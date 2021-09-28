@@ -2428,7 +2428,7 @@ void SdDrawPage::setBackground( const Any& rValue )
     // is it our own implementation?
     SdUnoPageBackground* pBack = comphelper::getFromUnoTunnel<SdUnoPageBackground>( xSet );
 
-    SfxItemSet aSet( GetModel()->GetDoc()->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST> );
+    SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aSet( GetModel()->GetDoc()->GetPool() );
 
     if( pBack )
     {
@@ -2796,7 +2796,7 @@ void SdMasterPage::setBackground( const Any& rValue )
             // is it our own implementation?
             SdUnoPageBackground* pBack = comphelper::getFromUnoTunnel<SdUnoPageBackground>( xInputSet );
 
-            SfxItemSet aSet( GetModel()->GetDoc()->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST> );
+            SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aSet( GetModel()->GetDoc()->GetPool() );
 
             if( pBack )
             {

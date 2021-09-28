@@ -198,7 +198,7 @@ const SfxItemSet& SdDialogsTest::getEmptyFillStyleSfxItemSet()
     {
         SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
         CPPUNIT_ASSERT(pDrawDoc);
-        mpEmptyFillStyleSfxItemSet.reset( new SfxItemSet(pDrawDoc->GetItemPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>) );
+        mpEmptyFillStyleSfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST>.reset( new SfxItemSet(pDrawDoc->GetItemPool(), ) );
         CPPUNIT_ASSERT(mpEmptyFillStyleSfxItemSet);
         mpEmptyFillStyleSfxItemSet->Put(XFillStyleItem(drawing::FillStyle_NONE));
     }
@@ -325,7 +325,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             // CreateSdSnapLineDlg(const SfxItemSet& rInAttrs, ::sd::View* pView) override;
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
             CPPUNIT_ASSERT(pDrawDoc);
-            SfxItemSet aNewAttr(pDrawDoc->GetItemPool(), svl::Items<ATTR_SNAPLINE_START, ATTR_SNAPLINE_END>);
+            SfxItemSetFixed<ATTR_SNAPLINE_START, ATTR_SNAPLINE_END> aNewAttr(pDrawDoc->GetItemPool(), );
             aNewAttr.Put(SfxInt32Item(ATTR_SNAPLINE_X, 0));
             aNewAttr.Put(SfxInt32Item(ATTR_SNAPLINE_Y, 0));
             pRetval = getSdAbstractDialogFactory()->CreateSdSnapLineDlg(
@@ -339,7 +339,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             // CreateSdInsertLayerDlg(const SfxItemSet& rInAttrs, bool bDeletable, const OUString& aStr) override;
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
             CPPUNIT_ASSERT(pDrawDoc);
-            SfxItemSet aNewAttr(pDrawDoc->GetItemPool(), svl::Items<ATTR_LAYER_START, ATTR_LAYER_END>);
+            SfxItemSetFixed<ATTR_LAYER_START, ATTR_LAYER_END> aNewAttr(pDrawDoc->GetItemPool(), );
             const OUString aLayerName = SdResId(STR_LAYER); // + OUString::number(2);
             aNewAttr.Put(makeSdAttrLayerName(aLayerName));
             aNewAttr.Put(makeSdAttrLayerTitle());
@@ -405,7 +405,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             // CreateSdStartPresentationDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, const std::vector<OUString> &rPageNames, SdCustomShowList* pCSList) override;
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
             CPPUNIT_ASSERT(pDrawDoc);
-            SfxItemSet aDlgSet(pDrawDoc->GetItemPool(), svl::Items<ATTR_PRESENT_START, ATTR_PRESENT_END>);
+            SfxItemSetFixed<ATTR_PRESENT_START, ATTR_PRESENT_END> aDlgSet(pDrawDoc->GetItemPool(), );
             ::sd::PresentationSettings& rPresentationSettings = pDrawDoc->getPresentationSettings();
             aDlgSet.Put(SfxBoolItem(ATTR_PRESENT_ALL, rPresentationSettings.mbAll));
             aDlgSet.Put(SfxBoolItem(ATTR_PRESENT_CUSTOMSHOW, rPresentationSettings.mbCustomShow));
@@ -487,7 +487,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             // CreatSdActionDialog(const SfxItemSet* pAttr, ::sd::View* pView) override;
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
             CPPUNIT_ASSERT(pDrawDoc);
-            SfxItemSet aSet(pDrawDoc->GetItemPool(), svl::Items<ATTR_ANIMATION_START, ATTR_ACTION_END>);
+            SfxItemSetFixed<ATTR_ANIMATION_START, ATTR_ACTION_END> aSet(pDrawDoc->GetItemPool(), );
             aSet.Put(SfxBoolItem(ATTR_ANIMATION_ACTIVE, false));
             aSet.Put(SfxUInt16Item(ATTR_ANIMATION_EFFECT, sal_uInt16(presentation::AnimationEffect_NONE)));
             aSet.Put(SfxUInt16Item(ATTR_ANIMATION_TEXTEFFECT, sal_uInt16(presentation::AnimationEffect_NONE)));

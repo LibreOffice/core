@@ -438,7 +438,7 @@ private:
                     nParagraph++;
                     pOutliner->Insert("");
 
-                    SfxItemSet aItemSet(m_rDrawViewShell.GetDoc()->GetPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>);
+                    SfxItemSetFixed<EE_ITEMS_START, EE_ITEMS_END> aItemSet(m_rDrawViewShell.GetDoc()->GetPool());
 
                     if (rResult.msName == "BOLD")
                         aItemSet.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT));
@@ -729,7 +729,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             if( pItem )
             {
-                SfxItemSet aSet( GetPool(), svl::Items<EE_PARA_HYPHENATE, EE_PARA_HYPHENATE> );
+                SfxItemSetFixed<EE_PARA_HYPHENATE, EE_PARA_HYPHENATE> aSet( GetPool() );
                 bool bValue = pItem->GetValue();
                 aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, bValue ) );
                 mpDrawView->SetAttributes( aSet );
@@ -737,7 +737,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             else // only for testing purpose
             {
                 OSL_FAIL(" no value for hyphenation!");
-                SfxItemSet aSet( GetPool(), svl::Items<EE_PARA_HYPHENATE, EE_PARA_HYPHENATE> );
+                SfxItemSetFixed<EE_PARA_HYPHENATE, EE_PARA_HYPHENATE> aSet( GetPool() );
                 aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, true ) );
                 mpDrawView->SetAttributes( aSet );
             }
@@ -1263,7 +1263,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                     if( pPresPage->IsPresObj( pObj ) )
                     {
-                        auto pNewSet = std::make_unique<SfxItemSet>( GetDoc()->GetPool(), svl::Items<SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT> );
+                        auto pNewSet = std::make_unique<SfxItemSetFixed<SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT>>( GetDoc()->GetPool() );
                         pNewSet->Put(pObj->GetMergedItemSet());
                         aAttrList.emplace_back(std::move(pNewSet), pObj->GetUserCall());
                     }
@@ -1805,7 +1805,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_CONNECTION_NEW_ROUTING:
         {
-            SfxItemSet aDefAttr( GetPool(), svl::Items<SDRATTR_EDGELINE1DELTA, SDRATTR_EDGELINE3DELTA> );
+            SfxItemSetFixed<SDRATTR_EDGELINE1DELTA, SDRATTR_EDGELINE3DELTA> aDefAttr( GetPool() );
             GetView()->SetAttributes( aDefAttr, true ); // (ReplaceAll)
 
             Cancel();
@@ -1924,7 +1924,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             if (! pArgs)
             {
-                SfxItemSet aNewAttr( GetDoc()->GetPool(), svl::Items<ATTR_LAYER_START, ATTR_LAYER_END> );
+                SfxItemSetFixed<ATTR_LAYER_START, ATTR_LAYER_END> aNewAttr( GetDoc()->GetPool() );
 
                 aNewAttr.Put( makeSdAttrLayerName( aLayerName ) );
                 aNewAttr.Put( makeSdAttrLayerTitle() );
@@ -2077,7 +2077,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             if (! pArgs)
             {
-                SfxItemSet aNewAttr( GetDoc()->GetPool(), svl::Items<ATTR_LAYER_START, ATTR_LAYER_END> );
+                SfxItemSetFixed<ATTR_LAYER_START, ATTR_LAYER_END> aNewAttr( GetDoc()->GetPool() );
 
                 aNewAttr.Put( makeSdAttrLayerName( aLayerName ) );
                 aNewAttr.Put( makeSdAttrLayerTitle( aLayerTitle ) );
