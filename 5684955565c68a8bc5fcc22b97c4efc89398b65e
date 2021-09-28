@@ -34,6 +34,24 @@
       "parentUuid": "f2e5549f_fd054c1e",
       "revId": "5684955565c68a8bc5fcc22b97c4efc89398b65e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ad08ce4_469afffc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-28T05:57:26Z",
+      "side": 1,
+      "message": "\u003e Can this compatibility flag be changed in the UI under the expert options, or is this directly embedded into the file?\n\nSee this answer by erAck from Sept 24:\n\n\u003e The option should be per document, otherwise you\u0027d get unpredictable results.\n\n\u003e In addition, is this the correct place for thiw new flag?\n\nI believe that this one is for \u003cconfig:config-item-set config:name\u003d\"ooo:view-settings\"\u003e in settings.xml; you need something similar used for \u003cconfig:config-item-set config:name\u003d\"ooo:configuration-settings\"\u003e (maybe debugging and looking at stack trace when in ScViewDataTable::ReadUserDataSequence could help you find that other method?)",
+      "parentUuid": "c522b77d_461fc119",
+      "revId": "5684955565c68a8bc5fcc22b97c4efc89398b65e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
