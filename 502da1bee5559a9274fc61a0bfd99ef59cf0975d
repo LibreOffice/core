@@ -52,6 +52,24 @@
       "parentUuid": "7dacb9c4_313723e5",
       "revId": "502da1bee5559a9274fc61a0bfd99ef59cf0975d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "062e6de9_3f100250",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-09-28T21:19:34Z",
+      "side": 1,
+      "message": "The use of undocumented options is now resolved in patchset 4. And yes; I will do the second part in another patch.\nAlso, I think an important problem that we face right now is that it is possible to skip the ask for username by just pressing Enter, which leads to invalid config.",
+      "parentUuid": "68dc49c3_db9ab8f2",
+      "revId": "502da1bee5559a9274fc61a0bfd99ef59cf0975d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
