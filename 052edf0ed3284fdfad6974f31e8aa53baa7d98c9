@@ -16,6 +16,23 @@
       "message": "Could you please take a look at this? This can help newbies setup ssh key pairs with better algorithms.",
       "revId": "052edf0ed3284fdfad6974f31e8aa53baa7d98c9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3f15b5f_ad6ef95e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001432
+      },
+      "writtenOn": "2021-09-28T13:26:05Z",
+      "side": 1,
+      "message": "I strongly advise against taking the first algorithm listed by `ssh -Q key`: it does happen that as of OpenSSH 8.8 (and since at least 6.7) the first item is `ssh-ed25519` which gerrit supports, but there is no guaranty that this will remain the case in the future.  I guess ed448 will eventually makes its way in the client list, possibly even the first position.\n\nFWIW OpenSSH has supported ed25519 since 6.5 (released in January 2014), and as said 6.7 lists it first in `ssh -Q key`, while gerrit\u0027s sshd only supports it since 2.14, which we upgraded to in Dec 2019 https://listarchives.tdf.io/i/1VUz1xLlwJzj3xdCi7Kpp5l5 .  With the proposed change people with OpenSSH \u003e\u003d6.5 would have generated keys unsupported with gerrit before the upgrade, and I assume the same will happen later with ed448.\n\nHardcoding the user key algorithms *currently* supported sounds like a safer option: `ssh -Qkey | grep -Fx -m1 -e{ssh-ed25519,ssh-rsa,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521}`.  That being said, is the list really ordered by client preference?  As of OpenSSH 8.4 it contains `ssh-dss` fairly high (ecdsa-sha2-nistp*) while there have long been considered unsafe and OpenSSH ≥7.0 won\u0027t use them by default…\n\nIMHO we should stick to ssh-keygen(1) default, which AFAICT is still RSA.  Changing the default will only come to be bite us in the future.  There is nothing wrong with RSA keys, OpenSSH upstream has only deprecated SHA1 signatures but happily use rsa-sha2-*.  What triggers the compatibility problem between gerrit and OpenSSH 8.8 is a bug of gerrit\u0027s sshd which doesn\u0027t advertise separate algorithms for different signatures: https://issues.apache.org/jira/browse/SSHD-1141 .  Given the implication I\u0027d hope that gerrit upstream upgrades the sshd 2.7 ASAP, in which case we\u0027re better off with RSA keys IMHO.  If that causes too much trouble the aforementioned list is probably fine.",
+      "revId": "052edf0ed3284fdfad6974f31e8aa53baa7d98c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
