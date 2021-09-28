@@ -16,6 +16,24 @@
       "message": "It looks like we conflicted here and in https://gerrit.libreoffice.org/c/core/+/122674 . AFAICT your patch makes mine pointless, so feel free to revert that one before pushing this.\n",
       "revId": "ccc3bb33fc6876c64f21b984941e32aec0bf4af2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d06ef7dd_fa03ee95",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-28T12:19:46Z",
+      "side": 1,
+      "message": "So I\u0027m not entirely sure about this patch - it makes the CPU usage considerably less, but it doesn\u0027t fix the actual problem I\u0027m seeing, which seems to be caused by bad use of timers or something similar.\n\nSo I\u0027m not planning on pushing this until I find a use-case where it actually makes a real difference.",
+      "parentUuid": "a87c23b7_b7c3641b",
+      "revId": "ccc3bb33fc6876c64f21b984941e32aec0bf4af2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
