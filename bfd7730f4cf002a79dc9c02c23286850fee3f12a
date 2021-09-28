@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64e2e2cd_aaa9a0f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-09-28T09:04:48Z",
+      "side": 1,
+      "message": "@Tünde: thanks for the MSO 365 test files with longer password/password with diacritics. The password verification works well with that, too.",
+      "revId": "bfd7730f4cf002a79dc9c02c23286850fee3f12a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
