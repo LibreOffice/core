@@ -23,14 +23,14 @@
 
 struct ImplMapRes
 {
-    ImplMapRes();
+    ImplMapRes() = default;
 
-    tools::Long mnMapOfsX; ///< Offset in X direction
-    tools::Long mnMapOfsY; ///< Offset in Y direction
-    tools::Long mnMapScNumX; ///< Scaling factor - numerator in X direction
-    tools::Long mnMapScNumY; ///< Scaling factor - numerator in Y direction
-    tools::Long mnMapScDenomX; ///< Scaling factor - denominator in X direction
-    tools::Long mnMapScDenomY; ///< Scaling factor - denominator in Y direction
+    tools::Long mnMapOfsX = 0; ///< Offset in X direction
+    tools::Long mnMapOfsY = 0; ///< Offset in Y direction
+    tools::Long mnMapScNumX = 1; ///< Scaling factor - numerator in X direction
+    tools::Long mnMapScNumY = 1; ///< Scaling factor - numerator in Y direction
+    tools::Long mnMapScDenomX = 1; ///< Scaling factor - denominator in X direction
+    tools::Long mnMapScDenomY = 1; ///< Scaling factor - denominator in Y direction
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
