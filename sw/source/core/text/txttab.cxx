@@ -42,9 +42,9 @@
  */
 const SvxTabStop* SwLineInfo::GetTabStop(const SwTwips nSearchPos, SwTwips& nRight) const
 {
-    for( sal_uInt16 i = 0; i < m_pRuler->Count(); ++i )
+    for( sal_uInt16 i = 0; i < m_oRuler->Count(); ++i )
     {
-        const SvxTabStop &rTabStop = m_pRuler->operator[](i);
+        const SvxTabStop &rTabStop = m_oRuler->operator[](i);
         if (nRight && rTabStop.GetTabPos() > nRight)
         {
             // Consider the first tabstop to always be in-bounds.
@@ -64,7 +64,7 @@ const SvxTabStop* SwLineInfo::GetTabStop(const SwTwips nSearchPos, SwTwips& nRig
 
 sal_uInt16 SwLineInfo::NumberOfTabStops() const
 {
-    return m_pRuler->Count();
+    return m_oRuler->Count();
 }
 
 SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto ) const
