@@ -52,6 +52,24 @@
       "parentUuid": "70ce8ab6_ae2960a7",
       "revId": "e59e69a0705ed38782284262a5575a036c0d1172",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3419b86_31bfba55",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-09-28T22:21:31Z",
+      "side": 1,
+      "message": "The last note is considered in the patch set 5.",
+      "parentUuid": "7ea593d1_f3031266",
+      "revId": "e59e69a0705ed38782284262a5575a036c0d1172",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
