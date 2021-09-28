@@ -19,20 +19,25 @@
 
 #pragma once
 
-#include <QtInstance.hxx>
+#include <sal/config.h>
 
-class KF5SalInstance final : public QtInstance
+#include <fontinstance.hxx>
+
+#include <QtGui/QFont>
+
+#include "QtFontFace.hxx"
+
+class QtFont final : public QFont, public LogicalFontInstance
 {
-    bool hasNativeFileSelection() const override;
-    rtl::Reference<QtFilePicker>
-    createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
-                 QFileDialog::FileMode) override;
+    friend rtl::Reference<LogicalFontInstance>
+    QtFontFace::CreateFontInstance(const vcl::font::FontSelectPattern&) const;
 
-    SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
-    SalFrame* CreateChildFrame(SystemParentData* pParent, SalFrameStyleFlags nStyle) override;
+    bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const override;
+    bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const override;
 
-public:
-    explicit KF5SalInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo);
+    virtual hb_font_t* ImplInitHbFont() override;
+
+    explicit QtFont(const PhysicalFontFace&, const vcl::font::FontSelectPattern&);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

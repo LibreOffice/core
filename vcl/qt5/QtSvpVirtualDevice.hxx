@@ -19,20 +19,18 @@
 
 #pragma once
 
-#include <QtInstance.hxx>
+#include <headless/svpvd.hxx>
+#include <QtSvpGraphics.hxx>
 
-class KF5SalInstance final : public QtInstance
+class VCL_DLLPUBLIC QtSvpVirtualDevice : public SvpSalVirtualDevice
 {
-    bool hasNativeFileSelection() const override;
-    rtl::Reference<QtFilePicker>
-    createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
-                 QFileDialog::FileMode) override;
-
-    SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
-    SalFrame* CreateChildFrame(SystemParentData* pParent, SalFrameStyleFlags nStyle) override;
-
 public:
-    explicit KF5SalInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo);
+    QtSvpVirtualDevice(cairo_surface_t* pRefSurface, cairo_surface_t* pPreExistingTarget)
+        : SvpSalVirtualDevice(pRefSurface, pPreExistingTarget)
+    {
+    }
+
+    SalGraphics* AcquireGraphics() override { return AddGraphics(new QtSvpGraphics(nullptr)); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

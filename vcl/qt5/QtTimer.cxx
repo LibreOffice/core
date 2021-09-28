@@ -17,22 +17,36 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#include <QtTimer.hxx>
+#include <QtTimer.moc>
 
-#include <QtInstance.hxx>
+#include <QtWidgets/QApplication>
+#include <QtCore/QThread>
 
-class KF5SalInstance final : public QtInstance
+#include <vcl/svapp.hxx>
+#include <sal/log.hxx>
+
+QtTimer::QtTimer()
 {
-    bool hasNativeFileSelection() const override;
-    rtl::Reference<QtFilePicker>
-    createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
-                 QFileDialog::FileMode) override;
+    m_aTimer.setSingleShot(true);
+    m_aTimer.setTimerType(Qt::PreciseTimer);
+    connect(&m_aTimer, SIGNAL(timeout()), this, SLOT(timeoutActivated()));
+    connect(this, SIGNAL(startTimerSignal(int)), this, SLOT(startTimer(int)));
+    connect(this, SIGNAL(stopTimerSignal()), this, SLOT(stopTimer()));
+}
 
-    SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
-    SalFrame* CreateChildFrame(SystemParentData* pParent, SalFrameStyleFlags nStyle) override;
+void QtTimer::timeoutActivated()
+{
+    SolarMutexGuard aGuard;
+    CallCallback();
+}
 
-public:
-    explicit KF5SalInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo);
-};
+void QtTimer::startTimer(int nMS) { m_aTimer.start(nMS); }
+
+void QtTimer::Start(sal_uInt64 nMS) { Q_EMIT startTimerSignal(nMS); }
+
+void QtTimer::stopTimer() { m_aTimer.stop(); }
+
+void QtTimer::Stop() { Q_EMIT stopTimerSignal(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

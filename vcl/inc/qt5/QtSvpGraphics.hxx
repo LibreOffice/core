@@ -19,20 +19,36 @@
 
 #pragma once
 
-#include <QtInstance.hxx>
+#include <vclpluginapi.h>
+#include <headless/svpgdi.hxx>
 
-class KF5SalInstance final : public QtInstance
+#include "QtGraphicsBase.hxx"
+
+class QtFrame;
+
+class VCLPLUG_QT5_PUBLIC QtSvpGraphics final : public SvpSalGraphics, public QtGraphicsBase
 {
-    bool hasNativeFileSelection() const override;
-    rtl::Reference<QtFilePicker>
-    createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
-                 QFileDialog::FileMode) override;
+    QtFrame* const m_pFrame;
 
-    SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
-    SalFrame* CreateChildFrame(SystemParentData* pParent, SalFrameStyleFlags nStyle) override;
+    void handleDamage(const tools::Rectangle&) override;
 
 public:
-    explicit KF5SalInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo);
+    QtSvpGraphics(QtFrame* pFrame);
+    ~QtSvpGraphics() override;
+
+    void updateQWidget() const;
+
+#if ENABLE_CAIRO_CANVAS
+    bool SupportsCairo() const override;
+    cairo::SurfaceSharedPtr
+    CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const override;
+    cairo::SurfaceSharedPtr CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width,
+                                          int height) const override;
+#endif // ENABLE_CAIRO_CANVAS
+
+    virtual void GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY) override;
+
+    virtual OUString getRenderBackendName() const override { return "qt5svp"; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,20 +19,22 @@
 
 #pragma once
 
-#include <QtInstance.hxx>
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QMainWindow>
 
-class KF5SalInstance final : public QtInstance
+#include "QtFrame.hxx"
+
+class QtMainWindow final : public QMainWindow
 {
-    bool hasNativeFileSelection() const override;
-    rtl::Reference<QtFilePicker>
-    createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
-                 QFileDialog::FileMode) override;
+    Q_OBJECT
 
-    SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
-    SalFrame* CreateChildFrame(SystemParentData* pParent, SalFrameStyleFlags nStyle) override;
+    QtFrame& m_rFrame;
+
+    virtual void closeEvent(QCloseEvent* pEvent) override;
+    void moveEvent(QMoveEvent*) override;
 
 public:
-    explicit KF5SalInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo);
+    QtMainWindow(QtFrame& rFrame, Qt::WindowFlags f = Qt::WindowFlags());
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

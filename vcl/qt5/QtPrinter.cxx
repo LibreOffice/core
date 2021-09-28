@@ -17,22 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#include <QtPrinter.hxx>
 
-#include <QtInstance.hxx>
-
-class KF5SalInstance final : public QtInstance
+QtPrinter::QtPrinter(SalInfoPrinter* pInfoPrinter)
+    : PspSalPrinter(pInfoPrinter)
 {
-    bool hasNativeFileSelection() const override;
-    rtl::Reference<QtFilePicker>
-    createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
-                 QFileDialog::FileMode) override;
-
-    SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
-    SalFrame* CreateChildFrame(SystemParentData* pParent, SalFrameStyleFlags nStyle) override;
-
-public:
-    explicit KF5SalInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo);
-};
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

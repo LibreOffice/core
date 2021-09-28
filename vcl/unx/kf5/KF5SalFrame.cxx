@@ -28,7 +28,7 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 
-#include <Qt5FontFace.hxx>
+#include <QtFontFace.hxx>
 #include "KF5SalFrame.hxx"
 
 #include <tools/color.hxx>
