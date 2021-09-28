@@ -441,6 +441,7 @@ public:
     virtual void PaintFieldToCell(OutputDevice& rDev, const tools::Rectangle& rRect,
                           const css::uno::Reference< css::sdb::XColumn >& _rxField,
                           const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
+    virtual void PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect) override;
     virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
 
 private:
