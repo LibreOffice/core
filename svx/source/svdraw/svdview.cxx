@@ -966,17 +966,17 @@ PointerStyle SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDe
     {
         if(!pOut || IsTextEditInSelectionMode())
         {
-            if(pTextEditOutliner->IsVertical())
+            if (mpTextEditOutliner->IsVertical())
                 return PointerStyle::TextVertical;
             else
                 return PointerStyle::Text;
         }
         // Outliner should return something here...
         Point aPos(pOut->LogicToPixel(rMousePos));
-        PointerStyle aPointer(pTextEditOutlinerView->GetPointer(aPos));
+        PointerStyle aPointer(mpTextEditOutlinerView->GetPointer(aPos));
         if (aPointer==PointerStyle::Arrow)
         {
-            if(pTextEditOutliner->IsVertical())
+            if (mpTextEditOutliner->IsVertical())
                 aPointer = PointerStyle::TextVertical;
             else
                 aPointer = PointerStyle::Text;
@@ -1216,24 +1216,24 @@ OUString SdrView::GetStatusText()
             aStr = SvxResId(STR_ViewMarkGluePoints);
         }
     }
-    else if (IsTextEdit() && pTextEditOutlinerView!=nullptr) {
+    else if (IsTextEdit() && mpTextEditOutlinerView != nullptr) {
         aStr=SvxResId(STR_ViewTextEdit); // "TextEdit - Row y, Column x";
-        ESelection aSel(pTextEditOutlinerView->GetSelection());
-        tools::Long nPar=aSel.nEndPara,nLin=0,nCol=aSel.nEndPos;
+        ESelection aSel(mpTextEditOutlinerView->GetSelection());
+        tools::Long nPar = aSel.nEndPara,nLin=0,nCol=aSel.nEndPos;
         if (aSel.nEndPara>0) {
             for (sal_Int32 nParaNum=0; nParaNum<aSel.nEndPara; nParaNum++) {
-                nLin+=pTextEditOutliner->GetLineCount(nParaNum);
+                nLin += mpTextEditOutliner->GetLineCount(nParaNum);
             }
         }
         // A little imperfection:
         // At the end of a line of any multi-line paragraph, we display the
         // position of the next line of the same paragraph, if there is one.
         sal_uInt16 nParaLine = 0;
-        sal_uLong nParaLineCount = pTextEditOutliner->GetLineCount(aSel.nEndPara);
+        sal_uLong nParaLineCount = mpTextEditOutliner->GetLineCount(aSel.nEndPara);
         bool bBrk = false;
         while (!bBrk)
         {
-            sal_uInt16 nLen = pTextEditOutliner->GetLineLen(aSel.nEndPara, nParaLine);
+            sal_uInt16 nLen = mpTextEditOutliner->GetLineLen(aSel.nEndPara, nParaLine);
             bool bLastLine = (nParaLine == nParaLineCount - 1);
             if (nCol>nLen || (!bLastLine && nCol == nLen))
             {
@@ -1253,7 +1253,7 @@ OUString SdrView::GetStatusText()
         aStr = aStr.replaceFirst("%3", OUString::number(nCol + 1));
 
 #ifdef DBG_UTIL
-        aStr +=  ", Level " + OUString::number( pTextEditOutliner->GetDepth( aSel.nEndPara ) );
+        aStr +=  ", Level " + OUString::number(mpTextEditOutliner->GetDepth( aSel.nEndPara ));
 #endif
     }
 
@@ -1400,7 +1400,7 @@ void SdrView::DeleteMarked()
 {
     if (IsTextEdit())
     {
-        SdrObjEditView::KeyInput(KeyEvent(0,vcl::KeyCode(KeyFuncType::DELETE)),pTextEditWin);
+        SdrObjEditView::KeyInput(KeyEvent(0, vcl::KeyCode(KeyFuncType::DELETE)), mpTextEditWin);
     }
     else
     {

@@ -74,16 +74,16 @@ class SVXCORE_DLLPUBLIC SdrObjEditView : public SdrGlueEditView, public EditView
 
     // The OverlayObjects used for visualizing active TextEdit (currently
     // using TextEditOverlayObject, but not limited to it
-    sdr::overlay::OverlayObjectList           maTEOverlayGroup;
+    sdr::overlay::OverlayObjectList maTEOverlayGroup;
 
 protected:
     // TextEdit
-    tools::WeakReference<SdrTextObj>
-                                mxTextEditObj;         // current object in TextEdit
-    SdrPageView*                pTextEditPV;
-    std::unique_ptr<SdrOutliner> pTextEditOutliner;     // outliner for the TextEdit
-    OutlinerView*               pTextEditOutlinerView; // current view of the outliners
-    VclPtr<vcl::Window>         pTextEditWin;          // matching window to pTextEditOutlinerView
+    tools::WeakReference<SdrTextObj> mxTextEditObj; // current object in TextEdit
+    SdrPageView* mpTextEditPV;
+    std::unique_ptr<SdrOutliner> mpTextEditOutliner; // outliner for the TextEdit
+    OutlinerView* mpTextEditOutlinerView; // current view of the outliners
+    VclPtr<vcl::Window> mpTextEditWin; // matching window to pTextEditOutlinerView
+
     vcl::Cursor*                pTextEditCursorBuffer; // to restore the cursor in each window
     SdrObject*                  pMacroObj;
     SdrPageView*                pMacroPV;
@@ -96,11 +96,11 @@ protected:
 
     sal_uInt16                  nMacroTol;
 
-    bool                        bTextEditDontDelete : 1;   // do not delete outliner and view of SdrEndTextEdit (f. spellchecking)
-    bool                        bTextEditOnlyOneView : 1;  // a single OutlinerView (f. spellchecking)
-    bool                        bTextEditNewObj : 1;       // current edited object was just recreated
-    bool                        bQuickTextEditMode : 1;    // persistent(->CrtV). Default=TRUE
-    bool                        bMacroDown : 1;
+    bool mbTextEditDontDelete : 1;  // do not delete outliner and view of SdrEndTextEdit (f. spellchecking)
+    bool mbTextEditOnlyOneView : 1; // a single OutlinerView (f. spellchecking)
+    bool mbTextEditNewObj : 1;      // current edited object was just recreated
+    bool mbQuickTextEditMode : 1;   // persistent(->CrtV). Default=TRUE
+    bool mbMacroDown : 1;
 
     rtl::Reference< sdr::SelectionController > mxSelectionController;
     rtl::Reference< sdr::SelectionController > mxLastSelectionController;
@@ -182,8 +182,14 @@ public:
     // TextEdit over an outliner
 
     // QuickTextEditMode = edit the text straight after selection. Default=TRUE. Persistent.
-    void SetQuickTextEditMode(bool bOn) { bQuickTextEditMode=bOn; }
-    bool IsQuickTextEditMode() const { return bQuickTextEditMode; }
+    void SetQuickTextEditMode(bool bOn)
+    {
+        mbQuickTextEditMode = bOn;
+    }
+    bool IsQuickTextEditMode() const
+    {
+        return mbQuickTextEditMode;
+    }
 
     // Start the TextEditMode. If pWin==NULL, use the first window, which is logged at the View.
     // The cursor of the currently edited window is stored with SdrBeginTextEdit()
@@ -231,10 +237,22 @@ public:
 
     // Now at this outliner, events can be send, attributes can be set,
     // call Cut/Copy/Paste, call Undo/Redo, and so on...
-    const SdrOutliner* GetTextEditOutliner() const { return pTextEditOutliner.get(); }
-    SdrOutliner* GetTextEditOutliner() { return pTextEditOutliner.get(); }
-    const OutlinerView* GetTextEditOutlinerView() const { return pTextEditOutlinerView; }
-    OutlinerView* GetTextEditOutlinerView() { return pTextEditOutlinerView; }
+    const SdrOutliner* GetTextEditOutliner() const
+    {
+        return mpTextEditOutliner.get();
+    }
+    SdrOutliner* GetTextEditOutliner()
+    {
+        return mpTextEditOutliner.get();
+    }
+    const OutlinerView* GetTextEditOutlinerView() const
+    {
+        return mpTextEditOutlinerView;
+    }
+    OutlinerView* GetTextEditOutlinerView()
+    {
+        return mpTextEditOutlinerView;
+    }
 
     virtual bool KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin) override;
     virtual bool MouseButtonDown(const MouseEvent& rMEvt, OutputDevice* pWin) override;
