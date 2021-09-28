@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b73abb4e_eb6d7535",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001432
+      },
+      "writtenOn": "2021-09-28T14:27:19Z",
+      "side": 1,
+      "message": "Where is it stated that `ssh -Qkey` orders by priority?  As said before I think it doesn\u0027t given the list includes obsolete algorithms near the top.  Also `ssh-keygen -t ssh-rsa` is definitely not what we want, it\u0027s for RSA CA keys…  Please use something like this instead\n\n```\nssh -Qkey | grep -Fxq ssh-ed25519 \u0026\u0026 type\u003d\"ed25519\" || type\u003d\"rsa\"\n```\n\nto use ed25519 when supported and fallback to RSA otherwise.\n\nFinally, “better key algorithms” is subjective :-P  There is nothing wrong with RSA per se, and RSA user/host keys will remain supported for the foreseeable future once gerrit upgrades to mina sshd 2.7.",
+      "revId": "502da1bee5559a9274fc61a0bfd99ef59cf0975d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
