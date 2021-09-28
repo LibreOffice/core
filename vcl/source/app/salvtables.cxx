@@ -1285,7 +1285,19 @@ void SalInstanceWidget::DoRecursivePaint(vcl::Window* pWindow, const Point& rRen
     Size aTempLogicSize(xOutput->PixelToLogic(aChildSizePixel));
     Size aRenderLogicSize(rOutput.PixelToLogic(aChildSizePixel));
 
-    xOutput->DrawOutDev(Point(), aTempLogicSize, rRenderLogicPos, aRenderLogicSize, rOutput);
+    switch (rOutput.GetOutDevType())
+    {
+        case OUTDEV_WINDOW:
+        case OUTDEV_VIRDEV:
+            xOutput->DrawOutDev(Point(), aTempLogicSize, rRenderLogicPos, aRenderLogicSize,
+                                rOutput);
+            break;
+        case OUTDEV_PRINTER:
+        case OUTDEV_PDF:
+            xOutput->SetBackground(rOutput.GetBackground());
+            xOutput->Erase();
+            break;
+    }
 
     //set ReallyVisible to match Visible, we restore the original state after Paint
     WindowImpl* pImpl = pWindow->ImplGetWindowImpl();
@@ -1297,7 +1309,19 @@ void SalInstanceWidget::DoRecursivePaint(vcl::Window* pWindow, const Point& rRen
 
     pImpl->mbReallyVisible = bRVisible;
 
-    rOutput.DrawOutDev(rRenderLogicPos, aRenderLogicSize, Point(), aTempLogicSize, *xOutput);
+    switch (rOutput.GetOutDevType())
+    {
+        case OUTDEV_WINDOW:
+        case OUTDEV_VIRDEV:
+            rOutput.DrawOutDev(rRenderLogicPos, aRenderLogicSize, Point(), aTempLogicSize,
+                               *xOutput);
+            break;
+        case OUTDEV_PRINTER:
+        case OUTDEV_PDF:
+            rOutput.DrawBitmapEx(rRenderLogicPos, aRenderLogicSize,
+                                 xOutput->GetBitmapEx(Point(), aTempLogicSize));
+            break;
+    }
 
     xOutput.disposeAndClear();
 
