@@ -28,8 +28,6 @@ constexpr auto BUTTON_DRAW_FLATTEST = DrawButtonFlags::Flat |
                                  DrawButtonFlags::Checked |
                                  DrawButtonFlags::Highlight;
 
-using namespace std;
-
 namespace {
 
 tools::Long AdjustRectToSquare( tools::Rectangle &rRect )
