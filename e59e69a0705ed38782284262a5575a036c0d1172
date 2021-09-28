@@ -34,6 +34,24 @@
       "parentUuid": "c36e4a0b_0e8a5522",
       "revId": "e59e69a0705ed38782284262a5575a036c0d1172",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ea593d1_f3031266",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001432
+      },
+      "writtenOn": "2021-09-28T21:57:53Z",
+      "side": 1,
+      "message": "\u003e The first part is fixed in patchset 4.\n\u003e Your code works fine, but I wanted to print an error when neither ed25519 nor rsa are present, and also make room for adding another algorithm(s).\n\nFair enough :-)\n\nLGTM, thanks!  One nitpick though, you can save the subshells + capture, `if grep -q …` works just as well as `if $(grep -q …)`, and AFAICT the former style is in line with the rest of the script.",
+      "parentUuid": "70ce8ab6_ae2960a7",
+      "revId": "e59e69a0705ed38782284262a5575a036c0d1172",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
