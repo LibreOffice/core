@@ -27,6 +27,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <comphelper/processfactory.hxx>
 
 #include <insdlg.hxx>
@@ -48,6 +49,9 @@
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/viewsh.hxx>
 #include <comphelper/seqstream.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <svx/strings.hrc>
+#include <svx/dialmgr.hxx>
 
 #include <strings.hrc>
 
@@ -276,10 +280,34 @@ short SvInsertOleDlg::run()
                 aMedium[1].Value <<= xInteraction;
 
                 // create object from media descriptor
+
+                uno::Reference<task::XStatusIndicator> xProgress;
+                SfxViewFrame* pFrame = SfxViewFrame::Current();
+                if (pFrame)
+                {
+                    // Have a current frame, create visual indication that insert is in progress.
+                    uno::Reference<frame::XFrame> xFrame = pFrame->GetFrame().GetFrameInterface();
+                    uno::Reference<task::XStatusIndicatorFactory> xProgressFactory(xFrame, uno::UNO_QUERY);
+                    if (xProgressFactory.is())
+                    {
+                        xProgress = xProgressFactory->createStatusIndicator();
+                        if (xProgress)
+                        {
+                            OUString aDocLoad(SvxResId(RID_SVXSTR_DOC_LOAD));
+                            xProgress->start(aDocLoad, 100);
+                        }
+                    }
+                }
+
                 if ( bLink )
                     m_xObj = aCnt.InsertEmbeddedLink( aMedium, aName );
                 else
                     m_xObj = aCnt.InsertEmbeddedObject( aMedium, aName );
+
+                if (xProgress.is())
+                {
+                    xProgress->end();
+                }
             }
 
             if ( !m_xObj.is() )
