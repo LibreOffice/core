@@ -4210,7 +4210,19 @@ public:
 
         VclPtr<VirtualDevice> xOutput(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
         xOutput->SetOutputSizePixel(aSize);
-        xOutput->DrawOutDev(Point(), aSize, rPos, aSize, rOutput);
+
+        switch (rOutput.GetOutDevType())
+        {
+            case OUTDEV_WINDOW:
+            case OUTDEV_VIRDEV:
+                xOutput->DrawOutDev(Point(), aSize, rPos, aSize, rOutput);
+                break;
+            case OUTDEV_PRINTER:
+            case OUTDEV_PDF:
+                xOutput->SetBackground(rOutput.GetBackground());
+                xOutput->Erase();
+                break;
+        }
 
         cairo_surface_t* pSurface = get_underlying_cairo_surface(*xOutput);
         cairo_t* cr = cairo_create(pSurface);
@@ -4228,7 +4240,17 @@ public:
         gtk_widget_size_allocate(m_pWidget, &aOrigAllocation, 0);
 #endif
 
-        rOutput.DrawOutDev(rPos, aSize, Point(), aSize, *xOutput);
+        switch (rOutput.GetOutDevType())
+        {
+            case OUTDEV_WINDOW:
+            case OUTDEV_VIRDEV:
+                rOutput.DrawOutDev(rPos, aSize, Point(), aSize, *xOutput);
+                break;
+            case OUTDEV_PRINTER:
+            case OUTDEV_PDF:
+                rOutput.DrawBitmapEx(rPos, xOutput->GetBitmapEx(Point(), aSize));
+                break;
+        }
 
         if (bAnimations)
             g_object_set(pSettings, "gtk-enable-animations", true, nullptr);
