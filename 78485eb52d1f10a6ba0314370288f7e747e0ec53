@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "455a7042_9a09cd0c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-09-28T13:32:41Z",
+      "side": 1,
+      "message": "doesn\u0027t help I\u0027m afraid, the deadlock occurs during the m_lModels.clear() rather than m_xEvents.clear()",
+      "revId": "78485eb52d1f10a6ba0314370288f7e747e0ec53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
