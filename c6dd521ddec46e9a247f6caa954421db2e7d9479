@@ -16,6 +16,23 @@
       "message": "Please review my patch!",
       "revId": "c6dd521ddec46e9a247f6caa954421db2e7d9479",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "198d1665_e04b7436",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-09-28T19:08:13Z",
+      "side": 1,
+      "message": "It seems you need to fix merge conflicts first.",
+      "revId": "c6dd521ddec46e9a247f6caa954421db2e7d9479",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
