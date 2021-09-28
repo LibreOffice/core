@@ -35,7 +35,7 @@
 
 #include "Qt5FilePicker.hxx"
 
-class Qt5Timer;
+class QtTimer;
 
 class QApplication;
 class SalYieldMutex;
@@ -47,15 +47,15 @@ struct StdFreeCStr
 };
 using FreeableCStr = std::unique_ptr<char[], StdFreeCStr>;
 
-class VCLPLUG_QT5_PUBLIC Qt5Instance : public QObject,
-                                       public SalGenericInstance,
-                                       public SalUserEventList
+class VCLPLUG_QT5_PUBLIC QtInstance : public QObject,
+                                      public SalGenericInstance,
+                                      public SalUserEventList
 {
     Q_OBJECT
 
     osl::Condition m_aWaitingYieldCond;
     const bool m_bUseCairo;
-    Qt5Timer* m_pTimer;
+    QtTimer* m_pTimer;
     bool m_bSleeping;
     std::unordered_map<OUString, css::uno::Reference<css::uno::XInterface>> m_aClipboards;
 
@@ -80,7 +80,7 @@ Q_SIGNALS:
     void deleteObjectLaterSignal(QObject* pObject);
 
 protected:
-    virtual rtl::Reference<Qt5FilePicker>
+    virtual rtl::Reference<QtFilePicker>
     createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
                  QFileDialog::FileMode);
     bool useCairo() const { return m_bUseCairo; }
@@ -88,8 +88,8 @@ protected:
     OUString constructToolkitID(std::u16string_view sTKname);
 
 public:
-    explicit Qt5Instance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo = false);
-    virtual ~Qt5Instance() override;
+    explicit QtInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo = false);
+    virtual ~QtInstance() override;
 
     // handle common SalInstance setup
     static void AllocFakeCmdlineArgs(std::unique_ptr<char* []>& rFakeArgv,

@@ -26,7 +26,7 @@
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 
-Qt5Timer::Qt5Timer()
+QtTimer::QtTimer()
 {
     m_aTimer.setSingleShot(true);
     m_aTimer.setTimerType(Qt::PreciseTimer);
@@ -35,18 +35,18 @@ Qt5Timer::Qt5Timer()
     connect(this, SIGNAL(stopTimerSignal()), this, SLOT(stopTimer()));
 }
 
-void Qt5Timer::timeoutActivated()
+void QtTimer::timeoutActivated()
 {
     SolarMutexGuard aGuard;
     CallCallback();
 }
 
-void Qt5Timer::startTimer(int nMS) { m_aTimer.start(nMS); }
+void QtTimer::startTimer(int nMS) { m_aTimer.start(nMS); }
 
-void Qt5Timer::Start(sal_uInt64 nMS) { Q_EMIT startTimerSignal(nMS); }
+void QtTimer::Start(sal_uInt64 nMS) { Q_EMIT startTimerSignal(nMS); }
 
-void Qt5Timer::stopTimer() { m_aTimer.stop(); }
+void QtTimer::stopTimer() { m_aTimer.stop(); }
 
-void Qt5Timer::Stop() { Q_EMIT stopTimerSignal(); }
+void QtTimer::Stop() { Q_EMIT stopTimerSignal(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

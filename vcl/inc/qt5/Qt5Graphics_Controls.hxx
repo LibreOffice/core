@@ -31,16 +31,16 @@
 #include <QtWidgets/QStyle>
 #include <QtWidgets/QStyleOption>
 
-class Qt5GraphicsBase;
+class QtGraphicsBase;
 
-class Qt5Graphics_Controls final : public vcl::WidgetDrawInterface
+class QtGraphics_Controls final : public vcl::WidgetDrawInterface
 {
     std::unique_ptr<QImage> m_image;
     QRect m_lastPopupRect;
-    Qt5GraphicsBase const& m_rGraphics;
+    QtGraphicsBase const& m_rGraphics;
 
 public:
-    Qt5Graphics_Controls(const Qt5GraphicsBase& rGraphics);
+    QtGraphics_Controls(const QtGraphicsBase& rGraphics);
 
     QImage* getImage() { return m_image.get(); }
 

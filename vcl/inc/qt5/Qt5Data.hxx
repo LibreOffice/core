@@ -28,13 +28,13 @@
 
 class QCursor;
 
-class VCLPLUG_QT5_PUBLIC Qt5Data final : public GenericUnixSalData
+class VCLPLUG_QT5_PUBLIC QtData final : public GenericUnixSalData
 {
     o3tl::enumarray<PointerStyle, std::unique_ptr<QCursor>> m_aCursors;
 
 public:
-    explicit Qt5Data(SalInstance* pInstance);
-    virtual ~Qt5Data() override;
+    explicit QtData(SalInstance* pInstance);
+    virtual ~QtData() override;
 
     virtual void ErrorTrapPush() override;
     virtual bool ErrorTrapPop(bool bIgnoreError = true) override;

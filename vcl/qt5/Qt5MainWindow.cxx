@@ -15,16 +15,16 @@
 #include <QtGui/QAccessible>
 #include <QtGui/QCloseEvent>
 
-Qt5MainWindow::Qt5MainWindow(Qt5Frame& rFrame, Qt::WindowFlags f)
+QtMainWindow::QtMainWindow(QtFrame& rFrame, Qt::WindowFlags f)
     : QMainWindow(nullptr, f)
     , m_rFrame(rFrame)
 {
 #ifndef EMSCRIPTEN
-    QAccessible::installFactory(Qt5AccessibleWidget::customFactory);
+    QAccessible::installFactory(QtAccessibleWidget::customFactory);
 #endif
 }
 
-void Qt5MainWindow::closeEvent(QCloseEvent* pEvent)
+void QtMainWindow::closeEvent(QCloseEvent* pEvent)
 {
     bool bRet = false;
     bRet = m_rFrame.CallCallback(SalEvent::Close, nullptr);
@@ -38,7 +38,7 @@ void Qt5MainWindow::closeEvent(QCloseEvent* pEvent)
         pEvent->ignore();
 }
 
-void Qt5MainWindow::moveEvent(QMoveEvent* pEvent)
+void QtMainWindow::moveEvent(QMoveEvent* pEvent)
 {
     const qreal fRatio = m_rFrame.devicePixelRatioF();
     m_rFrame.maGeometry.nX = round(pEvent->pos().x() * fRatio);

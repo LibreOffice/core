@@ -34,16 +34,16 @@
 class PhysicalFontCollection;
 class QImage;
 class QPushButton;
-class Qt5Font;
-class Qt5FontFace;
-class Qt5Frame;
-class Qt5Painter;
+class QtFont;
+class QtFontFace;
+class QtFrame;
+class QtPainter;
 
-class Qt5GraphicsBackend final : public SalGraphicsImpl, public Qt5GraphicsBase
+class QtGraphicsBackend final : public SalGraphicsImpl, public QtGraphicsBase
 {
-    friend class Qt5Painter;
+    friend class QtPainter;
 
-    Qt5Frame* m_pFrame;
+    QtFrame* m_pFrame;
     QImage* m_pQImage;
     QRegion m_aClipRegion;
     QPainterPath m_aClipPath;
@@ -52,8 +52,8 @@ class Qt5GraphicsBackend final : public SalGraphicsImpl, public Qt5GraphicsBase
     QPainter::CompositionMode m_eCompositionMode;
 
 public:
-    Qt5GraphicsBackend(Qt5Frame* pFrame, QImage* pQImage);
-    ~Qt5GraphicsBackend() override;
+    QtGraphicsBackend(QtFrame* pFrame, QImage* pQImage);
+    ~QtGraphicsBackend() override;
 
     void Init() override {}
 
@@ -161,33 +161,33 @@ private:
     void drawScaledImage(const SalTwoRect& rPosAry, const QImage& rImage);
 };
 
-class Qt5Graphics final : public SalGraphicsAutoDelegateToImpl, public Qt5GraphicsBase
+class QtGraphics final : public SalGraphicsAutoDelegateToImpl, public QtGraphicsBase
 {
-    friend class Qt5Bitmap;
+    friend class QtBitmap;
 
-    std::unique_ptr<Qt5GraphicsBackend> m_pBackend;
+    std::unique_ptr<QtGraphicsBackend> m_pBackend;
 
-    Qt5Frame* m_pFrame;
+    QtFrame* m_pFrame;
 
-    rtl::Reference<Qt5Font> m_pTextStyle[MAX_FALLBACK];
+    rtl::Reference<QtFont> m_pTextStyle[MAX_FALLBACK];
     Color m_aTextColor;
 
-    Qt5Graphics(Qt5Frame* pFrame, QImage* pQImage);
+    QtGraphics(QtFrame* pFrame, QImage* pQImage);
 
     void drawScaledImage(const SalTwoRect& rPosAry, const QImage& rImage);
 
     void handleDamage(const tools::Rectangle&) override;
 
 public:
-    Qt5Graphics(Qt5Frame* pFrame)
-        : Qt5Graphics(pFrame, nullptr)
+    QtGraphics(QtFrame* pFrame)
+        : QtGraphics(pFrame, nullptr)
     {
     }
-    Qt5Graphics(QImage* pQImage)
-        : Qt5Graphics(nullptr, pQImage)
+    QtGraphics(QImage* pQImage)
+        : QtGraphics(nullptr, pQImage)
     {
     }
-    virtual ~Qt5Graphics() override;
+    virtual ~QtGraphics() override;
 
     QImage* getQImage() { return m_pBackend->getQImage(); }
 

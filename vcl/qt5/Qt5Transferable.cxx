@@ -40,14 +40,14 @@ static bool lcl_textMimeInfo(const OUString& rMimeString, bool& bHaveNoCharset, 
     return false;
 }
 
-Qt5Transferable::Qt5Transferable(const QMimeData* pMimeData)
+QtTransferable::QtTransferable(const QMimeData* pMimeData)
     : m_pMimeData(pMimeData)
     , m_bConvertFromLocale(false)
 {
     assert(pMimeData);
 }
 
-css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL Qt5Transferable::getTransferDataFlavors()
+css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL QtTransferable::getTransferDataFlavors()
 {
     // it's just filled once, ever, so just try to get it without locking first
     if (m_aMimeTypeSeq.hasElements())
@@ -115,7 +115,7 @@ css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL Qt5Transferable::getT
 }
 
 sal_Bool SAL_CALL
-Qt5Transferable::isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor)
+QtTransferable::isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor)
 {
     const auto aSeq = getTransferDataFlavors();
     return std::any_of(aSeq.begin(), aSeq.end(), [&](const css::datatransfer::DataFlavor& aFlavor) {
@@ -123,8 +123,7 @@ Qt5Transferable::isDataFlavorSupported(const css::datatransfer::DataFlavor& rFla
     });
 }
 
-css::uno::Any SAL_CALL
-Qt5Transferable::getTransferData(const css::datatransfer::DataFlavor& rFlavor)
+css::uno::Any SAL_CALL QtTransferable::getTransferData(const css::datatransfer::DataFlavor& rFlavor)
 {
     css::uno::Any aAny;
     if (!isDataFlavorSupported(rFlavor))
@@ -158,14 +157,14 @@ Qt5Transferable::getTransferData(const css::datatransfer::DataFlavor& rFlavor)
     return aAny;
 }
 
-Qt5ClipboardTransferable::Qt5ClipboardTransferable(const QClipboard::Mode aMode,
-                                                   const QMimeData* pMimeData)
-    : Qt5Transferable(pMimeData)
+QtClipboardTransferable::QtClipboardTransferable(const QClipboard::Mode aMode,
+                                                 const QMimeData* pMimeData)
+    : QtTransferable(pMimeData)
     , m_aMode(aMode)
 {
 }
 
-bool Qt5ClipboardTransferable::hasInFlightChanged() const
+bool QtClipboardTransferable::hasInFlightChanged() const
 {
     const bool bChanged(mimeData() != QApplication::clipboard()->mimeData(m_aMode));
     SAL_WARN_IF(bChanged, "vcl.qt5",
@@ -174,45 +173,45 @@ bool Qt5ClipboardTransferable::hasInFlightChanged() const
 }
 
 css::uno::Any SAL_CALL
-Qt5ClipboardTransferable::getTransferData(const css::datatransfer::DataFlavor& rFlavor)
+QtClipboardTransferable::getTransferData(const css::datatransfer::DataFlavor& rFlavor)
 {
     css::uno::Any aAny;
-    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    auto* pSalInst(static_cast<QtInstance*>(GetSalData()->m_pInstance));
     SolarMutexGuard g;
     pSalInst->RunInMainThread([&, this]() {
         if (!hasInFlightChanged())
-            aAny = Qt5Transferable::getTransferData(rFlavor);
+            aAny = QtTransferable::getTransferData(rFlavor);
     });
     return aAny;
 }
 
 css::uno::Sequence<css::datatransfer::DataFlavor>
-    SAL_CALL Qt5ClipboardTransferable::getTransferDataFlavors()
+    SAL_CALL QtClipboardTransferable::getTransferDataFlavors()
 {
     css::uno::Sequence<css::datatransfer::DataFlavor> aSeq;
-    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    auto* pSalInst(static_cast<QtInstance*>(GetSalData()->m_pInstance));
     SolarMutexGuard g;
     pSalInst->RunInMainThread([&, this]() {
         if (!hasInFlightChanged())
-            aSeq = Qt5Transferable::getTransferDataFlavors();
+            aSeq = QtTransferable::getTransferDataFlavors();
     });
     return aSeq;
 }
 
 sal_Bool SAL_CALL
-Qt5ClipboardTransferable::isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor)
+QtClipboardTransferable::isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor)
 {
     bool bIsSupported = false;
-    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    auto* pSalInst(static_cast<QtInstance*>(GetSalData()->m_pInstance));
     SolarMutexGuard g;
     pSalInst->RunInMainThread([&, this]() {
         if (!hasInFlightChanged())
-            bIsSupported = Qt5Transferable::isDataFlavorSupported(rFlavor);
+            bIsSupported = QtTransferable::isDataFlavorSupported(rFlavor);
     });
     return bIsSupported;
 }
 
-Qt5MimeData::Qt5MimeData(const css::uno::Reference<css::datatransfer::XTransferable>& xTrans)
+QtMimeData::QtMimeData(const css::uno::Reference<css::datatransfer::XTransferable>& xTrans)
     : m_aContents(xTrans)
     , m_bHaveNoCharset(false)
     , m_bHaveUTF8(false)
@@ -220,7 +219,7 @@ Qt5MimeData::Qt5MimeData(const css::uno::Reference<css::datatransfer::XTransfera
     assert(xTrans.is());
 }
 
-bool Qt5MimeData::deepCopy(QMimeData** const pMimeCopy) const
+bool QtMimeData::deepCopy(QMimeData** const pMimeCopy) const
 {
     if (!pMimeCopy)
         return false;
@@ -244,7 +243,7 @@ bool Qt5MimeData::deepCopy(QMimeData** const pMimeCopy) const
     return true;
 }
 
-QStringList Qt5MimeData::formats() const
+QStringList QtMimeData::formats() const
 {
     if (!m_aMimeTypeList.isEmpty())
         return m_aMimeTypeList;
@@ -275,7 +274,7 @@ QStringList Qt5MimeData::formats() const
     return m_aMimeTypeList;
 }
 
-QVariant Qt5MimeData::retrieveData(const QString& mimeType, QVariant::Type) const
+QVariant QtMimeData::retrieveData(const QString& mimeType, QVariant::Type) const
 {
     if (!hasFormat(mimeType))
         return QVariant();
@@ -340,6 +339,6 @@ QVariant Qt5MimeData::retrieveData(const QString& mimeType, QVariant::Type) cons
     return QVariant::fromValue(aByteArray);
 }
 
-bool Qt5MimeData::hasFormat(const QString& mimeType) const { return formats().contains(mimeType); }
+bool QtMimeData::hasFormat(const QString& mimeType) const { return formats().contains(mimeType); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

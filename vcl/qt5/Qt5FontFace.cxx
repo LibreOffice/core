@@ -38,7 +38,7 @@
 
 using namespace vcl;
 
-Qt5FontFace::Qt5FontFace(const Qt5FontFace& rSrc)
+QtFontFace::QtFontFace(const QtFontFace& rSrc)
     : PhysicalFontFace(rSrc)
     , m_aFontId(rSrc.m_aFontId)
     , m_eFontIdType(rSrc.m_eFontIdType)
@@ -47,7 +47,7 @@ Qt5FontFace::Qt5FontFace(const Qt5FontFace& rSrc)
         m_xCharMap = rSrc.m_xCharMap;
 }
 
-FontWeight Qt5FontFace::toFontWeight(const int nWeight)
+FontWeight QtFontFace::toFontWeight(const int nWeight)
 {
     if (nWeight <= QFont::Thin)
         return WEIGHT_THIN;
@@ -68,7 +68,7 @@ FontWeight Qt5FontFace::toFontWeight(const int nWeight)
     return WEIGHT_BLACK;
 }
 
-FontWidth Qt5FontFace::toFontWidth(const int nStretch)
+FontWidth QtFontFace::toFontWidth(const int nStretch)
 {
     if (nStretch == 0) // QFont::AnyStretch since Qt 5.8
         return WIDTH_DONTKNOW;
@@ -91,7 +91,7 @@ FontWidth Qt5FontFace::toFontWidth(const int nStretch)
     return WIDTH_ULTRA_EXPANDED;
 }
 
-FontItalic Qt5FontFace::toFontItalic(const QFont::Style eStyle)
+FontItalic QtFontFace::toFontItalic(const QFont::Style eStyle)
 {
     switch (eStyle)
     {
@@ -106,7 +106,7 @@ FontItalic Qt5FontFace::toFontItalic(const QFont::Style eStyle)
     return ITALIC_NONE;
 }
 
-void Qt5FontFace::fillAttributesFromQFont(const QFont& rFont, FontAttributes& rFA)
+void QtFontFace::fillAttributesFromQFont(const QFont& rFont, FontAttributes& rFA)
 {
     QFontInfo aFontInfo(rFont);
 
@@ -115,19 +115,19 @@ void Qt5FontFace::fillAttributesFromQFont(const QFont& rFont, FontAttributes& rF
         rFA.SetSymbolFlag(true);
     rFA.SetStyleName(toOUString(aFontInfo.styleName()));
     rFA.SetPitch(aFontInfo.fixedPitch() ? PITCH_FIXED : PITCH_VARIABLE);
-    rFA.SetWeight(Qt5FontFace::toFontWeight(aFontInfo.weight()));
-    rFA.SetItalic(Qt5FontFace::toFontItalic(aFontInfo.style()));
-    rFA.SetWidthType(Qt5FontFace::toFontWidth(rFont.stretch()));
+    rFA.SetWeight(QtFontFace::toFontWeight(aFontInfo.weight()));
+    rFA.SetItalic(QtFontFace::toFontItalic(aFontInfo.style()));
+    rFA.SetWidthType(QtFontFace::toFontWidth(rFont.stretch()));
 }
 
-Qt5FontFace* Qt5FontFace::fromQFont(const QFont& rFont)
+QtFontFace* QtFontFace::fromQFont(const QFont& rFont)
 {
     FontAttributes aFA;
     fillAttributesFromQFont(rFont, aFA);
-    return new Qt5FontFace(aFA, rFont.toString(), FontIdType::Font);
+    return new QtFontFace(aFA, rFont.toString(), FontIdType::Font);
 }
 
-Qt5FontFace* Qt5FontFace::fromQFontDatabase(const QString& aFamily, const QString& aStyle)
+QtFontFace* QtFontFace::fromQFontDatabase(const QString& aFamily, const QString& aStyle)
 {
     QFontDatabase aFDB;
     FontAttributes aFA;
@@ -137,7 +137,7 @@ Qt5FontFace* Qt5FontFace::fromQFontDatabase(const QString& aFamily, const QStrin
         aFA.SetSymbolFlag(true);
     aFA.SetStyleName(toOUString(aStyle));
     aFA.SetPitch(aFDB.isFixedPitch(aFamily, aStyle) ? PITCH_FIXED : PITCH_VARIABLE);
-    aFA.SetWeight(Qt5FontFace::toFontWeight(aFDB.weight(aFamily, aStyle)));
+    aFA.SetWeight(QtFontFace::toFontWeight(aFDB.weight(aFamily, aStyle)));
     aFA.SetItalic(aFDB.italic(aFamily, aStyle) ? ITALIC_NORMAL : ITALIC_NONE);
 
     int nPointSize = 0;
@@ -145,12 +145,12 @@ Qt5FontFace* Qt5FontFace::fromQFontDatabase(const QString& aFamily, const QStrin
     if (!aPointList.empty())
         nPointSize = aPointList[0];
 
-    return new Qt5FontFace(aFA, aFamily + "," + aStyle + "," + QString::number(nPointSize),
-                           FontIdType::FontDB);
+    return new QtFontFace(aFA, aFamily + "," + aStyle + "," + QString::number(nPointSize),
+                          FontIdType::FontDB);
 }
 
-Qt5FontFace::Qt5FontFace(const FontAttributes& rFA, const QString& rFontID,
-                         const FontIdType eFontIdType)
+QtFontFace::QtFontFace(const FontAttributes& rFA, const QString& rFontID,
+                       const FontIdType eFontIdType)
     : PhysicalFontFace(rFA)
     , m_aFontId(rFontID)
     , m_eFontIdType(eFontIdType)
@@ -158,9 +158,9 @@ Qt5FontFace::Qt5FontFace(const FontAttributes& rFA, const QString& rFontID,
 {
 }
 
-sal_IntPtr Qt5FontFace::GetFontId() const { return reinterpret_cast<sal_IntPtr>(&m_aFontId); }
+sal_IntPtr QtFontFace::GetFontId() const { return reinterpret_cast<sal_IntPtr>(&m_aFontId); }
 
-QFont Qt5FontFace::CreateFont() const
+QFont QtFontFace::CreateFont() const
 {
     QFont aFont;
     switch (m_eFontIdType)
@@ -185,12 +185,12 @@ QFont Qt5FontFace::CreateFont() const
 }
 
 rtl::Reference<LogicalFontInstance>
-Qt5FontFace::CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const
+QtFontFace::CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const
 {
-    return new Qt5Font(*this, rFSD);
+    return new QtFont(*this, rFSD);
 }
 
-FontCharMapRef Qt5FontFace::GetFontCharMap() const
+FontCharMapRef QtFontFace::GetFontCharMap() const
 {
     if (m_xCharMap.is())
         return m_xCharMap;
@@ -212,7 +212,7 @@ FontCharMapRef Qt5FontFace::GetFontCharMap() const
     return m_xCharMap;
 }
 
-bool Qt5FontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) const
+bool QtFontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) const
 {
     // read this only once per font
     if (m_bFontCapabilitiesRead)

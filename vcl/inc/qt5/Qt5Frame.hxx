@@ -48,13 +48,13 @@
 #undef Unsorted
 #endif
 
-class Qt5DragSource;
-class Qt5DropTarget;
-class Qt5Graphics;
-class Qt5Instance;
-class Qt5MainWindow;
-class Qt5Menu;
-class Qt5SvpGraphics;
+class QtDragSource;
+class QtDropTarget;
+class QtGraphics;
+class QtInstance;
+class QtMainWindow;
+class QtMenu;
+class QtSvpGraphics;
 
 class QDragMoveEvent;
 class QDropEvent;
@@ -64,33 +64,33 @@ class QPaintDevice;
 class QScreen;
 class QWidget;
 
-class VCLPLUG_QT5_PUBLIC Qt5Frame : public QObject, public SalFrame
+class VCLPLUG_QT5_PUBLIC QtFrame : public QObject, public SalFrame
 {
     Q_OBJECT
 
-    friend class Qt5Widget;
+    friend class QtWidget;
 
     QWidget* m_pQWidget;
-    Qt5MainWindow* m_pTopLevel;
+    QtMainWindow* m_pTopLevel;
 
     const bool m_bUseCairo;
     std::unique_ptr<QImage> m_pQImage;
-    std::unique_ptr<Qt5Graphics> m_pQt5Graphics;
+    std::unique_ptr<QtGraphics> m_pQtGraphics;
     UniqueCairoSurface m_pSurface;
-    std::unique_ptr<Qt5SvpGraphics> m_pSvpGraphics;
+    std::unique_ptr<QtSvpGraphics> m_pSvpGraphics;
     DamageHandler m_aDamageHandler;
     QRegion m_aRegion;
     bool m_bNullRegion;
 
     bool m_bGraphicsInUse;
     SalFrameStyleFlags m_nStyle;
-    Qt5Frame* m_pParent;
+    QtFrame* m_pParent;
     PointerStyle m_ePointerStyle;
 
     SystemEnvData m_aSystemData;
 
-    Qt5DragSource* m_pDragSource;
-    Qt5DropTarget* m_pDropTarget;
+    QtDragSource* m_pDragSource;
+    QtDropTarget* m_pDropTarget;
     bool m_bInDrag;
 
     bool m_bDefaultSize;
@@ -131,11 +131,11 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public QObject, public SalFrame
     void fixICCCMwindowGroup();
 
 public:
-    Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nSalFrameStyle, bool bUseCairo);
-    virtual ~Qt5Frame() override;
+    QtFrame(QtFrame* pParent, SalFrameStyleFlags nSalFrameStyle, bool bUseCairo);
+    virtual ~QtFrame() override;
 
     QWidget* GetQWidget() const { return m_pQWidget; }
-    Qt5MainWindow* GetTopLevelWindow() const { return m_pTopLevel; }
+    QtMainWindow* GetTopLevelWindow() const { return m_pTopLevel; }
     QWidget* asChild() const;
     qreal devicePixelRatioF() const;
 
@@ -152,10 +152,10 @@ public:
     virtual void SetMenu(SalMenu* pMenu) override;
     virtual void DrawMenuBar() override;
 
-    virtual void registerDragSource(Qt5DragSource* pDragSource);
-    virtual void deregisterDragSource(Qt5DragSource const* pDragSource);
-    virtual void registerDropTarget(Qt5DropTarget* pDropTarget);
-    virtual void deregisterDropTarget(Qt5DropTarget const* pDropTarget);
+    virtual void registerDragSource(QtDragSource* pDragSource);
+    virtual void deregisterDragSource(QtDragSource const* pDragSource);
+    virtual void registerDropTarget(QtDropTarget* pDropTarget);
+    virtual void deregisterDropTarget(QtDropTarget const* pDropTarget);
 
     void handleDragLeave();
     void handleDragMove(QDragMoveEvent* pEvent);
@@ -213,13 +213,13 @@ public:
     inline bool isPopup() const;
 };
 
-inline bool Qt5Frame::CallCallback(SalEvent nEvent, const void* pEvent) const
+inline bool QtFrame::CallCallback(SalEvent nEvent, const void* pEvent) const
 {
     SolarMutexGuard aGuard;
     return SalFrame::CallCallback(nEvent, pEvent);
 }
 
-inline bool Qt5Frame::isPopup() const
+inline bool QtFrame::isPopup() const
 {
     return ((m_nStyle & SalFrameStyleFlags::FLOAT)
             && !(m_nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION));

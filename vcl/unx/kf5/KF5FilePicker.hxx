@@ -24,7 +24,7 @@
 
 class QGridLayout;
 
-class KF5FilePicker final : public Qt5FilePicker
+class KF5FilePicker final : public QtFilePicker
 {
     Q_OBJECT
 

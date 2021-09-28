@@ -11,12 +11,12 @@
 
 #include <QtWidgets/QApplication>
 
-class Qt5GraphicsBase
+class QtGraphicsBase
 {
     qreal m_fDPR;
 
 public:
-    Qt5GraphicsBase()
+    QtGraphicsBase()
         : m_fDPR(qApp ? qApp->devicePixelRatio() : 1.0)
     {
     }

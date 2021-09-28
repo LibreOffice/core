@@ -14,15 +14,15 @@
 #include <Qt5System.hxx>
 #include <Qt5Tools.hxx>
 
-unsigned int Qt5System::GetDisplayScreenCount() { return QGuiApplication::screens().size(); }
+unsigned int QtSystem::GetDisplayScreenCount() { return QGuiApplication::screens().size(); }
 
-tools::Rectangle Qt5System::GetDisplayScreenPosSizePixel(unsigned int nScreen)
+tools::Rectangle QtSystem::GetDisplayScreenPosSizePixel(unsigned int nScreen)
 {
     QRect qRect = QGuiApplication::screens().at(nScreen)->geometry();
     return toRectangle(scaledQRect(qRect, qApp->devicePixelRatio()));
 }
 
-int Qt5System::ShowNativeDialog(const OUString&, const OUString&, const std::vector<OUString>&)
+int QtSystem::ShowNativeDialog(const OUString&, const OUString&, const std::vector<OUString>&)
 {
     return 0;
 }

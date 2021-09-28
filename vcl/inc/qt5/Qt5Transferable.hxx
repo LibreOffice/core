@@ -18,8 +18,8 @@
 #include <QtGui/QClipboard>
 
 /**
- * Qt5Transferable classes are used to read QMimeData via the XTransferable
- * interface. All the functionality is already implemented in the Qt5Transferable.
+ * QtTransferable classes are used to read QMimeData via the XTransferable
+ * interface. All the functionality is already implemented in the QtTransferable.
  *
  * The specialisations map to the two users, which provide QMimeData: the Clipboard
  * and the Drag'n'Drop functionality.
@@ -27,11 +27,11 @@
  * LO itself seem to just accept "text/plain;charset=utf-16", so it relies on the
  * backend to convert to this charset, but still offers "text/plain" itself.
  *
- * It's the "mirror" interface of the Qt5MimeData, which is defined below.
+ * It's the "mirror" interface of the QtMimeData, which is defined below.
  **/
-class Qt5Transferable : public cppu::WeakImplHelper<css::datatransfer::XTransferable>
+class QtTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransferable>
 {
-    Qt5Transferable(const Qt5Transferable&) = delete;
+    QtTransferable(const QtTransferable&) = delete;
 
     const QMimeData* m_pMimeData;
     osl::Mutex m_aMutex;
@@ -39,7 +39,7 @@ class Qt5Transferable : public cppu::WeakImplHelper<css::datatransfer::XTransfer
     css::uno::Sequence<css::datatransfer::DataFlavor> m_aMimeTypeSeq;
 
 public:
-    Qt5Transferable(const QMimeData* pMimeData);
+    QtTransferable(const QMimeData* pMimeData);
     const QMimeData* mimeData() const { return m_pMimeData; }
 
     css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
@@ -59,7 +59,7 @@ public:
  * interface, but currently we don't. But we ensure to never report mixed content,
  * so we'll just cease operation on QMimeData change.
  **/
-class Qt5ClipboardTransferable final : public Qt5Transferable
+class QtClipboardTransferable final : public QtTransferable
 {
     // to detect in-flight QMimeData changes
     const QClipboard::Mode m_aMode;
@@ -67,9 +67,9 @@ class Qt5ClipboardTransferable final : public Qt5Transferable
     bool hasInFlightChanged() const;
 
 public:
-    explicit Qt5ClipboardTransferable(const QClipboard::Mode aMode, const QMimeData* pMimeData);
+    explicit QtClipboardTransferable(const QClipboard::Mode aMode, const QMimeData* pMimeData);
 
-    // these are the same then Qt5Transferable, except they go through RunInMainThread
+    // these are the same then QtTransferable, except they go through RunInMainThread
     css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
     sal_Bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
     css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override;
@@ -80,7 +80,7 @@ public:
  *
  * This just uses the QMimeData provided by the QWidgets D'n'D events.
  **/
-typedef Qt5Transferable Qt5DnDTransferable;
+typedef QtTransferable QtDnDTransferable;
 
 /**
  * A lazy loading QMimeData for XTransferable reads
@@ -97,11 +97,11 @@ typedef Qt5Transferable Qt5DnDTransferable;
  * If LO misses to offer a UTF-8 or a locale encoded string, these objects
  * will offer them themselves and convert from UTF-16 on demand.
  *
- * It's the "mirror" interface of the Qt5Transferable.
+ * It's the "mirror" interface of the QtTransferable.
  **/
-class Qt5MimeData final : public QMimeData
+class QtMimeData final : public QMimeData
 {
-    friend class Qt5ClipboardTransferable;
+    friend class QtClipboardTransferable;
 
     const css::uno::Reference<css::datatransfer::XTransferable> m_aContents;
     mutable bool m_bHaveNoCharset; // = uses the locale charset
@@ -111,7 +111,7 @@ class Qt5MimeData final : public QMimeData
     QVariant retrieveData(const QString& mimeType, QVariant::Type type) const override;
 
 public:
-    explicit Qt5MimeData(const css::uno::Reference<css::datatransfer::XTransferable>& aContents);
+    explicit QtMimeData(const css::uno::Reference<css::datatransfer::XTransferable>& aContents);
 
     bool hasFormat(const QString& mimeType) const override;
     QStringList formats() const override;

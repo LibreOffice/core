@@ -21,7 +21,7 @@
 using namespace css::accessibility;
 using namespace css::uno;
 
-Qt5XAccessible::Qt5XAccessible(Reference<XAccessible> xAccessible)
+QtXAccessible::QtXAccessible(Reference<XAccessible> xAccessible)
     : m_xAccessible(xAccessible)
 {
 }

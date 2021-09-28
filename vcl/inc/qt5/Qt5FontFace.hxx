@@ -37,11 +37,11 @@ namespace vcl::font
 class FontSelectPattern;
 }
 
-class Qt5FontFace final : public PhysicalFontFace
+class QtFontFace final : public PhysicalFontFace
 {
 public:
-    static Qt5FontFace* fromQFont(const QFont& rFont);
-    static Qt5FontFace* fromQFontDatabase(const QString& aFamily, const QString& aStyle);
+    static QtFontFace* fromQFont(const QFont& rFont);
+    static QtFontFace* fromQFontDatabase(const QString& aFamily, const QString& aStyle);
     static void fillAttributesFromQFont(const QFont& rFont, FontAttributes& rFA);
 
     VCLPLUG_QT5_PUBLIC static FontWeight toFontWeight(const int nWeight);
@@ -63,8 +63,8 @@ public:
 private:
     typedef enum { Font, FontDB } FontIdType;
 
-    Qt5FontFace(const Qt5FontFace&);
-    Qt5FontFace(const FontAttributes&, const QString& rFontID, const FontIdType);
+    QtFontFace(const QtFontFace&);
+    QtFontFace(const FontAttributes&, const QString& rFontID, const FontIdType);
 
     const QString m_aFontId;
     const FontIdType m_eFontIdType;

@@ -27,17 +27,17 @@
 
 #include "Qt5FontFace.hxx"
 
-class Qt5Font final : public QFont, public LogicalFontInstance
+class QtFont final : public QFont, public LogicalFontInstance
 {
     friend rtl::Reference<LogicalFontInstance>
-    Qt5FontFace::CreateFontInstance(const vcl::font::FontSelectPattern&) const;
+    QtFontFace::CreateFontInstance(const vcl::font::FontSelectPattern&) const;
 
     bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const override;
     bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const override;
 
     virtual hb_font_t* ImplInitHbFont() override;
 
-    explicit Qt5Font(const PhysicalFontFace&, const vcl::font::FontSelectPattern&);
+    explicit QtFont(const PhysicalFontFace&, const vcl::font::FontSelectPattern&);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -60,7 +60,7 @@
 
 using namespace com::sun::star;
 
-void Qt5Widget::paintEvent(QPaintEvent* pEvent)
+void QtWidget::paintEvent(QPaintEvent* pEvent)
 {
     QPainter p(this);
     if (!m_rFrame.m_bNullRegion)
@@ -74,7 +74,7 @@ void Qt5Widget::paintEvent(QPaintEvent* pEvent)
 
         aImage = QImage(cairo_image_surface_get_data(pSurface),
                         cairo_image_surface_get_width(pSurface),
-                        cairo_image_surface_get_height(pSurface), Qt5_DefaultFormat32);
+                        cairo_image_surface_get_height(pSurface), Qt_DefaultFormat32);
     }
     else
         aImage = *m_rFrame.m_pQImage;
@@ -85,7 +85,7 @@ void Qt5Widget::paintEvent(QPaintEvent* pEvent)
     p.drawImage(pEvent->rect(), aImage, source);
 }
 
-void Qt5Widget::resizeEvent(QResizeEvent* pEvent)
+void QtWidget::resizeEvent(QResizeEvent* pEvent)
 {
     const qreal fRatio = m_rFrame.devicePixelRatioF();
     const int nWidth = ceil(pEvent->size().width() * fRatio);
@@ -122,20 +122,20 @@ void Qt5Widget::resizeEvent(QResizeEvent* pEvent)
             pImage = new QImage(m_rFrame.m_pQImage->copy(0, 0, nWidth, nHeight));
         else
         {
-            pImage = new QImage(nWidth, nHeight, Qt5_DefaultFormat32);
+            pImage = new QImage(nWidth, nHeight, Qt_DefaultFormat32);
             pImage->fill(Qt::transparent);
         }
 
-        m_rFrame.m_pQt5Graphics->ChangeQImage(pImage);
+        m_rFrame.m_pQtGraphics->ChangeQImage(pImage);
         m_rFrame.m_pQImage.reset(pImage);
     }
 
     m_rFrame.CallCallback(SalEvent::Resize, nullptr);
 }
 
-void Qt5Widget::fillSalAbstractMouseEvent(const Qt5Frame& rFrame, const QInputEvent* pQEvent,
-                                          const QPoint& rPos, Qt::MouseButtons eButtons, int nWidth,
-                                          SalAbstractMouseEvent& aSalEvent)
+void QtWidget::fillSalAbstractMouseEvent(const QtFrame& rFrame, const QInputEvent* pQEvent,
+                                         const QPoint& rPos, Qt::MouseButtons eButtons, int nWidth,
+                                         SalAbstractMouseEvent& aSalEvent)
 {
     const qreal fRatio = rFrame.devicePixelRatioF();
     const Point aPos = toPoint(rPos * fRatio);
@@ -149,8 +149,8 @@ void Qt5Widget::fillSalAbstractMouseEvent(const Qt5Frame& rFrame, const QInputEv
 #define FILL_SAME(rFrame, nWidth)                                                                  \
     fillSalAbstractMouseEvent(rFrame, pEvent, pEvent->pos(), pEvent->buttons(), nWidth, aEvent)
 
-void Qt5Widget::handleMouseButtonEvent(const Qt5Frame& rFrame, const QMouseEvent* pEvent,
-                                       const ButtonKeyState eState)
+void QtWidget::handleMouseButtonEvent(const QtFrame& rFrame, const QMouseEvent* pEvent,
+                                      const ButtonKeyState eState)
 {
     SalMouseEvent aEvent;
     FILL_SAME(rFrame, rFrame.GetQWidget()->width());
@@ -178,7 +178,7 @@ void Qt5Widget::handleMouseButtonEvent(const Qt5Frame& rFrame, const QMouseEvent
     rFrame.CallCallback(nEventType, &aEvent);
 }
 
-void Qt5Widget::mousePressEvent(QMouseEvent* pEvent)
+void QtWidget::mousePressEvent(QMouseEvent* pEvent)
 {
     handleMousePressEvent(m_rFrame, pEvent);
     if (m_rFrame.isPopup()
@@ -186,12 +186,9 @@ void Qt5Widget::mousePressEvent(QMouseEvent* pEvent)
         closePopup();
 }
 
-void Qt5Widget::mouseReleaseEvent(QMouseEvent* pEvent)
-{
-    handleMouseReleaseEvent(m_rFrame, pEvent);
-}
+void QtWidget::mouseReleaseEvent(QMouseEvent* pEvent) { handleMouseReleaseEvent(m_rFrame, pEvent); }
 
-void Qt5Widget::mouseMoveEvent(QMouseEvent* pEvent)
+void QtWidget::mouseMoveEvent(QMouseEvent* pEvent)
 {
     SalMouseEvent aEvent;
     FILL_SAME(m_rFrame, width());
@@ -202,7 +199,7 @@ void Qt5Widget::mouseMoveEvent(QMouseEvent* pEvent)
     pEvent->accept();
 }
 
-void Qt5Widget::wheelEvent(QWheelEvent* pEvent)
+void QtWidget::wheelEvent(QWheelEvent* pEvent)
 {
     SalWheelMouseEvent aEvent;
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
@@ -242,22 +239,22 @@ void Qt5Widget::wheelEvent(QWheelEvent* pEvent)
     pEvent->accept();
 }
 
-void Qt5Widget::dragEnterEvent(QDragEnterEvent* event)
+void QtWidget::dragEnterEvent(QDragEnterEvent* event)
 {
-    if (dynamic_cast<const Qt5MimeData*>(event->mimeData()))
+    if (dynamic_cast<const QtMimeData*>(event->mimeData()))
         event->accept();
     else
         event->acceptProposedAction();
 }
 
 // also called when a drop is rejected
-void Qt5Widget::dragLeaveEvent(QDragLeaveEvent*) { m_rFrame.handleDragLeave(); }
+void QtWidget::dragLeaveEvent(QDragLeaveEvent*) { m_rFrame.handleDragLeave(); }
 
-void Qt5Widget::dragMoveEvent(QDragMoveEvent* pEvent) { m_rFrame.handleDragMove(pEvent); }
+void QtWidget::dragMoveEvent(QDragMoveEvent* pEvent) { m_rFrame.handleDragMove(pEvent); }
 
-void Qt5Widget::dropEvent(QDropEvent* pEvent) { m_rFrame.handleDrop(pEvent); }
+void QtWidget::dropEvent(QDropEvent* pEvent) { m_rFrame.handleDrop(pEvent); }
 
-void Qt5Widget::moveEvent(QMoveEvent* pEvent)
+void QtWidget::moveEvent(QMoveEvent* pEvent)
 {
     if (m_rFrame.m_pTopLevel)
         return;
@@ -268,17 +265,17 @@ void Qt5Widget::moveEvent(QMoveEvent* pEvent)
     m_rFrame.CallCallback(SalEvent::Move, nullptr);
 }
 
-void Qt5Widget::showEvent(QShowEvent*)
+void QtWidget::showEvent(QShowEvent*)
 {
     QSize aSize(m_rFrame.GetQWidget()->size() * m_rFrame.devicePixelRatioF());
     // forcing an immediate update somehow interferes with the hide + show
-    // sequence from Qt5Frame::SetModal, if the frame was already set visible,
+    // sequence from QtFrame::SetModal, if the frame was already set visible,
     // resulting in a hidden / unmapped window
     SalPaintEvent aPaintEvt(0, 0, aSize.width(), aSize.height());
     m_rFrame.CallCallback(SalEvent::Paint, &aPaintEvt);
 }
 
-void Qt5Widget::closeEvent(QCloseEvent* /*pEvent*/)
+void QtWidget::closeEvent(QCloseEvent* /*pEvent*/)
 {
     m_rFrame.CallCallback(SalEvent::Close, nullptr);
 }
@@ -429,7 +426,7 @@ static sal_uInt16 GetKeyCode(int keyval, Qt::KeyboardModifiers modifiers)
     return nCode;
 }
 
-void Qt5Widget::commitText(Qt5Frame& rFrame, const QString& aText)
+void QtWidget::commitText(QtFrame& rFrame, const QString& aText)
 {
     SalExtTextInputEvent aInputEvent;
     aInputEvent.mpTextAttr = nullptr;
@@ -444,8 +441,8 @@ void Qt5Widget::commitText(Qt5Frame& rFrame, const QString& aText)
         rFrame.CallCallback(SalEvent::EndExtTextInput, nullptr);
 }
 
-bool Qt5Widget::handleKeyEvent(Qt5Frame& rFrame, const QWidget& rWidget, QKeyEvent* pEvent,
-                               const ButtonKeyState eState)
+bool QtWidget::handleKeyEvent(QtFrame& rFrame, const QWidget& rWidget, QKeyEvent* pEvent,
+                              const ButtonKeyState eState)
 {
     sal_uInt16 nCode = GetKeyCode(pEvent->key(), pEvent->modifiers());
     if (eState == ButtonKeyState::Pressed && nCode == 0 && pEvent->text().length() > 1
@@ -555,7 +552,7 @@ bool Qt5Widget::handleKeyEvent(Qt5Frame& rFrame, const QWidget& rWidget, QKeyEve
     return bStopProcessingKey;
 }
 
-bool Qt5Widget::handleEvent(Qt5Frame& rFrame, const QWidget& rWidget, QEvent* pEvent)
+bool QtWidget::handleEvent(QtFrame& rFrame, const QWidget& rWidget, QEvent* pEvent)
 {
     if (pEvent->type() == QEvent::ShortcutOverride)
     {
@@ -585,20 +582,20 @@ bool Qt5Widget::handleEvent(Qt5Frame& rFrame, const QWidget& rWidget, QEvent* pE
     return false;
 }
 
-bool Qt5Widget::event(QEvent* pEvent)
+bool QtWidget::event(QEvent* pEvent)
 {
     return handleEvent(m_rFrame, *this, pEvent) || QWidget::event(pEvent);
 }
 
-void Qt5Widget::keyReleaseEvent(QKeyEvent* pEvent)
+void QtWidget::keyReleaseEvent(QKeyEvent* pEvent)
 {
     if (!handleKeyReleaseEvent(m_rFrame, *this, pEvent))
         QWidget::keyReleaseEvent(pEvent);
 }
 
-void Qt5Widget::focusInEvent(QFocusEvent*) { m_rFrame.CallCallback(SalEvent::GetFocus, nullptr); }
+void QtWidget::focusInEvent(QFocusEvent*) { m_rFrame.CallCallback(SalEvent::GetFocus, nullptr); }
 
-void Qt5Widget::closePopup()
+void QtWidget::closePopup()
 {
     VclPtr<FloatingWindow> pFirstFloat = ImplGetSVData()->mpWinData->mpFirstFloat;
     if (pFirstFloat && !(pFirstFloat->GetPopupModeFlags() & FloatWinPopupFlags::NoAppFocusClose))
@@ -608,7 +605,7 @@ void Qt5Widget::closePopup()
     }
 }
 
-void Qt5Widget::focusOutEvent(QFocusEvent*)
+void QtWidget::focusOutEvent(QFocusEvent*)
 {
     m_rFrame.m_nKeyModifiers = ModKeyFlags::NONE;
     endExtTextInput();
@@ -616,7 +613,7 @@ void Qt5Widget::focusOutEvent(QFocusEvent*)
     closePopup();
 }
 
-Qt5Widget::Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f)
+QtWidget::QtWidget(QtFrame& rFrame, Qt::WindowFlags f)
     : QWidget(Q_NULLPTR, f)
     , m_rFrame(rFrame)
     , m_bNonEmptyIMPreeditSeen(false)
@@ -646,7 +643,7 @@ static ExtTextInputAttr lcl_MapUndrelineStyle(QTextCharFormat::UnderlineStyle us
     }
 }
 
-void Qt5Widget::inputMethodEvent(QInputMethodEvent* pEvent)
+void QtWidget::inputMethodEvent(QInputMethodEvent* pEvent)
 {
     if (!pEvent->commitString().isEmpty())
         commitText(m_rFrame, pEvent->commitString());
@@ -765,7 +762,7 @@ static bool lcl_retrieveSurrounding(sal_Int32& rPosition, sal_Int32& rAnchor, QS
     return false;
 }
 
-QVariant Qt5Widget::inputMethodQuery(Qt::InputMethodQuery property) const
+QVariant QtWidget::inputMethodQuery(Qt::InputMethodQuery property) const
 {
     switch (property)
     {
@@ -812,7 +809,7 @@ QVariant Qt5Widget::inputMethodQuery(Qt::InputMethodQuery property) const
     }
 }
 
-void Qt5Widget::endExtTextInput()
+void QtWidget::endExtTextInput()
 {
     if (m_bNonEmptyIMPreeditSeen)
     {
@@ -821,7 +818,7 @@ void Qt5Widget::endExtTextInput()
     }
 }
 
-void Qt5Widget::changeEvent(QEvent* pEvent)
+void QtWidget::changeEvent(QEvent* pEvent)
 {
     switch (pEvent->type())
     {
@@ -831,7 +828,7 @@ void Qt5Widget::changeEvent(QEvent* pEvent)
             [[fallthrough]];
         case QEvent::StyleChange:
         {
-            auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+            auto* pSalInst(static_cast<QtInstance*>(GetSalData()->m_pInstance));
             assert(pSalInst);
             pSalInst->UpdateStyle(QEvent::FontChange == pEvent->type());
             break;

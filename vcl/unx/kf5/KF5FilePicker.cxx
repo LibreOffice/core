@@ -48,10 +48,10 @@ uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
 KF5FilePicker::KF5FilePicker(css::uno::Reference<css::uno::XComponentContext> const& context,
                              QFileDialog::FileMode eMode)
     // Native kf5 filepicker does not add file extension automatically
-    : Qt5FilePicker(context, eMode, true)
+    : QtFilePicker(context, eMode, true)
     , _layout(new QGridLayout(m_pExtraControls))
 {
-    // only columns 0 and 1 are used by controls (s. Qt5FilePicker::addCustomControl);
+    // only columns 0 and 1 are used by controls (s. QtFilePicker::addCustomControl);
     // set stretch for (unused) column 2 in order for the controls to only take the space
     // they actually need and avoid empty space in between
     _layout->setColumnStretch(2, 1);
@@ -78,13 +78,13 @@ void SAL_CALL KF5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAct
         // We ignore this one and rely on QFileDialog to provide the functionality
         return;
 
-    Qt5FilePicker::setValue(controlId, nControlAction, value);
+    QtFilePicker::setValue(controlId, nControlAction, value);
 }
 
 uno::Any SAL_CALL KF5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction)
 {
     SolarMutexGuard g;
-    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    auto* pSalInst(static_cast<QtInstance*>(GetSalData()->m_pInstance));
     assert(pSalInst);
     if (!pSalInst->IsMainThread())
     {
@@ -103,7 +103,7 @@ uno::Any SAL_CALL KF5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nContro
         // saves the value of the setting, so LO core is not needed for that either.
         return uno::Any(false);
 
-    return Qt5FilePicker::getValue(controlId, nControlAction);
+    return QtFilePicker::getValue(controlId, nControlAction);
 }
 
 void SAL_CALL KF5FilePicker::enableControl(sal_Int16 controlId, sal_Bool enable)
@@ -112,7 +112,7 @@ void SAL_CALL KF5FilePicker::enableControl(sal_Int16 controlId, sal_Bool enable)
         // We ignore this one and rely on QFileDialog to provide the functionality
         return;
 
-    Qt5FilePicker::enableControl(controlId, enable);
+    QtFilePicker::enableControl(controlId, enable);
 }
 
 void SAL_CALL KF5FilePicker::setLabel(sal_Int16 controlId, const OUString& label)
@@ -121,7 +121,7 @@ void SAL_CALL KF5FilePicker::setLabel(sal_Int16 controlId, const OUString& label
         // We ignore this one and rely on QFileDialog to provide the functionality
         return;
 
-    Qt5FilePicker::setLabel(controlId, label);
+    QtFilePicker::setLabel(controlId, label);
 }
 
 OUString SAL_CALL KF5FilePicker::getLabel(sal_Int16 controlId)
@@ -130,7 +130,7 @@ OUString SAL_CALL KF5FilePicker::getLabel(sal_Int16 controlId)
     if (CHECKBOX_AUTOEXTENSION == controlId)
         return "";
 
-    return Qt5FilePicker::getLabel(controlId);
+    return QtFilePicker::getLabel(controlId);
 }
 
 void KF5FilePicker::addCustomControl(sal_Int16 controlId)
@@ -140,7 +140,7 @@ void KF5FilePicker::addCustomControl(sal_Int16 controlId)
     if (controlId == CHECKBOX_AUTOEXTENSION)
         return;
 
-    Qt5FilePicker::addCustomControl(controlId);
+    QtFilePicker::addCustomControl(controlId);
 }
 
 // XServiceInfo

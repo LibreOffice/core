@@ -17,17 +17,17 @@
 
 #include <vcl/window.hxx>
 
-class Qt5Frame;
-class Qt5Widget;
+class QtFrame;
+class QtWidget;
 
 // Wrapper class to hold a css::accessibility::XAccessible object
 // while being able to pass it as a QObject
-class Qt5XAccessible : public QObject
+class QtXAccessible : public QObject
 {
     Q_OBJECT
 
 public:
-    Qt5XAccessible(css::uno::Reference<css::accessibility::XAccessible> xAccessible);
+    QtXAccessible(css::uno::Reference<css::accessibility::XAccessible> xAccessible);
     css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
 };
 

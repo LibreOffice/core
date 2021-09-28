@@ -13,23 +13,23 @@
 
 #include <vcl/cairo.hxx>
 
-class Qt5SvpGraphics;
+class QtSvpGraphics;
 class OutputDevice;
 
 namespace cairo
 {
-class Qt5SvpSurface final : public Surface
+class QtSvpSurface final : public Surface
 {
-    const Qt5SvpGraphics* m_pGraphics;
+    const QtSvpGraphics* m_pGraphics;
     cairo_t* const m_pCairoContext;
     CairoSurfaceSharedPtr m_pSurface;
 
 public:
     /// takes over ownership of passed cairo_surface
-    explicit Qt5SvpSurface(const CairoSurfaceSharedPtr& pSurface);
+    explicit QtSvpSurface(const CairoSurfaceSharedPtr& pSurface);
     /// create surface on subarea of given drawable
-    explicit Qt5SvpSurface(const Qt5SvpGraphics* pGraphics, int x, int y, int width, int height);
-    ~Qt5SvpSurface() override;
+    explicit QtSvpSurface(const QtSvpGraphics* pGraphics, int x, int y, int width, int height);
+    ~QtSvpSurface() override;
 
     // Surface interface
     CairoSharedPtr getCairo() const override;

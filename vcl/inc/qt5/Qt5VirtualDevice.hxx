@@ -26,19 +26,19 @@
 
 #include <QtCore/QSize>
 
-class Qt5Graphics;
+class QtGraphics;
 class QImage;
 enum class DeviceFormat;
 
-class Qt5VirtualDevice final : public SalVirtualDevice
+class QtVirtualDevice final : public SalVirtualDevice
 {
-    std::vector<Qt5Graphics*> m_aGraphics;
+    std::vector<QtGraphics*> m_aGraphics;
     std::unique_ptr<QImage> m_pImage;
     QSize m_aFrameSize;
     double m_fScale;
 
 public:
-    Qt5VirtualDevice(double fScale);
+    QtVirtualDevice(double fScale);
 
     // SalVirtualDevice
     virtual SalGraphics* AcquireGraphics() override;

@@ -25,7 +25,7 @@
 #include <QtGui/QFont>
 #include <QtGui/QRawFont>
 
-static inline void applyWeight(Qt5Font& rFont, FontWeight eWeight)
+static inline void applyWeight(QtFont& rFont, FontWeight eWeight)
 {
     switch (eWeight)
     {
@@ -63,7 +63,7 @@ static inline void applyWeight(Qt5Font& rFont, FontWeight eWeight)
     }
 }
 
-static inline void applyStretch(Qt5Font& rFont, FontWidth eWidthType)
+static inline void applyStretch(QtFont& rFont, FontWidth eWidthType)
 {
     switch (eWidthType)
     {
@@ -102,7 +102,7 @@ static inline void applyStretch(Qt5Font& rFont, FontWidth eWidthType)
     }
 }
 
-static inline void applyStyle(Qt5Font& rFont, FontItalic eItalic)
+static inline void applyStyle(QtFont& rFont, FontItalic eItalic)
 {
     switch (eItalic)
     {
@@ -120,7 +120,7 @@ static inline void applyStyle(Qt5Font& rFont, FontItalic eItalic)
     }
 }
 
-Qt5Font::Qt5Font(const PhysicalFontFace& rPFF, const vcl::font::FontSelectPattern& rFSP)
+QtFont::QtFont(const PhysicalFontFace& rPFF, const vcl::font::FontSelectPattern& rFSP)
     : LogicalFontInstance(rPFF, rFSP)
 {
     setFamily(toQString(rPFF.GetFamilyName()));
@@ -135,7 +135,7 @@ static hb_blob_t* getFontTable(hb_face_t*, hb_tag_t nTableTag, void* pUserData)
     char pTagName[5];
     LogicalFontInstance::DecodeOpenTypeTag(nTableTag, pTagName);
 
-    Qt5Font* pFont = static_cast<Qt5Font*>(pUserData);
+    QtFont* pFont = static_cast<QtFont*>(pUserData);
     QRawFont aRawFont(QRawFont::fromFont(*pFont));
     QByteArray aTable = aRawFont.fontTable(pTagName);
     const sal_uInt32 nLength = aTable.size();
@@ -146,14 +146,14 @@ static hb_blob_t* getFontTable(hb_face_t*, hb_tag_t nTableTag, void* pUserData)
     return pBlob;
 }
 
-hb_font_t* Qt5Font::ImplInitHbFont()
+hb_font_t* QtFont::ImplInitHbFont()
 {
     return InitHbFont(hb_face_create_for_tables(getFontTable, this, nullptr));
 }
 
-bool Qt5Font::GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const { return false; }
+bool QtFont::GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const { return false; }
 
-bool Qt5Font::ImplGetGlyphBoundRect(sal_GlyphId nId, tools::Rectangle& rRect, bool) const
+bool QtFont::ImplGetGlyphBoundRect(sal_GlyphId nId, tools::Rectangle& rRect, bool) const
 {
     QRawFont aRawFont(QRawFont::fromFont(*this));
     rRect = toRectangle(aRawFont.boundingRect(nId).toAlignedRect());

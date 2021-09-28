@@ -21,10 +21,10 @@
 
 #include <Qt5Instance.hxx>
 
-class KF5SalInstance final : public Qt5Instance
+class KF5SalInstance final : public QtInstance
 {
     bool hasNativeFileSelection() const override;
-    rtl::Reference<Qt5FilePicker>
+    rtl::Reference<QtFilePicker>
     createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
                  QFileDialog::FileMode) override;
 

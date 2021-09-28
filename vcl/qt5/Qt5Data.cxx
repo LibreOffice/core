@@ -155,7 +155,7 @@
 
 #include <unx/glyphcache.hxx>
 
-Qt5Data::Qt5Data(SalInstance* pInstance)
+QtData::QtData(SalInstance* pInstance)
     : GenericUnixSalData(pInstance)
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -174,7 +174,7 @@ Qt5Data::Qt5Data(SalInstance* pInstance)
 }
 
 // outline dtor b/c of FreetypeManager incomplete type
-Qt5Data::~Qt5Data() {}
+QtData::~QtData() {}
 
 static QCursor* getQCursorFromXBM(const unsigned char* pBitmap, const unsigned char* pMask,
                                   int nWidth, int nHeight, int nXHot, int nYHot)
@@ -194,7 +194,7 @@ static QCursor* getQCursorFromXBM(const unsigned char* pBitmap, const unsigned c
         pCursor = new QCursor(qt_enum);                                                            \
         break
 
-QCursor& Qt5Data::getCursor(PointerStyle ePointerStyle)
+QCursor& QtData::getCursor(PointerStyle ePointerStyle)
 {
     if (!m_aCursors[ePointerStyle])
     {
@@ -321,11 +321,11 @@ QCursor& Qt5Data::getCursor(PointerStyle ePointerStyle)
     return *m_aCursors[ePointerStyle];
 }
 
-void Qt5Data::ErrorTrapPush() {}
+void QtData::ErrorTrapPush() {}
 
-bool Qt5Data::ErrorTrapPop(bool /*bIgnoreError*/) { return false; }
+bool QtData::ErrorTrapPop(bool /*bIgnoreError*/) { return false; }
 
-bool Qt5Data::noNativeControls()
+bool QtData::noNativeControls()
 {
     static const bool bNoNative
         = ((nullptr != getenv("SAL_VCL_QT5_NO_NATIVE")) && (nullptr != ImplGetSVData())
