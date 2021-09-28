@@ -35,7 +35,6 @@ $(eval $(call gb_Library_set_include,vclplug_gtk3_kde5,\
 $(eval $(call gb_Library_add_cxxflags,vclplug_gtk3_kde5,\
     $$(INCLUDE) \
     $$(GTK3_CFLAGS) \
-    $(KF5_CFLAGS) \
     $$(GSTREAMER_1_0_CFLAGS) \
 ))
 
@@ -83,6 +82,7 @@ $(eval $(call gb_Library_use_externals,vclplug_gtk3_kde5,\
 	dbus \
 	graphite \
 	harfbuzz \
+	kf5 \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_gtk3_kde5,\
@@ -123,7 +123,6 @@ ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,vclplug_gtk3_kde5,\
 	-lm \
 	-ldl \
-	$(KF5_LIBS) \
 ))
 endif
 
