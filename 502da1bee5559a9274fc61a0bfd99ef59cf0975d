@@ -34,6 +34,24 @@
       "parentUuid": "b73abb4e_eb6d7535",
       "revId": "502da1bee5559a9274fc61a0bfd99ef59cf0975d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68dc49c3_db9ab8f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001432
+      },
+      "writtenOn": "2021-09-28T15:19:50Z",
+      "side": 1,
+      "message": "Ah yes indeed, however relying on undocumented options seems a bit YOLO to me…\n\nAnother thing, given (AFAIU) the point here is to make logerrit work smoothly with OpenSSH ≥8.8 and gerrit ≤3.4(?) I wonder if perhaps logerrit shouldn\u0027t be modified so `./logerrit setup` creates an ed25519 key if none exists?  But that probably belongs to another patch :-)",
+      "parentUuid": "7dacb9c4_313723e5",
+      "revId": "502da1bee5559a9274fc61a0bfd99ef59cf0975d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
