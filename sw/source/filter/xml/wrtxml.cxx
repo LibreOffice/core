@@ -81,9 +81,27 @@ SwXMLWriter::~SwXMLWriter()
 {
 }
 
-ErrCode SwXMLWriter::Write_(const uno::Reference < task::XStatusIndicator >& xStatusIndicator,
-                            const OUString& aDocHierarchicalName, bool bNoEmbDS)
+ErrCode SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
 {
+    uno::Reference<task::XStatusIndicator> xStatusIndicator;
+    OUString aDocHierarchicalName;
+    bool bNoEmbDS(false);
+
+    if (pMediumItemSet)
+    {
+        const SfxUnoAnyItem* pStatusBarItem = static_cast<const SfxUnoAnyItem*>(
+           pMediumItemSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL));
+        if (pStatusBarItem)
+            pStatusBarItem->GetValue() >>= xStatusIndicator;
+        const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
+            pMediumItemSet->GetItem(SID_DOC_HIERARCHICALNAME));
+        if (pDocHierarchItem)
+            aDocHierarchicalName = pDocHierarchItem->GetValue();
+        const SfxBoolItem* pNoEmbDS = pMediumItemSet->GetItem(SID_NO_EMBEDDED_DS);
+        if (pNoEmbDS)
+            bNoEmbDS = pNoEmbDS->GetValue();
+    }
+
     // Get service factory
     uno::Reference< uno::XComponentContext > xContext =
             comphelper::getProcessComponentContext();
@@ -447,28 +465,12 @@ ErrCode SwXMLWriter::Write_(const uno::Reference < task::XStatusIndicator >& xSt
 
 ErrCode SwXMLWriter::WriteStorage()
 {
-    return Write_(uno::Reference<task::XStatusIndicator>(), OUString(), false);
+    return Write_(nullptr);
 }
 
 ErrCode SwXMLWriter::WriteMedium( SfxMedium& aTargetMedium )
 {
-    uno::Reference < task::XStatusIndicator > xStatusIndicator;
-    OUString aName;
-    bool bNoEmbDS(false);
-
-    const SfxUnoAnyItem* pStatusBarItem = static_cast<const SfxUnoAnyItem*>(
-       aTargetMedium.GetItemSet()->GetItem(SID_PROGRESS_STATUSBAR_CONTROL) );
-    if ( pStatusBarItem )
-        pStatusBarItem->GetValue() >>= xStatusIndicator;
-    const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
-        aTargetMedium.GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME) );
-    if ( pDocHierarchItem )
-        aName = pDocHierarchItem->GetValue();
-    const SfxBoolItem* pNoEmbDS = SfxItemSet::GetItem(aTargetMedium.GetItemSet(), SID_NO_EMBEDDED_DS, false);
-    if (pNoEmbDS)
-        bNoEmbDS = pNoEmbDS->GetValue();
-
-    return Write_(xStatusIndicator, aName, bNoEmbDS);
+    return Write_(aTargetMedium.GetItemSet());
 }
 
 ErrCode SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
