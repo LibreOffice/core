@@ -16,6 +16,23 @@
       "message": "Seeing as this seems a similar sort of problem as that solved by:\n\ncommit edc62adae9a354ca1305e83b10c98a545f58d341\nAuthor: Mike Kaganski \u003cmike.kaganski@collabora.com\u003e\nDate:   Mon Jul 9 19:49:34 2018 +1000\n    tdf#118634: Don\u0027t save embedded data source to a temporary preview document\n\nmaybe you have some insight if doing this proposed change is sane",
       "revId": "15ffc5c8d8df590528ab951d2203b99135cf08b1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18ec032c_9760edd2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-28T09:55:36Z",
+      "side": 1,
+      "message": "I must say I have rather vague memory about that work, it was long ago; but what you do looks good to me.\n\nI seem to remember I thought at that time, that we need some sort of refcounting for the data sources... but indeed it\u0027s some separate task.",
+      "revId": "15ffc5c8d8df590528ab951d2203b99135cf08b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
