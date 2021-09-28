@@ -776,10 +776,10 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
                             }
                             else
                             {
-                                pItemSet = std::make_unique<SfxItemSet>(pDoc->GetPool(),
-                                            svl::Items<SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
+                                pItemSet = std::make_unique<SfxItemSetFixed
+                                            <SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
                                             SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
-                                            ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT> );
+                                            ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT>>(pDoc->GetPool());
                             }
 
                             pPrinter = SfxPrinter::Create ( aStream, std::move(pItemSet) );

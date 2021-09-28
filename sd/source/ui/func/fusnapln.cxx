@@ -69,7 +69,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
 
     if (!pArgs)
     {
-        SfxItemSet aNewAttr(mpViewShell->GetPool(), svl::Items<ATTR_SNAPLINE_START, ATTR_SNAPLINE_END>);
+        SfxItemSetFixed<ATTR_SNAPLINE_START, ATTR_SNAPLINE_END> aNewAttr(mpViewShell->GetPool());
         bool bLineExist (false);
         Point aLinePos;
 
