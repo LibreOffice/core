@@ -76,6 +76,7 @@
   <menu:menuitem menu:id=".uno:AuthoritiesEntryDialog"/>
   <menu:menuseparator/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:InsertFormula"/>
   <menu:menuitem menu:id=".uno:InsertAnnotation"/>
   <menu:menuitem menu:id=".uno:AcceptTrackedChange"/>
   <menu:menuitem menu:id=".uno:RejectTrackedChange"/>
