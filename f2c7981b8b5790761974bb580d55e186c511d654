@@ -52,6 +52,24 @@
       "parentUuid": "161fe119_0467f01b",
       "revId": "f2c7981b8b5790761974bb580d55e186c511d654",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a739f62_455d1a38",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2021-09-28T14:05:13Z",
+      "side": 1,
+      "message": "With the patch set 7 we export the \u003csheetDataSet\u003e\u003csheetData\u003e content completely as we have done for \"regular\" cell references.\n\nOtherwise, I didn\u0027t find any good solution about the unnecessary [1] external document identifier at the export (which is not cause any problem, but we do not need that). I added a TODO there.",
+      "parentUuid": "3e0a7437_42070def",
+      "revId": "f2c7981b8b5790761974bb580d55e186c511d654",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
