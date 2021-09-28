@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:styles>
+    <style:style style:name="List_20_Paragraph" style:display-name="List Paragraph" style:family="paragraph" loext:linked-style-name="List_20_Paragraph_20_Char"/>
+    <style:style style:name="List_20_Paragraph_20_Char" style:display-name="List Paragraph Char" style:family="text" loext:linked-style-name="List_20_Paragraph"/>
+  </office:styles>
+  <office:master-styles>
+    <style:master-page style:name="Standard"/>
+  </office:master-styles>
+  <office:body>
+    <office:text>
+      <text:p/>
+    </office:text>
+  </office:body>
+</office:document>

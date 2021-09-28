@@ -184,6 +184,27 @@ DECLARE_ODFEXPORT_TEST(testListFormatOdt, "listformat.odt")
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testStyleLink)
+{
+    // Given a document with a para and a char style that links each other, when loading that
+    // document:
+    load(mpTestDocumentPath, "style-link.fodt");
+
+    // Then make sure the char style links the para one:
+    uno::Any aCharStyle = getStyles("CharacterStyles")->getByName("List Paragraph Char");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: List Paragraph
+    // - Actual  :
+    // i.e. the linked style was lost on import.
+    CPPUNIT_ASSERT_EQUAL(OUString("List Paragraph"), getProperty<OUString>(aCharStyle, "LinkStyle"));
+    uno::Any aParaStyle = getStyles("ParagraphStyles")->getByName("List Paragraph");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: List Paragraph Char
+    // - Actual  :
+    // i.e. the linked style was lost on import.
+    CPPUNIT_ASSERT_EQUAL(OUString("List Paragraph Char"), getProperty<OUString>(aParaStyle, "LinkStyle"));
+}
+
 // This test started in LO 7.2. Use the odfexport.cxx if you intend to backport to 7.1.
 
 CPPUNIT_PLUGIN_IMPLEMENT();

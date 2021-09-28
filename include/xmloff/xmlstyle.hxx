@@ -44,6 +44,7 @@ class XMLOFF_DLLPUBLIC SvXMLStyleContext : public SvXMLImportContext
     OUString     maAutoName;
     OUString     maParentName;// Will be moved to XMLPropStyle soon!!!!
     OUString     maFollow;    // Will be moved to XMLPropStyle soon!!!!
+    OUString     maLinked;
     bool         mbHidden;
 
     XmlStyleFamily mnFamily;
@@ -79,6 +80,7 @@ public:
     const OUString&  GetAutoName() const { return maAutoName; }
     const OUString&  GetParentName() const { return maParentName; }
     const OUString&  GetFollow() const { return maFollow; }
+    const OUString&  GetLinked() const { return maLinked; }
 
     XmlStyleFamily GetFamily() const { return mnFamily; }
 

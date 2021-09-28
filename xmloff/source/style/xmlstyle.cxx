@@ -88,6 +88,9 @@ void SvXMLStyleContext::SetAttribute( sal_Int32 nElement,
         case XML_ELEMENT(STYLE, XML_NEXT_STYLE_NAME):
             maFollow = rValue;
             break;
+        case XML_ELEMENT(LO_EXT, XML_LINKED_STYLE_NAME):
+            maLinked = rValue;
+            break;
         case XML_ELEMENT(STYLE, XML_HIDDEN):
             mbHidden = rValue.toBoolean();
             break;

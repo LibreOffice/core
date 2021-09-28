@@ -3185,4 +3185,5 @@ movablelimits
 rspace
 rtl
 symmetric
+linked-style-name
 TOKEN_END_DUMMY
