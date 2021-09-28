@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b87fa36c_ed03b7ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-09-28T06:57:46Z",
+      "side": 1,
+      "message": "This is iOS- and Android-specific, and I have verified that it fixes crashes in the iOS app, so there is no point in waiting any longer for outstanding CI.",
+      "revId": "ab3a755cc95447c4c1805402a02e8bc0768ebd38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
