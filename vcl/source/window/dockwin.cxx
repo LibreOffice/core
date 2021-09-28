@@ -86,6 +86,7 @@ ImplDockFloatWin::ImplDockFloatWin( vcl::Window* pParent, WinBits nWinBits,
         FloatingWindow( pParent, nWinBits ),
         mpDockWin( pDockingWin ),
         mnLastTicks( tools::Time::GetSystemTicks() ),
+        maDockIdle( "vcl::ImplDockFloatWin maDockIdle" ),
         mbInMove( false ),
         mnLastUserEvent( nullptr )
 {
@@ -104,7 +105,6 @@ ImplDockFloatWin::ImplDockFloatWin( vcl::Window* pParent, WinBits nWinBits,
 
     maDockIdle.SetInvokeHandler( LINK( this, ImplDockFloatWin, DockTimerHdl ) );
     maDockIdle.SetPriority( TaskPriority::HIGH_IDLE );
-    maDockIdle.SetDebugName( "vcl::ImplDockFloatWin maDockIdle" );
 }
 
 ImplDockFloatWin::~ImplDockFloatWin()
@@ -307,7 +307,6 @@ void DockingWindow::ImplInitDockingWindowData()
     //To-Do, reuse maResizeTimer
     maLayoutIdle.SetPriority(TaskPriority::RESIZE);
     maLayoutIdle.SetInvokeHandler( LINK( this, DockingWindow, ImplHandleLayoutTimerHdl ) );
-    maLayoutIdle.SetDebugName( "vcl::DockingWindow maLayoutIdle" );
 }
 
 void DockingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
@@ -344,14 +343,16 @@ void DockingWindow::ImplInitSettings()
     SetBackground( aColor );
 }
 
-DockingWindow::DockingWindow( WindowType nType ) :
-    Window(nType)
+DockingWindow::DockingWindow( WindowType nType, const char* pIdleDebugName ) :
+    Window(nType),
+    maLayoutIdle( pIdleDebugName )
 {
     ImplInitDockingWindowData();
 }
 
-DockingWindow::DockingWindow( vcl::Window* pParent, WinBits nStyle ) :
-    Window( WindowType::DOCKINGWINDOW )
+DockingWindow::DockingWindow( vcl::Window* pParent, WinBits nStyle, const char* pIdleDebugName ) :
+    Window( WindowType::DOCKINGWINDOW ),
+    maLayoutIdle( pIdleDebugName )
 {
     ImplInitDockingWindowData();
     ImplInit( pParent, nStyle );
@@ -375,8 +376,10 @@ void DockingWindow::loadUI(vcl::Window* pParent, const OString& rID, const OUStr
 }
 
 DockingWindow::DockingWindow(vcl::Window* pParent, const OString& rID,
-    const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
-    : Window(WindowType::DOCKINGWINDOW)
+    const OUString& rUIXMLDescription, const char* pIdleDebugName,
+    const css::uno::Reference<css::frame::XFrame> &rFrame)
+    : Window(WindowType::DOCKINGWINDOW),
+    maLayoutIdle( pIdleDebugName )
 {
     ImplInitDockingWindowData();
 
@@ -1074,11 +1077,6 @@ void DockingWindow::SetFloatingPos( const Point& rNewPos )
         maFloatPos = rNewPos;
 }
 
-void DockingWindow::SetIdleDebugName( const char *pDebugName )
-{
-    maLayoutIdle.SetDebugName( pDebugName );
-}
-
 SystemWindow* DockingWindow::GetFloatingWindow() const
 {
     return mpFloatWin;
@@ -1088,6 +1086,7 @@ DropdownDockingWindow::DropdownDockingWindow(vcl::Window* pParent, const css::un
     : DockingWindow(pParent,
                     !bTearable ? OString("InterimDockParent") : OString("InterimTearableParent"),
                     !bTearable ? OUString("vcl/ui/interimdockparent.ui") : OUString("vcl/ui/interimtearableparent.ui"),
+                    "vcl::DropdownDockingWindow maLayoutIdle",
                     rFrame)
     , m_xBox(m_pUIBuilder->get("box"))
 {
@@ -1105,13 +1104,13 @@ void DropdownDockingWindow::dispose()
 }
 
 ResizableDockingWindow::ResizableDockingWindow(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame)
-    : DockingWindow(pParent, "DockingWindow", "vcl/ui/dockingwindow.ui", rFrame)
+    : DockingWindow(pParent, "DockingWindow", "vcl/ui/dockingwindow.ui", "vcl::ResizableDockingWindow maLayoutIdle", rFrame)
     , m_xBox(m_pUIBuilder->get("box"))
 {
 }
 
 ResizableDockingWindow::ResizableDockingWindow(vcl::Window* pParent, WinBits nStyle)
-    : DockingWindow(pParent, nStyle)
+    : DockingWindow(pParent, nStyle, "vcl::ResizableDockingWindow maLayoutIdle")
 {
 }
 

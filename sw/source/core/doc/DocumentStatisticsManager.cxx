@@ -37,15 +37,14 @@ using namespace ::com::sun::star;
 namespace sw
 {
 
-DocumentStatisticsManager::DocumentStatisticsManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc ),
-                                                                          mpDocStat( new SwDocStat ),
-                                                                          mbInitialized( false ),
-                                                                          maStatsUpdateIdle( i_rSwdoc )
-
+DocumentStatisticsManager::DocumentStatisticsManager( SwDoc& i_rSwdoc )
+    : m_rDoc( i_rSwdoc ),
+    mpDocStat( new SwDocStat ),
+    mbInitialized( false ),
+    maStatsUpdateIdle( i_rSwdoc, "sw::DocumentStatisticsManager maStatsUpdateIdle" )
 {
     maStatsUpdateIdle.SetPriority( TaskPriority::LOWEST );
     maStatsUpdateIdle.SetInvokeHandler( LINK( this, DocumentStatisticsManager, DoIdleStatsUpdate ) );
-    maStatsUpdateIdle.SetDebugName( "sw::DocumentStatisticsManager maStatsUpdateIdle" );
 }
 
 void DocumentStatisticsManager::DocInfoChgd(bool const isEnableSetModified)

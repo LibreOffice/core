@@ -174,9 +174,9 @@ SdFileDialog_Imp::SdFileDialog_Imp(weld::Window* pParent)
     : FileDialogHelper(css::ui::dialogs::TemplateDescription::FILEOPEN_LINK_PLAY, FileDialogFlags::NONE, pParent)
     , mnPlaySoundEvent(nullptr)
     , mbLabelPlaying(false)
+    , maUpdateIdle( "SdFileDialog_Imp maUpdateIdle" )
 {
     maUpdateIdle.SetInvokeHandler(LINK(this, SdFileDialog_Imp, IsMusicStoppedHdl));
-    maUpdateIdle.SetDebugName( "SdFileDialog_Imp maUpdateIdle" );
 
     css::uno::Reference < css::ui::dialogs::XFilePicker3 > xFileDlg = GetFilePicker();
 

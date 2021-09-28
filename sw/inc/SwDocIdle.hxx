@@ -41,7 +41,7 @@ private:
     virtual sal_uInt64 UpdateMinPeriod(sal_uInt64 nTimeNow) const override;
 
 public:
-    SwDocIdle(SwDoc& doc);
+    SwDocIdle(SwDoc& doc, const char* pDebugIdleName);
     virtual ~SwDocIdle() override;
 };
 }

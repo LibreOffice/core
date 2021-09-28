@@ -783,6 +783,7 @@ void ImpEditEngine::ParaAttribsToCharAttribs( ContentNode* pNode )
 }
 
 IdleFormattter::IdleFormattter()
+    : Idle("editeng::ImpEditEngine aIdleFormatter")
 {
     pView = nullptr;
     nRestarts = 0;

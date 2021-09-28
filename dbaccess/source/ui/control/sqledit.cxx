@@ -67,7 +67,8 @@ private:
 };
 
 SQLEditView::SQLEditView()
-    : m_aHighlighter(HighlighterLanguage::SQL)
+    : m_aUpdateDataTimer("dbaccess SQLEditView m_aUpdateDataTimer")
+    , m_aHighlighter(HighlighterLanguage::SQL)
     , m_bInUpdate(false)
     , m_bDisableInternalUndo(false)
 {

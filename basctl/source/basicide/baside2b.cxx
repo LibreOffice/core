@@ -239,6 +239,7 @@ EditorWindow::EditorWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
     nCurTextWidth(0),
     m_nSetSourceInBasicId(nullptr),
     aHighlighter(HighlighterLanguage::Basic),
+    aSyntaxIdle( "basctl EditorWindow aSyntaxIdle" ),
     bHighlighting(false),
     bDoSyntaxHighlight(true),
     bDelayHighlight(true),
@@ -999,7 +1000,6 @@ void EditorWindow::CreateEditEngine()
     ImplSetFont();
 
     aSyntaxIdle.SetInvokeHandler( LINK( this, EditorWindow, SyntaxTimerHdl ) );
-    aSyntaxIdle.SetDebugName( "basctl EditorWindow aSyntaxIdle" );
 
     bool bWasDoSyntaxHighlight = bDoSyntaxHighlight;
     bDoSyntaxHighlight = false; // too slow for large texts...

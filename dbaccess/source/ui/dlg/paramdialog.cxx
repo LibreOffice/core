@@ -50,6 +50,7 @@ namespace dbaui
         , m_nCurrentlySelected(-1)
         , m_xConnection(_rxConnection)
         , m_aPredicateInput( rxContext, _rxConnection, getParseContext() )
+        , m_aResetVisitFlag("dbaccess OParameterDialog m_aResetVisitFlag")
         , m_xAllParams(m_xBuilder->weld_tree_view("allParamTreeview"))
         , m_xParam(m_xBuilder->weld_entry("paramEntry"))
         , m_xTravelNext(m_xBuilder->weld_button("next"))

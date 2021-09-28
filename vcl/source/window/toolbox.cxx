@@ -1167,7 +1167,6 @@ void ToolBox::ImplInitToolBoxData()
     // set timeout and handler for dropdown items
     mpData->maDropdownTimer.SetTimeout( 250 );
     mpData->maDropdownTimer.SetInvokeHandler( LINK( this, ToolBox, ImplDropdownLongClickHdl ) );
-    mpData->maDropdownTimer.SetDebugName( "vcl::ToolBox mpData->maDropdownTimer" );
 }
 
 void ToolBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
@@ -1274,7 +1273,7 @@ void ToolBox::queue_resize(StateChangedType eReason)
 }
 
 ToolBox::ToolBox( vcl::Window* pParent, WinBits nStyle ) :
-    DockingWindow( WindowType::TOOLBOX )
+    DockingWindow( WindowType::TOOLBOX, "vcl::ToolBox maLayoutIdle" )
 {
     ImplInitToolBoxData();
     ImplInit( pParent, nStyle );
@@ -1282,7 +1281,7 @@ ToolBox::ToolBox( vcl::Window* pParent, WinBits nStyle ) :
 
 ToolBox::ToolBox(vcl::Window* pParent, const OString& rID,
     const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
-    : DockingWindow(WindowType::TOOLBOX)
+    : DockingWindow(WindowType::TOOLBOX, "vcl::ToolBox maLayoutIdle")
 {
     ImplInitToolBoxData();
 

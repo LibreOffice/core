@@ -38,7 +38,8 @@ public:
     bool        bExecState;
 
     IMapOwnData()
-        : pUpdateEditingObject(nullptr)
+        : aIdle("svx IMapOwnData")
+        , pUpdateEditingObject(nullptr)
         , bExecState(false)
     {
     }

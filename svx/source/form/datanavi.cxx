@@ -1262,6 +1262,7 @@ namespace svxform
         , m_nLastSelectedPos(-1)
         , m_bShowDetails(false)
         , m_bIsNotifyDisabled(false)
+        , m_aUpdateTimer("svx DataNavigatorWindow m_aUpdateTimer")
         , m_xDataListener(new DataListener(this))
     {
         // handler
@@ -2516,6 +2517,7 @@ namespace svxform
         const OUString& _rPropertyName,
         const Reference< XPropertySet >& _rPropSet)
         : GenericDialogController(pParent, "svx/ui/addconditiondialog.ui", "AddConditionDialog")
+        , m_aResultIdle("svx AddConditionDialog m_aResultIdle")
         , m_sPropertyName(_rPropertyName)
         , m_xBinding(_rPropSet)
         , m_xConditionED(m_xBuilder->weld_text_view("condition"))

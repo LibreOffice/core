@@ -43,6 +43,7 @@ ScNoteMarker::ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window*
     m_pDoc( pD ),
     m_aDocPos( aPos ),
     m_aUserText( rUser ),
+    m_aTimer("ScNoteMarker m_aTimer"),
     m_aMapMode( rMap ),
     m_bLeft( bLeftEdge ),
     m_bByKeyboard( bKeyboard ),

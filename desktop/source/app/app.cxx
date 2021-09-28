@@ -425,10 +425,10 @@ Desktop::Desktop()
     , m_bServicesRegistered(false)
     , m_aBootstrapError(BE_OK)
     , m_aBootstrapStatus(BS_OK)
+    , m_firstRunTimer( "desktop::Desktop m_firstRunTimer" )
 {
     m_firstRunTimer.SetTimeout(3000); // 3 sec.
     m_firstRunTimer.SetInvokeHandler(LINK(this, Desktop, AsyncInitFirstRun));
-    m_firstRunTimer.SetDebugName( "desktop::Desktop m_firstRunTimer" );
 }
 
 Desktop::~Desktop()
@@ -1877,7 +1877,7 @@ namespace {
 class ExitTimer : public Timer
 {
   public:
-    ExitTimer()
+    ExitTimer() : Timer("desktop ExitTimer")
     {
         SetTimeout(500);
         Start();

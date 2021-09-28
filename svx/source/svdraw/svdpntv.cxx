@@ -133,6 +133,7 @@ SdrPaintView::SdrPaintView(SdrModel& rSdrModel, OutputDevice* pOut)
     , mpDragWin(nullptr)
     , mpDefaultStyleSheet(nullptr)
     , maDefaultAttr(rSdrModel.GetItemPool())
+    , maComeBackIdle( "svx::SdrPaintView aComeBackIdle" )
     , meAnimationMode(SdrAnimationMode::Animate)
     , mnHitTolPix(2)
     , mnMinMovPix(3)
@@ -166,7 +167,6 @@ SdrPaintView::SdrPaintView(SdrModel& rSdrModel, OutputDevice* pOut)
 {
     maComeBackIdle.SetPriority(TaskPriority::REPAINT);
     maComeBackIdle.SetInvokeHandler(LINK(this,SdrPaintView,ImpComeBackHdl));
-    maComeBackIdle.SetDebugName( "svx::SdrPaintView aComeBackIdle" );
 
     if (mpModel)
         SetDefaultStyleSheet(mpModel->GetDefaultStyleSheet(), true);

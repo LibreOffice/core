@@ -56,10 +56,10 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     aVerSBar( VclPtr<ScrollBar>::Create(pCurView, WB_DRAG | WB_VSCROLL) ),
     aHorSBar( VclPtr<ScrollBar>::Create(pCurView, WB_DRAG | WB_HSCROLL) ),
     aScrBarBox( VclPtr<ScrollBarBox>::Create(pCurView) ),
-    aAutoArrangeIdle ( "svtools contnr SvxIconChoiceCtrl_Impl AutoArrange" ),
-    aDocRectChangedIdle ( "svtools contnr SvxIconChoiceCtrl_Impl DocRectChanged" ),
-    aVisRectChangedIdle ( "svtools contnr SvxIconChoiceCtrl_Impl VisRectChanged" ),
-    aCallSelectHdlIdle ( "svtools contnr SvxIconChoiceCtrl_Impl CallSelectHdl" ),
+    aAutoArrangeIdle( "svtools::SvxIconChoiceCtrl_Impl aAutoArrangeIdle" ),
+    aDocRectChangedIdle( "svtools::SvxIconChoiceCtrl_Impl aDocRectChangedIdle" ),
+    aVisRectChangedIdle( "svtools::SvxIconChoiceCtrl_Impl aVisRectChangedIdle" ),
+    aCallSelectHdlIdle( "svtools::SvxIconChoiceCtrl_Impl aCallSelectHdlIdle" ),
     aImageSize( 32 * pCurView->GetDPIScaleFactor(), 32 * pCurView->GetDPIScaleFactor()),
     pView(pCurView), nMaxVirtWidth(DEFAULT_MAX_VIRT_WIDTH), nMaxVirtHeight(DEFAULT_MAX_VIRT_HEIGHT),
     nFlags(IconChoiceFlags::NONE), nUserEventAdjustScrBars(nullptr),
@@ -81,19 +81,15 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
 
     aAutoArrangeIdle.SetPriority( TaskPriority::HIGH_IDLE );
     aAutoArrangeIdle.SetInvokeHandler(LINK(this,SvxIconChoiceCtrl_Impl,AutoArrangeHdl));
-    aAutoArrangeIdle.SetDebugName( "svtools::SvxIconChoiceCtrl_Impl aAutoArrangeIdle" );
 
     aCallSelectHdlIdle.SetPriority( TaskPriority::LOWEST );
     aCallSelectHdlIdle.SetInvokeHandler( LINK(this,SvxIconChoiceCtrl_Impl,CallSelectHdlHdl));
-    aCallSelectHdlIdle.SetDebugName( "svtools::SvxIconChoiceCtrl_Impl aCallSelectHdlIdle" );
 
     aDocRectChangedIdle.SetPriority( TaskPriority::HIGH_IDLE );
     aDocRectChangedIdle.SetInvokeHandler(LINK(this,SvxIconChoiceCtrl_Impl,DocRectChangedHdl));
-    aDocRectChangedIdle.SetDebugName( "svtools::SvxIconChoiceCtrl_Impl aDocRectChangedIdle" );
 
     aVisRectChangedIdle.SetPriority( TaskPriority::HIGH_IDLE );
     aVisRectChangedIdle.SetInvokeHandler(LINK(this,SvxIconChoiceCtrl_Impl,VisRectChangedHdl));
-    aVisRectChangedIdle.SetDebugName( "svtools::SvxIconChoiceCtrl_Impl aVisRectChangedIdle" );
 
     Clear( true );
     Size gridSize(100,70);

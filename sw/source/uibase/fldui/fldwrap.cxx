@@ -28,6 +28,7 @@ SFX_IMPL_CHILDWINDOW_WITHID(SwFieldDlgWrapper, FN_INSERT_FIELD)
 
 SwChildWinWrapper::SwChildWinWrapper(vcl::Window *pParentWindow, sal_uInt16 nId) :
         SfxChildWindow(pParentWindow, nId),
+        m_aUpdateTimer("SwChildWinWrapper m_aUpdateTimer"),
         m_pDocSh(nullptr)
 {
     // avoid flickering of buttons:

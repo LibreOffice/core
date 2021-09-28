@@ -111,7 +111,7 @@ struct SfxDispatcher_Impl
     std::vector<std::unique_ptr<SfxRequest>>
                          aReqArr;
     SfxShellStack_Impl   aStack;        // active functionality
-    Idle                 aIdle;        // for Flush
+    Idle                 aIdle { "sfx::SfxDispatcher_Impl aIdle" }; // for Flush
     std::deque<SfxToDo_Impl> aToDoStack;    // not processed Push/Pop
     SfxViewFrame*        pFrame;        // NULL or associated Frame
     tools::SvRef<SfxHintPoster>
@@ -306,7 +306,6 @@ void SfxDispatcher::Construct_Impl()
 
     xImp->aIdle.SetPriority(TaskPriority::HIGH_IDLE );
     xImp->aIdle.SetInvokeHandler( LINK(this, SfxDispatcher, EventHdl_Impl ) );
-    xImp->aIdle.SetDebugName( "sfx::SfxDispatcher_Impl aIdle" );
 }
 
 SfxDispatcher::SfxDispatcher()

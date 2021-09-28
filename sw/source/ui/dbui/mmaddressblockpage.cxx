@@ -458,6 +458,7 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
     , m_aTextFilter("<>")
     , m_rConfigItem(rConfig)
     , m_eType(eType)
+    , m_aSelectionChangedIdle("SwCustomizeAddressBlockDialog m_aSelectionChangedIdle")
     , m_xAddressElementsFT(m_xBuilder->weld_label("addressesft"))
     , m_xAddressElementsLB(m_xBuilder->weld_tree_view("addresses"))
     , m_xInsertFieldIB(m_xBuilder->weld_button("toaddr"))

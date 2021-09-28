@@ -224,6 +224,7 @@ EditControl::~EditControl()
 
 BibToolBar::BibToolBar(vcl::Window* pParent, Link<void*,void> aLink)
     : ToolBox(pParent, "toolbar", "modules/sbibliography/ui/toolbar.ui")
+    , aIdle("BibToolBar")
     , xSource(VclPtr<ComboBoxControl>::Create(this))
     , pLbSource(xSource->get_widget())
     , xQuery(VclPtr<EditControl>::Create(this))

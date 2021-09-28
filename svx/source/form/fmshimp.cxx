@@ -603,6 +603,7 @@ FmXFormShell_Base_Disambiguation::FmXFormShell_Base_Disambiguation( ::osl::Mutex
 FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
         :FmXFormShell_BASE(m_aMutex)
         ,FmXFormShell_CFGBASE("Office.Common/Misc", ConfigItemMode::NONE)
+        ,m_aMarkTimer("svx::FmXFormShell m_aMarkTimer")
         ,m_eNavigate( NavigationBarMode_NONE )
         ,m_nInvalidationEvent( nullptr )
         ,m_nActivationEvent( nullptr )
@@ -625,7 +626,6 @@ FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
 {
     m_aMarkTimer.SetTimeout(100);
     m_aMarkTimer.SetInvokeHandler(LINK(this, FmXFormShell, OnTimeOut_Lock));
-    m_aMarkTimer.SetDebugName("svx::FmXFormShell m_aMarkTimer");
 
     m_xAttachedFrame = _pViewFrame->GetFrame().GetFrameInterface();
 

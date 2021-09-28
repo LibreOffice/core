@@ -576,6 +576,7 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     m_xFrame( rFrame ),
     m_aListenerContainer( m_mutex ),
     m_xContext( rxContext ),
+    m_aAsyncUpdateControllersTimer( "framework::ToolBarManager m_aAsyncUpdateControllersTimer" ),
     m_sIconTheme( SvtMiscOptions().GetIconTheme() )
 {
     Init();
@@ -596,6 +597,7 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     m_xFrame( rFrame ),
     m_aListenerContainer( m_mutex ),
     m_xContext( rxContext ),
+    m_aAsyncUpdateControllersTimer( "framework::ToolBarManager m_aAsyncUpdateControllersTimer" ),
     m_sIconTheme( SvtMiscOptions().GetIconTheme() )
 {
     Init();
@@ -637,7 +639,6 @@ void ToolBarManager::Init()
 
     m_aAsyncUpdateControllersTimer.SetTimeout( 50 );
     m_aAsyncUpdateControllersTimer.SetInvokeHandler( LINK( this, ToolBarManager, AsyncUpdateControllersHdl ) );
-    m_aAsyncUpdateControllersTimer.SetDebugName( "framework::ToolBarManager m_aAsyncUpdateControllersTimer" );
 
     SvtMiscOptions().AddListenerLink( LINK( this, ToolBarManager, MiscOptionsChanged ) );
 }

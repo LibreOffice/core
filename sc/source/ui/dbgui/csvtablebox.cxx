@@ -26,6 +26,7 @@ ScCsvTableBox::ScCsvTableBox(weld::Builder& rBuilder)
     , mxScroll(rBuilder.weld_scrolled_window("scrolledwindow", true))
     , mxRulerWeld(new weld::CustomWeld(rBuilder, "csvruler", *mxRuler))
     , mxGridWeld(new weld::CustomWeld(rBuilder, "csvgrid", *mxGrid))
+    , maEndScrollIdle("ScCsvTableBox maEndScrollIdle")
 {
     Size aSize(mxScroll->get_approximate_digit_width() * 67,
                mxScroll->get_text_height() * 10);

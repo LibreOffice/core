@@ -583,6 +583,7 @@ std::unique_ptr<SfxTabPage> TPGalleryThemeGeneral::Create(weld::Container* pPage
 TPGalleryThemeProperties::TPGalleryThemeProperties(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "cui/ui/galleryfilespage.ui", "GalleryFilesPage", &rSet)
     , pData(nullptr)
+    , aPreviewTimer("cui TPGalleryThemeProperties aPreviewTimer")
     , bEntriesFound(false)
     , bInputAllowed(true)
     , bTakeAll(false)

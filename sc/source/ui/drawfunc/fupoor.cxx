@@ -39,6 +39,8 @@ FuPoor::FuPoor(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
     pWindow(pWin),
     pDrDoc(pDoc),
     aSfxRequest(rReq),
+    aScrollTimer("sc FuPoor aScrollTimer"),
+    aDragTimer("sc FuPoor aDragTimer"),
     bIsInDragMode(false),
     // remember MouseButton state
     mnCode(0)

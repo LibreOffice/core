@@ -77,7 +77,7 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
 }
 
 DlgEdFunc::DlgEdFunc (DlgEditor& rParent_) :
-    rParent(rParent_)
+    rParent(rParent_), aScrollTimer("basctl DlgEdFunc aScrollTimer")
 {
     aScrollTimer.SetInvokeHandler( LINK( this, DlgEdFunc, ScrollTimeout ) );
     aScrollTimer.SetTimeout( SELENG_AUTOREPEAT_INTERVAL );

@@ -33,6 +33,7 @@ SwOutlineContentVisibilityWin::SwOutlineContentVisibilityWin(SwEditWin* pEditWin
     , m_pEditWin(pEditWin)
     , m_pFrame(pFrame)
     , m_nDelayAppearing(0)
+    , m_aDelayTimer("SwOutlineContentVisibilityWin m_aDelayTimer")
     , m_bDestroyed(false)
     , m_nOutlinePos(SwOutlineNodes::npos)
 {

@@ -255,7 +255,9 @@ void Help::HidePopover(vcl::Window const * pParent, void* nId)
 
 HelpTextWindow::HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle ) :
     FloatingWindow( pParent, WB_SYSTEMWINDOW|WB_TOOLTIPWIN ), // #105827# if we change the parent, mirroring will not work correctly when positioning this window
-    maHelpText( rText )
+    maHelpText( rText ),
+    maShowTimer( "vcl::HelpTextWindow maShowTimer" ),
+    maHideTimer( "vcl::HelpTextWindow maHideTimer" )
 {
     SetType( WindowType::HELPTEXTWINDOW );
     ImplSetMouseTransparent( true );
@@ -276,12 +278,10 @@ HelpTextWindow::HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal
 
 
     maShowTimer.SetInvokeHandler( LINK( this, HelpTextWindow, TimerHdl ) );
-    maShowTimer.SetDebugName( "vcl::HelpTextWindow maShowTimer" );
 
     const HelpSettings& rHelpSettings = pParent->GetSettings().GetHelpSettings();
     maHideTimer.SetTimeout( rHelpSettings.GetTipTimeout() );
     maHideTimer.SetInvokeHandler( LINK( this, HelpTextWindow, TimerHdl ) );
-    maHideTimer.SetDebugName( "vcl::HelpTextWindow maHideTimer" );
 }
 
 void HelpTextWindow::ApplySettings(vcl::RenderContext& rRenderContext)

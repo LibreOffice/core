@@ -32,7 +32,7 @@
 
 struct ImplCursorData
 {
-    AutoTimer       maTimer;            // Timer
+    AutoTimer       maTimer { "vcl ImplCursorData maTimer" };            // Timer
     Point           maPixPos;           // Pixel-Position
     Point           maPixRotOff;        // Pixel-Offset-Position
     Size            maPixSize;          // Pixel-Size
@@ -212,7 +212,6 @@ void vcl::Cursor::ImplDoShow( bool bDrawDirect, bool bRestore )
         mpData.reset( new ImplCursorData );
         mpData->mbCurVisible = false;
         mpData->maTimer.SetInvokeHandler( LINK( this, Cursor, ImplTimerHdl ) );
-        mpData->maTimer.SetDebugName( "vcl ImplCursorData maTimer" );
     }
 
     mpData->mpWindow    = pWindow;

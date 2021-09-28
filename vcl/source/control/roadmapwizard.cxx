@@ -123,6 +123,7 @@ namespace vcl
     //= RoadmapWizard
     RoadmapWizard::RoadmapWizard(vcl::Window* pParent, WinBits nStyle, InitFlag eFlag)
         : Dialog(pParent, nStyle, eFlag)
+        , maWizardLayoutIdle("vcl RoadmapWizard maWizardLayoutIdle")
         , m_pFinish(nullptr)
         , m_pCancel(nullptr)
         , m_pNextPage(nullptr)

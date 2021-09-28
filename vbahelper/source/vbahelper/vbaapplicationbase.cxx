@@ -60,7 +60,7 @@ class VbaTimer
     ::rtl::Reference< VbaApplicationBase > m_xBase;
 
 public:
-    VbaTimer()
+    VbaTimer() : m_aTimer("VbaTimer")
     {}
 
     ~VbaTimer()

@@ -419,6 +419,7 @@ ExtMgrDialog::ExtMgrDialog(weld::Window *pParent, TheExtensionManager *pManager)
     , m_bDeleteWarning(false)
     , m_bClosed(false)
     , m_nProgress(0)
+    , m_aIdle( "ExtMgrDialog m_aIdle TimeOutHdl" )
     , m_pManager(pManager)
     , m_xExtensionBox(new ExtBoxWithBtns_Impl(m_xBuilder->weld_scrolled_window("scroll", true)))
     , m_xExtensionBoxWnd(new weld::CustomWeld(*m_xBuilder, "extensions", *m_xExtensionBox))
@@ -477,7 +478,6 @@ ExtMgrDialog::ExtMgrDialog(weld::Window *pParent, TheExtensionManager *pManager)
     }
 
     m_aIdle.SetPriority(TaskPriority::LOWEST);
-    m_aIdle.SetDebugName( "ExtMgrDialog m_aIdle TimeOutHdl" );
     m_aIdle.SetInvokeHandler( LINK( this, ExtMgrDialog, TimeOutHdl ) );
 }
 
@@ -969,6 +969,7 @@ UpdateRequiredDialog::UpdateRequiredDialog(weld::Window *pParent, TheExtensionMa
     , m_bStopProgress(false)
     , m_bHasLockedEntries(false)
     , m_nProgress(0)
+    , m_aIdle( "UpdateRequiredDialog m_aIdle TimeOutHdl" )
     , m_pManager(pManager)
     , m_xExtensionBox(new ExtensionBox_Impl(m_xBuilder->weld_scrolled_window("scroll", true)))
     , m_xExtensionBoxWnd(new weld::CustomWeld(*m_xBuilder, "extensions", *m_xExtensionBox))
@@ -995,7 +996,6 @@ UpdateRequiredDialog::UpdateRequiredDialog(weld::Window *pParent, TheExtensionMa
     m_xCloseBtn->grab_focus();
 
     m_aIdle.SetPriority( TaskPriority::LOWEST );
-    m_aIdle.SetDebugName( "UpdateRequiredDialog m_aIdle TimeOutHdl" );
     m_aIdle.SetInvokeHandler( LINK( this, UpdateRequiredDialog, TimeOutHdl ) );
 }
 

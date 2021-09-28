@@ -114,7 +114,7 @@ public:
     bool                    bAllMsgDirty;   //  Has a MessageServer been invalidated?
     bool                    bAllDirty;      // After InvalidateAll
     bool                    bCtrlReleased;  // while EnterRegistrations
-    AutoTimer               aAutoTimer;     // for volatile Slots
+    AutoTimer               aAutoTimer { "sfx::SfxBindings aAutoTimer" }; // for volatile Slots
     bool                    bInUpdate;      // for Assertions
     bool                    bInNextJob;     // for Assertions
     bool                    bFirstRound;    // First round in Update
@@ -146,7 +146,6 @@ SfxBindings::SfxBindings()
     // all caches are valid (no pending invalidate-job)
     // create the list of caches
     pImpl->aAutoTimer.SetInvokeHandler( LINK(this, SfxBindings, NextJob) );
-    pImpl->aAutoTimer.SetDebugName( "sfx::SfxBindings aAutoTimer" );
 }
 
 

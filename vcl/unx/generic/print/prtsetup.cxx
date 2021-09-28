@@ -274,9 +274,9 @@ RTSDevicePage::RTSDevicePage(weld::Widget* pPage, RTSDialog* pParent)
     , m_xLevelBox(m_xBuilder->weld_combo_box("level"))
     , m_xSpaceBox(m_xBuilder->weld_combo_box("colorspace"))
     , m_xDepthBox(m_xBuilder->weld_combo_box("colordepth"))
+    , m_aReselectCustomIdle("RTSDevicePage m_aReselectCustomIdle")
 {
     m_aReselectCustomIdle.SetInvokeHandler(LINK(this, RTSDevicePage, ImplHandleReselectHdl));
-    m_aReselectCustomIdle.SetDebugName("RTSDevicePage m_aReselectCustomIdle");
 
     m_xPPDKeyBox->set_size_request(m_xPPDKeyBox->get_approximate_digit_width() * 32,
                                    m_xPPDKeyBox->get_height_rows(12));

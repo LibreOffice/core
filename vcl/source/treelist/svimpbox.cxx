@@ -53,6 +53,7 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinS
     , m_aScrBarBox(VclPtr<ScrollBarBox>::Create(pLBView))
     , m_aFctSet(this, pLBView)
     , mbForceMakeVisible (false)
+    , m_aEditIdle("SvImpLBox m_aEditIdle")
     , m_aVerSBar(VclPtr<ScrollBar>::Create(pLBView, WB_DRAG | WB_VSCROLL))
     , m_aOutputSize(0, 0)
     , mbNoAutoCurEntry(false)

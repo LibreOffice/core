@@ -283,6 +283,7 @@ DataStream::DataStream(ScDocShell *pShell, const OUString& rURL, const ScRange& 
     mnLinesSinceRefresh(0),
     mfLastRefreshTime(0.0),
     mnCurRow(0),
+    maImportTimer("sc DataStream maImportTimer"),
     mbIsFirst(true),
     mbIsUpdate(false)
 {

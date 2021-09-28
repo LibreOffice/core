@@ -46,7 +46,7 @@ public:
 }
 
 SvLinkSourceTimer::SvLinkSourceTimer( SvLinkSource * pOwn )
-    : pOwner( pOwn )
+    : Timer("sfx2 SvLinkSourceTimer"), pOwner( pOwn )
 {
 }
 

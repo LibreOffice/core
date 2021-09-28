@@ -51,6 +51,7 @@ void SpinButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
 SpinButton::SpinButton( vcl::Window* pParent, WinBits nStyle )
     : Control(WindowType::SPINBUTTON)
+    , maRepeatTimer("SpinButton maRepeatTimer")
     , mbUpperIsFocused(false)
 {
     ImplInit(pParent, nStyle);

@@ -72,6 +72,7 @@ ScTabPageSortFields::ScTabPageSortFields(weld::Container* pPage, weld::DialogCon
     : SfxTabPage(pPage, pController, "modules/scalc/ui/sortcriteriapage.ui", "SortCriteriaPage", &rArgSet)
     ,
 
+        m_aIdle("ScTabPageSortFields Scroll To End Idle"),
         aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
         aStrColumn      ( ScResId( SCSTR_COLUMN ) ),
         aStrRow         ( ScResId( SCSTR_ROW ) ),
@@ -94,7 +95,6 @@ ScTabPageSortFields::ScTabPageSortFields(weld::Container* pPage, weld::DialogCon
     Init();
 
     m_aIdle.SetInvokeHandler(LINK(this, ScTabPageSortFields, ScrollToEndHdl));
-    m_aIdle.SetDebugName("ScTabPageSortFields Scroll To End Idle");
 
     SetExchangeSupport();
 }

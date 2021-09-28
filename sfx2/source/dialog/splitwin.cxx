@@ -101,6 +101,7 @@ public:
                             , bAutoHide( false )
                             , bSplit( false )
                             , bEndAutoHide( false )
+                            , aTimer("sfx2 SfxEmptySplitWin_Impl aTimer")
                             , nState( 1 )
                         {
                             aTimer.SetInvokeHandler(

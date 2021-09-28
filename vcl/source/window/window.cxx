@@ -760,6 +760,8 @@ ImplWinData::~ImplWinData()
 }
 
 ImplFrameData::ImplFrameData( vcl::Window *pWindow )
+    : maPaintIdle( "vcl::Window maPaintIdle" ),
+      maResizeIdle( "vcl::Window maResizeIdle" )
 {
     ImplSVData* pSVData = ImplGetSVData();
     assert (pSVData->maFrameData.mpFirstFrame.get() != pWindow);
@@ -799,10 +801,8 @@ ImplFrameData::ImplFrameData( vcl::Window *pWindow )
     mbSysObjFocus      = false;
     maPaintIdle.SetPriority( TaskPriority::REPAINT );
     maPaintIdle.SetInvokeHandler( LINK( pWindow, vcl::Window, ImplHandlePaintHdl ) );
-    maPaintIdle.SetDebugName( "vcl::Window maPaintIdle" );
     maResizeIdle.SetPriority( TaskPriority::RESIZE );
     maResizeIdle.SetInvokeHandler( LINK( pWindow, vcl::Window, ImplHandleResizeTimerHdl ) );
-    maResizeIdle.SetDebugName( "vcl::Window maResizeIdle" );
     mbInternalDragGestureRecognizer = false;
     mbInBufferedPaint = false;
     mnDPIX = 96;

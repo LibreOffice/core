@@ -406,6 +406,7 @@ SfxDockingWindow_Impl::SfxDockingWindow_Impl(SfxDockingWindow* pBase)
     ,eDockAlignment(SfxChildAlignment::NOALIGNMENT)
     ,bConstructed(false)
     ,pSplitWin(nullptr)
+    ,aMoveIdle( "sfx::SfxDockingWindow_Impl aMoveIdle" )
     ,nHorizontalSize(0)
     ,nVerticalSize(0)
     ,nLine(0)
@@ -417,7 +418,6 @@ SfxDockingWindow_Impl::SfxDockingWindow_Impl(SfxDockingWindow* pBase)
 {
     aMoveIdle.SetPriority(TaskPriority::RESIZE);
     aMoveIdle.SetInvokeHandler(LINK(pBase,SfxDockingWindow,TimerHdl));
-    aMoveIdle.SetDebugName( "sfx::SfxDockingWindow_Impl aMoveIdle" );
 }
 
 /*  [Description]

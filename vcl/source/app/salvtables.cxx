@@ -1818,6 +1818,7 @@ public:
                          bool bTakeOwnership)
         : SalInstanceDialog(pDialog, pBuilder, bTakeOwnership)
         , m_xWizard(pDialog)
+        , m_aUpdateRoadmapIdle("SalInstanceAssistant m_aUpdateRoadmapIdle")
     {
         m_xWizard->SetItemSelectHdl(LINK(this, SalInstanceAssistant, OnRoadmapItemSelected));
 

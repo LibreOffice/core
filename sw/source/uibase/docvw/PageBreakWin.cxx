@@ -104,6 +104,7 @@ SwPageBreakWin::SwPageBreakWin( SwEditWin* pEditWin, const SwFrame *pFrame ) :
     m_bIsAppearing( false ),
     m_nFadeRate( 100 ),
     m_nDelayAppearing( 0 ),
+    m_aFadeTimer("SwPageBreakWin m_aFadeTimer"),
     m_bDestroyed( false )
 {
     set_id("PageBreak"); // for uitest
