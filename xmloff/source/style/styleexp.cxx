@@ -237,6 +237,19 @@ bool XMLStyleExport::exportStyle(
         }
     }
 
+    // style:linked-style-name="..." (SW paragraph and character styles only)
+    if (xPropSetInfo->hasPropertyByName("LinkStyle"))
+    {
+        aAny = xPropSet->getPropertyValue("LinkStyle");
+        OUString sLinkName;
+        aAny >>= sLinkName;
+        if (!sLinkName.isEmpty())
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_LINKED_STYLE_NAME,
+                                     GetExport().EncodeStyleName(sLinkName));
+        }
+    }
+
     // style:auto-update="..." (SW only)
     if( xPropSetInfo->hasPropertyByName( gsIsAutoUpdate ) )
     {

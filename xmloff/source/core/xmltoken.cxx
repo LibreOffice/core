@@ -3440,6 +3440,8 @@ namespace xmloff::token {
         TOKEN("rtl",                 XML_RTL ),
         TOKEN("symmetric",           XML_SYMMETRIC ),
 
+        TOKEN("linked-style-name",   XML_LINKED_STYLE_NAME ),
+
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, std::nullopt,               XML_TOKEN_END }

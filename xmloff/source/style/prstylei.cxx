@@ -509,6 +509,30 @@ void XMLPropStyleContext::Finish( bool bOverwrite )
         }
     }
 
+    // Connect linked style.
+    OUString aLinked(GetLinked());
+    if (!aLinked.isEmpty())
+    {
+        if (GetFamily() == XmlStyleFamily::TEXT_PARAGRAPH)
+        {
+            aLinked = GetImport().GetStyleDisplayName(XmlStyleFamily::TEXT_TEXT, aLinked);
+        }
+        else if (GetFamily() == XmlStyleFamily::TEXT_TEXT)
+        {
+            aLinked = GetImport().GetStyleDisplayName(XmlStyleFamily::TEXT_PARAGRAPH, aLinked);
+        }
+    }
+    if (!aLinked.isEmpty() && xPropSetInfo->hasPropertyByName("LinkStyle"))
+    {
+        uno::Any aAny = xPropSet->getPropertyValue("LinkStyle");
+        OUString aCurrentLinked;
+        aAny >>= aCurrentLinked;
+        if (aCurrentLinked != aLinked)
+        {
+            xPropSet->setPropertyValue("LinkStyle", uno::Any(aLinked));
+        }
+    }
+
     if ( xPropSetInfo->hasPropertyByName( "Hidden" ) )
     {
         xPropSet->setPropertyValue( "Hidden", uno::makeAny( IsHidden( ) ) );

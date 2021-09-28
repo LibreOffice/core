@@ -3437,6 +3437,8 @@ namespace xmloff::token {
         XML_RTL,
         XML_SYMMETRIC,
 
+        XML_LINKED_STYLE_NAME,
+
         XML_TOKEN_END
     };
 

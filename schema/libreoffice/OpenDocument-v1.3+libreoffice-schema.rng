@@ -2731,4 +2731,13 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
+  <!-- TODO no proposal -->
+  <rng:define name="style-style-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:linked-style-name">
+        <rng:ref name="styleNameRef"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
 </rng:grammar>
