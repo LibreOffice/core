@@ -42,7 +42,8 @@ using namespace ::com::sun::star::uno;
 ImagePreparer::ImagePreparer(
     const uno::Reference<presentation::XSlideShowController>& rxController,
     Transmitter *aTransmitter )
- :  xController( rxController ),
+ :  Timer("sd ImagePreparer"),
+    xController( rxController ),
     pTransmitter( aTransmitter )
 {
     SAL_INFO( "sdremote", "ImagePreparer - start" );

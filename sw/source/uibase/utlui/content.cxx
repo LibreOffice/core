@@ -1075,6 +1075,7 @@ SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNaviga
     , m_aDropTargetHelper(*this)
     , m_pDialog(pDialog)
     , m_sSpace(OUString("                    "))
+    , m_aUpdTimer("SwContentTree m_aUpdTimer")
     , m_sInvisible(SwResId(STR_INVISIBLE))
     , m_pHiddenShell(nullptr)
     , m_pActiveShell(nullptr)

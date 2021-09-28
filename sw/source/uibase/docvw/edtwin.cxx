@@ -5118,7 +5118,10 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
     DropTargetHelper( this ),
     DragSourceHelper( this ),
 
+    m_aTimer("SwEditWin"),
+    m_aKeyInputFlushTimer("SwEditWin m_aKeyInputFlushTimer"),
     m_eBufferLanguage(LANGUAGE_DONTKNOW),
+    m_aTemplateTimer("SwEditWin m_aTemplateTimer"),
     m_pUserMarkerObj( nullptr ),
 
     m_rView( rMyView ),

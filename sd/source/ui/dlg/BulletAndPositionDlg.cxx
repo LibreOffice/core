@@ -76,6 +76,7 @@ class SdDrawDocument;
 SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const SfxItemSet& rSet,
                                                  const ::sd::View* pView)
     : GenericDialogController(pWindow, "cui/ui/bulletandposition.ui", "BulletAndPosition")
+    , aInvalidateTimer("sd SvxBulletAndPositionDlg aInvalidateTimer")
     , rFirstStateSet(rSet)
     , bLastWidthModified(false)
     , bModified(false)

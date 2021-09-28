@@ -28,7 +28,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::beans;
 
-Receiver::Receiver( Transmitter *aTransmitter )
+Receiver::Receiver( Transmitter *aTransmitter ) : Timer("sd Receiver")
 {
     pTransmitter = aTransmitter;
     SetTimeout( 0 );

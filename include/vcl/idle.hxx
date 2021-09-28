@@ -44,7 +44,7 @@ protected:
     Idle( bool bAuto, const char *pDebugName );
 
 public:
-    Idle( const char *pDebugName = nullptr );
+    Idle( const char *pDebugName );
 
     virtual void Start(bool bStartTimer = true) override;
 };

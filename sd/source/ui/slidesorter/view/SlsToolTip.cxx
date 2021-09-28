@@ -35,12 +35,12 @@ namespace sd::slidesorter::view {
 
 ToolTip::ToolTip (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
-      mnHelpWindowHandle(nullptr)
+      mnHelpWindowHandle(nullptr),
+      maShowTimer("sd::slidesorter::view::ToolTip maShowTimer"),
+      maHiddenTimer("sd::slidesorter::view::ToolTip maHiddenTimer")
 {
-    maShowTimer.SetDebugName("sd::slidesorter::view::ToolTip maShowTimer");
     maShowTimer.SetTimeout(HelpSettings::GetTipDelay());
     maShowTimer.SetInvokeHandler(LINK(this, ToolTip, DelayTrigger));
-    maHiddenTimer.SetDebugName("sd::slidesorter::view::ToolTip maHiddenTimer");
     maHiddenTimer.SetTimeout(HelpSettings::GetTipDelay());
 }
 

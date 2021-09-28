@@ -128,7 +128,7 @@ struct SearchDlg_Impl
     bool        bSaveToModule  : 1,
                 bFocusOnSearch : 1;
     WhichRangesContainer pRanges;
-    Timer       aSelectionTimer;
+    Timer       aSelectionTimer { "svx SearchDlg_Impl aSelectionTimer" };
 
     uno::Reference< frame::XDispatch > xCommand1Dispatch;
     uno::Reference< frame::XDispatch > xCommand2Dispatch;

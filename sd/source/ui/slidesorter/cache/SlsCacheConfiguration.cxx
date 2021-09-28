@@ -60,7 +60,6 @@ std::shared_ptr<CacheConfiguration> CacheConfiguration::Instance()
             rInstancePtr->m_ReleaseTimer.SetInvokeHandler(
                 LINK(rInstancePtr.get(),CacheConfiguration,TimerCallback));
             rInstancePtr->m_ReleaseTimer.SetTimeout(5000 /* 5s */);
-            rInstancePtr->m_ReleaseTimer.SetDebugName("sd::CacheConfiguration maReleaseTimer");
             rInstancePtr->m_ReleaseTimer.Start();
         }
     }
@@ -68,6 +67,7 @@ std::shared_ptr<CacheConfiguration> CacheConfiguration::Instance()
 }
 
 CacheConfiguration::CacheConfiguration()
+    : m_ReleaseTimer("sd::CacheConfiguration maReleaseTimer")
 {
     // Get the cache size from configuration.
     try

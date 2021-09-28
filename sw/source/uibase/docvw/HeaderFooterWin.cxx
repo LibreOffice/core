@@ -167,7 +167,8 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwFrame *pFrame
     m_bIsHeader( bHeader ),
     m_pLine( nullptr ),
     m_bIsAppearing( false ),
-    m_nFadeRate( 100 )
+    m_nFadeRate( 100 ),
+    m_aFadeTimer("SwHeaderFooterWin m_aFadeTimer")
 {
     m_xVirDev = m_xMenuButton->create_virtual_device();
     SetVirDevFont();

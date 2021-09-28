@@ -351,12 +351,11 @@ namespace sdr::overlay
         :   OverlayManager(rOutputDevice),
             mpBufferDevice(VclPtr<VirtualDevice>::Create()),
             mpOutputBufferDevice(VclPtr<VirtualDevice>::Create()),
-            maBufferIdle("sdr overlay OverlayManagerBuffered Idle")
+            maBufferIdle( "sdr::overlay::OverlayManagerBuffered maBufferIdle" )
         {
             // Init timer
             maBufferIdle.SetPriority( TaskPriority::POST_PAINT );
             maBufferIdle.SetInvokeHandler(LINK(this, OverlayManagerBuffered, ImpBufferTimerHandler));
-            maBufferIdle.SetDebugName( "sdr::overlay::OverlayManagerBuffered maBufferIdle" );
         }
 
         rtl::Reference<OverlayManager> OverlayManagerBuffered::create(

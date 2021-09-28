@@ -48,7 +48,7 @@ struct SvxModifyControl::ImplData
         MODIFICATION_STATE_SIZE
     };
 
-    Idle  maIdle;
+    Idle  maIdle { "svx::SvxModifyControl maIdle" };
     Image maImages[MODIFICATION_STATE_SIZE];
 
     ModificationState mnModState;
@@ -61,7 +61,6 @@ struct SvxModifyControl::ImplData
         maImages[MODIFICATION_STATE_FEEDBACK] = Image(StockImage::Yes, RID_SVXBMP_DOC_MODIFIED_FEEDBACK);
 
         maIdle.SetPriority(TaskPriority::LOWEST);
-        maIdle.SetDebugName("svx::SvxModifyControl maIdle");
     }
 };
 

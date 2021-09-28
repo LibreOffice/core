@@ -1215,7 +1215,7 @@ AutoRecovery::AutoRecovery(const css::uno::Reference< css::uno::XComponentContex
     , m_bListenForConfigChanges (false                                          )
     , m_nAutoSaveTimeIntervall  (0                                                  )
     , m_eJob                    (Job::NoJob)
-    , m_aTimer                  ( "Auto save timer" )
+    , m_aTimer( "framework::AutoRecovery m_aTimer" )
     , m_xAsyncDispatcher        (new vcl::EventPoster( LINK( this, AutoRecovery, implts_asyncDispatch )  ))
     , m_eTimerType              (E_DONT_START_TIMER                                 )
     , m_nIdPool                 (0                                                  )
@@ -1224,7 +1224,6 @@ AutoRecovery::AutoRecovery(const css::uno::Reference< css::uno::XComponentContex
     , m_nMinSpaceDocSave        (MIN_DISCSPACE_DOCSAVE                              )
     , m_nMinSpaceConfigSave     (MIN_DISCSPACE_CONFIGSAVE                           )
 {
-    m_aTimer.SetDebugName( "framework::AutoRecovery m_aTimer" );
 }
 
 void AutoRecovery::initListeners()

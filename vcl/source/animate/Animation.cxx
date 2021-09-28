@@ -34,7 +34,8 @@
 sal_uLong Animation::mnAnimCount = 0;
 
 Animation::Animation()
-    : mnLoopCount(0)
+    : maTimer("vcl::Animation")
+    , mnLoopCount(0)
     , mnLoops(0)
     , mnPos(0)
     , mbIsInAnimation(false)
@@ -45,6 +46,7 @@ Animation::Animation()
 
 Animation::Animation(const Animation& rAnimation)
     : maBitmapEx(rAnimation.maBitmapEx)
+    , maTimer("vcl::Animation")
     , maGlobalSize(rAnimation.maGlobalSize)
     , mnLoopCount(rAnimation.mnLoopCount)
     , mnPos(rAnimation.mnPos)

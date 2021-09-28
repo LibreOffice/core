@@ -140,6 +140,7 @@ SwModelessRedlineAcceptDlg::~SwModelessRedlineAcceptDlg()
 SwRedlineAcceptDlg::SwRedlineAcceptDlg(const std::shared_ptr<weld::Window>& rParent, weld::Builder *pBuilder,
                                        weld::Container *pContentArea, bool bAutoFormat)
     : m_xParentDlg(rParent)
+    , m_aSelectTimer("SwRedlineAcceptDlg m_aSelectTimer")
     , m_sInserted(SwResId(STR_REDLINE_INSERTED))
     , m_sDeleted(SwResId(STR_REDLINE_DELETED))
     , m_sFormated(SwResId(STR_REDLINE_FORMATTED))

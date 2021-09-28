@@ -170,7 +170,7 @@ void SvxCharBasePage::SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp
 
 struct SvxCharNamePage_Impl
 {
-    Idle            m_aUpdateIdle;
+    Idle            m_aUpdateIdle { "cui SvxCharNamePage_Impl m_aUpdateIdle" };
     OUString        m_aNoStyleText;
     std::unique_ptr<FontList> m_pFontList;
     int             m_nExtraEntryPos;

@@ -183,6 +183,7 @@ ScTabView::ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* 
     aCornerButton( VclPtr<ScCornerButton>::Create( pFrameWin, &aViewData ) ),
     aTopButton( VclPtr<ScCornerButton>::Create( pFrameWin, &aViewData ) ),
     aScrollBarBox( VclPtr<ScrollBarBox>::Create( pFrameWin, WB_SIZEABLE ) ),
+    aScrollTimer("ScTabView aScrollTimer"),
     pTimerWindow( nullptr ),
     aExtraEditViewManager( pViewShell, pGridWin ),
     nTipVisible( nullptr ),

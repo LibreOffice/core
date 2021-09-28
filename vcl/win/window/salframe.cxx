@@ -3063,8 +3063,7 @@ static bool ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
             // Start MouseLeave-Timer
             if ( !pSalData->mpMouseLeaveTimer )
             {
-                pSalData->mpMouseLeaveTimer = new AutoTimer;
-                pSalData->mpMouseLeaveTimer->SetDebugName( "ImplHandleMouseMsg SalData::mpMouseLeaveTimer" );
+                pSalData->mpMouseLeaveTimer = new AutoTimer( "ImplHandleMouseMsg SalData::mpMouseLeaveTimer" );
                 pSalData->mpMouseLeaveTimer->SetTimeout( SAL_MOUSELEAVE_TIMEOUT );
                 pSalData->mpMouseLeaveTimer->Start();
                 // We don't need to set a timeout handler, because we test

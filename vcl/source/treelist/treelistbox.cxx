@@ -63,7 +63,7 @@ class SvInplaceEdit2
     Link<SvInplaceEdit2&,void> aCallBackHdl;
     Accelerator   aAccReturn;
     Accelerator   aAccEscape;
-    Idle          aIdle;
+    Idle          aIdle { "svtools::SvInplaceEdit2 aIdle" };
     VclPtr<Edit>  pEdit;
     bool          bCanceled;
     bool          bAlreadyInCallBack;
@@ -237,7 +237,6 @@ void SvInplaceEdit2::LoseFocus()
         bCanceled = false;
         aIdle.SetPriority(TaskPriority::REPAINT);
         aIdle.SetInvokeHandler(LINK(this,SvInplaceEdit2,Timeout_Impl));
-        aIdle.SetDebugName( "svtools::SvInplaceEdit2 aIdle" );
         aIdle.Start();
     }
 }

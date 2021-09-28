@@ -285,7 +285,7 @@ class ProgressBarTimer : private Timer
     };
     std::vector< ISegmentProgressBarRef > aSegments;
 public:
-    ProgressBarTimer()
+    ProgressBarTimer() : Timer("sc ProgressBarTimer")
     {
         SetTimeout( 500 );
     }

@@ -1802,6 +1802,7 @@ namespace frm
         :OBoundControl( _rxFactory, VCL_CONTROL_LISTBOX, false )
         ,m_aChangeListeners( m_aMutex )
         ,m_aItemListeners( m_aMutex )
+        ,m_aChangeIdle("forms OListBoxControl m_aChangedIdle")
     {
 
         osl_atomic_increment(&m_refCount);

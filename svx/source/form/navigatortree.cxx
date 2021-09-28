@@ -131,6 +131,7 @@ namespace svxform
     NavigatorTree::NavigatorTree(std::unique_ptr<weld::TreeView> xTreeView)
         :m_xTreeView(std::move(xTreeView))
         ,m_aDropTargetHelper(*this)
+        ,m_aSynchronizeTimer("svx NavigatorTree m_aSynchronizeTimer")
         ,nEditEvent(nullptr)
         ,m_sdiState(SDI_DIRTY)
         ,m_nSelectLock(0)

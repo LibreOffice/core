@@ -102,7 +102,7 @@ class SfxInPlaceClient_Impl : public ::cppu::WeakImplHelper< embed::XEmbeddedCli
                                                               embed::XWindowSupplier >
 {
 public:
-    Timer                           m_aTimer;               // activation timeout, starts after object connection
+    Timer                           m_aTimer { "sfx::SfxInPlaceClient m_xImpl::m_aTimer" }; // activation timeout, starts after object connection
     tools::Rectangle                       m_aObjArea;             // area of object in coordinate system of the container (without scaling)
     Fraction                        m_aScaleWidth;          // scaling that was applied to the object when it was not active
     Fraction                        m_aScaleHeight;
@@ -631,7 +631,6 @@ SfxInPlaceClient::SfxInPlaceClient( SfxViewShell* pViewShell, vcl::Window *pDraw
     m_xImp->m_nAspect = nAspect;
     m_xImp->m_aScaleWidth = m_xImp->m_aScaleHeight = Fraction(1,1);
     pViewShell->NewIPClient_Impl(this);
-    m_xImp->m_aTimer.SetDebugName( "sfx::SfxInPlaceClient m_xImpl::m_aTimer" );
     m_xImp->m_aTimer.SetTimeout( SFX_CLIENTACTIVATE_TIMEOUT );
     m_xImp->m_aTimer.SetInvokeHandler( LINK( m_xImp.get(), SfxInPlaceClient_Impl, TimerHdl ) );
 }

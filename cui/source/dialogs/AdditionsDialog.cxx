@@ -451,7 +451,7 @@ void SearchAndParseThread::execute()
 
 AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditionsTag)
     : GenericDialogController(pParent, "cui/ui/additionsdialog.ui", "AdditionsDialog")
-    , m_aSearchDataTimer("SearchDataTimer")
+    , m_aSearchDataTimer("AdditionsDialog SearchDataTimer")
     , m_xEntrySearch(m_xBuilder->weld_entry("entrySearch"))
     , m_xButtonClose(m_xBuilder->weld_button("buttonClose"))
     , m_xMenuButtonSettings(m_xBuilder->weld_menu_button("buttonGear"))
@@ -464,7 +464,6 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
     m_xGearBtn->set_item_active("gear_sort_voting", true);
 
     m_aSearchDataTimer.SetInvokeHandler(LINK(this, AdditionsDialog, ImplUpdateDataHdl));
-    m_aSearchDataTimer.SetDebugName("AdditionsDialog SearchDataTimer");
     m_aSearchDataTimer.SetTimeout(EDIT_UPDATEDATA_TIMEOUT);
 
     m_xEntrySearch->connect_changed(LINK(this, AdditionsDialog, SearchUpdateHdl));

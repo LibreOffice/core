@@ -203,6 +203,7 @@ static void lcl_DelFormatIndices( SwFormat const * pFormat )
 SwDoc::SwDoc()
     : m_pNodes(new SwNodes(*this)),
     mpAttrPool(new SwAttrPool(this)),
+    maOLEModifiedIdle( "sw::SwDoc maOLEModifiedIdle" ),
     mpMarkManager(new ::sw::mark::MarkManager(*this)),
     m_pMetaFieldManager(new ::sw::MetaFieldManager()),
     m_pDocumentDrawModelManager( new ::sw::DocumentDrawModelManager( *this ) ),
@@ -335,7 +336,6 @@ SwDoc::SwDoc()
 
     maOLEModifiedIdle.SetPriority( TaskPriority::LOWEST );
     maOLEModifiedIdle.SetInvokeHandler( LINK( this, SwDoc, DoUpdateModifiedOLE ));
-    maOLEModifiedIdle.SetDebugName( "sw::SwDoc maOLEModifiedIdle" );
 
 #if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     // Create DBManager

@@ -710,6 +710,7 @@ void SwView::CheckReadonlySelection()
 
 SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     : SfxViewShell( _pFrame, SWVIEWFLAGS ),
+    m_aTimer( "sw::SwView m_aTimer" ),
     m_nNewPage(USHRT_MAX),
     m_nOldPageNum(0),
     m_pNumRuleNodeFromDoc(nullptr),
@@ -1036,7 +1037,6 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     }
 
     m_aTimer.SetInvokeHandler(LINK(this, SwView, TimeoutHdl));
-    m_aTimer.SetDebugName( "sw::SwView m_aTimer" );
     m_bAttrChgNotified = m_bAttrChgNotifiedWithRegistrations = false;
     if (bOldModifyFlag)
         rDocSh.EnableSetModified();

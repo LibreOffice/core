@@ -33,7 +33,7 @@ namespace {
 class URITools
 {
 private:
-    Timer aOpenURITimer;
+    Timer aOpenURITimer { "sfx2::openUriExternallyTimer" };
     OUString msURI;
     bool mbHandleSystemShellExecuteException;
     DECL_LINK(onOpenURI, Timer*, void);
@@ -72,7 +72,6 @@ void URITools::openURI(const OUString& sURI, bool bHandleSystemShellExecuteExcep
 #else
     aOpenURITimer.SetTimeout(0);
 #endif
-    aOpenURITimer.SetDebugName("sfx2::openUriExternallyTimer");
     aOpenURITimer.Start();
 }
 

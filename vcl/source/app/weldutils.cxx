@@ -554,6 +554,7 @@ void WidgetStatusListener::dispose()
 ButtonPressRepeater::ButtonPressRepeater(weld::Button& rButton, const Link<Button&, void>& rLink,
                                          const Link<const CommandEvent&, void>& rContextLink)
     : m_rButton(rButton)
+    , m_aRepeat("vcl ButtonPressRepeater m_aRepeat")
     , m_aLink(rLink)
     , m_aContextLink(rContextLink)
     , m_bModKey(false)

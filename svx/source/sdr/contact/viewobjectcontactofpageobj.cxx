@@ -75,7 +75,7 @@ public:
 
 PagePrimitiveExtractor::PagePrimitiveExtractor(
     ViewObjectContactOfPageObj& rVOC)
-:   ObjectContactOfPagePainter(rVOC.GetObjectContact()),
+:   ObjectContactOfPagePainter(rVOC.GetObjectContact()), Idle("svx PagePrimitiveExtractor"),
     mrViewObjectContactOfPageObj(rVOC)
 {
     // make this renderer a preview renderer

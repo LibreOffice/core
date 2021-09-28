@@ -336,7 +336,7 @@ void SpinField::ImplInit(vcl::Window* pParent, WinBits nWinStyle)
 }
 
 SpinField::SpinField(vcl::Window* pParent, WinBits nWinStyle, WindowType nType) :
-    Edit(nType)
+    Edit(nType), maRepeatTimer("SpinField maRepeatTimer")
 {
     ImplInitSpinFieldData();
     ImplInit(pParent, nWinStyle);

@@ -127,6 +127,7 @@ SwGlobalTree::SwGlobalTree(std::unique_ptr<weld::TreeView> xTreeView, SwNavigati
     : m_xTreeView(std::move(xTreeView))
     , m_aDropTargetHelper(*this)
     , m_pDialog(pDialog)
+    , m_aUpdateTimer("SwGlobalTree m_aUpdateTimer")
     , m_pActiveShell(nullptr)
 {
     m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 30,

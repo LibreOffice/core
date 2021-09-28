@@ -36,6 +36,7 @@ inline bool SelectionEngine::ShouldDeselect( bool bModifierKey1 ) const
 
 SelectionEngine::SelectionEngine( vcl::Window* pWindow, FunctionSet* pFuncSet ) :
     pWin( pWindow ),
+    aWTimer( "vcl::SelectionEngine aWTimer" ),
     nUpdateInterval( SELENG_AUTOREPEAT_INTERVAL )
 {
     eSelMode = SelectionMode::Single;
@@ -45,7 +46,6 @@ SelectionEngine::SelectionEngine( vcl::Window* pWindow, FunctionSet* pFuncSet ) 
 
     aWTimer.SetInvokeHandler( LINK( this, SelectionEngine, ImpWatchDog ) );
     aWTimer.SetTimeout( nUpdateInterval );
-    aWTimer.SetDebugName( "vcl::SelectionEngine aWTimer" );
 }
 
 SelectionEngine::~SelectionEngine()

@@ -4130,7 +4130,7 @@ class IdleTask
     DECL_LINK( FlipFlag, Timer *, void );
     private:
     bool flag;
-    Idle maIdle;
+    Idle maIdle { "sw uiwriter IdleTask" };
 };
 
 }

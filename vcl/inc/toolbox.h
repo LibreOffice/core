@@ -122,7 +122,7 @@ struct ImplToolBoxPrivateData
 
     // called when dropdown items are clicked
     Link<ToolBox *, void> maDropdownClickHdl;
-    Timer   maDropdownTimer; // for opening dropdown items on "long click"
+    Timer   maDropdownTimer { "vcl::ToolBox mpData->maDropdownTimer" }; // for opening dropdown items on "long click"
 
     // large or small buttons ?
     ToolBoxButtonSize   meButtonSize;

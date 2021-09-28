@@ -99,6 +99,7 @@ class AquaDelayedSettingsChanged : public Idle
 
 public:
     AquaDelayedSettingsChanged( bool bInvalidate ) :
+        Idle("AquaSalInstance AquaDelayedSettingsChanged"),
         mbInvalidate( bInvalidate )
     {
     }
@@ -129,7 +130,6 @@ void AquaSalInstance::delayedSettingsChanged( bool bInvalidate )
 {
     osl::Guard< comphelper::SolarMutex > aGuard( *GetYieldMutex() );
     AquaDelayedSettingsChanged* pIdle = new AquaDelayedSettingsChanged( bInvalidate );
-    pIdle->SetDebugName( "AquaSalInstance AquaDelayedSettingsChanged" );
     pIdle->Start();
 }
 

@@ -761,6 +761,7 @@ ScDataProviderDlg::ScDataProviderDlg(weld::Window* pParent, std::shared_ptr<ScDo
     , mxEditID(m_xBuilder->weld_entry("ed_id"))
     , mxApplyBtn(m_xBuilder->weld_button("apply"))
     , mxBrowseBtn(m_xBuilder->weld_button("browse"))
+    , maIdle("ScDataProviderDlg maIdle")
     , mnIndex(0)
 {
     Size aPrefSize = mxTable->GetOptimalSize();

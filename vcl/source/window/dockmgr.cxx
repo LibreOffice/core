@@ -74,6 +74,8 @@ ImplDockFloatWin2::ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
         FloatingWindow( pParent, nWinBits ),
         mpDockWin( pDockingWin ),
         mnLastTicks( tools::Time::GetSystemTicks() ),
+        m_aDockTimer("vcl::ImplDockFloatWin2 m_aDockTimer"),
+        m_aEndDockTimer( "vcl::ImplDockFloatWin2 m_aEndDockTimer" ),
         mbInMove( false ),
         mnLastUserEvent( nullptr )
 {
@@ -93,12 +95,10 @@ ImplDockFloatWin2::ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
     m_aDockTimer.SetInvokeHandler( LINK( this, ImplDockFloatWin2, DockTimerHdl ) );
     m_aDockTimer.SetPriority( TaskPriority::HIGH_IDLE );
     m_aDockTimer.SetTimeout( 50 );
-    m_aDockTimer.SetDebugName( "vcl::ImplDockFloatWin2 m_aDockTimer" );
 
     m_aEndDockTimer.SetInvokeHandler( LINK( this, ImplDockFloatWin2, EndDockTimerHdl ) );
     m_aEndDockTimer.SetPriority( TaskPriority::HIGH_IDLE );
     m_aEndDockTimer.SetTimeout( 50 );
-    m_aEndDockTimer.SetDebugName( "vcl::ImplDockFloatWin2 m_aEndDockTimer" );
 }
 
 ImplDockFloatWin2::~ImplDockFloatWin2()
