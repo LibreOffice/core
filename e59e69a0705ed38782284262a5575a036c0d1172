@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c36e4a0b_0e8a5522",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001432
+      },
+      "writtenOn": "2021-09-28T15:07:29Z",
+      "side": 1,
+      "message": "I think it\u0027s still wrong: 1/ It assumes that ssh-ed25519, when present, is listed before ssh-rsa, for which there is AFAICT no guaranty; and 2/ it calls `ssh-keygen -t ssh-rsa` resp. `ssh-key -t ssh-ed25519` while per documentation it should be rsa resp. ed25519.  What\u0027s wrong with the snippet I proposed earlier?  AIFCT that matches the commit description accuratly:\n\n```\nssh -Qkey | grep -Fxq ssh-ed25519 \u0026\u0026 algo\u003d\"ed25519\" || algo\u003d\"rsa\"\nssh-keygen -t \"$algo\"\n```\n\nMy take from the article is that *implementing* RSA is hard and implementors are best using something else.  Don\u0027t really see any argument against the *use* of RSA for authentication (beside speed and shorter keys which are irrelevant here), and frankly I think we should really rely on OpenSSH upstream for sane and secure defaults.  It\u0027s true than crypto stacks have not always had sane default, especially before 2014, which lead to tons of people blindly copy ssl_* snippets from random blogposts after the Heartbleed; and the non-default settings come back to bite them now because they won\u0027t upgrade to the newer shinier defaults security settings.",
+      "revId": "e59e69a0705ed38782284262a5575a036c0d1172",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
