@@ -40,7 +40,7 @@ namespace com::sun::star {
 
 class SwXMLWriter : public StgWriter
 {
-    ErrCode Write_( const css::uno::Reference < css::task::XStatusIndicator>&, const OUString&  );
+    ErrCode Write_(const css::uno::Reference < css::task::XStatusIndicator>&, const OUString&, bool bNoEmbDS);
 
     using StgWriter::Write;
 

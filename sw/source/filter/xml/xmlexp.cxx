@@ -393,6 +393,35 @@ void SwXMLExport::GetConfigurationSettings( Sequence < PropertyValue >& rProps)
         return;
 
     SvXMLUnitConverter::convertPropertySet( rProps, xProps );
+
+    // tdf#144532 if NoEmbDataSet was set, to indicate not to write an embedded
+    // database for the case of a temporary mail merge preview document, then
+    // also filter out the "EmbeddedDatabaseName" property from the document
+    // settings so that when the temp mailmerge preview document is closed it
+    // doesn't unregister the database of the same name which was registered by
+    // the document this is a copy of
+    Reference<XPropertySet> rInfoSet = getExportInfo();
+
+    if (!rInfoSet.is() || !rInfoSet->getPropertySetInfo()->hasPropertyByName(u"NoEmbDataSet"))
+        return;
+
+    Any aAny = rInfoSet->getPropertyValue(u"NoEmbDataSet");
+    bool bNoEmbDataSet = *o3tl::doAccess<bool>(aAny);
+    if (!bNoEmbDataSet)
+        return;
+
+    Sequence<PropertyValue> aFilteredProps(rProps.getLength());
+    sal_Int32 nFilteredPropLen = 0;
+    PropertyValue *pValue = rProps.getArray();
+    for (sal_Int32 i = 0; i < rProps.getLength(); ++i)
+    {
+        if (pValue[i].Name == "EmbeddedDatabaseName")
+            continue;
+        aFilteredProps[nFilteredPropLen] = rProps[i];
+        ++nFilteredPropLen;
+    }
+    aFilteredProps.realloc(nFilteredPropLen);
+    std::swap(rProps, aFilteredProps);
 }
 
 sal_Int32 SwXMLExport::GetDocumentSpecificSettings( std::vector< SettingsGroup >& _out_rSettings )

@@ -81,8 +81,8 @@ SwXMLWriter::~SwXMLWriter()
 {
 }
 
-ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xStatusIndicator,
-                                const OUString& aDocHierarchicalName )
+ErrCode SwXMLWriter::Write_(const uno::Reference < task::XStatusIndicator >& xStatusIndicator,
+                            const OUString& aDocHierarchicalName, bool bNoEmbDS)
 {
     // Get service factory
     uno::Reference< uno::XComponentContext > xContext =
@@ -160,6 +160,10 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
               beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("TargetStorage"),0, cppu::UnoType<embed::XStorage>::get(),
               css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        // tdf#144532
+        { OUString("NoEmbDataSet"), 0,
+              cppu::UnoType<bool>::get(),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet(
@@ -167,6 +171,8 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
                             new comphelper::PropertySetInfo( aInfoMap ) ) );
 
     xInfoSet->setPropertyValue( "TargetStorage", Any( m_xStg ) );
+
+    xInfoSet->setPropertyValue("NoEmbDataSet", makeAny(bNoEmbDS));
 
     if (m_bShowProgress)
     {
@@ -441,13 +447,15 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
 
 ErrCode SwXMLWriter::WriteStorage()
 {
-    return Write_( uno::Reference < task::XStatusIndicator >(), OUString() );
+    return Write_(uno::Reference<task::XStatusIndicator>(), OUString(), false);
 }
 
 ErrCode SwXMLWriter::WriteMedium( SfxMedium& aTargetMedium )
 {
     uno::Reference < task::XStatusIndicator > xStatusIndicator;
     OUString aName;
+    bool bNoEmbDS(false);
+
     const SfxUnoAnyItem* pStatusBarItem = static_cast<const SfxUnoAnyItem*>(
        aTargetMedium.GetItemSet()->GetItem(SID_PROGRESS_STATUSBAR_CONTROL) );
     if ( pStatusBarItem )
@@ -456,8 +464,11 @@ ErrCode SwXMLWriter::WriteMedium( SfxMedium& aTargetMedium )
         aTargetMedium.GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME) );
     if ( pDocHierarchItem )
         aName = pDocHierarchItem->GetValue();
+    const SfxBoolItem* pNoEmbDS = SfxItemSet::GetItem(aTargetMedium.GetItemSet(), SID_NO_EMBEDDED_DS, false);
+    if (pNoEmbDS)
+        bNoEmbDS = pNoEmbDS->GetValue();
 
-    return Write_( xStatusIndicator, aName );
+    return Write_(xStatusIndicator, aName, bNoEmbDS);
 }
 
 ErrCode SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
