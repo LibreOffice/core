@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08dfb355_c6a95cf7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-09-28T13:19:51Z",
+      "side": 1,
+      "message": "Could you please take a look at this? This can help newbies setup ssh key pairs with better algorithms.",
+      "revId": "052edf0ed3284fdfad6974f31e8aa53baa7d98c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
