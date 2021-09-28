@@ -385,7 +385,6 @@ core_constructor_list = [
 # svx/util/svxcore.component
     "com_sun_star_comp_graphic_PrimitiveFactory2D_get_implementation",
     "com_sun_star_comp_Draw_GraphicExporter_get_implementation",
-    "com_sun_star_comp_svx_CharacterSpacingToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_ColorToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_FontNameToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_FrameToolBoxControl_get_implementation",
