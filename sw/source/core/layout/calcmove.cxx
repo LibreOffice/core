@@ -1248,7 +1248,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     PROTOCOL_ENTER( this, PROT::MakeAll, DbgAction::NONE, nullptr )
 
     // takes care of the notification in the dtor
-    std::unique_ptr<SwContentNotify, o3tl::default_delete<SwContentNotify>> pNotify(new SwContentNotify( this ));
+    std::optional<SwContentNotify> oNotify( std::in_place, this );
 
     // as long as bMakePage is true, a new page can be created (exactly once)
     bool bMakePage = true;
@@ -1280,7 +1280,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
     if ( !IsFollow() && rAttrs.JoinedWithPrev( *(this) ) )
     {
-        pNotify->SetBordersJoinedWithPrev();
+        oNotify->SetBordersJoinedWithPrev();
     }
 
     const bool bKeep = IsKeep(rAttrs.GetAttrSet().GetKeep(), GetBreakItem());
@@ -1720,7 +1720,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                           bNxtNew) )
                     {
                         if( bMovedFwd )
-                            pNotify->SetInvaKeep();
+                            oNotify->SetInvaKeep();
                         bMovedFwd = false;
                     }
                 }
@@ -1909,12 +1909,12 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     UnlockJoin();
     oDeleteGuard.reset();
     if ( bMovedFwd || bMovedBwd )
-        pNotify->SetInvaKeep();
+        oNotify->SetInvaKeep();
     if ( bMovedFwd )
     {
-        pNotify->SetInvalidatePrevPrtArea();
+        oNotify->SetInvalidatePrevPrtArea();
     }
-    pNotify.reset();
+    oNotify.reset();
     SetFlyLock( false );
 }
 
