@@ -385,12 +385,14 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
 void SwXMLExport::GetConfigurationSettings( Sequence < PropertyValue >& rProps)
 {
     Reference< XMultiServiceFactory > xFac( GetModel(), UNO_QUERY );
-    if( xFac.is() )
-    {
-        Reference< XPropertySet > xProps( xFac->createInstance("com.sun.star.document.Settings"), UNO_QUERY );
-        if( xProps.is() )
-            SvXMLUnitConverter::convertPropertySet( rProps, xProps );
-    }
+    if (!xFac.is())
+        return;
+
+    Reference< XPropertySet > xProps( xFac->createInstance("com.sun.star.document.Settings"), UNO_QUERY );
+    if (!xProps.is())
+        return;
+
+    SvXMLUnitConverter::convertPropertySet( rProps, xProps );
 }
 
 sal_Int32 SwXMLExport::GetDocumentSpecificSettings( std::vector< SettingsGroup >& _out_rSettings )
