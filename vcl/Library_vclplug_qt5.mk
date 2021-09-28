@@ -64,13 +64,6 @@ $(eval $(call gb_Library_use_externals,vclplug_qt5,\
     qt5 \
 ))
 
-$(eval $(call gb_Library_add_cxxflags,vclplug_qt5,\
-    $(QT5_CFLAGS) \
-))
-$(eval $(call gb_Library_add_libs,vclplug_qt5,\
-    $(QT5_LIBS) \
-))
-
 ifneq ($(QT5_HAVE_GOBJECT),)
 $(eval $(call gb_Library_add_cxxflags,vclplug_qt5,\
     $(QT5_GOBJECT_CFLAGS) \
