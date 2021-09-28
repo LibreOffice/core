@@ -98,7 +98,18 @@ case "$1" in
 	    echo "Hit enter to generate an ssh key - you will need to enter a pass-phrase"
 	    echo
 	    read -r
-	    ssh-keygen -t rsa -f "$ssh_home/id_rsa" # default type as of OpenSSH 8.1
+        all_algo="$(ssh -Q key)"
+        if grep -q -x ssh-ed25519 <<< "$all_algo"
+        then
+            algo="ed25519"
+        elif grep -q -x ssh-rsa <<< "$all_algo"
+        then
+            algo="rsa"
+        else
+            echo "Could not find 'ssh-ed25519' or 'ssh-rsa' in the output from 'ssh -Q key'"
+            exit 1
+        fi
+        ssh-keygen -t "$algo" # Generate the key pair using the selected algorithm
 	fi
     if test -d "$ssh_home"; then
         # order algos based on the PubkeyAcceptedKeyTypes option from OpenSSH 8.1
