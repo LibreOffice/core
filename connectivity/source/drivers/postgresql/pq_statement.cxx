@@ -44,7 +44,6 @@
 #include <osl/time.h>
 
 #include <rtl/ustrbuf.hxx>
-#include <rtl/strbuf.hxx>
 
 #include <comphelper/sequence.hxx>
 
@@ -456,15 +455,11 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
                 }
                 else if( !sourceTableKeys.empty() )
                 {
-                    OStringBuffer buf( 128 );
-                    buf.append( "can't support updateable resultset for table " );
-                    buf.append( OUStringToOString( schema, ConnectionSettings::encoding ) );
-                    buf.append( "." );
-                    buf.append( OUStringToOString( table, ConnectionSettings::encoding ) );
-                    buf.append( ", because resultset does not contain a part of the primary key ( column " );
-                    buf.append( OUStringToOString( sourceTableKeys[i], ConnectionSettings::encoding ) );
-                    buf.append( " is missing )" );
-                    aReason = buf.makeStringAndClear();
+                    aReason = "can't support updateable resultset for table "
+                        + OUStringToOString( schema, ConnectionSettings::encoding ) + "."
+                        + OUStringToOString( table, ConnectionSettings::encoding )
+                        + ", because resultset does not contain a part of the primary key ( column "
+                        + OUStringToOString( sourceTableKeys[i], ConnectionSettings::encoding );
                 }
                 else
                 {
