@@ -439,6 +439,11 @@ Dim vNodePath As Variant
 					Set .TextSearch = CreateUnoService(&quot;com.sun.star.util.TextSearch&quot;)
 				End If
 				Set _GetUNOService = .TextSearch
+			Case &quot;Toolkit&quot;
+				If IsEmpty(.Toolkit) Or IsNull(.Toolkit) Then
+					Set .Toolkit = CreateUnoService(&quot;com.sun.star.awt.Toolkit&quot;)
+				End If
+				Set _GetUNOService = .Toolkit
 			Case &quot;URLTransformer&quot;
 				If IsEmpty(.URLTransformer) Or IsNull(.URLTransformer) Then
 					Set .URLTransformer = CreateUnoService(&quot;com.sun.star.util.URLTransformer&quot;)
