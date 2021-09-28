@@ -155,17 +155,17 @@ void lcl_CalDate(sal_Int32 _nJulianDate,sal_Int32 _nJulianTime,css::util::DateTi
 {
     if ( _nJulianDate )
     {
-        sal_Int32 ka = _nJulianDate;
+        sal_Int64 ka = _nJulianDate;
         if ( _nJulianDate >= 2299161 )
         {
-            sal_Int32 ialp = static_cast<sal_Int32>( (static_cast<double>(_nJulianDate) - 1867216.25 ) / 36524.25 );
-            ka = _nJulianDate + 1 + ialp - ( ialp >> 2 );
+            sal_Int64 ialp = static_cast<sal_Int64>( (static_cast<double>(_nJulianDate) - 1867216.25 ) / 36524.25 );
+            ka = ka + 1 + ialp - ( ialp >> 2 );
         }
-        sal_Int32 kb = ka + 1524;
-        sal_Int32 kc =  static_cast<sal_Int32>( (static_cast<double>(kb) - 122.1 ) / 365.25 );
-        sal_Int32 kd = static_cast<sal_Int32>(static_cast<double>(kc) * 365.25);
-        sal_Int32 ke = static_cast<sal_Int32>(static_cast<double>( kb - kd ) / 30.6001 );
-        _rDateTime.Day = static_cast<sal_uInt16>(kb - kd - static_cast<sal_Int32>( static_cast<double>(ke) * 30.6001 ));
+        sal_Int64 kb = ka + 1524;
+        sal_Int64 kc = static_cast<sal_Int64>((static_cast<double>(kb) - 122.1) / 365.25);
+        sal_Int64 kd = static_cast<sal_Int64>(static_cast<double>(kc) * 365.25);
+        sal_Int64 ke = static_cast<sal_Int64>(static_cast<double>(kb - kd) / 30.6001);
+        _rDateTime.Day = static_cast<sal_uInt16>(kb - kd - static_cast<sal_Int64>( static_cast<double>(ke) * 30.6001 ));
         if ( ke > 13 )
             _rDateTime.Month = static_cast<sal_uInt16>(ke - 13);
         else
