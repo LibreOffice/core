@@ -246,13 +246,15 @@ void SfxGlobalEvents_Impl::dispose() {
         if (m_disposed)
             return;
         m_disposed = true;
-        auto tmp = std::move(m_xEvents);
+        auto tmpEvents = std::move(m_xEvents);
+        auto tmpModels = std::move(m_lModels);
         m_xJobExecutorListener.clear();
         m_disposeListeners.swap(listeners);
         m_lModels.clear();
         g.unlock();
-        // clear events outside lock because it will trigger a call back into us
-        tmp.clear();
+        // clear events&models outside lock because it will trigger a call back into us
+        tmpEvents.clear();
+        tmpModels.clear();
         g.lock();
         m_aLegacyListeners.disposeAndClear(g, {static_cast<OWeakObject *>(this)});
         g.lock(); // because disposeAndClear is going to want to unlock()
