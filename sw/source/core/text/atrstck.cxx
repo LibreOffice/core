@@ -322,14 +322,10 @@ void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAS,
     // SwTextFrame::FormatOnceMore situation or (since sw_redlinehide)
     // from SwAttrIter::Seek(); in the latter case SwTextSizeInfo::m_pFnt
     // is an alias of m_pFnt so it must not be deleted!
-    if (m_pFnt)
-    {
-        *m_pFnt = rFnt;
-    }
+    if (m_oFnt)
+        *m_oFnt = rFnt;
     else
-    {
-        m_pFnt.reset(new SwFont(rFnt));
-    }
+        m_oFnt.emplace(rFnt);
 }
 
 void SwAttrHandler::Reset( )
@@ -826,11 +822,11 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
 void SwAttrHandler::GetDefaultAscentAndHeight( SwViewShell const * pShell, OutputDevice const & rOut,
                                                sal_uInt16& nAscent, sal_uInt16& nHeight ) const
 {
-    OSL_ENSURE(m_pFnt, "No font available for GetDefaultAscentAndHeight");
+    OSL_ENSURE(m_oFnt, "No font available for GetDefaultAscentAndHeight");
 
-    if (m_pFnt)
+    if (m_oFnt)
     {
-        SwFont aFont( *m_pFnt );
+        SwFont aFont( *m_oFnt );
         nHeight = aFont.GetHeight( pShell, rOut );
         nAscent = aFont.GetAscent( pShell, rOut );
     }

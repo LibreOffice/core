@@ -45,7 +45,7 @@ private:
 
     // This is the base font for the paragraph. It is stored in order to have
     // a template, if we have to restart the attribute evaluation
-    std::unique_ptr<SwFont> m_pFnt;
+    std::optional<SwFont> m_oFnt;
 
     bool m_bVertLayout;
     bool m_bVertLayoutLRBT;
@@ -104,14 +104,14 @@ public:
 
 inline void SwAttrHandler::ResetFont( SwFont& rFnt ) const
 {
-    OSL_ENSURE(m_pFnt, "ResetFont without a font");
-    if (m_pFnt)
-        rFnt = *m_pFnt;
+    OSL_ENSURE(m_oFnt, "ResetFont without a font");
+    if (m_oFnt)
+        rFnt = *m_oFnt;
 };
 
 inline const SwFont* SwAttrHandler::GetFont() const
 {
-    return m_pFnt.get();
+    return m_oFnt ? &*m_oFnt : nullptr;
 };
 
 
