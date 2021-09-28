@@ -8070,7 +8070,10 @@ void DocxAttributeOutput::CharBorder(
     if ( GetExport().m_bStyDef && GetExport().m_pCurrentStyle && GetExport().m_pCurrentStyle->DerivedFrom() )
         pInherited = GetExport().m_pCurrentStyle->DerivedFrom()->GetAttrSet().GetItem<SvxBoxItem>(RES_CHRATR_BOX);
     else if ( m_rExport.m_pChpIter ) // incredibly undocumented, but this is the character-style info, right?
-        pInherited = static_cast<const SvxBoxItem*>(GetExport().m_pChpIter->HasTextItem(RES_CHRATR_BOX));
+    {
+        const SfxPoolItem* pPoolItem = GetExport().m_pChpIter->HasTextItem(RES_CHRATR_BOX);
+        pInherited = pPoolItem ? &pPoolItem->StaticWhichCast(RES_CHRATR_BOX) : nullptr;
+    }
 
     if ( pInherited )
         rStyleBorder = SvxBoxItem::SvxLineToLine(pInherited->GetRight(), false);
@@ -8963,7 +8966,9 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
         m_pageMargins.nLeft = 0;
         m_pageMargins.nRight = 0;
 
-        if ( auto pBoxItem = static_cast<const SvxBoxItem*>(m_rExport.HasItem( RES_BOX )) )
+        const SfxPoolItem* pPoolItem = m_rExport.HasItem(RES_BOX);
+        const SvxBoxItem* pBoxItem = pPoolItem ? &pPoolItem->StaticWhichCast(RES_BOX) : nullptr;
+        if (pBoxItem)
         {
             m_pageMargins.nLeft = pBoxItem->CalcLineSpace( SvxBoxItemLine::LEFT, /*bEvenIfNoLine*/true );
             m_pageMargins.nRight = pBoxItem->CalcLineSpace( SvxBoxItemLine::RIGHT, /*bEvenIfNoLine*/true );
