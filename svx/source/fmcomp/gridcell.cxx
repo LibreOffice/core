@@ -1719,10 +1719,16 @@ void DbCheckBox::PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect)
             TriState eState = static_cast<CheckBoxControl*>(m_pWindow.get())->GetState();
 
             MapMode aResMapMode(MapUnit::Map100thMM);
+            Size aImageSize = rDev.LogicToPixel(Size(300, 300), aResMapMode);
             Size aBrd1Size = rDev.LogicToPixel(Size(20, 20), aResMapMode);
             Size aBrd2Size = rDev.LogicToPixel(Size(30, 30), aResMapMode);
             int nCheckWidth = rDev.LogicToPixel(Size(20, 20), aResMapMode).Width();
-            tools::Rectangle aStateRect(rRect);
+
+            tools::Rectangle aStateRect;
+            aStateRect.SetLeft(rRect.Left() + ((rRect.GetWidth() - aImageSize.Width()) / 2));
+            aStateRect.SetTop(rRect.Top() + ((rRect.GetHeight() - aImageSize.Height()) / 2));
+            aStateRect.SetRight(aStateRect.Left() + aImageSize.Width() - 1);
+            aStateRect.SetBottom(aStateRect.Top() + aImageSize.Height() - 1);
 
             rDev.Push();
             rDev.SetMapMode();
