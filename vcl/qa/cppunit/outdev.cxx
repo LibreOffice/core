@@ -9,6 +9,10 @@
 
 #include <test/bootstrapfixture.hxx>
 
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/vector/b2enums.hxx>
+
+#include <vcl/lineinfo.hxx>
 #include <vcl/print.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
@@ -18,8 +22,6 @@
 #include <bitmap/BitmapWriteAccess.hxx>
 #include <bufferdevice.hxx>
 #include <window.h>
-
-#include <basegfx/matrix/b2dhommatrix.hxx>
 
 class VclOutdevTest : public test::BootstrapFixture
 {
@@ -67,6 +69,7 @@ public:
     void testShouldDrawWavePixelAsRect();
     void testGetWaveLineSize();
     void testDrawPixel();
+    void testDrawLine();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
     CPPUNIT_TEST(testVirtualDevice);
@@ -107,6 +110,7 @@ public:
     CPPUNIT_TEST(testShouldDrawWavePixelAsRect);
     CPPUNIT_TEST(testGetWaveLineSize);
     CPPUNIT_TEST(testDrawPixel);
+    CPPUNIT_TEST(testDrawLine);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1063,6 +1067,63 @@ void VclOutdevTest::testDrawPixel()
         MetaPointAction* pPointAction = dynamic_cast<MetaPointAction*>(pAction);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Pixel action has incorrect position", Point(0, 0),
                                      pPointAction->GetPoint());
+    }
+}
+
+void VclOutdevTest::testDrawLine()
+{
+    {
+        ScopedVclPtrInstance<VirtualDevice> pVDev;
+        GDIMetaFile aMtf;
+        aMtf.Record(pVDev.get());
+
+        pVDev->SetOutputSizePixel(Size(1, 100));
+        pVDev->DrawLine(Point(0, 0), Point(0, 50));
+
+        MetaAction* pAction = aMtf.GetAction(aMtf.GetActionSize() - 1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a line action", MetaActionType::LINE, pAction->GetType());
+        MetaLineAction* pLineAction = dynamic_cast<MetaLineAction*>(pAction);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Line start has incorrect position", Point(0, 0),
+                                     pLineAction->GetStartPoint());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Line start has incorrect position", Point(0, 50),
+                                     pLineAction->GetEndPoint());
+    }
+
+    {
+        ScopedVclPtrInstance<VirtualDevice> pVDev;
+        GDIMetaFile aMtf;
+        aMtf.Record(pVDev.get());
+
+        LineInfo aLineInfo(LineStyle::Dash, 10);
+        aLineInfo.SetDashCount(5);
+        aLineInfo.SetDashLen(10);
+        aLineInfo.SetDotCount(3);
+        aLineInfo.SetDotLen(13);
+        aLineInfo.SetDistance(8);
+        aLineInfo.SetLineJoin(basegfx::B2DLineJoin::Bevel);
+
+        pVDev->SetOutputSizePixel(Size(1, 100));
+        pVDev->DrawLine(Point(0, 0), Point(0, 50), aLineInfo);
+
+        MetaAction* pAction = aMtf.GetAction(aMtf.GetActionSize() - 1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a line action", MetaActionType::LINE, pAction->GetType());
+        MetaLineAction* pLineAction = dynamic_cast<MetaLineAction*>(pAction);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Line start has incorrect position", Point(0, 0),
+                                     pLineAction->GetStartPoint());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Line start has incorrect position", Point(0, 50),
+                                     pLineAction->GetEndPoint());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Dash count wrong", static_cast<sal_uInt16>(5),
+                                     pLineAction->GetLineInfo().GetDashCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Dash len wrong", static_cast<double>(10),
+                                     pLineAction->GetLineInfo().GetDashLen());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Dot count wrong", static_cast<sal_uInt16>(3),
+                                     pLineAction->GetLineInfo().GetDotCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Dot len wrong", static_cast<double>(13),
+                                     pLineAction->GetLineInfo().GetDotLen());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Distance wrong", static_cast<double>(8),
+                                     pLineAction->GetLineInfo().GetDistance());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Line join", basegfx::B2DLineJoin::Bevel,
+                                     pLineAction->GetLineInfo().GetLineJoin());
     }
 }
 
