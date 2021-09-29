@@ -1713,6 +1713,7 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
     {
         pFormat = GetFormatEntry( nKey );
     }
+    assert(pFormat);
     if (pFormat)
     {
         if ( eType == SvNumFormatType::TIME && pFormat->GetFormatPrecision() )
@@ -1720,7 +1721,24 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
             ChangeStandardPrec(INPUTSTRING_PRECISION);
             bPrecChanged = true;
         }
-        pFormat->GetOutputString(fOutNumber, sOutString, &pColor);
+        const bool bOk = pFormat->GetOutputString(fOutNumber, sOutString, &pColor);
+
+        // The #FMT error string must not be used for input as it would lead to
+        // data loss. This can happen for at least date(+time). Fall back to a
+        // last resort of plain number in the locale the formatter was
+        // contructed with.
+        if (!bOk && eType != SvNumFormatType::NUMBER && sOutString == ImpSvNumberformatScan::sErrStr)
+        {
+            pFormat = GetFormatEntry(ZF_STANDARD);
+            assert(pFormat);
+            if (pFormat)
+            {
+                ChangeStandardPrec(INPUTSTRING_PRECISION);
+                bPrecChanged = true;
+                pFormat->GetOutputString(fOutNumber, sOutString, &pColor);
+            }
+        }
+        assert(sOutString != ImpSvNumberformatScan::sErrStr);
     }
     if (bPrecChanged)
     {

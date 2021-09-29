@@ -3647,6 +3647,24 @@ static bool lcl_isSignedYear( const CalendarWrapper& rCal, const ImpSvNumFor& rN
         rCal.getUniqueID() == GREGORIAN && !lcl_hasEra( rNumFor );
 }
 
+/* XXX: if needed this could be stripped from rEpochStart and diff adding and
+ * moved to tools' DateTime to be reused elsewhere. */
+static bool lcl_getValidDate( const DateTime& rNullDate, const DateTime& rEpochStart, double& fNumber )
+{
+    static const DateTime aCE( Date(1,1,1));
+    static const DateTime aMin( Date(1,1, SAL_MIN_INT16));
+    static const DateTime aMax( Date(31,12, SAL_MAX_INT16), tools::Time(23,59,59, tools::Time::nanoSecPerSec - 1));
+    static const double fMin = aMin - aCE;
+    static const double fMax = aMax - aCE;
+    // Value must be representable in our tools::Date proleptic Gregorian
+    // calendar as well.
+    const double fOff = (rNullDate - aCE) + fNumber;
+    // Add diff between epochs to serial date number.
+    const double fDiff = rNullDate - rEpochStart;
+    fNumber += fDiff;
+    return fMin <= fOff && fOff <= fMax;
+}
+
 bool SvNumberformat::ImpGetDateOutput(double fNumber,
                                       sal_uInt16 nIx,
                                       OUStringBuffer& sBuff)
@@ -3655,8 +3673,11 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
     bool bRes = false;
 
     CalendarWrapper& rCal = GetCal();
-    double fDiff = DateTime(rScan.GetNullDate()) - rCal.getEpochStart();
-    fNumber += fDiff;
+    if (!lcl_getValidDate( rScan.GetNullDate(), rCal.getEpochStart(), fNumber))
+    {
+        sBuff = ImpSvNumberformatScan::sErrStr;
+        return false;
+    }
     rCal.setLocalDateTime( fNumber );
     int nUseMonthCase = 0; // Not decided yet
     OUString aOrgCalendar; // empty => not changed yet
@@ -3922,8 +3943,11 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     bool bRes = false;
 
     CalendarWrapper& rCal = GetCal();
-    double fDiff = DateTime(rScan.GetNullDate()) - rCal.getEpochStart();
-    fNumber += fDiff;
+    if (!lcl_getValidDate( rScan.GetNullDate(), rCal.getEpochStart(), fNumber))
+    {
+        sBuff = ImpSvNumberformatScan::sErrStr;
+        return false;
+    }
 
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     bool bInputLine;
