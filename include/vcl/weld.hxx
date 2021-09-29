@@ -2131,6 +2131,9 @@ public:
         return get_text_height() * nRows;
     }
 
+    // font size is in points, not pixels, e.g. see Window::[G]etPointFont
+    virtual void set_font(const vcl::Font& rFont) = 0;
+
     /*
        Typically you want to avoid the temptation of customizing
        font colors

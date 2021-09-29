@@ -8872,6 +8872,81 @@ IMPL_LINK_NOARG(GtkInstanceNotebook, SizeAllocateHdl, void*, void)
 }
 #endif
 
+
+OUString vcl_font_to_css(const vcl::Font& rFont)
+{
+    OUStringBuffer sCSS;
+    sCSS.append("font-family: \"" + rFont.GetFamilyName() + "\"; ");
+    sCSS.append("font-size: " + OUString::number(rFont.GetFontSize().Height()) + "pt; ");
+    switch (rFont.GetItalic())
+    {
+        case ITALIC_NONE:
+            sCSS.append("font-style: normal; ");
+            break;
+        case ITALIC_NORMAL:
+            sCSS.append("font-style: italic; ");
+            break;
+        case ITALIC_OBLIQUE:
+            sCSS.append("font-style: oblique; ");
+            break;
+        default:
+            break;
+    }
+    switch (rFont.GetWeight())
+    {
+        case WEIGHT_ULTRALIGHT:
+            sCSS.append("font-weight: 200; ");
+            break;
+        case WEIGHT_LIGHT:
+            sCSS.append("font-weight: 300; ");
+            break;
+        case WEIGHT_NORMAL:
+            sCSS.append("font-weight: 400; ");
+            break;
+        case WEIGHT_BOLD:
+            sCSS.append("font-weight: 700; ");
+            break;
+        case WEIGHT_ULTRABOLD:
+            sCSS.append("font-weight: 800; ");
+            break;
+        default:
+            break;
+    }
+    switch (rFont.GetWidthType())
+    {
+        case WIDTH_ULTRA_CONDENSED:
+            sCSS.append("font-stretch: ultra-condensed; ");
+            break;
+        case WIDTH_EXTRA_CONDENSED:
+            sCSS.append("font-stretch: extra-condensed; ");
+            break;
+        case WIDTH_CONDENSED:
+            sCSS.append("font-stretch: condensed; ");
+            break;
+        case WIDTH_SEMI_CONDENSED:
+            sCSS.append("font-stretch: semi-condensed; ");
+            break;
+        case WIDTH_NORMAL:
+            sCSS.append("font-stretch: normal; ");
+            break;
+        case WIDTH_SEMI_EXPANDED:
+            sCSS.append("font-stretch: semi-expanded; ");
+            break;
+        case WIDTH_EXPANDED:
+            sCSS.append("font-stretch: expanded; ");
+            break;
+        case WIDTH_EXTRA_EXPANDED:
+            sCSS.append("font-stretch: extra-expanded; ");
+            break;
+        case WIDTH_ULTRA_EXPANDED:
+            sCSS.append("font-stretch: ultra-expanded; ");
+            break;
+        default:
+            break;
+    }
+    return sCSS.toString();
+}
+
 void update_attr_list(PangoAttrList* pAttrList, const vcl::Font& rFont)
 {
     pango_attr_list_change(pAttrList, pango_attr_family_new(OUStringToOString(rFont.GetFamilyName(), RTL_TEXTENCODING_UTF8).getStr()));
@@ -16415,6 +16490,8 @@ private:
     GtkTextBuffer* m_pTextBuffer;
     GtkAdjustment* m_pVAdjustment;
     GtkCssProvider* m_pFgCssProvider;
+    GtkCssProvider* m_pFontCssProvider;
+    std::optional<vcl::Font> m_xFont;
     int m_nMaxTextLength;
     gulong m_nChangedSignalId; // we don't disable/enable this one, it's to implement max-length
     gulong m_nInsertTextSignalId;
@@ -16506,6 +16583,7 @@ public:
         , m_pTextBuffer(gtk_text_view_get_buffer(pTextView))
         , m_pVAdjustment(gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(pTextView)))
         , m_pFgCssProvider(nullptr)
+        , m_pFontCssProvider(nullptr)
         , m_nMaxTextLength(0)
         , m_nChangedSignalId(g_signal_connect(m_pTextBuffer, "changed", G_CALLBACK(signalChanged), this))
         , m_nInsertTextSignalId(g_signal_connect_after(m_pTextBuffer, "insert-text", G_CALLBACK(signalInserText), this))
@@ -16617,6 +16695,27 @@ public:
         OString aResult = OUStringToOString(aBuffer, RTL_TEXTENCODING_UTF8);
         css_provider_load_from_data(m_pFgCssProvider, aResult.getStr(), aResult.getLength());
         gtk_style_context_add_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pFgCssProvider),
+                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
+
+    virtual vcl::Font get_font() override
+    {
+        if (m_xFont)
+            return *m_xFont;
+        return GtkInstanceWidget::get_font();
+    }
+
+    virtual void set_font(const vcl::Font& rFont) override
+    {
+        m_xFont = rFont;
+        GtkStyleContext *pWidgetContext = gtk_widget_get_style_context(GTK_WIDGET(m_pTextView));
+        if (m_pFontCssProvider)
+            gtk_style_context_remove_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pFontCssProvider));
+        m_pFontCssProvider = gtk_css_provider_new();
+        OUString aBuffer = "textview { " + vcl_font_to_css(rFont) +  "}";
+        OString aResult = OUStringToOString(aBuffer, RTL_TEXTENCODING_UTF8);
+        css_provider_load_from_data(m_pFontCssProvider, aResult.getStr(), aResult.getLength());
+        gtk_style_context_add_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pFontCssProvider),
                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
 

@@ -395,6 +395,11 @@ namespace svt
             m_xWidget->set_editable(!bReadOnly);
         }
 
+        virtual void SetPointFont(const vcl::Font& rFont) override
+        {
+            m_xWidget->set_font(rFont);
+        }
+
         virtual void GetFocus() override;
 
         virtual void dispose() override;

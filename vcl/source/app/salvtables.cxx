@@ -5763,9 +5763,7 @@ void SalInstanceTextView::set_monospace(bool bMonospace)
     else
         aFont = Application::GetSettings().GetStyleSettings().GetFieldFont();
     aFont.SetFontHeight(aOrigFont.GetFontHeight());
-    m_xTextView->SetFont(aFont);
-    m_xTextView->SetControlFont(aFont);
-    m_xTextView->Invalidate();
+    set_font(aFont);
 }
 
 void SalInstanceTextView::set_font_color(const Color& rColor)
@@ -5774,6 +5772,13 @@ void SalInstanceTextView::set_font_color(const Color& rColor)
         m_xTextView->SetControlForeground(rColor);
     else
         m_xTextView->SetControlForeground();
+}
+
+void SalInstanceTextView::set_font(const vcl::Font& rFont)
+{
+    m_xTextView->SetFont(rFont);
+    m_xTextView->SetControlFont(rFont);
+    m_xTextView->Invalidate();
 }
 
 void SalInstanceTextView::connect_cursor_position(const Link<TextView&, void>& rLink)
