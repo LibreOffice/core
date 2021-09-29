@@ -45,6 +45,29 @@
       },
       "revId": "e7dc7ccb13f0e773be82e8ce9519dce47c8bb57e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20495fa3_44e9f34f",
+        "filename": "basic/source/sbx/sbxscan.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-29T18:18:29Z",
+      "side": 1,
+      "message": "Hmm. Are we OK with rtl_math_StringFormat_Automatic? Previously we explicitly differentiated between rtl_math_StringFormat_F and rtl_math_StringFormat_E2 (basically, those constants; making sure to have no less than 2 decimal digits in exponent), and chose dependent on \u0027( nNum \u0026\u0026( nNum \u003c 1E-1 || nNum \u003e\u003d dMaxNumWithoutExp ) )\u0027. And dMaxNumWithoutExp was dependent on nPrec. I suppose that we better stick to the old behavior? It would be a regression IMO to change it.\n\nEven if you are in favor to change that, please do that in a follow-up, so that we may differentiate possible regressions.",
+      "range": {
+        "startLine": 315,
+        "startChar": 40,
+        "endLine": 315,
+        "endChar": 71
+      },
+      "revId": "e7dc7ccb13f0e773be82e8ce9519dce47c8bb57e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
