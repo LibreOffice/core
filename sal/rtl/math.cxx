@@ -358,14 +358,13 @@ void doubleToString(typename T::String ** pResult,
                 sal_Int64 nRounding = static_cast< sal_Int64 >(getN10Exp(-nDecPlaces - 1));
                 const sal_Int64 nTemp = (nInt / nRounding + 5) / 10;
                 nInt = nTemp * 10 * nRounding;
-                nDecPlaces = 0;
             }
 
             // Max 1 sign, 16 integer digits, 15 group separators, 1 decimal
             // separator, 15 decimals digits.
             typename T::Char aBuf[64];
-            typename T::Char * pBuf = aBuf;
-            typename T::Char * p = pBuf;
+            typename T::Char* pEnd = aBuf + 40;
+            typename T::Char* pStart = pEnd;
 
             // Backward fill.
             size_t nGrouping = 0;
@@ -374,10 +373,10 @@ void doubleToString(typename T::String ** pResult,
             {
                 typename T::Char nDigit = nInt % 10;
                 nInt /= 10;
-                *p++ = nDigit + '0';
+                *--pStart = nDigit + '0';
                 if (pGroups && pGroups[nGrouping] == ++nGroupDigits && nInt > 0 && cGroupSeparator)
                 {
-                    *p++ = cGroupSeparator;
+                    *--pStart = cGroupSeparator;
                     if (pGroups[nGrouping+1])
                         ++nGrouping;
                     nGroupDigits = 0;
@@ -385,23 +384,19 @@ void doubleToString(typename T::String ** pResult,
             }
             while (nInt > 0);
             if (bSign)
-                *p++ = '-';
-
-            // Reverse buffer content.
-            std::reverse(pBuf, p);
+                *--pStart = '-';
 
             // Append decimals.
             if (nDecPlaces > 0)
             {
-                *p++ = cDecSeparator;
-                while (nDecPlaces--)
-                    *p++ = '0';
+                *pEnd++ = cDecSeparator;
+                pEnd = std::fill_n(pEnd, nDecPlaces, '0');
             }
 
             if (!pResultCapacity)
-                T::createString(pResult, pBuf, p - pBuf);
+                T::createString(pResult, pStart, pEnd - pStart);
             else
-                T::appendChars(pResult, pResultCapacity, &nResultOffset, pBuf, p - pBuf);
+                T::appendChars(pResult, pResultCapacity, &nResultOffset, pStart, pEnd - pStart);
 
             return;
         }
