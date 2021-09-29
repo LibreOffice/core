@@ -64,8 +64,7 @@ namespace sw { class DocumentContentOperationsManager; }
 namespace svt { class EmbeddedObjectRef; }
 
 
-typedef SwNode * SwNodePtr;
-typedef bool (*FnForEach_SwNodes)( const SwNodePtr&, void* pArgs );
+typedef bool (*FnForEach_SwNodes)( SwNode*, void* pArgs );
 typedef struct _xmlTextWriter *xmlTextWriterPtr;
 
 struct CompareSwOutlineNodes
@@ -96,10 +95,8 @@ class SW_DLLPUBLIC SwNodes final
     SwNodeIndex* m_vIndices; ///< ring of all indices on nodes.
     void RemoveNode( sal_uLong nDelPos, sal_uLong nLen, bool bDel );
 
-    void InsertNode( const SwNodePtr pNode,
-                     const SwNodeIndex& rPos );
-    void InsertNode( const SwNodePtr pNode,
-                     sal_uLong nPos );
+    void InsertNode( SwNode* pNode, const SwNodeIndex& rPos );
+    void InsertNode( SwNode* pNode, sal_uLong nPos );
 
     SwDoc& m_rMyDoc;                      ///< This Doc contains the nodes-array.
 
@@ -137,7 +134,7 @@ public:
     typedef std::vector<SwNodeRange> NodeRanges_t;
     typedef std::vector<NodeRanges_t> TableRanges_t;
 
-    SwNodePtr operator[]( sal_uLong n ) const; // defined in node.hxx
+    SwNode* operator[]( sal_uLong n ) const; // defined in node.hxx
 
     sal_uLong Count() const { return BigPtrArray::Count(); }
     void ForEach( FnForEach_SwNodes fnForEach, void* pArgs = nullptr )

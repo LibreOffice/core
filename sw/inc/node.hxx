@@ -730,9 +730,9 @@ inline SwPlaceholderNode::SwPlaceholderNode(const SwNodeIndex &rWhere)
 {
 }
 
-inline SwNodePtr SwNodes::operator[]( sal_uLong n ) const
+inline SwNode* SwNodes::operator[]( sal_uLong n ) const
 {
-    return static_cast<SwNodePtr>(BigPtrArray::operator[] ( n ));
+    return static_cast<SwNode*>(BigPtrArray::operator[] ( n ));
 }
 
 #endif

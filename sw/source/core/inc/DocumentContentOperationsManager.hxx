@@ -149,7 +149,7 @@ public:
         {
         }
     };
-    static bool lcl_RstTextAttr( const SwNodePtr& rpNd, void* pArgs ); //originally from docfmt.cxx
+    static bool lcl_RstTextAttr( SwNode* pNd, void* pArgs ); //originally from docfmt.cxx
 
 
     virtual ~DocumentContentOperationsManager() override;
