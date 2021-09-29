@@ -333,12 +333,9 @@ namespace dbtools
     css::util::Time DBTypeConversion::toTime(const double dVal, short nDigits)
     {
         const double nDays = std::trunc(dVal);
-        sal_Int64 nNS;
-        {
-            double fSeconds((dVal - nDays) * (fNanoSecondsPerDay / nanoSecInSec));
-            fSeconds = ::rtl::math::round( fSeconds, nDigits );
-            nNS = fSeconds * nanoSecInSec;
-        }
+        double fSeconds((dVal - nDays) * (fNanoSecondsPerDay / nanoSecInSec));
+        fSeconds = ::rtl::math::round(fSeconds, nDigits);
+        sal_Int64 nNS = fSeconds * nanoSecInSec;
 
         sal_Int16 nSign;
         if ( nNS < 0 )
