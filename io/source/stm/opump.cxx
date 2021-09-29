@@ -35,7 +35,6 @@
 #include <tools/diagnose_ex.h>
 
 using namespace osl;
-using namespace std;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
