@@ -25,6 +25,7 @@
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
+#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 
 #include <osl/thread.h>
 #include <osl/file.hxx>
@@ -35,6 +36,7 @@
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include "xdialogcreator.hxx"
 #include <oleembobj.hxx>
@@ -231,8 +233,31 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
         if ( !xEmbCreator.is() )
             throw uno::RuntimeException();
 
+        uno::Reference<task::XStatusIndicator> xProgress;
+        OUString aProgressText;
+        comphelper::SequenceAsHashMap aMap(aInObjArgs);
+        auto it = aMap.find("StatusIndicator");
+        if (it != aMap.end())
+        {
+            it->second >>= xProgress;
+        }
+        it = aMap.find("StatusIndicatorText");
+        if (it != aMap.end())
+        {
+            it->second >>= aProgressText;
+        }
+        if (xProgress.is())
+        {
+            xProgress->start(aProgressText, 100);
+        }
+
         aObjectInfo.Object.set( xEmbCreator->createInstanceInitFromMediaDescriptor( xStorage, sEntName, aMediaDescr, aObjArgs ),
                                 uno::UNO_QUERY );
+
+        if (xProgress.is())
+        {
+            xProgress->end();
+        }
     }
 
     if ( ( io.dwFlags & IOF_CHECKDISPLAYASICON) && io.hMetaPict != nullptr )
