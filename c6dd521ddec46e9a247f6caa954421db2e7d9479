@@ -33,6 +33,23 @@
       "message": "It seems you need to fix merge conflicts first.",
       "revId": "c6dd521ddec46e9a247f6caa954421db2e7d9479",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69f60211_7dbff5af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-09-29T03:09:44Z",
+      "side": 1,
+      "message": "(Julien: “Merge Conflict” appears because this parch is part of a relation chain; once the other patch is merged, this one will be mergeable. If you can, please review the other patch.)",
+      "revId": "c6dd521ddec46e9a247f6caa954421db2e7d9479",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
