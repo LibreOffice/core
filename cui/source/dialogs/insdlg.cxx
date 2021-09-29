@@ -29,6 +29,7 @@
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <insdlg.hxx>
 #include <dialmgr.hxx>
@@ -193,10 +194,32 @@ short SvInsertOleDlg::run()
                         if ( xDialogCreator.is() )
                         {
                             aName = aCnt.CreateUniqueObjectName();
+
+                            uno::Reference<task::XStatusIndicator> xProgress;
+                            OUString aProgressText;
+                            SfxViewFrame* pFrame = SfxViewFrame::Current();
+                            if (pFrame)
+                            {
+                                // Have a current frame, create a matching progressbar, but don't start it yet.
+                                uno::Reference<frame::XFrame> xFrame
+                                    = pFrame->GetFrame().GetFrameInterface();
+                                uno::Reference<task::XStatusIndicatorFactory> xProgressFactory(
+                                    xFrame, uno::UNO_QUERY);
+                                if (xProgressFactory.is())
+                                {
+                                    xProgress = xProgressFactory->createStatusIndicator();
+                                    if (xProgress)
+                                    {
+                                        aProgressText = SvxResId(RID_SVXSTR_DOC_LOAD);
+                                    }
+                                }
+                            }
+
                             const embed::InsertedObjectInfo aNewInf = xDialogCreator->createInstanceByDialog(
                                                                     m_xStorage,
                                                                     aName,
-                                                                    uno::Sequence < beans::PropertyValue >() );
+                                                                    {comphelper::makePropertyValue("StatusIndicator", xProgress),
+                                                                     comphelper::makePropertyValue("StatusIndicatorText", aProgressText)} );
 
                             OSL_ENSURE( aNewInf.Object.is(), "The object must be created or an exception must be thrown!" );
                             m_xObj = aNewInf.Object;
