@@ -66,6 +66,7 @@ public:
     void testSystemTextColor();
     void testShouldDrawWavePixelAsRect();
     void testGetWaveLineSize();
+    void testDrawPixel();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
     CPPUNIT_TEST(testVirtualDevice);
@@ -105,6 +106,7 @@ public:
     CPPUNIT_TEST(testSystemTextColor);
     CPPUNIT_TEST(testShouldDrawWavePixelAsRect);
     CPPUNIT_TEST(testGetWaveLineSize);
+    CPPUNIT_TEST(testDrawPixel);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1018,6 +1020,49 @@ void VclOutdevTest::testGetWaveLineSize()
         CPPUNIT_ASSERT_EQUAL(Size(1, 1), pTestOutDev->testGetWaveLineSize(1));
 
         CPPUNIT_ASSERT_EQUAL(Size(10, 10), pTestOutDev->testGetWaveLineSize(10));
+    }
+}
+
+void VclOutdevTest::testDrawPixel()
+{
+    {
+        ScopedVclPtrInstance<VirtualDevice> pVDev;
+        GDIMetaFile aMtf;
+        aMtf.Record(pVDev.get());
+
+        pVDev->SetOutputSizePixel(Size(1, 1));
+        pVDev->SetLineColor(COL_RED);
+        pVDev->DrawPixel(Point(0, 0), COL_GREEN);
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Color not green", COL_GREEN, pVDev->GetPixel(Point(0, 0)));
+
+        MetaAction* pAction = aMtf.GetAction(aMtf.GetActionSize() - 1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a pixel action", MetaActionType::PIXEL,
+                                     pAction->GetType());
+        MetaPixelAction* pPixelAction = dynamic_cast<MetaPixelAction*>(pAction);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Pixel action has incorrect position", Point(0, 0),
+                                     pPixelAction->GetPoint());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Pixel action is wrong color", COL_GREEN,
+                                     pPixelAction->GetColor());
+    }
+
+    {
+        ScopedVclPtrInstance<VirtualDevice> pVDev;
+        GDIMetaFile aMtf;
+        aMtf.Record(pVDev.get());
+
+        pVDev->SetOutputSizePixel(Size(1, 1));
+        pVDev->SetLineColor(COL_RED);
+        pVDev->DrawPixel(Point(0, 0));
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Color not red", COL_RED, pVDev->GetPixel(Point(0, 0)));
+
+        MetaAction* pAction = aMtf.GetAction(aMtf.GetActionSize() - 1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a point action", MetaActionType::POINT,
+                                     pAction->GetType());
+        MetaPointAction* pPointAction = dynamic_cast<MetaPointAction*>(pAction);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Pixel action has incorrect position", Point(0, 0),
+                                     pPointAction->GetPoint());
     }
 }
 
