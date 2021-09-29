@@ -459,7 +459,8 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
                         + OUStringToOString( schema, ConnectionSettings::encoding ) + "."
                         + OUStringToOString( table, ConnectionSettings::encoding )
                         + ", because resultset does not contain a part of the primary key ( column "
-                        + OUStringToOString( sourceTableKeys[i], ConnectionSettings::encoding );
+                        + OUStringToOString( sourceTableKeys[i], ConnectionSettings::encoding )
+                        + " is missing )";
                 }
                 else
                 {
