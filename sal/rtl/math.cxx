@@ -388,11 +388,7 @@ void doubleToString(typename T::String ** pResult,
                 *p++ = '-';
 
             // Reverse buffer content.
-            sal_Int32 n = (p - pBuf) / 2;
-            for (sal_Int32 i=0; i < n; ++i)
-            {
-                ::std::swap( pBuf[i], p[-i-1]);
-            }
+            std::reverse(pBuf, p);
 
             // Append decimals.
             if (nDecPlaces > 0)
