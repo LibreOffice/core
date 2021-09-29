@@ -140,6 +140,30 @@
       },
       "revId": "e7dc7ccb13f0e773be82e8ce9519dce47c8bb57e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "977f496e_46457ae2",
+        "filename": "basic/source/sbx/sbxscan.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-29T19:35:03Z",
+      "side": 1,
+      "message": "The only regression I could think of is that instead of 1E18 it converts numbers to 1E018 and maybe from another limit determined by the function. I will create a follow up 👍",
+      "parentUuid": "a1ee97e8_66054771",
+      "range": {
+        "startLine": 315,
+        "startChar": 40,
+        "endLine": 315,
+        "endChar": 71
+      },
+      "revId": "e7dc7ccb13f0e773be82e8ce9519dce47c8bb57e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
