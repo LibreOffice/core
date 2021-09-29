@@ -130,7 +130,7 @@ public:
     void                SetColor(Color rColor) { maColor = rColor; }
 };
 
-class SAL_DLLPUBLIC_RTTI MetaPointAction final : public MetaAction
+class VCL_DLLPUBLIC MetaPointAction final : public MetaAction
 {
 private:
     Point               maPt;
