@@ -246,7 +246,7 @@ public:
     bool IsShowBookmarks(bool const bHard = false) const
     {
         return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::Bookmarks)
-                && (bHard || (m_nCoreOptions & ViewOptFlags1::ViewMetachars));
+                && (bHard || IsFieldShadings());
     }
 
     bool IsLineBreak(bool bHard = false) const
