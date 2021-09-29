@@ -178,6 +178,10 @@ namespace
                     TOOLS_INFO_EXCEPTION("sfx.appl", "trying to install LibreOffice Base");
                 }
             }
+            else
+            {
+                SAL_WARN("sfx.appl", "LibreOffice Base cannot be installed");
+            }
             return;
         }
 
