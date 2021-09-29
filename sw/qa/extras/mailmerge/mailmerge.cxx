@@ -950,7 +950,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf62364, "tdf62364.odt", "10-testing-addresses
     {
         for (int nodeIndex = 0; nodeIndex<4; nodeIndex++)
         {
-            const SwNodePtr aNode = rNodes[9 + pageIndex * 4 + nodeIndex];
+            SwNode* aNode = rNodes[9 + pageIndex * 4 + nodeIndex];
             CPPUNIT_ASSERT_EQUAL(true, aNode->IsTextNode());
 
             const SwTextNode* pTextNode = aNode->GetTextNode();
@@ -976,7 +976,7 @@ DECLARE_SHELL_MAILMERGE_TEST(tdf125522_shell, "tdf125522.odt", "10-testing-addre
     const auto & rNodes = pTextDoc->GetDocShell()->GetDoc()->GetNodes();
     for (sal_uLong nodeIndex = 0; nodeIndex<rNodes.Count(); nodeIndex++)
     {
-        const SwNodePtr aNode = rNodes[nodeIndex];
+        SwNode* aNode = rNodes[nodeIndex];
         if (aNode->StartOfSectionNode())
         {
             CPPUNIT_ASSERT(!aNode->StartOfSectionNode()->GetFlyFormat());

@@ -770,10 +770,10 @@ void SwHyphArgs::SetPam( SwPaM *pPam ) const
 }
 
 // Returns true if we can proceed.
-static bool lcl_HyphenateNode( const SwNodePtr& rpNd, void* pArgs )
+static bool lcl_HyphenateNode( SwNode* pNd, void* pArgs )
 {
     // Hyphenate returns true if there is a hyphenation point and sets pPam
-    SwTextNode *pNode = rpNd->GetTextNode();
+    SwTextNode *pNode = pNd->GetTextNode();
     SwHyphArgs *pHyphArgs = static_cast<SwHyphArgs*>(pArgs);
     if( pNode )
     {
@@ -797,10 +797,10 @@ static bool lcl_HyphenateNode( const SwNodePtr& rpNd, void* pArgs )
                                          : nPageNr + *pPageCnt - *pPageSt + 1;
                 ::SetProgressState( nStat, pNode->GetDoc().GetDocShell() );
             }
-            pHyphArgs->SetRange( rpNd );
+            pHyphArgs->SetRange( pNd );
             if( pNode->Hyphenate( *pHyphArgs ) )
             {
-                pHyphArgs->SetNode( rpNd );
+                pHyphArgs->SetNode( pNd );
                 return false;
             }
         }

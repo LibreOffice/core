@@ -1109,9 +1109,9 @@ sal_uInt16 SwDoc::GetRefMarks( std::vector<OUString>* pNames ) const
     return nCount;
 }
 
-static bool lcl_SpellAndGrammarAgain( const SwNodePtr& rpNd, void* pArgs )
+static bool lcl_SpellAndGrammarAgain( SwNode* pNd, void* pArgs )
 {
-    SwTextNode *pTextNode = rpNd->GetTextNode();
+    SwTextNode *pTextNode = pNd->GetTextNode();
     bool bOnlyWrong = *static_cast<sal_Bool*>(pArgs);
     if( pTextNode )
     {
@@ -1137,9 +1137,9 @@ static bool lcl_SpellAndGrammarAgain( const SwNodePtr& rpNd, void* pArgs )
     return true;
 }
 
-static bool lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
+static bool lcl_CheckSmartTagsAgain( SwNode* pNd, void*  )
 {
-    SwTextNode *pTextNode = rpNd->GetTextNode();
+    SwTextNode *pTextNode = pNd->GetTextNode();
     if( pTextNode )
     {
         pTextNode->SetSmartTagDirty( true );

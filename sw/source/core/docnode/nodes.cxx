@@ -152,7 +152,7 @@ void SwNodes::ChgNode( SwNodeIndex const & rDelPos, sal_uLong nSz,
 
                 if (pTextNode->IsOutline())
                 {
-                    const SwNodePtr pSrch = &rNd;
+                    SwNode* pSrch = &rNd;
                     m_pOutlineNodes->erase( pSrch );
                 }
             }
@@ -167,7 +167,7 @@ void SwNodes::ChgNode( SwNodeIndex const & rDelPos, sal_uLong nSz,
 
                 if (bInsOutlineIdx && rTextNd.IsOutline())
                 {
-                    const SwNodePtr pSrch = &rNd;
+                    SwNode* pSrch = &rNd;
                     m_pOutlineNodes->insert( pSrch );
                 }
                 rTextNd.InvalidateNumRule();
@@ -1396,12 +1396,12 @@ struct HighLevel
 
 }
 
-static bool lcl_HighestLevel( const SwNodePtr& rpNode, void * pPara )
+static bool lcl_HighestLevel( SwNode* pNode, void * pPara )
 {
     HighLevel * pHL = static_cast<HighLevel*>(pPara);
-    if( rpNode->GetStartNode() )
+    if( pNode->GetStartNode() )
         pHL->nLevel++;
-    else if( rpNode->GetEndNode() )
+    else if( pNode->GetEndNode() )
         pHL->nLevel--;
     if( pHL->nTop > pHL->nLevel )
         pHL->nTop = pHL->nLevel;
@@ -2288,15 +2288,13 @@ void SwNodes::RemoveNode( sal_uLong nDelPos, sal_uLong nSz, bool bDel )
     BigPtrArray::Remove( nDelPos, nSz );
 }
 
-void SwNodes::InsertNode( const SwNodePtr pNode,
-                          const SwNodeIndex& rPos )
+void SwNodes::InsertNode( SwNode* pNode, const SwNodeIndex& rPos )
 {
     BigPtrEntry* pIns = pNode;
     BigPtrArray::Insert( pIns, rPos.GetIndex() );
 }
 
-void SwNodes::InsertNode( const SwNodePtr pNode,
-                          sal_uLong nPos )
+void SwNodes::InsertNode( SwNode* pNode, sal_uLong nPos )
 {
     BigPtrEntry* pIns = pNode;
     BigPtrArray::Insert( pIns, nPos );

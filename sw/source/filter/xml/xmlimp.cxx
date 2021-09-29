@@ -953,10 +953,10 @@ void SwXMLImport::MergeListsAtDocumentInsertPosition(SwDoc *pDoc)
     sal_uLong index = 1;
 
     // the last node of the main document where we have inserted a document
-    const SwNodePtr node1 = pDoc->GetNodes()[m_pSttNdIdx->GetIndex() + 0];
+    SwNode* const node1 = pDoc->GetNodes()[m_pSttNdIdx->GetIndex() + 0];
 
     // the first node of the inserted document
-    SwNodePtr node2 = pDoc->GetNodes()[m_pSttNdIdx->GetIndex() + index];
+    SwNode* node2 = pDoc->GetNodes()[m_pSttNdIdx->GetIndex() + index];
 
     if (! (node1 && node2
         && (node1->GetNodeType() == node2->GetNodeType())

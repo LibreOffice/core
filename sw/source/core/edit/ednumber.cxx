@@ -589,7 +589,7 @@ bool SwEditShell::IsProtectedOutlinePara() const
     if( rNd.IsTextNode() )
     {
         const SwOutlineNodes& rOutlNd = GetDoc()->GetNodes().GetOutLineNds();
-        SwNodePtr pNd = const_cast<SwNodePtr>(&rNd);
+        SwNode* pNd = const_cast<SwNode*>(&rNd);
         bool bFirst = true;
         SwOutlineNodes::size_type nPos;
         int nLvl(0);
@@ -598,7 +598,7 @@ bool SwEditShell::IsProtectedOutlinePara() const
 
         for( ; nPos < rOutlNd.size(); ++nPos )
         {
-            SwNodePtr pTmpNd = rOutlNd[ nPos ];
+            SwNode* pTmpNd = rOutlNd[ nPos ];
 
             if (!sw::IsParaPropsNode(*GetLayout(), *pTmpNd->GetTextNode()))
             {
