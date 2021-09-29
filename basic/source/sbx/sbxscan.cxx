@@ -298,134 +298,6 @@ ErrCode SbxValue::ScanNumIntnl( const OUString& rSrc, double& nVal, bool bSingle
     return nRetError;
 }
 
-
-const double roundArray[] = {
-    5.0e+0, 0.5e+0, 0.5e-1, 0.5e-2, 0.5e-3, 0.5e-4, 0.5e-5, 0.5e-6, 0.5e-7,
-    0.5e-8, 0.5e-9, 0.5e-10,0.5e-11,0.5e-12,0.5e-13,0.5e-14,0.5e-15 };
-
-/*
-|*
-|*  void myftoa( double, char *, short, short, bool, bool )
-|*
-|*  description:        conversion double --> ASCII
-|*  parameters:         double              the number
-|*                      char *              target buffer
-|*                      short               number of positions after decimal point
-|*                      short               range of the exponent ( 0=no E )
-|*                      bool                true: with 1000-separators
-|*                      bool                true: output without formatting
-|*
- */
-
-static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth )
-{
-
-    short nExp = 0;
-    short nDig = nPrec + 1;
-    short nDec;                         // number of positions before decimal point
-    int i;
-
-    sal_Unicode cDecimalSep, cThousandSep, cDecimalSepAlt;
-    ImpGetIntntlSep( cDecimalSep, cThousandSep, cDecimalSepAlt );
-
-    // compute exponent
-    nExp = 0;
-    if( nNum > 0.0 )
-    {
-        while( nNum <   1.0 )
-        {
-            nNum *= 10.0;
-            nExp--;
-        }
-        while( nNum >= 10.0 )
-        {
-            nNum /= 10.0;
-            nExp++;
-        }
-    }
-    if( !nPrec )
-        nDig = nExp + 1;
-
-    // round number
-    if( (nNum += roundArray [std::min<short>( nDig, 16 )] ) >= 10.0 )
-    {
-        nNum = 1.0;
-        ++nExp;
-        if( !nExpWidth ) ++nDig;
-    }
-
-    // determine positions before decimal point
-    if( !nExpWidth )
-    {
-        if( nExp < 0 )
-        {
-            // #41691: also a 0 at bFix
-            *pBuf++ = '0';
-            if( nPrec ) *pBuf++ = static_cast<char>(cDecimalSep);
-            i = -nExp - 1;
-            if( nDig <= 0 ) i = nPrec;
-            while( i-- )    *pBuf++ = '0';
-            nDec = 0;
-        }
-        else
-            nDec = nExp+1;
-    }
-    else
-        nDec = 1;
-
-    // output number
-    if( nDig > 0 )
-    {
-        int digit;
-        for( i = 0 ; ; ++i )
-        {
-            if( i < 16 )
-            {
-                digit = static_cast<int>(nNum);
-                *pBuf++ = sal::static_int_cast< char >(digit + '0');
-                nNum =( nNum - digit ) * 10.0;
-            } else
-                *pBuf++ = '0';
-            if( --nDig == 0 ) break;
-            if( nDec )
-            {
-                nDec--;
-                if( !nDec )
-                    *pBuf++ = static_cast<char>(cDecimalSep);
-            }
-        }
-    }
-
-    // output exponent
-    if( nExpWidth )
-    {
-        if( nExpWidth < 3 ) nExpWidth = 3;
-        nExpWidth -= 2;
-        *pBuf++ = 'E';
-        if ( nExp < 0 )
-        {
-            nExp = -nExp;
-            *pBuf++ = '-';
-        }
-        else
-            *pBuf++ = '+';
-        while( nExpWidth > 3 )
-        {
-            *pBuf++ = '0';
-            nExpWidth--;
-        }
-        if( nExp >= 100 || nExpWidth == 3 )
-        {
-            *pBuf++ = sal::static_int_cast< char >(nExp/100 + '0');
-            nExp %= 100;
-        }
-        if( nExp/10 || nExpWidth >= 2 )
-            *pBuf++ = sal::static_int_cast< char >(nExp/10 + '0');
-        *pBuf++ = sal::static_int_cast< char >(nExp%10 + '0');
-    }
-    *pBuf = 0;
-}
-
 // The number is prepared unformattedly with the given number of
 // NK-positions. A leading minus is added if applicable.
 // This routine is public because it's also used by the Put-functions
@@ -433,32 +305,19 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth )
 
 void ImpCvtNum( double nNum, short nPrec, OUString& rRes, bool bCoreString )
 {
-    char *q;
-    char cBuf[ 40 ], *p = cBuf;
-
     sal_Unicode cDecimalSep, cThousandSep, cDecimalSepAlt;
     ImpGetIntntlSep( cDecimalSep, cThousandSep, cDecimalSepAlt );
     if( bCoreString )
         cDecimalSep = '.';
 
-    if( nNum < 0.0 ) {
-        nNum = -nNum;
-        *p++ = '-';
-    }
-    double dMaxNumWithoutExp = (nPrec == 6) ? 1E6 : 1E14;
-    myftoa( nNum, p, nPrec,( nNum &&( nNum < 1E-1 || nNum >= dMaxNumWithoutExp ) ) ? 4:0 );
-    // remove trailing zeros
-    for( p = cBuf; *p &&( *p != 'E' ); p++ ) {}
-    q = p; p--;
-    while( nPrec && *p == '0' )
-    {
-        nPrec--;
-        p--;
-    }
-    if( *p == cDecimalSep ) p--;
-    while( *q ) *++p = *q++;
-    *++p = 0;
-    rRes = OUString::createFromAscii( cBuf );
+    const double dMaxNumWithoutExp = (nPrec == 6) ? 1E6 : 1E14;
+    rtl_math_StringFormat aMathStringFormat
+        = (nNum && (std::abs(nNum) < 1E-1 || std::abs(nNum) >= dMaxNumWithoutExp))
+              ? rtl_math_StringFormat_E2
+              : rtl_math_StringFormat_F;
+
+    // tdf#143575 - use rtl::math::doubleToUString to convert numbers to strings in basic
+    rRes = rtl::math::doubleToUString(nNum, aMathStringFormat, nPrec, cDecimalSep, true);
 }
 
 bool ImpConvStringExt( OUString& rSrc, SbxDataType eTargetType )
