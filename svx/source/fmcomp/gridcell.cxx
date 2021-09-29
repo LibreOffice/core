@@ -60,6 +60,7 @@
 #include <svx/dialmgr.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
+#include <tools/fract.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -694,11 +695,11 @@ bool DbCellControl::Commit()
 
 void DbCellControl::ImplInitWindow( vcl::Window const & rParent, const InitWindowFacet _eInitWhat )
 {
-    vcl::Window* pWindows[] = { m_pPainter, m_pWindow };
+    svt::ControlBase* pWindows[] = { m_pPainter, m_pWindow };
 
     if (_eInitWhat & InitWindowFacet::WritingMode)
     {
-        for (vcl::Window* pWindow : pWindows)
+        for (svt::ControlBase* pWindow : pWindows)
         {
             if (pWindow)
                 pWindow->EnableRTL(rParent.IsRTLEnabled());
@@ -707,26 +708,29 @@ void DbCellControl::ImplInitWindow( vcl::Window const & rParent, const InitWindo
 
     if (_eInitWhat & InitWindowFacet::Font)
     {
-        for (vcl::Window* pWindow : pWindows)
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+        const Fraction& rZoom = rParent.GetZoom();
+
+        for (svt::ControlBase* pWindow : pWindows)
         {
             if (!pWindow)
                 continue;
 
-            pWindow->SetZoom(rParent.GetZoom());
-
-            const StyleSettings& rStyleSettings = pWindow->GetSettings().GetStyleSettings();
             vcl::Font aFont = rStyleSettings.GetFieldFont();
             aFont.SetTransparent(isTransparent());
 
             if (rParent.IsControlFont())
-            {
-                pWindow->SetControlFont(rParent.GetControlFont());
                 aFont.Merge(rParent.GetControlFont());
-            }
-            else
-                pWindow->SetControlFont();
 
-            pWindow->SetZoomedPointFont(*pWindow->GetOutDev(), aFont); // FIXME RenderContext
+            if (rZoom.GetNumerator() != rZoom.GetDenominator())
+            {
+                Size aSize = aFont.GetFontSize();
+                aSize.setWidth(std::round(double(aSize.Width() * rZoom)));
+                aSize.setHeight(std::round(double(aSize.Height() * rZoom)));
+                aFont.SetFontSize(aSize);
+            }
+
+            pWindow->SetPointFont(aFont);
         }
     }
 
@@ -737,7 +741,7 @@ void DbCellControl::ImplInitWindow( vcl::Window const & rParent, const InitWindo
         bool bTextLineColor = rParent.IsTextLineColor();
         Color aTextLineColor(rParent.GetTextLineColor());
 
-        for (vcl::Window* pWindow : pWindows)
+        for (svt::ControlBase* pWindow : pWindows)
         {
             if (pWindow)
             {
@@ -759,7 +763,7 @@ void DbCellControl::ImplInitWindow( vcl::Window const & rParent, const InitWindo
     if (rParent.IsControlBackground())
     {
         Color aColor(rParent.GetControlBackground());
-        for (vcl::Window* pWindow : pWindows)
+        for (svt::ControlBase* pWindow : pWindows)
         {
             if (pWindow)
             {
