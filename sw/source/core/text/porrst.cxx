@@ -597,7 +597,7 @@ bool SwBookmarkPortion::DoPaint(SwTextPaintInfo const& rTextPaintInfo,
     auto const nFactor = (Height() * 95) / aSize.Height();
     rFont.SetProportion(nFactor);
     rFont.SetWeight(WEIGHT_THIN, rFont.GetActual());
-    rFont.SetColor(NON_PRINTING_CHARACTER_COLOR);
+    rFont.SetColor(SwViewOption::GetFieldShadingsColor());
     // reset these to default...
     rFont.SetAlign(ALIGN_BASELINE);
     rFont.SetUnderline(LINESTYLE_NONE);
