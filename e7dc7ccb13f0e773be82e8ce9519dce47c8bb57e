@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "988d74d5_b8a07c1c",
+        "filename": "basic/source/sbx/sbxscan.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-29T18:06:19Z",
+      "side": 1,
+      "message": "stringToDouble is the opposite direction 😉",
+      "range": {
+        "startLine": 313,
+        "startChar": 35,
+        "endLine": 313,
+        "endChar": 49
+      },
+      "revId": "e7dc7ccb13f0e773be82e8ce9519dce47c8bb57e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "071cbf49_d17b41bc",
+        "filename": "basic/source/sbx/sbxscan.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-29T18:06:19Z",
+      "side": 1,
+      "message": "Please don\u0027t use this. Instead, please use doubleToUString (or directly rtl_math_doubleToUString, which is a better match here, not requiring to create a temporary OUString).",
+      "range": {
+        "startLine": 315,
+        "startChar": 19,
+        "endLine": 315,
+        "endChar": 33
+      },
+      "revId": "e7dc7ccb13f0e773be82e8ce9519dce47c8bb57e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
