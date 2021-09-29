@@ -71,6 +71,10 @@ public:
     void testDrawPixel();
     void testDrawLine();
     void testDrawRect();
+    void testDrawArc();
+    void testDrawEllipse();
+    void testDrawPie();
+    void testDrawChord();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
     CPPUNIT_TEST(testVirtualDevice);
@@ -113,6 +117,10 @@ public:
     CPPUNIT_TEST(testDrawPixel);
     CPPUNIT_TEST(testDrawLine);
     CPPUNIT_TEST(testDrawRect);
+    CPPUNIT_TEST(testDrawArc);
+    CPPUNIT_TEST(testDrawEllipse);
+    CPPUNIT_TEST(testDrawPie);
+    CPPUNIT_TEST(testDrawChord);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1160,11 +1168,89 @@ void VclOutdevTest::testDrawRect()
         MetaRoundRectAction* pRectAction = dynamic_cast<MetaRoundRectAction*>(pAction);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Rectangle wrong", tools::Rectangle(Point(0, 0), Size(50, 60)),
                                      pRectAction->GetRect());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Rectangle wrong", static_cast<sal_uInt32>(5),
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Horizontal round rect wrong", static_cast<sal_uInt32>(5),
                                      pRectAction->GetHorzRound());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Rectangle wrong", static_cast<sal_uInt32>(10),
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Vertical round rect wrong", static_cast<sal_uInt32>(10),
                                      pRectAction->GetVertRound());
     }
+}
+
+void VclOutdevTest::testDrawEllipse()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    pVDev->SetOutputSizePixel(Size(1, 100));
+    pVDev->DrawEllipse(tools::Rectangle(Point(0, 0), Size(50, 60)));
+
+    MetaAction* pAction = aMtf.GetAction(aMtf.GetActionSize() - 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a ellipse action", MetaActionType::ELLIPSE,
+                                 pAction->GetType());
+    MetaEllipseAction* pEllipseAction = dynamic_cast<MetaEllipseAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Ellipse rect wrong", tools::Rectangle(Point(0, 0), Size(50, 60)),
+                                 pEllipseAction->GetRect());
+}
+
+void VclOutdevTest::testDrawPie()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    tools::Rectangle aRect(Point(0, 0), Size(50, 60));
+
+    pVDev->SetOutputSizePixel(Size(1, 100));
+    pVDev->DrawPie(aRect, aRect.TopRight(), aRect.TopCenter());
+
+    MetaAction* pAction = aMtf.GetAction(aMtf.GetActionSize() - 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a pie action", MetaActionType::PIE, pAction->GetType());
+    MetaPieAction* pPieAction = dynamic_cast<MetaPieAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Pie rect wrong", aRect, pPieAction->GetRect());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Pie start point wrong", aRect.TopRight(),
+                                 pPieAction->GetStartPoint());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Pie end point wrong", aRect.TopCenter(),
+                                 pPieAction->GetEndPoint());
+}
+
+void VclOutdevTest::testDrawChord()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    tools::Rectangle aRect(Point(21, 22), Size(4, 4));
+    pVDev->SetOutputSizePixel(Size(1, 100));
+    pVDev->DrawChord(aRect, Point(30, 31), Point(32, 33));
+
+    MetaAction* pAction = aMtf.GetAction(aMtf.GetActionSize() - 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a chord action", MetaActionType::CHORD, pAction->GetType());
+    MetaChordAction* pChordAction = dynamic_cast<MetaChordAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Chord rect wrong", aRect, pChordAction->GetRect());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Chord start point wrong", Point(30, 31),
+                                 pChordAction->GetStartPoint());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Chord end point wrong", Point(32, 33),
+                                 pChordAction->GetEndPoint());
+}
+
+void VclOutdevTest::testDrawArc()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    tools::Rectangle aRect(Point(1, 2), Size(4, 4));
+
+    pVDev->SetOutputSizePixel(Size(1, 100));
+    pVDev->DrawArc(aRect, Point(10, 11), Point(12, 13));
+
+    MetaAction* pAction = aMtf.GetAction(aMtf.GetActionSize() - 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a arc action", MetaActionType::ARC, pAction->GetType());
+    MetaArcAction* pArcAction = dynamic_cast<MetaArcAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Arc rect wrong", aRect, pArcAction->GetRect());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Arc start point wrong", Point(10, 11),
+                                 pArcAction->GetStartPoint());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Arc end point wrong", Point(12, 13), pArcAction->GetEndPoint());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclOutdevTest);
