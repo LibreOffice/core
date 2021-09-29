@@ -51,6 +51,23 @@
       "message": "It\u0027s all about trade-offs; possibly you can reuse a close enough existing compat flag (since each new compat flag also has a cost), just let\u0027s try not not break existing ODF docs created in Writer, which has none of the Word compat flags.",
       "revId": "22f1328ce3e22b049aab3da2eebd3a153292ed1f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b8ed256_5d3c7ecc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-09-29T07:10:06Z",
+      "side": 1,
+      "message": "@Szücsi: very nice fix!\n\nI\u0027ve found a solution to avoid of the regressions, e.g. changing multi-column page style, where we still need the old layout: we must check also the section option \"Evenly distribute contents to all columns\". You can add that to this patch, or to the follow-up compat flag commit.",
+      "revId": "22f1328ce3e22b049aab3da2eebd3a153292ed1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
