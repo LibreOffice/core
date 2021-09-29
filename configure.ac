@@ -1136,6 +1136,7 @@ test "${test_gtk3+set}" = set || test_gtk3="$using_x11"
 test "${test_gtk4+set}" = set || test_gtk4="$using_x11"
 test "${test_kf5+set}" = set || test_kf5="$using_x11"
 # don't handle test_qt5, so it can disable test_kf5 later
+test "${test_qt6+set}" = set || test_qt6="$using_x11"
 test "${test_randr+set}" = set || test_randr="$using_x11"
 test "${test_xrender+set}" = set || test_xrender="$using_x11"
 test "${using_headless_plugin+set}" = set || using_headless_plugin="$using_freetype_fontconfig"
@@ -1163,6 +1164,7 @@ disable_x11_tests()
     test_gtk4=no
     test_kf5=no
     test_qt5=no
+    test_qt6=no
     test_randr=no
     test_xrender=no
 }
@@ -1665,6 +1667,12 @@ libo_FUZZ_ARG_ENABLE(gio,
 AC_ARG_ENABLE(qt5,
     AS_HELP_STRING([--enable-qt5],
         [Determines whether to use Qt5 vclplug on platforms where Qt5 is
+         available.]),
+,)
+
+AC_ARG_ENABLE(qt6,
+    AS_HELP_STRING([--enable-qt6],
+        [Determines whether to use Qt6 vclplug on platforms where Qt6 is
          available.]),
 ,)
 
@@ -11580,6 +11588,15 @@ if test "x$enable_qt5" = "xyes"; then
 fi
 AC_SUBST(ENABLE_QT5)
 
+ENABLE_QT6=""
+if test "x$enable_qt6" = "xyes"; then
+    ENABLE_QT6="TRUE"
+    AC_DEFINE(ENABLE_QT6)
+    R="$R qt6"
+fi
+AC_SUBST(ENABLE_QT6)
+
+
 ENABLE_KF5=""
 if test "x$enable_kf5" = "xyes"; then
     ENABLE_KF5="TRUE"
@@ -12721,7 +12738,7 @@ AC_SUBST(ENABLE_SCRIPTING_JAVASCRIPT)
 AC_SUBST(SYSTEM_RHINO)
 AC_SUBST(RHINO_JAR)
 
-# This is only used in Qt5/KF5 checks to determine if /usr/lib64
+# This is only used in Qt5/Qt6/KF5 checks to determine if /usr/lib64
 # paths should be added to library search path. So lets put all 64-bit
 # platforms there.
 supports_multilib=
@@ -12881,6 +12898,123 @@ AC_SUBST(QT5_GOBJECT_CFLAGS)
 AC_SUBST(QT5_GOBJECT_LIBS)
 AC_SUBST(QT5_HAVE_GOBJECT)
 AC_SUBST(QT5_PLATFORMS_SRCDIR)
+
+dnl ===================================================================
+dnl QT6 Integration
+dnl ===================================================================
+
+QT6_CFLAGS=""
+QT6_LIBS=""
+QMAKE6="qmake"
+MOC6="moc"
+QT6_PLATFORMS_SRCDIR=""
+if test \( "$test_qt6" = "yes" -a "$ENABLE_QT6" = "TRUE" \)
+then
+    qt6_incdirs="$QT6INC /usr/include/qt6 /usr/include $x_includes"
+    qt6_libdirs="$QT6LIB /usr/lib/qt6 /usr/lib $x_libraries"
+
+    if test -n "$supports_multilib"; then
+        qt6_libdirs="$qt6_libdirs /usr/lib64/qt6 /usr/lib64/qt /usr/lib64"
+    fi
+
+    qt6_test_include="QtWidgets/qapplication.h"
+    if test "$_os" = "Emscripten"; then
+        qt6_test_library="libQt6Widgets.a"
+    else
+        qt6_test_library="libQt6Widgets.so"
+    fi
+
+    dnl Check for qmake6
+    if test -n "$QT6DIR"; then
+        AC_PATH_PROG(QMAKE6, [qmake], no, [$QT6DIR/bin])
+    else
+        AC_PATH_PROGS(QMAKE6, [qmake-qt6 qmake], no)
+    fi
+    if test "$QMAKE6" = "no"; then
+        AC_MSG_ERROR([Qmake not found.  Please specify the root of your Qt6 installation by exporting QT6DIR before running "configure".])
+    else
+        qmake6_test_ver="`$QMAKE6 -v 2>&1 | $SED -n -e 's/^Using Qt version \(6\.[[0-9.]]\+\).*$/\1/p'`"
+        if test -z "$qmake6_test_ver"; then
+            AC_MSG_ERROR([Wrong qmake for Qt6 found. Please specify the root of your Qt6 installation by exporting QT6DIR before running "configure".])
+        fi
+        AC_MSG_NOTICE([Detected Qt6 version: $qmake6_test_ver])
+    fi
+
+    qt6_incdirs="`$QMAKE6 -query QT_INSTALL_HEADERS` $qt6_incdirs"
+    qt6_libdirs="`$QMAKE6 -query QT_INSTALL_LIBS` $qt6_libdirs"
+    qt6_platformsdir="`$QMAKE6 -query QT_INSTALL_PLUGINS`/platforms"
+    QT6_PLATFORMS_SRCDIR="$qt6_platformsdir"
+
+    AC_MSG_CHECKING([for Qt6 headers])
+    qt6_incdir="no"
+    for inc_dir in $qt6_incdirs; do
+        if test -r "$inc_dir/$qt6_test_include"; then
+            qt6_incdir="$inc_dir"
+            break
+        fi
+    done
+    AC_MSG_RESULT([$qt6_incdir])
+    if test "x$qt6_incdir" = "xno"; then
+        AC_MSG_ERROR([Qt6 headers not found.  Please specify the root of your Qt6 installation by exporting QT6DIR before running "configure".])
+    fi
+    # check for scenario: qt6-qtbase-devel-*.86_64 installed but host is i686
+    AC_LANG_PUSH([C++])
+    save_CPPFLAGS=$CPPFLAGS
+    CPPFLAGS="${CPPFLAGS} -I${qt6_incdir}"
+    AC_CHECK_HEADER(QtCore/qconfig.h, [],
+        [AC_MSG_ERROR(qconfig.h header not found.)], [])
+    CPPFLAGS=$save_CPPFLAGS
+    AC_LANG_POP([C++])
+
+    AC_MSG_CHECKING([for Qt6 libraries])
+    qt6_libdir="no"
+    for lib_dir in $qt6_libdirs; do
+        if test -r "$lib_dir/$qt6_test_library"; then
+            qt6_libdir="$lib_dir"
+            break
+        fi
+    done
+    AC_MSG_RESULT([$qt6_libdir])
+    if test "x$qt6_libdir" = "xno"; then
+        AC_MSG_ERROR([Qt6 libraries not found.  Please specify the root of your Qt6 installation by exporting QT6DIR before running "configure".])
+    fi
+
+    if test "$_os" = "Emscripten"; then
+        if test ! -f "$QT6_PLATFORMS_SRCDIR"/wasm_shell.html ; then
+            QT6_PLATFORMS_SRCDIR="${QT6_PLATFORMS_SRCDIR/plugins/src\/plugins}/wasm"
+        fi
+        if test ! -f "${qt6_platformsdir}"/libqwasm.a -o ! -f "$QT6_PLATFORMS_SRCDIR"/wasm_shell.html; then
+            AC_MSG_ERROR([No Qt6 WASM QPA plugin found in ${qt6_platformsdir} or ${QT6_PLATFORMS_SRCDIR}])
+        fi
+    fi
+
+    QT6_CFLAGS="-I$qt6_incdir -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT -DQT_NO_VERSION_TAGGING"
+    QT6_CFLAGS=$(printf '%s' "$QT6_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+    QT6_LIBS="-L$qt6_libdir -lQt6Core -lQt6Gui -lQt6Widgets -lQt6Network"
+    if test "$_os" = "Emscripten"; then
+        QT6_LIBS="$QT6_LIBS -lqtpcre2 -lQt6EventDispatcherSupport -lQt6FontDatabaseSupport -L${qt6_platformsdir} -lqwasm"
+    fi
+
+    if test "$USING_X11" = TRUE; then
+        PKG_CHECK_MODULES(QT6_XCB,[xcb],,[AC_MSG_ERROR([XCB not found, which is needed for key modifier handling in X11.])])
+        QT6_CFLAGS="$QT6_CFLAGS $QT6_XCB_CFLAGS"
+        QT6_LIBS="$QT6_LIBS $QT6_XCB_LIBS"
+        QT6_USING_X11=1
+        AC_DEFINE(QT6_USING_X11)
+    fi
+
+    dnl Check for Meta Object Compiler
+
+    AC_PATH_PROGS( MOC6, [moc-qt6 moc], no, [`dirname $qt6_libdir`/libexec:$QT6DIR/libexec:$PATH])
+    if test "$MOC6" = "no"; then
+        AC_MSG_ERROR([Qt Meta Object Compiler not found.  Please specify
+the root of your Qt installation by exporting QT6DIR before running "configure".])
+    fi
+fi
+AC_SUBST(QT6_CFLAGS)
+AC_SUBST(QT6_LIBS)
+AC_SUBST(MOC6)
+AC_SUBST(QT6_PLATFORMS_SRCDIR)
 
 dnl ===================================================================
 dnl KF5 Integration

@@ -89,6 +89,12 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_qt5 \
 ))
 endif
+ifneq ($(ENABLE_QT6),)
+$(eval $(call gb_Module_add_targets,vcl,\
+    CustomTarget_qt6_moc \
+    Library_vclplug_qt6 \
+))
+endif
 ifneq ($(ENABLE_GTK3_KDE5),)
 $(eval $(call gb_Module_add_targets,vcl,\
     CustomTarget_gtk3_kde5_moc \
@@ -119,6 +125,13 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_qt5 \
 ))
 endif
+ifneq ($(ENABLE_QT6),)
+$(eval $(call gb_Module_add_targets,vcl,\
+    CustomTarget_qt6_moc \
+    Library_vclplug_qt6 \
+))
+endif
+
 ifneq ($(ENABLE_KF5),)
 $(eval $(call gb_Module_add_targets,vcl,\
     CustomTarget_kf5_moc \

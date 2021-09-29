@@ -108,7 +108,11 @@ class QtMimeData final : public QMimeData
     mutable bool m_bHaveUTF8;
     mutable QStringList m_aMimeTypeList;
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QVariant retrieveData(const QString& mimeType, QVariant::Type type) const override;
+#else
+    QVariant retrieveData(const QString& mimeType, QMetaType type) const override;
+#endif
 
 public:
     explicit QtMimeData(const css::uno::Reference<css::datatransfer::XTransferable>& aContents);

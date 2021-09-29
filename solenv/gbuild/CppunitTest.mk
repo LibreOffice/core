@@ -238,6 +238,7 @@ $(call gb_CppunitTest_get_target,$(1)) : $(if $(filter $(2),$(true)),, \
         $(if $(ENABLE_GTK3),$(call gb_Library_get_target,vclplug_gtk3)) \
         $(if $(ENABLE_GTK4),$(call gb_Library_get_target,vclplug_gtk4)) \
         $(if $(ENABLE_QT5),$(call gb_Library_get_target,vclplug_qt5)) \
+        $(if $(ENABLE_QT6),$(call gb_Library_get_target,vclplug_qt6)) \
 	 )
 else ifeq ($(OS),MACOSX)
 $(call gb_CppunitTest_get_target,$(1)): $(call gb_Library_get_target,vclplug_osx)

@@ -48,7 +48,9 @@
 #include <comphelper/flagguard.hxx>
 #include <sal/log.hxx>
 #include <osl/process.h>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) && ENABLE_GSTREAMER_1_0 && QT5_HAVE_GOBJECT
 #include <unx/gstsink.hxx>
+#endif
 #include <headless/svpbmp.hxx>
 
 #include <mutex>
@@ -564,7 +566,8 @@ void QtInstance::UpdateStyle(bool bFontsChanged)
 
 void* QtInstance::CreateGStreamerSink(const SystemChildWindow* pWindow)
 {
-#if ENABLE_GSTREAMER_1_0 && QT5_HAVE_GOBJECT
+// As of 2021-09, qt-gstreamer is unmaintained and there is no Qt 6 video sink
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) && ENABLE_GSTREAMER_1_0 && QT5_HAVE_GOBJECT
     auto pSymbol = gstElementFactoryNameSymbol();
     if (!pSymbol)
         return nullptr;
@@ -654,9 +657,13 @@ void QtInstance::MoveFakeCmdlineArgs(std::unique_ptr<char* []>& rFakeArgv,
 
 std::unique_ptr<QApplication> QtInstance::CreateQApplication(int& nArgc, char** pArgv)
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    // for Qt 6, setting Qt::AA_EnableHighDpiScaling and Qt::AA_UseHighDpiPixmaps
+    // is deprecated, they're always enabled
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     // for scaled icons in the native menus
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+#endif
 
     FreeableCStr session_manager;
     if (getenv("SESSION_MANAGER") != nullptr)
