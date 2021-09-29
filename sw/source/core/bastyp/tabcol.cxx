@@ -74,13 +74,6 @@ void SwTabCols::Insert( tools::Long nValue, bool bValue, size_t nPos )
     aEntry.nMax = LONG_MAX;
     aEntry.bHidden = bValue;
     m_aData.insert( m_aData.begin() + nPos, aEntry );
-
-#if OSL_DEBUG_LEVEL > 1
-    for ( const auto& rPos : m_aData )
-    {
-        aEntry = rPos;
-    }
-#endif
 }
 
 void SwTabCols::Remove( size_t nPos, size_t nCount )
