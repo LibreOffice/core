@@ -274,7 +274,11 @@ QStringList QtMimeData::formats() const
     return m_aMimeTypeList;
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 QVariant QtMimeData::retrieveData(const QString& mimeType, QVariant::Type) const
+#else
+QVariant QtMimeData::retrieveData(const QString& mimeType, QMetaType) const
+#endif
 {
     if (!hasFormat(mimeType))
         return QVariant();

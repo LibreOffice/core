@@ -51,7 +51,7 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QMainWindow>
 
-#if QT5_USING_X11
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) && QT5_USING_X11
 #include <QtX11Extras/QX11Info>
 #include <xcb/xproto.h>
 #if QT5_HAVE_XCB_ICCCM
@@ -68,7 +68,7 @@
 #include <cairo.h>
 #include <headless/svpgdi.hxx>
 
-#if QT5_USING_X11 && QT5_HAVE_XCB_ICCCM
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) && QT5_USING_X11 && QT5_HAVE_XCB_ICCCM
 static bool g_bNeedsWmHintsWindowGroup = true;
 static xcb_atom_t g_aXcbClientLeaderAtom = 0;
 #endif
@@ -115,7 +115,8 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     , m_bDefaultPos(true)
     , m_bFullScreen(false)
     , m_bFullScreenSpanAll(false)
-#if QT5_USING_X11
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0) && QT5_USING_X11)                                      \
+    || (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0) && QT6_USING_X11)
     , m_nKeyModifiers(ModKeyFlags::NONE)
 #endif
     , m_nInputLanguage(LANGUAGE_DONTKNOW)
@@ -217,7 +218,7 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
 
 void QtFrame::fixICCCMwindowGroup()
 {
-#if QT5_USING_X11 && QT5_HAVE_XCB_ICCCM
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) && QT5_USING_X11 && QT5_HAVE_XCB_ICCCM
     // older Qt5 just sets WM_CLIENT_LEADER, but not the XCB_ICCCM_WM_HINT_WINDOW_GROUP
     // see Qt commit 0de4b326d8 ("xcb: fix issue with dialogs hidden by other windows")
     // or QTBUG-46626. So LO has to set this itself to help some WMs.
@@ -739,7 +740,7 @@ void QtFrame::StartPresentation(bool bStart)
 {
 // meh - so there's no Qt platform independent solution
 // https://forum.qt.io/topic/38504/solved-qdialog-in-fullscreen-disable-os-screensaver
-#if QT5_USING_X11
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) && QT5_USING_X11
     std::optional<unsigned int> aRootWindow;
     std::optional<Display*> aDisplay;
 
@@ -1256,7 +1257,7 @@ void QtFrame::SetScreenNumber(unsigned int nScreen)
 
 void QtFrame::SetApplicationID(const OUString& rWMClass)
 {
-#if QT5_USING_X11
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) && QT5_USING_X11
     if (QGuiApplication::platformName() != "xcb" || !m_pTopLevel)
         return;
 
@@ -1323,11 +1324,14 @@ lcl_getXTransferable(const QMimeData* pMimeData)
 static sal_Int8 lcl_getUserDropAction(const QDropEvent* pEvent, const sal_Int8 nSourceActions,
                                       const QMimeData* pMimeData)
 {
-    // we completely ignore all proposals by the Qt event, as they don't
-    // match at all with the preferred LO DnD actions.
-
-    // check the key modifiers to detect a user-overridden DnD action
+// we completely ignore all proposals by the Qt event, as they don't
+// match at all with the preferred LO DnD actions.
+// check the key modifiers to detect a user-overridden DnD action
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    const Qt::KeyboardModifiers eKeyMod = pEvent->modifiers();
+#else
     const Qt::KeyboardModifiers eKeyMod = pEvent->keyboardModifiers();
+#endif
     sal_Int8 nUserDropAction = 0;
     if ((eKeyMod & Qt::ShiftModifier) && !(eKeyMod & Qt::ControlModifier))
         nUserDropAction = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
@@ -1366,7 +1370,12 @@ void QtFrame::handleDragMove(QDragMoveEvent* pEvent)
     const sal_Int8 nSourceActions = toVclDropActions(pEvent->possibleActions());
     const QMimeData* pMimeData = pEvent->mimeData();
     const sal_Int8 nUserDropAction = lcl_getUserDropAction(pEvent, nSourceActions, pMimeData);
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    const Point aPos = toPoint(pEvent->position().toPoint() * devicePixelRatioF());
+#else
     const Point aPos = toPoint(pEvent->pos() * devicePixelRatioF());
+#endif
 
     css::datatransfer::dnd::DropTargetDragEnterEvent aEvent;
     aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(m_pDropTarget);
@@ -1404,7 +1413,12 @@ void QtFrame::handleDrop(QDropEvent* pEvent)
     const sal_Int8 nSourceActions = toVclDropActions(pEvent->possibleActions());
     const sal_Int8 nUserDropAction
         = lcl_getUserDropAction(pEvent, nSourceActions, pEvent->mimeData());
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    const Point aPos = toPoint(pEvent->position().toPoint() * devicePixelRatioF());
+#else
     const Point aPos = toPoint(pEvent->pos() * devicePixelRatioF());
+#endif
 
     css::datatransfer::dnd::DropTargetDropEvent aEvent;
     aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(m_pDropTarget);

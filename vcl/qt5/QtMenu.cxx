@@ -14,6 +14,12 @@
 #include <QtInstance.hxx>
 #include <QtMainWindow.hxx>
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <QtWidgets/QActionGroup>
+#else
+#include <QtGui/QActionGroup>
+#endif
+
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 
