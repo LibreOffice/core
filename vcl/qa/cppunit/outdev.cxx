@@ -70,6 +70,7 @@ public:
     void testGetWaveLineSize();
     void testDrawPixel();
     void testDrawLine();
+    void testDrawRect();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
     CPPUNIT_TEST(testVirtualDevice);
@@ -111,6 +112,7 @@ public:
     CPPUNIT_TEST(testGetWaveLineSize);
     CPPUNIT_TEST(testDrawPixel);
     CPPUNIT_TEST(testDrawLine);
+    CPPUNIT_TEST(testDrawRect);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1124,6 +1126,44 @@ void VclOutdevTest::testDrawLine()
                                      pLineAction->GetLineInfo().GetDistance());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Line join", basegfx::B2DLineJoin::Bevel,
                                      pLineAction->GetLineInfo().GetLineJoin());
+    }
+}
+
+void VclOutdevTest::testDrawRect()
+{
+    {
+        ScopedVclPtrInstance<VirtualDevice> pVDev;
+        GDIMetaFile aMtf;
+        aMtf.Record(pVDev.get());
+
+        pVDev->SetOutputSizePixel(Size(1, 100));
+        pVDev->DrawRect(tools::Rectangle(Point(0, 0), Size(50, 60)));
+
+        MetaAction* pAction = aMtf.GetAction(aMtf.GetActionSize() - 1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a rect action", MetaActionType::RECT, pAction->GetType());
+        MetaRectAction* pRectAction = dynamic_cast<MetaRectAction*>(pAction);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Rectangle wrong", tools::Rectangle(Point(0, 0), Size(50, 60)),
+                                     pRectAction->GetRect());
+    }
+
+    {
+        ScopedVclPtrInstance<VirtualDevice> pVDev;
+        GDIMetaFile aMtf;
+        aMtf.Record(pVDev.get());
+
+        pVDev->SetOutputSizePixel(Size(1, 100));
+        pVDev->DrawRect(tools::Rectangle(Point(0, 0), Size(50, 60)), 5, 10);
+
+        MetaAction* pAction = aMtf.GetAction(aMtf.GetActionSize() - 1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a rect action", MetaActionType::ROUNDRECT,
+                                     pAction->GetType());
+        MetaRoundRectAction* pRectAction = dynamic_cast<MetaRoundRectAction*>(pAction);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Rectangle wrong", tools::Rectangle(Point(0, 0), Size(50, 60)),
+                                     pRectAction->GetRect());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Rectangle wrong", static_cast<sal_uInt32>(5),
+                                     pRectAction->GetHorzRound());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Rectangle wrong", static_cast<sal_uInt32>(10),
+                                     pRectAction->GetVertRound());
     }
 }
 
