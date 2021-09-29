@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00f3443e_f64b59ce",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-29T20:26:40Z",
+      "side": 1,
+      "message": "These two numbers are same?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 22
+      },
+      "revId": "773461cdb903789f3ea2d41288d846ecd44ecdd3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96e56196_4224cd5d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-29T20:26:40Z",
+      "side": 1,
+      "message": "Sorry for slow review - you are faster to fix than I to review :)",
+      "revId": "773461cdb903789f3ea2d41288d846ecd44ecdd3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69817318_09391522",
+        "filename": "basic/source/sbx/sbxscan.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-29T20:26:40Z",
+      "side": 1,
+      "message": "This seems to be the same functional change?",
+      "revId": "773461cdb903789f3ea2d41288d846ecd44ecdd3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
