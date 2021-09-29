@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abb392dd_c8a7f910",
+        "filename": "connectivity/source/drivers/postgresql/pq_statement.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1002852
+      },
+      "writtenOn": "2021-09-29T08:28:48Z",
+      "side": 0,
+      "message": "It seems to me that this part is dropped in the new code, is it deliberate?",
+      "range": {
+        "startLine": 466,
+        "startChar": 20,
+        "endLine": 466,
+        "endChar": 50
+      },
+      "revId": "858c15cf215e511e2d636c16d374c88bca96d66c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
