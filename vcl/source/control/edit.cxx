@@ -1674,10 +1674,8 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
             break;
 
             case KEY_RETURN:
-                if (maActivateHdl.IsSet())
-                {
+                if (maActivateHdl.IsSet() && !rKEvt.GetKeyCode().GetModifier())
                     bDone = maActivateHdl.Call(*this);
-                }
             break;
 
             default:
