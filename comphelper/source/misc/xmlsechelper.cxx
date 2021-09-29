@@ -17,14 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <comphelper/xmlsechelper.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
-#include <vector>
 
-using namespace std;
+#include <utility>
+#include <vector>
 
 namespace comphelper::xmlsec
 {
@@ -49,9 +48,9 @@ namespace comphelper::xmlsec
         The second string is for the details view at the bottom. It shows the attribute/value
         pairs on different lines. All escape characters ('"') are removed.
     */
-    pair< OUString, OUString> GetDNForCertDetailsView( const OUString & rRawString)
+    std::pair< OUString, OUString> GetDNForCertDetailsView( const OUString & rRawString)
     {
-        vector< pair< OUString, OUString > > vecAttrValueOfDN = parseDN(rRawString);
+        std::vector< std::pair< OUString, OUString > > vecAttrValueOfDN = parseDN(rRawString);
         OUStringBuffer s1, s2;
         for (auto i = vecAttrValueOfDN.cbegin(); i < vecAttrValueOfDN.cend(); ++i)
         {
@@ -63,7 +62,7 @@ namespace comphelper::xmlsec
             s1.append(i->second);
             s2.append(i->first + " = " + i->second);
         }
-        return make_pair(s1.makeStringAndClear(), s2.makeStringAndClear());
+        return std::make_pair(s1.makeStringAndClear(), s2.makeStringAndClear());
     }
 
 /*
@@ -73,9 +72,9 @@ namespace comphelper::xmlsec
     they are escaped with a double quote. This function removes the escape characters.
 */
 #ifdef _WIN32
-vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
+std::vector< std::pair< OUString, OUString> > parseDN(const OUString& rRawString)
 {
-        vector< pair<OUString, OUString> > retVal;
+        std::vector< std::pair<OUString, OUString> > retVal;
         bool bInEscape = false;
         bool bInValue = false;
         bool bInType = true;
@@ -130,7 +129,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
                 if (!bInValue)
                 {
                     OSL_ASSERT(!sType.isEmpty());
-                    retVal.push_back(make_pair(sType, sbufValue.makeStringAndClear()));
+                    retVal.push_back(std::make_pair(sType, sbufValue.makeStringAndClear()));
                     sType.clear();
                     //The next char is the start of the new type
                     nTypeNameStart = i + 1;
@@ -153,14 +152,14 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
         if (sbufValue.getLength())
         {
             OSL_ASSERT(!sType.isEmpty());
-            retVal.push_back(make_pair(sType, sbufValue.makeStringAndClear()));
+            retVal.push_back(std::make_pair(sType, sbufValue.makeStringAndClear()));
         }
         return retVal;
     }
 #else
-vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
+std::vector< std::pair< OUString, OUString> > parseDN(const OUString& rRawString)
     {
-        vector< pair<OUString, OUString> > retVal;
+        std::vector< std::pair<OUString, OUString> > retVal;
         //bInEscape == true means that the preceding character is an escape character
         bool bInEscape = false;
         bool bInValue = false;
@@ -268,12 +267,12 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
 
         OUString retVal;
         int i = 0;
-        vector< pair< OUString, OUString > > vecAttrValueOfDN = parseDN(_rRawString);
+        std::vector< std::pair< OUString, OUString > > vecAttrValueOfDN = parseDN(_rRawString);
         while ( aIDs[i] )
         {
             OUString sPartId = OUString::createFromAscii( aIDs[i++] );
             auto idn = std::find_if(vecAttrValueOfDN.cbegin(), vecAttrValueOfDN.cend(),
-                [&sPartId](const pair< OUString, OUString >& dn) { return dn.first == sPartId; });
+                [&sPartId](const std::pair< OUString, OUString >& dn) { return dn.first == sPartId; });
             if (idn != vecAttrValueOfDN.cend())
                 retVal = idn->second;
             if (!retVal.isEmpty())
