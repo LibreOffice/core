@@ -70,6 +70,24 @@
       "parentUuid": "9ad08ce4_469afffc",
       "revId": "5684955565c68a8bc5fcc22b97c4efc89398b65e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e3fc68b_d9879664",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-29T08:12:38Z",
+      "side": 1,
+      "message": "If this were some flag *defined* in the standard, I\u0027d say that the best is to at least include the standard\u0027s name as part of the element, to provide clear indication about relation to the standard. (Unfortunately, AFAIK no evements have that - likely because they pre-date the standard.)\n\nIf this were something to include into the standard in the future, then we would need to use some custom name, not resembling the standard wording, to avoid wrong guesses that would result in (1) idea in users that there\u0027s such a standard thing *before* it appears there, and (2) a wrong name, if standard gets a different name.\n\nBut in this case, it\u0027s likely that we are already non-standard (please see the discussion on OASIS mailing list); if it is true, then our flag only needs to provide a \"use non-standard behavior for this (legacy) document\", and it should definitely not follow anything resembling standardized naming.\n\nThis is how I feel 😊 - HTH.",
+      "parentUuid": "4e92baf0_dfcc3abb",
+      "revId": "5684955565c68a8bc5fcc22b97c4efc89398b65e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
