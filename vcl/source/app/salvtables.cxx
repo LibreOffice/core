@@ -3296,6 +3296,7 @@ void SalInstanceEntry::set_message_type(weld::EntryMessageType eType)
 void SalInstanceEntry::set_font(const vcl::Font& rFont)
 {
     m_xEntry->SetPointFont(*m_xEntry->GetOutDev(), rFont);
+    m_xEntry->SetControlFont(rFont);
     m_xEntry->Invalidate();
 }
 
@@ -6514,6 +6515,7 @@ public:
     {
         Edit& rEntry = m_pEntry->getEntry();
         rEntry.SetPointFont(*rEntry.GetOutDev(), rFont);
+        rEntry.SetControlFont(rFont);
         rEntry.Invalidate();
     }
 
