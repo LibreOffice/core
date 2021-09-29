@@ -878,7 +878,7 @@ solaris*)
     fi
     ;;
 
-linux-gnu*|k*bsd*-gnu*)
+linux-gnu*|k*bsd*-gnu*|linux-musl*)
     using_freetype_fontconfig=yes
     using_x11=yes
     build_skia=yes
@@ -4950,7 +4950,7 @@ kfreebsd*)
     esac
     ;;
 
-linux-gnu*)
+linux-gnu*|linux-musl*)
     COM=GCC
     OS=LINUX
     RTL_OS=Linux
