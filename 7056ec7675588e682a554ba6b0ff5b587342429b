@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b974702_e6bdd084",
+        "filename": "basic/source/sbx/sbxscan.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-29T20:19:27Z",
+      "side": 1,
+      "message": "Please, make this functional change also separate! Thanks.",
+      "revId": "7056ec7675588e682a554ba6b0ff5b587342429b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
