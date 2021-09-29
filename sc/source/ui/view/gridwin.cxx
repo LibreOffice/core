@@ -975,6 +975,10 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
                     aParam.bCaseSens = false;
                     aParam.bDuplicate = true;
                     aParam.bInplace = true;
+
+                    pEntry = aParam.FindEntryByField(rPos.Col(), true);
+                    if (!pEntry)
+                        return;
                 }
 
                 // Get selected color from set
