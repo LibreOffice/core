@@ -172,6 +172,8 @@ namespace svt
 
         virtual bool ProcessKey(const KeyEvent& rKEvt);
 
+        virtual void SetPointFont(const vcl::Font& rFont);
+
         // chain after the FocusInHdl
         void SetFocusInHdl(const Link<LinkParamNone*,void>& rHdl)
         {
@@ -222,6 +224,11 @@ namespace svt
         virtual void SetEditableReadOnly(bool bReadOnly) override
         {
             m_pEntry->set_editable(!bReadOnly);
+        }
+
+        virtual void SetPointFont(const vcl::Font& rFont) override
+        {
+            m_pEntry->set_font(rFont);
         }
 
         virtual void dispose() override;
