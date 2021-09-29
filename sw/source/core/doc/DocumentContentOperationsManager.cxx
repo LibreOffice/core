@@ -3993,15 +3993,15 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
 /** @params pArgs contains the document's ChrFormatTable
  *                Is need for selections at the beginning/end and with no SSelection.
  */
-bool DocumentContentOperationsManager::lcl_RstTextAttr( const SwNodePtr& rpNd, void* pArgs )
+bool DocumentContentOperationsManager::lcl_RstTextAttr( SwNode* pNd, void* pArgs )
 {
     ParaRstFormat* pPara = static_cast<ParaRstFormat*>(pArgs);
     if (pPara->pLayout && pPara->pLayout->HasMergedParas()
-        && rpNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden)
+        && pNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden)
     {
         return true; // skip hidden, since new items aren't applied
     }
-    SwTextNode * pTextNode = rpNd->GetTextNode();
+    SwTextNode * pTextNode = pNd->GetTextNode();
     if( pTextNode && pTextNode->GetpSwpHints() )
     {
         SwIndex aSt( pTextNode, 0 );
@@ -4011,7 +4011,7 @@ bool DocumentContentOperationsManager::lcl_RstTextAttr( const SwNodePtr& rpNd, v
             pPara->pSttNd->nContent.GetIndex() )
             aSt = pPara->pSttNd->nContent.GetIndex();
 
-        if( &pPara->pEndNd->nNode.GetNode() == rpNd )
+        if( &pPara->pEndNd->nNode.GetNode() == pNd )
             nEnd = pPara->pEndNd->nContent.GetIndex();
 
         if( pPara->pHistory )

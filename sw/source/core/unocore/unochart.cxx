@@ -587,7 +587,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
         const SwNodes& rNodes = m_pDoc->GetNodes();
         for( sal_uLong nN = rNodes.Count(); nN--; )
         {
-            SwNodePtr pNode = rNodes[nN];
+            SwNode* pNode = rNodes[nN];
             if( !pNode )
                 continue;
             const SwOLENode* pOleNode = pNode->GetOLENode();

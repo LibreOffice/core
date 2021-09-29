@@ -86,11 +86,11 @@ bool SwDoc::GenerateHTMLDoc( const OUString& rPath,
 }
 
 // two helpers for outline mode
-static SwNodePtr GetStartNode( SwOutlineNodes const * pOutlNds, int nOutlineLevel, SwOutlineNodes::size_type* nOutl )
+static SwNode* GetStartNode( SwOutlineNodes const * pOutlNds, int nOutlineLevel, SwOutlineNodes::size_type* nOutl )
 {
     for( ; *nOutl < pOutlNds->size(); ++(*nOutl) )
     {
-        SwNodePtr pNd = (*pOutlNds)[ *nOutl ];
+        SwNode* pNd = (*pOutlNds)[ *nOutl ];
         if( pNd->GetTextNode()->GetAttrOutlineLevel() == nOutlineLevel && !pNd->FindTableNode() )
         {
             return pNd;
@@ -100,9 +100,9 @@ static SwNodePtr GetStartNode( SwOutlineNodes const * pOutlNds, int nOutlineLeve
     return nullptr;
 }
 
-static SwNodePtr GetEndNode( SwOutlineNodes const * pOutlNds, int nOutlineLevel, SwOutlineNodes::size_type* nOutl )
+static SwNode* GetEndNode( SwOutlineNodes const * pOutlNds, int nOutlineLevel, SwOutlineNodes::size_type* nOutl )
 {
-    SwNodePtr pNd;
+    SwNode* pNd;
 
     for( ++(*nOutl); (*nOutl) < pOutlNds->size(); ++(*nOutl) )
     {
@@ -120,11 +120,11 @@ static SwNodePtr GetEndNode( SwOutlineNodes const * pOutlNds, int nOutlineLevel,
 }
 
 // two helpers for collection mode
-static SwNodePtr GetStartNode( const SwOutlineNodes* pOutlNds, const SwTextFormatColl* pSplitColl, SwOutlineNodes::size_type* nOutl )
+static SwNode* GetStartNode( const SwOutlineNodes* pOutlNds, const SwTextFormatColl* pSplitColl, SwOutlineNodes::size_type* nOutl )
 {
     for( ; *nOutl < pOutlNds->size(); ++(*nOutl) )
     {
-        SwNodePtr pNd = (*pOutlNds)[ *nOutl ];
+        SwNode* pNd = (*pOutlNds)[ *nOutl ];
         if( pNd->GetTextNode()->GetTextColl() == pSplitColl &&
             !pNd->FindTableNode() )
         {
@@ -134,9 +134,9 @@ static SwNodePtr GetStartNode( const SwOutlineNodes* pOutlNds, const SwTextForma
     return nullptr;
 }
 
-static SwNodePtr GetEndNode( const SwOutlineNodes* pOutlNds, const SwTextFormatColl* pSplitColl, SwOutlineNodes::size_type* nOutl )
+static SwNode* GetEndNode( const SwOutlineNodes* pOutlNds, const SwTextFormatColl* pSplitColl, SwOutlineNodes::size_type* nOutl )
 {
-    SwNodePtr pNd;
+    SwNode* pNd;
 
     for( ++(*nOutl); *nOutl < pOutlNds->size(); ++(*nOutl) )
     {
@@ -168,7 +168,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
     SwOutlineNodes::size_type nOutl = 0;
     SwOutlineNodes* pOutlNds = const_cast<SwOutlineNodes*>(&GetNodes().GetOutLineNds());
     std::unique_ptr<SwOutlineNodes> xTmpOutlNds;
-    SwNodePtr pStartNd;
+    SwNode* pStartNd;
 
     if ( !bOutline) {
         if( pSplitColl )
@@ -262,7 +262,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
 
         if( pStartNd )
         {
-            SwNodePtr pEndNd;
+            SwNode* pEndNd;
             if( bOutline )
                 pEndNd = GetEndNode( pOutlNds, nOutlineLevel, &nOutl );
             else
