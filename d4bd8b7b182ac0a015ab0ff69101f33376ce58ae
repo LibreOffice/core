@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbdc78f3_861c35d6",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 8075,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-29T07:34:40Z",
+      "side": 1,
+      "message": "Given that pInherited is already nullptr, this could be simply\n\n    if (auto pPoolItem \u003d GetExport().m_pChpIter-\u003eHasTextItem(RES_CHRATR_BOX))\n        pInherited \u003d \u0026pPoolItem-\u003eStaticWhichCast(RES_CHRATR_BOX);",
+      "revId": "d4bd8b7b182ac0a015ab0ff69101f33376ce58ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
