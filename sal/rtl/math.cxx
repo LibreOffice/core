@@ -356,16 +356,8 @@ void doubleToString(typename T::String ** pResult,
             if (nDecPlaces < 0)
             {
                 sal_Int64 nRounding = static_cast< sal_Int64 >(getN10Exp(-nDecPlaces - 1));
-                sal_Int64 nTemp = nInt / nRounding;
-                int nDigit = nTemp % 10;
-                nTemp /= 10;
-
-                if (nDigit >= 5)
-                    ++nTemp;
-
-                nTemp *= 10;
-                nTemp *= nRounding;
-                nInt = nTemp;
+                const sal_Int64 nTemp = (nInt / nRounding + 5) / 10;
+                nInt = nTemp * 10 * nRounding;
                 nDecPlaces = 0;
             }
 
