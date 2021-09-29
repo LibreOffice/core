@@ -77,7 +77,7 @@ void SwNodes::UpdateOutlineIdx( const SwNode& rNd )
     if( m_pOutlineNodes->empty() )     // no OutlineNodes present ?
         return;
 
-    const SwNodePtr pSrch = const_cast<SwNodePtr>(&rNd);
+    SwNode* const pSrch = const_cast<SwNode*>(&rNd);
 
     SwOutlineNodes::size_type nPos;
     if (!m_pOutlineNodes->Seek_Entry(pSrch, &nPos))

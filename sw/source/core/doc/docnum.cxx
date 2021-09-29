@@ -209,8 +209,8 @@ bool SwDoc::OutlineUpDown(const SwPaM& rPam, short nOffset,
     SwPaM aPam(rPam, nullptr);
     ExpandPamForParaPropsNodes(aPam, pLayout);
     const SwOutlineNodes& rOutlNds = GetNodes().GetOutLineNds();
-    const SwNodePtr pSttNd = &aPam.Start()->nNode.GetNode();
-    const SwNodePtr pEndNd = &aPam.End()->nNode.GetNode();
+    SwNode* const pSttNd = &aPam.Start()->nNode.GetNode();
+    SwNode* const pEndNd = &aPam.End()->nNode.GetNode();
     SwOutlineNodes::size_type nSttPos, nEndPos;
 
     if( !rOutlNds.Seek_Entry( pSttNd, &nSttPos ) &&

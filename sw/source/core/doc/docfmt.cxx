@@ -94,10 +94,10 @@ static void SetTextFormatCollNext( SwTextFormatColl* pTextColl, const SwTextForm
     }
 }
 
-static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
+static bool lcl_RstAttr( SwNode* pNd, void* pArgs )
 {
     const sw::DocumentContentOperationsManager::ParaRstFormat* pPara = static_cast<sw::DocumentContentOperationsManager::ParaRstFormat*>(pArgs);
-    SwContentNode* pNode = rpNd->GetContentNode();
+    SwContentNode* pNode = pNd->GetContentNode();
     if (pPara && pPara->pLayout && pPara->pLayout->HasMergedParas()
         && pNode && pNode->GetRedlineMergeFlag() == SwNode::Merge::Hidden)
     {
@@ -1003,9 +1003,9 @@ void SwDoc::DelTextFormatColl( SwTextFormatColl const *pColl, bool bBroadcast )
     DelTextFormatColl( nFormat, bBroadcast );
 }
 
-static bool lcl_SetTextFormatColl( const SwNodePtr& rpNode, void* pArgs )
+static bool lcl_SetTextFormatColl( SwNode* pNode, void* pArgs )
 {
-    SwContentNode* pCNd = rpNode->GetTextNode();
+    SwContentNode* pCNd = pNode->GetTextNode();
 
     if( pCNd == nullptr)
         return true;

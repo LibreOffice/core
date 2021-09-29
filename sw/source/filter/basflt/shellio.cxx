@@ -66,7 +66,7 @@
 
 using namespace ::com::sun::star;
 
-static bool sw_MergePortions(SwNode *const& pNode, void *)
+static bool sw_MergePortions(SwNode* pNode, void *)
 {
     if (pNode->IsTextNode())
     {
