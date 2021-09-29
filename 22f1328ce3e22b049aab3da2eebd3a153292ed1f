@@ -68,6 +68,23 @@
       "message": "@Szücsi: very nice fix!\n\nI\u0027ve found a solution to avoid of the regressions, e.g. changing multi-column page style, where we still need the old layout: we must check also the section option \"Evenly distribute contents to all columns\". You can add that to this patch, or to the follow-up compat flag commit.",
       "revId": "22f1328ce3e22b049aab3da2eebd3a153292ed1f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "826236d8_4d5ddf06",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2021-09-29T08:28:41Z",
+      "side": 1,
+      "message": "For old ODF docs we also have https://bugs.documentfoundation.org/show_bug.cgi?id\u003d54465\n\nwhich basically asks for removing this \"feature\".\nAlso https://bz.apache.org/ooo/show_bug.cgi?id\u003d20103 too.\n\nSince this is not strictly a docx-specific fix here, I\u0027d like to suggest to have this numbered for 54465.",
+      "revId": "22f1328ce3e22b049aab3da2eebd3a153292ed1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
