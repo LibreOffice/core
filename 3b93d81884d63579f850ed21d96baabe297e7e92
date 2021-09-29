@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf96003a_b2cd9e64",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003349
+      },
+      "writtenOn": "2021-09-29T10:31:03Z",
+      "side": 1,
+      "message": "Redhat thought the previous attempt at this was regressive, and I have to agree with them.",
+      "revId": "3b93d81884d63579f850ed21d96baabe297e7e92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
