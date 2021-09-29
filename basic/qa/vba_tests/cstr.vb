@@ -23,6 +23,16 @@ Sub verify_testCStr()
     TestUtil.AssertEqual(CStr(n),   "437.324", "CStr(n)")
     TestUtil.AssertEqual(CStr(500), "500",     "CStr(500)")
 
+    ' tdf#143575 - round string to their nearest double representation
+    ' Without the fix in place, this test would have failed with:
+    ' - Expected: 691.2
+    ' - Actual  : 691.2000000000001
+    TestUtil.AssertEqual(CStr(691.2), "691.2", "CStr(691.2)")
+    ' Without the fix in place, this test would have failed with:
+    ' - Expected: 691.2
+    ' - Actual  : 691.1999999999999
+    TestUtil.AssertEqual(CStr(123.4 + 567.8), "691.2", "CStr(123.4 + 567.8)")
+
     Exit Sub
 errorHandler:
     TestUtil.ReportErrorHandler("verify_testCStr", Err, Error$, Erl)
