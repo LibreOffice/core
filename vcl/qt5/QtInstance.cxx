@@ -224,7 +224,8 @@ QtInstance::QtInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo)
     , m_bUpdateFonts(false)
 {
     ImplSVData* pSVData = ImplGetSVData();
-    pSVData->maAppData.mxToolkitName = constructToolkitID(u"qt5");
+    const OUString sToolkit = "qt" + OUString::number(QT_VERSION_MAJOR);
+    pSVData->maAppData.mxToolkitName = constructToolkitID(sToolkit);
 
     // this one needs to be blocking, so that the handling in main thread
     // is processed before the thread emitting the signal continues
