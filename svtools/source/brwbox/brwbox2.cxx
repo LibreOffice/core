@@ -647,6 +647,10 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
     pDev->Push();
     pDev->SetMapMode();
     pDev->SetFont( aFont );
+    if (nFlags & DrawFlags::Mono)
+        pDev->SetTextColor(COL_BLACK);
+    else
+        pDev->SetTextColor(pDataWin->GetTextColor());
 
     // draw a frame
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
