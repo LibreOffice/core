@@ -3295,7 +3295,6 @@ void SalInstanceEntry::set_message_type(weld::EntryMessageType eType)
 
 void SalInstanceEntry::set_font(const vcl::Font& rFont)
 {
-    m_xEntry->SetPointFont(*m_xEntry->GetOutDev(), rFont);
     m_xEntry->SetControlFont(rFont);
     m_xEntry->Invalidate();
 }
@@ -5766,6 +5765,7 @@ void SalInstanceTextView::set_monospace(bool bMonospace)
     aFont.SetFontHeight(aOrigFont.GetFontHeight());
     m_xTextView->SetFont(aFont);
     m_xTextView->SetControlFont(aFont);
+    m_xTextView->Invalidate();
 }
 
 void SalInstanceTextView::set_font_color(const Color& rColor)
@@ -6376,11 +6376,8 @@ bool SalInstanceComboBoxWithEdit::get_entry_selection_bounds(int& rStartPos, int
 
 void SalInstanceComboBoxWithEdit::set_entry_font(const vcl::Font& rFont)
 {
-    Edit* pEdit = m_xComboBox->GetSubEdit();
-    assert(pEdit);
-    pEdit->SetPointFont(*pEdit->GetOutDev(), rFont);
     m_xComboBox->SetControlFont(rFont); // tdf#134601 set it as control font to take effect properly
-    pEdit->Invalidate();
+    m_xComboBox->Invalidate();
 }
 
 vcl::Font SalInstanceComboBoxWithEdit::get_entry_font()
@@ -6514,7 +6511,6 @@ public:
     virtual void set_entry_font(const vcl::Font& rFont) override
     {
         Edit& rEntry = m_pEntry->getEntry();
-        rEntry.SetPointFont(*rEntry.GetOutDev(), rFont);
         rEntry.SetControlFont(rFont);
         rEntry.Invalidate();
     }
