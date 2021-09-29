@@ -24,7 +24,6 @@
 // DVO: always use standard headers:
 #include <istream>
 #include <sstream>
-using namespace std;
 
 #include "mzstring.h"
 #include "hwpeq.h"
@@ -65,8 +64,8 @@ static bool IS_BINARY(std::istream::int_type ch) {
 // sub and sup script status
 enum { SCRIPT_NONE, SCRIPT_SUB, SCRIPT_SUP, SCRIPT_ALL};
 
-static int  eq_word(MzString& outs, istream *strm, int script = SCRIPT_NONE);
-static bool eq_sentence(MzString& outs, istream *strm, const char *end = nullptr);
+static int  eq_word(MzString& outs, std::istream *strm, int script = SCRIPT_NONE);
+static bool eq_sentence(MzString& outs, std::istream *strm, const char *end = nullptr);
 
 namespace {
 
@@ -462,10 +461,10 @@ namespace {
 struct eq_stack {
   MzString  white;
   MzString  token;
-  istream   *strm;
+  std::istream   *strm;
 
   eq_stack() { strm = nullptr; };
-  bool state(istream const *s) {
+  bool state(std::istream const *s) {
     if( strm != s) { white = nullptr; token = nullptr; }
     return token.length() != 0;
   }
@@ -475,7 +474,7 @@ struct eq_stack {
 
 static eq_stack *stk = nullptr;
 
-static void push_token(MzString const &white, MzString const &token, istream *strm)
+static void push_token(MzString const &white, MzString const &token, std::istream *strm)
 {
   // one time stack
   assert(stk->token.length() == 0);
@@ -490,7 +489,7 @@ static void push_token(MzString const &white, MzString const &token, istream *st
  *
  * control char, control sequence, binary sequence,
  * alphabet string, single character */
-static int next_token(MzString &white, MzString &token, istream *strm)
+static int next_token(MzString &white, MzString &token, std::istream *strm)
 {
   std::istream::int_type ch = 0;
 
@@ -571,7 +570,7 @@ static int next_token(MzString &white, MzString &token, istream *strm)
   return token.length();
 }
 
-static std::istream::int_type read_white_space(MzString& outs, istream *strm)
+static std::istream::int_type read_white_space(MzString& outs, std::istream *strm)
 {
   std::istream::int_type result;
 
@@ -609,7 +608,7 @@ static std::istream::int_type read_white_space(MzString& outs, istream *strm)
       a over b -> {a} over {b}
  */
 
-static int eq_word(MzString& outs, istream *strm, int status)
+static int eq_word(MzString& outs, std::istream *strm, int status)
 {
   MzString  token, white, state;
   int       result;
@@ -677,7 +676,7 @@ static int eq_word(MzString& outs, istream *strm, int status)
   return result;
 }
 
-static bool eq_sentence(MzString& outs, istream *strm, const char *end)
+static bool eq_sentence(MzString& outs, std::istream *strm, const char *end)
 {
   MzString  state;
   MzString  white, token;
@@ -706,7 +705,7 @@ static bool eq_sentence(MzString& outs, istream *strm, const char *end)
   return multiline;
 }
 
-static char eq2ltxconv(MzString& sstr, istream *strm, const char *sentinel)
+static char eq2ltxconv(MzString& sstr, std::istream *strm, const char *sentinel)
 {
   MzString  white, token;
   char      key[256];
@@ -784,9 +783,9 @@ void eq2latex(MzString& outs, char const *s)
 
   MzString  tstr;
 
-  istringstream tstrm(s);
+  std::istringstream tstrm(s);
   bool eqnarray = eq_sentence(tstr, &tstrm);
-  istringstream strm(tstr.c_str());
+  std::istringstream strm(tstr.c_str());
 
   if( eqnarray )
     outs << "\\begin{array}{rllll}" << ENDL;
