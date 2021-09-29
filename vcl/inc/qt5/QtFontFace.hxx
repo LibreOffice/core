@@ -44,9 +44,9 @@ public:
     static QtFontFace* fromQFontDatabase(const QString& aFamily, const QString& aStyle);
     static void fillAttributesFromQFont(const QFont& rFont, FontAttributes& rFA);
 
-    VCLPLUG_QT5_PUBLIC static FontWeight toFontWeight(const int nWeight);
-    VCLPLUG_QT5_PUBLIC static FontWidth toFontWidth(const int nStretch);
-    VCLPLUG_QT5_PUBLIC static FontItalic toFontItalic(const QFont::Style eStyle);
+    VCLPLUG_QT_PUBLIC static FontWeight toFontWeight(const int nWeight);
+    VCLPLUG_QT_PUBLIC static FontWidth toFontWidth(const int nStretch);
+    VCLPLUG_QT_PUBLIC static FontItalic toFontItalic(const QFont::Style eStyle);
 
     sal_IntPtr GetFontId() const override;
 

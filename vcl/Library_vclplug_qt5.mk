@@ -29,7 +29,7 @@ $(eval $(call gb_Library_set_include,vclplug_qt5,\
 ))
 
 $(eval $(call gb_Library_add_defs,vclplug_qt5,\
-    -DVCLPLUG_QT5_IMPLEMENTATION \
+    -DVCLPLUG_QT_IMPLEMENTATION \
     -DVCL_INTERNALS \
 ))
 

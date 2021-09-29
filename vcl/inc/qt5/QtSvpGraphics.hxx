@@ -26,7 +26,7 @@
 
 class QtFrame;
 
-class VCLPLUG_QT5_PUBLIC QtSvpGraphics final : public SvpSalGraphics, public QtGraphicsBase
+class VCLPLUG_QT_PUBLIC QtSvpGraphics final : public SvpSalGraphics, public QtGraphicsBase
 {
     QtFrame* const m_pFrame;
 
