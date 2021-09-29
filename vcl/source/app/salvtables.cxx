@@ -3333,6 +3333,7 @@ void SalInstanceEntry::set_message_type(weld::EntryMessageType eType)
 void SalInstanceEntry::set_font(const vcl::Font& rFont)
 {
     m_xEntry->SetPointFont(*m_xEntry->GetOutDev(), rFont);
+    m_xEntry->SetControlFont(rFont);
     m_xEntry->Invalidate();
 }
 
@@ -5808,8 +5809,7 @@ void SalInstanceTextView::set_monospace(bool bMonospace)
     else
         aFont = Application::GetSettings().GetStyleSettings().GetFieldFont();
     aFont.SetFontHeight(aOrigFont.GetFontHeight());
-    m_xTextView->SetFont(aFont);
-    m_xTextView->SetControlFont(aFont);
+    set_font(aFont);
 }
 
 void SalInstanceTextView::set_font_color(const Color& rColor)
@@ -5818,6 +5818,13 @@ void SalInstanceTextView::set_font_color(const Color& rColor)
         m_xTextView->SetControlForeground(rColor);
     else
         m_xTextView->SetControlForeground();
+}
+
+void SalInstanceTextView::set_font(const vcl::Font& rFont)
+{
+    m_xTextView->SetFont(rFont);
+    m_xTextView->SetControlFont(rFont);
+    m_xTextView->Invalidate();
 }
 
 void SalInstanceTextView::connect_cursor_position(const Link<TextView&, void>& rLink)
@@ -6559,6 +6566,7 @@ public:
     {
         Edit& rEntry = m_pEntry->getEntry();
         rEntry.SetPointFont(*rEntry.GetOutDev(), rFont);
+        rEntry.SetControlFont(rFont);
         rEntry.Invalidate();
     }
 

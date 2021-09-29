@@ -361,6 +361,10 @@ namespace svt
         return static_cast<BrowserDataWin*>(GetParent())->GetParent()->ProcessKey(rKEvt);
     }
 
+    void ControlBase::SetPointFont(const vcl::Font& /*rFont*/)
+    {
+    }
+
     IMPL_LINK(ControlBase, KeyInputHdl, const KeyEvent&, rKEvt, bool)
     {
         return ProcessKey(rKEvt);

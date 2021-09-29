@@ -1298,6 +1298,8 @@ public:
 
     virtual void set_monospace(bool bMonospace) override;
 
+    virtual void set_font(const vcl::Font& rFont) override;
+
     virtual void set_font_color(const Color& rColor) override;
 
     virtual void connect_cursor_position(const Link<TextView&, void>& rLink) override;
