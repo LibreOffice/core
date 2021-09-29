@@ -26,10 +26,6 @@
 
 #include "mcnttype.hxx"
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::container;
-using namespace std;
-
 CMimeContentType::CMimeContentType( const OUString& aCntType )
 {
     init( aCntType );
@@ -50,7 +46,7 @@ OUString SAL_CALL CMimeContentType::getFullMediaType( )
     return m_MediaType + "/" + m_MediaSubtype;
 }
 
-Sequence< OUString > SAL_CALL CMimeContentType::getParameters( )
+css::uno::Sequence< OUString > SAL_CALL CMimeContentType::getParameters( )
 {
     return comphelper::mapKeysToSequence(m_ParameterMap);
 }
@@ -65,7 +61,7 @@ OUString SAL_CALL CMimeContentType::getParameterValue( const OUString& aName )
     auto const lower = aName.toAsciiLowerCase();
 
     if ( !hasParameter( lower ) )
-        throw NoSuchElementException( );
+        throw css::container::NoSuchElementException( );
 
     return m_ParameterMap.find( lower )->second;
 }
