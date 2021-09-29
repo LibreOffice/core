@@ -297,8 +297,8 @@ IMPL_LINK(FindTextFieldControl, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
     else if ( bMod1 && nCode == KEY_F )
         m_xWidget->select_entry_region(0, -1);
 
-    // Execute the search when Ctrl-G or F3 pressed (in addition to ActivateHdl conditions)
-    else if ( (bMod1 && (KEY_G == nCode)) || (KEY_F3 == nCode) )
+    // Execute the search when Ctrl-G, F3 and Shift-RETURN pressed (in addition to ActivateHdl condition which handles bare RETURN)
+    else if ( (bMod1 && KEY_G == nCode) || (bShift && KEY_RETURN == nCode) || (KEY_F3 == nCode) )
     {
         ActivateFind(bShift);
         bRet = true;
