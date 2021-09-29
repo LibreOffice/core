@@ -47,9 +47,9 @@ struct StdFreeCStr
 };
 using FreeableCStr = std::unique_ptr<char[], StdFreeCStr>;
 
-class VCLPLUG_QT5_PUBLIC QtInstance : public QObject,
-                                      public SalGenericInstance,
-                                      public SalUserEventList
+class VCLPLUG_QT_PUBLIC QtInstance : public QObject,
+                                     public SalGenericInstance,
+                                     public SalUserEventList
 {
     Q_OBJECT
 

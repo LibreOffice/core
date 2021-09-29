@@ -28,7 +28,7 @@
 
 class QCursor;
 
-class VCLPLUG_QT5_PUBLIC QtData final : public GenericUnixSalData
+class VCLPLUG_QT_PUBLIC QtData final : public GenericUnixSalData
 {
     o3tl::enumarray<PointerStyle, std::unique_ptr<QCursor>> m_aCursors;
 

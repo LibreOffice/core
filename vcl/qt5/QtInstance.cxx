@@ -678,7 +678,7 @@ std::unique_ptr<QApplication> QtInstance::CreateQApplication(int& nArgc, char** 
 }
 
 extern "C" {
-VCLPLUG_QT5_PUBLIC SalInstance* create_SalInstance()
+VCLPLUG_QT_PUBLIC SalInstance* create_SalInstance()
 {
     static const bool bUseCairo = (nullptr != getenv("SAL_VCL_QT5_USE_CAIRO"));
 

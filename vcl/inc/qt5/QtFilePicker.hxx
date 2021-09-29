@@ -54,7 +54,7 @@ typedef ::cppu::WeakComponentImplHelper<css::frame::XTerminateListener, css::lan
                                         css::ui::dialogs::XFolderPicker2>
     QtFilePicker_Base;
 
-class VCLPLUG_QT5_PUBLIC QtFilePicker : public QObject, public QtFilePicker_Base
+class VCLPLUG_QT_PUBLIC QtFilePicker : public QObject, public QtFilePicker_Base
 {
     Q_OBJECT
 
