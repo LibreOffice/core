@@ -332,10 +332,10 @@ namespace dbtools
 
     css::util::Time DBTypeConversion::toTime(const double dVal, short nDigits)
     {
-        const sal_Int32 nDays     = static_cast<sal_Int32>(dVal);
+        const double nDays = std::trunc(dVal);
         sal_Int64 nNS;
         {
-            double fSeconds((dVal - static_cast<double>(nDays)) * (fNanoSecondsPerDay / nanoSecInSec));
+            double fSeconds((dVal - nDays) * (fNanoSecondsPerDay / nanoSecInSec));
             fSeconds = ::rtl::math::round( fSeconds, nDigits );
             nNS = fSeconds * nanoSecInSec;
         }
