@@ -934,6 +934,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
                 if (nSelected == nActive)
                 {
                     aParam.RemoveAllEntriesByField(rPos.Col());
+                    pEntry = nullptr;   // invalidated by RemoveAllEntriesByField call
 
                     // tdf#46184 reset filter options to default values
                     aParam.eSearchType = utl::SearchParam::SearchType::Normal;
@@ -941,16 +942,18 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
                     aParam.bDuplicate = true;
                     aParam.bInplace = true;
                 }
-
-                // Get selected color from set
-                std::set<Color>::iterator it = aColors.begin();
-                std::advance(it, nSelected - 1);
-                Color selectedColor = *it;
-
-                if (eMode == AutoFilterMode::TextColor)
-                    pEntry->SetQueryByTextColor(selectedColor);
                 else
-                    pEntry->SetQueryByBackgroundColor(selectedColor);
+                {
+                    // Get selected color from set
+                    std::set<Color>::iterator it = aColors.begin();
+                    std::advance(it, nSelected - 1);
+                    Color selectedColor = *it;
+
+                    if (eMode == AutoFilterMode::TextColor)
+                        pEntry->SetQueryByTextColor(selectedColor);
+                    else
+                        pEntry->SetQueryByBackgroundColor(selectedColor);
+                }
             }
 
             break;
