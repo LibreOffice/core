@@ -488,7 +488,7 @@ static bool main2()
 void printStack( CONTEXT* ctx )
 {
     constexpr int MaxNameLen = 256;
-    BOOL    result;
+    bool    result;
     HANDLE  process;
     HANDLE  thread;
     HMODULE hModule;
