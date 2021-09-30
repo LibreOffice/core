@@ -76,7 +76,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_accessibleAt(long row, long col
     bool isTRUE = CMAccessible::get_IAccessibleFromXAccessible(pRAcc.get(), &pRet);
     if(isTRUE)
     {
-        *accessible = static_cast<IAccessible2 *>(pRet);
+        *accessible = pRet;
         pRet->AddRef();
         return S_OK;
     }
@@ -89,7 +89,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_accessibleAt(long row, long col
 
         if(isTRUE)
         {
-            *accessible = static_cast<IAccessible2 *>(pRet);
+            *accessible = pRet;
             pRet->AddRef();
             return S_OK;
         }
@@ -561,7 +561,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_summary(IUnknown * * accessible
 
     if(pRet)
     {
-        *accessible = static_cast<IAccessible2 *>(pRet);
+        *accessible = pRet;
         pRet->AddRef();
         return S_OK;
     }

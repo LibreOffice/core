@@ -2986,7 +2986,7 @@ void CMAccessible::ConvertAnyToVariant(const css::uno::Any &rAnyVal, VARIANT *pv
                             pIAcc->AddRef();
 
                             pvData->vt = VT_UNKNOWN;
-                            pvData->pdispVal = static_cast<IAccessible2*>(pIAcc);
+                            pvData->pdispVal = pIAcc;
                             break;
                         }
                     }
