@@ -51,8 +51,6 @@
 #include <sfx2/viewsh.hxx>
 #include <comphelper/seqstream.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svx/strings.hrc>
-#include <svx/dialmgr.hxx>
 
 #include <strings.hrc>
 
@@ -210,7 +208,7 @@ short SvInsertOleDlg::run()
                                     xProgress = xProgressFactory->createStatusIndicator();
                                     if (xProgress)
                                     {
-                                        aProgressText = SvxResId(RID_SVXSTR_DOC_LOAD);
+                                        aProgressText = CuiResId(RID_SVXSTR_OLE_INSERT);
                                     }
                                 }
                             }
@@ -316,8 +314,8 @@ short SvInsertOleDlg::run()
                         xProgress = xProgressFactory->createStatusIndicator();
                         if (xProgress)
                         {
-                            OUString aDocLoad(SvxResId(RID_SVXSTR_DOC_LOAD));
-                            xProgress->start(aDocLoad, 100);
+                            OUString aOleInsert(CuiResId(RID_SVXSTR_OLE_INSERT));
+                            xProgress->start(aOleInsert, 100);
                         }
                     }
                 }

@@ -394,4 +394,6 @@
 
 #define RID_SVXSTR_UI_APPLYALL                      NC_("RID_SVXSTR_UI_APPLYALL", "Apply to %MODULE")
 
+#define RID_SVXSTR_OLE_INSERT                       NC_("RID_SVXSTR_OLE_INSERT", "Inserting OLE object...")
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
