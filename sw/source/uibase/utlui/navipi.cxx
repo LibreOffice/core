@@ -879,7 +879,7 @@ IMPL_LINK(SwNavigationPI, DoneLink, SfxPoolItem const *, pItem, void)
     }
 }
 
-OUString SwNavigationPI::CreateDropFileName( TransferableDataHelper& rData )
+OUString SwNavigationPI::CreateDropFileName( const TransferableDataHelper& rData )
 {
     OUString sFileName;
     SotClipboardFormatId nFormat;

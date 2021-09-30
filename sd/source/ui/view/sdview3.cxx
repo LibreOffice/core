@@ -138,7 +138,7 @@ static void ImpCheckInsertPos(Point& rPos, const Size& rSize, const ::tools::Rec
     }
 }
 
-bool View::InsertMetaFile( TransferableDataHelper& rDataHelper, const Point& rPos, ImageMap const * pImageMap, bool bOptimize )
+bool View::InsertMetaFile( const TransferableDataHelper& rDataHelper, const Point& rPos, ImageMap const * pImageMap, bool bOptimize )
 {
     GDIMetaFile aMtf;
 
