@@ -2099,7 +2099,7 @@ SotExchangeDest SwTransferable::GetSotDestination( const SwWrtShell& rSh )
     return nRet;
 }
 
-bool SwTransferable::PasteFileContent( TransferableDataHelper& rData,
+bool SwTransferable::PasteFileContent( const TransferableDataHelper& rData,
                                     SwWrtShell& rSh, SotClipboardFormatId nFormat, bool bMsg, bool bIgnoreComments )
 {
     TranslateId pResId = STR_CLPBRD_FORMAT_ERROR;
@@ -2441,7 +2441,7 @@ bool SwTransferable::PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
     return bRet;
 }
 
-bool SwTransferable::PasteTargetURL( TransferableDataHelper& rData,
+bool SwTransferable::PasteTargetURL( const TransferableDataHelper& rData,
                                     SwWrtShell& rSh, SwPasteSdr nAction,
                                     const Point* pPt, bool bInsertGRF )
 {
@@ -2558,7 +2558,7 @@ void SwTransferable::SetSelInShell( SwWrtShell& rSh, bool bSelectFrame,
     }
 }
 
-bool SwTransferable::PasteDDE( TransferableDataHelper& rData,
+bool SwTransferable::PasteDDE( const TransferableDataHelper& rData,
                                 SwWrtShell& rWrtShell, bool bReReadGrf,
                                 bool bMsg )
 {
@@ -2729,7 +2729,7 @@ bool SwTransferable::PasteDDE( TransferableDataHelper& rData,
     return true;
 }
 
-bool SwTransferable::PasteSdrFormat(  TransferableDataHelper& rData,
+bool SwTransferable::PasteSdrFormat(  const TransferableDataHelper& rData,
                                     SwWrtShell& rSh, SwPasteSdr nAction,
                                     const Point* pPt, SotExchangeActionFlags nActionFlags, bool bNeedToSelectBeforePaste)
 {
@@ -2755,7 +2755,7 @@ bool SwTransferable::PasteSdrFormat(  TransferableDataHelper& rData,
     return bRet;
 }
 
-bool SwTransferable::PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
+bool SwTransferable::PasteGrf( const TransferableDataHelper& rData, SwWrtShell& rSh,
                                 SotClipboardFormatId nFormat, SwPasteSdr nAction, const Point* pPt,
                                 SotExchangeActionFlags nActionFlags, sal_Int8 nDropAction, bool bNeedToSelectBeforePaste, RndStdIds nAnchorType )
 {
@@ -2994,7 +2994,7 @@ bool SwTransferable::PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
     return bRet;
 }
 
-bool SwTransferable::PasteImageMap( TransferableDataHelper& rData,
+bool SwTransferable::PasteImageMap( const TransferableDataHelper& rData,
                                     SwWrtShell& rSh )
 {
     bool bRet = false;
@@ -3019,7 +3019,7 @@ bool SwTransferable::PasteImageMap( TransferableDataHelper& rData,
     return bRet;
 }
 
-bool SwTransferable::PasteAsHyperlink( TransferableDataHelper& rData,
+bool SwTransferable::PasteAsHyperlink( const TransferableDataHelper& rData,
                                         SwWrtShell& rSh, SotClipboardFormatId nFormat )
 {
     bool bRet = false;
@@ -3164,7 +3164,7 @@ bool SwTransferable::PasteFileName( TransferableDataHelper& rData,
     return bRet;
 }
 
-bool SwTransferable::PasteDBData( TransferableDataHelper& rData,
+bool SwTransferable::PasteDBData( const TransferableDataHelper& rData,
                                     SwWrtShell& rSh, SotClipboardFormatId nFormat, bool bLink,
                                     const Point* pDragPt, bool bMsg )
 {
@@ -3264,7 +3264,7 @@ bool SwTransferable::PasteDBData( TransferableDataHelper& rData,
     return bRet;
 }
 
-bool SwTransferable::PasteFileList( TransferableDataHelper& rData,
+bool SwTransferable::PasteFileList( const TransferableDataHelper& rData,
                                     SwWrtShell& rSh, bool bLink,
                                     const Point* pPt, bool bMsg )
 {
@@ -3306,7 +3306,7 @@ bool SwTransferable::PasteFileList( TransferableDataHelper& rData,
     return bRet;
 }
 
-bool SwTransferable::CheckForURLOrLNKFile( TransferableDataHelper& rData,
+bool SwTransferable::CheckForURLOrLNKFile( const TransferableDataHelper& rData,
                                         OUString& rFileName, OUString* pTitle )
 {
     bool bIsURLFile = false;

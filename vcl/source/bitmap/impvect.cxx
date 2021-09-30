@@ -64,7 +64,7 @@ class ImplChain;
 
 namespace ImplVectorizer
 {
-    static void ImplExpand( std::optional<ImplVectMap>& rMap, BitmapReadAccess* pRAcc, const Color& rColor );
+    static void ImplExpand( std::optional<ImplVectMap>& rMap, const BitmapReadAccess* pRAcc, const Color& rColor );
     static void ImplCalculate( ImplVectMap& rMap, tools::PolyPolygon& rPolyPoly, sal_uInt8 cReduce );
     static bool ImplGetChain( ImplVectMap& rMap, const Point& rStartPt, ImplChain& rChain );
     static bool ImplIsUp( ImplVectMap const & rMap, tools::Long nY, tools::Long nX );
@@ -778,7 +778,7 @@ void ImplLimitPolyPoly( tools::PolyPolygon& rPolyPoly )
     rPolyPoly = aNewPolyPoly;
 }
 
-void ImplExpand( std::optional<ImplVectMap>& oMap, BitmapReadAccess* pRAcc, const Color& rColor )
+void ImplExpand( std::optional<ImplVectMap>& oMap, const BitmapReadAccess* pRAcc, const Color& rColor )
 {
     if( pRAcc && pRAcc->Width() && pRAcc->Height() )
     {

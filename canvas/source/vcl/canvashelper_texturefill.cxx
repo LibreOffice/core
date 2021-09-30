@@ -55,7 +55,7 @@ namespace vclcanvas
     namespace
     {
         bool textureFill( OutputDevice&         rOutDev,
-                          GraphicObject&        rGraphic,
+                          const GraphicObject&  rGraphic,
                           const ::Point&        rPosPixel,
                           const ::Size&         rNextTileX,
                           const ::Size&         rNextTileY,

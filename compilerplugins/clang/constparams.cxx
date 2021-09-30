@@ -60,8 +60,11 @@ public:
             || loplugin::hasPathnamePrefix(fn, SRCDIR "/pyuno/source/module/pyuno_struct.cxx")
             || loplugin::hasPathnamePrefix(fn, SRCDIR "/pyuno/source/module/pyuno.cxx")
             || loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/filter/ascii/ascatr.cxx")
-            // TODO this plugin doesn't handle it well when we take the address of a poiner
+            // TODO this plugin doesn't handle it well when we take the address of a pointer
             || loplugin::hasPathnamePrefix(fn, SRCDIR "/svl/source/misc/sharedstringpool.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/registry/source/regkey.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/cppu/source/uno/lbenv.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/cppuhelper/source/implbase_ex.cxx")
             )
             return;
 
