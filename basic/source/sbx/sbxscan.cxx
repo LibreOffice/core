@@ -310,14 +310,8 @@ void ImpCvtNum( double nNum, short nPrec, OUString& rRes, bool bCoreString )
     if( bCoreString )
         cDecimalSep = '.';
 
-    const double dMaxNumWithoutExp = (nPrec == 6) ? 1E6 : 1E14;
-    rtl_math_StringFormat aMathStringFormat
-        = (nNum && (std::abs(nNum) < 1E-1 || std::abs(nNum) >= dMaxNumWithoutExp))
-              ? rtl_math_StringFormat_E2
-              : rtl_math_StringFormat_F;
-
     // tdf#143575 - use rtl::math::doubleToUString to convert numbers to strings in basic
-    rRes = rtl::math::doubleToUString(nNum, aMathStringFormat, nPrec, cDecimalSep, true);
+    rRes = rtl::math::doubleToUString(nNum, rtl_math_StringFormat_Automatic, nPrec, cDecimalSep, true);
 }
 
 bool ImpConvStringExt( OUString& rSrc, SbxDataType eTargetType )
