@@ -16,6 +16,24 @@
       "message": "Given that pInherited is already nullptr, this could be simply\n\n    if (auto pPoolItem \u003d GetExport().m_pChpIter-\u003eHasTextItem(RES_CHRATR_BOX))\n        pInherited \u003d \u0026pPoolItem-\u003eStaticWhichCast(RES_CHRATR_BOX);",
       "revId": "d4bd8b7b182ac0a015ab0ff69101f33376ce58ae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cbf987e_00577e47",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 8075,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-30T06:34:36Z",
+      "side": 1,
+      "message": "Good catch, will fix.",
+      "parentUuid": "dbdc78f3_861c35d6",
+      "revId": "d4bd8b7b182ac0a015ab0ff69101f33376ce58ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
