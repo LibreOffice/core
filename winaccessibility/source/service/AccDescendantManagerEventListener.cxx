@@ -197,8 +197,8 @@ bool AccDescendantManagerEventListener::NotifyChildEvent(short nWinEvent,const A
                 else
                 {
                     // handle any pending deletions for objects previously removed from selection
-                    for (XAccessible* pAcc : m_aUnselectedChildrenForDeletion)
-                        pAgent->DeleteAccObj(pAcc);
+                    for (XAccessible* pAcc2 : m_aUnselectedChildrenForDeletion)
+                        pAgent->DeleteAccObj(pAcc2);
                     m_aUnselectedChildrenForDeletion.clear();
                 }
             }
