@@ -98,12 +98,11 @@ void XmlWalker::parent()
 
 OString XmlWalker::attribute(const OString& sName)
 {
-    xmlChar* xmlName = xmlCharStrdup(sName.getStr());
-    xmlChar* xmlAttribute = xmlGetProp(mpImpl->mpCurrent, xmlName);
+    xmlChar* xmlAttribute
+        = xmlGetProp(mpImpl->mpCurrent, reinterpret_cast<const xmlChar*>(sName.getStr()));
     OString aAttributeContent(
         xmlAttribute == nullptr ? "" : reinterpret_cast<const char*>(xmlAttribute));
     xmlFree(xmlAttribute);
-    xmlFree(xmlName);
 
     return aAttributeContent;
 }
