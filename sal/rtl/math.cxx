@@ -367,22 +367,22 @@ void doubleToString(typename T::String ** pResult,
             typename T::Char* pStart = pEnd;
 
             // Backward fill.
-            size_t nGrouping = 0;
+            sal_Int32 nGrouping = cGroupSeparator && pGroups ? *pGroups : 0;
             sal_Int32 nGroupDigits = 0;
             do
             {
                 typename T::Char nDigit = nInt % 10;
                 nInt /= 10;
                 *--pStart = nDigit + '0';
-                if (pGroups && pGroups[nGrouping] == ++nGroupDigits && nInt > 0 && cGroupSeparator)
+                if (nGrouping && nGrouping == ++nGroupDigits && nInt)
                 {
                     *--pStart = cGroupSeparator;
-                    if (pGroups[nGrouping+1])
-                        ++nGrouping;
+                    if (*(pGroups + 1))
+                        nGrouping = *++pGroups;
                     nGroupDigits = 0;
                 }
             }
-            while (nInt > 0);
+            while (nInt);
             if (bSign)
                 *--pStart = '-';
 
