@@ -290,6 +290,12 @@ public:
     Bitmap setupTextBitmap();
 };
 
+class VCL_DLLPUBLIC BenchMarkTests : public OutputDeviceTestCommon
+{
+public:
+    Bitmap setupMultiplePolygonsWithPolyPolygon(clock_t &aTimeTaken);
+};
+
 } // end namespace vcl::test
 
 #endif
