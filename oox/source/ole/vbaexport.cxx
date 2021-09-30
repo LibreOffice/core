@@ -779,7 +779,7 @@ void exportModuleStream(SvStream& rStrm, const OUString& rSourceCode, const OUSt
 {
     SvMemoryStream aModuleStream(4096, 4096);
 
-    exportString(aModuleStream, OUString("Attribute VB_Name = \"" + aElementName + "\"\r\n"));
+    exportString(aModuleStream, OUStringConcatenation("Attribute VB_Name = \"" + aElementName + "\"\r\n"));
     if (rInfo.ModuleType == 4)
     {
         if (isWorkbook(rInfo.ModuleObject))
@@ -847,16 +847,16 @@ void exportPROJECTStream(SvStream& rStrm, const css::uno::Reference<css::contain
         css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(rModuleName);
         if(aModuleInfo.ModuleType == 1)
         {
-            exportString(rStrm, OUString("Module=" + rModuleName + "\r\n"));
+            exportString(rStrm, OUStringConcatenation("Module=" + rModuleName + "\r\n"));
         }
         else if(aModuleInfo.ModuleType == 4)
         {
-            exportString(rStrm, OUString("Document=" + rModuleName + "/&H00000000\r\n"));
+            exportString(rStrm, OUStringConcatenation("Document=" + rModuleName + "/&H00000000\r\n"));
         }
     }
 
     // section 2.3.1.11 ProjectName
-    exportString(rStrm, OUString("Name=\"" + projectName + "\"\r\n"));
+    exportString(rStrm, OUStringConcatenation("Name=\"" + projectName + "\"\r\n"));
 
     // section 2.3.1.12 ProjectHelpId
     exportString(rStrm, u"HelpContextID=\"0\"\r\n");
@@ -917,11 +917,11 @@ void exportPROJECTStream(SvStream& rStrm, const css::uno::Reference<css::contain
         css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(rModuleName);
         if(aModuleInfo.ModuleType == 1)
         {
-            exportString(rStrm,  OUString(rModuleName + "=25, 25, 1439, 639, \r\n"));
+            exportString(rStrm,  OUStringConcatenation(rModuleName + "=25, 25, 1439, 639, \r\n"));
         }
         else
         {
-            exportString(rStrm, OUString(rModuleName + "=0, 0, 0, 0, C\r\n"));
+            exportString(rStrm, OUStringConcatenation(rModuleName + "=0, 0, 0, 0, C\r\n"));
         }
     }
 }

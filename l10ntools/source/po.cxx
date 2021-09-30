@@ -221,7 +221,7 @@ void GenPoEntry::readFromFile(std::ifstream& rIFStream)
             {
                 sReference = m_sReferences.front();
             }
-            if (pLastMsg != &m_sMsgCtxt || sLine != "\"" + sReference + "\\n\"")
+            if (pLastMsg != &m_sMsgCtxt || sLine != OStringConcatenation("\"" + sReference + "\\n\""))
             {
                 *pLastMsg += lcl_GenNormString(sLine);
             }

@@ -125,7 +125,7 @@ protected:
         {
             if (m_aReferenceFile.is_open())
                 m_aReferenceFile.close();
-            OString sReferenceFile = OUStringToOString(OUString(m_directories.getPathFromSrc(getReferenceDirName()) + sFileName), RTL_TEXTENCODING_UTF8);
+            OString sReferenceFile = OUStringToOString(OUStringConcatenation(m_directories.getPathFromSrc(getReferenceDirName()) + sFileName), RTL_TEXTENCODING_UTF8);
             m_aReferenceFile.open(sReferenceFile.getStr(), std::ios_base::in);
             CPPUNIT_ASSERT_MESSAGE(OString("Can't open reference file: " + sReferenceFile).getStr(), m_aReferenceFile.is_open());
         }
@@ -133,7 +133,7 @@ protected:
         {
             if (m_aDumpFile.is_open())
                 m_aDumpFile.close();
-            OString sDumpFile = OUStringToOString(OUString(m_directories.getPathFromSrc(getReferenceDirName()) + sFileName), RTL_TEXTENCODING_UTF8);
+            OString sDumpFile = OUStringToOString(OUStringConcatenation(m_directories.getPathFromSrc(getReferenceDirName()) + sFileName), RTL_TEXTENCODING_UTF8);
             m_aDumpFile.open(sDumpFile.getStr(), std::ios_base::out | std::ofstream::binary | std::ofstream::trunc);
             CPPUNIT_ASSERT_MESSAGE(OString("Can't open dump file: " + sDumpFile).getStr(), m_aDumpFile.is_open());
         }

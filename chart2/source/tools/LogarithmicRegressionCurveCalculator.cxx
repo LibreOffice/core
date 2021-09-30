@@ -178,7 +178,7 @@ OUString LogarithmicRegressionCurveCalculator::ImplGetRepresentation(
         addStringToEquation( aBuf, nLineLength, aTmpBuf, pFormulaMaxWidth );
     }
 
-    if ( aBuf.toString() == (mYName + " = ") )
+    if ( aBuf.toString() == OUStringConcatenation(mYName + " = ") )
         aBuf.append( "0" );
 
     return aBuf.makeStringAndClear();

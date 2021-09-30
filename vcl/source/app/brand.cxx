@@ -68,11 +68,11 @@ bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
     ::std::vector< OUString > aFallbacks( aLanguageTag.getFallbackStrings( true));
     for (const OUString & aFallback : aFallbacks)
     {
-        if (tryLoadPng( aBaseDir, OUString(aBaseName + "-" + aFallback + aPng), rBitmap))
+        if (tryLoadPng( aBaseDir, OUStringConcatenation(aBaseName + "-" + aFallback + aPng), rBitmap))
             return true;
     }
 
-    return tryLoadPng( aBaseDir, OUString(aBaseName + aPng), rBitmap);
+    return tryLoadPng( aBaseDir, OUStringConcatenation(aBaseName + aPng), rBitmap);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

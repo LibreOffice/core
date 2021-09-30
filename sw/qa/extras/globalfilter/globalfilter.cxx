@@ -1054,7 +1054,7 @@ void Test::testNestedFieldmark()
         }
 
         mxComponent = loadFromDesktop(m_directories.getURLFromSrc(
-                OUString("/sw/qa/extras/globalfilter/data/" + rFilterName.second)),
+                OUStringConcatenation("/sw/qa/extras/globalfilter/data/" + rFilterName.second)),
             "com.sun.star.text.TextDocument");
 
         verifyNestedFieldmark(rFilterName.first + ", load", mxComponent);

@@ -511,7 +511,7 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
         SfxObjectShell* rShell = SfxObjectShell::GetShellFromComponent(mxModel);
         if (!rShell
             || !rShell->IsContinueImportOnFilterExceptions(
-                OUString("SAXException: " + rErr.Message)))
+                OUStringConcatenation("SAXException: " + rErr.Message)))
             throw;
     }
     catch (uno::RuntimeException const&)

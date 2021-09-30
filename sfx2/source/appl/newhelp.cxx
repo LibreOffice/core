@@ -2322,7 +2322,7 @@ IMPL_LINK_NOARG(SfxHelpWindow_Impl, OpenHdl, LinkParamNone*, void)
         else
             aId = aEntry;
 
-        sHelpURL = SfxHelpWindow_Impl::buildHelpURL(xIndexWin->GetFactory(), OUString("/" + aId), aAnchor);
+        sHelpURL = SfxHelpWindow_Impl::buildHelpURL(xIndexWin->GetFactory(), OUStringConcatenation("/" + aId), aAnchor);
     }
 
     loadHelpContent(sHelpURL);

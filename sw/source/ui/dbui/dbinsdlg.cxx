@@ -1612,7 +1612,7 @@ void SwInsertDBColAutoPilot::Load()
             for(const OUString& rSubName : aSubNames)
             {
                 Sequence <OUString> aSubNodeNames =
-                    lcl_CreateSubNames(OUString(sSubNodeName + rSubName));
+                    lcl_CreateSubNames(OUStringConcatenation(sSubNodeName + rSubName));
                 Sequence< Any> aSubProps = GetProperties(aSubNodeNames);
                 const Any* pSubProps = aSubProps.getConstArray();
 

@@ -374,7 +374,7 @@ bool OSQLParseNode::parseNodeToExecutableStatement( OUString& _out_rString, cons
     {
         constexpr char SELECT_KEYWORD[] = "SELECT";
         sBuffer.insert(sBuffer.indexOf(SELECT_KEYWORD) + strlen(SELECT_KEYWORD),
-                " FIRST " + sLimitValue);
+                OUStringConcatenation(" FIRST " + sLimitValue));
     }
 
     _out_rString = sBuffer.makeStringAndClear();
