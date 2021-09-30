@@ -8071,8 +8071,10 @@ void DocxAttributeOutput::CharBorder(
         pInherited = GetExport().m_pCurrentStyle->DerivedFrom()->GetAttrSet().GetItem<SvxBoxItem>(RES_CHRATR_BOX);
     else if ( m_rExport.m_pChpIter ) // incredibly undocumented, but this is the character-style info, right?
     {
-        const SfxPoolItem* pPoolItem = GetExport().m_pChpIter->HasTextItem(RES_CHRATR_BOX);
-        pInherited = pPoolItem ? &pPoolItem->StaticWhichCast(RES_CHRATR_BOX) : nullptr;
+        if (const SfxPoolItem* pPoolItem = GetExport().m_pChpIter->HasTextItem(RES_CHRATR_BOX))
+        {
+            pInherited = &pPoolItem->StaticWhichCast(RES_CHRATR_BOX);
+        }
     }
 
     if ( pInherited )
