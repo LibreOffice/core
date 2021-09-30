@@ -498,7 +498,7 @@ void printStack( CONTEXT* ctx )
     DWORD disp;
     char buffer[sizeof(SYMBOL_INFO) + MAX_SYM_NAME * sizeof(TCHAR)];
     char module[MaxNameLen];
-    PSYMBOL_INFO pSymbol = (PSYMBOL_INFO)buffer;
+    PSYMBOL_INFO pSymbol = reinterpret_cast<PSYMBOL_INFO>(buffer);
 
     memset( &stack, 0, sizeof( STACKFRAME64 ) );
 
@@ -545,7 +545,7 @@ void printStack( CONTEXT* ctx )
         //get symbol name for address
         pSymbol->SizeOfStruct = sizeof(SYMBOL_INFO);
         pSymbol->MaxNameLen = MAX_SYM_NAME;
-        SymFromAddr(process, ( ULONG64 )stack.AddrPC.Offset, &displacement, pSymbol);
+        SymFromAddr(process, static_cast< ULONG64 >(stack.AddrPC.Offset), &displacement, pSymbol);
 
         //try to get line
         if (SymGetLineFromAddr64(process, stack.AddrPC.Offset, &disp, line.get()))
@@ -559,7 +559,7 @@ void printStack( CONTEXT* ctx )
             hModule = NULL;
             lstrcpyA(module,"");
             GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
-                (LPCTSTR)(stack.AddrPC.Offset), &hModule);
+                reinterpret_cast<LPCTSTR>(stack.AddrPC.Offset), &hModule);
 
             //at least print module name
             if(hModule != NULL)GetModuleFileNameA(hModule,module,MaxNameLen);
