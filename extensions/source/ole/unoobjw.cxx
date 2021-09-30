@@ -1502,7 +1502,7 @@ Any SAL_CALL InterfaceOleWrapper::createBridge(const Any& modelDepObject,
                 if( pVar)
                 {
                     pVar->vt= VT_DISPATCH;
-                    pVar->pdispVal= static_cast<IDispatch*>( this);
+                    pVar->pdispVal= this;
                     AddRef();
 
                     retAny<<= reinterpret_cast< sal_uIntPtr >( pVar);
@@ -2763,7 +2763,7 @@ HRESULT InterfaceOleWrapper::InvokeGeneral( DISPID dispidMember, unsigned short 
             if( m_defaultValueType == VT_DISPATCH)
             {
                 pvarResult->vt= VT_DISPATCH;
-                pvarResult->pdispVal= static_cast<IDispatch*>( this);
+                pvarResult->pdispVal= this;
                 AddRef();
                 ret= S_OK;
             }
