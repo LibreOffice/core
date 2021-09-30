@@ -403,17 +403,11 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                 pFieldType->GatherFields(vFields);
                 for (SwFormatField* pFormatField: vFields)
                 {
-                    if (SwTextField* pTextField = pFormatField->GetTextField())
-                    {
-                        const SwTextNode& rTextNode = pTextField->GetTextNode();
-                        const SwContentFrame* pCFrame =
-                                rTextNode.getLayoutFrame(rTextNode.GetDoc().getIDocumentLayoutAccess().GetCurrentLayout());
-                        if (pCFrame)
-                            m_nMemberCount++;
-                    }
+                    if (pFormatField->GetTextField())
+                        m_nMemberCount++;
                 }
             }
-    }
+        }
         break;
         case ContentTypeId::BOOKMARK:
         {
@@ -786,17 +780,9 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     if (SwTextField* pTextField = pFormatField->GetTextField())
                     {
                         const SwTextNode& rTextNode = pTextField->GetTextNode();
-                        const SwContentFrame* pCFrame =
-                                rTextNode.getLayoutFrame(rTextNode.GetDoc().
-                                                         getIDocumentLayoutAccess().
-                                                         GetCurrentLayout());
-                        if (pCFrame)
-                        {
-                            std::unique_ptr<SetGetExpField>
-                                    pNew(new SetGetExpField(SwNodeIndex(rTextNode),
-                                                            pTextField));
-                            aSrtLst.insert(std::move(pNew));
-                        }
+                        std::unique_ptr<SetGetExpField>
+                                pNew(new SetGetExpField(SwNodeIndex(rTextNode), pTextField));
+                        aSrtLst.insert(std::move(pNew));
                     }
                 }
             }
@@ -852,6 +838,8 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                 }
                 std::unique_ptr<SwTextFieldContent> pCnt(new SwTextFieldContent(this, sText,
                                                                                 &rFormatField, i));
+                if (!pTextField->GetTextNode().getLayoutFrame(m_pWrtShell->GetLayout()))
+                    pCnt->SetInvisible();
                 m_pMember->insert(std::move(pCnt));
             }
             m_nMemberCount = m_pMember->size();
