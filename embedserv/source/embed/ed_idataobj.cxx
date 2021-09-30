@@ -132,7 +132,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::GetData( FORMATETC * pForm
             pMedium->tymed = TYMED_ISTORAGE;
             pMedium->pstg = pNewStg;
             pMedium->pstg->AddRef();
-            pMedium->pUnkForRelease = static_cast<IUnknown*>(pNewStg);
+            pMedium->pUnkForRelease = pNewStg;
 
             return S_OK;
         }
