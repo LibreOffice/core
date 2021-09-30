@@ -1176,7 +1176,7 @@ void XmlFilterBase::exportCustomFragments()
         const OUString fragmentPath = "customXml/item" + OUString::number(j+1) + ".xml";
         if (customXmlDom.is())
         {
-            addRelation(oox::getRelationship(Relationship::CUSTOMXML), OUString("../" + fragmentPath));
+            addRelation(oox::getRelationship(Relationship::CUSTOMXML), OUStringConcatenation("../" + fragmentPath));
 
             uno::Reference<xml::sax::XSAXSerializable> serializer(customXmlDom, uno::UNO_QUERY);
             uno::Reference<xml::sax::XWriter> writer = xml::sax::Writer::create(comphelper::getProcessComponentContext());
@@ -1197,7 +1197,7 @@ void XmlFilterBase::exportCustomFragments()
             // Adding itemprops's relationship entry to item.xml.rels file
             addRelation(openFragmentStream(fragmentPath, "application/xml"),
                         oox::getRelationship(Relationship::CUSTOMXMLPROPS),
-                        OUString("itemProps"+OUString::number(j+1)+".xml"));
+                        OUStringConcatenation("itemProps"+OUString::number(j+1)+".xml"));
         }
     }
 

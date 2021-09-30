@@ -1490,7 +1490,7 @@ void DocxExport::WriteCustomXml()
         {
             m_rFilter.addRelation( m_pDocumentFS->getOutputStream(),
                     oox::getRelationship(Relationship::CUSTOMXML),
-                    OUString("../customXml/item"+OUString::number(j+1)+".xml" ));
+                    OUStringConcatenation("../customXml/item"+OUString::number(j+1)+".xml" ));
 
             uno::Reference< xml::sax::XSAXSerializable > serializer( customXmlDom, uno::UNO_QUERY );
             uno::Reference< xml::sax::XWriter > writer = xml::sax::Writer::create( comphelper::getProcessComponentContext() );
@@ -1513,7 +1513,7 @@ void DocxExport::WriteCustomXml()
             m_rFilter.addRelation( GetFilter().openFragmentStream( "customXml/item"+OUString::number(j+1)+".xml",
                     "application/xml" ) ,
                     oox::getRelationship(Relationship::CUSTOMXMLPROPS),
-                    OUString("itemProps"+OUString::number(j+1)+".xml" ));
+                    OUStringConcatenation("itemProps"+OUString::number(j+1)+".xml" ));
         }
     }
 }

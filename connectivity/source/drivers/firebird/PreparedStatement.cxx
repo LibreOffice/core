@@ -563,7 +563,7 @@ void OPreparedStatement::openBlobForWriting(isc_blob_handle& rBlobHandle, ISC_QU
     if (aErr)
     {
         evaluateStatusVector(m_statusVector,
-                             OUString("setBlob failed on " + m_sSqlStatement),
+                             OUStringConcatenation("setBlob failed on " + m_sSqlStatement),
                              *this);
         assert(false);
     }

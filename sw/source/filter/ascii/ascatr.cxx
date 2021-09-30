@@ -280,7 +280,7 @@ static Writer& OutASC_SwTextNode( Writer& rWrt, SwContentNode& rNode )
         }
 
         if (!level.isEmpty() || !numString.isEmpty())
-            rWrt.Strm().WriteUnicodeOrByteText(OUString(level + numString + " "));
+            rWrt.Strm().WriteUnicodeOrByteText(OUStringConcatenation(level + numString + " "));
     }
 
     OUString aStr( rNd.GetText() );

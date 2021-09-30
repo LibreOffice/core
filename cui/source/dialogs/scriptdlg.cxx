@@ -756,7 +756,7 @@ void SvxScriptOrgDialog::createEntry(const weld::TreeIter& rEntry)
             }
             for( const Reference< browse::XBrowseNode >& n : std::as_const(childNodes) )
             {
-                if (aNewName+extn == n->getName())
+                if (OUStringConcatenation(aNewName+extn) == n->getName())
                 {
                     bFound = true;
                     break;
@@ -783,7 +783,7 @@ void SvxScriptOrgDialog::createEntry(const weld::TreeIter& rEntry)
                 bValid = true;
                 for( const Reference< browse::XBrowseNode >& n : std::as_const(childNodes) )
                 {
-                    if (aUserSuppliedName+extn == n->getName())
+                    if (OUStringConcatenation(aUserSuppliedName+extn) == n->getName())
                     {
                         bValid = false;
                         OUString aError = m_createErrStr + m_createDupStr;

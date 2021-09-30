@@ -511,11 +511,11 @@ void SwHTMLWriter::OutFrameFormat( AllHtmlFlags nMode, const SwFrameFormat& rFra
         DecIndentLevel();
         if( m_bLFPossible )
             OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( Strm(), OString(GetNamespace() + OOO_STRING_SVTOOLS_HTML_division), false );
+        HTMLOutFuncs::Out_AsciiTag( Strm(), OStringConcatenation(GetNamespace() + OOO_STRING_SVTOOLS_HTML_division), false );
         m_bLFPossible = true;
     }
     else if( HtmlContainerFlags::Span == nCntnrMode )
-        HTMLOutFuncs::Out_AsciiTag( Strm(), OString(GetNamespace() + OOO_STRING_SVTOOLS_HTML_span), false );
+        HTMLOutFuncs::Out_AsciiTag( Strm(), OStringConcatenation(GetNamespace() + OOO_STRING_SVTOOLS_HTML_span), false );
 }
 
 OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
@@ -1432,7 +1432,7 @@ Writer& OutHTML_ImageStart( HtmlWriter& rHtml, Writer& rWrt, const SwFrameFormat
 
     if( !aIMapName.isEmpty() )
     {
-        rHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_usemap, OUString("#" + aIMapName));
+        rHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_usemap, OUStringConcatenation("#" + aIMapName));
     }
 
     if (bReplacement)
@@ -1658,7 +1658,7 @@ static Writer & OutHTML_FrameFormatAsMulticol( Writer& rWrt,
     rHTMLWrt.DecIndentLevel();  // indent the content of Multicol;
     if( rHTMLWrt.m_bLFPossible )
         rHTMLWrt.OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OString(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_multicol), false );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_multicol), false );
     rHTMLWrt.m_bLFPossible = true;
 
     return rWrt;
@@ -1745,7 +1745,7 @@ static Writer& OutHTML_FrameFormatAsDivOrSpan( Writer& rWrt,
     rHTMLWrt.DecIndentLevel();  // indent the content of Multicol;
     if( rHTMLWrt.m_bLFPossible )
         rHTMLWrt.OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OString(rHTMLWrt.GetNamespace() + aTag), false );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rHTMLWrt.GetNamespace() + aTag), false );
 
     if( !aEndTags.isEmpty() )
         rWrt.Strm().WriteOString( aEndTags );
@@ -1777,8 +1777,8 @@ static void OutHTML_ImageOLEStart(SwHTMLWriter& rHTMLWrt, const Graphic& rGraphi
         // Refer to this data.
         aFileName = URIHelper::simpleNormalizedMakeRelative(rHTMLWrt.GetBaseURL(), aFileName);
         rHTMLWrt.Strm().WriteOString(
-            OString("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object));
-        rHTMLWrt.Strm().WriteOString(OString(" data=\"" + aFileName.toUtf8() + "\""));
+            OStringConcatenation("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object));
+        rHTMLWrt.Strm().WriteOString(OStringConcatenation(" data=\"" + aFileName.toUtf8() + "\""));
         rHTMLWrt.Strm().WriteOString(" type=\"text/rtf\"");
         rHTMLWrt.Strm().WriteOString(">");
         rHTMLWrt.OutNewLine();
@@ -1791,7 +1791,7 @@ static void OutHTML_ImageOLEEnd(SwHTMLWriter& rHTMLWrt)
     if (rHTMLWrt.mbReqIF && rHTMLWrt.m_bExportImagesAsOLE)
     {
         rHTMLWrt.Strm().WriteOString(
-            OString("</" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object ">"));
+            OStringConcatenation("</" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object ">"));
     }
 }
 
@@ -2071,7 +2071,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
     sOut.append(OOO_STRING_SVTOOLS_HTML_division " "
             OOO_STRING_SVTOOLS_HTML_O_title "=\"")
         .append( bHeader ? "header" : "footer" ).append("\"");
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OString(rHTMLWrt.GetNamespace() + sOut) );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rHTMLWrt.GetNamespace() + sOut) );
 
     rHTMLWrt.IncIndentLevel();  // indent the content of Multicol;
 
@@ -2105,7 +2105,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
     if( !bHeader && !aSpacer.isEmpty() )
     {
         rHTMLWrt.OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OString(rHTMLWrt.GetNamespace() + aSpacer) );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rHTMLWrt.GetNamespace() + aSpacer) );
     }
 
     {
@@ -2126,12 +2126,12 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
     if( bHeader && !aSpacer.isEmpty() )
     {
         rHTMLWrt.OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OString(rHTMLWrt.GetNamespace() + aSpacer) );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rHTMLWrt.GetNamespace() + aSpacer) );
     }
 
     rHTMLWrt.DecIndentLevel();  // indent the content of Multicol;
     rHTMLWrt.OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OString(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_division), false );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_division), false );
 
     rHTMLWrt.m_nHeaderFooterSpace = 0;
 

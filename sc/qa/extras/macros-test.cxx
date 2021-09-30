@@ -358,7 +358,7 @@ void ScMacrosTest::testVba()
     for (const auto& rTestInfo : testInfo)
     {
         OUString aFileName;
-        createFileURL(OUString(rTestInfo.sFileBaseName + "xls"), aFileName);
+        createFileURL(OUStringConcatenation(rTestInfo.sFileBaseName + "xls"), aFileName);
         uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
         // process all events such as OnLoad events etc.

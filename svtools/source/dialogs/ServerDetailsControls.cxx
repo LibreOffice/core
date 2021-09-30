@@ -145,7 +145,7 @@ bool HostDetailsContainer::setUrl( const INetURLObject& rUrl )
 
 bool HostDetailsContainer::verifyScheme( const OUString& sScheme )
 {
-    return sScheme == ( m_sScheme + "://" );
+    return sScheme == OUStringConcatenation( m_sScheme + "://" );
 }
 
 DavDetailsContainer::DavDetailsContainer(PlaceEditDialog* pBuilder)

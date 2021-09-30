@@ -56,7 +56,7 @@ OUString GenerateMSOLockFileURL(const OUString& aOrigURL)
         else if (nFileNameLength == 7)
             sFileName = sFileName.copy(1);
     }
-    aURL.setName(OUString("~$" + sFileName));
+    aURL.setName(OUStringConcatenation("~$" + sFileName));
     return aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 }
 }

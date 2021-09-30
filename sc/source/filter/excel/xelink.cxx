@@ -1466,7 +1466,7 @@ XclExpExternSheet::XclExpExternSheet( const XclExpRoot& rRoot, std::u16string_vi
     XclExpExternSheetBase( rRoot, EXC_ID_EXTERNSHEET )
 {
     // reference to own sheet: \03<sheetname>
-    Init(OUString(OUStringChar(EXC_EXTSH_TABNAME) + rTabName));
+    Init(OUStringConcatenation(OUStringChar(EXC_EXTSH_TABNAME) + rTabName));
 }
 
 void XclExpExternSheet::Save( XclExpStream& rStrm )

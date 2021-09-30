@@ -2146,6 +2146,17 @@ public:
 #endif
 };
 
+#if defined LIBO_INTERNAL_ONLY
+inline bool operator ==(OString const & lhs, OStringConcatenation const & rhs)
+{ return lhs == std::string_view(rhs); }
+inline bool operator !=(OString const & lhs, OStringConcatenation const & rhs)
+{ return lhs != std::string_view(rhs); }
+inline bool operator ==(OStringConcatenation const & lhs, OString const & rhs)
+{ return std::string_view(lhs) == rhs; }
+inline bool operator !=(OStringConcatenation const & lhs, OString const & rhs)
+{ return std::string_view(lhs) != rhs; }
+#endif
+
 /* ======================================================================= */
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
@@ -2249,6 +2260,7 @@ typedef rtlunittest::OString OString;
 #if defined LIBO_INTERNAL_ONLY && !defined RTL_STRING_UNITTEST
 using ::rtl::OString;
 using ::rtl::OStringChar;
+using ::rtl::OStringConcatenation;
 using ::rtl::OStringHash;
 using ::rtl::OStringLiteral;
 #endif

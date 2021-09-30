@@ -915,7 +915,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
                     if(pPg->GetObj(i)->GetStyleSheet())
                     {
                         OUString aStyleName = pPg->GetObj(i)->GetStyleSheet()->GetName();
-                        SfxStyleSheet *pSheet = lcl_findStyle(aNewGraphicStyles, OUString(aStyleName + aRenameStr));
+                        SfxStyleSheet *pSheet = lcl_findStyle(aNewGraphicStyles, OUStringConcatenation(aStyleName + aRenameStr));
                         if(pSheet != nullptr)
                             pPg->GetObj(i)->SetStyleSheet(pSheet, true);
                     }

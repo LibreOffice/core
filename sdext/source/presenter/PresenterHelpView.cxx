@@ -706,7 +706,7 @@ void LineDescriptorList::FormatText (
         }
         else
         {
-            aLineDescriptor.AddPart(OUString(", "+*iPart), rxFont);
+            aLineDescriptor.AddPart(OUStringConcatenation(", "+*iPart), rxFont);
         }
         ++iPart;
     }

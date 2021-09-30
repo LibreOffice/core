@@ -211,7 +211,7 @@ namespace dbaui
                 }
                 else
                     addOutputText(
-                        OUString(OUString::number(xMR->getUpdateCount()) + " rows updated\n"));
+                        OUStringConcatenation(OUString::number(xMR->getUpdateCount()) + " rows updated\n"));
                 for (;;)
                 {
                     hasRS = xMR->getMoreResults();
@@ -231,17 +231,17 @@ namespace dbaui
                 if (upperStatement.startsWith("UPDATE"))
                 {
                     sal_Int32 resultCount = xStatement->executeUpdate(_rStatement);
-                    addOutputText(OUString(OUString::number(resultCount) + " rows updated\n"));
+                    addOutputText(OUStringConcatenation(OUString::number(resultCount) + " rows updated\n"));
                 }
                 else if (upperStatement.startsWith("INSERT"))
                 {
                     sal_Int32 resultCount = xStatement->executeUpdate(_rStatement);
-                    addOutputText(OUString(OUString::number(resultCount) + " rows inserted\n"));
+                    addOutputText(OUStringConcatenation(OUString::number(resultCount) + " rows inserted\n"));
                 }
                 else if (upperStatement.startsWith("DELETE"))
                 {
                     sal_Int32 resultCount = xStatement->executeUpdate(_rStatement);
-                    addOutputText(OUString(OUString::number(resultCount) + " rows deleted\n"));
+                    addOutputText(OUStringConcatenation(OUString::number(resultCount) + " rows deleted\n"));
                 }
                 else if (upperStatement.startsWith("CREATE"))
                 {
@@ -257,7 +257,7 @@ namespace dbaui
                 else
                 {
                     sal_Int32 resultCount = xStatement->executeUpdate(_rStatement);
-                    addOutputText(OUString(OUString::number(resultCount) + " rows updated\n"));
+                    addOutputText(OUStringConcatenation(OUString::number(resultCount) + " rows updated\n"));
                 }
             }
             // successful

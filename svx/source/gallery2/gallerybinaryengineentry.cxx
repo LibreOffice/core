@@ -60,7 +60,7 @@ void GalleryBinaryEngineEntry::CreateUniqueURL(const INetURLObject& rBaseURL, IN
     { // create new URLs
         nIdx++;
         aURL = aBaseNoCase;
-        aURL.setName(OUString(aURL.getName() + OUString::number(nIdx)));
+        aURL.setName(OUStringConcatenation(aURL.getName() + OUString::number(nIdx)));
     }
 }
 
