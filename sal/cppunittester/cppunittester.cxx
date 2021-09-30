@@ -550,12 +550,12 @@ static void printStack( CONTEXT* ctx )
         //try to get line
         if (SymGetLineFromAddr64(process, stack.AddrPC.Offset, &disp, line.get()))
         {
-            printf("\tat %s in %s: line: %lu: address: 0x%0X\n", pSymbol->Name, line->FileName, line->LineNumber, pSymbol->Address);
+            printf("\tat %s in %s: line: %lu: address: 0x%0I64X\n", pSymbol->Name, line->FileName, line->LineNumber, pSymbol->Address);
         }
         else
         {
             //failed to get line
-            printf("\tat %s, address 0x%0X.\n", pSymbol->Name, pSymbol->Address);
+            printf("\tat %s, address 0x%0I64X.\n", pSymbol->Name, pSymbol->Address);
             hModule = NULL;
             lstrcpyA(module,"");
             GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
@@ -573,7 +573,7 @@ static void printStack( CONTEXT* ctx )
 static LONG WINAPI ExpFilter(EXCEPTION_POINTERS* ex)
 {
     // we only want this active on the Jenkins tinderboxes
-    printf("*** Exception 0x%x occurred ***\n\n",ex->ExceptionRecord->ExceptionCode);
+    printf("*** Exception 0x%lx occurred ***\n\n",ex->ExceptionRecord->ExceptionCode);
     printStack(ex->ContextRecord);
     return EXCEPTION_EXECUTE_HANDLER;
 }
