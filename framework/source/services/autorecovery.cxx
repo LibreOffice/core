@@ -1966,17 +1966,6 @@ void AutoRecovery::implts_collectActiveViewNames( AutoRecovery::TDocumentInfo& i
                 aViewNames.push_back( sViewName );
         }
     }
-    else
-    {
-        const Reference< XController2 > xController( xModel->getCurrentController(), UNO_QUERY );
-        OUString sViewName;
-        if ( xController.is() )
-            sViewName = xController->getViewControllerName();
-        OSL_ENSURE( !sViewName.isEmpty(), "AutoRecovery::implts_collectActiveViewNames: (no XController2 ->) no view name -> no recovery of this view!" );
-
-        if ( !sViewName.isEmpty() )
-            aViewNames.push_back( sViewName );
-    }
 
     i_rInfo.ViewNames.realloc( aViewNames.size() );
     ::std::copy( aViewNames.begin(), aViewNames.end(), i_rInfo.ViewNames.getArray() );
