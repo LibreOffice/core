@@ -76,6 +76,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	tiledrendering \
     mtfdemo \
     visualbackendtest \
+    benchmark \
 	$(if $(and $(ENABLE_GTK3), $(filter LINUX %BSD SOLARIS,$(OS))), gtktiledviewer) \
 ))
 
