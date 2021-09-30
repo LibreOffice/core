@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6c9a148_d47a8bea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-09-30T12:31:59Z",
+      "side": 1,
+      "message": "Good find, thx!",
+      "revId": "90b2251b5853a973c25b4db44d3893d3cc084bf7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "daeadde5_6d3689c8",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-09-30T12:31:59Z",
+      "side": 1,
+      "message": "maybe just put this in the else block?",
+      "range": {
+        "startLine": 983,
+        "startChar": 16,
+        "endLine": 983,
+        "endChar": 27
+      },
+      "revId": "90b2251b5853a973c25b4db44d3893d3cc084bf7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
