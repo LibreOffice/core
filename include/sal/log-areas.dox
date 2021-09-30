@@ -21,6 +21,7 @@ certain functionality.
 @section SAL
 
 @li @c sal.bootstrap - SAL bootstrap
+@li @c sal.cppunittester
 @li @c sal.debug - SAL debugging functionality
 @li @c sal.file - file system operations
 @li @c sal.fileio - file I/O

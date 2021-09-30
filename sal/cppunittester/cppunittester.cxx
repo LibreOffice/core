@@ -582,7 +582,7 @@ static void AbortSignalHandler(int signal)
 {
     if (signal == SIGABRT) {
         std::unique_ptr<sal::BacktraceState> bs = sal::backtrace_get(50);
-        SAL_WARN("sal", "CAUGHT SIGABRT:\n" << sal::backtrace_to_string(bs.get()));
+        SAL_WARN("sal.cppunittester", "CAUGHT SIGABRT:\n" << sal::backtrace_to_string(bs.get()));
     }
 }
 
