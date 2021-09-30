@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3975058a_562b59e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003349
+      },
+      "writtenOn": "2021-09-30T11:36:53Z",
+      "side": 1,
+      "message": "Updated patchset now ready for review.",
+      "revId": "4dc883e9c538543b45a5f22ba1d7dfd95ca70dc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
