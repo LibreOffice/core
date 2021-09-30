@@ -485,7 +485,7 @@ static bool main2()
 #if defined(_WIN32) && defined(_DEBUG)
 
 //Prints stack trace based on exception context record
-void printStack( CONTEXT* ctx )
+static void printStack( CONTEXT* ctx )
 {
     constexpr int MaxNameLen = 256;
     bool    result;
@@ -570,7 +570,7 @@ void printStack( CONTEXT* ctx )
 }
 
 // The exception filter function:
-LONG WINAPI ExpFilter(EXCEPTION_POINTERS* ex)
+static LONG WINAPI ExpFilter(EXCEPTION_POINTERS* ex)
 {
     // we only want this active on the Jenkins tinderboxes
     printf("*** Exception 0x%x occurred ***\n\n",ex->ExceptionRecord->ExceptionCode);
@@ -578,7 +578,7 @@ LONG WINAPI ExpFilter(EXCEPTION_POINTERS* ex)
     return EXCEPTION_EXECUTE_HANDLER;
 }
 
-void AbortSignalHandler(int signal)
+static void AbortSignalHandler(int signal)
 {
     if (signal == SIGABRT) {
         std::unique_ptr<sal::BacktraceState> bs = sal::backtrace_get(50);
