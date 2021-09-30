@@ -975,17 +975,22 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
                     aParam.bCaseSens = false;
                     aParam.bDuplicate = true;
                     aParam.bInplace = true;
+
+                    pEntry = nullptr;
                 }
 
                 // Get selected color from set
-                std::set<Color>::iterator it = aColors.begin();
-                std::advance(it, nSelected - 1);
-                Color selectedColor = *it;
+                if (pEntry)
+                {
+                    std::set<Color>::iterator it = aColors.begin();
+                    std::advance(it, nSelected - 1);
+                    Color selectedColor = *it;
 
-                if (eMode == AutoFilterMode::TextColor)
-                    pEntry->SetQueryByTextColor(selectedColor);
-                else
-                    pEntry->SetQueryByBackgroundColor(selectedColor);
+                    if (eMode == AutoFilterMode::TextColor)
+                        pEntry->SetQueryByTextColor(selectedColor);
+                    else
+                        pEntry->SetQueryByBackgroundColor(selectedColor);
+                }
             }
 
             break;
