@@ -77,7 +77,7 @@ COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE CColumnInfo::QueryInterface(REFII
 
     if (IID_IUnknown == riid || IID_IColumnProvider == riid)
     {
-        IUnknown* pUnk = static_cast<IColumnProvider*>(this);
+        IUnknown* pUnk = this;
         pUnk->AddRef();
         *ppvObject = pUnk;
         return S_OK;

@@ -99,7 +99,7 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
         pUnk = static_cast<IQueryInfo*>(new CInfoTip());
 
     else if (CLSID_COLUMN_HANDLER == m_Clsid)
-        pUnk = static_cast<IColumnProvider*>(new CColumnInfo());
+        pUnk = new CColumnInfo();
 
     else if (CLSID_THUMBVIEWER_HANDLER == m_Clsid)
         pUnk = static_cast<IExtractImage*>(new CThumbviewer());
