@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e6df65f_564030d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-30T12:15:13Z",
+      "side": 1,
+      "message": "(That might be acceptable to expand title case selection on the first word. I noticed at least one reference to that in the bug report comment 57. But it does slightly fly in the face of the rest of the commit, so at least worth noting that exception in the commit message.)",
+      "revId": "c37aa811308234924a31c2fccfe0141e9b45c707",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "59ad538e_d7c24a5d",
