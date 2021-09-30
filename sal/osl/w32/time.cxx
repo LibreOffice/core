@@ -35,7 +35,7 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* pTimeVal)
 
     OSL_ASSERT(pTimeVal != nullptr);
 
-    static GetSystemTimePreciseAsFileTime_PROC pGetSystemTimePreciseAsFileTime = [&]()
+    static GetSystemTimePreciseAsFileTime_PROC pGetSystemTimePreciseAsFileTime = []()
     {
         HMODULE hModule = GetModuleHandleW( L"Kernel32.dll" );
         return reinterpret_cast<GetSystemTimePreciseAsFileTime_PROC>(
