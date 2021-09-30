@@ -1365,6 +1365,9 @@ void PushButton::Draw( OutputDevice* pDev, const Point& rPos,
     pDev->Push();
     pDev->SetMapMode();
     pDev->SetFont( aFont );
+
+    std::optional<StyleSettings> oOrigDevStyleSettings;
+
     if ( nFlags & SystemTextColorFlags::Mono )
     {
         pDev->SetTextColor( COL_BLACK );
@@ -1372,10 +1375,10 @@ void PushButton::Draw( OutputDevice* pDev, const Point& rPos,
     else
     {
         pDev->SetTextColor( GetTextColor() );
-
         // DecoView uses the FaceColor...
         AllSettings aSettings = pDev->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
+        oOrigDevStyleSettings = aStyleSettings;
         if ( IsControlBackground() )
             aStyleSettings.SetFaceColor( GetControlBackground() );
         else
@@ -1394,6 +1397,16 @@ void PushButton::Draw( OutputDevice* pDev, const Point& rPos,
     aRect = aDecoView.DrawButton( aRect, nButtonStyle );
 
     ImplDrawPushButtonContent( pDev, nFlags, aRect, true, nButtonStyle );
+
+    // restore original settings (which are not affected by Push/Pop) after
+    // finished drawing
+    if (oOrigDevStyleSettings)
+    {
+        AllSettings aSettings = pDev->GetSettings();
+        aSettings.SetStyleSettings(*oOrigDevStyleSettings);
+        pDev->OutputDevice::SetSettings( aSettings );
+    }
+
     pDev->Pop();
 }
 
