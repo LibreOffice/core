@@ -16,6 +16,23 @@
       "message": "I suppose that you toggled WIP to initiate a build?\nIt was unnecessary: the feature of gerrit is to not start builds for message-only changes. In that case, if you have a +1 for the previous change that you only edited message of, just add +1 +2 yourself, and push :) - you may also put a \"moving +1 from Jenkins for change set X\"...",
       "revId": "badafc83fc4a0aeb7c2419bf03f1da3c6629371b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1774f612_ab7ffb2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-30T07:26:47Z",
+      "side": 1,
+      "message": "Thank you!",
+      "revId": "badafc83fc4a0aeb7c2419bf03f1da3c6629371b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
