@@ -16,6 +16,23 @@
       "message": "Redhat thought the previous attempt at this was regressive, and I have to agree with them.",
       "revId": "3b93d81884d63579f850ed21d96baabe297e7e92",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "674fa4d7_8f18fb34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003349
+      },
+      "writtenOn": "2021-09-30T07:50:20Z",
+      "side": 1,
+      "message": "Please hold off on review. I have an update (addition) coming.",
+      "revId": "3b93d81884d63579f850ed21d96baabe297e7e92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
