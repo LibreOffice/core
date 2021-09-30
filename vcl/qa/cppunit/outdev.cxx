@@ -78,6 +78,7 @@ public:
     void testDrawEllipse();
     void testDrawPie();
     void testDrawChord();
+    void testDrawCheckered();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
     CPPUNIT_TEST(testVirtualDevice);
@@ -125,6 +126,7 @@ public:
     CPPUNIT_TEST(testDrawEllipse);
     CPPUNIT_TEST(testDrawPie);
     CPPUNIT_TEST(testDrawChord);
+    CPPUNIT_TEST(testDrawCheckered);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1147,7 +1149,7 @@ void VclOutdevTest::testDrawLine()
         aLineInfo.SetDistance(8);
         aLineInfo.SetLineJoin(basegfx::B2DLineJoin::Bevel);
 
-        pVDev->SetOutputSizePixel(Size(1, 100));
+        pVDev->SetOutputSizePixel(Size(100, 100));
         pVDev->DrawLine(Point(0, 0), Point(0, 50), aLineInfo);
 
         MetaAction* pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT);
@@ -1179,7 +1181,7 @@ void VclOutdevTest::testDrawRect()
         GDIMetaFile aMtf;
         aMtf.Record(pVDev.get());
 
-        pVDev->SetOutputSizePixel(Size(1, 100));
+        pVDev->SetOutputSizePixel(Size(100, 100));
         pVDev->DrawRect(tools::Rectangle(Point(0, 0), Size(50, 60)));
 
         MetaAction* pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT);
@@ -1194,7 +1196,7 @@ void VclOutdevTest::testDrawRect()
         GDIMetaFile aMtf;
         aMtf.Record(pVDev.get());
 
-        pVDev->SetOutputSizePixel(Size(1, 100));
+        pVDev->SetOutputSizePixel(Size(100, 100));
         pVDev->DrawRect(tools::Rectangle(Point(0, 0), Size(50, 60)), 5, 10);
 
         MetaAction* pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT);
@@ -1216,7 +1218,7 @@ void VclOutdevTest::testDrawEllipse()
     GDIMetaFile aMtf;
     aMtf.Record(pVDev.get());
 
-    pVDev->SetOutputSizePixel(Size(1, 100));
+    pVDev->SetOutputSizePixel(Size(100, 100));
     pVDev->DrawEllipse(tools::Rectangle(Point(0, 0), Size(50, 60)));
 
     MetaAction* pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT);
@@ -1235,7 +1237,7 @@ void VclOutdevTest::testDrawPie()
 
     tools::Rectangle aRect(Point(0, 0), Size(50, 60));
 
-    pVDev->SetOutputSizePixel(Size(1, 100));
+    pVDev->SetOutputSizePixel(Size(100, 100));
     pVDev->DrawPie(aRect, aRect.TopRight(), aRect.TopCenter());
 
     MetaAction* pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT);
@@ -1255,7 +1257,7 @@ void VclOutdevTest::testDrawChord()
     aMtf.Record(pVDev.get());
 
     tools::Rectangle aRect(Point(21, 22), Size(4, 4));
-    pVDev->SetOutputSizePixel(Size(1, 100));
+    pVDev->SetOutputSizePixel(Size(100, 100));
     pVDev->DrawChord(aRect, Point(30, 31), Point(32, 33));
 
     MetaAction* pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT);
@@ -1276,7 +1278,7 @@ void VclOutdevTest::testDrawArc()
 
     tools::Rectangle aRect(Point(1, 2), Size(4, 4));
 
-    pVDev->SetOutputSizePixel(Size(1, 100));
+    pVDev->SetOutputSizePixel(Size(100, 100));
     pVDev->DrawArc(aRect, Point(10, 11), Point(12, 13));
 
     MetaAction* pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT);
@@ -1286,6 +1288,444 @@ void VclOutdevTest::testDrawArc()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Arc start point wrong", Point(10, 11),
                                  pArcAction->GetStartPoint());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Arc end point wrong", Point(12, 13), pArcAction->GetEndPoint());
+}
+
+void VclOutdevTest::testDrawCheckered()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    pVDev->SetOutputSizePixel(Size(100, 100));
+    pVDev->DrawCheckered(Point(0, 0), Size(100, 100), 20, COL_BLACK, COL_WHITE);
+
+    size_t nIndex = INITIAL_SETUP_ACTION_COUNT;
+
+    MetaAction* pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not push action", MetaActionType::PUSH, pAction->GetType());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a line color", MetaActionType::LINECOLOR, pAction->GetType());
+
+    // Row 1
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action for row 1, rect 1",
+                                 MetaActionType::FILLCOLOR, pAction->GetType());
+    MetaFillColorAction* pFillColorAction = dynamic_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill color wrong for row 1, rect 1", COL_WHITE,
+                                 pFillColorAction->GetColor());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not first rect, row 1", MetaActionType::RECT, pAction->GetType());
+    MetaRectAction* pRectAction = dynamic_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect 1, row 1 not correct",
+                                 tools::Rectangle(Point(0, 0), Size(21, 21)),
+                                 pRectAction->GetRect());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action for row 1, rect 2",
+                                 MetaActionType::FILLCOLOR, pAction->GetType());
+    pFillColorAction = dynamic_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill color wrong for row 1, rect 1", COL_BLACK,
+                                 pFillColorAction->GetColor());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not second rect, row 1", MetaActionType::RECT,
+                                 pAction->GetType());
+    pRectAction = dynamic_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect 2, row 1 not correct",
+                                 tools::Rectangle(Point(0, 20), Size(21, 21)),
+                                 pRectAction->GetRect());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action for row 1, rect 3",
+                                 MetaActionType::FILLCOLOR, pAction->GetType());
+    pFillColorAction = dynamic_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill color wrong for row 1, rect 1", COL_WHITE,
+                                 pFillColorAction->GetColor());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not third rect, row 1", MetaActionType::RECT, pAction->GetType());
+    pRectAction = dynamic_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect 3, row 1 not correct",
+                                 tools::Rectangle(Point(0, 40), Size(21, 21)),
+                                 pRectAction->GetRect());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action for row 1, rect 4",
+                                 MetaActionType::FILLCOLOR, pAction->GetType());
+    pFillColorAction = dynamic_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill color wrong for row 1, rect 4", COL_BLACK,
+                                 pFillColorAction->GetColor());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not fourth rect, row 1", MetaActionType::RECT,
+                                 pAction->GetType());
+    pRectAction = dynamic_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect 4, row 1 not correct",
+                                 tools::Rectangle(Point(0, 60), Size(21, 21)),
+                                 pRectAction->GetRect());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action for row 1, rect 5",
+                                 MetaActionType::FILLCOLOR, pAction->GetType());
+    pFillColorAction = dynamic_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill color wrong for row 1, rect 5", COL_WHITE,
+                                 pFillColorAction->GetColor());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not fifth rect, row 1", MetaActionType::RECT, pAction->GetType());
+    pRectAction = dynamic_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect 5, row 1 not correct",
+                                 tools::Rectangle(Point(0, 80), Size(21, 21)),
+                                 pRectAction->GetRect());
+
+    // Row 2
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action for row 2, rect 1",
+                                 MetaActionType::FILLCOLOR, pAction->GetType());
+    pFillColorAction = dynamic_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill color wrong for row 2, rect 1", COL_BLACK,
+                                 pFillColorAction->GetColor());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not row 2, first rect", MetaActionType::RECT, pAction->GetType());
+    pRectAction = dynamic_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect 1, row 2 not correct",
+                                 tools::Rectangle(Point(20, 0), Size(21, 21)),
+                                 pRectAction->GetRect());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action for row 2, rect 2",
+                                 MetaActionType::FILLCOLOR, pAction->GetType());
+    pFillColorAction = dynamic_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill color wrong for row 2, rect 1", COL_WHITE,
+                                 pFillColorAction->GetColor());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not row 2, second rect", MetaActionType::RECT,
+                                 pAction->GetType());
+    pRectAction = dynamic_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect 2, row 2 not correct",
+                                 tools::Rectangle(Point(20, 20), Size(21, 21)),
+                                 pRectAction->GetRect());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action for row 2, rect 3",
+                                 MetaActionType::FILLCOLOR, pAction->GetType());
+    pFillColorAction = dynamic_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill color wrong for row 2, rect 1", COL_BLACK,
+                                 pFillColorAction->GetColor());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not row 2, third rect", MetaActionType::RECT, pAction->GetType());
+    pRectAction = dynamic_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect 3, row 2 not correct",
+                                 tools::Rectangle(Point(20, 40), Size(21, 21)),
+                                 pRectAction->GetRect());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action for row 2, rect 4",
+                                 MetaActionType::FILLCOLOR, pAction->GetType());
+    pFillColorAction = dynamic_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill color wrong for row 2, rect 4", COL_WHITE,
+                                 pFillColorAction->GetColor());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not row 2, fourth rect", MetaActionType::RECT,
+                                 pAction->GetType());
+    pRectAction = dynamic_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect 4, row 2 not correct",
+                                 tools::Rectangle(Point(20, 60), Size(21, 21)),
+                                 pRectAction->GetRect());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action for row 2, rect 5",
+                                 MetaActionType::FILLCOLOR, pAction->GetType());
+    pFillColorAction = dynamic_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill color wrong for row 2, rect 5", COL_BLACK,
+                                 pFillColorAction->GetColor());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not row 2, fifth rect", MetaActionType::RECT, pAction->GetType());
+    pRectAction = dynamic_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect 5, row 2 not correct",
+                                 tools::Rectangle(Point(20, 80), Size(21, 21)),
+                                 pRectAction->GetRect());
+
+    // Row 3
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action for row 3, rect 1",
+                                 MetaActionType::FILLCOLOR, pAction->GetType());
+    pFillColorAction = dynamic_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill color wrong for row 3, rect 1", COL_WHITE,
+                                 pFillColorAction->GetColor());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not row 3, first rect", MetaActionType::RECT, pAction->GetType());
+    pRectAction = dynamic_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect 1, row 3 not correct",
+                                 tools::Rectangle(Point(40, 0), Size(21, 21)),
+                                 pRectAction->GetRect());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action for row 3, rect 2",
+                                 MetaActionType::FILLCOLOR, pAction->GetType());
+    pFillColorAction = dynamic_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill color wrong for row 3, rect 1", COL_BLACK,
+                                 pFillColorAction->GetColor());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not row 3, second rect", MetaActionType::RECT,
+                                 pAction->GetType());
+    pRectAction = dynamic_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect 2, row 3 not correct",
+                                 tools::Rectangle(Point(40, 20), Size(21, 21)),
+                                 pRectAction->GetRect());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action for row 3, rect 3",
+                                 MetaActionType::FILLCOLOR, pAction->GetType());
+    pFillColorAction = dynamic_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill color wrong for row 3, rect 1", COL_WHITE,
+                                 pFillColorAction->GetColor());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not row 3, third rect", MetaActionType::RECT, pAction->GetType());
+    pRectAction = dynamic_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect 3, row 3 not correct",
+                                 tools::Rectangle(Point(40, 40), Size(21, 21)),
+                                 pRectAction->GetRect());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action for row 3, rect 4",
+                                 MetaActionType::FILLCOLOR, pAction->GetType());
+    pFillColorAction = dynamic_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill color wrong for row 3, rect 4", COL_BLACK,
+                                 pFillColorAction->GetColor());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not row 3, fourth rect", MetaActionType::RECT,
+                                 pAction->GetType());
+    pRectAction = dynamic_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect 4, row 3 not correct",
+                                 tools::Rectangle(Point(40, 60), Size(21, 21)),
+                                 pRectAction->GetRect());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action for row 3, rect 5",
+                                 MetaActionType::FILLCOLOR, pAction->GetType());
+    pFillColorAction = dynamic_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill color wrong for row 3, rect 5", COL_WHITE,
+                                 pFillColorAction->GetColor());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not row 3, fifth rect", MetaActionType::RECT, pAction->GetType());
+    pRectAction = dynamic_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect 5, row 3 not correct",
+                                 tools::Rectangle(Point(40, 80), Size(21, 21)),
+                                 pRectAction->GetRect());
+
+    // Row 4
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action for row 4, rect 1",
+                                 MetaActionType::FILLCOLOR, pAction->GetType());
+    pFillColorAction = dynamic_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill color wrong for row 4, rect 1", COL_BLACK,
+                                 pFillColorAction->GetColor());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not row 4, first rect", MetaActionType::RECT, pAction->GetType());
+    pRectAction = dynamic_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect 1, row 4 not correct",
+                                 tools::Rectangle(Point(60, 0), Size(21, 21)),
+                                 pRectAction->GetRect());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action for row 4, rect 2",
+                                 MetaActionType::FILLCOLOR, pAction->GetType());
+    pFillColorAction = dynamic_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill color wrong for row 4, rect 1", COL_WHITE,
+                                 pFillColorAction->GetColor());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not row 4, second rect", MetaActionType::RECT,
+                                 pAction->GetType());
+    pRectAction = dynamic_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect 2, row 2 not correct",
+                                 tools::Rectangle(Point(60, 20), Size(21, 21)),
+                                 pRectAction->GetRect());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action for row 4, rect 3",
+                                 MetaActionType::FILLCOLOR, pAction->GetType());
+    pFillColorAction = dynamic_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill color wrong for row 4, rect 1", COL_BLACK,
+                                 pFillColorAction->GetColor());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not row 4, third rect", MetaActionType::RECT, pAction->GetType());
+    pRectAction = dynamic_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect 3, row 4 not correct",
+                                 tools::Rectangle(Point(60, 40), Size(21, 21)),
+                                 pRectAction->GetRect());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action for row 4, rect 4",
+                                 MetaActionType::FILLCOLOR, pAction->GetType());
+    pFillColorAction = dynamic_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill color wrong for row 4, rect 4", COL_WHITE,
+                                 pFillColorAction->GetColor());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not row 4, fourth rect", MetaActionType::RECT,
+                                 pAction->GetType());
+    pRectAction = dynamic_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect 4, row 4 not correct",
+                                 tools::Rectangle(Point(60, 60), Size(21, 21)),
+                                 pRectAction->GetRect());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action for row 4, rect 5",
+                                 MetaActionType::FILLCOLOR, pAction->GetType());
+    pFillColorAction = dynamic_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill color wrong for row 4, rect 5", COL_BLACK,
+                                 pFillColorAction->GetColor());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not row 4, fifth rect", MetaActionType::RECT, pAction->GetType());
+    pRectAction = dynamic_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect 5, row 4 not correct",
+                                 tools::Rectangle(Point(60, 80), Size(21, 21)),
+                                 pRectAction->GetRect());
+
+    // Row 5
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action for row 5, rect 1",
+                                 MetaActionType::FILLCOLOR, pAction->GetType());
+    pFillColorAction = dynamic_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill color wrong for row 5, rect 1", COL_WHITE,
+                                 pFillColorAction->GetColor());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not row 5, first rect", MetaActionType::RECT, pAction->GetType());
+    pRectAction = dynamic_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect 1, row 5 not correct",
+                                 tools::Rectangle(Point(80, 0), Size(21, 21)),
+                                 pRectAction->GetRect());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action for row 5, rect 2",
+                                 MetaActionType::FILLCOLOR, pAction->GetType());
+    pFillColorAction = dynamic_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill color wrong for row 5, rect 1", COL_BLACK,
+                                 pFillColorAction->GetColor());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not row 2, second rect", MetaActionType::RECT,
+                                 pAction->GetType());
+    pRectAction = dynamic_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect 2, row 2 not correct",
+                                 tools::Rectangle(Point(80, 20), Size(21, 21)),
+                                 pRectAction->GetRect());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action for row 2, rect 3",
+                                 MetaActionType::FILLCOLOR, pAction->GetType());
+    pFillColorAction = dynamic_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill color wrong for row 2, rect 1", COL_WHITE,
+                                 pFillColorAction->GetColor());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not row 2, third rect", MetaActionType::RECT, pAction->GetType());
+    pRectAction = dynamic_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect 3, row 2 not correct",
+                                 tools::Rectangle(Point(80, 40), Size(21, 21)),
+                                 pRectAction->GetRect());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action for row 2, rect 4",
+                                 MetaActionType::FILLCOLOR, pAction->GetType());
+    pFillColorAction = dynamic_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill color wrong for row 2, rect 4", COL_BLACK,
+                                 pFillColorAction->GetColor());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not row 2, fourth rect", MetaActionType::RECT,
+                                 pAction->GetType());
+    pRectAction = dynamic_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect 4, row 2 not correct",
+                                 tools::Rectangle(Point(80, 60), Size(21, 21)),
+                                 pRectAction->GetRect());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action for row 2, rect 5",
+                                 MetaActionType::FILLCOLOR, pAction->GetType());
+    pFillColorAction = dynamic_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill color wrong for row 2, rect 5", COL_WHITE,
+                                 pFillColorAction->GetColor());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not row 2, fifth rect", MetaActionType::RECT, pAction->GetType());
+    pRectAction = dynamic_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect 5, row 2 not correct",
+                                 tools::Rectangle(Point(80, 80), Size(21, 21)),
+                                 pRectAction->GetRect());
+
+    nIndex++;
+    pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not pop", MetaActionType::POP, pAction->GetType());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclOutdevTest);
