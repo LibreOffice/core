@@ -1,0 +1,59 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ */
+
+#include <test/Benchmarks.hxx>
+
+const Color Benchmark::constBackgroundColor(COL_LIGHTGRAY);
+const Color Benchmark::constLineColor(COL_LIGHTBLUE);
+const Color Benchmark::constFillColor(COL_BLUE);
+
+void Benchmark::initialSetup(tools::Long nWidth, tools::Long nHeight, Color aColor)
+{
+    mpVirtualDevice = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    maVDRectangle = tools::Rectangle(Point(), Size(nWidth, nHeight));
+    mpVirtualDevice->SetOutputSizePixel(maVDRectangle.GetSize());
+    mpVirtualDevice->SetAntialiasing(AntialiasingFlags::NONE);
+    mpVirtualDevice->SetBackground(Wallpaper(aColor));
+    mpVirtualDevice->Erase();
+}
+
+sal_Int64 Benchmark::getElapsedTime()
+{
+    return std::chrono::duration_cast<std::chrono::milliseconds>(m_xEnd - m_xStart).count();
+}
+
+Bitmap Benchmark::setupMultiplePolygonsWithPolyPolygon()
+{
+    initialSetup(4096, 4096, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    tools::PolyPolygon aPolyPolygon(4);
+
+    for (int nOffset = 1; nOffset <= 4096; nOffset += 4)
+    {
+        tools::Polygon aPolygon1(4);
+        aPolygon1.SetPoint(Point(maVDRectangle.Left() + nOffset, maVDRectangle.Top() + nOffset), 0);
+        aPolygon1.SetPoint(Point(maVDRectangle.Right() - nOffset, maVDRectangle.Top() + nOffset),
+                           1);
+        aPolygon1.SetPoint(Point(maVDRectangle.Right() - nOffset, maVDRectangle.Bottom() - nOffset),
+                           2);
+        aPolygon1.SetPoint(Point(maVDRectangle.Left() + nOffset, maVDRectangle.Bottom() - nOffset),
+                           3);
+        aPolyPolygon.Insert(aPolygon1);
+    }
+
+    m_xStart = std::chrono::steady_clock::now();
+    mpVirtualDevice->DrawPolyPolygon(aPolyPolygon);
+    Bitmap aBitmap = mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+    m_xEnd = std::chrono::steady_clock::now();
+    return aBitmap;
+}

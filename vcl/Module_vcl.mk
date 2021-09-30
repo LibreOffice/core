@@ -43,9 +43,8 @@ $(eval $(call gb_Module_add_targets,vcl,\
                 Executable_vcldemo \
                 Executable_icontest \
                 Executable_visualbackendtest \
-                Executable_mtfdemo \
-            ) \
-    )) \
+                Executable_benchmarktests \
+                Executable_mtfdemo ))) \
 ))
 
 ifeq ($(CROSS_COMPILING)$(DISABLE_DYNLOADING),)
