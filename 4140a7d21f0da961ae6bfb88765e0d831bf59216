@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fed6ef37_dd4ca6a5",
+        "filename": "vcl/inc/textrender.hxx",
+        "patchSetId": 50
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-30T13:49:50Z",
+      "side": 1,
+      "message": "Is this include needed, given that there\u0027s a forward declaration below?",
+      "revId": "4140a7d21f0da961ae6bfb88765e0d831bf59216",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "093c07bd_045737fa",
+        "filename": "vcl/inc/textrender.hxx",
+        "patchSetId": 50
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-30T13:49:50Z",
+      "side": 1,
+      "message": "And I don\u0027t see usages of FontSelectPattern here at all?",
+      "revId": "4140a7d21f0da961ae6bfb88765e0d831bf59216",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4db0503_28266cae",
+        "filename": "vcl/inc/unx/freetype_glyphcache.hxx",
+        "patchSetId": 50
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-30T13:49:50Z",
+      "side": 1,
+      "message": "This is whitespace-only change, looks this file got here by mistake.",
+      "revId": "4140a7d21f0da961ae6bfb88765e0d831bf59216",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
