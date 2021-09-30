@@ -3054,8 +3054,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
     xFormatter->FillKeywordTableForExcel( *mpKeywordTable );
 
     SCTAB nTables = rRoot.GetDoc().GetTableCount();
-    sal_Int32 nColorIndex = 0;
-    sal_Int32 nCondFormattingIndex = 0;
+    sal_Int32 nDxfId = 0;
     for(SCTAB nTab = 0; nTab < nTables; ++nTab)
     {
         // Color filters
@@ -3074,21 +3073,21 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                 // Does not matter it is text color or cell background color
                 for (auto& rColor : aFilterEntries.getBackgroundColors())
                 {
-                    if (!maColorToDxfId.emplace(rColor, nColorIndex).second)
+                    if (!maColorToDxfId.emplace(rColor, nDxfId).second)
                         continue;
 
                     std::unique_ptr<XclExpCellArea> pExpCellArea(new XclExpCellArea(rColor, 0));
                     maDxf.push_back(std::make_unique<XclExpDxf>(rRoot, std::move(pExpCellArea)));
-                    nColorIndex++;
+                    nDxfId++;
                 }
                 for (auto& rColor : aFilterEntries.getTextColors())
                 {
-                    if (!maColorToDxfId.emplace(rColor, nColorIndex).second)
+                    if (!maColorToDxfId.emplace(rColor, nDxfId).second)
                         continue;
 
                     std::unique_ptr<XclExpCellArea> pExpCellArea(new XclExpCellArea(rColor, 0));
                     maDxf.push_back(std::make_unique<XclExpDxf>(rRoot, std::move(pExpCellArea)));
-                    nColorIndex++;
+                    nDxfId++;
                 }
             }
         }
@@ -3122,7 +3121,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                         aStyleName = pEntry->GetStyleName();
                     }
 
-                    if (maStyleNameToDxfId.emplace(aStyleName, nCondFormattingIndex).second)
+                    if (maStyleNameToDxfId.emplace(aStyleName, nDxfId).second)
                     {
                         SfxStyleSheetBase* pStyle = rRoot.GetDoc().GetStyleSheetPool()->Find(aStyleName, SfxStyleFamily::Para);
                         if(!pStyle)
@@ -3167,7 +3166,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
 
                         maDxf.push_back(std::make_unique<XclExpDxf>( rRoot, std::move(pAlign), std::move(pBorder),
                                 std::move(pFont), std::move(pNumFormat), std::move(pCellProt), std::move(pColor) ));
-                        ++nCondFormattingIndex;
+                        ++nDxfId;
                     }
 
                 }

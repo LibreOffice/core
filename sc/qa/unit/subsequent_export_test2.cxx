@@ -207,6 +207,7 @@ public:
     void testTdf143220XLSX();
     void testTdf142264ManyChartsToXLSX();
     void testTdf143929MultiColumnToODS();
+    void testTdf142578();
 
     CPPUNIT_TEST_SUITE(ScExportTest2);
 
@@ -314,6 +315,7 @@ public:
     CPPUNIT_TEST(testTdf143220XLSX);
     CPPUNIT_TEST(testTdf142264ManyChartsToXLSX);
     CPPUNIT_TEST(testTdf143929MultiColumnToODS);
+    CPPUNIT_TEST(testTdf142578);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2802,6 +2804,45 @@ void ScExportTest2::testTdf143929MultiColumnToODS()
         "/office:document-content/office:automatic-styles/style:style[@style:family='graphic']/"
         "style:graphic-properties/style:columns",
         "column-gap");
+}
+
+void ScExportTest2::testTdf142578()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf142578.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh);
+
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+    xmlDocUniquePtr pSheet
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pSheet);
+
+    // Get DxfId for color filter
+    sal_Int32 nDxfIdColorFilter
+        = getXPath(pSheet, "/x:worksheet/x:autoFilter/x:filterColumn/x:colorFilter", "dxfId")
+              .toInt32()
+          + 1;
+
+    // Get DxfId for conditional formatting
+    sal_Int32 nDxfIdCondFormat
+        = getXPath(pSheet, "/x:worksheet/x:conditionalFormatting/x:cfRule", "dxfId").toInt32() + 1;
+
+    // Ensure they are using different dxfs
+    CPPUNIT_ASSERT_MESSAGE("dxfID's should be different!", nDxfIdColorFilter != nDxfIdCondFormat);
+
+    // Check colors used by these dxfs
+    xmlDocUniquePtr pStyles = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/styles.xml");
+    CPPUNIT_ASSERT(pStyles);
+
+    OString sDxfColorFilterXPath("/x:styleSheet/x:dxfs/x:dxf[" + OString::number(nDxfIdColorFilter)
+                                 + "]/x:fill/x:patternFill/x:fgColor");
+    assertXPath(pStyles, sDxfColorFilterXPath, "rgb", "FF81D41A");
+
+    OString sDxfCondFormatXPath("/x:styleSheet/x:dxfs/x:dxf[" + OString::number(nDxfIdCondFormat)
+                                + "]/x:fill/x:patternFill/x:bgColor");
+    assertXPath(pStyles, sDxfCondFormatXPath, "rgb", "FFFFCCCC");
+
+    xDocSh->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest2);
