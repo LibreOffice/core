@@ -54,7 +54,7 @@ public:
     OutlinerParaObject* GetOutlinerParaObject();
     const OutlinerParaObject* GetOutlinerParaObject() const;
 
-    void CheckPortionInfo(SdrOutliner& rOutliner);
+    void CheckPortionInfo(const SdrOutliner& rOutliner);
     void ReformatText();
 
     // default uses GetObjectItemSet, but may be overridden to

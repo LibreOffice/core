@@ -4683,7 +4683,7 @@ bool PPTTextRulerInterpreter::GetBulletOfs( sal_uInt32 nLevel, sal_uInt16& nValu
     return true;
 }
 
-PPTTextRulerInterpreter& PPTTextRulerInterpreter::operator=( PPTTextRulerInterpreter& rRuler )
+PPTTextRulerInterpreter& PPTTextRulerInterpreter::operator=( const PPTTextRulerInterpreter& rRuler )
 {
     if ( this != &rRuler )
     {
@@ -7137,7 +7137,7 @@ const SfxItemSet* PPTTextObj::GetBackground() const
         return nullptr;
 }
 
-PPTTextObj& PPTTextObj::operator=( PPTTextObj& rTextObj )
+PPTTextObj& PPTTextObj::operator=( const PPTTextObj& rTextObj )
 {
     if ( this != &rTextObj )
     {

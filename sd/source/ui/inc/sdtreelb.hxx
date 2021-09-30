@@ -315,7 +315,7 @@ public:
     */
     void AddShapeToTransferable (
         SdTransferable& rTransferable,
-        SdrObject& rObject) const;
+        const SdrObject& rObject) const;
 
     /** return selected entries
           nDepth == 0 -> pages

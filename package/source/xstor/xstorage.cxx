@@ -376,7 +376,7 @@ void OStorage_Impl::SetReadOnlyWrap( OStorage& aStorage )
     m_aReadOnlyWrapVector.emplace_back( &aStorage );
 }
 
-void OStorage_Impl::RemoveReadOnlyWrap( OStorage& aStorage )
+void OStorage_Impl::RemoveReadOnlyWrap( const OStorage& aStorage )
 {
     for ( StorageHoldersType::iterator pStorageIter = m_aReadOnlyWrapVector.begin();
       pStorageIter != m_aReadOnlyWrapVector.end();)

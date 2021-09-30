@@ -199,7 +199,7 @@ bool FillRangeDescriptor(
     return true;
 }
 
-static OUString GetCellRangeName( SwFrameFormat &rTableFormat, SwUnoCursor &rTableCursor )
+static OUString GetCellRangeName( const SwFrameFormat &rTableFormat, SwUnoCursor &rTableCursor )
 {
     OUString aRes;
 

@@ -420,7 +420,7 @@ bool ParentIsFloatingWindow(const vcl::Window *pParent)
     return false;
 }
 
-void SfxChildWindow::SetFactory_Impl( SfxChildWinFactory *pF )
+void SfxChildWindow::SetFactory_Impl( const SfxChildWinFactory *pF )
 {
     pImpl->aFact = *pF;
 }

@@ -355,7 +355,7 @@ ItemType SbTreeListBox::ConvertType (EntryType eType)
     }
 }
 
-bool SbTreeListBox::IsValidEntry(weld::TreeIter& rEntry)
+bool SbTreeListBox::IsValidEntry(const weld::TreeIter& rEntry)
 {
     bool bIsValid = false;
 

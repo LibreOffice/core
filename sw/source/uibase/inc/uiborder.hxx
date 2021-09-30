@@ -30,7 +30,7 @@ public:
     // SW_BORDER_MODE_TABLE
     // SW_BORDER_MODE_FRAME
 
-    SwBorderDlg(weld::Window* pParent, SfxItemSet& rSet, SwBorderModes nType);
+    SwBorderDlg(weld::Window* pParent, const SfxItemSet& rSet, SwBorderModes nType);
     virtual ~SwBorderDlg() override;
 };
 

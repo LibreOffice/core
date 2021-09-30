@@ -134,7 +134,7 @@ public:
     SAL_DLLPRIVATE void CreateWorkWindow_Impl();
     SAL_DLLPRIVATE void GrabFocusOnComponent_Impl();
 
-    SAL_DLLPRIVATE void PrepareForDoc_Impl( SfxObjectShell& i_rDoc );
+    SAL_DLLPRIVATE void PrepareForDoc_Impl( const SfxObjectShell& i_rDoc );
     SAL_DLLPRIVATE void LockResize_Impl( bool bLock );
     SAL_DLLPRIVATE void SetMenuBarOn_Impl( bool bOn );
     SAL_DLLPRIVATE bool IsMenuBarOn_Impl() const;

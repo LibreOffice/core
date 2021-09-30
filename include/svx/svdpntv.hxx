@@ -210,7 +210,7 @@ protected:
     Color                           maGridColor;
 
     // Interface to SdrPaintWindow
-    void DeletePaintWindow(SdrPaintWindow& rOld);
+    void DeletePaintWindow(const SdrPaintWindow& rOld);
     void ConfigurationChanged( ::utl::ConfigurationBroadcaster*, ConfigurationHints ) override;
     static void InitOverlayManager(rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager);
 

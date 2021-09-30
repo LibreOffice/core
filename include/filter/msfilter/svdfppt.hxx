@@ -1022,7 +1022,7 @@ struct PPTTextRulerInterpreter
         bool        GetTextOfs( sal_uInt32 nLevel, sal_uInt16& nValue ) const;
         bool        GetBulletOfs( sal_uInt32 nLevel, sal_uInt16& nValue ) const;
 
-        PPTTextRulerInterpreter& operator=( PPTTextRulerInterpreter& rRuler );
+        PPTTextRulerInterpreter& operator=( const PPTTextRulerInterpreter& rRuler );
 };
 
 #define PPT_SPEC_NEWLINE            0x10000
@@ -1269,7 +1269,7 @@ public:
 
     const SfxItemSet*       GetBackground() const;
 
-    PPTTextObj&             operator=( PPTTextObj& rTextObj );
+    PPTTextObj&             operator=( const PPTTextObj& rTextObj );
 };
 
 class PPTConvertOCXControls final : public SvxMSConvertOCXControls

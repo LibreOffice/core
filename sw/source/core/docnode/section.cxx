@@ -1065,7 +1065,7 @@ static void lcl_BreakSectionLinksInSect( const SwSectionNode& rSectNd )
     }
 }
 
-static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
+static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 {
     SwDoc& rDoc = rSectNd.GetDoc();
     SwDocShell* pDShell = rDoc.GetDocShell();

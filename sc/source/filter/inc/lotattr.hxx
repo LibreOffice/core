@@ -121,7 +121,7 @@ class LotAttrTable
 public:
     LotAttrTable(LotusContext& rContext);
 
-    void SetAttr(LotusContext& rContext, const SCCOL nColFirst, const SCCOL nColLast, const SCROW nRow, const LotAttrWK3& );
+    void SetAttr(const LotusContext& rContext, const SCCOL nColFirst, const SCCOL nColLast, const SCROW nRow, const LotAttrWK3& );
 
     void Apply(LotusContext& rContext, const SCTAB nTabNum);
 

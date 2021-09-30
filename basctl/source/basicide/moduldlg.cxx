@@ -369,7 +369,7 @@ private:
         return DND_ACTION_NONE;
     }
 
-    void NotifyCopyingMoving(weld::TreeIter& rTarget, bool bMove)
+    void NotifyCopyingMoving(const weld::TreeIter& rTarget, bool bMove)
     {
         sal_uInt16 nDepth = m_rTreeView.get_iter_depth(rTarget);
         std::unique_ptr<weld::TreeIter> xNewParent(m_rTreeView.make_iterator(&rTarget));

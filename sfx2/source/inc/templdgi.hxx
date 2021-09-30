@@ -159,10 +159,10 @@ public:
     // Used in StyleList::SelectStyle, StyleList::Notify, IMPL_LINK(PopupFlatMenuHdl)
     // These functions are used when a style is edited, deleted, created etc..
     virtual void EnableEdit(bool b, StyleList* rStyleList);
-    void EnableDel(bool b, StyleList* rStyleList);
-    void EnableNew(bool b, StyleList* rStyleList);
-    void EnableHide(bool b, StyleList* rStyleList);
-    void EnableShow(bool b, StyleList* rStyleList);
+    void EnableDel(bool b, const StyleList* rStyleList);
+    void EnableNew(bool b, const StyleList* rStyleList);
+    void EnableHide(bool b, const StyleList* rStyleList);
+    void EnableShow(bool b, const StyleList* rStyleList);
 
     // Used in TreeDrag
     void EnableTreeDrag(bool b);

@@ -81,7 +81,7 @@ public:
     bool DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewObj,
                           bool bRecord, bool bApi, bool bAllowMove = false );
 
-    bool RemovePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi);
+    bool RemovePivotTable(const ScDPObject& rDPObj, bool bRecord, bool bApi);
     bool CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool bApi);
     bool UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi);
 

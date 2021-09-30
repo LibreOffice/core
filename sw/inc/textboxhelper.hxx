@@ -63,7 +63,7 @@ public:
     /// Destroy a TextBox for a shape. If the format has more textboxes
     /// like group shapes, it will destroy only that textbox what belongs
     /// to the given pObject shape.
-    static void destroy(SwFrameFormat* pShape, SdrObject* pObject);
+    static void destroy(const SwFrameFormat* pShape, const SdrObject* pObject);
     /// Get interface of a shape's TextBox, if there is any.
     static css::uno::Any queryInterface(const SwFrameFormat* pShape, const css::uno::Type& rType);
 
@@ -112,7 +112,7 @@ public:
 
     // Returns true on success. Synchronize z-order of the text frame of the given textbox
     // by setting it one level higher than the z-order of the shape of the textbox.
-    static bool DoTextBoxZOrderCorrection(SwFrameFormat* pShape, SdrObject* pObj);
+    static bool DoTextBoxZOrderCorrection(SwFrameFormat* pShape, const SdrObject* pObj);
 
     /**
      * If we have an associated TextFrame, then return that.
@@ -126,7 +126,7 @@ public:
      * @see isTextBox
      */
     static SwFrameFormat* getOtherTextBoxFormat(const SwFrameFormat* pFormat, sal_uInt16 nType,
-                                                SdrObject* pObject = nullptr);
+                                                const SdrObject* pObject = nullptr);
     /// If we have an associated TextFrame, then return that.
     static SwFrameFormat*
     getOtherTextBoxFormat(css::uno::Reference<css::drawing::XShape> const& xShape);
@@ -153,7 +153,7 @@ public:
      *                 the textbox what belongs to the pObject will only be inspected.
      */
     static bool isTextBox(const SwFrameFormat* pFormat, sal_uInt16 nType,
-                          SdrObject* pObject = nullptr);
+                          const SdrObject* pObject = nullptr);
 
     /// Returns true if the SdrObject has a SwTextFrame otherwise false
     static bool hasTextFrame(const SdrObject* pObj);
@@ -223,7 +223,7 @@ public:
     // This will remove the textbox entry.
     // Parameters:
     //     pDrawObject: The shape which have the textbox to be deleted.
-    void DelTextBox(SdrObject* pDrawObject);
+    void DelTextBox(const SdrObject* pDrawObject);
 
     // This will return with the frame format of the textbox what belongs
     // to the given shape (pDrawObject)
@@ -233,8 +233,8 @@ public:
     bool IsTextBoxActive(const SdrObject* pDrawObject) const;
 
     // Setters for the state flag.
-    void SetTextBoxInactive(SdrObject* pDrawObject);
-    void SetTextBoxActive(SdrObject* pDrawObject);
+    void SetTextBoxInactive(const SdrObject* pDrawObject);
+    void SetTextBoxActive(const SdrObject* pDrawObject);
 
     // If this is a group shape, that returns true.
     bool IsGroupTextBox() const;

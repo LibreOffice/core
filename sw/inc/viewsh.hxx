@@ -150,7 +150,7 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
 
 
 
-    SAL_DLLPRIVATE void PaintDesktop(vcl::RenderContext& rRenderContext, const SwRect&);  // Collect values for painting of desktop
+    SAL_DLLPRIVATE void PaintDesktop(const vcl::RenderContext& rRenderContext, const SwRect&);  // Collect values for painting of desktop
                                                         // and calling.
     // PaintDesktop split. This pars is also used by PreviewPage.
     SAL_DLLPRIVATE void PaintDesktop_(const SwRegionRects &rRegion);

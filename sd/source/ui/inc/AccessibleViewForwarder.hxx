@@ -42,7 +42,7 @@ class AccessibleViewForwarder final : public IAccessibleViewForwarder
 public:
     //=====  internal  ========================================================
 
-    AccessibleViewForwarder(SdrPaintView* pView, OutputDevice& rDevice);
+    AccessibleViewForwarder(SdrPaintView* pView, const OutputDevice& rDevice);
 
     virtual ~AccessibleViewForwarder() override;
 

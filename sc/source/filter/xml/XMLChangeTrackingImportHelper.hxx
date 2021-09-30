@@ -209,7 +209,7 @@ public:
 
     void SetDeletionDependencies(ScMyDelAction* pAction, ScChangeActionDel* pDelAct);
     void SetMovementDependencies(ScMyMoveAction* pAction, ScChangeActionMove* pMoveAct);
-    void SetContentDependencies(const ScMyContentAction* pAction, ScChangeActionContent* pActContent, ScDocument& rDoc);
+    void SetContentDependencies(const ScMyContentAction* pAction, ScChangeActionContent* pActContent, const ScDocument& rDoc);
     void SetDependencies(ScMyBaseAction* pAction, ScDocument& rDoc);
 
     void SetNewCell(const ScMyContentAction* pAction, ScDocument& rDoc);

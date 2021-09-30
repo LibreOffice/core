@@ -115,7 +115,7 @@ void TriStateEnabled::ButtonToggled(weld::Toggleable& rToggle)
     eState = rToggle.get_state();
 }
 
-void RemoveParentKeepChildren(weld::TreeView& rTreeView, weld::TreeIter& rParent)
+void RemoveParentKeepChildren(weld::TreeView& rTreeView, const weld::TreeIter& rParent)
 {
     if (rTreeView.iter_has_child(rParent))
     {

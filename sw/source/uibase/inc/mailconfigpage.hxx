@@ -61,7 +61,7 @@ public:
 class SwMailConfigDlg final : public SfxSingleTabDialogController
 {
 public:
-    SwMailConfigDlg(weld::Window* pParent, SfxItemSet& rSet);
+    SwMailConfigDlg(weld::Window* pParent, const SfxItemSet& rSet);
 };
 
 #endif

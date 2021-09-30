@@ -352,7 +352,7 @@ void SwTestAccountSettingsDialog::Test()
     }
 }
 
-SwMailConfigDlg::SwMailConfigDlg(weld::Window* pParent, SfxItemSet& rSet)
+SwMailConfigDlg::SwMailConfigDlg(weld::Window* pParent, const SfxItemSet& rSet)
     : SfxSingleTabDialogController(pParent, &rSet)
 {
     // create TabPage

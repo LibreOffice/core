@@ -495,7 +495,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
 }
 
-void SwPostItMgr::Focus(SfxBroadcaster& rBC)
+void SwPostItMgr::Focus(const SfxBroadcaster& rBC)
 {
     if (!mpWrtShell->GetViewOptions()->IsPostIts())
     {

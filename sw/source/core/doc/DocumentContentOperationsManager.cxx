@@ -230,7 +230,7 @@ namespace
 namespace sw
 {
     // TODO: use SaveBookmark (from DelBookmarks)
-    void CopyBookmarks(const SwPaM& rPam, SwPosition& rCpyPam)
+    void CopyBookmarks(const SwPaM& rPam, const SwPosition& rCpyPam)
     {
         const SwDoc& rSrcDoc = rPam.GetDoc();
         SwDoc& rDestDoc =  rCpyPam.GetDoc();

@@ -87,7 +87,7 @@ private:
 
 public:
     sal_uInt32 PageWindowCount() const { return maPageWindows.size(); }
-    SdrPageWindow* FindPageWindow( SdrPaintWindow& rPaintWindow ) const;
+    SdrPageWindow* FindPageWindow( const SdrPaintWindow& rPaintWindow ) const;
     SdrPageWindow* FindPageWindow( const OutputDevice& rOutDev ) const;
     SdrPageWindow* GetPageWindow(sal_uInt32 nIndex) const;
 

@@ -524,7 +524,7 @@ sal_Int8 SdPageObjsTLVDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
 void SdPageObjsTLV::AddShapeToTransferable (
     SdTransferable& rTransferable,
-    SdrObject& rObject) const
+    const SdrObject& rObject) const
 {
     std::unique_ptr<TransferableObjectDescriptor> pObjectDescriptor(new TransferableObjectDescriptor);
     bool bIsDescriptorFillingPending (true);

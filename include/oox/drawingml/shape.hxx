@@ -187,7 +187,7 @@ public:
                             const Theme* pTheme,
                             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
                             const basegfx::B2DHomMatrix& aTransformation,
-                            FillProperties& rShapeOrParentShapeFillProps,
+                            const FillProperties& rShapeOrParentShapeFillProps,
                             ShapeIdMap* pShapeMap = nullptr,
                             oox::drawingml::ShapePtr pParentGroupShape = nullptr);
 
@@ -265,7 +265,7 @@ protected:
                             bool bClearText,
                             bool bDoNotInsertEmptyTextBody,
                             basegfx::B2DHomMatrix& aTransformation,
-                            FillProperties& rShapeOrParentShapeFillProps,
+                            const FillProperties& rShapeOrParentShapeFillProps,
                             oox::drawingml::ShapePtr pParentGroupShape = nullptr
                              );
 

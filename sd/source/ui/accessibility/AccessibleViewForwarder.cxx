@@ -32,7 +32,7 @@ namespace accessibility
     May change in the future.
 */
 
-AccessibleViewForwarder::AccessibleViewForwarder(SdrPaintView* pView, OutputDevice& rDevice)
+AccessibleViewForwarder::AccessibleViewForwarder(SdrPaintView* pView, const OutputDevice& rDevice)
     : mpView(pView)
     , mnWindowId(0)
 {

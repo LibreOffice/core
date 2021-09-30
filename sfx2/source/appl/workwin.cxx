@@ -924,7 +924,7 @@ void SfxWorkWindow::ReleaseChild_Impl( vcl::Window& rWindow )
     OSL_FAIL( "releasing unregistered child" );
 }
 
-void SfxWorkWindow::ReleaseChild_Impl(SfxDialogController& rController)
+void SfxWorkWindow::ReleaseChild_Impl(const SfxDialogController& rController)
 {
 
     SfxChild_Impl *pChild = nullptr;

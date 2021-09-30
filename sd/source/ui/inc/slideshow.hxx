@@ -100,7 +100,7 @@ public:
 
     /// returns true if there is a running presentation inside the given ViewShell
     /// returns false even if there is a running presentation but in another ViewShell
-    static bool IsRunning( ViewShell& rViewShell );
+    static bool IsRunning( const ViewShell& rViewShell );
 
     // helper api
 

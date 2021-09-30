@@ -104,7 +104,7 @@ public:
 
     void            checkedButton_noBroadcast(const weld::TreeIter& rEntry);
 private:
-    TriState implDetermineState(weld::TreeIter& rEntry);
+    TriState implDetermineState(const weld::TreeIter& rEntry);
 
     void implEmphasize(const weld::TreeIter& rEntry, bool _bChecked, bool _bUpdateDescendants = true, bool _bUpdateAncestors = true);
 
@@ -139,13 +139,13 @@ public:
     /** returns a NamedDatabaseObject record which describes the given entry
     */
     css::sdb::application::NamedDatabaseObject
-            describeObject(weld::TreeIter& rEntry);
+            describeObject(const weld::TreeIter& rEntry);
 
     /** returns the fully qualified name of a table entry
         @param _pEntry
             the entry whose name is to be obtained. Must not denote a folder entry.
     */
-    OUString getQualifiedTableName(weld::TreeIter& rEntry) const;
+    OUString getQualifiedTableName(const weld::TreeIter& rEntry) const;
 
     std::unique_ptr<weld::TreeIter> getEntryByQualifiedName(const OUString& rName);
 };

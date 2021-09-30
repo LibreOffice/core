@@ -1396,7 +1396,7 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     return true;
 }
 
-bool ScDBDocFunc::RemovePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
+bool ScDBDocFunc::RemovePivotTable(const ScDPObject& rDPObj, bool bRecord, bool bApi)
 {
     ScDocShellModificator aModificator(rDocShell);
     weld::WaitObject aWait(ScDocShell::GetActiveDialogParent());

@@ -504,7 +504,7 @@ public:
     void            ExecDlgExt(SfxRequest const &);
     void            ExecColl(SfxRequest const &);
     void            ExecutePrint(SfxRequest&);
-    void            ExecDraw(SfxRequest&);
+    void            ExecDraw(const SfxRequest&);
     void            ExecTabWin(SfxRequest const &);
     void            ExecuteStatusLine(SfxRequest&);
     DECL_LINK( ExecRulerClick, Ruler *, void );

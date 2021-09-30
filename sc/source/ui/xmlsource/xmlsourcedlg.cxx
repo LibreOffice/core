@@ -209,7 +209,7 @@ namespace {
  * the current entry position.  The mapped cell position for a range link is
  * stored with the reference entry.
  */
-std::unique_ptr<weld::TreeIter> getReferenceEntry(const weld::TreeView& rTree, weld::TreeIter& rCurEntry)
+std::unique_ptr<weld::TreeIter> getReferenceEntry(const weld::TreeView& rTree, const weld::TreeIter& rCurEntry)
 {
     std::unique_ptr<weld::TreeIter> xParent(rTree.make_iterator(&rCurEntry));
     bool bParent = rTree.iter_parent(*xParent);
@@ -274,7 +274,7 @@ void ScXMLSourceDlg::TreeItemSelected()
     }
 }
 
-void ScXMLSourceDlg::DefaultElementSelected(weld::TreeIter& rEntry)
+void ScXMLSourceDlg::DefaultElementSelected(const weld::TreeIter& rEntry)
 {
     if (mxLbTree->iter_has_child(rEntry))
     {
@@ -313,7 +313,7 @@ void ScXMLSourceDlg::DefaultElementSelected(weld::TreeIter& rEntry)
     SetSingleLinkable();
 }
 
-void ScXMLSourceDlg::RepeatElementSelected(weld::TreeIter& rEntry)
+void ScXMLSourceDlg::RepeatElementSelected(const weld::TreeIter& rEntry)
 {
     // Check all its parents first.
 
@@ -343,7 +343,7 @@ void ScXMLSourceDlg::RepeatElementSelected(weld::TreeIter& rEntry)
     SetRangeLinkable();
 }
 
-void ScXMLSourceDlg::AttributeSelected(weld::TreeIter& rEntry)
+void ScXMLSourceDlg::AttributeSelected(const weld::TreeIter& rEntry)
 {
     // Check all its parent elements and make sure non of them are linked nor
     // repeat elements.  In attribute's case, it's okay to have the immediate
@@ -384,7 +384,7 @@ void ScXMLSourceDlg::SetRangeLinkable()
     mxMapGrid->set_sensitive(true);
 }
 
-void ScXMLSourceDlg::SelectAllChildEntries(weld::TreeIter& rEntry)
+void ScXMLSourceDlg::SelectAllChildEntries(const weld::TreeIter& rEntry)
 {
     std::unique_ptr<weld::TreeIter> xChild(mxLbTree->make_iterator(&rEntry));
     if (!mxLbTree->iter_children(*xChild))

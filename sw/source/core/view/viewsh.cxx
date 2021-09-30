@@ -1475,7 +1475,7 @@ bool SwViewShell::SmoothScroll( tools::Long lXDiff, tools::Long lYDiff, const to
     return false;
 }
 
-void SwViewShell::PaintDesktop(vcl::RenderContext& rRenderContext, const SwRect &rRect)
+void SwViewShell::PaintDesktop(const vcl::RenderContext& rRenderContext, const SwRect &rRect)
 {
     if ( !GetWin() && !GetOut()->GetConnectMetaFile() )
         return;                     //for the printer we don't do anything here.

@@ -1552,10 +1552,10 @@ public:
         Invalidate();
     }
 
-    void InsertTOXMark(SwTOXType & rTOXType, SwTOXMark & rMark, SwPaM & rPam,
+    void InsertTOXMark(const SwTOXType & rTOXType, SwTOXMark & rMark, SwPaM & rPam,
             SwXTextCursor const*const pTextCursor);
 
-    void ReplaceTOXMark(SwTOXType & rTOXType, SwTOXMark & rMark, SwPaM & rPam)
+    void ReplaceTOXMark(const SwTOXType & rTOXType, SwTOXMark & rMark, SwPaM & rPam)
     {
         m_bInReplaceMark = true;
         DeleteTOXMark();
@@ -1611,7 +1611,7 @@ SwXDocumentIndexMark::SwXDocumentIndexMark(const TOXTypes eToxType)
 }
 
 SwXDocumentIndexMark::SwXDocumentIndexMark(SwDoc & rDoc,
-                SwTOXType & rType, SwTOXMark & rMark)
+                const SwTOXType & rType, const SwTOXMark & rMark)
     : m_pImpl( new SwXDocumentIndexMark::Impl(*this, &rDoc, rType.GetType(),
                     &rType, &rMark) )
 {
@@ -1896,7 +1896,7 @@ template<typename T> struct NotContainedIn
 }
 
 void SwXDocumentIndexMark::Impl::InsertTOXMark(
-        SwTOXType & rTOXType, SwTOXMark & rMark, SwPaM & rPam,
+        const SwTOXType & rTOXType, SwTOXMark & rMark, SwPaM & rPam,
         SwXTextCursor const*const pTextCursor)
 {
     SwDoc& rDoc(rPam.GetDoc());

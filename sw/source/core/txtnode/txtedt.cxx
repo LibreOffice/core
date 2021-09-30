@@ -221,7 +221,7 @@ lcl_MaskRedlinesAndHiddenText( const SwTextNode& rNode, OUStringBuffer& rText,
  * Used for spell checking. Calculates a rectangle for repaint.
  */
 static SwRect lcl_CalculateRepaintRect(
-        SwTextFrame & rTextFrame, SwTextNode & rNode,
+        const SwTextFrame & rTextFrame, const SwTextNode & rNode,
         sal_Int32 const nChgStart, sal_Int32 const nChgEnd)
 {
     TextFrameIndex const iChgStart(rTextFrame.MapModelToView(&rNode, nChgStart));

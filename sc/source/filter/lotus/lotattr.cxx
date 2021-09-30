@@ -227,7 +227,7 @@ LotAttrTable::LotAttrTable(LotusContext& rContext):
 {
 }
 
-void LotAttrTable::SetAttr( LotusContext& rContext, const SCCOL nColFirst, const SCCOL nColLast, const SCROW nRow,
+void LotAttrTable::SetAttr( const LotusContext& rContext, const SCCOL nColFirst, const SCCOL nColLast, const SCROW nRow,
                             const LotAttrWK3& rAttr )
 {
     // With the current implementation of MAXCOLCOUNT>=1024 and nColFirst and

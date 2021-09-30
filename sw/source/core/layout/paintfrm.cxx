@@ -1666,7 +1666,7 @@ static void lcl_DrawGraphicBackground( const SvxBrushItem& _rBackgrdBrush,
  * Also, change type of <bGrfNum> and <bClip> from <bool> to <bool>
  */
 static void lcl_DrawGraphic( const SvxBrushItem& rBrush, vcl::RenderContext &rOutDev,
-                      SwViewShell &rSh, const SwRect &rGrf, const SwRect &rOut,
+                      const SwViewShell &rSh, const SwRect &rGrf, const SwRect &rOut,
                       bool bGrfNum,
                       SwPaintProperties const & properties,
                       bool bBackgrdAlreadyDrawn )

@@ -29,7 +29,7 @@ class SwWrtShell;
 class SwWrapDlg final : public SfxSingleTabDialogController
 {
 public:
-    SwWrapDlg(weld::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode);
+    SwWrapDlg(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode);
 };
 
 // circulation TabPage

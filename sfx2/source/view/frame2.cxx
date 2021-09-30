@@ -379,7 +379,7 @@ bool SfxFrame::IsMenuBarOn_Impl() const
     return pImpl->bMenuBarOn;
 }
 
-void SfxFrame::PrepareForDoc_Impl( SfxObjectShell& i_rDoc )
+void SfxFrame::PrepareForDoc_Impl( const SfxObjectShell& i_rDoc )
 {
     const ::comphelper::NamedValueCollection aDocumentArgs( i_rDoc.GetModel()->getArgs2( { "Hidden", "PluginMode" } ) );
 

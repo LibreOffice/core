@@ -207,7 +207,7 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
     }
 }
 
-void SwTextBoxHelper::destroy(SwFrameFormat* pShape, SdrObject* pObject)
+void SwTextBoxHelper::destroy(const SwFrameFormat* pShape, const SdrObject* pObject)
 {
     // If a TextBox was enabled previously
     auto pTextBox = pShape->GetOtherTextBoxFormat();
@@ -221,7 +221,8 @@ void SwTextBoxHelper::destroy(SwFrameFormat* pShape, SdrObject* pObject)
     }
 }
 
-bool SwTextBoxHelper::isTextBox(const SwFrameFormat* pFormat, sal_uInt16 nType, SdrObject* pObject)
+bool SwTextBoxHelper::isTextBox(const SwFrameFormat* pFormat, sal_uInt16 nType,
+                                const SdrObject* pObject)
 {
     SolarMutexGuard aGuard;
     assert(nType == RES_FLYFRMFMT || nType == RES_DRAWFRMFMT);
@@ -338,7 +339,7 @@ void SwTextBoxHelper::getShapeWrapThrough(const SwFrameFormat* pTextBox, bool& r
 }
 
 SwFrameFormat* SwTextBoxHelper::getOtherTextBoxFormat(const SwFrameFormat* pFormat,
-                                                      sal_uInt16 nType, SdrObject* pObject)
+                                                      sal_uInt16 nType, const SdrObject* pObject)
 {
     SolarMutexGuard aGuard;
     if (!isTextBox(pFormat, nType, pObject))
@@ -1324,7 +1325,7 @@ bool SwTextBoxHelper::isTextBoxShapeHasValidTextFrame(const SwFrameFormat* pShap
     return false;
 }
 
-bool SwTextBoxHelper::DoTextBoxZOrderCorrection(SwFrameFormat* pShape, SdrObject* pObj)
+bool SwTextBoxHelper::DoTextBoxZOrderCorrection(SwFrameFormat* pShape, const SdrObject* pObj)
 {
     // TODO: do this with group shape textboxes.
     SdrObject* pShpObj = nullptr;
@@ -1418,7 +1419,7 @@ void SwTextBoxNode::AddTextBox(SdrObject* pDrawObject, SwFrameFormat* pNewTextBo
     m_pTextBoxes.push_back(aElem);
 }
 
-void SwTextBoxNode::DelTextBox(SdrObject* pDrawObject)
+void SwTextBoxNode::DelTextBox(const SdrObject* pDrawObject)
 {
     assert(pDrawObject);
     if (m_pTextBoxes.size())
@@ -1471,7 +1472,7 @@ bool SwTextBoxNode::IsTextBoxActive(const SdrObject* pDrawObject) const
     return false;
 }
 
-void SwTextBoxNode::SetTextBoxActive(SdrObject* pDrawObject)
+void SwTextBoxNode::SetTextBoxActive(const SdrObject* pDrawObject)
 {
     assert(pDrawObject);
 
@@ -1487,7 +1488,7 @@ void SwTextBoxNode::SetTextBoxActive(SdrObject* pDrawObject)
     }
 }
 
-void SwTextBoxNode::SetTextBoxInactive(SdrObject* pDrawObject)
+void SwTextBoxNode::SetTextBoxInactive(const SdrObject* pDrawObject)
 {
     assert(pDrawObject);
 

@@ -296,7 +296,7 @@ public:
     void                        SetController( SfxBaseController* pController );
     css::uno::Reference<css::frame::XController> GetController() const;
 
-    bool                        TryContextMenuInterception( Menu& rIn, const OUString& rMenuIdentifier, VclPtr<Menu>& rpOut, css::ui::ContextMenuExecuteEvent aEvent );
+    bool                        TryContextMenuInterception( const Menu& rIn, const OUString& rMenuIdentifier, VclPtr<Menu>& rpOut, css::ui::ContextMenuExecuteEvent aEvent );
     bool                        TryContextMenuInterception( Menu& rMenu, const OUString& rMenuIdentifier, css::ui::ContextMenuExecuteEvent aEvent );
 
     void                        ExecPrint( const css::uno::Sequence < css::beans::PropertyValue >&, bool, bool );

@@ -2477,7 +2477,7 @@ IMPL_LINK_NOARG(SbaTableQueryBrowser, OnSelectionChange, LinkParamNone*, void)
     implSelect(xSelection.get());
 }
 
-std::unique_ptr<weld::TreeIter> SbaTableQueryBrowser::implGetConnectionEntry(weld::TreeIter& rEntry) const
+std::unique_ptr<weld::TreeIter> SbaTableQueryBrowser::implGetConnectionEntry(const weld::TreeIter& rEntry) const
 {
     weld::TreeView& rTreeView = m_pTreeView->GetWidget();
     std::unique_ptr<weld::TreeIter> xCurrentEntry(rTreeView.make_iterator(&rEntry));
@@ -2973,7 +2973,7 @@ void SbaTableQueryBrowser::disposeConnection(const weld::TreeIter* pDSEntry)
     }
 }
 
-void SbaTableQueryBrowser::closeConnection(weld::TreeIter& rDSEntry, bool _bDisposeConnection)
+void SbaTableQueryBrowser::closeConnection(const weld::TreeIter& rDSEntry, bool _bDisposeConnection)
 {
     OSL_ENSURE(impl_isDataSourceEntry(&rDSEntry), "SbaTableQueryBrowser::closeConnection: invalid entry (not top-level)!");
 
@@ -3435,7 +3435,7 @@ int SbaTableQueryBrowser::OnTreeEntryCompare(const weld::TreeIter& rLHS, const w
     return nCompareResult;
 }
 
-void SbaTableQueryBrowser::implAdministrate(weld::TreeIter& rApplyTo)
+void SbaTableQueryBrowser::implAdministrate(const weld::TreeIter& rApplyTo)
 {
     try
     {

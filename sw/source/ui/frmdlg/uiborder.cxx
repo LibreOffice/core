@@ -29,7 +29,7 @@
 #include <uiborder.hxx>
 #include <strings.hrc>
 
-SwBorderDlg::SwBorderDlg(weld::Window* pParent, SfxItemSet& rSet, SwBorderModes nType)
+SwBorderDlg::SwBorderDlg(weld::Window* pParent, const SfxItemSet& rSet, SwBorderModes nType)
     : SfxSingleTabDialogController(pParent, &rSet)
 {
     m_xDialog->set_title(SwResId(STR_FRMUI_BORDER));

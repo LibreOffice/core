@@ -540,7 +540,7 @@ my_NSS_CMSArray_Add(PLArenaPool *poolp, void ***array, void *obj)
 }
 
 SECOidTag
-my_NSS_CMSAttribute_GetType(NSSCMSAttribute *attr)
+my_NSS_CMSAttribute_GetType(const NSSCMSAttribute *attr)
 {
     SECOidData *typetag;
 

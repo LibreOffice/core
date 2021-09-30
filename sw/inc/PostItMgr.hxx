@@ -158,7 +158,7 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
         bool            ArrowEnabled(sal_uInt16 aDirection,tools::ULong aPage) const;
         bool            BorderOverPageBorder(tools::ULong aPage) const;
         bool            HasScrollbars() const;
-        void            Focus(SfxBroadcaster& rBC);
+        void            Focus(const SfxBroadcaster& rBC);
 
         sal_Int32       GetInitialAnchorDistance() const;
         sal_Int32       GetScrollSize() const;
@@ -252,7 +252,7 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
         static Color           GetColorLight(std::size_t aAuthorIndex);
         static Color           GetColorAnchor(std::size_t aAuthorIndex);
 
-        void                RegisterAnswer(OutlinerParaObject* pAnswer) { if (pAnswer) mpAnswer =* pAnswer; else mpAnswer.reset(); }
+        void                RegisterAnswer(const OutlinerParaObject* pAnswer) { if (pAnswer) mpAnswer =* pAnswer; else mpAnswer.reset(); }
         OutlinerParaObject* IsAnswer() { return mpAnswer ? &*mpAnswer : nullptr; }
         void                RegisterAnswerText(const OUString& aAnswerText) { maAnswerText = aAnswerText; }
         const OUString&     GetAnswerText() const { return maAnswerText; }

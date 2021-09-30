@@ -147,7 +147,7 @@ void SdrEditView::SetMarkedObjRect(const tools::Rectangle& rRect)
         EndUndo();
 }
 
-std::vector< std::unique_ptr<SdrUndoAction> > SdrEditView::CreateConnectorUndo( SdrObject& rO )
+std::vector< std::unique_ptr<SdrUndoAction> > SdrEditView::CreateConnectorUndo( const SdrObject& rO )
 {
     std::vector< std::unique_ptr<SdrUndoAction> > vUndoActions;
 
