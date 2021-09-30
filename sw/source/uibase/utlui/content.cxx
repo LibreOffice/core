@@ -1598,6 +1598,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     bool bRemoveChapterEntries = true;
     bool bRemoveSendOutlineEntry = true;
     bool bRemoveTableTracking = true;
+    bool bRemoveSectionTracking = true;
 
     // Edit only if the shown content is coming from the current view.
     if (State::HIDDEN != m_eState &&
@@ -1670,8 +1671,10 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             }
             else if(ContentTypeId::REGION == nContentType)
             {
+                xPop->set_active("sectiontracking", m_bSectionTracking);
                 bRemoveSelectEntry = false;
                 bRemoveEditEntry = false;
+                bRemoveSectionTracking = false;
             }
             else
             {
@@ -1702,7 +1705,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                         m_xTreeView->get_id(*xEntry).toInt64())->GetParent();
         if (pType)
         {
-            if (ContentTypeId::OUTLINE == pType->GetType())
+            const ContentTypeId nContentType = pType->GetType();
+            if (ContentTypeId::OUTLINE == nContentType)
             {
                 bOutline = true;
                 if (State::HIDDEN != m_eState)
@@ -1715,14 +1719,19 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                                                                            *xPop);
             }
             else if (State::HIDDEN != m_eState &&
-                    pType->GetType() == ContentTypeId::POSTIT &&
+                    nContentType == ContentTypeId::POSTIT &&
                     !m_pActiveShell->GetView().GetDocShell()->IsReadOnly() &&
                     pType->GetMemberCount() > 0)
                 bRemovePostItEntries = false;
-            else if (ContentTypeId::TABLE == pType->GetType())
+            else if (ContentTypeId::TABLE == nContentType)
             {
                 xPop->set_active("tabletracking", m_bTableTracking);
                 bRemoveTableTracking = false;
+            }
+            else if (ContentTypeId::REGION == nContentType)
+            {
+                xPop->set_active("sectiontracking", m_bSectionTracking);
+                bRemoveSectionTracking = false;
             }
         }
     }
@@ -1810,6 +1819,9 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
 
     if (bRemoveTableTracking)
         xPop->remove("tabletracking");
+
+    if (bRemoveSectionTracking)
+        xPop->remove("sectiontracking");
 
     OString sCommand = xPop->popup_at_rect(m_xTreeView.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
     if (!sCommand.isEmpty())
@@ -3663,8 +3675,8 @@ void SwContentTree::UpdateTracking()
         return;
     }
     // section
-    if (const SwSection* pSection = m_pActiveShell->GetCurrSection(); pSection &&
-            !(m_bIsRoot && m_nRootType != ContentTypeId::REGION))
+    if (const SwSection* pSection = m_pActiveShell->GetCurrSection(); m_bSectionTracking &&
+            pSection && !(m_bIsRoot && m_nRootType != ContentTypeId::REGION))
     {
         lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_REGION),
                                        pSection->GetSectionName());
@@ -4162,6 +4174,11 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
     if (rSelectedPopupEntry == "tabletracking")
     {
         m_bTableTracking = !m_bTableTracking;
+        return;
+    }
+    if (rSelectedPopupEntry == "sectiontracking")
+    {
+        m_bSectionTracking = !m_bSectionTracking;
         return;
     }
 
