@@ -127,15 +127,15 @@ HRESULT STDMETHODCALLTYPE COooFilter::QueryInterface(
 {
     IUnknown *pUnkTemp = nullptr;
     if ( IID_IFilter == riid )
-        pUnkTemp = static_cast<IUnknown *>(static_cast<IFilter *>(this));
+        pUnkTemp = static_cast<IFilter *>(this);
     else if ( IID_IPersistFile == riid )
-        pUnkTemp = static_cast<IUnknown *>(static_cast<IPersistFile *>(this));
+        pUnkTemp = static_cast<IPersistFile *>(this);
     else if ( IID_IPersist == riid )
-        pUnkTemp = static_cast<IUnknown *>(static_cast<IPersist *>(static_cast<IPersistFile *>(this)));
+        pUnkTemp = static_cast<IPersistFile *>(this);
     else if (IID_IPersistStream == riid)
-        pUnkTemp = static_cast<IUnknown *>(static_cast<IPersistStream *>(this));
+        pUnkTemp = static_cast<IPersistStream *>(this);
     else if ( IID_IUnknown == riid )
-        pUnkTemp = static_cast<IUnknown *>(static_cast<IPersist *>(static_cast<IPersistFile *>(this)));
+        pUnkTemp = static_cast<IPersistFile *>(this);
     else
     {
         *ppvObject = nullptr;
@@ -723,9 +723,9 @@ HRESULT STDMETHODCALLTYPE COooFilterCF::QueryInterface(REFIID riid, void  ** ppv
     IUnknown *pUnkTemp;
 
     if ( IID_IClassFactory == riid )
-        pUnkTemp = static_cast<IUnknown *>(static_cast<IClassFactory *>(this));
+        pUnkTemp = this;
     else if ( IID_IUnknown == riid )
-        pUnkTemp = static_cast<IUnknown *>(this);
+        pUnkTemp = this;
     else
     {
         *ppvObject = nullptr;
@@ -882,7 +882,7 @@ extern "C" HRESULT STDMETHODCALLTYPE DllGetClassObject(
     if ( CLSID_COooFilter == cid )
     {
         pImpl = new COooFilterCF;
-        pResult = static_cast<IUnknown *>(pImpl);
+        pResult = pImpl;
     }
     else
         return CLASS_E_CLASSNOTAVAILABLE;

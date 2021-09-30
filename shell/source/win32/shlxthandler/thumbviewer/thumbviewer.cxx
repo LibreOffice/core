@@ -157,7 +157,7 @@ HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::QueryInterface(REFIID riid, void __
 
     if ((IID_IUnknown == riid) || (IID_IStream == riid))
     {
-        pUnk = static_cast<IStream*>(this);
+        pUnk = this;
         pUnk->AddRef();
         *ppvObject = pUnk;
         return S_OK;
