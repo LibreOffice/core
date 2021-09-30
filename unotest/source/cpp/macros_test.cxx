@@ -88,8 +88,8 @@ void MacrosTest::dispatchCommand(const uno::Reference<lang::XComponent>& xCompon
 void MacrosTest::setUpNssGpg(const test::Directories& rDirectories, const OUString& rTestName)
 {
     OUString aSourceDir = rDirectories.getURLFromSrc(u"/test/signing-keys/");
-    OUString aTargetDir
-        = rDirectories.getURLFromWorkdir(OUString("CppunitTest/" + rTestName + ".test.user"));
+    OUString aTargetDir = rDirectories.getURLFromWorkdir(
+        OUStringConcatenation("CppunitTest/" + rTestName + ".test.user"));
 
     // Set up cert8.db in workdir/CppunitTest/
     osl::File::copy(aSourceDir + "cert8.db", aTargetDir + "/cert8.db");

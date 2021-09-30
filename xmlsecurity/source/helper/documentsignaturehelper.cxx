@@ -199,7 +199,7 @@ DocumentSignatureHelper::CreateElementList(
                 {
                     Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
                     ImplFillElementList(
-                        aElements, xSubStore, OUString(aSubStorageName+aSep), true, mode);
+                        aElements, xSubStore, OUStringConcatenation(aSubStorageName+aSep), true, mode);
                 }
                 catch(css::io::IOException& )
                 {
@@ -211,7 +211,7 @@ DocumentSignatureHelper::CreateElementList(
                 {
                     Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
                     ImplFillElementList(
-                        aElements, xSubStore, OUString(aSubStorageName+aSep), true, mode);
+                        aElements, xSubStore, OUStringConcatenation(aSubStorageName+aSep), true, mode);
                     xSubStore.clear();
 
                     // Object folders...
@@ -222,7 +222,7 @@ DocumentSignatureHelper::CreateElementList(
                         {
                             Reference < css::embed::XStorage > xTmpSubStore = rxStore->openStorageElement( rName, css::embed::ElementModes::READ );
                             ImplFillElementList(
-                                aElements, xTmpSubStore, OUString(rName+aSep), true, mode);
+                                aElements, xTmpSubStore, OUStringConcatenation(rName+aSep), true, mode);
                         }
                     }
                 }
@@ -246,7 +246,7 @@ DocumentSignatureHelper::CreateElementList(
             {
                 Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
                 ImplFillElementList(
-                    aElements, xSubStore, OUString(aSubStorageName+aSep), true, mode);
+                    aElements, xSubStore, OUStringConcatenation(aSubStorageName+aSep), true, mode);
             }
             catch( css::io::IOException& )
             {
@@ -259,7 +259,7 @@ DocumentSignatureHelper::CreateElementList(
             {
                 Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
                 ImplFillElementList(
-                    aElements, xSubStore, OUString(aSubStorageName+aSep), true, mode);
+                    aElements, xSubStore, OUStringConcatenation(aSubStorageName+aSep), true, mode);
             }
             catch( css::io::IOException& )
             {
@@ -271,7 +271,7 @@ DocumentSignatureHelper::CreateElementList(
             {
                 Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
                 ImplFillElementList(
-                    aElements, xSubStore, OUString(aSubStorageName+aSep), true, mode);
+                    aElements, xSubStore, OUStringConcatenation(aSubStorageName+aSep), true, mode);
             }
             catch( css::io::IOException& )
             {
@@ -310,7 +310,7 @@ void DocumentSignatureHelper::AppendContentTypes(const uno::Reference<embed::XSt
     {
         auto it = std::find_if(rOverrides.begin(), rOverrides.end(), [&](const beans::StringPair& rPair)
         {
-            return rPair.First == "/" + rElement;
+            return rPair.First == OUStringConcatenation("/" + rElement);
         });
 
         if (it != rOverrides.end())
@@ -321,7 +321,7 @@ void DocumentSignatureHelper::AppendContentTypes(const uno::Reference<embed::XSt
 
         it = std::find_if(rDefaults.begin(), rDefaults.end(), [&](const beans::StringPair& rPair)
         {
-            return rElement.endsWith(OUString("." + rPair.First));
+            return rElement.endsWith(OUStringConcatenation("." + rPair.First));
         });
 
         if (it != rDefaults.end())

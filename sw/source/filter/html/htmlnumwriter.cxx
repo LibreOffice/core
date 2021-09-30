@@ -322,7 +322,7 @@ Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
         if ((bListEnd && rInfo.IsNumbered()) || (!bListEnd && rNextInfo.IsNumbered()))
         {
             HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(),
-                                       OString(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_li), false);
+                                       OStringConcatenation(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_li), false);
         }
     }
 
@@ -386,7 +386,7 @@ Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
             aTag = OOO_STRING_SVTOOLS_HTML_unorderlist;
         else
             aTag = OOO_STRING_SVTOOLS_HTML_orderlist;
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OString(rWrt.GetNamespace() + aTag), false );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + aTag), false );
         rWrt.m_bLFPossible = true;
     }
 

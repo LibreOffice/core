@@ -162,7 +162,13 @@ void StringView::handleSubExprThatCouldBeView(Expr const* subExpr)
 void StringView::handleCXXConstructExpr(CXXConstructExpr const* expr)
 {
     QualType argType;
-    bool charArg = false;
+    enum
+    {
+        None,
+        OrChar,
+        ViaConcatenation
+    } extra
+        = None;
     auto const d = expr->getConstructor();
     switch (d->getNumParams())
     {
@@ -174,7 +180,7 @@ void StringView::handleCXXConstructExpr(CXXConstructExpr const* expr)
             if (t->isAnyCharacterType())
             {
                 argType = expr->getArg(0)->IgnoreImplicit()->getType();
-                charArg = true;
+                extra = OrChar;
                 break;
             }
             loplugin::TypeCheck tc(t);
@@ -193,6 +199,13 @@ void StringView::handleCXXConstructExpr(CXXConstructExpr const* expr)
                 || tc.ClassOrStruct("basic_string_view").StdNamespace())
             {
                 argType = expr->getArg(0)->IgnoreImplicit()->getType();
+                break;
+            }
+            if (tc.RvalueReference().Struct("OStringConcat").Namespace("rtl").GlobalNamespace()
+                || tc.RvalueReference().Struct("OUStringConcat").Namespace("rtl").GlobalNamespace())
+            {
+                argType = expr->getArg(0)->IgnoreImplicit()->getType();
+                extra = ViaConcatenation;
                 break;
             }
             return;
@@ -214,7 +227,7 @@ void StringView::handleCXXConstructExpr(CXXConstructExpr const* expr)
                         {
                             if (val->getExtValue() == 1)
                             {
-                                charArg = true;
+                                extra = OrChar;
                             }
                         }
                     }
@@ -239,13 +252,14 @@ void StringView::handleCXXConstructExpr(CXXConstructExpr const* expr)
     report(DiagnosticsEngine::Warning,
            "instead of an %0%select{| constructed from a %2}1, pass a"
            " '%select{std::string_view|std::u16string_view}3'"
-           "%select{| (or an '%select{rtl::OStringChar|rtl::OUStringChar}3')}4",
+           "%select{| (or an '%select{rtl::OStringChar|rtl::OUStringChar}3')|"
+           " via '%select{rtl::OStringConcatenation|rtl::OUStringConcatenation}3'}4",
            expr->getExprLoc())
         << expr->getType() << (argType.isNull() ? 0 : 1) << argType
         << (loplugin::TypeCheck(expr->getType()).Class("OString").Namespace("rtl").GlobalNamespace()
                 ? 0
                 : 1)
-        << charArg << expr->getSourceRange();
+        << extra << expr->getSourceRange();
 }
 
 void StringView::handleCXXMemberCallExpr(CXXMemberCallExpr const* expr)
