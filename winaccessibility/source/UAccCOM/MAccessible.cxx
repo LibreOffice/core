@@ -2664,7 +2664,7 @@ bool CMAccessible::get_IAccessibleFromXAccessible(XAccessible* pXAcc, IAccessibl
     }
     catch(...)
     {
-        return FALSE;
+        return false;
     }
 }
 
