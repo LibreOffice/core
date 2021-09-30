@@ -603,7 +603,7 @@ sal_uInt16 VerticalTabControl::GetPagePos(std::string_view rPageId) const
     return m_xChooser->GetEntryListPos(pData->pEntry);
 }
 
-VclPtr<vcl::Window> VerticalTabControl::GetPage(std::string_view rPageId)
+VclPtr<vcl::Window> VerticalTabControl::GetPage(std::string_view rPageId) const
 {
     VerticalTabPageData* pData = GetPageData(rPageId);
     if (!pData)

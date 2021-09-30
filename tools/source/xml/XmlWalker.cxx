@@ -96,7 +96,7 @@ void XmlWalker::parent()
     mpImpl->mpStack.pop_back();
 }
 
-OString XmlWalker::attribute(const OString& sName)
+OString XmlWalker::attribute(const OString& sName) const
 {
     xmlChar* xmlAttribute
         = xmlGetProp(mpImpl->mpCurrent, reinterpret_cast<const xmlChar*>(sName.getStr()));

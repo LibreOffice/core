@@ -51,7 +51,7 @@ public:
     inline void ImplAddColorError5(const ImpErrorQuad& rErrQuad);
     inline void ImplAddColorError7(const ImpErrorQuad& rErrQuad);
 
-    inline BitmapColor ImplGetColor();
+    inline BitmapColor ImplGetColor() const;
 };
 
 inline void ImpErrorQuad::operator=(const BitmapColor& rColor)
@@ -98,7 +98,7 @@ inline void ImpErrorQuad::ImplAddColorError7(const ImpErrorQuad& rErrQuad)
     nBlue += rErrQuad.nBlue * 7L >> 4;
 }
 
-inline BitmapColor ImpErrorQuad::ImplGetColor()
+inline BitmapColor ImpErrorQuad::ImplGetColor() const
 {
     return BitmapColor(std::clamp(nRed, sal_Int16(0), sal_Int16(8160)) >> 5,
                        std::clamp(nGreen, sal_Int16(0), sal_Int16(8160)) >> 5,

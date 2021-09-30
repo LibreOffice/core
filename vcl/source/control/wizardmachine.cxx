@@ -217,7 +217,8 @@ namespace vcl
                                        nViewPosFlags );
     }
 
-    tools::Long RoadmapWizard::LogicalCoordinateToPixel(int iCoordinate){
+    tools::Long RoadmapWizard::LogicalCoordinateToPixel(int iCoordinate) const
+    {
         Size aLocSize = LogicToPixel(Size(iCoordinate, 0), MapMode(MapUnit::MapAppFont));
         int iPixelCoordinate =  aLocSize.Width();
         return iPixelCoordinate;

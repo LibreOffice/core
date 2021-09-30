@@ -416,7 +416,7 @@ bool ImplEntryList::IsEntrySelectable( sal_Int32 nPos ) const
     return pImplEntry == nullptr || ((pImplEntry->mnFlags & ListBoxEntryFlags::DisableSelection) == ListBoxEntryFlags::NONE);
 }
 
-sal_Int32 ImplEntryList::FindFirstSelectable( sal_Int32 nPos, bool bForward /* = true */ )
+sal_Int32 ImplEntryList::FindFirstSelectable( sal_Int32 nPos, bool bForward /* = true */ ) const
 {
     if( IsEntrySelectable( nPos ) )
         return nPos;
@@ -2877,7 +2877,7 @@ void ImplListBoxFloatingWindow::Resize()
     FloatingWindow::Resize();
 }
 
-Size ImplListBoxFloatingWindow::CalcFloatSize()
+Size ImplListBoxFloatingWindow::CalcFloatSize() const
 {
     Size aFloatSz( maPrefSz );
 

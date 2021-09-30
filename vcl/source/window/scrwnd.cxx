@@ -223,7 +223,7 @@ void ImplWheelWindow::ImplRecalcScrollValues()
     }
 }
 
-PointerStyle ImplWheelWindow::ImplGetMousePointer( tools::Long nDistX, tools::Long nDistY )
+PointerStyle ImplWheelWindow::ImplGetMousePointer( tools::Long nDistX, tools::Long nDistY ) const
 {
     PointerStyle    eStyle;
     const StartAutoScrollFlags nFlags = ImplGetSVData()->mpWinData->mnAutoScrollFlags;

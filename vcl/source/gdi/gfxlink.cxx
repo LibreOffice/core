@@ -110,7 +110,7 @@ void GfxLink::SetPrefMapMode( const MapMode& rPrefMapMode )
     mbPrefMapModeValid = true;
 }
 
-bool GfxLink::LoadNative( Graphic& rGraphic )
+bool GfxLink::LoadNative( Graphic& rGraphic ) const
 {
     bool bRet = false;
 

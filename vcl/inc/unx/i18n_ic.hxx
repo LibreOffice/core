@@ -55,9 +55,9 @@ private:
 
 public:
 
-    Bool UseContext()       { return mbUseable; }
+    Bool UseContext() const { return mbUseable; }
     bool IsPreeditMode() const { return maClientData.eState == PreeditStatus::Active; }
-    XIC  GetContext()       { return maContext; }
+    XIC  GetContext() const { return maContext; }
 
     void ExtendEventMask(  ::Window aFocusWindow );
     void SetICFocus( SalFrame* pFocusFrame );

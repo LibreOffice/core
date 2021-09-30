@@ -93,7 +93,7 @@ class VCL_DLLPUBLIC TextView final : public vcl::unohelper::DragAndDropClient
 
     TextSelection const & ImpMoveCursor( const KeyEvent& rKeyEvent );
     TextPaM             ImpDelete( sal_uInt8 nMode, sal_uInt8 nDelMode );
-    bool                IsInSelection( const TextPaM& rPaM );
+    bool                IsInSelection( const TextPaM& rPaM ) const;
 
     void                ImpPaint(vcl::RenderContext& rRenderContext, const Point& rStartPos, tools::Rectangle const* pPaintArea, TextSelection const* pSelection);
     void                ImpPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
@@ -105,7 +105,7 @@ class VCL_DLLPUBLIC TextView final : public vcl::unohelper::DragAndDropClient
     void                ImpShowDDCursor();
 
     bool                ImplTruncateNewText( OUString& rNewText ) const;
-    bool                ImplCheckTextLen( const OUString& rNewText );
+    bool                ImplCheckTextLen( const OUString& rNewText ) const;
 
     // DragAndDropClient
     virtual void        dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& dge ) override;
@@ -141,8 +141,8 @@ public:
     void                SetSelection( const TextSelection& rNewSel, bool bGotoCursor );
     bool                HasSelection() const;
 
-    OUString            GetSelected();
-    OUString            GetSelected( LineEnd aSeparator );
+    OUString            GetSelected() const;
+    OUString            GetSelected( LineEnd aSeparator ) const;
     void                DeleteSelected();
 
     void                InsertText( const OUString& rNew );

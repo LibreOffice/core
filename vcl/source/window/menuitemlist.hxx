@@ -141,7 +141,7 @@ public:
                     ) const;
     size_t          GetItemCount( sal_Unicode cSelectChar ) const;
     size_t          GetItemCount( vcl::KeyCode aKeyCode ) const;
-    size_t          size()
+    size_t          size() const
                     {
                         return maItemList.size();
                     }

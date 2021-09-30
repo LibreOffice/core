@@ -117,7 +117,7 @@ public:
     bool                IsActive() const { return bActive; }
     void                SetActive( bool bSetActive ) { bActive = bSetActive; }
 
-    bool                IsEqual( const IMapObject& rEqObj );
+    bool                IsEqual( const IMapObject& rEqObj ) const;
 
     // IMap-Events
     const SvxMacroTableDtor& GetMacroTable() const { return aEventList;}

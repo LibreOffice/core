@@ -58,7 +58,7 @@ public:
 
     // accepts bitmap file (including bitmap file header)
     Pixmap setBitmapData( const sal_uInt8* pData );
-    bool needsConversion( const sal_uInt8* pData );
+    bool needsConversion( const sal_uInt8* pData ) const;
 
     Colormap getColormap() const { return m_aColormap; }
     Pixmap getPixmap() const { return m_aPixmap; }

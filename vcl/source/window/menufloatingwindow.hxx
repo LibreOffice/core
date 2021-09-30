@@ -77,7 +77,7 @@ protected:
     void ImplCursorUpDown( bool bUp, bool bHomeEnd = false );
     void ImplHighlightItem( const MouseEvent& rMEvt, bool bMBDown );
     tools::Long ImplGetStartY() const;
-    tools::Rectangle ImplGetItemRect( sal_uInt16 nPos );
+    tools::Rectangle ImplGetItemRect( sal_uInt16 nPos ) const;
     void RenderHighlightItem( vcl::RenderContext& rRenderContext, sal_uInt16 nPos );
     tools::Long GetInitialItemY( tools::Long *pOptStartY = nullptr ) const;
     void InvalidateItem( sal_uInt16 nPos );

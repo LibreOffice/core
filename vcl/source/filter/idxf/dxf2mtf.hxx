@@ -55,11 +55,11 @@ private:
 
     static sal_uInt64 CountEntities(const DXFEntities & rEntities);
 
-    Color ConvertColor(sal_uInt8 nColor);
+    Color ConvertColor(sal_uInt8 nColor) const;
 
-    tools::Long GetEntityColor(const DXFBasicEntity & rE);
+    tools::Long GetEntityColor(const DXFBasicEntity & rE) const;
 
-    DXFLineInfo LTypeToDXFLineInfo(std::string_view rLineType);
+    DXFLineInfo LTypeToDXFLineInfo(std::string_view rLineType) const;
 
     DXFLineInfo GetEntityDXFLineInfo(const DXFBasicEntity & rE);
 

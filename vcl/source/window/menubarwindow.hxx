@@ -89,7 +89,7 @@ private:
     sal_uInt16      ImplFindEntry( const Point& rMousePos ) const;
     void            ImplCreatePopup( bool bPreSelectFirst );
     bool    HandleKeyEvent(const KeyEvent& rKEvent, bool bFromMenu = true);
-    tools::Rectangle       ImplGetItemRect( sal_uInt16 nPos );
+    tools::Rectangle       ImplGetItemRect( sal_uInt16 nPos ) const;
 
     void            ImplInitStyleSettings();
 
@@ -128,7 +128,7 @@ public:
 
     void    SetAutoPopup(bool bAuto) { mbAutoPopup = bAuto; }
     void    LayoutChanged();
-    Size const & MinCloseButtonSize();
+    Size const & MinCloseButtonSize() const;
 
     /// Add an arbitrary button to the menubar that will appear next to the close button.
     sal_uInt16 AddMenuBarButton(const Image&, const Link<MenuBar::MenuBarButtonCallbackArg&,bool>&, const OUString&);

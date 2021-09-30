@@ -3025,7 +3025,7 @@ void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const OString &rI
     }
 }
 
-VclBuilder::stringmap VclBuilder::handleAtkObject(xmlreader::XmlReader &reader)
+VclBuilder::stringmap VclBuilder::handleAtkObject(xmlreader::XmlReader &reader) const
 {
     int nLevel = 1;
 

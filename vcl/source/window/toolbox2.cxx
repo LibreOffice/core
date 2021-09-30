@@ -857,7 +857,7 @@ tools::Rectangle const & ToolBox::GetOverflowRect() const
     return mpData->maMenubuttonItem.maRect;
 }
 
-bool ToolBox::ImplHasExternalMenubutton()
+bool ToolBox::ImplHasExternalMenubutton() const
 {
     // check if the borderwindow (i.e. the decoration) provides the menu button
     bool bRet = false;

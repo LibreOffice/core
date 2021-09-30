@@ -91,7 +91,7 @@ private:
     SAL_DLLPRIVATE void      ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void      ImplInitSettings();
     SAL_DLLPRIVATE void      ImplFormat();
-    SAL_DLLPRIVATE bool      ImplIsItemUpdate();
+    SAL_DLLPRIVATE bool      ImplIsItemUpdate() const;
 
     SAL_DLLPRIVATE void      ImplDrawText(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE void      ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen,

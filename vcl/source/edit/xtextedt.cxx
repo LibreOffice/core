@@ -137,7 +137,7 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
     return aSel;
 }
 
-bool ExtTextEngine::Search( TextSelection& rSel, const i18nutil::SearchOptions& rSearchOptions, bool bForward )
+bool ExtTextEngine::Search( TextSelection& rSel, const i18nutil::SearchOptions& rSearchOptions, bool bForward ) const
 {
     TextSelection aSel( rSel );
     aSel.Justify();

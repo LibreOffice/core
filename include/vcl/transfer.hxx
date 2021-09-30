@@ -321,11 +321,11 @@ public:
     css::uno::Any GetAny( SotClipboardFormatId nFormat, const OUString& rDestDoc ) const;
     css::uno::Any GetAny( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) const;
 
-    bool                        GetString( SotClipboardFormatId nFormat, OUString& rStr );
-    bool                        GetString( const css::datatransfer::DataFlavor& rFlavor, OUString& rStr );
+    bool                        GetString( SotClipboardFormatId nFormat, OUString& rStr ) const;
+    bool                        GetString( const css::datatransfer::DataFlavor& rFlavor, OUString& rStr ) const;
 
-    bool                        GetBitmapEx( SotClipboardFormatId nFormat, BitmapEx& rBmp );
-    bool                        GetBitmapEx( const css::datatransfer::DataFlavor& rFlavor, BitmapEx& rBmp );
+    bool                        GetBitmapEx( SotClipboardFormatId nFormat, BitmapEx& rBmp ) const;
+    bool                        GetBitmapEx( const css::datatransfer::DataFlavor& rFlavor, BitmapEx& rBmp ) const;
 
     /** Return as GDI metafile.
 
@@ -335,35 +335,35 @@ public:
         metafile, with over 3 million (!) actions; which is just too large for
         any reasonable handling - and you need to set a limit.
     */
-    bool                        GetGDIMetaFile( SotClipboardFormatId nFormat, GDIMetaFile& rMtf, size_t nMaxActions = 0 );
-    bool                        GetGDIMetaFile( const css::datatransfer::DataFlavor& rFlavor, GDIMetaFile& rMtf );
+    bool                        GetGDIMetaFile( SotClipboardFormatId nFormat, GDIMetaFile& rMtf, size_t nMaxActions = 0 ) const;
+    bool                        GetGDIMetaFile( const css::datatransfer::DataFlavor& rFlavor, GDIMetaFile& rMtf ) const;
 
-    bool                        GetGraphic( SotClipboardFormatId nFormat, Graphic& rGraphic );
-    bool                        GetGraphic( const css::datatransfer::DataFlavor& rFlavor, Graphic& rGraphic );
+    bool                        GetGraphic( SotClipboardFormatId nFormat, Graphic& rGraphic ) const;
+    bool                        GetGraphic( const css::datatransfer::DataFlavor& rFlavor, Graphic& rGraphic ) const;
 
-    bool                        GetImageMap( SotClipboardFormatId nFormat, ImageMap& rIMap );
-    bool                        GetImageMap( const css::datatransfer::DataFlavor& rFlavor, ImageMap& rImap );
+    bool                        GetImageMap( SotClipboardFormatId nFormat, ImageMap& rIMap ) const;
+    bool                        GetImageMap( const css::datatransfer::DataFlavor& rFlavor, ImageMap& rImap ) const;
 
     bool                        GetTransferableObjectDescriptor( SotClipboardFormatId nFormat, TransferableObjectDescriptor& rDesc );
     bool                        GetTransferableObjectDescriptor( TransferableObjectDescriptor& rDesc );
 
-    bool                        GetINetBookmark( SotClipboardFormatId nFormat, INetBookmark& rBmk );
-    bool                        GetINetBookmark( const css::datatransfer::DataFlavor& rFlavor, INetBookmark& rBmk );
+    bool                        GetINetBookmark( SotClipboardFormatId nFormat, INetBookmark& rBmk ) const;
+    bool                        GetINetBookmark( const css::datatransfer::DataFlavor& rFlavor, INetBookmark& rBmk ) const;
 
-    bool                        GetINetImage( SotClipboardFormatId nFormat, INetImage& rINtImg );
-    bool                        GetINetImage( const css::datatransfer::DataFlavor& rFlavor, INetImage& rINtImg );
+    bool                        GetINetImage( SotClipboardFormatId nFormat, INetImage& rINtImg ) const;
+    bool                        GetINetImage( const css::datatransfer::DataFlavor& rFlavor, INetImage& rINtImg ) const;
 
-    bool                        GetFileList( SotClipboardFormatId nFormat, FileList& rFileList );
-    bool                        GetFileList( FileList& rFileList );
+    bool                        GetFileList( SotClipboardFormatId nFormat, FileList& rFileList ) const;
+    bool                        GetFileList( FileList& rFileList ) const;
 
-    css::uno::Sequence<sal_Int8> GetSequence( SotClipboardFormatId nFormat, const OUString& rDestDoc );
-    css::uno::Sequence<sal_Int8> GetSequence( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc );
+    css::uno::Sequence<sal_Int8> GetSequence( SotClipboardFormatId nFormat, const OUString& rDestDoc ) const;
+    css::uno::Sequence<sal_Int8> GetSequence( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) const;
 
-    bool                        GetSotStorageStream( SotClipboardFormatId nFormat, tools::SvRef<SotTempStream>& rStreamRef );
-    bool                        GetSotStorageStream( const css::datatransfer::DataFlavor& rFlavor, tools::SvRef<SotTempStream>& rStreamRef );
+    bool                        GetSotStorageStream( SotClipboardFormatId nFormat, tools::SvRef<SotTempStream>& rStreamRef ) const;
+    bool                        GetSotStorageStream( const css::datatransfer::DataFlavor& rFlavor, tools::SvRef<SotTempStream>& rStreamRef ) const;
 
-    css::uno::Reference<css::io::XInputStream> GetInputStream( SotClipboardFormatId nFormat, const OUString& rDestDoc );
-    css::uno::Reference<css::io::XInputStream> GetInputStream( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc );
+    css::uno::Reference<css::io::XInputStream> GetInputStream( SotClipboardFormatId nFormat, const OUString& rDestDoc ) const;
+    css::uno::Reference<css::io::XInputStream> GetInputStream( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) const;
 
     static TransferableDataHelper   CreateFromClipboard(const css::uno::Reference<css::datatransfer::clipboard::XClipboard>& rClipboard);
     static TransferableDataHelper   CreateFromSystemClipboard( vcl::Window * pWindow );

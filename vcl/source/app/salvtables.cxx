@@ -536,7 +536,7 @@ vcl::Window* SalInstanceWidget::getWidget() const { return m_xWidget; }
 
 void SalInstanceWidget::disable_notify_events() { ++m_nBlockNotify; }
 
-bool SalInstanceWidget::notify_events_disabled() { return m_nBlockNotify != 0; }
+bool SalInstanceWidget::notify_events_disabled() const { return m_nBlockNotify != 0; }
 
 void SalInstanceWidget::enable_notify_events() { --m_nBlockNotify; }
 

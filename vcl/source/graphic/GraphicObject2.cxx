@@ -379,7 +379,7 @@ bool GraphicObject::ImplDrawTiled(OutputDevice& rOut, const tools::Rectangle& rA
 
 bool GraphicObject::ImplDrawTiled( OutputDevice& rOut, const Point& rPosPixel,
                                    int nNumTilesX, int nNumTilesY,
-                                   const Size& rTileSizePixel, const GraphicAttr* pAttr )
+                                   const Size& rTileSizePixel, const GraphicAttr* pAttr ) const
 {
     Point   aCurrPos( rPosPixel );
     Size    aTileSizeLogic( rOut.PixelToLogic( rTileSizePixel ) );

@@ -123,7 +123,7 @@ void IMapObject::Read( SvStream& rIStm )
     }
 }
 
-bool IMapObject::IsEqual( const IMapObject& rEqObj )
+bool IMapObject::IsEqual( const IMapObject& rEqObj ) const
 {
     return ( ( aURL == rEqObj.aURL ) &&
              ( aAltText == rEqObj.aAltText ) &&
@@ -230,7 +230,7 @@ void IMapRectangleObject::Scale( const Fraction& rFracX, const Fraction& rFracY 
     aRect = tools::Rectangle( aTL, aBR );
 }
 
-bool IMapRectangleObject::IsEqual( const IMapRectangleObject& rEqObj )
+bool IMapRectangleObject::IsEqual( const IMapRectangleObject& rEqObj ) const
 {
     return ( IMapObject::IsEqual( rEqObj ) && ( aRect == rEqObj.aRect ) );
 }
@@ -372,7 +372,7 @@ void IMapCircleObject::Scale( const Fraction& rFracX, const Fraction& rFracY )
     nRadius = double(nRadius * aAverage);
 }
 
-bool IMapCircleObject::IsEqual( const IMapCircleObject& rEqObj )
+bool IMapCircleObject::IsEqual( const IMapCircleObject& rEqObj ) const
 {
     return ( IMapObject::IsEqual( rEqObj ) &&
              ( aCenter == rEqObj.aCenter ) &&

@@ -70,10 +70,10 @@ private:
 
 private:
     std::unique_ptr<osl::File> CreateSpoolFile (std::u16string_view rName,
-                                     std::u16string_view rExtension);
+                                     std::u16string_view rExtension) const;
     void            InitPaperSize (const JobData& rJobSetup);
 
-    bool            writeFeatureList( osl::File* pFile, const JobData&, bool bDocumentSetup );
+    bool            writeFeatureList( osl::File* pFile, const JobData&, bool bDocumentSetup ) const;
     bool            writeSetup( osl::File* pFile, const JobData& );
     bool            writePageSetup( osl::File* pFile, const JobData&, bool bWriteFeatures );
     static void     writeJobPatch( osl::File* File, const JobData& );

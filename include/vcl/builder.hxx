@@ -374,7 +374,7 @@ private:
 
     void        handleSizeGroup(xmlreader::XmlReader &reader);
 
-    stringmap   handleAtkObject(xmlreader::XmlReader &reader);
+    stringmap   handleAtkObject(xmlreader::XmlReader &reader) const;
 
     static void applyAtkProperties(vcl::Window *pWindow, const stringmap& rProperties);
 

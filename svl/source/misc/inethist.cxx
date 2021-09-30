@@ -346,7 +346,7 @@ void INetURLHistory::PutUrl_Impl (const INetURLObject &rUrl)
     }
 }
 
-bool INetURLHistory::QueryUrl_Impl (const INetURLObject &rUrl)
+bool INetURLHistory::QueryUrl_Impl (const INetURLObject &rUrl) const
 {
     DBG_ASSERT (m_pImpl, "QueryUrl_Impl(): no Implementation");
     if (m_pImpl)

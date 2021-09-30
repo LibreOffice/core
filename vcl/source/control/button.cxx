@@ -188,7 +188,7 @@ void Button::ImplSetSeparatorX( tools::Long nX )
     mpButtonData->mnSeparatorX = nX;
 }
 
-DrawTextFlags Button::ImplGetTextStyle( WinBits nWinStyle, SystemTextColorFlags nSystemTextColorFlags )
+DrawTextFlags Button::ImplGetTextStyle( WinBits nWinStyle, SystemTextColorFlags nSystemTextColorFlags ) const
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     DrawTextFlags nTextStyle = FixedText::ImplGetTextStyle(nWinStyle & ~WB_DEFBUTTON);
@@ -1868,7 +1868,7 @@ void RadioButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
     ImplInitSettings( true );
 }
 
-WinBits RadioButton::ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle )
+WinBits RadioButton::ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle ) const
 {
     if ( !(nStyle & WB_NOGROUP) &&
          (!pPrevWindow || (pPrevWindow->GetType() != WindowType::RADIOBUTTON)) )

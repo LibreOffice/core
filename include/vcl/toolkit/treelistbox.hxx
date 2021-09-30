@@ -128,7 +128,7 @@ public:
     virtual SvLBoxItemType GetType() const = 0;
     virtual int CalcWidth(const SvTreeListBox* pView) const;
     int GetWidth(const SvTreeListBox* pView, const SvTreeListEntry* pEntry) const;
-    int GetWidth(const SvTreeListBox* pView, const SvViewDataEntry* pData, sal_uInt16 nItemPos);
+    int GetWidth(const SvTreeListBox* pView, const SvViewDataEntry* pData, sal_uInt16 nItemPos) const;
     int GetHeight(const SvTreeListBox* pView, const SvTreeListEntry* pEntry) const;
     static int GetHeight(const SvViewDataEntry* pData, sal_uInt16 nItemPos);
     void Enable(bool bEnabled) { mbDisabled = !bEnabled; }
@@ -275,7 +275,7 @@ private:
     VCL_DLLPRIVATE void CheckBoxInserted(SvTreeListEntry* pEntry);
 
     VCL_DLLPRIVATE void DrawCustomEntry(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const SvTreeListEntry& rEntry);
-    VCL_DLLPRIVATE Size MeasureCustomEntry(vcl::RenderContext& rRenderContext, const SvTreeListEntry& rEntry);
+    VCL_DLLPRIVATE Size MeasureCustomEntry(vcl::RenderContext& rRenderContext, const SvTreeListEntry& rEntry) const;
 
     /** Handles the given key event.
 
@@ -626,7 +626,7 @@ public:
 
     virtual tools::Rectangle GetFocusRect(const SvTreeListEntry*, tools::Long nLine );
     // Respects indentation
-    sal_IntPtr      GetTabPos(const SvTreeListEntry*, const SvLBoxTab*);
+    sal_IntPtr      GetTabPos(const SvTreeListEntry*, const SvLBoxTab*) const;
     void            InvalidateEntry( SvTreeListEntry* );
     SvLBoxItem*     GetItem( SvTreeListEntry*, tools::Long nX, SvLBoxTab** ppTab);
     SvLBoxItem*     GetItem( SvTreeListEntry*, tools::Long nX );

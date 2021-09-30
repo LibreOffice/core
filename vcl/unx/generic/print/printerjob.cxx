@@ -79,7 +79,7 @@ AppendPS (FILE* pDst, osl::File* pSrc, unsigned char* pBuffer)
  */
 
 std::unique_ptr<osl::File>
-PrinterJob::CreateSpoolFile (std::u16string_view rName, std::u16string_view rExtension)
+PrinterJob::CreateSpoolFile (std::u16string_view rName, std::u16string_view rExtension) const
 {
     OUString aFile = OUString::Concat(rName) + rExtension;
     OUString aFileURL;
@@ -670,7 +670,7 @@ static bool writeFeature( osl::File* pFile, const PPDKey* pKey, const PPDValue* 
         || nWritten != static_cast<sal_uInt64>(aFeature.getLength()));
 }
 
-bool PrinterJob::writeFeatureList( osl::File* pFile, const JobData& rJob, bool bDocumentSetup )
+bool PrinterJob::writeFeatureList( osl::File* pFile, const JobData& rJob, bool bDocumentSetup ) const
 {
     bool bSuccess = true;
 

@@ -308,7 +308,7 @@ public:
     bool                HasHorScrollBar() const { return m_aHorSBar->IsVisible(); }
     void                CallEventListeners( VclEventId nEvent, void* pData = nullptr );
 
-    bool                IsSelectable( const SvTreeListEntry* pEntry );
+    bool                IsSelectable( const SvTreeListEntry* pEntry ) const;
     void                SetForceMakeVisible(bool bEnable) { mbForceMakeVisible = bEnable; }
 
     // tdf#143114 allow to ask if CaptureOnButton is active

@@ -58,9 +58,9 @@ public:
 
     size_t calculateHash() const;
 
-    auto cbegin() { return mpData->cbegin(); }
+    auto cbegin() const { return mpData->cbegin(); }
 
-    auto cend() { return mpData->cend(); }
+    auto cend() const { return mpData->cend(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

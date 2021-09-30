@@ -61,17 +61,17 @@ namespace basegfx
         }
 
         // Convenience accessor for value at 0,0 position in the matrix
-        double a() { return get(0,0); }
+        double a() const { return get(0,0); }
         // Convenience accessor for value at 1,0 position in the matrix
-        double b() { return get(1,0); }
+        double b() const { return get(1,0); }
         // Convenience accessor for value at 0,1 position in the matrix
-        double c() { return get(0,1); }
+        double c() const { return get(0,1); }
         // Convenience accessor for value at 1,1 position in the matrix
-        double d() { return get(1,1); }
+        double d() const { return get(1,1); }
         // Convenience accessor for value at 0,2 position in the matrix
-        double e() { return get(0,2); }
+        double e() const { return get(0,2); }
         // Convenience accessor for value at 1,2 position in the matrix
-        double f() { return get(1,2); }
+        double f() const { return get(1,2); }
 
         /** constructor to allow setting all needed values for a 3x2 matrix at once. The
             parameter f_0x1 e.g. is the same as using set(0, 1, f)

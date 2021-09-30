@@ -580,7 +580,7 @@ void SvHeaderTabListBox::RecalculateAccessibleChildren()
     }
 }
 
-bool SvHeaderTabListBox::IsCellCheckBox( sal_Int32 _nRow, sal_uInt16 _nColumn, TriState& _rState )
+bool SvHeaderTabListBox::IsCellCheckBox( sal_Int32 _nRow, sal_uInt16 _nColumn, TriState& _rState ) const
 {
     bool bRet = false;
     SvTreeListEntry* pEntry = GetEntry( _nRow );

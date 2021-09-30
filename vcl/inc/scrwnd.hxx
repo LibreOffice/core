@@ -57,7 +57,7 @@ private:
     void                ImplCreateImageList();
     void                ImplSetRegion(const Bitmap& rRegionBmp);
     using Window::ImplGetMousePointer;
-    PointerStyle        ImplGetMousePointer( tools::Long nDistX, tools::Long nDistY );
+    PointerStyle        ImplGetMousePointer( tools::Long nDistX, tools::Long nDistY ) const;
     void                ImplDrawWheel(vcl::RenderContext& rRenderContext);
     void                ImplRecalcScrollValues();
 

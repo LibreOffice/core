@@ -84,7 +84,7 @@ namespace vcl
         // here (e.g. committing page data) depend on having full control over page traveling.
         // So use the travelXXX methods if you need to travel
 
-        tools::Long                LogicalCoordinateToPixel(int iCoordinate);
+        tools::Long                LogicalCoordinateToPixel(int iCoordinate) const;
         /**sets the number of buttons which should be left-aligned. Normally, buttons are right-aligned.
 
             only to be used during construction, before any layouting happened

@@ -619,7 +619,7 @@ void PixmapHolder::setBitmapDataTC( const sal_uInt8* pData, XImage* pImage )
     }
 }
 
-bool PixmapHolder::needsConversion( const sal_uInt8* pData )
+bool PixmapHolder::needsConversion( const sal_uInt8* pData ) const
 {
     if( pData[0] != 'B' || pData[1] != 'M' )
         return true;

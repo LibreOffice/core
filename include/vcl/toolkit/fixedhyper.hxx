@@ -42,7 +42,7 @@ private:
     void                Initialize();
 
     /** is position X position hitting text */
-    SAL_DLLPRIVATE bool ImplIsOverText(Point rPosition);
+    SAL_DLLPRIVATE bool ImplIsOverText(Point rPosition) const;
 
     DECL_LINK(HandleClick, FixedHyperlink&, void);
 

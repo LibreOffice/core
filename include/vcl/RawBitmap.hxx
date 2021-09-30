@@ -69,8 +69,8 @@ public:
     }
     // so we don't accidentally leave any code in that uses palette color indexes
     void SetPixel(tools::Long nY, tools::Long nX, BitmapColor nColor) = delete;
-    tools::Long Height() { return maSize.Height(); }
-    tools::Long Width() { return maSize.Width(); }
+    tools::Long Height() const { return maSize.Height(); }
+    tools::Long Width() const { return maSize.Width(); }
     sal_uInt8 GetBitCount() const { return mnBitCount; }
 };
 

@@ -967,7 +967,7 @@ public:
                                                   sal_uLong nLayoutWidth = 0, const tools::Long* pDXArray = nullptr,
                                                   const SalLayoutGlyphs* pGlyphs = nullptr ) const;
 
-    tools::Rectangle                   ImplGetTextBoundRect( const SalLayout& );
+    tools::Rectangle            ImplGetTextBoundRect( const SalLayout& ) const;
 
     bool                        GetTextOutline( tools::PolyPolygon&,
                                                 const OUString& rStr ) const;
@@ -1132,7 +1132,7 @@ public:
                                 ImplGetEmphasisMarkStyle( const vcl::Font& rFont );
 
     bool                        GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex,
-                                                    int nLen, std::vector< tools::Rectangle >& rVector );
+                                                    int nLen, std::vector< tools::Rectangle >& rVector ) const;
 
     sal_Int32                   HasGlyphs( const vcl::Font& rFont, const OUString& rStr,
                                            sal_Int32 nIndex = 0, sal_Int32 nLen = -1 ) const;

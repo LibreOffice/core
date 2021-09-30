@@ -59,7 +59,7 @@ public:
 
     sal_uInt16 GetPagePos(std::string_view rPageId) const;
     const OString& GetPageId(sal_uInt16 nIndex) const;
-    VclPtr<vcl::Window> GetPage(std::string_view rPageId);
+    VclPtr<vcl::Window> GetPage(std::string_view rPageId) const;
 
     void RemovePage(std::string_view rPageId);
     void InsertPage(const OString& rPageId, const OUString& rLabel, const Image& rImage,

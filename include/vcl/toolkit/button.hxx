@@ -49,7 +49,7 @@ private:
                                     Button (const Button &) = delete;
                                     Button & operator= (const Button &) = delete;
 public:
-    SAL_DLLPRIVATE DrawTextFlags    ImplGetTextStyle( WinBits nWinStyle, SystemTextColorFlags nSystemTextColorFlags );
+    SAL_DLLPRIVATE DrawTextFlags    ImplGetTextStyle( WinBits nWinStyle, SystemTextColorFlags nSystemTextColorFlags ) const;
     SAL_DLLPRIVATE void             ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos, Size& rSize,
                                               sal_Int32 nImageSep,
                                               DrawTextFlags nTextStyle, tools::Rectangle *pSymbolRect=nullptr, bool bAddImageSep = false );
@@ -384,7 +384,7 @@ private:
     bool            mbUsesExplicitGroup;
     Link<RadioButton&,void> maToggleHdl;
     SAL_DLLPRIVATE void     ImplInitRadioButtonData();
-    SAL_DLLPRIVATE WinBits  ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle );
+    SAL_DLLPRIVATE WinBits  ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle ) const;
     SAL_DLLPRIVATE void     ImplInitSettings( bool bBackground );
     SAL_DLLPRIVATE void     ImplDrawRadioButtonState(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE void     ImplDraw( OutputDevice* pDev, SystemTextColorFlags nSystemTextColorFlags,

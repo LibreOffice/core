@@ -101,7 +101,7 @@ public:
     void            ImplCalcLineSpacing(LogicalFontInstance *pFontInstance);
 
 private:
-    bool            ShouldUseWinMetrics(const vcl::TTGlobalFontInfo& rInfo);
+    bool            ShouldUseWinMetrics(const vcl::TTGlobalFontInfo& rInfo) const;
 
     // font instance attributes from the font request
     tools::Long            mnHeight;                   // Font size

@@ -146,14 +146,12 @@ tools::Rectangle ImplCalcActionBounds(const MetaAction& rAct, const OutputDevice
                     aString, 0, nStrEndPos, rTextAct.GetPoint(), 0, rTextAct.GetDXArray());
                 if (pSalLayout2)
                 {
-                    tools::Rectangle aBoundRect2(
-                        const_cast<OutputDevice&>(rOut).ImplGetTextBoundRect(*pSalLayout2));
+                    tools::Rectangle aBoundRect2(rOut.ImplGetTextBoundRect(*pSalLayout2));
                     aActionBounds = rOut.PixelToLogic(aBoundRect2);
                 }
                 if (pSalLayout1 && nStrStartPos > 0)
                 {
-                    tools::Rectangle aBoundRect1(
-                        const_cast<OutputDevice&>(rOut).ImplGetTextBoundRect(*pSalLayout1));
+                    tools::Rectangle aBoundRect1(rOut.ImplGetTextBoundRect(*pSalLayout1));
                     aActionBounds.SetLeft(rOut.PixelToLogic(aBoundRect1).Right());
                 }
             }

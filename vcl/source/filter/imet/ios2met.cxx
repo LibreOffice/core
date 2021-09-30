@@ -401,10 +401,10 @@ private:
     void SetRasterOp(RasterOp eROP);
 
     void SetPalette0RGB(sal_uInt16 nIndex, sal_uInt32 nCol);
-    sal_uInt32 GetPalette0RGB(sal_uInt32 nIndex);
+    sal_uInt32 GetPalette0RGB(sal_uInt32 nIndex) const;
         // gets color from palette, or, if it doesn't exist,
         // interprets nIndex as immediate RGB value.
-    Color GetPaletteColor(sal_uInt32 nIndex);
+    Color GetPaletteColor(sal_uInt32 nIndex) const;
 
 
     bool        IsLineInfo() const;
@@ -806,14 +806,14 @@ void OS2METReader::SetPalette0RGB(sal_uInt16 nIndex, sal_uInt32 nCol)
     pPaletteStack->p0RGB[nIndex]=nCol;
 }
 
-sal_uInt32 OS2METReader::GetPalette0RGB(sal_uInt32 nIndex)
+sal_uInt32 OS2METReader::GetPalette0RGB(sal_uInt32 nIndex) const
 {
     if (pPaletteStack!=nullptr && pPaletteStack->p0RGB!=nullptr &&
         pPaletteStack->nSize>nIndex) nIndex=pPaletteStack->p0RGB[nIndex];
     return nIndex;
 }
 
-Color OS2METReader::GetPaletteColor(sal_uInt32 nIndex)
+Color OS2METReader::GetPaletteColor(sal_uInt32 nIndex) const
 {
     nIndex=GetPalette0RGB(nIndex);
     return Color(sal::static_int_cast< sal_uInt8 >((nIndex>>16)&0xff),
