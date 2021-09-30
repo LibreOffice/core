@@ -4841,7 +4841,7 @@ void NaviContentBookmark::Copy( TransferDataContainer& rData ) const
     rData.CopyByteString(SotClipboardFormatId::SONLK, sStrBuf);
 }
 
-bool NaviContentBookmark::Paste( TransferableDataHelper& rData )
+bool NaviContentBookmark::Paste( const TransferableDataHelper& rData )
 {
     OUString sStr;
     bool bRet = rData.GetString( SotClipboardFormatId::SONLK, sStr );

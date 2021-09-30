@@ -158,7 +158,7 @@ public:
         @param bOptimize if set to true, the metafile is analyzed and if only one bitmap action is
                          present, then is inserted as a single graphic.
     */
-    bool                    InsertMetaFile( TransferableDataHelper& rDataHelper,
+    bool                    InsertMetaFile( const TransferableDataHelper& rDataHelper,
                                             const Point& rInsertPos,
                                             ImageMap const * pImageMap, bool bOptimize );
     SdrGrafObj*             InsertGraphic( const Graphic& rGraphic,

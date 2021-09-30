@@ -141,7 +141,7 @@ public:
     virtual void GetControlState(const sal_uInt16 /*nSId*/,
                                  boost::property_tree::ptree& /*rState*/) override {};
 
-    static OUString CreateDropFileName( TransferableDataHelper& rData );
+    static OUString CreateDropFileName( const TransferableDataHelper& rData );
     static OUString CleanEntry(const OUString& rEntry);
 
     RegionMode      GetRegionDropMode() const {return m_nRegionMode;}
