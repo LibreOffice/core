@@ -68,6 +68,7 @@ public:
     void testSystemTextColor();
     void testShouldDrawWavePixelAsRect();
     void testGetWaveLineSize();
+    void testErase();
     void testDrawPixel();
     void testDrawLine();
     void testDrawRect();
@@ -114,6 +115,7 @@ public:
     CPPUNIT_TEST(testSystemTextColor);
     CPPUNIT_TEST(testShouldDrawWavePixelAsRect);
     CPPUNIT_TEST(testGetWaveLineSize);
+    CPPUNIT_TEST(testErase);
     CPPUNIT_TEST(testDrawPixel);
     CPPUNIT_TEST(testDrawLine);
     CPPUNIT_TEST(testDrawRect);
@@ -1037,6 +1039,37 @@ void VclOutdevTest::testGetWaveLineSize()
     }
 }
 
+void VclOutdevTest::testErase()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    // this actually triggers Erase()
+    pVDev->SetOutputSizePixel(Size(1, 1));
+
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a line color action (start)", MetaActionType::LINECOLOR,
+                                 pAction->GetType());
+
+    pAction = aMtf.GetAction(1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action (start)", MetaActionType::FILLCOLOR,
+                                 pAction->GetType());
+
+    pAction = aMtf.GetAction(2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a rect action", MetaActionType::RECT, pAction->GetType());
+
+    pAction = aMtf.GetAction(3);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a line color action (end)", MetaActionType::LINECOLOR,
+                                 pAction->GetType());
+
+    pAction = aMtf.GetAction(4);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action (end)", MetaActionType::FILLCOLOR,
+                                 pAction->GetType());
+}
+
+const size_t ERASE_ACTIONS = 4;
+
 void VclOutdevTest::testDrawPixel()
 {
     {
@@ -1044,13 +1077,14 @@ void VclOutdevTest::testDrawPixel()
         GDIMetaFile aMtf;
         aMtf.Record(pVDev.get());
 
+        // triggers an Erase()
         pVDev->SetOutputSizePixel(Size(1, 1));
         pVDev->SetLineColor(COL_RED);
         pVDev->DrawPixel(Point(0, 0), COL_GREEN);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Color not green", COL_GREEN, pVDev->GetPixel(Point(0, 0)));
 
-        MetaAction* pAction = aMtf.GetAction(aMtf.GetActionSize() - 1);
+        MetaAction* pAction = aMtf.GetAction(ERASE_ACTIONS + 2);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a pixel action", MetaActionType::PIXEL,
                                      pAction->GetType());
         MetaPixelAction* pPixelAction = dynamic_cast<MetaPixelAction*>(pAction);
@@ -1071,7 +1105,7 @@ void VclOutdevTest::testDrawPixel()
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Color not red", COL_RED, pVDev->GetPixel(Point(0, 0)));
 
-        MetaAction* pAction = aMtf.GetAction(aMtf.GetActionSize() - 1);
+        MetaAction* pAction = aMtf.GetAction(ERASE_ACTIONS + 2);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a point action", MetaActionType::POINT,
                                      pAction->GetType());
         MetaPointAction* pPointAction = dynamic_cast<MetaPointAction*>(pAction);
@@ -1090,7 +1124,7 @@ void VclOutdevTest::testDrawLine()
         pVDev->SetOutputSizePixel(Size(1, 100));
         pVDev->DrawLine(Point(0, 0), Point(0, 50));
 
-        MetaAction* pAction = aMtf.GetAction(aMtf.GetActionSize() - 1);
+        MetaAction* pAction = aMtf.GetAction(ERASE_ACTIONS + 2);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a line action", MetaActionType::LINE, pAction->GetType());
         MetaLineAction* pLineAction = dynamic_cast<MetaLineAction*>(pAction);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Line start has incorrect position", Point(0, 0),
@@ -1115,7 +1149,7 @@ void VclOutdevTest::testDrawLine()
         pVDev->SetOutputSizePixel(Size(1, 100));
         pVDev->DrawLine(Point(0, 0), Point(0, 50), aLineInfo);
 
-        MetaAction* pAction = aMtf.GetAction(aMtf.GetActionSize() - 1);
+        MetaAction* pAction = aMtf.GetAction(ERASE_ACTIONS + 2);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a line action", MetaActionType::LINE, pAction->GetType());
         MetaLineAction* pLineAction = dynamic_cast<MetaLineAction*>(pAction);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Line start has incorrect position", Point(0, 0),
@@ -1147,7 +1181,7 @@ void VclOutdevTest::testDrawRect()
         pVDev->SetOutputSizePixel(Size(1, 100));
         pVDev->DrawRect(tools::Rectangle(Point(0, 0), Size(50, 60)));
 
-        MetaAction* pAction = aMtf.GetAction(aMtf.GetActionSize() - 1);
+        MetaAction* pAction = aMtf.GetAction(ERASE_ACTIONS + 2);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a rect action", MetaActionType::RECT, pAction->GetType());
         MetaRectAction* pRectAction = dynamic_cast<MetaRectAction*>(pAction);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Rectangle wrong", tools::Rectangle(Point(0, 0), Size(50, 60)),
@@ -1162,7 +1196,7 @@ void VclOutdevTest::testDrawRect()
         pVDev->SetOutputSizePixel(Size(1, 100));
         pVDev->DrawRect(tools::Rectangle(Point(0, 0), Size(50, 60)), 5, 10);
 
-        MetaAction* pAction = aMtf.GetAction(aMtf.GetActionSize() - 1);
+        MetaAction* pAction = aMtf.GetAction(ERASE_ACTIONS + 2);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a rect action", MetaActionType::ROUNDRECT,
                                      pAction->GetType());
         MetaRoundRectAction* pRectAction = dynamic_cast<MetaRoundRectAction*>(pAction);
@@ -1184,7 +1218,7 @@ void VclOutdevTest::testDrawEllipse()
     pVDev->SetOutputSizePixel(Size(1, 100));
     pVDev->DrawEllipse(tools::Rectangle(Point(0, 0), Size(50, 60)));
 
-    MetaAction* pAction = aMtf.GetAction(aMtf.GetActionSize() - 1);
+    MetaAction* pAction = aMtf.GetAction(ERASE_ACTIONS + 2);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a ellipse action", MetaActionType::ELLIPSE,
                                  pAction->GetType());
     MetaEllipseAction* pEllipseAction = dynamic_cast<MetaEllipseAction*>(pAction);
@@ -1203,7 +1237,7 @@ void VclOutdevTest::testDrawPie()
     pVDev->SetOutputSizePixel(Size(1, 100));
     pVDev->DrawPie(aRect, aRect.TopRight(), aRect.TopCenter());
 
-    MetaAction* pAction = aMtf.GetAction(aMtf.GetActionSize() - 1);
+    MetaAction* pAction = aMtf.GetAction(ERASE_ACTIONS + 2);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a pie action", MetaActionType::PIE, pAction->GetType());
     MetaPieAction* pPieAction = dynamic_cast<MetaPieAction*>(pAction);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Pie rect wrong", aRect, pPieAction->GetRect());
@@ -1223,7 +1257,7 @@ void VclOutdevTest::testDrawChord()
     pVDev->SetOutputSizePixel(Size(1, 100));
     pVDev->DrawChord(aRect, Point(30, 31), Point(32, 33));
 
-    MetaAction* pAction = aMtf.GetAction(aMtf.GetActionSize() - 1);
+    MetaAction* pAction = aMtf.GetAction(ERASE_ACTIONS + 2);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a chord action", MetaActionType::CHORD, pAction->GetType());
     MetaChordAction* pChordAction = dynamic_cast<MetaChordAction*>(pAction);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Chord rect wrong", aRect, pChordAction->GetRect());
@@ -1244,7 +1278,7 @@ void VclOutdevTest::testDrawArc()
     pVDev->SetOutputSizePixel(Size(1, 100));
     pVDev->DrawArc(aRect, Point(10, 11), Point(12, 13));
 
-    MetaAction* pAction = aMtf.GetAction(aMtf.GetActionSize() - 1);
+    MetaAction* pAction = aMtf.GetAction(ERASE_ACTIONS + 2);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a arc action", MetaActionType::ARC, pAction->GetType());
     MetaArcAction* pArcAction = dynamic_cast<MetaArcAction*>(pAction);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Arc rect wrong", aRect, pArcAction->GetRect());
