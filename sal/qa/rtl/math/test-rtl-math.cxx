@@ -351,6 +351,12 @@ public:
                     2, '.');
         CPPUNIT_ASSERT_EQUAL( OUString("4503599627370496.00"), aRes);
 
+        fVal = -4503599627370496.0;
+        aRes = rtl::math::doubleToUString( fVal,
+                    rtl_math_StringFormat_Automatic,
+                    2, '.');
+        CPPUNIT_ASSERT_EQUAL( OUString("-4503599627370496.00"), aRes);
+
         fVal = 9007199254740991.0;  // (2^53)-1
         aRes = rtl::math::doubleToUString( fVal,
                     rtl_math_StringFormat_Automatic,
