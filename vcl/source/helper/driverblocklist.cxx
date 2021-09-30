@@ -723,7 +723,7 @@ bool IsDeviceBlocked(const OUString& blocklistURL, VersionType versionType,
 #ifdef _WIN32
 int32_t GetWindowsVersion()
 {
-    static int32_t winVersion = [&]() {
+    static int32_t winVersion = []() {
         // GetVersion(Ex) and VersionHelpers (based on VerifyVersionInfo) API are
         // subject to manifest-based behavior since Windows 8.1, so give wrong results.
         // Another approach would be to use NetWkstaGetInfo, but that has some small
