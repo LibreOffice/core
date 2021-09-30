@@ -11327,15 +11327,13 @@ dnl ***************************************
 dnl testing libc version for Linux...
 dnl ***************************************
 if test "$_os" = "Linux"; then
-    AC_MSG_CHECKING([whether libc is >= 2.1.1])
-    exec 6>/dev/null # no output
-    AC_CHECK_LIB(c, gnu_get_libc_version, HAVE_LIBC=yes; export HAVE_LIBC)
-    exec 6>&1 # output on again
-    if test "$HAVE_LIBC"; then
-        AC_MSG_RESULT([yes])
-    else
-        AC_MSG_ERROR([no, upgrade libc])
-    fi
+    AC_MSG_CHECKING([whether the libc is recent enough])
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+    #include <features.h>
+    #if defined(__GNU_LIBRARY__) && (__GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ < 1))
+    #error glibc >= 2.1 is required
+    #endif
+    ]])],, [AC_MSG_RESULT([yes])], [AC_MSG_ERROR([no, upgrade libc])])
 fi
 
 dnl =========================================
