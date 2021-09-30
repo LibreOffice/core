@@ -3265,6 +3265,16 @@ private:
                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    static void update_style(GtkWidget* pWidget, gpointer pData)
+    {
+        if (GTK_IS_CONTAINER(pWidget))
+            gtk_container_foreach(GTK_CONTAINER(pWidget), update_style, pData);
+        GtkWidgetClass* pWidgetClass = GTK_WIDGET_GET_CLASS(pWidget);
+        pWidgetClass->style_updated(pWidget);
+    }
+#endif
+
 public:
     GtkInstanceWidget(GtkWidget* pWidget, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : m_pWidget(pWidget)
@@ -4321,7 +4331,20 @@ public:
         bool bAlreadyMapped = gtk_widget_get_mapped(m_pWidget);
 
         if (!bAlreadyRealized)
+        {
+#if !GTK_CHECK_VERSION(4, 0, 0)
+            /*
+               tdf#141633 The "sample db" example (Mockup.odb) has multiline
+               entries used in its "Journal Entry" column. Those are painted by
+               taking snapshots of a never-really-shown textview widget.
+               Without this style_updated then the textview is always drawn
+               using its original default font size and changing the page zoom
+               has no effect on the size of text in the "Journal Entry" column.
+            */
+            update_style(m_pWidget, nullptr);
+#endif
             gtk_widget_realize(m_pWidget);
+        }
         if (!bAlreadyVisible)
             gtk_widget_show(m_pWidget);
         if (!bAlreadyMapped)
