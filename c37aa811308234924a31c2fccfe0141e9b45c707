@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68024c1d_e56176c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-30T12:01:19Z",
+      "side": 1,
+      "message": "\nA bit unexpected: I select \"et\" from \"met\".  In title-case, it expanded the selection to include the whole first word, and changed it to \"Met\". (same thing is true if multiple words are selected.)\n",
+      "revId": "c37aa811308234924a31c2fccfe0141e9b45c707",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59ad538e_d7c24a5d",
+        "filename": "editeng/source/editeng/impedit4.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2747,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-30T12:01:19Z",
+      "side": 1,
+      "message": "Title case might have expanded the selection here.",
+      "range": {
+        "startLine": 2747,
+        "startChar": 12,
+        "endLine": 2747,
+        "endChar": 54
+      },
+      "revId": "c37aa811308234924a31c2fccfe0141e9b45c707",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
