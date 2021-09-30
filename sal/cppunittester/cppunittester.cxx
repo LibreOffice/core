@@ -24,7 +24,7 @@
 #include <windows.h>
 #endif
 #if defined(_WIN32) && defined(_DEBUG)
-#include "dbghelp.h"
+#include <dbghelp.h>
 #include <sal/backtrace.hxx>
 #include <signal.h>
 #endif
