@@ -1372,6 +1372,11 @@ void Test::testUserDefinedNumberFormats()
         sExpected = "#FMT";
         checkPreviewString(aFormatter, sCode, 2E+306, eLang, sExpected);
     }
+    {  // tdf#144697
+        sCode =     "YYYY-MM-DD";
+        sExpected = "#FMT";
+        checkPreviewString(aFormatter, sCode, -12662108.0, eLang, sExpected);
+    }
     {  // tdf#122991
         sCode =     "[HH]:MM:SS";
         sExpected = "08:47:00";
