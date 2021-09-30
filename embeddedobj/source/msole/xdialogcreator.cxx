@@ -307,8 +307,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceInitF
                                             2 );
 
     uno::Reference< embed::XEmbeddedObject > xResult(
-                    static_cast< ::cppu::OWeakObject* > ( new OleEmbeddedObject( m_xContext ) ),
-                    uno::UNO_QUERY );
+                    new OleEmbeddedObject( m_xContext ) );
 
     uno::Reference< embed::XEmbedPersist > xPersist( xResult, uno::UNO_QUERY_THROW );
     xPersist->setPersistentEntry( xStorage,

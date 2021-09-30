@@ -966,8 +966,7 @@ void OleEmbeddedObject::CreateOleComponent_Impl(
         m_pOleComponent = pOleComponent ? pOleComponent : new OleComponent( m_xContext, this );
 
         if ( !m_xClosePreventer.is() )
-            m_xClosePreventer.set( static_cast< ::cppu::OWeakObject* >( new OClosePreventer ),
-                                   uno::UNO_QUERY );
+            m_xClosePreventer = new OClosePreventer;
 
         m_pOleComponent->addCloseListener( m_xClosePreventer );
     }
