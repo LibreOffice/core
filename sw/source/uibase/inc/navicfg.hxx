@@ -33,6 +33,9 @@ class SwNavigationConfig final : public utl::ConfigItem
     sal_Int32      m_nActiveBlock;   //ActiveBlock//Expand/CollapsState
     bool           m_bIsSmall;       //ShowListBox
     bool           m_bIsGlobalActive; //GlobalDocMode// global view for GlobalDoc valid?
+    sal_Int32      m_nOutlineTracking;
+    bool           m_bIsTableTracking;
+    bool           m_bIsSectionTracking;
 
     static css::uno::Sequence<OUString> GetPropertyNames();
 
@@ -95,6 +98,33 @@ public:
                         {
                             SetModified();
                             m_bIsGlobalActive = bSet;
+                        }
+                    }
+
+    sal_Int32   GetOutlineTracking()const {return m_nOutlineTracking;}
+    void        SetOutlineTracking(sal_Int32 nSet){
+                        if(m_nOutlineTracking != nSet)
+                        {
+                            SetModified();
+                            m_nOutlineTracking = nSet;
+                        }
+                    }
+
+    bool    IsTableTracking() const {return m_bIsTableTracking;}
+    void    SetTableTracking(bool bSet){
+                        if(m_bIsTableTracking != bSet)
+                        {
+                            SetModified();
+                            m_bIsTableTracking = bSet;
+                        }
+                    }
+
+    bool    IsSectionTracking() const {return m_bIsSectionTracking;}
+    void    SetSectionTracking(bool bSet){
+                        if(m_bIsSectionTracking != bSet)
+                        {
+                            SetModified();
+                            m_bIsSectionTracking = bSet;
                         }
                     }
 };
