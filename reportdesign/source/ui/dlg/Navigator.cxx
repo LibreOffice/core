@@ -179,7 +179,7 @@ public:
     virtual void traverseDetail(const uno::Reference< report::XSection>& xSection) override;
 
     bool find(const uno::Reference<uno::XInterface>& xContent, weld::TreeIter& rIter);
-    void removeEntry(weld::TreeIter& rEntry, bool bRemove = true);
+    void removeEntry(const weld::TreeIter& rEntry, bool bRemove = true);
 
     void grab_focus() { m_xTreeView->grab_focus(); }
 
@@ -663,7 +663,7 @@ void NavigatorTree::_disposing(const lang::EventObject& _rSource)
         removeEntry(*xEntry);
 }
 
-void NavigatorTree::removeEntry(weld::TreeIter& rEntry, bool bRemove)
+void NavigatorTree::removeEntry(const weld::TreeIter& rEntry, bool bRemove)
 {
     std::unique_ptr<weld::TreeIter> xChild = m_xTreeView->make_iterator(&rEntry);
     bool bChild = m_xTreeView->iter_children(*xChild);

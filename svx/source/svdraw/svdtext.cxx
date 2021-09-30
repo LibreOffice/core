@@ -39,7 +39,7 @@ SdrText::~SdrText()
     clearWeak();
 }
 
-void SdrText::CheckPortionInfo( SdrOutliner& rOutliner )
+void SdrText::CheckPortionInfo( const SdrOutliner& rOutliner )
 {
     if(mbPortionInfoChecked)
         return;

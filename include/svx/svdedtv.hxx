@@ -189,7 +189,7 @@ public:
      */
     void EndTextEditAllViews() const;
 
-    std::vector< std::unique_ptr<SdrUndoAction> > CreateConnectorUndo( SdrObject& rO );
+    std::vector< std::unique_ptr<SdrUndoAction> > CreateConnectorUndo( const SdrObject& rO );
     void AddUndoActions( std::vector< std::unique_ptr<SdrUndoAction> > );
 
     // Layermanagement with Undo.

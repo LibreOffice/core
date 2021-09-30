@@ -1494,7 +1494,7 @@ class ImplRenderPaintProc : public sdr::contact::ViewObjectContactRedirector
     SdrPageView*            pSdrPageView;
     vcl::PDFExtOutDevData*  pPDFExtOutDevData;
 
-    vcl::PDFWriter::StructElement ImplBegStructureTag( SdrObject& rObject );
+    vcl::PDFWriter::StructElement ImplBegStructureTag( const SdrObject& rObject );
 
 public:
     bool IsVisible  ( const SdrObject* pObj ) const;
@@ -1711,7 +1711,7 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
     }
 }
 
-vcl::PDFWriter::StructElement ImplRenderPaintProc::ImplBegStructureTag( SdrObject& rObject )
+vcl::PDFWriter::StructElement ImplRenderPaintProc::ImplBegStructureTag( const SdrObject& rObject )
 {
     vcl::PDFWriter::StructElement eElement(vcl::PDFWriter::NonStructElement);
 
@@ -1729,7 +1729,7 @@ vcl::PDFWriter::StructElement ImplRenderPaintProc::ImplBegStructureTag( SdrObjec
                 eElement = vcl::PDFWriter::Heading;
             else if ( nIdentifier == OBJ_OUTLINETEXT )
                 eElement = vcl::PDFWriter::Division;
-            else if ( !bIsTextObj || !static_cast<SdrTextObj&>(rObject).HasText() )
+            else if ( !bIsTextObj || !static_cast<const SdrTextObj&>(rObject).HasText() )
                 eElement = vcl::PDFWriter::Figure;
         }
     }

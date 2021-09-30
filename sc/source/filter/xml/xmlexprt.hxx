@@ -178,7 +178,7 @@ class ScXMLExport : public SvXMLExport
     void WriteEditCell(const EditTextObject* pText);
     void WriteMultiLineFormulaResult(const ScFormulaCell* pCell);
     void WriteAreaLink(const ScMyCell& rMyCell);
-    void WriteAnnotation(ScMyCell& rMyCell);
+    void WriteAnnotation(const ScMyCell& rMyCell);
     void WriteDetective(const ScMyCell& rMyCell);
     void ExportShape(const css::uno::Reference < css::drawing::XShape >& xShape, css::awt::Point* pPoint);
     void WriteShapes(const ScMyCell& rMyCell);

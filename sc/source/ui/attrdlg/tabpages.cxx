@@ -161,7 +161,7 @@ IMPL_LINK(ScTabPageProtection, HidePrintClickHdl, weld::Toggleable&, rBox, void)
     ButtonClick(rBox);
 }
 
-void ScTabPageProtection::ButtonClick(weld::Toggleable& rBox)
+void ScTabPageProtection::ButtonClick(const weld::Toggleable& rBox)
 {
     TriState eState = rBox.get_state();
     if (eState == TRISTATE_INDET)

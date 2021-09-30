@@ -2283,7 +2283,7 @@ IMPL_LINK(WatchWindow, EditedEntryHdl, const IterString&, rIterString, bool)
 namespace
 {
 
-void implCollapseModifiedObjectEntry(weld::TreeIter& rParent, weld::TreeView& rTree)
+void implCollapseModifiedObjectEntry(const weld::TreeIter& rParent, weld::TreeView& rTree)
 {
     rTree.collapse_row(rParent);
 

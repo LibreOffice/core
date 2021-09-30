@@ -622,7 +622,7 @@ IMPL_LINK_NOARG(SwDropCapsPage, WholeWordHdl, weld::Toggleable&, void)
     bModified = true;
 }
 
-void SwDropCapsPage::ModifyEntry(weld::Entry& rEdit)
+void SwDropCapsPage::ModifyEntry(const weld::Entry& rEdit)
 {
     OUString sPreview;
 

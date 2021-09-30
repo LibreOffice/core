@@ -2230,7 +2230,7 @@ void ChartExport::exportDoughnutChart( const Reference< chart2::XChartType >& xC
 
 namespace {
 
-void writeDataLabelsRange(FSHelperPtr& pFS, XmlFilterBase* pFB, DataLabelsRange& rDLblsRange)
+void writeDataLabelsRange(const FSHelperPtr& pFS, const XmlFilterBase* pFB, DataLabelsRange& rDLblsRange)
 {
     if (rDLblsRange.empty())
         return;

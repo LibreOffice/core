@@ -911,22 +911,22 @@ void SfxCommonTemplateDialog_Impl::EnableEdit(bool b, StyleList* rStyleList)
     if (rStyleList == &m_aStyleList || rStyleList == nullptr)
         m_aStyleList.Enableedit(b);
 }
-void SfxCommonTemplateDialog_Impl::EnableDel(bool b, StyleList* rStyleList)
+void SfxCommonTemplateDialog_Impl::EnableDel(bool b, const StyleList* rStyleList)
 {
     if (rStyleList == &m_aStyleList || rStyleList == nullptr)
         m_aStyleList.Enabledel(b);
 }
-void SfxCommonTemplateDialog_Impl::EnableNew(bool b, StyleList* rStyleList)
+void SfxCommonTemplateDialog_Impl::EnableNew(bool b, const StyleList* rStyleList)
 {
     if (rStyleList == &m_aStyleList || rStyleList == nullptr)
         m_aStyleList.Enablenew(b);
 }
-void SfxCommonTemplateDialog_Impl::EnableHide(bool b, StyleList* rStyleList)
+void SfxCommonTemplateDialog_Impl::EnableHide(bool b, const StyleList* rStyleList)
 {
     if (rStyleList == &m_aStyleList || rStyleList == nullptr)
         m_aStyleList.Enablehide(b);
 }
-void SfxCommonTemplateDialog_Impl::EnableShow(bool b, StyleList* rStyleList)
+void SfxCommonTemplateDialog_Impl::EnableShow(bool b, const StyleList* rStyleList)
 {
     if (rStyleList == &m_aStyleList || rStyleList == nullptr)
         m_aStyleList.Enableshow(b);

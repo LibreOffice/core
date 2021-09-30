@@ -34,7 +34,7 @@ namespace connectivity::dbase
 
         class ODbaseIndex : public ODbaseIndex_BASE
         {
-            friend SvStream& WriteODbaseIndex(SvStream &rStream, ODbaseIndex&);
+            friend SvStream& WriteODbaseIndex(SvStream &rStream, const ODbaseIndex&);
             friend SvStream& operator >> (SvStream &rStream, ODbaseIndex&);
 
             friend class ONDXNode;
@@ -129,7 +129,7 @@ namespace connectivity::dbase
             bool ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValue& rValue);
         };
 
-        SvStream& WriteODbaseIndex(SvStream &rStream, ODbaseIndex&);
+        SvStream& WriteODbaseIndex(SvStream &rStream, const ODbaseIndex&);
         SvStream& operator >> (SvStream &rStream, ODbaseIndex&);
 
         void ReadHeader(SvStream & rStream, ODbaseIndex::NDXHeader & rHeader);

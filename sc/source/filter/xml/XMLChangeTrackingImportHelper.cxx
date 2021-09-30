@@ -569,7 +569,7 @@ void ScXMLChangeTrackingImportHelper::SetMovementDependencies(ScMyMoveAction* pA
     }
 }
 
-void ScXMLChangeTrackingImportHelper::SetContentDependencies(const ScMyContentAction* pAction, ScChangeActionContent* pActContent, ScDocument& rDoc)
+void ScXMLChangeTrackingImportHelper::SetContentDependencies(const ScMyContentAction* pAction, ScChangeActionContent* pActContent, const ScDocument& rDoc)
 {
     if (!pActContent || !pAction->nPreviousAction)
         return;

@@ -572,7 +572,7 @@ protected:
 
     SAL_DLLPRIVATE Point                ImplOutputToFrame( const Point& rPos );
 
-    SAL_DLLPRIVATE void                 ImplInvalidateParentFrameRegion( vcl::Region& rRegion );
+    SAL_DLLPRIVATE void                 ImplInvalidateParentFrameRegion( const vcl::Region& rRegion );
     SAL_DLLPRIVATE void                 ImplValidateFrameRegion( const vcl::Region* rRegion, ValidateFlags nFlags );
     SAL_DLLPRIVATE void                 ImplValidate();
     SAL_DLLPRIVATE void                 ImplMoveInvalidateRegion( const tools::Rectangle& rRect, tools::Long nHorzScroll, tools::Long nVertScroll, bool bChildren );

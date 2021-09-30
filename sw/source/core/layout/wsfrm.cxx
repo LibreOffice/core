@@ -4230,10 +4230,10 @@ void SwRootFrame::InvalidateAllObjPos()
 static void AddRemoveFlysForNode(
         SwTextFrame & rFrame, SwTextNode & rTextNode,
         std::set<sal_uLong> *const pSkipped,
-        SwFrameFormats & rTable,
+        const SwFrameFormats & rTable,
         SwPageFrame *const pPage,
         SwTextNode const*const pNode,
-        std::vector<sw::Extent>::const_iterator & rIterFirst,
+        std::vector<sw::Extent>::const_iterator const& rIterFirst,
         std::vector<sw::Extent>::const_iterator const& rIterEnd,
         SwTextNode const*const pFirstNode, SwTextNode const*const pLastNode)
 {

@@ -290,7 +290,7 @@ namespace dbaui
 
         /** close the connection (and collapse the list entries) of the given list entries
         */
-        void        closeConnection(weld::TreeIter& rEntry, bool bDisposeConnection = true);
+        void        closeConnection(const weld::TreeIter& rEntry, bool bDisposeConnection = true);
 
         void        populateTree(const css::uno::Reference< css::container::XNameAccess>& xNameAccess, const weld::TreeIter& rParent, EntryType eEntryType);
         void        initializeTreeModel();
@@ -309,7 +309,7 @@ namespace dbaui
         */
         std::unique_ptr<ImageProvider> getImageProviderFor(const weld::TreeIter* pAnyEntry);
 
-        void    implAdministrate(weld::TreeIter& rApplyTo);
+        void    implAdministrate(const weld::TreeIter& rApplyTo);
 
         bool implCopyObject(ODataClipboard& rExchange, const weld::TreeIter& rApplyTo, sal_Int32 nCommandType);
 
@@ -350,7 +350,7 @@ namespace dbaui
             bool _bSelectDirect
         );
 
-        std::unique_ptr<weld::TreeIter> implGetConnectionEntry(weld::TreeIter& rEntry) const;
+        std::unique_ptr<weld::TreeIter> implGetConnectionEntry(const weld::TreeIter& rEntry) const;
         /// inserts an entry into the tree
         std::unique_ptr<weld::TreeIter> implAppendEntry(
             const weld::TreeIter* pParent,

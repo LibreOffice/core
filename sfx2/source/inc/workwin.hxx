@@ -243,7 +243,7 @@ public:
     // Methods for all Child windows
     void                    DataChanged_Impl();
     void                    ReleaseChild_Impl( vcl::Window& rWindow );
-    void                    ReleaseChild_Impl(SfxDialogController&);
+    void                    ReleaseChild_Impl(const SfxDialogController&);
     SfxChild_Impl*          RegisterChild_Impl( vcl::Window& rWindow, SfxChildAlignment eAlign );
     SfxChild_Impl*          RegisterChild_Impl(std::shared_ptr<SfxDialogController>& rController, SfxChildAlignment eAlign);
     void                    ShowChildren_Impl();

@@ -190,7 +190,7 @@ struct OStorage_Impl
     ~OStorage_Impl();
 
     void SetReadOnlyWrap( OStorage& aStorage );
-    void RemoveReadOnlyWrap( OStorage& aStorage );
+    void RemoveReadOnlyWrap( const OStorage& aStorage );
 
     void OpenOwnPackage();
     void ReadContents();

@@ -211,7 +211,7 @@ bool SlideShow::IsRunning( ViewShellBase const & rBase )
     return xSlideShow.is() && xSlideShow->isRunning();
 }
 
-bool SlideShow::IsRunning( ViewShell& rViewShell )
+bool SlideShow::IsRunning( const ViewShell& rViewShell )
 {
     rtl::Reference< SlideShow > xSlideShow( GetSlideShow( rViewShell.GetViewShellBase() ) );
     return xSlideShow.is() && xSlideShow->isRunning() && (xSlideShow->mxController->getViewShell() == &rViewShell);

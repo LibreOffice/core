@@ -75,7 +75,7 @@ SdrPaintWindow* SdrPaintView::GetPaintWindow(sal_uInt32 nIndex) const
     return maPaintWindows[nIndex].get();
 }
 
-void SdrPaintView::DeletePaintWindow(SdrPaintWindow& rOld)
+void SdrPaintView::DeletePaintWindow(const SdrPaintWindow& rOld)
 {
     auto aFindResult = ::std::find_if(maPaintWindows.begin(), maPaintWindows.end(),
                             [&](const std::unique_ptr<SdrPaintWindow>& p) { return p.get() == &rOld; });

@@ -52,7 +52,7 @@ namespace pcr
         css::uno::Reference< css::beans::XPropertySet >  GetSelected() const { return m_xNoAssignment->get_active() ? css::uno::Reference< css::beans::XPropertySet > () : m_xSelectedControl; }
 
     private:
-        sal_Int32 InsertEntries(const css::uno::Reference< css::uno::XInterface >& _xContainer, weld::TreeIter& rContainerEntry);
+        sal_Int32 InsertEntries(const css::uno::Reference< css::uno::XInterface >& _xContainer, const weld::TreeIter& rContainerEntry);
 
         DECL_LINK(OnEntrySelected, weld::TreeView&, void);
         DECL_LINK(OnNoAssignmentClicked, weld::Toggleable&, void);

@@ -160,13 +160,13 @@ void SwEditShell::Insert2(SwField const & rField, const bool bForceExpandHints)
 }
 
 /// Are the PaMs positioned on fields?
-static SwTextField* lcl_FindInputField( SwDoc* pDoc, SwField& rField )
+static SwTextField* lcl_FindInputField( SwDoc* pDoc, const SwField& rField )
 {
     // Search field via its address. For input fields this needs to be done in protected fields.
     SwTextField* pTField = nullptr;
     if (SwFieldIds::Input == rField.Which()
         || (SwFieldIds::SetExp == rField.Which()
-            && static_cast<SwSetExpField&>(rField).GetInputFlag()
+            && static_cast<const SwSetExpField&>(rField).GetInputFlag()
             && (static_cast<SwSetExpFieldType*>(rField.GetTyp())->GetType()
                 & nsSwGetSetExpType::GSE_STRING)))
     {
@@ -181,7 +181,7 @@ static SwTextField* lcl_FindInputField( SwDoc* pDoc, SwField& rField )
         }
     }
     else if( SwFieldIds::SetExp == rField.Which()
-        && static_cast<SwSetExpField&>(rField).GetInputFlag() )
+        && static_cast<const SwSetExpField&>(rField).GetInputFlag() )
     {
         for (const SfxPoolItem* pItem : pDoc->GetAttrPool().GetItemSurrogates(RES_TXTATR_FIELD))
         {

@@ -135,7 +135,7 @@ friend class SwDropCapsPict;
     virtual DeactivateRC   DeactivatePage(SfxItemSet *pSet) override;
     void    FillSet( SfxItemSet &rSet );
 
-    void ModifyEntry(weld::Entry& rEdit);
+    void ModifyEntry(const weld::Entry& rEdit);
 
     DECL_LINK(ClickHdl, weld::Toggleable&, void);
     DECL_LINK(MetricValueChangedHdl, weld::MetricSpinButton&, void);

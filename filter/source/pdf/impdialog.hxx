@@ -151,7 +151,7 @@ public:
     friend class                ImpPDFTabLinksPage;
     friend class                ImpPDFTabSigningPage;
 
-    ImpPDFTabDialog(weld::Window* pParent, Sequence< PropertyValue >& rFilterData,
+    ImpPDFTabDialog(weld::Window* pParent, const Sequence< PropertyValue >& rFilterData,
                     const css::uno::Reference< XComponent >& rDoc);
     virtual                     ~ImpPDFTabDialog() override;
 

@@ -75,7 +75,7 @@ void SvxScriptOrgDialog::delUserData(const weld::TreeIter& rIter)
     }
 }
 
-void SvxScriptOrgDialog::deleteTree(weld::TreeIter& rIter)
+void SvxScriptOrgDialog::deleteTree(const weld::TreeIter& rIter)
 {
     delUserData(rIter);
     std::unique_ptr<weld::TreeIter> xIter = m_xScriptsBox->make_iterator(&rIter);
@@ -697,7 +697,7 @@ Reference< XModel > SvxScriptOrgDialog::getModel(const weld::TreeIter& rEntry)
     return model;
 }
 
-void SvxScriptOrgDialog::createEntry(weld::TreeIter& rEntry)
+void SvxScriptOrgDialog::createEntry(const weld::TreeIter& rEntry)
 {
 
     Reference< browse::XBrowseNode >  aChildNode;
@@ -927,7 +927,7 @@ void SvxScriptOrgDialog::renameEntry(const weld::TreeIter& rEntry)
     }
 }
 
-void SvxScriptOrgDialog::deleteEntry(weld::TreeIter& rEntry)
+void SvxScriptOrgDialog::deleteEntry(const weld::TreeIter& rEntry)
 {
     bool result = false;
     Reference< browse::XBrowseNode > node = getBrowseNode(rEntry);

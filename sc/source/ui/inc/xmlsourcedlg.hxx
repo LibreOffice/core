@@ -76,14 +76,14 @@ private:
     void SelectSourceFile();
     void LoadSourceFileStructure(const OUString& rPath);
     void TreeItemSelected();
-    void DefaultElementSelected(weld::TreeIter& rEntry);
-    void RepeatElementSelected(weld::TreeIter& rEntry);
-    void AttributeSelected(weld::TreeIter& rEntry);
+    void DefaultElementSelected(const weld::TreeIter& rEntry);
+    void RepeatElementSelected(const weld::TreeIter& rEntry);
+    void AttributeSelected(const weld::TreeIter& rEntry);
 
     void SetNonLinkable();
     void SetSingleLinkable();
     void SetRangeLinkable();
-    void SelectAllChildEntries(weld::TreeIter& rEntry);
+    void SelectAllChildEntries(const weld::TreeIter& rEntry);
 
     /**
      * Check if any of its parents is linked or repeated.  The passed entry is

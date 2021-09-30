@@ -34,7 +34,7 @@ using namespace sfx2::sidebar;
 
 namespace {
 
-bool inChartContext(SwView& rViewShell)
+bool inChartContext(const SwView& rViewShell)
 {
     SidebarController* pSidebar = SidebarController::GetSidebarControllerForView(&rViewShell);
     if (pSidebar)

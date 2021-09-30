@@ -230,7 +230,7 @@ public:
     /* #96392# Added pCreator to distinguish SwFrameShell from SwWrtShell. */
     static void CreateSelection( SwWrtShell & rSh,
                                  const SwFrameShell * pCreator = nullptr );
-    static void ClearSelection( SwWrtShell& rSh,
+    static void ClearSelection( const SwWrtShell& rSh,
                                 const SwFrameShell * pCreator = nullptr );
 
     // the related SwView is being closed and the SwTransferable is invalid now

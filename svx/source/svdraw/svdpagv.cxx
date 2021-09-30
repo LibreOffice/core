@@ -40,7 +40,7 @@ using namespace ::com::sun::star;
 
 // interface to SdrPageWindow
 
-SdrPageWindow* SdrPageView::FindPageWindow(SdrPaintWindow& rPaintWindow) const
+SdrPageWindow* SdrPageView::FindPageWindow(const SdrPaintWindow& rPaintWindow) const
 {
     for(auto & a : maPageWindows)
     {

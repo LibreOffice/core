@@ -266,7 +266,7 @@ void Shape::addShape(
         const Theme* pTheme,
         const Reference< XShapes >& rxShapes,
         const basegfx::B2DHomMatrix& aTransformation,
-        FillProperties& rShapeOrParentShapeFillProps,
+        const FillProperties& rShapeOrParentShapeFillProps,
         ShapeIdMap* pShapeMap,
         oox::drawingml::ShapePtr pParentGroupShape)
 {
@@ -679,7 +679,7 @@ Reference< XShape > const & Shape::createAndInsert(
         bool bClearText,
         bool bDoNotInsertEmptyTextBody,
         basegfx::B2DHomMatrix& aParentTransformation,
-        FillProperties& rShapeOrParentShapeFillProps,
+        const FillProperties& rShapeOrParentShapeFillProps,
         oox::drawingml::ShapePtr pParentGroupShape)
 {
     bool bIsEmbMedia = false;

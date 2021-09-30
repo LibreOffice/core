@@ -819,7 +819,7 @@ SwRewriter SwUndoDelete::GetRewriter() const
 }
 
 // Every object, anchored "AtContent" will be reanchored at rPos
-static void lcl_ReAnchorAtContentFlyFrames( const SwFrameFormats& rSpzArr, SwPosition &rPos, sal_uLong nOldIdx )
+static void lcl_ReAnchorAtContentFlyFrames( const SwFrameFormats& rSpzArr, const SwPosition &rPos, sal_uLong nOldIdx )
 {
     if( rSpzArr.empty() )
         return;

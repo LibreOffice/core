@@ -354,7 +354,7 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ODbaseIndex& rInd
     return rStream;
 }
 
-SvStream& connectivity::dbase::WriteODbaseIndex(SvStream &rStream, ODbaseIndex& rIndex)
+SvStream& connectivity::dbase::WriteODbaseIndex(SvStream &rStream, const ODbaseIndex& rIndex)
 {
     rStream.Seek(0);
     rStream.WriteUInt32(rIndex.m_aHeader.db_rootpage);

@@ -178,7 +178,7 @@ private:
 };
 
 
-void CopyBookmarks(const SwPaM& rPam, SwPosition& rTarget);
+void CopyBookmarks(const SwPaM& rPam, const SwPosition& rTarget);
 
 void CalcBreaks(std::vector<std::pair<sal_uLong, sal_Int32>> & rBreaks,
         SwPaM const & rPam, bool const isOnlyFieldmarks = false);

@@ -64,7 +64,7 @@ namespace toolkit
     class StyleMethodGuard
     {
     public:
-        explicit StyleMethodGuard( VCLXWindow* pOwningWindow )
+        explicit StyleMethodGuard( const VCLXWindow* pOwningWindow )
         {
             if ( pOwningWindow == nullptr )
                 throw DisposedException();

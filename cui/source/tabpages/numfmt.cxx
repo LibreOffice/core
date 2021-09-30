@@ -1288,7 +1288,7 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, weld::Button&, rIB, void)
     Click_Impl(rIB);
 }
 
-bool SvxNumberFormatTabPage::Click_Impl(weld::Button& rIB)
+bool SvxNumberFormatTabPage::Click_Impl(const weld::Button& rIB)
 {
     sal_uLong       nReturn = 0;
     constexpr sal_uLong nReturnChanged  = 0x1;  // THE boolean return value

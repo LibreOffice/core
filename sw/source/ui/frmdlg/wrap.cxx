@@ -50,7 +50,7 @@ const WhichRangesContainer SwWrapTabPage::m_aWrapPageRg(svl::Items<
     RES_PROTECT, RES_SURROUND
 >);
 
-SwWrapDlg::SwWrapDlg(weld::Window* pParent, SfxItemSet& rSet, SwWrtShell* pWrtShell, bool bDrawMode)
+SwWrapDlg::SwWrapDlg(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtShell, bool bDrawMode)
     : SfxSingleTabDialogController(pParent, &rSet, "modules/swriter/ui/wrapdialog.ui", "WrapDialog")
 {
     // create TabPage

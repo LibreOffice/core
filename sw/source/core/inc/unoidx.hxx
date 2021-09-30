@@ -161,7 +161,7 @@ private:
     virtual ~SwXDocumentIndexMark() override;
 
     SwXDocumentIndexMark(SwDoc & rDoc,
-                SwTOXType & rType, SwTOXMark & rMark);
+                const SwTOXType & rType, const SwTOXMark & rMark);
 
     /// descriptor
     SwXDocumentIndexMark(const TOXTypes eToxType);

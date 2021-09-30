@@ -781,7 +781,7 @@ void Window::ImplInvalidateOverlapFrameRegion( const vcl::Region& rRegion )
     }
 }
 
-void Window::ImplInvalidateParentFrameRegion( vcl::Region& rRegion )
+void Window::ImplInvalidateParentFrameRegion( const vcl::Region& rRegion )
 {
     if ( mpWindowImpl->mbOverlapWin )
         mpWindowImpl->mpFrameWindow->ImplInvalidateOverlapFrameRegion( rRegion );

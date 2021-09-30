@@ -70,7 +70,7 @@ using namespace ::com::sun::star;
 
 // Execute Drawing-Ids
 
-void SwView::ExecDraw(SfxRequest& rReq)
+void SwView::ExecDraw(const SfxRequest& rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem;

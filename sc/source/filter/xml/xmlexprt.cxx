@@ -3711,7 +3711,7 @@ void ScXMLExport::exportAnnotationMeta( const uno::Reference < drawing::XShape >
     }
 }
 
-void ScXMLExport::WriteAnnotation(ScMyCell& rMyCell)
+void ScXMLExport::WriteAnnotation(const ScMyCell& rMyCell)
 {
     ScPostIt* pNote = pDoc->GetNote(rMyCell.maCellAddress);
     if (!pNote)

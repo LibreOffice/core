@@ -152,7 +152,7 @@ public:
     SAL_DLLPRIVATE void SetWorkWindow_Impl( SfxWorkWindow* );
     SAL_DLLPRIVATE void Activate_Impl();
 
-    SAL_DLLPRIVATE void SetFactory_Impl( SfxChildWinFactory* );
+    SAL_DLLPRIVATE void SetFactory_Impl( const SfxChildWinFactory* );
 };
 
 

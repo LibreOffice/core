@@ -4182,7 +4182,7 @@ void SwTransferable::CreateSelection( SwWrtShell& rSh,
     pNew->CopyToPrimarySelection();
 }
 
-void SwTransferable::ClearSelection( SwWrtShell& rSh,
+void SwTransferable::ClearSelection( const SwWrtShell& rSh,
                                      const SwFrameShell * _pCreatorView)
 {
     SwModule *pMod = SW_MOD();
