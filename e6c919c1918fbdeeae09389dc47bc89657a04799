@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15cd5ecf_2c5e0661",
+        "filename": "vcl/inc/font/PhysicalFontFamily.hxx",
+        "patchSetId": 63
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-30T14:41:36Z",
+      "side": 1,
+      "message": "The forward declaration together with header inclusion were pre-existing, I see; however, one of them looks redundant - if forward declaration is enough, I\u0027d suggest to keep it, but anyway one of them should go :)",
+      "revId": "e6c919c1918fbdeeae09389dc47bc89657a04799",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5fcd954_cb5e9d36",
+        "filename": "vcl/inc/impfont.hxx",
+        "patchSetId": 63
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-30T14:41:36Z",
+      "side": 1,
+      "message": "This file doesn\u0027t look like it uses FontSelectPattern?",
+      "revId": "e6c919c1918fbdeeae09389dc47bc89657a04799",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c77fb27_5fc001a5",
+        "filename": "vcl/inc/sallayout.hxx",
+        "patchSetId": 63
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-30T14:41:36Z",
+      "side": 1,
+      "message": "Why move this declaration below SalGraphics? It\u0027s not alphabetical, and not inside namespace, so it looks strange.",
+      "revId": "e6c919c1918fbdeeae09389dc47bc89657a04799",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3f7793b_44c1c38f",
+        "filename": "vcl/inc/unx/cairotextrender.hxx",
+        "patchSetId": 63
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-30T14:41:36Z",
+      "side": 1,
+      "message": "I don\u0027t see that this file uses FontSelectPattern?",
+      "revId": "e6c919c1918fbdeeae09389dc47bc89657a04799",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b05243c_dda04d89",
+        "filename": "vcl/inc/win/winlayout.hxx",
+        "patchSetId": 63
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-30T14:41:36Z",
+      "side": 1,
+      "message": "This change seems \"hanging\" - unrelated to the change, the only change in the file is some includes reorder.",
+      "revId": "e6c919c1918fbdeeae09389dc47bc89657a04799",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
