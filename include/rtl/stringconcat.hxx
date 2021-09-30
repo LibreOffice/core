@@ -16,7 +16,9 @@
 #include "rtl/string.h"
 #include "rtl/ustring.h"
 
+#include <cassert>
 #include <cstddef>
+#include <memory>
 #include <string>
 #include <string_view>
 #include <type_traits>
@@ -352,6 +354,42 @@ int operator+( const StringConcatInvalid&, const T& )
     return 0; // doesn't matter
     }
 #endif
+
+class OStringConcatenation {
+public:
+    template<typename T1, typename T2>
+    explicit OStringConcatenation(OStringConcat<T1, T2> const & c):
+        length_(c.length()),
+        buffer_(new char[length_])
+    {
+        auto const end = c.addData(buffer_.get());
+        assert(end == buffer_.get() + length_); (void)end;
+    }
+
+    operator std::string_view() const { return {buffer_.get(), length_}; }
+
+private:
+    std::size_t length_;
+    std::unique_ptr<char[]> buffer_;
+};
+
+class OUStringConcatenation {
+public:
+    template<typename T1, typename T2>
+    explicit OUStringConcatenation(OUStringConcat<T1, T2> const & c):
+        length_(c.length()),
+        buffer_(new char16_t[length_])
+    {
+        auto const end = c.addData(buffer_.get());
+        assert(end == buffer_.get() + length_); (void)end;
+    }
+
+    operator std::u16string_view() const { return {buffer_.get(), length_}; }
+
+private:
+    std::size_t length_;
+    std::unique_ptr<char16_t[]> buffer_;
+};
 
 /**
  @internal

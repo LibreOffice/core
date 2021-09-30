@@ -99,7 +99,7 @@ void f4(OUString s1, OUString s2)
 }
 }
 
-void f5(char const* s1, sal_Int32 n1, char16_t const* s2, sal_Int32 n2)
+void f5(char const* s1, sal_Int32 n1, char16_t const* s2, sal_Int32 n2, OString s3, OUString s4)
 {
     // expected-error@+1 {{instead of an 'rtl::OString', pass a 'std::string_view' [loplugin:stringview]}}
     call_view(OString());
@@ -118,6 +118,8 @@ void f5(char const* s1, sal_Int32 n1, char16_t const* s2, sal_Int32 n2)
     call_view(OString(std::string_view("foo")));
     // expected-error@+1 {{instead of an 'rtl::OString' constructed from a 'OStringNumber<int>', pass a 'std::string_view' [loplugin:stringview]}}
     call_view(OString(OString::number(0)));
+    // expected-error-re@+1 {{instead of an 'rtl::OString' constructed from a 'typename std::enable_if_t<ToStringHelper<OString>::allowOStringConcat && ToStringHelper<OString>::allowOStringConcat, OStringConcat<OString, OString>{{ ?}}>' (aka 'rtl::OStringConcat<rtl::OString, rtl::OString>'), pass a 'std::string_view' via 'rtl::OStringConcatenation' [loplugin:stringview]}}
+    call_view(OString(s3 + s3));
     // expected-error@+1 {{instead of an 'rtl::OUString', pass a 'std::u16string_view' [loplugin:stringview]}}
     call_view(OUString());
     // expected-error@+1 {{instead of an 'rtl::OUString' constructed from a 'const char [4]', pass a 'std::u16string_view' [loplugin:stringview]}}
@@ -141,6 +143,8 @@ void f5(char const* s1, sal_Int32 n1, char16_t const* s2, sal_Int32 n2)
     call_view(OUString(std::u16string_view(u"foo")));
     // expected-error@+1 {{instead of an 'rtl::OUString' constructed from a 'OUStringNumber<int>', pass a 'std::u16string_view' [loplugin:stringview]}}
     call_view(OUString(OUString::number(0)));
+    // expected-error-re@+1 {{instead of an 'rtl::OUString' constructed from a 'typename std::enable_if_t<ToStringHelper<OUString>::allowOUStringConcat && ToStringHelper<OUString>::allowOUStringConcat, OUStringConcat<OUString, OUString>{{ ?}}>' (aka 'rtl::OUStringConcat<rtl::OUString, rtl::OUString>'), pass a 'std::u16string_view' via 'rtl::OUStringConcatenation' [loplugin:stringview]}}
+    call_view(OUString(s4 + s4));
 }
 
 void f5(OUString s)

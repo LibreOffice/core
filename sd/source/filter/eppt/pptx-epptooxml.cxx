@@ -1263,7 +1263,7 @@ void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum
     // add explicit relation of presentation to this slide
     OUString sRelId = addRelation(mPresentationFS->getOutputStream(),
                                   oox::getRelationship(Relationship::SLIDE),
-                                  OUString("slides/slide" + OUString::number(nPageNum + 1) +".xml"));
+                                  OUStringConcatenation("slides/slide" + OUString::number(nPageNum + 1) +".xml"));
 
     mPresentationFS->singleElementNS(XML_p, XML_sldId,
                                      XML_id, OString::number(GetNewSlideId()),
@@ -1313,7 +1313,7 @@ void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum
     // add implicit relation to slide layout
     addRelation(pFS->getOutputStream(),
                 oox::getRelationship(Relationship::SLIDELAYOUT),
-                OUString("../slideLayouts/slideLayout" +
+                OUStringConcatenation("../slideLayouts/slideLayout" +
                     OUString::number(GetLayoutFileId(GetPPTXLayoutId(GetLayoutOffset(mXPagePropSet)), nMasterNum)) +
                     ".xml"));
 
@@ -1321,7 +1321,7 @@ void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum
         // add implicit relation to slide comments
         addRelation(pFS->getOutputStream(),
                     oox::getRelationship(Relationship::COMMENTS),
-                    OUString("../comments/comment" + OUString::number(nPageNum + 1) + ".xml"));
+                    OUStringConcatenation("../comments/comment" + OUString::number(nPageNum + 1) + ".xml"));
 
     SAL_INFO("sd.eppt", "----------------");
 }
@@ -1352,13 +1352,13 @@ void PowerPointExport::ImplWriteNotes(sal_uInt32 nPageNum)
     // add implicit relation to slide
     addRelation(pFS->getOutputStream(),
                 oox::getRelationship(Relationship::SLIDE),
-                OUString("../slides/slide" + OUString::number(nPageNum + 1) + ".xml"));
+                OUStringConcatenation("../slides/slide" + OUString::number(nPageNum + 1) + ".xml"));
 
     // add slide implicit relation to notes
     if (nPageNum < mpSlidesFSArray.size())
         addRelation(mpSlidesFSArray[ nPageNum ]->getOutputStream(),
                     oox::getRelationship(Relationship::NOTESSLIDE),
-                    OUString("../notesSlides/notesSlide" + OUString::number(nPageNum + 1) + ".xml"));
+                    OUStringConcatenation("../notesSlides/notesSlide" + OUString::number(nPageNum + 1) + ".xml"));
 
     // add implicit relation to notes master
     addRelation(pFS->getOutputStream(),
@@ -1373,7 +1373,7 @@ void PowerPointExport::AddLayoutIdAndRelation(const FSHelperPtr& pFS, sal_Int32 
     // add implicit relation of slide master to slide layout
     OUString sRelId = addRelation(pFS->getOutputStream(),
                                   oox::getRelationship(Relationship::SLIDELAYOUT),
-                                  OUString("../slideLayouts/slideLayout" + OUString::number(nLayoutFileId) + ".xml"));
+                                  OUStringConcatenation("../slideLayouts/slideLayout" + OUString::number(nLayoutFileId) + ".xml"));
 
     pFS->singleElementNS(XML_p, XML_sldLayoutId,
                          XML_id, OString::number(GetNewSlideMasterId()),
@@ -1390,7 +1390,7 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
 
     OUString sRelId = addRelation(mPresentationFS->getOutputStream(),
                                   oox::getRelationship(Relationship::SLIDEMASTER),
-                                  OUString("slideMasters/slideMaster" + OUString::number(nPageNum + 1) + ".xml"));
+                                  OUStringConcatenation("slideMasters/slideMaster" + OUString::number(nPageNum + 1) + ".xml"));
 
     mPresentationFS->singleElementNS(XML_p, XML_sldMasterId,
                                      XML_id, OString::number(GetNewSlideMasterId()),
@@ -1410,7 +1410,7 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
     // add implicit relation to the presentation theme
     addRelation(pFS->getOutputStream(),
                 oox::getRelationship(Relationship::THEME),
-                OUString("../theme/theme" + OUString::number(nPageNum + 1) + ".xml"));
+                OUStringConcatenation("../theme/theme" + OUString::number(nPageNum + 1) + ".xml"));
 
     pFS->startElementNS(XML_p, XML_sldMaster, PNMSS);
 
@@ -1507,7 +1507,7 @@ void PowerPointExport::ImplWritePPTXLayout(sal_Int32 nOffset, sal_uInt32 nMaster
     // add implicit relation of slide layout to slide master
     addRelation(pFS->getOutputStream(),
                 oox::getRelationship(Relationship::SLIDEMASTER),
-                OUString("../slideMasters/slideMaster" + OUString::number(nMasterNum + 1) + ".xml"));
+                OUStringConcatenation("../slideMasters/slideMaster" + OUString::number(nMasterNum + 1) + ".xml"));
 
     pFS->startElementNS(XML_p, XML_sldLayout,
                         PNMSS,
@@ -2178,7 +2178,7 @@ void PowerPointExport::WriteNotesMaster()
     // add implicit relation to the presentation theme
     addRelation(pFS->getOutputStream(),
                 oox::getRelationship(Relationship::THEME),
-                OUString("../theme/theme" + OUString::number(mnMasterPages + 1) + ".xml"));
+                OUStringConcatenation("../theme/theme" + OUString::number(mnMasterPages + 1) + ".xml"));
 
     pFS->startElementNS(XML_p, XML_notesMaster, PNMSS);
 

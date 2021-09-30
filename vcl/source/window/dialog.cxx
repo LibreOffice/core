@@ -1010,9 +1010,9 @@ bool Dialog::ImplStartExecute()
     aObject.EventName = "DialogExecute";
     xEventBroadcaster->documentEventOccured(aObject);
     if (bModal)
-        UITestLogger::getInstance().log(OUString("Open Modal " + get_id()));
+        UITestLogger::getInstance().log(OUStringConcatenation("Open Modal " + get_id()));
     else
-        UITestLogger::getInstance().log(OUString("Open Modeless " + get_id()));
+        UITestLogger::getInstance().log(OUStringConcatenation("Open Modeless " + get_id()));
 
     bool bTunnelingEnabled = mpDialogImpl->m_bLOKTunneling;
     if (comphelper::LibreOfficeKit::isActive() && bTunnelingEnabled)

@@ -229,7 +229,7 @@ void scanMap(
             scanMap(
                 manager,
                 static_cast<unoidl::ModuleEntity *>(ent.get())->createCursor(),
-                published, OUString(name + "."), entities);
+                published, OUStringConcatenation(name + "."), entities);
         } else {
             std::map<OUString, Entity>::iterator i(
                 entities.insert(

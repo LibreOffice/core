@@ -3393,6 +3393,17 @@ void operator !=(OUString const &, std::nullptr_t) = delete;
 void operator !=(std::nullptr_t, OUString const &) = delete;
 #endif
 
+#if defined LIBO_INTERNAL_ONLY && !defined RTL_STRING_UNITTEST
+inline bool operator ==(OUString const & lhs, OUStringConcatenation const & rhs)
+{ return lhs == std::u16string_view(rhs); }
+inline bool operator !=(OUString const & lhs, OUStringConcatenation const & rhs)
+{ return lhs != std::u16string_view(rhs); }
+inline bool operator ==(OUStringConcatenation const & lhs, OUString const & rhs)
+{ return std::u16string_view(lhs) == rhs; }
+inline bool operator !=(OUStringConcatenation const & lhs, OUString const & rhs)
+{ return std::u16string_view(lhs) != rhs; }
+#endif
+
 #if defined LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 /// @cond INTERNAL
 
@@ -3560,6 +3571,7 @@ using ::rtl::OStringToOUString;
 using ::rtl::OUStringToOString;
 using ::rtl::OUStringLiteral;
 using ::rtl::OUStringChar;
+using ::rtl::OUStringConcatenation;
 #endif
 
 /// @cond INTERNAL
