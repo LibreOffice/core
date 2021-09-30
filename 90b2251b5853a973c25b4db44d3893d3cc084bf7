@@ -39,6 +39,30 @@
       },
       "revId": "90b2251b5853a973c25b4db44d3893d3cc084bf7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1be36547_73278db6",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2021-09-30T13:24:41Z",
+      "side": 1,
+      "message": "Yeah, makes sense.",
+      "parentUuid": "daeadde5_6d3689c8",
+      "range": {
+        "startLine": 983,
+        "startChar": 16,
+        "endLine": 983,
+        "endChar": 27
+      },
+      "revId": "90b2251b5853a973c25b4db44d3893d3cc084bf7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
