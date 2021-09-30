@@ -569,6 +569,9 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
 
     bool bFloatingNavigator = ParentIsFloatingWindow(m_xNavigatorDlg);
 
+    m_xContentTree->SetOutlineTracking(static_cast<sal_uInt8>(m_pConfig->GetOutlineTracking()));
+    m_xContentTree->SetTableTracking(m_pConfig->IsTableTracking());
+    m_xContentTree->SetSectionTracking(m_pConfig->IsSectionTracking());
     m_xContentTree->set_selection_mode(SelectionMode::Single);
     m_xContentTree->ShowTree();
     m_xContent6ToolBox->set_item_active("listbox", true);

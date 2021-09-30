@@ -37,7 +37,10 @@ Sequence<OUString> SwNavigationConfig::GetPropertyNames()
         OUString("InsertMode"),
         OUString("ActiveBlock"),
         OUString("ShowListBox"),
-        OUString("GlobalDocMode")};
+        OUString("GlobalDocMode"),
+        OUString("OutlineTracking"),
+        OUString("TableTracking"),
+        OUString("SectionTracking")};
 }
 
 SwNavigationConfig::SwNavigationConfig() :
@@ -48,7 +51,10 @@ SwNavigationConfig::SwNavigationConfig() :
     m_nRegionMode(RegionMode::NONE),
     m_nActiveBlock(0),
     m_bIsSmall(false),
-    m_bIsGlobalActive(true)
+    m_bIsGlobalActive(true),
+    m_nOutlineTracking(1),
+    m_bIsTableTracking(true),
+    m_bIsSectionTracking(true)
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
@@ -92,6 +98,9 @@ SwNavigationConfig::SwNavigationConfig() :
                 case 4: pValues[nProp] >>= m_nActiveBlock;    break;
                 case 5: m_bIsSmall        = *o3tl::doAccess<bool>(pValues[nProp]);  break;
                 case 6: m_bIsGlobalActive = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                case 7: pValues[nProp] >>= m_nOutlineTracking; break;
+                case 8: m_bIsTableTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 9: m_bIsSectionTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
             }
         }
     }
@@ -118,6 +127,9 @@ void SwNavigationConfig::ImplCommit()
             case 4: pValues[nProp] <<= m_nActiveBlock;    break;
             case 5: pValues[nProp] <<= m_bIsSmall; break;
             case 6: pValues[nProp] <<= m_bIsGlobalActive; break;
+            case 7: pValues[nProp] <<= m_nOutlineTracking; break;
+            case 8: pValues[nProp] <<= m_bIsTableTracking; break;
+            case 9: pValues[nProp] <<= m_bIsSectionTracking; break;
         }
     }
     PutProperties(aNames, aValues);
