@@ -628,6 +628,8 @@ IMPL_LINK(ChartElementsPanel, CheckBoxHdl, weld::Toggleable&, rCheckBox, void)
         setGridVisible(mxModel, GridType::VERT_MINOR, bChecked);
     else if (&rCheckBox == mxCBGridHorizontalMinor.get())
         setGridVisible(mxModel, GridType::HOR_MINOR, bChecked);
+
+    updateData();
 }
 
 IMPL_LINK(ChartElementsPanel, EditHdl, weld::Entry&, rEdit, void)
