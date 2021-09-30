@@ -4174,11 +4174,13 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
     if (rSelectedPopupEntry == "tabletracking")
     {
         m_bTableTracking = !m_bTableTracking;
+        SetTableTracking(m_bTableTracking);
         return;
     }
     if (rSelectedPopupEntry == "sectiontracking")
     {
         m_bSectionTracking = !m_bSectionTracking;
+        SetSectionTracking(m_bSectionTracking);
         return;
     }
 
@@ -4239,7 +4241,7 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
         case 13:
             nSelectedPopupEntry -= 10;
             if(m_nOutlineTracking != nSelectedPopupEntry)
-                m_nOutlineTracking = nSelectedPopupEntry;
+                SetOutlineTracking(static_cast<sal_uInt8>(nSelectedPopupEntry));
         break;
         //Outlinelevel
         case 101:
@@ -4436,6 +4438,24 @@ void SwContentTree::SetOutlineLevel(sal_uInt8 nSet)
         rpContentT->Init();
     }
     Display(State::ACTIVE == m_eState);
+}
+
+void SwContentTree::SetOutlineTracking(sal_uInt8 nSet)
+{
+    m_nOutlineTracking = nSet;
+    m_pConfig->SetOutlineTracking(m_nOutlineTracking);
+}
+
+void SwContentTree::SetTableTracking(bool bSet)
+{
+    m_bTableTracking = bSet;
+    m_pConfig->SetTableTracking(m_bTableTracking);
+}
+
+void SwContentTree::SetSectionTracking(bool bSet)
+{
+    m_bSectionTracking = bSet;
+    m_pConfig->SetSectionTracking(m_bSectionTracking);
 }
 
 // Mode Change: Show dropped Doc
