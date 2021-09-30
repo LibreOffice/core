@@ -65,7 +65,7 @@ sal_Int16 lcl_matchIA2TextBoundaryType(IA2TextBoundaryType boundaryType)
         break;
     }
 
-    SAL_WARN("winaccessibility", "Unmatched text boundary type: " << boundaryType);
+    SAL_WARN("iacc2", "Unmatched text boundary type: " << boundaryType);
     return -1;
 }
 }
