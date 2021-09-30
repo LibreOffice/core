@@ -514,7 +514,7 @@ static void printStack( CONTEXT* ctx )
     stack.AddrFrame.Mode   = AddrModeFlat;
 #endif
 
-    SymInitialize( process, NULL, TRUE ); //load symbols
+    SymInitialize( process, nullptr, TRUE ); //load symbols
 
     std::unique_ptr<IMAGEHLP_LINE64> line(new IMAGEHLP_LINE64);
     line->SizeOfStruct = sizeof(IMAGEHLP_LINE64);
@@ -533,10 +533,10 @@ static void printStack( CONTEXT* ctx )
             thread,
             &stack,
             ctx,
-            NULL,
+            nullptr,
             SymFunctionTableAccess64,
             SymGetModuleBase64,
-            NULL
+            nullptr
         );
 
         if( !result )
@@ -556,13 +556,13 @@ static void printStack( CONTEXT* ctx )
         {
             //failed to get line
             printf("\tat %s, address 0x%0I64X.\n", pSymbol->Name, pSymbol->Address);
-            hModule = NULL;
+            hModule = nullptr;
             lstrcpyA(module,"");
             GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
                 reinterpret_cast<LPCTSTR>(stack.AddrPC.Offset), &hModule);
 
             //at least print module name
-            if(hModule != NULL)GetModuleFileNameA(hModule,module,MaxNameLen);
+            if(hModule != nullptr)GetModuleFileNameA(hModule,module,MaxNameLen);
 
             printf ("in %s\n",module);
         }

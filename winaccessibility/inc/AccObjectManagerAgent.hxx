@@ -49,7 +49,7 @@ public:
 
     virtual bool InsertAccObj(css::accessibility::XAccessible* pXAcc,
                               css::accessibility::XAccessible* pParentXAcc,
-                              HWND hWnd = 0);
+                              HWND hWnd = nullptr);
     virtual void GetIAccessibleFromResID(long childID,IMAccessible**);
     virtual bool GetIAccessibleFromXAccessible(css::accessibility::XAccessible* pXAcc, IAccessible** ppIA);
 
@@ -59,7 +59,7 @@ public:
     bool NotifyAccEvent(short pEvent = 0, css::accessibility::XAccessible* pXAcc = nullptr);
 
     bool InsertChildrenAccObj(css::accessibility::XAccessible* pXAcc,
-                              HWND  hWnd = 0);
+                              HWND  hWnd = nullptr);
     void DeleteChildrenAccObj( css::accessibility::XAccessible* pXAcc );
 
     void  DecreaseState( css::accessibility::XAccessible* pXAcc,unsigned short pState );
