@@ -3323,11 +3323,19 @@ Edit& SalInstanceEntry::getEntry() { return *m_xEntry; }
 
 void SalInstanceEntry::fire_signal_changed() { signal_changed(); }
 
-void SalInstanceEntry::cut_clipboard() { m_xEntry->Cut(); }
+void SalInstanceEntry::cut_clipboard()
+{
+    m_xEntry->Cut();
+    m_xEntry->Modify();
+}
 
 void SalInstanceEntry::copy_clipboard() { m_xEntry->Copy(); }
 
-void SalInstanceEntry::paste_clipboard() { m_xEntry->Paste(); }
+void SalInstanceEntry::paste_clipboard()
+{
+    m_xEntry->Paste();
+    m_xEntry->Modify();
+}
 
 namespace
 {
