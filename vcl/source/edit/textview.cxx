@@ -959,12 +959,12 @@ void TextView::Paste()
     Paste( aClipboard );
 }
 
-OUString TextView::GetSelected()
+OUString TextView::GetSelected() const
 {
     return GetSelected( GetSystemLineEnd() );
 }
 
-OUString TextView::GetSelected( LineEnd aSeparator )
+OUString TextView::GetSelected( LineEnd aSeparator ) const
 {
     return mpImpl->mpTextEngine->GetText( mpImpl->maSelection, aSeparator );
 }
@@ -1607,7 +1607,7 @@ bool TextView::IsSelectionAtPoint( const Point& rPosPixel )
     return IsInSelection( aPaM );
 }
 
-bool TextView::IsInSelection( const TextPaM& rPaM )
+bool TextView::IsInSelection( const TextPaM& rPaM ) const
 {
     TextSelection aSel = mpImpl->maSelection;
     aSel.Justify();
@@ -1699,7 +1699,7 @@ bool TextView::ImplTruncateNewText( OUString& rNewText ) const
     return bTruncated;
 }
 
-bool TextView::ImplCheckTextLen( const OUString& rNewText )
+bool TextView::ImplCheckTextLen( const OUString& rNewText ) const
 {
     bool bOK = true;
     if ( mpImpl->mpTextEngine->GetMaxTextLen() )

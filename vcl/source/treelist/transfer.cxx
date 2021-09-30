@@ -1476,14 +1476,14 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor, const OUString& r
 }
 
 
-bool TransferableDataHelper::GetString( SotClipboardFormatId nFormat, OUString& rStr )
+bool TransferableDataHelper::GetString( SotClipboardFormatId nFormat, OUString& rStr ) const
 {
     DataFlavor aFlavor;
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetString( aFlavor, rStr ) );
 }
 
 
-bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, OUString& rStr )
+bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, OUString& rStr ) const
 {
     Any aAny = GetAny(rFlavor, OUString());
     bool        bRet = false;
@@ -1518,7 +1518,7 @@ bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, OUString& rSt
 }
 
 
-bool TransferableDataHelper::GetBitmapEx( SotClipboardFormatId nFormat, BitmapEx& rBmpEx )
+bool TransferableDataHelper::GetBitmapEx( SotClipboardFormatId nFormat, BitmapEx& rBmpEx ) const
 {
     if(SotClipboardFormatId::BITMAP == nFormat)
     {
@@ -1548,7 +1548,7 @@ bool TransferableDataHelper::GetBitmapEx( SotClipboardFormatId nFormat, BitmapEx
 }
 
 
-bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapEx& rBmpEx )
+bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapEx& rBmpEx ) const
 {
     tools::SvRef<SotTempStream> xStm;
     DataFlavor aSubstFlavor;
@@ -1650,7 +1650,7 @@ bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapEx& r
 }
 
 
-bool TransferableDataHelper::GetGDIMetaFile(SotClipboardFormatId nFormat, GDIMetaFile& rMtf, size_t nMaxActions)
+bool TransferableDataHelper::GetGDIMetaFile(SotClipboardFormatId nFormat, GDIMetaFile& rMtf, size_t nMaxActions) const
 {
     DataFlavor aFlavor;
     return SotExchange::GetFormatDataFlavor(nFormat, aFlavor) &&
@@ -1659,7 +1659,7 @@ bool TransferableDataHelper::GetGDIMetaFile(SotClipboardFormatId nFormat, GDIMet
 }
 
 
-bool TransferableDataHelper::GetGDIMetaFile( const DataFlavor& rFlavor, GDIMetaFile& rMtf )
+bool TransferableDataHelper::GetGDIMetaFile( const DataFlavor& rFlavor, GDIMetaFile& rMtf ) const
 {
     tools::SvRef<SotTempStream> xStm;
     DataFlavor          aSubstFlavor;
@@ -1704,7 +1704,7 @@ bool TransferableDataHelper::GetGDIMetaFile( const DataFlavor& rFlavor, GDIMetaF
 }
 
 
-bool TransferableDataHelper::GetGraphic( SotClipboardFormatId nFormat, Graphic& rGraphic )
+bool TransferableDataHelper::GetGraphic( SotClipboardFormatId nFormat, Graphic& rGraphic ) const
 {
     if(SotClipboardFormatId::BITMAP == nFormat)
     {
@@ -1725,7 +1725,7 @@ bool TransferableDataHelper::GetGraphic( SotClipboardFormatId nFormat, Graphic& 
 }
 
 
-bool TransferableDataHelper::GetGraphic( const css::datatransfer::DataFlavor& rFlavor, Graphic& rGraphic )
+bool TransferableDataHelper::GetGraphic( const css::datatransfer::DataFlavor& rFlavor, Graphic& rGraphic ) const
 {
     DataFlavor  aFlavor;
     bool        bRet = false;
@@ -1796,14 +1796,14 @@ bool TransferableDataHelper::GetGraphic( const css::datatransfer::DataFlavor& rF
 }
 
 
-bool TransferableDataHelper::GetImageMap( SotClipboardFormatId nFormat, ImageMap& rIMap )
+bool TransferableDataHelper::GetImageMap( SotClipboardFormatId nFormat, ImageMap& rIMap ) const
 {
     DataFlavor aFlavor;
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetImageMap( aFlavor, rIMap ) );
 }
 
 
-bool TransferableDataHelper::GetImageMap( const css::datatransfer::DataFlavor& rFlavor, ImageMap& rIMap )
+bool TransferableDataHelper::GetImageMap( const css::datatransfer::DataFlavor& rFlavor, ImageMap& rIMap ) const
 {
     tools::SvRef<SotTempStream> xStm;
     bool                bRet = GetSotStorageStream( rFlavor, xStm );
@@ -1832,14 +1832,14 @@ bool TransferableDataHelper::GetTransferableObjectDescriptor( TransferableObject
 }
 
 
-bool TransferableDataHelper::GetINetBookmark( SotClipboardFormatId nFormat, INetBookmark& rBmk )
+bool TransferableDataHelper::GetINetBookmark( SotClipboardFormatId nFormat, INetBookmark& rBmk ) const
 {
     DataFlavor aFlavor;
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetINetBookmark( aFlavor, rBmk ) );
 }
 
 
-bool TransferableDataHelper::GetINetBookmark( const css::datatransfer::DataFlavor& rFlavor, INetBookmark& rBmk )
+bool TransferableDataHelper::GetINetBookmark( const css::datatransfer::DataFlavor& rFlavor, INetBookmark& rBmk ) const
 {
     bool bRet = false;
     if( HasFormat( rFlavor ))
@@ -1975,7 +1975,7 @@ bool TransferableDataHelper::GetINetBookmark( const css::datatransfer::DataFlavo
 
 
 bool TransferableDataHelper::GetINetImage( SotClipboardFormatId nFormat,
-                                                INetImage& rINtImg )
+                                                INetImage& rINtImg ) const
 {
     DataFlavor aFlavor;
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetINetImage( aFlavor, rINtImg ) );
@@ -1984,7 +1984,7 @@ bool TransferableDataHelper::GetINetImage( SotClipboardFormatId nFormat,
 
 bool TransferableDataHelper::GetINetImage(
         const css::datatransfer::DataFlavor& rFlavor,
-        INetImage& rINtImg )
+        INetImage& rINtImg ) const
 {
     tools::SvRef<SotTempStream> xStm;
     bool bRet = GetSotStorageStream( rFlavor, xStm );
@@ -1996,14 +1996,14 @@ bool TransferableDataHelper::GetINetImage(
 
 
 bool TransferableDataHelper::GetFileList( SotClipboardFormatId nFormat,
-                                                FileList& rFileList )
+                                                FileList& rFileList ) const
 {
     DataFlavor aFlavor;
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetFileList( rFileList ) );
 }
 
 
-bool TransferableDataHelper::GetFileList( FileList& rFileList )
+bool TransferableDataHelper::GetFileList( FileList& rFileList ) const
 {
     tools::SvRef<SotTempStream> xStm;
     bool                bRet = false;
@@ -2036,7 +2036,7 @@ bool TransferableDataHelper::GetFileList( FileList& rFileList )
 }
 
 
-Sequence<sal_Int8> TransferableDataHelper::GetSequence( SotClipboardFormatId nFormat, const OUString& rDestDoc )
+Sequence<sal_Int8> TransferableDataHelper::GetSequence( SotClipboardFormatId nFormat, const OUString& rDestDoc ) const
 {
     DataFlavor aFlavor;
     if (!SotExchange::GetFormatDataFlavor(nFormat, aFlavor))
@@ -2045,7 +2045,7 @@ Sequence<sal_Int8> TransferableDataHelper::GetSequence( SotClipboardFormatId nFo
     return GetSequence(aFlavor, rDestDoc);
 }
 
-Sequence<sal_Int8> TransferableDataHelper::GetSequence( const DataFlavor& rFlavor, const OUString& rDestDoc )
+Sequence<sal_Int8> TransferableDataHelper::GetSequence( const DataFlavor& rFlavor, const OUString& rDestDoc ) const
 {
     const Any aAny = GetAny(rFlavor, rDestDoc);
     Sequence<sal_Int8> aSeq;
@@ -2056,14 +2056,14 @@ Sequence<sal_Int8> TransferableDataHelper::GetSequence( const DataFlavor& rFlavo
 }
 
 
-bool TransferableDataHelper::GetSotStorageStream( SotClipboardFormatId nFormat, tools::SvRef<SotTempStream>& rxStream )
+bool TransferableDataHelper::GetSotStorageStream( SotClipboardFormatId nFormat, tools::SvRef<SotTempStream>& rxStream ) const
 {
     DataFlavor aFlavor;
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetSotStorageStream( aFlavor, rxStream ) );
 }
 
 
-bool TransferableDataHelper::GetSotStorageStream( const DataFlavor& rFlavor, tools::SvRef<SotTempStream>& rxStream )
+bool TransferableDataHelper::GetSotStorageStream( const DataFlavor& rFlavor, tools::SvRef<SotTempStream>& rxStream ) const
 {
     Sequence<sal_Int8> aSeq = GetSequence(rFlavor, OUString());
 
@@ -2077,7 +2077,7 @@ bool TransferableDataHelper::GetSotStorageStream( const DataFlavor& rFlavor, too
     return aSeq.hasElements();
 }
 
-Reference<XInputStream> TransferableDataHelper::GetInputStream( SotClipboardFormatId nFormat, const OUString& rDestDoc )
+Reference<XInputStream> TransferableDataHelper::GetInputStream( SotClipboardFormatId nFormat, const OUString& rDestDoc ) const
 {
     DataFlavor aFlavor;
     if (!SotExchange::GetFormatDataFlavor(nFormat, aFlavor))
@@ -2086,7 +2086,7 @@ Reference<XInputStream> TransferableDataHelper::GetInputStream( SotClipboardForm
     return GetInputStream(aFlavor, rDestDoc);
 }
 
-Reference<XInputStream> TransferableDataHelper::GetInputStream( const DataFlavor& rFlavor, const OUString& rDestDoc )
+Reference<XInputStream> TransferableDataHelper::GetInputStream( const DataFlavor& rFlavor, const OUString& rDestDoc ) const
 {
     Sequence<sal_Int8> aSeq = GetSequence(rFlavor, rDestDoc);
 

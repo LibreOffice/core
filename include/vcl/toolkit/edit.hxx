@@ -143,7 +143,7 @@ protected:
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 public:
     // public because needed in button.cxx
-    SAL_DLLPRIVATE bool ImplUseNativeBorder(vcl::RenderContext const & rRenderContext, WinBits nStyle);
+    SAL_DLLPRIVATE bool ImplUseNativeBorder(vcl::RenderContext const & rRenderContext, WinBits nStyle) const;
 
     Edit( vcl::Window* pParent, WinBits nStyle = WB_BORDER );
     virtual ~Edit() override;

@@ -49,7 +49,7 @@ public:
     void parent();
     void next();
     bool isValid() const;
-    OString attribute(const OString& sName);
+    OString attribute(const OString& sName) const;
 };
 
 } // end tools namespace

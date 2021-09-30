@@ -207,7 +207,7 @@ void MenuBarWindow::ShowButtons( bool bClose, bool bFloat, bool bHide )
     Resize();
 }
 
-Size const & MenuBarWindow::MinCloseButtonSize()
+Size const & MenuBarWindow::MinCloseButtonSize() const
 {
     return m_aCloseBtn->getMinSize();
 }
@@ -670,7 +670,7 @@ void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16
     }
 }
 
-tools::Rectangle MenuBarWindow::ImplGetItemRect( sal_uInt16 nPos )
+tools::Rectangle MenuBarWindow::ImplGetItemRect( sal_uInt16 nPos ) const
 {
     tools::Rectangle aRect;
     if( m_pMenu )

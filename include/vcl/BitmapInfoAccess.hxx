@@ -77,7 +77,7 @@ public:
         return mpBuffer ? mpBuffer->mnBitCount : 0;
     }
 
-    BitmapColor GetBestMatchingColor(const BitmapColor& rBitmapColor)
+    BitmapColor GetBestMatchingColor(const BitmapColor& rBitmapColor) const
     {
         if (HasPalette())
             return BitmapColor(static_cast<sal_uInt8>(GetBestPaletteIndex(rBitmapColor)));

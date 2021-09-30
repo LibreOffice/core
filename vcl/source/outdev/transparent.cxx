@@ -1214,7 +1214,7 @@ tools::Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
                                                          0, rTextAct.GetDXArray() );
                 if( pSalLayout )
                 {
-                    tools::Rectangle aBoundRect( const_cast<OutputDevice&>(rOut).ImplGetTextBoundRect( *pSalLayout ) );
+                    tools::Rectangle aBoundRect( rOut.ImplGetTextBoundRect( *pSalLayout ) );
                     aActionBounds = rOut.PixelToLogic( aBoundRect );
                 }
             }
@@ -1243,7 +1243,7 @@ tools::Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
                                                          rTextAct.GetWidth() );
                 if( pSalLayout )
                 {
-                    tools::Rectangle aBoundRect( const_cast<OutputDevice&>(rOut).ImplGetTextBoundRect( *pSalLayout ) );
+                    tools::Rectangle aBoundRect( rOut.ImplGetTextBoundRect( *pSalLayout ) );
                     aActionBounds = rOut.PixelToLogic( aBoundRect );
                 }
             }

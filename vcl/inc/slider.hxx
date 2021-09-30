@@ -55,12 +55,12 @@ private:
     void ImplInit( vcl::Window* pParent, WinBits nStyle );
     void ImplInitSettings();
     void ImplUpdateRects( bool bUpdate = true );
-    tools::Long ImplCalcThumbPos( tools::Long nPixPos );
-    tools::Long ImplCalcThumbPosPix( tools::Long nPos );
+    tools::Long ImplCalcThumbPos( tools::Long nPixPos ) const;
+    tools::Long ImplCalcThumbPosPix( tools::Long nPos ) const;
     void ImplCalc( bool bUpdate = true );
     void ImplDraw(vcl::RenderContext& rRenderContext);
-    bool ImplIsPageUp( const Point& rPos );
-    bool ImplIsPageDown( const Point& rPos );
+    bool ImplIsPageUp( const Point& rPos ) const;
+    bool ImplIsPageDown( const Point& rPos ) const;
     tools::Long ImplSlide( tools::Long nNewPos );
     tools::Long ImplDoAction( );
     void ImplDoMouseAction( const Point& rPos, bool bCallAction );
@@ -93,7 +93,7 @@ public:
     void            SetPageSize( tools::Long nNewSize ) { mnPageSize = nNewSize; }
     tools::Long            GetPageSize() const { return mnPageSize; }
 
-    Size            CalcWindowSizePixel();
+    Size            CalcWindowSizePixel() const;
 
     void            SetSlideHdl( const Link<Slider*,void>& rLink ) { maSlideHdl = rLink; }
 };

@@ -352,7 +352,7 @@ public:
 
     void disable_notify_events();
 
-    bool notify_events_disabled();
+    bool notify_events_disabled() const;
 
     void enable_notify_events();
 

@@ -184,9 +184,9 @@ void OTableCopyHelper::pasteTable( SotClipboardFormatId _nFormatId
             DropDescriptor aTrans;
             bool bOk;
             if ( _nFormatId != SotClipboardFormatId::RTF )
-                bOk = const_cast<TransferableDataHelper&>(_rTransData).GetSotStorageStream(SotClipboardFormatId::HTML ,aTrans.aHtmlRtfStorage);
+                bOk = _rTransData.GetSotStorageStream(SotClipboardFormatId::HTML ,aTrans.aHtmlRtfStorage);
             else
-                bOk = const_cast<TransferableDataHelper&>(_rTransData).GetSotStorageStream(SotClipboardFormatId::RTF,aTrans.aHtmlRtfStorage);
+                bOk = _rTransData.GetSotStorageStream(SotClipboardFormatId::RTF,aTrans.aHtmlRtfStorage);
 
             aTrans.nType            = E_TABLE;
             aTrans.bHtml            = SotClipboardFormatId::HTML == _nFormatId;
@@ -258,9 +258,9 @@ bool OTableCopyHelper::copyTagTable(const TransferableDataHelper& _aDroppedData
     {
         bool bOk;
         if ( bHtml )
-            bOk = const_cast<TransferableDataHelper&>(_aDroppedData).GetSotStorageStream(SotClipboardFormatId::HTML ,_rAsyncDrop.aHtmlRtfStorage);
+            bOk = _aDroppedData.GetSotStorageStream(SotClipboardFormatId::HTML ,_rAsyncDrop.aHtmlRtfStorage);
         else
-            bOk = const_cast<TransferableDataHelper&>(_aDroppedData).GetSotStorageStream(SotClipboardFormatId::RTF,_rAsyncDrop.aHtmlRtfStorage);
+            bOk = _aDroppedData.GetSotStorageStream(SotClipboardFormatId::RTF,_rAsyncDrop.aHtmlRtfStorage);
 
         _rAsyncDrop.bHtml           = bHtml;
         _rAsyncDrop.bError          = !copyTagTable(_rAsyncDrop,true,_xConnection);

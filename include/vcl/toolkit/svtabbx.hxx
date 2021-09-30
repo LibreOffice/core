@@ -123,7 +123,7 @@ public:
 
     // Accessible -------------------------------------------------------------
 
-    bool            IsCellCheckBox( sal_Int32 _nRow, sal_uInt16 _nColumn, TriState& _rState );
+    bool            IsCellCheckBox( sal_Int32 _nRow, sal_uInt16 _nColumn, TriState& _rState ) const;
 
     /** @return  The count of the rows. */
     virtual sal_Int32               GetRowCount() const override;

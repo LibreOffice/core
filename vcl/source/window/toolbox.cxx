@@ -434,7 +434,7 @@ void ToolBox::ImplDrawGradientBackground(vcl::RenderContext& rRenderContext)
 
 }
 
-bool ToolBox::ImplDrawNativeBackground(vcl::RenderContext& rRenderContext)
+bool ToolBox::ImplDrawNativeBackground(vcl::RenderContext& rRenderContext) const
 {
     // use NWF
     tools::Rectangle aCtrlRegion(Point(), GetOutputSizePixel());

@@ -55,7 +55,7 @@ public:
     void                Scale( const Fraction& rFractX, const Fraction& rFracY );
 
     using IMapObject::IsEqual;
-    bool                IsEqual( const IMapRectangleObject& rEqObj );
+    bool                IsEqual( const IMapRectangleObject& rEqObj ) const;
 
     // import/export
     void                WriteCERN( SvStream& rOStm  ) const;

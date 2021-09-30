@@ -131,8 +131,8 @@ public:
     inline void     Expand( sal_Int32 nDiff );
     inline void     Collaps( sal_Int32 nDiff );
 
-    inline bool     IsIn( sal_Int32 nIndex );
-    inline bool     IsInside( sal_Int32 nIndex );
+    inline bool     IsIn( sal_Int32 nIndex ) const;
+    inline bool     IsInside( sal_Int32 nIndex ) const;
     inline bool     IsEmpty() const;
 
 };
@@ -169,12 +169,12 @@ inline void TextCharAttrib::Collaps( sal_Int32 nDiff )
     mnEnd = mnEnd - nDiff;
 }
 
-inline bool TextCharAttrib::IsIn( sal_Int32 nIndex )
+inline bool TextCharAttrib::IsIn( sal_Int32 nIndex ) const
 {
     return ( ( mnStart <= nIndex ) && ( mnEnd >= nIndex ) );
 }
 
-inline bool TextCharAttrib::IsInside( sal_Int32 nIndex )
+inline bool TextCharAttrib::IsInside( sal_Int32 nIndex ) const
 {
     return ( ( mnStart < nIndex ) && ( mnEnd > nIndex ) );
 }

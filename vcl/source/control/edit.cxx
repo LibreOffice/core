@@ -285,7 +285,7 @@ void Edit::ImplInitEditData()
     mxDnDListener = new vcl::unohelper::DragAndDropWrapper( this );
 }
 
-bool Edit::ImplUseNativeBorder(vcl::RenderContext const & rRenderContext, WinBits nStyle)
+bool Edit::ImplUseNativeBorder(vcl::RenderContext const & rRenderContext, WinBits nStyle) const
 {
     bool bRet = rRenderContext.IsNativeControlSupported(ImplGetNativeControlType(),
                                                         ControlPart::HasBackgroundTexture)

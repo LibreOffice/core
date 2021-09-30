@@ -37,8 +37,8 @@ class SalI18N_InputMethod
 public:
 
     Bool        PosixLocale();
-    bool        UseMethod()             { return mbUseable; }
-    XIM         GetMethod()             { return maMethod;  }
+    bool        UseMethod() const      { return mbUseable; }
+    XIM         GetMethod() const      { return maMethod;  }
     void        HandleDestroyIM();
     void        CreateMethod( Display *pDisplay );
     XIMStyles  *GetSupportedStyles()    { return mpStyles;  }

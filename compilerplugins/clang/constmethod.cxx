@@ -43,6 +43,17 @@ public:
     explicit ConstMethod(loplugin::InstantiationData const & data): FunctionAddress(data) {}
 
     virtual void run() override {
+        std::string fn(handler.getMainFileName());
+        loplugin::normalizeDotDotInFilePath(fn);
+        // things I'm not sure about
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/svl/unx/source/svdde/ddedummy.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/svl/source/numbers/zformat.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/svl/source/numbers/zforscan.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/svl/source/numbers/zforlist.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/source/gdi/impgraph.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/source/image/ImplImage.cxx"))
+            return;
+
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
 
         for (const CXXMethodDecl *pMethodDecl : interestingMethodSet) {
@@ -52,8 +63,21 @@ public:
             if (getFunctionsWithAddressTaken().find((FunctionDecl const *)canonicalDecl)
                     != getFunctionsWithAddressTaken().end())
                 continue;
+            // things that I don't think should be logically const
+            std::string fqn = pMethodDecl->getQualifiedNameAsString();
+            if (fqn == "comphelper::EmbeddedObjectContainer::CommitImageSubStorage"
+                || fqn == "SvtLinguConfig::SetProperty"
+                || fqn == "SvtLinguConfig::ReplaceSetProperties"
+                || fqn == "SystemWindow::UpdatePositionData"
+                || fqn == "OutputDevice::SelectClipRegion"
+                || fqn == "OutputDevice::BlendBitmap")
+                continue;
             StringRef aFileName = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(canonicalDecl)));
+            // leave the kit API alone
             if (loplugin::isSamePathname(aFileName, SRCDIR "/include/LibreOfficeKit/LibreOfficeKit.hxx"))
+                continue;
+            // don't feel like touching this right now
+            if (loplugin::isSamePathname(aFileName, SRCDIR "/include/vcl/weld.hxx"))
                 continue;
             report(
                 DiagnosticsEngine::Warning,
@@ -140,8 +164,8 @@ bool ConstMethod::VisitCXXMethodDecl(const CXXMethodDecl * cxxMethodDecl)
 
     if (!cxxMethodDecl->getIdentifier())
         return true;
-    if (cxxMethodDecl->getNumParams() > 0)
-        return true;
+//    if (cxxMethodDecl->getNumParams() > 0)
+//        return true;
     // returning pointers or refs to non-const stuff, and then having the whole method
     // be const doesn't seem like a good idea
     auto tc = loplugin::TypeCheck(cxxMethodDecl->getReturnType());
@@ -153,11 +177,11 @@ bool ConstMethod::VisitCXXMethodDecl(const CXXMethodDecl * cxxMethodDecl)
     if (tc.Void())
         return true;
 
-    StringRef name = cxxMethodDecl->getName();
-    if (!name.startswith("get") && !name.startswith("Get")
-        && !name.startswith("is") && !name.startswith("Is")
-        && !name.startswith("has") && !name.startswith("Has"))
-        return true;
+//    StringRef name = cxxMethodDecl->getName();
+//    if (!name.startswith("get") && !name.startswith("Get")
+//        && !name.startswith("is") && !name.startswith("Is")
+//        && !name.startswith("has") && !name.startswith("Has"))
+//        return true;
 
     // something lacking in my analysis here
     if (loplugin::DeclCheck(cxxMethodDecl).Function("GetDescr").Class("SwRangeRedline").GlobalNamespace())
@@ -214,11 +238,11 @@ bool ConstMethod::checkIfCanBeConst(const Stmt* stmt, const CXXMethodDecl* cxxMe
 
     if (auto unaryOperator = dyn_cast<UnaryOperator>(parent)) {
         UnaryOperator::Opcode op = unaryOperator->getOpcode();
-        if (op == UO_AddrOf || op == UO_PreInc || op == UO_PostInc
+        if (op == UO_PreInc || op == UO_PostInc
             || op == UO_PreDec || op == UO_PostDec) {
             return false;
         }
-        if (op == UO_Deref) {
+        if (op == UO_Deref || op == UO_AddrOf) {
             return checkIfCanBeConst(parent, cxxMethodDecl);
         }
         return true;

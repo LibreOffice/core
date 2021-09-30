@@ -264,7 +264,7 @@ namespace internal
 
         /** checks whether the forwarder is responsible for the given property
         */
-        bool    isResponsibleFor( sal_Int32 _nHandle );
+        bool    isResponsibleFor( sal_Int32 _nHandle ) const;
 
         /// actually forwards a property value to the aggregate
         ///
@@ -288,7 +288,7 @@ namespace internal
     }
 
 
-    bool PropertyForwarder::isResponsibleFor( sal_Int32 _nHandle )
+    bool PropertyForwarder::isResponsibleFor( sal_Int32 _nHandle ) const
     {
         return m_aProperties.find( _nHandle ) != m_aProperties.end();
     }

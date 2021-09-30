@@ -458,7 +458,7 @@ void GraphicObject::SetUserData( const OUString& rUserData )
 }
 
 bool GraphicObject::Draw(OutputDevice& rOut, const Point& rPt, const Size& rSz,
-                         const GraphicAttr* pAttr)
+                         const GraphicAttr* pAttr) const
 {
     GraphicAttr         aAttr( pAttr ? *pAttr : GetAttr() );
     Point               aPt( rPt );

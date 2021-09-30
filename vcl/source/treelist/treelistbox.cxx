@@ -353,7 +353,7 @@ int SvLBoxItem::GetHeight(const SvTreeListBox* pView, const SvTreeListEntry* pEn
     return pViewData->mnHeight;
 }
 
-int SvLBoxItem::GetWidth(const SvTreeListBox* pView, const SvViewDataEntry* pData, sal_uInt16 nItemPos)
+int SvLBoxItem::GetWidth(const SvTreeListBox* pView, const SvViewDataEntry* pData, sal_uInt16 nItemPos) const
 {
     const SvViewDataItem& rIData = pData->GetItem(nItemPos);
     int nWidth = rIData.mnWidth;
@@ -2846,7 +2846,7 @@ void SvTreeListBox::DrawCustomEntry(vcl::RenderContext& rRenderContext, const to
     aCustomRenderHdl.Call(std::tuple<vcl::RenderContext&, const tools::Rectangle&, const SvTreeListEntry&>(rRenderContext, rRect, rEntry));
 }
 
-Size SvTreeListBox::MeasureCustomEntry(vcl::RenderContext& rRenderContext, const SvTreeListEntry& rEntry)
+Size SvTreeListBox::MeasureCustomEntry(vcl::RenderContext& rRenderContext, const SvTreeListEntry& rEntry) const
 {
     return aCustomMeasureHdl.Call(std::pair<vcl::RenderContext&, const SvTreeListEntry&>(rRenderContext, rEntry));
 }
@@ -2947,7 +2947,7 @@ tools::Rectangle SvTreeListBox::GetFocusRect(const SvTreeListEntry* pEntry, tool
     return aRect;
 }
 
-sal_IntPtr SvTreeListBox::GetTabPos(const SvTreeListEntry* pEntry, const SvLBoxTab* pTab)
+sal_IntPtr SvTreeListBox::GetTabPos(const SvTreeListEntry* pEntry, const SvLBoxTab* pTab) const
 {
     assert(pTab);
     sal_IntPtr nPos = pTab->GetPos();

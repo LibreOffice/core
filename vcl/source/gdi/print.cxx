@@ -1425,7 +1425,7 @@ const PaperInfo& Printer::GetPaperInfo( int nPaper ) const
     return mpInfoPrinter->m_aPaperFormats[nPaper];
 }
 
-Size Printer::GetPaperSize( int nPaper )
+Size Printer::GetPaperSize( int nPaper ) const
 {
     PaperInfo aInfo = GetPaperInfo( nPaper );
     return PixelToLogic( Size( aInfo.getWidth(), aInfo.getHeight() ) );

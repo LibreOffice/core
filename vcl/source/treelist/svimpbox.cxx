@@ -3120,7 +3120,7 @@ void SvImpLBox::CallEventListeners( VclEventId nEvent, void* pData )
 }
 
 
-bool SvImpLBox::IsSelectable( const SvTreeListEntry* pEntry )
+bool SvImpLBox::IsSelectable( const SvTreeListEntry* pEntry ) const
 {
     if( pEntry )
     {

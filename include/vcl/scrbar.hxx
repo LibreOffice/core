@@ -70,8 +70,8 @@ private:
     SAL_DLLPRIVATE void         ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void         ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void         ImplUpdateRects( bool bUpdate = true );
-    SAL_DLLPRIVATE tools::Long         ImplCalcThumbPos( tools::Long nPixPos );
-    SAL_DLLPRIVATE tools::Long         ImplCalcThumbPosPix( tools::Long nPos );
+    SAL_DLLPRIVATE tools::Long         ImplCalcThumbPos( tools::Long nPixPos ) const;
+    SAL_DLLPRIVATE tools::Long         ImplCalcThumbPosPix( tools::Long nPos ) const;
     SAL_DLLPRIVATE void         ImplCalc( bool bUpdate = true );
     SAL_DLLPRIVATE void         ImplDraw(vcl::RenderContext& rRenderContext);
     using Window::ImplScroll;

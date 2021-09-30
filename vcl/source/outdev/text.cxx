@@ -184,7 +184,7 @@ void OutputDevice::ImplDrawTextBackground( const SalLayout& rSalLayout )
                       mpFontInstance->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent );
 }
 
-tools::Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout )
+tools::Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout ) const
 {
     Point aPoint = rSalLayout.GetDrawPosition();
     tools::Long nX = aPoint.X();

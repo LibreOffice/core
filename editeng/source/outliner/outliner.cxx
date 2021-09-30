@@ -1032,8 +1032,7 @@ void Outliner::PaintBullet(sal_Int32 nPara, const Point& rStartPos, const Point&
                 }
                 else
                 {
-                    // Remove CAST when KA made the Draw-Method const
-                    const_cast<GraphicObject*>(pFmt->GetBrush()->GetGraphicObject())->Draw(rOutDev, aBulletPos, pPara->aBulSize);
+                    pFmt->GetBrush()->GetGraphicObject()->Draw(rOutDev, aBulletPos, pPara->aBulSize);
                 }
             }
         }

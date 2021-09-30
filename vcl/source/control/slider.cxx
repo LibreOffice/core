@@ -202,7 +202,7 @@ void Slider::ImplUpdateRects( bool bUpdate )
     }
 }
 
-tools::Long Slider::ImplCalcThumbPos( tools::Long nPixPos )
+tools::Long Slider::ImplCalcThumbPos( tools::Long nPixPos ) const
 {
     // calculate position
     tools::Long nCalcThumbPos;
@@ -211,7 +211,7 @@ tools::Long Slider::ImplCalcThumbPos( tools::Long nPixPos )
     return nCalcThumbPos;
 }
 
-tools::Long Slider::ImplCalcThumbPosPix( tools::Long nPos )
+tools::Long Slider::ImplCalcThumbPosPix( tools::Long nPos ) const
 {
     // calculate position
     tools::Long nCalcThumbPos;
@@ -461,7 +461,7 @@ void Slider::ImplDraw(vcl::RenderContext& rRenderContext)
     }
 }
 
-bool Slider::ImplIsPageUp( const Point& rPos )
+bool Slider::ImplIsPageUp( const Point& rPos ) const
 {
     Size aSize = GetOutputSizePixel();
     tools::Rectangle aRect = maChannel1Rect;
@@ -478,7 +478,7 @@ bool Slider::ImplIsPageUp( const Point& rPos )
     return aRect.Contains( rPos );
 }
 
-bool Slider::ImplIsPageDown( const Point& rPos )
+bool Slider::ImplIsPageDown( const Point& rPos ) const
 {
     Size aSize = GetOutputSizePixel();
     tools::Rectangle aRect = maChannel2Rect;
@@ -884,7 +884,7 @@ void Slider::SetThumbPos( tools::Long nNewThumbPos )
     }
 }
 
-Size Slider::CalcWindowSizePixel()
+Size Slider::CalcWindowSizePixel() const
 {
     tools::Long nWidth = mnMaxRange - mnMinRange + mnThumbSize + 1;
     tools::Long nHeight = SLIDER_HEIGHT;

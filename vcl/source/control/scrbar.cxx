@@ -200,7 +200,7 @@ void ScrollBar::ImplUpdateRects( bool bUpdate )
     }
 }
 
-tools::Long ScrollBar::ImplCalcThumbPos( tools::Long nPixPos )
+tools::Long ScrollBar::ImplCalcThumbPos( tools::Long nPixPos ) const
 {
     // Calculate position
     tools::Long nCalcThumbPos;
@@ -210,7 +210,7 @@ tools::Long ScrollBar::ImplCalcThumbPos( tools::Long nPixPos )
     return nCalcThumbPos;
 }
 
-tools::Long ScrollBar::ImplCalcThumbPosPix( tools::Long nPos )
+tools::Long ScrollBar::ImplCalcThumbPosPix( tools::Long nPos ) const
 {
     tools::Long nCalcThumbPos;
 

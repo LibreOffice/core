@@ -101,7 +101,7 @@ public:
 
     bool                IsNative() const;
 
-    bool                LoadNative( Graphic& rGraphic );
+    bool                LoadNative( Graphic& rGraphic ) const;
 
     bool                ExportNative( SvStream& rOStream ) const;
 

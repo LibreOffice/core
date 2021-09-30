@@ -114,7 +114,7 @@ private:
     bool    ReadMap();
         // reads/decompress the bitmap data and fills aMap
 
-    sal_uInt32 GetBits(const sal_uInt8 * pSrc, sal_uInt32 nBitsPos, sal_uInt32 nBitsCount);
+    sal_uInt32 GetBits(const sal_uInt8 * pSrc, sal_uInt32 nBitsPos, sal_uInt32 nBitsCount) const;
         // fetches BitsCount bits from pSrc[..] at the position nBitsPos
 
     void    MakePalCol();
@@ -771,7 +771,7 @@ bool TIFFReader::ReadMap()
     return true;
 }
 
-sal_uInt32 TIFFReader::GetBits( const sal_uInt8 * pSrc, sal_uInt32 nBitsPos, sal_uInt32 nBitsCount)
+sal_uInt32 TIFFReader::GetBits( const sal_uInt8 * pSrc, sal_uInt32 nBitsPos, sal_uInt32 nBitsCount) const
 {
     sal_uInt32 nRes;
     if ( bByteSwap )

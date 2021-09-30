@@ -144,7 +144,7 @@ private:
                                 int nNumTilesY,
                                 const Size& rTileSize,
                                 const GraphicAttr* pAttr
-                            );
+                            ) const;
 
     void VCL_DLLPRIVATE     ImplTransformBitmap(
                                 BitmapEx&           rBmpEx,
@@ -221,7 +221,7 @@ public:
     bool                    Draw(OutputDevice& rOut,
                                  const Point& rPt,
                                  const Size& rSz,
-                                 const GraphicAttr* pAttr = nullptr);
+                                 const GraphicAttr* pAttr = nullptr) const;
 
     /** Draw the graphic repeatedly into the given output rectangle
 

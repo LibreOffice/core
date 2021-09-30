@@ -245,7 +245,7 @@ class OInstanceProvider
     OUString                          _aInstanceName;
 
     /// @throws Exception
-    inline Reference< XInterface > createInstance();
+    inline Reference< XInterface > createInstance() const;
 
 public:
     OInstanceProvider( const Reference< XComponentContext > & xContext,
@@ -267,7 +267,7 @@ public:
 
 }
 
-inline Reference< XInterface > OInstanceProvider::createInstance()
+inline Reference< XInterface > OInstanceProvider::createInstance() const
 {
     Reference< XInterface > xRet;
     if (!_aImplName.isEmpty()) // manually via loader

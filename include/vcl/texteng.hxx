@@ -185,7 +185,7 @@ class VCL_DLLPUBLIC TextEngine : public SfxBroadcaster
     static void         ImpInitLayoutMode( OutputDevice* pOutDev );
     TxtAlign            ImpGetAlign() const;
 
-    tools::Long                CalcTextHeight();
+    tools::Long                CalcTextHeight() const;
     tools::Long                CalcParaHeight( sal_uInt32 nParagraph ) const;
     tools::Long                CalcTextWidth( sal_uInt32 nPara );
     tools::Long                CalcTextWidth( sal_uInt32 nPara, sal_Int32 nPortionStart, sal_Int32 nPortionLen);

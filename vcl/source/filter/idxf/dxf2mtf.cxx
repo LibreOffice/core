@@ -38,7 +38,7 @@ sal_uInt64 DXF2GDIMetaFile::CountEntities(const DXFEntities & rEntities)
     return nRes;
 }
 
-Color DXF2GDIMetaFile::ConvertColor(sal_uInt8 nColor)
+Color DXF2GDIMetaFile::ConvertColor(sal_uInt8 nColor) const
 {
     return Color(
         pDXF->aPalette.GetRed( nColor ),
@@ -46,7 +46,7 @@ Color DXF2GDIMetaFile::ConvertColor(sal_uInt8 nColor)
         pDXF->aPalette.GetBlue( nColor ) );
 }
 
-tools::Long DXF2GDIMetaFile::GetEntityColor(const DXFBasicEntity & rE)
+tools::Long DXF2GDIMetaFile::GetEntityColor(const DXFBasicEntity & rE) const
 {
     tools::Long nColor;
 
@@ -64,7 +64,7 @@ tools::Long DXF2GDIMetaFile::GetEntityColor(const DXFBasicEntity & rE)
     return nColor;
 }
 
-DXFLineInfo DXF2GDIMetaFile::LTypeToDXFLineInfo(std::string_view rLineType)
+DXFLineInfo DXF2GDIMetaFile::LTypeToDXFLineInfo(std::string_view rLineType) const
 {
     const DXFLType * pLT;
     DXFLineInfo aDXFLineInfo;

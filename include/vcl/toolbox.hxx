@@ -211,7 +211,7 @@ private:
     SAL_DLLPRIVATE bool            ImplIsInPopupMode() const;
     SAL_DLLPRIVATE const OUString& ImplGetHelpText( ToolBoxItemId nItemId ) const;
     SAL_DLLPRIVATE Size            ImplGetOptimalFloatingSize();
-    SAL_DLLPRIVATE bool            ImplHasExternalMenubutton();
+    SAL_DLLPRIVATE bool            ImplHasExternalMenubutton() const;
     SAL_DLLPRIVATE void            ImplDrawFloatwinBorder(vcl::RenderContext& rRenderContext, ImplToolItem const * pItem );
 
     DECL_DLLPRIVATE_LINK(    ImplUpdateHdl, Timer*, void );
@@ -239,7 +239,7 @@ public:
 
     SAL_DLLPRIVATE void ImplDrawGrip(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE void ImplDrawGradientBackground(vcl::RenderContext& rRenderContext);
-    SAL_DLLPRIVATE bool ImplDrawNativeBackground(vcl::RenderContext& rRenderContext);
+    SAL_DLLPRIVATE bool ImplDrawNativeBackground(vcl::RenderContext& rRenderContext) const;
     SAL_DLLPRIVATE void ImplDrawTransparentBackground(const vcl::Region &rRegion);
     SAL_DLLPRIVATE static void ImplDrawConstantBackground(vcl::RenderContext& rRenderContext, const vcl::Region &rRegion, bool bIsInPopupMode);
     SAL_DLLPRIVATE void ImplDrawBackground(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect);

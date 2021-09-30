@@ -96,7 +96,7 @@ static Point ImplGetItemTextPos( const Size& rRectSize, const Size& rTextSize,
     return Point( nX, nY );
 }
 
-bool StatusBar::ImplIsItemUpdate()
+bool StatusBar::ImplIsItemUpdate() const
 {
     return !mbProgressMode && IsReallyVisible() && IsUpdateMode();
 }

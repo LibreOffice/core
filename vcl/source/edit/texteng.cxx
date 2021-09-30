@@ -1156,7 +1156,7 @@ tools::Long TextEngine::CalcTextWidth()
     return mnCurTextWidth+1;// wider by 1, as CreateLines breaks at >=
 }
 
-tools::Long TextEngine::CalcTextHeight()
+tools::Long TextEngine::CalcTextHeight() const
 {
     SAL_WARN_IF( !GetUpdateMode(), "vcl", "CalcTextHeight: GetUpdateMode()" );
 

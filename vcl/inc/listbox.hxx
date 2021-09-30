@@ -169,7 +169,7 @@ public:
         it returns the first selectable entry after nPos if bForward is true and the
         first selectable entry after nPos is bForward is false.
         */
-    sal_Int32       FindFirstSelectable( sal_Int32  nPos, bool bForward = true );
+    sal_Int32       FindFirstSelectable( sal_Int32  nPos, bool bForward = true ) const;
 };
 
 class ImplListBoxWindow final : public Control, public vcl::ISearchableStringList
@@ -516,7 +516,7 @@ public:
 
     void            SetAutoWidth( bool b )              { mbAutoWidth = b; }
 
-    Size            CalcFloatSize();
+    Size            CalcFloatSize() const;
     void            StartFloat( bool bStartTracking );
 
     virtual void    setPosSizePixel( tools::Long nX, tools::Long nY,

@@ -323,7 +323,7 @@ namespace svx
             return false;
 
         OUString sFieldDescription;
-        (void)const_cast<TransferableDataHelper&>(_rData).GetString(nRecognizedFormat, sFieldDescription);
+        (void)_rData.GetString(nRecognizedFormat, sFieldDescription);
 
         const sal_Unicode cSeparator = u'\x000B';
         sal_Int32 nIdx{ 0 };

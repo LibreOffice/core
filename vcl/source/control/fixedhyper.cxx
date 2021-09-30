@@ -58,7 +58,7 @@ void FixedHyperlink::Initialize()
     SetClickHdl(LINK(this, FixedHyperlink, HandleClick));
 }
 
-bool FixedHyperlink::ImplIsOverText(Point aPosition)
+bool FixedHyperlink::ImplIsOverText(Point aPosition) const
 {
     Size aSize = GetOutputSizePixel();
 
