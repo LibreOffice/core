@@ -502,7 +502,7 @@ void doubleToString(typename T::String ** pResult,
 
     typename T::Char aBuf[1024];
 #ifndef NDEBUG
-    sal_Int32 nBuf =
+    sal_Int32 nBuf = 
         (nDigits <= 0 ? std::max< sal_Int32 >(nDecPlaces, abs(nExp))
           : nDigits + nDecPlaces ) + 10 + (pGroups ? abs(nDigits) * 2 : 0);
     // max(nDigits) = max(nDecPlaces) + 1 + max(nExp) + 1 = 20 + 1 + 308 + 1 = 330
@@ -583,22 +583,18 @@ void doubleToString(typename T::String ** pResult,
 
                 if (nDigit >= 10)
                 {   // after-treatment of up-rounding to the next decade
+                    // Assert that no one changed the logic we rely on.
+                    assert(!bSign || aBuf[0] == '-');
                     sal_Int32 sLen = p - aBuf - 1;
                     if (sLen == -1 || (sLen == 0 && bSign))
                     {
-                        // Assert that no one changed the logic we rely on.
-                        assert(!bSign || aBuf[0] == '-');
-                        p = aBuf;
-                        if (bSign)
-                            ++p;
+                        *(p - 1) = '1';
                         if (eFormat == rtl_math_StringFormat_F)
                         {
-                            *p++ = '1';
                             *p++ = '0';
                         }
                         else
                         {
-                            *p++ = '1';
                             *p++ = cDecSeparator;
                             *p++ = '0';
                             nExp++;
@@ -607,21 +603,16 @@ void doubleToString(typename T::String ** pResult,
                     }
                     else
                     {
-                        for (sal_Int32 j = sLen; j >= 0; j--)
+                        // Do not touch leading minus sign put earlier.
+                        for (sal_Int32 j = sLen; j >= bSign ? 1 : 0; j--)
                         {
                             typename T::Char cS = aBuf[j];
-                            if (j == 0 && bSign)
-                            {
-                                // Do not touch leading minus sign put earlier.
-                                assert(cS == '-');
-                                break;  // for, this is the last character backwards.
-                            }
                             if (cS != cDecSeparator)
                             {
                                 if (cS != '9')
                                 {
                                     aBuf[j] = ++cS;
-                                    j = -1;                 // break loop
+                                    break;
                                 }
                                 else
                                 {
@@ -631,13 +622,12 @@ void doubleToString(typename T::String ** pResult,
                                         if (eFormat == rtl_math_StringFormat_F)
                                         {   // insert '1'
                                             std::memmove(aBuf + j + 1, aBuf + j, (p++ - aBuf - j) * sizeof(*p));
-                                            aBuf[j] = '1';
                                         }
                                         else
                                         {
-                                            aBuf[j] = '1';
                                             nExp++;
                                         }
+                                        aBuf[j] = '1';
                                     }
                                 }
                             }
