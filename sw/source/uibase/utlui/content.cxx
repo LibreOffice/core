@@ -103,6 +103,10 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 
+#include <ftnidx.hxx>
+#include <txtftn.hxx>
+#include <fmtftn.hxx>
+
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
 
@@ -258,7 +262,8 @@ const TranslateId STR_CONTENT_TYPE_ARY[] =
     STR_CONTENT_TYPE_INDEX,
     STR_CONTENT_TYPE_POSTIT,
     STR_CONTENT_TYPE_DRAWOBJECT,
-    STR_CONTENT_TYPE_TEXTFIELD
+    STR_CONTENT_TYPE_TEXTFIELD,
+    STR_CONTENT_TYPE_FOOTNOTE
 };
 
 const TranslateId STR_CONTENT_TYPE_SINGLE_ARY[] =
@@ -275,7 +280,8 @@ const TranslateId STR_CONTENT_TYPE_SINGLE_ARY[] =
     STR_CONTENT_TYPE_SINGLE_INDEX,
     STR_CONTENT_TYPE_SINGLE_POSTIT,
     STR_CONTENT_TYPE_SINGLE_DRAWOBJECT,
-    STR_CONTENT_TYPE_SINGLE_TEXTFIELD
+    STR_CONTENT_TYPE_SINGLE_TEXTFIELD,
+    STR_CONTENT_TYPE_SINGLE_FOOTNOTE
 };
 
 namespace
@@ -407,6 +413,16 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                         m_nMemberCount++;
                 }
             }
+        }
+        break;
+        case ContentTypeId::FOOTNOTE:
+        {
+            m_nMemberCount = 0;
+            m_sTypeToken.clear();
+            m_bEdit = true;
+            m_bDelete = false;
+            const SwFootnoteIdxs& rFootnoteIdxs = m_pWrtShell->GetDoc()->GetFootnoteIdxs();
+            m_nMemberCount = rFootnoteIdxs.size();
         }
         break;
         case ContentTypeId::BOOKMARK:
@@ -845,7 +861,26 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
             m_nMemberCount = m_pMember->size();
         }
         break;
-
+        case ContentTypeId::FOOTNOTE:
+        {
+            const SwFootnoteIdxs& rFootnoteIdxs = m_pWrtShell->GetDoc()->GetFootnoteIdxs();
+            for (SwTextFootnote* pTextFootnote : rFootnoteIdxs)
+            {
+                const SwFormatFootnote& rFormatFootnote = pTextFootnote->GetFootnote();
+                const OUString& sText =
+                        rFormatFootnote.GetViewNumStr(*m_pWrtShell->GetDoc(),
+                                                      m_pWrtShell->GetLayout(), true) + " " +
+                        rFormatFootnote.GetFootnoteText(*m_pWrtShell->GetLayout());
+                std::unique_ptr<SwTextFootnoteContent> pCnt(new SwTextFootnoteContent(
+                                                                this, sText, pTextFootnote,
+                                                                rFormatFootnote.GetNumber()));
+                if (!pTextFootnote->GetTextNode().getLayoutFrame(m_pWrtShell->GetLayout()))
+                    pCnt->SetInvisible();
+                m_pMember->insert(std::move(pCnt));
+            }
+            m_nMemberCount = m_pMember->size();
+        }
+        break;
         case ContentTypeId::REGION    :
         {
             m_nMemberCount = m_pWrtShell->GetSectionFormatCount();
@@ -2122,6 +2157,9 @@ namespace
             case ContentTypeId::TEXTFIELD:
                 sResId = RID_BMP_NAVI_TEXTFIELD;
                 break;
+            case ContentTypeId::FOOTNOTE:
+                sResId = RID_BMP_NAVI_FOOTNOTE;
+                break;
             case ContentTypeId::UNKNOWN:
                 SAL_WARN("sw.ui", "ContentTypeId::UNKNOWN has no bitmap preview");
                 break;
@@ -3283,6 +3321,66 @@ void SwContentTree::HideTree()
     m_xTreeView->hide();
 }
 
+static void lcl_SelectByContentTypeAndAddress(SwContentTree* pThis, weld::TreeView& rContentTree,
+                                              ContentTypeId nType, const void* ptr)
+{
+    if (!ptr)
+        return;
+
+    // find content type entry
+    std::unique_ptr<weld::TreeIter> xIter(rContentTree.make_iterator());
+
+    bool bFoundEntry = rContentTree.get_iter_first(*xIter);
+    while (bFoundEntry)
+    {
+        void* pUserData = reinterpret_cast<void*>(rContentTree.get_id(*xIter).toInt64());
+        assert(dynamic_cast<SwContentType*>(static_cast<SwTypeNumber*>(pUserData)));
+        if (nType == static_cast<SwContentType*>(pUserData)->GetType())
+            break;
+        bFoundEntry = rContentTree.iter_next_sibling(*xIter);
+    }
+
+    if (bFoundEntry)
+    {
+        // assure content type entry is expanded
+        rContentTree.expand_row(*xIter);
+
+        // find content type content entry and select it
+        const void* p = nullptr;
+        while (rContentTree.iter_next(*xIter) && lcl_IsContent(*xIter, rContentTree))
+        {
+            void* pUserData = reinterpret_cast<void*>(rContentTree.get_id(*xIter).toInt64());
+            switch( nType )
+            {
+                case ContentTypeId::FOOTNOTE:
+                {
+                    assert(dynamic_cast<SwTextFootnoteContent*>(static_cast<SwTypeNumber*>(pUserData)));
+                    SwTextFootnoteContent* pCnt = static_cast<SwTextFootnoteContent*>(pUserData);
+                    p = pCnt->GetTextFootnote();
+                    break;
+                }
+                default:
+                    break;
+            }
+            if (ptr == p)
+            {
+                // get first selected for comparison
+                std::unique_ptr<weld::TreeIter> xFirstSelected(rContentTree.make_iterator());
+                if (!rContentTree.get_selected(xFirstSelected.get()))
+                    xFirstSelected.reset();
+                if (rContentTree.count_selected_rows() != 1 ||
+                        rContentTree.iter_compare(*xIter, *xFirstSelected) != 0)
+                {
+                    // unselect all entries and make passed entry visible and selected
+                    rContentTree.set_cursor(*xIter);
+                    pThis->Select();
+                }
+                return;
+            }
+        }
+    }
+}
+
 static void lcl_SelectByContentTypeAndName(SwContentTree* pThis, weld::TreeView& rContentTree,
                                            std::u16string_view rContentTypeName, std::u16string_view rName)
 {
@@ -3400,6 +3498,15 @@ void SwContentTree::UpdateTracking()
         return;
     }
 
+    // footnotes and endnotes
+    if (SwContentAtPos aContentAtPos(IsAttrAtPos::Ftn);
+            m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
+            !(m_bIsRoot && m_nRootType != ContentTypeId::FOOTNOTE))
+    {
+        lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, ContentTypeId::FOOTNOTE,
+                                          aContentAtPos.pFndTextAttr);
+        return;
+    }
     // bookmarks - track first bookmark at cursor
     SwDoc* pDoc = m_pActiveShell->GetDoc();
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(pDoc->GetDocShell()->GetBaseModel(),
@@ -4080,6 +4187,12 @@ IMPL_LINK(SwContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUStrin
                 }
             }
             break;
+            case ContentTypeId::FOOTNOTE:
+                assert(dynamic_cast<SwTextFootnoteContent*>(static_cast<SwTypeNumber*>(pUserData)));
+                sEntry = static_cast<SwTextFootnoteContent*>(pUserData)->GetTextFootnote()->
+                        GetFootnote().IsEndNote() ? SwResId(STR_CONTENT_ENDNOTE) :
+                                                    SwResId(STR_CONTENT_FOOTNOTE);
+            break;
             default: break;
         }
         if(static_cast<SwContent*>(pUserData)->IsInvisible())
@@ -4658,6 +4771,10 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
             else if(nMode == EditEntryMode::RENAME)
                 nSlot = FN_NAME_SHAPE;
         break;
+        case ContentTypeId::FOOTNOTE:
+            if (EditEntryMode::EDIT == nMode)
+                nSlot = FN_FORMAT_FOOTNOTE_DLG;
+        break;
         default: break;
     }
     if(nSlot)
@@ -4787,6 +4904,10 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
         {
             m_pActiveShell->GotoDrawingObject(pCnt->GetName());
         }
+        break;
+        case ContentTypeId::FOOTNOTE:
+            m_pActiveShell->GotoFootnoteAnchor(
+                        *static_cast<const SwTextFootnoteContent*>(pCnt)->GetTextFootnote());
         break;
         default: break;
     }
