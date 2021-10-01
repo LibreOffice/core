@@ -1636,8 +1636,9 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             {
                 // remove only selection ranges and 'EMPTY' messages
                 // always send 'INPLACE' and 'INPLACE EXIT' messages
+                // 'INPLACE' is not at the beginning we need to search for that
                 removeAll([type, payload] (const queue_type::value_type& elem)
-                    { return (elem.Type == type && elem.PayloadString[0] != 'I'); });
+                    { return (elem.Type == type && elem.PayloadString[0] != 'I' && elem.PayloadString.find("INPLACE") == std::string::npos); });
             }
             break;
         }
