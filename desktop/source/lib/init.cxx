@@ -1667,7 +1667,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                 // remove only selection ranges and 'EMPTY' messages
                 // always send 'INPLACE' and 'INPLACE EXIT' messages
                 removeAll(type, [payload] (const CallbackData& elemData)
-                    { return (elemData.PayloadString[0] != 'I'); });
+                    { return (elemData.PayloadString.find("INPLACE") == std::string::npos); });
             }
             break;
         }
