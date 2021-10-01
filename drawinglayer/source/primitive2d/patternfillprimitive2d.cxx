@@ -133,7 +133,7 @@ namespace drawinglayer::primitive2d
 
                 const BitmapEx aBitmapEx(
                     convertToBitmapEx(
-                        xEmbedSeq,
+                        std::move(xEmbedSeq),
                         aViewInformation2D,
                         mnDiscreteWidth,
                         mnDiscreteHeight,
@@ -191,10 +191,10 @@ namespace drawinglayer::primitive2d
                     new primitive2d::TransformPrimitive2D(
                         basegfx::utils::createScaleB2DHomMatrix(nWidth, nHeight),
                         std::move(aContent)));
-            const primitive2d::Primitive2DContainer xEmbedSeq { xEmbedRef };
+            primitive2d::Primitive2DContainer xEmbedSeq { xEmbedRef };
 
             return convertToBitmapEx(
-                        xEmbedSeq,
+                        std::move(xEmbedSeq),
                         aViewInformation2D,
                         nWidth,
                         nHeight,
