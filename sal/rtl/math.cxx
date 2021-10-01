@@ -506,7 +506,7 @@ void doubleToString(typename T::String ** pResult,
     // max(nDigits) = max(nDecPlaces) + 1 + max(nExp) + 1 = 20 + 1 + 308 + 1 = 330
     // max(nBuf) = max(nDigits) + max(nDecPlaces) + 10 + max(nDigits) * 2 = 330 * 3 + 20 + 10 = 1020
     assert(nBuf <= 1024);
-    typename T::Char* pBuf = static_cast<typename T::Char*>(alloca(nBuf));
+    typename T::Char* pBuf = static_cast<typename T::Char*>(alloca(nBuf * sizeof(typename T::Char)));
     typename T::Char * p = pBuf;
     if ( bSign )
         *p++ = '-';
