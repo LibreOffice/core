@@ -34,6 +34,24 @@
       "parentUuid": "e3709400_a9efe57f",
       "revId": "44b0f1ee5d4e4f8cd32f7e48c76d3954a98c8c8d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8af1f8d6_1e04c924",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-01T07:53:59Z",
+      "side": 1,
+      "message": "Additionally, having the const buffer size should make it even faster, since the compiler would generate a single stack allocation for the whole function at entry, instead of one stack allocation there, and another here?",
+      "parentUuid": "3aaa5bc6_31e6e40c",
+      "revId": "44b0f1ee5d4e4f8cd32f7e48c76d3954a98c8c8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
