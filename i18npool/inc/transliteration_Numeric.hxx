@@ -51,7 +51,7 @@ private:
         /// @throws css::uno::RuntimeException
         OUString
         transliterateBullet( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-                             css::uno::Sequence< sal_Int32 >* pOffset );
+                             css::uno::Sequence< sal_Int32 >* pOffset ) const;
 };
 
 }

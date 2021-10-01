@@ -67,8 +67,8 @@ class SalGtkPicker
 
         /// @throws css::uno::RuntimeException
         OUString implgetDisplayDirectory(  );
-        OUString uritounicode(const gchar *pIn);
-        OString unicodetouri(const OUString &rURL);
+        OUString uritounicode(const gchar *pIn) const;
+        OString unicodetouri(const OUString &rURL) const;
 
         // to instantiate own services
         css::uno::Reference< css::uno::XComponentContext > m_xContext;

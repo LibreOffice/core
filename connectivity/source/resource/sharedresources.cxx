@@ -44,7 +44,7 @@ namespace connectivity
         static SharedResources_Impl&
                         getInstance();
 
-        OUString getResourceString(TranslateId pId);
+        OUString getResourceString(TranslateId pId) const;
 
     private:
         SharedResources_Impl();
@@ -66,7 +66,7 @@ namespace connectivity
     {
     }
 
-    OUString SharedResources_Impl::getResourceString(TranslateId pId)
+    OUString SharedResources_Impl::getResourceString(TranslateId pId) const
     {
         return Translate::get(pId, m_aLocale);
     }

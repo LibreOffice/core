@@ -74,7 +74,7 @@ class EventList
 public:
                      EventList(){}
 
-    sal_uInt32      Count() { return static_cast<sal_uInt32>(maData.size()); }
+    sal_uInt32      Count() const { return static_cast<sal_uInt32>(maData.size()); }
 
     void            AddEvent( sal_IntPtr nType, sal_Int32 nPos );
     void            Insert( const css::ucb::ListAction& rAction ) { maData.push_back( rAction ); }

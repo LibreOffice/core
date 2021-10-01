@@ -87,7 +87,7 @@ protected:
 
     /// @throws css::uno::RuntimeException
     const OUString& getEntry( const OUString& IndexEntry,
-        const OUString& PhoneticEntry, const css::lang::Locale& rLocale );
+        const OUString& PhoneticEntry, const css::lang::Locale& rLocale ) const;
 };
 
 }

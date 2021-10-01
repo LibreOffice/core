@@ -216,7 +216,7 @@ public:
 
 private:
     void            StartRowDividerDrag( const Point& _rStartPos );
-    bool            ImplRowDividerHitTest( const BrowserMouseEvent& _rEvent );
+    bool            ImplRowDividerHitTest( const BrowserMouseEvent& _rEvent ) const;
 };
 
 class BrowserMouseEvent: public MouseEvent, public BrowseEvent
@@ -442,12 +442,12 @@ protected:
     // HACK(virtual create is not called in Ctor)
     void            SetHeaderBar( BrowserHeader* );
 
-    tools::Long            CalcReverseZoom(tools::Long nVal);
+    tools::Long     CalcReverseZoom(tools::Long nVal) const;
 
     const DataFlavorExVector&
                     GetDataFlavors() const;
 
-    bool            IsDropFormatSupported( SotClipboardFormatId nFormat );     // need this because the base class' IsDropFormatSupported is not const ...
+    bool            IsDropFormatSupported( SotClipboardFormatId nFormat ) const;     // need this because the base class' IsDropFormatSupported is not const ...
 
     void            DisposeAccessible();
 

@@ -2336,13 +2336,13 @@ namespace svt::table
     }
 
 
-    tools::Rectangle TableControl_Impl::calcTableRect()
+    tools::Rectangle TableControl_Impl::calcTableRect() const
     {
         return impl_getAllVisibleDataCellArea();
     }
 
 
-    tools::Rectangle TableControl_Impl::calcCellRect( sal_Int32 nRow, sal_Int32 nCol )
+    tools::Rectangle TableControl_Impl::calcCellRect( sal_Int32 nRow, sal_Int32 nCol ) const
     {
         tools::Rectangle aCellRect;
         impl_getCellRect( nRow, nCol, aCellRect );

@@ -534,7 +534,7 @@ protected:
     css::uno::Any  GetMaxValue() const;
 
     void    NotifyTextListeners();
-    css::uno::Any  convertEffectiveValue(const css::uno::Any& rValue);
+    css::uno::Any  convertEffectiveValue(const css::uno::Any& rValue) const;
 
     virtual void    SetWindow( const VclPtr< vcl::Window > &_pWindow) override;
 

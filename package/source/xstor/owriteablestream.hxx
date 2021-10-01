@@ -149,7 +149,7 @@ public:
 
     void CleanCacheStream();
 
-    bool UsesCommonEncryption_Impl() { return m_bUseCommonEncryption; }
+    bool UsesCommonEncryption_Impl() const { return m_bUseCommonEncryption; }
     bool HasTempFile_Impl() const { return ( m_aTempURL.getLength() != 0 ); }
     bool IsTransacted();
 

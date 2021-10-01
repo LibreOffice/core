@@ -104,7 +104,7 @@ namespace fileaccess {
         TaskManager*                                       m_pMyShell;
         css::uno::Reference< css::script::XTypeConverter > m_xTypeConverter;
 
-        bool isIndexOutOfBounds( sal_Int32 nIndex );
+        bool isIndexOutOfBounds( sal_Int32 nIndex ) const;
         template<typename T>
         T getValue(sal_Int32 columnIndex);
     };

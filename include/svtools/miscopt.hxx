@@ -61,7 +61,7 @@ class SVT_DLLPUBLIC SvtMiscOptions final : public utl::detail::Options
 
         OUString    GetIconTheme() const;
         void        SetIconTheme(const OUString&);
-        bool        IconThemeWasSetAutomatically();
+        bool        IconThemeWasSetAutomatically() const;
 
     private:
 

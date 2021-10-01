@@ -82,7 +82,7 @@ const DataFlavorExVector& BrowseBox::GetDataFlavors() const
 }
 
 
-bool BrowseBox::IsDropFormatSupported( SotClipboardFormatId _nFormat )
+bool BrowseBox::IsDropFormatSupported( SotClipboardFormatId _nFormat ) const
 {
     if ( pDataWin->bCallingDropCallback )
         return pDataWin->IsDropFormatSupported( _nFormat );

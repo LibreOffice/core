@@ -35,7 +35,7 @@ namespace cmis
             void setObjectId( const OUString& sId );
             void setUsername( const OUString& sUser );
 
-            OUString asString( );
+            OUString asString( ) const;
     };
 }
 

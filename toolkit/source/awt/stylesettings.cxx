@@ -111,7 +111,7 @@ namespace toolkit
     }
 
 
-    sal_Int32 WindowStyleSettings::ImplGetStyleColor( Color const & (StyleSettings::*i_pGetter)() const )
+    sal_Int32 WindowStyleSettings::ImplGetStyleColor( Color const & (StyleSettings::*i_pGetter)() const ) const
     {
         const VclPtr<vcl::Window>& pWindow = pOwningWindow->GetWindow();
         const AllSettings aAllSettings = pWindow->GetSettings();
@@ -129,7 +129,7 @@ namespace toolkit
         pWindow->SetSettings( aAllSettings );
     }
 
-    FontDescriptor WindowStyleSettings::ImplGetStyleFont( vcl::Font const & (StyleSettings::*i_pGetter)() const )
+    FontDescriptor WindowStyleSettings::ImplGetStyleFont( vcl::Font const & (StyleSettings::*i_pGetter)() const ) const
     {
         const VclPtr<vcl::Window>& pWindow = pOwningWindow->GetWindow();
         const AllSettings aAllSettings = pWindow->GetSettings();

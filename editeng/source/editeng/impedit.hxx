@@ -962,9 +962,9 @@ public:
     bool            DoVisualCursorTraveling();
 
     EditSelection         ConvertSelection( sal_Int32 nStartPara, sal_Int32 nStartPos, sal_Int32 nEndPara, sal_Int32 nEndPos );
-    inline EPaM           CreateEPaM( const EditPaM& rPaM );
+    inline EPaM           CreateEPaM( const EditPaM& rPaM ) const;
     inline EditPaM        CreateEditPaM( const EPaM& rEPaM );
-    inline ESelection     CreateESel( const EditSelection& rSel );
+    inline ESelection     CreateESel( const EditSelection& rSel ) const;
     inline EditSelection  CreateSel( const ESelection& rSel );
 
     void                SetStyleSheetPool( SfxStyleSheetPool* pSPool );
@@ -1174,7 +1174,7 @@ public:
     Size getTopLeftDocOffset(const tools::Rectangle& rect) const;
 };
 
-inline EPaM ImpEditEngine::CreateEPaM( const EditPaM& rPaM )
+inline EPaM ImpEditEngine::CreateEPaM( const EditPaM& rPaM ) const
 {
     const ContentNode* pNode = rPaM.GetNode();
     return EPaM( aEditDoc.GetPos( pNode ), rPaM.GetIndex() );
@@ -1187,7 +1187,7 @@ inline EditPaM ImpEditEngine::CreateEditPaM( const EPaM& rEPaM )
     return EditPaM( aEditDoc[ rEPaM.nPara], rEPaM.nIndex );
 }
 
-inline ESelection ImpEditEngine::CreateESel( const EditSelection& rSel )
+inline ESelection ImpEditEngine::CreateESel( const EditSelection& rSel ) const
 {
     const ContentNode* pStartNode = rSel.Min().GetNode();
     const ContentNode* pEndNode = rSel.Max().GetNode();

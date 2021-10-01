@@ -1477,7 +1477,7 @@ OUString SvtLineListBox::GetLineStyleName(SvxBorderLineStyle eStyle)
     return sRet;
 }
 
-sal_Int32 SvtLineListBox::GetStylePos( sal_Int32 nListPos )
+sal_Int32 SvtLineListBox::GetStylePos( sal_Int32 nListPos ) const
 {
     sal_Int32 nPos = -1;
     --nListPos;

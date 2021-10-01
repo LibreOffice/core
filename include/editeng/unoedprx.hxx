@@ -102,7 +102,7 @@ public:
         be changed, and sal_False if e.g. a field or a bullet is
         contained therein.
      */
-    bool                IsEditable( const ESelection& rSelection );
+    bool                IsEditable( const ESelection& rSelection ) const;
 
 private:
     SvxTextForwarder* mpTextForwarder;

@@ -89,7 +89,7 @@ public:
 
     SvXMLNumImpData* getData() { return pData.get(); }
 
-    LanguageType            GetLanguageForKey(sal_Int32 nKey);
+    LanguageType GetLanguageForKey(sal_Int32 nKey) const;
 
 //  sal_uInt32  GetKeyForName( const OUString& rName );
 };

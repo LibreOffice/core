@@ -193,7 +193,7 @@ ProviderCache::createProvider( ProviderDetails& details )
 }
 
 bool
-ProviderCache::isInDenyList( const OUString& serviceName )
+ProviderCache::isInDenyList( const OUString& serviceName ) const
 {
     return comphelper::findValue(m_sDenyList, serviceName) != -1;
 }

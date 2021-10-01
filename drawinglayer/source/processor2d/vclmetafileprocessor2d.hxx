@@ -147,7 +147,7 @@ private:
     void processPrimitive2DOnPixelProcessor(const primitive2d::BasePrimitive2D& rCandidate);
     VclPtr<VirtualDevice> CreateBufferDevice(const basegfx::B2DRange& rCandidateRange,
                                              geometry::ViewInformation2D& rViewInfo,
-                                             tools::Rectangle& rRectLogic, Size& rSizePixel);
+                                             tools::Rectangle& rRectLogic, Size& rSizePixel) const;
 
     /// Convert the fWidth to the same space as its coordinates.
     double getTransformedLineWidth(double fWidth) const;

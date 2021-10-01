@@ -78,7 +78,7 @@ public:
     void                            SetCurrentSchemeName(const OUString& rSchemeName) {m_sLoadedScheme = rSchemeName;}
     virtual void                    Notify( const uno::Sequence<OUString>& aPropertyNames) override;
 
-    const ColorConfigValue&         GetColorConfigValue(ColorConfigEntry eValue)
+    const ColorConfigValue&         GetColorConfigValue(ColorConfigEntry eValue) const
                                                             {return m_aConfigValues[eValue];}
     void                            SetColorConfigValue(ColorConfigEntry eValue,
                                                             const ColorConfigValue& rValue );

@@ -352,7 +352,7 @@ public:
     void              SetLibName( const OUString& rName )   { aLibName = rName; }
 
     // Only temporary for Load/Save
-    bool              DoLoad()                            { return bDoLoad; }
+    bool              DoLoad() const                      { return bDoLoad; }
 
     bool              HasPassword() const                 { return !aPassword.isEmpty(); }
     const OUString&   GetPassword() const                 { return aPassword; }

@@ -75,7 +75,7 @@ public:
 
 public:
     static bool         CanInputStart( const formula::RefEdit *pEdit ){ return !!pEdit; }
-    bool                CanInputDone(bool bForced) { return m_pRefEdit && (bForced || !m_pRefBtn); }
+    bool                CanInputDone(bool bForced) const { return m_pRefEdit && (bForced || !m_pRefBtn); }
 };
 
 class ScRefHandler : public IAnyRefDialog

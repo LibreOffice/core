@@ -42,7 +42,7 @@ namespace fileaccess {
          *  Returns an error code as given by filerror.hxx
          */
 
-        sal_Int32 CtorSuccess() { return m_nErrorCode;}
+        sal_Int32 CtorSuccess() const { return m_nErrorCode;}
         sal_Int32 getMinorError() const { return m_nMinorErrorCode;}
 
         virtual sal_Int32 SAL_CALL

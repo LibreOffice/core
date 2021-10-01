@@ -36,7 +36,7 @@ struct WordBreakCache {
     sal_Int32 size;         // size of wordboundary
 
     WordBreakCache();
-    bool equals(const sal_Unicode *str, css::i18n::Boundary const & boundary);    // checking cached string
+    bool equals(const sal_Unicode *str, css::i18n::Boundary const & boundary) const;    // checking cached string
 };
 
 struct xdictionarydata
@@ -80,8 +80,8 @@ private:
 
     bool        seekSegment(const OUString& rText, sal_Int32 pos, css::i18n::Boundary& boundary);
     WordBreakCache& getCache(const sal_Unicode *text, css::i18n::Boundary const & boundary);
-    bool        exists(const sal_uInt32 u);
-    sal_Int32   getLongestMatch(const sal_Unicode *text, sal_Int32 len);
+    bool        exists(const sal_uInt32 u) const;
+    sal_Int32   getLongestMatch(const sal_Unicode *text, sal_Int32 len) const;
 };
 
 }

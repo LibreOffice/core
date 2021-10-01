@@ -253,7 +253,7 @@ void Outliner::SetDepth( Paragraph* pPara, sal_Int16 nNewDepth )
     DepthChangedHdl(pPara, nPrevFlags);
 }
 
-sal_Int16 Outliner::GetNumberingStartValue( sal_Int32 nPara )
+sal_Int16 Outliner::GetNumberingStartValue( sal_Int32 nPara ) const
 {
     Paragraph* pPara = pParaList->GetParagraph( nPara );
     DBG_ASSERT( pPara, "Outliner::GetNumberingStartValue - Paragraph not found!" );
@@ -277,7 +277,7 @@ void Outliner::SetNumberingStartValue( sal_Int32 nPara, sal_Int16 nNumberingStar
     }
 }
 
-bool Outliner::IsParaIsNumberingRestart( sal_Int32 nPara )
+bool Outliner::IsParaIsNumberingRestart( sal_Int32 nPara ) const
 {
     Paragraph* pPara = pParaList->GetParagraph( nPara );
     DBG_ASSERT( pPara, "Outliner::IsParaIsNumberingRestart - Paragraph not found!" );
@@ -1335,7 +1335,7 @@ void Outliner::DepthChangedHdl(Paragraph* pPara, ParaFlag nPrevFlags)
 }
 
 
-sal_Int32 Outliner::GetAbsPos( Paragraph const * pPara )
+sal_Int32 Outliner::GetAbsPos( Paragraph const * pPara ) const
 {
     DBG_ASSERT(pPara,"GetAbsPos:No Para");
     return pParaList->GetAbsPos( pPara );
@@ -1699,7 +1699,7 @@ bool Outliner::ImpCanDeleteSelectedPages( OutlinerView* pCurView, sal_Int32 _nFi
     return RemovingPagesHdl( pCurView );
 }
 
-SfxItemSet const & Outliner::GetParaAttribs( sal_Int32 nPara )
+SfxItemSet const & Outliner::GetParaAttribs( sal_Int32 nPara ) const
 {
     return pEditEngine->GetParaAttribs( nPara );
 }

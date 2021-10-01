@@ -357,7 +357,7 @@ struct LocaleDataLookupTableItem
     LocaleDataLookupTableItem(const char *name, osl::Module* m, const char* lname) : dllName(name), module(m), localeName(lname)
     {
     }
-    bool equals(const css::lang::Locale& rLocale)
+    bool equals(const css::lang::Locale& rLocale) const
     {
         return (rLocale == aLocale);
     }

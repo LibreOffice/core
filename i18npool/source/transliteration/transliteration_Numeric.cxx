@@ -59,7 +59,7 @@ Sequence< OUString > SAL_CALL
 
 OUString
 transliteration_Numeric::transliterateBullet( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-        Sequence< sal_Int32 >* pOffset )
+        Sequence< sal_Int32 >* pOffset ) const
 {
     sal_Int32 number = -1, j = 0, endPos = startPos + nCount;
 

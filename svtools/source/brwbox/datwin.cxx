@@ -406,7 +406,7 @@ void BrowserDataWin::Command( const CommandEvent& rEvt )
 }
 
 
-bool BrowserDataWin::ImplRowDividerHitTest( const BrowserMouseEvent& _rEvent )
+bool BrowserDataWin::ImplRowDividerHitTest( const BrowserMouseEvent& _rEvent ) const
 {
     if ( ! (  GetParent()->IsInteractiveRowHeightEnabled()
            && ( _rEvent.GetRow() >= 0 )

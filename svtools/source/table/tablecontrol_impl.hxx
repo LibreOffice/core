@@ -275,8 +275,8 @@ namespace svt::table
 
         tools::Rectangle calcHeaderRect( bool bColHeader );
         tools::Rectangle calcHeaderCellRect( bool bColHeader, sal_Int32 nPos );
-        tools::Rectangle calcTableRect();
-        tools::Rectangle calcCellRect( sal_Int32 nRow, sal_Int32 nCol );
+        tools::Rectangle calcTableRect() const;
+        tools::Rectangle calcCellRect( sal_Int32 nRow, sal_Int32 nCol ) const;
 
         // A11Y
         css::uno::Reference< css::accessibility::XAccessible >

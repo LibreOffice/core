@@ -2310,7 +2310,7 @@ NeonSession::getDataFromInputStream(
 }
 
 bool
-NeonSession::isDomainMatch( const OUString& certHostName )
+NeonSession::isDomainMatch( const OUString& certHostName ) const
 {
     OUString hostName = getHostName();
 

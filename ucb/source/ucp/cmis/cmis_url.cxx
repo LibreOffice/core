@@ -55,7 +55,7 @@ namespace cmis
         m_sUser = sUser;
     }
 
-    OUString URL::asString( )
+    OUString URL::asString( ) const
     {
         OUString sUrl;
         // Related tdf#96174, can no longer save on Google Drive

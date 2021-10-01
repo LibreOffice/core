@@ -66,7 +66,7 @@ public:
         return (idx < maObjList.size()) ? const_cast< SdrObject* >(maObjList[idx]) : nullptr;
     }
 
-    size_t Count() { return maObjList.size(); }
+    size_t Count() const { return maObjList.size(); }
 };
 
 #endif // INCLUDED_SVX_SVDITER_HXX

@@ -195,7 +195,7 @@ void xdictionary::setJapaneseWordBreak()
     japaneseWordBreak = true;
 }
 
-bool xdictionary::exists(const sal_uInt32 c)
+bool xdictionary::exists(const sal_uInt32 c) const
 {
     // 0x1FFF is the hardcoded limit in gendict for data.existMarks
     bool exist = data.existMark && (c>>3) < 0x1FFF && (data.existMark[c>>3] & (1<<(c&0x07))) != 0;
@@ -205,7 +205,7 @@ bool xdictionary::exists(const sal_uInt32 c)
         return exist;
 }
 
-sal_Int32 xdictionary::getLongestMatch(const sal_Unicode* str, sal_Int32 sLen)
+sal_Int32 xdictionary::getLongestMatch(const sal_Unicode* str, sal_Int32 sLen) const
 {
     if ( !data.index1 ) return 0;
 
@@ -252,7 +252,7 @@ WordBreakCache::WordBreakCache() :
  * Compare two unicode string,
  */
 
-bool WordBreakCache::equals(const sal_Unicode* str, Boundary const & boundary)
+bool WordBreakCache::equals(const sal_Unicode* str, Boundary const & boundary) const
 {
     // Different length, different string.
     if (length != boundary.endPos - boundary.startPos) return false;

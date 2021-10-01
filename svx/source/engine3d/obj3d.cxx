@@ -597,7 +597,7 @@ E3dCompoundObject* E3dCompoundObject::CloneSdrObject(SdrModel& rTargetModel) con
 }
 
 // convert given basegfx::B3DPolyPolygon to screen coor
-basegfx::B2DPolyPolygon E3dCompoundObject::TransformToScreenCoor(const basegfx::B3DPolyPolygon& rCandidate)
+basegfx::B2DPolyPolygon E3dCompoundObject::TransformToScreenCoor(const basegfx::B3DPolyPolygon& rCandidate) const
 {
     const uno::Sequence< beans::PropertyValue > aEmptyParameters;
     drawinglayer::geometry::ViewInformation3D aViewInfo3D(aEmptyParameters);

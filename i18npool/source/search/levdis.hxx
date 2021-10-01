@@ -178,7 +178,7 @@ public:
     // c == cpPattern[jj] == cString[ii]
     // First seek up to found place, if the balance is still equal there then
     // also compare after the found place.
-    int levdisbalance(sal_Int32 jj, sal_Int32 ii, sal_Unicode c, const sal_Unicode* cString, sal_Int32 nStringLen)
+    int levdisbalance(sal_Int32 jj, sal_Int32 ii, sal_Unicode c, const sal_Unicode* cString, sal_Int32 nStringLen) const
     {
         int nBalance = 0;
 

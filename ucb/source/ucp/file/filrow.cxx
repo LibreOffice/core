@@ -276,7 +276,7 @@ XRow_impl::getArray(
 }
 
 bool
-XRow_impl::isIndexOutOfBounds(sal_Int32 nIndex)
+XRow_impl::isIndexOutOfBounds(sal_Int32 nIndex) const
 {
     return nIndex < 1 || m_aValueMap.getLength() < nIndex;
 }

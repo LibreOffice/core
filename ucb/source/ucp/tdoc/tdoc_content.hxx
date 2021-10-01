@@ -114,7 +114,7 @@ private:
     virtual OUString getParentURL() override;
 
     static bool hasData( ContentProvider const * pProvider, const Uri & rUri );
-    bool hasData( const Uri & rUri ) { return hasData( m_pProvider, rUri ); }
+    bool hasData( const Uri & rUri ) const { return hasData( m_pProvider, rUri ); }
 
     static bool loadData( ContentProvider const * pProvider,
                           const Uri & rUri,

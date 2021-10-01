@@ -60,7 +60,7 @@ public:
     void refreshDefaultColumn();
 
 protected:
-    sal_uInt16 get_nId(int pos);
+    sal_uInt16 get_nId(int pos) const;
 
     void select_id(const OUString& sId) { mxTreeView->select_id(sId); }
 
@@ -70,17 +70,17 @@ protected:
 
     bool IsListViewVisible() const { return mxTreeView->is_visible(); }
 
-    OUString get_id(int pos) { return mxTreeView->get_id(pos); }
+    OUString get_id(int pos) const { return mxTreeView->get_id(pos); }
 
     void set_cursor(int pos) { mxTreeView->set_cursor(pos); }
 
     int get_cursor_index() const { return mxTreeView->get_cursor_index(); }
 
-    sal_uInt16 get_cursor_nId() { return get_nId(mxTreeView->get_cursor_index()); }
+    sal_uInt16 get_cursor_nId() const { return get_nId(mxTreeView->get_cursor_index()); }
 
     void select(int pos) { mxTreeView->select(pos); }
 
-    int get_index(sal_uInt16 nId) { return mxTreeView->find_id(OUString::number(nId)); }
+    int get_index(sal_uInt16 nId) const { return mxTreeView->find_id(OUString::number(nId)); }
 
     DECL_LINK(ColumnClickedHdl, const int, void);
 
