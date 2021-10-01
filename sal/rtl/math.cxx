@@ -500,25 +500,17 @@ void doubleToString(typename T::String ** pResult,
         }
     }
 
-    static sal_Int32 const nBufMax = 256;
-    typename T::Char aBuf[nBufMax];
-    typename T::Char * pBuf;
+    typename T::Char aBuf[1024];
+#ifndef NDEBUG
     sal_Int32 nBuf = static_cast< sal_Int32 >
         (nDigits <= 0 ? std::max< sal_Int32 >(nDecPlaces, abs(nExp))
           : nDigits + nDecPlaces ) + 10 + (pGroups ? abs(nDigits) * 2 : 0);
+    // max(nDigits) = max(nDecPlaces) + 1 + max(nExp) + 1 = 20 + 1 + 308 + 1 = 330
+    // max(nBuf) = max(nDigits) + max(nDecPlaces) + 10 + max(nDigits) * 2 = 330 * 3 + 20 + 10 = 1020
+    assert(nBuf <= SAL_N_ELEMENTS(aBuf));
+#endif
 
-    if (nBuf > nBufMax)
-    {
-        pBuf = static_cast< typename T::Char * >(
-            malloc(nBuf * sizeof (typename T::Char)));
-        OSL_ENSURE(pBuf, "Out of memory");
-    }
-    else
-    {
-        pBuf = aBuf;
-    }
-
-    typename T::Char * p = pBuf;
+    typename T::Char * p = aBuf;
     if ( bSign )
         *p++ = static_cast< typename T::Char >('-');
 
@@ -591,12 +583,12 @@ void doubleToString(typename T::String ** pResult,
 
                 if (nDigit >= 10)
                 {   // after-treatment of up-rounding to the next decade
-                    sal_Int32 sLen = static_cast< long >(p-pBuf)-1;
+                    sal_Int32 sLen = static_cast< long >(p-aBuf)-1;
                     if (sLen == -1 || (sLen == 0 && bSign))
                     {
                         // Assert that no one changed the logic we rely on.
-                        assert(!bSign || *pBuf == static_cast< typename T::Char >('-'));
-                        p = pBuf;
+                        assert(!bSign || aBuf[0] == static_cast< typename T::Char >('-'));
+                        p = aBuf;
                         if (bSign)
                             ++p;
                         if (eFormat == rtl_math_StringFormat_F)
@@ -617,7 +609,7 @@ void doubleToString(typename T::String ** pResult,
                     {
                         for (sal_Int32 j = sLen; j >= 0; j--)
                         {
-                            typename T::Char cS = pBuf[j];
+                            typename T::Char cS = aBuf[j];
                             if (j == 0 && bSign)
                             {
                                 // Do not touch leading minus sign put earlier.
@@ -628,28 +620,28 @@ void doubleToString(typename T::String ** pResult,
                             {
                                 if (cS != static_cast< typename T::Char >('9'))
                                 {
-                                    pBuf[j] = ++cS;
+                                    aBuf[j] = ++cS;
                                     j = -1;                 // break loop
                                 }
                                 else
                                 {
-                                    pBuf[j] = static_cast< typename T::Char >('0');
+                                    aBuf[j] = static_cast< typename T::Char >('0');
                                     if (j == 0 || (j == 1 && bSign))
                                     {
                                         if (eFormat == rtl_math_StringFormat_F)
                                         {   // insert '1'
                                             typename T::Char * px = p++;
-                                            while (pBuf < px)
+                                            while (aBuf < px)
                                             {
                                                 *px = *(px-1);
                                                 px--;
                                             }
 
-                                            pBuf[0] = static_cast< typename T::Char >('1');
+                                            aBuf[0] = static_cast< typename T::Char >('1');
                                         }
                                         else
                                         {
-                                            pBuf[j] = static_cast< typename T::Char >('1');
+                                            aBuf[j] = static_cast< typename T::Char >('1');
                                             nExp++;
                                         }
                                     }
@@ -712,7 +704,7 @@ void doubleToString(typename T::String ** pResult,
         }
     }
 
-    if (bEraseTrailingDecZeros && bHasDec && p > pBuf)
+    if (bEraseTrailingDecZeros && bHasDec && p > aBuf)
     {
         while (*(p-1) == static_cast< typename T::Char >('0'))
         {
@@ -728,7 +720,7 @@ void doubleToString(typename T::String ** pResult,
     // rtl_[u]str_valueOf{Float|Double} relies on this format.
     if (eFormat == rtl_math_StringFormat_E || eFormat == rtl_math_StringFormat_E2 || eFormat == rtl_math_StringFormat_E1)
     {
-        if (p == pBuf)
+        if (p == aBuf)
             *p++ = static_cast< typename T::Char >('1');
                 // maybe no nDigits if nDecPlaces < 0
 
@@ -758,12 +750,9 @@ void doubleToString(typename T::String ** pResult,
     }
 
     if (!pResultCapacity)
-        T::createString(pResult, pBuf, p - pBuf);
+        T::createString(pResult, aBuf, p - aBuf);
     else
-        T::appendChars(pResult, pResultCapacity, &nResultOffset, pBuf, p - pBuf);
-
-    if (pBuf != &aBuf[0])
-        free(pBuf);
+        T::appendChars(pResult, pResultCapacity, &nResultOffset, aBuf, p - aBuf);
 }
 
 }
