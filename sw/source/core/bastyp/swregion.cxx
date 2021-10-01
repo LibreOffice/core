@@ -202,10 +202,8 @@ void SwRegionRects::Compress( CompressType type )
                     // paints), the area of the union can be a little bit larger:
                     // ( 9622 * 141.5 = 1361513 ~= a quarter (1/4) centimeter wider
                     // than the width of an A4 page
-                    SwRect aUnion( (*this)[i] );
-                    aUnion.Union( (*this)[j] );
-                    SwRect aInter( (*this)[i] );
-                    aInter.Intersection( (*this)[j] );
+                    SwRect aUnion = (*this)[i].GetUnion( (*this)[j] );
+                    SwRect aInter = (*this)[i].GetIntersection( (*this)[j] );
                     if ( CalcArea( (*this)[i] ) + CalcArea( (*this)[j] ) - CalcArea( aInter )
                             + nFuzzy >= CalcArea( aUnion ) )
                     {
