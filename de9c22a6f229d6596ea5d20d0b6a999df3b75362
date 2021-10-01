@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "941c1c7b_291acc6b",
+        "filename": "include/rtl/stringconcat.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-10-01T07:54:06Z",
+      "side": 1,
+      "message": "would be nice to have part of the commit message here as documentation",
+      "revId": "de9c22a6f229d6596ea5d20d0b6a999df3b75362",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

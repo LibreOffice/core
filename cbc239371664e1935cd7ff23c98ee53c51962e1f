@@ -33,6 +33,24 @@
       "message": "Noel, maybe you have some thoughts on this, working on performance improvements.  It simplifies from a call to rtl_uString_alloc to just new[] on construction, and avoids rtl_uString_release with its osl_decrementInterlockedCount on destruction.  Not sure if that would be enough of a win to justify this (LIBO_INTERNAL_ONLY) addition, though...",
       "revId": "cbc239371664e1935cd7ff23c98ee53c51962e1f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebb0f400_e517592e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-10-01T07:54:06Z",
+      "side": 1,
+      "message": "Oh definitely, rtl_uString_release and rtl_uString_acquire are often 10% or more of some perf profiles I see.",
+      "parentUuid": "e12202ba_21258418",
+      "revId": "cbc239371664e1935cd7ff23c98ee53c51962e1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
