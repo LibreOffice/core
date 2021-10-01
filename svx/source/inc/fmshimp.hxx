@@ -330,7 +330,7 @@ private:
     // collects in strNames the names of all forms
     SAL_DLLPRIVATE static void impl_collectFormSearchContexts_nothrow_Lock(
         const css::uno::Reference< css::uno::XInterface>& _rxStartingPoint,
-        const OUString& _rCurrentLevelPrefix,
+        std::u16string_view _rCurrentLevelPrefix,
         FmFormArray& _out_rForms,
         ::std::vector< OUString >& _out_rNames );
 

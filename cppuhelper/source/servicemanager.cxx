@@ -13,6 +13,7 @@
 #include <cassert>
 #include <iostream>
 #include <mutex>
+#include <string_view>
 #include <vector>
 
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -1798,7 +1799,7 @@ cppuhelper::ServiceManager::findServiceImplementation(
 
 /// Make a simpler unique name for preload / progress reporting.
 #ifndef DISABLE_DYNLOADING
-static OUString simplifyModule(const OUString &uri)
+static OUString simplifyModule(std::u16string_view uri)
 {
     sal_Int32 nIdx;
     OUStringBuffer edit(uri);

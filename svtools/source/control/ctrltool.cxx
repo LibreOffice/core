@@ -21,6 +21,7 @@
 
 #include <memory>
 #include <string.h>
+#include <string_view>
 
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
@@ -567,7 +568,7 @@ OUString FontList::GetFontMapText( const FontMetric& rInfo ) const
 
 namespace
 {
-    FontMetric makeMissing(ImplFontListFontMetric const * pFontNameInfo, const OUString &rName,
+    FontMetric makeMissing(ImplFontListFontMetric const * pFontNameInfo, std::u16string_view rName,
         FontWeight eWeight, FontItalic eItalic)
     {
         FontMetric aInfo;
@@ -583,7 +584,7 @@ namespace
 
         //If this is a known but uninstalled symbol font which we can remap to
         //OpenSymbol then toggle its charset to be a symbol font
-        if (ConvertChar::GetRecodeData(rName, "OpenSymbol"))
+        if (ConvertChar::GetRecodeData(rName, u"OpenSymbol"))
             aInfo.SetCharSet(RTL_TEXTENCODING_SYMBOL);
 
         return aInfo;

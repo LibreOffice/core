@@ -20,6 +20,10 @@
 #ifndef INCLUDED_UNOTOOLS_FONTCVT_HXX
 #define INCLUDED_UNOTOOLS_FONTCVT_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <unotools/unotoolsdllapi.h>
 #include <rtl/ustring.hxx>
 
@@ -31,7 +35,7 @@ enum class FontToSubsFontFlags
 };
 
 typedef void* FontToSubsFontConverter;
-UNOTOOLS_DLLPUBLIC FontToSubsFontConverter     CreateFontToSubsFontConverter( const OUString& rFontName, FontToSubsFontFlags nFlags );
+UNOTOOLS_DLLPUBLIC FontToSubsFontConverter     CreateFontToSubsFontConverter( std::u16string_view rFontName, FontToSubsFontFlags nFlags );
 UNOTOOLS_DLLPUBLIC sal_Unicode                 ConvertFontToSubsFontChar( FontToSubsFontConverter hConverter, sal_Unicode c );
 UNOTOOLS_DLLPUBLIC OUString                    GetFontToSubsFontName( FontToSubsFontConverter hConverter );
 

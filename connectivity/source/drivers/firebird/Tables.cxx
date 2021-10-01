@@ -81,7 +81,7 @@ OUString Tables::createStandardColumnPart(const Reference< XPropertySet >& xColP
     xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT))    >>= bIsAutoIncrement;
 
     const OUString sQuoteString = xMetaData->getIdentifierQuoteString();
-    OUStringBuffer aSql = ::dbtools::quoteName(sQuoteString,::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))));
+    OUStringBuffer aSql(::dbtools::quoteName(sQuoteString,::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME)))));
 
     // check if the user enter a specific string to create autoincrement values
     OUString sAutoIncrementValue;
@@ -196,16 +196,13 @@ void Tables::dropObject(sal_Int32 nPosition, const OUString& sName)
     if (ODescriptor::isNew(xTable))
         return;
 
-    OUStringBuffer sSql("DROP ");
-
     OUString sType;
     xTable->getPropertyValue("Type") >>= sType;
-    sSql.append(sType);
 
     const OUString sQuoteString = m_xMetaData->getIdentifierQuoteString();
-    sSql.append(::dbtools::quoteName(sQuoteString,sName));
 
-    m_xMetaData->getConnection()->createStatement()->execute(sSql.makeStringAndClear());
+    m_xMetaData->getConnection()->createStatement()->execute(
+        "DROP " + sType + ::dbtools::quoteName(sQuoteString,sName));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

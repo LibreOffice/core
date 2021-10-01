@@ -94,6 +94,12 @@ CXXConstructExpr const * lookForCXXConstructExpr(Expr const * expr) {
     if (auto e = dyn_cast<CXXBindTemporaryExpr>(expr)) {
         expr = e->getSubExpr();
     }
+    if (auto const e = dyn_cast<CXXMemberCallExpr>(expr)) {
+        // Look through OString::operator std::string_view:
+        if (auto const d = dyn_cast_or_null<CXXConversionDecl>(e->getCalleeDecl())) {
+            return lookForCXXConstructExpr(e->getImplicitObjectArgument()->IgnoreParenImpCasts());
+        }
+    }
     return dyn_cast<CXXConstructExpr>(expr);
 }
 

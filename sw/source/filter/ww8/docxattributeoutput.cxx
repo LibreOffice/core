@@ -9535,16 +9535,16 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         // and so on.
         OStringBuffer aInset;
         if(!aInset.isEmpty() || fDistanceBottomInch != 0.05)
-            aInset.insert(0, "," + OString::number(fDistanceBottomInch) + "in");
+            aInset.insert(0, OString("," + OString::number(fDistanceBottomInch) + "in"));
 
         if(!aInset.isEmpty() || fDistanceRightInch != 0.1)
-            aInset.insert(0, "," + OString::number(fDistanceRightInch) + "in");
+            aInset.insert(0, OString("," + OString::number(fDistanceRightInch) + "in"));
 
         if(!aInset.isEmpty() || fDistanceTopInch != 0.05)
-            aInset.insert(0, "," + OString::number(fDistanceTopInch) + "in");
+            aInset.insert(0, OString("," + OString::number(fDistanceTopInch) + "in"));
 
         if(!aInset.isEmpty() || fDistanceLeftInch != 0.1)
-            aInset.insert(0, OString::number(fDistanceLeftInch) + "in");
+            aInset.insert(0, OString(OString::number(fDistanceLeftInch) + "in"));
 
         if (!aInset.isEmpty())
             m_rExport.SdrExporter().getTextboxAttrList()->add(XML_inset, aInset.makeStringAndClear());

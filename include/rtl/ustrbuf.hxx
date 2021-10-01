@@ -138,7 +138,7 @@ public:
         @param   value   the initial contents of the buffer.
      */
 #if defined LIBO_INTERNAL_ONLY
-    explicit OUStringBuffer(std::u16string_view sv)
+    OUStringBuffer(std::u16string_view sv)
         : pData(nullptr)
         , nCapacity( sv.length() + 16 )
     {
@@ -147,13 +147,14 @@ public:
         }
         rtl_uStringbuffer_newFromStr_WithLength( &pData, sv.data(), sv.length() );
     }
-#endif
+#else
     OUStringBuffer(const OUString& value)
         : pData(NULL)
         , nCapacity( value.getLength() + 16 )
     {
         rtl_uStringbuffer_newFromStr_WithLength( &pData, value.getStr(), value.getLength() );
     }
+#endif
 
     template< typename T >
     OUStringBuffer( T& literal, typename libreoffice_internal::ConstCharArrayDetector< T, libreoffice_internal::Dummy >::Type = libreoffice_internal::Dummy() )
@@ -288,7 +289,7 @@ public:
         pData->length = n;
         return *this;
     }
-#endif
+#else
     OUStringBuffer & operator =(OUString const & string) {
         sal_Int32 n = string.getLength();
         if (n >= nCapacity) {
@@ -300,6 +301,7 @@ public:
         pData->length = n;
         return *this;
     }
+#endif
 
     /** Assign from a string literal.
 
@@ -583,12 +585,12 @@ public:
         @param   str   a string.
         @return  this string buffer.
      */
+#if !defined LIBO_INTERNAL_ONLY
     OUStringBuffer & append(const OUString &str)
     {
         return append( str.getStr(), str.getLength() );
     }
-
-#if defined LIBO_INTERNAL_ONLY
+#else
     OUStringBuffer & append(std::u16string_view sv) {
         if (sv.size() > sal_uInt32(std::numeric_limits<sal_Int32>::max())) {
             throw std::bad_alloc();
@@ -597,6 +599,7 @@ public:
     }
 #endif
 
+#if !defined LIBO_INTERNAL_ONLY
     /**
         Appends the content of a stringbuffer to this string buffer.
 
@@ -617,6 +620,7 @@ public:
         }
         return *this;
     }
+#endif
 
     /**
         Appends the string representation of the <code>char</code> array
@@ -992,11 +996,12 @@ public:
     {
         return insert( offset, str.data(), str.length() );
     }
-#endif
+#else
     OUStringBuffer & insert(sal_Int32 offset, const OUString & str)
     {
         return insert( offset, str.getStr(), str.getLength() );
     }
+#endif
 
     /**
         Inserts the string representation of the <code>char</code> array
@@ -1452,7 +1457,7 @@ public:
                                                         str.data(), str.length() );
         return (ret < 0 ? ret : ret+fromIndex);
     }
-#endif
+#else
     sal_Int32 indexOf( const OUString & str, sal_Int32 fromIndex = 0 ) const
     {
         assert( fromIndex >= 0 && fromIndex <= pData->length );
@@ -1460,6 +1465,7 @@ public:
                                                         str.pData->buffer, str.pData->length );
         return (ret < 0 ? ret : ret+fromIndex);
     }
+#endif
 
     /**
        @overload
@@ -1528,12 +1534,13 @@ public:
         return rtl_ustr_lastIndexOfStr_WithLength( pData->buffer, pData->length,
                                                    str.data(), str.length() );
     }
-#endif
+#else
     sal_Int32 lastIndexOf( const OUString & str ) const
     {
         return rtl_ustr_lastIndexOfStr_WithLength( pData->buffer, pData->length,
                                                    str.pData->buffer, str.pData->length );
     }
+#endif
 
     /**
        Returns the index within this string of the last occurrence of
@@ -1554,12 +1561,21 @@ public:
                  of the first character of the last such substring is
                  returned. Otherwise, -1 is returned.
     */
+#if defined LIBO_INTERNAL_ONLY
+    sal_Int32 lastIndexOf( std::u16string_view str, sal_Int32 fromIndex ) const
+    {
+        assert( fromIndex >= 0 && fromIndex <= pData->length );
+        return rtl_ustr_lastIndexOfStr_WithLength( pData->buffer, fromIndex,
+                                                   str.data(), str.length() );
+    }
+#else
     sal_Int32 lastIndexOf( const OUString & str, sal_Int32 fromIndex ) const
     {
         assert( fromIndex >= 0 && fromIndex <= pData->length );
         return rtl_ustr_lastIndexOfStr_WithLength( pData->buffer, fromIndex,
                                                    str.pData->buffer, str.pData->length );
     }
+#endif
 
     /**
        @overload

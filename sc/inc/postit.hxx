@@ -26,6 +26,7 @@
 
 #include <memory>
 #include <optional>
+#include <string_view>
 
 class EditTextObject;
 class OutlinerParaObject;
@@ -283,7 +284,7 @@ public:
 
     /** Creates and returns a caption object for a temporary caption. */
     static ScCaptionPtr CreateTempCaption( ScDocument& rDoc, const ScAddress& rPos,
-                            SdrPage& rDrawPage, const OUString& rUserText,
+                            SdrPage& rDrawPage, std::u16string_view rUserText,
                             const tools::Rectangle& rVisRect, bool bTailFront );
 
     /** Creates a cell note using the passed caption drawing object.

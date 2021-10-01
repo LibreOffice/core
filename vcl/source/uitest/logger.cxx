@@ -79,7 +79,7 @@ UITestLogger::UITestLogger()
     }
 }
 
-void UITestLogger::logCommand(const OUString& rAction,
+void UITestLogger::logCommand(std::u16string_view rAction,
                               const css::uno::Sequence<css::beans::PropertyValue>& rArgs)
 {
     if (!mbValid)

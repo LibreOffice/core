@@ -498,11 +498,8 @@ void SAL_CALL ODocumentDefinition::getFastPropertyValue( Any& o_rValue, sal_Int3
         OUString sPersistentPath;
         if ( !m_pImpl->m_aProps.sPersistentName.isEmpty() )
         {
-            OUStringBuffer aBuffer;
-            aBuffer.append( ODatabaseModelImpl::getObjectContainerStorageName( m_bForm ? ODatabaseModelImpl::E_FORM : ODatabaseModelImpl::E_REPORT ) );
-            aBuffer.append( '/' );
-            aBuffer.append( m_pImpl->m_aProps.sPersistentName );
-            sPersistentPath = aBuffer.makeStringAndClear();
+            sPersistentPath = ODatabaseModelImpl::getObjectContainerStorageName( m_bForm ? ODatabaseModelImpl::E_FORM : ODatabaseModelImpl::E_REPORT )
+                + "/" + m_pImpl->m_aProps.sPersistentName;
         }
         o_rValue <<= sPersistentPath;
         return;

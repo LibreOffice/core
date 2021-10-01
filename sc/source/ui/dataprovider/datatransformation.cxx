@@ -131,7 +131,7 @@ void MergeColumnTransformation::Transform(ScDocument& rDoc) const
 
     for (SCROW nRow = 0; nRow <= nMaxRow; ++nRow)
     {
-        OUStringBuffer aStr = rDoc.GetString(nTargetCol, nRow, 0);
+        OUStringBuffer aStr(rDoc.GetString(nTargetCol, nRow, 0));
         for (auto& itr : maColumns)
         {
             if (itr != nTargetCol)

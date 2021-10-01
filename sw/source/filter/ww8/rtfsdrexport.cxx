@@ -427,16 +427,14 @@ void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const tools::Rectangl
                 break;
             case ESCHER_Prop_fillBlip:
             {
-                OStringBuffer aBuf;
-                aBuf.append("{" OOO_STRING_SVTOOLS_RTF_PICT OOO_STRING_SVTOOLS_RTF_PNGBLIP
-                                SAL_NEWLINE_STRING);
                 int nHeaderSize
                     = 25; // The first bytes are WW8-specific, we're only interested in the PNG
-                aBuf.append(msfilter::rtfutil::WriteHex(rOpt.nProp.data() + nHeaderSize,
-                                                        rOpt.nProp.size() - nHeaderSize));
-                aBuf.append('}');
-                m_aShapeProps.insert(
-                    std::pair<OString, OString>("fillBlip", aBuf.makeStringAndClear()));
+                OString aBuf = "{" OOO_STRING_SVTOOLS_RTF_PICT OOO_STRING_SVTOOLS_RTF_PNGBLIP
+                                   SAL_NEWLINE_STRING
+                               + msfilter::rtfutil::WriteHex(rOpt.nProp.data() + nHeaderSize,
+                                                             rOpt.nProp.size() - nHeaderSize)
+                               + "}";
+                m_aShapeProps.insert(std::pair<OString, OString>("fillBlip", aBuf));
             }
             break;
             default:

@@ -68,7 +68,7 @@ XFSvgPathEntry::XFSvgPathEntry()
 OUString XFSvgPathEntry::ToString()
 {
     assert(!m_strCommand.isEmpty());
-    OUStringBuffer str = m_strCommand;
+    OUStringBuffer str(m_strCommand);
 
     for (auto const& point : m_aPoints)
     {

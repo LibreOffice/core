@@ -1160,7 +1160,7 @@ void ScPostIt::RemoveCaption()
 
 ScCaptionPtr ScNoteUtil::CreateTempCaption(
         ScDocument& rDoc, const ScAddress& rPos, SdrPage& rDrawPage,
-        const OUString& rUserText, const tools::Rectangle& rVisRect, bool bTailFront )
+        std::u16string_view rUserText, const tools::Rectangle& rVisRect, bool bTailFront )
 {
     OUStringBuffer aBuffer( rUserText );
     // add plain text of invisible (!) cell note (no formatting etc.)
@@ -1193,7 +1193,7 @@ ScCaptionPtr ScNoteUtil::CreateTempCaption(
     SdrCaptionObj* pCaption = aCreator.GetCaption().get();  // just for ease of use
 
     // clone the edit text object, unless user text is present, then set this text
-    if( pNoteCaption && rUserText.isEmpty() )
+    if( pNoteCaption && rUserText.empty() )
     {
         if( OutlinerParaObject* pOPO = pNoteCaption->GetOutlinerParaObject() )
             pCaption->SetOutlinerParaObject( *pOPO );

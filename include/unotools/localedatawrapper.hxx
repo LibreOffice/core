@@ -33,6 +33,7 @@
 #include <unotools/unotoolsdllapi.h>
 #include <memory>
 #include <map>
+#include <string_view>
 
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::i18n { class XLocaleData5; }
@@ -372,7 +373,7 @@ public:
 
     /** Append locale info to string, used with locale data checking.
         A string similar to "de_DE requested\n en_US loaded" is appended. */
-    OUString appendLocaleInfo(const OUString& rDebugMsg) const;
+    OUString appendLocaleInfo(std::u16string_view rDebugMsg) const;
 
     /** Output a message during locale data checking. The (UTF-8) string is
         written to stderr and in a non-product build or if DBG_UTIL is enabled

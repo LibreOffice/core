@@ -4316,7 +4316,7 @@ LanguageType ImpEditEngine::ImplCalcDigitLang(LanguageType eCurLang) const
     return eLang;
 }
 
-OUString ImpEditEngine::convertDigits(const OUString &rString, sal_Int32 nStt, sal_Int32 nLen, LanguageType eDigitLang)
+OUString ImpEditEngine::convertDigits(std::u16string_view rString, sal_Int32 nStt, sal_Int32 nLen, LanguageType eDigitLang)
 {
     OUStringBuffer aBuf(rString);
     for (sal_Int32 nIdx = nStt, nEnd = nStt + nLen; nIdx < nEnd; ++nIdx)

@@ -227,13 +227,13 @@ static bool ImplCommaPointCharEqual( sal_Unicode c1, sal_Unicode c2 )
 
 static OUString ImplPatternReformat( const OUString& rStr,
                                      const OString& rEditMask,
-                                     const OUString& rLiteralMask,
+                                     std::u16string_view rLiteralMask,
                                      sal_uInt16 nFormatFlags )
 {
     if (rEditMask.isEmpty())
         return rStr;
 
-    OUStringBuffer    aOutStr = rLiteralMask;
+    OUStringBuffer    aOutStr(rLiteralMask);
     sal_Unicode cTempChar;
     sal_Unicode cChar;
     sal_Unicode cLiteral;
@@ -366,7 +366,7 @@ static void ImplPatternMaxPos( const OUString& rStr, const OString& rEditMask,
 
 static OUString ImplPatternProcessStrictModify(const OUString& rText,
                                                const OString& rEditMask,
-                                               const OUString& rLiteralMask,
+                                               std::u16string_view rLiteralMask,
                                                bool bSameMask)
 {
     OUString aText(rText);
@@ -395,7 +395,7 @@ static OUString ImplPatternProcessStrictModify(const OUString& rText,
 
 static void ImplPatternProcessStrictModify( Edit* pEdit,
                                             const OString& rEditMask,
-                                            const OUString& rLiteralMask,
+                                            std::u16string_view rLiteralMask,
                                             bool bSameMask )
 {
     OUString aText = pEdit->GetText();
@@ -429,7 +429,7 @@ static void ImplPatternProcessStrictModify( Edit* pEdit,
 
 static void ImplPatternProcessStrictModify( weld::Entry& rEntry,
                                             const OString& rEditMask,
-                                            const OUString& rLiteralMask,
+                                            std::u16string_view rLiteralMask,
                                             bool bSameMask )
 {
     OUString aText = rEntry.get_text();
@@ -724,7 +724,7 @@ static bool ImplPatternProcessKeyInput( IEditImplementation& rEdit, const KeyEve
         cChar = 0;
     if ( cChar )
     {
-        OUStringBuffer  aStr = rEdit.GetText();
+        OUStringBuffer  aStr(rEdit.GetText());
         bool        bError = false;
         if ( bSameMask && rEdit.IsInsertMode() )
         {
@@ -2292,7 +2292,7 @@ static bool ImplTimeProcessKeyInput( const KeyEvent& rKEvt,
     }
 }
 
-static bool ImplIsOnlyDigits( const OUStringBuffer& _rStr )
+static bool ImplIsOnlyDigits( const OUString& _rStr )
 {
     const sal_Unicode* _pChr = _rStr.getStr();
     for ( sal_Int32 i = 0; i < _rStr.getLength(); ++i, ++_pChr )
@@ -2303,7 +2303,7 @@ static bool ImplIsOnlyDigits( const OUStringBuffer& _rStr )
     return true;
 }
 
-static bool ImplIsValidTimePortion( bool _bSkipInvalidCharacters, const OUStringBuffer& _rStr )
+static bool ImplIsValidTimePortion( bool _bSkipInvalidCharacters, const OUString& _rStr )
 {
     if ( !_bSkipInvalidCharacters )
     {
@@ -2328,17 +2328,18 @@ static bool ImplCutTimePortion( OUStringBuffer& _rStr, sal_Int32 _nSepPos, bool 
     return true;
 }
 
-bool TimeFormatter::TextToTime(const OUString& rStr, tools::Time& rTime, TimeFieldFormat eFormat,
+bool TimeFormatter::TextToTime(std::u16string_view rStr, tools::Time& rTime,
+    TimeFieldFormat eFormat,
     bool bDuration, const LocaleDataWrapper& rLocaleDataWrapper, bool _bSkipInvalidCharacters)
 {
-    OUStringBuffer    aStr    = rStr;
+    OUStringBuffer    aStr(rStr);
     short       nHour   = 0;
     short       nMinute = 0;
     short       nSecond = 0;
     sal_Int64   nNanoSec = 0;
     tools::Time        aTime( 0, 0, 0 );
 
-    if ( rStr.isEmpty() )
+    if ( rStr.empty() )
         return false;
 
     // Search for separators
@@ -2521,7 +2522,7 @@ bool TimeFormatter::TextToTime(const OUString& rStr, tools::Time& rTime, TimeFie
     return true;
 }
 
-void TimeFormatter::ImplTimeReformat( const OUString& rStr, OUString& rOutStr )
+void TimeFormatter::ImplTimeReformat( std::u16string_view rStr, OUString& rOutStr )
 {
     tools::Time aTime( 0, 0, 0 );
     if ( !TextToTime( rStr, aTime, GetFormat(), IsDuration(), ImplGetLocaleDataWrapper() ) )

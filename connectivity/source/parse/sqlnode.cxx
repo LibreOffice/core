@@ -307,7 +307,7 @@ void OSQLParseNode::parseNodeToStr(OUString& rString,
     if ( !_rxConnection.is() )
         return;
 
-    OUStringBuffer sBuffer = rString;
+    OUStringBuffer sBuffer(rString);
     try
     {
         OSQLParseNode::impl_parseNodeToString_throw( sBuffer,
@@ -374,7 +374,7 @@ bool OSQLParseNode::parseNodeToExecutableStatement( OUString& _out_rString, cons
     {
         constexpr char SELECT_KEYWORD[] = "SELECT";
         sBuffer.insert(sBuffer.indexOf(SELECT_KEYWORD) + strlen(SELECT_KEYWORD),
-                " FIRST " + sLimitValue);
+                OUString(" FIRST " + sLimitValue));
     }
 
     _out_rString = sBuffer.makeStringAndClear();

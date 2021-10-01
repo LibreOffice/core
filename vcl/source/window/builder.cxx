@@ -2222,7 +2222,7 @@ namespace BuilderUtils
         }
     }
 
-    OUString convertMnemonicMarkup(const OUString &rIn)
+    OUString convertMnemonicMarkup(std::u16string_view rIn)
     {
         OUStringBuffer aRet(rIn);
         for (sal_Int32 nI = 0; nI < aRet.getLength(); ++nI)

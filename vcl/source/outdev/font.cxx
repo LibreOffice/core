@@ -125,7 +125,7 @@ int OutputDevice::GetFontFaceCollectionCount() const
     return mpFontFaceCollection->Count();
 }
 
-bool OutputDevice::IsFontAvailable( const OUString& rFontName ) const
+bool OutputDevice::IsFontAvailable( std::u16string_view rFontName ) const
 {
     ImplInitFontList();
     vcl::font::PhysicalFontFamily* pFound = mxFontCollection->FindFontFamily( rFontName );
@@ -605,8 +605,8 @@ void ImplDirectFontSubstitution::AddFontSubstitute( const OUString& rFontName,
     maFontSubstList.emplace_back( rFontName, rSubstFontName, nFlags );
 }
 
-ImplFontSubstEntry::ImplFontSubstEntry( const OUString& rFontName,
-    const OUString& rSubstFontName, AddFontSubstituteFlags nSubstFlags )
+ImplFontSubstEntry::ImplFontSubstEntry( std::u16string_view rFontName,
+    std::u16string_view rSubstFontName, AddFontSubstituteFlags nSubstFlags )
 :   mnFlags( nSubstFlags )
 {
     maSearchName = GetEnglishSearchFontName( rFontName );

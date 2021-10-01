@@ -706,7 +706,7 @@ OUString SvNumberformat::ImpObtainCalendarAndNumerals( OUStringBuffer& rString, 
     if ( nNumeralID >= 0x02 && nNumeralID <= 0x13 )
         nNatNum = 1;
     if ( nNatNum )
-        rString.insert( nPos, "[NatNum"+OUString::number(nNatNum)+"]");
+        rString.insert( nPos, OUString("[NatNum"+OUString::number(nNatNum)+"]"));
     return sCalendar;
 }
 

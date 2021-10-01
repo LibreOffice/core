@@ -299,7 +299,7 @@ vcl::font::PhysicalFontFamily* PhysicalFontCollection::ImplFindFontFamilyBySearc
     return pFoundData;
 }
 
-vcl::font::PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( const OUString& rFontName ) const
+vcl::font::PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( std::u16string_view rFontName ) const
 {
     return ImplFindFontFamilyBySearchName( GetEnglishSearchFontName( rFontName ) );
 }

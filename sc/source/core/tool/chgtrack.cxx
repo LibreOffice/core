@@ -2079,11 +2079,7 @@ void ScChangeTrack::Init()
     bTimeNanoSeconds = true;
 
     const SvtUserOptions& rUserOpt = SC_MOD()->GetUserOptions();
-    OUStringBuffer aBuf;
-    aBuf.append(rUserOpt.GetFirstName());
-    aBuf.append(' ');
-    aBuf.append(rUserOpt.GetLastName());
-    maUser = aBuf.makeStringAndClear();
+    maUser = rUserOpt.GetFirstName() + " " + rUserOpt.GetLastName();
     maUserCollection.insert(maUser);
 }
 
@@ -2184,11 +2180,7 @@ void ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, Config
     const SvtUserOptions& rUserOptions = SC_MOD()->GetUserOptions();
     size_t nOldCount = maUserCollection.size();
 
-    OUStringBuffer aBuf;
-    aBuf.append(rUserOptions.GetFirstName());
-    aBuf.append(' ');
-    aBuf.append(rUserOptions.GetLastName());
-    SetUser(aBuf.makeStringAndClear());
+    SetUser(rUserOptions.GetFirstName() + " " + rUserOptions.GetLastName());
 
     if ( maUserCollection.size() != nOldCount )
     {

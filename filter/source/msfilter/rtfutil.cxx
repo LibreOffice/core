@@ -249,17 +249,10 @@ OString OutStringUpr(const char* pToken, const OUString& rStr, rtl_TextEncoding 
     if (TryOutString(rStr, eDestEnc))
         return OString::Concat("{") + pToken + " " + OutString(rStr, eDestEnc) + "}";
 
-    OStringBuffer aRet;
-    aRet.append("{" OOO_STRING_SVTOOLS_RTF_UPR "{");
-    aRet.append(pToken);
-    aRet.append(" ");
-    aRet.append(OutString(rStr, eDestEnc, /*bUnicode =*/false));
-    aRet.append("}{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_UD "{");
-    aRet.append(pToken);
-    aRet.append(" ");
-    aRet.append(OutString(rStr, eDestEnc));
-    aRet.append("}}}");
-    return aRet.makeStringAndClear();
+    return OString::Concat("{" OOO_STRING_SVTOOLS_RTF_UPR "{") + pToken + " "
+           + OutString(rStr, eDestEnc, /*bUnicode =*/false)
+           + "}{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_UD "{" + pToken + " "
+           + OutString(rStr, eDestEnc) + "}}}";
 }
 
 int AsHex(char ch)

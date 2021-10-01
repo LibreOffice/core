@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <worksheetbuffer.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -159,7 +163,7 @@ OUString WorksheetBuffer::getCalcSheetName( const OUString& rWorksheetName ) con
 
 namespace {
 
-OUString lclQuoteName( const OUString& rName )
+OUString lclQuoteName( std::u16string_view rName )
 {
     OUStringBuffer aBuffer( rName );
     // duplicate all quote characters
