@@ -341,7 +341,7 @@ OUString
         break;
 
         default:
-            aDG.Initialize ("Unknown accessible control shape");
+            aDG.Initialize (u"Unknown accessible control shape");
             if (mxShape.is())
             {
                 aDG.AppendString (u"service name=");

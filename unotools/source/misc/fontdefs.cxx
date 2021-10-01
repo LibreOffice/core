@@ -225,7 +225,7 @@ OUString StripScriptFromName(const OUString& _aName)
     return aName;
 }
 
-OUString GetEnglishSearchFontName(const OUString& rInName)
+OUString GetEnglishSearchFontName(std::u16string_view rInName)
 {
     OUStringBuffer rName(rInName);
     bool        bNeedTranslation = false;

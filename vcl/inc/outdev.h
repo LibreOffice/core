@@ -20,6 +20,7 @@
 #pragma once
 
 #include <set>
+#include <string_view>
 #include <vector>
 
 #include <tools/gen.hxx>
@@ -74,7 +75,7 @@ struct ImplFontSubstEntry
     OUString                  maSearchReplaceName;
     AddFontSubstituteFlags    mnFlags;
 
-    ImplFontSubstEntry(  const OUString& rFontName, const OUString& rSubstFontName, AddFontSubstituteFlags nSubstFlags );
+    ImplFontSubstEntry(  std::u16string_view rFontName, std::u16string_view rSubstFontName, AddFontSubstituteFlags nSubstFlags );
 };
 
 class ImplDirectFontSubstitution final

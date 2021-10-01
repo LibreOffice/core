@@ -2307,15 +2307,12 @@ void ScInterpreter::ScCell()
                     SfxObjectShell* pShell = mrDoc.GetDocumentShell();
                     if( pShell && pShell->GetMedium() )
                     {
-                        OUStringBuffer aBuf;
-                        aBuf.append('\'');
                         const INetURLObject& rURLObj = pShell->GetMedium()->GetURLObject();
-                        aBuf.append(rURLObj.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous));
-                        aBuf.append("'#$");
                         OUString aTabName;
                         mrDoc.GetName( nTab, aTabName );
-                        aBuf.append(aTabName);
-                        aFuncResult = aBuf.makeStringAndClear();
+                        aFuncResult = "'"
+                            + rURLObj.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous)
+                            + "'#$" + aTabName;
                     }
                 }
             }

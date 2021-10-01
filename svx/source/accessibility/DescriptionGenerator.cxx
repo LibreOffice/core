@@ -57,7 +57,7 @@ void DescriptionGenerator::Initialize(TranslateId pResourceId)
     Initialize(sPrefix);
 }
 
-void DescriptionGenerator::Initialize(const OUString& sPrefix)
+void DescriptionGenerator::Initialize(std::u16string_view sPrefix)
 {
     msDescription = sPrefix;
     if (!mxSet.is())

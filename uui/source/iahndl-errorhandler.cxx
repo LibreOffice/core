@@ -37,6 +37,7 @@
 
 #include "iahndl.hxx"
 #include <memory>
+#include <string_view>
 
 using namespace com::sun::star;
 
@@ -55,14 +56,14 @@ DialogMask
 executeErrorDialog(
     weld::Window* pParent,
     task::InteractionClassification eClassification,
-    OUString const & rContext,
+    std::u16string_view rContext,
     std::u16string_view rMessage,
     MessageBoxStyle nButtonMask)
 {
     SolarMutexGuard aGuard;
 
     OUStringBuffer aText(rContext);
-    if (!rContext.isEmpty() && !rMessage.empty())
+    if (!rContext.empty() && !rMessage.empty())
         aText.append(":\n");
             //TODO! must be internationalized
     aText.append(rMessage);

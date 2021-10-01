@@ -17,6 +17,7 @@
 
 #include <vector>
 #include <string>
+#include <string_view>
 
 #include <po.hxx>
 #include <helper.hxx>
@@ -50,7 +51,7 @@ public:
     bool        isFuzzy() const         { return m_bFuzzy; }
     bool        isNull() const          { return m_bNull; }
 
-    void        setExtractCom(const OString& rExtractCom)
+    void        setExtractCom(std::string_view rExtractCom)
                         {
                             m_sExtractCom = rExtractCom;
                         }
@@ -274,9 +275,9 @@ PoEntry::PoEntry(
     }
     m_pGenPo->setMsgCtxt(sMsgCtxt);
     m_pGenPo->setMsgId(rText);
-    m_pGenPo->setExtractCom(
+    m_pGenPo->setExtractCom(OStringConcatenation(
         ( !rHelpText.isEmpty() ?  rHelpText + "\n" : OString()) +
-        genKeyId( m_pGenPo->getReference().front() + rGroupId + rLocalId + rResType + rText ) );
+        genKeyId( m_pGenPo->getReference().front() + rGroupId + rLocalId + rResType + rText ) ));
     m_bIsInitialized = true;
 }
 
@@ -441,7 +442,7 @@ PoHeader::PoHeader( std::string_view rExtSrc, const OString& rPoHeaderMsgStr )
     : m_pGenPo( new GenPoEntry() )
     , m_bIsInitialized( false )
 {
-    m_pGenPo->setExtractCom(OString::Concat("extracted from ") + rExtSrc);
+    m_pGenPo->setExtractCom(OStringConcatenation(OString::Concat("extracted from ") + rExtSrc));
     m_pGenPo->setMsgStr(rPoHeaderMsgStr);
     m_bIsInitialized = true;
 }
@@ -450,7 +451,7 @@ PoHeader::PoHeader( std::string_view rExtSrc )
     : m_pGenPo( new GenPoEntry() )
     , m_bIsInitialized( false )
 {
-    m_pGenPo->setExtractCom(OString::Concat("extracted from ") + rExtSrc);
+    m_pGenPo->setExtractCom(OStringConcatenation(OString::Concat("extracted from ") + rExtSrc));
     m_pGenPo->setMsgStr(
         "Project-Id-Version: PACKAGE VERSION\n"
         "Report-Msgid-Bugs-To: https://bugs.libreoffice.org/enter_bug.cgi?"

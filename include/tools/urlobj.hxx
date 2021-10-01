@@ -297,7 +297,7 @@ public:
 
     bool ConcatData(INetProtocol eTheScheme, std::u16string_view rTheUser,
                     std::u16string_view rThePassword,
-                    OUString const & rTheHost, sal_uInt32 nThePort,
+                    std::u16string_view rTheHost, sal_uInt32 nThePort,
                     OUString const & rThePath);
 
     // Smart Parsing:
@@ -445,7 +445,7 @@ public:
 
     sal_uInt32 GetPort() const;
 
-    bool SetHost(OUString const & rTheHost)
+    bool SetHost(std::u16string_view rTheHost)
     { return setHost(rTheHost, RTL_TEXTENCODING_UTF8); }
 
     bool SetPort(sal_uInt32 nThePort);
@@ -1045,7 +1045,7 @@ private:
         bool bNetBiosName, OUStringBuffer* pCanonic);
 
     bool setHost(
-        OUString const & rTheHost,
+        std::u16string_view rTheHost,
         rtl_TextEncoding eCharset);
 
     // Path:

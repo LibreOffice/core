@@ -1082,7 +1082,7 @@ sal_uInt32 SvNumberFormatter::ImpGenerateCL( LanguageType eLnge )
             const LanguageTag& rLoadedLocale = xLocaleData->getLoadedLanguageTag();
             if ( !rLoadedLocale.equals( maLanguageTag ) )
             {
-                LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( "SvNumberFormatter::ImpGenerateCL: locales don't match:" ));
+                LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( u"SvNumberFormatter::ImpGenerateCL: locales don't match:" ));
             }
             // test XML locale data FormatElement entries
             {
@@ -2468,7 +2468,7 @@ void SvNumberFormatter::ImpAdjustFormatCodeDefault(
             aMsg.append("\nXML locale data FormatElement group of: ");
             OUString aUMsg(OStringToOUString(aMsg.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US));
             LocaleDataWrapper::outputCheckMessage(
-                xLocaleData->appendLocaleInfo(aUMsg + pFormatArr[0].NameID));
+                xLocaleData->appendLocaleInfo(OUStringConcatenation(aUMsg + pFormatArr[0].NameID)));
         }
     }
     // find the default (medium preferred, then long) and reset all other defaults
@@ -2583,7 +2583,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
         if (LocaleDataWrapper::areChecksEnabled() && pStdFormat->GetType() != SvNumFormatType::NUMBER)
         {
             LocaleDataWrapper::outputCheckMessage( xLocaleData->
-                                                   appendLocaleInfo( "SvNumberFormatter::ImpGenerateFormats: General format not NUMBER"));
+                                                   appendLocaleInfo( u"SvNumberFormatter::ImpGenerateFormats: General format not NUMBER"));
         }
         pStdFormat->SetType( SvNumFormatType::NUMBER );
         pStdFormat->SetStandard();
@@ -2594,7 +2594,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
         if (LocaleDataWrapper::areChecksEnabled())
         {
             LocaleDataWrapper::outputCheckMessage( xLocaleData->
-                                                   appendLocaleInfo( "SvNumberFormatter::ImpGenerateFormats: General format not insertable, nothing will work"));
+                                                   appendLocaleInfo( u"SvNumberFormatter::ImpGenerateFormats: General format not insertable, nothing will work"));
         }
     }
 
@@ -3226,7 +3226,7 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
     }
     else if (eType == SvNumFormatType::SCIENTIFIC)
     {
-      OUStringBuffer sOldFormatString = pFormat->GetFormatstring();
+      OUStringBuffer sOldFormatString(pFormat->GetFormatstring());
       sal_Int32 nIndexE = ImpPosToken( sOldFormatString, 'E' );
       if (nIndexE > -1)
       {
@@ -4059,7 +4059,7 @@ void SvNumberFormatter::GetCompatibilityCurrency( OUString& rSymbol, OUString& r
         if (LocaleDataWrapper::areChecksEnabled())
         {
             LocaleDataWrapper::outputCheckMessage( xLocaleData->
-                                                   appendLocaleInfo( "GetCompatibilityCurrency: none?"));
+                                                   appendLocaleInfo( u"GetCompatibilityCurrency: none?"));
         }
         rSymbol = xLocaleData->getCurrSymbol();
         rAbbrev = xLocaleData->getCurrBankSymbol();

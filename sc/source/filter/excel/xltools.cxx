@@ -494,16 +494,12 @@ OUString XclTools::GetXclBuiltInDefName( sal_Unicode cBuiltIn )
 
 OUString XclTools::GetBuiltInDefName( sal_Unicode cBuiltIn )
 {
-    OUStringBuffer aBuf(maDefNamePrefix);
-    aBuf.append(GetXclBuiltInDefName(cBuiltIn));
-    return aBuf.makeStringAndClear();
+    return maDefNamePrefix + GetXclBuiltInDefName(cBuiltIn);
 }
 
 OUString XclTools::GetBuiltInDefNameXml( sal_Unicode cBuiltIn )
 {
-    OUStringBuffer aBuf(maDefNamePrefixXml);
-    aBuf.append(GetXclBuiltInDefName(cBuiltIn));
-    return aBuf.makeStringAndClear();
+    return maDefNamePrefixXml + GetXclBuiltInDefName(cBuiltIn);
 }
 
 sal_Unicode XclTools::GetBuiltInDefNameIndex( const OUString& rDefName )

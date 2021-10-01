@@ -2662,13 +2662,11 @@ std::unique_ptr<SmExpressionNode> SmParser5::DoError(SmParseError eError)
     DepthProtect aDepthGuard(m_nParseDepth);
 
     // Identify error message
-    OUStringBuffer sStrBuf(128);
-    sStrBuf.append(SmResId(RID_ERR_IDENT));
-    sStrBuf.append(starmathdatabase::getParseErrorDesc(eError));
+    OUString sStrBuf(SmResId(RID_ERR_IDENT) + starmathdatabase::getParseErrorDesc(eError));
 
     // Generate error node
     m_aCurToken.eType = TERROR;
-    m_aCurToken.cMathChar = sStrBuf.makeStringAndClear();
+    m_aCurToken.cMathChar = sStrBuf;
     auto xSNode = std::make_unique<SmExpressionNode>(m_aCurToken);
     SmErrorNode* pErr(new SmErrorNode(m_aCurToken));
     pErr->SetSelection(m_aCurESelection);

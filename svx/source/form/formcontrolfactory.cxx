@@ -680,7 +680,7 @@ namespace svxform
     }
 
 
-    OUString FormControlFactory::getUniqueName( const Reference< XNameAccess >& _rxContainer, const OUString& _rBaseName )
+    OUString FormControlFactory::getUniqueName( const Reference< XNameAccess >& _rxContainer, std::u16string_view _rBaseName )
     {
         sal_Int32 n = 0;
         OUString sName;

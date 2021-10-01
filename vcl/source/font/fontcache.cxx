@@ -165,7 +165,7 @@ rtl::Reference<LogicalFontInstance> ImplFontCache::GetFontInstance( PhysicalFont
             aFontSelData.maTargetName.equalsIgnoreAsciiCase("symbol") &&
             aFontSelData.maSearchName.equalsIgnoreAsciiCase("symbol"))
         {
-            pFontInstance->mpConversion = ConvertChar::GetRecodeData( "Symbol", "AppleSymbol" );
+            pFontInstance->mpConversion = ConvertChar::GetRecodeData( u"Symbol", "AppleSymbol" );
         }
 #endif
 
@@ -221,7 +221,7 @@ rtl::Reference<LogicalFontInstance> ImplFontCache::GetGlyphFallbackFont( Physica
         //sufficient heavy-weight code that's likely to undo the value of the
         //optimization
         if (nFallbackLevel == 1)
-            pFallbackData = pFontCollection->FindFontFamily("EUDC");
+            pFallbackData = pFontCollection->FindFontFamily(u"EUDC");
         if (!pFallbackData)
             pFallbackData = pFontCollection->GetGlyphFallbackFont(rFontSelData, pFontInstance, rMissingCodes, nFallbackLevel-1);
         // escape when there are no font candidates

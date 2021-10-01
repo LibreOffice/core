@@ -33,6 +33,7 @@
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/deployment/PackageInformationProvider.hpp>
 
+#include <o3tl/string_view.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/content.hxx>
@@ -43,6 +44,7 @@
 #include <sal/log.hxx>
 
 #include <algorithm>
+#include <string_view>
 
 
 namespace ucb::ucp::ext
@@ -81,12 +83,12 @@ namespace ucb::ucp::ext
     namespace
     {
 
-        OUString lcl_compose( const OUString& i_rBaseURL, const OUString& i_rRelativeURL )
+        OUString lcl_compose( std::u16string_view i_rBaseURL, const OUString& i_rRelativeURL )
         {
-            ENSURE_OR_RETURN( !i_rBaseURL.isEmpty(), "illegal base URL", i_rRelativeURL );
+            ENSURE_OR_RETURN( !i_rBaseURL.empty(), "illegal base URL", i_rRelativeURL );
 
             OUStringBuffer aComposer( i_rBaseURL );
-            if ( !i_rBaseURL.endsWith("/") )
+            if ( !o3tl::ends_with(i_rBaseURL, u"/") )
                 aComposer.append( '/' );
             aComposer.append( i_rRelativeURL );
             return aComposer.makeStringAndClear();

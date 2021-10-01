@@ -1188,7 +1188,7 @@ void SbRtl_Mid(StarBASIC *, SbxArray & rPar, bool bWrite)
                     }
                 }
 
-                OUStringBuffer aResultStr = aArgStr;
+                OUStringBuffer aResultStr(aArgStr);
                 sal_Int32 nErase = nReplaceLen;
                 aResultStr.remove( nStartPos, nErase );
                 aResultStr.insert(

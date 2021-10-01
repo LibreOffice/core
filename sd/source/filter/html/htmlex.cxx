@@ -2492,21 +2492,17 @@ bool HtmlExport::CreateNavBarFrames()
     // the navigation bar outliner closed...
     if(bOk)
     {
-        OUStringBuffer aStr(gaHTMLHeader);
-        aStr.append(CreateMetaCharset());
-        aStr.append("  <title>");
-        aStr.append(StringToHTMLString(maPageNames[0]));
-        aStr.append("</title>\r\n</head>\r\n");
-        aStr.append(CreateBodyTag());
-
         aButton = SdResId(STR_HTMLEXP_OUTLINE);
         if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName(BTN_MORE), aButton);
 
-        aStr.append(CreateLink(u"JavaScript:parent.ExpandOutline()", aButton));
-        aStr.append("</body>\r\n</html>");
-
-        bOk = WriteHtml("navbar3", true, aStr.makeStringAndClear());
+        bOk = WriteHtml(
+            "navbar3", true,
+            OUStringConcatenation(
+                gaHTMLHeader + CreateMetaCharset() + "  <title>"
+                + StringToHTMLString(maPageNames[0]) + "</title>\r\n</head>\r\n" + CreateBodyTag()
+                + CreateLink(u"JavaScript:parent.ExpandOutline()", aButton)
+                + "</body>\r\n</html>"));
 
         if (mpProgress)
             mpProgress->SetState(++mnPagesWritten);
@@ -2515,21 +2511,17 @@ bool HtmlExport::CreateNavBarFrames()
     // ... and the outliner open
     if( bOk )
     {
-        OUStringBuffer aStr(gaHTMLHeader);
-        aStr.append(CreateMetaCharset());
-        aStr.append("  <title>");
-        aStr.append(StringToHTMLString(maPageNames[0]));
-        aStr.append("</title>\r\n</head>\r\n");
-        aStr.append(CreateBodyTag());
-
         aButton = SdResId(STR_HTMLEXP_NOOUTLINE);
         if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName(BTN_LESS), aButton);
 
-        aStr.append(CreateLink(u"JavaScript:parent.CollapseOutline()", aButton));
-        aStr.append("</body>\r\n</html>");
-
-        bOk = WriteHtml("navbar4", true, aStr.makeStringAndClear());
+        bOk = WriteHtml(
+            "navbar4", true,
+            OUStringConcatenation(
+                gaHTMLHeader + CreateMetaCharset() + "  <title>"
+                + StringToHTMLString(maPageNames[0]) + "</title>\r\n</head>\r\n" + CreateBodyTag()
+                + CreateLink(u"JavaScript:parent.CollapseOutline()", aButton)
+                + "</body>\r\n</html>"));
 
         if (mpProgress)
             mpProgress->SetState(++mnPagesWritten);

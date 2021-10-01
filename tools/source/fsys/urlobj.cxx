@@ -2823,7 +2823,7 @@ bool INetURLObject::parseHostOrNetBiosName(
     return true;
 }
 
-bool INetURLObject::setHost(OUString const & rTheHost,
+bool INetURLObject::setHost(std::u16string_view rTheHost,
                             rtl_TextEncoding eCharset)
 {
     if (!getSchemeInfo().m_bHost)
@@ -3691,7 +3691,7 @@ bool INetURLObject::operator ==(INetURLObject const & rObject) const
 bool INetURLObject::ConcatData(INetProtocol eTheScheme,
                                std::u16string_view rTheUser,
                                std::u16string_view rThePassword,
-                               OUString const & rTheHost,
+                               std::u16string_view rTheHost,
                                sal_uInt32 nThePort,
                                OUString const & rThePath)
 {
@@ -3799,7 +3799,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
                 }
             }
         }
-        else if (!rTheHost.isEmpty() || nThePort != 0)
+        else if (!rTheHost.empty() || nThePort != 0)
         {
             setInvalid();
             return false;
@@ -4024,12 +4024,11 @@ bool INetURLObject::setName(std::u16string_view rTheName, EncodeMechanism eMecha
     while (p != pSegEnd && *p != ';')
         ++p;
 
-    OUStringBuffer aNewPath(256);
-    aNewPath.append(pPathBegin, pSegBegin - pPathBegin);
-    aNewPath.append(encodeText(rTheName, PART_PCHAR, eMechanism, eCharset, true));
-    aNewPath.append(p, pPathEnd - p);
-
-    return setPath(aNewPath.makeStringAndClear(), EncodeMechanism::NotCanonical,
+    return setPath(
+        std::u16string_view(pPathBegin, pSegBegin - pPathBegin)
+            + encodeText(rTheName, PART_PCHAR, eMechanism, eCharset, true)
+            + std::u16string_view(p, pPathEnd - p),
+        EncodeMechanism::NotCanonical,
         RTL_TEXTENCODING_UTF8);
 }
 
@@ -4102,13 +4101,11 @@ bool INetURLObject::setBase(std::u16string_view rTheBase, sal_Int32 nIndex,
     if (!pExtension)
         pExtension = p;
 
-    OUStringBuffer aNewPath;
-    aNewPath.append(pPathBegin, pSegBegin - pPathBegin);
-    aNewPath.append(encodeText(rTheBase, PART_PCHAR,
-        eMechanism, eCharset, true));
-    aNewPath.append(pExtension, pPathEnd - pExtension);
-
-    return setPath(aNewPath.makeStringAndClear(), EncodeMechanism::NotCanonical,
+    return setPath(
+        std::u16string_view(pPathBegin, pSegBegin - pPathBegin)
+            + encodeText(rTheBase, PART_PCHAR, eMechanism, eCharset, true)
+            + std::u16string_view(pExtension, pPathEnd - pExtension),
+        EncodeMechanism::NotCanonical,
         RTL_TEXTENCODING_UTF8);
 }
 
@@ -4164,14 +4161,11 @@ bool INetURLObject::setExtension(std::u16string_view rTheExtension,
     if (!pExtension)
         pExtension = p;
 
-    OUStringBuffer aNewPath(128);
-    aNewPath.append(pPathBegin, pExtension - pPathBegin);
-    aNewPath.append('.');
-    aNewPath.append(encodeText(rTheExtension, PART_PCHAR,
-        EncodeMechanism::WasEncoded, eCharset, true));
-    aNewPath.append(p, pPathEnd - p);
-
-    return setPath(aNewPath.makeStringAndClear(), EncodeMechanism::NotCanonical,
+    return setPath(
+        OUString::Concat(std::u16string_view(pPathBegin, pExtension - pPathBegin)) + "."
+            + encodeText(rTheExtension, PART_PCHAR, EncodeMechanism::WasEncoded, eCharset, true)
+            + std::u16string_view(p, pPathEnd - p),
+        EncodeMechanism::NotCanonical,
         RTL_TEXTENCODING_UTF8);
 }
 

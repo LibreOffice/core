@@ -180,7 +180,7 @@ OUString createStandardColumnPart(const Reference< XPropertySet >& xColProp,cons
     xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT))    >>= bIsAutoIncrement;
 
     const OUString sQuoteString = xMetaData->getIdentifierQuoteString();
-    OUStringBuffer aSql = ::dbtools::quoteName(sQuoteString,::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))));
+    OUStringBuffer aSql(::dbtools::quoteName(sQuoteString,::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME)))));
 
     // check if the user enter a specific string to create autoincrement values
     OUString sAutoIncrementValue;

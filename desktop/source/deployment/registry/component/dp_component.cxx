@@ -83,18 +83,16 @@ bool jarManifestHeaderPresent(
     OUString const & url, OUString const & name,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
-    OUStringBuffer buf;
-    buf.append( "vnd.sun.star.zip://" );
-    buf.append(
-        ::rtl::Uri::encode(
+    OUString buf = "vnd.sun.star.zip://"
+        + ::rtl::Uri::encode(
             url, rtl_UriCharClassRegName, rtl_UriEncodeIgnoreEscapes,
-            RTL_TEXTENCODING_UTF8 ) );
-    buf.append( "/META-INF/MANIFEST.MF" );
+            RTL_TEXTENCODING_UTF8 )
+        + "/META-INF/MANIFEST.MF";
     ::ucbhelper::Content manifestContent;
     OUString line;
     return
         create_ucb_content(
-            &manifestContent, buf.makeStringAndClear(), xCmdEnv,
+            &manifestContent, buf, xCmdEnv,
             false /* no throw */ )
         && readLine( &line, name, manifestContent, RTL_TEXTENCODING_ASCII_US );
 }

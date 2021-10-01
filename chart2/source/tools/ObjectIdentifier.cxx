@@ -1054,7 +1054,7 @@ OUString ObjectIdentifier::createDataCurveEquationCID(
     return createClassifiedIdentifierWithParent( OBJECTTYPE_DATA_CURVE_EQUATION, aParticleID, rSeriesParticle );
 }
 
-OUString ObjectIdentifier::addChildParticle( const OUString& rParticle, std::u16string_view rChildParticle )
+OUString ObjectIdentifier::addChildParticle( std::u16string_view rParticle, std::u16string_view rChildParticle )
 {
     OUStringBuffer aRet(rParticle);
 

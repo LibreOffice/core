@@ -26,6 +26,7 @@
 #include "fontinstance.hxx"
 #include "font/PhysicalFontFamily.hxx"
 #include <array>
+#include <string_view>
 
 #define MAX_GLYPHFALLBACK 16
 
@@ -48,7 +49,7 @@ public:
     int                     Count() const { return maPhysicalFontFamilies.size(); }
 
     // find the device font family
-    vcl::font::PhysicalFontFamily* FindFontFamily( const OUString& rFontName ) const;
+    vcl::font::PhysicalFontFamily* FindFontFamily( std::u16string_view rFontName ) const;
     vcl::font::PhysicalFontFamily* FindOrCreateFontFamily( const OUString &rFamilyName );
     vcl::font::PhysicalFontFamily* FindFontFamily( vcl::font::FontSelectPattern& ) const;
     vcl::font::PhysicalFontFamily* FindFontFamilyByTokenNames(const OUString& rTokenStr) const;
