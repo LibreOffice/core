@@ -630,13 +630,8 @@ void doubleToString(typename T::String ** pResult,
                                     {
                                         if (eFormat == rtl_math_StringFormat_F)
                                         {   // insert '1'
-                                            typename T::Char * px = p++;
-                                            while (aBuf < px)
-                                            {
-                                                *px = *(px-1);
-                                                px--;
-                                            }
-
+                                            std::memmove(aBuf + 1, aBuf, (p++ - aBuf) * sizeof(*p));
+                                            assert(false);
                                             aBuf[0] = static_cast< typename T::Char >('1');
                                         }
                                         else
