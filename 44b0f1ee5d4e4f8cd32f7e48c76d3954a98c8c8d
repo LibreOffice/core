@@ -16,6 +16,24 @@
       "message": "if the buffer needs to be that big, we might as well use alloca(), which will be faster for small numbers",
       "revId": "44b0f1ee5d4e4f8cd32f7e48c76d3954a98c8c8d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3aaa5bc6_31e6e40c",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-01T07:51:06Z",
+      "side": 1,
+      "message": "Oh - why would it be faster? I assumed that allocation on stack is always increase stack pointer register + check stack overflow, regardless of the increase magnitude. I assumed that simplifying here would be reasonable, since the following code is never recursive, nor calling stack-hungry functions?",
+      "parentUuid": "e3709400_a9efe57f",
+      "revId": "44b0f1ee5d4e4f8cd32f7e48c76d3954a98c8c8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
