@@ -290,7 +290,11 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testIndexFieldFlagF,"IndexFieldFlagF.docx")
     // Specific Entry Type (ex. "Syn" in our case).
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // We check the Index field flag '\f'.
-    assertXPathContent(pXmlDoc, "/w:document[1]/w:body[1]/w:p[4]/w:r[2]/w:instrText[1]", " INDEX \\c \"2\"\\f \"Syn\" \" \\e \"");
+    // Note: no syntax error any more (extra quotation mark between "Syn" and \e)
+    assertXPathContent(pXmlDoc, "/w:document[1]/w:body[1]/w:p[4]/w:r[2]/w:instrText[1]", " INDEX \\c \"2\"\\f \"Syn\"\\e \"");
+    // XE entries lost their \f "Syn" before
+    assertXPathContent(pXmlDoc, "/w:document[1]/w:body[1]/w:p[17]/w:r[21]/w:instrText[1]", " XE \"formatting\" \\f \"Syn\" ");
+    assertXPathContent(pXmlDoc, "/w:document[1]/w:body[1]/w:p[17]/w:r[29]/w:instrText[1]", " XE \"choosing:aaaa\" \\f \"Syn\" ");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testBibliography,"FDO75133.docx")

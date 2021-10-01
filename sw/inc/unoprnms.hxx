@@ -490,7 +490,6 @@
 #define UNO_NAME_HIDE_FIELD_TIPS "HideFieldTips"
 #define UNO_NAME_PARA_SHADOW_FORMAT "ParaShadowFormat"
 #define UNO_NAME_CONTOUR_POLY_POLYGON "ContourPolyPolygon"
-#define UNO_NAME_INDEX_ENTRY_TYPE "IndexEntryType"
 
 #define UNO_NAME_IS_PIXEL_CONTOUR "IsPixelContour"
 #define UNO_NAME_IS_AUTOMATIC_CONTOUR "IsAutomaticContour"
