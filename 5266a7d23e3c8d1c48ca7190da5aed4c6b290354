@@ -16,6 +16,23 @@
       "message": "Thanks Mike, all fixed. I think some changes happened during a rebase where I split the change into two commits. ",
       "revId": "5266a7d23e3c8d1c48ca7190da5aed4c6b290354",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fa4729e_a8f0e72c",
+        "filename": "vcl/inc/font/PhysicalFontFamily.hxx",
+        "patchSetId": 64
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-01T08:29:48Z",
+      "side": 1,
+      "message": "Aha, FontSelectPattern also needs a forward declaration :)",
+      "revId": "5266a7d23e3c8d1c48ca7190da5aed4c6b290354",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
