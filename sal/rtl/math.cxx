@@ -580,64 +580,48 @@ void doubleToString(typename T::String ** pResult,
 
                 if (nDigit >= 10)
                 {   // after-treatment of up-rounding to the next decade
-                    sal_Int32 sLen = p - pBuf - 1;
-                    if (sLen == -1 || (sLen == 0 && bSign))
+                    typename T::Char* p1 = pBuf;
+                    // Assert that no one changed the logic we rely on.
+                    assert(!bSign || *p1 == '-');
+                    // Do not touch leading minus sign put earlier.
+                    if (bSign)
+                        ++p1;
+                    assert(p1 <= p);
+                    if (p1 == p)
                     {
-                        // Assert that no one changed the logic we rely on.
-                        assert(!bSign || pBuf[0] == '-');
-                        p = pBuf;
-                        if (bSign)
-                            ++p;
-                        if (eFormat == rtl_math_StringFormat_F)
+                        *p++ = '1';
+                        if (eFormat != rtl_math_StringFormat_F)
                         {
-                            *p++ = '1';
-                            *p++ = '0';
-                        }
-                        else
-                        {
-                            *p++ = '1';
                             *p++ = cDecSeparator;
-                            *p++ = '0';
                             nExp++;
                             bHasDec = true;
                         }
+                        *p++ = '0';
                     }
                     else
                     {
-                        for (sal_Int32 j = sLen; j >= 0; j--)
+                        for (typename T::Char* p2 = p - 1; p2 >= p1; --p2)
                         {
-                            typename T::Char* p2 = &pBuf[j];
                             typename T::Char cS = *p2;
-                            if (j == 0 && bSign)
+                            if (cS == cDecSeparator)
+                                continue;
+                            if (cS != '9')
                             {
-                                // Do not touch leading minus sign put earlier.
-                                assert(cS == '-');
-                                break;  // for, this is the last character backwards.
+                                ++*p2;
+                                break;
                             }
-                            if (cS != cDecSeparator)
+                            *p2 = '0';
+                            if (p2 == p1) // The number consisted of all 9s replaced to all 0s
                             {
-                                if (cS != '9')
-                                {
-                                    *p2 = ++cS;
-                                    j = -1;                 // break loop
+                                if (eFormat == rtl_math_StringFormat_F)
+                                { // move everything to the right before inserting '1'
+                                    std::memmove(p2 + 1, p2, (p++ - p2) * sizeof(*p));
                                 }
                                 else
                                 {
-                                    *p2 = '0';
-                                    if (j == 0 || (j == 1 && bSign))
-                                    {
-                                        if (eFormat == rtl_math_StringFormat_F)
-                                        {   // insert '1'
-                                            std::memmove(p2 + 1, p2, (p++ - p2) * sizeof(*p));
-                                            *p2 = '1';
-                                        }
-                                        else
-                                        {
-                                            *p2 = '1';
-                                            nExp++;
-                                        }
-                                    }
+                                    nExp++;
                                 }
+                                *p2 = '1';
                             }
                         }
 
