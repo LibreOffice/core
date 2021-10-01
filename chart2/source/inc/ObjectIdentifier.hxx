@@ -147,7 +147,7 @@ public:
     static OUString createParticleForLegend(
         const css::uno::Reference< css::frame::XModel >& xChartModel );
 
-    static OUString addChildParticle( const OUString& rParticle, std::u16string_view rChildParticle );
+    static OUString addChildParticle( std::u16string_view rParticle, std::u16string_view rChildParticle );
     static OUString createChildParticleWithIndex( ObjectType eObjectType, sal_Int32 nIndex );
     static sal_Int32 getIndexFromParticleOrCID( const OUString& rParticleOrCID );
 

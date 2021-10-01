@@ -208,31 +208,29 @@ void Bridge::call_java(
     jmethodID method_id = info->m_methods[ function_pos ];
 
 #if OSL_DEBUG_LEVEL > 0
-    OUStringBuffer trace_buf( 128 );
-    trace_buf.append( "calling " );
     JLocalAutoRef jo_method(
         jni, jni->ToReflectedMethod( info->m_class, method_id, JNI_FALSE ) );
     jni.ensure_no_exception();
-    JLocalAutoRef jo_descr(
+    JLocalAutoRef jo_descr1(
         jni, jni->CallObjectMethodA(
             jo_method.get(), getJniInfo()->m_method_Object_toString, nullptr ) );
     jni.ensure_no_exception();
-    trace_buf.append( jstring_to_oustring( jni, static_cast<jstring>(jo_descr.get()) ) );
-    trace_buf.append( " on " );
-    jo_descr.reset(
+    JLocalAutoRef jo_descr2(
+        jni,
         jni->CallObjectMethodA(
             javaI, getJniInfo()->m_method_Object_toString, nullptr ) );
     jni.ensure_no_exception();
-    trace_buf.append( jstring_to_oustring( jni, static_cast<jstring>(jo_descr.get()) ) );
-    trace_buf.append( " (" );
     JLocalAutoRef jo_class( jni, jni->GetObjectClass( javaI ) );
-    jo_descr.reset(
+    JLocalAutoRef jo_descr3(
+        jni,
         jni->CallObjectMethodA(
             jo_class.get(), getJniInfo()->m_method_Object_toString, nullptr ) );
     jni.ensure_no_exception();
-    trace_buf.append( jstring_to_oustring( jni, static_cast<jstring>(jo_descr.get()) ) );
-    trace_buf.append( ")" );
-    SAL_INFO("bridges", trace_buf.makeStringAndClear());
+    SAL_INFO(
+        "bridges",
+        "calling " << jstring_to_oustring( jni, static_cast<jstring>(jo_descr1.get()) ) << " on "
+            << jstring_to_oustring( jni, static_cast<jstring>(jo_descr2.get()) ) << " ("
+            << jstring_to_oustring( jni, static_cast<jstring>(jo_descr3.get()) ) << ")");
 #endif
 
     // complex return value

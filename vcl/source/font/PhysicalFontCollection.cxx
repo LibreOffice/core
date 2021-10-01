@@ -303,7 +303,7 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindFontFamilyBySearchName(const
     return pFoundData;
 }
 
-PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(OUString const& rFontName) const
+PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(std::u16string_view rFontName) const
 {
     return ImplFindFontFamilyBySearchName( GetEnglishSearchFontName( rFontName ) );
 }

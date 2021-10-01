@@ -27,18 +27,18 @@ public:
 void Test::testSingleElement()
 {
     // lowercase
-    OUString test1 = GetEnglishSearchFontName( "SYMBOL" );
+    OUString test1 = GetEnglishSearchFontName( u"SYMBOL" );
     CPPUNIT_ASSERT_EQUAL( OUString("symbol"),test1);
     //trailing whitespaces
-    test1 = GetEnglishSearchFontName( "Symbol    " );
+    test1 = GetEnglishSearchFontName( u"Symbol    " );
     CPPUNIT_ASSERT_EQUAL(OUString("symbol"),test1);
     //no longer remove script suffixes
-    test1 = GetEnglishSearchFontName( "Symbol(SIP)" );
+    test1 = GetEnglishSearchFontName( u"Symbol(SIP)" );
     CPPUNIT_ASSERT_EQUAL(OUString("symbol(sip)"),test1);
-    test1 = GetEnglishSearchFontName( "CM Roman CE" );
+    test1 = GetEnglishSearchFontName( u"CM Roman CE" );
     CPPUNIT_ASSERT_EQUAL( OUString("cmromance"),test1);
     //remove special characters; leave semicolon, numbers
-    test1 = GetEnglishSearchFontName( "sy;mb?=ol129" );
+    test1 = GetEnglishSearchFontName( u"sy;mb?=ol129" );
     CPPUNIT_ASSERT_EQUAL( OUString("sy;mbol129"),test1);
 
     //transformation

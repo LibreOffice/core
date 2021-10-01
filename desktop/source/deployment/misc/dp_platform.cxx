@@ -20,7 +20,6 @@
 
 #include <dp_platform.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/bootstrap.hxx>
 #include <osl/diagnose.h>
@@ -54,11 +53,7 @@ namespace
     struct StrPlatform : public rtl::StaticWithInit<
         OUString, StrPlatform> {
             OUString operator () () {
-                OUStringBuffer buf;
-                buf.append( StrOperatingSystem::get() );
-                buf.append( '_' );
-                buf.append( StrCPU::get() );
-                return buf.makeStringAndClear();
+                return StrOperatingSystem::get() + "_" + StrCPU::get();
             }
     };
 

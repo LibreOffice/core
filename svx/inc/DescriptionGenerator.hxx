@@ -19,6 +19,10 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <unotools/resmgr.hxx>
@@ -67,7 +71,7 @@ public:
             An introductory description of the shape that is made more
             specific by later calls to <member>addProperty</member>.
     */
-    void Initialize(const OUString& sPrefix);
+    void Initialize(std::u16string_view sPrefix);
 
     /** Initialize the description with the specified string from the
         resource followed by the shape style in parentheses and a colon.

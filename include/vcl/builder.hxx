@@ -398,7 +398,7 @@ namespace BuilderUtils
     VCL_DLLPUBLIC void set_properties(vcl::Window *pWindow, const VclBuilder::stringmap &rProps);
 
     //Convert _ gtk markup to ~ vcl markup
-    VCL_DLLPUBLIC OUString convertMnemonicMarkup(const OUString &rIn);
+    VCL_DLLPUBLIC OUString convertMnemonicMarkup(std::u16string_view rIn);
 
     VCL_DLLPUBLIC OUString extractCustomProperty(VclBuilder::stringmap &rMap);
 

@@ -140,9 +140,7 @@ OUString ScDPUtil::getDateGroupName(
         case sheet::DataPilotFieldGroupBy::MINUTES:
         case sheet::DataPilotFieldGroupBy::SECONDS:
         {
-            OUStringBuffer aBuf(ScGlobal::getLocaleData().getTimeSep());
-            aBuf.append(getTwoDigitString(nValue));
-            return aBuf.makeStringAndClear();
+            return ScGlobal::getLocaleData().getTimeSep() + getTwoDigitString(nValue);
         }
         break;
         default:

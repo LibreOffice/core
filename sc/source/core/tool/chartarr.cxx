@@ -340,15 +340,12 @@ std::unique_ptr<ScMemChart> ScChartArray::CreateMemChartMulti()
 
         if (aString.isEmpty())
         {
-            OUStringBuffer aBuf(ScResId(STR_COLUMN));
-            aBuf.append(' ');
             if ( pPos )
                 nPosCol = pPos->Col() + 1;
             else
                 nPosCol++;
             ScAddress aPos( nPosCol - 1, 0, 0 );
-            aBuf.append(aPos.Format(ScRefFlags::COL_VALID));
-            aString = aBuf.makeStringAndClear();
+            aString = ScResId(STR_COLUMN) + " " + aPos.Format(ScRefFlags::COL_VALID);
         }
         pMemChart->SetColText( nCol, aString);
     }

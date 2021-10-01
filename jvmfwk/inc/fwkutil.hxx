@@ -25,7 +25,6 @@
 #include <sal/log.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/byteseq.hxx>
 
 namespace osl { class Mutex; }
@@ -44,15 +43,13 @@ OUString getLibraryLocation();
 struct Bootstrap :
     public ::rtl::StaticWithInit< const rtl::Bootstrap *, Bootstrap > {
         const rtl::Bootstrap * operator () () {
-            OUStringBuffer buf(256);
-            buf.append(getLibraryLocation());
+            OUString sIni = getLibraryLocation() +
 #ifdef MACOSX
-            // For some reason the jvmfwk3rc file is traditionally in
-            // LIBO_URE_ETC_FOLDER
-            buf.append( "/../" LIBO_URE_ETC_FOLDER );
+                // For some reason the jvmfwk3rc file is traditionally in
+                // LIBO_URE_ETC_FOLDER
+                "/../" LIBO_URE_ETC_FOLDER
 #endif
-            buf.append(SAL_CONFIGFILE("/jvmfwk3"));
-            OUString sIni = buf.makeStringAndClear();
+                SAL_CONFIGFILE("/jvmfwk3");
             ::rtl::Bootstrap *  bootstrap = new ::rtl::Bootstrap(sIni);
             SAL_INFO("jfw.level2", "Using configuration file " << sIni);
             return bootstrap;

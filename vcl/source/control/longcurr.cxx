@@ -70,7 +70,7 @@ OUString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const BigInt 
     if ( rNumber.IsNeg() )
         aFraction *= -1;
 
-    OUStringBuffer aTemplate = rLocaleDataWrapper.getCurr( static_cast<tools::Long>(aFraction), nDigits, rCurrSymbol, bShowThousandSep );
+    OUStringBuffer aTemplate(rLocaleDataWrapper.getCurr( static_cast<tools::Long>(aFraction), nDigits, rCurrSymbol, bShowThousandSep ));
     while( !aInteger.IsZero() )
     {
         aFraction  = aInteger;

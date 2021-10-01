@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/text/ChapterFormat.hpp>
 #include <osl/diagnose.h>
 #include <doc.hxx>
@@ -35,7 +39,7 @@ using namespace ::com::sun::star;
 namespace
 {
 
-OUString removeControlChars(const OUString& sIn)
+OUString removeControlChars(std::u16string_view sIn)
 {
     OUStringBuffer aBuf(sIn);
     aBuf = aBuf.replace('\n', ' ').replace('\t', ' ');
