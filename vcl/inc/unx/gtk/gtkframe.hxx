@@ -392,6 +392,8 @@ class GtkSalFrame final : public SalFrame
 
     void SetIcon(const char* pIcon);
 
+    bool HandleMenubarMnemonic(guint eState, guint nKeyval);
+
 public:
     cairo_surface_t*                m_pSurface;
     basegfx::B2IVector              m_aFrameSize;
