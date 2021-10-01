@@ -37,7 +37,6 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/util/Color.hpp>
 
-using namespace std;
 using namespace cppu;
 using namespace rtl;
 using namespace css::uno;
@@ -67,7 +66,7 @@ int main()
     }
     catch (Exception& e)
     {
-        cout << "Error: cannot do bootstraping." << endl << e.Message << endl;
+        std::cout << "Error: cannot do bootstraping." << std::endl << e.Message << std::endl;
         exit(1);
     }
 
@@ -86,7 +85,7 @@ int main()
     }
     catch (Exception& e)
     {
-        cout << "Error: Document creation was not possible" << endl;
+        std::cout << "Error: Document creation was not possible" << std::endl;
         exit(1);
     }
 
@@ -119,7 +118,7 @@ Reference<XComponent> openDraw(Reference<XComponentContext> xContext)
     }
     catch (Exception e)
     {
-        cout << "Error opening draw." << endl << e.Message << endl;
+        std::cout << "Error opening draw." << std::endl << e.Message << std::endl;
         exit(1);
     }
 
@@ -152,7 +151,7 @@ Reference<XShape> createShape(Reference<XComponent> xDocComp, int height, int wi
     }
     catch (Exception e)
     {
-        cout << "Could not create instance." << endl << e.Message << endl;
+        std::cout << "Could not create instance." << std::endl << e.Message << std::endl;
         exit(1);
     }
 
@@ -164,7 +163,7 @@ Reference<XShape> createShape(Reference<XComponent> xDocComp, int height, int wi
     }
     catch (Exception e)
     {
-        cout << "Can not change the shape colors." << endl << e.Message << endl;
+        std::cout << "Can not change the shape colors." << std::endl << e.Message << std::endl;
         exit(1);
     }
 
@@ -205,7 +204,7 @@ Reference<XShapeGroup> createSequence(Reference<XComponent> xDocComp, Reference<
         catch (Exception e)
         {
             // Some exception occurs.FAILED
-            cout << "Could not get Shape." << endl << e.Message << endl;
+            std::cout << "Could not get Shape." << std::endl << e.Message << std::endl;
             exit(1);
         }
 
@@ -220,7 +219,7 @@ Reference<XShapeGroup> createSequence(Reference<XComponent> xDocComp, Reference<
         }
         catch (Exception e)
         {
-            cout << "Can not change shape colors." << endl << e.Message << endl;
+            std::cout << "Can not change shape colors." << std::endl << e.Message << std::endl;
             exit(1);
         }
         xShapes->add(xShape);
