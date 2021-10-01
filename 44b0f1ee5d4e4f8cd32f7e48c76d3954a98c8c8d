@@ -70,6 +70,24 @@
       "parentUuid": "8af1f8d6_1e04c924",
       "revId": "44b0f1ee5d4e4f8cd32f7e48c76d3954a98c8c8d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c8683d6_0c7e3097",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-01T08:02:16Z",
+      "side": 1,
+      "message": "Thanks; yes, I didn\u0027t consider the cache. I will leave the simple logic here for now; the problem I see is rather complex logic here, and simplifying allowed me to see e.g. https://gerrit.libreoffice.org/c/core/+/122863. So for now, let simplicity win. Additionally, I hope that we eventually just drop this all and use some *correct* (and faster) library implementation (plus our formatting post-processing).",
+      "parentUuid": "6a2d3ffd_3fc3cfc2",
+      "revId": "44b0f1ee5d4e4f8cd32f7e48c76d3954a98c8c8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
