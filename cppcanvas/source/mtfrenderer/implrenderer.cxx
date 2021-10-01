@@ -69,6 +69,7 @@
 #include <vector>
 #include <algorithm>
 #include <memory>
+#include <string_view>
 #include "mtftools.hxx"
 
 using namespace ::com::sun::star;
@@ -215,7 +216,7 @@ namespace
         return BitmapEx( aSolid, aMask );
     }
 
-    OUString convertToLocalizedNumerals(const OUString& rStr,
+    OUString convertToLocalizedNumerals(std::u16string_view rStr,
         LanguageType eTextLanguage)
     {
         OUStringBuffer aBuf(rStr);

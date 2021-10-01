@@ -1410,7 +1410,7 @@ void FmXFormShell::ExecuteSearch_Lock()
     FmFormArray().swap(m_aSearchForms);
     ::std::vector< OUString > aContextNames;
     impl_collectFormSearchContexts_nothrow_Lock(
-        m_pShell->GetCurPage()->GetForms(), OUString(),
+        m_pShell->GetCurPage()->GetForms(), u"",
         m_aSearchForms, aContextNames);
 
     if ( m_aSearchForms.size() != aContextNames.size() )
@@ -2841,7 +2841,7 @@ Reference< XControl> FmXFormShell::impl_getControl_Lock(const Reference<XControl
 
 // note: _out_rForms is a member so needs lock
 void FmXFormShell::impl_collectFormSearchContexts_nothrow_Lock( const Reference<XInterface>& _rxStartingPoint,
-    const OUString& _rCurrentLevelPrefix, FmFormArray& _out_rForms, ::std::vector< OUString >& _out_rNames )
+    std::u16string_view _rCurrentLevelPrefix, FmFormArray& _out_rForms, ::std::vector< OUString >& _out_rNames )
 {
     try
     {
@@ -2867,14 +2867,14 @@ void FmXFormShell::impl_collectFormSearchContexts_nothrow_Lock( const Reference<
 
             // the name of the current form
             OUString sCompleteCurrentName( sCurrentFormName );
-            if ( !_rCurrentLevelPrefix.isEmpty() )
+            if ( !_rCurrentLevelPrefix.empty() )
             {
-                sCompleteCurrentName += " (" + _rCurrentLevelPrefix + ")";
+                sCompleteCurrentName += OUString::Concat(" (") + _rCurrentLevelPrefix + ")";
             }
 
             // the prefix for the next level
             aNextLevelPrefix = _rCurrentLevelPrefix;
-            if ( !_rCurrentLevelPrefix.isEmpty() )
+            if ( !_rCurrentLevelPrefix.empty() )
                 aNextLevelPrefix.append( '/' );
             aNextLevelPrefix.append( sCurrentFormName );
 

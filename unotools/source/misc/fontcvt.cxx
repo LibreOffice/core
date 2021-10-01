@@ -1344,7 +1344,7 @@ const RecodeTable aAppleSymbolRecodeTable[] = {
 
 static ConvertChar aImplStarSymbolCvt = { nullptr, "StarBats", ImplStarSymbolToStarBats };
 
-const ConvertChar* ConvertChar::GetRecodeData( const OUString& rOrgFontName, const OUString& rMapFontName )
+const ConvertChar* ConvertChar::GetRecodeData( std::u16string_view rOrgFontName, std::u16string_view rMapFontName )
 {
     const ConvertChar* pCvt = nullptr;
 
@@ -1391,7 +1391,7 @@ const ConvertChar* ConvertChar::GetRecodeData( const OUString& rOrgFontName, con
     return pCvt;
 }
 
-FontToSubsFontConverter CreateFontToSubsFontConverter( const OUString& rOrgName, FontToSubsFontFlags nFlags )
+FontToSubsFontConverter CreateFontToSubsFontConverter( std::u16string_view rOrgName, FontToSubsFontFlags nFlags )
 {
     const ConvertChar* pCvt = nullptr;
 

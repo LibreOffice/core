@@ -126,7 +126,7 @@ int OutputDevice::GetFontFaceCollectionCount() const
     return mpFontFaceCollection->Count();
 }
 
-bool OutputDevice::IsFontAvailable( const OUString& rFontName ) const
+bool OutputDevice::IsFontAvailable( std::u16string_view rFontName ) const
 {
     ImplInitFontList();
     vcl::font::PhysicalFontFamily* pFound = mxFontCollection->FindFontFamily( rFontName );

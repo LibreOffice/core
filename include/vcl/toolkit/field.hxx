@@ -23,6 +23,10 @@
 #error "don't use this in new code"
 #endif
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <config_options.h>
 #include <tools/date.hxx>
 #include <tools/fldunit.hxx>
@@ -303,14 +307,14 @@ protected:
 
                             TimeFormatter(Edit* pEdit);
 
-    SAL_DLLPRIVATE void     ImplTimeReformat( const OUString& rStr, OUString& rOutStr );
+    SAL_DLLPRIVATE void     ImplTimeReformat( std::u16string_view rStr, OUString& rOutStr );
     SAL_DLLPRIVATE void     ImplNewFieldValue( const tools::Time& rTime );
     SAL_DLLPRIVATE void     ImplSetUserTime( const tools::Time& rNewTime, Selection const * pNewSelection = nullptr );
     SAL_DLLPRIVATE bool     ImplAllowMalformedInput() const;
 
 public:
     static OUString         FormatTime(const tools::Time& rNewTime, TimeFieldFormat eFormat, TimeFormat eHourFormat, bool bDuration, const LocaleDataWrapper& rLocaleData);
-    static bool             TextToTime(const OUString& rStr, tools::Time& rTime, TimeFieldFormat eFormat, bool bDuration, const LocaleDataWrapper& rLocaleDataWrapper, bool _bSkipInvalidCharacters = true);
+    static bool             TextToTime(std::u16string_view rStr, tools::Time& rTime, TimeFieldFormat eFormat, bool bDuration, const LocaleDataWrapper& rLocaleDataWrapper, bool _bSkipInvalidCharacters = true);
     static int              GetTimeArea(TimeFieldFormat eFormat, const OUString& rText, int nCursor,
                                         const LocaleDataWrapper& rLocaleDataWrapper);
     static tools::Time      SpinTime(bool bUp, const tools::Time& rTime, TimeFieldFormat eFormat,

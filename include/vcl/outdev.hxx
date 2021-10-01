@@ -63,6 +63,7 @@
 #include <com/sun/star/awt/DeviceInfo.hpp>
 
 #include <memory>
+#include <string_view>
 #include <vector>
 
 struct ImplOutDevData;
@@ -1111,7 +1112,7 @@ public:
     FontMetric                  GetFontMetricFromCollection( int nDevFontIndex ) const;
     int                         GetFontFaceCollectionCount() const;
 
-    bool                        IsFontAvailable( const OUString& rFontName ) const;
+    bool                        IsFontAvailable( std::u16string_view rFontName ) const;
 
     bool                        AddTempDevFont( const OUString& rFileURL, const OUString& rFontName );
     void                        RefreshFontData( const bool bNewFontLists );

@@ -864,12 +864,11 @@ bool XMLVariableDeclImportContext::FindFieldMaster(
             xFactory(rImport.GetModel(),UNO_QUERY);
         if( xFactory.is() ) {
 
-            OUStringBuffer sService;
-            sService.append(sAPI_fieldmaster_prefix);
-            sService.append((eVarType==VarTypeUserField) ?
+            OUString sService = sAPI_fieldmaster_prefix
+                + ((eVarType==VarTypeUserField) ?
                                  OUString(sAPI_user) : OUString(sAPI_set_expression));
             Reference<XInterface> xIfc =
-                xFactory->createInstance( sService.makeStringAndClear() );
+                xFactory->createInstance( sService );
             if (xIfc.is()) {
                 Reference<XPropertySet> xTmp( xIfc, UNO_QUERY );
                 xMaster = xTmp;

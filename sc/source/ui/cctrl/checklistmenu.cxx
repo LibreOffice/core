@@ -1344,7 +1344,7 @@ void ScCheckListMenuControl::getResult(ResultType& rResult)
     {
         if ( maMembers[i].mbLeaf )
         {
-            OUStringBuffer aLabel = maMembers[i].maName;
+            OUStringBuffer aLabel(maMembers[i].maName);
             if (aLabel.isEmpty())
                 aLabel = ScResId(STR_EMPTYDATA);
 

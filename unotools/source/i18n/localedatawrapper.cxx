@@ -118,7 +118,7 @@ void LocaleDataWrapper::loadData()
             {
                 if (areChecksEnabled())
                 {
-                    outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::getCurrSymbolsImpl: no default currency" ) );
+                    outputCheckMessage( appendLocaleInfo( u"LocaleDataWrapper::getCurrSymbolsImpl: no default currency" ) );
                 }
                 pCurr = aCurrSeq.begin();
             }
@@ -547,7 +547,7 @@ void LocaleDataWrapper::loadCurrencyFormats()
     {   // bad luck
         if (areChecksEnabled())
         {
-            outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::getCurrFormatsImpl: no currency formats" ) );
+            outputCheckMessage( appendLocaleInfo( u"LocaleDataWrapper::getCurrFormatsImpl: no currency formats" ) );
         }
         nCurrPositiveFormat = nCurrNegativeFormat = nCurrFormatDefault;
         return;
@@ -591,7 +591,7 @@ void LocaleDataWrapper::loadCurrencyFormats()
     scanCurrFormatImpl( pFormatArr[nElem].Code, 0, nSign, nPar, nNum, nBlank, nSym );
     if (areChecksEnabled() && (nNum == -1 || nSym == -1))
     {
-        outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::getCurrFormatsImpl: CurrPositiveFormat?" ) );
+        outputCheckMessage( appendLocaleInfo( u"LocaleDataWrapper::getCurrFormatsImpl: CurrPositiveFormat?" ) );
     }
     if (nBlank == -1)
     {
@@ -618,7 +618,7 @@ void LocaleDataWrapper::loadCurrencyFormats()
         scanCurrFormatImpl( rCode, nDelim+1, nSign, nPar, nNum, nBlank, nSym );
         if (areChecksEnabled() && (nNum == -1 || nSym == -1 || (nPar == -1 && nSign == -1)))
         {
-            outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::getCurrFormatsImpl: CurrNegativeFormat?" ) );
+            outputCheckMessage( appendLocaleInfo( u"LocaleDataWrapper::getCurrFormatsImpl: CurrNegativeFormat?" ) );
         }
         // NOTE: one of nPar or nSign are allowed to be -1
         if (nBlank == -1)
@@ -738,7 +738,7 @@ LongDateOrder LocaleDataWrapper::scanDateOrderImpl( const OUString& rCode ) cons
         {
             if (areChecksEnabled())
             {
-                outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::scanDateOrder: not all DMY present" ) );
+                outputCheckMessage( appendLocaleInfo( u"LocaleDataWrapper::scanDateOrder: not all DMY present" ) );
             }
             if (nDay == -1)
                 nDay = rCode.getLength();
@@ -761,7 +761,7 @@ LongDateOrder LocaleDataWrapper::scanDateOrderImpl( const OUString& rCode ) cons
     {
         if (areChecksEnabled())
         {
-            outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::scanDateOrder: no magic applicable" ) );
+            outputCheckMessage( appendLocaleInfo( u"LocaleDataWrapper::scanDateOrder: no magic applicable" ) );
         }
         return LongDateOrder::DMY;
     }
@@ -796,7 +796,7 @@ void LocaleDataWrapper::loadDateOrders()
     {   // bad luck
         if (areChecksEnabled())
         {
-            outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::getDateOrdersImpl: no date formats" ) );
+            outputCheckMessage( appendLocaleInfo( u"LocaleDataWrapper::getDateOrdersImpl: no date formats" ) );
         }
         nDateOrder = DateOrder::DMY;
         nLongDateOrder = LongDateOrder::DMY;
@@ -840,13 +840,13 @@ void LocaleDataWrapper::loadDateOrders()
     {
         if (areChecksEnabled())
         {
-            outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::getDateOrdersImpl: no edit" ) );
+            outputCheckMessage( appendLocaleInfo( u"LocaleDataWrapper::getDateOrdersImpl: no edit" ) );
         }
         if ( nDef == -1 )
         {
             if (areChecksEnabled())
             {
-                outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::getDateOrdersImpl: no default" ) );
+                outputCheckMessage( appendLocaleInfo( u"LocaleDataWrapper::getDateOrdersImpl: no default" ) );
             }
             if ( nMedium != -1 )
                 nDef = nMedium;
@@ -1463,16 +1463,11 @@ LanguageTag LocaleDataWrapper::getLoadedLanguageTag() const
     return LanguageTag( lang::Locale( aLCInfo.Language, aLCInfo.Country, aLCInfo.Variant ));
 }
 
-OUString LocaleDataWrapper::appendLocaleInfo(const OUString& rDebugMsg) const
+OUString LocaleDataWrapper::appendLocaleInfo(std::u16string_view rDebugMsg) const
 {
-    OUStringBuffer aDebugMsg(rDebugMsg);
-    aDebugMsg.append('\n');
-    aDebugMsg.append(maLanguageTag.getBcp47());
-    aDebugMsg.append(" requested\n");
     LanguageTag aLoaded = getLoadedLanguageTag();
-    aDebugMsg.append(aLoaded.getBcp47());
-    aDebugMsg.append(" loaded");
-    return aDebugMsg.makeStringAndClear();
+    return OUString::Concat(rDebugMsg) + "\n" + maLanguageTag.getBcp47() + " requested\n"
+        + aLoaded.getBcp47() + " loaded";
 }
 
 // static

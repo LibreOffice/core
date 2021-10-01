@@ -361,19 +361,16 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
         dp_misc::TRACE("> [dp_registry.cxx] media-type detection:\n\n" );
         for (auto const& elem : that->m_filter2mediaType)
         {
-            OUStringBuffer buf;
-            buf.append( "extension \"" );
-            buf.append( elem.first );
-            buf.append( "\" maps to media-type \"" );
-            buf.append( elem.second );
-            buf.append( "\" maps to backend " );
             const Reference<deployment::XPackageRegistry> xBackend(
                 that->m_mediaType2backend.find( elem.second )->second );
             allBackends.insert( xBackend );
-            buf.append( Reference<lang::XServiceInfo>(
+            dp_misc::TRACE(
+                "extension \"" + elem.first + "\" maps to media-type \"" + elem.second
+                + "\" maps to backend "
+                + Reference<lang::XServiceInfo>(
                             xBackend, UNO_QUERY_THROW )
-                        ->getImplementationName() );
-            dp_misc::TRACE( buf.makeStringAndClear() + "\n");
+                        ->getImplementationName()
+                + "\n");
         }
         dp_misc::TRACE( "> [dp_registry.cxx] ambiguous backends:\n\n" );
         for (auto const& ambiguousBackend : that->m_ambiguousBackends)
