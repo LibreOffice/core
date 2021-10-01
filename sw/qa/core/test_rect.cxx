@@ -42,6 +42,15 @@ void RectUnittest::testUnion()
     tmp.Union(rect3);
     CPPUNIT_ASSERT_EQUAL(SwRect(Point(10, 10), Size(30, 30)), tmp);
     CPPUNIT_ASSERT_EQUAL(SwRect(Point(10, 10), Size(30, 30)), rect1.GetUnion(rect3));
+
+    tmp = rect1;
+    tmp.Union(SwRect());
+    CPPUNIT_ASSERT_EQUAL(rect1, tmp);
+    CPPUNIT_ASSERT_EQUAL(rect1, rect1.GetUnion(SwRect()));
+    tmp = SwRect();
+    tmp.Union(rect1);
+    CPPUNIT_ASSERT_EQUAL(rect1, tmp);
+    CPPUNIT_ASSERT_EQUAL(rect1, SwRect().GetUnion(rect1));
 }
 
 void RectUnittest::testIntersection()
@@ -60,6 +69,15 @@ void RectUnittest::testIntersection()
     tmp.Intersection(rect3);
     CPPUNIT_ASSERT(tmp.IsEmpty());
     CPPUNIT_ASSERT(rect1.GetIntersection(rect3).IsEmpty());
+
+    tmp = rect1;
+    tmp.Intersection(SwRect());
+    CPPUNIT_ASSERT(tmp.IsEmpty());
+    CPPUNIT_ASSERT(rect1.GetIntersection(SwRect()).IsEmpty());
+    tmp = SwRect();
+    tmp.Intersection(rect1);
+    CPPUNIT_ASSERT(tmp.IsEmpty());
+    CPPUNIT_ASSERT(SwRect().GetIntersection(rect1).IsEmpty());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RectUnittest);

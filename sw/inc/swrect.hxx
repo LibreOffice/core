@@ -364,7 +364,7 @@ inline bool SwRect::Overlaps( const SwRect& rRect ) const
 
 inline SwRect SwRect::GetUnion( const SwRect& rRect ) const
 {
-    return SwRect(
+    return IsEmpty() ? rRect : rRect.IsEmpty() ? *this : SwRect(
         Point( std::min( Left(), rRect.Left()),
                std::min( Top(), rRect.Top())),
         Point( std::max( Right(), rRect.Right()),
