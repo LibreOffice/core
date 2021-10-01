@@ -69,7 +69,7 @@ void XDatabaseRange::testGetSortDescriptor()
         {
             bool bIsSortColumns = true;
             aProp.Value >>= bIsSortColumns;
-            CPPUNIT_ASSERT(bIsSortColumns);
+            CPPUNIT_ASSERT(!bIsSortColumns);
         }
         else if (aProp.Name == "ContainsHeader")
         {
