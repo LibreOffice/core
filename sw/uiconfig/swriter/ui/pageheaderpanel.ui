@@ -34,6 +34,7 @@
             <property name="can-focus">False</property>
             <property name="halign">end</property>
             <property name="label" translatable="yes" context="pageheaderpanel|spacing">Spacing:</property>
+            <property name="use-underline">True</property>
             <property name="mnemonic-widget">spacingpreset</property>
           </object>
           <packing>
@@ -47,6 +48,7 @@
             <property name="can-focus">False</property>
             <property name="halign">end</property>
             <property name="label" translatable="yes" context="pageheaderpanel|samecontent">Same Content:</property>
+            <property name="use-underline">True</property>
             <property name="mnemonic-widget">samecontentLB</property>
           </object>
           <packing>
