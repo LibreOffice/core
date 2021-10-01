@@ -2865,7 +2865,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                         {
                                             sal_uInt32 nSpFlags;
                                             rStCtrl.ReadUInt32( nSpFlags ).ReadUInt32( nSpFlags );
-                                            if ( ShapeFlag(nSpFlags) & ShapeFlag::Background )
+                                            if (rStCtrl.good() && ShapeFlag(nSpFlags) & ShapeFlag::Background)
                                             {
                                                 aEscherObjListHd.SeekToBegOfRecord( rStCtrl );
                                                 rSlidePersist.pBObj = ImportObj( rStCtrl, aProcessData, aPageSize, aPageSize, /*nCalledByGroup*/0, /*pShapeId*/nullptr );
