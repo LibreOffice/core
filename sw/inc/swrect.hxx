@@ -79,6 +79,9 @@ public:
     SwRect &Union( const SwRect& rRect );
     SwRect &Intersection( const SwRect& rRect );
 
+    SwRect GetUnion( const SwRect& rRect ) const;
+    SwRect GetIntersection( const SwRect& rRect ) const;
+
     // Same as Intersection, only assume that Rects are overlapping!
     SwRect &Intersection_( const SwRect &rRect );
 
@@ -357,6 +360,26 @@ inline bool SwRect::Overlaps( const SwRect& rRect ) const
            (Left()  <= rRect.Right())  &&
            (Right() >= rRect.Left())   &&
            (Bottom()>= rRect.Top());
+}
+
+inline SwRect SwRect::GetUnion( const SwRect& rRect ) const
+{
+    return SwRect(
+        Point( std::min( Left(), rRect.Left()),
+               std::min( Top(), rRect.Top())),
+        Point( std::max( Right(), rRect.Right()),
+               std::max( Bottom(), rRect.Bottom())));
+}
+
+inline SwRect SwRect::GetIntersection( const SwRect& rRect ) const
+{
+    return Overlaps( rRect )
+        ? SwRect(
+            Point( std::max( Left(), rRect.Left()),
+                   std::max( Top(), rRect.Top())),
+            Point( std::min( Right(), rRect.Right()),
+                   std::min( Bottom(), rRect.Bottom())))
+        : SwRect();
 }
 
 
