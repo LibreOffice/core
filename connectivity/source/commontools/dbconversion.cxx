@@ -377,14 +377,20 @@ namespace dbtools
 
     css::util::DateTime DBTypeConversion::toDateTime(const double dVal, const css::util::Date& _rNullDate)
     {
+        css::util::DateTime aRet;
+
+        if (!std::isfinite(dVal))
+        {
+            SAL_WARN("connectivity.commontools", "DateTime has invalid value: " << dVal);
+            return aRet;
+        }
+
         css::util::Date aDate = toDate(dVal, _rNullDate);
         // there is not enough precision in a double to have both a date
         // and a time up to nanoseconds -> limit to microseconds to have
         // correct rounding, that is e.g. 13:00:00.000000000 instead of
         // 12:59:59.999999790
         css::util::Time aTime = toTime(dVal, 6);
-
-        css::util::DateTime aRet;
 
         aRet.Day          = aDate.Day;
         aRet.Month        = aDate.Month;
