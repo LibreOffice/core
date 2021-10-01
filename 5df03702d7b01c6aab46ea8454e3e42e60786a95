@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ac03bc8_6bf8c942",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-01T17:20:35Z",
+      "side": 1,
+      "message": "Sorry about the repeated reviews that keep adding things that could have been added the first time. I think I\u0027m going to stop reviewing now because I\u0027m way too skittish around this code. (As you saw in the bug report, I abandoned the patch I made because I\u0027m too uncomfortable working here.)",
+      "revId": "5df03702d7b01c6aab46ea8454e3e42e60786a95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "380bf170_8bbc917d",
+        "filename": "sw/source/core/txtnode/txtedt.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1842,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-01T17:20:35Z",
+      "side": 1,
+      "message": "nLastStart and nLastEnd are not used after this point, so no need to adjust them, right?",
+      "range": {
+        "startLine": 1842,
+        "startChar": 7,
+        "endLine": 1842,
+        "endChar": 19
+      },
+      "revId": "5df03702d7b01c6aab46ea8454e3e42e60786a95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

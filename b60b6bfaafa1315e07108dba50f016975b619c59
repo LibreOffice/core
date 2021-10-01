@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be24db9b_74937343",
+        "filename": "sw/source/core/txtnode/txtedt.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1794,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-01T17:20:35Z",
+      "side": 0,
+      "message": "You removed the comment even though it also talks about extending the end. Perhaps the comment should remain, and explain why the start is not extended.",
+      "range": {
+        "startLine": 1794,
+        "startChar": 8,
+        "endLine": 1794,
+        "endChar": 31
+      },
+      "revId": "b60b6bfaafa1315e07108dba50f016975b619c59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
