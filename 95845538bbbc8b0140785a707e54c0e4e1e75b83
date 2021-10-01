@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df29c7b4_a98edf2a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-10-01T15:29:01Z",
+      "side": 1,
+      "message": "@Tibi: very nice and useful fix!\n\nNote: I\u0027ve replaced the Change-id with the more handy commit id in the commit description.",
+      "revId": "95845538bbbc8b0140785a707e54c0e4e1e75b83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
