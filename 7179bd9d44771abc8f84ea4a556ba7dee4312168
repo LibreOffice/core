@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2dde599d_78173dc8",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-10-01T13:12:22Z",
+      "side": 1,
+      "message": "Rather use the permalink (you get that in GitHub when clicking on the line number and the ... three dots menu appears) that includes the commit hash\n\nhttps://github.com/unicode-org/icu/blob/b9311e2f547251807c3982e6cb003feec3ba5c83/icu4c/source/i18n/gregocal.cpp#L462\n\nbecause in future line 462 may be something completely different..",
+      "revId": "7179bd9d44771abc8f84ea4a556ba7dee4312168",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
