@@ -1,0 +1,11 @@
+--- curl/lib/vtls/nss.c.orig	2021-10-01 17:34:59.302663021 +0200
++++ curl/lib/vtls/nss.c	2021-10-01 17:35:55.376666010 +0200
+@@ -955,7 +955,7 @@
+   subject = CERT_NameToAscii(&cert->subject);
+   issuer = CERT_NameToAscii(&cert->issuer);
+   common_name = CERT_GetCommonName(&cert->subject);
+-  infof(data, "subject: %s\n", subject);
++  infof(data, "subject: %s", subject);
+ 
+   CERT_GetCertTimes(cert, &notBefore, &notAfter);
+   PR_ExplodeTime(notBefore, PR_GMTParameters, &printableTime);
