@@ -129,7 +129,7 @@
       <object class="GtkMenuItem" id="InsertPivotTableD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:InsertPivotTable</property>
+        <property name="action_name">.uno:InsertPivotTableNBLabel</property>
       </object>
     </child>
     <child>

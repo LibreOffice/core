@@ -480,6 +480,17 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:InsertPivotTableNBLabel" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Insert or Edit Pivot Table...</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:DataDataPilotRun</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:GoLeftToStartOfDataSel" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Select to Left Block Margin</value>
