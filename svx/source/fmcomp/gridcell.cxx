@@ -1028,7 +1028,7 @@ void DbLimitedLengthField::implSetEffectiveMaxTextLen(sal_Int32 nMaxLen)
 
 DbTextField::DbTextField(DbGridColumn& _rColumn)
             :DbLimitedLengthField(_rColumn)
-            ,m_bIsSimpleEdit( true )
+            ,m_bIsMultiLineEdit(false)
 {
 }
 
@@ -1061,7 +1061,7 @@ void DbTextField::Init(BrowserDataWin& rParent, const Reference< XRowSet >& xCur
                              "caught an exception while determining the multi-line capabilities!");
     }
 
-    m_bIsSimpleEdit = !bIsMultiLine;
+    m_bIsMultiLineEdit = bIsMultiLine;
     if ( bIsMultiLine )
     {
         auto xEditControl = VclPtr<MultiLineTextCell>::Create(&rParent);
@@ -3627,7 +3627,7 @@ FmXEditCell::FmXEditCell( DbGridColumn* pColumn, std::unique_ptr<DbCellControl> 
     {
 
         m_pEditImplementation = pTextField->GetEditImplementation();
-        if ( !pTextField->IsSimpleEdit() )
+        if (pTextField->IsMultiLineEdit())
             m_bFastPaint = false;
     }
     else

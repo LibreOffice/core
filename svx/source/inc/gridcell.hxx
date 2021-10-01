@@ -380,7 +380,7 @@ class DbTextField final : public DbLimitedLengthField
 {
     std::unique_ptr<::svt::IEditImplementation> m_pEdit;
     std::unique_ptr<::svt::IEditImplementation> m_pPainterImplementation;
-    bool                    m_bIsSimpleEdit;
+    bool                    m_bIsMultiLineEdit;
 
     virtual ~DbTextField( ) override;
 
@@ -388,7 +388,7 @@ public:
     DbTextField(DbGridColumn& _rColumn);
 
     ::svt::IEditImplementation* GetEditImplementation() { return m_pEdit.get(); }
-    bool                    IsSimpleEdit() const { return m_bIsSimpleEdit; }
+    bool IsMultiLineEdit() const { return m_bIsMultiLineEdit; }
 
     virtual void Init( BrowserDataWin& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
     virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
