@@ -500,24 +500,13 @@ void doubleToString(typename T::String ** pResult,
         }
     }
 
-    static sal_Int32 const nBufMax = 256;
-    typename T::Char aBuf[nBufMax];
-    typename T::Char * pBuf;
     sal_Int32 nBuf = static_cast< sal_Int32 >
         (nDigits <= 0 ? std::max< sal_Int32 >(nDecPlaces, abs(nExp))
           : nDigits + nDecPlaces ) + 10 + (pGroups ? abs(nDigits) * 2 : 0);
-
-    if (nBuf > nBufMax)
-    {
-        pBuf = static_cast< typename T::Char * >(
-            malloc(nBuf * sizeof (typename T::Char)));
-        OSL_ENSURE(pBuf, "Out of memory");
-    }
-    else
-    {
-        pBuf = aBuf;
-    }
-
+    // max(nDigits) = max(nDecPlaces) + 1 + max(nExp) + 1 = 20 + 1 + 308 + 1 = 330
+    // max(nBuf) = max(nDigits) + max(nDecPlaces) + 10 + max(nDigits) * 2 = 330 * 3 + 20 + 10 = 1020
+    assert(nBuf <= 1024);
+    typename T::Char* pBuf = static_cast<typename T::Char*>(alloca(nBuf));
     typename T::Char * p = pBuf;
     if ( bSign )
         *p++ = static_cast< typename T::Char >('-');
@@ -595,7 +584,7 @@ void doubleToString(typename T::String ** pResult,
                     if (sLen == -1 || (sLen == 0 && bSign))
                     {
                         // Assert that no one changed the logic we rely on.
-                        assert(!bSign || *pBuf == static_cast< typename T::Char >('-'));
+                        assert(!bSign || pBuf[0] == static_cast< typename T::Char >('-'));
                         p = pBuf;
                         if (bSign)
                             ++p;
@@ -761,9 +750,6 @@ void doubleToString(typename T::String ** pResult,
         T::createString(pResult, pBuf, p - pBuf);
     else
         T::appendChars(pResult, pResultCapacity, &nResultOffset, pBuf, p - pBuf);
-
-    if (pBuf != &aBuf[0])
-        free(pBuf);
 }
 
 }
