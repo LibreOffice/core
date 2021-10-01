@@ -277,7 +277,7 @@ OUString VbaEventsHelperBase::getEventHandlerPath( const EventHandlerInfo& rInfo
         break;
 
         default:
-            throw uno::RuntimeException(); // unsupported module type
+            throw uno::RuntimeException("This module type is unsupported"); // unsupported module type
     }
 
     /*  Performance improvement: Check the list of existing event handlers
