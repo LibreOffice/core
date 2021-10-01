@@ -24,6 +24,7 @@
 #include <unx/gtk/gtksalmenu.hxx>
 #include <unx/gtk/hudawareness.h>
 #include <vcl/event.hxx>
+#include <vcl/i18nhelp.hxx>
 #include <vcl/keycodes.hxx>
 #include <unx/geninst.h>
 #include <headless/svpgdi.hxx>
@@ -3847,6 +3848,40 @@ static bool key_forward(GdkEventKey* pEvent, GtkWindow* pDest)
     return bHandled;
 }
 
+static bool activate_menubar_mnemonic(GtkWidget* pWidget, guint nKeyval)
+{
+    const char* pLabel = gtk_menu_item_get_label(GTK_MENU_ITEM(pWidget));
+    gunichar cAccelChar = 0;
+    if (!pango_parse_markup(pLabel, -1, '_', nullptr, nullptr, &cAccelChar, nullptr))
+        return false;
+    if (!cAccelChar)
+        return false;
+    auto nMnemonicKeyval = gdk_keyval_to_lower(gdk_unicode_to_keyval(cAccelChar));
+    if (nKeyval == nMnemonicKeyval)
+        return gtk_widget_mnemonic_activate(pWidget, false);
+    return false;
+}
+
+bool GtkSalFrame::HandleMenubarMnemonic(guint eState, guint nKeyval)
+{
+    bool bUsedInMenuBar = false;
+    if (eState & GDK_ALT_MASK)
+    {
+        if (GtkWidget* pMenuBar = m_pSalMenu ? m_pSalMenu->GetMenuBarWidget() : nullptr)
+        {
+            GList* pChildren = gtk_container_get_children(GTK_CONTAINER(pMenuBar));
+            for (GList* pChild = g_list_first(pChildren); pChild; pChild = g_list_next(pChild))
+            {
+                bUsedInMenuBar = activate_menubar_mnemonic(static_cast<GtkWidget*>(pChild->data), nKeyval);
+                if (bUsedInMenuBar)
+                    break;
+            }
+            g_list_free(pChildren);
+        }
+    }
+    return bUsedInMenuBar;
+}
+
 gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer frame)
 {
     UpdateLastInputEventTime(pEvent->time);
@@ -3859,6 +3894,12 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
 
     if (GTK_IS_WINDOW(pThis->m_pWindow))
     {
+        // tdf#144846 If this is registered as a menubar mnemonic then ensure
+        // that any other widget won't be considered as a candidate by taking
+        // over the task of launch the menubar menu outself
+        if (pThis->HandleMenubarMnemonic(pEvent->state, pEvent->keyval))
+            return true;
+
         GtkWidget* pFocusWindow = gtk_window_get_focus(GTK_WINDOW(pThis->m_pWindow));
         bFocusInAnotherGtkWidget = pFocusWindow && pFocusWindow != GTK_WIDGET(pThis->m_pFixedContainer);
         if (bFocusInAnotherGtkWidget)
