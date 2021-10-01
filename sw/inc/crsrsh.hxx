@@ -55,6 +55,7 @@ class SwRangeRedline;
 class SwBlockCursor;
 class SwPostItField;
 class SwTextField;
+class SwTextFootnote;
 
 namespace i18nutil {
     struct SearchOptions2;
@@ -811,6 +812,8 @@ public:
     const SwRangeRedline* SelNextRedline();
     const SwRangeRedline* SelPrevRedline();
     const SwRangeRedline* GotoRedline( SwRedlineTable::size_type nArrPos, bool bSelect );
+
+    bool GotoFootnoteAnchor(const SwTextFootnote& rTextFootnote);
 
     SAL_DLLPRIVATE SvxFrameDirection GetTextDirection( const Point* pPt = nullptr ) const;
     // is cursor or the point in/over a vertical formatted text?

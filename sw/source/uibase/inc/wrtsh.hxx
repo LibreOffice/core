@@ -114,7 +114,7 @@ private:
     SELECTFUNC  m_fnKillSel   = &SwWrtShell::Ignore;
 
 public:
-
+    using SwCursorShell::GotoFootnoteAnchor;
     using SwEditShell::Insert;
 
     tools::Long CallSetCursor(const Point* pPt, bool bProp) { return (this->*m_fnSetCursor)(pPt, bProp); }
@@ -486,7 +486,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     void GotoFormatField( const SwFormatField& rField );
     const SwRangeRedline* GotoRedline( SwRedlineTable::size_type nArrPos, bool bSelect);
     bool GotoDrawingObject(std::u16string_view rName);
-
+    void GotoFootnoteAnchor(const SwTextFootnote& rTextFootnote);
     void ChangeHeaderOrFooter(std::u16string_view rStyleName, bool bHeader, bool bOn, bool bShowWarning);
     virtual void SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow ) override;
 
