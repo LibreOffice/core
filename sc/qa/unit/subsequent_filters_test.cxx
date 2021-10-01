@@ -71,6 +71,7 @@
 #include <detfunc.hxx>
 #include <cellmergeoption.hxx>
 #include <undoblk.hxx>
+#include <sortparam.hxx>
 
 #include <orcusfilters.hxx>
 #include <filter.hxx>
@@ -217,6 +218,7 @@ public:
     void testTdf129681();
     void testTdf111974XLSM();
     void testEscapedUnicodeXLSX();
+    void testTdf144758_DBDataDefaultOrientation();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCondFormatOperatorsSameRangeXLSX);
@@ -320,6 +322,7 @@ public:
     CPPUNIT_TEST(testTdf129681);
     CPPUNIT_TEST(testTdf111974XLSM);
     CPPUNIT_TEST(testEscapedUnicodeXLSX);
+    CPPUNIT_TEST(testTdf144758_DBDataDefaultOrientation);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3119,6 +3122,24 @@ void ScFiltersTest::testEscapedUnicodeXLSX()
 
     // Without the fix, there would be "_x000D_" after every new-line char.
     CPPUNIT_ASSERT_EQUAL(OUString("Line 1\nLine 2\nLine 3\nLine 4"), rDoc.GetString(1, 1, 0));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf144758_DBDataDefaultOrientation()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf144758-dbdata-no-orientation.", FORMAT_FODS);
+    CPPUNIT_ASSERT(xDocSh);
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDBData* pAnonDBData = rDoc.GetAnonymousDBData(0);
+    CPPUNIT_ASSERT(pAnonDBData);
+
+    ScSortParam aSortParam;
+    pAnonDBData->GetSortParam(aSortParam);
+
+    // Without the fix, the default value for bByRow (in absence of 'table:orientation' attribute
+    // in 'table:database-range' element) was false
+    CPPUNIT_ASSERT(aSortParam.bByRow);
 
     xDocSh->DoClose();
 }
