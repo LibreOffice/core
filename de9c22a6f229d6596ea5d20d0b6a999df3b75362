@@ -16,6 +16,24 @@
       "message": "would be nice to have part of the commit message here as documentation",
       "revId": "de9c22a6f229d6596ea5d20d0b6a999df3b75362",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d77c47e_0f67462d",
+        "filename": "include/rtl/stringconcat.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-01T08:03:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "941c1c7b_291acc6b",
+      "revId": "de9c22a6f229d6596ea5d20d0b6a999df3b75362",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
