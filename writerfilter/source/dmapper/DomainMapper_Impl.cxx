@@ -4095,6 +4095,12 @@ static bool lcl_FindInCommand(
     return bRet;
 }
 
+static OUString lcl_trim(OUString& sValue)
+{
+    // it seems, all kind of quotation marks are allowed around index type identifiers
+    // TODO apply this on bookmarks, too, if needed
+    return sValue.trim().replaceAll("\"","").replaceAll(u"“", "").replaceAll(u"”", "");
+}
 
 void DomainMapper_Impl::GetCurrentLocale(lang::Locale& rLocale)
 {
@@ -5559,15 +5565,21 @@ void DomainMapper_Impl::handleIndex
     (const FieldContextPtr& pContext,
     const OUString & sTOCServiceName)
 {
+    // only UserIndex can handle user index defined by \f
+    // e.g. INDEX \f "user-index-id"
+    OUString sUserIndex;
+    if ( lcl_FindInCommand( pContext->GetCommand(), 'f', sUserIndex ) )
+        sUserIndex = lcl_trim(sUserIndex);
+
     // Create section before setting m_bStartTOC and m_bStartIndex: finishing paragraph
     // inside StartIndexSectionChecked could do the wrong thing otherwise
-    const auto xTOC = StartIndexSectionChecked(sTOCServiceName);
+    const auto xTOC = StartIndexSectionChecked( sUserIndex.isEmpty()
+            ? sTOCServiceName
+            : "com.sun.star.text.UserIndex");
 
     m_bStartTOC = true;
     m_bStartIndex = true;
     OUString sValue;
-    OUString sIndexEntryType = "I"; // Default value for field flag '\f' is 'I'.
-
     if (xTOC.is())
     {
         xTOC->setPropertyValue(getPropertyName( PROP_TITLE ), uno::makeAny(OUString()));
@@ -5580,11 +5592,9 @@ void DomainMapper_Impl::handleIndex
         {
             xTOC->setPropertyValue("UseAlphabeticalSeparators", uno::makeAny(true));
         }
-        if( lcl_FindInCommand( pContext->GetCommand(), 'f', sValue ))
+        if( !sUserIndex.isEmpty() )
         {
-            if(!sValue.isEmpty())
-                sIndexEntryType = sValue ;
-            xTOC->setPropertyValue(getPropertyName( PROP_INDEX_ENTRY_TYPE ), uno::makeAny(sIndexEntryType));
+            xTOC->setPropertyValue("UserIndexName", uno::makeAny(sUserIndex));
         }
     }
     pContext->SetTOC( xTOC );
@@ -6355,14 +6365,30 @@ void DomainMapper_Impl::CloseFieldCommand()
                     if( !m_xTextFactory.is() )
                         break;
 
+                    // only UserIndexMark can handle user index types defined by \f
+                    // e.g. XE "text" \f "user-index-id"
+                    OUString sUserIndex;
+                    OUString sFieldServiceName =
+                        lcl_FindInCommand( pContext->GetCommand(), 'f', sUserIndex )
+                            ? "com.sun.star.text.UserIndexMark"
+                            : OUString::createFromAscii(aIt->second.cFieldServiceName);
                     uno::Reference< beans::XPropertySet > xTC(
-                            m_xTextFactory->createInstance(
-                                    OUString::createFromAscii(aIt->second.cFieldServiceName)),
+                            m_xTextFactory->createInstance(sFieldServiceName),
                                     uno::UNO_QUERY_THROW);
+
                     if (!sFirstParam.isEmpty())
                     {
-                        xTC->setPropertyValue("PrimaryKey",
+                        xTC->setPropertyValue(sUserIndex.isEmpty()
+                                    ? OUString("PrimaryKey")
+                                    : OUString("AlternativeText"),
                                 uno::makeAny(sFirstParam));
+                    }
+
+                    sUserIndex = lcl_trim(sUserIndex);
+                    if (!sUserIndex.isEmpty())
+                    {
+                        xTC->setPropertyValue("UserIndexName",
+                                uno::makeAny(sUserIndex));
                     }
                     uno::Reference< text::XTextContent > xToInsert( xTC, uno::UNO_QUERY );
                     uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
