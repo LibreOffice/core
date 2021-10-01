@@ -464,6 +464,11 @@ public:
         fVal = DBL_MAX;
         aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_Automatic, 2, '.', true);
         CPPUNIT_ASSERT_EQUAL( OUString("1.80E+308"), aRes);
+
+        // Crashed after commit eae24a9488814e77254d175c11fc4a138c1dbd30
+        fVal = 123456.789;
+        aRes = rtl::math::doubleToUString(fVal, rtl_math_StringFormat_E, 2, '.', false);
+        CPPUNIT_ASSERT_EQUAL(OUString("1.23E+005"), aRes);
     }
 
     void test_approx() {
