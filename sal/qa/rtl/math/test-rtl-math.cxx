@@ -469,6 +469,18 @@ public:
         fVal = 123456.789;
         aRes = rtl::math::doubleToUString(fVal, rtl_math_StringFormat_E, 2, '.', false);
         CPPUNIT_ASSERT_EQUAL(OUString("1.23E+005"), aRes);
+
+        // Testing "after-treatment of up-rounding to the next decade" branch
+        // See void doubleToString in sal/rtl/math.cxx
+        // 1. Yet empty buffer
+        fVal = 9.9999999999999929;
+        aRes = rtl::math::doubleToUString(fVal, rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max, '.', true);
+        CPPUNIT_ASSERT_EQUAL(OUString("10"), aRes);
+
+        // 2. Buffer with some content
+        fVal = 0.99999999999999933;
+        aRes = rtl::math::doubleToUString(fVal, rtl_math_StringFormat_F, rtl_math_DecimalPlaces_Max, '.', true);
+        CPPUNIT_ASSERT_EQUAL(OUString("1"), aRes);
     }
 
     void test_approx() {
