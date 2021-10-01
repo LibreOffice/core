@@ -706,6 +706,14 @@ void SwWrtShell::GotoFormatField( const SwFormatField& rField ) {
         m_aNavigationMgr.addEntry(aPos);
 }
 
+void SwWrtShell::GotoFootnoteAnchor(const SwTextFootnote& rTextFootnote)
+{
+    SwPosition aPos = *GetCursor()->GetPoint();
+    bool bRet = SwCursorShell::GotoFootnoteAnchor(rTextFootnote);
+    if (bRet)
+        m_aNavigationMgr.addEntry(aPos);
+}
+
 const SwRangeRedline* SwWrtShell::GotoRedline( SwRedlineTable::size_type nArrPos, bool bSelect ) {
     SwPosition aPos = *GetCursor()->GetPoint();
     const SwRangeRedline *pRedline = SwCursorShell::GotoRedline(nArrPos, bSelect);
