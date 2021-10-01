@@ -631,13 +631,6 @@ SwXDocumentIndex::setPropertyValue(
            rTOXBase.SetCreate(nCreate);
         }
         break;
-        case WID_INDEX_ENTRY_TYPE:
-        {
-            rTOXBase.SetEntryTypeName(lcl_AnyToType<OUString>(rValue));
-            nCreate = SwTOXElement::IndexEntryType;
-            rTOXBase.SetCreate(nCreate);
-        }
-        break;
         case WID_CREATE_FROM_MARKS:
             lcl_AnyToBitMask(rValue, nCreate, SwTOXElement::Mark);
         break;
@@ -951,9 +944,6 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
             break;
             case WID_TOC_BOOKMARK  :
                aRet <<= pTOXBase->GetBookmarkName();
-            break;
-            case WID_INDEX_ENTRY_TYPE  :
-               aRet <<= pTOXBase->GetEntryTypeName();
             break;
             case WID_CREATE_FROM_MARKS:
                 lcl_BitMaskToAny(aRet, nCreate, SwTOXElement::Mark);
@@ -1504,7 +1494,6 @@ public:
     bool m_bMainEntry;
     sal_uInt16 m_nLevel;
     OUString m_aBookmarkName;
-    OUString m_aEntryTypeName;
     OUString m_sAltText;
     OUString m_sPrimaryKey;
     OUString m_sSecondaryKey;
@@ -2073,9 +2062,6 @@ SwXDocumentIndexMark::setPropertyValue(
             case WID_TOC_BOOKMARK :
                 aMark.SetBookmarkName(lcl_AnyToType<OUString>(rValue));
             break;
-            case WID_INDEX_ENTRY_TYPE :
-                aMark.SetEntryTypeName(lcl_AnyToType<OUString>(rValue));
-            break;
             case WID_PRIMARY_KEY  :
                 aMark.SetPrimaryKey(lcl_AnyToType<OUString>(rValue));
             break;
@@ -2130,11 +2116,6 @@ SwXDocumentIndexMark::setPropertyValue(
             case WID_TOC_BOOKMARK :
             {
                 m_pImpl->m_aBookmarkName = lcl_AnyToType<OUString>(rValue);
-            }
-            break;
-            case WID_INDEX_ENTRY_TYPE :
-            {
-                m_pImpl->m_aEntryTypeName = lcl_AnyToType<OUString>(rValue);
             }
             break;
             case WID_PRIMARY_KEY:
@@ -2207,9 +2188,6 @@ SwXDocumentIndexMark::getPropertyValue(const OUString& rPropertyName)
             case WID_TOC_BOOKMARK :
                 aRet <<= m_pImpl->m_pTOXMark->GetBookmarkName();
             break;
-            case WID_INDEX_ENTRY_TYPE :
-                aRet <<= m_pImpl->m_pTOXMark->GetEntryTypeName();
-            break;
             case WID_PRIMARY_KEY  :
                 aRet <<= m_pImpl->m_pTOXMark->GetPrimaryKey();
             break;
@@ -2252,9 +2230,6 @@ SwXDocumentIndexMark::getPropertyValue(const OUString& rPropertyName)
             break;
             case WID_TOC_BOOKMARK :
                 aRet <<= m_pImpl->m_aBookmarkName;
-            break;
-            case WID_INDEX_ENTRY_TYPE :
-                aRet <<= m_pImpl->m_aEntryTypeName;
             break;
             case WID_PRIMARY_KEY:
                 aRet <<= m_pImpl->m_sPrimaryKey;

@@ -1291,7 +1291,17 @@ void AttributeOutputBase::TOXMark( const SwTextNode& rNode, const SwTOXMark& rAt
     else
         sText = rAttr.GetAlternativeText();
 
-    switch ( rAttr.GetTOXType()->GetType() )
+    OUString sUserTypeName;
+    auto aType = rAttr.GetTOXType()->GetType();
+    // user index mark, it needs XE with \f
+    if ( TOX_USER == aType )
+    {
+        sUserTypeName = rAttr.GetTOXType()->GetTypeName();
+        if ( !sUserTypeName.isEmpty() )
+            aType = TOX_INDEX;
+    }
+
+    switch ( aType )
     {
         case TOX_INDEX:
             eType = ww::eXE;
@@ -1305,6 +1315,11 @@ void AttributeOutputBase::TOXMark( const SwTextNode& rNode, const SwTOXMark& rAt
                 sText = rAttr.GetPrimaryKey() + ":" + sText;
             }
             sText = " XE \"" + sText + "\" ";
+
+            if (!sUserTypeName.isEmpty())
+            {
+                sText += "\\f \"" + sUserTypeName + "\" ";
+            }
             break;
 
         case TOX_USER:

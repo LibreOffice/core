@@ -2224,7 +2224,16 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
         OUString sStr = pTOX ->GetMSTOCExpression();
         if ( sStr.isEmpty() )
         {
-            switch (pTOX->GetType())
+            OUString sUserTypeName;
+            auto aType = pTOX->GetType();
+            // user index, it needs INDEX with \f
+            if ( TOX_USER == aType )
+            {
+                 sUserTypeName = pTOX->GetTOXType()->GetTypeName();
+                 if ( !sUserTypeName.isEmpty() )
+                      aType = TOX_INDEX;
+            }
+            switch (aType)
             {
             case TOX_INDEX:
                 eCode = ww::eINDEX;
@@ -2256,14 +2265,9 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                 if (SwTOIOptions::AlphaDelimiter & pTOX->GetOptions())
                     sStr += "\\h \"A\" ";
 
-                if(SwTOXElement::IndexEntryType & pTOX->GetCreateType())
+                if (!sUserTypeName.isEmpty())
                 {
-                    sStr += "\\f ";
-                    const OUString& sName = pTOX->GetEntryTypeName();
-                    if(!sName.isEmpty())
-                    {
-                       sStr += sName + sEntryEnd;
-                    }
+                    sStr += "\\f \"" + sUserTypeName + "\"";
                 }
 
                 if (!pTOX->GetTOXForm().IsCommaSeparated())
