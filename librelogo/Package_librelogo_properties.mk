@@ -10,7 +10,7 @@
 $(eval $(call gb_Package_Package,librelogo_properties,$(call gb_CustomTarget_get_workdir,librelogo/locproperties)))
 
 $(eval $(call gb_Package_add_files,librelogo_properties,$(LIBO_SHARE_FOLDER)/Scripts/python/LibreLogo,\
-	$(foreach lang,$(subst -,_,$(gb_TRANS_LANGS)),LibreLogo_$(lang).properties) \
+	$(foreach lang,$(subst -,_,$(librelogo_LANGS)),LibreLogo_$(lang).properties) \
 ))
 
 # vim:set noet sw=4 ts=4:
