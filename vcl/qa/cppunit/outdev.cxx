@@ -80,6 +80,7 @@ public:
     void testDrawChord();
     void testDrawCheckered();
     void testDrawBorder();
+    void testDrawWaveLine();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
     CPPUNIT_TEST(testVirtualDevice);
@@ -129,6 +130,7 @@ public:
     CPPUNIT_TEST(testDrawChord);
     CPPUNIT_TEST(testDrawCheckered);
     CPPUNIT_TEST(testDrawBorder);
+    CPPUNIT_TEST(testDrawWaveLine);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1764,6 +1766,20 @@ void VclOutdevTest::testDrawBorder()
     pRectAction = dynamic_cast<MetaRectAction*>(pAction);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Rectangle wrong", tools::Rectangle(Point(0, 0), Size(49, 59)),
                                  pRectAction->GetRect());
+}
+
+void VclOutdevTest::testDrawWaveLine()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    pVDev->SetOutputSizePixel(Size(100, 100));
+    pVDev->DrawWaveLine(Point(0, 0), Point(50, 0));
+
+    MetaAction* pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a bitmap action", MetaActionType::BMPEXSCALEPART,
+                                 pAction->GetType());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclOutdevTest);
