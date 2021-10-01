@@ -10,7 +10,7 @@
 $(eval $(call gb_Package_Package,wizards_properties,$(call gb_CustomTarget_get_workdir,wizards/locproperties)))
 
 $(eval $(call gb_Package_add_files,wizards_properties,$(LIBO_SHARE_FOLDER)/wizards,\
-	$(foreach lang,$(subst -,_,$(gb_TRANS_LANGS)),resources_$(lang).properties) \
+	$(foreach lang,$(subst -,_,$(wizards_LANGS)),resources_$(lang).properties) \
 ))
 
 # vim:set noet sw=4 ts=4:
