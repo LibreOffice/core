@@ -580,22 +580,18 @@ void doubleToString(typename T::String ** pResult,
 
                 if (nDigit >= 10)
                 {   // after-treatment of up-rounding to the next decade
+                    // Assert that no one changed the logic we rely on.
+                    assert(!bSign || pBuf[0] == '-');
                     sal_Int32 sLen = p - pBuf - 1;
                     if (sLen == -1 || (sLen == 0 && bSign))
                     {
-                        // Assert that no one changed the logic we rely on.
-                        assert(!bSign || pBuf[0] == '-');
-                        p = pBuf;
-                        if (bSign)
-                            ++p;
+                        *(p - 1) = '1';
                         if (eFormat == rtl_math_StringFormat_F)
                         {
-                            *p++ = '1';
                             *p++ = '0';
                         }
                         else
                         {
-                            *p++ = '1';
                             *p++ = cDecSeparator;
                             *p++ = '0';
                             nExp++;
@@ -604,22 +600,17 @@ void doubleToString(typename T::String ** pResult,
                     }
                     else
                     {
-                        for (sal_Int32 j = sLen; j >= 0; j--)
+                        // Do not touch leading minus sign put earlier.
+                        for (sal_Int32 j = sLen; j >= (bSign ? 1 : 0); j--)
                         {
                             typename T::Char* p2 = &pBuf[j];
                             typename T::Char cS = *p2;
-                            if (j == 0 && bSign)
-                            {
-                                // Do not touch leading minus sign put earlier.
-                                assert(cS == '-');
-                                break;  // for, this is the last character backwards.
-                            }
                             if (cS != cDecSeparator)
                             {
                                 if (cS != '9')
                                 {
                                     *p2 = ++cS;
-                                    j = -1;                 // break loop
+                                    break;
                                 }
                                 else
                                 {
@@ -629,13 +620,12 @@ void doubleToString(typename T::String ** pResult,
                                         if (eFormat == rtl_math_StringFormat_F)
                                         {   // insert '1'
                                             std::memmove(p2 + 1, p2, (p++ - p2) * sizeof(*p));
-                                            *p2 = '1';
                                         }
                                         else
                                         {
-                                            *p2 = '1';
                                             nExp++;
                                         }
+                                        *p2 = '1';
                                     }
                                 }
                             }
