@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f683ecc4_5e1bd5c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-10-01T13:10:09Z",
+      "side": 1,
+      "message": "I have updated the commit message to more explicitly state that this will still occur in title case.",
+      "parentUuid": "9e6df65f_564030d6",
+      "revId": "c37aa811308234924a31c2fccfe0141e9b45c707",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "59ad538e_d7c24a5d",
@@ -48,6 +66,30 @@
       "writtenOn": "2021-09-30T12:01:19Z",
       "side": 1,
       "message": "Title case might have expanded the selection here.",
+      "range": {
+        "startLine": 2747,
+        "startChar": 12,
+        "endLine": 2747,
+        "endChar": 54
+      },
+      "revId": "c37aa811308234924a31c2fccfe0141e9b45c707",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7075a631_c506ba1f",
+        "filename": "editeng/source/editeng/impedit4.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2747,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-10-01T13:10:09Z",
+      "side": 1,
+      "message": "Consider that the original bug report was written about sentence case only. Changing the behavior of title case could be seen as expanding the scope of that original report. I have filed tdf#144851 to track this behavior of title case.",
+      "parentUuid": "59ad538e_d7c24a5d",
       "range": {
         "startLine": 2747,
         "startChar": 12,
