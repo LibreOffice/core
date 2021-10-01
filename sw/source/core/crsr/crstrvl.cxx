@@ -831,6 +831,24 @@ bool SwCursorShell::MoveFieldType(
     return bRet;
 }
 
+bool SwCursorShell::GotoFootnoteAnchor(const SwTextFootnote& rTextFootnote)
+{
+    bool bRet = false;
+    SwCursor* pCursor = getShellCursor(true);
+
+    CurrShell aCurr(this);
+    SwCallLink aLk(*this); // watch Cursor-Moves
+    SwCursorSaveState aSaveState(*pCursor);
+
+    pCursor->GetPoint()->nNode = rTextFootnote.GetTextNode();
+    pCursor->GetPoint()->nContent.Assign(const_cast<SwTextNode*>(&rTextFootnote.GetTextNode()),
+                                         rTextFootnote.GetStart());
+    bRet = !pCursor->IsSelOvr();
+    if (bRet)
+        UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
+    return bRet;
+}
+
 bool SwCursorShell::GotoFormatField( const SwFormatField& rField )
 {
     bool bRet = false;
