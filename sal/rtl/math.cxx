@@ -606,7 +606,8 @@ void doubleToString(typename T::String ** pResult,
                     {
                         for (sal_Int32 j = sLen; j >= 0; j--)
                         {
-                            typename T::Char cS = pBuf[j];
+                            typename T::Char* p2 = &pBuf[j];
+                            typename T::Char cS = *p2;
                             if (j == 0 && bSign)
                             {
                                 // Do not touch leading minus sign put earlier.
@@ -617,22 +618,22 @@ void doubleToString(typename T::String ** pResult,
                             {
                                 if (cS != '9')
                                 {
-                                    pBuf[j] = ++cS;
+                                    *p2 = ++cS;
                                     j = -1;                 // break loop
                                 }
                                 else
                                 {
-                                    pBuf[j] = '0';
+                                    *p2 = '0';
                                     if (j == 0 || (j == 1 && bSign))
                                     {
                                         if (eFormat == rtl_math_StringFormat_F)
                                         {   // insert '1'
-                                            std::memmove(pBuf + 1, pBuf, (p++ - pBuf) * sizeof(*p));
-                                            pBuf[0] = '1';
+                                            std::memmove(p2 + 1, p2, (p++ - p2) * sizeof(*p));
+                                            *p2 = '1';
                                         }
                                         else
                                         {
-                                            pBuf[j] = '1';
+                                            *p2 = '1';
                                             nExp++;
                                         }
                                     }
