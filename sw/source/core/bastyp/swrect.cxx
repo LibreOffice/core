@@ -34,6 +34,13 @@ SwRect::SwRect( const tools::Rectangle &rRect ) :
 
 SwRect& SwRect::Union( const SwRect& rRect )
 {
+    if( rRect.IsEmpty())
+        return *this;
+    if( IsEmpty())
+    {
+        *this = rRect;
+        return *this;
+    }
     if ( Top() > rRect.Top() )
         Top( rRect.Top() );
     if ( Left() > rRect.Left() )
