@@ -627,13 +627,7 @@ void doubleToString(typename T::String ** pResult,
                                     {
                                         if (eFormat == rtl_math_StringFormat_F)
                                         {   // insert '1'
-                                            typename T::Char * px = p++;
-                                            while (pBuf < px)
-                                            {
-                                                *px = *(px-1);
-                                                px--;
-                                            }
-
+                                            std::memmove(pBuf + 1, pBuf, (p++ - pBuf) * sizeof(*p));
                                             pBuf[0] = '1';
                                         }
                                         else
