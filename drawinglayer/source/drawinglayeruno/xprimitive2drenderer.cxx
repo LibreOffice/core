@@ -134,11 +134,11 @@ namespace drawinglayer::unorenderer
                         new primitive2d::TransformPrimitive2D(
                             aEmbedding,
                             comphelper::sequenceToContainer<primitive2d::Primitive2DContainer>(aPrimitive2DSequence)));
-                    const primitive2d::Primitive2DContainer xEmbedSeq { xEmbedRef };
+                    primitive2d::Primitive2DContainer xEmbedSeq { xEmbedRef };
 
                     BitmapEx aBitmapEx(
                         convertToBitmapEx(
-                            xEmbedSeq,
+                            std::move(xEmbedSeq),
                             aViewInformation2D,
                             nDiscreteWidth,
                             nDiscreteHeight,

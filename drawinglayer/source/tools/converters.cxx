@@ -36,7 +36,7 @@ namespace drawinglayer
 {
 
     BitmapEx convertToBitmapEx(
-        const drawinglayer::primitive2d::Primitive2DContainer& rSeq,
+        drawinglayer::primitive2d::Primitive2DContainer&& rSeq,
         const geometry::ViewInformation2D& rViewInformation2D,
         sal_uInt32 nDiscreteWidth,
         sal_uInt32 nDiscreteHeight,
@@ -61,12 +61,12 @@ namespace drawinglayer
                 const drawinglayer::primitive2d::Primitive2DReference aEmbed(
                     new drawinglayer::primitive2d::TransformPrimitive2D(
                         basegfx::utils::createScaleB2DHomMatrix(fReduceFactor, fReduceFactor),
-                        primitive2d::Primitive2DContainer(rSeq)));
+                        std::move(rSeq)));
 
                 aSequence = drawinglayer::primitive2d::Primitive2DContainer { aEmbed };
             }
             else
-                aSequence = rSeq;
+                aSequence = std::move(rSeq);
 
             const Point aEmptyPoint;
             const Size aSizePixel(nDiscreteWidth, nDiscreteHeight);

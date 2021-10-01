@@ -25,7 +25,7 @@
 namespace drawinglayer
 {
 BitmapEx DRAWINGLAYER_DLLPUBLIC
-convertToBitmapEx(const drawinglayer::primitive2d::Primitive2DContainer& rSeq,
+convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSeq,
                   const geometry::ViewInformation2D& rViewInformation2D, sal_uInt32 nDiscreteWidth,
                   sal_uInt32 nDiscreteHeight, sal_uInt32 nMaxSquarePixels);
 
