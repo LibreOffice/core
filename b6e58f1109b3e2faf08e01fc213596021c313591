@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6b89ea7_e903c97b",
+        "filename": "sw/inc/hintids.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-10-01T06:49:04Z",
+      "side": 1,
+      "message": "TLBR? Please, this is new code - there is no need for abbreviations.",
+      "range": {
+        "startLine": 342,
+        "startChar": 36,
+        "endLine": 342,
+        "endChar": 48
+      },
+      "revId": "b6e58f1109b3e2faf08e01fc213596021c313591",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
