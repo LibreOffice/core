@@ -1027,7 +1027,7 @@ void DbLimitedLengthField::implSetEffectiveMaxTextLen(sal_Int32 nMaxLen)
 
 DbTextField::DbTextField(DbGridColumn& _rColumn)
             :DbLimitedLengthField(_rColumn)
-            ,m_bIsSimpleEdit( true )
+            ,m_bIsMultiLineEdit(false)
 {
 }
 
@@ -1060,7 +1060,7 @@ void DbTextField::Init(BrowserDataWin& rParent, const Reference< XRowSet >& xCur
                              "caught an exception while determining the multi-line capabilities!");
     }
 
-    m_bIsSimpleEdit = !bIsMultiLine;
+    m_bIsMultiLineEdit = bIsMultiLine;
     if ( bIsMultiLine )
     {
         auto xEditControl = VclPtr<MultiLineTextCell>::Create(&rParent);
@@ -3562,7 +3562,7 @@ void FmXDataCell::UpdateFromColumn()
 
 FmXTextCell::FmXTextCell( DbGridColumn* pColumn, std::unique_ptr<DbCellControl> pControl )
     :FmXDataCell( pColumn, std::move(pControl) )
-    ,m_bFastPaint( true )
+    ,m_bIsMultiLineText(false)
 {
 }
 
@@ -3572,13 +3572,7 @@ void FmXTextCell::PaintFieldToCell(OutputDevice& rDev,
                         const Reference< css::sdb::XColumn >& _rxField,
                         const Reference< XNumberFormatter >& xFormatter)
 {
-    if ( !m_bFastPaint )
-    {
-        FmXDataCell::PaintFieldToCell( rDev, rRect, _rxField, xFormatter );
-        return;
-    }
-
-    DrawTextFlags nStyle = DrawTextFlags::Clip | DrawTextFlags::VCenter;
+    DrawTextFlags nStyle = DrawTextFlags::Clip;
     if ( ( rDev.GetOutDevType() == OUTDEV_WINDOW ) && !rDev.GetOwnerWindow()->IsEnabled() )
         nStyle |= DrawTextFlags::Disable;
 
@@ -3593,6 +3587,11 @@ void FmXTextCell::PaintFieldToCell(OutputDevice& rDev,
         default:
             nStyle |= DrawTextFlags::Left;
     }
+
+    if (!m_bIsMultiLineText)
+        nStyle |= DrawTextFlags::VCenter;
+    else
+        nStyle |= DrawTextFlags::Top | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak;
 
     try
     {
@@ -3627,8 +3626,7 @@ FmXEditCell::FmXEditCell( DbGridColumn* pColumn, std::unique_ptr<DbCellControl> 
     {
 
         m_pEditImplementation = pTextField->GetEditImplementation();
-        if ( !pTextField->IsSimpleEdit() )
-            m_bFastPaint = false;
+        m_bIsMultiLineText = pTextField->IsMultiLineEdit();
     }
     else
     {
