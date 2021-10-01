@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7585e185_69e3ee49",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-10-01T10:19:44Z",
+      "side": 1,
+      "message": "I\u0027m starting tests around the draw functions I am implementing as RenderContext2. Mostly checking metafile actions. ",
+      "revId": "3dcc912bd2c17c8b367cdf7c7fb6e930b6bbb434",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
