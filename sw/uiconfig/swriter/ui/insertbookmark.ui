@@ -87,7 +87,7 @@
                 <property name="halign">end</property>
                 <property name="valign">start</property>
                 <property name="hexpand">True</property>
-                <property name="label" context="insertbookmark|lbForbiddenChars">Forbidden characters:</property>
+                <property name="label" translatable="no" context="insertbookmark|lbForbiddenChars">Forbidden characters:</property>
                 <property name="single_line_mode">True</property>
               </object>
               <packing>
