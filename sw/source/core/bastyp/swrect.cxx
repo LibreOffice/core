@@ -32,12 +32,6 @@ SwRect::SwRect( const tools::Rectangle &rRect ) :
     m_Size.setHeight(rRect.IsHeightEmpty() ? 0 : rRect.Bottom() - rRect.Top()  + 1);
 }
 
-Point SwRect::Center() const
-{
-    return Point( Left() + Width()  / 2,
-                  Top()  + Height() / 2 );
-}
-
 SwRect& SwRect::Union( const SwRect& rRect )
 {
     if ( Top() > rRect.Top() )
@@ -88,44 +82,6 @@ SwRect& SwRect::Intersection_( const SwRect& rOther )
     *this = SwRect( left, top, right - left, bottom - top );
 
     return *this;
-}
-
-bool SwRect::Contains( const SwRect& rRect ) const
-{
-    const tools::Long nRight  = Right();
-    const tools::Long nBottom = Bottom();
-    const tools::Long nrRight = rRect.Right();
-    const tools::Long nrBottom= rRect.Bottom();
-    return (Left() <= rRect.Left()) && (rRect.Left()<= nRight)  &&
-           (Left() <= nrRight)      && (nrRight     <= nRight)  &&
-           (Top()  <= rRect.Top())  && (rRect.Top() <= nBottom) &&
-           (Top()  <= nrBottom)     && (nrBottom    <= nBottom);
-}
-
-bool SwRect::Contains( const Point& rPoint ) const
-{
-    return (Left()  <= rPoint.X()) &&
-           (Top()   <= rPoint.Y()) &&
-           (Right() >= rPoint.X()) &&
-           (Bottom()>= rPoint.Y());
-}
-
-// mouse moving of table borders
-bool SwRect::IsNear( const Point& rPoint, tools::Long nTolerance ) const
-{
-    bool bIsNearby = (((Left()   - nTolerance) <= rPoint.X()) &&
-                      ((Top()    - nTolerance) <= rPoint.Y()) &&
-                      ((Right()  + nTolerance) >= rPoint.X()) &&
-                      ((Bottom() + nTolerance) >= rPoint.Y()));
-    return Contains(rPoint) || bIsNearby;
-}
-
-bool SwRect::Overlaps( const SwRect& rRect ) const
-{
-    return (Top()   <= rRect.Bottom()) &&
-           (Left()  <= rRect.Right())  &&
-           (Right() >= rRect.Left())   &&
-           (Bottom()>= rRect.Top());
 }
 
 void SwRect::Justify()

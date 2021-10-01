@@ -315,6 +315,51 @@ inline SwRect::SwRect( tools::Long X, tools::Long Y, tools::Long W, tools::Long 
 {
 }
 
+inline Point SwRect::Center() const
+{
+    return Point( Left() + Width()  / 2,
+                  Top()  + Height() / 2 );
+}
+
+inline bool SwRect::Contains( const SwRect& rRect ) const
+{
+    const tools::Long nRight  = Right();
+    const tools::Long nBottom = Bottom();
+    const tools::Long nrRight = rRect.Right();
+    const tools::Long nrBottom= rRect.Bottom();
+    return (Left() <= rRect.Left()) && (rRect.Left()<= nRight)  &&
+           (Left() <= nrRight)      && (nrRight     <= nRight)  &&
+           (Top()  <= rRect.Top())  && (rRect.Top() <= nBottom) &&
+           (Top()  <= nrBottom)     && (nrBottom    <= nBottom);
+}
+
+inline bool SwRect::Contains( const Point& rPoint ) const
+{
+    return (Left()  <= rPoint.X()) &&
+           (Top()   <= rPoint.Y()) &&
+           (Right() >= rPoint.X()) &&
+           (Bottom()>= rPoint.Y());
+}
+
+// mouse moving of table borders
+inline bool SwRect::IsNear( const Point& rPoint, tools::Long nTolerance ) const
+{
+    bool bIsNearby = (((Left()   - nTolerance) <= rPoint.X()) &&
+                      ((Top()    - nTolerance) <= rPoint.Y()) &&
+                      ((Right()  + nTolerance) >= rPoint.X()) &&
+                      ((Bottom() + nTolerance) >= rPoint.Y()));
+    return Contains(rPoint) || bIsNearby;
+}
+
+inline bool SwRect::Overlaps( const SwRect& rRect ) const
+{
+    return (Top()   <= rRect.Bottom()) &&
+           (Left()  <= rRect.Right())  &&
+           (Right() >= rRect.Left())   &&
+           (Bottom()>= rRect.Top());
+}
+
+
 template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(
     std::basic_ostream<charT, traits> & stream, const SwRect& rectangle )
