@@ -121,6 +121,7 @@ public:
     GtkSalMenu*                 GetTopLevel();
     void                        SetNeedsUpdate();
 
+    GtkWidget*                  GetMenuBarWidget() const { return mpMenuBarWidget; }
     GtkWidget*                  GetMenuBarContainerWidget() const { return mpMenuBarContainerWidget; }
 
     void CreateMenuBarWidget();
