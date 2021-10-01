@@ -33,6 +33,23 @@
       "message": "I\u0027m not sure what process decides whether a toolbar dropdown menu should gain an entry. Is adding this one (which is usually only available through the major file name) useful as a more-discoverable shortcut? [see my earlier comment where I add some doubt about that]",
       "revId": "5aba380d9a133da6b8db332f3393e2fa102f4f99",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e180a056_c9ec1f0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-10-01T17:55:25Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "5aba380d9a133da6b8db332f3393e2fa102f4f99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
