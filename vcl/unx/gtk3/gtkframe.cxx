@@ -3835,6 +3835,18 @@ gboolean GtkSalFrame::signalUnmap(GtkWidget*, GdkEvent*, gpointer frame)
 #endif
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
+
+static bool key_forward(GdkEventKey* pEvent, GtkWindow* pDest)
+{
+    gpointer pClass = g_type_class_ref(GTK_TYPE_WINDOW);
+    GtkWidgetClass* pWindowClass = GTK_WIDGET_CLASS(pClass);
+    bool bHandled = pEvent->type == GDK_KEY_PRESS
+        ? pWindowClass->key_press_event(GTK_WIDGET(pDest), pEvent)
+        : pWindowClass->key_release_event(GTK_WIDGET(pDest), pEvent);
+    g_type_class_unref(pClass);
+    return bHandled;
+}
+
 gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer frame)
 {
     UpdateLastInputEventTime(pEvent->time);
@@ -3853,15 +3865,10 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
         {
             if (!gtk_widget_get_realized(pFocusWindow))
                 return true;
-            gpointer pClass = g_type_class_ref(GTK_TYPE_WINDOW);
-            GtkWidgetClass* pWindowClass = GTK_WIDGET_CLASS(pClass);
+
             // if the focus is not in our main widget, see if there is a handler
             // for this key stroke in GtkWindow first
-            bool bHandled = pEvent->type == GDK_KEY_PRESS
-                ? pWindowClass->key_press_event(pThis->m_pWindow, pEvent)
-                : pWindowClass->key_release_event(pThis->m_pWindow, pEvent);
-            g_type_class_unref(pClass);
-            if (bHandled)
+            if (key_forward(pEvent, GTK_WINDOW(pThis->m_pWindow)))
                 return true;
 
             // Is focus inside an InterimItemWindow? In which case find that
