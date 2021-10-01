@@ -1158,11 +1158,8 @@ void SmXMLExport::ExportFont(const SmNode* pNode, int nLevel)
         case TDVIPSNAMESCOL:
         case TICONICCOL:
         {
-            OUStringBuffer sStrBuf(7);
-            sStrBuf.append('#');
             nc = pNode->GetToken().cMathChar.toUInt32(16);
-            sStrBuf.append(Color(ColorTransparency, nc).AsRGBHEXString());
-            OUString ssStr(sStrBuf.makeStringAndClear());
+            OUString ssStr("#" + Color(ColorTransparency, nc).AsRGBHEXString());
             AddAttribute(XML_NAMESPACE_MATH, XML_MATHCOLOR, ssStr);
         }
         break;

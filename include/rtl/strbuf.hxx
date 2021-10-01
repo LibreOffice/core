@@ -137,7 +137,7 @@ public:
         @param   value   the initial string value.
      */
 #if defined LIBO_INTERNAL_ONLY
-    explicit OStringBuffer(std::string_view sv)
+    OStringBuffer(std::string_view sv)
         : pData(nullptr)
         , nCapacity( sv.length() + 16 )
     {
@@ -146,13 +146,14 @@ public:
         }
         rtl_stringbuffer_newFromStr_WithLength( &pData, sv.data(), sv.length() );
     }
-#endif
+#else
     OStringBuffer(const OString& value)
         : pData(NULL)
         , nCapacity( value.getLength() + 16 )
     {
         rtl_stringbuffer_newFromStr_WithLength( &pData, value.getStr(), value.getLength() );
     }
+#endif
 
     /**
         @overload
@@ -280,7 +281,7 @@ public:
         pData->length = n;
         return *this;
     }
-#endif
+#else
     OStringBuffer & operator =(OString const & string) {
         sal_Int32 n = string.getLength();
         if (n >= nCapacity) {
@@ -290,6 +291,7 @@ public:
         pData->length = n;
         return *this;
     }
+#endif
 
     /** Assign from a string literal.
 
@@ -513,6 +515,7 @@ public:
         return OString(pData->buffer, pData->length);
     }
 
+#if !defined LIBO_INTERNAL_ONLY
     /**
         Appends the string to this string buffer.
 
@@ -527,6 +530,7 @@ public:
     {
         return append( str.getStr(), str.getLength() );
     }
+#endif
 
     /**
         Appends the string representation of the <code>char</code> array
@@ -799,11 +803,12 @@ public:
     {
         return insert( offset, str.data(), str.length() );
     }
-#endif
+#else
     OStringBuffer & insert(sal_Int32 offset, const OString & str)
     {
         return insert( offset, str.getStr(), str.getLength() );
     }
+#endif
 
     /**
         Inserts the string representation of the <code>char</code> array

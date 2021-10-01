@@ -2641,7 +2641,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
         {
             // to notify to the SVGActionWriter::ImplWriteText method
             // that we are dealing with a placeholder shape
-            OUStringBuffer aRepresentation = sPlaceholderTag;
+            OUStringBuffer aRepresentation(sPlaceholderTag);
 
             if( !mCreateOjectsCurrentMasterPage.is() )
             {

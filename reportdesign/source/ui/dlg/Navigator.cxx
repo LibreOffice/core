@@ -75,7 +75,7 @@ static OUString lcl_getName(const uno::Reference< beans::XPropertySet>& _xElemen
     OSL_ENSURE(_xElement.is(),"Found report element which is NULL!");
     OUString sTempName;
     _xElement->getPropertyValue(PROPERTY_NAME) >>= sTempName;
-    OUStringBuffer sName = sTempName;
+    OUStringBuffer sName(sTempName);
     uno::Reference< report::XFixedText> xFixedText(_xElement,uno::UNO_QUERY);
     uno::Reference< report::XReportControlModel> xReportModel(_xElement,uno::UNO_QUERY);
     if ( xFixedText.is() )

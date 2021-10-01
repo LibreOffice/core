@@ -4276,7 +4276,7 @@ void XclImpSheetDrawing::ReadNote3( XclImpStream& rStrm )
         return;
 
     sal_uInt16 nPartLen = ::std::min( nTotalLen, static_cast< sal_uInt16 >( rStrm.GetRecLeft() ) );
-    OUStringBuffer aNoteText = rStrm.ReadRawByteString( nPartLen );
+    OUStringBuffer aNoteText(rStrm.ReadRawByteString( nPartLen ));
     nTotalLen = nTotalLen - nPartLen;
     while (true)
     {

@@ -307,7 +307,7 @@ void OSQLParseNode::parseNodeToStr(OUString& rString,
     if ( !_rxConnection.is() )
         return;
 
-    OUStringBuffer sBuffer = rString;
+    OUStringBuffer sBuffer(rString);
     try
     {
         OSQLParseNode::impl_parseNodeToString_throw( sBuffer,

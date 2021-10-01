@@ -1830,7 +1830,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                             if ( nRepeatCount > 1 )
                             {
                                 OUString aCellStr = aVars.GetString();
-                                OUStringBuffer aRepeated = aCellStr;
+                                OUStringBuffer aRepeated(aCellStr);
                                 for ( tools::Long nRepeat = 1; nRepeat < nRepeatCount; nRepeat++ )
                                     aRepeated.append(aCellStr);
                                 aVars.SetAutoText( aRepeated.makeStringAndClear() );
@@ -2998,7 +2998,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
                     tools::Long nRepeatCount = nAvailable / nRepeatSize;
                     if ( nRepeatCount > 1 )
                     {
-                        OUStringBuffer aRepeated = aCellStr;
+                        OUStringBuffer aRepeated(aCellStr);
                         for ( tools::Long nRepeat = 1; nRepeat < nRepeatCount; nRepeat++ )
                             aRepeated.append(aCellStr);
 
@@ -3376,7 +3376,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
                     const tools::Long nRepeatCount = nAvailable / nRepeatSize;
                     if ( nRepeatCount > 1 )
                     {
-                        OUStringBuffer aRepeated = aCellStr;
+                        OUStringBuffer aRepeated(aCellStr);
                         for ( tools::Long nRepeat = 1; nRepeat < nRepeatCount; nRepeat++ )
                             aRepeated.append(aCellStr);
 
@@ -3620,7 +3620,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
                     const tools::Long nRepeatCount = nAvailable / nRepeatSize;
                     if ( nRepeatCount > 1 )
                     {
-                        OUStringBuffer aRepeated = aCellStr;
+                        OUStringBuffer aRepeated(aCellStr);
                         for ( tools::Long nRepeat = 1; nRepeat < nRepeatCount; nRepeat++ )
                             aRepeated.append(aCellStr);
 

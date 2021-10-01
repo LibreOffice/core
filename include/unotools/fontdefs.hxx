@@ -53,7 +53,7 @@ public:
     sal_Unicode         (*mpCvtFunc)( sal_Unicode );
     sal_Unicode         RecodeChar( sal_Unicode c ) const;
     void                RecodeString( OUString& rStra, sal_Int32 nIndex, sal_Int32 nLen ) const;
-    static const ConvertChar* GetRecodeData( const OUString& rOrgFontName, const OUString& rMapFontName );
+    static const ConvertChar* GetRecodeData( std::u16string_view rOrgFontName, std::u16string_view rMapFontName );
 };
 
 
@@ -85,7 +85,7 @@ enum class DefaultFontType
 };
 
 UNOTOOLS_DLLPUBLIC OUString GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex );
-UNOTOOLS_DLLPUBLIC OUString GetEnglishSearchFontName( const OUString& rName );
+UNOTOOLS_DLLPUBLIC OUString GetEnglishSearchFontName( std::u16string_view rName );
 
 /** Strip any "script font suffix" from the font name
 

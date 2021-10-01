@@ -840,19 +840,16 @@ static void unoenv_computeObjectIdentifier(
         return;
 
     (*pUnoI->release)( pUnoI );
-    // interface
-    OUStringBuffer oid( 64 );
-    oid.append( reinterpret_cast< sal_Int64 >(pUnoI), 16 );
-    oid.append( ';' );
-    // environment[context]
-    oid.append( pEnv->aBase.pTypeName );
-    oid.append( '[' );
-    oid.append( reinterpret_cast< sal_Int64 >(
+    OUString aStr(
+        // interface
+        OUString::number( reinterpret_cast< sal_Int64 >(pUnoI), 16 ) + ";"
+        // environment[context]
+        + OUString::unacquired(&pEnv->aBase.pTypeName) + "["
+        + OUString::number( reinterpret_cast< sal_Int64 >(
                     reinterpret_cast<
-                    uno_Environment * >(pEnv)->pContext ), 16 );
-    // process;good guid
-    oid.append( unoenv_getStaticOIdPart() );
-    OUString aStr( oid.makeStringAndClear() );
+                    uno_Environment * >(pEnv)->pContext ), 16 )
+        // process;good guid
+        + unoenv_getStaticOIdPart() );
     *ppOId = aStr.pData;
     ::rtl_uString_acquire( *ppOId );
 }

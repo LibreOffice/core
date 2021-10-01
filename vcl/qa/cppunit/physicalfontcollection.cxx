@@ -68,12 +68,12 @@ void VclPhysicalFontCollectionTest::testShouldFindFontFamily()
 {
     // note: you must normalize the search family name (first parameter of PhysicalFontFamily constructor)
     vcl::font::PhysicalFontCollection aFontCollection;
-    aFontCollection.FindOrCreateFontFamily(GetEnglishSearchFontName("Test Font Family Name"));
+    aFontCollection.FindOrCreateFontFamily(GetEnglishSearchFontName(u"Test Font Family Name"));
 
     vcl::font::PhysicalFontFamily* pFontFamily
-        = aFontCollection.FindFontFamily("Test Font Family Name");
+        = aFontCollection.FindFontFamily(u"Test Font Family Name");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Font family name correct",
-                                 GetEnglishSearchFontName("Test Font Family Name"),
+                                 GetEnglishSearchFontName(u"Test Font Family Name"),
                                  pFontFamily->GetSearchName());
 }
 
@@ -81,25 +81,25 @@ void VclPhysicalFontCollectionTest::testShouldNotFindFontFamily()
 {
     // note: you must normalize the search family name (first parameter of PhysicalFontFamily constructor)
     vcl::font::PhysicalFontCollection aFontCollection;
-    aFontCollection.FindOrCreateFontFamily(GetEnglishSearchFontName("Test Font Family Name"));
+    aFontCollection.FindOrCreateFontFamily(GetEnglishSearchFontName(u"Test Font Family Name"));
 
-    CPPUNIT_ASSERT(!aFontCollection.FindFontFamily("blah"));
+    CPPUNIT_ASSERT(!aFontCollection.FindFontFamily(u"blah"));
 }
 
 void VclPhysicalFontCollectionTest::testShouldFindFontFamilyByTokenNames()
 {
     // note: you must normalize the search family name (first parameter of PhysicalFontFamily constructor)
     vcl::font::PhysicalFontCollection aFontCollection;
-    aFontCollection.FindOrCreateFontFamily(GetEnglishSearchFontName("Test Font Family Name"));
+    aFontCollection.FindOrCreateFontFamily(GetEnglishSearchFontName(u"Test Font Family Name"));
 
-    OUString sTokenNames(GetEnglishSearchFontName("Test Font Family Name;"));
-    sTokenNames += GetEnglishSearchFontName("Test 2");
+    OUString sTokenNames(GetEnglishSearchFontName(u"Test Font Family Name;"));
+    sTokenNames += GetEnglishSearchFontName(u"Test 2");
 
     vcl::font::PhysicalFontFamily* pFontFamily
         = aFontCollection.FindFontFamilyByTokenNames("Test Font Family Name");
     CPPUNIT_ASSERT_MESSAGE("Found the font family", pFontFamily);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Font family name correct",
-                                 GetEnglishSearchFontName("Test Font Family Name"),
+                                 GetEnglishSearchFontName(u"Test Font Family Name"),
                                  pFontFamily->GetSearchName());
 }
 
@@ -107,7 +107,7 @@ void VclPhysicalFontCollectionTest::testShouldFindNoFamilyWithWorthlessAttribute
 {
     // note: you must normalize the search family name (first parameter of PhysicalFontFamily constructor)
     vcl::font::PhysicalFontCollection aFontCollection;
-    aFontCollection.FindOrCreateFontFamily(GetEnglishSearchFontName("Test Font Family Name"));
+    aFontCollection.FindOrCreateFontFamily(GetEnglishSearchFontName(u"Test Font Family Name"));
 
     CPPUNIT_ASSERT(!aFontCollection.FindFontFamilyByAttributes(ImplFontAttrs::None, WEIGHT_NORMAL,
                                                                WIDTH_NORMAL, ITALIC_NONE, ""));

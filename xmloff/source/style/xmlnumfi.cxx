@@ -1027,7 +1027,7 @@ void SvXMLNumFmtElementContext::endFastElement(sal_Int32 )
                     // add integer part only if min-integer-digits attribute is there
                     aNumInfo.nDecimals = 0;
                     rParent.AddNumber( aNumInfo );      // number without decimals
-                    OUStringBuffer sIntegerFractionDelimiter = aNumInfo.aIntegerFractionDelimiter;
+                    OUStringBuffer sIntegerFractionDelimiter(aNumInfo.aIntegerFractionDelimiter);
                     lcl_EnquoteIfNecessary( sIntegerFractionDelimiter, rParent );
                     rParent.AddToCode( sIntegerFractionDelimiter.makeStringAndClear() ); // default is ' '
                 }
@@ -1704,8 +1704,8 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
         bGrouping = false;      // grouping and embedded characters can't be used together
 
     sal_uInt32 nStdIndex = pFormatter->GetStandardIndex( nFormatLang );
-    OUStringBuffer aNumStr = pFormatter->GenerateFormat( nStdIndex, nFormatLang,
-                                                         bGrouping, false, nGenPrec, nLeading );
+    OUStringBuffer aNumStr(pFormatter->GenerateFormat( nStdIndex, nFormatLang,
+                                                         bGrouping, false, nGenPrec, nLeading ));
 
     if ( rInfo.nExpDigits >= 0 && nLeading == 0 && !bGrouping && nEmbeddedCount == 0 )
     {

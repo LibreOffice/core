@@ -28,13 +28,14 @@
 #include <font/fontsubstitution.hxx>
 
 #include <string>
+#include <string_view>
 #include <vector>
 
 namespace vcl::font
 {
 struct FontSubstEntry
 {
-    FontSubstEntry(OUString const& rFontName, OUString const& rSubstFontName,
+    FontSubstEntry(std::u16string_view rFontName, std::u16string_view rSubstFontName,
                    AddFontSubstituteFlags nSubstFlags)
         : maSearchName(GetEnglishSearchFontName(rFontName))
         , maSearchReplaceName(GetEnglishSearchFontName(rSubstFontName))

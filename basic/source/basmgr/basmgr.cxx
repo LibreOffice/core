@@ -1506,7 +1506,7 @@ ErrCode BasicManager::ExecuteMacro( OUString const& i_fullyQualifiedName, SbxArr
     return nError;
 }
 
-ErrCode BasicManager::ExecuteMacro( OUString const& i_fullyQualifiedName, OUString const& i_commaSeparatedArgs, SbxValue* i_retValue )
+ErrCode BasicManager::ExecuteMacro( OUString const& i_fullyQualifiedName, std::u16string_view i_commaSeparatedArgs, SbxValue* i_retValue )
 {
     SbMethod* pMethod = lcl_queryMacro( this, i_fullyQualifiedName );
     if ( !pMethod )

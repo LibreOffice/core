@@ -693,12 +693,11 @@ Content::makeNewIdentifier( const OUString& rTitle )
 
     // Assemble new content identifier...
     Uri aUri( m_xIdentifier->getContentIdentifier() );
-    OUStringBuffer aNewURL = aUri.getParentUri();
-    aNewURL.append( ::ucb_impl::urihelper::encodeSegment( rTitle ) );
+    OUString aNewURL = aUri.getParentUri() + ::ucb_impl::urihelper::encodeSegment( rTitle );
 
     return
         uno::Reference< ucb::XContentIdentifier >(
-            new ::ucbhelper::ContentIdentifier( aNewURL.makeStringAndClear() ) );
+            new ::ucbhelper::ContentIdentifier( aNewURL ) );
 }
 
 
@@ -1531,9 +1530,7 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
             m_aProps.setTitle( aUri.getDecodedName() );
     }
 
-    OUStringBuffer aNewURL = aUri.getParentUri();
-    aNewURL.append( m_aProps.getTitle() );
-    Uri aNewUri( aNewURL.makeStringAndClear() );
+    Uri aNewUri( aUri.getParentUri() + m_aProps.getTitle() );
 
     // Handle possible name clash...
     switch ( nNameClashResolve )
@@ -1565,7 +1562,7 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
 
                 do
                 {
-                    OUStringBuffer aNew = aNewUri.getUri();
+                    OUStringBuffer aNew(aNewUri.getUri());
                     aNew.append( "_" );
                     aNew.append( ++nTry );
                     aNewUri.setUri( aNew.makeStringAndClear() );
@@ -1585,7 +1582,7 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
                 }
                 else
                 {
-                    OUStringBuffer aNewTitle = m_aProps.getTitle();
+                    OUStringBuffer aNewTitle(m_aProps.getTitle());
                     aNewTitle.append( "_" );
                     aNewTitle.append( ++nTry );
                     m_aProps.setTitle( aNewTitle.makeStringAndClear() );

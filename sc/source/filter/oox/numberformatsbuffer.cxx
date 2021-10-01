@@ -1915,7 +1915,7 @@ void NumberFormat::setFormatCode( const OUString& rFmtCode )
     sal_Int32 nPosEscape = 0;
     sal_Int32 nErase = 0;
     sal_Int32 nLastIndex = rFmtCode.getLength() - 1;
-    OUStringBuffer sFormat = rFmtCode;
+    OUStringBuffer sFormat(rFmtCode);
 
     while ( ( nPosEscape = lclPosToken( rFmtCode, u"\\ ", nPosEscape ) ) > 0 )
     {

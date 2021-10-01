@@ -32,7 +32,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <tools/urlobj.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <vcl/mnemonic.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -112,9 +111,7 @@ void FontMenuController::fillPopupMenu( const Sequence< OUString >& rFontNameSeq
         if ( rName == m_aFontFamilyName )
             m_xPopupMenu->checkItem( i+1, true );
         // use VCL popup menu pointer to set vital information that are not part of the awt implementation
-        OUStringBuffer aCommandBuffer( aFontNameCommandPrefix );
-        aCommandBuffer.append( INetURLObject::encode( rName, INetURLObject::PART_HTTP_QUERY, INetURLObject::EncodeMechanism::All ));
-        OUString aFontNameCommand = aCommandBuffer.makeStringAndClear();
+        OUString aFontNameCommand = aFontNameCommandPrefix + INetURLObject::encode( rName, INetURLObject::PART_HTTP_QUERY, INetURLObject::EncodeMechanism::All );
         pVCLPopupMenu->SetItemCommand( i+1, aFontNameCommand ); // Store font name into item command.
     }
 }
