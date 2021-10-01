@@ -380,7 +380,7 @@ class DbTextField : public DbLimitedLengthField
 {
     std::unique_ptr<::svt::IEditImplementation> m_pEdit;
     std::unique_ptr<::svt::IEditImplementation> m_pPainterImplementation;
-    bool                    m_bIsSimpleEdit;
+    bool                    m_bIsMultiLineEdit;
 
 protected:
     virtual ~DbTextField( ) override;
@@ -389,7 +389,7 @@ public:
     DbTextField(DbGridColumn& _rColumn);
 
     ::svt::IEditImplementation* GetEditImplementation() { return m_pEdit.get(); }
-    bool                    IsSimpleEdit() const { return m_bIsSimpleEdit; }
+    bool IsMultiLineEdit() const { return m_bIsMultiLineEdit; }
 
     virtual void Init( BrowserDataWin& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
     virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
@@ -819,20 +819,7 @@ protected:
 class FmXTextCell : public FmXDataCell
 {
 protected:
-    /** determines whether the text of this cell can be painted directly, without
-        using the painter control
-
-        If this is <TRUE/>, the <member>PaintCell</member> method will simply use the text as returned
-        by <member>GetText</member>, and draw it onto the device passed to <member>PaintFieldToCell</member>,
-        while respecting the current alignment settings.
-
-        If this is <FALSE/>, the <member>PaintFieldToCell</member> request will be forwarded to the painter
-        control (<member>m_pPainter</member>). This is more expensive, but the only option
-        if your painting involves more that a simple DrawText.
-
-        This member is <TRUE/> by default, and can be modified by derived classes.
-    */
-    bool    m_bFastPaint;
+    bool    m_bIsMultiLineText;
 
 public:
     FmXTextCell( DbGridColumn* pColumn, std::unique_ptr<DbCellControl> pControl );
