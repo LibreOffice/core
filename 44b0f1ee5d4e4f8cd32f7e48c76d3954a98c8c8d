@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3709400_a9efe57f",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-10-01T07:48:27Z",
+      "side": 1,
+      "message": "if the buffer needs to be that big, we might as well use alloca(), which will be faster for small numbers",
+      "revId": "44b0f1ee5d4e4f8cd32f7e48c76d3954a98c8c8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
