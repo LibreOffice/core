@@ -7008,7 +7008,7 @@ css::uno::Any SVTXFormattedField::getProperty( const OUString& PropertyName )
     return aReturn;
 }
 
-css::uno::Any SVTXFormattedField::convertEffectiveValue(const css::uno::Any& rValue)
+css::uno::Any SVTXFormattedField::convertEffectiveValue(const css::uno::Any& rValue) const
 {
     css::uno::Any aReturn;
 

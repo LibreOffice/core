@@ -440,7 +440,7 @@ public:
     void            StopMarking();
     void            UpdateInputContext();
 
-    bool            NeedsRepaint() { return bNeedsRepaint; }
+    bool            NeedsRepaint() const { return bNeedsRepaint; }
 
     void            DoInvertRect( const tools::Rectangle& rPixel );
 

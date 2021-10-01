@@ -65,7 +65,7 @@ public:
 
     sal_uInt16          GetId() const { return _nId; }
 
-    sal_uLong           Width() { return _nWidth; }
+    sal_uLong           Width() const { return _nWidth; }
     OUString&           Title() { return _aTitle; }
 
     bool                IsFrozen() const { return _bFrozen; }

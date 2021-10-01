@@ -330,9 +330,9 @@ public:
     SfxItemSet      GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib = EditEngineAttribs::All );
 
     bool            HasParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich ) const;
-    const SfxPoolItem&  GetParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich );
+    const SfxPoolItem&  GetParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich ) const;
     template<class T>
-    const T&            GetParaAttrib( sal_Int32 nPara, TypedWhichId<T> nWhich )
+    const T&            GetParaAttrib( sal_Int32 nPara, TypedWhichId<T> nWhich ) const
     {
         return static_cast<const T&>(GetParaAttrib(nPara, sal_uInt16(nWhich)));
     }
@@ -585,7 +585,7 @@ public:
 
     EditPaM DeleteSelection(const EditSelection& rSel);
 
-    ESelection CreateESelection(const EditSelection& rSel);
+    ESelection CreateESelection(const EditSelection& rSel) const;
     EditSelection CreateSelection(const ESelection& rSel);
 
     const SfxItemSet& GetBaseParaAttribs(sal_Int32 nPara) const;

@@ -233,11 +233,11 @@ public:
 
     /** convert ISO Date Time String to double */
     bool convertDateTime(double& fDateTime,
-                         std::u16string_view rString);
+                         std::u16string_view rString) const;
 
     /** convert ISO Date Time String to double */
     bool convertDateTime(double& fDateTime,
-                         std::string_view rString);
+                         std::string_view rString) const;
 
     /// these 2 functions use tools Date, so they're not yet moved to sax
 
@@ -270,7 +270,7 @@ public:
 
     /** convert string to Position3D */
     bool convertPosition3D( css::drawing::Position3D& rPosition,
-                              std::string_view rValue );
+                              std::string_view rValue ) const;
 
     /** convert Position3D to string */
     void convertPosition3D( OUStringBuffer &rBuffer,

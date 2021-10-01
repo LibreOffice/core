@@ -712,7 +712,7 @@ public:
     sal_Int32       GetChildCount( Paragraph const * pParent ) const;
     bool            IsExpanded( Paragraph const * pPara ) const;
     Paragraph*      GetParent( Paragraph const * pParagraph ) const;
-    sal_Int32       GetAbsPos( Paragraph const * pPara );
+    sal_Int32       GetAbsPos( Paragraph const * pPara ) const;
 
     sal_Int16       GetDepth( sal_Int32 nPara ) const;
     void            SetDepth( Paragraph* pParagraph, sal_Int16 nNewDepth );
@@ -839,7 +839,7 @@ public:
     SfxStyleSheet*  GetStyleSheet( sal_Int32 nPara );
 
     void            SetParaAttribs( sal_Int32 nPara, const SfxItemSet& );
-    SfxItemSet const & GetParaAttribs( sal_Int32 nPara );
+    SfxItemSet const & GetParaAttribs( sal_Int32 nPara ) const;
 
     void            Remove( Paragraph const * pPara, sal_Int32 nParaCount );
     bool            Expand( Paragraph const * );
@@ -947,10 +947,10 @@ public:
     /** sets a link that is called after a drop or paste operation. */
     void            SetEndPasteOrDropHdl( const Link<PasteOrDropInfos*,void>& rLink );
 
-    sal_Int16 GetNumberingStartValue( sal_Int32 nPara );
+    sal_Int16 GetNumberingStartValue( sal_Int32 nPara ) const;
     void SetNumberingStartValue( sal_Int32 nPara, sal_Int16 nNumberingStartValue );
 
-    bool IsParaIsNumberingRestart( sal_Int32 nPara );
+    bool IsParaIsNumberingRestart( sal_Int32 nPara ) const;
     void SetParaIsNumberingRestart( sal_Int32 nPara, bool bParaIsNumberingRestart );
 
     /** determine the bullets/numbering status of the given paragraphs

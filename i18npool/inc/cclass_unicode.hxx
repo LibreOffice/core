@@ -147,7 +147,7 @@ private:
     ParserFlags getFlags(sal_uInt32 c);
 
     /// Access parser flags via International and special definitions.
-    ParserFlags getFlagsExtended(sal_uInt32 c);
+    ParserFlags getFlagsExtended(sal_uInt32 c) const;
 
     /// Access parser table flags for user defined start characters.
     ParserFlags getStartCharsFlags( sal_uInt32 c );

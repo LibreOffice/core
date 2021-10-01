@@ -109,7 +109,7 @@ public:
         void
         SetIconTheme(const OUString &theme, SetModifiedFlag setModified );
 
-        bool IconThemeWasSetAutomatically()
+        bool IconThemeWasSetAutomatically() const
         {return m_bIconThemeWasSetAutomatically;}
 
         void AddListenerLink( const Link<LinkParamNone*,void>& rLink );
@@ -450,7 +450,7 @@ void SvtMiscOptions::RemoveListenerLink( const Link<LinkParamNone*,void>& rLink 
 }
 
 bool
-SvtMiscOptions::IconThemeWasSetAutomatically()
+SvtMiscOptions::IconThemeWasSetAutomatically() const
 {
     return m_pImpl->IconThemeWasSetAutomatically();
 }

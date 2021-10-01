@@ -329,7 +329,7 @@ css::uno::Reference< css::accessibility::XAccessible > ThumbnailView::CreateAcce
     return mxAccessible;
 }
 
-css::uno::Reference< css::accessibility::XAccessible > ThumbnailView::getAccessible()
+css::uno::Reference< css::accessibility::XAccessible > ThumbnailView::getAccessible() const
 {
     return mxAccessible;
 }
@@ -543,7 +543,7 @@ void ThumbnailView::ImplFireAccessibleEvent( short nEventId, const css::uno::Any
         pAcc->FireAccessibleEvent( nEventId, rOldValue, rNewValue );
 }
 
-bool ThumbnailView::ImplHasAccessibleListeners()
+bool ThumbnailView::ImplHasAccessibleListeners() const
 {
     ThumbnailViewAcc* pAcc = ThumbnailViewAcc::getImplementation(mxAccessible);
     return( pAcc && pAcc->HasAccessibleListeners() );

@@ -202,7 +202,7 @@ public:
 
     const void * getRequestData() const { return m_pRequestData; }
 
-    bool isDomainMatch( const OUString& certHostName );
+    bool isDomainMatch( const OUString& certHostName ) const;
 
     int CertificationNotify(const ne_ssl_certificate *cert);
 

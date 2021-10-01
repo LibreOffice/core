@@ -146,7 +146,7 @@ void CachedContentResultSet::CCRS_Cache
 }
 
 bool CachedContentResultSet::CCRS_Cache
-    ::hasRow( sal_Int32 row )
+    ::hasRow( sal_Int32 row ) const
 {
     if( !m_pResult )
         return false;
@@ -184,7 +184,7 @@ bool CachedContentResultSet::CCRS_Cache
 }
 
 bool CachedContentResultSet::CCRS_Cache
-    ::hasCausedException( sal_Int32 nRow )
+    ::hasCausedException( sal_Int32 nRow ) const
 {
     if( !m_pResult )
         return false;
@@ -840,14 +840,14 @@ void CachedContentResultSet
 }
 
 bool CachedContentResultSet
-    ::impl_isKnownValidPosition( sal_Int32 nRow )
+    ::impl_isKnownValidPosition( sal_Int32 nRow ) const
 {
     return m_nKnownCount && nRow
             && nRow <= m_nKnownCount;
 }
 
 bool CachedContentResultSet
-    ::impl_isKnownInvalidPosition( sal_Int32 nRow )
+    ::impl_isKnownInvalidPosition( sal_Int32 nRow ) const
 {
     if( !nRow )
         return true;

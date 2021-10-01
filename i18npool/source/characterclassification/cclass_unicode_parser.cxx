@@ -593,7 +593,7 @@ ParserFlags cclass_Unicode::getFlags(sal_uInt32 const c)
 }
 
 
-ParserFlags cclass_Unicode::getFlagsExtended(sal_uInt32 const c)
+ParserFlags cclass_Unicode::getFlagsExtended(sal_uInt32 const c) const
 {
     if ( c == cGroupSep )
         return ParserFlags::VALUE;

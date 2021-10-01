@@ -64,25 +64,25 @@ public:
     }
 
     /** Returns the computed width of the line 1 in twips. */
-    tools::Long GetLine1ForWidth( tools::Long nWidth ) { return m_aWidthImpl.GetLine1( nWidth ); }
+    tools::Long GetLine1ForWidth( tools::Long nWidth ) const { return m_aWidthImpl.GetLine1( nWidth ); }
 
     /** Returns the computed width of the line 2 in twips. */
-    tools::Long GetLine2ForWidth( tools::Long nWidth ) { return m_aWidthImpl.GetLine2( nWidth ); }
+    tools::Long GetLine2ForWidth( tools::Long nWidth ) const { return m_aWidthImpl.GetLine2( nWidth ); }
 
     /** Returns the computed width of the gap in twips. */
-    tools::Long GetDistForWidth( tools::Long nWidth ) { return m_aWidthImpl.GetGap( nWidth ); }
+    tools::Long GetDistForWidth( tools::Long nWidth ) const { return m_aWidthImpl.GetGap( nWidth ); }
 
-    Color GetColorLine1( const Color& rMain )
+    Color GetColorLine1( const Color& rMain ) const
     {
         return ( *m_pColor1Fn )( rMain );
     }
 
-    Color GetColorLine2( const Color& rMain )
+    Color GetColorLine2( const Color& rMain ) const
     {
         return ( *m_pColor2Fn )( rMain );
     }
 
-    Color GetColorDist( const Color& rMain, const Color& rDefault )
+    Color GetColorDist( const Color& rMain, const Color& rDefault ) const
     {
         return ( *m_pColorDistFn )( rMain, rDefault );
     }
@@ -257,7 +257,7 @@ private:
     DECL_LINK(NoneHdl, weld::Button&, void);
 
     void            UpdateEntries();
-    sal_Int32       GetStylePos(sal_Int32 nListPos);
+    sal_Int32       GetStylePos(sal_Int32 nListPos) const;
 
     const Color&    GetPaintColor() const
     {

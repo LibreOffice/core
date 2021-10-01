@@ -72,7 +72,7 @@ public:
     bool  IsCompatible() const      { return bCompatible; }
     void  SetCompatible( bool b )   { bCompatible = b; }        // #118206
     bool  IsVBASupportOn() const    { return bVBASupportOn; }
-    bool  WhiteSpace()              { return bSpaces; }
+    bool  WhiteSpace() const        { return bSpaces; }
     sal_Int32 GetErrors() const     { return nErrors; }
     sal_Int32 GetLine() const       { return nLine;   }
     sal_Int32 GetCol1() const       { return nCol1;   }

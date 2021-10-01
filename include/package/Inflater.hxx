@@ -42,8 +42,8 @@ public:
     Inflater(bool bNoWrap);
     ~Inflater();
     void setInput( const css::uno::Sequence< sal_Int8 >& rBuffer );
-    bool needsDictionary(  ) { return bNeedDict;}
-    bool finished(  ) { return bFinished;}
+    bool needsDictionary() const { return bNeedDict; }
+    bool finished() const { return bFinished; }
     sal_Int32 doInflateSegment( css::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
     void end(  );
 

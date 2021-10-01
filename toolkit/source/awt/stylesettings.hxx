@@ -166,8 +166,8 @@ namespace toolkit
         void ImplSetStyleFont( void (StyleSettings::*i_pSetter)( vcl::Font const &),
             vcl::Font const & (StyleSettings::*i_pGetter)() const, const css::awt::FontDescriptor& i_rFont );
         void ImplSetStyleColor( void (StyleSettings::*i_pSetter)( Color const & ), sal_Int32 i_nColor );
-        sal_Int32 ImplGetStyleColor( Color const & (StyleSettings::*i_pGetter)() const );
-        css::awt::FontDescriptor ImplGetStyleFont( vcl::Font const & (StyleSettings::*i_pGetter)() const );
+        sal_Int32 ImplGetStyleColor( Color const & (StyleSettings::*i_pGetter)() const ) const;
+        css::awt::FontDescriptor ImplGetStyleFont( vcl::Font const & (StyleSettings::*i_pGetter)() const ) const;
         DECL_LINK( OnWindowEvent, VclWindowEvent&, void );
 
         VCLXWindow*                                pOwningWindow;

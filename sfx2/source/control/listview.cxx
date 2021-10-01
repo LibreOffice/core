@@ -293,7 +293,7 @@ IMPL_LINK(ListView, QueryTooltipHdl, const weld::TreeIter&, rIter, OUString)
     return OUString();
 }
 
-sal_uInt16 ListView::get_nId(int pos)
+sal_uInt16 ListView::get_nId(int pos) const
 {
     return static_cast<sal_uInt16>(mxTreeView->get_id(pos).toInt32());
 }

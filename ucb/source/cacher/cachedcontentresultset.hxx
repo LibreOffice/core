@@ -78,10 +78,10 @@ class CachedContentResultSet
             const css::ucb::FetchResult& rResult );
 
         bool
-        hasRow( sal_Int32 nRow );
+        hasRow( sal_Int32 nRow ) const;
 
         bool
-        hasCausedException( sal_Int32 nRow );
+        hasCausedException( sal_Int32 nRow ) const;
 
         sal_Int32
         getMaxRow() const;
@@ -165,10 +165,10 @@ private:
                     , sal_Int32 nFetchDirection );
 
     bool
-    impl_isKnownValidPosition( sal_Int32 nRow );
+    impl_isKnownValidPosition( sal_Int32 nRow ) const;
 
     bool
-    impl_isKnownInvalidPosition( sal_Int32 nRow );
+    impl_isKnownInvalidPosition( sal_Int32 nRow ) const;
 
     void
     impl_changeRowCount( sal_Int32 nOld, sal_Int32 nNew );

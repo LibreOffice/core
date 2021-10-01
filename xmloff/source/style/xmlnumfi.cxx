@@ -2210,7 +2210,7 @@ SvXMLStyleContext*  SvXMLNumFmtHelper::CreateChildContext( SvXMLImport& rImport,
                                       pData.get(), nStyleToken, xAttrList, rStyles );
 }
 
-LanguageType SvXMLNumFmtHelper::GetLanguageForKey(sal_Int32 nKey)
+LanguageType SvXMLNumFmtHelper::GetLanguageForKey(sal_Int32 nKey) const
 {
     if (pData->GetNumberFormatter())
     {

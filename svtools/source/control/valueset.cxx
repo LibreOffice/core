@@ -236,7 +236,7 @@ void ValueSet::ImplFireAccessibleEvent( short nEventId, const Any& rOldValue, co
         pAcc->FireAccessibleEvent( nEventId, rOldValue, rNewValue );
 }
 
-bool ValueSet::ImplHasAccessibleListeners()
+bool ValueSet::ImplHasAccessibleListeners() const
 {
     ValueSetAcc* pAcc = ValueSetAcc::getImplementation(mxAccessible);
     return( pAcc && pAcc->HasAccessibleListeners() );

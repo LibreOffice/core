@@ -164,7 +164,7 @@ protected:
 
 protected:
     // convert given basegfx::B3DPolyPolygon to screen coor
-    basegfx::B2DPolyPolygon TransformToScreenCoor(const basegfx::B3DPolyPolygon& rCandidate);
+    basegfx::B2DPolyPolygon TransformToScreenCoor(const basegfx::B3DPolyPolygon& rCandidate) const;
 
     // protected destructor
     virtual ~E3dCompoundObject() override;

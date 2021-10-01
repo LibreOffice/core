@@ -50,7 +50,7 @@ namespace connectivity
 
         // versions of the public SQLError methods which are just delegated to this impl-class
         static const OUString& getMessagePrefix();
-        OUString     getErrorMessage( const ErrorCondition _eCondition, const std::optional<OUString>& _rParamValue1, const std::optional<OUString>& _rParamValue2, const std::optional<OUString>& _rParamValue3 );
+        OUString     getErrorMessage( const ErrorCondition _eCondition, const std::optional<OUString>& _rParamValue1, const std::optional<OUString>& _rParamValue2, const std::optional<OUString>& _rParamValue3 ) const;
         static ErrorCode    getErrorCode( const ErrorCondition _eCondition );
         void                raiseException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext, const std::optional<OUString>& _rParamValue1, const std::optional<OUString>& _rParamValue2, const std::optional<OUString>& _rParamValue3 );
         void                raiseException( const ErrorCondition _eCondition, const std::optional<OUString>& _rParamValue1, const std::optional<OUString>& _rParamValue2, const std::optional<OUString>& _rParamValue3 );
@@ -59,8 +59,7 @@ namespace connectivity
 
     private:
         /// returns the basic error message associated with the given error condition, without any parameter replacements
-        OUString
-                impl_getErrorMessage( ErrorCondition _eCondition );
+        OUString impl_getErrorMessage( ErrorCondition _eCondition ) const;
 
         /// returns the SQLState associated with the given error condition
         static OUString
@@ -142,7 +141,7 @@ namespace connectivity
         }
     }
 
-    OUString SQLError_Impl::getErrorMessage( const ErrorCondition _eCondition, const std::optional<OUString>& _rParamValue1, const std::optional<OUString>& _rParamValue2, const std::optional<OUString>& _rParamValue3 )
+    OUString SQLError_Impl::getErrorMessage( const ErrorCondition _eCondition, const std::optional<OUString>& _rParamValue1, const std::optional<OUString>& _rParamValue2, const std::optional<OUString>& _rParamValue3 ) const
     {
         OUString sErrorMessage( impl_getErrorMessage( _eCondition ) );
 
@@ -220,7 +219,7 @@ namespace connectivity
         );
     }
 
-    OUString SQLError_Impl::impl_getErrorMessage( ErrorCondition _eCondition )
+    OUString SQLError_Impl::impl_getErrorMessage( ErrorCondition _eCondition ) const
     {
         OUString sResMessage(Translate::get(lcl_getResourceErrorID(_eCondition), m_aResources));
         OSL_ENSURE( !sResMessage.isEmpty(), "SQLError_Impl::impl_getErrorMessage: illegal error condition, or invalid resource!" );

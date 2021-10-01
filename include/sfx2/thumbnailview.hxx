@@ -256,7 +256,7 @@ protected:
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
-    css::uno::Reference<css::accessibility::XAccessible> getAccessible();
+    css::uno::Reference<css::accessibility::XAccessible> getAccessible() const;
 
 protected:
 
@@ -285,7 +285,7 @@ protected:
     sal_uInt16 ImplGetVisibleItemCount() const;
     ThumbnailViewItem* ImplGetVisibleItem(sal_uInt16 nVisiblePos);
     void         ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
-    bool         ImplHasAccessibleListeners();
+    bool         ImplHasAccessibleListeners() const;
     DECL_LINK( ImplScrollHdl, weld::ScrolledWindow&, void );
 
 protected:

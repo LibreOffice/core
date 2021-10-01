@@ -143,7 +143,7 @@ public:
     ItemList();
     const SfxPoolItem*  First();
     const SfxPoolItem*  Next();
-    sal_Int32              Count() { return aItemPool.size(); };
+    sal_Int32           Count() const { return aItemPool.size(); };
     void                Insert( const SfxPoolItem* pItem );
     void                Clear() { aItemPool.clear(); };
 };

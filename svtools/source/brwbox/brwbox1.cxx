@@ -2315,7 +2315,7 @@ tools::Long BrowseBox::GetTitleHeight() const
     return nTitleLines ? nTitleLines * nHeight + 4 : 0;
 }
 
-tools::Long BrowseBox::CalcReverseZoom(tools::Long nVal)
+tools::Long BrowseBox::CalcReverseZoom(tools::Long nVal) const
 {
     if (IsZoom())
     {

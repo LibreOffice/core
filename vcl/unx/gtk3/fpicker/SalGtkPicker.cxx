@@ -44,7 +44,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-OUString SalGtkPicker::uritounicode(const gchar* pIn)
+OUString SalGtkPicker::uritounicode(const gchar* pIn) const
 {
     if (!pIn)
         return OUString();
@@ -64,7 +64,7 @@ OUString SalGtkPicker::uritounicode(const gchar* pIn)
     return sURL;
 }
 
-OString SalGtkPicker::unicodetouri(const OUString &rURL)
+OString SalGtkPicker::unicodetouri(const OUString &rURL) const
 {
     // all the URLs are handled by office in UTF-8 ( and encoded with "%xx" codes based on UTF-8 )
     // so the Gnome FP related URLs should be converted accordingly

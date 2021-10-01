@@ -112,7 +112,7 @@ public:
     static void                 Deactivate(const gchar* pMenuCommand);
     void                        EnableUnity(bool bEnable);
     virtual void                ShowMenuBar( bool bVisible ) override;
-    bool                        PrepUpdate();
+    bool                        PrepUpdate() const;
     virtual void                Update() override;  // Update this menu only.
     // Update full menu hierarchy from this menu.
     void                        UpdateFull () { ActivateAllSubmenus(mpVCLMenu); }

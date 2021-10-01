@@ -23,7 +23,7 @@
 #include <vcl/settings.hxx>
 #include <memory>
 
-OUString GalleryBinaryEngineEntry::ReadStrFromIni(std::u16string_view aKeyName )
+OUString GalleryBinaryEngineEntry::ReadStrFromIni(std::u16string_view aKeyName ) const
 {
     std::unique_ptr<SvStream> pStrm(::utl::UcbStreamHelper::CreateStream(
         GetStrURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ),

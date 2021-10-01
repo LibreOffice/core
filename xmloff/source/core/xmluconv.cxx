@@ -369,14 +369,14 @@ void SvXMLUnitConverter::convertDateTime(OUStringBuffer& rBuffer,
 
 /** convert ISO Date Time String to double */
 bool SvXMLUnitConverter::convertDateTime(double& fDateTime,
-                     std::u16string_view rString)
+                     std::u16string_view rString) const
 {
     return convertDateTime(fDateTime, rString, m_pImpl->m_aNullDate);
 }
 
 /** convert ISO Date Time String to double */
 bool SvXMLUnitConverter::convertDateTime(double& fDateTime,
-                     std::string_view rString)
+                     std::string_view rString) const
 {
     return convertDateTime(fDateTime, rString, m_pImpl->m_aNullDate);
 }
@@ -672,7 +672,7 @@ void SvXMLUnitConverter::convertB3DVector( OUStringBuffer &rBuffer, const ::base
 
 /** convert string to Position3D */
 bool SvXMLUnitConverter::convertPosition3D( drawing::Position3D& rPosition,
-    std::string_view rValue )
+    std::string_view rValue ) const
 {
     OUString aContentX,aContentY,aContentZ;
     if ( !lcl_getPositions(rValue,aContentX,aContentY,aContentZ) )

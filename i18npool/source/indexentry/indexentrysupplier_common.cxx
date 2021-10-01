@@ -100,7 +100,7 @@ OUString SAL_CALL IndexEntrySupplier_Common::getIndexFollowPageWord( sal_Bool,
 
 const OUString&
 IndexEntrySupplier_Common::getEntry( const OUString& IndexEntry,
-    const OUString& PhoneticEntry, const lang::Locale& rLocale )
+    const OUString& PhoneticEntry, const lang::Locale& rLocale ) const
 {
     // The condition for using phonetic entry is:
     // usePhonetic is set for the algorithm;

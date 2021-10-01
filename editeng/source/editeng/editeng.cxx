@@ -936,7 +936,7 @@ EditPaM EditEngine::DeleteSelection(const EditSelection& rSel)
     return pImpEditEngine->ImpDeleteSelection(rSel);
 }
 
-ESelection EditEngine::CreateESelection(const EditSelection& rSel)
+ESelection EditEngine::CreateESelection(const EditSelection& rSel) const
 {
     return pImpEditEngine->CreateESel(rSel);
 }
@@ -1766,7 +1766,7 @@ bool EditEngine::HasParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich ) const
     return pImpEditEngine->HasParaAttrib( nPara, nWhich );
 }
 
-const SfxPoolItem& EditEngine::GetParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich )
+const SfxPoolItem& EditEngine::GetParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich ) const
 {
     return pImpEditEngine->GetParaAttrib( nPara, nWhich );
 }

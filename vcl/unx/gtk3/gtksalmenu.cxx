@@ -41,7 +41,7 @@ static gchar* GetCommandForItem(GtkSalMenuItem* pSalMenuItem)
                              pSalMenuItem->mnId);
 }
 
-bool GtkSalMenu::PrepUpdate()
+bool GtkSalMenu::PrepUpdate() const
 {
     return mpMenuModel && mpActionGroup;
 }

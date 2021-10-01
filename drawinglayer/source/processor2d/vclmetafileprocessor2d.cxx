@@ -2368,7 +2368,7 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
 VclPtr<VirtualDevice>
 VclMetafileProcessor2D::CreateBufferDevice(const basegfx::B2DRange& rCandidateRange,
                                            geometry::ViewInformation2D& rViewInfo,
-                                           tools::Rectangle& rRectLogic, Size& rSizePixel)
+                                           tools::Rectangle& rRectLogic, Size& rSizePixel) const
 {
     constexpr double fMaxSquarePixels = 500000;
     basegfx::B2DRange aViewRange(rCandidateRange);

@@ -1055,7 +1055,7 @@ bool SvxAccessibleTextAdapter::HaveTextBullet( sal_Int32 nPara ) const
             aBulletInfo.nType != SVX_NUM_BITMAP );
 }
 
-bool SvxAccessibleTextAdapter::IsEditable( const ESelection& rSel )
+bool SvxAccessibleTextAdapter::IsEditable( const ESelection& rSel ) const
 {
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;

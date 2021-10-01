@@ -236,7 +236,7 @@ protected:
     void ImpSetGlueVisible4(bool bOn) { if (mbGlueVisible4!=bOn) { mbGlueVisible4=bOn; if (!mbGlueVisible && !mbGlueVisible2 && !mbGlueVisible3) GlueInvalidate(); } }
 
 public:
-    bool ImpIsGlueVisible() { return mbGlueVisible || mbGlueVisible2 || mbGlueVisible3 || mbGlueVisible4; }
+    bool ImpIsGlueVisible() const { return mbGlueVisible || mbGlueVisible2 || mbGlueVisible3 || mbGlueVisible4; }
 
 protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;

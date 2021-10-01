@@ -76,10 +76,10 @@ private:
         css::lang::Locale aLocale;
         OUString aName;
         css::uno::Reference < XCharacterClassification > xCI;
-        bool equals(const css::lang::Locale& rLocale) {
-        return aLocale.Language == rLocale.Language &&
-            aLocale.Country == rLocale.Country &&
-            aLocale.Variant == rLocale.Variant;
+        bool equals(const css::lang::Locale& rLocale) const {
+            return aLocale.Language == rLocale.Language &&
+                aLocale.Country == rLocale.Country &&
+                aLocale.Variant == rLocale.Variant;
         };
     };
     std::vector<lookupTableItem> lookupTable;

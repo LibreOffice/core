@@ -38,7 +38,7 @@ public:
     GalleryBinaryEngineEntry();
     static void CreateUniqueURL(const INetURLObject& rBaseURL, INetURLObject& aURL);
 
-    OUString ReadStrFromIni(std::u16string_view aKeyName);
+    OUString ReadStrFromIni(std::u16string_view aKeyName) const;
 
     const INetURLObject& GetThmURL() const { return mpGalleryStorageLocations->GetThmURL(); }
     const INetURLObject& GetSdgURL() const { return mpGalleryStorageLocations->GetSdgURL(); }
