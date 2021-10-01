@@ -631,8 +631,8 @@ void doubleToString(typename T::String ** pResult,
                                     {
                                         if (eFormat == rtl_math_StringFormat_F)
                                         {   // insert '1'
-                                            std::memmove(aBuf + 1, aBuf, (p++ - aBuf) * sizeof(*p));
-                                            aBuf[0] = '1';
+                                            std::memmove(aBuf + j + 1, aBuf + j, (p++ - aBuf - j) * sizeof(*p));
+                                            aBuf[j] = '1';
                                         }
                                         else
                                         {
