@@ -34,6 +34,24 @@
       "parentUuid": "dbdc78f3_861c35d6",
       "revId": "d4bd8b7b182ac0a015ab0ff69101f33376ce58ae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd319a8d_2a121a12",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 8075,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-01T07:09:41Z",
+      "side": 1,
+      "message": "Done in https://gerrit.libreoffice.org/c/core/+/122901",
+      "parentUuid": "6cbf987e_00577e47",
+      "revId": "d4bd8b7b182ac0a015ab0ff69101f33376ce58ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
