@@ -16,6 +16,23 @@
       "message": "not sure if this is actually worth it, though",
       "revId": "cbc239371664e1935cd7ff23c98ee53c51962e1f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e12202ba_21258418",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-01T07:34:06Z",
+      "side": 1,
+      "message": "Noel, maybe you have some thoughts on this, working on performance improvements.  It simplifies from a call to rtl_uString_alloc to just new[] on construction, and avoids rtl_uString_release with its osl_decrementInterlockedCount on destruction.  Not sure if that would be enough of a win to justify this (LIBO_INTERNAL_ONLY) addition, though...",
+      "revId": "cbc239371664e1935cd7ff23c98ee53c51962e1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
