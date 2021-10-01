@@ -104,7 +104,7 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
     bSubTotalsAscending(true),
     bFilterConditionSourceRange(false),
     bHasHeader(true),
-    bByRow(false),
+    bByRow(true),
     meRangeType(ScDBCollection::GlobalNamed)
 {
     if( rAttrList.is() )
