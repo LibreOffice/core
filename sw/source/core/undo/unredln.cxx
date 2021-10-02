@@ -128,7 +128,8 @@ void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
                     rPam = *pRedline;
                 else
                 {
-                    rPam = SwPaM(*pRedline->GetMark(), *rPam.GetPoint());
+                    rPam.SetMark();
+                    *rPam.GetMark() = *pRedline->GetMark();
                 }
             }
         }
