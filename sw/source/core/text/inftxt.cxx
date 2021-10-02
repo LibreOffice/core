@@ -990,13 +990,13 @@ void SwTextPaintInfo::DrawRedArrow( const SwLinePortion &rPor ) const
     {
         aRect.Pos().AdjustY(20 - GetAscent() );
         aRect.Pos().AdjustX(20 );
-        if( aSize.Height() > o3tl::narrowing<SwTwips>(rPor.Height()) )
+        if( aSize.Height() > rPor.Height() )
             aRect.Height( rPor.Height() );
         cChar = CHAR_LEFT_ARROW;
     }
     else
     {
-        if( aSize.Height() > o3tl::narrowing<SwTwips>(rPor.Height()) )
+        if( aSize.Height() > rPor.Height() )
             aRect.Height( rPor.Height() );
         aRect.Pos().AdjustY( -(aRect.Height() + 20) );
         aRect.Pos().AdjustX( -(aRect.Width() + 20) );

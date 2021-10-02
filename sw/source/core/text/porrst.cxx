@@ -642,7 +642,7 @@ void SwControlCharPortion::Paint( const SwTextPaintInfo &rInf ) const
 
     Point aOldPos = rInf.GetPos();
     Point aNewPos( aOldPos );
-    auto const deltaX((o3tl::narrowing<SwTwips>(Width()) / 2) - mnHalfCharWidth);
+    auto const deltaX((Width() / 2) - mnHalfCharWidth);
     switch (rInf.GetFont()->GetOrientation(rInf.GetTextFrame()->IsVertical()).get())
     {
         case 0:

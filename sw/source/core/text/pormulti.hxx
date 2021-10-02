@@ -243,7 +243,7 @@ class SwTextCursorSave
     bool bSpaceChg;
 public:
     SwTextCursorSave( SwTextCursor* pTextCursor, SwMultiPortion* pMulti,
-        SwTwips nY, sal_uInt32& nX, TextFrameIndex nCurrStart, tools::Long nSpaceAdd);
+        SwTwips nY, SwTwips& nX, TextFrameIndex nCurrStart, tools::Long nSpaceAdd);
     ~SwTextCursorSave();
 };
 

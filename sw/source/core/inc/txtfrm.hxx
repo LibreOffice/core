@@ -577,7 +577,7 @@ public:
     virtual void CheckDirection( bool bVert ) override;
 
     /// Returns the sum of line height in pLine
-    sal_uInt32 GetParHeight() const;
+    SwTwips GetParHeight() const;
 
     inline       SwTextFrame *GetFollow();
     inline const SwTextFrame *GetFollow() const;

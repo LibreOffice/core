@@ -415,7 +415,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
                 const SwTwips nTmpRstHeight = aRectFnSet.BottomDist( pMaster->getFrameArea(),
                     aRectFnSet.GetPrtBottom(*pMaster->GetUpper()) );
                 if ( nTmpRstHeight >=
-                     SwTwips(rLine.GetInfo().GetParaPortion()->Height() ) )
+                     rLine.GetInfo().GetParaPortion()->Height() )
                 {
                     pMaster->Prepare( PrepareHint::AdjustSizeWithoutFormatting );
                     pMaster->InvalidateSize_();
@@ -437,7 +437,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
     {
         SwTwips nTmpRstHeight = aRectFnSet.BottomDist( pMaster->getFrameArea(),
             aRectFnSet.GetPrtBottom(*pMaster->GetUpper()) );
-        if( nTmpRstHeight >= SwTwips(rLine.GetInfo().GetParaPortion()->Height() ) )
+        if( nTmpRstHeight >= rLine.GetInfo().GetParaPortion()->Height() )
         {
             pMaster->Prepare( PrepareHint::AdjustSizeWithoutFormatting );
             pMaster->InvalidateSize_();

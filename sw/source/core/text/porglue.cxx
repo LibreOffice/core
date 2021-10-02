@@ -215,7 +215,7 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
             }
             while( pPrev != pLeft )
             {
-                if( bNoMove || o3tl::narrowing<SwTwips>(pPrev->PrtWidth()) >= nRightGlue ||
+                if( bNoMove || pPrev->PrtWidth() >= nRightGlue ||
                     pPrev->InHyphGrp() || pPrev->IsKernPortion() )
                 {
                     // The portion before the pRight cannot be moved

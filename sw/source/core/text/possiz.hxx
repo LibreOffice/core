@@ -20,21 +20,22 @@
 
 #include <tools/gen.hxx>
 #include <sal/types.h>
+#include <swtypes.hxx>
 
 // Compared to the SV sizes SwPosSize is always positive
 class SwPosSize
 {
-    sal_uInt32 m_nWidth;
-    sal_uInt32 m_nHeight;
+    SwTwips m_nWidth;
+    SwTwips m_nHeight;
 public:
-    SwPosSize( const sal_uInt32 nW = 0, const sal_uInt32 nH = 0 )
+    SwPosSize( const SwTwips nW = 0, const SwTwips nH = 0 )
         : m_nWidth(nW)
         , m_nHeight(nH)
     {
     }
     explicit SwPosSize( const Size &rSize )
-        : m_nWidth(sal_uInt32(rSize.Width()))
-        ,m_nHeight(sal_uInt32(rSize.Height()))
+        : m_nWidth(SwTwips(rSize.Width()))
+        , m_nHeight(SwTwips(rSize.Height()))
     {
     }
 #if defined(__COVERITY__)
@@ -46,25 +47,25 @@ public:
     SwPosSize(SwPosSize &&) = default;
     SwPosSize & operator =(SwPosSize const &) = default;
     SwPosSize & operator =(SwPosSize &&) = default;
-    sal_uInt32 Height() const { return m_nHeight; }
-    virtual void Height(const sal_uInt32 nNew, const bool = true) { m_nHeight = nNew; }
-    sal_uInt32 Width() const { return m_nWidth; }
-    void Width( const sal_uInt32 nNew ) { m_nWidth = nNew; }
+    SwTwips Height() const { return m_nHeight; }
+    virtual void Height(const SwTwips nNew, const bool = true) { m_nHeight = nNew; }
+    SwTwips Width() const { return m_nWidth; }
+    void Width( const SwTwips nNew ) { m_nWidth = nNew; }
     Size SvLSize() const { return Size( m_nWidth, m_nHeight ); }
     void SvLSize( const Size &rSize )
     {
-        m_nWidth  = sal_uInt32(rSize.Width());
-        m_nHeight = sal_uInt32(rSize.Height());
+        m_nWidth  = SwTwips(rSize.Width());
+        m_nHeight = SwTwips(rSize.Height());
     }
     void SvXSize( const Size &rSize )
     {
-        m_nHeight = sal_uInt32(rSize.Width());
-        m_nWidth = sal_uInt32(rSize.Height());
+        m_nHeight = SwTwips(rSize.Width());
+        m_nWidth = SwTwips(rSize.Height());
     }
     SwPosSize& operator=( const Size &rSize )
     {
-        m_nWidth  = sal_uInt32(rSize.Width());
-        m_nHeight = sal_uInt32(rSize.Height());
+        m_nWidth  = SwTwips(rSize.Width());
+        m_nHeight = SwTwips(rSize.Height());
         return *this;
     }
 };

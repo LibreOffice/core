@@ -484,8 +484,8 @@ void SwTextFormatter::CalcDropHeight( const sal_uInt16 nLines )
 {
     const SwLinePortion *const pOldCurr = GetCurr();
     sal_uInt16 nDropHght = 0;
-    sal_uInt32 nAscent = 0;
-    sal_uInt32 nHeight = 0;
+    SwTwips nAscent = 0;
+    SwTwips nHeight = 0;
     sal_uInt16 nDropLns = 0;
     const bool bRegisterOld = IsRegisterOn();
     m_bRegisterOn = false;
@@ -545,8 +545,8 @@ void SwTextFormatter::CalcDropHeight( const sal_uInt16 nLines )
 void SwTextFormatter::GuessDropHeight( const sal_uInt16 nLines )
 {
     OSL_ENSURE( nLines, "GuessDropHeight: Give me more Lines!" );
-    sal_uInt32 nAscent = 0;
-    sal_uInt32 nHeight = 0;
+    SwTwips nAscent = 0;
+    SwTwips nHeight = 0;
     SetDropLines( nLines );
     if ( GetDropLines() > 1 )
     {
@@ -678,7 +678,7 @@ void SwTextPainter::PaintDropPortion()
     Point aLineOrigin( GetTopLeft() );
 
     aLineOrigin.AdjustX(nX );
-    sal_uInt32 nTmpAscent, nTmpHeight;
+    SwTwips nTmpAscent, nTmpHeight;
     CalcAscentAndHeight( nTmpAscent, nTmpHeight );
     aLineOrigin.AdjustY(nTmpAscent );
     GetInfo().SetIdx( GetStart() );
