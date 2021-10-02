@@ -408,7 +408,7 @@ public:
     void                SetPolygon(const tools::Polygon& rPoly) { maPoly = rPoly; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaPolygonAction final : public MetaAction
+class VCL_DLLPUBLIC MetaPolygonAction final : public MetaAction
 {
 private:
 
