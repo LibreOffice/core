@@ -288,7 +288,7 @@ SwTwips SwTextFrame::GetFootnoteLine( const SwTextFootnote *pFootnote ) const
                     &pFootnote->GetTextNode(), pFootnote->GetStart()));
         aLine.CharToLine( nPos );
 
-        nRet = aLine.Y() + SwTwips(aLine.GetLineHeight());
+        nRet = aLine.Y() + aLine.GetLineHeight();
         if( IsVertical() )
             nRet = SwitchHorizontalToVertical( nRet );
     }
