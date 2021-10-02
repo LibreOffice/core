@@ -1752,6 +1752,11 @@ void SwTextNode::TransliterateText(
                     nWordType);
         }
 
+        // prevent going outside of the user's selection, which may
+        // start in the middle of a word
+        aSttBndry.startPos = std::max(aSttBndry.startPos, selStart);
+        aEndBndry.startPos = std::max(aSttBndry.startPos, aEndBndry.startPos);
+
         Boundary aCurWordBndry( aSttBndry );
         while (aCurWordBndry.startPos <= aEndBndry.startPos)
         {
@@ -1780,6 +1785,9 @@ void SwTextNode::TransliterateText(
                     GetText(), nStt,
                     g_pBreakIt->GetLocale(GetLang(nStt, 1)),
                     nWordType);
+
+            /* Selection may end in the middle of a word */
+            aCurWordBndry.endPos = std::min(aCurWordBndry.endPos, selEnd);
         }
     }
     else if (rTrans.getType() == TransliterationFlags::SENTENCE_CASE)
