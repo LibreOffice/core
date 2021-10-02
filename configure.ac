@@ -1966,6 +1966,13 @@ AC_ARG_ENABLE(wasm-strip,
         [Strip the static build like for WASM/emscripten platform.]),
 ,)
 
+AC_ARG_ENABLE(wasm-exceptions,
+    AS_HELP_STRING([--enable-wasm-exceptions],
+        [Build with native WASM exceptions (AKA -fwasm-exceptions),
+        matter of fact, this is currently not finished by any implementation)
+        (see https://webassembly.org/roadmap/ for the current state]),
+,)
+
 AC_ARG_ENABLE(xmlhelp,
     AS_HELP_STRING([--disable-xmlhelp],
         [Disable XML help support]),
@@ -2994,6 +3001,13 @@ if test "$enable_wasm_strip" = "yes"; then
 
     AC_DEFINE(HAVE_FEATURE_WASM_STRIP)
 fi
+
+ENABLE_WASM_EXCEPTIONS=
+if test "$enable_wasm_exceptions" = "yes"; then
+    ENABLE_WASM_EXCEPTIONS=TRUE
+    AC_DEFINE(ENABLE_WASM_EXCEPTIONS)
+fi
+AC_SUBST(ENABLE_WASM_EXCEPTIONS)
 
 ENABLE_SERVICES_RDB_FROM_BUILD=
 if test "$enable_services_rdb_from_build" = yes; then

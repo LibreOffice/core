@@ -39,6 +39,8 @@
 #include <unordered_map>
 #include "share.hxx"
 
+#include <config_wasm_strip.h>
+
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
 
@@ -293,6 +295,7 @@ static void deleteException( void * pExc )
 
 void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 {
+#if ENABLE_WASM_EXCEPTIONS
 #if OSL_DEBUG_LEVEL > 1
     OString cstr(
         OUStringToOString(
@@ -337,10 +340,14 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     //                  struct std::type_info * tinfo,
     //                  void (*dest)(void*));
     __cxxabiv1::__cxa_throw( pCppExc, rtti, deleteException );
+#else
+    std::abort();
+#endif
 }
 
 void fillUnoException(uno_Any * pUnoExc, uno_Mapping * pCpp2Uno)
 {
+#if ENABLE_WASM_EXCEPTIONS
     __cxa_exception * header = __cxxabiv1::__cxa_get_globals()->caughtExceptions;
     if (! header)
     {
@@ -399,6 +406,9 @@ void fillUnoException(uno_Any * pUnoExc, uno_Mapping * pCpp2Uno)
         uno_any_constructAndConvert( pUnoExc, header->adjustedPtr, pExcTypeDescr, pCpp2Uno );
         typelib_typedescription_release( pExcTypeDescr );
     }
+#else
+    std::abort();
+#endif
 }
 
 }

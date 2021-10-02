@@ -539,6 +539,12 @@ bridges/source/cpp_uno/gcc3_solaris_sparc/cpp2uno.cxx
 bridges/source/cpp_uno/gcc3_solaris_sparc/except.cxx
 bridges/source/cpp_uno/gcc3_solaris_sparc/share.hxx
 bridges/source/cpp_uno/gcc3_solaris_sparc/uno2cpp.cxx
+bridges/source/cpp_uno/gcc3_wasm/cpp2uno.cxx
+bridges/source/cpp_uno/gcc3_wasm/except.cxx
+bridges/source/cpp_uno/gcc3_wasm/rtti.h
+bridges/source/cpp_uno/gcc3_wasm/share.hxx
+bridges/source/cpp_uno/gcc3_wasm/uno2cpp.cxx
+bridges/source/cpp_uno/gcc3_wasm/unwind-cxx.h
 bridges/source/cpp_uno/msvc_win32_intel/cpp2uno.cxx
 bridges/source/cpp_uno/msvc_win32_intel/except.cxx
 bridges/source/cpp_uno/msvc_win32_intel/uno2cpp.cxx
