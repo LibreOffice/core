@@ -2744,6 +2744,14 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                         nWordType);
             }
 
+            // prevent going outside of the user's selection, which may
+            // start or end in the middle of a word
+            if (nNode == nStartNode) {
+                aSttBndry.startPos = std::max(aSttBndry.startPos, aSel.Min().GetIndex());
+                aSttBndry.endPos   = std::min(aSttBndry.endPos,   aSel.Max().GetIndex());
+                aEndBndry.startPos = std::max(aEndBndry.startPos, aSttBndry.startPos);
+                aEndBndry.endPos   = std::min(aEndBndry.endPos,   aSel.Max().GetIndex());
+            }
             i18n::Boundary aCurWordBndry( aSttBndry );
             while (aCurWordBndry.endPos && aCurWordBndry.startPos <= aEndBndry.startPos)
             {
@@ -2774,6 +2782,9 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 aCurWordBndry = _xBI->nextWord(aNodeStr, nCurrentStart,
                         GetLocale( EditPaM( pNode, nCurrentStart + 1 ) ),
                         nWordType);
+
+                /* Selection may end in the middle of a word */
+                aCurWordBndry.endPos = std::min(aCurWordBndry.endPos,   aSel.Max().GetIndex());
             }
             DBG_ASSERT( nCurrentEnd >= aEndBndry.endPos, "failed to reach end of transliteration" );
         }
