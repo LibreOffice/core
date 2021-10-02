@@ -113,8 +113,8 @@ public:
     // Truncates all after pCurr
     void TruncLines( bool bNoteFollow = false );
 
-    sal_uInt32 GetLineHeight() const { return m_pCurr->GetRealHeight(); }
-    void CalcAscentAndHeight( sal_uInt32 &rAscent, sal_uInt32 &rHeight ) const;
+    SwTwips GetLineHeight() const { return m_pCurr->GetRealHeight(); }
+    void CalcAscentAndHeight( SwTwips &rAscent, SwTwips &rHeight ) const;
 
     // Lots of trouble for querying pCurr == pPara
     bool IsFirstTextLine() const
@@ -287,8 +287,8 @@ public:
 
     // calculates baseline for portion rPor
     // bAutoToCentered indicates, if AUTOMATIC mode means CENTERED or BASELINE
-    sal_uInt32 AdjustBaseLine( const SwLineLayout& rLine, const SwLinePortion* pPor,
-                           sal_uInt32 nPorHeight = 0, sal_uInt32 nAscent = 0,
+    SwTwips AdjustBaseLine( const SwLineLayout& rLine, const SwLinePortion* pPor,
+                           SwTwips nPorHeight = 0, SwTwips nAscent = 0,
                            const bool bAutoToCentered = false ) const;
 
     static void SetRightMargin( const bool bNew ){ s_bRightMargin = bNew; }

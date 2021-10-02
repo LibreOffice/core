@@ -428,7 +428,7 @@ void SwTextCursor::GetEndCharRect(SwRect* pOrig, const TextFrameIndex nOfst,
     tools::Long nLast = 0;
     SwLinePortion *pPor = m_pCurr->GetFirstPortion();
 
-    sal_uInt32 nTmpHeight, nTmpAscent;
+    SwTwips nTmpHeight, nTmpAscent;
     CalcAscentAndHeight( nTmpAscent, nTmpHeight );
     sal_uInt16 nPorHeight = nTmpHeight;
     sal_uInt16 nPorAscent = nTmpAscent;
@@ -479,7 +479,7 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
     SwTextSizeInfo aInf( GetInfo(), &aText, m_nStart );
     if( GetPropFont() )
         aInf.GetFont()->SetProportion( GetPropFont() );
-    sal_uInt32 nTmpAscent, nTmpHeight;  // Line height
+    SwTwips nTmpAscent, nTmpHeight;  // Line height
     CalcAscentAndHeight( nTmpAscent, nTmpHeight );
     const Size  aCharSize( 1, nTmpHeight );
     const Point aCharPos;
@@ -505,8 +505,8 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
     }
     else
     {
-        sal_uInt32 nPorHeight = nTmpHeight;
-        sal_uInt32 nPorAscent = nTmpAscent;
+        SwTwips nPorHeight = nTmpHeight;
+        SwTwips nPorAscent = nTmpAscent;
         SwTwips nX = 0;
         SwTwips nTmpFirst = 0;
         SwLinePortion *pPor = m_pCurr->GetFirstPortion();
@@ -1051,7 +1051,7 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
                     nPorHeight = nPorAscent;
                     pOrig->Height( nPorHeight +
                         static_cast<SwDropPortion*>(pPor)->GetDropDescent() );
-                    if( o3tl::narrowing<SwTwips>(nTmpHeight) < pOrig->Height() )
+                    if( nTmpHeight < pOrig->Height() )
                     {
                         nTmpAscent = nPorAscent;
                         nTmpHeight = sal_uInt16( pOrig->Height() );
@@ -1266,7 +1266,7 @@ void SwTextCursor::GetCharRect( SwRect* pOrig, TextFrameIndex const nOfst,
  * Determines if SwTextCursor::GetModelPositionForViewPoint() should consider the next portion when calculating the
  * doc model position from a Point.
  */
-static bool ConsiderNextPortionForCursorOffset(const SwLinePortion* pPor, sal_uInt32 nWidth30, sal_uInt16 nX)
+static bool ConsiderNextPortionForCursorOffset(const SwLinePortion* pPor, SwTwips nWidth30, sal_uInt16 nX)
 {
     if (!pPor->GetNextPortion() || pPor->IsBreakPortion())
     {
@@ -1323,7 +1323,7 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
     // Until here everything in document coordinates.
     x -= nLeftMargin;
 
-    sal_uInt32 nX = sal_uInt16( x );
+    SwTwips nX = x;
 
     // If there are attribute changes in the line, search for the paragraph,
     // in which nX is situated.
@@ -1342,7 +1342,7 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
     // nWidth is the width of the line, or the width of
     // the paragraph with the font change, in which nX is situated.
 
-    sal_uInt32 nWidth = pPor->Width();
+    SwTwips nWidth = pPor->Width();
     if ( m_pCurr->IsSpaceAdd() || pKanaComp )
     {
         if ( pPor->InSpaceGrp() && nSpaceAdd )
@@ -1372,7 +1372,7 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
         }
     }
 
-    sal_uInt32 nWidth30;
+    SwTwips nWidth30;
     if ( pPor->IsPostItsPortion() )
         nWidth30 = 0;
     else
@@ -1691,12 +1691,12 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
                         }
                         pCurrPart = pCurrPart->GetFollow();
                     }
-                    nX = std::max(o3tl::narrowing<sal_uInt32>(0), nX - nSumBorderWidth);
+                    nX = std::max(static_cast<SwTwips>(0), nX - nSumBorderWidth);
                 }
                 // Shift the offset with the left border width
                 else if( GetInfo().GetFont()->GetLeftBorder() && !pPor->GetJoinBorderWithPrev() )
                 {
-                    nX = std::max(o3tl::narrowing<sal_uInt32>(0), nX - GetInfo().GetFont()->GetLeftBorderSpace());
+                    nX = std::max(static_cast<SwTwips>(0), nX - GetInfo().GetFont()->GetLeftBorderSpace());
                 }
 
                 aDrawInf.SetOffset( nX );

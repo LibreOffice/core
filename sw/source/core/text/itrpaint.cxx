@@ -83,14 +83,14 @@ SwLinePortion *SwTextPainter::CalcPaintOfst( const SwRect &rPaint )
     {
         SwLinePortion *pLast = nullptr;
         // 7529 and 4757: not <= nPaintOfst
-        while( pPor && o3tl::narrowing<SwTwips>(GetInfo().X() + pPor->Width() + (pPor->Height()/2))
+        while( pPor && GetInfo().X() + pPor->Width() + (pPor->Height()/2)
                        < nPaintOfst )
         {
             if( pPor->InSpaceGrp() && GetInfo().GetSpaceAdd() )
             {
                 tools::Long nTmp = GetInfo().X() +pPor->Width() +
                     pPor->CalcSpacing( GetInfo().GetSpaceAdd(), GetInfo() );
-                if( o3tl::narrowing<SwTwips>(nTmp + (pPor->Height()/2)) >= nPaintOfst )
+                if( nTmp + (pPor->Height()/2) >= nPaintOfst )
                     break;
                 GetInfo().X( nTmp );
                 GetInfo().SetIdx( GetInfo().GetIdx() + pPor->GetLen() );
@@ -178,7 +178,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                      && GetDropLines() >= GetLineNr();
     }
 
-    sal_uInt32 nTmpHeight, nTmpAscent;
+    SwTwips nTmpHeight, nTmpAscent;
     CalcAscentAndHeight( nTmpAscent, nTmpHeight );
 
     // bClip decides if there's a need to clip
@@ -192,7 +192,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
         if( GetInfo().GetPos().X() < rPaint.Left() ||
             GetInfo().GetPos().Y() < rPaint.Top() ||
-            GetInfo().GetPos().Y() + o3tl::narrowing<SwTwips>(nTmpHeight) > rPaint.Top() + rPaint.Height() )
+            GetInfo().GetPos().Y() + nTmpHeight > rPaint.Top() + rPaint.Height() )
         {
             bClip = false;
             rClip.ChgClip( rPaint, m_pFrame, m_pCurr->HasUnderscore() );
@@ -347,7 +347,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         // A safety distance of half the height is added, so that
         // TTF-"f" isn't overlapping into the page margin.
         if( bClip &&
-            o3tl::narrowing<SwTwips>(GetInfo().X() + pPor->Width() + ( pPor->Height() / 2 )) > nMaxRight )
+            GetInfo().X() + pPor->Width() + ( pPor->Height() / 2 ) > nMaxRight )
         {
             bClip = false;
             rClip.ChgClip( rPaint, m_pFrame, m_pCurr->HasUnderscore() );
@@ -480,7 +480,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                 SwTwips nDiff = GetInfo().Y() + nTmpHeight - nTmpAscent - GetTextFrame()->getFrameArea().Bottom();
                 if( ( nDiff > 0 &&
                       (GetEnd() < TextFrameIndex(GetInfo().GetText().getLength()) ||
-                        ( nDiff > o3tl::narrowing<SwTwips>(nTmpHeight)/2 && GetPrevLine() ) ) ) ||
+                        ( nDiff > nTmpHeight/2 && GetPrevLine() ) ) ) ||
                     (nDiff >= 0 && bNextUndersized) )
 
                 {

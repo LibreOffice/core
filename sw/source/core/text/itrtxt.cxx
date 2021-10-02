@@ -60,7 +60,7 @@ void SwTextIter::Init()
     m_nLineNr = 1;
 }
 
-void SwTextIter::CalcAscentAndHeight( sal_uInt32 &rAscent, sal_uInt32 &rHeight ) const
+void SwTextIter::CalcAscentAndHeight( SwTwips &rAscent, SwTwips &rHeight ) const
 {
     rHeight = GetLineHeight();
     rAscent = m_pCurr->GetAscent() + rHeight - m_pCurr->Height();
@@ -211,9 +211,9 @@ const SwLineLayout *SwTextCursor::CharCursorToLine(TextFrameIndex const nPositio
     return bPrevious ? PrevLine() : m_pCurr;
 }
 
-sal_uInt32 SwTextCursor::AdjustBaseLine( const SwLineLayout& rLine,
+SwTwips SwTextCursor::AdjustBaseLine( const SwLineLayout& rLine,
                                     const SwLinePortion* pPor,
-                                    sal_uInt32 nPorHeight, sal_uInt32 nPorAscent,
+                                    SwTwips nPorHeight, SwTwips nPorAscent,
                                     const bool bAutoToCentered ) const
 {
     if ( pPor )
@@ -222,7 +222,7 @@ sal_uInt32 SwTextCursor::AdjustBaseLine( const SwLineLayout& rLine,
         nPorAscent = pPor->GetAscent();
     }
 
-    sal_uInt32 nOfst = rLine.GetRealHeight() - rLine.Height();
+    SwTwips nOfst = rLine.GetRealHeight() - rLine.Height();
 
     SwTextGridItem const*const pGrid(GetGridItem(m_pFrame->FindPageFrame()));
 
@@ -299,7 +299,7 @@ sal_uInt32 SwTextCursor::AdjustBaseLine( const SwLineLayout& rLine,
 
 void SwTextIter::TwipsToLine( const SwTwips y)
 {
-    while( m_nY + o3tl::narrowing<SwTwips>(GetLineHeight()) <= y && Next() )
+    while( m_nY + GetLineHeight() <= y && Next() )
         ;
     while( m_nY > y && Prev() )
         ;
