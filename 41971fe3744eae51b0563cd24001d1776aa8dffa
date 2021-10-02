@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a15baf4_af3bc0d9",
+        "filename": "vcl/unx/generic/fontmanager/fontsubst.cxx",
+        "patchSetId": 56
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-02T05:00:19Z",
+      "side": 1,
+      "message": "I\u0027m afraid it\u0027s some mistake here.",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 23
+      },
+      "revId": "41971fe3744eae51b0563cd24001d1776aa8dffa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
