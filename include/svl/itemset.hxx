@@ -70,6 +70,8 @@ protected:
     SfxItemSet( SfxItemPool&, SfxAllItemSetFlag );
     /** special constructor for SfxItemSetFixed */
     SfxItemSet( SfxItemPool&, WhichRangesContainer&& ranges, SfxPoolItem const ** ppItems );
+    /** special constructor for Clone */
+    SfxItemSet( const SfxItemSet&, SfxPoolItem const ** ppItems );
 
 public:
     SfxItemSet( const SfxItemSet& );
