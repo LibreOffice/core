@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38cc21a9_d362c701",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-10-02T17:39:04Z",
+      "side": 1,
+      "message": "Please add to the beginning of the commit message: tdf#144607\n\nYou can submit a new patchset: https://wiki.documentfoundation.org/Development/gerrit/SubmitPatch#Submitting_a_new_version",
+      "revId": "f550fbd5206ea116bc73f00a595feacbf6bd94a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
