@@ -25,6 +25,7 @@
 #include <editeng/lspcitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <sal/log.hxx>
+#include <o3tl/deleter.hxx>
 #include <osl/diagnose.h>
 
 #include <drawdoc.hxx>
@@ -782,7 +783,7 @@ SwContentNotify::SwContentNotify( SwContentFrame *pContentFrame ) :
     }
 }
 
-SwContentNotify::~SwContentNotify()
+void SwContentNotify::ImplDestroy()
 {
     SwContentFrame *pCnt = static_cast<SwContentFrame*>(mpFrame);
     if ( bSetCompletePaintOnInvalidate )
@@ -1000,6 +1001,11 @@ SwContentNotify::~SwContentNotify()
             }
         }
     }
+}
+
+SwContentNotify::~SwContentNotify()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 // note this *cannot* be static because it's a friend

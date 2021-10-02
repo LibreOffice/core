@@ -275,6 +275,8 @@ private:
     bool        mbInvalidatePrevPrtArea;
     bool        mbBordersJoinedWithPrev;
 
+    void ImplDestroy();
+
 public:
     SwContentNotify( SwContentFrame *pContentFrame );
     ~SwContentNotify();
