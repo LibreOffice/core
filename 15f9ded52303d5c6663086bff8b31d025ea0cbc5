@@ -16,6 +16,23 @@
       "message": "noting that the factor is 3, not 6, because in the 6 case referenced in the rtl/ code, we are consuming 2 input chars",
       "revId": "15f9ded52303d5c6663086bff8b31d025ea0cbc5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5959c1d1_7a4805e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-10-02T15:48:35Z",
+      "side": 1,
+      "message": "I think there are other sites where the same calculation is done for the worst-case length - with different results and multipliers (?) \u003d) line 203 looks problematic too at a minimum.",
+      "revId": "15f9ded52303d5c6663086bff8b31d025ea0cbc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
