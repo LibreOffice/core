@@ -8,8 +8,10 @@
  */
 
 #include <test/bootstrapfixture.hxx>
+#include <test/outputdevice.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/vector/b2enums.hxx>
 
 #include <vcl/lineinfo.hxx>
@@ -81,6 +83,7 @@ public:
     void testDrawCheckered();
     void testDrawBorder();
     void testDrawWaveLine();
+    void testDrawPolyLine();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
     CPPUNIT_TEST(testVirtualDevice);
@@ -131,6 +134,7 @@ public:
     CPPUNIT_TEST(testDrawCheckered);
     CPPUNIT_TEST(testDrawBorder);
     CPPUNIT_TEST(testDrawWaveLine);
+    CPPUNIT_TEST(testDrawPolyLine);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1152,6 +1156,7 @@ void VclOutdevTest::testDrawLine()
         aLineInfo.SetDotLen(13);
         aLineInfo.SetDistance(8);
         aLineInfo.SetLineJoin(basegfx::B2DLineJoin::Bevel);
+        aLineInfo.SetLineCap(css::drawing::LineCap_BUTT);
 
         pVDev->SetOutputSizePixel(Size(100, 100));
         pVDev->DrawLine(Point(0, 0), Point(0, 50), aLineInfo);
@@ -1175,6 +1180,8 @@ void VclOutdevTest::testDrawLine()
                                      pLineAction->GetLineInfo().GetDistance());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Line join", basegfx::B2DLineJoin::Bevel,
                                      pLineAction->GetLineInfo().GetLineJoin());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Line cap", css::drawing::LineCap_BUTT,
+                                     pLineAction->GetLineInfo().GetLineCap());
     }
 }
 
@@ -1780,6 +1787,122 @@ void VclOutdevTest::testDrawWaveLine()
     MetaAction* pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a bitmap action", MetaActionType::BMPEXSCALEPART,
                                  pAction->GetType());
+}
+
+void VclOutdevTest::testDrawPolyLine()
+{
+    {
+        ScopedVclPtrInstance<VirtualDevice> pVDev;
+        GDIMetaFile aMtf;
+        aMtf.Record(pVDev.get());
+
+        pVDev->SetOutputSizePixel(Size(100, 100));
+        tools::Polygon aPolygon(vcl::test::OutputDeviceTestCommon::createClosedBezierLoop(
+            tools::Rectangle(Point(10, 10), Size(80, 8))));
+
+        pVDev->DrawPolyLine(aPolygon);
+
+        MetaAction* pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polygon action", MetaActionType::POLYLINE,
+                                     pAction->GetType());
+        MetaPolyLineAction* pPolyLineAction = dynamic_cast<MetaPolyLineAction*>(pAction);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Polygon in polyline action is wrong", aPolygon,
+                                     pPolyLineAction->GetPolygon());
+    }
+
+    {
+        ScopedVclPtrInstance<VirtualDevice> pVDev;
+        GDIMetaFile aMtf;
+        aMtf.Record(pVDev.get());
+
+        pVDev->SetOutputSizePixel(Size(100, 100));
+
+        tools::Polygon aPolygon(vcl::test::OutputDeviceTestCommon::createClosedBezierLoop(
+            tools::Rectangle(Point(10, 10), Size(80, 8))));
+
+        LineInfo aLineInfo(LineStyle::Dash, 10);
+        aLineInfo.SetDashCount(5);
+        aLineInfo.SetDashLen(10);
+        aLineInfo.SetDotCount(3);
+        aLineInfo.SetDotLen(13);
+        aLineInfo.SetDistance(8);
+        aLineInfo.SetLineJoin(basegfx::B2DLineJoin::Bevel);
+        aLineInfo.SetLineCap(css::drawing::LineCap_BUTT);
+
+        pVDev->DrawPolyLine(aPolygon, aLineInfo);
+
+        MetaAction* pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polygon action", MetaActionType::POLYLINE,
+                                     pAction->GetType());
+        MetaPolyLineAction* pPolyLineAction = dynamic_cast<MetaPolyLineAction*>(pAction);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Polygon in polyline action is wrong", aPolygon,
+                                     pPolyLineAction->GetPolygon());
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Dash count wrong", static_cast<sal_uInt16>(5),
+                                     pPolyLineAction->GetLineInfo().GetDashCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Dash len wrong", static_cast<double>(10),
+                                     pPolyLineAction->GetLineInfo().GetDashLen());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Dot count wrong", static_cast<sal_uInt16>(3),
+                                     pPolyLineAction->GetLineInfo().GetDotCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Dot len wrong", static_cast<double>(13),
+                                     pPolyLineAction->GetLineInfo().GetDotLen());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Distance wrong", static_cast<double>(8),
+                                     pPolyLineAction->GetLineInfo().GetDistance());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Line join", basegfx::B2DLineJoin::Bevel,
+                                     pPolyLineAction->GetLineInfo().GetLineJoin());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Line cap", css::drawing::LineCap_BUTT,
+                                     pPolyLineAction->GetLineInfo().GetLineCap());
+    }
+
+    {
+        ScopedVclPtrInstance<VirtualDevice> pVDev;
+        GDIMetaFile aMtf;
+        aMtf.Record(pVDev.get());
+
+        pVDev->SetOutputSizePixel(Size(100, 100));
+
+        basegfx::B2DPolygon aPolygon(vcl::test::OutputDeviceTestCommon::createClosedBezierLoop(
+                                         tools::Rectangle(Point(10, 10), Size(80, 8)))
+                                         .getB2DPolygon());
+
+        LineInfo aLineInfo(LineStyle::Dash, 10);
+        aLineInfo.SetDashCount(5);
+        aLineInfo.SetDashLen(10);
+        aLineInfo.SetDotCount(3);
+        aLineInfo.SetDotLen(13);
+        aLineInfo.SetDistance(8);
+        aLineInfo.SetLineJoin(basegfx::B2DLineJoin::Bevel);
+        aLineInfo.SetLineCap(css::drawing::LineCap_BUTT);
+
+        pVDev->DrawPolyLine(aPolygon, 3, basegfx::B2DLineJoin::Bevel, css::drawing::LineCap_BUTT,
+                            15.0);
+
+        MetaAction* pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polygon action", MetaActionType::POLYLINE,
+                                     pAction->GetType());
+        MetaPolyLineAction* pPolyLineAction = dynamic_cast<MetaPolyLineAction*>(pAction);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Polygon in polyline action is wrong", aPolygon,
+                                     pPolyLineAction->GetPolygon().getB2DPolygon());
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Width wrong", static_cast<double>(3),
+                                     pPolyLineAction->GetLineInfo().GetWidth());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Dash count wrong", static_cast<sal_uInt16>(0),
+                                     pPolyLineAction->GetLineInfo().GetDashCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Dash len wrong", static_cast<double>(0),
+                                     pPolyLineAction->GetLineInfo().GetDashLen());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Dot count wrong", static_cast<sal_uInt16>(0),
+                                     pPolyLineAction->GetLineInfo().GetDotCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Dot len wrong", static_cast<double>(0),
+                                     pPolyLineAction->GetLineInfo().GetDotLen());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Distance wrong", static_cast<double>(0),
+                                     pPolyLineAction->GetLineInfo().GetDistance());
+        /* these aren't set!
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Line join", basegfx::B2DLineJoin::Bevel,
+                                     pPolyLineAction->GetLineInfo().GetLineJoin());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Line cap", css::drawing::LineCap_BUTT,
+                                     pPolyLineAction->GetLineInfo().GetLineCap());
+        */
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclOutdevTest);
