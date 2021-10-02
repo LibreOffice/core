@@ -522,6 +522,27 @@ void SwUiWriterTest4::testTdf49033()
     CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
                          lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
 
+    /* -- Test behavior when there is a selection that does not begin at a word boundary: "et" -- */
+    for (int i = 0; i < 2; i++)
+        pCursor->Move(fnMoveBackward);
+    pCursor->SetMark();
+    for (int i = 0; i < 2; i++)
+        pCursor->Move(fnMoveForward);
+    pWrtShell->GetSelectedText(currentSelectedText);
+    CPPUNIT_ASSERT_EQUAL(OUString("et"), currentSelectedText);
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones mEt joe Smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
+    pDoc->GetIDocumentUndoRedo().Undo();
+    CPPUNIT_ASSERT_EQUAL(OUString("et"), currentSelectedText);
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones mEt joe Smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
+    pDoc->GetIDocumentUndoRedo().Undo();
+    CPPUNIT_ASSERT_EQUAL(OUString("et"), currentSelectedText);
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones mET joe Smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
+
     /* -- Test behavior when there is a selection that crosses a word boundary -- */
     for (int i = 0; i < 7; i++)
         pCursor->Move(fnMoveBackward);
@@ -533,7 +554,7 @@ void SwUiWriterTest4::testTdf49033()
     CPPUNIT_ASSERT_EQUAL(OUString("nes met joe Sm"), currentSelectedText);
     CPPUNIT_ASSERT_EQUAL(OUString("Mary JoNes met joe smith. Time Passed."),
                          lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones Met Joe Smith. Time Passed."),
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary JoNes Met Joe Smith. Time Passed."),
                          lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
     CPPUNIT_ASSERT_EQUAL(OUString("Mary JoNES MET JOE SMith. Time Passed."),
                          lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
