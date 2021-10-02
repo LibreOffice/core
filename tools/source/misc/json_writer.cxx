@@ -413,10 +413,7 @@ void JsonWriter::reallocBuffer(int noMoreBytesRequired)
 {
     int currentUsed = mPos - mpBuffer;
     auto newSize = std::max<int>(mSpaceAllocated * 2, (currentUsed + noMoreBytesRequired) * 2);
-    char* pNew = static_cast<char*>(malloc(newSize));
-    memcpy(pNew, mpBuffer, currentUsed);
-    free(mpBuffer);
-    mpBuffer = pNew;
+    mpBuffer = static_cast<char*>(realloc(mpBuffer, newSize));
     mPos = mpBuffer + currentUsed;
     mSpaceAllocated = newSize;
 }
