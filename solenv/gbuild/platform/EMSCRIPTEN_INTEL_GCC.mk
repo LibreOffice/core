@@ -11,13 +11,19 @@ gb_UnoApiHeadersTarget_select_variant = $(if $(filter udkapi,$(1)),comprehensive
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 
+# don't sort; later can override previous settings!
+gb_EMSCRIPTEN_PRE_JS_FILES = \
+    $(call gb_CustomTarget_get_workdir,static/wasm_fs_image)/soffice.data.js.link \
+    $(SRCDIR)/static/environment.js
+
 gb_RUN_CONFIGURE := $(SRCDIR)/solenv/bin/run-configure
 # avoid -s SAFE_HEAP=1 - c.f. gh#8584 this breaks source maps
 gb_EMSCRIPTEN_CPPFLAGS := -pthread -s USE_PTHREADS=1
+
 # To keep the link time (and memory) down, prevent all rewriting options from wasm-emscripten-finalize
 # See emscrypten.py, finalize_wasm, modify_wasm = True
 # So we need WASM_BIGINT=1 and ASSERTIONS=1 (2 implies STACK_OVERFLOW_CHECK)
-gb_EMSCRIPTEN_LDFLAGS := $(gb_EMSCRIPTEN_CPPFLAGS) --bind -s TOTAL_MEMORY=1GB -s PTHREAD_POOL_SIZE=4 -s FORCE_FILESYSTEM=1 -s WASM_BIGINT=1 -s ERROR_ON_UNDEFINED_SYMBOLS=1 -s FETCH=1 -s ASSERTIONS=1 -s EXIT_RUNTIME=0 -s EXPORTED_RUNTIME_METHODS=["UTF16ToString","stringToUTF16"] --pre-js $(call gb_CustomTarget_get_workdir,static/wasm_fs_image)/soffice.data.js.link --pre-js $(SRCDIR)/static/environment.js
+gb_EMSCRIPTEN_LDFLAGS := $(gb_EMSCRIPTEN_CPPFLAGS) --bind -s TOTAL_MEMORY=1GB -s PTHREAD_POOL_SIZE=4 -s FORCE_FILESYSTEM=1 -s WASM_BIGINT=1 -s ERROR_ON_UNDEFINED_SYMBOLS=1 -s FETCH=1 -s ASSERTIONS=1 -s EXIT_RUNTIME=0 -s EXPORTED_RUNTIME_METHODS=["UTF16ToString","stringToUTF16"] $(foreach pre_js,$(gb_EMSCRIPTEN_PRE_JS_FILES), --pre-js $(pre_js))
 gb_EMSCRIPTEN_QTDEFS := -DQT_NO_LINKED_LIST -DQT_NO_JAVA_STYLE_ITERATORS -DQT_NO_EXCEPTIONS -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 
 gb_Executable_EXT := .html
@@ -57,6 +63,8 @@ $(call gb_LinkTarget_add_auxtargets,$(2),\
         $(patsubst %.lib,%.worker.js,$(3)) \
 )
 
+$(call gb_Executable_get_linktarget,$(2)) : $(gb_EMSCRIPTEN_PRE_JS)
+
 endef
 
 define gb_CppunitTest_CppunitTest_platform
@@ -65,6 +73,8 @@ $(call gb_LinkTarget_add_auxtargets,$(2),\
         $(patsubst %.lib,%.js,$(3)) \
         $(patsubst %.lib,%.worker.js,$(3)) \
 )
+
+$(call gb_CppunitTest_get_linktarget,$(2)) : $(gb_EMSCRIPTEN_PRE_JS)
 
 endef
 
