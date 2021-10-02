@@ -1109,6 +1109,7 @@ emscripten)
     test_qt5=yes
     test_system_freetype=no
     enable_compiler_plugins=no
+    enable_split_debug=yes
     enable_qt5=yes
     enable_wasm_strip=yes
     with_system_zlib=no
@@ -4558,7 +4559,7 @@ printf ("hello world\n");
 }
 USE_LD=
 if test "$enable_ld" != "no"; then
-    if test "$GCC" = "yes"; then
+    if test "$GCC" = "yes" -a "$_os" != "Emscripten"; then
         if test -n "$enable_ld"; then
             check_use_ld "$enable_ld" fail_if_error
         elif test -z "$ENABLE_DEBUG$ENABLE_DBGUTIL"; then
@@ -4641,16 +4642,21 @@ printf ("hello world\n");
 fi
 AC_SUBST(LD_GC_SECTIONS)
 
-HAVE_GSPLIT_DWARF=
+HAVE_EXTERNAL_DWARF=
 if test "$enable_split_debug" != no; then
     dnl Currently by default enabled only on Linux, feel free to set test_split_debug above also for other platforms.
-    if test "$enable_split_debug" = yes -o \( "$test_split_debug" = "yes" -a -n "$ENABLE_DEBUG$ENABLE_DBGUTIL" \); then
-        AC_MSG_CHECKING([whether $CC_BASE supports -gsplit-dwarf])
+    if test "$enable_split_debug" = yes -o \( "$test_split_debug" = "yes" -a -n "$ENABLE_DEBUG$ENABLE_DBGUTIL" \) -o "$_os" = "Emscripten"; then
+        if test "$_os" = "Emscripten"; then
+            TEST_CC_FLAG=-gseparate-dwarf
+        else
+            TEST_CC_FLAG=-gsplit-dwarf
+        fi
+        AC_MSG_CHECKING([whether $CC_BASE supports $TEST_CC_FLAG])
         save_CFLAGS=$CFLAGS
-        CFLAGS="$CFLAGS -Werror -gsplit-dwarf"
-        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_SPLIT_DWARF=TRUE ],[])
+        CFLAGS="$CFLAGS -Werror $TEST_CC_FLAG"
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_EXTERNAL_DWARF=TRUE ],[])
         CFLAGS=$save_CFLAGS
-        if test "$HAVE_GCC_SPLIT_DWARF" = "TRUE"; then
+        if test "$HAVE_EXTERNAL_DWARF" = "TRUE"; then
             AC_MSG_RESULT([yes])
         else
             if test "$enable_split_debug" = yes; then
@@ -4660,12 +4666,8 @@ if test "$enable_split_debug" != no; then
             fi
         fi
     fi
-    if test -z "$HAVE_GCC_SPLIT_DWARF" -a "$test_split_debug" = "yes" -a -n "$ENABLE_DEBUG$ENABLE_DBGUTIL"; then
-        AC_MSG_WARN([Compiler is not capable of creating split debug info, linking will require more time and disk space.])
-        add_warning "Compiler is not capable of creating split debug info, linking will require more time and disk space."
-    fi
 fi
-AC_SUBST(HAVE_GCC_SPLIT_DWARF)
+AC_SUBST(HAVE_EXTERNAL_DWARF)
 
 HAVE_CLANG_DEBUG_INFO_KIND_CONSTRUCTOR=
 AC_MSG_CHECKING([whether $CC_BASE supports -Xclang -debug-info-kind=constructor])
