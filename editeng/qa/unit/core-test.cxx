@@ -1822,13 +1822,23 @@ void Test::testTransliterate()
     CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones MET joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
     CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
 
+    /* Test behavior when there is a selection that does not begin at a word boundary: "et" */
+    selStart = 12;
+    selEnd = 14;
+    esel = ESelection(0, selStart, 0, selEnd);
+    CPPUNIT_ASSERT_EQUAL(OUString("et"), editEng.GetText(esel));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones mEt joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones mEt joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones mET joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
+
     /* Test behavior when there is a selection that crosses a word boundary: "nes met joe Sm" */
     selStart = 7;
     selEnd = 21;
     esel = ESelection(0, selStart, 0, selEnd);
     CPPUNIT_ASSERT_EQUAL(OUString("nes met joe Sm"), editEng.GetText(esel));
     CPPUNIT_ASSERT_EQUAL(OUString("Mary JoNes met joe smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::SENTENCE_CASE));
-    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones Met Joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary JoNes Met Joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
     CPPUNIT_ASSERT_EQUAL(OUString("Mary JoNES MET JOE SMith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
     CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
 
