@@ -242,7 +242,7 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
 
     // line width is adjusted, so that pPor does not fit to current
     // line anymore
-    rInf.Width( o3tl::narrowing<sal_uInt16>(rInf.X() + (pPor->Width() ? pPor->Width() - 1 : 0)) );
+    rInf.Width( rInf.X() + (pPor->Width() ? pPor->Width() - 1 : 0) );
     rInf.SetLen( pPor->GetLen() );
     rInf.SetFull( false );
     if( pFly )
@@ -535,7 +535,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                 const SwTwips nRestWidth = rInf.Width() - rInf.X();
 
                 if ( nKernWidth <= nRestWidth )
-                    pGridKernPortion->Width( o3tl::narrowing<sal_uInt16>(nKernWidth) );
+                    pGridKernPortion->Width( nKernWidth );
             }
 
             if ( pGridKernPortion != pPor )
@@ -622,7 +622,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                     (m_pScriptInfo->ScriptType(nTmp - TextFrameIndex(1)) == css::i18n::ScriptType::ASIAN ||
                      m_pScriptInfo->ScriptType(nTmp) == css::i18n::ScriptType::ASIAN) )
                 {
-                    const sal_uInt16 nDist = o3tl::narrowing<sal_uInt16>(rInf.GetFont()->GetHeight()/5);
+                    const SwTwips nDist = rInf.GetFont()->GetHeight()/5;
 
                     if( nDist )
                     {
@@ -677,7 +677,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                                  0;
                 const SwTwips nTmpWidth = i * nGridWidth;
                 const SwTwips nKernWidth = std::min(nTmpWidth - nSumWidth, nRestWidth);
-                const sal_uInt16 nKernWidth_1 = o3tl::narrowing<sal_uInt16>(nKernWidth / 2);
+                const SwTwips nKernWidth_1 = nKernWidth / 2;
 
                 OSL_ENSURE( nKernWidth <= nRestWidth,
                         "Not enough space left for adjusting non-asian text in grid mode" );
@@ -1631,8 +1631,8 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
 
     // Recycling must be suppressed by changed line height and also
     // by changed ascent (lowering of baseline).
-    const sal_uInt32 nOldHeight = m_pCurr->Height();
-    const sal_uInt32 nOldAscent = m_pCurr->GetAscent();
+    const SwTwips nOldHeight = m_pCurr->Height();
+    const SwTwips nOldAscent = m_pCurr->GetAscent();
 
     m_pCurr->SetEndHyph( false );
     m_pCurr->SetMidHyph( false );
@@ -1712,7 +1712,7 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
         if ( IsFlyInCntBase() && (!IsQuick() || (pPorTmp && pPorTmp->IsFlyCntPortion() && !pPorTmp->GetNextPortion() &&
             m_pCurr->Height() > pPorTmp->Height())))
         {
-            sal_uInt32 nTmpAscent, nTmpHeight;
+            SwTwips nTmpAscent, nTmpHeight;
             CalcAscentAndHeight( nTmpAscent, nTmpHeight );
             AlignFlyInCntBase( Y() + tools::Long( nTmpAscent ) );
             m_pCurr->CalcLine( *this, GetInfo() );
@@ -1829,7 +1829,7 @@ void SwTextFormatter::RecalcRealHeight()
 
 void SwTextFormatter::CalcRealHeight( bool bNewLine )
 {
-    sal_uInt32 nLineHeight = m_pCurr->Height();
+    SwTwips nLineHeight = m_pCurr->Height();
     m_pCurr->SetClipping( false );
 
     SwTextGridItem const*const pGrid(GetGridItem(m_pFrame->FindPageFrame()));
@@ -1863,7 +1863,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                 nTmp = 100;
 
             nTmp *= nLineHeight;
-            nLineHeight = o3tl::narrowing<sal_uInt16>(nTmp / 100);
+            nLineHeight = nTmp / 100;
         }
 
         m_pCurr->SetRealHeight( nLineHeight );
@@ -1898,7 +1898,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                             nTmp /= 100;
                             if( !nTmp )
                                 ++nTmp;
-                            nLineHeight = o3tl::narrowing<sal_uInt16>(nTmp);
+                            nLineHeight = nTmp;
                             sal_uInt16 nAsc = ( 4 * nLineHeight ) / 5;  // 80%
 #if 0
                             // could do clipping here (like Word does)
@@ -1956,7 +1956,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                         nTmp += nLineHeight;
                         if (nTmp < 1)
                             nTmp = 1;
-                        nLineHeight = o3tl::narrowing<sal_uInt16>(nTmp);
+                        nLineHeight = nTmp;
                         break;
                     }
                     case SvxInterLineSpaceRule::Fix:
@@ -2156,8 +2156,8 @@ void SwTextFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
     SwTwips nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
     pCurrent->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
 
-    const sal_uInt32 nTmpHeight = pCurrent->GetRealHeight();
-    sal_uInt32 nAscent = pCurrent->GetAscent() + nTmpHeight - pCurrent->Height();
+    const SwTwips nTmpHeight = pCurrent->GetRealHeight();
+    SwTwips nAscent = pCurrent->GetAscent() + nTmpHeight - pCurrent->Height();
     AsCharFlags nFlags = AsCharFlags::UlSpace;
     if( GetMulti() )
     {
@@ -2422,7 +2422,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
         nAscent = pLast->GetAscent();
         nHeight = pLast->Height();
 
-        if ( o3tl::narrowing<SwTwips>(m_pCurr->GetRealHeight()) > nHeight )
+        if ( m_pCurr->GetRealHeight() > nHeight )
             nTop += m_pCurr->GetRealHeight() - nHeight;
         else
             // Important for fixed space between lines
@@ -2538,7 +2538,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
         // created: here and in MakeFlyDummies.
         // IsDummy() is evaluated in IsFirstTextLine(), when moving lines
         // and in relation with DropCaps.
-        pFly->Height( sal_uInt16(aInter.Height()) );
+        pFly->Height( aInter.Height() );
 
         // nNextTop now contains the margin's bottom edge, which we avoid
         // or the next margin's top edge, which we need to respect.
@@ -2551,10 +2551,10 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
         {
             SwTwips nH = nNextTop - aInter.Top();
             if( nH < SAL_MAX_UINT16 )
-                pFly->Height( sal_uInt16( nH ) );
+                pFly->Height( nH );
         }
-        if( nAscent < o3tl::narrowing<SwTwips>(pFly->Height()) )
-            pFly->SetAscent( sal_uInt16(nAscent) );
+        if( nAscent < pFly->Height() )
+            pFly->SetAscent( nAscent );
         else
             pFly->SetAscent( pFly->Height() );
     }
@@ -2568,9 +2568,9 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
         }
         else
         {
-            pFly->Height( sal_uInt16(aInter.Height()) );
-            if( nAscent < o3tl::narrowing<SwTwips>(pFly->Height()) )
-                pFly->SetAscent( sal_uInt16(nAscent) );
+            pFly->Height( aInter.Height() );
+            if( nAscent < pFly->Height() )
+                pFly->SetAscent( nAscent );
             else
                 pFly->SetAscent( pFly->Height() );
         }
@@ -2608,11 +2608,11 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
     const SwTwips nOfst = nStartX - nGridOrigin;
     const SwTwips nTmpWidth = rInf.Width() + nOfst;
 
-    const sal_uLong i = nTmpWidth / nGridWidth + 1;
+    const SwTwips i = nTmpWidth / nGridWidth + 1;
 
-    const tools::Long nNewWidth = ( i - 1 ) * nGridWidth - nOfst;
+    const SwTwips nNewWidth = ( i - 1 ) * nGridWidth - nOfst;
     if ( nNewWidth > 0 )
-        rInf.Width( o3tl::narrowing<sal_uInt16>(nNewWidth) );
+        rInf.Width( nNewWidth );
     else
         rInf.Width( 0 );
 
@@ -2649,7 +2649,7 @@ SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
     // we use this one when calculating the base, or the frame would be positioned
     // too much to the top, sliding down after all causing a repaint in an area
     // he actually never was in.
-    sal_uInt32 nAscent = 0;
+    SwTwips nAscent = 0;
 
     const bool bTextFrameVertical = GetInfo().GetTextFrame()->IsVertical();
 
@@ -2670,7 +2670,7 @@ SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
     {
         nAscent = rInf.GetLast()->GetAscent();
     }
-    else if( o3tl::narrowing<SwTwips>(nAscent) > nFlyAsc )
+    else if( nAscent > nFlyAsc )
         nFlyAsc = nAscent;
 
     Point aBase( GetLeftMargin() + rInf.X(), Y() + nAscent );

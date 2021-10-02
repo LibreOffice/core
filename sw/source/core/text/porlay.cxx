@@ -196,7 +196,7 @@ void SwLineLayout::DeleteNext()
     while (pNext);
 }
 
-void SwLineLayout::Height(const sal_uInt32 nNew, const bool bText)
+void SwLineLayout::Height(const SwTwips nNew, const bool bText)
 {
     SwPosSize::Height(nNew);
     if (bText)
@@ -371,7 +371,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
         }
         else
         {
-            const sal_uInt32 nLineHeight = Height();
+            const SwTwips nLineHeight = Height();
             Init( GetNextPortion() );
             SwLinePortion *pPos = mpNextPortion;
             SwLinePortion *pLast = this;
@@ -434,8 +434,8 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
 
                 // We had an attribute change: Sum up/build maxima of length and mass
 
-                sal_uInt32 nPosHeight = pPos->Height();
-                sal_uInt32 nPosAscent = pPos->GetAscent();
+                SwTwips nPosHeight = pPos->Height();
+                SwTwips nPosAscent = pPos->GetAscent();
 
                 SAL_WARN_IF( nPosHeight < nPosAscent,
                         "sw.core", "SwLineLayout::CalcLine: bad ascent or height" );
@@ -723,9 +723,8 @@ void SwLineLayout::MaxAscentDescent( SwTwips& _orAscent,
                ( !pTmpPortion->IsFlyCntPortion() &&
                  !(pTmpPortion == this && pTmpPortion->GetNextPortion() ) ) ) )
         {
-            SwTwips nPortionAsc = static_cast<SwTwips>(pTmpPortion->GetAscent());
-            SwTwips nPortionDesc = static_cast<SwTwips>(pTmpPortion->Height()) -
-                                   nPortionAsc;
+            SwTwips nPortionAsc = pTmpPortion->GetAscent();
+            SwTwips nPortionDesc = pTmpPortion->Height() - nPortionAsc;
 
             const bool bFlyCmp = pTmpPortion->IsFlyCntPortion() ?
                                      static_cast<const SwFlyCntPortion*>(pTmpPortion)->IsMax() :

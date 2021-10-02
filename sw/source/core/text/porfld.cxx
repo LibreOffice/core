@@ -594,11 +594,11 @@ bool SwNumberPortion::Format( SwTextFormatInfo &rInf )
         // Height has to be changed
         if ( rInf.IsMulti() )
         {
-            if ( o3tl::narrowing<SwTwips>(Height()) < nDiff )
-                Height( sal_uInt16( nDiff ) );
+            if ( Height() < nDiff )
+                Height( nDiff );
         }
-        else if( o3tl::narrowing<SwTwips>(Width()) < nDiff )
-            Width( sal_uInt16(nDiff) );
+        else if( Width() < nDiff )
+            Width( nDiff );
     }
     return bFull;
 }
@@ -785,7 +785,7 @@ SwGrfNumPortion::SwGrfNumPortion(
         m_nYPos = 0;
         m_eOrient = text::VertOrientation::TOP;
     }
-    Width( o3tl::narrowing<sal_uInt16>(rGrfSize.Width() + 2 * GRFNUM_SECURE) );
+    Width( rGrfSize.Width() + 2 * GRFNUM_SECURE );
     m_nFixWidth = Width();
     m_nGrfHeight = rGrfSize.Height() + 2 * GRFNUM_SECURE;
     Height( sal_uInt16(m_nGrfHeight) );
@@ -834,7 +834,7 @@ bool SwGrfNumPortion::Format( SwTextFormatInfo &rInf )
 
     if( bFull )
     {
-        Width( rInf.Width() - o3tl::narrowing<sal_uInt16>(rInf.X()) );
+        Width( rInf.Width() - rInf.X() );
         if( bFly )
         {
             SetLen(TextFrameIndex(0));
@@ -868,8 +868,8 @@ bool SwGrfNumPortion::Format( SwTextFormatInfo &rInf )
             SetHide( true );
     }
 
-    if( o3tl::narrowing<SwTwips>(Width()) < nDiff )
-        Width( sal_uInt16(nDiff) );
+    if( Width() < nDiff )
+        Width( nDiff );
     return bFull;
 }
 
@@ -1232,7 +1232,7 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
             if( nAsc > nMaxAscent )
                 nMaxAscent = nAsc;
             if( aSize.Height() - nAsc > nMaxDescent )
-                nMaxDescent = o3tl::narrowing<sal_uInt16>(aSize.Height() - nAsc);
+                nMaxDescent = aSize.Height() - nAsc;
         }
         // for one or two characters we double the width of the portion
         if( nCount < 3 )
@@ -1257,7 +1257,7 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
         Height( Height() + nMainAscent - GetAscent() );
         SetAscent( nMainAscent );
     }
-    if( o3tl::narrowing<SwTwips>(Height()) < nMainAscent + nMainDescent )
+    if( Height() < nMainAscent + nMainDescent )
         Height( nMainAscent + nMainDescent );
 
     // We calculate the x positions of the characters in both lines...
@@ -1295,7 +1295,7 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
     {
         if( rInf.GetLineStart() == rInf.GetIdx() && (!rInf.GetLast()->InFieldGrp()
             || !static_cast<SwFieldPortion*>(rInf.GetLast())->IsFollow() ) )
-            Width( o3tl::narrowing<sal_uInt16>( rInf.Width() - rInf.X() ) );
+            Width( rInf.Width() - rInf.X() );
         else
         {
             Truncate();

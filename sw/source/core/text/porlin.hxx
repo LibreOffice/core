@@ -55,7 +55,7 @@ protected:
     SwLinePortion *mpNextPortion;
     // Count of chars and spaces on the line
     TextFrameIndex mnLineLength;
-    sal_uInt32 mnAscent;      // Maximum ascender
+    SwTwips mnAscent;      // Maximum ascender
 
     SwLinePortion();
 private:
@@ -75,13 +75,13 @@ public:
     TextFrameIndex GetLen() const { return mnLineLength; }
     void SetLen(TextFrameIndex const nLen) { mnLineLength = nLen; }
     void SetNextPortion( SwLinePortion *pNew ){ mpNextPortion = pNew; }
-    sal_uInt32 &GetAscent() { return mnAscent; }
-    sal_uInt32 GetAscent() const { return mnAscent; }
-    void SetAscent( const sal_uInt32 nNewAsc ) { mnAscent = nNewAsc; }
-    void  PrtWidth( sal_uInt16 nNewWidth ) { Width( nNewWidth ); }
-    sal_uInt32 PrtWidth() const { return Width(); }
-    void AddPrtWidth( const sal_uInt32 nNew ) { Width( Width() + nNew ); }
-    void SubPrtWidth( const sal_uInt16 nNew ) { Width( Width() - nNew ); }
+    SwTwips &GetAscent() { return mnAscent; }
+    SwTwips GetAscent() const { return mnAscent; }
+    void SetAscent( const SwTwips nNewAsc ) { mnAscent = nNewAsc; }
+    void  PrtWidth( SwTwips nNewWidth ) { Width( nNewWidth ); }
+    SwTwips PrtWidth() const { return Width(); }
+    void AddPrtWidth( const SwTwips nNew ) { Width( Width() + nNew ); }
+    void SubPrtWidth( const SwTwips nNew ) { Width( Width() - nNew ); }
 
     // Insert methods
     virtual SwLinePortion *Insert( SwLinePortion *pPortion );

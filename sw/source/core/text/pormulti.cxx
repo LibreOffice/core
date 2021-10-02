@@ -413,7 +413,7 @@ void SwDoubleLinePortion::FormatBrackets( SwTextFormatInfo &rInf, SwTwips& nMaxW
         m_pBracket->nAscent = rInf.GetAscent();
         m_pBracket->nHeight = aSize.Height();
         aTmpFnt.SetActual( nActualScr );
-        if( nMaxWidth > o3tl::narrowing<SwTwips>(aSize.Width()) )
+        if( nMaxWidth > aSize.Width() )
         {
             m_pBracket->nPreWidth = aSize.Width();
             nMaxWidth -= aSize.Width();
@@ -442,7 +442,7 @@ void SwDoubleLinePortion::FormatBrackets( SwTextFormatInfo &rInf, SwTwips& nMaxW
         }
         if( aSize.Height() > m_pBracket->nHeight )
             m_pBracket->nHeight = aSize.Height();
-        if( nMaxWidth > o3tl::narrowing<SwTwips>(aSize.Width()) )
+        if( nMaxWidth > aSize.Width() )
         {
             m_pBracket->nPostWidth = aSize.Width();
             nMaxWidth -= aSize.Width();
@@ -644,7 +644,7 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
 // If there is a tabulator in smaller line, no adjustment is possible.
 void SwRubyPortion::Adjust_( SwTextFormatInfo &rInf )
 {
-    SwTwips nLineDiff = o3tl::narrowing<SwTwips>(GetRoot().Width()) - GetRoot().GetNext()->Width();
+    SwTwips nLineDiff = GetRoot().Width() - GetRoot().GetNext()->Width();
     TextFrameIndex const nOldIdx = rInf.GetIdx();
     if( !nLineDiff )
         return;
@@ -1693,7 +1693,7 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
         }
         else if ( rMulti.IsRuby() && rMulti.OnRight() && GetInfo().IsRuby() )
         {
-            SwTwips nLineDiff = std::max(( rMulti.GetRoot().Height() - pPor->Width() ) / 2, static_cast<sal_uInt32>(0) );
+            SwTwips nLineDiff = std::max(( rMulti.GetRoot().Height() - pPor->Width() ) / 2, static_cast<SwTwips>(0) );
             GetInfo().Y( nOfst + nLineDiff );
             // Draw the ruby text on top of the preserved space.
             GetInfo().X( GetInfo().X() - pPor->Height() );
@@ -2183,7 +2183,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
             // Setting this to the portion width ( = rMulti.Width() )
             // can make GetTextBreak inside SwTextGuess::Guess return too small
             // values. Therefore we add some extra twips.
-            if( nActWidth > nTmpX + o3tl::narrowing<SwTwips>(rMulti.Width()) + 6 )
+            if( nActWidth > nTmpX + rMulti.Width() + 6 )
                 nActWidth = nTmpX + rMulti.Width() + 6;
             nMaxWidth = nActWidth;
             nActWidth = ( 3 * nMaxWidth + nMinWidth + 3 ) / 4;
@@ -2525,7 +2525,7 @@ SwLinePortion* SwTextFormatter::MakeRestPortion( const SwLineLayout* pLine,
 SwTextCursorSave::SwTextCursorSave( SwTextCursor* pCursor,
                                   SwMultiPortion* pMulti,
                                   SwTwips nY,
-                                  sal_uInt32& nX,
+                                  SwTwips& nX,
                                   TextFrameIndex const nCurrStart,
                                   tools::Long nSpaceAdd )
   : pTextCursor(pCursor),
@@ -2534,7 +2534,7 @@ SwTextCursorSave::SwTextCursorSave( SwTextCursor* pCursor,
 {
     pCursor->m_nStart = nCurrStart;
     pCursor->m_pCurr = &pMulti->GetRoot();
-    while( pCursor->Y() + o3tl::narrowing<SwTwips>(pCursor->GetLineHeight()) < nY &&
+    while( pCursor->Y() + pCursor->GetLineHeight() < nY &&
         pCursor->Next() )
         ; // nothing
     nWidth = pCursor->m_pCurr->Width();

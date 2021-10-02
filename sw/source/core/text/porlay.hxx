@@ -83,8 +83,8 @@ private:
     SwLineLayout *m_pNext;                // The next Line
     std::unique_ptr<std::vector<tools::Long>> m_pLLSpaceAdd;     // Used for justified alignment
     std::unique_ptr<std::deque<sal_uInt16>> m_pKanaComp;  // Used for Kana compression
-    sal_uInt32 m_nRealHeight;             // The height resulting from line spacing and register
-    sal_uInt32 m_nTextHeight;             // The max height of all non-FlyCnt portions in this Line
+    SwTwips m_nRealHeight;             // The height resulting from line spacing and register
+    SwTwips m_nTextHeight;             // The max height of all non-FlyCnt portions in this Line
     bool m_bFormatAdj : 1;
     bool m_bDummy     : 1;
     bool m_bEndHyph   : 1;
@@ -110,7 +110,7 @@ private:
 public:
     // From SwPosSize
     using SwPosSize::Height;
-    virtual void Height(const sal_uInt32 nNew, const bool bText = true) override;
+    virtual void Height(const SwTwips nNew, const bool bText = true) override;
 
     // From SwLinePortion
     virtual SwLinePortion *Insert( SwLinePortion *pPortion ) override;
@@ -167,10 +167,10 @@ public:
     // Collects the data for the line
     void CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf );
 
-    void SetRealHeight( sal_uInt32 nNew ) { m_nRealHeight = nNew; }
-    sal_uInt32 GetRealHeight() const { return m_nRealHeight; }
+    void SetRealHeight( SwTwips nNew ) { m_nRealHeight = nNew; }
+    SwTwips GetRealHeight() const { return m_nRealHeight; }
 
-    sal_uInt16 GetTextHeight() const { return m_nTextHeight; }
+    SwTwips GetTextHeight() const { return m_nTextHeight; }
 
     // Creates the glue chain for short lines
     SwMarginPortion *CalcLeftMargin();
