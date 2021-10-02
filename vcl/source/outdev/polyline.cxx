@@ -149,6 +149,9 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         if( fLineWidth != 0.0 )
             aLineInfo.SetWidth( fLineWidth );
 
+        aLineInfo.SetLineJoin(eLineJoin);
+        aLineInfo.SetLineCap(eLineCap);
+
         const tools::Polygon aToolsPolygon( rB2DPolygon );
         mpMetaFile->AddAction( new MetaPolyLineAction( aToolsPolygon, aLineInfo ) );
     }
