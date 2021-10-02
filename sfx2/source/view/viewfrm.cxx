@@ -49,7 +49,9 @@
 #include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/weldutils.hxx>
+#ifndef ENABLE_WASM_STRIP_PINGUSER
 #include <unotools/VersionConfig.hxx>
+#endif
 #include <svtools/miscopt.hxx>
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/container/XIndexAccess.hpp>

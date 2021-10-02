@@ -1354,7 +1354,7 @@ if test "$_os" = "Emscripten"; then
     EMSDK_FILE_PACKAGER="$(em-config EMSCRIPTEN_ROOT)"/tools/file_packager
     if ! test -x "$EMSDK_FILE_PACKAGER"; then
         AC_MSG_WARN([No file_packager found in $(em-config EMSCRIPTEN_ROOT)/tools/file_packager.])
-	EMSCRIPTEN_ERROR=1
+        EMSCRIPTEN_ERROR=1
     fi
     if test $EMSCRIPTEN_ERROR -ne 0; then
         AC_MSG_ERROR(["Please fix your EMSDK setup to build with Emscripten!"])

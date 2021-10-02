@@ -93,12 +93,10 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
 ))
 endif
 
-ifneq ($(ENABLE_WASM_STRIP_ACCESSIBILITY),TRUE)
 $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/accessibility/AccessibilityCheck \
     sfx2/source/accessibility/AccessibilityIssue \
 ))
-endif
 
 $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/appl/app \

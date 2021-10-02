@@ -1224,8 +1224,10 @@ void SwHTMLParser::NewForm( bool bAppend )
     if( !m_pFormImpl )
         m_pFormImpl = new SwHTMLForm_Impl( m_xDoc->GetDocShell() );
 
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     OUString aAction( m_sBaseURL );
     OUString sName, sTarget;
+#endif
     FormSubmitEncoding nEncType = FormSubmitEncoding_URL;
     FormSubmitMethod nMethod = FormSubmitMethod_GET;
     SvxMacroTableDtor aMacroTable;
@@ -1245,20 +1247,22 @@ void SwHTMLParser::NewForm( bool bAppend )
 
         switch( rOption.GetToken() )
         {
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         case HtmlOptionId::ACTION:
             aAction = rOption.GetString();
-            break;
-        case HtmlOptionId::METHOD:
-            nMethod = rOption.GetEnum( aHTMLFormMethodTable, nMethod );
-            break;
-        case HtmlOptionId::ENCTYPE:
-            nEncType = rOption.GetEnum( aHTMLFormEncTypeTable, nEncType );
             break;
         case HtmlOptionId::TARGET:
             sTarget = rOption.GetString();
             break;
         case HtmlOptionId::NAME:
             sName = rOption.GetString();
+            break;
+#endif
+        case HtmlOptionId::METHOD:
+            nMethod = rOption.GetEnum( aHTMLFormMethodTable, nMethod );
+            break;
+        case HtmlOptionId::ENCTYPE:
+            nEncType = rOption.GetEnum( aHTMLFormEncTypeTable, nEncType );
             break;
 
         case HtmlOptionId::SDONSUBMIT:

@@ -102,7 +102,9 @@
 #include <osl/process.h>
 #include <rtl/byteseq.hxx>
 #include <unotools/pathoptions.hxx>
+#ifndef ENABLE_WASM_STRIP_PINGUSER
 #include <unotools/VersionConfig.hxx>
+#endif
 #include <rtl/bootstrap.hxx>
 #include <vcl/test/GraphicsRenderTests.hxx>
 #include <vcl/glxtestprocess.hxx>
@@ -342,10 +344,12 @@ namespace {
 
 void runGraphicsRenderTests()
 {
+#ifndef ENABLE_WASM_STRIP_PINGUSER
     if (!utl::isProductVersionUpgraded(false))
     {
         return;
     }
+#endif
     GraphicsRenderTests TestObject;
     TestObject.run();
 }

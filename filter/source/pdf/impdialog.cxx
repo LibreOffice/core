@@ -351,7 +351,6 @@ short ImpPDFTabDialog::Ok( )
 {
     // here the whole mechanism of the base class is not used
     // when Ok is hit, the user means 'convert to PDF', so simply close with ok
-#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     if (getGeneralPage()->IsPdfUaSelected())
     {
         SfxObjectShell* pShell = SfxObjectShell::GetShellFromComponent(mrDoc);
@@ -365,7 +364,6 @@ short ImpPDFTabDialog::Ok( )
             }
         }
     }
-#endif
 
     return RET_OK;
 }

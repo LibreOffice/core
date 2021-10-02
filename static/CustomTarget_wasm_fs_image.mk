@@ -26,6 +26,17 @@ gb_wasm_image_filelist := \
     $(INSTROOT)/$(LIBO_ETC_FOLDER)/services/services.rdb \
     $(INSTROOT)/$(LIBO_URE_ETC_FOLDER)/$(call gb_Helper_get_rcfile,uno) \
     $(INSTROOT)/$(LIBO_URE_MISC_FOLDER)/services.rdb \
+    $(INSTROOT)/share/registry/cjk.xcd \
+    $(INSTROOT)/share/registry/ctlseqcheck.xcd \
+    $(INSTROOT)/share/registry/ctl.xcd \
+    $(INSTROOT)/share/registry/graphicfilter.xcd \
+    $(INSTROOT)/share/registry/Langpack-en-US.xcd \
+    $(INSTROOT)/share/registry/lingucomponent.xcd \
+    $(INSTROOT)/share/registry/main.xcd \
+    $(INSTROOT)/share/registry/writer.xcd \
+    $(INSTROOT)/share/registry/xsltfilter.xcd \
+    $(INSTROOT)/program/intro-highres.png \
+    $(INSTROOT)/program/intro.png \
 
 wasm_fs_image_WORKDIR := $(call gb_CustomTarget_get_workdir,static/wasm_fs_image)
 

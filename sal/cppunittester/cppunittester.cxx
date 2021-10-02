@@ -230,13 +230,17 @@ class CPPUNIT_API ProtectedFixtureFunctor
 {
 private:
     const std::string &testlib;
+#ifndef DISABLE_DYNLOADING
     const std::string &args;
+#endif
     std::vector<CppUnit::Protector *> &protectors;
     CppUnit::TestResult &result;
 public:
     ProtectedFixtureFunctor(const std::string& testlib_, const std::string &args_, std::vector<CppUnit::Protector*> &protectors_, CppUnit::TestResult &result_)
         : testlib(testlib_)
+#ifndef DISABLE_DYNLOADING
         , args(args_)
+#endif
         , protectors(protectors_)
         , result(result_)
     {

@@ -127,7 +127,7 @@ oslSecurity SAL_CALL osl_getCurrentSecurity()
         if (p == nullptr) {
             return nullptr;
         }
-#if defined(IOS) && defined(X86_64)
+#if (defined(IOS) && defined(X86_64)) || defined(EMSCRIPTEN)
         // getpwuid_r() does not work in the iOS simulator
         (void) found;
         char * buffer = p->m_buffer;
@@ -140,10 +140,6 @@ oslSecurity SAL_CALL osl_getCurrentSecurity()
         buffer += strlen(buffer) + 1;
         p->m_pPasswd.pw_uid = geteuid();
         p->m_pPasswd.pw_gid = getegid();
-        p->m_pPasswd.pw_change = 0;
-        strcpy(buffer, "");
-        p->m_pPasswd.pw_class = buffer;
-        buffer += strlen(buffer) + 1;
         strcpy(buffer, "Mobile User");
         p->m_pPasswd.pw_gecos = buffer;
         buffer += strlen(buffer) + 1;
@@ -153,7 +149,13 @@ oslSecurity SAL_CALL osl_getCurrentSecurity()
         strcpy(buffer, "");
         p->m_pPasswd.pw_shell = buffer;
         buffer += strlen(buffer) + 1;
+#ifndef EMSCRIPTEN
+        p->m_pPasswd.pw_change = 0;
+        strcpy(buffer, "");
+        p->m_pPasswd.pw_class = buffer;
+        buffer += strlen(buffer) + 1;
         p->m_pPasswd.pw_expire = 0;
+#endif
         return p;
 #else
         switch (getpwuid_r(getuid(), &p->m_pPasswd, p->m_buffer, n, &found)) {

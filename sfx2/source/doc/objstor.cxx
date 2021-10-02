@@ -2727,9 +2727,11 @@ bool SfxObjectShell::CommonSaveAs_Impl(const INetURLObject& aURL, const OUString
     if (SfxItemState::SET != rItemSet.GetItemState(SID_UNPACK) && officecfg::Office::Common::Save::Document::Unpacked::get())
         rItemSet.Put(SfxBoolItem(SID_UNPACK, false));
 
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
     OUString aTempFileURL;
     if ( IsDocShared() )
         aTempFileURL = pMedium->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE );
+#endif
 
     if (PreDoSaveAs_Impl(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), aFilterName,
                          rItemSet, rArgs))

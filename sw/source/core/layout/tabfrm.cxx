@@ -4586,7 +4586,9 @@ void SwRowFrame::AdjustCells( const SwTwips nHeight, const bool bHeight )
     if ( bHeight )
     {
         SwRectFnSet aRectFnSet(this);
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
         SwRect aOldFrame;
+#endif
 
         while ( pFrame )
         {
@@ -4653,7 +4655,9 @@ void SwRowFrame::AdjustCells( const SwTwips nHeight, const bool bHeight )
             const tools::Long nDiff = nSumRowHeight - aRectFnSet.GetHeight(pToAdjust->getFrameArea());
             if ( nDiff )
             {
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
                 aOldFrame = pToAdjust->getFrameArea();
+#endif
                 SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pToAdjust);
                 aRectFnSet.AddBottom( aFrm, nDiff );
                 pNotify = pToAdjust;
