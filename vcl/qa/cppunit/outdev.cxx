@@ -11,6 +11,7 @@
 #include <test/outputdevice.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/vector/b2enums.hxx>
 
@@ -84,6 +85,7 @@ public:
     void testDrawBorder();
     void testDrawWaveLine();
     void testDrawPolyLine();
+    void testDrawPolygon();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
     CPPUNIT_TEST(testVirtualDevice);
@@ -135,6 +137,7 @@ public:
     CPPUNIT_TEST(testDrawBorder);
     CPPUNIT_TEST(testDrawWaveLine);
     CPPUNIT_TEST(testDrawPolyLine);
+    CPPUNIT_TEST(testDrawPolygon);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1875,7 +1878,7 @@ void VclOutdevTest::testDrawPolyLine()
         aLineInfo.SetLineCap(css::drawing::LineCap_BUTT);
 
         pVDev->DrawPolyLine(aPolygon, 3, basegfx::B2DLineJoin::Bevel, css::drawing::LineCap_BUTT,
-                            15.0);
+                            basegfx::deg2rad(15.0));
 
         MetaAction* pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polygon action", MetaActionType::POLYLINE,
@@ -1900,6 +1903,47 @@ void VclOutdevTest::testDrawPolyLine()
                                      pPolyLineAction->GetLineInfo().GetLineJoin());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Line cap", css::drawing::LineCap_BUTT,
                                      pPolyLineAction->GetLineInfo().GetLineCap());
+    }
+}
+
+void VclOutdevTest::testDrawPolygon()
+{
+    {
+        ScopedVclPtrInstance<VirtualDevice> pVDev;
+        GDIMetaFile aMtf;
+        aMtf.Record(pVDev.get());
+
+        pVDev->SetOutputSizePixel(Size(100, 100));
+        tools::Polygon aPolygon(vcl::test::OutputDeviceTestCommon::createClosedBezierLoop(
+            tools::Rectangle(Point(10, 10), Size(80, 8))));
+
+        pVDev->DrawPolygon(aPolygon);
+
+        MetaAction* pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polygon action", MetaActionType::POLYGON,
+                                     pAction->GetType());
+        MetaPolygonAction* pPolygonAction = dynamic_cast<MetaPolygonAction*>(pAction);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Polygon in polygon action is wrong", aPolygon,
+                                     pPolygonAction->GetPolygon());
+    }
+
+    {
+        ScopedVclPtrInstance<VirtualDevice> pVDev;
+        GDIMetaFile aMtf;
+        aMtf.Record(pVDev.get());
+
+        pVDev->SetOutputSizePixel(Size(100, 100));
+        tools::Polygon aPolygon(vcl::test::OutputDeviceTestCommon::createClosedBezierLoop(
+            tools::Rectangle(Point(10, 10), Size(80, 8))));
+
+        pVDev->DrawPolygon(aPolygon);
+
+        MetaAction* pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polygon action", MetaActionType::POLYGON,
+                                     pAction->GetType());
+        MetaPolygonAction* pPolygonAction = dynamic_cast<MetaPolygonAction*>(pAction);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Polygon in polygon action is wrong", aPolygon,
+                                     pPolygonAction->GetPolygon());
     }
 }
 
