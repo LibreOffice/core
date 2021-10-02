@@ -1984,6 +1984,13 @@ AC_ARG_ENABLE(wasm-strip,
         [Strip the static build like for WASM/emscripten platform.]),
 ,)
 
+AC_ARG_ENABLE(wasm-exceptions,
+    AS_HELP_STRING([--enable-wasm-exceptions],
+        [Build with native WASM exceptions (AKA -fwasm-exceptions),
+        matter of fact, this is currently not finished by any implementation)
+        (see https://webassembly.org/roadmap/ for the current state]),
+,)
+
 AC_ARG_ENABLE(xmlhelp,
     AS_HELP_STRING([--disable-xmlhelp],
         [Disable XML help support]),
@@ -3001,6 +3008,11 @@ if test "$enable_wasm_strip" = "yes"; then
     test "${with_fonts+set}" = set || with_fonts=yes
     test "${with_locales+set}" = set || with_locales=en
 fi
+
+if test "$enable_wasm_exceptions" = yes; then
+    ENABLE_WASM_EXCEPTIONS=TRUE
+fi
+AC_SUBST(ENABLE_WASM_EXCEPTIONS)
 
 # Whether to build "avmedia" functionality or not.
 
@@ -6022,6 +6034,9 @@ if test -z "$enable_pch"; then
     else
         enable_pch=no
     fi
+fi
+if test "$enable_pch" != no -a "$_os" = Emscripten -a "$ENABLE_WASM_EXCEPTIONS" = TRUE; then
+    AC_MSG_ERROR([PCH currently isn't supported for Emscripten with native EH (nEH) because of missing Sj/Lj support with nEH in clang.])
 fi
 if test "$enable_pch" != "no" -a "$_os" != "WINNT" -a "$GCC" != "yes" ; then
     AC_MSG_ERROR([Precompiled header not yet supported for your platform/compiler])
