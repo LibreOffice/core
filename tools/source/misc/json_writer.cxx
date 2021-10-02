@@ -121,7 +121,7 @@ void JsonWriter::endStruct()
 void JsonWriter::put(const char* pPropName, const OUString& rPropVal)
 {
     auto nPropNameLength = strlen(pPropName);
-    auto nWorstCasePropValLength = rPropVal.getLength() * 2;
+    auto nWorstCasePropValLength = rPropVal.getLength() * 3;
     ensureSpace(nPropNameLength + nWorstCasePropValLength + 8);
 
     addCommaBeforeField();
@@ -214,7 +214,7 @@ void JsonWriter::put(const char* pPropName, const OUString& rPropVal)
 void JsonWriter::put(const char* pPropName, const OString& rPropVal)
 {
     auto nPropNameLength = strlen(pPropName);
-    auto nWorstCasePropValLength = rPropVal.getLength();
+    auto nWorstCasePropValLength = rPropVal.getLength() * 2;
     ensureSpace(nPropNameLength + nWorstCasePropValLength + 8);
 
     addCommaBeforeField();
