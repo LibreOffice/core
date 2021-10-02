@@ -16,8 +16,10 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/vector/b2enums.hxx>
 
+#include <vcl/gradient.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/print.hxx>
+#include <vcl/rendercontext/RasterOp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/gdimtf.hxx>
@@ -88,6 +90,11 @@ public:
     void testDrawPolyLine();
     void testDrawPolygon();
     void testDrawPolyPolygon();
+    void testDrawGradient_drawmode();
+    void testDrawGradient_rect_linear();
+    void testDrawGradient_rect_axial();
+    void testDrawGradient_polygon_linear();
+    void testDrawGradient_polygon_axial();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
     CPPUNIT_TEST(testVirtualDevice);
@@ -141,6 +148,11 @@ public:
     CPPUNIT_TEST(testDrawPolyLine);
     CPPUNIT_TEST(testDrawPolygon);
     CPPUNIT_TEST(testDrawPolyPolygon);
+    CPPUNIT_TEST(testDrawGradient_drawmode);
+    CPPUNIT_TEST(testDrawGradient_rect_linear);
+    CPPUNIT_TEST(testDrawGradient_rect_axial);
+    CPPUNIT_TEST(testDrawGradient_polygon_linear);
+    CPPUNIT_TEST(testDrawGradient_polygon_axial);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -2011,6 +2023,284 @@ void VclOutdevTest::testDrawPolyPolygon()
                                      pPolyPolygonAction->GetPolyPolygon());
         */
     }
+}
+
+static size_t ClipGradientTest(GDIMetaFile& rMtf, size_t nIndex)
+{
+    MetaAction* pAction = rMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a comment action", MetaActionType::COMMENT,
+                                 pAction->GetType());
+
+    nIndex++;
+    pAction = rMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a gradientex action", MetaActionType::GRADIENTEX,
+                                 pAction->GetType());
+
+    // clip gradient
+    nIndex++;
+    pAction = rMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a push action", MetaActionType::PUSH, pAction->GetType());
+    MetaPushAction* pPushAction = dynamic_cast<MetaPushAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not using XOR push flags", vcl::PushFlags::RASTEROP,
+                                 pPushAction->GetFlags());
+
+    nIndex++;
+    pAction = rMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a rasterop action", MetaActionType::RASTEROP,
+                                 pAction->GetType());
+    MetaRasterOpAction* pRasterOpAction = dynamic_cast<MetaRasterOpAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not an XOR rasterop", RasterOp::Xor,
+                                 pRasterOpAction->GetRasterOp());
+
+    nIndex++;
+    pAction = rMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a gradient action", MetaActionType::GRADIENT,
+                                 pAction->GetType());
+
+    nIndex++;
+    pAction = rMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action", MetaActionType::FILLCOLOR,
+                                 pAction->GetType());
+
+    nIndex++;
+    pAction = rMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a rasterop action", MetaActionType::RASTEROP,
+                                 pAction->GetType());
+    pRasterOpAction = dynamic_cast<MetaRasterOpAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not an N0 rasterop", RasterOp::N0,
+                                 pRasterOpAction->GetRasterOp());
+
+    nIndex++;
+    pAction = rMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polypolygon action", MetaActionType::POLYPOLYGON,
+                                 pAction->GetType());
+
+    nIndex++;
+    pAction = rMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a rasterop action", MetaActionType::RASTEROP,
+                                 pAction->GetType());
+    pRasterOpAction = dynamic_cast<MetaRasterOpAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not an XOR rasterop", RasterOp::Xor,
+                                 pRasterOpAction->GetRasterOp());
+
+    nIndex++;
+    pAction = rMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a gradient action", MetaActionType::GRADIENT,
+                                 pAction->GetType());
+
+    nIndex++;
+    pAction = rMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a pop action", MetaActionType::POP, pAction->GetType());
+
+    nIndex++;
+    pAction = rMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a comment action", MetaActionType::COMMENT,
+                                 pAction->GetType());
+
+    return nIndex;
+}
+
+void VclOutdevTest::testDrawGradient_drawmode()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    pVDev->SetOutputSizePixel(Size(100, 100));
+    pVDev->SetDrawMode(DrawModeFlags::BlackGradient);
+
+    tools::Rectangle aRect(Point(10, 10), Size(40, 40));
+    pVDev->DrawGradient(aRect, Gradient());
+    MetaAction* pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a push action (drawmode is black gradient)",
+                                 MetaActionType::PUSH, pAction->GetType());
+    MetaPushAction* pPushAction = dynamic_cast<MetaPushAction*>(pAction);
+    vcl::PushFlags eFlags = vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Push flags wrong (drawmode is black gradient)", eFlags,
+                                 pPushAction->GetFlags());
+
+    pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT + 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a line color action (drawmode is black gradient)",
+                                 MetaActionType::LINECOLOR, pAction->GetType());
+    pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT + 2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action (drawmode is black gradient)",
+                                 MetaActionType::FILLCOLOR, pAction->GetType());
+    pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT + 3);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polypolygon action (drawmode is black gradient)",
+                                 MetaActionType::POLYPOLYGON, pAction->GetType());
+    pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT + 4);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a pop action (drawmode is black gradient)",
+                                 MetaActionType::POP, pAction->GetType());
+}
+
+static size_t TestLinearStripes(GDIMetaFile& rMtf, size_t nTimes, size_t nIndex)
+{
+    nIndex++;
+    MetaAction* pAction = rMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action", MetaActionType::FILLCOLOR,
+                                 pAction->GetType());
+
+    nIndex++;
+    pAction = rMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polygon action", MetaActionType::POLYGON,
+                                 pAction->GetType());
+
+    for (size_t i = 0; i < nTimes - 1; i++)
+    {
+        nIndex++;
+        pAction = rMtf.GetAction(nIndex);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action", MetaActionType::FILLCOLOR,
+                                     pAction->GetType());
+
+        nIndex++;
+        pAction = rMtf.GetAction(nIndex);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polygon action", MetaActionType::POLYGON,
+                                     pAction->GetType());
+    }
+
+    nIndex++;
+    pAction = rMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action", MetaActionType::FILLCOLOR,
+                                 pAction->GetType());
+
+    nIndex++;
+    pAction = rMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polygon action", MetaActionType::POLYGON,
+                                 pAction->GetType());
+
+    return nIndex;
+}
+
+static size_t TestAxialStripes(GDIMetaFile& rMtf, size_t nTimes, size_t nIndex)
+{
+    nIndex++;
+    MetaAction* pAction = rMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action", MetaActionType::FILLCOLOR,
+                                 pAction->GetType());
+
+    nIndex++;
+    pAction = rMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polygon action", MetaActionType::POLYGON,
+                                 pAction->GetType());
+
+    nIndex++;
+    pAction = rMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polygon action", MetaActionType::POLYGON,
+                                 pAction->GetType());
+
+    for (size_t i = 0; i < nTimes - 1; i++)
+    {
+        nIndex++;
+        pAction = rMtf.GetAction(nIndex);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action", MetaActionType::FILLCOLOR,
+                                     pAction->GetType());
+
+        nIndex++;
+        pAction = rMtf.GetAction(nIndex);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polygon action", MetaActionType::POLYGON,
+                                     pAction->GetType());
+
+        nIndex++;
+        pAction = rMtf.GetAction(nIndex);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polygon action", MetaActionType::POLYGON,
+                                     pAction->GetType());
+    }
+
+    nIndex++;
+    pAction = rMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action", MetaActionType::FILLCOLOR,
+                                 pAction->GetType());
+
+    nIndex++;
+    pAction = rMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polygon action", MetaActionType::POLYGON,
+                                 pAction->GetType());
+
+    return nIndex;
+}
+
+void VclOutdevTest::testDrawGradient_rect_linear()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    tools::Rectangle aRect(Point(10, 10), Size(40, 40));
+    pVDev->SetOutputSizePixel(Size(100, 100));
+
+    Gradient aGradient(GradientStyle::Linear, COL_RED, COL_WHITE);
+    aGradient.SetBorder(100);
+
+    pVDev->DrawGradient(aRect, aGradient);
+
+    size_t nIndex = INITIAL_SETUP_ACTION_COUNT;
+
+    MetaAction* pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a gradient action (rectangle area)", MetaActionType::GRADIENT,
+                                 pAction->GetType());
+
+    TestLinearStripes(aMtf, 3, nIndex);
+}
+
+void VclOutdevTest::testDrawGradient_rect_axial()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    tools::Rectangle aRect(Point(10, 10), Size(40, 40));
+    pVDev->SetOutputSizePixel(Size(100, 100));
+
+    Gradient aGradient(GradientStyle::Axial, COL_RED, COL_WHITE);
+    aGradient.SetBorder(100);
+
+    pVDev->DrawGradient(aRect, aGradient);
+
+    size_t nIndex = INITIAL_SETUP_ACTION_COUNT;
+
+    MetaAction* pAction = aMtf.GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a gradient action (rectangle area)", MetaActionType::GRADIENT,
+                                 pAction->GetType());
+
+    TestAxialStripes(aMtf, 3, nIndex);
+}
+
+void VclOutdevTest::testDrawGradient_polygon_linear()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    tools::PolyPolygon aPolyPolygon = createPolyPolygon();
+
+    pVDev->SetOutputSizePixel(Size(100, 100));
+
+    Gradient aGradient(GradientStyle::Linear, COL_RED, COL_WHITE);
+    aGradient.SetBorder(100);
+    pVDev->DrawGradient(aPolyPolygon, aGradient);
+
+    size_t nIndex = ClipGradientTest(aMtf, INITIAL_SETUP_ACTION_COUNT);
+
+    TestLinearStripes(aMtf, 3, nIndex);
+}
+
+void VclOutdevTest::testDrawGradient_polygon_axial()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    tools::PolyPolygon aPolyPolygon = createPolyPolygon();
+
+    pVDev->SetOutputSizePixel(Size(100, 100));
+
+    Gradient aGradient(GradientStyle::Axial, COL_RED, COL_WHITE);
+    aGradient.SetBorder(100);
+    pVDev->DrawGradient(aPolyPolygon, aGradient);
+
+    size_t nIndex = ClipGradientTest(aMtf, INITIAL_SETUP_ACTION_COUNT);
+
+    TestAxialStripes(aMtf, 3, nIndex);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclOutdevTest);
