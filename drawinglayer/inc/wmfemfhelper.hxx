@@ -23,7 +23,7 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <vcl/font.hxx>
 #include <rtl/ref.hxx>
-#include <vcl/outdevstate.hxx>
+#include <vcl/rendercontext/State.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <memory>
@@ -100,9 +100,9 @@ namespace wmfemfhelper
         /// font, etc.
         vcl::Font               maFont;
         RasterOp                maRasterOp;
-        ComplexTextLayoutFlags   mnLayoutMode;
+        vcl::text::ComplexTextLayoutFlags   mnLayoutMode;
         LanguageType            maLanguageType;
-        PushFlags               mnPushFlags;
+        vcl::PushFlags               mnPushFlags;
 
         /// contains all active markers
         bool                    mbLineColor : 1;
@@ -167,14 +167,14 @@ namespace wmfemfhelper
         bool isRasterOpForceBlack() const { return RasterOp::N0 == maRasterOp; }
         bool isRasterOpActive() const { return isRasterOpInvert() || isRasterOpForceBlack(); }
 
-        ComplexTextLayoutFlags getLayoutMode() const { return mnLayoutMode; }
-        void setLayoutMode(ComplexTextLayoutFlags nNew) { if (nNew != mnLayoutMode) mnLayoutMode = nNew; }
+        vcl::text::ComplexTextLayoutFlags getLayoutMode() const { return mnLayoutMode; }
+        void setLayoutMode(vcl::text::ComplexTextLayoutFlags nNew) { if (nNew != mnLayoutMode) mnLayoutMode = nNew; }
 
         LanguageType getLanguageType() const { return maLanguageType; }
         void setLanguageType(LanguageType aNew) { if (aNew != maLanguageType) maLanguageType = aNew; }
 
-        PushFlags getPushFlags() const { return mnPushFlags; }
-        void setPushFlags(PushFlags nNew) { if (nNew != mnPushFlags) mnPushFlags = nNew; }
+        vcl::PushFlags getPushFlags() const { return mnPushFlags; }
+        void setPushFlags(vcl::PushFlags nNew) { if (nNew != mnPushFlags) mnPushFlags = nNew; }
 
         bool getLineOrFillActive() const { return (mbLineColor || mbFillColor); }
     };
@@ -196,7 +196,7 @@ namespace wmfemfhelper
     public:
         PropertyHolders();
         void PushDefault();
-        void Push(PushFlags nPushFlags);
+        void Push(vcl::PushFlags nPushFlags);
         void Pop();
         PropertyHolder& Current();
         ~PropertyHolders();

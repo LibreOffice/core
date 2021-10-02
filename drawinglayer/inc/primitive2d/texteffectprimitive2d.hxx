@@ -63,7 +63,7 @@ private:
 
 public:
     /// constructor
-    TextEffectPrimitive2D(const Primitive2DContainer& rTextContent,
+    TextEffectPrimitive2D(Primitive2DContainer&& rTextContent,
                           const basegfx::B2DPoint& rRotationCenter, double fDirection,
                           TextEffectStyle2D eTextEffectStyle2D);
 

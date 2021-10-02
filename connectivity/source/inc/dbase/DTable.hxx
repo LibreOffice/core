@@ -115,7 +115,7 @@ namespace connectivity::dbase
             void copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos);
             bool CreateFile(const INetURLObject& aFile, bool& bCreateMemo);
             bool CreateMemoFile(const INetURLObject& aFile);
-            bool HasMemoFields() const { return m_aHeader.type > dBaseIV;}
+            bool HasMemoFields() const;
             void ReadMemoHeader();
             bool ReadMemo(std::size_t nBlockNo, ORowSetValue& aVariable);
 

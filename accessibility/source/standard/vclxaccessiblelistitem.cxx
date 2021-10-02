@@ -293,7 +293,7 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::containsPoint( const awt::Point& _aPoi
     {
         tools::Rectangle aRect(pListBoxHelper->GetBoundingRectangle(static_cast<sal_uInt16>(m_nIndexInParent)));
         aRect.Move(-aRect.Left(), -aRect.Top());
-        bInside = aRect.IsInside( VCLPoint( _aPoint ) );
+        bInside = aRect.Contains( VCLPoint( _aPoint ) );
     }
     return bInside;
 }

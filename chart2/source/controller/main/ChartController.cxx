@@ -102,6 +102,7 @@ ChartController::ChartController(uno::Reference<uno::XComponentContext> const & 
     m_xCC(xContext),
     m_aModel( nullptr, m_aModelMutex ),
     m_eDragMode(SdrDragMode::Move),
+    m_aDoubleClickTimer("chart2 ChartController m_aDoubleClickTimer"),
     m_bWaitingForDoubleClick(false),
     m_bWaitingForMouseUp(false),
     m_bFieldButtonDown(false),

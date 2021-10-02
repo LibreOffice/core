@@ -168,11 +168,11 @@ void TextEffectPrimitive2D::create2DDecomposition(
     }
 }
 
-TextEffectPrimitive2D::TextEffectPrimitive2D(const Primitive2DContainer& rTextContent,
+TextEffectPrimitive2D::TextEffectPrimitive2D(Primitive2DContainer&& rTextContent,
                                              const basegfx::B2DPoint& rRotationCenter,
                                              double fDirection,
                                              TextEffectStyle2D eTextEffectStyle2D)
-    : maTextContent(rTextContent)
+    : maTextContent(std::move(rTextContent))
     , maRotationCenter(rRotationCenter)
     , mfDirection(fDirection)
     , meTextEffectStyle2D(eTextEffectStyle2D)
@@ -213,7 +213,7 @@ void TextEffectPrimitive2D::get2DDecomposition(
     Primitive2DDecompositionVisitor& rVisitor,
     const geometry::ViewInformation2D& rViewInformation) const
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     if (!getBuffered2DDecomposition().empty())
     {
@@ -233,6 +233,7 @@ void TextEffectPrimitive2D::get2DDecomposition(
     }
 
     // use parent implementation
+    aGuard.unlock();
     BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
 }
 

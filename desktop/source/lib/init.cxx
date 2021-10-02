@@ -1386,12 +1386,28 @@ static OUString getGenerator()
 
 extern "C" {
 
+CallbackFlushHandler::TimeoutIdle::TimeoutIdle( CallbackFlushHandler* handler )
+    : Timer( "lokit timer callback" )
+    , mHandler( handler )
+{
+    // A second timer with higher priority, it'll ensure we flush in reasonable time if we get too busy
+    // to get POST_PAINT priority processing. Otherwise it could take a long time to flush.
+    SetPriority(TaskPriority::DEFAULT);
+    SetTimeout( 100 ); // 100 ms
+}
+
+void CallbackFlushHandler::TimeoutIdle::Invoke()
+{
+    mHandler->Invoke();
+}
+
 CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, LibreOfficeKitCallback pCallback, void* pData)
-    : Idle( "lokit timer callback" ),
+    : Idle( "lokit idle callback" ),
       m_pDocument(pDocument),
       m_pCallback(pCallback),
       m_pData(pData),
-      m_nDisableCallbacks(0)
+      m_nDisableCallbacks(0),
+      m_TimeoutIdle( this )
 {
     SetPriority(TaskPriority::POST_PAINT);
 
@@ -1408,8 +1424,6 @@ CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, Li
     m_states.emplace(LOK_CALLBACK_CURSOR_VISIBLE, "NIL");
     m_states.emplace(LOK_CALLBACK_SET_PART, "NIL");
     m_states.emplace(LOK_CALLBACK_TABLE_SELECTED, "NIL");
-
-    Start();
 }
 
 CallbackFlushHandler::~CallbackFlushHandler()
@@ -1424,6 +1438,12 @@ void CallbackFlushHandler::callback(const int type, const char* payload, void* d
     {
         self->queue(type, payload);
     }
+}
+
+CallbackFlushHandler::queue_type2::iterator CallbackFlushHandler::toQueue2(CallbackFlushHandler::queue_type1::iterator pos)
+{
+    int delta = std::distance(m_queue1.begin(), pos);
+    return m_queue2.begin() + delta;
 }
 
 CallbackFlushHandler::queue_type2::reverse_iterator CallbackFlushHandler::toQueue2(CallbackFlushHandler::queue_type1::reverse_iterator pos)
@@ -1517,8 +1537,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         case LOK_CALLBACK_CALC_FUNCTION_LIST:
         case LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
         {
-            const auto& pos = std::find_if(m_queue1.rbegin(), m_queue1.rend(),
-                    [type] (int elemType) { return (elemType == type); });
+            const auto& pos = std::find(m_queue1.rbegin(), m_queue1.rend(), type);
             auto pos2 = toQueue2(pos);
             if (pos != m_queue1.rend() && pos2->PayloadString == payload)
             {
@@ -1531,14 +1550,12 @@ void CallbackFlushHandler::queue(const int type, const char* data)
 
     if (type == LOK_CALLBACK_TEXT_SELECTION && payload.empty())
     {
-        const auto& posStart = std::find_if(m_queue1.rbegin(), m_queue1.rend(),
-                [] (int elemType) { return (elemType == LOK_CALLBACK_TEXT_SELECTION_START); });
+        const auto& posStart = std::find(m_queue1.rbegin(), m_queue1.rend(), LOK_CALLBACK_TEXT_SELECTION_START);
         auto posStart2 = toQueue2(posStart);
         if (posStart != m_queue1.rend())
             posStart2->PayloadString.clear();
 
-        const auto& posEnd = std::find_if(m_queue1.rbegin(), m_queue1.rend(),
-                [] (int elemType) { return (elemType == LOK_CALLBACK_TEXT_SELECTION_END); });
+        const auto& posEnd = std::find(m_queue1.rbegin(), m_queue1.rend(), LOK_CALLBACK_TEXT_SELECTION_END);
         auto posEnd2 = toQueue2(posEnd);
         if (posEnd != m_queue1.rend())
             posEnd2->PayloadString.clear();
@@ -1555,8 +1572,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             case LOK_CALLBACK_GRAPHIC_SELECTION:
             case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
             case LOK_CALLBACK_INVALIDATE_TILES:
-                if (removeAll(
-                        [type](int elemType, const CallbackData&) { return (elemType == type); }))
+                if (removeAll(type))
                     SAL_INFO("lok", "Removed dups of [" << type << "]: [" << payload << "].");
                 break;
         }
@@ -1579,8 +1595,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
             case LOK_CALLBACK_RULER_UPDATE:
             {
-                if (removeAll(
-                        [type](int elemType, const CallbackData&) { return (elemType == type); }))
+                if (removeAll(type))
                     SAL_INFO("lok", "Removed dups of [" << type << "]: [" << payload << "].");
             }
             break;
@@ -1602,12 +1617,14 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                 const bool hyperLinkException = type == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR &&
                     payload.find("\"hyperlink\":\"\"") == std::string::npos &&
                     payload.find("\"hyperlink\": {}") == std::string::npos;
-                const int nViewId = lcl_getViewId(payload);
-                removeAll(
-                    [type, nViewId, hyperLinkException] (int elemType, const CallbackData& elemData) {
-                        return (elemType == type && nViewId == lcl_getViewId(elemData) && !hyperLinkException);
-                    }
-                );
+                if(!hyperLinkException)
+                {
+                    const int nViewId = lcl_getViewId(payload);
+                    removeAll(type, [nViewId] (const CallbackData& elemData) {
+                            return (nViewId == lcl_getViewId(elemData));
+                        }
+                    );
+                }
             }
             break;
 
@@ -1629,9 +1646,8 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                     // a save occurs while a cell is still edited in Calc.
                     if (name != ".uno:ModifiedStatus=")
                     {
-                        removeAll(
-                            [type, &name] (int elemType, const CallbackData& elemData) {
-                                return (elemType == type) && (elemData.PayloadString.compare(0, name.size(), name) == 0);
+                        removeAll(type, [&name] (const CallbackData& elemData) {
+                                return (elemData.PayloadString.compare(0, name.size(), name) == 0);
                             }
                         );
                     }
@@ -1648,8 +1664,8 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             {
                 // remove only selection ranges and 'EMPTY' messages
                 // always send 'INPLACE' and 'INPLACE EXIT' messages
-                removeAll([type, payload] (int elemType, const CallbackData& elemData)
-                    { return (elemType == type && elemData.PayloadString[0] != 'I'); });
+                removeAll(type, [payload] (const CallbackData& elemData)
+                    { return (elemData.PayloadString[0] != 'I'); });
             }
             break;
         }
@@ -1688,6 +1704,8 @@ void CallbackFlushHandler::queue(const int type, const char* data)
     {
         Start();
     }
+    if (!m_TimeoutIdle.IsActive())
+        m_TimeoutIdle.Start();
 }
 
 bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& aCallbackData)
@@ -1704,9 +1722,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
     // If we have to invalidate all tiles, we can skip any new tile invalidation.
     // Find the last INVALIDATE_TILES entry, if any to see if it's invalidate-all.
     const auto& pos
-        = std::find_if(m_queue1.rbegin(), m_queue1.rend(), [](int elemType) {
-              return (elemType == LOK_CALLBACK_INVALIDATE_TILES);
-          });
+        = std::find(m_queue1.rbegin(), m_queue1.rend(), LOK_CALLBACK_INVALIDATE_TILES);
     if (pos != m_queue1.rend())
     {
         auto pos2 = toQueue2(pos);
@@ -1721,7 +1737,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
         if (rcOld.m_nPart == -1 || rcOld.m_nPart == rcNew.m_nPart)
         {
             // If fully overlapping.
-            if (rcOld.m_aRectangle.IsInside(rcNew.m_aRectangle))
+            if (rcOld.m_aRectangle.Contains(rcNew.m_aRectangle))
             {
                 SAL_INFO("lok", "Skipping queue [" << type << "]: [" << payload
                                                    << "] since overlaps existing all-parts.");
@@ -1734,16 +1750,9 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
     {
         SAL_INFO("lok", "Have Empty [" << type << "]: [" << payload
                                        << "] so removing all with part " << rcNew.m_nPart << ".");
-        removeAll([&rcNew](int elemType, const CallbackData& elemData) {
-            if (elemType == LOK_CALLBACK_INVALIDATE_TILES)
-            {
-                // Remove exiting if new is all-encompassing, or if of the same part.
-                const RectangleAndPart rcOld = RectangleAndPart::Create(elemData.PayloadString);
-                return (rcNew.m_nPart == -1 || rcOld.m_nPart == rcNew.m_nPart);
-            }
-
-            // Keep others.
-            return false;
+        removeAll(LOK_CALLBACK_INVALIDATE_TILES, [&rcNew](const CallbackData& elemData) {
+            // Remove exiting if new is all-encompassing, or if of the same part.
+            return (rcNew.m_nPart == -1 || rcNew.m_nPart == elemData.getRectangleAndPart().m_nPart);
         });
     }
     else
@@ -1751,55 +1760,52 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
         const auto rcOrig = rcNew;
 
         SAL_INFO("lok", "Have [" << type << "]: [" << payload << "] so merging overlapping.");
-        removeAll([&rcNew](int elemType, const CallbackData& elemData) {
-            if (elemType == LOK_CALLBACK_INVALIDATE_TILES)
+        removeAll(LOK_CALLBACK_INVALIDATE_TILES,[&rcNew](const CallbackData& elemData) {
+            const RectangleAndPart& rcOld = elemData.getRectangleAndPart();
+            if (rcNew.m_nPart != -1 && rcOld.m_nPart != -1 && rcOld.m_nPart != rcNew.m_nPart)
             {
-                const RectangleAndPart& rcOld = elemData.getRectangleAndPart();
-                if (rcNew.m_nPart != -1 && rcOld.m_nPart != -1 && rcOld.m_nPart != rcNew.m_nPart)
-                {
-                    SAL_INFO("lok", "Nothing to merge between new: "
-                                        << rcNew.toString() << ", and old: " << rcOld.toString());
-                    return false;
-                }
+                SAL_INFO("lok", "Nothing to merge between new: "
+                                    << rcNew.toString() << ", and old: " << rcOld.toString());
+                return false;
+            }
 
-                if (rcNew.m_nPart == -1)
+            if (rcNew.m_nPart == -1)
+            {
+                // Don't merge unless fully overlapped.
+                SAL_INFO("lok", "New " << rcNew.toString() << " has " << rcOld.toString()
+                                       << "?");
+                if (rcNew.m_aRectangle.Contains(rcOld.m_aRectangle))
                 {
-                    // Don't merge unless fully overlapped.
-                    SAL_INFO("lok", "New " << rcNew.toString() << " has " << rcOld.toString()
-                                           << "?");
-                    if (rcNew.m_aRectangle.IsInside(rcOld.m_aRectangle))
-                    {
-                        SAL_INFO("lok", "New " << rcNew.toString() << " engulfs old "
-                                               << rcOld.toString() << ".");
-                        return true;
-                    }
+                    SAL_INFO("lok", "New " << rcNew.toString() << " engulfs old "
+                                           << rcOld.toString() << ".");
+                    return true;
                 }
-                else if (rcOld.m_nPart == -1)
+            }
+            else if (rcOld.m_nPart == -1)
+            {
+                // Don't merge unless fully overlapped.
+                SAL_INFO("lok", "Old " << rcOld.toString() << " has " << rcNew.toString()
+                                       << "?");
+                if (rcOld.m_aRectangle.Contains(rcNew.m_aRectangle))
                 {
-                    // Don't merge unless fully overlapped.
-                    SAL_INFO("lok", "Old " << rcOld.toString() << " has " << rcNew.toString()
-                                           << "?");
-                    if (rcOld.m_aRectangle.IsInside(rcNew.m_aRectangle))
-                    {
-                        SAL_INFO("lok", "New " << rcNew.toString() << " engulfs old "
-                                               << rcOld.toString() << ".");
-                        return true;
-                    }
+                    SAL_INFO("lok", "New " << rcNew.toString() << " engulfs old "
+                                           << rcOld.toString() << ".");
+                    return true;
                 }
-                else
+            }
+            else
+            {
+                const tools::Rectangle rcOverlap
+                    = rcNew.m_aRectangle.GetIntersection(rcOld.m_aRectangle);
+                const bool bOverlap = !rcOverlap.IsEmpty();
+                SAL_INFO("lok", "Merging " << rcNew.toString() << " & " << rcOld.toString()
+                                           << " => " << rcOverlap.toString()
+                                           << " Overlap: " << bOverlap);
+                if (bOverlap)
                 {
-                    const tools::Rectangle rcOverlap
-                        = rcNew.m_aRectangle.GetIntersection(rcOld.m_aRectangle);
-                    const bool bOverlap = !rcOverlap.IsEmpty();
-                    SAL_INFO("lok", "Merging " << rcNew.toString() << " & " << rcOld.toString()
-                                               << " => " << rcOverlap.toString()
-                                               << " Overlap: " << bOverlap);
-                    if (bOverlap)
-                    {
-                        rcNew.m_aRectangle.Union(rcOld.m_aRectangle);
-                        SAL_INFO("lok", "Merged: " << rcNew.toString());
-                        return true;
-                    }
+                    rcNew.m_aRectangle.Union(rcOld.m_aRectangle);
+                    SAL_INFO("lok", "Merged: " << rcNew.toString());
+                    return true;
                 }
             }
 
@@ -1837,15 +1843,12 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
         // remove all previous window part invalidations
         if (aRectStr.empty())
         {
-            removeAll([&nLOKWindowId](int elemType, const CallbackData& elemData) {
-                if (elemType == LOK_CALLBACK_WINDOW)
+            removeAll(LOK_CALLBACK_WINDOW,[&nLOKWindowId](const CallbackData& elemData) {
+                const boost::property_tree::ptree& aOldTree = elemData.getJson();
+                if (nLOKWindowId == aOldTree.get<unsigned>("id", 0)
+                    && aOldTree.get<std::string>("action", "") == "invalidate")
                 {
-                    const boost::property_tree::ptree& aOldTree = elemData.getJson();
-                    if (nLOKWindowId == aOldTree.get<unsigned>("id", 0)
-                        && aOldTree.get<std::string>("action", "") == "invalidate")
-                    {
-                        return true;
-                    }
+                    return true;
                 }
                 return false;
             });
@@ -1886,11 +1889,8 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
             aRectStream >> nLeft >> nComma >> nTop >> nComma >> nWidth >> nComma >> nHeight;
             tools::Rectangle aNewRect(nLeft, nTop, nLeft + nWidth, nTop + nHeight);
             bool currentIsRedundant = false;
-            removeAll([&aNewRect, &nLOKWindowId,
-                       &currentIsRedundant](int elemType, const CallbackData& elemData) {
-                if (elemType != LOK_CALLBACK_WINDOW)
-                    return false;
-
+            removeAll(LOK_CALLBACK_WINDOW, [&aNewRect, &nLOKWindowId,
+                       &currentIsRedundant](const CallbackData& elemData) {
                 const boost::property_tree::ptree& aOldTree = elemData.getJson();
                 if (aOldTree.get<std::string>("action", "") == "invalidate")
                 {
@@ -1914,7 +1914,7 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
                             return false;
                         }
                         // new one engulfs the old one?
-                        else if (aNewRect.IsInside(aOldRect))
+                        else if (aNewRect.Contains(aOldRect))
                         {
                             SAL_INFO("lok.dialog",
                                      "New rect [" << aNewRect.toString() << "] engulfs old ["
@@ -1922,7 +1922,7 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
                             return true;
                         }
                         // old one engulfs the new one?
-                        else if (aOldRect.IsInside(aNewRect))
+                        else if (aOldRect.Contains(aNewRect))
                         {
                             SAL_INFO("lok.dialog",
                                      "Old rect [" << aOldRect.toString() << "] engulfs new ["
@@ -1962,13 +1962,10 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
     else if (aAction == "created")
     {
         // Remove all previous actions on same dialog, if we are creating it anew.
-        removeAll([&nLOKWindowId](int elemType, const CallbackData& elemData) {
-            if (elemType == LOK_CALLBACK_WINDOW)
-            {
-                const boost::property_tree::ptree& aOldTree = elemData.getJson();
-                if (nLOKWindowId == aOldTree.get<unsigned>("id", 0))
-                    return true;
-            }
+        removeAll(LOK_CALLBACK_WINDOW,[&nLOKWindowId](const CallbackData& elemData) {
+            const boost::property_tree::ptree& aOldTree = elemData.getJson();
+            if (nLOKWindowId == aOldTree.get<unsigned>("id", 0))
+                return true;
             return false;
         });
 
@@ -1990,16 +1987,13 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
     {
         // A size change is practically re-creation of the window.
         // But at a minimum it's a full invalidation.
-        removeAll([&nLOKWindowId](int elemType, const CallbackData& elemData) {
-            if (elemType == LOK_CALLBACK_WINDOW)
+        removeAll(LOK_CALLBACK_WINDOW, [&nLOKWindowId](const CallbackData& elemData) {
+            const boost::property_tree::ptree& aOldTree = elemData.getJson();
+            if (nLOKWindowId == aOldTree.get<unsigned>("id", 0))
             {
-                const boost::property_tree::ptree& aOldTree = elemData.getJson();
-                if (nLOKWindowId == aOldTree.get<unsigned>("id", 0))
-                {
-                    const std::string aOldAction = aOldTree.get<std::string>("action", "");
-                    if (aOldAction == "invalidate")
-                        return true;
-                }
+                const std::string aOldAction = aOldTree.get<std::string>("action", "");
+                if (aOldAction == "invalidate")
+                    return true;
             }
             return false;
         });
@@ -2075,6 +2069,46 @@ void CallbackFlushHandler::Invoke()
 
     m_queue1.clear();
     m_queue2.clear();
+    Stop();
+    m_TimeoutIdle.Stop();
+}
+
+bool CallbackFlushHandler::removeAll(int type)
+{
+    bool bErased = false;
+    auto it1 = m_queue1.begin();
+    for(;;)
+    {
+        it1 = std::find(it1, m_queue1.end(), type);
+        if(it1 == m_queue1.end())
+            break;
+        m_queue2.erase(toQueue2(it1));
+        it1 = m_queue1.erase(it1);
+        bErased = true;
+    }
+    return bErased;
+}
+
+bool CallbackFlushHandler::removeAll(int type, const std::function<bool (const CallbackData&)>& rTestFunc)
+{
+    bool bErased = false;
+    auto it1 = m_queue1.begin();
+    for(;;)
+    {
+        it1 = std::find(it1, m_queue1.end(), type);
+        if(it1 == m_queue1.end())
+            break;
+        auto it2 = toQueue2(it1);
+        if (rTestFunc(*it2))
+        {
+            m_queue2.erase(it2);
+            it1 = m_queue1.erase(it1);
+            bErased = true;
+        }
+        else
+            ++it1;
+    }
+    return bErased;
 }
 
 bool CallbackFlushHandler::removeAll(const std::function<bool (int, const CallbackData&)>& rTestFunc)
@@ -4692,7 +4726,7 @@ static char* getFonts (const char* pCommand)
         {
             boost::property_tree::ptree aChildren;
             const FontMetric& rFontMetric = pList->GetFontName(i);
-            const int* pAry = pList->GetSizeAry(rFontMetric);
+            const int* pAry = FontList::GetStdSizeAry();
             sal_uInt16 nSizeCount = 0;
             while (pAry[nSizeCount])
             {

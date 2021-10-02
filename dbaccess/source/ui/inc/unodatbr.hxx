@@ -46,6 +46,7 @@ namespace com::sun::star::container { class XNameContainer; }
 namespace dbaui
 {
     struct DBTreeEditedEntry;
+    struct DBTreeListUserData;
     class ImageProvider;
 
     typedef ::cppu::ImplHelper5 <   css::frame::XStatusListener
@@ -289,7 +290,7 @@ namespace dbaui
 
         /** close the connection (and collapse the list entries) of the given list entries
         */
-        void        closeConnection(weld::TreeIter& rEntry, bool bDisposeConnection = true);
+        void        closeConnection(const weld::TreeIter& rEntry, bool bDisposeConnection = true);
 
         void        populateTree(const css::uno::Reference< css::container::XNameAccess>& xNameAccess, const weld::TreeIter& rParent, EntryType eEntryType);
         void        initializeTreeModel();
@@ -308,7 +309,7 @@ namespace dbaui
         */
         std::unique_ptr<ImageProvider> getImageProviderFor(const weld::TreeIter* pAnyEntry);
 
-        void    implAdministrate(weld::TreeIter& rApplyTo);
+        void    implAdministrate(const weld::TreeIter& rApplyTo);
 
         bool implCopyObject(ODataClipboard& rExchange, const weld::TreeIter& rApplyTo, sal_Int32 nCommandType);
 
@@ -349,14 +350,12 @@ namespace dbaui
             bool _bSelectDirect
         );
 
-        std::unique_ptr<weld::TreeIter> implGetConnectionEntry(weld::TreeIter& rEntry) const;
+        std::unique_ptr<weld::TreeIter> implGetConnectionEntry(const weld::TreeIter& rEntry) const;
         /// inserts an entry into the tree
         std::unique_ptr<weld::TreeIter> implAppendEntry(
             const weld::TreeIter* pParent,
             const OUString& rName,
-            void* pUserData,
-            EntryType eEntryType
-        );
+            DBTreeListUserData* pUserData);
 
         /// loads the grid control with the data object specified (which may be a table, a query or a command)
         bool implLoadAnything(const OUString& _rDataSourceName, const OUString& _rCommand,

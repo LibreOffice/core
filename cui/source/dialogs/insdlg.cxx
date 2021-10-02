@@ -27,7 +27,9 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <insdlg.hxx>
 #include <dialmgr.hxx>
@@ -48,6 +50,7 @@
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/viewsh.hxx>
 #include <comphelper/seqstream.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #include <strings.hrc>
 
@@ -189,10 +192,32 @@ short SvInsertOleDlg::run()
                         if ( xDialogCreator.is() )
                         {
                             aName = aCnt.CreateUniqueObjectName();
+
+                            uno::Reference<task::XStatusIndicator> xProgress;
+                            OUString aProgressText;
+                            SfxViewFrame* pFrame = SfxViewFrame::Current();
+                            if (pFrame)
+                            {
+                                // Have a current frame, create a matching progressbar, but don't start it yet.
+                                uno::Reference<frame::XFrame> xFrame
+                                    = pFrame->GetFrame().GetFrameInterface();
+                                uno::Reference<task::XStatusIndicatorFactory> xProgressFactory(
+                                    xFrame, uno::UNO_QUERY);
+                                if (xProgressFactory.is())
+                                {
+                                    xProgress = xProgressFactory->createStatusIndicator();
+                                    if (xProgress)
+                                    {
+                                        aProgressText = CuiResId(RID_SVXSTR_OLE_INSERT);
+                                    }
+                                }
+                            }
+
                             const embed::InsertedObjectInfo aNewInf = xDialogCreator->createInstanceByDialog(
                                                                     m_xStorage,
                                                                     aName,
-                                                                    uno::Sequence < beans::PropertyValue >() );
+                                                                    {comphelper::makePropertyValue("StatusIndicator", xProgress),
+                                                                     comphelper::makePropertyValue("StatusIndicatorText", aProgressText)} );
 
                             OSL_ENSURE( aNewInf.Object.is(), "The object must be created or an exception must be thrown!" );
                             m_xObj = aNewInf.Object;
@@ -276,10 +301,34 @@ short SvInsertOleDlg::run()
                 aMedium[1].Value <<= xInteraction;
 
                 // create object from media descriptor
+
+                uno::Reference<task::XStatusIndicator> xProgress;
+                SfxViewFrame* pFrame = SfxViewFrame::Current();
+                if (pFrame)
+                {
+                    // Have a current frame, create visual indication that insert is in progress.
+                    uno::Reference<frame::XFrame> xFrame = pFrame->GetFrame().GetFrameInterface();
+                    uno::Reference<task::XStatusIndicatorFactory> xProgressFactory(xFrame, uno::UNO_QUERY);
+                    if (xProgressFactory.is())
+                    {
+                        xProgress = xProgressFactory->createStatusIndicator();
+                        if (xProgress)
+                        {
+                            OUString aOleInsert(CuiResId(RID_SVXSTR_OLE_INSERT));
+                            xProgress->start(aOleInsert, 100);
+                        }
+                    }
+                }
+
                 if ( bLink )
                     m_xObj = aCnt.InsertEmbeddedLink( aMedium, aName );
                 else
                     m_xObj = aCnt.InsertEmbeddedObject( aMedium, aName );
+
+                if (xProgress.is())
+                {
+                    xProgress->end();
+                }
             }
 
             if ( !m_xObj.is() )

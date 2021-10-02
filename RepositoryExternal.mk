@@ -3152,6 +3152,33 @@ endef
 
 endif # ENABLE_QT5
 
+ifeq ($(ENABLE_QT6),TRUE)
+
+define gb_LinkTarget__use_qt6
+$(call gb_LinkTarget_set_include,$(1),\
+	$(subst -isystem/,-isystem /,$(filter -I% -isystem%,$(subst -isystem /,-isystem/,$(QT6_CFLAGS)))) \
+	$$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_add_defs,$(1),\
+	$(filter-out -I% -isystem%,$(subst -isystem /,-isystem/,$(QT6_CFLAGS))) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(QT6_LIBS) \
+)
+
+endef
+
+else # !ENABLE_QT6
+
+define gb_LinkTarget__use_qt6
+
+endef
+
+endif # ENABLE_QT6
+
+
 # PYTHON
 # extra python_headers external because pyuno wrapper must not link python
 ifneq ($(SYSTEM_PYTHON),)

@@ -347,6 +347,15 @@ bool BufferAdd::isSideEffectFree(Expr const* expr)
                     if (isSideEffectFree(callExpr->getArg(0)))
                         return true;
             }
+        // O[U]String::operator std::[u16]string_view:
+        if (auto const d = dyn_cast_or_null<CXXConversionDecl>(callExpr->getCalleeDecl()))
+        {
+            auto tc = loplugin::TypeCheck(d->getParent());
+            if (tc.Class("OString") || tc.Class("OUString"))
+            {
+                return true;
+            }
+        }
     }
 
     // sometimes we have a constructor call on the RHS

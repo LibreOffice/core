@@ -118,6 +118,7 @@ SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase(weld::Container* pParent,
   , mbIsCloseDisabled( false )
   , mpDialog( pDlg )
   , mbStdControlsInit( false )
+  , maTimer("cui SvxHyperlinkTabPageBase maTimer")
 {
     // create bookmark-window
 }
@@ -341,9 +342,7 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, weld::Button&, voi
         aItem.SetMacroTable( *pMacroTbl );
 
     // create empty itemset for macro-dlg
-    SfxItemSet aItemSet( SfxGetpApp()->GetPool(),
-                         svl::Items<SID_ATTR_MACROITEM,
-                                    SID_ATTR_MACROITEM> );
+    SfxItemSetFixed<SID_ATTR_MACROITEM, SID_ATTR_MACROITEM> aItemSet( SfxGetpApp()->GetPool() );
     aItemSet.Put ( aItem );
 
     DisableClose( true );

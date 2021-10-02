@@ -93,8 +93,8 @@ MenuBarManager::MenuBarManager(
     , m_xContext(rxContext)
     , m_xURLTransformer(_xURLTransformer)
     , m_sIconTheme( SvtMiscOptions().GetIconTheme() )
+    , m_aAsyncSettingsTimer( "framework::MenuBarManager::Deactivate m_aAsyncSettingsTimer" )
 {
-    m_aAsyncSettingsTimer.SetDebugName( "framework::MenuBarManager::Deactivate m_aAsyncSettingsTimer" );
     m_xPopupMenuControllerFactory = frame::thePopupMenuControllerFactory::get(m_xContext);
     FillMenuManager( pMenu, rFrame, rDispatchProvider, rModuleIdentifier, bDelete );
 }

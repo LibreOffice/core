@@ -18,6 +18,10 @@
  */
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "cuihyperdlg.hxx"
 #include "hltpbase.hxx"
 
@@ -54,7 +58,7 @@ private:
     DECL_LINK( TimeoutHdl_Impl,             Timer *, void); ///< Handler for timer -timeout
 
 
-    void    SetScheme(const OUString& rScheme);
+    void    SetScheme(std::u16string_view rScheme);
     void    RemoveImproperProtocol(std::u16string_view rProperScheme);
     OUString  GetSchemeFromButtons() const;
     INetProtocol GetSmartProtocolFromButtons() const;

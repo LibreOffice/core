@@ -80,7 +80,7 @@ sal_Int32 AccessibleStringWrap::GetIndexAtPoint( const Point& rPoint )
     for( i=0; i<nLen; ++i )
     {
         GetCharacterBounds(i, aRect);
-        if( aRect.IsInside(rPoint) )
+        if( aRect.Contains(rPoint) )
             return i;
     }
 

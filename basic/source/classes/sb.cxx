@@ -1246,7 +1246,7 @@ void StarBASIC::DeInitAllModules()
 // a public var or an entrypoint. If it is not found and we look for a
 // method and a module with the given name is found the search continues
 // for entrypoint "Main".
-// If this fails again a conventional search over objects is performend.
+// If this fails again a conventional search over objects is performed.
 SbxVariable* StarBASIC::Find( const OUString& rName, SbxClassType t )
 {
     SbxVariable* pRes = nullptr;
@@ -1581,7 +1581,7 @@ void StarBASIC::MakeErrorText( ErrCode nId, std::u16string_view aMsg )
         }
         GetSbData()->aErrMsg = aMsg1.makeStringAndClear();
     }
-    // tdf#123144 - don't use an artifical error message if there is a custom one
+    // tdf#123144 - don't use an artificial error message if there is a custom one
     else if (!aMsg.empty())
     {
         GetSbData()->aErrMsg = aMsg;

@@ -60,6 +60,8 @@ public:
             || loplugin::hasPathnamePrefix(fn, SRCDIR "/pyuno/source/module/pyuno_struct.cxx")
             || loplugin::hasPathnamePrefix(fn, SRCDIR "/pyuno/source/module/pyuno.cxx")
             || loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/filter/ascii/ascatr.cxx")
+            // TODO this plugin doesn't handle it well when we take the address of a poiner
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/svl/source/misc/sharedstringpool.cxx")
             )
             return;
 
@@ -96,6 +98,7 @@ public:
     bool TraverseCXXMethodDecl(CXXMethodDecl * f);
     bool TraverseCXXConstructorDecl(CXXConstructorDecl * f);
     bool VisitDeclRefExpr(const DeclRefExpr *);
+    bool VisitLambdaExpr(const LambdaExpr*);
 
 private:
     bool CheckTraverseFunctionDecl(FunctionDecl *);
@@ -159,6 +162,8 @@ bool ConstParams::CheckTraverseFunctionDecl(FunctionDecl * functionDecl)
     if (functionDecl->isMain()) {
         return false;
     }
+    if (functionDecl->getTemplatedKind() != FunctionDecl::TK_NonTemplate)
+        return false;
 
     // ignore the macros from include/tools/link.hxx
     auto canonicalDecl = functionDecl->getCanonicalDecl();
@@ -189,6 +194,7 @@ bool ConstParams::CheckTraverseFunctionDecl(FunctionDecl * functionDecl)
             || name.startswith("Read_F_")
                 // UNO component entry points
             || name.endswith("component_getFactory")
+            || name.endswith("_get_implementation")
             // callback for some external code?
             || name == "ScAddInAsyncCallBack"
             // used as function pointers
@@ -256,6 +262,23 @@ bool ConstParams::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
     return true;
 }
 
+bool ConstParams::VisitLambdaExpr(const LambdaExpr* lambdaExpr)
+{
+    if (ignoreLocation(lambdaExpr))
+        return true;
+    for (auto captureIt = lambdaExpr->capture_begin(); captureIt != lambdaExpr->capture_end();
+         ++captureIt)
+    {
+        const LambdaCapture& capture = *captureIt;
+        if (capture.capturesVariable())
+        {
+            if (auto varDecl = dyn_cast<ParmVarDecl>(capture.getCapturedVar()))
+                interestingParamSet.erase(varDecl);
+        }
+    }
+    return true;
+}
+
 // Walk up from a statement that contains a DeclRefExpr, checking if the usage means that the
 // related ParamVarDecl can be const.
 bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVarDecl)
@@ -308,11 +331,11 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
 
     if (auto unaryOperator = dyn_cast<UnaryOperator>(parent)) {
         UnaryOperator::Opcode op = unaryOperator->getOpcode();
-        if (op == UO_AddrOf || op == UO_PreInc || op == UO_PostInc
+        if (op == UO_PreInc || op == UO_PostInc
             || op == UO_PreDec || op == UO_PostDec) {
             return false;
         }
-        if (op == UO_Deref) {
+        if (op == UO_Deref || op == UO_AddrOf) {
             return checkIfCanBeConst(parent, parmVarDecl);
         }
         return true;

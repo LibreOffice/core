@@ -129,7 +129,7 @@ private:
     void    MakePreviewText( const OUString& rFormat );
     void    ChangePreviewText( sal_uInt16 nPos );
     void    AddAutomaticLanguage_Impl(LanguageType eAutoLang, bool bSelect);
-    bool    Click_Impl(weld::Button& rIB);
+    bool    Click_Impl(const weld::Button& rIB);
     // Handler
     DECL_LINK(LostFocusHdl_Impl, weld::Widget&, void);
     DECL_LINK(DoubleClickHdl_Impl, weld::TreeView&, bool);

@@ -308,10 +308,10 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
 
 const sal_uInt16 nNoArrowNoShadowDlg    = 1101;
 
-void SchAttribTabDlg::setSymbolInformation( std::unique_ptr<SfxItemSet> pSymbolShapeProperties,
+void SchAttribTabDlg::setSymbolInformation( SfxItemSet&& rSymbolShapeProperties,
                 std::unique_ptr<Graphic> pAutoSymbolGraphic )
 {
-    m_pSymbolShapeProperties = std::move(pSymbolShapeProperties);
+    m_oSymbolShapeProperties.emplace(std::move(rSymbolShapeProperties));
     m_pAutoSymbolGraphic = std::move(pAutoSymbolGraphic);
 }
 
@@ -495,8 +495,8 @@ void SchAttribTabDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
         if( m_pParameter->HasSymbolProperties() )
         {
             aSet.Put(OfaPtrItem(SID_OBJECT_LIST,m_pViewElementListProvider->GetSymbolList()));
-            if( m_pSymbolShapeProperties )
-                aSet.Put(SfxTabDialogItem(SID_ATTR_SET,*m_pSymbolShapeProperties));
+            if( m_oSymbolShapeProperties )
+                aSet.Put(SfxTabDialogItem(SID_ATTR_SET, *m_oSymbolShapeProperties));
             if( m_pAutoSymbolGraphic )
                 aSet.Put(SvxGraphicItem(*m_pAutoSymbolGraphic));
         }

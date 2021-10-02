@@ -47,6 +47,8 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage(weld::Container* pPar
         const uno::Reference< beans::XPropertySet > & xSceneProperties,
         ControllerLockHelper & rControllerLockHelper)
     : m_xSceneProperties( xSceneProperties )
+    , m_aAngleTimer("chart2 ThreeD_SceneGeometry_TabPage m_aAngleTimer")
+    , m_aPerspectiveTimer("chart2 ThreeD_SceneGeometry_TabPage m_aPerspectiveTimer")
     , m_nXRotation(0)
     , m_nYRotation(0)
     , m_nZRotation(0)

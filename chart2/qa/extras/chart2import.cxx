@@ -69,7 +69,7 @@ public:
     void testODPChartSeries();
     void testBnc864396();
     void testBnc882383();
-    void testTransparancyGradientValue();
+    void testTransparencyGradientValue();
     void testBnc889755();
     void testSimpleStrictXLSX();
     void testDelayedCellImport(); // chart range referencing content on later sheets
@@ -165,7 +165,7 @@ public:
     CPPUNIT_TEST(testODPChartSeries);
     CPPUNIT_TEST(testBnc864396);
     CPPUNIT_TEST(testBnc882383);
-    CPPUNIT_TEST(testTransparancyGradientValue);
+    CPPUNIT_TEST(testTransparencyGradientValue);
     CPPUNIT_TEST(testBnc889755);
     CPPUNIT_TEST(testSimpleStrictXLSX);
     CPPUNIT_TEST(testDelayedCellImport);
@@ -808,7 +808,7 @@ void Chart2ImportTest::testBnc882383()
     CPPUNIT_ASSERT(!sGradientName.isEmpty());
 }
 
-void Chart2ImportTest::testTransparancyGradientValue()
+void Chart2ImportTest::testTransparencyGradientValue()
 {
     load(u"/chart2/qa/extras/data/xlsx/", "tdf128732.xlsx");
     uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet(0, mxComponent);

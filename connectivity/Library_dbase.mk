@@ -58,6 +58,4 @@ $(eval $(call gb_Library_add_exception_objects,dbase,\
 	connectivity/source/drivers/dbase/DTable \
 ))
 
-#connectivity/source/drivers/dbase/DTable disable optimization?
-
 # vim: set noet sw=4 ts=4:

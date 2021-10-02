@@ -35,6 +35,8 @@ OQueryTextView::OQueryTextView(OQueryContainerWindow* pParent, OQueryController&
     , m_rController(rController)
     , m_xSQL(new SQLEditView)
     , m_xSQLEd(new weld::CustomWeld(*m_xBuilder, "sql", *m_xSQL))
+    , m_timerUndoActionCreation("dbaccess OQueryTextView m_timerUndoActionCreation")
+    , m_timerInvalidate("dbaccess OQueryTextView m_timerInvalidate")
     , m_bStopTimer(false)
 {
     m_xSQL->DisableInternalUndo();

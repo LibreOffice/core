@@ -19,6 +19,10 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <rtl/ref.hxx>
@@ -65,7 +69,7 @@ public:
 
 protected:
     // Determines the appropriate proxy settings for the given URL. Returns true if a proxy should be used
-    void getProxyForURL(const OUString& rURL, OString& rHost, sal_Int32& rPort) const;
+    void getProxyForURL(std::u16string_view rURL, OString& rHost, sal_Int32& rPort) const;
 
 private:
     osl::Condition m_aCondition;

@@ -106,6 +106,7 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
         , m_xModuleManager( ModuleManager::create( xContext ))
         , m_xUIElementFactoryManager( ui::theUIElementFactoryManager::get(xContext) )
         , m_xPersistentWindowStateSupplier( ui::theWindowStateConfiguration::get( xContext ) )
+        , m_aAsyncLayoutTimer( "framework::LayoutManager m_aAsyncLayoutTimer" )
         , m_aListenerContainer( m_aMutex )
 {
     // Initialize statusbar member
@@ -120,7 +121,6 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
     m_aAsyncLayoutTimer.SetPriority( TaskPriority::HIGH_IDLE );
     m_aAsyncLayoutTimer.SetTimeout( 50 );
     m_aAsyncLayoutTimer.SetInvokeHandler( LINK( this, LayoutManager, AsyncLayoutHdl ) );
-    m_aAsyncLayoutTimer.SetDebugName( "framework::LayoutManager m_aAsyncLayoutTimer" );
 
     registerProperty( LAYOUTMANAGER_PROPNAME_ASCII_AUTOMATICTOOLBARS, LAYOUTMANAGER_PROPHANDLE_AUTOMATICTOOLBARS, css::beans::PropertyAttribute::TRANSIENT, &m_bAutomaticToolbars, cppu::UnoType<decltype(m_bAutomaticToolbars)>::get() );
     registerProperty( LAYOUTMANAGER_PROPNAME_ASCII_HIDECURRENTUI, LAYOUTMANAGER_PROPHANDLE_HIDECURRENTUI, beans::PropertyAttribute::TRANSIENT, &m_bHideCurrentUI, cppu::UnoType<decltype(m_bHideCurrentUI)>::get() );

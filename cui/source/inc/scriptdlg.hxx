@@ -106,9 +106,9 @@ protected:
     static bool         getBoolProperty( css::uno::Reference< css::beans::XPropertySet > const & xProps, OUString const & propName );
     void                CheckButtons(  css::uno::Reference< css::script::browse::XBrowseNode > const & node );
 
-    void        createEntry(weld::TreeIter& rEntry);
+    void        createEntry(const weld::TreeIter& rEntry);
     void        renameEntry(const weld::TreeIter& rEntry);
-    void        deleteEntry(weld::TreeIter& rEntry);
+    void        deleteEntry(const weld::TreeIter& rEntry);
     css::uno::Reference<css::script::browse::XBrowseNode> getBrowseNode(const weld::TreeIter& rEntry);
     css::uno::Reference<css::frame::XModel> getModel(const weld::TreeIter& rEntry);
     OUString    getListOfChildren( const css::uno::Reference< css::script::browse::XBrowseNode >& node, int depth );
@@ -117,7 +117,7 @@ protected:
 
     void        Init(std::u16string_view language);
     void        delUserData(const weld::TreeIter& rIter);
-    void        deleteTree(weld::TreeIter& rIter);
+    void        deleteTree(const weld::TreeIter& rIter);
     void        deleteAllTree();
     void        insertEntry(OUString const & rText, OUString const & rBitmap,
                               const weld::TreeIter* pParent,

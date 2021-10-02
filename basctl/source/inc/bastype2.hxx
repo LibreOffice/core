@@ -222,7 +222,7 @@ public:
     EntryDescriptor GetEntryDescriptor(const weld::TreeIter* pEntry);
 
     static ItemType ConvertType (EntryType eType);
-    bool            IsValidEntry(weld::TreeIter& rEntry);
+    bool            IsValidEntry(const weld::TreeIter& rEntry);
     void AddEntry(const OUString& rText, const OUString& rImage,
                   const weld::TreeIter* pParent, bool bChildrenOnDemand,
                   std::unique_ptr<Entry>&& rUserData,

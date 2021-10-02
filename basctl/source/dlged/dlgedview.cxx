@@ -63,7 +63,7 @@ void DlgEdView::MakeVisible( const tools::Rectangle& rRect, vcl::Window& rWin )
     tools::Rectangle aVisRect( RectTmp );
 
     // check, if rectangle is inside visible area
-    if ( aVisRect.IsInside( rRect ) )
+    if ( aVisRect.Contains( rRect ) )
         return;
 
     // calculate scroll distance; the rectangle must be inside the visible area

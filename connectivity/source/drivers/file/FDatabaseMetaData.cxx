@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_fuzzers.h>
+
 #include <file/FDatabaseMetaData.hxx>
 #include <FDatabaseMetaDataResultSet.hxx>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
@@ -227,7 +229,11 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         if ( !bKnowCaseSensitivity )
         {
             bKnowCaseSensitivity = true;
+#if ENABLE_FUZZERS
+            sal_Int16 nCase = 1;
+#else
             sal_Int16 nCase = isCaseSensitiveParentFolder( m_pConnection->getURL(), aURL.getName() );
+#endif
             switch( nCase )
             {
             case 1:

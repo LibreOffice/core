@@ -84,6 +84,8 @@ extern "C" {
 #define CL_EXTENSION_WEAK_LINK
 #endif
 
+#include <stdint.h>
+
 #if defined(_WIN32) && defined(_MSC_VER)
 
 /* scalar types  */
@@ -164,8 +166,6 @@ typedef double          cl_double16[16];
 /* There are no vector types for half */
 
 #else
-
-#include <stdint.h>
 
 /* scalar types  */
 typedef int8_t          cl_char;

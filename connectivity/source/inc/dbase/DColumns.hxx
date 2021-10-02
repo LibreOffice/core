@@ -38,7 +38,6 @@ namespace connectivity::dbase
                          ) : file::OColumns(_pTable,_rMutex,_rVector)
             {}
         };
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

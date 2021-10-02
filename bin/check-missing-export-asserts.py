@@ -141,7 +141,7 @@ def insert_code_in_sw_model(repoPath, modelTestRelPath):
     modelTestFile.close()
 
 def check_sw(repoPath):
-    modelTestRelPath = '/sw/qa/inc/swmodeltestbase.hxx'
+    modelTestRelPath = '/sw/qa/unit/swmodeltestbase.cxx'
 
     checkout_file(repoPath, modelTestRelPath)
     insert_code_in_sw_model(repoPath, modelTestRelPath)

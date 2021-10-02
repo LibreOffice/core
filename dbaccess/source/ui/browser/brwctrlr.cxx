@@ -525,6 +525,7 @@ Any SAL_CALL SbaXDataBrowserController::queryInterface(const Type& _rType)
 SbaXDataBrowserController::SbaXDataBrowserController(const Reference< css::uno::XComponentContext >& _rM)
     :SbaXDataBrowserController_Base(_rM)
     ,m_nRowSetPrivileges(0)
+    ,m_aInvalidateClipboard("dbaui::SbaXDataBrowserController m_aInvalidateClipboard")
     ,m_aAsyncGetCellFocus(LINK(this, SbaXDataBrowserController, OnAsyncGetCellFocus))
     ,m_aAsyncDisplayError( LINK( this, SbaXDataBrowserController, OnAsyncDisplayError ) )
     ,m_sStateSaveRecord(DBA_RES(RID_STR_SAVE_CURRENT_RECORD))
@@ -542,7 +543,6 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< css::uno::
     }
     osl_atomic_decrement(&m_refCount);
 
-    m_aInvalidateClipboard.SetDebugName("dbaui::SbaXDataBrowserController m_aInvalidateClipboard");
     m_aInvalidateClipboard.SetInvokeHandler(LINK(this, SbaXDataBrowserController, OnInvalidateClipboard));
     m_aInvalidateClipboard.SetTimeout(300);
 }

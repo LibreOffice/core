@@ -1183,7 +1183,7 @@ std::unique_ptr<weld::TreeIter> SbaTableQueryBrowser::getObjectEntry(const OUStr
                                         {
                                             pEntryData->eType = etQueryContainer;
                                         }
-                                        implAppendEntry(xObject.get(), sPath, pEntryData, pEntryData->eType);
+                                        implAppendEntry(xObject.get(), sPath, pEntryData);
                                     }
                                 }
                             }
@@ -2107,7 +2107,7 @@ void SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xNameAcce
                     if ( xChild.is() )
                         pEntryData->eType = etQueryContainer;
                 }
-                implAppendEntry(&rParent, rName, pEntryData, pEntryData->eType);
+                implAppendEntry(&rParent, rName, pEntryData);
             }
         }
     }
@@ -2119,8 +2119,10 @@ void SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xNameAcce
     rTreeView.make_sorted();
 }
 
-std::unique_ptr<weld::TreeIter> SbaTableQueryBrowser::implAppendEntry(const weld::TreeIter* pParent, const OUString& rName, void* pUserData, EntryType eEntryType)
+std::unique_ptr<weld::TreeIter> SbaTableQueryBrowser::implAppendEntry(const weld::TreeIter* pParent, const OUString& rName, DBTreeListUserData* pUserData)
 {
+    EntryType eEntryType = pUserData->eType;
+
     std::unique_ptr<ImageProvider> xImageProvider(getImageProviderFor(pParent));
 
     OUString aImage = xImageProvider->getImageId(rName, getDatabaseObjectType(eEntryType));
@@ -2475,7 +2477,7 @@ IMPL_LINK_NOARG(SbaTableQueryBrowser, OnSelectionChange, LinkParamNone*, void)
     implSelect(xSelection.get());
 }
 
-std::unique_ptr<weld::TreeIter> SbaTableQueryBrowser::implGetConnectionEntry(weld::TreeIter& rEntry) const
+std::unique_ptr<weld::TreeIter> SbaTableQueryBrowser::implGetConnectionEntry(const weld::TreeIter& rEntry) const
 {
     weld::TreeView& rTreeView = m_pTreeView->GetWidget();
     std::unique_ptr<weld::TreeIter> xCurrentEntry(rTreeView.make_iterator(&rEntry));
@@ -2776,7 +2778,7 @@ void SAL_CALL SbaTableQueryBrowser::elementInserted(const ContainerEvent& rEvent
             }
             pNewData->eType = etQuery;
         }
-        implAppendEntry(xEntry.get(), ::comphelper::getString(rEvent.Accessor), pNewData, pNewData->eType);
+        implAppendEntry(xEntry.get(), ::comphelper::getString(rEvent.Accessor), pNewData);
 
         rTreeView.make_sorted();
     }
@@ -2878,7 +2880,7 @@ void SAL_CALL SbaTableQueryBrowser::elementReplaced( const ContainerEvent& _rEve
                 if ( etTableOrView == pData->eType )
                 {
                     // only insert userdata when we have a table because the query is only a commanddefinition object and not a query
-                     _rEvent.Element >>= pData->xObjectProperties;  // remember the new element
+                    _rEvent.Element >>= pData->xObjectProperties;  // remember the new element
                 }
                 else
                 {
@@ -2971,7 +2973,7 @@ void SbaTableQueryBrowser::disposeConnection(const weld::TreeIter* pDSEntry)
     }
 }
 
-void SbaTableQueryBrowser::closeConnection(weld::TreeIter& rDSEntry, bool _bDisposeConnection)
+void SbaTableQueryBrowser::closeConnection(const weld::TreeIter& rDSEntry, bool _bDisposeConnection)
 {
     OSL_ENSURE(impl_isDataSourceEntry(&rDSEntry), "SbaTableQueryBrowser::closeConnection: invalid entry (not top-level)!");
 
@@ -3433,7 +3435,7 @@ int SbaTableQueryBrowser::OnTreeEntryCompare(const weld::TreeIter& rLHS, const w
     return nCompareResult;
 }
 
-void SbaTableQueryBrowser::implAdministrate(weld::TreeIter& rApplyTo)
+void SbaTableQueryBrowser::implAdministrate(const weld::TreeIter& rApplyTo)
 {
     try
     {

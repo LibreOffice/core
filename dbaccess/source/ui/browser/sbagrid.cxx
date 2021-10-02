@@ -522,7 +522,7 @@ void SbaGridHeader::ImplStartColumnDrag(sal_Int8 _nAction, const Point& _rMouseP
         tools::Rectangle aColRect = GetItemRect(nId);
         aColRect.AdjustLeft(nId ? 3 : 0 ); // the handle col (nId == 0) does not have a left margin for resizing
         aColRect.AdjustRight( -3 );
-        bResizingCol = !aColRect.IsInside(_rMousePos);
+        bResizingCol = !aColRect.Contains(_rMousePos);
     }
     if (bResizingCol)
         return;
@@ -1164,7 +1164,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
                 break;
 
             tools::Rectangle aRect = GetCellRect(nRow, nCol, false);
-            if (!aRect.IsInside(rEvt.maPosPixel))
+            if (!aRect.Contains(rEvt.maPosPixel))
                 // not dropped within a cell (a cell isn't as wide as the column - the are small spaces)
                 break;
 

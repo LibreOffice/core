@@ -48,4 +48,26 @@ void f4(std::string * p) {
     *p = std::string("xxx");
 }
 
+
+namespace test5
+{
+struct Rectangle {};
+
+struct Foo
+{
+    void CallConst(const Rectangle*);
+    void CallNonConst(Rectangle*);
+    // expected-error@+1 {{this parameter can be const test5::Foo::ImplInvalidateParentFrameRegion [loplugin:constparams]}}
+    void ImplInvalidateParentFrameRegion( Rectangle& rRegion )
+    {
+        CallConst( &rRegion );
+    }
+    // no warning expected
+    void ImplInvalidateParentFrameRegion2( Rectangle& rRegion )
+    {
+        CallNonConst( &rRegion );
+    }
+};
+
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

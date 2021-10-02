@@ -514,7 +514,7 @@ namespace accessibility
                 {
                     tools::Rectangle aRect = VCLRectangle( xComp->getBounds() );
                     Point aPos = VCLPoint( rPoint );
-                    if ( aRect.IsInside( aPos ) )
+                    if ( aRect.Contains( aPos ) )
                     {
                         xChild = xAcc;
                         break;

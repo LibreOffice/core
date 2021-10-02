@@ -70,7 +70,7 @@ void OEvoabTable::refreshColumns()
     if (m_xColumns)
         m_xColumns->reFill(aVector);
     else
-        m_xColumns = new OEvoabColumns(this,m_aMutex,aVector);
+        m_xColumns.reset(new OEvoabColumns(this,m_aMutex,aVector));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

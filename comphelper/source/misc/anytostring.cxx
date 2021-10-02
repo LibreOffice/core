@@ -29,7 +29,7 @@ namespace comphelper {
 namespace {
 
 void appendTypeError(
-    OUStringBuffer & buf, typelib_TypeDescriptionReference * typeRef )
+    OUStringBuffer & buf, const typelib_TypeDescriptionReference * typeRef )
 {
     buf.append( "<cannot get type description of type " );
     buf.append( OUString::unacquired( &typeRef->pTypeName ) );

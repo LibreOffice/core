@@ -90,7 +90,7 @@ void OAdoTable::refreshColumns()
     if(m_xColumns)
         m_xColumns->reFill(aVector);
     else
-        m_xColumns = new OColumns(*this,m_aMutex,aVector,aColumns,isCaseSensitive(),m_pCatalog->getConnection());
+        m_xColumns.reset(new OColumns(*this,m_aMutex,aVector,aColumns,isCaseSensitive(),m_pCatalog->getConnection()));
 }
 
 void OAdoTable::refreshKeys()
@@ -107,7 +107,7 @@ void OAdoTable::refreshKeys()
     if(m_xKeys)
         m_xKeys->reFill(aVector);
     else
-        m_xKeys = new OKeys(*this,m_aMutex,aVector,aKeys,isCaseSensitive(),m_pCatalog->getConnection());
+        m_xKeys.reset(new OKeys(*this,m_aMutex,aVector,aKeys,isCaseSensitive(),m_pCatalog->getConnection()));
 }
 
 void OAdoTable::refreshIndexes()
@@ -124,7 +124,7 @@ void OAdoTable::refreshIndexes()
     if(m_xIndexes)
         m_xIndexes->reFill(aVector);
     else
-        m_xIndexes = new OIndexes(*this,m_aMutex,aVector,aIndexes,isCaseSensitive(),m_pCatalog->getConnection());
+        m_xIndexes.reset(new OIndexes(*this,m_aMutex,aVector,aIndexes,isCaseSensitive(),m_pCatalog->getConnection()));
 }
 
 Sequence< sal_Int8 > OAdoTable::getUnoTunnelId()

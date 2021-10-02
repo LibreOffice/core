@@ -555,7 +555,8 @@ void EditView::SetAttribs( const SfxItemSet& rSet )
 
     pImpEditView->DrawSelectionXOR();
     pImpEditView->pEditEngine->SetAttribs( pImpEditView->GetEditSelection(), rSet, SetAttribsMode::WholeWord );
-    pImpEditView->pEditEngine->FormatAndLayout( this );
+    if (pImpEditView->pEditEngine->IsUpdateLayout())
+        pImpEditView->pEditEngine->FormatAndLayout( this );
 }
 
 void EditView::RemoveAttribsKeepLanguages( bool bRemoveParaAttribs )
@@ -575,7 +576,8 @@ void EditView::RemoveAttribsKeepLanguages( bool bRemoveParaAttribs )
     }
 
     pImpEditView->pEditEngine->UndoActionEnd();
-    pImpEditView->pEditEngine->FormatAndLayout( this );
+    if (pImpEditView->pEditEngine->IsUpdateLayout())
+        pImpEditView->pEditEngine->FormatAndLayout( this );
 }
 
 void EditView::RemoveAttribs( bool bRemoveParaAttribs, sal_uInt16 nWhich )
@@ -590,7 +592,8 @@ void EditView::RemoveAttribs( EERemoveParaAttribsMode eMode, sal_uInt16 nWhich )
     pImpEditView->pEditEngine->UndoActionStart( EDITUNDO_RESETATTRIBS );
     pImpEditView->pEditEngine->RemoveCharAttribs( pImpEditView->GetEditSelection(), eMode, nWhich  );
     pImpEditView->pEditEngine->UndoActionEnd();
-    pImpEditView->pEditEngine->FormatAndLayout( this );
+    if (pImpEditView->pEditEngine->IsUpdateLayout())
+        pImpEditView->pEditEngine->FormatAndLayout( this );
 }
 
 void EditView::RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich )
@@ -598,7 +601,8 @@ void EditView::RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich )
     pImpEditView->pEditEngine->UndoActionStart( EDITUNDO_RESETATTRIBS );
     pImpEditView->pEditEngine->RemoveCharAttribs( nPara, nWhich );
     pImpEditView->pEditEngine->UndoActionEnd();
-    pImpEditView->pEditEngine->FormatAndLayout( this );
+    if (pImpEditView->pEditEngine->IsUpdateLayout())
+        pImpEditView->pEditEngine->FormatAndLayout( this );
 }
 
 SfxItemSet EditView::GetAttribs()
@@ -749,7 +753,8 @@ void EditView::InsertText( const EditTextObject& rTextObject )
 
     aTextSel.Min() = aTextSel.Max();    // Selection not retained.
     pImpEditView->SetEditSelection( aTextSel );
-    pImpEditView->pEditEngine->FormatAndLayout( this );
+    if (pImpEditView->pEditEngine->IsUpdateLayout())
+        pImpEditView->pEditEngine->FormatAndLayout( this );
 }
 
 void EditView::InsertText( css::uno::Reference< css::datatransfer::XTransferable > const & xDataObj, const OUString& rBaseURL, bool bUseSpecial )
@@ -762,7 +767,8 @@ void EditView::InsertText( css::uno::Reference< css::datatransfer::XTransferable
 
     aTextSel.Min() = aTextSel.Max();    // Selection not retained.
     pImpEditView->SetEditSelection( aTextSel );
-    pImpEditView->pEditEngine->FormatAndLayout( this );
+    if (pImpEditView->pEditEngine->IsUpdateLayout())
+        pImpEditView->pEditEngine->FormatAndLayout( this );
 }
 
 bool EditView::SetEditEngineUpdateLayout( bool bUpdate )
@@ -1285,7 +1291,8 @@ void EditView::InsertParaBreak()
     EditPaM aPaM(pImpEditView->pEditEngine->InsertParaBreak(pImpEditView->GetEditSelection()));
     pImpEditView->pEditEngine->UndoActionEnd();
     pImpEditView->SetEditSelection(EditSelection(aPaM, aPaM));
-    pImpEditView->pEditEngine->FormatAndLayout(this);
+    if (pImpEditView->pEditEngine->IsUpdateLayout())
+        pImpEditView->pEditEngine->FormatAndLayout(this);
 }
 
 void EditView::InsertField( const SvxFieldItem& rFld )
@@ -1297,7 +1304,8 @@ void EditView::InsertField( const SvxFieldItem& rFld )
     pEE->UndoActionEnd();
     pImpEditView->SetEditSelection( EditSelection( aPaM, aPaM ) );
     pEE->UpdateFields();
-    pEE->FormatAndLayout( this );
+    if (pImpEditView->pEditEngine->IsUpdateLayout())
+        pEE->FormatAndLayout( this );
 }
 
 const SvxFieldItem* EditView::GetFieldUnderMousePointer() const
@@ -1472,7 +1480,6 @@ bool EditView::ChangeFontSize( bool bGrow, SfxItemSet& rSet, const FontList* pFo
         return false;
 
     static const sal_uInt16 gFontSizeWichMap[] = { EE_CHAR_FONTHEIGHT, EE_CHAR_FONTHEIGHT_CJK, EE_CHAR_FONTHEIGHT_CTL, 0 };
-    const SvxFontItem& rFontItem = rSet.Get(EE_CHAR_FONTINFO);
     bool bRet = false;
 
     const sal_uInt16* pWhich = gFontSizeWichMap;
@@ -1483,8 +1490,7 @@ bool EditView::ChangeFontSize( bool bGrow, SfxItemSet& rSet, const FontList* pFo
         const MapUnit eUnit = rSet.GetPool()->GetMetric( *pWhich );
         nHeight = OutputDevice::LogicToLogic(nHeight * 10, eUnit, MapUnit::MapPoint);
 
-        FontMetric aFontMetric = pFontList->Get( rFontItem.GetFamilyName(), rFontItem.GetStyleName() );
-        const int* pAry = pFontList->GetSizeAry( aFontMetric );
+        const int* pAry = FontList::GetStdSizeAry();
 
         if( bGrow )
         {

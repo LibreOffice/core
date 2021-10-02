@@ -244,7 +244,7 @@ sal_Int32 OutlinerView::ImpCheckMousePos(const Point& rPosPix, MouseTarget& reTa
     sal_Int32 nPara = EE_PARA_NOT_FOUND;
 
     Point aMousePosWin = pEditView->GetOutputDevice().PixelToLogic( rPosPix );
-    if( !pEditView->GetOutputArea().IsInside( aMousePosWin ) )
+    if( !pEditView->GetOutputArea().Contains( aMousePosWin ) )
     {
         reTarget = MouseTarget::Outside;
     }
@@ -288,7 +288,7 @@ bool OutlinerView::MouseMove( const MouseEvent& rMEvt )
         return pEditView->MouseMove( rMEvt );
 
     Point aMousePosWin( pEditView->GetOutputDevice().PixelToLogic( rMEvt.GetPosPixel() ) );
-    if( !pEditView->GetOutputArea().IsInside( aMousePosWin ) )
+    if( !pEditView->GetOutputArea().Contains( aMousePosWin ) )
         return false;
 
     PointerStyle aPointer = GetPointer( rMEvt.GetPosPixel() );
@@ -303,7 +303,7 @@ bool OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
         return pEditView->MouseButtonDown( rMEvt );
 
     Point aMousePosWin( pEditView->GetOutputDevice().PixelToLogic( rMEvt.GetPosPixel() ) );
-    if( !pEditView->GetOutputArea().IsInside( aMousePosWin ) )
+    if( !pEditView->GetOutputArea().Contains( aMousePosWin ) )
         return false;
 
     PointerStyle aPointer = GetPointer( rMEvt.GetPosPixel() );
@@ -351,7 +351,7 @@ bool OutlinerView::MouseButtonUp( const MouseEvent& rMEvt )
         return pEditView->MouseButtonUp( rMEvt );
 
     Point aMousePosWin( pEditView->GetOutputDevice().PixelToLogic( rMEvt.GetPosPixel() ) );
-    if( !pEditView->GetOutputArea().IsInside( aMousePosWin ) )
+    if( !pEditView->GetOutputArea().Contains( aMousePosWin ) )
         return false;
 
     PointerStyle aPointer = GetPointer( rMEvt.GetPosPixel() );
@@ -644,13 +644,13 @@ void OutlinerView::InsertText( const OutlinerParaObject& rParaObj )
 
     pOwner->UndoActionStart( OLUNDO_INSERT );
 
-    pOwner->pEditEngine->SetUpdateLayout( false );
+    const bool bPrevUpdateLayout = pOwner->pEditEngine->SetUpdateLayout( false );
     sal_Int32 nStart, nParaCount;
     nParaCount = pOwner->pEditEngine->GetParagraphCount();
     sal_uInt16 nSize = ImpInitPaste( nStart );
     pEditView->InsertText( rParaObj.GetTextObject() );
     ImpPasted( nStart, nParaCount, nSize);
-    pEditView->SetEditEngineUpdateLayout( true );
+    pEditView->SetEditEngineUpdateLayout( bPrevUpdateLayout );
 
     pOwner->UndoActionEnd();
 
@@ -679,7 +679,7 @@ void OutlinerView::Paste( bool bUseSpecial )
 
     pOwner->UndoActionStart( OLUNDO_INSERT );
 
-    pOwner->pEditEngine->SetUpdateLayout( false );
+    const bool bPrevUpdateLayout = pOwner->pEditEngine->SetUpdateLayout( false );
     pOwner->bPasting = true;
 
     if ( bUseSpecial )
@@ -695,7 +695,7 @@ void OutlinerView::Paste( bool bUseSpecial )
             pOwner->ImplSetLevelDependentStyleSheet( nPara );
     }
 
-    pEditView->SetEditEngineUpdateLayout( true );
+    pEditView->SetEditEngineUpdateLayout( bPrevUpdateLayout );
     pOwner->UndoActionEnd();
     pEditView->ShowCursor();
 

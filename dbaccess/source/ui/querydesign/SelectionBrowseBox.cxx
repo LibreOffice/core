@@ -103,6 +103,7 @@ namespace
 OSelectionBrowseBox::OSelectionBrowseBox( vcl::Window* pParent )
                    :EditBrowseBox( pParent,EditBrowseBoxFlags::NO_HANDLE_COLUMN_CONTENT, WB_3DLOOK, BrowserMode::COLUMNSELECTION | BrowserMode::KEEPHIGHLIGHT |  BrowserMode::HIDESELECT |
                                   BrowserMode::HIDECURSOR | BrowserMode::HLINES | BrowserMode::VLINES )
+                   ,m_timerInvalidate("dbaccess OSelectionBrowseBox m_timerInvalidate")
                    ,m_nSeekRow(0)
                    ,m_nMaxColumns(0)
                    ,m_aFunctionStrings(DBA_RES(STR_QUERY_FUNCTIONS))

@@ -79,6 +79,8 @@ LicenseDialogImpl::LicenseDialogImpl(
     const OUString & sLicenseText)
     : GenericDialogController(pParent, "desktop/ui/licensedialog.ui", "LicenseDialog")
     , m_bLicenseRead(false)
+    , m_aResized("desktop LicenseDialogImpl m_aResized")
+    , m_aRepeat("LicenseDialogImpl m_aRepeat")
     , m_xFtHead(m_xBuilder->weld_label("head"))
     , m_xArrow1(m_xBuilder->weld_widget("arrow1"))
     , m_xArrow2(m_xBuilder->weld_widget("arrow2"))

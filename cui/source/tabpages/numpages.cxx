@@ -1011,6 +1011,7 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, weld::Button&, voi
 SvxNumOptionsTabPage::SvxNumOptionsTabPage(weld::Container* pPage, weld::DialogController* pController,
                                const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "cui/ui/numberingoptionspage.ui", "NumberingOptionsPage", &rSet)
+    , aInvalidateTimer("cui SvxNumOptionsTabPage aInvalidateTimer")
     , m_pLevelHdlEvent(nullptr)
     , bLastWidthModified(false)
     , bModified(false)

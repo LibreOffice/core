@@ -958,10 +958,10 @@ void Outliner::PaintBullet(sal_Int32 nPara, const Point& rStartPos, const Point&
             }
 
             // VCL will take care of brackets and so on...
-            ComplexTextLayoutFlags nLayoutMode = rOutDev.GetLayoutMode();
-            nLayoutMode &= ~ComplexTextLayoutFlags(ComplexTextLayoutFlags::BiDiRtl|ComplexTextLayoutFlags::BiDiStrong);
+            vcl::text::ComplexTextLayoutFlags nLayoutMode = rOutDev.GetLayoutMode();
+            nLayoutMode &= ~vcl::text::ComplexTextLayoutFlags(vcl::text::ComplexTextLayoutFlags::BiDiRtl|vcl::text::ComplexTextLayoutFlags::BiDiStrong);
             if ( bRightToLeftPara )
-                nLayoutMode |= ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft | ComplexTextLayoutFlags::BiDiStrong;
+                nLayoutMode |= vcl::text::ComplexTextLayoutFlags::BiDiRtl | vcl::text::ComplexTextLayoutFlags::TextOriginLeft | vcl::text::ComplexTextLayoutFlags::BiDiStrong;
             rOutDev.SetLayoutMode( nLayoutMode );
 
             if(bStrippingPortions)
@@ -1032,8 +1032,7 @@ void Outliner::PaintBullet(sal_Int32 nPara, const Point& rStartPos, const Point&
                 }
                 else
                 {
-                    // Remove CAST when KA made the Draw-Method const
-                    const_cast<GraphicObject*>(pFmt->GetBrush()->GetGraphicObject())->Draw(rOutDev, aBulletPos, pPara->aBulSize);
+                    pFmt->GetBrush()->GetGraphicObject()->Draw(rOutDev, aBulletPos, pPara->aBulSize);
                 }
             }
         }

@@ -69,7 +69,8 @@ using namespace ::com::sun::star::sdb;
 #define MAX_DESCR_LEN       256
 
 OTableEditorCtrl::ClipboardInvalidator::ClipboardInvalidator(OTableEditorCtrl* _pOwner)
-: m_pOwner(_pOwner)
+: m_aInvalidateTimer("dbaccess ClipboardInvalidator")
+, m_pOwner(_pOwner)
 {
 
     m_aInvalidateTimer.SetTimeout(500);
@@ -302,7 +303,7 @@ void OTableEditorCtrl::PaintCell(OutputDevice& rDev, const tools::Rectangle& rRe
 {
     const OUString aText( GetCellText( m_nCurrentPos, nColumnId ));
 
-    rDev.Push( PushFlags::CLIPREGION );
+    rDev.Push( vcl::PushFlags::CLIPREGION );
     rDev.SetClipRegion(vcl::Region(rRect));
     rDev.DrawText( rRect, aText, DrawTextFlags::Left | DrawTextFlags::VCenter );
     rDev.Pop();

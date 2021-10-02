@@ -342,7 +342,7 @@ bool Twain::InitializeNewShim(ScannerManager& rMgr, const VclPtr<vcl::Window>& x
         return false; // Have a shim for another task already!
 
     // hold reference to ScannerManager, to prevent premature death
-    mxMgr.set(static_cast<OWeakObject*>(mpCurMgr = &rMgr), css::uno::UNO_QUERY);
+    mxMgr = mpCurMgr = &rMgr;
 
     mpThread.set(new ShimListenerThread(xTopWindow));
     mpThread->launch();

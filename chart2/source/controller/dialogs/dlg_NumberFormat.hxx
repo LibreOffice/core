@@ -32,7 +32,7 @@ namespace chart
 class NumberFormatDialog : public SfxSingleTabDialogController
 {
 public:
-    NumberFormatDialog(weld::Window* pParent, SfxItemSet& rSet);
+    NumberFormatDialog(weld::Window* pParent, const SfxItemSet& rSet);
 
     static SfxItemSet CreateEmptyItemSetForNumberFormatDialog(SfxItemPool& rItemPool);
 };

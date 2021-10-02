@@ -109,6 +109,7 @@ TreeListBox::TreeListBox(std::unique_ptr<weld::TreeView> xTreeView, bool bSQLTyp
     , m_aDropTargetHelper(*this)
     , m_pActionListener(nullptr)
     , m_pContextMenuProvider(nullptr)
+    , m_aTimer("dbaccess TreeListBox m_aTimer")
 {
     m_xTreeView->connect_key_press(LINK(this, TreeListBox, KeyInputHdl));
     m_xTreeView->connect_changed(LINK(this, TreeListBox, SelectHdl));

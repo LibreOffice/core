@@ -196,26 +196,22 @@ enum EID_OPTIONS
 
 }
 
-//! this array must have an entry for every value of EID_OPTIONS.
-//  It is used to get the respective property name.
-static const char * aEidToPropName[] =
-{
-    UPN_IS_SPELL_AUTO,              // EID_SPELL_AUTO
-    UPN_IS_GRAMMAR_AUTO,            // EID_GRAMMAR_AUTO
-    UPN_IS_SPELL_UPPER_CASE,        // EID_CAPITAL_WORDS
-    UPN_IS_SPELL_WITH_DIGITS,       // EID_WORDS_WITH_DIGITS
-    UPN_IS_SPELL_SPECIAL,           // EID_SPELL_SPECIAL
-    UPN_HYPH_MIN_WORD_LENGTH,       // EID_NUM_MIN_WORDLEN,
-    UPN_HYPH_MIN_LEADING,           // EID_NUM_PRE_BREAK
-    UPN_HYPH_MIN_TRAILING,          // EID_NUM_POST_BREAK
-    UPN_IS_HYPH_AUTO,               // EID_HYPH_AUTO
-    UPN_IS_HYPH_SPECIAL             // EID_HYPH_SPECIAL
-};
-
 static OUString lcl_GetPropertyName( EID_OPTIONS eEntryId )
 {
-    DBG_ASSERT( static_cast<unsigned int>(eEntryId) < SAL_N_ELEMENTS(aEidToPropName), "index out of range" );
-    return OUString::createFromAscii( aEidToPropName[ static_cast<int>(eEntryId) ] );
+    switch (eEntryId)
+    {
+        case EID_SPELL_AUTO: return UPN_IS_SPELL_AUTO;
+        case EID_GRAMMAR_AUTO: return UPN_IS_GRAMMAR_AUTO;
+        case EID_CAPITAL_WORDS: return UPN_IS_SPELL_UPPER_CASE;
+        case EID_WORDS_WITH_DIGITS: return UPN_IS_SPELL_WITH_DIGITS;
+        case EID_SPELL_SPECIAL: return UPN_IS_SPELL_SPECIAL;
+        case EID_NUM_MIN_WORDLEN: return UPN_HYPH_MIN_WORD_LENGTH;
+        case EID_NUM_PRE_BREAK: return UPN_HYPH_MIN_LEADING;
+        case EID_NUM_POST_BREAK: return UPN_HYPH_MIN_TRAILING;
+        case EID_HYPH_AUTO: return UPN_IS_HYPH_AUTO;
+        case EID_HYPH_SPECIAL: return UPN_IS_HYPH_SPECIAL;
+        default: assert (false); abort();
+    }
 }
 
 namespace {

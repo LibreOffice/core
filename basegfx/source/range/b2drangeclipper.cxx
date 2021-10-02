@@ -333,7 +333,7 @@ namespace basegfx
 
         private:
             void handleInitialOwnEdge(SweepLineEvent const & rEvent,
-                                      ActiveEdge&            rActiveEdge) const
+                                      ActiveEdge const & rActiveEdge) const
             {
                 const bool isActiveEdgeProceedLeft(
                     rActiveEdge.getEdgeDirection() == ActiveEdge::PROCEED_LEFT);

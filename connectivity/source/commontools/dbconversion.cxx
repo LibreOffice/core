@@ -26,6 +26,7 @@
 #include <rtl/character.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 #include <unotools/datetime.hxx>
 #include <sstream>
 #include <iomanip>
@@ -163,10 +164,13 @@ namespace dbtools
                 ;
     }
 
-
     static sal_Int32 implDaysInMonth(sal_Int32 _nMonth, sal_Int32 _nYear)
     {
-        OSL_ENSURE(_nMonth > 0 && _nMonth < 13,"Month as invalid value!");
+        SAL_WARN_IF(_nMonth < 1 || _nMonth > 12, "connectivity.commontools", "Month has invalid value: " << _nMonth);
+        if (_nMonth < 1)
+            _nMonth = 1;
+        else if (_nMonth > 12)
+            _nMonth = 12;
         if (_nMonth != 2)
             return aDaysInMonth[_nMonth-1];
         else
@@ -177,7 +181,6 @@ namespace dbtools
                 return aDaysInMonth[_nMonth-1];
         }
     }
-
 
     static sal_Int32 implRelativeToAbsoluteNull(const css::util::Date& _rDate)
     {
@@ -329,13 +332,10 @@ namespace dbtools
 
     css::util::Time DBTypeConversion::toTime(const double dVal, short nDigits)
     {
-        const sal_Int32 nDays     = static_cast<sal_Int32>(dVal);
-        sal_Int64 nNS;
-        {
-            double fSeconds((dVal - static_cast<double>(nDays)) * (fNanoSecondsPerDay / nanoSecInSec));
-            fSeconds = ::rtl::math::round( fSeconds, nDigits );
-            nNS = fSeconds * nanoSecInSec;
-        }
+        const double nDays = std::trunc(dVal);
+        double fSeconds((dVal - nDays) * (fNanoSecondsPerDay / nanoSecInSec));
+        fSeconds = ::rtl::math::round(fSeconds, nDigits);
+        sal_Int64 nNS = fSeconds * nanoSecInSec;
 
         sal_Int16 nSign;
         if ( nNS < 0 )

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_fuzzers.h>
 
 #include "mdrivermanager.hxx"
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -328,6 +329,7 @@ void OSDBCDriverManager::bootstrapDrivers()
 
 void OSDBCDriverManager::initializeDriverPrecedence()
 {
+#if !ENABLE_FUZZERS
     if ( m_aDriversBS.empty() )
         // nothing to do
         return;
@@ -395,6 +397,7 @@ void OSDBCDriverManager::initializeDriverPrecedence()
     {
         TOOLS_WARN_EXCEPTION( "connectivity.hsqldb", "OSDBCDriverManager::initializeDriverPrecedence: caught an exception while sorting the drivers!");
     }
+#endif
 }
 
 

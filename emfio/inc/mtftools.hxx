@@ -26,7 +26,7 @@
 #include <vcl/font.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/lineinfo.hxx>
-#include <vcl/outdevstate.hxx>
+#include <vcl/rendercontext/State.hxx>
 #include <rtl/ref.hxx>
 
 #include "emfiodllapi.h"
@@ -439,7 +439,7 @@ namespace emfio
     {
         BkMode              nBkMode;
         sal_uInt32          nMapMode, nGfxMode;
-        ComplexTextLayoutFlags nTextLayoutMode;
+        vcl::text::ComplexTextLayoutFlags nTextLayoutMode;
         sal_Int32           nWinOrgX, nWinOrgY, nWinExtX, nWinExtY;
         sal_Int32           nDevOrgX, nDevOrgY, nDevWidth, nDevHeight;
 
@@ -525,8 +525,8 @@ namespace emfio
         Color               maTextColor;
         Color               maLatestBkColor;
         Color               maBkColor;
-        ComplexTextLayoutFlags  mnLatestTextLayoutMode;
-        ComplexTextLayoutFlags  mnTextLayoutMode;
+        vcl::text::ComplexTextLayoutFlags  mnLatestTextLayoutMode;
+        vcl::text::ComplexTextLayoutFlags  mnTextLayoutMode;
         BkMode              mnLatestBkMode;
         BkMode              mnBkMode;
         RasterOp            meLatestRasterOp;
@@ -634,7 +634,7 @@ namespace emfio
         void                SelectObject(sal_uInt32 nIndex);
         rtl_TextEncoding    GetCharSet() const { return maFont.GetCharSet(); };
         const vcl::Font&    GetFont() const { return maFont; }
-        void                SetTextLayoutMode(ComplexTextLayoutFlags nLayoutMode);
+        void                SetTextLayoutMode(vcl::text::ComplexTextLayoutFlags nLayoutMode);
 
         void                ClearPath() { maPathObj.Init(); };
         void                ClosePath() { maPathObj.ClosePath(); };

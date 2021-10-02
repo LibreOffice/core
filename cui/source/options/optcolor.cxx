@@ -170,7 +170,7 @@ public:
                   Link<weld::Widget&,void> const&,
                   weld::ScrolledWindow& rScroll);
     void Update(EditableColorConfig const*, EditableExtendedColorConfig const*);
-    void ClickHdl(EditableColorConfig*, weld::Toggleable&);
+    void ClickHdl(EditableColorConfig*, const weld::Toggleable&);
     void ColorHdl(EditableColorConfig*, EditableExtendedColorConfig*, const ColorListBox*);
 
     weld::Widget& GetWidget1()
@@ -496,7 +496,7 @@ void ColorConfigWindow_Impl::Update (
 }
 
 // ClickHdl()
-void ColorConfigWindow_Impl::ClickHdl(EditableColorConfig* pConfig, weld::Toggleable& rBox)
+void ColorConfigWindow_Impl::ClickHdl(EditableColorConfig* pConfig, const weld::Toggleable& rBox)
 {
     for (unsigned i = 0; i != ColorConfigEntryCount; ++i)
     {

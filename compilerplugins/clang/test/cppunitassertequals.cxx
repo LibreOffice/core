@@ -55,7 +55,7 @@ void test(
     // very meaningful, so let it use CPPUNIT_ASSERT (but stick to CPPUNIT_ASSERT_EQUAL for
     // consistency in the unlikely case that P is of type std::nullptr_t):
     CPPUNIT_ASSERT(p == nullptr);
-    CPPUNIT_ASSERT(n == nullptr); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL when comparing 'std::nullptr_t' (aka 'nullptr_t') and 'nullptr_t' (or rewrite as an explicit operator == call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
+    CPPUNIT_ASSERT(n == nullptr); // expected-error-re {{rather call CPPUNIT_ASSERT_EQUAL when comparing 'std::nullptr_t'{{( \(aka 'nullptr_t'\))?}} and '{{(std::)?}}nullptr_t' (or rewrite as an explicit operator == call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
 
     // There might even be good reasons(?) not to warn inside explicit casts:
     CPPUNIT_ASSERT(bool(b1 && b2));

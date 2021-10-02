@@ -276,7 +276,7 @@ void ImpEditEngine::WriteXML(SvStream& rOutput, const EditSelection& rSel)
 
 ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
 {
-    DBG_ASSERT( IsUpdateLayout(), "WriteRTF for UpdateMode = sal_False!" );
+    assert( IsUpdateLayout() && "WriteRTF for UpdateMode = sal_False!" );
     CheckIdleFormatter();
     if ( !IsFormatted() )
         FormatDoc();
@@ -2168,7 +2168,8 @@ void ImpEditEngine::ApplyChangedSentence(EditView const & rEditView,
     }
     rEditView.pImpEditView->SetEditSelection( aNext );
 
-    FormatAndLayout();
+    if (IsUpdateLayout())
+        FormatAndLayout();
     aEditDoc.SetModified(true);
 }
 
@@ -2954,7 +2955,8 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
         SetModifyFlag( true );
         if ( bLenChanged )
             UpdateSelections();
-        FormatAndLayout();
+        if (IsUpdateLayout())
+            FormatAndLayout();
     }
 
     return aNewSel;

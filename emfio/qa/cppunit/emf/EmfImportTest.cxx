@@ -866,43 +866,43 @@ void Test::TestBitBltStretchBltWMF()
         = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
-    assertXPath(pDocument, aXPathPrefix + "bitmap", 2);
-    assertXPath(pDocument, aXPathPrefix + "bitmap[1]", "xy11", "508");
-    assertXPath(pDocument, aXPathPrefix + "bitmap[1]", "xy12", "0");
-    assertXPath(pDocument, aXPathPrefix + "bitmap[1]", "xy13", "711");
-    assertXPath(pDocument, aXPathPrefix + "bitmap[1]", "xy21", "0");
-    assertXPath(pDocument, aXPathPrefix + "bitmap[1]", "xy22", "508");
-    assertXPath(pDocument, aXPathPrefix + "bitmap[1]", "xy23", "508");
-    assertXPath(pDocument, aXPathPrefix + "bitmap[1]", "height", "10");
-    assertXPath(pDocument, aXPathPrefix + "bitmap[1]", "width", "10");
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap", 2);
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "xy11", "508");
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "xy12", "0");
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "xy13", "0");
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "xy21", "0");
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "xy22", "508");
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "xy23", "406");
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "height", "10");
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "width", "10");
 #if !defined(MACOSX)                                                                               \
     && !defined(_WIN32) // TODO Bitmap display needs to be aligned for macOS and Windows
-    assertXPath(pDocument, aXPathPrefix + "bitmap[1]", "checksum", "747141214295528493");
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "checksum", "747141214295528493");
 #endif
-    assertXPath(pDocument, aXPathPrefix + "bitmap[1]/data", 10);
-    assertXPath(pDocument, aXPathPrefix + "bitmap[1]/data[1]", "row",
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]/data", 10);
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]/data[1]", "row",
                 "000000,000000,000000,000000,000000,000000,000000,000000,000000,000000");
-    assertXPath(pDocument, aXPathPrefix + "bitmap[1]/data[4]", "row",
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]/data[4]", "row",
                 "000000,ffffff,000000,ffffff,000000,ffffff,000000,ffffff,000000,ffffff");
-    assertXPath(pDocument, aXPathPrefix + "bitmap[1]/data[5]", "row",
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]/data[5]", "row",
                 "ffffff,000000,ffffff,ffffff,000000,000000,000000,ffffff,ffffff,000000");
 
-    assertXPath(pDocument, aXPathPrefix + "bitmap[2]", "xy11", "1524");
-    assertXPath(pDocument, aXPathPrefix + "bitmap[2]", "xy12", "0");
-    assertXPath(pDocument, aXPathPrefix + "bitmap[2]", "xy13", "1524");
-    assertXPath(pDocument, aXPathPrefix + "bitmap[2]", "xy21", "0");
-    assertXPath(pDocument, aXPathPrefix + "bitmap[2]", "xy22", "1016");
-    assertXPath(pDocument, aXPathPrefix + "bitmap[2]", "xy23", "102");
-    assertXPath(pDocument, aXPathPrefix + "bitmap[2]", "height", "10");
-    assertXPath(pDocument, aXPathPrefix + "bitmap[2]", "width", "10");
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "xy11", "1524");
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "xy12", "0");
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "xy13", "813");
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "xy21", "0");
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "xy22", "1016");
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "xy23", "0");
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "height", "10");
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "width", "10");
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]/data", 10);
 #if !defined(MACOSX)                                                                               \
     && !defined(_WIN32) // TODO Bitmap display needs to be aligned for macOS and Windows
-    assertXPath(pDocument, aXPathPrefix + "bitmap[2]", "checksum", "3134789313661517563");
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "checksum", "3134789313661517563");
 #endif
-    assertXPath(pDocument, aXPathPrefix + "bitmap[2]/data", 10);
-    assertXPath(pDocument, aXPathPrefix + "bitmap[2]/data[1]", "row",
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]/data[1]", "row",
                 "000000,00001c,000038,000055,000071,00008d,0000aa,0000c6,0000e2,0000ff");
-    assertXPath(pDocument, aXPathPrefix + "bitmap[2]/data[5]", "row",
+    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]/data[5]", "row",
                 "720000,721c1c,723838,725555,727171,72728d,55728d,39728d,1d728d,00728d");
 }
 
@@ -1032,30 +1032,30 @@ void Test::TestRoundrectWMF()
 
     assertXPathContent(
         pDocument, aXPathPrefix + "polygonstroke/polygon",
-        "2865,661 2865,653 2865,645 2865,637 2865,621 2865,613 2865,605 2857,597 2857,589 2857,582 "
-        "2857,566 2857,558 2849,550 2849,542 2849,534 2841,526 2841,518 2841,510 2833,502 2833,494 "
-        "2825,486 2825,478 2817,470 2817,462 2809,454 2809,446 2801,438 2801,430 2793,422 2793,422 "
-        "2785,414 2777,406 2777,398 2769,390 2761,390 2761,382 2753,374 2745,374 2737,366 2737,366 "
-        "2729,358 2721,350 2714,350 2714,343 2706,343 2698,343 2690,335 2682,335 2682,335 2674,327 "
-        "2666,327 2658,327 2650,327 2642,319 2634,319 2634,319 2626,319 2618,319 2610,319 573,319 "
-        "565,319 557,319 549,319 549,319 541,319 533,327 525,327 517,327 509,327 501,335 501,335 "
-        "493,335 485,343 477,343 469,343 469,350 462,350 454,358 446,366 446,366 438,374 430,374 "
-        "422,382 422,390 414,390 406,398 406,406 398,414 390,422 390,422 382,430 382,438 374,446 "
-        "374,454 366,462 366,470 358,478 358,486 350,494 350,502 342,510 342,518 342,526 334,534 "
-        "334,542 334,550 326,558 326,566 326,582 326,589 326,597 318,605 318,613 318,621 318,637 "
-        "318,645 318,653 318,661 318,1673 318,1681 318,1689 318,1697 318,1713 318,1721 318,1729 "
-        "326,1737 326,1745 326,1752 326,1768 326,1776 334,1784 334,1792 334,1800 342,1808 342,1816 "
-        "342,1824 350,1832 350,1840 358,1848 358,1856 366,1864 366,1872 374,1880 374,1888 382,1896 "
-        "382,1904 390,1912 390,1912 398,1920 406,1928 406,1936 414,1944 422,1944 422,1952 430,1960 "
-        "438,1960 446,1968 446,1968 454,1976 462,1984 469,1984 469,1991 477,1991 485,1991 493,1999 "
-        "501,1999 501,1999 509,2007 517,2007 525,2007 533,2007 541,2015 549,2015 549,2015 557,2015 "
-        "565,2015 573,2015 2610,2015 2618,2015 2626,2015 2634,2015 2634,2015 2642,2015 2650,2007 "
-        "2658,2007 2666,2007 2674,2007 2682,1999 2682,1999 2690,1999 2698,1991 2706,1991 2714,1991 "
-        "2714,1984 2721,1984 2729,1976 2737,1968 2737,1968 2745,1960 2753,1960 2761,1952 2761,1944 "
-        "2769,1944 2777,1936 2777,1928 2785,1920 2793,1912 2793,1912 2801,1904 2801,1896 2809,1888 "
-        "2809,1880 2817,1872 2817,1864 2825,1856 2825,1848 2833,1840 2833,1832 2841,1824 2841,1816 "
-        "2841,1808 2849,1800 2849,1792 2849,1784 2857,1776 2857,1768 2857,1752 2857,1745 2857,1737 "
-        "2865,1729 2865,1721 2865,1713 2865,1697 2865,1689 2865,1681 2865,1673");
+        "2858,659 2858,651 2858,643 2858,635 2858,619 2858,611 2858,603 2850,595 2850,587 2850,580 "
+        "2850,564 2850,556 2842,548 2842,540 2842,532 2834,524 2834,516 2834,508 2826,500 2826,492 "
+        "2818,484 2818,476 2810,468 2810,460 2802,452 2802,445 2794,437 2794,429 2786,421 2786,421 "
+        "2778,413 2770,405 2770,397 2762,389 2754,389 2754,381 2746,373 2738,373 2731,365 2731,365 "
+        "2723,357 2715,349 2707,349 2707,341 2699,341 2691,341 2683,333 2675,333 2675,333 2667,325 "
+        "2659,325 2651,325 2643,325 2635,318 2627,318 2627,318 2619,318 2611,318 2604,318 572,318 "
+        "564,318 556,318 548,318 548,318 540,318 532,325 524,325 516,325 508,325 500,333 500,333 "
+        "492,333 484,341 476,341 468,341 468,349 460,349 452,357 445,365 445,365 437,373 429,373 "
+        "421,381 421,389 413,389 405,397 405,405 397,413 389,421 389,421 381,429 381,437 373,445 "
+        "373,452 365,460 365,468 357,476 357,484 349,492 349,500 341,508 341,516 341,524 333,532 "
+        "333,540 333,548 325,556 325,564 325,580 325,587 325,595 318,603 318,611 318,619 318,635 "
+        "318,643 318,651 318,659 318,1667 318,1675 318,1683 318,1691 318,1707 318,1715 318,1723 "
+        "325,1731 325,1739 325,1746 325,1762 325,1770 333,1778 333,1786 333,1794 341,1802 341,1810 "
+        "341,1818 349,1826 349,1834 357,1842 357,1850 365,1858 365,1866 373,1874 373,1881 381,1889 "
+        "381,1897 389,1905 389,1905 397,1913 405,1921 405,1929 413,1937 421,1937 421,1945 429,1953 "
+        "437,1953 445,1961 445,1961 452,1969 460,1977 468,1977 468,1985 476,1985 484,1985 492,1993 "
+        "500,1993 500,1993 508,2001 516,2001 524,2001 532,2001 540,2008 548,2008 548,2008 556,2008 "
+        "564,2008 572,2008 2604,2008 2611,2008 2619,2008 2627,2008 2627,2008 2635,2008 2643,2001 "
+        "2651,2001 2659,2001 2667,2001 2675,1993 2675,1993 2683,1993 2691,1985 2699,1985 2707,1985 "
+        "2707,1977 2715,1977 2723,1969 2731,1961 2731,1961 2738,1953 2746,1953 2754,1945 2754,1937 "
+        "2762,1937 2770,1929 2770,1921 2778,1913 2786,1905 2786,1905 2794,1897 2794,1889 2802,1881 "
+        "2802,1874 2810,1866 2810,1858 2818,1850 2818,1842 2826,1834 2826,1826 2834,1818 2834,1810 "
+        "2834,1802 2842,1794 2842,1786 2842,1778 2850,1770 2850,1762 2850,1746 2850,1739 2850,1731 "
+        "2858,1723 2858,1715 2858,1707 2858,1691 2858,1683 2858,1675 2858,1667");
     assertXPath(pDocument, aXPathPrefix + "polygonstroke/line", "color", "#000000");
     assertXPath(pDocument, aXPathPrefix + "polygonstroke/line", "width", "143");
 }

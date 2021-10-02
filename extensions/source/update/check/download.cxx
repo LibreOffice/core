@@ -23,6 +23,7 @@
 
 #include <curl/curl.h>
 
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -168,7 +169,7 @@ progress_callback( void *clientp, double dltotal, double dlnow, SAL_UNUSED_PARAM
 
 
 void
-Download::getProxyForURL(const OUString& rURL, OString& rHost, sal_Int32& rPort) const
+Download::getProxyForURL(std::u16string_view rURL, OString& rHost, sal_Int32& rPort) const
 {
     uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
         css::configuration::theDefaultProvider::get( m_xContext ) );
@@ -191,17 +192,17 @@ Download::getProxyForURL(const OUString& rURL, OString& rHost, sal_Int32& rPort)
     sal_Int32 nProxyType = aValue.get< sal_Int32 >();
     if( 0 != nProxyType ) // type 0 means "direct connection to the internet
     {
-        if( rURL.startsWith("http:") )
+        if( o3tl::starts_with(rURL, u"http:") )
         {
             rHost = getStringValue(xNameAccess, "ooInetHTTPProxyName");
             rPort = getInt32Value(xNameAccess, "ooInetHTTPProxyPort");
         }
-        else if( rURL.startsWith("https:") )
+        else if( o3tl::starts_with(rURL, u"https:") )
         {
             rHost = getStringValue(xNameAccess, "ooInetHTTPSProxyName");
             rPort = getInt32Value(xNameAccess, "ooInetHTTPSProxyPort");
         }
-        else if( rURL.startsWith("ftp:") )
+        else if( o3tl::starts_with(rURL, u"ftp:") )
         {
             rHost = getStringValue(xNameAccess, "ooInetFTPProxyName");
             rPort = getInt32Value(xNameAccess, "ooInetFTPProxyPort");

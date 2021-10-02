@@ -361,7 +361,7 @@ Reference< XAccessible > OAccessibleMenuBaseComponent::GetChildAt( const awt::Po
             {
                 tools::Rectangle aRect = VCLRectangle( xComp->getBounds() );
                 Point aPos = VCLPoint( rPoint );
-                if ( aRect.IsInside( aPos ) )
+                if ( aRect.Contains( aPos ) )
                 {
                     xChild = xAcc;
                     break;

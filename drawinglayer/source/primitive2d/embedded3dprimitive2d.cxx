@@ -35,7 +35,7 @@ namespace drawinglayer::primitive2d
 {
         bool Embedded3DPrimitive2D::impGetShadow3D() const
         {
-            osl::MutexGuard aGuard( m_aMutex );
+            std::unique_lock aGuard( m_aMutex );
 
             // create on demand
             if(!mbShadow3DChecked && !getChildren3D().empty())

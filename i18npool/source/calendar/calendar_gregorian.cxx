@@ -127,6 +127,22 @@ using namespace ::com::sun::star::lang;
 
 namespace i18npool {
 
+// Cast positive int32 values to signed int16, needed for
+// fieldValue[CalendarFieldIndex::YEAR] where absolute value of an era year may
+// be 32768 that with static_cast<sal_Int16> becomes -32768, which we also
+// do here but indicating places in a controlled way to map back.
+static inline sal_Int16 cast32To16( sal_Int32 a )
+{
+    // More than uint16 can't be handled, should not occur.
+    assert(a >= 0 && a < static_cast<sal_Int32>(SAL_MAX_INT16) - static_cast<sal_Int32>(SAL_MIN_INT16));
+    return static_cast<sal_Int16>(a);
+}
+// And back.
+static inline sal_Int32 cast16To32( sal_Int16 i )
+{
+    return static_cast<sal_Int32>(static_cast<sal_uInt16>(i));
+}
+
 Calendar_gregorian::Calendar_gregorian()
     : mxNatNum(new NativeNumberSupplierService)
 {
@@ -409,10 +425,11 @@ void Calendar_gregorian::mapFromGregorian()
     if (!eraArray)
         return;
 
-    sal_Int16 e, y, m, d;
+    sal_Int16 e, m, d;
+    sal_Int32 y;
 
     e = fieldValue[CalendarFieldIndex::ERA];
-    y = fieldValue[CalendarFieldIndex::YEAR];
+    y = cast16To32(fieldValue[CalendarFieldIndex::YEAR]);
     m = fieldValue[CalendarFieldIndex::MONTH] + 1;
     d = fieldValue[CalendarFieldIndex::DAY_OF_MONTH];
 
@@ -427,7 +444,7 @@ void Calendar_gregorian::mapFromGregorian()
 
     fieldValue[CalendarFieldIndex::ERA] = e;
     fieldValue[CalendarFieldIndex::YEAR] =
-        sal::static_int_cast<sal_Int16>( (e == 0) ? (eraArray[0].year - y) : (y - eraArray[e-1].year + 1) );
+        cast32To16( (e == 0) ? (eraArray[0].year - y) : (y - eraArray[e-1].year + 1) );
 }
 
 #define FIELDS  ((1 << CalendarFieldIndex::ERA) | (1 << CalendarFieldIndex::YEAR))
@@ -436,14 +453,15 @@ void Calendar_gregorian::mapFromGregorian()
 void Calendar_gregorian::mapToGregorian()
 {
     if (eraArray && (fieldSet & FIELDS)) {
-        sal_Int16 y, e = fieldValue[CalendarFieldIndex::ERA];
+        sal_Int16 e = fieldValue[CalendarFieldIndex::ERA];
+        sal_Int32 y;
         if (e == 0)
-            y = sal::static_int_cast<sal_Int16>( eraArray[0].year - fieldValue[CalendarFieldIndex::YEAR] );
+            y = eraArray[0].year - cast16To32(fieldValue[CalendarFieldIndex::YEAR]);
         else
-            y = sal::static_int_cast<sal_Int16>( eraArray[e-1].year + fieldValue[CalendarFieldIndex::YEAR] - 1 );
+            y = eraArray[e-1].year + cast16To32(fieldValue[CalendarFieldIndex::YEAR] - 1);
 
         fieldSetValue[CalendarFieldIndex::ERA] = y <= 0 ? 0 : 1;
-        fieldSetValue[CalendarFieldIndex::YEAR] = (y <= 0 ? 1 - y : y);
+        fieldSetValue[CalendarFieldIndex::YEAR] = cast32To16(y <= 0 ? 1 - y : y);
         fieldSet |= FIELDS;
     }
 }
@@ -664,7 +682,7 @@ Calendar_gregorian::isValid()
 // NatNum4                                                              NatNum9/9/11/11
 
 static sal_Int16 NatNumForCalendar(const css::lang::Locale& aLocale,
-        sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode, sal_Int16 value )
+        sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode, sal_Int32 value )
 {
     bool isShort = ((nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR ||
         nCalendarDisplayCode == CalendarDisplayCode::LONG_YEAR) && value >= 100) ||
@@ -883,7 +901,8 @@ Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 
 OUString
 Calendar_gregorian::getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode, bool bEraMode )
 {
-    sal_Int16 value = getValue(sal::static_int_cast<sal_Int16>( DisplayCode2FieldIndex(nCalendarDisplayCode) ));
+    sal_Int32 value = cast16To32( getValue( sal::static_int_cast<sal_Int16>(
+                    DisplayCode2FieldIndex(nCalendarDisplayCode))));
     OUString aOUStr;
 
     if (nCalendarDisplayCode == CalendarDisplayCode::SHORT_QUARTER ||
@@ -906,23 +925,23 @@ Calendar_gregorian::getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_In
         // The "#100211# - checked" comments serve for detection of "use of
         // sprintf is safe here" conditions. An sprintf encountered without
         // having that comment triggers alarm ;-)
-        char aStr[10];
+        char aStr[12];  // "-2147483648" and \0
         switch( nCalendarDisplayCode ) {
             case CalendarDisplayCode::SHORT_MONTH:
                 value += 1;     // month is zero based
                 [[fallthrough]];
             case CalendarDisplayCode::SHORT_DAY:
-                sprintf(aStr, "%d", value);     // #100211# - checked
+                sprintf(aStr, "%" SAL_PRIdINT32, value);     // #100211# - checked
                 break;
             case CalendarDisplayCode::LONG_YEAR:
                 if ( aCalendar.Name == "gengou" )
-                    sprintf(aStr, "%02d", value);     // #100211# - checked
+                    sprintf(aStr, "%02" SAL_PRIdINT32, value);     // #100211# - checked
                 else
-                    sprintf(aStr, "%d", value);     // #100211# - checked
+                    sprintf(aStr, "%" SAL_PRIdINT32, value);     // #100211# - checked
                 break;
             case CalendarDisplayCode::LONG_MONTH:
                 value += 1;     // month is zero based
-                sprintf(aStr, "%02d", value);   // #100211# - checked
+                sprintf(aStr, "%02" SAL_PRIdINT32, value);   // #100211# - checked
                 break;
             case CalendarDisplayCode::SHORT_YEAR:
                 // Take last 2 digits, or only one if value<10, for example,
@@ -937,12 +956,12 @@ Calendar_gregorian::getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_In
                 // the only calendar using this.
                 // See i#116701 and fdo#60915
                 if (value < 100 || bEraMode || (eraArray && (eraArray[0].flags & kDisplayEraForcedLongYear)))
-                    sprintf(aStr, "%d", value); // #100211# - checked
+                    sprintf(aStr, "%" SAL_PRIdINT32, value); // #100211# - checked
                 else
-                    sprintf(aStr, "%02d", value % 100); // #100211# - checked
+                    sprintf(aStr, "%02" SAL_PRIdINT32, value % 100); // #100211# - checked
                 break;
             case CalendarDisplayCode::LONG_DAY:
-                sprintf(aStr, "%02d", value);   // #100211# - checked
+                sprintf(aStr, "%02" SAL_PRIdINT32, value);   // #100211# - checked
                 break;
 
             case CalendarDisplayCode::SHORT_DAY_NAME:

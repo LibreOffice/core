@@ -283,7 +283,7 @@ bool DrawViewWrapper::IsObjectHit( SdrObject const * pObj, const Point& rPnt )
     if(pObj)
     {
         tools::Rectangle aRect(pObj->GetCurrentBoundRect());
-        return aRect.IsInside(rPnt);
+        return aRect.Contains(rPnt);
     }
     return false;
 }

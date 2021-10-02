@@ -173,9 +173,10 @@ namespace drawinglayer::primitive2d
 
         void FillHatchPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
-            ::osl::MutexGuard aGuard( m_aMutex );
+            std::unique_lock aGuard( m_aMutex );
             bool bAdaptDistance(0 != getFillHatch().getMinimalDiscreteDistance());
 
+            aGuard.unlock();
             if(bAdaptDistance)
             {
                 // behave view-dependent

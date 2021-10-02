@@ -170,7 +170,7 @@ void SvxCharBasePage::SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp
 
 struct SvxCharNamePage_Impl
 {
-    Idle            m_aUpdateIdle;
+    Idle            m_aUpdateIdle { "cui SvxCharNamePage_Impl m_aUpdateIdle" };
     OUString        m_aNoStyleText;
     std::unique_ptr<FontList> m_pFontList;
     int             m_nExtraEntryPos;
@@ -563,27 +563,19 @@ void SvxCharNamePage::FillSizeBox_Impl(const weld::Widget& rNameBox)
     const FontList* pFontList = GetFontList();
     DBG_ASSERT( pFontList, "no fontlist" );
 
-    FontStyleBox* pStyleBox = nullptr;
     FontSizeBox* pSizeBox = nullptr;
-    OUString sFontName;
 
     if (m_xWestFontNameLB.get() == &rNameBox)
     {
-        pStyleBox = m_xWestFontStyleLB.get();
         pSizeBox = m_xWestFontSizeLB.get();
-        sFontName = m_xWestFontNameLB->get_active_text();
     }
     else if (m_xEastFontNameLB.get() == &rNameBox)
     {
-        pStyleBox = m_xEastFontStyleLB.get();
         pSizeBox = m_xEastFontSizeLB.get();
-        sFontName = m_xEastFontNameLB->get_active_text();
     }
     else if (m_xCTLFontNameLB.get() == &rNameBox)
     {
-        pStyleBox = m_xCTLFontStyleLB.get();
         pSizeBox = m_xCTLFontSizeLB.get();
-        sFontName = m_xCTLFontNameLB->get_active_text();
     }
     else
     {
@@ -591,8 +583,7 @@ void SvxCharNamePage::FillSizeBox_Impl(const weld::Widget& rNameBox)
         return;
     }
 
-    FontMetric _aFontMetric(pFontList->Get(sFontName, pStyleBox->get_active_text()));
-    pSizeBox->Fill( &_aFontMetric, pFontList );
+    pSizeBox->Fill( pFontList );
 }
 
 namespace

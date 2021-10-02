@@ -1637,7 +1637,8 @@ void EditEngine::RemoveParagraph( sal_Int32 nPara )
         pImpEditEngine->ImpRemoveParagraph( nPara );
         pImpEditEngine->InvalidateFromParagraph( nPara );
         pImpEditEngine->UpdateSelections();
-        pImpEditEngine->FormatAndLayout();
+        if (pImpEditEngine->IsUpdateLayout())
+            pImpEditEngine->FormatAndLayout();
     }
 }
 
@@ -1712,7 +1713,8 @@ void EditEngine::InsertParagraph( sal_Int32 nPara, const EditTextObject& rTxtObj
 
     pImpEditEngine->UndoActionEnd();
 
-    pImpEditEngine->FormatAndLayout();
+    if (pImpEditEngine->IsUpdateLayout())
+        pImpEditEngine->FormatAndLayout();
 }
 
 void EditEngine::InsertParagraph(sal_Int32 nPara, const OUString& rTxt)
@@ -1730,7 +1732,8 @@ void EditEngine::InsertParagraph(sal_Int32 nPara, const OUString& rTxt)
     pImpEditEngine->RemoveCharAttribs( nPara );
     pImpEditEngine->UndoActionEnd();
     pImpEditEngine->ImpInsertText( EditSelection( aPaM, aPaM ), rTxt );
-    pImpEditEngine->FormatAndLayout();
+    if (pImpEditEngine->IsUpdateLayout())
+        pImpEditEngine->FormatAndLayout();
 }
 
 void EditEngine::SetText(sal_Int32 nPara, const OUString& rTxt)
@@ -1741,7 +1744,8 @@ void EditEngine::SetText(sal_Int32 nPara, const OUString& rTxt)
         pImpEditEngine->UndoActionStart( EDITUNDO_INSERT );
         pImpEditEngine->ImpInsertText( *pSel, rTxt );
         pImpEditEngine->UndoActionEnd();
-        pImpEditEngine->FormatAndLayout();
+        if (pImpEditEngine->IsUpdateLayout())
+            pImpEditEngine->FormatAndLayout();
     }
 }
 
@@ -1773,7 +1777,8 @@ void EditEngine::SetCharAttribs(sal_Int32 nPara, const SfxItemSet& rSet)
     // This is called by sd::View::OnBeginPasteOrDrop(), updating the cursor position on undo is not
     // wanted.
     pImpEditEngine->SetAttribs(aSel, rSet, /*nSpecial=*/SetAttribsMode::NONE, /*bSetSelection=*/false);
-    pImpEditEngine->FormatAndLayout();
+    if (pImpEditEngine->IsUpdateLayout())
+        pImpEditEngine->FormatAndLayout();
 }
 
 void EditEngine::GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const
@@ -1803,7 +1808,8 @@ void EditEngine::RemoveAttribs( const ESelection& rSelection, bool bRemoveParaAt
     EditSelection aSel( pImpEditEngine->ConvertSelection( rSelection.nStartPara, rSelection.nStartPos, rSelection.nEndPara, rSelection.nEndPos ) );
     pImpEditEngine->RemoveCharAttribs( aSel, eMode, nWhich  );
     pImpEditEngine->UndoActionEnd();
-    pImpEditEngine->FormatAndLayout();
+    if (pImpEditEngine->IsUpdateLayout())
+        pImpEditEngine->FormatAndLayout();
 }
 
 vcl::Font EditEngine::GetStandardFont( sal_Int32 nPara )
@@ -2327,7 +2333,7 @@ EFieldInfo EditEngine::GetFieldInfo( sal_Int32 nPara, sal_uInt16 nField ) const
 bool EditEngine::UpdateFields()
 {
     bool bChanges = pImpEditEngine->UpdateFields();
-    if ( bChanges )
+    if ( bChanges && pImpEditEngine->IsUpdateLayout())
         pImpEditEngine->FormatAndLayout();
     return bChanges;
 }

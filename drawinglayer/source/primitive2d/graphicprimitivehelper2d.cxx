@@ -576,7 +576,7 @@ namespace drawinglayer::primitive2d
         }
 
         Primitive2DContainer create2DColorModifierEmbeddingsAsNeeded(
-            const Primitive2DContainer& rChildren,
+            Primitive2DContainer&& rChildren,
             GraphicDrawMode aGraphicDrawMode,
             double fLuminance,
             double fContrast,
@@ -596,7 +596,7 @@ namespace drawinglayer::primitive2d
 
             // set child content as retval; that is what will be used as child content in all
             // embeddings from here
-            aRetval = rChildren;
+            aRetval = std::move(rChildren);
 
             if(GraphicDrawMode::Watermark == aGraphicDrawMode)
             {

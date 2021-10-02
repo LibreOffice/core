@@ -271,7 +271,7 @@ namespace drawinglayer::primitive2d
                         }
 
                         Primitive2DReference aNewTextEffect(new TextEffectPrimitive2D(
-                            aRetval,
+                            std::move(aRetval),
                             aDecTrans.getTranslate(),
                             aDecTrans.getRotate(),
                             aTextEffectStyle2D));
@@ -282,7 +282,7 @@ namespace drawinglayer::primitive2d
                         // create outline using an own helper primitive since this will
                         // be view-dependent
                         Primitive2DReference aNewTextEffect(new TextEffectPrimitive2D(
-                            aRetval,
+                            std::move(aRetval),
                             aDecTrans.getTranslate(),
                             aDecTrans.getRotate(),
                             TextEffectStyle2D::Outline));

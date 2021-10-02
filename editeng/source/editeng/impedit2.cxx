@@ -105,6 +105,8 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     eDefLanguage(LANGUAGE_DONTKNOW),
     nCurTextHeight(0),
     nCurTextHeightNTP(0),
+    aOnlineSpellTimer( "editeng::ImpEditEngine aOnlineSpellTimer" ),
+    aStatusTimer( "editeng::ImpEditEngine aStatusTimer" ),
     bKernAsianPunctuation(false),
     bAddExtLeading(false),
     bIsFormatting(false),
@@ -131,15 +133,12 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
 
     aStatusTimer.SetTimeout( 200 );
     aStatusTimer.SetInvokeHandler( LINK( this, ImpEditEngine, StatusTimerHdl ) );
-    aStatusTimer.SetDebugName( "editeng::ImpEditEngine aStatusTimer" );
 
     aIdleFormatter.SetPriority( TaskPriority::REPAINT );
     aIdleFormatter.SetInvokeHandler( LINK( this, ImpEditEngine, IdleFormatHdl ) );
-    aIdleFormatter.SetDebugName( "editeng::ImpEditEngine aIdleFormatter" );
 
     aOnlineSpellTimer.SetTimeout( 100 );
     aOnlineSpellTimer.SetInvokeHandler( LINK( this, ImpEditEngine, OnlineSpellHdl ) );
-    aOnlineSpellTimer.SetDebugName( "editeng::ImpEditEngine aOnlineSpellTimer" );
 
     // Access data already from here on!
     SetRefDevice( nullptr );
@@ -3066,7 +3065,7 @@ tools::Rectangle ImpEditEngine::GetEditCursor(const ParaPortion* pPortion, const
 
 tools::Rectangle ImpEditEngine::PaMtoEditCursor( EditPaM aPaM, GetCursorFlags nFlags )
 {
-    OSL_ENSURE( IsUpdateLayout(), "Must not be reached when Update=FALSE: PaMtoEditCursor" );
+    assert( IsUpdateLayout() && "Must not be reached when Update=FALSE: PaMtoEditCursor" );
 
     tools::Rectangle aEditCursor;
     const sal_Int32 nIndex = aPaM.GetIndex();
@@ -3235,7 +3234,7 @@ ImpEditEngine::GetPortionAndLine(Point aDocPos)
 
 EditPaM ImpEditEngine::GetPaM( Point aDocPos, bool bSmart )
 {
-    OSL_ENSURE( IsUpdateLayout(), "Must not be reached when Update=FALSE: GetPaM" );
+    assert( IsUpdateLayout() && "Must not be reached when Update=FALSE: GetPaM" );
 
     if (const auto& [pPortion, pLine, nLineStartX] = GetPortionAndLine(aDocPos); pPortion)
     {
@@ -3268,7 +3267,7 @@ bool ImpEditEngine::IsTextPos(const Point& rDocPos, sal_uInt16 nBorder)
 
 sal_uInt32 ImpEditEngine::GetTextHeight() const
 {
-    OSL_ENSURE( IsUpdateLayout(), "Should not be used for Update=FALSE: GetTextHeight" );
+    assert( IsUpdateLayout() && "Should not be used for Update=FALSE: GetTextHeight" );
     OSL_ENSURE( IsFormatted() || IsFormatting(), "GetTextHeight: Not formatted" );
     return nCurTextHeight;
 }
@@ -3353,7 +3352,7 @@ sal_uInt32 ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine,
 
     // #114278# Saving both layout mode and language (since I'm
     // potentially changing both)
-    GetRefDevice()->Push( PushFlags::TEXTLAYOUTMODE|PushFlags::TEXTLANGUAGE );
+    GetRefDevice()->Push( vcl::PushFlags::TEXTLAYOUTMODE|vcl::PushFlags::TEXTLANGUAGE );
 
     ImplInitLayoutMode(*GetRefDevice(), nPara, -1);
 
@@ -3402,7 +3401,7 @@ sal_uInt32 ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine,
 
 sal_uInt32 ImpEditEngine::GetTextHeightNTP() const
 {
-    DBG_ASSERT( IsUpdateLayout(), "Should not be used for Update=FALSE: GetTextHeight" );
+    assert( IsUpdateLayout() && "Should not be used for Update=FALSE: GetTextHeight" );
     DBG_ASSERT( IsFormatted() || IsFormatting(), "GetTextHeight: Not formatted" );
     return nCurTextHeightNTP;
 }
@@ -3432,7 +3431,7 @@ tools::Long ImpEditEngine::Calc1ColumnTextHeight(tools::Long* pHeightNTP)
 
 tools::Long ImpEditEngine::CalcTextHeight(tools::Long* pHeightNTP)
 {
-    OSL_ENSURE( IsUpdateLayout(), "Should not be used when Update=FALSE: CalcTextHeight" );
+    assert( IsUpdateLayout() && "Should not be used when Update=FALSE: CalcTextHeight" );
 
     if (mnColumns <= 1)
         return Calc1ColumnTextHeight(pHeightNTP); // All text fits into a single column - done!

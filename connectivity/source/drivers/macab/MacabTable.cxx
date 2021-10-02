@@ -80,7 +80,7 @@ void MacabTable::refreshColumns()
     if (m_xColumns)
         m_xColumns->reFill(aVector);
     else
-        m_xColumns  = new MacabColumns(this,m_aMutex,aVector);
+        m_xColumns.reset(new MacabColumns(this, m_aMutex, aVector));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

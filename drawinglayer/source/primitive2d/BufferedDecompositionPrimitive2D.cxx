@@ -33,14 +33,14 @@ void BufferedDecompositionPrimitive2D::get2DDecomposition(
     Primitive2DDecompositionVisitor& rVisitor,
     const geometry::ViewInformation2D& rViewInformation) const
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     if (getBuffered2DDecomposition().empty())
     {
         Primitive2DContainer aNewSequence;
         create2DDecomposition(aNewSequence, rViewInformation);
         const_cast<BufferedDecompositionPrimitive2D*>(this)->setBuffered2DDecomposition(
-            aNewSequence);
+            std::move(aNewSequence));
     }
 
     rVisitor.append(getBuffered2DDecomposition());

@@ -40,6 +40,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/types.hxx>
@@ -154,17 +155,17 @@ void lcl_CalDate(sal_Int32 _nJulianDate,sal_Int32 _nJulianTime,css::util::DateTi
 {
     if ( _nJulianDate )
     {
-        sal_Int32 ka = _nJulianDate;
+        sal_Int64 ka = _nJulianDate;
         if ( _nJulianDate >= 2299161 )
         {
-            sal_Int32 ialp = static_cast<sal_Int32>( (static_cast<double>(_nJulianDate) - 1867216.25 ) / 36524.25 );
-            ka = _nJulianDate + 1 + ialp - ( ialp >> 2 );
+            sal_Int64 ialp = static_cast<sal_Int64>( (static_cast<double>(_nJulianDate) - 1867216.25 ) / 36524.25 );
+            ka = ka + 1 + ialp - ( ialp >> 2 );
         }
-        sal_Int32 kb = ka + 1524;
-        sal_Int32 kc =  static_cast<sal_Int32>( (static_cast<double>(kb) - 122.1 ) / 365.25 );
-        sal_Int32 kd = static_cast<sal_Int32>(static_cast<double>(kc) * 365.25);
-        sal_Int32 ke = static_cast<sal_Int32>(static_cast<double>( kb - kd ) / 30.6001 );
-        _rDateTime.Day = static_cast<sal_uInt16>(kb - kd - static_cast<sal_Int32>( static_cast<double>(ke) * 30.6001 ));
+        sal_Int64 kb = ka + 1524;
+        sal_Int64 kc = static_cast<sal_Int64>((static_cast<double>(kb) - 122.1) / 365.25);
+        sal_Int64 kd = static_cast<sal_Int64>(static_cast<double>(kc) * 365.25);
+        sal_Int64 ke = static_cast<sal_Int64>(static_cast<double>(kb - kd) / 30.6001);
+        _rDateTime.Day = static_cast<sal_uInt16>(kb - kd - static_cast<sal_Int64>( static_cast<double>(ke) * 30.6001 ));
         if ( ke > 13 )
             _rDateTime.Month = static_cast<sal_uInt16>(ke - 13);
         else
@@ -272,7 +273,11 @@ void ODbaseTable::readHeader()
 void ODbaseTable::fillColumns()
 {
     m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
-    m_pFileStream->Seek(32);
+    if (!checkSeek(*m_pFileStream, 32))
+    {
+        SAL_WARN("connectivity.drivers", "ODbaseTable::fillColumns: bad offset!");
+        return;
+    }
 
     if(!m_aColumns.is())
         m_aColumns = new OSQLColumns();
@@ -284,8 +289,21 @@ void ODbaseTable::fillColumns()
     m_aScales.clear();
 
     // Number of fields:
-    const sal_Int32 nFieldCount = (m_aHeader.headerLength - 1) / 32 - 1;
-    OSL_ENSURE(nFieldCount,"No columns in table!");
+    sal_Int32 nFieldCount = (m_aHeader.headerLength - 1) / 32 - 1;
+    if (nFieldCount <= 0)
+    {
+        SAL_WARN("connectivity.drivers", "No columns in table!");
+        return;
+    }
+
+    auto nRemainingsize = m_pFileStream->remainingSize();
+    auto nMaxPossibleRecords = nRemainingsize / 32;
+    if (o3tl::make_unsigned(nFieldCount) > nMaxPossibleRecords)
+    {
+        SAL_WARN("connectivity.drivers", "Parsing error: " << nMaxPossibleRecords <<
+                 " max possible entries, but " << nFieldCount << " claimed, truncating");
+        nFieldCount = nMaxPossibleRecords;
+    }
 
     m_aColumns->reserve(nFieldCount);
     m_aTypes.reserve(nFieldCount);
@@ -300,17 +318,13 @@ void ODbaseTable::fillColumns()
     for (; i < nFieldCount; i++)
     {
         DBFColumn aDBFColumn;
-#if !defined(NDEBUG)
-        sal_uInt64 const nOldPos(m_pFileStream->Tell());
-#endif
         m_pFileStream->ReadBytes(aDBFColumn.db_fnm, 11);
         m_pFileStream->ReadUChar(aDBFColumn.db_typ);
         m_pFileStream->ReadUInt32(aDBFColumn.db_adr);
         m_pFileStream->ReadUChar(aDBFColumn.db_flng);
         m_pFileStream->ReadUChar(aDBFColumn.db_dez);
         m_pFileStream->ReadBytes(aDBFColumn.db_free2, 14);
-        assert(m_pFileStream->GetError() || m_pFileStream->Tell() == nOldPos + sizeof(aDBFColumn));
-        if (m_pFileStream->GetError())
+        if (!m_pFileStream->good())
         {
             SAL_WARN("connectivity.drivers", "ODbaseTable::fillColumns: short read!");
             break;
@@ -454,7 +468,6 @@ ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables, ODbaseConnection* _pConne
     m_eEncoding = getConnection()->getTextEncoding();
 }
 
-
 void ODbaseTable::construct()
 {
     // initialize the header
@@ -482,10 +495,38 @@ void ODbaseTable::construct()
         m_pFileStream = createStream_simpleError( sFileName, StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYNONE);
     }
 
-    if(!m_pFileStream)
+    if (!m_pFileStream)
         return;
 
     readHeader();
+
+    std::size_t nFileSize = lcl_getFileSize(*m_pFileStream);
+
+    if (m_aHeader.headerLength > nFileSize)
+    {
+        SAL_WARN("connectivity.drivers", "Parsing error: " << nFileSize <<
+                 " max possible size, but " << m_aHeader.headerLength << " claimed, abandoning");
+        return;
+    }
+
+    if (m_aHeader.recordLength)
+    {
+        std::size_t nMaxPossibleRecords = (nFileSize - m_aHeader.headerLength) / m_aHeader.recordLength;
+        // #i83401# seems to be empty or someone wrote nonsense into the dbase
+        // file try and recover if m_aHeader.db_slng is sane
+        if (m_aHeader.nbRecords == 0)
+        {
+            SAL_WARN("connectivity.drivers", "Parsing warning: 0 records claimed, recovering");
+            m_aHeader.nbRecords = nMaxPossibleRecords;
+        }
+        else if (m_aHeader.nbRecords > nMaxPossibleRecords)
+        {
+            SAL_WARN("connectivity.drivers", "Parsing error: " << nMaxPossibleRecords <<
+                     " max possible records, but " << m_aHeader.nbRecords << " claimed, truncating");
+            m_aHeader.nbRecords = std::max(nMaxPossibleRecords, static_cast<size_t>(1));
+        }
+    }
+
     if (HasMemoFields())
     {
     // Create Memo-Filename (.DBT):
@@ -507,18 +548,10 @@ void ODbaseTable::construct()
         if (m_pMemoStream)
             ReadMemoHeader();
     }
-    fillColumns();
 
-    std::size_t nFileSize = lcl_getFileSize(*m_pFileStream);
+    fillColumns();
     m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
-    // seems to be empty or someone wrote bullshit into the dbase file
-    // try and recover if m_aHeader.db_slng is sane
-    if (m_aHeader.nbRecords == 0 && m_aHeader.recordLength)
-    {
-        std::size_t nRecords = (nFileSize-m_aHeader.headerLength)/m_aHeader.recordLength;
-        if (nRecords > 0)
-            m_aHeader.nbRecords = nRecords;
-    }
+
 
     // Buffersize dependent on the file size
     m_pFileStream->SetBufferSize(nFileSize > 1000000 ? 32768 :
@@ -644,7 +677,7 @@ void ODbaseTable::refreshColumns()
     if(m_xColumns)
         m_xColumns->reFill(aVector);
     else
-        m_xColumns = new ODbaseColumns(this,m_aMutex,aVector);
+        m_xColumns.reset(new ODbaseColumns(this,m_aMutex,aVector));
 }
 
 void ODbaseTable::refreshIndexes()
@@ -687,7 +720,7 @@ void ODbaseTable::refreshIndexes()
     if(m_xIndexes)
         m_xIndexes->reFill(aVector);
     else
-        m_xIndexes = new ODbaseIndexes(this,m_aMutex,aVector);
+        m_xIndexes.reset(new ODbaseIndexes(this,m_aMutex,aVector));
 }
 
 
@@ -769,10 +802,8 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
     for (std::size_t i = 1; aIter != aEnd && nByteOffset <= m_nBufferSize && i < nCount;++aIter, i++)
     {
         // Lengths depending on data type:
-        sal_Int32 nLen = 0;
-        sal_Int32 nType = 0;
-        nLen    = m_aPrecisions[i-1];
-        nType   = m_aTypes[i-1];
+        sal_Int32 nLen = m_aPrecisions[i-1];
+        sal_Int32 nType = m_aTypes[i-1];
 
         switch(nType)
         {
@@ -831,8 +862,13 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
         else if ( DataType::TIMESTAMP == nType )
         {
             sal_Int32 nDate = 0,nTime = 0;
+            if (o3tl::make_unsigned(nLen) < 8)
+            {
+                SAL_WARN("connectivity.drivers", "short TIMESTAMP");
+                return false;
+            }
             memcpy(&nDate, pData, 4);
-            memcpy(&nTime, pData+ 4, 4);
+            memcpy(&nTime, pData + 4, 4);
             if ( !nDate && !nTime )
             {
                 (*_rRow)[i]->setNull();
@@ -1360,6 +1396,10 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
     return true;
 }
 
+bool ODbaseTable::HasMemoFields() const
+{
+    return m_aHeader.type > dBaseIV && !utl::ConfigManager::IsFuzzing();
+}
 
 // creates in principle dBase III file format
 bool ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
@@ -1632,7 +1672,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
 
     ::comphelper::UStringMixEqual aCase(isCaseSensitive());
 
-    Reference<XIndexAccess> xColumns = m_xColumns;
+    Reference<XIndexAccess> xColumns(m_xColumns.get());
     // first search a key that exist already in the table
     for (sal_Int32 i = 0; i < nColumnCount; ++i)
     {
@@ -2498,7 +2538,7 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
                         }
                     }
                 }
-                bOk = _pNewTable->InsertRow(*aInsertRow,_pNewTable->m_xColumns);
+                bOk = _pNewTable->InsertRow(*aInsertRow, _pNewTable->m_xColumns.get());
                 SAL_WARN_IF(!bOk, "connectivity.drivers", "Row could not be inserted!");
             }
             else

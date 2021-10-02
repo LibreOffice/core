@@ -38,109 +38,6 @@ index 0fb627ba8..dda1fc8bc 100644
    template <
        typename Container,
 diff --git a/core/fxcodec/jpx/cjpx_decoder.cpp b/core/fxcodec/jpx/cjpx_decoder.cpp
-index c66985a7f..9c1122b75 100644
---- a/core/fxcodec/jpx/cjpx_decoder.cpp
-+++ b/core/fxcodec/jpx/cjpx_decoder.cpp
-@@ -6,6 +6,8 @@
- 
- #include "core/fxcodec/jpx/cjpx_decoder.h"
- 
-+#include <string.h>
-+
- #include <algorithm>
- #include <limits>
- #include <utility>
-diff --git a/core/fxcodec/jpeg/jpegmodule.cpp b/core/fxcodec/jpeg/jpegmodule.cpp
-index cea0679aa..036f25003 100644
---- a/core/fxcodec/jpeg/jpegmodule.cpp
-+++ b/core/fxcodec/jpeg/jpegmodule.cpp
-@@ -7,6 +7,7 @@
- #include "core/fxcodec/jpeg/jpegmodule.h"
- 
- #include <setjmp.h>
-+#include <string.h>
- 
- #include <memory>
- #include <utility>
-diff --git a/core/fxge/dib/cfx_bitmapcomposer.cpp b/core/fxge/dib/cfx_bitmapcomposer.cpp
-index 6f9b42013..0f1ffae2c 100644
---- a/core/fxge/dib/cfx_bitmapcomposer.cpp
-+++ b/core/fxge/dib/cfx_bitmapcomposer.cpp
-@@ -6,6 +6,8 @@
- 
- #include "core/fxge/dib/cfx_bitmapcomposer.h"
- 
-+#include <string.h>
-+
- #include "core/fxge/cfx_cliprgn.h"
- #include "core/fxge/dib/cfx_dibitmap.h"
- 
-diff --git a/core/fxge/dib/cfx_dibitmap.cpp b/core/fxge/dib/cfx_dibitmap.cpp
-index d7ccf6cfa..94e8accdd 100644
---- a/core/fxge/dib/cfx_dibitmap.cpp
-+++ b/core/fxge/dib/cfx_dibitmap.cpp
-@@ -6,6 +6,8 @@
- 
- #include "core/fxge/dib/cfx_dibitmap.h"
- 
-+#include <string.h>
-+
- #include <limits>
- #include <memory>
- #include <utility>
-diff --git a/core/fxge/dib/cfx_bitmapstorer.cpp b/core/fxge/dib/cfx_bitmapstorer.cpp
-index f57c00eaa..45a0a180c 100644
---- a/core/fxge/dib/cfx_bitmapstorer.cpp
-+++ b/core/fxge/dib/cfx_bitmapstorer.cpp
-@@ -6,6 +6,8 @@
- 
- #include "core/fxge/dib/cfx_bitmapstorer.h"
- 
-+#include <string.h>
-+
- #include <utility>
- 
- #include "core/fxge/dib/cfx_dibitmap.h"
-diff --git a/core/fxge/cfx_cliprgn.cpp b/core/fxge/cfx_cliprgn.cpp
-index 5369d522c..d198852e3 100644
---- a/core/fxge/cfx_cliprgn.cpp
-+++ b/core/fxge/cfx_cliprgn.cpp
-@@ -6,6 +6,8 @@
- 
- #include "core/fxge/cfx_cliprgn.h"
- 
-+#include <string.h>
-+
- #include <utility>
- 
- #include "core/fxge/dib/cfx_dibitmap.h"
-diff --git a/core/fxge/dib/cfx_scanlinecompositor.cpp b/core/fxge/dib/cfx_scanlinecompositor.cpp
-index e8362d708..c04c6dcab 100644
---- a/core/fxge/dib/cfx_scanlinecompositor.cpp
-+++ b/core/fxge/dib/cfx_scanlinecompositor.cpp
-@@ -6,6 +6,8 @@
- 
- #include "core/fxge/dib/cfx_scanlinecompositor.h"
- 
-+#include <string.h>
-+
- #include <algorithm>
- 
- #include "core/fxge/dib/fx_dib.h"
-diff --git a/core/fxge/dib/cfx_dibbase.cpp b/core/fxge/dib/cfx_dibbase.cpp
-index 4ec0ddbf9..a1de2fbec 100644
---- a/core/fxge/dib/cfx_dibbase.cpp
-+++ b/core/fxge/dib/cfx_dibbase.cpp
-@@ -6,6 +6,8 @@
- 
- #include "core/fxge/dib/cfx_dibbase.h"
- 
-+#include <string.h>
-+
- #include <algorithm>
- #include <memory>
- #include <utility>
-diff --git a/core/fxcodec/jpx/cjpx_decoder.cpp b/core/fxcodec/jpx/cjpx_decoder.cpp
 index c66985a7f..817f81dfa 100644
 --- a/core/fxcodec/jpx/cjpx_decoder.cpp
 +++ b/core/fxcodec/jpx/cjpx_decoder.cpp
@@ -153,3 +50,68 @@ index c66985a7f..817f81dfa 100644
  }
  
  void sycc_to_rgb(int offset,
+diff --git a/core/fdrm/fx_crypt_aes.cpp b/core/fdrm/fx_crypt_aes.cpp
+index f2170220b..ede18f581 100644
+--- a/core/fdrm/fx_crypt_aes.cpp
++++ b/core/fdrm/fx_crypt_aes.cpp
+@@ -437,7 +437,7 @@ const unsigned int D3[256] = {
+   (block[0] ^= *keysched++, block[1] ^= *keysched++, block[2] ^= *keysched++, \
+    block[3] ^= *keysched++)
+ #define MOVEWORD(i) (block[i] = newstate[i])
+-#define MAKEWORD(i)                                         \
++#define FMAKEWORD(i)                                         \
+   (newstate[i] = (E0[(block[i] >> 24) & 0xFF] ^             \
+                   E1[(block[(i + C1) % Nb] >> 16) & 0xFF] ^ \
+                   E2[(block[(i + C2) % Nb] >> 8) & 0xFF] ^  \
+@@ -458,10 +458,10 @@ void aes_encrypt_nb_4(CRYPT_aes_context* ctx, unsigned int* block) {
+   unsigned int newstate[4];
+   for (i = 0; i < ctx->Nr - 1; i++) {
+     ADD_ROUND_KEY_4();
+-    MAKEWORD(0);
+-    MAKEWORD(1);
+-    MAKEWORD(2);
+-    MAKEWORD(3);
++    FMAKEWORD(0);
++    FMAKEWORD(1);
++    FMAKEWORD(2);
++    FMAKEWORD(3);
+     MOVEWORD(0);
+     MOVEWORD(1);
+     MOVEWORD(2);
+@@ -478,10 +478,10 @@ void aes_encrypt_nb_4(CRYPT_aes_context* ctx, unsigned int* block) {
+   MOVEWORD(3);
+   ADD_ROUND_KEY_4();
+ }
+-#undef MAKEWORD
++#undef FMAKEWORD
+ #undef LASTWORD
+ 
+-#define MAKEWORD(i)                                         \
++#define FMAKEWORD(i)                                         \
+   (newstate[i] = (D0[(block[i] >> 24) & 0xFF] ^             \
+                   D1[(block[(i + C1) % Nb] >> 16) & 0xFF] ^ \
+                   D2[(block[(i + C2) % Nb] >> 8) & 0xFF] ^  \
+@@ -502,10 +502,10 @@ void aes_decrypt_nb_4(CRYPT_aes_context* ctx, unsigned int* block) {
+   unsigned int newstate[4];
+   for (i = 0; i < ctx->Nr - 1; i++) {
+     ADD_ROUND_KEY_4();
+-    MAKEWORD(0);
+-    MAKEWORD(1);
+-    MAKEWORD(2);
+-    MAKEWORD(3);
++    FMAKEWORD(0);
++    FMAKEWORD(1);
++    FMAKEWORD(2);
++    FMAKEWORD(3);
+     MOVEWORD(0);
+     MOVEWORD(1);
+     MOVEWORD(2);
+@@ -522,7 +522,7 @@ void aes_decrypt_nb_4(CRYPT_aes_context* ctx, unsigned int* block) {
+   MOVEWORD(3);
+   ADD_ROUND_KEY_4();
+ }
+-#undef MAKEWORD
++#undef FMAKEWORD
+ #undef LASTWORD
+ 
+ void aes_setup(CRYPT_aes_context* ctx, const unsigned char* key, int keylen) {

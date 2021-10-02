@@ -231,7 +231,7 @@ private:
 };
 
 SeriesHeader::SeriesHeader(weld::Container* pParent, weld::Container* pColorParent)
-    : m_aUpdateDataTimer("UpdateDataTimer")
+    : m_aUpdateDataTimer( "SeriesHeader UpdateDataTimer" )
     , m_xBuilder1(Application::CreateBuilder(pParent, "modules/schart/ui/columnfragment.ui"))
     , m_xBuilder2(Application::CreateBuilder(pColorParent, "modules/schart/ui/imagefragment.ui"))
     , m_pParent(pParent)
@@ -248,7 +248,6 @@ SeriesHeader::SeriesHeader(weld::Container* pParent, weld::Container* pColorPare
     , m_bSeriesNameChangePending( false )
 {
     m_aUpdateDataTimer.SetInvokeHandler(LINK(this, SeriesHeader, ImplUpdateDataHdl));
-    m_aUpdateDataTimer.SetDebugName( "SeriesHeader UpdateDataTimer" );
     m_aUpdateDataTimer.SetTimeout(4 * EDIT_UPDATEDATA_TIMEOUT);
 
     m_spSeriesName->SetModifyHdl(LINK(this, SeriesHeader, SeriesNameEdited));

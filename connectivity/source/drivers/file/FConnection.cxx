@@ -32,6 +32,7 @@
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #include <tools/urlobj.hxx>
 #include <file/FCatalog.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/pathoptions.hxx>
 #include <ucbhelper/content.hxx>
 #include <connectivity/dbcharset.hxx>
@@ -131,6 +132,7 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
         OUString aFileName = aDSN;
         INetURLObject aURL;
         aURL.SetSmartProtocol(INetProtocol::File);
+        if (!utl::ConfigManager::IsFuzzing())
         {
             SvtPathOptions aPathOptions;
             aFileName = aPathOptions.SubstituteVariable(aFileName);

@@ -25,6 +25,17 @@ Sub verify_testConstants()
         TestUtil.AssertEqual(vbNewLine, vbLf, "vbNewline")
     End If
 
+    ' tdf#131563 - check for vba color constants
+    ' See https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/color-constants
+    TestUtil.AssertEqual(vbBlack,   RGB(0, 0, 0),       "vbBlack")
+    TestUtil.AssertEqual(vbRed,     RGB(255, 0, 0),     "vbRed")
+    TestUtil.AssertEqual(vbGreen,   RGB(0, 255, 0),     "vbGreen")
+    TestUtil.AssertEqual(vbYellow,  RGB(255, 255, 0),   "vbYellow")
+    TestUtil.AssertEqual(vbBlue,    RGB(0, 0, 255),     "vbBlue")
+    TestUtil.AssertEqual(vbMagenta, RGB(255, 0, 255),   "vbMagenta")
+    TestUtil.AssertEqual(vbCyan,    RGB(0, 255, 255),   "vbCyan")
+    TestUtil.AssertEqual(vbWhite,   RGB(255, 255, 255), "vbWhite")
+
     Exit Sub
 errorHandler:
     TestUtil.ReportErrorHandler("verify_testConstants", Err, Error$, Erl)

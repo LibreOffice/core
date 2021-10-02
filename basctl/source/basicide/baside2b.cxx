@@ -239,6 +239,7 @@ EditorWindow::EditorWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
     nCurTextWidth(0),
     m_nSetSourceInBasicId(nullptr),
     aHighlighter(HighlighterLanguage::Basic),
+    aSyntaxIdle( "basctl EditorWindow aSyntaxIdle" ),
     bHighlighting(false),
     bDoSyntaxHighlight(true),
     bDelayHighlight(true),
@@ -999,7 +1000,6 @@ void EditorWindow::CreateEditEngine()
     ImplSetFont();
 
     aSyntaxIdle.SetInvokeHandler( LINK( this, EditorWindow, SyntaxTimerHdl ) );
-    aSyntaxIdle.SetDebugName( "basctl EditorWindow aSyntaxIdle" );
 
     bool bWasDoSyntaxHighlight = bDoSyntaxHighlight;
     bDoSyntaxHighlight = false; // too slow for large texts...
@@ -2283,7 +2283,7 @@ IMPL_LINK(WatchWindow, EditedEntryHdl, const IterString&, rIterString, bool)
 namespace
 {
 
-void implCollapseModifiedObjectEntry(weld::TreeIter& rParent, weld::TreeView& rTree)
+void implCollapseModifiedObjectEntry(const weld::TreeIter& rParent, weld::TreeView& rTree)
 {
     rTree.collapse_row(rParent);
 

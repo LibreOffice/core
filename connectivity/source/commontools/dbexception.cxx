@@ -187,44 +187,58 @@ void SQLExceptionInfo::prepend( const OUString& _rErrorMessage )
     m_eType = TYPE::SQLException;
 }
 
+// create the to-be-appended exception
+Any SQLExceptionInfo::createException(TYPE eType, const OUString& rErrorMessage, const OUString& rSQLState, const sal_Int32 nErrorCode)
+{
+    Any aAppend;
+    switch (eType)
+    {
+        case TYPE::SQLException:
+            aAppend <<= SQLException();
+            break;
+        case TYPE::SQLWarning:
+            aAppend <<= SQLWarning();
+            break;
+        case TYPE::SQLContext:
+            aAppend <<= SQLContext();
+            break;
+        default:
+            TOOLS_WARN_EXCEPTION("connectivity.commontools", "SQLExceptionInfo::createException: invalid exception type: this will crash!");
+            break;
+    }
+
+    SQLException& pAppendException = const_cast<SQLException &>(*o3tl::forceAccess<SQLException>(aAppend));
+    pAppendException.Message = rErrorMessage;
+    pAppendException.SQLState = rSQLState;
+    pAppendException.ErrorCode = nErrorCode;
+
+    return aAppend;
+}
+
+// find the end of the exception chain
+SQLException* SQLExceptionInfo::getLastException(SQLException* pLastException)
+{
+    SQLException* pException = pLastException;
+    while (pException)
+    {
+        pException = const_cast<SQLException*>(o3tl::tryAccess<SQLException>(pException->NextException));
+        if (!pException)
+            break;
+        pLastException = pException;
+    }
+    return pLastException;
+}
 
 void SQLExceptionInfo::append( TYPE _eType, const OUString& _rErrorMessage, const OUString& _rSQLState, const sal_Int32 _nErrorCode )
 {
     // create the to-be-appended exception
-    Any aAppend;
-    switch ( _eType )
-    {
-    case TYPE::SQLException: aAppend <<= SQLException(); break;
-    case TYPE::SQLWarning:   aAppend <<= SQLWarning();   break;
-    case TYPE::SQLContext:   aAppend <<= SQLContext();   break;
-    default:
-        TOOLS_WARN_EXCEPTION( "connectivity.commontools", "SQLExceptionInfo::append: invalid exception type: this will crash!" );
-        break;
-    }
-
-    SQLException& pAppendException = const_cast<SQLException &>(*o3tl::forceAccess<SQLException>(aAppend));
-    pAppendException.Message = _rErrorMessage;
-    pAppendException.SQLState = _rSQLState;
-    pAppendException.ErrorCode = _nErrorCode;
+    Any aAppend = createException(_eType, _rErrorMessage, _rSQLState, _nErrorCode);
 
     // find the end of the current chain
-    Any* pChainIterator = &m_aContent;
-    SQLException* pLastException = nullptr;
-    const Type& aSQLExceptionType( cppu::UnoType<SQLException>::get() );
-    while ( pChainIterator )
-    {
-        if ( !pChainIterator->hasValue() )
-            break;
-
-        if ( !isAssignableFrom( aSQLExceptionType, pChainIterator->getValueType() ) )
-            break;
-
-        pLastException = const_cast< SQLException* >( o3tl::doAccess<SQLException>( *pChainIterator ) );
-        pChainIterator = &pLastException->NextException;
-    }
+    SQLException* pLastException = getLastException(const_cast<SQLException*>(o3tl::tryAccess<SQLException>(m_aContent)));
 
     // append
-    if ( pLastException )
+    if (pLastException)
         pLastException->NextException = aAppend;
     else
     {
@@ -232,7 +246,6 @@ void SQLExceptionInfo::append( TYPE _eType, const OUString& _rErrorMessage, cons
         m_eType = _eType;
     }
 }
-
 
 void SQLExceptionInfo::doThrow()
 {

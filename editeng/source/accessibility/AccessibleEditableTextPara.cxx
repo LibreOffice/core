@@ -1003,7 +1003,7 @@ namespace accessibility
         tools::Rectangle aRect( Point(aTmpRect.X, aTmpRect.Y), Size(aTmpRect.Width, aTmpRect.Height) );
         Point aPoint( aTmpPoint.X, aTmpPoint.Y );
 
-        return aRect.IsInside( aPoint );
+        return aRect.Contains( aPoint );
     }
 
     uno::Reference< XAccessible > SAL_CALL AccessibleEditableTextPara::getAccessibleAtPoint( const awt::Point& _aPoint )
@@ -1030,7 +1030,7 @@ namespace accessibility
             {
                 tools::Rectangle aRect = aBulletInfo.aBounds;
 
-                if( aRect.IsInside( aLogPoint ) )
+                if( aRect.Contains( aLogPoint ) )
                     return getAccessibleChild(0);
             }
         }
@@ -1361,7 +1361,7 @@ namespace accessibility
                 awt::Rectangle aRect1( getCharacterBounds(nIndex) );
                 tools::Rectangle aRect2( aRect1.X, aRect1.Y,
                                   aRect1.Width + aRect1.X, aRect1.Height + aRect1.Y );
-                if( aRect2.IsInside( Point( rPoint.X, rPoint.Y ) ) )
+                if( aRect2.Contains( Point( rPoint.X, rPoint.Y ) ) )
                     return nIndex;
                 else
                     return -1;

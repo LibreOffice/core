@@ -123,6 +123,7 @@ SvtExpFileDlg_Impl::SvtExpFileDlg_Impl()
     , m_eMode( FILEDLG_MODE_OPEN )
     , m_eDlgType( FILEDLG_TYPE_FILEDLG )
     , m_nStyle( PickerFlags::NONE )
+    , m_aFilterIdle("fpicker SvtExpFileDlg_Impl m_aFilterIdle")
     , m_bDoubleClick( false )
     , m_bMultiSelection( false )
 {

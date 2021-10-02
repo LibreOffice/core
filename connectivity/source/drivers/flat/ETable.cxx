@@ -503,7 +503,7 @@ void OFlatTable::refreshColumns()
     if(m_xColumns)
         m_xColumns->reFill(aVector);
     else
-        m_xColumns = new OFlatColumns(this,m_aMutex,aVector);
+        m_xColumns.reset(new OFlatColumns(this,m_aMutex,aVector));
 }
 
 

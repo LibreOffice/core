@@ -209,7 +209,7 @@ lang::Locale SAL_CALL AccessibleBrowseBoxBase::getLocale()
 
 sal_Bool SAL_CALL AccessibleBrowseBoxBase::containsPoint( const css::awt::Point& rPoint )
 {
-    return tools::Rectangle( Point(), getBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
+    return tools::Rectangle( Point(), getBoundingBox().GetSize() ).Contains( VCLPoint( rPoint ) );
 }
 
 awt::Rectangle SAL_CALL AccessibleBrowseBoxBase::getBounds()
@@ -348,7 +348,7 @@ bool AccessibleBrowseBoxBase::implIsShowing()
         css::uno::Reference< css::accessibility::XAccessibleComponent >
             xParentComp( mxParent->getAccessibleContext(), uno::UNO_QUERY );
         if( xParentComp.is() )
-            bShowing = implGetBoundingBox().IsOver(
+            bShowing = implGetBoundingBox().Overlaps(
                 VCLRectangle( xParentComp->getBounds() ) );
     }
     return bShowing;

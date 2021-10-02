@@ -463,7 +463,7 @@ std::unique_ptr<weld::TreeIter> OTableTreeListBox::implAddEntry(
     return nullptr;
 }
 
-NamedDatabaseObject OTableTreeListBox::describeObject(weld::TreeIter& rEntry)
+NamedDatabaseObject OTableTreeListBox::describeObject(const weld::TreeIter& rEntry)
 {
     NamedDatabaseObject aObject;
 
@@ -511,7 +511,7 @@ bool OTableTreeListBox::impl_getAndAssertMetaData( Reference< XDatabaseMetaData 
     return _out_rMetaData.is();
 }
 
-OUString OTableTreeListBox::getQualifiedTableName(weld::TreeIter& rEntry) const
+OUString OTableTreeListBox::getQualifiedTableName(const weld::TreeIter& rEntry) const
 {
     OSL_PRECOND( !isFolderEntry(rEntry), "OTableTreeListBox::getQualifiedTableName: folder entries not allowed here!" );
 
@@ -625,7 +625,7 @@ void OTableTreeListBox::CheckButtons()
     } while (m_xTreeView->iter_next_sibling(*xEntry));
 }
 
-TriState OTableTreeListBox::implDetermineState(weld::TreeIter& rEntry)
+TriState OTableTreeListBox::implDetermineState(const weld::TreeIter& rEntry)
 {
     if (!m_bShowToggles)
         return TRISTATE_FALSE;

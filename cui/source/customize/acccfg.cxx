@@ -834,7 +834,8 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage,
     , aFilterAllStr(SfxResId(STR_SFX_FILTERNAME_ALL))
     , aFilterCfgStr(CuiResId(RID_SVXSTR_FILTERNAME_CFG))
     , m_bStylesInfoInitialized(false)
-    , m_aUpdateDataTimer("UpdateDataTimer")
+    , m_aUpdateDataTimer("SfxAcceleratorConfigPage UpdateDataTimer")
+    , m_aFillGroupIdle("SfxAcceleratorConfigPage m_aFillGroupIdle")
     , m_xEntriesBox(m_xBuilder->weld_tree_view("shortcuts"))
     , m_xOfficeButton(m_xBuilder->weld_radio_button("office"))
     , m_xModuleButton(m_xBuilder->weld_radio_button("module"))
@@ -904,12 +905,10 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage,
     m_xKeyBox->make_sorted();
 
     m_aUpdateDataTimer.SetInvokeHandler(LINK(this, SfxAcceleratorConfigPage, ImplUpdateDataHdl));
-    m_aUpdateDataTimer.SetDebugName("SfxAcceleratorConfigPage UpdateDataTimer");
     m_aUpdateDataTimer.SetTimeout(EDIT_UPDATEDATA_TIMEOUT);
 
     m_aFillGroupIdle.SetInvokeHandler(LINK(this, SfxAcceleratorConfigPage, TimeOut_Impl));
     m_aFillGroupIdle.SetPriority(TaskPriority::HIGHEST);
-    m_aFillGroupIdle.SetDebugName("SfxAcceleratorConfigPage m_aFillGroupIdle");
 }
 
 SfxAcceleratorConfigPage::~SfxAcceleratorConfigPage()

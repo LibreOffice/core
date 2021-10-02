@@ -74,6 +74,7 @@
 #include "pq_statics.hxx"
 #include "pq_tools.hxx"
 
+#include <o3tl/string_view.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/macros.h>
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
@@ -1184,34 +1185,34 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getTables(
 namespace
 {
     // sort no schema first, then "public", then normal schemas, then internal schemas
-    int compare_schema(const OUString &nsA, const OUString &nsB)
+    int compare_schema(const OUString &nsA, std::u16string_view nsB)
     {
         if (nsA.isEmpty())
         {
-            return nsB.isEmpty() ? 0 : -1;
+            return nsB.empty() ? 0 : -1;
         }
-        else if (nsB.isEmpty())
+        else if (nsB.empty())
         {
             assert(!nsA.isEmpty());
             return 1;
         }
         else if(nsA == "public")
         {
-            return (nsB == "public") ? 0 : -1;
+            return (nsB == u"public") ? 0 : -1;
         }
-        else if(nsB == "public")
+        else if(nsB == u"public")
         {
             assert(nsA != "public");
             return 1;
         }
         else if(nsA.startsWith("pg_"))
         {
-            if(nsB.startsWith("pg_"))
+            if(o3tl::starts_with(nsB, u"pg_"))
                 return nsA.compareTo(nsB);
             else
                 return 1;
         }
-        else if(nsB.startsWith("pg_"))
+        else if(o3tl::starts_with(nsB, u"pg_"))
         {
             return -1;
         }

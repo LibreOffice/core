@@ -1060,8 +1060,8 @@ writerfilter/source/dmapper/DomainMapperTableHandler.cxx:240
     writerfilter::dmapper::TableInfo aTablePropertyIds std::vector<PropertyIds>
 writerfilter/source/dmapper/PropertyMap.hxx:219
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
-writerfilter/source/dmapper/SettingsTable.cxx:264
-    writerfilter::dmapper::SettingsTable_Impl m_sRedlineProtectionKey class rtl::OUString
+writerfilter/source/dmapper/DocumentProtection.hxx:50
+    writerfilter::dmapper::DocumentProtection m_sRedlineProtectionKey class rtl::OUString
 xmlhelp/source/cxxhelp/provider/databases.hxx:249
     chelp::Databases m_aDatabases chelp::Databases::DatabasesTable
 xmlhelp/source/cxxhelp/provider/databases.hxx:255

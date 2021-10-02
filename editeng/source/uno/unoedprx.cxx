@@ -793,7 +793,7 @@ bool SvxAccessibleTextAdapter::GetIndexAtPoint( const Point& rPoint, sal_Int32& 
         aBulletInfo.bVisible &&
         aBulletInfo.nType != SVX_NUM_BITMAP )
     {
-        if( aBulletInfo.aBounds.IsInside( rPoint) )
+        if( aBulletInfo.aBounds.Contains( rPoint) )
         {
             OutputDevice* pOutDev = GetRefDevice();
 

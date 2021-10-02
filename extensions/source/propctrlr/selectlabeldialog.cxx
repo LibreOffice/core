@@ -149,7 +149,7 @@ namespace pcr
     {
     }
 
-    sal_Int32 OSelectLabelDialog::InsertEntries(const Reference< XInterface > & _xContainer, weld::TreeIter& rContainerEntry)
+    sal_Int32 OSelectLabelDialog::InsertEntries(const Reference< XInterface > & _xContainer, const weld::TreeIter& rContainerEntry)
     {
         Reference< XIndexAccess >  xContainer(_xContainer, UNO_QUERY);
         if (!xContainer.is())

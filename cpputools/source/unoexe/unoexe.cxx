@@ -22,6 +22,7 @@
 
 #include <sal/main.h>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
@@ -126,11 +127,11 @@ static bool readOption( OUString * pValue, const char * pOpt,
 }
 
 static bool readOption( bool * pbOpt, const char * pOpt,
-                        sal_uInt32 * pnIndex, const OUString & aArg)
+                        sal_uInt32 * pnIndex, std::u16string_view aArg)
 {
     OUString aOpt = OUString::createFromAscii(pOpt);
 
-    if(aArg.startsWith("--") && aOpt == aArg.subView(2))
+    if(o3tl::starts_with(aArg, u"--") && aOpt == aArg.substr(2))
     {
         ++(*pnIndex);
         *pbOpt = true;
@@ -244,7 +245,7 @@ class OInstanceProvider
     OUString                          _aInstanceName;
 
     /// @throws Exception
-    inline Reference< XInterface > createInstance();
+    inline Reference< XInterface > createInstance() const;
 
 public:
     OInstanceProvider( const Reference< XComponentContext > & xContext,
@@ -266,7 +267,7 @@ public:
 
 }
 
-inline Reference< XInterface > OInstanceProvider::createInstance()
+inline Reference< XInterface > OInstanceProvider::createInstance() const
 {
     Reference< XInterface > xRet;
     if (!_aImplName.isEmpty()) // manually via loader

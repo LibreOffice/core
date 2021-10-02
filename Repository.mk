@@ -142,6 +142,7 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
 	$(call gb_Helper_optional,FUZZERS,mtpfuzzer) \
 	$(call gb_Helper_optional,FUZZERS,htmlfuzzer) \
 	$(call gb_Helper_optional,FUZZERS,sftfuzzer) \
+	$(call gb_Helper_optional,FUZZERS,dbffuzzer) \
 	$(if $(filter-out ANDROID HAIKU iOS MACOSX WNT,$(OS)),oosplash) \
 	soffice_bin \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),unopkg_bin) \
@@ -293,6 +294,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,kde, \
 	$(if $(USING_X11), \
         $(if $(ENABLE_KF5),vclplug_kf5) \
         $(if $(ENABLE_QT5),vclplug_qt5) \
+        $(if $(ENABLE_QT6),vclplug_qt6) \
         $(if $(ENABLE_GTK3_KDE5),vclplug_gtk3_kde5) \
 	) \
 ))
@@ -305,6 +307,7 @@ endif
 ifeq ($(OS),HAIKU)
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,haiku, \
     $(if $(ENABLE_QT5),vclplug_qt5) \
+    $(if $(ENABLE_QT6),vclplug_qt6) \
     $(if $(ENABLE_KF5),vclplug_kf5) \
 ))
 endif

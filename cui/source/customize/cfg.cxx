@@ -970,7 +970,7 @@ IMPL_LINK(SvxMenuEntriesListBox, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
  *****************************************************************************/
 SvxConfigPage::SvxConfigPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "cui/ui/menuassignpage.ui", "MenuAssignPage", &rSet)
-    , m_aUpdateDataTimer("UpdateDataTimer")
+    , m_aUpdateDataTimer( "SvxConfigPage UpdateDataTimer" )
     , bInitialised(false)
     , pCurrentSaveInData(nullptr)
     , m_xCommandCategoryListBox(new CommandCategoryListBox(m_xBuilder->weld_combo_box("commandcategorylist")))
@@ -1002,7 +1002,6 @@ SvxConfigPage::SvxConfigPage(weld::Container* pPage, weld::DialogController* pCo
     m_xDescriptionField->set_size_request(aSize.Width(), m_xDescriptionField->get_height_rows(3));
 
     m_aUpdateDataTimer.SetInvokeHandler(LINK(this, SvxConfigPage, ImplUpdateDataHdl));
-    m_aUpdateDataTimer.SetDebugName( "SvxConfigPage UpdateDataTimer" );
     m_aUpdateDataTimer.SetTimeout(EDIT_UPDATEDATA_TIMEOUT);
 
     m_xSearchEdit->connect_changed(LINK(this, SvxConfigPage, SearchUpdateHdl));

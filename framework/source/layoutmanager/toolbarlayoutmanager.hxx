@@ -19,9 +19,9 @@
 
 #pragma once
 
-/** Attention: stl headers must(!) be included at first. Otherwise it can make trouble
-               with solaris headers ...
-*/
+#include <sal/config.h>
+
+#include <string_view>
 #include <vector>
 
 #include <uiconfiguration/globalsettings.hxx>
@@ -87,7 +87,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
 
         bool requestToolbar( const OUString& rResourceURL );
         bool createToolbar( const OUString& rResourceURL );
-        bool destroyToolbar( const OUString& rResourceURL );
+        bool destroyToolbar( std::u16string_view rResourceURL );
 
         // visibility
         bool showToolbar( std::u16string_view rResourceURL );

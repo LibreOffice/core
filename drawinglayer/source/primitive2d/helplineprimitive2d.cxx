@@ -155,7 +155,7 @@ namespace drawinglayer::primitive2d
 
         void HelplinePrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
-            ::osl::MutexGuard aGuard( m_aMutex );
+            std::unique_lock aGuard( m_aMutex );
 
             if(!getBuffered2DDecomposition().empty())
             {
@@ -174,6 +174,7 @@ namespace drawinglayer::primitive2d
             }
 
             // use parent implementation
+            aGuard.unlock();
             BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
 

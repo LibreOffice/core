@@ -64,7 +64,7 @@ struct TimeBasedInfo
 
     bool bTimeBased;
     size_t nFrame;
-    Timer maTimer;
+    Timer maTimer { "chart2 TimeBasedInfo" };
 
     // only valid when we are in the time based mode
     std::vector< std::vector< VDataSeries* > > m_aDataSeriesList;

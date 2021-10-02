@@ -87,8 +87,7 @@ void DirectoryHelper::scanDirsAndFiles(const OUString& rDirURL, std::set<OUStrin
 
     while (osl::FileBase::E_None == aDirectory.getNextItem(aDirectoryItem))
     {
-        osl::FileStatus aFileStatus(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL
-                                    | osl_FileStatus_Mask_FileName);
+        osl::FileStatus aFileStatus(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName);
 
         if (osl::FileBase::E_None == aDirectoryItem.getFileStatus(aFileStatus))
         {

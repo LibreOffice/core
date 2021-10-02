@@ -12,17 +12,19 @@ $(eval $(call gb_Library_Library,cppuhelper))
 
 $(eval $(call gb_Library_set_soversion_script,cppuhelper,$(SRCDIR)/cppuhelper/source/gcc3.map))
 
+$(eval $(call gb_Library_set_precompiled_header,cppuhelper,cppuhelper/inc/pch/precompiled_cppuhelper))
+
 $(eval $(call gb_Library_use_internal_comprehensive_api,cppuhelper,\
 	cppuhelper \
 	udkapi \
 	offapi \
 ))
 
+$(eval $(call gb_Library_set_is_ure_library,cppuhelper))
+
 $(eval $(call gb_Library_add_defs,cppuhelper,\
 	-DCPPUHELPER_DLLIMPLEMENTATION \
 ))
-
-$(eval $(call gb_Library_set_precompiled_header,cppuhelper,cppuhelper/inc/pch/precompiled_cppuhelper))
 
 $(eval $(call gb_Library_use_libraries,cppuhelper,\
 	cppu \
@@ -36,6 +38,12 @@ $(eval $(call gb_Library_use_libraries,cppuhelper,\
 $(eval $(call gb_Library_use_static_libraries,cppuhelper,\
 	findsofficepath \
 ))
+
+ifeq ($(OS),iOS)
+$(eval $(call gb_Library_add_cxxflags,cppuhelper,\
+    $(gb_OBJCXXFLAGS) \
+))
+endif
 
 $(eval $(call gb_Library_add_exception_objects,cppuhelper,\
 	cppuhelper/source/access_control \

@@ -63,7 +63,7 @@ void OComponentTable::refreshColumns()
     if(m_xColumns)
         m_xColumns->reFill(aVector);
     else
-        m_xColumns = new component::OComponentColumns(this,m_aMutex,aVector);
+        m_xColumns.reset(new component::OComponentColumns(this,m_aMutex,aVector));
 }
 
 void OComponentTable::refreshIndexes()

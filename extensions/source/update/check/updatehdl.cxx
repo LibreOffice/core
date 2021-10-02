@@ -1071,7 +1071,7 @@ void UpdateHandler::createDialog()
     {   // Text (edit) <percent>
         uno::Sequence< beans::NamedValue > aProps
         {
-            { "Text", uno::Any( msPercent ) },
+            { "Text", uno::Any( substVariables(msPercent) ) },
             { "Border", uno::Any( sal_Int16( 0 ) ) },
             { "PaintTransparent", uno::Any( true ) },
             { "ReadOnly", uno::Any( true ) },

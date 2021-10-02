@@ -100,7 +100,8 @@ namespace dbaccess
 
         ::dbtools::WarningsContainer                m_aWarnings;
 
-        rtl::Reference<OTableContainer>        m_xTables;
+        // no Reference! see OCollection::acquire
+        std::unique_ptr<OTableContainer>       m_xTables;
 
         OUString                               m_aCommand;
         OUString                               m_aDataSourceName;
@@ -115,6 +116,7 @@ namespace dbaccess
         OUString                               m_aUpdateCatalogName; // is set by a query
         OUString                               m_aUpdateSchemaName; // is set by a query
         OUString                               m_aUpdateTableName; // is set by a query
+        OUString                               m_sErrorString;
 
         sal_Int32                   m_nFetchDirection;
         sal_Int32                   m_nFetchSize;

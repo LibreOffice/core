@@ -11,11 +11,11 @@
 
 AutocompleteEdit::AutocompleteEdit(std::unique_ptr<weld::Entry> xEntry)
     : m_xEntry(std::move(xEntry))
+    , m_aChangedIdle("fpicker::AutocompleteEdit m_aChangedIdle")
 {
     m_xEntry->connect_changed(LINK(this, AutocompleteEdit, ChangedHdl));
 
     m_aChangedIdle.SetInvokeHandler(LINK(this, AutocompleteEdit, TryAutoComplete));
-    m_aChangedIdle.SetDebugName("fpicker::AutocompleteEdit m_aChangedIdle");
 }
 
 IMPL_LINK_NOARG(AutocompleteEdit, ChangedHdl, weld::Entry&, void)

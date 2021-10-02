@@ -52,6 +52,12 @@ void f5(OUStringBuffer& input)
     OUStringBuffer v(input);
     v.append("aaaa");
 }
+void f6(OString const& s)
+{
+    // expected-error@+1 {{convert this append sequence into a *String + sequence [loplugin:bufferadd]}}
+    OUStringBuffer b("foo");
+    b.append(OStringToOUString(s, RTL_TEXTENCODING_ASCII_US));
+}
 struct Footer
 {
     OStringBuffer m_descriptorStart;

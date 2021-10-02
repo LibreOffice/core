@@ -149,7 +149,7 @@ namespace vclcanvas
 
         ::basegfx::B2DHomMatrix aTransform( getTransformation() );
 
-        rTargetSurface.Push( PushFlags::CLIPREGION );
+        rTargetSurface.Push( vcl::PushFlags::CLIPREGION );
 
         // apply clip (if any)
         if( getClip().is() )

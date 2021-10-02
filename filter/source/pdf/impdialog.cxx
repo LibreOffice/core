@@ -54,7 +54,7 @@ using namespace ::com::sun::star::uno;
     Please note: the default used here are the same as per specification,
     They should be the same in  PDFFilter::implExport and  in PDFExport::PDFExport
  */
-ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, Sequence< PropertyValue >& rFilterData,
+ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, const Sequence< PropertyValue >& rFilterData,
     const Reference< XComponent >& rxDoc)
     : SfxTabDialogController(pParent, "filter/ui/pdfoptionsdialog.ui", "PdfOptionsDialog"),
     mrDoc(rxDoc),

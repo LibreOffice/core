@@ -175,7 +175,7 @@ namespace accessibility
         {
             Reference< XAccessibleComponent > xParentComp( xParentContext, uno::UNO_QUERY );
             if( xParentComp.is() )
-                bShowing = GetBoundingBox_Impl().IsOver( VCLRectangle( xParentComp->getBounds() ) );
+                bShowing = GetBoundingBox_Impl().Overlaps( VCLRectangle( xParentComp->getBounds() ) );
         }
 
         return bShowing;
@@ -544,7 +544,7 @@ namespace accessibility
 
     sal_Bool SAL_CALL AccessibleListBoxEntry::containsPoint( const awt::Point& rPoint )
     {
-        return tools::Rectangle( Point(), GetBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
+        return tools::Rectangle( Point(), GetBoundingBox().GetSize() ).Contains( VCLPoint( rPoint ) );
     }
 
     Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleAtPoint( const awt::Point& _aPoint )
@@ -562,7 +562,7 @@ namespace accessibility
         assert(xListBox.is());
         auto pAccEntry = m_rListBox.implGetAccessible(*pEntry);
         tools::Rectangle aRect = pAccEntry->GetBoundingBox_Impl();
-        if ( aRect.IsInside( VCLPoint( _aPoint ) ) )
+        if ( aRect.Contains( VCLPoint( _aPoint ) ) )
             xAcc = pAccEntry.get();
         return xAcc;
     }
