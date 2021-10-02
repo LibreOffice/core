@@ -640,6 +640,7 @@ certain functionality.
 @li @c unoxml
 @li @c uui
 @li @c vbahelper
+@li @c wasm
 @li @c xmlhelp
 @li @c xmlreader
 

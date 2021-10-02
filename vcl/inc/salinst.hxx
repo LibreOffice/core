@@ -214,6 +214,8 @@ public:
 
     // Note: we cannot make this a global variable, because it might be initialised BEFORE the putenv() call in cppunittester.
     static bool IsRunningUnitTest() { return getenv("LO_TESTNAME") != nullptr; }
+
+    virtual bool DoExecute(int &nExitCode) { (void)nExitCode; return false; }
 };
 
 // called from SVMain
