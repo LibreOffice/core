@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dba42170_9b243e13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003349
+      },
+      "writtenOn": "2021-10-02T23:28:39Z",
+      "side": 1,
+      "message": "\u003e Patch Set 1: Verified+1\n\u003e \n\u003e Build Successful \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/97348/ : SUCCESS\n\nHasn\u0027t flagged \"Verified\" under Code Review. Is this not automatic?",
+      "revId": "4c6f05c70955e3b682280f861f7e2f64d1d4bbfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
