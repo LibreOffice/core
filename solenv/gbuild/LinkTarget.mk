@@ -1062,6 +1062,7 @@ $(call gb_LinkTarget_get_target,$(1)) : T_CC :=
 $(call gb_LinkTarget_get_target,$(1)) : T_CXX :=
 $(call gb_LinkTarget_get_target,$(1)) : T_USE_LD := $(USE_LD)
 $(call gb_LinkTarget_get_target,$(1)) : T_LTOFLAGS := $(gb_LTOFLAGS)
+$(call gb_LinkTarget_get_target,$(1)) : T_PREJS :=
 
 ifeq ($(gb_FULLDEPS),$(true))
 ifeq (depcache:,$(filter depcache,$(.FEATURES)):$(gb_PARTIAL_BUILD))
@@ -2269,5 +2270,14 @@ endef
 
 # call gb_LinkTarget__set_plugin_for_nodep,linktarget,loader
 gb_LinkTarget__set_plugin_for_nodep = $(call gb_LinkTarget__set_plugin_for,$(1),$(2),$(true))
+
+# call gb_LinkTarget_add_prejs,linktarget,js_file
+define gb_LinkTarget_add_prejs
+ifeq (EMSCRIPTEN,$(OS))
+$(call gb_LinkTarget_get_target,$(1)) : T_PREJS += $(2)
+$(call gb_LinkTarget_get_target,$(1)) : $(2)
+endif
+
+endef
 
 # vim: set noet sw=4:

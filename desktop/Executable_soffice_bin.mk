@@ -27,6 +27,8 @@ $(eval $(call gb_Executable_add_cobjects,soffice_bin,\
     desktop/source/app/main \
 ))
 
+$(eval $(call gb_Executable_add_prejs,soffice_bin,$(SRCDIR)/static/emscripten/soffice_args.js))
+
 ifeq ($(OS),WNT)
 
 $(eval $(call gb_Executable_set_targettype_gui,soffice_bin,NO))
