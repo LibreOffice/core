@@ -174,6 +174,8 @@ public:
     void UpdateStyle(bool bFontsChanged);
 
     void* CreateGStreamerSink(const SystemChildWindow*) override;
+
+    bool DoExecute(int& nExitCode) override;
 };
 
 inline QtInstance* GetQtInstance() { return static_cast<QtInstance*>(GetSalInstance()); }
