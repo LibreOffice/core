@@ -808,40 +808,48 @@ void OutputDevice::DrawComplexGradientToMetafile( const tools::Rectangle& rRect,
     // Also for printers always use PolyPolygon, as not all printers
     // can print polygons on top of each other.
 
+    tools::Rectangle aRect;
+    Point aCenter;
+    rGradient.GetBoundRect(rRect, aRect, aCenter);
+
     std::optional<tools::PolyPolygon> xPolyPoly;
-    tools::Rectangle       aRect;
-    Point           aCenter;
-    Color           aStartCol( rGradient.GetStartColor() );
-    Color           aEndCol( rGradient.GetEndColor() );
-    tools::Long            nStartRed = ( static_cast<tools::Long>(aStartCol.GetRed()) * rGradient.GetStartIntensity() ) / 100;
-    tools::Long            nStartGreen = ( static_cast<tools::Long>(aStartCol.GetGreen()) * rGradient.GetStartIntensity() ) / 100;
-    tools::Long            nStartBlue = ( static_cast<tools::Long>(aStartCol.GetBlue()) * rGradient.GetStartIntensity() ) / 100;
-    tools::Long            nEndRed = ( static_cast<tools::Long>(aEndCol.GetRed()) * rGradient.GetEndIntensity() ) / 100;
-    tools::Long            nEndGreen = ( static_cast<tools::Long>(aEndCol.GetGreen()) * rGradient.GetEndIntensity() ) / 100;
-    tools::Long            nEndBlue = ( static_cast<tools::Long>(aEndCol.GetBlue()) * rGradient.GetEndIntensity() ) / 100;
-    tools::Long            nRedSteps = nEndRed - nStartRed;
-    tools::Long            nGreenSteps = nEndGreen - nStartGreen;
-    tools::Long            nBlueSteps = nEndBlue   - nStartBlue;
-    Degree10       nAngle = rGradient.GetAngle() % 3600_deg10;
-
-    rGradient.GetBoundRect( rRect, aRect, aCenter );
-
     xPolyPoly = tools::PolyPolygon( 2 );
 
     // last parameter - true if complex gradient, false if linear
-    tools::Long nStepCount = GetGradientSteps( rGradient, rRect, true, true );
+    tools::Long nStepCount = GetGradientSteps(rGradient, rRect, true, true);
 
     // at least three steps and at most the number of colour differences
-    tools::Long nSteps = std::max( nStepCount, tools::Long(2) );
-    tools::Long nCalcSteps  = std::abs( nRedSteps );
-    tools::Long nTempSteps = std::abs( nGreenSteps );
-    if ( nTempSteps > nCalcSteps )
+    tools::Long nSteps = std::max(nStepCount, tools::Long(2));
+
+    Color aStartCol(rGradient.GetStartColor());
+    Color aEndCol(rGradient.GetEndColor());
+
+    tools::Long nStartRed = (static_cast<tools::Long>(aStartCol.GetRed()) * rGradient.GetStartIntensity()) / 100;
+    tools::Long nStartGreen = (static_cast<tools::Long>(aStartCol.GetGreen()) * rGradient.GetStartIntensity()) / 100;
+    tools::Long nStartBlue = (static_cast<tools::Long>(aStartCol.GetBlue()) * rGradient.GetStartIntensity()) / 100;
+
+    tools::Long nEndRed = (static_cast<tools::Long>(aEndCol.GetRed()) * rGradient.GetEndIntensity()) / 100;
+    tools::Long nEndGreen = (static_cast<tools::Long>(aEndCol.GetGreen()) * rGradient.GetEndIntensity()) / 100;
+    tools::Long nEndBlue = (static_cast<tools::Long>(aEndCol.GetBlue()) * rGradient.GetEndIntensity()) / 100;
+
+    tools::Long nRedSteps = nEndRed - nStartRed;
+    tools::Long nGreenSteps = nEndGreen - nStartGreen;
+    tools::Long nBlueSteps = nEndBlue - nStartBlue;
+
+    tools::Long nCalcSteps  = std::abs(nRedSteps);
+    tools::Long nTempSteps = std::abs(nGreenSteps);
+
+    if (nTempSteps > nCalcSteps)
         nCalcSteps = nTempSteps;
+
     nTempSteps = std::abs( nBlueSteps );
-    if ( nTempSteps > nCalcSteps )
+
+    if (nTempSteps > nCalcSteps)
         nCalcSteps = nTempSteps;
-    if ( nCalcSteps < nSteps )
+
+    if (nCalcSteps < nSteps)
         nSteps = nCalcSteps;
+
     if ( !nSteps )
         nSteps = 1;
 
@@ -892,7 +900,7 @@ void OutputDevice::DrawComplexGradientToMetafile( const tools::Rectangle& rRect,
         else
             aPoly = tools::Polygon( aRect );
 
-        aPoly.Rotate( aCenter, nAngle );
+        aPoly.Rotate(aCenter, rGradient.GetAngle() % 3600_deg10);
 
         // adapt colour accordingly
         const tools::Long nStepIndex = ( xPolyPoly ? i : ( i + 1 ) );
