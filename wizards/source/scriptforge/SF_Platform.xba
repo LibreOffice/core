@@ -346,7 +346,7 @@ Const cstSubArgs = &quot;&quot;
 			&apos;	Select only not yet registered fonts
 			For i = 0 To UBound(oFontDescriptors)
 				sFont = oFontDescriptors(i).Name
-				If InStr(sFonts, &quot;,&quot; &amp; sFont &amp; &quot;,&quot;) = 0  Then sFonts = sFonts &amp; sFont &amp; &quot;,&quot;
+				If InStr(1, sFonts, &quot;,&quot; &amp; sFont &amp; &quot;,&quot;, 0) = 0  Then sFonts = sFonts &amp; sFont &amp; &quot;,&quot;	&apos; Case-sensitive comparison
 			Next i
 			&apos;	Remove leading and trailing commas
 			If Len(sFonts) &gt; 1 Then _PropertyGet = Split(Mid(sFonts, 2, Len(sFonts) - 2), &quot;,&quot;) Else _PropertyGet = Array()
