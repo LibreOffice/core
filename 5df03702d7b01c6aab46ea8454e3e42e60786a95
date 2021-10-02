@@ -39,6 +39,30 @@
       },
       "revId": "5df03702d7b01c6aab46ea8454e3e42e60786a95",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e46b7a64_f4e89d09",
+        "filename": "sw/source/core/txtnode/txtedt.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1842,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-10-02T12:20:45Z",
+      "side": 1,
+      "message": "nLastStart is not used after this point, so I was able to remove it. But nLastEnd is used in the condition to the while loop just below.",
+      "parentUuid": "380bf170_8bbc917d",
+      "range": {
+        "startLine": 1842,
+        "startChar": 7,
+        "endLine": 1842,
+        "endChar": 19
+      },
+      "revId": "5df03702d7b01c6aab46ea8454e3e42e60786a95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

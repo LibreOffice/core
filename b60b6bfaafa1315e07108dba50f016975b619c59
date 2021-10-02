@@ -22,6 +22,30 @@
       },
       "revId": "b60b6bfaafa1315e07108dba50f016975b619c59",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8718fcf0_c30334d2",
+        "filename": "sw/source/core/txtnode/txtedt.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1794,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-10-02T12:20:45Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "be24db9b_74937343",
+      "range": {
+        "startLine": 1794,
+        "startChar": 8,
+        "endLine": 1794,
+        "endChar": 31
+      },
+      "revId": "b60b6bfaafa1315e07108dba50f016975b619c59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
