@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e645e991_fd22ebe6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-02T21:16:59Z",
+      "side": 1,
+      "message": "Just wondering if PageCache::rescale_Impl (see https://opengrok.libreoffice.org/xref/core/store/source/storcach.cxx?r\u003dd9af7ac4#218) could be optimized the same way.",
+      "revId": "897192f07c1f7863a50e09cdd29e6631550b83ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
