@@ -246,8 +246,11 @@ std::unique_ptr<SfxChildWindow> SfxChildWindow::CreateChildWindow( sal_uInt16 nI
         }
     }
 
-    if ( pChild )
+    if (pChild)
+    {
+        assert(pFact && "pChild is returned by a call on pFact, so pFact cannot be null");
         pChild->SetFactory_Impl( pFact );
+    }
 
     DBG_ASSERT(pFact && (pChild || !rInfo.bVisible), "ChildWindow-Typ not registered!");
 
