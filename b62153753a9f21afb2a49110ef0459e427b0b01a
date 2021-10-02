@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3166609_0a11dcf9",
+        "filename": "sw/source/core/text/atrstck.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-10-02T20:01:03Z",
+      "side": 1,
+      "message": "coverity states \"cid#1492313 Logically dead code\" here because !pTopAttr is already covered at line 404",
+      "revId": "b62153753a9f21afb2a49110ef0459e427b0b01a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
