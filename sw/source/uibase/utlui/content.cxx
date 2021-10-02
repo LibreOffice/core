@@ -3440,6 +3440,7 @@ void SwContentTree::UpdateTracking()
     // references
     if (SwContentAtPos aContentAtPos(IsAttrAtPos::RefMark);
             m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
+            aContentAtPos.pFndTextAttr &&
             !(m_bIsRoot && m_nRootType != ContentTypeId::REFERENCE))
     {
         const SwFormatRefMark& rRefMark = aContentAtPos.pFndTextAttr->GetRefMark();
