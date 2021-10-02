@@ -1967,26 +1967,26 @@ namespace emfio
                                             }
                                         }
 
-                                        sal_Int32 nDx = 0, nDy = 0;
+                                        pDXAry[i] = 0;
+                                        if (nOptions & ETO_PDY)
+                                        {
+                                            pDYAry[i] = 0;
+                                        }
+
                                         while (nDxCount--)
                                         {
                                             sal_Int32 nDxTmp = 0;
                                             mpInputStream->ReadInt32(nDxTmp);
-                                            nDx += nDxTmp;
+                                            pDXAry[i] += nDxTmp;
                                             if (nOptions & ETO_PDY)
                                             {
                                                 sal_Int32 nDyTmp = 0;
                                                 mpInputStream->ReadInt32(nDyTmp);
-                                                nDy += nDyTmp;
+                                                pDYAry[i] += nDyTmp;
                                             }
                                         }
 
-                                        SAL_INFO("emfio", "\t\t\tSpacing " << i << ": " << nDx);
-                                        pDXAry[i] = nDx;
-                                        if (nOptions & ETO_PDY)
-                                        {
-                                            pDYAry[i] = nDy;
-                                        }
+                                        SAL_INFO("emfio", "\t\t\tSpacing " << i << ": " << pDXAry[i]);
                                     }
                                 }
                                 if ( nOptions & ETO_CLIPPED )
