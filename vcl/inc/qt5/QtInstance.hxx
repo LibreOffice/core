@@ -164,6 +164,8 @@ public:
     void UpdateStyle(bool bFontsChanged);
 
     void* CreateGStreamerSink(const SystemChildWindow*) override;
+
+    bool DoExecute(int& nExitCode) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

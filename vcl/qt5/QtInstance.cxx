@@ -686,6 +686,12 @@ std::unique_ptr<QApplication> QtInstance::CreateQApplication(int& nArgc, char** 
     return pQApp;
 }
 
+bool QtInstance::DoExecute(int& nExitCode)
+{
+    nExitCode = m_pQApplication->exec();
+    return true;
+}
+
 extern "C" {
 VCLPLUG_QT_PUBLIC SalInstance* create_SalInstance()
 {

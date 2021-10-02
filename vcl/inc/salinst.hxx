@@ -208,6 +208,7 @@ public:
     virtual void* CreateGStreamerSink(const SystemChildWindow*) { return nullptr; }
 
     virtual void BeforeAbort(const OUString& /* rErrorText */, bool /* bDumpCore */) {}
+    virtual bool DoExecute(int &nExitCode) { (void)nExitCode; return false; }
 };
 
 // called from SVMain

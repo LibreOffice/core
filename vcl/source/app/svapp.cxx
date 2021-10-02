@@ -440,8 +440,12 @@ void Application::Execute()
         pSVData->maAppData.mpEventTestingIdle->Start();
     }
 
-    while ( !pSVData->maAppData.mbAppQuit )
-        Application::Yield();
+    int nExitCode = 0;
+    if (!pSVData->mpDefInst->DoExecute(nExitCode))
+    {
+        while ( !pSVData->maAppData.mbAppQuit )
+            Application::Yield();
+    }
 
     pSVData->maAppData.mbInAppExecute = false;
 
