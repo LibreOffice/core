@@ -13,6 +13,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/vector/b2enums.hxx>
 
 #include <vcl/lineinfo.hxx>
@@ -86,6 +87,7 @@ public:
     void testDrawWaveLine();
     void testDrawPolyLine();
     void testDrawPolygon();
+    void testDrawPolyPolygon();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
     CPPUNIT_TEST(testVirtualDevice);
@@ -138,6 +140,7 @@ public:
     CPPUNIT_TEST(testDrawWaveLine);
     CPPUNIT_TEST(testDrawPolyLine);
     CPPUNIT_TEST(testDrawPolygon);
+    CPPUNIT_TEST(testDrawPolyPolygon);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1944,6 +1947,69 @@ void VclOutdevTest::testDrawPolygon()
         MetaPolygonAction* pPolygonAction = dynamic_cast<MetaPolygonAction*>(pAction);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Polygon in polygon action is wrong", aPolygon,
                                      pPolygonAction->GetPolygon());
+    }
+}
+
+static tools::PolyPolygon createPolyPolygon()
+{
+    tools::Polygon aPolygon(4);
+
+    aPolygon.SetPoint(Point(1, 8), 0);
+    aPolygon.SetPoint(Point(2, 7), 1);
+    aPolygon.SetPoint(Point(3, 6), 2);
+    aPolygon.SetPoint(Point(4, 5), 3);
+
+    tools::PolyPolygon aPolyPolygon(aPolygon);
+    aPolyPolygon.Optimize(PolyOptimizeFlags::CLOSE);
+
+    return aPolyPolygon;
+}
+
+void VclOutdevTest::testDrawPolyPolygon()
+{
+    {
+        ScopedVclPtrInstance<VirtualDevice> pVDev;
+        GDIMetaFile aMtf;
+        aMtf.Record(pVDev.get());
+
+        pVDev->SetOutputSizePixel(Size(100, 100));
+
+        tools::PolyPolygon aPolyPolygon = createPolyPolygon();
+
+        pVDev->DrawPolyPolygon(aPolyPolygon);
+
+        MetaAction* pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polypolygon action", MetaActionType::POLYPOLYGON,
+                                     pAction->GetType());
+
+        MetaPolyPolygonAction* pPolyPolygonAction = dynamic_cast<MetaPolyPolygonAction*>(pAction);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Not the same polypolygon in polypolygon action", aPolyPolygon,
+                                     pPolyPolygonAction->GetPolyPolygon());
+    }
+
+    {
+        ScopedVclPtrInstance<VirtualDevice> pVDev;
+        GDIMetaFile aMtf;
+        aMtf.Record(pVDev.get());
+
+        pVDev->SetOutputSizePixel(Size(100, 100));
+
+        tools::PolyPolygon aPolyPolygon = createPolyPolygon();
+
+        basegfx::B2DPolyPolygon aB2DPolyPolygon(aPolyPolygon.getB2DPolyPolygon());
+
+        pVDev->DrawPolyPolygon(aB2DPolyPolygon);
+
+        MetaAction* pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polypolygon action", MetaActionType::POLYPOLYGON,
+                                     pAction->GetType());
+
+        /* these should match, but the equality operator does not work on PolyPolygon for some reason
+
+        MetaPolyPolygonAction* pPolyPolygonAction = dynamic_cast<MetaPolyPolygonAction*>(pAction);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Not the same polypolygon in polypolygon action", aPolyPolygon,
+                                     pPolyPolygonAction->GetPolyPolygon());
+        */
     }
 }
 

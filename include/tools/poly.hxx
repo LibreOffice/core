@@ -19,6 +19,7 @@
 #ifndef INCLUDED_TOOLS_POLY_HXX
 #define INCLUDED_TOOLS_POLY_HXX
 
+#include <rtl/ustring.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/gen.hxx>
 #include <tools/degree.hxx>
@@ -272,6 +273,18 @@ inline std::basic_ostream<charT, traits> & operator <<(
         if (i > 0)
             stream << "--";
         stream << poly.GetPoint(i);
+
+        OUString aFlag;
+        if (poly.GetFlags(i) == PolyFlags::Normal)
+            aFlag = "Normal";
+        else if (poly.GetFlags(i) == PolyFlags::Smooth)
+            aFlag = "Smooth";
+        else if (poly.GetFlags(i) == PolyFlags::Control)
+            aFlag = "Control";
+        else if (poly.GetFlags(i) == PolyFlags::Symmetric)
+            aFlag = "Symmetric";
+
+        stream << ";f=" << aFlag;
     }
     stream << ">";
     return stream;
