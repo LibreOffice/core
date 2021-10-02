@@ -1896,12 +1896,10 @@ void VclOutdevTest::testDrawPolyLine()
                                      pPolyLineAction->GetLineInfo().GetDotLen());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Distance wrong", static_cast<double>(0),
                                      pPolyLineAction->GetLineInfo().GetDistance());
-        /* these aren't set!
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Line join", basegfx::B2DLineJoin::Bevel,
                                      pPolyLineAction->GetLineInfo().GetLineJoin());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Line cap", css::drawing::LineCap_BUTT,
                                      pPolyLineAction->GetLineInfo().GetLineCap());
-        */
     }
 }
 
