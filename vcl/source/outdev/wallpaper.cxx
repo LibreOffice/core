@@ -131,17 +131,12 @@ void OutputDevice::DrawBitmapWallpaper( tools::Long nX, tools::Long nY,
 {
     assert(!is_double_buffered_window());
 
-    BitmapEx aBmpEx;
     const BitmapEx* pCached = rWallpaper.ImplGetCachedBitmap();
-    Point aPos;
-    Size aSize;
-    GDIMetaFile* pOldMetaFile = mpMetaFile;
-    const WallpaperStyle eStyle = rWallpaper.GetStyle();
-    const bool bOldMap = mbMap;
-    bool bDrawn = false;
-    bool bDrawGradientBackground = false;
-    bool bDrawColorBackground = false;
 
+    GDIMetaFile* pOldMetaFile = mpMetaFile;
+    const bool bOldMap = mbMap;
+
+    BitmapEx aBmpEx;
     if( pCached )
         aBmpEx = *pCached;
     else
@@ -150,6 +145,11 @@ void OutputDevice::DrawBitmapWallpaper( tools::Long nX, tools::Long nY,
     const tools::Long nBmpWidth = aBmpEx.GetSizePixel().Width();
     const tools::Long nBmpHeight = aBmpEx.GetSizePixel().Height();
     const bool bTransparent = aBmpEx.IsAlpha();
+
+    const WallpaperStyle eStyle = rWallpaper.GetStyle();
+
+    bool bDrawGradientBackground = false;
+    bool bDrawColorBackground = false;
 
     // draw background
     if( bTransparent )
@@ -180,12 +180,17 @@ void OutputDevice::DrawBitmapWallpaper( tools::Long nX, tools::Long nY,
 
     // background of bitmap?
     if( bDrawGradientBackground )
+    {
         DrawGradientWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
+    }
     else if( bDrawColorBackground && bTransparent )
     {
         DrawColorWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
         bDrawColorBackground = false;
     }
+
+    Point aPos;
+    Size aSize;
 
     // calc pos and size
     if( rWallpaper.IsRect() )
@@ -204,6 +209,8 @@ void OutputDevice::DrawBitmapWallpaper( tools::Long nX, tools::Long nY,
     EnableMapMode( false );
     Push( vcl::PushFlags::CLIPREGION );
     IntersectClipRegion( tools::Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
+
+    bool bDrawn = false;
 
     switch( eStyle )
     {
