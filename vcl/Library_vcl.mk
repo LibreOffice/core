@@ -93,6 +93,20 @@ $(eval $(call gb_Library_use_externals,vcl,\
     mdds_headers \
 ))
 
+# WASM LLVM doesn't support native EH + SjLj (setjump / longjump) used by libjpeg / libpng.
+# This otherwise breaks the PCH generation, so just move the files for that case.
+ifeq (EMSCRIPTEN_TRUE,$(OS)_$(ENABLE_WASM_EXCEPTIONS))
+$(eval $(call gb_Library_add_cxxobjects,vcl,\
+    vcl/source/filter/jpeg/jpegc \
+    vcl/source/filter/png/PngImageReader \
+))
+else
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/source/filter/jpeg/jpegc \
+    vcl/source/filter/png/PngImageReader \
+))
+endif
+
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/rendercontext/drawmode \
     vcl/skia/SkiaHelper \
@@ -459,7 +473,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/filter/ixpm/xpmread \
     vcl/source/filter/jpeg/Exif \
     vcl/source/filter/jpeg/jpeg \
-    vcl/source/filter/jpeg/jpegc \
     vcl/source/filter/jpeg/JpegReader \
     vcl/source/filter/jpeg/JpegWriter \
     vcl/source/filter/jpeg/JpegTransform \
@@ -470,7 +483,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/filter/wmf/wmf \
     vcl/source/filter/wmf/wmfexternal \
     vcl/source/filter/wmf/wmfwr \
-    vcl/source/filter/png/PngImageReader \
     vcl/source/filter/png/pngwrite \
     vcl/source/font/DirectFontSubstitution \
     vcl/source/font/Feature \
