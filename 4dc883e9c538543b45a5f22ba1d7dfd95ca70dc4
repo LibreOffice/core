@@ -16,6 +16,40 @@
       "message": "Updated patchset now ready for review.",
       "revId": "4dc883e9c538543b45a5f22ba1d7dfd95ca70dc4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb4b189a_bb801676",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-10-02T09:05:18Z",
+      "side": 1,
+      "message": "git blame is sufficient IMO, you can remove a comment you added from the source code.",
+      "revId": "4dc883e9c538543b45a5f22ba1d7dfd95ca70dc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f2f0ead_20fb8e37",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2804,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-10-02T09:05:18Z",
+      "side": 1,
+      "message": "This comment seems unnecessary.",
+      "revId": "4dc883e9c538543b45a5f22ba1d7dfd95ca70dc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
