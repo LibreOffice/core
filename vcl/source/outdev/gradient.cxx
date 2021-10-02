@@ -380,6 +380,7 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
     {
         nSteps -= 1; // draw middle polygons as one polygon after loop to avoid gap
     }
+
     for ( tools::Long i = 0; i < nSteps; i++ )
     {
         // linear interpolation of color
