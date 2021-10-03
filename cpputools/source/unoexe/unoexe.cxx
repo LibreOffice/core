@@ -49,7 +49,6 @@
 #include <com/sun/star/bridge/XBridgeFactory.hpp>
 #include <com/sun/star/bridge/XBridge.hpp>
 
-using namespace std;
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::uno;
