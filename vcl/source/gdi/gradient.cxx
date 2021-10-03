@@ -93,6 +93,15 @@ Gradient::Gradient( GradientStyle eStyle,
 
 Gradient::~Gradient() = default;
 
+sal_uInt8 Gradient::GetColorValue(tools::Long nValue)
+{
+    if (nValue < 0)
+        return 0;
+    else if (nValue > 0xFF)
+        return 0xFF;
+    else
+        return static_cast<sal_uInt8>(nValue);
+}
 
 GradientStyle Gradient::GetStyle() const
 {

@@ -2082,19 +2082,6 @@ rtl::Reference<MetaAction> MetaTextLanguageAction::Clone() const
     return new MetaTextLanguageAction( *this );
 }
 
-namespace
-{
-    sal_uInt8 GetGradientColorValue(tools::Long nValue)
-    {
-        if (nValue < 0)
-            return 0;
-        else if (nValue > 0xFF)
-            return 0xFF;
-        else
-            return static_cast<sal_uInt8>(nValue);
-    }
-}
-
 MetaLinearGradientAction::MetaLinearGradientAction(tools::Rectangle const& rRect, Gradient const& rGradient, tools::Long nStepCount)
     : MetaAction(MetaActionType::LINEARGRADIENT)
 {
@@ -2216,11 +2203,11 @@ MetaLinearGradientAction::MetaLinearGradientAction(tools::Rectangle const& rRect
         // linear interpolation of color
         double fAlpha = static_cast<double>(i) / fStepsMinus1;
         double fTempColor = static_cast<double>(nStartRed) * (1.0-fAlpha) + static_cast<double>(nEndRed) * fAlpha;
-        nRed = GetGradientColorValue(static_cast<tools::Long>(fTempColor));
+        nRed = Gradient::GetColorValue(static_cast<tools::Long>(fTempColor));
         fTempColor = static_cast<double>(nStartGreen) * (1.0-fAlpha) + static_cast<double>(nEndGreen) * fAlpha;
-        nGreen = GetGradientColorValue(static_cast<tools::Long>(fTempColor));
+        nGreen = Gradient::GetColorValue(static_cast<tools::Long>(fTempColor));
         fTempColor = static_cast<double>(nStartBlue) * (1.0-fAlpha) + static_cast<double>(nEndBlue) * fAlpha;
-        nBlue = GetGradientColorValue(static_cast<tools::Long>(fTempColor));
+        nBlue = Gradient::GetColorValue(static_cast<tools::Long>(fTempColor));
 
         maActions.push_back(new MetaFillColorAction(Color(nRed, nGreen, nBlue), true));
 
@@ -2252,9 +2239,9 @@ MetaLinearGradientAction::MetaLinearGradientAction(tools::Rectangle const& rRect
         return;
 
     // draw middle polygon with end color
-    nRed = GetGradientColorValue(nEndRed);
-    nGreen = GetGradientColorValue(nEndGreen);
-    nBlue = GetGradientColorValue(nEndBlue);
+    nRed = Gradient::GetColorValue(nEndRed);
+    nGreen = Gradient::GetColorValue(nEndGreen);
+    nBlue = Gradient::GetColorValue(nEndBlue);
 
     maActions.push_back(new MetaFillColorAction(Color(nRed, nGreen, nBlue), true));
 

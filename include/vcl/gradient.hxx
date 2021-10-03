@@ -24,6 +24,7 @@
 #include <vcl/dllapi.h>
 #include <tools/color.hxx>
 #include <tools/degree.hxx>
+#include <tools/long.hxx>
 
 #include <vcl/vclenum.hxx>
 #include <o3tl/cow_wrapper.hxx>
@@ -51,6 +52,8 @@ public:
 
     void            SetStyle( GradientStyle eStyle );
     GradientStyle   GetStyle() const;
+
+    static sal_uInt8 GetColorValue(tools::Long nValue);
 
     void            SetStartColor( const Color& rColor );
     const Color&    GetStartColor() const;
