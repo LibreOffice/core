@@ -325,6 +325,9 @@ OString convertLineStyleToString(const MetaActionType nActionType)
         case MetaActionType::COMMENT:               return "comment";
         case MetaActionType::LAYOUTMODE:            return "layoutmode";
         case MetaActionType::TEXTLANGUAGE:          return "textlanguage";
+        case MetaActionType::LINEARGRADIENT:        return "lineargradient";
+        case MetaActionType::COMPLEXGRADIENT:       return "complexgradient";
+        case MetaActionType::GRADIENTCONTAINER:     return "gradientcontainer";
     }
     return "";
 }
