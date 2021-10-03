@@ -63,7 +63,7 @@ $(call gb_LinkTarget_add_auxtargets,$(2),\
         $(patsubst %.lib,%.worker.js,$(3)) \
 )
 
-$(call gb_Executable_get_linktarget,$(2)) : $(gb_EMSCRIPTEN_PRE_JS_FILES)
+$(call gb_LinkTarget_get_target,$(2)) : $(gb_EMSCRIPTEN_PRE_JS_FILES)
 
 endef
 
@@ -74,7 +74,7 @@ $(call gb_LinkTarget_add_auxtargets,$(2),\
         $(patsubst %.lib,%.worker.js,$(3)) \
 )
 
-$(call gb_CppunitTest_get_linktarget,$(2)) : $(gb_EMSCRIPTEN_PRE_JS_FILES)
+$(call gb_LinkTarget_get_target,$(2)) : $(gb_EMSCRIPTEN_PRE_JS_FILES)
 
 endef
 
