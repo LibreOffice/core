@@ -1748,6 +1748,33 @@ public:
     void                SetTextLanguage(const LanguageType eTextLanguage) { meTextLanguage = eTextLanguage; }
 };
 
+class VCL_DLLPUBLIC MetaLinearGradientAction final : public MetaAction
+{
+    using ActionsType = std::vector<MetaAction*>;
+
+private:
+    ActionsType maActions;
+
+public:
+    MetaLinearGradientAction(tools::Rectangle const& rRect, Gradient const& rGradient, tools::Long nStepCount);
+    MetaLinearGradientAction(MetaLinearGradientAction const &) = default;
+    MetaLinearGradientAction(MetaLinearGradientAction &&) = default;
+    MetaLinearGradientAction & operator =(MetaLinearGradientAction const &) = delete; // due to MetaAction
+    MetaLinearGradientAction & operator =(MetaLinearGradientAction &&) = delete; // due to MetaAction
+
+public:
+    virtual void Execute(OutputDevice* pOut) override;
+    virtual void Move(tools::Long nHorzMove, tools::Long nVertMove) override;
+    virtual void Scale(double fScaleX, double fScaleY) override;
+
+    MetaAction* GetAction(size_t nIndex) const { return maActions[nIndex]; }
+
+    ActionsType::iterator begin() { return maActions.begin(); }
+    ActionsType::iterator end() { return maActions.end(); }
+
+    size_t size() const { return maActions.size(); }
+};
+
 #endif // INCLUDED_VCL_METAACT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
