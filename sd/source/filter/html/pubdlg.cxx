@@ -46,7 +46,6 @@
 #include "buttonset.hxx"
 #include <strings.hxx>
 
-using namespace std;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 

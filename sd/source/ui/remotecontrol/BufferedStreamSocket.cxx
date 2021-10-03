@@ -24,7 +24,6 @@
  #include <unistd.h>
 #endif
 using namespace sd;
-using namespace std;
 using namespace osl;
 
 BufferedStreamSocket::BufferedStreamSocket( const osl::StreamSocket &aSocket ):
@@ -89,7 +88,7 @@ sal_Int32 BufferedStreamSocket::readLine( OString& aLine )
     while ( true )
     {
         // Process buffer first in case data already present.
-        vector<char>::iterator aIt;
+        std::vector<char>::iterator aIt;
         if ( (aIt = find( aBuffer.begin(), aBuffer.end(), '\n' ))
              != aBuffer.end() )
         {
