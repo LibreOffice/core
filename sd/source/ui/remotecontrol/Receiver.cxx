@@ -21,7 +21,6 @@
 
 using namespace sd;
 using namespace ::osl;
-using namespace std;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;

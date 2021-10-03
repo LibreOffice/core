@@ -15,12 +15,11 @@
 
 #include "std_outputstream.hxx"
 
-using namespace std;
 using namespace com::sun::star;
 
 namespace cmis
 {
-    StdOutputStream::StdOutputStream( boost::shared_ptr< ostream > const & pStream ) :
+    StdOutputStream::StdOutputStream( boost::shared_ptr< std::ostream > const & pStream ) :
         m_pStream( pStream )
     {
     }
@@ -28,7 +27,7 @@ namespace cmis
     StdOutputStream::~StdOutputStream()
     {
         if (m_pStream)
-            m_pStream->setstate( ios::eofbit );
+            m_pStream->setstate( std::ios::eofbit );
     }
 
     uno::Any SAL_CALL StdOutputStream::queryInterface( const uno::Type& rType )
@@ -59,7 +58,7 @@ namespace cmis
         {
             m_pStream->write( reinterpret_cast< const char* >( aData.getConstArray( ) ), aData.getLength( ) );
         }
-        catch ( const ios_base::failure& e )
+        catch ( const std::ios_base::failure& e )
         {
             SAL_INFO( "ucb.ucp.cmis", "Exception caught when calling write: " << e.what() );
             throw io::IOException( );
@@ -77,7 +76,7 @@ namespace cmis
         {
             m_pStream->flush( );
         }
-        catch ( const ios_base::failure& e )
+        catch ( const std::ios_base::failure& e )
         {
             SAL_INFO( "ucb.ucp.cmis", "Exception caught when calling flush: " << e.what() );
             throw io::IOException( );
@@ -91,7 +90,7 @@ namespace cmis
         if (!m_pStream)
             throw io::IOException( );
 
-        m_pStream->setstate( ios_base::eofbit );
+        m_pStream->setstate( std::ios_base::eofbit );
     }
 }
 

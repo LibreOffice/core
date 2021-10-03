@@ -67,11 +67,10 @@
 #include "std_inputstream.hxx"
 #include "std_outputstream.hxx"
 
-#define OUSTR_TO_STDSTR(s) string( OUStringToOString( s, RTL_TEXTENCODING_UTF8 ).getStr() )
+#define OUSTR_TO_STDSTR(s) std::string( OUStringToOString( s, RTL_TEXTENCODING_UTF8 ).getStr() )
 #define STD_TO_OUSTR( str ) OUString( str.c_str(), str.length( ), RTL_TEXTENCODING_UTF8 )
 
 using namespace com::sun::star;
-using namespace std;
 
 namespace
 {
@@ -104,7 +103,7 @@ namespace
             default:
             case libcmis::PropertyType::String:
                 {
-                    vector< string > aCmisStrings = pProperty->getStrings( );
+                    auto aCmisStrings = pProperty->getStrings( );
                     uno::Sequence< OUString > aStrings( aCmisStrings.size( ) );
                     OUString* aStringsArr = aStrings.getArray( );
                     sal_Int32 i = 0;
@@ -117,7 +116,7 @@ namespace
                 break;
             case libcmis::PropertyType::Integer:
                 {
-                    vector< long > aCmisLongs = pProperty->getLongs( );
+                    auto aCmisLongs = pProperty->getLongs( );
                     uno::Sequence< sal_Int64 > aLongs( aCmisLongs.size( ) );
                     sal_Int64* aLongsArr = aLongs.getArray( );
                     sal_Int32 i = 0;
@@ -130,14 +129,14 @@ namespace
                 break;
             case libcmis::PropertyType::Decimal:
                 {
-                    vector< double > aCmisDoubles = pProperty->getDoubles( );
+                    auto aCmisDoubles = pProperty->getDoubles( );
                     uno::Sequence< double > aDoubles = comphelper::containerToSequence(aCmisDoubles);
                     aValue <<= aDoubles;
                 }
                 break;
             case libcmis::PropertyType::Bool:
                 {
-                    vector< bool > aCmisBools = pProperty->getBools( );
+                    auto aCmisBools = pProperty->getBools( );
                     uno::Sequence< sal_Bool > aBools( aCmisBools.size( ) );
                     sal_Bool* aBoolsArr = aBools.getArray( );
                     sal_Int32 i = 0;
@@ -150,7 +149,7 @@ namespace
                 break;
             case libcmis::PropertyType::DateTime:
                 {
-                    vector< boost::posix_time::ptime > aCmisTimes = pProperty->getDateTimes( );
+                    auto aCmisTimes = pProperty->getDateTimes( );
                     uno::Sequence< util::DateTime > aTimes( aCmisTimes.size( ) );
                     util::DateTime* aTimesArr = aTimes.getArray( );
                     sal_Int32 i = 0;
@@ -315,7 +314,7 @@ namespace cmis
         OUString sProxy = rProxy.aName;
         if ( rProxy.nPort > 0 )
             sProxy += ":" + OUString::number( rProxy.nPort );
-        libcmis::SessionFactory::setProxySettings( OUSTR_TO_STDSTR( sProxy ), string(), string(), string() );
+        libcmis::SessionFactory::setProxySettings( OUSTR_TO_STDSTR( sProxy ), std::string(), std::string(), std::string() );
 
         // Look for a cached session, key is binding url + repo id
         OUString sSessionId = m_aURL.getBindingUrl( ) + m_aURL.getRepositoryId( );
@@ -345,8 +344,8 @@ namespace cmis
             AuthProvider aAuthProvider(xEnv, m_xIdentifier->getContentIdentifier(), m_aURL.getBindingUrl());
             AuthProvider::setXEnv( xEnv );
 
-            string rUsername = OUSTR_TO_STDSTR( m_aURL.getUsername( ) );
-            string rPassword = OUSTR_TO_STDSTR( m_aURL.getPassword( ) );
+            auto rUsername = OUSTR_TO_STDSTR( m_aURL.getUsername( ) );
+            auto rPassword = OUSTR_TO_STDSTR( m_aURL.getPassword( ) );
 
             bool bSkipInitialPWAuth = false;
             if (m_aURL.getBindingUrl() == ONEDRIVE_BASE_URL
@@ -456,7 +455,7 @@ namespace cmis
     {
         if ( nullptr == m_pObjectType.get( ) && m_bTransient )
         {
-            string typeId = m_bIsFolder ? "cmis:folder" : "cmis:document";
+            std::string typeId = m_bIsFolder ? "cmis:folder" : "cmis:document";
             // The type to create needs to be fetched from the possible children types
             // defined in the parent folder. Then, we'll pick up the first one we find matching
             // cmis:folder or cmis:document (depending what we need to create).
@@ -473,14 +472,14 @@ namespace cmis
 
             if ( pParent )
             {
-                map< string, libcmis::PropertyPtr >& aProperties = pParent->getProperties( );
-                map< string, libcmis::PropertyPtr >::iterator it = aProperties.find( "cmis:allowedChildObjectTypeIds" );
+                std::map< std::string, libcmis::PropertyPtr >& aProperties = pParent->getProperties( );
+                std::map< std::string, libcmis::PropertyPtr >::iterator it = aProperties.find( "cmis:allowedChildObjectTypeIds" );
                 if ( it != aProperties.end( ) )
                 {
                     libcmis::PropertyPtr pProperty = it->second;
                     if ( pProperty )
                     {
-                        vector< string > typesIds = pProperty->getStrings( );
+                        std::vector< std::string > typesIds = pProperty->getStrings( );
                         for ( const auto& rType : typesIds )
                         {
                             bTypeRestricted = true;
@@ -544,7 +543,7 @@ namespace cmis
                     // It's weird, but needed to handle case where the path isn't the folders/files
                     // names separated by '/' (as in Lotus Live)
                     INetURLObject aParentUrl( m_sURL );
-                    string sName = OUSTR_TO_STDSTR( aParentUrl.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset ) );
+                    std::string sName = OUSTR_TO_STDSTR( aParentUrl.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset ) );
                     aParentUrl.removeSegment( );
                     OUString sParentUrl = aParentUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE );
                     // Avoid infinite recursion if sParentUrl == m_sURL
@@ -554,7 +553,7 @@ namespace cmis
                         libcmis::FolderPtr pParentFolder = boost::dynamic_pointer_cast< libcmis::Folder >(xParent->getObject(xEnv));
                         if (pParentFolder)
                         {
-                            vector< libcmis::ObjectPtr > children = pParentFolder->getChildren();
+                            std::vector< libcmis::ObjectPtr > children = pParentFolder->getChildren();
                             auto it = std::find_if(children.begin(), children.end(),
                                 [&sName](const libcmis::ObjectPtr& rChild) { return rChild->getName() == sName; });
                             if (it != children.end())
@@ -614,13 +613,13 @@ namespace cmis
         // Convert iCmisProps to Cmis Properties;
         uno::Sequence< document::CmisProperty > aPropsSeq;
         iCmisProps >>= aPropsSeq;
-        map< string, libcmis::PropertyPtr > aProperties;
+        std::map< std::string, libcmis::PropertyPtr > aProperties;
 
         for ( const auto& rProp : std::as_const(aPropsSeq) )
         {
             std::string id = OUSTR_TO_STDSTR( rProp.Id );
             libcmis::PropertyPtr prop = lcl_unoToCmisProperty( rProp );
-            aProperties.insert( std::pair<string, libcmis::PropertyPtr>( id, prop ) );
+            aProperties.insert( std::pair<std::string, libcmis::PropertyPtr>( id, prop ) );
         }
         libcmis::ObjectPtr updateObj;
         try
@@ -690,10 +689,10 @@ namespace cmis
                     {
                         if ( !m_pObjectProps.empty() )
                         {
-                            map< string, libcmis::PropertyPtr >::iterator it = m_pObjectProps.find( "cmis:name" );
+                            std::map< std::string, libcmis::PropertyPtr >::iterator it = m_pObjectProps.find( "cmis:name" );
                             if ( it != m_pObjectProps.end( ) )
                             {
-                                vector< string > values = it->second->getStrings( );
+                                std::vector< std::string > values = it->second->getStrings( );
                                 if ( !values.empty() )
                                     sTitle = STD_TO_OUSTR( values.front( ) );
                             }
@@ -731,10 +730,10 @@ namespace cmis
                     {
                         if ( !m_pObjectProps.empty() )
                         {
-                            map< string, libcmis::PropertyPtr >::iterator it = m_pObjectProps.find( "cmis:objectId" );
+                            std::map< std::string, libcmis::PropertyPtr >::iterator it = m_pObjectProps.find( "cmis:objectId" );
                             if ( it != m_pObjectProps.end( ) )
                             {
-                                vector< string > values = it->second->getStrings( );
+                                std::vector< std::string > values = it->second->getStrings( );
                                 if ( !values.empty() )
                                     sId = STD_TO_OUSTR( values.front( ) );
                             }
@@ -841,13 +840,13 @@ namespace cmis
                     try
                     {
                         libcmis::ObjectPtr object = getObject( xEnv );
-                        map< string, libcmis::PropertyPtr >& aProperties = object->getProperties( );
+                        std::map< std::string, libcmis::PropertyPtr >& aProperties = object->getProperties( );
                         uno::Sequence< document::CmisProperty > aCmisProperties( aProperties.size( ) );
                         document::CmisProperty* pCmisProps = aCmisProperties.getArray( );
                         sal_Int32 i = 0;
                         for ( const auto& [sId, rProperty] : aProperties )
                         {
-                            string sDisplayName = rProperty->getPropertyType()->getDisplayName( );
+                            auto sDisplayName = rProperty->getPropertyType()->getDisplayName( );
                             bool bUpdatable = rProperty->getPropertyType()->isUpdatable( );
                             bool bRequired = rProperty->getPropertyType()->isRequired( );
                             bool bMultiValued = rProperty->getPropertyType()->isMultiValued();
@@ -1065,11 +1064,11 @@ namespace cmis
                                 "Checkin only supported by documents" );
         }
 
-        boost::shared_ptr< ostream > pOut( new ostringstream ( ios_base::binary | ios_base::in | ios_base::out ) );
+        boost::shared_ptr< std::ostream > pOut( new std::ostringstream ( std::ios_base::binary | std::ios_base::in | std::ios_base::out ) );
         uno::Reference < io::XOutputStream > xOutput = new StdOutputStream( pOut );
         copyData( xIn, xOutput );
 
-        map< string, libcmis::PropertyPtr > newProperties;
+        std::map< std::string, libcmis::PropertyPtr > newProperties;
         libcmis::DocumentPtr pDoc;
 
         try
@@ -1089,17 +1088,17 @@ namespace cmis
 
         // Get the URL and send it back as a result
         URL aCmisUrl( m_sURL );
-        vector< string > aPaths = pDoc->getPaths( );
+        std::vector< std::string > aPaths = pDoc->getPaths( );
         if ( !aPaths.empty() )
         {
-            string sPath = aPaths.front( );
+            auto sPath = aPaths.front( );
             aCmisUrl.setObjectPath( STD_TO_OUSTR( sPath ) );
         }
         else
         {
             // We may have unfiled document depending on the server, those
             // won't have any path, use their ID instead
-            string sId = pDoc->getId( );
+            auto sId = pDoc->getId( );
             aCmisUrl.setObjectId( STD_TO_OUSTR( sId ) );
         }
         return aCmisUrl.asString( );
@@ -1124,17 +1123,17 @@ namespace cmis
 
             // Compute the URL of the Private Working Copy (PWC)
             URL aCmisUrl( m_sURL );
-            vector< string > aPaths = pPwc->getPaths( );
+            std::vector< std::string > aPaths = pPwc->getPaths( );
             if ( !aPaths.empty() )
             {
-                string sPath = aPaths.front( );
+                auto sPath = aPaths.front( );
                 aCmisUrl.setObjectPath( STD_TO_OUSTR( sPath ) );
             }
             else
             {
                 // We may have unfiled PWC depending on the server, those
                 // won't have any path, use their ID instead
-                string sId = pPwc->getId( );
+                auto sId = pPwc->getId( );
                 aCmisUrl.setObjectId( STD_TO_OUSTR( sId ) );
             }
             aRet = aCmisUrl.asString( );
@@ -1168,13 +1167,13 @@ namespace cmis
             pPwc->cancelCheckout( );
 
             // Get the Original document (latest version)
-            vector< libcmis::DocumentPtr > aVersions = pPwc->getAllVersions( );
+            std::vector< libcmis::DocumentPtr > aVersions = pPwc->getAllVersions( );
             for ( const auto& rVersion : aVersions )
             {
                 libcmis::DocumentPtr pVersion = rVersion;
-                map< string, libcmis::PropertyPtr > aProps = pVersion->getProperties( );
+                std::map< std::string, libcmis::PropertyPtr > aProps = pVersion->getProperties( );
                 bool bIsLatestVersion = false;
-                map< string, libcmis::PropertyPtr >::iterator propIt = aProps.find( string( "cmis:isLatestVersion" ) );
+                std::map< std::string, libcmis::PropertyPtr >::iterator propIt = aProps.find( std::string( "cmis:isLatestVersion" ) );
                 if ( propIt != aProps.end( ) && !propIt->second->getBools( ).empty( ) )
                 {
                     bIsLatestVersion = propIt->second->getBools( ).front( );
@@ -1184,17 +1183,17 @@ namespace cmis
                 {
                     // Compute the URL of the Document
                     URL aCmisUrl( m_sURL );
-                    vector< string > aPaths = pVersion->getPaths( );
+                    std::vector< std::string > aPaths = pVersion->getPaths( );
                     if ( !aPaths.empty() )
                     {
-                        string sPath = aPaths.front( );
+                        auto sPath = aPaths.front( );
                         aCmisUrl.setObjectPath( STD_TO_OUSTR( sPath ) );
                     }
                     else
                     {
                         // We may have unfiled doc depending on the server, those
                         // won't have any path, use their ID instead
-                        string sId = pVersion->getId( );
+                        auto sId = pVersion->getId( );
                         aCmisUrl.setObjectId( STD_TO_OUSTR( sId ) );
                     }
                     aRet = aCmisUrl.asString( );
@@ -1228,7 +1227,7 @@ namespace cmis
                                     xEnv,
                                     "Can not get the document" );
             }
-            vector< libcmis::DocumentPtr > aCmisVersions = pDoc->getAllVersions( );
+            std::vector< libcmis::DocumentPtr > aCmisVersions = pDoc->getAllVersions( );
             uno::Sequence< document::CmisVersion > aVersions( aCmisVersions.size( ) );
             int i = 0;
             for ( const auto& rVersion : aCmisVersions )
@@ -1308,7 +1307,7 @@ namespace cmis
             return;
 
         libcmis::ObjectPtr object;
-        map< string, libcmis::PropertyPtr >::iterator it = m_pObjectProps.find( "cmis:name" );
+        std::map< std::string, libcmis::PropertyPtr >::iterator it = m_pObjectProps.find( "cmis:name" );
         if ( it == m_pObjectProps.end( ) )
         {
             ucbhelper::cancelCommandExecution( uno::makeAny
@@ -1316,8 +1315,8 @@ namespace cmis
                     static_cast< cppu::OWeakObject * >( this ) ) ),
                 xEnv );
         }
-        string newName = it->second->getStrings( ).front( );
-        string newPath = OUSTR_TO_STDSTR( m_sObjectPath );
+        auto newName = it->second->getStrings( ).front( );
+        auto newPath = OUSTR_TO_STDSTR( m_sObjectPath );
         if ( !newPath.empty( ) && newPath[ newPath.size( ) - 1 ] != '/' )
             newPath += "/";
         newPath += newName;
@@ -1349,12 +1348,12 @@ namespace cmis
             libcmis::Document* document = dynamic_cast< libcmis::Document* >( object.get( ) );
             if ( nullptr != document )
             {
-                boost::shared_ptr< ostream > pOut( new ostringstream ( ios_base::binary | ios_base::in | ios_base::out ) );
+                boost::shared_ptr< std::ostream > pOut( new std::ostringstream ( std::ios_base::binary | std::ios_base::in | std::ios_base::out ) );
                 uno::Reference < io::XOutputStream > xOutput = new StdOutputStream( pOut );
                 copyData( xInputStream, xOutput );
                 try
                 {
-                    document->setContentStream( pOut, OUSTR_TO_STDSTR( rMimeType ), string( ), bReplaceExisting );
+                    document->setContentStream( pOut, OUSTR_TO_STDSTR( rMimeType ), std::string( ), bReplaceExisting );
                 }
                 catch ( const libcmis::Exception& )
                 {
@@ -1388,12 +1387,12 @@ namespace cmis
             }
             else
             {
-                boost::shared_ptr< ostream > pOut( new ostringstream ( ios_base::binary | ios_base::in | ios_base::out ) );
+                boost::shared_ptr< std::ostream > pOut( new std::ostringstream ( std::ios_base::binary | std::ios_base::in | std::ios_base::out ) );
                 uno::Reference < io::XOutputStream > xOutput = new StdOutputStream( pOut );
                 copyData( xInputStream, xOutput );
                 try
                 {
-                    pFolder->createDocument( m_pObjectProps, pOut, OUSTR_TO_STDSTR( rMimeType ), string() );
+                    pFolder->createDocument( m_pObjectProps, pOut, OUSTR_TO_STDSTR( rMimeType ), std::string() );
                     sNewPath = STD_TO_OUSTR( newPath );
                 }
                 catch ( const libcmis::Exception& )
@@ -1553,7 +1552,7 @@ namespace cmis
             if (!document)
                 return false;
 
-            boost::shared_ptr< istream > aIn = document->getContentStream( );
+            boost::shared_ptr< std::istream > aIn = document->getContentStream( );
 
             uno::Reference< io::XInputStream > xIn = new StdInputStream( aIn );
             if( !xIn.is( ) )
@@ -2039,7 +2038,7 @@ namespace cmis
             // Get the children from pObject
             try
             {
-                vector< libcmis::ObjectPtr > children = pFolder->getChildren( );
+                std::vector< libcmis::ObjectPtr > children = pFolder->getChildren( );
 
                 // Loop over the results
                 for ( const auto& rChild : children )
@@ -2080,20 +2079,20 @@ namespace cmis
         if ( !getObjectType( xEnv ).get( ) )
             return;
 
-        map< string, libcmis::PropertyPtr >::iterator propIt = m_pObjectProps.find(rName);
-        vector< string > values;
+        std::map< std::string, libcmis::PropertyPtr >::iterator propIt = m_pObjectProps.find(rName);
+        std::vector< std::string > values;
         values.push_back(rValue);
 
         if ( propIt == m_pObjectProps.end( ) && getObjectType( xEnv ).get( ) )
         {
-            map< string, libcmis::PropertyTypePtr > propsTypes = getObjectType( xEnv )->getPropertiesTypes( );
-            map< string, libcmis::PropertyTypePtr >::iterator typeIt = propsTypes.find(rName);
+            std::map< std::string, libcmis::PropertyTypePtr > propsTypes = getObjectType( xEnv )->getPropertiesTypes( );
+            std::map< std::string, libcmis::PropertyTypePtr >::iterator typeIt = propsTypes.find(rName);
 
             if ( typeIt != propsTypes.end( ) )
             {
                 libcmis::PropertyTypePtr propType = typeIt->second;
                 libcmis::PropertyPtr property( new libcmis::Property( propType, values ) );
-                m_pObjectProps.insert(pair< string, libcmis::PropertyPtr >(rName, property));
+                m_pObjectProps.insert(std::pair< std::string, libcmis::PropertyPtr >(rName, property));
             }
         }
         else if ( propIt != m_pObjectProps.end( ) )
