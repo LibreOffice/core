@@ -2150,45 +2150,103 @@ void VclOutdevTest::testDrawGradient_drawmode()
                                  MetaActionType::POP, pAction->GetType());
 }
 
-static size_t TestLinearStripes(GDIMetaFile& rMtf, size_t nTimes, size_t nIndex)
+static void TestLinearStripes(MetaLinearGradientAction const* pLinearAction)
 {
-    for (size_t i = 0; i < nTimes; i++)
+    size_t nIndex = 0;
+
+    MetaAction* pAction = pLinearAction->GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a comment action (start)", MetaActionType::COMMENT,
+                                 pAction->GetType());
+    nIndex++;
+
+    pAction = pLinearAction->GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action (start)", MetaActionType::FILLCOLOR,
+                                 pAction->GetType());
+    nIndex++;
+
+    pAction = pLinearAction->GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polygon action (start)", MetaActionType::POLYGON,
+                                 pAction->GetType());
+
+    for (size_t i = 0; i < pLinearAction->GetSteps() - 1; i++)
     {
         nIndex++;
-        MetaAction* pAction = rMtf.GetAction(nIndex);
+        pAction = pLinearAction->GetAction(nIndex);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action", MetaActionType::FILLCOLOR,
                                      pAction->GetType());
 
         nIndex++;
-        pAction = rMtf.GetAction(nIndex);
+        pAction = pLinearAction->GetAction(nIndex);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polygon action", MetaActionType::POLYGON,
                                      pAction->GetType());
     }
 
-    return nIndex;
+    nIndex++;
+    pAction = pLinearAction->GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a comment action (end)", MetaActionType::COMMENT,
+                                 pAction->GetType());
+
+    nIndex++;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("More actions to be processed", pLinearAction->size(),
+                                 static_cast<size_t>(nIndex));
 }
 
-static size_t TestAxialStripes(GDIMetaFile& rMtf, size_t nTimes, size_t nIndex)
+static void TestAxialStripes(MetaLinearGradientAction const* pLinearAction)
 {
-    for (size_t i = 0; i < nTimes; i++)
+    size_t nIndex = 0;
+
+    MetaAction* pAction = pLinearAction->GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a comment action (start)", MetaActionType::COMMENT,
+                                 pAction->GetType());
+
+    nIndex++;
+
+    pAction = pLinearAction->GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action (start)", MetaActionType::FILLCOLOR,
+                                 pAction->GetType());
+    nIndex++;
+
+    pAction = pLinearAction->GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polygon action (start)", MetaActionType::POLYGON,
+                                 pAction->GetType());
+
+    for (size_t i = 0; i < pLinearAction->GetSteps(); i++)
     {
         nIndex++;
-        MetaAction* pAction = rMtf.GetAction(nIndex);
+        pAction = pLinearAction->GetAction(nIndex);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action", MetaActionType::FILLCOLOR,
                                      pAction->GetType());
 
         nIndex++;
-        pAction = rMtf.GetAction(nIndex);
+        pAction = pLinearAction->GetAction(nIndex);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polygon action", MetaActionType::POLYGON,
                                      pAction->GetType());
-
         nIndex++;
-        pAction = rMtf.GetAction(nIndex);
+        pAction = pLinearAction->GetAction(nIndex);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polygon action", MetaActionType::POLYGON,
                                      pAction->GetType());
     }
 
-    return nIndex;
+    nIndex++;
+
+    pAction = pLinearAction->GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action (end)", MetaActionType::FILLCOLOR,
+                                 pAction->GetType());
+    nIndex++;
+
+    pAction = pLinearAction->GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polygon action (end)", MetaActionType::POLYGON,
+                                 pAction->GetType());
+
+    nIndex++;
+
+    pAction = pLinearAction->GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a comment action (end)", MetaActionType::COMMENT,
+                                 pAction->GetType());
+
+    nIndex++;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("More actions to be processed", pLinearAction->size(),
+                                 static_cast<size_t>(nIndex));
 }
 
 void VclOutdevTest::testDrawGradient_rect_linear()
@@ -2200,15 +2258,17 @@ void VclOutdevTest::testDrawGradient_rect_linear()
     tools::Rectangle aRect(Point(10, 10), Size(40, 40));
     pVDev->SetOutputSizePixel(Size(100, 100));
 
-    size_t nIndex = ERASE_ACTIONS;
-
-    nIndex++;
     pVDev->DrawGradient(aRect, Gradient(GradientStyle::Linear, COL_RED, COL_WHITE));
-    MetaAction* pAction = aMtf.GetAction(nIndex);
+    MetaAction* pAction = aMtf.GetAction(ERASE_ACTIONS + 1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a gradient action (rectangle area)", MetaActionType::GRADIENT,
                                  pAction->GetType());
 
-    TestLinearStripes(aMtf, 21, nIndex);
+    pAction = aMtf.GetAction(ERASE_ACTIONS + 2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a linear gradient action (rectangle area)",
+                                 MetaActionType::LINEARGRADIENT, pAction->GetType());
+    MetaLinearGradientAction* pLinearAction = dynamic_cast<MetaLinearGradientAction*>(pAction);
+
+    TestLinearStripes(pLinearAction);
 }
 
 void VclOutdevTest::testDrawGradient_rect_axial()
@@ -2220,15 +2280,17 @@ void VclOutdevTest::testDrawGradient_rect_axial()
     tools::Rectangle aRect(Point(10, 10), Size(40, 40));
     pVDev->SetOutputSizePixel(Size(100, 100));
 
-    size_t nIndex = ERASE_ACTIONS;
-
-    nIndex++;
     pVDev->DrawGradient(aRect, Gradient(GradientStyle::Linear, COL_RED, COL_WHITE));
-    MetaAction* pAction = aMtf.GetAction(nIndex);
+    MetaAction* pAction = aMtf.GetAction(ERASE_ACTIONS + 1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a gradient action (rectangle area)", MetaActionType::GRADIENT,
                                  pAction->GetType());
 
-    TestAxialStripes(aMtf, 21, nIndex);
+    pAction = aMtf.GetAction(ERASE_ACTIONS + 2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a linear gradient action (rectangle area)",
+                                 MetaActionType::LINEARGRADIENT, pAction->GetType());
+    MetaLinearGradientAction* pLinearAction = dynamic_cast<MetaLinearGradientAction*>(pAction);
+
+    TestAxialStripes(pLinearAction);
 }
 
 void VclOutdevTest::testDrawGradient_polygon_linear()
@@ -2248,25 +2310,11 @@ void VclOutdevTest::testDrawGradient_polygon_linear()
 
     nIndex++;
     MetaAction* pAction = aMtf.GetAction(nIndex);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action", MetaActionType::FILLCOLOR,
-                                 pAction->GetType());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a linear gradient action (rectangle area)",
+                                 MetaActionType::LINEARGRADIENT, pAction->GetType());
+    MetaLinearGradientAction* pLinearAction = dynamic_cast<MetaLinearGradientAction*>(pAction);
 
-    nIndex++;
-    pAction = aMtf.GetAction(nIndex);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polygon action", MetaActionType::POLYGON,
-                                 pAction->GetType());
-
-    TestLinearStripes(aMtf, 4, nIndex);
-
-    nIndex++;
-    pAction = aMtf.GetAction(nIndex);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not end fill color action", MetaActionType::FILLCOLOR,
-                                 pAction->GetType());
-
-    nIndex++;
-    pAction = aMtf.GetAction(nIndex);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not end polygon action", MetaActionType::POLYGON,
-                                 pAction->GetType());
+    TestLinearStripes(pLinearAction);
 }
 
 void VclOutdevTest::testDrawGradient_polygon_axial()
@@ -2291,38 +2339,59 @@ void VclOutdevTest::testDrawGradient_polygon_axial()
 
     nIndex++;
     pAction = aMtf.GetAction(nIndex);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polygon action", MetaActionType::POLYGON,
-                                 pAction->GetType());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a linear gradient action (rectangle area)",
+                                 MetaActionType::LINEARGRADIENT, pAction->GetType());
+    MetaLinearGradientAction* pLinearAction = dynamic_cast<MetaLinearGradientAction*>(pAction);
 
-    TestAxialStripes(aMtf, 4, nIndex);
-
-    nIndex++;
-    pAction = aMtf.GetAction(nIndex);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not end fill color action", MetaActionType::FILLCOLOR,
-                                 pAction->GetType());
-
-    nIndex++;
-    pAction = aMtf.GetAction(nIndex);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not end polygon action", MetaActionType::POLYGON,
-                                 pAction->GetType());
+    TestAxialStripes(pLinearAction);
 }
 
-static size_t TestComplexStripes(GDIMetaFile& rMtf, size_t nTimes, size_t nIndex)
+static void TestComplexStripes(MetaComplexGradientAction const* pComplexAction)
 {
-    for (size_t i = 0; i < nTimes; i++)
+    size_t nIndex = 0;
+
+    MetaAction* pAction = pComplexAction->GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a comment action (Start)", MetaActionType::COMMENT,
+                                 pAction->GetType());
+
+    nIndex++;
+
+    pAction = pComplexAction->GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action", MetaActionType::FILLCOLOR,
+                                 pAction->GetType());
+
+    // starts at 1 because the code does!
+    for (size_t i = 1; i < pComplexAction->GetSteps() - 1; i++)
     {
         nIndex++;
-        MetaAction* pAction = rMtf.GetAction(nIndex);
+        pAction = pComplexAction->GetAction(nIndex);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polypolygon action", MetaActionType::POLYPOLYGON,
                                      pAction->GetType());
 
         nIndex++;
-        pAction = rMtf.GetAction(nIndex);
+        pAction = pComplexAction->GetAction(nIndex);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action", MetaActionType::FILLCOLOR,
                                      pAction->GetType());
     }
 
-    return nIndex;
+    nIndex++;
+    pAction = pComplexAction->GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action (end)", MetaActionType::FILLCOLOR,
+                                 pAction->GetType());
+
+    nIndex++;
+    pAction = pComplexAction->GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polygon action (end)", MetaActionType::POLYGON,
+                                 pAction->GetType());
+
+    nIndex++;
+    pAction = pComplexAction->GetAction(nIndex);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a comment action (end)", MetaActionType::COMMENT,
+                                 pAction->GetType());
+
+    nIndex++;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("More actions to be processed", pComplexAction->size(),
+                                 static_cast<size_t>(nIndex));
 }
 
 void VclOutdevTest::testDrawGradient_rect_complex()
@@ -2344,20 +2413,11 @@ void VclOutdevTest::testDrawGradient_rect_complex()
 
     nIndex++;
     pAction = aMtf.GetAction(nIndex);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action", MetaActionType::FILLCOLOR,
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a complex gradient action", MetaActionType::COMPLEXGRADIENT,
                                  pAction->GetType());
+    MetaComplexGradientAction* pComplexAction = dynamic_cast<MetaComplexGradientAction*>(pAction);
 
-    nIndex = TestComplexStripes(aMtf, 40, nIndex);
-
-    nIndex++;
-    pAction = aMtf.GetAction(nIndex);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action", MetaActionType::FILLCOLOR,
-                                 pAction->GetType());
-
-    nIndex++;
-    pAction = aMtf.GetAction(nIndex);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polygon action", MetaActionType::POLYGON,
-                                 pAction->GetType());
+    TestComplexStripes(pComplexAction);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclOutdevTest);
