@@ -239,7 +239,7 @@ void OutputDevice::DrawGradientToMetafile ( const tools::PolyPolygon& rPolyPoly,
     // if the clipping polypolygon is a rectangle, then it's the same size as the bounding of the
     // polypolygon, so pass in a NULL for the clipping parameter
     if( aGradient.GetStyle() == GradientStyle::Linear || rGradient.GetStyle() == GradientStyle::Axial )
-        DrawLinearGradientToMetafile( aRect, aGradient );
+        mpMetaFile->AddAction(new MetaLinearGradientAction(aRect, aGradient, GetGradientSteps(rGradient, aRect, false/*bMtf*/)));
     else
         DrawComplexGradientToMetafile( aRect, aGradient );
 }
@@ -967,7 +967,7 @@ tools::Long OutputDevice::GetGradientSteps( const Gradient& rGradient, const too
     {
         tools::Long nInc;
 
-        nInc = GetGradientStepCount (nMinRect);
+        nInc = GetGradientStepIncrement(nMinRect);
         if ( !nInc || bMtf )
             nInc = 1;
         nStepCount = nMinRect / nInc;
