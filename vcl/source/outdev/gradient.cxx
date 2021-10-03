@@ -244,6 +244,24 @@ void OutputDevice::DrawGradientToMetafile ( const tools::PolyPolygon& rPolyPoly,
         DrawComplexGradientToMetafile( aRect, aGradient );
 }
 
+static tools::Long GetSteps(tools::Long nStartRed, tools::Long nStartGreen, tools::Long nStartBlue,
+                            tools::Long nEndRed, tools::Long nEndGreen, tools::Long nEndBlue,
+                            tools::Long nStepCount)
+{
+    // minimal three steps and maximal as max color steps
+    tools::Long nAbsRedSteps = std::abs(nEndRed - nStartRed);
+    tools::Long nAbsGreenSteps = std::abs(nEndGreen - nStartGreen);
+    tools::Long nAbsBlueSteps = std::abs(nEndBlue - nStartBlue );
+    tools::Long nMaxColorSteps = std::max(nAbsRedSteps, nAbsGreenSteps);
+    nMaxColorSteps = std::max(nMaxColorSteps, nAbsBlueSteps);
+    tools::Long nSteps = std::min(nStepCount, nMaxColorSteps);
+
+    if (nSteps < 3)
+        nSteps = 3;
+
+    return nSteps;
+}
+
 void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
                                        const Gradient& rGradient,
                                        const tools::PolyPolygon* pClixPolyPoly )
@@ -334,20 +352,9 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
         }
     }
 
-    // calculate step count
-    tools::Long    nStepCount  = GetGradientSteps( rGradient, aRect, false/*bMtf*/ );
-
-    // minimal three steps and maximal as max color steps
-    tools::Long   nAbsRedSteps   = std::abs( nEndRed   - nStartRed );
-    tools::Long   nAbsGreenSteps = std::abs( nEndGreen - nStartGreen );
-    tools::Long   nAbsBlueSteps  = std::abs( nEndBlue  - nStartBlue );
-    tools::Long   nMaxColorSteps = std::max( nAbsRedSteps , nAbsGreenSteps );
-    nMaxColorSteps = std::max( nMaxColorSteps, nAbsBlueSteps );
-    tools::Long nSteps = std::min( nStepCount, nMaxColorSteps );
-    if ( nSteps < 3)
-    {
-        nSteps = 3;
-    }
+    tools::Long nSteps = GetSteps(nStartRed, nStartGreen, nStartBlue,
+                                  nEndRed, nEndGreen, nEndBlue,
+                                  GetGradientSteps(rGradient, aRect, false /*bMtf*/));
 
     double fScanInc = static_cast<double>(aRect.GetHeight()) / static_cast<double>(nSteps);
     double fGradientLine = static_cast<double>(aRect.Top());

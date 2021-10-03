@@ -2082,6 +2082,24 @@ rtl::Reference<MetaAction> MetaTextLanguageAction::Clone() const
     return new MetaTextLanguageAction( *this );
 }
 
+static tools::Long GetSteps(tools::Long nStartRed, tools::Long nStartGreen, tools::Long nStartBlue,
+                            tools::Long nEndRed, tools::Long nEndGreen, tools::Long nEndBlue,
+                            tools::Long nStepCount)
+{
+    // minimal three steps and maximal as max color steps
+    tools::Long nAbsRedSteps = std::abs(nEndRed - nStartRed);
+    tools::Long nAbsGreenSteps = std::abs(nEndGreen - nStartGreen);
+    tools::Long nAbsBlueSteps = std::abs(nEndBlue - nStartBlue );
+    tools::Long nMaxColorSteps = std::max(nAbsRedSteps, nAbsGreenSteps);
+    nMaxColorSteps = std::max(nMaxColorSteps, nAbsBlueSteps);
+    tools::Long nSteps = std::min(nStepCount, nMaxColorSteps);
+
+    if (nSteps < 3)
+        nSteps = 3;
+
+    return nSteps;
+}
+
 MetaLinearGradientAction::MetaLinearGradientAction(tools::Rectangle const& rRect, Gradient const& rGradient, tools::Long nStepCount)
     : MetaAction(MetaActionType::LINEARGRADIENT)
 {
@@ -2150,15 +2168,9 @@ MetaLinearGradientAction::MetaLinearGradientAction(tools::Rectangle const& rRect
         }
     }
 
-    // minimal three steps and maximal as max color steps
-    tools::Long   nAbsRedSteps   = std::abs( nEndRed   - nStartRed );
-    tools::Long   nAbsGreenSteps = std::abs( nEndGreen - nStartGreen );
-    tools::Long   nAbsBlueSteps  = std::abs( nEndBlue  - nStartBlue );
-    tools::Long   nMaxColorSteps = std::max( nAbsRedSteps , nAbsGreenSteps );
-    nMaxColorSteps = std::max( nMaxColorSteps, nAbsBlueSteps );
-    tools::Long nSteps = std::min( nStepCount, nMaxColorSteps );
-    if (nSteps < 3)
-        nSteps = 3;
+    tools::Long nSteps = GetSteps(nStartRed, nStartGreen, nStartBlue,
+                                  nEndRed, nEndGreen, nEndBlue,
+                                  nStepCount);
 
     double fScanInc = static_cast<double>(aRect.GetHeight()) / static_cast<double>(nSteps);
     double fGradientLine = static_cast<double>(aRect.Top());
