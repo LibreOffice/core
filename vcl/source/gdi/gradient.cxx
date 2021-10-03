@@ -133,6 +133,47 @@ void Gradient::SetEndColor( const Color& rColor )
     mpImplGradient->maEndColor = rColor;
 }
 
+static std::tuple<tools::Long, tools::Long, tools::Long>
+CalculateColorIntensities(Color const& rColor, tools::Long nFactor)
+{
+    tools::Long nRed = (rColor.GetRed() * nFactor) / 100;
+    tools::Long nGreen = (rColor.GetGreen() * nFactor) / 100;
+    tools::Long nBlue = (rColor.GetBlue() * nFactor) / 100;
+
+    return std::make_tuple(nRed, nGreen, nBlue);
+}
+
+std::tuple<tools::Long, tools::Long, tools::Long, tools::Long, tools::Long, tools::Long>
+Gradient::GetColorIntensities() const
+{
+    tools::Long nStartRed = 0;
+    tools::Long nStartGreen = 0;
+    tools::Long nStartBlue = 0;
+
+    std::tie(nStartRed, nStartGreen, nStartBlue) = CalculateColorIntensities(GetStartColor(), GetStartIntensity());
+    tools::Long nEndRed = 0;
+    tools::Long nEndGreen = 0;
+    tools::Long nEndBlue = 0;
+
+    std::tie(nEndRed, nEndGreen, nEndBlue) = CalculateColorIntensities(GetEndColor(), GetEndIntensity());
+
+    // gradient style axial has exchanged start and end colors
+    if (GetStyle() == GradientStyle::Axial)
+    {
+        tools::Long nTempColor = nStartRed;
+        nStartRed = nEndRed;
+        nEndRed = nTempColor;
+        nTempColor = nStartGreen;
+        nStartGreen = nEndGreen;
+        nEndGreen = nTempColor;
+        nTempColor = nStartBlue;
+        nStartBlue = nEndBlue;
+        nEndBlue = nTempColor;
+    }
+
+    return std::make_tuple(nStartRed, nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue);
+}
+
 Degree10 Gradient::GetAngle() const
 {
     return mpImplGradient->mnAngle;

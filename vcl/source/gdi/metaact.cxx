@@ -2094,40 +2094,21 @@ MetaLinearGradientAction::MetaLinearGradientAction(tools::Rectangle const& rRect
 
     std::tie(aRect, aMirrorRect, aCenter, fBorder) = rGradient.GetBounds(rRect);
 
-    bool bAxial = (rGradient.GetStyle() == GradientStyle::Linear);
+    bool bAxial = (rGradient.GetStyle() != GradientStyle::Linear);
 
-    // colour-intensities of start- and finish; change if needed
-    tools::Long    nFactor;
-    Color   aStartCol   = rGradient.GetStartColor();
-    Color   aEndCol     = rGradient.GetEndColor();
-    tools::Long    nStartRed   = aStartCol.GetRed();
-    tools::Long    nStartGreen = aStartCol.GetGreen();
-    tools::Long    nStartBlue  = aStartCol.GetBlue();
-    tools::Long    nEndRed     = aEndCol.GetRed();
-    tools::Long    nEndGreen   = aEndCol.GetGreen();
-    tools::Long    nEndBlue    = aEndCol.GetBlue();
-    nFactor     = rGradient.GetStartIntensity();
-    nStartRed   = (nStartRed   * nFactor) / 100;
-    nStartGreen = (nStartGreen * nFactor) / 100;
-    nStartBlue  = (nStartBlue  * nFactor) / 100;
-    nFactor     = rGradient.GetEndIntensity();
-    nEndRed     = (nEndRed   * nFactor) / 100;
-    nEndGreen   = (nEndGreen * nFactor) / 100;
-    nEndBlue    = (nEndBlue  * nFactor) / 100;
+    aMirrorRect = aRect; // used in style axial
+    aMirrorRect.SetTop( ( aRect.Top() + aRect.Bottom() ) / 2 );
+    if (!bAxial)
+        aRect.SetBottom( aMirrorRect.Top() );
 
-    // gradient style axial has exchanged start and end colors
-    if (bAxial)
-    {
-        tools::Long nTempColor = nStartRed;
-        nStartRed = nEndRed;
-        nEndRed = nTempColor;
-        nTempColor = nStartGreen;
-        nStartGreen = nEndGreen;
-        nEndGreen = nTempColor;
-        nTempColor = nStartBlue;
-        nStartBlue = nEndBlue;
-        nEndBlue = nTempColor;
-    }
+    tools::Long nStartRed = 0;
+    tools::Long nStartGreen = 0;
+    tools::Long nStartBlue = 0;
+    tools::Long nEndRed = 0;
+    tools::Long nEndGreen = 0;
+    tools::Long nEndBlue = 0;
+
+    std::tie(nStartRed, nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue) = rGradient.GetColorIntensities();
 
     sal_uInt8   nRed;
     sal_uInt8   nGreen;
@@ -2154,7 +2135,7 @@ MetaLinearGradientAction::MetaLinearGradientAction(tools::Rectangle const& rRect
 
         maActions.push_back(new MetaPolygonAction(aPoly));
 
-        if (bAxial)
+        if ( !bAxial)
         {
             aBorderRect = aMirrorRect;
             aBorderRect.SetTop( static_cast<tools::Long>( aBorderRect.Bottom() - fBorder ) );
@@ -2184,7 +2165,7 @@ MetaLinearGradientAction::MetaLinearGradientAction(tools::Rectangle const& rRect
     double fMirrorGradientLine = static_cast<double>(aMirrorRect.Bottom());
 
     const double fStepsMinus1 = static_cast<double>(nSteps) - 1.0;
-    if (bAxial)
+    if (!bAxial)
         nSteps -= 1; // draw middle polygons as one polygon after loop to avoid gap
 
     for ( tools::Long i = 0; i < nSteps; i++ )
@@ -2211,7 +2192,7 @@ MetaLinearGradientAction::MetaLinearGradientAction(tools::Rectangle const& rRect
 
         maActions.push_back(new MetaPolygonAction(aPoly));
 
-        if (bAxial)
+        if (!bAxial)
         {
             aMirrorRect.SetBottom( static_cast<tools::Long>( fMirrorGradientLine - static_cast<double>(i) * fScanInc ) );
             aMirrorRect.SetTop( static_cast<tools::Long>( fMirrorGradientLine - (static_cast<double>(i) + 1.0)* fScanInc ) );
@@ -2225,7 +2206,7 @@ MetaLinearGradientAction::MetaLinearGradientAction(tools::Rectangle const& rRect
         }
     }
 
-    if (!bAxial)
+    if (bAxial)
         return;
 
     // draw middle polygon with end color
