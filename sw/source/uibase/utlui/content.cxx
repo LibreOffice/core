@@ -3359,6 +3359,27 @@ static void lcl_SelectByContentTypeAndAddress(SwContentTree* pThis, weld::TreeVi
                     p = pCnt->GetTextFootnote();
                     break;
                 }
+                case ContentTypeId::URLFIELD:
+                {
+                    assert(dynamic_cast<SwURLFieldContent*>(static_cast<SwTypeNumber*>(pUserData)));
+                    SwURLFieldContent* pCnt = static_cast<SwURLFieldContent*>(pUserData);
+                    p = static_cast<const SwTextAttr*>(pCnt->GetINetAttr());
+                    break;
+                }
+                case ContentTypeId::TEXTFIELD:
+                {
+                    assert(dynamic_cast<SwTextFieldContent*>(static_cast<SwTypeNumber*>(pUserData)));
+                    SwTextFieldContent* pCnt = static_cast/*reinterpret_cast*/<SwTextFieldContent*>(pUserData);
+                    p = pCnt->GetFormatField()->GetField();
+                    break;
+                }
+                case ContentTypeId::POSTIT:
+                {
+                    assert(dynamic_cast<SwPostItContent*>(static_cast<SwTypeNumber*>(pUserData)));
+                    SwPostItContent* pCnt = static_cast<SwPostItContent*>(pUserData);
+                    p = pCnt->GetPostIt()->GetField();
+                    break;
+                }
                 default:
                     break;
             }
@@ -3564,96 +3585,18 @@ void SwContentTree::UpdateTracking()
         // in the tree by name may result in incorrect selection. Find the item in the tree by
         // comparing the SwTextINetFormat pointer at the document cursor position to that stored
         // in the item SwURLFieldContent.
-        // find content type entry
-        std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
-        bool bFoundEntry = m_xTreeView->get_iter_first(*xIter);
-        while (bFoundEntry && SwResId(STR_CONTENT_TYPE_URLFIELD) != m_xTreeView->get_text(*xIter))
-            bFoundEntry = m_xTreeView->iter_next_sibling(*xIter);
-        if (bFoundEntry)
-        {
-            // assure content type entry is expanded
-            m_xTreeView->expand_row(*xIter);
-            // find content type content entry and select it
-            while (m_xTreeView->iter_next(*xIter) && lcl_IsContent(*xIter, *m_xTreeView))
-            {
-                if (aContentAtPos.pFndTextAttr == reinterpret_cast<const SwURLFieldContent*>
-                        (m_xTreeView->get_id(*xIter).toInt64())->GetINetAttr())
-                {
-                    // get first selected for comparison
-                    std::unique_ptr<weld::TreeIter> xFirstSelected(m_xTreeView->make_iterator());
-                    if (!m_xTreeView->get_selected(xFirstSelected.get()))
-                        xFirstSelected.reset();
-                    if (m_xTreeView->count_selected_rows() != 1 ||
-                            m_xTreeView->iter_compare(*xIter, *xFirstSelected) != 0)
-                    {
-                        // unselect all entries and make found entry visible and selected
-                        m_xTreeView->set_cursor(*xIter);
-                        Select();
-                    }
-                    break;
-                }
-            }
-        }
+        lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, ContentTypeId::URLFIELD,
+                                          aContentAtPos.pFndTextAttr);
         return;
     }
     // fields
     if (SwField* pField = m_pActiveShell->GetCurField(); pField &&
             !(m_bIsRoot && m_nRootType != ContentTypeId::TEXTFIELD))
     {
-        OUString sContentType(SwResId(STR_CONTENT_TYPE_TEXTFIELD));
-        if (pField->GetTypeId() == SwFieldTypesEnum::Postit)
-            sContentType = SwResId(STR_CONTENT_TYPE_POSTIT);
-        // find content type entry
-        std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
-        bool bFoundEntry = m_xTreeView->get_iter_first(*xIter);
-        while (bFoundEntry && sContentType != m_xTreeView->get_text(*xIter))
-            bFoundEntry = m_xTreeView->iter_next_sibling(*xIter);
-        // find content type content entry and select it
-        if (bFoundEntry)
-        {
-            m_xTreeView->expand_row(*xIter); // assure content type entry is expanded
-            while (m_xTreeView->iter_next(*xIter) && lcl_IsContent(*xIter, *m_xTreeView))
-            {
-                if (pField->GetTypeId() == SwFieldTypesEnum::Postit)
-                {
-                    SwPostItContent* pCnt = reinterpret_cast<SwPostItContent*>(m_xTreeView->get_id(*xIter).toInt64());
-                    if (pCnt && pField == pCnt->GetPostIt()->GetField())
-                    {
-                        // get first selected for comparison
-                        std::unique_ptr<weld::TreeIter> xFirstSelected(m_xTreeView->make_iterator());
-                        if (!m_xTreeView->get_selected(xFirstSelected.get()))
-                            xFirstSelected.reset();
-                        if (m_xTreeView->count_selected_rows() != 1 ||
-                                m_xTreeView->iter_compare(*xIter, *xFirstSelected) != 0)
-                        {
-                            // unselect all entries and make passed entry visible and selected
-                            m_xTreeView->set_cursor(*xIter);
-                            Select();
-                        }
-                        break;
-                    }
-                }
-                else
-                {
-                    SwTextFieldContent* pCnt = reinterpret_cast<SwTextFieldContent*>(m_xTreeView->get_id(*xIter).toInt64());
-                    if (pCnt && pField == pCnt->GetFormatField()->GetField())
-                    {
-                        // get first selected for comparison
-                        std::unique_ptr<weld::TreeIter> xFirstSelected(m_xTreeView->make_iterator());
-                        if (!m_xTreeView->get_selected(xFirstSelected.get()))
-                            xFirstSelected.reset();
-                        if (m_xTreeView->count_selected_rows() != 1 ||
-                                m_xTreeView->iter_compare(*xIter, *xFirstSelected) != 0)
-                        {
-                            // unselect all entries and make passed entry visible and selected
-                            m_xTreeView->set_cursor(*xIter);
-                            Select();
-                        }
-                        break;
-                    }
-                }
-            }
-        }
+        ContentTypeId nContentTypeId =
+                pField->GetTypeId() == SwFieldTypesEnum::Postit ? ContentTypeId::POSTIT :
+                                                                  ContentTypeId::TEXTFIELD;
+        lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, nContentTypeId, pField);
         return;
     }
     // drawing
