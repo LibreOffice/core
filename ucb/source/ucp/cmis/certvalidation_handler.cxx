@@ -24,12 +24,11 @@
 
 #define STD_TO_OUSTR( str ) OUString( str.c_str(), str.length( ), RTL_TEXTENCODING_UTF8 )
 
-using namespace std;
 using namespace com::sun::star;
 
 namespace cmis
 {
-    bool CertValidationHandler::validateCertificate( vector< string > aCertificates )
+    bool CertValidationHandler::validateCertificate( std::vector< std::string > aCertificates )
     {
         bool bValidate = false;
         if ( !aCertificates.empty() && m_xEnv.is() )
@@ -51,8 +50,8 @@ namespace cmis
                 uno::Reference< xml::crypto::XSecurityEnvironment > xSecurityEnv(
                         xSecurityContext->getSecurityEnvironment() );
 
-                vector< string >::iterator pIt = aCertificates.begin();
-                string sCert = *pIt;
+                std::vector< std::string >::iterator pIt = aCertificates.begin();
+                std::string sCert = *pIt;
                 // We need to get rid of the PEM header/footer lines
                 OUString sCleanCert = STD_TO_OUSTR( sCert );
                 sCleanCert = sCleanCert.replaceAll( "-----BEGIN CERTIFICATE-----", "" );

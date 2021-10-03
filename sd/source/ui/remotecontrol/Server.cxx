@@ -33,7 +33,6 @@
 #include "Communicator.hxx"
 #include "BufferedStreamSocket.hxx"
 
-using namespace std;
 using namespace sd;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
