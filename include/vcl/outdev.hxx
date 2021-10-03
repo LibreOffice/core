@@ -811,10 +811,7 @@ private:
     SAL_DLLPRIVATE void         DrawLinearGradient( const tools::Rectangle& rRect, const Gradient& rGradient, const tools::PolyPolygon* pClipPolyPoly );
     SAL_DLLPRIVATE void         DrawComplexGradient( const tools::Rectangle& rRect, const Gradient& rGradient, const tools::PolyPolygon* pClipPolyPoly );
 
-    SAL_DLLPRIVATE void         DrawGradientToMetafile( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient );
-    SAL_DLLPRIVATE void         DrawLinearGradientToMetafile( const tools::Rectangle& rRect, const Gradient& rGradient );
-    SAL_DLLPRIVATE void         DrawComplexGradientToMetafile( const tools::Rectangle& rRect, const Gradient& rGradient );
-
+    virtual void DrawGradientToMetafile(tools::PolyPolygon const& rPolyPoly, Gradient const& rGradient);
     SAL_DLLPRIVATE tools::Long  GetLinearGradientSteps( const Gradient& rGradient, const tools::Rectangle& rRect, bool bMtf);
     SAL_DLLPRIVATE tools::Long  GetComplexGradientSteps( const Gradient& rGradient, const tools::Rectangle& rRect, bool bMtf);
 
@@ -1493,8 +1490,6 @@ public:
 protected:
 
     virtual void                EmulateDrawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
-
-    virtual void                ClipAndDrawGradientMetafile ( const Gradient &rGradient, const tools::PolyPolygon &rPolyPoly );
 
 private:
 

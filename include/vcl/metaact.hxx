@@ -40,6 +40,7 @@
 #include <vcl/lineinfo.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/region.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/rendercontext/RasterOp.hxx>
 #include <vcl/wall.hxx>
 
@@ -1745,6 +1746,97 @@ public:
 
     LanguageType        GetTextLanguage() const { return meTextLanguage; }
     void                SetTextLanguage(const LanguageType eTextLanguage) { meTextLanguage = eTextLanguage; }
+};
+
+class VCL_DLLPUBLIC MetaLinearGradientAction final : public MetaAction
+{
+    using ActionsType = std::vector<MetaAction*>;
+
+private:
+    ActionsType maActions;
+    size_t mnSteps;
+
+public:
+    MetaLinearGradientAction(tools::Rectangle const& rRect, Gradient const& rGradient, tools::Long nStepCount);
+    MetaLinearGradientAction(MetaLinearGradientAction const &) = default;
+    MetaLinearGradientAction(MetaLinearGradientAction &&) = default;
+    MetaLinearGradientAction & operator =(MetaLinearGradientAction const &) = delete; // due to MetaAction
+    MetaLinearGradientAction & operator =(MetaLinearGradientAction &&) = delete; // due to MetaAction
+
+public:
+    virtual void Execute(OutputDevice* pOut) override;
+    virtual void Move(tools::Long nHorzMove, tools::Long nVertMove) override;
+    virtual void Scale(double fScaleX, double fScaleY) override;
+
+    MetaAction* GetAction(size_t nIndex) const { return maActions[nIndex]; }
+    size_t GetSteps() const { return mnSteps; }
+
+    ActionsType::iterator begin() { return maActions.begin(); }
+    ActionsType::iterator end() { return maActions.end(); }
+
+    size_t size() const { return maActions.size(); }
+};
+
+class VCL_DLLPUBLIC MetaComplexGradientAction final : public MetaAction
+{
+    using ActionsType = std::vector<MetaAction*>;
+
+private:
+    ActionsType maActions;
+    size_t mnSteps;
+
+public:
+    MetaComplexGradientAction(tools::Rectangle const& rRect, Gradient const& rGradient, tools::Long nStepCount);
+    MetaComplexGradientAction(MetaComplexGradientAction const &) = default;
+    MetaComplexGradientAction(MetaComplexGradientAction &&) = default;
+    MetaComplexGradientAction & operator =(MetaComplexGradientAction const &) = delete; // due to MetaAction
+    MetaComplexGradientAction & operator =(MetaComplexGradientAction &&) = delete; // due to MetaAction
+
+public:
+    virtual void Execute(OutputDevice* pOut) override;
+    virtual void Move(tools::Long nHorzMove, tools::Long nVertMove) override;
+    virtual void Scale(double fScaleX, double fScaleY) override;
+
+    MetaAction* GetAction(size_t nIndex) const { return maActions[nIndex]; }
+    size_t GetSteps() const { return mnSteps; }
+
+    ActionsType::iterator begin() { return maActions.begin(); }
+    ActionsType::iterator end() { return maActions.end(); }
+
+    size_t size() const { return maActions.size(); }
+};
+
+class VCL_DLLPUBLIC MetaGradientContainerAction : public MetaAction
+{
+    using ActionsType = std::vector<MetaAction*>;
+
+private:
+    void Clip(Gradient const& rGradient, tools::PolyPolygon const& rPolyPoly);
+
+    ActionsType maActions;
+    bool mbWillBePrinted;
+
+public:
+    MetaGradientContainerAction(tools::PolyPolygon const& rPolyPoly, tools::Rectangle const& rBoundRect, Gradient const& rGradient, tools::Long nStepCount, DrawModeFlags nDrawMode, bool bWillBePrinted = false);
+    MetaGradientContainerAction(MetaGradientContainerAction const &) = default;
+    MetaGradientContainerAction(MetaGradientContainerAction &&) = default;
+    MetaGradientContainerAction & operator =(MetaGradientContainerAction const &) = delete; // due to MetaAction
+    MetaGradientContainerAction & operator =(MetaGradientContainerAction &&) = delete; // due to MetaAction
+
+public:
+    virtual void Execute(OutputDevice* pOut) override;
+    virtual void Move(tools::Long nHorzMove, tools::Long nVertMove) override;
+    virtual void Scale(double fScaleX, double fScaleY) override;
+
+    MetaAction* GetAction(size_t nIndex) const { return maActions[nIndex]; }
+
+    bool IsPrintable() const { return mbWillBePrinted; }
+
+    ActionsType::iterator begin() { return maActions.begin(); }
+    ActionsType::iterator end() { return maActions.end(); }
+
+    size_t size() const { return maActions.size(); }
+    bool empty() const { return maActions.empty(); }
 };
 
 #endif // INCLUDED_VCL_METAACT_HXX
