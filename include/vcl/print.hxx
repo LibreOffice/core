@@ -127,7 +127,7 @@ protected:
     void ImplReleaseGraphics(bool bRelease = true);
     virtual void                ImplReleaseFonts() override;
 
-    virtual tools::Long                GetGradientStepCount( tools::Long nMinRect ) override;
+    virtual tools::Long GetGradientStepIncrement(tools::Long nMinRect) override;
     virtual bool                UsePolyPolygonForComplexGradient() override;
     virtual void                ClipAndDrawGradientMetafile ( const Gradient &rGradient,
                                     const tools::PolyPolygon &rPolyPoly ) override;
