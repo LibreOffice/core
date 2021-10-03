@@ -798,6 +798,20 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
             TextLanguageHandler(pMetaAction);
         }
         break;
+
+        case MetaActionType::LINEARGRADIENT:
+        {
+            auto* pMetaAction = static_cast<MetaLinearGradientAction*>(pAction);
+            LinearGradientHandler(pMetaAction);
+        }
+        break;
+
+        case MetaActionType::COMPLEXGRADIENT:
+        {
+            auto* pMetaAction = static_cast<MetaComplexGradientAction*>(pAction);
+            ComplexGradientHandler(pMetaAction);
+        }
+        break;
     }
 }
 
@@ -1418,4 +1432,121 @@ void SvmWriter::TextLanguageHandler(const MetaTextLanguageAction* pAction)
     VersionCompatWrite aCompat(mrStream, 1);
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetTextLanguage()));
 }
+
+void SvmWriter::LinearGradientHandler(const MetaLinearGradientAction* pActionConst)
+{
+    MetaLinearGradientAction* pAction = const_cast<MetaLinearGradientAction*>(pActionConst);
+
+    for (auto* pLinearAction : *pAction)
+    {
+        MetaActionType nType = pAction->GetType();
+
+        switch (nType)
+        {
+            case MetaActionType::COMMENT:
+            {
+                auto* pMetaAction = static_cast<MetaCommentAction*>(pLinearAction);
+                CommentHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::FILLCOLOR:
+            {
+                auto* pMetaAction = static_cast<MetaFillColorAction*>(pLinearAction);
+                FillColorHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::LINECOLOR:
+            {
+                auto* pMetaAction = static_cast<MetaLineColorAction*>(pLinearAction);
+                LineColorHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::POLYGON:
+            {
+                auto* pMetaAction = static_cast<MetaPolygonAction*>(pLinearAction);
+                PolygonHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::POLYPOLYGON:
+            {
+                auto* pMetaAction = static_cast<MetaPolyPolygonAction*>(pLinearAction);
+                PolyPolygonHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::GRADIENT:
+            {
+                auto* pMetaAction = static_cast<MetaGradientAction*>(pLinearAction);
+                GradientHandler(pMetaAction);
+            }
+            break;
+
+            default:
+                break;
+        }
+    }
+}
+
+void SvmWriter::ComplexGradientHandler(const MetaComplexGradientAction* pActionConst)
+{
+    MetaComplexGradientAction* pAction = const_cast<MetaComplexGradientAction*>(pActionConst);
+
+    for (auto* pComplexAction : *pAction)
+    {
+        MetaActionType nType = pAction->GetType();
+
+        switch (nType)
+        {
+            case MetaActionType::COMMENT:
+            {
+                auto* pMetaAction = static_cast<MetaCommentAction*>(pComplexAction);
+                CommentHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::FILLCOLOR:
+            {
+                auto* pMetaAction = static_cast<MetaFillColorAction*>(pComplexAction);
+                FillColorHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::LINECOLOR:
+            {
+                auto* pMetaAction = static_cast<MetaLineColorAction*>(pComplexAction);
+                LineColorHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::POLYGON:
+            {
+                auto* pMetaAction = static_cast<MetaPolygonAction*>(pComplexAction);
+                PolygonHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::POLYPOLYGON:
+            {
+                auto* pMetaAction = static_cast<MetaPolyPolygonAction*>(pComplexAction);
+                PolyPolygonHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::GRADIENT:
+            {
+                auto* pMetaAction = static_cast<MetaGradientAction*>(pComplexAction);
+                GradientHandler(pMetaAction);
+            }
+            break;
+
+            default:
+                break;
+        }
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
