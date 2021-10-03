@@ -81,7 +81,6 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 
-using namespace std;
 using namespace osl;
 using namespace cppu;
 using namespace ucbhelper;
@@ -1044,7 +1043,7 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
     }
 }
 
-void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< uno::Sequence < PropertyValue > >& aManList )
+void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const std::vector< uno::Sequence < PropertyValue > >& aManList )
 {
     // Write the manifest
     uno::Reference < XManifestWriter > xWriter = ManifestWriter::create( m_xContext );
@@ -1071,7 +1070,7 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< uno::Seq
     aZipOut.rawCloseEntry();
 }
 
-void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno::Sequence < PropertyValue > >& aManList )
+void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const std::vector< uno::Sequence < PropertyValue > >& aManList )
 {
     ZipEntry* pEntry = new ZipEntry;
     rtl::Reference<ZipPackageBuffer> pBuffer = new ZipPackageBuffer;
@@ -1245,7 +1244,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
         }
 
         // Create a vector to store data for the manifest.xml file
-        vector < uno::Sequence < PropertyValue > > aManList;
+        std::vector < uno::Sequence < PropertyValue > > aManList;
 
         static constexpr OUStringLiteral sMediaType(u"MediaType");
         static constexpr OUStringLiteral sVersion(u"Version");

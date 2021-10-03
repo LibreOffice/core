@@ -31,7 +31,6 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star;
-using namespace std;
 
 
 constexpr OUStringLiteral gsFileEntryElement     ( u"" ELEMENT_FILE_ENTRY );
@@ -106,7 +105,7 @@ constexpr OUStringLiteral gsAES256_URL                   ( u"" AES256_URL );
 constexpr OUStringLiteral gsPBKDF2_Name                  ( u"" PBKDF2_NAME );
 constexpr OUStringLiteral gsPBKDF2_URL                   ( u"" PBKDF2_URL );
 
-ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManVector )
+ManifestImport::ManifestImport( std::vector < Sequence < PropertyValue > > & rNewManVector )
     : bIgnoreEncryptData    ( false )
     , bPgpEncryption ( false )
     , nDerivedKeySize( 0 )
