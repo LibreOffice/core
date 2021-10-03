@@ -39,7 +39,6 @@
 #include <uno/any2.h>
 #include "typelib.hxx"
 
-using namespace std;
 using namespace osl;
 
 #ifdef _WIN32
@@ -158,9 +157,9 @@ struct hashStr_Impl
 typedef std::unordered_map< const sal_Unicode *, typelib_TypeDescriptionReference *,
                   hashStr_Impl, equalStr_Impl > WeakMap_Impl;
 
-typedef pair< void *, typelib_typedescription_Callback > CallbackEntry;
-typedef list< CallbackEntry > CallbackSet_Impl;
-typedef list< typelib_TypeDescription * > TypeDescriptionList_Impl;
+typedef std::pair< void *, typelib_typedescription_Callback > CallbackEntry;
+typedef std::list< CallbackEntry > CallbackSet_Impl;
+typedef std::list< typelib_TypeDescription * > TypeDescriptionList_Impl;
 
 // # of cached elements
 static sal_Int32 nCacheSize = 256;

@@ -47,7 +47,6 @@
 #include "cascade_mapping.hxx"
 #include "loadmodule.hxx"
 
-using namespace std;
 using namespace osl;
 using namespace com::sun::star::uno;
 
@@ -156,11 +155,11 @@ struct MappingsData
     t_Mapping2Entry     aMapping2Entry;
 
     Mutex               aCallbacksMutex;
-    set< uno_getMappingFunc >
+    std::set< uno_getMappingFunc >
                         aCallbacks;
 
     std::mutex          aNegativeLibsMutex;
-    set<OUString>       aNegativeLibs;
+    std::set<OUString>       aNegativeLibs;
 };
 
 }
