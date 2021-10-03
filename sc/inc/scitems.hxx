@@ -204,6 +204,8 @@ constexpr TypedWhichId<ScPageScaleToItem> ATTR_PAGE_SCALETO (188);     // #i8868
 
 constexpr TypedWhichId<SfxBoolItem> ATTR_HIDDEN (189);
 
+constexpr TypedWhichId<ScIndentItem> ATTR_SPACEWIDTH(190);
+
 constexpr sal_uInt16 ATTR_ENDINDEX(ATTR_HIDDEN);        // end of pool-range
 
 // Dummy Slot-IDs for dialogs

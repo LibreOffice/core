@@ -292,6 +292,7 @@ struct ApiAlignmentData
     Degree100                    mnRotation;         /// Text rotation angle.
     sal_Int16                    mnWritingMode;      /// CTL text direction.
     sal_Int16                    mnIndent;           /// Indentation.
+    sal_Int16                    mnSpaceWidth;       /// Width of space char using the default font.
     bool                         mbWrapText;         /// True = multi-line text.
     bool                         mbShrink;           /// True = shrink to fit cell size.
 

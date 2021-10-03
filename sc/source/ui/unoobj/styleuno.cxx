@@ -1264,6 +1264,10 @@ uno::Any ScStyleObj::getPropertyDefault_Impl( std::u16string_view aPropertyName 
                     aAny <<= sal_Int16( convertTwipToMm100(static_cast<const ScIndentItem&>(
                                     pItemSet->Get(nWhich)).GetValue()) );
                     break;
+                case ATTR_SPACEWIDTH:
+                    aAny <<= sal_Int16( convertTwipToMm100(static_cast<const ScIndentItem&>(
+                                    pItemSet->Get(nWhich)).GetValue()) );
+                    break;
                 case ATTR_PAGE_SCALE:
                 case ATTR_PAGE_SCALETOPAGES:
                 case ATTR_PAGE_FIRSTPAGENO:

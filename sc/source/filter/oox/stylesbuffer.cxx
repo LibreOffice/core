@@ -1089,6 +1089,7 @@ ApiAlignmentData::ApiAlignmentData() :
     mnRotation( 0 ),
     mnWritingMode( css::text::WritingMode2::PAGE ),
     mnIndent( 0 ),
+    mnSpaceWidth(100),
     mbWrapText( false ),
     mbShrink( false )
 {
@@ -1183,9 +1184,15 @@ void Alignment::finalizeImport()
 
     /*  indentation: expressed as number of blocks of 3 space characters in
         OOXML. */
-    sal_Int32 nIndent = getUnitConverter().scaleToMm100( 3.0 * maModel.mnIndent, Unit::Space );
-    if( (0 <= nIndent) && (nIndent <= SAL_MAX_INT16) )
+    const UnitConverter& rUnitConvertor = getUnitConverter();
+    double nSpaceWidth = rUnitConvertor.getCoefficient(Unit::Space);
+    sal_Int32 nIndent = 3.0 * nSpaceWidth * maModel.mnIndent;
+
+    if ((0 <= nIndent) && (nIndent <= SAL_MAX_INT16))
+    {
+        maApiData.mnSpaceWidth = nSpaceWidth;
         maApiData.mnIndent = static_cast< sal_Int16 >( nIndent );
+    }
 
     // complex text direction
     switch( maModel.mnTextDir )
@@ -1300,6 +1307,7 @@ void Alignment::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
     // Orientation
     ScfTools::PutItem( rItemSet, ScVerticalStackCell( maApiData.meOrientation == css::table::CellOrientation_STACKED ), bSkipPoolDefs );
     // indent
+    ScfTools::PutItem( rItemSet, ScIndentItem( maApiData.mnSpaceWidth ), bSkipPoolDefs );
     ScfTools::PutItem( rItemSet, ScIndentItem( maApiData.mnIndent ), bSkipPoolDefs );
     // line wrap
     ScfTools::PutItem( rItemSet, ScLineBreakCell( maApiData.mbWrapText ), bSkipPoolDefs );
