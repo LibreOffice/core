@@ -244,6 +244,22 @@ void Gradient::SetSteps( sal_uInt16 nSteps )
     mpImplGradient->mnStepCount = nSteps;
 }
 
+tools::Polygon Gradient::GenerateBorderPolygon(tools::Rectangle aBorderRect, tools::Long nTop, tools::Long nBottom,
+        Point aCenter, Degree10 nAngle)
+{
+    aBorderRect.SetTop(nTop);
+    aBorderRect.SetBottom(nBottom);
+
+    tools::Polygon aPoly(4);
+    aPoly[0] = aBorderRect.TopLeft();
+    aPoly[1] = aBorderRect.TopRight();
+    aPoly[2] = aBorderRect.BottomRight();
+    aPoly[3] = aBorderRect.BottomLeft();
+    aPoly.Rotate(aCenter, nAngle);
+
+    return aPoly;
+}
+
 void Gradient::GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle& rBoundRect, Point& rCenter ) const
 {
     tools::Rectangle aRect( rRect );

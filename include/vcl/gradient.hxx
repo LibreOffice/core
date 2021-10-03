@@ -25,6 +25,7 @@
 #include <tools/color.hxx>
 #include <tools/degree.hxx>
 #include <tools/long.hxx>
+#include <tools/poly.hxx>
 
 #include <vcl/vclenum.hxx>
 #include <o3tl/cow_wrapper.hxx>
@@ -86,6 +87,10 @@ public:
     void            GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle &rBoundRect, Point& rCenter ) const;
 
     std::tuple<tools::Rectangle, tools::Rectangle, Point, double> GetBounds(tools::Rectangle const& rRect) const;
+
+    static tools::Polygon GenerateBorderPolygon(tools::Rectangle aBorderRect,
+                                                tools::Long nTop, tools::Long nBottom,
+                                                Point aCenter, Degree10 nAngle);
 
     Gradient&       operator=( const Gradient& rGradient );
     Gradient&       operator=( Gradient&& rGradient );
