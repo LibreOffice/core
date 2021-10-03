@@ -66,6 +66,11 @@
         <property name="use-underline">True</property>
         <property name="active">True</property>
         <property name="draw-indicator">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="createDatabase-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="generalpagewizard|extended_tip|createDatabase">Select to create a new database.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left-attach">0</property>
@@ -120,6 +125,11 @@
         <property name="use-underline">True</property>
         <property name="draw-indicator">True</property>
         <property name="group">createDatabase</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="openExistingDatabase-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="generalpagewizard|extended_tip|openExistingDatabase">Select to open a database file from a list of recently used files or from a file selection dialog.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left-attach">0</property>
@@ -159,6 +169,11 @@
             <property name="position">1</property>
           </packing>
         </child>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="docListBox-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="generalpagewizard|extended_tip|docListBox">Select a database file to open from the list of recently used files. Click Finish to open the file immediately and to exit the wizard.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left-attach">0</property>
@@ -174,6 +189,11 @@
         <property name="halign">start</property>
         <property name="margin-start">24</property>
         <property name="always-show-image">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="openDatabase-atkobject">
+            <property name="AtkObject::accessible-name" translatable="yes" context="generalpagewizard|extended_tip|openDatabase">Opens a file selection dialog where you can select a database file. Click Open or OK in the file selection dialog to open the file immediately and to exit the wizard.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left-attach">0</property>
@@ -190,6 +210,11 @@
         <property name="use-underline">True</property>
         <property name="draw-indicator">True</property>
         <property name="group">createDatabase</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="connectDatabase-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="generalpagewizard|extended_tip|connectDatabase">Select to create a database document for an existing database connection.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left-attach">0</property>
@@ -202,6 +227,11 @@
         <property name="can-focus">False</property>
         <property name="halign">start</property>
         <property name="margin-start">24</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="datasourceType-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="generalpagewizard|extended_tip|datasourceType">Select the database type for the existing database connection.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left-attach">0</property>
@@ -229,6 +259,11 @@ available in this setup.</property>
         <property name="left-attach">0</property>
         <property name="top-attach">4</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="PageGeneral-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="generalpagewizard|extended_tip|PageGeneral">The Database Wizard creates a database file that contains information about a database.</property>
+      </object>
     </child>
   </object>
 </interface>
