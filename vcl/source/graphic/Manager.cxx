@@ -140,6 +140,8 @@ void Manager::reduceGraphicMemory(std::unique_lock<std::mutex>& rGuard)
 
     if (calculatedSize != mnUsedSize)
     {
+        assert(rGuard.owns_lock() && rGuard.mutex() == &maMutex);
+        // coverity[missing_lock: FALSE] - as above assert
         mnUsedSize = calculatedSize;
     }
 
@@ -171,6 +173,8 @@ void Manager::registerGraphic(const std::shared_ptr<ImpGraphic>& pImpGraphic)
         reduceGraphicMemory(aGuard);
 
     // Insert and update the used size (bytes)
+    assert(aGuard.owns_lock() && aGuard.mutex() == &maMutex);
+    // coverity[missing_lock: FALSE] - as above assert
     mnUsedSize += getGraphicSizeBytes(pImpGraphic.get());
     m_pImpGraphicList.insert(pImpGraphic.get());
 
