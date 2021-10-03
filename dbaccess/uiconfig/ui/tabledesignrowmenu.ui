@@ -26,6 +26,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="tabledesignrowmenu|paste">_Paste</property>
+        <property name="use-underline">True</property>
       </object>
     </child>
     <child>
@@ -33,6 +34,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="tabledesignrowmenu|delete">_Delete</property>
+        <property name="use-underline">True</property>
       </object>
     </child>
     <child>
@@ -40,6 +42,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="tabledesignrowmenu|insert">Insert Rows</property>
+        <property name="use-underline">True</property>
       </object>
     </child>
     <child>
@@ -53,6 +56,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="tabledesignrowmenu|primarykey">Primary Key</property>
+        <property name="use-underline">True</property>
       </object>
     </child>
   </object>
