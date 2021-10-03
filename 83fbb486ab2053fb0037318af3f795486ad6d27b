@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c7e0f40_8a69bec4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-10-03T16:08:20Z",
+      "side": 1,
+      "message": "I did a make clean and ccache -C. Without this patch, the build failed at the very beginning. With this one applied, there is no fail so far, build is continuing and may take several hours.",
+      "revId": "83fbb486ab2053fb0037318af3f795486ad6d27b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
