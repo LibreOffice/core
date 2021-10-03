@@ -92,6 +92,11 @@ public:
                                                 tools::Long nTop, tools::Long nBottom,
                                                 Point aCenter, Degree10 nAngle);
 
+    static std::tuple<sal_uInt8, sal_uInt8, sal_uInt8>
+    InterpolateColor(tools::Long nStartRed, tools::Long nStartGreen, tools::Long nStartBlue,
+                 tools::Long nEndRed, tools::Long nEndGreen, tools::Long nEndBlue,
+                 tools::Long nSteps, tools::Long nStep);
+
     Gradient&       operator=( const Gradient& rGradient );
     Gradient&       operator=( Gradient&& rGradient );
     bool            operator==( const Gradient& rGradient ) const;

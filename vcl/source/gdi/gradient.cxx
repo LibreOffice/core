@@ -260,6 +260,27 @@ tools::Polygon Gradient::GenerateBorderPolygon(tools::Rectangle aBorderRect, too
     return aPoly;
 }
 
+std::tuple<sal_uInt8, sal_uInt8, sal_uInt8>
+Gradient::InterpolateColor(tools::Long nStartRed, tools::Long nStartGreen, tools::Long nStartBlue,
+                 tools::Long nEndRed, tools::Long nEndGreen, tools::Long nEndBlue,
+                 tools::Long nSteps, tools::Long nStep)
+{
+    const double fStepsMinus1 = static_cast<double>(nSteps) - 1.0;
+
+    double fAlpha = static_cast<double>(nStep) / fStepsMinus1;
+
+    double fTempColor = static_cast<double>(nStartRed) * (1.0-fAlpha) + static_cast<double>(nEndRed) * fAlpha;
+    sal_uInt8 nRed = Gradient::GetColorValue(static_cast<tools::Long>(fTempColor));
+
+    fTempColor = static_cast<double>(nStartGreen) * (1.0-fAlpha) + static_cast<double>(nEndGreen) * fAlpha;
+    sal_uInt8 nGreen = Gradient::GetColorValue(static_cast<tools::Long>(fTempColor));
+
+    fTempColor = static_cast<double>(nStartBlue) * (1.0-fAlpha) + static_cast<double>(nEndBlue) * fAlpha;
+    sal_uInt8 nBlue = Gradient::GetColorValue(static_cast<tools::Long>(fTempColor));
+
+    return std::make_tuple(nRed, nGreen, nBlue);
+}
+
 void Gradient::GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle& rBoundRect, Point& rCenter ) const
 {
     tools::Rectangle aRect( rRect );

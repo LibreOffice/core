@@ -2167,20 +2167,13 @@ MetaLinearGradientAction::MetaLinearGradientAction(tools::Rectangle const& rRect
     double fGradientLine = static_cast<double>(aRect.Top());
     double fMirrorGradientLine = static_cast<double>(aMirrorRect.Bottom());
 
-    const double fStepsMinus1 = static_cast<double>(nSteps) - 1.0;
     if (!bAxial)
         nSteps -= 1; // draw middle polygons as one polygon after loop to avoid gap
 
     for ( tools::Long i = 0; i < nSteps; i++ )
     {
-        // linear interpolation of color
-        double fAlpha = static_cast<double>(i) / fStepsMinus1;
-        double fTempColor = static_cast<double>(nStartRed) * (1.0-fAlpha) + static_cast<double>(nEndRed) * fAlpha;
-        nRed = Gradient::GetColorValue(static_cast<tools::Long>(fTempColor));
-        fTempColor = static_cast<double>(nStartGreen) * (1.0-fAlpha) + static_cast<double>(nEndGreen) * fAlpha;
-        nGreen = Gradient::GetColorValue(static_cast<tools::Long>(fTempColor));
-        fTempColor = static_cast<double>(nStartBlue) * (1.0-fAlpha) + static_cast<double>(nEndBlue) * fAlpha;
-        nBlue = Gradient::GetColorValue(static_cast<tools::Long>(fTempColor));
+        std::tie(nRed, nGreen, nBlue) = Gradient::InterpolateColor(nStartRed, nStartGreen, nStartBlue,
+                nEndRed, nEndGreen, nEndBlue, nSteps, i);
 
         maActions.push_back(new MetaFillColorAction(Color(nRed, nGreen, nBlue), true));
 
