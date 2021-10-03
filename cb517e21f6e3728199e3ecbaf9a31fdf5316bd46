@@ -16,6 +16,24 @@
       "message": "With this commit, I get the following error when build. Is this a known issue?\n\u0027\u0027\u0027\n/home/suokunlong/lo/source/core/solenv/gbuild/AllLangMoTarget.mk:40: *** unterminated call to function \u0027call\u0027: missing \u0027)\u0027.  Stop.\nmake: *** [Makefile:288: build] Error 2\n\u0027\u0027\u0027",
       "revId": "cb517e21f6e3728199e3ecbaf9a31fdf5316bd46",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8044ce74_b4ed4923",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-10-03T16:01:35Z",
+      "side": 1,
+      "message": "odd that build passed, I guess it doesn\u0027t do any translation related work by default. How about with https://gerrit.libreoffice.org/c/core/+/123027",
+      "parentUuid": "303c38b7_30ccf89a",
+      "revId": "cb517e21f6e3728199e3ecbaf9a31fdf5316bd46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
