@@ -68,7 +68,11 @@ void ScStyleSaveData::InitFromStyle( const SfxStyleSheetBase* pSource )
         moItems.emplace(const_cast<SfxStyleSheetBase*>(pSource)->GetItemSet());
     }
     else
-        *this = ScStyleSaveData();      // empty
+    {
+        aName.clear();
+        aParent.clear();
+        moItems.reset();
+    }
 }
 
 ScUndoModifyStyle::ScUndoModifyStyle( ScDocShell* pDocSh, SfxStyleFamily eFam,
