@@ -93,4 +93,7 @@ public:
     void CommentHandler(const MetaCommentAction* pAction);
     void LayoutModeHandler(const MetaLayoutModeAction* pAction);
     void TextLanguageHandler(const MetaTextLanguageAction* pAction);
+    void LinearGradientHandler(const MetaLinearGradientAction* pAction);
+    void ComplexGradientHandler(const MetaComplexGradientAction* pAction);
+    void GradientContainerHandler(const MetaGradientContainerAction* pAction);
 };
