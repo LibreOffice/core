@@ -35,8 +35,10 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/specialchars.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace dbaui;
@@ -355,6 +357,79 @@ bool SQLEditView::KeyInput(const KeyEvent& rKEvt)
     }
 
     return WeldEditView::KeyInput(rKEvt);
+}
+
+bool SQLEditView::Command(const CommandEvent& rCEvt)
+{
+    if (rCEvt.GetCommand() == CommandEventId::ContextMenu)
+    {
+        ::tools::Rectangle aRect(rCEvt.GetMousePosPixel(), Size(1, 1));
+        weld::Widget* pPopupParent = GetDrawingArea();
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "vcl/ui/editmenu.ui"));
+        std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu("menu"));
+
+        bool bEnableCut = true;
+        bool bEnableCopy = true;
+        bool bEnableDelete = true;
+        bool bEnablePaste = true;
+        bool bEnableSpecialChar = true;
+
+        EditView* pEditView = GetEditView();
+
+        if (!pEditView->HasSelection())
+        {
+            bEnableCut = false;
+            bEnableCopy = false;
+            bEnableDelete = false;
+        }
+
+        if (pEditView->IsReadOnly())
+        {
+            bEnableCut = false;
+            bEnablePaste = false;
+            bEnableDelete = false;
+            bEnableSpecialChar = false;
+        }
+
+        xContextMenu->set_sensitive("cut", bEnableCut);
+        xContextMenu->set_sensitive("copy", bEnableCopy);
+        xContextMenu->set_sensitive("delete", bEnableDelete);
+        xContextMenu->set_sensitive("paste", bEnablePaste);
+        xContextMenu->set_sensitive("specialchar", bEnableSpecialChar);
+        xContextMenu->set_visible("undo", false);
+        xContextMenu->set_visible("specialchar", vcl::GetGetSpecialCharsFunction() != nullptr);
+
+        OString sCommand = xContextMenu->popup_at_rect(pPopupParent, aRect);
+
+        if (sCommand == "cut")
+            pEditView->Cut();
+        else if (sCommand == "copy")
+            pEditView->Copy();
+        else if (sCommand == "paste")
+            pEditView->Paste();
+        else if (sCommand == "delete")
+            pEditView->DeleteSelected();
+        else if (sCommand == "selectall")
+        {
+            sal_Int32 nPar = m_xEditEngine->GetParagraphCount();
+            if (nPar)
+            {
+                sal_Int32 nLen = m_xEditEngine->GetTextLen(nPar - 1);
+                pEditView->SetSelection(ESelection(0, 0, nPar - 1, nLen));
+            }
+        }
+        else if (sCommand == "specialchar")
+        {
+            OUString aChars = vcl::GetGetSpecialCharsFunction()(pPopupParent, m_xEditEngine->GetStandardFont(0));
+            if (!aChars.isEmpty())
+            {
+                pEditView->InsertText(aChars);
+            }
+        }
+
+        return true;
+    }
+    return WeldEditView::Command(rCEvt);
 }
 
 void SQLEditView::ConfigurationChanged(utl::ConfigurationBroadcaster*, ConfigurationHints)
