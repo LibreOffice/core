@@ -714,7 +714,6 @@ void SwWrtShell::GotoFootnoteAnchor(const SwTextFootnote& rTextFootnote)
         m_aNavigationMgr.addEntry(aPos);
 }
 
-
 const SwRangeRedline* SwWrtShell::GotoRedline( SwRedlineTable::size_type nArrPos, bool bSelect ) {
     SwPosition aPos = *GetCursor()->GetPoint();
     const SwRangeRedline *pRedline = SwCursorShell::GotoRedline(nArrPos, bSelect);
