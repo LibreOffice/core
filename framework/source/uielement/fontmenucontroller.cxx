@@ -45,8 +45,6 @@ using namespace css::frame;
 using namespace css::beans;
 using namespace css::util;
 
-using namespace std;
-
 static bool lcl_I18nCompareString(const OUString& rStr1, const OUString& rStr2)
 {
     const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
@@ -97,7 +95,7 @@ void FontMenuController::fillPopupMenu( const Sequence< OUString >& rFontNameSeq
     if ( !pVCLPopupMenu )
         return;
 
-    vector<OUString> aVector;
+    std::vector<OUString> aVector;
     aVector.reserve(rFontNameSeq.getLength());
     for ( OUString const & s : rFontNameSeq )
     {

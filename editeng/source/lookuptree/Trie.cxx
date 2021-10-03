@@ -16,8 +16,6 @@
 namespace editeng
 {
 
-using namespace std;
-
 /* TrieNode */
 
 struct TrieNode final
@@ -36,7 +34,7 @@ struct TrieNode final
     TrieNode* traversePath(const OUString& sPath);
     void      addNewChild(TrieNode* pChild);
     void      collectSuggestions(std::u16string_view sPath, std::vector<OUString>& rSuggestionList);
-    static void  collectSuggestionsForCurrentNode(TrieNode* pCurrent, std::u16string_view sPath, vector<OUString>& rSuggestionList);
+    static void  collectSuggestionsForCurrentNode(TrieNode* pCurrent, std::u16string_view sPath, std::vector<OUString>& rSuggestionList);
 };
 
 TrieNode::TrieNode(sal_Unicode aCharacter) :
@@ -84,7 +82,7 @@ TrieNode* TrieNode::findChild(sal_Unicode aInputCharacter)
     return nullptr;
 }
 
-void TrieNode::collectSuggestions(std::u16string_view sPath, vector<OUString>& rSuggestionList)
+void TrieNode::collectSuggestions(std::u16string_view sPath, std::vector<OUString>& rSuggestionList)
 {
     // first traverse nodes for alphabet characters
     for (auto const & pCurrent : mLatinArray)
@@ -101,7 +99,7 @@ void TrieNode::collectSuggestions(std::u16string_view sPath, vector<OUString>& r
     }
 }
 
-void TrieNode::collectSuggestionsForCurrentNode(TrieNode* pCurrent, std::u16string_view sPath, vector<OUString>& rSuggestionList)
+void TrieNode::collectSuggestionsForCurrentNode(TrieNode* pCurrent, std::u16string_view sPath, std::vector<OUString>& rSuggestionList)
 {
     OUString aStringPath = sPath + OUStringChar(pCurrent->mCharacter);
     if(pCurrent->mMarker)
@@ -168,7 +166,7 @@ void Trie::insert(const OUString& sInputString) const
     pCurrent->markWord();
 }
 
-void Trie::findSuggestions(const OUString& sWordPart, vector<OUString>& rSuggestionList) const
+void Trie::findSuggestions(const OUString& sWordPart, std::vector<OUString>& rSuggestionList) const
 {
     TrieNode* pNode = mRoot->traversePath(sWordPart);
 

@@ -36,7 +36,6 @@ using namespace css::task;
 using namespace css::io;
 using namespace osl;
 using namespace ucbhelper;
-using namespace std;
 
 
 CSubmissionGet::CSubmissionGet(const OUString& aURL, const css::uno::Reference< css::xml::dom::XDocumentFragment >& aFragment)

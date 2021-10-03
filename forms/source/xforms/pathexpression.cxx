@@ -33,7 +33,6 @@
 using com::sun::star::uno::Reference;
 using com::sun::star::xml::dom::XNode;
 using com::sun::star::xml::dom::XNodeList;
-using namespace std;
 
 
 namespace xforms
