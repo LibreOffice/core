@@ -69,6 +69,7 @@ namespace dbaui
         virtual ~SQLEditView() override;
 
         virtual bool KeyInput(const KeyEvent& rKEvt) override;
+        virtual bool Command(const CommandEvent& rCEvt) override;
 
         void SetTextAndUpdate(const OUString& rNewText);
 
