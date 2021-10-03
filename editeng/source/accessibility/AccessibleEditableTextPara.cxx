@@ -68,7 +68,6 @@
 #include "AccessibleImageBullet.hxx"
 
 #include <svtools/colorcfg.hxx>
-using namespace std;
 #include <editeng/editrids.hrc>
 #include <editeng/eerdll.hxx>
 #include <editeng/numitem.hxx>
@@ -1276,7 +1275,7 @@ namespace accessibility
             sal_Int32 i = 0;
             for( i = 0; i < nLength; i++ )
                 pIndices[i] = i;
-            sort( &pIndices[0], &pIndices[nLength], IndexCompare(pPairs) );
+            std::sort( &pIndices[0], &pIndices[nLength], IndexCompare(pPairs) );
             // create sorted sequences according to index array
             uno::Sequence<beans::PropertyValue> aNewValues( nLength );
             beans::PropertyValue* pNewValues = aNewValues.getArray();

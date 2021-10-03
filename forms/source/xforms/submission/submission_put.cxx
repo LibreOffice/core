@@ -33,7 +33,6 @@ using namespace css::task;
 using namespace css::io;
 using namespace osl;
 using namespace ucbhelper;
-using namespace std;
 
 
 CSubmissionPut::CSubmissionPut(const OUString& aURL, const css::uno::Reference< css::xml::dom::XDocumentFragment >& aFragment)
@@ -44,7 +43,7 @@ CSubmissionPut::CSubmissionPut(const OUString& aURL, const css::uno::Reference< 
 CSubmission::SubmissionResult CSubmissionPut::submit(const css::uno::Reference< css::task::XInteractionHandler >& aInteractionHandler)
 {
     css::uno::Reference< XCommandEnvironment > aEnvironment;
-    unique_ptr< CSerialization > apSerialization(createSerialization(aInteractionHandler,aEnvironment));
+    std::unique_ptr< CSerialization > apSerialization(createSerialization(aInteractionHandler,aEnvironment));
 
     try {
         ucbhelper::Content aContent(m_aURLObj.GetMainURL(INetURLObject::DecodeMechanism::NONE), aEnvironment, comphelper::getProcessComponentContext());

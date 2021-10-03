@@ -56,7 +56,6 @@
 #include <vcl/commandinfoprovider.hxx>
 
 using namespace osl;
-using namespace std;
 using namespace com::sun::star::task;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;

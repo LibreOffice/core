@@ -34,8 +34,6 @@
 #include <vcl/pngwrite.hxx>
 #endif
 
-using namespace std;
-
 // GDI-Array
 
 #define EMR_HEADER                      1

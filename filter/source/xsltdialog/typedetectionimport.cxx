@@ -32,7 +32,6 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::xml::sax;
 using namespace com::sun::star;
-using namespace std;
 
 TypeDetectionImporter::TypeDetectionImporter()
 {

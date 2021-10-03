@@ -35,7 +35,6 @@
 using xforms::Convert;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::makeAny;
-using namespace std;
 using namespace utl;
 
 Convert::Convert()
