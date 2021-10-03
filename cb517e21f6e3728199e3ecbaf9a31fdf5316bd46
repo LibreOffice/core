@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "303c38b7_30ccf89a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-10-03T15:54:37Z",
+      "side": 1,
+      "message": "With this commit, I get the following error when build. Is this a known issue?\n\u0027\u0027\u0027\n/home/suokunlong/lo/source/core/solenv/gbuild/AllLangMoTarget.mk:40: *** unterminated call to function \u0027call\u0027: missing \u0027)\u0027.  Stop.\nmake: *** [Makefile:288: build] Error 2\n\u0027\u0027\u0027",
+      "revId": "cb517e21f6e3728199e3ecbaf9a31fdf5316bd46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
