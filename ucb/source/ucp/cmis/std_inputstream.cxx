@@ -16,21 +16,20 @@
 
 #include "std_inputstream.hxx"
 
-using namespace std;
 using namespace com::sun::star;
 
 namespace cmis
 {
-    StdInputStream::StdInputStream( boost::shared_ptr< istream > const & pStream ) :
+    StdInputStream::StdInputStream( boost::shared_ptr< std::istream > const & pStream ) :
         m_pStream( pStream ),
         m_nLength( 0 )
     {
         if (m_pStream)
         {
-            streampos nInitPos = m_pStream->tellg( );
-            m_pStream->seekg( 0, ios_base::end );
-            streampos nEndPos = m_pStream->tellg( );
-            m_pStream->seekg( nInitPos, ios_base::beg );
+            auto nInitPos = m_pStream->tellg( );
+            m_pStream->seekg( 0, std::ios_base::end );
+            auto nEndPos = m_pStream->tellg( );
+            m_pStream->seekg( nInitPos, std::ios_base::beg );
 
             m_nLength = sal_Int64( nEndPos - nInitPos );
         }
@@ -75,7 +74,7 @@ namespace cmis
             m_pStream->read( reinterpret_cast< char* >( aData.getArray( ) ), nBytesToRead );
             nRead = m_pStream->gcount();
         }
-        catch ( const ios_base::failure& e )
+        catch ( const std::ios_base::failure& e )
         {
             SAL_INFO( "ucb.ucp.cmis", "StdInputStream::readBytes() error: " << e.what() );
             throw io::IOException( );
@@ -100,7 +99,7 @@ namespace cmis
         {
             nRead = m_pStream->readsome( reinterpret_cast< char* >( aData.getArray( ) ), nMaxBytesToRead );
         }
-        catch ( const ios_base::failure& e )
+        catch ( const std::ios_base::failure& e )
         {
             SAL_INFO( "ucb.ucp.cmis", "StdInputStream::readBytes() error: " << e.what() );
             throw io::IOException( );
@@ -117,9 +116,9 @@ namespace cmis
 
         try
         {
-            m_pStream->seekg( nBytesToSkip, ios_base::cur );
+            m_pStream->seekg( nBytesToSkip, std::ios_base::cur );
         }
-        catch ( const ios_base::failure& e )
+        catch ( const std::ios_base::failure& e )
         {
             SAL_INFO( "ucb.ucp.cmis", "StdInputStream::readBytes() error: " << e.what() );
             throw io::IOException( );
@@ -151,9 +150,9 @@ namespace cmis
         try
         {
             m_pStream->clear( ); // may be needed to rewind the stream
-            m_pStream->seekg( location, ios_base::beg );
+            m_pStream->seekg( location, std::ios_base::beg );
         }
-        catch ( const ios_base::failure& e )
+        catch ( const std::ios_base::failure& e )
         {
             SAL_INFO( "ucb.ucp.cmis", "StdInputStream::readBytes() error: " << e.what() );
             throw io::IOException( );

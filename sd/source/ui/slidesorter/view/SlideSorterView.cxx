@@ -55,7 +55,6 @@
 #include <vector>
 #endif
 
-using namespace std;
 using namespace ::sd::slidesorter::model;
 using namespace ::drawinglayer::primitive2d;
 

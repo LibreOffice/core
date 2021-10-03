@@ -42,7 +42,6 @@
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
-using namespace std;
 using namespace webdav_ucp;
 
 
@@ -201,8 +200,8 @@ static void NPFR_propfind_results( void* userdata,
     ne_propset_iterate( set, NPFR_propfind_iter, &theResource );
 
     // Add entry to resources list.
-    vector< DAVResource > * theResources
-        = static_cast< vector< DAVResource > * >( userdata );
+    std::vector< DAVResource > * theResources
+        = static_cast< std::vector< DAVResource > * >( userdata );
     theResources->push_back( theResource );
 }
 
@@ -233,8 +232,8 @@ static void NPFR_propnames_results( void* userdata,
     ne_propset_iterate( results, NPFR_propnames_iter, &theResource );
 
     // Add entry to resources list.
-    vector< DAVResourceInfo > * theResources
-        = static_cast< vector< DAVResourceInfo > * >( userdata );
+    std::vector< DAVResourceInfo > * theResources
+        = static_cast< std::vector< DAVResourceInfo > * >( userdata );
     theResources->push_back( theResource );
 }
 
@@ -243,8 +242,8 @@ static void NPFR_propnames_results( void* userdata,
 NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
                                           const char* inPath,
                                           const Depth inDepth,
-                                          const vector< OUString >& inPropNames,
-                                          vector< DAVResource >& ioResources,
+                                          const std::vector< OUString >& inPropNames,
+                                          std::vector< DAVResource >& ioResources,
                                           int & nError )
 {
     // Generate the list of properties we're looking for

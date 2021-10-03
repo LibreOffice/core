@@ -28,7 +28,6 @@
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
-using namespace std;
 
 CMimeContentType::CMimeContentType( const OUString& aCntType )
 {

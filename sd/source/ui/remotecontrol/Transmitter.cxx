@@ -10,7 +10,6 @@
 #include "IBluetoothSocket.hxx"
 #include <sal/log.hxx>
 
-using namespace std;
 using namespace osl; // Sockets etc.
 using namespace sd;
 

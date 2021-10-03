@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#define OUSTR_TO_STDSTR(s) string( OUStringToOString( s, RTL_TEXTENCODING_UTF8 ).getStr() )
+#define OUSTR_TO_STDSTR(s) std::string( OUStringToOString( s, RTL_TEXTENCODING_UTF8 ).getStr() )
 #define STD_TO_OUSTR( str ) OUString( str.c_str(), str.length( ), RTL_TEXTENCODING_UTF8 )
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -21,11 +21,10 @@
 #include "auth_provider.hxx"
 
 using namespace com::sun::star;
-using namespace std;
 
 namespace cmis
 {
-    bool AuthProvider::authenticationQuery( string& username, string& password )
+    bool AuthProvider::authenticationQuery( std::string& username, std::string& password )
     {
         if ( m_xEnv.is() )
         {
@@ -67,9 +66,9 @@ namespace cmis
         return false;
     }
 
-    string AuthProvider::getRefreshToken(string& rUsername)
+    std::string AuthProvider::getRefreshToken(std::string& rUsername)
     {
-        string refreshToken;
+        std::string refreshToken;
         const css::uno::Reference<css::ucb::XCommandEnvironment> xEnv = getXEnv();
         if (xEnv.is())
         {
@@ -123,8 +122,8 @@ namespace cmis
         return refreshToken;
     }
 
-    bool AuthProvider::storeRefreshToken(const string& username, const string& password,
-                                         const string& refreshToken)
+    bool AuthProvider::storeRefreshToken(const std::string& username, const std::string& password,
+                                         const std::string& refreshToken)
     {
         if (refreshToken.empty())
             return false;

@@ -14,8 +14,6 @@
 
 #include "cmis_url.hxx"
 
-using namespace std;
-
 namespace cmis
 {
     URL::URL( OUString const & urlStr )

@@ -27,7 +27,6 @@
 #include <RemoteServer.hxx>
 
 using namespace sd;
-using namespace std;
 using namespace com::sun::star;
 using namespace osl;
 
@@ -93,7 +92,7 @@ void Communicator::execute()
     }
 
     sal_uInt64 aRet;
-    vector<OString> aCommand;
+    std::vector<OString> aCommand;
     while ( true )
     {
         OString aLine;
