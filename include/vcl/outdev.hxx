@@ -796,7 +796,7 @@ protected:
 
     virtual bool                UsePolyPolygonForComplexGradient() = 0;
 
-    virtual tools::Long                GetGradientStepCount( tools::Long nMinRect );
+    virtual tools::Long GetGradientStepIncrement(tools::Long nMinRect);
 
 private:
 
