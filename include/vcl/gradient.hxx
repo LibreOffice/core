@@ -81,6 +81,8 @@ public:
 
     void            GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle &rBoundRect, Point& rCenter ) const;
 
+    std::tuple<tools::Rectangle, tools::Rectangle, Point, double> GetBounds(tools::Rectangle const& rRect) const;
+
     Gradient&       operator=( const Gradient& rGradient );
     Gradient&       operator=( Gradient&& rGradient );
     bool            operator==( const Gradient& rGradient ) const;

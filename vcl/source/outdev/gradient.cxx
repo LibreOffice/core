@@ -254,19 +254,12 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
     tools::Rectangle aRect;
     Point     aCenter;
     Degree10  nAngle = rGradient.GetAngle() % 3600_deg10;
+    double fBorder = 0.0;
+    tools::Rectangle aMirrorRect;
 
-    rGradient.GetBoundRect( rRect, aRect, aCenter );
+    std::tie(aRect, aMirrorRect, aCenter, fBorder) = rGradient.GetBounds(rRect);
 
     bool bAxial = (rGradient.GetStyle() == GradientStyle::Linear);
-    double fBorder = rGradient.GetBorder() * aRect.GetHeight() / 100.0;
-    if (bAxial)
-        fBorder /= 2.0;
-
-    tools::Rectangle aMirrorRect = aRect; // used in style axial
-    aMirrorRect.SetTop( ( aRect.Top() + aRect.Bottom() ) / 2 );
-
-    if (bAxial)
-        aRect.SetBottom( aMirrorRect.Top() );
 
     // colour-intensities of start- and finish; change if needed
     tools::Long    nFactor;
