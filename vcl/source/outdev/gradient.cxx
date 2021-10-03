@@ -944,7 +944,7 @@ void OutputDevice::DrawComplexGradientToMetafile( const tools::Rectangle& rRect,
     mpMetaFile->AddAction( new MetaPolygonAction( rPoly ) );
 }
 
-tools::Long OutputDevice::GetGradientStepCount( tools::Long nMinRect )
+tools::Long OutputDevice::GetGradientStepIncrement(tools::Long nMinRect)
 {
     tools::Long nInc = (nMinRect < 50) ? 2 : 4;
 
