@@ -39,7 +39,7 @@ $(call gb_MoTarget_get_target,%) : \
 	$(call gb_Trace_StartRange,$*,MO )
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
-		$(MSGUNIQ) --force-po $(gb_POLOCATION)/$(LANGUAGE)/$(POLOCATION)/messages.po | $(MSGFMT) - -o $@; \
+		$(MSGUNIQ) --force-po $(gb_POLOCATION)/$(LANGUAGE)/$(POLOCATION)/messages.po | $(MSGFMT) - -o $@)
 	$(call gb_Trace_EndRange,$*,MO )
 
 #$(info $(call gb_MoTarget_get_target,$(1)))
