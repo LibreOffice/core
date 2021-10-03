@@ -27,7 +27,6 @@
 #include <com/sun/star/drawing/LineCap.hpp>
 
 using namespace com::sun::star;
-using namespace std;
 
 namespace drawinglayer::primitive2d
 {
