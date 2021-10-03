@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2336d4ba_83e2e995",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003349
+      },
+      "writtenOn": "2021-10-03T05:55:07Z",
+      "side": 1,
+      "message": "Eike, the regression that you picked up previously was addressed by reverting those changes. I don\u0027t believe any have been included with the new patchset, which has gone in a less abrupt direction.\n\nThanks.",
+      "revId": "b9beb36a15f80388ad6744be526a769aef5729ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
