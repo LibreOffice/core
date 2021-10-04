@@ -6226,6 +6226,12 @@ void SalInstanceComboBoxWithoutEdit::copy_entry_clipboard() { assert(false); }
 
 void SalInstanceComboBoxWithoutEdit::paste_entry_clipboard() { assert(false); }
 
+void SalInstanceComboBoxWithoutEdit::set_font(const vcl::Font& rFont)
+{
+    m_xComboBox->SetControlFont(rFont);
+    m_xComboBox->Invalidate();
+}
+
 void SalInstanceComboBoxWithoutEdit::set_entry_font(const vcl::Font&) { assert(false); }
 
 vcl::Font SalInstanceComboBoxWithoutEdit::get_entry_font()
@@ -6387,10 +6393,18 @@ bool SalInstanceComboBoxWithEdit::get_entry_selection_bounds(int& rStartPos, int
     return rSelection.Len();
 }
 
+void SalInstanceComboBoxWithEdit::set_font(const vcl::Font& rFont)
+{
+    m_xComboBox->SetControlFont(rFont);
+    m_xComboBox->Invalidate();
+}
+
 void SalInstanceComboBoxWithEdit::set_entry_font(const vcl::Font& rFont)
 {
-    m_xComboBox->SetControlFont(rFont); // tdf#134601 set it as control font to take effect properly
-    m_xComboBox->Invalidate();
+    Edit* pEdit = m_xComboBox->GetSubEdit();
+    assert(pEdit);
+    pEdit->SetControlFont(rFont); // tdf#134601 set it as control font to take effect properly
+    pEdit->Invalidate();
 }
 
 vcl::Font SalInstanceComboBoxWithEdit::get_entry_font()
@@ -6521,12 +6535,9 @@ public:
         rEntry.SetAutocompleteHdl(Link<Edit&, void>());
     }
 
-    virtual void set_entry_font(const vcl::Font& rFont) override
-    {
-        Edit& rEntry = m_pEntry->getEntry();
-        rEntry.SetControlFont(rFont);
-        rEntry.Invalidate();
-    }
+    virtual void set_font(const vcl::Font&) override { assert(false && "not implemented"); }
+
+    virtual void set_entry_font(const vcl::Font& rFont) override { m_pEntry->set_font(rFont); }
 
     virtual vcl::Font get_entry_font() override
     {

@@ -172,7 +172,7 @@ namespace svt
 
         virtual bool ProcessKey(const KeyEvent& rKEvt);
 
-        virtual void SetPointFont(const vcl::Font& rFont);
+        virtual void SetPointFont(const vcl::Font& rFont) = 0;
 
         // chain after the FocusInHdl
         void SetFocusInHdl(const Link<LinkParamNone*,void>& rHdl)
@@ -564,6 +564,8 @@ namespace svt
         virtual ~CheckBoxControl() override;
         virtual void dispose() override;
 
+        virtual void SetPointFont(const vcl::Font& rFont) override;
+
         void SetToggleHdl(const Link<weld::CheckButton&,void>& rHdl) {m_aToggleLink = rHdl;}
 
         // sets a link to call when the text is changed by the user
@@ -628,6 +630,8 @@ namespace svt
 
     public:
         ComboBoxControl(BrowserDataWin* pParent);
+
+        virtual void SetPointFont(const vcl::Font& rFont) override;
 
         virtual void SetEditableReadOnly(bool bReadOnly) override
         {
@@ -694,6 +698,8 @@ namespace svt
 
     public:
         ListBoxControl(BrowserDataWin* pParent);
+
+        virtual void SetPointFont(const vcl::Font& rFont) override;
 
         weld::ComboBox& get_widget() { return *m_xWidget; }
 

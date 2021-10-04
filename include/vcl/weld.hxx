@@ -787,6 +787,9 @@ public:
     virtual void paste_entry_clipboard() = 0;
 
     // font size is in points, not pixels, e.g. see Window::[G]etPointFont
+    virtual void set_font(const vcl::Font& rFont) = 0;
+
+    // font size is in points, not pixels, e.g. see Window::[G]etPointFont
     virtual void set_entry_font(const vcl::Font& rFont) = 0;
     virtual vcl::Font get_entry_font() = 0;
 

@@ -37,6 +37,11 @@ namespace svt
         m_xWidget->connect_mouse_move(LINK(this, ControlBase, MouseMoveHdl));
     }
 
+    void ComboBoxControl::SetPointFont(const vcl::Font& rFont)
+    {
+        m_xWidget->set_entry_font(rFont);
+    }
+
     void ComboBoxControl::dispose()
     {
         m_xWidget.reset();
@@ -127,6 +132,11 @@ namespace svt
         m_xWidget->connect_mouse_move(LINK(this, ControlBase, MouseMoveHdl));
     }
 
+    void ListBoxControl::SetPointFont(const vcl::Font& rFont)
+    {
+        m_xWidget->set_font(rFont);
+    }
+
     void ListBoxControl::dispose()
     {
         m_xWidget.reset();
@@ -199,6 +209,10 @@ namespace svt
         m_xBox->connect_mouse_release(LINK(this, ControlBase, MouseReleaseHdl));
         m_xBox->connect_mouse_move(LINK(this, ControlBase, MouseMoveHdl));
         m_xBox->connect_toggled(LINK(this, CheckBoxControl, OnToggle));
+    }
+
+    void CheckBoxControl::SetPointFont(const vcl::Font& /*rFont*/)
+    {
     }
 
     void CheckBoxControl::EnableTriState( bool bTriState )
@@ -359,10 +373,6 @@ namespace svt
     bool ControlBase::ProcessKey(const KeyEvent& rKEvt)
     {
         return static_cast<BrowserDataWin*>(GetParent())->GetParent()->ProcessKey(rKEvt);
-    }
-
-    void ControlBase::SetPointFont(const vcl::Font& /*rFont*/)
-    {
     }
 
     IMPL_LINK(ControlBase, KeyInputHdl, const KeyEvent&, rKEvt, bool)
