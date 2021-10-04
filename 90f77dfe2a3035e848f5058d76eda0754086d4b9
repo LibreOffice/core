@@ -33,6 +33,24 @@
       "message": "We have https://lists.freedesktop.org/archives/libreoffice/2020-February/084572.html",
       "revId": "90f77dfe2a3035e848f5058d76eda0754086d4b9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89c15256_462c9eac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-10-04T09:21:12Z",
+      "side": 1,
+      "message": "ah! i looked at \"Owner\" which has a gmail address and didn\u0027t notice that \"Author\" is a different address ending in \"ossii.com.tw\"",
+      "parentUuid": "b5881c99_4b3d8764",
+      "revId": "90f77dfe2a3035e848f5058d76eda0754086d4b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
