@@ -144,6 +144,8 @@ public:
 
     void             QueryControlState ( sal_uInt16 nSID, boost::property_tree::ptree& rState );
 
+    sal_uInt16       QuerySlotId( const css::util::URL& aURL );
+
     const SfxPoolItem*  ExecuteSynchron( sal_uInt16 nSlot,
                                  const SfxPoolItem **pArgs = nullptr);
     bool             Execute( sal_uInt16 nSlot,
