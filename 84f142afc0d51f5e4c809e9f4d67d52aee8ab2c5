@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3656ac55_16b411f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-10-04T09:50:41Z",
+      "side": 1,
+      "message": "@Szücsi: thanks for the clean-up, there is no page style regression any more!\n\nI\u0027ve found a freezing with one of my test documents. If it\u0027s possible to fix it by removing checking the balancing option, I suggest to do that (especially because checking balancing will be obsolete with the upcoming compatibility option, which is going to solve the back-compatibility).",
+      "revId": "84f142afc0d51f5e4c809e9f4d67d52aee8ab2c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
