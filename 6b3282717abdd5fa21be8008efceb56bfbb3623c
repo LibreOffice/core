@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0e2d794_d8eb6090",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-10-04T09:03:10Z",
+      "side": 1,
+      "message": "Hi Akshit, I\u0027ll check it out.",
+      "revId": "6b3282717abdd5fa21be8008efceb56bfbb3623c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
