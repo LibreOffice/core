@@ -88,7 +88,7 @@ void SwLinePortion::PrePaint( const SwTextPaintInfo& rInf,
     sal_uInt16 nLastWidth = pLast->Width();
 
     if ( pLast->InSpaceGrp() && rInf.GetSpaceAdd() )
-        nLastWidth = nLastWidth + o3tl::narrowing<sal_uInt16>(pLast->CalcSpacing( rInf.GetSpaceAdd(), rInf ));
+        nLastWidth = nLastWidth + static_cast<sal_uInt16>(pLast->CalcSpacing( rInf.GetSpaceAdd(), rInf ));
 
     sal_uInt16 nPos;
     SwTextPaintInfo aInf( rInf );
@@ -246,7 +246,7 @@ bool SwLinePortion::Format( SwTextFormatInfo &rInf )
     const SwLinePortion *pLast = rInf.GetLast();
     Height( pLast->Height() );
     SetAscent( pLast->GetAscent() );
-    const sal_uInt16 nNewWidth = o3tl::narrowing<sal_uInt16>(rInf.X() + PrtWidth());
+    const sal_uInt16 nNewWidth = static_cast<sal_uInt16>(rInf.X() + PrtWidth());
     // Only portions with true width can return true
     // Notes for example never set bFull==true
     if( rInf.Width() <= nNewWidth && PrtWidth() && ! IsKernPortion() )
