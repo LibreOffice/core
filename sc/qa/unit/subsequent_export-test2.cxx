@@ -202,6 +202,7 @@ public:
     void testTdf142264ManyChartsToXLSX();
     void testTdf143929MultiColumnToODS();
     void testTdf142578();
+    void testTdf130104_XLSXIndent();
 
     CPPUNIT_TEST_SUITE(ScExportTest2);
 
@@ -305,6 +306,7 @@ public:
     CPPUNIT_TEST(testTdf142264ManyChartsToXLSX);
     CPPUNIT_TEST(testTdf143929MultiColumnToODS);
     CPPUNIT_TEST(testTdf142578);
+    CPPUNIT_TEST(testTdf130104_XLSXIndent);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2662,6 +2664,95 @@ void ScExportTest2::testTdf142578()
     OString sDxfCondFormatXPath("/x:styleSheet/x:dxfs/x:dxf[" + OString::number(nDxfIdCondFormat)
                                 + "]/x:fill/x:patternFill/x:bgColor");
     assertXPath(pStyles, sDxfCondFormatXPath, "rgb", "FFFFCCCC");
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest2::testTdf130104_XLSXIndent()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf130104_indent.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh);
+
+    // Resave the xlsx file without any modification.
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+    xmlDocUniquePtr pSheet
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pSheet);
+    xmlDocUniquePtr pStyle = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/styles.xml");
+    CPPUNIT_ASSERT(pStyle);
+
+    // Check to see whether the indents remain the same as the original ones:
+
+    // Get the style index number for cell A1
+    sal_Int32 nCellA1StyleIndex
+        = getXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[1]", "s").toInt32() + 1;
+    // The indent for cell A1 should be 0
+    OString sStyleA1XPath
+        = "/x:styleSheet/x:cellXfs/x:xf[" + OString::number(nCellA1StyleIndex) + "]/x:alignment";
+    // (if this assertion fails, you should first check whether there is no style index set for this cell)
+    assertXPath(pStyle, sStyleA1XPath, "indent", "0");
+
+    sal_Int32 nCellA3StyleIndex
+        = getXPath(pSheet, "/x:worksheet/x:sheetData/x:row[3]/x:c[1]", "s").toInt32() + 1;
+    // The indent for cell A3 should be 1
+    OString sStyleA3XPath
+        = "/x:styleSheet/x:cellXfs/x:xf[" + OString::number(nCellA3StyleIndex) + "]/x:alignment";
+    assertXPath(pStyle, sStyleA3XPath, "indent", "1");
+
+    sal_Int32 nCellA6StyleIndex
+        = getXPath(pSheet, "/x:worksheet/x:sheetData/x:row[6]/x:c[1]", "s").toInt32() + 1;
+    OString sStyleA6XPath
+        = "/x:styleSheet/x:cellXfs/x:xf[" + OString::number(nCellA6StyleIndex) + "]/x:alignment";
+    assertXPath(pStyle, sStyleA6XPath, "indent", "2");
+
+    sal_Int32 nCellA9StyleIndex
+        = getXPath(pSheet, "/x:worksheet/x:sheetData/x:row[9]/x:c[1]", "s").toInt32() + 1;
+    OString sStyleA9XPath
+        = "/x:styleSheet/x:cellXfs/x:xf[" + OString::number(nCellA9StyleIndex) + "]/x:alignment";
+    assertXPath(pStyle, sStyleA9XPath, "indent", "3");
+
+    sal_Int32 nCellA12StyleIndex
+        = getXPath(pSheet, "/x:worksheet/x:sheetData/x:row[12]/x:c[1]", "s").toInt32() + 1;
+    OString sStyleA12XPath
+        = "/x:styleSheet/x:cellXfs/x:xf[" + OString::number(nCellA12StyleIndex) + "]/x:alignment";
+    assertXPath(pStyle, sStyleA12XPath, "indent", "4");
+
+    sal_Int32 nCellA15StyleIndex
+        = getXPath(pSheet, "/x:worksheet/x:sheetData/x:row[15]/x:c[1]", "s").toInt32() + 1;
+    OString sStyleA15XPath
+        = "/x:styleSheet/x:cellXfs/x:xf[" + OString::number(nCellA15StyleIndex) + "]/x:alignment";
+    assertXPath(pStyle, sStyleA15XPath, "indent", "5");
+
+    sal_Int32 nCellA18StyleIndex
+        = getXPath(pSheet, "/x:worksheet/x:sheetData/x:row[18]/x:c[1]", "s").toInt32() + 1;
+    OString sStyleA18XPath
+        = "/x:styleSheet/x:cellXfs/x:xf[" + OString::number(nCellA18StyleIndex) + "]/x:alignment";
+    assertXPath(pStyle, sStyleA18XPath, "indent", "6");
+
+    sal_Int32 nCellA21StyleIndex
+        = getXPath(pSheet, "/x:worksheet/x:sheetData/x:row[21]/x:c[1]", "s").toInt32() + 1;
+    OString sStyleA21XPath
+        = "/x:styleSheet/x:cellXfs/x:xf[" + OString::number(nCellA21StyleIndex) + "]/x:alignment";
+    assertXPath(pStyle, sStyleA21XPath, "indent", "7");
+
+    sal_Int32 nCellA24StyleIndex
+        = getXPath(pSheet, "/x:worksheet/x:sheetData/x:row[24]/x:c[1]", "s").toInt32() + 1;
+    OString sStyleA24XPath
+        = "/x:styleSheet/x:cellXfs/x:xf[" + OString::number(nCellA24StyleIndex) + "]/x:alignment";
+    assertXPath(pStyle, sStyleA24XPath, "indent", "8");
+
+    sal_Int32 nCellA27StyleIndex
+        = getXPath(pSheet, "/x:worksheet/x:sheetData/x:row[27]/x:c[1]", "s").toInt32() + 1;
+    OString sStyleA27XPath
+        = "/x:styleSheet/x:cellXfs/x:xf[" + OString::number(nCellA27StyleIndex) + "]/x:alignment";
+    assertXPath(pStyle, sStyleA27XPath, "indent", "9");
+
+    sal_Int32 nCellA30StyleIndex
+        = getXPath(pSheet, "/x:worksheet/x:sheetData/x:row[30]/x:c[1]", "s").toInt32() + 1;
+    OString sStyleA30XPath
+        = "/x:styleSheet/x:cellXfs/x:xf[" + OString::number(nCellA30StyleIndex) + "]/x:alignment";
+    assertXPath(pStyle, sStyleA30XPath, "indent", "10");
 
     xDocSh->DoClose();
 }
