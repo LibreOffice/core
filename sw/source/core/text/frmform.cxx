@@ -1182,8 +1182,8 @@ bool SwTextFrame::FormatLine( SwTextFormatter &rLine, const bool bPrev )
     SwParaPortion *pPara = rLine.GetInfo().GetParaPortion();
     const SwLineLayout *pOldCur = rLine.GetCurr();
     const TextFrameIndex nOldLen = pOldCur->GetLen();
-    const sal_uInt32 nOldAscent = pOldCur->GetAscent();
-    const sal_uInt32 nOldHeight = pOldCur->Height();
+    const sal_uInt16 nOldAscent = pOldCur->GetAscent();
+    const sal_uInt16 nOldHeight = pOldCur->Height();
     const SwTwips nOldWidth = pOldCur->Width() + pOldCur->GetHangingMargin();
     const bool bOldHyph = pOldCur->IsEndHyph();
     SwTwips nOldTop = 0;
@@ -1205,7 +1205,7 @@ bool SwTextFrame::FormatLine( SwTextFormatter &rLine, const bool bPrev )
                   bOldHyph == pNew->IsEndHyph();
     if ( bUnChg && !bPrev )
     {
-        const tools::Long nWidthDiff = nOldWidth > static_cast<SwTwips>(pNew->Width())
+        const tools::Long nWidthDiff = nOldWidth > pNew->Width()
                                 ? nOldWidth - pNew->Width()
                                 : pNew->Width() - nOldWidth;
 
@@ -1259,7 +1259,7 @@ bool SwTextFrame::FormatLine( SwTextFormatter &rLine, const bool bPrev )
                 rLine.SetUnclipped( false );
             }
         }
-        SwTwips nRght = std::max( nOldWidth, static_cast<SwTwips>(pNew->Width()) +
+        SwTwips nRght = std::max( nOldWidth, pNew->Width() +
                              pNew->GetHangingMargin() );
         SwViewShell *pSh = getRootFrame()->GetCurrShell();
         const SwViewOption *pOpt = pSh ? pSh->GetViewOptions() : nullptr;
