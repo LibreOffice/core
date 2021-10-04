@@ -340,7 +340,6 @@ void ScTable::GetAllRowBreaks(set<SCROW>& rBreaks, bool bPage, bool bManual) con
 
     if (bManual)
     {
-        using namespace std;
         copy(maRowManualBreaks.begin(), maRowManualBreaks.end(),
              inserter(rBreaks, rBreaks.begin()));
     }
@@ -353,7 +352,6 @@ void ScTable::GetAllColBreaks(set<SCCOL>& rBreaks, bool bPage, bool bManual) con
 
     if (bManual)
     {
-        using namespace std;
         copy(maColManualBreaks.begin(), maColManualBreaks.end(),
              inserter(rBreaks, rBreaks.begin()));
     }
@@ -399,8 +397,6 @@ SCROW ScTable::GetNextManualBreak(SCROW nRow) const
 
 void ScTable::RemoveRowPageBreaks(SCROW nStartRow, SCROW nEndRow)
 {
-    using namespace std;
-
     if (!ValidRow(nStartRow) || !ValidRow(nEndRow))
         return;
 

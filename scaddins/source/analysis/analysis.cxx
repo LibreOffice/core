@@ -38,7 +38,6 @@ constexpr OUStringLiteral MY_IMPLNAME = u"com.sun.star.sheet.addin.AnalysisImpl"
 
 using namespace                 ::com::sun::star;
 using namespace sca::analysis;
-using namespace std;
 
 OUString AnalysisAddIn::GetFuncDescrStr(const TranslateId* pResId, sal_uInt16 nStrIndex)
 {

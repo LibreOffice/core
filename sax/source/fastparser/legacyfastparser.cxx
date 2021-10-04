@@ -29,7 +29,6 @@
 #include <memory>
 #include <vector>
 
-using namespace std;
 using namespace ::cppu;
 using namespace css;
 using namespace uno;
@@ -49,7 +48,7 @@ private:
 
         NamespaceDefine( const OUString& rPrefix, const OUString& rNamespaceURI ) : m_aPrefix( rPrefix ), m_aNamespaceURI( rNamespaceURI ) {}
     };
-    vector< unique_ptr< NamespaceDefine > > m_aNamespaceDefines;
+    std::vector< std::unique_ptr< NamespaceDefine > > m_aNamespaceDefines;
 
 public:
     NamespaceHandler();

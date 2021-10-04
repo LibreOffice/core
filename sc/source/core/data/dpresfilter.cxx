@@ -20,7 +20,6 @@
 #include <limits>
 
 using namespace com::sun::star;
-using namespace std;
 
 ScDPResultFilter::ScDPResultFilter(const OUString& rDimName, bool bDataLayout) :
     maDimName(rDimName), mbHasValue(false), mbDataLayout(bDataLayout) {}

@@ -49,7 +49,6 @@ using namespace css;
 using namespace uno;
 using namespace io;
 using namespace xml::sax;
-using namespace std;
 using namespace ::osl;
 using namespace sax_fastparser;
 
@@ -71,8 +70,8 @@ class TestDocumentHandler : public cppu::WeakImplHelper< XDocumentHandler >
 {
 private:
     OUString m_aStr;
-    deque< pair<OUString,OUString> > m_aNamespaceStack;
-    stack<sal_uInt16> m_aCountStack;
+    std::deque< std::pair<OUString,OUString> > m_aNamespaceStack;
+    std::stack<sal_uInt16> m_aCountStack;
 
     OUString canonicalform(const OUString &sName, const OUString &sValue, bool isElement);
     OUString getNamespace(std::u16string_view sName);
@@ -126,7 +125,7 @@ OUString TestDocumentHandler::getNamespace(std::u16string_view sName)
 {
     for (sal_Int16 i = m_aNamespaceStack.size() - 1; i>=0; i--)
     {
-        pair<OUString, OUString> aPair = m_aNamespaceStack.at(i);
+        std::pair<OUString, OUString> aPair = m_aNamespaceStack.at(i);
         if (aPair.first == sName)
             return aPair.second;
     }
@@ -137,8 +136,8 @@ void SAL_CALL TestDocumentHandler::startDocument()
 {
     m_aStr.clear();
     m_aNamespaceStack.clear();
-    m_aNamespaceStack.emplace_back( make_pair( OUString( "default" ), OUString() ) );
-    m_aCountStack = stack<sal_uInt16>();
+    m_aNamespaceStack.emplace_back( std::make_pair( OUString( "default" ), OUString() ) );
+    m_aCountStack = std::stack<sal_uInt16>();
     m_aCountStack.emplace(0);
 }
 
