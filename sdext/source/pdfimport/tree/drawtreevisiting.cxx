@@ -767,7 +767,7 @@ void DrawXmlFinalizer::visit( PolyPolyElement& elem, const std::list< std::uniqu
         {
             PropertyMap props;
             FillDashStyleProps(props, rGC.DashArray, scale);
-            StyleContainer::Style style("draw:stroke-dash", props);
+            StyleContainer::Style style("draw:stroke-dash", std::move(props));
 
             aGCProps[ "draw:stroke" ] = "dash";
             aGCProps[ "draw:stroke-dash" ] =
@@ -800,8 +800,8 @@ void DrawXmlFinalizer::visit( PolyPolyElement& elem, const std::list< std::uniqu
         aGCProps[ "draw:fill" ] = "none";
     }
 
-    StyleContainer::Style aStyle( "style:style", aProps );
-    StyleContainer::Style aSubStyle( "style:graphic-properties", aGCProps );
+    StyleContainer::Style aStyle( "style:style", std::move(aProps) );
+    StyleContainer::Style aSubStyle( "style:graphic-properties", std::move(aGCProps) );
     aStyle.SubStyles.push_back( &aSubStyle );
 
     elem.StyleId = m_rStyleContainer.getStyleId( aStyle );
@@ -880,8 +880,8 @@ void DrawXmlFinalizer::visit( TextElement& elem, const std::list< std::unique_pt
         aFontProps[ "style:text-scale" ] = getPercentString(textScale);
     }
 
-    StyleContainer::Style aStyle( "style:style", aProps );
-    StyleContainer::Style aSubStyle( "style:text-properties", aFontProps );
+    StyleContainer::Style aStyle( "style:style", std::move(aProps) );
+    StyleContainer::Style aSubStyle( "style:text-properties", std::move(aFontProps) );
     aStyle.SubStyles.push_back( &aSubStyle );
     elem.StyleId = m_rStyleContainer.getStyleId( aStyle );
 }
@@ -902,8 +902,8 @@ void DrawXmlFinalizer::visit( ParagraphElement& elem, const std::list< std::uniq
     else
         aParProps[ "style:writing-mode"]                    = "lr-tb";
 
-    StyleContainer::Style aStyle( "style:style", aProps );
-    StyleContainer::Style aSubStyle( "style:paragraph-properties", aParProps );
+    StyleContainer::Style aStyle( "style:style", std::move(aProps) );
+    StyleContainer::Style aSubStyle( "style:paragraph-properties", std::move(aParProps) );
     aStyle.SubStyles.push_back( &aSubStyle );
 
     elem.StyleId = m_rStyleContainer.getStyleId( aStyle );
@@ -934,7 +934,7 @@ void DrawXmlFinalizer::visit( FrameElement& elem, const std::list< std::unique_p
     aGCProps[ "fo:padding-right" ]               = "0cm";
     aGCProps[ "fo:padding-bottom" ]              = "0cm";
 
-    StyleContainer::Style style1( "style:style", props1 );
+    StyleContainer::Style style1( "style:style", std::move(props1) );
     StyleContainer::Style subStyle1( "style:graphic-properties", aGCProps );
     style1.SubStyles.push_back(&subStyle1);
 

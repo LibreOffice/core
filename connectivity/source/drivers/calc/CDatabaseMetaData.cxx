@@ -209,7 +209,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
         }
     }
 
-    pResult->setRows(aRows);
+    pResult->setRows(std::move(aRows));
 
     return pResult;
 }

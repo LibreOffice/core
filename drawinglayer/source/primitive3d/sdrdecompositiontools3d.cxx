@@ -137,7 +137,7 @@ namespace drawinglayer::primitive3d
 
             // create line and stroke attribute
             const attribute::LineAttribute aLineAttribute(rLine.getColor(), rLine.getWidth(), rLine.getJoin(), rLine.getCap());
-            const attribute::StrokeAttribute aStrokeAttribute(rLine.getDotDashArray(), rLine.getFullDotDashLen());
+            const attribute::StrokeAttribute aStrokeAttribute(std::vector(rLine.getDotDashArray()), rLine.getFullDotDashLen());
 
             // create primitives
             Primitive3DContainer aRetval(aScaledPolyPolygon.count());

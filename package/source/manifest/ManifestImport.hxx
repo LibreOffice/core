@@ -41,9 +41,9 @@ struct ManifestScopeEntry
     StringHashMap   m_aNamespaces;
     bool            m_bValid;
 
-    ManifestScopeEntry( const OUString& aConvertedName, const StringHashMap& aNamespaces )
+    ManifestScopeEntry( const OUString& aConvertedName, StringHashMap&& aNamespaces )
     : m_aConvertedName( aConvertedName )
-    , m_aNamespaces( aNamespaces )
+    , m_aNamespaces( std::move(aNamespaces) )
     , m_bValid( true )
     {}
 };

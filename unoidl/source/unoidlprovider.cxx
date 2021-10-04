@@ -649,7 +649,7 @@ ConstantValue readConstant(
 
 rtl::Reference< Entity > readEntity(
     rtl::Reference< MappedFile > const & file, sal_uInt32 offset,
-    std::set<Map> const & trace);
+    std::set<Map> && trace);
 
 class UnoidlModuleEntity;
 
@@ -682,7 +682,7 @@ rtl::Reference< Entity > UnoidlCursor::getNext(OUString * name) {
     if (index_ != map_.map.size) {
         *name = file_->readNulName(map_.map.begin[index_].name.getUnsigned32());
         ent = readEntity(
-            file_, map_.map.begin[index_].data.getUnsigned32(), map_.trace);
+            file_, map_.map.begin[index_].data.getUnsigned32(), std::set(map_.trace));
         ++index_;
     }
     return ent;
@@ -692,14 +692,14 @@ class UnoidlModuleEntity: public ModuleEntity {
 public:
     UnoidlModuleEntity(
         rtl::Reference< MappedFile > const & file, sal_uInt32 mapOffset,
-        sal_uInt32 mapSize, std::set<Map> const & trace):
+        sal_uInt32 mapSize, std::set<Map> && trace):
         file_(file)
     {
         assert(file.is());
         map_.map.begin = reinterpret_cast<MapEntry const *>(
             static_cast<char const *>(file_->address) + mapOffset);
         map_.map.size = mapSize;
-        map_.trace = trace;
+        map_.trace = std::move(trace);
         if (!map_.trace.insert(map_.map).second) {
             throw FileFormatException(
                 file_->uri, "UNOIDL format: recursive map");
@@ -732,7 +732,7 @@ std::vector< OUString > UnoidlModuleEntity::getMemberNames() const {
 
 rtl::Reference< Entity > readEntity(
     rtl::Reference< MappedFile > const & file, sal_uInt32 offset,
-    std::set<Map> const & trace)
+    std::set<Map> && trace)
 {
     assert(file.is());
     int v = file->read8(offset);
@@ -761,7 +761,7 @@ rtl::Reference< Entity > readEntity(
                     file->uri,
                     "UNOIDL format: module map offset + size too large");
             }
-            return new UnoidlModuleEntity(file, offset + 5, n, trace);
+            return new UnoidlModuleEntity(file, offset + 5, n, std::move(trace));
         }
     case 1: // enum type
         {
@@ -790,7 +790,7 @@ rtl::Reference< Entity > readEntity(
                     readAnnotations(annotated, file, offset, &offset));
             }
             return new EnumTypeEntity(
-                published, mems, readAnnotations(annotated, file, offset));
+                published, std::move(mems), readAnnotations(annotated, file, offset));
         }
     case 2: // plain struct type without base
     case 2 | 0x20: // plain struct type with base
@@ -826,7 +826,7 @@ rtl::Reference< Entity > readEntity(
                     readAnnotations(annotated, file, offset, &offset));
             }
             return new PlainStructTypeEntity(
-                published, base, mems,
+                published, base, std::move(mems),
                 readAnnotations(annotated, file, offset));
         }
     case 3: // polymorphic struct type template
@@ -873,7 +873,7 @@ rtl::Reference< Entity > readEntity(
                     readAnnotations(annotated, file, offset, &offset));
             }
             return new PolymorphicStructTypeTemplateEntity(
-                published, params, mems,
+                published, std::move(params), std::move(mems),
                 readAnnotations(annotated, file, offset));
         }
     case 4: // exception type without base
@@ -909,7 +909,7 @@ rtl::Reference< Entity > readEntity(
                     readAnnotations(annotated, file, offset, &offset));
             }
             return new ExceptionTypeEntity(
-                published, base, mems,
+                published, base, std::move(mems),
                 readAnnotations(annotated, file, offset));
         }
     case 5: // interface type
@@ -999,7 +999,7 @@ rtl::Reference< Entity > readEntity(
                 }
                 attrs.emplace_back(
                     attrName, attrType, (v & 0x01) != 0, (v & 0x02) != 0,
-                    getExcs, setExcs,
+                    std::move(getExcs), std::move(setExcs),
                     readAnnotations(annotated, file, offset, &offset));
             }
             sal_uInt32 nMeths = file->read32(offset);
@@ -1072,11 +1072,11 @@ rtl::Reference< Entity > readEntity(
                     excs.push_back(exc);
                 }
                 meths.emplace_back(
-                    methName, methType, params, excs,
+                    methName, methType, std::move(params), std::move(excs),
                     readAnnotations(annotated, file, offset, &offset));
             }
             return new InterfaceTypeEntity(
-                published, mandBases, optBases, attrs, meths,
+                published, std::move(mandBases), std::move(optBases), std::move(attrs), std::move(meths),
                 readAnnotations(annotated, file, offset));
         }
     case 6: // typedef
@@ -1115,7 +1115,7 @@ rtl::Reference< Entity > readEntity(
                     readAnnotations(ann, file, off));
             }
             return new ConstantGroupEntity(
-                published, mems,
+                published, std::move(mems),
                 readAnnotations(annotated, file, offset + 5 + 8 * n));
         }
     case 8: // single-interface--based service without default constructor
@@ -1194,12 +1194,12 @@ rtl::Reference< Entity > readEntity(
                     }
                     ctors.push_back(
                         SingleInterfaceBasedServiceEntity::Constructor(
-                            ctorName, params, excs,
+                            ctorName, std::move(params), std::move(excs),
                             readAnnotations(annotated, file, offset, &offset)));
                 }
             }
             return new SingleInterfaceBasedServiceEntity(
-                published, base, ctors,
+                published, base, std::move(ctors),
                 readAnnotations(annotated, file, offset));
         }
     case 9: // accumulation-based service
@@ -1295,7 +1295,7 @@ rtl::Reference< Entity > readEntity(
                     readAnnotations(annotated, file, offset, &offset));
             }
             return new AccumulationBasedServiceEntity(
-                published, mandServs, optServs, mandIfcs, optIfcs, props,
+                published, std::move(mandServs), std::move(optServs), std::move(mandIfcs), std::move(optIfcs), std::move(props),
                 readAnnotations(annotated, file, offset));
         }
     case 10: // interface-based singleton
@@ -1365,7 +1365,7 @@ rtl::Reference< Entity > UnoidlProvider::findEntity(OUString const & name) const
         if (j == name.getLength()) {
             return cgroup
                 ? rtl::Reference< Entity >()
-                : readEntity(file_, off, map.trace);
+                : readEntity(file_, off, std::set(map.trace));
         }
         if (cgroup) {
             return rtl::Reference< Entity >();

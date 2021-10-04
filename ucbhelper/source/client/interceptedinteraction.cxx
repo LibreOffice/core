@@ -32,9 +32,9 @@ void InterceptedInteraction::setInterceptedHandler(const css::uno::Reference< cs
     m_xInterceptedHandler = xInterceptedHandler;
 }
 
-void InterceptedInteraction::setInterceptions(const ::std::vector< InterceptedRequest >& lInterceptions)
+void InterceptedInteraction::setInterceptions(::std::vector< InterceptedRequest >&& lInterceptions)
 {
-    m_lInterceptions = lInterceptions;
+    m_lInterceptions = std::move(lInterceptions);
 }
 
 InterceptedInteraction::EInterceptionState InterceptedInteraction::intercepted(

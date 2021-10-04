@@ -75,9 +75,9 @@ namespace dbtools::param
 
 
     ParameterWrapper::ParameterWrapper( const Reference< XPropertySet >& _rxColumn,
-            const Reference< XParameters >& _rxAllParameters, const std::vector< sal_Int32 >& _rIndexes )
+            const Reference< XParameters >& _rxAllParameters, std::vector< sal_Int32 >&& _rIndexes )
         :PropertyBase( m_aBHelper )
-        ,m_aIndexes( _rIndexes )
+        ,m_aIndexes( std::move(_rIndexes) )
         ,m_xDelegator( _rxColumn )
         ,m_xValueDestination( _rxAllParameters )
     {

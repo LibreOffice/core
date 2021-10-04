@@ -46,9 +46,9 @@ namespace pq_sdbc_driver
 {
 
 SequenceResultSetMetaData::SequenceResultSetMetaData(
-    const ColumnMetaDataVector &metaDataVector,
+    ColumnMetaDataVector&& metaDataVector,
     int colCount ) :
-    m_columnData( metaDataVector ),
+    m_columnData( std::move(metaDataVector) ),
     m_colCount( colCount )
 {
 }

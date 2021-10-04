@@ -79,7 +79,7 @@ sal_Int32 StyleContainer::getStandardStyleId( std::string_view rName )
     aProps[ "style:family" ] = OStringToOUString( rName, RTL_TEXTENCODING_UTF8 );
     aProps[ "style:name" ] = "standard";
 
-    Style aStyle( "style:style", aProps );
+    Style aStyle( "style:style", std::move(aProps) );
     return getStyleId( aStyle );
 }
 

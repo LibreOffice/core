@@ -734,7 +734,7 @@ void OTableEditorCtrl::CopyRows()
     }
     if(!vClipboardList.empty())
     {
-        rtl::Reference<OTableRowExchange> pData = new OTableRowExchange(vClipboardList);
+        rtl::Reference<OTableRowExchange> pData = new OTableRowExchange(std::move(vClipboardList));
         pData->CopyToClipboard(GetParent());
     }
 }
@@ -806,7 +806,7 @@ void OTableEditorCtrl::InsertRows( sal_Int32 nRow )
     RowInserted( nRow,vInsertedUndoRedoRows.size() );
 
     // Create the Undo-Action
-    GetUndoManager().AddUndoAction( std::make_unique<OTableEditorInsUndoAct>(this, nRow,vInsertedUndoRedoRows) );
+    GetUndoManager().AddUndoAction( std::make_unique<OTableEditorInsUndoAct>(this, nRow, std::move(vInsertedUndoRedoRows)) );
     GetView()->getController().setModified( true );
     InvalidateFeatures();
 }

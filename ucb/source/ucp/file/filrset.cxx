@@ -603,7 +603,7 @@ XResultSet_impl::getMetaData()
         return new ::ucbhelper::ResultSetMetaData(
                 m_pMyShell->m_xContext,
                 m_sProperty,
-                aColumnData );
+                std::move(aColumnData) );
     }
 
     return new ::ucbhelper::ResultSetMetaData( m_pMyShell->m_xContext, m_sProperty );

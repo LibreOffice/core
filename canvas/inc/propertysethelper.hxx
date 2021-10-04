@@ -105,7 +105,7 @@ namespace canvas
             a property, and reading/writing to this property is passed
             on to the given function pointer.
          */
-        void initProperties( const InputMap& rMap );
+        void initProperties( InputMap&& rMap );
 
         /** Add given properties to helper
 

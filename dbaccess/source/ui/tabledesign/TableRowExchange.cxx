@@ -28,8 +28,8 @@ namespace dbaui
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
-    OTableRowExchange::OTableRowExchange(const std::vector< std::shared_ptr<OTableRow> >& _rvTableRow)
-        : m_vTableRow(_rvTableRow)
+    OTableRowExchange::OTableRowExchange(std::vector< std::shared_ptr<OTableRow> >&& _rvTableRow)
+        : m_vTableRow(std::move(_rvTableRow))
     {
     }
     bool OTableRowExchange::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const css::datatransfer::DataFlavor& /*rFlavor*/ )

@@ -2218,14 +2218,14 @@ bool lcl_createLegend( const uno::Reference< XLegend > & xLegend
                    , awt::Rectangle & rRemainingSpace
                    , const awt::Size & rPageSize
                    , ChartModel& rModel
-                   , const std::vector< LegendEntryProvider* >& rLegendEntryProviderList
+                   , std::vector< LegendEntryProvider* >&& rLegendEntryProviderList
                    , sal_Int16 nDefaultWritingMode )
 {
     if (!VLegend::isVisible(xLegend))
         return false;
 
     awt::Size rDefaultLegendSize;
-    VLegend aVLegend( xLegend, xContext, rLegendEntryProviderList,
+    VLegend aVLegend( xLegend, xContext, std::move(rLegendEntryProviderList),
             xPageShapes, xShapeFactory, rModel);
     aVLegend.setDefaultWritingMode( nDefaultWritingMode );
     aVLegend.createShapes( awt::Size( rRemainingSpace.Width, rRemainingSpace.Height ),

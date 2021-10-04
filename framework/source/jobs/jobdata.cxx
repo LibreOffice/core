@@ -225,12 +225,12 @@ void JobData::setEvent( const OUString& sEvent ,
     @param      lArguments
                     list of arguments, which should be set for this job
  */
-void JobData::setJobConfig( const std::vector< css::beans::NamedValue >& lArguments )
+void JobData::setJobConfig( std::vector< css::beans::NamedValue >&& lArguments )
 {
     SolarMutexGuard g;
 
     // update member
-    m_lArguments = lArguments;
+    m_lArguments = std::move(lArguments);
 
     // update the configuration ... if possible!
     if (m_eMode!=E_ALIAS)

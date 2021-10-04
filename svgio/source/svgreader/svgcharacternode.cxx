@@ -431,7 +431,7 @@ namespace svgio::svgreader
                         getText(),
                         nIndex,
                         nLength,
-                        aTextArray,
+                        std::move(aTextArray),
                         aFontAttribute,
                         aLocale,
                         aFill,
@@ -459,7 +459,7 @@ namespace svgio::svgreader
                         getText(),
                         nIndex,
                         nLength,
-                        aTextArray,
+                        std::move(aTextArray),
                         aFontAttribute,
                         aLocale,
                         aFill);

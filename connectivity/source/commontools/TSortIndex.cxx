@@ -94,10 +94,10 @@ struct TKeyValueFunc
     return pKeySet;
 }
 
-OSortIndex::OSortIndex( const std::vector<OKeyType>& _aKeyType,
-                        const std::vector<TAscendingOrder>& _aAscending)
-    :m_aKeyType(_aKeyType)
-    ,m_aAscending(_aAscending)
+OSortIndex::OSortIndex( std::vector<OKeyType>&& _aKeyType,
+                        std::vector<TAscendingOrder>&& _aAscending)
+    :m_aKeyType(std::move(_aKeyType))
+    ,m_aAscending(std::move(_aAscending))
     ,m_bFrozen(false)
 {
 }

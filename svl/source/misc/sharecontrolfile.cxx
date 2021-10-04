@@ -174,7 +174,7 @@ std::vector< o3tl::enumarray< LockFileComponent, OUString > > ShareControlFile::
 }
 
 
-void ShareControlFile::SetUsersDataAndStore( const std::vector< LockFileEntry >& aUsersData )
+void ShareControlFile::SetUsersDataAndStore( std::vector< LockFileEntry >&& aUsersData )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -243,7 +243,7 @@ LockFileEntry ShareControlFile::InsertOwnEntry()
     if ( !bExists )
         aNewData.push_back( aNewEntry );
 
-    SetUsersDataAndStore( aNewData );
+    SetUsersDataAndStore( std::move(aNewData) );
 
     return aNewEntry;
 }
@@ -301,9 +301,10 @@ void ShareControlFile::RemoveEntry( const LockFileEntry& aEntry )
         }
     }
 
-    SetUsersDataAndStore( aNewData );
+    const bool bNewDataEmpty = aNewData.empty();
+    SetUsersDataAndStore( std::move(aNewData) );
 
-    if ( aNewData.empty() )
+    if ( bNewDataEmpty )
     {
         // try to remove the file if it is empty
         RemoveFile();

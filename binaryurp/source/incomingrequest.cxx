@@ -47,11 +47,11 @@ IncomingRequest::IncomingRequest(
     OUString const & oid, css::uno::UnoInterfaceReference const & object,
     css::uno::TypeDescription const & type, sal_uInt16 functionId,
     bool synchronous, css::uno::TypeDescription const & member, bool setter,
-    std::vector< BinaryAny > const & inArguments, bool currentContextMode,
+    std::vector< BinaryAny >&& inArguments, bool currentContextMode,
     css::uno::UnoInterfaceReference const & currentContext):
     bridge_(bridge), tid_(tid), oid_(oid), object_(object), type_(type),
     member_(member), currentContext_(currentContext),
-    inArguments_(inArguments), functionId_(functionId),
+    inArguments_(std::move(inArguments)), functionId_(functionId),
     synchronous_(synchronous), setter_(setter), currentContextMode_(currentContextMode)
 {
     assert(bridge.is());
@@ -98,7 +98,7 @@ void IncomingRequest::execute() const {
         bridge_->decrementActiveCalls();
         try {
             bridge_->getWriter()->queueReply(
-                tid_, member_, setter_, isExc, ret, outArgs, false);
+                tid_, member_, setter_, isExc, ret, std::move(outArgs), false);
             return;
         } catch (const css::uno::RuntimeException & e) {
             SAL_INFO("binaryurp", "caught " << e);

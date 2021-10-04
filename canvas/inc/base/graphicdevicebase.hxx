@@ -118,16 +118,17 @@ namespace canvas
             maDeviceHelper(),
             mbDumpScreenContent(false)
         {
-            maPropHelper.initProperties( PropertySetHelper::MakeMap
-                ("HardwareAcceleration",
-                 [this] () { return this->maDeviceHelper.isAccelerated(); } )
-                ("DeviceHandle",
-                 [this] () { return this->maDeviceHelper.getDeviceHandle(); } )
-                ("SurfaceHandle",
-                 [this] () { return this->maDeviceHelper.getSurfaceHandle(); } )
-                ("DumpScreenContent",
-                 [this] () { return this->getDumpScreenContent(); },
-                 [this] (css::uno::Any const& rAny) { this->setDumpScreenContent(rAny); }));
+            maPropHelper.initProperties(
+                PropertySetHelper::InputMap {
+                    {"HardwareAcceleration",
+                        { [this] () { return this->maDeviceHelper.isAccelerated(); }, {} } },
+                    {"DeviceHandle",
+                        { [this] () { return this->maDeviceHelper.getDeviceHandle(); }, {} } },
+                    {"SurfaceHandle",
+                        { [this] () { return this->maDeviceHelper.getSurfaceHandle(); }, {} } },
+                    {"DumpScreenContent",
+                        { [this] () { return this->getDumpScreenContent(); },
+                          [this] (css::uno::Any const& rAny) { this->setDumpScreenContent(rAny); } } } } );
         }
 
         virtual void disposeThis() override

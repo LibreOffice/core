@@ -189,7 +189,7 @@ private:
 
     void                ImplAddPath( const tools::Polygon & rPolygon );
     void                ImplWriteLineInfo( double fLineWidth, double fMiterLimit, SvtGraphicStroke::CapType eLineCap,
-                                    SvtGraphicStroke::JoinType eJoinType, SvtGraphicStroke::DashArray const & rDashArray );
+                                    SvtGraphicStroke::JoinType eJoinType, SvtGraphicStroke::DashArray && rDashArray );
     void                ImplWriteLineInfo( const LineInfo& rLineInfo );
     void                ImplRect( const tools::Rectangle & rRectangle );
     void                ImplRectFill ( const tools::Rectangle & rRectangle );
@@ -1253,7 +1253,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                             if ( bSkipSequence )
                             {
                                 ImplWriteLineInfo( fStrokeWidth, aStroke.getMiterLimit(),
-                                                    aStroke.getCapType(), eJT, l_aDashArray );
+                                                    aStroke.getCapType(), eJT, std::move(l_aDashArray) );
                                 ImplPolyLine( aPath );
                             }
                         }
@@ -2257,7 +2257,7 @@ double PSWriter::ImplGetScaling( const MapMode& rMapMode )
 void PSWriter::ImplWriteLineInfo( double fLWidth, double fMLimit,
                                   SvtGraphicStroke::CapType eLCap,
                                   SvtGraphicStroke::JoinType eJoin,
-                                  SvtGraphicStroke::DashArray const & rLDash )
+                                  SvtGraphicStroke::DashArray && rLDash )
 {
     if ( fLineWidth != fLWidth )
     {
@@ -2288,7 +2288,7 @@ void PSWriter::ImplWriteLineInfo( double fLWidth, double fMLimit,
     }
     if ( aDashArray != rLDash )
     {
-        aDashArray = rLDash;
+        aDashArray = std::move(rLDash);
         sal_uInt32 j, i = aDashArray.size();
         ImplWriteLine( "[", PS_SPACE );
         for ( j = 0; j < i; j++ )
@@ -2342,7 +2342,7 @@ void PSWriter::ImplWriteLineInfo( const LineInfo& rLineInfo )
         }
     }
 
-    ImplWriteLineInfo( fLWidth, fMiterLimit, aCapType, aJoinType, l_aDashArray );
+    ImplWriteLineInfo( fLWidth, fMiterLimit, aCapType, aJoinType, std::move(l_aDashArray) );
 }
 
 void PSWriter::ImplWriteLong(sal_Int32 nNumber, NMode nMode)

@@ -160,7 +160,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public InterceptedInteraction
             @param  lInterceptions
                     the list of intercepted requests.
          */
-        void setInterceptions(const ::std::vector< InterceptedRequest >& lInterceptions);
+        void setInterceptions(::std::vector< InterceptedRequest >&& lInterceptions);
 
 
         /** @short  extract a requested continuation from the list of available ones.

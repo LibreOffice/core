@@ -77,7 +77,7 @@ XInteractionRequestImpl::XInteractionRequestImpl(
         aAny <<= excep;
 
     }
-    m_xRequest.set(new ::comphelper::OInteractionRequest(aAny, continuations));
+    m_xRequest.set(new ::comphelper::OInteractionRequest(aAny, std::move(continuations)));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

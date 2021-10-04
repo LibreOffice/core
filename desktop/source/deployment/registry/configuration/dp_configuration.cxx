@@ -680,7 +680,7 @@ OUString replaceOrigin(
     }
 
     ucbhelper::Content(newUrl, xCmdEnv, xContext).writeStream(
-        xmlscript::createInputStream(filtered), true);
+        xmlscript::createInputStream(std::move(filtered)), true);
     out_replaced = true;
     return newUrl;
 }

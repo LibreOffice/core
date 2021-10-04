@@ -1179,7 +1179,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getTables(
         closeable->close();
 
     return new SequenceResultSet(
-        m_xMutex, *this, statics.tablesRowNames, vec, m_pSettings->tc );
+        m_xMutex, *this, std::vector(statics.tablesRowNames), std::move(vec), m_pSettings->tc );
 }
 
 namespace
@@ -1262,7 +1262,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getSchemas(  )
     if( closeable.is() )
         closeable->close();
     return new SequenceResultSet(
-        m_xMutex, *this, getStatics().schemaNames, vec, m_pSettings->tc );
+        m_xMutex, *this, std::vector(getStatics().schemaNames), std::move(vec), m_pSettings->tc );
 }
 
 css::uno::Reference< XResultSet > DatabaseMetaData::getCatalogs(  )
@@ -1279,7 +1279,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getTableTypes(  )
     // LEM TODO: this can be made dynamic, see JDBC driver
     MutexGuard guard( m_xMutex->GetMutex() );
     return new SequenceResultSet(
-        m_xMutex, *this, getStatics().tableTypeNames, getStatics().tableTypeData,
+        m_xMutex, *this, std::vector(getStatics().tableTypeNames), std::vector(getStatics().tableTypeData),
         m_pSettings->tc );
 }
 
@@ -1599,7 +1599,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getColumns(
         closeable->close();
 
     return new SequenceResultSet(
-        m_xMutex, *this, statics.columnRowNames, vec, m_pSettings->tc );
+        m_xMutex, *this, std::vector(statics.columnRowNames), std::move(vec), m_pSettings->tc );
 }
 
 css::uno::Reference< XResultSet > DatabaseMetaData::getColumnPrivileges(
@@ -1782,7 +1782,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getPrimaryKeys(
         elements ++;
     }
     return new SequenceResultSet(
-        m_xMutex, *this, getStatics().primaryKeyNames, ret, m_pSettings->tc );
+        m_xMutex, *this, std::vector(getStatics().primaryKeyNames), std::move(ret), m_pSettings->tc );
 }
 
 // Copied / adapted / simplified from JDBC driver
@@ -2298,8 +2298,8 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getTypeInfo(  )
     return new SequenceResultSet(
         m_xMutex,
         *this,
-        getStatics().typeinfoColumnNames,
-        vec,
+        std::vector(getStatics().typeinfoColumnNames),
+        std::move(vec),
         m_pSettings->tc,
         &( getStatics().typeInfoMetaData ));
 }
@@ -2423,8 +2423,8 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getIndexInfo(
         }
     }
     return new SequenceResultSet(
-        m_xMutex, *this, getStatics().indexinfoColumnNames,
-        vec,
+        m_xMutex, *this, std::vector(getStatics().indexinfoColumnNames),
+        std::move(vec),
         m_pSettings->tc );
 }
 

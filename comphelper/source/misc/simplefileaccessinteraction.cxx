@@ -66,7 +66,7 @@ SimpleFileAccessInteraction::SimpleFileAccessInteraction(
     lInterceptions.push_back(aInterceptedRequest);
 
     setInterceptedHandler(xHandler);
-    setInterceptions(lInterceptions);
+    setInterceptions(std::move(lInterceptions));
 }
 
 SimpleFileAccessInteraction::~SimpleFileAccessInteraction() {}

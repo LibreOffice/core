@@ -996,7 +996,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTableTypes(  )
         aRows.push_back( { ODatabaseMetaDataResultSet::getEmptyValue(), new ORowSetValueDecorator(OUString(sTableTypes[i])) });
     }
     // here we set the rows at the resultset
-    pResult->setRows(aRows);
+    pResult->setRows(std::move(aRows));
     return pResult;
 }
 
@@ -1042,7 +1042,7 @@ Reference< XResultSet > OEvoabDatabaseMetaData::impl_getTypeInfo_throw(  )
         tmp.push_back(aRow);
         return tmp;
     }();
-    pResultSet->setRows(aRows);
+    pResultSet->setRows(std::move(aRows));
     return pResultSet;
 }
 
@@ -1201,7 +1201,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
         }
     }
 
-    pResult->setRows(aRows);
+    pResult->setRows(std::move(aRows));
 
     return pResult;
 }

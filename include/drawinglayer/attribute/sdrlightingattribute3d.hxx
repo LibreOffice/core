@@ -53,7 +53,7 @@ namespace drawinglayer::attribute
             /// constructors/assignmentoperator/destructor
             SdrLightingAttribute(
                 const basegfx::BColor& rAmbientLight,
-                const ::std::vector< Sdr3DLightAttribute >& rLightVector);
+                std::vector< Sdr3DLightAttribute >&& rLightVector);
             SdrLightingAttribute();
             SdrLightingAttribute(const SdrLightingAttribute& rCandidate);
             SdrLightingAttribute(SdrLightingAttribute&& rCandidate);

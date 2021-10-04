@@ -502,7 +502,7 @@ namespace
                                         pCandidate->getText(),
                                         nPortionIndex,
                                         nNextGlyphLen,
-                                        aNewDXArray,
+                                        std::vector(aNewDXArray),
                                         aCandidateFontAttribute,
                                         pCandidate->getLocale(),
                                         aRGBShadowColor) );
@@ -519,7 +519,7 @@ namespace
                                         pCandidate->getText(),
                                         nPortionIndex,
                                         nNextGlyphLen,
-                                        aNewDXArray,
+                                        std::move(aNewDXArray),
                                         aCandidateFontAttribute,
                                         pCandidate->getLocale(),
                                         aRGBColor) );

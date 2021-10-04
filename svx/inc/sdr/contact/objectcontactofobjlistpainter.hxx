@@ -65,7 +65,7 @@ public:
     // basic constructor/destructor
     ObjectContactOfObjListPainter(
         OutputDevice& rTargetDevice,
-        const SdrObjectVector& rObjects,
+        SdrObjectVector&& rObjects,
         const SdrPage* pProcessedPage);
     virtual ~ObjectContactOfObjListPainter() override;
 

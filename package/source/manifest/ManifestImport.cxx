@@ -560,7 +560,7 @@ OUString ManifestImport::PushNameAndNamespaces( const OUString& aName, const uno
     if ( !aConvertedName.getLength() )
         aConvertedName = ConvertName( aName );
 
-    aStack.emplace_back( aConvertedName, aNamespaces );
+    aStack.emplace_back( aConvertedName, std::move(aNamespaces) );
 
     for (const std::pair<OUString,OUString> & rAttribsStr : aAttribsStrs) {
         // convert the attribute names on filling

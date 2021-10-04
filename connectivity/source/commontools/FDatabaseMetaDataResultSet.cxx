@@ -143,9 +143,9 @@ Sequence< Type > SAL_CALL ODatabaseMetaDataResultSet::getTypes(  )
     return ::comphelper::concatSequences(aTypes.getTypes(),ODatabaseMetaDataResultSet_BASE::getTypes());
 }
 
-void ODatabaseMetaDataResultSet::setRows(const ORows& _rRows)
+void ODatabaseMetaDataResultSet::setRows(ORows&& _rRows)
 {
-    m_aRows = _rRows;
+    m_aRows = std::move(_rRows);
     m_bBOF = true;
     m_bEOF = m_aRows.empty();
 }
@@ -822,7 +822,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
         }
         aRowsToSet.push_back(aRowToSet);
     } // for (; pRowsIter != pRowsEnd;++pRowsIter
-    setRows(aRowsToSet);
+    setRows(std::move(aRowsToSet));
 }
 // XServiceInfo
 

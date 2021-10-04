@@ -200,8 +200,8 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPrimitive2DSequence:
 }
 
 
-SdrDragEntryPointGlueDrag::SdrDragEntryPointGlueDrag(const std::vector< basegfx::B2DPoint >& rPositions, bool bIsPointDrag)
-:   maPositions(rPositions),
+SdrDragEntryPointGlueDrag::SdrDragEntryPointGlueDrag(std::vector< basegfx::B2DPoint >&& rPositions, bool bIsPointDrag)
+:   maPositions(std::move(rPositions)),
     mbIsPointDrag(bIsPointDrag)
 {
     // add SdrObject parts to transparent overlay stuff
@@ -249,7 +249,7 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPointGlueDrag::creat
             }
 
             drawinglayer::primitive2d::Primitive2DReference aMarkerArrayPrimitive2D(
-                new drawinglayer::primitive2d::MarkerArrayPrimitive2D(aTransformedPositions,
+                new drawinglayer::primitive2d::MarkerArrayPrimitive2D(std::move(aTransformedPositions),
                     drawinglayer::primitive2d::createDefaultCross_3x3(aColor)));
 
             aRetval = drawinglayer::primitive2d::Primitive2DContainer { aMarkerArrayPrimitive2D };
@@ -257,7 +257,7 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPointGlueDrag::creat
         else
         {
             drawinglayer::primitive2d::Primitive2DReference aMarkerArrayPrimitive2D(
-                new drawinglayer::primitive2d::MarkerArrayPrimitive2D(aTransformedPositions,
+                new drawinglayer::primitive2d::MarkerArrayPrimitive2D(std::move(aTransformedPositions),
                                                                       SdrHdl::createGluePointBitmap()));
             aRetval = drawinglayer::primitive2d::Primitive2DContainer { aMarkerArrayPrimitive2D };
         }
@@ -504,7 +504,7 @@ void SdrDragMethod::createSdrDragEntries_PointDrag()
 
     if(!aPositions.empty())
     {
-        addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPointGlueDrag(aPositions, true)));
+        addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPointGlueDrag(std::move(aPositions), true)));
     }
 }
 
@@ -545,7 +545,7 @@ void SdrDragMethod::createSdrDragEntries_GlueDrag()
 
     if(!aPositions.empty())
     {
-        addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPointGlueDrag(aPositions, false)));
+        addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPointGlueDrag(std::move(aPositions), false)));
     }
 }
 

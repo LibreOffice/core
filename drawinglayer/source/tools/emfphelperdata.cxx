@@ -546,16 +546,16 @@ namespace emfplushelper
                 case EmfPlusLineStyleSolid: // do nothing special, use default stroke attribute
                     break;
                 case EmfPlusLineStyleDash:
-                    aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(dash);
+                    aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(std::vector(dash));
                     break;
                 case EmfPlusLineStyleDot:
-                    aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(dot);
+                    aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(std::vector(dot));
                     break;
                 case EmfPlusLineStyleDashDot:
-                    aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(dashdot);
+                    aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(std::vector(dashdot));
                     break;
                 case EmfPlusLineStyleDashDotDot:
-                    aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(dashdotdot);
+                    aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(std::vector(dashdotdot));
                     break;
             }
         }
@@ -568,7 +568,7 @@ namespace emfplushelper
                 // convert from float to double and multiply with the adjusted pen width
                 aPattern[i] = maMapTransform.get(1, 1) * pen->penWidth * pen->dashPattern[i];
             }
-            aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(aPattern);
+            aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(std::move(aPattern));
         }
 
         if (!pen->GetColor().IsTransparent())
@@ -923,7 +923,7 @@ namespace emfplushelper
                         new drawinglayer::primitive2d::SvgLinearGradientPrimitive2D(
                             aTextureTransformation,
                             polygon,
-                            aVector,
+                            std::move(aVector),
                             aStartPoint,
                             aEndPoint,
                             false,                  // do not use UnitCoordinates
@@ -939,7 +939,7 @@ namespace emfplushelper
                         new drawinglayer::primitive2d::SvgRadialGradientPrimitive2D(
                             aTextureTransformation,
                             polygon,
-                            aVector,
+                            std::move(aVector),
                             aCenterPoint,
                             0.5,                   // relative radius
                             true,                  // use UnitCoordinates to stretch the gradient
@@ -1689,7 +1689,7 @@ namespace emfplushelper
                                             text,
                                             0,             // text always starts at 0
                                             stringLength,
-                                            emptyVector,   // EMF-PLUS has no DX-array
+                                            std::move(emptyVector),   // EMF-PLUS has no DX-array
                                             fontAttribute,
                                             locale,
                                             color.getBColor(), // Font Color
@@ -1708,7 +1708,7 @@ namespace emfplushelper
                                             text,
                                             0,             // text always starts at 0
                                             stringLength,
-                                            emptyVector,   // EMF-PLUS has no DX-array
+                                            std::move(emptyVector),   // EMF-PLUS has no DX-array
                                             fontAttribute,
                                             locale,
                                             color.getBColor());
@@ -2133,7 +2133,6 @@ namespace emfplushelper
                                 false);                                          // BiDiStrong
 
                             const Color color = EMFPGetBrushColorOrARGBColor(flags, brushIndexOrColor);
-                            std::vector<double> aDXArray; // dummy for DX array (not used)
 
                             // generate TextSimplePortionPrimitive2Ds or TextDecoratedPortionPrimitive2D
                             // for all portions of text with the same charsPosY values
@@ -2146,7 +2145,7 @@ namespace emfplushelper
                                     aLength++;
 
                                 // generate the DX-Array
-                                aDXArray.clear();
+                                std::vector<double> aDXArray;
                                 for (size_t i = 0; i < aLength - 1; i++)
                                 {
                                     aDXArray.push_back(charsPosX[pos + i + 1] - charsPosX[pos]);
@@ -2169,7 +2168,7 @@ namespace emfplushelper
                                                     text,
                                                     pos,            // take character at current pos
                                                     aLength,        // use determined length
-                                                    aDXArray,       // generated DXArray
+                                                    std::move(aDXArray),       // generated DXArray
                                                     fontAttribute,
                                                     Application::GetSettings().GetLanguageTag().getLocale(),
                                                     color.getBColor(),
@@ -2188,7 +2187,7 @@ namespace emfplushelper
                                                     text,
                                                     pos,            // take character at current pos
                                                     aLength,        // use determined length
-                                                    aDXArray,       // generated DXArray
+                                                    std::move(aDXArray),       // generated DXArray
                                                     fontAttribute,
                                                     Application::GetSettings().GetLanguageTag().getLocale(),
                                                     color.getBColor());

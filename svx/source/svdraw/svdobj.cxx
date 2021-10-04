@@ -1056,7 +1056,7 @@ void SdrObject::SingleObjectPainter(OutputDevice& rOut) const
     sdr::contact::SdrObjectVector aObjectVector;
     aObjectVector.push_back(const_cast< SdrObject* >(this));
 
-    sdr::contact::ObjectContactOfObjListPainter aPainter(rOut, aObjectVector, getSdrPageFromSdrObject());
+    sdr::contact::ObjectContactOfObjListPainter aPainter(rOut, std::move(aObjectVector), getSdrPageFromSdrObject());
     sdr::contact::DisplayInfo aDisplayInfo;
 
     aPainter.ProcessDisplay(aDisplayInfo);

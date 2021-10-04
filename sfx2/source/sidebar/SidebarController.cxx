@@ -787,7 +787,7 @@ void SidebarController::CreatePanels(std::u16string_view rDeckId, const Context&
 
     // mpCurrentPanels - may miss stuff (?)
     aNewPanels.resize(nWriteIndex);
-    pDeck->ResetPanels(aNewPanels);
+    pDeck->ResetPanels(std::move(aNewPanels));
 }
 
 void SidebarController::SwitchToDeck (

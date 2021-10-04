@@ -74,7 +74,7 @@ OResultSetPrivileges::OResultSetPrivileges( const Reference< XDatabaseMetaData>&
         aRow[6] = new ORowSetValueDecorator(OUString("REFERENCE"));
         aRows.push_back(aRow);
 
-        setRows(aRows);
+        setRows(std::move(aRows));
     }
     osl_atomic_decrement( &m_refCount );
 }

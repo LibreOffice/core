@@ -61,10 +61,10 @@ namespace canvas
     {
     }
 
-    void PropertySetHelper::initProperties( const InputMap& rMap )
+    void PropertySetHelper::initProperties( InputMap&& rMap )
     {
         mpMap.reset();
-        maMapEntries = rMap;
+        maMapEntries = std::move(rMap);
 
         std::sort( maMapEntries.begin(),
                    maMapEntries.end(),
@@ -83,7 +83,7 @@ namespace canvas
                         rMap.begin(),
                         rMap.end() );
 
-        initProperties( aMerged );
+        initProperties( std::move(aMerged) );
     }
 
     bool PropertySetHelper::isPropertyName( const OUString& aPropertyName ) const

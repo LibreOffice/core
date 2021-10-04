@@ -29,7 +29,7 @@ namespace dbaccess
         ORowSetValueVector::Vector m_aRow;
         sal_Int32 m_nPos;
     public:
-        explicit OPrivateRow(const ORowSetValueVector::Vector& i_aRow) : m_aRow(i_aRow),m_nPos(0)
+        explicit OPrivateRow(ORowSetValueVector::Vector&& i_aRow) : m_aRow(std::move(i_aRow)),m_nPos(0)
         {
         }
         virtual sal_Bool SAL_CALL wasNull(  ) override;

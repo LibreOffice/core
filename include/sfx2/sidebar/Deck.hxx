@@ -46,7 +46,7 @@ public:
 
     DeckTitleBar* GetTitleBar() const;
     tools::Rectangle GetContentArea() const;
-    void ResetPanels(const SharedPanelContainer& rPanels);
+    void ResetPanels(SharedPanelContainer&& rPanels);
     const SharedPanelContainer& GetPanels() const { return maPanels; }
 
     std::shared_ptr<Panel> GetPanel(std::u16string_view panelId);

@@ -145,7 +145,7 @@ namespace connectivity
         /// construction of a pre-defined result set type
         ODatabaseMetaDataResultSet( MetaDataResultSetType _eType );
 
-        void setRows(const ORows& _rRows);
+        void setRows(ORows&& _rRows);
 
         // XServiceInfo
 

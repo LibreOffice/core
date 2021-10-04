@@ -56,7 +56,7 @@ XInteractionRequestImpl::XInteractionRequestImpl()
     };
     UnsupportedNameClashException excep;
     excep.NameClash = NameClash::ERROR;
-    m_xRequest.set(new ::comphelper::OInteractionRequest(Any(excep), continuations));
+    m_xRequest.set(new ::comphelper::OInteractionRequest(Any(excep), std::move(continuations)));
 }
 
 bool XInteractionRequestImpl::approved() const { return p1->isSelected(); }

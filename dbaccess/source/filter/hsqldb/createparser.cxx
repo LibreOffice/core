@@ -256,7 +256,7 @@ void CreateStmtParser::parseColumnPart(const OUString& sColumnPart)
         const OUString sColumnWithoutName = sColumn.copy(sColumn.indexOf(typeParts.typeName));
 
         ColumnDefinition aColDef(rColumnName, lcl_getDataTypeFromHsql(typeParts.typeName),
-                                 typeParts.params, isPrimaryKey,
+                                 std::move(typeParts.params), isPrimaryKey,
                                  lcl_getAutoIncrementDefault(sColumnWithoutName),
                                  lcl_isNullable(sColumnWithoutName), bCaseInsensitive,
                                  lcl_getDefaultValue(sColumnWithoutName));

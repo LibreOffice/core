@@ -35,9 +35,9 @@ namespace drawinglayer::attribute
 
             ImpSdrLightingAttribute(
                 const basegfx::BColor& rAmbientLight,
-                const std::vector< Sdr3DLightAttribute >& rLightVector)
+                std::vector< Sdr3DLightAttribute >&& rLightVector)
             :   maAmbientLight(rAmbientLight),
-                maLightVector(rLightVector)
+                maLightVector(std::move(rLightVector))
             {
             }
 
@@ -64,9 +64,9 @@ namespace drawinglayer::attribute
 
         SdrLightingAttribute::SdrLightingAttribute(
             const basegfx::BColor& rAmbientLight,
-            const std::vector< Sdr3DLightAttribute >& rLightVector)
+            std::vector< Sdr3DLightAttribute >&& rLightVector)
         :   mpSdrLightingAttribute(ImpSdrLightingAttribute(
-                rAmbientLight, rLightVector))
+                rAmbientLight, std::move(rLightVector)))
         {
         }
 

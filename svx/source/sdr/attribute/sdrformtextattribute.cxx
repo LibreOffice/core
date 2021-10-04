@@ -135,7 +135,7 @@ namespace
             }
         }
 
-        return drawinglayer::attribute::StrokeAttribute(aDotDashArray, fFullDotDashLen);
+        return drawinglayer::attribute::StrokeAttribute(std::move(aDotDashArray), fFullDotDashLen);
     }
 } // end of anonymous namespace
 

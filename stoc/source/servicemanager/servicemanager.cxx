@@ -206,8 +206,8 @@ sal_Bool PropertySetInfo_Impl::hasPropertyByName( OUString const & name )
 class ImplementationEnumeration_Impl : public WeakImplHelper< XEnumeration >
 {
 public:
-    explicit ImplementationEnumeration_Impl( const HashSet_Ref & rImplementationMap )
-        : aImplementationMap( rImplementationMap )
+    explicit ImplementationEnumeration_Impl( HashSet_Ref && rImplementationMap )
+        : aImplementationMap( std::move(rImplementationMap) )
         , aIt( aImplementationMap.begin() )
         {}
 
@@ -966,7 +966,7 @@ Reference<XEnumeration > OServiceManager::createEnumeration()
 {
     check_undisposed();
     MutexGuard aGuard( m_mutex );
-    return new ImplementationEnumeration_Impl( m_ImplementationMap );
+    return new ImplementationEnumeration_Impl( HashSet_Ref(m_ImplementationMap) );
 }
 
 // XElementAccess

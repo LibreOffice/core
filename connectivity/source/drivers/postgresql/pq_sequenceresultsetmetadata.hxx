@@ -56,7 +56,7 @@ namespace pq_sdbc_driver
 
     public:
         SequenceResultSetMetaData(
-            const ColumnMetaDataVector &vec,
+            ColumnMetaDataVector&& vec,
             int colCount );
 
     public:
