@@ -112,6 +112,7 @@ void SAL_CALL SequenceOutputStreamService::closeOutput()
     if ( !m_xOutputStream.is() )
         throw io::NotConnectedException();
 
+    m_xOutputStream->flush();
     m_xOutputStream->closeOutput();
     m_xOutputStream.clear();
 }
@@ -120,10 +121,13 @@ void SAL_CALL SequenceOutputStreamService::closeOutput()
 uno::Sequence< ::sal_Int8 > SAL_CALL SequenceOutputStreamService::getWrittenBytes()
 {
     std::scoped_lock aGuard( m_aMutex );
-    if ( !m_xOutputStream.is() )
-        throw io::NotConnectedException();
 
-    m_xOutputStream->flush();
+    if (m_xOutputStream.is())
+    {
+        m_xOutputStream->flush();
+    }
+    // else: no exception, just return the finished sequence
+
     return m_aSequence;
 }
 
