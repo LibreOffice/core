@@ -325,7 +325,7 @@ struct XclExpCellAlign : public XclCellAlign
         @descr  Fills only the attributes exported in the passed BIFF version.
         @param bForceLineBreak  true = Set line break flag unconditionally.
         @return  true = At least one alignment item is set. */
-    bool                FillFromItemSet( const SfxItemSet& rItemSet,
+    bool                FillFromItemSet(const XclRoot& rRoot, const SfxItemSet& rItemSet,
                             bool bForceLineBreak, XclBiff eBiff, bool bStyle = false );
 
     /** Fills the data to the passed fields of a BIFF5/BIFF7 XF record. */

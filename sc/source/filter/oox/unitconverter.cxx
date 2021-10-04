@@ -34,6 +34,8 @@
 #include <stylesbuffer.hxx>
 #include <biffhelper.hxx>
 
+#include <iostream>
+
 namespace com::sun::star::awt { struct FontDescriptor; }
 
 namespace oox::xls {
@@ -140,7 +142,10 @@ void UnitConverter::finalizeImport()
     sal_Int32 nSpaceWidth
         = o3tl::convert(xFont->getCharWidth(' '), o3tl::Length::twip, o3tl::Length::mm100);
     if( nSpaceWidth > 0 )
+    {
+        std::cout << xFont->getFontDescriptor().Name << std::endl;
         maCoeffs[ Unit::Space ] = nSpaceWidth;
+    }
 }
 
 void UnitConverter::finalizeNullDate( const util::Date& rNullDate )
