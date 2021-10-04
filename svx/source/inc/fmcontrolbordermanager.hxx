@@ -190,7 +190,7 @@ namespace svxform
             @param _eStatus
                 the status of the control. Must not be <member>ControlStatus::none</member>
         */
-        Color       getControlColorByStatus( ControlStatus _eStatus );
+        Color       getControlColorByStatus( ControlStatus _eStatus ) const;
 
         /** sets the border color for a given control, depending on its status
             @param _rxControl

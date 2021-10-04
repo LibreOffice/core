@@ -2036,7 +2036,7 @@ XGradient XGradient::fromJSON(const OUString& rJSON)
     return lcl_buildGradientFromStringMap(aMap);
 }
 
-css::awt::Gradient XGradient::toGradientUNO()
+css::awt::Gradient XGradient::toGradientUNO() const
 {
     css::awt::Gradient aGradient;
 

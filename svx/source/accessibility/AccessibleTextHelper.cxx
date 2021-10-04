@@ -131,7 +131,7 @@ namespace accessibility
         void FireEvent( const AccessibleEventObject& rEvent ) const;
 
         void SetFocus( bool bHaveFocus );
-        bool HaveFocus()
+        bool HaveFocus() const
         {
             // No locking of solar mutex here, since we rely on the fact
             // that sal_Bool access is atomic

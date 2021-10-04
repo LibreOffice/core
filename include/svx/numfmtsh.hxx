@@ -171,7 +171,7 @@ public:
 
     sal_uInt16          FindCurrencyTableEntry( const OUString& rFmtString, bool &bTestBanking );
     bool                IsInTable(sal_uInt16 nPos, bool bTmpBanking,
-                            std::u16string_view rFmtString);
+                            std::u16string_view rFmtString) const;
 
     void                SetUseStarFormat( bool bUse ) { bUseStarFormat = bUse; }
 private:

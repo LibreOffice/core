@@ -78,7 +78,7 @@ public:
 
     boost::property_tree::ptree dumpAsJSON() const;
     static XGradient fromJSON(const OUString& rJSON);
-    css::awt::Gradient toGradientUNO();
+    css::awt::Gradient toGradientUNO() const;
 };
 
 #endif

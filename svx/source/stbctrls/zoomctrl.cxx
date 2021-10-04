@@ -46,7 +46,7 @@ class ZoomPopup_Impl
 public:
     ZoomPopup_Impl(weld::Window* pPopupParent, sal_uInt16 nZ, SvxZoomEnableFlags nValueSet);
 
-    sal_uInt16 GetZoom(std::string_view ident);
+    sal_uInt16 GetZoom(std::string_view ident) const;
 
     OString popup_at_rect(const tools::Rectangle& rRect)
     {
@@ -84,7 +84,7 @@ ZoomPopup_Impl::ZoomPopup_Impl(weld::Window* pPopupParent, sal_uInt16 nZ, SvxZoo
         m_xMenu->set_sensitive("width", false);
 }
 
-sal_uInt16 ZoomPopup_Impl::GetZoom(std::string_view ident)
+sal_uInt16 ZoomPopup_Impl::GetZoom(std::string_view ident) const
 {
     sal_uInt16 nRet = nZoom;
 

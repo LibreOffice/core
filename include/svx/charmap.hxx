@@ -155,7 +155,7 @@ protected:
     void ContextMenuSelect(std::string_view rIdent);
 
     void            init();
-    tools::Rectangle       getGridRectangle(const Point &rPointUL, const Size &rOutputSize);
+    tools::Rectangle       getGridRectangle(const Point &rPointUL, const Size &rOutputSize) const;
 };
 
 #endif

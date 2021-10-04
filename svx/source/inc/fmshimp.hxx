@@ -516,7 +516,7 @@ public:
 
     /** determines whether the current form slot is currently enabled
     */
-    SAL_DLLPRIVATE bool    IsFormSlotEnabled( sal_Int32 _nSlot, css::form::runtime::FeatureState* _pCompleteState );
+    SAL_DLLPRIVATE bool    IsFormSlotEnabled( sal_Int32 _nSlot, css::form::runtime::FeatureState* _pCompleteState ) const;
 
     SAL_DLLPRIVATE static OString SlotToIdent(sal_uInt16 nSlot);
 

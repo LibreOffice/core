@@ -57,7 +57,7 @@
     <SvxPosSizeStatusBarControl::Paint(const UserDrawEvent&)>
 */
 
-OUString SvxPosSizeStatusBarControl::GetMetricStr_Impl( tools::Long nVal )
+OUString SvxPosSizeStatusBarControl::GetMetricStr_Impl( tools::Long nVal ) const
 {
     // deliver and set the Metric of the application
     FieldUnit eOutUnit = SfxModule::GetModuleFieldUnit( getFrameInterface() );

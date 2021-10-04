@@ -49,7 +49,7 @@ private:
 
     rtl::Reference<TextUnderlinePopup> mxControl;
 
-    FontLineStyle getLineStyle(const weld::Button& rButton);
+    FontLineStyle getLineStyle(const weld::Button& rButton) const;
 
     DECL_LINK(PBClickHdl, weld::Button&, void);
 };

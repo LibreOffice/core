@@ -2780,7 +2780,7 @@ void Svx3DWin::InitColorLB()
     m_xLbMatSpecular->SelectEntry( aColWhite );
 }
 
-sal_uInt16 Svx3DWin::GetLightSource( const LightButton* pBtn )
+sal_uInt16 Svx3DWin::GetLightSource( const LightButton* pBtn ) const
 {
     sal_uInt16 nLight = 8;
 
