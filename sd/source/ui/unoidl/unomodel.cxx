@@ -2223,7 +2223,8 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
         {
             patchedPageWindow = pSdrPageView->FindPageWindow(*getDocWindow()->GetOutDev());
             temporaryPaintWindow.reset(new SdrPaintWindow(*pDrawView, rDevice));
-            previousPaintWindow = patchedPageWindow->patchPaintWindow(*temporaryPaintWindow);
+            if (patchedPageWindow)
+                previousPaintWindow = patchedPageWindow->patchPaintWindow(*temporaryPaintWindow);
         }
     }
 
