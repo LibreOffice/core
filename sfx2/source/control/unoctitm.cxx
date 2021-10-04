@@ -307,6 +307,11 @@ SfxDispatcher* SfxOfficeDispatch::GetDispatcher_Impl()
     return pImpl->GetDispatcher();
 }
 
+sal_uInt16 SfxOfficeDispatch::GetId() const
+{
+    return pImpl ? pImpl->GetId() : 0;
+}
+
 void SfxOfficeDispatch::SetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame)
 {
     if ( pImpl )
