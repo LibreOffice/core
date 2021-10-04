@@ -244,9 +244,9 @@ void OutputDevice::DrawGradientToMetafile ( const tools::PolyPolygon& rPolyPoly,
     // if the clipping polypolygon is a rectangle, then it's the same size as the bounding of the
     // polypolygon, so pass in a NULL for the clipping parameter
     if( aGradient.GetStyle() == GradientStyle::Linear || rGradient.GetStyle() == GradientStyle::Axial )
-        mpMetaFile->AddAction(new MetaLinearGradientAction(aRect, aGradient, GetGradientSteps(rGradient, aRect, true/*bMtf*/)));
+        mpMetaFile->AddAction(new MetaLinearGradientAction(aRect, aGradient, GetLinearGradientSteps(rGradient, aRect, true/*bMtf*/)));
     else
-        mpMetaFile->AddAction(new MetaComplexGradientAction(aRect, aGradient, GetGradientSteps(rGradient, aRect, true, true)));
+        mpMetaFile->AddAction(new MetaComplexGradientAction(aRect, aGradient, GetComplexGradientSteps(rGradient, aRect, true)));
 }
 
 namespace
@@ -362,7 +362,7 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
     }
 
     // calculate step count
-    tools::Long    nStepCount  = GetGradientSteps( rGradient, aRect, false/*bMtf*/ );
+    tools::Long    nStepCount  = GetLinearGradientSteps(rGradient, aRect, false/*bMtf*/);
 
     // minimal three steps and maximal as max color steps
     tools::Long   nAbsRedSteps   = std::abs( nEndRed   - nStartRed );
@@ -484,7 +484,7 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
     if ( UsePolyPolygonForComplexGradient() )
         xPolyPoly = tools::PolyPolygon( 2 );
 
-    tools::Long nStepCount = GetGradientSteps( rGradient, rRect, false/*bMtf*/, true/*bComplex*/ );
+    tools::Long nStepCount = GetComplexGradientSteps(rGradient, rRect, false/*bMtf*/);
 
     // at least three steps and at most the number of colour differences
     tools::Long nSteps = std::max( nStepCount, tools::Long(2) );
@@ -629,17 +629,32 @@ tools::Long OutputDevice::GetGradientStepIncrement(tools::Long nMinRect)
     return nInc;
 }
 
-tools::Long OutputDevice::GetGradientSteps( const Gradient& rGradient, const tools::Rectangle& rRect, bool bMtf, bool bComplex )
+tools::Long OutputDevice::GetLinearGradientSteps(Gradient const& rGradient, tools::Rectangle const& rRect, bool bMtf)
 {
     // calculate step count
     tools::Long nStepCount  = rGradient.GetSteps();
-    tools::Long nMinRect;
-
     // generate nStepCount, if not passed
-    if (bComplex)
-        nMinRect = std::min( rRect.GetWidth(), rRect.GetHeight() );
-    else
-        nMinRect = rRect.GetHeight();
+    tools::Long nMinRect = rRect.GetHeight();
+
+    if ( !nStepCount )
+    {
+        tools::Long nInc;
+
+        nInc = GetGradientStepIncrement(nMinRect);
+        if ( !nInc || bMtf )
+            nInc = 1;
+        nStepCount = nMinRect / nInc;
+    }
+
+    return nStepCount;
+}
+
+tools::Long OutputDevice::GetComplexGradientSteps(Gradient const& rGradient, tools::Rectangle const& rRect, bool bMtf)
+{
+    // calculate step count
+    tools::Long nStepCount  = rGradient.GetSteps();
+    // generate nStepCount, if not passed
+    tools::Long nMinRect = std::min(rRect.GetWidth(), rRect.GetHeight());
 
     if ( !nStepCount )
     {
@@ -703,9 +718,9 @@ void OutputDevice::AddGradientActions( const tools::Rectangle& rRect, const Grad
         aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
 
     if( aGradient.GetStyle() == GradientStyle::Linear || aGradient.GetStyle() == GradientStyle::Axial )
-        mpMetaFile->AddAction(new MetaLinearGradientAction(aRect, aGradient, GetGradientSteps(aGradient, aRect, false/*bMtf*/)));
+        mpMetaFile->AddAction(new MetaLinearGradientAction(aRect, aGradient, GetLinearGradientSteps(aGradient, aRect, true/*bMtf*/)));
     else
-        mpMetaFile->AddAction(new MetaComplexGradientAction(aRect, aGradient, GetGradientSteps(rGradient, aRect, true, true)));
+        mpMetaFile->AddAction(new MetaComplexGradientAction(aRect, aGradient, GetComplexGradientSteps(rGradient, aRect, true)));
 
     mpMetaFile->AddAction( new MetaPopAction() );
     mpMetaFile = pOldMtf;
