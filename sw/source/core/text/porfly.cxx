@@ -424,7 +424,7 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
         SwTwips nRelPos = aObjPositioning.GetRelPosY();
         if ( nRelPos < 0 )
         {
-            mnAscent = -nRelPos;
+            mnAscent = static_cast<sal_uInt16>(-nRelPos);
             if( mnAscent > Height() )
                 Height( mnAscent );
         }
