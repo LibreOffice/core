@@ -16,6 +16,24 @@
       "message": "coverity states \"cid#1492313 Logically dead code\" here because !pTopAttr is already covered at line 404",
       "revId": "b62153753a9f21afb2a49110ef0459e427b0b01a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5facf59a_6ed5dee8",
+        "filename": "sw/source/core/text/atrstck.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-10-04T13:46:38Z",
+      "side": 1,
+      "message": "thanks, that\u0027s right, fixed with\n   https://gerrit.libreoffice.org/c/core/+/123055\n(we only really care about the most important attribute, the others we can ignore)",
+      "parentUuid": "d3166609_0a11dcf9",
+      "revId": "b62153753a9f21afb2a49110ef0459e427b0b01a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
