@@ -29,6 +29,23 @@ sal_Int64 Benchmark::getElapsedTime()
     return std::chrono::duration_cast<std::chrono::milliseconds>(m_xEnd - m_xStart).count();
 }
 
+Bitmap Benchmark::setupWavelines()
+{
+    initialSetup(4096, 4096, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    m_xStart = std::chrono::steady_clock::now();
+    for (int i = 1; i < 4096; i += 4)
+    {
+        mpVirtualDevice->DrawWaveLine(Point(i, 1), Point(i, 4096));
+    }
+    Bitmap aBitmap = mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+    m_xEnd = std::chrono::steady_clock::now();
+    return aBitmap;
+}
+
 Bitmap Benchmark::setupMultiplePolygonsWithPolyPolygon()
 {
     initialSetup(4096, 4096, constBackgroundColor);
