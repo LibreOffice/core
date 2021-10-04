@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47ffd94f_ec9697d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-10-04T11:26:24Z",
+      "side": 1,
+      "message": "Hi László,\nDo you think this should be backported to 7.2 branch ?\n",
+      "revId": "05f92eb1359c399c43d3bcbe8942034408fa23eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
