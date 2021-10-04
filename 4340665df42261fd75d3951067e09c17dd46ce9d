@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46c83252_7febeaa9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-10-04T09:25:49Z",
+      "side": 1,
+      "message": "could you please send a license email to the mailing list as described in https://wiki.documentfoundation.org/Development/Developers#Example_Code_Contributor_Statement\n\nalso feel free to add yourself to the wiki page",
+      "revId": "4340665df42261fd75d3951067e09c17dd46ce9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
