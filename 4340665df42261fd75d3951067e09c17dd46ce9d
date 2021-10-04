@@ -16,6 +16,24 @@
       "message": "could you please send a license email to the mailing list as described in https://wiki.documentfoundation.org/Development/Developers#Example_Code_Contributor_Statement\n\nalso feel free to add yourself to the wiki page",
       "revId": "4340665df42261fd75d3951067e09c17dd46ce9d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "feac070f_7d35205e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003375
+      },
+      "writtenOn": "2021-10-04T19:13:57Z",
+      "side": 1,
+      "message": "Thanks, done: https://lists.freedesktop.org/archives/libreoffice/2021-October/087905.html",
+      "parentUuid": "46c83252_7febeaa9",
+      "revId": "4340665df42261fd75d3951067e09c17dd46ce9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
