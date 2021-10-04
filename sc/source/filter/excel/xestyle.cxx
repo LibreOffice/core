@@ -1446,8 +1446,8 @@ void XclExpCellProt::SaveXml( XclExpXmlStream& rStrm ) const
             XML_hidden,     ToPsz( mbHidden ) );
 }
 
-bool XclExpCellAlign::FillFromItemSet(
-        const SfxItemSet& rItemSet, bool bForceLineBreak, XclBiff eBiff, bool bStyle )
+bool XclExpCellAlign::FillFromItemSet(const XclRoot& rRoot, const SfxItemSet& rItemSet,
+                                      bool bForceLineBreak, XclBiff eBiff, bool bStyle)
 {
     bool bUsed = false;
     SvxCellHorJustify eHorAlign = rItemSet.Get( ATTR_HOR_JUSTIFY ).GetValue();
@@ -1459,8 +1459,19 @@ bool XclExpCellAlign::FillFromItemSet(
         {
             // text indent
             tools::Long nTmpIndent = rItemSet.Get( ATTR_INDENT ).GetValue();
-            nTmpIndent = (nTmpIndent + 100) / 200; // 1 Excel unit == 10 pt == 200 twips
-            mnIndent = limit_cast< sal_uInt8 >( nTmpIndent, 0, 15 );
+            SAL_WARN("sc", "excel export, nTmpIndent as get from rItemSet is: " << nTmpIndent);
+            tools::Long nSpaceWidth = rRoot.GetSpaceWidth();
+            nSpaceWidth = o3tl::convert(nSpaceWidth, o3tl::Length::twip, o3tl::Length::mm100);
+            SAL_WARN("sc", "excel export, the space width as in XclRoot is: " << nSpaceWidth);
+            if (nSpaceWidth <= 0)
+            {
+                SAL_WARN("sc", "XclExpCellAlign::FillFromItemSet: width of space char should > 0. \
+Now is: " << nSpaceWidth << ". Fallback to 88 instead.");
+                nSpaceWidth = 88;
+            }
+            sal_Int32 nIndent = static_cast<double>(nTmpIndent) / (3.0 * nSpaceWidth) + 0.5;
+            SAL_WARN("sc", "excel export, the final indent calculated is: " << nIndent);
+            mnIndent = limit_cast< sal_uInt8 >( nIndent, 0, 15 );
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_INDENT, bStyle );
 
             // shrink to fit
@@ -2142,7 +2153,7 @@ void XclExpXF::Init( const SfxItemSet& rItemSet, sal_Int16 nScript,
     mbFmtUsed = ScfTools::CheckItem( rItemSet, ATTR_VALUE_FORMAT, IsStyleXF() );
 
     // alignment
-    mbAlignUsed = maAlignment.FillFromItemSet( rItemSet, bForceLineBreak, GetBiff(), IsStyleXF() );
+    mbAlignUsed = maAlignment.FillFromItemSet(*this, rItemSet, bForceLineBreak, GetBiff(), IsStyleXF());
 
     // cell border
     mbBorderUsed = maBorder.FillFromItemSet( rItemSet, GetPalette(), GetBiff(), IsStyleXF() );
@@ -3136,7 +3147,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                         }
 
                         std::unique_ptr<XclExpCellAlign> pAlign(new XclExpCellAlign);
-                        if (!pAlign->FillFromItemSet( rSet, false, GetBiff()))
+                        if (!pAlign->FillFromItemSet(rRoot, rSet, false, GetBiff()))
                         {
                             pAlign.reset();
                         }

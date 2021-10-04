@@ -1183,7 +1183,11 @@ void Alignment::finalizeImport()
 
     /*  indentation: expressed as number of blocks of 3 space characters in
         OOXML. */
-    sal_Int32 nIndent = getUnitConverter().scaleToMm100( 3.0 * maModel.mnIndent, Unit::Space );
+    sal_Int32 nSpaceWidth = getUnitConverter().scaleToMm100(1, Unit::Space);
+    SAL_WARN("sc", "OOX Import, the space width detected by UnitConverter is: " << nSpaceWidth);
+    SAL_WARN("sc", "OOX Import, the indent in xlsx file is: " << maModel.mnIndent);
+    sal_Int32 nIndent = 3 * nSpaceWidth * maModel.mnIndent;
+
     if( (0 <= nIndent) && (nIndent <= SAL_MAX_INT16) )
         maApiData.mnIndent = static_cast< sal_Int16 >( nIndent );
 
