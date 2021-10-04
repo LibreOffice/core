@@ -406,8 +406,6 @@ bool SwAttrHandler::Push( const SwTextAttr& rAttr, const SfxPoolItem& rItem )
         return true;
     }
 
-    if (!pTopAttr)
-        m_aAttrStack[nStack] = &rAttr;
     return false;
 }
 
