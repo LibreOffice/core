@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8216dbb_7ac8a179",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-10-04T08:49:02Z",
+      "side": 1,
+      "message": "@Szücsi: very nice and useful interoperability fix! I suggest only small clean-ups.",
+      "revId": "a9a5e46280c12766f5865614a4a1d3e204af760e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2097c93d_3c1fd3b1",
+        "filename": "oox/source/core/xmlfilterbase.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1032,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-10-04T08:49:02Z",
+      "side": 1,
+      "message": "This can be called for ~1 million rows, so I suggest to add a new member variable e.g. mbMSO, and reset its value in XmlFilterBase::checkDocumentProperties(), like in the case of mbMSO2007.",
+      "range": {
+        "startLine": 1025,
+        "startChar": 0,
+        "endLine": 1032,
+        "endChar": 16
+      },
+      "revId": "a9a5e46280c12766f5865614a4a1d3e204af760e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3145f125_856dce93",
+        "filename": "sc/source/filter/oox/sheetdatacontext.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-10-04T08:49:02Z",
+      "side": 1,
+      "message": "small clean-up:\n\n    // round down the row height to 0.75 pt like MSO table layout does\n    if ( double fInteropHeightDiff \u003d fmod(aModel.mfHeight, 0.75) \u0026\u0026 getFilter().isMSODocument() )\n    {\n        aModel.mfHeight -\u003d fInteropHeightDiff;\n    }\n\n\nBy the way, this still can result 0 pt row height e.g. when the document contains 0.5 pt row height, but that is corrected to 12.8 pt in Calc. Maybe it\u0027s worth to check its interoperability later (likely it\u0027s not possible to set 0.5 pt row height in Excel, or small values can have different rounding).",
+      "revId": "a9a5e46280c12766f5865614a4a1d3e204af760e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
