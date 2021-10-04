@@ -531,10 +531,10 @@ bool SwEditShell::IsMoveLeftMargin( bool bRight, bool bModulus ) const
                     SwFrame* pFrame = pCNd->getLayoutFrame( GetLayout() );
                     if ( pFrame )
                     {
-                        const sal_uInt32 nFrameWidth = o3tl::narrowing<sal_uInt32>( pFrame->IsVertical() ?
+                        const sal_uInt16 nFrameWidth = o3tl::narrowing<sal_uInt16>( pFrame->IsVertical() ?
                                                  pFrame->getFrameArea().Height() :
                                                  pFrame->getFrameArea().Width() );
-                        bRet = o3tl::narrowing<SwTwips>(nFrameWidth) > ( nNext + MM50 );
+                        bRet = nFrameWidth > ( nNext + MM50 );
                     }
                     else
                         bRet = false;
