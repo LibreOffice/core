@@ -42,9 +42,6 @@
 #include <string_view>
 
 
-using namespace std;
-
-
 const sal_Unicode C_NUM_REPL      = '@';
 const sal_Unicode C_END_PAGE_NUM   = '~';
 

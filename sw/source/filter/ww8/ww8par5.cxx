@@ -94,7 +94,6 @@ using namespace ::com::sun::star;
 using namespace msfilter::util;
 using namespace sw::util;
 using namespace sw::mark;
-using namespace std; // #i24377#
 using namespace nsSwDocInfoSubType;
 
 // Bookmarks

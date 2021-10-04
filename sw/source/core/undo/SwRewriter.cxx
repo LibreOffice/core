@@ -20,15 +20,13 @@
 #include <algorithm>
 #include <SwRewriter.hxx>
 
-using namespace std;
-
 SwRewriter::SwRewriter() {}
 
 void SwRewriter::AddRule(SwUndoArg eWhat, const OUString& rWith)
 {
     SwRewriteRule aRule(eWhat, rWith);
 
-    vector<SwRewriteRule>::iterator aIt
+    std::vector<SwRewriteRule>::iterator aIt
         = find_if(mRules.begin(), mRules.end(),
                   [&aRule](SwRewriteRule const& a) { return a.first == aRule.first; });
 
