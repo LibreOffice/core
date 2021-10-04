@@ -20,6 +20,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_uwriter, \
     sw/qa/core/test_ToxLinkProcessor \
     sw/qa/core/test_ToxTextGenerator \
     sw/qa/core/test_ToxMiscTest \
+    sw/qa/core/test_rect \
     sw/qa/core/test_region \
 ))
 
