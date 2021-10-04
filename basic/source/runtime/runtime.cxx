@@ -1196,13 +1196,21 @@ void SbiRuntime::PushForEach()
     }
     else if (SbUnoObject* pUnoObj = dynamic_cast<SbUnoObject*>(pObj))
     {
-        // XEnumerationAccess?
+        // XEnumerationAccess or XIndexAccess?
         Any aAny = pUnoObj->getUnoAny();
+        Reference<XIndexAccess> xIndexAccess;
         Reference< XEnumerationAccess > xEnumerationAccess;
         if( aAny >>= xEnumerationAccess )
         {
             p->xEnumeration = xEnumerationAccess->createEnumeration();
             p->eForType = ForType::EachXEnumeration;
+        }
+        // tdf#130307 - support for each loop for objects exposing XIndexAccess
+        else if (aAny >>= xIndexAccess)
+        {
+            p->eForType = ForType::EachXIndexAccess;
+            p->xIndexAccess = xIndexAccess;
+            p->nCurCollectionIndex = 0;
         }
         else if ( isVBAEnabled() && pUnoObj->isNativeCOMObject() )
         {
@@ -3196,6 +3204,29 @@ void SbiRuntime::StepTESTFOR( sal_uInt32 nOp1 )
                 Any aElem = p->xEnumeration->nextElement();
                 SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
                 unoToSbxValue( xVar.get(), aElem );
+                (*pForStk->refVar) = *xVar;
+            }
+            else
+            {
+                bEndLoop = true;
+            }
+            break;
+        }
+        // tdf#130307 - support for each loop for objects exposing XIndexAccess
+        case ForType::EachXIndexAccess:
+        {
+            SbiForStack* p = pForStk;
+            if (!p->xIndexAccess)
+            {
+                SbxBase::SetError(ERRCODE_BASIC_CONVERSION);
+                pForStk->eForType = ForType::Error; // terminate loop at the next iteration
+            }
+            else if (pForStk->nCurCollectionIndex < p->xIndexAccess->getCount())
+            {
+                Any aElem = p->xIndexAccess->getByIndex(pForStk->nCurCollectionIndex);
+                pForStk->nCurCollectionIndex++;
+                SbxVariableRef xVar = new SbxVariable(SbxVARIANT);
+                unoToSbxValue(xVar.get(), aElem);
                 (*pForStk->refVar) = *xVar;
             }
             else
