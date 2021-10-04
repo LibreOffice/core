@@ -109,9 +109,16 @@ void SwFieldDlg::Close()
 {
     if (m_bClosing)
         return;
-    m_pBindings->GetDispatcher()->
+    const SfxPoolItem* pResult = m_pBindings->GetDispatcher()->
         Execute(m_bDataBaseMode ? FN_INSERT_FIELD_DATA_ONLY : FN_INSERT_FIELD,
         SfxCallMode::SYNCHRON|SfxCallMode::RECORD);
+    if (!pResult)
+    {
+        // If Execute action did fail for whatever reason, this means that request
+        // to close did fail or wasn't delivered to SwTextShell::ExecField().
+        // Just explicitly close dialog in this case.
+        SfxTabDialogController::EndDialog();
+    }
 }
 
 void SwFieldDlg::Initialize(SfxChildWinInfo const *pInfo)
