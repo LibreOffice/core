@@ -165,6 +165,9 @@ rtl::Reference< sdr::overlay::OverlayManager > const & SdrPageWindow::GetOverlay
 
 SdrPaintWindow* SdrPageWindow::patchPaintWindow(SdrPaintWindow& rPaintWindow)
 {
+    if (!mpImpl)
+        return nullptr;
+
     if (!mpImpl->mpOriginalPaintWindow)
     {
         // first patch
