@@ -6659,9 +6659,9 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
         return;
 
     // TextHeaderAtom is always the first Atom
-    sal_uInt16 nTmp;
-    rIn.ReadUInt16( nTmp );   // this number tells us the TxMasterStyleAtom Instance
-    if ( nTmp > 8 )
+    sal_uInt16 nTmp(0);
+    rIn.ReadUInt16(nTmp);   // this number tells us the TxMasterStyleAtom Instance
+    if (nTmp > 8)
         nTmp = 4;
     TSS_Type nInstance = static_cast<TSS_Type>(nTmp);
     aTextHd.SeekToEndOfRecord( rIn );
