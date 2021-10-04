@@ -26,8 +26,6 @@
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 
-using namespace std;
-
 namespace
 {
     struct CursorStateHelper

@@ -25,8 +25,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weldutils.hxx>
 
-using namespace std;
-
 SwFrameControlsManager::SwFrameControlsManager( SwEditWin* pEditWin ) :
     m_pEditWin( pEditWin )
 {
