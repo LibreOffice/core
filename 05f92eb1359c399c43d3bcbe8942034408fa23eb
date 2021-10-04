@@ -16,6 +16,24 @@
       "message": "Hi László,\nDo you think this should be backported to 7.2 branch ?\n",
       "revId": "05f92eb1359c399c43d3bcbe8942034408fa23eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c866dec2_953df416",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-10-04T14:52:14Z",
+      "side": 1,
+      "message": "Hi Xisco,\n\nLikely it\u0027s a good idea, because this is an important fix for professional users. The other back-portable fix is\n\nhttps://gerrit.libreoffice.org/c/core/+/122393\n\nin this field. Thanks in advance, if you going to back-port them.",
+      "parentUuid": "47ffd94f_ec9697d4",
+      "revId": "05f92eb1359c399c43d3bcbe8942034408fa23eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
