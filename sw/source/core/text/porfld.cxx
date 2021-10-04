@@ -785,7 +785,7 @@ SwGrfNumPortion::SwGrfNumPortion(
         m_nYPos = 0;
         m_eOrient = text::VertOrientation::TOP;
     }
-    Width( o3tl::narrowing<sal_uInt16>(rGrfSize.Width() + 2 * GRFNUM_SECURE) );
+    Width( static_cast<sal_uInt16>(rGrfSize.Width() + 2 * GRFNUM_SECURE) );
     m_nFixWidth = Width();
     m_nGrfHeight = rGrfSize.Height() + 2 * GRFNUM_SECURE;
     Height( sal_uInt16(m_nGrfHeight) );
@@ -834,7 +834,7 @@ bool SwGrfNumPortion::Format( SwTextFormatInfo &rInf )
 
     if( bFull )
     {
-        Width( rInf.Width() - o3tl::narrowing<sal_uInt16>(rInf.X()) );
+        Width( rInf.Width() - static_cast<sal_uInt16>(rInf.X()) );
         if( bFly )
         {
             SetLen(TextFrameIndex(0));
@@ -1170,7 +1170,7 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
             {
                 rInf.GetOut()->SetFont( rInf.GetFont()->GetFnt( m_aScrType[i] ) );
                 m_aWidth[ m_aScrType[i] ] =
-                        o3tl::narrowing<sal_uInt16>(2 * rInf.GetOut()->GetFontMetric().GetFontSize().Width() / 3);
+                        static_cast<sal_uInt16>(2 * rInf.GetOut()->GetFontMetric().GetFontSize().Width() / 3);
             }
         }
     }
@@ -1217,7 +1217,7 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
             SwDrawTextInfo aDrawInf(pSh, *rInf.GetOut(), m_aExpand, i, 1);
             Size aSize = aTmpFont.GetTextSize_( aDrawInf );
             const sal_uInt16 nAsc = aTmpFont.GetAscent( pSh, *rInf.GetOut() );
-            m_aPos[ i ] = o3tl::narrowing<sal_uInt16>(aSize.Width());
+            m_aPos[ i ] = static_cast<sal_uInt16>(aSize.Width());
             if( i == nTop ) // enter the second line
             {
                 m_nLowPos = nMaxDescent;
@@ -1232,7 +1232,7 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
             if( nAsc > nMaxAscent )
                 nMaxAscent = nAsc;
             if( aSize.Height() - nAsc > nMaxDescent )
-                nMaxDescent = o3tl::narrowing<sal_uInt16>(aSize.Height() - nAsc);
+                nMaxDescent = static_cast<sal_uInt16>(aSize.Height() - nAsc);
         }
         // for one or two characters we double the width of the portion
         if( nCount < 3 )
@@ -1295,7 +1295,7 @@ bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )
     {
         if( rInf.GetLineStart() == rInf.GetIdx() && (!rInf.GetLast()->InFieldGrp()
             || !static_cast<SwFieldPortion*>(rInf.GetLast())->IsFollow() ) )
-            Width( o3tl::narrowing<sal_uInt16>( rInf.Width() - rInf.X() ) );
+            Width( static_cast<sal_uInt16>( rInf.Width() - rInf.X() ) );
         else
         {
             Truncate();
