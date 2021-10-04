@@ -191,7 +191,7 @@ bool SwPageFootnoteInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
 
 SwPtrItem::SwPtrItem( const sal_uInt16 nId, void* pPtr ) :
     SfxPoolItem( nId ),
-    pMisc(pPtr)
+    m_pMisc(pPtr)
 {
 }
 
@@ -205,19 +205,19 @@ SwPtrItem* SwPtrItem::Clone( SfxItemPool * /*pPool*/ ) const
 bool SwPtrItem::operator==( const SfxPoolItem& rAttr ) const
 {
     return SfxPoolItem::operator==(rAttr)
-        && pMisc == static_cast<const SwPtrItem&>(rAttr).pMisc;
+        && m_pMisc == static_cast<const SwPtrItem&>(rAttr).m_pMisc;
 }
 
 // SwUINumRuleItem for the NumTabPages of the FormatNumRule/Styleists
 
 SwUINumRuleItem::SwUINumRuleItem( const SwNumRule& rRul )
-    : SfxPoolItem( FN_PARAM_ACT_NUMBER ), pRule( new SwNumRule( rRul ) )
+    : SfxPoolItem( FN_PARAM_ACT_NUMBER ), m_pRule( new SwNumRule( rRul ) )
 {
 }
 
 SwUINumRuleItem::SwUINumRuleItem( const SwUINumRuleItem& rItem )
     : SfxPoolItem( rItem ),
-    pRule( new SwNumRule( *rItem.pRule ))
+    m_pRule( new SwNumRule( *rItem.m_pRule ))
 {
 }
 
@@ -233,12 +233,12 @@ SwUINumRuleItem* SwUINumRuleItem::Clone( SfxItemPool * /*pPool*/ ) const
 bool SwUINumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 {
     return SfxPoolItem::operator==(rAttr)
-        && *pRule == *static_cast<const SwUINumRuleItem&>(rAttr).pRule;
+        && *m_pRule == *static_cast<const SwUINumRuleItem&>(rAttr).m_pRule;
 }
 
 bool SwUINumRuleItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
-    uno::Reference< container::XIndexReplace >xRules = new SwXNumberingRules(*pRule);
+    uno::Reference< container::XIndexReplace >xRules = new SwXNumberingRules(*m_pRule);
     rVal <<= xRules;
     return true;
 }
@@ -250,7 +250,7 @@ bool SwUINumRuleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
         auto pSwXRules = comphelper::getFromUnoTunnel<SwXNumberingRules>(xRulesRef);
         if(pSwXRules)
         {
-            *pRule = *pSwXRules->GetNumRule();
+            *m_pRule = *pSwXRules->GetNumRule();
         }
     }
     return true;

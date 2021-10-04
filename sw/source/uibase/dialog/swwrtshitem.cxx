@@ -21,7 +21,7 @@
 #include <globals.hrc>
 
 SwWrtShellItem::SwWrtShellItem( SwWrtShell* pSh )
-    : SfxPoolItem( SID_WRT_SHELL ), pWrtSh( pSh )
+    : SfxPoolItem( SID_WRT_SHELL ), m_pWrtSh( pSh )
 {
 
 }
@@ -29,7 +29,7 @@ SwWrtShellItem::SwWrtShellItem( SwWrtShell* pSh )
 bool SwWrtShellItem::operator==( const SfxPoolItem& rItem) const
 {
     return SfxPoolItem::operator==(rItem)
-        && pWrtSh == static_cast<const SwWrtShellItem&>(rItem).pWrtSh;
+        && m_pWrtSh == static_cast<const SwWrtShellItem&>(rItem).m_pWrtSh;
 }
 
 SwWrtShellItem* SwWrtShellItem::Clone( SfxItemPool * /*pPool*/ ) const

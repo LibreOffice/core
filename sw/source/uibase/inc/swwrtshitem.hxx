@@ -25,7 +25,7 @@ class SwWrtShell;
 
 class SW_DLLPUBLIC SwWrtShellItem final : public SfxPoolItem
 {
-    SwWrtShell*         pWrtSh;
+    SwWrtShell*         m_pWrtSh;
 
 public:
                             SwWrtShellItem( SwWrtShell* pWrtSh );
@@ -33,7 +33,7 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SwWrtShellItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
-    SwWrtShell*             GetValue() const { return pWrtSh; }
+    SwWrtShell*             GetValue() const { return m_pWrtSh; }
 
 };
 
