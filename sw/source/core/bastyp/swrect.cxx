@@ -134,12 +134,6 @@ void SwRect::SetPosY( const tools::Long nNew ){ m_Point.setY(nNew); }
 Size  SwRect::Size_() const { return SSize(); }
 Size  SwRect::SwappedSize() const { return Size( m_Size.getHeight(), m_Size.getWidth() ); }
 
-Point SwRect::TopLeft() const { return Pos(); }
-Point SwRect::TopRight() const { return Point( m_Point.getX() + m_Size.getWidth(), m_Point.getY() ); }
-Point SwRect::BottomLeft() const { return Point( m_Point.getX(), m_Point.getY() + m_Size.getHeight() ); }
-Point SwRect::BottomRight() const
-    { return Point( m_Point.getX() + m_Size.getWidth(), m_Point.getY() + m_Size.getHeight() ); }
-
 tools::Long SwRect::GetLeftDistance( tools::Long nLimit ) const { return m_Point.getX() - nLimit; }
 tools::Long SwRect::GetBottomDistance( tools::Long nLim ) const { return nLim - m_Point.getY() - m_Size.getHeight();}
 tools::Long SwRect::GetTopDistance( tools::Long nLimit ) const { return m_Point.getY() - nLimit; }
