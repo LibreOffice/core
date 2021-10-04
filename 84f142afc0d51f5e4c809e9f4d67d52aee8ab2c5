@@ -16,6 +16,92 @@
       "message": "@Szücsi: thanks for the clean-up, there is no page style regression any more!\n\nI\u0027ve found a freezing with one of my test documents. If it\u0027s possible to fix it by removing checking the balancing option, I suggest to do that (especially because checking balancing will be obsolete with the upcoming compatibility option, which is going to solve the back-compatibility).",
       "revId": "84f142afc0d51f5e4c809e9f4d67d52aee8ab2c5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18121f90_ab8f52b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-10-04T09:57:52Z",
+      "side": 1,
+      "message": "@Szücsi: I\u0027ve found some typos, yet.",
+      "revId": "84f142afc0d51f5e4c809e9f4d67d52aee8ab2c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a36bc37_7cfeb91c",
+        "filename": "sw/source/core/layout/findfrm.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-10-04T09:57:52Z",
+      "side": 1,
+      "message": "i",
+      "range": {
+        "startLine": 451,
+        "startChar": 54,
+        "endLine": 451,
+        "endChar": 55
+      },
+      "revId": "84f142afc0d51f5e4c809e9f4d67d52aee8ab2c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8934fbcf_3314ad5f",
+        "filename": "sw/source/core/layout/findfrm.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-10-04T09:57:52Z",
+      "side": 1,
+      "message": "to",
+      "range": {
+        "startLine": 452,
+        "startChar": 69,
+        "endLine": 452,
+        "endChar": 71
+      },
+      "revId": "84f142afc0d51f5e4c809e9f4d67d52aee8ab2c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8d65f99_af51116f",
+        "filename": "sw/source/core/layout/findfrm.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-10-04T09:57:52Z",
+      "side": 1,
+      "message": "i-",
+      "range": {
+        "startLine": 455,
+        "startChar": 79,
+        "endLine": 455,
+        "endChar": 81
+      },
+      "revId": "84f142afc0d51f5e4c809e9f4d67d52aee8ab2c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
