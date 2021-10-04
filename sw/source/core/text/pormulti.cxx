@@ -399,7 +399,7 @@ void SwDoubleLinePortion::FormatBrackets( SwTextFormatInfo &rInf, SwTwips& nMaxW
         m_pBracket->nAscent = rInf.GetAscent();
         m_pBracket->nHeight = aSize.Height();
         aTmpFnt.SetActual( nActualScr );
-        if( nMaxWidth > o3tl::narrowing<SwTwips>(aSize.Width()) )
+        if( nMaxWidth > static_cast<SwTwips>(aSize.Width()) )
         {
             m_pBracket->nPreWidth = aSize.Width();
             nMaxWidth -= aSize.Width();
@@ -428,7 +428,7 @@ void SwDoubleLinePortion::FormatBrackets( SwTextFormatInfo &rInf, SwTwips& nMaxW
         }
         if( aSize.Height() > m_pBracket->nHeight )
             m_pBracket->nHeight = aSize.Height();
-        if( nMaxWidth > o3tl::narrowing<SwTwips>(aSize.Width()) )
+        if( nMaxWidth > static_cast<SwTwips>(aSize.Width()) )
         {
             m_pBracket->nPostWidth = aSize.Width();
             nMaxWidth -= aSize.Width();
@@ -2169,7 +2169,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
             // Setting this to the portion width ( = rMulti.Width() )
             // can make GetTextBreak inside SwTextGuess::Guess return too small
             // values. Therefore we add some extra twips.
-            if( nActWidth > nTmpX + o3tl::narrowing<SwTwips>(rMulti.Width()) + 6 )
+            if( nActWidth > nTmpX + static_cast<SwTwips>(rMulti.Width()) + 6 )
                 nActWidth = nTmpX + rMulti.Width() + 6;
             nMaxWidth = nActWidth;
             nActWidth = ( 3 * nMaxWidth + nMinWidth + 3 ) / 4;
@@ -2520,7 +2520,7 @@ SwTextCursorSave::SwTextCursorSave( SwTextCursor* pCursor,
 {
     pCursor->m_nStart = nCurrStart;
     pCursor->m_pCurr = &pMulti->GetRoot();
-    while( pCursor->Y() + o3tl::narrowing<SwTwips>(pCursor->GetLineHeight()) < nY &&
+    while( pCursor->Y() + static_cast<SwTwips>(pCursor->GetLineHeight()) < nY &&
         pCursor->Next() )
         ; // nothing
     nWidth = pCursor->m_pCurr->Width();

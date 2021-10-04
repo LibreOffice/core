@@ -2422,7 +2422,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
         nAscent = pLast->GetAscent();
         nHeight = pLast->Height();
 
-        if ( o3tl::narrowing<SwTwips>(m_pCurr->GetRealHeight()) > nHeight )
+        if ( static_cast<SwTwips>(m_pCurr->GetRealHeight()) > nHeight )
             nTop += m_pCurr->GetRealHeight() - nHeight;
         else
             // Important for fixed space between lines
@@ -2553,7 +2553,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
             if( nH < SAL_MAX_UINT16 )
                 pFly->Height( sal_uInt16( nH ) );
         }
-        if( nAscent < o3tl::narrowing<SwTwips>(pFly->Height()) )
+        if( nAscent < static_cast<SwTwips>(pFly->Height()) )
             pFly->SetAscent( sal_uInt16(nAscent) );
         else
             pFly->SetAscent( pFly->Height() );
@@ -2569,7 +2569,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
         else
         {
             pFly->Height( sal_uInt16(aInter.Height()) );
-            if( nAscent < o3tl::narrowing<SwTwips>(pFly->Height()) )
+            if( nAscent < static_cast<SwTwips>(pFly->Height()) )
                 pFly->SetAscent( sal_uInt16(nAscent) );
             else
                 pFly->SetAscent( pFly->Height() );
@@ -2666,7 +2666,7 @@ SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
     {
         nAscent = rInf.GetLast()->GetAscent();
     }
-    else if( o3tl::narrowing<SwTwips>(nAscent) > nFlyAsc )
+    else if( static_cast<SwTwips>(nAscent) > nFlyAsc )
         nFlyAsc = nAscent;
 
     Point aBase( GetLeftMargin() + rInf.X(), Y() + nAscent );
