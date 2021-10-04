@@ -17604,12 +17604,14 @@ private:
     GtkWidget* m_pEntry;
     GtkEditable* m_pEditable;
 //    GtkCellView* m_pCellView;
+    GtkCssProvider* m_pFontCssProvider;
     GtkEventController* m_pKeyController;
     GtkEventController* m_pEntryKeyController;
     GtkEventController* m_pMenuKeyController;
     GtkEventController* m_pEntryFocusController;
 //    std::unique_ptr<CustomRenderMenuButtonHelper> m_xCustomMenuButtonHelper;
     std::optional<vcl::Font> m_xFont;
+    std::optional<vcl::Font> m_xEntryFont;
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
     vcl::QuickSelectionEngine m_aQuickSelectionEngine;
     std::vector<std::unique_ptr<GtkTreeRowReference, GtkTreeRowReferenceDeleter>> m_aSeparatorRows;
@@ -18646,6 +18648,7 @@ public:
 //        , m_pToggleButton(GTK_WIDGET(gtk_builder_get_object(pComboBuilder, "button")))
         , m_pEntry(GTK_IS_ENTRY(gtk_combo_box_get_child(pComboBox)) ? gtk_combo_box_get_child(pComboBox) : nullptr)
         , m_pEditable(GTK_EDITABLE(m_pEntry))
+        , m_pFontCssProvider(nullptr)
 //        , m_pCellView(nullptr)
         , m_aQuickSelectionEngine(*this)
 //        , m_bHoverSelection(false)
@@ -19026,9 +19029,30 @@ public:
         gtk_widget_activate_action(m_pEntry, "paste.clipboard", nullptr);
     }
 
-    virtual void set_entry_font(const vcl::Font& rFont) override
+    virtual void set_font(const vcl::Font& rFont) override
     {
         m_xFont = rFont;
+        GtkStyleContext *pWidgetContext = gtk_widget_get_style_context(GTK_WIDGET(m_pComboBox));
+        if (m_pFontCssProvider)
+            gtk_style_context_remove_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pFontCssProvider));
+        m_pFontCssProvider = gtk_css_provider_new();
+        OUString aBuffer = "combobox { " + vcl_font_to_css(rFont) +  "}";
+        OString aResult = OUStringToOString(aBuffer, RTL_TEXTENCODING_UTF8);
+        css_provider_load_from_data(m_pFontCssProvider, aResult.getStr(), aResult.getLength());
+        gtk_style_context_add_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pFontCssProvider),
+                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
+
+    virtual vcl::Font get_font() override
+    {
+        if (m_xFont)
+            return *m_xFont;
+        return GtkInstanceWidget::get_font();
+    }
+
+    virtual void set_entry_font(const vcl::Font& rFont) override
+    {
+        m_xEntryFont = rFont;
         assert(m_pEntry);
         PangoAttrList* pOrigList = gtk_entry_get_attributes(GTK_ENTRY(m_pEntry));
         PangoAttrList* pAttrList = pOrigList ? pango_attr_list_copy(pOrigList) : pango_attr_list_new();
@@ -19039,8 +19063,8 @@ public:
 
     virtual vcl::Font get_entry_font() override
     {
-        if (m_xFont)
-            return *m_xFont;
+        if (m_xEntryFont)
+            return *m_xEntryFont;
         assert(m_pEntry);
         PangoContext* pContext = gtk_widget_get_pango_context(m_pEntry);
         return pango_to_vcl(pango_context_get_font_description(pContext),
@@ -19357,8 +19381,10 @@ private:
     GtkWidget* m_pToggleButton;
     GtkWidget* m_pEntry;
     GtkCellView* m_pCellView;
+    GtkCssProvider* m_pFontCssProvider;
     std::unique_ptr<CustomRenderMenuButtonHelper> m_xCustomMenuButtonHelper;
     std::optional<vcl::Font> m_xFont;
+    std::optional<vcl::Font> m_xEntryFont;
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
     vcl::QuickSelectionEngine m_aQuickSelectionEngine;
     std::vector<std::unique_ptr<GtkTreeRowReference, GtkTreeRowReferenceDeleter>> m_aSeparatorRows;
@@ -20395,6 +20421,7 @@ public:
         , m_pToggleButton(GTK_WIDGET(gtk_builder_get_object(pComboBuilder, "button")))
         , m_pEntry(GTK_WIDGET(gtk_builder_get_object(pComboBuilder, "entry")))
         , m_pCellView(nullptr)
+        , m_pFontCssProvider(nullptr)
         , m_aQuickSelectionEngine(*this)
         , m_bHoverSelection(false)
         , m_bMouseInOverlayButton(false)
@@ -20811,9 +20838,30 @@ public:
         gtk_editable_paste_clipboard(GTK_EDITABLE(m_pEntry));
     }
 
-    virtual void set_entry_font(const vcl::Font& rFont) override
+    virtual void set_font(const vcl::Font& rFont) override
     {
         m_xFont = rFont;
+        GtkStyleContext *pWidgetContext = gtk_widget_get_style_context(GTK_WIDGET(getContainer()));
+        if (m_pFontCssProvider)
+            gtk_style_context_remove_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pFontCssProvider));
+        m_pFontCssProvider = gtk_css_provider_new();
+        OUString aBuffer = "box#combobox { " + vcl_font_to_css(rFont) +  "}";
+        OString aResult = OUStringToOString(aBuffer, RTL_TEXTENCODING_UTF8);
+        css_provider_load_from_data(m_pFontCssProvider, aResult.getStr(), aResult.getLength());
+        gtk_style_context_add_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pFontCssProvider),
+                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
+
+    virtual vcl::Font get_font() override
+    {
+        if (m_xFont)
+            return *m_xFont;
+        return GtkInstanceContainer::get_font();
+    }
+
+    virtual void set_entry_font(const vcl::Font& rFont) override
+    {
+        m_xEntryFont = rFont;
         assert(m_pEntry);
         PangoAttrList* pOrigList = gtk_entry_get_attributes(GTK_ENTRY(m_pEntry));
         PangoAttrList* pAttrList = pOrigList ? pango_attr_list_copy(pOrigList) : pango_attr_list_new();
@@ -20824,8 +20872,8 @@ public:
 
     virtual vcl::Font get_entry_font() override
     {
-        if (m_xFont)
-            return *m_xFont;
+        if (m_xEntryFont)
+            return *m_xEntryFont;
         assert(m_pEntry);
         PangoContext* pContext = gtk_widget_get_pango_context(m_pEntry);
         return pango_to_vcl(pango_context_get_font_description(pContext),
@@ -21363,6 +21411,11 @@ public:
     virtual void paste_entry_clipboard() override
     {
         m_xEntry->paste_clipboard();
+    }
+
+    virtual void set_font(const vcl::Font&) override
+    {
+        assert(false && "not implemented");
     }
 
     virtual void set_entry_font(const vcl::Font& rFont) override

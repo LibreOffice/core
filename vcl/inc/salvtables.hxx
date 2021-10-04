@@ -911,6 +911,8 @@ public:
 
     virtual void paste_entry_clipboard() override;
 
+    virtual void set_font(const vcl::Font& rFont) override;
+
     virtual void set_entry_font(const vcl::Font&) override;
 
     virtual vcl::Font get_entry_font() override;
@@ -980,6 +982,8 @@ public:
     virtual void select_entry_region(int nStartPos, int nEndPos) override;
 
     virtual bool get_entry_selection_bounds(int& rStartPos, int& rEndPos) override;
+
+    virtual void set_font(const vcl::Font& rFont) override;
 
     virtual void set_entry_font(const vcl::Font& rFont) override;
 
