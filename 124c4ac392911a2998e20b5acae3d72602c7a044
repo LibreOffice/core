@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4df3b5da_8630253d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-10-04T01:31:29Z",
+      "side": 1,
+      "message": "Please give advice on how to get nSpaceWidth in XclExpCellAlign::FillFromItemSet in sc/source/filter/excel/xestyle.cxx. Currently I am trying to get it by adding an ATTR_SPACEWIDTH SfxItemSet, but there is a crash when saving the XLSX file.",
+      "revId": "124c4ac392911a2998e20b5acae3d72602c7a044",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
