@@ -16,6 +16,23 @@
       "message": "Just wondering if PageCache::rescale_Impl (see https://opengrok.libreoffice.org/xref/core/store/source/storcach.cxx?r\u003dd9af7ac4#218) could be optimized the same way.",
       "revId": "897192f07c1f7863a50e09cdd29e6631550b83ff",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "335ac6fb_03dc6a31",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-10-04T14:37:38Z",
+      "side": 1,
+      "message": "I think the store/ code is deep, deep legacy that we shouldn\u0027t be using for much these days \u003d)\ncf. store/README.md - hopefully one day we\u0027ll bite the bullet and kill it completely.",
+      "revId": "897192f07c1f7863a50e09cdd29e6631550b83ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
