@@ -51,6 +51,7 @@
 #include <textlineinfo.hxx>
 #include <impglyphitem.hxx>
 #include <optional>
+#include <font/PhysicalFontFace.hxx>
 
 #define TEXT_DRAW_ELLIPSIS  (DrawTextFlags::EndEllipsis | DrawTextFlags::PathEllipsis | DrawTextFlags::NewsEllipsis)
 
@@ -1245,6 +1246,57 @@ vcl::text::ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
     return aLayoutArgs;
 }
 
+static OutputDevice::FontMappingUseData* fontMappingUseData = nullptr;
+
+static inline bool IsTrackingFontMappingUse()
+{
+    return fontMappingUseData != nullptr;
+}
+
+static void TrackFontMappingUse( const vcl::Font& originalFont, const SalLayout* salLayout)
+{
+    assert(fontMappingUseData);
+    OUString originalName = originalFont.GetStyleName().isEmpty()
+        ? originalFont.GetFamilyName()
+        : originalFont.GetFamilyName() + "/" + originalFont.GetStyleName();
+    std::vector<OUString> usedFontNames;
+    SalLayoutGlyphs glyphs = salLayout->GetGlyphs(); // includes all font fallbacks
+    int level = 0;
+    while( const SalLayoutGlyphsImpl* impl = glyphs.Impl(level++))
+    {
+        const vcl::font::PhysicalFontFace* face = impl->GetFont()->GetFontFace();
+        OUString name = face->GetStyleName().isEmpty()
+            ? face->GetFamilyName()
+            : face->GetFamilyName() + "/" + face->GetStyleName();
+        usedFontNames.push_back( name );
+    }
+    for( OutputDevice::FontMappingUseItem& item : *fontMappingUseData )
+    {
+        if( item.mOriginalFont == originalName && item.mUsedFonts == usedFontNames )
+        {
+            ++item.mCount;
+            return;
+        }
+    }
+    fontMappingUseData->push_back( { originalName, usedFontNames, 1 } );
+}
+
+void OutputDevice::StartTrackingFontMappingUse()
+{
+    delete fontMappingUseData;
+    fontMappingUseData = new FontMappingUseData;
+}
+
+OutputDevice::FontMappingUseData OutputDevice::FinishTrackingFontMappingUse()
+{
+    if(!fontMappingUseData)
+        return {};
+    FontMappingUseData ret = std::move( *fontMappingUseData );
+    delete fontMappingUseData;
+    fontMappingUseData = nullptr;
+    return ret;
+}
+
 std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
                                     sal_Int32 nMinIndex, sal_Int32 nLen,
                                     const Point& rLogicalPos, tools::Long nLogicalWidth,
@@ -1357,6 +1409,9 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
             nRTLOffset = pSalLayout->GetTextWidth() / pSalLayout->GetUnitsPerPixel();
         pSalLayout->DrawOffset().setX( 1 - nRTLOffset );
     }
+
+    if(IsTrackingFontMappingUse())
+        TrackFontMappingUse(GetFont(), pSalLayout.get());
 
     return pSalLayout;
 }

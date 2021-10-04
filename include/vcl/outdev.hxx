@@ -1253,6 +1253,25 @@ public:
                                     LogicalFontInstance* pLogicalFont, int nFallbackLevel,
                                     vcl::text::ImplLayoutArgs& rLayoutArgs, const SalLayoutGlyphs* ) const;
 
+    /*
+     These functions allow collecting information on how fonts are mapped when used, such as what
+     replacements are used when a requrested font is missing or which fonts are used as fallbacks
+     when a font doesn't provide all necessary glyphs.
+     After StartTrackingFontMappingUse() is called, VCL starts collecting font usage for all
+     text layout calls, FinishTrackingFontMappingUse() will stop collecting and providing
+     the collected information.
+     Each item is a mapping from a requested font to a list of actually used fonts and the number
+     of times this mapping was done.
+    */
+    struct FontMappingUseItem
+    {
+        OUString mOriginalFont;
+        std::vector<OUString> mUsedFonts;
+        int mCount;
+    };
+    typedef std::vector<FontMappingUseItem> FontMappingUseData;
+    static void StartTrackingFontMappingUse();
+    static FontMappingUseData FinishTrackingFontMappingUse();
 
     // Enabling/disabling RTL only makes sense for OutputDevices that use a mirroring SalGraphicsLayout
     virtual void                EnableRTL( bool bEnable = true);
