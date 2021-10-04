@@ -95,6 +95,8 @@ bool isBuilderEnabledForSidebar(const OUString& rUIFile)
         || rUIFile == "modules/simpress/ui/customanimationspanel.ui"
         || rUIFile == "modules/simpress/ui/layoutpanel.ui"
         || rUIFile == "modules/simpress/ui/masterpagepanel.ui"
+        || rUIFile == "modules/simpress/ui/masterpagepanelall.ui"
+        || rUIFile == "modules/simpress/ui/masterpagepanelrecent.ui"
         || rUIFile == "modules/simpress/ui/slidetransitionspanel.ui"
         || rUIFile == "modules/simpress/ui/tabledesignpanel.ui"
         || rUIFile == "modules/simpress/ui/navigatorpanel.ui"
