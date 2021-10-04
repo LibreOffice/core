@@ -10,14 +10,14 @@
 #ifndef __com_sun_star_awt_XToolkitExperimental_idl__
 #define __com_sun_star_awt_XToolkitExperimental_idl__
 
-#include <com/sun/star/awt/XToolkit2.idl>
+#include <com/sun/star/awt/XToolkit3.idl>
 
 module com {  module sun {  module star {  module awt {
 
 /** Work in progress, don't use unless you know what you are doing.
  */
 
-interface XToolkitExperimental : XToolkit2
+interface XToolkitExperimental : XToolkit3
 {
     /** Process all pending idle events
      */

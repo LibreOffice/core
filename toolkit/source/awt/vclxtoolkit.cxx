@@ -564,6 +564,11 @@ public:
     // css::awt::XReschedule:
     virtual void SAL_CALL reschedule() override;
 
+    // css::awt::XFontMappingUse:
+    virtual void SAL_CALL startTrackingFontMappingUse() override;
+
+    virtual css::uno::Sequence<css::awt::XFontMappingUseItem> SAL_CALL finishTrackingFontMappingUse() override;
+
     // css:awt:XToolkitRobot
     virtual void SAL_CALL keyPress( const css::awt::KeyEvent & aKeyEvent ) override;
 
@@ -2530,6 +2535,29 @@ void SAL_CALL VCLXToolkit::reschedule()
 {
     SolarMutexGuard aSolarGuard;
     Application::Reschedule(true);
+}
+
+// css::awt::XFontMappingUse:
+void SAL_CALL VCLXToolkit::startTrackingFontMappingUse()
+{
+    SolarMutexGuard aSolarGuard;
+    OutputDevice::StartTrackingFontMappingUse();
+}
+
+css::uno::Sequence<css::awt::XFontMappingUseItem>
+SAL_CALL VCLXToolkit::finishTrackingFontMappingUse()
+{
+    SolarMutexGuard aSolarGuard;
+    OutputDevice::FontMappingUseData data = OutputDevice::FinishTrackingFontMappingUse();
+    css::uno::Sequence<css::awt::XFontMappingUseItem> ret( data.size());
+    for( size_t i = 0; i < data.size(); ++i )
+    {
+        ret[ i ].originalFont = data[ i ].mOriginalFont;
+        ret[ i ].usedFonts = comphelper::arrayToSequence<OUString,OUString>
+            (data[ i ].mUsedFonts.data(), data[ i ].mUsedFonts.size());
+        ret[ i ].count = data[ i ].mCount;
+    }
+    return ret;
 }
 
 // css::awt::XToolkitExperimental
