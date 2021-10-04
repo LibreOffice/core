@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb621a3e_69611da2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-10-04T15:01:10Z",
+      "side": 1,
+      "message": "This change to this plugin has the potential to sprinkle std::move and \u0026\u0026 all over our codebase.\nI think (based on what it has found so far), it is (haha) a move in the right direction.\nPlease let me know if you disagree.",
+      "revId": "ec819e9950d875c9facad1344fa9dc1b71f3f04d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
