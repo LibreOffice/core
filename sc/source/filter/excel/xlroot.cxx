@@ -101,6 +101,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     mfScreenPixelX( 50.0 ),
     mfScreenPixelY( 50.0 ),
     mnCharWidth( 110 ),
+    mnSpaceWidth(88),
     mnScTab( 0 ),
     mbExport( bExport )
 {
@@ -218,12 +219,23 @@ void XclRoot::SetCharWidth( const XclFontData& rFontData )
         // UnitConverter::finalizeImport()
         for (sal_Unicode cChar = '0'; cChar <= '9'; ++cChar)
             mrData.mnCharWidth = std::max( pPrinter->GetTextWidth( OUString(cChar)), mrData.mnCharWidth);
+
+        // Set the width of space ' ' character.
+        SAL_WARN("sc",
+                 "XclRoot::SetCharWidth - The font is: " << aFont.GetFamilyName() << ", size "
+                 << aFont.GetFontSize());
+        mrData.mnSpaceWidth = pPrinter->GetTextWidth(OUString(' '));
     }
     if( mrData.mnCharWidth <= 0 )
     {
         // #i48717# Win98 with HP LaserJet returns 0
         SAL_WARN( "sc", "XclRoot::SetCharWidth - invalid character width (no printer?)" );
         mrData.mnCharWidth = 11 * rFontData.mnHeight / 20;
+    }
+    if (mrData.mnSpaceWidth <= 0)
+    {
+        SAL_WARN( "sc", "XclRoot::SetCharWidth - invalid character width (no printer?)" );
+        mrData.mnSpaceWidth = 88;
     }
 }
 
