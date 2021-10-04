@@ -14,6 +14,20 @@
 
 namespace vcl::test
 {
+Bitmap BenchMarkTests::setupWavelines(clock_t& aTimeTaken)
+{
+    initialSetup(24, 24, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    aTimeTaken = clock();
+    mpVirtualDevice->DrawWaveLine(Point(2, 2), Point(23, 22), 4);
+    aTimeTaken = clock() - aTimeTaken;
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
 Bitmap BenchMarkTests::setupMultiplePolygonsWithPolyPolygon(clock_t& aTimeTaken)
 {
     initialSetup(24, 24, constBackgroundColor);
@@ -26,16 +40,13 @@ Bitmap BenchMarkTests::setupMultiplePolygonsWithPolyPolygon(clock_t& aTimeTaken)
     for (int nOffset = 1; nOffset <= 11; nOffset += 2)
     {
         tools::Polygon aPolygon1(4);
-        aPolygon1.SetPoint(
-            Point(maVDRectangle.Left() + nOffset, maVDRectangle.Top() + nOffset), 0);
-        aPolygon1.SetPoint(
-            Point(maVDRectangle.Right() - nOffset, maVDRectangle.Top() + nOffset), 1);
-        aPolygon1.SetPoint(
-            Point(maVDRectangle.Right() - nOffset, maVDRectangle.Bottom() - nOffset),
-            2);
-        aPolygon1.SetPoint(
-            Point(maVDRectangle.Left() + nOffset, maVDRectangle.Bottom() - nOffset),
-            3);
+        aPolygon1.SetPoint(Point(maVDRectangle.Left() + nOffset, maVDRectangle.Top() + nOffset), 0);
+        aPolygon1.SetPoint(Point(maVDRectangle.Right() - nOffset, maVDRectangle.Top() + nOffset),
+                           1);
+        aPolygon1.SetPoint(Point(maVDRectangle.Right() - nOffset, maVDRectangle.Bottom() - nOffset),
+                           2);
+        aPolygon1.SetPoint(Point(maVDRectangle.Left() + nOffset, maVDRectangle.Bottom() - nOffset),
+                           3);
         aPolyPolygon.Insert(aPolygon1);
     }
 

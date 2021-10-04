@@ -293,6 +293,7 @@ public:
 class VCL_DLLPUBLIC BenchMarkTests : public OutputDeviceTestCommon
 {
 public:
+    Bitmap setupWavelines(clock_t &aTimeTaken);
     Bitmap setupMultiplePolygonsWithPolyPolygon(clock_t &aTimeTaken);
 };
 

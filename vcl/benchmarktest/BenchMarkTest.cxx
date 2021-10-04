@@ -72,7 +72,7 @@ namespace
 class BenchMarkTestWindow : public WorkWindow
 {
 private:
-    static constexpr unsigned char gnNumberOfTests = 1;
+    static constexpr unsigned char gnNumberOfTests = 2;
     unsigned char mnTest;
     ScopedVclPtr<VirtualDevice> mpVDev;
     clock_t m_xTimeTaken;
@@ -150,6 +150,26 @@ public:
         updateResults(rRenderContext, m_xTimeTaken);
     }
 
+    static void testDrawingWavelines(vcl::RenderContext& rRenderContext, int nWidth,
+                                                    int nHeight)
+    {
+        tools::Rectangle aRectangle;
+        size_t index = 0;
+
+        std::vector<tools::Rectangle> aRegions = setupRegions(1, 1, nWidth, nHeight);
+
+        clock_t m_xTimeTaken;
+
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::BenchMarkTests aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupWavelines(m_xTimeTaken);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+        updateResults(rRenderContext, m_xTimeTaken);
+    }
+
+
     virtual void Paint(vcl::RenderContext& rRenderContext,
                        const tools::Rectangle& /*rRect*/) override
     {
@@ -163,6 +183,10 @@ public:
         if (mnTest % gnNumberOfTests == 0)
         {
             testMultiplePolygonsWithPolyPolygon(rRenderContext, nWidth, nHeight);
+        }
+        else if(mnTest % gnNumberOfTests == 1)
+        {
+            testDrawingWavelines(rRenderContext, nWidth, nHeight);
         }
     }
 };
