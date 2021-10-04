@@ -34,6 +34,7 @@
 #include <memory>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <o3tl/deleter.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -55,6 +56,7 @@ enum class ForType {
     EachArray,
     EachCollection,
     EachXEnumeration,
+    EachXIndexAccess,
     Error,
 };
 
@@ -74,6 +76,7 @@ struct SbiForStack {                // for/next stack:
     std::unique_ptr<sal_Int32[]>
                         pArrayUpperBounds;
     css::uno::Reference< css::container::XEnumeration > xEnumeration;
+    css::uno::Reference<css::container::XIndexAccess> xIndexAccess;
 
     SbiForStack()
         : pNext(nullptr)
