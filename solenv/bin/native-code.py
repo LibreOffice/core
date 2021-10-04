@@ -26,6 +26,8 @@ core_factory_list = [
     ]
 
 core_constructor_list = [
+# animations/source/animcore/animcore.component
+    "com_sun_star_animations_AnimatePhysics_get_implementation",
 # basic/util/sb.component
     ("com_sun_star_comp_sfx2_DialogLibraryContainer_get_implementation","#if HAVE_FEATURE_SCRIPTING"),
     ("com_sun_star_comp_sfx2_ScriptLibraryContainer_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
