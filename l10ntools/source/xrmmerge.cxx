@@ -35,8 +35,6 @@
 #include <vector>
 #include <memory>
 
-using namespace std;
-
 // set of global variables
 static bool bMergeMode;
 static bool bDisplayName;
@@ -303,11 +301,11 @@ void XRMResExport::WorkOnDesc(
 {
     const OString sDescFileName{ sInputFileName.replaceAll("description.xml", OString())
         + GetAttribute( rOpenTag, "xlink:href" ) };
-    ifstream file (sDescFileName.getStr(), ios::in|ios::binary|ios::ate);
+    std::ifstream file (sDescFileName.getStr(), std::ios::in|std::ios::binary|std::ios::ate);
     if (file.is_open()) {
         int size = static_cast<int>(file.tellg());
         std::unique_ptr<char[]> memblock(new char [size+1]);
-        file.seekg (0, ios::beg);
+        file.seekg (0, std::ios::beg);
         file.read (memblock.get(), size);
         file.close();
         memblock[size] = '\0';
@@ -421,7 +419,7 @@ void XRMResMerge::WorkOnDesc(
                     }
                     OString sOutputDescFile(
                         sOutputFile.subView(0, i + 1) + sLocDescFilename);
-                    ofstream file(sOutputDescFile.getStr());
+                    std::ofstream file(sOutputDescFile.getStr());
                     if (file.is_open()) {
                         file << sText;
                         file.close();

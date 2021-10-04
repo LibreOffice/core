@@ -45,8 +45,6 @@
 
 #include <po.hxx>
 
-using namespace std;
-
 namespace {
 
 bool matchList(
@@ -113,7 +111,7 @@ void handleCommand(
     const OString cmd = buf.makeStringAndClear();
     if (system(cmd.getStr()) != 0)
     {
-        cerr << "Error: Failed to execute " << cmd << '\n';
+        std::cerr << "Error: Failed to execute " << cmd << '\n';
         throw false; //TODO
     }
 }
@@ -131,7 +129,7 @@ void InitPoFile(
         if (osl::FileBase::getFileURLFromSystemPath(outDir, outDirUrl)
             != osl::FileBase::E_None)
         {
-            cerr
+            std::cerr
                 << ("Error: Cannot convert pathname to URL in " __FILE__
                     ", in line ")
                 << __LINE__ << "\n       outDir: "
@@ -147,7 +145,7 @@ void InitPoFile(
     aPoOutPut.open(rOutPath.getStr());
     if (!aPoOutPut.isOpen())
     {
-        cerr
+        std::cerr
             << "Error: Cannot open po file "
             << rOutPath << "\n";
         throw false; //TODO
@@ -208,7 +206,7 @@ bool handleFile(std::string_view rProject, const OUString& rUrl, const OString& 
                     if (osl::FileBase::getSystemPathFromFileURL(rUrl, sInPathTmp) !=
                         osl::FileBase::E_None)
                     {
-                        cerr << "osl::FileBase::getSystemPathFromFileURL(" << rUrl << ") failed\n";
+                        std::cerr << "osl::FileBase::getSystemPathFromFileURL(" << rUrl << ") failed\n";
                         throw false; //TODO
                     }
                     sInPath = OUStringToOString( sInPathTmp, RTL_TEXTENCODING_UTF8 );
@@ -240,7 +238,7 @@ bool handleFile(std::string_view rProject, const OUString& rUrl, const OString& 
                     {
                         if ( system(OString("rm " + sOutPath).getStr()) != 0 )
                         {
-                            cerr
+                            std::cerr
                                 << "Error: Cannot remove entryless pot file: "
                                 << sOutPath << "\n";
                             throw false; //TODO
@@ -371,7 +369,7 @@ void handleDirectory(
 {
     osl::Directory dir(rUrl);
     if (dir.open() != osl::FileBase::E_None) {
-        cerr
+        std::cerr
             << "Error: Cannot open directory: " << rUrl << '\n';
         throw false; //TODO
     }
@@ -384,14 +382,14 @@ void handleDirectory(
             break;
         }
         if (e != osl::FileBase::E_None) {
-            cerr << "Error: Cannot read directory\n";
+            std::cerr << "Error: Cannot read directory\n";
             throw false; //TODO
         }
         osl::FileStatus stat(
             osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName
             | osl_FileStatus_Mask_FileURL);
         if (item.getFileStatus(stat) != osl::FileBase::E_None) {
-            cerr << "Error: Cannot get file status\n";
+            std::cerr << "Error: Cannot get file status\n";
             throw false; //TODO
         }
         const OString sDirName =
@@ -427,7 +425,7 @@ void handleDirectory(
     }
 
     if (dir.close() != osl::FileBase::E_None) {
-        cerr << "Error: Cannot close directory\n";
+        std::cerr << "Error: Cannot close directory\n";
         throw false; //TODO
     }
 
@@ -443,7 +441,7 @@ void handleDirectory(
     if (osl::FileBase::getFileURLFromSystemPath(sPoPath, sPoUrl)
         != osl::FileBase::E_None)
     {
-        cerr
+        std::cerr
             << ("Error: Cannot convert pathname to URL in " __FILE__
                 ", in line ")
             << __LINE__ << "\n"
@@ -464,14 +462,14 @@ void handleProjects(char const * sSourceRoot, char const * sDestRoot)
              | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
              | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
     {
-        cerr << "Error: Cannot convert pathname to UTF-16\n";
+        std::cerr << "Error: Cannot convert pathname to UTF-16\n";
         throw false; //TODO
     }
     OUString rootUrl;
     if (osl::FileBase::getFileURLFromSystemPath(root16, rootUrl)
         != osl::FileBase::E_None)
     {
-        cerr
+        std::cerr
             << ("Error: Cannot convert pathname to URL in " __FILE__
                 ", in line ")
             << __LINE__ << "\n       root16: "
@@ -490,7 +488,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     {
         if (argc != 3)
         {
-            cerr
+            std::cerr
                 << ("localize (c)2001 by Sun Microsystems\n\n"
                     "As part of the L10N framework, localize extracts en-US\n"
                     "strings for translation out of the toplevel modules defined\n"
@@ -502,7 +500,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     }
     catch (std::exception& e)
     {
-        cerr << "exception: " << e.what() << std::endl;
+        std::cerr << "exception: " << e.what() << std::endl;
         return EXIT_FAILURE;
     }
     catch (bool) //TODO

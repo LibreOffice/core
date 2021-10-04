@@ -17,13 +17,11 @@
 
 const int MAXLINE = 1024*64;
 
-using namespace std;
-
 int main(int argc, char *argv[])
 {
         if (argc != 3 || strcmp(argv[1],"-o"))
         {
-                cout << "Usage: idxdict -o outputfile < input\n";
+                std::cout << "Usage: idxdict -o outputfile < input\n";
                 ::exit(99);
         }
         // This call improves performance by approx 5x
@@ -31,27 +29,27 @@ int main(int argc, char *argv[])
 
         const char * outputFile(argv[2]);
         char inputBuffer[MAXLINE];
-        multimap<string, size_t> entries;
-        multimap<string,size_t>::iterator ret(entries.begin());
+        std::multimap<std::string, size_t> entries;
+        std::multimap<std::string,size_t>::iterator ret(entries.begin());
 
-        cin.getline(inputBuffer, MAXLINE);
-        const string encoding(inputBuffer);
+        std::cin.getline(inputBuffer, MAXLINE);
+        const std::string encoding(inputBuffer);
         size_t currentOffset(encoding.size()+1);
         while (true)
         {
                 // Extract the next word, but not the entry count
-                cin.getline(inputBuffer, MAXLINE, '|');
+                std::cin.getline(inputBuffer, MAXLINE, '|');
 
-                if (cin.eof()) break;
+                if (std::cin.eof()) break;
 
-                string word(inputBuffer);
-                ret = entries.insert(ret, pair<string, size_t>(word, currentOffset));
+                std::string word(inputBuffer);
+                ret = entries.insert(ret, std::pair<std::string, size_t>(word, currentOffset));
                 currentOffset += word.size() + 1;
                 // Next is the entry count
-                cin.getline(inputBuffer, MAXLINE);
-                if (!cin.good())
+                std::cin.getline(inputBuffer, MAXLINE);
+                if (!std::cin.good())
                 {
-                        cerr << "Unable to read entry - insufficient buffer?.\n";
+                        std::cerr << "Unable to read entry - insufficient buffer?.\n";
                         exit(99);
                 }
                 currentOffset += strlen(inputBuffer)+1;
@@ -60,23 +58,23 @@ int main(int argc, char *argv[])
                 int entryCount(strtol(inputBuffer, &endptr, 10));
                 if (errno != 0 || endptr == inputBuffer || *endptr != '\0')
                 {
-                    cerr
+                    std::cerr
                         << "Unable to read count from \"" << inputBuffer
                         << "\" input.\n";
                     exit(99);
                 }
                 for (int i(0); i < entryCount; ++i)
                 {
-                        cin.getline(inputBuffer, MAXLINE);
+                        std::cin.getline(inputBuffer, MAXLINE);
                         currentOffset += strlen(inputBuffer)+1;
                 }
         }
 
         // Use binary mode to prevent any translation of LF to CRLF on Windows
-        ofstream outputStream(outputFile, ios_base::binary| ios_base::trunc|ios_base::out);
+        std::ofstream outputStream(outputFile, std::ios_base::binary| std::ios_base::trunc|std::ios_base::out);
         if (!outputStream.is_open())
         {
-                cerr << "Unable to open output file " << outputFile << endl;
+                std::cerr << "Unable to open output file " << outputFile << std::endl;
                 ::exit(99);
         }
 

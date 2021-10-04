@@ -34,7 +34,6 @@
 #include <rtl/strbuf.hxx>
 #include <unicode/regex.h>
 
-using namespace std;
 using namespace osl;
 
 #define XML_LANG    "xml-lang"
@@ -160,7 +159,7 @@ void XMLFile::Write( OString const &aFilename )
     s.close();
 }
 
-void XMLFile::Write( ofstream &rStream , XMLNode *pCur )
+void XMLFile::Write( std::ofstream &rStream , XMLNode *pCur )
 {
     if ( !pCur )
         Write( rStream, this );

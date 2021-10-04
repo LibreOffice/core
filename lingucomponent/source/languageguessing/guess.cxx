@@ -40,8 +40,6 @@
 #define TEXTCAT_RESULT_SHORT_STR _TEXTCAT_RESULT_SHORT
 #endif
 
-using namespace std;
-
 Guess::Guess()
     : language_str(DEFAULT_LANGUAGE)
     , country_str(DEFAULT_COUNTRY)
