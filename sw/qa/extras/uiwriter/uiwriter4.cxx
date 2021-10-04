@@ -1580,24 +1580,20 @@ void SwUiWriterTest4::testTdf107025()
     createSwDoc(DATA_DIRECTORY, "tdf107025.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // Verify the number of characters in each line.
-    CPPUNIT_ASSERT_EQUAL(
-        sal_Int32(1),
-        getXPath(pXmlDoc, "(//Text[@nType='PortionType::Text'])[1]", "nLength").toInt32());
-    CPPUNIT_ASSERT_EQUAL(
-        sal_Int32(9),
-        getXPath(pXmlDoc, "(//Text[@nType='PortionType::Text'])[2]", "nLength").toInt32());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1),
+                         getXPath(pXmlDoc, "(//SwLinePortion)[1]", "length").toInt32());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(9),
+                         getXPath(pXmlDoc, "(//SwLinePortion)[2]", "length").toInt32());
 
     // Do the subsequent test only if the first line can be displayed,
     // in case that the required font does not exist.
-    sal_Int32 nWidth1
-        = getXPath(pXmlDoc, "(//Text[@nType='PortionType::Text'])[1]", "nWidth").toInt32();
+    sal_Int32 nWidth1 = getXPath(pXmlDoc, "(//SwLinePortion)[1]", "width").toInt32();
     if (!nWidth1)
         return;
 
-    CPPUNIT_ASSERT(!parseDump("(//Text[@nType='PortionType::Text'])[2]", "nWidth").isEmpty());
+    CPPUNIT_ASSERT(!parseDump("(//SwLinePortion)[2]", "width").isEmpty());
     // Width of the second line is expected to be 9 times of the first.
-    sal_Int32 nWidth2
-        = getXPath(pXmlDoc, "(//Text[@nType='PortionType::Text'])[2]", "nWidth").toInt32();
+    sal_Int32 nWidth2 = getXPath(pXmlDoc, "(//SwLinePortion)[2]", "width").toInt32();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(9), nWidth2 / nWidth1);
 }

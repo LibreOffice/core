@@ -322,6 +322,15 @@ void SwLinePortion::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwLinePortion"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("symbol"), BAD_CAST(typeid(*this).name()));
+    (void)xmlTextWriterWriteAttribute(
+        pWriter, BAD_CAST("width"),
+        BAD_CAST(OString::number(Width()).getStr()));
+    (void)xmlTextWriterWriteAttribute(
+        pWriter, BAD_CAST("height"),
+        BAD_CAST(OString::number(Height()).getStr()));
+    (void)xmlTextWriterWriteAttribute(
+        pWriter, BAD_CAST("length"),
+        BAD_CAST(OString::number(static_cast<sal_Int32>(mnLineLength)).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 }
 
