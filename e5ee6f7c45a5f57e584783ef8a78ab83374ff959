@@ -16,6 +16,24 @@
       "message": "is that removal expected? isn\u0027t that true that all the mouse handling should be the same as it was in the past?",
       "revId": "e5ee6f7c45a5f57e584783ef8a78ab83374ff959",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57e948c7_eee266e9",
+        "filename": "desktop/qa/desktop_lib/test_desktop_lib.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1124,
+      "author": {
+        "id": 1000865
+      },
+      "writtenOn": "2021-10-04T18:27:58Z",
+      "side": 0,
+      "message": "Yes, I have split the commit, with a proper description.",
+      "parentUuid": "a11e2432_55e3e6a2",
+      "revId": "e5ee6f7c45a5f57e584783ef8a78ab83374ff959",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
