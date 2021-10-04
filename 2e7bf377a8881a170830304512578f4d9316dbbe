@@ -16,6 +16,24 @@
       "message": "I like the move towards using SwTwips at multiple places. If you ask my input, I would:\n\n1) Split this large patch to a minimal fix + a follow-up mass conversion. This way you can backport the minimal fix to 7.2. At least I\u0027m not smart enough to review the current mass-conversion on a release branch. :-)\n\n2) Undo the changes to ruby.fodt and redo them with a text editor. It\u0027s not clear to me what you changed there \u0026 why in its current form. If possible, it would be good to do that in a separate commit (with a commit message explaining the \"why\"): ideally you should never touch existing test code or data and source code in the same commit.\n\n3) Once you have a minimal fix, I\u0027m happy to try to cover it with a test.\n\nAnyhow, nice work! Looking forward to get this in.",
       "revId": "2e7bf377a8881a170830304512578f4d9316dbbe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a369fc4_c0cb6f89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000863
+      },
+      "writtenOn": "2021-10-04T10:04:47Z",
+      "side": 1,
+      "message": "Thanks for the review, Miklos!\n\n\u003e 1) Split this large patch to a minimal fix + a follow-up mass conversion. This way you can backport the minimal fix to 7.2. At least I\u0027m not smart enough to review the current mass-conversion on a release branch. :-)\n\nThe purpose of this change was to avoid having to debug stealthy underflow fallouts, and I wouldn\u0027t be eager to chase those, plus keep supporting a diverged codebase in 7.2. In that case I would strongly suggest considering reverting the series of changes leading up to the current state in 7.2.\n\n\u003e 2) Undo the changes to ruby.fodt and redo them with a text editor. It\u0027s not clear to me what you changed there \u0026 why in its current form. If possible, it would be good to do that in a separate commit (with a commit message explaining the \"why\"): ideally you should never touch existing test code or data and source code in the same commit.\n\nRight, I didn\u0027t consider LO mangling the file, the only change in the document is making the font size 44 pt. And that\u0027s why I relied on the existing file, since it exhibited the previously fixed bug, the newly reported one, and another unreported case as well. (which is the reason why I\u0027m worried about further cases popping up down the line with a \"minimal fix\")\n\n\u003e 3) Once you have a minimal fix, I\u0027m happy to try to cover it with a test.\n\nMany thanks in advance!",
+      "parentUuid": "08d29885_bf92036a",
+      "revId": "2e7bf377a8881a170830304512578f4d9316dbbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
