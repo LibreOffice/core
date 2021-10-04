@@ -3069,7 +3069,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                 rRoot.GetDoc().GetFilterEntriesArea(nCol, aRange.aStart.Row(),
                                                     aRange.aEnd.Row(), nTab, true, aFilterEntries);
 
-                // Excel has all filter values stored as forground colors
+                // Excel has all filter values stored as foreground colors
                 // Does not matter it is text color or cell background color
                 for (auto& rColor : aFilterEntries.getBackgroundColors())
                 {

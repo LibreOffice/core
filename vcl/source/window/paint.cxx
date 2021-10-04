@@ -1180,7 +1180,7 @@ void Window::Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFlags )
     if ( !aRect.IsEmpty() )
     {
         if (!comphelper::LibreOfficeKit::isActive())
-        {   // ImplInvalidate() immediatelly returns in LOK mode, skip useless Region construction
+        {   // ImplInvalidate() immediately returns in LOK mode, skip useless Region construction
             vcl::Region aRegion( aRect );
             ImplInvalidate( &aRegion, nFlags );
         }
