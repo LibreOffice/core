@@ -42,7 +42,7 @@ public:
 // field dialog only showing database page to support mail merge
 class SwFieldDataOnlyDlgWrapper final : public SwChildWinWrapper
 {
-    ScopedVclPtr<AbstractSwFieldDlg> pDlgInterface;
+    ScopedVclPtr<AbstractSwFieldDlg> m_pDlgInterface;
 public:
     SwFieldDataOnlyDlgWrapper(vcl::Window* pParent, sal_uInt16 nId,
                               SfxBindings* pBindings, SfxChildWinInfo* pInfo);

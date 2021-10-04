@@ -60,7 +60,7 @@ public:
 
 class SW_DLLPUBLIC SwPtrItem final : public SfxPoolItem
 {
-    void* pMisc;
+    void* m_pMisc;
 
 public:
     SwPtrItem( const sal_uInt16 nId, void* pPtr);
@@ -68,12 +68,12 @@ public:
     virtual SwPtrItem*      Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
 
-    void*   GetValue() const        { return pMisc; }
+    void*   GetValue() const        { return m_pMisc; }
 };
 
 class SW_DLLPUBLIC SwUINumRuleItem final : public SfxPoolItem
 {
-    std::unique_ptr<SwNumRule> pRule;
+    std::unique_ptr<SwNumRule> m_pRule;
 
 public:
     SwUINumRuleItem( const SwNumRule& rRule );
@@ -86,8 +86,8 @@ public:
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    const SwNumRule* GetNumRule() const         { return pRule.get(); }
-          SwNumRule* GetNumRule()               { return pRule.get(); }
+    const SwNumRule* GetNumRule() const         { return m_pRule.get(); }
+          SwNumRule* GetNumRule()               { return m_pRule.get(); }
 };
 
 class SwPaMItem final : public SfxPoolItem

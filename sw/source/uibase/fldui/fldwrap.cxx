@@ -109,12 +109,12 @@ SwFieldDataOnlyDlgWrapper::SwFieldDataOnlyDlgWrapper( vcl::Window* _pParent, sal
     : SwChildWinWrapper( _pParent, nId )
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    pDlgInterface = pFact->CreateSwFieldDlg(pB, this, _pParent->GetFrameWeld());
+    m_pDlgInterface = pFact->CreateSwFieldDlg(pB, this, _pParent->GetFrameWeld());
 
-    SetController(pDlgInterface->GetController());
-    pDlgInterface->ActivateDatabasePage();
-    pDlgInterface->StartExecuteAsync(nullptr);
-    pDlgInterface->Initialize( pInfo );
+    SetController(m_pDlgInterface->GetController());
+    m_pDlgInterface->ActivateDatabasePage();
+    m_pDlgInterface->StartExecuteAsync(nullptr);
+    m_pDlgInterface->Initialize( pInfo );
 }
 
 // re-init after doc activation
@@ -123,7 +123,7 @@ bool SwFieldDataOnlyDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
     bool bRet = SwChildWinWrapper::ReInitDlg(pDocSh);
     if (bRet)  // update immediately, Doc switch
     {
-        pDlgInterface->ReInitDlg();
+        m_pDlgInterface->ReInitDlg();
     }
 
     return bRet;
