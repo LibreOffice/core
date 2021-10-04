@@ -1182,8 +1182,8 @@ void Alignment::finalizeImport()
         maApiData.mnVerJustifyMethod = css::table::CellJustifyMethod::DISTRIBUTE;
 
     /*  indentation: expressed as number of blocks of 3 space characters in
-        OOXML. */
-    sal_Int32 nIndent = getUnitConverter().scaleToMm100( 3.0 * maModel.mnIndent, Unit::Space );
+        OOXML. In Calc we convert it to the multiple of SC_INDENT_STEP for better interoperability. */
+    sal_Int32 nIndent = maModel.mnIndent * SC_INDENT_STEP;
     if( (0 <= nIndent) && (nIndent <= SAL_MAX_INT16) )
         maApiData.mnIndent = static_cast< sal_Int16 >( nIndent );
 

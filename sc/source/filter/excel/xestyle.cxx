@@ -1458,9 +1458,12 @@ bool XclExpCellAlign::FillFromItemSet(
         case EXC_BIFF8: // attributes new in BIFF8
         {
             // text indent
-            tools::Long nTmpIndent = rItemSet.Get( ATTR_INDENT ).GetValue();
-            nTmpIndent = (nTmpIndent + 100) / 200; // 1 Excel unit == 10 pt == 200 twips
-            mnIndent = limit_cast< sal_uInt8 >( nTmpIndent, 0, 15 );
+            tools::Long nIndentMm100 = rItemSet.Get(ATTR_INDENT).GetValue();
+            // Tdf#130104: Indentation is expressed as number of blocks of 3 space characters in OOXML.
+            // Because we converted the OOXML integer indent into 100mm unit in Alignment::finalizeImport in stylesbuffer.cxx,
+            // we need to convert it back to integer OOXML indent unit here.
+            tools::Long nExcelIndent = nIndentMm100 / SC_INDENT_STEP;
+            mnIndent = limit_cast<sal_uInt8> (nExcelIndent, 0, 15);
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_INDENT, bStyle );
 
             // shrink to fit
