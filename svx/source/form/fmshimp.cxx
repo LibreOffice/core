@@ -1728,7 +1728,7 @@ namespace
 }
 
 
-bool FmXFormShell::IsFormSlotEnabled( sal_Int32 _nSlot, FeatureState* _pCompleteState )
+bool FmXFormShell::IsFormSlotEnabled( sal_Int32 _nSlot, FeatureState* _pCompleteState ) const
 {
     const svx::ControllerFeatures& rController =
             lcl_isNavigationRelevant( _nSlot )

@@ -1563,7 +1563,7 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyFormat(const NfCurrencyEntry* pTmpC
 }
 
 bool SvxNumberFormatShell::IsInTable(sal_uInt16 const nPos, bool const bTmpBanking,
-                                     std::u16string_view rFmtString)
+                                     std::u16string_view rFmtString) const
 {
     bool bFlag = false;
 

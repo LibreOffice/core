@@ -69,7 +69,7 @@ TextUnderlineControl::~TextUnderlineControl()
 {
 }
 
-FontLineStyle TextUnderlineControl::getLineStyle(const weld::Button& rButton)
+FontLineStyle TextUnderlineControl::getLineStyle(const weld::Button& rButton) const
 {
     if (&rButton == mxSingle.get())
         return LINESTYLE_SINGLE;

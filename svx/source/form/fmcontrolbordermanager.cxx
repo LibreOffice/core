@@ -151,7 +151,7 @@ namespace svxform
     }
 
 
-    Color ControlBorderManager::getControlColorByStatus( ControlStatus _nStatus )
+    Color ControlBorderManager::getControlColorByStatus( ControlStatus _nStatus ) const
     {
         // "invalid" is ranked highest
         if ( _nStatus & ControlStatus::Invalid )
