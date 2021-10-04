@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c4314dd_702f4a09",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2021-10-04T08:05:05Z",
+      "side": 1,
+      "message": "FYI screenshot of this is here: https://bugs.documentfoundation.org/show_bug.cgi?id\u003d144483#c10",
+      "revId": "5408a03ef313d1b7b4f3fa22fb4b3d6df4588d01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
