@@ -1637,6 +1637,28 @@ void SfxBindings::QueryControlState( sal_uInt16 nSlot, boost::property_tree::ptr
     }
 }
 
+sal_uInt16 SfxBindings::QuerySlotId( const util::URL& aURL )
+{
+    if (!pImpl)
+        return 0;
+
+    css::uno::Reference<css::frame::XDispatch> xDispatch =
+        pImpl->xProv->queryDispatch(aURL, OUString(), 0);
+    if (!xDispatch.is())
+        return 0;
+
+    css::uno::Reference<css::lang::XUnoTunnel> xTunnel(xDispatch, css::uno::UNO_QUERY);
+    if (!xTunnel.is())
+        return 0;
+
+    sal_Int64 nHandle = xTunnel->getSomething(SfxOfficeDispatch::impl_getStaticIdentifier());
+    if (!nHandle)
+        return 0;
+
+    SfxOfficeDispatch* pDispatch = reinterpret_cast<SfxOfficeDispatch*>(sal::static_int_cast<sal_IntPtr>(nHandle));
+    return pDispatch->GetId();
+}
+
 void SfxBindings::SetSubBindings_Impl( SfxBindings *pSub )
 {
     if ( pImpl->pSubBindings )
