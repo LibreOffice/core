@@ -59,17 +59,37 @@
             <property name="homogeneous">True</property>
             <property name="layout-style">end</property>
             <child>
-              <object class="GtkButton" id="deviceInfoButton">
-                <property name="label" translatable="yes" context="sanedialog|deviceInfoButton">About Dev_ice</property>
+              <object class="GtkButton" id="help">
+                <property name="label" translatable="yes" context="stock">_Help</property>
+                <property name="use-action-appearance">True</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
-                <property name="expand">False</property>
+                <property name="expand">True</property>
                 <property name="fill">True</property>
                 <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="deviceInfoButton">
+                <property name="label" translatable="yes" context="sanedialog|deviceInfoButton">About Dev_ice</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="deviceInfoButton-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="sanedialog|extended_tip|deviceInfoButton">Displays a popup window with information obtained from the scanner driver.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -79,11 +99,16 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="previewButton-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="sanedialog|extended_tip|previewButton">Scans and displays the document in the preview area.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
@@ -93,11 +118,16 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="ok-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="sanedialog|extended_tip|ok">Scans an image, and then inserts the result into the document and closes the dialog.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="position">3</property>
               </packing>
             </child>
             <child>
@@ -111,7 +141,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">4</property>
+                <property name="position">5</property>
               </packing>
             </child>
           </object>
@@ -214,6 +244,11 @@
                             <property name="activates-default">True</property>
                             <property name="truncate-multiline">True</property>
                             <property name="adjustment">adjustment2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="topSpinbutton-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="sanedialog|extended_tip|topSpinbutton">Set the top margin of the scan area.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
@@ -228,6 +263,11 @@
                             <property name="activates-default">True</property>
                             <property name="truncate-multiline">True</property>
                             <property name="adjustment">adjustment3</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="rightSpinbutton-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="sanedialog|extended_tip|rightSpinbutton">Set the right margin of the scan area.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
@@ -242,6 +282,11 @@
                             <property name="activates-default">True</property>
                             <property name="truncate-multiline">True</property>
                             <property name="adjustment">adjustment4</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="bottomSpinbutton-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="sanedialog|extended_tip|bottomSpinbutton">Set the bottom margin of the scan area.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
@@ -256,6 +301,11 @@
                             <property name="activates-default">True</property>
                             <property name="truncate-multiline">True</property>
                             <property name="adjustment">adjustment1</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="leftSpinbutton-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="sanedialog|extended_tip|leftSpinbutton">Set the left margin of the scan area.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
@@ -311,6 +361,11 @@
                                 <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                                 <property name="hexpand">True</property>
                                 <property name="vexpand">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="preview-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="sanedialog|extended_tip|preview">Displays a preview of the scanned image. The preview area contains eight handles. Drag the handles to adjust the scan area or enter a value in the corresponding margin spin box.</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
@@ -384,6 +439,11 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="hexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="deviceCombobox-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sanedialog|extended_tip|deviceCombobox">Displays a list of available scanners detected in your system.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -399,6 +459,11 @@
                           <object class="GtkEntry">
                             <property name="can-focus">True</property>
                             <property name="truncate-multiline">True</property>
+                          </object>
+                        </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="reslCombobox-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sanedialog|extended_tip|reslCombobox">Select the resolution in dots per inch for the scan job.</property>
                           </object>
                         </child>
                       </object>
@@ -430,6 +495,11 @@
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
                         <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="advancedCheckbutton-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sanedialog|extended_tip|advancedcheckbutton">Mark this checkbox to display more configuration options for the scanner device.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -492,6 +562,11 @@
                                             <attribute name="text">0</attribute>
                                           </attributes>
                                         </child>
+                                      </object>
+                                    </child>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="optionSvTreeListBox-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="sanedialog\extended_tip|optionSvTreeListBox">Displays the list of available scanner driver advanced options. Double click an option to display its contents just below.</property>
                                       </object>
                                     </child>
                                   </object>
@@ -693,6 +768,7 @@
       </object>
     </child>
     <action-widgets>
+      <action-widget response="-11">help</action-widget>
       <action-widget response="101">deviceInfoButton</action-widget>
       <action-widget response="102">previewButton</action-widget>
       <action-widget response="-5">ok</action-widget>
