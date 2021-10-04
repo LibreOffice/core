@@ -576,7 +576,7 @@ public:
     //@{
     /// Read elements from the start of the stream till its end.
     bool Read(SvStream& rStream);
-    void SetSignatureLine(const std::vector<sal_Int8>& rSignatureLine);
+    void SetSignatureLine(std::vector<sal_Int8>&& rSignatureLine);
     void SetSignaturePage(size_t nPage);
     /// Sign the read document with xCertificate in the edit buffer.
     bool Sign(const css::uno::Reference<css::security::XCertificate>& xCertificate,

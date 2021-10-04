@@ -149,7 +149,7 @@ namespace drawinglayer::primitive2d
             SvgGradientHelper(
                 const basegfx::B2DHomMatrix& rGradientTransform,
                 const basegfx::B2DPolyPolygon& rPolyPolygon,
-                const SvgGradientEntryVector& rGradientEntries,
+                SvgGradientEntryVector&& rGradientEntries,
                 const basegfx::B2DPoint& rStart,
                 bool bUseUnitCoordinates,
                 SpreadMethod aSpreadMethod);
@@ -192,7 +192,7 @@ namespace drawinglayer::primitive2d
             SvgLinearGradientPrimitive2D(
                 const basegfx::B2DHomMatrix& rGradientTransform,
                 const basegfx::B2DPolyPolygon& rPolyPolygon,
-                const SvgGradientEntryVector& rGradientEntries,
+                SvgGradientEntryVector&& rGradientEntries,
                 const basegfx::B2DPoint& rStart,
                 const basegfx::B2DPoint& rEnd,
                 bool bUseUnitCoordinates,
@@ -244,7 +244,7 @@ namespace drawinglayer::primitive2d
             SvgRadialGradientPrimitive2D(
                 const basegfx::B2DHomMatrix& rGradientTransform,
                 const basegfx::B2DPolyPolygon& rPolyPolygon,
-                const SvgGradientEntryVector& rGradientEntries,
+                SvgGradientEntryVector&& rGradientEntries,
                 const basegfx::B2DPoint& rStart,
                 double fRadius,
                 bool bUseUnitCoordinates,

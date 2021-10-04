@@ -94,7 +94,7 @@ namespace drawinglayer::primitive2d
                     aStrikeoutString.makeStringAndClear(),
                     0,
                     len,
-                    aDXArray,
+                    std::move(aDXArray),
                     getFontAttribute(),
                     getLocale(),
                     getFontColor()));

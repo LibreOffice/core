@@ -230,7 +230,7 @@ void TheExtensionManager::checkUpdates()
         }
     }
 
-    m_xExecuteCmdQueue->checkForUpdates( vEntries );
+    m_xExecuteCmdQueue->checkForUpdates( std::move(vEntries) );
 }
 
 

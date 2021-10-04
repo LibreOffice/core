@@ -787,7 +787,7 @@ Found findEntity(
                                  + " type parameters"));
                             return FOUND_ERROR;
                         }
-                        t = unoidl::detail::SourceProviderType(n, e, args);
+                        t = unoidl::detail::SourceProviderType(n, e, std::move(args));
                         break;
                     }
                     [[fallthrough]];
@@ -1014,7 +1014,7 @@ enumDefn:
               ent->pad.get());
       assert(pad != nullptr);
       ent->entity = new unoidl::EnumTypeEntity(
-          pad->isPublished(), pad->members, annotations($1));
+          pad->isPublished(), std::move(pad->members), annotations($1));
       ent->pad.clear();
       clearCurrentState(data);
   }
@@ -1146,7 +1146,7 @@ plainStructDefn:
                   ent->pad.get());
       assert(pad != nullptr);
       ent->entity = new unoidl::PlainStructTypeEntity(
-          pad->isPublished(), pad->baseName, pad->members, annotations($1));
+          pad->isPublished(), pad->baseName, std::move(pad->members), annotations($1));
       ent->pad.clear();
       clearCurrentState(data);
   }
@@ -1179,7 +1179,7 @@ polymorphicStructTemplateDefn:
                   ent->pad.get());
       assert(pad != nullptr);
       ent->entity = new unoidl::PolymorphicStructTypeTemplateEntity(
-          pad->isPublished(), pad->typeParameters, pad->members,
+          pad->isPublished(), std::move(pad->typeParameters), std::move(pad->members),
           annotations($1));
       ent->pad.clear();
       clearCurrentState(data);
@@ -1274,7 +1274,7 @@ exceptionDefn:
               ent->pad.get());
       assert(pad != nullptr);
       ent->entity = new unoidl::ExceptionTypeEntity(
-          pad->isPublished(), pad->baseName, pad->members, annotations($1));
+          pad->isPublished(), pad->baseName, std::move(pad->members), annotations($1));
       ent->pad.clear();
       clearCurrentState(data);
   }
@@ -1604,15 +1604,15 @@ interfaceDefn:
       }
       std::vector<unoidl::AnnotatedReference> mbases;
       for (auto & i: pad->directMandatoryBases) {
-          mbases.emplace_back(i.name, i.annotations);
+          mbases.emplace_back(i.name, std::move(i.annotations));
       }
       std::vector<unoidl::AnnotatedReference> obases;
       for (auto & i: pad->directOptionalBases) {
-          obases.emplace_back(i.name, i.annotations);
+          obases.emplace_back(i.name, std::move(i.annotations));
       }
       ent->entity = new unoidl::InterfaceTypeEntity(
-          pad->isPublished(), mbases, obases, pad->directAttributes,
-          pad->directMethods, annotations($1));
+          pad->isPublished(), std::move(mbases), std::move(obases), std::move(pad->directAttributes),
+          std::move(pad->directMethods), annotations($1));
       ent->pad.clear();
       clearCurrentState(data);
   }
@@ -1988,7 +1988,7 @@ constantGroupDefn:
               ent->pad.get());
       assert(pad != nullptr);
       ent->entity = new unoidl::ConstantGroupEntity(
-          pad->isPublished(), pad->members, annotations($1));
+          pad->isPublished(), std::move(pad->members), annotations($1));
       ent->pad.clear();
       clearCurrentState(data);
   }
@@ -2359,7 +2359,7 @@ singleInterfaceBasedServiceDefn:
               }
               ctors.push_back(
                   unoidl::SingleInterfaceBasedServiceEntity::Constructor(
-                      i.name, parms, i.exceptions, i.annotations));
+                      i.name, std::vector(parms), std::vector(i.exceptions), std::vector(i.annotations)));
           }
       } else {
           assert(pad->constructors.empty());
@@ -2367,7 +2367,7 @@ singleInterfaceBasedServiceDefn:
               unoidl::SingleInterfaceBasedServiceEntity::Constructor());
       }
       ent->entity = new unoidl::SingleInterfaceBasedServiceEntity(
-          pad->isPublished(), pad->base, ctors, annotations($1));
+          pad->isPublished(), pad->base, std::move(ctors), annotations($1));
       ent->pad.clear();
       clearCurrentState(data);
   }
@@ -2564,9 +2564,9 @@ accumulationBasedServiceDefn:
               ent->pad.get());
       assert(pad != nullptr);
       ent->entity = new unoidl::AccumulationBasedServiceEntity(
-          pad->isPublished(), pad->directMandatoryBaseServices,
-          pad->directOptionalBaseServices, pad->directMandatoryBaseInterfaces,
-          pad->directOptionalBaseInterfaces, pad->directProperties,
+          pad->isPublished(), std::move(pad->directMandatoryBaseServices),
+          std::move(pad->directOptionalBaseServices), std::move(pad->directMandatoryBaseInterfaces),
+          std::move(pad->directOptionalBaseInterfaces), std::move(pad->directProperties),
           annotations($1));
       ent->pad.clear();
       clearCurrentState(data);
@@ -3941,7 +3941,7 @@ type:
                        + " used in published context"));
                   YYERROR;
               }
-              $$ = new unoidl::detail::SourceProviderType(name, ent, args);
+              $$ = new unoidl::detail::SourceProviderType(name, ent, std::move(args));
               ok = true;
           }
           break;

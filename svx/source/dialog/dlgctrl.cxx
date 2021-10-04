@@ -1166,7 +1166,7 @@ void SvxXLinePreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     aObjectVector.push_back(mpLineObjB);
     aObjectVector.push_back(mpLineObjC);
 
-    sdr::contact::ObjectContactOfObjListPainter aPainter(getBufferDevice(), aObjectVector, nullptr);
+    sdr::contact::ObjectContactOfObjListPainter aPainter(getBufferDevice(), std::move(aObjectVector), nullptr);
     sdr::contact::DisplayInfo aDisplayInfo;
 
     // do processing
@@ -1258,7 +1258,7 @@ void SvxXShadowPreview::Paint(vcl::RenderContext& rRenderContext, const tools::R
     aObjectVector.push_back(mpRectangleShadow);
     aObjectVector.push_back(mpRectangleObject);
 
-    sdr::contact::ObjectContactOfObjListPainter aPainter(getBufferDevice(), aObjectVector, nullptr);
+    sdr::contact::ObjectContactOfObjListPainter aPainter(getBufferDevice(), std::move(aObjectVector), nullptr);
     sdr::contact::DisplayInfo aDisplayInfo;
 
     aPainter.ProcessDisplay(aDisplayInfo);
@@ -1411,7 +1411,7 @@ void SvxXRectPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
 
     aObjectVector.push_back(mpRectangleObject);
 
-    sdr::contact::ObjectContactOfObjListPainter aPainter(getBufferDevice(), aObjectVector, nullptr);
+    sdr::contact::ObjectContactOfObjListPainter aPainter(getBufferDevice(), std::move(aObjectVector), nullptr);
     sdr::contact::DisplayInfo aDisplayInfo;
 
     aPainter.ProcessDisplay(aDisplayInfo);

@@ -27,9 +27,9 @@ using namespace com::sun::star;
 namespace drawinglayer::primitive2d
 {
         PointArrayPrimitive2D::PointArrayPrimitive2D(
-            const std::vector< basegfx::B2DPoint >& rPositions,
+            std::vector< basegfx::B2DPoint >&& rPositions,
             const basegfx::BColor& rRGBColor)
-        :   maPositions(rPositions),
+        :   maPositions(std::move(rPositions)),
             maRGBColor(rRGBColor)
         {
         }

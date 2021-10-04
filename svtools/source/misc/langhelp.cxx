@@ -69,9 +69,9 @@ class InstallLangpack : public Idle
 {
     std::vector<OUString> m_aPackages;
 public:
-    explicit InstallLangpack(const std::vector<OUString>& rPackages)
+    explicit InstallLangpack(std::vector<OUString>&& rPackages)
         : Idle("install langpack")
-        , m_aPackages(rPackages)
+        , m_aPackages(std::move(rPackages))
     {
         SetPriority(TaskPriority::LOWEST);
     }
@@ -151,7 +151,7 @@ OUString getInstalledLocaleForSystemUILanguage(const css::uno::Sequence<OUString
             }
             if (!aPackages.empty())
             {
-                xLangpackInstaller.reset(new InstallLangpack(aPackages));
+                xLangpackInstaller.reset(new InstallLangpack(std::move(aPackages)));
                 xLangpackInstaller->Start();
             }
         }

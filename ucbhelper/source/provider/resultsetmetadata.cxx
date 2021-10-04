@@ -63,8 +63,8 @@ struct ResultSetMetaData_Impl
     : m_aColumnData( nSize ), m_bObtainedTypes( false ) {}
 
     explicit ResultSetMetaData_Impl(
-        const std::vector< ::ucbhelper::ResultSetColumnData >& rColumnData )
-    : m_aColumnData( rColumnData ), m_bObtainedTypes( false ) {}
+        std::vector< ::ucbhelper::ResultSetColumnData >&& rColumnData )
+    : m_aColumnData( std::move(rColumnData) ), m_bObtainedTypes( false ) {}
 };
 
 }
@@ -90,8 +90,8 @@ ResultSetMetaData::ResultSetMetaData(
 ResultSetMetaData::ResultSetMetaData(
                         const Reference< XComponentContext >& rxContext,
                         const Sequence< Property >& rProps,
-                        const std::vector< ResultSetColumnData >& rColumnData )
-: m_pImpl( new ResultSetMetaData_Impl( rColumnData ) ),
+                        std::vector< ResultSetColumnData >&& rColumnData )
+: m_pImpl( new ResultSetMetaData_Impl( std::move(rColumnData) ) ),
   m_xContext( rxContext ),
   m_aProps( rProps )
 {

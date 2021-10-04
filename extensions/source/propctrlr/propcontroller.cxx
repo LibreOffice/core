@@ -1428,7 +1428,7 @@ namespace pcr
 
                 // then create a handler which composes information out of those single handlers
                 if ( !aSingleHandlers.empty() )
-                    _rHandlers.push_back( new PropertyComposer( aSingleHandlers ) );
+                    _rHandlers.push_back( new PropertyComposer( std::move(aSingleHandlers) ) );
             }
         }
 

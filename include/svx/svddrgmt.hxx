@@ -104,7 +104,7 @@ private:
     bool                                            mbIsPointDrag;
 
 public:
-    SdrDragEntryPointGlueDrag(const std::vector< basegfx::B2DPoint >& rPositions, bool bIsPointDrag);
+    SdrDragEntryPointGlueDrag(std::vector< basegfx::B2DPoint >&& rPositions, bool bIsPointDrag);
     virtual ~SdrDragEntryPointGlueDrag() override;
 
     virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod) override;

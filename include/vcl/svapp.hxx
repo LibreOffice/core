@@ -161,8 +161,8 @@ public:
         and are the \em only events that accept an array of strings. No other
         events should use this constructor.
     */
-    ApplicationEvent(Type type, std::vector<OUString> const & data):
-        aEvent(type), aData(data)
+    ApplicationEvent(Type type, std::vector<OUString>&& data):
+        aEvent(type), aData(std::move(data))
     {
         assert(type == Type::Open || type == Type::Print);
     }

@@ -54,7 +54,7 @@ class NamePasswordRecord
     bool                        m_bHasPersistentPassword;
     OUString                    m_aPersistentPassword;
 
-    void InitArrays( bool bHasMemoryList, const ::std::vector< OUString >& aMemoryList,
+    void InitArrays( bool bHasMemoryList, ::std::vector< OUString >&& aMemoryList,
                      bool bHasPersistentList, const OUString& aPersistentList )
     {
         m_bHasMemoryPasswords = bHasMemoryList;
@@ -88,7 +88,7 @@ public:
         , m_bHasMemoryPasswords( false )
         , m_bHasPersistentPassword( false )
     {
-        InitArrays( aRecord.m_bHasMemoryPasswords, aRecord.m_aMemoryPasswords, aRecord.m_bHasPersistentPassword, aRecord.m_aPersistentPassword );
+        InitArrays( aRecord.m_bHasMemoryPasswords, std::vector(aRecord.m_aMemoryPasswords), aRecord.m_bHasPersistentPassword, aRecord.m_aPersistentPassword );
     }
 
     NamePasswordRecord& operator=( const NamePasswordRecord& aRecord )
@@ -99,7 +99,7 @@ public:
 
             m_aMemoryPasswords.clear();
             m_aPersistentPassword.clear();
-            InitArrays( aRecord.m_bHasMemoryPasswords, aRecord.m_aMemoryPasswords, aRecord.m_bHasPersistentPassword, aRecord.m_aPersistentPassword );
+            InitArrays( aRecord.m_bHasMemoryPasswords, std::vector(aRecord.m_aMemoryPasswords), aRecord.m_bHasPersistentPassword, aRecord.m_aPersistentPassword );
         }
         return *this;
     }
@@ -135,9 +135,9 @@ public:
         return OUString();
     }
 
-    void SetMemoryPasswords( const ::std::vector< OUString >& aMemList )
+    void SetMemoryPasswords( ::std::vector< OUString >&& aMemList )
     {
-        m_aMemoryPasswords = aMemList;
+        m_aMemoryPasswords = std::move(aMemList);
         m_bHasMemoryPasswords = true;
     }
 

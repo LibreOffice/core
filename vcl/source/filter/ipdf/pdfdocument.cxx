@@ -93,9 +93,9 @@ bool PDFDocument::writeBuffer(const void* pBuffer, sal_uInt64 nBytes)
     return nWritten == nBytes;
 }
 
-void PDFDocument::SetSignatureLine(const std::vector<sal_Int8>& rSignatureLine)
+void PDFDocument::SetSignatureLine(std::vector<sal_Int8>&& rSignatureLine)
 {
-    m_aSignatureLine = rSignatureLine;
+    m_aSignatureLine = std::move(rSignatureLine);
 }
 
 void PDFDocument::SetSignaturePage(size_t nPage) { m_nSignaturePage = nPage; }

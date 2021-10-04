@@ -116,11 +116,11 @@ struct ParsedRDFaAttributes
 
     ParsedRDFaAttributes(
             OUString const & i_rAbout,
-            ::std::vector< OUString > const & i_rProperties,
+            ::std::vector< OUString >&& i_rProperties,
             OUString const & i_rContent,
             OUString const & i_rDatatype)
         : m_About(i_rAbout)
-        , m_Properties(i_rProperties)
+        , m_Properties(std::move(i_rProperties))
         , m_Content(i_rContent)
         , m_Datatype(i_rDatatype)
     { }
@@ -384,7 +384,7 @@ RDFaImportHelper::ParseRDFa(
     if (about.isEmpty()) {
         return std::shared_ptr<ParsedRDFaAttributes>();
     }
-    const ::std::vector< OUString > properties(
+    ::std::vector< OUString > properties(
         reader.ReadCURIEs(i_rProperty) );
     if (properties.empty()) {
         return std::shared_ptr<ParsedRDFaAttributes>();
@@ -393,7 +393,7 @@ RDFaImportHelper::ParseRDFa(
         ?   reader.ReadCURIE(i_rDatatype)
         :   OUString() );
     return std::make_shared<ParsedRDFaAttributes>(
-            about, properties, i_rContent, datatype);
+            about, std::move(properties), i_rContent, datatype);
 }
 
 void

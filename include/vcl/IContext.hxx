@@ -22,9 +22,9 @@ protected:
     IContext() { maContext.push_back(vcl::EnumContext::Context::Any); }
 
 public:
-    void SetContext(const std::vector<vcl::EnumContext::Context>& aContext)
+    void SetContext(std::vector<vcl::EnumContext::Context>&& aContext)
     {
-        maContext = aContext;
+        maContext = std::move(aContext);
     }
 
     bool HasContext(const vcl::EnumContext::Context eContext) const

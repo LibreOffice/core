@@ -57,14 +57,14 @@ ORTFReader::ORTFReader( SvStream& rIn,
 
 ORTFReader::ORTFReader(SvStream& rIn,
                        sal_Int32 nRows,
-                       const TPositions &_rColumnPositions,
+                       TPositions&& _rColumnPositions,
                        const Reference< css::util::XNumberFormatter >& _rxNumberF,
                        const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
                        const TColumnVector* pList,
                        const OTypeInfoMap* _pInfoMap,
                        bool _bAutoIncrementEnabled)
    :SvRTFParser(rIn)
-   ,ODatabaseExport( nRows, _rColumnPositions, _rxNumberF, _rxContext, pList, _pInfoMap, _bAutoIncrementEnabled, rIn )
+   ,ODatabaseExport( nRows, std::move(_rColumnPositions), _rxNumberF, _rxContext, pList, _pInfoMap, _bAutoIncrementEnabled, rIn )
 {
     m_bAppendFirstLine = false;
 }

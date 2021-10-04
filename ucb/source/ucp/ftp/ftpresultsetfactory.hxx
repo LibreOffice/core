@@ -41,7 +41,7 @@ public:
     ResultSetFactory(const css::uno::Reference<css::uno::XComponentContext >&  rxContext,
                       const css::uno::Reference<css::ucb::XContentProvider >&  xProvider,
                       const css::uno::Sequence<css::beans::Property>& seq,
-                      const std::vector<FTPDirentry>& dirvec);
+                    std::vector<FTPDirentry>&& dirvec);
 
     rtl::Reference<ResultSetBase> createResultSet();
 private:

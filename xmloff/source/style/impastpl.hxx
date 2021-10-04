@@ -49,7 +49,7 @@ class XMLAutoStylePoolProperties
 
 public:
 
-    XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties, OUString const & rParentname );
+    XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFamilyData, std::vector< XMLPropertyState >&& rProperties, OUString const & rParentname );
 
     const OUString& GetName() const { return msName; }
     const ::std::vector< XMLPropertyState >& GetProperties() const { return maProperties; }

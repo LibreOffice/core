@@ -597,8 +597,8 @@ namespace
         }
 
         static const double fPatScFact(10.0); // 10.0 multiply, see old code
-        const std::vector<double> aDashing(svtools::GetLineDashing(rBorder.Type(), rBorder.PatternScale() * fPatScFact));
-        const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(aDashing);
+        std::vector<double> aDashing(svtools::GetLineDashing(rBorder.Type(), rBorder.PatternScale() * fPatScFact));
+        const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(std::move(aDashing));
         const basegfx::B2DPoint aStart(rOrigin + (aPerpendX * aCombination.getRefModeOffset()));
 
         rTarget.append(
@@ -606,7 +606,7 @@ namespace
                 new drawinglayer::primitive2d::BorderLinePrimitive2D(
                     aStart,
                     aStart + rX,
-                    aBorderlines,
+                    std::move(aBorderlines),
                     aStrokeAttribute)));
     }
 

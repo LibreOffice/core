@@ -147,7 +147,7 @@ public:
     Thread(
         uno::Reference< uno::XComponentContext > const & context,
         UpdateDialog & dialog,
-        const std::vector< uno::Reference< deployment::XPackage >  > & vExtensionList);
+        std::vector< uno::Reference< deployment::XPackage >  > && vExtensionList);
 
     void stop();
 
@@ -185,11 +185,11 @@ private:
 UpdateDialog::Thread::Thread(
     uno::Reference< uno::XComponentContext > const & context,
     UpdateDialog & dialog,
-    const std::vector< uno::Reference< deployment::XPackage > > &vExtensionList):
+    std::vector< uno::Reference< deployment::XPackage > >&& vExtensionList):
     salhelper::Thread("dp_gui_updatedialog"),
     m_context(context),
     m_dialog(dialog),
-    m_vExtensionList(vExtensionList),
+    m_vExtensionList(std::move(vExtensionList)),
     m_updateInformation(
         deployment::UpdateInformationProvider::create(context)),
     m_stop(false)
@@ -418,7 +418,7 @@ bool UpdateDialog::Thread::update(
 // UpdateDialog ----------------------------------------------------------
 UpdateDialog::UpdateDialog(
     uno::Reference< uno::XComponentContext > const & context,
-    weld::Window * parent, const std::vector<uno::Reference< deployment::XPackage > > &vExtensionList,
+    weld::Window * parent, std::vector<uno::Reference< deployment::XPackage > > && vExtensionList,
     std::vector< dp_gui::UpdateData > * updateData)
     : GenericDialogController(parent, "desktop/ui/updatedialog.ui", "UpdateDialog")
     , m_context(context)
@@ -434,7 +434,7 @@ UpdateDialog::UpdateDialog(
     , m_version(DpResId(RID_DLG_UPDATE_VERSION))
     , m_ignoredUpdate(DpResId(RID_DLG_UPDATE_IGNORED_UPDATE))
     , m_updateData(*updateData)
-    , m_thread(new UpdateDialog::Thread(context, *this, vExtensionList))
+    , m_thread(new UpdateDialog::Thread(context, *this, std::move(vExtensionList)))
     , m_xChecking(m_xBuilder->weld_label("UPDATE_CHECKING"))
     , m_xThrobber(m_xBuilder->weld_spinner("THROBBER"))
     , m_xUpdate(m_xBuilder->weld_label("UPDATE_LABEL"))

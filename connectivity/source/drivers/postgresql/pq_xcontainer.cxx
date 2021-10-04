@@ -211,8 +211,8 @@ class ContainerEnumeration : public ::cppu::WeakImplHelper< XEnumeration >
     std::vector< css::uno::Any > m_vec;
     sal_Int32 m_index;
 public:
-    explicit ContainerEnumeration( const std::vector< css::uno::Any > &vec )
-        : m_vec( vec ),
+    explicit ContainerEnumeration( std::vector< css::uno::Any >&& vec )
+        : m_vec( std::move(vec) ),
           m_index( -1 )
     {}
 
@@ -243,7 +243,7 @@ css::uno::Any ContainerEnumeration::nextElement()
 
 Reference< XEnumeration > Container::createEnumeration(  )
 {
-    return new ContainerEnumeration( m_values );
+    return new ContainerEnumeration( std::vector(m_values) );
 }
 
 void Container::addRefreshListener(

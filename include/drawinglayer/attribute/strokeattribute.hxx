@@ -40,8 +40,7 @@ private:
 
 public:
     /// constructors/assignmentoperator/destructor
-    explicit StrokeAttribute(const ::std::vector<double>& rDotDashArray,
-                             double fFullDotDashLen = 0.0);
+    explicit StrokeAttribute(std::vector<double>&& rDotDashArray, double fFullDotDashLen = 0.0);
     StrokeAttribute();
     StrokeAttribute(const StrokeAttribute&);
     StrokeAttribute(StrokeAttribute&&);

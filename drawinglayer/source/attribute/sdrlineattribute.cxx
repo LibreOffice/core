@@ -42,13 +42,13 @@ namespace drawinglayer::attribute
                 double fTransparence,
                 const basegfx::BColor& rColor,
                 css::drawing::LineCap eCap,
-                const std::vector< double >& rDotDashArray,
+                std::vector< double >&& rDotDashArray,
                 double fFullDotDashLen)
             :   mfWidth(fWidth),
                 mfTransparence(fTransparence),
                 mfFullDotDashLen(fFullDotDashLen),
                 maColor(rColor),
-                maDotDashArray(rDotDashArray),
+                maDotDashArray(std::move(rDotDashArray)),
                 meJoin(eJoin),
                 meCap(eCap)
             {
@@ -95,7 +95,7 @@ namespace drawinglayer::attribute
             double fTransparence,
             const basegfx::BColor& rColor,
             css::drawing::LineCap eCap,
-            const std::vector< double >& rDotDashArray,
+            std::vector< double >&& rDotDashArray,
             double fFullDotDashLen)
         :   mpSdrLineAttribute(
                 ImpSdrLineAttribute(
@@ -104,7 +104,7 @@ namespace drawinglayer::attribute
                     fTransparence,
                     rColor,
                     eCap,
-                    rDotDashArray,
+                    std::move(rDotDashArray),
                     fFullDotDashLen))
 
         {

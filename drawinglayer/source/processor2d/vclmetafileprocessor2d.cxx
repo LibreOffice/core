@@ -495,7 +495,7 @@ std::unique_ptr<SvtGraphicStroke> VclMetafileProcessor2D::impTryToCreateSvtGraph
         pRetval.reset(
             new SvtGraphicStroke(tools::Polygon(aLocalPolygon), tools::PolyPolygon(aStartArrow),
                                  tools::PolyPolygon(aEndArrow), mfCurrentUnifiedTransparence,
-                                 fLineWidth, eCap, eJoin, fMiterLength, aDashArray));
+                                 fLineWidth, eCap, eJoin, fMiterLength, std::move(aDashArray)));
     }
 
     return pRetval;

@@ -100,7 +100,7 @@ namespace comphelper
     public:
         OInteractionRequest(const css::uno::Any& _rRequestDescription);
         OInteractionRequest(const css::uno::Any& rRequestDescription,
-            std::vector<css::uno::Reference<css::task::XInteractionContinuation>> const& rContinuations);
+            std::vector<css::uno::Reference<css::task::XInteractionContinuation>>&& rContinuations);
 
         /// add a new continuation
         void addContinuation(const css::uno::Reference< css::task::XInteractionContinuation >& _rxContinuation);

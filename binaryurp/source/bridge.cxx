@@ -584,7 +584,7 @@ void Bridge::decrementActiveCalls() noexcept {
 
 bool Bridge::makeCall(
     OUString const & oid, css::uno::TypeDescription const & member,
-    bool setter, std::vector< BinaryAny > const & inArguments,
+    bool setter, std::vector< BinaryAny >&& inArguments,
     BinaryAny * returnValue, std::vector< BinaryAny > * outArguments)
 {
     std::unique_ptr< IncomingReply > resp;
@@ -596,7 +596,7 @@ bool Bridge::makeCall(
             OutgoingRequest(OutgoingRequest::KIND_NORMAL, member, setter));
         sendRequest(
             att.getTid(), oid, css::uno::TypeDescription(), member,
-            inArguments);
+            std::move(inArguments));
         pop.clear();
         incrementCalls(true);
         incrementActiveCalls();
@@ -873,7 +873,7 @@ css::uno::Reference< css::uno::XInterface > Bridge::getInstance(
         sInstanceName,
         css::uno::TypeDescription(
             "com.sun.star.uno.XInterface::queryInterface"),
-        false, inArgs, &ret, &outArgs);
+        false, std::move(inArgs), &ret, &outArgs);
     throwException(bExc, ret);
     auto const t = ret.getType();
     if (t.get()->eTypeClass == typelib_TypeClass_VOID) {
@@ -1003,9 +1003,9 @@ void Bridge::sendRequest(
     rtl::ByteSequence const & tid, OUString const & oid,
     css::uno::TypeDescription const & type,
     css::uno::TypeDescription const & member,
-    std::vector< BinaryAny > const & inArguments)
+    std::vector< BinaryAny >&& inArguments)
 {
-    getWriter()->queueRequest(tid, oid, type, member, inArguments);
+    getWriter()->queueRequest(tid, oid, type, member, std::move(inArguments));
 }
 
 void Bridge::throwException(bool exception, BinaryAny const & value) {

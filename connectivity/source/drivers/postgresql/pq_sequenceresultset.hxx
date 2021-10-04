@@ -71,8 +71,8 @@ public:
     SequenceResultSet(
         const ::rtl::Reference< comphelper::RefCountedMutex > & mutex,
         const css::uno::Reference< css::uno::XInterface > &owner,
-        const std::vector< OUString > &colNames,
-        const std::vector< std::vector< css::uno::Any > > &data,
+        std::vector< OUString >&& colNames,
+        std::vector< std::vector< css::uno::Any > >&& data,
         const css::uno::Reference< css::script::XTypeConverter > &tc,
         const ColumnMetaDataVector *pVec = nullptr);
     virtual ~SequenceResultSet() override;

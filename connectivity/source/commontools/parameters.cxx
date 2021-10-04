@@ -480,7 +480,7 @@ namespace dbtools
             // property, but the parameter listeners expect such a property. So we need an object "aggregating"
             // xParam and supplying an additional property ("Value")
             // (it's no real aggregation of course...)
-            m_pOuterParameters->push_back( new param::ParameterWrapper( aParam.second.xComposerColumn, m_xInnerParamUpdate, aParam.second.aInnerIndexes ) );
+            m_pOuterParameters->push_back( new param::ParameterWrapper( aParam.second.xComposerColumn, m_xInnerParamUpdate, std::vector(aParam.second.aInnerIndexes) ) );
         }
 
 #if OSL_DEBUG_LEVEL > 0

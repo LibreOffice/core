@@ -148,8 +148,8 @@ static OUString any2string(const uno::Any& any)
 // Class SvXMLAutoStylePoolProperties_Impl
 // ctor class SvXMLAutoStylePoolProperties_Impl
 
-XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties, OUString const & rParentName )
-: maProperties( rProperties ),
+XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFamilyData, vector< XMLPropertyState >&& rProperties, OUString const & rParentName )
+: maProperties( std::move(rProperties) ),
   mnPos       ( rFamilyData.mnCount )
 {
     static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != nullptr);
@@ -284,7 +284,7 @@ bool XMLAutoStylePoolParent::Add( XMLAutoStyleFamily& rFamilyData, const vector<
     bool bAdded = false;
     if( bDontSeek || !pProperties )
     {
-        pProperties = new XMLAutoStylePoolProperties( rFamilyData, rProperties, msParent );
+        pProperties = new XMLAutoStylePoolProperties( rFamilyData, std::vector(rProperties), msParent );
         m_PropertiesList.insert(itBegin, std::unique_ptr<XMLAutoStylePoolProperties>(pProperties));
         bAdded = true;
     }
@@ -308,7 +308,7 @@ bool XMLAutoStylePoolParent::AddNamed( XMLAutoStyleFamily& rFamilyData, const ve
     auto it = std::lower_bound(m_PropertiesList.begin(), m_PropertiesList.end(), rProperties, ComparePartial{rFamilyData});
 
     std::unique_ptr<XMLAutoStylePoolProperties> pProperties(
-        new XMLAutoStylePoolProperties(rFamilyData, rProperties, msParent));
+        new XMLAutoStylePoolProperties(rFamilyData, std::vector(rProperties), msParent));
     // ignore the generated name
     pProperties->SetName( rName );
     m_PropertiesList.insert(it, std::move(pProperties));

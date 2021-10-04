@@ -34,9 +34,9 @@ private:
 public:
     IncomingReply(
         bool theException, BinaryAny const & theReturnValue,
-        std::vector< BinaryAny > const & theOutArguments):
+        std::vector< BinaryAny >&& theOutArguments):
         exception(theException), returnValue(theReturnValue),
-        outArguments(theOutArguments)
+        outArguments(std::move(theOutArguments))
     {}
 
     bool exception;

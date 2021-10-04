@@ -53,9 +53,15 @@ bool MoveParam::VisitCXXOperatorCallExpr(const CXXOperatorCallExpr* callExpr)
         return true;
     if (!callExpr->isAssignmentOp())
         return true;
-    if (!loplugin::TypeCheck(callExpr->getType())
+    // Emperically, when we are passing a vector to a constructor, 80% of the time,
+    // we are passing a local temporary that can be moved instead of being copied.
+    auto qt = callExpr->getType();
+    if (!loplugin::TypeCheck(qt)
              .Class("Primitive2DContainer")
-             .Namespace("primitive2d"))
+             .Namespace("primitive2d")
+             .Namespace("drawinglayer")
+             .GlobalNamespace()
+        && !loplugin::TypeCheck(qt).Class("vector").StdNamespace())
         return true;
     auto declRef = dyn_cast<DeclRefExpr>(callExpr->getArg(1)->IgnoreParenImpCasts());
     if (!declRef)
@@ -77,16 +83,21 @@ bool MoveParam::PreTraverseConstructorInitializer(CXXCtorInitializer* init)
 {
     if (ignoreLocation(init->getSourceLocation()))
         return true;
+    if (isInUnoIncludeFile(init->getSourceLocation()))
+        return true;
     const FieldDecl* fieldDecl = init->getAnyMember();
     if (!fieldDecl)
         return true;
 
-    auto dc = loplugin::TypeCheck(fieldDecl->getType())
-                  .Class("Primitive2DContainer")
-                  .Namespace("primitive2d")
-                  .Namespace("drawinglayer")
-                  .GlobalNamespace();
-    if (!dc)
+    // Emperically, when we are passing a vector to a constructor, 80% of the time,
+    // we are passing a local temporary that can be moved instead of being copied.
+    auto qt = fieldDecl->getType();
+    if (!loplugin::TypeCheck(qt)
+             .Class("Primitive2DContainer")
+             .Namespace("primitive2d")
+             .Namespace("drawinglayer")
+             .GlobalNamespace()
+        && !loplugin::TypeCheck(qt).Class("vector").StdNamespace())
         return true;
 
     auto constructExpr = dyn_cast_or_null<CXXConstructExpr>(init->getInit());

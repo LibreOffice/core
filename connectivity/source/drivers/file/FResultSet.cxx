@@ -1136,7 +1136,7 @@ void OResultSet::sortRows()
         ++i;
     }
 
-    m_pSortIndex.reset(new OSortIndex(eKeyType,m_aOrderbyAscending));
+    m_pSortIndex.reset(new OSortIndex(std::move(eKeyType), std::vector(m_aOrderbyAscending)));
 
     while ( ExecuteRow( IResultSetHelper::NEXT, 1, false ) )
     {

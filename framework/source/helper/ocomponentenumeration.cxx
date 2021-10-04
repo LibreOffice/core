@@ -32,9 +32,9 @@ using namespace ::osl;
 
 //  constructor
 
-OComponentEnumeration::OComponentEnumeration( const std::vector< css::uno::Reference< XComponent > >& seqComponents )
+OComponentEnumeration::OComponentEnumeration( std::vector< css::uno::Reference< XComponent > >&& seqComponents )
         :   m_nPosition     ( 0                             )   // 0 is the first position for a valid list and the right value for an invalid list to!
-        ,   m_seqComponents ( seqComponents                 )
+        ,   m_seqComponents ( std::move(seqComponents)      )
 {}
 
 //  destructor

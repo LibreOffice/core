@@ -169,7 +169,7 @@ void Proxy::do_dispatch_throw(
             oid_,
             css::uno::TypeDescription(
                 const_cast< typelib_TypeDescription * >(member)),
-            bSetter, inArgs, &ret, &outArgs))
+            bSetter, std::move(inArgs), &ret, &outArgs))
     {
         assert(ret.getType().get()->eTypeClass == typelib_TypeClass_EXCEPTION);
         uno_any_construct(

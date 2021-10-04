@@ -108,7 +108,7 @@ bool interactContinuation( Any const & request,
                 new InteractionContinuationImpl(continuation, &cont ),
                 new InteractionContinuationImpl( cppu::UnoType<task::XInteractionAbort>::get(), &abort ) };
             xInteractionHandler->handle(
-                new ::comphelper::OInteractionRequest( request, conts ) );
+                new ::comphelper::OInteractionRequest( request, std::move(conts) ) );
             if (cont || abort) {
                 if (pcont != nullptr)
                     *pcont = cont;

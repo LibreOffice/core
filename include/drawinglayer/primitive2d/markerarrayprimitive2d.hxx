@@ -57,7 +57,7 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             MarkerArrayPrimitive2D(
-                const std::vector< basegfx::B2DPoint >& rPositions,
+                std::vector< basegfx::B2DPoint >&& rPositions,
                 const BitmapEx& rMarker);
 
             /// data read access

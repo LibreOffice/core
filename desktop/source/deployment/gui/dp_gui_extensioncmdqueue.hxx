@@ -72,8 +72,7 @@ public:
     void removeExtension( const css::uno::Reference< css::deployment::XPackage > &rPackage );
     void enableExtension( const css::uno::Reference< css::deployment::XPackage > &rPackage,
                           const bool bEnable );
-    void checkForUpdates(const std::vector< css::uno::Reference<
-                         css::deployment::XPackage > > &vList );
+    void checkForUpdates( std::vector< css::uno::Reference< css::deployment::XPackage > > && vList );
     void acceptLicense( const css::uno::Reference< css::deployment::XPackage > &rPackage );
     static void syncRepositories( const css::uno::Reference< css::uno::XComponentContext > & xContext );
     /**
