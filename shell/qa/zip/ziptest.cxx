@@ -31,12 +31,11 @@
 #include <string>
 #include <stream_helper.hxx>
 #include "testzipimpl.hxx"
-using namespace std;
 
 class Test : public CppUnit::TestFixture
 {
 private:
-    wstring documentName;
+    std::wstring documentName;
     LPSTREAM pStream;
 
 public:

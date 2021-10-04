@@ -54,7 +54,6 @@
 // Inverse of libxml's BAD_CAST.
 #define XML_CAST( str ) reinterpret_cast< const char* >( str )
 
-using namespace std;
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
