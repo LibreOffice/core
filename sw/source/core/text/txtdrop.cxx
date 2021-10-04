@@ -775,7 +775,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
             m_aText[ nTmpIdx ] = aStr;
             m_aWishedHeight[ nTmpIdx ] = sal_uInt16(nWishedHeight);
             // save initial scaling factor
-            m_aFactor[ nTmpIdx ] = o3tl::narrowing<sal_uInt16>(nFactor);
+            m_aFactor[ nTmpIdx ] = static_cast<sal_uInt16>(nFactor);
         }
 
         bool bGrow = (pDrop->GetLen() != TextFrameIndex(0));
@@ -925,7 +925,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
                 else
                 {
                     if ( bUseCache )
-                        m_aFactor[ nTmpIdx ] = o3tl::narrowing<sal_uInt16>(nFactor);
+                        m_aFactor[ nTmpIdx ] = static_cast<sal_uInt16>(nFactor);
                     nMin = nFactor;
                 }
 
@@ -982,7 +982,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
 bool SwDropPortion::Format( SwTextFormatInfo &rInf )
 {
     bool bFull = false;
-    m_nFix = o3tl::narrowing<sal_uInt16>(rInf.X());
+    m_nFix = static_cast<sal_uInt16>(rInf.X());
 
     SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
     aLayoutModeModifier.SetAuto();
@@ -1020,7 +1020,7 @@ bool SwDropPortion::Format( SwTextFormatInfo &rInf )
                         Width();
 
                 // set values
-                pCurrPart->SetWidth( o3tl::narrowing<sal_uInt16>(nTmpWidth) );
+                pCurrPart->SetWidth( static_cast<sal_uInt16>(nTmpWidth) );
 
                 // Move
                 rInf.SetIdx( rInf.GetIdx() + pCurrPart->GetLen() );
@@ -1029,7 +1029,7 @@ bool SwDropPortion::Format( SwTextFormatInfo &rInf )
             }
             SetJoinBorderWithNext(false);
             SetJoinBorderWithPrev(false);
-            Width( o3tl::narrowing<sal_uInt16>(rInf.X() - nOldX) );
+            Width( static_cast<sal_uInt16>(rInf.X() - nOldX) );
         }
 
         // reset my length
@@ -1066,7 +1066,7 @@ bool SwDropPortion::Format( SwTextFormatInfo &rInf )
     else
     {
         const sal_uInt16 nWant = Width() + GetDistance();
-        const sal_uInt16 nRest = o3tl::narrowing<sal_uInt16>(rInf.Width() - rInf.X());
+        const sal_uInt16 nRest = static_cast<sal_uInt16>(rInf.Width() - rInf.X());
         if( ( nWant > nRest ) ||
             lcl_IsDropFlyInter( rInf, Width() + GetDistance(), m_nDropHeight ) )
             m_nDistance = 0;

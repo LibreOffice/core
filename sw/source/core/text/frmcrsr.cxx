@@ -1418,7 +1418,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
         if( nDiff > 0 )
         {
             nDiff /= nDist;
-            rFill.Fill().nParaCnt = o3tl::narrowing<sal_uInt16>(nDiff + 1);
+            rFill.Fill().nParaCnt = static_cast<sal_uInt16>(nDiff + 1);
             rFill.nLineWidth = 0;
             rFill.bInner = false;
             rFill.bEmpty = true;

@@ -242,7 +242,7 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
 
     // line width is adjusted, so that pPor does not fit to current
     // line anymore
-    rInf.Width( o3tl::narrowing<sal_uInt16>(rInf.X() + (pPor->Width() ? pPor->Width() - 1 : 0)) );
+    rInf.Width( static_cast<sal_uInt16>(rInf.X() + (pPor->Width() ? pPor->Width() - 1 : 0)) );
     rInf.SetLen( pPor->GetLen() );
     rInf.SetFull( false );
     if( pFly )
@@ -431,7 +431,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
         {
             SwFontScript nNxtActual = rInf.GetFont()->GetActual();
             SwFontScript nLstActual = nNxtActual;
-            sal_uInt16 nLstHeight = o3tl::narrowing<sal_uInt16>(rInf.GetFont()->GetHeight());
+            sal_uInt16 nLstHeight = static_cast<sal_uInt16>(rInf.GetFont()->GetHeight());
             bool bAllowBehind = false;
             const CharClass& rCC = GetAppCharClass();
 
@@ -474,7 +474,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                         if ( pTmpFnt )
                         {
                             nLstActual = pTmpFnt->GetActual();
-                            nLstHeight = o3tl::narrowing<sal_uInt16>(pTmpFnt->GetHeight());
+                            nLstHeight = static_cast<sal_uInt16>(pTmpFnt->GetHeight());
                         }
                     }
                 }
@@ -535,7 +535,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                 const SwTwips nRestWidth = rInf.Width() - rInf.X();
 
                 if ( nKernWidth <= nRestWidth )
-                    pGridKernPortion->Width( o3tl::narrowing<sal_uInt16>(nKernWidth) );
+                    pGridKernPortion->Width( static_cast<sal_uInt16>(nKernWidth) );
             }
 
             if ( pGridKernPortion != pPor )
@@ -622,7 +622,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                     (m_pScriptInfo->ScriptType(nTmp - TextFrameIndex(1)) == css::i18n::ScriptType::ASIAN ||
                      m_pScriptInfo->ScriptType(nTmp) == css::i18n::ScriptType::ASIAN) )
                 {
-                    const sal_uInt16 nDist = o3tl::narrowing<sal_uInt16>(rInf.GetFont()->GetHeight()/5);
+                    const sal_uInt16 nDist = static_cast<sal_uInt16>(rInf.GetFont()->GetHeight()/5);
 
                     if( nDist )
                     {
@@ -677,7 +677,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                                  0;
                 const SwTwips nTmpWidth = i * nGridWidth;
                 const SwTwips nKernWidth = std::min(nTmpWidth - nSumWidth, nRestWidth);
-                const sal_uInt16 nKernWidth_1 = o3tl::narrowing<sal_uInt16>(nKernWidth / 2);
+                const sal_uInt16 nKernWidth_1 = static_cast<sal_uInt16>(nKernWidth / 2);
 
                 OSL_ENSURE( nKernWidth <= nRestWidth,
                         "Not enough space left for adjusting non-asian text in grid mode" );
@@ -1488,7 +1488,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                              PortionType::TabDecimal == pLastTabPortion->GetWhichPor() )
                         {
                             OSL_ENSURE( rInf.X() >= pLastTabPortion->GetFix(), "Decimal tab stop position cannot be calculated" );
-                            const sal_uInt16 nWidthOfPortionsUpToDecimalPosition = o3tl::narrowing<sal_uInt16>(rInf.X() - pLastTabPortion->GetFix() );
+                            const sal_uInt16 nWidthOfPortionsUpToDecimalPosition = static_cast<sal_uInt16>(rInf.X() - pLastTabPortion->GetFix() );
                             static_cast<SwTabDecimalPortion*>(pLastTabPortion)->SetWidthOfPortionsUpToDecimalPosition( nWidthOfPortionsUpToDecimalPosition );
                             rInf.SetTabDecimal( 0 );
                         }
@@ -1863,7 +1863,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                 nTmp = 100;
 
             nTmp *= nLineHeight;
-            nLineHeight = o3tl::narrowing<sal_uInt16>(nTmp / 100);
+            nLineHeight = static_cast<sal_uInt16>(nTmp / 100);
         }
 
         m_pCurr->SetRealHeight( nLineHeight );
@@ -1898,7 +1898,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                             nTmp /= 100;
                             if( !nTmp )
                                 ++nTmp;
-                            nLineHeight = o3tl::narrowing<sal_uInt16>(nTmp);
+                            nLineHeight = static_cast<sal_uInt16>(nTmp);
                             sal_uInt16 nAsc = ( 4 * nLineHeight ) / 5;  // 80%
 #if 0
                             // could do clipping here (like Word does)
@@ -1956,7 +1956,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                         nTmp += nLineHeight;
                         if (nTmp < 1)
                             nTmp = 1;
-                        nLineHeight = o3tl::narrowing<sal_uInt16>(nTmp);
+                        nLineHeight = static_cast<sal_uInt16>(nTmp);
                         break;
                     }
                     case SvxInterLineSpaceRule::Fix:
@@ -2522,7 +2522,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
     if( bForced )
     {
         m_pCurr->SetForcedLeftMargin();
-        rInf.ForcedLeftMargin( o3tl::narrowing<sal_uInt16>(aInter.Width()) );
+        rInf.ForcedLeftMargin( static_cast<sal_uInt16>(aInter.Width()) );
     }
 
     if( bFullLine )
@@ -2612,7 +2612,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
 
     const tools::Long nNewWidth = ( i - 1 ) * nGridWidth - nOfst;
     if ( nNewWidth > 0 )
-        rInf.Width( o3tl::narrowing<sal_uInt16>(nNewWidth) );
+        rInf.Width( static_cast<sal_uInt16>(nNewWidth) );
     else
         rInf.Width( 0 );
 
