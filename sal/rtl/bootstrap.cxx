@@ -905,9 +905,25 @@ OUString expandMacros(
                     seg[j] = expandMacros(file, seg[j], mode, requestStack);
                 }
 
+                if (n == 3 && seg[0] != ".override" && seg[1].isEmpty())
+                {
+                    // For backward compatibility, treat ${file::key} the
+                    // same as just ${file:key}:
+                    seg[1] = seg[2];
+                    n = 2;
+                }
+
                 if (n == 1)
                 {
                     buf.append(lookup(file, mode, false, seg[0], requestStack));
+                }
+                else if (n == 2)
+                {
+                    buf.append(
+                        lookup(
+                            static_cast< Bootstrap_Impl * >(
+                                rtl::Bootstrap(seg[0]).getHandle()),
+                            mode, false, seg[1], requestStack));
                 }
                 else if (n == 3 && seg[0] == ".override")
                 {
@@ -917,38 +933,19 @@ OUString expandMacros(
                 }
                 else
                 {
-                    if (n == 3 && seg[1].isEmpty())
-                    {
-                        // For backward compatibility, treat ${file::key} the
-                        // same as just ${file:key}:
-                        seg[1] = seg[2];
-                        n = 2;
-                    }
-
-                    if (n == 2)
-                    {
-                        buf.append(
-                            lookup(
-                                static_cast< Bootstrap_Impl * >(
-                                    rtl::Bootstrap(seg[0]).getHandle()),
-                                mode, false, seg[1], requestStack));
-                    }
-                    else
-                    {
-                        // Going through osl::Profile, this code erroneously
-                        // does not recursively expand macros in the resulting
-                        // replacement text (and if it did, it would fail to
-                        // detect cycles that pass through here):
-                        buf.append(
-                            OStringToOUString(
-                                osl::Profile(seg[0]).readString(
-                                    OUStringToOString(
-                                        seg[1], RTL_TEXTENCODING_UTF8),
-                                    OUStringToOString(
-                                        seg[2], RTL_TEXTENCODING_UTF8),
-                                    OString()),
-                                RTL_TEXTENCODING_UTF8));
-                    }
+                    // Going through osl::Profile, this code erroneously
+                    // does not recursively expand macros in the resulting
+                    // replacement text (and if it did, it would fail to
+                    // detect cycles that pass through here):
+                    buf.append(
+                        OStringToOUString(
+                            osl::Profile(seg[0]).readString(
+                                OUStringToOString(
+                                    seg[1], RTL_TEXTENCODING_UTF8),
+                                OUStringToOString(
+                                    seg[2], RTL_TEXTENCODING_UTF8),
+                                OString()),
+                            RTL_TEXTENCODING_UTF8));
                 }
             }
             else
