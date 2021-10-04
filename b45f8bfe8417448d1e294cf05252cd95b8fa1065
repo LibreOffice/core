@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "169ac785_e73bd74c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-10-04T11:55:07Z",
+      "side": 1,
+      "message": "The iOS build passed, pointless to wait for the rest",
+      "revId": "b45f8bfe8417448d1e294cf05252cd95b8fa1065",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
