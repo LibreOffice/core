@@ -29,5 +29,6 @@ class VCL_DLLPUBLIC Benchmark
 
 public:
     sal_Int64 getElapsedTime();
+    Bitmap setupWavelines();
     Bitmap setupMultiplePolygonsWithPolyPolygon();
 };
