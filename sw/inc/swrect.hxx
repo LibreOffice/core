@@ -251,6 +251,23 @@ inline tools::Long SwRect::Bottom() const
     return m_Size.getHeight() ? m_Point.getY() + m_Size.getHeight() - 1 : m_Point.getY();
 }
 
+inline Point SwRect::TopLeft() const
+{
+    return Point( Left(), Top());
+}
+inline Point SwRect::TopRight() const
+{
+    return Point( Right(), Top());
+}
+inline Point SwRect::BottomLeft() const
+{
+    return Point( Left(), Bottom());
+}
+inline Point SwRect::BottomRight() const
+{
+    return Point( Right(), Bottom());
+}
+
 inline bool SwRect::operator == ( const SwRect& rRect ) const
 {
     return (m_Point == rRect.m_Point && m_Size == rRect.m_Size);

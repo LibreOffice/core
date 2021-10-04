@@ -17,14 +17,36 @@
 class RectUnittest : public CppUnit::TestFixture
 {
 public:
+    void testBasic();
     void testUnion();
     void testIntersection();
 
     CPPUNIT_TEST_SUITE(RectUnittest);
+    CPPUNIT_TEST(testBasic);
     CPPUNIT_TEST(testUnion);
     CPPUNIT_TEST(testIntersection);
     CPPUNIT_TEST_SUITE_END();
 };
+
+void RectUnittest::testBasic()
+{
+    SwRect rect(Point(10, 15), Size(20, 25));
+
+    CPPUNIT_ASSERT_EQUAL(rect, SwRect(10, 15, 20, 25));
+    CPPUNIT_ASSERT_EQUAL(rect, SwRect(Point(10, 15), Point(10 + 20 - 1, 15 + 25 - 1)));
+
+    CPPUNIT_ASSERT_EQUAL(tools::Long(20), rect.Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(25), rect.Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(10), rect.Left());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(15), rect.Top());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(10 + 20 - 1), rect.Right());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(15 + 25 - 1), rect.Bottom());
+
+    CPPUNIT_ASSERT_EQUAL(Point(rect.Left(), rect.Top()), rect.TopLeft());
+    CPPUNIT_ASSERT_EQUAL(Point(rect.Right(), rect.Top()), rect.TopRight());
+    CPPUNIT_ASSERT_EQUAL(Point(rect.Left(), rect.Bottom()), rect.BottomLeft());
+    CPPUNIT_ASSERT_EQUAL(Point(rect.Right(), rect.Bottom()), rect.BottomRight());
+}
 
 void RectUnittest::testUnion()
 {
