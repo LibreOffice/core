@@ -157,6 +157,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testLineHeight)
     assertXPath(pXmlDoc, "//fly/infos/bounds", "top", OUString::number(DOCUMENTBORDER));
 }
 
+<<<<<<< HEAD   (ce64c6 Resolves: tdf#140992 Paste/Cut should mark Edit as modified)
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testLineWidth)
 {
     // Given a document with an as-char image, width in twips not fitting into sal_uInt16:
@@ -216,6 +217,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRuby)
     }
 }
 
+=======
+>>>>>>> CHANGE (b74e0f Revert "sw: allow the width of a line portion to be larger..)
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
