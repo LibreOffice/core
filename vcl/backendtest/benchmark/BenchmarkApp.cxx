@@ -71,7 +71,7 @@ namespace
 class BenchMarkWindow : public WorkWindow
 {
 private:
-    static constexpr unsigned char gnNumberOfTests = 1;
+    static constexpr unsigned char gnNumberOfTests = 2;
     unsigned char mnTest;
     ScopedVclPtr<VirtualDevice> mpVDev;
 
@@ -105,8 +105,8 @@ public:
     static void updateResults(vcl::RenderContext& rRenderContext, sal_Int64 aTimeElapsed)
     {
         rRenderContext.SetTextColor(COL_YELLOW);
-        rRenderContext.DrawText(Point(10, 10),
-                                "Time Taken to Render: " + OUString::number(float(aTimeElapsed)) + " ms");
+        rRenderContext.DrawText(Point(10, 10), "Time Taken to Render: "
+                                                   + OUString::number(float(aTimeElapsed)) + " ms");
     }
 
     static std::vector<tools::Rectangle> setupRegions(int nPartitionsX, int nPartitionsY,
@@ -129,7 +129,7 @@ public:
         return aRegions;
     }
 
-    static void testMultiplePolygonsWithPolyPolygon(vcl::RenderContext& rRenderContext, int nWidth,
+    static void drawMultiplePolygonsWithPolyPolygon(vcl::RenderContext& rRenderContext, int nWidth,
                                                     int nHeight)
     {
         tools::Rectangle aRectangle;
@@ -140,6 +140,19 @@ public:
         aRectangle = aRegions[index++];
         Benchmark aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupMultiplePolygonsWithPolyPolygon();
+        drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        updateResults(rRenderContext, aOutDevTest.getElapsedTime());
+    }
+
+    static void drawWavelines(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
+    {
+        tools::Rectangle aRectangle;
+        size_t index = 0;
+
+        std::vector<tools::Rectangle> aRegions = setupRegions(1, 1, nWidth, nHeight);
+        aRectangle = aRegions[index++];
+        Benchmark aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupWavelines();
         drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
         updateResults(rRenderContext, aOutDevTest.getElapsedTime());
     }
@@ -156,7 +169,11 @@ public:
 
         if (mnTest % gnNumberOfTests == 0)
         {
-            testMultiplePolygonsWithPolyPolygon(rRenderContext, nWidth, nHeight);
+            drawMultiplePolygonsWithPolyPolygon(rRenderContext, nWidth, nHeight);
+        }
+        else if (mnTest % gnNumberOfTests == 1)
+        {
+            drawWavelines(rRenderContext, nWidth, nHeight);
         }
     }
 };
