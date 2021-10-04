@@ -103,7 +103,8 @@ struct XclRootData
 
     double              mfScreenPixelX;     /// Width of a screen pixel (1/100 mm).
     double              mfScreenPixelY;     /// Height of a screen pixel (1/100 mm).
-    tools::Long                mnCharWidth;        /// Width of '0' in default font (twips).
+    tools::Long         mnCharWidth;        /// Width of '0' in default font (twips).
+    tools::Long         mnSpaceWidth;       /// Width of space char ' ' using default font.
     SCTAB               mnScTab;            /// Current Calc sheet index.
     const bool          mbExport;           /// false = Import, true = Export.
 
@@ -153,7 +154,8 @@ public:
     /** Returns the default script type, e.g. for blank cells. */
     sal_Int16    GetDefApiScript() const { return mrData.mnDefApiScript; }
     /** Returns the width of the '0' character (default font) for the current printer (twips). */
-    tools::Long         GetCharWidth() const { return mrData.mnCharWidth; }
+    tools::Long  GetCharWidth() const { return mrData.mnCharWidth; }
+    tools::Long  GetSpaceWidth() const { return mrData.mnSpaceWidth; }
     /** Returns the current Calc sheet index. */
     bool         IsInGlobals() const { return mrData.mnScTab == SCTAB_GLOBAL; }
     /** Returns the current Calc sheet index. */
@@ -251,7 +253,8 @@ public:
     void         SetUILanguage( LanguageType eLang ) { mrData.meUILang = eLang; }
     /** Sets the text encoding to import/export byte strings. */
     void                SetTextEncoding( rtl_TextEncoding eTextEnc );
-    /** Sets the width of the '0' character (default font) for the current printer (twips).
+    /** Sets the width of the '0' - '9' digit character as well as the ' ' space char
+        (using the default font) for the current printer (twips).
         @param rFontData  The font used for the '0' character. */
     void                SetCharWidth( const XclFontData& rFontData );
     /** Sets the current Calc sheet index. */
