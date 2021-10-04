@@ -102,6 +102,8 @@ public:
     void                    SetMasterUnoCommand( bool bSet );
 
     SfxDispatcher*          GetDispatcher_Impl();
+
+    sal_uInt16              GetId() const;
 };
 
 class SfxDispatchController_Impl final
