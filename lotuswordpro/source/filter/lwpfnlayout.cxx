@@ -59,6 +59,7 @@
  */
 
 #include "lwpfnlayout.hxx"
+#include <o3tl/sorted_vector.hxx>
 
 LwpFootnoteLayout::LwpFootnoteLayout(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpTableLayout(objHdr, pStrm)
@@ -111,12 +112,16 @@ void LwpFnRowLayout::RegisterStyle()
     LwpObjectID* pCellID = &GetChildHead();
     LwpCellLayout* pCellLayout = dynamic_cast<LwpCellLayout*>(pCellID->obj().get());
 
+    o3tl::sorted_vector<LwpCellLayout*> aSeen;
     while (pCellLayout)
     {
+        aSeen.insert(pCellLayout);
         pCellLayout->SetFoundry(m_pFoundry);
         pCellLayout->RegisterStyle();
         pCellID = &pCellLayout->GetNext();
         pCellLayout = dynamic_cast<LwpCellLayout*>(pCellID->obj().get());
+        if (aSeen.find(pCellLayout) != aSeen.end())
+            throw std::runtime_error("loop in conversion");
     }
 }
 
