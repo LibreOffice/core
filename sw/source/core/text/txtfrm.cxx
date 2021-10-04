@@ -3330,11 +3330,11 @@ sal_uInt32 SwTextFrame::GetParHeight() const
     if( !HasPara() )
     {   // For non-empty paragraphs this is a special case
         // For UnderSized we can simply just ask 1 Twip more
-        sal_uInt16 nRet = o3tl::narrowing<sal_uInt16>(getFramePrintArea().SSize().Height());
+        sal_uInt16 nRet = static_cast<sal_uInt16>(getFramePrintArea().SSize().Height());
         if( IsUndersized() )
         {
             if( IsEmpty() || GetText().isEmpty() )
-                nRet = o3tl::narrowing<sal_uInt16>(EmptyHeight());
+                nRet = static_cast<sal_uInt16>(EmptyHeight());
             else
                 ++nRet;
         }
@@ -3485,7 +3485,7 @@ void SwTextFrame::CalcAdditionalFirstLineOffset()
         nListLevel = MAXLEVEL - 1;
 
     const SwNumFormat& rNumFormat =
-            pTextNode->GetNumRule()->Get( o3tl::narrowing<sal_uInt16>(nListLevel) );
+            pTextNode->GetNumRule()->Get( static_cast<sal_uInt16>(nListLevel) );
     if ( rNumFormat.GetPositionAndSpaceMode() != SvxNumberFormat::LABEL_ALIGNMENT )
         return;
 
@@ -3732,7 +3732,7 @@ sal_uInt16 SwTextFrame::FirstLineHeight() const
     if ( !HasPara() )
     {
         if( IsEmpty() && isFrameAreaDefinitionValid() )
-            return IsVertical() ? o3tl::narrowing<sal_uInt16>(getFramePrintArea().Width()) : o3tl::narrowing<sal_uInt16>(getFramePrintArea().Height());
+            return IsVertical() ? static_cast<sal_uInt16>(getFramePrintArea().Width()) : static_cast<sal_uInt16>(getFramePrintArea().Height());
         return USHRT_MAX;
     }
     const SwParaPortion *pPara = GetPara();

@@ -654,9 +654,9 @@ void SwRubyPortion::Adjust_( SwTextFormatInfo &rInf )
     TextFrameIndex nSub(0);
     switch ( m_nAdjustment )
     {
-        case css::text::RubyAdjust_CENTER: nRight = o3tl::narrowing<sal_uInt16>(nLineDiff / 2);
+        case css::text::RubyAdjust_CENTER: nRight = static_cast<sal_uInt16>(nLineDiff / 2);
             [[fallthrough]];
-        case css::text::RubyAdjust_RIGHT: nLeft  = o3tl::narrowing<sal_uInt16>(nLineDiff - nRight); break;
+        case css::text::RubyAdjust_RIGHT: nLeft  = static_cast<sal_uInt16>(nLineDiff - nRight); break;
         case css::text::RubyAdjust_BLOCK: nSub   = TextFrameIndex(1);
             [[fallthrough]];
         case css::text::RubyAdjust_INDENT_BLOCK:
@@ -683,8 +683,8 @@ void SwRubyPortion::Adjust_( SwTextFormatInfo &rInf )
             }
             if( nLineDiff > 1 )
             {
-                nRight = o3tl::narrowing<sal_uInt16>(nLineDiff / 2);
-                nLeft  = o3tl::narrowing<sal_uInt16>(nLineDiff - nRight);
+                nRight = static_cast<sal_uInt16>(nLineDiff / 2);
+                nLeft  = static_cast<sal_uInt16>(nLineDiff - nRight);
             }
             break;
         }
@@ -2545,7 +2545,7 @@ SwTextCursorSave::SwTextCursorSave( SwTextCursor* pCursor,
         }
 
         if( nSpaceAdd > 0 && !pMulti->HasTabulator() )
-            pCursor->m_pCurr->Width( o3tl::narrowing<sal_uInt16>(nWidth + nSpaceAdd * sal_Int32(nSpaceCnt) / SPACING_PRECISION_FACTOR) );
+            pCursor->m_pCurr->Width( static_cast<sal_uInt16>(nWidth + nSpaceAdd * sal_Int32(nSpaceCnt) / SPACING_PRECISION_FACTOR) );
 
         // For a BidiPortion we have to calculate the offset from the
         // end of the portion
