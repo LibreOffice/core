@@ -200,7 +200,7 @@ void TextSimplePortionPrimitive2D::create2DDecomposition(
 
 TextSimplePortionPrimitive2D::TextSimplePortionPrimitive2D(
     const basegfx::B2DHomMatrix& rNewTransform, const OUString& rText, sal_Int32 nTextPosition,
-    sal_Int32 nTextLength, const std::vector<double>& rDXArray,
+    sal_Int32 nTextLength, std::vector<double>&& rDXArray,
     const attribute::FontAttribute& rFontAttribute, const css::lang::Locale& rLocale,
     const basegfx::BColor& rFontColor, bool bFilled, tools::Long nWidthToFill,
     const Color& rTextFillColor)
@@ -208,7 +208,7 @@ TextSimplePortionPrimitive2D::TextSimplePortionPrimitive2D(
     , maText(rText)
     , mnTextPosition(nTextPosition)
     , mnTextLength(nTextLength)
-    , maDXArray(rDXArray)
+    , maDXArray(std::move(rDXArray))
     , maFontAttribute(rFontAttribute)
     , maLocale(rLocale)
     , maFontColor(rFontColor)

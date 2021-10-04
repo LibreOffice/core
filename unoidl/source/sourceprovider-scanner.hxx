@@ -109,8 +109,8 @@ public:
         DirectBase(
             OUString const & theName,
             rtl::Reference<unoidl::InterfaceTypeEntity> const & theEntity,
-            std::vector<OUString> const & theAnnotations):
-            name(theName), entity(theEntity), annotations(theAnnotations)
+            std::vector<OUString>&& theAnnotations):
+            name(theName), entity(theEntity), annotations(std::move(theAnnotations))
         { assert(theEntity.is()); }
 
         OUString name;
@@ -210,8 +210,8 @@ public:
 
         Constructor(
             OUString const & theName,
-            std::vector< OUString > const & theAnnotations):
-            name(theName), annotations(theAnnotations)
+            std::vector< OUString >&& theAnnotations):
+            name(theName), annotations(std::move(theAnnotations))
         {}
 
         OUString name;

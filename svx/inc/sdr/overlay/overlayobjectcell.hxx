@@ -40,7 +40,7 @@ namespace sdr::overlay
             virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;
 
         public:
-            OverlayObjectCell( const Color& rColor, const RangeVector& rRects);
+            OverlayObjectCell( const Color& rColor, RangeVector&& rRects);
             virtual ~OverlayObjectCell() override;
         };
 

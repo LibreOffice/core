@@ -50,11 +50,11 @@ namespace cmis
 {
     RepoContent::RepoContent( const uno::Reference< uno::XComponentContext >& rxContext,
         ContentProvider *pProvider, const uno::Reference< ucb::XContentIdentifier >& Identifier,
-        std::vector< libcmis::RepositoryPtr > const & aRepos )
+        std::vector< libcmis::RepositoryPtr > && aRepos )
         : ContentImplHelper( rxContext, pProvider, Identifier ),
         m_pProvider( pProvider ),
         m_aURL( Identifier->getContentIdentifier( ) ),
-        m_aRepositories( aRepos )
+        m_aRepositories( std::move(aRepos) )
     {
         // Split the URL into bits
         OUString sURL = m_xIdentifier->getContentIdentifier( );
@@ -399,7 +399,7 @@ namespace cmis
                 aUrl.setObjectPath( STD_TO_OUSTR( rRepo->getId( ) ) );
 
                 uno::Reference< ucb::XContentIdentifier > xId = new ucbhelper::ContentIdentifier( aUrl.asString( ) );
-                uno::Reference< ucb::XContent > xContent = new RepoContent( m_xContext, m_pProvider, xId, m_aRepositories );
+                uno::Reference< ucb::XContent > xContent = new RepoContent( m_xContext, m_pProvider, xId, std::vector(m_aRepositories) );
 
                 result.push_back( xContent );
             }

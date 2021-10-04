@@ -60,7 +60,7 @@ class DocumentsEnumImpl : public ::cppu::WeakImplHelper< container::XEnumeration
 
 public:
     /// @throws uno::RuntimeException
-    DocumentsEnumImpl( const uno::Reference< uno::XComponentContext >& xContext, const Documents& docs ) :  m_xContext( xContext ), m_documents( docs )
+    DocumentsEnumImpl( const uno::Reference< uno::XComponentContext >& xContext, Documents&& docs ) :  m_xContext( xContext ), m_documents( std::move(docs) )
     {
         m_it = m_documents.begin();
     }
@@ -138,7 +138,7 @@ public:
     //XEnumerationAccess
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) override
     {
-        return new DocumentsEnumImpl( m_xContext, m_documents );
+        return new DocumentsEnumImpl( m_xContext, std::vector(m_documents) );
     }
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) override

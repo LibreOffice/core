@@ -84,7 +84,7 @@ public:
                       CapType               aCap,
                       JoinType              aJoin,
                       double                fMiterLimit,
-                      const DashArray&      rDashArray  );      // TODO: Dash array offset (position where to start, see PS)
+                      DashArray&&           rDashArray  );      // TODO: Dash array offset (position where to start, see PS)
 
     // accessors
     /// Query path to stroke

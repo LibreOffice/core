@@ -221,7 +221,7 @@ void SvxXConnectionPreview::Paint(vcl::RenderContext& rRenderContext, const tool
             aObjectVector.push_back(pObject);
         }
 
-        sdr::contact::ObjectContactOfObjListPainter aPainter(rRenderContext, aObjectVector, nullptr);
+        sdr::contact::ObjectContactOfObjListPainter aPainter(rRenderContext, std::move(aObjectVector), nullptr);
         sdr::contact::DisplayInfo aDisplayInfo;
 
         // do processing

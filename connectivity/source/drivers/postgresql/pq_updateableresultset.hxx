@@ -75,17 +75,17 @@ private:
     UpdateableResultSet(
         const ::rtl::Reference< comphelper::RefCountedMutex > & mutex,
         const css::uno::Reference< css::uno::XInterface > &owner,
-        const std::vector< OUString > &colNames,
-        const std::vector< std::vector< css::uno::Any > > &data,
+        std::vector< OUString >&& colNames,
+        std::vector< std::vector< css::uno::Any > >&& data,
         ConnectionSettings **ppSettings,
         const OUString &schema,
         const OUString &table,
-        const std::vector< OUString > &primaryKey)
-        : SequenceResultSet( mutex, owner, colNames, data, (*ppSettings)->tc ),
+        std::vector< OUString >&& primaryKey)
+        : SequenceResultSet( mutex, owner, std::move(colNames), std::move(data), (*ppSettings)->tc ),
           m_ppSettings( ppSettings ),
           m_schema( schema ),
           m_table( table ),
-          m_primaryKey( primaryKey ),
+          m_primaryKey( std::move(primaryKey) ),
           m_insertRow( false )
     {
         // LEM TODO: this duplicates code in pq_resultset.cxx, except for different value

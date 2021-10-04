@@ -42,8 +42,8 @@ static void validateInput(const std::vector<double>& rKeyStops)
 
 namespace basegfx::utils
 {
-        KeyStopLerp::KeyStopLerp( const std::vector<double>& rKeyStops ) :
-            maKeyStops(rKeyStops),
+        KeyStopLerp::KeyStopLerp( std::vector<double>&& rKeyStops ) :
+            maKeyStops(std::move(rKeyStops)),
             mnLastIndex(0)
         {
             validateInput(maKeyStops);

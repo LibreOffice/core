@@ -230,7 +230,7 @@ namespace drawinglayer::primitive2d
             // add PointArrayPrimitive2D if point markers were added
             if(nCountPoint)
             {
-                rContainer.push_back(new PointArrayPrimitive2D(aPositionsPoint, getBColor()));
+                rContainer.push_back(new PointArrayPrimitive2D(std::move(aPositionsPoint), getBColor()));
             }
 
             // add MarkerArrayPrimitive2D if cross markers were added
@@ -241,11 +241,11 @@ namespace drawinglayer::primitive2d
             {
                 // no subdivisions, so fall back to points at grid positions, no need to
                 // visualize a difference between divisions and sub-divisions
-                rContainer.push_back(new PointArrayPrimitive2D(aPositionsCross, getBColor()));
+                rContainer.push_back(new PointArrayPrimitive2D(std::move(aPositionsCross), getBColor()));
             }
             else
             {
-                rContainer.push_back(new MarkerArrayPrimitive2D(aPositionsCross, getCrossMarker()));
+                rContainer.push_back(new MarkerArrayPrimitive2D(std::move(aPositionsCross), getCrossMarker()));
             }
         }
 

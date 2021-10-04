@@ -122,7 +122,7 @@ BitmapEx XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
     }
 
     const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(
-        aDotDashArray,
+        std::move(aDotDashArray),
         fFullDotDashLen);
 
     // create LinePrimitive

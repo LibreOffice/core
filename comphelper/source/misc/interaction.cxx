@@ -36,9 +36,9 @@ namespace comphelper
     }
 
     OInteractionRequest::OInteractionRequest(const Any& rRequestDescription,
-            std::vector<Reference<XInteractionContinuation>> const& rContinuations)
+            std::vector<Reference<XInteractionContinuation>>&& rContinuations)
         : m_aRequest(rRequestDescription)
-        , m_aContinuations(rContinuations)
+        , m_aContinuations(std::move(rContinuations))
     {
     }
 

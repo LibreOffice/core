@@ -100,7 +100,7 @@ css::uno::Reference< css::sdbc::XResultSet > Array::getResultSetAtIndex(
     }
 
     return new SequenceResultSet(
-        m_xMutex, m_owner, getStatics().resultSetArrayColumnNames, ret, m_tc );
+        m_xMutex, m_owner, std::vector(getStatics().resultSetArrayColumnNames), std::move(ret), m_tc );
 }
 
 

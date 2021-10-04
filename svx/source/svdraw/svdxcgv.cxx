@@ -698,7 +698,7 @@ void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut) const
 
     if(!aSdrObjects.empty())
     {
-        sdr::contact::ObjectContactOfObjListPainter aPainter(rOut, aSdrObjects, aSdrObjects[0]->getSdrPageFromSdrObject());
+        sdr::contact::ObjectContactOfObjListPainter aPainter(rOut, std::move(aSdrObjects), aSdrObjects[0]->getSdrPageFromSdrObject());
         sdr::contact::DisplayInfo aDisplayInfo;
 
         // do processing

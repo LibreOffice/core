@@ -31,7 +31,7 @@ void OWizHTMLExtend::createReaderAndCallParser(sal_Int32 _nRows)
 {
     tools::SvRef<OHTMLReader> xParser = new OHTMLReader(*m_pParserStream,
                             _nRows,
-                            m_pParent->GetColumnPositions(),
+                            std::vector(m_pParent->GetColumnPositions()),
                             m_pParent->GetFormatter(),
                             m_pParent->GetComponentContext(),
                             &m_pParent->getDestVector(),
@@ -44,7 +44,7 @@ void OWizRTFExtend::createReaderAndCallParser(sal_Int32 _nRows)
 {
     tools::SvRef<ORTFReader> xParser = new ORTFReader(*m_pParserStream,
                             _nRows,
-                            m_pParent->GetColumnPositions(),
+                            std::vector(m_pParent->GetColumnPositions()),
                             m_pParent->GetFormatter(),
                             m_pParent->GetComponentContext(),
                             &m_pParent->getDestVector(),

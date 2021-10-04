@@ -381,7 +381,7 @@ std::optional<OutlinerParaObject> Outliner::CreateParaObject( sal_Int32 nStartPa
         aParagraphDataVector[nPara-nStartPara] = *GetParagraph(nPara);
     }
 
-    OutlinerParaObject aPObj(std::move(xText), aParagraphDataVector, bIsEditDoc);
+    OutlinerParaObject aPObj(std::move(xText), std::move(aParagraphDataVector), bIsEditDoc);
     aPObj.SetOutlinerMode(GetOutlinerMode());
 
     return aPObj;

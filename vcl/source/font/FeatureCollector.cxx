@@ -73,8 +73,9 @@ bool FeatureCollector::collectGraphite()
                 FeatureID{ nFeatureCode, HB_OT_TAG_DEFAULT_SCRIPT, HB_OT_TAG_DEFAULT_LANGUAGE },
                 vcl::font::FeatureType::Graphite);
             vcl::font::Feature& rFeature = m_rFontFeatures.back();
-            rFeature.m_aDefinition = vcl::font::FeatureDefinition(
-                nFeatureCode, sLabel, eFeatureParameterType, aParameters, sal_uInt32(nValue));
+            rFeature.m_aDefinition
+                = vcl::font::FeatureDefinition(nFeatureCode, sLabel, eFeatureParameterType,
+                                               std::move(aParameters), sal_uInt32(nValue));
         }
     }
     gr_featureval_destroy(pfeatureValues);

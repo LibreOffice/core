@@ -41,7 +41,7 @@ class VLegend
 public:
     VLegend( const css::uno::Reference< css::chart2::XLegend > & xLegend,
              const css::uno::Reference< css::uno::XComponentContext > & xContext,
-             const std::vector< LegendEntryProvider* >& rLegendEntryProviderList,
+             std::vector< LegendEntryProvider* >&& rLegendEntryProviderList,
              const css::uno::Reference< css::drawing::XShapes >& xTargetPage,
              const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
              ChartModel& rModel  );

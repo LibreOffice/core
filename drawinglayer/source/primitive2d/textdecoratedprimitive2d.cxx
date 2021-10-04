@@ -45,7 +45,7 @@ namespace drawinglayer::primitive2d
                     rText,
                     nTextPosition,
                     nTextLength,
-                    rDXArray,
+                    std::vector(rDXArray),
                     rFontAttribute,
                     getLocale(),
                     getFontColor())));
@@ -307,7 +307,7 @@ namespace drawinglayer::primitive2d
             const OUString& rText,
             sal_Int32 nTextPosition,
             sal_Int32 nTextLength,
-            const std::vector< double >& rDXArray,
+            std::vector< double >&& rDXArray,
             const attribute::FontAttribute& rFontAttribute,
             const css::lang::Locale& rLocale,
             const basegfx::BColor& rFontColor,
@@ -326,7 +326,7 @@ namespace drawinglayer::primitive2d
             bool bEmphasisMarkBelow,
             TextRelief eTextRelief,
             bool bShadow)
-        :   TextSimplePortionPrimitive2D(rNewTransform, rText, nTextPosition, nTextLength, rDXArray, rFontAttribute, rLocale, rFontColor, false, 0, rFillColor),
+        :   TextSimplePortionPrimitive2D(rNewTransform, rText, nTextPosition, nTextLength, std::move(rDXArray), rFontAttribute, rLocale, rFontColor, false, 0, rFillColor),
             maOverlineColor(rOverlineColor),
             maTextlineColor(rTextlineColor),
             meFontOverline(eFontOverline),

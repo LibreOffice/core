@@ -108,10 +108,10 @@ struct SourceProviderType {
     SourceProviderType(
         OUString const & polymorphicStructTypeTemplateName,
         SourceProviderEntity const * theEntity,
-        std::vector<SourceProviderType> const & typeArguments):
+        std::vector<SourceProviderType>&& typeArguments):
         type(TYPE_INSTANTIATED_POLYMORPHIC_STRUCT),
         name(polymorphicStructTypeTemplateName), entity(theEntity),
-        subtypes(typeArguments)
+        subtypes(std::move(typeArguments))
     { assert(theEntity != nullptr); }
 
     explicit SourceProviderType(OUString const & identifier):

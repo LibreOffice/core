@@ -1633,7 +1633,8 @@ namespace
         std::vector<bool, std::allocator<bool> >       m_aSet;
         Reference<XIndexAccess> m_xSource;
     public:
-        OParameterWrapper(const std::vector<bool, std::allocator<bool> >& _aSet,const Reference<XIndexAccess>& _xSource) : m_aSet(_aSet),m_xSource(_xSource){}
+        OParameterWrapper(std::vector<bool, std::allocator<bool> >&& _aSet,const Reference<XIndexAccess>& _xSource)
+            : m_aSet(std::move(_aSet)), m_xSource(_xSource) {}
     private:
         // css::container::XElementAccess
         virtual Type SAL_CALL getElementType() override
@@ -1717,7 +1718,7 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
     rtl::Reference<OParameterContinuation> pParams = new OParameterContinuation;
     // the request
     ParametersRequest aRequest;
-    Reference<XIndexAccess> xWrappedParameters = new OParameterWrapper(aNewParameterSet,xParamsAsIndicies);
+    Reference<XIndexAccess> xWrappedParameters = new OParameterWrapper(std::move(aNewParameterSet),xParamsAsIndicies);
     aRequest.Parameters = xWrappedParameters;
     aRequest.Connection = _xConnection;
     rtl::Reference<OInteractionRequest> pRequest = new OInteractionRequest(makeAny(aRequest));

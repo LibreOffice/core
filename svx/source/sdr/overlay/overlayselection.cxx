@@ -157,11 +157,11 @@ namespace sdr::overlay
         OverlaySelection::OverlaySelection(
             OverlayType eType,
             const Color& rColor,
-            const std::vector< basegfx::B2DRange >& rRanges,
+            std::vector< basegfx::B2DRange >&& rRanges,
             bool bBorder)
         :   OverlayObject(rColor),
             meOverlayType(eType),
-            maRanges(rRanges),
+            maRanges(std::move(rRanges)),
             maLastOverlayType(eType),
             mnLastTransparence(0),
             mbBorder(bBorder)

@@ -71,8 +71,7 @@ public:
     UpdateDialog(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         weld::Window * parent,
-        const std::vector< css::uno::Reference<
-        css::deployment::XPackage > > & vExtensionList,
+        std::vector< css::uno::Reference< css::deployment::XPackage > > && vExtensionList,
         std::vector< dp_gui::UpdateData > * updateData);
 
     virtual ~UpdateDialog() override;

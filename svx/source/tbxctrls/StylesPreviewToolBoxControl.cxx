@@ -155,8 +155,8 @@ StylesPreviewToolBoxControl::createItemWindow(const css::uno::Reference<css::awt
         {
             SolarMutexGuard aSolarMutexGuard;
 
-            m_xVclBox = VclPtr<StylesPreviewWindow_Impl>::Create(pParent, m_aDefaultStyles,
-                                                                 m_xDispatchProvider);
+            m_xVclBox = VclPtr<StylesPreviewWindow_Impl>::Create(
+                pParent, std::vector(m_aDefaultStyles), m_xDispatchProvider);
             xItemWindow = VCLUnoHelper::GetInterface(m_xVclBox);
         }
     }

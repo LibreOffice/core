@@ -275,7 +275,7 @@ namespace drawinglayer::primitive2d
                         static_cast<double>(nTransparence) * 0.01,
                         aColor.getBColor(),
                         eCap,
-                        aDotDashArray,
+                        std::move(aDotDashArray),
                         fFullDotDashLen);
                 }
             }
@@ -1029,7 +1029,7 @@ namespace drawinglayer::primitive2d
             const Color aAmbientValue(rSet.Get(SDRATTR_3DSCENE_AMBIENTCOLOR).GetValue());
             const basegfx::BColor aAmbientLight(aAmbientValue.getBColor());
 
-            return attribute::SdrLightingAttribute(aAmbientLight, aLightVector);
+            return attribute::SdrLightingAttribute(aAmbientLight, std::move(aLightVector));
         }
 
         void calculateRelativeCornerRadius(sal_Int32 nRadius, const basegfx::B2DRange& rObjectRange, double& rfCornerRadiusX, double& rfCornerRadiusY)

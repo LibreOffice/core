@@ -67,7 +67,7 @@ namespace pcr
             @param _rSlaveHandlers
                 the set of slave handlers to invoke. Must not be <NULL/>
         */
-        explicit PropertyComposer( const std::vector< css::uno::Reference< css::inspection::XPropertyHandler > >& _rSlaveHandlers );
+        explicit PropertyComposer( std::vector< css::uno::Reference< css::inspection::XPropertyHandler > >&& _rSlaveHandlers );
 
     public:
         // XPropertyHandler overridables

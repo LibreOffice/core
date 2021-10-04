@@ -46,14 +46,14 @@ namespace fileaccess {
             TaskManager* pMyShell,
             const css::uno::Reference< css::ucb::XContent >& xCreatorContent,
             const css::uno::Reference< css::ucb::XContentIdentifier >& xCreatorId,
-            const std::vector< css::uno::Reference< css::uno::XInterface > >& sListeners );
+            std::vector< css::uno::Reference< css::uno::XInterface > >&& sListeners );
 
         ContentEventNotifier(
             TaskManager* pMyShell,
             const css::uno::Reference< css::ucb::XContent >& xCreatorContent,
             const css::uno::Reference< css::ucb::XContentIdentifier >& xCreatorId,
             const css::uno::Reference< css::ucb::XContentIdentifier >& xOldId,
-            const std::vector< css::uno::Reference< css::uno::XInterface > >& sListeners );
+            std::vector< css::uno::Reference< css::uno::XInterface > >&& sListeners );
 
         void notifyChildInserted( const OUString& aChildName ) const;
         void notifyDeleted() const;
@@ -70,7 +70,7 @@ namespace fileaccess {
     public:
         PropertySetInfoChangeNotifier(
             const css::uno::Reference< css::ucb::XContent >& xCreatorContent,
-            const std::vector< css::uno::Reference< css::uno::XInterface > >& sListeners );
+            std::vector< css::uno::Reference< css::uno::XInterface > >&& sListeners );
 
         void notifyPropertyAdded( const OUString & aPropertyName ) const;
         void notifyPropertyRemoved( const OUString & aPropertyName ) const;

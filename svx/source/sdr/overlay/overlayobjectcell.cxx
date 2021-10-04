@@ -29,9 +29,9 @@ using namespace ::basegfx;
 
 namespace sdr::overlay
 {
-        OverlayObjectCell::OverlayObjectCell( const Color& rColor, const RangeVector& rRects )
+        OverlayObjectCell::OverlayObjectCell( const Color& rColor, RangeVector&& rRects )
         :   OverlayObject( rColor ),
-            maRectangles( rRects )
+            maRectangles( std::move(rRects) )
         {
             // no AA for selection overlays
             allowAntiAliase(false);

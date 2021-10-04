@@ -65,17 +65,17 @@ Any SequenceResultSet::getValue( sal_Int32 columnIndex )
 SequenceResultSet::SequenceResultSet(
     const ::rtl::Reference< comphelper::RefCountedMutex > & mutex,
     const css::uno::Reference< css::uno::XInterface > &owner,
-    const std::vector< OUString > &colNames,
-    const std::vector< std::vector< Any > > &data,
+    std::vector< OUString >&& colNames,
+    std::vector< std::vector< Any > >&& data,
     const Reference< css::script::XTypeConverter > & tc,
     const ColumnMetaDataVector *pVec) :
     BaseResultSet( mutex, owner, data.size(), colNames.size(), tc ),
-    m_data(data ),
-    m_columnNames( colNames )
+    m_data(std::move(data) ),
+    m_columnNames( std::move(colNames) )
 {
     if( pVec )
     {
-        m_meta = new SequenceResultSetMetaData( *pVec, m_columnNames.size() );
+        m_meta = new SequenceResultSetMetaData( std::vector(*pVec), m_columnNames.size() );
     }
 }
 

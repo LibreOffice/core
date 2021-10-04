@@ -69,14 +69,14 @@ namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOper
 
 // ODatabaseExport
 ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
-                                 const TPositions &_rColumnPositions,
+                                 TPositions&&_rColumnPositions,
                                  const Reference< XNumberFormatter >& _rxNumberF,
                                  const Reference< css::uno::XComponentContext >& _rxContext,
                                  const TColumnVector* pList,
                                  const OTypeInfoMap* _pInfoMap,
                                  bool _bAutoIncrementEnabled,
                                  SvStream& _rInputStream)
-    :m_vColumnPositions(_rColumnPositions)
+    :m_vColumnPositions(std::move(_rColumnPositions))
     ,m_aDestColumns(true)
     ,m_xFormatter(_rxNumberF)
     ,m_xContext(_rxContext)

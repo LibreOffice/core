@@ -105,7 +105,7 @@ public:
     ResultSetMetaData(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             const css::uno::Sequence< css::beans::Property >& rProps,
-            const std::vector< ResultSetColumnData >& rColumnData );
+            std::vector< ResultSetColumnData >&& rColumnData );
 
     /**
       * Destructor.
