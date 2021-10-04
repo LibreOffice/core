@@ -31,7 +31,6 @@
 #include <string>
 #include <stream_helper.hxx>
 #include "testzipimpl.hxx"
-using namespace std;
 
 class Test : public CppUnit::TestFixture
 {

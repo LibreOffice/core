@@ -28,7 +28,6 @@
 #include <vcl/weldutils.hxx>
 #include <bitmaps.hlst>
 
-using namespace std;
 using namespace drawinglayer::geometry;
 using namespace drawinglayer::processor2d;
 using namespace drawinglayer::primitive2d;
@@ -107,7 +106,7 @@ void SfxInfoBarWindow::SetCloseButtonImage()
     Point aBtnPos(0, 0);
 
     const ViewInformation2D aNewViewInfos;
-    const unique_ptr<BaseProcessor2D> pProcessor(
+    const std::unique_ptr<BaseProcessor2D> pProcessor(
         createBaseProcessor2DFromOutputDevice(*xDevice, aNewViewInfos));
 
     const ::tools::Rectangle aRect(aBtnPos, xDevice->PixelToLogic(aSize));
