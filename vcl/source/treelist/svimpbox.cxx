@@ -362,7 +362,8 @@ void SvImpLBox::CursorUp()
     m_pView->PaintImmediately();
     m_pStartEntry = pPrevFirstToDraw;
     tools::Rectangle aArea( GetVisibleArea() );
-    aArea.AdjustBottom( -nEntryHeight );
+    if (aArea.GetHeight() > nEntryHeight)
+        aArea.AdjustBottom(-nEntryHeight);
     m_pView->Scroll( 0, nEntryHeight, aArea, ScrollFlags::NoChildren );
     m_pView->PaintImmediately();
     ShowCursor( true );
