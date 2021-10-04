@@ -52,7 +52,6 @@
 #include "convdicxml.hxx"
 #include <linguistic/misc.hxx>
 
-using namespace std;
 using namespace utl;
 using namespace osl;
 using namespace com::sun::star;
@@ -246,7 +245,7 @@ void ConvDic::Save()
 
 ConvMap::iterator ConvDic::GetEntry( ConvMap &rMap, const OUString &rFirstText, std::u16string_view rSecondText )
 {
-    pair< ConvMap::iterator, ConvMap::iterator > aRange =
+    std::pair< ConvMap::iterator, ConvMap::iterator > aRange =
             rMap.equal_range( rFirstText );
     ConvMap::iterator aPos = rMap.end();
     for (ConvMap::iterator aIt = aRange.first;
@@ -379,7 +378,7 @@ uno::Sequence< OUString > SAL_CALL ConvDic::getConversions(
     OUString aLookUpText( aText.copy(nStartPos, nLength) );
     ConvMap &rConvMap = eDirection == ConversionDirection_FROM_LEFT ?
                                 aFromLeft : *pFromRight;
-    pair< ConvMap::iterator, ConvMap::iterator > aRange =
+    std::pair< ConvMap::iterator, ConvMap::iterator > aRange =
             rConvMap.equal_range( aLookUpText );
 
     std::vector<OUString> aRes;

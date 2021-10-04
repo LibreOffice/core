@@ -34,7 +34,6 @@
 #include "convdicxml.hxx"
 #include <linguistic/misc.hxx>
 
-using namespace std;
 using namespace utl;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
@@ -311,7 +310,7 @@ void ConvDicXMLExport::ExportContent_()
         SvXMLElementExport aEntryMain( *this, XML_NAMESPACE_TCD,
                 "entry" , true, true );
 
-        pair< ConvMap::iterator, ConvMap::iterator > aRange =
+        std::pair< ConvMap::iterator, ConvMap::iterator > aRange =
                 rDic.aFromLeft.equal_range(aLeftText);
         for (auto aIt = aRange.first;  aIt != aRange.second;  ++aIt)
         {
