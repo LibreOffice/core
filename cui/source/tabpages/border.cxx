@@ -534,7 +534,7 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     FillValueSets();
     FillLineListBox_Impl();
 
-    // Reapply line width: probably one of prefefined values should be selected
+    // Reapply line width: probably one of predefined values should be selected
     SetLineWidth(m_xLineWidthMF->get_value(FieldUnit::NONE));
 
     // connections

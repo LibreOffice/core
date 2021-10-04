@@ -1726,7 +1726,7 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
         // The #FMT error string must not be used for input as it would lead to
         // data loss. This can happen for at least date(+time). Fall back to a
         // last resort of plain number in the locale the formatter was
-        // contructed with.
+        // constructed with.
         if (!bOk && eType != SvNumFormatType::NUMBER && sOutString == ImpSvNumberformatScan::sErrStr)
         {
             pFormat = GetFormatEntry(ZF_STANDARD);
