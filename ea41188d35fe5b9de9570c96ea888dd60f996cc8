@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2948a540_878c3b20",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-04T06:16:44Z",
+      "side": 1,
+      "message": "If the testcase doesn\u0027t pass but manual testing confirms that your backport works, then perhaps just omit the testcase from the backport.",
+      "revId": "ea41188d35fe5b9de9570c96ea888dd60f996cc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
