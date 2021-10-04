@@ -151,25 +151,6 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testLineHeight)
     assertXPath(pXmlDoc, "//fly/infos/bounds", "top", OUString::number(DOCUMENTBORDER));
 }
 
-CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testLineWidth)
-{
-    // Given a document with an as-char image, width in twips not fitting into sal_uInt16:
-    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "line-width.fodt");
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    sal_Int32 nOldLeft = pWrtShell->GetCharRect().Left();
-
-    // When moving the cursor to the right:
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
-
-    // Then make sure we move to the right by the image width:
-    sal_Int32 nNewLeft = pWrtShell->GetCharRect().Left();
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected greater than: 65536
-    // - Actual  : 1872
-    // i.e. the width (around 67408 twips) was truncated.
-    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(65536), nNewLeft - nOldLeft);
-}
-
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
