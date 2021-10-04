@@ -1828,6 +1828,8 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/awt,\
 	XFocusListener \
 	XFont \
 	XFont2 \
+	XFontMappingUse \
+	XFontMappingUseItem \
 	XGraphics \
 	XGraphics2 \
 	XImageButton \
@@ -1890,6 +1892,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/awt,\
 	XToggleButton \
 	XToolkit \
 	XToolkit2 \
+	XToolkit3 \
 	XToolkitExperimental \
 	XToolkitRobot \
 	XTopWindow \
