@@ -25,9 +25,10 @@ class VCL_DLLPUBLIC Benchmark
     static const Color constLineColor;
     static const Color constFillColor;
 
-    void initialSetup(tools::Long nWidth, tools::Long nHeight, Color aColor);
+    void initialSetup(tools::Long nWidth, tools::Long nHeight, Color aColor, bool bEnableAA = false);
 
 public:
     sal_Int64 getElapsedTime();
+    Bitmap setupWavelines();
     Bitmap setupMultiplePolygonsWithPolyPolygon();
 };

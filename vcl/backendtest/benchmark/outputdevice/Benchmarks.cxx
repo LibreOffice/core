@@ -9,17 +9,22 @@
  */
 
 #include <test/Benchmarks.hxx>
+#include <basegfx/polygon/WaveLine.hxx>
 
 const Color Benchmark::constBackgroundColor(COL_LIGHTGRAY);
 const Color Benchmark::constLineColor(COL_LIGHTBLUE);
 const Color Benchmark::constFillColor(COL_BLUE);
 
-void Benchmark::initialSetup(tools::Long nWidth, tools::Long nHeight, Color aColor)
+void Benchmark::initialSetup(tools::Long nWidth, tools::Long nHeight, Color aColor, bool bEnableAA)
 {
     mpVirtualDevice = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
     maVDRectangle = tools::Rectangle(Point(), Size(nWidth, nHeight));
     mpVirtualDevice->SetOutputSizePixel(maVDRectangle.GetSize());
-    mpVirtualDevice->SetAntialiasing(AntialiasingFlags::NONE);
+    if (bEnableAA)
+        mpVirtualDevice->SetAntialiasing(AntialiasingFlags::Enable
+                                         | AntialiasingFlags::PixelSnapHairline);
+    else
+        mpVirtualDevice->SetAntialiasing(AntialiasingFlags::NONE);
     mpVirtualDevice->SetBackground(Wallpaper(aColor));
     mpVirtualDevice->Erase();
 }
@@ -27,6 +32,26 @@ void Benchmark::initialSetup(tools::Long nWidth, tools::Long nHeight, Color aCol
 sal_Int64 Benchmark::getElapsedTime()
 {
     return std::chrono::duration_cast<std::chrono::milliseconds>(m_xEnd - m_xStart).count();
+}
+
+Bitmap Benchmark::setupWavelines()
+{
+    initialSetup(514, 514, constBackgroundColor, true);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    m_xStart = std::chrono::steady_clock::now();
+    for (int i = 1; i + 6 <= 514; i += 6)
+    {
+        const basegfx::B2DRectangle aWaveLineRectangle(1, i, 512, i + 6);
+        const basegfx::B2DPolygon aWaveLinePolygon
+            = basegfx::createWaveLinePolygon(aWaveLineRectangle);
+        mpVirtualDevice->DrawPolyLine(aWaveLinePolygon);
+    }
+    Bitmap aBitmap = mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+    m_xEnd = std::chrono::steady_clock::now();
+    return aBitmap;
 }
 
 Bitmap Benchmark::setupMultiplePolygonsWithPolyPolygon()
