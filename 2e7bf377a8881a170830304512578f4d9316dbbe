@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08d29885_bf92036a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-04T06:08:51Z",
+      "side": 1,
+      "message": "I like the move towards using SwTwips at multiple places. If you ask my input, I would:\n\n1) Split this large patch to a minimal fix + a follow-up mass conversion. This way you can backport the minimal fix to 7.2. At least I\u0027m not smart enough to review the current mass-conversion on a release branch. :-)\n\n2) Undo the changes to ruby.fodt and redo them with a text editor. It\u0027s not clear to me what you changed there \u0026 why in its current form. If possible, it would be good to do that in a separate commit (with a commit message explaining the \"why\"): ideally you should never touch existing test code or data and source code in the same commit.\n\n3) Once you have a minimal fix, I\u0027m happy to try to cover it with a test.\n\nAnyhow, nice work! Looking forward to get this in.",
+      "revId": "2e7bf377a8881a170830304512578f4d9316dbbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
