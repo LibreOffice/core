@@ -44,8 +44,6 @@
 #include <iostream>
 #include <cstdio>
 
-using namespace std;
-
 static OString aDbgOutResult;
 bool bDbgOutStdErr = false;
 bool bDbgOutPrintAttrSet = false;
@@ -92,9 +90,9 @@ const char * dbg_out(std::u16string_view aStr)
     return aDbgOutResult.getStr();
 }
 
-static map<sal_uInt16,OUString> & GetItemWhichMap()
+static std::map<sal_uInt16,OUString> & GetItemWhichMap()
 {
-    static map<sal_uInt16,OUString> aItemWhichMap
+    static std::map<sal_uInt16,OUString> aItemWhichMap
     {
         { RES_CHRATR_CASEMAP , "CHRATR_CASEMAP" },
         { RES_CHRATR_CHARSETCOLOR , "CHRATR_CHARSETCOLOR" },
