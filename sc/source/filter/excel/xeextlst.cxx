@@ -211,7 +211,7 @@ void XclExpExtCF::SaveXml( XclExpXmlStream& rStrm )
         pBorder.reset();
 
     std::unique_ptr<XclExpCellAlign> pAlign(new XclExpCellAlign);
-    if (!pAlign->FillFromItemSet( rSet, false, GetBiff()))
+    if (!pAlign->FillFromItemSet(*this, rSet, false, GetBiff()))
         pAlign.reset();
 
     std::unique_ptr<XclExpCellProt> pCellProt(new XclExpCellProt);
