@@ -1157,20 +1157,6 @@ void DesktopLOKTest::testSheetSelections()
     /*
      * Check if clicking inside the selection deselects the whole selection
      */
-    int const row10 = 2400;
-    // Select starting from row5, col1 to row10, col5
-    pDocument->pClass->postMouseEvent(pDocument,
-                                      LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
-                                      col1, row5,
-                                      1, 1, 0);
-    pDocument->pClass->postMouseEvent(pDocument,
-                                      LOK_MOUSEEVENT_MOUSEMOVE,
-                                      col5, row5,
-                                      1, 1, 0);
-    pDocument->pClass->postMouseEvent(pDocument,
-                                      LOK_MOUSEEVENT_MOUSEBUTTONUP,
-                                      col5, row10,
-                                      1, 1, 0);
 
     // Click at row5, col4
     pDocument->pClass->postMouseEvent(pDocument,
