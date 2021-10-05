@@ -2370,8 +2370,6 @@ OUString SvNumberformat::GetIntegerFractionDelimiterString( sal_uInt16 nNumFor )
 
 bool SvNumberformat::GetOutputString(double fNumber, sal_uInt16 nCharCount, OUString& rOutString) const
 {
-    using namespace std;
-
     if (eType != SvNumFormatType::NUMBER)
     {
         return false;

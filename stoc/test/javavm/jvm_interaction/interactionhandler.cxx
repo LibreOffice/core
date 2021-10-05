@@ -49,7 +49,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <uno/current_context.hxx>
 
-using namespace std;
 using namespace cppu;
 using namespace css::uno;
 using namespace css::lang;
