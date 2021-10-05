@@ -1189,6 +1189,7 @@ void SfxWorkWindow::UpdateObjectBars_Impl2()
 
     // Iterate over all Toolboxes
     xLayoutManager->lock();
+    const bool isNotebookBarActive = sfx2::SfxNotebookBar::IsActive();
     for ( auto const & n: aObjBarList )
     {
         ToolbarId eId = n.eId;
@@ -1202,7 +1203,7 @@ void SfxWorkWindow::UpdateObjectBars_Impl2()
 
         // Is a ToolBox required in this context ?
         bool bModesMatching = (nUpdateMode != SfxVisibilityFlags::Invisible) && ((nTbxMode & nUpdateMode) == nUpdateMode);
-        if ( bDestroy || sfx2::SfxNotebookBar::IsActive())
+        if ( bDestroy || isNotebookBarActive)
         {
             OUString aTbxId = g_aTbxTypeName + GetResourceURLFromToolbarId(eId);
             xLayoutManager->destroyElement( aTbxId );
