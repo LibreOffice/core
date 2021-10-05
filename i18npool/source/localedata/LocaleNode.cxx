@@ -41,7 +41,6 @@ typedef ::o3tl::sorted_vector< OUString > NameSet;
 typedef ::o3tl::sorted_vector< sal_Int16 > ValueSet;
 
 namespace cssi = ::com::sun::star::i18n;
-using namespace std;
 
 LocaleNode::LocaleNode (const OUString& name, const Reference< XAttributeList > & attr)
     : aName(name)
@@ -1212,10 +1211,10 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         }
 
         // Check for duplicates.
-        for (vector<OUString>::const_iterator aIt = theDateAcceptancePatterns.begin();
+        for (std::vector<OUString>::const_iterator aIt = theDateAcceptancePatterns.begin();
                 aIt != theDateAcceptancePatterns.end(); ++aIt)
         {
-            for (vector<OUString>::iterator aComp = theDateAcceptancePatterns.begin();
+            for (std::vector<OUString>::iterator aComp = theDateAcceptancePatterns.begin();
                     aComp != theDateAcceptancePatterns.end(); /*nop*/)
             {
                 if (aIt != aComp && *aIt == *aComp)
@@ -2254,7 +2253,7 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
     // record each attribute of each level of each style in a static C++ variable.
     // determine number of styles and number of levels per style on the fly.
     sal_Int32 nStyles = getNumberOfChildren();
-    vector<sal_Int32> nLevels; // may be different for each style?
+    std::vector<sal_Int32> nLevels; // may be different for each style?
     for( sal_Int32 i = 0; i < nStyles; i++ )
     {
         LocaleNode* p = getChildAt( i );
