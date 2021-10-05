@@ -864,6 +864,21 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
         case ContentTypeId::FOOTNOTE:
         {
             const SwFootnoteIdxs& rFootnoteIdxs = m_pWrtShell->GetDoc()->GetFootnoteIdxs();
+            size_t nFootnoteCount = 0;
+            for (SwTextFootnote* pTextFootnote : rFootnoteIdxs)
+                if (!pTextFootnote->GetFootnote().IsEndNote())
+                    ++nFootnoteCount;
+            // insert a separator bar between footnote and endnote entries
+            if (rFootnoteIdxs.size())
+            {
+
+                std::unique_ptr<SwTextFootnoteContent> pCnt(new SwTextFootnoteContent(
+                                                            this, "-------------------------------",
+                                                            nullptr, nFootnoteCount + 1));
+                pCnt->SetInvisible();
+                m_pMember->insert(std::move(pCnt));
+            }
+            tools::Long nPos = 0, nInsertPos = 0;
             for (SwTextFootnote* pTextFootnote : rFootnoteIdxs)
             {
                 const SwFormatFootnote& rFormatFootnote = pTextFootnote->GetFootnote();
@@ -871,9 +886,13 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                         rFormatFootnote.GetViewNumStr(*m_pWrtShell->GetDoc(),
                                                       m_pWrtShell->GetLayout(), true) + " " +
                         rFormatFootnote.GetFootnoteText(*m_pWrtShell->GetLayout());
+                if (rFormatFootnote.IsEndNote())
+                    nInsertPos = nPos + nFootnoteCount + 2;
+                else
+                    nInsertPos = ++nPos;
                 std::unique_ptr<SwTextFootnoteContent> pCnt(new SwTextFootnoteContent(
                                                                 this, sText, pTextFootnote,
-                                                                rFormatFootnote.GetNumber()));
+                                                                nInsertPos));
                 if (!pTextFootnote->GetTextNode().getLayoutFrame(m_pWrtShell->GetLayout()))
                     pCnt->SetInvisible();
                 m_pMember->insert(std::move(pCnt));
@@ -1627,6 +1646,14 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                 ContentTypeId::INDEX == nContentType ||
                 ContentTypeId::DRAWOBJECT == nContentType);
 
+        if (ContentTypeId::FOOTNOTE == nContentType)
+        {
+            void* pUserData = reinterpret_cast<void*>(m_xTreeView->get_id(*xEntry).toInt64());
+            const SwTextFootnote* pFootnote =
+                    static_cast<const SwTextFootnoteContent*>(pUserData)->GetTextFootnote();
+            if (!pFootnote)
+                xPop->remove(OString::number(900)); // go to
+        }
         if(ContentTypeId::OUTLINE == nContentType)
         {
             bOutline = true;
@@ -4143,10 +4170,15 @@ IMPL_LINK(SwContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUStrin
             }
             break;
             case ContentTypeId::FOOTNOTE:
+            {
                 assert(dynamic_cast<SwTextFootnoteContent*>(static_cast<SwTypeNumber*>(pUserData)));
-                sEntry = static_cast<SwTextFootnoteContent*>(pUserData)->GetTextFootnote()->
-                        GetFootnote().IsEndNote() ? SwResId(STR_CONTENT_ENDNOTE) :
-                                                    SwResId(STR_CONTENT_FOOTNOTE);
+                const SwTextFootnote* pFootnote =
+                        static_cast<const SwTextFootnoteContent*>(pUserData)->GetTextFootnote();
+                if (!pFootnote)
+                    return SwResId(STR_FOOTNOTE_ENDNOTE_SEPARATOR_TIP);
+                sEntry = pFootnote->GetFootnote().IsEndNote() ? SwResId(STR_CONTENT_ENDNOTE) :
+                                                                SwResId(STR_CONTENT_FOOTNOTE);
+            }
             break;
             default: break;
         }
@@ -4159,7 +4191,9 @@ IMPL_LINK(SwContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUStrin
     }
     else
     {
-        const size_t nMemberCount = static_cast<SwContentType*>(pUserData)->GetMemberCount();
+        size_t nMemberCount = static_cast<SwContentType*>(pUserData)->GetMemberCount();
+        if (nMemberCount && nType == ContentTypeId::FOOTNOTE)
+            --nMemberCount; // account for horizontal footnote endnote separator entry
         sEntry = OUString::number(nMemberCount) + " " +
             (nMemberCount == 1
                     ? static_cast<SwContentType*>(pUserData)->GetSingleName()
@@ -4886,8 +4920,13 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
         }
         break;
         case ContentTypeId::FOOTNOTE:
-            m_pActiveShell->GotoFootnoteAnchor(
-                        *static_cast<const SwTextFootnoteContent*>(pCnt)->GetTextFootnote());
+        {
+            const SwTextFootnote* pFootnote =
+                    static_cast<const SwTextFootnoteContent*>(pCnt)->GetTextFootnote();
+            if (!pFootnote)
+                return;
+            m_pActiveShell->GotoFootnoteAnchor(*pFootnote);
+        }
         break;
         default: break;
     }

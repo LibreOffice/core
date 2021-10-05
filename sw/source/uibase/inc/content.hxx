@@ -110,9 +110,9 @@ class SwTextFootnoteContent final : public SwContent
     const SwTextFootnote* m_pTextFootnote;
 public:
     SwTextFootnoteContent(const SwContentType* pCnt,
-                       const OUString& rName,
-                       const SwTextFootnote* pTextFootnote,
-                       tools::Long nYPos)
+                          const OUString& rName,
+                          const SwTextFootnote* pTextFootnote,
+                          tools::Long nYPos)
         : SwContent(pCnt, rName, nYPos),
           m_pTextFootnote(pTextFootnote)
     {}
