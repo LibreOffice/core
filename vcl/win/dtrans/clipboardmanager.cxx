@@ -34,7 +34,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace cppu;
 using namespace osl;
-using namespace std;
 
 using ::dtrans::ClipboardManager;
 
@@ -105,11 +104,11 @@ void SAL_CALL ClipboardManager::addClipboard( const Reference< XClipboard >& xCl
     ClearableMutexGuard aGuard(m_aMutex);
     if (!rBHelper.bDisposed && !rBHelper.bInDispose)
     {
-        pair< const OUString, Reference< XClipboard > > value (
+        std::pair< const OUString, Reference< XClipboard > > value (
             aName.getLength() ? aName : m_aDefaultName,
             xClipboard );
 
-        pair< ClipboardMap::iterator, bool > p = m_aClipboardMap.insert(value);
+        std::pair< ClipboardMap::iterator, bool > p = m_aClipboardMap.insert(value);
         aGuard.clear();
 
         // insert failed, element must exist already
