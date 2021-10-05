@@ -4551,6 +4551,50 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf143215)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getRows()->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf144748)
+{
+    // load a table with an empty row, and an empty line before the table
+    // (to allow the easy selection of the full text with the table)
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf144748.fodt");
+
+    // turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    // there is a table in the text
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+
+    // delete full text with the table and check Undo
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+    // this crashed LibreOffice
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    // redo and check redline usage
+
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    // This was 2 (bad extra redline for the empty row of the deleted table)
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pEditShell->GetRedlineCount());
+
+    // accept deletion of the text, including the table with the empty row
+
+    IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
+    rIDRA.AcceptAllRedline(true);
+
+    // no table left in the text
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf128335)
 {
     // Load the bugdoc, which has 3 textboxes.
