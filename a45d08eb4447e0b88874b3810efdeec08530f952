@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "459f1cde_e514e195",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-05T14:16:21Z",
+      "side": 1,
+      "message": "Looks like a good direction in general.",
+      "revId": "a45d08eb4447e0b88874b3810efdeec08530f952",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "969f75be_ac2c8af6",
+        "filename": "filter/source/svg/svgfilter.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-05T14:16:21Z",
+      "side": 1,
+      "message": "Newer code like sd/source/ui/inc/unokywds.hxx uses \u0027inline constexpr OUStringLiteral\u0027, would it make sense to switch straight to that, instead of an intermediate step?",
+      "revId": "a45d08eb4447e0b88874b3810efdeec08530f952",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
