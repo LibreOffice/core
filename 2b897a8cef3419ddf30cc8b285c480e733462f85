@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1faf80b4_8755014c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-05T06:39:21Z",
+      "side": 1,
+      "message": "If that is not 100%, would it be useful to run this once, but don\u0027t enforce it? My ideal would be to have an additional ctor that takes its param by rvalue reference, then the caller can decide. (Sure, I understand that you assume that the caller won\u0027t bother to correctly decide in most cases, and there is some truth in it.)\n\nUnless I misunderstand what you do here. :-)",
+      "revId": "2b897a8cef3419ddf30cc8b285c480e733462f85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
