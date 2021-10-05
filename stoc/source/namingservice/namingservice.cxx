@@ -30,7 +30,6 @@
 
 using namespace cppu;
 using namespace osl;
-using namespace std;
 
 using namespace css::uno;
 using namespace css::lang;

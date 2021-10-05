@@ -9,18 +9,16 @@
 
 #include "wrapper.hxx"
 
-using namespace std;
-
 int main(int argc, char* argv[])
 {
-    vector<string> rawargs(argv + 1, argv + argc);
+    std::vector<string> rawargs(argv + 1, argv + argc);
 
-    string env_prefix; // defaults to REAL_
+    std::string env_prefix; // defaults to REAL_
     bool verbose = false;
-    string args = processccargs(rawargs, env_prefix, verbose);
+    std::string args = processccargs(rawargs, env_prefix, verbose);
 
-    string command = getexe(env_prefix + "CC");
-    string flags = getexe(env_prefix + "CC_FLAGS", true);
+    std::string command = getexe(env_prefix + "CC");
+    std::string flags = getexe(env_prefix + "CC_FLAGS", true);
     args.insert(0, flags.empty() ? string() : flags + " ");
 
     setupccenv();
