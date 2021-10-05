@@ -44,9 +44,9 @@ double SvgNumber::solveNonPercentage(const InfoProvider& rInfoProvider) const
         case SvgUnit::pc:
             return mfNumber * F_SVG_PIXEL_PER_INCH / 6.0;
         case SvgUnit::cm:
-            return mfNumber * F_SVG_PIXEL_PER_INCH / 2.54;
+            return mfNumber * F_SVG_PIXEL_PER_INCH / CENTIMETERS_PER_INCH;
         case SvgUnit::mm:
-            return mfNumber * 0.1 * F_SVG_PIXEL_PER_INCH / 2.54;
+            return mfNumber * 0.1 * F_SVG_PIXEL_PER_INCH / CENTIMETERS_PER_INCH;
         case SvgUnit::in:
             return mfNumber * F_SVG_PIXEL_PER_INCH;
         case SvgUnit::none:
@@ -84,12 +84,10 @@ double SvgNumber::solve(const InfoProvider& rInfoProvider, NumberType aNumberTyp
             aViewPort = basegfx::B2DRange(
                 0.0,
                 0.0,
-                210.0 * F_SVG_PIXEL_PER_INCH / 2.54,
-                297.0 * F_SVG_PIXEL_PER_INCH / 2.54);
-
+                210.0 * F_SVG_PIXEL_PER_INCH / CENTIMETERS_PER_INCH,
+                297.0 * F_SVG_PIXEL_PER_INCH / CENTIMETERS_PER_INCH);
         }
-
-        if ( !aViewPort.isEmpty() )
+        else
         {
             if (NumberType::xcoordinate == aNumberType)
             {
@@ -107,7 +105,7 @@ double SvgNumber::solve(const InfoProvider& rInfoProvider, NumberType aNumberTyp
                 const double fCurrentWidth(aViewPort.getWidth());
                 const double fCurrentHeight(aViewPort.getHeight());
                 const double fCurrentLength(
-                    sqrt(fCurrentWidth * fCurrentWidth + fCurrentHeight * fCurrentHeight)/sqrt(2.0));
+                    sqrt((fCurrentWidth * fCurrentWidth + fCurrentHeight * fCurrentHeight)/2.0));
 
                 fRetval *= fCurrentLength;
             }
