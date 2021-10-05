@@ -27,6 +27,7 @@
 
 #include <vcl/QueueInfo.hxx>
 #include <vcl/event.hxx>
+#include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/print.hxx>
 #include <vcl/printer/Options.hxx>
@@ -1617,14 +1618,22 @@ bool Printer::UsePolyPolygonForComplexGradient()
     return true;
 }
 
-void Printer::ClipAndDrawGradientMetafile ( const Gradient &rGradient, const tools::PolyPolygon &rPolyPoly )
+void Printer::DrawGradientToMetafile(tools::PolyPolygon const& rPolyPoly, Gradient const& rGradient)
 {
-    const tools::Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
+    tools::Rectangle aBoundRect(ImplLogicToDevicePixel(rPolyPoly.GetBoundRect()));
 
-    Push( vcl::PushFlags::CLIPREGION );
-    IntersectClipRegion(vcl::Region(rPolyPoly));
-    DrawGradient( aBoundRect, rGradient );
-    Pop();
+    // if the clipping polypolygon is a rectangle, then it's the same size as the bounding of the
+    // polypolygon, so pass in a NULL for the clipping parameter
+    if (rGradient.GetStyle() == GradientStyle::Linear || rGradient.GetStyle() == GradientStyle::Axial)
+    {
+        mpMetaFile->AddAction(new MetaGradientContainerAction(rPolyPoly,
+                    aBoundRect, rGradient, GetLinearGradientSteps(rGradient, aBoundRect, true/*bMtf*/), mnDrawMode, true));
+    }
+    else
+    {
+        mpMetaFile->AddAction(new MetaGradientContainerAction(rPolyPoly,
+                    aBoundRect, rGradient, GetComplexGradientSteps(rGradient, aBoundRect, true), mnDrawMode, true));
+    }
 }
 
 void Printer::SetFontOrientation( LogicalFontInstance* const pFontEntry ) const
