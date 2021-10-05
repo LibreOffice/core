@@ -27,6 +27,7 @@ namespace svgio::svgreader
 
 // recommended value for this device dependent unit, see CSS2 section 4.3.2 Lengths
 constexpr const double F_SVG_PIXEL_PER_INCH = 96.0;
+constexpr const double CENTIMETERS_PER_INCH = 2.54;
 
 enum class NumberType
 {
