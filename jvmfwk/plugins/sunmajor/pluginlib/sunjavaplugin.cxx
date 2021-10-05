@@ -95,7 +95,6 @@
 #endif
 
 using namespace osl;
-using namespace std;
 using namespace jfw_plugin;
 
 
@@ -343,9 +342,9 @@ javaPluginError jfw_plugin_getAllJavaInfos(
     assert(parJavaInfo);
 
     //Find all JREs
-    vector<rtl::Reference<VendorBase> > vecInfos =
+    std::vector<rtl::Reference<VendorBase> > vecInfos =
         addAllJREInfos(checkJavaHomeAndPath, infos);
-    vector<rtl::Reference<VendorBase> > vecVerifiedInfos;
+    std::vector<rtl::Reference<VendorBase> > vecVerifiedInfos;
 
     for (auto const& vecInfo : vecInfos)
     {
@@ -438,10 +437,10 @@ javaPluginError jfw_plugin_getJavaInfosFromPath(
     std::vector<rtl::Reference<jfw_plugin::VendorBase>> & infos)
 {
     // find JREs from PATH
-    vector<rtl::Reference<VendorBase>> vecInfosFromPath;
+    std::vector<rtl::Reference<VendorBase>> vecInfosFromPath;
     addJavaInfosFromPath(infos, vecInfosFromPath);
 
-    vector<std::unique_ptr<JavaInfo>> vecVerifiedInfos;
+    std::vector<std::unique_ptr<JavaInfo>> vecVerifiedInfos;
 
     // copy infos of JREs that meet version requirements to vecVerifiedInfos
     for (auto const& infosFromPath : vecInfosFromPath)

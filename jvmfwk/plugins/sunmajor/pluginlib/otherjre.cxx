@@ -20,8 +20,6 @@
 
 #include "otherjre.hxx"
 
-using namespace std;
-
 using ::rtl::Reference;
 namespace jfw_plugin
 {

@@ -26,7 +26,6 @@
 #include <stdio.h>
 #include <vector>
 
-using namespace std;
 using namespace osl;
 
 using jvmaccess::JavaInfo;
@@ -189,9 +188,9 @@ bool test_createAllInfo()
 {
     printf("\ntest JavaInfo::createAllInfo\n" \
            "! Compare output with values in registry, PATH, JAVA_HOME, LD_LIBRARY_PATH !\n\n");
-    vector<JavaInfo> vec;
+    std::vector<JavaInfo> vec;
     JavaInfo::createAllInfo(&vec);
-    for(vector<JavaInfo>::size_type i= 0; i < vec.size(); i++)
+    for(std::vector<JavaInfo>::size_type i= 0; i < vec.size(); i++)
         printInfo(vec[i]);
     return true;
 }

@@ -51,7 +51,6 @@
 #endif
 
 using namespace osl;
-using namespace std;
 
 using ::rtl::Reference;
 
@@ -633,7 +632,7 @@ static void addJavaInfoFromWinReg(
 
 #endif // _WIN32
 
-void bubbleSortVersion(vector<rtl::Reference<VendorBase> >& vec)
+void bubbleSortVersion(std::vector<rtl::Reference<VendorBase> >& vec)
 {
     if(vec.empty())
         return;
@@ -684,7 +683,7 @@ void bubbleSortVersion(vector<rtl::Reference<VendorBase> >& vec)
 
 
 void addJREInfoFromBinPath(
-    const OUString& path, vector<rtl::Reference<VendorBase>> & allInfos,
+    const OUString& path, std::vector<rtl::Reference<VendorBase>> & allInfos,
     std::vector<rtl::Reference<VendorBase>> & addedInfos)
 {
     // file:///c:/jre/bin
@@ -693,7 +692,7 @@ void addJREInfoFromBinPath(
     for ( sal_Int32 pos = 0;
           gVendorMap[pos].sVendorName != nullptr; ++pos )
     {
-        vector<OUString> vecPaths;
+        std::vector<OUString> vecPaths;
         getJavaExePaths_func pFunc = gVendorMap[pos].getJavaFunc;
 
         int size = 0;
@@ -738,11 +737,11 @@ void addJREInfoFromBinPath(
     }
 }
 
-vector<Reference<VendorBase> > addAllJREInfos(
+std::vector<Reference<VendorBase> > addAllJREInfos(
     bool checkJavaHomeAndPath,
     std::vector<rtl::Reference<VendorBase>> & allInfos)
 {
-    vector<Reference<VendorBase> > addedInfos;
+    std::vector<Reference<VendorBase> > addedInfos;
 
 #if defined(_WIN32)
     // Get Javas from the registry
@@ -765,9 +764,9 @@ vector<Reference<VendorBase> > addAllJREInfos(
 }
 
 
-vector<OUString> getVectorFromCharArray(char const * const * ar, int size)
+std::vector<OUString> getVectorFromCharArray(char const * const * ar, int size)
 {
-    vector<OUString> vec;
+    std::vector<OUString> vec;
     for( int i = 0; i < size; i++)
     {
         OUString s(ar[i], strlen(ar[i]), RTL_TEXTENCODING_UTF8);
@@ -826,11 +825,11 @@ rtl::Reference<VendorBase> getJREInfoByPath(
     const OUString& path)
 {
     rtl::Reference<VendorBase> ret;
-    static vector<OUString> vecBadPaths;
+    static std::vector<OUString> vecBadPaths;
 
-    static map<OUString, rtl::Reference<VendorBase> > mapJREs;
+    static std::map<OUString, rtl::Reference<VendorBase> > mapJREs;
     OUString sFilePath;
-    vector<pair<OUString, OUString> > props;
+    std::vector<std::pair<OUString, OUString> > props;
 
     OUString sResolvedDir = resolveDirPath(path);
     // If this path is invalid then there is no chance to find a JRE here
@@ -855,7 +854,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
     for ( sal_Int32 pos = 0;
           gVendorMap[pos].sVendorName != nullptr; ++pos )
     {
-        vector<OUString> vecPaths;
+        std::vector<OUString> vecPaths;
         getJavaExePaths_func pFunc = gVendorMap[pos].getJavaFunc;
 
         int size = 0;
@@ -1011,7 +1010,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
 }
 
 Reference<VendorBase> createInstance(createInstance_func pFunc,
-                                     const vector<pair<OUString, OUString> >& properties)
+                                     const std::vector<std::pair<OUString, OUString> >& properties)
 {
 
     Reference<VendorBase> aBase = (*pFunc)();
