@@ -398,7 +398,7 @@ namespace svgio::svgreader
                     new drawinglayer::primitive2d::SvgLinearGradientPrimitive2D(
                         aGradientTransform,
                         rPath,
-                        aSvgGradientEntryVector,
+                        std::move(aSvgGradientEntryVector),
                         aStart,
                         aEnd,
                         SvgUnits::userSpaceOnUse != rFillGradient.getGradientUnits(),
@@ -459,7 +459,7 @@ namespace svgio::svgreader
                     new drawinglayer::primitive2d::SvgRadialGradientPrimitive2D(
                         aGradientTransform,
                         rPath,
-                        aSvgGradientEntryVector,
+                        std::move(aSvgGradientEntryVector),
                         aStart,
                         fRadius,
                         SvgUnits::userSpaceOnUse != rFillGradient.getGradientUnits(),
@@ -734,7 +734,7 @@ namespace svgio::svgreader
                 }
                 else
                 {
-                    const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(aDashArray);
+                    const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(std::move(aDashArray));
 
                     aNewLinePrimitive = new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
                         rPath,

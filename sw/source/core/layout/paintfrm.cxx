@@ -3603,7 +3603,7 @@ static drawinglayer::primitive2d::Primitive2DContainer lcl_CreateDashedIndicator
             new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D (
                 basegfx::B2DPolyPolygon( aLinePolygon ),
                 drawinglayer::attribute::LineAttribute( aColor ),
-                drawinglayer::attribute::StrokeAttribute( aStrokePattern ) );
+                drawinglayer::attribute::StrokeAttribute( std::move(aStrokePattern) ) );
 
 
     return aSeq;

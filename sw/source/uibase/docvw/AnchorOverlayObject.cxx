@@ -128,7 +128,7 @@ void AnchorPrimitive::create2DDecomposition(
             aDotDashArray.push_back(fDistance);
 
             const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(
-                aDotDashArray,
+                std::move(aDotDashArray),
                 fDistance + fDashLen);
 
             const drawinglayer::primitive2d::Primitive2DReference aStrokedLine(
