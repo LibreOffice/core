@@ -124,6 +124,23 @@
       "parentUuid": "a27db64f_b1780e0d",
       "revId": "2e7bf377a8881a170830304512578f4d9316dbbe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f11f0b2_41206803",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-05T11:30:45Z",
+      "side": 1,
+      "message": "FWIW I don\u0027t mind too much either way. Part of the problem is to do that many reviews -- you can perhaps squash the reverts to a single change. :-)",
+      "revId": "2e7bf377a8881a170830304512578f4d9316dbbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
