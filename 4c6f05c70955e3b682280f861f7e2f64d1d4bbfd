@@ -16,6 +16,41 @@
       "message": "\u003e Patch Set 1: Verified+1\n\u003e \n\u003e Build Successful \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/97348/ : SUCCESS\n\nHasn\u0027t flagged \"Verified\" under Code Review. Is this not automatic?",
       "revId": "4c6f05c70955e3b682280f861f7e2f64d1d4bbfd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "224ddc34_c45d51a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-10-05T15:04:39Z",
+      "side": 1,
+      "message": "Jenkins sometimes has hiccups. You can \"Rebase\" to build again.",
+      "parentUuid": "dba42170_9b243e13",
+      "revId": "4c6f05c70955e3b682280f861f7e2f64d1d4bbfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "397acd0f_b9b70728",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-10-05T15:04:39Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "4c6f05c70955e3b682280f861f7e2f64d1d4bbfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
