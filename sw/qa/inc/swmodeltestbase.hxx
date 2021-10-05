@@ -340,6 +340,9 @@ protected:
     /// Combines load() and save().
     void loadAndSave(const char* pName);
 
+    /// Combines load() and reload().
+    void loadAndReload(const char* pName);
+
     void finish();
 
     /// Get page count.

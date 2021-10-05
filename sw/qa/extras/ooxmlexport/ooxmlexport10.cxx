@@ -136,8 +136,9 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(style::ParagraphAdjust_CENTER), nValue); // Paragraph properties are imported
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo69548, "fdo69548.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFdo69548)
 {
+    loadAndReload("fdo69548.docx");
     // The problem was that the last space in target URL was removed
     CPPUNIT_ASSERT_EQUAL(OUString("#this_is_a_bookmark"), getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
 }
@@ -221,8 +222,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf120412_400PercentSubscript, "tdf120412_400Percen
     CPPUNIT_ASSERT_DOUBLES_EQUAL( -400.f, getProperty<float>(getRun(xPara, 2, "Subscript"), "CharEscapement"), 0);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFontEsc, "test_tdf120412.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFontEsc)
 {
+    loadAndSave("test_tdf120412.docx");
     xmlDocUniquePtr pXmlDoc =parseExport("word/document.xml");
     // don't lose the run with superscript formatting
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r", 2);
@@ -385,8 +387,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo73389,"fdo73389.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tblPr/w:tblW","w","1611");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf133735, "fdo73389.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf133735)
 {
+    loadAndSave("fdo73389.docx");
     xmlDocUniquePtr pXmlDoc = parseExport();
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tr[2]/w:tc[1]/w:p/w:pPr/w:spacing", "after", "0");
@@ -396,14 +399,16 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf133735, "fdo73389.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tr[1]/w:tc[3]/w:p/w:pPr/w:spacing", "after", "0");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf134569_nestedTable, "tdf134569_nestedTable.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf134569_nestedTable)
 {
+    loadAndSave("tdf134569_nestedTable.docx");
     // non-overridden w:after spacing in the table was pushing the document to the second page.
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf59274, "tdf59274.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf59274)
 {
+    loadAndSave("tdf59274.docx");
     // Table with "auto" table width and incomplete grid: 11 columns, but only 4 gridCol elements.
     xmlDocUniquePtr pXmlDoc = parseExport();
 
@@ -624,15 +629,17 @@ DECLARE_OOXMLEXPORT_TEST(testGridBefore, "gridbefore.docx")
     CPPUNIT_ASSERT( leftA3.toInt32() > leftB2.toInt32());
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf116194, "tdf116194.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf116194)
 {
+    loadAndSave("tdf116194.docx");
     // The problem was that the importer lost consecutive tables with w:gridBefore
     xmlDocUniquePtr pXmlDoc = parseExport();
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl", 2);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf134606, "tdf134606.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf134606)
 {
+    loadAndSave("tdf134606.docx");
     // The problem was that the importer lost the nested table structure with w:gridBefore
     xmlDocUniquePtr pXmlDoc = parseExport();
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl");
@@ -1337,8 +1344,9 @@ DECLARE_OOXMLEXPORT_TEST( testTdf107359, "tdf107359-char-pitch.docx" )
     CPPUNIT_ASSERT_EQUAL( sal_Int32(convertTwipToMm100(24 * 20)), nBaseWidth );
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf77236_MissingSolidFill, "tdf77236_MissingSolidFill.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf77236_MissingSolidFill)
 {
+    loadAndSave("tdf77236_MissingSolidFill.docx");
     // tdf#77236: solidFill of VML shape was not exported if the colors of line and style were the same
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "//mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill", 1);
