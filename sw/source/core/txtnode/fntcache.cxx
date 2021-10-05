@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
 #include <sal/config.h>
-
-#include <cstdint>
 
 #include <i18nlangtag/mslangid.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -33,6 +30,7 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <breakit.hxx>
+#include <config_fuzzers.h>
 #include <paintfrm.hxx>
 #include <viewsh.hxx>
 #include <viewopt.hxx>
@@ -58,6 +56,8 @@
 #include <fntcap.hxx>
 #include <vcl/outdev/ScopedStates.hxx>
 #include <o3tl/hash_combine.hxx>
+#include <cstdint>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -189,6 +189,13 @@ void SwFntObj::CreatePrtFont( const OutputDevice& rPrt )
 
 }
 
+#if !ENABLE_FUZZERS
+const SalLayoutFlags eGlyphItemsOnlyLayout = SalLayoutFlags::GlyphItemsOnly;
+#else
+// ofz#39150 skip detecting bidi directions
+const SalLayoutFlags eGlyphItemsOnlyLayout = SalLayoutFlags::GlyphItemsOnly | SalLayoutFlags::BiDiStrong;
+#endif
+
 /**
  * Pre-calculates glyph items for the rendered subset of rKey's text, assuming
  * outdev state does not change between the outdev calls.
@@ -204,7 +211,7 @@ static SalLayoutGlyphs* lcl_CreateLayout(const SwTextGlyphsKey& rKey, SwTextGlyp
     // Calculate glyph items.
     std::unique_ptr<SalLayout> pLayout
         = rKey.m_pOutputDevice->ImplLayout(rKey.m_aText, rKey.m_nIndex, rKey.m_nLength, Point(0, 0), 0,
-                                         nullptr, SalLayoutFlags::GlyphItemsOnly);
+                                           nullptr, eGlyphItemsOnlyLayout);
     if (!pLayout)
         return nullptr;
 
