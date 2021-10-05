@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e21ac351_f70405f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000863
+      },
+      "writtenOn": "2021-10-05T13:20:13Z",
+      "side": 1,
+      "message": "Thanks for the comments! The reverts for 7.2 are now in in libreoffice-7-2 (7-2-2 is pending).\n\nI have removed the ruby.fodt change from this patch.\nIt actually contained two changes to the original test file (I remembered wrong previously):\n- add grid via \"Format \u003e Page Style \u003e Text Grid\", select \"Grid (lines only)\",\n- change font size to 44.\n\nThe grid was based on the description of tdf#144122, and the size change was based on Shinji\u0027s test document.\nAnd yes, this file should exhibit the issues from both bug reports.",
+      "revId": "f0ece85f02e7bc1506868b20c34f1ca2bf68eb15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
