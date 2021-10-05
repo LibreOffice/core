@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ed4ff55_bfc47a8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-05T17:13:04Z",
+      "side": 1,
+      "message": "Noel, do you think it is OK? I hope that the big chunk of data will not be bad for cache (and only actually used part of it would get cached) - but then I may totally misunderstand how cache works, and it may need to cache it all to use indexes into it?",
+      "revId": "8e1939d33e5bf07fa39e55982d6ca6b5571a0de1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
