@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb27d4d3_41e759a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-10-05T00:10:56Z",
+      "side": 1,
+      "message": "Hi Michael, thank you for looking this over and putting it in.\n\nFrom studying the code, my understanding is a content node could have many frames in which the content can be shown. So here it is best to specify the shells root frame which will return the first content frame the node has in the specified shell layout. If SwPosition is passed we may get a following frame or even a frame belonging to a different node if SwPosition is given that is a position in the document model of a different node.\n\nAny advice to help understand this better is welcomed.\n",
+      "revId": "80da4d6d4bfe3607a7fd9641f83ebb49a1886697",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
