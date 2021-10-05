@@ -45,7 +45,6 @@
 #include <unomsaaevent.hxx>
 
 
-using namespace std;
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star::accessibility::AccessibleRole;
 using namespace com::sun::star::accessibility::AccessibleStateType;
