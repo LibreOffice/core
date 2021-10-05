@@ -1,3 +1,4 @@
+'
 ' This file is part of the LibreOffice project.
 '
 ' This Source Code Form is subject to the terms of the Mozilla Public
@@ -5,6 +6,7 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
+Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
@@ -40,18 +42,14 @@ Sub verify_testSplit
     TestUtil.AssertEqual(arr(0), "a", "ReDim Preserve arr(1)(0) after assignment")
     TestUtil.AssertEqual(arr(1), "b", "ReDim Preserve arr(1)(1) after assignment")
 
-    ' tdf#144924 - allow the assignment of different data types to the individual elements
+    ' tdf#144924 - using VBASupport 1, the split function returns an array of substrings, hence no
+    ' assignment of different data types to the individual elements is possible
     Dim splitArr
     splitArr = Split("a/b&&c/d", "&&")
-    Dim i As Integer
-    For i = 0 To UBound(splitArr)
-        ' Without the fix in place, this assignment would have failed
-        splitArr(i) = Split(splitArr(i), "/")
-        ' Without the fix in place, this test would have failed with:
-        ' - Expected: 8200 (8192 for Array and 8 for String)
-        ' - Actual  : 8    (8 for String)
-        TestUtil.AssertEqual(VarType(splitArr(i)), 8200, "VarType(splitArr(i))")
-    Next
+    ' Without the fix in place, this test would have failed with:
+    ' - Expected: 8    (8 for String)
+    ' - Actual  : 8200 (8192 for Array and 8 for String)
+    TestUtil.AssertEqual(VarType(splitArr(0)), 8, "VarType(splitArr(0))")
 
     Exit Sub
 errorHandler:
