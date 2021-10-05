@@ -83,7 +83,7 @@ void SwDashedLine::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
             new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
                 basegfx::B2DPolyPolygon(aPolygon),
                 drawinglayer::attribute::LineAttribute(m_pColorFn().getBColor()),
-                drawinglayer::attribute::StrokeAttribute(aStrokePattern));
+                drawinglayer::attribute::StrokeAttribute(std::move(aStrokePattern)));
 
     pProcessor->process(aSeq);
 }

@@ -447,7 +447,7 @@ namespace wmfemfhelper
         {
             rTarget.append(
                 new drawinglayer::primitive2d::PointArrayPrimitive2D(
-                    rPositions,
+                    std::vector(rPositions),
                     rBColor));
         }
         else
@@ -461,7 +461,7 @@ namespace wmfemfhelper
 
             rTarget.append(
                 new drawinglayer::primitive2d::PointArrayPrimitive2D(
-                    aPositions,
+                    std::move(aPositions),
                     rBColor));
         }
     }
@@ -544,7 +544,7 @@ namespace wmfemfhelper
 
                 const double fAccumulated(std::accumulate(fDotDashArray.begin(), fDotDashArray.end(), 0.0));
                 const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(
-                    fDotDashArray,
+                    std::move(fDotDashArray),
                     fAccumulated);
 
                 rTarget.append(
@@ -1184,7 +1184,7 @@ namespace wmfemfhelper
                     rText,
                     nTextStart,
                     nTextLength,
-                    rDXArray,
+                    std::vector(rDXArray),
                     aFontAttribute,
                     aLocale,
                     aFontColor,
@@ -1212,7 +1212,7 @@ namespace wmfemfhelper
                     rText,
                     nTextStart,
                     nTextLength,
-                    rDXArray,
+                    std::vector(rDXArray),
                     aFontAttribute,
                     aLocale,
                     aFontColor);

@@ -249,7 +249,7 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPointGlueDrag::creat
             }
 
             drawinglayer::primitive2d::Primitive2DReference aMarkerArrayPrimitive2D(
-                new drawinglayer::primitive2d::MarkerArrayPrimitive2D(aTransformedPositions,
+                new drawinglayer::primitive2d::MarkerArrayPrimitive2D(std::move(aTransformedPositions),
                     drawinglayer::primitive2d::createDefaultCross_3x3(aColor)));
 
             aRetval = drawinglayer::primitive2d::Primitive2DContainer { aMarkerArrayPrimitive2D };
@@ -257,7 +257,7 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPointGlueDrag::creat
         else
         {
             drawinglayer::primitive2d::Primitive2DReference aMarkerArrayPrimitive2D(
-                new drawinglayer::primitive2d::MarkerArrayPrimitive2D(aTransformedPositions,
+                new drawinglayer::primitive2d::MarkerArrayPrimitive2D(std::move(aTransformedPositions),
                                                                       SdrHdl::createGluePointBitmap()));
             aRetval = drawinglayer::primitive2d::Primitive2DContainer { aMarkerArrayPrimitive2D };
         }
