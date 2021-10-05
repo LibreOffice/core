@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0c406c5_8e8fdac6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-10-05T14:16:47Z",
+      "side": 1,
+      "message": "@Balázs: very nice fix! I\u0027ve found only some typos.\n\n@Eike: what is your opinion?",
+      "revId": "730cde8058c4064244484ee22bc0b7ef381ec768",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99d7485f_1c8168b5",
+        "filename": "sc/source/filter/excel/xelink.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1067,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-10-05T14:16:47Z",
+      "side": 1,
+      "message": "fixing the typos:\n\n/* TODO: mpArray contains external references. It doesn\u0027t cause any problems, but it\u0027s enough\n   to export it without the external document identifier. */",
+      "range": {
+        "startLine": 1067,
+        "startChar": 50,
+        "endLine": 1067,
+        "endChar": 111
+      },
+      "revId": "730cde8058c4064244484ee22bc0b7ef381ec768",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b3b9633_dbb0d4a9",
+        "filename": "sc/source/ui/docshell/externalrefmgr.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-10-05T14:16:47Z",
+      "side": 1,
+      "message": "nice catch!",
+      "range": {
+        "startLine": 749,
+        "startChar": 4,
+        "endLine": 751,
+        "endChar": 38
+      },
+      "revId": "730cde8058c4064244484ee22bc0b7ef381ec768",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
