@@ -1267,7 +1267,7 @@ std::unique_ptr<SfxItemSet> SfxItemSet::Clone(bool bItems, SfxItemPool *pToPool 
     // Use placement new to avoid one of the allocation calls when constructing a new SfxItemSet.
     // This is effectively a run-time equivalent of the SfxItemSetFixed template.
     const int cnt = TotalCount();
-    char* p = new char[sizeof(SfxItemSet) + (sizeof(const SfxPoolItem*) * cnt)];
+    char* p = static_cast<char*>(::operator new(sizeof(SfxItemSet) + (sizeof(const SfxPoolItem*) * cnt)));
     SfxItemSet* pNewItemSet = reinterpret_cast<SfxItemSet*>(p);
     const SfxPoolItem** ppNewItems = reinterpret_cast<const SfxPoolItem **>(p + sizeof(SfxItemSet));
     if (pToPool && pToPool != m_pPool)
