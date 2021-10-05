@@ -1629,11 +1629,17 @@ void SbRtl_Split(StarBASIC *, SbxArray & rPar, bool)
     pArray->unoAddDim(0, nArraySize - 1);
 
     // insert parameter(s) into the array
+    const bool bIsVBAInterOp = SbiRuntime::isVBAEnabled();
     for(sal_Int32 i = 0 ; i < nArraySize ; i++ )
     {
         // tdf#123025 - split returns an array of substrings
         SbxVariableRef xVar = new SbxVariable( SbxSTRING );
         xVar->PutString( vRet[i] );
+        // tdf#144924 - allow the assignment of different data types to the individual elements
+        if (!bIsVBAInterOp)
+        {
+            xVar->ResetFlag(SbxFlagBits::Fixed);
+        }
         pArray->Put(xVar.get(), &i);
     }
 
