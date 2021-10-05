@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ace82e85_4caf572d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-10-05T08:40:25Z",
+      "side": 1,
+      "message": "patch set 4 built successfully, copying Verified+1",
+      "revId": "f413a9606c7e3c5118f5117ae0865336ab98de3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
