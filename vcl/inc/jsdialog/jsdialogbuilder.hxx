@@ -686,4 +686,14 @@ public:
     JSBox(JSDialogSender* pSender, VclBox* pBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 };
 
+class JSWidgetInstance : public JSWidget<SalInstanceWidget, vcl::Window>
+{
+public:
+    JSWidgetInstance(JSDialogSender* pSender, vcl::Window* pObject, SalInstanceBuilder* pBuilder,
+                     bool bTakeOwnership)
+        : JSWidget<SalInstanceWidget, vcl::Window>(pSender, pObject, pBuilder, bTakeOwnership)
+    {
+    }
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
