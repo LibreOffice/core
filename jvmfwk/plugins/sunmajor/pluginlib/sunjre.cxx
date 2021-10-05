@@ -22,8 +22,6 @@
 #include "sunversion.hxx"
 #include "diagnostics.h"
 
-using namespace std;
-
 namespace jfw_plugin
 {
 

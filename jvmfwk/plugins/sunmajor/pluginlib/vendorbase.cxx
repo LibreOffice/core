@@ -23,7 +23,6 @@
 #include <vendorbase.hxx>
 #include "util.hxx"
 
-using namespace std;
 using namespace osl;
 
 
@@ -36,7 +35,7 @@ VendorBase::VendorBase()
 {
 }
 
-bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
+bool VendorBase::initialize(std::vector<std::pair<OUString, OUString> > props)
 {
     //get java.vendor, java.version, java.home
     //from system properties
@@ -97,7 +96,7 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
 
     int size = 0;
     char const* const* arRtPaths = getRuntimePaths( & size);
-    vector<OUString> libpaths = getVectorFromCharArray(arRtPaths, size);
+    std::vector<OUString> libpaths = getVectorFromCharArray(arRtPaths, size);
 
     bool bRt = false;
     for (auto const& libpath : libpaths)
@@ -120,7 +119,7 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
     OSL_ASSERT(!m_sHome.isEmpty());
     size = 0;
     char const * const * arLDPaths = getLibraryPaths( & size);
-    vector<OUString> ld_paths = getVectorFromCharArray(arLDPaths, size);
+    std::vector<OUString> ld_paths = getVectorFromCharArray(arLDPaths, size);
 
     bool bLdPath = true;
     int c = 0;
