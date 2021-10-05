@@ -812,6 +812,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
             ComplexGradientHandler(pMetaAction);
         }
         break;
+
+        case MetaActionType::GRADIENTCONTAINER:
+        {
+            auto* pMetaAction = static_cast<MetaGradientContainerAction*>(pAction);
+            GradientContainerHandler(pMetaAction);
+        }
+        break;
     }
 }
 
@@ -1540,6 +1547,78 @@ void SvmWriter::ComplexGradientHandler(const MetaComplexGradientAction* pActionC
             {
                 auto* pMetaAction = static_cast<MetaGradientAction*>(pComplexAction);
                 GradientHandler(pMetaAction);
+            }
+            break;
+
+            default:
+                break;
+        }
+    }
+}
+
+void SvmWriter::GradientContainerHandler(const MetaGradientContainerAction* pActionConst)
+{
+    MetaGradientContainerAction* pAction = const_cast<MetaGradientContainerAction*>(pActionConst);
+
+    for (auto* pContainerAction : *pAction)
+    {
+        MetaActionType nType = pAction->GetType();
+
+        switch (nType)
+        {
+            case MetaActionType::COMMENT:
+            {
+                auto* pMetaAction = static_cast<MetaCommentAction*>(pContainerAction);
+                CommentHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::GRADIENT:
+            {
+                auto* pMetaAction = static_cast<MetaGradientAction*>(pContainerAction);
+                GradientHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::GRADIENTEX:
+            {
+                auto* pMetaAction = static_cast<MetaGradientExAction*>(pContainerAction);
+                GradientExHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::PUSH:
+            {
+                auto* pMetaAction = static_cast<MetaPushAction*>(pContainerAction);
+                PushHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::POP:
+            {
+                auto* pMetaAction = static_cast<MetaPopAction*>(pContainerAction);
+                PopHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::RASTEROP:
+            {
+                auto* pMetaAction = static_cast<MetaRasterOpAction*>(pContainerAction);
+                RasterOpHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::POLYPOLYGON:
+            {
+                auto* pMetaAction = static_cast<MetaPolyPolygonAction*>(pContainerAction);
+                PolyPolygonHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::ISECTRECTCLIPREGION:
+            {
+                auto* pMetaAction = static_cast<MetaISectRectClipRegionAction*>(pContainerAction);
+                ISectRectClipRegionHandler(pMetaAction);
             }
             break;
 
