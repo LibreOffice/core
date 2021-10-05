@@ -1640,15 +1640,18 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor,
                     nDiff -= aTabCols[i] - aTabCols[i-1];
 
                 tools::Long nTabRight = aTabCols.GetRight() + nDiff;
+                const tools::Long nMaxRight = std::max(aTabCols.GetRightMax(), nOldRight);
 
-                // If the Table would become too wide, we restrict the
-                // adjusted amount to the allowed maximum.
-                if ( !bBalance && nTabRight > aTabCols.GetRightMax() )
+                // If the Table would become (or is already) too wide,
+                // restrict the column growth to the allowed maximum.
+                if (!bBalance && nTabRight > nMaxRight)
                 {
-                    const tools::Long nTmpD = nTabRight - aTabCols.GetRightMax();
+                    const tools::Long nTmpD = nTabRight - nMaxRight;
                     nDiff     -= nTmpD;
                     nTabRight -= nTmpD;
                 }
+
+                // all the remaining columns need to be shifted by the same amount
                 for ( size_t i2 = i; i2 < aTabCols.Count(); ++i2 )
                     aTabCols[i2] += nDiff;
                 aTabCols.SetRight( nTabRight );
