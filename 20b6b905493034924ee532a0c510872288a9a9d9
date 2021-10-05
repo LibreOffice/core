@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2dd15081_7809b48a",
+        "filename": "basic/source/runtime/methods1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1638,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-05T19:55:33Z",
+      "side": 1,
+      "message": "isVBAEnabled has some non-zero cost (several checks, indirections and function calls) - doing this in a loop may be better using a local variable.",
+      "revId": "20b6b905493034924ee532a0c510872288a9a9d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
