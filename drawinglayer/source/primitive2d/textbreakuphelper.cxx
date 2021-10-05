@@ -136,7 +136,7 @@ namespace drawinglayer::primitive2d
                         mrSource.getText(),
                         nIndex,
                         nLength,
-                        aNewDXArray,
+                        std::move(aNewDXArray),
                         mrSource.getFontAttribute(),
                         mrSource.getLocale(),
                         mrSource.getFontColor(),
@@ -167,7 +167,7 @@ namespace drawinglayer::primitive2d
                         mrSource.getText(),
                         nIndex,
                         nLength,
-                        aNewDXArray,
+                        std::move(aNewDXArray),
                         mrSource.getFontAttribute(),
                         mrSource.getLocale(),
                         mrSource.getFontColor()));

@@ -265,7 +265,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
 
                         const double fFullDotDashLen(::std::accumulate(aDotDashArray.begin(), aDotDashArray.end(), 0.0));
                         const drawinglayer::attribute::LineAttribute aLine(aRGBColor);
-                        const drawinglayer::attribute::StrokeAttribute aStroke(aDotDashArray, fFullDotDashLen);
+                        const drawinglayer::attribute::StrokeAttribute aStroke(std::move(aDotDashArray), fFullDotDashLen);
 
                         // create primitive and add
                         const drawinglayer::primitive2d::Primitive2DReference xRef(new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
@@ -402,7 +402,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
                                 fPosX, fPosY));
 
                             // create DXTextArray (can be empty one)
-                            const ::std::vector< double > aDXArray{};
+                            ::std::vector< double > aDXArray{};
 
                             // create locale; this may need some more information in the future
                             const css::lang::Locale aLocale;
@@ -414,7 +414,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
                                     aObjectString,
                                     0,
                                     nTextLength,
-                                    aDXArray,
+                                    std::move(aDXArray),
                                     aFontAttribute,
                                     aLocale,
                                     aRGBColor));

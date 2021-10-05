@@ -177,7 +177,7 @@ namespace drawinglayer::primitive2d
                     aDoubleArray.push_back(static_cast<double>(*p) * fHeight);
                 }
 
-                aStrokeAttribute = attribute::StrokeAttribute(aDoubleArray);
+                aStrokeAttribute = attribute::StrokeAttribute(std::move(aDoubleArray));
             }
 
             // create base polygon and new primitive

@@ -56,7 +56,7 @@ namespace drawinglayer::attribute
                 double fTransparence,
                 const basegfx::BColor& rColor,
                 css::drawing::LineCap eCap,
-                const ::std::vector< double >& rDotDashArray,
+                std::vector< double >&& rDotDashArray,
                 double fFullDotDashLen);
             SdrLineAttribute();
             SdrLineAttribute(const SdrLineAttribute&);

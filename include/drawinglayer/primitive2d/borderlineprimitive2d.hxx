@@ -113,7 +113,7 @@ private:
 public:
     /// simplified constructor for BorderLine with single edge
     BorderLinePrimitive2D(const basegfx::B2DPoint& rStart, const basegfx::B2DPoint& rEnd,
-                          const std::vector<BorderLine>& rBorderLines,
+                          std::vector<BorderLine>&& rBorderLines,
                           const drawinglayer::attribute::StrokeAttribute& rStrokeAttribute);
 
     /// data read access

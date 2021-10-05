@@ -265,11 +265,11 @@ namespace drawinglayer::primitive2d
         BorderLinePrimitive2D::BorderLinePrimitive2D(
             const basegfx::B2DPoint& rStart,
             const basegfx::B2DPoint& rEnd,
-            const std::vector< BorderLine >& rBorderLines,
+            std::vector< BorderLine >&& rBorderLines,
             const drawinglayer::attribute::StrokeAttribute& rStrokeAttribute)
         :   maStart(rStart),
             maEnd(rEnd),
-            maBorderLines(rBorderLines),
+            maBorderLines(std::move(rBorderLines)),
             maStrokeAttribute(rStrokeAttribute)
         {
         }
@@ -421,7 +421,7 @@ namespace drawinglayer::primitive2d
                 new BorderLinePrimitive2D(
                     pCandidateA->getStart(),
                     pCandidateB->getEnd(),
-                    aMergedBorderLines,
+                    std::move(aMergedBorderLines),
                     pCandidateA->getStrokeAttribute()));
         }
 

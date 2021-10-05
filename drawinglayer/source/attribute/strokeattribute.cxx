@@ -32,9 +32,9 @@ namespace drawinglayer::attribute
             double                                      mfFullDotDashLen;       // sum of maDotDashArray (for convenience)
 
             ImpStrokeAttribute(
-                const std::vector< double >& rDotDashArray,
+                std::vector< double >&& rDotDashArray,
                 double fFullDotDashLen)
-            :   maDotDashArray(rDotDashArray),
+            :   maDotDashArray(std::move(rDotDashArray)),
                 mfFullDotDashLen(fFullDotDashLen)
             {
             }
@@ -72,10 +72,10 @@ namespace drawinglayer::attribute
         }
 
         StrokeAttribute::StrokeAttribute(
-            const std::vector< double >& rDotDashArray,
+            std::vector< double >&& rDotDashArray,
             double fFullDotDashLen)
         :   mpStrokeAttribute(ImpStrokeAttribute(
-                rDotDashArray, fFullDotDashLen))
+                std::move(rDotDashArray), fFullDotDashLen))
         {
         }
 
