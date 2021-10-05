@@ -16,6 +16,23 @@
       "message": "Please do not name line width 0.5pt a \"Hairline\". The term \"Hairline\" has a special meaning. I think \"Very Thin\" would be better.",
       "revId": "a9ef6d02b8e4e6d3786275cc6345ade74ed23b8b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d3a4134_13669062",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-10-05T09:32:02Z",
+      "side": 1,
+      "message": "Commented on BZ about the steps. \n\n* But I wonder what happens to the dropdown when text becomes larger (it cuts off a few pixels from \"Extra thick\" right now).\n* To omit the actual values feels wrong. Maybe we always show the spin edit and select the right name in the dropdown (but no hard feeling about this).\n* The request was probably more inspired from the sidebar\u0027s line width.",
+      "revId": "a9ef6d02b8e4e6d3786275cc6345ade74ed23b8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
