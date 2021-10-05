@@ -16,47 +16,45 @@
 #include <string>
 #include <stdio.h>
 
-using namespace std;
-
 int main(int argc, char** argv)
 {
-    const string optsintro("--");
-    map<string, string> vartofile;
+    const std::string optsintro("--");
+    std::map<std::string, std::string> vartofile;
     for(int i=1; i < argc; ++i)
     {
-        const string arg(argv[i]);
+        const std::string arg(argv[i]);
         if(arg.substr(0,2) != optsintro)
         {
-            cerr << "Only option args starting with -- allowed." << endl;
+            std::cerr << "Only option args starting with -- allowed." << std::endl;
             return 1;
         }
         const size_t eqpos = arg.find("=", 2);
-        if(eqpos == string::npos)
+        if(eqpos == std::string::npos)
         {
-            cerr << "Only option args assigning with = allowed." << endl;
+            std::cerr << "Only option args assigning with = allowed." << std::endl;
             return 2;
         }
-        const string argname(arg.substr(2, eqpos-2));
-        vartofile[argname] = arg.substr(eqpos+1, string::npos);
+        const std::string argname(arg.substr(2, eqpos-2));
+        vartofile[argname] = arg.substr(eqpos+1, std::string::npos);
     }
-    cout << "{";
+    std::cout << "{";
     bool first(true);
     for(const auto& varandfile : vartofile)
     {
         if(first)
             first =false;
         else
-            cout << "," << endl;
-        string varupper(varandfile.first);
+            std::cout << "," << std::endl;
+        std::string varupper(varandfile.first);
         for(auto& c : varupper)
             if(c != '_')
                 c = c-32;
-        ifstream filestream(varandfile.second.c_str());
-        stringstream contents;
+        std::ifstream filestream(varandfile.second.c_str());
+        std::stringstream contents;
         contents << filestream.rdbuf();
         filestream.close();
         (void)remove(varandfile.second.c_str());
-        string escapedcontents;
+        std::string escapedcontents;
         for(const auto& c : contents.str())
         {
             if(c=='\\')
@@ -68,9 +66,9 @@ int main(int argc, char** argv)
             else
                 escapedcontents += c;
         }
-        cout << "\"" << varupper << "\": \"" << escapedcontents << "\"";
+        std::cout << "\"" << varupper << "\": \"" << escapedcontents << "\"";
     }
-    cout << "}" << endl;
+    std::cout << "}" << std::endl;
     return 0;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

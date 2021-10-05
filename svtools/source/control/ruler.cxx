@@ -35,7 +35,6 @@
 #include <memory>
 #include <vector>
 
-using namespace std;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -96,10 +95,10 @@ class ImplRulerData
     friend class Ruler;
 
 private:
-    vector<RulerLine>    pLines;
-    vector<RulerBorder>  pBorders;
-    vector<RulerIndent>  pIndents;
-    vector<RulerTab>     pTabs;
+    std::vector<RulerLine>    pLines;
+    std::vector<RulerBorder>  pBorders;
+    std::vector<RulerIndent>  pIndents;
+    std::vector<RulerTab>     pTabs;
 
     tools::Long       nNullVirOff;
     tools::Long       nRulVirOff;
@@ -2501,7 +2500,7 @@ void Ruler::SetLines( sal_uInt32 aLineArraySize, const RulerLine* pLineArray )
     if ( mpData->pLines.size() == aLineArraySize )
     {
         sal_uInt32           i = aLineArraySize;
-        vector<RulerLine>::const_iterator aItr1 = mpData->pLines.begin();
+        std::vector<RulerLine>::const_iterator aItr1 = mpData->pLines.begin();
         const RulerLine* pAry2 = pLineArray;
         while ( i )
         {
@@ -2644,7 +2643,7 @@ void Ruler::SetTabs( sal_uInt32 aTabArraySize, const RulerTab* pTabArray )
         else
         {
             sal_uInt32 i = aTabArraySize;
-            vector<RulerTab>::iterator aTabIterator = mpData->pTabs.begin();
+            std::vector<RulerTab>::iterator aTabIterator = mpData->pTabs.begin();
             const RulerTab* pInputArray = pTabArray;
             while ( i )
             {

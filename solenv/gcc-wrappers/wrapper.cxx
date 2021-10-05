@@ -15,27 +15,25 @@
 
 #define BUFLEN 2048
 
-using namespace std;
-
-string getexe(string exename, bool maybeempty) {
+std::string getexe(std::string exename, bool maybeempty) {
     char* cmdbuf;
     size_t cmdlen;
     _dupenv_s(&cmdbuf,&cmdlen,exename.c_str());
     if(!cmdbuf) {
         if (maybeempty) {
-            return string();
+            return std::string();
         }
-        cout << "Error " << exename << " not defined. Did you forget to source the environment?" << endl;
+        std::cout << "Error " << exename << " not defined. Did you forget to source the environment?" << std::endl;
         exit(1);
     }
-    string command(cmdbuf);
+    std::string command(cmdbuf);
     free(cmdbuf);
     return command;
 }
 
 void setupccenv() {
     // Set-up library path
-    string libpath="LIB=";
+    std::string libpath="LIB=";
     char* libbuf;
     size_t liblen;
     _dupenv_s(&libbuf,&liblen,"ILIB");
@@ -46,12 +44,12 @@ void setupccenv() {
     libpath.append(libbuf);
     free(libbuf);
     if(_putenv(libpath.c_str())<0) {
-        cerr << "Error: could not export LIB" << endl;
+        std::cerr << "Error: could not export LIB" << std::endl;
         exit(1);
     }
 
     // Set-up include path
-    string includepath="INCLUDE=.";
+    std::string includepath="INCLUDE=.";
     char* incbuf;
     size_t inclen;
     _dupenv_s(&incbuf,&inclen,"SOLARINC");
@@ -59,13 +57,13 @@ void setupccenv() {
         std::cerr << "No environment variable SOLARINC" << std::endl;
         std::exit(EXIT_FAILURE);
     }
-    string inctmp(incbuf);
+    std::string inctmp(incbuf);
     free(incbuf);
 
     // 3 = strlen(" -I")
     for(size_t pos=0,len=0;pos<inctmp.length();) {
         size_t endpos=inctmp.find(" -I",pos+1);
-        if(endpos==string::npos)
+        if(endpos==std::string::npos)
             endpos=inctmp.length();
         len=endpos-pos;
 
@@ -79,12 +77,12 @@ void setupccenv() {
         pos=endpos;
     }
     if(_putenv(includepath.c_str())<0) {
-        cerr << "Error: could not export INCLUDE" << endl;
+        std::cerr << "Error: could not export INCLUDE" << std::endl;
         exit(1);
     }
 }
 
-string processccargs(vector<string> rawargs, string &env_prefix, bool &verbose)
+std::string processccargs(std::vector<std::string> rawargs, std::string &env_prefix, bool &verbose)
 {
     // default env var prefix
     env_prefix = "REAL_";
@@ -92,7 +90,7 @@ string processccargs(vector<string> rawargs, string &env_prefix, bool &verbose)
     bool env_prefix_next_arg = false;
 
     // suppress the msvc banner
-    string args=" -nologo";
+    std::string args=" -nologo";
     // TODO: should these options be enabled globally?
     args.append(" -EHsc");
     const char *const pDebugRuntime(getenv("MSVC_USE_DEBUG_RUNTIME"));
@@ -106,13 +104,13 @@ string processccargs(vector<string> rawargs, string &env_prefix, bool &verbose)
     // apparently these must be at the end
     // otherwise configure tests may fail
     // note: always use -debug so a PDB file is created
-    string linkargs(" -link -debug");
+    std::string linkargs(" -link -debug");
 
     // instead of using synced PDB access (-FS), use individual PDB files based on output
     const char *const pEnvIndividualPDBs(getenv("MSVC_USE_INDIVIDUAL_PDBS"));
     const bool bIndividualPDBs = (pEnvIndividualPDBs && !strcmp(pEnvIndividualPDBs, "TRUE"));
 
-    for(vector<string>::iterator i = rawargs.begin(); i != rawargs.end(); ++i) {
+    for(std::vector<std::string>::iterator i = rawargs.begin(); i != rawargs.end(); ++i) {
         if (env_prefix_next_arg)
         {
             env_prefix = *i;
@@ -140,21 +138,21 @@ string processccargs(vector<string> rawargs, string &env_prefix, bool &verbose)
                 linkargs.append(" -dll -out:");
                 linkargs.append(*i);
             }
-            else if (dot == string::npos)
+            else if (dot == std::string::npos)
             {
                 args.append("-Fe");
                 args.append(*i + ".exe");
             }
             else
             {
-                cerr << "unknown -o argument - please adapt gcc-wrapper for \""
-                     << (*i) << "\"" << endl;
+                std::cerr << "unknown -o argument - please adapt gcc-wrapper for \""
+                     << (*i) << "\"" << std::endl;
                 exit(1);
             }
 
             if (bIndividualPDBs)
             {
-                if (dot == string::npos)
+                if (dot == std::string::npos)
                     args.append(" -Fd" + *i + ".pdb");
                 else
                     args.append(" -Fd" + (*i).substr(0, dot) + ".pdb");
@@ -167,7 +165,7 @@ string processccargs(vector<string> rawargs, string &env_prefix, bool &verbose)
         }
         else if(!(*i).compare(0,2,"-D")) {
             // need to re-escape strings for preprocessor
-            for(size_t pos=(*i).find("\""); pos!=string::npos; pos=(*i).find("\"",pos)) {
+            for(size_t pos=(*i).find("\""); pos!=std::string::npos; pos=(*i).find("\"",pos)) {
                 (*i).replace(pos,0,"\\");
                 pos+=2;
             }
@@ -199,7 +197,7 @@ string processccargs(vector<string> rawargs, string &env_prefix, bool &verbose)
             size_t pos = i->find("=");
             if (0 == i->compare(0, pos, "--wrapper-env-prefix"))
             {
-                if (pos == string::npos)
+                if (pos == std::string::npos)
                     env_prefix_next_arg = true;
                 else if (pos + 1 == i->length())
                 {
@@ -217,7 +215,7 @@ string processccargs(vector<string> rawargs, string &env_prefix, bool &verbose)
 
     if (env_prefix_next_arg)
     {
-        cerr << "wrapper-env-prefix needs an argument!" << endl;
+        std::cerr << "wrapper-env-prefix needs an argument!" << std::endl;
         exit(1);
     }
 
@@ -225,7 +223,7 @@ string processccargs(vector<string> rawargs, string &env_prefix, bool &verbose)
     return args;
 }
 
-int startprocess(string command, string args, bool verbose)
+int startprocess(std::string command, std::string args, bool verbose)
 {
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
@@ -242,7 +240,7 @@ int startprocess(string command, string args, bool verbose)
     sa.bInheritHandle=TRUE;
 
     if(!CreatePipe(&childout_read,&childout_write,&sa,0)) {
-        cerr << "Error: could not create stdout pipe" << endl;
+        std::cerr << "Error: could not create stdout pipe" << std::endl;
         exit(1);
     }
 
@@ -253,7 +251,7 @@ int startprocess(string command, string args, bool verbose)
 
     // support ccache
     size_t pos=command.find("ccache ");
-    if(pos != string::npos) {
+    if(pos != std::string::npos) {
         args.insert(0,"cl.exe");
         command=command.substr(0,pos+strlen("ccache"))+".exe";
     }
@@ -261,7 +259,7 @@ int startprocess(string command, string args, bool verbose)
     auto cmdline = "\"" + command + "\" " + args;
 
     if (verbose)
-        cerr << "CMD= " << command << " " << args << endl;
+        std::cerr << "CMD= " << command << " " << args << std::endl;
 
     // Commandline may be modified by CreateProcess
     char* cmdlineBuf=_strdup(cmdline.c_str());
@@ -278,7 +276,7 @@ int startprocess(string command, string args, bool verbose)
         &pi) // Process Information
         ) {
             auto const e = GetLastError();
-            cerr << "Error: could not create process \"" << cmdlineBuf << "\": " << e << endl;
+            std::cerr << "Error: could not create process \"" << cmdlineBuf << "\": " << e << std::endl;
             exit(1);
     }
 
@@ -295,7 +293,7 @@ int startprocess(string command, string args, bool verbose)
         if(GetLastError()==ERROR_BROKEN_PIPE)
             break;
         if(!success) {
-            cerr << "Error: could not read from subprocess stdout" << endl;
+            std::cerr << "Error: could not read from subprocess stdout" << std::endl;
             exit(1);
         }
         if(readlen!=0) {

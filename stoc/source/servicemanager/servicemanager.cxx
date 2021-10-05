@@ -64,7 +64,6 @@ using namespace css::lang;
 using namespace css::container;
 using namespace cppu;
 using namespace osl;
-using namespace std;
 
 namespace {
 
@@ -1123,7 +1122,7 @@ void OServiceManager::remove( const Any & Element )
     const Sequence< OUString > aServiceNames = xSF->getSupportedServiceNames();
     for( const OUString& rServiceName : aServiceNames )
     {
-        pair<HashMultimap_OWString_Interface::iterator, HashMultimap_OWString_Interface::iterator> p =
+        std::pair<HashMultimap_OWString_Interface::iterator, HashMultimap_OWString_Interface::iterator> p =
             m_ServiceMap.equal_range( rServiceName );
 
         while( p.first != p.second )

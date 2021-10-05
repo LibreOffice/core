@@ -36,7 +36,6 @@
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/java/XJavaThreadRegister_11.hpp>
 
-using namespace std;
 using namespace cppu;
 using namespace css::uno;
 using namespace css::lang;
