@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eeb7a63f_403607b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-10-05T08:49:06Z",
+      "side": 1,
+      "message": "Please do not name line width 0.5pt a \"Hairline\". The term \"Hairline\" has a special meaning. I think \"Very Thin\" would be better.",
+      "revId": "a9ef6d02b8e4e6d3786275cc6345ade74ed23b8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
