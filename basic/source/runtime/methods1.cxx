@@ -1634,6 +1634,11 @@ void SbRtl_Split(StarBASIC *, SbxArray & rPar, bool)
         // tdf#123025 - split returns an array of substrings
         SbxVariableRef xVar = new SbxVariable( SbxSTRING );
         xVar->PutString( vRet[i] );
+        // tdf#144924 - allow the assignment of different data types to the individual elements
+        if (!SbiRuntime::isVBAEnabled())
+        {
+            xVar->ResetFlag(SbxFlagBits::Fixed);
+        }
         pArray->Put(xVar.get(), &i);
     }
 
