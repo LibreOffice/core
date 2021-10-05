@@ -68,7 +68,6 @@ int DAVAuthListener_Impl::authenticate(
                 = new ucbhelper::SimpleAuthenticationRequest(
                     m_aURL, inHostName, inRealm, inoutUserName,
                     outPassWord,
-                    true /*bAllowPersistentStoring*/,
                     bCanUseSystemCredentials );
             xIH->handle( xRequest );
 
