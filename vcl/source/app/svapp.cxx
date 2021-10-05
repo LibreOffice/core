@@ -452,6 +452,7 @@ void Application::Execute()
     GetpApp()->Shutdown();
 }
 
+#ifndef EMSCRIPTEN
 static bool ImplYield(bool i_bWait, bool i_bAllEvents)
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -476,10 +477,16 @@ static bool ImplYield(bool i_bWait, bool i_bAllEvents)
     SAL_INFO("vcl.schedule", "Leave ImplYield with return " << bProcessedEvent );
     return bProcessedEvent;
 }
+#endif
 
 bool Application::Reschedule( bool i_bAllEvents )
 {
+#ifdef EMSCRIPTEN
+    (void) i_bAllEvents;
+    std::abort();
+#else
     return ImplYield(false, i_bAllEvents);
+#endif
 }
 
 void Scheduler::ProcessEventsToIdle()
@@ -533,7 +540,11 @@ SAL_DLLPUBLIC_EXPORT void unit_lok_process_events_to_idle()
 
 void Application::Yield()
 {
+#ifdef EMSCRIPTEN
+    std::abort();
+#else
     ImplYield(true, false);
+#endif
 }
 
 IMPL_STATIC_LINK_NOARG( ImplSVAppData, ImplQuitMsg, void*, void )

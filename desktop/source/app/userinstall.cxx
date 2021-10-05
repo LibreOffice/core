@@ -27,7 +27,7 @@
 #include <officecfg/Setup.hxx>
 #include <osl/file.h>
 #include <osl/file.hxx>
-#if defined ANDROID || defined IOS
+#if defined ANDROID || defined IOS || defined EMSCRIPTEN
 #include <rtl/bootstrap.hxx>
 #endif
 #include <rtl/ustring.hxx>
@@ -40,7 +40,7 @@ namespace desktop::userinstall {
 
 namespace {
 
-#if !(defined ANDROID || defined IOS)
+#if !(defined ANDROID || defined IOS || defined EMSCRIPTEN)
 osl::FileBase::RC copyRecursive(
     OUString const & srcUri, OUString const & dstUri)
 {
@@ -104,7 +104,7 @@ Status create(OUString const & uri) {
     if (e != osl::FileBase::E_None && e != osl::FileBase::E_EXIST) {
         return ERROR_OTHER;
     }
-#if !(defined ANDROID || defined IOS)
+#if !(defined ANDROID || defined IOS || defined EMSCRIPTEN)
 #if defined UNIX
     // Set safer permissions for the user directory by default:
     osl::File::setAttributes(

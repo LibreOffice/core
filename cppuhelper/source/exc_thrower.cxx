@@ -170,7 +170,7 @@ ExceptionThrower::ExceptionThrower()
 
 class theExceptionThrower : public rtl::Static<ExceptionThrower, theExceptionThrower> {};
 
-#if defined(IOS) || (defined(__aarch64__) && defined(ANDROID))
+#if defined(IOS) || (defined(__aarch64__) && defined(ANDROID)) || defined(EMSCRIPTEN)
 // In the native iOS / Android app, where we don't have any Java, Python,
 // BASIC, or other scripting, the only thing that would use the C++/UNO bridge
 // functionality that invokes codeSnippet() was cppu::throwException().
@@ -226,7 +226,7 @@ void SAL_CALL throwException( Any const & exc )
             "(must be derived from com::sun::star::uno::Exception)!" );
     }
 
-#if defined(IOS) || (defined(__aarch64__) && defined(ANDROID))
+#if defined(IOS) || (defined(__aarch64__) && defined(ANDROID)) || defined(EMSCRIPTEN)
     lo_mobile_throwException(exc);
 #else
     Mapping uno2cpp(Environment(UNO_LB_UNO), Environment::getCurrent());
@@ -249,7 +249,7 @@ void SAL_CALL throwException( Any const & exc )
 
 Any SAL_CALL getCaughtException()
 {
-#if defined(__aarch64__) && defined(ANDROID)
+#if defined(__aarch64__) && defined(ANDROID) || defined(EMSCRIPTEN)
     // FIXME This stuff works on 32bit ARM, let's use the shortcut only for
     // the 64bit ARM.
     return Any();

@@ -63,9 +63,9 @@ uno::Reference< lang::XComponent > SynchronousDispatch::dispatch(
 
             aRet >>= aComponent;
         }
-        catch ( uno::Exception& )
+        catch ( uno::Exception& e )
         {
-            SAL_WARN("comphelper","SynchronousDispatch::dispatch() Error while dispatching!");
+            SAL_WARN("comphelper","SynchronousDispatch::dispatch() Error while dispatching! " << sURL << " " << sTarget);
         }
     }
 

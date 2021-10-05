@@ -45,7 +45,7 @@ void QtTimer::timeoutActivated()
 #ifdef EMSCRIPTEN
     const ImplSVData* pSVData = ImplGetSVData();
     assert(pSVData->mpDefInst);
-    bool ts = static_cast<QtInstance*>(pSVData->mpDefInst)->DispatchUserEvents(true);
+    static_cast<QtInstance*>(pSVData->mpDefInst)->DispatchUserEvents(true);
 #endif
     CallCallback();
 }

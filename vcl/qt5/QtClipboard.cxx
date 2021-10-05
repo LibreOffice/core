@@ -81,6 +81,9 @@ void QtClipboard::flushClipboard()
 
 css::uno::Reference<css::datatransfer::XTransferable> QtClipboard::getContents()
 {
+#if defined(EMSCRIPTEN)
+    static QMimeData aMimeData;
+#endif
     osl::MutexGuard aGuard(m_aMutex);
 
     // if we're the owner, we might have the XTransferable from setContents. but
@@ -99,6 +102,10 @@ css::uno::Reference<css::datatransfer::XTransferable> QtClipboard::getContents()
             return m_aContents;
     }
 
+#if defined(EMSCRIPTEN)
+    if (!pMimeData)
+        pMimeData = &aMimeData;
+#endif
     m_aContents = new QtClipboardTransferable(m_aClipboardMode, pMimeData);
     return m_aContents;
 }

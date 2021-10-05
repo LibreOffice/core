@@ -697,7 +697,7 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
     if( pGlobal.is() )
         return IPC_STATUS_OK;
 
-#if !HAVE_FEATURE_DESKTOP || HAVE_FEATURE_MACOSX_SANDBOX
+#if !HAVE_FEATURE_DESKTOP || HAVE_FEATURE_MACOSX_SANDBOX || defined(EMSCRIPTEN)
     ipc = false;
 #endif
 

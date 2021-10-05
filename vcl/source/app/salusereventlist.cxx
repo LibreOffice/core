@@ -110,7 +110,7 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
             *   which is do-able, but requires writing some assembly.
             * See also Scheduler::CallbackTaskScheduling
             */
-#ifdef IOS
+#if defined IOS || defined EMSCRIPTEN
             ProcessEvent( aEvent );
 #else
             // the noexcept here means that (a) we abort and (b) debuggers will

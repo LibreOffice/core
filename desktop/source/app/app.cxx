@@ -1288,7 +1288,7 @@ int Desktop::Main()
     userinstall::Status inst_fin = userinstall::finalize();
     if (inst_fin != userinstall::EXISTED && inst_fin != userinstall::CREATED)
     {
-        SAL_WARN( "desktop.app", "userinstall failed");
+        SAL_WARN( "desktop.app", "userinstall failed: " << inst_fin);
         if ( inst_fin == userinstall::ERROR_NO_SPACE )
             HandleBootstrapErrors(
                 BE_USERINSTALL_NOTENOUGHDISKSPACE, OUString() );
@@ -2003,6 +2003,7 @@ void Desktop::OpenClients()
         handleCrashReport();
 #endif
 
+#if 0
     if ( ! bAllowRecoveryAndSessionManagement )
     {
         try
@@ -2079,6 +2080,7 @@ void Desktop::OpenClients()
             }
         }
     }
+#endif
 
     // write this information here to avoid depending on vcl in the crash reporter lib
     CrashReporter::addKeyValue("Language", Application::GetSettings().GetLanguageTag().getBcp47(), CrashReporter::Create);

@@ -1774,7 +1774,7 @@ cppuhelper::ServiceManager::findServiceImplementation(
             Data::NamedImplementations::const_iterator j(
                 data_.namedImplementations.find(specifier));
             if (j == data_.namedImplementations.end()) {
-                SAL_INFO("cppuhelper", "No implementation for " << specifier);
+                SAL_WARN("cppuhelper", "No implementation for " << specifier);
                 return std::shared_ptr< Data::Implementation >();
             }
             impl = j->second;
