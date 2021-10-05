@@ -1637,14 +1637,20 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor,
 
                 tools::Long nTabRight = aTabCols.GetRight() + nDiff;
 
-                // If the Table would become too wide, we restrict the
-                // adjusted amount to the allowed maximum.
-                if ( !bBalance && nTabRight > aTabCols.GetRightMax() )
+                // If the Table would become (or is already) too wide,
+                // restrict the column growth to the allowed maximum.
+                if (!bBalance && nDiff > 0 && nTabRight > aTabCols.GetRightMax())
                 {
                     const tools::Long nTmpD = nTabRight - aTabCols.GetRightMax();
-                    nDiff     -= nTmpD;
-                    nTabRight -= nTmpD;
+                    if (!bNoShrink && nDiff > nTmpD)
+                    {
+                        nDiff -= nTmpD;
+                        nTabRight = aTabCols.GetRightMax();
+                    }
+                    else
+                        nDiff = 0;
                 }
+                // all the remaining columns need to be shifted by the same amount
                 for ( size_t i2 = i; i2 < aTabCols.Count(); ++i2 )
                     aTabCols[i2] += nDiff;
                 aTabCols.SetRight( nTabRight );
