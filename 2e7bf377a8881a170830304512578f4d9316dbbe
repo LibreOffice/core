@@ -34,6 +34,24 @@
       "parentUuid": "08d29885_bf92036a",
       "revId": "2e7bf377a8881a170830304512578f4d9316dbbe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "142c82e6_e05b886d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-05T06:44:34Z",
+      "side": 1,
+      "message": "Fine, I think getting the mass-conversion into master and reverting on libreoffice-7-2 is fair enough.\n\nIt\u0027s still not clear to me what is the purpose of the ruby.fodt change: do you improve the test doc there, so the test code fails in more cases? If so, you could do that in a separate, follow-up master commit.\n\nIf the majority of this change is just a preventive mass-conversion and it touches no test code / test data, then I think this can go in as-is, and a follow-up commit can do the testcase. Could you please amend this change accordingly? Thanks.",
+      "parentUuid": "7a369fc4_c0cb6f89",
+      "revId": "2e7bf377a8881a170830304512578f4d9316dbbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
