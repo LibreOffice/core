@@ -29,8 +29,6 @@
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
 
-using namespace std;
-
 
 void test_coreReflection()
 {
@@ -368,7 +366,7 @@ void test_coreReflection()
 //  REG_ENSURE(!myRegistry->destroy(NULL), "testCoreReflection error 10");
     delete myRegistry;
 
-    cout << "test_coreReflection() Ok!\n";
+    std::cout << "test_coreReflection() Ok!\n";
 }
 
 void test_registry_CppApi()
@@ -689,7 +687,7 @@ void test_registry_CppApi()
     REG_ENSURE(!myRegistry->destroy(OUString()), "test_registry_CppApi error 63");
     delete(myRegistry);
 
-    cout << "test_registry_CppApi() Ok!\n";
+    std::cout << "test_registry_CppApi() Ok!\n";
 
     return;
 }

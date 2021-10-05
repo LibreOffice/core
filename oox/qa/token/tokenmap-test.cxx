@@ -15,7 +15,6 @@
 #include <oox/token/tokenmap.hxx>
 #include <oox/token/tokens.hxx>
 
-using namespace std;
 using namespace com::sun::star::uno;
 
 namespace oox {

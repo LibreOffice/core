@@ -16,8 +16,6 @@
 
 #define LOG(args...)  __android_log_print(ANDROID_LOG_INFO, "GeckoUpdater" , ## args)
 
-using namespace std;
-
 int InitProgressUI(int *argc, char ***argv)
 {
     return 0;
@@ -48,7 +46,7 @@ void UpdateProgressUI(float progress)
     sLastNumBars = numBars;
 
     size_t numSpaces = kProgressBarLength - numBars;
-    string bars(numBars, '=');
-    string spaces(numSpaces, ' ');
+    std::string bars(numBars, '=');
+    std::string spaces(numSpaces, ' ');
     LOG("Progress [ %s%s ]\n", bars.c_str(), spaces.c_str());
 }

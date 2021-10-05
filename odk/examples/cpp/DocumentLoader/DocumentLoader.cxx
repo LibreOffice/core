@@ -49,7 +49,6 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 
-using namespace std;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
