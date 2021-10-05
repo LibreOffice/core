@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a51b276f_ed1b8e4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-10-05T19:18:00Z",
+      "side": 1,
+      "message": "Hi! We could reset the fixed length, but then the type of the array and the type of the contents would differ, but imho it should not have any side effects. See also https://bugs.documentfoundation.org/show_bug.cgi?id\u003d123263",
+      "revId": "f451b6ba4860a40b33f4bef9d1a563bd1e5183e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
