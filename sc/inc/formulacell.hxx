@@ -137,6 +137,7 @@ private:
     bool            mbPostponedDirty : 1;   // if cell needs to be set dirty later
     bool            mbIsExtRef       : 1; // has references in ScExternalRefManager; never cleared after set
     bool            mbSeenInPath     : 1; // For detecting cycle involving formula groups and singleton formulacells
+    bool            mbFreeFlying     : 1; // Cell is out of sheets interpreted, like in conditional format
     ScMatrixMode    cMatrixFlag      : 8;
     sal_uInt16      nSeenInIteration : 16;   // Iteration cycle in which the cell was last encountered
     SvNumFormatType nFormatType      : 16;
@@ -221,6 +222,8 @@ public:
                     ScMatrixMode cMatInd = ScMatrixMode::NONE );
 
     ScFormulaCell(const ScFormulaCell& rCell, ScDocument& rDoc, const ScAddress& rPos, ScCloneFlags nCloneFlags = ScCloneFlags::Default);
+
+    void            SetFreeFlying( bool b ) { mbFreeFlying = b; }
 
     size_t GetHash() const;
 
