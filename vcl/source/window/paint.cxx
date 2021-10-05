@@ -646,7 +646,7 @@ void Window::ImplCallOverlapPaint()
 
 IMPL_LINK_NOARG(Window, ImplHandlePaintHdl, Timer *, void)
 {
-    if (comphelper::LibreOfficeKit::isActive() && true)
+    if (comphelper::LibreOfficeKit::isActive())
     {
         // Tiled rendering is used, idle paint does not need to do anything.
         mpWindowImpl->mpFrameData->maPaintIdle.Stop();
@@ -691,7 +691,7 @@ IMPL_LINK_NOARG(Window, ImplHandleResizeTimerHdl, Timer *, void)
 
 void Window::ImplInvalidateFrameRegion( const vcl::Region* pRegion, InvalidateFlags nFlags )
 {
-    if (comphelper::LibreOfficeKit::isActive() && true)
+    if (comphelper::LibreOfficeKit::isActive())
     {
         // Tiled rendering is used, so there's no need to invalidate for idle painting.
         return;
@@ -1293,7 +1293,7 @@ void Window::PaintImmediately()
     if (!mpWindowImpl)
         return;
 
-    if (comphelper::LibreOfficeKit::isActive() && true)
+    if (comphelper::LibreOfficeKit::isActive())
     {
         // Tiled rendering is used, direct paint does not need to do anything.
         return;
