@@ -52,6 +52,24 @@
       "parentUuid": "7a369fc4_c0cb6f89",
       "revId": "2e7bf377a8881a170830304512578f4d9316dbbe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16460f97_511a5ed6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-10-05T08:57:19Z",
+      "side": 1,
+      "message": "are we sure we want to revert 4 patches in libreoffice-7-2 branch? it seems a lot to me,",
+      "parentUuid": "142c82e6_e05b886d",
+      "revId": "2e7bf377a8881a170830304512578f4d9316dbbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
