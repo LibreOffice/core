@@ -572,7 +572,9 @@ void SwDoc::SetRowNotTracked( const SwCursor& rCursor, const SvxPrintItem &rNew,
         ::lcl_ProcessRowAttr( aFormatCmp, pLn, rNew );
         // as a workaround for the rows without text content,
         // add a redline with invisible text CH_TXT_TRACKED_DUMMY_CHAR
-        if (pLn->IsEmpty())
+        // (unless the table is part of a bigger deletion, where the
+        // new redline can cause a problem)
+        if (!bAll && pLn->IsEmpty())
         {
             SwNodeIndex aInsPos( *(pLn->GetTabBoxes()[0]->GetSttNd()), 1 );
             RedlineFlags eOld = getIDocumentRedlineAccess().GetRedlineFlags();
