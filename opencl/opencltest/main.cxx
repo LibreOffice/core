@@ -18,8 +18,6 @@
 
 #include <clew_setup.hxx>
 
-using namespace std;
-
 // The purpose of this separate executable is to check whether OpenCL works
 // without crashing (asserting, etc.). Other checks can be done by LO core itself.
 
@@ -44,7 +42,7 @@ static void runTest(const char* deviceName, const char* devicePlatform)
     // Find the given OpenCL device (in order to use the same one as LO core).
     cl_uint numPlatforms;
     openclcheck(clGetPlatformIDs(0, nullptr, &numPlatforms));
-    vector<cl_platform_id> platforms(numPlatforms);
+    std::vector<cl_platform_id> platforms(numPlatforms);
     openclcheck(clGetPlatformIDs(numPlatforms, platforms.data(), nullptr));
     cl_platform_id platformId = nullptr;
     for (cl_uint i = 0; i < numPlatforms; ++i)
@@ -67,7 +65,7 @@ static void runTest(const char* deviceName, const char* devicePlatform)
 
     cl_uint numDevices;
     openclcheck(clGetDeviceIDs(platformId, CL_DEVICE_TYPE_ALL, 0, nullptr, &numDevices));
-    vector<cl_device_id> devices(numDevices);
+    std::vector<cl_device_id> devices(numDevices);
     openclcheck(
         clGetDeviceIDs(platformId, CL_DEVICE_TYPE_ALL, numDevices, devices.data(), nullptr));
     cl_device_id deviceId = nullptr;
@@ -116,11 +114,11 @@ static void runTest(const char* deviceName, const char* devicePlatform)
         size_t length;
         status
             = clGetProgramBuildInfo(program, deviceId, CL_PROGRAM_BUILD_LOG, 0, nullptr, &length);
-        vector<char> error(length + 1);
+        std::vector<char> error(length + 1);
         status = clGetProgramBuildInfo(program, deviceId, CL_PROGRAM_BUILD_LOG, length,
                                        error.data(), nullptr);
         error[length] = '\0';
-        cerr << "OpenCL driver check build error:" << error.data() << endl;
+        std::cerr << "OpenCL driver check build error:" << error.data() << std::endl;
         abort();
     }
 #endif

@@ -49,7 +49,6 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 
-using namespace std;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -67,14 +66,14 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     if (nCount < 1)
     {
-        cout << "using: DocumentLoader -env:URE_MORE_TYPES=<office_types_rdb_url> <file_url> "
+        std::cout << "using: DocumentLoader -env:URE_MORE_TYPES=<office_types_rdb_url> <file_url> "
                 "[<uno_connection_url>]"
-             << endl
-             << endl
+             << std::endl
+             << std::endl
              << "example: DocumentLoader -env:URE_MORE_TYPES=\"file:///.../program/offapi.rdb\" "
                 "\"file:///e:/temp/test.odt\" "
                 "\"uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager\""
-             << endl;
+             << std::endl;
         exit(1);
     }
      if (nCount == 2)
@@ -109,8 +108,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     }
     catch ( Exception& e )
     {
-        cout << "Error: cannot establish a connection using "
-             << sConnectionString << endl << e.Message << endl;
+        std::cout << "Error: cannot establish a connection using "
+             << sConnectionString << std::endl << e.Message << std::endl;
         exit(1);
     }
 

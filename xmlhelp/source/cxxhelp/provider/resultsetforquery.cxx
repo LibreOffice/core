@@ -44,7 +44,6 @@
 #include "resultsetforquery.hxx"
 #include "databases.hxx"
 
-using namespace std;
 using namespace chelp;
 using namespace com::sun::star;
 using namespace com::sun::star::ucb;
@@ -85,7 +84,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
     xTrans->loadModule(TransliterationModules_UPPERCASE_LOWERCASE,
                        aLocale );
 
-    vector< vector< OUString > > queryList;
+    std::vector< std::vector< OUString > > queryList;
     {
         sal_Int32 idx;
         OUString query = aURLParameter.get_query();
@@ -95,7 +94,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
             if( idx == -1 )
                 idx = query.getLength();
 
-            vector< OUString > currentQuery;
+            std::vector< OUString > currentQuery;
             OUString tmp(query.copy( 0,idx ));
             Sequence<sal_Int32> aSeq;
             OUString toliterate = xTrans->transliterate(
@@ -112,7 +111,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
         }
     }
 
-    vector< OUString > aCompleteResultVector;
+    std::vector< OUString > aCompleteResultVector;
     OUString scope = aURLParameter.get_scope();
     bool bCaptionsOnly = scope == "Heading";
     sal_Int32 hitCount = aURLParameter.get_hitCount();
@@ -120,7 +119,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
     IndexFolderIterator aIndexFolderIt( *pDatabases, aURLParameter.get_module(), aURLParameter.get_language() );
     OUString idxDir;
     bool bExtension = false;
-    vector< vector<HitItem> > aIndexFolderResultVectorVector;
+    std::vector< std::vector<HitItem> > aIndexFolderResultVectorVector;
 
     bool bTemporary;
     for (;;)
@@ -128,12 +127,12 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
         idxDir = aIndexFolderIt.nextIndexFolder( bExtension, bTemporary );
         if( idxDir.isEmpty() )
             break;
-        vector<HitItem> aIndexFolderResultVector;
+        std::vector<HitItem> aIndexFolderResultVector;
 
         try
         {
-            vector< vector<HitItem> > aQueryListResultVectorVector;
-            set< OUString > aSet,aCurrent,aResultSet;
+            std::vector< std::vector<HitItem> > aQueryListResultVectorVector;
+            std::set< OUString > aSet,aCurrent,aResultSet;
 
             int nQueryListSize = queryList.size();
             if( nQueryListSize > 1 )
@@ -141,7 +140,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
 
             for( int i = 0; i < nQueryListSize; ++i )
             {
-                vector<HitItem>* pQueryResultVector;
+                std::vector<HitItem>* pQueryResultVector;
                 if( nQueryListSize > 1 )
                 {
                     aQueryListResultVectorVector.emplace_back();
@@ -156,8 +155,8 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
                 const std::vector< OUString >& aListItem = queryList[i];
                 OUString aNewQueryStr = aListItem[0];
 
-                vector<float> aScoreVector;
-                vector<OUString> aPathVector;
+                std::vector<float> aScoreVector;
+                std::vector<OUString> aPathVector;
 
                 try
                 {
@@ -201,7 +200,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
             {
                 for( int n = 0 ; n < nQueryListSize ; ++n )
                 {
-                    vector<HitItem>& rQueryResultVector = aQueryListResultVectorVector[n];
+                    std::vector<HitItem>& rQueryResultVector = aQueryListResultVectorVector[n];
 
                     int nItemCount = rQueryResultVector.size();
                     for( int i = 0 ; i < nItemCount ; ++i )
@@ -251,7 +250,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
 
 
     int nVectorCount = aIndexFolderResultVectorVector.size();
-    std::unique_ptr<std::vector<HitItem>::size_type[]> pCurrentVectorIndex(new vector<HitItem>::size_type[nVectorCount]);
+    std::unique_ptr<std::vector<HitItem>::size_type[]> pCurrentVectorIndex(new std::vector<HitItem>::size_type[nVectorCount]);
     for( int j = 0 ; j < nVectorCount ; ++j )
         pCurrentVectorIndex[j] = 0;
 
@@ -263,7 +262,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
         float fBestScore = 0.0;
         for( int k = 0 ; k < nVectorCount ; ++k )
         {
-            vector<HitItem>& rIndexFolderVector = aIndexFolderResultVectorVector[k];
+            std::vector<HitItem>& rIndexFolderVector = aIndexFolderResultVectorVector[k];
             if( pCurrentVectorIndex[k] < rIndexFolderVector.size() )
             {
                 const HitItem& rItem = rIndexFolderVector[ pCurrentVectorIndex[k] ];
@@ -279,7 +278,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
         if( iVectorWithBestScore == -1 )    // No item left at all
             break;
 
-        vector<HitItem>& rIndexFolderVector = aIndexFolderResultVectorVector[iVectorWithBestScore];
+        std::vector<HitItem>& rIndexFolderVector = aIndexFolderResultVectorVector[iVectorWithBestScore];
         const HitItem& rItem = rIndexFolderVector[ pCurrentVectorIndex[iVectorWithBestScore] ];
 
         pCurrentVectorIndex[iVectorWithBestScore]++;

@@ -56,8 +56,6 @@ if( status != CL_SUCCESS )  \
     return false; \
 }
 
-using namespace std;
-
 namespace {
 
 bool bIsInited = false;

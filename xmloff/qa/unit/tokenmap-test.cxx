@@ -16,7 +16,6 @@
 #include <xmloff/token/tokens.hxx>
 #include <xmloff/xmltoken.hxx>
 
-using namespace std;
 using namespace com::sun::star::uno;
 
 namespace xmloff {

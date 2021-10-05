@@ -30,9 +30,6 @@
 #include <rtl/ustring.hxx>
 
 
-using namespace std;
-
-
 sal_Int32 lValue1   = 123456789;
 sal_Int32 lValue2   = 54321;
 sal_Int32 lValue3   = 111333111;
@@ -103,7 +100,7 @@ void test_generateMerge1()
 
     delete myRegistry;
 
-    cout << "test_generateMerge1() Ok!\n";
+    std::cout << "test_generateMerge1() Ok!\n";
     return;
 }
 
@@ -168,7 +165,7 @@ void test_generateMerge2()
 
     delete myRegistry;
 
-    cout << "test_generateMerge2() Ok!\n";
+    std::cout << "test_generateMerge2() Ok!\n";
     return;
 }
 
@@ -400,7 +397,7 @@ void test_merge()
 
     delete myRegistry;
 
-    cout << "test_merge() Ok!\n";
+    std::cout << "test_merge() Ok!\n";
     return;
 }
 
