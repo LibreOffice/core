@@ -16,6 +16,91 @@
       "message": "is there any chance we can approve this one? It makes things less of a hodge-podge of unrelated code. ",
       "revId": "4289168863858e7e96fcd6de25e615b497a6d044",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e53b77ad_b1eeee81",
+        "filename": "solenv/clang-format/excludelist",
+        "patchSetId": 62
+      },
+      "lineNbr": 14442,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-05T16:52:07Z",
+      "side": 1,
+      "message": "In this case, where we don\u0027t move a single header, but create a bunch of new headers, so that the git history will anyway not provide a \"history\" of individual lines, I suppose that we better not add new entries to the exclude list, but instead just format the new headers to match the policy from start. The less exceptions, the better.",
+      "revId": "4289168863858e7e96fcd6de25e615b497a6d044",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac44299e_1f0f132e",
+        "filename": "solenv/clang-format/excludelist",
+        "patchSetId": 62
+      },
+      "lineNbr": 14943,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-05T16:52:07Z",
+      "side": 1,
+      "message": "And this",
+      "revId": "4289168863858e7e96fcd6de25e615b497a6d044",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f49e01a6_e24c2217",
+        "filename": "vcl/inc/PhysicalFontCollection.hxx",
+        "patchSetId": 62
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-05T16:52:07Z",
+      "side": 1,
+      "message": "No need in this whitespace-only change :)",
+      "revId": "4289168863858e7e96fcd6de25e615b497a6d044",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "012771dc_9ec0078e",
+        "filename": "vcl/inc/font/DirectFontSubstitution.hxx",
+        "patchSetId": 62
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-05T16:52:07Z",
+      "side": 1,
+      "message": "This in fact requires that FontSubstEntry definition is available at this point; and the forward declaration is not helpful, it only works because related header is included in CXX prior to this header.",
+      "revId": "4289168863858e7e96fcd6de25e615b497a6d044",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87d4918b_0bb0ef42",
+        "filename": "vcl/source/font/PhysicalFontCollection.cxx",
+        "patchSetId": 62
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-05T16:52:07Z",
+      "side": 1,
+      "message": "I may be wrong, but it seems to me that headers related to font substitution and fallback are related to each other, and having them split to atomic items is bit too much.\n\nFontSubstEntry.hxx is needed inside DirectFontSubstitution.hxx (and related CXXs should be merged, too).\n\nFontSubstitution.hxx only defines a small common parent for DirectFontSubstitution.hxx, GlyphFallbackFontSubstitution.hxx, and PreMatchFontSubstitution.hxx. The latter two are themselves very small.\n\nAll in all, I believe that the mentioned headers are best served as a single thing. Or at least FontSubstitution.hxx + GlyphFallbackFontSubstitution.hxx + PreMatchFontSubstitution.hxx (all three define pure virtual base classes for later reuse), and separately DirectFontSubstitution.hxx + FontSubstEntry.hxx",
+      "revId": "4289168863858e7e96fcd6de25e615b497a6d044",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
