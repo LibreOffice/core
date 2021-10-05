@@ -595,7 +595,8 @@ void Window::ImplCallPaint(const vcl::Region* pRegion, ImplPaintFlags nPaintFlag
     if (!mpWindowImpl->mpFirstChild)
         mpWindowImpl->mnPaintFlags &= ~ImplPaintFlags::PaintAllChildren;
 
-    if (mpWindowImpl->mbPaintDisabled)
+    // If tiled rendering is used, windows are only invalidated, never painted to.
+    if (mpWindowImpl->mbPaintDisabled || comphelper::LibreOfficeKit::isActive())
     {
         if (mpWindowImpl->mnPaintFlags & ImplPaintFlags::PaintAll)
             Invalidate(InvalidateFlags::NoChildren | InvalidateFlags::NoErase | InvalidateFlags::NoTransparent | InvalidateFlags::NoClipChildren);
@@ -1292,12 +1293,6 @@ void Window::PaintImmediately()
 {
     if (!mpWindowImpl)
         return;
-
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        // Tiled rendering is used, direct paint does not need to do anything.
-        return;
-    }
 
     if ( mpWindowImpl->mpBorderWindow )
     {
