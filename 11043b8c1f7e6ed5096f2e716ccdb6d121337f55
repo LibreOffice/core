@@ -160,6 +160,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b88a03c_cd6e09af",
+        "filename": "sc/uiconfig/scalc/ui/pastespecial.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-10-05T13:26:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bba53baa_43211ba0",
+      "range": {
+        "startLine": 163,
+        "startChar": 159,
+        "endLine": 163,
+        "endChar": 209
+      },
+      "revId": "11043b8c1f7e6ed5096f2e716ccdb6d121337f55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "05d57927_5933db8c",
@@ -245,6 +269,30 @@
       "side": 1,
       "message": "I was confused by your original sentence \"Pastes the formulas only and adjusts the references to the new range\". Did you mean?\n\n\"Pastes the formats only and adjusts the references to the new range\"",
       "parentUuid": "72ef8211_880dedd7",
+      "range": {
+        "startLine": 186,
+        "startChar": 152,
+        "endLine": 186,
+        "endChar": 188
+      },
+      "revId": "11043b8c1f7e6ed5096f2e716ccdb6d121337f55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73fb296b_fb0f6e6b",
+        "filename": "sc/uiconfig/scalc/ui/pastespecial.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-10-05T13:26:53Z",
+      "side": 1,
+      "message": "Maybe I mixed up format and formula. Don\u0027t remember.",
+      "parentUuid": "11ffee27_426fcf90",
       "range": {
         "startLine": 186,
         "startChar": 152,
