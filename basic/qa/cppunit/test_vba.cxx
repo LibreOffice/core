@@ -123,6 +123,7 @@ void VBATest::testMiscVBAFunctions()
         "sgn.vb",
         "sin.vb",
         "space.vb",
+        "split.vb",
         "sqr.vb",
         "str.vb",
         "strcomp.vb",
