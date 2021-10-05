@@ -40,7 +40,6 @@ const css::uno::Type CppuType_String       = ::cppu::UnoType<OUString>::get();
 
 using namespace osl;
 using namespace cppu;
-using namespace std;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::datatransfer;
@@ -353,7 +352,7 @@ void findDataFlavorForStandardFormatId( sal_Int32 aStandardFormatId, DataFlavor&
         standard clipboard format id appear before the other
         entries with CF_INVALID
     */
-    vector< FormatEntry >::const_iterator citer = std::find_if(g_TranslTable.begin(), g_TranslTable.end(),
+    std::vector< FormatEntry >::const_iterator citer = std::find_if(g_TranslTable.begin(), g_TranslTable.end(),
         [&aStandardFormatId](const FormatEntry& rEntry) {
             return rEntry.aStandardFormatId == aStandardFormatId
                 || rEntry.aStandardFormatId == CF_INVALID;
@@ -364,7 +363,7 @@ void findDataFlavorForStandardFormatId( sal_Int32 aStandardFormatId, DataFlavor&
 
 void findDataFlavorForNativeFormatName( const OUString& aNativeFormatName, DataFlavor& aDataFlavor )
 {
-    vector< FormatEntry >::const_iterator citer = std::find_if(g_TranslTable.begin(), g_TranslTable.end(),
+    std::vector< FormatEntry >::const_iterator citer = std::find_if(g_TranslTable.begin(), g_TranslTable.end(),
         [&aNativeFormatName](const FormatEntry& rEntry) {
             return aNativeFormatName.equalsIgnoreAsciiCase(rEntry.aNativeFormatName); });
     if (citer != g_TranslTable.end())
@@ -385,7 +384,7 @@ void findStandardFormatIdForCharset( const OUString& aCharset, Any& aAny )
 
 void setStandardFormatIdForNativeFormatName( const OUString& aNativeFormatName, Any& aAny )
 {
-    vector< FormatEntry >::const_iterator citer = std::find_if(g_TranslTable.begin(), g_TranslTable.end(),
+    std::vector< FormatEntry >::const_iterator citer = std::find_if(g_TranslTable.begin(), g_TranslTable.end(),
         [&aNativeFormatName](const FormatEntry& rEntry) {
             return aNativeFormatName.equalsIgnoreAsciiCase(rEntry.aNativeFormatName)
                 && (CF_INVALID != rEntry.aStandardFormatId);
@@ -399,7 +398,7 @@ void findStdFormatIdOrNativeFormatNameForFullMediaType(
     const OUString& aFullMediaType,
     Any& aAny )
 {
-    vector< FormatEntry >::const_iterator citer = std::find_if(g_TranslTable.begin(), g_TranslTable.end(),
+    std::vector< FormatEntry >::const_iterator citer = std::find_if(g_TranslTable.begin(), g_TranslTable.end(),
         [&aRefXMimeFactory, &aFullMediaType](const FormatEntry& rEntry) {
             Reference<XMimeContentType> refXMime( aRefXMimeFactory->createMimeContentType(rEntry.aDataFlavor.MimeType) );
             return aFullMediaType.equalsIgnoreAsciiCase(refXMime->getFullMediaType());

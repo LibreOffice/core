@@ -36,7 +36,6 @@
 #include <windows.h>
 #include <shlobj.h>
 
-using namespace std;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::lang;

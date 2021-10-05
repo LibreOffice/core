@@ -37,7 +37,6 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-using namespace std;
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::uno;

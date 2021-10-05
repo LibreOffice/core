@@ -36,7 +36,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::datatransfer::dnd;
 using namespace com::sun::star::datatransfer::dnd::DNDConstants;
 using namespace cppu;
-using namespace std;
 
 LRESULT APIENTRY EditSubclassProc( HWND hwnd, UINT uMsg,WPARAM wParam, LPARAM lParam) ;
 

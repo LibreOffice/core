@@ -54,9 +54,7 @@
 #include <optional>
 #include <ControlCacheKey.hxx>
 
-using namespace std;
-
-typedef map< wstring, HTHEME > ThemeMap;
+typedef std::map< std::wstring, HTHEME > ThemeMap;
 static ThemeMap aThemeMap;
 
 /****************************************************
