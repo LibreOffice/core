@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19de7c0f_278b3ccd",
+        "filename": "vcl/source/font/PhysicalFontFace.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-05T16:23:46Z",
+      "side": 0,
+      "message": "This last check is omitted from the refactor - it looks like the values are never updated; nice cleanup!",
+      "revId": "2006d822bb839cd1a610954195921ee818908459",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
