@@ -16,6 +16,23 @@
       "message": "FYI screenshot of this is here: https://bugs.documentfoundation.org/show_bug.cgi?id\u003d144483#c10",
       "revId": "5408a03ef313d1b7b4f3fa22fb4b3d6df4588d01",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca92bdfd_83d30a2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-10-05T14:51:51Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "5408a03ef313d1b7b4f3fa22fb4b3d6df4588d01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
