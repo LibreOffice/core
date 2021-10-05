@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e9ea264_b7292c5c",
+        "filename": "vcl/benchmarktest/BenchMarkTest.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-10-05T13:30:50Z",
+      "side": 1,
+      "message": "I would add this file into backendtest - not creating a new folder benchmarktest. Maybe a subfolder benchmark inside backendtest.",
+      "revId": "c14982013545b87871592e6d0c88d00a03738e0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15912e2b_26d12115",
+        "filename": "vcl/benchmarktest/outputdevice/BenchMarkTests.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-10-05T13:30:50Z",
+      "side": 1,
+      "message": "This is way way way to simple for a benchmark. Also only 24x24 is way way way way too small of a surface. You don\u0027t need to check the results so you can go crazy here - like drawing 100000 rectangles for example (but it shouldn\u0027t take too long either).",
+      "revId": "c14982013545b87871592e6d0c88d00a03738e0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce5020d8_3b24e281",
+        "filename": "vcl/benchmarktest/outputdevice/BenchMarkTests.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-10-05T13:30:50Z",
+      "side": 1,
+      "message": "This is not a good for measuring elapsed time. Use [1] also look at [2], which is some benchmark I worked on in the past. \n\n[1] https://cgit.freedesktop.org/libreoffice/core/commit/?h\u003dprivate/tvajngerl/staging\u0026id\u003d0c84257a6346dd3dc4602a57a413a07a20dad2c9\n[2] https://cgit.freedesktop.org/libreoffice/core/commit/?h\u003dprivate/tvajngerl/staging\u0026id\u003de79efa638c42e6a7d32e9ddcb41f90f4860a07c3",
+      "range": {
+        "startLine": 39,
+        "startChar": 17,
+        "endLine": 39,
+        "endChar": 22
+      },
+      "revId": "c14982013545b87871592e6d0c88d00a03738e0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5dc2a7b2_772fa329",
+        "filename": "vcl/benchmarktest/outputdevice/BenchMarkTests.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-10-05T13:30:50Z",
+      "side": 1,
+      "message": "This should certainly be included in the time measurement. What if the device postpones painting, until it actually need to paint - in that case you wouldn\u0027t measure the time it took to render, but just time it took to prepare and the actual rendering would happen after you stopped measuring.",
+      "range": {
+        "startLine": 43,
+        "startChar": 11,
+        "endLine": 43,
+        "endChar": 88
+      },
+      "revId": "c14982013545b87871592e6d0c88d00a03738e0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e63b6b4a_684d2325",
+        "filename": "vcl/inc/test/outputdevice.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-10-05T13:30:50Z",
+      "side": 1,
+      "message": "put this into a new file",
+      "range": {
+        "startLine": 293,
+        "startChar": 6,
+        "endLine": 297,
+        "endChar": 2
+      },
+      "revId": "c14982013545b87871592e6d0c88d00a03738e0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
