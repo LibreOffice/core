@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8f33981_fca6a9c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-10-05T07:11:14Z",
+      "side": 1,
+      "message": "Xisco: thanks for back-porting, László",
+      "revId": "3f8cc48e0416e8e47914d4b6f3f6b9fa3f75cbcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
