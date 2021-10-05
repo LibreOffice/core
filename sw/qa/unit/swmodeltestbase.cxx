@@ -637,6 +637,12 @@ void SwModelTestBase::loadAndSave(const char* pName)
     mbExported = true;
 }
 
+void SwModelTestBase::loadAndReload(const char* pName)
+{
+    load(mpTestDocumentPath, pName);
+    reload(mpFilter, pName);
+}
+
 void SwModelTestBase::finish()
 {
     sal_uInt32 nEndTime = osl_getGlobalTimer();
