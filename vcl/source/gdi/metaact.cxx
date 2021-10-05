@@ -21,9 +21,11 @@
 #include <string.h>
 #include <osl/thread.h>
 #include <sal/log.hxx>
+#include <tools/color.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/helpers.hxx>
+
 #include <vcl/dibtools.hxx>
 #include <vcl/filter/SvmReader.hxx>
 #include <vcl/filter/SvmWriter.hxx>
@@ -2449,6 +2451,110 @@ void MetaComplexGradientAction::Move(tools::Long nHorzMove, tools::Long nVertMov
 }
 
 void MetaComplexGradientAction::Scale(double fScaleX, double fScaleY)
+{
+    for (MetaAction* pAction : maActions)
+    {
+        pAction->Scale(fScaleX, fScaleY);
+    }
+}
+
+MetaGradientContainerAction::MetaGradientContainerAction(tools::PolyPolygon const& rPolyPoly, tools::Rectangle const& rBoundRectInPixels, Gradient const& rGradient, tools::Long nSteps, DrawModeFlags nDrawMode, bool bWillBePrinted)
+    : MetaAction(MetaActionType::GRADIENTCONTAINER)
+    , mbWillBePrinted(bWillBePrinted)
+{
+    if (!(rPolyPoly.Count() && rPolyPoly[0].GetSize()))
+        return;
+
+    Gradient aGradient( rGradient );
+
+    if (nDrawMode & DrawModeFlags::GrayGradient)
+        aGradient.MakeGrayscale();
+
+    const tools::Rectangle aBoundRectInLogicalUnits(rPolyPoly.GetBoundRect());
+
+    if ( rPolyPoly.IsRect() )
+        maActions.push_back(new MetaGradientAction(aBoundRectInLogicalUnits, aGradient));
+    else
+        Clip(rGradient, rPolyPoly);
+
+    tools::Rectangle aBoundRect(rBoundRectInPixels);
+    aBoundRect.Justify();
+
+    // do nothing if the rectangle is empty
+    if (aBoundRect.IsEmpty())
+        return;
+
+    const int GRADIENT_DEFAULT_STEPCOUNT = 0;
+
+    // calculate step count if necessary
+    if (!aGradient.GetSteps())
+        aGradient.SetSteps(GRADIENT_DEFAULT_STEPCOUNT);
+
+    if (rPolyPoly.IsRect())
+    {
+        // because we draw with no border line, we have to expand gradient
+        // rect to avoid missing lines on the right and bottom edge
+        aBoundRect.AdjustLeft(-1);
+        aBoundRect.AdjustTop(-1);
+        aBoundRect.AdjustRight(1);
+        aBoundRect.AdjustBottom(1);
+    }
+
+    // if the clipping polypolygon is a rectangle, then it's the same size as the bounding of the
+    // polypolygon, so pass in a NULL for the clipping parameter
+    if( aGradient.GetStyle() == GradientStyle::Linear || rGradient.GetStyle() == GradientStyle::Axial)
+        maActions.push_back(new MetaLinearGradientAction(aBoundRect, aGradient, nSteps));
+    else
+        maActions.push_back(new MetaComplexGradientAction(aBoundRect, aGradient, nSteps));
+}
+
+void MetaGradientContainerAction::Clip(Gradient const& rGradient, tools::PolyPolygon const& rPolyPoly)
+{
+    const tools::Rectangle aBoundRect(rPolyPoly.GetBoundRect());
+
+    if (mbWillBePrinted)
+    {
+        maActions.push_back(new MetaCommentAction("XGRAD_PRINTABLECLIPPING_SEQ_BEGIN"));
+        maActions.push_back(new MetaPushAction(vcl::PushFlags::CLIPREGION));
+        maActions.push_back(new MetaISectRegionClipRegionAction(vcl::Region(rPolyPoly)));
+        maActions.push_back(new MetaGradientAction(aBoundRect, rGradient));
+        maActions.push_back(new MetaPopAction());
+        maActions.push_back(new MetaCommentAction("XGRAD_PRINTABLECLIPPING_SEQ_END"));
+    }
+    else
+    {
+        maActions.push_back(new MetaCommentAction("XGRAD_SEQ_BEGIN"));
+        maActions.push_back(new MetaGradientExAction(rPolyPoly, rGradient));
+        maActions.push_back(new MetaPushAction(vcl::PushFlags::RASTEROP));
+        maActions.push_back(new MetaRasterOpAction(RasterOp::Xor));
+        maActions.push_back(new MetaGradientAction(aBoundRect, rGradient));
+        maActions.push_back(new MetaFillColorAction(COL_BLACK, true));
+        maActions.push_back(new MetaRasterOpAction(RasterOp::N0));
+        maActions.push_back(new MetaPolyPolygonAction(rPolyPoly));
+        maActions.push_back(new MetaRasterOpAction(RasterOp::Xor));
+        maActions.push_back(new MetaGradientAction(aBoundRect, rGradient));
+        maActions.push_back(new MetaPopAction());
+        maActions.push_back(new MetaCommentAction("XGRAD_SEQ_END"));
+    }
+}
+
+void MetaGradientContainerAction::Execute(OutputDevice* pOutDev)
+{
+    for (MetaAction* pAction : maActions)
+    {
+        pAction->Execute(pOutDev);
+    }
+}
+
+void MetaGradientContainerAction::Move(tools::Long nHorzMove, tools::Long nVertMove)
+{
+    for (MetaAction* pAction : maActions)
+    {
+        pAction->Move(nHorzMove, nVertMove);
+    }
+}
+
+void MetaGradientContainerAction::Scale(double fScaleX, double fScaleY)
 {
     for (MetaAction* pAction : maActions)
     {
