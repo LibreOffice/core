@@ -48,7 +48,6 @@ using namespace com::sun::star::accessibility;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::awt;
 using namespace com::sun::star::beans;
-using namespace std;
 
 /**
  * Copy a range of text to the clipboard.
@@ -228,7 +227,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::setAttributes(long startOffs
 
     OUString ouStr(o3tl::toU(*attributes));
 
-    vector< OUString > vecAttr;
+    std::vector< OUString > vecAttr;
     for (sal_Int32 nIndex {0}; nIndex >= 0; )
         vecAttr.push_back(ouStr.getToken(0, ';', nIndex));
 
@@ -315,7 +314,7 @@ void CAccEditableText::get_AnyFromOLECHAR(std::u16string_view ouName, const OUSt
     {
 
         // Convert to the Sequence with TabStop element.
-        vector< css::style::TabStop > vecTabStop;
+        std::vector< css::style::TabStop > vecTabStop;
         css::style::TabStop tabStop;
         OUString ouSubValue;
         sal_Int32 pos = 0, posComma = 0;

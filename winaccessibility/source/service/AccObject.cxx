@@ -46,7 +46,6 @@
 #pragma clang diagnostic pop
 #endif
 
-using namespace std;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star::accessibility::AccessibleRole;
