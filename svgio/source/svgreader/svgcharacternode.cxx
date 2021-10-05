@@ -25,6 +25,8 @@
 #include <drawinglayer/primitive2d/textbreakuphelper.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 
+using namespace drawinglayer::primitive2d;
+
 namespace svgio::svgreader
 {
         SvgTextPositions::SvgTextPositions()
@@ -139,7 +141,7 @@ namespace svgio::svgreader
 
         namespace {
 
-        class localTextBreakupHelper : public drawinglayer::primitive2d::TextBreakupHelper
+        class localTextBreakupHelper : public TextBreakupHelper
         {
         private:
             SvgTextPosition&                    mrSvgTextPosition;
@@ -151,9 +153,9 @@ namespace svgio::svgreader
 
         public:
             localTextBreakupHelper(
-                const drawinglayer::primitive2d::TextSimplePortionPrimitive2D& rSource,
+                const TextSimplePortionPrimitive2D& rSource,
                 SvgTextPosition& rSvgTextPosition)
-            :   drawinglayer::primitive2d::TextBreakupHelper(rSource),
+            :   TextBreakupHelper(rSource),
                 mrSvgTextPosition(rSvgTextPosition)
             {
             }
@@ -203,12 +205,12 @@ namespace svgio::svgreader
             }
         }
 
-        rtl::Reference<drawinglayer::primitive2d::TextSimplePortionPrimitive2D> SvgCharacterNode::createSimpleTextPrimitive(
+        rtl::Reference<TextSimplePortionPrimitive2D> SvgCharacterNode::createSimpleTextPrimitive(
             SvgTextPosition& rSvgTextPosition,
             const SvgStyleAttributes& rSvgStyleAttributes) const
         {
             // prepare retval, index and length
-            rtl::Reference<drawinglayer::primitive2d::TextSimplePortionPrimitive2D> pRetval;
+            rtl::Reference<TextSimplePortionPrimitive2D> pRetval;
             sal_uInt32 nLength(getText().getLength());
 
             if(nLength)
@@ -216,9 +218,9 @@ namespace svgio::svgreader
                 sal_uInt32 nIndex(0);
                 // prepare FontAttribute
                 const SvgStringVector& rFontFamilyVector = rSvgStyleAttributes.getFontFamily();
-                OUString aFontFamily = rFontFamilyVector.empty() ?
-                    OUString("Times New Roman") :
-                    rFontFamilyVector[0];
+                OUString aFontFamily("Times New Roman");
+                if(!rFontFamilyVector.empty())
+                    aFontFamily=rFontFamilyVector[0];
 
                 // #i122324# if the FontFamily name ends on ' embedded' it is probably a re-import
                 // of a SVG export with font embedding. Remove this to make font matching work. This
@@ -252,7 +254,7 @@ namespace svgio::svgreader
                 css::lang::Locale aLocale;
 
                 // prepare TextLayouterDevice
-                drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
+                TextLayouterDevice aTextLayouterDevice;
                 aTextLayouterDevice.setFontAttribute(aFontAttribute, fFontWidth, fFontHeight, aLocale);
 
                 // prepare TextArray
@@ -403,9 +405,9 @@ namespace svgio::svgreader
                 }
 
                 // get fill color
-                const basegfx::BColor aFill(rSvgStyleAttributes.getFill()
-                    ? *rSvgStyleAttributes.getFill()
-                    : basegfx::BColor(0.0, 0.0, 0.0));
+                basegfx::BColor aFill(0, 0, 0);
+                if(rSvgStyleAttributes.getFill())
+                    aFill = *rSvgStyleAttributes.getFill();
 
                 // prepare TextTransformation
                 basegfx::B2DHomMatrix aTextTransform;
@@ -423,10 +425,25 @@ namespace svgio::svgreader
                     // get the fill for decoration as described by SVG. We cannot
                     // have different stroke colors/definitions for those, though
                     const SvgStyleAttributes* pDecoDef = rSvgStyleAttributes.getTextDecorationDefiningSvgStyleAttributes();
-                    const basegfx::BColor aDecoColor(pDecoDef && pDecoDef->getFill() ? *pDecoDef->getFill() : aFill);
+
+                    basegfx::BColor aDecoColor(aFill);
+                    if(pDecoDef && pDecoDef->getFill())
+                        aDecoColor = *pDecoDef->getFill();
+
+                    TextLine eFontOverline = TEXT_LINE_NONE;
+                    if(TextDecoration::overline == aDeco)
+                        eFontOverline = TEXT_LINE_SINGLE;
+
+                    TextLine eFontUnderline = TEXT_LINE_NONE;
+                    if(TextDecoration::underline == aDeco)
+                        eFontUnderline = TEXT_LINE_SINGLE;
+
+                    TextStrikeout eTextStrikeout = TEXT_STRIKEOUT_NONE;
+                    if(TextDecoration::line_through == aDeco)
+                        eTextStrikeout = TEXT_STRIKEOUT_SINGLE;
 
                     // create decorated text primitive
-                    pRetval = new drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D(
+                    pRetval = new TextDecoratedPortionPrimitive2D(
                         aTextTransform,
                         getText(),
                         nIndex,
@@ -440,21 +457,21 @@ namespace svgio::svgreader
                         // extra props for decorated
                         aDecoColor,
                         aDecoColor,
-                        TextDecoration::overline == aDeco ? drawinglayer::primitive2d::TEXT_LINE_SINGLE : drawinglayer::primitive2d::TEXT_LINE_NONE,
-                        TextDecoration::underline == aDeco ? drawinglayer::primitive2d::TEXT_LINE_SINGLE : drawinglayer::primitive2d::TEXT_LINE_NONE,
+                        eFontOverline,
+                        eFontUnderline,
                         false,
-                        TextDecoration::line_through == aDeco ? drawinglayer::primitive2d::TEXT_STRIKEOUT_SINGLE : drawinglayer::primitive2d::TEXT_STRIKEOUT_NONE,
+                        eTextStrikeout,
                         false,
-                        drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_NONE,
+                        TEXT_FONT_EMPHASIS_MARK_NONE,
                         true,
                         false,
-                        drawinglayer::primitive2d::TEXT_RELIEF_NONE,
+                        TEXT_RELIEF_NONE,
                         false);
                 }
                 else
                 {
                     // create text primitive
-                    pRetval = new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                    pRetval = new TextSimplePortionPrimitive2D(
                         aTextTransform,
                         getText(),
                         nIndex,
@@ -473,11 +490,11 @@ namespace svgio::svgreader
         }
 
         void SvgCharacterNode::decomposeTextWithStyle(
-            drawinglayer::primitive2d::Primitive2DContainer& rTarget,
+            Primitive2DContainer& rTarget,
             SvgTextPosition& rSvgTextPosition,
             const SvgStyleAttributes& rSvgStyleAttributes) const
         {
-            const drawinglayer::primitive2d::Primitive2DReference xRef(
+            const Primitive2DReference xRef(
                 createSimpleTextPrimitive(
                     rSvgTextPosition,
                     rSvgStyleAttributes));
@@ -492,13 +509,13 @@ namespace svgio::svgreader
             else
             {
                 // need to apply rotations to each character as given
-                const drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pCandidate =
-                    dynamic_cast< const drawinglayer::primitive2d::TextSimplePortionPrimitive2D* >(xRef.get());
+                const TextSimplePortionPrimitive2D* pCandidate =
+                    dynamic_cast< const TextSimplePortionPrimitive2D* >(xRef.get());
 
                 if(pCandidate)
                 {
                     const localTextBreakupHelper alocalTextBreakupHelper(*pCandidate, rSvgTextPosition);
-                    const drawinglayer::primitive2d::Primitive2DContainer& aResult(
+                    const Primitive2DContainer& aResult(
                         alocalTextBreakupHelper.getResult());
 
                     if(!aResult.empty())
@@ -538,7 +555,7 @@ namespace svgio::svgreader
             maText += rText;
         }
 
-        void SvgCharacterNode::decomposeText(drawinglayer::primitive2d::Primitive2DContainer& rTarget, SvgTextPosition& rSvgTextPosition) const
+        void SvgCharacterNode::decomposeText(Primitive2DContainer& rTarget, SvgTextPosition& rSvgTextPosition) const
         {
             if(!getText().isEmpty())
             {
