@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "526ca918_4a8453ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-05T12:42:53Z",
+      "side": 1,
+      "message": "OK to revert on libreoffice-7-2, you\u0027ll sort this out on master differently.",
+      "revId": "b74e0fae0321db94c7b501f59f9454676bd64ec4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
