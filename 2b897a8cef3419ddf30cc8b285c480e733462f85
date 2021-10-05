@@ -16,6 +16,24 @@
       "message": "If that is not 100%, would it be useful to run this once, but don\u0027t enforce it? My ideal would be to have an additional ctor that takes its param by rvalue reference, then the caller can decide. (Sure, I understand that you assume that the caller won\u0027t bother to correctly decide in most cases, and there is some truth in it.)\n\nUnless I misunderstand what you do here. :-)",
       "revId": "2b897a8cef3419ddf30cc8b285c480e733462f85",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "646a204b_90d39be1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-10-05T13:20:46Z",
+      "side": 1,
+      "message": "I\u0027m quite happy to leave this off by default and run it myself.\n\nThe reason I like changing the signature is that it makes it obvious in the source code which option the call site has chosen, and the compiler makes you choose (otherwise you get a warning), so it\u0027s easier to know that you have found all the call sites.",
+      "parentUuid": "1faf80b4_8755014c",
+      "revId": "2b897a8cef3419ddf30cc8b285c480e733462f85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
