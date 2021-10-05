@@ -599,6 +599,7 @@ ScFormulaCell::ScFormulaCell( ScDocument& rDoc, const ScAddress& rPos ) :
     mbPostponedDirty(false),
     mbIsExtRef(false),
     mbSeenInPath(false),
+    mbFreeFlying(false),
     cMatrixFlag(ScMatrixMode::NONE),
     nSeenInIteration(0),
     nFormatType(SvNumFormatType::NUMBER),
@@ -631,6 +632,7 @@ ScFormulaCell::ScFormulaCell( ScDocument& rDoc, const ScAddress& rPos,
     mbPostponedDirty(false),
     mbIsExtRef(false),
     mbSeenInPath(false),
+    mbFreeFlying(false),
     cMatrixFlag ( cMatInd ),
     nSeenInIteration(0),
     nFormatType ( SvNumFormatType::NUMBER ),
@@ -666,6 +668,7 @@ ScFormulaCell::ScFormulaCell(
     mbPostponedDirty(false),
     mbIsExtRef(false),
     mbSeenInPath(false),
+    mbFreeFlying(false),
     cMatrixFlag ( cMatInd ),
     nSeenInIteration(0),
     nFormatType ( SvNumFormatType::NUMBER ),
@@ -718,6 +721,7 @@ ScFormulaCell::ScFormulaCell(
     mbPostponedDirty(false),
     mbIsExtRef(false),
     mbSeenInPath(false),
+    mbFreeFlying(false),
     cMatrixFlag ( cMatInd ),
     nSeenInIteration(0),
     nFormatType ( SvNumFormatType::NUMBER ),
@@ -767,6 +771,7 @@ ScFormulaCell::ScFormulaCell(
     mbPostponedDirty(false),
     mbIsExtRef(false),
     mbSeenInPath(false),
+    mbFreeFlying(false),
     cMatrixFlag ( cInd ),
     nSeenInIteration(0),
     nFormatType(xGroup->mnFormatType),
@@ -798,6 +803,7 @@ ScFormulaCell::ScFormulaCell(const ScFormulaCell& rCell, ScDocument& rDoc, const
     mbPostponedDirty(false),
     mbIsExtRef(false),
     mbSeenInPath(false),
+    mbFreeFlying(false),
     cMatrixFlag ( rCell.cMatrixFlag ),
     nSeenInIteration(0),
     nFormatType( rCell.nFormatType ),
@@ -1627,9 +1633,12 @@ bool ScFormulaCell::Interpret(SCROW nStartOffset, SCROW nEndOffset)
     // recursion list in reverse order.
     if (rRecursionHelper.IsInReturn())
     {
-        if (rRecursionHelper.GetRecursionCount() > 0 ||
-                !rRecursionHelper.IsDoingRecursion())
+        bool bFreeFlyingInserted = false;
+        if (rRecursionHelper.GetRecursionCount() > 0 || !rRecursionHelper.IsDoingRecursion())
+        {
             rRecursionHelper.Insert( this, bOldRunning, aResult);
+            bFreeFlyingInserted = mbFreeFlying;
+        }
         bool bIterationFromRecursion = false;
         bool bResumeIteration = false;
         do
@@ -1849,6 +1858,25 @@ bool ScFormulaCell::Interpret(SCROW nStartOffset, SCROW nEndOffset)
                     rRecursionHelper.Clear();
             }
         } while (bIterationFromRecursion || bResumeIteration);
+
+        if (bFreeFlyingInserted)
+        {
+            // Remove this from recursion list, it may get deleted.
+            // It additionally also should mean that the recursion/iteration
+            // ends here as it must had been triggered by this free-flying
+            // out-of-sheets cell
+            /* TODO: replace by a simple rRecursionHelper.EndIteration() call
+             * if the assertions hold. */
+            const bool bOnlyThis = (rRecursionHelper.GetList().size() == 1);
+            assert(bOnlyThis);
+            rRecursionHelper.GetList().remove_if([this](const ScFormulaRecursionEntry& r){return r.pCell == this;});
+            if (bOnlyThis)
+            {
+                assert(rRecursionHelper.GetList().empty());
+                if (rRecursionHelper.GetList().empty())
+                    rRecursionHelper.EndIteration();
+            }
+        }
     }
 
 #if DEBUG_CALCULATION
