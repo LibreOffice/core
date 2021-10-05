@@ -95,4 +95,5 @@ public:
     void TextLanguageHandler(const MetaTextLanguageAction* pAction);
     void LinearGradientHandler(const MetaLinearGradientAction* pAction);
     void ComplexGradientHandler(const MetaComplexGradientAction* pAction);
+    void GradientContainerHandler(const MetaGradientContainerAction* pAction);
 };
