@@ -26,7 +26,6 @@
 
 #include "ServerDetailsControls.hxx"
 
-using namespace std;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::task;
 using namespace com::sun::star::ucb;
