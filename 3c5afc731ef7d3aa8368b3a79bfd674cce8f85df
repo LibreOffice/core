@@ -34,6 +34,24 @@
       "parentUuid": "6240bcdf_342ae968",
       "revId": "3c5afc731ef7d3aa8368b3a79bfd674cce8f85df",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ffa7f5a_561c8794",
+        "filename": "sc/source/filter/oox/stylesbuffer.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-06T08:50:22Z",
+      "side": 0,
+      "message": "I disagree.\n\nWe use some specific indent steps. They are not 1:1 representable in Excel file formats. We should not pretend that our steps are the same as Excel units. We should save them as close to the actual result as possible (which implies that the answer to \"and now if we save as XLXS, the indent converted to should be what? 1 or 2?\" is \"what rounding gives\").\n\nThe \"user expects them to be equal after hitting \"Increase Indent\"\" is unrelated. I\u0027d say it\u0027s absolutely not a problem at all - exporting/importing an external format, one needs to understand that things will change. However, *if* there\u0027s an idea that this workflow should give user same indents, *then* we might consider the \"Increase Indent\" button to take into account the format of current document (either it would look into the media descriptor itself, or - better - import could set some global value of the indent step, since it knows the default font size). It should not be the problem of import/export of correct values.\n\nAdditionally, you will get much greater problems when you consider, that the \"default spreadsheet font\" is a configurable, variable thing, and as soon as you get a different font with different size, the difference between the visual representation in Excel and Calc (also on print!) will become inappropriate.",
+      "parentUuid": "66b4bf72_b8488835",
+      "revId": "3c5afc731ef7d3aa8368b3a79bfd674cce8f85df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
