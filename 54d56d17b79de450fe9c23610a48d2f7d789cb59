@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9faa72d_21d47a40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-10-06T17:10:15Z",
+      "side": 1,
+      "message": "I dont use this timer and it works, is it really needed?",
+      "revId": "54d56d17b79de450fe9c23610a48d2f7d789cb59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
