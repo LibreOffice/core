@@ -32,10 +32,12 @@
 #include <vcl/printer/Options.hxx>
 
 #include <jobset.h>
-#include <outdev.h>
 #include <print.h>
+#include <ImplOutDevData.hxx>
 #include <PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
+#include <font/fontsubstitution.hxx>
+#include <impfontcache.hxx>
 #include <print.hrc>
 #include <salgdi.hxx>
 #include <salinst.hxx>
