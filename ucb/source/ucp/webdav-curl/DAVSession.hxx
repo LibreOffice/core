@@ -29,6 +29,10 @@
 #include "DAVTypes.hxx"
 #include "DAVRequestEnvironment.hxx"
 
+namespace com { namespace sun { namespace star { namespace beans {
+    struct NamedValue;
+} } } }
+
 namespace com::sun::star::ucb {
     struct Lock;
 }
@@ -55,7 +59,8 @@ public:
         }
     }
 
-    virtual bool CanUse( const OUString & rURI ) = 0;
+    virtual bool CanUse( const OUString & rURI,
+            const ::com::sun::star::uno::Sequence<::com::sun::star::beans::NamedValue>& rFlags ) = 0;
 
     virtual bool UsesProxy() = 0;
 

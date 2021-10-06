@@ -43,7 +43,7 @@ namespace com::sun::star::sdbc {
 }
 
 namespace com::sun::star::ucb {
-    struct OpenCommandArgument2;
+    struct OpenCommandArgument3;
     struct PropertyCommandArgument;
     struct PostCommandArgument2;
     struct TransferInfo;
@@ -125,7 +125,7 @@ private:
     // Command "open"
     /// @throws css::uno::Exception
     css::uno::Any open(
-                const css::ucb::OpenCommandArgument2 & rArg,
+                const css::ucb::OpenCommandArgument3 & rArg,
                 const css::uno::Reference<
                     css::ucb::XCommandEnvironment > & xEnv );
 

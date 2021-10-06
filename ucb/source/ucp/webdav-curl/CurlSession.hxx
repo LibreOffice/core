@@ -23,6 +23,7 @@ class CurlSession : public DAVSession
 private:
     ::std::mutex m_Mutex;
     css::uno::Reference<css::uno::XComponentContext> const m_xContext;
+    css::uno::Sequence<css::beans::NamedValue> const m_Flags;
     CurlUri const m_URI;
     char m_ErrorBuffer[CURL_ERROR_SIZE];
     ::ucbhelper::InternetProxyServer const m_Proxy;
@@ -39,10 +40,12 @@ private:
 public:
     explicit CurlSession(css::uno::Reference<css::uno::XComponentContext> const& xContext,
                          ::rtl::Reference<DAVSessionFactory> const& rpFactory, OUString const& rURI,
+                         css::uno::Sequence<css::beans::NamedValue> const& rFlags,
                          ::ucbhelper::InternetProxyDecider const& rProxyDecider);
     virtual ~CurlSession() override;
 
-    virtual auto CanUse(OUString const& rURI) -> bool override;
+    virtual auto CanUse(OUString const& rURI,
+                        css::uno::Sequence<css::beans::NamedValue> const& rFlags) -> bool override;
 
     virtual auto UsesProxy() -> bool override;
 
