@@ -129,16 +129,16 @@ void UnitConverter::finalizeImport()
         return;
 
     // get maximum width of all digits
-    sal_Int64 nDigitWidth = 0;
+    double nDigitWidth = 0;
     for( sal_Unicode cChar = '0'; cChar <= '9'; ++cChar )
         nDigitWidth
-            = ::std::max(nDigitWidth, o3tl::convert(xFont->getCharWidth(cChar), o3tl::Length::twip,
-                                                    o3tl::Length::mm100));
+            = ::std::max(nDigitWidth, o3tl::convert<double>(xFont->getCharWidth(cChar),
+                                                    o3tl::Length::twip, o3tl::Length::mm100));
     if( nDigitWidth > 0 )
         maCoeffs[ Unit::Digit ] = nDigitWidth;
     // get width of space character
-    sal_Int32 nSpaceWidth
-        = o3tl::convert(xFont->getCharWidth(' '), o3tl::Length::twip, o3tl::Length::mm100);
+    double nSpaceWidth
+        = o3tl::convert<double>(xFont->getCharWidth(' '), o3tl::Length::twip, o3tl::Length::mm100);
     if( nSpaceWidth > 0 )
         maCoeffs[ Unit::Space ] = nSpaceWidth;
 }
