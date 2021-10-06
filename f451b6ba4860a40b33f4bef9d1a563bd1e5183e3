@@ -51,6 +51,24 @@
       "parentUuid": "7e2060ed_2a7b2dff",
       "revId": "f451b6ba4860a40b33f4bef9d1a563bd1e5183e3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd7ced03_55089f4a",
+        "filename": "basic/source/runtime/methods1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1637,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-06T05:48:10Z",
+      "side": 1,
+      "message": "\u003e I think it is better to go for no option VBASupport.\n\nYou are definitely right. This is about run-time behavior of a library function, and not about some compile-time language feature support, which is what Option Compatible controls. For such things, the behavior should only depend on VBASupport.",
+      "parentUuid": "576ac2b9_692857dd",
+      "revId": "f451b6ba4860a40b33f4bef9d1a563bd1e5183e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
