@@ -12263,8 +12263,8 @@ class GtkInstanceEditable : public GtkInstanceWidget, public virtual weld::Entry
 protected:
     GtkEditable* m_pEditable;
     GtkWidget* m_pDelegate;
-private:
     WidgetFont m_aCustomFont;
+private:
     gulong m_nChangedSignalId;
     gulong m_nInsertTextSignalId;
     gulong m_nCursorPosSignalId;
@@ -12519,11 +12519,6 @@ public:
         g_signal_handler_unblock(m_pDelegate, m_nActivateSignalId);
     }
 
-    virtual void set_font(const vcl::Font& rFont) override
-    {
-        m_aCustomFont.use_custom_font(&rFont, u"entry");
-    }
-
     virtual vcl::Font get_font() override
     {
         if (const vcl::Font* pFont = m_aCustomFont.get_custom_font())
@@ -12640,6 +12635,11 @@ public:
     GtkInstanceEntry(GtkEntry* pEntry, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceEditable(GTK_WIDGET(pEntry), pBuilder, bTakeOwnership)
     {
+    }
+
+    virtual void set_font(const vcl::Font& rFont) override
+    {
+        m_aCustomFont.use_custom_font(&rFont, u"entry");
     }
 };
 
@@ -16200,6 +16200,11 @@ public:
         return gtk_spin_button_get_digits(m_pButton);
     }
 
+    virtual void set_font(const vcl::Font& rFont) override
+    {
+        m_aCustomFont.use_custom_font(&rFont, u"spinbutton");
+    }
+
     virtual void disable_notify_events() override
     {
         g_signal_handler_block(m_pButton, m_nValueChangedSignalId);
@@ -16402,6 +16407,11 @@ public:
         double fSpinSize = m_pFormatter->GetSpinSize();
         gtk_spin_button_set_increments(m_pButton, fSpinSize, fSpinSize * 10);
         enable_notify_events();
+    }
+
+    virtual void set_font(const vcl::Font& rFont) override
+    {
+        m_aCustomFont.use_custom_font(&rFont, u"spinbutton");
     }
 
     virtual void disable_notify_events() override

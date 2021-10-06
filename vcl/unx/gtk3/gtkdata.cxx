@@ -446,6 +446,7 @@ static GtkStyleProvider* CreateStyleProvider()
           which would instead be combobox button.small-button if we didn't replace GtkComboBox,
           see GtkInstanceComboBox for an explanation for why we do that)
        1.e) entry in the data browser for tdf#137695 (entry.small-button)
+       1.f) spinbutton in the data browser tdf#141633 (spinbutton.small-button)
 
        2) hide the unwanted active tab in an 'overflow' notebook of double-decker notebooks.
           (tdf#122623) it's nigh impossible to have a GtkNotebook without an active (checked) tab,
@@ -454,7 +455,8 @@ static GtkStyleProvider* CreateStyleProvider()
     GtkCssProvider* pStyleProvider = gtk_css_provider_new();
     static const gchar data[] =
       "button.small-button, toolbar.small-button button, box.small-button button, "
-      "combobox.small-button *.combo, box#combobox.small-button *.combo, entry.small-button { "
+      "combobox.small-button *.combo, box#combobox.small-button *.combo, entry.small-button, "
+      "spinbutton.small-button, spinbutton.small-button entry, spinbutton.small-button button { "
       "padding: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;"
       "border-width: 0; min-height: 0; min-width: 0; }"
       "notebook.overflow > header.top > tabs > tab:checked { "
