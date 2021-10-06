@@ -436,7 +436,15 @@ bool ScRangeList::UpdateReference(
         if( nDx < 0 || nDy < 0 )
         {
             size_t n = maRanges.size();
-            Join(maRanges[n-1], true);
+            for(size_t i = n-1; i > 0;)
+            {
+                Join(maRanges[i], true);
+                // Join() may merge and remove even more than one item, protect against it.
+                if(i >= maRanges.size())
+                    i = maRanges.size()-1;
+                else
+                    --i;
+            }
         }
     }
 
