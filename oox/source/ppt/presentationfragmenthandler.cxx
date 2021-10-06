@@ -37,6 +37,7 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 
@@ -598,6 +599,81 @@ void PresentationFragmentHandler::finalizeImport()
         return new CustomShowListContext( *this, maCustomShowList );
     case PPT_TOKEN( defaultTextStyle ):
         return new TextListStyleContext( *this, *mpTextListStyle );
+    case PPT_TOKEN( modifyVerifier ):
+        OUString sAlgorithmClass = rAttribs.getString(XML_cryptAlgorithmClass, OUString());
+        OUString sAlgorithmType = rAttribs.getString(XML_cryptAlgorithmType, OUString());
+        sal_Int32 nAlgorithmSid = rAttribs.getInteger(XML_cryptAlgorithmSid, 0);
+        sal_Int32 nSpinCount = rAttribs.getInteger(XML_spinCount, 0);
+        OUString sSalt = rAttribs.getString(XML_saltData, OUString());
+        OUString sHash = rAttribs.getString(XML_hashData, OUString());
+        if (sAlgorithmClass == "hash" && sAlgorithmType == "typeAny" && nAlgorithmSid != 0
+            && !sSalt.isEmpty() && !sHash.isEmpty())
+        {
+            OUString sAlgorithmName;
+            switch (nAlgorithmSid)
+            {
+                case 1:
+                    sAlgorithmName = "MD2";
+                    break;
+                case 2:
+                    sAlgorithmName = "MD4";
+                    break;
+                case 3:
+                    sAlgorithmName = "MD5";
+                    break;
+                case 4:
+                    sAlgorithmName = "SHA-1";
+                    break;
+                case 5:
+                    sAlgorithmName = "MAC";
+                    break;
+                case 6:
+                    sAlgorithmName = "RIPEMD";
+                    break;
+                case 7:
+                    sAlgorithmName = "RIPEMD-160";
+                    break;
+                case 9:
+                    sAlgorithmName = "HMAC";
+                    break;
+                case 12:
+                    sAlgorithmName = "SHA-256";
+                    break;
+                case 13:
+                    sAlgorithmName = "SHA-384";
+                    break;
+                case 14:
+                    sAlgorithmName = "SHA-512";
+                    break;
+                default:; // 8, 10, 11, any other value: Undefined.
+            }
+
+            if (!sAlgorithmName.isEmpty())
+            {
+                uno::Sequence<beans::PropertyValue> aResult;
+                aResult.realloc(4);
+                aResult[0].Name = "algorithm-name";
+                aResult[0].Value <<= sAlgorithmName;
+                aResult[1].Name = "salt";
+                aResult[1].Value <<= sSalt;
+                aResult[2].Name = "iteration-count";
+                aResult[2].Value <<= nSpinCount;
+                aResult[3].Name = "hash";
+                aResult[3].Value <<= sHash;
+                try
+                {
+                    uno::Reference<beans::XPropertySet> xDocSettings(
+                        getFilter().getModelFactory()->createInstance(
+                            "com.sun.star.document.Settings"),
+                        uno::UNO_QUERY);
+                    xDocSettings->setPropertyValue("ModifyPasswordInfo", uno::makeAny(aResult));
+                }
+                catch (const uno::Exception&)
+                {
+                }
+            }
+        }
+        return this;
     }
     return this;
 }
