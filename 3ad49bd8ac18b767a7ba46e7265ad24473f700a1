@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b127676_e19c3fac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 65
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-10-06T08:51:50Z",
+      "side": 1,
+      "message": "Oops, sorry... didn\u0027t mean to trigger a rebuild!",
+      "revId": "3ad49bd8ac18b767a7ba46e7265ad24473f700a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
