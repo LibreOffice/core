@@ -84,7 +84,6 @@ extern "C" {
 #include <crt_externs.h>
 }
 
-using namespace std;
 using namespace ::com::sun::star;
 
 static int* gpnInit = nullptr;

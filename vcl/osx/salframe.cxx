@@ -54,7 +54,6 @@
 #include <Carbon/Carbon.h>
 #include <postmac.h>
 
-using namespace std;
 
 AquaSalFrame* AquaSalFrame::s_pCaptureFrame = nullptr;
 
