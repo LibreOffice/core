@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6240bcdf_342ae968",
+        "filename": "sc/source/filter/oox/stylesbuffer.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-06T07:09:24Z",
+      "side": 0,
+      "message": "Why this is changed from calculating in \"space width\" units (as defined in [OOXML] part 1 18.8.1) into use of SC_INDENT_STEP? You suggested in the bug to use the reverse of this process in filesave, which looked reasonable.",
+      "revId": "3c5afc731ef7d3aa8368b3a79bfd674cce8f85df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
