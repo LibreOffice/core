@@ -154,7 +154,7 @@ class ContentAttribs
 {
 private:
     SfxStyleSheet*  pStyle;
-    SfxItemSet      aAttribSet;
+    SfxItemSetFixed<EE_PARA_START, EE_CHAR_END> aAttribSet;
 
 public:
                     ContentAttribs( SfxItemPool& rItemPool );
