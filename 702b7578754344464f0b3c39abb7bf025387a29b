@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a342692b_1388110f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000863
+      },
+      "writtenOn": "2021-10-06T06:28:06Z",
+      "side": 1,
+      "message": "Thanks for merging, Christian! And Andras, Mike thanks for the reviews!",
+      "revId": "702b7578754344464f0b3c39abb7bf025387a29b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
