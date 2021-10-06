@@ -53,10 +53,10 @@
 
 #include <font/FontSelectPattern.hxx>
 #include <fontsubset.hxx>
-#include <outdev.h>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFace.hxx>
+#include <font/fontsubstitution.hxx>
 #include <sft.hxx>
 #include <win/saldata.hxx>
 #include <win/salgdi.h>
@@ -158,14 +158,14 @@ RawFontData::RawFontData( HDC hDC, DWORD nTableTag )
 namespace {
 
 class WinPreMatchFontSubstititution
-:    public ImplPreMatchFontSubstitution
+:    public vcl::font::PreMatchFontSubstitution
 {
 public:
     bool FindFontSubstitute(vcl::font::FontSelectPattern&) const override;
 };
 
 class WinGlyphFallbackSubstititution
-:    public ImplGlyphFallbackFontSubstitution
+:    public vcl::font::GlyphFallbackFontSubstitution
 {
 public:
     explicit WinGlyphFallbackSubstititution()

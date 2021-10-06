@@ -34,13 +34,14 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
 
-#include <outdev.h>
 #include <window.h>
 
 #include <ImplLayoutArgs.hxx>
+#include <drawmode.hxx>
+#include <impfontcache.hxx>
+#include <font/DirectFontSubstitution.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <PhysicalFontCollection.hxx>
-#include <drawmode.hxx>
 #include <font/FeatureCollector.hxx>
 #include <impglyphitem.hxx>
 #include <sallayout.hxx>
@@ -591,69 +592,18 @@ void OutputDevice::AddFontSubstitute( const OUString& rFontName,
                                       const OUString& rReplaceFontName,
                                       AddFontSubstituteFlags nFlags )
 {
-    ImplDirectFontSubstitution*& rpSubst = ImplGetSVData()->maGDIData.mpDirectFontSubst;
+    vcl::font::DirectFontSubstitution*& rpSubst = ImplGetSVData()->maGDIData.mpDirectFontSubst;
     if( !rpSubst )
-        rpSubst = new ImplDirectFontSubstitution;
+        rpSubst = new vcl::font::DirectFontSubstitution;
     rpSubst->AddFontSubstitute( rFontName, rReplaceFontName, nFlags );
     ImplGetSVData()->maGDIData.mbFontSubChanged = true;
 }
 
-void ImplDirectFontSubstitution::AddFontSubstitute( const OUString& rFontName,
-    const OUString& rSubstFontName, AddFontSubstituteFlags nFlags )
-{
-    maFontSubstList.emplace_back( rFontName, rSubstFontName, nFlags );
-}
-
-ImplFontSubstEntry::ImplFontSubstEntry( const OUString& rFontName,
-    const OUString& rSubstFontName, AddFontSubstituteFlags nSubstFlags )
-:   mnFlags( nSubstFlags )
-{
-    maSearchName = GetEnglishSearchFontName( rFontName );
-    maSearchReplaceName = GetEnglishSearchFontName( rSubstFontName );
-}
-
 void OutputDevice::RemoveFontsSubstitute()
 {
-    ImplDirectFontSubstitution* pSubst = ImplGetSVData()->maGDIData.mpDirectFontSubst;
+    vcl::font::DirectFontSubstitution* pSubst = ImplGetSVData()->maGDIData.mpDirectFontSubst;
     if( pSubst )
         pSubst->RemoveFontsSubstitute();
-}
-
-void ImplDirectFontSubstitution::RemoveFontsSubstitute()
-{
-    maFontSubstList.clear();
-}
-
-bool ImplDirectFontSubstitution::FindFontSubstitute( OUString& rSubstName,
-    std::u16string_view rSearchName ) const
-{
-    // TODO: get rid of O(N) searches
-    std::vector<ImplFontSubstEntry>::const_iterator it = std::find_if (
-                         maFontSubstList.begin(), maFontSubstList.end(),
-                         [&] (const ImplFontSubstEntry& s) { return (s.mnFlags & AddFontSubstituteFlags::ALWAYS)
-                                   && (s.maSearchName == rSearchName); } );
-    if (it != maFontSubstList.end())
-    {
-        rSubstName = it->maSearchReplaceName;
-        return true;
-    }
-    return false;
-}
-
-void ImplFontSubstitute( OUString& rFontName )
-{
-    // must be canonicalised
-    assert( GetEnglishSearchFontName( rFontName ) == rFontName );
-
-    OUString aSubstFontName;
-
-    // apply user-configurable font replacement (eg, from the list in Tools->Options)
-    const ImplDirectFontSubstitution* pSubst = ImplGetSVData()->maGDIData.mpDirectFontSubst;
-    if( pSubst && pSubst->FindFontSubstitute( aSubstFontName, rFontName ) )
-    {
-        rFontName = aSubstFontName;
-        return;
-    }
 }
 
 //hidpi TODO: This routine has hard-coded font-sizes that break places such as DialControl

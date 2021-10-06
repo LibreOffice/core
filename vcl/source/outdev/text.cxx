@@ -42,8 +42,8 @@
 #include <vcl/unohelp.hxx>
 
 #include <config_fuzzers.h>
-#include <outdev.h>
 #include <ImplLayoutArgs.hxx>
+#include <ImplOutDevData.hxx>
 #include <drawmode.hxx>
 #include <salgdi.hxx>
 #include <svdata.hxx>
