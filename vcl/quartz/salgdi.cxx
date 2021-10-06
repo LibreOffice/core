@@ -43,7 +43,7 @@
 #include <impfont.hxx>
 #include <impfontcharmap.hxx>
 #include <impfontmetricdata.hxx>
-#include <outdev.h>
+#include <font/fontsubstitution.hxx>
 #include <PhysicalFontCollection.hxx>
 
 #ifdef MACOSX
@@ -67,7 +67,7 @@ using namespace vcl;
 namespace {
 
 class CoreTextGlyphFallbackSubstititution
-:    public ImplGlyphFallbackFontSubstitution
+:    public vcl::font::GlyphFallbackFontSubstitution
 {
 public:
     bool FindFontSubstitute(vcl::font::FontSelectPattern&, LogicalFontInstance* pLogicalFont, OUString&) const override;
