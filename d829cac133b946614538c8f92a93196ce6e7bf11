@@ -16,6 +16,23 @@
       "message": "Automatic replacement can be useful but you must be careful a bit.\nYou replaced:\nmake_pair\nby:\nmake_std::pair\nwhich is wrong of course.\n\nAlso, I removed \"std::\" when \"pairs\" was in a comment.",
       "revId": "d829cac133b946614538c8f92a93196ce6e7bf11",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5528203_8348e565",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-06T20:10:16Z",
+      "side": 1,
+      "message": "No need to rebase or resume rebuild for just Android Jenkins, let\u0027s push this one then.\n\nThank you Chris for the patch!",
+      "revId": "d829cac133b946614538c8f92a93196ce6e7bf11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
