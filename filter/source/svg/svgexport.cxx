@@ -99,9 +99,9 @@ const char    aOOOAttrDisplayName[] = NSPREFIX "display-name";
 const char    aOOOAttrBackgroundVisibility[] = NSPREFIX "background-visibility";
 const char    aOOOAttrMasterObjectsVisibility[] = NSPREFIX "master-objects-visibility";
 const char    aOOOAttrSlideDuration[] = NSPREFIX "slide-duration";
-const OUString aOOOAttrDateTimeField = NSPREFIX "date-time-field";
-constexpr OUStringLiteral aOOOAttrFooterField = u"" NSPREFIX "footer-field";
 const char    aOOOAttrHasTransition[] = NSPREFIX "has-transition";
+constexpr OUStringLiteral aOOOAttrDateTimeField = u"" NSPREFIX "date-time-field";
+constexpr OUStringLiteral aOOOAttrFooterField = u"" NSPREFIX "footer-field";
 
 // ooo xml attributes for pages and shapes
 const char    aOOOAttrName[] = NSPREFIX "name";
@@ -2108,7 +2108,7 @@ bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShap
                 if( rMtf.GetActionSize() )
                 {   // for text field shapes we set up text-adjust attributes
                     // and set visibility to hidden
-                    const OUString* pElementId = nullptr;
+                    const OUString pElementId(sPlaceholderTag);
                     if( mbPresentation )
                     {
                         bool bIsPageNumber  = ( aShapeClass == "Slide_Number" );
@@ -2119,7 +2119,6 @@ bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShap
                         {
                             // to notify to the SVGActionWriter::ImplWriteActions method
                             // that we are dealing with a placeholder shape
-                            pElementId = &sPlaceholderTag;
 
                             mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", "hidden" );
                         }
@@ -2213,7 +2212,7 @@ bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShap
                                 SvXMLElementExport alinkA( *mpSVGExport, XML_NAMESPACE_NONE, "a", true, true );
                                 mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf,
                                                             0xffffffff,
-                                                            pElementId,
+                                                            &pElementId,
                                                             &rxShape,
                                                             pEmbeddedBitmapsMtf );
                             }
@@ -2222,7 +2221,7 @@ bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShap
                         {
                             mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf,
                                                         0xffffffff,
-                                                        pElementId,
+                                                        &pElementId,
                                                         &rxShape,
                                                         pEmbeddedBitmapsMtf );
                         }
