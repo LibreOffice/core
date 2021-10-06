@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkDialog" id="AsciiFilterDialog">
-    <property name="can_focus">False</property>
-    <property name="border_width">6</property>
+    <property name="can-focus">False</property>
+    <property name="border-width">6</property>
     <property name="title" translatable="yes" context="asciifilterdialog|AsciiFilterDialog">ASCII Filter Options</property>
     <property name="modal">True</property>
-    <property name="default_width">0</property>
-    <property name="default_height">0</property>
-    <property name="type_hint">dialog</property>
+    <property name="default-width">0</property>
+    <property name="default-height">0</property>
+    <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label" translatable="yes" context="stock">_OK</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="has-default">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -39,8 +39,8 @@
               <object class="GtkButton" id="cancel">
                 <property name="label" translatable="yes" context="stock">_Cancel</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -53,8 +53,8 @@
               <object class="GtkButton" id="help">
                 <property name="label" translatable="yes" context="stock">_Help</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -68,87 +68,87 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkFrame" id="frame1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <property name="label_xalign">0</property>
-            <property name="shadow_type">none</property>
+            <property name="label-xalign">0</property>
+            <property name="shadow-type">none</property>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
+              <!-- n-columns=2 n-rows=5 -->
               <object class="GtkGrid" id="grid1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="valign">start</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
                 <property name="margin-start">12</property>
                 <property name="margin-top">6</property>
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="halign">end</property>
                     <property name="label" translatable="yes" context="asciifilterdialog|label2">_Character set:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">charset</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">charset</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="fontft">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="halign">end</property>
                     <property name="label" translatable="yes" context="asciifilterdialog|fontft">Default fonts:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">font</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">font</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="languageft">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="halign">end</property>
                     <property name="label" translatable="yes" context="asciifilterdialog|languageft">Lan_guage:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">language</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">language</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="label5">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="halign">end</property>
                     <property name="label" translatable="yes" context="asciifilterdialog|label5">_Paragraph break:</property>
-                    <property name="use_underline">True</property>
+                    <property name="use-underline">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">3</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">3</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkComboBoxText" id="charset">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="charset-atkobject">
@@ -157,14 +157,14 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkComboBoxText" id="font">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="font-atkobject">
@@ -173,25 +173,25 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkBox" id="box1">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="spacing">12</property>
                     <child>
                       <object class="GtkRadioButton" id="crlf">
                         <property name="label" translatable="yes" context="asciifilterdialog|crlf">_CR &amp; LF</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
                         <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="crlf-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="asciifilterdialog|extended_tip|crlf">Produces a "Carriage Return" and a "Linefeed". This option is the default.</property>
@@ -208,11 +208,11 @@
                       <object class="GtkRadioButton" id="cr">
                         <property name="label" translatable="yes" context="asciifilterdialog|cr">C_R</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
                         <property name="halign">center</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                         <property name="group">crlf</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="cr-atkobject">
@@ -230,11 +230,11 @@
                       <object class="GtkRadioButton" id="lf">
                         <property name="label" translatable="yes" context="asciifilterdialog|lf">_LF</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
                         <property name="halign">end</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                         <property name="group">crlf</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="lf-atkobject">
@@ -250,21 +250,21 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">3</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">3</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkComboBoxText" id="language">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="has_entry">True</property>
+                    <property name="has-entry">True</property>
                     <child internal-child="entry">
                       <object class="GtkEntry">
-                        <property name="can_focus">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="activates-default">True</property>
                         <property name="truncate-multiline">True</property>
-                        <property name="activates_default">True</property>
                       </object>
                     </child>
                     <child internal-child="accessible">
@@ -274,22 +274,22 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">2</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="includebom">
                     <property name="label" translatable="yes" context="asciifilterdialog|includebom">Include byte-order mark</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
                     <property name="halign">start</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="draw-indicator">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">4</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">4</property>
                   </packing>
                 </child>
                 <child>
@@ -300,7 +300,7 @@
             <child type="label">
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="asciifilterdialog|label1">Properties</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
@@ -321,8 +321,5 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
   </object>
 </interface>
