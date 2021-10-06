@@ -33,6 +33,24 @@
       "message": "Xisco: you missed the last half of the commit message.  [So I gave up (again).]",
       "revId": "70d732dc52093934c5accd59b9bcea1e8da7f469",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf098bc4_56734f1e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-10-06T15:37:30Z",
+      "side": 1,
+      "message": "oh I see, then why did you add sw/qa/extras/uiwriter/data/tdf144317_optimizeTable.odt ?",
+      "parentUuid": "2b7b972c_dadd4446",
+      "revId": "70d732dc52093934c5accd59b9bcea1e8da7f469",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
