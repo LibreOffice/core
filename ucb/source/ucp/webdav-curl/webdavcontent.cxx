@@ -286,14 +286,8 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
     {
         try
         {
-            uno::Reference< beans::XPropertySet > const xProps(
-                m_xContext, uno::UNO_QUERY_THROW );
-            uno::Reference< uno::XComponentContext > xCtx;
-            xCtx.set( xProps->getPropertyValue( "DefaultContext" ),
-                uno::UNO_QUERY_THROW );
-
             uno::Reference< task::XInteractionHandler > xIH(
-                task::PasswordContainerInteractionHandler::create( xCtx ) );
+                task::PasswordContainerInteractionHandler::create(m_xContext) );
 
             // Supply a command env to isFolder() that contains an interaction
             // handler that uses the password container service to obtain
@@ -301,7 +295,7 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
 
             uno::Reference< ucb::XCommandEnvironment > xCmdEnv(
                 ucb::CommandEnvironment::create(
-                   xCtx,
+                   m_xContext,
                    xIH,
                    uno::Reference< ucb::XProgressHandler >() ) );
 
