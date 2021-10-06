@@ -915,7 +915,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     aIndexList = pDlg->GetSelectedRows();
                     pDlg.disposeAndClear();
-                    rReq.AppendItem( SfxIntegerListItem( SID_SELECT_TABLES, aIndexList ) );
+                    rReq.AppendItem( SfxIntegerListItem( SID_SELECT_TABLES, std::vector(aIndexList) ) );
                 }
                 else
                     rReq.Ignore();

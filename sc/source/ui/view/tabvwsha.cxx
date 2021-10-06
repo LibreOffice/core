@@ -517,7 +517,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     pOldSet->MergeRange(SID_ATTR_BORDER_STYLES, SID_ATTR_BORDER_DEFAULT_WIDTH);
 
     // We only allow these border line types.
-    const std::vector<sal_Int32> aBorderStyles{
+    std::vector<sal_Int32> aBorderStyles{
         table::BorderLineStyle::SOLID,
         table::BorderLineStyle::DOTTED,
         table::BorderLineStyle::DASHED,
@@ -526,8 +526,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
         table::BorderLineStyle::DASH_DOT_DOT,
         table::BorderLineStyle::DOUBLE_THIN };
 
-    SfxIntegerListItem aBorderStylesItem(SID_ATTR_BORDER_STYLES, aBorderStyles);
-    pOldSet->Put(aBorderStylesItem);
+    pOldSet->Put(SfxIntegerListItem(SID_ATTR_BORDER_STYLES, std::move(aBorderStyles)));
 
     // Set the default border width to 0.75 points.
     SfxInt64Item aBorderWidthItem(SID_ATTR_BORDER_DEFAULT_WIDTH, 75);
