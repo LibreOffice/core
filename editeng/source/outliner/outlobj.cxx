@@ -29,9 +29,9 @@
 #include <o3tl/safeint.hxx>
 #include <libxml/xmlwriter.h>
 
-OutlinerParaObjData::OutlinerParaObjData( std::unique_ptr<EditTextObject> pEditTextObject, const ParagraphDataVector& rParagraphDataVector, bool bIsEditDoc ) :
+OutlinerParaObjData::OutlinerParaObjData( std::unique_ptr<EditTextObject> pEditTextObject, ParagraphDataVector&& rParagraphDataVector, bool bIsEditDoc ) :
     mpEditTextObject(std::move(pEditTextObject)),
-    maParagraphDataVector(rParagraphDataVector),
+    maParagraphDataVector(std::move(rParagraphDataVector)),
     mbIsEditDoc(bIsEditDoc)
 {
     if( maParagraphDataVector.empty() && (mpEditTextObject->GetParagraphCount() != 0) )
@@ -62,8 +62,8 @@ bool OutlinerParaObjData::isWrongListEqual(const OutlinerParaObjData& rCompare) 
 }
 
 OutlinerParaObject::OutlinerParaObject(
-    std::unique_ptr<EditTextObject> xTextObj, const ParagraphDataVector& rParagraphDataVector, bool bIsEditDoc ) :
-    mpImpl(OutlinerParaObjData(std::move(xTextObj), rParagraphDataVector, bIsEditDoc))
+    std::unique_ptr<EditTextObject> xTextObj, ParagraphDataVector&& rParagraphDataVector, bool bIsEditDoc ) :
+    mpImpl(OutlinerParaObjData(std::move(xTextObj), std::move(rParagraphDataVector), bIsEditDoc))
 {
 }
 
