@@ -62,7 +62,7 @@ struct ResultListEntry
 // ResultList.
 
 
-typedef std::vector< ResultListEntry* > ResultList;
+typedef std::vector<std::unique_ptr<ResultListEntry>> ResultList;
 
 
 // struct DataSupplier_Impl.
@@ -71,7 +71,7 @@ typedef std::vector< ResultListEntry* > ResultList;
 struct DataSupplier_Impl
 {
     osl::Mutex                                   m_aMutex;
-    ResultList                                   m_aResults;
+    ResultList                                   m_Results;
     rtl::Reference< Content >                    m_xContent;
     uno::Reference< uno::XComponentContext > m_xContext;
     sal_Int32                                    m_nOpenMode;
@@ -84,17 +84,7 @@ struct DataSupplier_Impl
                 sal_Int32 nOpenMode )
     : m_xContent( rContent ), m_xContext( rxContext ), m_nOpenMode( nOpenMode ),
       m_bCountFinal( false ), m_bThrowException( false ) {}
-    ~DataSupplier_Impl();
 };
-
-
-DataSupplier_Impl::~DataSupplier_Impl()
-{
-    for ( auto& rResultPtr : m_aResults )
-    {
-        delete rResultPtr;
-    }
-}
 
 }
 
@@ -121,9 +111,9 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    if ( nIndex < m_pImpl->m_aResults.size() )
+    if (nIndex < m_pImpl->m_Results.size())
     {
-        OUString aId = m_pImpl->m_aResults[ nIndex ]->aId;
+        OUString aId = m_pImpl->m_Results[ nIndex ]->aId;
         if ( aId.getLength() )
         {
             // Already cached.
@@ -135,8 +125,7 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
     {
         OUString aId = m_pImpl->m_xContent->getResourceAccess().getURL();
 
-        const ContentProperties& props
-                            = *( m_pImpl->m_aResults[ nIndex ]->pData );
+        const ContentProperties& props(*(m_pImpl->m_Results[ nIndex ]->pData));
 
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
             aId += "/";
@@ -146,7 +135,7 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
         if ( props.isTrailingSlash() )
             aId += "/";
 
-        m_pImpl->m_aResults[ nIndex ]->aId = aId;
+        m_pImpl->m_Results[ nIndex ]->aId = aId;
         return aId;
     }
     return OUString();
@@ -159,10 +148,10 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    if ( nIndex < m_pImpl->m_aResults.size() )
+    if (nIndex < m_pImpl->m_Results.size())
     {
         uno::Reference< ucb::XContentIdentifier > xId
-            = m_pImpl->m_aResults[ nIndex ]->xId;
+            = m_pImpl->m_Results[ nIndex ]->xId;
         if ( xId.is() )
         {
             // Already cached.
@@ -175,7 +164,7 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
     {
         uno::Reference< ucb::XContentIdentifier > xId
             = new ::ucbhelper::ContentIdentifier( aId );
-        m_pImpl->m_aResults[ nIndex ]->xId = xId;
+        m_pImpl->m_Results[ nIndex ]->xId = xId;
         return xId;
     }
     return uno::Reference< ucb::XContentIdentifier >();
@@ -188,10 +177,10 @@ DataSupplier::queryContent( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    if ( nIndex < m_pImpl->m_aResults.size() )
+    if (nIndex < m_pImpl->m_Results.size())
     {
         uno::Reference< ucb::XContent > xContent
-            = m_pImpl->m_aResults[ nIndex ]->xContent;
+            = m_pImpl->m_Results[ nIndex ]->xContent;
         if ( xContent.is() )
         {
             // Already cached.
@@ -207,7 +196,7 @@ DataSupplier::queryContent( sal_uInt32 nIndex )
         {
             uno::Reference< ucb::XContent > xContent
                 = m_pImpl->m_xContent->getProvider()->queryContent( xId );
-            m_pImpl->m_aResults[ nIndex ]->xContent = xContent;
+            m_pImpl->m_Results[ nIndex ]->xContent = xContent;
             return xContent;
 
         }
@@ -224,7 +213,7 @@ bool DataSupplier::getResult( sal_uInt32 nIndex )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    if ( m_pImpl->m_aResults.size() > nIndex )
+    if (nIndex < m_pImpl->m_Results.size())
     {
         // Result already present.
         return true;
@@ -233,7 +222,7 @@ bool DataSupplier::getResult( sal_uInt32 nIndex )
     // Obtain values...
     if ( getData() )
     {
-        if ( m_pImpl->m_aResults.size() > nIndex )
+        if (nIndex < m_pImpl->m_Results.size())
         {
             // Result already present.
             return true;
@@ -250,14 +239,14 @@ sal_uInt32 DataSupplier::totalCount()
   // Obtain values...
   getData();
 
-  return m_pImpl->m_aResults.size();
+  return m_pImpl->m_Results.size();
 }
 
 
 // virtual
 sal_uInt32 DataSupplier::currentCount()
 {
-    return m_pImpl->m_aResults.size();
+    return m_pImpl->m_Results.size();
 }
 
 
@@ -274,9 +263,9 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues(
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    if ( nIndex < m_pImpl->m_aResults.size() )
+    if (nIndex < m_pImpl->m_Results.size())
     {
-        uno::Reference< sdbc::XRow > xRow = m_pImpl->m_aResults[ nIndex ]->xRow;
+        uno::Reference< sdbc::XRow > xRow = m_pImpl->m_Results[ nIndex ]->xRow;
         if ( xRow.is() )
         {
             // Already cached.
@@ -290,10 +279,10 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues(
             = Content::getPropertyValues(
                 m_pImpl->m_xContext,
                 getResultSet()->getProperties(),
-                *(m_pImpl->m_aResults[ nIndex ]->pData),
+                *(m_pImpl->m_Results[ nIndex ]->pData),
                 m_pImpl->m_xContent->getProvider(),
                 queryContentIdentifierString( nIndex ) );
-        m_pImpl->m_aResults[ nIndex ]->xRow = xRow;
+        m_pImpl->m_Results[ nIndex ]->xRow = xRow;
         return xRow;
     }
 
@@ -306,8 +295,8 @@ void DataSupplier::releasePropertyValues( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    if ( nIndex < m_pImpl->m_aResults.size() )
-        m_pImpl->m_aResults[ nIndex ]->xRow.clear();
+    if (nIndex < m_pImpl->m_Results.size())
+        m_pImpl->m_Results[ nIndex ]->xRow.clear();
 }
 
 
@@ -445,8 +434,8 @@ bool DataSupplier::getData()
                         break;
                     }
 
-                    m_pImpl->m_aResults.push_back(
-                        new ResultListEntry( std::move(pContentProperties) ) );
+                    m_pImpl->m_Results.push_back(
+                        std::make_unique<ResultListEntry>(std::move(pContentProperties)));
                 }
             }
             catch ( DAVException const & )
