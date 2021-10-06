@@ -832,7 +832,7 @@ bool ImplLOKHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, MouseNotifyEven
 
     vcl::Window* pDragWin = pFrameData->mpMouseDownWin;
     if (pDragWin &&
-        nSVEvent == MouseNotifyEvent::MOUSEMOVE &&
+        nEvent == MouseNotifyEvent::MOUSEMOVE &&
         pFrameData->mbDragging)
     {
         css::uno::Reference<css::datatransfer::dnd::XDropTargetDragContext> xDropTargetDragContext =
@@ -868,7 +868,7 @@ bool ImplLOKHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, MouseNotifyEven
     }
 
     if (pDragWin &&
-        nSVEvent == MouseNotifyEvent::MOUSEBUTTONUP &&
+        nEvent == MouseNotifyEvent::MOUSEBUTTONUP &&
         pFrameData->mbDragging)
     {
         css::uno::Reference<css::datatransfer::dnd::XDropTargetDropContext> xDropTargetDropContext =
