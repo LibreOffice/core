@@ -33,6 +33,24 @@
       "message": "Newer code like sd/source/ui/inc/unokywds.hxx uses \u0027inline constexpr OUStringLiteral\u0027, would it make sense to switch straight to that, instead of an intermediate step?",
       "revId": "a45d08eb4447e0b88874b3810efdeec08530f952",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f6b95b9_e39223c9",
+        "filename": "filter/source/svg/svgfilter.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-06T15:00:36Z",
+      "side": 1,
+      "message": "Note that marking a variable in a header \u0027inline\u0027 will not prevent having several copies of the variable - one in each unit. This is a misconception IIUC. \u0027inline variables\u0027 in c++17 are serving for modules. Please follow the advice that Miklos gave :)",
+      "parentUuid": "969f75be_ac2c8af6",
+      "revId": "a45d08eb4447e0b88874b3810efdeec08530f952",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
