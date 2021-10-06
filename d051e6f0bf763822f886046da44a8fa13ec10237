@@ -16,6 +16,24 @@
       "message": "Thanks, certainly makes it easier to step through this code.",
       "revId": "d051e6f0bf763822f886046da44a8fa13ec10237",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "928488a8_7865dd7f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-06T14:40:18Z",
+      "side": 1,
+      "message": "Oh?\n\nI find it at least questionable.\n1. Explicit namespace makes it much more visible and greppable. If some namespace name looks too long, we have a precedent to handle that: css::. Or rename the namespace if it\u0027s not a published API.\n2. Change ternary operator to if: it (1) gives an overhead to initialize it twice; and (2) removes \u0027const\u0027 from things that don\u0027t need to change after the initialization. Tis is a bad thing IMO.",
+      "parentUuid": "ee9dbb70_df249873",
+      "revId": "d051e6f0bf763822f886046da44a8fa13ec10237",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
