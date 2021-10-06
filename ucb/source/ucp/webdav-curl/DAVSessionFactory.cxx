@@ -31,6 +31,7 @@ DAVSessionFactory::~DAVSessionFactory()
 
 rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
                 const OUString & inUri,
+                const uno::Sequence< beans::NamedValue >& rFlags,
                 const uno::Reference< uno::XComponentContext > & rxContext )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -39,14 +40,14 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
         m_xProxyDecider.reset( new ucbhelper::InternetProxyDecider( rxContext ) );
 
     Map::iterator aIt = std::find_if(m_aMap.begin(), m_aMap.end(),
-        [&inUri](const Map::value_type& rEntry) { return rEntry.second->CanUse( inUri ); });
+        [&inUri, &rFlags](const Map::value_type& rEntry) { return rEntry.second->CanUse( inUri, rFlags ); });
 
     if ( aIt == m_aMap.end() )
     {
         CurlUri const aURI( inUri );
 
         std::unique_ptr< DAVSession > xElement(
-            new CurlSession(rxContext, this, inUri, *m_xProxyDecider) );
+            new CurlSession(rxContext, this, inUri, rFlags, *m_xProxyDecider) );
 
         aIt = m_aMap.emplace(  inUri, xElement.get() ).first;
         aIt->second->m_aContainerIt = aIt;
@@ -69,7 +70,7 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
         // call a little:
         CurlUri const aURI( inUri );
 
-        aIt->second = new CurlSession(rxContext, this, inUri, *m_xProxyDecider);
+        aIt->second = new CurlSession(rxContext, this, inUri, rFlags, *m_xProxyDecider);
         aIt->second->m_aContainerIt = aIt;
         return aIt->second;
     }
