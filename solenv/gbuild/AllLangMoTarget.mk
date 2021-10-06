@@ -32,9 +32,7 @@ $(call gb_MoTarget_get_clean_target,%) :
 			$(call gb_MoTarget_get_target,$*) \
 			$(call gb_MoTarget_get_install_target,$*))
 
-$(call gb_MoTarget_get_target,%) : \
-		$(gb_Helper_MISCDUMMY) \
-		$(call gb_ExternalExecutable_get_dependencies,python)
+$(call gb_MoTarget_get_target,%) : $(gb_Helper_MISCDUMMY)
 	$(call gb_Output_announce,$*,$(true),MO ,2)
 	$(call gb_Trace_StartRange,$*,MO )
 	$(call gb_Helper_abbreviate_dirs,\
