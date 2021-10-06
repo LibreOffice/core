@@ -303,6 +303,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "965f2180_ad3df6ae",
+        "filename": "sc/uiconfig/scalc/ui/pastespecial.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2021-10-06T22:12:44Z",
+      "side": 1,
+      "message": "I gave a more detailed explanation in this tooltip now.",
+      "parentUuid": "73fb296b_fb0f6e6b",
+      "range": {
+        "startLine": 186,
+        "startChar": 152,
+        "endLine": 186,
+        "endChar": 188
+      },
+      "revId": "11043b8c1f7e6ed5096f2e716ccdb6d121337f55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6328b00f_1c6d0f6b",
