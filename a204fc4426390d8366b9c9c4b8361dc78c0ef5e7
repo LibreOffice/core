@@ -16,6 +16,24 @@
       "message": "To introduce less code and ifs I would propose to do this in a different way.\n\nSC_MOD()-\u003eSetDragObject(...)   sets the transfer object\nSC_MOD()-\u003eGetDragData()        gets the transfer data\n\nWe can modify ScModule::SetDragObject(...)\n\n`if (LibreOfficeKit::isActive())\n{\n    ScTabViewShell* pViewShell \u003d dynamic_cast\u003cScTabViewShell*\u003e( SfxViewShell::Current() );\n    if (pViewShell) pViewShell-\u003eSetDragObject(...)   \u003c- which will store drag data per view\n}\nelse\n{\n    ... current code setting m_pDragData\n}`\n\nand similar code inside ScModule::GetDragData()\n\nThanks to that we don\u0027t need to modify d\u0026d code implementation in gridwindow and other places\nIt will be transparent and not a special case for online.",
       "revId": "a204fc4426390d8366b9c9c4b8361dc78c0ef5e7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "969b2af0_8d3367fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000865
+      },
+      "writtenOn": "2021-10-06T16:24:37Z",
+      "side": 1,
+      "message": "Conceptually is wrong, Module is global.\n\nand I do no like to depend on SfxViewShell::Current(), the ScGridWindow already\nhas the drag data and it is not needed to call SetDragObject.",
+      "parentUuid": "fc7daea3_65fe858e",
+      "revId": "a204fc4426390d8366b9c9c4b8361dc78c0ef5e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
