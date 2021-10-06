@@ -114,12 +114,6 @@ public:
     void addProperties( const std::vector< OUString > & rProps,
                         const ContentProperties & rContentProps );
 
-    // overwrites probably existing entries.
-    void addProperties( const ContentProperties & rProps );
-
-    // overwrites probably existing entries.
-    void addProperties( const std::vector< DAVPropertyValue > & rProps );
-
     // overwrites probably existing entry.
     void addProperty( const OUString & rName,
                      const css::uno::Any & rValue,
