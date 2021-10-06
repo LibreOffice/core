@@ -33,7 +33,6 @@
 #include <test/bootstrapfixture.hxx>
 
 
-using namespace std;
 using namespace ::com::sun::star;
 
 
