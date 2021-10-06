@@ -52,6 +52,24 @@
       "parentUuid": "66b4bf72_b8488835",
       "revId": "3c5afc731ef7d3aa8368b3a79bfd674cce8f85df",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a450c51e_407c654d",
+        "filename": "sc/source/filter/oox/stylesbuffer.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-10-06T13:02:50Z",
+      "side": 0,
+      "message": "Yes, your suggestion makes more sense. But I am afraid this is too complicated from me as it is out of my skills at this moment. If you can give more detailed coding advice that will be great. For now I will reset the assignee of that bug to default until I learn more on this.",
+      "parentUuid": "6ffa7f5a_561c8794",
+      "revId": "3c5afc731ef7d3aa8368b3a79bfd674cce8f85df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
