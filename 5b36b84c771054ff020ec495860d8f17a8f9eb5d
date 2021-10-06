@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ba65118b_d80f3e36",
+        "filename": "vcl/qa/cppunit/outdev.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1049,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-10-06T13:11:08Z",
+      "side": 1,
+      "message": "totally fair comment, I will do this",
+      "parentUuid": "4450345b_16701bf7",
+      "range": {
+        "startLine": 1049,
+        "startChar": 0,
+        "endLine": 1049,
+        "endChar": 9
+      },
+      "revId": "5b36b84c771054ff020ec495860d8f17a8f9eb5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3f11a7cf_1fde3e90",
         "filename": "vcl/qa/cppunit/outdev.cxx",
         "patchSetId": 6
@@ -37,6 +61,30 @@
       "writtenOn": "2021-10-06T12:13:21Z",
       "side": 1,
       "message": "I would say INITIAL_SETUP_ACTION_COUNT.",
+      "range": {
+        "startLine": 1087,
+        "startChar": 45,
+        "endLine": 1087,
+        "endChar": 58
+      },
+      "revId": "5b36b84c771054ff020ec495860d8f17a8f9eb5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9b41e39_f7264627",
+        "filename": "vcl/qa/cppunit/outdev.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1087,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-10-06T13:11:08Z",
+      "side": 1,
+      "message": "excellent suggestions, will do",
+      "parentUuid": "3f11a7cf_1fde3e90",
       "range": {
         "startLine": 1087,
         "startChar": 45,
