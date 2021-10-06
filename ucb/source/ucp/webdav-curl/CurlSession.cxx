@@ -453,6 +453,10 @@ CurlSession::CurlSession(uno::Reference<uno::XComponentContext> const& xContext,
              "curl version: " << pVersion->version << " " << pVersion->host
                               << " features: " << ::std::hex << pVersion->features << " ssl: "
                               << pVersion->ssl_version << " libz: " << pVersion->libz_version);
+    // Make sure a User-Agent header is always included, as at least
+    // en.wikipedia.org:80 forces back 403 "Scripts should use an informative
+    // User-Agent string with contact information, or they may be IP-blocked
+    // without notice" otherwise:
     OString const useragent(OString::Concat("LibreOffice " LIBO_VERSION_DOTTED " curl/")
                             + ::std::string_view(pVersion->version, strlen(pVersion->version)) + " "
                             + pVersion->ssl_version);
