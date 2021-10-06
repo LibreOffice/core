@@ -9111,6 +9111,55 @@ public:
     }
 };
 
+class WidgetFont
+{
+private:
+    GtkWidget* m_pWidget;
+    GtkCssProvider* m_pFontCssProvider;
+    std::unique_ptr<vcl::Font> m_xFont;
+public:
+    WidgetFont(GtkWidget* pWidget)
+        : m_pWidget(pWidget)
+        , m_pFontCssProvider(nullptr)
+    {
+    }
+
+    void use_custom_font(const vcl::Font* pFont, std::u16string_view rCSSSelector)
+    {
+        GtkStyleContext *pWidgetContext = gtk_widget_get_style_context(m_pWidget);
+        if (m_pFontCssProvider)
+        {
+            gtk_style_context_remove_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pFontCssProvider));
+            m_pFontCssProvider = nullptr;
+        }
+
+        m_xFont.reset();
+
+        if (!pFont)
+            return;
+
+        m_xFont.reset(new vcl::Font(*pFont));
+        m_pFontCssProvider = gtk_css_provider_new();
+        OUString aBuffer = rCSSSelector + OUString::Concat(" { ") + vcl_font_to_css(*pFont) + OUString::Concat(" }");
+        OString aResult = OUStringToOString(aBuffer, RTL_TEXTENCODING_UTF8);
+        css_provider_load_from_data(m_pFontCssProvider, aResult.getStr(), aResult.getLength());
+        gtk_style_context_add_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pFontCssProvider),
+                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
+
+    const vcl::Font* get_custom_font() const
+    {
+        return m_xFont.get();
+    }
+
+    ~WidgetFont()
+    {
+        if (m_pFontCssProvider)
+            use_custom_font(nullptr, u"");
+        assert(!m_pFontCssProvider);
+    }
+};
+
 class GtkInstanceButton : public GtkInstanceWidget, public virtual weld::Button
 {
 private:
@@ -12215,7 +12264,7 @@ protected:
     GtkEditable* m_pEditable;
     GtkWidget* m_pDelegate;
 private:
-    std::optional<vcl::Font> m_xFont;
+    WidgetFont m_aCustomFont;
     gulong m_nChangedSignalId;
     gulong m_nInsertTextSignalId;
     gulong m_nCursorPosSignalId;
@@ -12311,6 +12360,7 @@ public:
 #else
         , m_pDelegate(pWidget)
 #endif
+        , m_aCustomFont(m_pWidget)
         , m_nChangedSignalId(g_signal_connect(m_pEditable, "changed", G_CALLBACK(signalChanged), this))
         , m_nInsertTextSignalId(g_signal_connect(m_pEditable, "insert-text", G_CALLBACK(signalInsertText), this))
         , m_nCursorPosSignalId(g_signal_connect(m_pEditable, "notify::cursor-position", G_CALLBACK(signalCursorPosition), this))
@@ -12471,18 +12521,13 @@ public:
 
     virtual void set_font(const vcl::Font& rFont) override
     {
-        m_xFont = rFont;
-        PangoAttrList* pOrigList = get_attributes();
-        PangoAttrList* pAttrList = pOrigList ? pango_attr_list_copy(pOrigList) : pango_attr_list_new();
-        update_attr_list(pAttrList, rFont);
-        set_attributes(pAttrList);
-        pango_attr_list_unref(pAttrList);
+        m_aCustomFont.use_custom_font(&rFont, u"entry");
     }
 
     virtual vcl::Font get_font() override
     {
-        if (m_xFont)
-            return *m_xFont;
+        if (const vcl::Font* pFont = m_aCustomFont.get_custom_font())
+            return *pFont;
         return GtkInstanceWidget::get_font();
     }
 
@@ -16513,8 +16558,7 @@ private:
     GtkTextBuffer* m_pTextBuffer;
     GtkAdjustment* m_pVAdjustment;
     GtkCssProvider* m_pFgCssProvider;
-    GtkCssProvider* m_pFontCssProvider;
-    std::optional<vcl::Font> m_xFont;
+    WidgetFont m_aCustomFont;
     int m_nMaxTextLength;
     gulong m_nChangedSignalId; // we don't disable/enable this one, it's to implement max-length
     gulong m_nInsertTextSignalId;
@@ -16606,7 +16650,7 @@ public:
         , m_pTextBuffer(gtk_text_view_get_buffer(pTextView))
         , m_pVAdjustment(gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(pTextView)))
         , m_pFgCssProvider(nullptr)
-        , m_pFontCssProvider(nullptr)
+        , m_aCustomFont(m_pWidget)
         , m_nMaxTextLength(0)
         , m_nChangedSignalId(g_signal_connect(m_pTextBuffer, "changed", G_CALLBACK(signalChanged), this))
         , m_nInsertTextSignalId(g_signal_connect_after(m_pTextBuffer, "insert-text", G_CALLBACK(signalInserText), this))
@@ -16721,25 +16765,16 @@ public:
                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
 
-    virtual vcl::Font get_font() override
-    {
-        if (m_xFont)
-            return *m_xFont;
-        return GtkInstanceWidget::get_font();
-    }
-
     virtual void set_font(const vcl::Font& rFont) override
     {
-        m_xFont = rFont;
-        GtkStyleContext *pWidgetContext = gtk_widget_get_style_context(GTK_WIDGET(m_pTextView));
-        if (m_pFontCssProvider)
-            gtk_style_context_remove_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pFontCssProvider));
-        m_pFontCssProvider = gtk_css_provider_new();
-        OUString aBuffer = "textview { " + vcl_font_to_css(rFont) +  "}";
-        OString aResult = OUStringToOString(aBuffer, RTL_TEXTENCODING_UTF8);
-        css_provider_load_from_data(m_pFontCssProvider, aResult.getStr(), aResult.getLength());
-        gtk_style_context_add_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pFontCssProvider),
-                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        m_aCustomFont.use_custom_font(&rFont, u"textview");
+    }
+
+    virtual vcl::Font get_font() override
+    {
+        if (const vcl::Font* pFont = m_aCustomFont.get_custom_font())
+            return *pFont;
+        return GtkInstanceWidget::get_font();
     }
 
     virtual void disable_notify_events() override
@@ -17604,13 +17639,12 @@ private:
     GtkWidget* m_pEntry;
     GtkEditable* m_pEditable;
 //    GtkCellView* m_pCellView;
-    GtkCssProvider* m_pFontCssProvider;
     GtkEventController* m_pKeyController;
     GtkEventController* m_pEntryKeyController;
     GtkEventController* m_pMenuKeyController;
     GtkEventController* m_pEntryFocusController;
 //    std::unique_ptr<CustomRenderMenuButtonHelper> m_xCustomMenuButtonHelper;
-    std::optional<vcl::Font> m_xFont;
+    WidgetFont m_aCustomFont;
     std::optional<vcl::Font> m_xEntryFont;
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
     vcl::QuickSelectionEngine m_aQuickSelectionEngine;
@@ -18648,7 +18682,7 @@ public:
 //        , m_pToggleButton(GTK_WIDGET(gtk_builder_get_object(pComboBuilder, "button")))
         , m_pEntry(GTK_IS_ENTRY(gtk_combo_box_get_child(pComboBox)) ? gtk_combo_box_get_child(pComboBox) : nullptr)
         , m_pEditable(GTK_EDITABLE(m_pEntry))
-        , m_pFontCssProvider(nullptr)
+        , m_aCustomFont(m_pWidget)
 //        , m_pCellView(nullptr)
         , m_aQuickSelectionEngine(*this)
 //        , m_bHoverSelection(false)
@@ -19031,22 +19065,13 @@ public:
 
     virtual void set_font(const vcl::Font& rFont) override
     {
-        m_xFont = rFont;
-        GtkStyleContext *pWidgetContext = gtk_widget_get_style_context(GTK_WIDGET(m_pComboBox));
-        if (m_pFontCssProvider)
-            gtk_style_context_remove_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pFontCssProvider));
-        m_pFontCssProvider = gtk_css_provider_new();
-        OUString aBuffer = "combobox { " + vcl_font_to_css(rFont) +  "}";
-        OString aResult = OUStringToOString(aBuffer, RTL_TEXTENCODING_UTF8);
-        css_provider_load_from_data(m_pFontCssProvider, aResult.getStr(), aResult.getLength());
-        gtk_style_context_add_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pFontCssProvider),
-                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        m_aCustomFont.use_custom_font(&rFont, u"combobox");
     }
 
     virtual vcl::Font get_font() override
     {
-        if (m_xFont)
-            return *m_xFont;
+        if (const vcl::Font* pFont = m_aCustomFont.get_custom_font())
+            return *pFont;
         return GtkInstanceWidget::get_font();
     }
 
@@ -19381,9 +19406,8 @@ private:
     GtkWidget* m_pToggleButton;
     GtkWidget* m_pEntry;
     GtkCellView* m_pCellView;
-    GtkCssProvider* m_pFontCssProvider;
+    WidgetFont m_aCustomFont;
     std::unique_ptr<CustomRenderMenuButtonHelper> m_xCustomMenuButtonHelper;
-    std::optional<vcl::Font> m_xFont;
     std::optional<vcl::Font> m_xEntryFont;
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
     vcl::QuickSelectionEngine m_aQuickSelectionEngine;
@@ -20421,7 +20445,7 @@ public:
         , m_pToggleButton(GTK_WIDGET(gtk_builder_get_object(pComboBuilder, "button")))
         , m_pEntry(GTK_WIDGET(gtk_builder_get_object(pComboBuilder, "entry")))
         , m_pCellView(nullptr)
-        , m_pFontCssProvider(nullptr)
+        , m_aCustomFont(m_pWidget)
         , m_aQuickSelectionEngine(*this)
         , m_bHoverSelection(false)
         , m_bMouseInOverlayButton(false)
@@ -20840,23 +20864,14 @@ public:
 
     virtual void set_font(const vcl::Font& rFont) override
     {
-        m_xFont = rFont;
-        GtkStyleContext *pWidgetContext = gtk_widget_get_style_context(GTK_WIDGET(getContainer()));
-        if (m_pFontCssProvider)
-            gtk_style_context_remove_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pFontCssProvider));
-        m_pFontCssProvider = gtk_css_provider_new();
-        OUString aBuffer = "box#combobox { " + vcl_font_to_css(rFont) +  "}";
-        OString aResult = OUStringToOString(aBuffer, RTL_TEXTENCODING_UTF8);
-        css_provider_load_from_data(m_pFontCssProvider, aResult.getStr(), aResult.getLength());
-        gtk_style_context_add_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pFontCssProvider),
-                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        m_aCustomFont.use_custom_font(&rFont, u"box#combobox");
     }
 
     virtual vcl::Font get_font() override
     {
-        if (m_xFont)
-            return *m_xFont;
-        return GtkInstanceContainer::get_font();
+        if (const vcl::Font* pFont = m_aCustomFont.get_custom_font())
+            return *pFont;
+        return GtkInstanceWidget::get_font();
     }
 
     virtual void set_entry_font(const vcl::Font& rFont) override
