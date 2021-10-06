@@ -51,6 +51,24 @@
       "parentUuid": "969f75be_ac2c8af6",
       "revId": "a45d08eb4447e0b88874b3810efdeec08530f952",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20a00f56_53ad601e",
+        "filename": "filter/source/svg/svgfilter.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-06T15:24:58Z",
+      "side": 1,
+      "message": "\u003e Note that marking a variable in a header \u0027inline\u0027 will not prevent having several copies of the variable - one in each unit\n\nIgnore me - I\u0027m obviously wrong.\nYet, having const converted to constexpr would be great: it removes dynamic string initialization at load, including memory allocation and data copy.",
+      "parentUuid": "3f6b95b9_e39223c9",
+      "revId": "a45d08eb4447e0b88874b3810efdeec08530f952",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
