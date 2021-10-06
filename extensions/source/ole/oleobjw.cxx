@@ -47,7 +47,6 @@
 #include "oleobjw.hxx"
 #include "unoobjw.hxx"
 #include <stdio.h>
-using namespace std;
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::script;
@@ -2193,9 +2192,9 @@ void IUnknownWrapper::getFuncDesc(const OUString & sFuncName, FUNCDESC ** pFuncD
                 // maybe this is a property, if so we need
                 // to store either both id's ( put/get ) or
                 // just the get. Storing both is more consistent
-                pair<cit, cit> pItems = m_mapComFunc.equal_range( sRealName );
+                std::pair<cit, cit> pItems = m_mapComFunc.equal_range( sRealName );
                 for ( ;pItems.first != pItems.second; ++pItems.first )
-                    m_mapComFunc.insert( TLBFuncIndexMap::value_type ( make_pair(sFuncName, pItems.first->second ) ));
+                    m_mapComFunc.insert( TLBFuncIndexMap::value_type ( std::make_pair(sFuncName, pItems.first->second ) ));
                 itIndex =
                     m_mapComFunc.find( sFuncName );
             }
@@ -2205,7 +2204,7 @@ void IUnknownWrapper::getFuncDesc(const OUString & sFuncName, FUNCDESC ** pFuncD
 #if OSL_DEBUG_LEVEL >= 1
     // There must only be one entry if sFuncName represents a function or two
     // if it is a property
-    pair<cit, cit> p = m_mapComFunc.equal_range(sFuncName.toAsciiLowerCase());
+    std::pair<cit, cit> p = m_mapComFunc.equal_range(sFuncName.toAsciiLowerCase());
     int numEntries = 0;
     for ( ;p.first != p.second; p.first ++, numEntries ++);
     OSL_ASSERT( ! (numEntries > 3) );
@@ -2237,7 +2236,7 @@ void IUnknownWrapper::getPropDesc(const OUString & sFuncName, FUNCDESC ** pFuncD
     OSL_ASSERT( * pFuncDescGet == nullptr && * pFuncDescPut == nullptr);
     buildComTlbIndex();
     typedef TLBFuncIndexMap::const_iterator cit;
-    pair<cit, cit> p = m_mapComFunc.equal_range(sFuncName);
+    std::pair<cit, cit> p = m_mapComFunc.equal_range(sFuncName);
     if (p.first == m_mapComFunc.end())
     {
         //try case insensitive with IDispatch::GetIDsOfNames
