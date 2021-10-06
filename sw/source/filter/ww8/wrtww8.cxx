@@ -2415,6 +2415,11 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
     }
 
     int nWidthPercent = pFormat->GetFrameSize().GetWidthPercent();
+
+    // The best fit for "automatic" table placement is relative 100%
+    if (!nWidthPercent && rHori.GetHoriOrient() == text::HoriOrientation::FULL)
+        nWidthPercent = 100;
+
     // Width is in fiftieths of a percent. For sprmTTableWidth, must be non-negative and 600% max
     if ( nWidthPercent > 0 && nWidthPercent <= 600 )
     {

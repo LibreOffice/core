@@ -1214,6 +1214,10 @@ DECLARE_OOXMLEXPORT_TEST(testTableMarginAdjustment, "table.fodt")
 
     assertXPath(pXmlDoc, "//w:tbl[1]/w:tblPr[1]/w:tblInd[1]", "type", "dxa");
     assertXPath(pXmlDoc, "//w:tbl[1]/w:tblPr[1]/w:tblInd[1]", "w", "0");
+
+
+    // tdf#143982: automatic tables should export as something better than just left-and-size
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xTable, "RelativeWidth"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf119760_tableInTablePosition, "tdf119760_tableInTablePosition.docx")
