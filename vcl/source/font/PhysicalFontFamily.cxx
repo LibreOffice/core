@@ -22,7 +22,6 @@
 #include <rtl/ustring.hxx>
 #include <unotools/fontdefs.hxx>
 
-#include <outdev.h>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <PhysicalFontCollection.hxx>
 

@@ -470,10 +470,12 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/filter/wmf/wmfwr \
     vcl/source/filter/png/PngImageReader \
     vcl/source/filter/png/pngwrite \
+    vcl/source/font/DirectFontSubstitution \
     vcl/source/font/Feature \
     vcl/source/font/FeatureCollector \
     vcl/source/font/FeatureParser \
     vcl/source/font/FontSelectPattern \
+    vcl/source/font/FontSubstEntry \
     vcl/source/font/OpenTypeFeatureDefinitionList \
     vcl/source/font/PhysicalFontCollection \
     vcl/source/font/PhysicalFontFace \

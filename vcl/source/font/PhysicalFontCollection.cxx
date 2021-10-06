@@ -26,9 +26,10 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/fontdefs.hxx>
 #include <o3tl/sorted_vector.hxx>
-#include <outdev.h>
+
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <PhysicalFontCollection.hxx>
+#include <font/fontsubstitution.hxx>
 
 static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
 {
@@ -76,12 +77,12 @@ PhysicalFontCollection::~PhysicalFontCollection()
     Clear();
 }
 
-void PhysicalFontCollection::SetPreMatchHook( ImplPreMatchFontSubstitution* pHook )
+void PhysicalFontCollection::SetPreMatchHook( vcl::font::PreMatchFontSubstitution* pHook )
 {
     mpPreMatchHook = pHook;
 }
 
-void PhysicalFontCollection::SetFallbackHook( ImplGlyphFallbackFontSubstitution* pHook )
+void PhysicalFontCollection::SetFallbackHook( vcl::font::GlyphFallbackFontSubstitution* pHook )
 {
     mpFallbackHook = pHook;
 }
@@ -967,7 +968,7 @@ vcl::font::PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( vcl::font
         }
 
         aSearchName = GetEnglishSearchFontName( aSearchName );
-        ImplFontSubstitute( aSearchName );
+        vcl::font::ImplFontSubstitute(aSearchName);
         // #114999# special emboldening for Ricoh fonts
         // TODO: smarter check for special cases by using PreMatch infrastructure?
         if( (rFSD.GetWeight() > WEIGHT_MEDIUM) &&
@@ -1064,7 +1065,7 @@ vcl::font::PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( vcl::font
         {
             aSearchName = GetEnglishSearchFontName( aSearchName );
         }
-        ImplFontSubstitute( aSearchName );
+        vcl::font::ImplFontSubstitute( aSearchName );
         vcl::font::PhysicalFontFamily* pFoundData = ImplFindFontFamilyBySearchName( aSearchName );
         if( pFoundData )
             return pFoundData;
