@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 #include <osl/time.h>
 #include <osl/thread.hxx>
+#include <salhelper/thread.hxx>
 
 #include <com/sun/star/ucb/LockScope.hpp>
 
@@ -31,7 +32,7 @@ using namespace http_dav_ucp;
 
 namespace http_dav_ucp {
 
-class TickerThread : public osl::Thread
+class TickerThread : public salhelper::Thread
 {
     bool m_bFinish;
     SerfLockStore & m_rLockStore;
@@ -39,19 +40,20 @@ class TickerThread : public osl::Thread
 public:
 
     explicit TickerThread( SerfLockStore & rLockStore )
-        : osl::Thread(), m_bFinish( false ), m_rLockStore( rLockStore ) {}
+        : Thread( "WebDavTickerThread" ), m_bFinish( false ),
+          m_rLockStore( rLockStore ) {}
 
     void finish() { m_bFinish = true; }
 
-protected:
+private:
 
-    virtual void SAL_CALL run() override;
+    virtual void execute();
 };
 
 } // namespace http_dav_ucp
 
 
-void TickerThread::run()
+void TickerThread::execute()
 {
     osl_setThreadName("http_dav_ucp::TickerThread");
 
@@ -72,7 +74,7 @@ void TickerThread::run()
         TimeValue aTV;
         aTV.Seconds = 0;
         aTV.Nanosec = 1000000000 / nNth;
-        wait( aTV );
+        salhelper::Thread::wait( aTV );
     }
 
     SAL_INFO("ucb.ucp.webdav",  "TickerThread: stop." );
@@ -80,8 +82,7 @@ void TickerThread::run()
 
 
 SerfLockStore::SerfLockStore()
-    : m_pTickerThread( nullptr )
-    , m_bFinishing( false )
+    : m_bFinishing( false )
 {
 }
 
@@ -110,10 +111,10 @@ void SerfLockStore::startTicker()
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    if ( !m_pTickerThread )
+    if ( !m_pTickerThread.is() )
     {
         m_pTickerThread = new TickerThread( *this );
-        m_pTickerThread->create();
+        m_pTickerThread->launch();
     }
 }
 
@@ -122,12 +123,11 @@ void SerfLockStore::stopTicker()
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    if ( m_pTickerThread )
+    if ( m_pTickerThread.is() )
     {
         m_pTickerThread->finish();
         m_pTickerThread->join();
-        delete m_pTickerThread;
-        m_pTickerThread = nullptr;
+        m_pTickerThread.clear();
     }
 }
 
