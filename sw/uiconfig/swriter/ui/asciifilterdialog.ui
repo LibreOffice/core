@@ -286,6 +286,11 @@
                     <property name="receives-default">False</property>
                     <property name="halign">start</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="includebom-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="asciifilterdialog|extended_tip|includebom">For Unicode character set only, a byte order mark (BOM) is a sequence of bytes used to indicate Unicode encoding of a text file.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
