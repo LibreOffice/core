@@ -16,6 +16,23 @@
       "message": "Thanks for the comments! The reverts for 7.2 are now in in libreoffice-7-2 (7-2-2 is pending).\n\nI have removed the ruby.fodt change from this patch.\nIt actually contained two changes to the original test file (I remembered wrong previously):\n- add grid via \"Format \u003e Page Style \u003e Text Grid\", select \"Grid (lines only)\",\n- change font size to 44.\n\nThe grid was based on the description of tdf#144122, and the size change was based on Shinji\u0027s test document.\nAnd yes, this file should exhibit the issues from both bug reports.",
       "revId": "f0ece85f02e7bc1506868b20c34f1ca2bf68eb15",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea9d1b41_c1a7d4f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-06T11:42:24Z",
+      "side": 1,
+      "message": "Looks good to me for master. Moving to SwTwips has the positive effect that the unit is now clear. This is a mass-conversion, so I think it\u0027s fine to leave the test for tdf#144122 to a separate follow-up change. If you need help, please upload what you have so far to gerrit and I\u0027m happy to take a look. Thanks.",
+      "revId": "f0ece85f02e7bc1506868b20c34f1ca2bf68eb15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
