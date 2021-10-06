@@ -53,7 +53,7 @@ namespace basegfx::utils
                 need key stop lerping in the first place). All
                 elements must be of monotonically increasing value.
              */
-            explicit KeyStopLerp( const std::vector<double>& rKeyStops );
+            explicit KeyStopLerp( std::vector<double>&& rKeyStops );
 
             /** Create lerper with given sequence of stops
 
