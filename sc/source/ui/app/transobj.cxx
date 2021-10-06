@@ -28,6 +28,7 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/fileformat.h>
+#include <comphelper/lok.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <sot/storage.hxx>
@@ -51,6 +52,7 @@
 #include <scmod.hxx>
 #include <dragdata.hxx>
 #include <sortparam.hxx>
+#include <tabvwsh.hxx>
 
 #include <editeng/paperinf.hxx>
 #include <editeng/sizeitem.hxx>
@@ -176,8 +178,9 @@ ScTransferObj::~ScTransferObj()
 {
     SolarMutexGuard aSolarGuard;
 
+    bool bIsDisposing = comphelper::LibreOfficeKit::isActive() && !ScTabViewShell::GetActiveViewShell();
     ScModule* pScMod = SC_MOD();
-    if (pScMod && pScMod->GetDragData().pCellTransfer == this)
+    if (pScMod && !bIsDisposing && pScMod->GetDragData().pCellTransfer == this)
     {
         OSL_FAIL("ScTransferObj wasn't released");
         pScMod->ResetDragObject();
