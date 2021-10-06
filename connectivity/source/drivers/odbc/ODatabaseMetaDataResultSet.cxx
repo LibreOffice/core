@@ -881,7 +881,7 @@ void ODatabaseMetaDataResultSet::openTablesTypes( )
     m_aColMapping.clear();
     m_aColMapping.push_back(-1);
     m_aColMapping.push_back(4);
-    m_xMetaData = new OResultSetMetaData(m_pConnection.get(),m_aStatementHandle,m_aColMapping);
+    m_xMetaData = new OResultSetMetaData(m_pConnection.get(),m_aStatementHandle,std::vector(m_aColMapping));
     checkColumnCount();
 }
 
@@ -898,7 +898,7 @@ void ODatabaseMetaDataResultSet::openCatalogs()
     m_aColMapping.clear();
     m_aColMapping.push_back(-1);
     m_aColMapping.push_back(1);
-    m_xMetaData = new OResultSetMetaData(m_pConnection.get(),m_aStatementHandle,m_aColMapping);
+    m_xMetaData = new OResultSetMetaData(m_pConnection.get(),m_aStatementHandle,std::vector(m_aColMapping));
     checkColumnCount();
 }
 
@@ -914,7 +914,7 @@ void ODatabaseMetaDataResultSet::openSchemas()
     m_aColMapping.clear();
     m_aColMapping.push_back(-1);
     m_aColMapping.push_back(2);
-    m_xMetaData = new OResultSetMetaData(m_pConnection.get(),m_aStatementHandle,m_aColMapping);
+    m_xMetaData = new OResultSetMetaData(m_pConnection.get(),m_aStatementHandle,std::vector(m_aColMapping));
     checkColumnCount();
 }
 

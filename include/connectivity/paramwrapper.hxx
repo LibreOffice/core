@@ -86,7 +86,7 @@ namespace dbtools::param
         ParameterWrapper(
             const css::uno::Reference< css::beans::XPropertySet >& _rxColumn,
             const css::uno::Reference< css::sdbc::XParameters >& _rxAllParameters,
-            const ::std::vector< sal_Int32 >& _rIndexes
+            std::vector< sal_Int32 >&& _rIndexes
         );
 
         DECLARE_XINTERFACE()
