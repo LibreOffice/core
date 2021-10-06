@@ -66,6 +66,13 @@ public:
     PhysicalFontFamily(const OUString& rSearchName);
     ~PhysicalFontFamily();
 
+    // Avoid implicitly defined copy constructors/assignments for the DLLPUBLIC class (they may
+    // require forward-declared classes used internally to be defined in places using this)
+    PhysicalFontFamily(const PhysicalFontFamily&) = delete;
+    PhysicalFontFamily(PhysicalFontFamily&&) = delete;
+    PhysicalFontFamily& operator=(const PhysicalFontFamily&) = delete;
+    PhysicalFontFamily& operator=(PhysicalFontFamily&&) = delete;
+
     const OUString& GetFamilyName() const { return maFamilyName; }
     const OUString& GetSearchName() const { return maSearchName; }
     const OUString& GetAliasNames() const { return maMapNames; }
