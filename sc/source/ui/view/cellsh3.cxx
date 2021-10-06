@@ -454,13 +454,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                     // set cell attribute without dialog:
 
-                    SfxItemSet aEmptySet( *pReqArgs->GetPool(),
-                                          svl::Items<ATTR_PATTERN_START,
-                                          ATTR_PATTERN_END> );
+                    SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END>  aEmptySet( *pReqArgs->GetPool() );
 
-                    SfxItemSet aNewSet( *pReqArgs->GetPool(),
-                                        svl::Items<ATTR_PATTERN_START,
-                                        ATTR_PATTERN_END> );
+                    SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END>  aNewSet( *pReqArgs->GetPool() );
 
                     const SfxPoolItem*  pAttr = nullptr;
                     sal_uInt16              nWhich = 0;

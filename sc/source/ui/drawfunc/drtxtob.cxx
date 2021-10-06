@@ -800,7 +800,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
                 if ( pOutView )
                     pOutView->Paint( tools::Rectangle() );
 
-                SfxItemSet aEmptyAttr( *aEditAttr.GetPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END> );
+                SfxItemSetFixed<EE_ITEMS_START, EE_ITEMS_END> aEmptyAttr( *aEditAttr.GetPool() );
                 pView->SetAttributes( aEmptyAttr, true );
 
                 if ( pOutView )
@@ -924,7 +924,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
         sal_uInt16 nId = SID_ATTR_PARA_LRSPACE;
         const SvxLRSpaceItem& rItem = static_cast<const SvxLRSpaceItem&>(
             pArgs->Get( nId ));
-        SfxItemSet aAttr( GetPool(), svl::Items<EE_PARA_LRSPACE, EE_PARA_LRSPACE> );
+        SfxItemSetFixed<EE_PARA_LRSPACE, EE_PARA_LRSPACE> aAttr( GetPool() );
         nId = EE_PARA_LRSPACE;
         SvxLRSpaceItem aLRSpaceItem( rItem.GetLeft(),
             rItem.GetRight(), rItem.GetTextLeft(),
@@ -936,7 +936,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
     {
         SvxLineSpacingItem aLineSpaceItem = static_cast<const SvxLineSpacingItem&>(pArgs->Get(
                                                             GetPool().GetWhich(nSlot)));
-        SfxItemSet aAttr( GetPool(), svl::Items<EE_PARA_SBL, EE_PARA_SBL> );
+        SfxItemSetFixed<EE_PARA_SBL, EE_PARA_SBL> aAttr( GetPool() );
         aAttr.Put( aLineSpaceItem );
         pView->SetAttributes( aAttr );
     }
@@ -944,7 +944,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
     {
         SvxULSpaceItem aULSpaceItem = static_cast<const SvxULSpaceItem&>(pArgs->Get(
                                                             GetPool().GetWhich(nSlot)));
-        SfxItemSet aAttr( GetPool(), svl::Items<EE_PARA_ULSPACE, EE_PARA_ULSPACE> );
+        SfxItemSetFixed<EE_PARA_ULSPACE, EE_PARA_ULSPACE> aAttr( GetPool() );
         aULSpaceItem.SetWhich(EE_PARA_ULSPACE);
         aAttr.Put( aULSpaceItem );
         pView->SetAttributes( aAttr );

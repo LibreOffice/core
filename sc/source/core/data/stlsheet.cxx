@@ -138,14 +138,12 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                     // (== Standard page template)
 
                     SfxItemPool& rItemPool = GetPool()->GetPool();
-                    pSet = new SfxItemSet(
-                        rItemPool,
-                        svl::Items<
+                    pSet = new SfxItemSetFixed<
                             ATTR_USERDEF, ATTR_USERDEF,
                             ATTR_WRITINGDIR, ATTR_WRITINGDIR,
                             ATTR_BACKGROUND, ATTR_BACKGROUND,
                             ATTR_BORDER, ATTR_SHADOW,
-                            ATTR_LRSPACE, ATTR_PAGE_SCALETO> );
+                            ATTR_LRSPACE, ATTR_PAGE_SCALETO>(rItemPool);
 
                     //  If being loaded also the set is then filled in from the file,
                     //  so the defaults do not need to be set.
@@ -222,7 +220,7 @@ SfxItemSet& ScStyleSheet::GetItemSet()
 
             case SfxStyleFamily::Para:
             default:
-                pSet = new SfxItemSet( GetPool()->GetPool(), svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END> );
+                pSet = new SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END>( GetPool()->GetPool() );
                 break;
         }
         bMySet = true;

@@ -646,8 +646,7 @@ void ScDocShell::ExecuteChangeCommentDialog( ScChangeAction* pAction, weld::Wind
     OUString aDate = ScGlobal::getLocaleData().getDate( aDT ) + " " +
         ScGlobal::getLocaleData().getTime( aDT, false );
 
-    SfxItemSet aSet(
-        GetPool(), svl::Items<SID_ATTR_POSTIT_AUTHOR, SID_ATTR_POSTIT_TEXT>);
+    SfxItemSetFixed<SID_ATTR_POSTIT_AUTHOR, SID_ATTR_POSTIT_TEXT> aSet( GetPool() );
 
     aSet.Put( SvxPostItTextItem  ( aComment, SID_ATTR_POSTIT_TEXT ) );
     aSet.Put( SvxPostItAuthorItem( aAuthor,  SID_ATTR_POSTIT_AUTHOR ) );
