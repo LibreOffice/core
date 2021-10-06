@@ -1617,16 +1617,14 @@ void SwWrtShell::QuickUpdateStyle()
 void SwWrtShell::AutoUpdatePara(SwTextFormatColl* pColl, const SfxItemSet& rStyleSet, SwPaM* pPaM )
 {
     SwPaM* pCursor = pPaM ? pPaM : GetCursor( );
-    SfxItemSet aCoreSet(
-        GetAttrPool(),
-        svl::Items<
+    SfxItemSetFixed<
             RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
             RES_PARATR_BEGIN, RES_PARATR_END - 1,
             RES_FRMATR_BEGIN, RES_FRMATR_END - 1,
             SID_ATTR_TABSTOP_DEFAULTS,SID_ATTR_TABSTOP_OFFSET,
             SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
             SID_ATTR_PARA_MODEL, SID_ATTR_PARA_KEEP,
-            SID_ATTR_PARA_PAGENUM, SID_ATTR_PARA_PAGENUM>);
+            SID_ATTR_PARA_PAGENUM, SID_ATTR_PARA_PAGENUM>  aCoreSet( GetAttrPool() );
     GetPaMAttr( pCursor, aCoreSet );
     bool bReset = false;
     SfxItemIter aParaIter( aCoreSet );

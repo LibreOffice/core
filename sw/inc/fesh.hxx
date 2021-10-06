@@ -382,7 +382,7 @@ public:
     bool IsFrameSelected() const;
     bool GetFlyFrameAttr( SfxItemSet &rSet ) const;
     bool SetFlyFrameAttr( SfxItemSet &rSet );
-    static SfxItemSet makeItemSetFromFormatAnchor(SfxItemPool& rPool, const SwFormatAnchor &rAnchor);
+    static SfxItemSetFixed<RES_VERT_ORIENT, RES_ANCHOR> makeItemSetFromFormatAnchor(SfxItemPool& rPool, const SwFormatAnchor &rAnchor);
     void ResetFlyFrameAttr( const SfxItemSet* pSet );
     const SwFrameFormat *NewFlyFrame( const SfxItemSet &rSet, bool bAnchValid = false,
                          SwFrameFormat *pParent = nullptr );

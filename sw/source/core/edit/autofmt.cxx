@@ -588,9 +588,8 @@ bool SwAutoFormat::DoUnderline()
             aLine.SetWidth( DEF_LINE_WIDTH_2 );
             break;
         }
-        SfxItemSet aSet(m_pDoc->GetAttrPool(),
-                    svl::Items<RES_PARATR_CONNECT_BORDER, RES_PARATR_CONNECT_BORDER,
-                    RES_BOX, RES_BOX>);
+        SfxItemSetFixed<RES_PARATR_CONNECT_BORDER, RES_PARATR_CONNECT_BORDER,
+                    RES_BOX, RES_BOX>  aSet(m_pDoc->GetAttrPool());
         aSet.Put( SwParaConnectBorderItem( false ) );
         SvxBoxItem aBox( RES_BOX );
         aBox.SetLine( &aLine, SvxBoxItemLine::BOTTOM );
@@ -1003,13 +1002,11 @@ void SwAutoFormat::SetColl( sal_uInt16 nId, bool bHdLineOrText )
     m_aDelPam.GetPoint()->nContent.Assign(m_aDelPam.GetPoint()->nNode.GetNode().GetContentNode(), 0);
 
     // keep hard tabs, alignment, language, hyphenation, DropCaps and nearly all frame attributes
-    SfxItemSet aSet(
-        m_pDoc->GetAttrPool(),
-        svl::Items<
+    SfxItemSetFixed<
             RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE,
             RES_PARATR_ADJUST, RES_PARATR_ADJUST,
             RES_PARATR_TABSTOP, RES_PARATR_DROP,
-            RES_BACKGROUND, RES_SHADOW>);
+            RES_BACKGROUND, RES_SHADOW>  aSet(m_pDoc->GetAttrPool());
 
     if (m_aDelPam.GetPoint()->nNode.GetNode().GetTextNode()->HasSwAttrSet())
     {

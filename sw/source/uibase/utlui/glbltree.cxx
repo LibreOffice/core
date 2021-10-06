@@ -657,15 +657,14 @@ void SwGlobalTree::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry
     {
         if(pContCopy)
         {
-            SfxItemSet aSet(
-                m_pActiveShell->GetView().GetPool(),
-                svl::Items<
+            SfxItemSetFixed<
                     RES_FRM_SIZE, RES_FRM_SIZE,
                     RES_LR_SPACE, RES_LR_SPACE,
                     RES_BACKGROUND, RES_BACKGROUND,
                     RES_COL, RES_COL,
                     SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
-                    FN_PARAM_TOX_TYPE, FN_PARAM_TOX_TYPE>);
+                    FN_PARAM_TOX_TYPE, FN_PARAM_TOX_TYPE>
+                aSet( m_pActiveShell->GetView().GetPool() );
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             ScopedVclPtr<AbstractMultiTOXTabDialog> pDlg(pFact->CreateMultiTOXTabDialog(

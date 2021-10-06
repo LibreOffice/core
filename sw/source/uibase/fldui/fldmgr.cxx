@@ -1414,8 +1414,7 @@ bool SwFieldMgr::InsertField(
                                 { &aFormat });
                 }
 
-                SfxItemSet aBoxSet( pCurShell->GetAttrPool(),
-                    svl::Items<RES_BOXATR_FORMULA, RES_BOXATR_FORMULA> );
+                SfxItemSetFixed<RES_BOXATR_FORMULA, RES_BOXATR_FORMULA> aBoxSet( pCurShell->GetAttrPool() );
 
                 OUString sFormula(comphelper::string::stripStart(rData.m_sPar2, ' '));
                 if ( sFormula.startsWith("=") )

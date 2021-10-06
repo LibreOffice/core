@@ -350,14 +350,13 @@ SwXTextSection::attach(const uno::Reference< text::XTextRange > & xTextRange)
     aSect.SetProtectFlag(m_pImpl->m_pProps->m_bProtect);
     aSect.SetEditInReadonlyFlag(m_pImpl->m_pProps->m_bEditInReadonly);
 
-    SfxItemSet aSet(
-        pDoc->GetAttrPool(),
-        svl::Items<
+    SfxItemSetFixed<
             RES_LR_SPACE, RES_LR_SPACE,
             RES_BACKGROUND, RES_BACKGROUND,
             RES_COL, RES_COL,
             RES_FTN_AT_TXTEND, RES_FRAMEDIR,
-            RES_UNKNOWNATR_CONTAINER,RES_UNKNOWNATR_CONTAINER>);
+            RES_UNKNOWNATR_CONTAINER,RES_UNKNOWNATR_CONTAINER>
+        aSet(pDoc->GetAttrPool());
     if (m_pImpl->m_pProps->m_pBrushItem)
     {
         aSet.Put(*m_pImpl->m_pProps->m_pBrushItem);

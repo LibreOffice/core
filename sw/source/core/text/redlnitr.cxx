@@ -721,7 +721,7 @@ short SwRedlineItr::Seek(SwFont& rFnt,
                     {
                         SwAttrPool& rPool =
                             const_cast<SwDoc&>(m_rDoc).GetAttrPool();
-                        m_pSet = std::make_unique<SfxItemSet>(rPool, svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1>);
+                        m_pSet = std::make_unique<SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END-1>>(rPool);
                     }
 
                     if( 1 < pRed->GetStackCount() )

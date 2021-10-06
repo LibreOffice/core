@@ -47,9 +47,7 @@ std::unique_ptr<SfxItemSet> lcl_CreateEmptyItemSet( SelectionType nSelectionType
     std::unique_ptr<SfxItemSet> pItemSet;
     if( nSelectionType & (SelectionType::Frame | SelectionType::Ole | SelectionType::Graphic) )
     {
-        pItemSet = std::make_unique<SfxItemSet>(
-            rPool,
-            svl::Items<
+        pItemSet = std::make_unique<SfxItemSetFixed<
                 RES_FRMATR_BEGIN, RES_FILL_ORDER,
                 // no RES_FRM_SIZE
                 RES_PAPER_BIN, RES_SURROUND,
@@ -62,7 +60,7 @@ std::unique_ptr<SfxItemSet> lcl_CreateEmptyItemSet( SelectionType nSelectionType
                 // no RES_URL
                 RES_EDIT_IN_READONLY, RES_LAYOUT_SPLIT,
                 // no RES_CHAIN
-                RES_TEXTGRID, RES_FRMATR_END - 1>);
+                RES_TEXTGRID, RES_FRMATR_END - 1>>(rPool);
     }
     else if( nSelectionType & SelectionType::DrawObject )
     {
@@ -71,12 +69,10 @@ std::unique_ptr<SfxItemSet> lcl_CreateEmptyItemSet( SelectionType nSelectionType
     else if( nSelectionType & SelectionType::Text )
     {
         if( bNoParagraphFormats )
-            pItemSet = std::make_unique<SfxItemSet>(rPool,
-                    svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1>);
+            pItemSet = std::make_unique<SfxItemSetFixed
+                    <RES_CHRATR_BEGIN, RES_CHRATR_END - 1>>(rPool);
         else
-            pItemSet = std::make_unique<SfxItemSet>(
-                rPool,
-                svl::Items<
+            pItemSet = std::make_unique<SfxItemSetFixed<
                     RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
                     RES_PARATR_BEGIN, RES_FILL_ORDER,
                     // no RES_FRM_SIZE
@@ -90,7 +86,7 @@ std::unique_ptr<SfxItemSet> lcl_CreateEmptyItemSet( SelectionType nSelectionType
                     // no RES_URL
                     RES_EDIT_IN_READONLY, RES_LAYOUT_SPLIT,
                     // no RES_CHAIN
-                    RES_TEXTGRID, RES_FRMATR_END - 1>);
+                    RES_TEXTGRID, RES_FRMATR_END - 1>>(rPool);
     }
     return pItemSet;
 }
@@ -377,9 +373,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
 
     if( nSelectionType & SelectionType::TableCell )//only copy table attributes if really cells are selected (not only text in tables)
     {
-        m_pTableItemSet = std::make_unique<SfxItemSet>(
-            rPool,
-            svl::Items<
+        m_pTableItemSet = std::make_unique<SfxItemSetFixed<
                 RES_PAGEDESC, RES_BREAK,
                 RES_BACKGROUND, RES_SHADOW, // RES_BOX is inbetween
                 RES_KEEP, RES_KEEP,
@@ -391,7 +385,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
                 SID_ATTR_BRUSH_ROW, SID_ATTR_BRUSH_TABLE,
                 FN_TABLE_SET_VERT_ALIGN, FN_TABLE_SET_VERT_ALIGN,
                 FN_TABLE_BOX_TEXTORIENTATION, FN_TABLE_BOX_TEXTORIENTATION,
-                FN_PARAM_TABLE_HEADLINE, FN_PARAM_TABLE_HEADLINE>);
+                FN_PARAM_TABLE_HEADLINE, FN_PARAM_TABLE_HEADLINE>>(rPool);
         lcl_getTableAttributes( *m_pTableItemSet, rWrtShell );
     }
 

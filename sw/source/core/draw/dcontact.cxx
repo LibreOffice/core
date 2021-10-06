@@ -1088,7 +1088,7 @@ static void lcl_textBoxSizeNotify(SwFrameFormat* pFormat)
     if (SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT))
     {
         // Just notify the textbox that the size has changed, the actual object size is not interesting.
-        SfxItemSet aResizeSet(pFormat->GetDoc()->GetAttrPool(), svl::Items<RES_FRM_SIZE, RES_FRM_SIZE>);
+        SfxItemSetFixed<RES_FRM_SIZE, RES_FRM_SIZE> aResizeSet(pFormat->GetDoc()->GetAttrPool());
         SwFormatFrameSize aSize;
         aResizeSet.Put(aSize);
         SwTextBoxHelper::syncFlyFrameAttr(*pFormat, aResizeSet, pFormat->FindRealSdrObject());
@@ -1283,8 +1283,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                         assert(!"<SwDrawContact::Changed_(..)> - unsupported layout direction");
                     }
                 }
-                SfxItemSet aSet( GetFormat()->GetDoc()->GetAttrPool(),
-                                 svl::Items<RES_VERT_ORIENT, RES_HORI_ORIENT> );
+                SfxItemSetFixed<RES_VERT_ORIENT, RES_HORI_ORIENT> aSet( GetFormat()->GetDoc()->GetAttrPool() );
                 const SwFormatVertOrient& rVert = GetFormat()->GetVertOrient();
                 if ( nYPosDiff != 0 )
                 {
@@ -1354,9 +1353,8 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                 const bool bEnableSetModified = pDoc->getIDocumentState().IsEnableSetModified();
                 pDoc->getIDocumentState().SetEnableSetModified(false);
 
-                SfxItemSet aSyncSet(
-                    pDoc->GetAttrPool(),
-                    svl::Items<RES_VERT_ORIENT, RES_HORI_ORIENT, RES_ANCHOR, RES_ANCHOR>);
+                SfxItemSetFixed<RES_VERT_ORIENT, RES_HORI_ORIENT, RES_ANCHOR, RES_ANCHOR>
+                    aSyncSet( pDoc->GetAttrPool() );
                 aSyncSet.Put(GetFormat()->GetHoriOrient());
                 bool bRelToTableCell(false);
                 aSyncSet.Put(SwFormatVertOrient(pAnchoredDrawObj->GetRelPosToPageFrame(false, bRelToTableCell).getY(),
@@ -1367,9 +1365,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                 auto pSdrObj = const_cast<SdrObject*>(&rObj);
                 if (pSdrObj != GetFormat()->FindRealSdrObject())
                 {
-                    SfxItemSet aSet(
-                        pDoc->GetAttrPool(),
-                        svl::Items<RES_FRM_SIZE, RES_FRM_SIZE>);
+                    SfxItemSetFixed<RES_FRM_SIZE, RES_FRM_SIZE>  aSet( pDoc->GetAttrPool() );
 
                     aSet.Put(aSyncSet);
                     aSet.Put(pSdrObj->GetMergedItem(RES_FRM_SIZE));

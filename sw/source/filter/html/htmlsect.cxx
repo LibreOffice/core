@@ -324,8 +324,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
             aSection.SetProtectFlag(true);
         }
 
-        SfxItemSet aFrameItemSet( m_xDoc->GetAttrPool(),
-                                svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1> );
+        SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END-1> aFrameItemSet( m_xDoc->GetAttrPool() );
         if( !IsNewDoc() )
             Reader::ResetFrameFormatAttrs(aFrameItemSet );
 
@@ -628,8 +627,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
     bool bPositioned = false;
     if( bInCntnr || SwCSS1Parser::MayBePositioned( aPropInfo, true ) )
     {
-        SfxItemSet aFrameItemSet( m_xDoc->GetAttrPool(),
-                                svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1> );
+        SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END-1> aFrameItemSet( m_xDoc->GetAttrPool() );
         if( !IsNewDoc() )
             Reader::ResetFrameFormatAttrs(aFrameItemSet );
 
@@ -700,8 +698,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         OUString aName( m_xDoc->GetUniqueSectionName( !aId.isEmpty() ? &aId : nullptr ) );
         SwSectionData aSection( SectionType::Content, aName );
 
-        SfxItemSet aFrameItemSet( m_xDoc->GetAttrPool(),
-                                svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1> );
+        SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END-1> aFrameItemSet( m_xDoc->GetAttrPool() );
         if( !IsNewDoc() )
             Reader::ResetFrameFormatAttrs(aFrameItemSet );
 

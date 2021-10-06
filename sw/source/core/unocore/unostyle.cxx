@@ -2671,7 +2671,7 @@ void SAL_CALL SwXStyle::setPropertiesToDefault(const uno::Sequence<OUString>& aP
         {
             //
             SwDoc* pDoc = pTargetFormat->GetDoc();
-            SfxItemSet aSet(pDoc->GetAttrPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>);
+            SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aSet(pDoc->GetAttrPool());
             aSet.SetParent(&pTargetFormat->GetAttrSet());
 
             aSet.ClearItem(XATTR_FILLBMP_STRETCH);
@@ -2933,8 +2933,8 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                     else if(pEntry->nWID == SID_ATTR_PAGE_ON && rValues[nProp].get<bool>())
                     {
                         // Header/footer gets switched on, create defaults and the needed SfxSetItem
-                        SfxItemSet aTempSet(*aBaseImpl.GetItemSet().GetPool(),
-                            svl::Items<RES_FRMATR_BEGIN,RES_FRMATR_END - 1,            // [82
+                        SfxItemSetFixed
+                            <RES_FRMATR_BEGIN,RES_FRMATR_END - 1,            // [82
 
                             // FillAttribute support
                             XATTR_FILL_FIRST, XATTR_FILL_LAST,              // [1014
@@ -2942,7 +2942,8 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                             SID_ATTR_BORDER_INNER,SID_ATTR_BORDER_INNER,    // [10023
                             SID_ATTR_PAGE_SIZE,SID_ATTR_PAGE_SIZE,          // [10051
                             SID_ATTR_PAGE_ON,SID_ATTR_PAGE_SHARED,          // [10060
-                            SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST>);
+                            SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST>
+                                aTempSet(*aBaseImpl.GetItemSet().GetPool());
 
                         // set correct parent to get the XFILL_NONE FillStyle as needed
                         aTempSet.SetParent(&GetDoc()->GetDfltFrameFormat()->GetAttrSet());
@@ -3814,7 +3815,7 @@ SwAutoStylesEnumImpl::SwAutoStylesEnumImpl( SwDoc& rInitDoc, IStyleAccess::SwAut
             std::pair< sal_uInt16, text::RubyAdjust > aPair( pRubyItem->GetPosition(), pRubyItem->GetAdjustment() );
             if ( aRubyMap.insert( aPair ).second )
             {
-                auto pItemSet = std::make_shared<SfxItemSet>( rAttrPool, svl::Items<RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY> );
+                auto pItemSet = std::make_shared<SfxItemSetFixed<RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY>>( rAttrPool );
                 pItemSet->Put( *pRubyItem );
                 mAutoStyles.push_back( pItemSet );
             }

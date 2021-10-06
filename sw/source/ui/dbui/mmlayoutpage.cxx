@@ -255,12 +255,10 @@ SwFrameFormat* SwMailMergeLayoutPage::InsertAddressFrame(
         bool bExample)
 {
     // insert the address block and the greeting line
-    SfxItemSet aSet(
-        rShell.GetAttrPool(),
-        svl::Items<
+    SfxItemSetFixed<
             RES_FRM_SIZE, RES_FRM_SIZE,
             RES_SURROUND, RES_ANCHOR,
-            RES_BOX, RES_BOX> );
+            RES_BOX, RES_BOX>  aSet( rShell.GetAttrPool() );
     aSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_PAGE, 1));
     if(bAlignLeft)
         aSet.Put(SwFormatHoriOrient( 0, text::HoriOrientation::NONE, text::RelOrientation::PAGE_PRINT_AREA ));
@@ -657,9 +655,8 @@ IMPL_LINK_NOARG(SwMailMergeLayoutPage, ChangeAddressHdl_Impl, weld::MetricSpinBu
     tools::Long nLeft = static_cast< tools::Long >(m_xLeftMF->denormalize(m_xLeftMF->get_value(FieldUnit::TWIP)));
     tools::Long nTop  = static_cast< tools::Long >(m_xTopMF->denormalize(m_xTopMF->get_value(FieldUnit::TWIP)));
 
-    SfxItemSet aSet(
-        m_pExampleWrtShell->GetAttrPool(),
-        svl::Items<RES_VERT_ORIENT, RES_ANCHOR>);
+    SfxItemSetFixed<RES_VERT_ORIENT, RES_ANCHOR> aSet(
+        m_pExampleWrtShell->GetAttrPool());
     if (m_xAlignToBodyCB->get_active())
         aSet.Put(SwFormatHoriOrient( 0, text::HoriOrientation::NONE, text::RelOrientation::PAGE_PRINT_AREA ));
     else

@@ -2972,7 +2972,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                 case RES_BACKGROUND:
                 {
                     const SvxBrushItem& rBrush = static_cast< SvxBrushItem& >(*pAttr->m_pItem);
-                    SfxItemSet aNewSet(m_xDoc->GetAttrPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>);
+                    SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aNewSet(m_xDoc->GetAttrPool());
 
                     setSvxBrushItemAsFillAttributesToTargetSet(rBrush, aNewSet);
                     m_xDoc->getIDocumentContentOperations().InsertItemSet(aAttrPam, aNewSet, SetAttrMode::DONTREPLACE);
@@ -4943,8 +4943,7 @@ void SwHTMLParser::InsertSpacer()
             // create an empty text frame
 
             // fetch the ItemSet
-            SfxItemSet aFrameSet( m_xDoc->GetAttrPool(),
-                                svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1> );
+            SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END-1> aFrameSet( m_xDoc->GetAttrPool() );
             if( !IsNewDoc() )
                 Reader::ResetFrameFormatAttrs( aFrameSet );
 

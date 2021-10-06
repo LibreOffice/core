@@ -349,8 +349,7 @@ lcl_setCharFormatSequence(SwPaM & rPam, uno::Any const& rValue)
         rPam.GetDoc().GetIDocumentUndoRedo().StartUndo(SwUndoId::START, nullptr);
         aStyle <<= aCharStyles.getConstArray()[nStyle];
         // create a local set and apply each format directly
-        SfxItemSet aSet(rPam.GetDoc().GetAttrPool(),
-                svl::Items<RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT>);
+        SfxItemSetFixed<RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT> aSet(rPam.GetDoc().GetAttrPool());
         lcl_setCharStyle(rPam.GetDoc(), aStyle, aSet);
         // the first style should replace the current attributes,
         // all other have to be added
@@ -519,10 +518,11 @@ SwUnoCursorHelper::SetCursorPropertyValue(
                     // TODO create own map for this, it contains UNO_NAME_DISPLAY_NAME? or make property readable so ODF export can map it to a automatic style?
                     SfxItemPropertySet const& rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_CHAR_AUTO_STYLE));
                     SfxItemPropertyMap const& rMap(rPropSet.getPropertyMap());
-                    SfxItemSet items( rPam.GetDoc().GetAttrPool(),
-                        svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1,
+                    SfxItemSetFixed
+                        <RES_CHRATR_BEGIN, RES_CHRATR_END-1,
                             RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
-                            RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1> );
+                            RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1>
+                         items( rPam.GetDoc().GetAttrPool() );
 
                     for (beans::NamedValue const & prop : std::as_const(props))
                     {
@@ -1716,11 +1716,11 @@ uno::Any SwUnoCursorHelper::GetPropertyValue(
 
     if (!bDone)
     {
-        SfxItemSet aSet(
-            rPaM.GetDoc().GetAttrPool(),
-            svl::Items<
+        SfxItemSetFixed<
                 RES_CHRATR_BEGIN, RES_FRMATR_END - 1,
-                RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER>);
+                RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER>
+            aSet(rPaM.GetDoc().GetAttrPool());
+
         SwUnoCursorHelper::GetCursorAttr(rPaM, aSet);
 
         rPropSet.getPropertyValue(*pEntry, aSet, aAny);

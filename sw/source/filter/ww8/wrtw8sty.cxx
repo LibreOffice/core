@@ -1088,7 +1088,7 @@ sal_uInt16 MSWordSections::NumberOfColumns( const SwDoc &rDoc, const WW8_SepInfo
         pPd = &rDoc.GetPageDesc( 0 );
 
     const SfxItemSet &rSet = pPd->GetMaster().GetAttrSet();
-    SfxItemSet aSet( *rSet.GetPool(), svl::Items<RES_COL, RES_COL> );
+    SfxItemSetFixed<RES_COL, RES_COL> aSet( *rSet.GetPool() );
     aSet.SetParent( &rSet );
 
     //0xffffffff, what the hell is going on with that!, fixme most terribly

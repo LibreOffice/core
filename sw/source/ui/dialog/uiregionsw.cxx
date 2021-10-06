@@ -991,16 +991,14 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl, weld::Button&, void)
     if (!pSectRepr)
         return;
 
-    SfxItemSet aSet(
-        rSh.GetView().GetPool(),
-        svl::Items<
+    SfxItemSetFixed<
             RES_FRM_SIZE, RES_FRM_SIZE,
             RES_LR_SPACE, RES_LR_SPACE,
             RES_BACKGROUND, RES_BACKGROUND,
             RES_COL, RES_COL,
             RES_FTN_AT_TXTEND, RES_FRAMEDIR,
             XATTR_FILL_FIRST, XATTR_FILL_LAST,
-            SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>);
+            SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>  aSet( rSh.GetView().GetPool() );
 
     aSet.Put( pSectRepr->GetCol() );
     aSet.Put( *pSectRepr->GetBackground() );

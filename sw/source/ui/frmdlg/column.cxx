@@ -134,12 +134,10 @@ SwColumnDlg::SwColumnDlg(weld::Window* pParent, SwWrtShell& rSh)
     const SwPageDesc* pPageDesc = m_rWrtShell.GetSelectedPageDescs();
     if( pPageDesc )
     {
-        m_pPageSet.reset( new SfxItemSet(
-            m_rWrtShell.GetAttrPool(),
-            svl::Items<
+        m_pPageSet = std::make_unique<SfxItemSetFixed<
                 RES_FRM_SIZE, RES_FRM_SIZE,
                 RES_LR_SPACE, RES_LR_SPACE,
-                RES_COL, RES_COL>) );
+                RES_COL, RES_COL>>(m_rWrtShell.GetAttrPool());
 
         const SwFrameFormat &rFormat = pPageDesc->GetMaster();
         m_nPageWidth = rFormat.GetFrameSize().GetSize().Width();
@@ -295,7 +293,7 @@ IMPL_LINK_NOARG(SwColumnDlg, OkHdl, weld::Button&, void)
     }
     if(m_pFrameSet && SfxItemState::SET == m_pFrameSet->GetItemState(RES_COL) && m_bFrameChanged)
     {
-        SfxItemSet aTmp(*m_pFrameSet->GetPool(), svl::Items<RES_COL, RES_COL>);
+        SfxItemSetFixed<RES_COL, RES_COL> aTmp(*m_pFrameSet->GetPool());
         aTmp.Put(*m_pFrameSet);
         m_rWrtShell.StartAction();
         m_rWrtShell.Push();

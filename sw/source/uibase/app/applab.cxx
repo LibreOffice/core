@@ -69,8 +69,7 @@ static const SwFrameFormat *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& 
                         SwFrameFormat &rFormat,
                         sal_uInt16 nCol, sal_uInt16 nRow )
 {
-    SfxItemSet aSet(
-        rSh.GetAttrPool(), svl::Items<RES_VERT_ORIENT, RES_ANCHOR>);
+    SfxItemSetFixed<RES_VERT_ORIENT, RES_ANCHOR> aSet( rSh.GetAttrPool() );
     sal_uInt16 nPhyPageNum, nVirtPageNum;
     rSh.GetPageNum( nPhyPageNum, nVirtPageNum );
 
@@ -105,8 +104,7 @@ static const SwFrameFormat *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem&
                         SwFrameFormat &rFormat, SwFieldMgr& rFieldMgr,
                         sal_uInt16 nCol, sal_uInt16 nRow, bool bLast )
 {
-    SfxItemSet aSet(
-        rSh.GetAttrPool(), svl::Items<RES_VERT_ORIENT, RES_ANCHOR>);
+    SfxItemSetFixed<RES_VERT_ORIENT, RES_ANCHOR> aSet( rSh.GetAttrPool() );
     sal_uInt16 nPhyPageNum, nVirtPageNum;
     rSh.GetPageNum( nPhyPageNum, nVirtPageNum );
 
@@ -149,7 +147,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
     SwLabCfgItem aLabCfg(bLabel);
 
     // Move up Dialog
-    SfxItemSet aSet( GetPool(), svl::Items<FN_LABEL, FN_LABEL> );
+    SfxItemSetFixed<FN_LABEL, FN_LABEL> aSet( GetPool() );
     aSet.Put( aLabCfg.GetItem() );
 
     SwAbstractDialogFactory* pDialogFactory = SwAbstractDialogFactory::Create();
