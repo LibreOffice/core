@@ -1780,7 +1780,7 @@ void ContentNode::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 ContentAttribs::ContentAttribs( SfxItemPool& rPool )
 : pStyle(nullptr)
-, aAttribSet( rPool, svl::Items<EE_PARA_START, EE_CHAR_END> )
+, aAttribSet( rPool )
 {
 }
 
