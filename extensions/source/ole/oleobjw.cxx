@@ -47,7 +47,6 @@
 #include "oleobjw.hxx"
 #include "unoobjw.hxx"
 #include <stdio.h>
-using namespace std;
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::script;

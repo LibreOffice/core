@@ -23,8 +23,6 @@
 #include <osl/thread.hxx>
 #include <sal/log.hxx>
 
-using namespace std;
-
 void o2u_attachCurrentThread()
 {
     static osl::ThreadData oleThreadData;
