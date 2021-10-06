@@ -274,9 +274,8 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         }
         case SID_OPENDLG_CONSOLIDATE:
         {
-            SfxItemSet aArgSet( GetPool(),
-                                svl::Items<SCITEM_CONSOLIDATEDATA,
-                                SCITEM_CONSOLIDATEDATA> );
+            SfxItemSetFixed<SCITEM_CONSOLIDATEDATA,
+                                SCITEM_CONSOLIDATEDATA>  aArgSet( GetPool() );
 
             const ScConsolidateParam* pDlgData =
                             rDoc.GetConsolidateDlgData();
@@ -313,9 +312,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         {
 
             ScQueryParam    aQueryParam;
-            SfxItemSet      aArgSet( GetPool(),
-                                     svl::Items<SCITEM_QUERYDATA,
-                                     SCITEM_QUERYDATA> );
+            SfxItemSetFixed<SCITEM_QUERYDATA, SCITEM_QUERYDATA> aArgSet( GetPool() );
 
             ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, ScGetDBSelection::RowDown);
             pDBData->ExtendDataArea(rDoc);
@@ -338,9 +335,8 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         case SID_SPECIAL_FILTER:
         {
             ScQueryParam    aQueryParam;
-            SfxItemSet      aArgSet( GetPool(),
-                                     svl::Items<SCITEM_QUERYDATA,
-                                     SCITEM_QUERYDATA> );
+            SfxItemSetFixed<SCITEM_QUERYDATA,
+                                     SCITEM_QUERYDATA> aArgSet( GetPool() );
 
             ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, ScGetDBSelection::RowDown);
             pDBData->ExtendDataArea(rDoc);

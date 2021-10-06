@@ -282,11 +282,11 @@ ScDocumentPool::ScDocumentPool()
     if ( ScGlobal::GetEmptyBrushItem() )
 
         mvPoolDefaults[ ATTR_PATTERN     - ATTR_STARTINDEX ] =
-            new ScPatternAttr( SfxItemSet( *this, svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END> ),
+            new ScPatternAttr( SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END>( *this ),
                                ScResId(STR_STYLENAME_STANDARD) );
     else
         mvPoolDefaults[ ATTR_PATTERN     - ATTR_STARTINDEX ] =
-            new ScPatternAttr( SfxItemSet( *this, svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END> ),
+            new ScPatternAttr( SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END>( *this ),
                                STRING_STANDARD ); // FIXME: without name?
 
     mvPoolDefaults[ ATTR_LRSPACE         - ATTR_STARTINDEX ] = new SvxLRSpaceItem( ATTR_LRSPACE );

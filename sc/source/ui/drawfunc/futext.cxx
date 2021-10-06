@@ -394,8 +394,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
                     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
                     // set needed attributes for scrolling
-                    SfxItemSet aItemSet( pDrDoc->GetItemPool(),
-                                            svl::Items<SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST>);
+                    SfxItemSetFixed<SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST> aItemSet( pDrDoc->GetItemPool());
 
                     aItemSet.Put( makeSdrTextAutoGrowWidthItem( false ) );
                     aItemSet.Put( makeSdrTextAutoGrowHeightItem( false ) );
@@ -662,7 +661,7 @@ SdrObjectUniquePtr FuText::CreateDefaultObject(const sal_uInt16 nID, const tools
 
             if(bMarquee)
             {
-                SfxItemSet aSet(pDrDoc->GetItemPool(), svl::Items<SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST>);
+                SfxItemSetFixed<SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST> aSet(pDrDoc->GetItemPool());
 
                 aSet.Put( makeSdrTextAutoGrowWidthItem( false ) );
                 aSet.Put( makeSdrTextAutoGrowHeightItem( false ) );

@@ -94,8 +94,7 @@ void ScPivotShell::Execute( const SfxRequest& rReq )
                 }
 
                 ScViewData& rViewData = pViewShell->GetViewData();
-                SfxItemSet aArgSet( pViewShell->GetPool(),
-                    svl::Items<SCITEM_QUERYDATA, SCITEM_QUERYDATA> );
+                SfxItemSetFixed<SCITEM_QUERYDATA, SCITEM_QUERYDATA> aArgSet( pViewShell->GetPool() );
                 aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA, &rViewData, &aQueryParam ) );
 
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
