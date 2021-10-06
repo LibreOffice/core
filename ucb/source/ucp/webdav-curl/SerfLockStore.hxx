@@ -59,7 +59,7 @@ typedef std::map< OUString, LockInfo > LockInfoMap;
 class SerfLockStore
 {
     osl::Mutex         m_aMutex;
-    TickerThread     * m_pTickerThread;
+    rtl::Reference< TickerThread > m_pTickerThread;
     bool               m_bFinishing;
     LockInfoMap        m_aLockInfoMap;
 
