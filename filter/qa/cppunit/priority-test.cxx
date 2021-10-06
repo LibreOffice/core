@@ -21,7 +21,6 @@
 #include <unotest/bootstrapfixturebase.hxx>
 
 
-using namespace std;
 using namespace css;
 
 namespace {
