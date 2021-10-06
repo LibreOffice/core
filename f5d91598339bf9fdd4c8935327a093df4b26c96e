@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0910a22c_f279c2c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-06T13:40:54Z",
+      "side": 1,
+      "message": "I\u0027m all for avoiding copy\u0026paste, but o3tl seems to provide close enough functionality here, perhaps better to start moving to use that instead. :-)",
+      "revId": "f5d91598339bf9fdd4c8935327a093df4b26c96e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9f11876_85993a95",
+        "filename": "svgio/source/svgreader/SvgNumber.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-06T13:40:54Z",
+      "side": 1,
+      "message": "Did you consider switching to o3tl::convert() instead? That way you would not introduce yet another copy of those magic numbers.",
+      "revId": "f5d91598339bf9fdd4c8935327a093df4b26c96e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
