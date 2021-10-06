@@ -530,10 +530,9 @@ void SdrTextObj::AdaptTextMinSize()
         // No auto grow requested.  Bail out.
         return;
 
-    SfxItemSet aSet(
-        *GetObjectItemSet().GetPool(),
-        svl::Items<SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
-        SDRATTR_TEXT_MINFRAMEWIDTH, SDRATTR_TEXT_AUTOGROWWIDTH>); // contains SDRATTR_TEXT_MAXFRAMEWIDTH
+    SfxItemSetFixed<SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
+        SDRATTR_TEXT_MINFRAMEWIDTH, SDRATTR_TEXT_AUTOGROWWIDTH> // contains SDRATTR_TEXT_MAXFRAMEWIDTH
+        aSet(*GetObjectItemSet().GetPool());
 
     if(bW)
     {
