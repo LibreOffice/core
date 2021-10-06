@@ -4230,7 +4230,8 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
             OUString aChartName;
             if (rThisDoc.HasChartAtPoint( nThisTab, rLogicPos, aChartName ))
             {
-                OUString aRangeName(aSource.Format(rThisDoc, ScRefFlags::RANGE_ABS_3D));
+                OUString aRangeName(aSource.Format(rThisDoc, ScRefFlags::RANGE_ABS_3D,
+                            rThisDoc.GetAddressConvention()));
                 SfxStringItem aNameItem( SID_CHART_NAME, aChartName );
                 SfxStringItem aRangeItem( SID_CHART_SOURCE, aRangeName );
                 sal_uInt16 nId = bIsMove ? SID_CHART_SOURCE : SID_CHART_ADDSOURCE;

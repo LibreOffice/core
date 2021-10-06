@@ -229,7 +229,7 @@ void ScDocument::GetOldChartParameters( std::u16string_view rName,
                     OUString aRangesStr;
                     lcl_GetChartParameters( xChartDoc, aRangesStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
 
-                    rRanges.Parse( aRangesStr, *this );
+                    rRanges.Parse( aRangesStr, *this, GetAddressConvention());
                     if ( eDataRowSource == chart::ChartDataRowSource_COLUMNS )
                     {
                         rRowHeaders = bHasCategories;
@@ -285,7 +285,7 @@ void ScDocument::UpdateChartArea( const OUString& rChartName,
                         // append to old ranges, keep other settings
 
                         aNewRanges = new ScRangeList;
-                        aNewRanges->Parse( aRangesStr, *this );
+                        aNewRanges->Parse( aRangesStr, *this, GetAddressConvention());
 
                         for ( size_t nAdd = 0, nAddCount = rNewList->size(); nAdd < nAddCount; ++nAdd )
                             aNewRanges->push_back( (*rNewList)[nAdd] );
