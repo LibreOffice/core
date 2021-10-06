@@ -122,6 +122,7 @@ public:
     virtual void setUp() override;
 
     void testDocumentLayout();
+    void testTdf144917();
     void testHyperlinkOnImage();
     void testTdf142645();
     void testTdf141704();
@@ -248,6 +249,7 @@ public:
     CPPUNIT_TEST_SUITE(SdImportTest);
 
     CPPUNIT_TEST(testDocumentLayout);
+    CPPUNIT_TEST(testTdf144917);
     CPPUNIT_TEST(testHyperlinkOnImage);
     CPPUNIT_TEST(testTdf142645);
     CPPUNIT_TEST(testTdf141704);
@@ -448,6 +450,25 @@ void SdImportTest::testDocumentLayout()
                 OUStringConcatenation(m_directories.getPathFromSrc( u"/sd/qa/unit/data/" ) + aFilesToCompare[i].sDump),
                 i == nUpdateMe );
     }
+}
+
+void SdImportTest::testTdf144917()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf144917.pptx"), PPTX);
+
+    uno::Reference<container::XIndexAccess> xGroupShape(getShapeFromPage(0, 0, xDocShRef),
+                                                        uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShape(xGroupShape->getByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<document::XEventsSupplier> xEventsSupplier(xShape, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xEvents(xEventsSupplier->getEvents());
+    uno::Sequence<beans::PropertyValue> props;
+    xEvents->getByName("OnClick") >>= props;
+    comphelper::SequenceAsHashMap map(props);
+    auto iter(map.find("Bookmark"));
+    CPPUNIT_ASSERT_EQUAL(OUString("http://www.example.com/"), iter->second.get<OUString>());
+
+    xDocShRef->DoClose();
 }
 
 void SdImportTest::testHyperlinkOnImage()
