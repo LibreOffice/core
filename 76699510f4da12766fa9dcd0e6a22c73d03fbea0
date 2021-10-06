@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9da3ccd7_8f67a533",
+        "filename": "vcl/source/font/FontSubstEntry.cxx",
+        "patchSetId": 64
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-06T08:10:18Z",
+      "side": 1,
+      "message": "Do we need to split this into an own CXX? I suppose that having this in vcl/source/font/DirectFontSubstitution.cxx would also be logical.",
+      "revId": "76699510f4da12766fa9dcd0e6a22c73d03fbea0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
