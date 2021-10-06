@@ -70,6 +70,24 @@
       "parentUuid": "16dc9476_47b0944a",
       "revId": "76699510f4da12766fa9dcd0e6a22c73d03fbea0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ec9a735_5623830b",
+        "filename": "vcl/source/font/FontSubstEntry.cxx",
+        "patchSetId": 64
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-10-06T13:15:29Z",
+      "side": 1,
+      "message": "the reasons you give are fair, let me fix",
+      "parentUuid": "42d6c8d3_365c171f",
+      "revId": "76699510f4da12766fa9dcd0e6a22c73d03fbea0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
