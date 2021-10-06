@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <unx/geninst.h>
-#include <outdev.h>
+#include <font/fontsubstitution.hxx>
 #include <unx/fontmanager.hxx>
 #include <PhysicalFontCollection.hxx>
 
@@ -29,7 +29,7 @@
 namespace {
 
 class FcPreMatchSubstitution
-:   public ImplPreMatchFontSubstitution
+:   public vcl::font::PreMatchFontSubstitution
 {
 public:
     bool FindFontSubstitute( vcl::font::FontSelectPattern& ) const override;
@@ -40,7 +40,7 @@ private:
 };
 
 class FcGlyphFallbackSubstitution
-:    public ImplGlyphFallbackFontSubstitution
+:    public vcl::font::GlyphFallbackFontSubstitution
 {
     // TODO: add a cache
 public:
