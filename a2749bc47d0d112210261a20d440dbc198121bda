@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4ec8237_af5d1e70",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-06T21:59:08Z",
+      "side": 1,
+      "message": "Done.\nUsed \"constexpr OUStringLiteral\" where it was possible.",
+      "revId": "a2749bc47d0d112210261a20d440dbc198121bda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
