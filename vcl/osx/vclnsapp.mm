@@ -230,7 +230,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     aFile.push_back( GetOUString( pFile ) );
     if( ! AquaSalInstance::isOnCommandLine( aFile[0] ) )
     {
-        const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::Type::Open, aFile);
+        const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::Type::Open, std::move(aFile));
         AquaSalInstance::aAppEventList.push_back( pAppEvent );
         AquaSalInstance *pInst = GetSalData()->mpInstance;
         if( pInst )
@@ -261,7 +261,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         // we have no back channel here, we have to assume success, in which case
         // replyToOpenOrPrint does not need to be called according to documentation
         // [app replyToOpenOrPrint: NSApplicationDelegateReplySuccess];
-        const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::Type::Open, aFileList);
+        const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::Type::Open, std::move(aFileList));
         AquaSalInstance::aAppEventList.push_back( pAppEvent );
         AquaSalInstance *pInst = GetSalData()->mpInstance;
         if( pInst )
@@ -274,7 +274,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     (void)app;
     std::vector<OUString> aFile;
     aFile.push_back( GetOUString( pFile ) );
-    const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::Type::Print, aFile);
+    const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::Type::Print, std::move(aFile));
     AquaSalInstance::aAppEventList.push_back( pAppEvent );
     AquaSalInstance *pInst = GetSalData()->mpInstance;
     if( pInst )
@@ -296,7 +296,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     {
         aFileList.push_back( GetOUString( pFile ) );
     }
-    const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::Type::Print, aFileList);
+    const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::Type::Print, std::move(aFileList));
     AquaSalInstance::aAppEventList.push_back( pAppEvent );
     AquaSalInstance *pInst = GetSalData()->mpInstance;
     if( pInst )

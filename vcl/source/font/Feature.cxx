@@ -96,13 +96,13 @@ FeatureDefinition::FeatureDefinition()
 
 FeatureDefinition::FeatureDefinition(uint32_t nCode, OUString const& rDescription,
                                      FeatureParameterType eType,
-                                     std::vector<FeatureParameter> const& rEnumParameters,
+                                     std::vector<FeatureParameter>&& rEnumParameters,
                                      uint32_t nDefault)
     : m_sDescription(rDescription)
     , m_nCode(nCode)
     , m_nDefault(nDefault)
     , m_eType(eType)
-    , m_aEnumParameters(rEnumParameters)
+    , m_aEnumParameters(std::move(rEnumParameters))
 {
 }
 

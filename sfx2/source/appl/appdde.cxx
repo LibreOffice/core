@@ -282,7 +282,7 @@ bool SfxAppEvent_Impl( const OUString& rCmd, std::u16string_view rEvent,
                 }
             }
 
-            GetpApp()->AppEvent( ApplicationEvent(eType, aData) );
+            GetpApp()->AppEvent( ApplicationEvent(eType, std::move(aData)) );
             return true;
         }
     }
