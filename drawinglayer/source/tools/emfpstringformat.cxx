@@ -46,75 +46,39 @@ namespace emfplushelper
     {
         OUStringBuffer sFlags;
 
+        // These are extracted from enum in emfpstringformat.hxx
         if (flag & StringFormatDirectionRightToLeft)
-            sFlags.append("StringFormatDirectionRightToLeft");
+            sFlags.append("StringFormatDirectionRightToLeft ");
 
-        if (flag & StringFormatDirectionRightToLeft)
-        {
-            if (!sFlags.isEmpty())
-                sFlags.append(", ");
-
-            sFlags.append("StringFormatDirectionRightToLeft");
-        }
+        if (flag & StringFormatDirectionVertical)
+            sFlags.append("StringFormatDirectionVertical ");
 
         if (flag & StringFormatNoFitBlackBox)
-        {
-            if (!sFlags.isEmpty())
-                sFlags.append(", ");
-
-            sFlags.append("StringFormatNoFitBlackBox");
-        }
+            sFlags.append("StringFormatNoFitBlackBox ");
 
         if (flag & StringFormatDisplayFormatControl)
-        {
-            if (!sFlags.isEmpty())
-                sFlags.append(", ");
+            sFlags.append("StringFormatDisplayFormatControl ");
 
-            sFlags.append("StringFormatDisplayFormatControl");
-        }
         if (flag & StringFormatNoFontFallback)
-        {
-            if (!sFlags.isEmpty())
-                sFlags.append(", ");
+            sFlags.append("StringFormatNoFontFallback ");
 
-            sFlags.append("StringFormatNoFontFallback");
-        }
         if (flag & StringFormatMeasureTrailingSpaces)
-        {
-            if (!sFlags.isEmpty())
-                sFlags.append(", ");
+            sFlags.append("StringFormatMeasureTrailingSpaces ");
 
-            sFlags.append("StringFormatMeasureTrailingSpaces");
-        }
         if (flag & StringFormatNoWrap)
-        {
-            if (!sFlags.isEmpty())
-                sFlags.append(", ");
+            sFlags.append("StringFormatNoWrap ");
 
-            sFlags.append("StringFormatNoWrap");
-        }
         if (flag & StringFormatLineLimit)
-        {
-            if (!sFlags.isEmpty())
-                sFlags.append(", ");
+            sFlags.append("StringFormatLineLimit ");
 
-            sFlags.append("StringFormatLineLimit");
-        }
         if (flag & StringFormatNoClip)
-        {
-            if (!sFlags.isEmpty())
-                sFlags.append(", ");
+            sFlags.append("StringFormatNoClip ");
 
-            sFlags.append("StringFormatNoClip");
-        }
         if (flag & StringFormatBypassGDI)
-        {
-            if (!sFlags.isEmpty())
-                sFlags.append(", ");
+            sFlags.append("StringFormatBypassGDI ");
 
-            sFlags.append("StringFormatBypassGDI");
-        }
-
+        // There will be 1 extra space in the end. It could be truncated, but
+        // as it is for SAL_INFO() only, it would not be important
         return sFlags.makeStringAndClear();
     }
 
