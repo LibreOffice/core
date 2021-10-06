@@ -33,6 +33,24 @@
       "message": "No need to rebase or resume rebuild for just Android Jenkins, let\u0027s push this one then.\n\nThank you Chris for the patch!",
       "revId": "d829cac133b946614538c8f92a93196ce6e7bf11",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8b954aa_d4667b2b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-10-06T20:35:06Z",
+      "side": 1,
+      "message": "yeah, I saw that - sorry, it was more an experiment... I didn\u0027t realise I had activated it!",
+      "parentUuid": "7f1ad6c3_009b5cf8",
+      "revId": "d829cac133b946614538c8f92a93196ce6e7bf11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
