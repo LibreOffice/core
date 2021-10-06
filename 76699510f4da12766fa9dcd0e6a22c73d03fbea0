@@ -34,6 +34,24 @@
       "parentUuid": "9da3ccd7_8f67a533",
       "revId": "76699510f4da12766fa9dcd0e6a22c73d03fbea0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16dc9476_47b0944a",
+        "filename": "vcl/source/font/FontSubstEntry.cxx",
+        "patchSetId": 64
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-06T08:55:58Z",
+      "side": 1,
+      "message": "Why? What is the reason? A single function in a single source file does not make sense to me, unless there\u0027s a very good reason for that. The downsides are IMO having to keep track of multiple sources (from dev PoV; I need to look it up in the IDE); having compiler overhead (individual invocations of compiler for each unit); less optimizations opportunities (if the function definitions are unknown at the places where they are used, they are less likely to be inlined, unless smart linking technologies are used).\n\nKeeping related things together is also a good thing - so IMO there should be a balance between \"let\u0027s split unrelated things\" vs \"let\u0027s consider that these are actually related\".",
+      "parentUuid": "6cdcd40a_02c1a141",
+      "revId": "76699510f4da12766fa9dcd0e6a22c73d03fbea0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
