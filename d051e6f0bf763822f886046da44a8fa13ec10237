@@ -34,6 +34,24 @@
       "parentUuid": "ee9dbb70_df249873",
       "revId": "d051e6f0bf763822f886046da44a8fa13ec10237",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba559569_fd502aa0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-06T14:53:26Z",
+      "side": 1,
+      "message": "Sure, I think there is value in avoiding using declarations as well, but in this case drawinglayer::primitive2d::TextSimplePortionPrimitive2D has little value when most classes in that namespace already repeat \"Primitive2D\".\n\nWhat I had in mind for complex function invocations, full of ternary operators is that it\u0027s quite hard to step that through in the debugger. At least my usual way is to do a local refactor the way Hossein did to be able to step through, and then I throw it away. :-)\n\nAnyhow: hopefully none of the above is bad enough to revert it. For the future: could you please Hossein add Mike as reviewer for such cleanups? Then you can discuss the changes before submitting, which is always easier.\n\nMike: https://gerrit.libreoffice.org/c/core/+/123092 and https://gerrit.libreoffice.org/c/core/+/123104 are similar, please do point if you have further input there. Thanks!",
+      "parentUuid": "928488a8_7865dd7f",
+      "revId": "d051e6f0bf763822f886046da44a8fa13ec10237",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
