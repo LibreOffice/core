@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "261b1e11_ef91acb0",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 876,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-10-06T07:39:37Z",
+      "side": 1,
+      "message": "Hope we will not pay dearly for this static string. At least it\u0027s not a blocker for the sidebar width since \"Footnotes and Endnotes\" should be longer in any translation.",
+      "range": {
+        "startLine": 876,
+        "startChar": 66,
+        "endLine": 876,
+        "endChar": 100
+      },
+      "revId": "cca6092c43e6f5ff56251b2fd43e7530b99358e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
