@@ -16,6 +16,23 @@
       "message": "did you forget the unittest code ?",
       "revId": "70d732dc52093934c5accd59b9bcea1e8da7f469",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b7b972c_dadd4446",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-06T15:33:37Z",
+      "side": 1,
+      "message": "Xisco: you missed the last half of the commit message.  [So I gave up (again).]",
+      "revId": "70d732dc52093934c5accd59b9bcea1e8da7f469",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
