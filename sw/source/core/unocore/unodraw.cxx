@@ -584,8 +584,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     // now evaluate the properties of SwShapeDescriptor_Impl
     SwShapeDescriptor_Impl* pDesc = pShape->GetDescImpl();
 
-    SfxItemSet aSet( m_pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN,
-                                        RES_FRMATR_END-1> );
+    SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END-1> aSet( m_pDoc->GetAttrPool() );
     SwFormatAnchor aAnchor( RndStdIds::FLY_AS_CHAR );
     bool bOpaque = false;
     if( pDesc )
@@ -1056,8 +1055,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                         pFrame->GetFrameFormat()->GetDoc() == pDoc)
                     {
                         UnoActionContext aCtx(pDoc);
-                        SfxItemSet aItemSet( pDoc->GetAttrPool(),
-                                    svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1> );
+                        SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END - 1> aItemSet( pDoc->GetAttrPool() );
                         aItemSet.SetParent(&pFormat->GetAttrSet());
                         SwFormatAnchor aAnchor = static_cast<const SwFormatAnchor&>(aItemSet.Get(pEntry->nWID));
                         SwPosition aPos(*pFrame->GetFrameFormat()->GetContent().GetContentIdx());

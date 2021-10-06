@@ -1403,8 +1403,8 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
             {
                 bool bLock = pFrameFormat->GetDoc()->GetNumberFormatter()
                                      ->IsTextFormat( nNumFormat );
-                SfxItemSet aItemSet( *pFrameFormat->GetAttrSet().GetPool(),
-                                     svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_VALUE> );
+                SfxItemSetFixed<RES_BOXATR_FORMAT, RES_BOXATR_VALUE>
+                    aItemSet( *pFrameFormat->GetAttrSet().GetPool() );
                 SvxAdjust eAdjust = SvxAdjust::End;
                 SwContentNode *pCNd = nullptr;
                 if( !bLock )
@@ -2691,8 +2691,7 @@ SvxBrushItem* SwHTMLParser::CreateBrushItem( const Color *pColor,
 
     if( !rStyle.isEmpty() || !rId.isEmpty() || !rClass.isEmpty() )
     {
-        SfxItemSet aItemSet( m_xDoc->GetAttrPool(), svl::Items<RES_BACKGROUND,
-                                                  RES_BACKGROUND> );
+        SfxItemSetFixed<RES_BACKGROUND, RES_BACKGROUND> aItemSet( m_xDoc->GetAttrPool() );
         SvxCSS1PropertyInfo aPropInfo;
 
         if( !rClass.isEmpty() )
@@ -3212,7 +3211,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             // the table has no content yet, this means the actual table needs
             // to be created first
 
-            static const WhichRangesContainer aWhichIds(svl::Items<
+            SfxItemSetFixed<
                 RES_PARATR_SPLIT,   RES_PARATR_SPLIT,
                 RES_PAGEDESC,       RES_PAGEDESC,
                 RES_BREAK,          RES_BREAK,
@@ -3220,9 +3219,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 RES_KEEP,           RES_KEEP,
                 RES_LAYOUT_SPLIT,   RES_LAYOUT_SPLIT,
                 RES_FRAMEDIR,       RES_FRAMEDIR
-            >);
-
-            SfxItemSet aItemSet( m_xDoc->GetAttrPool(), aWhichIds );
+            > aItemSet( m_xDoc->GetAttrPool() );
             SvxCSS1PropertyInfo aPropInfo;
 
             bool bStyleParsed = ParseStyleOptions( pCurTable->GetStyle(),
@@ -3394,8 +3391,8 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 {
                     // the table should be put in a text frame
 
-                    SfxItemSet aFrameSet( m_xDoc->GetAttrPool(),
-                                        svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1> );
+                    SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END-1>
+                        aFrameSet( m_xDoc->GetAttrPool() );
                     if( !pCurTable->IsNewDoc() )
                         Reader::ResetFrameFormatAttrs( aFrameSet );
 

@@ -1026,14 +1026,13 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
         rSh.IsSelObjProtected( FlyProtectFlags::Pos ) != FlyProtectFlags::NONE )
         return;
 
-    SfxItemSet aSet(
-        rSh.GetAttrPool(),
-        svl::Items<
+    SfxItemSetFixed<
             RES_FRM_SIZE, RES_FRM_SIZE,
             RES_PROTECT, RES_PROTECT,
             RES_VERT_ORIENT, RES_ANCHOR,
             RES_COL, RES_COL,
-            RES_FOLLOW_TEXT_FLOW, RES_FOLLOW_TEXT_FLOW>);
+            RES_FOLLOW_TEXT_FLOW, RES_FOLLOW_TEXT_FLOW>
+        aSet( rSh.GetAttrPool() );
     rSh.GetFlyFrameAttr( aSet );
     RndStdIds eAnchorId = aSet.Get(RES_ANCHOR).GetAnchorId();
     Size aSnap;
@@ -2235,7 +2234,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             eKeyState = SwKeyState::GoIntoFly;
                         else
                         {
-                            SfxItemSet aSet(rSh.GetAttrPool(), svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>);
+                            SfxItemSetFixed<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT> aSet(rSh.GetAttrPool());
                             rSh.GetCurAttr(aSet);
                             if(SfxItemState::SET == aSet.GetItemState(RES_TXTATR_INETFMT, false))
                             {

@@ -2217,8 +2217,7 @@ void SwUndoTableNumFormat::RedoImpl(::sw::UndoRedoContext & rContext)
     SwFrameFormat* pBoxFormat = pBox->ClaimFrameFormat();
     if( m_bNewFormat || m_bNewFormula || m_bNewValue )
     {
-        SfxItemSet aBoxSet( rDoc.GetAttrPool(),
-                                svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_VALUE> );
+        SfxItemSetFixed<RES_BOXATR_FORMAT, RES_BOXATR_VALUE> aBoxSet( rDoc.GetAttrPool() );
 
         // Resetting attributes is not enough. In addition, take care that the
         // text will be also formatted correctly.
@@ -2246,8 +2245,7 @@ void SwUndoTableNumFormat::RedoImpl(::sw::UndoRedoContext & rContext)
     }
     else if( getSwDefaultTextFormat() != m_nFormatIdx )
     {
-        SfxItemSet aBoxSet( rDoc.GetAttrPool(),
-                            svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_VALUE> );
+        SfxItemSetFixed<RES_BOXATR_FORMAT, RES_BOXATR_VALUE> aBoxSet( rDoc.GetAttrPool() );
 
         aBoxSet.Put( SwTableBoxNumFormat( m_nFormatIdx ));
         aBoxSet.Put( SwTableBoxValue( m_fNum ));
@@ -2463,11 +2461,10 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
         aInsIdx = rBox.GetSttIdx() + 1;
         rDoc.GetNodes().Delete( aInsIdx );
 
-        SfxItemSet aTmpSet(
-            rDoc.GetAttrPool(),
-            svl::Items<
+        SfxItemSetFixed<
                 RES_VERT_ORIENT, RES_VERT_ORIENT,
-                RES_BOXATR_FORMAT, RES_BOXATR_VALUE>);
+                RES_BOXATR_FORMAT, RES_BOXATR_VALUE>
+             aTmpSet(rDoc.GetAttrPool());
         aTmpSet.Put( rBox.GetFrameFormat()->GetAttrSet() );
         if( aTmpSet.Count() )
         {
@@ -2484,11 +2481,9 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
 
         if( aTmpSet.Count() )
         {
-            pEntry->pBoxNumAttr = std::make_unique<SfxItemSet>(
-                rDoc.GetAttrPool(),
-                svl::Items<
+            pEntry->pBoxNumAttr = std::make_unique<SfxItemSetFixed<
                     RES_VERT_ORIENT, RES_VERT_ORIENT,
-                    RES_BOXATR_FORMAT, RES_BOXATR_VALUE>);
+                    RES_BOXATR_FORMAT, RES_BOXATR_VALUE>>(rDoc.GetAttrPool());
             pEntry->pBoxNumAttr->Put( aTmpSet );
         }
 
@@ -2559,11 +2554,9 @@ void SwUndoTableCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
         aInsIdx = rBox.GetSttIdx() + 1;
         rDoc.GetNodes().Delete( aInsIdx );
 
-        SfxItemSet aTmpSet(
-            rDoc.GetAttrPool(),
-            svl::Items<
+        SfxItemSetFixed<
                 RES_VERT_ORIENT, RES_VERT_ORIENT,
-                RES_BOXATR_FORMAT, RES_BOXATR_VALUE>);
+                RES_BOXATR_FORMAT, RES_BOXATR_VALUE> aTmpSet(rDoc.GetAttrPool());
         aTmpSet.Put( rBox.GetFrameFormat()->GetAttrSet() );
         if( aTmpSet.Count() )
         {
@@ -2579,11 +2572,9 @@ void SwUndoTableCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
 
         if( aTmpSet.Count() )
         {
-            pEntry->pBoxNumAttr = std::make_unique<SfxItemSet>(
-                rDoc.GetAttrPool(),
-                svl::Items<
+            pEntry->pBoxNumAttr = std::make_unique<SfxItemSetFixed<
                     RES_VERT_ORIENT, RES_VERT_ORIENT,
-                    RES_BOXATR_FORMAT, RES_BOXATR_VALUE>);
+                    RES_BOXATR_FORMAT, RES_BOXATR_VALUE>>(rDoc.GetAttrPool());
             pEntry->pBoxNumAttr->Put( aTmpSet );
         }
 
@@ -2612,11 +2603,9 @@ void SwUndoTableCpyTable::AddBoxBefore( const SwTableBox& rBox, bool bDelContent
             pEntry->pUndo = std::make_unique<SwUndoDelete>( aPam, true );
     }
 
-    pEntry->pBoxNumAttr = std::make_unique<SfxItemSet>(
-        pDoc->GetAttrPool(),
-        svl::Items<
+    pEntry->pBoxNumAttr = std::make_unique<SfxItemSetFixed<
             RES_VERT_ORIENT, RES_VERT_ORIENT,
-            RES_BOXATR_FORMAT, RES_BOXATR_VALUE>);
+            RES_BOXATR_FORMAT, RES_BOXATR_VALUE>>(pDoc->GetAttrPool());
     pEntry->pBoxNumAttr->Put( rBox.GetFrameFormat()->GetAttrSet() );
     if( !pEntry->pBoxNumAttr->Count() )
     {

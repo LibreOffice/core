@@ -837,7 +837,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
         }
 
         // create new Itemset for character attributes
-        rpItemSet.reset(new SfxItemSet( rDoc.GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1>));
+        rpItemSet.reset(new SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END - 1>( rDoc.GetAttrPool() ));
 
         // Set Reader-ItemSet-Pointer to the newly created set
         rReader.SetCurrentItemSet(std::move(rpItemSet));
@@ -1865,8 +1865,7 @@ void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nCurrentLFO,
     if (!bApplyListLevelIndentDirectlyAtPara)
         return;
 
-    std::unique_ptr<SfxItemSet> xListIndent(new SfxItemSet(m_rDoc.GetAttrPool(), svl::Items<RES_LR_SPACE,
-                                                                                            RES_LR_SPACE>));
+    auto xListIndent = std::make_unique<SfxItemSet>(m_rDoc.GetAttrPool(), svl::Items<RES_LR_SPACE, RES_LR_SPACE>);
     const SvxLRSpaceItem *pItem = static_cast<const SvxLRSpaceItem*>(
         GetFormatAttr(RES_LR_SPACE));
     OSL_ENSURE(pItem, "impossible");

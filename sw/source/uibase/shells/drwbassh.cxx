@@ -124,15 +124,14 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                     if( rMarkList.GetMark(0) != nullptr )
                     {
-                        SfxItemSet aSet(
-                            GetPool(),
-                            svl::Items<
+                        SfxItemSetFixed<
                                 RES_LR_SPACE, RES_UL_SPACE,
                                 RES_SURROUND, RES_SURROUND,
                                 RES_ANCHOR, RES_ANCHOR,
                                 RES_WRAP_INFLUENCE_ON_OBJPOS, RES_WRAP_INFLUENCE_ON_OBJPOS,
                                 SID_HTML_MODE, SID_HTML_MODE,
-                                FN_DRAW_WRAP_DLG, FN_DRAW_WRAP_DLG>);
+                                FN_DRAW_WRAP_DLG, FN_DRAW_WRAP_DLG>
+                            aSet( GetPool() );
 
                         aSet.Put(SfxBoolItem(SID_HTML_MODE,
                             0 != ::GetHtmlMode(pSh->GetView().GetDocShell())));
@@ -268,7 +267,7 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                                     SfxItemState::SET != pOutSet->GetItemState(
                                         SID_ATTR_TRANSFORM_POS_Y, false );
 
-                                SfxItemSet aFrameAttrSet(GetPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>);
+                                SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END - 1> aFrameAttrSet(GetPool());
 
                                 bool bSingleSelection = rMarkList.GetMarkCount() == 1;
 

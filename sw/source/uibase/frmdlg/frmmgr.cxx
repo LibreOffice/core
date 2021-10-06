@@ -169,7 +169,7 @@ void SwFlyFrameAttrMgr::UpdateFlyFrame()
     const SfxPoolItem *pGItem, *pItem;
     if( SfxItemState::SET == m_aSet.GetItemState( RES_ANCHOR, false, &pItem ))
     {
-        SfxItemSet aGetSet( *m_aSet.GetPool(), svl::Items<RES_ANCHOR, RES_ANCHOR> );
+        SfxItemSetFixed<RES_ANCHOR, RES_ANCHOR> aGetSet( *m_aSet.GetPool() );
         if( m_pOwnSh->GetFlyFrameAttr( aGetSet ) && 1 == aGetSet.Count() &&
             SfxItemState::SET == aGetSet.GetItemState( RES_ANCHOR, false, &pGItem )
             && static_cast<const SwFormatAnchor*>(pGItem)->GetAnchorId() ==

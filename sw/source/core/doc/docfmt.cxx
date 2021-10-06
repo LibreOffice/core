@@ -112,18 +112,16 @@ static bool lcl_RstAttr( SwNode* pNd, void* pArgs )
 
         // remove unused attribute RES_LR_SPACE
         // add list attributes
-        SfxItemSet aSavedAttrsSet(
-            rDoc.GetAttrPool(),
-            svl::Items<
+        SfxItemSetFixed<
                 RES_PARATR_NUMRULE, RES_PARATR_NUMRULE,
                 RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1,
-                RES_PAGEDESC, RES_BREAK>);
+                RES_PAGEDESC, RES_BREAK>  aSavedAttrsSet(rDoc.GetAttrPool());
         const SfxItemSet* pAttrSetOfNode = pNode->GetpSwAttrSet();
 
         std::vector<sal_uInt16> aClearWhichIds;
         // restoring all paragraph list attributes
         {
-            SfxItemSet aListAttrSet( rDoc.GetAttrPool(), svl::Items<RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1> );
+            SfxItemSetFixed<RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1> aListAttrSet( rDoc.GetAttrPool() );
             aListAttrSet.Set(*pAttrSetOfNode);
             if ( aListAttrSet.Count() )
             {
@@ -321,10 +319,11 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
             pStt, pEnd, pHst, nullptr, pLayout);
 
     // mst: not including META here; it seems attrs with CH_TXTATR are omitted
-    SfxItemSet aDelSet(GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
-                                                 RES_TXTATR_INETFMT, RES_TXTATR_UNKNOWN_CONTAINER,
-                                                 RES_PARATR_BEGIN, RES_FRMATR_END - 1,
-                                                 RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1>);
+    SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
+                     RES_TXTATR_INETFMT, RES_TXTATR_UNKNOWN_CONTAINER,
+                     RES_PARATR_BEGIN, RES_FRMATR_END - 1,
+                     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1>
+        aDelSet(GetAttrPool());
     for( auto it = rAttrs.rbegin(); it != rAttrs.rend(); ++it )
     {
         if( POOLATTR_END > *it )
@@ -416,7 +415,7 @@ void SwDoc::UpdateRsid( const SwPaM &rRg, const sal_Int32 nLen )
     const sal_Int32 nStart(rRg.GetPoint()->nContent.GetIndex() - nLen);
     SvxRsidItem aRsid( mnRsid, RES_CHRATR_RSID );
 
-    SfxItemSet aSet(GetAttrPool(), svl::Items<RES_CHRATR_RSID, RES_CHRATR_RSID>);
+    SfxItemSetFixed<RES_CHRATR_RSID, RES_CHRATR_RSID> aSet(GetAttrPool());
     aSet.Put(aRsid);
     bool const bRet(pTextNode->SetAttr(aSet, nStart,
         rRg.GetPoint()->nContent.GetIndex()));

@@ -412,8 +412,7 @@ void SwWW8AttrIter::OutAttr(sal_Int32 nSwPos, bool bWriteCombChars, bool bPostpo
     const SvxFontItem *pFont = &rParentFont;
     const SfxPoolItem *pGrabBag = nullptr;
 
-    SfxItemSet aExportSet(*rNd.GetSwAttrSet().GetPool(),
-        svl::Items<RES_CHRATR_BEGIN, RES_TXTATR_END - 1>);
+    SfxItemSetFixed<RES_CHRATR_BEGIN, RES_TXTATR_END - 1> aExportSet(*rNd.GetSwAttrSet().GetPool());
 
     //The hard formatting properties that affect the entire paragraph
     if (rNd.HasSwAttrSet())
@@ -2608,7 +2607,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 {
                     // Allow MSO to emulate LO footnote text starting at left margin - only meaningful with hanging indent
                     sal_Int32 nFirstLineIndent=0;
-                    SfxItemSet aSet( m_rDoc.GetAttrPool(), svl::Items<RES_LR_SPACE, RES_LR_SPACE> );
+                    SfxItemSetFixed<RES_LR_SPACE, RES_LR_SPACE> aSet( m_rDoc.GetAttrPool() );
                     const SwTextNode* pTextNode( rNode.GetTextNode() );
                     if ( pTextNode && pTextNode->GetAttr(aSet) )
                     {
@@ -3147,7 +3146,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
         // Exception: if there is a character style hint at the end of the
         // paragraph only, then still go with 2), as RES_TXTATR_CHARFMT is always
         // set as a hint.
-        SfxItemSet aParagraphMarkerProperties(m_rDoc.GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_TXTATR_END>);
+        SfxItemSetFixed<RES_CHRATR_BEGIN, RES_TXTATR_END> aParagraphMarkerProperties(m_rDoc.GetAttrPool());
         bool bCharFormatOnly = true;
 
         SwFormatAutoFormat const& rListAutoFormat(static_cast<SwFormatAutoFormat const&>(rNode.GetAttr(RES_PARATR_LIST_AUTOFMT)));

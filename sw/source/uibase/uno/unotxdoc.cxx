@@ -821,13 +821,12 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
         //try attribute search first
         if(pSearch->HasSearchAttributes())
         {
-            SfxItemSet aSearch(
-                m_pDocShell->GetDoc()->GetAttrPool(),
-                svl::Items<
+            SfxItemSetFixed<
                     RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
                     RES_TXTATR_INETFMT, RES_TXTATR_CHARFMT,
                     RES_PARATR_BEGIN, RES_PARATR_END - 1,
-                    RES_FRMATR_BEGIN, RES_FRMATR_END - 1>);
+                    RES_FRMATR_BEGIN, RES_FRMATR_END - 1>
+                 aSearch( m_pDocShell->GetDoc()->GetAttrPool() );
             pSearch->FillSearchItemSet(aSearch);
             bool bCancel;
             nResult = static_cast<sal_Int32>(pUnoCursor->FindAttrs(aSearch, !pSearch->m_bStyles,

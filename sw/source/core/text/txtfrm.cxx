@@ -383,8 +383,7 @@ namespace sw {
                     rFormatSet.ClearItem(RES_BREAK);
                     static_assert(RES_PAGEDESC + 1 == sal_uInt16(RES_BREAK),
                             "first-node items must be adjacent");
-                    SfxItemSet firstSet(*rFormatSet.GetPool(),
-                            svl::Items<RES_PAGEDESC, RES_BREAK>);
+                    SfxItemSetFixed<RES_PAGEDESC, RES_BREAK> firstSet(*rFormatSet.GetPool());
                     pMerged->pFirstNode->SwContentNode::GetAttr(firstSet);
                     rFormatSet.Put(firstSet);
 
@@ -402,10 +401,10 @@ namespace sw {
                     {
                         rFormatSet.ClearItem(i);
                     }
-                    SfxItemSet propsSet(*rFormatSet.GetPool(),
-                        svl::Items<RES_PARATR_BEGIN, RES_PAGEDESC,
+                    SfxItemSetFixed<RES_PARATR_BEGIN, RES_PAGEDESC,
                                    RES_BREAK+1, RES_FRMATR_END,
-                                   XATTR_FILL_FIRST, XATTR_FILL_LAST+1>);
+                                   XATTR_FILL_FIRST, XATTR_FILL_LAST+1>
+                         propsSet(*rFormatSet.GetPool());
                     pMerged->pParaPropsNode->SwContentNode::GetAttr(propsSet);
                     rFormatSet.Put(propsSet);
                     return *pMerged->pParaPropsNode;

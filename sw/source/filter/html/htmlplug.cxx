@@ -622,8 +622,7 @@ bool SwHTMLParser::InsertEmbed()
         }
     }
 
-    SfxItemSet aFrameSet( m_xDoc->GetAttrPool(),
-                        svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1> );
+    SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END-1> aFrameSet( m_xDoc->GetAttrPool() );
     if( !IsNewDoc() )
         Reader::ResetFrameFormatAttrs( aFrameSet );
 
@@ -1132,8 +1131,7 @@ void SwHTMLParser::InsertFloatingFrame()
         ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
 
     // fetch the ItemSet
-    SfxItemSet aFrameSet( m_xDoc->GetAttrPool(),
-                        svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1> );
+    SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END-1> aFrameSet( m_xDoc->GetAttrPool() );
     if( !IsNewDoc() )
         Reader::ResetFrameFormatAttrs( aFrameSet );
 

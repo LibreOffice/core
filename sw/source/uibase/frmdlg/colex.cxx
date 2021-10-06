@@ -121,7 +121,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             {
                 // create FillAttributes from SvxBrushItem //SetHdColor(rItem.GetColor());
                 const SvxBrushItem& rItem = rHeaderSet.Get(RES_BACKGROUND);
-                SfxItemSet aTempSet(*rHeaderSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>);
+                SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aTempSet(*rHeaderSet.GetPool());
 
                 setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
                 setHeaderFillAttributes(
@@ -159,7 +159,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             {
                 // create FillAttributes from SvxBrushItem //SetFtColor(rItem.GetColor());
                 const SvxBrushItem& rItem = rFooterSet.Get(RES_BACKGROUND);
-                SfxItemSet aTempSet(*rFooterSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>);
+                SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aTempSet(*rFooterSet.GetPool());
 
                 setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
                 setFooterFillAttributes(
@@ -175,7 +175,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
     {
         // create FillAttributes from SvxBrushItem
         const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(*pItem);
-        SfxItemSet aTempSet(*rSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>);
+        SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aTempSet(*rSet.GetPool());
 
         setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
         setPageFillAttributes(

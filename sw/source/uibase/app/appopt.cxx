@@ -85,9 +85,7 @@ std::optional<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
     }
 
     // Options/Edit
-    SfxItemSet aRet(
-        GetPool(),
-        svl::Items<
+    SfxItemSetFixed<
             RES_BACKGROUND, RES_BACKGROUND,
             XATTR_FILL_FIRST, XATTR_FILL_LAST,
             SID_PRINTPREVIEW, SID_PRINTPREVIEW,
@@ -104,7 +102,8 @@ std::optional<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
             FN_PARAM_PRINTER, FN_PARAM_STDFONTS,
             FN_PARAM_WRTSHELL, FN_PARAM_WRTSHELL,
             FN_PARAM_SHADOWCURSOR, FN_PARAM_SHADOWCURSOR,
-            FN_PARAM_CRSR_IN_PROTECTED, FN_PARAM_CRSR_IN_PROTECTED>);
+            FN_PARAM_CRSR_IN_PROTECTED, FN_PARAM_CRSR_IN_PROTECTED>
+        aRet(GetPool());
 
     aRet.Put( SwDocDisplayItem( aViewOpt ) );
     aRet.Put( SwElemItem( aViewOpt ) );

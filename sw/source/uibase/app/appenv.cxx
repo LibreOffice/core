@@ -167,7 +167,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     // Check if there's already an envelope.
     bool bEnvChange = false;
 
-    SfxItemSet aSet(GetPool(), svl::Items<FN_ENVELOP, FN_ENVELOP>);
+    SfxItemSetFixed<FN_ENVELOP, FN_ENVELOP> aSet(GetPool());
     aSet.Put(aEnvCfg.GetItem());
 
     SfxPrinter* pTempPrinter = pSh->getIDocumentDeviceAccess().getPrinter( true );
@@ -282,7 +282,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
             {
                 pSh->SplitNode();
                 pSh->Right( CRSR_SKIP_CHARS, false, 1, false );
-                SfxItemSet aBreakSet( pSh->GetAttrPool(), svl::Items<RES_PAGEDESC, RES_PAGEDESC> );
+                SfxItemSetFixed<RES_PAGEDESC, RES_PAGEDESC> aBreakSet( pSh->GetAttrPool() );
                 aBreakSet.Put( SwFormatPageDesc( pFollow ) );
                 pSh->SetTableAttr( aBreakSet );
             }

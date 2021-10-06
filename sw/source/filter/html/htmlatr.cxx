@@ -1847,8 +1847,7 @@ void HTMLEndPosLst::Insert( const SwDrawFrameFormat& rFormat, sal_Int32 nPos,
     // insert them as hints. Because of the amount of Hints the styles
     // are not considered!
     const SfxItemSet& rFormatItemSet = rFormat.GetAttrSet();
-    SfxItemSet aItemSet( *rFormatItemSet.GetPool(), svl::Items<RES_CHRATR_BEGIN,
-                                                 RES_CHRATR_END> );
+    SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END> aItemSet( *rFormatItemSet.GetPool() );
     SwHTMLWriter::GetEEAttrsFromDrwObj( aItemSet, pTextObj );
     bool bOutStylesOld = m_bOutStyles;
     m_bOutStyles = false;

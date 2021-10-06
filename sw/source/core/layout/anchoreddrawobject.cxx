@@ -795,7 +795,7 @@ void SwAnchoredDrawObject::AdjustPositioningAttr( const SwFrame* _pNewAnchorFram
 
     SwFormatHoriOrient hori(nHoriRelPos, text::HoriOrientation::NONE, text::RelOrientation::FRAME);
     SwFormatVertOrient vert(nVertRelPos, text::VertOrientation::NONE, text::RelOrientation::FRAME);
-    SfxItemSet items(GetFrameFormat().GetDoc()->GetAttrPool(), svl::Items<RES_VERT_ORIENT, RES_HORI_ORIENT>);
+    SfxItemSetFixed<RES_VERT_ORIENT, RES_HORI_ORIENT> items(GetFrameFormat().GetDoc()->GetAttrPool());
     items.Put(hori);
     items.Put(vert);
     GetFrameFormat().GetDoc()->SetAttr(items, GetFrameFormat());

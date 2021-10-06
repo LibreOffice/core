@@ -272,9 +272,8 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
 
             if (pShell)
             {
-                SfxItemSet aSet(m_pCursorShell->GetSfxViewShell()->GetPool(),
-                    svl::Items<RES_TXTATR_INETFMT,
-                    RES_TXTATR_INETFMT>);
+                SfxItemSetFixed<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>
+                     aSet(m_pCursorShell->GetSfxViewShell()->GetPool());
                 pShell->GetCurAttr(aSet);
                 if(SfxItemState::SET <= aSet.GetItemState( RES_TXTATR_INETFMT ))
                 {

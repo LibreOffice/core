@@ -236,12 +236,11 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString
         {
             // we create a default SfxPrinter.
             // ItemSet is deleted by Sfx!
-            auto pSet = std::make_unique<SfxItemSet>(
-                xDocSh->GetDoc()->GetAttrPool(),
-                svl::Items<
+            auto pSet = std::make_unique<SfxItemSetFixed<
                     SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                     SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
-                    FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER>);
+                    FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER>>
+                        ( xDocSh->GetDoc()->GetAttrPool() );
             VclPtr<SfxPrinter> pPrinter = VclPtr<SfxPrinter>::Create( std::move(pSet) );
 
             // and append it to the document.

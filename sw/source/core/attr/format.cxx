@@ -459,7 +459,7 @@ bool SwFormat::SetFormatAttr( const SfxPoolItem& rAttr )
     {
         // FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
-        SfxItemSet aTempSet(*m_aSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>);
+        SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aTempSet(*m_aSet.GetPool());
         const SvxBrushItem& rSource = rAttr.StaticWhichCast(RES_BACKGROUND);
 
         // fill a local ItemSet with the attributes corresponding as good as possible

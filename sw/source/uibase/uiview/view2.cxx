@@ -1731,8 +1731,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                     {
                         if(!pNumRule->IsAutoRule())
                         {
-                            SfxItemSet aSet(GetPool(),
-                                    svl::Items<RES_PARATR_NUMRULE, RES_PARATR_NUMRULE>);
+                            SfxItemSetFixed<RES_PARATR_NUMRULE, RES_PARATR_NUMRULE> aSet(GetPool());
                             rShell.GetCurAttr(aSet);
                             if(SfxItemState::DEFAULT <=
                                aSet.GetItemState(RES_PARATR_NUMRULE))
@@ -1867,7 +1866,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                 else
                 {
                     const SwViewOption& rViewOptions = *rSh.GetViewOptions();
-                    SfxItemSet aCoreSet(m_pShell->GetPool(), svl::Items<SID_ATTR_ZOOM, SID_ATTR_ZOOM, SID_ATTR_VIEWLAYOUT, SID_ATTR_VIEWLAYOUT> );
+                    SfxItemSetFixed<SID_ATTR_ZOOM, SID_ATTR_ZOOM, SID_ATTR_VIEWLAYOUT, SID_ATTR_VIEWLAYOUT> aCoreSet(m_pShell->GetPool());
                     SvxZoomItem aZoom( rViewOptions.GetZoomType(), rViewOptions.GetZoom() );
 
                     const bool bBrowseMode = rSh.GetViewOptions()->getBrowseMode();
