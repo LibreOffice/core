@@ -96,7 +96,6 @@
 #include "unoobjw.hxx"
 #include "servprov.hxx"
 
-using namespace std;
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::uno;
@@ -3095,7 +3094,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP  UnoObjectWrapperRemoteOpt::GetIDsOfNames ( RE
         {
             // name has not been bad before( member exists
             typedef NameToIdMap::iterator ITnames;
-            pair< ITnames, bool > pair_id= m_nameToDispIdMap.emplace(name, m_currentId++);
+            std::pair< ITnames, bool > pair_id= m_nameToDispIdMap.emplace(name, m_currentId++);
             // new ID inserted ?
             if( pair_id.second )
             {// yes, now create MemberInfo and ad to IdToMemberInfoMap
