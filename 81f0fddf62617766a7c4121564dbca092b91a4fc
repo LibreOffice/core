@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ea36058_af6776a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-06T20:55:52Z",
+      "side": 1,
+      "message": "Concerns only MacOs and ios and MacOs Jenkins didn\u0027t complain.\nLet\u0027s push this one, at worst, it can be reverted.",
+      "revId": "81f0fddf62617766a7c4121564dbca092b91a4fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
