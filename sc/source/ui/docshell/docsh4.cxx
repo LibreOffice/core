@@ -380,11 +380,11 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 }
 
                 ScAddress::Details aDetails(rDoc.GetAddressConvention(), 0, 0);
-                bool bValid = (aSingleRange.ParseAny(aRangeName, rDoc, aDetails) & ScRefFlags::VALID) == ScRefFlags::ZERO;
+                bool bValid = (aSingleRange.ParseAny(aRangeName, rDoc, aDetails) & ScRefFlags::VALID) != ScRefFlags::ZERO;
                 if (!bValid)
                 {
                     aRangeListRef = new ScRangeList;
-                    aRangeListRef->Parse( aRangeName, rDoc );
+                    aRangeListRef->Parse( aRangeName, rDoc, rDoc.GetAddressConvention());
                     if ( !aRangeListRef->empty() )
                     {
                         bMultiRange = true;
