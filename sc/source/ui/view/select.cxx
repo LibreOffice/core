@@ -31,6 +31,7 @@
 #include <markdata.hxx>
 #include <gridwin.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <comphelper/lok.hxx>
 
 #if defined(_WIN32)
 #define SC_SELENG_REFMODE_UPDATE_INTERVAL_MIN 65
