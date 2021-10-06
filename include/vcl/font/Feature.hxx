@@ -68,7 +68,7 @@ public:
     FeatureDefinition();
     FeatureDefinition(uint32_t nCode, OUString const& rDescription,
                       FeatureParameterType eType = FeatureParameterType::BOOL,
-                      std::vector<FeatureParameter> const& rEnumParameters
+                      std::vector<FeatureParameter>&& rEnumParameters
                       = std::vector<FeatureParameter>{},
                       uint32_t nDefault = 0);
     FeatureDefinition(uint32_t nCode, TranslateId pDescriptionID,

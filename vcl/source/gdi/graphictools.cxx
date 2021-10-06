@@ -45,7 +45,7 @@ SvtGraphicStroke::SvtGraphicStroke( const tools::Polygon& rPath,
                                     CapType             aCap,
                                     JoinType            aJoin,
                                     double              fMiterLimit,
-                                    const DashArray&    rDashArray  ) :
+                                    DashArray&&         rDashArray  ) :
     maPath( rPath ),
     maStartArrow( rStartArrow ),
     maEndArrow( rEndArrow ),
@@ -54,7 +54,7 @@ SvtGraphicStroke::SvtGraphicStroke( const tools::Polygon& rPath,
     maCapType( aCap ),
     maJoinType( aJoin ),
     mfMiterLimit( fMiterLimit ),
-    maDashArray( rDashArray )
+    maDashArray( std::move(rDashArray) )
 {
 }
 
