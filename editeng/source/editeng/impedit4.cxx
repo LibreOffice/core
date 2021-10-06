@@ -1359,7 +1359,7 @@ void ImpEditEngine::GetAllMisspellRanges( std::vector<editeng::MisspellRanges>& 
         if (!pWrongList)
             continue;
 
-        aRanges.emplace_back(i, pWrongList->GetRanges());
+        aRanges.emplace_back(i, std::vector(pWrongList->GetRanges()));
     }
 
     aRanges.swap(rRanges);
