@@ -404,7 +404,7 @@
 #define STR_CONTENT_TYPE_SINGLE_FOOTNOTE        NC_("STR_CONTENT_TYPE_SINGLE_FOOTNOTE", "Footnote or Endnote")
 #define STR_CONTENT_FOOTNOTE                    NC_("STR_CONTENT_FOOTNOTE", "Footnote")
 #define STR_CONTENT_ENDNOTE                     NC_("STR_CONTENT_ENDNOTE", "Endnote")
-#define STR_FOOTNOTE_ENDNOTE_SEPARATOR_TIP      NC_("STR_FOOTNOTE_ENDNOTE_SEPARATOR_TIP", "Foonotes are listed above this line and Endnotes are listed below")
+#define STR_FOOTNOTE_ENDNOTE_SEPARATOR_TIP      NC_("STR_FOOTNOTE_ENDNOTE_SEPARATOR_TIP", "Footnotes are listed above this line and Endnotes are listed below")
 #define STR_DEFINE_NUMBERFORMAT                 NC_("STR_DEFINE_NUMBERFORMAT", "Additional formats...")
 #define RID_STR_SYSTEM                          NC_("RID_STR_SYSTEM", "[System]")
 #define STR_MULT_INTERACT_HYPH_WARN             NC_("STR_MULT_INTERACT_HYPH_WARN", "The interactive hyphenation is already active\nin a different document")
