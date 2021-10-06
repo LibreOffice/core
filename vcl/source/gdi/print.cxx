@@ -1564,8 +1564,8 @@ void Printer::ImplEndPage()
 
     if ( mpPrinter )
     {
-        mpPrinter->EndPage();
         ReleaseGraphics();
+        mpPrinter->EndPage();
         mbDevOutput = false;
 
         mpJobGraphics = nullptr;
