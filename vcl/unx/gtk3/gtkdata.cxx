@@ -455,8 +455,8 @@ static GtkStyleProvider* CreateStyleProvider()
     static const gchar data[] =
       "button.small-button, toolbar.small-button button, box.small-button button, "
       "combobox.small-button *.combo, box#combobox.small-button *.combo, entry.small-button { "
-      "padding: 0; margin-left: 0px; margin-right: 0px;"
-      "min-height: 18px; min-width: 18px; }"
+      "padding: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;"
+      "border-width: 0; min-height: 0; min-width: 0; }"
       "notebook.overflow > header.top > tabs > tab:checked { "
       "box-shadow: none; padding: 0 0 0 0; margin: 0 0 0 0;"
       "border-image: none; border-image-width: 0 0 0 0;"
