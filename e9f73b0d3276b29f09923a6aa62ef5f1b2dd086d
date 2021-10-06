@@ -33,6 +33,23 @@
       "message": "I could have created even a simpler example, but I thought it could be useful to resemble the example in the bug report.",
       "revId": "e9f73b0d3276b29f09923a6aa62ef5f1b2dd086d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3b4a7b7_239965ec",
+        "filename": "basic/qa/vba_tests/split.vb",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-06T19:02:47Z",
+      "side": 1,
+      "message": "I suppose that a comment here would be nice, clarifying that it\u0027s *not* allowed to change types in VBASupport mode.",
+      "revId": "e9f73b0d3276b29f09923a6aa62ef5f1b2dd086d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
