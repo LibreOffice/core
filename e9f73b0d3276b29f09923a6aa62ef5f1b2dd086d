@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d77d441_0a14f1c5",
+        "filename": "basic/qa/basic_coverage/test_split_method.bas",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-10-06T19:00:55Z",
+      "side": 1,
+      "message": "I hope it is fine that I changed even the structure of the test file, otherwise the test would not report back the exact problem or position where it failed.",
+      "revId": "e9f73b0d3276b29f09923a6aa62ef5f1b2dd086d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "334f8214_abefa2d5",
+        "filename": "basic/qa/basic_coverage/test_split_method.bas",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-10-06T19:00:55Z",
+      "side": 1,
+      "message": "I could have created even a simpler example, but I thought it could be useful to resemble the example in the bug report.",
+      "revId": "e9f73b0d3276b29f09923a6aa62ef5f1b2dd086d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
