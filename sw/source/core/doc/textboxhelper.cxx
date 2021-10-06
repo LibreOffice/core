@@ -1388,7 +1388,7 @@ SwTextBoxNode::SwTextBoxNode(SwFrameFormat* pOwnerShape)
     assert(pOwnerShape->Which() == RES_DRAWFRMFMT);
 
     m_pOwnerShapeFormat = pOwnerShape;
-    if (m_pTextBoxes.size())
+    if (!m_pTextBoxes.empty())
         m_pTextBoxes.clear();
 }
 
@@ -1422,7 +1422,7 @@ void SwTextBoxNode::AddTextBox(SdrObject* pDrawObject, SwFrameFormat* pNewTextBo
 void SwTextBoxNode::DelTextBox(const SdrObject* pDrawObject)
 {
     assert(pDrawObject);
-    if (m_pTextBoxes.size())
+    if (!m_pTextBoxes.empty())
     {
         for (auto it = m_pTextBoxes.begin(); it != m_pTextBoxes.end();)
         {
@@ -1442,7 +1442,7 @@ void SwTextBoxNode::DelTextBox(const SdrObject* pDrawObject)
 SwFrameFormat* SwTextBoxNode::GetTextBox(const SdrObject* pDrawObject) const
 {
     assert(pDrawObject);
-    if (m_pTextBoxes.size())
+    if (!m_pTextBoxes.empty())
     {
         for (auto it = m_pTextBoxes.begin(); it != m_pTextBoxes.end(); it++)
         {
@@ -1459,7 +1459,7 @@ bool SwTextBoxNode::IsTextBoxActive(const SdrObject* pDrawObject) const
 {
     assert(pDrawObject);
 
-    if (m_pTextBoxes.size())
+    if (!m_pTextBoxes.empty())
     {
         for (auto it = m_pTextBoxes.begin(); it != m_pTextBoxes.end(); it++)
         {
@@ -1476,7 +1476,7 @@ void SwTextBoxNode::SetTextBoxActive(const SdrObject* pDrawObject)
 {
     assert(pDrawObject);
 
-    if (m_pTextBoxes.size())
+    if (!m_pTextBoxes.empty())
     {
         for (auto it = m_pTextBoxes.begin(); it != m_pTextBoxes.end(); it++)
         {
@@ -1492,7 +1492,7 @@ void SwTextBoxNode::SetTextBoxInactive(const SdrObject* pDrawObject)
 {
     assert(pDrawObject);
 
-    if (m_pTextBoxes.size())
+    if (!m_pTextBoxes.empty())
     {
         for (auto it = m_pTextBoxes.begin(); it != m_pTextBoxes.end(); it++)
         {
