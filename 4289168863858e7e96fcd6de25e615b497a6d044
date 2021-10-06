@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b214c7a8_da808583",
+        "filename": "solenv/clang-format/excludelist",
+        "patchSetId": 62
+      },
+      "lineNbr": 14442,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-10-06T05:39:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e53b77ad_b1eeee81",
+      "revId": "4289168863858e7e96fcd6de25e615b497a6d044",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac44299e_1f0f132e",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-10-05T16:52:07Z",
       "side": 1,
       "message": "And this",
+      "revId": "4289168863858e7e96fcd6de25e615b497a6d044",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e3a2b6b_23e25065",
+        "filename": "solenv/clang-format/excludelist",
+        "patchSetId": 62
+      },
+      "lineNbr": 14943,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-10-06T05:39:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac44299e_1f0f132e",
       "revId": "4289168863858e7e96fcd6de25e615b497a6d044",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -69,6 +105,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "472c8f85_3a6dc175",
+        "filename": "vcl/inc/PhysicalFontCollection.hxx",
+        "patchSetId": 62
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-10-06T05:39:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f49e01a6_e24c2217",
+      "revId": "4289168863858e7e96fcd6de25e615b497a6d044",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "012771dc_9ec0078e",
@@ -86,6 +140,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7aa24f6a_0880cf6e",
+        "filename": "vcl/inc/font/DirectFontSubstitution.hxx",
+        "patchSetId": 62
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-10-06T05:39:46Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "012771dc_9ec0078e",
+      "revId": "4289168863858e7e96fcd6de25e615b497a6d044",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "87d4918b_0bb0ef42",
@@ -99,6 +171,24 @@
       "writtenOn": "2021-10-05T16:52:07Z",
       "side": 1,
       "message": "I may be wrong, but it seems to me that headers related to font substitution and fallback are related to each other, and having them split to atomic items is bit too much.\n\nFontSubstEntry.hxx is needed inside DirectFontSubstitution.hxx (and related CXXs should be merged, too).\n\nFontSubstitution.hxx only defines a small common parent for DirectFontSubstitution.hxx, GlyphFallbackFontSubstitution.hxx, and PreMatchFontSubstitution.hxx. The latter two are themselves very small.\n\nAll in all, I believe that the mentioned headers are best served as a single thing. Or at least FontSubstitution.hxx + GlyphFallbackFontSubstitution.hxx + PreMatchFontSubstitution.hxx (all three define pure virtual base classes for later reuse), and separately DirectFontSubstitution.hxx + FontSubstEntry.hxx",
+      "revId": "4289168863858e7e96fcd6de25e615b497a6d044",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cecb23b4_28aa954e",
+        "filename": "vcl/source/font/PhysicalFontCollection.cxx",
+        "patchSetId": 62
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-10-06T05:39:46Z",
+      "side": 1,
+      "message": "That\u0027s fair, I\u0027ll organize this.",
+      "parentUuid": "87d4918b_0bb0ef42",
       "revId": "4289168863858e7e96fcd6de25e615b497a6d044",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
