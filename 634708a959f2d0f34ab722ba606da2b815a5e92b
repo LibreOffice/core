@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b4c9e5c_b5409a52",
+        "filename": "vcl/qa/cppunit/outdev.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1139,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-10-06T12:07:04Z",
+      "side": 1,
+      "message": "Hm.. would probably be good to have a VDev the size of the output to not trigger some corner case optimizations... unless you explicitly test that.",
+      "range": {
+        "startLine": 1139,
+        "startChar": 39,
+        "endLine": 1139,
+        "endChar": 45
+      },
+      "revId": "634708a959f2d0f34ab722ba606da2b815a5e92b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
