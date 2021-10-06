@@ -3947,9 +3947,19 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
         const SwFormatFrameSize &rFrameSize = pFloatingTableFrame->GetFrameFormat().GetFrameSize();
         nWidthPercent = rFrameSize.GetWidthPercent();
     }
+
     uno::Reference<beans::XPropertySet> xPropertySet(SwXTextTables::GetObject(*pTable->GetFrameFormat( )),uno::UNO_QUERY);
     bool isWidthRelative = false;
     xPropertySet->getPropertyValue("IsWidthRelative") >>= isWidthRelative;
+    if (!isWidthRelative && !nWidthPercent)
+    {
+        // The best fit for "automatic" table placement is relative 100%
+        short nHoriOrient = -1;
+        xPropertySet->getPropertyValue("HoriOrient") >>= nHoriOrient;
+        isWidthRelative = nHoriOrient == text::HoriOrientation::FULL;
+        if (isWidthRelative)
+            nWidthPercent = 100;
+    }
 
     if(isWidthRelative)
     {

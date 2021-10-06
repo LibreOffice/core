@@ -268,11 +268,20 @@ DECLARE_WW8EXPORT_TEST(testdf79553_lineNumbers, "tdf79553_lineNumbers.doc")
     CPPUNIT_ASSERT_MESSAGE("automatic distance", nValue > 0);
 }
 
-DECLARE_WW8EXPORT_TEST(tesTdf138302_restartNumbering, "tdf138302_restartNumbering.odt")
+DECLARE_WW8EXPORT_TEST(testTdf138302_restartNumbering, "tdf138302_restartNumbering.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xPara(getParagraph(8), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("1."), getProperty<OUString>(xPara, "ListLabelString"));
+
+
+    // tdf#143982: automatic tables should export as something better than just left-and-size
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT(getProperty<bool>(xTable, "IsWidthRelative"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xTable, "RelativeWidth"));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf122429_header, "tdf122429_header.doc")
