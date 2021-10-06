@@ -124,6 +124,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "caa7fe51_b771dfa2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-10-06T16:18:35Z",
+      "side": 1,
+      "message": "Note: you added Gerrit, who can bring this to Robert\u0027s attention, but he is not Robert.",
+      "parentUuid": "55b2bdd8_47d49138",
+      "revId": "27efa1c900339b96a944eb5906d4941f3481e6ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3328bc12_d0002700",
