@@ -16,6 +16,24 @@
       "message": "Do we need to split this into an own CXX? I suppose that having this in vcl/source/font/DirectFontSubstitution.cxx would also be logical.",
       "revId": "76699510f4da12766fa9dcd0e6a22c73d03fbea0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cdcd40a_02c1a141",
+        "filename": "vcl/source/font/FontSubstEntry.cxx",
+        "patchSetId": 64
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-10-06T08:45:47Z",
+      "side": 1,
+      "message": "I think keep it in its own source file. It makes sense to keep the headers together, but I\u0027d prefer to keep the source file seperate.",
+      "parentUuid": "9da3ccd7_8f67a533",
+      "revId": "76699510f4da12766fa9dcd0e6a22c73d03fbea0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
