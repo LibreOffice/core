@@ -28,7 +28,7 @@ namespace slideshow::internal
 {
         ContinuousKeyTimeActivityBase::ContinuousKeyTimeActivityBase( const ActivityParameters& rParms ) :
             SimpleContinuousActivityBase( rParms ),
-            maLerper( rParms.maDiscreteTimes )
+            maLerper( std::vector(rParms.maDiscreteTimes) )
         {
             ENSURE_OR_THROW( rParms.maDiscreteTimes.size() > 1,
                               "ContinuousKeyTimeActivityBase::ContinuousKeyTimeActivityBase(): key times vector must have two entries or more" );
