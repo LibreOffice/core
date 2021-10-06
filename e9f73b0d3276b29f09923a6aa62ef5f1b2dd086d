@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd48e5ed_dcd1f5e7",
+        "filename": "basic/qa/basic_coverage/test_split_method.bas",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-06T19:04:01Z",
+      "side": 1,
+      "message": "Absolutely fine!",
+      "parentUuid": "5d77d441_0a14f1c5",
+      "revId": "e9f73b0d3276b29f09923a6aa62ef5f1b2dd086d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "334f8214_abefa2d5",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-10-06T19:00:55Z",
       "side": 1,
       "message": "I could have created even a simpler example, but I thought it could be useful to resemble the example in the bug report.",
+      "revId": "e9f73b0d3276b29f09923a6aa62ef5f1b2dd086d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "433aa26a_df454ae1",
+        "filename": "basic/qa/basic_coverage/test_split_method.bas",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-06T19:04:01Z",
+      "side": 1,
+      "message": "Thank you!",
+      "parentUuid": "334f8214_abefa2d5",
       "revId": "e9f73b0d3276b29f09923a6aa62ef5f1b2dd086d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
