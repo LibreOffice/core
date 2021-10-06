@@ -370,27 +370,6 @@ void ContentProperties::addProperties(
     }
 }
 
-
-void ContentProperties::addProperties( const ContentProperties & rProps )
-{
-    for ( const auto& rProp : *rProps.m_xProps )
-    {
-        addProperty(
-            rProp.first, rProp.second.value(), rProp.second.isCaseSensitive() );
-    }
-}
-
-
-void ContentProperties::addProperties(
-    const std::vector< DAVPropertyValue > & rProps )
-{
-    for ( const auto& rProp : rProps )
-    {
-        addProperty( rProp );
-    }
-}
-
-
 void ContentProperties::addProperty( const DAVPropertyValue & rProp )
 {
     addProperty( rProp.Name, rProp.Value, rProp.IsCaseSensitive );
