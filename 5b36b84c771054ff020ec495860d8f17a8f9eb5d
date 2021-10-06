@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4450345b_16701bf7",
+        "filename": "vcl/qa/cppunit/outdev.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1049,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-10-06T12:13:21Z",
+      "side": 1,
+      "message": "It\u0027s true that this triggers and Erase... but you should test and explicit Erase action. For example if the behavior changes and this wouldn\u0027t trigger it anymore - the test could become a silent no-op.",
+      "range": {
+        "startLine": 1049,
+        "startChar": 0,
+        "endLine": 1049,
+        "endChar": 9
+      },
+      "revId": "5b36b84c771054ff020ec495860d8f17a8f9eb5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f11a7cf_1fde3e90",
+        "filename": "vcl/qa/cppunit/outdev.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1087,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-10-06T12:13:21Z",
+      "side": 1,
+      "message": "I would say INITIAL_SETUP_ACTION_COUNT.",
+      "range": {
+        "startLine": 1087,
+        "startChar": 45,
+        "endLine": 1087,
+        "endChar": 58
+      },
+      "revId": "5b36b84c771054ff020ec495860d8f17a8f9eb5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
