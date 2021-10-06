@@ -875,8 +875,8 @@ void Content::addProperty( const css::ucb::PropertyCommandArgument &aCmdArg,
             {
                 try
                 {
-                    const ResourceType & rType = getResourceType( xEnv );
-                    switch ( rType )
+                    const ResourceType eType = getResourceType( xEnv );
+                    switch ( eType )
                     {
                     case UNKNOWN:
                     case DAV:
@@ -979,8 +979,8 @@ void Content::removeProperty( const OUString& Name,
             {
                 try
                 {
-                    const ResourceType & rType = getResourceType( xEnv );
-                    switch ( rType )
+                    const ResourceType eType = getResourceType( xEnv );
+                    switch ( eType )
                     {
                     case UNKNOWN:
                     case DAV:
@@ -1284,9 +1284,10 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
         // First, identify whether resource is DAV or not
         bool bNetworkAccessAllowed = true;
-        const ResourceType & rType = getResourceType( xEnv, xResAccess, &bNetworkAccessAllowed );
+        const ResourceType eType = getResourceType(
+                xEnv, xResAccess, &bNetworkAccessAllowed );
 
-        if ( DAV == rType )
+        if ( eType == DAV )
         {
             // cache lookup... getResourceType may fill the props cache via
             // PROPFIND!
@@ -1364,8 +1365,8 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     }
                     catch ( DAVException const & e )
                     {
-                        bNetworkAccessAllowed = bNetworkAccessAllowed &&
-                            shouldAccessNetworkAfterException( e );
+                        bNetworkAccessAllowed = bNetworkAccessAllowed
+                            && shouldAccessNetworkAfterException( e );
 
                         if ( !bNetworkAccessAllowed )
                         {
@@ -1465,7 +1466,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         CurlUri const aUri( xResAccess->getURL() );
         aUnescapedTitle = aUri.GetPathBaseNameUnescaped();
 
-        if ( rType == UNKNOWN )
+        if ( eType == UNKNOWN )
         {
             xProps.reset( new ContentProperties( aUnescapedTitle ) );
         }
@@ -1473,7 +1474,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         // For DAV resources we only know the Title, for non-DAV
         // resources we additionally know that it is a document.
 
-        if ( rType == DAV )
+        if ( eType == DAV )
         {
             //xProps.reset(
             //    new ContentProperties( aUnescapedTitle ) );
@@ -3222,11 +3223,9 @@ Content::ResourceType Content::getResourceType(
         aProperties[ 3 ].Name = "MediaType";
         aProperties[ 4 ].Name = DAVProperties::SUPPORTEDLOCK;
 
-        ContentProperties::UCBNamesToDAVNames(
-            aProperties, aPropNames );
+        ContentProperties::UCBNamesToDAVNames( aProperties, aPropNames );
 
-        rResAccess->PROPFIND(
-            DAVZERO, aPropNames, resources, xEnv );
+        rResAccess->PROPFIND( DAVZERO, aPropNames, resources, xEnv );
 
         // TODO - is this really only one?
         if ( resources.size() == 1 )
