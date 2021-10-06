@@ -29,7 +29,6 @@
 
 #define MAX_GLYPHFALLBACK 16
 
-class ImplDeviceFontSizeList;
 class ImplGlyphFallbackFontSubstitution;
 class ImplPreMatchFontSubstitution;
 
