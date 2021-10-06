@@ -2715,7 +2715,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
             }
         }
 
-        OSL_ENSURE(m_pRangeIndices->size() == aRanges.size(),
+        assert(m_pRangeIndices->size() == aRanges.size() &&
                    "range list and range index list have different sizes.");
 
         unique_ptr<ScRangeList> pUndoRanges;
@@ -2728,7 +2728,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 
         if (bChanged)
         {
-            OSL_ENSURE(m_pRangeIndices->size() == aRanges.size(),
+            assert(m_pRangeIndices->size() == aRanges.size() &&
                        "range list and range index list have different sizes after the reference update.");
 
             // Bring the change back from the range list to the token list.
@@ -2750,7 +2750,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 
             if (!m_pRangeIndices || m_pRangeIndices->empty())
             {
-                OSL_FAIL(" faulty range indices");
+                assert(false && " faulty range indices");
                 break;
             }
 
@@ -2759,7 +2759,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
             size_t nCount = rRanges.size();
             if (nCount != m_pRangeIndices->size())
             {
-                OSL_FAIL("range count and range index count differ.");
+                assert(false && "range count and range index count differ.");
                 break;
             }
 
