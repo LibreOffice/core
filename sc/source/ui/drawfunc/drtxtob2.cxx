@@ -82,7 +82,7 @@ void ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
         case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
             {
-                SfxItemSet aAttr( pView->GetModel()->GetItemPool(), svl::Items<SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION> );
+                SfxItemSetFixed<SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION> aAttr( pView->GetModel()->GetItemPool() );
                 aAttr.Put( SvxWritingModeItem(
                     nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ?
                         css::text::WritingMode_LR_TB : css::text::WritingMode_TB_RL,
@@ -98,7 +98,7 @@ void ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
                 const SfxBoolItem* pItem = rReq.GetArg<SfxBoolItem>(SID_ENABLE_HYPHENATION);
                 if( pItem )
                 {
-                    SfxItemSet aSet( GetPool(), svl::Items<EE_PARA_HYPHENATE, EE_PARA_HYPHENATE> );
+                    SfxItemSetFixed<EE_PARA_HYPHENATE, EE_PARA_HYPHENATE> aSet( GetPool() );
                     bool bValue = pItem->GetValue();
                     aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, bValue ) );
                     pView->SetAttributes( aSet );
@@ -153,9 +153,8 @@ void ScDrawTextObjectBar::ExecuteExtra( SfxRequest &rReq )
         case SID_ATTR_PARA_LEFT_TO_RIGHT:
         case SID_ATTR_PARA_RIGHT_TO_LEFT:
             {
-                SfxItemSet aAttr( pView->GetModel()->GetItemPool(),
-                                    svl::Items<EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
-                                    EE_PARA_JUST, EE_PARA_JUST> );
+                SfxItemSetFixed<EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
+                                    EE_PARA_JUST, EE_PARA_JUST>  aAttr( pView->GetModel()->GetItemPool() );
                 bool bLeft = ( nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT );
                 aAttr.Put( SvxFrameDirectionItem(
                                 bLeft ? SvxFrameDirection::Horizontal_LR_TB : SvxFrameDirection::Horizontal_RL_TB,

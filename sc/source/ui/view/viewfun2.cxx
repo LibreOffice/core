@@ -3342,12 +3342,8 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
     // none of the lines don't care?
     if( (eItemState != SfxItemState::DONTCARE) && (eTLBRState != SfxItemState::DONTCARE) && (eBLTRState != SfxItemState::DONTCARE) )
     {
-        SfxItemSet aOldSet( *rDoc.GetPool(),
-                            svl::Items<ATTR_PATTERN_START,
-                                        ATTR_PATTERN_END> );
-        SfxItemSet aNewSet(*rDoc.GetPool(),
-                            svl::Items<ATTR_PATTERN_START,
-                                        ATTR_PATTERN_END> );
+        SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END> aOldSet( *rDoc.GetPool() );
+        SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END> aNewSet( *rDoc.GetPool() );
 
         SvxBorderLine           aLine;
 

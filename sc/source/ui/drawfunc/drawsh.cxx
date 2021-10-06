@@ -202,7 +202,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 
         case SID_TEXT_STANDARD: // delete hard text attributes
             {
-                SfxItemSet aEmptyAttr(GetPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>);
+                SfxItemSetFixed<EE_ITEMS_START, EE_ITEMS_END> aEmptyAttr(GetPool());
                 pView->SetAttributes(aEmptyAttr, true);
             }
             break;
@@ -460,7 +460,7 @@ void ScDrawShell::ExecuteMacroAssign(SdrObject* pObj, weld::Window* pWin)
     }
 
     // create empty itemset for macro-dlg
-    SfxItemSet aItemSet(SfxGetpApp()->GetPool(), svl::Items<SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, SID_EVENTCONFIG, SID_EVENTCONFIG> );
+    SfxItemSetFixed<SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, SID_EVENTCONFIG, SID_EVENTCONFIG> aItemSet(SfxGetpApp()->GetPool() );
     aItemSet.Put ( aItem );
 
     SfxEventNamesItem aNamesItem(SID_EVENTCONFIG);

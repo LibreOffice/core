@@ -467,7 +467,7 @@ void ScTable::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMa
     if ( IsProtected() && (nDelFlag & InsertDeleteFlags::ATTRIB) )
     {
         ScDocumentPool* pPool = rDocument.GetPool();
-        SfxItemSet aSet( *pPool, svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END> );
+        SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END> aSet( *pPool );
         aSet.Put( ScProtectionAttr( false ) );
         SfxItemPoolCache aCache( pPool, &aSet );
         ApplySelectionCache( &aCache, rMark );
