@@ -576,40 +576,88 @@ void ScModule::HideDisabledSlots( SfxItemSet& rSet )
 
 void ScModule::ResetDragObject()
 {
-    m_pDragData->pCellTransfer = nullptr;
-    m_pDragData->pDrawTransfer = nullptr;
-    m_pDragData->pJumpLocalDoc = nullptr;
-    m_pDragData->aLinkDoc.clear();
-    m_pDragData->aLinkTable.clear();
-    m_pDragData->aLinkArea.clear();
-    m_pDragData->aJumpTarget.clear();
-    m_pDragData->aJumpText.clear();
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+        if (pViewShell)
+            pViewShell->ResetDragObject();
+    }
+    else
+    {
+        m_pDragData->pCellTransfer = nullptr;
+        m_pDragData->pDrawTransfer = nullptr;
+        m_pDragData->pJumpLocalDoc = nullptr;
+        m_pDragData->aLinkDoc.clear();
+        m_pDragData->aLinkTable.clear();
+        m_pDragData->aLinkArea.clear();
+        m_pDragData->aJumpTarget.clear();
+        m_pDragData->aJumpText.clear();
+    }
+}
+
+const ScDragData& ScModule::GetDragData() const
+{
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+        assert(pViewShell);
+        return pViewShell->GetDragData();
+    }
+    else
+        return *m_pDragData;
 }
 
 void ScModule::SetDragObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj )
 {
-    ResetDragObject();
-    m_pDragData->pCellTransfer = pCellObj;
-    m_pDragData->pDrawTransfer = pDrawObj;
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+        if (pViewShell)
+            pViewShell->SetDragObject(pCellObj, pDrawObj);
+    }
+    else
+    {
+        ResetDragObject();
+        m_pDragData->pCellTransfer = pCellObj;
+        m_pDragData->pDrawTransfer = pDrawObj;
+    }
 }
 
 void ScModule::SetDragLink(
     const OUString& rDoc, const OUString& rTab, const OUString& rArea )
 {
-    ResetDragObject();
-    m_pDragData->aLinkDoc   = rDoc;
-    m_pDragData->aLinkTable = rTab;
-    m_pDragData->aLinkArea  = rArea;
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+        if (pViewShell)
+            pViewShell->SetDragLink(rDoc, rTab, rArea);
+    }
+    else
+    {
+        ResetDragObject();
+        m_pDragData->aLinkDoc   = rDoc;
+        m_pDragData->aLinkTable = rTab;
+        m_pDragData->aLinkArea  = rArea;
+    }
 }
 
 void ScModule::SetDragJump(
     ScDocument* pLocalDoc, const OUString& rTarget, const OUString& rText )
 {
-    ResetDragObject();
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+        if (pViewShell)
+            pViewShell->SetDragJump(pLocalDoc, rTarget, rText);
+    }
+    else
+    {
+        ResetDragObject();
 
-    m_pDragData->pJumpLocalDoc = pLocalDoc;
-    m_pDragData->aJumpTarget = rTarget;
-    m_pDragData->aJumpText = rText;
+        m_pDragData->pJumpLocalDoc = pLocalDoc;
+        m_pDragData->aJumpTarget = rTarget;
+        m_pDragData->aJumpText = rText;
+    }
 }
 
 ScDocument* ScModule::GetClipDoc()

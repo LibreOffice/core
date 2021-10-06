@@ -31,6 +31,8 @@
 #include <shellids.hxx>
 #include <tabprotection.hxx>
 #include <com/sun/star/ui/dialogs/DialogClosedEvent.hpp>
+#include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
+#include <dragdata.hxx>
 
 #include <memory>
 #include <map>
@@ -58,6 +60,7 @@ class ScPageBreakShell;
 class ScDPObject;
 class ScNavigatorSettings;
 class ScRangeName;
+class ScDrawTransferObj;
 
 struct ScHeaderFieldData;
 
@@ -161,6 +164,8 @@ private:
     bool    mbInSwitch;
     OUString   maName;
     OUString   maScope;
+
+    std::unique_ptr<ScDragData> m_pDragData;
 private:
     void    Construct( TriState nForceDesignMode );
 
@@ -406,6 +411,12 @@ public:
     void EnableEditHyperlink();
 
     virtual tools::Rectangle getLOKVisibleArea() const override;
+
+    const ScDragData& GetDragData() const { return *m_pDragData; }
+    void SetDragObject(ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj);
+    void ResetDragObject();
+    void SetDragLink(const OUString& rDoc, const OUString& rTab, const OUString& rArea);
+    void SetDragJump(ScDocument* pLocalDoc, const OUString& rTarget, const OUString& rText);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
