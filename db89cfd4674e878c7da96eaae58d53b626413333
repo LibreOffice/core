@@ -16,6 +16,23 @@
       "message": "Mike, Xisco, could you please help with getting these changes in into 7.2.2? The rationale is explained here: https://gerrit.libreoffice.org/c/core/+/123014/",
       "revId": "db89cfd4674e878c7da96eaae58d53b626413333",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44e76ba4_c9684c14",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-10-06T00:21:47Z",
+      "side": 1,
+      "message": "dummy comment to maybe have gerrit reevaluate the not very helpful \"Problem with integrating this change\"on disabled submit button...",
+      "revId": "db89cfd4674e878c7da96eaae58d53b626413333",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
