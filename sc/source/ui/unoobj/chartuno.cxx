@@ -209,8 +209,9 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
         xReceiver.set( xObj->getComponent(), uno::UNO_QUERY );
     if( xReceiver.is())
     {
+        // Range in UI representation.
         OUString sRangeStr;
-        xNewRanges->Format(sRangeStr, ScRefFlags::RANGE_ABS_3D, rDoc);
+        xNewRanges->Format(sRangeStr, ScRefFlags::RANGE_ABS_3D, rDoc, rDoc.GetAddressConvention());
 
         // connect
         if( !sRangeStr.isEmpty() )
@@ -478,7 +479,8 @@ void ScChartObj::GetData_Impl( ScRangeListRef& rRanges, bool& rColHeaders, bool&
                     rColHeaders=bHasCategories;
                     rRowHeaders=bFirstCellAsLabel;
                 }
-                rRanges->Parse( aRanges, rDoc);
+                // Range in UI representation.
+                rRanges->Parse( aRanges, rDoc, rDoc.GetAddressConvention());
             }
             bFound = true;
         }
