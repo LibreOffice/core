@@ -529,10 +529,10 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
 
         if(mbEnableDrawingLayerFillStyles)
         {
-            pBBSet.reset(new SfxItemSet(
-                *GetItemSet().GetPool(),
-                svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST,      // DrawingLayer FillStyle definitions
-                           SID_COLOR_TABLE, SID_PATTERN_LIST>)); // XPropertyLists for Color, Gradient, Hatch and Graphic fills
+            pBBSet.reset(new SfxItemSetFixed
+                            <XATTR_FILL_FIRST, XATTR_FILL_LAST,      // DrawingLayer FillStyle definitions
+                             SID_COLOR_TABLE, SID_PATTERN_LIST> // XPropertyLists for Color, Gradient, Hatch and Graphic fills
+                            (*GetItemSet().GetPool()));
             // Keep it valid
             pBBSet->MergeRange(nOuter, nOuter);
             pBBSet->MergeRange(nInner, nInner);
@@ -567,9 +567,8 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
         {
             const sal_uInt16 nBrush(GetWhich(SID_ATTR_BRUSH));
 
-            pBBSet.reset( new SfxItemSet(
-                *GetItemSet().GetPool(),
-                svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>) );
+            pBBSet.reset( new SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST>
+                            (*GetItemSet().GetPool()) );
             // Keep it valid
             pBBSet->MergeRange(nBrush, nBrush);
             pBBSet->MergeRange(nOuter, nOuter);

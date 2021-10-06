@@ -3005,7 +3005,7 @@ XLineAttrSetItem::XLineAttrSetItem( SfxItemSet&& pItemSet ) :
 
 XLineAttrSetItem::XLineAttrSetItem( SfxItemPool* pItemPool ) :
     SfxSetItem( XATTRSET_LINE,
-        SfxItemSet( *pItemPool, svl::Items<XATTR_LINE_FIRST, XATTR_LINE_LAST>))
+        SfxItemSetFixed<XATTR_LINE_FIRST, XATTR_LINE_LAST>( *pItemPool ))
 {
 }
 
@@ -3033,7 +3033,7 @@ XFillAttrSetItem::XFillAttrSetItem( SfxItemSet&& pItemSet ) :
 
 XFillAttrSetItem::XFillAttrSetItem( SfxItemPool* pItemPool ) :
     SfxSetItem( XATTRSET_FILL,
-        SfxItemSet( *pItemPool, svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>))
+        SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST>( *pItemPool ))
 {
 }
 
