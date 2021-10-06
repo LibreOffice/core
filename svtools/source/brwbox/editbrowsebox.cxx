@@ -1227,22 +1227,18 @@ namespace svt
         Controller()->resume();
     }
 
-
-    CellController::CellController(Control* pW)
-                   :pWindow( pW )
-                   ,bSuspended( true )
+    CellController::CellController(ControlBase* pW)
+        : pWindow(pW)
+        , bSuspended( true )
     {
 
         DBG_ASSERT(pWindow, "CellController::CellController: missing the window!");
         DBG_ASSERT(!pWindow->IsVisible(), "CellController::CellController: window should not be visible!");
     }
 
-
     CellController::~CellController()
     {
-
     }
-
 
     void CellController::suspend( )
     {

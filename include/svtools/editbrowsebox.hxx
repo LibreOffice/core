@@ -68,20 +68,22 @@ namespace o3tl
 
 namespace svt
 {
+    class ControlBase;
+
     class SVT_DLLPUBLIC CellController : public SvRefBase
     {
         friend class EditBrowseBox;
         Link<LinkParamNone*, void> maModifyHdl;
 
-        VclPtr<Control>            pWindow;
+        VclPtr<ControlBase>        pWindow;
         bool                       bSuspended;     // <true> if the window is hidden and disabled
 
     public:
 
-        CellController(Control* pW);
+        CellController(ControlBase* pW);
         virtual ~CellController() override;
 
-        Control& GetWindow() const { return *const_cast< CellController* >( this )->pWindow; }
+        ControlBase& GetWindow() const { return *const_cast<CellController*>(this)->pWindow; }
 
         virtual void SaveValue() = 0;
         virtual bool IsValueChangedFromSaved() const = 0;
@@ -112,7 +114,7 @@ namespace svt
     public:
         virtual ~IEditImplementation() = 0;
 
-        virtual Control&            GetControl() = 0;
+        virtual ControlBase&        GetControl() = 0;
 
         virtual OUString            GetText( LineEnd aSeparator ) const = 0;
         virtual void                SetText( const OUString& _rStr ) = 0;
@@ -280,7 +282,7 @@ namespace svt
             m_rEdit.connect_changed(LINK(this, EntryImplementation, ModifyHdl));
         }
 
-        virtual Control& GetControl() override
+        virtual ControlBase& GetControl() override
         {
             return m_rEdit;
         }
@@ -431,7 +433,7 @@ namespace svt
             m_rEdit.connect_changed(LINK(this, MultiLineEditImplementation, ModifyHdl));
         }
 
-        virtual Control& GetControl() override
+        virtual ControlBase& GetControl() override
         {
             return m_rEdit;
         }
