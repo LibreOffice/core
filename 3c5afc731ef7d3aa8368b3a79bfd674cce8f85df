@@ -16,6 +16,24 @@
       "message": "Why this is changed from calculating in \"space width\" units (as defined in [OOXML] part 1 18.8.1) into use of SC_INDENT_STEP? You suggested in the bug to use the reverse of this process in filesave, which looked reasonable.",
       "revId": "3c5afc731ef7d3aa8368b3a79bfd674cce8f85df",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66b4bf72_b8488835",
+        "filename": "sc/source/filter/oox/stylesbuffer.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-10-06T08:41:15Z",
+      "side": 0,
+      "message": "That\u0027s because the format is totally in a mess if you modify the cell indents in Calc if we do it that way. Think of the following senario:\n1. You open an xlsx file in which the indent is 1 in A1, and 2 in A2.\n2. We convert it to 3 spaces width (assume the space width is 88 Mm100), so A1 is 264 Mm100 unit and A2 is 528.\n3. If we do not edit the docement, then it is fine that we do 264/(88*3)\u003d1 for A1, and do 528/(88*3)\u003d2, without taking into account any convertion loss in this roundtrip.\n4. However, if we edit the document by hitting the \"Increase Indent\" toolbar icon once in A1, the indent would be 264+SC_INDENT_STEP\u003d264+200\u003d464. This is different than A2, but the user may expect it to be the same as A2 which is 528 (actually now no matter how many times you click on the toolbar icon you never get the same width as A2), and now if we save as XLXS, the indent converted to should be what? 1 or 2?\n\nBased on my testing the only reasonable way is to treat 1 excel indent as 1 SC_INDENT_STEP.\n\nWe may also consider to increase the SC_INDENT_STEP from the current 200 to a value more similar than the excel 3 space width (e.g. 264), but this will break if we export the old ODS files to XLSX which used the 200 value.\n\nThe only bad thing of teating 1 excel indent as the current 1 SC_INDENT_STEP is that, the look of indent width when you open an XLSX file is smaller than what you see in Excel (this is because of the difference on ODF and OOXML for the treatment of indent), but this does not hurt other aspects especially for XLSX import and export interoperability.",
+      "parentUuid": "6240bcdf_342ae968",
+      "revId": "3c5afc731ef7d3aa8368b3a79bfd674cce8f85df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
