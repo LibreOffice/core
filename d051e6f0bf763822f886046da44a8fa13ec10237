@@ -52,6 +52,24 @@
       "parentUuid": "928488a8_7865dd7f",
       "revId": "d051e6f0bf763822f886046da44a8fa13ec10237",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fee1b70_26e58942",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-06T15:12:23Z",
+      "side": 1,
+      "message": "I should add that I did these two things before adding \"using namespace ...\";\n\n1. Made sure that it was used elsewhere:\ngit grep \"using namespace drawinglayer::primitive2d\"\n\n2. Tested some of the symbols to make sure that they don\u0027t exist elsewhere \"git grep -w\"\n\nIf this is seriously a bad idea, I can go on and remove the other \"using namespace ...\" elsewhere.",
+      "parentUuid": "ba559569_fd502aa0",
+      "revId": "d051e6f0bf763822f886046da44a8fa13ec10237",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
