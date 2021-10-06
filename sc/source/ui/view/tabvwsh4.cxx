@@ -1674,7 +1674,8 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     bInPrepareClose(false),
     bInDispose(false),
     nCurRefDlgId(0),
-    mbInSwitch(false)
+    mbInSwitch(false),
+    m_pDragData(new ScDragData)
 {
     const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
 
@@ -1863,6 +1864,41 @@ ScNavigatorSettings* ScTabViewShell::GetNavigatorSettings()
 tools::Rectangle ScTabViewShell::getLOKVisibleArea() const
 {
     return GetViewData().getLOKVisibleArea();
+}
+
+void ScTabViewShell::SetDragObject(ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj)
+{
+    ResetDragObject();
+    m_pDragData->pCellTransfer = pCellObj;
+    m_pDragData->pDrawTransfer = pDrawObj;
+}
+
+void ScTabViewShell::ResetDragObject()
+{
+    m_pDragData->pCellTransfer = nullptr;
+    m_pDragData->pDrawTransfer = nullptr;
+    m_pDragData->pJumpLocalDoc = nullptr;
+    m_pDragData->aLinkDoc.clear();
+    m_pDragData->aLinkTable.clear();
+    m_pDragData->aLinkArea.clear();
+    m_pDragData->aJumpTarget.clear();
+    m_pDragData->aJumpText.clear();
+}
+
+void ScTabViewShell::SetDragLink(const OUString& rDoc, const OUString& rTab, const OUString& rArea)
+{
+    ResetDragObject();
+    m_pDragData->aLinkDoc   = rDoc;
+    m_pDragData->aLinkTable = rTab;
+    m_pDragData->aLinkArea  = rArea;
+}
+
+void ScTabViewShell::SetDragJump(ScDocument* pLocalDoc, const OUString& rTarget, const OUString& rText)
+{
+    ResetDragObject();
+    m_pDragData->pJumpLocalDoc = pLocalDoc;
+    m_pDragData->aJumpTarget = rTarget;
+    m_pDragData->aJumpText = rText;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
