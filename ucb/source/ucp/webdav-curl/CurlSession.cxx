@@ -18,6 +18,7 @@
 
 #include <officecfg/Inet.hxx>
 
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/io/SequenceInputStream.hpp>
 #include <com/sun/star/io/SequenceOutputStream.hpp>
@@ -430,9 +431,11 @@ static auto ExtractRealm(ResponseHeaders const& rHeaders, char const* const pAut
 
 CurlSession::CurlSession(uno::Reference<uno::XComponentContext> const& xContext,
                          ::rtl::Reference<DAVSessionFactory> const& rpFactory, OUString const& rURI,
+                         uno::Sequence<beans::NamedValue> const& rFlags,
                          ::ucbhelper::InternetProxyDecider const& rProxyDecider)
     : DAVSession(rpFactory)
     , m_xContext(xContext)
+    , m_Flags(rFlags)
     , m_URI(rURI)
     , m_Proxy(rProxyDecider.getProxy(m_URI.GetScheme(), m_URI.GetHost(), m_URI.GetPort()))
 {
@@ -530,18 +533,28 @@ CurlSession::CurlSession(uno::Reference<uno::XComponentContext> const& xContext,
         rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_PROXYAUTH, CURLAUTH_ANY);
         assert(rc == CURLE_OK); // ANY is always available
     }
+    auto const it(::std::find_if(m_Flags.begin(), m_Flags.end(),
+                                 [](auto const& rFlag) { return rFlag.Name == "KeepAlive"; }));
+    if (it != m_Flags.end() && it->Value.get<bool>())
+    {
+        // neon would close the connection from ne_end_request(), this seems
+        // to be the equivalent and not CURLOPT_TCP_KEEPALIVE
+        rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_FORBID_REUSE, 1L);
+        assert(rc == CURLE_OK);
+    }
 }
 
 CurlSession::~CurlSession() {}
 
-auto CurlSession::CanUse(OUString const& rURI) -> bool
+auto CurlSession::CanUse(OUString const& rURI, uno::Sequence<beans::NamedValue> const& rFlags)
+    -> bool
 {
     try
     {
         CurlUri const uri(rURI);
 
         return m_URI.GetScheme() == uri.GetScheme() && m_URI.GetHost() == uri.GetHost()
-               && m_URI.GetPort() == uri.GetPort();
+               && m_URI.GetPort() == uri.GetPort() && m_Flags == rFlags;
     }
     catch (DAVException const&)
     {

@@ -26,6 +26,7 @@
 #include <osl/mutex.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/ucb/Lock.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/WebDAVHTTPMethod.hpp>
@@ -46,6 +47,7 @@ class DAVResourceAccess
     osl::Mutex    m_aMutex;
     OUString m_aURL;
     OUString m_aPath;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > m_aFlags;
     rtl::Reference< DAVSession > m_xSession;
     rtl::Reference< DAVSessionFactory > m_xSessionFactory;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
@@ -59,6 +61,9 @@ public:
     DAVResourceAccess( const DAVResourceAccess & rOther );
 
     DAVResourceAccess & operator=( const DAVResourceAccess & rOther );
+
+    /// @throws DAVException
+    void setFlags( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rFlags );
 
     /// @throws DAVException
     void setURL( const OUString & rNewURL );
