@@ -30,7 +30,6 @@
 
 #include "DataFlavorMapping.hxx"
 
-using namespace std;
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::uno;

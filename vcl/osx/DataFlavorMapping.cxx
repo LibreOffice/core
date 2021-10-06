@@ -45,7 +45,6 @@ using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace cppu;
-using namespace std;
 
 namespace
 {
