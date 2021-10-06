@@ -29,7 +29,7 @@ struct MisspellRanges
     sal_Int32 mnParagraph;
     std::vector<MisspellRange> maRanges;
 
-    MisspellRanges(sal_Int32 nParagraph, const std::vector<MisspellRange>& rRanges);
+    MisspellRanges(sal_Int32 nParagraph, std::vector<MisspellRange>&& rRanges);
 };
 }
 
