@@ -68,7 +68,7 @@ class ODriverEnumeration : public ::cppu::WeakImplHelper< XEnumeration >
 protected:
     virtual ~ODriverEnumeration() override;
 public:
-    explicit ODriverEnumeration(const DriverArray& _rDriverSequence);
+    explicit ODriverEnumeration(DriverArray&& _rDriverSequence);
 
 // XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements( ) override;
@@ -76,8 +76,8 @@ public:
 };
 
 
-ODriverEnumeration::ODriverEnumeration(const DriverArray& _rDriverSequence)
-    :m_aDrivers( _rDriverSequence )
+ODriverEnumeration::ODriverEnumeration(DriverArray&& _rDriverSequence)
+    :m_aDrivers( std::move(_rDriverSequence) )
     ,m_aPos( m_aDrivers.begin() )
 {
 }
@@ -492,7 +492,7 @@ Reference< XEnumeration > SAL_CALL OSDBCDriverManager::createEnumeration(  )
         ExtractDriverFromCollectionElement()    // transformation to apply (extract a driver from a driver access)
     );
 
-    return new ODriverEnumeration( aDrivers );
+    return new ODriverEnumeration( std::move(aDrivers) );
 }
 
 

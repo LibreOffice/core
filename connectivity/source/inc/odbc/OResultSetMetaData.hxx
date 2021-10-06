@@ -58,8 +58,8 @@ namespace connectivity::odbc
                 ,m_nColCount(-1)
                 ,m_bUseODBC2Types(false)
             {}
-            OResultSetMetaData(OConnection* _pConnection, SQLHANDLE _pStmt ,const std::vector<sal_Int32> & _vMapping)
-                    :m_vMapping(_vMapping)
+            OResultSetMetaData(OConnection* _pConnection, SQLHANDLE _pStmt, std::vector<sal_Int32>&& _vMapping)
+                    :m_vMapping(std::move(_vMapping))
                     ,m_aStatementHandle( _pStmt )
                     ,m_pConnection(_pConnection)
                     ,m_nColCount(_vMapping.size()-1)

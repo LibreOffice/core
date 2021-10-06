@@ -120,7 +120,7 @@ css::uno::Reference< css::sdbc::XCloseable > UpdateableResultSet::createFromPGRe
     }
 
     rtl::Reference<UpdateableResultSet> pRS =  new UpdateableResultSet(
-        mutex, owner, columnNames, data, ppSettings, schema, table, primaryKey );
+        mutex, owner, std::move(columnNames), std::move(data), ppSettings, schema, table, std::vector(primaryKey) );
 
     pRS->m_meta = new ResultSetMetaData( mutex, pRS,nullptr, ppSettings, result, schema, table );
 

@@ -57,8 +57,8 @@ namespace connectivity
 
     public:
 
-        OSortIndex( const std::vector<OKeyType>& _aKeyType,
-                    const std::vector<TAscendingOrder>& _aAscending);
+        OSortIndex( std::vector<OKeyType>&& _aKeyType,
+                    std::vector<TAscendingOrder>&& _aAscending);
         OSortIndex(OSortIndex const &) = delete; // MSVC2015 workaround
         OSortIndex& operator=(OSortIndex const &) = delete; // MSVC2015 workaround
 
