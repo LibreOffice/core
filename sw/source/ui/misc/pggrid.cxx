@@ -29,6 +29,7 @@
 #include <svx/ruler.hxx>
 #include <pggrid.hxx>
 #include <tgrditem.hxx>
+#include <svx/pageitem.hxx>
 
 #include <wrtsh.hxx>
 #include <doc.hxx>
@@ -273,6 +274,24 @@ void SwTextGridPage::UpdatePageSize(const SfxItemSet& rSet)
     const SvxBoxItem& rBox = rSet.Get(RES_BOX);
     sal_Int32 nDistanceLR = rLRSpace.GetLeft() + rLRSpace.GetRight();
     sal_Int32 nDistanceUL = rULSpace.GetUpper() + rULSpace.GetLower();
+
+    for( sal_Int32 nId : { SID_ATTR_PAGE_HEADERSET, SID_ATTR_PAGE_FOOTERSET })
+    {
+        const SfxPoolItem* pItem;
+        if( SfxItemState::SET == rSet.GetItemState( nId, false, &pItem ) )
+        {
+            const SfxItemSet& rExtraSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
+            const SfxBoolItem& rOn =
+                static_cast<const SfxBoolItem&>(rExtraSet.Get( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_ON ) ));
+
+            if ( rOn.GetValue() )
+            {
+                const SvxSizeItem& rSizeItem =
+                    static_cast<const SvxSizeItem&>(rExtraSet.Get(rSet.GetPool()->GetWhich(SID_ATTR_PAGE_SIZE)));
+                nDistanceUL += rSizeItem.GetSize().Height();
+            }
+        }
+    }
 
     sal_Int32 nValue1 = rSize.GetSize().Height() - nDistanceUL -
             rBox.GetDistance(SvxBoxItemLine::TOP) -
