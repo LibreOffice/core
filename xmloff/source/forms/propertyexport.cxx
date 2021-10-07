@@ -633,7 +633,7 @@ namespace xmloff
         OSL_ENSURE(m_rContext.getGlobalContext().GetXAttrList()->getValueByName(OUString::createFromAscii(_pName)).isEmpty(),
             "OPropertyExport::AddAttribute: already have such an attribute");
 
-        m_rContext.getGlobalContext().AddAttribute(_nPrefix, _pName, _rValue);
+        m_rContext.getGlobalContext().AddAttributeASCII(_nPrefix, _pName, _rValue);
     }
 
     void OPropertyExport::AddAttribute( sal_uInt16 _nPrefix, const OUString& _rName, const OUString& _rValue )

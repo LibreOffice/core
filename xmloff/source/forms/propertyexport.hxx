@@ -361,7 +361,7 @@ namespace xmloff
 #else
         //  in the product version, inline this, so it does not cost us extra time calling into our method
         void AddAttribute(sal_uInt16 _nPrefix, const char* _pName, const OUString& _rValue)
-            { m_rContext.getGlobalContext().AddAttribute(_nPrefix, _pName, _rValue); }
+            { m_rContext.getGlobalContext().AddAttributeASCII(_nPrefix, _pName, _rValue); }
         void AddAttribute( sal_uInt16 _nPrefix, const OUString& _rName, const OUString& _rValue )
             { m_rContext.getGlobalContext().AddAttribute( _nPrefix, _rName, _rValue ); }
         void AddAttribute(sal_uInt16 _nPrefix, ::xmloff::token::XMLTokenEnum _eName, const OUString& _rValue)
