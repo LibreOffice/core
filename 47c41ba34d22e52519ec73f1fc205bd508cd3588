@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fbbd50d_24b2fc24",
+        "filename": "sc/source/filter/excel/xestyle.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1464,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-07T15:16:55Z",
+      "side": 1,
+      "message": "Ah, I see that you already have the double in the division (you use \u00273.0\u0027 in the divisor) - so no need to explicitly cast the integer to double here (but no problem if you keep it).",
+      "revId": "47c41ba34d22e52519ec73f1fc205bd508cd3588",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df9b24ee_df6752f1",
+        "filename": "sc/source/filter/oox/stylesbuffer.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1187,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-07T15:16:55Z",
+      "side": 1,
+      "message": "This line\u0027s change should be reverted - I assume it was just something for debug?",
+      "revId": "47c41ba34d22e52519ec73f1fc205bd508cd3588",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "077d6984_a8f65a58",
+        "filename": "sc/source/filter/oox/unitconverter.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-07T15:16:55Z",
+      "side": 1,
+      "message": "This (and the include above) is a debug temporary change, I suppose?",
+      "revId": "47c41ba34d22e52519ec73f1fc205bd508cd3588",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
