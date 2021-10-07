@@ -984,12 +984,12 @@ void SwDrawView::DeleteMarked()
         pTmpRoot->EndAllAction();
 }
 
-// support enhanced text edit for draw objects
-SdrUndoManager* SwDrawView::getSdrUndoManagerForEnhancedTextEdit() const
+// Create a new view-local UndoManager manager for Writer
+std::unique_ptr<SdrUndoManager> SwDrawView::createLocalTextUndoManager()
 {
-    SwDoc* pDoc = Imp().GetShell()->GetDoc();
-
-    return pDoc ? dynamic_cast< SdrUndoManager* >(&(pDoc->GetUndoManager())) : nullptr;
+    std::unique_ptr<SdrUndoManager> pUndoManager(new SdrUndoManager);
+    pUndoManager->SetDocShell(SfxObjectShell::Current());
+    return pUndoManager;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

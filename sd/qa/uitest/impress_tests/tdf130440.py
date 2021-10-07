@@ -25,24 +25,43 @@ class tdf129346(UITestCase):
 
         xDoc = self.xUITest.getTopFocusWindow()
         xEdit = xDoc.getChild("impress_win")
+        # Type "test" into the text box
         xEdit.executeAction("TYPE", mkPropertyValues({"TEXT":"test"}))
+        xToolkit.processEventsToIdle()
 
+        # Rename the slide to interrupt the text edit mode
+        self.ui_test.execute_dialog_through_command(".uno:RenamePage")
+        xDialog = self.xUITest.getTopFocusWindow()
+        name_entry = xDialog.getChild("name_entry")
+        name_entry.executeAction("TYPE", mkPropertyValues({"TEXT":"NewName"}))
+        xOKBtn = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOKBtn)
+        xToolkit.processEventsToIdle()
+
+        # We should be at Page 2
+        self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
+
+        # Undo the renaming of the page
         self.xUITest.executeCommand(".uno:Undo")
         xToolkit.processEventsToIdle()
         self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
 
+        # Undo the text edit
         self.xUITest.executeCommand(".uno:Undo")
         xToolkit.processEventsToIdle()
         self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
 
+        # Undo sends us to page 1 and undo-es command ".uno:DuplicatePage"
         self.xUITest.executeCommand(".uno:Undo")
         xToolkit.processEventsToIdle()
         self.assertEqual(document.CurrentController.getCurrentPage().Number, 1)
 
+        # Redo ".uno:DuplicatePage" - we go to Page 2
         self.xUITest.executeCommand(".uno:Redo")
         xToolkit.processEventsToIdle()
         self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
 
+        # Redo text edit
         self.xUITest.executeCommand(".uno:Redo")
 
         xDoc = self.xUITest.getTopFocusWindow()

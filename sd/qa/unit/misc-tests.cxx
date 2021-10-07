@@ -71,7 +71,7 @@ public:
     void testTdf96206();
     void testTdf96708();
     void testTdf99396();
-    void testTdf99396TextEdit();
+    void testTableObjectUndoTest();
     void testFillGradient();
     void testTdf44774();
     void testTdf38225();
@@ -94,7 +94,7 @@ public:
     CPPUNIT_TEST(testTdf96206);
     CPPUNIT_TEST(testTdf96708);
     CPPUNIT_TEST(testTdf99396);
-    CPPUNIT_TEST(testTdf99396TextEdit);
+    CPPUNIT_TEST(testTableObjectUndoTest);
     CPPUNIT_TEST(testFillGradient);
     CPPUNIT_TEST(testTdf44774);
     CPPUNIT_TEST(testTdf38225);
@@ -271,8 +271,10 @@ void SdMiscTest::testTdf99396()
     xDocSh->DoClose();
 }
 
-void SdMiscTest::testTdf99396TextEdit()
+void SdMiscTest::testTableObjectUndoTest()
 {
+    // See tdf#99396 for the issue
+
     // Load the document and select the table.
     sd::DrawDocShellRef xDocSh = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/tdf99396.odp"), ODP);
     sd::ViewShell* pViewShell = xDocSh->GetViewShell();
@@ -298,13 +300,25 @@ void SdMiscTest::testTdf99396TextEdit()
         const SfxItemSet* pArgs = aRequest.GetArgs();
         pView->SetAttributes(*pArgs);
     }
+    const auto& pLocalUndoManager = pView->getViewLocalUndoManager();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pLocalUndoManager->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("Apply attributes"), pLocalUndoManager->GetUndoActionComment());
     {
         auto pTableController = dynamic_cast<sdr::table::SvxTableController*>(pView->getSelectionController().get());
         CPPUNIT_ASSERT(pTableController);
         SfxRequest aRequest(pViewShell->GetViewFrame(), SID_TABLE_VERT_BOTTOM);
         pTableController->Execute(aRequest);
     }
+    // Global change "Format cell" is applied only - Change the vertical alignment to "Bottom"
+    CPPUNIT_ASSERT_EQUAL(size_t(1), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("Format cell"), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionComment());
+
     pView->SdrEndTextEdit();
+
+    // End of text edit, so the text edit action is added to the undo stack
+    CPPUNIT_ASSERT_EQUAL(size_t(2), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("Edit text of Table"), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionComment(0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Format cell"), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionComment(1));
 
     // Check that the result is what we expect.
     {
@@ -323,6 +337,10 @@ void SdMiscTest::testTdf99396TextEdit()
     // Now undo.
     xDocSh->GetUndoManager()->Undo();
 
+    // Undoing the last action - one left
+    CPPUNIT_ASSERT_EQUAL(size_t(1), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("Format cell"), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionComment(0));
+
     // Check again that the result is what we expect.
     {
         uno::Reference<table::XTable> xTable = pTableObject->getTable();
@@ -338,6 +356,9 @@ void SdMiscTest::testTdf99396TextEdit()
         CPPUNIT_ASSERT_EQUAL(SvxAdjust::Center, pAdjust->GetAdjust());
     }
 
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("Format cell"), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionComment(0));
 
     /*
      * now test tdf#103950 - Undo does not revert bundled font size changes for table cells
@@ -348,8 +369,11 @@ void SdMiscTest::testTdf99396TextEdit()
         SfxRequest aRequest(pViewShell->GetViewFrame(), SID_GROW_FONT_SIZE);
         static_cast<sd::DrawViewShell*>(pViewShell)->ExecChar(aRequest);
     }
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionCount());
-
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("Apply attributes to Table"), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionComment(0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Grow font size"), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionComment(1));
+    CPPUNIT_ASSERT_EQUAL(OUString("Format cell"), xDocSh->GetDoc()->GetUndoManager()->GetUndoActionComment(2));
 
     xDocSh->DoClose();
 }
