@@ -144,7 +144,7 @@ public:
                             SVGAttributeWriter( SVGExport& rExport, SVGFontExport& rFontExport, SVGState& rCurState );
                             ~SVGAttributeWriter();
 
-    void                    AddColorAttr( const char* pColorAttrName, const char* pColorOpacityAttrName, const Color& rColor );
+    void                    AddColorAttr( const OUString& pColorAttrName, const OUString& pColorOpacityAttrName, const Color& rColor );
     void                    AddGradientDef( const tools::Rectangle& rObjRect,const Gradient& rGradient, OUString& rGradientId );
     void                    AddPaintAttr( const Color& rLineColor, const Color& rFillColor,
                                           const tools::Rectangle* pObjBoundRect = nullptr, const Gradient* pFillGradient = nullptr );

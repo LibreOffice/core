@@ -265,7 +265,7 @@ ErrCode ConvDicXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum /*eClass
     // Add xmlns line and some other arguments
     AddAttribute( GetNamespaceMap_().GetAttrNameByKey( XML_NAMESPACE_TCD ),
                   GetNamespaceMap_().GetNameByKey( XML_NAMESPACE_TCD ) );
-    AddAttributeASCII( XML_NAMESPACE_TCD, "package", "org.openoffice.Office" );
+    AddAttribute( XML_NAMESPACE_TCD, "package", "org.openoffice.Office" );
 
     OUString aIsoLang( LanguageTag::convertToBcp47( rDic.nLanguage ) );
     AddAttribute( XML_NAMESPACE_TCD, "lang", aIsoLang );
