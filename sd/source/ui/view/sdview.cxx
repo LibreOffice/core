@@ -82,6 +82,8 @@
 #include <DrawController.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 
+#include <undo/undomanager.hxx>
+
 #include <memory>
 #include <numeric>
 
@@ -622,6 +624,14 @@ SfxViewShell* View::GetSfxViewShell() const
         pRet = &mpViewSh->GetViewShellBase();
 
     return pRet;
+}
+
+// Create a new view-local UndoManager manager for Impress/Draw
+std::unique_ptr<SdrUndoManager> View::createLocalTextUndoManager()
+{
+    std::unique_ptr<SdrUndoManager> pUndoManager(new sd::UndoManager);
+    pUndoManager->SetDocShell(mpDocSh);
+    return pUndoManager;
 }
 
 bool View::SdrBeginTextEdit(

@@ -95,7 +95,7 @@ void SdrEditView::SetMarkedObjRect(const tools::Rectangle& rRect)
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
     {
-        EndTextEditAllViews();
+        EndTextEditCurrentView();
         BegUndo(ImpGetDescriptionString(STR_EditPosSize));
     }
 
@@ -186,7 +186,7 @@ void SdrEditView::MoveMarkedObj(const Size& rSiz, bool bCopy)
 
     if( bUndo )
     {
-        EndTextEditAllViews();
+        EndTextEditCurrentView();
         OUString aStr(SvxResId(STR_EditMove));
         if (bCopy)
             aStr += SvxResId(STR_EditWithCopy);
@@ -219,7 +219,7 @@ void SdrEditView::ResizeMarkedObj(const Point& rRef, const Fraction& xFact, cons
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
     {
-        EndTextEditAllViews();
+        EndTextEditCurrentView();
         OUString aStr {ImpGetDescriptionString(STR_EditResize)};
         if (bCopy)
             aStr+=SvxResId(STR_EditWithCopy);
@@ -254,7 +254,7 @@ void SdrEditView::ResizeMultMarkedObj(const Point& rRef,
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
     {
-        EndTextEditAllViews();
+        EndTextEditCurrentView();
         BegUndo(ImpGetDescriptionString(STR_EditResize));
     }
 
@@ -301,7 +301,7 @@ void SdrEditView::RotateMarkedObj(const Point& rRef, Degree100 nAngle, bool bCop
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
     {
-        EndTextEditAllViews();
+        EndTextEditCurrentView();
         OUString aStr {ImpGetDescriptionString(STR_EditRotate)};
         if (bCopy) aStr+=SvxResId(STR_EditWithCopy);
         BegUndo(aStr);
@@ -358,7 +358,7 @@ void SdrEditView::MirrorMarkedObj(const Point& rRef1, const Point& rRef2, bool b
 
     if( bUndo )
     {
-        EndTextEditAllViews();
+        EndTextEditCurrentView();
         OUString aStr;
         Point aDif(rRef2-rRef1);
         if (aDif.X()==0)
@@ -458,7 +458,7 @@ void SdrEditView::ShearMarkedObj(const Point& rRef, Degree100 nAngle, bool bVShe
 
     if( bUndo )
     {
-        EndTextEditAllViews();
+        EndTextEditCurrentView();
         OUString aStr {ImpGetDescriptionString(STR_EditShear)};
         if (bCopy)
             aStr+=SvxResId(STR_EditWithCopy);
@@ -574,7 +574,7 @@ void SdrEditView::CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookM
 
     if( bUndo )
     {
-        EndTextEditAllViews();
+        EndTextEditCurrentView();
         OUString aStr {ImpGetDescriptionString(bNoContortion ? STR_EditCrook : STR_EditCrookContortion)};
         if (bCopy)
             aStr+=SvxResId(STR_EditWithCopy);
@@ -648,7 +648,7 @@ void SdrEditView::DistortMarkedObj(const tools::Rectangle& rRef, const XPolygon&
 
     if( bUndo )
     {
-        EndTextEditAllViews();
+        EndTextEditCurrentView();
         OUString aStr {ImpGetDescriptionString(STR_EditDistort)};
         if (bCopy)
             aStr+=SvxResId(STR_EditWithCopy);
@@ -1098,7 +1098,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
     {
-        EndTextEditAllViews();
+        EndTextEditCurrentView();
         BegUndo(ImpGetDescriptionString(STR_EditSetAttributes));
     }
 
@@ -1277,7 +1277,7 @@ void SdrEditView::SetStyleSheetToMarked(SfxStyleSheet* pStyleSheet, bool bDontRe
 
     if( bUndo )
     {
-        EndTextEditAllViews();
+        EndTextEditCurrentView();
         OUString aStr;
         if (pStyleSheet!=nullptr)
             aStr = ImpGetDescriptionString(STR_EditSetStylesheet);
@@ -1844,7 +1844,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
     {
-        EndTextEditAllViews();
+        EndTextEditCurrentView();
         OUString aStr(GetDescriptionOfMarkedObjects());
         if (eHor==SdrHorAlign::NONE)
         {
