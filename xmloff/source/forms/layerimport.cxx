@@ -91,7 +91,7 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
 
     // properties not added because they're already present in another form
     OSL_ENSURE(
-        OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCAFlags::TargetLocation)).equalsAscii(
+        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::TargetLocation).equals(
             OAttributeMetaData::getFormAttributeName(faAction)),
         "OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl: invalid attribute names (1)!");
         // if this fails, we would have to add a translation from faAction->PROPERTY_TARGETURL
@@ -99,7 +99,7 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
         // and CCAFlags::TargetLocation and faAction should be represented by the same attribute
 
     OSL_ENSURE(
-        OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Name)).equalsAscii(
+        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Name).equals(
             OAttributeMetaData::getFormAttributeName(faName)),
         "OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl: invalid attribute names (2)!");
         // the same for faName, CCAFlags::Name and PROPERTY_NAME

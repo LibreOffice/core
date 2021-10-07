@@ -49,43 +49,43 @@
 #include <memory>
 
 
-const char   aPrefixClipPathId[] = "clip_path_";
+constexpr OUStringLiteral aPrefixClipPathId = u"clip_path_";
 
-const char   aXMLElemG[] = "g";
-const char   aXMLElemDefs[] = "defs";
-const char   aXMLElemText[] = "text";
-const char   aXMLElemTspan[] = "tspan";
-const char   aXMLElemLinearGradient[] = "linearGradient";
-const char   aXMLElemStop[] = "stop";
+constexpr OUStringLiteral aXMLElemG = u"g";
+constexpr OUStringLiteral aXMLElemDefs = u"defs";
+constexpr OUStringLiteral aXMLElemText = u"text";
+constexpr OUStringLiteral aXMLElemTspan = u"tspan";
+constexpr OUStringLiteral aXMLElemLinearGradient = u"linearGradient";
+constexpr OUStringLiteral aXMLElemStop = u"stop";
 
-const char   aXMLAttrTransform[] = "transform";
-const char   aXMLAttrStyle[] = "style";
-const char   aXMLAttrId[] = "id";
-const char   aXMLAttrX[] = "x";
-const char   aXMLAttrY[] = "y";
-const char   aXMLAttrX1[] = "x1";
-const char   aXMLAttrY1[] = "y1";
-const char   aXMLAttrX2[] = "x2";
-const char   aXMLAttrY2[] = "y2";
-const char   aXMLAttrCX[] = "cx";
-const char   aXMLAttrCY[] = "cy";
-const char   aXMLAttrRX[] = "rx";
-const char   aXMLAttrRY[] = "ry";
-const char   aXMLAttrWidth[] = "width";
-const char   aXMLAttrHeight[] = "height";
-const char   aXMLAttrStrokeWidth[] = "stroke-width";
-const char   aXMLAttrFill[] = "fill";
-const char   aXMLAttrFontFamily[] = "font-family";
-const char   aXMLAttrFontSize[] = "font-size";
-const char   aXMLAttrFontStyle[] = "font-style";
-const char   aXMLAttrFontWeight[] = "font-weight";
-const char   aXMLAttrTextDecoration[] = "text-decoration";
-const char   aXMLAttrXLinkHRef[] = "xlink:href";
-const char   aXMLAttrGradientUnits[] = "gradientUnits";
-const char   aXMLAttrOffset[] = "offset";
-const char   aXMLAttrStopColor[] = "stop-color";
-const char   aXMLAttrStrokeLinejoin[] = "stroke-linejoin";
-const char   aXMLAttrStrokeLinecap[] = "stroke-linecap";
+constexpr OUStringLiteral aXMLAttrTransform = u"transform";
+constexpr OUStringLiteral aXMLAttrStyle = u"style";
+constexpr OUStringLiteral aXMLAttrId = u"id";
+constexpr OUStringLiteral aXMLAttrX = u"x";
+constexpr OUStringLiteral aXMLAttrY = u"y";
+constexpr OUStringLiteral aXMLAttrX1 = u"x1";
+constexpr OUStringLiteral aXMLAttrY1 = u"y1";
+constexpr OUStringLiteral aXMLAttrX2 = u"x2";
+constexpr OUStringLiteral aXMLAttrY2 = u"y2";
+constexpr OUStringLiteral aXMLAttrCX = u"cx";
+constexpr OUStringLiteral aXMLAttrCY = u"cy";
+constexpr OUStringLiteral aXMLAttrRX = u"rx";
+constexpr OUStringLiteral aXMLAttrRY = u"ry";
+constexpr OUStringLiteral aXMLAttrWidth = u"width";
+constexpr OUStringLiteral aXMLAttrHeight = u"height";
+constexpr OUStringLiteral aXMLAttrStrokeWidth = u"stroke-width";
+constexpr OUStringLiteral aXMLAttrFill = u"fill";
+constexpr OUStringLiteral aXMLAttrFontFamily = u"font-family";
+constexpr OUStringLiteral aXMLAttrFontSize = u"font-size";
+constexpr OUStringLiteral aXMLAttrFontStyle = u"font-style";
+constexpr OUStringLiteral aXMLAttrFontWeight = u"font-weight";
+constexpr OUStringLiteral aXMLAttrTextDecoration = u"text-decoration";
+constexpr OUStringLiteral aXMLAttrXLinkHRef = u"xlink:href";
+constexpr OUStringLiteral aXMLAttrGradientUnits = u"gradientUnits";
+constexpr OUStringLiteral aXMLAttrOffset = u"offset";
+constexpr OUStringLiteral aXMLAttrStopColor = u"stop-color";
+constexpr OUStringLiteral aXMLAttrStrokeLinejoin = u"stroke-linejoin";
+constexpr OUStringLiteral aXMLAttrStrokeLinecap = u"stroke-linecap";
 
 
 vcl::PushFlags SVGContextHandler::getPushFlags() const
@@ -172,8 +172,8 @@ void SVGAttributeWriter::ImplGetColorStr( const Color& rColor, OUString& rColorS
 }
 
 
-void SVGAttributeWriter::AddColorAttr( const char* pColorAttrName,
-                                       const char* pColorOpacityAttrName,
+void SVGAttributeWriter::AddColorAttr( const OUString& pColorAttrName,
+                                       const OUString& pColorOpacityAttrName,
                                        const Color& rColor )
 {
     OUString aColor, aColorOpacity;
