@@ -1483,8 +1483,8 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
     BitmapChecksum nId, nChecksum = 0;
     Point aPt;
     Size  aSz;
-    size_t nCount = rMtf.GetActionSize();
-    for( size_t nCurAction = 0; nCurAction < nCount; nCurAction++ )
+    sal_uLong nCount = rMtf.GetActionSize();
+    for( sal_uLong nCurAction = 0; nCurAction < nCount; nCurAction++ )
     {
 
         const MetaAction*    pAction = rMtf.GetAction( nCurAction );
@@ -2261,7 +2261,9 @@ void SVGActionWriter::ImplWritePattern( const tools::PolyPolygon& rPolyPoly,
                 if( pHatch )
                     mpVDev->AddHatchActions( rPolyPoly, *pHatch, aTmpMtf );
                 else if ( pGradient )
-                    mpVDev->AddGradientActions( rPolyPoly.GetBoundRect(), *pGradient, aTmpMtf );
+                    aTmpMtf.AddAction(new MetaGradientContainerAction(rPolyPoly.GetBoundRect(),
+                                *pGradient, mpVDev->GetGradientStepCount(*pGradient, rPolyPoly.GetBoundRect(), true)));
+
                 ImplWriteActions( aTmpMtf, nWriteFlags, "" );
             }
         }
