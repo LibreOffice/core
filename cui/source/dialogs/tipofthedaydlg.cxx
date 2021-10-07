@@ -73,7 +73,14 @@ TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
     }
 
     const auto t0 = std::chrono::system_clock::now().time_since_epoch();
+<<<<<<< HEAD   (bc3571 Related: tdf#141633 similiarly support match spinbutton font)
     m_nDay = std::chrono::duration_cast<std::chrono::hours>(t0).count() / 24;
+=======
+    sal_Int32 nDay = std::chrono::duration_cast<std::chrono::hours>(t0).count() / 24;
+    //show next tip after one day
+    if (nDay > officecfg::Office::Common::Misc::LastTipOfTheDayShown::get())
+        m_nCurrentTip++;
+>>>>>>> CHANGE (1b6b2e Resolves tdf#144693 - TipOfTheDay does not progress)
 
     // save this time to the config now instead of in the dtor otherwise we
     // end up with multiple copies of this dialog every time we open a new
@@ -83,9 +90,12 @@ TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
     officecfg::Office::Common::Misc::LastTipOfTheDayShown::set(m_nDay, xChanges);
     xChanges->commit();
 
+<<<<<<< HEAD   (bc3571 Related: tdf#141633 similiarly support match spinbutton font)
     if (m_nDay > officecfg::Office::Common::Misc::LastTipOfTheDayShown::get())
         m_nCurrentTip++;
 
+=======
+>>>>>>> CHANGE (1b6b2e Resolves tdf#144693 - TipOfTheDay does not progress)
     UpdateTip();
 }
 
