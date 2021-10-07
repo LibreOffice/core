@@ -24,24 +24,31 @@ class tdf129346(UITestCase):
 
             xDoc = self.xUITest.getTopFocusWindow()
             xEdit = xDoc.getChild("impress_win")
+            # Type "test" into the text box
             xEdit.executeAction("TYPE", mkPropertyValues({"TEXT":"test"}))
+            # Go to Page 1, which also forces to end edit box
+            xEdit.executeAction("GOTO", mkPropertyValues({"PAGE": "1"}))
+            xToolkit.processEventsToIdle()
 
+            # We should be at Page 1
+            self.assertEqual(document.CurrentController.getCurrentPage().Number, 1)
+
+            # Undo sends us to Page 2 and undo-es the text edit
             self.xUITest.executeCommand(".uno:Undo")
             xToolkit.processEventsToIdle()
             self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
 
-            self.xUITest.executeCommand(".uno:Undo")
-            xToolkit.processEventsToIdle()
-            self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
-
+            # Undo sends us to page 1 and undo-es command ".uno:DuplicatePage"
             self.xUITest.executeCommand(".uno:Undo")
             xToolkit.processEventsToIdle()
             self.assertEqual(document.CurrentController.getCurrentPage().Number, 1)
 
+            # Redo ".uno:DuplicatePage" - we go to Page 2
             self.xUITest.executeCommand(".uno:Redo")
             xToolkit.processEventsToIdle()
             self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
 
+            # Redo text edit
             self.xUITest.executeCommand(".uno:Redo")
 
             xDoc = self.xUITest.getTopFocusWindow()
