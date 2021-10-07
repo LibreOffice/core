@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e532dda_5d045636",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-07T05:21:08Z",
+      "side": 1,
+      "message": "This should be a safe change to make, because it is strictly ODT-\u003eMS. So there is no \"compatibility\" here since MS can\u0027t import as automatic. Also, automatic placement means that the user hasn\u0027t been picky about exactly how it is placed, and the computer is allowed to adjust it slightly. So twip-perfection is excluded even if it did apply.",
+      "revId": "423243ee1e055ce0f2af918014989e691541b255",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
