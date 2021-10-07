@@ -16,6 +16,24 @@
       "message": "This check and following default will never allow to return 0",
       "revId": "52d22e42a0e365864fb50607f74e29151c22586c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31b2e3ee_cbc594d9",
+        "filename": "sc/source/filter/excel/xlroot.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-10-07T15:11:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0a29dfb3_a9bbc5d8",
+      "revId": "52d22e42a0e365864fb50607f74e29151c22586c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

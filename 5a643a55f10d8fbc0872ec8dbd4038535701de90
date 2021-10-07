@@ -48,6 +48,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "244c1235_4b9a5976",
+        "filename": "sc/source/filter/excel/xestyle.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1463,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-10-07T15:11:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "974b303c_721961e5",
+      "range": {
+        "startLine": 1463,
+        "startChar": 12,
+        "endLine": 1463,
+        "endChar": 23
+      },
+      "revId": "5a643a55f10d8fbc0872ec8dbd4038535701de90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7589ca36_9e6756a0",
@@ -79,6 +103,24 @@
       "side": 1,
       "message": "It\u0027s guaranteed to be \u003e 0 in the constructor of XclRootData, but in XclRoot::SetCharWidth if we get a zero value then this will be overwritten. If this happens, then we are in danger of divide-by-zero.",
       "parentUuid": "7589ca36_9e6756a0",
+      "revId": "5a643a55f10d8fbc0872ec8dbd4038535701de90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19a1ff63_793aa48c",
+        "filename": "sc/source/filter/excel/xestyle.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1466,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-10-07T15:11:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5075b908_3b1a2d7d",
       "revId": "5a643a55f10d8fbc0872ec8dbd4038535701de90",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
