@@ -3,6 +3,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f29080af_e4075438",
+        "filename": "sc/inc/global.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-07T16:10:43Z",
+      "side": 1,
+      "message": "And indeed, the values throughout the code are all in twips: here we read \"step \u003d 10pt\", and the value of the step is \"200\", i.e. 10 pt * 20 (1 pt \u003d 20 twips).",
+      "revId": "e56939d5bfaec08f1cffecf109ef05b290e2828f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd7af496_c883f925",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1753,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-07T16:10:43Z",
+      "side": 1,
+      "message": "See how SC_INDENT_STEP (in twips!) is used directly here, its value is used without any conversions and get stored to ScIndentItem.\n\nAnd in other places, grepping for ScIndentItem, everywhere its value is treated to be in twips.\n\nSo the end result is: we also need to fix the import here, removing the incorrect conversion from twips to mm100.",
+      "revId": "e56939d5bfaec08f1cffecf109ef05b290e2828f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5892fa78_7fe4b83f",
         "filename": "sc/source/filter/oox/stylesbuffer.cxx",
         "patchSetId": 9
