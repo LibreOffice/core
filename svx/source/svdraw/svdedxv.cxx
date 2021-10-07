@@ -1060,10 +1060,11 @@ IMPL_LINK(SdrObjEditView, ImpOutlinerCalcFieldValueHdl, EditFieldInfo*, pFI, voi
 
 IMPL_LINK_NOARG(SdrObjEditView, EndTextEditHdl, SdrUndoManager*, void) { SdrEndTextEdit(); }
 
-SdrUndoManager* SdrObjEditView::getSdrUndoManagerForEnhancedTextEdit() const
+// Default implementation - null UndoManager
+std::unique_ptr<SdrUndoManager> SdrObjEditView::createLocalTextUndoManager()
 {
-    // default returns registered UndoManager
-    return GetModel() ? dynamic_cast<SdrUndoManager*>(GetModel()->GetSdrUndoManager()) : nullptr;
+    SAL_WARN("svx", "SdrObjEditView::createLocalTextUndoManager needs to be overridden");
+    return std::unique_ptr<SdrUndoManager>();
 }
 
 bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::Window* pWin,
@@ -1360,7 +1361,11 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
             if (GetModel() && IsUndoEnabled()
                 && !GetModel()->GetDisableTextEditUsesCommonUndoManager())
             {
-                SdrUndoManager* pSdrUndoManager = getSdrUndoManagerForEnhancedTextEdit();
+                SdrUndoManager* pSdrUndoManager = nullptr;
+                mpLocalTextEditUndoManager = createLocalTextUndoManager();
+
+                if (mpLocalTextEditUndoManager)
+                    pSdrUndoManager = mpLocalTextEditUndoManager.get();
 
                 if (pSdrUndoManager)
                 {
@@ -1434,7 +1439,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
         if (pOriginal)
         {
             // check if we got back our document undo manager
-            SdrUndoManager* pSdrUndoManager = getSdrUndoManagerForEnhancedTextEdit();
+            SdrUndoManager* pSdrUndoManager = mpLocalTextEditUndoManager.get();
 
             if (pSdrUndoManager && dynamic_cast<SdrUndoManager*>(pOriginal) == pSdrUndoManager)
             {
@@ -1467,6 +1472,8 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
                                   "expected document UndoManager (!)");
                 delete pOriginal;
             }
+
+            mpLocalTextEditUndoManager.reset();
         }
     }
     else

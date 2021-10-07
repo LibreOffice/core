@@ -1000,7 +1000,7 @@ bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, SdrInser
     }
     if( IsUndoEnabled())
     {
-        EndTextEditAllViews();
+        EndTextEditCurrentView();
         AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
     }
 
@@ -1077,6 +1077,16 @@ void SdrEditView::EndTextEditAllViews() const
 
         if (pView->IsTextEdit())
             pView->SdrEndTextEdit();
+    }
+}
+
+void SdrEditView::EndTextEditCurrentView()
+{
+    if (IsTextEdit())
+    {
+        SdrView* pSdrView = dynamic_cast<SdrView*>(this);
+        if (pSdrView)
+            pSdrView->SdrEndTextEdit();
     }
 }
 
