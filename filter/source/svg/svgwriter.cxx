@@ -2261,7 +2261,9 @@ void SVGActionWriter::ImplWritePattern( const tools::PolyPolygon& rPolyPoly,
                 if( pHatch )
                     mpVDev->AddHatchActions( rPolyPoly, *pHatch, aTmpMtf );
                 else if ( pGradient )
-                    mpVDev->AddGradientActions( rPolyPoly.GetBoundRect(), *pGradient, aTmpMtf );
+                    aTmpMtf.AddAction(new MetaGradientContainerAction(rPolyPoly.GetBoundRect(),
+                                *pGradient, mpVDev->GetGradientStepCount(*pGradient, rPolyPoly.GetBoundRect(), true)));
+
                 ImplWriteActions( aTmpMtf, nWriteFlags, nullptr );
             }
         }
