@@ -76,8 +76,8 @@ protected:
     using FmFormView::CheckSingleSdrObjectHit;
     virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, SdrSearchOptions nOptions, const SdrLayerIDSet* pMVisLay) const override;
 
-    // support enhanced text edit for draw objects
-    virtual SdrUndoManager* getSdrUndoManagerForEnhancedTextEdit() const override;
+    // Create a local UndoManager
+    std::unique_ptr<SdrUndoManager> createLocalTextUndoManager() override;
 
 public:
     SwDrawView(
