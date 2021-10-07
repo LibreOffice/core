@@ -109,6 +109,7 @@ protected:
 
 private:
     SfxUndoManager* mpOldTextEditUndoManager;
+    std::unique_ptr<SdrUndoManager> mpLocalTextEditUndoManager;
 
 protected:
     // central method to get an SdrUndoManager for enhanced TextEdit. Default will
@@ -117,9 +118,11 @@ protected:
     // provide their document UndoManager and derive it from SdrUndoManager.
     virtual SdrUndoManager* getSdrUndoManagerForEnhancedTextEdit() const;
 
+    // Create a local UndoManager that is used for text editing.
+    virtual std::unique_ptr<SdrUndoManager> createLocalTextUndoManager();
+
     void ImpMoveCursorAfterChainingEvent(TextChainCursorManager *pCursorManager);
     std::unique_ptr<TextChainCursorManager> ImpHandleMotionThroughBoxesKeyInput(const KeyEvent& rKEvt, bool *bOutHandled);
-
 
     OutlinerView* ImpFindOutlinerView(vcl::Window const * pWin) const;
 
