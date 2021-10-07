@@ -129,8 +129,6 @@ protected:
 
     virtual tools::Long GetGradientStepCount(tools::Long nMinRect) override;
     virtual bool                UsePolyPolygonForComplexGradient() override;
-    void DrawGradientToMetafile(tools::PolyPolygon const& rPolyPoly, Gradient const& rGradient) override;
-
 
     bool                        CanSubsampleBitmap() const override { return false; }
     vcl::Region                 ClipToDeviceBounds(vcl::Region aRegion) const override;

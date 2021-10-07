@@ -1515,7 +1515,10 @@ void PSWriter::ImplWriteGradient( const tools::PolyPolygon& rPolyPoly, const Gra
     ScopedVclPtrInstance< VirtualDevice > l_pVDev;
     GDIMetaFile     aTmpMtf;
     l_pVDev->SetMapMode( rVDev.GetMapMode() );
-    l_pVDev->AddGradientActions( rPolyPoly.GetBoundRect(), rGradient, aTmpMtf );
+
+    aTmpMtf.AddAction(new MetaGradientContainerAction(rPolyPoly.GetBoundRect(),
+                rGradient, l_pVDev->GetGradientStepCount(rGradient, rPolyPoly.GetBoundRect(), true)));
+
     ImplWriteActions( aTmpMtf, rVDev );
 }
 
