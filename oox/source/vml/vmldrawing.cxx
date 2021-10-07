@@ -196,10 +196,10 @@ void Drawing::convertAndInsert() const
             {
                 RadioItr->first->setPropertyValue("GroupName", aGroup );
                 // If conflict, first created GroupBox wins
-                RadioButtonMap.erase( RadioItr++ );
+                RadioItr = RadioButtonMap.erase(RadioItr);
             }
             else
-                RadioItr++;
+                ++RadioItr;
         }
     }
 
