@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "672daa5a_335f2a6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-07T19:36:14Z",
+      "side": 1,
+      "message": "To make Firebird appear in LO, you must enable experimental features.\nIn Tools/Options/Advanced, enable \"Enable experimental features (may be unstable)",
+      "revId": "418e56997c9e63a5bc669c1b79157b2a4dbf6a2c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
