@@ -34,7 +34,7 @@ namespace xmloff
     using namespace ::com::sun::star::beans;
 
     //= OAttributeMetaData
-    const char* OAttributeMetaData::getCommonControlAttributeName(CCAFlags _nId)
+    OUString OAttributeMetaData::getCommonControlAttributeName(CCAFlags _nId)
     {
         switch (_nId)
         {
@@ -115,7 +115,7 @@ namespace xmloff
         return XML_NAMESPACE_FORM;
     }
 
-    const char* OAttributeMetaData::getFormAttributeName(FormAttributes _eAttrib)
+    OUString OAttributeMetaData::getFormAttributeName(FormAttributes _eAttrib)
     {
         switch (_eAttrib)
         {
@@ -181,7 +181,7 @@ namespace xmloff
         return XML_NAMESPACE_FORM;
     }
 
-    const char* OAttributeMetaData::getDatabaseAttributeName(DAFlags _nId)
+    OUString OAttributeMetaData::getDatabaseAttributeName(DAFlags _nId)
     {
         switch (_nId)
         {
@@ -213,7 +213,7 @@ namespace xmloff
         return XML_NONE;
     }
 
-    const char* OAttributeMetaData::getBindingAttributeName(BAFlags _nId)
+    OUString OAttributeMetaData::getBindingAttributeName(BAFlags _nId)
     {
         switch (_nId)
         {
@@ -239,7 +239,7 @@ namespace xmloff
         return XML_UNKNOWN;
     }
 
-    const char* OAttributeMetaData::getSpecialAttributeName(SCAFlags _nId)
+    OUString OAttributeMetaData::getSpecialAttributeName(SCAFlags _nId)
     {
         switch (_nId)
         {
@@ -305,7 +305,7 @@ namespace xmloff
         return XML_NAMESPACE_FORM;
     }
 
-    const char* OAttributeMetaData::getOfficeFormsAttributeName(OfficeFormsAttributes _eAttrib)
+    OUString OAttributeMetaData::getOfficeFormsAttributeName(OfficeFormsAttributes _eAttrib)
     {
         switch (_eAttrib)
         {

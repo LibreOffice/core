@@ -924,49 +924,24 @@ SvXMLExport::EnsureNamespace(OUString const & i_rNamespace)
     return sPrefix;
 }
 
-void SvXMLExport::AddAttributeASCII( sal_uInt16 nPrefixKey,
-                                     const char *pName,
-                                       const char *pValue )
-{
-    OUString sName( OUString::createFromAscii( pName ) );
-    OUString sValue( OUString::createFromAscii( pValue ) );
-
-    mxAttrList->AddAttribute(
-        GetNamespaceMap_().GetQNameByKey( nPrefixKey, sName ), sValue );
-}
-
-void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey, const char *pName,
-                              const OUString& rValue )
-{
-    OUString sName( OUString::createFromAscii( pName ) );
-
-    mxAttrList->AddAttribute(
-        GetNamespaceMap_().GetQNameByKey( nPrefixKey, sName ), rValue );
-}
-
 void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey, const OUString& rName,
                               const OUString& rValue )
 {
-    mxAttrList->AddAttribute(
-        GetNamespaceMap_().GetQNameByKey( nPrefixKey, rName ), rValue );
+    AddAttribute(GetNamespaceMap_().GetQNameByKey(nPrefixKey, rName), rValue);
 }
 
 void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey,
                                 enum XMLTokenEnum eName,
                                 const OUString& rValue )
 {
-    mxAttrList->AddAttribute(
-        GetNamespaceMap_().GetQNameByKey( nPrefixKey, GetXMLToken(eName) ),
-        rValue );
+    AddAttribute(nPrefixKey, GetXMLToken(eName), rValue);
 }
 
 void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey,
                                 enum XMLTokenEnum eName,
                                 enum XMLTokenEnum eValue)
 {
-    mxAttrList->AddAttribute(
-        GetNamespaceMap_().GetQNameByKey( nPrefixKey, GetXMLToken(eName) ),
-        GetXMLToken(eValue) );
+    AddAttribute(nPrefixKey, eName, GetXMLToken(eValue));
 }
 
 void SvXMLExport::AddAttribute( const OUString& rQName,
@@ -980,9 +955,7 @@ void SvXMLExport::AddAttribute( const OUString& rQName,
 void SvXMLExport::AddAttribute( const OUString& rQName,
                                 enum ::xmloff::token::XMLTokenEnum eValue )
 {
-      mxAttrList->AddAttribute(
-        rQName,
-        GetXMLToken(eValue) );
+    AddAttribute(rQName, GetXMLToken(eValue));
 }
 
 void SvXMLExport::AddLanguageTagAttributes( sal_uInt16 nPrefix, sal_uInt16 nPrefixRfc,
