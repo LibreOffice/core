@@ -106,6 +106,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123642_BookmarkAtDocEnd, "tdf123642.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Bookmark1"), getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:bookmarkStart[1]", "name"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf142407, "tdf142407.docx")
+{
+    uno::Reference<container::XNameAccess> xPageStyles = getStyles("PageStyles");
+    uno::Reference<beans::XPropertySet> xPageStyle(xPageStyles->getByName("Standard"), uno::UNO_QUERY);
+    sal_Int16 nGridLines;
+    xPageStyle->getPropertyValue("GridLines") >>= nGridLines;
+    CPPUNIT_ASSERT_EQUAL( sal_Int16(36), nGridLines);   // was 23, left large space before text.
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
