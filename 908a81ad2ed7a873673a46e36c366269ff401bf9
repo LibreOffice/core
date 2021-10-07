@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c294582d_aec28f50",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2111,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-07T20:14:06Z",
+      "side": 1,
+      "message": "This change looks strange. Indeed, you can\u0027t set pointer to OUString to point to a literal - but then you may create a OUString here, like you do, but let the pElementId *pointer* to point to either it or nullptr, like before?\n\nOr is there a guarantee that sPlaceholderTag is suitable at all times?",
+      "revId": "908a81ad2ed7a873673a46e36c366269ff401bf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
