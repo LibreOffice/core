@@ -129,7 +129,7 @@ namespace xmloff
         */
         void exportStringPropertyAttribute(
             const sal_uInt16 _nNamespaceKey,
-            const char* _pAttributeName,
+            const OUString& _pAttributeName,
             const OUString& _rPropertyName
         );
 
@@ -147,7 +147,7 @@ namespace xmloff
         */
         void exportBooleanPropertyAttribute(
             const sal_uInt16 _nNamespaceKey,
-            const char* _pAttributeName,
+            const OUString& _pAttributeName,
             const OUString& _rPropertyName,
             const BoolAttrFlags _nBooleanAttributeFlags);
 
@@ -170,7 +170,7 @@ namespace xmloff
         */
         void exportInt16PropertyAttribute(
             const sal_uInt16 _nNamespaceKey,
-            const char* _pAttributeName,
+            const OUString& _pAttributeName,
             const OUString& _rPropertyName,
             const sal_Int16 _nDefault,
             const bool force = false);
@@ -190,7 +190,7 @@ namespace xmloff
         */
         void exportInt32PropertyAttribute(
             const sal_uInt16 _nNamespaceKey,
-            const char* _pAttributeName,
+            const OUString& _pAttributeName,
             const OUString& _rPropertyName,
             const sal_Int32 _nDefault);
 
@@ -212,7 +212,7 @@ namespace xmloff
         template<typename EnumT>
         void exportEnumPropertyAttribute(
             const sal_uInt16 _nNamespaceKey,
-            const char* _pAttributeName,
+            const OUString& _pAttributeName,
             const OUString& _rPropertyName,
             const SvXMLEnumMapEntry<EnumT>* _pValueMap,
             const EnumT _nDefault,
@@ -224,7 +224,7 @@ namespace xmloff
         }
         void exportEnumPropertyAttributeImpl(
             const sal_uInt16 _nNamespaceKey,
-            const char* _pAttributeName,
+            const OUString& _pAttributeName,
             const OUString& _rPropertyName,
             const SvXMLEnumMapEntry<sal_uInt16>* _pValueMap,
             const sal_uInt16 _nDefault,
@@ -291,7 +291,7 @@ namespace xmloff
         */
         void exportGenericPropertyAttribute(
             const sal_uInt16 _nAttributeNamespaceKey,
-            const char* _pAttributeName,
+            const OUString& _pAttributeName,
             const char* _pPropertyName);
 
         /** exports a property value, which is a string sequence, as attribute
@@ -315,7 +315,7 @@ namespace xmloff
         */
         void exportStringSequenceAttribute(
             const sal_uInt16 _nAttributeNamespaceKey,
-            const char* _pAttributeName,
+            const OUString& _pAttributeName,
             const OUString& _rPropertyName);
 
         /** determines whether the given property is to be exported
@@ -354,14 +354,11 @@ namespace xmloff
         static ::xmloff::token::XMLTokenEnum implGetPropertyXMLType(const css::uno::Type& _rType);
 
 #ifdef DBG_UTIL
-                void AddAttribute(sal_uInt16 _nPrefix, const char* _pName, const OUString& _rValue);
                 void AddAttribute( sal_uInt16 _nPrefix, const OUString& _rName, const OUString& _rValue );
                 void AddAttribute(sal_uInt16 _nPrefix, ::xmloff::token::XMLTokenEnum _eName, const OUString& _rValue);
                 void AddAttribute(sal_uInt16 _nPrefix, ::xmloff::token::XMLTokenEnum _eName, ::xmloff::token::XMLTokenEnum _eValue );
 #else
         //  in the product version, inline this, so it does not cost us extra time calling into our method
-        void AddAttribute(sal_uInt16 _nPrefix, const char* _pName, const OUString& _rValue)
-            { m_rContext.getGlobalContext().AddAttribute(_nPrefix, _pName, _rValue); }
         void AddAttribute( sal_uInt16 _nPrefix, const OUString& _rName, const OUString& _rValue )
             { m_rContext.getGlobalContext().AddAttribute( _nPrefix, _rName, _rValue ); }
         void AddAttribute(sal_uInt16 _nPrefix, ::xmloff::token::XMLTokenEnum _eName, const OUString& _rValue)

@@ -337,10 +337,6 @@ public:
     void ClearAttrList();
 
     // Add an attribute to the common attribute list.
-    void AddAttributeASCII( sal_uInt16 nPrefix, const char *pName,
-                            const char *pValue );
-    void AddAttribute( sal_uInt16 nPrefix, const char *pName,
-                       const OUString& rValue );
     void AddAttribute( sal_uInt16 nPrefix, const OUString& rName,
                        const OUString& rValue );
     void AddAttribute( sal_uInt16 nPrefix,
