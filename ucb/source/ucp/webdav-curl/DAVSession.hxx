@@ -173,12 +173,6 @@ public:
                        css::ucb::Lock & inLock,
                        const DAVRequestEnvironment & rEnv ) = 0;
 
-    // refresh existing lock.
-    /// @throws DAVException
-    virtual sal_Int64 LOCK( const OUString & inPath,
-                            sal_Int64 nTimeout,
-                            const DAVRequestEnvironment & rEnv ) = 0;
-
     /// @throws DAVException
     virtual void UNLOCK( const OUString & inPath,
                          const DAVRequestEnvironment & rEnv ) = 0;

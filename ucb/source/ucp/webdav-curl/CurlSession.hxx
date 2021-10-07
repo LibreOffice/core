@@ -119,9 +119,6 @@ public:
     virtual auto LOCK(OUString const& rURIReference, css::ucb::Lock /*const*/& rLock,
                       DAVRequestEnvironment const& rEnv) -> void override;
 
-    virtual auto LOCK(OUString const& rURIReference, sal_Int64 nTimeout,
-                      DAVRequestEnvironment const& rEnv) -> sal_Int64 override;
-
     virtual auto UNLOCK(OUString const& rURIReference, DAVRequestEnvironment const& rEnv)
         -> void override;
 

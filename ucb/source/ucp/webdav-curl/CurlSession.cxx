@@ -1908,14 +1908,6 @@ auto CurlProcessor::Unlock(CurlSession& rSession, OUString const& rURIReference,
                                   nullptr, nullptr);
 }
 
-auto CurlSession::LOCK(OUString const& /*rURIReference*/, sal_Int64 const /*nTimeout*/,
-                       DAVRequestEnvironment const & /*rEnv*/) -> sal_Int64
-{
-    // FIXME unused?
-    assert(false);
-    return 1234567890;
-}
-
 auto CurlSession::UNLOCK(OUString const& rURIReference, DAVRequestEnvironment const& rEnv) -> void
 {
     SAL_INFO("ucb.ucp.webdav.curl", "UNLOCK: " << rURIReference);
