@@ -36,7 +36,6 @@ private:
     std::unique_ptr<weld::CustomWeld> m_pPreview;
 
     sal_Int32 m_nCurrentTip;
-    sal_Int32 m_nDay;
     void UpdateTip();
     DECL_LINK(OnNextClick, weld::Button&, void);
     DECL_LINK(OnLinkClick, weld::LinkButton&, bool);
