@@ -478,25 +478,14 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
     // If pSelectionRectangles is set, we're just collecting the text selections -> don't emit start/end.
     if (!empty() && !pSelectionRectangles)
     {
-        // The selection may be a complex polygon, emit the logical
-        // start/end cursor rectangle of the selection as separate
-        // events, if there is a real selection.
-        // This can be used to easily show selection handles on the
-        // client side.
         SwRect aStartRect;
         SwRect aEndRect;
         FillStartEnd(aStartRect, aEndRect);
 
         if (aStartRect.HasArea())
-        {
-            OString sRect = aStartRect.SVRect().toString();
-            GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, sRect.getStr());
-        }
+            SfxLokHelper::notifyUpdate(GetShell()->GetSfxViewShell(), LOK_CALLBACK_TEXT_SELECTION_START);
         if (aEndRect.HasArea())
-        {
-            OString sRect = aEndRect.SVRect().toString();
-            GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, sRect.getStr());
-        }
+            SfxLokHelper::notifyUpdate(GetShell()->GetSfxViewShell(), LOK_CALLBACK_TEXT_SELECTION_END);
     }
 
     std::vector<OString> aRect;
@@ -509,11 +498,62 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
     OString sRect = comphelper::string::join("; ", aRect);
     if (!pSelectionRectangles)
     {
-        GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
-        SfxLokHelper::notifyOtherViews(GetShell()->GetSfxViewShell(), LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
+        SfxLokHelper::notifyUpdate(GetShell()->GetSfxViewShell(),LOK_CALLBACK_TEXT_SELECTION);
+        SfxLokHelper::notifyOtherViewsUpdatePerViewId(GetShell()->GetSfxViewShell(), LOK_CALLBACK_TEXT_VIEW_SELECTION);
     }
     else
         pSelectionRectangles->push_back(sRect);
+}
+
+OString SwSelPaintRects::getLOKPayload( int nType, int nViewId ) const
+{
+    switch( nType )
+    {
+        case LOK_CALLBACK_TEXT_SELECTION_START:
+        case LOK_CALLBACK_TEXT_SELECTION_END:
+        {
+            // The selection may be a complex polygon, emit the logical
+            // start/end cursor rectangle of the selection as separate
+            // events, if there is a real selection.
+            // This can be used to easily show selection handles on the
+            // client side.
+            SwRect aStartRect;
+            SwRect aEndRect;
+            FillStartEnd(aStartRect, aEndRect);
+
+            if( nType == LOK_CALLBACK_TEXT_SELECTION_START )
+            {
+                if (aStartRect.HasArea())
+                    return aStartRect.SVRect().toString();
+                return OString();
+            }
+            else // LOK_CALLBACK_TEXT_SELECTION_END
+            {
+                if (aEndRect.HasArea())
+                    return aEndRect.SVRect().toString();
+                return OString();
+            }
+        }
+        break;
+        case LOK_CALLBACK_TEXT_SELECTION:
+        case LOK_CALLBACK_TEXT_VIEW_SELECTION:
+        {
+            std::vector<OString> aRect;
+            aRect.reserve(size());
+            for (size_type i = 0; i < size(); ++i)
+            {
+                const SwRect& rRect = (*this)[i];
+                aRect.push_back(rRect.SVRect().toString());
+            }
+            OString sRect = comphelper::string::join("; ", aRect);
+            if( nType == LOK_CALLBACK_TEXT_SELECTION )
+                return sRect;
+            else // LOK_CALLBACK_TEXT_VIEW_SELECTION
+                return SfxLokHelper::makePayloadJSON(GetShell()->GetSfxViewShell(), nViewId, "selection", sRect);
+        }
+        break;
+    }
+    abort();
 }
 
 void SwSelPaintRects::HighlightInputField()

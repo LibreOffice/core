@@ -113,6 +113,8 @@ public:
     // Optional set the parameters pX, pY
     static void Get1PixelInLogic( const SwViewShell& rSh,
                                     tools::Long* pX = nullptr, tools::Long* pY = nullptr );
+
+    OString getLOKPayload(int nType, int nViewId) const;
 };
 
 class SW_DLLPUBLIC SwShellCursor : public virtual SwCursor, public SwSelPaintRects

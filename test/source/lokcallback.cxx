@@ -143,7 +143,7 @@ void TestLokCallbackWrapper::flushLOKData()
         return shell->GetViewShellId().get() == m_viewId;
     });
     assert(viewShell != nullptr);
-    // First move data to local structures, so that notifyFromLOKCallback() doesn't modify it.
+    // First move data to local structures, so that callbacks don't possibly modify it.
     std::vector<int> updatedTypes;
     std::swap(updatedTypes, m_updatedTypes);
     std::vector<PerViewIdData> updatedTypesPerViewId;

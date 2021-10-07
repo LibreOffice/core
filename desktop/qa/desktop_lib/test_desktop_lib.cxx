@@ -1545,6 +1545,7 @@ void DesktopLOKTest::testNotificationCompression()
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     std::vector<std::tuple<int, std::string>> notifs;
     std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
+    handler->setViewId(SfxLokHelper::getView());
 
     handler->queue(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, ""); // 0
     handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15, 25, 15, 10"); // Superseded.
@@ -1640,6 +1641,7 @@ void DesktopLOKTest::testTileInvalidationCompression()
     {
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
+        handler->setViewId(SfxLokHelper::getView());
 
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 0");
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 0");
@@ -1660,6 +1662,7 @@ void DesktopLOKTest::testTileInvalidationCompression()
     {
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
+        handler->setViewId(SfxLokHelper::getView());
 
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 0");
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 200, 200, 1"); // Different part
@@ -1683,6 +1686,7 @@ void DesktopLOKTest::testTileInvalidationCompression()
     {
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
+        handler->setViewId(SfxLokHelper::getView());
 
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 0"); // 0
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 200, 200, 1"); // 1: Different part
@@ -1709,6 +1713,7 @@ void DesktopLOKTest::testTileInvalidationCompression()
     {
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
+        handler->setViewId(SfxLokHelper::getView());
 
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 200, 200, 0"); // 0
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 100, 100, 1"); // 1: Different part
@@ -1744,6 +1749,7 @@ void DesktopLOKTest::testTileInvalidationCompression()
     {
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
+        handler->setViewId(SfxLokHelper::getView());
 
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 0");
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "EMPTY, 0");
@@ -1768,6 +1774,7 @@ void DesktopLOKTest::testPartInInvalidation()
     {
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
+        handler->setViewId(SfxLokHelper::getView());
 
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10");
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "20, 10, 20, 10");
@@ -1783,6 +1790,7 @@ void DesktopLOKTest::testPartInInvalidation()
     {
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
+        handler->setViewId(SfxLokHelper::getView());
 
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10");
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "40, 10, 20, 10");
@@ -1802,6 +1810,7 @@ void DesktopLOKTest::testPartInInvalidation()
 
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
+        handler->setViewId(SfxLokHelper::getView());
 
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10, 0");
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "20, 10, 20, 10, 0");
@@ -1820,6 +1829,7 @@ void DesktopLOKTest::testPartInInvalidation()
 
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
+        handler->setViewId(SfxLokHelper::getView());
 
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10, 0");
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "20, 10, 20, 10, 1");
@@ -1848,6 +1858,7 @@ void DesktopLOKTest::testBinaryCallback()
     {
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackBinaryCallbackTest, &notifs));
+        handler->setViewId(SfxLokHelper::getView());
 
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, rect1String.c_str());
 
@@ -1860,6 +1871,7 @@ void DesktopLOKTest::testBinaryCallback()
     {
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackBinaryCallbackTest, &notifs));
+        handler->setViewId(SfxLokHelper::getView());
 
         handler->libreOfficeKitViewInvalidateTilesCallback(&rect1, INT_MIN);
 
