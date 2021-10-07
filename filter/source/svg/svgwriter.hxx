@@ -351,7 +351,8 @@ private:
 
     void                    ImplWriteActions( const GDIMetaFile& rMtf,
                                               sal_uInt32 nWriteFlags,
-                                              const OUString* pElementId,
+                                              bool bUseElementId,
+                                              const OUString& pElementId = "",
                                               const Reference< css::drawing::XShape >* pXShape = nullptr,
                                               const GDIMetaFile* pTextEmbeddedBitmapMtf = nullptr );
 
@@ -370,7 +371,8 @@ public:
                                            const Size& rSize100thmm,
                                            const GDIMetaFile& rMtf,
                                            sal_uInt32 nWriteFlags,
-                                           const OUString* pElementId = nullptr,
+                                           bool bUseElementId = false,
+                                           const OUString& pElementId = "",
                                            const Reference< css::drawing::XShape >* pXShape = nullptr,
                                            const GDIMetaFile* pTextEmbeddedBitmapMtf = nullptr );
 

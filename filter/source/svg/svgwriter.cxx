@@ -2262,7 +2262,7 @@ void SVGActionWriter::ImplWritePattern( const tools::PolyPolygon& rPolyPoly,
                     mpVDev->AddHatchActions( rPolyPoly, *pHatch, aTmpMtf );
                 else if ( pGradient )
                     mpVDev->AddGradientActions( rPolyPoly.GetBoundRect(), *pGradient, aTmpMtf );
-                ImplWriteActions( aTmpMtf, nWriteFlags, nullptr );
+                ImplWriteActions( aTmpMtf, nWriteFlags, false );
             }
         }
     }
@@ -2529,7 +2529,7 @@ void SVGActionWriter::ImplWriteMask(GDIMetaFile& rMtf, const Point& rDestPt, con
         }
 
         mpVDev->Push();
-        ImplWriteActions( rMtf, nWriteFlags, nullptr );
+        ImplWriteActions( rMtf, nWriteFlags, false );
         mpVDev->Pop();
     }
 }
@@ -2949,7 +2949,8 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
 
 void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                                         sal_uInt32 nWriteFlags,
-                                        const OUString* pElementId,
+                                        bool bUseElementId,
+                                        const OUString& pElementId,
                                         const Reference< css::drawing::XShape >* pxShape,
                                         const GDIMetaFile* pTextEmbeddedBitmapMtf )
 {
@@ -2966,11 +2967,11 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
     }
 #endif
     mbIsPlaceholderShape = false;
-    if( ( pElementId != nullptr ) && ( *pElementId == sPlaceholderTag ) )
+    if( bUseElementId && ( pElementId == sPlaceholderTag ) )
     {
         mbIsPlaceholderShape = true;
         // since we utilize pElementId in an improper way we reset it to NULL before to go on
-        pElementId = nullptr;
+        bUseElementId = false;
     }
 
     for( sal_uLong nCurAction = 0, nCount = rMtf.GetActionSize(); nCurAction < nCount; nCurAction++ )
@@ -3328,9 +3329,9 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         {
                             mapCurShape.reset( new SVGShapeDescriptor );
 
-                            if( pElementId )
+                            if( bUseElementId )
                             {
-                                mapCurShape->maId = *pElementId + "_" + OUString::number(nEntryCount++);
+                                mapCurShape->maId = pElementId + "_" + OUString::number(nEntryCount++);
                             }
 
                             mapCurShape->maShapePolyPoly = aShapePolyPoly;
@@ -3416,9 +3417,9 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                         mapCurShape.reset( new SVGShapeDescriptor );
 
-                        if( pElementId )
+                        if( bUseElementId )
                         {
-                            mapCurShape->maId = *pElementId + "_" + OUString::number(nEntryCount++);
+                            mapCurShape->maId = pElementId + "_" + OUString::number(nEntryCount++);
                         }
 
                         mapCurShape->maShapePolyPoly = aPoly;
@@ -3484,9 +3485,9 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         {
                             mapCurShape->maShapePolyPoly = aStartArrow;
 
-                            if( pElementId ) // #i124825# pElementId is optional, may be zero
+                            if( bUseElementId ) // #i124825# pElementId is optional, may be zero
                             {
-                                mapCurShape->maId = *pElementId + "_" + OUString::number(nEntryCount++);
+                                mapCurShape->maId = pElementId + "_" + OUString::number(nEntryCount++);
                             }
 
                             ImplWriteShape( *mapCurShape );
@@ -3496,9 +3497,9 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         {
                             mapCurShape->maShapePolyPoly = aEndArrow;
 
-                            if( pElementId ) // #i124825# pElementId is optional, may be zero
+                            if( bUseElementId ) // #i124825# pElementId is optional, may be zero
                             {
-                                mapCurShape->maId = *pElementId + "_" + OUString::number(nEntryCount++);
+                                mapCurShape->maId = pElementId + "_" + OUString::number(nEntryCount++);
                             }
 
                             ImplWriteShape( *mapCurShape );
@@ -3934,7 +3935,8 @@ void SVGActionWriter::WriteMetaFile( const Point& rPos100thmm,
                                      const Size& rSize100thmm,
                                      const GDIMetaFile& rMtf,
                                      sal_uInt32 nWriteFlags,
-                                     const OUString* pElementId,
+                                     bool bUseElementID,
+                                     const OUString& pElementId,
                                      const Reference< css::drawing::XShape >* pXShape,
                                      const GDIMetaFile* pTextEmbeddedBitmapMtf )
 {
@@ -3959,7 +3961,7 @@ void SVGActionWriter::WriteMetaFile( const Point& rPos100thmm,
 
     mapCurShape.reset();
 
-    ImplWriteActions( rMtf, nWriteFlags, pElementId, pXShape, pTextEmbeddedBitmapMtf );
+    ImplWriteActions( rMtf, nWriteFlags, bUseElementID, pElementId, pXShape, pTextEmbeddedBitmapMtf );
     maTextWriter.endTextParagraph();
     ImplEndClipRegion();
 
