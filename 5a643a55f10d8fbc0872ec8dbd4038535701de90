@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "974b303c_721961e5",
+        "filename": "sc/source/filter/excel/xestyle.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1463,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-10-07T14:52:50Z",
+      "side": 1,
+      "message": "I tried to use double for nSpaceWidth, but then I get different space width even though there is no default font change. That\u0027s because on the xlsx import the space width determined is tools::Long, not double. As a result I prefer to declare this as tools::Long and use static_cast below.",
+      "parentUuid": "b9f32ee8_9871d2dc",
+      "range": {
+        "startLine": 1463,
+        "startChar": 12,
+        "endLine": 1463,
+        "endChar": 23
+      },
+      "revId": "5a643a55f10d8fbc0872ec8dbd4038535701de90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7589ca36_9e6756a0",
         "filename": "sc/source/filter/excel/xestyle.cxx",
         "patchSetId": 6
@@ -43,6 +67,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5075b908_3b1a2d7d",
+        "filename": "sc/source/filter/excel/xestyle.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1466,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-10-07T14:52:50Z",
+      "side": 1,
+      "message": "It\u0027s guaranteed to be \u003e 0 in the constructor of XclRootData, but in XclRoot::SetCharWidth if we get a zero value then this will be overwritten. If this happens, then we are in danger of divide-by-zero.",
+      "parentUuid": "7589ca36_9e6756a0",
+      "revId": "5a643a55f10d8fbc0872ec8dbd4038535701de90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ffc56e47_5c5f150d",
         "filename": "sc/source/filter/excel/xestyle.cxx",
         "patchSetId": 6
@@ -54,6 +96,24 @@
       "writtenOn": "2021-10-07T14:29:46Z",
       "side": 1,
       "message": "I believe that you need to round the result. E.g., by adding 0.5.",
+      "revId": "5a643a55f10d8fbc0872ec8dbd4038535701de90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7be420e9_61e12461",
+        "filename": "sc/source/filter/excel/xestyle.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1472,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-10-07T14:52:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ffc56e47_5c5f150d",
       "revId": "5a643a55f10d8fbc0872ec8dbd4038535701de90",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
