@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37ec7e38_36d0a131",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-10-07T06:21:32Z",
+      "side": 1,
+      "message": "Just for clarity, you should remove the [ ] braces around the bug id.",
+      "revId": "9cfb1845b5498aa0afc53c0d86665fbb74fb9ba7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
