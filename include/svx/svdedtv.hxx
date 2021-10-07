@@ -189,6 +189,9 @@ public:
      */
     void EndTextEditAllViews() const;
 
+    void EndTextEditCurrentView() const;
+
+
     std::vector< std::unique_ptr<SdrUndoAction> > CreateConnectorUndo( SdrObject& rO );
     void AddUndoActions( std::vector< std::unique_ptr<SdrUndoAction> > );
 
