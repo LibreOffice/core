@@ -1815,6 +1815,7 @@ private:
 
 public:
     MetaGradientContainerAction(tools::PolyPolygon const& rPolyPoly, tools::Rectangle const& rBoundRect, Gradient const& rGradient, tools::Long nStepCount, DrawModeFlags nDrawMode, bool bWillBePrinted = false);
+    MetaGradientContainerAction(tools::Rectangle const& rRect, Gradient const& rGradient, tools::Long nStepCount);
     MetaGradientContainerAction(MetaGradientContainerAction const &) = default;
     MetaGradientContainerAction(MetaGradientContainerAction &&) = default;
     MetaGradientContainerAction & operator =(MetaGradientContainerAction const &) = delete; // due to MetaAction

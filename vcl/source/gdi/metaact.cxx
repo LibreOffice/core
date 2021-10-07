@@ -2458,6 +2458,8 @@ void MetaComplexGradientAction::Scale(double fScaleX, double fScaleY)
     }
 }
 
+const int GRADIENT_DEFAULT_STEPCOUNT = 0;
+
 MetaGradientContainerAction::MetaGradientContainerAction(tools::PolyPolygon const& rPolyPoly, tools::Rectangle const& rBoundRectInPixels, Gradient const& rGradient, tools::Long nSteps, DrawModeFlags nDrawMode, bool bWillBePrinted)
     : MetaAction(MetaActionType::GRADIENTCONTAINER)
     , mbWillBePrinted(bWillBePrinted)
@@ -2484,8 +2486,6 @@ MetaGradientContainerAction::MetaGradientContainerAction(tools::PolyPolygon cons
     if (aBoundRect.IsEmpty())
         return;
 
-    const int GRADIENT_DEFAULT_STEPCOUNT = 0;
-
     // calculate step count if necessary
     if (!aGradient.GetSteps())
         aGradient.SetSteps(GRADIENT_DEFAULT_STEPCOUNT);
@@ -2506,6 +2506,38 @@ MetaGradientContainerAction::MetaGradientContainerAction(tools::PolyPolygon cons
         maActions.push_back(new MetaLinearGradientAction(aBoundRect, aGradient, nSteps));
     else
         maActions.push_back(new MetaComplexGradientAction(aBoundRect, aGradient, nSteps));
+}
+
+MetaGradientContainerAction::MetaGradientContainerAction(tools::Rectangle const& rRect, Gradient const& rGradient, tools::Long nSteps)
+    : MetaAction(MetaActionType::GRADIENTCONTAINER)
+{
+    if (rRect.IsEmpty())
+       return;
+
+    tools::Rectangle aBoundRect(rRect);
+
+    maActions.push_back(new MetaPushAction(vcl::PushFlags::ALL));
+    maActions.push_back(new MetaISectRectClipRegionAction(aBoundRect));
+    maActions.push_back(new MetaLineColorAction(Color(), false));
+
+    // because we draw with no border line, we have to expand gradient
+    // rect to avoid missing lines on the right and bottom edge
+    aBoundRect.AdjustLeft(-1);
+    aBoundRect.AdjustTop(-1);
+    aBoundRect.AdjustRight(1);
+    aBoundRect.AdjustBottom(1);
+
+    Gradient aGradient(rGradient);
+
+    if (aGradient.GetSteps() == 0)
+        aGradient.SetSteps(GRADIENT_DEFAULT_STEPCOUNT);
+
+    if( aGradient.GetStyle() == GradientStyle::Linear || rGradient.GetStyle() == GradientStyle::Axial)
+        maActions.push_back(new MetaLinearGradientAction(aBoundRect, aGradient, nSteps));
+    else
+        maActions.push_back(new MetaComplexGradientAction(aBoundRect, aGradient, nSteps));
+
+    maActions.push_back(new MetaPopAction());
 }
 
 void MetaGradientContainerAction::Clip(Gradient const& rGradient, tools::PolyPolygon const& rPolyPoly)

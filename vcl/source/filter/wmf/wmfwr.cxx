@@ -1302,7 +1302,9 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 const MetaGradientAction*   pA = static_cast<const MetaGradientAction*>(pMA);
                 GDIMetaFile                 aTmpMtf;
 
-                pVirDev->AddGradientActions( pA->GetRect(), pA->GetGradient(), aTmpMtf );
+                aTmpMtf.AddAction(new MetaGradientContainerAction(pA->GetRect(), pA->GetGradient(),
+                            pVirDev->GetGradientStepCount(pA->GetGradient(), pA->GetRect(), true)));
+
                 WriteRecords( aTmpMtf );
             }
             break;
