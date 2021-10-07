@@ -139,6 +139,9 @@ public:
     ViewShell* GetViewShell() const { return mpViewSh; }
     SfxViewShell* GetSfxViewShell() const override;
 
+    // Create a local UndoManager
+    std::unique_ptr<SdrUndoManager> createLocalTextUndoManager() override;
+
     virtual bool SdrBeginTextEdit(SdrObject* pObj, SdrPageView* pPV = nullptr, vcl::Window* pWin = nullptr, bool bIsNewObj = false,
         SdrOutliner* pGivenOutliner = nullptr, OutlinerView* pGivenOutlinerView = nullptr,
         bool bDontDeleteOutliner = false, bool bOnlyOneView = false, bool bGrabFocus = true) override;
