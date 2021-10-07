@@ -2256,7 +2256,7 @@ namespace BuilderUtils
         OString sWidthChars("width-chars");
         VclBuilder::stringmap::iterator aFind = rMap.find(sWidthChars);
         if (aFind == rMap.end())
-            rMap[sWidthChars] = "25";
+            rMap[sWidthChars] = "20";
     }
 
     bool extractDropdown(VclBuilder::stringmap &rMap)
