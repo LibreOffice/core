@@ -2714,6 +2714,74 @@ protected:
         }
     }
 
+    void DisconnectMouseEvents()
+    {
+        if (m_nButtonPressSignalId)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            g_signal_handler_disconnect(get_click_controller(), m_nButtonPressSignalId);
+#else
+            g_signal_handler_disconnect(m_pMouseEventBox, m_nButtonPressSignalId);
+#endif
+            m_nButtonPressSignalId = 0;
+        }
+        if (m_nMotionSignalId)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            g_signal_handler_disconnect(get_motion_controller(), m_nMotionSignalId);
+#else
+            g_signal_handler_disconnect(m_pMouseEventBox, m_nMotionSignalId);
+#endif
+            m_nMotionSignalId = 0;
+        }
+        if (m_nLeaveSignalId)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            g_signal_handler_disconnect(get_motion_controller(), m_nLeaveSignalId);
+#else
+            g_signal_handler_disconnect(m_pMouseEventBox, m_nLeaveSignalId);
+#endif
+            m_nLeaveSignalId = 0;
+        }
+        if (m_nEnterSignalId)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            g_signal_handler_disconnect(get_motion_controller(), m_nEnterSignalId);
+#else
+            g_signal_handler_disconnect(m_pMouseEventBox, m_nEnterSignalId);
+#endif
+            m_nEnterSignalId = 0;
+        }
+        if (m_nButtonReleaseSignalId)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            g_signal_handler_disconnect(get_click_controller(), m_nButtonReleaseSignalId);
+#else
+            g_signal_handler_disconnect(m_pMouseEventBox, m_nButtonReleaseSignalId);
+#endif
+            m_nButtonReleaseSignalId = 0;
+        }
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        if (m_pMouseEventBox && m_pMouseEventBox != m_pWidget)
+        {
+            // put things back they way we found them
+            GtkWidget* pParent = gtk_widget_get_parent(m_pMouseEventBox);
+
+            g_object_ref(m_pWidget);
+            gtk_container_remove(GTK_CONTAINER(m_pMouseEventBox), m_pWidget);
+
+            gtk_widget_destroy(m_pMouseEventBox);
+
+            gtk_container_add(GTK_CONTAINER(pParent), m_pWidget);
+            // coverity[freed_arg : FALSE] - this does not free m_pWidget, it is reffed by pParent
+            g_object_unref(m_pWidget);
+
+            m_pMouseEventBox = m_pWidget;
+        }
+#endif
+    }
+
 private:
     bool m_bTakeOwnership;
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -4164,46 +4232,6 @@ public:
             g_signal_handler_disconnect(m_pWidget, m_nKeyReleaseSignalId);
 #endif
         }
-        if (m_nButtonPressSignalId)
-        {
-#if GTK_CHECK_VERSION(4, 0, 0)
-            g_signal_handler_disconnect(get_click_controller(), m_nButtonPressSignalId);
-#else
-            g_signal_handler_disconnect(m_pMouseEventBox, m_nButtonPressSignalId);
-#endif
-        }
-        if (m_nMotionSignalId)
-        {
-#if GTK_CHECK_VERSION(4, 0, 0)
-            g_signal_handler_disconnect(get_motion_controller(), m_nMotionSignalId);
-#else
-            g_signal_handler_disconnect(m_pMouseEventBox, m_nMotionSignalId);
-#endif
-        }
-        if (m_nLeaveSignalId)
-        {
-#if GTK_CHECK_VERSION(4, 0, 0)
-            g_signal_handler_disconnect(get_motion_controller(), m_nLeaveSignalId);
-#else
-            g_signal_handler_disconnect(m_pMouseEventBox, m_nLeaveSignalId);
-#endif
-        }
-        if (m_nEnterSignalId)
-        {
-#if GTK_CHECK_VERSION(4, 0, 0)
-            g_signal_handler_disconnect(get_motion_controller(), m_nEnterSignalId);
-#else
-            g_signal_handler_disconnect(m_pMouseEventBox, m_nEnterSignalId);
-#endif
-        }
-        if (m_nButtonReleaseSignalId)
-        {
-#if GTK_CHECK_VERSION(4, 0, 0)
-            g_signal_handler_disconnect(get_click_controller(), m_nButtonReleaseSignalId);
-#else
-            g_signal_handler_disconnect(m_pMouseEventBox, m_nButtonReleaseSignalId);
-#endif
-        }
 
         if (m_nFocusInSignalId)
         {
@@ -4228,22 +4256,7 @@ public:
 
         do_set_background(COL_AUTO);
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        if (m_pMouseEventBox && m_pMouseEventBox != m_pWidget)
-        {
-            // put things back they way we found them
-            GtkWidget* pParent = gtk_widget_get_parent(m_pMouseEventBox);
-
-            g_object_ref(m_pWidget);
-            gtk_container_remove(GTK_CONTAINER(m_pMouseEventBox), m_pWidget);
-
-            gtk_widget_destroy(m_pMouseEventBox);
-
-            gtk_container_add(GTK_CONTAINER(pParent), m_pWidget);
-            // coverity[freed_arg : FALSE] - this does not free m_pWidget, it is reffed by pParent
-            g_object_unref(m_pWidget);
-        }
-#endif
+        DisconnectMouseEvents();
 
         if (m_bTakeOwnership)
         {
@@ -21183,6 +21196,8 @@ public:
         // restore original hierarchy in dtor so a new GtkInstanceComboBox will
         // result in the same layout each time
         {
+            DisconnectMouseEvents();
+
             g_object_ref(m_pComboBox);
 
             GtkContainer* pContainer = getContainer();
