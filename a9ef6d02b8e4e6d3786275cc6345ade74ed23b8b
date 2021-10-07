@@ -69,6 +69,24 @@
       "parentUuid": "3d3a4134_13669062",
       "revId": "a9ef6d02b8e4e6d3786275cc6345ade74ed23b8b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cefd263_c26d7bc4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-10-07T14:21:13Z",
+      "side": 1,
+      "message": "The properties deck at the sidebar provides a list of options to change the width of ordinary lines or lines of shapes. This list has some rather random values.\n\nCommented on BZ about the steps.",
+      "parentUuid": "4c216f83_fe645656",
+      "revId": "a9ef6d02b8e4e6d3786275cc6345ade74ed23b8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
