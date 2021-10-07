@@ -143,7 +143,7 @@ namespace xmloff
         ::sax::Converter::convertBool(aValue, bValue);
 
         // add the attribute
-        _rExp.AddAttribute(
+        _rExp.AddAttributeASCII(
             OAttributeMetaData::getOfficeFormsAttributeNamespace(),
             OAttributeMetaData::getOfficeFormsAttributeName(_eAttribute),
             aValue.makeStringAndClear());
