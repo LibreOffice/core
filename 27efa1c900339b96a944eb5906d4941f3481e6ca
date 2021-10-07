@@ -159,6 +159,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b218542_bddb6444",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-07T11:02:53Z",
+      "side": 1,
+      "message": "Response from Robert:\n\"Have read the comments there. I would prefer to add add \"External\" in opposite\nto \"Embedded\". \"External\" will be a connection to a server or connection to a\nfile...\"\n(see https://bugs.documentfoundation.org/show_bug.cgi?id\u003d85148#c6)",
+      "revId": "27efa1c900339b96a944eb5906d4941f3481e6ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3328bc12_d0002700",
