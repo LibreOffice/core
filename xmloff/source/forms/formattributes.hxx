@@ -182,7 +182,7 @@ namespace xmloff
             @param _nId
                 the id of the attribute. Has to be one of the CCA_* constants.
         */
-        static const char* getCommonControlAttributeName(CCAFlags _nId);
+        static OUString getCommonControlAttributeName(CCAFlags _nId);
 
         /** calculates the xml attribute representation of a common control attribute.
             @param _nId
@@ -200,7 +200,7 @@ namespace xmloff
             @param  _eAttrib
                 enum value specifying the attribute
         */
-        static const char* getFormAttributeName(FormAttributes _eAttrib);
+        static OUString getFormAttributeName(FormAttributes _eAttrib);
 
         /** retrieves the name of an attribute of a form xml representation
             @param  _eAttrib
@@ -218,7 +218,7 @@ namespace xmloff
             @param _nId
                 the id of the attribute. Has to be one of the DA_* constants.
         */
-        static const char* getDatabaseAttributeName(DAFlags _nId);
+        static OUString getDatabaseAttributeName(DAFlags _nId);
 
         /** calculates the xml attribute representation of a database attribute.
             @param _nId
@@ -240,7 +240,7 @@ namespace xmloff
             @param _nId
                 the id of the attribute. Has to be one of the SCA_* constants.
         */
-        static const char* getSpecialAttributeName(SCAFlags _nId);
+        static OUString getSpecialAttributeName(SCAFlags _nId);
 
         /** calculates the xml attribute representation of a special attribute.
             @param _nId
@@ -252,7 +252,7 @@ namespace xmloff
             @param _nId
                 the id of the attribute. Has to be one of the BA_* constants.
         */
-        static const char* getBindingAttributeName(BAFlags _nId);
+        static OUString getBindingAttributeName(BAFlags _nId);
 
         /** calculates the xml attribute representation of a binding attribute.
             @param _nId
@@ -280,7 +280,7 @@ namespace xmloff
             @param _nId
                 the id of the attribute
         */
-        static const char* getOfficeFormsAttributeName(OfficeFormsAttributes _eAttrib);
+        static OUString getOfficeFormsAttributeName(OfficeFormsAttributes _eAttrib);
         static xmloff::token::XMLTokenEnum getOfficeFormsAttributeToken(OfficeFormsAttributes _eAttrib);
 
         /** calculates the xml namedspace key of an attribute of the office:forms element
