@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8f4c85f_c347bbb5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-07T17:03:37Z",
+      "side": 1,
+      "message": "I haven\u0027t tested it and won\u0027t do it but let\u0027s give it a chance.\nAt worst, it can be reverted.\n\n(license from author here: https://lists.freedesktop.org/archives/libreoffice/2021-September/087802.html)",
+      "revId": "132ef45e19eb5f996abb9e5c815f9c0a192366e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
