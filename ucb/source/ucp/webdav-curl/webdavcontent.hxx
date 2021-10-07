@@ -77,7 +77,6 @@ class Content : public ::ucbhelper::ContentImplHelper,
     ResourceType      m_eResourceType;
     ContentProvider*  m_pProvider; // No need for a ref, base class holds object
     bool              m_bTransient;
-    bool              m_bLocked;
     bool              m_bCollection;
     bool              m_bDidGetOrHead;
     std::vector< OUString > m_aFailedPropNames;

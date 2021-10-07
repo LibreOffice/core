@@ -199,7 +199,6 @@ Content::Content(
   m_eResourceType( UNKNOWN ),
   m_pProvider( pProvider ),
   m_bTransient( false ),
-  m_bLocked( false ),
   m_bCollection( false ),
   m_bDidGetOrHead( false )
 {
@@ -231,7 +230,6 @@ Content::Content(
   m_eResourceType( UNKNOWN ),
   m_pProvider( pProvider ),
   m_bTransient( true ),
-  m_bLocked( false ),
   m_bCollection( isCollection ),
   m_bDidGetOrHead( false )
 {
@@ -252,8 +250,6 @@ Content::Content(
 // virtual
 Content::~Content()
 {
-    if (m_bLocked)
-        unlock(uno::Reference< ucb::XCommandEnvironment >());
 }
 
 
@@ -532,10 +528,6 @@ uno::Any SAL_CALL Content::execute(
 
         aRet = open( aOpenCommand, Environment );
 
-        if ( (aOpenCommand.Mode == ucb::OpenMode::DOCUMENT ||
-              aOpenCommand.Mode == ucb::OpenMode::DOCUMENT_SHARE_DENY_WRITE) &&
-                supportsExclusiveWriteLock( Environment ) )
-            lock( Environment );
     }
     else if ( aCommand.Name == "insert" )
     {
@@ -638,13 +630,18 @@ uno::Any SAL_CALL Content::execute(
 
         post( aArg, Environment );
     }
-    else if ( aCommand.Name == "lock" &&
-              supportsExclusiveWriteLock( Environment ) )
+    else if ( aCommand.Name == "lock" )
     {
 
         // lock
 
-
+        // supportsExclusiveWriteLock()  does not work if the file is being created.
+        // The lack of lock functionality is taken care of inside lock(),
+        // a temporary measure.
+        // This current implementation will result in a wasted lock request issued to web site
+        // that don't support it.
+        // TODO: need to rewrite the managing of the m_bTransient flag, when the resource is non yet existent
+        // and the first lock on a non existed resource first creates it then lock it.
         lock( Environment );
     }
     else if ( aCommand.Name == "unlock" &&
@@ -1325,8 +1322,18 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     {
                         const OUString & rName = rProperties[ n ].Name;
 
-                        if ( std::none_of(m_aFailedPropNames.begin(), m_aFailedPropNames.end(),
-                                [&rName](const OUString& rPropName) { return rPropName == rName; }) )
+                        if (!std::any_of(m_aFailedPropNames.begin(), m_aFailedPropNames.end(),
+                                [&](const OUString& rPropName) {
+                                    bool const isFound(rPropName == rName);
+                                    if (isFound)
+                                    {
+                                        // the failed property in cache is the same as the requested one,
+                                        // so add it to the requested properties list
+                                        aProperties[ nProps ] = rProperties[ n ];
+                                        nProps++;
+                                    }
+                                    return isFound;
+                                }) )
                         {
                             aProperties[ nProps ] = rProperties[ n ];
                             nProps++;
@@ -2808,6 +2815,21 @@ bool Content::supportsExclusiveWriteLock(
 void Content::lock(
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
 {
+// prepare aURL to be used in exception, see below
+    OUString aURL;
+    if ( m_bTransient )
+    {
+        aURL = getParentURL();
+        if ( aURL.lastIndexOf('/') != ( aURL.getLength() - 1 ) )
+            aURL += "/";
+
+        aURL += m_aEscapedTitle;
+    }
+    else
+    {
+        aURL = m_xIdentifier->getContentIdentifier();
+    }
+
     try
     {
         std::unique_ptr< DAVResourceAccess > xResAccess;
@@ -2817,7 +2839,8 @@ void Content::lock(
         }
 
         uno::Any aOwnerAny;
-        aOwnerAny <<= OUString( "http://ucb.openoffice.org" );
+        aOwnerAny
+            <<= OUString("LibreOffice - http://www.libreoffice.org/");
 
         ucb::Lock aLock(
             ucb::LockScope_EXCLUSIVE,
@@ -2829,7 +2852,6 @@ void Content::lock(
             uno::Sequence< OUString >() );
 
         xResAccess->LOCK( aLock, Environment );
-        m_bLocked = true;
 
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -2838,6 +2860,43 @@ void Content::lock(
     }
     catch ( DAVException const & e )
     {
+        // check if the exception thrown is 'already locked'
+        // this exception is mapped directly to the ucb correct one, without
+        // going into the cancelCommandExecution() user interaction
+        // this exception should be managed by the issuer of 'lock' command
+        switch(e.getError())
+        {
+        case DAVException::DAV_LOCKED:
+        {
+            throw(ucb::InteractiveLockingLockedException(
+                      "Locked!",
+                      static_cast< cppu::OWeakObject * >( this ),
+                      task::InteractionClassification_ERROR,
+                      aURL,
+                      false ));
+        }
+        break;
+        case DAVException::DAV_HTTP_ERROR:
+            //grab the error code
+            switch( e.getStatus() )
+            {
+                // this returned error is part of base http 1.1 RFCs
+            case SC_NOT_IMPLEMENTED:
+            case SC_METHOD_NOT_ALLOWED:
+                // this is a temporary measure, means the lock method is not supported
+                // TODO: fix the behaviour of m_bTransient when the file is first created
+                return;
+                break;
+            default:
+                //fallthrough
+                ;
+            }
+            break;
+        default:
+            //fallthrough
+            ;
+        }
+
         cancelCommandExecution( e, Environment, false );
         // Unreachable
     }
@@ -2856,7 +2915,6 @@ void Content::unlock(
         }
 
         xResAccess->UNLOCK( Environment );
-        m_bLocked = false;
 
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -2865,6 +2923,28 @@ void Content::unlock(
     }
     catch ( DAVException const & e )
     {
+        switch(e.getError())
+        {
+        case DAVException::DAV_HTTP_ERROR:
+            //grab the error code
+            switch( e.getStatus() )
+            {
+                // this returned error is part of base http 1.1 RFCs
+            case SC_NOT_IMPLEMENTED:
+            case SC_METHOD_NOT_ALLOWED:
+                // this is a temporary measure, means the lock method is not supported
+                // TODO: fix the behaviour of m_bTransient when the file is first created
+                return;
+                break;
+            default:
+                //fallthrough
+                ;
+            }
+            break;
+        default:
+            //fallthrough
+            ;
+        }
         cancelCommandExecution( e, Environment, false );
         // Unreachable
     }
