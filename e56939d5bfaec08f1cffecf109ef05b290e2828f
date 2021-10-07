@@ -16,6 +16,23 @@
       "message": "Interesting: here we convert indentation to mm100 on import. But it this correct? Where do we pass this value to? Does it expect mm100, or twip?",
       "revId": "e56939d5bfaec08f1cffecf109ef05b290e2828f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b07d83f_731bca09",
+        "filename": "sc/source/filter/oox/stylesbuffer.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1303,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-07T15:58:18Z",
+      "side": 1,
+      "message": "Here\u0027s where the value gets stored into the document model; now the question is: how is ScIndentItem used in the code? If its value interpreted as mm100 or twips.\n\nI *guess* that the code at line 1186 above should not do the conversion, because the value is already in twips",
+      "revId": "e56939d5bfaec08f1cffecf109ef05b290e2828f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
