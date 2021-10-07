@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5892fa78_7fe4b83f",
+        "filename": "sc/source/filter/oox/stylesbuffer.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-07T15:52:47Z",
+      "side": 1,
+      "message": "Interesting: here we convert indentation to mm100 on import. But it this correct? Where do we pass this value to? Does it expect mm100, or twip?",
+      "revId": "e56939d5bfaec08f1cffecf109ef05b290e2828f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
