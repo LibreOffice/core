@@ -1059,4 +1059,14 @@ void SdrEditView::EndTextEditAllViews() const
     }
 }
 
+void SdrEditView::EndTextEditCurrentView()
+{
+    if (IsTextEdit())
+    {
+        SdrView* pSdrView = dynamic_cast<SdrView*>(this);
+        if (pSdrView)
+            pSdrView->SdrEndTextEdit();
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

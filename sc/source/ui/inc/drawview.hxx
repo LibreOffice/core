@@ -52,8 +52,8 @@ class ScDrawView final : public FmFormView
 
     void ImplClearCalcDropMarker();
 
-    // support enhanced text edit for draw objects
-    virtual SdrUndoManager* getSdrUndoManagerForEnhancedTextEdit() const override;
+    // Create a local UndoManager
+    std::unique_ptr<SdrUndoManager> createLocalTextUndoManager() override;
 
 public:
     ScDrawView(

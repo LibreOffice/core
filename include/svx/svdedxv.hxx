@@ -104,19 +104,16 @@ protected:
 
 private:
     SfxUndoManager* mpOldTextEditUndoManager;
+    std::unique_ptr<SdrUndoManager> mpLocalTextEditUndoManager;
 
     SVX_DLLPRIVATE void ImpClearVars();
 
 protected:
-    // central method to get an SdrUndoManager for enhanced TextEdit. Default will
-    // try to return a dynamic_casted GetModel()->GetSdrUndoManager(). Applications
-    // which want to use this feature will need to override this virtual method,
-    // provide their document UndoManager and derive it from SdrUndoManager.
-    virtual SdrUndoManager* getSdrUndoManagerForEnhancedTextEdit() const;
+    // Create a local UndoManager that is used for text editing.
+    virtual std::unique_ptr<SdrUndoManager> createLocalTextUndoManager();
 
     void ImpMoveCursorAfterChainingEvent(TextChainCursorManager *pCursorManager);
     TextChainCursorManager *ImpHandleMotionThroughBoxesKeyInput(const KeyEvent& rKEvt, bool *bOutHandled);
-
 
     OutlinerView* ImpFindOutlinerView(vcl::Window const * pWin) const;
 
@@ -177,6 +174,10 @@ public:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
     virtual void ModelHasChanged() override;
 
+    const std::unique_ptr<SdrUndoManager>& getViewLocalUndoManager() const
+    {
+        return mpLocalTextEditUndoManager;
+    }
 
     // TextEdit over an outliner
 
