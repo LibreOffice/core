@@ -1631,6 +1631,14 @@ auto CurlSession::LOCK(OUString const& rURIReference, ucb::Lock /*const*/& rLock
 {
     SAL_INFO("ucb.ucp.webdav.curl", "LOCK: " << rURIReference);
 
+    // FIXME: why is a *global* LockStore keyed by *path*?
+    if (g_Init.LockStore.getLockTokenForURI(rURIReference, rLock))
+    {
+        // already have a lock that covers the requirement
+        // TODO: maybe use DAV:lockdiscovery to ensure it's valid
+        return;
+    }
+
     // note: no m_Mutex lock needed here, only in CurlProcessor::Lock()
 
     // generate XML document for acquiring new LOCK
@@ -1731,8 +1739,8 @@ auto CurlSession::LOCK(OUString const& rURIReference, ucb::Lock /*const*/& rLock
 
     for (auto const& rAcquiredLock : acquiredLocks)
     {
-        g_Init.LockStore.addLock(rURIReference, rAcquiredLock.first.LockTokens[0], this,
-                                 rAcquiredLock.second);
+        g_Init.LockStore.addLock(rURIReference, rAcquiredLock.first,
+                                 rAcquiredLock.first.LockTokens[0], this, rAcquiredLock.second);
         SAL_INFO("ucb.ucp.webdav.curl", "created LOCK for " << rURIReference);
     }
 }

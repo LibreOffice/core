@@ -21,6 +21,9 @@
 #include <sal/log.hxx>
 #include <osl/time.h>
 #include <osl/thread.hxx>
+
+#include <com/sun/star/ucb/LockScope.hpp>
+
 #include "CurlSession.hxx"
 #include "SerfLockStore.hxx"
 
@@ -140,15 +143,42 @@ OUString SerfLockStore::getLockToken( const OUString& rLock )
     return OUString();
 }
 
-void SerfLockStore::addLock( const OUString& rLock,
+OUString const*
+SerfLockStore::getLockTokenForURI(OUString const& rURI, css::ucb::Lock const& rLock)
+{
+    osl::MutexGuard aGuard( m_aMutex );
+
+    auto const it(m_aLockInfoMap.find(rURI));
+
+    if (it == m_aLockInfoMap.end())
+    {
+        return nullptr;
+    }
+    // 0: EXCLUSIVE 1: SHARED
+    if (it->second.m_Lock.Scope == ucb::LockScope_SHARED && rLock.Scope == ucb::LockScope_EXCLUSIVE)
+    {
+        return nullptr;
+    }
+    assert(it->second.m_Lock.Type == rLock.Type); // only WRITE possible
+    if (it->second.m_Lock.Depth < rLock.Depth)
+    {
+        return nullptr;
+    }
+    assert(it->second.m_Lock.Owner == rLock.Owner); // only own locks expected
+    // ignore Timeout ?
+    return &it->second.m_sToken;
+}
+
+void SerfLockStore::addLock( const OUString& rURI,
+                             ucb::Lock const& rLock,
                              const OUString& sToken,
                              rtl::Reference<CurlSession> const & xSession,
                              sal_Int32 nLastChanceToSendRefreshRequest )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    m_aLockInfoMap[ rLock ]
-        = LockInfo( sToken, xSession, nLastChanceToSendRefreshRequest );
+    m_aLockInfoMap[ rURI ]
+        = LockInfo(sToken, rLock, xSession, nLastChanceToSendRefreshRequest);
 
     startTicker();
 }
