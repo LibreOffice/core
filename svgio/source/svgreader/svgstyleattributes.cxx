@@ -83,74 +83,50 @@ namespace svgio::svgreader
 
         FontStretch getWider(FontStretch aSource)
         {
-            switch(aSource)
-            {
-                case FontStretch::ultra_condensed: aSource = FontStretch::extra_condensed; break;
-                case FontStretch::extra_condensed: aSource = FontStretch::condensed; break;
-                case FontStretch::condensed: aSource = FontStretch::semi_condensed; break;
-                case FontStretch::semi_condensed: aSource = FontStretch::normal; break;
-                case FontStretch::normal: aSource = FontStretch::semi_expanded; break;
-                case FontStretch::semi_expanded: aSource = FontStretch::expanded; break;
-                case FontStretch::expanded: aSource = FontStretch::extra_expanded; break;
-                case FontStretch::extra_expanded: aSource = FontStretch::ultra_expanded; break;
-                default: break;
-            }
+            int wideness = static_cast<int>(aSource);
+            int min = static_cast<int>(FontStretch::ultra_condensed);
+            int max = static_cast<int>(FontStretch::ultra_expanded);
+            // Can not increas for the max
+            if(wideness >= min && wideness < max)
+                wideness++;
 
-            return aSource;
+            return static_cast<FontStretch>(wideness);
         }
 
         FontStretch getNarrower(FontStretch aSource)
         {
-            switch(aSource)
-            {
-                case FontStretch::extra_condensed: aSource = FontStretch::ultra_condensed; break;
-                case FontStretch::condensed: aSource = FontStretch::extra_condensed; break;
-                case FontStretch::semi_condensed: aSource = FontStretch::condensed; break;
-                case FontStretch::normal: aSource = FontStretch::semi_condensed; break;
-                case FontStretch::semi_expanded: aSource = FontStretch::normal; break;
-                case FontStretch::expanded: aSource = FontStretch::semi_expanded; break;
-                case FontStretch::extra_expanded: aSource = FontStretch::expanded; break;
-                case FontStretch::ultra_expanded: aSource = FontStretch::extra_expanded; break;
-                default: break;
-            }
+            int wideness = static_cast<int>(aSource);
+            int min = static_cast<int>(FontStretch::ultra_condensed);
+            int max = static_cast<int>(FontStretch::ultra_expanded);
+            // Can not decrease for the min
+            if(wideness > min && wideness <= max)
+                wideness--;
 
-            return aSource;
+            return static_cast<FontStretch>(wideness);
         }
 
         FontWeight getBolder(FontWeight aSource)
         {
-            switch(aSource)
-            {
-                case FontWeight::N100: aSource = FontWeight::N200; break;
-                case FontWeight::N200: aSource = FontWeight::N300; break;
-                case FontWeight::N300: aSource = FontWeight::N400; break;
-                case FontWeight::N400: aSource = FontWeight::N500; break;
-                case FontWeight::N500: aSource = FontWeight::N600; break;
-                case FontWeight::N600: aSource = FontWeight::N700; break;
-                case FontWeight::N700: aSource = FontWeight::N800; break;
-                case FontWeight::N800: aSource = FontWeight::N900; break;
-                default: break;
-            }
+            int weight = static_cast<int>(aSource);
+            int min = static_cast<int>(FontWeight::N100);
+            int max = static_cast<int>(FontWeight::N900);
+            // Can not increase for the max
+            if(weight >= min && weight < max)
+                weight++;
 
-            return aSource;
+            return static_cast<FontWeight>(weight);
         }
 
         FontWeight getLighter(FontWeight aSource)
         {
-            switch(aSource)
-            {
-                case FontWeight::N200: aSource = FontWeight::N100; break;
-                case FontWeight::N300: aSource = FontWeight::N200; break;
-                case FontWeight::N400: aSource = FontWeight::N300; break;
-                case FontWeight::N500: aSource = FontWeight::N400; break;
-                case FontWeight::N600: aSource = FontWeight::N500; break;
-                case FontWeight::N700: aSource = FontWeight::N600; break;
-                case FontWeight::N800: aSource = FontWeight::N700; break;
-                case FontWeight::N900: aSource = FontWeight::N800; break;
-                default: break;
-            }
+            int weight = static_cast<int>(aSource);
+            int min = static_cast<int>(FontWeight::N100);
+            int max = static_cast<int>(FontWeight::N900);
+            // Can not decrease for the min
+            if(weight > min && weight <= max)
+                weight--;
 
-            return aSource;
+            return static_cast<FontWeight>(weight);
         }
 
         ::FontWeight getVclFontWeight(FontWeight aSource)
