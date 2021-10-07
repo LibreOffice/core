@@ -624,7 +624,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     // for non-SwWebDocShells.
     // No mbIsGlobalDoc: this is true for SwGlobalDocShells.
     mbGlblDocSaveLinks = rSource.mbGlblDocSaveLinks;
-    // No mbIsLabelDoc
+    mbIsLabelDoc = rSource.mbIsLabelDoc;
     mbPurgeOLE = rSource.mbPurgeOLE;
     mbKernAsianPunctuation = rSource.mbKernAsianPunctuation;
     mbParaSpaceMax = rSource.mbParaSpaceMax;
