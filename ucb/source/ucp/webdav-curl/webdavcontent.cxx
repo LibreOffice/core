@@ -1318,26 +1318,9 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 {
                     sal_Int32 nProps = 0;
                     sal_Int32 nCount = rProperties.getLength();
-                    for ( sal_Int32 n = 0; n < nCount; ++n )
+                    for ( sal_Int32 n = 0; n < nCount; ++n, ++nProps )
                     {
-                        const OUString & rName = rProperties[ n ].Name;
-
-                        if (!std::any_of(m_aFailedPropNames.begin(), m_aFailedPropNames.end(),
-                                [&](const OUString& rPropName) {
-                                    bool const isFound(rPropName == rName);
-                                    if (isFound)
-                                    {
-                                        // the failed property in cache is the same as the requested one,
-                                        // so add it to the requested properties list
-                                        aProperties[ nProps ] = rProperties[ n ];
-                                        nProps++;
-                                    }
-                                    return isFound;
-                                }) )
-                        {
-                            aProperties[ nProps ] = rProperties[ n ];
-                            nProps++;
-                        }
+                        aProperties[ nProps ] = rProperties[ n ];
                     }
 
                     aProperties.realloc( nProps );
