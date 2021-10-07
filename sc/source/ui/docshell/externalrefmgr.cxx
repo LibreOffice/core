@@ -3190,8 +3190,10 @@ void ScExternalRefManager::transformUnsavedRefToSavedRef( SfxObjectShell* pShell
             OUString aFileURL = pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
             switchSrcFile(itr->first, aFileURL, OUString());
             EndListening(*pShell);
-            maUnsavedDocShells.erase(itr++);
+            itr = maUnsavedDocShells.erase(itr);
         }
+        else
+            ++itr;
     }
 }
 
