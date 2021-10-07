@@ -273,7 +273,7 @@ namespace dbtools
 
     static void addDays(const sal_Int32 nDays, css::util::Date& _rDate)
     {
-        sal_Int32   nTempDays = implRelativeToAbsoluteNull( _rDate );
+        sal_Int64 nTempDays = implRelativeToAbsoluteNull(_rDate);
 
         nTempDays += nDays;
         if ( nTempDays > maxDays )
@@ -296,7 +296,7 @@ namespace dbtools
 
     static void subDays(const sal_Int32 nDays, css::util::Date& _rDate )
     {
-        sal_Int32   nTempDays = implRelativeToAbsoluteNull( _rDate );
+        sal_Int64 nTempDays = implRelativeToAbsoluteNull(_rDate);
 
         nTempDays -= nDays;
         if ( nTempDays > maxDays )
