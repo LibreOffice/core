@@ -1048,7 +1048,7 @@ void VclOutdevTest::testErase()
     aMtf.Record(pVDev.get());
 
     // this actually triggers Erase()
-    pVDev->SetOutputSizePixel(Size(1, 1));
+    pVDev->SetOutputSizePixel(Size(10, 10));
     pVDev->Erase();
 
     MetaAction* pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT);
@@ -1079,7 +1079,7 @@ void VclOutdevTest::testDrawPixel()
         aMtf.Record(pVDev.get());
 
         // triggers an Erase()
-        pVDev->SetOutputSizePixel(Size(1, 1));
+        pVDev->SetOutputSizePixel(Size(10, 10));
         pVDev->SetLineColor(COL_RED);
         pVDev->DrawPixel(Point(0, 0), COL_GREEN);
 
@@ -1122,7 +1122,7 @@ void VclOutdevTest::testDrawLine()
         GDIMetaFile aMtf;
         aMtf.Record(pVDev.get());
 
-        pVDev->SetOutputSizePixel(Size(1, 100));
+        pVDev->SetOutputSizePixel(Size(10, 100));
         pVDev->DrawLine(Point(0, 0), Point(0, 50));
 
         MetaAction* pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT);
