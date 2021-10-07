@@ -16,6 +16,24 @@
       "message": "I haven\u0027t tested it and won\u0027t do it but let\u0027s give it a chance.\nAt worst, it can be reverted.\n\n(license from author here: https://lists.freedesktop.org/archives/libreoffice/2021-September/087802.html)",
       "revId": "132ef45e19eb5f996abb9e5c815f9c0a192366e4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c8a3856_838bba2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003336
+      },
+      "writtenOn": "2021-10-07T19:27:00Z",
+      "side": 1,
+      "message": "Firebird External is OK, but don´t mind what is the name, that is very easy to change when we decide it.\nNow I\u0027m fighting with the interface and that is not easy to understand for me, Im not able to show a Firebird related page in the database wizard (but I will).\nMean while I have a doubt: should I do an intermediate page, like MySQL with option to file, direct driver connection, JDBC and ODBC? or should I do a page with just two options, Firebird file or Firebird server (and the server options in the same page)? The later is what I\u0027m working on. I\u0027ve created a page but I can\u0027t send it because I\u0027m having compilations problems since a git pull (I suppose I did something wrong)",
+      "parentUuid": "c8f4c85f_c347bbb5",
+      "revId": "132ef45e19eb5f996abb9e5c815f9c0a192366e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
