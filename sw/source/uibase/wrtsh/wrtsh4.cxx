@@ -241,6 +241,11 @@ OString SwWrtShell::getLOKPayload(int nType, int nViewId) const
         case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
         case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
             return GetVisibleCursor()->getLOKPayload(nType, nViewId);
+        case LOK_CALLBACK_TEXT_SELECTION:
+        case LOK_CALLBACK_TEXT_SELECTION_START:
+        case LOK_CALLBACK_TEXT_SELECTION_END:
+        case LOK_CALLBACK_TEXT_VIEW_SELECTION:
+            return GetCursor_()->getLOKPayload( nType, nViewId );
     }
     abort();
 }
