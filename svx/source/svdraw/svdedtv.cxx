@@ -1000,7 +1000,7 @@ bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, SdrInser
     }
     if( IsUndoEnabled())
     {
-        EndTextEditAllViews();
+        EndTextEditCurrentView();
         AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
     }
 
@@ -1078,6 +1078,12 @@ void SdrEditView::EndTextEditAllViews() const
         if (pView->IsTextEdit())
             pView->SdrEndTextEdit();
     }
+}
+
+void SdrEditView::EndTextEditCurrentView()
+{
+    if (IsTextEdit())
+        SdrEndTextEdit();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

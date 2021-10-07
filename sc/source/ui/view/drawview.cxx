@@ -1107,10 +1107,13 @@ bool ScDrawView::calculateGridOffsetForB2DRange(
     return true;
 }
 
-// support enhanced text edit for draw objects
-SdrUndoManager* ScDrawView::getSdrUndoManagerForEnhancedTextEdit() const
+// Create a new view-local UndoManager manager for Calc
+std::unique_ptr<SdrUndoManager> ScDrawView::createLocalTextUndoManager()
 {
-    return dynamic_cast<SdrUndoManager*>(rDoc.GetUndoManager());
+    std::unique_ptr<SdrUndoManager> pUndoManager(new SdrUndoManager);
+    ScDocShell* pDocShell = pViewData ? pViewData->GetDocShell() : nullptr;
+    pUndoManager->SetDocShell(pDocShell);
+    return pUndoManager;
 }
 
 // #i123922# helper to apply a Graphic to an existing SdrObject
