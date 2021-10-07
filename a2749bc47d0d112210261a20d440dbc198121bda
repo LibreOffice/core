@@ -16,6 +16,23 @@
       "message": "Done.\nUsed \"constexpr OUStringLiteral\" where it was possible.",
       "revId": "a2749bc47d0d112210261a20d440dbc198121bda",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83261cb9_7160d071",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-07T05:58:46Z",
+      "side": 1,
+      "message": "Please see how all the other strings are used in the file. They are passed to SVG export\u0027s AddAttribute, which internally converts them from ASCII to OUString; also there is an overload taking OUString directly (which is used for the strings that are already OUString). So I suppose that there\u0027s a value to make all of these OUStringLiterals, which will eliminate the conversion cost completely.",
+      "revId": "a2749bc47d0d112210261a20d440dbc198121bda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
