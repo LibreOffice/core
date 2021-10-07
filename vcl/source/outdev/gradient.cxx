@@ -73,7 +73,13 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
         if ( mnDrawMode & DrawModeFlags::GrayGradient )
             aGradient.MakeGrayscale();
 
-        DrawGradientToMetafile( rPolyPoly, rGradient );
+        tools::Rectangle aBoundRectPixel(ImplLogicToDevicePixel(rPolyPoly.GetBoundRect()));
+
+        if (mpMetaFile)
+        {
+            mpMetaFile->AddAction(new MetaGradientContainerAction(rPolyPoly,
+                        aBoundRectPixel, rGradient, GetGradientStepCount(rGradient, aBoundRectPixel, true/*bMtf*/), mnDrawMode));
+        }
 
         if( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
             return;
@@ -157,20 +163,6 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
         mpAlphaVDev->DrawPolyPolygon( rPolyPoly );
         mpAlphaVDev->SetFillColor( aFillCol );
     }
-}
-
-void OutputDevice::DrawGradientToMetafile(tools::PolyPolygon const& rPolyPoly, Gradient const& rGradient)
-{
-    tools::Rectangle aBoundRect(ImplLogicToDevicePixel(rPolyPoly.GetBoundRect()));
-
-    // if the clipping polypolygon is a rectangle, then it's the same size as the bounding of the
-    // polypolygon, so pass in a NULL for the clipping parameter
-    if (rGradient.GetStyle() == GradientStyle::Linear || rGradient.GetStyle() == GradientStyle::Axial)
-        mpMetaFile->AddAction(new MetaGradientContainerAction(rPolyPoly,
-                    aBoundRect, rGradient, GetLinearGradientSteps(rGradient, aBoundRect, true/*bMtf*/), mnDrawMode));
-    else
-        mpMetaFile->AddAction(new MetaGradientContainerAction(rPolyPoly,
-                    aBoundRect, rGradient, GetComplexGradientSteps(rGradient, aBoundRect, true), mnDrawMode));
 }
 
 namespace
@@ -573,6 +565,14 @@ tools::Long OutputDevice::GetLinearGradientSteps(Gradient const& rGradient, tool
     return nStepCount;
 }
 
+tools::Long OutputDevice::GetGradientStepCount(Gradient const& rGradient, tools::Rectangle const& rRect, bool bMtf)
+{
+    if ((rGradient.GetStyle() == GradientStyle::Linear) || (rGradient.GetStyle() == GradientStyle::Axial))
+        return GetLinearGradientSteps(rGradient, rRect, bMtf);
+    else
+        return GetComplexGradientSteps(rGradient, rRect, bMtf);
+}
+
 tools::Long OutputDevice::GetComplexGradientSteps(Gradient const& rGradient, tools::Rectangle const& rRect, bool bMtf)
 {
     // calculate step count
@@ -608,46 +608,6 @@ Color OutputDevice::GetSingleColorGradientFill()
         aColor = GetSettings().GetStyleSettings().GetWindowColor();
 
     return aColor;
-}
-
-void OutputDevice::AddGradientActions( const tools::Rectangle& rRect, const Gradient& rGradient,
-                                       GDIMetaFile& rMtf )
-{
-
-    tools::Rectangle aRect( rRect );
-
-    aRect.Justify();
-
-    // do nothing if the rectangle is empty
-    if ( aRect.IsEmpty() )
-        return;
-
-    Gradient        aGradient( rGradient );
-    GDIMetaFile*    pOldMtf = mpMetaFile;
-
-    mpMetaFile = &rMtf;
-    mpMetaFile->AddAction( new MetaPushAction( vcl::PushFlags::ALL ) );
-    mpMetaFile->AddAction( new MetaISectRectClipRegionAction( aRect ) );
-    mpMetaFile->AddAction( new MetaLineColorAction( Color(), false ) );
-
-    // because we draw with no border line, we have to expand gradient
-    // rect to avoid missing lines on the right and bottom edge
-    aRect.AdjustLeft( -1 );
-    aRect.AdjustTop( -1 );
-    aRect.AdjustRight( 1 );
-    aRect.AdjustBottom( 1 );
-
-    // calculate step count if necessary
-    if ( !aGradient.GetSteps() )
-        aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
-
-    if( aGradient.GetStyle() == GradientStyle::Linear || aGradient.GetStyle() == GradientStyle::Axial )
-        mpMetaFile->AddAction(new MetaLinearGradientAction(aRect, aGradient, GetLinearGradientSteps(aGradient, aRect, true/*bMtf*/)));
-    else
-        mpMetaFile->AddAction(new MetaComplexGradientAction(aRect, aGradient, GetComplexGradientSteps(rGradient, aRect, true)));
-
-    mpMetaFile->AddAction( new MetaPopAction() );
-    mpMetaFile = pOldMtf;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

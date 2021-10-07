@@ -730,9 +730,8 @@ namespace cppcanvas::internal
             }
 
             GDIMetaFile aTmpMtf;
-            rParms.mrVDev.AddGradientActions( rPoly.GetBoundRect(),
-                                              rGradient,
-                                               aTmpMtf );
+            aTmpMtf.AddAction(new MetaGradientContainerAction(rPoly.GetBoundRect(),
+                        rGradient, rParms.mrVDev.GetGradientStepCount(rGradient, rPoly.GetBoundRect(), true)));
 
             createActions( aTmpMtf, rParms, bSubsettableActions );
 
