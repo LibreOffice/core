@@ -70,6 +70,24 @@
       "parentUuid": "ba559569_fd502aa0",
       "revId": "d051e6f0bf763822f886046da44a8fa13ec10237",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83e6bc2b_b68dd424",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-07T06:37:28Z",
+      "side": 1,
+      "message": "com::sun::star is an exception, but otherwise, in general, we try to avoid \"using namespace\" in .cxx files to help readability and we have a harder rule to avoid any kind of \"using namespace\" in headers.\n\nThe using declaration for drawinglayer in drawinglayer-heavy code (like this change) is a gray zone I would say, you already saw the different opinions above. :-) The ideal cleanup is where everyone easily agrees that the new version is obviously better than the old one, like killing #define in c++ code and replace with something which is not a C macro.",
+      "parentUuid": "2fee1b70_26e58942",
+      "revId": "d051e6f0bf763822f886046da44a8fa13ec10237",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
