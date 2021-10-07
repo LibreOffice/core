@@ -344,7 +344,9 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
 
     if ( mpDrawView->IsTextEdit() )
     {
-        mpDrawView->SdrEndTextEdit();
+        // This exits the text edit mode when going in and out of window focus, which is not needed
+        // Let's keep this call as comment for now as it probably just needs a better conditional.
+        // mpDrawView->SdrEndTextEdit();
     }
 
     LayerTabBar* pLayerBar = GetLayerTabControl();
