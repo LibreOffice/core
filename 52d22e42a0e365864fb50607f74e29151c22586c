@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a29dfb3_a9bbc5d8",
+        "filename": "sc/source/filter/excel/xlroot.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-07T14:54:57Z",
+      "side": 1,
+      "message": "This check and following default will never allow to return 0",
+      "revId": "52d22e42a0e365864fb50607f74e29151c22586c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
