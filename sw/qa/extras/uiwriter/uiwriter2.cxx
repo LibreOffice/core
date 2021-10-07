@@ -1387,6 +1387,36 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126784_distributeSelectedColumns)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Last column shouldn't change", nOrigCol3Pos, aSeq[1].Position);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf144317)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf144317.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
+
+    auto aSeq = getProperty<uno::Sequence<text::TableColumnSeparator>>(xTableRows->getByIndex(0),
+                                                                       "TableColumnSeparators");
+    sal_Int16 nOrigCol1Pos = aSeq[0].Position;
+
+    // Move the cursor inside the table
+    pWrtShell->Down(/*bSelect=*/false);
+
+    //Select some cells in the first column
+    pWrtShell->Down(/*bSelect=*/true);
+    pWrtShell->Down(/*bSelect=*/true);
+    pWrtShell->Down(/*bSelect=*/true);
+
+    dispatchCommand(mxComponent, ".uno:SetMinimalColumnWidth", {});
+
+    aSeq = getProperty<uno::Sequence<text::TableColumnSeparator>>(xTableRows->getByIndex(0),
+                                                                  "TableColumnSeparators");
+    CPPUNIT_ASSERT_MESSAGE("First column should shrink", aSeq[0].Position < nOrigCol1Pos);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf108687_tabstop)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf108687_tabstop.odt");
