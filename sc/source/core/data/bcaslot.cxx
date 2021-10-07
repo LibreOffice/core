@@ -85,7 +85,7 @@ ScBroadcastAreaSlot::~ScBroadcastAreaSlot()
         ScBroadcastArea* pArea = (*aIter).mpArea;
         // Erase all so no hash will be accessed upon destruction of the
         // unordered_map.
-        aBroadcastAreaTbl.erase( aIter++);
+        aIter = aBroadcastAreaTbl.erase(aIter);
         if (!pArea->DecRef())
             delete pArea;
     }
@@ -348,7 +348,7 @@ void ScBroadcastAreaSlot::DelBroadcastAreasInRange( const ScRange& rRange )
         if (rRange.In( rAreaRange))
         {
             ScBroadcastArea* pArea = (*aIter).mpArea;
-            aBroadcastAreaTbl.erase( aIter++);  // erase before modifying
+            aIter = aBroadcastAreaTbl.erase(aIter);  // erase before modifying
             if (!pArea->DecRef())
             {
                 if (pBASM->IsInBulkBroadcast())
@@ -377,7 +377,7 @@ void ScBroadcastAreaSlot::UpdateRemove( UpdateRefMode eUpdateRefMode,
         ScBroadcastArea* pArea = (*aIter).mpArea;
         if ( pArea->IsInUpdateChain() )
         {
-            aBroadcastAreaTbl.erase( aIter++);
+            aIter = aBroadcastAreaTbl.erase(aIter);
             pArea->DecRef();
         }
         else
@@ -387,7 +387,7 @@ void ScBroadcastAreaSlot::UpdateRemove( UpdateRefMode eUpdateRefMode,
                     nCol1,nRow1,nTab1, nCol2,nRow2,nTab2, nDx,nDy,nDz,
                     theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 ))
             {
-                aBroadcastAreaTbl.erase( aIter++);
+                aIter = aBroadcastAreaTbl.erase(aIter);
                 pArea->DecRef();
                 if (pBASM->IsInBulkBroadcast())
                     pBASM->RemoveBulkArea( pArea);
@@ -951,14 +951,14 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
             // Remove sheets, if any, iDel or/and iTab may as well point to end().
             while (iDel != iTab)
             {
-                aTableSlotsMap.erase( iDel++);
+                iDel = aTableSlotsMap.erase(iDel);
             }
             // shift remaining down
             while (iTab != aTableSlotsMap.end())
             {
                 SCTAB nTab = (*iTab).first + nDz;
                 aTableSlotsMap[nTab] = std::move((*iTab).second);
-                aTableSlotsMap.erase( iTab++);
+                iTab = aTableSlotsMap.erase(iTab);
             }
         }
         else
