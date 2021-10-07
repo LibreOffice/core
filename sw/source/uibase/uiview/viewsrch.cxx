@@ -126,8 +126,8 @@ static void lcl_emitSearchResultCallbacks(SvxSearchItem const * pSearchItem, SwW
 
     if(bHighlightAll)
     {   // FindAll disables this during find, do it once when done.
-        pWrtShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, textSelection.getStr());
-        SfxLokHelper::notifyOtherViews(pWrtShell->GetSfxViewShell(), LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", textSelection);
+        SfxLokHelper::notifyUpdate(pWrtShell->GetSfxViewShell(),LOK_CALLBACK_TEXT_SELECTION);
+        SfxLokHelper::notifyOtherViewsUpdatePerViewId(pWrtShell->GetSfxViewShell(), LOK_CALLBACK_TEXT_VIEW_SELECTION);
     }
 }
 

@@ -698,9 +698,17 @@ static bool lcl_isViewCallbackType(const int type)
     }
 }
 
-static bool isUpdatedType(int /*type*/)
+static bool isUpdatedType(int type)
 {
-    return false;
+    switch (type)
+    {
+        case LOK_CALLBACK_TEXT_SELECTION:
+        case LOK_CALLBACK_TEXT_SELECTION_START:
+        case LOK_CALLBACK_TEXT_SELECTION_END:
+            return true;
+        default:
+            return false;
+    }
 }
 
 static bool isUpdatedTypePerViewId(int type)
@@ -709,6 +717,7 @@ static bool isUpdatedTypePerViewId(int type)
     {
         case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
         case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
+        case LOK_CALLBACK_TEXT_VIEW_SELECTION:
             return true;
         default:
             return false;
@@ -2121,31 +2130,53 @@ void CallbackFlushHandler::enqueueUpdatedTypes()
 {
     if( m_updatedTypes.empty() && m_updatedTypesPerViewId.empty())
         return;
+    assert(m_viewId >= 0);
     SfxViewShell* viewShell = SfxViewShell::GetFirst( false,
         [this](const SfxViewShell* shell) { return shell->GetViewShellId().get() == m_viewId; } );
     assert(viewShell != nullptr);
-    for( size_t type = 0; type < m_updatedTypes.size(); ++type )
+
+    // First move data to local structures, so that callbacks don't possibly modify it.
+    std::vector<bool> updatedTypes;
+    std::swap(updatedTypes, m_updatedTypes);
+    std::unordered_map<int, std::vector<PerViewIdData>> updatedTypesPerViewId;
+    std::swap(updatedTypesPerViewId, m_updatedTypesPerViewId);
+
+    // Some types must always precede other types, for example
+    // LOK_CALLBACK_TEXT_SELECTION_START and LOK_CALLBACK_TEXT_SELECTION_END
+    // must always precede LOK_CALLBACK_TEXT_SELECTION if present.
+    // Only these types should be present (see isUpdatedType()) and should be processed in this order.
+    static const int orderedUpdatedTypes[] = {
+        LOK_CALLBACK_TEXT_SELECTION_START, LOK_CALLBACK_TEXT_SELECTION_END, LOK_CALLBACK_TEXT_SELECTION };
+    // Only these types should be present (see isUpdatedTypePerViewId()) and (as of now)
+    // the order doesn't matter.
+    static const int orderedUpdatedTypesPerViewId[] = {
+        LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR,
+        LOK_CALLBACK_INVALIDATE_VIEW_CURSOR,
+        LOK_CALLBACK_TEXT_VIEW_SELECTION };
+
+    for( int type : orderedUpdatedTypes )
     {
-        if(m_updatedTypes[ type ])
+        if(o3tl::make_unsigned( type ) < updatedTypes.size() && updatedTypes[ type ])
         {
-            assert(isUpdatedType( type ));
             enqueueUpdatedType( type, viewShell, m_viewId );
         }
     }
-    for( const auto& it : m_updatedTypesPerViewId )
+    for( const auto& it : updatedTypesPerViewId )
     {
         int viewId = it.first;
         const std::vector<PerViewIdData>& types = it.second;
-        for( size_t type = 0; type < types.size(); ++type )
+        for( int type : orderedUpdatedTypesPerViewId )
         {
-            if(types[ type ].set)
+            if(o3tl::make_unsigned( type ) < types.size() && types[ type ].set)
             {
-                assert(isUpdatedTypePerViewId( type ));
                 SfxViewShell* sourceViewShell = viewShell;
                 const int sourceViewId = types[ type ].sourceViewId;
                 if( sourceViewId != m_viewId )
+                {
+                    assert(sourceViewId >= 0);
                     sourceViewShell = SfxViewShell::GetFirst( false,
                     [sourceViewId](const SfxViewShell* shell) { return shell->GetViewShellId().get() == sourceViewId; } );
+                }
                 if(sourceViewShell == nullptr)
                 {
                     SAL_INFO("lok", "View #" << sourceViewId << " no longer found for updated event [" << type << "]");
@@ -2155,13 +2186,13 @@ void CallbackFlushHandler::enqueueUpdatedTypes()
             }
         }
     }
-    m_updatedTypes.clear();
-    m_updatedTypesPerViewId.clear();
 }
 
 void CallbackFlushHandler::enqueueUpdatedType( int type, SfxViewShell* viewShell, int viewId )
 {
     OString payload = viewShell->getLOKPayload( type, viewId );
+    if(payload.isEmpty())
+        return; // No actual payload to send.
     CallbackData callbackData(payload.getStr(), viewId);
     m_queue1.emplace_back(type);
     m_queue2.emplace_back(callbackData);
@@ -2178,6 +2209,7 @@ void CallbackFlushHandler::Invoke()
 
     // Get any pending invalidate tile events. This will call our callbacks,
     // so it must be done before taking the mutex.
+    assert(m_viewId >= 0);
     if(SfxViewShell* viewShell = SfxViewShell::GetFirst( false,
         [this](const SfxViewShell* shell) { return shell->GetViewShellId().get() == m_viewId; } ))
     {
