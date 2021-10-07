@@ -1710,12 +1710,12 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         if ( pProp )
             pProp->second >>= nWidth;
 
-        text::WritingMode eWritingMode = text::WritingMode_LR_TB;
+        sal_Int16 nWritingMode = text::WritingMode2::LR_TB;
         pProp = getProperty( PROP_WRITING_MODE );
         if ( pProp )
-            pProp->second >>= eWritingMode;
+            pProp->second >>= nWritingMode;
 
-        sal_Int32 nTextAreaHeight = eWritingMode == text::WritingMode_LR_TB ?
+        sal_Int32 nTextAreaHeight = nWritingMode == text::WritingMode2::LR_TB ?
             nHeight - m_nTopMargin - m_nBottomMargin :
             nWidth - m_nLeftMargin - m_nRightMargin;
 
