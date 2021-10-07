@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9f32ee8_9871d2dc",
+        "filename": "sc/source/filter/excel/xestyle.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1463,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-07T14:29:46Z",
+      "side": 1,
+      "message": "Possibly declare nSpaceWidth as double right away? Then you will not need an explicit cast below.\n\nIf you prefer to not do this, please use static_cast instead of functional-style cast below.",
+      "range": {
+        "startLine": 1463,
+        "startChar": 12,
+        "endLine": 1463,
+        "endChar": 23
+      },
+      "revId": "5a643a55f10d8fbc0872ec8dbd4038535701de90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7589ca36_9e6756a0",
+        "filename": "sc/source/filter/excel/xestyle.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1466,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-07T14:29:46Z",
+      "side": 1,
+      "message": "I believe this check is not needed. You already guarantee this to never happen, in both constructor of XclRootData, and XclRoot::SetCharWidth.",
+      "revId": "5a643a55f10d8fbc0872ec8dbd4038535701de90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffc56e47_5c5f150d",
+        "filename": "sc/source/filter/excel/xestyle.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1472,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-07T14:29:46Z",
+      "side": 1,
+      "message": "I believe that you need to round the result. E.g., by adding 0.5.",
+      "revId": "5a643a55f10d8fbc0872ec8dbd4038535701de90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
