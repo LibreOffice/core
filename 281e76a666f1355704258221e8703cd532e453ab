@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00cb3db0_57986bf9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-07T13:22:40Z",
+      "side": 1,
+      "message": "We have o3tl::enumrange, that would be a better alternative to manual implementation.\n\nIf not using the o3tl machinery, then a comment is needed at the definitions of respective enums, stating that the order and contiguous values are required, as used in functions ...; and that if something is added to the enums, respective changes are needed in the functions.",
+      "revId": "281e76a666f1355704258221e8703cd532e453ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a009c18_32c72b55",
+        "filename": "svgio/source/svgreader/svgstyleattributes.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-07T13:22:40Z",
+      "side": 1,
+      "message": "A typo - missing trailing \u0027e\u0027",
+      "range": {
+        "startLine": 89,
+        "startChar": 23,
+        "endLine": 89,
+        "endChar": 30
+      },
+      "revId": "281e76a666f1355704258221e8703cd532e453ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2bfba95_6dcd0df5",
+        "filename": "svgio/source/svgreader/svgstyleattributes.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-07T13:22:40Z",
+      "side": 1,
+      "message": "I suppose it\u0027s still too verbose; if not using the o3tl machinery, some possible improvements:\n\n1. Avoid definition of \"min\"/\"max\", and compare passed argument directly to min/max enum values;\n2. If the check succeeds, do a one-liner operation like\n\n    aSource \u003d static_cast\u003cFontStretch\u003e(static_cast\u003cint\u003e(aSource) + 1);\n\n3. Return aSource.",
+      "revId": "281e76a666f1355704258221e8703cd532e453ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
