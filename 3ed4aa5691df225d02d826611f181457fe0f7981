@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b97144ee_e1b020f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-07T19:26:09Z",
+      "side": 1,
+      "message": "I just tried to find same kind of code as https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d9a0d52c95b6fd8639a56df2c2ceff07277253183",
+      "revId": "3ed4aa5691df225d02d826611f181457fe0f7981",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
