@@ -16,6 +16,24 @@
       "message": "This change looks strange. Indeed, you can\u0027t set pointer to OUString to point to a literal - but then you may create a OUString here, like you do, but let the pElementId *pointer* to point to either it or nullptr, like before?\n\nOr is there a guarantee that sPlaceholderTag is suitable at all times?",
       "revId": "908a81ad2ed7a873673a46e36c366269ff401bf9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "689c3228_61f5f536",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2111,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-07T20:28:03Z",
+      "side": 1,
+      "message": "A guarantee for sPlaceholderTag contents?\nsPlaceholderTag is an \u0027inline constexpr OUStringLiteral\u0027 inside svgfilter.hxx, so it should be fine.",
+      "parentUuid": "c294582d_aec28f50",
+      "revId": "908a81ad2ed7a873673a46e36c366269ff401bf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
