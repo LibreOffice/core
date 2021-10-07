@@ -183,10 +183,10 @@ void SVGAttributeWriter::AddColorAttr( const char* pColorAttrName,
     if( rColor.GetAlpha() < 255 && rColor.GetAlpha() > 0 )
         aColorOpacity = OUString::number( ImplRound( rColor.GetAlpha() / 255.0 ) );
 
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, pColorAttrName, aColor );
+    mrExport.AddAttributeASCII( XML_NAMESPACE_NONE, pColorAttrName, aColor );
 
     if( !aColorOpacity.isEmpty() && mrExport.IsUseOpacity() )
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, pColorOpacityAttrName, aColorOpacity );
+        mrExport.AddAttributeASCII( XML_NAMESPACE_NONE, pColorOpacityAttrName, aColorOpacity );
 }
 
 
