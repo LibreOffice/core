@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9efaa824_7b536f3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-10-07T08:03:54Z",
+      "side": 1,
+      "message": "this will be done using GetDragData per view",
+      "revId": "0b9591aa88e2e2e9853c6417ce765c2e5e0a3d39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
