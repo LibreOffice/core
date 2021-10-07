@@ -742,7 +742,7 @@ namespace xmloff
             // add the attributes if necessary and possible
             if (pCurrentValuePropertyName && (CCAFlags::CurrentValue & m_nIncludeCommon))
             {
-                static const char* pCurrentValueAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCAFlags::CurrentValue);
+                static const OUString pCurrentValueAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCAFlags::CurrentValue);
                 // don't export the current-value if this value originates from a data binding
                 // #i26944#
                 if ( controlHasActiveDataBinding() )
@@ -760,7 +760,7 @@ namespace xmloff
 
             if (pValuePropertyName && (CCAFlags::Value & m_nIncludeCommon))
             {
-                static const char* pValueAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Value);
+                static const OUString pValueAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Value);
                 static const sal_uInt16 nValueAttributeNamespaceKey = OAttributeMetaData::getCommonControlAttributeNamespace(CCAFlags::Value);
                 exportGenericPropertyAttribute(
                     nValueAttributeNamespaceKey,
@@ -1164,8 +1164,8 @@ namespace xmloff
                 "OControlExport::exportCommonControlAttributes: no property found for the max value attribute!");
 
             // add the two attributes
-            static const char* pMinValueAttributeName = OAttributeMetaData::getSpecialAttributeName(SCAFlags::MinValue);
-            static const char* pMaxValueAttributeName = OAttributeMetaData::getSpecialAttributeName(SCAFlags::MaxValue);
+            static const OUString pMinValueAttributeName = OAttributeMetaData::getSpecialAttributeName(SCAFlags::MinValue);
+            static const OUString pMaxValueAttributeName = OAttributeMetaData::getSpecialAttributeName(SCAFlags::MaxValue);
             static const sal_uInt16 nMinValueNamespaceKey = OAttributeMetaData::getSpecialAttributeNamespace(SCAFlags::MinValue);
             static const sal_uInt16 nMaxValueNamespaceKey = OAttributeMetaData::getSpecialAttributeNamespace(SCAFlags::MaxValue);
 
