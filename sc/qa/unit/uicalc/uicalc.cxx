@@ -933,6 +933,9 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119793)
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_ESCAPE);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_ESCAPE);
+    Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();

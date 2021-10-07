@@ -138,6 +138,7 @@ public:
     void testMoveShapeHandle();
     void testDeleteTable();
     void testPasteUndo();
+    void testShapeEditInMultipleViews();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testCreateDestroy);
@@ -196,7 +197,7 @@ public:
     CPPUNIT_TEST(testMoveShapeHandle);
     CPPUNIT_TEST(testDeleteTable);
     CPPUNIT_TEST(testPasteUndo);
-
+    CPPUNIT_TEST(testShapeEditInMultipleViews);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1327,6 +1328,38 @@ void SdTiledRenderingTest::testUndoLimiting()
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(pViewShell1->GetView()->IsTextEdit());
 
+    // View2 UNDO stack should be empty
+    {
+        SfxRequest aReq2(SID_UNDO, SfxCallMode::SLOT, pXImpressDocument->GetDocShell()->GetDoc()->GetPool());
+        aReq2.AppendItem(SfxUInt16Item(SID_UNDO, 1));
+        pViewShell2->ExecuteSlot(aReq2);
+        const auto* pReturnValue = aReq2.GetReturnValue();
+        CPPUNIT_ASSERT(!pReturnValue);
+    }
+
+    // View1 can UNDO
+    {
+        SfxRequest aReq1(SID_UNDO, SfxCallMode::SLOT, pXImpressDocument->GetDocShell()->GetDoc()->GetPool());
+        aReq1.AppendItem(SfxUInt16Item(SID_UNDO, 1));
+        pViewShell1->ExecuteSlot(aReq1);
+        CPPUNIT_ASSERT(aReq1.IsDone());
+    }
+
+    // View1 can REDO
+    {
+        SfxRequest aReq1(SID_REDO, SfxCallMode::SLOT, pXImpressDocument->GetDocShell()->GetDoc()->GetPool());
+        aReq1.AppendItem(SfxUInt16Item(SID_REDO, 1));
+        pViewShell1->ExecuteSlot(aReq1);
+        CPPUNIT_ASSERT(aReq1.IsDone());
+    }
+
+    // Exit text edit mode
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(!pViewShell1->GetView()->IsTextEdit());
+
     // Now check view2 cannot undo actions.
     {
         SfxRequest aReq2(SID_UNDO, SfxCallMode::SLOT, pXImpressDocument->GetDocShell()->GetDoc()->GetPool());
@@ -2064,11 +2097,19 @@ void SdTiledRenderingTest::testDisableUndoRepair()
 {
     // Load the document.
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+
+    // Create View 1
     SfxViewShell* pView1 = SfxViewShell::Current();
+    sd::ViewShell* pViewShell1 = pXImpressDocument->GetDocShell()->GetViewShell();
     int nView1 = SfxLokHelper::getView();
+
+    // Create View 2
     SfxLokHelper::createView();
     SfxViewShell* pView2 = SfxViewShell::Current();
+    sd::ViewShell* pViewShell2 = pXImpressDocument->GetDocShell()->GetViewShell();
     int nView2 = SfxLokHelper::getView();
+
+    // Check UNDO is disabled
     {
         std::unique_ptr<SfxPoolItem> pItem1;
         std::unique_ptr<SfxPoolItem> pItem2;
@@ -2083,15 +2124,24 @@ void SdTiledRenderingTest::testDisableUndoRepair()
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'h', 0);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'h', 0);
     Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pViewShell1->GetView()->IsTextEdit());
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pViewShell1->GetView()->IsTextEdit());
+
+    // Check
     {
         std::unique_ptr<SfxPoolItem> xItem1;
-        std::unique_ptr<SfxPoolItem> xItem2;
         pView1->GetViewFrame()->GetBindings().QueryState(SID_UNDO, xItem1);
+        const auto* pUInt32Item1 = dynamic_cast<const SfxUInt32Item*>(xItem1.get());
+        CPPUNIT_ASSERT(!pUInt32Item1);
+
+        std::unique_ptr<SfxPoolItem> xItem2;
         pView2->GetViewFrame()->GetBindings().QueryState(SID_UNDO, xItem2);
-        CPPUNIT_ASSERT(!dynamic_cast< const SfxUInt32Item* >(xItem1.get()));
-        const SfxUInt32Item* pUInt32Item = dynamic_cast<const SfxUInt32Item*>(xItem2.get());
-        CPPUNIT_ASSERT(pUInt32Item);
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), pUInt32Item->GetValue());
+        const auto* pUInt32Item2 = dynamic_cast<const SfxUInt32Item*>(xItem2.get());
+        CPPUNIT_ASSERT(pUInt32Item2);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), pUInt32Item2->GetValue());
     }
 
     // Insert a character in the second view.
@@ -2102,15 +2152,23 @@ void SdTiledRenderingTest::testDisableUndoRepair()
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', 0);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'c', 0);
     Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pViewShell2->GetView()->IsTextEdit());
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pViewShell2->GetView()->IsTextEdit());
+
+    // Check
     {
         std::unique_ptr<SfxPoolItem> xItem1;
-        std::unique_ptr<SfxPoolItem> xItem2;
         pView1->GetViewFrame()->GetBindings().QueryState(SID_UNDO, xItem1);
-        pView2->GetViewFrame()->GetBindings().QueryState(SID_UNDO, xItem2);
-        CPPUNIT_ASSERT(!dynamic_cast< const SfxUInt32Item* >(xItem2.get()));
         const SfxUInt32Item* pUInt32Item = dynamic_cast<const SfxUInt32Item*>(xItem1.get());
         CPPUNIT_ASSERT(pUInt32Item);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), pUInt32Item->GetValue());
+
+        std::unique_ptr<SfxPoolItem> xItem2;
+        pView2->GetViewFrame()->GetBindings().QueryState(SID_UNDO, xItem2);
+        CPPUNIT_ASSERT(!dynamic_cast< const SfxUInt32Item* >(xItem2.get()));
     }
 }
 
@@ -2127,17 +2185,20 @@ void SdTiledRenderingTest::testDocumentRepair()
     SfxLokHelper::createView();
     SfxViewShell* pView2 = SfxViewShell::Current();
     int nView2 = SfxLokHelper::getView();
+    sd::ViewShell* pViewShell2 = pXImpressDocument->GetDocShell()->GetViewShell();
+
     CPPUNIT_ASSERT(pView1 != pView2);
     {
         std::unique_ptr<SfxPoolItem> xItem1;
-        std::unique_ptr<SfxPoolItem> xItem2;
         pView1->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, xItem1);
-        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, xItem2);
         const SfxBoolItem* pItem1 = dynamic_cast<const SfxBoolItem*>(xItem1.get());
-        const SfxBoolItem* pItem2 = dynamic_cast<const SfxBoolItem*>(xItem2.get());
         CPPUNIT_ASSERT(pItem1);
-        CPPUNIT_ASSERT(pItem2);
         CPPUNIT_ASSERT_EQUAL(false, pItem1->GetValue());
+
+        std::unique_ptr<SfxPoolItem> xItem2;
+        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, xItem2);
+        const SfxBoolItem* pItem2 = dynamic_cast<const SfxBoolItem*>(xItem2.get());
+        CPPUNIT_ASSERT(pItem2);
         CPPUNIT_ASSERT_EQUAL(false, pItem2->GetValue());
     }
 
@@ -2149,16 +2210,23 @@ void SdTiledRenderingTest::testDocumentRepair()
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', 0);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'c', 0);
     Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pViewShell2->GetView()->IsTextEdit());
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pViewShell2->GetView()->IsTextEdit());
+
     {
         std::unique_ptr<SfxPoolItem> xItem1;
-        std::unique_ptr<SfxPoolItem> xItem2;
         pView1->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, xItem1);
-        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, xItem2);
         const SfxBoolItem* pItem1 = dynamic_cast<const SfxBoolItem*>(xItem1.get());
-        const SfxBoolItem* pItem2 = dynamic_cast<const SfxBoolItem*>(xItem2.get());
         CPPUNIT_ASSERT(pItem1);
-        CPPUNIT_ASSERT(pItem2);
         CPPUNIT_ASSERT_EQUAL(true, pItem1->GetValue());
+
+        std::unique_ptr<SfxPoolItem> xItem2;
+        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, xItem2);
+        const SfxBoolItem* pItem2 = dynamic_cast<const SfxBoolItem*>(xItem2.get());
+        CPPUNIT_ASSERT(pItem2);
         CPPUNIT_ASSERT_EQUAL(true, pItem2->GetValue());
     }
 }
@@ -2683,7 +2751,6 @@ void SdTiledRenderingTest::testMoveShapeHandle()
         CPPUNIT_ASSERT_EQUAL(x-1, oldX);
         CPPUNIT_ASSERT_EQUAL(y-1, oldY);
     }
-
 }
 
 void SdTiledRenderingTest::testPasteUndo()
@@ -2718,6 +2785,153 @@ void SdTiledRenderingTest::testPasteUndo()
     // i.e. the cursor position after undo was at the end of the line, not at the start, as
     // expected.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aSelection.nStartPos);
+}
+
+void SdTiledRenderingTest::testShapeEditInMultipleViews()
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("TextBoxAndRect.odg");
+    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    // Create view 1
+    const int nView1 = SfxLokHelper::getView();
+    sd::ViewShell* pViewShell1 = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView1 = pViewShell1->GetView();
+    Scheduler::ProcessEventsToIdle();
+
+    // Create view 2
+    SfxLokHelper::createView();
+    const int nView2 = SfxLokHelper::getView();
+    CPPUNIT_ASSERT(nView1 != nView2);
+
+    sd::ViewShell* pViewShell2 = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView2 = pViewShell2->GetView();
+    Scheduler::ProcessEventsToIdle();
+
+    // Switch to view 1
+    SfxLokHelper::setView(nView1);
+
+    SdPage* pPage1 = pViewShell1->GetActualPage();
+
+    SdrObject* pTextBoxObject = pPage1->GetObj(0);
+    CPPUNIT_ASSERT_EQUAL(OUString("Text Box"), pTextBoxObject->GetName());
+
+    SdrObject* pRectangleObject = pPage1->GetObj(1);
+    CPPUNIT_ASSERT_EQUAL(OUString("Rect"), pRectangleObject->GetName());
+
+    SdrObject* pTableObject = pPage1->GetObj(2);
+    CPPUNIT_ASSERT_EQUAL(OUString("Table1"), pTableObject->GetName());
+
+    // 2 shapes - "Text Box" and "Rect"
+    // Scenario 1: View1 - "Text Box" enters text edit mode, View 2 - moves the "Rect" around
+    {
+        pView1->SdrBeginTextEdit(pTextBoxObject);
+        CPPUNIT_ASSERT_EQUAL(true, pView1->IsTextEdit());
+        CPPUNIT_ASSERT_EQUAL(false, pView2->IsTextEdit());
+
+        // Mark rectangle object
+        pView2->MarkObj(pRectangleObject, pView2->GetSdrPageView());
+
+        // Check the initial position of the object
+        tools::Rectangle aRectangle = pRectangleObject->GetLogicRect();
+        CPPUNIT_ASSERT_EQUAL(6250L, aRectangle.TopLeft().X());
+        CPPUNIT_ASSERT_EQUAL(7000L, aRectangle.TopLeft().Y());
+        CPPUNIT_ASSERT_EQUAL(6501L, aRectangle.GetWidth());
+        CPPUNIT_ASSERT_EQUAL(4501L, aRectangle.GetHeight());
+
+        // On View2 - Move handle 0 on the shape to a new mosition - resize
+        Point aNewPosition = aRectangle.TopLeft() + Point(-1250, -1000);
+        pView2->MoveShapeHandle(0, aNewPosition, -1);
+        Scheduler::ProcessEventsToIdle();
+
+        // Check the object has a new size
+        aRectangle = pRectangleObject->GetLogicRect();
+        CPPUNIT_ASSERT_EQUAL(5000L, aRectangle.TopLeft().X());
+        CPPUNIT_ASSERT_EQUAL(6000L, aRectangle.TopLeft().Y());
+        CPPUNIT_ASSERT_EQUAL(7751L, aRectangle.GetWidth());
+        CPPUNIT_ASSERT_EQUAL(5501L, aRectangle.GetHeight());
+
+        // View1 is still in text edit mode...
+        CPPUNIT_ASSERT_EQUAL(true, pView1->IsTextEdit());
+        CPPUNIT_ASSERT_EQUAL(false, pView2->IsTextEdit());
+
+        // On View2 - relative move the shape to a different position
+        pView2->MoveMarkedObj(Size(1000, 2000), /*bCopy=*/false);
+        Scheduler::ProcessEventsToIdle();
+
+        // Check the object is at a different position
+        aRectangle = pRectangleObject->GetLogicRect();
+        CPPUNIT_ASSERT_EQUAL(6000L, aRectangle.TopLeft().X());
+        CPPUNIT_ASSERT_EQUAL(8000L, aRectangle.TopLeft().Y());
+        CPPUNIT_ASSERT_EQUAL(7751L, aRectangle.GetWidth());
+        CPPUNIT_ASSERT_EQUAL(5501L, aRectangle.GetHeight());
+
+        // View1 is still in text edit mode...
+        CPPUNIT_ASSERT_EQUAL(true, pView1->IsTextEdit());
+        CPPUNIT_ASSERT_EQUAL(false, pView2->IsTextEdit());
+
+        // End Text edit
+        pView1->SdrEndTextEdit();
+
+        // Check that both views exited the text edit mode
+        CPPUNIT_ASSERT_EQUAL(false, pView1->IsTextEdit());
+        CPPUNIT_ASSERT_EQUAL(false, pView2->IsTextEdit());
+    }
+
+    // 2 shapes - "Text Box" and "Rect"
+    // Scenario 2: View1 - "Text Box" enters text edit mode, View 2 - moves the "Text Box" around
+    {
+        pView1->SdrBeginTextEdit(pTextBoxObject);
+        CPPUNIT_ASSERT_EQUAL(true, pView1->IsTextEdit());
+        CPPUNIT_ASSERT_EQUAL(false, pView2->IsTextEdit());
+
+        // Mark rectangle object
+        pView2->MarkObj(pTextBoxObject, pView2->GetSdrPageView());
+
+        // Check the initial position of the object
+        tools::Rectangle aRectangle = pTextBoxObject->GetLogicRect();
+        CPPUNIT_ASSERT_EQUAL(2250L, aRectangle.TopLeft().X());
+        CPPUNIT_ASSERT_EQUAL(2000L, aRectangle.TopLeft().Y());
+        CPPUNIT_ASSERT_EQUAL(4501L, aRectangle.GetWidth());
+        CPPUNIT_ASSERT_EQUAL(2001L, aRectangle.GetHeight());
+
+        // On View2 - Move handle 0 on the shape to a new mosition - resize
+        Point aNewPosition = aRectangle.TopLeft() + Point(-1250, -1000);
+        pView2->MoveShapeHandle(0, aNewPosition, -1);
+        Scheduler::ProcessEventsToIdle();
+
+        // Check the object has a new size
+        aRectangle = pTextBoxObject->GetLogicRect();
+        CPPUNIT_ASSERT_EQUAL(1000L, aRectangle.TopLeft().X());
+        CPPUNIT_ASSERT_EQUAL(1000L, aRectangle.TopLeft().Y());
+        CPPUNIT_ASSERT_EQUAL(4990L, aRectangle.GetWidth());
+        CPPUNIT_ASSERT_EQUAL(2175L, aRectangle.GetHeight());
+
+        // View1 is still in text edit mode...
+        CPPUNIT_ASSERT_EQUAL(true, pView1->IsTextEdit());
+        CPPUNIT_ASSERT_EQUAL(false, pView2->IsTextEdit());
+
+        // On View2 - relative move the shape to a different position
+        pView2->MoveMarkedObj(Size(1000, 2000), /*bCopy=*/false);
+        Scheduler::ProcessEventsToIdle();
+
+        // Check the object is at a different position
+        aRectangle = pTextBoxObject->GetLogicRect();
+        CPPUNIT_ASSERT_EQUAL(2000L, aRectangle.TopLeft().X());
+        CPPUNIT_ASSERT_EQUAL(3000L, aRectangle.TopLeft().Y());
+        CPPUNIT_ASSERT_EQUAL(4990L, aRectangle.GetWidth());
+        CPPUNIT_ASSERT_EQUAL(2175L, aRectangle.GetHeight());
+
+        // View1 is still in text edit mode...
+        CPPUNIT_ASSERT_EQUAL(true, pView1->IsTextEdit());
+        CPPUNIT_ASSERT_EQUAL(false, pView2->IsTextEdit());
+
+        // End Text edit
+        pView1->SdrEndTextEdit();
+
+        // Check that both views exited the text edit mode
+        CPPUNIT_ASSERT_EQUAL(false, pView1->IsTextEdit());
+        CPPUNIT_ASSERT_EQUAL(false, pView2->IsTextEdit());
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdTiledRenderingTest);
