@@ -1304,6 +1304,7 @@ void SwTiledRenderingTest::testUndoShapeLimiting()
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
+    pWrtShell2->EndTextEdit();
 
     // Assert that the first view can't and the second view can undo the insertion.
     SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
@@ -1314,7 +1315,6 @@ void SwTiledRenderingTest::testUndoShapeLimiting()
     rUndoManager.SetView(&pWrtShell2->GetView());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rUndoManager.GetUndoActionCount());
 
-    pWrtShell2->EndTextEdit();
     rUndoManager.SetView(nullptr);
 
     SfxLokHelper::setView(nView1);
@@ -1419,11 +1419,14 @@ void SwTiledRenderingTest::testShapeTextUndoShells()
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
+    pWrtShell->EndTextEdit();
 
     // Make sure that the undo item remembers who created it.
     SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rUndoManager.GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rUndoManager.GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("Edit text of Shape 'Shape1'"), rUndoManager.GetUndoActionComment(0));
+
     // This was -1: the view shell id for the undo action wasn't known.
     CPPUNIT_ASSERT_EQUAL(ViewShellId(nView1), rUndoManager.GetUndoAction()->GetViewShellId());
 }
@@ -1450,7 +1453,14 @@ void SwTiledRenderingTest::testShapeTextUndoGroupShells()
     // Make sure that the undo item remembers who created it.
     SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rUndoManager.GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(size_t(0), rUndoManager.GetUndoActionCount());
+
+    pWrtShell->EndTextEdit();
+    pWrtShell->GetView().BeginTextEdit(pObject, pView->GetSdrPageView(), pWrtShell->GetWin());
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rUndoManager.GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("Edit text of Shape 'Shape1'"), rUndoManager.GetUndoActionComment(0));
+
     // This was -1: the view shell id for the (top) undo list action wasn't known.
     CPPUNIT_ASSERT_EQUAL(ViewShellId(nView1), rUndoManager.GetUndoAction()->GetViewShellId());
 
