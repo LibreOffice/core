@@ -263,7 +263,7 @@ public:
          */
         bool insert(std::unique_ptr<ScDBData> p);
 
-        void erase(const iterator& itr);
+        iterator erase(const iterator& itr);
         bool empty() const;
         size_t size() const;
         bool operator== (const NamedDBs& r) const;
@@ -295,7 +295,7 @@ public:
         void deleteOnTab(SCTAB nTab);
         ScDBData* getByRange(const ScRange& rRange);
         void insert(ScDBData* p);
-        void erase(const iterator& itr);
+        iterator erase(const iterator& itr);
         bool empty() const;
         bool has( const ScDBData* p ) const;
         bool operator== (const AnonDBs& r) const;

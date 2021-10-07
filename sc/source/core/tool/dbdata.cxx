@@ -1175,9 +1175,9 @@ bool ScDBCollection::NamedDBs::insert(std::unique_ptr<ScDBData> pData)
     return r.second;
 }
 
-void ScDBCollection::NamedDBs::erase(const iterator& itr)
+ScDBCollection::NamedDBs::iterator ScDBCollection::NamedDBs::erase(const iterator& itr)
 {
-    m_DBs.erase(itr);
+    return m_DBs.erase(itr);
 }
 
 bool ScDBCollection::NamedDBs::empty() const
@@ -1256,8 +1256,9 @@ void ScDBCollection::AnonDBs::insert(ScDBData* p)
     m_DBs.push_back(std::unique_ptr<ScDBData>(p));
 }
 
-void ScDBCollection::AnonDBs::erase(const iterator& itr) {
-    m_DBs.erase(itr);
+ScDBCollection::AnonDBs::iterator ScDBCollection::AnonDBs::erase(const iterator& itr)
+{
+    return m_DBs.erase(itr);
 }
 
 bool ScDBCollection::AnonDBs::empty() const
@@ -1461,7 +1462,7 @@ void ScDBCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
         // Delete the database range, if some part of the reference became invalid.
         if (it->get()->UpdateReference(&rDoc, eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2,
                                        nTab2, nDx, nDy, nDz))
-            maNamedDBs.erase(it++);
+            it = maNamedDBs.erase(it);
         else
             ++it;
     }
@@ -1470,7 +1471,7 @@ void ScDBCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
         // Delete the database range, if some part of the reference became invalid.
         if (it->get()->UpdateReference(&rDoc, eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2,
                                        nTab2, nDx, nDy, nDz))
-            maAnonDBs.erase(it++);
+            it = maAnonDBs.erase(it);
         else
             ++it;
     }
