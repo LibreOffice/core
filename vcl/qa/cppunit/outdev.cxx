@@ -99,6 +99,7 @@ public:
     void testDrawGradient_polygon_axial();
     void testDrawGradient_polygon_axial_printable();
     void testDrawGradient_rect_complex();
+    void testAddGradientActions();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
     CPPUNIT_TEST(testVirtualDevice);
@@ -157,6 +158,7 @@ public:
     CPPUNIT_TEST(testDrawGradient_rect_axial);
     CPPUNIT_TEST(testDrawGradient_polygon_linear);
     CPPUNIT_TEST(testDrawGradient_rect_complex);
+    CPPUNIT_TEST(testAddGradientActions);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -2543,6 +2545,48 @@ void VclOutdevTest::testDrawGradient_rect_complex()
     MetaComplexGradientAction* pComplexAction = dynamic_cast<MetaComplexGradientAction*>(pAction);
 
     TestComplexStripes(pComplexAction);
+}
+
+void VclOutdevTest::testAddGradientActions()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    pVDev->SetOutputSizePixel(Size(100, 100));
+
+    Gradient aGradient(GradientStyle::Axial, COL_RED, COL_WHITE);
+    aGradient.SetBorder(100);
+
+    tools::Rectangle aRect(Point(10, 10), Size(40, 40));
+
+    GDIMetaFile aMtf;
+    aMtf.AddAction(new MetaGradientContainerAction(
+        aRect, aGradient, pVDev->GetGradientStepCount(aGradient, aRect, true)));
+
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a gradient container action",
+                                 MetaActionType::GRADIENTCONTAINER, pAction->GetType());
+    MetaGradientContainerAction* pContainerAction
+        = dynamic_cast<MetaGradientContainerAction*>(pAction);
+
+    pAction = pContainerAction->GetAction(0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a push action", MetaActionType::PUSH, pAction->GetType());
+
+    pAction = pContainerAction->GetAction(1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a MetaISectRectClipRegionAction action",
+                                 MetaActionType::ISECTRECTCLIPREGION, pAction->GetType());
+
+    pAction = pContainerAction->GetAction(2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a line color action", MetaActionType::LINECOLOR,
+                                 pAction->GetType());
+
+    pAction = pContainerAction->GetAction(3);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a linear gradient action", MetaActionType::LINEARGRADIENT,
+                                 pAction->GetType());
+    MetaLinearGradientAction* pLinearAction = dynamic_cast<MetaLinearGradientAction*>(pAction);
+
+    TestAxialStripes(pLinearAction);
+
+    pAction = pContainerAction->GetAction(4);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a pop action", MetaActionType::POP, pAction->GetType());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclOutdevTest);
