@@ -33,6 +33,23 @@
       "message": "Please see how all the other strings are used in the file. They are passed to SVG export\u0027s AddAttribute, which internally converts them from ASCII to OUString; also there is an overload taking OUString directly (which is used for the strings that are already OUString). So I suppose that there\u0027s a value to make all of these OUStringLiterals, which will eliminate the conversion cost completely.",
       "revId": "a2749bc47d0d112210261a20d440dbc198121bda",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71667dd1_3237ff50",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-07T06:01:40Z",
+      "side": 1,
+      "message": "And that would additionally eliminate the need to randomly re-arrange the strings.",
+      "revId": "a2749bc47d0d112210261a20d440dbc198121bda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
