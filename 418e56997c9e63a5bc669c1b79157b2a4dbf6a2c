@@ -16,6 +16,24 @@
       "message": "To make Firebird appear in LO, you must enable experimental features.\nIn Tools/Options/Advanced, enable \"Enable experimental features (may be unstable)",
       "revId": "418e56997c9e63a5bc669c1b79157b2a4dbf6a2c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d090487b_c510f9db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003336
+      },
+      "writtenOn": "2021-10-07T19:41:46Z",
+      "side": 1,
+      "message": "Yes, I Know.\nI send this patch, because just adding the option of user and password, you can connect to a server if you put the correct connection string in the place of file name. That demonstrate that we only need an apropiate page in the connection wizard, and I\u0027m working on it.",
+      "parentUuid": "672daa5a_335f2a6e",
+      "revId": "418e56997c9e63a5bc669c1b79157b2a4dbf6a2c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
