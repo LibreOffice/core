@@ -3983,18 +3983,28 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     // handle potential interaction
     if (gImpl && aCommand == ".uno:Save")
     {
-        // Check if saving a PDF file
         OUString aMimeType = lcl_getCurrentDocumentMimeType(pDocument);
-        if (pDocSh->IsModified() && aMimeType == "application/pdf")
+        if (pDocSh->IsModified() && (aMimeType == "application/pdf" || aMimeType == "application/x-t602"))
         {
-            // If we have a PDF file (for saving annotations for example), we need
-            // to run save-as to the same file as the opened document. Plain save
-            // doesn't work as the PDF is not a "native" format.
+            std::string extension;
+            bool takeOwnership = false;
+            if (aMimeType == "application/pdf")
+                // If we have a PDF file (for saving annotations for example), we need
+                // to run save-as to the same file as the opened document. Plain save
+                // doesn't work as the PDF is not a "native" format.
+                extension = "pdf";
+            else if (aMimeType == "application/x-t602")
+            {
+                // txt files are open in this format,
+                // we should run a save-as since we cannot save to this format directly
+                // it only appears first on first load with 0 byte files, after save as it becomes "Text" format
+                extension = "txt";
+                takeOwnership = true;
+            }
             uno::Reference<frame::XStorable> xStorable(pDocument->mxComponent, uno::UNO_QUERY_THROW);
             OUString aURL = xStorable->getLocation();
             OString aURLUtf8 = OUStringToOString(aURL, RTL_TEXTENCODING_UTF8);
-            bool bResult = doc_saveAs(pThis, aURLUtf8.getStr(), "pdf", nullptr);
-
+            bool bResult = doc_saveAs(pThis, aURLUtf8.getStr(), extension.c_str(), takeOwnership ? "TakeOwnership" : nullptr);
             // Send the result of save
             tools::JsonWriter aJson;
             aJson.put("commandName", pCommand);
@@ -4002,7 +4012,6 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
             pDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.extractData());
             return;
         }
-
 
         rtl::Reference<LOKInteractionHandler> const pInteraction(
             new LOKInteractionHandler("save", gImpl, pDocument));
