@@ -66,14 +66,9 @@ public:
 
     // DAV methods
 
-
-    // NOT USED
-    /*
     virtual void OPTIONS( const OUString & inPath,
-                          DAVCapabilities & outCapabilities,
-                          const DAVRequestEnvironment & rEnv )
-        throw( DAVException ) = 0;
-    */
+                          DAVOptions & rOptions,
+                          const DAVRequestEnvironment & rEnv ) = 0;
 
     // allprop & named
     /// @throws DAVException

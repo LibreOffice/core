@@ -15,6 +15,7 @@
 
 #include <comphelper/attributelist.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <comphelper/string.hxx>
 
 #include <officecfg/Inet.hxx>
 
@@ -1097,6 +1098,80 @@ auto CurlProcessor::ProcessRequest(
         }
         throw; // everything else: re-throw
     }
+}
+
+auto CurlSession::OPTIONS(OUString const& rURIReference,
+
+                          DAVOptions& rOptions, DAVRequestEnvironment const& rEnv) -> void
+{
+    SAL_INFO("ucb.ucp.webdav.curl", "OPTIONS: " << rURIReference);
+
+    rOptions.reset();
+
+    ::std::vector<OUString> const headerNames{ "allow", "dav" };
+    DAVResource result;
+    ::std::pair<::std::vector<OUString> const&, DAVResource&> const headers(headerNames, result);
+
+    {
+        // scope to release m_Mutex before accessing LockStore
+        Guard g(m_Mutex, [&]() {
+            auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_NOBODY, 0L);
+            assert(rc == CURLE_OK);
+            (void)rc;
+            rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_CUSTOMREQUEST, nullptr);
+            assert(rc == CURLE_OK);
+        });
+
+        // need this to prevent calling write_callback
+        auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_NOBODY, 1L);
+        assert(rc == CURLE_OK);
+        rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_CUSTOMREQUEST, "OPTIONS");
+        if (rc != CURLE_OK)
+        {
+            SAL_WARN("ucb.ucp.webdav.curl", "CURLOPT_CUSTOMREQUEST failed: " << GetErrorString(rc));
+            throw DAVException(DAVException::DAV_SESSION_CREATE,
+                               ConnectionEndPointString(m_URI.GetHost(), m_URI.GetPort()));
+        }
+
+        CurlProcessor::ProcessRequest(g, *this, rURIReference, &rEnv, nullptr, nullptr, nullptr,
+                                      &headers);
+    }
+
+    for (auto const& it : result.properties)
+    {
+        OUString value;
+        it.Value >>= value;
+        SAL_INFO("ucb.ucp.webdav.curl", "OPTIONS: header: " << it.Name << ": " << value);
+        if (it.Name.equalsIgnoreAsciiCase("allow"))
+        {
+            rOptions.setAllowedMethods(value);
+        }
+        else if (it.Name.equalsIgnoreAsciiCase("dav"))
+        {
+            // see <http://tools.ietf.org/html/rfc4918#section-10.1>,
+            // <http://tools.ietf.org/html/rfc4918#section-18>,
+            // and <http://tools.ietf.org/html/rfc7230#section-3.2>
+            // we detect the class (1, 2 and 3), other elements (token, URL)
+            // are not used for now
+            auto const list(::comphelper::string::convertCommaSeparated(value));
+            for (OUString const& v : list)
+            {
+                if (v == "1")
+                {
+                    rOptions.setClass1();
+                }
+                else if (v == "2")
+                {
+                    rOptions.setClass2();
+                }
+                else if (v == "3")
+                {
+                    rOptions.setClass3();
+                }
+            }
+        }
+    }
+    rOptions.setResourceFound();
 }
 
 auto CurlProcessor::PropFind(
