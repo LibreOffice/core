@@ -872,7 +872,7 @@ namespace {
 
 struct ButtonOrder
 {
-    const char * m_aType;
+    std::string_view m_aType;
     int m_nPriority;
 };
 
@@ -883,26 +883,26 @@ int getButtonPriority(std::string_view rType)
     static const size_t N_TYPES = 8;
     static const ButtonOrder aDiscardCancelSave[N_TYPES] =
     {
-        { "/discard", 0 },
-        { "/cancel", 1 },
-        { "/close", 1 },
-        { "/no", 2 },
-        { "/open", 3 },
-        { "/save", 3 },
-        { "/yes", 3 },
-        { "/ok", 3 }
+        { "discard", 0 },
+        { "cancel", 1 },
+        { "close", 1 },
+        { "no", 2 },
+        { "open", 3 },
+        { "save", 3 },
+        { "yes", 3 },
+        { "ok", 3 }
     };
 
     static const ButtonOrder aSaveDiscardCancel[N_TYPES] =
     {
-        { "/open", 0 },
-        { "/save", 0 },
-        { "/yes", 0 },
-        { "/ok", 0 },
-        { "/discard", 1 },
-        { "/no", 1 },
-        { "/cancel", 2 },
-        { "/close", 2 }
+        { "open", 0 },
+        { "save", 0 },
+        { "yes", 0 },
+        { "ok", 0 },
+        { "discard", 1 },
+        { "no", 1 },
+        { "cancel", 2 },
+        { "close", 2 }
     };
 
     const ButtonOrder* pOrder = &aDiscardCancelSave[0];
@@ -918,7 +918,7 @@ int getButtonPriority(std::string_view rType)
 
     for (size_t i = 0; i < N_TYPES; ++i, ++pOrder)
     {
-        if (o3tl::ends_with(rType, pOrder->m_aType))
+        if (rType == pOrder->m_aType)
             return pOrder->m_nPriority;
     }
 

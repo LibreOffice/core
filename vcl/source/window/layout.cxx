@@ -746,33 +746,33 @@ namespace {
 
 struct ButtonOrder
 {
-    const char* m_aType;
+    std::u16string_view m_aType;
     int m_nPriority;
 };
 
 }
 
-static int getButtonPriority(std::string_view rType)
+static int getButtonPriority(std::u16string_view rType)
 {
     static const size_t N_TYPES = 6;
     static const ButtonOrder aDiscardCancelSave[N_TYPES] =
     {
-        { "/discard", 0 },
-        { "/cancel", 1 },
-        { "/no", 2 },
-        { "/save", 3 },
-        { "/yes", 3 },
-        { "/ok", 3 }
+        { u"discard", 0 },
+        { u"cancel", 1 },
+        { u"no", 2 },
+        { u"save", 3 },
+        { u"yes", 3 },
+        { u"ok", 3 }
     };
 
     static const ButtonOrder aSaveDiscardCancel[N_TYPES] =
     {
-        { "/save", 0 },
-        { "/yes", 0 },
-        { "/ok", 0 },
-        { "/discard", 1 },
-        { "/no", 1 },
-        { "/cancel", 2 }
+        { u"save", 0 },
+        { u"yes", 0 },
+        { u"ok", 0 },
+        { u"discard", 1 },
+        { u"no", 1 },
+        { u"cancel", 2 }
     };
 
     const ButtonOrder* pOrder = &aDiscardCancelSave[0];
@@ -788,7 +788,7 @@ static int getButtonPriority(std::string_view rType)
 
     for (size_t i = 0; i < N_TYPES; ++i, ++pOrder)
     {
-        if (o3tl::ends_with(rType, pOrder->m_aType))
+        if (rType == pOrder->m_aType)
             return pOrder->m_nPriority;
     }
 
@@ -839,7 +839,7 @@ bool sortButtons::operator()(const vcl::Window *pA, const vcl::Window *pB) const
     }
 
     //now order within groups according to platform rules
-    return getButtonPriority(pA->GetHelpId()) < getButtonPriority(pB->GetHelpId());
+    return getButtonPriority(pA->get_id()) < getButtonPriority(pB->get_id());
 }
 
 void sort_native_button_order(const VclBox& rContainer)
