@@ -747,7 +747,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTableTypes(  )
         tmp.push_back(aRow);
         return tmp;
     }();
-    pResult->setRows(aRows);
+    pResult->setRows(std::vector(aRows));
     return pResult;
 }
 
@@ -804,7 +804,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTypeInfo(  )
 
         return tmp;
     }();
-    pResult->setRows(aRows);
+    pResult->setRows(std::vector(aRows));
     return pResult;
 }
 
@@ -907,7 +907,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getColumns(
             }
         }
     }
-    pResult->setRows(aRows);
+    pResult->setRows(std::move(aRows));
     return pResult;
 }
 
@@ -968,7 +968,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTables(
         }
         return tmp;
     }();
-    pResult->setRows(aRows);
+    pResult->setRows(std::vector(aRows));
     return pResult;
 }
 
@@ -1012,7 +1012,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getVersionColumns(
 
         aRows.push_back(aRow);
     }
-    pResult->setRows(aRows);
+    pResult->setRows(std::move(aRows));
     return pResult;
 }
 

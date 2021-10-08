@@ -102,7 +102,7 @@ uno::Reference<sdbc::XResultSet> SAL_CALL OWriterDatabaseMetaData::getTables(
         }
     }
 
-    pResult->setRows(aRows);
+    pResult->setRows(std::move(aRows));
 
     return pResult;
 }

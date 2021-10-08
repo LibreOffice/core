@@ -304,7 +304,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         }
     }
 
-    pResult->setRows(aRows);
+    pResult->setRows(std::move(aRows));
 
     return pResult;
 }
@@ -425,7 +425,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
         }
     }
 
-    pResult->setRows(aRows);
+    pResult->setRows(std::move(aRows));
     return pResult;
 }
 
@@ -624,7 +624,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  )
     {
         aRows.push_back( { ODatabaseMetaDataResultSet::getEmptyValue(), new ORowSetValueDecorator(OUString("TABLE")) } );
     }
-    pResult->setRows(aRows);
+    pResult->setRows(std::move(aRows));
     return pResult;
 }
 

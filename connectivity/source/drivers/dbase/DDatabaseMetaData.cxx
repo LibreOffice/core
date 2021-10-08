@@ -147,7 +147,7 @@ Reference< XResultSet > ODbaseDatabaseMetaData::impl_getTypeInfo_throw(  )
         aRows.push_back(aRow);
     }
 
-    pResult->setRows(aRows);
+    pResult->setRows(std::move(aRows));
     return pResult;
 }
 
@@ -245,7 +245,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
         throw WrappedTargetRuntimeException(e.Message, e.Context, e.TargetException);
     }
     rtl::Reference<::connectivity::ODatabaseMetaDataResultSet> pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eColumns);
-    pResult->setRows(aRows);
+    pResult->setRows(std::move(aRows));
 
     return pResult;
 }
@@ -316,7 +316,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
     }
 
     rtl::Reference<::connectivity::ODatabaseMetaDataResultSet> pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eIndexInfo);
-    pResult->setRows(aRows);
+    pResult->setRows(std::move(aRows));
     return pResult;
 }
 
