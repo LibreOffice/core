@@ -71,6 +71,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "451950b4_e8c4822e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-08T19:57:32Z",
+      "side": 1,
+      "message": "OK, I will take a look and do it in a new patch.",
+      "parentUuid": "31175903_8e3e1bb4",
+      "revId": "4e21f291aeeeb906b6703370bfe3aa991a5bc033",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f6a9c496_c336cba3",
@@ -120,6 +138,24 @@
       "side": 1,
       "message": "It *might* be useful, but it is orthogonal to this specific change. I\u0027d suggest to do that in a separate change.",
       "parentUuid": "008d7595_c2e63112",
+      "revId": "4e21f291aeeeb906b6703370bfe3aa991a5bc033",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fd2d9fd_35e05fa5",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2111,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-08T19:57:32Z",
+      "side": 1,
+      "message": "OK, I\u0027ve chosen this path to fix, and I will do the reset in a new patch.",
+      "parentUuid": "d439f304_33902a3f",
       "revId": "4e21f291aeeeb906b6703370bfe3aa991a5bc033",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }

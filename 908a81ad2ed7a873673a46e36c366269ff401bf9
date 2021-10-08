@@ -88,6 +88,24 @@
       "parentUuid": "aee3cba2_34b7ef95",
       "revId": "908a81ad2ed7a873673a46e36c366269ff401bf9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b601f291_17c2ff3e",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2111,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-08T19:57:32Z",
+      "side": 1,
+      "message": "This is fixed.",
+      "parentUuid": "203a75ca_30e05800",
+      "revId": "908a81ad2ed7a873673a46e36c366269ff401bf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

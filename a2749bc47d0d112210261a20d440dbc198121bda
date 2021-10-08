@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "39ba02ed_12a36e70",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-08T19:57:32Z",
+      "side": 1,
+      "message": "This is fixed. It is now written in the commit message that \u0027inline\u0027 keyword is used in the headers.",
+      "parentUuid": "98de2cd8_a1711f5b",
+      "range": {
+        "startLine": 9,
+        "startChar": 36,
+        "endLine": 9,
+        "endChar": 42
+      },
+      "revId": "a2749bc47d0d112210261a20d440dbc198121bda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "a4ec8237_af5d1e70",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -58,6 +82,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e71e727_5ba3fb29",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-08T19:57:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "83261cb9_7160d071",
+      "revId": "a2749bc47d0d112210261a20d440dbc198121bda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "71667dd1_3237ff50",
@@ -71,6 +113,24 @@
       "writtenOn": "2021-10-07T06:01:40Z",
       "side": 1,
       "message": "And that would additionally eliminate the need to randomly re-arrange the strings.",
+      "revId": "a2749bc47d0d112210261a20d440dbc198121bda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed24a5f2_60201f8f",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-08T19:57:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71667dd1_3237ff50",
       "revId": "a2749bc47d0d112210261a20d440dbc198121bda",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
