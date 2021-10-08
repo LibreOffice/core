@@ -242,9 +242,6 @@ static void CalculateHorizontalScalingFactor(
 
     if (nFontSize > 1)
         rFWData.fVerticalTextScaling = static_cast<double>(nFontSize) / rFontHeight.GetHeight();
-    // Add some padding
-    if (rFWData.bScaleX)
-        fScalingFactor *= 1.1;
 
     rFWData.fHorizontalTextScaling = fScalingFactor;
 }
