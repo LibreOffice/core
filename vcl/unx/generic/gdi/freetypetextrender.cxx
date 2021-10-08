@@ -33,6 +33,7 @@
 #include <unx/glyphcache.hxx>
 #include <unx/fc_fontoptions.hxx>
 #include <unx/freetype_glyphcache.hxx>
+#include <font/LogicalFontInstance.hxx>
 #include <font/PhysicalFontFace.hxx>
 #include <font/FontInstanceData.hxx>
 
