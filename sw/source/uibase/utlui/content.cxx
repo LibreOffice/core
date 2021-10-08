@@ -871,7 +871,6 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
             // insert a separator bar between footnote and endnote entries
             if (rFootnoteIdxs.size())
             {
-
                 std::unique_ptr<SwTextFootnoteContent> pCnt(new SwTextFootnoteContent(
                                                             this, "-------------------------------",
                                                             nullptr, nFootnoteCount + 1));
