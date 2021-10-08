@@ -418,8 +418,8 @@ namespace svgio::svgreader
                 if(nPos < nLen)
                 {
                     const sal_Unicode aChar(rCandidate[nPos]);
-                    static const char aStrGrad[] = "grad";
-                    static const char aStrRad[] = "rad";
+                    constexpr OUStringLiteral aStrGrad = u"grad";
+                    constexpr OUStringLiteral aStrRad = u"rad";
 
                     switch(aChar)
                     {
@@ -429,7 +429,7 @@ namespace svgio::svgreader
                             if(rCandidate.matchIgnoreAsciiCase(aStrGrad, nPos))
                             {
                                 // angle in grad
-                                nPos += strlen(aStrGrad);
+                                nPos += aStrGrad.getLength();
                                 aType = DegreeType::grad;
                             }
                             break;
@@ -440,7 +440,7 @@ namespace svgio::svgreader
                             if(rCandidate.matchIgnoreAsciiCase(aStrRad, nPos))
                             {
                                 // angle in radians
-                                nPos += strlen(aStrRad);
+                                nPos += aStrRad.getLength();
                                 aType = DegreeType::rad;
                             }
                             break;
@@ -707,12 +707,12 @@ namespace svgio::svgreader
                 }
                 else
                 {
-                    static const char aStrRgb[] = "rgb";
+                    constexpr OUStringLiteral aStrRgb = u"rgb";
 
                     if(rCandidate.matchIgnoreAsciiCase(aStrRgb, 0))
                     {
                         // rgb/rgba definition
-                        sal_Int32 nPos(strlen(aStrRgb));
+                        sal_Int32 nPos(aStrRgb.getLength());
                         bool bIsRGBA = false;
 
                         if('a' == rCandidate[nPos])
@@ -864,12 +864,12 @@ namespace svgio::svgreader
                 {
                     const sal_Unicode aChar(rCandidate[nPos]);
                     const sal_Int32 nInitPos(nPos);
-                    static const char aStrMatrix[] = "matrix";
-                    static const char aStrTranslate[] = "translate";
-                    static const char aStrScale[] = "scale";
-                    static const char aStrRotate[] = "rotate";
-                    static const char aStrSkewX[] = "skewX";
-                    static const char aStrSkewY[] = "skewY";
+                    constexpr OUStringLiteral aStrMatrix = u"matrix";
+                    constexpr OUStringLiteral aStrTranslate = u"translate";
+                    constexpr OUStringLiteral aStrScale = u"scale";
+                    constexpr OUStringLiteral aStrRotate = u"rotate";
+                    constexpr OUStringLiteral aStrSkewX = u"skewX";
+                    constexpr OUStringLiteral aStrSkewY = u"skewY";
 
                     switch(aChar)
                     {
@@ -878,7 +878,7 @@ namespace svgio::svgreader
                             if(rCandidate.match(aStrMatrix, nPos))
                             {
                                 // matrix element
-                                nPos += strlen(aStrMatrix);
+                                nPos += aStrMatrix.getLength();
                                 skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 SvgNumber aVal;
                                 basegfx::B2DHomMatrix aNew;
@@ -932,7 +932,7 @@ namespace svgio::svgreader
                             if(rCandidate.match(aStrTranslate, nPos))
                             {
                                 // translate element
-                                nPos += strlen(aStrTranslate);
+                                nPos += aStrTranslate.getLength();
                                 skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 SvgNumber aTransX;
 
@@ -956,7 +956,7 @@ namespace svgio::svgreader
                             if(rCandidate.match(aStrScale, nPos))
                             {
                                 // scale element
-                                nPos += strlen(aStrScale);
+                                nPos += aStrScale.getLength();
                                 skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 SvgNumber aScaleX;
 
@@ -976,7 +976,7 @@ namespace svgio::svgreader
                             else if(rCandidate.match(aStrSkewX, nPos))
                             {
                                 // skewx element
-                                nPos += strlen(aStrSkewX);
+                                nPos += aStrSkewX.getLength();
                                 skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 double fSkewX(0.0);
 
@@ -991,7 +991,7 @@ namespace svgio::svgreader
                             else if(rCandidate.match(aStrSkewY, nPos))
                             {
                                 // skewy element
-                                nPos += strlen(aStrSkewY);
+                                nPos += aStrSkewY.getLength();
                                 skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 double fSkewY(0.0);
 
@@ -1010,7 +1010,7 @@ namespace svgio::svgreader
                             if(rCandidate.match(aStrRotate, nPos))
                             {
                                 // rotate element
-                                nPos += strlen(aStrRotate);
+                                nPos += aStrRotate.getLength();
                                 skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 double fAngle(0.0);
 
@@ -1065,12 +1065,12 @@ namespace svgio::svgreader
 
         bool readLocalUrl(const OUString& rCandidate, OUString& rURL)
         {
-            static const char aStrUrl[] = "url";
+            constexpr OUStringLiteral aStrUrl = u"url";
 
             if(rCandidate.startsWith(aStrUrl))
             {
                 const sal_Int32 nLen(rCandidate.getLength());
-                sal_Int32 nPos(strlen(aStrUrl));
+                sal_Int32 nPos(aStrUrl.getLength());
 
                 skip_char(rCandidate, '(', '#', nPos, nLen);
                 OUStringBuffer aTokenValue;
@@ -1304,12 +1304,12 @@ namespace svgio::svgreader
             }
             else
             {
-                static const char aStrData[] = "data:";
+                constexpr OUStringLiteral aStrData = u"data:";
 
                 if(rCandidate.match(aStrData, 0))
                 {
                     // embedded data
-                    sal_Int32 nPos(strlen(aStrData));
+                    sal_Int32 nPos(aStrData.getLength());
                     sal_Int32 nLen(rCandidate.getLength());
                     OUStringBuffer aBuffer;
 
@@ -1325,12 +1325,12 @@ namespace svgio::svgreader
                         {
                             // image data
                             OUString aData(rCandidate.copy(nPos));
-                            static const char aStrBase64[] = "base64";
+                            constexpr OUStringLiteral aStrBase64 = u"base64";
 
                             if(aData.startsWith(aStrBase64))
                             {
                                 // base64 encoded
-                                nPos = strlen(aStrBase64);
+                                nPos = aStrBase64.getLength();
                                 nLen = aData.getLength();
 
                                 skip_char(aData, ' ', ',', nPos, nLen);
