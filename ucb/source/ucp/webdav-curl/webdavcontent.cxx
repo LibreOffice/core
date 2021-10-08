@@ -2884,7 +2884,7 @@ Content::ResourceType Content::resourceTypeForLocks(
                 switch( e.getStatus() )
                 {
                     case SC_NOT_FOUND:
-                        SAL_WARN( "ucb.ucp.webdav", "resourceTypeForLocks - URL: <"
+                        SAL_WARN( "ucb.ucp.webdav", "resourceTypeForLocks() - URL: <"
                                   << m_xIdentifier->getContentIdentifier() << "> was not found. ");
                         eResourceTypeForLocks = NOT_FOUND;
                         break;
@@ -2899,13 +2899,13 @@ Content::ResourceType Content::resourceTypeForLocks(
                     case SC_NOT_IMPLEMENTED:    // http://tools.ietf.org/html/rfc7231#section-6.6.2
                     case SC_METHOD_NOT_ALLOWED: // http://tools.ietf.org/html/rfc7231#section-6.5.5
                         // they all mean the resource is NON_DAV
-                        SAL_WARN( "ucb.ucp.webdav", "resourceTypeForLocks DAVException (SC_FORBIDDEN, SC_NOT_IMPLEMENTED or SC_METHOD_NOT_ALLOWED) - URL: <"
+                        SAL_WARN( "ucb.ucp.webdav", "resourceTypeForLocks() DAVException (SC_FORBIDDEN, SC_NOT_IMPLEMENTED or SC_METHOD_NOT_ALLOWED) - URL: <"
                                   << m_xIdentifier->getContentIdentifier() << ">, DAV error: " << e.getError() << ", HTTP error: " << e.getStatus() );
                         eResourceTypeForLocks = NON_DAV;
                         break;
                     default:
                         //fallthrough
-                        SAL_WARN( "ucb.ucp.webdav", "resourceTypeForLocks DAVException - URL: <"
+                        SAL_WARN( "ucb.ucp.webdav", "resourceTypeForLocks() DAVException - URL: <"
                                   << m_xIdentifier->getContentIdentifier() << ">, DAV error: " << e.getError() << ", HTTP error: " << e.getStatus() );
                         eResourceTypeForLocks = UNKNOWN;
                 }
@@ -2924,7 +2924,7 @@ Content::ResourceType Content::resourceTypeForLocks(
             "different resource types for <" << rURL << ">: "
             << +eResourceTypeForLocks << " vs. " << +m_eResourceTypeForLocks);
     }
-    SAL_INFO( "ucb.ucp.webdav", "resourceTypeForLocks - URL: <"
+    SAL_INFO( "ucb.ucp.webdav", "resourceTypeForLocks() - URL: <"
               << m_xIdentifier->getContentIdentifier() << ">, m_eResourceTypeForLocks: " << m_eResourceTypeForLocks );
     return m_eResourceTypeForLocks;
 }
@@ -2986,7 +2986,7 @@ void Content::lock(
         {
             case DAVException::DAV_LOCKED:
             {
-                SAL_WARN( "ucb.ucp.webdav", "lock: resource already locked - URL: <"
+                SAL_WARN( "ucb.ucp.webdav", "lock(): resource already locked - URL: <"
                           << m_xIdentifier->getContentIdentifier() << ">");
                 throw
                     ucb::InteractiveLockingLockedException(
@@ -2999,7 +2999,7 @@ void Content::lock(
             break;
             case DAVException::DAV_HTTP_AUTH:
             {
-                SAL_WARN( "ucb.ucp.webdav", "lock: DAVException Authentication error - URL: <"
+                SAL_WARN( "ucb.ucp.webdav", "lock(): DAVException Authentication error - URL: <"
                           << m_xIdentifier->getContentIdentifier() << ">" );
                 // this could mean:
                 // - interaction handler for credential management not present (happens, depending
@@ -3026,7 +3026,7 @@ void Content::lock(
                     // this returned error is part of base http 1.1 RFCs
                     case SC_NOT_IMPLEMENTED:
                     case SC_METHOD_NOT_ALLOWED:
-                        SAL_WARN( "ucb.ucp.webdav", "lock: DAVException (SC_NOT_IMPLEMENTED or SC_METHOD_NOT_ALLOWED) - URL: <"
+                        SAL_WARN( "ucb.ucp.webdav", "lock() DAVException (SC_NOT_IMPLEMENTED or SC_METHOD_NOT_ALLOWED) - URL: <"
                                   << m_xIdentifier->getContentIdentifier() << ">, DAV error: " << e.getError() << ", HTTP error: " << e.getStatus() );
                         // act as nothing happened
                         // that's because when a resource is first created
@@ -3054,7 +3054,7 @@ void Content::lock(
                 ;
         }
 
-        SAL_WARN( "ucb.ucp.webdav","lock: DAVException - URL: <"
+        SAL_WARN( "ucb.ucp.webdav","lock(): DAVException - URL: <"
                   << m_xIdentifier->getContentIdentifier() << ">, DAV error: " << e.getError() << ", HTTP error: " << e.getStatus() );
         cancelCommandExecution( e, Environment, false );
         // Unreachable
@@ -3085,7 +3085,7 @@ void Content::unlock(
         switch( e.getError() )
         {
             case DAVException::DAV_NOT_LOCKED:
-                SAL_WARN( "ucb.ucp.webdav", "unlock: DAVException::DAV_NOT_LOCKED - URL: <"
+                SAL_WARN( "ucb.ucp.webdav", "unlock(): DAVException::DAV_NOT_LOCKED - URL: <"
                           << m_xIdentifier->getContentIdentifier() << ">");
                 // means that we don't own any lock on this resource
                 // intercepted here to remove a confusing indication to the user
@@ -3101,7 +3101,7 @@ void Content::unlock(
                     // this returned error is part of base http 1.1 RFCs
                     case SC_NOT_IMPLEMENTED:
                     case SC_METHOD_NOT_ALLOWED:
-                        SAL_WARN( "ucb.ucp.webdav", "unlock: DAVException (SC_NOT_IMPLEMENTED or SC_METHOD_NOT_ALLOWED) - URL: <"
+                        SAL_WARN( "ucb.ucp.webdav", "unlock() DAVException (SC_NOT_IMPLEMENTED or SC_METHOD_NOT_ALLOWED) - URL: <"
                                   << m_xIdentifier->getContentIdentifier() << ">, DAV error: " << e.getError() << ", HTTP error: " << e.getStatus() );
                         return;
                         break;
@@ -3114,7 +3114,7 @@ void Content::unlock(
                 //fallthrough
                 ;
         }
-        SAL_WARN( "ucb.ucp.webdav","unlock: DAVException - URL: <"
+        SAL_WARN( "ucb.ucp.webdav","unlock(): DAVException - URL: <"
                   << m_xIdentifier->getContentIdentifier() << ">, DAV error: " << e.getError() << ", HTTP error: " << e.getStatus() );
         cancelCommandExecution( e, Environment, false );
         // Unreachable
@@ -3522,6 +3522,7 @@ Content::ResourceType Content::getResourceType(
             "different resource types for <" << rResAccess->getURL() << ">: "
             << +eResourceType << " vs. " << +m_eResourceType);
     }
+    SAL_INFO( "ucb.ucp.webdav", "m_eResourceType for <" << rResAccess->getURL() << ">: " << m_eResourceType );
     return m_eResourceType;
 }
 

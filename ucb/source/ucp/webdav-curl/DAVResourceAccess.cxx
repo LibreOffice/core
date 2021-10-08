@@ -1019,8 +1019,8 @@ void DAVResourceAccess::initialize()
 
 const OUString & DAVResourceAccess::getRequestURI() const
 {
-    SAL_WARN_IF( !m_xSession.is(), "ucb.ucp.webdav",
-                "DAVResourceAccess::getRequestURI - Not initialized!" );
+    assert(m_xSession.is() &&
+                "DAVResourceAccess::getRequestURI - Not initialized!");
 
     // In case a proxy is used we have to use the absolute URI for a request.
     if ( m_xSession->UsesProxy() )
