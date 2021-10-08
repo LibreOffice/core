@@ -330,7 +330,7 @@ void Reader::readMessage(Unmarshal & unmarshal) {
         std::unique_ptr< IncomingRequest > req(
             new IncomingRequest(
                 bridge_, tid, oid, obj, type, functionId, synchronous, memberTd,
-                bSetter, inArgs, ccMode, cc));
+                bSetter, std::move(inArgs), ccMode, cc));
         if (synchronous) {
             bridge_->incrementActiveCalls();
         }
@@ -441,7 +441,7 @@ void Reader::readReplyMessage(Unmarshal & unmarshal, sal_uInt8 flags1) {
     case OutgoingRequest::KIND_NORMAL:
         {
             std::unique_ptr< IncomingReply > resp(
-                new IncomingReply(exc, ret, outArgs));
+                new IncomingReply(exc, ret, std::move(outArgs)));
             uno_threadpool_putJob(
                 bridge_->getThreadPool(), tid.getHandle(), resp.get(), nullptr,
                 false);

@@ -49,7 +49,7 @@ public:
         com::sun::star::uno::TypeDescription const & type,
         sal_uInt16 functionId, bool synchronous,
         com::sun::star::uno::TypeDescription const & member, bool setter,
-        std::vector< BinaryAny > const & inArguments, bool currentContextMode,
+        std::vector< BinaryAny >&& inArguments, bool currentContextMode,
         com::sun::star::uno::UnoInterfaceReference const & currentContext);
 
     ~IncomingRequest();

@@ -54,10 +54,10 @@ Writer::Item::Item(
     rtl::ByteSequence const & theTid, OUString const & theOid,
     css::uno::TypeDescription const & theType,
     css::uno::TypeDescription const & theMember,
-    std::vector< BinaryAny > const & inArguments,
+    std::vector< BinaryAny >&& inArguments,
     css::uno::UnoInterfaceReference const & theCurrentContext):
     tid(theTid), oid(theOid), type(theType), member(theMember),
-    currentContext(theCurrentContext), arguments(inArguments),
+    currentContext(theCurrentContext), arguments(std::move(inArguments)),
     request(true), setter(false), exception(false), setCurrentContextMode(false)
 {}
 
@@ -65,10 +65,10 @@ Writer::Item::Item(
     rtl::ByteSequence const & theTid,
     css::uno::TypeDescription const & theMember, bool theSetter,
     bool theException, BinaryAny const & theReturnValue,
-    std::vector< BinaryAny > const & outArguments,
+    std::vector< BinaryAny >&& outArguments,
     bool theSetCurrentContextMode):
     tid(theTid), member(theMember),
-    returnValue(theReturnValue), arguments(outArguments),
+    returnValue(theReturnValue), arguments(std::move(outArguments)),
     request(false), setter(theSetter),
     exception(theException), setCurrentContextMode(theSetCurrentContextMode)
 {}
@@ -105,11 +105,11 @@ void Writer::queueRequest(
     rtl::ByteSequence const & tid, OUString const & oid,
     css::uno::TypeDescription const & type,
     css::uno::TypeDescription const & member,
-    std::vector< BinaryAny > const & inArguments)
+    std::vector< BinaryAny >&& inArguments)
 {
     css::uno::UnoInterfaceReference cc(current_context::get());
     osl::MutexGuard g(mutex_);
-    queue_.emplace_back(tid, oid, type, member, inArguments, cc);
+    queue_.emplace_back(tid, oid, type, member, std::move(inArguments), cc);
     items_.set();
 }
 
@@ -117,11 +117,11 @@ void Writer::queueReply(
     rtl::ByteSequence const & tid,
     com::sun::star::uno::TypeDescription const & member, bool setter,
     bool exception, BinaryAny const & returnValue,
-    std::vector< BinaryAny > const & outArguments, bool setCurrentContextMode)
+    std::vector< BinaryAny >&& outArguments, bool setCurrentContextMode)
 {
     osl::MutexGuard g(mutex_);
     queue_.emplace_back(
-            tid, member, setter, exception, returnValue, outArguments,
+            tid, member, setter, exception, returnValue, std::move(outArguments),
             setCurrentContextMode);
     items_.set();
 }

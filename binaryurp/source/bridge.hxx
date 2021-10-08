@@ -132,7 +132,7 @@ public:
     bool makeCall(
         OUString const & oid,
         com::sun::star::uno::TypeDescription const & member, bool setter,
-        std::vector< BinaryAny > const & inArguments, BinaryAny * returnValue,
+        std::vector< BinaryAny >&& inArguments, BinaryAny * returnValue,
         std::vector< BinaryAny > * outArguments);
 
     // Only called from reader_ thread:
@@ -204,7 +204,7 @@ private:
         rtl::ByteSequence const & tid, OUString const & oid,
         com::sun::star::uno::TypeDescription const & type,
         com::sun::star::uno::TypeDescription const & member,
-        std::vector< BinaryAny > const & inArguments);
+        std::vector< BinaryAny >&& inArguments);
 
     void throwException(bool exception, BinaryAny const & value);
 

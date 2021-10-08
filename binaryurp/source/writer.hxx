@@ -66,13 +66,13 @@ public:
         rtl::ByteSequence const & tid, OUString const & oid,
         com::sun::star::uno::TypeDescription const & type,
         com::sun::star::uno::TypeDescription const & member,
-        std::vector< BinaryAny > const & inArguments);
+        std::vector< BinaryAny >&& inArguments);
 
     void queueReply(
         rtl::ByteSequence const & tid,
         com::sun::star::uno::TypeDescription const & member, bool setter,
         bool exception, BinaryAny const & returnValue,
-        std::vector< BinaryAny > const & outArguments,
+        std::vector< BinaryAny >&& outArguments,
         bool setCurrentContextMode);
 
     void unblock();
@@ -107,7 +107,7 @@ private:
             rtl::ByteSequence const & theTid, OUString const & theOid,
             com::sun::star::uno::TypeDescription const & theType,
             com::sun::star::uno::TypeDescription const & theMember,
-            std::vector< BinaryAny > const & inArguments,
+            std::vector< BinaryAny >&& inArguments,
             com::sun::star::uno::UnoInterfaceReference const &
                 theCurrentContext);
 
@@ -116,7 +116,7 @@ private:
             rtl::ByteSequence const & theTid,
             com::sun::star::uno::TypeDescription const & theMember,
             bool theSetter, bool theException, BinaryAny const & theReturnValue,
-            std::vector< BinaryAny > const & outArguments,
+            std::vector< BinaryAny >&& outArguments,
             bool theSetCurrentContextMode);
 
         rtl::ByteSequence tid; // request + reply
