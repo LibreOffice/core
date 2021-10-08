@@ -33,5 +33,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,gpgmepp, \
     external/gpgmepp/gcc9.patch \
     external/gpgmepp/version.patch \
     external/gpgmepp/ubsan.patch \
+    external/gpgmepp/gpgme.git-4b64774b6d13ffa4f59dddf947a97d61bcfa2f2e.patch.1 \
 ))
 # vim: set noet sw=4 ts=4:
