@@ -6713,6 +6713,9 @@ void ScGridWindow::DeleteDragRectOverlay()
 
 void ScGridWindow::UpdateDragRectOverlay()
 {
+    bool bInPrintTwips = comphelper::LibreOfficeKit::isCompatFlagSet(
+        comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+
     MapMode aDrawMode = GetDrawMapMode();
     MapMode aOldMode = GetMapMode();
     if ( aOldMode != aDrawMode )
@@ -6740,7 +6743,8 @@ void ScGridWindow::UpdateDragRectOverlay()
         if (nY1 < nPosY) nY1 = nPosY;
         if (nY2 < nPosY) nY2 = nPosY;
 
-        Point aScrPos( mrViewData.GetScrPos( nX1, nY1, eWhich ) );
+        Point aScrPos(bInPrintTwips ? mrViewData.GetPrintTwipsPos( nX1, nY1 )
+            : mrViewData.GetScrPos( nX1, nY1, eWhich ) );
 
         tools::Long nSizeXPix=0;
         tools::Long nSizeYPix=0;
@@ -6751,29 +6755,42 @@ void ScGridWindow::UpdateDragRectOverlay()
 
         bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
         tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
+        tools::Long nAdjust = comphelper::LibreOfficeKit::isActive() ? 0 : 2;
 
         if (rDoc.ValidCol(nX2) && nX2>=nX1)
             for (i=nX1; i<=nX2; i++)
-                nSizeXPix += ScViewData::ToPixel( rDoc.GetColWidth( static_cast<SCCOL>(i), nTab ), nPPTX );
+            {
+                tools::Long nWidth = rDoc.GetColWidth( static_cast<SCCOL>(i), nTab );
+                nSizeXPix += bInPrintTwips ? nWidth : ScViewData::ToPixel( nWidth, nPPTX );
+            }
         else
         {
             aScrPos.AdjustX( -nLayoutSign );
-            nSizeXPix   += 2;
+            nSizeXPix   += nAdjust;
         }
 
         if (rDoc.ValidRow(nY2) && nY2>=nY1)
             for (i=nY1; i<=nY2; i++)
-                nSizeYPix += ScViewData::ToPixel( rDoc.GetRowHeight( i, nTab ), nPPTY );
+            {
+                tools::Long nHeight = rDoc.GetRowHeight( i, nTab );
+                nSizeYPix += bInPrintTwips ? nHeight : ScViewData::ToPixel( nHeight, nPPTY );
+            }
         else
         {
             aScrPos.AdjustY( -1 );
-            nSizeYPix   += 2;
+            nSizeYPix   += nAdjust;
         }
 
-        aScrPos.AdjustX( -(2 * nLayoutSign) );
-        aScrPos.AdjustY( -2 );
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            nSizeXPix -= 2;
+            nSizeYPix -= 2;
+        }
+
+        aScrPos.AdjustX( -(nAdjust * nLayoutSign) );
+        aScrPos.AdjustY( -1 * nAdjust );
         tools::Rectangle aRect( aScrPos.X(), aScrPos.Y(),
-                         aScrPos.X() + ( nSizeXPix + 2 ) * nLayoutSign, aScrPos.Y() + nSizeYPix + 2 );
+                         aScrPos.X() + ( nSizeXPix + nAdjust ) * nLayoutSign, aScrPos.Y() + nSizeYPix + nAdjust );
         if ( bLayoutRTL )
         {
             aRect.SetLeft( aRect.Right() );   // end position is left
@@ -6826,6 +6843,33 @@ void ScGridWindow::UpdateDragRectOverlay()
             xOverlayManager->add(*pOverlay);
             mpOODragRect.reset(new sdr::overlay::OverlayObjectList);
             mpOODragRect->append(std::move(pOverlay));
+        }
+
+        ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+        if (comphelper::LibreOfficeKit::isActive() && pViewShell)
+        {
+            OString aRectsString;
+            tools::Rectangle aBoundingBox;
+
+            std::vector<tools::Rectangle> aRectangles;
+            aRectangles.push_back(aRect);
+
+            if (bInPrintTwips)
+            {
+                aBoundingBox = aRect;
+                aRectsString = rectanglesToString(aRectangles);
+            }
+            else
+            {
+                aRectsString = rectanglesToString(convertPixelToLogical(pViewShell->GetViewData(), aRectangles, aBoundingBox));
+            }
+
+            OString sBoundingBoxString = "EMPTY";
+            if (!aBoundingBox.IsEmpty())
+                sBoundingBoxString = aBoundingBox.toString();
+
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, sBoundingBoxString.getStr());
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aRectsString.getStr());
         }
     }
 
