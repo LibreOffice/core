@@ -180,10 +180,8 @@ gb_CFLAGS_COMMON += -std=gnu89
 
 ifeq ($(ENABLE_LTO),TRUE)
 ifeq ($(COM_IS_CLANG),TRUE)
-ifneq (,$(index,iOS MACOSX,$(OS)))
 gb_LTOFLAGS := -flto=thin
-else
-gb_LTOFLAGS := -flto
+ifeq (,$(index,iOS MACOSX,$(OS)))
 gb_LTOPLUGINFLAGS := --plugin LLVMgold.so
 endif
 else
