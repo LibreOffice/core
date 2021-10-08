@@ -29,23 +29,19 @@
 
 #include <fontattributes.hxx>
 
-class LogicalFontInstance;
 struct FontMatchStatus;
-namespace vcl::font
-{
-class FontSelectPattern;
-}
-class PhysicalFontFace;
 
 namespace vcl
 {
 struct FontCapabilities;
-class PhysicalFontFamily;
 }
 
 namespace vcl::font
 {
 class FontSelectPattern;
+class LogicalFontInstance;
+class PhysicalFontFamily;
+class PhysicalFontFace;
 
 struct FontMatchStatus
 {

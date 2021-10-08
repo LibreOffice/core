@@ -22,12 +22,14 @@
 
 #include <o3tl/typed_flags_set.hxx>
 #include <tools/gen.hxx>
+
 #include <vcl/dllapi.h>
 #include <vcl/glyphitem.hxx>
 #include <vcl/outdev.hxx>
-#include <vector>
 
-#include "fontinstance.hxx"
+#include <font/LogicalFontInstance.hxx>
+
+#include <vector>
 
 enum class GlyphItemFlags : sal_uInt8
 {
@@ -83,8 +85,9 @@ public:
     bool IsDropped() const { return bool(m_nFlags & GlyphItemFlags::IS_DROPPED); }
     bool IsClusterStart() const { return bool(m_nFlags & GlyphItemFlags::IS_CLUSTER_START); }
 
-    inline bool GetGlyphBoundRect(const LogicalFontInstance*, tools::Rectangle&) const;
-    inline bool GetGlyphOutline(const LogicalFontInstance*, basegfx::B2DPolyPolygon&) const;
+    inline bool GetGlyphBoundRect(const vcl::font::LogicalFontInstance*, tools::Rectangle&) const;
+    inline bool GetGlyphOutline(const vcl::font::LogicalFontInstance*,
+                                basegfx::B2DPolyPolygon&) const;
     inline void dropGlyph();
 
     sal_GlyphId glyphId() const { return m_aGlyphId; }
@@ -94,13 +97,13 @@ public:
     int xOffset() const { return m_nXOffset; }
 };
 
-VCL_DLLPUBLIC bool GlyphItem::GetGlyphBoundRect(const LogicalFontInstance* pFontInstance,
+VCL_DLLPUBLIC bool GlyphItem::GetGlyphBoundRect(const vcl::font::LogicalFontInstance* pFontInstance,
                                                 tools::Rectangle& rRect) const
 {
     return pFontInstance->GetGlyphBoundRect(m_aGlyphId, rRect, IsVertical());
 }
 
-VCL_DLLPUBLIC bool GlyphItem::GetGlyphOutline(const LogicalFontInstance* pFontInstance,
+VCL_DLLPUBLIC bool GlyphItem::GetGlyphOutline(const vcl::font::LogicalFontInstance* pFontInstance,
                                               basegfx::B2DPolyPolygon& rPoly) const
 {
     return pFontInstance->GetGlyphOutline(m_aGlyphId, rPoly, IsVertical());
@@ -118,14 +121,17 @@ class SalLayoutGlyphsImpl : public std::vector<GlyphItem>
 
 public:
     SalLayoutGlyphsImpl* clone() const;
-    const rtl::Reference<LogicalFontInstance>& GetFont() const { return m_rFontInstance; }
+    const rtl::Reference<vcl::font::LogicalFontInstance>& GetFont() const
+    {
+        return m_rFontInstance;
+    }
     bool IsValid() const;
 
 private:
-    rtl::Reference<LogicalFontInstance> m_rFontInstance;
+    rtl::Reference<vcl::font::LogicalFontInstance> m_rFontInstance;
     SalLayoutFlags mnFlags = SalLayoutFlags::NONE;
 
-    SalLayoutGlyphsImpl(LogicalFontInstance& rFontInstance)
+    SalLayoutGlyphsImpl(vcl::font::LogicalFontInstance& rFontInstance)
         : m_rFontInstance(&rFontInstance)
     {
     }
