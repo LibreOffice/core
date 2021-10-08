@@ -88,7 +88,7 @@ public:
 };
 
 // TabPage Format/Table/Columns
-#define MET_FIELDS 6 //Number of the used MetricFields
+#define MET_FIELDS 5 //Number of the used MetricFields
 
 class SwTableColumnPage : public SfxTabPage
 {
