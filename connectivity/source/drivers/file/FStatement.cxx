@@ -453,10 +453,10 @@ void OStatement_Base::initializeResultSet(OResultSet* _pResult)
     GetAssignValues();
 
     _pResult->setSqlAnalyzer(m_pSQLAnalyzer.get());
-    _pResult->setOrderByColumns(m_aOrderbyColumnNumber);
-    _pResult->setOrderByAscending(m_aOrderbyAscending);
+    _pResult->setOrderByColumns(std::vector(m_aOrderbyColumnNumber));
+    _pResult->setOrderByAscending(std::vector(m_aOrderbyAscending));
     _pResult->setBindingRow(m_aRow);
-    _pResult->setColumnMapping(m_aColMapping);
+    _pResult->setColumnMapping(std::vector(m_aColMapping));
     _pResult->setEvaluationRow(m_aEvaluateRow);
     _pResult->setAssignValues(m_aAssignValues);
     _pResult->setSelectRow(m_aSelectRow);
