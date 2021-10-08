@@ -29,7 +29,6 @@
 
 #include <fontattributes.hxx>
 
-class LogicalFontInstance;
 struct FontMatchStatus;
 
 namespace vcl
@@ -40,6 +39,7 @@ struct FontCapabilities;
 namespace vcl::font
 {
 class FontSelectPattern;
+class LogicalFontInstance;
 class PhysicalFontFamily;
 class PhysicalFontFace;
 

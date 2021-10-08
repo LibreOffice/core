@@ -121,7 +121,7 @@ static inline void applyStyle(QtFont& rFont, FontItalic eItalic)
 }
 
 QtFont::QtFont(const vcl::font::PhysicalFontFace& rPFF, const vcl::font::FontSelectPattern& rFSP)
-    : LogicalFontInstance(rPFF, rFSP)
+    : vcl::font::LogicalFontInstance(rPFF, rFSP)
 {
     setFamily(toQString(rPFF.GetFamilyName()));
     applyWeight(*this, rPFF.GetWeight());
@@ -133,7 +133,7 @@ QtFont::QtFont(const vcl::font::PhysicalFontFace& rPFF, const vcl::font::FontSel
 static hb_blob_t* getFontTable(hb_face_t*, hb_tag_t nTableTag, void* pUserData)
 {
     char pTagName[5];
-    LogicalFontInstance::DecodeOpenTypeTag(nTableTag, pTagName);
+    vcl::font::LogicalFontInstance::DecodeOpenTypeTag(nTableTag, pTagName);
 
     QtFont* pFont = static_cast<QtFont*>(pUserData);
     QRawFont aRawFont(QRawFont::fromFont(*pFont));

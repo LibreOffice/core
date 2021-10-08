@@ -33,8 +33,8 @@
 
 #include <vcl/glyphitem.hxx>
 
-#include "font/FontInstanceData.hxx"
-#include "font/FontSelectPattern.hxx"
+#include "FontInstanceData.hxx"
+#include "FontSelectPattern.hxx"
 
 #include <optional>
 #include <unordered_map>
@@ -44,6 +44,9 @@
 
 class ConvertChar;
 class ImplFontCache;
+
+namespace vcl::font
+{
 class PhysicalFontFace;
 
 // TODO: allow sharing of metrics for related fonts
@@ -52,8 +55,8 @@ class VCL_PLUGIN_PUBLIC LogicalFontInstance : public salhelper::SimpleReferenceO
 {
     // just declaring the factory function doesn't work AKA
     // friend LogicalFontInstance* PhysicalFontFace::CreateFontInstance(const FontSelectPattern&) const;
-    friend class vcl::font::PhysicalFontFace;
-    friend class ImplFontCache;
+    friend class PhysicalFontFace;
+    friend class ::ImplFontCache;
 
 public: // TODO: make data members private
     virtual ~LogicalFontInstance() override;
@@ -114,7 +117,7 @@ public: // TODO: make data members private
     void InitAboveTextLineSize() { mxFontMetric->InitAboveTextLineSize(); }
     void InitFlags(vcl::Font const& rFont, tools::Rectangle const& rRect) { mxFontMetric->InitFlags(rFont, rRect); }
 
-    vcl::font::FontInstanceDataRef GetFontInstanceData() { return mxFontMetric; }
+    FontInstanceDataRef GetFontInstanceData() { return mxFontMetric; }
 
     // Conversion functions
     bool CanConvertChars() { return (mpConversion ? true : false); }
@@ -129,10 +132,10 @@ public: // TODO: make data members private
     bool IsGraphiteFont();
     void SetAverageWidthFactor(double nFactor) { m_nAveWidthFactor = std::abs(nFactor); }
     double GetAverageWidthFactor() const { return m_nAveWidthFactor; }
-    const vcl::font::FontSelectPattern& GetFontSelectPattern() const { return m_aFontSelData; }
+    const FontSelectPattern& GetFontSelectPattern() const { return m_aFontSelData; }
 
-    const vcl::font::PhysicalFontFace* GetFontFace() const { return m_pFontFace.get(); }
-    vcl::font::PhysicalFontFace* GetFontFace() { return m_pFontFace.get(); }
+    const PhysicalFontFace* GetFontFace() const { return m_pFontFace.get(); }
+    PhysicalFontFace* GetFontFace() { return m_pFontFace.get(); }
     const ImplFontCache* GetFontCache() const { return mpFontCache; }
 
     bool GetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const;
@@ -144,7 +147,7 @@ public: // TODO: make data members private
     static inline void DecodeOpenTypeTag(const uint32_t nTableTag, char* pTagName);
 
 protected:
-    explicit LogicalFontInstance(const vcl::font::PhysicalFontFace&, const vcl::font::FontSelectPattern&);
+    explicit LogicalFontInstance(const PhysicalFontFace&, const FontSelectPattern&);
 
     virtual bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const = 0;
 
@@ -153,7 +156,7 @@ protected:
     virtual hb_font_t* ImplInitHbFont() { assert(false); return hb_font_get_empty(); }
 
 private:
-    vcl::font::FontInstanceDataRef mxFontMetric;        // Font attributes
+    FontInstanceDataRef mxFontMetric;        // Font attributes
     const ConvertChar* mpConversion;        // used e.g. for StarBats->StarSymbol
 
     // cache of Unicode characters and replacement font names
@@ -162,10 +165,10 @@ private:
     typedef ::std::unordered_map< ::std::pair<sal_UCS4,FontWeight>, OUString > UnicodeFallbackList;
     std::unique_ptr<UnicodeFallbackList> mpUnicodeFallbackList;
     mutable ImplFontCache * mpFontCache;
-    const vcl::font::FontSelectPattern m_aFontSelData;
+    const FontSelectPattern m_aFontSelData;
     hb_font_t* m_pHbFont;
     double m_nAveWidthFactor;
-    rtl::Reference<vcl::font::PhysicalFontFace> m_pFontFace;
+    rtl::Reference<PhysicalFontFace> m_pFontFace;
     std::optional<bool> m_xbIsGraphiteFont;
 
     tools::Long mnLineHeight;
@@ -188,6 +191,7 @@ inline void LogicalFontInstance::DecodeOpenTypeTag(const uint32_t nTableTag, cha
     pTagName[2] = static_cast<char>(nTableTag >> 8);
     pTagName[3] = static_cast<char>(nTableTag);
     pTagName[4] = 0;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

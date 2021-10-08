@@ -27,7 +27,7 @@
 #include <tools/long.hxx>
 #include <vcl/GestureEvent.hxx>
 
-class LogicalFontInstance;
+namespace vcl::font { class LogicalFontInstance; }
 class SalGraphics;
 class SalFrame;
 class SalObject;
@@ -247,7 +247,7 @@ struct SalFrameState
 
 struct SalInputContext
 {
-    rtl::Reference<LogicalFontInstance> mpFont;
+    rtl::Reference<vcl::font::LogicalFontInstance> mpFont;
     InputContextFlags      mnOptions;
 };
 

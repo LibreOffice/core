@@ -27,9 +27,9 @@
 #include <unotools/fontdefs.hxx>
 #include <o3tl/sorted_vector.hxx>
 
+#include <font/LogicalFontInstance.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <font/PhysicalFontCollection.hxx>
-#include <fontinstance.hxx>
 #include <font/fontsubstitution.hxx>
 
 #include <string_view>
@@ -182,7 +182,7 @@ void PhysicalFontCollection::ImplInitGenericGlyphFallback() const
 }
 
 PhysicalFontFamily* PhysicalFontCollection::GetGlyphFallbackFont(FontSelectPattern& rFontSelData,
-                                                                 LogicalFontInstance* pFontInstance,
+                                                                 vcl::font::LogicalFontInstance* pFontInstance,
                                                                  OUString& rMissingCodes,
                                                                  int nFallbackLevel) const
 {

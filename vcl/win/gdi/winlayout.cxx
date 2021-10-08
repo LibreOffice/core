@@ -105,7 +105,7 @@ std::unique_ptr<GenericSalLayout> WinSalGraphics::GetTextLayout(int nFallbackLev
 }
 
 WinFontInstance::WinFontInstance(const WinFontFace& rPFF, const vcl::font::FontSelectPattern& rFSP)
-    : LogicalFontInstance(rPFF, rFSP)
+    : vcl::font::LogicalFontInstance(rPFF, rFSP)
     , m_pGraphics(nullptr)
     , m_hFont(nullptr)
     , m_fScale(1.0f)
