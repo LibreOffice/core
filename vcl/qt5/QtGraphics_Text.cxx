@@ -41,7 +41,7 @@
 
 void QtGraphics::SetTextColor(Color nColor) { m_aTextColor = nColor; }
 
-void QtGraphics::SetFont(LogicalFontInstance* pReqFont, int nFallbackLevel)
+void QtGraphics::SetFont(vcl::font::LogicalFontInstance* pReqFont, int nFallbackLevel)
 {
     // release the text styles
     for (int i = nFallbackLevel; i < MAX_FALLBACK; ++i)
@@ -277,7 +277,7 @@ namespace
 class QtCommonSalLayout : public GenericSalLayout
 {
 public:
-    QtCommonSalLayout(LogicalFontInstance& rLFI)
+    QtCommonSalLayout(vcl::font::LogicalFontInstance& rLFI)
         : GenericSalLayout(rLFI)
     {
     }

@@ -157,7 +157,7 @@ bool OutputDevice::GetFontFeatures(std::vector<vcl::font::Feature>& rFontFeature
     if (!ImplNewFont())
         return false;
 
-    LogicalFontInstance* pFontInstance = mpFontInstance.get();
+    vcl::font::LogicalFontInstance* pFontInstance = mpFontInstance.get();
     if (!pFontInstance)
         return false;
 
@@ -183,7 +183,7 @@ FontMetric OutputDevice::GetFontMetric() const
     if (!ImplNewFont())
         return aMetric;
 
-    LogicalFontInstance* pFontInstance = mpFontInstance.get();
+    vcl::font::LogicalFontInstance* pFontInstance = mpFontInstance.get();
 
     // prepare metric
     aMetric = maFont;
@@ -559,7 +559,7 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
 
                     // get the name of the first available font
                     float fExactHeight = static_cast<float>(aSize.Height());
-                    rtl::Reference<LogicalFontInstance> pFontInstance = pOutDev->mxFontCache->GetFontInstance( pOutDev->mxFontCollection.get(), aFont, aSize, fExactHeight );
+                    rtl::Reference<vcl::font::LogicalFontInstance> pFontInstance = pOutDev->mxFontCache->GetFontInstance( pOutDev->mxFontCollection.get(), aFont, aSize, fExactHeight );
                     if (pFontInstance)
                     {
                         assert(pFontInstance->GetFontFace());
@@ -661,7 +661,7 @@ bool OutputDevice::InitFont() const
     return true;
 }
 
-const LogicalFontInstance* OutputDevice::GetFontInstance() const
+const vcl::font::LogicalFontInstance* OutputDevice::GetFontInstance() const
 {
     if (!InitFont())
         return nullptr;
@@ -713,16 +713,16 @@ bool OutputDevice::ImplNewFont() const
     }
 
     // get font entry
-    rtl::Reference<LogicalFontInstance> pOldFontInstance = mpFontInstance;
+    rtl::Reference<vcl::font::LogicalFontInstance> pOldFontInstance = mpFontInstance;
     mpFontInstance = mxFontCache->GetFontInstance(mxFontCollection.get(), maFont, aSize, fExactHeight, bNonAntialiased);
     const bool bNewFontInstance = pOldFontInstance.get() != mpFontInstance.get();
     pOldFontInstance.clear();
 
-    LogicalFontInstance* pFontInstance = mpFontInstance.get();
+    vcl::font::LogicalFontInstance* pFontInstance = mpFontInstance.get();
 
     if (!pFontInstance)
     {
-        SAL_WARN("vcl.gdi", "OutputDevice::ImplNewFont(): no LogicalFontInstance, no Font");
+        SAL_WARN("vcl.gdi", "OutputDevice::ImplNewFont(): no vcl::font::LogicalFontInstance, no Font");
         return false;
     }
 
@@ -824,7 +824,7 @@ bool OutputDevice::ImplNewFont() const
     return bRet;
 }
 
-void OutputDevice::SetFontOrientation( LogicalFontInstance* const pFontInstance ) const
+void OutputDevice::SetFontOrientation( vcl::font::LogicalFontInstance* const pFontInstance ) const
 {
     if( pFontInstance->GetFontSelectPattern().mnOrientation && !pFontInstance->GetOrientationFromData() )
     {
@@ -923,7 +923,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     Point aOutPoint;
     tools::Rectangle aRectangle;
     const GlyphItem* pGlyph;
-    const LogicalFontInstance* pGlyphFont;
+    const vcl::font::LogicalFontInstance* pGlyphFont;
     int nStart = 0;
     while (rSalLayout.GetNextGlyph(&pGlyph, aOutPoint, nStart, &pGlyphFont))
     {
@@ -955,7 +955,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
 }
 
 std::unique_ptr<SalLayout> OutputDevice::getFallbackLayout(
-    LogicalFontInstance* pLogicalFont, int nFallbackLevel,
+    vcl::font::LogicalFontInstance* pLogicalFont, int nFallbackLevel,
     vcl::text::ImplLayoutArgs& rLayoutArgs, const SalLayoutGlyphs* pGlyphs) const
 {
     // we need a graphics
@@ -1014,7 +1014,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
     // try if fallback fonts support the missing code units
     for( int nFallbackLevel = 1; nFallbackLevel < MAX_FALLBACK; ++nFallbackLevel )
     {
-        rtl::Reference<LogicalFontInstance> pFallbackFont;
+        rtl::Reference<vcl::font::LogicalFontInstance> pFallbackFont;
         if(pGlyphsImpl != nullptr)
             pFallbackFont = pGlyphsImpl->GetFont();
         // find a font family suited for glyph fallback

@@ -27,8 +27,8 @@
 
 #include <sft.hxx>
 #include <impfontcharmap.hxx>
-#include <fontinstance.hxx>
 #include <font/FontSelectPattern.hxx>
+#include <font/LogicalFontInstance.hxx>
 #include <font/PhysicalFontCollection.hxx>
 
 #include <QtGui/QFont>
@@ -184,7 +184,7 @@ QFont QtFontFace::CreateFont() const
     return aFont;
 }
 
-rtl::Reference<LogicalFontInstance>
+rtl::Reference<vcl::font::LogicalFontInstance>
 QtFontFace::CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const
 {
     return new QtFont(*this, rFSD);

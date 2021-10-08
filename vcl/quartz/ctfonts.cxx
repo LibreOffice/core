@@ -32,9 +32,9 @@
 #include <osx/saldata.hxx>
 #include <osx/salinst.h>
 #endif
-#include <fontinstance.hxx>
 #include <fontattributes.hxx>
 #include <impglyphitem.hxx>
+#include <font/LogicalFontInstance.hxx>
 #include <font/PhysicalFontCollection.hxx>
 #include <quartz/salgdi.h>
 #include <quartz/utils.h>
@@ -47,7 +47,7 @@ static double toRadian(int nDegree)
 }
 
 CoreTextStyle::CoreTextStyle(const vcl::font::PhysicalFontFace& rPFF, const vcl::font::FontSelectPattern& rFSP)
-    : LogicalFontInstance(rPFF, rFSP)
+    : vcl::font::LogicalFontInstance(rPFF, rFSP)
     , mfFontStretch( 1.0 )
     , mfFontRotation( 0.0 )
     , mbFauxBold(false)
@@ -262,7 +262,7 @@ hb_font_t* CoreTextStyle::ImplInitHbFont()
     return InitHbFont(pHbFace);
 }
 
-rtl::Reference<LogicalFontInstance> CoreTextFontFace::CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const
+rtl::Reference<vcl::font::LogicalFontInstance> CoreTextFontFace::CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const
 {
     return new CoreTextStyle(*this, rFSD);
 }

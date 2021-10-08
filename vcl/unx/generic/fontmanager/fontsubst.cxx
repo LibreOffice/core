@@ -44,7 +44,7 @@ class FcGlyphFallbackSubstitution
 {
     // TODO: add a cache
 public:
-    bool FindFontSubstitute(vcl::font::FontSelectPattern&, LogicalFontInstance* pLogicalFont, OUString& rMissingCodes) const override;
+    bool FindFontSubstitute(vcl::font::FontSelectPattern&, vcl::font::LogicalFontInstance* pLogicalFont, OUString& rMissingCodes) const override;
 };
 
 }
@@ -171,7 +171,7 @@ bool FcPreMatchSubstitution::FindFontSubstitute(vcl::font::FontSelectPattern &rF
 }
 
 bool FcGlyphFallbackSubstitution::FindFontSubstitute(vcl::font::FontSelectPattern& rFontSelData,
-    LogicalFontInstance* /*pLogicalFont*/,
+    vcl::font::LogicalFontInstance* /*pLogicalFont*/,
     OUString& rMissingCodes ) const
 {
     // We don't actually want to talk to Fontconfig at all for symbol fonts

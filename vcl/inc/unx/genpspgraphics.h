@@ -81,7 +81,7 @@ public:
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;
 
     virtual void            SetTextColor( Color nColor ) override;
-    virtual void            SetFont(LogicalFontInstance*, int nFallbackLevel) override;
+    virtual void            SetFont(vcl::font::LogicalFontInstance*, int nFallbackLevel) override;
     virtual void            GetFontMetric( vcl::font::FontInstanceDataRef&, int nFallbackLevel ) override;
     virtual FontCharMapRef  GetFontCharMap() const override;
     virtual bool            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const override;
