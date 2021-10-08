@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ab5f16b8_1da48362",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-08T10:01:26Z",
+      "side": 1,
+      "message": "Is empty string as a valid value needed here?\nI will add the default value in the parameter list, and remove the extra argument.",
+      "parentUuid": "4ab60ad2_691447a0",
+      "revId": "4e21f291aeeeb906b6703370bfe3aa991a5bc033",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f6a9c496_c336cba3",
         "filename": "filter/source/svg/svgexport.cxx",
         "patchSetId": 7
@@ -48,6 +66,24 @@
       "writtenOn": "2021-10-08T05:31:36Z",
       "side": 1,
       "message": "I don\u0027t see why do you need to change ImplWriteActions.\n\n                    const OUString aElementId \u003d sPlaceholderTag; // has no overhead, since is \"constructed\" from literal\n                    const OUString* pElementId;\n                    if( mbPresentation )\n                    {\n                        ...\n                        if( bTextField )\n                        {\n                            ...\n                            pElementId \u003d \u0026aElementId;\n                            ...\n\nNo logic change needed at all.",
+      "revId": "4e21f291aeeeb906b6703370bfe3aa991a5bc033",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "008d7595_c2e63112",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2111,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-08T10:01:26Z",
+      "side": 1,
+      "message": "Good solution; But isn\u0027t there a value in migrating from pointer -\u003e reference, and nullptr -\u003e default value?",
+      "parentUuid": "f6a9c496_c336cba3",
       "revId": "4e21f291aeeeb906b6703370bfe3aa991a5bc033",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
