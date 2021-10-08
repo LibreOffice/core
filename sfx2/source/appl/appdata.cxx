@@ -31,7 +31,6 @@
 #include <appbaslib.hxx>
 #include <childwinimpl.hxx>
 #include <ctrlfactoryimpl.hxx>
-#include <shellimpl.hxx>
 #include <unoctitm.hxx>
 #include <svl/svdde.hxx>
 

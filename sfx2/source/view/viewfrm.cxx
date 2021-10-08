@@ -85,7 +85,6 @@
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include <framework/framelistanalyzer.hxx>
-#include <shellimpl.hxx>
 
 #include <optional>
 

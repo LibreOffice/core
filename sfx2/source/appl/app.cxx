@@ -50,7 +50,6 @@
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/stbitem.hxx>
 #include <sfx2/dockwin.hxx>
-#include <shellimpl.hxx>
 #include <comphelper/lok.hxx>
 #include <sidebar/ControllerFactory.hxx>
 

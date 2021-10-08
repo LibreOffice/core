@@ -60,7 +60,6 @@ excludelist:
     - sfx2/fcontnr.hxx
     - sfx2/msgpool.hxx
     - sfx2/viewsh.hxx
-    - shellimpl.hxx
     sfx2/source/appl/appmisc.cxx:
     # Needed for TypedWhichId macro
     - svl/stritem.hxx

@@ -47,7 +47,6 @@
 #include <nochaos.hxx>
 #include <sfxpicklist.hxx>
 #include <ctrlfactoryimpl.hxx>
-#include <shellimpl.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;

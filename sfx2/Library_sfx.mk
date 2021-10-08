@@ -113,7 +113,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/appl/preventduplicateinteraction \
     sfx2/source/appl/sfxhelp \
     sfx2/source/appl/sfxpicklist \
-    sfx2/source/appl/shellimpl \
     sfx2/source/appl/shutdownicon \
     sfx2/source/appl/workwin \
     sfx2/source/appl/xpackcreator \
