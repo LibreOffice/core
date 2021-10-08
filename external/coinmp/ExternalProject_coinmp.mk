@@ -20,8 +20,7 @@ $(call gb_ExternalProject_get_state_target,coinmp,build) :
 		MSBuild.exe CoinMP.sln /t:Build \
 			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 			/p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) \
-			$(if $(filter 160,$(VCVER)),/p:PlatformToolset=v142 /p:VisualStudioVersion=16.0 /ToolsVersion:Current) \
-			$(if $(filter 170,$(VCVER)),/p:PlatformToolset=v143 /p:VisualStudioVersion=17.0 /ToolsVersion:Current) \
+			/p:PlatformToolset=$(VCTOOLSET) /p:VisualStudioVersion=$(VCVER) /ToolsVersion:Current \
 			$(if $(filter 10,$(WINDOWS_SDK_VERSION)),/p:WindowsTargetPlatformVersion=$(UCRTVERSION)) \
 	,CoinMP/MSVisualStudio/v9)
 	$(call gb_Trace_EndRange,coinmp,EXTERNAL)

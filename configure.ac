@@ -3928,9 +3928,9 @@ find_msvc()
 {
     # Find Visual C++ 2019
     # Args: $1 (optional) : The VS version year
-    # Return values: $vctest, $vcyear, $vcnum, $vcnumwithdot, $vcbuildnumber
+    # Return values: $vctest, $vcyear, $vctoolset, $vcnumwithdot, $vcbuildnumber
 
-    unset vctest vcnum vcnumwithdot vcbuildnumber
+    unset vctest vctoolset vcnumwithdot vcbuildnumber
 
     vs_versions_to_check "$1"
     if test "$build_os" = wsl; then
@@ -3960,11 +3960,11 @@ find_msvc()
         case "$vcnumwithdot" in
         16.0)
             vcyear=2019
-            vcnum=160
+            vctoolset=v142
             ;;
         17.0)
             vcyear=2022
-            vcnum=170
+            vctoolset=v143
             ;;
         esac
         vcbuildnumber=`ls $vctest/VC/Tools/MSVC -A1r | head -1`
@@ -4127,13 +4127,14 @@ if test "$_os" = "WINNT"; then
         PathFormat "$COMPATH"
         COMPATH=`win_short_path_for_make "$formatted_path"`
 
-        VCVER=$vcnum
+        VCVER=$vcnumwithdot
+        VCTOOLSET=$vctoolset
 
         # The WINDOWS_SDK_ACCEPTABLE_VERSIONS is mostly an educated guess...  Assuming newer ones
         # are always "better", we list them in reverse chronological order.
 
-        case "$vcnum" in
-        160 | 170)
+        case "$vcnumwithdot" in
+        16.0 | 17.0)
             WINDOWS_SDK_ACCEPTABLE_VERSIONS="10.0 8.1A 8.1 8.0"
             ;;
         esac
@@ -4225,6 +4226,7 @@ if test "$_os" = "WINNT"; then
     AC_SUBST(CXX_X86_BINARY)
 fi
 AC_SUBST(VCVER)
+AC_SUBST(VCTOOLSET)
 AC_SUBST(DEVENV)
 AC_SUBST(MSVC_CXX)
 
@@ -6427,7 +6429,7 @@ find_msms()
     dnl the result will be the highest MSM version found in the highest directory.
 
     case "$VCVER" in
-        160 | 170)
+        16.0 | 17.0)
         my_msm_files="Microsoft_VC141_CRT_x86.msm Microsoft_VC142_CRT_x86.msm ${my_msm_files}"
         ;;
     esac
@@ -6437,7 +6439,7 @@ find_msms()
 
     msmdir=
     case "$VCVER" in
-    160 | 170)
+    16.0 | 17.0)
         for f in ${my_msm_files}; do
             for l in `ls -1 $VC_PRODUCT_DIR/redist/MSVC/`; do
                 my_msm_dir="$VC_PRODUCT_DIR/redist/MSVC/$l/MergeModules/"
@@ -6475,7 +6477,7 @@ find_msvc_x64_dlls()
 
     msvcdllpath="$VC_PRODUCT_DIR/redist/x64/Microsoft.VC${VCVER}.CRT"
     case "$VCVER" in
-    160 | 170)
+    16.0 | 17.0)
         for crtver in 141 142; do
             for l in `ls -1 $VC_PRODUCT_DIR/redist/MSVC/`; do
                 echo "$as_me:$LINENO: testing $VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC$crtver.CRT" >&5

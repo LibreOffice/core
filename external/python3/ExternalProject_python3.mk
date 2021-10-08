@@ -42,8 +42,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			/p:libffiOutDir=$(call gb_UnpackedTarball_get_dir,libffi)/$(HOST_PLATFORM)/.libs \
 			/p:libffiIncludeDir=$(call gb_UnpackedTarball_get_dir,libffi)/$(HOST_PLATFORM)/include \
 			/maxcpucount \
-			$(if $(filter 160,$(VCVER)),/p:PlatformToolset=v142 /p:VisualStudioVersion=16.0 /ToolsVersion:Current) \
-			$(if $(filter 170,$(VCVER)),/p:PlatformToolset=v143 /p:VisualStudioVersion=17.0 /ToolsVersion:Current) \
+			/p:PlatformToolset=$(VCTOOLSET) /p:VisualStudioVersion=$(VCVER) /ToolsVersion:Current \
 			$(if $(filter 10,$(WINDOWS_SDK_VERSION)),/p:WindowsTargetPlatformVersion=$(UCRTVERSION)) \
 	,PCBuild)
 	$(call gb_Trace_EndRange,python3,EXTERNAL)
