@@ -115,6 +115,8 @@ class SwContentTree final : public SfxListener
     bool m_bTableTracking = true;
     bool m_bSectionTracking = true;
 
+    SwOutlineNodes::size_type m_nLastGotoContentWasOutlinePos = SwOutlineNodes::npos;
+
     enum class State { ACTIVE, CONSTANT, HIDDEN } m_eState;
 
     bool                m_bIsRoot             :1;
