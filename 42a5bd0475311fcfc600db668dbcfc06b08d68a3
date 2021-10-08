@@ -39,6 +39,30 @@
       },
       "revId": "42a5bd0475311fcfc600db668dbcfc06b08d68a3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "162b7a3d_1ab326a4",
+        "filename": "unotools/source/config/fontcfg.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-10-08T18:50:14Z",
+      "side": 1,
+      "message": "Ah, good find! I\u0027ll fix this, thanks Mike.",
+      "parentUuid": "6e30f458_3cdd5978",
+      "range": {
+        "startLine": 708,
+        "startChar": 64,
+        "endLine": 708,
+        "endChar": 80
+      },
+      "revId": "42a5bd0475311fcfc600db668dbcfc06b08d68a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
