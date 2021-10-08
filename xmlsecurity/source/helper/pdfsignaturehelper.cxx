@@ -562,7 +562,7 @@ bool PDFSignatureHelper::Sign(const uno::Reference<frame::XModel>& xModel,
     }
     if (!aSignatureLineShape.empty())
     {
-        aDocument.SetSignatureLine(aSignatureLineShape);
+        aDocument.SetSignatureLine(std::move(aSignatureLineShape));
     }
 
     if (!aDocument.Sign(m_xCertificate, m_aDescription, bAdES))

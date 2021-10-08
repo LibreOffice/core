@@ -60,7 +60,7 @@ public:
     void stop();
     bool isRunning() const;
 
-    void setImageList( ::std::vector< Image > const& i_images );
+    void setImageList( ::std::vector< Image > && i_images );
 
     // default images
     static ::std::vector< OUString >

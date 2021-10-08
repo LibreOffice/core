@@ -141,7 +141,7 @@ void Throbber::initImages()
         }
 
         if ( nPreferredSet < aImageSets.size() )
-            setImageList( aImageSets[nPreferredSet] );
+            setImageList( std::vector(aImageSets[nPreferredSet]) );
     }
     catch( const Exception& )
     {
@@ -163,11 +163,11 @@ bool Throbber::isRunning() const
     return maWaitTimer.IsActive();
 }
 
-void Throbber::setImageList( ::std::vector< Image > const& i_images )
+void Throbber::setImageList( ::std::vector< Image > && i_images )
 {
     SAL_WARN_IF( i_images.size()>=SAL_MAX_INT32, "vcl.control", "Throbber::setImageList: too many images!" );
 
-    maImageList = i_images;
+    maImageList = std::move(i_images);
 
     const Image aInitialImage( !maImageList.empty() ? maImageList[ 0 ] : Image() );
     SetImage( aInitialImage );
