@@ -601,7 +601,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                 sal_uInt32 nSize = aSequence.getLength();
                 SvMemoryStream aStream ( aSequence.getArray(), nSize, StreamMode::READ );
                 aStream.Seek ( STREAM_SEEK_TO_BEGIN );
-                auto pItemSet = std::make_unique<SfxItemSet>( SmDocShell::GetPool(), svl::Items<
+                auto pItemSet = std::make_unique<SfxItemSetFixed<
                     SID_PRINTTITLE,      SID_PRINTTITLE,
                     SID_PRINTTEXT,       SID_PRINTTEXT,
                     SID_PRINTFRAME,      SID_PRINTFRAME,
@@ -610,7 +610,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                     SID_NO_RIGHT_SPACES, SID_NO_RIGHT_SPACES,
                     SID_SAVE_ONLY_USED_SYMBOLS, SID_SAVE_ONLY_USED_SYMBOLS,
                     SID_AUTO_CLOSE_BRACKETS,    SID_AUTO_CLOSE_BRACKETS,
-                    SID_SMEDITWINDOWZOOM,       SID_SMEDITWINDOWZOOM> );
+                    SID_SMEDITWINDOWZOOM,       SID_SMEDITWINDOWZOOM>> ( SmDocShell::GetPool() );
                 SmModule *pp = SM_MOD();
                 pp->GetConfig()->ConfigToItemSet(*pItemSet);
                 VclPtr<SfxPrinter> pPrinter = SfxPrinter::Create ( aStream, std::move(pItemSet) );

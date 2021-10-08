@@ -117,8 +117,8 @@ SvxHpLinkDlg::SvxHpLinkDlg(SfxBindings* pBindings, SfxChildWindow* pChild, weld:
     m_xCancelBtn->set_label(CuiResId(RID_SVXSTR_HYPDLG_CLOSEBUT));
 
     // create itemset for tabpages
-    mpItemSet = std::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(), svl::Items<SID_HYPERLINK_GETLINK,
-                               SID_HYPERLINK_SETLINK> );
+    mpItemSet = std::make_unique<SfxItemSetFixed<SID_HYPERLINK_GETLINK,
+                               SID_HYPERLINK_SETLINK>>( SfxGetpApp()->GetPool());
 
     SvxHyperlinkItem aItem(SID_HYPERLINK_GETLINK);
     mpItemSet->Put(aItem);

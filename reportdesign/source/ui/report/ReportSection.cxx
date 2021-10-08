@@ -596,9 +596,7 @@ void OReportSection::createDefault(const OUString& _sType,SdrObject* _pObj)
                     if( pSourceObj )
                     {
                         const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
-                        SfxItemSet aDest(
-                            _pObj->getSdrModelFromSdrObject().GetItemPool(),
-                            svl::Items<
+                        SfxItemSetFixed<
                                 // Ranges from SdrAttrObj:
                                 SDRATTR_START, SDRATTR_SHADOW_LAST,
                                 SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
@@ -609,7 +607,8 @@ void OReportSection::createDefault(const OUString& _sType,SdrObject* _pObj)
                                 SDRATTR_GRAF_FIRST,
                                     SDRATTR_CUSTOMSHAPE_LAST,
                                 // Range from SdrTextObj:
-                                EE_ITEMS_START, EE_ITEMS_END>);
+                                EE_ITEMS_START, EE_ITEMS_END>
+                            aDest( _pObj->getSdrModelFromSdrObject().GetItemPool() );
                         aDest.Set( rSource );
                         _pObj->SetMergedItemSet( aDest );
                         Degree100 nAngle = pSourceObj->GetRotateAngle();
