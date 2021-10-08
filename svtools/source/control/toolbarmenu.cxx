@@ -35,27 +35,19 @@ using namespace ::com::sun::star::accessibility;
 
 namespace {
 
-vcl::Window* GetTopMostParentSystemWindow( vcl::Window* pWindow )
+SystemWindow* GetTopMostParentSystemWindow(vcl::Window& rWindow)
 {
-    OSL_ASSERT( pWindow );
-    if ( pWindow )
+    // ->manually search topmost system window
+    // required because their might be another system window between this and the top window
+    vcl::Window* pWindow = rWindow.GetParent();
+    SystemWindow* pTopMostSysWin = nullptr;
+    while ( pWindow )
     {
-        // ->manually search topmost system window
-        // required because their might be another system window between this and the top window
+        if ( pWindow->IsSystemWindow() )
+            pTopMostSysWin = static_cast<SystemWindow*>(pWindow);
         pWindow = pWindow->GetParent();
-        SystemWindow* pTopMostSysWin = nullptr;
-        while ( pWindow )
-        {
-            if ( pWindow->IsSystemWindow() )
-                pTopMostSysWin = static_cast<SystemWindow*>(pWindow);
-            pWindow = pWindow->GetParent();
-        }
-        pWindow = pTopMostSysWin;
-        OSL_ASSERT( pWindow );
-        return pWindow;
     }
-
-    return nullptr;
+    return pTopMostSysWin;
 }
 
 class ToolbarPopupStatusListener : public svt::FrameStatusListener
@@ -182,9 +174,8 @@ InterimToolbarPopup::InterimToolbarPopup(const css::uno::Reference<css::frame::X
     , m_xContainer(m_xBuilder->weld_container("container"))
     , m_xPopup(std::move(xPopup))
 {
-    vcl::Window* pWindow = GetTopMostParentSystemWindow(this);
-    if (pWindow)
-        static_cast<SystemWindow*>(pWindow)->GetTaskPaneList()->AddWindow(this);
+    if (SystemWindow* pWindow = GetTopMostParentSystemWindow(*this))
+        pWindow->GetTaskPaneList()->AddWindow(this);
 
     // move the WeldToolbarPopup contents into this interim toolbar so welded contents can appear as a dropdown in an unwelded toolbar
     m_xPopup->getTopLevel()->move(m_xPopup->getContainer(), m_xContainer.get());
@@ -200,9 +191,8 @@ void InterimToolbarPopup::GetFocus()
 
 void InterimToolbarPopup::dispose()
 {
-    vcl::Window* pWindow = GetTopMostParentSystemWindow(this);
-    if (pWindow)
-        static_cast<SystemWindow*>(pWindow)->GetTaskPaneList()->RemoveWindow(this);
+    if (SystemWindow* pWindow = GetTopMostParentSystemWindow(*this))
+        pWindow->GetTaskPaneList()->RemoveWindow(this);
 
     // if we have focus when disposed, pick the document window as destination
     // for focus rather than let it go to an arbitrary windows
