@@ -159,6 +159,43 @@ DAVResourceAccess & DAVResourceAccess::operator=(
     return *this;
 }
 
+void DAVResourceAccess::OPTIONS(
+    DAVOptions & rOptions,
+    const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+{
+    initialize();
+
+    int errorCount = 0;
+    bool bRetry;
+    do
+    {
+        bRetry = false;
+        try
+        {
+            DAVRequestHeaders aHeaders;
+
+            getUserRequestHeaders( xEnv,
+                                   getRequestURI(),
+                                   ucb::WebDAVHTTPMethod_OPTIONS,
+                                   aHeaders );
+
+            m_xSession->OPTIONS( getRequestURI(),
+                                  rOptions,
+                                  DAVRequestEnvironment(
+                                      getRequestURI(),
+                                      new DAVAuthListener_Impl( xEnv, m_aURL ),
+                                      aHeaders, xEnv ) );
+        }
+        catch (DAVException const& e)
+        {
+            errorCount++;
+            bRetry = handleException( e, errorCount );
+            if ( !bRetry )
+                throw;
+        }
+    }
+    while ( bRetry );
+}
 
 void DAVResourceAccess::PROPFIND(
     const Depth nDepth,
