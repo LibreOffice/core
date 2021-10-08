@@ -14,6 +14,7 @@
 #include <unotools/tempfile.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/borderline.hxx>
+#include <svx/svdpage.hxx>
 #include <unotools/mediadescriptor.hxx>
 
 #include <docsh.hxx>
@@ -61,6 +62,7 @@ public:
     void testTdf43003();
     void testTdf133887();
     void testTdf133889();
+    void testTdf144970();
     void testTdf138646();
     void testTdf105558();
     void testTdf90278();
@@ -89,6 +91,7 @@ public:
     CPPUNIT_TEST(testTdf43003);
     CPPUNIT_TEST(testTdf133887);
     CPPUNIT_TEST(testTdf133889);
+    CPPUNIT_TEST(testTdf144970);
     CPPUNIT_TEST(testTdf138646);
     CPPUNIT_TEST(testTdf105558);
     CPPUNIT_TEST(testTdf90278);
@@ -1053,6 +1056,48 @@ void ScMacrosTest::testTdf144085()
     css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
     xCloseable->close(true);
 }
+
+void ScMacrosTest::testTdf144970()
+{
+    OUString aFileName;
+    createFileURL(u"tdf144970.ods", aFileName);
+    auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    Any aRet;
+    Sequence< sal_Int16 > aOutParamIndex;
+    Sequence< Any > aOutParam;
+    Sequence< uno::Any > aParams;
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_ENGLISH_XL_A1;
+    rDoc.SetGrammar(eGram);
+
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    const SdrPage* pPage = pDrawLayer->GetPage(0);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());
+
+    // Without the fix in place, this test would have failed with
+    // - Expression: false
+    // - Unexpected dialog:  Error: BASIC runtime error.
+    // An exception occurred
+    // Type: com.sun.star.lang.IllegalArgumentException
+    SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:Standard.Module1.Main?language=Basic&location=document",
+        aParams, aRet, aOutParamIndex, aOutParam);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
+
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
+}
+
 void ScMacrosTest::testTdf138646()
 {
     OUString aFileName;
