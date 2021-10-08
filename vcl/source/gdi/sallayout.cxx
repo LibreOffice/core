@@ -188,7 +188,7 @@ bool SalLayout::GetOutline(basegfx::B2DPolyPolygonVector& rVector) const
     Point aPos;
     const GlyphItem* pGlyph;
     int nStart = 0;
-    const LogicalFontInstance* pGlyphFont;
+    const vcl::font::LogicalFontInstance* pGlyphFont;
     while (GetNextGlyph(&pGlyph, aPos, nStart, &pGlyphFont))
     {
         // get outline of individual glyph, ignoring "empty" glyphs
@@ -221,7 +221,7 @@ bool SalLayout::GetBoundRect(tools::Rectangle& rRect) const
     Point aPos;
     const GlyphItem* pGlyph;
     int nStart = 0;
-    const LogicalFontInstance* pGlyphFont;
+    const vcl::font::LogicalFontInstance* pGlyphFont;
     while (GetNextGlyph(&pGlyph, aPos, nStart, &pGlyphFont))
     {
         // get bounding rectangle of individual glyph
@@ -492,7 +492,7 @@ sal_Int32 GenericSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoor
 
 bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
                                     Point& rPos, int& nStart,
-                                    const LogicalFontInstance** ppGlyphFont,
+                                    const vcl::font::LogicalFontInstance** ppGlyphFont,
                                     const vcl::font::PhysicalFontFace**) const
 {
     std::vector<GlyphItem>::const_iterator pGlyphIter = m_GlyphItems.begin();
@@ -1106,7 +1106,7 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, tools::Long* pCaretXArray
 
 bool MultiSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
                                   Point& rPos, int& nStart,
-                                  const LogicalFontInstance** ppGlyphFont,
+                                  const vcl::font::LogicalFontInstance** ppGlyphFont,
                                   const vcl::font::PhysicalFontFace** pFallbackFont) const
 {
     // NOTE: nStart is tagged with current font index

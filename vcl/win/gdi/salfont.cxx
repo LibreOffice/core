@@ -178,7 +178,7 @@ public:
         ReleaseDC(nullptr, mhDC);
     };
 
-    bool FindFontSubstitute(vcl::font::FontSelectPattern&, LogicalFontInstance* pLogicalFont, OUString& rMissingChars) const override;
+    bool FindFontSubstitute(vcl::font::FontSelectPattern&, vcl::font::LogicalFontInstance* pLogicalFont, OUString& rMissingChars) const override;
 private:
     HDC mhDC;
     bool HasMissingChars(vcl::font::PhysicalFontFace*, OUString& rMissingChars) const;
@@ -288,7 +288,7 @@ bool WinPreMatchFontSubstititution::FindFontSubstitute(vcl::font::FontSelectPatt
 
 // find a fallback font for missing characters
 // TODO: should stylistic matches be searched and preferred?
-bool WinGlyphFallbackSubstititution::FindFontSubstitute(vcl::font::FontSelectPattern& rFontSelData, LogicalFontInstance* /*pLogicalFont*/, OUString& rMissingChars) const
+bool WinGlyphFallbackSubstititution::FindFontSubstitute(vcl::font::FontSelectPattern& rFontSelData, vcl::font::LogicalFontInstance* /*pLogicalFont*/, OUString& rMissingChars) const
 {
     // guess a locale matching to the missing chars
     LanguageType eLang = rFontSelData.meLanguage;
@@ -667,7 +667,7 @@ sal_IntPtr WinFontFace::GetFontId() const
     return mnId;
 }
 
-rtl::Reference<LogicalFontInstance> WinFontFace::CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const
+rtl::Reference<vcl::font::LogicalFontInstance> WinFontFace::CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const
 {
 #if HAVE_FEATURE_SKIA
     if (SkiaHelper::isVCLSkiaEnabled())
@@ -855,7 +855,7 @@ HFONT WinSalGraphics::ImplDoSetFont(vcl::font::FontSelectPattern const & i_rFont
     return hNewFont;
 }
 
-void WinSalGraphics::SetFont(LogicalFontInstance* pFont, int nFallbackLevel)
+void WinSalGraphics::SetFont(vcl::font::LogicalFontInstance* pFont, int nFallbackLevel)
 {
     // check that we don't change the first font while ScopedFont has replaced HFONT
     assert(!mpWinFontEntry[0].is() || nFallbackLevel != 0 || mpWinFontEntry[0]->GetHFONT());

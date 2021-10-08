@@ -22,8 +22,8 @@
 #include <hb-ot.h>
 #include <hb-graphite2.h>
 
+#include <font/LogicalFontInstance.hxx>
 #include <font/PhysicalFontFace.hxx>
-#include <fontinstance.hxx>
 #include <impfontcache.hxx>
 
 #include <o3tl/hash_combine.hxx>
@@ -44,7 +44,8 @@ namespace std
     };
 }
 
-
+namespace vcl::font
+{
 LogicalFontInstance::LogicalFontInstance(const vcl::font::PhysicalFontFace& rFontFace, const vcl::font::FontSelectPattern& rFontSelData )
     : mxFontMetric( new vcl::font::FontInstanceData( rFontSelData ))
     , mpConversion( nullptr )
@@ -170,6 +171,7 @@ bool LogicalFontInstance::IsGraphiteFont()
         m_xbIsGraphiteFont = hb_graphite2_face_get_gr_face(hb_font_get_face(GetHbFont())) != nullptr;
     }
     return *m_xbIsGraphiteFont;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

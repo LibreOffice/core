@@ -24,7 +24,7 @@
 #include <sallayout.hxx>
 #include <salgeom.hxx>
 #include <salgdi.hxx>
-#include <fontinstance.hxx>
+#include <font/LogicalFontInstance.hxx>
 #include <fontattributes.hxx>
 #include <font/PhysicalFontFace.hxx>
 #include <impfont.hxx>
@@ -66,7 +66,7 @@ public:
                                 BYTE nPitchAndFamily  );
     virtual                 ~WinFontFace() override;
 
-    virtual rtl::Reference<LogicalFontInstance> CreateFontInstance( const vcl::font::FontSelectPattern& ) const override;
+    virtual rtl::Reference<vcl::font::LogicalFontInstance> CreateFontInstance( const vcl::font::FontSelectPattern& ) const override;
     virtual sal_IntPtr      GetFontId() const override;
     void                    SetFontId( sal_IntPtr nId ) { mnId = nId; }
     void                    UpdateFromHDC( HDC ) const;
@@ -339,7 +339,7 @@ public:
     // set the text color to a specific color
     virtual void            SetTextColor( Color nColor ) override;
     // set the font
-    virtual void            SetFont( LogicalFontInstance*, int nFallbackLevel ) override;
+    virtual void            SetFont( vcl::font::LogicalFontInstance*, int nFallbackLevel ) override;
     // get the current font's metrics
     virtual void            GetFontMetric( vcl::font::FontInstanceDataRef&, int nFallbackLevel ) override;
     // get the repertoire of the current font
