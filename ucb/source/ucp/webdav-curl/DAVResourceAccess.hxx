@@ -77,6 +77,11 @@ public:
 
     // DAV methods
 
+    /// @throws DAVException
+    void
+    OPTIONS(
+              DAVOptions & rOptions,
+              const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
     // allprop & named
     /// @throws DAVException
