@@ -27,13 +27,12 @@
 
 #include <vector>
 
+namespace vcl::font
+{
 /**
     A PhysicalFontFaceCollection is created by a PhysicalFontCollection and
     becomes invalid when original PhysicalFontCollection is modified.
  */
-
-namespace vcl::font
-{
 class PhysicalFontFaceCollection
 {
 private:
