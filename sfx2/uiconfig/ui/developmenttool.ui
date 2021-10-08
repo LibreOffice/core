@@ -272,10 +272,9 @@
                   <object class="GtkLabel" id="class_name_label">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
+                    <property name="margin-end">6</property>
                     <property name="hexpand">False</property>
                     <property name="vexpand">False</property>
-                    <property name="xpad">6</property>
-                    <property name="ypad">6</property>
                     <property name="label" translatable="yes" context="developmenttool|classname">Class name:</property>
                     <accessibility>
                       <relation type="label-for" target="class_name_value_id"/>
