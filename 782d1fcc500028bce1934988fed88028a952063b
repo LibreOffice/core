@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dafe676_eb2bec7e",
+        "filename": "svgio/source/svgreader/svgtools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-08T10:56:33Z",
+      "side": 1,
+      "message": "This is not really the best thing here.\n1. It changes char (1-byte) to char16_t (2-byte) string, with additional refcount field. It increases the memory requirement.\n2. It is only needed for string comparison and length; and that is done without any speed loss with good old static character arrays - matchIgnoreAsciiCase is optimized for that; you only need to use SAL_N_ELEMENTS(aStrGrad)-1 in place of old strlen to get compile-time constant.",
+      "revId": "782d1fcc500028bce1934988fed88028a952063b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
