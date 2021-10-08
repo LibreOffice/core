@@ -1336,7 +1336,6 @@ void makeRedline( SwPaM const & rPaM,
 
                 for (size_t i = 0; i < aEntries.size(); ++i)
                 {
-                    SfxItemPropertyMapEntry const*const pEntry = aEntries[i];
                     const uno::Any &rValue = aValues[i];
                     if (i == nNumId)
                     {
@@ -1354,6 +1353,7 @@ void makeRedline( SwPaM const & rPaM,
                     }
                     else
                     {
+                        SfxItemPropertyMapEntry const*const pEntry = aEntries[i];
                         rPropSet.setPropertyValue(*pEntry, rValue, aItemSet);
                         if (i == nStyleId)
                             rValue >>= sParaStyleName;
