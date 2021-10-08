@@ -1627,7 +1627,7 @@ void Printer::ClipAndDrawGradientMetafile ( const Gradient &rGradient, const too
     Pop();
 }
 
-void Printer::SetFontOrientation( LogicalFontInstance* const pFontEntry ) const
+void Printer::SetFontOrientation( vcl::font::LogicalFontInstance* const pFontEntry ) const
 {
     pFontEntry->SetOrientationInData(pFontEntry->GetOrientationFromData());
 }
