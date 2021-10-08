@@ -9,6 +9,8 @@
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
+      <!-- column-name weight1 -->
+      <column type="gint"/>
     </columns>
   </object>
   <object class="GtkTreeStore" id="object_inspector_interfaces_liststore">
@@ -17,6 +19,8 @@
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
+      <!-- column-name weight1 -->
+      <column type="gint"/>
     </columns>
   </object>
   <object class="GtkTreeStore" id="object_inspector_methods_liststore">
@@ -31,6 +35,14 @@
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
+      <!-- column-name weight1 -->
+      <column type="gint"/>
+      <!-- column-name weight2 -->
+      <column type="gint"/>
+      <!-- column-name weight3 -->
+      <column type="gint"/>
+      <!-- column-name weight4 -->
+      <column type="gint"/>
     </columns>
   </object>
   <object class="GtkTreeStore" id="object_inspector_properties_liststore">
@@ -45,6 +57,14 @@
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
+      <!-- column-name weight1 -->
+      <column type="gint"/>
+      <!-- column-name weight2 -->
+      <column type="gint"/>
+      <!-- column-name weight3 -->
+      <column type="gint"/>
+      <!-- column-name weight4 -->
+      <column type="gint"/>
     </columns>
   </object>
   <object class="GtkTreeStore" id="object_inspector_services_liststore">
@@ -53,6 +73,8 @@
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
+      <!-- column-name weight1 -->
+      <column type="gint"/>
     </columns>
   </object>
   <object class="GtkBox" id="DevelopmentTool">
@@ -322,6 +344,7 @@
                               <object class="GtkCellRendererText" id="obj_insp_cellrenderertext4"/>
                               <attributes>
                                 <attribute name="text">0</attribute>
+                                <attribute name="weight">2</attribute>
                               </attributes>
                             </child>
                           </object>
@@ -367,6 +390,7 @@
                               <object class="GtkCellRendererText" id="obj_insp_cellrenderertext7"/>
                               <attributes>
                                 <attribute name="text">0</attribute>
+                                <attribute name="weight">2</attribute>
                               </attributes>
                             </child>
                           </object>
@@ -421,6 +445,7 @@
                                   <object class="GtkCellRendererText" id="obj_insp_cellrenderertext1"/>
                                   <attributes>
                                     <attribute name="text">0</attribute>
+                                    <attribute name="weight">5</attribute>
                                   </attributes>
                                 </child>
                               </object>
@@ -541,6 +566,7 @@
                               <object class="GtkCellRendererText" id="obj_insp_cellrenderertext10"/>
                               <attributes>
                                 <attribute name="text">0</attribute>
+                                <attribute name="weight">5</attribute>
                               </attributes>
                             </child>
                           </object>
