@@ -146,6 +146,7 @@
                 </child>
               </object>
               <packing>
+                <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
@@ -186,6 +187,7 @@
                 </child>
               </object>
               <packing>
+                <property name="expand">True</property>
                 <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
@@ -334,6 +336,9 @@
                         <property name="model">object_inspector_interfaces_liststore</property>
                         <property name="search-column">0</property>
                         <property name="enable-tree-lines">True</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection"/>
+                        </child>
                         <child>
                           <object class="GtkTreeViewColumn" id="interfaces_treeviewcolumn1">
                             <property name="resizable">True</property>
@@ -380,6 +385,9 @@
                         <property name="model">object_inspector_services_liststore</property>
                         <property name="search-column">0</property>
                         <property name="enable-tree-lines">True</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection"/>
+                        </child>
                         <child>
                           <object class="GtkTreeViewColumn" id="services_treeviewcolumn1">
                             <property name="resizable">True</property>
@@ -435,6 +443,9 @@
                             <property name="model">object_inspector_properties_liststore</property>
                             <property name="search-column">0</property>
                             <property name="enable-tree-lines">True</property>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection"/>
+                            </child>
                             <child>
                               <object class="GtkTreeViewColumn" id="properties_treeviewcolumn1">
                                 <property name="resizable">True</property>
@@ -556,6 +567,9 @@
                         <property name="model">object_inspector_methods_liststore</property>
                         <property name="search-column">0</property>
                         <property name="enable-tree-lines">True</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection"/>
+                        </child>
                         <child>
                           <object class="GtkTreeViewColumn" id="methods_treeviewcolumn1">
                             <property name="resizable">True</property>
