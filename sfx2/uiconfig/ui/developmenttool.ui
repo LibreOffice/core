@@ -9,6 +9,8 @@
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
+      <!-- column-name weight1 -->
+      <column type="gint"/>
     </columns>
   </object>
   <object class="GtkTreeStore" id="object_inspector_interfaces_liststore">
@@ -17,6 +19,8 @@
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
+      <!-- column-name weight1 -->
+      <column type="gint"/>
     </columns>
   </object>
   <object class="GtkTreeStore" id="object_inspector_methods_liststore">
@@ -31,6 +35,14 @@
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
+      <!-- column-name weight1 -->
+      <column type="gint"/>
+      <!-- column-name weight2 -->
+      <column type="gint"/>
+      <!-- column-name weight3 -->
+      <column type="gint"/>
+      <!-- column-name weight4 -->
+      <column type="gint"/>
     </columns>
   </object>
   <object class="GtkTreeStore" id="object_inspector_properties_liststore">
@@ -45,6 +57,14 @@
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
+      <!-- column-name weight1 -->
+      <column type="gint"/>
+      <!-- column-name weight2 -->
+      <column type="gint"/>
+      <!-- column-name weight3 -->
+      <column type="gint"/>
+      <!-- column-name weight4 -->
+      <column type="gint"/>
     </columns>
   </object>
   <object class="GtkTreeStore" id="object_inspector_services_liststore">
@@ -53,6 +73,8 @@
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
+      <!-- column-name weight1 -->
+      <column type="gint"/>
     </columns>
   </object>
   <object class="GtkBox" id="DevelopmentTool">
@@ -68,15 +90,14 @@
         <property name="position">270</property>
         <property name="wide-handle">True</property>
         <child>
-          <!-- n-columns=1 n-rows=2 -->
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="orientation">vertical</property>
             <property name="margin-start">6</property>
             <property name="margin-end">6</property>
             <property name="margin-top">6</property>
             <property name="margin-bottom">6</property>
+            <property name="orientation">vertical</property>
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
@@ -125,8 +146,8 @@
                 </child>
               </object>
               <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
@@ -165,8 +186,8 @@
                 </child>
               </object>
               <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </object>
@@ -323,6 +344,7 @@
                               <object class="GtkCellRendererText" id="obj_insp_cellrenderertext4"/>
                               <attributes>
                                 <attribute name="text">0</attribute>
+                                <attribute name="weight">2</attribute>
                               </attributes>
                             </child>
                           </object>
@@ -368,6 +390,7 @@
                               <object class="GtkCellRendererText" id="obj_insp_cellrenderertext7"/>
                               <attributes>
                                 <attribute name="text">0</attribute>
+                                <attribute name="weight">2</attribute>
                               </attributes>
                             </child>
                           </object>
@@ -422,6 +445,7 @@
                                   <object class="GtkCellRendererText" id="obj_insp_cellrenderertext1"/>
                                   <attributes>
                                     <attribute name="text">0</attribute>
+                                    <attribute name="weight">5</attribute>
                                   </attributes>
                                 </child>
                               </object>
@@ -542,6 +566,7 @@
                               <object class="GtkCellRendererText" id="obj_insp_cellrenderertext10"/>
                               <attributes>
                                 <attribute name="text">0</attribute>
+                                <attribute name="weight">5</attribute>
                               </attributes>
                             </child>
                           </object>
