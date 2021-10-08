@@ -1360,6 +1360,39 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf64242_optimizeTable)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Row set to auto-height", double(0), minimalRowHeight);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf45525)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf45525.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
+
+    CPPUNIT_ASSERT_EQUAL(3889.0, getProperty<double>(xTableRows->getByIndex(0), "Height"));
+    CPPUNIT_ASSERT_EQUAL(0.0, getProperty<double>(xTableRows->getByIndex(1), "Height"));
+    CPPUNIT_ASSERT_EQUAL(0.0, getProperty<double>(xTableRows->getByIndex(2), "Height"));
+    CPPUNIT_ASSERT_EQUAL(0.0, getProperty<double>(xTableRows->getByIndex(3), "Height"));
+    CPPUNIT_ASSERT_EQUAL(0.0, getProperty<double>(xTableRows->getByIndex(4), "Height"));
+
+    //Select three cells in the first column
+    pWrtShell->Down(/*bSelect=*/true);
+    pWrtShell->Down(/*bSelect=*/true);
+
+    dispatchCommand(mxComponent, ".uno:SetOptimalRowHeight", {});
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1914
+    // - Actual  : 3889
+    CPPUNIT_ASSERT_EQUAL(1914.0, getProperty<double>(xTableRows->getByIndex(0), "Height"));
+    CPPUNIT_ASSERT_EQUAL(1914.0, getProperty<double>(xTableRows->getByIndex(1), "Height"));
+    CPPUNIT_ASSERT_EQUAL(1914.0, getProperty<double>(xTableRows->getByIndex(2), "Height"));
+    CPPUNIT_ASSERT_EQUAL(0.0, getProperty<double>(xTableRows->getByIndex(3), "Height"));
+    CPPUNIT_ASSERT_EQUAL(0.0, getProperty<double>(xTableRows->getByIndex(4), "Height"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126784_distributeSelectedColumns)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf126784_distributeSelectedColumns.odt");
