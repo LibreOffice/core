@@ -66,7 +66,6 @@
 #include <vector>
 
 struct ImplOutDevData;
-class LogicalFontInstance;
 struct SystemGraphicsData;
 class ImplFontCache;
 class ImplMultiTextLineInfo;
@@ -104,6 +103,7 @@ namespace vcl
     class WindowOutputDevice;
     namespace font {
         struct Feature;
+        class LogicalFontInstance;
         class PhysicalFontCollection;
         class PhysicalFontFaceCollection;
     }
@@ -181,7 +181,7 @@ private:
     mutable VclPtr<OutputDevice>    mpPrevGraphics;     ///< Previous output device in list
     mutable VclPtr<OutputDevice>    mpNextGraphics;     ///< Next output device in list
     GDIMetaFile*                    mpMetaFile;
-    mutable rtl::Reference<LogicalFontInstance> mpFontInstance;
+    mutable rtl::Reference<vcl::font::LogicalFontInstance> mpFontInstance;
     mutable std::unique_ptr<vcl::font::PhysicalFontFaceCollection>  mpFontFaceCollection;
     std::vector<vcl::State>        maOutDevStateStack;
     std::unique_ptr<ImplOutDevData> mpOutDevData;
@@ -1169,12 +1169,12 @@ public:
     SAL_DLLPRIVATE static void  ImplUpdateAllFontData( bool bNewFontLists );
 
 protected:
-    SAL_DLLPRIVATE const LogicalFontInstance* GetFontInstance() const;
+    SAL_DLLPRIVATE const vcl::font::LogicalFontInstance* GetFontInstance() const;
     SAL_DLLPRIVATE tools::Long GetEmphasisAscent() const { return mnEmphasisAscent; }
     SAL_DLLPRIVATE tools::Long GetEmphasisDescent() const { return mnEmphasisDescent; }
 
     SAL_DLLPRIVATE bool InitFont() const;
-    virtual void                SetFontOrientation( LogicalFontInstance* const pFontInstance ) const;
+    virtual void                SetFontOrientation( vcl::font::LogicalFontInstance* const pFontInstance ) const;
     virtual tools::Long                GetFontExtLeading() const;
 
     virtual void ImplClearFontData(bool bNewFontLists);
@@ -1230,7 +1230,7 @@ public:
                                                          const SalLayoutGlyphs* ) const;
     SAL_DLLPRIVATE std::unique_ptr<SalLayout>
                                 getFallbackLayout(
-                                    LogicalFontInstance* pLogicalFont, int nFallbackLevel,
+                                    vcl::font::LogicalFontInstance* pLogicalFont, int nFallbackLevel,
                                     vcl::text::ImplLayoutArgs& rLayoutArgs, const SalLayoutGlyphs* ) const;
 
 

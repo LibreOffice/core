@@ -37,10 +37,10 @@ namespace vcl::font { class PhysicalFontCollection; }
 
 struct GlyphBoundRectCacheKey
 {
-    const LogicalFontInstance* m_pFont;
+    const vcl::font::LogicalFontInstance* m_pFont;
     const sal_GlyphId m_nId;
 
-    GlyphBoundRectCacheKey(const LogicalFontInstance* pFont, sal_GlyphId nID)
+    GlyphBoundRectCacheKey(const vcl::font::LogicalFontInstance* pFont, sal_GlyphId nID)
         : m_pFont(pFont), m_nId(nID)
     {}
 
@@ -68,26 +68,26 @@ private:
     // cache of recently used font instances
     struct IFSD_Equal { bool operator()( const vcl::font::FontSelectPattern&, const vcl::font::FontSelectPattern& ) const; };
     struct IFSD_Hash { size_t operator()( const vcl::font::FontSelectPattern& ) const; };
-    typedef o3tl::lru_map<vcl::font::FontSelectPattern, rtl::Reference<LogicalFontInstance>, IFSD_Hash, IFSD_Equal> FontInstanceList;
+    typedef o3tl::lru_map<vcl::font::FontSelectPattern, rtl::Reference<vcl::font::LogicalFontInstance>, IFSD_Hash, IFSD_Equal> FontInstanceList;
 
-    LogicalFontInstance* mpLastHitCacheEntry; ///< keeps the last hit cache entry
+    vcl::font::LogicalFontInstance* mpLastHitCacheEntry; ///< keeps the last hit cache entry
     FontInstanceList maFontInstanceList;
     GlyphBoundRectCache m_aBoundRectCache;
 
-    rtl::Reference<LogicalFontInstance> GetFontInstance(vcl::font::PhysicalFontCollection const*, vcl::font::FontSelectPattern&);
+    rtl::Reference<vcl::font::LogicalFontInstance> GetFontInstance(vcl::font::PhysicalFontCollection const*, vcl::font::FontSelectPattern&);
 
 public:
     ImplFontCache();
     ~ImplFontCache();
 
-    rtl::Reference<LogicalFontInstance> GetFontInstance(vcl::font::PhysicalFontCollection const *,
+    rtl::Reference<vcl::font::LogicalFontInstance> GetFontInstance(vcl::font::PhysicalFontCollection const *,
                              const vcl::Font&, const Size& rPixelSize, float fExactHeight, bool bNonAntialias = false);
-    rtl::Reference<LogicalFontInstance> GetGlyphFallbackFont( vcl::font::PhysicalFontCollection const *, vcl::font::FontSelectPattern&,
-                            LogicalFontInstance* pLogicalFont,
+    rtl::Reference<vcl::font::LogicalFontInstance> GetGlyphFallbackFont( vcl::font::PhysicalFontCollection const *, vcl::font::FontSelectPattern&,
+                            vcl::font::LogicalFontInstance* pLogicalFont,
                             int nFallbackLevel, OUString& rMissingCodes );
 
-    bool GetCachedGlyphBoundRect(const LogicalFontInstance *, sal_GlyphId, tools::Rectangle &);
-    void CacheGlyphBoundRect(const LogicalFontInstance *, sal_GlyphId, tools::Rectangle &);
+    bool GetCachedGlyphBoundRect(const vcl::font::LogicalFontInstance *, sal_GlyphId, tools::Rectangle &);
+    void CacheGlyphBoundRect(const vcl::font::LogicalFontInstance *, sal_GlyphId, tools::Rectangle &);
 
     void                Invalidate();
 };
