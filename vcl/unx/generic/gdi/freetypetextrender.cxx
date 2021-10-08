@@ -48,7 +48,7 @@ FreeTypeTextRenderImpl::~FreeTypeTextRenderImpl()
     ReleaseFonts();
 }
 
-void FreeTypeTextRenderImpl::SetFont(LogicalFontInstance *pEntry, int nFallbackLevel)
+void FreeTypeTextRenderImpl::SetFont(vcl::font::LogicalFontInstance *pEntry, int nFallbackLevel)
 {
     // release all no longer needed font resources
     for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )

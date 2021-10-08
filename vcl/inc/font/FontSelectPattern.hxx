@@ -30,12 +30,12 @@
 
 namespace vcl { class Font; }
 
-class LogicalFontInstance;
 class PhysicalFontFace;
 class Size;
 
 namespace vcl::font
 {
+class LogicalFontInstance;
 class PhysicalFontFace;
 
 class VCL_DLLPUBLIC FontSelectPattern : public FontAttributes

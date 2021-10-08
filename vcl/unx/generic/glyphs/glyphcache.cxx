@@ -23,7 +23,7 @@
 #include <unx/freetype_glyphcache.hxx>
 #include <unx/gendata.hxx>
 
-#include <fontinstance.hxx>
+#include <font/LogicalFontInstance.hxx>
 
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -67,7 +67,7 @@ FreetypeFontFile* FreetypeManager::FindFontFile(const OString& rNativeFileName)
 }
 
 FreetypeFontInstance::FreetypeFontInstance(const vcl::font::PhysicalFontFace& rPFF, const vcl::font::FontSelectPattern& rFSP)
-    : LogicalFontInstance(rPFF, rFSP)
+    : vcl::font::LogicalFontInstance(rPFF, rFSP)
     , mxFreetypeFont(FreetypeManager::get().CreateFont(this))
 {
 }
@@ -79,7 +79,7 @@ FreetypeFontInstance::~FreetypeFontInstance()
 static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
 {
     char pTagName[5];
-    LogicalFontInstance::DecodeOpenTypeTag( nTableTag, pTagName );
+    vcl::font::LogicalFontInstance::DecodeOpenTypeTag( nTableTag, pTagName );
 
     sal_uLong nLength = 0;
     FreetypeFontInstance* pFontInstance = static_cast<FreetypeFontInstance*>( pUserData );
