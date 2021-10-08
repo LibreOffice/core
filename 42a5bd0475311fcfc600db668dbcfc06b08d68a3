@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b9856c8_2ac16ab2",
+        "filename": "unotools/source/config/fontcfg.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-08T17:17:56Z",
+      "side": 1,
+      "message": "Please avoid this whitespace-only change.",
+      "revId": "42a5bd0475311fcfc600db668dbcfc06b08d68a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e30f458_3cdd5978",
+        "filename": "unotools/source/config/fontcfg.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-08T17:17:56Z",
+      "side": 1,
+      "message": "ImplFindAndErase is used exactly three times in the file; since you have added ImplIsTrailing to each of them, it seems like the function itself could be changed to include the check.",
+      "range": {
+        "startLine": 708,
+        "startChar": 64,
+        "endLine": 708,
+        "endChar": 80
+      },
+      "revId": "42a5bd0475311fcfc600db668dbcfc06b08d68a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
