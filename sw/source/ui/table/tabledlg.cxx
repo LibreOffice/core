@@ -742,14 +742,12 @@ SwTableColumnPage::SwTableColumnPage(weld::Container* pPage, weld::DialogControl
                     m_xBuilder->weld_metric_spin_button("width2", FieldUnit::CM),
                     m_xBuilder->weld_metric_spin_button("width3", FieldUnit::CM),
                     m_xBuilder->weld_metric_spin_button("width4", FieldUnit::CM),
-                    m_xBuilder->weld_metric_spin_button("width5", FieldUnit::CM),
-                    m_xBuilder->weld_metric_spin_button("width6", FieldUnit::CM) }
+                    m_xBuilder->weld_metric_spin_button("width5", FieldUnit::CM)}
     , m_aTextArr { m_xBuilder->weld_label("1"),
                    m_xBuilder->weld_label("2"),
                    m_xBuilder->weld_label("3"),
                    m_xBuilder->weld_label("4"),
-                   m_xBuilder->weld_label("5"),
-                   m_xBuilder->weld_label("6") }
+                   m_xBuilder->weld_label("5")}
     , m_xModifyTableCB(m_xBuilder->weld_check_button("adaptwidth"))
     , m_xProportionalCB(m_xBuilder->weld_check_button("adaptcolumns"))
     , m_xSpaceFT(m_xBuilder->weld_label("spaceft"))
