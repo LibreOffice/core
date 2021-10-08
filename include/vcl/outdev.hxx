@@ -634,7 +634,7 @@ public:
                                           const LineInfo& rLineInfo );
 
 protected:
-    virtual void DrawHatchLine_DrawLine(const Point& rStartPoint, const Point& rEndPoint);
+    virtual void DrawHatchLine(const Point& rStartPoint, const Point& rEndPoint);
 
 private:
 
@@ -831,7 +831,7 @@ public:
 private:
 
     SAL_DLLPRIVATE void         CalcHatchValues( const tools::Rectangle& rRect, tools::Long nDist, Degree10 nAngle10, Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1 );
-    SAL_DLLPRIVATE void         DrawHatchLine( const tools::Line& rLine, const tools::PolyPolygon& rPolyPoly, Point* pPtBuffer, bool bMtf );
+    SAL_DLLPRIVATE void         DrawHatchLines( const tools::Line& rLine, const tools::PolyPolygon& rPolyPoly, Point* pPtBuffer, bool bMtf );
     ///@}
 
 
