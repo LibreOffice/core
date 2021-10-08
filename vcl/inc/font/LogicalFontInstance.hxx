@@ -130,8 +130,6 @@ public: // TODO: make data members private
 
     inline hb_font_t* GetHbFont();
     bool IsGraphiteFont();
-    void SetAverageWidthFactor(double nFactor) { m_nAveWidthFactor = std::abs(nFactor); }
-    double GetAverageWidthFactor() const { return m_nAveWidthFactor; }
     const FontSelectPattern& GetFontSelectPattern() const { return m_aFontSelData; }
 
     const PhysicalFontFace* GetFontFace() const { return m_pFontFace.get(); }
@@ -148,6 +146,9 @@ public: // TODO: make data members private
 
 protected:
     explicit LogicalFontInstance(const PhysicalFontFace&, const FontSelectPattern&);
+
+    void SetAverageWidthFactor(double nFactor) { m_nAveWidthFactor = std::abs(nFactor); }
+    double GetAverageWidthFactor() const { return m_nAveWidthFactor; }
 
     virtual bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const = 0;
 
