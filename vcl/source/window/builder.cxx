@@ -2601,7 +2601,7 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
             if (!context.empty())
             {
                 TabPage* pPage = pTabControl->GetTabPage(nPageId);
-                pPage->SetContext(context);
+                pPage->SetContext(std::move(context));
             }
 
             for (auto const& prop : aAtkProperties)
@@ -3643,7 +3643,7 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, stringmap *pA
                     vcl::IContext* pContextControl = dynamic_cast<vcl::IContext*>(pCurrentChild.get());
                     SAL_WARN_IF(!pContextControl, "vcl", "context set for not supported item");
                     if (pContextControl)
-                        pContextControl->SetContext(aContext);
+                        pContextControl->SetContext(std::move(aContext));
                 }
             }
             else

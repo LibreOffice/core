@@ -440,7 +440,7 @@ namespace toolkit
                         aImages[ imageIndex++ ] = Image(rCachedImage.xGraphic);
                     }
                 }
-                pThrobber->setImageList( aImages );
+                pThrobber->setImageList( std::move(aImages) );
             }
             catch( const Exception& )
             {
