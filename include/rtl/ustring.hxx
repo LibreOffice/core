@@ -106,6 +106,12 @@ public:
 
     constexpr operator std::u16string_view() const { return {more.buffer, sal_uInt32(more.length)}; }
 
+    template<std::size_t M> constexpr auto append(char16_t const (&right)[M]) const
+    {
+        assert(right[M - 1] == '\0');
+        return OUStringLiteral<N + M - 1>(more.buffer, N - 1, right, M - 1);
+    }
+
 private:
     static constexpr void assertLayout() {
         // These static_asserts verifying the layout compatibility with rtl_uString cannot be class
@@ -114,6 +120,24 @@ private:
         static_assert(offsetof(OUStringLiteral, str.refCount) == offsetof(OUStringLiteral, more.refCount));
         static_assert(offsetof(OUStringLiteral, str.length) == offsetof(OUStringLiteral, more.length));
         static_assert(offsetof(OUStringLiteral, str.buffer) == offsetof(OUStringLiteral, more.buffer));
+    }
+
+#if HAVE_CPP_CONSTEVAL
+    consteval
+#else
+    constexpr
+#endif
+    OUStringLiteral(const char16_t* s1, std::size_t n1, const char16_t* s2, std::size_t n2) {
+        assertLayout();
+        assert(n1 + n2 == N - 1);
+        //TODO: Use C++20 constexpr std::copy_n (P0202R3):
+        for (std::size_t i = 0; i != n1; ++i) {
+            more.buffer[i] = s1[i];
+        }
+        for (std::size_t i = 0; i != n2; ++i) {
+            more.buffer[i + n1] = s2[i];
+        }
+        more.buffer[N - 1] = u'\0';
     }
 
     union {
