@@ -173,7 +173,11 @@ private:
     static bool shouldAccessNetworkAfterException( const DAVException & e );
 
     ResourceType resourceTypeForLocks(
-        const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment );
+        const css::uno::Reference< css::ucb::XCommandEnvironment >& rEnvironment,
+        const std::unique_ptr< DAVResourceAccess > & rResAccess );
+
+    ResourceType resourceTypeForLocks(
+        const css::uno::Reference< css::ucb::XCommandEnvironment >& rEnvironment );
 
     // XPropertyContainer replacement
     /// @throws css::beans::PropertyExistException
