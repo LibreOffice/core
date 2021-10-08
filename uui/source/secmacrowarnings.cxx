@@ -91,7 +91,7 @@ void MacroWarning::SetDocumentURL( const OUString& rDocURL )
     OUString aPath;
 
     osl::FileBase::getFileURLFromSystemPath(rDocURL, aPath);
-    aPath = INetURLObject(aPath).GetLastName();
+    aPath = INetURLObject(aPath).GetLastName(INetURLObject::DecodeMechanism::Unambiguous);
     m_xDialog->set_primary_text(aPath);
 }
 
