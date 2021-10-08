@@ -144,8 +144,7 @@ endef
 define gb_LinkTarget__command_staticlink
 $(call gb_Helper_abbreviate_dirs,\
 	rm -f $(1) && \
-	$(gb_AR) -rsu $(1) \
-		$(if $(LD_PLUGIN),--plugin $(LD_PLUGIN)) \
+	$(gb_AR) $(gb_LTOPLUGINFLAGS) -rsu $(1) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
