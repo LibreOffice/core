@@ -15,6 +15,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/vector/b2enums.hxx>
+#include <tools/degree.hxx>
 
 #include <vcl/gradient.hxx>
 #include <vcl/lineinfo.hxx>
@@ -23,6 +24,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/hatch.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/print.hxx>
 
@@ -100,6 +102,7 @@ public:
     void testDrawGradient_polygon_axial_printable();
     void testDrawGradient_rect_complex();
     void testAddGradientActions();
+    void testDrawHatch();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
     CPPUNIT_TEST(testVirtualDevice);
@@ -159,6 +162,7 @@ public:
     CPPUNIT_TEST(testDrawGradient_polygon_linear);
     CPPUNIT_TEST(testDrawGradient_rect_complex);
     CPPUNIT_TEST(testAddGradientActions);
+    CPPUNIT_TEST(testDrawHatch);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -2587,6 +2591,25 @@ void VclOutdevTest::testAddGradientActions()
 
     pAction = pContainerAction->GetAction(4);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a pop action", MetaActionType::POP, pAction->GetType());
+}
+
+void VclOutdevTest::testDrawHatch()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    tools::PolyPolygon aPolyPolygon = createPolyPolygon();
+    aPolyPolygon.Optimize(PolyOptimizeFlags::CLOSE);
+
+    pVDev->SetOutputSizePixel(Size(100, 100));
+
+    Hatch aHatch(HatchStyle::Single, COL_RED, 10, Degree10(900));
+    pVDev->DrawHatch(aPolyPolygon, aHatch);
+
+    MetaAction* pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a hatch container action", MetaActionType::HATCH,
+                                 pAction->GetType());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclOutdevTest);
