@@ -1,0 +1,32 @@
+From 4b64774b6d13ffa4f59dddf947a97d61bcfa2f2e Mon Sep 17 00:00:00 2001
+From: Jiri Kucera <sanczes@gmail.com>
+Date: Sun, 25 Jul 2021 11:35:54 +0200
+Subject: [PATCH] core: Support closefrom also for glibc.
+
+* src/posix-io.c (_gpgme_io_spawn): Use glibc's closefrom.
+--
+
+Since 2.34, glibc introduces closefrom (the implementation
+follows *BSD standard).
+
+Signed-off-by: Werner Koch <wk@gnupg.org>
+---
+ src/posix-io.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/posix-io.c b/src/posix-io.c
+index e712ef28..2a3a81fc 100644
+--- a/src/posix-io.c
++++ b/src/posix-io.c
+@@ -570,7 +570,7 @@ _gpgme_io_spawn (const char *path, char *const argv[], unsigned int flags,
+               if (fd_list[i].fd > fd)
+                 fd = fd_list[i].fd;
+             fd++;
+-#ifdef __sun
++#if defined(__sun) || defined(__FreeBSD__) || defined(__GLIBC__)
+             closefrom (fd);
+             max_fds = fd;
+ #else /*!__sun */
+-- 
+2.11.0
+
