@@ -158,7 +158,7 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
         CalcHatchValues( aRect, nWidth, rHatch.GetAngle(), aPt1, aPt2, aInc, aEndPt1 );
         do
         {
-            DrawHatchLine( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
+            DrawHatchLines( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
             aPt1.AdjustX(aInc.Width() ); aPt1.AdjustY(aInc.Height() );
             aPt2.AdjustX(aInc.Width() ); aPt2.AdjustY(aInc.Height() );
         }
@@ -170,7 +170,7 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
             CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 900_deg10, aPt1, aPt2, aInc, aEndPt1 );
             do
             {
-                DrawHatchLine( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
+                DrawHatchLines( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
                 aPt1.AdjustX(aInc.Width() ); aPt1.AdjustY(aInc.Height() );
                 aPt2.AdjustX(aInc.Width() ); aPt2.AdjustY(aInc.Height() );
             }
@@ -182,7 +182,7 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
                 CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 450_deg10, aPt1, aPt2, aInc, aEndPt1 );
                 do
                 {
-                    DrawHatchLine( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
+                    DrawHatchLines( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
                     aPt1.AdjustX(aInc.Width() ); aPt1.AdjustY(aInc.Height() );
                     aPt2.AdjustX(aInc.Width() ); aPt2.AdjustY(aInc.Height() );
                 }
@@ -302,7 +302,7 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, tools::Long n
     }
 }
 
-void OutputDevice::DrawHatchLine( const tools::Line& rLine, const tools::PolyPolygon& rPolyPoly,
+void OutputDevice::DrawHatchLines( const tools::Line& rLine, const tools::PolyPolygon& rPolyPoly,
                                       Point* pPtBuffer, bool bMtf )
 {
     assert(!is_double_buffered_window());
@@ -377,11 +377,11 @@ void OutputDevice::DrawHatchLine( const tools::Line& rLine, const tools::PolyPol
     else
     {
         for( tools::Long i = 0; i < nPCounter; i += 2 )
-            DrawHatchLine_DrawLine(pPtBuffer[i], pPtBuffer[i+1]);
+            DrawHatchLine(pPtBuffer[i], pPtBuffer[i+1]);
     }
 }
 
-void OutputDevice::DrawHatchLine_DrawLine(const Point& rStartPoint, const Point& rEndPoint)
+void OutputDevice::DrawHatchLine(const Point& rStartPoint, const Point& rEndPoint)
 {
     Point aPt1{ImplLogicToDevicePixel(rStartPoint)}, aPt2{ImplLogicToDevicePixel(rEndPoint)};
     mpGraphics->DrawLine(aPt1.X(), aPt1.Y(), aPt2.X(), aPt2.Y(), *this);
