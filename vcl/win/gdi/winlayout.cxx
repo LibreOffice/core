@@ -30,6 +30,8 @@
 #include <comphelper/windowserrorstring.hxx>
 #include <comphelper/scopeguard.hxx>
 
+#include <font/LogicalFontInstance.hxx>
+
 #include <win/salgdi.h>
 #include <win/saldata.hxx>
 #include <win/wingdiimpl.hxx>

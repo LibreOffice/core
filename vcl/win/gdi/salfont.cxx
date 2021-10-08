@@ -53,6 +53,7 @@
 
 #include <font/FontSelectPattern.hxx>
 #include <fontsubset.hxx>
+#include <font/LogicalFontInstance.hxx>
 #include <font/PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <font/PhysicalFontFace.hxx>

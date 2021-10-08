@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <unx/geninst.h>
+#include <font/LogicalFontInstance.hxx>
 #include <font/PhysicalFontCollection.hxx>
 #include <font/fontsubstitution.hxx>
 #include <unx/fontmanager.hxx>

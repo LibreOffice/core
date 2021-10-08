@@ -31,6 +31,11 @@
 
 #include <vector>
 
+namespace vcl::font
+{
+class LogicalFontInstance;
+}
+
 enum class GlyphItemFlags : sal_uInt8
 {
     NONE = 0,
