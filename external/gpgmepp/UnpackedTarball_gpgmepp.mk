@@ -25,5 +25,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,gpgmepp, \
     external/gpgmepp/w32-build-fixes-2.patch \
     $(if $(filter LINUX,$(OS)),external/gpgmepp/asan.patch) \
     $(if $(filter LINUX,$(OS)),external/gpgmepp/rpath.patch) \
+    external/gpgmepp/gpgme.git-4b64774b6d13ffa4f59dddf947a97d61bcfa2f2e.patch.1 \
 ))
 # vim: set noet sw=4 ts=4:
