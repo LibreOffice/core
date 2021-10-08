@@ -23,6 +23,7 @@
 #include <memory>
 #include <utility>
 
+#include <rtl/ustrbuf.hxx>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/providerhelper.hxx>
@@ -56,6 +57,35 @@ struct ResultListEntry
 
     explicit ResultListEntry( std::unique_ptr<ContentProperties> && pEntry ) : pData( std::move(pEntry) ) {}
 };
+
+auto DumpResources(std::vector<DAVResource> const& rResources) -> OUString
+{
+    OUStringBuffer buf;
+    for (auto const& rResource : rResources)
+    {
+        buf.append("resource URL: <");
+        buf.append(rResource.uri);
+        try {
+            CurlUri const uri(rResource.uri);
+            buf.append("> parsed URL: <");
+            buf.append(DecodeURI(uri.GetPath()));
+            buf.append("> ");
+        } catch (...) {
+            // parsing uri could fail
+            buf.append("> parsing URL failed! ");
+        }
+        buf.append("properties: ");
+        for (auto const& it : rResource.properties)
+        {
+            buf.append("\"");
+            buf.append(it.Name);
+            buf.append("\" ");
+        }
+        buf.append("\n");
+    }
+    buf.stripEnd('\n'); // the last newline is superfluous, remove it
+    return buf.makeStringAndClear();
+}
 
 }
 
@@ -343,6 +373,7 @@ bool DataSupplier::getData()
                            propertyNames,
                            resources,
                            getResultSet()->getEnvironment() );
+            SAL_INFO("ucb.ucp.webdav", "getData() - " << DumpResources(resources));
         }
         catch ( DAVException & )
         {
