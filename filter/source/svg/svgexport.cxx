@@ -78,7 +78,7 @@ using namespace ::xmloff::token;
 
 // - ooo elements and attributes -
 
-#define NSPREFIX "ooo:"
+#define NSPREFIX u"ooo:"
 
 constexpr OUStringLiteral SVG_PROP_TINYPROFILE = u"TinyMode";
 constexpr OUStringLiteral SVG_PROP_DTDSTRING = u"DTDString";
@@ -88,23 +88,23 @@ constexpr OUStringLiteral SVG_PROP_OPACITY = u"Opacity";
 constexpr OUStringLiteral SVG_PROP_POSITIONED_CHARACTERS = u"UsePositionedCharacters";
 
 // ooo xml elements
-constexpr OUStringLiteral aOOOElemTextField = u"" NSPREFIX "text_field";
+constexpr OUStringLiteral aOOOElemTextField = NSPREFIX "text_field";
 
 
 // ooo xml attributes for meta_slide
-const char    aOOOAttrSlide[] = NSPREFIX "slide";
-const char    aOOOAttrMaster[] = NSPREFIX "master";
-const char    aOOOAttrHasCustomBackground[] = NSPREFIX "has-custom-background";
-const char    aOOOAttrDisplayName[] = NSPREFIX "display-name";
-const char    aOOOAttrBackgroundVisibility[] = NSPREFIX "background-visibility";
-const char    aOOOAttrMasterObjectsVisibility[] = NSPREFIX "master-objects-visibility";
-const char    aOOOAttrSlideDuration[] = NSPREFIX "slide-duration";
-const OUString aOOOAttrDateTimeField = NSPREFIX "date-time-field";
-constexpr OUStringLiteral aOOOAttrFooterField = u"" NSPREFIX "footer-field";
-const char    aOOOAttrHasTransition[] = NSPREFIX "has-transition";
+constexpr OUStringLiteral aOOOAttrSlide = NSPREFIX "slide";
+constexpr OUStringLiteral aOOOAttrMaster = NSPREFIX "master";
+constexpr OUStringLiteral aOOOAttrHasCustomBackground = NSPREFIX "has-custom-background";
+constexpr OUStringLiteral aOOOAttrDisplayName = NSPREFIX "display-name";
+constexpr OUStringLiteral aOOOAttrBackgroundVisibility = NSPREFIX "background-visibility";
+constexpr OUStringLiteral aOOOAttrMasterObjectsVisibility = NSPREFIX "master-objects-visibility";
+constexpr OUStringLiteral aOOOAttrSlideDuration = NSPREFIX "slide-duration";
+constexpr OUStringLiteral aOOOAttrDateTimeField = NSPREFIX "date-time-field";
+constexpr OUStringLiteral aOOOAttrFooterField = NSPREFIX "footer-field";
+constexpr OUStringLiteral aOOOAttrHasTransition = NSPREFIX "has-transition";
 
 // ooo xml attributes for pages and shapes
-const char    aOOOAttrName[] = NSPREFIX "name";
+constexpr OUStringLiteral aOOOAttrName = NSPREFIX "name";
 
 constexpr OUStringLiteral constSvgNamespace = u"http://www.w3.org/2000/svg";
 
@@ -2108,7 +2108,8 @@ bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShap
                 if( rMtf.GetActionSize() )
                 {   // for text field shapes we set up text-adjust attributes
                     // and set visibility to hidden
-                    const OUString* pElementId = nullptr;
+                    OUString aElementId;
+
                     if( mbPresentation )
                     {
                         bool bIsPageNumber  = ( aShapeClass == "Slide_Number" );
@@ -2119,7 +2120,7 @@ bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShap
                         {
                             // to notify to the SVGActionWriter::ImplWriteActions method
                             // that we are dealing with a placeholder shape
-                            pElementId = &sPlaceholderTag;
+                            aElementId = sPlaceholderTag;
 
                             mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", "hidden" );
                         }
@@ -2213,7 +2214,7 @@ bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShap
                                 SvXMLElementExport alinkA( *mpSVGExport, XML_NAMESPACE_NONE, "a", true, true );
                                 mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf,
                                                             0xffffffff,
-                                                            pElementId,
+                                                            aElementId,
                                                             &rxShape,
                                                             pEmbeddedBitmapsMtf );
                             }
@@ -2222,7 +2223,7 @@ bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShap
                         {
                             mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf,
                                                         0xffffffff,
-                                                        pElementId,
+                                                        aElementId,
                                                         &rxShape,
                                                         pEmbeddedBitmapsMtf );
                         }
