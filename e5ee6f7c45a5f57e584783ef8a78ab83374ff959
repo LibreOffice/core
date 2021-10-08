@@ -34,6 +34,24 @@
       "parentUuid": "a11e2432_55e3e6a2",
       "revId": "e5ee6f7c45a5f57e584783ef8a78ab83374ff959",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff02419c_a3397008",
+        "filename": "desktop/qa/desktop_lib/test_desktop_lib.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1124,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-10-08T16:51:02Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "57e948c7_eee266e9",
+      "revId": "e5ee6f7c45a5f57e584783ef8a78ab83374ff959",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
