@@ -483,8 +483,7 @@ endef
 
 $(foreach ide,\
 	codelite \
-	vs2019 \
-	vs2022 \
+	vs \
 	kdevelop \
 	vim \
 	qtcreator \
