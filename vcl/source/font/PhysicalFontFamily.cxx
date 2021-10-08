@@ -22,6 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <unotools/fontdefs.hxx>
 
+#include <font/LogicalFontInstance.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <font/PhysicalFontCollection.hxx>
 
