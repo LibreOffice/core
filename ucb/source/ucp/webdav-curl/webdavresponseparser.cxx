@@ -761,7 +761,7 @@ namespace
                                         // when collecting properties add them to result when there are some
                                         if(!maResponseNames.empty())
                                         {
-                                            http_dav_ucp::DAVResourceInfo aDAVResourceInfo(maHref);
+                                            http_dav_ucp::DAVResourceInfo aDAVResourceInfo;
 
                                             aDAVResourceInfo.properties = maResponseNames;
                                             maResult_PropName.push_back(aDAVResourceInfo);
