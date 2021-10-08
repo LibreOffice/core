@@ -55,6 +55,9 @@ public:
     virtual auto UsesProxy() -> bool override;
 
     // DAV methods
+    virtual auto OPTIONS(OUString const& rURIReference, DAVOptions& rOptions,
+                         DAVRequestEnvironment const& rEnv) -> void override;
+
     virtual auto PROPFIND(OUString const& rURIReference, Depth depth,
                           ::std::vector<OUString> const& rPropertyNames,
                           ::std::vector<DAVResource>& o_rResources,
