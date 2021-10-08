@@ -801,7 +801,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  )
     aRow[1] = new ORowSetValueDecorator(OUString("SYSTEM TABLE"));
     aResults.push_back(aRow);
 
-    pResultSet->setRows(aResults);
+    pResultSet->setRows(std::move(aResults));
     return pResultSet;
 }
 
@@ -1026,7 +1026,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         tmp.push_back(aRow);
         return tmp;
     }();
-    pResultSet->setRows(aResults);
+    pResultSet->setRows(std::move(aResults));
     return pResultSet;
 }
 
@@ -1099,7 +1099,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
         aResults.push_back(aCurrentRow);
     }
 
-    pResultSet->setRows( aResults );
+    pResultSet->setRows( std::move(aResults) );
 
     return pResultSet;
 }
@@ -1307,7 +1307,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
     }
     rtl::Reference<ODatabaseMetaDataResultSet> pResultSet = new
             ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eColumns);
-    pResultSet->setRows( aResults );
+    pResultSet->setRows( std::move(aResults) );
 
     return pResultSet;
 }
@@ -1424,7 +1424,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         aResults.push_back(aCurrentRow);
     }
 
-    pResultSet->setRows( aResults );
+    pResultSet->setRows( std::move(aResults) );
 
     return pResultSet;
 }
@@ -1552,7 +1552,7 @@ uno::Reference< XResultSet > ODatabaseMetaData::lcl_getKeys(const bool bIsImport
         aResults.push_back(aCurrentRow);
     }
 
-    pResultSet->setRows( aResults );
+    pResultSet->setRows( std::move(aResults) );
     return pResultSet;
 }
 
@@ -1606,7 +1606,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
     }
     rtl::Reference<ODatabaseMetaDataResultSet> pResultSet = new
             ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::ePrimaryKeys);
-    pResultSet->setRows( aResults );
+    pResultSet->setRows( std::move(aResults) );
 
     return pResultSet;
 }
@@ -1699,7 +1699,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
     }
     rtl::Reference<ODatabaseMetaDataResultSet> pResultSet = new
             ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::ePrimaryKeys);
-    pResultSet->setRows( aResults );
+    pResultSet->setRows( std::move(aResults) );
 
     return pResultSet;
 }
@@ -1774,7 +1774,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
         aResults.push_back(aRow);
     }
 
-    pResultSet->setRows( aResults );
+    pResultSet->setRows( std::move(aResults) );
 
     return pResultSet;
 }

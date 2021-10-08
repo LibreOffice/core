@@ -164,7 +164,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  )
         }
     }
     rtl::Reference<::connectivity::ODatabaseMetaDataResultSet> pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);
-    pResult->setRows(m_aTypeInfoRows);
+    pResult->setRows(std::vector(m_aTypeInfoRows));
     return pResult;
 }
 

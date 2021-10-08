@@ -115,7 +115,7 @@ Reference< XResultSet > OComponentDatabaseMetaData::impl_getTypeInfo_throw(  )
         aRows.push_back(aRow);
     }
 
-    pResult->setRows(aRows);
+    pResult->setRows(std::move(aRows));
     return pResult;
 }
 
@@ -207,7 +207,7 @@ Reference< XResultSet > SAL_CALL OComponentDatabaseMetaData::getColumns(
     }
 
     rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eColumns);
-    pResult->setRows(aRows);
+    pResult->setRows(std::move(aRows));
 
     return pResult;
 }

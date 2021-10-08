@@ -265,11 +265,11 @@ namespace connectivity::file
                 m_aSelectRow = _rRow;
                 m_nColumnCount = m_aSelectRow->size();
             }
-            void setColumnMapping(const std::vector<sal_Int32>& _aColumnMapping)   { m_aColMapping = _aColumnMapping; }
+            void setColumnMapping(std::vector<sal_Int32>&& _aColumnMapping)   { m_aColMapping = std::move(_aColumnMapping); }
             void setSqlAnalyzer(OSQLAnalyzer* _pSQLAnalyzer)                     { m_pSQLAnalyzer = _pSQLAnalyzer; }
 
-            void setOrderByColumns(const std::vector<sal_Int32>& _aColumnOrderBy)  { m_aOrderbyColumnNumber = _aColumnOrderBy; }
-            void setOrderByAscending(const std::vector<TAscendingOrder>& _aOrderbyAsc)    { m_aOrderbyAscending = _aOrderbyAsc; }
+            void setOrderByColumns(std::vector<sal_Int32>&& _aColumnOrderBy)  { m_aOrderbyColumnNumber = std::move(_aColumnOrderBy); }
+            void setOrderByAscending(std::vector<TAscendingOrder>&& _aOrderbyAsc)    { m_aOrderbyAscending = std::move(_aOrderbyAsc); }
             void setMetaData(const css::uno::Reference< css::sdbc::XResultSetMetaData>& _xMetaData) { m_xMetaData = _xMetaData;}
 
             static void setBoundedColumns(const OValueRefRow& _rRow,

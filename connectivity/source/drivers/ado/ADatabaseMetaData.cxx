@@ -347,7 +347,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
         aRows.push_back(aRow);
         aRow[6] = ::connectivity::ODatabaseMetaDataResultSet::getDropValue();
         aRows.push_back(aRow);
-        pResult->setRows(aRows);
+        pResult->setRows(std::move(aRows));
     }
 
     return xRef;

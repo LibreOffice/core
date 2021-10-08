@@ -481,7 +481,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
 
                     aRows.push_back(aRow);
                 }
-                pNewPrivRes->setRows(aRows);
+                pNewPrivRes->setRows(std::move(aRows));
             }
         }
     }
