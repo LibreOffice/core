@@ -5732,7 +5732,8 @@ namespace {
 bool sortButtons(const GtkWidget* pA, const GtkWidget* pB)
 {
     //order within groups according to platform rules
-    return getButtonPriority(::get_help_id(pA)) < getButtonPriority(::get_help_id(pB));
+    return getButtonPriority(get_buildable_id(GTK_BUILDABLE(pA))) <
+           getButtonPriority(get_buildable_id(GTK_BUILDABLE(pB)));
 }
 
 void sort_native_button_order(GtkBox* pContainer)
