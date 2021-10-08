@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <font/LogicalFontInstance.hxx>
+
 #include <QtFont.hxx>
 #include <QtTools.hxx>
 
