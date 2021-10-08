@@ -937,7 +937,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         }
 
     def retrieve_toolset(self, ide):
-        ide_toolset_map = {'vs2017': 'v141', 'vs2019': 'v142'}
+        ide_toolset_map = {'vs2019': 'v142', 'vs2022': 'v143'}
         return ide_toolset_map[ide]
 
     def module_make_command(self, targets):
@@ -1870,8 +1870,8 @@ if __name__ == '__main__':
         'eclipsecdt': EclipseCDTIntegrationGenerator,
         'kdevelop': KdevelopIntegrationGenerator,
         'xcode': XcodeIntegrationGenerator,
-        'vs2017': VisualStudioIntegrationGenerator,
         'vs2019': VisualStudioIntegrationGenerator,
+        'vs2022': VisualStudioIntegrationGenerator,
         'vim': VimIntegrationGenerator,
         'debug': DebugIntegrationGenerator,
         'qtcreator': QtCreatorIntegrationGenerator,
