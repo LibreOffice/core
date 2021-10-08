@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "30622c2f_b6e7cf62",
+        "filename": "sc/inc/global.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-10-08T03:00:55Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f29080af_e4075438",
+      "revId": "e56939d5bfaec08f1cffecf109ef05b290e2828f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cd7af496_c883f925",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-10-07T16:10:43Z",
       "side": 1,
       "message": "See how SC_INDENT_STEP (in twips!) is used directly here, its value is used without any conversions and get stored to ScIndentItem.\n\nAnd in other places, grepping for ScIndentItem, everywhere its value is treated to be in twips.\n\nSo the end result is: we also need to fix the import here, removing the incorrect conversion from twips to mm100.",
+      "revId": "e56939d5bfaec08f1cffecf109ef05b290e2828f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1606fda_7b7f4b0a",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1753,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-10-08T03:00:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd7af496_c883f925",
       "revId": "e56939d5bfaec08f1cffecf109ef05b290e2828f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -65,6 +101,24 @@
       "writtenOn": "2021-10-07T15:58:18Z",
       "side": 1,
       "message": "Here\u0027s where the value gets stored into the document model; now the question is: how is ScIndentItem used in the code? If its value interpreted as mm100 or twips.\n\nI *guess* that the code at line 1186 above should not do the conversion, because the value is already in twips",
+      "revId": "e56939d5bfaec08f1cffecf109ef05b290e2828f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f269505_839e0ba1",
+        "filename": "sc/source/filter/oox/stylesbuffer.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1303,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-10-08T03:00:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b07d83f_731bca09",
       "revId": "e56939d5bfaec08f1cffecf109ef05b290e2828f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
