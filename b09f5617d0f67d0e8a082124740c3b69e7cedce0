@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b4bdb69_bb82f70b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-10-08T06:03:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5031f3cc_bdfa20ea",
+      "revId": "b09f5617d0f67d0e8a082124740c3b69e7cedce0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7cd79d7a_81e7bbc6",
@@ -31,6 +49,30 @@
       "writtenOn": "2021-10-08T05:34:09Z",
       "side": 1,
       "message": "This part needs some update, it seems, to reflect actual use of twips, and small change in import?",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 97
+      },
+      "revId": "b09f5617d0f67d0e8a082124740c3b69e7cedce0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ec0e187_4ebebaa3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-10-08T06:03:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7cd79d7a_81e7bbc6",
       "range": {
         "startLine": 45,
         "startChar": 0,
