@@ -248,10 +248,10 @@ void ImplFontCache::Invalidate()
 
 bool ImplFontCache::GetCachedGlyphBoundRect(const vcl::font::LogicalFontInstance *pFont, sal_GlyphId nID, tools::Rectangle &rRect)
 {
-    if (!pFont->GetFontCache())
+    if (!pFont->mpFontCache)
         return false;
-    assert(pFont->GetFontCache() == this);
-    if (pFont->GetFontCache() != this)
+    assert(pFont->mpFontCache == this);
+    if (pFont->mpFontCache != this)
         return false;
 
     auto it = m_aBoundRectCache.find({pFont, nID});
@@ -265,10 +265,10 @@ bool ImplFontCache::GetCachedGlyphBoundRect(const vcl::font::LogicalFontInstance
 
 void ImplFontCache::CacheGlyphBoundRect(const vcl::font::LogicalFontInstance *pFont, sal_GlyphId nID, tools::Rectangle &rRect)
 {
-    if (!pFont->GetFontCache())
+    if (!pFont->mpFontCache)
         return;
-    assert(pFont->GetFontCache() == this);
-    if (pFont->GetFontCache() != this)
+    assert(pFont->mpFontCache == this);
+    if (pFont->mpFontCache != this)
         return;
 
     m_aBoundRectCache.insert({{pFont, nID}, rRect});
