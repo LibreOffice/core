@@ -171,7 +171,7 @@ protected:
     virtual void                EmulateDrawTransparent( const tools::PolyPolygon& rPolyPoly,
                                     sal_uInt16 nTransparencePercent ) override;
 
-    virtual void                SetFontOrientation( LogicalFontInstance* const pFontInstance ) const override;
+    virtual void                SetFontOrientation( vcl::font::LogicalFontInstance* const pFontInstance ) const override;
 
     bool                        shouldDrawWavePixelAsRect(tools::Long) const override { return true; }
     void                        SetWaveLineColors(Color const& rColor, tools::Long) override;

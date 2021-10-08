@@ -29,9 +29,12 @@
 #include <vcl/glyphitem.hxx>
 #include <vcl/dllapi.h>
 
-class LogicalFontInstance;
 namespace vcl::text { class ImplLayoutArgs; }
-namespace vcl::font { class PhysicalFontFace; }
+namespace vcl::font
+{
+class LogicalFontInstance;
+class PhysicalFontFace;
+}
 class SalGraphics;
 class GlyphItem;
 
@@ -93,7 +96,7 @@ public:
 
     // methods using glyph indexing
     virtual bool    GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int& nStart,
-                                 const LogicalFontInstance** ppGlyphFont = nullptr,
+                                 const vcl::font::LogicalFontInstance** ppGlyphFont = nullptr,
                                  const vcl::font::PhysicalFontFace** pFallbackFont = nullptr) const = 0;
     virtual bool GetOutline(basegfx::B2DPolyPolygonVector&) const;
     bool GetBoundRect(tools::Rectangle&) const;

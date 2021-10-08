@@ -57,7 +57,7 @@ public:
     bool GetFontCapabilities(vcl::FontCapabilities&) const override;
     bool HasChar(sal_uInt32 cChar) const;
 
-    rtl::Reference<LogicalFontInstance>
+    rtl::Reference<vcl::font::LogicalFontInstance>
     CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const override;
 
 private:

@@ -279,7 +279,7 @@ void OutputDevice::ImplDrawWaveTextLine( tools::Long nBaseX, tools::Long nBaseY,
                                          Color aColor,
                                          bool bIsAbove )
 {
-    LogicalFontInstance* pFontInstance = mpFontInstance.get();
+    vcl::font::LogicalFontInstance* pFontInstance = mpFontInstance.get();
     tools::Long            nLineHeight;
     tools::Long            nLinePos;
 
@@ -347,7 +347,7 @@ void OutputDevice::ImplDrawStraightTextLine( tools::Long nBaseX, tools::Long nBa
                                              Color aColor,
                                              bool bIsAbove )
 {
-    LogicalFontInstance*  pFontInstance = mpFontInstance.get();
+    vcl::font::LogicalFontInstance*  pFontInstance = mpFontInstance.get();
     tools::Long            nLineHeight = 0;
     tools::Long            nLinePos  = 0;
     tools::Long            nLinePos2 = 0;
@@ -589,7 +589,7 @@ void OutputDevice::ImplDrawStrikeoutLine( tools::Long nBaseX, tools::Long nBaseY
                                           FontStrikeout eStrikeout,
                                           Color aColor )
 {
-    LogicalFontInstance*  pFontInstance = mpFontInstance.get();
+    vcl::font::LogicalFontInstance*  pFontInstance = mpFontInstance.get();
     tools::Long            nLineHeight = 0;
     tools::Long            nLinePos  = 0;
     tools::Long            nLinePos2 = 0;
@@ -1026,7 +1026,7 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, to
     }
 
     // #109280# make sure the waveline does not exceed the descent to avoid paint problems
-    LogicalFontInstance* pFontInstance = mpFontInstance.get();
+    vcl::font::LogicalFontInstance* pFontInstance = mpFontInstance.get();
     if (nWaveHeight > pFontInstance->GetWavelineUnderlineSize())
     {
         nWaveHeight = pFontInstance->GetWavelineUnderlineSize();
