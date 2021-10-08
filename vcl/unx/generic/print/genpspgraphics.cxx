@@ -43,10 +43,10 @@
 #include <unx/genpspgraphics.h>
 #include <unx/printergfx.hxx>
 #include <langboost.hxx>
-#include <fontinstance.hxx>
 #include <fontattributes.hxx>
 #include <font/FontInstanceData.hxx>
 #include <font/FontSelectPattern.hxx>
+#include <font/LogicalFontInstance.hxx>
 #include <font/PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFace.hxx>
 #include <sallayout.hxx>
@@ -111,7 +111,7 @@ namespace {
 class PspSalLayout : public GenericSalLayout
 {
 public:
-    PspSalLayout(psp::PrinterGfx&, LogicalFontInstance &rFontInstance);
+    PspSalLayout(psp::PrinterGfx&, vcl::font::LogicalFontInstance &rFontInstance);
 
     void                InitFont() const final override;
 
@@ -127,7 +127,7 @@ private:
 
 }
 
-PspSalLayout::PspSalLayout(::psp::PrinterGfx& rGfx, LogicalFontInstance &rFontInstance)
+PspSalLayout::PspSalLayout(::psp::PrinterGfx& rGfx, vcl::font::LogicalFontInstance &rFontInstance)
 :   GenericSalLayout(rFontInstance)
 ,   mrPrinterGfx(rGfx)
 {
@@ -171,7 +171,7 @@ bool GenPspGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilitie
     return m_pFreetypeFont[0]->GetFreetypeFont().GetFontCapabilities(rFontCapabilities);
 }
 
-void GenPspGraphics::SetFont(LogicalFontInstance *pFontInstance, int nFallbackLevel)
+void GenPspGraphics::SetFont(vcl::font::LogicalFontInstance *pFontInstance, int nFallbackLevel)
 {
     // release all fonts that are to be overridden
     for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )

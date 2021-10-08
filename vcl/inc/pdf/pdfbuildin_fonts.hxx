@@ -21,8 +21,8 @@
 
 #include <sal/config.h>
 
+#include <font/LogicalFontInstance.hxx>
 #include <font/PhysicalFontFace.hxx>
-#include <fontinstance.hxx>
 
 namespace vcl::pdf
 {
@@ -47,7 +47,7 @@ struct BuildinFont
     FontAttributes GetFontAttributes() const;
 };
 
-class BuildinFontInstance final : public LogicalFontInstance
+class BuildinFontInstance final : public vcl::font::LogicalFontInstance
 {
     bool ImplGetGlyphBoundRect(sal_GlyphId nID, tools::Rectangle& rRect, bool) const override;
 
@@ -62,7 +62,7 @@ class BuildinFontFace final : public vcl::font::PhysicalFontFace
     static const BuildinFont m_aBuildinFonts[14];
     const BuildinFont& mrBuildin;
 
-    rtl::Reference<LogicalFontInstance>
+    rtl::Reference<vcl::font::LogicalFontInstance>
     CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const override;
 
 public:
