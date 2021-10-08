@@ -23,7 +23,6 @@
 
 #include <vcl/dllapi.h>
 
-#include "LogicalFontInstance.hxx"
 #include "PhysicalFontFamily.hxx"
 
 #include <array>
@@ -74,6 +73,7 @@ class PreMatchFontSubstitution;
 
 namespace vcl::font
 {
+class LogicalFontInstance;
 
 class VCL_PLUGIN_PUBLIC PhysicalFontCollection final
 {

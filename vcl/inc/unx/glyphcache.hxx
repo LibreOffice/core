@@ -33,7 +33,6 @@
 #include <vcl/outdev.hxx>
 
 #include <fontattributes.hxx>
-#include <font/LogicalFontInstance.hxx>
 #include <font/FontInstanceData.hxx>
 
 #include <unordered_map>

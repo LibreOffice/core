@@ -22,6 +22,7 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/fontcharmap.hxx>
 
+#include <font/LogicalFontInstance.hxx>
 #include <unx/salgdi.h>
 #include <textrender.hxx>
 #include <sallayout.hxx>
