@@ -127,6 +127,28 @@ void lcl_AssertRectEqualWithTolerance(std::string_view sInfo, const tools::Recta
                            std::abs(rExpected.GetHeight() - rActual.GetHeight()) <= nTolerance);
 }
 
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145004_gap_by_ScaleX)
+{
+    if (!IsDefaultDPI())
+        return;
+    // tdf#145004 In case property ScaleX=true was set in property 'TextPath' an additional
+    // padding was added to the scaling factor. That results in a gap at start or/and end of
+    // the text. Such gap should not be there.
+
+    // Load document and get shape. It is a custom shape from pptx import of a WordArt of
+    // kind 'Follow Path'.
+    OUString aURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf145004_gap_by_ScaleX.pptx";
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.comp.presentation.PresentationDocument");
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    SdrObjCustomShape& rSdrCustomShape(
+        static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
+
+    // Verify width. Without the fix in place the width was 8231, but should be 8496 for 96dpi.
+    // Was 8328, should be 8527 for 120dpi.
+    tools::Rectangle aBoundRect(rSdrCustomShape.GetCurrentBoundRect());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(8496), aBoundRect.GetWidth(), 5);
+}
+
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf141021ExtrusionNorth)
 {
     // tdf#141021 Setting extrusion direction in projection method 'perspective' to
