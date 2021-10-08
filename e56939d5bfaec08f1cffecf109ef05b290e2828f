@@ -71,6 +71,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "80a9e43c_7c4d2eda",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1753,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-10-08T03:03:57Z",
+      "side": 1,
+      "message": "And I think this is why the indent in Calc, after import, looked much bigger wider than it was in Excel. Now with the updated patch set it looks much better.",
+      "parentUuid": "e1606fda_7b7f4b0a",
+      "revId": "e56939d5bfaec08f1cffecf109ef05b290e2828f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5892fa78_7fe4b83f",
