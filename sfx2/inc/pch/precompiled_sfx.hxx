@@ -478,7 +478,6 @@
 #include <sfx2/viewsh.hxx>
 #include <sfxpicklist.hxx>
 #include <sfxtypes.hxx>
-#include <shellimpl.hxx>
 #include <splitwin.hxx>
 #include <statcach.hxx>
 #include <workwin.hxx>

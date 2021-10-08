@@ -86,7 +86,6 @@
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/lokcallback.hxx>
 #include <openuriexternally.hxx>
-#include <shellimpl.hxx>
 #include <iostream>
 #include <vector>
 #include <libxml/xmlwriter.h>
