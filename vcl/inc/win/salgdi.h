@@ -24,7 +24,6 @@
 #include <sallayout.hxx>
 #include <salgeom.hxx>
 #include <salgdi.hxx>
-#include <font/LogicalFontInstance.hxx>
 #include <fontattributes.hxx>
 #include <font/PhysicalFontFace.hxx>
 #include <impfont.hxx>
@@ -46,6 +45,7 @@
 namespace vcl::font
 {
 class FontInstanceData;
+class LogicalFontInstance;
 class PhysicalFontCollection;
 class FontSelectPattern;
 }

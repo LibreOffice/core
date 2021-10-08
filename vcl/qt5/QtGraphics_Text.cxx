@@ -32,6 +32,7 @@
 #include <unx/genpspgraphics.h>
 
 #include <sallayout.hxx>
+#include <font/LogicalFontInstance.hxx>
 #include <font/PhysicalFontCollection.hxx>
 
 #include <QtGui/QGlyphRun>
