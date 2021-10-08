@@ -4212,15 +4212,12 @@ void OReportController::openZoomDialog()
     {
         new SvxZoomItem()
     };
-    static const WhichRangesContainer pRanges(svl::Items<
-        SID_ATTR_ZOOM,SID_ATTR_ZOOM
-    >);
     rtl::Reference<SfxItemPool> pPool( new SfxItemPool("ZoomProperties", SID_ATTR_ZOOM,SID_ATTR_ZOOM, aItemInfos, &pDefaults) );
     pPool->SetDefaultMetric( MapUnit::Map100thMM );    // ripped, don't understand why
     pPool->FreezeIdRanges();                        // the same
     try
     {
-        SfxItemSet aDescriptor(*pPool, pRanges);
+        SfxItemSetFixed<SID_ATTR_ZOOM,SID_ATTR_ZOOM> aDescriptor(*pPool);
         // fill it
         SvxZoomItem aZoomItem( m_eZoomType, m_nZoomValue, SID_ATTR_ZOOM );
         aZoomItem.SetValueSet(SvxZoomEnableFlags::N100|SvxZoomEnableFlags::WHOLEPAGE|SvxZoomEnableFlags::PAGEWIDTH);
