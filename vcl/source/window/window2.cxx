@@ -1496,7 +1496,7 @@ bool Window::set_property(const OString &rKey, const OUString &rValue)
         else if (f == 1.0)
             nBits |= WB_BOTTOM;
         else if (f == 0.5)
-            nBits |= WB_CENTER;
+            nBits |= WB_VCENTER;
 
         SetStyle(nBits);
     }
