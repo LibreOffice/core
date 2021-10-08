@@ -56,10 +56,10 @@ ViewContact& ObjectContactOfObjListPainter::GetPaintObjectViewContact(sal_uInt32
 
 ObjectContactOfObjListPainter::ObjectContactOfObjListPainter(
     OutputDevice& rTargetDevice,
-    const SdrObjectVector& rObjects,
+    SdrObjectVector&& rObjects,
     const SdrPage* pProcessedPage)
 :   mrTargetOutputDevice(rTargetDevice),
-    maStartObjects(rObjects),
+    maStartObjects(std::move(rObjects)),
     mpProcessedPage(pProcessedPage)
 {
 }

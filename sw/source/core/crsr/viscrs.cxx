@@ -434,7 +434,7 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
             m_pCursorOverlay.reset( new sdr::overlay::OverlaySelection(
                 sdr::overlay::OverlayType::Transparent,
                 aHighlight,
-                aNewRanges,
+                std::move(aNewRanges),
                 true) );
 
             xTargetOverlay->add(*m_pCursorOverlay);

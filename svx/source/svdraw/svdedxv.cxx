@@ -480,9 +480,9 @@ TextEditOverlayObject::TextEditOverlayObject(const Color& rColor, OutlinerView& 
 
     // create local OverlaySelection - this is an integral part of EditText
     // visualization
-    const std::vector<basegfx::B2DRange> aEmptySelection{};
+    std::vector<basegfx::B2DRange> aEmptySelection{};
     mxOverlaySelection.reset(new sdr::overlay::OverlaySelection(
-        sdr::overlay::OverlayType::Transparent, rColor, aEmptySelection, true));
+        sdr::overlay::OverlayType::Transparent, rColor, std::move(aEmptySelection), true));
 }
 
 TextEditOverlayObject::~TextEditOverlayObject()

@@ -154,7 +154,7 @@ public:
                 std::unique_ptr<sdr::overlay::OverlaySelection> pNew =
                     std::make_unique<sdr::overlay::OverlaySelection>(
                         sdr::overlay::OverlayType::Transparent,
-                        aHighlightColor, rSelections, false);
+                        aHighlightColor, std::vector(rSelections), false);
 
                 xTargetOverlay->add(*pNew);
                 maObjects.append(std::move(pNew));
