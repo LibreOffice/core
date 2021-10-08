@@ -12,17 +12,17 @@
 #include <sal/config.h>
 
 #include <font/FontSelectPattern.hxx>
+#include <font/LogicalFontInstance.hxx>
 #include <font/PhysicalFontFace.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <fontattributes.hxx>
-#include <fontinstance.hxx>
 
-class TestFontInstance : public LogicalFontInstance
+class TestFontInstance : public vcl::font::LogicalFontInstance
 {
 public:
     TestFontInstance(vcl::font::PhysicalFontFace const& rFontFace,
                      vcl::font::FontSelectPattern const& rFontSelectPattern)
-        : LogicalFontInstance(rFontFace, rFontSelectPattern)
+        : vcl::font::LogicalFontInstance(rFontFace, rFontSelectPattern)
     {
     }
 
@@ -50,7 +50,7 @@ public:
     {
     }
 
-    rtl::Reference<LogicalFontInstance>
+    rtl::Reference<vcl::font::LogicalFontInstance>
     CreateFontInstance(vcl::font::FontSelectPattern const& rFontSelectPattern) const override
     {
         return new TestFontInstance(*this, rFontSelectPattern);

@@ -733,7 +733,7 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
 
 BuildinFontInstance::BuildinFontInstance(const vcl::font::PhysicalFontFace& rFontFace,
                                          const vcl::font::FontSelectPattern& rFSP)
-    : LogicalFontInstance(rFontFace, rFSP)
+    : vcl::font::LogicalFontInstance(rFontFace, rFSP)
 {
 }
 
@@ -753,7 +753,7 @@ BuildinFontFace::BuildinFontFace(int nId)
 {
 }
 
-rtl::Reference<LogicalFontInstance>
+rtl::Reference<vcl::font::LogicalFontInstance>
 BuildinFontFace::CreateFontInstance(const vcl::font::FontSelectPattern& rFSP) const
 {
     return new BuildinFontInstance(*this, rFSP);

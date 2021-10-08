@@ -36,7 +36,6 @@ namespace tools
 }
 
 class OutputDevice;
-class LogicalFontInstance;
 namespace vcl
 {
 class Font;
@@ -48,6 +47,7 @@ namespace vcl::font
 class FontInstanceData;
 typedef tools::SvRef<FontInstanceData> FontInstanceDataRef;
 class FontSelectPattern;
+class LogicalFontInstance;
 
 class VCL_DLLPUBLIC FontInstanceData final : public FontAttributes, public SvRefBase
 {

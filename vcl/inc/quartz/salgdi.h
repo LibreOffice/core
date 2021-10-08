@@ -42,8 +42,8 @@
 #include <vcl/metric.hxx>
 
 
-#include <fontinstance.hxx>
 #include <font/FontInstanceData.hxx>
+#include <font/LogicalFontInstance.hxx>
 #include <font/PhysicalFontFace.hxx>
 #include <salgdi.hxx>
 
@@ -73,7 +73,7 @@ public:
     bool GetFontCapabilities(vcl::FontCapabilities&) const override;
     bool                            HasChar( sal_uInt32 cChar ) const;
 
-    rtl::Reference<LogicalFontInstance> CreateFontInstance(const vcl::font::FontSelectPattern&) const override;
+    rtl::Reference<vcl::font::LogicalFontInstance> CreateFontInstance(const vcl::font::FontSelectPattern&) const override;
 
 private:
     const sal_IntPtr                mnFontId;
@@ -82,9 +82,9 @@ private:
     mutable bool                    mbFontCapabilitiesRead;
 };
 
-class CoreTextStyle final : public LogicalFontInstance
+class CoreTextStyle final : public vcl::font::LogicalFontInstance
 {
-    friend rtl::Reference<LogicalFontInstance> CoreTextFontFace::CreateFontInstance(const vcl::font::FontSelectPattern&) const;
+    friend rtl::Reference<vcl::font::LogicalFontInstance> CoreTextFontFace::CreateFontInstance(const vcl::font::FontSelectPattern&) const;
 
 public:
     ~CoreTextStyle() override;
@@ -528,7 +528,7 @@ public:
     // set the text color to a specific color
     virtual void            SetTextColor( Color nColor ) override;
     // set the font
-    virtual void            SetFont( LogicalFontInstance*, int nFallbackLevel ) override;
+    virtual void            SetFont( vcl::font::LogicalFontInstance*, int nFallbackLevel ) override;
     // get the current font's metrics
     virtual void            GetFontMetric( vcl::font::FontInstanceDataRef&, int nFallbackLevel ) override;
     // get the repertoire of the current font

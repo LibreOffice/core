@@ -23,8 +23,7 @@
 
 #include <vcl/dllapi.h>
 
-#include <fontinstance.hxx>
-
+#include "LogicalFontInstance.hxx"
 #include "PhysicalFontFamily.hxx"
 
 #include <array>
@@ -98,7 +97,7 @@ public:
 
     // suggest fonts for glyph fallback
     vcl::font::PhysicalFontFamily* GetGlyphFallbackFont( vcl::font::FontSelectPattern&,
-                                                  LogicalFontInstance* pLogicalFont,
+                                                  vcl::font::LogicalFontInstance* pLogicalFont,
                                                   OUString& rMissingCodes, int nFallbackLevel ) const;
 
     // prepare platform specific font substitutions

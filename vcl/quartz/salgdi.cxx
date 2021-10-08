@@ -70,12 +70,12 @@ class CoreTextGlyphFallbackSubstititution
 :    public vcl::font::GlyphFallbackFontSubstitution
 {
 public:
-    bool FindFontSubstitute(vcl::font::FontSelectPattern&, LogicalFontInstance* pLogicalFont, OUString&) const override;
+    bool FindFontSubstitute(vcl::font::FontSelectPattern&, vcl::font::LogicalFontInstance* pLogicalFont, OUString&) const override;
 };
 
 }
 
-bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(vcl::font::FontSelectPattern& rPattern, LogicalFontInstance* pLogicalFont,
+bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(vcl::font::FontSelectPattern& rPattern, vcl::font::LogicalFontInstance* pLogicalFont,
     OUString& rMissingChars) const
 {
     bool bFound = false;
@@ -484,7 +484,7 @@ void AquaGraphicsBackend::drawTextLayout(const GenericSalLayout& rLayout)
     mrShared.maContextHolder.restoreState();
 }
 
-void AquaSalGraphics::SetFont(LogicalFontInstance* pReqFont, int nFallbackLevel)
+void AquaSalGraphics::SetFont(vcl::font::LogicalFontInstance* pReqFont, int nFallbackLevel)
 {
     // release the text style
     for (int i = nFallbackLevel; i < MAX_FALLBACK; ++i)

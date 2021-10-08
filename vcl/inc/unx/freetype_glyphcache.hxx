@@ -22,8 +22,8 @@
 #include <sal/config.h>
 
 #include <unx/glyphcache.hxx>
+#include <font/LogicalFontInstance.hxx>
 #include <font/PhysicalFontFace.hxx>
-#include <fontinstance.hxx>
 #include <vcl/glyphitem.hxx>
 
 class CmapResult;
@@ -100,7 +100,7 @@ private:
 public:
                             FreetypeFontFace( FreetypeFontInfo*, const FontAttributes& );
 
-    virtual rtl::Reference<LogicalFontInstance> CreateFontInstance(const vcl::font::FontSelectPattern&) const override;
+    virtual rtl::Reference<vcl::font::LogicalFontInstance> CreateFontInstance(const vcl::font::FontSelectPattern&) const override;
     virtual sal_IntPtr      GetFontId() const override { return mpFreetypeFontInfo->GetFontId(); }
 
     FontCharMapRef GetFontCharMap() const override { return mpFreetypeFontInfo->GetFontCharMap(); }
@@ -112,9 +112,9 @@ bool FreetypeFontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilit
     return mpFreetypeFontInfo->GetFontCapabilities(rFontCapabilities);
 }
 
-class SAL_DLLPUBLIC_RTTI FreetypeFontInstance final : public LogicalFontInstance
+class SAL_DLLPUBLIC_RTTI FreetypeFontInstance final : public vcl::font::LogicalFontInstance
 {
-    friend rtl::Reference<LogicalFontInstance> FreetypeFontFace::CreateFontInstance(const vcl::font::FontSelectPattern&) const;
+    friend rtl::Reference<vcl::font::LogicalFontInstance> FreetypeFontFace::CreateFontInstance(const vcl::font::FontSelectPattern&) const;
 
     std::unique_ptr<FreetypeFont> mxFreetypeFont;
 

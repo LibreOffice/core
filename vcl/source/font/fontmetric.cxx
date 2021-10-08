@@ -28,8 +28,8 @@
 
 #include <font/FontInstanceData.hxx>
 #include <font/FontSelectPattern.hxx>
+#include <font/LogicalFontInstance.hxx>
 #include <font/PhysicalFontFace.hxx>
-#include <fontinstance.hxx>
 #include <sft.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>

@@ -21,13 +21,13 @@
 
 #include <sal/config.h>
 
-#include <fontinstance.hxx>
+#include <font/LogicalFontInstance.hxx>
 
 #include <QtGui/QFont>
 
 #include "QtFontFace.hxx"
 
-class QtFont final : public QFont, public LogicalFontInstance
+class QtFont final : public QFont, public vcl::font::LogicalFontInstance
 {
     friend rtl::Reference<LogicalFontInstance>
     QtFontFace::CreateFontInstance(const vcl::font::FontSelectPattern&) const;
