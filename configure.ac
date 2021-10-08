@@ -6262,10 +6262,9 @@ if test "$_os" != "WINNT"; then
     AC_CHECK_TOOL(OBJDUMP,objdump)
     AC_CHECK_TOOL(READELF,readelf)
     AC_CHECK_TOOL(STRIP,strip)
-    if test "$_os" = "WINNT"; then
-        AC_CHECK_TOOL(DLLTOOL,dlltool)
-        AC_CHECK_TOOL(WINDRES,windres)
-    fi
+else
+    AC_CHECK_TOOL(DLLTOOL,dlltool)
+    AC_CHECK_TOOL(WINDRES,windres)
 fi
 AC_SUBST(AR)
 AC_SUBST(DLLTOOL)
