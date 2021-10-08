@@ -3558,6 +3558,15 @@ void SwContentTree::UpdateTracking()
         return;
     }
 
+    bool bTrackTablesAndSections = true;
+    if (m_nLastGotoContentWasOutlinePos != SwOutlineNodes::npos)
+    {
+        if (m_pActiveShell->GetOutlinePos() == m_nLastGotoContentWasOutlinePos)
+            bTrackTablesAndSections = false;
+        else
+            m_nLastGotoContentWasOutlinePos = SwOutlineNodes::npos;
+    }
+
     // footnotes and endnotes
     if (SwContentAtPos aContentAtPos(IsAttrAtPos::Ftn);
             m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
@@ -3685,7 +3694,7 @@ void SwContentTree::UpdateTracking()
         return;
     }
     // table
-    if (m_bTableTracking && m_pActiveShell->IsCursorInTable() &&
+    if (bTrackTablesAndSections && m_bTableTracking && m_pActiveShell->IsCursorInTable() &&
             !(m_bIsRoot && m_nRootType != ContentTypeId::TABLE))
     {
         if(m_pActiveShell->GetTableFormat())
@@ -3705,8 +3714,8 @@ void SwContentTree::UpdateTracking()
         return;
     }
     // section
-    if (const SwSection* pSection = m_pActiveShell->GetCurrSection(); m_bSectionTracking &&
-            pSection && !(m_bIsRoot && m_nRootType != ContentTypeId::REGION))
+    if (const SwSection* pSection = m_pActiveShell->GetCurrSection(); bTrackTablesAndSections &&
+            m_bSectionTracking && pSection && !(m_bIsRoot && m_nRootType != ContentTypeId::REGION))
     {
         lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_REGION),
                                        pSection->GetSectionName());
@@ -4856,6 +4865,7 @@ static void lcl_AssureStdModeAtShell(SwWrtShell* pWrtShell)
 
 void SwContentTree::GotoContent(const SwContent* pCnt)
 {
+    m_nLastGotoContentWasOutlinePos = SwOutlineNodes::npos;
     lcl_AssureStdModeAtShell(m_pActiveShell);
     switch(pCnt->GetParent()->GetType())
     {
@@ -4867,7 +4877,10 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
         break;
         case ContentTypeId::OUTLINE   :
         {
-            m_pActiveShell->GotoOutline(static_cast<const SwOutlineContent*>(pCnt)->GetOutlinePos());
+            const SwOutlineNodes::size_type nPos =
+                    static_cast<const SwOutlineContent*>(pCnt)->GetOutlinePos();
+            m_pActiveShell->GotoOutline(nPos);
+            m_nLastGotoContentWasOutlinePos = nPos;
         }
         break;
         case ContentTypeId::TABLE     :
