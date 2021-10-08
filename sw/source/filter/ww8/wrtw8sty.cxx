@@ -1745,7 +1745,14 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         {
             const SwPageDesc *pFollow = pPd->GetFollow();
             const SwFrameFormat& rFollowFormat = pFollow->GetMaster();
-            if (sw::util::IsPlausableSingleWordSection(*pPdFirstPgFormat, rFollowFormat))
+            // Two situations that can warrant merging this into the next page style
+            // 1.) These two styles are basically identical (IsPlausable) - likely setup by import.
+            // 2.) The user created this arrangement, and MS formats can't do the same thing.
+            //     In this case (if there is no explicit page break) then it makes sense to use
+            //     the Follow style's margins/pagesize etc (which likely will span many pages)
+            //     instead of the first style (which of course would only affect a single page).
+            if ((!nBreakCode && pFollow->IsFirstShared())
+                || sw::util::IsPlausableSingleWordSection(*pPdFirstPgFormat, rFollowFormat))
             {
                 if (rSepInfo.pPDNd)
                     pPdFirstPgFormat = pPd->GetPageFormatOfNode( *rSepInfo.pPDNd );
