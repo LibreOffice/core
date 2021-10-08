@@ -27,10 +27,9 @@
 #include <unotools/fontdefs.hxx>
 #include <o3tl/sorted_vector.hxx>
 
-#include <fontinstance.hxx>
+#include <font/LogicalFontInstance.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <font/PhysicalFontCollection.hxx>
-#include <fontinstance.hxx>
 #include <font/fontsubstitution.hxx>
 
 #include <string_view>

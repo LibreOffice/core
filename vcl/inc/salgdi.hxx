@@ -137,7 +137,7 @@ public:
     virtual void                SetTextColor( Color nColor ) = 0;
 
     // set the font
-    virtual void                SetFont(LogicalFontInstance*, int nFallbackLevel) = 0;
+    virtual void                SetFont(vcl::font::LogicalFontInstance*, int nFallbackLevel) = 0;
 
     // release the fonts
     void                        ReleaseFonts() { SetFont( nullptr, 0 ); }
