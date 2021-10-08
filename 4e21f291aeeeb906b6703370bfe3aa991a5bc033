@@ -16,6 +16,23 @@
       "message": "In patch set 6, the parameters ",
       "revId": "4e21f291aeeeb906b6703370bfe3aa991a5bc033",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ab60ad2_691447a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-08T04:40:16Z",
+      "side": 1,
+      "message": "I\u0027d suggest to use std::optional\u003cOUString\u003e instead. It combines all the goodness, and allows using empty string as a valid value.\n\nI see that some places passed nullptr as argument explicitly. Is the argument\u0027s default value used? May we remove it?",
+      "revId": "4e21f291aeeeb906b6703370bfe3aa991a5bc033",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
