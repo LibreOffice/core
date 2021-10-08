@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32929957_93850988",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-08T20:54:24Z",
+      "side": 1,
+      "message": "Stephan: possibly something like this could be nice; unfortunately, operator+ conflicts with concat - but maybe we could create something like constexpr concat - if all its elements are constexpr? then there could be a ctor for literal taking such concat...",
+      "revId": "ffc4b78b24ef19a67771b372382272351e8e6468",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
