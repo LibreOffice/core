@@ -56,7 +56,7 @@ namespace sdr::overlay
             OverlaySelection(
                 OverlayType eType,
                 const Color& rColor,
-                const std::vector< basegfx::B2DRange >& rRanges,
+                std::vector< basegfx::B2DRange >&& rRanges,
                 bool bBorder);
             virtual ~OverlaySelection() override;
 

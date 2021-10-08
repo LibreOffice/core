@@ -6286,7 +6286,7 @@ void ScGridWindow::UpdateCursorOverlay()
                 std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
                     sdr::overlay::OverlayType::Solid,
                     aCursorColor,
-                    aRanges,
+                    std::move(aRanges),
                     false));
 
                 xOverlayManager->add(*pOverlay);
@@ -6372,7 +6372,7 @@ void ScGridWindow::UpdateSelectionOverlay()
             std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
                 sdr::overlay::OverlayType::Transparent,
                 aHighlight,
-                aRanges,
+                std::move(aRanges),
                 true));
 
             xOverlayManager->add(*pOverlay);
@@ -6478,7 +6478,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
         std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
             sdr::overlay::OverlayType::Solid,
             aHandleColor,
-            aRanges,
+            std::move(aRanges),
             false));
 
         xOverlayManager->add(*pOverlay);
@@ -6604,7 +6604,7 @@ void ScGridWindow::UpdateDragRectOverlay()
             std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
                 sdr::overlay::OverlayType::Invert,
                 COL_BLACK,
-                aRanges,
+                std::move(aRanges),
                 false));
 
             xOverlayManager->add(*pOverlay);
@@ -6650,7 +6650,7 @@ void ScGridWindow::UpdateHeaderOverlay()
             std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
                 sdr::overlay::OverlayType::Invert,
                 COL_BLACK,
-                aRanges,
+                std::move(aRanges),
                 false));
 
             xOverlayManager->add(*pOverlay);
@@ -6717,7 +6717,7 @@ void ScGridWindow::UpdateShrinkOverlay()
             std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
                 sdr::overlay::OverlayType::Invert,
                 COL_BLACK,
-                aRanges,
+                std::move(aRanges),
                 false));
 
             xOverlayManager->add(*pOverlay);

@@ -200,8 +200,8 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPrimitive2DSequence:
 }
 
 
-SdrDragEntryPointGlueDrag::SdrDragEntryPointGlueDrag(const std::vector< basegfx::B2DPoint >& rPositions, bool bIsPointDrag)
-:   maPositions(rPositions),
+SdrDragEntryPointGlueDrag::SdrDragEntryPointGlueDrag(std::vector< basegfx::B2DPoint >&& rPositions, bool bIsPointDrag)
+:   maPositions(std::move(rPositions)),
     mbIsPointDrag(bIsPointDrag)
 {
     // add SdrObject parts to transparent overlay stuff
@@ -504,7 +504,7 @@ void SdrDragMethod::createSdrDragEntries_PointDrag()
 
     if(!aPositions.empty())
     {
-        addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPointGlueDrag(aPositions, true)));
+        addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPointGlueDrag(std::move(aPositions), true)));
     }
 }
 
@@ -545,7 +545,7 @@ void SdrDragMethod::createSdrDragEntries_GlueDrag()
 
     if(!aPositions.empty())
     {
-        addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPointGlueDrag(aPositions, false)));
+        addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPointGlueDrag(std::move(aPositions), false)));
     }
 }
 

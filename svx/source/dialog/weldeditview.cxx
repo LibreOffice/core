@@ -232,7 +232,7 @@ void WeldEditView::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rect
         const Color aHighlight(SvtOptionsDrawinglayer::getHilightColor());
 
         sdr::overlay::OverlaySelection aCursorOverlay(sdr::overlay::OverlayType::Transparent,
-                                                      aHighlight, aLogicRanges, true);
+                                                      aHighlight, std::move(aLogicRanges), true);
 
         const drawinglayer::geometry::ViewInformation2D aViewInformation2D(
             basegfx::B2DHomMatrix(), rRenderContext.GetViewTransformation(),
