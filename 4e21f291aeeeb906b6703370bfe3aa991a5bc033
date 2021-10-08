@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "31175903_8e3e1bb4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-08T10:03:54Z",
+      "side": 1,
+      "message": "I have no idea, and it needs own research and own change. So please do that in a separate change; also don\u0027t change the method signature here if possible, to avoid unrelated stuff in a single commit. Thanks!",
+      "parentUuid": "ab5f16b8_1da48362",
+      "revId": "4e21f291aeeeb906b6703370bfe3aa991a5bc033",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f6a9c496_c336cba3",
         "filename": "filter/source/svg/svgexport.cxx",
         "patchSetId": 7
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "Good solution; But isn\u0027t there a value in migrating from pointer -\u003e reference, and nullptr -\u003e default value?",
       "parentUuid": "f6a9c496_c336cba3",
+      "revId": "4e21f291aeeeb906b6703370bfe3aa991a5bc033",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d439f304_33902a3f",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2111,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-08T10:03:54Z",
+      "side": 1,
+      "message": "It *might* be useful, but it is orthogonal to this specific change. I\u0027d suggest to do that in a separate change.",
+      "parentUuid": "008d7595_c2e63112",
       "revId": "4e21f291aeeeb906b6703370bfe3aa991a5bc033",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
