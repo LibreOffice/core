@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "505cc61d_63a4015c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-10-08T08:22:04Z",
+      "side": 1,
+      "message": "fixed a typo in the commit message; copying Verified+1 from previous...",
+      "revId": "be99d1395f3a2da99fd90762b593c56cd5635ae1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
