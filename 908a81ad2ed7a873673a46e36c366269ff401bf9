@@ -70,6 +70,24 @@
       "parentUuid": "147ffa48_2bf66cd2",
       "revId": "908a81ad2ed7a873673a46e36c366269ff401bf9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "203a75ca_30e05800",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2111,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-08T03:08:46Z",
+      "side": 1,
+      "message": "Patch set 5 used extra boolean parameter, and checks it instead of checking for nullptr.\nPatch set 6 does not change the methods. Instead of checking for nullptr, it checks if OUString is empty.",
+      "parentUuid": "aee3cba2_34b7ef95",
+      "revId": "908a81ad2ed7a873673a46e36c366269ff401bf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
