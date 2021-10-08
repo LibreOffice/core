@@ -16,6 +16,23 @@
       "message": "You removed the bug id",
       "revId": "653569c4db3d7855a4c8145b173cf5f69b636041",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ed97905_aecf1532",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-10-08T04:35:18Z",
+      "side": 1,
+      "message": "There was no need to abandon this patch. After you submit something to Gerrit, you can always download it: https://wiki.documentfoundation.org/Development/gerrit/SubmitPatch#Cherry_picking_yourself_out_of_trouble\n\nThink of it like a backup.",
+      "revId": "653569c4db3d7855a4c8145b173cf5f69b636041",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
