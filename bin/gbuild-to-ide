@@ -916,7 +916,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
 
     def __init__(self, gbuildparser, ide):
         IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
-        self.toolset = self.retrieve_toolset()
+        self.toolset = os.environ['VCTOOLSET']
         self.solution_directory = self.gbuildparser.builddir
         self.configurations = {
             'Build': {
@@ -935,10 +935,6 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
                 'rebuild': self.module_make_command('clean unitcheck slowcheck screenshot subsequentcheck')
             }
         }
-
-    def retrieve_toolset(self):
-        ide_toolset_map = {'160': 'v142', '170': 'v143'}
-        return ide_toolset_map[os.environ['VCVER']]
 
     def module_make_command(self, targets):
         return '%(sh)s -c "PATH=\\"/bin:$PATH\\";BUILDDIR=\\"%(builddir)s\\" %(makecmd)s -rsC %(location)s ' + targets + '"'

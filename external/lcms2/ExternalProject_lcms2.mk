@@ -19,8 +19,7 @@ $(call gb_ExternalProject_get_state_target,lcms2,build):
 	$(call gb_ExternalProject_run,build,\
 		MSBuild.exe lcms2_DLL.vcxproj \
 			$(gb_MSBUILD_CONFIG_AND_PLATFORM) /p:TargetName=lcms2 \
-			$(if $(filter 160,$(VCVER)),/p:PlatformToolset=v142 /p:VisualStudioVersion=16.0 /ToolsVersion:Current) \
-			$(if $(filter 170,$(VCVER)),/p:PlatformToolset=v143 /p:VisualStudioVersion=17.0 /ToolsVersion:Current) \
+			/p:PlatformToolset=$(VCTOOLSET) /p:VisualStudioVersion=$(VCVER) /ToolsVersion:Current \
 			$(if $(filter 10,$(WINDOWS_SDK_VERSION)),/p:WindowsTargetPlatformVersion=$(UCRTVERSION)) \
 	,Projects/VC2019/lcms2_DLL)
 	$(call gb_Trace_EndRange,lcms2,EXTERNAL)
