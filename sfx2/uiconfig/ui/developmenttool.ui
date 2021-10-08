@@ -289,7 +289,6 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="class_name_value_id">
-                    <property name="name">class_name_id</property>
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
