@@ -35,7 +35,7 @@ public:
     void testShouldFindFontFamilyByTokenNames();
     void testShouldFindNoFamilyWithWorthlessAttributes();
     void testShouldFindCJKFamily();
-    //    void testShouldNotFindCJKFamily();
+    void testShouldNotFindCJKFamily();
     void testShouldFindStarsymbolFamily();
     void testShouldFindOpensymbolFamilyWithMultipleSymbolFamilies();
     void testShouldFindSymboltypeFamily();
@@ -74,7 +74,7 @@ public:
     CPPUNIT_TEST(testShouldFindFontFamilyByTokenNames);
     CPPUNIT_TEST(testShouldFindNoFamilyWithWorthlessAttributes);
     CPPUNIT_TEST(testShouldFindCJKFamily);
-    //    CPPUNIT_TEST(testShouldNotFindCJKFamily);
+    CPPUNIT_TEST(testShouldNotFindCJKFamily);
     CPPUNIT_TEST(testShouldFindStarsymbolFamily);
     CPPUNIT_TEST(testShouldFindOpensymbolFamilyWithMultipleSymbolFamilies);
     CPPUNIT_TEST(testShouldFindSymboltypeFamily);
@@ -204,7 +204,6 @@ void VclPhysicalFontCollectionTest::testShouldFindCJKFamily()
                                  pCJKFamily->GetSearchName());
 }
 
-/* bug found, will be fixed in followup patch
 void VclPhysicalFontCollectionTest::testShouldNotFindCJKFamily()
 {
     vcl::font::PhysicalFontCollection aFontCollection;
@@ -216,7 +215,6 @@ void VclPhysicalFontCollectionTest::testShouldNotFindCJKFamily()
                            !aFontCollection.FindFontFamilyByAttributes(
                                ImplFontAttrs::CJK, WEIGHT_NORMAL, WIDTH_NORMAL, ITALIC_NONE, ""));
 }
-*/
 
 void VclPhysicalFontCollectionTest::testShouldFindStarsymbolFamily()
 {
