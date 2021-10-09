@@ -43,7 +43,7 @@ public:
     void testImpossibleSymbolFamily();
     void testShouldNotFindSymbolFamily();
     void testShouldMatchFamilyName();
-    //    void testShouldNotMatchFamilyName();
+    void testShouldNotMatchFamilyName();
     void testShouldMatchBrushScriptFamily();
     void testShouldNotMatchBrushScriptFamily();
     void testShouldMatchFixedFamily();
@@ -53,19 +53,19 @@ public:
     void testShouldMatchSansSerifFamily();
     void testShouldNotMatchSansSerifFamily();
     void testShouldMatchDecorativeFamily();
-    //    void testShouldNotMatchDecorativeFamily();
+    void testShouldNotMatchDecorativeFamily();
     void testShouldFindTitlingFamily();
-    //    void testShouldNotFindTitlingFamily();
+    void testShouldNotFindTitlingFamily();
     void testShouldFindCapitalsFamily();
-    //    void testShouldNotFindCapitalsFamily();
+    void testShouldNotFindCapitalsFamily();
     void testShouldFindFamilyName();
-    //    void testShouldNotFindFamilyName();
+    void testShouldNotFindFamilyName();
     void testShouldFindOtherStyleFamily();
-    //    void testShouldNotFindOtherStyleFamily();
+    void testShouldNotFindOtherStyleFamily();
     //    void testShouldFindTypewriterFamily();
-    //    void testShouldNotFindTypewriterFamily();
+    void testShouldNotFindTypewriterFamily();
     void testShouldFindSchoolbookFamily();
-    //    void testShouldNotFindSchoolbookFamily();
+    void testShouldNotFindSchoolbookFamily();
 
     CPPUNIT_TEST_SUITE(VclPhysicalFontCollectionTest);
     CPPUNIT_TEST(testShouldCreateAndAddFontFamilyToCollection);
@@ -82,7 +82,7 @@ public:
     CPPUNIT_TEST(testImpossibleSymbolFamily);
     CPPUNIT_TEST(testShouldNotFindSymbolFamily);
     CPPUNIT_TEST(testShouldMatchFamilyName);
-    //    CPPUNIT_TEST(testShouldNotMatchFamilyName);
+    CPPUNIT_TEST(testShouldNotMatchFamilyName);
     CPPUNIT_TEST(testShouldMatchBrushScriptFamily);
     CPPUNIT_TEST(testShouldNotMatchBrushScriptFamily);
     CPPUNIT_TEST(testShouldMatchFixedFamily);
@@ -92,19 +92,19 @@ public:
     CPPUNIT_TEST(testShouldMatchSansSerifFamily);
     CPPUNIT_TEST(testShouldNotMatchSansSerifFamily);
     CPPUNIT_TEST(testShouldMatchDecorativeFamily);
-    //    CPPUNIT_TEST(testShouldNotMatchDecorativeFamily);
+    CPPUNIT_TEST(testShouldNotMatchDecorativeFamily);
     CPPUNIT_TEST(testShouldFindTitlingFamily);
-    //    CPPUNIT_TEST(testShouldNotFindTitlingFamily);
+    CPPUNIT_TEST(testShouldNotFindTitlingFamily);
     CPPUNIT_TEST(testShouldFindCapitalsFamily);
-    //    CPPUNIT_TEST(testShouldNotFindCapitalsFamily);
+    CPPUNIT_TEST(testShouldNotFindCapitalsFamily);
     CPPUNIT_TEST(testShouldFindFamilyName);
-    //    CPPUNIT_TEST(testShouldNotFindFamilyName);
+    CPPUNIT_TEST(testShouldNotFindFamilyName);
     CPPUNIT_TEST(testShouldFindOtherStyleFamily);
-    //    CPPUNIT_TEST(testShouldNotFindOtherStyleFamily);
+    CPPUNIT_TEST(testShouldNotFindOtherStyleFamily);
     //    CPPUNIT_TEST(testShouldFindTypewriterFamily);
-    //    CPPUNIT_TEST(testShouldNotFindTypewriterFamily);
+    CPPUNIT_TEST(testShouldNotFindTypewriterFamily);
     CPPUNIT_TEST(testShouldFindSchoolbookFamily);
-    //    CPPUNIT_TEST(testShouldNotFindSchoolbookFamily);
+    CPPUNIT_TEST(testShouldNotFindSchoolbookFamily);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -332,7 +332,6 @@ void VclPhysicalFontCollectionTest::testShouldMatchFamilyName()
                                "Matching family name"));
 }
 
-/* bug found - will fix in followup patch
 void VclPhysicalFontCollectionTest::testShouldNotMatchFamilyName()
 {
     vcl::font::PhysicalFontCollection aFontCollection;
@@ -347,7 +346,6 @@ void VclPhysicalFontCollectionTest::testShouldNotMatchFamilyName()
                                                ImplFontAttrs::Normal, WEIGHT_NORMAL, WIDTH_NORMAL,
                                                ITALIC_NONE, "Non matching family name"));
 }
-*/
 
 void VclPhysicalFontCollectionTest::testShouldMatchBrushScriptFamily()
 {
@@ -507,7 +505,6 @@ void VclPhysicalFontCollectionTest::testShouldMatchDecorativeFamily()
                                                                       ITALIC_NORMAL, ""));
 }
 
-/* uncovered bug, will followup with fix
 void VclPhysicalFontCollectionTest::testShouldNotMatchDecorativeFamily()
 {
     vcl::font::PhysicalFontCollection aFontCollection;
@@ -524,7 +521,6 @@ void VclPhysicalFontCollectionTest::testShouldNotMatchDecorativeFamily()
                                                           ImplFontAttrs::Decorative, WEIGHT_NORMAL,
                                                           WIDTH_NORMAL, ITALIC_NORMAL, ""));
 }
-*/
 
 void VclPhysicalFontCollectionTest::testShouldFindTitlingFamily()
 {
@@ -538,7 +534,6 @@ void VclPhysicalFontCollectionTest::testShouldFindTitlingFamily()
                                                            WIDTH_NORMAL, ITALIC_NORMAL, ""));
 }
 
-/* uncovered bug, will followup with fix
 void VclPhysicalFontCollectionTest::testShouldNotFindTitlingFamily()
 {
     vcl::font::PhysicalFontCollection aFontCollection;
@@ -550,7 +545,6 @@ void VclPhysicalFontCollectionTest::testShouldNotFindTitlingFamily()
                                                        ImplFontAttrs::Titling, WEIGHT_NORMAL,
                                                        WIDTH_NORMAL, ITALIC_NORMAL, ""));
 }
-*/
 
 void VclPhysicalFontCollectionTest::testShouldFindCapitalsFamily()
 {
@@ -563,7 +557,6 @@ void VclPhysicalFontCollectionTest::testShouldFindCapitalsFamily()
                                                             WIDTH_NORMAL, ITALIC_NORMAL, ""));
 }
 
-/* uncovered bug, will followup with fix
 void VclPhysicalFontCollectionTest::testShouldNotFindCapitalsFamily()
 {
     vcl::font::PhysicalFontCollection aFontCollection;
@@ -574,7 +567,6 @@ void VclPhysicalFontCollectionTest::testShouldNotFindCapitalsFamily()
                                                         ImplFontAttrs::Capitals, WEIGHT_NORMAL,
                                                         WIDTH_NORMAL, ITALIC_NORMAL, ""));
 }
-*/
 
 void VclPhysicalFontCollectionTest::testShouldFindFamilyName()
 {
@@ -589,7 +581,6 @@ void VclPhysicalFontCollectionTest::testShouldFindFamilyName()
                                GetEnglishSearchFontName("Test font name")));
 }
 
-/* uncovered bug, will followup with fix
 void VclPhysicalFontCollectionTest::testShouldNotFindFamilyName()
 {
     vcl::font::PhysicalFontCollection aFontCollection;
@@ -602,7 +593,6 @@ void VclPhysicalFontCollectionTest::testShouldNotFindFamilyName()
                                ImplFontAttrs::Normal, WEIGHT_NORMAL, WIDTH_NORMAL, ITALIC_NORMAL,
                                GetEnglishSearchFontName("Completely different name")));
 }
-*/
 
 void VclPhysicalFontCollectionTest::testShouldFindOtherStyleFamily()
 {
@@ -616,7 +606,6 @@ void VclPhysicalFontCollectionTest::testShouldFindOtherStyleFamily()
                                                          WIDTH_NORMAL, ITALIC_NORMAL, ""));
 }
 
-/* uncovered bug, will followup with fix
 void VclPhysicalFontCollectionTest::testShouldNotFindOtherStyleFamily()
 {
     vcl::font::PhysicalFontCollection aFontCollection;
@@ -628,6 +617,7 @@ void VclPhysicalFontCollectionTest::testShouldNotFindOtherStyleFamily()
                                                   WIDTH_NORMAL, ITALIC_NORMAL, ""));
 }
 
+/* bug found - will followup with fix
 void VclPhysicalFontCollectionTest::testShouldFindTypewriterFamily()
 {
     vcl::font::PhysicalFontCollection aFontCollection;
@@ -639,6 +629,7 @@ void VclPhysicalFontCollectionTest::testShouldFindTypewriterFamily()
                                                   ImplFontAttrs::Typewriter, WEIGHT_NORMAL,
                                                   WIDTH_NORMAL, ITALIC_NORMAL, ""));
 }
+*/
 
 void VclPhysicalFontCollectionTest::testShouldNotFindTypewriterFamily()
 {
@@ -651,7 +642,6 @@ void VclPhysicalFontCollectionTest::testShouldNotFindTypewriterFamily()
                                                   ImplFontAttrs::Typewriter, WEIGHT_NORMAL,
                                                   WIDTH_NORMAL, ITALIC_NORMAL, ""));
 }
-*/
 
 void VclPhysicalFontCollectionTest::testShouldFindSchoolbookFamily()
 {
@@ -665,7 +655,6 @@ void VclPhysicalFontCollectionTest::testShouldFindSchoolbookFamily()
                                                          WIDTH_NORMAL, ITALIC_NORMAL, ""));
 }
 
-/* uncovered bug, will followup with fix
 void VclPhysicalFontCollectionTest::testShouldNotFindSchoolbookFamily()
 {
     vcl::font::PhysicalFontCollection aFontCollection;
@@ -677,7 +666,6 @@ void VclPhysicalFontCollectionTest::testShouldNotFindSchoolbookFamily()
                                                   ImplFontAttrs::Schoolbook, WEIGHT_NORMAL,
                                                   WIDTH_NORMAL, ITALIC_NORMAL, ""));
 }
-*/
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclPhysicalFontCollectionTest);
 
