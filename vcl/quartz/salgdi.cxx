@@ -516,7 +516,7 @@ FontCharMapRef AquaSalGraphics::GetFontCharMap() const
         return FontCharMapRef( new FontCharMap() );
     }
 
-    return static_cast<const CoreTextFontFace*>(mpTextStyle[0]->GetFontFace())->GetFontCharMap();
+    return mpTextStyle[0]->GetFontCharMap();
 }
 
 bool AquaSalGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
