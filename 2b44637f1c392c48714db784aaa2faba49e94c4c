@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0956197_5eb491d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-09T16:31:25Z",
+      "side": 1,
+      "message": "I don\u0027t know if it\u0027s just an id and the typo has no impact but just in case, I prefer \"advertise\" a bit about this change.",
+      "revId": "2b44637f1c392c48714db784aaa2faba49e94c4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
