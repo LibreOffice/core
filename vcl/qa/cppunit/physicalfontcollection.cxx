@@ -62,7 +62,7 @@ public:
     void testShouldNotFindFamilyName();
     void testShouldFindOtherStyleFamily();
     void testShouldNotFindOtherStyleFamily();
-    //    void testShouldFindTypewriterFamily();
+    void testShouldFindTypewriterFamily();
     void testShouldNotFindTypewriterFamily();
     void testShouldFindSchoolbookFamily();
     void testShouldNotFindSchoolbookFamily();
@@ -101,7 +101,7 @@ public:
     CPPUNIT_TEST(testShouldNotFindFamilyName);
     CPPUNIT_TEST(testShouldFindOtherStyleFamily);
     CPPUNIT_TEST(testShouldNotFindOtherStyleFamily);
-    //    CPPUNIT_TEST(testShouldFindTypewriterFamily);
+    CPPUNIT_TEST(testShouldFindTypewriterFamily);
     CPPUNIT_TEST(testShouldNotFindTypewriterFamily);
     CPPUNIT_TEST(testShouldFindSchoolbookFamily);
     CPPUNIT_TEST(testShouldNotFindSchoolbookFamily);
@@ -617,7 +617,6 @@ void VclPhysicalFontCollectionTest::testShouldNotFindOtherStyleFamily()
                                                   WIDTH_NORMAL, ITALIC_NORMAL, ""));
 }
 
-/* bug found - will followup with fix
 void VclPhysicalFontCollectionTest::testShouldFindTypewriterFamily()
 {
     vcl::font::PhysicalFontCollection aFontCollection;
@@ -629,7 +628,6 @@ void VclPhysicalFontCollectionTest::testShouldFindTypewriterFamily()
                                                   ImplFontAttrs::Typewriter, WEIGHT_NORMAL,
                                                   WIDTH_NORMAL, ITALIC_NORMAL, ""));
 }
-*/
 
 void VclPhysicalFontCollectionTest::testShouldNotFindTypewriterFamily()
 {
