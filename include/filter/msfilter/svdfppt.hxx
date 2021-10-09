@@ -107,7 +107,7 @@ struct SdHyperlinkEntry
     sal_Int32   nPrivate3;
     sal_Int32   nInfo;
     OUString    aTarget;
-    OUString    aSubAdress;
+    OUString    aSubAddress;
 
     OUString    aConvSubString;
 };

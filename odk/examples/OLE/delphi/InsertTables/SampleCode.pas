@@ -83,10 +83,10 @@ uses
     function GetBookmarkFromDBPointer(
         oDoc : Variant;
         sBookmarkName : String) : Variant;
-    function GetBookmarkFromAdress(
+    function GetBookmarkFromAddress(
         oDoc : Variant;
         sTableName : String;
-        sCellAdress : String) : Variant;
+        sCellAddress : String) : Variant;
     function JumpToBookmark(
         oBookmark : Variant) : Variant;
     function CreateUniqueTablename(oDoc : Variant) : String;
@@ -172,7 +172,7 @@ var
     sBookmarkName : String;
     iPos : Integer;
 begin
-    oBookmark := GetBookmarkFromAdress( Document, sTableName, sCellName );
+    oBookmark := GetBookmarkFromAddress( Document, sTableName, sCellName );
 
     sBookmarkName := oBookmark.getName();
 
@@ -251,7 +251,7 @@ var
     oTextCursor : Variant;
     sBookmarkName : String;
 begin
-    oBookmark := GetBookmarkFromAdress( oDoc, sTableName, sCellName );
+    oBookmark := GetBookmarkFromAddress( oDoc, sTableName, sCellName );
     oTextCursor := JumpToBookmark( oBookmark );
     oTextCursor.Cell.Value := dValue;
 
@@ -343,17 +343,17 @@ begin
 end;
 
 { ' Returns the Bookmark the Tablename and Cellname }
-function TSampleCode.GetBookmarkFromAdress(
+function TSampleCode.GetBookmarkFromAddress(
         oDoc : Variant;
         sTableName : String;
-        sCellAdress : String) : Variant;
+        sCellAddress : String) : Variant;
 var
     sTableAddress : String;
     iTableNameLength : Integer;
     sBookNames : Variant;
     iBookCounter : Integer;
 begin
-    sTableAddress := '//' + sTableName + '/%' + sCellAdress;
+    sTableAddress := '//' + sTableName + '/%' + sCellAddress;
     iTableNameLength := Length( sTableAddress );
 
     sBookNames := oDoc.Bookmarks.getElementNames;
@@ -362,7 +362,7 @@ begin
     begin
     	If sTableAddress = Copy( sBookNames[iBookCounter], 1, iTableNameLength) then
         begin
-    		GetBookmarkFromAdress := oDoc.Bookmarks.getByName(sBookNames[iBookCounter]);
+    		GetBookmarkFromAddress := oDoc.Bookmarks.getByName(sBookNames[iBookCounter]);
     		exit;
         end;
     end;

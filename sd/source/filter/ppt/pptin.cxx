@@ -412,13 +412,13 @@ bool ImplSdPPTImport::Import()
                                         INetURLObject aUrl( aHyperlink.aTarget, INetProtocol::File );
                                         aHyperlink.aTarget = aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
-                                        if ( !aPropItem.Read( aHyperlink.aSubAdress ) )
+                                        if ( !aPropItem.Read( aHyperlink.aSubAddress ) )
                                             break;
 
-                                        if ( !aHyperlink.aSubAdress.isEmpty() ) // get the converted subaddress
+                                        if ( !aHyperlink.aSubAddress.isEmpty() ) // get the converted subaddress
                                         {
                                             sal_uInt32 nPageNumber = 0;
-                                            OUString aString( aHyperlink.aSubAdress );
+                                            OUString aString( aHyperlink.aSubAddress );
                                             OString aStringAry[ 3 ];
                                             size_t nTokenCount = 0;
                                             sal_Int32 nPos = 0;
