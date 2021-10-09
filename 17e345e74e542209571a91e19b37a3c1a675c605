@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0922d3de_856a18a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-10-09T21:43:04Z",
+      "side": 1,
+      "message": "Thanks Caolan, I see what you mean! Hopefully this latest version works better. I\u0027ve included an extra unit test to deal with this case. ",
+      "revId": "17e345e74e542209571a91e19b37a3c1a675c605",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
