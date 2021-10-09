@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "538c31b9_3a2bed93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-09T13:16:59Z",
+      "side": 1,
+      "message": "All done.\nShould I change the string literal L\"abc\" to u\"abc\"? -\u003e OUString aVersion( L\"abc\" );",
+      "revId": "099ed428f548f020394ca9740cc7aba3c88708af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
