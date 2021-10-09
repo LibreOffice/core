@@ -826,15 +826,7 @@ bool OutputDevice::ImplNewFont() const
 
 void OutputDevice::SetFontOrientation( vcl::font::LogicalFontInstance* const pFontInstance ) const
 {
-    if( pFontInstance->GetFontSelectPattern().mnOrientation && !pFontInstance->GetOrientationFromData() )
-    {
-        pFontInstance->SetOwnOrientation(pFontInstance->GetFontSelectPattern().mnOrientation);
-        pFontInstance->SetOrientationInData(pFontInstance->GetOwnOrientation());
-    }
-    else
-    {
-        pFontInstance->SetOrientationInData(pFontInstance->GetOrientationFromData());
-    }
+    pFontInstance->SetFontOrientation();
 }
 
 void OutputDevice::ImplDrawEmphasisMark( tools::Long nBaseX, tools::Long nX, tools::Long nY,
