@@ -123,7 +123,7 @@ def bisect(lines, marks, min, max, update, command):
 
 def get_filename(line):
     """ Strips the line from the
-        '#include' and angled brakets
+        '#include' and angled brackets
         and return the filename only.
     """
     return re.sub(r'(.*#include\s*)<(.*)>(.*)', r'\2', line)

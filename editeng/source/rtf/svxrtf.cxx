@@ -273,19 +273,19 @@ void SvxRTFParser::ReadStyleTable()
     int bSaveChkStyleAttr = bChkStyleAttr ? 1 : 0;
     sal_uInt16 nStyleNo = 0;
     bool bHasStyleNo = false;
-    int _nOpenBrakets = 1;      // the first was already detected earlier!!
+    int _nOpenBrackets = 1;      // the first was already detected earlier!!
     std::optional<SvxRTFStyleType> xStyle(SvxRTFStyleType(*pAttrPool, aWhichMap));
     xStyle->aAttrSet.Put( GetRTFDefaults() );
 
     bIsInReadStyleTab = true;
     bChkStyleAttr = false;      // Do not check Attribute against the Styles
 
-    while( _nOpenBrakets && IsParserWorking() )
+    while( _nOpenBrackets && IsParserWorking() )
     {
         int nToken = GetNextToken();
         switch( nToken )
         {
-        case '}':       if( --_nOpenBrakets && IsParserWorking() )
+        case '}':       if( --_nOpenBrackets && IsParserWorking() )
                             // Style has been completely read,
                             // so this is still a stable status
                             SaveState( RTF_STYLESHEET );
@@ -306,7 +306,7 @@ void SvxRTFParser::ReadStyleTable()
                         eState = SvParserState::Error;
                     break;
                 }
-                ++_nOpenBrakets;
+                ++_nOpenBrackets;
             }
             break;
 
@@ -439,7 +439,7 @@ void SvxRTFParser::ReadColorTable()
 
 void SvxRTFParser::ReadFontTable()
 {
-    int _nOpenBrakets = 1;      // the first was already detected earlier!!
+    int _nOpenBrackets = 1;      // the first was already detected earlier!!
     vcl::Font aFont;
     short nFontNo(0), nInsFontNo (0);
     OUString sAltNm, sFntNm;
@@ -449,7 +449,7 @@ void SvxRTFParser::ReadFontTable()
     aFont.SetCharSet( nSystemChar );
     SetEncoding( nSystemChar );
 
-    while( _nOpenBrakets && IsParserWorking() )
+    while( _nOpenBrackets && IsParserWorking() )
     {
         bool bCheckNewFont = false;
         int nToken = GetNextToken();
@@ -459,7 +459,7 @@ void SvxRTFParser::ReadFontTable()
                 bIsAltFntNm = false;
                 // Style has been completely read,
                 // so this is still a stable status
-                if( --_nOpenBrakets <= 1 && IsParserWorking() )
+                if( --_nOpenBrackets <= 1 && IsParserWorking() )
                     SaveState( RTF_FONTTBL );
                 bCheckNewFont = true;
                 nInsFontNo = nFontNo;
@@ -482,7 +482,7 @@ void SvxRTFParser::ReadFontTable()
                         eState = SvParserState::Error;
                     break;
                 }
-                ++_nOpenBrakets;
+                ++_nOpenBrackets;
                 break;
             case RTF_FROMAN:
                 aFont.SetFamily( FAMILY_ROMAN );
@@ -550,7 +550,7 @@ void SvxRTFParser::ReadFontTable()
                 break;
         }
 
-        if( bCheckNewFont && 1 >= _nOpenBrakets && !sFntNm.isEmpty() )  // one font is ready
+        if( bCheckNewFont && 1 >= _nOpenBrackets && !sFntNm.isEmpty() )  // one font is ready
         {
             // All data from the font is available, so off to the table
             if (!sAltNm.isEmpty())

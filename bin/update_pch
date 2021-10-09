@@ -176,7 +176,7 @@ def find_files(path, recurse=True):
 
 def get_filename(line):
     """ Strips the line from the
-        '#include' and angled brakets
+        '#include' and angled brackets
         and return the filename only.
     """
     if not len(line) or line[0] != '#':

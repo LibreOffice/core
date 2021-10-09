@@ -39,7 +39,7 @@ const int MAX_TOKEN_LEN = 128;
 
 SvRTFParser::SvRTFParser( SvStream& rIn, sal_uInt8 nStackSize )
     : SvParser<int>( rIn, nStackSize )
-    , nOpenBrakets(0)
+    , nOpenBrackets(0)
     , eCodeSet(RTL_TEXTENCODING_MS_1252)
     , nUCharOverread(1)
 {
@@ -225,22 +225,22 @@ int SvRTFParser::GetNextToken_()
 
         case '{':
             {
-                if( 0 <= nOpenBrakets )
+                if( 0 <= nOpenBrackets )
                 {
                     RtfParserState_Impl aState( nUCharOverread, GetSrcEncoding() );
                     aParserStates.push( aState );
                 }
-                ++nOpenBrakets;
+                ++nOpenBrackets;
                 DBG_ASSERT(
-                    static_cast<size_t>(nOpenBrakets) == aParserStates.size(),
+                    static_cast<size_t>(nOpenBrackets) == aParserStates.size(),
                     "ParserStateStack unequal to bracket count" );
                 nRet = nNextCh;
             }
             break;
 
         case '}':
-            --nOpenBrakets;
-            if( 0 <= nOpenBrakets )
+            --nOpenBrackets;
+            if( 0 <= nOpenBrackets )
             {
                 aParserStates.pop();
                 if( !aParserStates.empty() )
@@ -257,7 +257,7 @@ int SvRTFParser::GetNextToken_()
                 }
             }
             DBG_ASSERT(
-                static_cast<size_t>(nOpenBrakets) == aParserStates.size(),
+                static_cast<size_t>(nOpenBrackets) == aParserStates.size(),
                 "ParserStateStack unequal to bracket count" );
             nRet = nNextCh;
             break;
@@ -577,7 +577,7 @@ SvParserState SvRTFParser::CallParser()
     rInput.ReadChar( cFirstCh );
     nNextCh = static_cast<unsigned char>(cFirstCh);
     eState = SvParserState::Working;
-    nOpenBrakets = 0;
+    nOpenBrackets = 0;
     eCodeSet = RTL_TEXTENCODING_MS_1252;
     SetSrcEncoding( eCodeSet );
 
@@ -617,7 +617,7 @@ void SvRTFParser::Continue( int nToken )
         switch( nToken )
         {
         case '}':
-            if( nOpenBrakets )
+            if( nOpenBrackets )
                 goto NEXTTOKEN;
             eState = SvParserState::Accepted;
             break;
@@ -675,7 +675,7 @@ NEXTTOKEN:
         nToken = GetNextToken();
         bLooping = nCurrentTokenIndex == m_nTokenIndex && nToken == nCurrentToken;
     }
-    if( SvParserState::Accepted == eState && 0 < nOpenBrakets )
+    if( SvParserState::Accepted == eState && 0 < nOpenBrackets )
         eState = SvParserState::Error;
 }
 

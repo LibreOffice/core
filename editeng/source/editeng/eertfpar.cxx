@@ -510,20 +510,20 @@ void EditRTFParser::CalcValue()
 void EditRTFParser::ReadField()
 {
     // From SwRTFParser::ReadField()
-    int _nOpenBrakets = 1;      // the first was already detected earlier
+    int _nOpenBrackets = 1;      // the first was already detected earlier
     bool bFldInst = false;
     bool bFldRslt = false;
     OUString aFldInst;
     OUString aFldRslt;
 
-    while( _nOpenBrakets && IsParserWorking() )
+    while( _nOpenBrackets && IsParserWorking() )
     {
         switch( GetNextToken() )
         {
             case '}':
             {
-                _nOpenBrakets--;
-                if ( _nOpenBrakets == 1 )
+                _nOpenBrackets--;
+                if ( _nOpenBrackets == 1 )
                 {
                     bFldInst = false;
                     bFldRslt = false;
@@ -531,7 +531,7 @@ void EditRTFParser::ReadField()
             }
             break;
 
-            case '{':           _nOpenBrakets++;
+            case '{':           _nOpenBrackets++;
                                 break;
 
             case RTF_FIELD:     SkipGroup();
@@ -578,21 +578,21 @@ void EditRTFParser::ReadField()
 
 void EditRTFParser::SkipGroup()
 {
-    int _nOpenBrakets = 1;      // the first was already detected earlier
+    int _nOpenBrackets = 1;      // the first was already detected earlier
 
-    while( _nOpenBrakets && IsParserWorking() )
+    while( _nOpenBrackets && IsParserWorking() )
     {
         switch( GetNextToken() )
         {
             case '}':
             {
-                _nOpenBrakets--;
+                _nOpenBrackets--;
             }
             break;
 
             case '{':
             {
-                _nOpenBrakets++;
+                _nOpenBrackets++;
             }
             break;
         }

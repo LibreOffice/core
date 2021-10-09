@@ -98,7 +98,7 @@ sal_Int32 FindEndPosR1C1(const sal_Unicode* p, sal_Int32 nStartPos, sal_Int32 nE
         }
         else if (*p == '[')
         {
-            // Skip until the closing braket.
+            // Skip until the closing bracket.
             for (; nNewEnd <= nEndPos; ++p, ++nNewEnd)
                 if (*p == ']')
                     break;
@@ -163,7 +163,7 @@ void ExpandToTextR1C1(const sal_Unicode* p, sal_Int32 nLen, sal_Int32& rStartPos
             }
             else if (c == ']')
             {
-                // Skip until the opening braket.
+                // Skip until the opening bracket.
                 for (--rStartPos; rStartPos > 0; --rStartPos)
                 {
                     c = p[rStartPos];
