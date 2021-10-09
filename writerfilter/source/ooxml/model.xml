@@ -3557,7 +3557,7 @@
     </resource>
     <resource name="CT_SystemColor" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_SystemColor_val"/>
-      <attribute name="lastClr" tokenid="ooxml:CT_SytemColor_lastClr"/>
+      <attribute name="lastClr" tokenid="ooxml:CT_SystemColor_lastClr"/>
     </resource>
     <resource name="ST_SchemeColorVal" resource="List">
       <value tokenid="ooxml:Value_drawingml_ST_SchemeColorVal_bg1">bg1</value>
