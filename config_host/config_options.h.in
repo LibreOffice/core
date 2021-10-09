@@ -13,8 +13,12 @@
 //
 #if ENABLE_MERGELIBS
 #define UNLESS_MERGELIBS(x)
+#define IF_MERGELIBS(x) x
+#define IF_ELSE_MERGELIBS(x,y) x
 #else
 #define UNLESS_MERGELIBS(x) x
+#define IF_MERGELIBS(x)
+#define IF_ELSE_MERGELIBS(x,y) y
 #endif
 
 
