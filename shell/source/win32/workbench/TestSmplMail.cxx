@@ -25,7 +25,7 @@
 #include <sal/types.h>
 #include <osl/diagnose.h>
 
-#include <stdio.h>
+#include <iostream>
 
 #include <windows.h>
 
@@ -35,13 +35,12 @@
 //  namespaces
 
 
-using namespace ::cppu                  ;
-using namespace ::com::sun::star::uno   ;
-using namespace ::com::sun::star::lang  ;
-using namespace std                     ;
-using namespace com::sun::star::system;
+using namespace ::cppu;
+using namespace ::css::uno;
+using namespace ::css::lang;
+using namespace ::css::system;
 
-#define RDB_SYSPATH "D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\applicat.rdb"
+constexpr OUStringLiteral RDB_SYSPATH "D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\applicat.rdb";
 
 
 //  global variables
@@ -62,17 +61,17 @@ int SAL_CALL main(int , char*, char* )
 
 
     // Get global factory for uno services.
-    OUString rdbName = OUString( RDB_SYSPATH  );
+    OUString rdbName ( RDB_SYSPATH  );
     Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( rdbName ) );
 
     // Print a message if an error occurred.
-    if ( g_xFactory.is() == sal_False )
+    if ( !g_xFactory )
     {
         OSL_FAIL("Can't create RegistryServiceFactory");
-        return(-1);
+        return -1;
     }
 
-    printf("Creating RegistryServiceFactory successful\n");
+    std::cout << "Creating RegistryServiceFactory successful" << std::endl;
 
 
     // try to get an Interface to a XFilePicker Service
@@ -83,21 +82,21 @@ int SAL_CALL main(int , char*, char* )
         Reference< XSimpleMailClientSupplier > xSmplMailClientSuppl(
             g_xFactory->createInstance("com.sun.star.system.SimpleSystemMail"), UNO_QUERY );
 
-        if ( !xSmplMailClientSuppl.is() )
+        if ( !xSmplMailClientSuppl )
         {
             OSL_FAIL( "Error creating SimpleSystemMail Service" );
-            return(-1);
+            return -1;
         }
 
         Reference< XSimpleMailClient > xSmplMailClient(
             xSmplMailClientSuppl->querySimpleMailClient( ) );
 
-        if ( xSmplMailClient.is( ) )
+        if ( xSmplMailClient )
         {
             Reference< XSimpleMailMessage > xSmplMailMsg(
                 xSmplMailClient->createSimpleMailMessage( ) );
 
-            if ( xSmplMailMsg.is( ) )
+            if ( xSmplMailMsg )
             {
                 xSmplMailMsg->setRecipient( OUString("tino.rachui@germany.sun.com") );
                 xSmplMailMsg->setOriginator( OUString("tino.rachui@germany.sun.com") );
@@ -143,7 +142,7 @@ int SAL_CALL main(int , char*, char* )
     Reference< XComponent > xComponent( g_xFactory, UNO_QUERY );
 
     // Print a message if an error occurred.
-    if ( xComponent.is() == sal_False )
+    if ( !xComponent )
     {
         OSL_FAIL("Error shutting down");
     }
@@ -152,7 +151,7 @@ int SAL_CALL main(int , char*, char* )
     xComponent->dispose();
     g_xFactory.clear();
 
-    printf("Test successful\n");
+    std::cout << "Test successful" << std::endl;
 
     return 0;
 }
