@@ -13,6 +13,7 @@
 #include <cstdlib>
 #include <limits>
 #include <memory>
+#include <mutex>
 
 #include <o3tl/runtimetooustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -68,7 +69,7 @@ struct FrameData
 };
 
 typedef o3tl::lru_map<void*, OString> FrameCache;
-osl::Mutex frameCacheMutex;
+std::mutex frameCacheMutex;
 FrameCache frameCache( 256 );
 
 void process_file_addr2line( const char* file, std::vector<FrameData>& frameData )
@@ -164,7 +165,7 @@ void process_file_addr2line( const char* file, std::vector<FrameData>& frameData
                     frame.info = function + " in " + file;
                 else
                     frame.info = function + " at " + source;
-                osl::MutexGuard guard(frameCacheMutex);
+                std::lock_guard guard(frameCacheMutex);
                 frameCache.insert( { frame.addr, frame.info } );
             }
         }
@@ -183,9 +184,9 @@ OUString sal::backtrace_to_string(BacktraceState* backtraceState)
     {
         Dl_info dli;
         void* addr = backtraceState->buffer[i];
-        osl::ClearableMutexGuard guard(frameCacheMutex);
+        std::unique_lock guard(frameCacheMutex);
         auto it = frameCache.find(addr);
-        guard.clear();
+        guard.release();
         if( it != frameCache.end())
         {
             frameData[ i ].info = it->second;
