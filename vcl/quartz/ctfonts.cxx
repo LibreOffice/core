@@ -376,6 +376,9 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
     {
         CFNumberGetValue( pSymbolNum, kCFNumberSInt64Type, &nSymbolTrait );
         rDFA.SetSymbolFlag( (nSymbolTrait & kCTFontClassMaskTrait) == kCTFontSymbolicClass );
+
+        if (nSymbolTrait & kCTFontMonoSpaceTrait)
+            rDFA.SetPitch(PITCH_FIXED);
     }
 
     // get the font weight
