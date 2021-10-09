@@ -290,9 +290,9 @@ const SbiRuntime::pStep2 SbiRuntime::aStep2[] = {// all opcodes with two operand
 //                              SbiRTLData
 
 SbiRTLData::SbiRTLData()
+    : nDirFlags(SbAttributes::NONE)
+    , nCurDirPos(0)
 {
-    nDirFlags   = SbAttributes::NONE;
-    nCurDirPos  = 0;
 }
 
 SbiRTLData::~SbiRTLData()
