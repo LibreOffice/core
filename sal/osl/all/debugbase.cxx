@@ -56,8 +56,6 @@ bool isSubStr( char const* pStr, OString const& subStr )
     return rtl_str_indexOfStr( pStr, subStr.getStr() ) >= 0;
 }
 
-struct DebugBaseMutex : rtl::Static<osl::Mutex, DebugBaseMutex> {};
-
 } // anon namespace
 
 extern "C" {
@@ -72,7 +70,8 @@ extern "C" {
 osl::Mutex & SAL_CALL osl_detail_ObjectRegistry_getMutex()
     SAL_THROW_EXTERN_C()
 {
-    return DebugBaseMutex::get();
+    static osl::Mutex aMutex;
+    return aMutex;
 }
 #ifdef __clang__
 #pragma clang diagnostic pop
