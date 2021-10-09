@@ -205,24 +205,24 @@ Any AnimationsImportHelperImpl::convertTarget( const OUString& rValue )
 Any AnimationsImportHelperImpl::convertValue( XMLTokenEnum eAttributeName, const OUString& rValue )
 {
     sal_Int32 nCommaPos = -1, nPos;
-    sal_Int32 nOpenBrakets = 0;
+    sal_Int32 nOpenBrackets = 0;
     for( nPos = 0; (nPos < rValue.getLength()) && (nCommaPos == -1); nPos++ )
     {
         switch( rValue[nPos] )
         {
         case ',':
-            if( nOpenBrakets == 0 )
+            if( nOpenBrackets == 0 )
                 nCommaPos = nPos;
             break;
         case '(':
         case '[':
         case '{':
-            nOpenBrakets++;
+            nOpenBrackets++;
             break;
         case ')':
         case ']':
         case '}':
-            nOpenBrakets--;
+            nOpenBrackets--;
             break;
         }
     }
