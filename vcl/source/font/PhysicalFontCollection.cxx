@@ -586,18 +586,18 @@ static int GetFixedMatchValue(ImplFontAttrs nSearchType, ImplFontAttrs nMatchTyp
     int nTestMatch = 0;
 
     // test MONOSPACE+TYPEWRITER attributes
-    if( nSearchType & ImplFontAttrs::Fixed )
+    if ((nSearchType & ImplFontAttrs::Fixed) || (nSearchType & ImplFontAttrs::Typewriter))
     {
-        if( nMatchType & ImplFontAttrs::Fixed )
-            nTestMatch += 1000000*2;
+        if (nMatchType & ImplFontAttrs::Fixed)
+            nTestMatch += FIXED_MATCH_VALUE * 2;
 
         // a typewriter attribute is even better
-        if( ImplFontAttrs::None == ((nSearchType ^ nMatchType) & ImplFontAttrs::Typewriter) )
-            nTestMatch += 10000*2;
+        if ((nSearchType & ImplFontAttrs::Typewriter) && (nMatchType & ImplFontAttrs::Typewriter))
+            nTestMatch += TYPEWRITER_MATCH_VALUE * 2;
     }
-    else if( nMatchType & ImplFontAttrs::Fixed )
+    else if (nMatchType & ImplFontAttrs::Fixed)
     {
-        nTestMatch -= 1000000;
+        nTestMatch -= FIXED_MATCH_VALUE;
     }
 
     SAL_INFO("vcl.fonts", "GetFixedMatchValue: " << nTestMatch);
