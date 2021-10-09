@@ -479,7 +479,7 @@
 #include <authfld.hxx>
 #include <basesh.hxx>
 #include <bodyfrm.hxx>
-#include <bookmrk.hxx>
+#include <bookmark.hxx>
 #include <breakit.hxx>
 #include <calbck.hxx>
 #include <calc.hxx>

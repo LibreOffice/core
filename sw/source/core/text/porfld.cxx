@@ -42,7 +42,7 @@
 #include <accessibilityoptions.hxx>
 #include <editeng/lrspitem.hxx>
 #include <unicode/ubidi.h>
-#include <bookmrk.hxx>
+#include <bookmark.hxx>
 
 using namespace ::com::sun::star;
 

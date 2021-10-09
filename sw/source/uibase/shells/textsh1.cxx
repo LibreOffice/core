@@ -100,7 +100,7 @@
 #include <numrule.hxx>
 #include <memory>
 #include <xmloff/odffields.hxx>
-#include <bookmrk.hxx>
+#include <bookmark.hxx>
 #include <linguistic/misc.hxx>
 #include <authfld.hxx>
 

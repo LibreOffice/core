@@ -29,7 +29,7 @@
 #include <swtblfmt.hxx>
 #include <swcrsr.hxx>
 #include <unocrsr.hxx>
-#include <bookmrk.hxx>
+#include <bookmark.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentRedlineAccess.hxx>

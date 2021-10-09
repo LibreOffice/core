@@ -37,7 +37,7 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IMark.hxx>
-#include <bookmrk.hxx>
+#include <bookmark.hxx>
 #include <rootfrm.hxx>
 #include <breakit.hxx>
 #include <vcl/commandevent.hxx>

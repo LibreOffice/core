@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_ANNOTATIONMARK_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_ANNOTATIONMARK_HXX
 
-#include "bookmrk.hxx"
+#include "bookmark.hxx"
 #include <rtl/ustring.hxx>
 
 class SwFormatField;

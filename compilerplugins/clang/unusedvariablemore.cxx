@@ -98,7 +98,7 @@ void UnusedVariableMore::run()
     if (fn == SRCDIR "/sc/source/ui/miscdlgs/simpref.cxx")
         return;
     // Using an SwPaM to do stuff
-    if (fn == SRCDIR "/sw/source/core/crsr/bookmrk.cxx")
+    if (fn == SRCDIR "/sw/source/core/crsr/bookmark.cxx")
         return;
     // index variable in for loop?
     if (fn == SRCDIR "/sw/source/uibase/docvw/edtwin.cxx")

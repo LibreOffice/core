@@ -63,7 +63,7 @@
 #include <UndoAttribute.hxx>
 #include <rolbck.hxx>
 #include <acorrect.hxx>
-#include <bookmrk.hxx>
+#include <bookmark.hxx>
 #include <ftnidx.hxx>
 #include <txtftn.hxx>
 #include <hints.hxx>
