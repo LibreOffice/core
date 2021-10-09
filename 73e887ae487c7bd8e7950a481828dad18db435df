@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0720ca47_29854056",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-10-09T16:53:46Z",
+      "side": 1,
+      "message": "Tor, I\u0027m pretty sure this fixes the bug. Would you be able to give this the once over? I\u0027m no expert in this area, but I\u0027ve run this on my Mac and it populates the font list. ",
+      "revId": "73e887ae487c7bd8e7950a481828dad18db435df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
