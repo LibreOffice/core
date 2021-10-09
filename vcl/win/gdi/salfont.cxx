@@ -949,7 +949,7 @@ FontCharMapRef WinSalGraphics::GetFontCharMap() const
     {
         return FontCharMapRef( new FontCharMap() );
     }
-    return mpWinFontEntry[0]->GetFontFace()->GetFontCharMap();
+    return mpWinFontEntry[0]->GetFontCharMap();
 }
 
 bool WinSalGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const

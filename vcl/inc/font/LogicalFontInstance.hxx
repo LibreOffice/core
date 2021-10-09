@@ -35,6 +35,7 @@
 
 #include "FontInstanceData.hxx"
 #include "FontSelectPattern.hxx"
+#include "PhysicalFontFace.hxx"
 
 #include <optional>
 #include <unordered_map>
@@ -112,6 +113,8 @@ public: // TODO: make data members private
     void SetOwnOrientation(Degree10 nOwnOrientation) { mnOwnOrientation = nOwnOrientation; }
     void SetOrientationInData(Degree10 nOrientation) { mnOrientation = nOrientation; }
     void SetInitFlag(bool bIsInit) { mbInit = bIsInit; }
+
+    FontCharMapRef GetFontCharMap() { return m_pFontFace->GetFontCharMap(); }
 
     void InitTextLineSize(sal_Int32 nDPIY, vcl::Font const& rFont, sal_Int32 mnBulletOffset);
     void InitAboveTextLineSize() { mxFontMetric->InitAboveTextLineSize(); }
