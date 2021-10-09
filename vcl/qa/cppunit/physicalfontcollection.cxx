@@ -62,6 +62,7 @@ public:
     void testShouldNotFindFamilyName();
     void testShouldFindOtherStyleFamily();
     void testShouldNotFindOtherStyleFamily();
+    void testShouldFindTypewriterFamily();
     void testShouldNotFindTypewriterFamily();
     void testShouldFindSchoolbookFamily();
     void testShouldNotFindSchoolbookFamily();
@@ -100,6 +101,7 @@ public:
     CPPUNIT_TEST(testShouldNotFindFamilyName);
     CPPUNIT_TEST(testShouldFindOtherStyleFamily);
     CPPUNIT_TEST(testShouldNotFindOtherStyleFamily);
+    CPPUNIT_TEST(testShouldFindTypewriterFamily);
     CPPUNIT_TEST(testShouldNotFindTypewriterFamily);
     CPPUNIT_TEST(testShouldFindSchoolbookFamily);
     CPPUNIT_TEST(testShouldNotFindSchoolbookFamily);
@@ -613,6 +615,18 @@ void VclPhysicalFontCollectionTest::testShouldNotFindOtherStyleFamily()
 
     CPPUNIT_ASSERT_MESSAGE("Found font name", !aFontCollection.FindFontFamilyByAttributes(
                                                   ImplFontAttrs::OtherStyle, WEIGHT_NORMAL,
+                                                  WIDTH_NORMAL, ITALIC_NORMAL, ""));
+}
+
+void VclPhysicalFontCollectionTest::testShouldFindTypewriterFamily()
+{
+    vcl::font::PhysicalFontCollection aFontCollection;
+    vcl::font::PhysicalFontFamily* pFontFamily
+        = aFontCollection.FindOrCreateFontFamily("testtypewriter");
+    AddNormalFontFace(pFontFamily, "testtypewriter");
+
+    CPPUNIT_ASSERT_MESSAGE("Found font name", aFontCollection.FindFontFamilyByAttributes(
+                                                  ImplFontAttrs::Typewriter, WEIGHT_NORMAL,
                                                   WIDTH_NORMAL, ITALIC_NORMAL, ""));
 }
 
