@@ -2886,11 +2886,11 @@ sw/source/core/access/accmap.cxx:469
     void SwAccessibleEvent_Impl::SwAccessibleEvent_Impl(enum SwAccessibleEvent_Impl::EventType,const class SwFrame *,const class sw::access::SwAccessibleChild &,const class SwRect &)
     enum SwAccessibleEvent_Impl::EventType eT
     3
-sw/source/core/crsr/bookmrk.cxx:160
+sw/source/core/crsr/bookmark.cxx:160
     void lcl_SetFieldMarks(class sw::mark::Fieldmark &,class SwDoc &,const char16_t,const char16_t,const struct SwPosition *const)
     const char16_t aStartMark
     7
-sw/source/core/crsr/bookmrk.cxx:216
+sw/source/core/crsr/bookmark.cxx:216
     void lcl_RemoveFieldMarks(const class sw::mark::Fieldmark &,class SwDoc &,const char16_t,const char16_t)
     const char16_t aStartMark
     7

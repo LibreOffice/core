@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <bookmrk.hxx>
+#include <bookmark.hxx>
 #include <cntfrm.hxx>
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>

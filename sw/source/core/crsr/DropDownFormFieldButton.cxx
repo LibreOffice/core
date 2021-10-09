@@ -9,7 +9,7 @@
 
 #include <DropDownFormFieldButton.hxx>
 #include <edtwin.hxx>
-#include <bookmrk.hxx>
+#include <bookmark.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <xmloff/odffields.hxx>

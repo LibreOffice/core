@@ -9,7 +9,7 @@
 
 #include <DateFormFieldButton.hxx>
 #include <edtwin.hxx>
-#include <bookmrk.hxx>
+#include <bookmark.hxx>
 #include <tools/date.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>

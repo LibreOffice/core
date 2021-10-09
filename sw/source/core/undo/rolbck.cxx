@@ -55,7 +55,7 @@
 #include <IMark.hxx>
 #include <charfmt.hxx>
 #include <strings.hrc>
-#include <bookmrk.hxx>
+#include <bookmark.hxx>
 #include <frameformats.hxx>
 #include <memory>
 

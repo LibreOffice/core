@@ -27,7 +27,7 @@
 #include <swbaslnk.hxx>
 #include <mvsave.hxx>
 #include <IMark.hxx>
-#include <bookmrk.hxx>
+#include <bookmark.hxx>
 #include <pam.hxx>
 #include <shellio.hxx>
 

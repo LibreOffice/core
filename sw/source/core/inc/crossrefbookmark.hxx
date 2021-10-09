@@ -24,7 +24,7 @@
 
 #include <string_view>
 
-#include "bookmrk.hxx"
+#include "bookmark.hxx"
 #include <rtl/ustring.hxx>
 #include <vcl/keycod.hxx>
 

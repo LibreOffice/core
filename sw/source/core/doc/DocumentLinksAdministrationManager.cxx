@@ -32,7 +32,7 @@
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <swtypes.hxx>
 #include <docsh.hxx>
-#include <bookmrk.hxx>
+#include <bookmark.hxx>
 #include <swserv.hxx>
 #include <swbaslnk.hxx>
 #include <section.hxx>

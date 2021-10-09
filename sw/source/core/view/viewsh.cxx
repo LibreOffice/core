@@ -52,7 +52,7 @@
 #include <ptqueue.hxx>
 #include <docsh.hxx>
 #include <pagedesc.hxx>
-#include <bookmrk.hxx>
+#include <bookmark.hxx>
 #include <ndole.hxx>
 #include <ndindex.hxx>
 #include <accmap.hxx>

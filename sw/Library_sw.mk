@@ -147,7 +147,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/bastyp/tabcol \
     sw/source/core/crsr/annotationmark \
     sw/source/core/crsr/BlockCursor \
-    sw/source/core/crsr/bookmrk \
+    sw/source/core/crsr/bookmark \
     sw/source/core/crsr/callnk \
     sw/source/core/crsr/crbm \
     sw/source/core/crsr/crossrefbookmark \

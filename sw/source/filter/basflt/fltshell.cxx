@@ -44,7 +44,7 @@
 #include <txtfld.hxx>
 #include <tox.hxx>
 #include <expfld.hxx>
-#include <bookmrk.hxx>
+#include <bookmark.hxx>
 #include <fltshell.hxx>
 #include <rdfhelper.hxx>
 

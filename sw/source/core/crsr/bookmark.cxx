@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include <bookmrk.hxx>
+#include <bookmark.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentState.hxx>

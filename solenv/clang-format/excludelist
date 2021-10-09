@@ -12401,7 +12401,7 @@ sw/source/core/bastyp/swregion.cxx
 sw/source/core/bastyp/tabcol.cxx
 sw/source/core/crsr/BlockCursor.hxx
 sw/source/core/crsr/annotationmark.cxx
-sw/source/core/crsr/bookmrk.cxx
+sw/source/core/crsr/bookmark.cxx
 sw/source/core/crsr/callnk.cxx
 sw/source/core/crsr/callnk.hxx
 sw/source/core/crsr/crbm.cxx
@@ -12600,7 +12600,7 @@ sw/source/core/inc/anchoredobjectposition.hxx
 sw/source/core/inc/annotationmark.hxx
 sw/source/core/inc/ascharanchoredobjectposition.hxx
 sw/source/core/inc/bodyfrm.hxx
-sw/source/core/inc/bookmrk.hxx
+sw/source/core/inc/bookmark.hxx
 sw/source/core/inc/cellfrm.hxx
 sw/source/core/inc/cntfrm.hxx
 sw/source/core/inc/crossrefbookmark.hxx
