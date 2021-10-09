@@ -40,7 +40,7 @@
  * simple example component implementing a counter
  */
 
-#include <stdio.h>
+#include <iostream>
 #include <rtl/ustring.hxx>
 #include <uno/lbnames.h>
 #include <cppuhelper/queryinterface.hxx>
@@ -77,9 +77,9 @@ class MyCounterImpl
 public:
     MyCounterImpl( const Reference< XMultiServiceFactory > & xServiceManager )
         : m_xServiceManager( xServiceManager ), m_nRefCount( 0 )
-        { printf( "< MyCounterImpl ctor called >\n" ); }
+        { std::cout << "< MyCounterImpl ctor called >" << std::endl; }
     ~MyCounterImpl()
-        { printf( "< MyCounterImpl dtor called >\n" ); }
+        { std::cout << "< MyCounterImpl dtor called >" << std::endl; }
 
     // XInterface implementation
     virtual void SAL_CALL acquire() throw ()
