@@ -88,6 +88,19 @@ hb_font_t* LogicalFontInstance::InitHbFont(hb_face_t* pHbFace)
     return pHbFont;
 }
 
+void LogicalFontInstance::SetFontOrientation()
+{
+    if (m_aFontSelData.mnOrientation && !mxFontMetric->GetOrientation())
+    {
+        mnOwnOrientation = m_aFontSelData.mnOrientation;
+        mnOrientation = mnOwnOrientation;
+    }
+    else
+    {
+        mnOrientation = mxFontMetric->GetOrientation();
+    }
+}
+
 int LogicalFontInstance::GetKashidaWidth()
 {
     hb_font_t* pHbFont = GetHbFont();
