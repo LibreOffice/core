@@ -16,6 +16,24 @@
       "message": "we seem to be already loading the symbolic font trait down below, just after\n\n    // get symbolic trait\n   \nso we should rather use the value loaded there, otherwise this looks fine",
       "revId": "5d33df71d10bfb8edef22ee19c128279e1d0f73d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2e97e26_d1b64973",
+        "filename": "vcl/quartz/ctfonts.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-10-09T18:08:46Z",
+      "side": 1,
+      "message": "Thanks Noel, didn\u0027t notice that. Will fix.",
+      "parentUuid": "50d6dd07_ce193a52",
+      "revId": "5d33df71d10bfb8edef22ee19c128279e1d0f73d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
