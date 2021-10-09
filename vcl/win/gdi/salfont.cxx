@@ -956,7 +956,7 @@ bool WinSalGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilitie
 {
     if (!mpWinFontEntry[0])
         return false;
-    return mpWinFontEntry[0]->GetFontFace()->GetFontCapabilities(rFontCapabilities);
+    return mpWinFontEntry[0]->GetFontCapabilities(rFontCapabilities);
 }
 
 static int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,
