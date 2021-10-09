@@ -350,7 +350,7 @@ public class _ParagraphProperties extends MultiPropertyTest {
 
         _NumberingLevel numb = new _NumberingLevel((LogWriter)log, tParam, propertyValues);
 
-        boolean result = numb.testPropertieArray();
+        boolean result = numb.testPropertyArray();
 
         tRes.tested("NumberingRules", result);
     }

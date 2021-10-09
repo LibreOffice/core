@@ -64,12 +64,12 @@ struct SfxItemPropertyMapEntry;
 #define WID_NUMBERINGSTARTVALUE     OWN_ATTR_VALUE_START+3
 #define WID_PARAISNUMBERINGRESTART  OWN_ATTR_VALUE_START+4
 
-#define SVX_UNOEDIT_NUMBERING_PROPERTIE \
+#define SVX_UNOEDIT_NUMBERING_PROPERTY \
     {u"" UNO_NAME_NUMBERING_RULES,        EE_PARA_NUMBULLET,  cppu::UnoType<css::container::XIndexReplace>::get(), 0, 0 }, \
     {u"" UNO_NAME_NUMBERING,              EE_PARA_BULLETSTATE,cppu::UnoType<bool>::get(), 0, 0 }
 
 #define SVX_UNOEDIT_OUTLINER_PROPERTIES \
-    SVX_UNOEDIT_NUMBERING_PROPERTIE, \
+    SVX_UNOEDIT_NUMBERING_PROPERTY, \
     {u"" UNO_NAME_NUMBERING_LEVEL,        WID_NUMLEVEL,       ::cppu::UnoType<sal_Int16>::get(), 0, 0 }, \
     {u"NumberingStartValue",           WID_NUMBERINGSTARTVALUE, ::cppu::UnoType<sal_Int16>::get(), 0, 0 }, \
     {u"ParaIsNumberingRestart",        WID_PARAISNUMBERINGRESTART, cppu::UnoType<bool>::get(), 0, 0 }

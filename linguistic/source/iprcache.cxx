@@ -59,10 +59,10 @@ static void lcl_AddAsPropertyChangeListener(
 {
     if (xListener.is() && rPropSet.is())
     {
-        for (auto& aFlushPropertie : aFlushProperties)
+        for (auto& aFlushProperty : aFlushProperties)
         {
             rPropSet->addPropertyChangeListener(
-                aFlushPropertie.aPropName, xListener );
+                aFlushProperty.aPropName, xListener );
         }
     }
 }
@@ -74,10 +74,10 @@ static void lcl_RemoveAsPropertyChangeListener(
 {
     if (xListener.is() && rPropSet.is())
     {
-        for (auto& aFlushPropertie : aFlushProperties)
+        for (auto& aFlushProperty : aFlushProperties)
         {
             rPropSet->removePropertyChangeListener(
-                    aFlushPropertie.aPropName, xListener );
+                    aFlushProperty.aPropName, xListener );
         }
     }
 }

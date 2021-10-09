@@ -957,16 +957,16 @@ namespace pcr
 
                 // append these properties to our "all properties" array
                 aProperties.reserve( aProperties.size() + aThisHandlersProperties.size() );
-                for (const auto & aThisHandlersPropertie : aThisHandlersProperties)
+                for (const auto & aThisHandlersProperty : aThisHandlersProperties)
                 {
                     auto noPrevious = std::none_of(
                         aProperties.begin(),
                         aProperties.end(),
-                        FindPropertyByName( aThisHandlersPropertie.Name )
+                        FindPropertyByName( aThisHandlersProperty.Name )
                     );
                     if ( noPrevious )
                     {
-                        aProperties.push_back( aThisHandlersPropertie );
+                        aProperties.push_back( aThisHandlersProperty );
                         continue;
                     }
 
@@ -979,7 +979,7 @@ namespace pcr
                     // which means it can give it a completely different meaning than the previous
                     // handler for this property is prepared for.
                     std::pair< PropertyHandlerMultiRepository::iterator, PropertyHandlerMultiRepository::iterator >
-                        aDepHandlers = m_aDependencyHandlers.equal_range( aThisHandlersPropertie.Name );
+                        aDepHandlers = m_aDependencyHandlers.equal_range( aThisHandlersProperty.Name );
                     m_aDependencyHandlers.erase( aDepHandlers.first, aDepHandlers.second );
                 }
 
@@ -1003,9 +1003,9 @@ namespace pcr
 
                 // remember this handler for every of the properties which it is responsible
                 // for
-                for (const auto & aThisHandlersPropertie : aThisHandlersProperties)
+                for (const auto & aThisHandlersProperty : aThisHandlersProperties)
                 {
-                    m_aPropertyHandlers[ aThisHandlersPropertie.Name ] = *aHandler;
+                    m_aPropertyHandlers[ aThisHandlersProperty.Name ] = *aHandler;
                     // note that this implies that if two handlers support the same property,
                     // the latter wins
                 }

@@ -407,9 +407,9 @@ UpdateCheckConfig::clearUpdateFound()
 {
     OUString aName;
 
-    for(const char* aUpdateEntryPropertie : aUpdateEntryProperties)
+    for(const char* aUpdateEntryProperty : aUpdateEntryProperties)
     {
-        aName = OUString::createFromAscii(aUpdateEntryPropertie);
+        aName = OUString::createFromAscii(aUpdateEntryProperty);
 
         try {
             if( m_xContainer->hasByName(aName) )
