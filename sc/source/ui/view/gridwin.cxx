@@ -6464,7 +6464,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
     }
     else if (xOverlayManager.is())
     {
-        Color aHandleColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
+        Color aHandleColor = GetSettings().GetStyleSettings().GetHighlightColor();
         if (mrViewData.GetActivePart() != eWhich)
             // non-active pane uses a different color.
             aHandleColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCPAGEBREAKAUTOMATIC).nColor;
