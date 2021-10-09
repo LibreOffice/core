@@ -509,7 +509,7 @@ SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
     {
         if ( pPos->InTextGrp() )
         {
-            const sal_uInt16 nMinWidth = pPos->Width();
+            const SwTwips nMinWidth = pPos->Width();
 
             // get maximum portion width from info structure, calculated
             // during text formatting
@@ -524,7 +524,7 @@ SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
         }
         else if( pPos->InGlueGrp() && pPos->InFixMargGrp() )
         {
-            pPos->Width( o3tl::narrowing<sal_uInt16>(pPos->Width() - nDecompress) );
+            pPos->Width(pPos->Width() - nDecompress);
 
             if ( pPos->InTabGrp() )
                 // set fix width to width
