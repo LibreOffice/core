@@ -698,21 +698,21 @@ bool AdditionsItem::getExtensionFile(OUString& sExtensionFile)
     rtl::Bootstrap::expandMacros(userFolder);
     userFolder += "/user/additions/" + m_sExtensionID + "/";
 
-    OUString aExtesionsFile(INetURLObject(m_sDownloadURL).getName());
-    OUString aExtesionsURL = m_sDownloadURL;
+    OUString aExtensionsFile(INetURLObject(m_sDownloadURL).getName());
+    OUString aExtensionsURL = m_sDownloadURL;
 
     try
     {
         osl::Directory::createPath(userFolder);
 
-        if (!xFileAccess->exists(userFolder + aExtesionsFile))
-            ucbDownload(aExtesionsURL, userFolder, aExtesionsFile);
+        if (!xFileAccess->exists(userFolder + aExtensionsFile))
+            ucbDownload(aExtensionsURL, userFolder, aExtensionsFile);
     }
     catch (const uno::Exception&)
     {
         return false;
     }
-    sExtensionFile = userFolder + aExtesionsFile;
+    sExtensionFile = userFolder + aExtensionsFile;
     return true;
 }
 
