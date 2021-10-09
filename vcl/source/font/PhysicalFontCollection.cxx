@@ -557,23 +557,30 @@ static int GetScriptMatchValue(ImplFontAttrs nSearchType, ImplFontAttrs nMatchTy
 {
     int nTestMatch = 0;
 
-    if( nSearchType & ImplFontAttrs::AllScript )
+    if (nSearchType & ImplFontAttrs::AllScript)
     {
-        if( nMatchType & ImplFontAttrs::AllScript )
+        if (nMatchType & ImplFontAttrs::AllScript)
         {
-            nTestMatch += 1000000*2;
+            nTestMatch += SCRIPT_MATCH_VALUE * 2;
         }
-        if( nSearchType & ImplFontAttrs::AllSubscript )
+        if (nSearchType & ImplFontAttrs::AllSubscript)
         {
-            if( ImplFontAttrs::None == ((nSearchType ^ nMatchType) & ImplFontAttrs::AllSubscript) )
-                nTestMatch += 1000000*2;
-            if( ImplFontAttrs::None != ((nSearchType ^ nMatchType) & ImplFontAttrs::BrushScript) )
-                nTestMatch -= 1000000;
+            if ((nSearchType & ImplFontAttrs::AllSubscript)
+                && (nMatchType & ImplFontAttrs::AllSubscript))
+            {
+                nTestMatch += SCRIPT_MATCH_VALUE * 2;
+            }
+
+            if ((nSearchType & ImplFontAttrs::BrushScript)
+                && (nMatchType & ImplFontAttrs::BrushScript))
+            {
+                nTestMatch -= SCRIPT_MATCH_VALUE;
+            }
         }
     }
-    else if( nMatchType & ImplFontAttrs::AllScript )
+    else if (nMatchType & ImplFontAttrs::AllScript)
     {
-        nTestMatch -= 1000000;
+        nTestMatch -= SCRIPT_MATCH_VALUE;
     }
 
     SAL_INFO("vcl.fonts", "GetScriptMatchValue: " << nTestMatch);
@@ -668,25 +675,25 @@ static int GetTitlingCapitalsMatchValue(ImplFontAttrs nSearchType, ImplFontAttrs
 {
     int nTestMatch = 0;
 
-    if( nSearchType & (ImplFontAttrs::Titling | ImplFontAttrs::Capitals) )
+    if (nSearchType & (ImplFontAttrs::Titling | ImplFontAttrs::Capitals))
     {
-        if( nMatchType & (ImplFontAttrs::Titling | ImplFontAttrs::Capitals) )
+        if (nMatchType & (ImplFontAttrs::Titling | ImplFontAttrs::Capitals))
+            nTestMatch += CAPITALS_TITLING_MATCH_VALUE * 2;
+
+        if ((nSearchType & (ImplFontAttrs::Titling | ImplFontAttrs::Capitals))
+            && (nMatchType & (ImplFontAttrs::Titling | ImplFontAttrs::Capitals)))
         {
-            nTestMatch += 1000000*2;
+            nTestMatch += CAPITALS_TITLING_MATCH_VALUE;
         }
-        if( ImplFontAttrs::None == ((nSearchType^nMatchType) & ImplFontAttrs(ImplFontAttrs::Titling | ImplFontAttrs::Capitals)))
+        else if ((nMatchType & (ImplFontAttrs::Titling | ImplFontAttrs::Capitals))
+                 && (nMatchType & (ImplFontAttrs::Standard | ImplFontAttrs::Default)))
         {
-            nTestMatch += 1000000;
-        }
-        else if( (nMatchType & (ImplFontAttrs::Titling | ImplFontAttrs::Capitals)) &&
-                 (nMatchType & (ImplFontAttrs::Standard | ImplFontAttrs::Default)) )
-        {
-            nTestMatch += 1000000;
+            nTestMatch += CAPITALS_TITLING_MATCH_VALUE;
         }
     }
-    else if( nMatchType & (ImplFontAttrs::Titling | ImplFontAttrs::Capitals) )
+    else if (nMatchType & (ImplFontAttrs::Titling | ImplFontAttrs::Capitals))
     {
-        nTestMatch -= 1000000;
+        nTestMatch -= CAPITALS_TITLING_MATCH_VALUE;
     }
 
     SAL_INFO("vcl.fonts", "GetTitlingCapitalsMatchValue: " << nTestMatch);
@@ -698,25 +705,27 @@ static int GetOutlineShadowMatchValue(ImplFontAttrs nSearchType, ImplFontAttrs n
 {
     int nTestMatch = 0;
 
-    if( nSearchType & (ImplFontAttrs::Outline | ImplFontAttrs::Shadow) )
+    if (nSearchType & (ImplFontAttrs::Outline | ImplFontAttrs::Shadow))
     {
-        if( nMatchType & (ImplFontAttrs::Outline | ImplFontAttrs::Shadow) )
+        SAL_WARN("vcl.fonts", "Nothing currently allows shadow/outline matching");
+
+        if (nMatchType & (ImplFontAttrs::Outline | ImplFontAttrs::Shadow))
+            nTestMatch += OUTLINE_SHADOW_MATCH_VALUE * 2;
+
+        if ((nSearchType & (ImplFontAttrs::Outline | ImplFontAttrs::Shadow))
+            && (nMatchType & (ImplFontAttrs::Outline | ImplFontAttrs::Shadow)))
         {
-            nTestMatch += 1000000*2;
+            nTestMatch += OUTLINE_SHADOW_MATCH_VALUE;
         }
-        if( ImplFontAttrs::None == ((nSearchType ^ nMatchType) & ImplFontAttrs(ImplFontAttrs::Outline | ImplFontAttrs::Shadow)) )
+        else if ((nMatchType & (ImplFontAttrs::Outline | ImplFontAttrs::Shadow))
+                 && (nMatchType & (ImplFontAttrs::Standard | ImplFontAttrs::Default)))
         {
-            nTestMatch += 1000000;
-        }
-        else if( (nMatchType & (ImplFontAttrs::Outline | ImplFontAttrs::Shadow)) &&
-                 (nMatchType & (ImplFontAttrs::Standard | ImplFontAttrs::Default)) )
-        {
-            nTestMatch += 1000000;
+            nTestMatch += OUTLINE_SHADOW_MATCH_VALUE;
         }
     }
-    else if ( nMatchType & (ImplFontAttrs::Outline | ImplFontAttrs::Shadow) )
+    else if (nMatchType & (ImplFontAttrs::Outline | ImplFontAttrs::Shadow))
     {
-        nTestMatch -= 1000000;
+        nTestMatch -= OUTLINE_SHADOW_MATCH_VALUE;
     }
 
     SAL_INFO("vcl.fonts", "GetOutlineShadowMatchValue: " << nTestMatch);
