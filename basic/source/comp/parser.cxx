@@ -115,24 +115,23 @@ const SbiStatement StmntTable [] = {
 { NIL, nullptr, N, N }
 };
 
-
 SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
         : SbiTokenizer( pm->GetSource32(), pb ),
+          pStack(nullptr),
+          pProc(nullptr),
+          pWithVar(nullptr),
+          eEndTok(NIL),
+          bGblDefs(false),
+          bNewGblDefs(false),
+          bSingleLineIf(false),
+          bCodeCompleting(false),
           aGlobals( aGblStrings, SbGLOBAL, this ),
           aPublics( aGblStrings, SbPUBLIC, this ),
           aRtlSyms( aGblStrings, SbRTL, this ),
-          aGen( *pm, this )
+          aGen( *pm, this ),
+          nBase(0),
+          bExplicit(false)
 {
-    eEndTok  = NIL;
-    pProc    = nullptr;
-    pStack   = nullptr;
-    pWithVar = nullptr;
-    nBase    = 0;
-    bGblDefs =
-    bNewGblDefs =
-    bSingleLineIf =
-    bCodeCompleting =
-    bExplicit = false;
     bClassModule = ( pm->GetModuleType() == css::script::ModuleType::CLASS );
     pPool    = &aPublics;
     for(SbxDataType & eDefType : eDefTypes)
