@@ -133,10 +133,10 @@ void ObjectCopySource::copyUISettingsTo( const Reference< XPropertySet >& _rxObj
     const OUString aCopyProperties[] = {
         OUString(PROPERTY_FONT), OUString(PROPERTY_ROW_HEIGHT), OUString(PROPERTY_TEXTCOLOR),OUString(PROPERTY_TEXTLINECOLOR),OUString(PROPERTY_TEXTEMPHASIS),OUString(PROPERTY_TEXTRELIEF)
     };
-    for (const auto & aCopyPropertie : aCopyProperties)
+    for (const auto & aCopyProperty : aCopyProperties)
     {
-        if ( m_xObjectPSI->hasPropertyByName( aCopyPropertie ) )
-            _rxObject->setPropertyValue( aCopyPropertie, m_xObject->getPropertyValue( aCopyPropertie ) );
+        if ( m_xObjectPSI->hasPropertyByName( aCopyProperty ) )
+            _rxObject->setPropertyValue( aCopyProperty, m_xObject->getPropertyValue( aCopyProperty ) );
     }
 }
 
@@ -155,17 +155,17 @@ void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _
 
         OUStringBuffer sStatement = "SELECT * FROM " + sTargetName + " WHERE 0=1";
 
-        for (const std::pair<OUString,OUString> & aPropertie : aProperties)
+        for (const std::pair<OUString,OUString> & aProperty : aProperties)
         {
-            if ( m_xObjectPSI->hasPropertyByName( aPropertie.first ) )
+            if ( m_xObjectPSI->hasPropertyByName( aProperty.first ) )
             {
                 OUString sFilter;
-                m_xObject->getPropertyValue( aPropertie.first ) >>= sFilter;
+                m_xObject->getPropertyValue( aProperty.first ) >>= sFilter;
                 if ( !sFilter.isEmpty() )
                 {
-                    sStatement.append(aPropertie.second);
+                    sStatement.append(aProperty.second);
                     sFilter = sFilter.replaceFirst(sSourceName,sTargetNameTemp);
-                    _rxObject->setPropertyValue( aPropertie.first, makeAny(sFilter) );
+                    _rxObject->setPropertyValue( aProperty.first, makeAny(sFilter) );
                     sStatement.append(sFilter);
                 }
             }

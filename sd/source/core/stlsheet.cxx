@@ -92,7 +92,7 @@ static SvxItemPropertySet& GetStylePropertySet()
         { u"DisplayName",            WID_STYLE_DISPNAME,     ::cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY,    0},
         { u"Hidden",                 WID_STYLE_HIDDEN,       cppu::UnoType<bool>::get(),       0,     0},
 
-        SVX_UNOEDIT_NUMBERING_PROPERTIE,
+        SVX_UNOEDIT_NUMBERING_PROPERTY,
         SHADOW_PROPERTIES
         LINE_PROPERTIES
         LINE_PROPERTIES_START_END

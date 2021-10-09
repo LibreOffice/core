@@ -325,7 +325,7 @@
     SVX_UNOEDIT_PARA_PROPERTIES,
 
 #define TEXT_PROPERTIES \
-    SVX_UNOEDIT_NUMBERING_PROPERTIE, \
+    SVX_UNOEDIT_NUMBERING_PROPERTY, \
     TEXT_PROPERTIES_DEFAULTS
 
 //  { "HasLevels",                    OWN_ATTR_HASLEVELS,             cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY,      0},

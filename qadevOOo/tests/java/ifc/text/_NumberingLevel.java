@@ -111,7 +111,7 @@ public class _NumberingLevel {
      * are missing the return value is FALSE, else TRUE
      * @return returns TRUE if PropertyValue[] is complete, else FALSE
      */
-    public boolean testPropertieArray(){
+    public boolean testPropertyArray(){
 
         boolean status = true;
         try{

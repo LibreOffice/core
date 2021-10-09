@@ -841,7 +841,7 @@ static const SfxItemPropertyMapEntry* lcl_GetEditPropertyMap()
         SVX_UNOEDIT_CHAR_PROPERTIES,
         SVX_UNOEDIT_FONT_PROPERTIES,
         SVX_UNOEDIT_PARA_PROPERTIES,
-        SVX_UNOEDIT_NUMBERING_PROPERTIE,    // for completeness of service ParagraphProperties
+        SVX_UNOEDIT_NUMBERING_PROPERTY,    // for completeness of service ParagraphProperties
         {u"" SC_UNONAME_TEXTUSER, EE_CHAR_XMLATTRIBS, cppu::UnoType<container::XNameContainer>::get(), 0, 0},
         {u"" SC_UNONAME_USERDEF,  EE_PARA_XMLATTRIBS, cppu::UnoType<container::XNameContainer>::get(), 0, 0},
         { u"", 0, css::uno::Type(), 0, 0 }
