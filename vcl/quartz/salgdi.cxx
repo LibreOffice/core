@@ -524,7 +524,7 @@ bool AquaSalGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabiliti
     if (!mpTextStyle[0])
         return false;
 
-    return static_cast<const CoreTextFontFace*>(mpTextStyle[0]->GetFontFace())->GetFontCapabilities(rFontCapabilities);
+    return mpTextStyle[0]->GetFontCapabilities(rFontCapabilities);
 }
 
 // fake a SFNT font directory entry for a font table

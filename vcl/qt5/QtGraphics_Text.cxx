@@ -82,7 +82,7 @@ bool QtGraphics::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) c
 {
     if (!m_pTextStyle[0])
         return false;
-    return m_pTextStyle[0]->GetFontFace()->GetFontCapabilities(rFontCapabilities);
+    return m_pTextStyle[0]->GetFontCapabilities(rFontCapabilities);
 }
 
 void QtGraphics::GetDevFontList(vcl::font::PhysicalFontCollection* pPFC)
