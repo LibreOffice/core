@@ -295,14 +295,14 @@ table::CellRangeAddress lclCreateTestData(uno::Reference<sheet::XSpreadsheetDocu
     uno::Reference<beans::XPropertySet> xCellProp(xCellRange, UNO_QUERY_THROW);
     xCellProp->setPropertyValue("NumberFormat", uno::makeAny(nDateKey));
 
-    table::CellRangeAddress sCellRangeAdress;
-    sCellRangeAdress.Sheet = 0;
-    sCellRangeAdress.StartColumn = 0;
-    sCellRangeAdress.StartRow = 0;
-    sCellRangeAdress.EndColumn = nEndCol;
-    sCellRangeAdress.EndRow = nEndRow;
+    table::CellRangeAddress sCellRangeAddress;
+    sCellRangeAddress.Sheet = 0;
+    sCellRangeAddress.StartColumn = 0;
+    sCellRangeAddress.StartRow = 0;
+    sCellRangeAddress.EndColumn = nEndCol;
+    sCellRangeAddress.EndRow = nEndRow;
 
-    return sCellRangeAdress;
+    return sCellRangeAddress;
 }
 
 } // end anonymous namespace
@@ -535,12 +535,12 @@ void PivotChartTest::testPivotChartWithOneColumnField()
 
     OUString sPivotTableName("DataPilotTable");
 
-    table::CellRangeAddress sCellRangeAdress = lclCreateTestData(xSheetDoc);
+    table::CellRangeAddress sCellRangeAddress = lclCreateTestData(xSheetDoc);
 
     uno::Reference<sheet::XDataPilotTables> xDataPilotTables = lclGetDataPilotTables(0, xSheetDoc);
 
     uno::Reference<sheet::XDataPilotDescriptor> xDataPilotDescriptor = xDataPilotTables->createDataPilotDescriptor();
-    xDataPilotDescriptor->setSourceRange(sCellRangeAdress);
+    xDataPilotDescriptor->setSourceRange(sCellRangeAddress);
 
     lclModifyOrientation(xDataPilotDescriptor, u"Country", sheet::DataPilotFieldOrientation_COLUMN);
     lclModifyOrientation(xDataPilotDescriptor, u"Sales T1", sheet::DataPilotFieldOrientation_DATA);
@@ -617,12 +617,12 @@ void PivotChartTest::testPivotChartWithOneRowField()
 
     OUString sPivotTableName("DataPilotTable");
 
-    table::CellRangeAddress sCellRangeAdress = lclCreateTestData(xSheetDoc);
+    table::CellRangeAddress sCellRangeAddress = lclCreateTestData(xSheetDoc);
 
     uno::Reference<sheet::XDataPilotTables> xDataPilotTables = lclGetDataPilotTables(0, xSheetDoc);
 
     uno::Reference<sheet::XDataPilotDescriptor> xDataPilotDescriptor = xDataPilotTables->createDataPilotDescriptor();
-    xDataPilotDescriptor->setSourceRange(sCellRangeAdress);
+    xDataPilotDescriptor->setSourceRange(sCellRangeAddress);
 
     lclModifyOrientation(xDataPilotDescriptor, u"Country", sheet::DataPilotFieldOrientation_ROW);
     lclModifyOrientation(xDataPilotDescriptor, u"Sales T1", sheet::DataPilotFieldOrientation_DATA);
@@ -677,12 +677,12 @@ void PivotChartTest::testPivotTableDataProvider_PivotTableFields()
 
     OUString sPivotTableName("DataPilotTable");
 
-    table::CellRangeAddress sCellRangeAdress = lclCreateTestData(xSheetDoc);
+    table::CellRangeAddress sCellRangeAddress = lclCreateTestData(xSheetDoc);
 
     uno::Reference<sheet::XDataPilotTables> xDataPilotTables = lclGetDataPilotTables(0, xSheetDoc);
 
     uno::Reference<sheet::XDataPilotDescriptor> xDataPilotDescriptor = xDataPilotTables->createDataPilotDescriptor();
-    xDataPilotDescriptor->setSourceRange(sCellRangeAdress);
+    xDataPilotDescriptor->setSourceRange(sCellRangeAddress);
 
     lclModifyOrientation(xDataPilotDescriptor, u"City", sheet::DataPilotFieldOrientation_ROW);
     lclModifyOrientation(xDataPilotDescriptor, u"Country", sheet::DataPilotFieldOrientation_COLUMN);
@@ -785,12 +785,12 @@ void PivotChartTest::testPivotChartRowFieldInOutlineMode()
 
     OUString sPivotTableName("DataPilotTable");
 
-    table::CellRangeAddress sCellRangeAdress = lclCreateTestData(xSheetDoc);
+    table::CellRangeAddress sCellRangeAddress = lclCreateTestData(xSheetDoc);
 
     uno::Reference<sheet::XDataPilotTables> xDataPilotTables = lclGetDataPilotTables(0, xSheetDoc);
 
     uno::Reference<sheet::XDataPilotDescriptor> xDataPilotDescriptor = xDataPilotTables->createDataPilotDescriptor();
-    xDataPilotDescriptor->setSourceRange(sCellRangeAdress);
+    xDataPilotDescriptor->setSourceRange(sCellRangeAddress);
 
     lclModifyOrientation(xDataPilotDescriptor, u"Country", sheet::DataPilotFieldOrientation_ROW);
     lclModifyOrientation(xDataPilotDescriptor, u"City", sheet::DataPilotFieldOrientation_ROW);
@@ -916,12 +916,12 @@ void PivotChartTest::testPivotChartWithDateRowField()
 
     OUString sPivotTableName("DataPilotTable");
 
-    table::CellRangeAddress sCellRangeAdress = lclCreateTestData(xSheetDoc);
+    table::CellRangeAddress sCellRangeAddress = lclCreateTestData(xSheetDoc);
 
     uno::Reference<sheet::XDataPilotTables> xDataPilotTables = lclGetDataPilotTables(0, xSheetDoc);
 
     uno::Reference<sheet::XDataPilotDescriptor> xDataPilotDescriptor = xDataPilotTables->createDataPilotDescriptor();
-    xDataPilotDescriptor->setSourceRange(sCellRangeAdress);
+    xDataPilotDescriptor->setSourceRange(sCellRangeAddress);
 
     lclModifyOrientation(xDataPilotDescriptor, u"Date", sheet::DataPilotFieldOrientation_ROW);
     lclModifyOrientation(xDataPilotDescriptor, u"City", sheet::DataPilotFieldOrientation_ROW);

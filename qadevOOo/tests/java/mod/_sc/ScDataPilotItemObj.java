@@ -121,18 +121,18 @@ public class ScDataPilotItemObj extends TestCase {
         log.println("Creating a test environment");
 
         // the cell range
-        CellRangeAddress sCellRangeAdress = new CellRangeAddress();
-        sCellRangeAdress.Sheet = 0;
-        sCellRangeAdress.StartColumn = 1;
-        sCellRangeAdress.StartRow = 0;
-        sCellRangeAdress.EndColumn = mMaxFieldIndex - 1;
-        sCellRangeAdress.EndRow = mMaxFieldIndex - 1;
+        CellRangeAddress sCellRangeAddress = new CellRangeAddress();
+        sCellRangeAddress.Sheet = 0;
+        sCellRangeAddress.StartColumn = 1;
+        sCellRangeAddress.StartRow = 0;
+        sCellRangeAddress.EndColumn = mMaxFieldIndex - 1;
+        sCellRangeAddress.EndRow = mMaxFieldIndex - 1;
 
         // position of the data pilot table
-        CellAddress sCellAdress = new CellAddress();
-        sCellAdress.Sheet = 0;
-        sCellAdress.Column = 7;
-        sCellAdress.Row = 8;
+        CellAddress sCellAddress = new CellAddress();
+        sCellAddress.Sheet = 0;
+        sCellAddress.Column = 7;
+        sCellAddress.Row = 8;
 
         log.println("Getting a sheet");
 
@@ -168,8 +168,8 @@ public class ScDataPilotItemObj extends TestCase {
 
         oSheet.getCellByPosition(1, 5);
 
-        int x = sCellAdress.Column;
-        int y = sCellAdress.Row + 3;
+        int x = sCellAddress.Column;
+        int y = sCellAddress.Row + 3;
 
 
         oSheet.getCellByPosition(x, y);
@@ -183,7 +183,7 @@ public class ScDataPilotItemObj extends TestCase {
                                                 oSheet);
         XDataPilotTables DPT = DPTS.getDataPilotTables();
         XDataPilotDescriptor DPDsc = DPT.createDataPilotDescriptor();
-        DPDsc.setSourceRange(sCellRangeAdress);
+        DPDsc.setSourceRange(sCellRangeAddress);
 
         XPropertySet fieldPropSet = null;
 
@@ -205,7 +205,7 @@ public class ScDataPilotItemObj extends TestCase {
         XIndexAccess IA = DPDsc.getDataPilotFields();
         getSRange(IA);
 
-        DPT.insertNewByName("DataPilotTable", sCellAdress, DPDsc);
+        DPT.insertNewByName("DataPilotTable", sCellAddress, DPDsc);
 
         oObj = (XInterface) AnyConverter.toObject(
                        new Type(XInterface.class), IA.getByIndex(0));

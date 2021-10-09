@@ -85,18 +85,18 @@ uno::Reference< uno::XInterface > CheckDataPilotTable::init()
     uno::Reference< sheet::XSpreadsheetDocument > xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
 
     // the cell range
-    table::CellRangeAddress sCellRangeAdress;
-    sCellRangeAdress.Sheet = 0;
-    sCellRangeAdress.StartColumn = 1;
-    sCellRangeAdress.StartRow = 0;
-    sCellRangeAdress.EndColumn = MAX_FIELD_INDEX-1;
-    sCellRangeAdress.EndRow = MAX_FIELD_INDEX - 1;
+    table::CellRangeAddress sCellRangeAddress;
+    sCellRangeAddress.Sheet = 0;
+    sCellRangeAddress.StartColumn = 1;
+    sCellRangeAddress.StartRow = 0;
+    sCellRangeAddress.EndColumn = MAX_FIELD_INDEX-1;
+    sCellRangeAddress.EndRow = MAX_FIELD_INDEX - 1;
 
     // position of the data pilot table
-    table::CellAddress sCellAdress;
-    sCellAdress.Sheet = 0;
-    sCellAdress.Column = 7;
-    sCellAdress.Row = 8;
+    table::CellAddress sCellAddress;
+    sCellAddress.Sheet = 0;
+    sCellAddress.Column = 7;
+    sCellAddress.Row = 8;
     // Getting spreadsheet
     uno::Reference< sheet::XSpreadsheets > xSpreadsheets = xSheetDoc->getSheets();
     uno::Reference< container::XIndexAccess > oIndexAccess(xSpreadsheets, uno::UNO_QUERY_THROW);
@@ -133,8 +133,8 @@ uno::Reference< uno::XInterface > CheckDataPilotTable::init()
     // cell of data
     uno::Any oChangeCell;
     oChangeCell<<= oSheet->getCellByPosition(1, 5);
-    int x = sCellAdress.Column;
-    int y = sCellAdress.Row + 3;
+    int x = sCellAddress.Column;
+    int y = sCellAddress.Row + 3;
     // cell of the data pilot output
     uno::Any oCheckCell;
     oCheckCell<<= oSheet->getCellByPosition(x, y);
@@ -142,7 +142,7 @@ uno::Reference< uno::XInterface > CheckDataPilotTable::init()
     uno::Reference< sheet::XDataPilotTablesSupplier> DPTS(oSheet, uno::UNO_QUERY_THROW);
     uno::Reference< sheet::XDataPilotTables> DPT = DPTS->getDataPilotTables();
     uno::Reference< sheet::XDataPilotDescriptor> DPDsc = DPT->createDataPilotDescriptor();
-    DPDsc->setSourceRange(sCellRangeAdress);
+    DPDsc->setSourceRange(sCellRangeAddress);
 
     uno::Any oDataPilotField = DPDsc->getDataPilotFields()->getByIndex(0);
     uno::Reference<beans::XPropertySet> fieldPropSet(oDataPilotField,  uno::UNO_QUERY_THROW);
@@ -158,7 +158,7 @@ uno::Reference< uno::XInterface > CheckDataPilotTable::init()
     //Insert the DataPilotTable
     if (DPT->hasByName("DataPilotTable"))
         DPT->removeByName("DataPilotTable");
-    DPT->insertNewByName("DataPilotTable", sCellAdress, DPDsc);
+    DPT->insertNewByName("DataPilotTable", sCellAddress, DPDsc);
 
     uno::Reference<uno::XInterface> xDataPilotTableObject;
     data = DPT->getByName( DPT->getElementNames()[0] );
