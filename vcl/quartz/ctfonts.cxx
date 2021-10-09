@@ -321,6 +321,17 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
     CFStringRef pFamilyName = static_cast<CFStringRef>(
             CTFontDescriptorCopyLocalizedAttribute( pFD, kCTFontFamilyNameAttribute, &pLang ));
 
+    CTFontRef font = CTFontCreateWithFontDescriptor(pFD, 0.0, nullptr);
+    CFDictionaryRef traits = (CFDictionaryRef)CTFontCopyTraits(font);
+    if (traits)
+    {
+        CFNumberRef sybolicTrait = (CFNumberRef)CFDictionaryGetValue(traits, kCTFontSymbolicTrait);
+        CTFontSymbolicTraits trait = 0;
+        CFNumberGetValue(sybolicTrait, kCFNumberSInt32Type, &trait);
+        if (trait & kCTFontMonoSpaceTrait)
+            rDFA.SetPitch( PITCH_FIXED );
+    }
+
     if ( !pLang )
     {
         if( pFamilyName )
