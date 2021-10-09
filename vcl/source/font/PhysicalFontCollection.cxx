@@ -443,19 +443,29 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByAttributes(ImplFontA
         tools::Long nTestMatch = 0;
 
         // test CJK script attributes
-        if ( nSearchType & ImplFontAttrs::CJK )
+        if (nSearchType & ImplFontAttrs::CJK)
         {
-            // Matching language
-            if( ImplFontAttrs::None == ((nSearchType ^ nMatchType) & ImplFontAttrs::CJK_AllLang) )
-                nTestMatch += 10000000*3;
-            if( nMatchType & ImplFontAttrs::CJK )
-                nTestMatch += 10000000*2;
-            if( nMatchType & ImplFontAttrs::Full )
-                nTestMatch += 10000000;
+            // if the matching font doesn't support any CJK languages, then
+            // it is not appropriate
+            if (!(nMatchType & ImplFontAttrs::CJK_AllLang))
+            {
+                nTestMatch -= 10'000'000;
+            }
+            else
+            {
+                // Matching language
+                if ((nSearchType & ImplFontAttrs::CJK_AllLang)
+                    && (nMatchType & ImplFontAttrs::CJK_AllLang))
+                    nTestMatch += 10'000'000 * 3;
+                if (nMatchType & ImplFontAttrs::CJK)
+                    nTestMatch += 10'000'000 * 2;
+                if (nMatchType & ImplFontAttrs::Full)
+                    nTestMatch += 10'000'000;
+            }
         }
-        else if ( nMatchType & ImplFontAttrs::CJK )
+        else if (nMatchType & ImplFontAttrs::CJK)
         {
-            nTestMatch -= 10000000;
+            nTestMatch -= 10'000'000;
         }
 
         // test CTL script attributes
