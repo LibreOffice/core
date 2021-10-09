@@ -937,7 +937,7 @@ static int GetOtherStyleMatchValue(ImplFontAttrs nSearchType, ImplFontAttrs nMat
 {
     int nTestMatch = 0;
 
-    if( ((nSearchType ^ nMatchType) & ImplFontAttrs::OtherStyle) != ImplFontAttrs::None )
+    if ((nSearchType & ImplFontAttrs::OtherStyle) && (nMatchType & ImplFontAttrs::OtherStyle))
         nTestMatch += OTHERSTYLE_MATCH_VALUE;
 
     SAL_INFO("vcl.fonts", "GetOtherMatchValue: " << nTestMatch);
@@ -949,7 +949,7 @@ static int GetRoundedMatchValue(ImplFontAttrs nSearchType, ImplFontAttrs nMatchT
 {
     int nTestMatch = 0;
 
-    if( ImplFontAttrs::None == ((nSearchType ^ nMatchType) & ImplFontAttrs::Rounded) )
+    if ((nSearchType & ImplFontAttrs::Rounded) && (nMatchType & ImplFontAttrs::Rounded))
         nTestMatch += ROUNDED_MATCH_VALUE;
 
     SAL_INFO("vcl.fonts", "GetRoundedMatchValue: " << nTestMatch);
