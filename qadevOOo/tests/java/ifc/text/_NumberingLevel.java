@@ -32,7 +32,7 @@ import com.sun.star.beans.PropertyValue;
 * Testing <code>com.sun.star.text.NumberingLevel</code><p>
 * This service is currently known as property value of
 * com.sun.star.text.ParagraphProperties.NumberingRules
-* This test checks only for completnes of implemented properties.
+* This test checks only for completeness of implemented properties.
 * service properties :
 * <ul>
 *  <li><code> Adjust</code></li>
@@ -107,7 +107,7 @@ public class _NumberingLevel {
     }
 
     /**
-     * This methods checks the PropertyValue for completnes. If one or more properties
+     * This method checks the PropertyValue for completeness. If one or more properties
      * are missing the return value is FALSE, else TRUE
      * @return returns TRUE if PropertyValue[] is complete, else FALSE
      */
