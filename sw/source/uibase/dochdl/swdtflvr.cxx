@@ -180,7 +180,7 @@ class SwTransferDdeLink : public ::sfx2::SvBaseLink
     SwTransferable& rTrnsfr;
     SwDocShell* pDocShell;
     sal_uLong nOldTimeOut;
-    bool bDelBookmrk : 1;
+    bool bDelBookmark : 1;
     bool bInDisconnect : 1;
 
     bool FindDocShell();
@@ -4215,7 +4215,7 @@ SwTransferDdeLink::SwTransferDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
     : rTrnsfr(rTrans)
     , pDocShell(nullptr)
     , nOldTimeOut(0)
-    , bDelBookmrk(false)
+    , bDelBookmark(false)
     , bInDisconnect(false)
 {
     // we only end up here with table- or text selection
@@ -4239,7 +4239,7 @@ SwTransferDdeLink::SwTransferDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
         if(pMark)
         {
             sName = pMark->GetName();
-            bDelBookmrk = true;
+            bDelBookmark = true;
             if( !bIsModified )
                 rSh.ResetModified();
         }
@@ -4347,7 +4347,7 @@ bool SwTransferDdeLink::WriteData( SvStream& rStrm )
         rServerObject.SetDdeBookmark(*pNewMark);
     }
 
-    bDelBookmrk = false;
+    bDelBookmark = false;
     return true;
 }
 
@@ -4359,7 +4359,7 @@ void SwTransferDdeLink::Disconnect( bool bRemoveDataAdvise )
     bInDisconnect = true;
 
     // destroy the unused bookmark again (without Undo!)?
-    if( bDelBookmrk && refObj.is() && FindDocShell() )
+    if( bDelBookmark && refObj.is() && FindDocShell() )
     {
         SwDoc* pDoc = pDocShell->GetDoc();
         ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
@@ -4378,7 +4378,7 @@ void SwTransferDdeLink::Disconnect( bool bRemoveDataAdvise )
         // #i58448#
         pDoc->SetOle2Link( aSavedOle2Link );
 
-        bDelBookmrk = false;
+        bDelBookmark = false;
     }
 
     if( refObj.is() )
