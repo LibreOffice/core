@@ -116,6 +116,7 @@ public: // TODO: make data members private
 
     FontCharMapRef GetFontCharMap() { return m_pFontFace->GetFontCharMap(); }
     bool GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) { return m_pFontFace->GetFontCapabilities(rFontCapabilities); }
+    void SetFontOrientation();
 
     void InitTextLineSize(sal_Int32 nDPIY, vcl::Font const& rFont, sal_Int32 mnBulletOffset);
     void InitAboveTextLineSize() { mxFontMetric->InitAboveTextLineSize(); }
