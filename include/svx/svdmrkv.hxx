@@ -310,7 +310,7 @@ public:
     // Just objects are marked which are inclosed completely
     void MarkObj(const tools::Rectangle& rRect, bool bUnmark);
     void MarkObj(SdrObject* pObj, SdrPageView* pPV, bool bUnmark = false, bool bDoNoSetMarkHdl = false,
-                 std::vector<basegfx::B2DRectangle> const & rSubSelections = std::vector<basegfx::B2DRectangle>());
+                 std::vector<basegfx::B2DRectangle> && rSubSelections = std::vector<basegfx::B2DRectangle>());
     void MarkAllObj(SdrPageView* pPV=nullptr); // pPage=NULL => all displayed pages
     void UnmarkAllObj(SdrPageView const * pPV=nullptr); // pPage=NULL => all displayed pages
 

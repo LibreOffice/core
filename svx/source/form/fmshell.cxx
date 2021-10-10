@@ -575,7 +575,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
 
             InterfaceBag aOnlyTheForm;
             aOnlyTheForm.insert(Reference<XInterface>(GetImpl()->getCurrentForm_Lock(), UNO_QUERY));
-            GetImpl()->setCurrentSelection_Lock(aOnlyTheForm);
+            GetImpl()->setCurrentSelection_Lock(std::move(aOnlyTheForm));
 
             GetImpl()->ShowSelectionProperties_Lock(bShow);
 

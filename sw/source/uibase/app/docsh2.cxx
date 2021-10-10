@@ -1215,7 +1215,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
             SwWrtShell* pShell = GetWrtShell();
             std::vector<svx::ClassificationResult> aInput = pShell->CollectAdvancedClassification();
-            xDialog->setupValues(aInput);
+            xDialog->setupValues(std::move(aInput));
 
             weld::DialogController::runAsync(xDialog, [xDialog, pShell](sal_Int32 nResult){
                 if (RET_OK == nResult)
@@ -1232,7 +1232,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             });
 
             std::vector<svx::ClassificationResult> aInput = pShell->CollectParagraphClassification();
-            xDialog->setupValues(aInput);
+            xDialog->setupValues(std::move(aInput));
 
             weld::DialogController::runAsync(xDialog, [xDialog, pShell](sal_Int32 nResult){
                 if (RET_OK == nResult)

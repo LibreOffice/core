@@ -130,7 +130,7 @@ public:
 
     void                SetInfoLink( const Link<IMapWindow&,void>& rLink ) { aInfoLink = rLink; }
 
-    void                SetTargetList( TargetList& rTargetList );
+    void                SetTargetList( const TargetList& rTargetList );
 
     const NotifyInfo&   GetInfo() const { return aInfo; }
 };
