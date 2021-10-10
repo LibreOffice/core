@@ -835,12 +835,9 @@ void DrawXmlFinalizer::visit( TextElement& elem, const std::list< std::unique_pt
     aFontProps[ "style:font-family-complex" ] = rFont.familyName;
 
     // bold
-    if( rFont.isBold )
-    {
-        aFontProps[ "fo:font-weight" ]         = "bold";
-        aFontProps[ "style:font-weight-asian" ]   = "bold";
-        aFontProps[ "style:font-weight-complex" ] = "bold";
-    }
+    aFontProps[ "fo:font-weight" ]         = rFont.fontWeight;
+    aFontProps[ "style:font-weight-asian" ]   = rFont.fontWeight;
+    aFontProps[ "style:font-weight-complex" ] = rFont.fontWeight;
 
     // italic
     if( rFont.isItalic )

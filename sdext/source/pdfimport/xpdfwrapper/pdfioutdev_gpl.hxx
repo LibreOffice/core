@@ -75,7 +75,7 @@ namespace pdfi
         FontAttributes() :
             familyName(),
             isEmbedded(false),
-            isBold(false),
+            maFontWeight(GfxFont::W400),
             isItalic(false),
             isUnderline(false),
             size(0.0)
@@ -86,7 +86,7 @@ namespace pdfi
         FontAttributes( const FontAttributes& rSrc ) :
             familyName(),
             isEmbedded(rSrc.isEmbedded),
-            isBold(rSrc.isBold),
+            maFontWeight(rSrc.maFontWeight),
             isItalic(rSrc.isItalic),
             isUnderline(rSrc.isUnderline),
             size(rSrc.size)
@@ -100,7 +100,7 @@ namespace pdfi
             familyName.append(&rSrc.getFamilyName());
 
             isEmbedded  = rSrc.isEmbedded;
-            isBold      = rSrc.isBold;
+            maFontWeight= rSrc.maFontWeight;
             isItalic    = rSrc.isItalic;
             isUnderline = rSrc.isUnderline;
             size        = rSrc.size;
@@ -112,15 +112,15 @@ namespace pdfi
         {
             return getFamilyName().cmp(&rFont.getFamilyName())==0 &&
                 isEmbedded == rFont.isEmbedded &&
-                isBold == rFont.isBold &&
+                maFontWeight == rFont.maFontWeight &&
                 isItalic == rFont.isItalic &&
                 isUnderline == rFont.isUnderline &&
                 size == rFont.size;
         }
 
-        GooString     familyName;
+        GooString   familyName;
         bool        isEmbedded;
-        bool        isBold;
+        GfxFont::Weight maFontWeight;
         bool        isItalic;
         bool        isUnderline;
         double      size;

@@ -49,6 +49,7 @@
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
 #include <com/sun/star/geometry/RealSize2D.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <tools/diagnose_ex.h>
 
 #include <basegfx/point/b2dpoint.hxx>
@@ -483,18 +484,28 @@ e.g., TimesNewRoman -> Times New Roman
 */
 void LineParser::parseFontFamilyName( FontAttributes& rResult )
 {
-    SAL_INFO("sdext.pdfimport", "Processing " << rResult.familyName << " ---");
+    SAL_WARN("sdext.pdfimport", "Processing " << rResult.familyName << " ---");
     rResult.familyName = rResult.familyName.trim();
     for (const OUString& fontAttributesSuffix: fontAttributesSuffixes)
     {
         if ( rResult.familyName.endsWith(fontAttributesSuffix) )
         {
             rResult.familyName = rResult.familyName.replaceAll(fontAttributesSuffix, "");
-            SAL_INFO("sdext.pdfimport", rResult.familyName);
-            if (fontAttributesSuffix == "Bold")
+            SAL_WARN("sdext.pdfimport", rResult.familyName);
+            if (fontAttributesSuffix == u"Bold")
             {
-                rResult.isBold = true;
-            } else if ( (fontAttributesSuffix == "Italic") or (fontAttributesSuffix == "Oblique") )
+                rResult.fontWeight = u"bold";
+            }
+            else if (fontAttributesSuffix == u"Semibold")
+            {
+                rResult.fontWeight = u"600";
+            }
+            else if (fontAttributesSuffix == u"Light")
+            {
+                rResult.fontWeight = u"300";
+            }
+
+            if ( (fontAttributesSuffix == "Italic") or (fontAttributesSuffix == "Oblique") )
             {
                 rResult.isItalic = true;
             }
@@ -506,20 +517,23 @@ void LineParser::readFont()
 {
     /*
     xpdf line is like (separated by space):
-    updateFont <FontID> <isEmbedded> <isBold> <isItalic> <isUnderline> <TransformedFontSize> <nEmbedSize> <FontName>
-    updateFont 14       1            0        0          0             1200.000000           23068        TimesNewRomanPSMT
+    updateFont <FontID> <isEmbedded> <maFontWeight> <isItalic> <isUnderline> <TransformedFontSize> <nEmbedSize> <FontName>
+    updateFont 14       1            4              0          0             1200.000000           23068        TimesNewRomanPSMT
 
     If nEmbedSize > 0, then a fontFile is followed as a stream.
     */
-
-    OString        aFontName;
     sal_Int64      nFontID;
-    sal_Int32      nIsEmbedded, nIsBold, nIsItalic, nIsUnderline, nFileLen;
+    sal_Int32      nIsEmbedded;
+    sal_Int32      nFontWeight;
+    sal_Int32      nIsItalic;
+    sal_Int32      nIsUnderline;
     double         nSize;
+    sal_Int32      nFileLen;
+    OString        aFontName;
 
     readInt64(nFontID);     // read FontID
     readInt32(nIsEmbedded); // read isEmbedded
-    readInt32(nIsBold);     // read isBold
+    readInt32(nFontWeight); // read maFontWeight, see GfxFont enum Weight
     readInt32(nIsItalic);   // read isItalic
     readInt32(nIsUnderline);// read isUnderline
     readDouble(nSize);      // read TransformedFontSize
@@ -545,15 +559,36 @@ void LineParser::readFont()
         return;
     }
 
-    // yet unknown font - get info and add to map
+    // The font is not yet in the map list - get info and add to map
+    OUString sFontWeight; // font weight name per ODF specifications
+    if (nFontWeight == 0 or nFontWeight == 4)  // WeightNotDefined or W400, map to normal font
+        sFontWeight = u"normal";
+    else if (nFontWeight == 1)                 // W100, Thin
+        sFontWeight = u"100";
+    else if (nFontWeight == 2)                 // W200, Extra-Light
+        sFontWeight = u"200";
+    else if (nFontWeight == 3)                 // W300, Light
+        sFontWeight = u"300";
+    else if (nFontWeight == 5)                 // W500, Medium. Is this supported by ODF?
+        sFontWeight = u"500";
+    else if (nFontWeight == 6)                 // W600, Semi-Bold
+        sFontWeight = u"600";
+    else if (nFontWeight == 7)                 // W700, Bold
+        sFontWeight = u"bold";
+    else if (nFontWeight == 8)                 // W800, Extra-Bold
+        sFontWeight = u"800";
+    else if (nFontWeight == 9)                 // W900, Black
+        sFontWeight = u"900";
+    SAL_WARN("sdext.pdfimport", "Font weight passed from xpdfimport is: " << sFontWeight);
+
     FontAttributes aResult( OStringToOUString( aFontName, RTL_TEXTENCODING_UTF8 ),
-                            nIsBold != 0,
+                            sFontWeight,
                             nIsItalic != 0,
                             nIsUnderline != 0,
                             nSize,
                             1.0);
 
-    /* The above font attributes (fontName, bold, italic) are based on
+    /* The above font attributes (fontName, fontWeight, italic) are based on
        xpdf line output and may not be reliable. To get correct attributes,
        we do the following:
     1. Read the embedded font file and determine the attributes based on the
@@ -583,7 +618,9 @@ void LineParser::readFont()
                 aFontReadResult >>= aFontDescriptor;
                 if (!aFontDescriptor.Name.isEmpty())
                 {
+                    // Family name
                     aResult.familyName = aFontDescriptor.Name;
+                    SAL_INFO("sdext.pdfimport", aResult.familyName);
                     // tdf#143959: there are cases when the family name returned by font descriptor
                     // is like "AAAAAA+TimesNewRoman,Bold". In this case, use the font name
                     // determined by parseFontFamilyName instead, but still determine the font
@@ -593,7 +630,28 @@ void LineParser::readFont()
                         aResult.familyName = aResult.familyName.copy(7, aResult.familyName.getLength() - 7);
                         parseFontFamilyName(aResult);
                     }
-                    aResult.isBold = (aFontDescriptor.Weight > 100.0);
+
+                    // Font weight
+                    if (aFontDescriptor.Weight == com::sun::star::awt::FontWeight::THIN)
+                        aResult.fontWeight = u"100";
+                    else if (aFontDescriptor.Weight == com::sun::star::awt::FontWeight::ULTRALIGHT)
+                        aResult.fontWeight = u"200";
+                    else if (aFontDescriptor.Weight == com::sun::star::awt::FontWeight::LIGHT)
+                        aResult.fontWeight = u"300";
+                    else if (aFontDescriptor.Weight == com::sun::star::awt::FontWeight::SEMILIGHT)
+                        aResult.fontWeight = u"350";
+                    // no need to check "normal" here as this is default in nFontWeight above
+                    else if (aFontDescriptor.Weight == com::sun::star::awt::FontWeight::SEMIBOLD)
+                        aResult.fontWeight = u"600";
+                    else if (aFontDescriptor.Weight == com::sun::star::awt::FontWeight::BOLD)
+                        aResult.fontWeight = u"bold";
+                    else if (aFontDescriptor.Weight == com::sun::star::awt::FontWeight::ULTRABOLD)
+                        aResult.fontWeight = u"800";
+                    else if (aFontDescriptor.Weight == com::sun::star::awt::FontWeight::BLACK)
+                        aResult.fontWeight = u"900";
+                    SAL_INFO("sdext.pdfimport", aResult.fontWeight);
+
+                    // Italic
                     aResult.isItalic = (aFontDescriptor.Slant == awt::FontSlant_OBLIQUE ||
                                         aFontDescriptor.Slant == awt::FontSlant_ITALIC);
                 } else
