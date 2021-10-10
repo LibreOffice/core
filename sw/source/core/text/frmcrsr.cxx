@@ -1319,7 +1319,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
                 nNextCol = 0;
             }
             else
-                ++nNextCol; // Empty columns require column brakes
+                ++nNextCol; // Empty columns require column breaks
         }
         if( pTmp != GetUpper()->GetUpper() ) // Did we end up in another column?
         {

@@ -2163,7 +2163,7 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
         }
     }
 
-    // Move hard page brakes to the following Node.
+    // Move hard page breaks to the following Node.
     bool bSavePageBreak = false, bSavePageDesc = false;
 
     /* #i9185# This would lead to a segmentation fault if not caught above. */

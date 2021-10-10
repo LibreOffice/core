@@ -647,7 +647,7 @@ void HtmlExport::ExportSingleDocument()
         OUString sTitleText(CreateTextForTitle(pOutliner, pPage, pPage->GetPageBackgroundColor()));
         OUString sStyle;
 
-        if (nSdPage != 0) // First page - no need for a page brake here
+        if (nSdPage != 0) // First page - no need for a page break here
             sStyle += "page-break-before:always; ";
         sStyle += getParagraphStyle(pOutliner, 0);
 
