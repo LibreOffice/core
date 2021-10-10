@@ -56,7 +56,7 @@ public:
     virtual ~ShareControlFile() override;
 
     std::vector< LockFileEntry > GetUsersData();
-    void SetUsersDataAndStore( const std::vector< LockFileEntry >& aUserNames );
+    void SetUsersDataAndStore( std::vector< LockFileEntry >&& aUserNames );
     LockFileEntry InsertOwnEntry();
     bool HasOwnEntry();
     void RemoveEntry( const LockFileEntry& aOptionalSpecification );
