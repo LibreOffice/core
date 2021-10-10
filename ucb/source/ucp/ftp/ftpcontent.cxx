@@ -199,11 +199,11 @@ void SAL_CALL FTPContent::abort( sal_Int32 /*CommandId*/ )
 ResultSetFactory::ResultSetFactory(const Reference<XComponentContext >&  rxContext,
                   const Reference<XContentProvider >&  xProvider,
                   const Sequence<Property>& seq,
-                  const std::vector<FTPDirentry>& dirvec)
+                  std::vector<FTPDirentry>&& dirvec)
         : m_xContext(rxContext),
           m_xProvider(xProvider),
           m_seq(seq),
-          m_dirvec(dirvec)
+          m_dirvec(std::move(dirvec))
 {
 }
 
@@ -489,7 +489,7 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                             std::make_unique<ResultSetFactory>(m_xContext,
                                                  m_xProvider.get(),
                                                  aOpenCommand.Properties,
-                                                 resvec));
+                                                 std::move(resvec)));
                     aRet <<= xSet;
                 }
                 else if(aOpenCommand.Mode ==

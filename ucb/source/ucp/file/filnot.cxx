@@ -34,11 +34,11 @@ using namespace com::sun::star::ucb;
 ContentEventNotifier::ContentEventNotifier( TaskManager* pMyShell,
                                             const uno::Reference< XContent >& xCreatorContent,
                                             const uno::Reference< XContentIdentifier >& xCreatorId,
-                                            const std::vector< uno::Reference< uno::XInterface > >& sListeners )
+                                            std::vector< uno::Reference< uno::XInterface > >&& sListeners )
     : m_pMyShell( pMyShell ),
       m_xCreatorContent( xCreatorContent ),
       m_xCreatorId( xCreatorId ),
-      m_sListeners( sListeners )
+      m_sListeners( std::move(sListeners) )
 {
 }
 
@@ -47,12 +47,12 @@ ContentEventNotifier::ContentEventNotifier( TaskManager* pMyShell,
                                             const uno::Reference< XContent >& xCreatorContent,
                                             const uno::Reference< XContentIdentifier >& xCreatorId,
                                             const uno::Reference< XContentIdentifier >& xOldId,
-                                            const std::vector< uno::Reference< uno::XInterface > >& sListeners )
+                                            std::vector< uno::Reference< uno::XInterface > >&& sListeners )
     : m_pMyShell( pMyShell ),
       m_xCreatorContent( xCreatorContent ),
       m_xCreatorId( xCreatorId ),
       m_xOldId( xOldId ),
-      m_sListeners( sListeners )
+      m_sListeners( std::move(sListeners) )
 {
 }
 
@@ -141,9 +141,9 @@ void ContentEventNotifier::notifyExchanged() const
 
 PropertySetInfoChangeNotifier::PropertySetInfoChangeNotifier(
     const uno::Reference< XContent >& xCreatorContent,
-    const std::vector< uno::Reference< uno::XInterface > >& sListeners )
+    std::vector< uno::Reference< uno::XInterface > >&& sListeners )
     : m_xCreatorContent( xCreatorContent ),
-      m_sListeners( sListeners )
+      m_sListeners( std::move(sListeners) )
 {
 
 }
