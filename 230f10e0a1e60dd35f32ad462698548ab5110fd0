@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51f4f802_454a8ade",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-10-10T20:44:01Z",
+      "side": 1,
+      "message": "Is there a way of getting things like \"bold\" and \"italic\" from the fonts themselves without parsing the font name?",
+      "revId": "230f10e0a1e60dd35f32ad462698548ab5110fd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
