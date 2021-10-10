@@ -10,6 +10,7 @@
 
 #include <test/Benchmarks.hxx>
 #include <basegfx/polygon/WaveLine.hxx>
+#include <vcl/lineinfo.hxx>
 
 const Color Benchmark::constBackgroundColor(COL_LIGHTGRAY);
 const Color Benchmark::constLineColor(COL_LIGHTBLUE);
@@ -44,6 +45,50 @@ Bitmap Benchmark::setupWavelines()
         const basegfx::B2DPolygon aWaveLinePolygon
             = basegfx::createWaveLinePolygon(aWaveLineRectangle);
         mpVirtualDevice->DrawPolyLine(aWaveLinePolygon);
+    }
+    Bitmap aBitmap = mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+    m_xEnd = std::chrono::steady_clock::now();
+    return aBitmap;
+}
+
+Bitmap Benchmark::setupGrid()
+{
+    initialSetup(4096, 4096, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    m_xStart = std::chrono::steady_clock::now();
+    for (int i = 1; i <= 4096; i += 2)
+    {
+        mpVirtualDevice->DrawLine(Point(1, i), Point(4096, i));
+        mpVirtualDevice->DrawLine(Point(i, 1), Point(i, 4096));
+    }
+    Bitmap aBitmap = mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+    m_xEnd = std::chrono::steady_clock::now();
+    return aBitmap;
+}
+
+Bitmap Benchmark::setupGridWithDottedLine()
+{
+    initialSetup(4096, 4096, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    m_xStart = std::chrono::steady_clock::now();
+    for (int i = 1; i <= 4096; i += 2)
+    {
+        LineInfo aLineInfo(LineStyle::Dash, 1);
+        aLineInfo.SetDashCount(10);
+        aLineInfo.SetDashLen(1);
+        aLineInfo.SetDotCount(10);
+        aLineInfo.SetDotLen(1);
+        aLineInfo.SetDistance(1);
+        aLineInfo.SetLineJoin(basegfx::B2DLineJoin::Bevel);
+        aLineInfo.SetLineCap(css::drawing::LineCap_BUTT);
+        mpVirtualDevice->DrawLine(Point(1, i), Point(4096, i), aLineInfo);
+        mpVirtualDevice->DrawLine(Point(i, 1), Point(i, 4096), aLineInfo);
     }
     Bitmap aBitmap = mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
     m_xEnd = std::chrono::steady_clock::now();
