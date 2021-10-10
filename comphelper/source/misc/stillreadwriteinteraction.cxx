@@ -63,7 +63,7 @@ StillReadWriteInteraction::StillReadWriteInteraction(const css::uno::Reference< 
     lInterceptions.push_back(aInterceptedRequest);
 
     setInterceptedHandler(xHandler);
-    setInterceptions(lInterceptions);
+    setInterceptions(std::move(lInterceptions));
 }
 
 void StillReadWriteInteraction::resetInterceptions()
