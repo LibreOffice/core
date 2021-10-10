@@ -68,6 +68,24 @@
       "message": "Caolan: do you think it\u0027s OK now?",
       "revId": "17e345e74e542209571a91e19b37a3c1a675c605",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9452ae81_d6b664b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-10-10T20:13:36Z",
+      "side": 1,
+      "message": "I feel the original is an unfortunate piece of code but if I read this change correctly, then it will now assume that weight is at the end, and width before that and \"type\" before that, while previously it assumed it could look for those elements in any part of the string. \"type\" is aImplTypeAttrSearchList f.e. and has italic, sans, serif, mono in there which would imply that these fonts I have installed...\n\nIBM Plex Sans Arabic Bold\nAnonymous Pro Bold Italic\nLibertinus Serif Display Regular\nLiteration Mono Powerline Bold Italic\nNoto Serif Display Condensed Black Italic (*)\n\nwould have different results after this change that they had before (?)\n\nan order of width – weight – style (where style is probably a subset of our \"type\" e.g. stuff like Italic/Oblique) does seem to be a convention of sorts https://adoringtype.quora.com/Naming-conventions-in-fonts but a quick search doesn\u0027t throw up a full font name parsing convention so the existing code looks to be something of a guesstimate.\n\nThis level of old but unnoticed oddness might suggest that many of the results of this function are typically thrown away or next to never used (?)\n\n(*) this one being hilariously mangled by the current scheme too, due to \"no\" in aImplTypeAttrSearchList",
+      "parentUuid": "42216318_d8bc24dc",
+      "revId": "17e345e74e542209571a91e19b37a3c1a675c605",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
