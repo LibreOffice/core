@@ -787,12 +787,7 @@ namespace
 
 static void MenuButtonClicked(GtkWidget* pWidget, gpointer pMenu)
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pWidget));
-#else
-    const char* pStr = gtk_buildable_get_buildable_id(GTK_BUILDABLE(pWidget));
-#endif
-    OString aId(pStr, pStr ? strlen(pStr) : 0);
+    OString aId(get_buildable_id(GTK_BUILDABLE(pWidget)));
     static_cast<MenuBar*>(pMenu)->HandleMenuButtonEvent(aId.toUInt32());
 }
 
@@ -829,9 +824,7 @@ bool GtkSalMenu::AddMenuBarButton(const SalMenuButtonItem& rNewItem)
 
     maExtraButtons.emplace_back(rNewItem.mnId, pButton);
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    gtk_buildable_set_name(GTK_BUILDABLE(pButton), OString::number(rNewItem.mnId).getStr());
-#endif
+    set_buildable_id(GTK_BUILDABLE(pButton), OString::number(rNewItem.mnId).getStr());
 
     gtk_widget_set_tooltip_text(pButton, rNewItem.maToolTipText.toUtf8().getStr());
 

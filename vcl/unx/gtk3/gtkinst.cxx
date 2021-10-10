@@ -2495,6 +2495,8 @@ void set_cursor(GtkWidget* pWidget, const char *pName)
 #endif
 }
 
+}
+
 OString get_buildable_id(GtkBuildable* pWidget)
 {
 #if GTK_CHECK_VERSION(4, 0, 0)
@@ -2514,6 +2516,8 @@ void set_buildable_id(GtkBuildable* pWidget, const OString& rId)
     gtk_buildable_set_name(pWidget, rId.getStr());
 #endif
 }
+
+namespace {
 
 class GtkInstanceWidget : public virtual weld::Widget
 {
