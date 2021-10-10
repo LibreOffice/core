@@ -1376,7 +1376,7 @@ void ImpEditEngine::SetAllMisspellRanges( const std::vector<editeng::MisspellRan
 
         pNode->CreateWrongList();
         WrongList* pWrongList = pNode->GetWrongList();
-        pWrongList->SetRanges(rParaRanges.maRanges);
+        pWrongList->SetRanges(std::vector(rParaRanges.maRanges));
     }
 }
 

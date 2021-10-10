@@ -150,9 +150,9 @@ void EditSpellWrapper::CheckSpellTo()
 
 WrongList::WrongList() : mnInvalidStart(0), mnInvalidEnd(Valid) {}
 
-void WrongList::SetRanges( const std::vector<editeng::MisspellRange>& rRanges )
+void WrongList::SetRanges( std::vector<editeng::MisspellRange>&&rRanges )
 {
-    maRanges = rRanges;
+    maRanges = std::move(rRanges);
 }
 
 bool WrongList::IsValid() const

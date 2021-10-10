@@ -68,7 +68,7 @@ public:
     WrongList();
 
     const std::vector<editeng::MisspellRange>& GetRanges() const { return maRanges;}
-    void SetRanges( const std::vector<editeng::MisspellRange>& rRanges );
+    void SetRanges( std::vector<editeng::MisspellRange>&& rRanges );
 
     bool IsValid() const;
     void SetValid();
