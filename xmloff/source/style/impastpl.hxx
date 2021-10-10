@@ -49,7 +49,7 @@ class XMLAutoStylePoolProperties
 
 public:
 
-    XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties, OUString const & rParentname );
+    XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFamilyData, std::vector< XMLPropertyState >&& rProperties, OUString const & rParentname );
 
     const OUString& GetName() const { return msName; }
     const ::std::vector< XMLPropertyState >& GetProperties() const { return maProperties; }
@@ -77,9 +77,9 @@ public:
 
     ~XMLAutoStylePoolParent();
 
-    bool Add( XMLAutoStyleFamily& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties, OUString& rName, bool bDontSeek );
+    bool Add( XMLAutoStyleFamily& rFamilyData, std::vector< XMLPropertyState >&& rProperties, OUString& rName, bool bDontSeek );
 
-    bool AddNamed( XMLAutoStyleFamily& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties, const OUString& rName );
+    bool AddNamed( XMLAutoStyleFamily& rFamilyData, std::vector< XMLPropertyState >&& rProperties, const OUString& rName );
 
     OUString Find( const XMLAutoStyleFamily& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties ) const;
 
@@ -158,13 +158,13 @@ public:
     bool Add(
         OUString& rName, XmlStyleFamily nFamily,
         const OUString& rParentName,
-        const ::std::vector< XMLPropertyState >& rProperties,
+        std::vector< XMLPropertyState >&& rProperties,
         bool bDontSeek = false );
 
     bool AddNamed(
         const OUString& rName, XmlStyleFamily nFamily,
         const OUString& rParentName,
-        const ::std::vector< XMLPropertyState >& rProperties );
+        std::vector< XMLPropertyState >&& rProperties );
 
     OUString Find( XmlStyleFamily nFamily, const OUString& rParent,
                           const ::std::vector< XMLPropertyState >& rProperties ) const;

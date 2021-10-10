@@ -590,7 +590,7 @@ namespace xmloff
 
                 if ( !aPropertyStates.empty() )
                 {   // add to the style pool
-                    OUString sColumnStyleName = m_rContext.GetAutoStylePool()->Add( XmlStyleFamily::CONTROL_ID, aPropertyStates );
+                    OUString sColumnStyleName = m_rContext.GetAutoStylePool()->Add( XmlStyleFamily::CONTROL_ID, std::move(aPropertyStates) );
 
                     OSL_ENSURE( m_aGridColumnStyles.end() == m_aGridColumnStyles.find( xColumnProperties ),
                         "OFormLayerXMLExport_Impl::collectGridColumnStylesAndIds: already have a style for this column!" );

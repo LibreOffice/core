@@ -331,32 +331,32 @@ void SvXMLAutoStylePoolP::RegisterNames(
 }
 
 OUString SvXMLAutoStylePoolP::Add( XmlStyleFamily nFamily,
-                                  const vector< XMLPropertyState >& rProperties )
+                                   vector< XMLPropertyState >&& rProperties )
 {
     OUString sName;
-    pImpl->Add(sName, nFamily, "", rProperties );
+    pImpl->Add(sName, nFamily, "", std::move(rProperties) );
     return sName;
 }
 
 OUString SvXMLAutoStylePoolP::Add( XmlStyleFamily nFamily,
                                   const OUString& rParent,
-                                  const vector< XMLPropertyState >& rProperties, bool bDontSeek )
+                                  vector< XMLPropertyState >&& rProperties, bool bDontSeek )
 {
     OUString sName;
-    pImpl->Add(sName, nFamily, rParent, rProperties, bDontSeek);
+    pImpl->Add(sName, nFamily, rParent, std::move(rProperties), bDontSeek);
     return sName;
 }
 
-bool SvXMLAutoStylePoolP::Add(OUString& rName, XmlStyleFamily nFamily, const OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties )
+bool SvXMLAutoStylePoolP::Add(OUString& rName, XmlStyleFamily nFamily, const OUString& rParent, ::std::vector< XMLPropertyState >&& rProperties )
 {
-    return pImpl->Add(rName, nFamily, rParent, rProperties);
+    return pImpl->Add(rName, nFamily, rParent, std::move(rProperties));
 }
 
 bool SvXMLAutoStylePoolP::AddNamed( const OUString& rName, XmlStyleFamily nFamily, const OUString& rParent,
-                                        const ::std::vector< XMLPropertyState >& rProperties )
+                                    std::vector< XMLPropertyState >&& rProperties )
 
 {
-    return pImpl->AddNamed(rName, nFamily, rParent, rProperties);
+    return pImpl->AddNamed(rName, nFamily, rParent, std::move(rProperties));
 }
 
 OUString SvXMLAutoStylePoolP::Find( XmlStyleFamily nFamily,

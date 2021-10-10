@@ -204,7 +204,7 @@ public:
      */
     ::std::queue< OUString > maAutoStyleNameQueue;
     void CollectAutoStyle(
-        const std::vector< XMLPropertyState >& aStates );
+        std::vector< XMLPropertyState >&& aStates );
     void AddAutoStyleAttribute(
         const std::vector< XMLPropertyState >& aStates );
 
@@ -1296,7 +1296,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
     }
     else    // autostyles
     {
-        CollectAutoStyle( aPropertyStates );
+        CollectAutoStyle( std::move(aPropertyStates) );
     }
     // remove property states for autostyles
     aPropertyStates.clear();
@@ -1335,7 +1335,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
         }
         else    // autostyles
         {
-            CollectAutoStyle( aPropertyStates );
+            CollectAutoStyle( std::move(aPropertyStates) );
         }
         // remove property states for autostyles
         aPropertyStates.clear();
@@ -1376,7 +1376,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
         }
         else    // autostyles
         {
-            CollectAutoStyle( aPropertyStates );
+            CollectAutoStyle( std::move(aPropertyStates) );
         }
         // remove property states for autostyles
         aPropertyStates.clear();
@@ -1481,7 +1481,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
         }
         else    // autostyles
         {
-            CollectAutoStyle( aPropertyStates );
+            CollectAutoStyle( std::move(aPropertyStates) );
         }
         // remove property states for autostyles
         aPropertyStates.clear();
@@ -1997,7 +1997,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
     }
     else    // autostyles
     {
-        CollectAutoStyle( aPropertyStates );
+        CollectAutoStyle( std::move(aPropertyStates) );
     }
     // remove property states for autostyles
     aPropertyStates.clear();
@@ -2033,7 +2033,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
                     }
                     else
                     {
-                        CollectAutoStyle( aPropertyStates );
+                        CollectAutoStyle( std::move(aPropertyStates) );
                     }
                 }
             }
@@ -2055,7 +2055,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
                     }
                     else
                     {
-                        CollectAutoStyle( aPropertyStates );
+                        CollectAutoStyle( std::move(aPropertyStates) );
                     }
                 }
             }
@@ -2077,7 +2077,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
                     }
                     else
                     {
-                        CollectAutoStyle( aPropertyStates );
+                        CollectAutoStyle( std::move(aPropertyStates) );
                     }
                 }
             }
@@ -2110,7 +2110,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
             }
             else    // autostyles
             {
-                CollectAutoStyle( aPropertyStates );
+                CollectAutoStyle( std::move(aPropertyStates) );
             }
         }
     }
@@ -2138,7 +2138,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
     }
     else    // autostyles
     {
-        CollectAutoStyle( aPropertyStates );
+        CollectAutoStyle( std::move(aPropertyStates) );
     }
 }
 
@@ -2235,7 +2235,7 @@ void SchXMLExportHelper_Impl::exportAxisTitle( const Reference< beans::XProperty
     }
     else
     {
-        CollectAutoStyle( aPropertyStates );
+        CollectAutoStyle( std::move(aPropertyStates) );
     }
     aPropertyStates.clear();
 }
@@ -2253,7 +2253,7 @@ void SchXMLExportHelper_Impl::exportGrid( const Reference< beans::XPropertySet >
     }
     else
     {
-        CollectAutoStyle( aPropertyStates );
+        CollectAutoStyle( std::move(aPropertyStates) );
     }
     aPropertyStates.clear();
 }
@@ -2384,7 +2384,7 @@ void SchXMLExportHelper_Impl::exportAxis(
     }
     else
     {
-        CollectAutoStyle( aPropertyStates );
+        CollectAutoStyle( std::move(aPropertyStates) );
     }
     aPropertyStates.clear();
 
@@ -2862,7 +2862,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                             }
                             else    // autostyles
                             {
-                                CollectAutoStyle( aPropertyStates );
+                                CollectAutoStyle( std::move(aPropertyStates) );
                             }
                             // remove property states for autostyles
                             aPropertyStates.clear();
@@ -2955,7 +2955,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                                 }
                                 else    // autostyles
                                 {
-                                    CollectAutoStyle( aPropertyStates );
+                                    CollectAutoStyle( std::move(aPropertyStates) );
                                 }
                             }
                         }
@@ -3003,7 +3003,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                     {
                         // add the style for the to be <chart:data-label> too
                         if (!aDataLabelPropertyStates.empty())
-                            CollectAutoStyle(aDataLabelPropertyStates);
+                            CollectAutoStyle(std::move(aDataLabelPropertyStates));
                     }
                     aDataLabelPropertyStates.clear();
 
@@ -3161,11 +3161,11 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
             {
                 if( !aPropertyStates.empty())
                 {
-                    CollectAutoStyle( aPropertyStates );
+                    CollectAutoStyle( std::move(aPropertyStates) );
                 }
                 if( bExportEquation && !aEquationPropertyStates.empty())
                 {
-                    CollectAutoStyle( aEquationPropertyStates );
+                    CollectAutoStyle( std::move(aEquationPropertyStates) );
                 }
             }
         }
@@ -3245,7 +3245,7 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
     }
     else    // autostyles
     {
-        CollectAutoStyle( aPropertyStates );
+        CollectAutoStyle( std::move(aPropertyStates) );
     }
 }
 
@@ -3504,9 +3504,9 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                     else
                     {
                         if (!aPropertyStates.empty())
-                            CollectAutoStyle(aPropertyStates);
+                            CollectAutoStyle(std::move(aPropertyStates));
                         if (!aDataLabelPropertyStates.empty())
-                            CollectAutoStyle(aDataLabelPropertyStates);
+                            CollectAutoStyle(std::move(aDataLabelPropertyStates));
                     }
                 }
             }
@@ -3591,9 +3591,9 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                     else
                     {
                         if (!aPropertyStates.empty())
-                            CollectAutoStyle(aPropertyStates);
+                            CollectAutoStyle(std::move(aPropertyStates));
                         if (!aDataLabelPropertyStates.empty())
-                            CollectAutoStyle(aDataLabelPropertyStates);
+                            CollectAutoStyle(std::move(aDataLabelPropertyStates));
                     }
                     continue;
                 }
@@ -3773,10 +3773,10 @@ awt::Size SchXMLExportHelper_Impl::getPageSize( const Reference< chart2::XChartD
     return aSize;
 }
 
-void SchXMLExportHelper_Impl::CollectAutoStyle( const std::vector< XMLPropertyState >& aStates )
+void SchXMLExportHelper_Impl::CollectAutoStyle( std::vector< XMLPropertyState >&& aStates )
 {
     if( !aStates.empty() )
-        maAutoStyleNameQueue.push( mrAutoStylePool.Add( XmlStyleFamily::SCH_CHART_ID, aStates ));
+        maAutoStyleNameQueue.push( mrAutoStylePool.Add( XmlStyleFamily::SCH_CHART_ID, std::move(aStates) ));
 }
 
 void SchXMLExportHelper_Impl::AddAutoStyleAttribute( const std::vector< XMLPropertyState >& aStates )

@@ -1071,12 +1071,11 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
             ,TExportPropMapperPair(m_xRowExportHelper,TEnumMapperPair(&m_aRowAutoStyleNames,XmlStyleFamily::TABLE_ROW))
         };
 
-        std::vector< XMLPropertyState > aPropertyStates;
         for (const auto & i : pExportHelper)
         {
-            aPropertyStates = i.first->Filter(*this, _xProp);
+            std::vector< XMLPropertyState > aPropertyStates = i.first->Filter(*this, _xProp);
             if ( !aPropertyStates.empty() )
-                i.second.first->emplace( _xProp,GetAutoStylePool()->Add( i.second.second, aPropertyStates ) );
+                i.second.first->emplace( _xProp,GetAutoStylePool()->Add( i.second.second, std::move(aPropertyStates) ) );
         }
 
         Reference< XNameAccess > xCollection;
@@ -1148,7 +1147,7 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
             if ( XmlStyleFamily::TABLE_CELL == i.second.second )
                 aPropStates.insert( aPropStates.end(), m_aCurrentPropertyStates.begin(), m_aCurrentPropertyStates.end() );
             if ( !aPropStates.empty() )
-                i.second.first->emplace( _xProp,GetAutoStylePool()->Add( i.second.second, aPropStates ) );
+                i.second.first->emplace( _xProp,GetAutoStylePool()->Add( i.second.second, std::move(aPropStates) ) );
         }
     }
 }

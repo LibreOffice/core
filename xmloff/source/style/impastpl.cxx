@@ -148,8 +148,8 @@ static OUString any2string(const uno::Any& any)
 // Class SvXMLAutoStylePoolProperties_Impl
 // ctor class SvXMLAutoStylePoolProperties_Impl
 
-XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties, OUString const & rParentName )
-: maProperties( rProperties ),
+XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFamilyData, vector< XMLPropertyState >&& rProperties, OUString const & rParentName )
+: maProperties( std::move(rProperties) ),
   mnPos       ( rFamilyData.mnCount )
 {
     static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != nullptr);
@@ -272,7 +272,7 @@ struct ComparePartial
 // Adds an array of XMLPropertyState ( vector< XMLPropertyState > ) to list
 // if not added, yet.
 
-bool XMLAutoStylePoolParent::Add( XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties, OUString& rName, bool bDontSeek )
+bool XMLAutoStylePoolParent::Add( XMLAutoStyleFamily& rFamilyData, vector< XMLPropertyState >&& rProperties, OUString& rName, bool bDontSeek )
 {
     XMLAutoStylePoolProperties *pProperties = nullptr;
     auto [itBegin, itEnd] = std::equal_range(m_PropertiesList.begin(), m_PropertiesList.end(), rProperties, ComparePartial{rFamilyData});
@@ -284,7 +284,7 @@ bool XMLAutoStylePoolParent::Add( XMLAutoStyleFamily& rFamilyData, const vector<
     bool bAdded = false;
     if( bDontSeek || !pProperties )
     {
-        pProperties = new XMLAutoStylePoolProperties( rFamilyData, rProperties, msParent );
+        pProperties = new XMLAutoStylePoolProperties( rFamilyData, std::move(rProperties), msParent );
         m_PropertiesList.insert(itBegin, std::unique_ptr<XMLAutoStylePoolProperties>(pProperties));
         bAdded = true;
     }
@@ -300,7 +300,7 @@ bool XMLAutoStylePoolParent::Add( XMLAutoStyleFamily& rFamilyData, const vector<
 // the same properties exists, a new one is added (like with bDontSeek).
 
 
-bool XMLAutoStylePoolParent::AddNamed( XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties, const OUString& rName )
+bool XMLAutoStylePoolParent::AddNamed( XMLAutoStyleFamily& rFamilyData, vector< XMLPropertyState >&& rProperties, const OUString& rName )
 {
     if (rFamilyData.maNameSet.find(rName) != rFamilyData.maNameSet.end())
         return false;
@@ -308,7 +308,7 @@ bool XMLAutoStylePoolParent::AddNamed( XMLAutoStyleFamily& rFamilyData, const ve
     auto it = std::lower_bound(m_PropertiesList.begin(), m_PropertiesList.end(), rProperties, ComparePartial{rFamilyData});
 
     std::unique_ptr<XMLAutoStylePoolProperties> pProperties(
-        new XMLAutoStylePoolProperties(rFamilyData, rProperties, msParent));
+        new XMLAutoStylePoolProperties(rFamilyData, std::move(rProperties), msParent));
     // ignore the generated name
     pProperties->SetName( rName );
     m_PropertiesList.insert(it, std::move(pProperties));
@@ -453,7 +453,7 @@ void SvXMLAutoStylePoolP_Impl::GetRegisteredNames(
 
 bool SvXMLAutoStylePoolP_Impl::Add(
     OUString& rName, XmlStyleFamily nFamily, const OUString& rParentName,
-    const ::std::vector< XMLPropertyState >& rProperties, bool bDontSeek )
+    ::std::vector< XMLPropertyState >&& rProperties, bool bDontSeek )
 {
     XMLAutoStyleFamily aTemp(nFamily);
     auto const iter = m_FamilySet.find(aTemp);
@@ -466,7 +466,7 @@ bool SvXMLAutoStylePoolP_Impl::Add(
     XMLAutoStylePoolParent& rParent = **itPair.first;
 
     bool bRet = false;
-    if (rParent.Add(rFamily, rProperties, rName, bDontSeek))
+    if (rParent.Add(rFamily, std::move(rProperties), rName, bDontSeek))
     {
         rFamily.mnCount++;
         bRet = true;
@@ -477,7 +477,7 @@ bool SvXMLAutoStylePoolP_Impl::Add(
 
 bool SvXMLAutoStylePoolP_Impl::AddNamed(
     const OUString& rName, XmlStyleFamily nFamily, const OUString& rParentName,
-    const ::std::vector< XMLPropertyState >& rProperties )
+    std::vector< XMLPropertyState >&& rProperties )
 {
     // get family and parent the same way as in Add()
 
@@ -492,7 +492,7 @@ bool SvXMLAutoStylePoolP_Impl::AddNamed(
     XMLAutoStylePoolParent& rParent = **itPair.first;
 
     bool bRet = false;
-    if (rParent.AddNamed(rFamily, rProperties, rName))
+    if (rParent.AddNamed(rFamily, std::move(rProperties), rName))
     {
         rFamily.mnCount++;
         bRet = true;

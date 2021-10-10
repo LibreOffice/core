@@ -111,13 +111,13 @@ public:
         css::uno::Sequence<OUString> const & aNames );
 
     /// Add an item set to the pool and return its generated name.
-    OUString Add( XmlStyleFamily nFamily, const ::std::vector< XMLPropertyState >& rProperties );
-    OUString Add( XmlStyleFamily nFamily, const OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties, bool bDontSeek = false );
-    bool        Add( OUString& rName, XmlStyleFamily nFamily, const OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties );
+    OUString Add( XmlStyleFamily nFamily, ::std::vector< XMLPropertyState >&& rProperties );
+    OUString Add( XmlStyleFamily nFamily, const OUString& rParent, ::std::vector< XMLPropertyState >&& rProperties, bool bDontSeek = false );
+    bool        Add( OUString& rName, XmlStyleFamily nFamily, const OUString& rParent, ::std::vector< XMLPropertyState >&& rProperties );
 
     /// Add an item set with a pre-defined name (needed for saving sheets separately in Calc).
     bool        AddNamed( const OUString& rName, XmlStyleFamily nFamily, const OUString& rParent,
-                              const ::std::vector< XMLPropertyState >& rProperties );
+                              std::vector< XMLPropertyState >&& rProperties );
 
     /// Find an item set's name.
     OUString Find( XmlStyleFamily nFamily, const OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties ) const;
