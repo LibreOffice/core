@@ -1430,7 +1430,7 @@ IMPL_LINK(FmFilterNavigator, DragBeginHdl, bool&, rUnsetDragIcon, bool)
     ::std::vector<FmFilterItem*> aItemList;
     if (FmFormItem* pFirstItem = getSelectedFilterItems(aItemList))
     {
-        m_aControlExchange->setDraggedEntries(aItemList);
+        m_aControlExchange->setDraggedEntries(std::move(aItemList));
         m_aControlExchange->setFormItem(pFirstItem);
 
         OFilterItemExchange& rExchange = *m_aControlExchange;

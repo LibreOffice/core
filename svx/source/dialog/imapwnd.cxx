@@ -161,7 +161,7 @@ const ImageMap& IMapWindow::GetImageMap()
     return aIMap;
 }
 
-void IMapWindow::SetTargetList( TargetList& rTargetList )
+void IMapWindow::SetTargetList( const TargetList& rTargetList )
 {
     // Delete old List
     aTargetList.clear();

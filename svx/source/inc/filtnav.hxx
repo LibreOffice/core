@@ -186,7 +186,7 @@ public:
     inline static bool  hasFormat( const DataFlavorExVector& _rFormats );
 
     const ::std::vector<FmFilterItem*>& getDraggedEntries() const { return m_aDraggedEntries; }
-    void setDraggedEntries(const ::std::vector<FmFilterItem*>& _rList) { m_aDraggedEntries = _rList; }
+    void setDraggedEntries(::std::vector<FmFilterItem*>&& _rList) { m_aDraggedEntries = std::move(_rList); }
     FmFormItem* getFormItem() const { return m_pFormItem; }
 
     void setFormItem( FmFormItem* _pItem ) { m_pFormItem = _pItem; }

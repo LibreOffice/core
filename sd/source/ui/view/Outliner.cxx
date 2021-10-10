@@ -854,7 +854,7 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
                     basegfx::B2DRectangle aSubSelection = getPDFSelection(rVectorGraphicSearchContext.mpVectorGraphicSearch, mpObj);
                     if (!aSubSelection.isEmpty())
                         aSubSelections.push_back(aSubSelection);
-                    mpView->MarkObj(mpObj, pPageView, false, false, aSubSelections);
+                    mpView->MarkObj(mpObj, pPageView, false, false, std::move(aSubSelections));
                 }
                 else
                 {
@@ -1276,7 +1276,7 @@ void SdOutliner::ProvideNextTextObject()
                         if (!aSubSelection.isEmpty())
                             aSubSelections.push_back(aSubSelection);
 
-                        mpView->MarkObj(mpObj, pPageView, false, false, aSubSelections);
+                        mpView->MarkObj(mpObj, pPageView, false, false, std::move(aSubSelections));
 
                         mpDrawDocument->GetDocSh()->SetWaitCursor( false );
                     }

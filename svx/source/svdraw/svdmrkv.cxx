@@ -2124,7 +2124,7 @@ void collectUIInformation(const SdrObject* pObj)
 }
 
  void SdrMarkView::MarkObj(SdrObject* pObj, SdrPageView* pPV, bool bUnmark, bool bDoNoSetMarkHdl,
-                          std::vector<basegfx::B2DRectangle> const & rSubSelections)
+                          std::vector<basegfx::B2DRectangle> && rSubSelections)
 {
     if (!(pObj!=nullptr && pPV!=nullptr && IsObjMarkable(pObj, pPV)))
         return;
@@ -2144,7 +2144,7 @@ void collectUIInformation(const SdrObject* pObj)
         }
     }
 
-    maSubSelectionList = rSubSelections;
+    maSubSelectionList = std::move(rSubSelections);
 
     if (!bDoNoSetMarkHdl) {
         MarkListHasChanged();
