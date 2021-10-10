@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4bd6bf8_43cc2415",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-10-10T06:36:40Z",
+      "side": 1,
+      "message": "caused by\n\ncommit d7358047d9bcee8368a940bfb75b41fb65f87514\nAuthor: Chris Sherlock \u003cchris.sherlock79@gmail.com\u003e\nDate:   Thu Sep 30 20:26:26 2021 +1000\n\n    vcl: test OutputDevice::Erase()\n    \n    Change-Id: Id15ad1419a5f9d0e628c746770f05b2983c1f65b\n    Reviewed-on: https://gerrit.libreoffice.org/c/core/+/122893\n    Tested-by: Jenkins\n    Reviewed-by: Tomaž Vajngerl \u003cquikee@gmail.com\u003e\n\ncommit 927de6c264d43ae5ad4b32ea38c0d1120ba0ebe1\nAuthor: Chris Sherlock \u003cchris.sherlock79@gmail.com\u003e\nDate:   Wed Sep 29 20:39:38 2021 +1000\n\n    vcl: test OutputDevice::DrawArc(), DrawChord(), DrawPie() and DrawEllipse()\n    \n    Change-Id: Ie1513d75262b4664a3b2620fca27d805d4e780bd\n    Reviewed-on: https://gerrit.libreoffice.org/c/core/+/122821\n    Tested-by: Jenkins\n    Reviewed-by: Tomaž Vajngerl \u003cquikee@gmail.com\u003e\n\ncommit f4d5be05f643e9a483fcbb8441faa4a89c0cb280\nAuthor: Chris Sherlock \u003cchris.sherlock79@gmail.com\u003e\nDate:   Wed Sep 29 17:06:19 2021 +1000\n\n    vcl: test OutputDevice::DrawRect()\n    \n    Change-Id: Ic9ed566d171b3059fbe6de9fcc32ca0af6db7a2d\n    Reviewed-on: https://gerrit.libreoffice.org/c/core/+/122820\n    Tested-by: Jenkins\n    Reviewed-by: Tomaž Vajngerl \u003cquikee@gmail.com\u003e\n\ncommit d4b68f063cbb3c490e1ad084c3f9eb30c6a8c93a\nAuthor: Chris Sherlock \u003cchris.sherlock79@gmail.com\u003e\nDate:   Wed Sep 29 16:17:40 2021 +1000\n\n    vcl: test OutputDevice::DrawLine()\n    \n    Change-Id: I17691623e28a75080a1a46099796ec24bab3b91d\n    Reviewed-on: https://gerrit.libreoffice.org/c/core/+/122819\n    Tested-by: Jenkins\n    Reviewed-by: Tomaž Vajngerl \u003cquikee@gmail.com\u003e\n\ncommit 4fb0d442316e914d3a75e317d6756d95b920a3e1\nAuthor: Chris Sherlock \u003cchris.sherlock79@gmail.com\u003e\nDate:   Wed Sep 29 12:10:24 2021 +1000\n\n    vcl: test OutputDevice::DrawPixel()\n    \n    Change-Id: I82651c6f41f46bb1097a69f3bcddcac2486a5baa\n    Reviewed-on: https://gerrit.libreoffice.org/c/core/+/122794\n    Tested-by: Jenkins\n    Reviewed-by: Tomaž Vajngerl \u003cquikee@gmail.com\u003e\n",
+      "revId": "7b10dac72a8c44b466528f8aaced47c924c7ec4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
