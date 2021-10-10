@@ -16,6 +16,24 @@
       "message": "\u003e Patch Set 2: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/97930/ : FAILURE\n\u003e \n\u003e error: no viable conversion from \"Reference\u003ccom::sun::star::lang::XSingleServiceFactory\u003e\" to \"bool\" in file counter.cxx ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/98577/ )\n\nWhy this happens?",
       "revId": "1fab270f551d2bd47dd67afb2a0e0a365e241ade",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3739a8e_d9ba94c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-10T12:22:01Z",
+      "side": 1,
+      "message": "Because operator bool is internal-only convenience thing. This one uses only public API, being an example to use by e.g. extension developers.",
+      "parentUuid": "14d3e817_535a247c",
+      "revId": "1fab270f551d2bd47dd67afb2a0e0a365e241ade",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
