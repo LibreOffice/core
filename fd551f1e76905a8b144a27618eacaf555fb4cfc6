@@ -16,6 +16,24 @@
       "message": "Please either don\u0027t add this commented out code (just add it later when you add the fix), or describe what bug was found. E.g., you might add to the comment the error text that shows currently, and a couple of lines explaining why.\n\nThe commented out test may need to get changed later while working on the fix - so I suppose is to just drop these tests from here completely (they don\u0027t add value to this change itself IMO).",
       "revId": "fd551f1e76905a8b144a27618eacaf555fb4cfc6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64a3a743_7c0321e2",
+        "filename": "vcl/qa/cppunit/physicalfontcollection.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-10-10T17:32:54Z",
+      "side": 1,
+      "message": "Hi Mike, the subsequent patches fix these tests. I split up the tests from the actual changes to more clearly show what I was doing as in the previous patch I submitted I had refactored *and* fixed the issues, which would be very confusing for a patch reviewer. \n\nIn terms of the errors, do I really need this? the errors don\u0027t reveal anything other than the test failed and don\u0027t show any debug info that is useful to the one running the test. The test itself is quite self explanatory in its name and the code that comes before it.\n\nI also prefer to keep in the test to show that there is indeed an issue that must be fixed. We have done this in other tests throughout LibreOffice, which gives people a clear roadmap towards knowing what must be fixed. Commented out tests on legacy code, IMHO, do actually have a lot of value.",
+      "parentUuid": "18f3dec8_6a7cbc3f",
+      "revId": "fd551f1e76905a8b144a27618eacaf555fb4cfc6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
