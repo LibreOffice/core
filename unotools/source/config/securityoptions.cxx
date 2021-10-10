@@ -104,12 +104,12 @@ std::vector< OUString > GetSecureURLs()
     return aRet;
 }
 
-void SetSecureURLs( const std::vector< OUString >& urlList )
+void SetSecureURLs( std::vector< OUString >&& urlList )
 {
 //    DBG_ASSERT(!officecfg::SecureURL::isReadOnly(), "SvtSecurityOptions_Impl::SetSecureURLs()\nYou tried to write on a readonly value!\n");
 //    if (officecfg::SecureURL::isReadOnly())
 //        return;
-    std::vector< OUString > lURLs( urlList );
+    std::vector< OUString > lURLs( std::move(urlList) );
     SvtPathOptions aOpt;
     std::transform(lURLs.begin(), lURLs.end(), lURLs.begin(),
         [&aOpt](const OUString& rUrl) -> OUString { return aOpt.UseVariable( rUrl ); });

@@ -430,7 +430,7 @@ void MacroSecurityTrustedSourcesTP::ClosePage()
             aSecureURLs.push_back(aURL);
         }
 
-        SvtSecurityOptions::SetSecureURLs( aSecureURLs );
+        SvtSecurityOptions::SetSecureURLs( std::move(aSecureURLs) );
     }
     // Trusted Path could not be removed (#i33584#)
     // don't forget to remove the old saved SecureURLs

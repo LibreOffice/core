@@ -640,7 +640,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SfxItemState::SET == rSet.GetItemState(SID_SECURE_URL, true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxStringListItem *>( pItem ) !=  nullptr, "StringListItem expected");
-        SvtSecurityOptions::SetSecureURLs( static_cast<const SfxStringListItem*>(pItem)->GetList() );
+        SvtSecurityOptions::SetSecureURLs( std::vector(static_cast<const SfxStringListItem*>(pItem)->GetList()) );
     }
 
     // Store changed data

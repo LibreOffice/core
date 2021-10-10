@@ -90,7 +90,7 @@ namespace SvtSecurityOptions
     *//*-*****************************************************************************************************/
 
     UNOTOOLS_DLLPUBLIC std::vector< OUString >  GetSecureURLs();
-    UNOTOOLS_DLLPUBLIC void SetSecureURLs( const std::vector< OUString >& seqURLList );
+    UNOTOOLS_DLLPUBLIC void SetSecureURLs( std::vector< OUString >&& seqURLList );
 
     /*-****************************************************************************************************
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/Security/Scripting/StarOfficeBasic"
