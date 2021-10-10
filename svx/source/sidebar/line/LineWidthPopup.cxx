@@ -73,7 +73,7 @@ LineWidthPopup::LineWidthPopup(weld::Widget* pParent, LinePropertyPanelBase& rPa
         m_xVSWidth->SetItemText(i, maStrUnits[i - 1]);
     }
 
-    m_xVSWidth->SetUnit(maStrUnits);
+    m_xVSWidth->SetUnit(std::array<OUString, 9>(maStrUnits));
     m_xVSWidth->SetItemData(1, reinterpret_cast<void*>(5));
     m_xVSWidth->SetItemData(2, reinterpret_cast<void*>(8));
     m_xVSWidth->SetItemData(3, reinterpret_cast<void*>(10));

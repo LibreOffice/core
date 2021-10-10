@@ -2408,7 +2408,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(bool bForceLineDash)
             if (!aExtractedLineFills.empty() && !utl::ConfigManager::IsFuzzing())
             {
                 // merge to a single tools::PolyPolygon (OR)
-                aMergedLineFillPolyPolygon = basegfx::utils::mergeToSinglePolyPolygon(aExtractedLineFills);
+                aMergedLineFillPolyPolygon = basegfx::utils::mergeToSinglePolyPolygon(std::move(aExtractedLineFills));
             }
         }
 

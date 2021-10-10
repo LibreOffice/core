@@ -56,7 +56,7 @@ public:
     double                  GetValueDouble() const  { return nDoubleVal; }
 
     const std::vector<sal_uInt32> & GetDelFormats() const { return mvDelFormats; }
-    void                    SetDelFormats( std::vector<sal_uInt32> const & );
+    void                    SetDelFormats( std::vector<sal_uInt32> && );
 
     SvxNumberValueType      GetValueType() const { return eValueType; }
 

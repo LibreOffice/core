@@ -713,7 +713,7 @@ bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
         if ( !aDelFormats.empty() )
         {
 
-            pNumItem->SetDelFormats( aDelFormats );
+            pNumItem->SetDelFormats( std::vector(aDelFormats) );
 
             if(bNumItemFlag)
             {

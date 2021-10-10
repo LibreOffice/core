@@ -122,9 +122,9 @@ SvxNumberInfoItem* SvxNumberInfoItem::Clone( SfxItemPool * ) const
     return new SvxNumberInfoItem( *this );
 }
 
-void SvxNumberInfoItem::SetDelFormats( std::vector<sal_uInt32> const & aData )
+void SvxNumberInfoItem::SetDelFormats( std::vector<sal_uInt32> && aData )
 {
-    mvDelFormats = aData;
+    mvDelFormats = std::move(aData);
 }
 
 
