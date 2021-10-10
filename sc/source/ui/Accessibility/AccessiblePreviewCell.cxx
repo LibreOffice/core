@@ -271,7 +271,7 @@ void ScAccessiblePreviewCell::CreateTextHelper()
     // paragraphs in preview are transient
     ::accessibility::AccessibleTextHelper::VectorOfStates aChildStates;
     aChildStates.push_back( AccessibleStateType::TRANSIENT );
-    mpTextHelper->SetAdditionalChildStates( aChildStates );
+    mpTextHelper->SetAdditionalChildStates( std::move(aChildStates) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

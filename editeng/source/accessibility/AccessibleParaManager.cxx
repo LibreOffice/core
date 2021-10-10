@@ -56,9 +56,9 @@ namespace accessibility
         // owner is responsible for possible child death
     }
 
-    void AccessibleParaManager::SetAdditionalChildStates( const VectorOfStates& rChildStates )
+    void AccessibleParaManager::SetAdditionalChildStates( VectorOfStates&& rChildStates )
     {
-        maChildStates = rChildStates;
+        maChildStates = std::move(rChildStates);
     }
 
     void AccessibleParaManager::SetNum( sal_Int32 nNumParas )
