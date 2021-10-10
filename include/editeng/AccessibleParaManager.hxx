@@ -105,7 +105,7 @@ namespace accessibility
             (text paragraph). The state values are defined in
             css::accessibility::AccessibleStateType.
          */
-        void SetAdditionalChildStates( const VectorOfStates& rChildStates );
+        void SetAdditionalChildStates( VectorOfStates&& rChildStates );
 
         /** Set the number of paragraphs
 
