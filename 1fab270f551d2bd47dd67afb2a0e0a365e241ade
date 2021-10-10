@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14d3e817_535a247c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-10T10:30:06Z",
+      "side": 1,
+      "message": "\u003e Patch Set 2: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/97930/ : FAILURE\n\u003e \n\u003e error: no viable conversion from \"Reference\u003ccom::sun::star::lang::XSingleServiceFactory\u003e\" to \"bool\" in file counter.cxx ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/98577/ )\n\nWhy this happens?",
+      "revId": "1fab270f551d2bd47dd67afb2a0e0a365e241ade",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
