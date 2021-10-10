@@ -1824,8 +1824,8 @@ void XclImpChartObj::FinalizeTabChart()
     tools::Long nHeight = XclTools::GetHmmFromTwips( aPaperSize.Height() );
 
     // subtract page margins, give some more extra space
-    nWidth -= (XclTools::GetHmmFromInch( rPageData.mfLeftMargin + rPageData.mfRightMargin ) + 2000);
-    nHeight -= (XclTools::GetHmmFromInch( rPageData.mfTopMargin + rPageData.mfBottomMargin ) + 1000);
+    nWidth -= o3tl::saturating_add(XclTools::GetHmmFromInch(rPageData.mfLeftMargin + rPageData.mfRightMargin), static_cast<sal_Int32>(2000));
+    nHeight -= o3tl::saturating_add(XclTools::GetHmmFromInch(rPageData.mfTopMargin + rPageData.mfBottomMargin), static_cast<sal_Int32>(1000));
 
     // print column/row headers?
     if( rPageData.mbPrintHeadings )
