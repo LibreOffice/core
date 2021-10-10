@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <string_view>
+#include <tuple>
 
 #include <sal/log.hxx>
 #include <com/sun/star/document/XImporter.hpp>
@@ -186,35 +187,21 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
 
         if( !sClass.isEmpty() )
         {
-            static struct { XMLTokenEnum eClass; std::u16string_view sFilterService;
-            } const aServiceMap[] = {
-                { XML_TEXT,         std::u16string_view(u"" XML_IMPORT_FILTER_WRITER) },
-                { XML_ONLINE_TEXT,  std::u16string_view(u"" XML_IMPORT_FILTER_WRITER) },
-                { XML_SPREADSHEET,  std::u16string_view(u"" XML_IMPORT_FILTER_CALC) },
-                { XML_DRAWING,      std::u16string_view(u"" XML_IMPORT_FILTER_DRAW) },
-                { XML_GRAPHICS,     std::u16string_view(u"" XML_IMPORT_FILTER_DRAW) },
-                { XML_PRESENTATION, std::u16string_view(u"" XML_IMPORT_FILTER_IMPRESS) },
-                { XML_CHART,        std::u16string_view(u"" XML_IMPORT_FILTER_CHART) }};
-            for (auto const & entry: aServiceMap)
+            static const std::tuple<XMLTokenEnum, OUString, SvGUID> aServiceMap[] = {
+                { XML_TEXT, XML_IMPORT_FILTER_WRITER, { SO3_SW_CLASSID } },
+                { XML_ONLINE_TEXT, XML_IMPORT_FILTER_WRITER, { SO3_SWWEB_CLASSID } },
+                { XML_SPREADSHEET, XML_IMPORT_FILTER_CALC, { SO3_SC_CLASSID } },
+                { XML_DRAWING, XML_IMPORT_FILTER_DRAW, { SO3_SDRAW_CLASSID } },
+                { XML_GRAPHICS, XML_IMPORT_FILTER_DRAW, { SO3_SDRAW_CLASSID } },
+                { XML_PRESENTATION, XML_IMPORT_FILTER_IMPRESS, { SO3_SIMPRESS_CLASSID } },
+                { XML_CHART, XML_IMPORT_FILTER_CHART, { SO3_SCH_CLASSID } },
+            };
+            for (auto const& [eClass, sMatchingFilterService, rCLASSID] : aServiceMap)
             {
-                if( IsXMLToken( sClass, entry.eClass ) )
+                if (IsXMLToken(sClass, eClass))
                 {
-                    sFilterService = entry.sFilterService;
-
-                    switch( entry.eClass )
-                    {
-                    case XML_TEXT:          aName = SvGlobalName(SO3_SW_CLASSID); break;
-                    case XML_ONLINE_TEXT:   aName = SvGlobalName(SO3_SWWEB_CLASSID); break;
-                    case XML_SPREADSHEET:   aName = SvGlobalName(SO3_SC_CLASSID); break;
-                    case XML_DRAWING:
-                    case XML_GRAPHICS:
-                    case XML_IMAGE:     aName = SvGlobalName(SO3_SDRAW_CLASSID); break;
-                    case XML_PRESENTATION:  aName = SvGlobalName(SO3_SIMPRESS_CLASSID); break;
-                    case XML_CHART:         aName = SvGlobalName(SO3_SCH_CLASSID); break;
-                    default:
-                        break;
-                    }
-
+                    sFilterService = sMatchingFilterService;
+                    aName = SvGlobalName(rCLASSID);
                     break;
                 }
             }

@@ -63,6 +63,8 @@
 #include <tools/globname.hxx>
 #include <tools/UnitConversion.hxx>
 
+#include <utility>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -71,33 +73,13 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace xml::sax;
 
-namespace {
-
-struct XMLServiceMapEntry_Impl
-{
-    const char *sFilterService;
-    sal_Int32   nFilterServiceLen;
-
-    sal_uInt32  n1;
-    sal_uInt16  n2, n3;
-    sal_uInt8   n4, n5, n6, n7, n8, n9, n10, n11;
-};
-
-}
-
-#define SERVICE_MAP_ENTRY( app, s ) \
-    { XML_IMPORT_FILTER_##app, sizeof(XML_IMPORT_FILTER_##app)-1, \
-      SO3_##s##_CLASSID }
-
-const XMLServiceMapEntry_Impl aServiceMap[] =
-{
-    SERVICE_MAP_ENTRY( WRITER, SW ),
-    SERVICE_MAP_ENTRY( CALC, SC ),
-    SERVICE_MAP_ENTRY( DRAW, SDRAW ),
-    SERVICE_MAP_ENTRY( IMPRESS, SIMPRESS ),
-    SERVICE_MAP_ENTRY( CHART, SCH ),
-    SERVICE_MAP_ENTRY( MATH, SM ),
-    { nullptr, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+const std::pair<OUString, SvGUID> aServiceMap[] = {
+    { XML_IMPORT_FILTER_WRITER, { SO3_SW_CLASSID } },
+    { XML_IMPORT_FILTER_CALC, { SO3_SC_CLASSID } },
+    { XML_IMPORT_FILTER_DRAW, { SO3_SDRAW_CLASSID } },
+    { XML_IMPORT_FILTER_IMPRESS, { SO3_SIMPRESS_CLASSID } },
+    { XML_IMPORT_FILTER_CHART, { SO3_SCH_CLASSID } },
+    { XML_IMPORT_FILTER_MATH, { SO3_SM_CLASSID } },
 };
 static void lcl_putHeightAndWidth ( SfxItemSet &rItemSet,
         sal_Int32 nHeight, sal_Int32 nWidth,
@@ -250,22 +232,14 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     {
         bool bInsert = false;
         SvGlobalName aClassName;
-        const XMLServiceMapEntry_Impl *pEntry = aServiceMap;
-        while( pEntry->sFilterService )
+        for (const auto& [sFilterService, rCLASSID] : aServiceMap)
         {
-            if( aObjName.equalsAsciiL( pEntry->sFilterService,
-                                     pEntry->nFilterServiceLen ) )
+            if (aObjName == sFilterService)
             {
-                aClassName = SvGlobalName( pEntry->n1, pEntry->n2,
-                                           pEntry->n3, pEntry->n4,
-                                           pEntry->n5, pEntry->n6,
-                                           pEntry->n7, pEntry->n8,
-                                           pEntry->n9, pEntry->n10,
-                                           pEntry->n11  );
+                aClassName = SvGlobalName(rCLASSID);
                 bInsert = true;
                 break;
             }
-            pEntry++;
         }
 
         if( bInsert )
