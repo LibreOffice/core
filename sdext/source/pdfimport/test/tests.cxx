@@ -566,20 +566,19 @@ namespace
                 xAdaptor->odfConvert(m_directories.getURLFromSrc(u"/sdext/source/pdfimport/test/testTdf141709.pdf"),
                 new OutputWrapString(aOutput),
                 nullptr));
-            std::cout << aOutput << std::endl;
+            //std::cout << aOutput << std::endl;
             // This ensures that the imported text contains all of the characters
-            CPPUNIT_ASSERT(aOutput.indexOf("敏") != -1);
-            CPPUNIT_ASSERT(aOutput.indexOf("捷") != -1);
-            CPPUNIT_ASSERT(aOutput.indexOf("的") != -1);
-            CPPUNIT_ASSERT(aOutput.indexOf("狐") != -1);
-            CPPUNIT_ASSERT(aOutput.indexOf("狸") != -1);
-            CPPUNIT_ASSERT(aOutput.indexOf("跨") != -1);
-            CPPUNIT_ASSERT(aOutput.indexOf("过") != -1);
-            CPPUNIT_ASSERT(aOutput.indexOf("慵") != -1);
-            CPPUNIT_ASSERT(aOutput.indexOf("懒") != -1);
-            CPPUNIT_ASSERT(aOutput.indexOf("的") != -1);
-            CPPUNIT_ASSERT(aOutput.indexOf("狗") != -1);
-            CPPUNIT_ASSERT(aOutput.indexOf("。") != -1);
+            CPPUNIT_ASSERT(aOutput.indexOf("\u654F") != -1);    // Chinese char "min"
+            CPPUNIT_ASSERT(aOutput.indexOf("\u6377") != -1);    // Chinese char "jie"
+            CPPUNIT_ASSERT(aOutput.indexOf("\u7684") != -1);    // Chinese char "de"
+            CPPUNIT_ASSERT(aOutput.indexOf("\u72D0") != -1);    // Chinese char "hu"
+            CPPUNIT_ASSERT(aOutput.indexOf("\u72F8") != -1);    // Chinese char "li"
+            CPPUNIT_ASSERT(aOutput.indexOf("\u8DE8") != -1);    // Chinese char "kua"
+            CPPUNIT_ASSERT(aOutput.indexOf("\u8FC7") != -1);    // Chinese char "guo"
+            CPPUNIT_ASSERT(aOutput.indexOf("\u6175") != -1);    // Chinese char "yong"
+            CPPUNIT_ASSERT(aOutput.indexOf("\u61D2") != -1);    // Chinese char "lan"
+            CPPUNIT_ASSERT(aOutput.indexOf("\u72D7") != -1);    // Chinese char "gou"
+            CPPUNIT_ASSERT(aOutput.indexOf("\u3002") != -1);    // "Ideographic Full Stop" char
 #endif
         }
 
