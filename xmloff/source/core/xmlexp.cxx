@@ -97,7 +97,6 @@
 #include <comphelper/xmltools.hxx>
 #include <comphelper/graphicmimetype.hxx>
 
-using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
