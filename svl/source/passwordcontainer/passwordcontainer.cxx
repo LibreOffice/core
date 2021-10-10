@@ -607,7 +607,7 @@ void PasswordContainer::PrivateAdd( const OUString& Url, const OUString& UserNam
     if( Mode == PERSISTENT_RECORD )
         aRecord.SetPersistentPasswords( EncodePasswords( aStorePass, GetMasterPassword( aHandler ) ) );
     else if( Mode == MEMORY_RECORD )
-        aRecord.SetMemoryPasswords( aStorePass );
+        aRecord.SetMemoryPasswords( std::move(aStorePass) );
     else
     {
         OSL_FAIL( "Unexpected persistence status!" );
