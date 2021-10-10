@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18f3dec8_6a7cbc3f",
+        "filename": "vcl/qa/cppunit/physicalfontcollection.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-10T12:31:46Z",
+      "side": 1,
+      "message": "Please either don\u0027t add this commented out code (just add it later when you add the fix), or describe what bug was found. E.g., you might add to the comment the error text that shows currently, and a couple of lines explaining why.\n\nThe commented out test may need to get changed later while working on the fix - so I suppose is to just drop these tests from here completely (they don\u0027t add value to this change itself IMO).",
+      "revId": "fd551f1e76905a8b144a27618eacaf555fb4cfc6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
