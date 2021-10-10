@@ -101,7 +101,7 @@ protected:
     static void         WriteColor(SvStream& rIStm, ::Color aColor);
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaPixelAction final : public MetaAction
+class VCL_DLLPUBLIC MetaPixelAction final : public MetaAction
 {
 private:
     Point               maPt;
@@ -218,7 +218,7 @@ public:
     void                SetRect(const tools::Rectangle& rRect) { maRect = rRect; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaRoundRectAction final : public MetaAction
+class VCL_DLLPUBLIC MetaRoundRectAction final : public MetaAction
 {
 private:
 
@@ -252,7 +252,7 @@ public:
     void                SetVertRound(sal_uInt32 rVertRound) { mnVertRound = rVertRound; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaEllipseAction final : public MetaAction
+class VCL_DLLPUBLIC MetaEllipseAction final : public MetaAction
 {
 private:
 
@@ -279,7 +279,7 @@ public:
     void                SetRect(const tools::Rectangle& rRect) { maRect = rRect; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaArcAction final : public MetaAction
+class VCL_DLLPUBLIC MetaArcAction final : public MetaAction
 {
 private:
 
@@ -313,7 +313,7 @@ public:
     void                SetEndPoint(const Point& rPoint) { maEndPt = rPoint; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaPieAction final : public MetaAction
+class VCL_DLLPUBLIC MetaPieAction final : public MetaAction
 {
 private:
 
@@ -347,7 +347,7 @@ public:
     void                SetEndPoint(const Point& rPoint) { maEndPt = rPoint; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaChordAction final : public MetaAction
+class VCL_DLLPUBLIC MetaChordAction final : public MetaAction
 {
 private:
 
