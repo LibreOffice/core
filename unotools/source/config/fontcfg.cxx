@@ -614,29 +614,14 @@ static bool ImplKillLeading( OUString& rName, const char* const* ppStr )
     return false;
 }
 
-static sal_Int32 ImplIsTrailing( const OUString& rName, const char* pStr )
-{
-    sal_Int32 nStrLen = static_cast<sal_Int32>(strlen( pStr ));
-    if( nStrLen >= rName.getLength() )
-        return 0;
-
-    const sal_Unicode* pEndName = rName.getStr() + rName.getLength();
-    const sal_Unicode* pNameStr = pEndName - nStrLen;
-    do if( *(pNameStr++) != *(pStr++) )
-        return 0;
-    while( *pStr );
-
-    return nStrLen;
-}
-
 static bool ImplKillTrailing( OUString& rName, const char* const* ppStr )
 {
     for(; *ppStr; ++ppStr )
     {
-        sal_Int32 nTrailLen = ImplIsTrailing( rName, *ppStr );
-        if( nTrailLen )
+        sal_Int32 nTrailLen = rName.lastIndexOfAsciiL( *ppStr, strlen( *ppStr ) );
+        if( nTrailLen > 0 )
         {
-            rName = rName.copy(0, rName.getLength() - nTrailLen );
+            rName = rName.copy( 0, nTrailLen );
             return true;
         }
     }
@@ -648,15 +633,17 @@ static bool ImplKillTrailingWithExceptions( OUString& rName, const char* const* 
 {
     for(; *ppStr; ++ppStr )
     {
-        sal_Int32 nTrailLen = ImplIsTrailing( rName, *ppStr );
-        if( nTrailLen )
+        sal_Int32 nTrailLen = rName.lastIndexOfAsciiL( *ppStr, strlen( *ppStr ) );
+        if( nTrailLen > 0 )
         {
             // check string match against string exceptions
             while( *++ppStr )
-                if( ImplIsTrailing( rName, *ppStr ) )
+            {
+                if( rName.endsWithAsciiL( *ppStr, strlen(*ppStr) ) )
                     return false;
+            }
 
-            rName = rName.copy(0, rName.getLength() - nTrailLen );
+            rName = rName.copy( 0, nTrailLen );
             return true;
         }
         else
@@ -671,7 +658,7 @@ static bool ImplKillTrailingWithExceptions( OUString& rName, const char* const* 
 
 static bool ImplFindAndErase( OUString& rName, const char* pStr )
 {
-    if ( ImplIsTrailing(rName, pStr) )
+    if ( rName.endsWithAsciiL( pStr, strlen(pStr) ) )
     {
         sal_Int32 nLen = static_cast<sal_Int32>(strlen(pStr));
         sal_Int32 nPos = rName.getLength() - nLen;
