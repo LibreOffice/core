@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc59d3b8_3dafb78d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-10T21:31:44Z",
+      "side": 1,
+      "message": "Testing tdf#140045, I had valgrind conditional jump or move depends on uninitialised value(s) (I haven\u0027t kept the Valgrind trace).\nBut let\u0027s revert then.",
+      "revId": "00ee02ea26a070d630160ef5c51f36ab093a9b53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3f54f4bd_fd367220",
