@@ -50,6 +50,24 @@ Bitmap Benchmark::setupWavelines()
     return aBitmap;
 }
 
+Bitmap Benchmark::setupGrid()
+{
+    initialSetup(4096, 4096, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    m_xStart = std::chrono::steady_clock::now();
+    for (int i = 1; i <= 4096; i += 2)
+    {
+        mpVirtualDevice->DrawLine(Point(1, i), Point(4096, i));
+        mpVirtualDevice->DrawLine(Point(i, 1), Point(i, 4096));
+    }
+    Bitmap aBitmap = mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+    m_xEnd = std::chrono::steady_clock::now();
+    return aBitmap;
+}
+
 Bitmap Benchmark::setupMultiplePolygonsWithPolyPolygon()
 {
     initialSetup(4096, 4096, constBackgroundColor);
