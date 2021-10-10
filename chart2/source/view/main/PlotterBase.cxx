@@ -52,13 +52,13 @@ PlotterBase::~PlotterBase()
 {
 }
 
-void PlotterBase::setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis )
+void PlotterBase::setScales( std::vector< ExplicitScaleData >&& rScales, bool bSwapXAndYAxis )
 {
     if (!m_pPosHelper)
         return;
 
     OSL_PRECOND(m_nDimension<=static_cast<sal_Int32>(rScales.size()),"Dimension of Plotter does not fit two dimension of given scale sequence");
-    m_pPosHelper->setScales( rScales, bSwapXAndYAxis );
+    m_pPosHelper->setScales( std::move(rScales), bSwapXAndYAxis );
 }
 
 void PlotterBase::setTransformationSceneToScreen( const drawing::HomogenMatrix& rMatrix)

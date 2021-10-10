@@ -59,11 +59,11 @@ void CommandDispatchContainer::setModel(
 
 void CommandDispatchContainer::setChartDispatch(
     const Reference< frame::XDispatch >& rChartDispatch,
-    const o3tl::sorted_vector< OUString > & rChartCommands )
+    o3tl::sorted_vector< OUString > && rChartCommands )
 {
     OSL_ENSURE(rChartDispatch.is(),"Invalid fall back dispatcher!");
     m_xChartDispatcher.set( rChartDispatch );
-    m_aChartCommands = rChartCommands;
+    m_aChartCommands = std::move(rChartCommands);
     m_aToBeDisposedDispatches.push_back( m_xChartDispatcher );
 }
 

@@ -50,9 +50,9 @@ VPolarGrid::~VPolarGrid()
 {
 }
 
-void VPolarGrid::setIncrements( const std::vector< ExplicitIncrementData >& rIncrements )
+void VPolarGrid::setIncrements( std::vector< ExplicitIncrementData >&& rIncrements )
 {
-    m_aIncrements = rIncrements;
+    m_aIncrements = std::move(rIncrements);
 }
 
 void VPolarGrid::getAllTickInfos( sal_Int32 nDimensionIndex, TickInfoArraysType& rAllTickInfos ) const
