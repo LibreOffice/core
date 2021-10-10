@@ -648,7 +648,7 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
 
     // Draw text next to the left border
     Point aFontPos(m_aPos);
-    if( m_pFnt->GetLeftBorder() && !static_cast<const SwTextPortion&>(rPor).GetJoinBorderWithPrev() )
+    if( m_pFnt->GetLeftBorder() && rPor.InTextGrp() && !static_cast<const SwTextPortion&>(rPor).GetJoinBorderWithPrev() )
     {
         const sal_uInt16 nLeftBorderSpace = m_pFnt->GetLeftBorderSpace();
         if ( GetTextFrame()->IsRightToLeft() )
