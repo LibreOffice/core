@@ -54,7 +54,7 @@ void BackendDb::save()
     xDataControl->start();
 
     const Reference<css::io::XInputStream> xData(
-        ::xmlscript::createInputStream(bytes));
+        ::xmlscript::createInputStream(std::move(bytes)));
     ::ucbhelper::Content ucbDb(m_urlDb, nullptr, m_xContext);
     ucbDb.writeStream(xData, true /*replace existing*/);
 }
