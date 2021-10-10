@@ -1476,7 +1476,7 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
         {
             if ( bInTitle && !aString.isEmpty() )
             {
-                // Remove blanks from line brakes
+                // Remove blanks from line breaks
                 aString = aString.trim();
                 uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                     mpDoc->GetDocumentShell()->GetModel(),
