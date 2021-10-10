@@ -231,13 +231,11 @@ const ImageMap& SvxIMapDlg::GetImageMap() const
 
 void SvxIMapDlg::SetTargetList( const TargetList& rTargetList )
 {
-    TargetList aNewList( rTargetList );
-
-    m_xIMapWnd->SetTargetList( aNewList );
+    m_xIMapWnd->SetTargetList( rTargetList );
 
     m_xCbbTarget->clear();
 
-    for (const OUString & s : aNewList)
+    for (const OUString & s : rTargetList)
         m_xCbbTarget->append_text(s);
 }
 

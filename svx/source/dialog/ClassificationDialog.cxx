@@ -291,9 +291,9 @@ void ClassificationDialog::insertField(ClassificationType eType, OUString const 
     m_xEditWindow->InsertField(SvxFieldItem(aField, EE_FEATURE_FIELD));
 }
 
-void ClassificationDialog::setupValues(std::vector<ClassificationResult> const & rInput)
+void ClassificationDialog::setupValues(std::vector<ClassificationResult> && rInput)
 {
-    m_aInitialValues = rInput;
+    m_aInitialValues = std::move(rInput);
     readIn(m_aInitialValues);
 }
 

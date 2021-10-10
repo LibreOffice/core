@@ -1312,7 +1312,7 @@ namespace svxform
         {
             InterfaceBag aSelection;
             aSelection.insert( Reference<XInterface>( xNewForm, UNO_QUERY ) );
-            pFormShell->GetImpl()->setCurrentSelection_Lock(aSelection);
+            pFormShell->GetImpl()->setCurrentSelection_Lock(std::move(aSelection));
 
             pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_PROPERTIES, true, true);
         }
@@ -1540,7 +1540,7 @@ namespace svxform
         if ( bSetSelectionAsMarkList )
             pFormShell->GetImpl()->setCurrentSelectionFromMark_Lock(pFormShell->GetFormView()->GetMarkedObjectList());
         else
-            pFormShell->GetImpl()->setCurrentSelection_Lock(aSelection);
+            pFormShell->GetImpl()->setCurrentSelection_Lock(std::move(aSelection));
 
         if (pFormShell->GetImpl()->IsPropBrwOpen_Lock() || bForce)
         {
@@ -1898,7 +1898,7 @@ namespace svxform
         {
             InterfaceBag aSelection;
             aSelection.insert( Reference< XInterface >( pSingleSelectionData->GetFormIface(), UNO_QUERY ) );
-            pFormShell->GetImpl()->setCurrentSelection_Lock(aSelection);
+            pFormShell->GetImpl()->setCurrentSelection_Lock(std::move(aSelection));
         }
     }
 

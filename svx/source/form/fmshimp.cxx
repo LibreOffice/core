@@ -1908,17 +1908,17 @@ bool FmXFormShell::setCurrentSelectionFromMark_Lock(const SdrMarkList& _rMarkLis
     if ( ( _rMarkList.GetMarkCount() > 0 ) && isControlList( _rMarkList ) )
         collectInterfacesFromMarkList( _rMarkList, m_aLastKnownMarkedControls );
 
-    return setCurrentSelection_Lock(m_aLastKnownMarkedControls);
+    return setCurrentSelection_Lock(o3tl::sorted_vector(m_aLastKnownMarkedControls));
 }
 
 
 bool FmXFormShell::selectLastMarkedControls_Lock()
 {
-    return setCurrentSelection_Lock(m_aLastKnownMarkedControls);
+    return setCurrentSelection_Lock(o3tl::sorted_vector(m_aLastKnownMarkedControls));
 }
 
 
-bool FmXFormShell::setCurrentSelection_Lock( const InterfaceBag& _rSelection )
+bool FmXFormShell::setCurrentSelection_Lock( InterfaceBag&& _rSelection )
 {
     if (impl_checkDisposed_Lock())
         return false;
@@ -2627,7 +2627,7 @@ void SAL_CALL FmXFormShell::selectionChanged(const lang::EventObject& rEvent)
     InterfaceBag aNewSelection;
     aNewSelection.insert( Reference<XInterface>( xSelObj, UNO_QUERY ) );
 
-    if (setCurrentSelection_Lock(aNewSelection) && IsPropBrwOpen_Lock())
+    if (setCurrentSelection_Lock(std::move(aNewSelection)) && IsPropBrwOpen_Lock())
         ShowSelectionProperties_Lock(true);
 
     EnableTrackProperties_Lock(true);

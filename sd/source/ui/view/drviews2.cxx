@@ -1652,7 +1652,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             ClassificationCollector aCollector(*this);
             aCollector.collect();
 
-            xDialog->setupValues(aCollector.getResults());
+            xDialog->setupValues(std::vector(aCollector.getResults()));
 
             if (RET_OK == xDialog->run())
             {

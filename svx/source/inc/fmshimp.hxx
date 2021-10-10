@@ -356,7 +356,7 @@ public:
         @return
             <TRUE/> if and only if the to-bet-set selection was different from the previous selection
     */
-    SAL_DLLPRIVATE bool setCurrentSelection_Lock(const InterfaceBag& rSelection);
+    SAL_DLLPRIVATE bool setCurrentSelection_Lock(InterfaceBag&& rSelection);
 
     /** sets the new selection to the last known marked controls
     */

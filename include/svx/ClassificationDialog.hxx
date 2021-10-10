@@ -87,7 +87,7 @@ public:
     ~ClassificationDialog() override;
 
     std::vector<ClassificationResult> getResult();
-    void setupValues(std::vector<ClassificationResult> const& rInput);
+    void setupValues(std::vector<ClassificationResult>&& rInput);
 };
 
 } // end svx namespace

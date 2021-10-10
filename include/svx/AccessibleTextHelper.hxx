@@ -258,7 +258,7 @@ public:
         This function has to be called before querying for
         any children (e.g. with GetChild()).
     */
-    void SetAdditionalChildStates(const VectorOfStates& rChildStates);
+    void SetAdditionalChildStates(VectorOfStates&& rChildStates);
 
     /** Update the visible children
 

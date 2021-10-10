@@ -43,9 +43,9 @@ LineWidthValueSet::~LineWidthValueSet()
 {
 }
 
-void LineWidthValueSet::SetUnit(std::array<OUString,9> const & strUnits)
+void LineWidthValueSet::SetUnit(std::array<OUString,9> && strUnits)
 {
-    maStrUnits = strUnits;
+    maStrUnits = std::move(strUnits);
 }
 
 void LineWidthValueSet::SetSelItem(sal_uInt16 nSel)

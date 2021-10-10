@@ -607,7 +607,7 @@ void TextEditOverlayObject::checkSelectionChange()
             aRect.Right() + aLogicPixel.Width(), aRect.Bottom() + aLogicPixel.Height());
     }
 
-    mxOverlaySelection->setRanges(aLogicRanges);
+    mxOverlaySelection->setRanges(std::move(aLogicRanges));
 }
 } // end of anonymous namespace
 

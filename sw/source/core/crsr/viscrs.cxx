@@ -412,7 +412,7 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
     {
         if(!aNewRanges.empty())
         {
-            static_cast<sdr::overlay::OverlaySelection*>(m_pCursorOverlay.get())->setRanges(aNewRanges);
+            static_cast<sdr::overlay::OverlaySelection*>(m_pCursorOverlay.get())->setRanges(std::move(aNewRanges));
         }
         else
         {

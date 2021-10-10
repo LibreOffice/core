@@ -31,7 +31,7 @@ public:
     explicit LineWidthValueSet();
     virtual ~LineWidthValueSet() override;
 
-    void SetUnit(std::array<OUString,9> const & strUnits);
+    void SetUnit(std::array<OUString,9> && strUnits);
     void SetSelItem(sal_uInt16 nSel);
     sal_uInt16 GetSelItem() const { return nSelItem;}
     void SetImage(const Image& img);
