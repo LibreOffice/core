@@ -788,7 +788,7 @@ void DocumentDigitalSignatures::addLocationToTrustedSources( const OUString& Loc
     std::vector< OUString > aSecURLs = SvtSecurityOptions::GetSecureURLs();
     aSecURLs.push_back(Location);
 
-    SvtSecurityOptions::SetSecureURLs( aSecURLs );
+    SvtSecurityOptions::SetSecureURLs( std::move(aSecURLs) );
 }
 
 sal_Bool DocumentDigitalSignatures::signDocumentWithCertificate(
