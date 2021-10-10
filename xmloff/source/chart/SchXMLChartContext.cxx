@@ -496,12 +496,10 @@ struct NewDonutSeries
 };
 
 void lcl_swapPointAndSeriesStylesForDonutCharts( ::std::vector< DataRowPointStyle >& rStyleVector
-        , const ::std::map< css::uno::Reference< css::chart2::XDataSeries> , sal_Int32 >& rSeriesMap )
+        , ::std::map< css::uno::Reference< css::chart2::XDataSeries> , sal_Int32 >&& aSeriesMap )
 {
     //detect old series count
     //and add old series to aSeriesMap
-    ::std::map< css::uno::Reference<
-                css::chart2::XDataSeries >, sal_Int32 > aSeriesMap(rSeriesMap);
     sal_Int32 nOldSeriesCount = 0;
     {
         sal_Int32 nMaxOldSeriesIndex = 0;

@@ -436,7 +436,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
             if(aShapeInfo.msStyleName.isEmpty())
             {
                 // Style did not exist, add it to AutoStalePool
-                aShapeInfo.msStyleName = mrExport.GetAutoStylePool()->Add(aShapeInfo.mnFamily, aParentName, aPropStates);
+                aShapeInfo.msStyleName = mrExport.GetAutoStylePool()->Add(aShapeInfo.mnFamily, aParentName, std::move(aPropStates));
             }
         }
 
@@ -485,7 +485,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                 if(aShapeInfo.msTextStyleName.isEmpty())
                 {
                     // Style did not exist, add it to AutoStalePool
-                    aShapeInfo.msTextStyleName = mrExport.GetAutoStylePool()->Add(XmlStyleFamily::TEXT_PARAGRAPH, "", aPropStates);
+                    aShapeInfo.msTextStyleName = mrExport.GetAutoStylePool()->Add(XmlStyleFamily::TEXT_PARAGRAPH, "", std::move(aPropStates));
                 }
             }
         }

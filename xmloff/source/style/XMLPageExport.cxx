@@ -78,12 +78,12 @@ void XMLPageExport::collectPageMasterAutoStyle(
             rEntry.sPageMasterName = rExport.GetAutoStylePool()->Find( XmlStyleFamily::PAGE_MASTER, sParent, aPropStates );
             if (rEntry.sPageMasterName.isEmpty())
             {
-                rEntry.sPageMasterName = rExport.GetAutoStylePool()->Add(XmlStyleFamily::PAGE_MASTER, sParent, aPropStates);
+                rEntry.sPageMasterName = rExport.GetAutoStylePool()->Add(XmlStyleFamily::PAGE_MASTER, sParent, std::move(aPropStates));
             }
         }
     }
     assert(m_xPageMasterDrawingPageExportPropMapper.is());
-    ::std::vector<XMLPropertyState> const aPropStates(
+    ::std::vector<XMLPropertyState> aPropStates(
         m_xPageMasterDrawingPageExportPropMapper->Filter(rExport, rPropSet));
     if (!aPropStates.empty())
     {
@@ -91,7 +91,7 @@ void XMLPageExport::collectPageMasterAutoStyle(
         rEntry.sDrawingPageStyleName = rExport.GetAutoStylePool()->Find(XmlStyleFamily::SD_DRAWINGPAGE_ID, sParent, aPropStates);
         if (rEntry.sDrawingPageStyleName.isEmpty())
         {
-            rEntry.sDrawingPageStyleName = rExport.GetAutoStylePool()->Add(XmlStyleFamily::SD_DRAWINGPAGE_ID, sParent, aPropStates);
+            rEntry.sDrawingPageStyleName = rExport.GetAutoStylePool()->Add(XmlStyleFamily::SD_DRAWINGPAGE_ID, sParent, std::move(aPropStates));
         }
     }
 }

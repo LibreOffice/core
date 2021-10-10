@@ -636,9 +636,9 @@ void XMLTextParagraphExport::Add( XmlStyleFamily nFamily,
     }
     if (aPropStates.size() - nIgnoreProps)
     {
-        GetAutoStylePool().Add( nFamily, sParent, aPropStates, bDontSeek );
+        GetAutoStylePool().Add( nFamily, sParent, std::vector(aPropStates), bDontSeek );
         if( !sCondParent.isEmpty() && sParent != sCondParent )
-            GetAutoStylePool().Add( nFamily, sCondParent, aPropStates );
+            GetAutoStylePool().Add( nFamily, sCondParent, std::move(aPropStates) );
     }
 }
 
@@ -725,9 +725,9 @@ void XMLTextParagraphExport::Add( XmlStyleFamily nFamily,
 
     if( std::any_of( aPropStates.begin(), aPropStates.end(), lcl_validPropState ) )
     {
-        GetAutoStylePool().Add( nFamily, sParent, aPropStates );
+        GetAutoStylePool().Add( nFamily, sParent, std::vector(aPropStates) );
         if( !sCondParent.isEmpty() && sParent != sCondParent )
-            GetAutoStylePool().Add( nFamily, sCondParent, aPropStates );
+            GetAutoStylePool().Add( nFamily, sCondParent, std::move(aPropStates) );
     }
 }
 

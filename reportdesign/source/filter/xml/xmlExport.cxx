@@ -453,28 +453,26 @@ static void lcl_calculate(const ::std::vector<sal_Int32>& _aPosX,const ::std::ve
 
 void ORptExport::collectStyleNames(XmlStyleFamily _nFamily,const ::std::vector< sal_Int32>& _aSize, std::vector<OUString>& _rStyleNames)
 {
-    ::std::vector< XMLPropertyState > aPropertyStates;
-    aPropertyStates.emplace_back(0);
     ::std::vector<sal_Int32>::const_iterator aIter = _aSize.begin();
     ::std::vector<sal_Int32>::const_iterator aIter2 = aIter + 1;
     ::std::vector<sal_Int32>::const_iterator aEnd = _aSize.end();
     for (;aIter2 != aEnd ; ++aIter,++aIter2)
     {
+        ::std::vector< XMLPropertyState > aPropertyStates(1, 0);
         sal_Int32 nValue = static_cast<sal_Int32>(*aIter2 - *aIter);
         aPropertyStates[0].maValue <<= nValue;
-        _rStyleNames.push_back(GetAutoStylePool()->Add(_nFamily, aPropertyStates ));
+        _rStyleNames.push_back(GetAutoStylePool()->Add(_nFamily, std::move(aPropertyStates) ));
     }
 }
 
 void ORptExport::collectStyleNames(XmlStyleFamily _nFamily, const ::std::vector< sal_Int32>& _aSize, const ::std::vector< sal_Int32>& _aSizeAutoGrow, std::vector<OUString>& _rStyleNames)
 {
-    ::std::vector< XMLPropertyState > aPropertyStates;
-    aPropertyStates.emplace_back(0);
     ::std::vector<sal_Int32>::const_iterator aIter = _aSize.begin();
     ::std::vector<sal_Int32>::const_iterator aIter2 = aIter + 1;
     ::std::vector<sal_Int32>::const_iterator aEnd = _aSize.end();
     for (;aIter2 != aEnd; ++aIter, ++aIter2)
     {
+        ::std::vector< XMLPropertyState > aPropertyStates(1, 0);
         sal_Int32 nValue = static_cast<sal_Int32>(*aIter2 - *aIter);
         aPropertyStates[0].maValue <<= nValue;
         // note: there cannot be 0-height rows, because a call to std::unique has removed them
@@ -485,7 +483,7 @@ void ORptExport::collectStyleNames(XmlStyleFamily _nFamily, const ::std::vector<
         bool bAutoGrow = aAutoGrow != _aSizeAutoGrow.end();
         // the mnIndex is into the array returned by OXMLHelper::GetRowStyleProps()
         aPropertyStates[0].mnIndex = bAutoGrow ? 1 : 0;
-        _rStyleNames.push_back(GetAutoStylePool()->Add(_nFamily, aPropertyStates));
+        _rStyleNames.push_back(GetAutoStylePool()->Add(_nFamily, std::move(aPropertyStates)));
     }
 }
 
@@ -1114,7 +1112,7 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
     {
         ::std::vector<XMLPropertyState> aPropertyStates(m_xParaPropMapper->Filter(*this, _xProp));
         if ( !aPropertyStates.empty() )
-            m_aAutoStyleNames.emplace( _xProp,GetAutoStylePool()->Add( XmlStyleFamily::TEXT_PARAGRAPH, aPropertyStates ));
+            m_aAutoStyleNames.emplace( _xProp,GetAutoStylePool()->Add( XmlStyleFamily::TEXT_PARAGRAPH, std::move(aPropertyStates) ));
     }
     ::std::vector<XMLPropertyState> aPropertyStates(m_xCellStylesExportPropertySetMapper->Filter(*this, _xProp));
     Reference<XFixedLine> xFixedLine(_xProp,uno::UNO_QUERY);
@@ -1214,14 +1212,14 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
     }
 
     if ( !aPropertyStates.empty() )
-        m_aAutoStyleNames.emplace( _xProp,GetAutoStylePool()->Add( XmlStyleFamily::TABLE_CELL, aPropertyStates ));
+        m_aAutoStyleNames.emplace( _xProp,GetAutoStylePool()->Add( XmlStyleFamily::TABLE_CELL, std::move(aPropertyStates) ));
 }
 
 void ORptExport::exportAutoStyle(const Reference<XSection>& _xProp)
 {
     ::std::vector<XMLPropertyState> aPropertyStates(m_xTableStylesExportPropertySetMapper->Filter(*this, _xProp));
     if ( !aPropertyStates.empty() )
-        m_aAutoStyleNames.emplace( _xProp.get(),GetAutoStylePool()->Add( XmlStyleFamily::TABLE_TABLE, aPropertyStates ));
+        m_aAutoStyleNames.emplace( _xProp.get(),GetAutoStylePool()->Add( XmlStyleFamily::TABLE_TABLE, std::move(aPropertyStates) ));
 }
 
 void ORptExport::SetBodyAttributes()

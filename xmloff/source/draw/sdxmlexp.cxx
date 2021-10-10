@@ -1539,7 +1539,7 @@ OUString SdXMLExport::ImpCreatePresPageStyleName( const Reference<XDrawPage>& xD
             if(sStyleName.isEmpty())
             {
                 // Style did not exist, add it to AutoStalePool
-                sStyleName = GetAutoStylePool()->Add(XmlStyleFamily::SD_DRAWINGPAGE_ID, sStyleName, aPropStates);
+                sStyleName = GetAutoStylePool()->Add(XmlStyleFamily::SD_DRAWINGPAGE_ID, sStyleName, std::move(aPropStates));
             }
         }
     }
