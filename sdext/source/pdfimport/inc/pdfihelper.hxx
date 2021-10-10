@@ -82,7 +82,7 @@ namespace pdfi
         {
             std::size_t seed = 0;
             o3tl::hash_combine(seed, rFont.familyName.hashCode());
-            o3tl::hash_combine(seed, rFont.isBold);
+            o3tl::hash_combine(seed, rFont.fontWeight);
             o3tl::hash_combine(seed, rFont.isItalic);
             o3tl::hash_combine(seed, rFont.isUnderline);
             o3tl::hash_combine(seed, rFont.isOutline);
