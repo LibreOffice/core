@@ -1416,7 +1416,9 @@ void GtkSalMenu::DispatchCommand(const gchar *pCommand)
     }
     if (pTopLevel->mpMenuWidget)
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_popover_popdown(GTK_POPOVER(pTopLevel->mpMenuWidget));
+#else
         gtk_menu_shell_deactivate(GTK_MENU_SHELL(pTopLevel->mpMenuWidget));
 #endif
     }
