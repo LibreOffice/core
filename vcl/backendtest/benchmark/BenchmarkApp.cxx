@@ -71,7 +71,7 @@ namespace
 class BenchMarkWindow : public WorkWindow
 {
 private:
-    static constexpr unsigned char gnNumberOfTests = 2;
+    static constexpr unsigned char gnNumberOfTests = 4;
     unsigned char mnTest;
     ScopedVclPtr<VirtualDevice> mpVDev;
 
@@ -155,6 +155,32 @@ public:
         updateResults(rRenderContext, aOutDevTest.getElapsedTime());
     }
 
+    static void drawGrid(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
+    {
+        tools::Rectangle aRectangle;
+        size_t index = 0;
+
+        std::vector<tools::Rectangle> aRegions = setupRegions(1, 1, nWidth, nHeight);
+        aRectangle = aRegions[index++];
+        Benchmark aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupGrid();
+        drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        updateResults(rRenderContext, aOutDevTest.getElapsedTime());
+    }
+
+    static void drawGridWithDottedLines(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
+    {
+        tools::Rectangle aRectangle;
+        size_t index = 0;
+
+        std::vector<tools::Rectangle> aRegions = setupRegions(1, 1, nWidth, nHeight);
+        aRectangle = aRegions[index++];
+        Benchmark aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupGridWithDottedLine();
+        drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        updateResults(rRenderContext, aOutDevTest.getElapsedTime());
+    }
+
     virtual void Paint(vcl::RenderContext& rRenderContext,
                        const tools::Rectangle& /*rRect*/) override
     {
@@ -172,6 +198,14 @@ public:
         else if (mnTest % gnNumberOfTests == 1)
         {
             drawWavelines(rRenderContext, nWidth, nHeight);
+        }
+        else if (mnTest % gnNumberOfTests == 2)
+        {
+            drawGrid(rRenderContext, nWidth, nHeight);
+        }
+        else if (mnTest % gnNumberOfTests == 3)
+        {
+            drawGridWithDottedLines(rRenderContext, nWidth, nHeight);
         }
     }
 };
