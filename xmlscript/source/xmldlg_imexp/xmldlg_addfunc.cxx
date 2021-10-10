@@ -40,8 +40,8 @@ class InputStreamProvider
     std::vector<sal_Int8> const _bytes;
 
 public:
-    explicit InputStreamProvider( std::vector<sal_Int8> const & rBytes )
-        : _bytes( rBytes )
+    explicit InputStreamProvider( std::vector<sal_Int8>&& rBytes )
+        : _bytes( std::move(rBytes) )
     {
     }
 
@@ -53,7 +53,7 @@ public:
 
 uno::Reference< io::XInputStream > InputStreamProvider::createInputStream()
 {
-    return ::xmlscript::createInputStream( _bytes );
+    return ::xmlscript::createInputStream( std::vector(_bytes) );
 }
 
 uno::Reference< io::XInputStreamProvider > exportDialogModel(
@@ -69,7 +69,7 @@ uno::Reference< io::XInputStreamProvider > exportDialogModel(
     uno::Reference< xml::sax::XExtendedDocumentHandler > xHandler(xWriter, uno::UNO_QUERY_THROW);
     exportDialogModel( xHandler, xDialogModel, xDocument );
 
-    return new InputStreamProvider( aBytes );
+    return new InputStreamProvider( std::move(aBytes) );
 }
 
 void importDialogModel(

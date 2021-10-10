@@ -106,7 +106,7 @@ private:
 
 XMLSCRIPT_DLLPUBLIC css::uno::Reference< css::io::XInputStream >
 createInputStream(
-    std::vector<sal_Int8> const & rInData );
+    std::vector<sal_Int8>&& rInData );
 
 XMLSCRIPT_DLLPUBLIC css::uno::Reference< css::io::XInputStream >
 createInputStream(

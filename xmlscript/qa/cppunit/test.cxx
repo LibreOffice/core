@@ -92,7 +92,7 @@ Reference<container::XNameContainer> XmlScriptTest::importFile(std::u16string_vi
             "com.sun.star.awt.UnoControlDialogModel", mxComponentContext),
         UNO_QUERY);
 
-    ::xmlscript::importDialogModel(::xmlscript::createInputStream(bytes), xDialogModel,
+    ::xmlscript::importDialogModel(::xmlscript::createInputStream(std::move(bytes)), xDialogModel,
                                    mxComponentContext, nullptr);
 
     Reference<lang::XComponent> xDialogModelComp(xDialogModel, UNO_QUERY);

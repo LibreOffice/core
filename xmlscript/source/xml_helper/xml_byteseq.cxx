@@ -41,8 +41,8 @@ class BSeqInputStream
     sal_Int32 _nPos;
 
 public:
-    explicit BSeqInputStream( std::vector<sal_Int8> const & rSeq )
-        : _seq( rSeq )
+    explicit BSeqInputStream( std::vector<sal_Int8>&& rSeq )
+        : _seq( std::move(rSeq) )
         , _nPos( 0 )
         {}
 
@@ -134,9 +134,9 @@ void BSeqOutputStream::closeOutput()
 {
 }
 
-Reference< io::XInputStream > createInputStream( std::vector<sal_Int8> const & rInData )
+Reference< io::XInputStream > createInputStream( std::vector<sal_Int8>&& rInData )
 {
-    return new BSeqInputStream( rInData );
+    return new BSeqInputStream( std::move(rInData) );
 }
 
 Reference< io::XInputStream > createInputStream( const sal_Int8* pData, int len )
@@ -145,7 +145,7 @@ Reference< io::XInputStream > createInputStream( const sal_Int8* pData, int len 
     if (len != 0) {
         memcpy( rInData.data(), pData, len);
     }
-    return new BSeqInputStream( rInData );
+    return new BSeqInputStream( std::move(rInData) );
 }
 
 Reference< io::XOutputStream > createOutputStream( std::vector<sal_Int8> * pOutData )
