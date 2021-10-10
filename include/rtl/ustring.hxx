@@ -1089,13 +1089,9 @@ public:
     {
         assert(
             libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
-        return
-            rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(
-                pData->buffer+fromIndex, pData->length-fromIndex,
-                libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
-                    literal),
-                libreoffice_internal::ConstCharArrayDetector<T>::length)
-            == 0;
+        return matchIgnoreAsciiCaseAsciiL(
+            libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
+            libreoffice_internal::ConstCharArrayDetector<T>::length, fromIndex);
     }
 
     /**
