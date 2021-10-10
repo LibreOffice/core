@@ -78,7 +78,7 @@ namespace
         std::vector< DAVResourceInfo > aProps { aSingleInfo };
         std::vector< DAVResourceInfo > aRetProp;
 
-        aPropsNames.setPropertiesNames( aProps );
+        aPropsNames.setPropertiesNames( std::vector(aProps) );
         aRetProp = aPropsNames.getPropertiesNames();
         CPPUNIT_ASSERT_EQUAL( true, ( aProps == aRetProp ) );
 
@@ -112,7 +112,7 @@ namespace
         std::vector< DAVResourceInfo > aProps { aSingleInfo };
 
         // add the cache an element
-        aPropsNames.setPropertiesNames( aProps );
+        aPropsNames.setPropertiesNames( std::vector(aProps) );
         PropCache.addCachePropertyNames( aPropsNames );
 
         PropertyNames aRetPropsNames;

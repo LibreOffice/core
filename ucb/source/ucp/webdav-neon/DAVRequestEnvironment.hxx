@@ -49,11 +49,11 @@ struct DAVRequestEnvironment
 
 DAVRequestEnvironment( const OUString & rRequestURI,
                            const rtl::Reference< DAVAuthListener > & xListener,
-                           const DAVRequestHeaders & rRequestHeaders,
+                           DAVRequestHeaders && rRequestHeaders,
                            const uno::Reference< ucb::XCommandEnvironment > & xEnv)
     : m_aRequestURI( rRequestURI ),
       m_xAuthListener( xListener ),
-      m_aRequestHeaders( rRequestHeaders ),
+      m_aRequestHeaders( std::move(rRequestHeaders) ),
       m_xEnv( xEnv ){}
 
     DAVRequestEnvironment() {}
