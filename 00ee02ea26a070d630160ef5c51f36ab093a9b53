@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f54f4bd_fd367220",
+        "filename": "vcl/source/control/edit.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1194,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-10T21:14:23Z",
+      "side": 1,
+      "message": "Why? The alternative buffer (allocated from heap in line 1199) is not initialized. The uninitialized data is not used. Why waste cycles here?\n\nOr is there some bug here? Then likely there should be some explanation in the commit message, and possibly some reference to the bug?\n\n(A nitpick: it\u0027s better to initialize with {} in such case)",
+      "revId": "00ee02ea26a070d630160ef5c51f36ab093a9b53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
