@@ -67,7 +67,7 @@ namespace sdr::overlay
             virtual drawinglayer::primitive2d::Primitive2DContainer getOverlayObjectPrimitive2DSequence() const override;
 
             // data write access
-            void setRanges(const std::vector< basegfx::B2DRange >& rNew);
+            void setRanges(std::vector< basegfx::B2DRange >&& rNew);
         };
 } // end of namespace sdr::overlay
 

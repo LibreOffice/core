@@ -205,11 +205,11 @@ namespace sdr::overlay
             return OverlayObject::getOverlayObjectPrimitive2DSequence();
         }
 
-        void OverlaySelection::setRanges(const std::vector< basegfx::B2DRange >& rNew)
+        void OverlaySelection::setRanges(std::vector< basegfx::B2DRange >&& rNew)
         {
             if(rNew != maRanges)
             {
-                maRanges = rNew;
+                maRanges = std::move(rNew);
                 objectChange();
             }
         }
