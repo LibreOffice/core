@@ -48,6 +48,7 @@ private:
     BitmapEx                        maPersonaBitmap;
     GtkWidget*                      mpMenuAllowShrinkWidget;
     GtkWidget*                      mpMenuBarWidget;
+    GtkWidget*                      mpMenuWidget;
     GtkCssProvider*                 mpMenuBarContainerProvider;
     GtkCssProvider*                 mpMenuBarProvider;
     GtkWidget*                      mpCloseButton;
