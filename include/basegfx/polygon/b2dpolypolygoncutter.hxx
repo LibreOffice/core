@@ -136,7 +136,7 @@ namespace basegfx::utils
 
             @return A single tools::PolyPolygon containing the Or-merged result
         */
-        BASEGFX_DLLPUBLIC B2DPolyPolygon mergeToSinglePolyPolygon(const B2DPolyPolygonVector& rInput);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon mergeToSinglePolyPolygon(B2DPolyPolygonVector&& rInput);
 
 } // end of namespace basegfx::utils
 

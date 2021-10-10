@@ -1067,9 +1067,9 @@ namespace basegfx::utils
             }
         }
 
-        B2DPolyPolygon mergeToSinglePolyPolygon(const B2DPolyPolygonVector& rInput)
+        B2DPolyPolygon mergeToSinglePolyPolygon(B2DPolyPolygonVector&& rInput)
         {
-            B2DPolyPolygonVector aInput(rInput);
+            B2DPolyPolygonVector aInput(std::move(rInput));
 
             // first step: prepareForPolygonOperation and simple merge of non-overlapping
             // PolyPolygons for speedup; this is possible for the wanted OR-operation
