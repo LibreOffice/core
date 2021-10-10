@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c484fa4_838264bf",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1202,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2021-10-10T22:43:55Z",
+      "side": 1,
+      "message": "away from the bug itself, but I wonder whether we should accept XEnumeration itself too.\n\nUnfortunately, unlike other programming languages, interfaces like XEnumeration, XIndexAccess, XNamedAccess, XEnumerationAccess are not in inheritance relationship, and we would not be able to change this sort of APIs for the backward compatiblity...",
+      "revId": "79d274cd715e32f90e5b506d180d116e9229c468",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
