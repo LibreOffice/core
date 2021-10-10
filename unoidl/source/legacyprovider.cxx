@@ -297,7 +297,7 @@ rtl::Reference< Entity > readEntity(
                 attrs.emplace_back(
                     attrName, reader.getFieldTypeName(j).replace('/', '.'),
                     bool(flags & RTFieldAccess::BOUND),
-                    bool(flags & RTFieldAccess::READONLY), getExcs, setExcs,
+                    bool(flags & RTFieldAccess::READONLY), std::move(getExcs), std::move(setExcs),
                     translateAnnotations(reader.getFieldDocumentation(j)));
             }
             std::vector< InterfaceTypeEntity::Method > meths;
@@ -355,13 +355,13 @@ rtl::Reference< Entity > readEntity(
                     meths.emplace_back(
                         reader.getMethodName(j),
                         reader.getMethodReturnTypeName(j).replace('/', '.'),
-                        params, excs,
+                        std::move(params), std::move(excs),
                         translateAnnotations(
                             reader.getMethodDocumentation(j)));
                 }
             }
             return new InterfaceTypeEntity(
-                reader.isPublished(), mandBases, optBases, attrs, meths,
+                reader.isPublished(), std::move(mandBases), std::move(optBases), std::move(attrs), std::move(meths),
                 translateAnnotations(reader.getDocumentation()));
         }
     case RT_TYPE_MODULE:
@@ -394,7 +394,7 @@ rtl::Reference< Entity > readEntity(
                         translateAnnotations(reader.getFieldDocumentation(j)));
                 }
                 return new PlainStructTypeEntity(
-                    reader.isPublished(), base, mems,
+                    reader.isPublished(), base, std::move(mems),
                     translateAnnotations(reader.getDocumentation()));
             } else {
                 if (reader.getSuperTypeCount() != 0) {
@@ -422,7 +422,7 @@ rtl::Reference< Entity > readEntity(
                         translateAnnotations(reader.getFieldDocumentation(j)));
                 }
                 return new PolymorphicStructTypeTemplateEntity(
-                    reader.isPublished(), params, mems,
+                    reader.isPublished(), std::move(params), std::move(mems),
                     translateAnnotations(reader.getDocumentation()));
             }
         }
@@ -446,7 +446,7 @@ rtl::Reference< Entity > readEntity(
 
             }
             return new EnumTypeEntity(
-                reader.isPublished(), mems,
+                reader.isPublished(), std::move(mems),
                 translateAnnotations(reader.getDocumentation()));
         }
     case RT_TYPE_EXCEPTION:
@@ -475,7 +475,7 @@ rtl::Reference< Entity > readEntity(
                     translateAnnotations(reader.getFieldDocumentation(j)));
             }
             return new ExceptionTypeEntity(
-                reader.isPublished(), base, mems,
+                reader.isPublished(), base, std::move(mems),
                 translateAnnotations(reader.getDocumentation()));
         }
     case RT_TYPE_TYPEDEF:
@@ -579,8 +579,8 @@ rtl::Reference< Entity > readEntity(
                         translateAnnotations(reader.getFieldDocumentation(j)));
                 }
                 return new AccumulationBasedServiceEntity(
-                    reader.isPublished(), mandServs, optServs, mandIfcs,
-                    optIfcs, props,
+                    reader.isPublished(), std::move(mandServs), std::move(optServs), std::move(mandIfcs),
+                    std::move(optIfcs), std::move(props),
                     translateAnnotations(reader.getDocumentation()));
             }
         case 1:
@@ -661,14 +661,14 @@ rtl::Reference< Entity > readEntity(
                         }
                         ctors.push_back(
                             SingleInterfaceBasedServiceEntity::Constructor(
-                                reader.getMethodName(j), params, excs,
+                                reader.getMethodName(j), std::move(params), std::move(excs),
                                 translateAnnotations(
                                     reader.getMethodDocumentation(j))));
                     }
                 }
                 return new SingleInterfaceBasedServiceEntity(
                     reader.isPublished(),
-                    reader.getSuperTypeName(0).replace('/', '.'), ctors,
+                    reader.getSuperTypeName(0).replace('/', '.'), std::move(ctors),
                     translateAnnotations(reader.getDocumentation()));
             }
         default:
@@ -764,7 +764,7 @@ rtl::Reference< Entity > readEntity(
                     translateAnnotations(reader.getFieldDocumentation(j)));
             }
             return new ConstantGroupEntity(
-                reader.isPublished(), mems,
+                reader.isPublished(), std::move(mems),
                 translateAnnotations(reader.getDocumentation()));
         }
     default:
