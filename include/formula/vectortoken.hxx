@@ -91,7 +91,7 @@ class FORMULA_DLLPUBLIC DoubleVectorRefToken final : public FormulaToken
 
 public:
     DoubleVectorRefToken(
-        const std::vector<VectorRefArray>& rArrays, size_t nArrayLength,
+        std::vector<VectorRefArray>&& rArrays, size_t nArrayLength,
         size_t nRefRowSize, bool bStartFixed, bool bEndFixed );
 
     virtual FormulaToken* Clone() const override;
