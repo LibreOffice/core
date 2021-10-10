@@ -33,7 +33,7 @@ public:
            , const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier
            , sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount );
 
-    void setIncrements( const std::vector< ExplicitIncrementData >& rIncrements );
+    void setIncrements( std::vector< ExplicitIncrementData >&& rIncrements );
 
     virtual bool isAnythingToDraw() override;
 

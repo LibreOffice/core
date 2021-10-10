@@ -42,8 +42,8 @@ public:
     void setColumnValues( sal_Int32 nColumnIndex, const std::vector< double > & rNewData );
     void setRowValues( sal_Int32 nRowIndex, const std::vector< double > & rNewData );
 
-    void setComplexColumnLabel( sal_Int32 nColumnIndex, const std::vector< css::uno::Any >& rComplexLabel );
-    void setComplexRowLabel( sal_Int32 nRowIndex, const std::vector< css::uno::Any >& rComplexLabel );
+    void setComplexColumnLabel( sal_Int32 nColumnIndex, std::vector< css::uno::Any >&& rComplexLabel );
+    void setComplexRowLabel( sal_Int32 nRowIndex, std::vector< css::uno::Any >&& rComplexLabel );
 
     std::vector< css::uno::Any > getComplexColumnLabel( sal_Int32 nColumnIndex ) const;
     std::vector< css::uno::Any > getComplexRowLabel( sal_Int32 nRowIndex ) const;
@@ -66,9 +66,9 @@ public:
 
     typedef std::vector< std::vector< css::uno::Any > > tVecVecAny; //inner index is hierarchical level
 
-    void setComplexRowLabels( const tVecVecAny& rNewRowLabels );
+    void setComplexRowLabels( tVecVecAny&& rNewRowLabels );
     const tVecVecAny& getComplexRowLabels() const;
-    void setComplexColumnLabels( const tVecVecAny& rNewColumnLabels );
+    void setComplexColumnLabels( tVecVecAny&& rNewColumnLabels );
     const tVecVecAny& getComplexColumnLabels() const;
 
     void dump() const;

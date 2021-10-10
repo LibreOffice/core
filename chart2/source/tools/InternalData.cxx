@@ -194,7 +194,7 @@ void InternalData::setRowValues( sal_Int32 nRowIndex, const vector< double > & r
     m_aData[ std::slice( nRowIndex*m_nColumnCount, m_nColumnCount, 1 ) ]= aSlice;
 }
 
-void InternalData::setComplexColumnLabel( sal_Int32 nColumnIndex, const vector< uno::Any >& rComplexLabel )
+void InternalData::setComplexColumnLabel( sal_Int32 nColumnIndex, vector< uno::Any >&& rComplexLabel )
 {
     if( nColumnIndex < 0 )
         return;
@@ -203,12 +203,12 @@ void InternalData::setComplexColumnLabel( sal_Int32 nColumnIndex, const vector< 
         m_aColumnLabels.resize(nColumnIndex+1);
         enlargeData( nColumnIndex+1, 0 );
     }
-    m_aColumnLabels[nColumnIndex]=rComplexLabel;
+    m_aColumnLabels[nColumnIndex] = std::move(rComplexLabel);
 
     dump();
 }
 
-void InternalData::setComplexRowLabel( sal_Int32 nRowIndex, const vector< uno::Any >& rComplexLabel )
+void InternalData::setComplexRowLabel( sal_Int32 nRowIndex, vector< uno::Any >&& rComplexLabel )
 {
     if( nRowIndex < 0 )
         return;
@@ -225,7 +225,7 @@ void InternalData::setComplexRowLabel( sal_Int32 nRowIndex, const vector< uno::A
     }
     else
     {
-        m_aRowLabels[nRowIndex] = rComplexLabel;
+        m_aRowLabels[nRowIndex] = std::move(rComplexLabel);
     }
 }
 
@@ -468,9 +468,9 @@ void InternalData::deleteRow( sal_Int32 nAtIndex )
     dump();
 }
 
-void InternalData::setComplexRowLabels( const tVecVecAny& rNewRowLabels )
+void InternalData::setComplexRowLabels( tVecVecAny&& rNewRowLabels )
 {
-    m_aRowLabels = rNewRowLabels;
+    m_aRowLabels = std::move(rNewRowLabels);
     sal_Int32 nNewRowCount = static_cast< sal_Int32 >( m_aRowLabels.size() );
     if( nNewRowCount < m_nRowCount )
         m_aRowLabels.resize( m_nRowCount );
@@ -483,9 +483,9 @@ const InternalData::tVecVecAny& InternalData::getComplexRowLabels() const
     return m_aRowLabels;
 }
 
-void InternalData::setComplexColumnLabels( const tVecVecAny& rNewColumnLabels )
+void InternalData::setComplexColumnLabels( tVecVecAny&& rNewColumnLabels )
 {
-    m_aColumnLabels = rNewColumnLabels;
+    m_aColumnLabels = std::move(rNewColumnLabels);
     sal_Int32 nNewColumnCount = static_cast< sal_Int32 >( m_aColumnLabels.size() );
     if( nNewColumnCount < m_nColumnCount )
         m_aColumnLabels.resize( m_nColumnCount );

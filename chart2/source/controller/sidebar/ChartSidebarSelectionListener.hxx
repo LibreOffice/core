@@ -40,7 +40,7 @@ public:
 
     virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent) override;
 
-    void setAcceptedTypes(const std::vector<ObjectType>& aTypes);
+    void setAcceptedTypes(std::vector<ObjectType>&& aTypes);
 
 private:
     ChartSidebarSelectionListenerParent* mpParent;

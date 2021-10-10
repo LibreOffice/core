@@ -878,7 +878,7 @@ std::vector<std::shared_ptr<VButton>> lcl_createButtons(
 VLegend::VLegend(
     const Reference< XLegend > & xLegend,
     const Reference< uno::XComponentContext > & xContext,
-    const std::vector< LegendEntryProvider* >& rLegendEntryProviderList,
+    std::vector< LegendEntryProvider* >&& rLegendEntryProviderList,
     const Reference< drawing::XShapes >& xTargetPage,
     const Reference< lang::XMultiServiceFactory >& xFactory,
     ChartModel& rModel )
@@ -887,7 +887,7 @@ VLegend::VLegend(
         , m_xLegend(xLegend)
         , mrModel(rModel)
         , m_xContext(xContext)
-        , m_aLegendEntryProviderList(rLegendEntryProviderList)
+        , m_aLegendEntryProviderList(std::move(rLegendEntryProviderList))
         , m_nDefaultWritingMode(text::WritingMode2::LR_TB)
 {
 }

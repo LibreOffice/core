@@ -42,7 +42,7 @@ public:
 
     virtual void createShapes() override;
 
-    void setIncrements( const std::vector< ExplicitIncrementData >& rIncrements );
+    void setIncrements( std::vector< ExplicitIncrementData >&& rIncrements );
 
     static void createLinePointSequence_ForAngleAxis(
                     css::drawing::PointSequenceSequence& rPoints

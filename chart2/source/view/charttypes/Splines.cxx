@@ -52,7 +52,7 @@ public:
                derivation equal to this value at the x-value of the last point
                of rSortedPoints
      */
-    lcl_SplineCalculation( const tPointVecType & rSortedPoints,
+    lcl_SplineCalculation( tPointVecType && rSortedPoints,
                            double fY1FirstDerivation,
                            double fYnFirstDerivation );
 
@@ -62,7 +62,7 @@ public:
         @param rSortedPoints  the points for which splines shall be calculated,
                they need to be sorted in x values. First and last y value must be equal
      */
-    explicit lcl_SplineCalculation( const tPointVecType & rSortedPoints);
+    explicit lcl_SplineCalculation( tPointVecType && rSortedPoints);
 
     /** @descr this function corresponds to the function splint in [1].
 
@@ -113,10 +113,10 @@ private:
 };
 
 lcl_SplineCalculation::lcl_SplineCalculation(
-    const tPointVecType & rSortedPoints,
+    tPointVecType && rSortedPoints,
     double fY1FirstDerivation,
     double fYnFirstDerivation )
-        : m_aPoints( rSortedPoints ),
+        : m_aPoints( std::move(rSortedPoints) ),
           m_fYp1( fY1FirstDerivation ),
           m_fYpN( fYnFirstDerivation ),
           m_nKLow( 0 ),
@@ -127,8 +127,8 @@ lcl_SplineCalculation::lcl_SplineCalculation(
 }
 
 lcl_SplineCalculation::lcl_SplineCalculation(
-    const tPointVecType & rSortedPoints)
-        : m_aPoints( rSortedPoints ),
+    tPointVecType && rSortedPoints)
+        : m_aPoints( std::move(rSortedPoints) ),
           m_fYp1( 0.0 ),  /*dummy*/
           m_fYpN( 0.0 ),  /*dummy*/
           m_nKLow( 0 ),
@@ -593,16 +593,16 @@ void SplineCalculater::CalculateCubicSplines(
             pOldZ[ 0 ] == pOldZ[nMaxIndexPoints] &&
             nMaxIndexPoints >=2 )
         {   // periodic spline
-            aSplineX.reset(new lcl_SplineCalculation( aInputX));
-            aSplineY.reset(new lcl_SplineCalculation( aInputY));
+            aSplineX.reset(new lcl_SplineCalculation( std::move(aInputX)));
+            aSplineY.reset(new lcl_SplineCalculation( std::move(aInputY)));
             // aSplineZ = new lcl_SplineCalculation( aInputZ) ;
         }
         else // generate the kind "natural spline"
         {
             double fXDerivation = std::numeric_limits<double>::infinity();
             double fYDerivation = std::numeric_limits<double>::infinity();
-            aSplineX.reset(new lcl_SplineCalculation( aInputX, fXDerivation, fXDerivation ));
-            aSplineY.reset(new lcl_SplineCalculation( aInputY, fYDerivation, fYDerivation ));
+            aSplineX.reset(new lcl_SplineCalculation( std::move(aInputX), fXDerivation, fXDerivation ));
+            aSplineY.reset(new lcl_SplineCalculation( std::move(aInputY), fYDerivation, fYDerivation ));
         }
 
         // fill result polygon with calculated values

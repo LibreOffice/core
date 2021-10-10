@@ -80,7 +80,7 @@ public:
      */
     void setChartDispatch(
         const css::uno::Reference< css::frame::XDispatch >& rChartDispatch,
-        const o3tl::sorted_vector< OUString > & rChartCommands );
+        o3tl::sorted_vector< OUString > && rChartCommands );
 
     /** Returns the dispatch that is able to do the command given in rURL, if
         implemented here.  If the URL is not implemented here, it should be

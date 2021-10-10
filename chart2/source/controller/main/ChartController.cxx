@@ -589,7 +589,7 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
     // the dispatch container will return "this" for all commands returned by
     // impl_getAvailableCommands().  That means, for those commands dispatch()
     // is called here at the ChartController.
-    m_aDispatchContainer.setChartDispatch( pDispatch, impl_getAvailableCommands() );
+    m_aDispatchContainer.setChartDispatch( pDispatch, o3tl::sorted_vector(impl_getAvailableCommands()) );
 
     rtl::Reference<DrawCommandDispatch> pDrawDispatch = new DrawCommandDispatch( m_xCC, this );
     pDrawDispatch->initialize();
