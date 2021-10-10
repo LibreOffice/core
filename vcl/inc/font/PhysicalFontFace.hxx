@@ -35,7 +35,6 @@ namespace vcl::font
 {
 class FontSelectPattern;
 }
-class PhysicalFontFace;
 
 namespace vcl
 {
