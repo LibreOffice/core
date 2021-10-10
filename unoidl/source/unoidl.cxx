@@ -32,9 +32,9 @@ namespace {
 class AggregatingModule: public ModuleEntity {
 public:
     AggregatingModule(
-        std::vector< rtl::Reference< Provider > > const & providers,
+        std::vector< rtl::Reference< Provider > >&& providers,
         OUString const & name):
-        providers_(providers), name_(name)
+        providers_(std::move(providers)), name_(name)
     {}
 
 private:
@@ -64,9 +64,9 @@ std::vector< OUString > AggregatingModule::getMemberNames() const {
 class AggregatingCursor: public MapCursor {
 public:
     AggregatingCursor(
-        std::vector< rtl::Reference< Provider > > const & providers,
+        std::vector< rtl::Reference< Provider > >&& providers,
         OUString const & name):
-        providers_(providers), name_(name), iterator_(providers_.begin())
+        providers_(std::move(providers)), name_(name), iterator_(providers_.begin())
     { findCursor(); }
 
 private:
@@ -94,7 +94,7 @@ rtl::Reference< Entity > AggregatingCursor::getNext(OUString * name) {
                 }
                 return ent->getSort() == Entity::SORT_MODULE
                     ? new AggregatingModule(
-                        providers_, (name_.isEmpty() ? name_ : name_ + ".") + n)
+                        std::vector(providers_), (name_.isEmpty() ? name_ : name_ + ".") + n)
                     : ent;
             }
         } else {
@@ -120,7 +120,7 @@ void AggregatingCursor::findCursor() {
 }
 
 rtl::Reference< MapCursor > AggregatingModule::createCursor() const {
-    return new AggregatingCursor(providers_, name_);
+    return new AggregatingCursor(std::vector(providers_), name_);
 }
 
 }
@@ -189,7 +189,7 @@ rtl::Reference< Entity > Manager::findEntity(OUString const & name) const {
 rtl::Reference< MapCursor > Manager::createCursor(OUString const & name)
     const
 {
-    return new AggregatingCursor(providers_, name);
+    return new AggregatingCursor(std::vector(providers_), name);
 }
 
 Manager::~Manager() noexcept {}
