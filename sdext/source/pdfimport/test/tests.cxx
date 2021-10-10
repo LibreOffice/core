@@ -583,17 +583,20 @@ namespace
 #endif
         }
 
-        void testFontFeatures() // tdf#78427
+        void testTdf78427_FontFeatures()
         {
             rtl::Reference<pdfi::PDFIRawAdaptor> xAdaptor(new pdfi::PDFIRawAdaptor(OUString(), getComponentContext()));
             xAdaptor->setTreeVisitorFactory(createDrawTreeVisitorFactory());
 
             OString aOutput;
             CPPUNIT_ASSERT_MESSAGE("Converting PDF to ODF XML",
-                                   xAdaptor->odfConvert( m_directories.getURLFromSrc(u"/sdext/source/pdfimport/test/testdocs/testFontFeatures.pdf"),
-                                                        new OutputWrapString(aOutput),
-                                                        nullptr ));
-            std::cout << aOutput << std::endl;
+                xAdaptor->odfConvert( m_directories.getURLFromSrc(
+                    u"/sdext/source/pdfimport/test/testdocs/tdf78427-testFontFeatures.pdf"),
+                new OutputWrapString(aOutput),
+                nullptr ));
+            // Un-comment the following debug line to see the content of generated XML content in
+            // workdir/CppunitTest/sdext_pdfimport.test.log after running "make CppunitTest_sdext_pdfimport".
+            //std::cout << aOutput << std::endl;
             xmlDocUniquePtr pXmlDoc(xmlParseDoc(reinterpret_cast<xmlChar const *>(aOutput.getStr())));
             //CPPUNIT_ASSERT(pXmlDoc);
 
@@ -602,8 +605,8 @@ namespace
             OString xpath = "//office:automatic-styles/style:style[@style:name=\"" +
                 OUStringToOString(styleName,  RTL_TEXTENCODING_UTF8) +
                 "\"]/style:text-properties";
-            // the font-weight and  font-style should be normal (e.g., no such attribute)
-            assertXPathNoAttribute(pXmlDoc, xpath, "font-weight");
+            // the font-weight and font-style should be normal
+            assertXPath(pXmlDoc, xpath, "font-weight", "normal");
             assertXPathNoAttribute(pXmlDoc, xpath, "font-style");
 
             /* Test for the 2nd paragraph */
@@ -621,7 +624,7 @@ namespace
                 OUStringToOString(styleName,  RTL_TEXTENCODING_UTF8) +
                 "\"]/style:text-properties";
             // there should be a font-style="italic", but no font-weight bold
-            assertXPathNoAttribute(pXmlDoc, xpath, "font-weight");
+            assertXPath(pXmlDoc, xpath, "font-weight", "normal");
             assertXPath(pXmlDoc, xpath, "font-style", "italic");
 
             /* Test for the 4th paragraph */
@@ -650,7 +653,7 @@ namespace
                 "\"]/style:text-properties";
             // the font should be Arial without font-weight and font-style
             assertXPath(pXmlDoc, xpath, "font-family", "Arial");
-            assertXPathNoAttribute(pXmlDoc, xpath, "font-weight");
+            assertXPath(pXmlDoc, xpath, "font-weight", "normal");
             assertXPathNoAttribute(pXmlDoc, xpath, "font-style");
 
             /* Test for the 7th paragraph */
@@ -660,7 +663,7 @@ namespace
                 "\"]/style:text-properties";
             // the font should be SimSun without font-weight and font-style
             assertXPath(pXmlDoc, xpath, "font-family", "SimSun"); // TODO: tdf#143095 use localized font name rather than PS name
-            assertXPathNoAttribute(pXmlDoc, xpath, "font-weight");
+            assertXPath(pXmlDoc, xpath, "font-weight", "normal");
             assertXPathNoAttribute(pXmlDoc, xpath, "font-style");
 
             /* Test for the 8th paragraph */
@@ -678,9 +681,9 @@ namespace
             xpath = "//office:automatic-styles/style:style[@style:name=\"" +
                 OUStringToOString(styleName,  RTL_TEXTENCODING_UTF8) +
                 "\"]/style:text-properties";
-            // the font should be SimSun, no font-weight="bold", with font-style="italic"
+            // the font should be SimSun, font-weight should be "normal", font-style="italic"
             assertXPath(pXmlDoc, xpath, "font-family", "SimSun");
-            assertXPathNoAttribute(pXmlDoc, xpath, "font-weight");
+            assertXPath(pXmlDoc, xpath, "font-weight", "normal");
             // FIXME and remove the below comment:
             // the chinese chars are shown in pdf as faux italic (fake italic). It is currencly imported wrongly as normal font style.
             // See tdf#78427 for how the faux bold problem was handled. Faux italic may be handled using the transformation pattern.
@@ -705,9 +708,42 @@ namespace
             // the font should be SimSun and there should be style:text-outline="true"
             // (i.e., the real "outline" font rather than faux bold / fake bold)
             assertXPath(pXmlDoc, xpath, "font-family", "SimSun");
-            assertXPathNoAttribute(pXmlDoc, xpath, "font-weight");
+            assertXPath(pXmlDoc, xpath, "font-weight", "normal");
             assertXPathNoAttribute(pXmlDoc, xpath, "font-style");
             assertXPath(pXmlDoc, xpath, "text-outline", "true");
+        }
+
+        void testTdf78427_FontWeight_MyraidProSemibold() // Related to attachment 155937.
+        {
+            rtl::Reference<pdfi::PDFIRawAdaptor> xAdaptor(new pdfi::PDFIRawAdaptor(OUString(), getComponentContext()));
+            xAdaptor->setTreeVisitorFactory(createDrawTreeVisitorFactory());
+
+            OString aOutput;
+            CPPUNIT_ASSERT_MESSAGE("Converting PDF to ODF XML",
+                xAdaptor->odfConvert( m_directories.getURLFromSrc(
+                    u"/sdext/source/pdfimport/test/testdocs/tdf78427-MyraidPro-Semibold-Light.pdf"),
+                new OutputWrapString(aOutput),
+                nullptr ));
+            //std::cout << aOutput << std::endl;
+
+            xmlDocUniquePtr pXmlDoc(xmlParseDoc(reinterpret_cast<xmlChar const *>(aOutput.getStr())));
+            //CPPUNIT_ASSERT(pXmlDoc);
+
+            // The for the 1st frame */
+            OUString styleName = getXPath(pXmlDoc, "//draw:frame[1]//text:span[1]", "style-name");
+            OString xpath = "//office:automatic-styles/style:style[@style:name=\"" +
+                OUStringToOString(styleName,  RTL_TEXTENCODING_UTF8) +
+                "\"]/style:text-properties";
+            // the font-weight and font-style should be 600 (Semibold)
+            assertXPath(pXmlDoc, xpath, "font-weight", "600");
+
+            // The for the 2nd frame */
+            styleName = getXPath(pXmlDoc, "//draw:frame[2]//text:span[1]", "style-name");
+            xpath = "//office:automatic-styles/style:style[@style:name=\"" +
+                OUStringToOString(styleName,  RTL_TEXTENCODING_UTF8) +
+                "\"]/style:text-properties";
+            // the font-weight and font-style should be 300 (Light)
+            assertXPath(pXmlDoc, xpath, "font-weight", "300");
         }
 
         void testTdf143959_nameFromFontFile()
@@ -751,7 +787,8 @@ namespace
         CPPUNIT_TEST(testTdf98421);
         CPPUNIT_TEST(testTdf105536);
         CPPUNIT_TEST(testTdf141709);
-        CPPUNIT_TEST(testFontFeatures);
+        CPPUNIT_TEST(testTdf78427_FontFeatures);
+        CPPUNIT_TEST(testTdf78427_FontWeight_MyraidProSemibold);
         CPPUNIT_TEST(testTdf143959_nameFromFontFile);
         CPPUNIT_TEST_SUITE_END();
     };

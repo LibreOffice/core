@@ -463,8 +463,17 @@ void WriterXmlOptimizer::visit( ParagraphElement& elem, const std::list< std::un
                         {
                             const FontAttributes& rPrevFont = m_rProcessor.getFont( pPrevText->FontId );
                             const FontAttributes& rThisFont = m_rProcessor.getFont( pThisText->FontId );
-                            if( rPrevFont.isBold && ! rThisFont.isBold )
+                            if ( (rPrevFont.fontWeight ==  u"600" ||
+                                  rPrevFont.fontWeight ==  u"bold" ||
+                                  rPrevFont.fontWeight ==  u"800" ||
+                                  rPrevFont.fontWeight ==  u"900" )  &&
+                                 (rThisFont.fontWeight ==  u"600" ||
+                                  rThisFont.fontWeight ==  u"bold" ||
+                                  rThisFont.fontWeight ==  u"800" ||
+                                  rThisFont.fontWeight ==  u"900" ) )
+                            {
                                 pPrevPara->Type = ParagraphElement::Headline;
+                            }
                         }
                     }
                 }
@@ -906,12 +915,9 @@ void WriterXmlFinalizer::visit( TextElement& elem, const std::list< std::unique_
     aFontProps[ "style:font-family-complex" ] = rFont.familyName;
 
     // bold
-    if( rFont.isBold )
-    {
-        aFontProps[ "fo:font-weight" ]            = "bold";
-        aFontProps[ "style:font-weight-asian" ]   = "bold";
-        aFontProps[ "style:font-weight-complex" ] = "bold";
-    }
+    aFontProps[ "fo:font-weight" ]            = rFont.fontWeight;
+    aFontProps[ "style:font-weight-asian" ]   = rFont.fontWeight;
+    aFontProps[ "style:font-weight-complex" ] = rFont.fontWeight;
 
     // italic
     if( rFont.isItalic )

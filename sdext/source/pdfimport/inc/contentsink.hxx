@@ -48,14 +48,14 @@ namespace pdfi
 {
     struct FontAttributes
     {
-        FontAttributes( const OUString& familyName_,
-                        bool                 isBold_,
+        FontAttributes( const OUString&      familyName_,
+                        const OUString&      sFontWeight,
                         bool                 isItalic_,
                         bool                 isUnderline_,
                         double               size_,
                         double               ascent_) :
             familyName(familyName_),
-            isBold(isBold_),
+            fontWeight(sFontWeight),
             isItalic(isItalic_),
             isUnderline(isUnderline_),
             isOutline(false),
@@ -65,7 +65,7 @@ namespace pdfi
 
         FontAttributes() :
             familyName(),
-            isBold(false),
+            fontWeight(u"normal"),
             isItalic(false),
             isUnderline(false),
             isOutline(false),
@@ -74,7 +74,7 @@ namespace pdfi
         {}
 
         OUString            familyName;
-        bool                isBold;
+        OUString            fontWeight;
         bool                isItalic;
         bool                isUnderline;
         bool                isOutline;
@@ -84,7 +84,7 @@ namespace pdfi
         bool operator==(const FontAttributes& rFont) const
         {
             return familyName == rFont.familyName &&
-                !isBold == !rFont.isBold &&
+                fontWeight == rFont.fontWeight &&
                 !isItalic == !rFont.isItalic &&
                 !isUnderline == !rFont.isUnderline &&
                 !isOutline == !rFont.isOutline &&

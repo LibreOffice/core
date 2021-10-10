@@ -461,7 +461,7 @@ int PDFOutDev::parseFont( long long nNewId, GfxFont* gfxFont, const GfxState* st
         aNewFont.familyName.append( "Arial" );
     }
 
-    aNewFont.isBold        = gfxFont->isBold();
+    aNewFont.maFontWeight  = gfxFont->getWeight();
     aNewFont.isItalic      = gfxFont->isItalic();
 #if POPPLER_CHECK_VERSION(0, 83, 0) // const added to getTransformedFontSize
     aNewFont.size          = state->getTransformedFontSize();
@@ -795,7 +795,7 @@ void PDFOutDev::updateFont(GfxState *state)
 #endif
         printf( " %d %d %d %d %f %d %s",
                 aFont.isEmbedded,
-                aFont.isBold,
+                aFont.maFontWeight,
                 aFont.isItalic,
                 aFont.isUnderline,
                 normalize(state->getTransformedFontSize()),

@@ -57,7 +57,7 @@ namespace pdfi
 {
     FontAttributes aDefFont;
     aDefFont.familyName = "Helvetica";
-    aDefFont.isBold     = false;
+    aDefFont.fontWeight = u"normal";
     aDefFont.isItalic   = false;
     aDefFont.size       = 10*PDFI_OUTDEV_RESOLUTION/72;
     m_aIdToFont.insert({0, aDefFont});
@@ -151,7 +151,7 @@ void PDFIProcessor::setFont( const FontAttributes& i_rFont )
         // Convert to bold instead if the stroke color is the same as the fill color,
         // otherwise it should be outline.
         if (getCurrentContext().LineColor == getCurrentContext().FillColor)
-            aChangedFont.isBold = true;
+            aChangedFont.fontWeight = u"bold";
         else
             aChangedFont.isOutline = true;
     }
