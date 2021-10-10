@@ -91,7 +91,7 @@ protected:
     {
     }
 
-    TraceEvent(std::map<OUString, OUString> aArgs)
+    TraceEvent(const std::map<OUString, OUString>& aArgs)
         : TraceEvent(createArgsString(aArgs))
     {
     }
