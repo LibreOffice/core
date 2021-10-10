@@ -16,6 +16,24 @@
       "message": "All done.\nShould I change the string literal L\"abc\" to u\"abc\"? -\u003e OUString aVersion( L\"abc\" );",
       "revId": "099ed428f548f020394ca9740cc7aba3c88708af",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8947c0e8_3ef26447",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-10T07:16:54Z",
+      "side": 1,
+      "message": "Hum.\n\nSo this code looks to depend on !defined LIBO_INTERNAL_ONLY, in which case sal_Unicode is a typedef for wchar_t on Windows.\n\nI don\u0027t know if this all makes sense then - OUStringLiteral is internal, so does this compile at all?",
+      "parentUuid": "538c31b9_3a2bed93",
+      "revId": "099ed428f548f020394ca9740cc7aba3c88708af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
