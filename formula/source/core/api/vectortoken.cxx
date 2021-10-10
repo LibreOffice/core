@@ -64,10 +64,10 @@ size_t SingleVectorRefToken::GetArrayLength() const
 }
 
 DoubleVectorRefToken::DoubleVectorRefToken(
-    const std::vector<VectorRefArray>& rArrays, size_t nArrayLength,
+    std::vector<VectorRefArray>&& rArrays, size_t nArrayLength,
     size_t nRefRowSize, bool bStartFixed, bool bEndFixed ) :
     FormulaToken(svDoubleVectorRef, ocPush),
-    maArrays(rArrays), mnArrayLength(nArrayLength),
+    maArrays(std::move(rArrays)), mnArrayLength(nArrayLength),
     mnRefRowSize(nRefRowSize), mbStartFixed(bStartFixed), mbEndFixed(bEndFixed)
 {
     SAL_INFO("formula.core", "Created DoubleVectorRefToken nArrayLength=" << nArrayLength);
@@ -76,7 +76,7 @@ DoubleVectorRefToken::DoubleVectorRefToken(
 FormulaToken* DoubleVectorRefToken::Clone() const
 {
     return new DoubleVectorRefToken(
-        maArrays, mnArrayLength, mnRefRowSize, mbStartFixed, mbEndFixed);
+        std::vector(maArrays), mnArrayLength, mnRefRowSize, mbStartFixed, mbEndFixed);
 }
 
 const std::vector<VectorRefArray>& DoubleVectorRefToken::GetArrays() const
