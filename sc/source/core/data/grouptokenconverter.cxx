@@ -257,7 +257,7 @@ bool ScGroupTokenConverter::convert( const ScTokenArray& rCode, sc::FormulaLogge
                     aArrays.push_back(aArray);
                 }
 
-                formula::DoubleVectorRefToken aTok(aArrays, nArrayLength, nRefRowSize, bAbsFirst, bAbsLast);
+                formula::DoubleVectorRefToken aTok(std::vector(aArrays), nArrayLength, nRefRowSize, bAbsFirst, bAbsLast);
                 mrGroupTokens.AddToken(aTok);
                 rScope.addRefMessage(mrPos, aAbs.aStart, nRequestedLength, aArrays);
 
