@@ -311,8 +311,8 @@ struct Item {
 struct ConstItem {
     ConstItem(
         unoidl::ConstantValue const & theConstant,
-        std::vector< OUString > const & theAnnotations):
-        constant(theConstant), annotations(theAnnotations), nameOffset(0),
+        std::vector< OUString >&& theAnnotations):
+        constant(theConstant), annotations(std::move(theAnnotations)), nameOffset(0),
         dataOffset(0)
     {}
 
@@ -637,7 +637,7 @@ sal_uInt64 writeMap(
                 for (auto & j: ent2->getMembers()) {
                     if (!cmap.insert(
                             std::make_pair(
-                                j.name, ConstItem(j.value, j.annotations))).
+                                j.name, ConstItem(j.value, std::vector(j.annotations)))).
                         second)
                     {
                         std::cout
