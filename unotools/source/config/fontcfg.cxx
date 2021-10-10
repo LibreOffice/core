@@ -621,7 +621,9 @@ static bool ImplKillTrailing( OUString& rName, const char* const* ppStr )
         sal_Int32 nTrailLen = rName.lastIndexOfAsciiL( *ppStr, strlen( *ppStr ) );
         if( nTrailLen > 0 )
         {
-            rName = rName.copy( 0, nTrailLen );
+            OUStringBuffer sBuff( rName );
+            sBuff.truncate( nTrailLen );
+            rName = sBuff.makeStringAndClear();
             return true;
         }
     }
@@ -643,7 +645,9 @@ static bool ImplKillTrailingWithExceptions( OUString& rName, const char* const* 
                     return false;
             }
 
-            rName = rName.copy( 0, nTrailLen );
+            OUStringBuffer sBuff( rName );
+            sBuff.truncate( nTrailLen );
+            rName = sBuff.makeStringAndClear();
             return true;
         }
         else
