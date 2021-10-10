@@ -24,6 +24,7 @@
 #include <mutex>
 #include <stack>
 #include <optional>
+#include <utility>
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <tools/urlobj.hxx>
@@ -109,43 +110,25 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::io;
 using namespace ::xmloff::token;
 
-#define XML_MODEL_SERVICE_WRITER    "com.sun.star.text.TextDocument"
-#define XML_MODEL_SERVICE_CALC      "com.sun.star.sheet.SpreadsheetDocument"
-#define XML_MODEL_SERVICE_DRAW      "com.sun.star.drawing.DrawingDocument"
-#define XML_MODEL_SERVICE_IMPRESS   "com.sun.star.presentation.PresentationDocument"
-#define XML_MODEL_SERVICE_MATH      "com.sun.star.formula.FormulaProperties"
-#define XML_MODEL_SERVICE_CHART     "com.sun.star.chart.ChartDocument"
+constexpr OUStringLiteral XML_MODEL_SERVICE_WRITER = u"com.sun.star.text.TextDocument";
+constexpr OUStringLiteral XML_MODEL_SERVICE_CALC = u"com.sun.star.sheet.SpreadsheetDocument";
+constexpr OUStringLiteral XML_MODEL_SERVICE_DRAW = u"com.sun.star.drawing.DrawingDocument";
+constexpr OUStringLiteral XML_MODEL_SERVICE_IMPRESS = u"com.sun.star.presentation.PresentationDocument";
+constexpr OUStringLiteral XML_MODEL_SERVICE_MATH = u"com.sun.star.formula.FormulaProperties";
+constexpr OUStringLiteral XML_MODEL_SERVICE_CHART = u"com.sun.star.chart.ChartDocument";
 
 constexpr OUStringLiteral XML_USEPRETTYPRINTING = u"UsePrettyPrinting";
 
 constexpr OUStringLiteral XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE = u"vnd.sun.star.GraphicObject:";
 constexpr OUStringLiteral XML_EMBEDDEDOBJECT_URL_BASE = u"vnd.sun.star.EmbeddedObject:";
 
-namespace {
-
-struct XMLServiceMapEntry_Impl
-{
-    const char *sModelService;
-    sal_Int32   nModelServiceLen;
-    const char *sFilterService;
-    sal_Int32   nFilterServiceLen;
-};
-
-}
-
-#define SERVICE_MAP_ENTRY( app ) \
-    { XML_MODEL_SERVICE_##app, sizeof(XML_MODEL_SERVICE_##app)-1, \
-      XML_EXPORT_FILTER_##app, sizeof(XML_EXPORT_FILTER_##app)-1 }
-
-const XMLServiceMapEntry_Impl aServiceMap[] =
-{
-    SERVICE_MAP_ENTRY( WRITER ),
-    SERVICE_MAP_ENTRY( CALC ),
-    SERVICE_MAP_ENTRY( IMPRESS ),// Impress supports DrawingDocument, too, so
-    SERVICE_MAP_ENTRY( DRAW ),   // it must appear before Draw
-    SERVICE_MAP_ENTRY( MATH ),
-    SERVICE_MAP_ENTRY( CHART ),
-    { nullptr, 0, nullptr, 0 }
+const std::pair<OUString, OUString> aServiceMap[] = {
+    { XML_MODEL_SERVICE_WRITER, XML_EXPORT_FILTER_WRITER },
+    { XML_MODEL_SERVICE_CALC, XML_EXPORT_FILTER_CALC },
+    { XML_MODEL_SERVICE_IMPRESS, XML_EXPORT_FILTER_IMPRESS }, // Impress supports DrawingDocument,
+    { XML_MODEL_SERVICE_DRAW, XML_EXPORT_FILTER_DRAW }, // too, so it must appear before Draw
+    { XML_MODEL_SERVICE_MATH, XML_EXPORT_FILTER_MATH },
+    { XML_MODEL_SERVICE_CHART, XML_EXPORT_FILTER_CHART },
 };
 
 namespace {
@@ -2043,20 +2026,13 @@ void SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent > const & rComp
     Reference < lang::XServiceInfo > xServiceInfo( rComp, UNO_QUERY );
     if( xServiceInfo.is() )
     {
-        const XMLServiceMapEntry_Impl *pEntry = aServiceMap;
-        while( pEntry->sModelService )
+        for (const auto& [sModelService, sMatchingFilterService] : aServiceMap)
         {
-            OUString sModelService( pEntry->sModelService,
-                                    pEntry->nModelServiceLen,
-                                       RTL_TEXTENCODING_ASCII_US );
             if( xServiceInfo->supportsService( sModelService ) )
             {
-                sFilterService = OUString( pEntry->sFilterService,
-                                           pEntry->nFilterServiceLen,
-                                              RTL_TEXTENCODING_ASCII_US );
+                sFilterService = sMatchingFilterService;
                 break;
             }
-            pEntry++;
         }
     }
 
