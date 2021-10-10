@@ -40,7 +40,6 @@
 
 class ConvertChar;
 class ImplFontCache;
-class PhysicalFontFace;
 
 // TODO: allow sharing of metrics for related fonts
 
