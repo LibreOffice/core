@@ -1191,7 +1191,7 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
     sal_Int32 nIndex = EDIT_NOLIMIT;
     OUString aText = ImplGetText();
 
-    tools::Long   nDXBuffer[256];
+    tools::Long   nDXBuffer[256] = {0};
     std::unique_ptr<tools::Long[]> pDXBuffer;
     tools::Long*  pDX = nDXBuffer;
     if( o3tl::make_unsigned(2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
