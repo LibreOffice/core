@@ -75,7 +75,7 @@ public:
     RepoContent( const css::uno::Reference<
         css::uno::XComponentContext >& rxContext, ContentProvider *pProvider,
         const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
-        std::vector< libcmis::RepositoryPtr > const & aRepos = std::vector< libcmis::RepositoryPtr > ( ) );
+        std::vector< libcmis::RepositoryPtr > && aRepos = std::vector< libcmis::RepositoryPtr > ( ) );
 
     virtual ~RepoContent() override;
 
