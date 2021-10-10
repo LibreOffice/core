@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30414df6_9e888ea6",
+        "filename": "include/vcl/metaact.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-10-10T12:42:46Z",
+      "side": 1,
+      "message": "honestly, I would just remove the UNLESS_MERGELIBS here, I don\u0027t think we need to be __that__ concerned about symbol visibility for mergelibs - and I don\u0027t think these classes are performance-hot",
+      "revId": "a542259f950d59a2ef205c01d4e7d198548e21ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
