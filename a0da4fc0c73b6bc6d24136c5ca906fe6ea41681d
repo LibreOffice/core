@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8083621_fa1eba6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-10T21:32:43Z",
+      "side": 1,
+      "message": "For a revert in the same day, no need to wait Jenkins.",
+      "revId": "a0da4fc0c73b6bc6d24136c5ca906fe6ea41681d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
