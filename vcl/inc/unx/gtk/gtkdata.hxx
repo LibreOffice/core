@@ -192,6 +192,9 @@ inline GdkGLContext* surface_create_gl_context(GdkSurface* pSurface)
 #endif
 }
 
+void set_buildable_id(GtkBuildable* pWidget, const OString& rId);
+OString get_buildable_id(GtkBuildable* pWidget);
+
 #if !GTK_CHECK_VERSION(4, 0, 0)
 typedef GtkClipboard GdkClipboard;
 #endif
