@@ -71,10 +71,10 @@ void VPolarRadiusAxis::initPlotter(  const uno::Reference< drawing::XShapes >& x
     m_apAxisWithLabels->initPlotter(  xLogicTarget, xFinalTarget, xShapeFactory, rCID );
 }
 
-void VPolarRadiusAxis::setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis )
+void VPolarRadiusAxis::setScales( std::vector< ExplicitScaleData >&& rScales, bool bSwapXAndYAxis )
 {
-    VPolarAxis::setScales( rScales, bSwapXAndYAxis );
-    m_apAxisWithLabels->setScales( rScales, bSwapXAndYAxis );
+    VPolarAxis::setScales( std::vector(rScales), bSwapXAndYAxis );
+    m_apAxisWithLabels->setScales( std::move(rScales), bSwapXAndYAxis );
 }
 
 void VPolarRadiusAxis::initAxisLabelProperties( const css::awt::Size& rFontReferenceSize
@@ -154,7 +154,7 @@ void VPolarRadiusAxis::createShapes()
         aAxis.setExplicitScaleAndIncrement( m_aScale, m_aIncrement );
         aAxis.initPlotter(m_xLogicTarget,m_xFinalTarget,m_xShapeFactory, m_aCID );
         aAxis.setTransformationSceneToScreen( B3DHomMatrixToHomogenMatrix( m_aMatrixScreenToScene ) );
-        aAxis.setScales( m_pPosHelper->getScales(), false );
+        aAxis.setScales( std::vector(m_pPosHelper->getScales()), false );
         aAxis.initAxisLabelProperties(m_aAxisLabelProperties.m_aFontReferenceSize,m_aAxisLabelProperties.m_aMaximumSpaceForLabels);
         aAxis.createShapes();
     }

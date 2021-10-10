@@ -54,7 +54,7 @@ public:
 
     virtual void setTransformationSceneToScreen( const css::drawing::HomogenMatrix& rMatrix);
 
-    virtual void setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis );
+    virtual void setScales( std::vector< ExplicitScaleData >&& rScales, bool bSwapXAndYAxis );
     const std::vector< ExplicitScaleData >& getScales() const { return m_aScales;}
 
     //better performance for big data
@@ -149,7 +149,7 @@ public:
     virtual std::unique_ptr<PlottingPositionHelper> clone() const override;
 
     virtual void setTransformationSceneToScreen( const css::drawing::HomogenMatrix& rMatrix) override;
-    virtual void setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis ) override;
+    virtual void setScales( std::vector< ExplicitScaleData >&& rScales, bool bSwapXAndYAxis ) override;
 
     const ::basegfx::B3DHomMatrix& getUnitCartesianToScene() const { return m_aUnitCartesianToScene;}
 

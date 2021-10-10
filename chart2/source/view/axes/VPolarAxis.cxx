@@ -49,9 +49,9 @@ VPolarAxis::~VPolarAxis()
 {
 }
 
-void VPolarAxis::setIncrements( const std::vector< ExplicitIncrementData >& rIncrements )
+void VPolarAxis::setIncrements( std::vector< ExplicitIncrementData >&& rIncrements )
 {
-    m_aIncrements = rIncrements;
+    m_aIncrements = std::move(rIncrements);
 }
 
 bool VPolarAxis::isAnythingToDraw()

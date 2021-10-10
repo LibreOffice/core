@@ -74,9 +74,9 @@ void ChartSidebarSelectionListener::disposing(const css::lang::EventObject& /*rE
     mpParent = nullptr;
 }
 
-void ChartSidebarSelectionListener::setAcceptedTypes(const std::vector<ObjectType>& aTypes)
+void ChartSidebarSelectionListener::setAcceptedTypes(std::vector<ObjectType>&& aTypes)
 {
-    maTypes = aTypes;
+    maTypes = std::move(aTypes);
 }
 
 }

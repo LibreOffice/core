@@ -93,9 +93,9 @@ void PlottingPositionHelper::setTransformationSceneToScreen( const drawing::Homo
     m_xTransformationLogicToScene = nullptr;
 }
 
-void PlottingPositionHelper::setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis )
+void PlottingPositionHelper::setScales( std::vector< ExplicitScaleData >&& rScales, bool bSwapXAndYAxis )
 {
-    m_aScales = rScales;
+    m_aScales = std::move(rScales);
     m_bSwapXAndY = bSwapXAndYAxis;
     m_xTransformationLogicToScene = nullptr;
 }
@@ -340,9 +340,9 @@ void PolarPlottingPositionHelper::setTransformationSceneToScreen( const drawing:
     PlottingPositionHelper::setTransformationSceneToScreen( rMatrix);
     m_aUnitCartesianToScene =impl_calculateMatrixUnitCartesianToScene( m_aMatrixScreenToScene );
 }
-void PolarPlottingPositionHelper::setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis )
+void PolarPlottingPositionHelper::setScales( std::vector< ExplicitScaleData >&& rScales, bool bSwapXAndYAxis )
 {
-    PlottingPositionHelper::setScales( rScales, bSwapXAndYAxis );
+    PlottingPositionHelper::setScales( std::move(rScales), bSwapXAndYAxis );
     m_aUnitCartesianToScene =impl_calculateMatrixUnitCartesianToScene( m_aMatrixScreenToScene );
 }
 

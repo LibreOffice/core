@@ -283,7 +283,7 @@ ChartAreaPanel::ChartAreaPanel(weld::Widget* pParent,
     std::vector<ObjectType> aAcceptedTypes { OBJECTTYPE_PAGE, OBJECTTYPE_DIAGRAM,
         OBJECTTYPE_DATA_SERIES, OBJECTTYPE_DATA_POINT,
         OBJECTTYPE_TITLE, OBJECTTYPE_LEGEND};
-    mxSelectionListener->setAcceptedTypes(aAcceptedTypes);
+    mxSelectionListener->setAcceptedTypes(std::move(aAcceptedTypes));
     Initialize();
 }
 

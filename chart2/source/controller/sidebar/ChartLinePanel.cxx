@@ -137,7 +137,7 @@ ChartLinePanel::ChartLinePanel(weld::Widget* pParent,
         OBJECTTYPE_DATA_SERIES, OBJECTTYPE_DATA_POINT,
         OBJECTTYPE_TITLE, OBJECTTYPE_LEGEND, OBJECTTYPE_DATA_CURVE,
         OBJECTTYPE_DATA_AVERAGE_LINE, OBJECTTYPE_AXIS};
-    mxSelectionListener->setAcceptedTypes(aAcceptedTypes);
+    mxSelectionListener->setAcceptedTypes(std::move(aAcceptedTypes));
     Initialize();
 }
 

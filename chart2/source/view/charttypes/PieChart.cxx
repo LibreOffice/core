@@ -229,10 +229,10 @@ PieChart::~PieChart()
 {
 }
 
-void PieChart::setScales( const std::vector< ExplicitScaleData >& rScales, bool /* bSwapXAndYAxis */ )
+void PieChart::setScales( std::vector< ExplicitScaleData >&& rScales, bool /* bSwapXAndYAxis */ )
 {
     OSL_ENSURE(m_nDimension<=static_cast<sal_Int32>(rScales.size()),"Dimension of Plotter does not fit two dimension of given scale sequence");
-    m_pPosHelper->setScales( rScales, true );
+    m_pPosHelper->setScales( std::move(rScales), true );
 }
 
 drawing::Direction3D PieChart::getPreferredDiagramAspectRatio() const
