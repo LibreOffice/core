@@ -428,12 +428,12 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
     UpdateFull();
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    GtkWidget *pWidget = gtk_menu_new_from_model(mpMenuModel);
-    gtk_menu_attach_to_widget(GTK_MENU(pWidget), mpFrame->getMouseEventWidget(), nullptr);
+    mpMenuWidget = gtk_menu_new_from_model(mpMenuModel);
+    gtk_menu_attach_to_widget(GTK_MENU(mpMenuWidget), mpFrame->getMouseEventWidget(), nullptr);
 #else
-    GtkWidget *pWidget = gtk_popover_menu_new_from_model(mpMenuModel);
-    gtk_widget_set_parent(pWidget, mpFrame->getMouseEventWidget());
-    gtk_popover_set_has_arrow(GTK_POPOVER(pWidget), false);
+    mpMenuWidget = gtk_popover_menu_new_from_model(mpMenuModel);
+    gtk_widget_set_parent(mpMenuWidget, mpFrame->getMouseEventWidget());
+    gtk_popover_set_has_arrow(GTK_POPOVER(mpMenuWidget), false);
 #endif
     gtk_widget_insert_action_group(mpFrame->getMouseEventWidget(), "win", mpActionGroup);
 
@@ -443,9 +443,9 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
     //until the gtk menu is destroyed
     GMainLoop* pLoop = g_main_loop_new(nullptr, true);
 #if GTK_CHECK_VERSION(4, 0, 0)
-    g_signal_connect_swapped(G_OBJECT(pWidget), "closed", G_CALLBACK(g_main_loop_quit), pLoop);
+    g_signal_connect_swapped(G_OBJECT(mpMenuWidget), "closed", G_CALLBACK(g_main_loop_quit), pLoop);
 #else
-    g_signal_connect_swapped(G_OBJECT(pWidget), "deactivate", G_CALLBACK(g_main_loop_quit), pLoop);
+    g_signal_connect_swapped(G_OBJECT(mpMenuWidget), "deactivate", G_CALLBACK(g_main_loop_quit), pLoop);
 #endif
 
 
@@ -464,18 +464,18 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
     GdkRectangle rect {static_cast<int>(aFloatRect.Left()), static_cast<int>(aFloatRect.Top()),
                        static_cast<int>(aFloatRect.GetWidth()), static_cast<int>(aFloatRect.GetHeight())};
 
-    gtk_popover_set_pointing_to(GTK_POPOVER(pWidget), &rect);
+    gtk_popover_set_pointing_to(GTK_POPOVER(mpMenuWidget), &rect);
 
     if (nFlags & FloatWinPopupFlags::Left)
-        gtk_popover_set_position(GTK_POPOVER(pWidget), GTK_POS_LEFT);
+        gtk_popover_set_position(GTK_POPOVER(mpMenuWidget), GTK_POS_LEFT);
     else if (nFlags & FloatWinPopupFlags::Up)
-        gtk_popover_set_position(GTK_POPOVER(pWidget), GTK_POS_TOP);
+        gtk_popover_set_position(GTK_POPOVER(mpMenuWidget), GTK_POS_TOP);
     else if (nFlags & FloatWinPopupFlags::Right)
-        gtk_popover_set_position(GTK_POPOVER(pWidget), GTK_POS_RIGHT);
+        gtk_popover_set_position(GTK_POPOVER(mpMenuWidget), GTK_POS_RIGHT);
     else
-        gtk_popover_set_position(GTK_POPOVER(pWidget), GTK_POS_BOTTOM);
+        gtk_popover_set_position(GTK_POPOVER(mpMenuWidget), GTK_POS_BOTTOM);
 
-    gtk_popover_popup(GTK_POPOVER(pWidget));
+    gtk_popover_popup(GTK_POPOVER(mpMenuWidget));
 #else
 #if GTK_CHECK_VERSION(3,22,0)
     if (gtk_check_version(3, 22, 0) == nullptr)
@@ -503,7 +503,7 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
         }
 
         GdkSurface* gdkWindow = widget_get_surface(mpFrame->getMouseEventWidget());
-        gtk_menu_popup_at_rect(GTK_MENU(pWidget), gdkWindow, &rect, rect_anchor, menu_anchor, nullptr);
+        gtk_menu_popup_at_rect(GTK_MENU(mpMenuWidget), gdkWindow, &rect, rect_anchor, menu_anchor, nullptr);
     }
     else
 #endif
@@ -532,7 +532,7 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
         Point aPos = FloatingWindow::ImplCalcPos(pWin, rRect, nFlags, nArrangeIndex);
         aPos = FloatingWindow::ImplConvertToAbsPos(xParent, aPos);
 
-        gtk_menu_popup(GTK_MENU(pWidget), nullptr, nullptr, MenuPositionFunc,
+        gtk_menu_popup(GTK_MENU(mpMenuWidget), nullptr, nullptr, MenuPositionFunc,
                        &aPos, nButton, nTime);
     }
 #endif
@@ -547,10 +547,11 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
     gtk_widget_insert_action_group(mpFrame->getMouseEventWidget(), "win", nullptr);
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    gtk_widget_destroy(pWidget);
+    gtk_widget_destroy(mpMenuWidget);
 #else
-    g_clear_pointer(&pWidget, gtk_widget_unparent);
+    g_clear_pointer(&mpMenuWidget, gtk_widget_unparent);
 #endif
+    mpMenuWidget = nullptr;
 
     g_object_unref(mpActionGroup);
     ClearActionGroupAndMenuModel();
@@ -577,6 +578,7 @@ GtkSalMenu::GtkSalMenu( bool bMenuBar ) :
     mpMenuBarContainerWidget( nullptr ),
     mpMenuAllowShrinkWidget( nullptr ),
     mpMenuBarWidget( nullptr ),
+    mpMenuWidget( nullptr ),
     mpMenuBarContainerProvider( nullptr ),
     mpMenuBarProvider( nullptr ),
     mpCloseButton( nullptr ),
@@ -1398,19 +1400,27 @@ void GtkSalMenu::DispatchCommand(const gchar *pCommand)
     MenuAndId aMenuAndId = decode_command(pCommand);
     GtkSalMenu* pSalSubMenu = aMenuAndId.first;
     GtkSalMenu* pTopLevel = pSalSubMenu->GetTopLevel();
+
+    // tdf#125803 spacebar will toggle radios and checkbuttons without automatically
+    // closing the menu. To handle this properly I imagine we need to set groups for the
+    // radiobuttons so the others visually untoggle when the active one is toggled and
+    // we would further need to teach vcl that the state can change more than once.
+    //
+    // or we could unconditionally deactivate the menus if regardless of what particular
+    // type of menu item got activated
     if (pTopLevel->mpMenuBarWidget)
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
-        // tdf#125803 spacebar will toggle radios and checkbuttons without automatically
-        // closing the menu. To handle this properly I imagine we need to set groups for the
-        // radiobuttons so the others visually untoggle when the active one is toggled and
-        // we would further need to teach vcl that the state can change more than once.
-        //
-        // or we could unconditionally deactivate the menus if regardless of what particular
-        // type of menu item got activated
         gtk_menu_shell_deactivate(GTK_MENU_SHELL(pTopLevel->mpMenuBarWidget));
 #endif
     }
+    if (pTopLevel->mpMenuWidget)
+    {
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        gtk_menu_shell_deactivate(GTK_MENU_SHELL(pTopLevel->mpMenuWidget));
+#endif
+    }
+
     pTopLevel->GetMenu()->HandleMenuCommandEvent(pSalSubMenu->GetMenu(), aMenuAndId.second);
 }
 
