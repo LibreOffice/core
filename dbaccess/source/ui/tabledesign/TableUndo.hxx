@@ -103,7 +103,7 @@ namespace dbaui
     public:
         OTableEditorInsUndoAct( OTableEditorCtrl* pOwner,
                                 tools::Long nInsertPosition,
-                                const std::vector<  std::shared_ptr<OTableRow> >& _vInsertedRows);
+                                std::vector<  std::shared_ptr<OTableRow> >&& _vInsertedRows);
         virtual ~OTableEditorInsUndoAct() override;
     };
 

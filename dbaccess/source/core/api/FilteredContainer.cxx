@@ -168,7 +168,7 @@ static sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::
         _io_tableInfo.sType = OptionalString( sTypeName );
     }
 
-    static ::std::vector< OUString> lcl_filter( const TableInfos& _unfilteredTables,
+    static ::std::vector< OUString> lcl_filter( TableInfos&& _unfilteredTables,
         const Sequence< OUString >& _tableFilter, const Sequence< OUString >& _tableTypeFilter,
         const Reference< XDatabaseMetaData >& _metaData, const Reference< XNameAccess >& _masterContainer )
     {
@@ -179,7 +179,7 @@ static sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::
         bool dontFilterTableNames = ( ( nTableFilterCount == 1 ) && _tableFilter[0] == "%" );
         if( dontFilterTableNames )
         {
-            aFilteredTables = _unfilteredTables;
+            aFilteredTables = std::move(_unfilteredTables);
         }
         else
         {
@@ -189,7 +189,7 @@ static sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::
             Sequence< OUString > aNonWildCardTableFilter = _tableFilter;
             nTableFilterCount = createWildCardVector( aNonWildCardTableFilter, aWildCardTableFilter );
 
-            TableInfos aUnfilteredTables( _unfilteredTables );
+            TableInfos aUnfilteredTables( std::move(_unfilteredTables) );
             aUnfilteredTables.reserve( nTableFilterCount + ( aWildCardTableFilter.size() * 10 ) );
 
             for (auto & unfilteredTable : aUnfilteredTables)
@@ -277,7 +277,7 @@ static sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::
             for ( ; name != nameEnd; ++name )
                 aUnfilteredTables.emplace_back( *name );
 
-            reFill( lcl_filter( aUnfilteredTables,
+            reFill( lcl_filter( std::move(aUnfilteredTables),
                 _rTableFilter, _rTableTypeFilter, m_xMetaData, m_xMasterContainer ) );
 
             m_bConstructed = true;
@@ -359,7 +359,7 @@ static sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::
                 aUnfilteredTables.emplace_back( sCatalog, sSchema, sName, sType );
             }
 
-            reFill( lcl_filter( aUnfilteredTables,
+            reFill( lcl_filter( std::move(aUnfilteredTables),
                 _rTableFilter, aTableTypeFilter, m_xMetaData, nullptr ) );
 
             disposeComponent( xTables );

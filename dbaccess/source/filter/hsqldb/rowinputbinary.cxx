@@ -90,9 +90,8 @@ OUString lcl_double_dabble(const std::vector<sal_uInt8>& bytes)
                              RTL_TEXTENCODING_UTF8);
 }
 
-OUString lcl_makeStringFromBigint(const std::vector<sal_uInt8>& bytes)
+OUString lcl_makeStringFromBigint(std::vector<sal_uInt8>&& aBytes)
 {
-    std::vector<sal_uInt8> aBytes{ bytes };
     OUStringBuffer sRet;
 
     // two's complement
@@ -311,7 +310,7 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const std::vector<ColumnDefiniti
                 m_pStream->ReadInt32(nScale);
 
                 Sequence<Any> result(2);
-                OUString sNum = lcl_makeStringFromBigint(aBytes);
+                OUString sNum = lcl_makeStringFromBigint(std::move(aBytes));
                 result[0] <<= lcl_putDot(sNum, nScale);
                 result[1] <<= nScale;
                 aData.push_back(makeAny(result));

@@ -87,9 +87,9 @@ namespace dbaccess
                         bool _bCase,
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
-                        const std::vector< OUString> &_rVector
+                        std::vector< OUString> && _rVector
                     ) : sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector)
-                        ,m_aTables(_rTables)
+                        ,m_aTables(std::move(_rTables))
         {
         }
         virtual void disposing() override

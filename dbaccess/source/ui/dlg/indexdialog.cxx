@@ -641,7 +641,7 @@ namespace dbaui
             m_xUnique->set_sensitive(!aSelectedIndex->bPrimaryKey);
             m_xUnique->save_state();
 
-            m_xFields->initializeFrom(aSelectedIndex->aFields);
+            m_xFields->initializeFrom(std::vector(aSelectedIndex->aFields));
             m_xFields->Enable(!aSelectedIndex->bPrimaryKey);
             m_xFields->SaveValue();
 

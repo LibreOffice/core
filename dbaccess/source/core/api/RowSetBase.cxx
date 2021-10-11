@@ -1382,7 +1382,7 @@ ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet )
         m_pRowSet->doCancelModification( ORowSetBase::GrantNotifierAccess() );
 }
 
-ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet,const ORowSetValueVector::Vector& i_aRow )
+ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet, ORowSetValueVector::Vector&& i_aRow )
     :m_pImpl(new ORowSetNotifierImpl)
     ,m_pRowSet( _pRowSet )
     ,m_bWasNew( false )
@@ -1390,7 +1390,7 @@ ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet,const ORowSetValueVector
 {
 
     OSL_ENSURE( m_pRowSet, "ORowSetNotifier::ORowSetNotifier: invalid row set. This will crash." );
-    m_pImpl->aRow = i_aRow; // yes, create a copy to store the old values
+    m_pImpl->aRow = std::move(i_aRow); // yes, create a copy to store the old values
 }
 
 ORowSetNotifier::~ORowSetNotifier( )

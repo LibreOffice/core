@@ -583,11 +583,11 @@ weld::Container* OCopyTableWizard::CreatePageContainer()
 }
 
 OCopyTableWizard::OCopyTableWizard( weld::Window* pParent, const OUString& _rDefaultName, sal_Int16 _nOperation,
-        const ODatabaseExport::TColumns& _rSourceColumns, const ODatabaseExport::TColumnVector& _rSourceColVec,
+        ODatabaseExport::TColumns&& _rSourceColumns, const ODatabaseExport::TColumnVector& _rSourceColVec,
         const Reference< XConnection >& _xConnection, const Reference< XNumberFormatter >&  _xFormatter,
         TypeSelectionPageFactory _pTypeSelectionPageFactory, SvStream& _rTypeSelectionPageArg, const Reference< XComponentContext >& _rxContext )
     : vcl::RoadmapWizardMachine(pParent)
-    , m_vSourceColumns(_rSourceColumns)
+    , m_vSourceColumns(std::move(_rSourceColumns))
     , m_mNameMapping(_xConnection->getMetaData().is() && _xConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers())
     , m_xDestConnection( _xConnection )
     , m_rSourceObject( DummyCopySource::Instance() )

@@ -782,7 +782,7 @@ void OKeySet::tryRefetch(const ORowSetRow& _rInsertRow,bool bRefetch)
     }
     if ( !bRefetch )
     {
-        m_aKeyIter->second.second.second = new OPrivateRow(*_rInsertRow);
+        m_aKeyIter->second.second.second = new OPrivateRow(std::vector(*_rInsertRow));
     }
 }
 
