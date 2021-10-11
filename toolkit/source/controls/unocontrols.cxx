@@ -1998,9 +1998,9 @@ struct UnoControlListBoxModel_Data
         m_aListItems = i_copySource.m_aListItems;
     }
 
-    void    setAllItems( const ::std::vector< ListItem >& i_rItems )
+    void    setAllItems( ::std::vector< ListItem >&& i_rItems )
     {
-        m_aListItems = i_rItems;
+        m_aListItems = std::move(i_rItems);
     }
 
     void    removeItem( const sal_Int32 i_nIndex )
@@ -2130,7 +2130,7 @@ void SAL_CALL UnoControlListBoxModel::setFastPropertyValue_NoBroadcast( sal_Int3
         aItems.begin(),
         CreateListItem()
     );
-    m_xData->setAllItems( aItems );
+    m_xData->setAllItems( std::move(aItems) );
 
     // since an XItemListListener does not have a "all items modified" or some such method,
     // we simulate this by notifying removal of all items, followed by insertion of all new
@@ -2937,7 +2937,7 @@ void SAL_CALL UnoControlComboBoxModel::setFastPropertyValue_NoBroadcast( sal_Int
         aItems.begin(),
         CreateListItem()
     );
-    m_xData->setAllItems( aItems );
+    m_xData->setAllItems( std::move(aItems) );
 
     // since an XItemListListener does not have a "all items modified" or some such method,
     // we simulate this by notifying removal of all items, followed by insertion of all new
