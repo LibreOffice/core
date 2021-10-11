@@ -80,8 +80,8 @@ namespace {
 
 class SwImplShellAction
 {
-    SwWrtShell* pSh;
-    std::unique_ptr<CurrShell> pCurrSh;
+    SwWrtShell* m_pSh;
+    std::unique_ptr<CurrShell> m_pCurrSh;
 public:
     explicit SwImplShellAction( SwDoc& rDoc );
     ~SwImplShellAction() COVERITY_NOEXCEPT_FALSE;
@@ -94,23 +94,23 @@ public:
 SwImplShellAction::SwImplShellAction( SwDoc& rDoc )
 {
     if( rDoc.GetDocShell() )
-        pSh = rDoc.GetDocShell()->GetWrtShell();
+        m_pSh = rDoc.GetDocShell()->GetWrtShell();
     else
-        pSh = nullptr;
+        m_pSh = nullptr;
 
-    if( pSh )
+    if( m_pSh )
     {
-        pCurrSh.reset( new CurrShell( pSh ) );
-        pSh->StartAllAction();
+        m_pCurrSh.reset( new CurrShell( m_pSh ) );
+        m_pSh->StartAllAction();
     }
 }
 
 SwImplShellAction::~SwImplShellAction() COVERITY_NOEXCEPT_FALSE
 {
-    if( pCurrSh )
+    if( m_pCurrSh )
     {
-        pSh->EndAllAction();
-        pCurrSh.reset();
+        m_pSh->EndAllAction();
+        m_pCurrSh.reset();
     }
 }
 

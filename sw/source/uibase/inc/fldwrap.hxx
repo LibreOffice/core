@@ -28,7 +28,7 @@ class AbstractSwFieldDlg;
 
 class SwFieldDlgWrapper final : public SwChildWinWrapper
 {
-    ScopedVclPtr<AbstractSwFieldDlg> pDlgInterface;
+    ScopedVclPtr<AbstractSwFieldDlg> m_pDlgInterface;
 public:
     SwFieldDlgWrapper(vcl::Window* pParent, sal_uInt16 nId,
                       SfxBindings* pBindings, SfxChildWinInfo* pInfo);
