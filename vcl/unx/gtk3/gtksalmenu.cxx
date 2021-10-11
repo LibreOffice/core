@@ -415,6 +415,12 @@ static void MenuPositionFunc(GtkMenu* menu, gint* x, gint* y, gboolean* push_in,
 }
 #endif
 
+static void MenuClosed(GtkPopover* pWidget, GMainLoop* pLoop)
+{
+    gtk_widget_grab_focus(gtk_widget_get_parent(GTK_WIDGET(pWidget)));
+    g_main_loop_quit(pLoop);
+}
+
 bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangle& rRect,
                                      FloatWinPopupFlags nFlags)
 {
@@ -443,9 +449,9 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
     //until the gtk menu is destroyed
     GMainLoop* pLoop = g_main_loop_new(nullptr, true);
 #if GTK_CHECK_VERSION(4, 0, 0)
-    g_signal_connect_swapped(G_OBJECT(mpMenuWidget), "closed", G_CALLBACK(g_main_loop_quit), pLoop);
+    g_signal_connect(G_OBJECT(mpMenuWidget), "closed", G_CALLBACK(MenuClosed), pLoop);
 #else
-    g_signal_connect_swapped(G_OBJECT(mpMenuWidget), "deactivate", G_CALLBACK(g_main_loop_quit), pLoop);
+    g_signal_connect(G_OBJECT(mpMenuWidget), "deactivate", G_CALLBACK(MenuClosed), pLoop);
 #endif
 
 
@@ -544,14 +550,14 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
 
     mpVCLMenu->Deactivate();
 
-    gtk_widget_insert_action_group(mpFrame->getMouseEventWidget(), "win", nullptr);
-
 #if !GTK_CHECK_VERSION(4, 0, 0)
     gtk_widget_destroy(mpMenuWidget);
 #else
     g_clear_pointer(&mpMenuWidget, gtk_widget_unparent);
 #endif
     mpMenuWidget = nullptr;
+
+    gtk_widget_insert_action_group(mpFrame->getMouseEventWidget(), "win", nullptr);
 
     g_object_unref(mpActionGroup);
     ClearActionGroupAndMenuModel();
