@@ -47,7 +47,7 @@ namespace svgio::svgreader
 
                         if(readSvgNumberVector(aContent, aVector))
                         {
-                            setX(aVector);
+                            setX(std::move(aVector));
                         }
                     }
                     break;
@@ -60,7 +60,7 @@ namespace svgio::svgreader
 
                         if(readSvgNumberVector(aContent, aVector))
                         {
-                            setY(aVector);
+                            setY(std::move(aVector));
                         }
                     }
                     break;
@@ -73,7 +73,7 @@ namespace svgio::svgreader
 
                         if(readSvgNumberVector(aContent, aVector))
                         {
-                            setDx(aVector);
+                            setDx(std::move(aVector));
                         }
                     }
                     break;
@@ -86,7 +86,7 @@ namespace svgio::svgreader
 
                         if(readSvgNumberVector(aContent, aVector))
                         {
-                            setDy(aVector);
+                            setDy(std::move(aVector));
                         }
                     }
                     break;
@@ -99,7 +99,7 @@ namespace svgio::svgreader
 
                         if(readSvgNumberVector(aContent, aVector))
                         {
-                            setRotate(aVector);
+                            setRotate(std::move(aVector));
                         }
                     }
                     break;
