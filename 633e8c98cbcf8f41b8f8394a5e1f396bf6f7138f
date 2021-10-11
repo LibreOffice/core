@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5205fe51_ddefcd87",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-11T06:32:25Z",
+      "side": 1,
+      "message": "dml-main.xsd in the OOXML spec has CT_SystemColor, thx for fixing this.",
+      "revId": "633e8c98cbcf8f41b8f8394a5e1f396bf6f7138f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
