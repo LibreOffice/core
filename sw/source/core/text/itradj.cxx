@@ -513,7 +513,7 @@ SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
 
             // get maximum portion width from info structure, calculated
             // during text formatting
-            sal_uInt16 nMaxWidthDiff = GetInfo().GetMaxWidthDiff( pPos );
+            SwTwips nMaxWidthDiff = GetInfo().GetMaxWidthDiff( pPos );
 
             // check, if information is stored under other key
             if ( !nMaxWidthDiff && pPos == pCurrent->GetFirstPortion() )
