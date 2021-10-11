@@ -81,14 +81,14 @@ const sal_uInt16 SC_UNPROCESSABLE_ENTITY             = 422;
 const sal_uInt16 SC_LOCKED                           = 423;
 const sal_uInt16 SC_FAILED_DEPENDENCY                = 424;
 
-//5xx (Server error)
+//5xx (Server error, general <https://tools.ietf.org/html/rfc7231#section-6.6>)
 const sal_uInt16 SC_INTERNAL_SERVER_ERROR            = 500;
 const sal_uInt16 SC_NOT_IMPLEMENTED                  = 501;
 const sal_uInt16 SC_BAD_GATEWAY                      = 502;
 const sal_uInt16 SC_SERVICE_UNAVAILABLE              = 503;
 const sal_uInt16 SC_GATEWAY_TIMEOUT                  = 504;
 const sal_uInt16 SC_HTTP_VERSION_NOT_SUPPORTED       = 505;
-// DAV extensions
+// DAV extensions (<https://tools.ietf.org/html/rfc4918#section-11>)
 const sal_uInt16 SC_INSUFFICIENT_STORAGE             = 507;
 
 
