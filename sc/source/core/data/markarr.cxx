@@ -213,9 +213,9 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
   optimised init-from-range-list. Specifically this is optimised for cases
   where we have very large data columns with lots and lots of ranges.
 */
-void ScMarkArray::Set( const std::vector<ScMarkEntry> & rMarkEntries )
+void ScMarkArray::Set( std::vector<ScMarkEntry> && rMarkEntries )
 {
-    mvData = rMarkEntries;
+    mvData = std::move(rMarkEntries);
 }
 
 bool ScMarkArray::IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const

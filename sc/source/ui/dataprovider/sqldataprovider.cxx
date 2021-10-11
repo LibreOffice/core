@@ -39,18 +39,18 @@ class SQLFetchThread : public salhelper::Thread
 
 public:
     SQLFetchThread(ScDocument& rDoc, const OUString& rID, std::function<void()> aImportFinishedHdl,
-                   const std::vector<std::shared_ptr<sc::DataTransformation>>& rTransformations);
+                   std::vector<std::shared_ptr<sc::DataTransformation>>&& rTransformations);
 
     virtual void execute() override;
 };
 
 SQLFetchThread::SQLFetchThread(
     ScDocument& rDoc, const OUString& rID, std::function<void()> aImportFinishedHdl,
-    const std::vector<std::shared_ptr<sc::DataTransformation>>& rTransformations)
+    std::vector<std::shared_ptr<sc::DataTransformation>>&& rTransformations)
     : salhelper::Thread("SQL Fetch Thread")
     , mrDocument(rDoc)
     , maID(rID)
-    , maDataTransformations(rTransformations)
+    , maDataTransformations(std::move(rTransformations))
     , maImportFinishedHdl(aImportFinishedHdl)
 {
 }
@@ -147,7 +147,7 @@ void SQLDataProvider::Import()
     mpDoc->ResetClip(mpDocument, SCTAB(0));
     mxSQLFetchThread = new SQLFetchThread(*mpDoc, mrDataSource.getID(),
                                           std::bind(&SQLDataProvider::ImportFinished, this),
-                                          mrDataSource.getDataTransformation());
+                                          std::vector(mrDataSource.getDataTransformation()));
     mxSQLFetchThread->launch();
 
     if (mbDeterministic)

@@ -261,7 +261,7 @@ public:
 
     void SetShowEmpty(const bool bValue) { if (xDim) xDim->SetShowEmpty(bValue); }
     void SetRepeatItemLabels(const bool bSet) { if (xDim) xDim->SetRepeatItemLabels(bSet); }
-    void SetSubTotals(std::vector<ScGeneralFunction> const & rFunctions) { if (xDim) xDim->SetSubTotals(rFunctions); }
+    void SetSubTotals(std::vector<ScGeneralFunction> && rFunctions) { if (xDim) xDim->SetSubTotals(std::move(rFunctions)); }
     void AddMember(std::unique_ptr<ScDPSaveMember> pMember);
     void SetSubTotalName(const OUString& rName);
     void SetFieldReference(const css::sheet::DataPilotFieldReference& aRef) { if (xDim) xDim->SetReferenceValue(&aRef); }
@@ -281,7 +281,7 @@ public:
         bAutoStart = bAutoSt;
         bAutoEnd = bAutoE;
     }
-    void AddGroup(const ::std::vector<OUString>& rMembers, const OUString& rName);
+    void AddGroup(::std::vector<OUString>&& rMembers, const OUString& rName);
 };
 
 class ScXMLDataPilotFieldReferenceContext : public ScXMLImportContext

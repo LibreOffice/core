@@ -498,7 +498,7 @@ void SAL_CALL ScXMLDataPilotTableContext::endFastElement( sal_Int32 /*nElement*/
         break;
     }
 
-    rPivotSources.appendSelectedPages(pDPObject.get(), maSelectedPages);
+    rPivotSources.appendSelectedPages(pDPObject.get(), std::unordered_map(maSelectedPages));
 
     pDPSave->SetRowGrand(maRowGrandTotal.mbVisible);
     pDPSave->SetColumnGrand(maColGrandTotal.mbVisible);
@@ -896,12 +896,12 @@ void ScXMLDataPilotFieldContext::SetSubTotalName(const OUString& rName)
         xDim->SetSubtotalName(rName);
 }
 
-void ScXMLDataPilotFieldContext::AddGroup(const ::std::vector<OUString>& rMembers, const OUString& rName)
+void ScXMLDataPilotFieldContext::AddGroup(::std::vector<OUString>&& rMembers, const OUString& rName)
 {
     ScXMLDataPilotGroup aGroup;
-    aGroup.aMembers = rMembers;
+    aGroup.aMembers = std::move(rMembers);
     aGroup.aName = rName;
-    aGroups.push_back(aGroup);
+    aGroups.push_back(std::move(aGroup));
 }
 
 void SAL_CALL ScXMLDataPilotFieldContext::endFastElement( sal_Int32 /*nElement*/ )
@@ -1228,7 +1228,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotSubTotals
 
 void SAL_CALL ScXMLDataPilotSubTotalsContext::endFastElement( sal_Int32 /*nElement*/ )
 {
-    pDataPilotField->SetSubTotals(maFunctions);
+    pDataPilotField->SetSubTotals(std::vector(maFunctions));
     if (!maDisplayName.isEmpty())
         pDataPilotField->SetSubTotalName(maDisplayName);
 }
@@ -1506,7 +1506,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotGroupCont
 
 void SAL_CALL ScXMLDataPilotGroupContext::endFastElement( sal_Int32 /*nElement*/ )
 {
-    pDataPilotField->AddGroup(aMembers, sName);
+    pDataPilotField->AddGroup(std::vector(aMembers), sName);
 }
 
 ScXMLDataPilotGroupMemberContext::ScXMLDataPilotGroupMemberContext( ScXMLImport& rImport,

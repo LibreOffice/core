@@ -121,7 +121,7 @@ std::shared_ptr<sc::DataTransformation> ScDeleteColumnTransformationControl::get
         ColNums.insert(nCol - 1);
     }
 
-    return std::make_shared<sc::ColumnRemoveTransformation>(ColNums);
+    return std::make_shared<sc::ColumnRemoveTransformation>(std::move(ColNums));
 }
 
 class ScSplitColumnTransformationControl : public ScDataTransformationBaseControl
@@ -217,7 +217,7 @@ std::shared_ptr<sc::DataTransformation> ScMergeColumnTransformationControl::getT
         // translate from 1-based column notations to internal Calc one
         aMergedColumns.insert(nCol - 1);
     }
-    return std::make_shared<sc::MergeColumnTransformation>(aMergedColumns, mxSeparator->get_text());
+    return std::make_shared<sc::MergeColumnTransformation>(std::move(aMergedColumns), mxSeparator->get_text());
 }
 
 class ScSortTransformationControl : public ScDataTransformationBaseControl
@@ -316,13 +316,13 @@ std::shared_ptr<sc::DataTransformation> ScColumnTextTransformation::getTransform
     switch (nPos)
     {
         case 0:
-            return std::make_shared<sc::TextTransformation>(aColumns,sc::TEXT_TRANSFORM_TYPE::TO_LOWER);
+            return std::make_shared<sc::TextTransformation>(std::move(aColumns),sc::TEXT_TRANSFORM_TYPE::TO_LOWER);
         case 1:
-            return std::make_shared<sc::TextTransformation>(aColumns,sc::TEXT_TRANSFORM_TYPE::TO_UPPER);
+            return std::make_shared<sc::TextTransformation>(std::move(aColumns),sc::TEXT_TRANSFORM_TYPE::TO_UPPER);
         case 2:
-            return std::make_shared<sc::TextTransformation>(aColumns,sc::TEXT_TRANSFORM_TYPE::CAPITALIZE);
+            return std::make_shared<sc::TextTransformation>(std::move(aColumns),sc::TEXT_TRANSFORM_TYPE::CAPITALIZE);
         case 3:
-            return std::make_shared<sc::TextTransformation>(aColumns,sc::TEXT_TRANSFORM_TYPE::TRIM);
+            return std::make_shared<sc::TextTransformation>(std::move(aColumns),sc::TEXT_TRANSFORM_TYPE::TRIM);
         default:
             assert(false);
     }
@@ -379,13 +379,13 @@ std::shared_ptr<sc::DataTransformation> ScAggregateFunction::getTransformation()
     switch (nPos)
     {
         case 0:
-            return std::make_shared<sc::AggregateFunction>(aColumns,sc::AGGREGATE_FUNCTION::SUM);
+            return std::make_shared<sc::AggregateFunction>(std::move(aColumns),sc::AGGREGATE_FUNCTION::SUM);
         case 1:
-            return std::make_shared<sc::AggregateFunction>(aColumns,sc::AGGREGATE_FUNCTION::AVERAGE);
+            return std::make_shared<sc::AggregateFunction>(std::move(aColumns),sc::AGGREGATE_FUNCTION::AVERAGE);
         case 2:
-            return std::make_shared<sc::AggregateFunction>(aColumns,sc::AGGREGATE_FUNCTION::MIN);
+            return std::make_shared<sc::AggregateFunction>(std::move(aColumns),sc::AGGREGATE_FUNCTION::MIN);
         case 3:
-            return std::make_shared<sc::AggregateFunction>(aColumns,sc::AGGREGATE_FUNCTION::MAX);
+            return std::make_shared<sc::AggregateFunction>(std::move(aColumns),sc::AGGREGATE_FUNCTION::MAX);
         default:
             assert(false);
     }
@@ -442,31 +442,31 @@ std::shared_ptr<sc::DataTransformation> ScNumberTransformation::getTransformatio
     switch (nPos)
     {
         case 0:
-            return std::make_shared<sc::NumberTransformation>(aColumns,sc::NUMBER_TRANSFORM_TYPE::SIGN);
+            return std::make_shared<sc::NumberTransformation>(std::move(aColumns),sc::NUMBER_TRANSFORM_TYPE::SIGN);
         case 1:
-            return std::make_shared<sc::NumberTransformation>(aColumns,sc::NUMBER_TRANSFORM_TYPE::ROUND);
+            return std::make_shared<sc::NumberTransformation>(std::move(aColumns),sc::NUMBER_TRANSFORM_TYPE::ROUND);
         case 2:
-            return std::make_shared<sc::NumberTransformation>(aColumns,sc::NUMBER_TRANSFORM_TYPE::ROUND_UP);
+            return std::make_shared<sc::NumberTransformation>(std::move(aColumns),sc::NUMBER_TRANSFORM_TYPE::ROUND_UP);
         case 3:
-            return std::make_shared<sc::NumberTransformation>(aColumns,sc::NUMBER_TRANSFORM_TYPE::ROUND_DOWN);
+            return std::make_shared<sc::NumberTransformation>(std::move(aColumns),sc::NUMBER_TRANSFORM_TYPE::ROUND_DOWN);
         case 4:
-            return std::make_shared<sc::NumberTransformation>(aColumns,sc::NUMBER_TRANSFORM_TYPE::ABSOLUTE);
+            return std::make_shared<sc::NumberTransformation>(std::move(aColumns),sc::NUMBER_TRANSFORM_TYPE::ABSOLUTE);
         case 5:
-            return std::make_shared<sc::NumberTransformation>(aColumns,sc::NUMBER_TRANSFORM_TYPE::LOG_E);
+            return std::make_shared<sc::NumberTransformation>(std::move(aColumns),sc::NUMBER_TRANSFORM_TYPE::LOG_E);
         case 6:
-            return std::make_shared<sc::NumberTransformation>(aColumns,sc::NUMBER_TRANSFORM_TYPE::LOG_10);
+            return std::make_shared<sc::NumberTransformation>(std::move(aColumns),sc::NUMBER_TRANSFORM_TYPE::LOG_10);
         case 7:
-            return std::make_shared<sc::NumberTransformation>(aColumns,sc::NUMBER_TRANSFORM_TYPE::CUBE);
+            return std::make_shared<sc::NumberTransformation>(std::move(aColumns),sc::NUMBER_TRANSFORM_TYPE::CUBE);
         case 8:
-            return std::make_shared<sc::NumberTransformation>(aColumns,sc::NUMBER_TRANSFORM_TYPE::SQUARE);
+            return std::make_shared<sc::NumberTransformation>(std::move(aColumns),sc::NUMBER_TRANSFORM_TYPE::SQUARE);
         case 9:
-            return std::make_shared<sc::NumberTransformation>(aColumns,sc::NUMBER_TRANSFORM_TYPE::SQUARE_ROOT);
+            return std::make_shared<sc::NumberTransformation>(std::move(aColumns),sc::NUMBER_TRANSFORM_TYPE::SQUARE_ROOT);
         case 10:
-            return std::make_shared<sc::NumberTransformation>(aColumns,sc::NUMBER_TRANSFORM_TYPE::EXPONENT);
+            return std::make_shared<sc::NumberTransformation>(std::move(aColumns),sc::NUMBER_TRANSFORM_TYPE::EXPONENT);
         case 11:
-            return std::make_shared<sc::NumberTransformation>(aColumns,sc::NUMBER_TRANSFORM_TYPE::IS_EVEN);
+            return std::make_shared<sc::NumberTransformation>(std::move(aColumns),sc::NUMBER_TRANSFORM_TYPE::IS_EVEN);
         case 12:
-            return std::make_shared<sc::NumberTransformation>(aColumns,sc::NUMBER_TRANSFORM_TYPE::IS_ODD);
+            return std::make_shared<sc::NumberTransformation>(std::move(aColumns),sc::NUMBER_TRANSFORM_TYPE::IS_ODD);
         default:
             assert(false);
     }
@@ -522,7 +522,7 @@ std::shared_ptr<sc::DataTransformation> ScReplaceNullTransformation::getTransfor
         aColumns.insert(nCol - 1);
     }
 
-    return std::make_shared<sc::ReplaceNullTransformation>(aColumns,aReplaceWithString);
+    return std::make_shared<sc::ReplaceNullTransformation>(std::move(aColumns),aReplaceWithString);
 }
 
 class ScDateTimeTransformation : public ScDataTransformationBaseControl
@@ -574,41 +574,41 @@ std::shared_ptr<sc::DataTransformation> ScDateTimeTransformation::getTransformat
     switch (nPos)
     {
         case 0:
-            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::DATE_STRING);
+            return std::make_shared<sc::DateTimeTransformation>(std::move(aColumns),sc::DATETIME_TRANSFORMATION_TYPE::DATE_STRING);
         case 1:
-            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::YEAR);
+            return std::make_shared<sc::DateTimeTransformation>(std::move(aColumns),sc::DATETIME_TRANSFORMATION_TYPE::YEAR);
         case 2:
-            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::START_OF_YEAR);
+            return std::make_shared<sc::DateTimeTransformation>(std::move(aColumns),sc::DATETIME_TRANSFORMATION_TYPE::START_OF_YEAR);
         case 3:
-            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::END_OF_YEAR);
+            return std::make_shared<sc::DateTimeTransformation>(std::move(aColumns),sc::DATETIME_TRANSFORMATION_TYPE::END_OF_YEAR);
         case 4:
-            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::MONTH);
+            return std::make_shared<sc::DateTimeTransformation>(std::move(aColumns),sc::DATETIME_TRANSFORMATION_TYPE::MONTH);
         case 5:
-            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::MONTH_NAME);
+            return std::make_shared<sc::DateTimeTransformation>(std::move(aColumns),sc::DATETIME_TRANSFORMATION_TYPE::MONTH_NAME);
         case 6:
-            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::START_OF_MONTH);
+            return std::make_shared<sc::DateTimeTransformation>(std::move(aColumns),sc::DATETIME_TRANSFORMATION_TYPE::START_OF_MONTH);
         case 7:
-            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::END_OF_MONTH);
+            return std::make_shared<sc::DateTimeTransformation>(std::move(aColumns),sc::DATETIME_TRANSFORMATION_TYPE::END_OF_MONTH);
         case 8:
-            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::DAY);
+            return std::make_shared<sc::DateTimeTransformation>(std::move(aColumns),sc::DATETIME_TRANSFORMATION_TYPE::DAY);
         case 9:
-            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::DAY_OF_WEEK);
+            return std::make_shared<sc::DateTimeTransformation>(std::move(aColumns),sc::DATETIME_TRANSFORMATION_TYPE::DAY_OF_WEEK);
         case 10:
-            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::DAY_OF_YEAR);
+            return std::make_shared<sc::DateTimeTransformation>(std::move(aColumns),sc::DATETIME_TRANSFORMATION_TYPE::DAY_OF_YEAR);
         case 11:
-            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::QUARTER);
+            return std::make_shared<sc::DateTimeTransformation>(std::move(aColumns),sc::DATETIME_TRANSFORMATION_TYPE::QUARTER);
         case 12:
-            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::START_OF_QUARTER);
+            return std::make_shared<sc::DateTimeTransformation>(std::move(aColumns),sc::DATETIME_TRANSFORMATION_TYPE::START_OF_QUARTER);
         case 13:
-            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::END_OF_QUARTER);
+            return std::make_shared<sc::DateTimeTransformation>(std::move(aColumns),sc::DATETIME_TRANSFORMATION_TYPE::END_OF_QUARTER);
         case 14:
-            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::HOUR);
+            return std::make_shared<sc::DateTimeTransformation>(std::move(aColumns),sc::DATETIME_TRANSFORMATION_TYPE::HOUR);
         case 15:
-            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::MINUTE);
+            return std::make_shared<sc::DateTimeTransformation>(std::move(aColumns),sc::DATETIME_TRANSFORMATION_TYPE::MINUTE);
         case 16:
-            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::SECOND);
+            return std::make_shared<sc::DateTimeTransformation>(std::move(aColumns),sc::DATETIME_TRANSFORMATION_TYPE::SECOND);
         case 17:
-            return std::make_shared<sc::DateTimeTransformation>(aColumns,sc::DATETIME_TRANSFORMATION_TYPE::TIME);
+            return std::make_shared<sc::DateTimeTransformation>(std::move(aColumns),sc::DATETIME_TRANSFORMATION_TYPE::TIME);
         default:
             assert(false);
     }

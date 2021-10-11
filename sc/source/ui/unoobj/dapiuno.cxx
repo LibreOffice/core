@@ -2024,7 +2024,7 @@ void ScDataPilotFieldObj::setFunction(ScGeneralFunction eNewFunc)
         {
             nSubTotalFuncs.push_back( eNewFunc );
         }
-        pDim->SetSubTotals( nSubTotalFuncs );
+        pDim->SetSubTotals( std::move(nSubTotalFuncs) );
     }
     else
         pDim->SetFunction( eNewFunc );
@@ -2071,7 +2071,7 @@ void ScDataPilotFieldObj::setSubtotals( const std::vector< ScGeneralFunction >& 
             {
                 nTmpFuncs.push_back( rSubtotals[ 0 ] );
             }
-            pDim->SetSubTotals( nTmpFuncs );
+            pDim->SetSubTotals( std::move(nTmpFuncs) );
         }
         else if( nCount > 1 )
         {
@@ -2088,7 +2088,7 @@ void ScDataPilotFieldObj::setSubtotals( const std::vector< ScGeneralFunction >& 
                 }
             }
             // set values from vector to ScDPSaveDimension
-            pDim->SetSubTotals( aSubt );
+            pDim->SetSubTotals( std::move(aSubt) );
         }
     }
     SetDPObject( pDPObj );
@@ -2282,7 +2282,7 @@ DataPilotFieldGroupInfo ScDataPilotFieldObj::getGroupInfo()
                                 aGroup.maMembers.push_back( *pMem );
                         aGroups.push_back( aGroup );
                     }
-                    aInfo.Groups = new ScDataPilotFieldGroupsObj( aGroups );
+                    aInfo.Groups = new ScDataPilotFieldGroupsObj( std::move(aGroups) );
                 }
             }
             else if( const ScDPSaveNumGroupDimension* pNumGroupDim = pDimData->GetNumGroupDim( pDim->GetName() ) )
@@ -2720,8 +2720,8 @@ bool lclExtractGroupMembers( ScFieldGroupMembers& rMembers, const Any& rElement 
 
 } // namespace
 
-ScDataPilotFieldGroupsObj::ScDataPilotFieldGroupsObj( const ScFieldGroups& rGroups ) :
-    maGroups( rGroups )
+ScDataPilotFieldGroupsObj::ScDataPilotFieldGroupsObj( ScFieldGroups&& rGroups ) :
+    maGroups( std::move(rGroups) )
 {
 }
 

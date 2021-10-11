@@ -9250,12 +9250,12 @@ uno::Reference<container::XEnumeration> SAL_CALL ScUniqueCellFormatsObj::createE
 {
     SolarMutexGuard aGuard;
     if (pDocShell)
-        return new ScUniqueCellFormatsEnumeration( pDocShell, aRangeLists );
+        return new ScUniqueCellFormatsEnumeration( pDocShell, std::vector(aRangeLists) );
     return nullptr;
 }
 
-ScUniqueCellFormatsEnumeration::ScUniqueCellFormatsEnumeration(ScDocShell* pDocSh, const std::vector<ScRangeList>& rRangeLists) :
-    aRangeLists(rRangeLists),
+ScUniqueCellFormatsEnumeration::ScUniqueCellFormatsEnumeration(ScDocShell* pDocSh, std::vector<ScRangeList>&& rRangeLists) :
+    aRangeLists(std::move(rRangeLists)),
     pDocShell( pDocSh ),
     nCurrentPosition(0)
 {

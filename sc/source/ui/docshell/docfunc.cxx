@@ -3447,7 +3447,7 @@ void ScDocFunc::SetTableVisible( SCTAB nTab, bool bVisible, bool bApi )
     {
         std::vector<SCTAB> undoTabs;
         undoTabs.push_back(nTab);
-        rDocShell.GetUndoManager()->AddUndoAction( std::make_unique<ScUndoShowHideTab>( &rDocShell, undoTabs, bVisible ) );
+        rDocShell.GetUndoManager()->AddUndoAction( std::make_unique<ScUndoShowHideTab>( &rDocShell, std::move(undoTabs), bVisible ) );
     }
 
     //  update views
@@ -3613,7 +3613,7 @@ bool ScDocFunc::SetTabBgColor(
         if (bRecord)
         {
             rDocShell.GetUndoManager()->AddUndoAction(
-                std::make_unique<ScUndoTabColor>( &rDocShell, rUndoTabColorList));
+                std::make_unique<ScUndoTabColor>( &rDocShell, std::vector(rUndoTabColorList)));
         }
         rDocShell.PostPaintExtras();
         ScDocShellModificator aModificator( rDocShell );
@@ -3798,7 +3798,7 @@ bool ScDocFunc::SetWidthOrHeight(
         rDocShell.GetUndoManager()->AddUndoAction(
             std::make_unique<ScUndoWidthOrHeight>(
                 &rDocShell, aMark, nStart, nTab, nEnd, nTab, std::move(pUndoDoc),
-                aUndoRanges, std::move(pUndoTab), eMode, nSizeTwips, bWidth));
+                std::move(aUndoRanges), std::move(pUndoTab), eMode, nSizeTwips, bWidth));
     }
 
     rDoc.UpdatePageBreaks( nTab );

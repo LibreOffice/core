@@ -38,8 +38,8 @@ SCROW DataTransformation::getLastRow(const ScDocument& rDoc, SCCOL nCol)
     return rDoc.GetLastDataRow(0, nCol, nCol, nEndRow);
 }
 
-ColumnRemoveTransformation::ColumnRemoveTransformation(const std::set<SCCOL>& rColumns):
-    maColumns(rColumns)
+ColumnRemoveTransformation::ColumnRemoveTransformation(std::set<SCCOL>&& rColumns):
+    maColumns(std::move(rColumns))
 {
 }
 
@@ -108,8 +108,8 @@ sal_Unicode SplitColumnTransformation::getSeparator() const
     return mcSeparator;
 }
 
-MergeColumnTransformation::MergeColumnTransformation(const std::set<SCCOL>& rColumns, const OUString& rMergeString):
-    maColumns(rColumns),
+MergeColumnTransformation::MergeColumnTransformation( std::set<SCCOL>&& rColumns, const OUString& rMergeString):
+    maColumns(std::move(rColumns)),
     maMergeString(rMergeString)
 {
 }
@@ -186,8 +186,8 @@ const ScSortParam & SortTransformation::getSortParam() const
     return maSortParam;
 }
 
-TextTransformation::TextTransformation(const std::set<SCCOL>& nCol, const TEXT_TRANSFORM_TYPE rType):
-    mnCol(nCol),
+TextTransformation::TextTransformation( std::set<SCCOL>&& nCol, const TEXT_TRANSFORM_TYPE rType):
+    mnCol(std::move(nCol)),
     maType(rType)
 {
 }
@@ -298,8 +298,8 @@ const std::set<SCCOL>& TextTransformation::getColumns() const
     return mnCol;
 }
 
-AggregateFunction::AggregateFunction(const std::set<SCCOL>& rColumns, const AGGREGATE_FUNCTION rType):
-    maColumns(rColumns),
+AggregateFunction::AggregateFunction(std::set<SCCOL>&& rColumns, const AGGREGATE_FUNCTION rType):
+    maColumns(std::move(rColumns)),
     maType(rType)
 {
 }
@@ -406,17 +406,17 @@ const std::set<SCCOL>& AggregateFunction::getColumns() const
      return maColumns;
 }
 
-NumberTransformation::NumberTransformation(const std::set<SCCOL>& nCol,
+NumberTransformation::NumberTransformation(std::set<SCCOL>&& nCol,
                                            const NUMBER_TRANSFORM_TYPE rType)
-    : mnCol(nCol)
+    : mnCol(std::move(nCol))
     , maType(rType)
     , maPrecision(-1)
 {
 }
 
-NumberTransformation::NumberTransformation(const std::set<SCCOL>& nCol,
+NumberTransformation::NumberTransformation(std::set<SCCOL>&& nCol,
                                            const NUMBER_TRANSFORM_TYPE rType, int nPrecision)
-    : mnCol(nCol)
+    : mnCol(std::move(nCol))
     , maType(rType)
     , maPrecision(nPrecision)
 {
@@ -665,9 +665,9 @@ const std::set<SCCOL>& NumberTransformation::getColumn() const
     return mnCol;
 }
 
-ReplaceNullTransformation::ReplaceNullTransformation(const std::set<SCCOL>& nCol,
+ReplaceNullTransformation::ReplaceNullTransformation(std::set<SCCOL>&& nCol,
                                                      const OUString& sReplaceWith)
-    : mnCol(nCol)
+    : mnCol(std::move(nCol))
     , msReplaceWith(sReplaceWith)
 {
 }
@@ -710,9 +710,9 @@ TransformationType ReplaceNullTransformation::getTransformationType() const
      return TransformationType::REMOVE_NULL_TRANSFORMATION;
 }
 
-DateTimeTransformation::DateTimeTransformation(const std::set<SCCOL>& nCol,
+DateTimeTransformation::DateTimeTransformation(std::set<SCCOL>&& nCol,
                                                const DATETIME_TRANSFORMATION_TYPE rType)
-    : mnCol(nCol)
+    : mnCol(std::move(nCol))
     , maType(rType)
 {
 }

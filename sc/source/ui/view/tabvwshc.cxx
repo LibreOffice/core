@@ -214,7 +214,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             {
                 std::map<OUString, ScRangeName*> aRangeMap;
                 rDoc.GetRangeNameMap(aRangeMap);
-                xResult = std::make_shared<ScNameDefDlg>(pB, pCW, pParent, GetViewData(), aRangeMap,
+                xResult = std::make_shared<ScNameDefDlg>(pB, pCW, pParent, GetViewData(), std::move(aRangeMap),
                                 ScAddress(GetViewData().GetCurX(),
                                           GetViewData().GetCurY(),
                                           GetViewData().GetTabNo()), true);
@@ -226,7 +226,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                 {
                     aRangeMap.insert(std::pair<OUString, ScRangeName*>(itr.first, itr.second.get()));
                 }
-                xResult = std::make_shared<ScNameDefDlg>(pB, pCW, pParent, GetViewData(), aRangeMap,
+                xResult = std::make_shared<ScNameDefDlg>(pB, pCW, pParent, GetViewData(), std::move(aRangeMap),
                                 ScAddress(GetViewData().GetCurX(),
                                           GetViewData().GetCurY(),
                                           GetViewData().GetTabNo()), false);

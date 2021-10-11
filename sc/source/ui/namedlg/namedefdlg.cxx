@@ -25,7 +25,7 @@
 #include <tokenarray.hxx>
 
 ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
-        const ScViewData& rViewData, const std::map<OUString, ScRangeName*>& aRangeMap,
+        const ScViewData& rViewData, std::map<OUString, ScRangeName*>&& aRangeMap,
         const ScAddress& aCursorPos, const bool bUndo )
     : ScAnyRefDlgController( pB, pCW, pParent, "modules/scalc/ui/definename.ui", "DefineNameDialog")
     , mbUndo( bUndo )
@@ -36,7 +36,7 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* 
     , maErrInvalidNameStr( ScResId(STR_ERR_NAME_INVALID))
     , maErrInvalidNameCellRefStr( ScResId(STR_ERR_NAME_INVALID_CELL_REF))
     , maErrNameInUse   ( ScResId(STR_ERR_NAME_EXISTS))
-    , maRangeMap( aRangeMap )
+    , maRangeMap( std::move(aRangeMap) )
     , m_xEdName(m_xBuilder->weld_entry("edit"))
     , m_xEdRange(new formula::RefEdit(m_xBuilder->weld_entry("range")))
     , m_xRbRange(new formula::RefButton(m_xBuilder->weld_button("refbutton")))

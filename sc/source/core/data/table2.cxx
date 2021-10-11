@@ -1380,7 +1380,7 @@ void ScTable::CopyToTable(
                 ++destTabColWidthIt;
                 ++thisTabColWidthIt;
             }
-            pDestTab->SetColManualBreaks( maColManualBreaks);
+            pDestTab->SetColManualBreaks( std::set(maColManualBreaks) );
         }
 
         if (bHeight)
@@ -1425,7 +1425,7 @@ void ScTable::CopyToTable(
                 pDestTab->SetRowFiltered(i, nLastRow, bFiltered);
                 i = nLastRow;
             }
-            pDestTab->SetRowManualBreaks( maRowManualBreaks);
+            pDestTab->SetRowManualBreaks( std::set(maRowManualBreaks) );
         }
     }
 
@@ -1505,12 +1505,12 @@ void ScTable::UndoToTable(
     if (bWidth)
     {
         pDestTab->mpColWidth->CopyFrom(*mpColWidth, nCol1, nCol2);
-        pDestTab->SetColManualBreaks( maColManualBreaks);
+        pDestTab->SetColManualBreaks( std::set(maColManualBreaks) );
     }
     if (bHeight)
     {
         pDestTab->CopyRowHeight(*this, nRow1, nRow2, 0);
-        pDestTab->SetRowManualBreaks( maRowManualBreaks);
+        pDestTab->SetRowManualBreaks( std::set(maRowManualBreaks) );
     }
 }
 

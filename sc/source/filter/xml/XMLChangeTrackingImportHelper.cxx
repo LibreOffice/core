@@ -719,7 +719,7 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pDoc)
     if (!pDoc)
         return;
 
-    pTrack = new ScChangeTrack(*pDoc, aUsers);
+    pTrack = new ScChangeTrack(*pDoc, std::set(aUsers));
     // old files didn't store nanoseconds, disable until encountered
     pTrack->SetTimeNanoSeconds( false );
 

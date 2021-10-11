@@ -68,7 +68,7 @@ class SC_DLLPUBLIC ColumnRemoveTransformation : public DataTransformation
 
 public:
 
-    ColumnRemoveTransformation(const std::set<SCCOL>& rColumns);
+    ColumnRemoveTransformation(std::set<SCCOL>&& rColumns);
     virtual ~ColumnRemoveTransformation() override;
     virtual void Transform(ScDocument& rDoc) const override;
     virtual TransformationType getTransformationType() const override;
@@ -96,7 +96,7 @@ class SC_DLLPUBLIC MergeColumnTransformation : public DataTransformation
 
 public:
 
-    MergeColumnTransformation(const std::set<SCCOL>& rColumns, const OUString& rMergeString);
+    MergeColumnTransformation(std::set<SCCOL>&& rColumns, const OUString& rMergeString);
     virtual void Transform(ScDocument& rDoc) const  override;
     virtual TransformationType getTransformationType() const override;
     const OUString & getMergeString() const;
@@ -120,7 +120,7 @@ class SC_DLLPUBLIC TextTransformation : public DataTransformation
     TEXT_TRANSFORM_TYPE maType;
 
     public:
-    TextTransformation(const std::set<SCCOL>& nCol, const TEXT_TRANSFORM_TYPE rType);
+    TextTransformation(std::set<SCCOL>&& nCol, const TEXT_TRANSFORM_TYPE rType);
     virtual void Transform(ScDocument& rDoc) const override;
     virtual TransformationType getTransformationType() const override;
     TEXT_TRANSFORM_TYPE getTextTransformationType() const;
@@ -133,7 +133,7 @@ class SC_DLLPUBLIC AggregateFunction : public DataTransformation
     AGGREGATE_FUNCTION maType;
 
     public:
-    AggregateFunction(const std::set<SCCOL>& rColumns, const AGGREGATE_FUNCTION rType);
+    AggregateFunction(std::set<SCCOL>&& rColumns, const AGGREGATE_FUNCTION rType);
     virtual void Transform(ScDocument& rDoc) const override;
     virtual TransformationType getTransformationType() const override;
     AGGREGATE_FUNCTION getAggregateType() const;
@@ -147,8 +147,8 @@ class SC_DLLPUBLIC NumberTransformation : public DataTransformation
     int maPrecision;
 
     public:
-        NumberTransformation(const std::set<SCCOL>& nCol, const NUMBER_TRANSFORM_TYPE rType);
-        NumberTransformation(const std::set<SCCOL>& nCol, const NUMBER_TRANSFORM_TYPE rType,
+        NumberTransformation(std::set<SCCOL>&& nCol, const NUMBER_TRANSFORM_TYPE rType);
+        NumberTransformation(std::set<SCCOL>&& nCol, const NUMBER_TRANSFORM_TYPE rType,
                              int nPrecision);
         virtual void Transform(ScDocument& rDoc) const override;
         virtual TransformationType getTransformationType() const override;
@@ -163,7 +163,7 @@ class SC_DLLPUBLIC ReplaceNullTransformation : public DataTransformation
     OUString msReplaceWith;
 
     public:
-        ReplaceNullTransformation(const std::set<SCCOL>& nCol, const OUString& sReplaceWith);
+        ReplaceNullTransformation(std::set<SCCOL>&& nCol, const OUString& sReplaceWith);
         virtual void Transform(ScDocument& rDoc) const override;
         virtual TransformationType getTransformationType() const override;
         const std::set<SCCOL>& getColumn() const;
@@ -176,7 +176,7 @@ class SC_DLLPUBLIC DateTimeTransformation : public DataTransformation
     DATETIME_TRANSFORMATION_TYPE maType;
 
     public:
-        DateTimeTransformation(const std::set<SCCOL>& nCol,
+        DateTimeTransformation(std::set<SCCOL>&& nCol,
                                const DATETIME_TRANSFORMATION_TYPE rType);
         virtual void Transform(ScDocument& rDoc) const override;
         virtual TransformationType getTransformationType() const override;

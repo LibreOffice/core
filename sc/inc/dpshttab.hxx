@@ -107,9 +107,9 @@ public:
     virtual bool                    IsRepeatIfEmpty() override;
 
     virtual void                    CreateCacheTable() override;
-    virtual void                    FilterCacheTable(const std::vector<ScDPFilteredCache::Criterion>& rCriteria, const std::unordered_set<sal_Int32>& rCatDims) override;
-    virtual void                    GetDrillDownData(const std::vector<ScDPFilteredCache::Criterion>& rCriteria,
-                                                     const std::unordered_set<sal_Int32>& rCatDims,
+    virtual void                    FilterCacheTable(std::vector<ScDPFilteredCache::Criterion>&& rCriteria, std::unordered_set<sal_Int32>&& rCatDims) override;
+    virtual void                    GetDrillDownData(std::vector<ScDPFilteredCache::Criterion>&& rCriteria,
+                                                    std::unordered_set<sal_Int32>&& rCatDims,
                                                      css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& rData) override;
     virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow) override;
     virtual const ScDPFilteredCache&   GetCacheTable() const override;

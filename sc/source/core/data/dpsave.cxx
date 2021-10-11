@@ -319,9 +319,9 @@ void ScDPSaveDimension::SetOrientation(css::sheet::DataPilotFieldOrientation nNe
     nOrientation = nNew;
 }
 
-void ScDPSaveDimension::SetSubTotals(std::vector<ScGeneralFunction> const & rFuncs)
+void ScDPSaveDimension::SetSubTotals(std::vector<ScGeneralFunction> && rFuncs)
 {
-    maSubTotalFuncs = rFuncs;
+    maSubTotalFuncs = std::move(rFuncs);
     bSubTotalDefault = false;
 }
 

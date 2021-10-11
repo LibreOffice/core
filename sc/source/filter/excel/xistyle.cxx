@@ -89,7 +89,7 @@ namespace {
 class PaletteIndex : public XIndexAccess_BASE
 {
 public:
-    explicit PaletteIndex( const ColorVec& rColorTable ) : maColor( rColorTable ) {}
+    explicit PaletteIndex( ColorVec&& rColorTable ) : maColor( std::move(rColorTable) ) {}
 
     // Methods XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount() override
@@ -136,7 +136,7 @@ XclImpPalette::ExportPalette()
     uno::Reference< beans::XPropertySet > xProps( pDocShell->GetModel(), uno::UNO_QUERY );
     if ( xProps.is() )
     {
-        uno::Reference< container::XIndexAccess > xIndex( new PaletteIndex( aColors ) );
+        uno::Reference< container::XIndexAccess > xIndex( new PaletteIndex( std::move(aColors) ) );
         xProps->setPropertyValue( "ColorPalette", uno::makeAny( xIndex ) );
     }
 

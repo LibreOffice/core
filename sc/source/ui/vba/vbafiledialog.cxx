@@ -139,7 +139,7 @@ sal_Int32 ScVbaFileDialog::Show()
     }
 
     m_xItems = css::uno::Reference< ov::excel::XFileDialogSelectedItems >(
-            new ScVbaFileDialogSelectedItems(this, mxContext, sSelectedPaths) );
+            new ScVbaFileDialogSelectedItems(this, mxContext, std::move(sSelectedPaths)) );
     return nRet;
 }
 

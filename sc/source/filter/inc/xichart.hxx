@@ -401,7 +401,7 @@ public:
     /** Sets explicit string data for this text object. */
     void                SetString( const OUString& rString );
     /** Sets formatting runs read from a CHFORMATRUNS record. */
-    void                SetTextFormats( const XclFormatRunVec& rFormats );
+    void                SetTextFormats( XclFormatRunVec&& rFormats );
 
     /** Returns the destination object (title, values, category, ...). */
     sal_uInt8    GetDestType() const { return maData.mnDestType; }

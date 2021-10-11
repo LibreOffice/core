@@ -31,7 +31,7 @@ public:
     XclExpXmlPivotCaches(const XclExpRoot& rRoot);
     virtual void SaveXml(XclExpXmlStream& rStrm) override;
 
-    void SetCaches(const std::vector<Entry>& rCaches);
+    void SetCaches(std::vector<Entry>&& rCaches);
     bool HasCaches() const;
     const Entry* GetCache(sal_Int32 nCacheId) const;
 

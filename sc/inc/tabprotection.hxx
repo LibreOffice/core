@@ -210,7 +210,7 @@ public:
     bool isOptionEnabled(Option eOption) const;
     void setOption(Option eOption, bool bEnabled);
 
-    void setEnhancedProtection( const ::std::vector< ScEnhancedProtection > & rProt );
+    void setEnhancedProtection( ::std::vector< ScEnhancedProtection > && rProt );
     const ::std::vector< ScEnhancedProtection > & getEnhancedProtection() const;
     bool updateReference( UpdateRefMode, const ScDocument&, const ScRange& rWhere, SCCOL nDx, SCROW nDy, SCTAB nDz );
     bool isBlockEditable( const ScRange& rRange ) const;

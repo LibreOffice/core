@@ -638,13 +638,13 @@ bool ScUndoDeleteCells::CanRepeat(SfxRepeatTarget& rTarget) const
 ScUndoDeleteMulti::ScUndoDeleteMulti(
     ScDocShell* pNewDocShell,
     bool bNewRows, bool bNeedsRefresh, SCTAB nNewTab,
-    const std::vector<sc::ColRowSpan>& rSpans,
+    std::vector<sc::ColRowSpan>&& rSpans,
     ScDocumentUniquePtr pUndoDocument, std::unique_ptr<ScRefUndoData> pRefData ) :
     ScMoveUndo( pNewDocShell, std::move(pUndoDocument), std::move(pRefData) ),
     mbRows(bNewRows),
     mbRefresh(bNeedsRefresh),
     nTab( nNewTab ),
-    maSpans(rSpans)
+    maSpans(std::move(rSpans))
 {
     SetChangeTrack();
 }

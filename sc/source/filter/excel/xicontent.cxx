@@ -1115,7 +1115,7 @@ XclImpDecrypterRef lclReadFilepass8_Standard( XclImpStream& rStrm )
         rStrm.Read(aSalt.data(), 16);
         rStrm.Read(aVerifier.data(), 16);
         rStrm.Read(aVerifierHash.data(), 16);
-        xDecr = std::make_shared<XclImpBiff8StdDecrypter>(aSalt, aVerifier, aVerifierHash);
+        xDecr = std::make_shared<XclImpBiff8StdDecrypter>(std::move(aSalt), std::move(aVerifier), std::move(aVerifierHash));
     }
     return xDecr;
 }
@@ -1406,7 +1406,7 @@ void XclImpSheetProtectBuffer::Apply() const
         pProtect->setOption( ScTableProtection::SELECT_UNLOCKED_CELLS, (nOptions & 0x4000) );
 
         // Enhanced protection containing editable ranges and permissions.
-        pProtect->setEnhancedProtection( rSheet.maEnhancedProtections);
+        pProtect->setEnhancedProtection( std::vector(rSheet.maEnhancedProtections) );
 
         // all done.  now commit.
         GetDoc().SetTabProtection(rTab, pProtect.get());

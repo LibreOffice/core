@@ -15,8 +15,8 @@
 
 namespace sc {
 
-PivotTableSources::SelectedPages::SelectedPages( ScDPObject* pObj, const SelectedPagesType& rSelected ) :
-    mpDP(pObj), maSelectedPages(rSelected) {}
+PivotTableSources::SelectedPages::SelectedPages( ScDPObject* pObj, SelectedPagesType&& rSelected ) :
+    mpDP(pObj), maSelectedPages(std::move(rSelected)) {}
 
 PivotTableSources::SheetSource::SheetSource( ScDPObject* pObj, const ScSheetSourceDesc& rDesc ) :
     mpDP(pObj), maDesc(rDesc) {}
@@ -44,12 +44,12 @@ void PivotTableSources::appendServiceSource( ScDPObject* pObj, const ScDPService
     maServiceSources.emplace_back(pObj, rDesc);
 }
 
-void PivotTableSources::appendSelectedPages( ScDPObject* pObj, const SelectedPagesType& rSelected )
+void PivotTableSources::appendSelectedPages( ScDPObject* pObj, SelectedPagesType&& rSelected )
 {
     if (rSelected.empty())
         return;
 
-    maSelectedPagesList.emplace_back(pObj, rSelected);
+    maSelectedPagesList.emplace_back(pObj, std::move(rSelected));
 }
 
 namespace {

@@ -35,9 +35,9 @@ ScPrintSaverTab::~ScPrintSaverTab()
     mpRepeatRow.reset();
 }
 
-void ScPrintSaverTab::SetAreas( const ScRangeVec& rRanges, bool bEntireSheet )
+void ScPrintSaverTab::SetAreas( ScRangeVec&& rRanges, bool bEntireSheet )
 {
-    maPrintRanges = rRanges;
+    maPrintRanges = std::move(rRanges);
     mbEntireSheet = bEntireSheet;
 }
 

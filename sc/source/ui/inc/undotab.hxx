@@ -67,7 +67,7 @@ public:
                     ScUndoInsertTables(
                             ScDocShell* pNewDocShell,
                             SCTAB nTabNum,
-                            const std::vector<OUString>& newNameList);
+                            std::vector<OUString>&& newNameList);
     virtual         ~ScUndoInsertTables() override;
 
     virtual void    Undo() override;
@@ -203,7 +203,7 @@ public:
                             const Color& aNTabBgColor);
                     ScUndoTabColor(
                             ScDocShell* pNewDocShell,
-                            const ScUndoTabColorInfo::List& rUndoTabColorList);
+                            ScUndoTabColorInfo::List&& rUndoTabColorList);
     virtual         ~ScUndoTabColor() override;
 
     virtual void    Undo() override;
@@ -308,7 +308,7 @@ class ScUndoShowHideTab : public ScSimpleUndo
 public:
                     ScUndoShowHideTab(
                             ScDocShell* pShell,
-                            const std::vector<SCTAB>& newUndoTabs,
+                            std::vector<SCTAB>&& newUndoTabs,
                             bool bNewShow );
     virtual         ~ScUndoShowHideTab() override;
 

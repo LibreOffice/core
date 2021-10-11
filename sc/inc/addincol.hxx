@@ -129,7 +129,7 @@ public:
                          const css::uno::Any& rNewObj );
     void    SetArguments( tools::Long nNewCount, const ScAddInArgDesc* pNewDescs );
     void    SetCallerPos( tools::Long nNewPos );
-    void    SetCompNames( const ::std::vector< LocalizedName >& rNew );
+    void    SetCompNames( ::std::vector< LocalizedName >&& rNew );
 };
 
 class SC_DLLPUBLIC ScUnoAddInCollection

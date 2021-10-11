@@ -56,7 +56,7 @@ class WorkSheetsEnumeration : public ::cppu::WeakImplHelper< container::XEnumera
     SheetMap mSheetMap;
     SheetMap::iterator mIt;
 public:
-    explicit WorkSheetsEnumeration( const SheetMap& sMap ) : mSheetMap( sMap ), mIt( mSheetMap.begin() ) {}
+    explicit WorkSheetsEnumeration( SheetMap&& sMap ) : mSheetMap( std::move(sMap) ), mIt( mSheetMap.begin() ) {}
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override
     {
         return ( mIt != mSheetMap.end() );
@@ -77,7 +77,7 @@ class SheetCollectionHelper : public ::cppu::WeakImplHelper< container::XNameAcc
     SheetMap mSheetMap;
     SheetMap::iterator cachePos;
 public:
-    explicit SheetCollectionHelper( const SheetMap& sMap ) : mSheetMap( sMap ), cachePos(mSheetMap.begin()) {}
+    explicit SheetCollectionHelper( SheetMap&& sMap ) : mSheetMap( std::move(sMap) ), cachePos(mSheetMap.begin()) {}
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<sheet::XSpreadsheet>::get(); }
     virtual sal_Bool SAL_CALL hasElements(  ) override { return ( !mSheetMap.empty() ); }
@@ -127,7 +127,7 @@ public:
     // XEnumerationAccess
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) override
     {
-        return new WorkSheetsEnumeration( mSheetMap );
+        return new WorkSheetsEnumeration( std::vector(mSheetMap) );
     }
 };
 
@@ -439,7 +439,7 @@ ScVbaWorksheets::Item(const uno::Any& Index, const uno::Any& Index2)
             uno::Reference< container::XNamed > xName( xSheet, uno::UNO_QUERY_THROW );
             aSheets.push_back( xSheet );
         }
-        uno::Reference< container::XIndexAccess > xIndexAccess = new SheetCollectionHelper( aSheets );
+        uno::Reference< container::XIndexAccess > xIndexAccess = new SheetCollectionHelper( std::move(aSheets) );
         uno::Reference< XCollection > xSelectedSheets(  new ScVbaWorksheets( getParent(), mxContext, xIndexAccess, mxModel ) );
         return uno::makeAny( xSelectedSheets );
     }

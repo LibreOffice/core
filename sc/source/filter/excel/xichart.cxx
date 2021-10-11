@@ -776,10 +776,10 @@ void XclImpChSourceLink::SetString( const OUString& rString )
     mxString->SetText( rString );
 }
 
-void XclImpChSourceLink::SetTextFormats( const XclFormatRunVec& rFormats )
+void XclImpChSourceLink::SetTextFormats( XclFormatRunVec&& rFormats )
 {
     if( mxString )
-        mxString->SetFormats( rFormats );
+        mxString->SetFormats( std::move(rFormats) );
 }
 
 sal_uInt16 XclImpChSourceLink::GetCellCount() const
@@ -1003,7 +1003,7 @@ void XclImpChText::ReadSubRecord( XclImpStream& rStrm )
         break;
         case EXC_ID_CHEND:
             if( mxSrcLink && !maFormats.empty() )
-                mxSrcLink->SetTextFormats( maFormats );
+                mxSrcLink->SetTextFormats( std::vector(maFormats) );
         break;
     }
 }

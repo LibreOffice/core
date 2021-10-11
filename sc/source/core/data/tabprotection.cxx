@@ -137,7 +137,7 @@ public:
     bool isOptionEnabled(SCSIZE nOptId) const;
     void setOption(SCSIZE nOptId, bool bEnabled);
 
-    void setEnhancedProtection( const ::std::vector< ScEnhancedProtection > & rProt );
+    void setEnhancedProtection( ::std::vector< ScEnhancedProtection > && rProt );
     const ::std::vector< ScEnhancedProtection > & getEnhancedProtection() const { return maEnhancedProtection;}
     bool updateReference( UpdateRefMode, const ScDocument&, const ScRange& rWhere, SCCOL nDx, SCROW nDy, SCTAB nDz );
     bool isBlockEditable( const ScRange& rRange ) const;
@@ -423,9 +423,9 @@ void ScTableProtectionImpl::setOption(SCSIZE nOptId, bool bEnabled)
     maOptions[nOptId] = bEnabled;
 }
 
-void ScTableProtectionImpl::setEnhancedProtection( const ::std::vector< ScEnhancedProtection > & rProt )
+void ScTableProtectionImpl::setEnhancedProtection( ::std::vector< ScEnhancedProtection > && rProt )
 {
-    maEnhancedProtection = rProt;
+    maEnhancedProtection = std::move(rProt);
 }
 
 bool ScTableProtectionImpl::updateReference( UpdateRefMode eMode, const ScDocument& rDoc,
@@ -695,9 +695,9 @@ void ScTableProtection::setOption(Option eOption, bool bEnabled)
     mpImpl->setOption(eOption, bEnabled);
 }
 
-void ScTableProtection::setEnhancedProtection( const ::std::vector< ScEnhancedProtection > & rProt )
+void ScTableProtection::setEnhancedProtection( ::std::vector< ScEnhancedProtection > && rProt )
 {
-    mpImpl->setEnhancedProtection(rProt);
+    mpImpl->setEnhancedProtection(std::move(rProt));
 }
 
 const ::std::vector< ScEnhancedProtection > & ScTableProtection::getEnhancedProtection() const

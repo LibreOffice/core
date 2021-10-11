@@ -66,12 +66,12 @@ public:
 namespace sc {
 CSVFetchThread::CSVFetchThread(
     ScDocument& rDoc, const OUString& mrURL, std::function<void()> aImportFinishedHdl,
-    const std::vector<std::shared_ptr<sc::DataTransformation>>& rDataTransformations)
+    std::vector<std::shared_ptr<sc::DataTransformation>>&& rDataTransformations)
     : Thread("CSV Fetch Thread")
     , mrDocument(rDoc)
     , maURL(mrURL)
     , mbTerminate(false)
-    , maDataTransformations(rDataTransformations)
+    , maDataTransformations(std::move(rDataTransformations))
     , maImportFinishedHdl(std::move(aImportFinishedHdl))
 {
     maConfig.delimiters.push_back(',');
@@ -142,7 +142,7 @@ void CSVDataProvider::Import()
 
     mpDoc.reset(new ScDocument(SCDOCMODE_CLIP));
     mpDoc->ResetClip(mpDocument, SCTAB(0));
-    mxCSVFetchThread = new CSVFetchThread(*mpDoc, mrDataSource.getURL(), std::bind(&CSVDataProvider::ImportFinished, this), mrDataSource.getDataTransformation());
+    mxCSVFetchThread = new CSVFetchThread(*mpDoc, mrDataSource.getURL(), std::bind(&CSVDataProvider::ImportFinished, this), std::vector(mrDataSource.getDataTransformation()));
     mxCSVFetchThread->launch();
 
     if (mbDeterministic)

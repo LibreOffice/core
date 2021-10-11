@@ -36,7 +36,7 @@ public:
             ScPrintSaverTab();
             ~ScPrintSaverTab();
 
-    void            SetAreas( const ScRangeVec& rRanges, bool bEntireSheet );
+    void            SetAreas( ScRangeVec&& rRanges, bool bEntireSheet );
     void            SetRepeat( const ScRange* pCol, const ScRange* pRow );
 
     const ScRangeVec&   GetPrintRanges() const  { return maPrintRanges; }

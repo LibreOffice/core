@@ -950,7 +950,7 @@ public:
     SCSIZE              ComputeContentSlot( sal_Int32 nRow ) const;
 
     SC_DLLPUBLIC ScChangeTrack( ScDocument& );
-    ScChangeTrack(ScDocument& rDocP, const std::set<OUString>& aTempUserCollection); // only to use in the XML import
+    ScChangeTrack(ScDocument& rDocP, std::set<OUString>&& aTempUserCollection); // only to use in the XML import
     SC_DLLPUBLIC virtual ~ScChangeTrack() override;
     void Clear();
 

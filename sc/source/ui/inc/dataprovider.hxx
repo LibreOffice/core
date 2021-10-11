@@ -49,7 +49,7 @@ class CSVFetchThread : public salhelper::Thread
 
 public:
     CSVFetchThread(ScDocument& rDoc, const OUString&, std::function<void()> aImportFinishedHdl,
-            const std::vector<std::shared_ptr<sc::DataTransformation>>& mrDataTransformations);
+            std::vector<std::shared_ptr<sc::DataTransformation>>&& mrDataTransformations);
     virtual ~CSVFetchThread() override;
 
     void RequestTerminate();

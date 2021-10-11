@@ -34,20 +34,20 @@ class XMLFetchThread : public salhelper::Thread
 public:
     XMLFetchThread(ScDocument& rDoc, const OUString&, const ScOrcusImportXMLParam& rParam,
                    const OUString& rID, std::function<void()> aImportFinishedHdl,
-                   const std::vector<std::shared_ptr<sc::DataTransformation>>& rTransformations);
+                   std::vector<std::shared_ptr<sc::DataTransformation>>&& rTransformations);
     virtual void execute() override;
 };
 
 XMLFetchThread::XMLFetchThread(
     ScDocument& rDoc, const OUString& rURL, const ScOrcusImportXMLParam& rParam,
     const OUString& rID, std::function<void()> aImportFinishedHdl,
-    const std::vector<std::shared_ptr<sc::DataTransformation>>& rTransformations)
+    std::vector<std::shared_ptr<sc::DataTransformation>>&& rTransformations)
     : salhelper::Thread("XML Fetch Thread")
     , mrDocument(rDoc)
     , maURL(rURL)
     , maID(rID)
     , maParam(rParam)
-    , maDataTransformations(rTransformations)
+    , maDataTransformations(std::move(rTransformations))
     , maImportFinishedHdl(std::move(aImportFinishedHdl))
 {
 }
@@ -105,9 +105,10 @@ void XMLDataProvider::Import()
 
     mpDoc.reset(new ScDocument(SCDOCMODE_CLIP));
     mpDoc->ResetClip(mpDocument, SCTAB(0));
-    mxXMLFetchThread = new XMLFetchThread(
-        *mpDoc, mrDataSource.getURL(), mrDataSource.getXMLImportParam(), mrDataSource.getID(),
-        std::bind(&XMLDataProvider::ImportFinished, this), mrDataSource.getDataTransformation());
+    mxXMLFetchThread = new XMLFetchThread(*mpDoc, mrDataSource.getURL(),
+                                          mrDataSource.getXMLImportParam(), mrDataSource.getID(),
+                                          std::bind(&XMLDataProvider::ImportFinished, this),
+                                          std::vector(mrDataSource.getDataTransformation()));
     mxXMLFetchThread->launch();
 
     if (mbDeterministic)

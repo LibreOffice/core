@@ -2262,7 +2262,7 @@ const ScRange* ScTable::GetPrintRange(sal_uInt16 nPos) const
 
 void ScTable::FillPrintSaver( ScPrintSaverTab& rSaveTab ) const
 {
-    rSaveTab.SetAreas( aPrintRanges, bPrintEntireSheet );
+    rSaveTab.SetAreas( std::vector(aPrintRanges), bPrintEntireSheet );
     rSaveTab.SetRepeat( pRepeatColRange.get(), pRepeatRowRange.get() );
 }
 

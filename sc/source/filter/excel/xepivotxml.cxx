@@ -160,9 +160,9 @@ void XclExpXmlPivotCaches::SaveXml( XclExpXmlStream& rStrm )
     pWorkbookStrm->endElement(XML_pivotCaches);
 }
 
-void XclExpXmlPivotCaches::SetCaches( const std::vector<Entry>& rCaches )
+void XclExpXmlPivotCaches::SetCaches( std::vector<Entry>&& rCaches )
 {
-    maCaches = rCaches;
+    maCaches = std::move(rCaches);
 }
 
 bool XclExpXmlPivotCaches::HasCaches() const
@@ -614,7 +614,7 @@ void XclExpXmlPivotTableManager::Initialize()
         p->AppendTable(&rDPObj, nCacheId, i+1);
     }
 
-    maCaches.SetCaches(aCaches);
+    maCaches.SetCaches(std::move(aCaches));
 }
 
 XclExpXmlPivotCaches& XclExpXmlPivotTableManager::GetCaches()

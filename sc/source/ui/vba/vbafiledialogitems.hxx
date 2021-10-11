@@ -17,7 +17,9 @@ class ScVbaFileDialogSelectedItems final : public FileDialogSelectedItems_BASE
 {
     const std::vector<OUString> m_sItems;
 public:
-    ScVbaFileDialogSelectedItems( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const std::vector<OUString>& sItems);
+    ScVbaFileDialogSelectedItems( const css::uno::Reference< ov::XHelperInterface >& xParent,
+            const css::uno::Reference< css::uno::XComponentContext >& xContext,
+            std::vector<OUString>&& sItems);
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() override;

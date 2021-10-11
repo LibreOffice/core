@@ -145,7 +145,7 @@ public:
     void SetName( const OUString& rNew ); // used if the source dim was renamed (groups)
 
     void SetOrientation(css::sheet::DataPilotFieldOrientation nNew);
-    void SetSubTotals(std::vector<ScGeneralFunction> const & rFuncs);
+    void SetSubTotals(std::vector<ScGeneralFunction> && rFuncs);
     tools::Long GetSubTotalsCount() const
         { return maSubTotalFuncs.size(); }
 
