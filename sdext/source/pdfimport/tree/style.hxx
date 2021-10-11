@@ -45,9 +45,9 @@ namespace pdfi
             Element*                 ContainedElement;
             std::vector< Style* >    SubStyles;
 
-            Style( const OString& rName, const PropertyMap& rProps ) :
+            Style( const OString& rName, PropertyMap&& rProps ) :
                 Name( rName ),
-                Properties( rProps ),
+                Properties( std::move(rProps) ),
                 ContainedElement( nullptr )
             {}
         };
@@ -156,7 +156,7 @@ namespace pdfi
 
         // returns NULL for an invalid style id
         const PropertyMap* getProperties( sal_Int32 nStyleId ) const;
-        sal_Int32 setProperties( sal_Int32 nStyleId, const PropertyMap &rNewProps );
+        sal_Int32 setProperties( sal_Int32 nStyleId, PropertyMap&& rNewProps );
         OUString getStyleName( sal_Int32 nStyle ) const;
     };
 }
