@@ -16,6 +16,24 @@
       "message": "This is still broken, e.g. CppunitTest_svl_items still failing with\n  \u003d\u003d850754\u003d\u003dERROR: AddressSanitizer: new-delete-type-mismatch on 0x6060000024e0 in thread T0:\n    object passed to delete has wrong type:\n    size of the allocated type:   64 bytes;\n    size of the deallocated type: 56 bytes.\n   #0 in operator delete(void*, unsigned long) at /home/sbergman/github.com/llvm/llvm-project/compiler-rt/lib/asan/asan_new_delete.cpp:164:3 (workdir/LinkTarget/Executable/cppunittester +0x330ae2)\n   #1 in SfxItemSet::~SfxItemSet() at svl/source/items/itemset.cxx:202:1 (instdir/program/libsvllo.so +0x110ccf6)\n   #2 in std::default_delete\u003cSfxItemSet\u003e::operator()(SfxItemSet*) const at /home/sbergman/gcc/trunk/inst/lib/gcc/x86_64-pc-linux-gnu/12.0.0/../../../../include/c++/12.0.0/bits/unique_ptr.h:85:2 (instdir/program/libsvllo.so +0x1142a28)\n   #3 in std::_Sp_counted_deleter\u003cSfxItemSet*, std::default_delete\u003cSfxItemSet\u003e, std::allocator\u003cvoid\u003e, (__gnu_cxx::_Lock_policy)2\u003e::_M_dispose() at /home/sbergman/gcc/trunk/inst/lib/gcc/x86_64-pc-linux-gnu/12.0.0/../../../../include/c++/12.0.0/bits/shared_ptr_base.h:442:9 (instdir/program/libsvllo.so +0x12696e4)\n   #4 in std::_Sp_counted_base\u003c(__gnu_cxx::_Lock_policy)2\u003e::_M_release() at /home/sbergman/gcc/trunk/inst/lib/gcc/x86_64-pc-linux-gnu/12.0.0/../../../../include/c++/12.0.0/bits/shared_ptr_base.h:168:6 (instdir/program/libsvllo.so +0xe500b5)\n[...]\n  0x6060000024e0 is located 0 bytes inside of 64-byte region [0x6060000024e0,0x606000002520)\n  allocated by thread T0 here:\n   #0 in operator new(unsigned long) at /home/sbergman/github.com/llvm/llvm-project/compiler-rt/lib/asan/asan_new_delete.cpp:95:3 (workdir/LinkTarget/Executable/cppunittester +0x32fe7d)\n   #1 in SfxItemSet::Clone(bool, SfxItemPool*) const at svl/source/items/itemset.cxx:1270:34 (instdir/program/libsvllo.so +0x1127854)\n   #2 in (anonymous namespace)::Node::setItemSet(SfxItemSet const\u0026) at svl/source/items/stylepool.cxx:65:107 (instdir/program/libsvllo.so +0x1212179)\n   #3 in StylePoolImpl::insertItemSet(SfxItemSet const\u0026, rtl::OUString const*) at svl/source/items/stylepool.cxx:417:19 (instdir/program/libsvllo.so +0x12103e1)\n   #4 in StylePool::insertItemSet(SfxItemSet const\u0026, rtl::OUString const*) at svl/source/items/stylepool.cxx:456:17 (instdir/program/libsvllo.so +0x1212ffb)\n[...]\n(in ASan builds that actually report that, unlike \u003chttps://ci.libreoffice.org/job/lo_ubsan/2156/\u003e).",
       "revId": "17915ab5202a4d7456e9bc031c3f6a72bc861844",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a964dc79_2905bf82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-10-11T07:44:01Z",
+      "side": 1,
+      "message": "Darn. How does LLVM work around this - I know they have a TrailingObjects template thing, but I don\u0027t see how they can work around this.",
+      "parentUuid": "765a5bb3_bbc0785d",
+      "revId": "17915ab5202a4d7456e9bc031c3f6a72bc861844",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
