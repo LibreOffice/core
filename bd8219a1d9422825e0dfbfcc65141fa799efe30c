@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42d2056c_44dcd623",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-10-11T09:22:54Z",
+      "side": 1,
+      "message": "hmmm... it looks like all of the callers of this function pass arguments of type \"int\", and all of the uses of the parameter in this function is to pass it to functions \"insert_text\" etc that have parameters of type \"int\", so \"int\" would be better in this case",
+      "revId": "bd8219a1d9422825e0dfbfcc65141fa799efe30c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
