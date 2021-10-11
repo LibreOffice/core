@@ -186,7 +186,7 @@ class JobData final
         void                                         setService     ( const OUString&                              sService     );
         void                                         setEvent       ( const OUString&                              sEvent       ,
                                                                       const OUString&                              sAlias       );
-        void                                         setJobConfig   ( const std::vector< css::beans::NamedValue >& lArguments   );
+        void                                         setJobConfig   ( std::vector< css::beans::NamedValue >&& lArguments   );
         void                                         disableJob     (                                                                  );
 
         static std::vector< OUString > getEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >& rxContext,

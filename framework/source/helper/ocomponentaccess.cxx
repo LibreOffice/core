@@ -68,7 +68,7 @@ css::uno::Reference< XEnumeration > SAL_CALL OComponentAccess::createEnumeration
 
         std::vector< css::uno::Reference< XComponent > > seqComponents;
         impl_collectAllChildComponents( css::uno::Reference< XFramesSupplier >( xLock, UNO_QUERY ), seqComponents );
-        xReturn = new OComponentEnumeration( seqComponents );
+        xReturn = new OComponentEnumeration( std::move(seqComponents) );
     }
 
     // Return result of this operation.

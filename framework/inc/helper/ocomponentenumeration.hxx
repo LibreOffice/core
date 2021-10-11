@@ -62,7 +62,7 @@ class OComponentEnumeration final : public ::cppu::WeakImplHelper< css::containe
             @onerror    Do nothing and reset this object to default with an empty list.
         *//*-*****************************************************************************************************/
 
-         OComponentEnumeration( const std::vector< css::uno::Reference< css::lang::XComponent > >& seqComponents );
+         OComponentEnumeration( std::vector< css::uno::Reference< css::lang::XComponent > >&& seqComponents );
 
         //  XEventListener
 
