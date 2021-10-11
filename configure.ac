@@ -10844,10 +10844,11 @@ AC_SUBST(ENABLE_RANDR)
 
 if test "$test_webdav" = yes; then
     if test -z "$with_webdav"; then
-        WITH_WEBDAV=neon
-        if test "$enable_mpl_subset" = yes; then
-            WITH_WEBDAV=serf
-        fi
+        WITH_WEBDAV=curl
+#        WITH_WEBDAV=neon
+#        if test "$enable_mpl_subset" = yes; then
+#            WITH_WEBDAV=serf
+#        fi
     else
         WITH_WEBDAV="$with_webdav"
     fi
