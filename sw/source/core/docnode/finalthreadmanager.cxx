@@ -37,8 +37,8 @@
 class CancelJobsThread : public osl::Thread
 {
     public:
-        explicit CancelJobsThread( const std::list< css::uno::Reference< css::util::XCancellable > >& rJobs )
-            : maJobs( rJobs ),
+        explicit CancelJobsThread( std::list< css::uno::Reference< css::util::XCancellable > >&& rJobs )
+            : maJobs( std::move(rJobs) ),
               mbAllJobsCancelled( false ),
               mbStopped( false )
         {
@@ -320,7 +320,7 @@ void SAL_CALL FinalThreadManager::cancelAllJobs()
 
     if ( mpCancelJobsThread == nullptr )
     {
-        mpCancelJobsThread.reset(new CancelJobsThread( aThreads ));
+        mpCancelJobsThread.reset(new CancelJobsThread( std::list(aThreads) ));
         if ( !mpCancelJobsThread->create() )
         {
             mpCancelJobsThread.reset();

@@ -51,9 +51,9 @@ public:
 
     std::vector<OUString> const& getAdditionalInfo() const { return m_aIssueAdditionalInfo; }
 
-    void setAdditionalInfo(std::vector<OUString> const& rIssueAdditionalInfo)
+    void setAdditionalInfo(std::vector<OUString>&& rIssueAdditionalInfo)
     {
-        m_aIssueAdditionalInfo = rIssueAdditionalInfo;
+        m_aIssueAdditionalInfo = std::move(rIssueAdditionalInfo);
     }
 
     bool canGotoIssue() const override;

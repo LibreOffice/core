@@ -77,7 +77,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 
-    void SetAttrs( const o3tl::sorted_vector<sal_uInt16> &rAttrs );
+    void SetAttrs( o3tl::sorted_vector<sal_uInt16> && rAttrs );
 
     SwHistory& GetHistory() { return *m_pHistory; }
 };

@@ -36,7 +36,7 @@ class RedlinesEnumeration : public ::cppu::WeakImplHelper< container::XEnumerati
     RevisionMap mRevisionMap;
     RevisionMap::iterator mIt;
 public:
-    explicit RedlinesEnumeration( const RevisionMap& sMap ) : mRevisionMap( sMap ), mIt( mRevisionMap.begin() ) {}
+    explicit RedlinesEnumeration( RevisionMap&& sMap ) : mRevisionMap( std::move(sMap) ), mIt( mRevisionMap.begin() ) {}
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override
     {
         return ( mIt != mRevisionMap.end() );
@@ -74,7 +74,7 @@ RevisionCollectionHelper( const uno::Reference< frame::XModel >& xModel, const u
     // XEnumerationAccess
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) override
     {
-        return new RedlinesEnumeration( mRevisionMap );
+        return new RedlinesEnumeration( std::vector(mRevisionMap) );
     }
 };
 

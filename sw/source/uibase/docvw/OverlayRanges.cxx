@@ -103,7 +103,7 @@ namespace sw::overlay
         /*static*/ std::unique_ptr<OverlayRanges> OverlayRanges::CreateOverlayRange(
             SwView const & rDocView,
             const Color& rColor,
-            const std::vector< basegfx::B2DRange >& rRanges,
+            std::vector< basegfx::B2DRange >&& rRanges,
             const bool bShowSolidBorder )
         {
             std::unique_ptr<OverlayRanges> pOverlayRanges;
@@ -116,7 +116,7 @@ namespace sw::overlay
 
                 if ( xTargetOverlay.is() )
                 {
-                    pOverlayRanges.reset(new sw::overlay::OverlayRanges( rColor, rRanges, bShowSolidBorder ));
+                    pOverlayRanges.reset(new sw::overlay::OverlayRanges( rColor, std::move(rRanges), bShowSolidBorder ));
                     xTargetOverlay->add( *pOverlayRanges );
                 }
             }
@@ -126,10 +126,10 @@ namespace sw::overlay
 
         OverlayRanges::OverlayRanges(
             const Color& rColor,
-            const std::vector< basegfx::B2DRange >& rRanges,
+            std::vector< basegfx::B2DRange >&& rRanges,
             const bool bShowSolidBorder )
             : sdr::overlay::OverlayObject( rColor )
-            , maRanges( rRanges )
+            , maRanges( std::move(rRanges) )
             , mbShowSolidBorder( bShowSolidBorder )
         {
             // no AA for highlight overlays
@@ -144,11 +144,11 @@ namespace sw::overlay
             }
         }
 
-        void OverlayRanges::setRanges(const std::vector< basegfx::B2DRange >& rNew)
+        void OverlayRanges::setRanges(std::vector< basegfx::B2DRange >&& rNew)
         {
             if(rNew != maRanges)
             {
-                maRanges = rNew;
+                maRanges = std::move(rNew);
                 objectChange();
             }
         }

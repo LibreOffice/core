@@ -326,8 +326,8 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
 
 SwXTextPortionEnumeration::SwXTextPortionEnumeration(
         SwPaM& rParaCursor,
-        TextRangeList_t const & rPortions )
-    : m_Portions( rPortions )
+        TextRangeList_t && rPortions )
+    : m_Portions( std::move(rPortions) )
 {
     m_pUnoCursor = rParaCursor.GetDoc().CreateUnoCursor(*rParaCursor.GetPoint());
 }

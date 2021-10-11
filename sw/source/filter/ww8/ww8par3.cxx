@@ -261,7 +261,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
 
         if (!aFormula.maListEntries.empty())
         {
-            aField.SetItems(aFormula.maListEntries);
+            aField.SetItems(std::vector(aFormula.maListEntries));
             int nIndex = aFormula.mfDropdownIndex  < aFormula.maListEntries.size() ? aFormula.mfDropdownIndex : 0;
             aField.SetSelectedItem(aFormula.maListEntries[nIndex]);
         }

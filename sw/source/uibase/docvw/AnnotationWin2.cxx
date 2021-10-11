@@ -707,7 +707,7 @@ void SwAnnotationWin::SetPosAndSize()
     {
         if ( mpTextRangeOverlay != nullptr )
         {
-            mpTextRangeOverlay->setRanges( maAnnotationTextRanges );
+            mpTextRangeOverlay->setRanges( std::vector(maAnnotationTextRanges) );
             if ( mpAnchor != nullptr && mpAnchor->getLineSolid() )
             {
                 mpTextRangeOverlay->ShowSolidBorder();
@@ -724,7 +724,7 @@ void SwAnnotationWin::SetPosAndSize()
                 sw::overlay::OverlayRanges::CreateOverlayRange(
                     mrView,
                     mColorAnchor,
-                    maAnnotationTextRanges,
+                    std::vector(maAnnotationTextRanges),
                     mpAnchor && mpAnchor->getLineSolid() );
         }
     }

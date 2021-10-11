@@ -648,9 +648,9 @@ void SwUndoResetAttr::RepeatImpl(::sw::RepeatContext & rContext)
     }
 }
 
-void SwUndoResetAttr::SetAttrs( const o3tl::sorted_vector<sal_uInt16> &rAttrs )
+void SwUndoResetAttr::SetAttrs( o3tl::sorted_vector<sal_uInt16> && rAttrs )
 {
-    m_Ids = rAttrs;
+    m_Ids = std::move(rAttrs);
 }
 
 SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxPoolItem& rAttr,

@@ -75,9 +75,9 @@ namespace sw::overlay
 
         OverlayRangesOutline::OverlayRangesOutline(
             const Color& rColor,
-            const std::vector< basegfx::B2DRange >& rRanges )
+            std::vector< basegfx::B2DRange >&& rRanges )
             : sdr::overlay::OverlayObject(rColor)
-            , maRanges(rRanges)
+            , maRanges(std::move(rRanges))
         {
             // no AA for highlight overlays
             allowAntiAliase(false);
@@ -91,11 +91,11 @@ namespace sw::overlay
             }
         }
 
-        void OverlayRangesOutline::setRanges(const std::vector< basegfx::B2DRange >& rNew)
+        void OverlayRangesOutline::setRanges(std::vector< basegfx::B2DRange >&& rNew)
         {
             if(rNew != maRanges)
             {
-                maRanges = rNew;
+                maRanges = std::move(rNew);
                 objectChange();
             }
         }

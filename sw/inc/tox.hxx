@@ -331,7 +331,7 @@ public:
     inline OUString const & GetTemplate(sal_uInt16 nLevel) const;
 
     // #i21237#
-    void    SetPattern(sal_uInt16 nLevel, const SwFormTokens& rName);
+    void    SetPattern(sal_uInt16 nLevel, SwFormTokens&& rName);
     void    SetPattern(sal_uInt16 nLevel, const OUString& rStr);
     const SwFormTokens& GetPattern(sal_uInt16 nLevel) const;
 

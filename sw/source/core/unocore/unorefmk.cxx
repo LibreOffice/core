@@ -1207,7 +1207,7 @@ SwXMeta::createEnumeration()
     }
     else // cached!
     {
-        return new SwXTextPortionEnumeration(aPam, *m_pImpl->m_pTextPortions);
+        return new SwXTextPortionEnumeration(aPam, std::deque(*m_pImpl->m_pTextPortions));
     }
 }
 

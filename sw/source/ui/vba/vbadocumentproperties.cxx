@@ -650,7 +650,7 @@ class DocPropEnumeration : public ::cppu::WeakImplHelper< css::container::XEnume
     DocProps::iterator mIt;
 public:
 
-    explicit DocPropEnumeration( const DocProps& rProps ) : mDocProps( rProps ), mIt( mDocProps.begin() ) {}
+    explicit DocPropEnumeration( DocProps&& rProps ) : mDocProps( std::move(rProps) ), mIt( mDocProps.begin() ) {}
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override
     {
         return mIt != mDocProps.end();
@@ -739,7 +739,7 @@ protected:
     }
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) override
     {
-        return new DocPropEnumeration( mDocProps );
+        return new DocPropEnumeration( std::unordered_map(mDocProps) );
     }
 };
 
@@ -872,7 +872,7 @@ public:
         for ( ; key < nElem; ++key )
              simpleDocPropSnapShot[ key ].set( getByIndex( key ), uno::UNO_QUERY_THROW );
         SAL_INFO("sw.vba", "After creating the enumeration");
-        return  new DocPropEnumeration( simpleDocPropSnapShot );
+        return  new DocPropEnumeration( std::move(simpleDocPropSnapShot) );
     }
 
     void addProp( const OUString& Name, const uno::Any& Value )
