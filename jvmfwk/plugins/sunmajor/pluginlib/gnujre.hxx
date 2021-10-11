@@ -38,7 +38,7 @@ public:
 
     virtual char const* const* getLibraryPaths(int* size) override;
 
-    virtual bool initialize(std::vector<std::pair<OUString, OUString>> props) override;
+    virtual bool initialize(const std::vector<std::pair<OUString, OUString>>& props) override;
     virtual int compareVersions(const OUString& sSecond) const override;
 };
 }

@@ -154,7 +154,7 @@ protected:
        false - the object could not completely initialize. In this case
        it will be discarded by the caller.
     */
-    virtual bool initialize(std::vector<std::pair<OUString, OUString>> props);
+    virtual bool initialize(const std::vector<std::pair<OUString, OUString>>& props);
 
     /* returns relative file URLs to the runtime library.
        For example         "/bin/client/jvm.dll"
