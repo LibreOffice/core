@@ -208,11 +208,15 @@ Writer& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
 
         rWrt.m_aBulletGrfs[i].clear();
         OString sOut = "<" + rWrt.GetNamespace();
+        if (rWrt.mbXHTML && (nPrevDepth != 0 || i != 0))
+        {
+            sOut += OOO_STRING_SVTOOLS_HTML_li "><" + rWrt.GetNamespace();
+        }
         const SwNumFormat& rNumFormat = rInfo.GetNumRule()->Get( i );
         sal_Int16 eType = rNumFormat.GetNumberingType();
         if( SVX_NUM_CHAR_SPECIAL == eType )
         {
-            // ordered list: <OL>
+            // unordered list: <UL>
             sOut += OString(OOO_STRING_SVTOOLS_HTML_unorderlist);
 
             // determine the type by the bullet character
@@ -390,6 +394,12 @@ Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
         else
             aTag = OOO_STRING_SVTOOLS_HTML_orderlist;
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rWrt.GetNamespace() + aTag, false );
+        if (rWrt.mbXHTML && (nNextDepth != 0 || i != 1))
+        {
+            HTMLOutFuncs::Out_AsciiTag(
+                rWrt.Strm(), rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_li,
+                /*bOn=*/false);
+        }
         rWrt.m_bLFPossible = true;
     }
 
