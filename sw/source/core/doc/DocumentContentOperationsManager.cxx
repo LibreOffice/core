@@ -1920,13 +1920,16 @@ namespace //local functions originally from docfmt.cxx
 
                 if (pCharSet && pCharSet->Count())
                 {
-                    SwpHints *pSwpHints = bCreateSwpHints ? &pTNd->GetOrCreateSwpHints()
-                                                : pTNd->GetpSwpHints();
-                    if( pSwpHints )
+                    if (SwpHints *pSwpHints = bCreateSwpHints ? &pTNd->GetOrCreateSwpHints()
+                                                : pTNd->GetpSwpHints())
+                    {
                         pSwpHints->Register( &aRegH );
+                    }
 
                     pTNd->SetAttr(*pCharSet, 0, pTNd->GetText().getLength(), nFlags);
-                    if( pSwpHints )
+
+                    // re-fetch as it may be deleted by SetAttr
+                    if (SwpHints *pSwpHints = pTNd->GetpSwpHints())
                         pSwpHints->DeRegister();
                 }
             }
