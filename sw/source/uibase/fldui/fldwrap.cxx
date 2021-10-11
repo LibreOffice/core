@@ -70,9 +70,9 @@ SwFieldDlgWrapper::SwFieldDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
     : SwChildWinWrapper( _pParent, nId )
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    pDlgInterface = pFact->CreateSwFieldDlg(pB, this, _pParent->GetFrameWeld());
-    SetController(pDlgInterface->GetController());
-    pDlgInterface->StartExecuteAsync(nullptr);
+    m_pDlgInterface = pFact->CreateSwFieldDlg(pB, this, _pParent->GetFrameWeld());
+    SetController(m_pDlgInterface->GetController());
+    m_pDlgInterface->StartExecuteAsync(nullptr);
 }
 
 // newly initialise dialog after Doc switch
@@ -81,7 +81,7 @@ bool SwFieldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
     bool bRet = SwChildWinWrapper::ReInitDlg(pDocSh);
     if (bRet)  // update immediately, Doc switch
     {
-        pDlgInterface->ReInitDlg();
+        m_pDlgInterface->ReInitDlg();
     }
 
     return bRet;
@@ -89,7 +89,7 @@ bool SwFieldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
 
 void SwFieldDlgWrapper::ShowReferencePage()
 {
-    pDlgInterface->ShowReferencePage();
+    m_pDlgInterface->ShowReferencePage();
 }
 
 SFX_IMPL_CHILDWINDOW(SwFieldDataOnlyDlgWrapper, FN_INSERT_FIELD_DATA_ONLY)

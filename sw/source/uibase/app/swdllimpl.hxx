@@ -39,7 +39,7 @@ private:
     SwDLL(SwDLL const&) = delete;
     SwDLL& operator=(SwDLL const&) = delete;
 
-    std::unique_ptr<sw::Filters> filters_;
+    std::unique_ptr<sw::Filters> m_pFilters;
     SvxAutoCorrCfg* m_pAutoCorrCfg;
 };
 

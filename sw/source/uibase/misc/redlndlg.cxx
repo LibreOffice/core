@@ -82,7 +82,7 @@ SwModelessRedlineAcceptDlg::SwModelessRedlineAcceptDlg(
     : SfxModelessDialogController(_pBindings, pChild, pParent,
         "svx/ui/acceptrejectchangesdialog.ui", "AcceptRejectChangesDialog")
     , m_xContentArea(m_xDialog->weld_content_area())
-    , pChildWin(pChild)
+    , m_pChildWin(pChild)
 {
     m_xImplDlg.reset(new SwRedlineAcceptDlg(m_xDialog, m_xBuilder.get(), m_xContentArea.get()));
 }
@@ -95,12 +95,12 @@ void SwModelessRedlineAcceptDlg::Activate()
 
     SwDocShell *pDocSh = pView->GetDocShell();
 
-    if (pChildWin->GetOldDocShell() != pDocSh)
+    if (m_pChildWin->GetOldDocShell() != pDocSh)
     {   // doc-switch
         SwWait aWait( *pDocSh, false );
         SwWrtShell* pSh = pView->GetWrtShellPtr();
 
-        pChildWin->SetOldDocShell(pDocSh);  // avoid recursion (using modified-Hdl)
+        m_pChildWin->SetOldDocShell(pDocSh);  // avoid recursion (using modified-Hdl)
 
         bool bMod = pSh->IsModified();
         SfxBoolItem aShow(FN_REDLINE_SHOW, true);

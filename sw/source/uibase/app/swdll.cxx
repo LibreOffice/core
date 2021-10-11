@@ -118,7 +118,7 @@ SwDLL::SwDLL()
     SAL_INFO( "sw.ui", "Init Core/UI/Filter" );
     // Initialisation of Statics
     ::InitCore();
-    filters_.reset(new sw::Filters);
+    m_pFilters.reset(new sw::Filters);
     ::InitUI();
 
     pModule->InitAttrPool();
@@ -155,7 +155,7 @@ SwDLL::~SwDLL() COVERITY_NOEXCEPT_FALSE
     SW_MOD()->RemoveAttrPool();
 
     ::FinitUI();
-    filters_.reset();
+    m_pFilters.reset();
     ::FinitCore();
     // sign out object-Factory
     SdrObjFactory::RemoveMakeObjectHdl(LINK(&aSwObjectFactory, SwObjectFactory, MakeObject ));
@@ -163,8 +163,8 @@ SwDLL::~SwDLL() COVERITY_NOEXCEPT_FALSE
 
 sw::Filters & SwDLL::getFilters()
 {
-    assert(filters_);
-    return *filters_;
+    assert(m_pFilters);
+    return *m_pFilters;
 }
 
 #ifndef DISABLE_DYNLOADING
