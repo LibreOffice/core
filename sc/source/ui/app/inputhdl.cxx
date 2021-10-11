@@ -163,12 +163,9 @@ OUString getExactMatch(const ScTypedCaseStrSet& rDataSet, const OUString& rStrin
 
 ScTypedCaseStrSet::const_iterator findTextAll(
     const ScTypedCaseStrSet& rDataSet, ScTypedCaseStrSet::const_iterator const & itPos,
-    const OUString& rStart, ::std::vector< OUString > &rResultVec, bool bBack, size_t nMax = 0)
+    const OUString& rStart, ::std::vector< OUString > &rResultVec, bool bBack)
 {
     rResultVec.clear(); // clear contents
-
-    if (!rDataSet.size())
-        return rDataSet.end();
 
     size_t nCount = 0;
     ScTypedCaseStrSet::const_iterator retit;
@@ -220,8 +217,6 @@ ScTypedCaseStrSet::const_iterator findTextAll(
                 std::advance(retit, nPos);
             }
             ++nCount;
-            if (nMax > 0 && nCount >= nMax)
-                break;
         }
     }
     else // Forwards
@@ -254,8 +249,6 @@ ScTypedCaseStrSet::const_iterator findTextAll(
             if ( nCount == 0 )
                 retit = it; // remember first match iterator
             ++nCount;
-            if (nMax > 0 && nCount >= nMax)
-                break;
         }
     }
 
@@ -1941,7 +1934,7 @@ void ScInputHandler::GetColData()
 
     std::vector<ScTypedStrData> aEntries;
     rDoc.GetDataEntries(
-        aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(), aEntries);
+        aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(), aEntries, true);
     if (!aEntries.empty())
         pColumnData->insert(aEntries.begin(), aEntries.end());
 
@@ -1970,26 +1963,12 @@ void ScInputHandler::UseColData() // When typing
     if (aText.isEmpty())
         return;
 
-    std::vector< OUString > aResultVec;
     OUString aNew;
     miAutoPosColumn = pColumnData->end();
-    miAutoPosColumn = findTextAll(*pColumnData, miAutoPosColumn, aText, aResultVec, false, 2);
-    bool bShowCompletion = (aResultVec.size() == 1);
-    bUseTab = (aResultVec.size() == 2);
-    if (bUseTab)
-    {
-        // Allow cycling through possible matches using shortcut.
-        // Make miAutoPosColumn invalid so that Ctrl+TAB provides the first matching one.
-        miAutoPosColumn = pColumnData->end();
-        aAutoSearch = aText;
-        return;
-    }
-
-    if (!bShowCompletion)
+    miAutoPosColumn = findText(*pColumnData, miAutoPosColumn, aText, aNew, false);
+    if (miAutoPosColumn == pColumnData->end())
         return;
 
-    assert(miAutoPosColumn != pColumnData->end());
-    aNew = aResultVec[0];
     // Strings can contain line endings (e.g. due to dBase import),
     // which would result in multiple paragraphs here, which is not desirable.
     //! Then GetExactMatch doesn't work either
@@ -2019,6 +1998,17 @@ void ScInputHandler::UseColData() // When typing
     }
 
     aAutoSearch = aText; // To keep searching - nAutoPos is set
+
+    if (aText.getLength() == aNew.getLength())
+    {
+        // If the inserted text is found, consume TAB only if there's more coming
+        OUString aDummy;
+        ScTypedCaseStrSet::const_iterator itNextPos =
+            findText(*pColumnData, miAutoPosColumn, aText, aDummy, false);
+        bUseTab = itNextPos != pColumnData->end();
+    }
+    else
+        bUseTab = true;
 }
 
 void ScInputHandler::NextAutoEntry( bool bBack )
@@ -2026,7 +2016,7 @@ void ScInputHandler::NextAutoEntry( bool bBack )
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if ( pActiveView && pColumnData )
     {
-        if (!aAutoSearch.isEmpty())
+        if (miAutoPosColumn != pColumnData->end() && !aAutoSearch.isEmpty())
         {
             // Is the selection still valid (could be changed via the mouse)?
             ESelection aSel = pActiveView->GetSelection();
@@ -3658,7 +3648,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                     NextFormulaEntry( bShift );
                     bUsed = true;
                 }
-                else if (pColumnData && bUseTab)
+                else if (pColumnData && bUseTab && miAutoPosColumn != pColumnData->end())
                 {
                     // Iterate through AutoInput entries
                     NextAutoEntry( bShift );
