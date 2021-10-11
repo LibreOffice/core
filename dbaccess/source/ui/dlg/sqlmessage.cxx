@@ -266,7 +266,7 @@ class OExceptionChainDialog : public weld::GenericDialogController
     ExceptionDisplayChain   m_aExceptions;
 
 public:
-    OExceptionChainDialog(weld::Window* pParent, const ExceptionDisplayChain& rExceptions);
+    OExceptionChainDialog(weld::Window* pParent, ExceptionDisplayChain&& rExceptions);
 
 protected:
     DECL_LINK(OnExceptionSelected, weld::TreeView&, void);
@@ -274,11 +274,11 @@ protected:
 
 }
 
-OExceptionChainDialog::OExceptionChainDialog(weld::Window* pParent, const ExceptionDisplayChain& rExceptions)
+OExceptionChainDialog::OExceptionChainDialog(weld::Window* pParent, ExceptionDisplayChain&& rExceptions)
     : GenericDialogController(pParent, "dbaccess/ui/sqlexception.ui", "SQLExceptionDialog")
     , m_xExceptionList(m_xBuilder->weld_tree_view("list"))
     , m_xExceptionText(m_xBuilder->weld_text_view("description"))
-    , m_aExceptions(rExceptions)
+    , m_aExceptions(std::move(rExceptions))
 {
     int nListWidth = m_xExceptionText->get_approximate_digit_width() * 28;
     int nTextWidth = m_xExceptionText->get_approximate_digit_width() * 42;
@@ -581,7 +581,7 @@ OSQLMessageBox::~OSQLMessageBox()
 
 IMPL_LINK_NOARG(OSQLMessageBox, ButtonClickHdl, weld::Button&, void)
 {
-    OExceptionChainDialog aDlg(m_xDialog.get(), m_pImpl->aDisplayInfo);
+    OExceptionChainDialog aDlg(m_xDialog.get(), std::vector(m_pImpl->aDisplayInfo));
     aDlg.run();
 }
 

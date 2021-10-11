@@ -54,7 +54,7 @@ namespace dbaui
 
         void Init(const css::uno::Sequence< OUString >& _rAvailableFields, bool _bAddIndexAppendix);
 
-        void initializeFrom(const IndexFields& _rFields);
+        void initializeFrom(IndexFields&& _rFields);
         void commitTo(IndexFields& _rFields);
 
         bool SaveModified() override;

@@ -137,10 +137,10 @@ constexpr auto BROWSER_STANDARD_FLAGS = BrowserMode::COLUMNSELECTION | BrowserMo
             _rDev.SetClipRegion();
     }
 
-    void IndexFieldsControl::initializeFrom(const IndexFields& _rFields)
+    void IndexFieldsControl::initializeFrom(IndexFields&& _rFields)
     {
         // copy the field descriptions
-        m_aFields = _rFields;
+        m_aFields = std::move(_rFields);
         m_aSeekRow = m_aFields.end();
 
         SetUpdateMode(false);

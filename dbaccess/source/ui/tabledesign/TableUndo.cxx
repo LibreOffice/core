@@ -213,9 +213,9 @@ void OTableEditorDelUndoAct::Redo()
 
 OTableEditorInsUndoAct::OTableEditorInsUndoAct( OTableEditorCtrl* pOwner,
                                                tools::Long nInsertPosition ,
-                                               const std::vector<  std::shared_ptr<OTableRow> >& _vInsertedRows)
+                                               std::vector<  std::shared_ptr<OTableRow> >&& _vInsertedRows)
     :OTableEditorUndoAct( pOwner,STR_TABED_UNDO_ROWINSERTED )
-    ,m_vInsertedRows(_vInsertedRows)
+    ,m_vInsertedRows(std::move(_vInsertedRows))
     ,m_nInsPos( nInsertPosition )
 {
 }

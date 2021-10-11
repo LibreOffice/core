@@ -367,7 +367,7 @@ namespace dbaccess
 
         /** use this one to construct a vector for change value notification
         */
-        ORowSetNotifier( ORowSetBase* m_pRowSet,const ORowSetValueVector::Vector& i_aRow );
+        ORowSetNotifier( ORowSetBase* m_pRowSet, ORowSetValueVector::Vector&& i_aRow );
 
         // destructs the object. <member>fire</member> has to be called before.
         ~ORowSetNotifier( );

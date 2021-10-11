@@ -311,7 +311,7 @@ namespace dbaui
             weld::Window* pParent,
             const OUString& _rDefaultName,
             sal_Int16 _nOperation,
-            const ODatabaseExport::TColumns& _rDestColumns,
+            ODatabaseExport::TColumns&& _rDestColumns,
             const ODatabaseExport::TColumnVector& _rSourceColVec,
             const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
             const css::uno::Reference< css::util::XNumberFormatter >& _xFormatter,

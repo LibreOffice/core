@@ -942,11 +942,11 @@ namespace
     class ValueTransfer
     {
     public:
-        ValueTransfer( const sal_Int32& _rSourcePos, const sal_Int32& _rDestPos, const std::vector< sal_Int32 >& _rColTypes,
+        ValueTransfer( const sal_Int32& _rSourcePos, const sal_Int32& _rDestPos, std::vector< sal_Int32 >&& _rColTypes,
             const Reference< XRow >& _rxSource, const Reference< XParameters >& _rxDest )
             :m_rSourcePos( _rSourcePos )
             ,m_rDestPos( _rDestPos )
-            ,m_rColTypes( _rColTypes )
+            ,m_rColTypes( std::move(_rColTypes) )
             ,m_xSource( _rxSource )
             ,m_xDest( _rxDest )
         {
@@ -1144,7 +1144,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
 
             sal_Int32 nDestColumn( 0 );
             sal_Int32 nSourceColumn( 1 );
-            ValueTransfer aTransfer( nSourceColumn, nDestColumn, aSourceColTypes, xRow, xStatementParams );
+            ValueTransfer aTransfer( nSourceColumn, nDestColumn, std::vector(aSourceColTypes), xRow, xStatementParams );
 
             for ( auto const& rColumnPos : aColumnPositions )
             {

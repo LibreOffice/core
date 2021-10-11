@@ -54,7 +54,7 @@ namespace dbaui
         // required for automatic type recognition
         OHTMLReader(SvStream& rIn,
                     sal_Int32 nRows,
-                    const TPositions &_rColumnPositions,
+                    TPositions&& _rColumnPositions,
                     const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
                     const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
                     const TColumnVector* rList,

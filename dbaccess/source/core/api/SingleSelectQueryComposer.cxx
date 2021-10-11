@@ -717,7 +717,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getTables(  )
         for (auto const& elem : aTables)
             aNames.push_back(elem.first);
 
-        m_pTables.reset( new OPrivateTables(aTables,m_xMetaData->supportsMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames) );
+        m_pTables.reset( new OPrivateTables(aTables,m_xMetaData->supportsMixedCaseQuotedIdentifiers(),*this,m_aMutex,std::move(aNames)) );
     }
 
     return m_pTables.get();
