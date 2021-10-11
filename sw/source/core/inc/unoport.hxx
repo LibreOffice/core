@@ -248,7 +248,7 @@ public:
             const sal_Int32 nStart, const sal_Int32 nEnd );
 
     SwXTextPortionEnumeration(SwPaM& rParaCursor,
-        TextRangeList_t const & rPortions );
+        TextRangeList_t && rPortions );
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 

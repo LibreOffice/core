@@ -3066,7 +3066,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                                                 aToken.sText = sDelimiter;
                                                 *aIt = aToken;
                                             }
-                                            aForm.SetPattern(nLevel, aPattern);
+                                            aForm.SetPattern(nLevel, std::move(aPattern));
                                         }
 
                                         eType = TOKEN_END;
@@ -3188,7 +3188,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
 
                                             *aIt = aToken;
                                             aForm.SetPattern(nLevel,
-                                                             aPattern);
+                                                             std::move(aPattern));
                                         }
                                         eType = TOKEN_END;
                                     }
@@ -3240,7 +3240,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                                        )
                                     {
                                         aPattern.erase(aIt);
-                                        aForm.SetPattern(nLevel, aPattern);
+                                        aForm.SetPattern(nLevel, std::move(aPattern));
                                     }
                                     eType = TOKEN_END;
                                 }
@@ -3287,7 +3287,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                         aPattern.insert(aItr, aLinkStart);
                 }
                 aPattern.push_back(aLinkEnd);
-                aForm.SetPattern(nLevel, aPattern);
+                aForm.SetPattern(nLevel, std::move(aPattern));
             }
             pBase->SetTOXForm(aForm);
 
@@ -3333,7 +3333,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                                             SwFormToken aNumberEntrySeparator( TOKEN_TEXT );
                                             aNumberEntrySeparator.sText = " ";
                                             aPattern.insert( ++aIt, aNumberEntrySeparator );
-                                            pForm->SetPattern( nStyleLevel, aPattern );
+                                            pForm->SetPattern( nStyleLevel, std::move(aPattern) );
                                         }
                                     }
                                 }
@@ -3375,7 +3375,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                             SwFormTokens::iterator new_end =
                                 remove_if(aPattern.begin(), aPattern.end(), SwFormTokenEqualToFormTokenType(TOKEN_ENTRY_NO));
                             aPattern.erase(new_end, aPattern.end() ); // table index imported with wrong page number format
-                            aForm.SetPattern( nLevel, aPattern );
+                            aForm.SetPattern( nLevel, std::move(aPattern) );
                             aForm.SetTemplate( nLevel, aOldForm.GetTemplate(nLevel) );
                         }
 

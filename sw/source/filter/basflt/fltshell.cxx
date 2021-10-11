@@ -987,9 +987,9 @@ tools::Long SwFltRDFMark::GetHandle() const
     return m_nHandle;
 }
 
-void SwFltRDFMark::SetAttributes(const std::vector< std::pair<OUString, OUString> >& rAttributes)
+void SwFltRDFMark::SetAttributes( std::vector< std::pair<OUString, OUString> >&& rAttributes)
 {
-    m_aAttributes = rAttributes;
+    m_aAttributes = std::move(rAttributes);
 }
 
 const std::vector< std::pair<OUString, OUString> >& SwFltRDFMark::GetAttributes() const

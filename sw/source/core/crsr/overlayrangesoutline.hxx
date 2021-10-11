@@ -37,7 +37,7 @@ namespace sw::overlay
         public:
             OverlayRangesOutline(
                 const Color& rColor,
-                const std::vector< basegfx::B2DRange >& rRanges );
+                std::vector< basegfx::B2DRange >&& rRanges );
 
             virtual ~OverlayRangesOutline() override;
 
@@ -48,7 +48,7 @@ namespace sw::overlay
             }
 
             // data write access
-            void setRanges(const std::vector< basegfx::B2DRange >& rNew);
+            void setRanges(std::vector< basegfx::B2DRange >&& rNew);
         };
 
 } // end of namespace sw::overlay

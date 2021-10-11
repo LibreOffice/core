@@ -35,7 +35,7 @@ namespace sw::overlay
             static std::unique_ptr<OverlayRanges> CreateOverlayRange(
                 SwView const & rDocView,
                 const Color& rColor,
-                const std::vector< basegfx::B2DRange >& rRanges,
+                std::vector< basegfx::B2DRange >&& rRanges,
                 const bool bShowSolidBorder );
 
             virtual ~OverlayRanges() override;
@@ -47,7 +47,7 @@ namespace sw::overlay
             }
 
             // data write access
-            void setRanges(const std::vector< basegfx::B2DRange >& rNew);
+            void setRanges(std::vector< basegfx::B2DRange >&& rNew);
 
             void ShowSolidBorder();
             void HideSolidBorder();
@@ -55,7 +55,7 @@ namespace sw::overlay
         private:
             OverlayRanges(
                 const Color& rColor,
-                const std::vector< basegfx::B2DRange >& rRanges,
+                std::vector< basegfx::B2DRange >&& rRanges,
                 const bool bShowSolidBorder );
 
             // geometry creation for OverlayObject

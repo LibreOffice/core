@@ -100,9 +100,9 @@ void SwDropDownField::SetPar2(const OUString & rName)
     SetName(rName);
 }
 
-void SwDropDownField::SetItems(const vector<OUString> & rItems)
+void SwDropDownField::SetItems(vector<OUString> && rItems)
 {
-    m_aValues = rItems;
+    m_aValues = std::move(rItems);
     m_aSelectedItem.clear();
 }
 

@@ -391,7 +391,7 @@ class SwUndoTableStyleDelete final : public SwUndo
     std::unique_ptr<SwTableAutoFormat> m_pAutoFormat;
     std::vector<SwTable*> m_rAffectedTables;
 public:
-    SwUndoTableStyleDelete(std::unique_ptr<SwTableAutoFormat> pAutoFormat, const std::vector<SwTable*>& rAffectedTables, const SwDoc& rDoc);
+    SwUndoTableStyleDelete(std::unique_ptr<SwTableAutoFormat> pAutoFormat, std::vector<SwTable*>&& rAffectedTables, const SwDoc& rDoc);
 
     virtual ~SwUndoTableStyleDelete() override;
 

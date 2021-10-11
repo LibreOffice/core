@@ -3129,10 +3129,10 @@ SwRewriter SwUndoTableStyleMake::GetRewriter() const
     return aResult;
 }
 
-SwUndoTableStyleDelete::SwUndoTableStyleDelete(std::unique_ptr<SwTableAutoFormat> pAutoFormat, const std::vector<SwTable*>& rAffectedTables, const SwDoc& rDoc)
+SwUndoTableStyleDelete::SwUndoTableStyleDelete(std::unique_ptr<SwTableAutoFormat> pAutoFormat, std::vector<SwTable*>&& rAffectedTables, const SwDoc& rDoc)
     : SwUndo(SwUndoId::TBLSTYLE_DELETE, &rDoc),
     m_pAutoFormat(std::move(pAutoFormat)),
-    m_rAffectedTables(rAffectedTables)
+    m_rAffectedTables(std::move(rAffectedTables))
 { }
 
 SwUndoTableStyleDelete::~SwUndoTableStyleDelete()

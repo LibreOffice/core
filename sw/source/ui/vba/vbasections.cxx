@@ -37,7 +37,7 @@ class SectionEnumeration : public ::cppu::WeakImplHelper< container::XEnumeratio
     XSectionVec::iterator mIt;
 
 public:
-    explicit SectionEnumeration( const XSectionVec& rVec ) : mxSections( rVec ), mIt( mxSections.begin() ) {}
+    explicit SectionEnumeration( XSectionVec&& rVec ) : mxSections( std::move(rVec) ), mIt( mxSections.begin() ) {}
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override
     {
         return ( mIt != mxSections.end() );
@@ -115,7 +115,7 @@ public:
     // XEnumerationAccess
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) override
     {
-        return new SectionEnumeration( mxSections );
+        return new SectionEnumeration( std::vector(mxSections) );
     }
 };
 

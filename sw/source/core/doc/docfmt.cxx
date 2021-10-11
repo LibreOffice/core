@@ -308,7 +308,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
             bTextAttr ? sal_uInt16(RES_CONDTXTFMTCOLL) : sal_uInt16(RES_TXTFMTCOLL) ));
         if( !rAttrs.empty() )
         {
-            pUndo->SetAttrs( rAttrs );
+            pUndo->SetAttrs( o3tl::sorted_vector(rAttrs) );
         }
         pHst = &pUndo->GetHistory();
         GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));

@@ -4623,7 +4623,7 @@ std::unique_ptr<SwTableAutoFormat> SwDoc::DelTableStyle(const OUString& rName, b
         if (GetIDocumentUndoRedo().DoesUndo())
         {
             GetIDocumentUndoRedo().AppendUndo(
-                std::make_unique<SwUndoTableStyleDelete>(std::move(pReleasedFormat), vAffectedTables, *this));
+                std::make_unique<SwUndoTableStyleDelete>(std::move(pReleasedFormat), std::move(vAffectedTables), *this));
         }
     }
 

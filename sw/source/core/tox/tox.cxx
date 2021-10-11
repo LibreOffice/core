@@ -384,12 +384,12 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
                 SwFormToken aTmpToken(TOKEN_ENTRY);
                 aTmpTokens.push_back(aTmpToken);
 
-                SetPattern( i, aTmpTokens );
+                SetPattern( i, std::move(aTmpTokens) );
                 SetTemplate(i, SwResId(STR_POOLCOLL_TOX_IDXBREAK));
             }
             else
             {
-                SetPattern( i, aTokens );
+                SetPattern( i, std::vector(aTokens) );
                 SetTemplate(i, SwResId(STR_POOLCOLL_TOX_ARY[i - 1]));
             }
         }
@@ -402,10 +402,10 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
             {
                 SwFormTokens aAuthTokens;
                 lcl_FillAuthPattern(aAuthTokens, i);
-                SetPattern(i, aAuthTokens);
+                SetPattern(i, std::move(aAuthTokens));
             }
             else
-                SetPattern( i, aTokens );
+                SetPattern( i, std::vector(aTokens) );
 
             if( TOX_CONTENT == m_eType && 6 == i )
                 pPoolId = STR_POOLCOLL_TOX_CNTNT_EXTRA_ARY;
@@ -507,7 +507,7 @@ void SwForm::AdjustTabStops( SwDoc const & rDoc ) // #i21237#
             }
 
             if ( bChanged )
-                SetPattern( nLevel, aCurrentPattern );
+                SetPattern( nLevel, std::move(aCurrentPattern) );
         }
     }
 }
@@ -926,10 +926,10 @@ SwFormTokensHelper::SwFormTokensHelper(const OUString & rPattern)
 
 // <- #i21237#
 
-void SwForm::SetPattern(sal_uInt16 nLevel, const SwFormTokens& rTokens)
+void SwForm::SetPattern(sal_uInt16 nLevel, SwFormTokens&& rTokens)
 {
     OSL_ENSURE(nLevel < GetFormMax(), "Index >= FORM_MAX");
-    m_aPattern[nLevel] = rTokens;
+    m_aPattern[nLevel] = std::move(rTokens);
 }
 
 void SwForm::SetPattern(sal_uInt16 nLevel, const OUString & rStr)
