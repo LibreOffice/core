@@ -136,44 +136,6 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
     assert(svl::detail::validRanges2(m_pWhichRanges));
 }
 
-/** special constructor for Clone */
-SfxItemSet::SfxItemSet( const SfxItemSet& rASet, SfxPoolItem const ** ppItems )
-    : m_pPool( rASet.m_pPool )
-    , m_pParent( rASet.m_pParent )
-    , m_ppItems( ppItems )
-    , m_pWhichRanges( rASet.m_pWhichRanges )
-    , m_nCount( rASet.m_nCount )
-    , m_bItemsFixed(true)
-{
-    if (rASet.m_pWhichRanges.empty())
-        return;
-
-    auto nCnt = svl::detail::CountRanges(m_pWhichRanges);
-
-    // Copy attributes
-    SfxPoolItem const** ppDst = m_ppItems;
-    SfxPoolItem const** ppSrc = rASet.m_ppItems;
-    for( sal_uInt16 n = nCnt; n; --n, ++ppDst, ++ppSrc )
-        if ( nullptr == *ppSrc ||                 // Current Default?
-             IsInvalidItem(*ppSrc) ||       // DontCare?
-             IsStaticDefaultItem(*ppSrc) )  // Defaults that are not to be pooled?
-            // Just copy the pointer
-            *ppDst = *ppSrc;
-        else if (m_pPool->IsItemPoolable( **ppSrc ))
-        {
-            // Just copy the pointer and increase RefCount
-            *ppDst = *ppSrc;
-            (*ppDst)->AddRef();
-        }
-        else if ( !(*ppSrc)->Which() )
-            *ppDst = (*ppSrc)->Clone();
-        else
-            // !IsPoolable() => assign via Pool
-            *ppDst = &m_pPool->Put( **ppSrc );
-
-    assert(svl::detail::validRanges2(m_pWhichRanges));
-}
-
 SfxItemSet::SfxItemSet(SfxItemSet&& rASet) noexcept
     : m_pPool( rASet.m_pPool )
     , m_pParent( rASet.m_pParent )
@@ -1264,20 +1226,9 @@ bool SfxItemSet::Equals(const SfxItemSet &rCmp, bool bComparePool) const
 
 std::unique_ptr<SfxItemSet> SfxItemSet::Clone(bool bItems, SfxItemPool *pToPool ) const
 {
-    // Use placement new to avoid one of the allocation calls when constructing a new SfxItemSet.
-    // This is effectively a run-time equivalent of the SfxItemSetFixed template.
-    const int cnt = TotalCount();
-    char* p = static_cast<char*>(::operator new(sizeof(SfxItemSet) + (sizeof(const SfxPoolItem*) * cnt)));
-    SfxItemSet* pNewItemSet = reinterpret_cast<SfxItemSet*>(p);
-    const SfxPoolItem** ppNewItems = reinterpret_cast<const SfxPoolItem **>(p + sizeof(SfxItemSet));
     if (pToPool && pToPool != m_pPool)
     {
-        std::fill(ppNewItems, ppNewItems + cnt, nullptr);
-        std::unique_ptr<SfxItemSet> pNewSet(
-            new (pNewItemSet)
-                SfxItemSet(*pToPool,
-                    WhichRangesContainer(m_pWhichRanges),
-                    ppNewItems));
+        std::unique_ptr<SfxItemSet> pNewSet(new SfxItemSet(*pToPool, m_pWhichRanges));
         if ( bItems )
         {
             SfxWhichIter aIter(*pNewSet);
@@ -1292,17 +1243,10 @@ std::unique_ptr<SfxItemSet> SfxItemSet::Clone(bool bItems, SfxItemPool *pToPool 
         }
         return pNewSet;
     }
-    else if (bItems)
-    {
-        return std::unique_ptr<SfxItemSet>(
-            new (pNewItemSet) SfxItemSet(*this, ppNewItems));
-    }
     else
-    {
-        std::fill(ppNewItems, ppNewItems + cnt, nullptr);
-        return std::unique_ptr<SfxItemSet>(
-            new (pNewItemSet) SfxItemSet(*m_pPool, WhichRangesContainer(m_pWhichRanges), ppNewItems));
-    }
+        return std::unique_ptr<SfxItemSet>(bItems
+                ? new SfxItemSet(*this)
+                : new SfxItemSet(*m_pPool, m_pWhichRanges));
 }
 
 SfxItemSet SfxItemSet::CloneAsValue(bool bItems, SfxItemPool *pToPool ) const
