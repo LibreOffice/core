@@ -189,7 +189,7 @@ class LibPage final : public OrganizePage
     void                FillListBox();
     void                InsertListBoxEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
     void                SetCurLib();
-    void                ImpInsertLibEntry( const OUString& rLibName, sal_uLong nPos );
+    void                ImpInsertLibEntry( const OUString& rLibName, int nPos );
 
 public:
     explicit LibPage(weld::Container* pParent, OrganizeDialog* pDialog);
