@@ -47,8 +47,8 @@ private:
     SvNumberFormatter*  m_pNumberFormatter;
     bool                m_bNumberFormatMixedState;
     bool                m_bPercentFormatMixedState;
-    sal_uLong           m_nNumberFormatForValue;
-    sal_uLong           m_nNumberFormatForPercent;
+    sal_uInt32          m_nNumberFormatForValue;
+    sal_uInt32          m_nNumberFormatForPercent;
 
     bool                m_bSourceFormatMixedState;
     bool                m_bPercentSourceMixedState;

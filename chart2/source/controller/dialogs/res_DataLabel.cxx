@@ -46,7 +46,7 @@ namespace
 
 const std::u16string_view our_aLBEntryMap[] = {u" ", u", ", u"; ", u"\n", u". "};
 
-bool lcl_ReadNumberFormatFromItemSet( const SfxItemSet& rSet, sal_uInt16 nValueWhich, sal_uInt16 nSourceFormatWhich, sal_uLong& rnFormatKeyOut, bool& rbSourceFormatOut, bool& rbSourceFormatMixedStateOut )
+bool lcl_ReadNumberFormatFromItemSet( const SfxItemSet& rSet, sal_uInt16 nValueWhich, sal_uInt16 nSourceFormatWhich, sal_uInt32& rnFormatKeyOut, bool& rbSourceFormatOut, bool& rbSourceFormatMixedStateOut )
 {
     bool bSet = false;
     const SfxPoolItem *pItem1 = nullptr;
@@ -191,7 +191,7 @@ IMPL_LINK(DataLabelResources, NumberFormatDialogHdl, weld::Button&, rButton, voi
 
     bool bPercent = (&rButton == m_xPB_NumberFormatForPercent.get());
 
-    sal_uLong& rnFormatKey = bPercent ? m_nNumberFormatForPercent : m_nNumberFormatForValue;
+    sal_uInt32& rnFormatKey = bPercent ? m_nNumberFormatForPercent : m_nNumberFormatForValue;
     bool& rUseSourceFormat = bPercent ? m_bSourceFormatForPercent : m_bSourceFormatForValue;
     bool& rbMixedState = bPercent ? m_bPercentFormatMixedState : m_bNumberFormatMixedState;
     bool& rbSourceMixedState = bPercent ? m_bPercentSourceMixedState : m_bSourceFormatMixedState;
@@ -210,7 +210,7 @@ IMPL_LINK(DataLabelResources, NumberFormatDialogHdl, weld::Button&, rButton, voi
     if( pResult )
     {
         bool bOldSource = rUseSourceFormat;
-        sal_uLong nOldFormat = rnFormatKey;
+        sal_uInt32 nOldFormat = rnFormatKey;
         bool bOldMixedState = rbMixedState || rbSourceMixedState;
 
         rbMixedState = !lcl_ReadNumberFormatFromItemSet( *pResult, SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_SOURCE, rnFormatKey, rUseSourceFormat, rbSourceMixedState );
