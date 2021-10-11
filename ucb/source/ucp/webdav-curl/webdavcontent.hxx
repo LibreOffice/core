@@ -81,7 +81,6 @@ class Content : public ::ucbhelper::ContentImplHelper,
     // resource type for general LOCK method only
     ResourceType      m_eResourceTypeForLocks;
     ContentProvider*  m_pProvider; // No need for a ref, base class holds object
-    rtl::Reference< DAVSessionFactory > m_rSessionFactory;
     bool              m_bTransient;
     bool              m_bCollection;
     bool              m_bDidGetOrHead;
