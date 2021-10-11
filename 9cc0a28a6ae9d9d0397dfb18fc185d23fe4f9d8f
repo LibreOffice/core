@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec6c253c_df94ea84",
+        "filename": "vcl/source/app/vclevent.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-10-11T14:21:31Z",
+      "side": 1,
+      "message": "if this is showing up in a perf-profile, then changing it to use o3tl::sorted_vector instead of std::vector will make the std::find O(1) instead of O(n).\n\nAt the cost of potentially changing the order in which listeners are currently being called, and of increasing the insert/delete cost, but normally event listeners are called several orders of magnitude more often than the list is modified. \n\nAnd if that is really is a problem, we could pull the logic out of SfxBroadcaster into a standalone class, because that amortizes insert/delete cost.",
+      "revId": "9cc0a28a6ae9d9d0397dfb18fc185d23fe4f9d8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
