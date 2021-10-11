@@ -20,6 +20,7 @@ package ifc.text;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import lib.StatusException;
 import lib.TestParameters;
@@ -136,11 +137,9 @@ public class _NumberingLevel {
 
             // get rest of properties and check if they are optional
             if (! NumberingLevel.isEmpty()){
-                for (Iterator<String> e = NumberingLevel.keySet().iterator() ; e.hasNext() ;) {
-                    String property = e.next();
-
+                for (Map.Entry<String,Boolean> e : NumberingLevel.entrySet()) {
                     // if some elements are not optional -> failed
-                    if ( ! NumberingLevel.get(property).booleanValue() ){
+                    if (!e.getValue().booleanValue()) {
 
                         if ( status ) {
                             log.println("FAILED: com.sun.star.text.NumberingLevel -> " +
@@ -148,7 +147,7 @@ public class _NumberingLevel {
                         }
 
                         status = false;
-                        log.println("-> '" + property + "'");
+                        log.println("-> '" + e.getKey() + "'");
                     }
                 }
             }
