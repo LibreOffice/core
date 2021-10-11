@@ -706,7 +706,7 @@ XMLSignatureHelper::CheckAndUpdateSignatureInformation(
     }
 
     // rInfo is a copy, update the original
-    mpXSecController->UpdateSignatureInformation(rInfo.nSecurityId, datas);
+    mpXSecController->UpdateSignatureInformation(rInfo.nSecurityId, std::move(datas));
     return certs;
 }
 
