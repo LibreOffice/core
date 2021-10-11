@@ -621,22 +621,22 @@ void LineParser::readFont()
             }
 
             // Font weight
-            if (aFontReadResult.GetWeight() == com::sun::star::awt::FontWeight::THIN)
+            if (aFontReadResult.GetWeight() == WEIGHT_THIN)
                 aResult.fontWeight = u"100";
-            else if (aFontReadResult.GetWeight() == com::sun::star::awt::FontWeight::ULTRALIGHT)
+            else if (aFontReadResult.GetWeight() == WEIGHT_ULTRALIGHT)
                 aResult.fontWeight = u"200";
-            else if (aFontReadResult.GetWeight() == com::sun::star::awt::FontWeight::LIGHT)
+            else if (aFontReadResult.GetWeight() == WEIGHT_LIGHT)
                 aResult.fontWeight = u"300";
-            else if (aFontReadResult.GetWeight() == com::sun::star::awt::FontWeight::SEMILIGHT)
+            else if (aFontReadResult.GetWeight() == WEIGHT_SEMILIGHT)
                 aResult.fontWeight = u"350";
             // no need to check "normal" here as this is default in nFontWeight above
-            else if (aFontReadResult.GetWeight() == com::sun::star::awt::FontWeight::SEMIBOLD)
+            else if (aFontReadResult.GetWeight() == WEIGHT_SEMIBOLD)
                 aResult.fontWeight = u"600";
-            else if (aFontReadResult.GetWeight() == com::sun::star::awt::FontWeight::BOLD)
+            else if (aFontReadResult.GetWeight() == WEIGHT_BOLD)
                 aResult.fontWeight = u"bold";
-            else if (aFontReadResult.GetWeight() == com::sun::star::awt::FontWeight::ULTRABOLD)
+            else if (aFontReadResult.GetWeight() == WEIGHT_ULTRABOLD)
                 aResult.fontWeight = u"800";
-            else if (aFontReadResult.GetWeight() == com::sun::star::awt::FontWeight::BLACK)
+            else if (aFontReadResult.GetWeight() == WEIGHT_BLACK)
                 aResult.fontWeight = u"900";
             SAL_INFO("sdext.pdfimport", aResult.fontWeight);
 
