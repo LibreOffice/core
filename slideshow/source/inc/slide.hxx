@@ -197,7 +197,7 @@ namespace slideshow::internal
                                     const css::uno::Reference< css::uno::XComponentContext >&      xContext,
                                     const ShapeEventListenerMap&                        rShapeListenerMap,
                                     const ShapeCursorMap&                               rShapeCursorMap,
-                                    const PolyPolygonVector&                            rPolyPolygonVector,
+                                    PolyPolygonVector&&                                 rPolyPolygonVector,
                                     RGBColor const&                                     aUserPaintColor,
                                     double                                              dUserPaintStrokeWidth,
                                     bool                                                bUserPaintEnabled,

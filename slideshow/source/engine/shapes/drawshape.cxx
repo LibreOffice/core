@@ -554,7 +554,7 @@ namespace slideshow::internal
                         rContext,
                         pShape,
                         pWakeupEvent,
-                        aTimeout,
+                        std::move(aTimeout),
                         pShape->mnAnimationLoopCount);
 
                 pWakeupEvent->setActivity( pActivity );

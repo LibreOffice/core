@@ -573,13 +573,13 @@ void ReflectionTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlid
 
 std::shared_ptr<OGLTransitionImpl>
 makeReflectionTransition(
-        const Primitives_t& rLeavingSlidePrimitives,
-        const Primitives_t& rEnteringSlidePrimitives,
-        const Operations_t& rOverallOperations,
+        Primitives_t&& rLeavingSlidePrimitives,
+        Primitives_t&& rEnteringSlidePrimitives,
+        Operations_t&& rOverallOperations,
         const TransitionSettings& rSettings)
 {
     return std::make_shared<ReflectionTransition>(
-            TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives, rOverallOperations, SceneObjects_t()),
+            TransitionScene(std::move(rLeavingSlidePrimitives), std::move(rEnteringSlidePrimitives), std::move(rOverallOperations), SceneObjects_t()),
             rSettings);
 }
 
@@ -621,44 +621,48 @@ void SimpleTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlideTex
 
 std::shared_ptr<OGLTransitionImpl>
 makeSimpleTransition(
-        const Primitives_t& rLeavingSlidePrimitives,
-        const Primitives_t& rEnteringSlidePrimitives,
-        const Operations_t& rOverallOperations,
-        const SceneObjects_t& rSceneObjects,
+        Primitives_t&& rLeavingSlidePrimitives,
+        Primitives_t&& rEnteringSlidePrimitives,
+        Operations_t&& rOverallOperations,
+        SceneObjects_t&& rSceneObjects,
         const TransitionSettings& rSettings)
 {
     return std::make_shared<SimpleTransition>(
-            TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives, rOverallOperations, rSceneObjects),
+            TransitionScene(std::move(rLeavingSlidePrimitives), std::move(rEnteringSlidePrimitives),
+                            std::move(rOverallOperations), std::move(rSceneObjects)),
             rSettings);
 }
 
 std::shared_ptr<OGLTransitionImpl>
 makeSimpleTransition(
-        const Primitives_t& rLeavingSlidePrimitives,
-        const Primitives_t& rEnteringSlidePrimitives,
-        const Operations_t& rOverallOperations,
+        Primitives_t&& rLeavingSlidePrimitives,
+        Primitives_t&& rEnteringSlidePrimitives,
+        Operations_t&& rOverallOperations,
         const TransitionSettings& rSettings = TransitionSettings())
 {
-    return makeSimpleTransition(rLeavingSlidePrimitives, rEnteringSlidePrimitives, rOverallOperations, SceneObjects_t(), rSettings);
+    return makeSimpleTransition(std::move(rLeavingSlidePrimitives), std::move(rEnteringSlidePrimitives),
+                                std::move(rOverallOperations), SceneObjects_t(), rSettings);
 }
 
 std::shared_ptr<OGLTransitionImpl>
 makeSimpleTransition(
-        const Primitives_t& rLeavingSlidePrimitives,
-        const Primitives_t& rEnteringSlidePrimitives,
-        const SceneObjects_t& rSceneObjects,
+        Primitives_t&& rLeavingSlidePrimitives,
+        Primitives_t&& rEnteringSlidePrimitives,
+        SceneObjects_t&& rSceneObjects,
         const TransitionSettings& rSettings)
 {
-    return makeSimpleTransition(rLeavingSlidePrimitives, rEnteringSlidePrimitives, Operations_t(), rSceneObjects, rSettings);
+    return makeSimpleTransition(std::move(rLeavingSlidePrimitives), std::move(rEnteringSlidePrimitives),
+                                Operations_t(), std::move(rSceneObjects), rSettings);
 }
 
 std::shared_ptr<OGLTransitionImpl>
 makeSimpleTransition(
-        const Primitives_t& rLeavingSlidePrimitives,
-        const Primitives_t& rEnteringSlidePrimitives,
+        Primitives_t&& rLeavingSlidePrimitives,
+        Primitives_t&& rEnteringSlidePrimitives,
         const TransitionSettings& rSettings = TransitionSettings())
 {
-    return makeSimpleTransition(rLeavingSlidePrimitives, rEnteringSlidePrimitives, Operations_t(), SceneObjects_t(), rSettings);
+    return makeSimpleTransition(std::move(rLeavingSlidePrimitives), std::move(rEnteringSlidePrimitives),
+                                Operations_t(), SceneObjects_t(), rSettings);
 }
 
 }
@@ -681,7 +685,7 @@ std::shared_ptr<OGLTransitionImpl> makeOutsideCubeFaceToLeft()
     Operations_t aOperations;
     aOperations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,-1),-90,false,true,0.0,1.0));
 
-    return makeSimpleTransition(aLeavingPrimitives, aEnteringPrimitives, aOperations);
+    return makeSimpleTransition(std::move(aLeavingPrimitives), std::move(aEnteringPrimitives), std::move(aOperations));
 }
 
 std::shared_ptr<OGLTransitionImpl> makeInsideCubeFaceToLeft()
@@ -702,7 +706,7 @@ std::shared_ptr<OGLTransitionImpl> makeInsideCubeFaceToLeft()
     Operations_t aOperations;
     aOperations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,1),90,false,true,0.0,1.0));
 
-    return makeSimpleTransition(aLeavingPrimitives, aEnteringPrimitives, aOperations);
+    return makeSimpleTransition(std::move(aLeavingPrimitives), std::move(aEnteringPrimitives), std::move(aOperations));
 }
 
 std::shared_ptr<OGLTransitionImpl> makeFallLeaving()
@@ -722,7 +726,7 @@ std::shared_ptr<OGLTransitionImpl> makeFallLeaving()
     TransitionSettings aSettings;
     aSettings.mbUseMipMapEntering = false;
 
-    return makeSimpleTransition(aLeavingPrimitives, aEnteringPrimitives, aSettings);
+    return makeSimpleTransition(std::move(aLeavingPrimitives), std::move(aEnteringPrimitives), aSettings);
 }
 
 std::shared_ptr<OGLTransitionImpl> makeTurnAround()
@@ -751,7 +755,7 @@ std::shared_ptr<OGLTransitionImpl> makeTurnAround()
     aOperations.push_back(makeSTranslate(glm::vec3(0, 0, 1.5), true, 0.5, 1));
     aOperations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0, 1, 0),glm::vec3(0, 0, 0), -180, true, true, 0.0, 1.0));
 
-    return makeReflectionTransition(aLeavingPrimitives, aEnteringPrimitives, aOperations, aSettings);
+    return makeReflectionTransition(std::move(aLeavingPrimitives), std::move(aEnteringPrimitives), std::move(aOperations), aSettings);
 }
 
 std::shared_ptr<OGLTransitionImpl> makeTurnDown()
@@ -772,7 +776,7 @@ std::shared_ptr<OGLTransitionImpl> makeTurnDown()
     TransitionSettings aSettings;
     aSettings.mbUseMipMapLeaving = false;
 
-    return makeSimpleTransition(aLeavingPrimitives, aEnteringPrimitives, aSettings);
+    return makeSimpleTransition(std::move(aLeavingPrimitives), std::move(aEnteringPrimitives), aSettings);
 }
 
 std::shared_ptr<OGLTransitionImpl> makeIris()
@@ -843,7 +847,7 @@ std::shared_ptr<OGLTransitionImpl> makeIris()
     TransitionSettings aSettings;
     aSettings.mbUseMipMapLeaving = aSettings.mbUseMipMapEntering = false;
 
-    return makeSimpleTransition(aLeavingPrimitives, aEnteringPrimitives, aSceneObjects, aSettings);
+    return makeSimpleTransition(std::move(aLeavingPrimitives), std::move(aEnteringPrimitives), std::move(aSceneObjects), aSettings);
 }
 
 namespace
@@ -875,12 +879,12 @@ void RochadeTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlideTe
 
 std::shared_ptr<OGLTransitionImpl>
 makeRochadeTransition(
-        const Primitives_t& rLeavingSlidePrimitives,
-        const Primitives_t& rEnteringSlidePrimitives,
+        Primitives_t&& rLeavingSlidePrimitives,
+        Primitives_t&& rEnteringSlidePrimitives,
         const TransitionSettings& rSettings)
 {
     return std::make_shared<RochadeTransition>(
-            TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives),
+            TransitionScene(std::move(rLeavingSlidePrimitives), std::move(rEnteringSlidePrimitives)),
             rSettings)
         ;
 
@@ -919,7 +923,7 @@ std::shared_ptr<OGLTransitionImpl> makeRochade()
     Slide.Operations.push_back(makeSScale(glm::vec3(1, -1, 1), glm::vec3(0, -1.02, 0), false, -1, 0));
     aEnteringSlide.push_back(Slide);
 
-    return makeRochadeTransition(aLeavingSlide, aEnteringSlide, aSettings);
+    return makeRochadeTransition(std::move(aLeavingSlide), std::move(aEnteringSlide), aSettings);
 }
 
 static double randFromNeg1to1()
@@ -1049,7 +1053,7 @@ std::shared_ptr<OGLTransitionImpl> makeRevolvingCircles( sal_uInt16 nCircles , s
         aLeavingSlide.push_back(LeavingSlide);
     }
 
-    return makeSimpleTransition(aLeavingSlide, aEnteringSlide);
+    return makeSimpleTransition(std::move(aLeavingSlide), std::move(aEnteringSlide));
 }
 
 std::shared_ptr<OGLTransitionImpl> makeHelix( sal_uInt16 nRows )
@@ -1081,7 +1085,7 @@ std::shared_ptr<OGLTransitionImpl> makeHelix( sal_uInt16 nRows )
         iPDn += invN;
     }
 
-    return makeSimpleTransition(aLeavingSlide, aEnteringSlide);
+    return makeSimpleTransition(std::move(aLeavingSlide), std::move(aEnteringSlide));
 }
 
 static float fdiv(int a, int b)
@@ -1124,7 +1128,7 @@ std::shared_ptr<OGLTransitionImpl> makeNByMTileFlip( sal_uInt16 n, sal_uInt16 m 
         }
     }
 
-    return makeSimpleTransition(aLeavingSlide, aEnteringSlide);
+    return makeSimpleTransition(std::move(aLeavingSlide), std::move(aEnteringSlide));
 }
 
 Primitive& Primitive::operator=(const Primitive& rvalue)
@@ -1249,7 +1253,7 @@ makeDiamondTransition(const TransitionSettings& rSettings)
     aEnteringSlidePrimitives.push_back (Slide1);
     Primitives_t aLeavingSlidePrimitives;
     aLeavingSlidePrimitives.push_back (Slide1);
-    return std::make_shared<DiamondTransition>(TransitionScene(aLeavingSlidePrimitives, aEnteringSlidePrimitives), rSettings);
+    return std::make_shared<DiamondTransition>(TransitionScene(std::move(aLeavingSlidePrimitives), std::move(aEnteringSlidePrimitives)), rSettings);
 }
 
 }
@@ -1295,7 +1299,7 @@ std::shared_ptr<OGLTransitionImpl> makeVenetianBlinds( bool vertical, int parts 
         ln = n;
     }
 
-    return makeSimpleTransition(aLeavingSlide, aEnteringSlide);
+    return makeSimpleTransition(std::move(aLeavingSlide), std::move(aEnteringSlide));
 }
 
 namespace
@@ -1319,12 +1323,12 @@ GLuint FadeSmoothlyTransition::makeShader() const
 
 std::shared_ptr<OGLTransitionImpl>
 makeFadeSmoothlyTransition(
-        const Primitives_t& rLeavingSlidePrimitives,
-        const Primitives_t& rEnteringSlidePrimitives,
+        Primitives_t&& rLeavingSlidePrimitives,
+        Primitives_t&& rEnteringSlidePrimitives,
         const TransitionSettings& rSettings)
 {
     return std::make_shared<FadeSmoothlyTransition>(
-            TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives),
+            TransitionScene(std::move(rLeavingSlidePrimitives), std::move(rEnteringSlidePrimitives)),
             rSettings)
         ;
 }
@@ -1345,7 +1349,7 @@ std::shared_ptr<OGLTransitionImpl> makeFadeSmoothly()
     TransitionSettings aSettings;
     aSettings.mbUseMipMapLeaving = aSettings.mbUseMipMapEntering = false;
 
-    return makeFadeSmoothlyTransition(aLeavingSlide, aEnteringSlide, aSettings);
+    return makeFadeSmoothlyTransition(std::move(aLeavingSlide), std::move(aEnteringSlide), aSettings);
 }
 
 namespace
@@ -1371,13 +1375,13 @@ GLuint FadeThroughColorTransition::makeShader() const
 
 std::shared_ptr<OGLTransitionImpl>
 makeFadeThroughColorTransition(
-        const Primitives_t& rLeavingSlidePrimitives,
-        const Primitives_t& rEnteringSlidePrimitives,
+        Primitives_t&& rLeavingSlidePrimitives,
+        Primitives_t&& rEnteringSlidePrimitives,
         const TransitionSettings& rSettings,
         bool white)
 {
     return std::make_shared<FadeThroughColorTransition>(
-            TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives),
+            TransitionScene(std::move(rLeavingSlidePrimitives), std::move(rEnteringSlidePrimitives)),
             rSettings, white)
         ;
 }
@@ -1398,7 +1402,7 @@ std::shared_ptr<OGLTransitionImpl> makeFadeThroughColor( bool white )
     TransitionSettings aSettings;
     aSettings.mbUseMipMapLeaving = aSettings.mbUseMipMapEntering = false;
 
-    return makeFadeThroughColorTransition(aLeavingSlide, aEnteringSlide, aSettings, white);
+    return makeFadeThroughColorTransition(std::move(aLeavingSlide), std::move(aEnteringSlide), aSettings, white);
 }
 
 namespace
@@ -1527,12 +1531,12 @@ GLuint StaticNoiseTransition::makeShader() const
 
 std::shared_ptr<OGLTransitionImpl>
 makeStaticNoiseTransition(
-        const Primitives_t& rLeavingSlidePrimitives,
-        const Primitives_t& rEnteringSlidePrimitives,
+        Primitives_t&& rLeavingSlidePrimitives,
+        Primitives_t&& rEnteringSlidePrimitives,
         const TransitionSettings& rSettings)
 {
     return std::make_shared<StaticNoiseTransition>(
-            TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives),
+            TransitionScene(std::move(rLeavingSlidePrimitives), std::move(rEnteringSlidePrimitives)),
             rSettings)
         ;
 }
@@ -1553,7 +1557,7 @@ std::shared_ptr<OGLTransitionImpl> makeStatic()
     TransitionSettings aSettings;
     aSettings.mbUseMipMapLeaving = aSettings.mbUseMipMapEntering = false;
 
-    return makeStaticNoiseTransition(aLeavingSlide, aEnteringSlide, aSettings);
+    return makeStaticNoiseTransition(std::move(aLeavingSlide), std::move(aEnteringSlide), aSettings);
 }
 
 namespace
@@ -1577,12 +1581,12 @@ GLuint DissolveTransition::makeShader() const
 
 std::shared_ptr<OGLTransitionImpl>
 makeDissolveTransition(
-        const Primitives_t& rLeavingSlidePrimitives,
-        const Primitives_t& rEnteringSlidePrimitives,
+        Primitives_t&& rLeavingSlidePrimitives,
+        Primitives_t&& rEnteringSlidePrimitives,
         const TransitionSettings& rSettings)
 {
     return std::make_shared<DissolveTransition>(
-            TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives),
+            TransitionScene(std::move(rLeavingSlidePrimitives), std::move(rEnteringSlidePrimitives)),
             rSettings)
         ;
 }
@@ -1603,7 +1607,7 @@ std::shared_ptr<OGLTransitionImpl> makeDissolve()
     TransitionSettings aSettings;
     aSettings.mbUseMipMapLeaving = aSettings.mbUseMipMapEntering = false;
 
-    return makeDissolveTransition(aLeavingSlide, aEnteringSlide, aSettings);
+    return makeDissolveTransition(std::move(aLeavingSlide), std::move(aEnteringSlide), aSettings);
 }
 
 namespace
@@ -1822,13 +1826,13 @@ void VortexTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlideTex
 }
 
 std::shared_ptr<OGLTransitionImpl>
-makeVortexTransition(const Primitives_t& rLeavingSlidePrimitives,
-                     const Primitives_t& rEnteringSlidePrimitives,
+makeVortexTransition(Primitives_t&& rLeavingSlidePrimitives,
+                     Primitives_t&& rEnteringSlidePrimitives,
                      const TransitionSettings& rSettings,
                      int NX,
                      int NY)
 {
-    return std::make_shared<VortexTransition>(TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives),
+    return std::make_shared<VortexTransition>(TransitionScene(std::move(rLeavingSlidePrimitives), std::move(rEnteringSlidePrimitives)),
                                               rSettings,
                                               NX, NY);
 }
@@ -1857,7 +1861,7 @@ std::shared_ptr<OGLTransitionImpl> makeVortex()
     aSettings.mbUseMipMapLeaving = aSettings.mbUseMipMapEntering = false;
     aSettings.mnRequiredGLVersion = 3.2f;
 
-    return makeVortexTransition(aLeavingSlide, aEnteringSlide, aSettings, NX, NY);
+    return makeVortexTransition(std::move(aLeavingSlide), std::move(aEnteringSlide), aSettings, NX, NY);
 }
 
 namespace
@@ -1905,12 +1909,12 @@ void RippleTransition::prepare( double SlideWidth, double SlideHeight )
 }
 
 std::shared_ptr<OGLTransitionImpl>
-makeRippleTransition(const Primitives_t& rLeavingSlidePrimitives,
-                     const Primitives_t& rEnteringSlidePrimitives,
+makeRippleTransition(Primitives_t&& rLeavingSlidePrimitives,
+                     Primitives_t&& rEnteringSlidePrimitives,
                      const TransitionSettings& rSettings)
 {
     // The center point should be adjustable by the user, but we have no way to do that in the UI
-    return std::make_shared<RippleTransition>(TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives),
+    return std::make_shared<RippleTransition>(TransitionScene(std::move(rLeavingSlidePrimitives), std::move(rEnteringSlidePrimitives)),
                                               rSettings,
                                               glm::vec2(0.5, 0.5));
 }
@@ -1933,7 +1937,7 @@ std::shared_ptr<OGLTransitionImpl> makeRipple()
     TransitionSettings aSettings;
     aSettings.mbUseMipMapLeaving = aSettings.mbUseMipMapEntering = false;
 
-    return makeRippleTransition(aLeavingSlide, aEnteringSlide, aSettings);
+    return makeRippleTransition(std::move(aLeavingSlide), std::move(aEnteringSlide), aSettings);
 }
 
 static void createHexagon(Primitive& aHexagon, const int x, const int y, const int NX, const int NY)
@@ -2030,11 +2034,11 @@ void GlitterTransition::cleanup()
 }
 
 std::shared_ptr<OGLTransitionImpl>
-makeGlitterTransition(const Primitives_t& rLeavingSlidePrimitives,
-                      const Primitives_t& rEnteringSlidePrimitives,
+makeGlitterTransition(Primitives_t&& rLeavingSlidePrimitives,
+                      Primitives_t&& rEnteringSlidePrimitives,
                       const TransitionSettings& rSettings)
 {
-    return std::make_shared<GlitterTransition>(TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives),
+    return std::make_shared<GlitterTransition>(TransitionScene(std::move(rLeavingSlidePrimitives), std::move(rEnteringSlidePrimitives)),
                                                rSettings);
 }
 
@@ -2055,7 +2059,7 @@ std::shared_ptr<OGLTransitionImpl> makeGlitter()
 
     aSlide.push_back(aHexagon);
 
-    return makeGlitterTransition(aSlide, aEmptySlide, TransitionSettings());
+    return makeGlitterTransition(std::move(aSlide), std::move(aEmptySlide), TransitionSettings());
 }
 
 namespace
@@ -2229,12 +2233,12 @@ void HoneycombTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlide
 }
 
 std::shared_ptr<OGLTransitionImpl>
-makeHoneycombTransition(const Primitives_t& rLeavingSlidePrimitives,
-                        const Primitives_t& rEnteringSlidePrimitives,
+makeHoneycombTransition(Primitives_t&& rLeavingSlidePrimitives,
+                        Primitives_t&& rEnteringSlidePrimitives,
                         const TransitionSettings& rSettings)
 {
     // The center point should be adjustable by the user, but we have no way to do that in the UI
-    return std::make_shared<HoneycombTransition>(TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives),
+    return std::make_shared<HoneycombTransition>(TransitionScene(std::move(rLeavingSlidePrimitives), std::move(rEnteringSlidePrimitives)),
                                                  rSettings);
 }
 
@@ -2255,7 +2259,7 @@ std::shared_ptr<OGLTransitionImpl> makeHoneycomb()
             aHexagon.pushTriangle(glm::vec2((y % 4) ? fdiv(x, NX) : fdiv(x + 1, NX), fdiv(y, NY)), glm::vec2(1, 0), glm::vec2(0, 0));
     aSlide.push_back(aHexagon);
 
-    return makeHoneycombTransition(aSlide, aSlide, aSettings);
+    return makeHoneycombTransition(std::vector(aSlide), std::vector(aSlide), aSettings);
 }
 
 std::shared_ptr<OGLTransitionImpl> makeNewsflash()
@@ -2282,7 +2286,7 @@ std::shared_ptr<OGLTransitionImpl> makeNewsflash()
     Operations_t aOverallOperations;
     aOverallOperations.push_back(makeSRotate(glm::vec3(0,0,1),glm::vec3(0.2,0.2,0),1080,true,0,1));
 
-    return makeSimpleTransition(aLeavingSlide, aEnteringSlide, aOverallOperations);
+    return makeSimpleTransition(std::move(aLeavingSlide), std::move(aEnteringSlide), std::move(aOverallOperations));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
