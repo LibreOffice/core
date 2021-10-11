@@ -206,7 +206,6 @@ Content::Content(
   m_eResourceType( UNKNOWN ),
   m_eResourceTypeForLocks( UNKNOWN ),
   m_pProvider( pProvider ),
-  m_rSessionFactory( rSessionFactory ),
   m_bTransient( false ),
   m_bCollection( false ),
   m_bDidGetOrHead( false )
