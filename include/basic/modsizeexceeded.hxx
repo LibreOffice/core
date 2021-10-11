@@ -28,6 +28,13 @@
 
 namespace com::sun::star::task { class XInteractionContinuation; }
 
+#if defined(_MSC_VER)
+// MSVC automatically applies dllexport to template instantiations if they are a base class
+// of a dllexport class, and this template instantiation is a case of that. If we don't
+// dllimport here, MSVC will complain about duplicate symbols in a mergelibs build.
+template class __declspec(dllimport) cppu::WeakImplHelper< css::task::XInteractionRequest >;
+#endif
+
 class UNLESS_MERGELIBS(BASIC_DLLPUBLIC) ModuleSizeExceeded final : public cppu::WeakImplHelper< css::task::XInteractionRequest >
 {
 // C++ interface
