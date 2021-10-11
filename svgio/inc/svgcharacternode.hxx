@@ -49,23 +49,23 @@ namespace svgio::svgreader
 
             /// X content
             const SvgNumberVector& getX() const { return maX; }
-            void setX(const SvgNumberVector& aX) { maX = aX; }
+            void setX(SvgNumberVector&& aX) { maX = std::move(aX); }
 
             /// Y content
             const SvgNumberVector& getY() const { return maY; }
-            void setY(const SvgNumberVector& aY) { maY = aY; }
+            void setY(SvgNumberVector&& aY) { maY = std::move(aY); }
 
             /// Dx content
             const SvgNumberVector& getDx() const { return maDx; }
-            void setDx(const SvgNumberVector& aDx) { maDx = aDx; }
+            void setDx(SvgNumberVector&& aDx) { maDx = std::move(aDx); }
 
             /// Dy content
             const SvgNumberVector& getDy() const { return maDy; }
-            void setDy(const SvgNumberVector& aDy) { maDy = aDy; }
+            void setDy(SvgNumberVector&& aDy) { maDy = std::move(aDy); }
 
             /// Rotate content
             const SvgNumberVector& getRotate() const { return maRotate; }
-            void setRotate(const SvgNumberVector& aRotate) { maRotate = aRotate; }
+            void setRotate(SvgNumberVector&& aRotate) { maRotate = std::move(aRotate); }
 
             /// TextLength content
             const SvgNumber& getTextLength() const { return maTextLength; }
