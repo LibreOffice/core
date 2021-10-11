@@ -118,7 +118,6 @@ namespace http_dav_ucp
         void  setAllowedMethods( OUString & aAllowedMethods ) { m_aAllowedMethods = aAllowedMethods; } ;
         OUString & getAllowedMethods() { return m_aAllowedMethods; } ;
         bool isLockAllowed() const { return ( m_aAllowedMethods.indexOf( "LOCK" ) != -1 ); };
-        bool isUnlockAllowed() const { return ( m_aAllowedMethods.indexOf( "UNLOCK" ) != -1 ); };
 
         void setLocked( bool locked = true ) { m_isLocked = locked; } ;
         bool isLocked() const { return m_isLocked; };
