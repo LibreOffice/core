@@ -806,11 +806,27 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS( pDocShell->GetModel(), uno::UNO_QUERY_THROW );
     uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
 
-    sal_uInt32 nWriteProtHash = pDocShell->GetModifyPasswordHash();
     OUString sUserName = GetUserName();
-    bool bHasPassword = nWriteProtHash && !sUserName.isEmpty();
-    rStrm.exportDocumentProperties(xDocProps,
-                                   pDocShell->IsSecurityOptOpenReadOnly() && !bHasPassword);
+    sal_uInt32 nWriteProtHash = pDocShell->GetModifyPasswordHash();
+    bool bHasPasswordHash = nWriteProtHash && !sUserName.isEmpty();
+    const uno::Sequence<beans::PropertyValue> aInfo = pDocShell->GetModifyPasswordInfo();
+    OUString sAlgorithm, sSalt, sHash;
+    sal_Int32 nCount = 0;
+    for (const auto& prop : aInfo)
+    {
+        if (prop.Name == "algorithm-name")
+            prop.Value >>= sAlgorithm;
+        else if (prop.Name == "salt")
+            prop.Value >>= sSalt;
+        else if (prop.Name == "iteration-count")
+            prop.Value >>= nCount;
+        else if (prop.Name == "hash")
+            prop.Value >>= sHash;
+    }
+    bool bHasPasswordInfo
+        = sAlgorithm != "PBKDF2" && !sSalt.isEmpty() && !sHash.isEmpty() && !sUserName.isEmpty();
+    rStrm.exportDocumentProperties(xDocProps, pDocShell->IsSecurityOptOpenReadOnly()
+                                                  && !bHasPasswordHash && !bHasPasswordInfo);
     rStrm.exportCustomFragments();
 
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
@@ -825,10 +841,17 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_rupBuild
     );
 
-    if (bHasPassword)
+    if (bHasPasswordHash)
         rWorkbook->singleElement(XML_fileSharing,
                 XML_userName, sUserName,
                 XML_reservationPassword, OString::number(nWriteProtHash, 16).getStr());
+    else if (bHasPasswordInfo)
+        rWorkbook->singleElement(XML_fileSharing,
+                XML_userName, sUserName,
+                XML_algorithmName, sAlgorithm.toUtf8().getStr(),
+                XML_hashValue, sHash.toUtf8().getStr(),
+                XML_saltValue, sSalt.toUtf8().getStr(),
+                XML_spinCount, OString::number(nCount).getStr());
 
     if( !maTableList.IsEmpty() )
     {
