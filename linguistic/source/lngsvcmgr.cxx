@@ -131,9 +131,9 @@ struct SvcInfo
     const std::vector< LanguageType >    aSuppLanguages;
 
     SvcInfo( const OUString &rSvcImplName,
-             const std::vector< LanguageType >  &rSuppLanguages ) :
+             std::vector< LanguageType >&& rSuppLanguages ) :
         aSvcImplName    (rSvcImplName),
-        aSuppLanguages  (rSuppLanguages)
+        aSuppLanguages  (std::move(rSuppLanguages))
     {
     }
 
@@ -961,7 +961,7 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
                 uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
                 aLanguages = LocaleSeqToLangVec( aLocaleSequence );
 
-                pAvailSpellSvcs->push_back( SvcInfo( aImplName, aLanguages ) );
+                pAvailSpellSvcs->push_back( SvcInfo( aImplName, std::move(aLanguages) ) );
             }
             catch (const uno::Exception &)
             {
@@ -1019,7 +1019,7 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
                 uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
                 aLanguages = LocaleSeqToLangVec( aLocaleSequence );
 
-                pAvailGrammarSvcs->push_back( SvcInfo( aImplName, aLanguages ) );
+                pAvailGrammarSvcs->push_back( SvcInfo( aImplName, std::move(aLanguages) ) );
             }
             catch (const uno::Exception &)
             {
@@ -1071,7 +1071,7 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
                 SAL_WARN_IF( aImplName.isEmpty(), "linguistic", "empty implementation name" );
                 uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
                 aLanguages = LocaleSeqToLangVec( aLocaleSequence );
-                pAvailHyphSvcs->push_back( SvcInfo( aImplName, aLanguages ) );
+                pAvailHyphSvcs->push_back( SvcInfo( aImplName, std::move(aLanguages) ) );
             }
             catch (const uno::Exception &)
             {
@@ -1125,7 +1125,7 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
                 uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
                 aLanguages = LocaleSeqToLangVec( aLocaleSequence );
 
-                pAvailThesSvcs->push_back( SvcInfo( aImplName, aLanguages ) );
+                pAvailThesSvcs->push_back( SvcInfo( aImplName, std::move(aLanguages) ) );
             }
             catch (const uno::Exception &)
             {
