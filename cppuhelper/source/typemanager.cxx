@@ -444,12 +444,12 @@ public:
         OUString const & name,
         rtl::Reference< unoidl::PolymorphicStructTypeTemplateEntity > const &
             entity,
-        std::vector< OUString > const & arguments):
-        manager_(manager), name_(name), entity_(entity), arguments_(arguments)
+        std::vector< OUString >&& arguments):
+        manager_(manager), name_(name), entity_(entity), arguments_(std::move(arguments))
     {
         assert(manager.is());
         assert(entity.is());
-        assert(arguments.size() == entity->getTypeParameters().size());
+        assert(arguments_.size() == entity->getTypeParameters().size());
     }
 
 private:
@@ -2121,7 +2121,7 @@ css::uno::Any cppuhelper::TypeManager::getInstantiatedStruct(
     return css::uno::makeAny<
         css::uno::Reference< css::reflection::XTypeDescription > >(
             new InstantiatedPolymorphicStructTypeDescription(
-                this, name, ent2, args));
+                this, name, ent2, std::move(args)));
 }
 
 css::uno::Any cppuhelper::TypeManager::getInterfaceMember(

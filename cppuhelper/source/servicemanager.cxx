@@ -451,8 +451,8 @@ class ContentEnumeration:
     public cppu::WeakImplHelper< css::container::XEnumeration >
 {
 public:
-    explicit ContentEnumeration(std::vector< css::uno::Any > const & factories):
-        factories_(factories), iterator_(factories_.begin()) {}
+    explicit ContentEnumeration(std::vector< css::uno::Any >&& factories):
+        factories_(std::move(factories)), iterator_(factories_.begin()) {}
 
     ContentEnumeration(const ContentEnumeration&) = delete;
     const ContentEnumeration& operator=(const ContentEnumeration&) = delete;
@@ -1193,7 +1193,7 @@ cppuhelper::ServiceManager::createContentEnumeration(
             factories.push_back(css::uno::Any(impl->factory2));
         }
     }
-    return new ContentEnumeration(factories);
+    return new ContentEnumeration(std::move(factories));
 }
 
 css::uno::Reference< css::beans::XPropertySetInfo >
