@@ -112,7 +112,7 @@ define gb_LinkTarget__command_dynamiclink
 $(call gb_Helper_abbreviate_dirs,\
 	$(if $(CXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS),$(gb_CXX),$(gb_CC)) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
-		$(gb_LTOFLAGS) \
+		$(T_LTOFLAGS) \
 		$(if $(SOVERSIONSCRIPT),-Wl$(COMMA)-soname=$(notdir $(1)) \
 			) \
 		$(subst \d,$$,$(RPATH)) \

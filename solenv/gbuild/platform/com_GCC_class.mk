@@ -42,7 +42,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && cd $(SRCDIR) && \
 	$(gb_CC) \
 		-x assembler-with-cpp \
-		$(gb_LTOFLAGS) \
+		$(T_LTOFLAGS) \
 		$(gb_AFLAGS) \
 		-c $(3) \
 		-o $(1)) \
@@ -73,7 +73,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(if $(5),$(gb_COMPILER_PLUGINS_SETUP)) \
 	$(call gb_CObject__compiler,$(3),$(7)) \
 		$(DEFS) \
-		$(gb_LTOFLAGS) \
+		$(T_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
 		$(if $(5),$(gb_COMPILER_PLUGINS)) \
