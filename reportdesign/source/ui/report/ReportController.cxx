@@ -2976,7 +2976,7 @@ uno::Reference< sdbc::XRowSet > const & OReportController::getRowSet()
         aPropertyMediation.emplace( PROPERTY_ESCAPEPROCESSING, TPropertyConverter(PROPERTY_ESCAPEPROCESSING,aNoConverter) );
         aPropertyMediation.emplace( PROPERTY_FILTER, TPropertyConverter(PROPERTY_FILTER,aNoConverter) );
 
-        m_xRowSetMediator = new OPropertyMediator( m_xReportDefinition, xRowSetProp, aPropertyMediation );
+        m_xRowSetMediator = new OPropertyMediator( m_xReportDefinition, xRowSetProp, std::move(aPropertyMediation) );
         m_xRowSet = xRowSet;
     }
     catch(const uno::Exception&)

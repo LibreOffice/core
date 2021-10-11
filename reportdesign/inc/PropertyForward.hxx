@@ -59,7 +59,7 @@ namespace rptui
     public:
         OPropertyMediator(const css::uno::Reference< css::beans::XPropertySet>& _xSource
                         ,const css::uno::Reference< css::beans::XPropertySet>& _xDest
-                        ,const TPropertyNamePair& _aNameMap
+                        ,TPropertyNamePair&& _aNameMap
                         ,bool _bReverse = false);
 
         // css::beans::XPropertyChangeListener

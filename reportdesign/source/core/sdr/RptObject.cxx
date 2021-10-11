@@ -875,7 +875,7 @@ void OUnoObject::CreateMediator(bool _bReverse)
             m_xMediator = new OPropertyMediator(
                 m_xReportComponent,
                 xControlModel,
-                getPropertyNameMap(GetObjIdentifier()),
+                TPropertyNamePair(getPropertyNameMap(GetObjIdentifier())),
                 _bReverse);
         }
     }

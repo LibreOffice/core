@@ -30,10 +30,10 @@ namespace rptui
 
 OPropertyMediator::OPropertyMediator(const Reference< XPropertySet>& _xSource
                                      ,const Reference< XPropertySet>& _xDest
-                                     ,const TPropertyNamePair& _aNameMap
+                                     ,TPropertyNamePair&& _aNameMap
                                      ,bool _bReverse)
                                 : OPropertyForward_Base(m_aMutex)
-                                ,m_aNameMap(_aNameMap)
+                                ,m_aNameMap(std::move(_aNameMap))
                                 ,m_xSource(_xSource)
                                 ,m_xDest(_xDest)
                                 ,m_bInChange(false)
