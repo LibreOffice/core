@@ -1479,7 +1479,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
         RegisterFrameConversion(
             rAppendContext.pLastParagraphProperties->GetStartingRange(),
             rAppendContext.pLastParagraphProperties->GetEndingRange(),
-            aFrameProperties );
+            std::move(aFrameProperties) );
     }
     catch( const uno::Exception& )
     {
@@ -7505,13 +7505,13 @@ PageMar::PageMar()
 void DomainMapper_Impl::RegisterFrameConversion(
         uno::Reference< text::XTextRange > const&    xFrameStartRange,
         uno::Reference< text::XTextRange > const&    xFrameEndRange,
-        const std::vector<beans::PropertyValue>& rFrameProperties
+        std::vector<beans::PropertyValue>&& rFrameProperties
         )
 {
     OSL_ENSURE(
         m_aFrameProperties.empty() && !m_xFrameStartRange.is() && !m_xFrameEndRange.is(),
         "frame properties not removed");
-    m_aFrameProperties = rFrameProperties;
+    m_aFrameProperties = std::move(rFrameProperties);
     m_xFrameStartRange = xFrameStartRange;
     m_xFrameEndRange   = xFrameEndRange;
 }

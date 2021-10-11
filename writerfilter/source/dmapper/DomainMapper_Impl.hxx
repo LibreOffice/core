@@ -982,7 +982,7 @@ public:
 
     void RegisterFrameConversion(css::uno::Reference<css::text::XTextRange> const& xFrameStartRange,
                                  css::uno::Reference<css::text::XTextRange> const& xFrameEndRange,
-                                 const std::vector<css::beans::PropertyValue>& aFrameProperties);
+                                 std::vector<css::beans::PropertyValue>&& aFrameProperties);
     void ExecuteFrameConversion();
 
     void AddNewRedline( sal_uInt32 sprmId );

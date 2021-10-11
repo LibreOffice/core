@@ -254,9 +254,9 @@ struct ListCharStylePropertyMap_t
     OUString         sCharStyleName;
     PropertyValueVector_t   aPropertyValues;
 
-    ListCharStylePropertyMap_t(const OUString& rCharStyleName, const PropertyValueVector_t& rPropertyValues):
+    ListCharStylePropertyMap_t(const OUString& rCharStyleName, PropertyValueVector_t&& rPropertyValues):
         sCharStyleName( rCharStyleName ),
-        aPropertyValues( rPropertyValues )
+        aPropertyValues( std::move(rPropertyValues) )
         {}
 };
 
@@ -1686,7 +1686,7 @@ OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProp
             }
         }
         xCharStyles->insertByName( sListLabel, uno::makeAny( xStyle) );
-        m_pImpl->m_aListCharStylePropertyVector.emplace_back( sListLabel, rCharProperties );
+        m_pImpl->m_aListCharStylePropertyVector.emplace_back( sListLabel, std::vector(rCharProperties) );
     }
     catch( const uno::Exception& )
     {
