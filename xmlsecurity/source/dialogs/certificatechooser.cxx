@@ -38,7 +38,7 @@ using namespace comphelper;
 using namespace css;
 
 CertificateChooser::CertificateChooser(weld::Window* _pParent,
-                                       std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > const & rxSecurityContexts,
+                                       std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > && rxSecurityContexts,
                                        UserAction eAction)
     : GenericDialogController(_pParent, "xmlsec/ui/selectcertificatedialog.ui", "SelectCertificateDialog")
     , meAction(eAction)
@@ -63,7 +63,7 @@ CertificateChooser::CertificateChooser(weld::Window* _pParent,
     m_xCertLB->connect_row_activated( LINK( this, CertificateChooser, CertificateSelectHdl ) );
     m_xViewBtn->connect_clicked( LINK( this, CertificateChooser, ViewButtonHdl ) );
 
-    mxSecurityContexts = rxSecurityContexts;
+    mxSecurityContexts = std::move(rxSecurityContexts);
     mbInitialized = false;
 
     // disable buttons

@@ -76,7 +76,7 @@ private:
 
 public:
     CertificateChooser(weld::Window* pParent,
-                       std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > const & rxSecurityContexts,
+                       std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > && rxSecurityContexts,
                        UserAction eAction);
     virtual ~CertificateChooser() override;
 

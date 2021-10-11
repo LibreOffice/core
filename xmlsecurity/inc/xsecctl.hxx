@@ -307,7 +307,7 @@ public:
     SignatureInformations   getSignatureInformations() const;
     /// only verify can figure out which X509Data is the signing certificate
     void UpdateSignatureInformation(sal_Int32 nSecurityId,
-            std::vector<SignatureInformation::X509Data> const& rDatas);
+            std::vector<SignatureInformation::X509Data> && rDatas);
 
     static void exportSignature(
         const css::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler,
