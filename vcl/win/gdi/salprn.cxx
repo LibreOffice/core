@@ -1350,7 +1350,6 @@ static DEVMODEW const * ImplSalSetCopies( DEVMODEW const * pDevMode, sal_uInt32 
 
 
 WinSalPrinter::WinSalPrinter() :
-    mpGraphics( nullptr ),
     mpInfoPrinter( nullptr ),
     mpNextPrinter( nullptr ),
     mhDC( nullptr ),
@@ -1374,7 +1373,6 @@ WinSalPrinter::~WinSalPrinter()
     HDC hDC = mhDC;
     if ( hDC )
     {
-        delete mpGraphics;
         DeleteDC( hDC );
     }
 
@@ -1531,8 +1529,7 @@ bool WinSalPrinter::EndJob()
     HDC hDC = mhDC;
     if (isValid())
     {
-        delete mpGraphics;
-        mpGraphics = nullptr;
+        mxGraphics.reset();
 
         // #i54419# Windows fax printer brings up a dialog in EndDoc
         // which text previously copied in soffice process can be
@@ -1587,14 +1584,13 @@ SalGraphics* WinSalPrinter::StartPage( ImplJobSetup* pSetupData, bool bNewJobDat
     SelectPen( hDC, hTempPen );
     SelectBrush( hDC, hTempBrush );
 
-    mpGraphics = ImplCreateSalPrnGraphics( hDC );
-    return mpGraphics;
+    mxGraphics.reset(ImplCreateSalPrnGraphics( hDC ));
+    return mxGraphics.get();
 }
 
 void WinSalPrinter::EndPage()
 {
-    delete mpGraphics;
-    mpGraphics = nullptr;
+    mxGraphics.reset();
 
     if (!isValid())
         return;
