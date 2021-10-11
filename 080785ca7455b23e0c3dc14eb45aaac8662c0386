@@ -51,6 +51,24 @@
       "message": "oooh, that is great news! would be nice to make that the default release build for Windows",
       "revId": "080785ca7455b23e0c3dc14eb45aaac8662c0386",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ca15aad_e96ea608",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-10-11T10:20:00Z",
+      "side": 1,
+      "message": "Yes, see my dev ML mail. Although according to my few tests MSVC rather sucks at getting a noticeable improvement from LTO :(.",
+      "parentUuid": "d44f883a_687009de",
+      "revId": "080785ca7455b23e0c3dc14eb45aaac8662c0386",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
