@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bd6dadd_46ae8d6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-10-11T11:46:49Z",
+      "side": 1,
+      "message": "Hi Mike! Do you know how we could achieve this here? Test is still missing, I will just create a document with some bookmarks and loop through them.",
+      "revId": "79d274cd715e32f90e5b506d180d116e9229c468",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8c484fa4_838264bf",
@@ -14,6 +31,24 @@
       "writtenOn": "2021-10-10T22:43:55Z",
       "side": 1,
       "message": "away from the bug itself, but I wonder whether we should accept XEnumeration itself too.\n\nUnfortunately, unlike other programming languages, interfaces like XEnumeration, XIndexAccess, XNamedAccess, XEnumerationAccess are not in inheritance relationship, and we would not be able to change this sort of APIs for the backward compatiblity...",
+      "revId": "79d274cd715e32f90e5b506d180d116e9229c468",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90fad330_42b88999",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1202,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-10-11T11:46:49Z",
+      "side": 1,
+      "message": "I don\u0027t know how to check this more efficiently for every kind of interface we may need here 😐",
+      "parentUuid": "8c484fa4_838264bf",
       "revId": "79d274cd715e32f90e5b506d180d116e9229c468",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
