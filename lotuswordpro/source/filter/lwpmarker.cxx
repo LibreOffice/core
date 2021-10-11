@@ -257,7 +257,7 @@ void LwpCHBlkMarker::ProcessKeylist(XFContentContainer* pXFPara,sal_uInt8 nType)
             EnumAllKeywords();//traverse the proplist to find all keywords
             XFInputList* pList = new XFInputList;
             pList->SetName(LwpDLNFPVList::m_Name.str());
-            pList->SetLabels(m_Keylist);
+            pList->SetLabels(std::vector(m_Keylist));
             pXFPara->Add(pList);
         }
         // else skip MARKER_END
@@ -269,7 +269,7 @@ void LwpCHBlkMarker::ProcessKeylist(XFContentContainer* pXFPara,sal_uInt8 nType)
             EnumAllKeywords();
             XFInputList* pList = new XFInputList;
             pList->SetName(LwpDLNFPVList::m_Name.str());
-            pList->SetLabels(m_Keylist);
+            pList->SetLabels(std::vector(m_Keylist));
             pXFPara->Add(pList);
 
             XFHolderStart* pHolder= new XFHolderStart;

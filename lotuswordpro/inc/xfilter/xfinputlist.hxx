@@ -76,9 +76,9 @@ public:
         m_strName = sName;
     }
 
-    void SetLabels(const std::vector<OUString>& list)
+    void SetLabels(std::vector<OUString>&& list)
     {
-        m_list=list;
+        m_list=std::move(list);
     }
 
     virtual void    ToXml(IXFStream *pStrm) override;
