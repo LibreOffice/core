@@ -22,6 +22,30 @@
       },
       "revId": "2d486bac81e06c64d13c647f35d3f4affbeb183e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "987b41a9_41d76574",
+        "filename": "sdext/source/pdfimport/wrapper/wrapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-10-11T08:18:00Z",
+      "side": 1,
+      "message": "Ops... I think it should be \"aFontReadResult.GetWeight() \u003d\u003d THIN\". Will prepare another patch to fix this. How come my own build has passed, and the Jenkins builds are all passed?? Which build options are you using to detect this kind of error?",
+      "parentUuid": "50c55cf9_71fc37e8",
+      "range": {
+        "startLine": 624,
+        "startChar": 16,
+        "endLine": 624,
+        "endChar": 84
+      },
+      "revId": "2d486bac81e06c64d13c647f35d3f4affbeb183e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
