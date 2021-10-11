@@ -88,4 +88,9 @@ enum class PortionType
     TabLeft     = 0x0740,
 };
 
+namespace sw
+{
+const char* PortionTypeToString(PortionType nType);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
