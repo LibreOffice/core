@@ -669,7 +669,8 @@ public:
     virtual sal_Bool SAL_CALL canCheckIn( ) override;
 
     // XColorSetsManager
-    virtual void SAL_CALL addNewColorSet(const OUString& rColorSetName, const css::uno::Sequence<css::util::Color>& rColorSetColors) override;
+    virtual sal_Int32 SAL_CALL addNewColorSet(const OUString& rColorSetName, const css::uno::Sequence<css::util::Color>& rColorSetColors) override;
+    virtual sal_Int32 SAL_CALL createVirtualThemeColorSet( sal_Int32 nIndexColorSetToReference ) override;
 
     /// @throws css::uno::RuntimeException
     bool getBoolPropertyValue( const OUString& rName );

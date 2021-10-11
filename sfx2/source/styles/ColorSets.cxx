@@ -8,6 +8,7 @@
  *
  */
 
+#include <memory>
 #include <sfx2/ColorSets.hxx>
 
 ColorSet::ColorSet(OUString const& aColorSetName)
@@ -18,6 +19,7 @@ ColorSet::ColorSet(OUString const& aColorSetName)
 
 ColorSets::ColorSets()
     : maColorSets()
+    , maVirtualThemeColorSets()
     , mnThemeColorSetIndex(0)
 {
     {
@@ -34,7 +36,7 @@ ColorSets::ColorSets()
         aColorSet.add(9, 0x2ECC71);
         aColorSet.add(10, 0x1D99F3);
         aColorSet.add(11, 0x3DAEE9);
-        maColorSets.push_back(aColorSet);
+        addColorSet(aColorSet);
     }
     {
         ColorSet aColorSet("Material Blue");
@@ -50,7 +52,7 @@ ColorSets::ColorSets()
         aColorSet.add(9, 0x0277BD);
         aColorSet.add(10, 0x4DD0E1);
         aColorSet.add(11, 0x0097A7);
-        maColorSets.push_back(aColorSet);
+        addColorSet(aColorSet);
     }
     {
         ColorSet aColorSet("Material Red");
@@ -66,7 +68,7 @@ ColorSets::ColorSets()
         aColorSet.add(9, 0xD50000);
         aColorSet.add(10, 0xE91E63);
         aColorSet.add(11, 0xC51162);
-        maColorSets.push_back(aColorSet);
+        addColorSet(aColorSet);
     }
     {
         ColorSet aColorSet("Material Green");
@@ -82,7 +84,7 @@ ColorSets::ColorSets()
         aColorSet.add(9, 0x64dd17);
         aColorSet.add(10, 0xcddc39);
         aColorSet.add(11, 0xaeea00);
-        maColorSets.push_back(aColorSet);
+        addColorSet(aColorSet);
     }
 }
 
@@ -90,9 +92,19 @@ ColorSets::~ColorSets() {}
 
 const ColorSet& ColorSets::getColorSet(std::u16string_view rName) const
 {
-    for (const ColorSet& rColorSet : maColorSets)
+    for (const std::shared_ptr<ColorSet>& rColorSet : maColorSets)
     {
-        if (rColorSet.getName() == rName)
+        if (rColorSet->getName() == rName)
+            return *rColorSet;
+    }
+    return *maColorSets[0];
+}
+
+const std::shared_ptr<ColorSet>& ColorSets::getColorSetPtr(std::u16string_view rName) const
+{
+    for (const std::shared_ptr<ColorSet>& rColorSet : maColorSets)
+    {
+        if (rColorSet->getName() == rName)
             return rColorSet;
     }
     return maColorSets[0];
@@ -104,8 +116,11 @@ void ColorSets::setThemeColorSet(std::u16string_view rName)
 {
     for (sal_uInt32 nIndex = 0; nIndex < maColorSets.size(); ++nIndex)
     {
-        if (maColorSets[nIndex].getName() == rName)
+        if (maColorSets[nIndex]->getName() == rName)
+        {
             mnThemeColorSetIndex = nIndex;
+            break;
+        }
     }
 }
 

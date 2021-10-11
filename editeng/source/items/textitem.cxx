@@ -1321,36 +1321,43 @@ bool ThemeColorData::operator==(const ThemeColorData &rOther) const
         return true;
     else
         return mnThemeColorIndex == rOther.mnThemeColorIndex
+               && mnVirtualThemeColorSetIndex == rOther.mnVirtualThemeColorSetIndex
                && mnTintShade == rOther.mnTintShade;
 }
 
 std::optional<Color> ThemeColorData::getThemeColorIfNeedsUpdate() const
 {
-    if (mnThemeColorIndex > -1)
+    // HACK: after getting rid of SfxObjectShell::Current() should be
+    // able to get rid of mnContainerIndex
+    if (mnThemeColorIndex != -1 && mnVirtualThemeColorSetIndex != -1)
     {
-        // try to get the pointer for ColorSets if it's not there...
-        if (!mpColorSets)
+        // HACK: try to get the pointer to the container.. if it's not there
+        // We won't need this after figuring out a better way of interacting with SfxObjectShell
+        if(mpVirtualThemeColorSet.expired())
         {
             if (SfxObjectShell* pObjShell = SfxObjectShell::Current())
             {
                 if (const SfxColorSetListItem* pColorSetItem = pObjShell->GetItem(SID_COLOR_SETS))
                 {
-                    mpColorSets = &pColorSetItem->GetSfxColorSetList();
+                    ColorSets& rColorSets = pColorSetItem->GetSfxColorSetList();
+                    mpVirtualThemeColorSet = rColorSets.getVirtualColorSet(mnVirtualThemeColorSetIndex);
                 }
             }
         }
 
-        if (mpColorSets)
+        if (auto pVirtualThemeColorSet = mpVirtualThemeColorSet.lock())
         {
-            Color aColor = mpColorSets->getThemeColorSet().getColor(mnThemeColorIndex);
-
-            // only calculate transformations applied color when necessary
-            if(aColor != maCachedBaseColor || mbRecalculateColor)
+            if ( auto pColorSet = pVirtualThemeColorSet->getColorSetPtr().lock() )
             {
-                maCachedBaseColor = aColor;
-                mbRecalculateColor = false;
-                aColor.ApplyTintOrShade(mnTintShade);
-                return aColor;
+                Color aColor = pColorSet->getColor(mnThemeColorIndex);
+                // only calculate transformations applied color when necessary
+                if(aColor != maCachedBaseColor || mbRecalculateColor)
+                {
+                    maCachedBaseColor = aColor;
+                    mbRecalculateColor = false;
+                    aColor.ApplyTintOrShade(mnTintShade);
+                    return aColor;
+                }
             }
         }
     }
@@ -1396,6 +1403,40 @@ void ThemeColorData::RecalculateOnNextGet()
     // set here...
     // Also pretty unmaintainable in my opinion.
     // maCachedBaseColor = 0xDEADBEEF;
+}
+
+void ThemeColorData::setVirtualThemeColorSet(sal_Int32 nVirtualThemeColorSetIndex)
+{
+    // HACK:
+    mnVirtualThemeColorSetIndex = nVirtualThemeColorSetIndex;
+    return;
+
+    // After swapping out SfxObjectShell::Current() with something reasonable
+    // this should work:
+    if (SfxObjectShell* pObjShell = SfxObjectShell::Current())
+    {
+        if (const SfxColorSetListItem* pColorSetItem = pObjShell->GetItem(SID_COLOR_SETS))
+        {
+            ColorSets& rColorSets = pColorSetItem->GetSfxColorSetList();
+            mpVirtualThemeColorSet = rColorSets.getVirtualColorSet(nVirtualThemeColorSetIndex);
+        }
+    }
+}
+
+sal_Int32 ThemeColorData::getVirtualThemeColorSetIndex() const
+{
+    // HACK:
+    return mnVirtualThemeColorSetIndex;
+
+    // After swapping out SfxObjectShell::Current() with something reasonable
+    // this should work:
+    if (SfxObjectShell* pObjShell = SfxObjectShell::Current())
+    {
+        if (const SfxColorSetListItem* pColorSetItem = pObjShell->GetItem(SID_COLOR_SETS))
+        {
+            return pColorSetItem->GetSfxColorSetList().getVirtualColorSetIndex(mpVirtualThemeColorSet);
+        }
+    }
 }
 
 // class SvxColorItem ----------------------------------------------------
@@ -1472,6 +1513,11 @@ bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= maThemeColorData.getTintOrShade();
             break;
         }
+        case MID_COLOR_VIRTUAL_THEME_COLOR_SET_INDEX:
+        {
+            rVal <<= maThemeColorData.getVirtualThemeColorSetIndex();
+            break;
+        }
         default:
         {
             rVal <<= mColor;
@@ -1516,6 +1562,14 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if (!(rVal >>= nTintShade))
                 return false;
             maThemeColorData.setTintOrShade(nTintShade);
+        }
+        break;
+        case MID_COLOR_VIRTUAL_THEME_COLOR_SET_INDEX:
+        {
+            sal_Int32 nContainerIndex = -1;
+            if (!(rVal >>= nContainerIndex))
+                return false;
+            maThemeColorData.setVirtualThemeColorSet(nContainerIndex);
         }
         break;
         default:

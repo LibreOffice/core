@@ -30,8 +30,10 @@
 #include <oox/helper/propertyset.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/ppt/pptimport.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
+#include <optional>
 
 using ::oox::core::XmlFilterBase;
 using namespace ::com::sun::star;
@@ -114,6 +116,16 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         // set color theme index
         rPropMap.setProperty(PROP_CharColorThemeColorIndex, aColor.getSchemeColorIndex());
         rPropMap.setProperty(PROP_CharColorTintOrShade, aColor.getTintOrShade());
+        if (const ::oox::ppt::PowerPointImport* pPowerPointImport
+            = dynamic_cast<const ::oox::ppt::PowerPointImport*>(&rFilter))
+        {
+            if (std::optional<sal_Int32> oVirtualColorSetIndex
+                = pPowerPointImport->getActualSlidePersist()->getVirtualThemeColorSetIndex())
+            {
+                rPropMap.setProperty(PROP_CharColorVirtualThemeColorSetIndex,
+                                     oVirtualColorSetIndex.value());
+            }
+        }
 
         if (aColor.hasTransparency())
         {

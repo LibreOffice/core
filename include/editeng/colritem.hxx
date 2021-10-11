@@ -47,6 +47,8 @@ public:
     sal_Int16 getTintOrShade() const;
     void setThemeColorIndex(sal_Int16 nThemeColorIndex);
     sal_Int16 getThemeColorIndex() const;
+    void setVirtualThemeColorSet(sal_Int32 nVirtualThemeColorSetIndex);
+    sal_Int32 getVirtualThemeColorSetIndex() const;
 
 private:
     void RecalculateOnNextGet();
@@ -74,6 +76,15 @@ private:
     mutable const ColorSets* mpColorSets = nullptr;
     // mutable since marked as false after recalculation in getThemeColorIfNeedsUpdate
     mutable bool mbRecalculateColor = true;
+
+    // HACK: VirtualColorSet index
+    // should be able to remove this after removing SfxObjectShell::Current()
+    // from the themecolordata code
+    sal_Int32 mnVirtualThemeColorSetIndex = -1;
+
+
+    // HACK: mutable here until I fix the SfxObjectShell interactions..
+    mutable std::weak_ptr<VirtualThemeColorSet> mpVirtualThemeColorSet = std::weak_ptr<VirtualThemeColorSet>();
 };
 
 /** SvxColorItem item describes a color.

@@ -1921,7 +1921,7 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                     ThemePtr pTheme = pPowerPointImport->getActualSlidePersist()->getTheme();
                     rFilter.importFragment(new ThemeOverrideFragmentHandler(
                                 rFilter, aThemeOverrideFragmentPath, *pTheme), xDoc);
-                    pPowerPointImport->getActualSlidePersist()->setTheme(pTheme);
+                    pPowerPointImport->getActualSlidePersist()->setTheme(pTheme, rFilter);
                 }
 
                 // convert imported chart model to chart document

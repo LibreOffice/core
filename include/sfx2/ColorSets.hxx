@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include <memory>
 #include <vector>
 
 #include <rtl/ustring.hxx>
@@ -34,37 +35,78 @@ public:
     const std::vector<Color>& getColors() const { return maColors; }
 };
 
+class VirtualThemeColorSet
+{
+public:
+    VirtualThemeColorSet() = default;
+    VirtualThemeColorSet(const std::shared_ptr<ColorSet>& pColorSet)
+        : mpThemeColorSet(pColorSet)
+    {
+    }
+    const std::weak_ptr<ColorSet>& getColorSetPtr() { return mpThemeColorSet; }
+
+private:
+    std::weak_ptr<ColorSet> mpThemeColorSet = std::weak_ptr<ColorSet>();
+};
+
 class SFX2_DLLPUBLIC ColorSets
 {
-    std::vector<ColorSet> maColorSets;
+    std::vector<std::shared_ptr<ColorSet>> maColorSets;
+    std::vector<std::shared_ptr<VirtualThemeColorSet>> maVirtualThemeColorSets;
+    // TEMP: should remove
     sal_Int32 mnThemeColorSetIndex;
 
 public:
     ColorSets();
     ~ColorSets();
 
-    static ColorSets& get()
-    {
-        static ColorSets aColorSetsInstance;
-        return aColorSetsInstance;
-    }
-
+    // TEMP: should remove
     const ColorSet& getThemeColorSet() const { return getColorSet(mnThemeColorSetIndex); }
 
+    // TEMP: should remove
     void setThemeColorSet(sal_Int32 nIndex);
-
     void setThemeColorSet(std::u16string_view rName);
 
-    const std::vector<ColorSet>& getColorSets() const { return maColorSets; }
+    const std::vector<std::shared_ptr<ColorSet>>& getColorSets() const { return maColorSets; }
 
-    const ColorSet& getColorSet(sal_uInt32 nIndex) const { return maColorSets[nIndex]; }
-
+    const ColorSet& getColorSet(sal_Int32 nIndex) const { return *maColorSets[nIndex]; }
+    const std::shared_ptr<ColorSet>& getColorSetPtr(sal_Int32 nIndex) const
+    {
+        return maColorSets[nIndex];
+    }
     const ColorSet& getColorSet(std::u16string_view rName) const;
+    const std::shared_ptr<ColorSet>& getColorSetPtr(std::u16string_view rName) const;
 
     int addColorSet(const ColorSet& rColorSet)
     {
-        maColorSets.push_back(rColorSet);
+        maColorSets.emplace_back(std::make_shared<ColorSet>(rColorSet));
         return maColorSets.size() - 1;
+    }
+
+    std::shared_ptr<VirtualThemeColorSet>& getVirtualColorSet(int nVirtualColorSetIndex)
+    {
+        return maVirtualThemeColorSets[nVirtualColorSetIndex];
+    }
+
+    sal_Int32 getVirtualColorSetIndex(const std::weak_ptr<VirtualThemeColorSet>& pVirtualColorSet)
+    {
+        if (auto aIt = std::find_if(
+                maVirtualThemeColorSets.begin(), maVirtualThemeColorSets.end(),
+                [pVirtualColorSet](std::shared_ptr<VirtualThemeColorSet>& pVirtualColorSet_) {
+                    return pVirtualColorSet_.get() == pVirtualColorSet.lock().get();
+                });
+            aIt != maVirtualThemeColorSets.end())
+        {
+            return aIt - maVirtualThemeColorSets.begin();
+        }
+        return -1;
+    }
+
+    int addVirtualThemeColorSet(int nIndexColorSetToReference)
+    {
+        maVirtualThemeColorSets.emplace_back(
+            std::make_shared<VirtualThemeColorSet>(getColorSetPtr(nIndexColorSetToReference)));
+        return maVirtualThemeColorSets.size() - 1;
     }
 };
 

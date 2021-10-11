@@ -83,8 +83,10 @@ public:
     void setLayoutPath( const OUString& rLayoutPath ) { maLayoutPath = rLayoutPath; }
     const OUString& getLayoutPath() const { return maLayoutPath; }
 
-    void setTheme( const oox::drawingml::ThemePtr& rThemePtr ){ mpThemePtr = rThemePtr; }
+    void setTheme(const oox::drawingml::ThemePtr& rThemePtr,
+                  const oox::core::XmlFilterBase& rFilterBase);
     const oox::drawingml::ThemePtr& getTheme() const { return mpThemePtr; }
+    const std::optional<sal_Int32>& getVirtualThemeColorSetIndex() { return moVirtualColorSetIndex; }
 
     void setClrMap( const oox::drawingml::ClrMapPtr pClrMapPtr ){ mpClrMapPtr = pClrMapPtr; }
     const oox::drawingml::ClrMapPtr& getClrMap() const { return mpClrMapPtr; }
@@ -132,6 +134,7 @@ private:
     css::uno::Reference< css::drawing::XDrawPage >                          mxPage;
     oox::drawingml::ThemePtr                                                mpThemePtr;         // the theme that is used
     oox::drawingml::ClrMapPtr                                               mpClrMapPtr;        // color mapping (if any)
+    std::optional<sal_Int32>                                                moVirtualColorSetIndex;
     SlidePersistPtr                                                         mpMasterPagePtr;
 
     oox::drawingml::ShapePtr                                                maShapesPtr;

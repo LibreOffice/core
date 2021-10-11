@@ -45,6 +45,7 @@
 #include <oox/drawingml/themefragmenthandler.hxx>
 #include <drawingml/textliststylecontext.hxx>
 #include <oox/helper/attributelist.hxx>
+#include <oox/helper/propertyset.hxx>
 #include <oox/ole/olestorage.hxx>
 #include <oox/ole/vbaproject.hxx>
 #include <oox/ppt/pptshape.hxx>
@@ -53,6 +54,7 @@
 #include <oox/ppt/layoutfragmenthandler.hxx>
 #include <oox/ppt/pptimport.hxx>
 #include <oox/token/namespaces.hxx>
+#include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 
 #include <com/sun/star/office/XAnnotation.hpp>
@@ -355,7 +357,6 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
                             if( aIter2 == rThemes.end() )
                             {
                                 oox::drawingml::ThemePtr pThemePtr = std::make_shared<oox::drawingml::Theme>();
-                                pMasterPersistPtr->setTheme( pThemePtr );
                                 Reference<xml::dom::XDocument> xDoc=
                                     rFilter.importFragment(aThemeFragmentPath);
 
@@ -367,11 +368,12 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
                                         UNO_QUERY_THROW));
                                 rThemes[ aThemeFragmentPath ] = pThemePtr;
                                 pThemePtr->setFragment(xDoc);
+                                pMasterPersistPtr->setTheme(pThemePtr, rFilter);
                                 saveThemeToGrabBag(pThemePtr, nIndex + 1);
                             }
                             else
                             {
-                                pMasterPersistPtr->setTheme( (*aIter2).second );
+                                pMasterPersistPtr->setTheme( (*aIter2).second, rFilter );
                             }
                         }
                         importSlide( xMasterFragmentHandler, pMasterPersistPtr );
@@ -385,7 +387,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
             // importing slide page
             if (pMasterPersistPtr) {
                 pSlidePersistPtr->setMasterPersist( pMasterPersistPtr );
-                pSlidePersistPtr->setTheme( pMasterPersistPtr->getTheme() );
+                pSlidePersistPtr->setTheme( pMasterPersistPtr->getTheme(), rFilter );
                 Reference< drawing::XMasterPageTarget > xMasterPageTarget( pSlidePersistPtr->getPage(), UNO_QUERY );
                 if( xMasterPageTarget.is() )
                     xMasterPageTarget->setMasterPage( pMasterPersistPtr->getPage() );

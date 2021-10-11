@@ -103,7 +103,7 @@ bool ClrScheme::getColorByIndex(size_t nIndex, ::Color& rColor) const
     return true;
 }
 
-std::vector<::Color> ClrScheme::getColorVector()
+std::vector<::Color> ClrScheme::getColorVector() const
 {
     // most likely should reorder using tokens here...
     // this is a experimental hack:
@@ -117,7 +117,7 @@ std::vector<::Color> ClrScheme::getColorVector()
     return aColors;
 }
 
-std::vector<sal_Int32> ClrScheme::getColorVectorAsInts()
+std::vector<sal_Int32> ClrScheme::getColorVectorAsInts() const
 {
     // most likely should reorder using tokens here...
     // this is a experimental hack:

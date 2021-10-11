@@ -15,8 +15,8 @@ module com { module sun { module star { module document {
 
 interface XColorSetsManager: com::sun::star::uno::XInterface
 {
-  /* definitions of colorset functions here*/
-  void addNewColorSet( [in] string ColorSetName, [in] sequence < com::sun::star::util::Color > ColorSetColors );
+  long addNewColorSet( [in] string ColorSetName, [in] sequence < com::sun::star::util::Color > ColorSetColors );
+  long createVirtualThemeColorSet( [in] long IndexColorSetToReference );
 };
 
 }; }; }; };

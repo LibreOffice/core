@@ -21,10 +21,12 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <comphelper/sequence.hxx>
 #include <oox/ppt/timenode.hxx>
 #include <oox/ppt/pptshape.hxx>
 #include <oox/ppt/slidepersist.hxx>
 #include <drawingml/fillproperties.hxx>
+#include <oox/drawingml/theme.hxx>
 #include <oox/drawingml/shapepropertymap.hxx>
 #include <oox/helper/propertymap.hxx>
 #include <oox/helper/propertyset.hxx>
@@ -35,8 +37,11 @@
 #include <drawingml/textliststyle.hxx>
 #include <drawingml/textparagraphproperties.hxx>
 
+#include <sfx2/ColorSets.hxx>
+
 #include <osl/diagnose.h>
 
+#include <com/sun/star/document/XColorSetsManager.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -328,6 +333,33 @@ Reference<XAnimationNode> SlidePersist::getAnimationNode(const OUString& sId) co
 
     Reference<XAnimationNode> aResult;
     return aResult;
+}
+
+void SlidePersist::setTheme(const oox::drawingml::ThemePtr& rThemePtr,
+                            const oox::core::XmlFilterBase& rFilterBase)
+{
+    const auto& xModel = rFilterBase.getModel();
+    mpThemePtr = rThemePtr;
+
+    if (isMasterPage())
+    {
+        css::uno::Reference<css::document::XColorSetsManager> xColorSetsManager(
+            xModel, css::uno::UNO_QUERY_THROW);
+
+        const OUString& rThemeName = mpThemePtr->getStyleName();
+        const drawingml::ClrScheme& rColorScheme = mpThemePtr->getClrScheme();
+
+        auto nColorSetIndex = xColorSetsManager->addNewColorSet(
+            rThemeName, comphelper::containerToSequence(rColorScheme.getColorVectorAsInts()));
+
+        moVirtualColorSetIndex
+                = xColorSetsManager->createVirtualThemeColorSet(nColorSetIndex);
+    }
+    else
+    {
+        // share master's virtual color set
+        moVirtualColorSetIndex = getMasterPersist()->getVirtualThemeColorSetIndex();
+    }
 }
 
 }

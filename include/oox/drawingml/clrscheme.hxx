@@ -86,8 +86,8 @@ public:
     bool     getColor( sal_Int32 nSchemeClrToken, ::Color& rColor ) const;
     void     setColor( sal_Int32 nSchemeClrToken, ::Color nColor );
 
-    std::vector<::Color> getColorVector();
-    std::vector<sal_Int32> getColorVectorAsInts();
+    std::vector<::Color> getColorVector() const;
+    std::vector<sal_Int32> getColorVectorAsInts() const;
 
     bool     getColorByIndex(size_t nIndex,
             ::Color& rColor) const;

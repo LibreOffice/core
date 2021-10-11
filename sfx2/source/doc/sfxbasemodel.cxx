@@ -2736,7 +2736,7 @@ void SfxBaseModel::loadCmisProperties( )
     }
 }
 
-void SAL_CALL SfxBaseModel::addNewColorSet(const OUString& rColorSetName,
+sal_Int32 SAL_CALL SfxBaseModel::addNewColorSet(const OUString& rColorSetName,
                const css::uno::Sequence<css::util::Color>& rColorSetColors)
 {
     if(SfxObjectShell* pObjShell = GetObjectShell())
@@ -2752,10 +2752,19 @@ void SAL_CALL SfxBaseModel::addNewColorSet(const OUString& rColorSetName,
 
             ColorSets& rColorSets = pColorSetItem->GetSfxColorSetList();
 
-            // let's force it as the selected color set for the moment.
-            rColorSets.setThemeColorSet( rColorSets.addColorSet(aColorSet) );
+            // let's force it as the selected "theme" color set for the moment.
+            int nColorSetIndex = rColorSets.addColorSet(aColorSet);
+            rColorSets.setThemeColorSet( nColorSetIndex );
+            return nColorSetIndex;
         }
     }
+}
+
+sal_Int32 SAL_CALL SfxBaseModel::createVirtualThemeColorSet( sal_Int32 nIndexColorSetToReference )
+{
+    SfxObjectShell* pObjShell = GetObjectShell();
+    const SfxColorSetListItem* pColorSetItem = pObjShell->GetItem(SID_COLOR_SETS);
+    return pColorSetItem->GetSfxColorSetList().addVirtualThemeColorSet(nIndexColorSetToReference);
 }
 
 SfxMedium* SfxBaseModel::handleLoadError( ErrCode nError, SfxMedium* pMedium )

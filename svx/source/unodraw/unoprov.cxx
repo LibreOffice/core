@@ -581,6 +581,7 @@ static SfxItemPropertyMapEntry const * ImplGetSvxControlShapePropertyMap()
         { u"" UNO_NAME_EDIT_CHAR_COLOR,           0,  cppu::UnoType<sal_Int32>::get(),        0, MID_COLOR_RGB },
         { u"" UNO_NAME_EDIT_CHAR_COLOR_THEME_COLOR_INDEX, 0, cppu::UnoType<sal_Int16>::get(), 0, MID_COLOR_THEME_INDEX },
         { u"" UNO_NAME_EDIT_CHAR_COLOR_TINT_OR_SHADE, 0, cppu::UnoType<sal_Int16>::get(),     0, MID_COLOR_TINT_OR_SHADE },
+        { u"" UNO_NAME_EDIT_CHAR_COLOR_VIRTUAL_THEME_COLOR_SET_INDEX, 0, cppu::UnoType<sal_Int32>::get(),     0, MID_COLOR_VIRTUAL_THEME_COLOR_SET_INDEX },
         { u"CharBackColor",                    0,  cppu::UnoType<sal_Int32>::get(),        0, 0 },
         { u"CharBackTransparent",              0,  cppu::UnoType<bool>::get(),             0, 0 },
         { u"CharRelief",                       0,  cppu::UnoType<sal_Int16>::get(),        0, 0 },

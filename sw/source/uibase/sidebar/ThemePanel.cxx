@@ -8,6 +8,7 @@
  *
  */
 
+#include <memory>
 #include <sal/config.h>
 
 #include "ThemePanel.hxx"
@@ -467,10 +468,10 @@ ThemePanel::ThemePanel(weld::Widget* pParent)
     }
 
 
-    const std::vector<ColorSet>& aColorSets = maColorSets->getColorSets();
+    const std::vector<std::shared_ptr<ColorSet>>& aColorSets = maColorSets->getColorSets();
         for (size_t i = 0; i < aColorSets.size(); ++i)
         {
-            const ColorSet& rColorSet = aColorSets[i];
+            const ColorSet& rColorSet = *aColorSets[i];
 
             const OUString& aName = rColorSet.getName();
             BitmapEx aPreview = GenerateColorPreview(rColorSet);
