@@ -79,7 +79,7 @@ sal_Int32 StyleContainer::getStandardStyleId( std::string_view rName )
     aProps[ "style:family" ] = OStringToOUString( rName, RTL_TEXTENCODING_UTF8 );
     aProps[ "style:name" ] = "standard";
 
-    Style aStyle( "style:style", aProps );
+    Style aStyle( "style:style", std::move(aProps) );
     return getStyleId( aStyle );
 }
 
@@ -90,7 +90,7 @@ const PropertyMap* StyleContainer::getProperties( sal_Int32 nStyleId ) const
     return it != m_aIdToStyle.end() ? &(it->second.style.Properties) : nullptr;
 }
 
-sal_Int32 StyleContainer::setProperties( sal_Int32 nStyleId, const PropertyMap& rNewProps )
+sal_Int32 StyleContainer::setProperties( sal_Int32 nStyleId, PropertyMap&& rNewProps )
 {
     sal_Int32 nRet = -1;
     std::unordered_map< sal_Int32, RefCountedHashedStyle >::iterator it =
@@ -103,7 +103,7 @@ sal_Int32 StyleContainer::setProperties( sal_Int32 nStyleId, const PropertyMap& 
             // erase old hash to id mapping
             m_aStyleToId.erase( it->second.style );
             // change properties
-            it->second.style.Properties = rNewProps;
+            it->second.style.Properties = std::move(rNewProps);
             // fill in new hash to id mapping
             m_aStyleToId[ it->second.style ] = nRet;
         }
@@ -114,7 +114,7 @@ sal_Int32 StyleContainer::setProperties( sal_Int32 nStyleId, const PropertyMap& 
             // acquire new HashedStyle
             HashedStyle aSearchStyle;
             aSearchStyle.Name                   = it->second.style.Name;
-            aSearchStyle.Properties             = rNewProps;
+            aSearchStyle.Properties             = std::move(rNewProps);
             aSearchStyle.Contents               = it->second.style.Contents;
             aSearchStyle.ContainedElement       = it->second.style.ContainedElement;
             aSearchStyle.SubStyles              = it->second.style.SubStyles;
