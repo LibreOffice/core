@@ -57,7 +57,7 @@ namespace slideshow::internal
             static UserPaintOverlaySharedPtr create( const RGBColor&          rStrokeColor,
                                                      double                   nStrokeWidth,
                                                      const SlideShowContext&  rContext,
-                                                     const PolyPolygonVector& rPolygons,
+                                                     PolyPolygonVector&&      rPolygons,
                                                      bool                     bActive);
             ~UserPaintOverlay();
             UserPaintOverlay(const UserPaintOverlay&) = delete;
@@ -69,7 +69,7 @@ namespace slideshow::internal
             UserPaintOverlay( const RGBColor&          rStrokeColor,
                               double                   nStrokeWidth,
                               const SlideShowContext&  rContext,
-                              const PolyPolygonVector& rPolygons,
+                              PolyPolygonVector&&     rPolygons,
                               bool                    bActive );
 
             ::std::shared_ptr<PaintOverlayHandler>    mpHandler;

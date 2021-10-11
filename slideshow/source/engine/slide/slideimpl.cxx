@@ -80,7 +80,7 @@ public:
                const uno::Reference<uno::XComponentContext>&     xContext,
                const ShapeEventListenerMap&                      rShapeListenerMap,
                const ShapeCursorMap&                             rShapeCursorMap,
-               const PolyPolygonVector&                          rPolyPolygonVector,
+               PolyPolygonVector&&                               rPolyPolygonVector,
                RGBColor const&                                   rUserPaintColor,
                double                                            dUserPaintStrokeWidth,
                bool                                              bUserPaintEnabled,
@@ -301,7 +301,7 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
                       const uno::Reference< uno::XComponentContext >&       xComponentContext,
                       const ShapeEventListenerMap&                          rShapeListenerMap,
                       const ShapeCursorMap&                                 rShapeCursorMap,
-                      const PolyPolygonVector&                              rPolyPolygonVector,
+                      PolyPolygonVector&&                                   rPolyPolygonVector,
                       RGBColor const&                                       aUserPaintColor,
                       double                                                dUserPaintStrokeWidth,
                       bool                                                  bUserPaintEnabled,
@@ -337,7 +337,7 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
     mrCursorManager( rCursorManager ),
     maAnimations( maContext,
                   basegfx::B2DSize( getSlideSizeImpl() ) ),
-    maPolygons(rPolyPolygonVector),
+    maPolygons(std::move(rPolyPolygonVector)),
     maUserPaintColor(aUserPaintColor),
     mdUserPaintStrokeWidth(dUserPaintStrokeWidth),
     mpPaintOverlay(),
@@ -806,7 +806,7 @@ void SlideImpl::activatePaintOverlay()
         mpPaintOverlay = UserPaintOverlay::create( maUserPaintColor,
                                                    mdUserPaintStrokeWidth,
                                                    maContext,
-                                                   maPolygons,
+                                                   std::vector(maPolygons),
                                                    mbUserPaintOverlayEnabled );
         mbPaintOverlayActive = true;
     }
@@ -1105,7 +1105,7 @@ SlideSharedPtr createSlide( const uno::Reference< drawing::XDrawPage >&         
                             const uno::Reference< uno::XComponentContext >&     xComponentContext,
                             const ShapeEventListenerMap&                        rShapeListenerMap,
                             const ShapeCursorMap&                               rShapeCursorMap,
-                            const PolyPolygonVector&                            rPolyPolygonVector,
+                            PolyPolygonVector&&                                 rPolyPolygonVector,
                             RGBColor const&                                     rUserPaintColor,
                             double                                              dUserPaintStrokeWidth,
                             bool                                                bUserPaintEnabled,
@@ -1117,7 +1117,7 @@ SlideSharedPtr createSlide( const uno::Reference< drawing::XDrawPage >&         
                                              rActivitiesQueue, rUserEventQueue,
                                              rCursorManager, rMediaFileManager, rViewContainer,
                                              xComponentContext, rShapeListenerMap,
-                                             rShapeCursorMap, rPolyPolygonVector, rUserPaintColor,
+                                             rShapeCursorMap, std::move(rPolyPolygonVector), rUserPaintColor,
                                              dUserPaintStrokeWidth, bUserPaintEnabled,
                                              bIntrinsicAnimationsAllowed,
                                              bDisableAnimationZOrder );

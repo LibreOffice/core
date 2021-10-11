@@ -72,15 +72,15 @@ class TransitionScene
 {
 public:
     TransitionScene(
-            const Primitives_t& rLeavingSlidePrimitives,
-            const Primitives_t& rEnteringSlidePrimitives,
-            const Operations_t& rOverallOperations = Operations_t(),
-            const SceneObjects_t& rSceneObjects = SceneObjects_t()
+            Primitives_t&& rLeavingSlidePrimitives,
+            Primitives_t&& rEnteringSlidePrimitives,
+            Operations_t&& rOverallOperations = Operations_t(),
+            SceneObjects_t&& rSceneObjects = SceneObjects_t()
     )
-        : maLeavingSlidePrimitives(rLeavingSlidePrimitives)
-        , maEnteringSlidePrimitives(rEnteringSlidePrimitives)
-        , maOverallOperations(rOverallOperations)
-        , maSceneObjects(rSceneObjects)
+        : maLeavingSlidePrimitives(std::move(rLeavingSlidePrimitives))
+        , maEnteringSlidePrimitives(std::move(rEnteringSlidePrimitives))
+        , maOverallOperations(std::move(rOverallOperations))
+        , maSceneObjects(std::move(rSceneObjects))
     {
     }
 

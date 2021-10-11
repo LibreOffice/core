@@ -51,11 +51,11 @@ namespace slideshow::internal
                                  ScreenUpdater&           rScreenUpdater,
                                  const UnoViewContainer&  rViews,
                                  Slide&                   rSlide,
-                                 const PolyPolygonVector& rPolygons,
+                                 PolyPolygonVector&&      rPolygons,
                                  bool                     bActive ) :
                 mrScreenUpdater( rScreenUpdater ),
                 maViews(),
-                maPolygons( rPolygons ),
+                maPolygons( std::move(rPolygons) ),
                 maStrokeColor( rStrokeColor ),
                 mnStrokeWidth( nStrokeWidth ),
                 maLastPoint(),
@@ -424,13 +424,13 @@ namespace slideshow::internal
         UserPaintOverlaySharedPtr UserPaintOverlay::create( const RGBColor&          rStrokeColor,
                                                             double                   nStrokeWidth,
                                                             const SlideShowContext&  rContext,
-                                                            const PolyPolygonVector& rPolygons,
+                                                            PolyPolygonVector&&      rPolygons,
                                                             bool                     bActive )
         {
             UserPaintOverlaySharedPtr pRet( new UserPaintOverlay( rStrokeColor,
                                                                   nStrokeWidth,
                                                                   rContext,
-                                                                  rPolygons,
+                                                                  std::move(rPolygons),
                                                                   bActive));
 
             return pRet;
@@ -439,7 +439,7 @@ namespace slideshow::internal
         UserPaintOverlay::UserPaintOverlay( const RGBColor&          rStrokeColor,
                                             double                   nStrokeWidth,
                                             const SlideShowContext&  rContext,
-                                            const PolyPolygonVector& rPolygons,
+                                            PolyPolygonVector&&      rPolygons,
                                             bool                     bActive ) :
             mpHandler( std::make_shared<PaintOverlayHandler>( rStrokeColor,
                                                 nStrokeWidth,
@@ -447,7 +447,7 @@ namespace slideshow::internal
                                                 rContext.mrViewContainer,
                                                 //adding a link to Slide
                                                 dynamic_cast<Slide&>(rContext.mrCursorManager),
-                                                rPolygons, bActive )),
+                                                std::move(rPolygons), bActive )),
             mrMultiplexer( rContext.mrEventMultiplexer )
         {
             mrMultiplexer.addClickHandler( mpHandler, 3.0 );

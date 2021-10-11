@@ -62,7 +62,7 @@ namespace slideshow::internal
             IntrinsicAnimationActivity( const SlideShowContext&         rContext,
                                         const DrawShapeSharedPtr&       rDrawShape,
                                         const WakeupEventSharedPtr&     rWakeupEvent,
-                                        const ::std::vector<double>&    rTimeouts,
+                                        ::std::vector<double>&&         rTimeouts,
                                         ::std::size_t                   nNumLoops );
             IntrinsicAnimationActivity(const IntrinsicAnimationActivity&) = delete;
             IntrinsicAnimationActivity& operator=(const IntrinsicAnimationActivity&) = delete;
@@ -111,13 +111,13 @@ namespace slideshow::internal
         IntrinsicAnimationActivity::IntrinsicAnimationActivity( const SlideShowContext&         rContext,
                                                                 const DrawShapeSharedPtr&       rDrawShape,
                                                                 const WakeupEventSharedPtr&     rWakeupEvent,
-                                                                const ::std::vector<double>&    rTimeouts,
+                                                                ::std::vector<double>&&         rTimeouts,
                                                                 ::std::size_t                   nNumLoops ) :
             maContext( rContext ),
             mpDrawShape( rDrawShape ),
             mpWakeupEvent( rWakeupEvent ),
             mpListener( std::make_shared<IntrinsicAnimationListener>(*this) ),
-            maTimeouts( rTimeouts ),
+            maTimeouts( std::move(rTimeouts) ),
             mnCurrIndex(0),
             mnNumLoops(nNumLoops),
             mnLoopCount(0),
@@ -235,13 +235,13 @@ namespace slideshow::internal
             const SlideShowContext&         rContext,
             const DrawShapeSharedPtr&       rDrawShape,
             const WakeupEventSharedPtr&     rWakeupEvent,
-            const ::std::vector<double>&    rTimeouts,
+            ::std::vector<double>&&         rTimeouts,
             sal_uInt32                      nNumLoops)
         {
             return std::make_shared<IntrinsicAnimationActivity>(rContext,
                                                rDrawShape,
                                                rWakeupEvent,
-                                               rTimeouts,
+                                               std::move(rTimeouts),
                                                nNumLoops);
         }
 }

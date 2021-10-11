@@ -56,7 +56,7 @@ namespace slideshow::internal
             const SlideShowContext&         rContext,
             const DrawShapeSharedPtr&       rDrawShape,
             const WakeupEventSharedPtr&     rWakeupEvent,
-            const ::std::vector<double>&    rTimeouts,
+            ::std::vector<double>&&         rTimeouts,
             sal_uInt32                      nNumLoops);
 
 }
