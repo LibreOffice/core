@@ -525,7 +525,7 @@ void SwSelPaintRects::HighlightInputField()
     {
         if (m_pTextInputFieldOverlay != nullptr)
         {
-            m_pTextInputFieldOverlay->setRanges( aInputFieldRanges );
+            m_pTextInputFieldOverlay->setRanges( std::move(aInputFieldRanges) );
         }
         else
         {
@@ -540,7 +540,7 @@ void SwSelPaintRects::HighlightInputField()
                 aHighlight.DecreaseLuminance( 128 );
 
                 m_pTextInputFieldOverlay.reset( new sw::overlay::OverlayRangesOutline(
-                        aHighlight, aInputFieldRanges ) );
+                        aHighlight, std::move(aInputFieldRanges) ) );
                 xTargetOverlay->add( *m_pTextInputFieldOverlay );
             }
         }

@@ -158,7 +158,7 @@ public:
 
        @param rItems the new items
     */
-    void SetItems(const std::vector<OUString>& rItems);
+    void SetItems(std::vector<OUString>&& rItems);
 
     /**
        Sets the items of the dropdown box.

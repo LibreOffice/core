@@ -6163,7 +6163,7 @@ void SwWW8ImplReader::GetSmartTagInfo(SwFltRDFMark& rMark)
         if (!aKey.isEmpty() && !aValue.isEmpty())
             aAttributes.emplace_back(aKey, aValue);
     }
-    rMark.SetAttributes(aAttributes);
+    rMark.SetAttributes(std::move(aAttributes));
 }
 
 ErrCode SwWW8ImplReader::LoadDoc(WW8Glossary *pGloss)

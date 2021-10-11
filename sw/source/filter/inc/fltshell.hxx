@@ -252,7 +252,7 @@ public:
 
     void SetHandle(tools::Long nHandle);
     tools::Long GetHandle() const;
-    void SetAttributes(const std::vector< std::pair<OUString, OUString> >& rAttributes);
+    void SetAttributes(std::vector< std::pair<OUString, OUString> >&& rAttributes);
     const std::vector< std::pair<OUString, OUString> >& GetAttributes() const;
 };
 
