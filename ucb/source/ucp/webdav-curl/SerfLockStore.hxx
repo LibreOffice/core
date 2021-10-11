@@ -70,7 +70,7 @@ public:
     bool finishing() const;
     OUString getLockToken( const OUString& rLock );
 
-    bool hasLockByURI(OUString const& rURI, css::ucb::Lock const& rLock);
+    bool hasLockByURI(OUString const& rURI, css::ucb::Lock const* pLock);
 
     void addLock( const OUString& rURI,
                   css::ucb::Lock const& rLock,

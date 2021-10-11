@@ -1004,6 +1004,13 @@ auto CurlSession::OPTIONS(OUString const& rURIReference,
         }
     }
     rOptions.setResourceFound();
+    if (rOptions.isClass2() || rOptions.isClass3())
+    {
+        if (g_Init.LockStore.hasLockByURI(rURIReference, nullptr))
+        {
+            rOptions.setLocked();
+        }
+    }
 }
 
 auto CurlProcessor::PropFind(
@@ -1668,7 +1675,7 @@ auto CurlSession::LOCK(OUString const& rURIReference, ucb::Lock /*const*/& rLock
     SAL_INFO("ucb.ucp.webdav.curl", "LOCK: " << rURIReference);
 
     // FIXME: why is a *global* LockStore keyed by *path*?
-    if (g_Init.LockStore.hasLockByURI(rURIReference, rLock))
+    if (g_Init.LockStore.hasLockByURI(rURIReference, &rLock))
     {
         // already have a lock that covers the requirement
         // TODO: maybe use DAV:lockdiscovery to ensure it's valid

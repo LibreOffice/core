@@ -150,7 +150,7 @@ OUString SerfLockStore::getLockToken( const OUString& rLock )
     return OUString();
 }
 
-bool SerfLockStore::hasLockByURI(OUString const& rURI, css::ucb::Lock const& rLock)
+bool SerfLockStore::hasLockByURI(OUString const& rURI, css::ucb::Lock const*const pLock)
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -160,17 +160,21 @@ bool SerfLockStore::hasLockByURI(OUString const& rURI, css::ucb::Lock const& rLo
     {
         return false;
     }
+    if (!pLock) // any lock will do
+    {
+        return true;
+    }
     // 0: EXCLUSIVE 1: SHARED
-    if (it->second.m_Lock.Scope == ucb::LockScope_SHARED && rLock.Scope == ucb::LockScope_EXCLUSIVE)
+    if (it->second.m_Lock.Scope == ucb::LockScope_SHARED && pLock->Scope == ucb::LockScope_EXCLUSIVE)
     {
         return false;
     }
-    assert(it->second.m_Lock.Type == rLock.Type); // only WRITE possible
-    if (it->second.m_Lock.Depth < rLock.Depth)
+    assert(it->second.m_Lock.Type == pLock->Type); // only WRITE possible
+    if (it->second.m_Lock.Depth < pLock->Depth)
     {
         return false;
     }
-    assert(it->second.m_Lock.Owner == rLock.Owner); // only own locks expected
+    assert(it->second.m_Lock.Owner == pLock->Owner); // only own locks expected
     // ignore Timeout ?
     return true;
 }
