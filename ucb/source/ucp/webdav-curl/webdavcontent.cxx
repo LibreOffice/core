@@ -100,7 +100,7 @@ void lcl_sendPartialGETRequest( bool &bError,
     DAVRequestHeaders aPartialGet;
     aPartialGet.push_back(
         DAVRequestHeader(
-            OUString( "Range" ),
+            OUString( "Range" ), // see <https://tools.ietf.org/html/rfc7233#section-3.1>
             OUString( "bytes=0-0" )));
 
     bool bIsRequestSize = std::any_of(aHeaderNames.begin(), aHeaderNames.end(),
@@ -110,8 +110,8 @@ void lcl_sendPartialGETRequest( bool &bError,
     {
         // we need to know if the server accepts range requests for a resource
         // and the range unit it uses
-        aHeaderNames.push_back( OUString( "Accept-Ranges" ) );
-        aHeaderNames.push_back( OUString( "Content-Range" ) );
+        aHeaderNames.push_back( OUString( "Accept-Ranges" ) ); // see <https://tools.ietf.org/html/rfc7233#section-2.3>
+        aHeaderNames.push_back( OUString( "Content-Range" ) ); // see <https://tools.ietf.org/html/rfc7233#section-4.2>
     }
     try
     {
@@ -1498,6 +1498,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                                 aLastException.getStatus() == SC_METHOD_NOT_ALLOWED ||
                                 aLastException.getStatus() == SC_NOT_FOUND )
                         {
+                            SAL_WARN( "ucb.ucp.webdav", "HEAD not implemented: fall back to a partial GET" );
                             lcl_sendPartialGETRequest( bError,
                                                        aLastException,
                                                        aMissingProps,
