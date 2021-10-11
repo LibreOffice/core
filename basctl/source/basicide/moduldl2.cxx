@@ -1219,7 +1219,7 @@ void LibPage::SetCurLib()
     m_xLibBox->set_cursor(nEntry_);
 }
 
-void LibPage::ImpInsertLibEntry( const OUString& rLibName, sal_uLong nPos )
+void LibPage::ImpInsertLibEntry( const OUString& rLibName, sal_uInt32 nPos )
 {
     // check, if library is password protected
     bool bProtected = false;
