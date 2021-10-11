@@ -16,6 +16,24 @@
       "message": "hopefully my change here is sensible",
       "revId": "1e22323a10fe3cdd7c4968fb5e60b6a063dcba04",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d7cb8cd_ab4b4c68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000863
+      },
+      "writtenOn": "2021-10-11T01:27:32Z",
+      "side": 1,
+      "message": "It seems so, thanks for adjusting that! At some point I\u0027m planning to review the remaining unsigned 16-bit types in these classes, because there are still some here and there that are related to working with SwTwips, but that\u0027s for another day.",
+      "parentUuid": "afa66f07_bbee889d",
+      "revId": "1e22323a10fe3cdd7c4968fb5e60b6a063dcba04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
