@@ -89,7 +89,7 @@ char const* const* GnuInfo::getLibraryPaths(int* /*size*/)
     return nullptr;
 }
 
-bool GnuInfo::initialize(std::vector<std::pair<OUString, OUString> > props)
+bool GnuInfo::initialize(const std::vector<std::pair<OUString, OUString> >& props)
 {
     //get java.vendor, java.version, java.home
     //from system properties

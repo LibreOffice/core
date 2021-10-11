@@ -35,7 +35,7 @@ VendorBase::VendorBase()
 {
 }
 
-bool VendorBase::initialize(std::vector<std::pair<OUString, OUString> > props)
+bool VendorBase::initialize(const std::vector<std::pair<OUString, OUString> >& props)
 {
     //get java.vendor, java.version, java.home
     //from system properties
