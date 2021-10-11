@@ -46,6 +46,30 @@
       },
       "revId": "2d486bac81e06c64d13c647f35d3f4affbeb183e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfa9acd9_5fa53236",
+        "filename": "sdext/source/pdfimport/wrapper/wrapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-11T10:16:08Z",
+      "side": 1,
+      "message": "\u003e Ops... I think it should be \"aFontReadResult.GetWeight() \u003d\u003d THIN\". Will prepare another patch to fix this.\n\nYeah, noticed that a fix should probably be trivial after leaving my comment here, so already prepared \u003chttps://gerrit.libreoffice.org/c/core/+/123375\u003e \"Fix font weight comparisons\" to get my various local builds unstuck.\n\n\u003e How come my own build has passed, and the Jenkins builds are all passed?? Which build options are you using to detect this kind of error?\n\nI\u0027m using (some recent) Clang and --with-latest-c++ (so that this C++20 deprecation warning gets enabled).",
+      "parentUuid": "987b41a9_41d76574",
+      "range": {
+        "startLine": 624,
+        "startChar": 16,
+        "endLine": 624,
+        "endChar": 84
+      },
+      "revId": "2d486bac81e06c64d13c647f35d3f4affbeb183e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
