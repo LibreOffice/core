@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50c55cf9_71fc37e8",
+        "filename": "sdext/source/pdfimport/wrapper/wrapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-11T07:59:42Z",
+      "side": 1,
+      "message": "these changes from aFontDescriptor.Weight (of type float) to aFontReadResult.GetWeight() (of type FontWeight from include/tools/fontenum.hxx) etc. are broken and cause\n  sdext/source/pdfimport/wrapper/wrapper.cxx:624:45: error: comparison of enumeration type \u0027FontWeight\u0027 with floating-point type \u0027float\u0027 is deprecated [-Werror,-Wdeprecated-enum-float-conversion]\n              if (aFontReadResult.GetWeight() \u003d\u003d com::sun::star::awt::FontWeight::THIN)\n                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n  sdext/source/pdfimport/wrapper/wrapper.cxx:626:50: error: comparison of enumeration type \u0027FontWeight\u0027 with floating-point type \u0027float\u0027 is deprecated [-Werror,-Wdeprecated-enum-float-conversion]\n              else if (aFontReadResult.GetWeight() \u003d\u003d com::sun::star::awt::FontWeight::ULTRALIGHT)\n                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n  sdext/source/pdfimport/wrapper/wrapper.cxx:628:50: error: comparison of enumeration type \u0027FontWeight\u0027 with floating-point type \u0027float\u0027 is deprecated [-Werror,-Wdeprecated-enum-float-conversion]\n              else if (aFontReadResult.GetWeight() \u003d\u003d com::sun::star::awt::FontWeight::LIGHT)\n                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n  sdext/source/pdfimport/wrapper/wrapper.cxx:630:50: error: comparison of enumeration type \u0027FontWeight\u0027 with floating-point type \u0027float\u0027 is deprecated [-Werror,-Wdeprecated-enum-float-conversion]\n              else if (aFontReadResult.GetWeight() \u003d\u003d com::sun::star::awt::FontWeight::SEMILIGHT)\n                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n  sdext/source/pdfimport/wrapper/wrapper.cxx:633:50: error: comparison of enumeration type \u0027FontWeight\u0027 with floating-point type \u0027float\u0027 is deprecated [-Werror,-Wdeprecated-enum-float-conversion]\n              else if (aFontReadResult.GetWeight() \u003d\u003d com::sun::star::awt::FontWeight::SEMIBOLD)\n                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n  sdext/source/pdfimport/wrapper/wrapper.cxx:635:50: error: comparison of enumeration type \u0027FontWeight\u0027 with floating-point type \u0027float\u0027 is deprecated [-Werror,-Wdeprecated-enum-float-conversion]\n              else if (aFontReadResult.GetWeight() \u003d\u003d com::sun::star::awt::FontWeight::BOLD)\n                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n  sdext/source/pdfimport/wrapper/wrapper.cxx:637:50: error: comparison of enumeration type \u0027FontWeight\u0027 with floating-point type \u0027float\u0027 is deprecated [-Werror,-Wdeprecated-enum-float-conversion]\n              else if (aFontReadResult.GetWeight() \u003d\u003d com::sun::star::awt::FontWeight::ULTRABOLD)\n                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n  sdext/source/pdfimport/wrapper/wrapper.cxx:639:50: error: comparison of enumeration type \u0027FontWeight\u0027 with floating-point type \u0027float\u0027 is deprecated [-Werror,-Wdeprecated-enum-float-conversion]\n              else if (aFontReadResult.GetWeight() \u003d\u003d com::sun::star::awt::FontWeight::BLACK)\n                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+      "range": {
+        "startLine": 624,
+        "startChar": 16,
+        "endLine": 624,
+        "endChar": 84
+      },
+      "revId": "2d486bac81e06c64d13c647f35d3f4affbeb183e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
