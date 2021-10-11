@@ -62,7 +62,6 @@ public:
     {
         A   nEnd;           // start is end of previous entry + 1
         D   aValue;
-            DataEntry() {}  //! uninitialized
     };
     struct RangeData
     {
