@@ -244,8 +244,8 @@ public:
     ScAddress( SCCOL nColP, SCROW nRowP, SCTAB nTabP ) :
         nRow(nRowP), nCol(nColP), nTab(nTabP)
     {}
-    /** Yes, it is what it seems to be: Uninitialized. May be used for
-        performance reasons if it is initialized by other means. */
+    /** coverity[uninit_member] - Yes, it is what it seems to be: Uninitialized.
+        May be used for performance reasons if it is initialized by other means. */
     ScAddress( Uninitialized )
     {}
     ScAddress( InitializeInvalid ) :

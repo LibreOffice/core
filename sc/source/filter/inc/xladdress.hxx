@@ -31,6 +31,7 @@ struct XclAddress
     sal_uInt16          mnCol;
     sal_uInt32          mnRow;
 
+    // coverity[uninit_member] - members deliberately not initialized
     explicit     XclAddress( ScAddress::Uninitialized ) {}
     explicit     XclAddress() : mnCol( 0 ), mnRow( 0 ) {}
     explicit     XclAddress( sal_uInt16 nCol, sal_uInt32 nRow ) : mnCol( nCol ), mnRow( nRow ) {}
