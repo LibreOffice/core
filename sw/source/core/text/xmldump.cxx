@@ -30,6 +30,130 @@
 
 #include "porlay.hxx"
 
+const char* sw::PortionTypeToString(PortionType nType)
+{
+    switch (nType)
+    {
+        case PortionType::NONE:
+            return "PortionType::NONE";
+        case PortionType::FlyCnt:
+            return "PortionType::FlyCnt";
+
+        case PortionType::Hole:
+            return "PortionType::Hole";
+        case PortionType::TempEnd:
+            return "PortionType::TempEnd";
+        case PortionType::Break:
+            return "PortionType::Break";
+        case PortionType::Kern:
+            return "PortionType::Kern";
+        case PortionType::Arrow:
+            return "PortionType::Arrow";
+        case PortionType::Multi:
+            return "PortionType::Multi";
+        case PortionType::HiddenText:
+            return "PortionType::HiddenText";
+        case PortionType::ControlChar:
+            return "PortionType::ControlChar";
+        case PortionType::Bookmark:
+            return "PortionType::Bookmark";
+
+        case PortionType::Text:
+            return "PortionType::Text";
+        case PortionType::Lay:
+            return "PortionType::Lay";
+        case PortionType::Para:
+            return "PortionType::Para";
+        case PortionType::Hanging:
+            return "PortionType::Hanging";
+
+        case PortionType::Drop:
+            return "PortionType::Drop";
+        case PortionType::Tox:
+            return "PortionType::Tox";
+        case PortionType::IsoTox:
+            return "PortionType::IsoTox";
+        case PortionType::Ref:
+            return "PortionType::Ref";
+        case PortionType::IsoRef:
+            return "PortionType::IsoRef";
+        case PortionType::Meta:
+            return "PortionType::Meta";
+        case PortionType::FieldMark:
+            return "PortionType::FieldMark";
+        case PortionType::FieldFormCheckbox:
+            return "PortionType::FieldFormCheckbox";
+        case PortionType::InputField:
+            return "PortionType::InputField";
+
+        case PortionType::Expand:
+            return "PortionType::Expand";
+        case PortionType::Blank:
+            return "PortionType::Blank";
+        case PortionType::PostIts:
+            return "PortionType::PostIts";
+
+        case PortionType::Hyphen:
+            return "PortionType::Hyphen";
+        case PortionType::HyphenStr:
+            return "PortionType::HyphenStr";
+        case PortionType::SoftHyphen:
+            return "PortionType::SoftHyphen";
+        case PortionType::SoftHyphenStr:
+            return "PortionType::SoftHyphenStr";
+        case PortionType::SoftHyphenComp:
+            return "PortionType::SoftHyphenComp";
+
+        case PortionType::Field:
+            return "PortionType::Field";
+        case PortionType::Hidden:
+            return "PortionType::Hidden";
+        case PortionType::QuoVadis:
+            return "PortionType::QuoVadis";
+        case PortionType::ErgoSum:
+            return "PortionType::ErgoSum";
+        case PortionType::Combined:
+            return "PortionType::Combined";
+        case PortionType::Footnote:
+            return "PortionType::Footnote";
+
+        case PortionType::FootnoteNum:
+            return "PortionType::FootnoteNum";
+        case PortionType::Number:
+            return "PortionType::Number";
+        case PortionType::Bullet:
+            return "PortionType::Bullet";
+        case PortionType::GrfNum:
+            return "PortionType::GrfNum";
+
+        case PortionType::Glue:
+            return "PortionType::Glue";
+
+        case PortionType::Margin:
+            return "PortionType::Margin";
+
+        case PortionType::Fix:
+            return "PortionType::Fix";
+        case PortionType::Fly:
+            return "PortionType::Fly";
+
+        case PortionType::Table:
+            return "PortionType::Table";
+
+        case PortionType::TabRight:
+            return "PortionType::TabRight";
+        case PortionType::TabCenter:
+            return "PortionType::TabCenter";
+        case PortionType::TabDecimal:
+            return "PortionType::TabDecimal";
+
+        case PortionType::TabLeft:
+            return "PortionType::TabLeft";
+        default:
+            return "Unknown";
+    }
+}
+
 namespace {
 
 class XmlPortionDumper:public SwPortionHandler
@@ -39,130 +163,6 @@ class XmlPortionDumper:public SwPortionHandler
       TextFrameIndex m_Ofs;
       const OUString& m_rText;
       OUString m_aLine;
-
-      static const char* getTypeName(PortionType nType)
-      {
-          switch (nType)
-          {
-              case PortionType::NONE:
-                  return "PortionType::NONE";
-              case PortionType::FlyCnt:
-                  return "PortionType::FlyCnt";
-
-              case PortionType::Hole:
-                  return "PortionType::Hole";
-              case PortionType::TempEnd:
-                  return "PortionType::TempEnd";
-              case PortionType::Break:
-                  return "PortionType::Break";
-              case PortionType::Kern:
-                  return "PortionType::Kern";
-              case PortionType::Arrow:
-                  return "PortionType::Arrow";
-              case PortionType::Multi:
-                  return "PortionType::Multi";
-              case PortionType::HiddenText:
-                  return "PortionType::HiddenText";
-              case PortionType::ControlChar:
-                  return "PortionType::ControlChar";
-              case PortionType::Bookmark:
-                  return "PortionType::Bookmark";
-
-              case PortionType::Text:
-                  return "PortionType::Text";
-              case PortionType::Lay:
-                  return "PortionType::Lay";
-              case PortionType::Para:
-                  return "PortionType::Para";
-              case PortionType::Hanging:
-                  return "PortionType::Hanging";
-
-              case PortionType::Drop:
-                  return "PortionType::Drop";
-              case PortionType::Tox:
-                  return "PortionType::Tox";
-              case PortionType::IsoTox:
-                  return "PortionType::IsoTox";
-              case PortionType::Ref:
-                  return "PortionType::Ref";
-              case PortionType::IsoRef:
-                  return "PortionType::IsoRef";
-              case PortionType::Meta:
-                  return "PortionType::Meta";
-              case PortionType::FieldMark:
-                  return "PortionType::FieldMark";
-              case PortionType::FieldFormCheckbox:
-                  return "PortionType::FieldFormCheckbox";
-              case PortionType::InputField:
-                  return "PortionType::InputField";
-
-              case PortionType::Expand:
-                  return "PortionType::Expand";
-              case PortionType::Blank:
-                  return "PortionType::Blank";
-              case PortionType::PostIts:
-                  return "PortionType::PostIts";
-
-              case PortionType::Hyphen:
-                  return "PortionType::Hyphen";
-              case PortionType::HyphenStr:
-                  return "PortionType::HyphenStr";
-              case PortionType::SoftHyphen:
-                  return "PortionType::SoftHyphen";
-              case PortionType::SoftHyphenStr:
-                  return "PortionType::SoftHyphenStr";
-              case PortionType::SoftHyphenComp:
-                  return "PortionType::SoftHyphenComp";
-
-              case PortionType::Field:
-                  return "PortionType::Field";
-              case PortionType::Hidden:
-                  return "PortionType::Hidden";
-              case PortionType::QuoVadis:
-                  return "PortionType::QuoVadis";
-              case PortionType::ErgoSum:
-                  return "PortionType::ErgoSum";
-              case PortionType::Combined:
-                  return "PortionType::Combined";
-              case PortionType::Footnote:
-                  return "PortionType::Footnote";
-
-              case PortionType::FootnoteNum:
-                  return "PortionType::FootnoteNum";
-              case PortionType::Number:
-                  return "PortionType::Number";
-              case PortionType::Bullet:
-                  return "PortionType::Bullet";
-              case PortionType::GrfNum:
-                  return "PortionType::GrfNum";
-
-              case PortionType::Glue:
-                  return "PortionType::Glue";
-
-              case PortionType::Margin:
-                  return "PortionType::Margin";
-
-              case PortionType::Fix:
-                  return "PortionType::Fix";
-              case PortionType::Fly:
-                  return "PortionType::Fly";
-
-              case PortionType::Table:
-                  return "PortionType::Table";
-
-              case PortionType::TabRight:
-                  return "PortionType::TabRight";
-              case PortionType::TabCenter:
-                  return "PortionType::TabCenter";
-              case PortionType::TabDecimal:
-                  return "PortionType::TabDecimal";
-
-              case PortionType::TabLeft:
-                  return "PortionType::TabLeft";
-              default:
-                  return "Unknown";
-          }
-    }
 
   public:
       explicit XmlPortionDumper(xmlTextWriterPtr some_writer, const OUString& rText)
@@ -187,7 +187,7 @@ class XmlPortionDumper:public SwPortionHandler
         (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nLength"), "%i",
                                                 static_cast<int>(static_cast<sal_Int32>(nLength)));
         (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nType"), "%s",
-                                                getTypeName(nType));
+                                                sw::PortionTypeToString(nType));
         if (nHeight > 0)
             (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nHeight"), "%i",
                                                     static_cast<int>(nHeight));
@@ -225,7 +225,7 @@ class XmlPortionDumper:public SwPortionHandler
         (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nLength"), "%i",
                                                 static_cast<int>(static_cast<sal_Int32>(nLength)));
         (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nType"), "%s",
-                                                getTypeName(nType));
+                                                sw::PortionTypeToString(nType));
         OString sText8 = OUStringToOString( rText, RTL_TEXTENCODING_UTF8 );
         (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("rText"), "%s", sText8.getStr());
 

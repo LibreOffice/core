@@ -331,6 +331,9 @@ void SwLinePortion::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteAttribute(
         pWriter, BAD_CAST("length"),
         BAD_CAST(OString::number(static_cast<sal_Int32>(mnLineLength)).getStr()));
+    (void)xmlTextWriterWriteAttribute(
+        pWriter, BAD_CAST("type"),
+        BAD_CAST(sw::PortionTypeToString(GetWhichPor())));
     (void)xmlTextWriterEndElement(pWriter);
 }
 

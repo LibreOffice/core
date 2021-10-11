@@ -1536,16 +1536,18 @@ void SwUiWriterTest4::testTdf35021_tabOverMarginDemo()
     sal_Int32 nMargin = getXPath(pXmlDoc, "//body/txt[1]/infos/prtBounds", "width").toInt32();
     // left tab was 3381 because it got its own full line
     sal_Int32 nWidth
-        = getXPath(pXmlDoc, "//Text[@nType='PortionType::TabLeft']", "nWidth").toInt32();
+        = getXPath(pXmlDoc, "//SwLinePortion[@type='PortionType::TabLeft']", "width").toInt32();
     CPPUNIT_ASSERT_MESSAGE("Left Tab width is ~4479", nMargin < nWidth);
     // center tab was 842
-    nWidth = getXPath(pXmlDoc, "//Text[@nType='PortionType::TabCenter']", "nWidth").toInt32();
+    nWidth
+        = getXPath(pXmlDoc, "//SwLinePortion[@type='PortionType::TabCenter']", "width").toInt32();
     CPPUNIT_ASSERT_MESSAGE("Center Tab width is ~3521", nMargin < nWidth);
     // right tab was probably the same as center tab.
-    nWidth = getXPath(pXmlDoc, "//Text[@nType='PortionType::TabRight']", "nWidth").toInt32();
+    nWidth = getXPath(pXmlDoc, "//SwLinePortion[@type='PortionType::TabRight']", "width").toInt32();
     CPPUNIT_ASSERT_MESSAGE("Right Tab width is ~2907", sal_Int32(2500) < nWidth);
     // decimal tab was 266
-    nWidth = getXPath(pXmlDoc, "//Text[@nType='PortionType::TabDecimal']", "nWidth").toInt32();
+    nWidth
+        = getXPath(pXmlDoc, "//SwLinePortion[@type='PortionType::TabDecimal']", "width").toInt32();
     CPPUNIT_ASSERT_MESSAGE("Decimal Tab width is ~4096", nMargin < nWidth);
 #endif
 }
