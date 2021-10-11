@@ -2678,7 +2678,7 @@ void ScDPObject::ConvertOrientation(
                     nSubTotalFuncs.push_back( ScDataPilotConversion::FirstFunc( static_cast<PivotFunc>(nMask) ) );
                 nMask *= 2;
             }
-            pDim->SetSubTotals( nSubTotalFuncs );
+            pDim->SetSubTotals( std::move(nSubTotalFuncs) );
 
             //  ShowEmpty was implicit in old tables,
             //  must be set for data layout dimension (not accessible in dialog)

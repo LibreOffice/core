@@ -272,7 +272,7 @@ void WorksheetSettings::finalizeImport()
         aProtect.setOption( ScTableProtection::PIVOT_TABLES, !maSheetProt.mbPivotTables );
         aProtect.setOption( ScTableProtection::SELECT_UNLOCKED_CELLS, !maSheetProt.mbSelectUnlocked );
 
-        aProtect.setEnhancedProtection( maSheetProt.maEnhancedProtections);
+        aProtect.setEnhancedProtection( std::vector(maSheetProt.maEnhancedProtections) );
 
         getScDocument().SetTabProtection( getSheetIndex(), &aProtect );
     }

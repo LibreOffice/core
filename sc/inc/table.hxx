@@ -881,8 +881,8 @@ public:
     void        UpdatePageBreaks( const ScRange* pUserArea );
     void        RemoveManualBreaks();
     bool        HasManualBreaks() const;
-    void        SetRowManualBreaks( const ::std::set<SCROW>& rBreaks );
-    void        SetColManualBreaks( const ::std::set<SCCOL>& rBreaks );
+    void        SetRowManualBreaks( ::std::set<SCROW>&& rBreaks );
+    void        SetColManualBreaks( ::std::set<SCCOL>&& rBreaks );
 
     void        GetAllRowBreaks(::std::set<SCROW>& rBreaks, bool bPage, bool bManual) const;
     void        GetAllColBreaks(::std::set<SCCOL>& rBreaks, bool bPage, bool bManual) const;

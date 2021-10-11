@@ -41,7 +41,7 @@ public:
     /** Sets the passed string data. */
     void         SetText( const OUString& rText ) { maString = rText; }
     /** Sets the passed formatting buffer. */
-    void         SetFormats( const XclFormatRunVec& rFormats ) { maFormats = rFormats; }
+    void         SetFormats( XclFormatRunVec&& rFormats ) { maFormats = std::move(rFormats); }
     /** Reads and appends the formatting information (run count and runs) from stream. */
     void         ReadFormats( XclImpStream& rStrm ) { ReadFormats( rStrm, maFormats ); }
     /** Reads and appends formatting runs from an OBJ or TXO record. */

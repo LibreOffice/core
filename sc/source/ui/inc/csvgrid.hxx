@@ -172,13 +172,13 @@ public:
     /** Returns the vector with the states of all columns. */
     const ScCsvColStateVec& GetColumnStates() const { return maColStates; }
     /** Sets all column states to the values in the passed vector. */
-    void                        SetColumnStates( const ScCsvColStateVec& rColStates );
+    void                        SetColumnStates( ScCsvColStateVec&& rColStates );
     /** Returns the data type of the selected columns. */
     sal_Int32                   GetSelColumnType() const;
     /** Changes the data type of all selected columns. */
     void                        SetSelColumnType( sal_Int32 nType );
     /** Sets new UI data type names. */
-    void                        SetTypeNames( const std::vector<OUString>& rTypeNames );
+    void                        SetTypeNames( std::vector<OUString>&& rTypeNames );
     /** Returns the UI type name of the specified column. */
     const OUString&             GetColumnTypeName( sal_uInt32 nColIndex ) const;
 

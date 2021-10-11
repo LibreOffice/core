@@ -300,10 +300,7 @@ void ScMultiSel::Set( ScRangeList const & rList )
     aMultiSelContainer.resize(nMaxCol+1, ScMarkArray(mrSheetLimits));
     for (SCCOL nCol = 0; nCol<=nMaxCol; ++nCol)
         if (!aMarkEntriesPerCol[nCol].empty())
-        {
-            aMultiSelContainer[nCol].Set( aMarkEntriesPerCol[nCol] );
-            aMarkEntriesPerCol[nCol].clear(); // reduce peak memory usage
-        }
+            aMultiSelContainer[nCol].Set( std::move(aMarkEntriesPerCol[nCol]) );
 }
 
 bool ScMultiSel::IsRowMarked( SCROW nRow ) const

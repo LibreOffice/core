@@ -346,9 +346,9 @@ public:
         }
     }
 
-    void SetOrderIndices( const std::vector<SCCOLROW>& rIndices )
+    void SetOrderIndices( std::vector<SCCOLROW>&& rIndices )
     {
-        maOrderIndices = rIndices;
+        maOrderIndices = std::move(rIndices);
     }
 
     /**
@@ -1894,7 +1894,7 @@ void ScTable::Reorder( const sc::ReorderParam& rParam )
     else
     {
         // Ordering by column is much simpler.  Just set the order indices and we are done.
-        pArray->SetOrderIndices(rParam.maOrderIndices);
+        pArray->SetOrderIndices(std::vector(rParam.maOrderIndices));
         SortReorderByColumn(
             pArray.get(), rParam.maSortRange.aStart.Row(), rParam.maSortRange.aEnd.Row(),
             rParam.maDataAreaExtras.mbCellFormats, nullptr);

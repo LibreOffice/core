@@ -342,12 +342,12 @@ void ScTabView::InvalidateAttribs()
 
 namespace {
 
-void collectUIInformation(const std::map<OUString, OUString>& aParameters)
+void collectUIInformation(std::map<OUString, OUString>&& aParameters)
 {
     EventDescription aDescription;
     aDescription.aID = "grid_window";
     aDescription.aAction = "SELECT";
-    aDescription.aParameters = aParameters;
+    aDescription.aParameters = std::move(aParameters);
     aDescription.aParent = "MainWindow";
     aDescription.aKeyWord = "ScGridWinUIObject";
 

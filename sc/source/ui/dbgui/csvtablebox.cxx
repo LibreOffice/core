@@ -71,7 +71,7 @@ void ScCsvTableBox::SetSeparatorsMode()
     mxGrid->Execute( CSVCMD_SETLINEOFFSET, 0 );
     mxGrid->Execute( CSVCMD_SETPOSCOUNT, 1 );
     mxGrid->Execute( CSVCMD_NEWCELLTEXTS );
-    mxGrid->SetColumnStates( maSepColStates );
+    mxGrid->SetColumnStates( std::vector(maSepColStates) );
     InitControls();
     mxGrid->EnableRepaint();
 }
@@ -90,7 +90,7 @@ void ScCsvTableBox::SetFixedWidthMode()
     mxGrid->Execute( CSVCMD_SETLINEOFFSET, 0 );
     mxGrid->Execute( CSVCMD_SETPOSCOUNT, mnFixedWidth );
     mxGrid->SetSplits( mxRuler->GetSplits() );
-    mxGrid->SetColumnStates( maFixColStates );
+    mxGrid->SetColumnStates( std::vector(maFixColStates) );
     InitControls();
     mxGrid->EnableRepaint();
 }
@@ -188,7 +188,7 @@ void ScCsvTableBox::InitTypes(const weld::ComboBox& rListBox)
     std::vector<OUString> aTypeNames( nTypeCount );
     for( sal_Int32 nIndex = 0; nIndex < nTypeCount; ++nIndex )
         aTypeNames[ nIndex ] = rListBox.get_text( nIndex );
-    mxGrid->SetTypeNames( aTypeNames );
+    mxGrid->SetTypeNames( std::move(aTypeNames) );
 }
 
 void ScCsvTableBox::FillColumnData( ScAsciiOptions& rOptions ) const
@@ -235,7 +235,7 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl&, rCtrl, void )
                 mxGrid->Execute( CSVCMD_SETPOSCOUNT, 1 );
                 mxGrid->Execute( CSVCMD_UPDATECELLTEXTS );
                 mxGrid->Execute( CSVCMD_SETPOSOFFSET, nPos );
-                mxGrid->SetColumnStates( aStates );
+                mxGrid->SetColumnStates( std::move(aStates) );
                 mxGrid->EnableRepaint();
             }
         break;

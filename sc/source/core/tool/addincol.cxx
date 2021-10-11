@@ -128,11 +128,11 @@ const ::std::vector<ScUnoAddInFuncData::LocalizedName>& ScUnoAddInFuncData::GetC
     return maCompNames;
 }
 
-void ScUnoAddInFuncData::SetCompNames( const ::std::vector< ScUnoAddInFuncData::LocalizedName >& rNew )
+void ScUnoAddInFuncData::SetCompNames( ::std::vector< ScUnoAddInFuncData::LocalizedName >&& rNew )
 {
     OSL_ENSURE( !bCompInitialized, "SetCompNames after initializing" );
 
-    maCompNames = rNew;
+    maCompNames = std::move(rNew);
 
     bCompInitialized = true;
 }
@@ -513,7 +513,7 @@ void ScUnoAddInCollection::ReadConfiguration()
                     xFunc, aObject,
                     nVisibleCount, pVisibleArgs.get(), SC_CALLERPOS_NONE );
 
-                pData->SetCompNames( aCompNames );
+                pData->SetCompNames( std::move(aCompNames) );
 
                 ppFuncData[nFuncPos+nOld].reset(pData);
 

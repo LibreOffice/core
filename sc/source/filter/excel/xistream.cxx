@@ -199,12 +199,12 @@ sal_uInt16 XclImpBiff5Decrypter::OnRead( SvStream& rStrm, sal_uInt8* pnData, sal
     return nRet;
 }
 
-XclImpBiff8Decrypter::XclImpBiff8Decrypter(const std::vector<sal_uInt8>& rSalt,
-                                           const std::vector<sal_uInt8>& rVerifier,
-                                           const std::vector<sal_uInt8>& rVerifierHash)
-    : maSalt(rSalt)
-    , maVerifier(rVerifier)
-    , maVerifierHash(rVerifierHash)
+XclImpBiff8Decrypter::XclImpBiff8Decrypter( std::vector<sal_uInt8>&& rSalt,
+                                            std::vector<sal_uInt8>&& rVerifier,
+                                            std::vector<sal_uInt8>&& rVerifierHash)
+    : maSalt(std::move(rSalt))
+    , maVerifier(std::move(rVerifier))
+    , maVerifierHash(std::move(rVerifierHash))
     , mpCodec(nullptr)
 {
 }

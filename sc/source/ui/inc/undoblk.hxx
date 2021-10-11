@@ -107,7 +107,7 @@ public:
 
     ScUndoDeleteMulti( ScDocShell* pNewDocShell,
                        bool bNewRows, bool bNeedsRefresh, SCTAB nNewTab,
-                       const std::vector<sc::ColRowSpan>& rSpans,
+                       std::vector<sc::ColRowSpan>&& rSpans,
                        ScDocumentUniquePtr pUndoDocument, std::unique_ptr<ScRefUndoData> pRefData );
 
     virtual         ~ScUndoDeleteMulti() override;
@@ -361,7 +361,7 @@ public:
                                          SCCOLROW nNewStart, SCTAB nNewStartTab,
                                          SCCOLROW nNewEnd, SCTAB nNewEndTab,
                                          ScDocumentUniquePtr pNewUndoDoc,
-                                         const std::vector<sc::ColRowSpan>& rRanges,
+                                        std::vector<sc::ColRowSpan>&& rRanges,
                                          std::unique_ptr<ScOutlineTable> pNewUndoTab,
                                          ScSizeMode eNewMode, sal_uInt16 nNewSizeTwips,
                                          bool bNewWidth );

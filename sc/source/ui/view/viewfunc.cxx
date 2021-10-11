@@ -102,12 +102,12 @@ ScViewFunc::~ScViewFunc()
 
 namespace {
 
-void collectUIInformation(const std::map<OUString, OUString>& aParameters, const OUString& rAction)
+void collectUIInformation(std::map<OUString, OUString>&& aParameters, const OUString& rAction)
 {
     EventDescription aDescription;
     aDescription.aID = "grid_window";
     aDescription.aAction = rAction;
-    aDescription.aParameters = aParameters;
+    aDescription.aParameters = std::move(aParameters);
     aDescription.aParent = "MainWindow";
     aDescription.aKeyWord = "ScGridWinUIObject";
 
@@ -1906,7 +1906,7 @@ void ScViewFunc::DeleteMulti( bool bRows )
     {
         pDocSh->GetUndoManager()->AddUndoAction(
             std::make_unique<ScUndoDeleteMulti>(
-                pDocSh, bRows, bNeedRefresh, nTab, aSpans, std::move(pUndoDoc), std::move(pUndoData)));
+                pDocSh, bRows, bNeedRefresh, nTab, std::vector(aSpans), std::move(pUndoDoc), std::move(pUndoData)));
     }
 
     if (!AdjustRowHeight(0, rDoc.MaxRow(), true))
@@ -2258,7 +2258,7 @@ void ScViewFunc::SetWidthOrHeight(
         pDocSh->GetUndoManager()->AddUndoAction(
             std::make_unique<ScUndoWidthOrHeight>(
                 pDocSh, aMarkData, nStart, nCurTab, nEnd, nCurTab,
-                std::move(pUndoDoc), aUndoRanges, std::move(pUndoTab), eMode, nSizeTwips, bWidth));
+                std::move(pUndoDoc), std::move(aUndoRanges), std::move(pUndoTab), eMode, nSizeTwips, bWidth));
     }
 
     if (nCurX < 0)

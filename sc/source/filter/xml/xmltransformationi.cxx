@@ -94,7 +94,7 @@ ScXMLColumnRemoveContext::~ScXMLColumnRemoveContext()
     if (!rDataSources.empty())
     {
         rDataSources[rDataSources.size() - 1].AddDataTransformation(
-            std::make_shared<sc::ColumnRemoveTransformation>(maColumns));
+            std::make_shared<sc::ColumnRemoveTransformation>(std::set(maColumns)));
     }
 }
 
@@ -200,7 +200,7 @@ ScXMLColumnMergeContext::~ScXMLColumnMergeContext()
     if (!rDataSources.empty())
     {
         rDataSources[rDataSources.size() - 1].AddDataTransformation(
-            std::make_shared<sc::MergeColumnTransformation>(maColumns, maMergeString));
+            std::make_shared<sc::MergeColumnTransformation>(std::set(maColumns), maMergeString));
     }
 }
 
@@ -288,7 +288,7 @@ ScXMLColumnTextContext::~ScXMLColumnTextContext()
     if (!rDataSources.empty())
     {
         rDataSources[rDataSources.size() - 1].AddDataTransformation(
-            std::make_shared<sc::TextTransformation>(maColumns, maType));
+            std::make_shared<sc::TextTransformation>(std::set(maColumns), maType));
     }
 }
 
@@ -359,7 +359,7 @@ ScXMLColumnAggregateContext::~ScXMLColumnAggregateContext()
     if (!rDataSources.empty())
     {
         rDataSources[rDataSources.size() - 1].AddDataTransformation(
-            std::make_shared<sc::AggregateFunction>(maColumns, maType));
+            std::make_shared<sc::AggregateFunction>(std::set(maColumns), maType));
     }
 }
 
@@ -453,7 +453,7 @@ ScXMLColumnNumberContext::~ScXMLColumnNumberContext()
     if (!rDataSources.empty())
     {
         rDataSources[rDataSources.size() - 1].AddDataTransformation(
-            std::make_shared<sc::NumberTransformation>(maColumns, maType, maPrecision));
+            std::make_shared<sc::NumberTransformation>(std::set(maColumns), maType, maPrecision));
     }
 }
 
@@ -509,7 +509,7 @@ ScXMLColumnRemoveNullContext::~ScXMLColumnRemoveNullContext()
     if (!rDataSources.empty())
     {
         rDataSources[rDataSources.size() - 1].AddDataTransformation(
-            std::make_shared<sc::ReplaceNullTransformation>(maColumns, maReplaceString));
+            std::make_shared<sc::ReplaceNullTransformation>(std::set(maColumns), maReplaceString));
     }
 }
 
@@ -606,7 +606,7 @@ ScXMLDateTimeContext::~ScXMLDateTimeContext()
     if (!rDataSources.empty())
     {
         rDataSources[rDataSources.size() - 1].AddDataTransformation(
-            std::make_shared<sc::DateTimeTransformation>(maColumns, maType));
+            std::make_shared<sc::DateTimeTransformation>(std::set(maColumns), maType));
     }
 }
 

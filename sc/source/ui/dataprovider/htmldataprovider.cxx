@@ -38,7 +38,7 @@ class HTMLFetchThread : public salhelper::Thread
 
 public:
     HTMLFetchThread(ScDocument& rDoc, const OUString&, const OUString& rID, std::function<void()> aImportFinishedHdl,
-            const std::vector<std::shared_ptr<sc::DataTransformation>>& rTransformations);
+            std::vector<std::shared_ptr<sc::DataTransformation>>&& rTransformations);
 
     virtual void execute() override;
 };
@@ -46,12 +46,12 @@ public:
 HTMLFetchThread::HTMLFetchThread(
     ScDocument& rDoc, const OUString& rURL, const OUString& rID,
     std::function<void()> aImportFinishedHdl,
-    const std::vector<std::shared_ptr<sc::DataTransformation>>& rTransformations)
+    std::vector<std::shared_ptr<sc::DataTransformation>>&& rTransformations)
     : salhelper::Thread("HTML Fetch Thread")
     , mrDocument(rDoc)
     , maURL(rURL)
     , maID(rID)
-    , maDataTransformations(rTransformations)
+    , maDataTransformations(std::move(rTransformations))
     , maImportFinishedHdl(std::move(aImportFinishedHdl))
 {
 }
@@ -255,7 +255,7 @@ void HTMLDataProvider::Import()
     mpDoc.reset(new ScDocument(SCDOCMODE_CLIP));
     mpDoc->ResetClip(mpDocument, SCTAB(0));
     mxHTMLFetchThread = new HTMLFetchThread(*mpDoc, mrDataSource.getURL(), mrDataSource.getID(),
-            std::bind(&HTMLDataProvider::ImportFinished, this), mrDataSource.getDataTransformation());
+            std::bind(&HTMLDataProvider::ImportFinished, this), std::vector(mrDataSource.getDataTransformation()));
     mxHTMLFetchThread->launch();
 
     if (mbDeterministic)

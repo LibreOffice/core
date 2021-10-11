@@ -36,7 +36,7 @@
 ScUndoWidthOrHeight::ScUndoWidthOrHeight( ScDocShell* pNewDocShell,
                 const ScMarkData& rMark,
                 SCCOLROW nNewStart, SCTAB nNewStartTab, SCCOLROW nNewEnd, SCTAB nNewEndTab,
-                ScDocumentUniquePtr pNewUndoDoc, const std::vector<sc::ColRowSpan>& rRanges,
+                ScDocumentUniquePtr pNewUndoDoc, std::vector<sc::ColRowSpan>&& rRanges,
                 std::unique_ptr<ScOutlineTable> pNewUndoTab,
                 ScSizeMode eNewMode, sal_uInt16 nNewSizeTwips, bool bNewWidth ) :
     ScSimpleUndo( pNewDocShell ),
@@ -47,7 +47,7 @@ ScUndoWidthOrHeight::ScUndoWidthOrHeight( ScDocShell* pNewDocShell,
     nEndTab( nNewEndTab ),
     pUndoDoc( std::move(pNewUndoDoc) ),
     pUndoTab( std::move(pNewUndoTab) ),
-    maRanges(rRanges),
+    maRanges( std::move(rRanges) ),
     nNewSize( nNewSizeTwips ),
     bWidth( bNewWidth ),
     eMode( eNewMode )

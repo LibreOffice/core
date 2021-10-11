@@ -1137,7 +1137,7 @@ void XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) const
     XclPTSubtotalVec aSubtotalVec;
     maFieldInfo.GetSubtotals( aSubtotalVec );
     if( !aSubtotalVec.empty() )
-        rSaveDim.SetSubTotals( aSubtotalVec );
+        rSaveDim.SetSubTotals( std::move(aSubtotalVec) );
 
     // sorting
     DataPilotFieldSortInfo aSortInfo;

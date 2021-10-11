@@ -681,9 +681,9 @@ void ScDBData::EndTableColumnNamesListener()
     EndListeningAll();
 }
 
-void ScDBData::SetTableColumnNames( const ::std::vector< OUString >& rNames )
+void ScDBData::SetTableColumnNames( ::std::vector< OUString >&& rNames )
 {
-    maTableColumnNames = rNames;
+    maTableColumnNames = std::move(rNames);
     mbTableColumnNamesDirty = false;
 }
 

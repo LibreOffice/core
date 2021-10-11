@@ -89,7 +89,7 @@ bool TableColumns::finalizeImport( ScDBData* pDBData )
             aNames[i] = rxTableColumn->getName();
             ++i;
         }
-        pDBData->SetTableColumnNames( aNames);
+        pDBData->SetTableColumnNames( std::move(aNames) );
         return true;
     }
     return false;

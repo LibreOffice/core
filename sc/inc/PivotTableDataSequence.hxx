@@ -81,7 +81,7 @@ class PivotTableDataSequence final : public PivotTableDataSequence_Base, public 
 {
 public:
     explicit PivotTableDataSequence(ScDocument* pDocument,
-                                    OUString const & sID, std::vector<ValueAndFormat> const & rData);
+                                    OUString const & sID, std::vector<ValueAndFormat>&& rData);
 
     virtual ~PivotTableDataSequence() override;
     PivotTableDataSequence(const PivotTableDataSequence&) = delete;

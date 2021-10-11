@@ -28,7 +28,7 @@ typedef cppu::WeakImplHelper<css::chart2::data::XDataSource,
 class PivotTableDataSource final : public PivotTableDataSource_Base, public SfxListener
 {
 public:
-    explicit PivotTableDataSource(const std::vector<css::uno::Reference<css::chart2::data::XLabeledDataSequence>>& xLabeledSequence);
+    explicit PivotTableDataSource(std::vector<css::uno::Reference<css::chart2::data::XLabeledDataSequence>>&& xLabeledSequence);
     virtual ~PivotTableDataSource() override;
     virtual void Notify(SfxBroadcaster& rBroadcaster, const SfxHint& rHint) override;
 

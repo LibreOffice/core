@@ -155,9 +155,9 @@ bool ScUndoInsertTab::CanRepeat(SfxRepeatTarget& rTarget) const
 
 ScUndoInsertTables::ScUndoInsertTables( ScDocShell* pNewDocShell,
                                         SCTAB nTabNum,
-                                        const std::vector<OUString>& newNameList) :
+                                        std::vector<OUString>&& newNameList) :
     ScSimpleUndo( pNewDocShell ),
-    aNameList( newNameList ),
+    aNameList( std::move(newNameList) ),
     nTab( nTabNum )
 {
     pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
@@ -715,9 +715,9 @@ ScUndoTabColor::ScUndoTabColor(
 
 ScUndoTabColor::ScUndoTabColor(
     ScDocShell* pNewDocShell,
-    const ScUndoTabColorInfo::List& rUndoTabColorList) :
+    ScUndoTabColorInfo::List&& rUndoTabColorList) :
     ScSimpleUndo(pNewDocShell),
-    aTabColorList(rUndoTabColorList)
+    aTabColorList(std::move(rUndoTabColorList))
 {
 }
 
@@ -1086,9 +1086,9 @@ bool ScUndoRemoveLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-ScUndoShowHideTab::ScUndoShowHideTab( ScDocShell* pShell, const std::vector<SCTAB>& newUndoTabs, bool bNewShow ) :
+ScUndoShowHideTab::ScUndoShowHideTab( ScDocShell* pShell, std::vector<SCTAB>&& newUndoTabs, bool bNewShow ) :
     ScSimpleUndo( pShell ),
-    undoTabs( newUndoTabs ),
+    undoTabs( std::move(newUndoTabs) ),
     bShow( bNewShow )
 {
 }

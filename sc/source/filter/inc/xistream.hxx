@@ -136,9 +136,9 @@ private:
     static sal_uInt16   GetOffset( std::size_t nStrmPos );
 
 protected:
-    explicit  XclImpBiff8Decrypter(const std::vector<sal_uInt8>& rSalt,
-                                   const std::vector<sal_uInt8>& rVerifier,
-                                   const std::vector<sal_uInt8>& rVerifierHash);
+    explicit  XclImpBiff8Decrypter( std::vector<sal_uInt8>&& rSalt,
+                                    std::vector<sal_uInt8>&& rVerifier,
+                                    std::vector<sal_uInt8>&& rVerifierHash);
 
     explicit  XclImpBiff8Decrypter(const XclImpBiff8Decrypter& rSrc);
 
@@ -152,10 +152,10 @@ protected:
 class XclImpBiff8StdDecrypter : public XclImpBiff8Decrypter
 {
 public:
-    explicit XclImpBiff8StdDecrypter(const std::vector<sal_uInt8>& rSalt,
-                                     const std::vector<sal_uInt8>& rVerifier,
-                                     const std::vector<sal_uInt8>& rVerifierHash)
-        : XclImpBiff8Decrypter(rSalt, rVerifier, rVerifierHash)
+    explicit XclImpBiff8StdDecrypter( std::vector<sal_uInt8>&& rSalt,
+                                      std::vector<sal_uInt8>&& rVerifier,
+                                      std::vector<sal_uInt8>&& rVerifierHash)
+        : XclImpBiff8Decrypter(std::move(rSalt), std::move(rVerifier), std::move(rVerifierHash))
     {
         mpCodec = &maCodec;
     }
@@ -174,10 +174,10 @@ private:
 class XclImpBiff8CryptoAPIDecrypter : public XclImpBiff8Decrypter
 {
 public:
-    explicit XclImpBiff8CryptoAPIDecrypter(const std::vector<sal_uInt8>& rSalt,
-                                           const std::vector<sal_uInt8>& rVerifier,
-                                           const std::vector<sal_uInt8>& rVerifierHash)
-        : XclImpBiff8Decrypter(rSalt, rVerifier, rVerifierHash)
+    explicit XclImpBiff8CryptoAPIDecrypter( std::vector<sal_uInt8>&& rSalt,
+                                            std::vector<sal_uInt8>&& rVerifier,
+                                            std::vector<sal_uInt8>&& rVerifierHash)
+        : XclImpBiff8Decrypter(std::move(rSalt), std::move(rVerifier), std::move(rVerifierHash))
     {
         mpCodec = &maCodec;
     }

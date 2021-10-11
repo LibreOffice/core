@@ -500,7 +500,7 @@ ScDataPilotFieldGroupsObjImpl;
 class ScDataPilotFieldGroupsObj final : public ScDataPilotFieldGroupsObjImpl
 {
 public:
-    explicit            ScDataPilotFieldGroupsObj( const ScFieldGroups& rGroups );
+    explicit            ScDataPilotFieldGroupsObj( ScFieldGroups&& rGroups );
     virtual             ~ScDataPilotFieldGroupsObj() override;
 
                             // XNameAccess

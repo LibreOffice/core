@@ -71,7 +71,7 @@ class ScOptSolverSave
 public:
             ScOptSolverSave( const OUString& rObjective, bool bMax, bool bMin, bool bValue,
                              const OUString& rTarget, const OUString& rVariable,
-                             const std::vector<ScOptConditionRow>& rConditions,
+                             std::vector<ScOptConditionRow>&& rConditions,
                              const OUString& rEngine,
                              const css::uno::Sequence<css::beans::PropertyValue>& rProperties );
 

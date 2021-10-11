@@ -65,7 +65,8 @@ protected:
 
 public:
     /// @throws uno::RuntimeException
-    WindowComponentEnumImpl( const uno::Reference< uno::XComponentContext >& xContext, const Components& components ) :  m_xContext( xContext ), m_components( components )
+    WindowComponentEnumImpl( const uno::Reference< uno::XComponentContext >& xContext, Components&& components )
+        :  m_xContext( xContext ), m_components( std::move(components) )
     {
         m_it = m_components.begin();
     }
@@ -151,7 +152,7 @@ public:
     //XEnumerationAccess
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) override
     {
-        return new WindowComponentEnumImpl( m_xContext, m_windows );
+        return new WindowComponentEnumImpl( m_xContext, std::vector(m_windows) );
     }
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) override

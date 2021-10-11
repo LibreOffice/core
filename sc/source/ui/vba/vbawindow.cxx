@@ -72,7 +72,8 @@ public:
     Sheets::const_iterator m_it;
 
     /// @throws uno::RuntimeException
-    SelectedSheetsEnum( const uno::Reference< uno::XComponentContext >& xContext, const Sheets& sheets, const uno::Reference< frame::XModel >& xModel ) :  m_xContext( xContext ), m_sheets( sheets ), m_xModel( xModel )
+    SelectedSheetsEnum( const uno::Reference< uno::XComponentContext >& xContext, Sheets&& sheets, const uno::Reference< frame::XModel >& xModel )
+        :  m_xContext( xContext ), m_sheets( std::move(sheets) ), m_xModel( xModel )
     {
         m_it = m_sheets.begin();
     }
@@ -133,7 +134,7 @@ public:
     //XEnumerationAccess
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) override
     {
-        return new SelectedSheetsEnum( m_xContext, sheets, m_xModel  );
+        return new SelectedSheetsEnum( m_xContext, std::vector(sheets), m_xModel  );
     }
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) override

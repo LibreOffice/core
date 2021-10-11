@@ -95,12 +95,12 @@ using ::editeng::SvxBorderLine;
 
 namespace {
 
-void collectUIInformation(const std::map<OUString, OUString>& aParameters, const OUString& rAction)
+void collectUIInformation(std::map<OUString, OUString>&& aParameters, const OUString& rAction)
 {
     EventDescription aDescription;
     aDescription.aID = "grid_window";
     aDescription.aAction = rAction;
-    aDescription.aParameters = aParameters;
+    aDescription.aParameters = std::move(aParameters);
     aDescription.aParent = "MainWindow";
     aDescription.aKeyWord = "ScGridWinUIObject";
 
@@ -2379,7 +2379,7 @@ void ScViewFunc::InsertTables(std::vector<OUString>& aNames, SCTAB nTab,
 
     if (bRecord)
         pDocSh->GetUndoManager()->AddUndoAction(
-                    std::make_unique<ScUndoInsertTables>( pDocSh, nTab, aNames));
+                    std::make_unique<ScUndoInsertTables>( pDocSh, nTab, std::move(aNames)));
 
     //    Update views
 
@@ -3182,7 +3182,7 @@ void ScViewFunc::ShowTable( const std::vector<OUString>& rNames )
     {
         if (bUndo)
         {
-            pDocSh->GetUndoManager()->AddUndoAction( std::make_unique<ScUndoShowHideTab>( pDocSh, undoTabs, true ) );
+            pDocSh->GetUndoManager()->AddUndoAction( std::make_unique<ScUndoShowHideTab>( pDocSh, std::move(undoTabs), true ) );
         }
         pDocSh->PostPaint(0,0,0,rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::Extras);
         pDocSh->SetDocumentModified();
@@ -3230,7 +3230,7 @@ void ScViewFunc::HideTable( const ScMarkData& rMark, SCTAB nTabToSelect )
 
     if (bUndo)
     {
-        pDocSh->GetUndoManager()->AddUndoAction( std::make_unique<ScUndoShowHideTab>( pDocSh, undoTabs, false ) );
+        pDocSh->GetUndoManager()->AddUndoAction( std::make_unique<ScUndoShowHideTab>( pDocSh, std::move(undoTabs), false ) );
     }
 
     //  Update views

@@ -482,9 +482,9 @@ sal_Int32 ScCsvGrid::GetColumnWidth( sal_uInt32 nColIndex ) const
     return IsValidColumn( nColIndex ) ? (GetColumnPos( nColIndex + 1 ) - GetColumnPos( nColIndex )) : 0;
 }
 
-void ScCsvGrid::SetColumnStates( const ScCsvColStateVec& rStates )
+void ScCsvGrid::SetColumnStates( ScCsvColStateVec&& rStates )
 {
-    maColStates = rStates;
+    maColStates = std::move(rStates);
     maColStates.resize( maSplits.Count() - 1 );
     Execute( CSVCMD_EXPORTCOLUMNTYPE );
     AccSendTableUpdateEvent( 0, GetColumnCount(), false );
@@ -532,10 +532,10 @@ void ScCsvGrid::SetSelColumnType( sal_Int32 nType )
     }
 }
 
-void ScCsvGrid::SetTypeNames( const std::vector<OUString>& rTypeNames )
+void ScCsvGrid::SetTypeNames( std::vector<OUString>&& rTypeNames )
 {
     OSL_ENSURE( !rTypeNames.empty(), "ScCsvGrid::SetTypeNames - vector is empty" );
-    maTypeNames = rTypeNames;
+    maTypeNames = std::move(rTypeNames);
     Repaint( true );
 
     mxPopup->clear();

@@ -28,7 +28,7 @@ class FileDialogItemEnumeration : public ::cppu::WeakImplHelper< container::XEnu
     std::vector< OUString > m_sItems;
     std::vector< OUString >::iterator mIt;
 public:
-    explicit FileDialogItemEnumeration( const std::vector< OUString >& rVector ) : m_sItems( rVector ), mIt( m_sItems.begin() ) {}
+    explicit FileDialogItemEnumeration( std::vector< OUString >&& rVector ) : m_sItems( std::move(rVector) ), mIt( m_sItems.begin() ) {}
     virtual sal_Bool SAL_CALL hasMoreElements() override
     {
         return ( mIt != m_sItems.end() );
@@ -47,9 +47,9 @@ public:
 ScVbaFileDialogSelectedItems::ScVbaFileDialogSelectedItems(
         const css::uno::Reference< ov::XHelperInterface >& xParent
        ,const css::uno::Reference< css::uno::XComponentContext >& xContext
-       ,const std::vector< OUString >& rItems)
+       ,std::vector< OUString >&& rItems)
     : FileDialogSelectedItems_BASE( xParent, xContext, uno::Reference< container::XIndexAccess>() )
-    , m_sItems(rItems) {}
+    , m_sItems(std::move(rItems)) {}
 
 
 // XEnumerationAccess
@@ -62,7 +62,7 @@ ScVbaFileDialogSelectedItems::getElementType()
 uno::Reference< container::XEnumeration >
 ScVbaFileDialogSelectedItems::createEnumeration()
 {
-    return uno::Reference< container::XEnumeration >( new FileDialogItemEnumeration( m_sItems ) );
+    return uno::Reference< container::XEnumeration >( new FileDialogItemEnumeration( std::vector(m_sItems) ) );
 }
 
 uno::Any

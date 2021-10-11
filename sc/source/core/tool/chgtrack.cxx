@@ -2033,8 +2033,8 @@ ScChangeTrack::ScChangeTrack( ScDocument& rDocP ) :
     memset( ppContentSlots.get(), 0, mnContentSlots * sizeof( ScChangeActionContent* ) );
 }
 
-ScChangeTrack::ScChangeTrack( ScDocument& rDocP, const std::set<OUString>& aTempUserCollection) :
-        maUserCollection(aTempUserCollection),
+ScChangeTrack::ScChangeTrack( ScDocument& rDocP, std::set<OUString>&& aTempUserCollection) :
+        maUserCollection(std::move(aTempUserCollection)),
         aFixDateTime( DateTime::SYSTEM ),
         rDoc( rDocP )
 {

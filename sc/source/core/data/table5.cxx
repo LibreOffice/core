@@ -319,16 +319,16 @@ bool ScTable::HasManualBreaks() const
     return !maRowManualBreaks.empty() || !maColManualBreaks.empty();
 }
 
-void ScTable::SetRowManualBreaks(const ::std::set<SCROW>& rBreaks)
+void ScTable::SetRowManualBreaks(::std::set<SCROW>&& rBreaks)
 {
-    maRowManualBreaks = rBreaks;
+    maRowManualBreaks = std::move(rBreaks);
     InvalidatePageBreaks();
     SetStreamValid(false);
 }
 
-void ScTable::SetColManualBreaks(const ::std::set<SCCOL>& rBreaks)
+void ScTable::SetColManualBreaks(::std::set<SCCOL>&& rBreaks)
 {
-    maColManualBreaks = rBreaks;
+    maColManualBreaks = std::move(rBreaks);
     InvalidatePageBreaks();
     SetStreamValid(false);
 }

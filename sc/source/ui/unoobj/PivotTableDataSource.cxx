@@ -23,8 +23,8 @@ namespace sc
 
 SC_SIMPLE_SERVICE_INFO(PivotTableDataSource, "PivotTableDataSource", "com.sun.star.chart2.data.DataSource")
 
-PivotTableDataSource::PivotTableDataSource(const std::vector<css::uno::Reference<css::chart2::data::XLabeledDataSequence>>& xLabeledSequence)
-    : m_xLabeledSequence(xLabeledSequence)
+PivotTableDataSource::PivotTableDataSource(std::vector<css::uno::Reference<css::chart2::data::XLabeledDataSequence>>&& xLabeledSequence)
+    : m_xLabeledSequence(std::move(xLabeledSequence))
 {
 }
 

@@ -469,7 +469,7 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
     Sequence< Sequence<Any> > aTabData;
     std::unordered_set<sal_Int32> aCatDims;
     GetCategoryDimensionIndices(aCatDims);
-    pData->GetDrillDownData(aFilterCriteria, aCatDims, aTabData);
+    pData->GetDrillDownData(std::move(aFilterCriteria), std::move(aCatDims), aTabData);
     return aTabData;
 }
 
@@ -729,7 +729,7 @@ void ScDPSource::FilterCacheByPageDimensions()
     {
         std::unordered_set<sal_Int32> aCatDims;
         GetCategoryDimensionIndices(aCatDims);
-        pData->FilterCacheTable(aCriteria, aCatDims);
+        pData->FilterCacheTable(std::move(aCriteria), std::move(aCatDims));
         bPageFiltered = true;
     }
 }

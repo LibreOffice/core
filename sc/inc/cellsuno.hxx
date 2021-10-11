@@ -1205,7 +1205,7 @@ private:
     sal_Int32                       nCurrentPosition;
 
 public:
-                            ScUniqueCellFormatsEnumeration(ScDocShell* pDocShell, const std::vector<ScRangeList>& rRangeLists);
+                            ScUniqueCellFormatsEnumeration(ScDocShell* pDocShell, std::vector<ScRangeList>&& rRangeLists);
     virtual                 ~ScUniqueCellFormatsEnumeration() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;

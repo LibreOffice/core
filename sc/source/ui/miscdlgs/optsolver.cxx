@@ -134,7 +134,7 @@ IMPL_LINK(ScCursorRefEdit, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 
 ScOptSolverSave::ScOptSolverSave( const OUString& rObjective, bool bMax, bool bMin, bool bValue,
                              const OUString& rTarget, const OUString& rVariable,
-                             const std::vector<ScOptConditionRow>& rConditions,
+                             std::vector<ScOptConditionRow>&& rConditions,
                              const OUString& rEngine,
                              const uno::Sequence<beans::PropertyValue>& rProperties ) :
     maObjective( rObjective ),
@@ -143,7 +143,7 @@ ScOptSolverSave::ScOptSolverSave( const OUString& rObjective, bool bMax, bool bM
     mbValue( bValue ),
     maTarget( rTarget ),
     maVariable( rVariable ),
-    maConditions( rConditions ),
+    maConditions( std::move(rConditions) ),
     maEngine( rEngine ),
     maProperties( rProperties )
 {
@@ -526,7 +526,7 @@ IMPL_LINK(ScOptSolverDlg, BtnHdl, weld::Button&, rBtn, void)
             ReadConditions();
             std::unique_ptr<ScOptSolverSave> pSave( new ScOptSolverSave(
                 m_xEdObjectiveCell->GetText(), m_xRbMax->get_active(), m_xRbMin->get_active(), m_xRbValue->get_active(),
-                m_xEdTargetValue->GetText(), m_xEdVariableCells->GetText(), maConditions, maEngine, maProperties ) );
+                m_xEdTargetValue->GetText(), m_xEdVariableCells->GetText(), std::vector(maConditions), maEngine, maProperties ) );
             mpDocShell->SetSolverSaveData( std::move(pSave) );
             response(RET_CLOSE);
         }
@@ -564,7 +564,7 @@ IMPL_LINK(ScOptSolverDlg, BtnHdl, weld::Button&, rBtn, void)
         maConditions.clear();
         std::unique_ptr<ScOptSolverSave> pEmpty( new ScOptSolverSave(
                         sEmpty, true, false, false,
-                        sEmpty, sEmpty, maConditions, maEngine, maProperties ) );
+                        sEmpty, sEmpty, std::vector(maConditions), maEngine, maProperties ) );
         mpDocShell->SetSolverSaveData( std::move(pEmpty) );
         ShowConditions();
 

@@ -145,7 +145,7 @@ public:
     ScRange     GetHeaderArea() const;
     void        StartTableColumnNamesListener();
     void        EndTableColumnNamesListener();
-    SC_DLLPUBLIC void SetTableColumnNames( const ::std::vector< OUString >& rNames );
+    SC_DLLPUBLIC void SetTableColumnNames( ::std::vector< OUString >&& rNames );
     SC_DLLPUBLIC const ::std::vector< OUString >& GetTableColumnNames() const { return maTableColumnNames; }
     bool        AreTableColumnNamesDirty() const { return mbTableColumnNamesDirty; }
 

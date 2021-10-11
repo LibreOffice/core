@@ -49,7 +49,7 @@ namespace {
 class ScDPGroupNumFilter : public ScDPFilteredCache::FilterBase
 {
 public:
-    ScDPGroupNumFilter(const std::vector<ScDPItemData>& rValues, const ScDPNumGroupInfo& rInfo);
+    ScDPGroupNumFilter(std::vector<ScDPItemData>&& rValues, const ScDPNumGroupInfo& rInfo);
 
     virtual bool match(const ScDPItemData &rCellData) const override;
     virtual std::vector<ScDPItemData> getMatchValues() const override;
@@ -60,8 +60,8 @@ private:
 
 }
 
-ScDPGroupNumFilter::ScDPGroupNumFilter(const std::vector<ScDPItemData>& rValues, const ScDPNumGroupInfo& rInfo) :
-    maValues(rValues), maNumInfo(rInfo) {}
+ScDPGroupNumFilter::ScDPGroupNumFilter( std::vector<ScDPItemData>&& rValues, const ScDPNumGroupInfo& rInfo) :
+    maValues(std::move(rValues)), maNumInfo(rInfo) {}
 
 bool ScDPGroupNumFilter::match(const ScDPItemData& rCellData) const
 {
@@ -110,7 +110,7 @@ class ScDPGroupDateFilter : public ScDPFilteredCache::FilterBase
 {
 public:
     ScDPGroupDateFilter(
-        const std::vector<ScDPItemData>& rValues, const Date& rNullDate, const ScDPNumGroupInfo& rNumInfo);
+        std::vector<ScDPItemData>&& rValues, const Date& rNullDate, const ScDPNumGroupInfo& rNumInfo);
 
     virtual bool match(const ScDPItemData & rCellData) const override;
     virtual std::vector<ScDPItemData> getMatchValues() const override;
@@ -124,8 +124,8 @@ private:
 }
 
 ScDPGroupDateFilter::ScDPGroupDateFilter(
-    const std::vector<ScDPItemData>& rValues, const Date& rNullDate, const ScDPNumGroupInfo& rNumInfo) :
-    maValues(rValues),
+    std::vector<ScDPItemData>&& rValues, const Date& rNullDate, const ScDPNumGroupInfo& rNumInfo) :
+    maValues(std::move(rValues)),
     maNullDate(rNullDate),
     maNumInfo(rNumInfo)
 {
@@ -679,13 +679,13 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPFilteredCache::Criterio
                     // grouped by dates.
                     aCri.mpFilter =
                         std::make_shared<ScDPGroupDateFilter>(
-                            aMatchValues, pDoc->GetFormatTable()->GetNullDate(), *pNumInfo);
+                            std::move(aMatchValues), pDoc->GetFormatTable()->GetNullDate(), *pNumInfo);
                 }
                 else
                 {
                     // This dimension is grouped by numeric ranges.
                     aCri.mpFilter =
-                        std::make_shared<ScDPGroupNumFilter>(aMatchValues, *pNumInfo);
+                        std::make_shared<ScDPGroupNumFilter>(std::move(aMatchValues), *pNumInfo);
                 }
 
                 aNewCriteria.push_back(aCri);
@@ -712,7 +712,7 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPFilteredCache::Criterio
                 aCri.mnFieldIndex = nSrcDim;  // use the source dimension, not the group dimension.
                 aCri.mpFilter =
                     std::make_shared<ScDPGroupDateFilter>(
-                        aMatchValues, pDoc->GetFormatTable()->GetNullDate(), *pNumInfo);
+                        std::move(aMatchValues), pDoc->GetFormatTable()->GetNullDate(), *pNumInfo);
 
                 aNewCriteria.push_back(aCri);
             }
@@ -747,18 +747,16 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPFilteredCache::Criterio
     rCriteria.swap(aNewCriteria);
 }
 
-void ScDPGroupTableData::FilterCacheTable(const vector<ScDPFilteredCache::Criterion>& rCriteria, const std::unordered_set<sal_Int32>& rCatDims)
+void ScDPGroupTableData::FilterCacheTable(std::vector<ScDPFilteredCache::Criterion>&& rCriteria, std::unordered_set<sal_Int32>&& rCatDims)
 {
-    vector<ScDPFilteredCache::Criterion> aNewCriteria(rCriteria);
-    ModifyFilterCriteria(aNewCriteria);
-    pSourceData->FilterCacheTable(aNewCriteria, rCatDims);
+    ModifyFilterCriteria(rCriteria);
+    pSourceData->FilterCacheTable(std::move(rCriteria), std::move(rCatDims));
 }
 
-void ScDPGroupTableData::GetDrillDownData(const vector<ScDPFilteredCache::Criterion>& rCriteria, const std::unordered_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
+void ScDPGroupTableData::GetDrillDownData(std::vector<ScDPFilteredCache::Criterion>&& rCriteria, std::unordered_set<sal_Int32>&&rCatDims, Sequence< Sequence<Any> >& rData)
 {
-    vector<ScDPFilteredCache::Criterion> aNewCriteria(rCriteria);
-    ModifyFilterCriteria(aNewCriteria);
-    pSourceData->GetDrillDownData(aNewCriteria, rCatDims, rData);
+    ModifyFilterCriteria(rCriteria);
+    pSourceData->GetDrillDownData(std::move(rCriteria), std::move(rCatDims), rData);
 }
 
 void ScDPGroupTableData::CalcResults(CalcInfo& rInfo, bool bAutoShow)
