@@ -31,6 +31,7 @@ public:
 
 private:
     std::vector<Link<VclSimpleEvent&, void>> m_aListeners;
+    mutable bool m_updated = false;
 };
 
 #endif // INCLUDED_VCL_INC_VCLEVENTLISTENERS_HXX
