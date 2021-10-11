@@ -758,6 +758,9 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
     if (LokControlHandler::postMouseEvent(pPage, pDrawView, *pGridWindow, nType, aPointHMMDraw, nCount, nButtons, nModifier))
         return;
 
+    if (!pGridWindow->HasChildPathFocus(true))
+        pGridWindow->GrabFocus();
+
     // Calc operates in pixels...
     const Point aPosition(nX * pViewData->GetPPTX() + pGridWindow->GetOutOffXPixel(),
                           nY * pViewData->GetPPTY() + pGridWindow->GetOutOffYPixel());
