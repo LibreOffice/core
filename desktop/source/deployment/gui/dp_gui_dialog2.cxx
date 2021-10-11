@@ -595,7 +595,7 @@ void ExtMgrDialog::updatePackage( const uno::Reference< deployment::XPackage > &
     std::vector< css::uno::Reference< css::deployment::XPackage > > vEntries;
     vEntries.push_back(extension);
 
-    m_pManager->getCmdQueue()->checkForUpdates( vEntries );
+    m_pManager->getCmdQueue()->checkForUpdates( std::move(vEntries) );
 }
 
 
@@ -1160,7 +1160,7 @@ IMPL_LINK_NOARG(UpdateRequiredDialog, HandleUpdateBtn, weld::Button&, void)
 
     aGuard.clear();
 
-    m_pManager->getCmdQueue()->checkForUpdates( vUpdateEntries );
+    m_pManager->getCmdQueue()->checkForUpdates( std::move(vUpdateEntries) );
 }
 
 

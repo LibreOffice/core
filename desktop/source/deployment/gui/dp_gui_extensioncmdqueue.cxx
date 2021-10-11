@@ -184,10 +184,10 @@ struct ExtensionCmd
           m_bWarnUser( false ),
           m_xPackage( rPackage ) {};
     ExtensionCmd( const E_CMD_TYPE eCommand,
-                  const std::vector<uno::Reference<deployment::XPackage > > &vExtensionList )
+                std::vector<uno::Reference<deployment::XPackage > >&&vExtensionList )
         : m_eCmdType( eCommand ),
           m_bWarnUser( false ),
-          m_vExtensionList( vExtensionList ) {};
+          m_vExtensionList( std::move(vExtensionList) ) {};
 };
 
 }
@@ -208,7 +208,7 @@ public:
     void removeExtension( const uno::Reference< deployment::XPackage > &rPackage );
     void enableExtension( const uno::Reference< deployment::XPackage > &rPackage,
                           const bool bEnable );
-    void checkForUpdates( const std::vector<uno::Reference<deployment::XPackage > > &vExtensionList );
+    void checkForUpdates( std::vector<uno::Reference<deployment::XPackage > > && vExtensionList );
     void acceptLicense( const uno::Reference< deployment::XPackage > &rPackage );
     void stop();
     bool isBusy();
@@ -230,7 +230,7 @@ private:
                            const uno::Reference< deployment::XPackage > &xPackage );
     void _disableExtension( ::rtl::Reference< ProgressCmdEnv > const &rCmdEnv,
                             const uno::Reference< deployment::XPackage > &xPackage );
-    void _checkForUpdates( const std::vector<uno::Reference<deployment::XPackage > > &vExtensionList );
+    void _checkForUpdates( std::vector<uno::Reference<deployment::XPackage > > &&vExtensionList );
     void _acceptLicense( ::rtl::Reference< ProgressCmdEnv > const &rCmdEnv,
                            const uno::Reference< deployment::XPackage > &xPackage );
 
@@ -645,9 +645,9 @@ void ExtensionCmdQueue::Thread::enableExtension( const uno::Reference< deploymen
 
 
 void ExtensionCmdQueue::Thread::checkForUpdates(
-    const std::vector<uno::Reference<deployment::XPackage > > &vExtensionList )
+    std::vector<uno::Reference<deployment::XPackage > > && vExtensionList )
 {
-    TExtensionCmd pEntry = std::make_shared<ExtensionCmd>( ExtensionCmd::CHECK_FOR_UPDATES, vExtensionList );
+    TExtensionCmd pEntry = std::make_shared<ExtensionCmd>( ExtensionCmd::CHECK_FOR_UPDATES, std::move(vExtensionList) );
     _insert( pEntry );
 }
 
@@ -753,7 +753,7 @@ void ExtensionCmdQueue::Thread::execute()
                     _disableExtension( currentCmdEnv, pEntry->m_xPackage );
                     break;
                 case ExtensionCmd::CHECK_FOR_UPDATES :
-                    _checkForUpdates( pEntry->m_vExtensionList );
+                    _checkForUpdates( std::vector(pEntry->m_vExtensionList) );
                     break;
                 case ExtensionCmd::ACCEPT_LICENSE :
                     _acceptLicense( currentCmdEnv, pEntry->m_xPackage );
@@ -913,7 +913,7 @@ void ExtensionCmdQueue::Thread::_removeExtension( ::rtl::Reference< ProgressCmdE
 
 
 void ExtensionCmdQueue::Thread::_checkForUpdates(
-    const std::vector<uno::Reference<deployment::XPackage > > &vExtensionList )
+    std::vector<uno::Reference<deployment::XPackage > > && vExtensionList )
 {
     const SolarMutexGuard guard;
 
@@ -921,7 +921,7 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
         m_pDialogHelper->incBusy();
 
     std::vector< UpdateData > vData;
-    UpdateDialog aUpdateDialog(m_xContext, m_pDialogHelper ? m_pDialogHelper->getFrameWeld() : nullptr, vExtensionList, &vData);
+    UpdateDialog aUpdateDialog(m_xContext, m_pDialogHelper ? m_pDialogHelper->getFrameWeld() : nullptr, std::move(vExtensionList), &vData);
 
     aUpdateDialog.notifyMenubar( true, false ); // prepare the checking, if there updates to be notified via menu bar icon
 
@@ -1085,9 +1085,9 @@ void ExtensionCmdQueue::enableExtension( const uno::Reference< deployment::XPack
     m_thread->enableExtension( rPackage, bEnable );
 }
 
-void ExtensionCmdQueue::checkForUpdates( const std::vector<uno::Reference<deployment::XPackage > > &vExtensionList )
+void ExtensionCmdQueue::checkForUpdates( std::vector<uno::Reference<deployment::XPackage > > && vExtensionList )
 {
-    m_thread->checkForUpdates( vExtensionList );
+    m_thread->checkForUpdates( std::move(vExtensionList) );
 }
 
 void ExtensionCmdQueue::acceptLicense( const uno::Reference< deployment::XPackage > &rPackage )

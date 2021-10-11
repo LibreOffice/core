@@ -562,12 +562,10 @@ namespace
 {
 
 // removes elements of vector 2 in vector 1
-strings_v subtract(strings_v const & va, strings_v const & vb)
+strings_v subtract(strings_v && a, strings_v && b)
 {
-    strings_v a(va);
     std::sort(a.begin(), a.end());
     strings_v::iterator ae(std::unique(a.begin(), a.end()));
-    strings_v b(vb);
     std::sort(b.begin(), b.end());
     strings_v::iterator be(std::unique(b.begin(), b.end()));
     strings_v c;
@@ -581,8 +579,6 @@ strings_vr MigrationImpl::compileFileList()
 {
 
     strings_vr vrResult(new strings_v);
-    strings_vr vrInclude;
-    strings_vr vrExclude;
 
     // get a list of all files:
     strings_vr vrFiles = getAllFiles(m_aInfo.userdata);
@@ -590,9 +586,9 @@ strings_vr MigrationImpl::compileFileList()
     // get a file list result for each migration step
     for (auto const& rMigration : *m_vrMigrations)
     {
-        vrInclude = applyPatterns(*vrFiles, rMigration.includeFiles);
-        vrExclude = applyPatterns(*vrFiles, rMigration.excludeFiles);
-        strings_v sub(subtract(*vrInclude, *vrExclude));
+        strings_vr vrInclude = applyPatterns(*vrFiles, rMigration.includeFiles);
+        strings_vr vrExclude = applyPatterns(*vrFiles, rMigration.excludeFiles);
+        strings_v sub(subtract(std::move(*vrInclude), std::move(*vrExclude)));
         vrResult->insert(vrResult->end(), sub.begin(), sub.end());
     }
     return vrResult;
