@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4df36f74_e2335e73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-11T10:45:20Z",
+      "side": 1,
+      "message": "see comment at \u003chttps://gerrit.libreoffice.org/c/core/+/122829/2#message-10949e27b5ee28270f167bd62b78cfee1d5f3496\u003e \"Resolves tdf#144677 - Show bookmarks like fields\"",
+      "revId": "2cd6e4e588f695c88db9bc92514b05683609c936",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
