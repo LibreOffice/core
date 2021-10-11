@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dee24714_58929719",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-10-11T21:22:58Z",
+      "side": 1,
+      "message": "Is it intended, that the Bezier curve is not correctly structured?",
+      "revId": "d9cd62ebc5748e8bd56e1d8083f6535346b00c1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
