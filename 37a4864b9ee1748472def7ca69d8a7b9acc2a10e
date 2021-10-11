@@ -16,6 +16,23 @@
       "message": "@quikee: can you take a look at the error, please. I am not sure if the cherry-pick is needed at all? Thank you",
       "revId": "37a4864b9ee1748472def7ca69d8a7b9acc2a10e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a6ab101_dc683b35",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-10-11T09:53:13Z",
+      "side": 1,
+      "message": "Depending on the state of the code in co-2021 you have to either cherry-pick from cp-6.4 or master as the way we initialize the factories / components has been changed somewhere in-between.\nAs this was cherry-picked from cp-6.4 the error says that it can\u0027t find the factories so it seems the co-2021 has the changed code and you need to cherry-pick from master[1].\n\n[1] https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003da52590d76b89dc75be2aa87f4287624c89f1e82f",
+      "revId": "37a4864b9ee1748472def7ca69d8a7b9acc2a10e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
