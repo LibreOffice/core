@@ -957,7 +957,7 @@ bool SVGFilter::implExportDocument()
                 aObjects[ nPos++ ] = elem.second;
             }
 
-            mpSVGFontExport = new SVGFontExport( *mpSVGExport, aObjects );
+            mpSVGFontExport = new SVGFontExport( *mpSVGExport, std::move(aObjects) );
             mpSVGWriter = new SVGActionWriter( *mpSVGExport, *mpSVGFontExport );
 
             if( mpSVGExport->IsEmbedFonts() )
@@ -2851,7 +2851,7 @@ void SVGExport::writeMtf( const GDIMetaFile& rMtf )
         std::vector< ObjectRepresentation > aObjects;
 
         aObjects.emplace_back( Reference< XInterface >(), rMtf );
-        SVGFontExport aSVGFontExport( *this, aObjects );
+        SVGFontExport aSVGFontExport( *this, std::move(aObjects) );
 
         Point aPoint100thmm( OutputDevice::LogicToLogic(rMtf.GetPrefMapMode().GetOrigin(), rMtf.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)) );
         Size  aSize100thmm( OutputDevice::LogicToLogic(rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)) );

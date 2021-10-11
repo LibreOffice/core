@@ -62,7 +62,7 @@ private:
 
 public:
 
-                        SVGFontExport( SVGExport& rExport, const ::std::vector< ObjectRepresentation >& rObjects );
+                        SVGFontExport( SVGExport& rExport, ::std::vector< ObjectRepresentation >&& rObjects );
                         ~SVGFontExport();
 
     void                EmbedFonts();
