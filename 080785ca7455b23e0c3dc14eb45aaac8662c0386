@@ -16,6 +16,24 @@
       "message": "the last time I checked, LTO on Windows did not play nice with --enable-mergelibs, which is exactly the place we would most like to use it.\n",
       "revId": "080785ca7455b23e0c3dc14eb45aaac8662c0386",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53c03d09_df11ac5b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-10-11T09:58:25Z",
+      "side": 1,
+      "message": "Check again :) ? I used --enable-mergelibs together with --enable-lto.",
+      "parentUuid": "34ac7c98_700043ab",
+      "revId": "080785ca7455b23e0c3dc14eb45aaac8662c0386",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
