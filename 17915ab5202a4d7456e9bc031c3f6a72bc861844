@@ -34,6 +34,24 @@
       "parentUuid": "765a5bb3_bbc0785d",
       "revId": "17915ab5202a4d7456e9bc031c3f6a72bc861844",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9171052_c480cd76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-11T12:09:59Z",
+      "side": 1,
+      "message": "[...]\n\u003e (in ASan builds that actually report that, unlike \u003chttps://ci.libreoffice.org/job/lo_ubsan/2156/\u003e).\n\n(see \u003chttps://git.libreoffice.org/lode/+/363ee54b2b3e0b7714b999018322e3cda6e61025%5E%21\u003e \"Improve ASan new-delete-type-mismatch with -fsized-deallocation\")",
+      "parentUuid": "a964dc79_2905bf82",
+      "revId": "17915ab5202a4d7456e9bc031c3f6a72bc861844",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
