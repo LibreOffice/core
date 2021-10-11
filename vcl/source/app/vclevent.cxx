@@ -32,6 +32,7 @@ void VclEventListeners::Call( VclSimpleEvent& rEvent ) const
     std::vector<Link<VclSimpleEvent&,void>> aCopy( m_aListeners );
     std::vector<Link<VclSimpleEvent&,void>>::iterator aIter( aCopy.begin() );
     std::vector<Link<VclSimpleEvent&,void>>::const_iterator aEnd( aCopy.end() );
+    m_updated = false;
     if (VclWindowEvent* pWindowEvent = dynamic_cast<VclWindowEvent*>(&rEvent))
     {
         VclPtr<vcl::Window> xWin(pWindowEvent->GetWindow());
@@ -40,7 +41,8 @@ void VclEventListeners::Call( VclSimpleEvent& rEvent ) const
         {
             Link<VclSimpleEvent&,void> &rLink = *aIter;
             // check this hasn't been removed in some re-enterancy scenario fdo#47368
-            if( std::find(m_aListeners.begin(), m_aListeners.end(), rLink) != m_aListeners.end() )
+            // But only check if the list actually has been changed.
+            if( !m_updated || std::find(m_aListeners.begin(), m_aListeners.end(), rLink) != m_aListeners.end() )
                 rLink.Call( rEvent );
             ++aIter;
         }
@@ -50,7 +52,7 @@ void VclEventListeners::Call( VclSimpleEvent& rEvent ) const
         while ( aIter != aEnd )
         {
             Link<VclSimpleEvent&,void> &rLink = *aIter;
-            if( std::find(m_aListeners.begin(), m_aListeners.end(), rLink) != m_aListeners.end() )
+            if( !m_updated || std::find(m_aListeners.begin(), m_aListeners.end(), rLink) != m_aListeners.end() )
                 rLink.Call( rEvent );
             ++aIter;
         }
@@ -60,11 +62,13 @@ void VclEventListeners::Call( VclSimpleEvent& rEvent ) const
 void VclEventListeners::addListener( const Link<VclSimpleEvent&,void>& rListener )
 {
     m_aListeners.push_back( rListener );
+    m_updated = true;
 }
 
 void VclEventListeners::removeListener( const Link<VclSimpleEvent&,void>& rListener )
 {
     m_aListeners.erase( std::remove(m_aListeners.begin(), m_aListeners.end(), rListener ), m_aListeners.end() );
+    m_updated = true;
 }
 
 VclWindowEvent::VclWindowEvent( vcl::Window* pWin, VclEventId n, void* pDat ) : VclSimpleEvent(n)
