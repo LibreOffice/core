@@ -223,7 +223,7 @@ namespace pcr
         void doInspection();
 
         // bind the browser to m_xIntrospecteeAsProperty
-        void    impl_rebindToInspectee_nothrow( const InterfaceArray& _rObjects );
+        void    impl_rebindToInspectee_nothrow( InterfaceArray&& _rObjects );
 
         /** retrieves special property handlers for our introspectee
         */

@@ -91,7 +91,7 @@ namespace pcr
         static css::uno::Reference< css::inspection::XPropertyControl >
             createListBoxControl(
                 const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory,
-                const std::vector< OUString >& _rInitialListEntries,
+                std::vector< OUString >&& _rInitialListEntries,
                 bool _bReadOnlyControl,
                 bool _bSorted
             );
@@ -139,7 +139,7 @@ namespace pcr
         static css::uno::Reference< css::inspection::XPropertyControl >
             createComboBoxControl(
                 const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory,
-                const std::vector< OUString >& _rInitialListEntries,
+                std::vector< OUString >&& _rInitialListEntries,
                 bool _bSorted
             );
 

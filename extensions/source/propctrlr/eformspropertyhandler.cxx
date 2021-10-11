@@ -445,10 +445,10 @@ namespace pcr
         switch ( nControlType )
         {
         case PropertyControlType::ListBox:
-            aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, false, true );
+            aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, std::move(aListEntries), false, true );
             break;
         case PropertyControlType::ComboBox:
-            aDescriptor.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, aListEntries, true );
+            aDescriptor.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, std::move(aListEntries), true );
             break;
         default:
             aDescriptor.Control = _rxControlFactory->createPropertyControl( nControlType, false );

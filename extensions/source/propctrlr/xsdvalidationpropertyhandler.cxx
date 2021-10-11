@@ -391,7 +391,7 @@ namespace pcr
         switch ( nControlType )
         {
         case PropertyControlType::ListBox:
-            aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, false, false );
+            aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, std::move(aListEntries), false, false );
             break;
         case PropertyControlType::NumericField:
             aDescriptor.Control = PropertyHandlerHelper::createNumericControl( _rxControlFactory, 0, aMinValue, aMaxValue );
