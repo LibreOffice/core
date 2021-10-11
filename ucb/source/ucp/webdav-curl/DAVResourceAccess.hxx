@@ -203,12 +203,13 @@ public:
         css::ucb::WebDAVHTTPMethod eMethod,
         DAVRequestHeaders & rRequestHeaders );
 
+    /// @throws DAVException
+    bool handleException(DAVException const& e, int errorCount);
+
 private:
     const OUString & getRequestURI() const;
     /// @throws DAVException
     bool detectRedirectCycle(::std::u16string_view rRedirectURL);
-    /// @throws DAVException
-    bool handleException(DAVException const& e, int errorCount);
     /// @throws DAVException
     void initialize();
 };
