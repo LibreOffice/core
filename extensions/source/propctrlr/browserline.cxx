@@ -346,6 +346,7 @@ namespace pcr
             if (m_pBrowseButton)
             {
                 m_pBrowseButton->hide();
+                m_pBrowseButton->connect_focus_in(Link<weld::Widget&, void>());
                 m_pBrowseButton = nullptr;
             }
         }
@@ -354,6 +355,7 @@ namespace pcr
             if (m_pAdditionalBrowseButton)
             {
                 m_pAdditionalBrowseButton->hide();
+                m_pAdditionalBrowseButton->connect_focus_in(Link<weld::Widget&, void>());
                 m_pAdditionalBrowseButton = nullptr;
             }
         }
