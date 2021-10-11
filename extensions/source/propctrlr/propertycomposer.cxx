@@ -82,9 +82,9 @@ namespace pcr
     // of supported properties per handler). Shouldn't we cache this? So that it is O( log k )?
 
 
-    PropertyComposer::PropertyComposer( const std::vector< Reference< XPropertyHandler > >& _rSlaveHandlers )
+    PropertyComposer::PropertyComposer( std::vector< Reference< XPropertyHandler > >&& _rSlaveHandlers )
         :PropertyComposer_Base          ( m_aMutex          )
-        ,m_aSlaveHandlers               ( _rSlaveHandlers   )
+        ,m_aSlaveHandlers               ( std::move(_rSlaveHandlers) )
         ,m_aPropertyListeners           ( m_aMutex          )
         ,m_bSupportedPropertiesAreKnown ( false             )
     {

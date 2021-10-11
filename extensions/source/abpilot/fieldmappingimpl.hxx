@@ -77,7 +77,7 @@ namespace abp
         */
         void writeTemplateAddressFieldMapping(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
-            const MapString2String& _rFieldAssignment
+            MapString2String&& _rFieldAssignment
         );
 
 

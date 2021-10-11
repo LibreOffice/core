@@ -1264,10 +1264,10 @@ namespace pcr
 
             // create the control
             if ( PROPERTY_ID_TARGET_FRAME == nPropId )
-                aDescriptor.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, aListEntries, false );
+                aDescriptor.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, std::move(aListEntries), false );
             else
             {
-                aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, false, false );
+                aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, std::move(aListEntries), false, false );
                 bNeedDefaultStringIfVoidAllowed = true;
             }
         }
@@ -1333,7 +1333,7 @@ namespace pcr
                 aListEntries.resize( aDatasources.getLength() );
                 std::copy( aDatasources.begin(), aDatasources.end(), aListEntries.begin() );
                 aDescriptor.Control = PropertyHandlerHelper::createComboBoxControl(
-                    _rxControlFactory, aListEntries, true );
+                    _rxControlFactory, std::move(aListEntries), true );
             }
             break;
 
@@ -1342,7 +1342,7 @@ namespace pcr
                 std::vector< OUString > aFieldNames;
                 impl_initFieldList_nothrow( aFieldNames );
                 aDescriptor.Control = PropertyHandlerHelper::createComboBoxControl(
-                    _rxControlFactory, aFieldNames, false );
+                    _rxControlFactory, std::move(aFieldNames), false );
             }
             break;
 
@@ -2461,7 +2461,7 @@ namespace pcr
                     else
                         impl_fillQueryNames_throw( aNames );
                 }
-                _out_rProperty.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, aNames, true );
+                _out_rProperty.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, std::move(aNames), true );
             }
             break;
 
@@ -2572,7 +2572,7 @@ namespace pcr
                 else
                     impl_fillTableNames_throw( aListEntries );
             }
-            _out_rDescriptor.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, aListEntries, false );
+            _out_rDescriptor.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, std::move(aListEntries), false );
         }
         break;
         case ListSourceType_SQL:

@@ -204,11 +204,8 @@ namespace abp
         }
 
 
-        void writeTemplateAddressFieldMapping( const Reference< XComponentContext >& _rxContext, const MapString2String& _rFieldAssignment )
+        void writeTemplateAddressFieldMapping( const Reference< XComponentContext >& _rxContext, MapString2String&& aFieldAssignment )
         {
-            // want to have a non-const map for easier handling
-            MapString2String aFieldAssignment( _rFieldAssignment );
-
             // access the configuration information which the driver uses for determining its column names
 
             // create a config node for this

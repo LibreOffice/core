@@ -295,7 +295,7 @@ namespace pcr
         }
 
         LineDescriptor aDescriptor;
-        aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, false, true );
+        aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, std::move(aListEntries), false, true );
         aDescriptor.DisplayName = m_pInfoService->getPropertyTranslation( nPropId );
         aDescriptor.Category = "General";
         aDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( nPropId ) );

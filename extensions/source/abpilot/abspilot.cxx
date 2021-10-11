@@ -157,7 +157,7 @@ namespace abp
         addressconfig::writeTemplateAddressSource( getORB(), m_aSettings.bRegisterDataSource ? m_aSettings.sRegisteredDataSourceName : m_aSettings.sDataSourceName, m_aSettings.sSelectedTable );
 
         // 4. write the field mapping
-        fieldmapping::writeTemplateAddressFieldMapping( getORB(), m_aSettings.aFieldMapping );
+        fieldmapping::writeTemplateAddressFieldMapping( getORB(), std::map(m_aSettings.aFieldMapping) );
     }
 
     void OAddressBookSourcePilot::implCleanup()

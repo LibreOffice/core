@@ -208,7 +208,7 @@ namespace pcr
 
         // inspect again, if we already have inspectees
         if ( !m_aInspectedObjects.empty() )
-            impl_rebindToInspectee_nothrow( m_aInspectedObjects );
+            impl_rebindToInspectee_nothrow( std::vector(m_aInspectedObjects) );
     }
 
 
@@ -643,7 +643,7 @@ namespace pcr
                 // Even if they had an API for this, we do not know whether they were
                 // originally created read-only, or if they are read-only just because
                 // the model was.
-                impl_rebindToInspectee_nothrow( m_aInspectedObjects );
+                impl_rebindToInspectee_nothrow( std::vector(m_aInspectedObjects) );
             return;
         }
 
@@ -907,7 +907,7 @@ namespace pcr
     }
 
 
-    void OPropertyBrowserController::impl_rebindToInspectee_nothrow( const InterfaceArray& _rObjects )
+    void OPropertyBrowserController::impl_rebindToInspectee_nothrow( InterfaceArray&& _rObjects )
     {
         try
         {
@@ -915,7 +915,7 @@ namespace pcr
             stopInspection( true );
 
             // inspect the new object(s)
-            m_aInspectedObjects = _rObjects;
+            m_aInspectedObjects = std::move(_rObjects);
             doInspection();
 
             // update the user interface
@@ -1428,7 +1428,7 @@ namespace pcr
 
                 // then create a handler which composes information out of those single handlers
                 if ( !aSingleHandlers.empty() )
-                    _rHandlers.push_back( new PropertyComposer( aSingleHandlers ) );
+                    _rHandlers.push_back( new PropertyComposer( std::move(aSingleHandlers) ) );
             }
         }
 
