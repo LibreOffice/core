@@ -321,7 +321,7 @@ namespace frm
             // propagate
             if ( m_eListSourceType == ListSourceType_VALUELIST )
             {
-                setBoundValues(m_aListSourceValues);
+                setBoundValues(std::vector(m_aListSourceValues));
             }
             else
             {
@@ -1000,7 +1000,7 @@ namespace frm
             m_nNULLPos = 0;
         }
 
-        setBoundValues(aValueList);
+        setBoundValues(std::move(aValueList));
 
         setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( lcl_convertToStringSequence( aDisplayList ) ) );
         setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, makeAny( css::uno::Sequence<css::uno::Any>() ) );
@@ -1037,10 +1037,10 @@ namespace frm
     }
 
 
-    void OListBoxModel::setBoundValues(const ValueList &l)
+    void OListBoxModel::setBoundValues(ValueList && l)
     {
         m_aConvertedBoundValues.clear();
-        m_aBoundValues = l;
+        m_aBoundValues = std::move(l);
     }
 
 

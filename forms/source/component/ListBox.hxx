@@ -214,7 +214,7 @@ private:
     */
     void        impl_refreshDbEntryList( bool _bForce );
 
-    void        setBoundValues(const ValueList&);
+    void        setBoundValues(ValueList &&);
     void        clearBoundValues();
 
     ValueList   impl_getValues() const;
