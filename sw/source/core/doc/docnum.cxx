@@ -2188,9 +2188,11 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, tools::Long const nOffset,
                 {
                     break;
                 }
-                if (pRedline->GetType() == RedlineType::Delete)
+                if (pRedline->GetType() == RedlineType::Delete &&
+                    // tdf#145066 skip full-paragraph deletion which was jumped over
+                    // in Show Changes mode to avoid of deleting an extra row
+                    *aPam.Start() <= *pRedline->Start())
                 {
-                    assert(*aPam.Start() <= *pRedline->Start()); // caller's fault
                     SwRangeRedline* pNewRedline;
                     {
                         SwPaM pam(*pRedline, nullptr);
