@@ -2739,8 +2739,14 @@ public:
 }
 
 // GetDataEntries - Strings from continuous Section around nRow
+
+// DATENT_MAX      - max. number of entries in list for auto entry
+// DATENT_SEARCH   - max. number of cells that get transparent - new: only count Strings
+#define DATENT_MAX      200
+#define DATENT_SEARCH   2000
+
 bool ScColumn::GetDataEntries(
-    SCROW nStartRow, std::set<ScTypedStrData>& rStrings) const
+    SCROW nStartRow, std::set<ScTypedStrData>& rStrings, bool bLimit ) const
 {
     // Start at the specified row position, and collect all string values
     // going upward and downward directions in parallel. The start position
@@ -2762,30 +2768,44 @@ bool ScColumn::GetDataEntries(
         bMoveDown = aItrDown.next(); // Find the next string cell position.
 
     bool bFound = false;
-    while (bMoveUp)
+    size_t nCellsSearched = 0;
+    while (bMoveUp || bMoveDown)
     {
-        // Get the current string and move up.
-        OUString aStr = aItrUp.get();
-        if (!aStr.isEmpty())
+        if (bMoveUp)
         {
-            if (rStrings.insert(ScTypedStrData(aStr)).second)
+            // Get the current string and move up.
+            OUString aStr = aItrUp.get();
+            if (!aStr.isEmpty())
+            {
+                bool bInserted = rStrings.insert(ScTypedStrData(aStr)).second;
+                if (bInserted && bLimit && rStrings.size() >= DATENT_MAX)
+                    return true; // Maximum reached
                 bFound = true;
+            }
+
+            if (bLimit && ++nCellsSearched >= DATENT_SEARCH)
+                return bFound; // max search cell count reached.
+
+            bMoveUp = aItrUp.prev();
         }
 
-        bMoveUp = aItrUp.prev();
-    }
-
-    while (bMoveDown)
-    {
-        // Get the current string and move down.
-        OUString aStr = aItrDown.get();
-        if (!aStr.isEmpty())
+        if (bMoveDown)
         {
-            if (rStrings.insert(ScTypedStrData(aStr)).second)
+            // Get the current string and move down.
+            OUString aStr = aItrDown.get();
+            if (!aStr.isEmpty())
+            {
+                bool bInserted = rStrings.insert(ScTypedStrData(aStr)).second;
+                if (bInserted && bLimit && rStrings.size() >= DATENT_MAX)
+                    return true; // Maximum reached
                 bFound = true;
-        }
+            }
 
-        bMoveDown = aItrDown.next();
+            if (bLimit && ++nCellsSearched >= DATENT_SEARCH)
+                return bFound; // max search cell count reached.
+
+            bMoveDown = aItrDown.next();
+        }
     }
 
     return bFound;
