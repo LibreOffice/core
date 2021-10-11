@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5be05d27_f13f812c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-10-11T07:03:30Z",
+      "side": 1,
+      "message": "@Balázs: many thanks for fixing the broken XLSX export!\n\nEike: many thanks for your review!",
+      "revId": "4098b3b0894212a09385e50c7b36f6ac34474887",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
