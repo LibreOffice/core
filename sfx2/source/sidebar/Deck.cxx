@@ -170,7 +170,7 @@ void Deck::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
  * This container may contain existing panels that are
  * being re-used, and new ones too.
  */
-void Deck::ResetPanels(const SharedPanelContainer& rPanelContainer)
+void Deck::ResetPanels(SharedPanelContainer&& rPanelContainer)
 {
     SharedPanelContainer aHiddens;
 
@@ -186,7 +186,7 @@ void Deck::ResetPanels(const SharedPanelContainer& rPanelContainer)
             aHiddens.push_back(rpPanel);
         }
     }
-    maPanels = rPanelContainer;
+    maPanels = std::move(rPanelContainer);
 
     // Hidden ones always at the end
     maPanels.insert(std::end(maPanels), std::begin(aHiddens), std::end(aHiddens));
