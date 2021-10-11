@@ -91,7 +91,7 @@ $(call gb_Helper_abbreviate_dirs,\
         ICECC=no CCACHE_DISABLE=1 \
 	$(gb_CC) \
 		$(DEFS) \
-		$(gb_LTOFLAGS) \
+		$(T_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
 		$(gb_COMPILER_PLUGINS) \
@@ -106,7 +106,7 @@ $(call gb_Helper_abbreviate_dirs,\
         ICECC=no CCACHE_DISABLE=1 \
 	$(gb_CC) \
 		$(DEFS) \
-		$(gb_LTOFLAGS) \
+		$(T_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
 		$(gb_COMPILER_PLUGINS) \
@@ -121,7 +121,7 @@ $(call gb_Helper_abbreviate_dirs,\
         ICECC=no CCACHE_DISABLE=1 \
 	$(gb_CXX) \
 		$(DEFS) \
-		$(gb_LTOFLAGS) \
+		$(T_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
 		$(gb_COMPILER_PLUGINS) \
@@ -136,7 +136,7 @@ $(call gb_Helper_abbreviate_dirs,\
         ICECC=no CCACHE_DISABLE=1 \
 	$(gb_CXX) \
 		$(DEFS) \
-		$(gb_LTOFLAGS) \
+		$(T_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
 		$(gb_COMPILER_PLUGINS) \
@@ -151,7 +151,7 @@ $(call gb_Helper_abbreviate_dirs,\
         ICECC=no CCACHE_DISABLE=1 \
 	$(gb_CXX) \
 		$(DEFS) \
-		$(gb_LTOFLAGS) \
+		$(T_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
 		$(gb_COMPILER_PLUGINS) \
@@ -834,6 +834,7 @@ $(call gb_LinkTarget_get_target,$(1)) : T_SYMBOLS := $(if $(call gb_LinkTarget__
 $(call gb_LinkTarget_get_target,$(1)) : T_CC :=
 $(call gb_LinkTarget_get_target,$(1)) : T_CXX :=
 $(call gb_LinkTarget_get_target,$(1)) : T_USE_LD := $(USE_LD)
+$(call gb_LinkTarget_get_target,$(1)) : T_LTOFLAGS := $(gb_LTOFLAGS)
 
 ifeq ($(gb_FULLDEPS),$(true))
 ifeq (depcache:,$(filter depcache,$(.FEATURES)):$(gb_PARTIAL_BUILD))
@@ -1785,6 +1786,7 @@ define gb_LinkTarget_use_clang
 $(call gb_LinkTarget_get_target,$(1)) : T_CC := $(LO_CLANG_CC)
 $(call gb_LinkTarget_get_target,$(1)) : T_CXX := $(LO_CLANG_CXX)
 $(call gb_LinkTarget_get_target,$(1)) : T_USE_LD := $(or $(CLANG_USE_LD),$(USE_LD))
+$(call gb_LinkTarget_get_target,$(1)) : T_LTOFLAGS := $(or $(gb_CLANG_LTOFLAGS),$(gb_LTOFLAGS))
 endef
 
 
