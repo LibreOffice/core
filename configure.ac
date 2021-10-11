@@ -1599,8 +1599,7 @@ AC_ARG_ENABLE(lto,
     AS_HELP_STRING([--enable-lto],
         [Enable link-time optimization. Suitable for (optimised) product builds. Building might take
          longer but libraries and executables are optimized for speed. For GCC, best to use the 'gold'
-         linker. For MSVC, this option is broken at the moment. This is experimental work
-         in progress that shouldn't be used unless you are working on it.)]))
+         linker.)]))
 
 AC_ARG_ENABLE(python,
     AS_HELP_STRING([--enable-python=<no/auto/system/internal/fully-internal>],
