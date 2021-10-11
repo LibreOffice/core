@@ -2005,6 +2005,45 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testOleEmfPreviewToHtml)
     CPPUNIT_ASSERT(aPath.endsWith("gif"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testNestedBullets)
+{
+    // Given a documented with nested lists:
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("first");
+    sal_uInt16 nPos = pDoc->MakeNumRule(pDoc->GetUniqueNumRuleName());
+    SwNumRule* pNumRule = pDoc->GetNumRuleTable()[nPos];
+    {
+        SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+        SwTextNode& rTextNode = *rNode.GetTextNode();
+        rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
+        rTextNode.SetAttrListLevel(0);
+    }
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("second");
+    {
+        SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+        SwTextNode& rTextNode = *rNode.GetTextNode();
+        rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
+        rTextNode.SetAttrListLevel(1);
+    }
+
+    // When exporting to xhtml:
+    ExportToReqif();
+
+    // Then make sure that there is a <li> between the outer and the inner <ol>:
+    SvMemoryStream aStream;
+    HtmlExportTest::wrapFragment(maTempFile, aStream);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pDoc);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - XPath '//reqif-xhtml:ol/reqif-xhtml:li/reqif-xhtml:ol/reqif-xhtml:li/reqif-xhtml:p' not found
+    // i.e. the <li> inside the outer <ol> was missing.
+    assertXPathContent(
+        pXmlDoc, "//reqif-xhtml:ol/reqif-xhtml:li/reqif-xhtml:ol/reqif-xhtml:li/reqif-xhtml:p",
+        "second");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
