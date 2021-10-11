@@ -84,4 +84,14 @@ SfxObjectItem* SfxObjectItem::Clone( SfxItemPool *) const
     return new SfxObjectItem( *this );
 }
 
+bool SfxObjectItem::QueryValue(css::uno::Any&, sal_uInt8) const
+{
+    return false;
+}
+
+bool SfxObjectItem::PutValue(const css::uno::Any&, sal_uInt8)
+{
+  return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

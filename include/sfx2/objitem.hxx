@@ -36,6 +36,9 @@ public:
     virtual bool             operator==( const SfxPoolItem& ) const override;
     virtual SfxObjectItem*   Clone( SfxItemPool *pPool = nullptr ) const override;
 
+    virtual bool             QueryValue(css::uno::Any&, sal_uInt8 nMemberId = 0) const override;
+    virtual bool             PutValue(const css::uno::Any&, sal_uInt8) override;
+
     SfxShell*                GetShell() const
                              { return _pSh; }
 };
