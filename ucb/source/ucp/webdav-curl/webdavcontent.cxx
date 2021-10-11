@@ -4012,23 +4012,6 @@ void Content::getResourceOptions(
     }
 }
 
-void Content::getResourceOptions(
-                    const uno::Reference< ucb::XCommandEnvironment >& xEnv,
-                    DAVOptions& rDAVOptions )
-{
-    std::unique_ptr< DAVResourceAccess > xResAccess;
-    {
-        osl::MutexGuard aGuard( m_aMutex );
-        xResAccess.reset( new DAVResourceAccess( *m_xResAccess ) );
-    }
-    getResourceOptions( xEnv, rDAVOptions, xResAccess );
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        m_xResAccess.reset( new DAVResourceAccess( *xResAccess ) );
-    }
-}
-
-
 //static
 bool Content::isResourceAvailable( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
                                   const std::unique_ptr< DAVResourceAccess > & rResAccess,
