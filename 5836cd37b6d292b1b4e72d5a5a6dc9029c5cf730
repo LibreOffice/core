@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f24256b_a9e51247",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-11T10:44:17Z",
+      "side": 1,
+      "message": "Bisecting shows this to be broken, see \u003chttps://ci.libreoffice.org/job/lo_ubsan/2152/\u003e,\n  /sw/source/core/text/inftxt.cxx:651:37: runtime error: downcast of address 0x6040011c0b90 which does not point to an object of type \u0027const SwTextPortion\u0027\n  0x6040011c0b90: note: object is of type \u0027SwBookmarkPortion\u0027\n   33 07 80 54  70 f3 b9 a7 88 2b 00 00  2d 00 00 00 49 01 00 00  d0 0b 1c 01 40 60 00 00  00 00 00 00\n                ^~~~~~~~~~~~~~~~~~~~~~~\n                vptr for \u0027SwBookmarkPortion\u0027\n      #0 0x2b889f29ccd7 in SwTextPaintInfo::DrawText_(rtl::OUString const\u0026, SwLinePortion const\u0026, o3tl::strong_int\u003cint, Tag_TextFrameIndex\u003e, o3tl::strong_int\u003cint, Tag_TextFrameIndex\u003e, bool, bool, bool, bool) /sw/source/core/text/inftxt.cxx:651:37\n      #1 0x2b889f2d8cdb in SwTextPaintInfo::DrawText(rtl::OUString const\u0026, SwLinePortion const\u0026, o3tl::strong_int\u003cint, Tag_TextFrameIndex\u003e, o3tl::strong_int\u003cint, Tag_TextFrameIndex\u003e, bool) const /sw/source/core/text/inftxt.hxx:745:41\n      #2 0x2b889f652d85 in SwControlCharPortion::Paint(SwTextPaintInfo const\u0026) const /sw/source/core/text/porrst.cxx:666:10\n      #3 0x2b889f5b248a in SwLinePortion::PrePaint(SwTextPaintInfo const\u0026, SwLinePortion const*) const /sw/source/core/text/porlin.cxx:134:5\n      #4 0x2b889f435cbc in SwTextPainter::DrawTextLine(SwRect const\u0026, SwSaveClip\u0026, bool) /sw/source/core/text/itrpaint.cxx:269:19\n      #5 0x2b889f26235e in SwTextFrame::PaintSwFrame(OutputDevice\u0026, SwRect const\u0026, SwPrintData const*) const /sw/source/core/text/frmpaint.cxx:756:23\n[...]\n  /home/tdf/lode/jenkins/workspace/lo_ubsan/solenv/gbuild/CppunitTest.mk:123: recipe for target \u0027/home/tdf/lode/jenkins/workspace/lo_ubsan/workdir/CppunitTest/sw_ww8export.test\u0027 failed\n\nMaybe \u003chttps://gerrit.libreoffice.org/c/core/+/123356\u003e \"Try to fix Ubsan TB\" is an appropriate fix.",
+      "revId": "5836cd37b6d292b1b4e72d5a5a6dc9029c5cf730",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
