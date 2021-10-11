@@ -6262,13 +6262,8 @@ if test "$_os" != "WINNT"; then
     AC_CHECK_TOOL(OBJDUMP,objdump)
     AC_CHECK_TOOL(READELF,readelf)
     AC_CHECK_TOOL(STRIP,strip)
-    if test "$_os" = "WINNT"; then
-        AC_CHECK_TOOL(DLLTOOL,dlltool)
-        AC_CHECK_TOOL(WINDRES,windres)
-    fi
 fi
 AC_SUBST(AR)
-AC_SUBST(DLLTOOL)
 AC_SUBST(LD)
 AC_SUBST(NM)
 AC_SUBST(OBJDUMP)
@@ -6278,7 +6273,6 @@ AC_SUBST(PKG_CONFIG_LIBDIR)
 AC_SUBST(RANLIB)
 AC_SUBST(READELF)
 AC_SUBST(STRIP)
-AC_SUBST(WINDRES)
 
 dnl ===================================================================
 dnl pkg-config checks on macOS
