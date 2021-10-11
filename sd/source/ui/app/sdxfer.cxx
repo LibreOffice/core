@@ -666,7 +666,7 @@ void SdTransferable::SetObjectDescriptor( std::unique_ptr<TransferableObjectDesc
     PrepareOLE( *mpObjDesc );
 }
 
-void SdTransferable::SetPageBookmarks( const std::vector<OUString> &rPageBookmarks, bool bPersistent )
+void SdTransferable::SetPageBookmarks( std::vector<OUString> && rPageBookmarks, bool bPersistent )
 {
     if( !mpSourceDoc )
         return;
@@ -689,7 +689,7 @@ void SdTransferable::SetPageBookmarks( const std::vector<OUString> &rPageBookmar
     else
     {
         mpPageDocShell = mpSourceDoc->GetDocSh();
-        maPageBookmarks = rPageBookmarks;
+        maPageBookmarks = std::move(rPageBookmarks);
     }
 
     if( mpSdViewIntern )

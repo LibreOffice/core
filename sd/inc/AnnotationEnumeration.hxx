@@ -31,7 +31,7 @@ class XAnnotationEnumeration;
 namespace sd
 {
 css::uno::Reference<css::office::XAnnotationEnumeration>
-createAnnotationEnumeration(const AnnotationVector&);
+createAnnotationEnumeration(AnnotationVector&&);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

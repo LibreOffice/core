@@ -75,8 +75,8 @@ struct PresetCategory
     OUString maLabel;
     EffectDescriptorList maEffects;
 
-    PresetCategory( const OUString& rLabel, const EffectDescriptorList& rEffects )
-        : maLabel( rLabel ), maEffects( rEffects ) {}
+    PresetCategory( const OUString& rLabel, EffectDescriptorList&& rEffects )
+        : maLabel( rLabel ), maEffects( std::move(rEffects) ) {}
 };
 typedef std::shared_ptr< PresetCategory > PresetCategoryPtr;
 typedef std::vector< PresetCategoryPtr > PresetCategoryList;

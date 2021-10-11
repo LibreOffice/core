@@ -38,7 +38,7 @@ namespace {
 class AnnotationEnumeration: public ::cppu::WeakImplHelper< css::office::XAnnotationEnumeration >
 {
 public:
-    explicit AnnotationEnumeration( const AnnotationVector& rAnnotations );
+    explicit AnnotationEnumeration( AnnotationVector&& rAnnotations );
     AnnotationEnumeration(const AnnotationEnumeration&) = delete;
     AnnotationEnumeration& operator=(const AnnotationEnumeration&) = delete;
 
@@ -55,13 +55,13 @@ private:
 
 }
 
-Reference< XAnnotationEnumeration > createAnnotationEnumeration( const sd::AnnotationVector& rAnnotations )
+Reference< XAnnotationEnumeration > createAnnotationEnumeration( sd::AnnotationVector&& rAnnotations )
 {
-    return new AnnotationEnumeration( rAnnotations );
+    return new AnnotationEnumeration( std::move(rAnnotations) );
 }
 
-AnnotationEnumeration::AnnotationEnumeration( const AnnotationVector& rAnnotations )
-: maAnnotations(rAnnotations)
+AnnotationEnumeration::AnnotationEnumeration( AnnotationVector&& rAnnotations )
+: maAnnotations(std::move(rAnnotations))
 {
     maIter = maAnnotations.begin();
 }
