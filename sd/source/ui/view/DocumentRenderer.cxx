@@ -80,9 +80,9 @@ namespace {
     public:
         PrintOptions (
             const vcl::PrinterOptionsHelper& rHelper,
-            const std::vector<sal_Int32>& rSlidesPerPage)
+            std::vector<sal_Int32>&& rSlidesPerPage)
             : mrProperties(rHelper),
-              maSlidesPerPage(rSlidesPerPage)
+              maSlidesPerPage(std::move(rSlidesPerPage))
         {
         }
 
@@ -951,7 +951,7 @@ namespace {
     public:
         HandoutPrinterPage (
             const sal_uInt16 nHandoutPageIndex,
-            const std::vector<sal_uInt16>& rPageIndices,
+            std::vector<sal_uInt16>&& rPageIndices,
             const MapMode& rMapMode,
             const OUString& rsPageString,
             const Point& rPageStringOffset,
@@ -961,7 +961,7 @@ namespace {
             : PrinterPage(PageKind::Handout, rMapMode, false, rsPageString,
                 rPageStringOffset, nDrawMode, eOrientation, nPaperTray),
               mnHandoutPageIndex(nHandoutPageIndex),
-              maPageIndices(rPageIndices)
+              maPageIndices(std::move(rPageIndices))
         {
         }
 
@@ -1218,7 +1218,7 @@ public:
         }
 
         if (bIsValueChanged && ! mpOptions )
-            mpOptions.reset(new PrintOptions(*this, maSlidesPerPage));
+            mpOptions.reset(new PrintOptions(*this, std::vector(maSlidesPerPage)));
         if( bIsValueChanged || bIsPaperChanged )
             PreparePages();
     }
@@ -1858,7 +1858,7 @@ private:
                 maPrinterPages.push_back(
                     std::make_shared<HandoutPrinterPage>(
                             nPrinterPageIndex++,
-                            aPageIndices,
+                            std::move(aPageIndices),
                             aMap,
                             rInfo.msTimeDate,
                             aPageOfs,

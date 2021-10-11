@@ -52,8 +52,8 @@ ResourceId::ResourceId()
 }
 
 ResourceId::ResourceId (
-    const std::vector<OUString>& rResourceURLs)
-    : maResourceURLs(rResourceURLs)
+    std::vector<OUString>&& rResourceURLs)
+    : maResourceURLs(std::move(rResourceURLs))
 {
     ParseResourceURL();
 }
@@ -342,7 +342,7 @@ sal_Bool SAL_CALL
 Reference<XResourceId> SAL_CALL
     ResourceId::clone()
 {
-    return new ResourceId(maResourceURLs);
+    return new ResourceId(std::vector(maResourceURLs));
 }
 
 //----- XInitialization -------------------------------------------------------

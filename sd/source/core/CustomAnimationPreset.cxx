@@ -381,7 +381,7 @@ void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactor
                         }
 #endif
                     }
-                    rPresetMap.push_back( std::make_shared<PresetCategory>( aLabel, aEffectsList ) );
+                    rPresetMap.push_back( std::make_shared<PresetCategory>( aLabel, std::move(aEffectsList) ) );
                 }
             }
         }

@@ -26,10 +26,10 @@ namespace sd::slidesorter::controller {
 rtl::Reference<SdTransferable> TransferableData::CreateTransferable (
     SdDrawDocument* pSrcDoc,
     SlideSorterViewShell* pViewShell,
-    const ::std::vector<Representative>& rRepresentatives)
+    ::std::vector<Representative>&& rRepresentatives)
 {
     rtl::Reference<SdTransferable> pTransferable = new SdTransferable (pSrcDoc, nullptr, false/*bInitOnGetData*/);
-    auto pData = std::make_shared<TransferableData>(pViewShell, rRepresentatives);
+    auto pData = std::make_shared<TransferableData>(pViewShell, std::move(rRepresentatives));
     pTransferable->AddUserData(pData);
     return pTransferable;
 }
@@ -51,9 +51,9 @@ std::shared_ptr<TransferableData> TransferableData::GetFromTransferable (const S
 
 TransferableData::TransferableData (
     SlideSorterViewShell* pViewShell,
-    const ::std::vector<Representative>& rRepresentatives)
+    ::std::vector<Representative>&& rRepresentatives)
     : mpViewShell(pViewShell),
-      maRepresentatives(rRepresentatives)
+      maRepresentatives(std::move(rRepresentatives))
 {
     if (mpViewShell != nullptr)
         StartListening(*mpViewShell);

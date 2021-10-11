@@ -51,13 +51,13 @@ public:
     static rtl::Reference<SdTransferable> CreateTransferable (
         SdDrawDocument* pSrcDoc,
         SlideSorterViewShell* pViewShell,
-        const ::std::vector<TransferableData::Representative>& rRepresentatives);
+        ::std::vector<TransferableData::Representative>&& rRepresentatives);
 
     static std::shared_ptr<TransferableData> GetFromTransferable (const SdTransferable* pTransferable);
 
     TransferableData (
         SlideSorterViewShell* pViewShell,
-        const ::std::vector<TransferableData::Representative>& rRepresentatives);
+        ::std::vector<TransferableData::Representative>&& rRepresentatives);
     virtual ~TransferableData() override;
 
     const ::std::vector<Representative>& GetRepresentatives() const { return maRepresentatives;}

@@ -99,11 +99,11 @@ SlideExclusionState GetSlideExclusionState (model::PageEnumeration& rPageSet);
 
 namespace {
 
-void collectUIInformation(const std::map<OUString, OUString>& aParameters, const OUString& rAction)
+void collectUIInformation(std::map<OUString, OUString>&& aParameters, const OUString& rAction)
 {
     EventDescription aDescription;
     aDescription.aID = "impress_win_or_draw_win";
-    aDescription.aParameters = aParameters;
+    aDescription.aParameters = std::move(aParameters);
     aDescription.aAction = rAction;
     aDescription.aKeyWord = "ImpressWindowUIObject";
     aDescription.aParent = "MainWindow";

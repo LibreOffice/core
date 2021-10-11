@@ -62,7 +62,7 @@ public:
 
     bool                            HasSourceDoc( const SdDrawDocument* pDoc ) const { return( mpSourceDoc == pDoc ); }
 
-    void                            SetPageBookmarks( const std::vector<OUString>& rPageBookmarks, bool bPersistent );
+    void                            SetPageBookmarks( std::vector<OUString>&& rPageBookmarks, bool bPersistent );
     bool                            IsPageTransferable() const { return mbPageTransferable; }
     bool                            HasPageBookmarks() const { return( mpPageDocShell && ( !maPageBookmarks.empty() ) ); }
     const std::vector<OUString>&    GetPageBookmarks() const { return maPageBookmarks; }

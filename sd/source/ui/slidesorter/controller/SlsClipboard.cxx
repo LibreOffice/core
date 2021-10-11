@@ -429,7 +429,7 @@ void Clipboard::CreateSlideTransferable (
     rtl::Reference<SdTransferable> pTransferable = TransferableData::CreateTransferable (
         pDocument,
         dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell()),
-        aRepresentatives);
+        std::move(aRepresentatives));
 
     if (bDrag)
         SD_MOD()->pTransferDrag = pTransferable.get();
@@ -461,7 +461,7 @@ void Clipboard::CreateSlideTransferable (
 
     {
         TemporarySlideTrackingDeactivator aDeactivator (mrController);
-        pTransferable->SetPageBookmarks (aBookmarkList, !bDrag);
+        pTransferable->SetPageBookmarks (std::move(aBookmarkList), !bDrag);
     }
 
     if (bDrag)
@@ -540,14 +540,14 @@ std::shared_ptr<SdTransferable::UserData> Clipboard::CreateTransferableUserData 
         std::shared_ptr<SdTransferable::UserData> pNewTransferable =
             std::make_shared<TransferableData>(
                 pSlideSorterViewShell,
-                aRepresentatives);
+                std::move(aRepresentatives));
         pTransferable->SetWorkDocument(pTreeListBoxTransferable->GetSourceDoc()->AllocSdDrawDocument());
         //        pTransferable->SetView(&mrSlideSorter.GetView());
 
         // Set page bookmark list.
         std::vector<OUString> aPageBookmarks;
         aPageBookmarks.push_back(sBookmark);
-        pTransferable->SetPageBookmarks(aPageBookmarks, false);
+        pTransferable->SetPageBookmarks(std::move(aPageBookmarks), false);
 
         // Replace the view referenced by the transferable with the
         // corresponding slide sorter view.

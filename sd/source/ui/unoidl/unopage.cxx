@@ -2488,7 +2488,7 @@ void SAL_CALL SdGenericDrawPage::removeAnnotation(const Reference< XAnnotation >
 
 Reference< XAnnotationEnumeration > SAL_CALL SdGenericDrawPage::createAnnotationEnumeration()
 {
-    return ::sd::createAnnotationEnumeration( GetPage()->getAnnotations() );
+    return ::sd::createAnnotationEnumeration( std::vector(GetPage()->getAnnotations()) );
 }
 
 void SdDrawPage::getBackground(Any& rValue)
