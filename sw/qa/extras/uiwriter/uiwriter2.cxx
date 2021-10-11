@@ -920,6 +920,38 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf39721)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf145066_bad_paragraph_deletion)
+{
+    // check move down with redlining: jumping over a deleted paragraph
+    // resulted bad deletion of the not deleted adjacent paragraph in Show Changes mode
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf39721.fodt");
+
+    //turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // Three paragraphs (list items)
+    CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
+
+    // move down once and move up two times second paragraph with change tracking
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Down(/*bSelect=*/false);
+    dispatchCommand(mxComponent, ".uno:MoveDown", {});
+    dispatchCommand(mxComponent, ".uno:MoveUp", {});
+    dispatchCommand(mxComponent, ".uno:MoveUp", {});
+
+    // accept all changes
+    dispatchCommand(mxComponent, ".uno:AcceptAllTrackedChanges", {});
+
+    // This was 2 (bad deletion of the first paragraph)
+    CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf54819)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf54819.fodt");
