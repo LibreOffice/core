@@ -78,7 +78,7 @@ public:
 class WinSalPrinter : public SalPrinter
 {
 public:
-    WinSalGraphics*         mpGraphics;             // current Printer graphics
+    std::unique_ptr<WinSalGraphics> mxGraphics;    // current Printer graphics
     WinSalInfoPrinter*      mpInfoPrinter;          // pointer to the compatible InfoPrinter
     WinSalPrinter*          mpNextPrinter;          // next printing printer
     HDC                     mhDC;                   // printer hdc
