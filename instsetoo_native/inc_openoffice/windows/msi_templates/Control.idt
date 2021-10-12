@@ -183,7 +183,7 @@ MsiRMFilesInUse	DlgDesc	Text	21	23	372	25	196611		OOO_CONTROL_322
 MsiRMFilesInUse	BannerLine	Line	0	44	474	0	1				
 MsiRMFilesInUse	DlgText	Text	21	51	426	43	3		OOO_CONTROL_323		
 MsiRMFilesInUse	List	ListBox	21	95	432	85	7	FileInUseProcess			
-MsiRMFilesInUse	ShutdownOption	RadioButtonGroup	26	190	305	45	3	MsiUIRMOption		OK	
+MsiRMFilesInUse	ShutdownOption	RadioButtonGroup	26	190	422	45	3	MsiUIRMOption		OK	
 MsiRMFilesInUse	DlgLine	Line	0	234	474	0	1				
 MsiRMFilesInUse	OK	PushButton	330	243	66	17	3		OOO_CONTROL_326	Cancel	
 MsiRMFilesInUse	Cancel	PushButton	401	243	66	17	3		OOO_CONTROL_325	ShutdownOption	
