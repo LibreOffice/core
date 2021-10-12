@@ -236,7 +236,8 @@ bool ScRangeUtil::MakeRangeFromName (
     SCTAB           nCurTab,
     ScRange&        rRange,
     RutlNameScope   eScope,
-    ScAddress::Details const & rDetails )
+    ScAddress::Details const & rDetails,
+    bool bUseDetailsPos )
 {
     bool bResult = false;
     if (rName.isEmpty())
@@ -292,9 +293,16 @@ bool ScRangeUtil::MakeRangeFromName (
             ScRefAddress     aStartPos;
             ScRefAddress     aEndPos;
 
-            // tdf#138646 - consider the current grammar and address convention of the document
-            pData->GetSymbol(aStrArea,
-                             FormulaGrammar::mergeToGrammar(rDoc.GetGrammar(), rDetails.eConv));
+            // tdf#138646: use the current grammar of the document and passed
+            // address convention.
+            // tdf#145077: create range string according to current cell cursor
+            // position if expression has relative references and details say so.
+            if (bUseDetailsPos)
+                pData->GetSymbol( aStrArea, ScAddress( rDetails.nCol, rDetails.nRow, nCurTab),
+                        FormulaGrammar::mergeToGrammar(rDoc.GetGrammar(), rDetails.eConv));
+            else
+                pData->GetSymbol( aStrArea,
+                        FormulaGrammar::mergeToGrammar(rDoc.GetGrammar(), rDetails.eConv));
 
             if ( IsAbsArea( aStrArea, rDoc, nTable,
                             nullptr, &aStartPos, &aEndPos, rDetails ) )
