@@ -141,6 +141,12 @@ public:
     void fill(sal_uInt32 color);
 };
 
+/**
+ * WinSalGraphics never owns the HDC used to draw, because it can have various
+ * sources of origin. But it stores all default values (mhDef*) of the HDC,
+ * which are restored when the HDC changes (setHDC) or the SalGraphics is
+ * destructed. So think of it in the terms of Rust's Borrowing semantics.
+ */
 class WinSalGraphics : public SalGraphics
 {
     friend class WinSalGraphicsImpl;
@@ -177,6 +183,7 @@ public:
     HFONT ImplDoSetFont(vcl::font::FontSelectPattern const & i_rFont, const vcl::font::PhysicalFontFace * i_pFontFace, HFONT& o_rOldFont);
 
     HDC getHDC() const { return mhLocalDC; }
+    // NOTE: this doesn't transfer ownership! See class comment.
     void setHDC(HDC aNew);
 
     HPALETTE getDefPal() const;
