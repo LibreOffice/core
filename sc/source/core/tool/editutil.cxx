@@ -613,16 +613,6 @@ void ScEditEngineDefaulter::SetTextNewDefaults( const EditTextObject& rTextObjec
         SetUpdateLayout( true );
 }
 
-void ScEditEngineDefaulter::SetTextNewDefaults( const EditTextObject& rTextObject,
-            std::unique_ptr<SfxItemSet> pSet )
-{
-    bool bUpdateMode = SetUpdateLayout( false );
-    SetText( rTextObject );
-    SetDefaults( std::move(pSet) );
-    if ( bUpdateMode )
-        SetUpdateLayout( true );
-}
-
 void ScEditEngineDefaulter::SetTextCurrentDefaults( const OUString& rText )
 {
     bool bUpdateMode = SetUpdateLayout( false );
@@ -639,16 +629,6 @@ void ScEditEngineDefaulter::SetTextNewDefaults( const OUString& rText,
     bool bUpdateMode = SetUpdateLayout( false );
     SetText( rText );
     SetDefaults( rSet );
-    if ( bUpdateMode )
-        SetUpdateLayout( true );
-}
-
-void ScEditEngineDefaulter::SetTextNewDefaults( const OUString& rText,
-            std::unique_ptr<SfxItemSet> pSet )
-{
-    bool bUpdateMode = SetUpdateLayout( false );
-    SetText( rText );
-    SetDefaults( std::move(pSet) );
     if ( bUpdateMode )
         SetUpdateLayout( true );
 }
