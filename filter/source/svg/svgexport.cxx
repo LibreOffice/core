@@ -2108,8 +2108,8 @@ bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShap
                 if( rMtf.GetActionSize() )
                 {   // for text field shapes we set up text-adjust attributes
                     // and set visibility to hidden
-                    const OUString aElementId(sPlaceholderTag);
-                    const OUString* pElementId = nullptr;
+                    OUString aElementId;
+
                     if( mbPresentation )
                     {
                         bool bIsPageNumber  = ( aShapeClass == "Slide_Number" );
@@ -2120,7 +2120,7 @@ bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShap
                         {
                             // to notify to the SVGActionWriter::ImplWriteActions method
                             // that we are dealing with a placeholder shape
-                            pElementId = &aElementId;
+                            aElementId = sPlaceholderTag;
 
                             mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", "hidden" );
                         }
@@ -2214,7 +2214,7 @@ bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShap
                                 SvXMLElementExport alinkA( *mpSVGExport, XML_NAMESPACE_NONE, "a", true, true );
                                 mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf,
                                                             0xffffffff,
-                                                            pElementId,
+                                                            aElementId,
                                                             &rxShape,
                                                             pEmbeddedBitmapsMtf );
                             }
@@ -2223,7 +2223,7 @@ bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShap
                         {
                             mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf,
                                                         0xffffffff,
-                                                        pElementId,
+                                                        aElementId,
                                                         &rxShape,
                                                         pEmbeddedBitmapsMtf );
                         }
