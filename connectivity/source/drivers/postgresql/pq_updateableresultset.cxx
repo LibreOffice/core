@@ -89,7 +89,7 @@ css::uno::Reference< css::sdbc::XCloseable > UpdateableResultSet::createFromPGRe
     PGresult *result,
     const OUString &schema,
     const OUString &table,
-    const std::vector< OUString > &primaryKey )
+    std::vector< OUString > && primaryKey )
 {
     sal_Int32 columnCount = PQnfields( result );
     sal_Int32 rowCount = PQntuples( result );
@@ -120,7 +120,7 @@ css::uno::Reference< css::sdbc::XCloseable > UpdateableResultSet::createFromPGRe
     }
 
     rtl::Reference<UpdateableResultSet> pRS =  new UpdateableResultSet(
-        mutex, owner, std::move(columnNames), std::move(data), ppSettings, schema, table, std::vector(primaryKey) );
+        mutex, owner, std::move(columnNames), std::move(data), ppSettings, schema, table, std::move(primaryKey) );
 
     pRS->m_meta = new ResultSetMetaData( mutex, pRS,nullptr, ppSettings, result, schema, table );
 

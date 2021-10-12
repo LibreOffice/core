@@ -279,7 +279,7 @@ public:
     void calccols(const vcl::RenderContext& rRenderContext);
     void    SelectSymbol(sal_uInt16 nSymbol);
     sal_uInt16  GetSelectSymbol() const { return nSelectSymbol; }
-    void SetSymbolSet(const SymbolPtrVec_t& rSymbolSet);
+    void SetSymbolSet(SymbolPtrVec_t && rSymbolSet);
     void SetSelectHdl(const Link<SmShowSymbolSet&,void>& rLink) { aSelectHdlLink = rLink; }
     void SetDblClickHdl(const Link<SmShowSymbolSet&,void>& rLink) { aDblClickHdlLink = rLink; }
 };

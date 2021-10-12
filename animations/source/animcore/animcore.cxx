@@ -370,7 +370,7 @@ private:
 class TimeContainerEnumeration : public ::cppu::WeakImplHelper< XEnumeration >
 {
 public:
-    explicit TimeContainerEnumeration( const std::vector< Reference< XAnimationNode > > &rChildren );
+    explicit TimeContainerEnumeration( std::vector< Reference< XAnimationNode > >&& rChildren );
 
     // Methods
     virtual sal_Bool SAL_CALL hasMoreElements() override;
@@ -389,8 +389,8 @@ private:
 
 }
 
-TimeContainerEnumeration::TimeContainerEnumeration( const std::vector< Reference< XAnimationNode > > &rChildren )
-: maChildren( rChildren )
+TimeContainerEnumeration::TimeContainerEnumeration( std::vector< Reference< XAnimationNode > >&& rChildren )
+: maChildren( std::move(rChildren) )
 {
     maIter = maChildren.begin();
 }
@@ -1902,7 +1902,7 @@ Reference< XEnumeration > SAL_CALL AnimationNode::createEnumeration()
 {
     Guard< Mutex > aGuard( maMutex );
 
-    return new TimeContainerEnumeration( maChildren);
+    return new TimeContainerEnumeration(std::vector(maChildren));
 }
 
 

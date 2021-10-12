@@ -118,7 +118,7 @@ public:
         PGresult *result,
         const OUString &schema,
         const OUString &table,
-        const std::vector< OUString > &primaryKey );
+        std::vector< OUString > && primaryKey );
 
 public: // XInterface
     virtual void SAL_CALL acquire() noexcept override { SequenceResultSet::acquire(); }

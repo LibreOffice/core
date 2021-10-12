@@ -67,9 +67,9 @@ struct ViewRectangles
     int m_nPart;
     std::vector<GdkRectangle> m_aRectangles;
 
-    ViewRectangles(int nPart = 0, const std::vector<GdkRectangle>& rRectangles = std::vector<GdkRectangle>())
+    ViewRectangles(int nPart = 0, std::vector<GdkRectangle>&& rRectangles = std::vector<GdkRectangle>())
         : m_nPart(nPart),
-        m_aRectangles(rRectangles)
+        m_aRectangles(std::move(rRectangles))
     {
     }
 };

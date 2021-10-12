@@ -51,6 +51,7 @@ class SVX_DLLPUBLIC SearchAttrItemList : private SrchAttrItemList
 public:
     SearchAttrItemList() {}
     SearchAttrItemList( const SearchAttrItemList& rList );
+    SearchAttrItemList( SearchAttrItemList&& rList );
     ~SearchAttrItemList();
 
     void            Put( const SfxItemSet& rSet );
