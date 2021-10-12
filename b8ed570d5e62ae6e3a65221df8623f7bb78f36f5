@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01b3003a_a8b541e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-10-12T07:45:29Z",
+      "side": 1,
+      "message": "I\u0027m afraid I have no real time to review this. Of course, seeing unit tests commented out looks scary in a diff \u003d) but - if they are all new tests anyway, then presumably that\u0027s no problem - particularly if a subsequent patches un-comments them.\n\nGlad to see more tests getting written: assuming that is that they exercise code paths that are actually used in LibreOffice. Nailing down all details of our API whether they are un-used or not would not be good. We really don\u0027t want to sacrifice flexibility for the sake of making VCL a general purpose library \u003d)\n\nSo - I guess that\u0027s a +1 from me assuming that each test is testing something that is in live use \u003d)",
+      "revId": "b8ed570d5e62ae6e3a65221df8623f7bb78f36f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
