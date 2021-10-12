@@ -2378,7 +2378,7 @@ static ScNameInputType lcl_GetInputType( const OUString& rText )
         ScViewData& rViewData = pViewSh->GetViewData();
         ScDocument& rDoc = rViewData.GetDocument();
         SCTAB nTab = rViewData.GetTabNo();
-        formula::FormulaGrammar::AddressConvention eConv = rDoc.GetAddressConvention();
+        ScAddress::Details aDetails( rDoc.GetAddressConvention());
 
         // test in same order as in SID_CURRENTCELL execute
 
@@ -2395,16 +2395,16 @@ static ScNameInputType lcl_GetInputType( const OUString& rText )
 
         if (rText == ScResId(STR_MANAGE_NAMES))
             eRet = SC_MANAGE_NAMES;
-        else if ( aRange.Parse( rText, rDoc, eConv ) & ScRefFlags::VALID )
+        else if ( aRange.Parse( rText, rDoc, aDetails ) & ScRefFlags::VALID )
             eRet = SC_NAME_INPUT_RANGE;
-        else if ( aAddress.Parse( rText, rDoc, eConv ) & ScRefFlags::VALID )
+        else if ( aAddress.Parse( rText, rDoc, aDetails ) & ScRefFlags::VALID )
             eRet = SC_NAME_INPUT_CELL;
-        else if ( ScRangeUtil::MakeRangeFromName( rText, rDoc, nTab, aRange, eNameScope, eConv ) )
+        else if ( ScRangeUtil::MakeRangeFromName( rText, rDoc, nTab, aRange, eNameScope, aDetails ) )
         {
             eRet = ((eNameScope == RUTL_NAMES_LOCAL) ? SC_NAME_INPUT_NAMEDRANGE_LOCAL :
                     SC_NAME_INPUT_NAMEDRANGE_GLOBAL);
         }
-        else if ( ScRangeUtil::MakeRangeFromName( rText, rDoc, nTab, aRange, RUTL_DBASE, eConv ) )
+        else if ( ScRangeUtil::MakeRangeFromName( rText, rDoc, nTab, aRange, RUTL_DBASE, aDetails ) )
             eRet = SC_NAME_INPUT_DATABASE;
         else if ( comphelper::string::isdigitAsciiString( rText ) &&
                   ( nNumeric = rText.toInt32() ) > 0 && nNumeric <= rDoc.MaxRow()+1 )
