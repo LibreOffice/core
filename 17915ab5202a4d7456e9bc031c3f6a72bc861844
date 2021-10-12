@@ -52,6 +52,24 @@
       "parentUuid": "a964dc79_2905bf82",
       "revId": "17915ab5202a4d7456e9bc031c3f6a72bc861844",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2767739b_36dcddaa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-12T09:38:34Z",
+      "side": 1,
+      "message": "see \u003chttps://gerrit.libreoffice.org/c/core/+/123446\u003e \"Revert \u0027Use placement new to avoid one of the allocation calls...\u0027\"",
+      "parentUuid": "b9171052_c480cd76",
+      "revId": "17915ab5202a4d7456e9bc031c3f6a72bc861844",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
