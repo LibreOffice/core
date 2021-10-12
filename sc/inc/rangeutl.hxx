@@ -82,7 +82,8 @@ public:
                                     SCTAB           nCurTab,
                                     ScRange&        rRange,
                                   RutlNameScope eScope=RUTL_NAMES,
-                                  ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 );
+                                  ScAddress::Details const & rDetails = ScAddress::detailsOOOa1,
+                                  bool bUseDetailsPos = false );
 };
 
 class SC_DLLPUBLIC ScRangeStringConverter
