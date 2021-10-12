@@ -42,7 +42,7 @@ typedef cppu::ImplHelper1< css::accessibility::XAccessibleExtendedAttributes>
 */
 class ScAccessibleCell
     :   public  ScAccessibleCellBase,
-        public  accessibility::AccessibleStaticTextBase,
+        public  ::accessibility::AccessibleStaticTextBase,
         public  ScAccessibleCellAttributeImpl
 {
 public:
