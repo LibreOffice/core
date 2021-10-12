@@ -98,7 +98,7 @@ void OlePicture::Read(HWPFile & hwpf)
         return;
 
 // We process only FILESTG_SIGNATURE_NORMAL.
-    hwpf.Read4b(&signature, 1);
+    hwpf.Read4b(signature);
     if (signature != FILESTG_SIGNATURE_NORMAL)
         return;
 #ifdef _WIN32

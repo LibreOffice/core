@@ -46,7 +46,7 @@ bool HBox::Read(HWPFile & )
 bool SkipData::Read(HWPFile & hwpf)
 {
     uint data_block_len;
-    hwpf.Read4b(&data_block_len, 1);
+    hwpf.Read4b(data_block_len);
 
     hchar dummy;
     if (!hwpf.Read2b(dummy))
@@ -73,7 +73,7 @@ bool FieldCode::Read(HWPFile & hwpf)
     if (!hwpf.Read2b(dummy))
         return false;
     hwpf.ReadBlock(&type, 2);
-    hwpf.Read4b(reserved1.data(), 1);
+    hwpf.ReadBlock(reserved1.data(), 4);
     if (!hwpf.Read2b(location_info))
         return false;
     hwpf.ReadBlock(reserved2.data(), 22);
@@ -123,7 +123,7 @@ bool Bookmark::Read(HWPFile & hwpf)
 {
     uint len;
 
-    hwpf.Read4b(&len, 1);
+    hwpf.Read4b(len);
     if (!hwpf.Read2b(dummy))
         return false;
 
@@ -402,7 +402,7 @@ bool Picture::Read(HWPFile & hwpf)
     }
     hwpf.AddBox(this);
 
-    hwpf.Read4b(&follow_block_size, 1);
+    hwpf.Read4b(follow_block_size);
 
     //when fuzzing with a max len set, max decompress to 10 times that limit
     static size_t nMaxAllowedDecompression = [](const char* pEnv) { size_t nRet = pEnv ? std::atoi(pEnv) : 0; return nRet * 10; }(std::getenv("FUZZ_MAX_INPUT_LEN"));

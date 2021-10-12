@@ -98,7 +98,7 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
     hwpf.Read2b(&nline, 1);
     hwpf.Read1b(contain_cshape);
     hwpf.Read1b(etcflag);
-    hwpf.Read4b(&ctrlflag, 1);
+    hwpf.Read4b(ctrlflag);
     hwpf.Read1b(pstyno);
 
 /* Paragraph representative character */

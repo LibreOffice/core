@@ -139,10 +139,7 @@ class DLLEXPORT HWPFile
  * Reads nmemb short type array from HIODev
  */
         size_t Read2b(void *ptr, size_t nmemb);
-/**
- * Reads nmemb long type array from HIODev
- */
-        void Read4b( void *ptr, size_t nmemb );
+
 /**
  * Reads some bytes from HIODev not regarding endian's way
  * @param size Amount for reading
