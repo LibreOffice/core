@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65da0850_513fbf09",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-12T06:32:04Z",
+      "side": 1,
+      "message": "Looks good, a few nitpicks inline if you have energy to address those. :-)",
+      "revId": "083d04744f0a7f6d247a6605af2f6229313c8486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb8a9061_9eae9cfd",
+        "filename": "xmlsecurity/qa/unit/signing/signing.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-12T06:32:04Z",
+      "side": 1,
+      "message": "Perhaps a one-liner here to explain this is invalid because there are multiple X509Data elements?\n\nBefore somebody breaks this, declares the test as a change detector and just adapts it to pass.",
+      "revId": "083d04744f0a7f6d247a6605af2f6229313c8486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72514e3e_3ee22ed7",
+        "filename": "xmlsecurity/qa/unit/signing/signing.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-12T06:32:04Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "083d04744f0a7f6d247a6605af2f6229313c8486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9366a4bb_2a610aee",
+        "filename": "xmlsecurity/qa/unit/signing/signing.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-12T06:32:04Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "083d04744f0a7f6d247a6605af2f6229313c8486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
