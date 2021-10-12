@@ -446,7 +446,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
                     *(data->pLastResultset) =
                         UpdateableResultSet::createFromPGResultSet(
                             data->refMutex, data->owner, data->ppSettings, result,
-                            schema, table,sourceTableKeys );
+                            schema, table, std::move(sourceTableKeys) );
                 }
                 else if( ! table.getLength() )
                 {

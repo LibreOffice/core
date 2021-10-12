@@ -174,6 +174,14 @@ static void StrArrToList_Impl( sal_uInt16 nId, const std::vector<OUString>& rStr
     SfxGetpApp()->PutItem( SfxStringListItem( nId, &rStrLst ) );
 }
 
+SearchAttrItemList::SearchAttrItemList( SearchAttrItemList&& rList ) :
+    SrchAttrItemList(std::move(rList))
+{
+    for ( size_t i = 0; i < size(); ++i )
+        if ( !IsInvalidItem( (*this)[i].pItem ) )
+            (*this)[i].pItem = (*this)[i].pItem->Clone();
+}
+
 SearchAttrItemList::SearchAttrItemList( const SearchAttrItemList& rList ) :
     SrchAttrItemList(rList)
 {

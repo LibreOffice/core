@@ -435,7 +435,7 @@ namespace wmfemfhelper
 {
     /** helper to create a PointArrayPrimitive2D based on current context */
     static void createPointArrayPrimitive(
-        const std::vector< basegfx::B2DPoint >& rPositions,
+        std::vector< basegfx::B2DPoint >&& rPositions,
         TargetHolder& rTarget,
         PropertyHolder const & rProperties,
         const basegfx::BColor& rBColor)
@@ -447,21 +447,19 @@ namespace wmfemfhelper
         {
             rTarget.append(
                 new drawinglayer::primitive2d::PointArrayPrimitive2D(
-                    std::vector(rPositions),
+                    std::move(rPositions),
                     rBColor));
         }
         else
         {
-            std::vector< basegfx::B2DPoint > aPositions(rPositions);
-
-            for(basegfx::B2DPoint & aPosition : aPositions)
+            for(basegfx::B2DPoint & aPosition : rPositions)
             {
                 aPosition = rProperties.getTransformation() * aPosition;
             }
 
             rTarget.append(
                 new drawinglayer::primitive2d::PointArrayPrimitive2D(
-                    std::move(aPositions),
+                    std::move(rPositions),
                     rBColor));
         }
     }
@@ -1100,7 +1098,7 @@ namespace wmfemfhelper
         const OUString& rText,
         sal_uInt16 nTextStart,
         sal_uInt16 nTextLength,
-        const std::vector< double >& rDXArray,
+        std::vector< double >&& rDXArray,
         TargetHolder& rTarget,
         PropertyHolder const & rProperty)
     {
@@ -1184,7 +1182,7 @@ namespace wmfemfhelper
                     rText,
                     nTextStart,
                     nTextLength,
-                    std::vector(rDXArray),
+                    std::move(rDXArray),
                     aFontAttribute,
                     aLocale,
                     aFontColor,
@@ -1494,7 +1492,7 @@ namespace wmfemfhelper
                         {
                             if(!aPositions.empty())
                             {
-                                createPointArrayPrimitive(aPositions, rTargetHolders.Current(), rPropertyHolders.Current(), aLastColor.getBColor());
+                                createPointArrayPrimitive(std::move(aPositions), rTargetHolders.Current(), rPropertyHolders.Current(), aLastColor.getBColor());
                                 aPositions.clear();
                             }
 
@@ -1510,7 +1508,7 @@ namespace wmfemfhelper
 
                     if(!aPositions.empty())
                     {
-                        createPointArrayPrimitive(aPositions, rTargetHolders.Current(), rPropertyHolders.Current(), aLastColor.getBColor());
+                        createPointArrayPrimitive(std::move(aPositions), rTargetHolders.Current(), rPropertyHolders.Current(), aLastColor.getBColor());
                     }
 
                     break;
@@ -1534,7 +1532,7 @@ namespace wmfemfhelper
 
                         if(!aPositions.empty())
                         {
-                            createPointArrayPrimitive(aPositions, rTargetHolders.Current(), rPropertyHolders.Current(), rPropertyHolders.Current().getLineColor());
+                            createPointArrayPrimitive(std::move(aPositions), rTargetHolders.Current(), rPropertyHolders.Current(), rPropertyHolders.Current().getLineColor());
                         }
                     }
 
@@ -1800,13 +1798,13 @@ namespace wmfemfhelper
 
                     if(nTextLength && rPropertyHolders.Current().getTextColorActive())
                     {
-                        const std::vector< double > aDXArray{};
+                        std::vector< double > aDXArray{};
                         processMetaTextAction(
                             pA->GetPoint(),
                             pA->GetText(),
                             nTextIndex,
                             nTextLength,
-                            aDXArray,
+                            std::move(aDXArray),
                             rTargetHolders.Current(),
                             rPropertyHolders.Current());
                     }
@@ -1847,7 +1845,7 @@ namespace wmfemfhelper
                             pA->GetText(),
                             nTextIndex,
                             nTextLength,
-                            aDXArray,
+                            std::move(aDXArray),
                             rTargetHolders.Current(),
                             rPropertyHolders.Current());
                     }
@@ -1910,7 +1908,7 @@ namespace wmfemfhelper
                             pA->GetText(),
                             nTextIndex,
                             nTextLength,
-                            aTextArray,
+                            std::move(aTextArray),
                             rTargetHolders.Current(),
                             rPropertyHolders.Current());
                     }
