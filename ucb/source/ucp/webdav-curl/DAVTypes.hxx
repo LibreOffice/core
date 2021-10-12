@@ -67,16 +67,14 @@ namespace http_dav_ucp
     class DAVOptions
     {
     private:
-        bool    m_isResourceFound;   // true if the resource was found, else false
         bool    m_isClass1;
         bool    m_isClass2;
         bool    m_isClass3;
-        // for server that do not implement it
+        /// for server that do not implement it
         bool    m_isHeadAllowed;
-        // Internally used to maintain locked stated of the resource, only
-        // if it's a Class 2 resource
+        /// Internally used to maintain the locked state of the resource, only if it's a Class 2 resource
         bool    m_isLocked;
-        // contains the methods allowed on this resource
+        /// contains the methods allowed on this resource
         OUString    m_aAllowedMethods;
 
         /// target time when this capability becomes stale
@@ -84,15 +82,17 @@ namespace http_dav_ucp
         OUString  m_sURL;
         OUString  m_sRedirectedURL;
 
+        /// The cached HTT response status code. It's 0 if the code was dealt with and there is no need to cache it
+        sal_uInt16 m_nHttpResponseStatusCode;
+        /// The cached string with the server returned HTTP response status code string, corresponds to m_nHttpResponseStatusCode.
+        OUString  m_sHttpResponseStatusText;
+
     public:
         DAVOptions();
 
         DAVOptions( const DAVOptions & rOther );
 
         virtual ~DAVOptions();
-
-        bool isResourceFound() { return m_isResourceFound; };
-        void setResourceFound( bool ResourceFound = true ) { m_isResourceFound = ResourceFound; };
 
         bool isClass1() { return m_isClass1; };
         void setClass1( bool Class1 = true ) { m_isClass1 = Class1; };
@@ -106,7 +106,7 @@ namespace http_dav_ucp
         bool isHeadAllowed() { return m_isHeadAllowed; };
         void setHeadAllowed( bool HeadAllowed = true ) { m_isHeadAllowed = HeadAllowed; };
 
-        sal_uInt32  getStaleTime() const { return m_nStaleTime ; };
+        sal_uInt32 getStaleTime() { return m_nStaleTime ; };
         void setStaleTime( const sal_uInt32 nStaleTime ) { m_nStaleTime = nStaleTime; };
 
         const OUString & getURL() { return m_sURL; };
@@ -122,8 +122,13 @@ namespace http_dav_ucp
         void setLocked( bool locked = true ) { m_isLocked = locked; } ;
         bool isLocked() { return m_isLocked; };
 
+        sal_uInt16 getHttpResponseStatusCode() { return m_nHttpResponseStatusCode; };
+        void setHttpResponseStatusCode( const sal_uInt16 nHttpResponseStatusCode ) { m_nHttpResponseStatusCode = nHttpResponseStatusCode; };
+
+        const OUString & getHttpResponseStatusText() { return m_sHttpResponseStatusText; };
+        void setHttpResponseStatusText( const OUString & rHttpResponseStatusText ) { m_sHttpResponseStatusText = rHttpResponseStatusText; };
+
         void init() {
-            m_isResourceFound = false;
             m_isClass1 = false;
             m_isClass2 = false;
             m_isClass3 = false;
@@ -133,6 +138,8 @@ namespace http_dav_ucp
             m_nStaleTime = 0;
             m_sURL.clear();
             m_sRedirectedURL.clear();
+            m_nHttpResponseStatusCode = 0;
+            m_sHttpResponseStatusText.clear();
         };
 
         DAVOptions & operator=( const DAVOptions& rOpts ) = default; //TODO -Werror=deprecated-copy
@@ -158,20 +165,19 @@ namespace http_dav_ucp
         void removeDAVOptions( const OUString & rURL );
         void addDAVOptions( DAVOptions & rDAVOptions, const sal_uInt32 nLifeTime );
 
-        /** Check if the DAV options cached value was found
-            by the last OPTIONS method call.
+        /** return the cached value of HTTP response status code
             If the cached value is found stale, it is removed.
 
-            @param OUString
+            @param (in) OUString
                    the resource URL
 
-            @return bool
-                    true if resource was found or if the Web resource DAV options
+            @return int
+                    the cached
                     are not present (meaning the resource should be checked for
                     presence anyway)
                     false if resource was not found
         */
-        bool isResourceFound( const OUString & rURL );
+        sal_uInt16 getHttpResponseStatusCode( const OUString & rURL, OUString & rHttpResponseStatusText );
 
         bool isHeadAllowed( const OUString & rURL );
 

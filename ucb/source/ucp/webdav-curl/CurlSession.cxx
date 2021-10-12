@@ -1171,7 +1171,6 @@ auto CurlSession::OPTIONS(OUString const& rURIReference,
             }
         }
     }
-    rOptions.setResourceFound();
     if (rOptions.isClass2() || rOptions.isClass3())
     {
         if (g_Init.LockStore.getLockTokenForURI(rURIReference, nullptr))

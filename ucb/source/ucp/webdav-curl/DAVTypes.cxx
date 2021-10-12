@@ -22,7 +22,6 @@ using namespace com::sun::star;
 // DAVOptions implementation
 
 DAVOptions::DAVOptions() :
-    m_isResourceFound( false ),
     m_isClass1( false ),
     m_isClass2( false ),
     m_isClass3( false ),
@@ -31,13 +30,14 @@ DAVOptions::DAVOptions() :
     m_aAllowedMethods(),
     m_nStaleTime( 0 ),
     m_sURL(),
-    m_sRedirectedURL()
+    m_sRedirectedURL(),
+    m_nHttpResponseStatusCode( 0 ),
+    m_sHttpResponseStatusText()
 {
 }
 
 
 DAVOptions::DAVOptions( const DAVOptions & rOther ) :
-    m_isResourceFound( rOther.m_isResourceFound ),
     m_isClass1( rOther.m_isClass1 ),
     m_isClass2( rOther.m_isClass2 ),
     m_isClass3( rOther.m_isClass3 ),
@@ -46,7 +46,9 @@ DAVOptions::DAVOptions( const DAVOptions & rOther ) :
     m_aAllowedMethods( rOther.m_aAllowedMethods ),
     m_nStaleTime( rOther.m_nStaleTime ),
     m_sURL( rOther.m_sURL ),
-    m_sRedirectedURL( rOther.m_sRedirectedURL)
+    m_sRedirectedURL( rOther.m_sRedirectedURL),
+    m_nHttpResponseStatusCode( rOther.m_nHttpResponseStatusCode ),
+    m_sHttpResponseStatusText( rOther.m_sHttpResponseStatusText )
 {
 }
 
@@ -59,7 +61,6 @@ DAVOptions::~DAVOptions()
 bool DAVOptions::operator==( const DAVOptions& rOpts ) const
 {
     return
-        m_isResourceFound == rOpts.m_isResourceFound &&
         m_isClass1 == rOpts.m_isClass1 &&
         m_isClass2 == rOpts.m_isClass2 &&
         m_isClass3 == rOpts.m_isClass3 &&
@@ -68,7 +69,9 @@ bool DAVOptions::operator==( const DAVOptions& rOpts ) const
         m_aAllowedMethods == rOpts.m_aAllowedMethods &&
         m_nStaleTime == rOpts.m_nStaleTime &&
         m_sURL == rOpts.m_sURL &&
-        m_sRedirectedURL == rOpts.m_sRedirectedURL;
+        m_sRedirectedURL == rOpts.m_sRedirectedURL &&
+        m_nHttpResponseStatusCode == rOpts.m_nHttpResponseStatusCode &&
+        m_sHttpResponseStatusText == rOpts.m_sHttpResponseStatusText;
 }
 
 
@@ -131,7 +134,6 @@ void DAVOptionsCache::removeDAVOptions( const OUString & rURL )
 void DAVOptionsCache::addDAVOptions( DAVOptions & rDAVOptions, const sal_uInt32 nLifeTime )
 {
     osl::MutexGuard aGuard( m_aMutex );
-
     OUString aURL( rDAVOptions.getURL() );
 
     OUString aEncodedUrl( ucb_impl::urihelper::encodeURI( DecodeURI(aURL) ) );
@@ -149,8 +151,7 @@ void DAVOptionsCache::addDAVOptions( DAVOptions & rDAVOptions, const sal_uInt32 
     m_aTheCache[ aEncodedUrl ] = rDAVOptions;
 }
 
-
-bool DAVOptionsCache::isResourceFound( const OUString & rURL )
+sal_uInt16 DAVOptionsCache::getHttpResponseStatusCode( const OUString & rURL, OUString & rHttpResponseStatusText )
 {
     osl::MutexGuard aGuard( m_aMutex );
     OUString aEncodedUrl( ucb_impl::urihelper::encodeURI( DecodeURI(rURL) ) );
@@ -166,16 +167,13 @@ bool DAVOptionsCache::isResourceFound( const OUString & rURL )
         if( (*it).second.getStaleTime() < t1.Seconds )
         {
             m_aTheCache.erase( it );
-            return true; // to force again OPTIONS method
+            return 0;
         }
 
-        // check if the resource was present on server
-        return (*it).second.isResourceFound();
+        rHttpResponseStatusText = (*it).second.getHttpResponseStatusText();
+        return (*it).second.getHttpResponseStatusCode();
     }
-    // this value is needed because some web server don't implement
-    // OPTIONS method, so the resource is considered found,
-    // until detected otherwise
-    return true;
+    return 0;
 }
 
 bool DAVOptionsCache::isHeadAllowed( const OUString & rURL )
