@@ -16,6 +16,24 @@
       "message": ".GlobalNamespace()",
       "revId": "cc90c232572af4597822df994690893621ec5cb6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dd8fd0c_77fce33e",
+        "filename": "compilerplugins/clang/moveparam.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-10-12T08:25:11Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "1390f474_6b6cb693",
+      "revId": "cc90c232572af4597822df994690893621ec5cb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
