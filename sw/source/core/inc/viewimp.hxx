@@ -66,6 +66,8 @@ class SwViewShellImp
     SwPageFrame     *m_pFirstVisiblePage; // Always points to the first visible Page
     std::unique_ptr<SwRegionRects> m_pRegion; // Collector of Paintrects from the LayAction
 
+    std::vector<SwRect> m_pendingLOKInvalidations;
+
     SwLayAction   *m_pLayAction;      // Is set if an Action object exists
                                  // Is registered by the SwLayAction ctor and deregistered by the dtor
     SwLayIdle     *m_pIdleAct;     // The same as SwLayAction for SwLayIdle
@@ -148,6 +150,9 @@ public:
     bool AddPaintRect( const SwRect &rRect );
     SwRegionRects *GetRegion()      { return m_pRegion.get(); }
     void DelRegion();
+
+    void AddPendingLOKInvalidation( const SwRect& rRect );
+    std::vector<SwRect> TakePendingLOKInvalidations();
 
     /// New Interface for StarView Drawing
     bool  HasDrawView()             const { return nullptr != m_pDrawView; }
