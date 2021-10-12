@@ -87,10 +87,6 @@ while ($arg = shift) {
             s/Icon=/Icon=$iconprefix/;
         }
 
-        # patch all occurrences of openoffice in icon_filename
-        # line with $prefix
-        s/icon_filename=/icon_filename=$iconprefix/;
-
         # patch all occurrences of openoffice in EXEC line with
         # $productfilename
         if ( /Exec/ ) {
