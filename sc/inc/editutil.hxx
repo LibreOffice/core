@@ -150,18 +150,12 @@ public:
                     /// Current defaults are not applied, new defaults are applied
     void            SetTextNewDefaults( const EditTextObject& rTextObject,
                         const SfxItemSet& rDefaults, bool bRememberCopy = true );
-                    /// Current defaults are not applied, new defaults are applied
-    void            SetTextNewDefaults( const EditTextObject& rTextObject,
-                        std::unique_ptr<SfxItemSet> pDefaults );
 
                     /// SetText and apply defaults already set
     void            SetTextCurrentDefaults( const OUString& rText );
                     /// Current defaults are not applied, new defaults are applied
     void            SetTextNewDefaults( const OUString& rText,
                         const SfxItemSet& rDefaults );
-                    /// Current defaults are not applied, new defaults are applied
-    void            SetTextNewDefaults( const OUString& rText,
-                        std::unique_ptr<SfxItemSet> pDefaults );
 
                     /// Paragraph attributes that are not defaults are copied to
                     /// character attributes and all paragraph attributes reset

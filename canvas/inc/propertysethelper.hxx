@@ -85,13 +85,6 @@ namespace canvas
                 push_back(aEntry);
                 return *this;
             }
-            MakeMap& operator()(const char*       name,
-                                const GetterType& getter)
-            {
-                MapType::MapEntry aEntry={name, {getter, SetterType()}};
-                push_back(aEntry);
-                return *this;
-            }
         };
 
         /** Create helper with zero properties

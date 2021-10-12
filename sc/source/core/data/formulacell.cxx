@@ -526,14 +526,6 @@ void ScFormulaCellGroup::setCode( const ScTokenArray& rCode )
     mpCode->GenHash();
 }
 
-void ScFormulaCellGroup::setCode( std::optional<ScTokenArray> pCode )
-{
-    mpCode = std::move(pCode); // takes ownership of the token array.
-    mpCode->Finalize(); // Reduce memory usage if needed.
-    mbInvariant = mpCode->IsInvariant();
-    mpCode->GenHash();
-}
-
 void ScFormulaCellGroup::compileCode(
     ScDocument& rDoc, const ScAddress& rPos, FormulaGrammar::Grammar eGram )
 {

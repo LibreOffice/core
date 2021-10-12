@@ -2113,28 +2113,6 @@ bool CallbackFlushHandler::removeAll(int type, const std::function<bool (const C
     return bErased;
 }
 
-bool CallbackFlushHandler::removeAll(const std::function<bool (int, const CallbackData&)>& rTestFunc)
-{
-    bool bErased = false;
-    auto it1 = m_queue1.begin();
-    auto it2 = m_queue2.begin();
-    while (it1 != m_queue1.end())
-    {
-        if (rTestFunc(*it1, *it2))
-        {
-            it1 = m_queue1.erase(it1);
-            it2 = m_queue2.erase(it2);
-            bErased = true;
-        }
-        else
-        {
-            ++it1;
-            ++it2;
-        }
-    }
-    return bErased;
-}
-
 void CallbackFlushHandler::addViewStates(int viewId)
 {
     const auto& result = m_viewStates.emplace(viewId, decltype(m_viewStates)::mapped_type());
