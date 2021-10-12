@@ -579,6 +579,7 @@ fi
 # Set the ENABLE_LTO variable
 # ===================================================================
 AC_MSG_CHECKING([whether to use link-time optimization])
+enable_lto=yes
 if test -n "$enable_lto" -a "$enable_lto" != "no"; then
     ENABLE_LTO="TRUE"
     AC_MSG_RESULT([yes])
@@ -14225,6 +14226,7 @@ AC_SUBST(ILIB_FOR_BUILD)
 # ===================================================================
 AC_MSG_CHECKING([whether to create huge library])
 MERGELIBS=
+enable_mergelibs=yes
 
 if test $_os = iOS -o $_os = Android; then
     # Never any point in mergelibs for these as we build just static
