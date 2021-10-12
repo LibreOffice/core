@@ -104,7 +104,7 @@ class DLLEXPORT HWPPara
 /**
  * Checks the special characters in the paragraph
  */
-        tools::ULong      ctrlflag;
+        uint              ctrlflag;
         unsigned char     pstyno;
         std::shared_ptr<CharShape> cshape;                     /* When characters are all the same shape */
         std::shared_ptr<ParaShape> pshape;                     /* if reuse flag is 0, */
