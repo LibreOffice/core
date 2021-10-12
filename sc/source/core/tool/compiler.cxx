@@ -6261,7 +6261,7 @@ void ScCompiler::CorrectSumRange(const ScComplexRefData& rBaseRange,
 
 void ScCompiler::AnnotateTrimOnDoubleRefs()
 {
-    if (!pCode || !(pCode -1) || !(*(pCode - 1)))
+    if (!pCode || !(*(pCode - 1)))
         return;
 
     // OpCode of the "root" operator (which is already in RPN array).
