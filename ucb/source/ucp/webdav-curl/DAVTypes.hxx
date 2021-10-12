@@ -170,22 +170,6 @@ namespace http_dav_ucp
         void removeDAVOptions( const OUString & rURL );
         void addDAVOptions( DAVOptions & rDAVOptions, const sal_uInt32 nLifeTime );
 
-        /** return the cached value of HTTP response status code
-            If the cached value is found stale, it is removed.
-
-            @param (in) OUString
-                   the resource URL
-
-            @return int
-                    the cached
-                    are not present (meaning the resource should be checked for
-                    presence anyway)
-                    false if resource was not found
-        */
-        sal_uInt16 getHttpResponseStatusCode( const OUString & rURL, OUString & rHttpResponseStatusText );
-
-        bool isHeadAllowed( const OUString & rURL );
-
         void setHeadAllowed( const OUString & rURL, bool HeadAllowed = true );
 
     private:
