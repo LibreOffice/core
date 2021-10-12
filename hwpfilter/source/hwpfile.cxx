@@ -158,12 +158,6 @@ size_t HWPFile::Read2b(void *ptr, size_t nmemb)
     return hiodev ? hiodev->read2b(ptr, nmemb) : 0;
 }
 
-void HWPFile::Read4b(void *ptr, size_t nmemb)
-{
-    if (hiodev)
-        hiodev->read4b(ptr, nmemb);
-}
-
 size_t HWPFile::ReadBlock(void *ptr, size_t size)
 {
     return hiodev ? hiodev->readBlock(ptr, size) : 0;
