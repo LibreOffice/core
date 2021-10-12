@@ -111,18 +111,6 @@ void MetaAction::Scale( double, double )
 {
 }
 
-void MetaAction::ReadColor(SvStream& rIStm, ::Color& rColor)
-{
-    sal_uInt32 nTmp;
-    rIStm.ReadUInt32(nTmp);
-    rColor = ::Color(ColorTransparency, nTmp);
-}
-
-void MetaAction::WriteColor(SvStream& rIStm, ::Color aColor)
-{
-    rIStm.WriteUInt32(static_cast<sal_uInt32>(aColor));
-}
-
 MetaPixelAction::MetaPixelAction() :
     MetaAction(MetaActionType::PIXEL)
 {}

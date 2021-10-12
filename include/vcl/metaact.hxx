@@ -95,10 +95,6 @@ public:
         if given action requires special transparency handling
     */
     virtual bool        IsTransparent() const { return false; }
-
-protected:
-    static void         ReadColor(SvStream& rIStm, ::Color& rColor);
-    static void         WriteColor(SvStream& rIStm, ::Color aColor);
 };
 
 class VCL_DLLPUBLIC MetaPixelAction final : public MetaAction

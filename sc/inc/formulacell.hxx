@@ -91,7 +91,6 @@ public:
     ~ScFormulaCellGroup();
 
     void setCode( const ScTokenArray& rCode );
-    void setCode( std::optional<ScTokenArray> pCode );
     void compileCode(
         ScDocument& rDoc, const ScAddress& rPos, formula::FormulaGrammar::Grammar eGram );
 

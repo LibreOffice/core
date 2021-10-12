@@ -43,21 +43,6 @@ namespace dbaccess
         */
         static OUString  loadString(TranslateId pResId);
 
-        /** loads a string from the resource file, substituting a placeholder with a given string
-
-            @param  pResId
-                the resource ID of the string to load
-            @param  _pPlaceholderAscii
-                the ASCII representation of the placeholder string
-            @param  _rReplace
-                the string which should substitute the placeholder
-        */
-        static OUString  loadString(
-                TranslateId pResId,
-                const char* _pPlaceholderAscii,
-                std::u16string_view  _rReplace
-        );
-
         /** loads a string from the resource file, substituting two placeholders with given strings
 
             @param  pResId

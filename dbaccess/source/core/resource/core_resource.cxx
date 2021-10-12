@@ -31,12 +31,6 @@ namespace dbaccess
         return Translate::get(pResId, Translate::Create("dba"));
     }
 
-    OUString ResourceManager::loadString(TranslateId pResId, const char* _pPlaceholderAscii, std::u16string_view _rReplace)
-    {
-        OUString sString(loadString(pResId));
-        return sString.replaceFirst( OUString::createFromAscii(_pPlaceholderAscii), _rReplace );
-    }
-
     OUString ResourceManager::loadString(TranslateId pResId, const char* _pPlaceholderAscii1, std::u16string_view _rReplace1,
         const char* _pPlaceholderAscii2, std::u16string_view _rReplace2)
     {
