@@ -22,7 +22,7 @@ connectivity/source/drivers/evoab2/NStatement.hxx:54
     connectivity::evoab::FieldSort bAscending _Bool
 cppu/source/threadpool/threadpool.cxx:352
     _uno_ThreadPool dummy sal_Int32
-cppu/source/typelib/typelib.cxx:59
+cppu/source/typelib/typelib.cxx:58
     (anonymous namespace)::AlignSize_Impl nInt16 sal_Int16
 cui/source/inc/AdditionsDialog.hxx:47
     AdditionInfo sReleaseVersion class rtl::OUString
@@ -204,6 +204,8 @@ include/sfx2/msg.hxx:147
     SfxType23 pType const std::type_info *
 include/sfx2/templdlg.hxx:41
     SfxTemplatePanelControl pImpl std::unique_ptr<SfxTemplateDialog_Impl>
+include/svtools/ctrlbox.hxx:425
+    FontSizeBox aFontMetric class FontMetric
 include/svtools/genericunodialog.hxx:154
     svt::UnoDialogEntryGuard m_aGuard ::osl::MutexGuard
 include/svtools/unoevent.hxx:162
@@ -254,9 +256,9 @@ libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.hxx:28
     GtvMainToolbar parent GtkBox
 libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.hxx:36
     GtvMainToolbarClass parentClass GtkBoxClass
-lingucomponent/source/languageguessing/simpleguesser.cxx:81
+lingucomponent/source/languageguessing/simpleguesser.cxx:79
     (anonymous namespace)::textcat_t maxsize uint4
-lingucomponent/source/languageguessing/simpleguesser.cxx:83
+lingucomponent/source/languageguessing/simpleguesser.cxx:81
     (anonymous namespace)::textcat_t output char [1024]
 lotuswordpro/source/filter/clone.hxx:23
     detail::has_clone::(anonymous) a char [2]
@@ -266,6 +268,8 @@ pyuno/source/module/pyuno_impl.hxx:138
     pyuno::(anonymous) ob_base PyObject
 pyuno/source/module/pyuno_impl.hxx:238
     pyuno::stRuntimeImpl ob_base PyObject
+reportdesign/source/filter/xml/xmlExport.cxx:1198
+      sal_Int32
 reportdesign/source/ui/inc/ReportWindow.hxx:52
     rptui::OReportWindow m_pObjFac std::unique_ptr<DlgEdFactory, o3tl::default_delete<DlgEdFactory> >
 sal/qa/osl/condition/osl_Condition.cxx:72
@@ -324,8 +328,6 @@ sc/inc/editutil.hxx:111
     ScEnginePoolHelper pEnginePool rtl::Reference<SfxItemPool>
 sc/inc/editutil.hxx:113
     ScEnginePoolHelper bDeleteEnginePool _Bool
-sc/qa/unit/ucalc_formula.cxx:3534
-      class TestFormula *
 sc/source/core/data/document.cxx:1234
     (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aSwitch sc::AutoCalcSwitch
 sc/source/core/data/document.cxx:1235
@@ -336,7 +338,7 @@ sc/source/filter/html/htmlpars.cxx:3022
     (anonymous namespace)::CSSHandler::MemStr mn size_t
 sc/source/filter/inc/sheetdatacontext.hxx:50
     oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
-sc/source/ui/inc/docsh.hxx:455
+sc/source/ui/inc/docsh.hxx:459
     ScDocShellModificator mpProtector std::unique_ptr<ScRefreshTimerProtector>
 sc/source/ui/inc/PivotLayoutTreeListBase.hxx:47
     ScPivotLayoutTreeListBase maDropTargetHelper class ScPivotLayoutTreeDropTarget
@@ -376,11 +378,11 @@ sfx2/source/inc/sfxpicklist.hxx:33
     SfxPickList mxImpl std::unique_ptr<SfxPickListImpl>
 sfx2/source/inc/templdgi.hxx:101
     SfxCommonTemplateDialog_Impl m_aStyleListUpdateFamily Link<void *, void>
-slideshow/source/engine/opengl/TransitionImpl.cxx:1987
+slideshow/source/engine/opengl/TransitionImpl.cxx:1991
     (anonymous namespace)::ThreeFloats x GLfloat
-slideshow/source/engine/opengl/TransitionImpl.cxx:1987
+slideshow/source/engine/opengl/TransitionImpl.cxx:1991
     (anonymous namespace)::ThreeFloats y GLfloat
-slideshow/source/engine/opengl/TransitionImpl.cxx:1987
+slideshow/source/engine/opengl/TransitionImpl.cxx:1991
     (anonymous namespace)::ThreeFloats z GLfloat
 starmath/inc/mathml/mathmlMo.hxx:63
     moOperatorData m_motxt class rtl::OUString
@@ -396,7 +398,7 @@ starmath/inc/mathml/mathmlMo.hxx:68
     moOperatorData m_properties enum moOpDP
 starmath/inc/smmod.hxx:67
     SmModule mpLocSymbolData std::unique_ptr<SmLocalizedSymbolData>
-starmath/inc/view.hxx:245
+starmath/inc/view.hxx:243
     SmViewShell maGraphicController class SmGraphicController
 svl/source/crypto/cryptosign.cxx:108
     (anonymous namespace)::Extension extnID SECItem
@@ -418,7 +420,7 @@ svx/source/sidebar/fontwork/FontworkPropertyPanel.hxx:42
     svx::sidebar::FontworkPropertyPanel m_xToolbar std::unique_ptr<ToolbarUnoDispatcher>
 svx/source/tbxctrls/layctrl.cxx:434
     (anonymous namespace)::ColumnsWindow mxControl rtl::Reference<SvxColumnsToolBoxControl>
-sw/source/core/crsr/crbm.cxx:64
+sw/source/core/crsr/crbm.cxx:62
     (anonymous namespace)::CursorStateHelper m_aSaveState class SwCursorSaveState
 sw/source/core/frmedt/fetab.cxx:78
     (anonymous namespace)::TableWait m_pWait const std::unique_ptr<SwWait>
@@ -426,7 +428,7 @@ sw/source/core/layout/dbg_lay.cxx:179
     SwImplEnterLeave m_nAction enum DbgAction
 sw/source/uibase/inc/condedit.hxx:43
     ConditionEdit m_aDropTargetHelper class ConditionEditDropTarget
-sw/source/uibase/inc/conttree.hxx:289
+sw/source/uibase/inc/conttree.hxx:297
     SwGlobalTree m_aDropTargetHelper class SwGlobalTreeDropTarget
 sw/source/uibase/inc/swuicnttab.hxx:240
     SwTokenWindow m_aAdjustPositionsIdle class Idle
@@ -440,150 +442,154 @@ unoidl/source/unoidlprovider.cxx:673
     unoidl::detail::(anonymous namespace)::UnoidlCursor reference1_ rtl::Reference<UnoidlProvider>
 unoidl/source/unoidlprovider.cxx:674
     unoidl::detail::(anonymous namespace)::UnoidlCursor reference2_ rtl::Reference<UnoidlModuleEntity>
-vcl/inc/pdf/pdfbuildin_fonts.hxx:32
+vcl/inc/font/PhysicalFontFace.hxx:53
+    vcl::font::FontMatchStatus mnHeightMatch int
+vcl/inc/font/PhysicalFontFace.hxx:54
+    vcl::font::FontMatchStatus mnWidthMatch int
+vcl/inc/pdf/pdfbuildin_fonts.hxx:34
     vcl::pdf::BuildinFont m_nAscent const int
-vcl/inc/pdf/pdfbuildin_fonts.hxx:33
+vcl/inc/pdf/pdfbuildin_fonts.hxx:35
     vcl::pdf::BuildinFont m_nDescent const int
-vcl/inc/pdf/pdfbuildin_fonts.hxx:40
+vcl/inc/pdf/pdfbuildin_fonts.hxx:42
     vcl::pdf::BuildinFont m_aWidths const int [256]
-vcl/inc/qt5/Qt5AccessibleEventListener.hxx:34
-    Qt5AccessibleEventListener m_xAccessible css::uno::Reference<css::accessibility::XAccessible>
-vcl/inc/qt5/Qt5AccessibleWidget.hxx:139
-    Qt5AccessibleWidget m_xAccessible css::uno::Reference<css::accessibility::XAccessible>
-vcl/inc/qt5/Qt5AccessibleWidget.hxx:141
-    Qt5AccessibleWidget m_pObject class QObject *
-vcl/inc/qt5/Qt5Clipboard.hxx:38
-    Qt5Clipboard m_aMutex osl::Mutex
-vcl/inc/qt5/Qt5Clipboard.hxx:39
-    Qt5Clipboard m_aClipboardName const class rtl::OUString
-vcl/inc/qt5/Qt5Clipboard.hxx:40
-    Qt5Clipboard m_aClipboardMode const class QClipboard::Mode
-vcl/inc/qt5/Qt5Clipboard.hxx:43
-    Qt5Clipboard m_bOwnClipboardChange _Bool
-vcl/inc/qt5/Qt5Clipboard.hxx:45
-    Qt5Clipboard m_bDoClear _Bool
-vcl/inc/qt5/Qt5Clipboard.hxx:48
-    Qt5Clipboard m_aContents css::uno::Reference<css::datatransfer::XTransferable>
-vcl/inc/qt5/Qt5Clipboard.hxx:50
-    Qt5Clipboard m_aOwner css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner>
-vcl/inc/qt5/Qt5Clipboard.hxx:51
-    Qt5Clipboard m_aListeners std::vector<css::uno::Reference<css::datatransfer::clipboard::XClipboardListener> >
-vcl/inc/qt5/Qt5FilePicker.hxx:62
-    Qt5FilePicker m_context css::uno::Reference<css::uno::XComponentContext>
-vcl/inc/qt5/Qt5FilePicker.hxx:64
-    Qt5FilePicker m_xListener css::uno::Reference<css::ui::dialogs::XFilePickerListener>
-vcl/inc/qt5/Qt5FilePicker.hxx:66
-    Qt5FilePicker m_aHelperMutex osl::Mutex
-vcl/inc/qt5/Qt5FilePicker.hxx:68
-    Qt5FilePicker m_aNamedFilterList class QStringList
-vcl/inc/qt5/Qt5FilePicker.hxx:69
-    Qt5FilePicker m_aTitleToFilterMap QHash<class QString, class QString>
-vcl/inc/qt5/Qt5FilePicker.hxx:71
-    Qt5FilePicker m_aNamedFilterToExtensionMap QHash<class QString, class QString>
-vcl/inc/qt5/Qt5FilePicker.hxx:72
-    Qt5FilePicker m_aCurrentFilter class QString
-vcl/inc/qt5/Qt5FilePicker.hxx:75
-    Qt5FilePicker m_aCustomWidgetsMap QHash<sal_Int16, class QWidget *>
-vcl/inc/qt5/Qt5FilePicker.hxx:77
-    Qt5FilePicker m_bIsFolderPicker const _Bool
-vcl/inc/qt5/Qt5FilePicker.hxx:79
-    Qt5FilePicker m_pParentWidget class QWidget *
-vcl/inc/qt5/Qt5Frame.hxx:85
-    Qt5Frame m_bGraphicsInUse _Bool
-vcl/inc/qt5/Qt5Frame.hxx:87
-    Qt5Frame m_pParent class Qt5Frame *
-vcl/inc/qt5/Qt5Frame.hxx:88
-    Qt5Frame m_ePointerStyle enum PointerStyle
-vcl/inc/qt5/Qt5Frame.hxx:92
-    Qt5Frame m_pDragSource class Qt5DragSource *
-vcl/inc/qt5/Qt5Frame.hxx:93
-    Qt5Frame m_pDropTarget class Qt5DropTarget *
-vcl/inc/qt5/Qt5Frame.hxx:94
-    Qt5Frame m_bInDrag _Bool
-vcl/inc/qt5/Qt5Frame.hxx:96
-    Qt5Frame m_bDefaultSize _Bool
-vcl/inc/qt5/Qt5Frame.hxx:97
-    Qt5Frame m_bDefaultPos _Bool
-vcl/inc/qt5/Qt5Frame.hxx:98
-    Qt5Frame m_bFullScreen _Bool
-vcl/inc/qt5/Qt5Frame.hxx:99
-    Qt5Frame m_bFullScreenSpanAll _Bool
-vcl/inc/qt5/Qt5Frame.hxx:100
-    Qt5Frame m_nRestoreScreen sal_uInt32
-vcl/inc/qt5/Qt5Frame.hxx:101
-    Qt5Frame m_aRestoreGeometry class QRect
-vcl/inc/qt5/Qt5Frame.hxx:104
-    Qt5Frame m_ScreenSaverInhibitor class ScreenSaverInhibitor
-vcl/inc/qt5/Qt5Frame.hxx:108
-    Qt5Frame m_nInputLanguage LanguageType
-vcl/inc/qt5/Qt5Instance.hxx:56
-    Qt5Instance m_aWaitingYieldCond osl::Condition
-vcl/inc/qt5/Qt5Instance.hxx:58
-    Qt5Instance m_pTimer class Qt5Timer *
-vcl/inc/qt5/Qt5Instance.hxx:59
-    Qt5Instance m_bSleeping _Bool
-vcl/inc/qt5/Qt5Instance.hxx:60
-    Qt5Instance m_aClipboards std::unordered_map<OUString, css::uno::Reference<css::uno::XInterface> >
-vcl/inc/qt5/Qt5Instance.hxx:62
-    Qt5Instance m_pQApplication std::unique_ptr<QApplication>
-vcl/inc/qt5/Qt5Instance.hxx:63
-    Qt5Instance m_pFakeArgvFreeable std::vector<FreeableCStr>
-vcl/inc/qt5/Qt5Instance.hxx:64
-    Qt5Instance m_pFakeArgv std::unique_ptr<char *[]>
-vcl/inc/qt5/Qt5Instance.hxx:65
-    Qt5Instance m_pFakeArgc std::unique_ptr<int>
-vcl/inc/qt5/Qt5Instance.hxx:67
-    Qt5Instance m_aUpdateStyleTimer class Timer
-vcl/inc/qt5/Qt5Instance.hxx:68
-    Qt5Instance m_bUpdateFonts _Bool
-vcl/inc/qt5/Qt5MainWindow.hxx:31
-    Qt5MainWindow m_rFrame class Qt5Frame &
-vcl/inc/qt5/Qt5Menu.hxx:44
-    Qt5Menu mpParentSalMenu class Qt5Menu *
-vcl/inc/qt5/Qt5Menu.hxx:45
-    Qt5Menu mpFrame class Qt5Frame *
-vcl/inc/qt5/Qt5Menu.hxx:46
-    Qt5Menu mbMenuBar _Bool
-vcl/inc/qt5/Qt5Menu.hxx:47
-    Qt5Menu mpQMenuBar class QMenuBar *
-vcl/inc/qt5/Qt5Menu.hxx:49
-    Qt5Menu mpOwnedQMenu std::unique_ptr<QMenu>
-vcl/inc/qt5/Qt5Menu.hxx:51
-    Qt5Menu mpQMenu class QMenu *
-vcl/inc/qt5/Qt5Menu.hxx:52
-    Qt5Menu mpCloseButton class QPushButton *
-vcl/inc/qt5/Qt5Menu.hxx:53
-    Qt5Menu maCloseButtonConnection struct QMetaObject::Connection
-vcl/inc/qt5/Qt5Menu.hxx:110
-    Qt5MenuItem mpParentMenu class Qt5Menu *
-vcl/inc/qt5/Qt5Menu.hxx:111
-    Qt5MenuItem mpSubMenu class Qt5Menu *
-vcl/inc/qt5/Qt5Menu.hxx:112
-    Qt5MenuItem mpAction std::unique_ptr<QAction>
-vcl/inc/qt5/Qt5Menu.hxx:113
-    Qt5MenuItem mpMenu std::unique_ptr<QMenu>
-vcl/inc/qt5/Qt5Menu.hxx:114
-    Qt5MenuItem mpActionGroup std::shared_ptr<QActionGroup>
-vcl/inc/qt5/Qt5Menu.hxx:115
-    Qt5MenuItem mnId sal_uInt16
-vcl/inc/qt5/Qt5Menu.hxx:116
-    Qt5MenuItem mnType enum MenuItemType
-vcl/inc/qt5/Qt5Menu.hxx:117
-    Qt5MenuItem mbVisible _Bool
-vcl/inc/qt5/Qt5Menu.hxx:118
-    Qt5MenuItem mbEnabled _Bool
-vcl/inc/qt5/Qt5Menu.hxx:119
-    Qt5MenuItem maImage class Image
-vcl/inc/qt5/Qt5Object.hxx:40
-    Qt5Object m_pRegion class QRegion
-vcl/inc/qt5/Qt5Object.hxx:67
-    Qt5ObjectWindow m_rParent class Qt5Object &
-vcl/inc/qt5/Qt5Widget.hxx:38
-    Qt5Widget m_bNonEmptyIMPreeditSeen _Bool
-vcl/inc/qt5/Qt5Widget.hxx:39
-    Qt5Widget m_nDeltaX int
-vcl/inc/qt5/Qt5Widget.hxx:40
-    Qt5Widget m_nDeltaY int
+vcl/inc/qt5/QtAccessibleEventListener.hxx:34
+    QtAccessibleEventListener m_xAccessible css::uno::Reference<css::accessibility::XAccessible>
+vcl/inc/qt5/QtAccessibleWidget.hxx:153
+    QtAccessibleWidget m_xAccessible css::uno::Reference<css::accessibility::XAccessible>
+vcl/inc/qt5/QtAccessibleWidget.hxx:156
+    QtAccessibleWidget m_pObject class QObject *
+vcl/inc/qt5/QtClipboard.hxx:38
+    QtClipboard m_aMutex osl::Mutex
+vcl/inc/qt5/QtClipboard.hxx:39
+    QtClipboard m_aClipboardName const class rtl::OUString
+vcl/inc/qt5/QtClipboard.hxx:40
+    QtClipboard m_aClipboardMode const class QClipboard::Mode
+vcl/inc/qt5/QtClipboard.hxx:43
+    QtClipboard m_bOwnClipboardChange _Bool
+vcl/inc/qt5/QtClipboard.hxx:45
+    QtClipboard m_bDoClear _Bool
+vcl/inc/qt5/QtClipboard.hxx:48
+    QtClipboard m_aContents css::uno::Reference<css::datatransfer::XTransferable>
+vcl/inc/qt5/QtClipboard.hxx:50
+    QtClipboard m_aOwner css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner>
+vcl/inc/qt5/QtClipboard.hxx:51
+    QtClipboard m_aListeners std::vector<css::uno::Reference<css::datatransfer::clipboard::XClipboardListener> >
+vcl/inc/qt5/QtFilePicker.hxx:62
+    QtFilePicker m_context css::uno::Reference<css::uno::XComponentContext>
+vcl/inc/qt5/QtFilePicker.hxx:64
+    QtFilePicker m_xListener css::uno::Reference<css::ui::dialogs::XFilePickerListener>
+vcl/inc/qt5/QtFilePicker.hxx:66
+    QtFilePicker m_aHelperMutex osl::Mutex
+vcl/inc/qt5/QtFilePicker.hxx:68
+    QtFilePicker m_aNamedFilterList class QStringList
+vcl/inc/qt5/QtFilePicker.hxx:69
+    QtFilePicker m_aTitleToFilterMap QHash<class QString, class QString>
+vcl/inc/qt5/QtFilePicker.hxx:71
+    QtFilePicker m_aNamedFilterToExtensionMap QHash<class QString, class QString>
+vcl/inc/qt5/QtFilePicker.hxx:72
+    QtFilePicker m_aCurrentFilter class QString
+vcl/inc/qt5/QtFilePicker.hxx:75
+    QtFilePicker m_aCustomWidgetsMap QHash<sal_Int16, class QWidget *>
+vcl/inc/qt5/QtFilePicker.hxx:77
+    QtFilePicker m_bIsFolderPicker const _Bool
+vcl/inc/qt5/QtFilePicker.hxx:79
+    QtFilePicker m_pParentWidget class QWidget *
+vcl/inc/qt5/QtFrame.hxx:85
+    QtFrame m_bGraphicsInUse _Bool
+vcl/inc/qt5/QtFrame.hxx:87
+    QtFrame m_pParent class QtFrame *
+vcl/inc/qt5/QtFrame.hxx:88
+    QtFrame m_ePointerStyle enum PointerStyle
+vcl/inc/qt5/QtFrame.hxx:92
+    QtFrame m_pDragSource class QtDragSource *
+vcl/inc/qt5/QtFrame.hxx:93
+    QtFrame m_pDropTarget class QtDropTarget *
+vcl/inc/qt5/QtFrame.hxx:94
+    QtFrame m_bInDrag _Bool
+vcl/inc/qt5/QtFrame.hxx:96
+    QtFrame m_bDefaultSize _Bool
+vcl/inc/qt5/QtFrame.hxx:97
+    QtFrame m_bDefaultPos _Bool
+vcl/inc/qt5/QtFrame.hxx:98
+    QtFrame m_bFullScreen _Bool
+vcl/inc/qt5/QtFrame.hxx:99
+    QtFrame m_bFullScreenSpanAll _Bool
+vcl/inc/qt5/QtFrame.hxx:100
+    QtFrame m_nRestoreScreen sal_uInt32
+vcl/inc/qt5/QtFrame.hxx:101
+    QtFrame m_aRestoreGeometry class QRect
+vcl/inc/qt5/QtFrame.hxx:104
+    QtFrame m_ScreenSaverInhibitor class ScreenSaverInhibitor
+vcl/inc/qt5/QtFrame.hxx:111
+    QtFrame m_nInputLanguage LanguageType
+vcl/inc/qt5/QtInstance.hxx:56
+    QtInstance m_aWaitingYieldCond osl::Condition
+vcl/inc/qt5/QtInstance.hxx:58
+    QtInstance m_pTimer class QtTimer *
+vcl/inc/qt5/QtInstance.hxx:59
+    QtInstance m_bSleeping _Bool
+vcl/inc/qt5/QtInstance.hxx:60
+    QtInstance m_aClipboards std::unordered_map<OUString, css::uno::Reference<css::uno::XInterface> >
+vcl/inc/qt5/QtInstance.hxx:62
+    QtInstance m_pQApplication std::unique_ptr<QApplication>
+vcl/inc/qt5/QtInstance.hxx:63
+    QtInstance m_pFakeArgvFreeable std::vector<FreeableCStr>
+vcl/inc/qt5/QtInstance.hxx:64
+    QtInstance m_pFakeArgv std::unique_ptr<char *[]>
+vcl/inc/qt5/QtInstance.hxx:65
+    QtInstance m_pFakeArgc std::unique_ptr<int>
+vcl/inc/qt5/QtInstance.hxx:67
+    QtInstance m_aUpdateStyleTimer class Timer
+vcl/inc/qt5/QtInstance.hxx:68
+    QtInstance m_bUpdateFonts _Bool
+vcl/inc/qt5/QtMainWindow.hxx:31
+    QtMainWindow m_rFrame class QtFrame &
+vcl/inc/qt5/QtMenu.hxx:44
+    QtMenu mpParentSalMenu class QtMenu *
+vcl/inc/qt5/QtMenu.hxx:45
+    QtMenu mpFrame class QtFrame *
+vcl/inc/qt5/QtMenu.hxx:46
+    QtMenu mbMenuBar _Bool
+vcl/inc/qt5/QtMenu.hxx:47
+    QtMenu mpQMenuBar class QMenuBar *
+vcl/inc/qt5/QtMenu.hxx:49
+    QtMenu mpOwnedQMenu std::unique_ptr<QMenu>
+vcl/inc/qt5/QtMenu.hxx:51
+    QtMenu mpQMenu class QMenu *
+vcl/inc/qt5/QtMenu.hxx:52
+    QtMenu mpCloseButton class QPushButton *
+vcl/inc/qt5/QtMenu.hxx:53
+    QtMenu maCloseButtonConnection struct QMetaObject::Connection
+vcl/inc/qt5/QtMenu.hxx:110
+    QtMenuItem mpParentMenu class QtMenu *
+vcl/inc/qt5/QtMenu.hxx:111
+    QtMenuItem mpSubMenu class QtMenu *
+vcl/inc/qt5/QtMenu.hxx:112
+    QtMenuItem mpAction std::unique_ptr<QAction>
+vcl/inc/qt5/QtMenu.hxx:113
+    QtMenuItem mpMenu std::unique_ptr<QMenu>
+vcl/inc/qt5/QtMenu.hxx:114
+    QtMenuItem mpActionGroup std::shared_ptr<QActionGroup>
+vcl/inc/qt5/QtMenu.hxx:115
+    QtMenuItem mnId sal_uInt16
+vcl/inc/qt5/QtMenu.hxx:116
+    QtMenuItem mnType enum MenuItemType
+vcl/inc/qt5/QtMenu.hxx:117
+    QtMenuItem mbVisible _Bool
+vcl/inc/qt5/QtMenu.hxx:118
+    QtMenuItem mbEnabled _Bool
+vcl/inc/qt5/QtMenu.hxx:119
+    QtMenuItem maImage class Image
+vcl/inc/qt5/QtObject.hxx:40
+    QtObject m_pRegion class QRegion
+vcl/inc/qt5/QtObject.hxx:67
+    QtObjectWindow m_rParent class QtObject &
+vcl/inc/qt5/QtWidget.hxx:38
+    QtWidget m_bNonEmptyIMPreeditSeen _Bool
+vcl/inc/qt5/QtWidget.hxx:39
+    QtWidget m_nDeltaX int
+vcl/inc/qt5/QtWidget.hxx:40
+    QtWidget m_nDeltaY int
 vcl/inc/salprn.hxx:45
     SalPrinterQueueInfo mpPortName std::unique_ptr<OUString>
 vcl/source/gdi/jobset.cxx:36

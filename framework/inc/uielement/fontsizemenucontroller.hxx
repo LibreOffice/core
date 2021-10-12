@@ -60,7 +60,6 @@ namespace framework
             OUString retrievePrinterName( css::uno::Reference< css::frame::XFrame > const & rFrame );
 
             std::unique_ptr<tools::Long[]>                   m_pHeightArray;
-            css::awt::FontDescriptor                         m_aFontDescriptor;
             css::frame::status::FontHeight                   m_aFontHeight;
             css::uno::Reference< css::frame::XDispatch >     m_xCurrentFontDispatch;
     };
