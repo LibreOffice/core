@@ -24,6 +24,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,breakpad,\
 	external/breakpad/ucontext.patch \
 	external/breakpad/0001-Handle-race-between-ExceptionHandler-SignalHandler-a.patch.1 \
 	external/breakpad/0001-Fix-double-declaration-of-tgkill-when-using-Android-.patch.1 \
+	external/breakpad/SIGSTKSZ.patch \
 ))
 
 ifeq ($(COM_IS_CLANG),TRUE)
