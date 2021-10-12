@@ -11,6 +11,8 @@
 #include <test/Benchmarks.hxx>
 #include <basegfx/polygon/WaveLine.hxx>
 #include <vcl/lineinfo.hxx>
+#include <vcl/bitmapex.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 
 const Color Benchmark::constBackgroundColor(COL_LIGHTGRAY);
 const Color Benchmark::constLineColor(COL_LIGHTBLUE);
@@ -93,6 +95,160 @@ Bitmap Benchmark::setupGridWithDottedLine()
     Bitmap aBitmap = mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
     m_xEnd = std::chrono::steady_clock::now();
     return aBitmap;
+}
+
+Bitmap Benchmark::setupBitmap()
+{
+    initialSetup(4096, 4096, constBackgroundColor);
+
+    Size aBitmapSize(4095, 4095);
+    Bitmap aBitmap(aBitmapSize, vcl::PixelFormat::N24_BPP);
+
+    BitmapScopedWriteAccess aWriteAccess(aBitmap);
+    aWriteAccess->Erase(constFillColor);
+    aWriteAccess->SetLineColor(constLineColor);
+
+    for (int i = 1; i < 4095; i += 4)
+    {
+        aWriteAccess->DrawRect(tools::Rectangle(i, i, 4095 - i, 4095 - i));
+        aWriteAccess->DrawRect(tools::Rectangle(i + 1, i + 1, 4095 - i - 1, 4095 - i - 1));
+    }
+
+    Point aPoint((maVDRectangle.GetWidth() / 2.0) - (aBitmapSize.Width() / 2.0),
+                 (maVDRectangle.GetHeight() / 2.0) - (aBitmapSize.Height() / 2.0));
+
+    m_xStart = std::chrono::steady_clock::now();
+
+    mpVirtualDevice->DrawBitmapEx(aPoint, BitmapEx(aBitmap));
+    Bitmap rBitmap = mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+
+    m_xEnd = std::chrono::steady_clock::now();
+    return rBitmap;
+}
+
+Bitmap Benchmark::setupBitmapWithAlpha()
+    Size aBitmapSize(4095, 4095);
+    Bitmap aBitmap(aBitmapSize, vcl::PixelFormat::N24_BPP);
+
+    BitmapScopedWriteAccess aWriteAccess(aBitmap);
+    aWriteAccess->Erase(constFillColor);
+    aWriteAccess->SetLineColor(Color(0xFF, 0xFF, 0x00));
+
+    AlphaMask aAlpha(aBitmapSize);
+    AlphaScopedWriteAccess rWriteAccess(aAlpha);
+    rWriteAccess->Erase(COL_WHITE);
+    rWriteAccess->SetLineColor(Color(0x44, 0x44, 0x44));
+
+    for (int i = 1; i < 4095; i += 4)
+    {
+        aWriteAccess->DrawRect(tools::Rectangle(i, i, 4095 - i, 4095 - i));
+        aWriteAccess->DrawRect(tools::Rectangle(i + 1, i + 1, 4095 - i - 1, 4095 - i - 1));
+        rWriteAccess->DrawRect(tools::Rectangle(i, i, 4095 - i, 4095 - i));
+        rWriteAccess->DrawRect(tools::Rectangle(i + 1, i + 1, 4095 - i - 1, 4095 - i - 1));
+    }
+
+    tools::Rectangle aRect(Point(), aBitmapSize);
+    Point aPoint((maVDRectangle.GetWidth() / 2.0) - (aRect.GetWidth() / 2.0),
+                 (maVDRectangle.GetHeight() / 2.0) - (aRect.GetHeight() / 2.0));
+
+    m_xStart = std::chrono::steady_clock::now();
+
+    mpVirtualDevice->DrawBitmapEx(tools::Rectangle(aPoint, aRect.GetSize()).TopLeft(),
+                                  BitmapEx(aBitmap, aAlpha));
+
+    Bitmap rBitmap = mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+
+    m_xEnd = std::chrono::steady_clock::now();
+    return rBitmap;
+}
+
+Bitmap Benchmark::setupScaledBitmap()
+{
+    initialSetup(4096, 4096, constBackgroundColor);
+
+    Size aBitmapSize(100, 100);
+    Bitmap aBitmap(aBitmapSize, vcl::PixelFormat::N24_BPP);
+
+    BitmapScopedWriteAccess aWriteAccess(aBitmap);
+    aWriteAccess->Erase(constFillColor);
+    aWriteAccess->SetLineColor(constLineColor);
+
+    for (int i = 1; i + 4 <= 100; i += 4)
+    {
+        aWriteAccess->DrawRect(tools::Rectangle(i, i, 100 - i, 100 - i));
+        aWriteAccess->DrawRect(tools::Rectangle(i + 1, i + 1, 100 - i - 1, 100 - i - 1));
+    }
+
+    m_xStart = std::chrono::steady_clock::now();
+
+    BitmapEx aBitmapEx(aBitmap);
+    aBitmapEx.Scale(Size(4095, 4095), BmpScaleFlag::Fast);
+
+    mpVirtualDevice->DrawBitmapEx(Point(0, 0), aBitmapEx);
+    Bitmap rBitmap = mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+
+    m_xEnd = std::chrono::steady_clock::now();
+    return rBitmap;
+}
+
+Bitmap Benchmark::setupReducedBitmap()
+{
+    initialSetup(4096, 4096, constBackgroundColor);
+
+    Size aBitmapSize(8096, 8096);
+    Bitmap aBitmap(aBitmapSize, vcl::PixelFormat::N24_BPP);
+
+    BitmapScopedWriteAccess aWriteAccess(aBitmap);
+    aWriteAccess->Erase(constFillColor);
+    aWriteAccess->SetLineColor(constLineColor);
+
+    for (int i = 1; i + 4 <= 8096; i += 4)
+    {
+        aWriteAccess->DrawRect(tools::Rectangle(i, i, 8096 - i, 8096 - i));
+        aWriteAccess->DrawRect(tools::Rectangle(i + 1, i + 1, 8096 - i - 1, 8096 - i - 1));
+    }
+
+    m_xStart = std::chrono::steady_clock::now();
+
+    BitmapEx aBitmapEx(aBitmap);
+    aBitmapEx.Scale(Size(4095, 4095), BmpScaleFlag::Fast);
+
+    mpVirtualDevice->DrawBitmapEx(Point(0, 0), aBitmapEx);
+    Bitmap rBitmap = mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+
+    m_xEnd = std::chrono::steady_clock::now();
+    return rBitmap;
+}
+
+Bitmap Benchmark::setupRotatedBitmap()
+{
+    initialSetup(4096, 4096, constBackgroundColor);
+
+    Size aBitmapSize(4095, 4095);
+    Bitmap aBitmap(aBitmapSize, vcl::PixelFormat::N24_BPP);
+
+    BitmapScopedWriteAccess aWriteAccess(aBitmap);
+    aWriteAccess->Erase(constFillColor);
+    aWriteAccess->SetLineColor(constLineColor);
+
+    for (int i = 1; i < 4095; i += 4)
+    {
+        aWriteAccess->DrawRect(tools::Rectangle(i, i, 4095 - i, 4095 - i));
+        aWriteAccess->DrawRect(tools::Rectangle(i + 1, i + 1, 4095 - i - 1, 4095 - i - 1));
+    }
+
+    Point aPoint((maVDRectangle.GetWidth() / 2.0) - (aBitmapSize.Width() / 2.0),
+                 (maVDRectangle.GetHeight() / 2.0) - (aBitmapSize.Height() / 2.0));
+
+    m_xStart = std::chrono::steady_clock::now();
+
+    BitmapEx aBitmapEx(aBitmap);
+    aBitmapEx.Rotate(Degree10(3600), COL_RED);
+    mpVirtualDevice->DrawBitmapEx(aPoint, aBitmapEx);
+    Bitmap rBitmap = mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+
+    m_xEnd = std::chrono::steady_clock::now();
+    return rBitmap;
 }
 
 Bitmap Benchmark::setupMultiplePolygonsWithPolyPolygon()

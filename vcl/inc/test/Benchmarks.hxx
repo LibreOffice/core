@@ -32,5 +32,10 @@ public:
     Bitmap setupWavelines();
     Bitmap setupGrid();
     Bitmap setupGridWithDottedLine();
+    Bitmap setupBitmap();
+    Bitmap setupBitmapWithAlpha();
+    Bitmap setupScaledBitmap();
+    Bitmap setupReducedBitmap();
+    Bitmap setupRotatedBitmap();
     Bitmap setupMultiplePolygonsWithPolyPolygon();
 };
