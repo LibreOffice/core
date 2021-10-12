@@ -110,6 +110,39 @@ uno::Sequence< beans::PropertyValue > DocPasswordHelper::GenerateNewModifyPasswo
 }
 
 
+uno::Sequence<beans::PropertyValue>
+DocPasswordHelper::GenerateNewModifyPasswordInfoOOXML(std::u16string_view aPassword)
+{
+    uno::Sequence<beans::PropertyValue> aResult;
+
+    uno::Sequence<sal_Int8> aSalt = GenerateRandomByteSequence(16);
+    OUStringBuffer aBuffer;
+    comphelper::Base64::encode(aBuffer, aSalt);
+    OUString sSalt = aBuffer.toString();
+
+    sal_Int32 const nIterationCount = 100000;
+    OUString sAlgorithm("SHA-512");
+
+    const OUString sHash(GetOoxHashAsBase64(OUString(aPassword), sSalt, nIterationCount,
+                                            comphelper::Hash::IterCount::APPEND, sAlgorithm));
+
+    if (!sHash.isEmpty())
+    {
+        aResult.realloc(4);
+        aResult[0].Name = "algorithm-name";
+        aResult[0].Value <<= sAlgorithm;
+        aResult[1].Name = "salt";
+        aResult[1].Value <<= sSalt;
+        aResult[2].Name = "iteration-count";
+        aResult[2].Value <<= nIterationCount;
+        aResult[3].Name = "hash";
+        aResult[3].Value <<= sHash;
+    }
+
+    return aResult;
+}
+
+
 bool DocPasswordHelper::IsModifyPasswordCorrect( std::u16string_view aPassword, const uno::Sequence< beans::PropertyValue >& aInfo )
 {
     bool bResult = false;
