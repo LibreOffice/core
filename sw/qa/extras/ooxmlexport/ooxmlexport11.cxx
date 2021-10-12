@@ -167,8 +167,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121456_tabsOffset, "tdf121456_tabsOffset.odt")
 }
 
 // tdf#121561: make sure w:sdt/w:sdtContent around TOC is written during ODT->DOCX conversion
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121561_tocTitle, "tdf121456_tabsOffset.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf121561_tocTitle)
 {
+    loadAndSave("tdf121456_tabsOffset.odt");
     xmlDocUniquePtr pXmlDoc = parseExport();
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r/w:t", "Inhaltsverzeichnis");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r/w:instrText", " TOC \\f \\o \"1-9\" \\h");
@@ -176,8 +177,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121561_tocTitle, "tdf121456_tabsOffse
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:docPartObj/w:docPartUnique", 1);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf129525, "tdf129525.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf129525)
 {
+    loadAndSave("tdf129525.rtf");
     xmlDocUniquePtr pXmlDoc = parseExport();
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[4]/w:t", "Overview");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[5]/w:t", "3");
@@ -195,8 +197,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124106, "tdf121456.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), text->getString().indexOf('y'));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121561_tocTitleDocx, "tdf121456_tabsOffset.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf121561_tocTitleDocx)
 {
+    loadAndSave("tdf121456_tabsOffset.odt");
     CPPUNIT_ASSERT_EQUAL(7, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport();
 
@@ -250,8 +253,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82065_Ind_start_strict, "tdf82065_Ind_start_stri
     CPPUNIT_ASSERT_EQUAL_MESSAGE("IndentAt defined", true, bFoundIndentAt);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf76683_negativeTwipsMeasure, "tdf76683_negativeTwipsMeasure.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf76683_negativeTwipsMeasure)
 {
+    loadAndSave("tdf76683_negativeTwipsMeasure.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols/w:col", 2);
     sal_uInt32 nColumn1 = getXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols/w:col[1]", "w").toUInt32();
@@ -373,8 +377,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf94801, "tdf94801.docx")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testParagraphSplitOnSectionBorder, "parasplit-on-section-border.odt")
+CPPUNIT_TEST_FIXTURE(Test, testParagraphSplitOnSectionBorder)
 {
+    loadAndSave("parasplit-on-section-border.odt");
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
@@ -384,8 +389,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testParagraphSplitOnSectionBorder, "paraspli
     assertXPath(pXmlDoc, "//w:p", 3);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf44832_testSectionWithDifferentHeader, "tdf44832_section_new_header.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf44832_testSectionWithDifferentHeader)
 {
+    loadAndSave("tdf44832_section_new_header.odt");
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:headerReference", 1);
@@ -429,8 +435,9 @@ DECLARE_OOXMLEXPORT_TEST(testSignatureLineShape, "signature-line-all-props-set.d
     CPPUNIT_ASSERT_EQUAL(OUString("Check the machines!"), aSigningInstructions);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf117805, "tdf117805.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf117805)
 {
+    loadAndSave("tdf117805.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
@@ -553,8 +560,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142542_cancelledAutospacing, "tdf142542_cancelle
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraph(1), "ParaBottomMargin"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf137655, "tdf137655.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf137655)
 {
+    loadAndSave("tdf137655.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // These were 280.
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "before", "0");
@@ -967,8 +975,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119188_list_margin_in_cell, "tdf119188_list_marg
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(494), getProperty<sal_Int32>(getParagraphOfText(3, xCell->getText()), "ParaBottomMargin"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testChart_BorderLine_Style, "Chart_BorderLine_Style.docx")
+CPPUNIT_TEST_FIXTURE(Test, testChart_BorderLine_Style)
 {
+    loadAndSave("Chart_BorderLine_Style.docx");
     /* DOCX containing Chart with BorderLine Style as Dash Type should get preserved
      * inside an XML tag <a:prstDash> with value "dash", "sysDot, "lgDot", etc.
      */
@@ -978,8 +987,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testChart_BorderLine_Style, "Chart_BorderLin
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[3]/c:spPr/a:ln/a:prstDash", "val", "dash");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testChart_Plot_BorderLine_Style, "Chart_Plot_BorderLine_Style.docx")
+CPPUNIT_TEST_FIXTURE(Test, testChart_Plot_BorderLine_Style)
 {
+    loadAndSave("Chart_Plot_BorderLine_Style.docx");
     /* DOCX containing Chart wall (plot area) and Chart Page with BorderLine Style as Dash Type
      * should get preserved inside an XML tag <a:prstDash> with value "dash", "sysDot, "lgDot", etc.
      */
@@ -989,21 +999,24 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testChart_Plot_BorderLine_Style, "Chart_Plot
 
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTrackChangesDeletedEmptyParagraph, "testTrackChangesDeletedEmptyParagraph.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTrackChangesDeletedEmptyParagraph)
 {
+    loadAndSave("testTrackChangesDeletedEmptyParagraph.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:rPr/w:del");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTrackChangesEmptyParagraphsInADeletion, "testTrackChangesEmptyParagraphsInADeletion.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTrackChangesEmptyParagraphsInADeletion)
 {
+    loadAndSave("testTrackChangesEmptyParagraphsInADeletion.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     for (int i = 1; i < 12; ++i)
         assertXPath(pXmlDoc, "/w:document/w:body/w:p[" + OString::number(i) + "]/w:pPr/w:rPr/w:del");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf70234, "tdf70234.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf70234)
 {
+    loadAndSave("tdf70234.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // import field with tracked deletion
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:del/w:r[1]/w:fldChar");
@@ -1015,29 +1028,33 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf70234, "tdf70234.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:del/w:r/w:delInstrText");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf115212, "tdf115212.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf115212)
 {
+    loadAndSave("tdf115212.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // export field with tracked deletion
     assertXPath(pXmlDoc, "//w:p[2]/w:del[1]/w:r[1]/w:fldChar");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf126243, "tdf120338.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf126243)
 {
+    loadAndSave("tdf120338.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // export change tracking rejection data for tracked paragraph style change
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[11]/w:pPr/w:pPrChange/w:pPr/w:pStyle", "val", "Heading3");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf126245, "tdf126245.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf126245)
 {
+    loadAndSave("tdf126245.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // export change tracking rejection data for tracked numbering change
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pPrChange/w:pPr/w:numPr/w:numId", "val", "1");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf124491, "tdf124491.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf124491)
 {
+    loadAndSave("tdf124491.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // import format change of empty lines, FIXME: change w:r with w:pPr in export
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/*/w:rPr/w:rPrChange");
@@ -1046,8 +1063,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf124491, "tdf124491.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/*/*/w:rPrChange", 0);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf143911, "tdf126206.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf143911)
 {
+    loadAndSave("tdf126206.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // export format change of text portions
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:rPr/w:rPrChange");
@@ -1055,60 +1073,68 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf143911, "tdf126206.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:rPr/w:rPrChange/w:rPr/w:b");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf105485, "tdf105485.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf105485)
 {
+    loadAndSave("tdf105485.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // import change tracking of deleted comments
     assertXPath(pXmlDoc, "//w:del/w:r/w:commentReference");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf125894, "tdf125894.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf125894)
 {
+    loadAndSave("tdf125894.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // import change tracking in frames
     assertXPath(pXmlDoc, "//w:del", 2);
     assertXPath(pXmlDoc, "//w:ins");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf132271, "tdf132271.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf132271)
 {
+    loadAndSave("tdf132271.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // import change tracking in floating tables
     assertXPath(pXmlDoc, "//w:del", 2);
     assertXPath(pXmlDoc, "//w:ins", 2);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf136667, "tdf136667.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf136667)
 {
+    loadAndSave("tdf136667.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // import change tracking in floating tables
     assertXPath(pXmlDoc, "//w:del", 2);
     assertXPath(pXmlDoc, "//w:ins", 4);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf136850, "tdf136850.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf136850)
 {
+    loadAndSave("tdf136850.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // import change tracking in floating tables
     assertXPath(pXmlDoc, "//w:del");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128156, "tdf128156.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf128156)
 {
+    loadAndSave("tdf128156.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // import change tracking in frames
     assertXPath(pXmlDoc, "//w:ins");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf125546, "tdf125546.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf125546)
 {
+    loadAndSave("tdf125546.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // compress redlines (it was 15)
     assertXPath(pXmlDoc, "//w:rPrChange", 2);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testLabelWidthAndPosition_Left_FirstLineIndent, "Hau_min_list2.fodt")
+CPPUNIT_TEST_FIXTURE(Test, testLabelWidthAndPosition_Left_FirstLineIndent)
 {
+    loadAndSave("Hau_min_list2.fodt");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // list is LABEL_WIDTH_AND_POSITION with SvxAdjust::Left
     // I) LTR
@@ -1209,23 +1235,26 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testLabelWidthAndPosition_Left_FirstLineInde
     // TODO: other cases
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf124604, "tdf124604.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf124604)
 {
+    loadAndSave("tdf124604.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // If the numbering comes from a base style, indentation of the base style has also priority.
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:ind", "start", "0");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf95374, "tdf95374.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf95374)
 {
+    loadAndSave("tdf95374.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // Numbering disabled by non-existent numId=0, disabling also inheritance of indentation of parent styles
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:ind", "hanging", "0");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:ind", "start", "1136");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf108493, "tdf108493.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf108493)
 {
+    loadAndSave("tdf108493.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // set in the paragraph
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:ind", "start", "709");
@@ -1279,8 +1308,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf58944RepeatingTableHeader, "tdf58944-repeating-t
                          parseDump("/root/page[2]/body/tab/row[2]/cell[1]/txt/text()"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf81100, "tdf81100.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf81100)
 {
+    loadAndSave("tdf81100.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/styles.xml");
     CPPUNIT_ASSERT(pXmlDoc);
     // keep "repeat table header" setting of table styles
@@ -1298,8 +1328,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf81100, "tdf81100.docx")
         assertXPath(pDump, "/root/page[3]/body/tab/row", 1);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf88496, "tdf88496.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf88496)
 {
+    loadAndReload("tdf88496.docx");
     // Switch off repeating header, there is no place for it.
     // Now there are only 3 pages with complete table content
     // instead of a 51-page long table only with header.
@@ -1313,23 +1344,26 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf88496, "tdf88496.docx")
     // invalidates 1105 again.
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf77417, "tdf77417.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf77417)
 {
+    loadAndSave("tdf77417.docx");
     // MSO 2010 compatibility mode: terminating white spaces are ignored in tables.
     // This was 3 pages with the first invisible blank page.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf130494, "tdf130494.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf130494)
 {
+    loadAndSave("tdf130494.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:pPr/w:rPr/w:highlight", "val", "yellow");
     // keep direct formatting of table cell paragraph with removed highlighting
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:r/w:rPr/w:highlight", 0);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf130690, "tdf130690.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf130690)
 {
+    loadAndSave("tdf130690.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:pPr/w:rPr/w:highlight", "val", "yellow");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:r[1]/w:rPr/w:highlight", 1);
@@ -1337,8 +1371,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf130690, "tdf130690.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:r[2]/w:rPr/w:highlight", 0);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf105215, "tdf105215.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf105215)
 {
+    loadAndSave("tdf105215.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:pPr/w:rPr/w:rFonts", "ascii", "Linux Libertine G");
 
@@ -1351,8 +1386,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf105215, "tdf105215.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[5]/w:rPr/w:rFonts", "ascii", "Lohit Devanagari");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf135187, "tdf135187.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf135187)
 {
+    loadAndSave("tdf135187.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:p/w:pPr/w:rPr/w:b", 0);
     // FIXME: remove duplicate
@@ -1368,8 +1404,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf135187, "tdf135187.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[1]/w:p/w:r[1]/w:rPr/w:b", "val", "false");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121597TrackedDeletionOfMultipleParagraphs, "tdf121597.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf121597TrackedDeletionOfMultipleParagraphs)
 {
+    loadAndSave("tdf121597.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
@@ -1382,8 +1419,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121597TrackedDeletionOfMultipleParagr
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[10]/w:pPr/w:rPr/w:del");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf141660, "tdf141660.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf141660)
 {
+    loadAndSave("tdf141660.docx");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
@@ -1393,8 +1431,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf141660, "tdf141660.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/w:footnoteReference", "id", "4");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf133643, "tdf133643.doc")
+CPPUNIT_TEST_FIXTURE(Test, testTdf133643)
 {
+    loadAndSave("tdf133643.doc");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
@@ -1437,24 +1476,27 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121176, "tdf121176.docx")
     CPPUNIT_ASSERT_EQUAL( OUString( "must" ), getRun( getParagraph( 1 ), 2 )->getString());
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128913, "tdf128913.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf128913)
 {
+    loadAndSave("tdf128913.docx");
     xmlDocUniquePtr pXmlDoc = parseExport();
     // w:ins and w:del are imported correctly, if they contain only inline images
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:r/w:drawing/wp:inline/a:graphic");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:del/w:r/w:drawing/wp:inline/a:graphic");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf142700, "tdf142700.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf142700)
 {
+    loadAndSave("tdf142700.docx");
     xmlDocUniquePtr pXmlDoc = parseExport();
     // w:ins and w:del are imported correctly, if they contain only images anchored to character
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:r/w:drawing/wp:anchor/a:graphic");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:del/w:r/w:drawing/wp:anchor/a:graphic");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf142387, "tdf142387.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf142387)
 {
+    loadAndSave("tdf142387.docx");
     xmlDocUniquePtr pXmlDoc = parseExport();
     // w:del in w:ins is exported correctly (only w:del was exported)
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del/w:r/w:delText", "inserts ");
@@ -1498,8 +1540,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf67207_MERGEFIELD_DATABASE, "tdf67207.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.text.fieldmaster.DataBase.database.Sheet1.c1"), sValue);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf101122_noFillForCustomShape, "tdf101122_noFillForCustomShape.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf101122_noFillForCustomShape)
 {
+    loadAndSave("tdf101122_noFillForCustomShape.odt");
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // tdf#101122 check whether the "F" (noFill) option has been exported to docx
