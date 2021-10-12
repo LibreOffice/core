@@ -1347,9 +1347,10 @@ void SwTextNode::Update(
     SwIndexReg aTmpIdxReg;
     if ( !bNegative && !bDelete )
     {
-        const SwRedlineTable& rTable = GetDoc().getIDocumentRedlineAccess().GetRedlineTable();
-        for (SwRangeRedline* pRedl : rTable)
+        auto nRedlinePos = GetDoc().getIDocumentRedlineAccess().GetRedlinePos(*this, RedlineType::Any);
+        if ( nRedlinePos != SwRedlineTable::npos )
         {
+            SwRangeRedline* pRedl = GetDoc().getIDocumentRedlineAccess().GetRedlineTable()[nRedlinePos];
             if ( pRedl->HasMark() )
             {
                 SwPosition* const pEnd = pRedl->End();
