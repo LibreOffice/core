@@ -377,7 +377,7 @@ public:
     void                SetEndPoint(const Point& rPoint) { maEndPt = rPoint; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaPolyLineAction final : public MetaAction
+class VCL_DLLPUBLIC MetaPolyLineAction final : public MetaAction
 {
 private:
 
