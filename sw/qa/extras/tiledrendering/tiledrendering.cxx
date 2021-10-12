@@ -438,6 +438,7 @@ void SwTiledRenderingTest::testRegisterCallback()
     pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(this);
     // Insert a character at the beginning of the document.
     pWrtShell->Insert("x");
+    pWrtShell->GetSfxViewShell()->flushPendingLOKInvalidateTiles();
 
     // Check that the top left 256x256px tile would be invalidated.
     CPPUNIT_ASSERT(!m_aInvalidation.IsEmpty());
@@ -854,6 +855,11 @@ namespace {
             mpViewShell->setLibreOfficeKitViewCallback(nullptr);
         }
 
+        void flushPendingLOKInvalidateTiles()
+        {
+            mpViewShell->flushPendingLOKInvalidateTiles();
+        }
+
         virtual void libreOfficeKitViewCallback(int nType, const char* pPayload, int /*nViewId*/) override
         {
             libreOfficeKitViewCallback(nType, pPayload); // the view id is also included in payload
@@ -1037,6 +1043,8 @@ void SwTiledRenderingTest::testMissingInvalidation()
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DELETE);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DELETE);
     Scheduler::ProcessEventsToIdle();
+    aView1.flushPendingLOKInvalidateTiles();
+    aView2.flushPendingLOKInvalidateTiles();
     CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
     CPPUNIT_ASSERT(aView2.m_bTilesInvalidated);
 }
@@ -1715,6 +1723,7 @@ void SwTiledRenderingTest::testCommentEndTextEdit()
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
+    aView1.flushPendingLOKInvalidateTiles();
     CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
 }
 

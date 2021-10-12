@@ -692,6 +692,7 @@ public:
     void SetOldDrwCat(const OUString& sStr);
 
     virtual tools::Rectangle getLOKVisibleArea() const override;
+    virtual void flushPendingLOKInvalidateTiles() override;
 };
 
 inline tools::Long SwView::GetXScroll() const

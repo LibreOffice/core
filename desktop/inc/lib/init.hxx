@@ -98,6 +98,8 @@ namespace desktop {
         void addViewStates(int viewId);
         void removeViewStates(int viewId);
 
+        void setViewId( int viewId ) { m_viewId = viewId; }
+
         // SfxLockCallbackInterface
         virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) override;
         virtual void libreOfficeKitViewCallback(int nType, const char* pPayload, int nViewId) override;
@@ -177,6 +179,7 @@ namespace desktop {
         std::map<int, std::string> m_states;
         std::unordered_map<int, std::unordered_map<int, std::string>> m_viewStates;
         LibreOfficeKitDocument* m_pDocument;
+        int m_viewId = -1; // view id of the associated SfxViewShell
         LibreOfficeKitCallback m_pCallback;
         void *m_pData;
         int m_nDisableCallbacks;

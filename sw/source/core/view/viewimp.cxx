@@ -158,6 +158,21 @@ bool SwViewShellImp::AddPaintRect( const SwRect &rRect )
     return false;
 }
 
+void SwViewShellImp::AddPendingLOKInvalidation( const SwRect& rRect )
+{
+    // These are often repeated, so check first for duplicates.
+    std::vector<SwRect>& l = m_pendingLOKInvalidations;
+    if( std::find( l.begin(), l.end(), rRect ) == l.end())
+        l.push_back( rRect );
+}
+
+std::vector<SwRect> SwViewShellImp::TakePendingLOKInvalidations()
+{
+    std::vector<SwRect> ret;
+    std::swap(ret, m_pendingLOKInvalidations);
+    return ret;
+}
+
 void SwViewShellImp::CheckWaitCursor()
 {
     if ( m_pLayAction )
