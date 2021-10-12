@@ -130,7 +130,6 @@ namespace desktop {
     private:
         bool removeAll(int type);
         bool removeAll(int type, const std::function<bool (const CallbackData&)>& rTestFunc);
-        bool removeAll(const std::function<bool (int, const CallbackData&)>& rTestFunc);
         bool processInvalidateTilesEvent(int type, CallbackData& aCallbackData);
         bool processWindowEvent(int type, CallbackData& aCallbackData);
         queue_type2::iterator toQueue2(queue_type1::iterator);
