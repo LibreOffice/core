@@ -211,6 +211,7 @@ public:
     bool AddPaintRect( const SwRect &rRect );
 
     void InvalidateWindows( const SwRect &rRect );
+    void FlushPendingLOKInvalidateTiles();
 
     /// Invalidates complete Layout (ApplyViewOption).
     void Reformat();
