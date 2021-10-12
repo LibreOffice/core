@@ -224,9 +224,6 @@ public:
     static constexpr size_type npos = SAL_MAX_INT32;
 private:
     vector_type maVector;
-    /// Sometimes we load bad data, and we need to know if we can use
-    /// fast binary search, or if we have to fall back to a linear search
-    bool m_bHasOverlappingElements = false;
 public:
     ~SwRedlineTable();
     bool Contains(const SwRangeRedline* p) const { return maVector.find(const_cast<SwRangeRedline*>(p)) != maVector.end(); }
@@ -235,7 +232,6 @@ public:
     bool Insert(SwRangeRedline*& p);
     bool Insert(SwRangeRedline*& p, size_type& rInsPos);
     bool InsertWithValidRanges(SwRangeRedline*& p, size_type* pInsPos = nullptr);
-    bool HasOverlappingElements() const { return m_bHasOverlappingElements; }
 
     void Remove( size_type nPos );
     void Remove( const SwRangeRedline* p );
@@ -272,7 +268,7 @@ public:
     static void                 LOKRedlineNotification(RedlineNotification eType, SwRangeRedline* pRedline);
 
 private:
-    void CheckOverlapping(vector_type::const_iterator it);
+    bool CheckOverlapping(vector_type::const_iterator it);
 };
 
 /// Table that holds 'extra' redlines, such as 'table row insert/delete', 'paragraph moves' etc...

@@ -433,39 +433,38 @@ bool SwRedlineTable::Insert(SwRangeRedline*& p)
     if( p->HasValidRange() )
     {
         std::pair<vector_type::const_iterator, bool> rv = maVector.insert( p );
+        if (rv.second && CheckOverlapping(rv.first))
+        {
+            maVector.erase(rv.first);
+            return false;
+        }
         size_type nP = rv.first - begin();
         LOKRedlineNotification(RedlineNotification::Add, p);
         p->CallDisplayFunc(nP);
-        if (rv.second)
-            CheckOverlapping(rv.first);
         return rv.second;
     }
     return InsertWithValidRanges( p );
 }
 
-void SwRedlineTable::CheckOverlapping(vector_type::const_iterator it)
+bool SwRedlineTable::CheckOverlapping(vector_type::const_iterator it)
 {
-    if (m_bHasOverlappingElements)
-        return;
     if (maVector.size() <= 1) // a single element cannot be overlapping
-        return;
+        return false;
     auto pCurr = *it;
     auto itNext = it + 1;
     if (itNext != maVector.end())
     {
         auto pNext = *itNext;
         if (pCurr->End()->nNode.GetIndex() >= pNext->Start()->nNode.GetIndex())
-        {
-            m_bHasOverlappingElements = true;
-            return;
-        }
+            return true;
     }
     if (it != maVector.begin())
     {
         auto pPrev = *(it - 1);
         if (pPrev->End()->nNode.GetIndex() >= pCurr->Start()->nNode.GetIndex())
-            m_bHasOverlappingElements = true;
+            return true;
     }
+    return false;
 }
 
 bool SwRedlineTable::Insert(SwRangeRedline*& p, size_type& rP)
@@ -669,7 +668,6 @@ void SwRedlineTable::DeleteAndDestroyAll()
         LOKRedlineNotification(RedlineNotification::Remove, pRedline);
         delete pRedline;
     }
-    m_bHasOverlappingElements = false;
 }
 
 void SwRedlineTable::DeleteAndDestroy(size_type const nP)
