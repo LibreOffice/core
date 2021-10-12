@@ -4649,7 +4649,7 @@ AC_SUBST(HAVE_CLANG_DEBUG_INFO_KIND_CONSTRUCTOR)
 ENABLE_GDB_INDEX=
 if test "$enable_gdb_index" != "no"; then
     dnl Currently by default enabled only on Linux, feel free to set test_gdb_index above also for other platforms.
-    if test "$enable_gdb_index" = yes -o \( "$test_gdb_index" = "yes" -o -n "$ENABLE_DEBUG$ENABLE_DBGUTIL" \); then
+    if test "$enable_gdb_index" = yes -o \( "$test_gdb_index" = "yes" -a -n "$ENABLE_DEBUG$ENABLE_DBGUTIL" \); then
         AC_MSG_CHECKING([whether $CC_BASE supports -ggnu-pubnames])
         save_CFLAGS=$CFLAGS
         CFLAGS="$CFLAGS -Werror -ggnu-pubnames"
