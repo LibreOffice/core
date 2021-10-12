@@ -1347,8 +1347,9 @@ void SwTextNode::Update(
     SwIndexReg aTmpIdxReg;
     if ( !bNegative && !bDelete )
     {
-        const SwRedlineTable& rTable = GetDoc().getIDocumentRedlineAccess().GetRedlineTable();
-        for (SwRangeRedline* pRedl : rTable)
+        o3tl::sorted_vector<SwRangeRedline*> vTmpRedlines =
+            GetDoc().getIDocumentRedlineAccess().GetRedlinesThatIntersect(*this);
+        for (SwRangeRedline* pRedl : vTmpRedlines)
         {
             if ( pRedl->HasMark() )
             {

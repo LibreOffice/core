@@ -169,6 +169,9 @@ public:
         /*[in]*/const SwNode& rNode,
         /*[in]*/RedlineType nType) const = 0;
 
+    virtual o3tl::sorted_vector<SwRangeRedline*> GetRedlinesThatIntersect(
+        const SwNode& rNode) const = 0;
+
     virtual bool HasRedline(
         /*[in]*/const SwPaM& rPam,
         /*[in]*/RedlineType nType,
