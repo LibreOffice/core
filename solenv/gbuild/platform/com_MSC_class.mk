@@ -59,7 +59,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	unset INCLUDE && \
 	$(call gb_CObject__compiler,$(2),$(3),$(7)) \
 		$(DEFS) \
-		$(gb_LTOFLAGS) \
+		$(if $(filter YES,$(LIBRARY_X64)), ,$(gb_LTOFLAGS)) \
 		$(call gb_Helper_remove_overridden_flags, \
 			$(2) $(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS))) \
 		$(if $(EXTERNAL_CODE), \
@@ -103,7 +103,7 @@ $(call gb_Helper_abbreviate_dirs,\
 			$(4) $(5) $(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS))) \
 		-Fd$(PDBFILE) \
 		$(if $(EXTERNAL_CODE),$(if $(COM_IS_CLANG),-Wno-undef),$(gb_DEFS_INTERNAL)) \
-		$(gb_LTOFLAGS) \
+		$(if $(filter YES,$(LIBRARY_X64)), ,$(gb_LTOFLAGS)) \
 		$(gb_COMPILERDEPFLAGS) \
 		$(6) \
 		-c $(3) \
