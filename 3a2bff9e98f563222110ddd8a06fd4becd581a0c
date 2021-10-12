@@ -16,6 +16,46 @@
       "message": "I doubt anything else can be done easily to prevent this kind of bug :-(",
       "revId": "3a2bff9e98f563222110ddd8a06fd4becd581a0c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39637fa9_8db59e00",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2021-10-12T13:24:00Z",
+      "side": 1,
+      "message": "Maybe it\u0027s feasible to create a wrapper class for DC ( like CompatibleDC in salgdi.cxx ), restore the defaults in the destructor, and let both WinSalGraphics and WinSalPrinter store shared_ptr to that ( to make the order of destruction irrelevant. )? But it\u0027s always worthy to write good document.",
+      "revId": "3a2bff9e98f563222110ddd8a06fd4becd581a0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb9db0e2_66f05308",
+        "filename": "vcl/win/gdi/salprn.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1377,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2021-10-12T13:24:00Z",
+      "side": 1,
+      "message": "Just my two cents: I felt confused when reading \"so needs to apply the defaults before deletion.\" Then I digged into WinSalGraphics::~WinSalGraphics and WinSalGraphics::DeInitGraphics() and realized what you mean. I think maybe it\u0027s just enough to say WinSalGraphics destructor has to be called first because hDC has been borrowed / referred in the object.",
+      "range": {
+        "startLine": 1377,
+        "startChar": 0,
+        "endLine": 1377,
+        "endChar": 49
+      },
+      "revId": "3a2bff9e98f563222110ddd8a06fd4becd581a0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
