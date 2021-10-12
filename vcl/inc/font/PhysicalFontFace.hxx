@@ -50,8 +50,6 @@ struct FontMatchStatus
 {
 public:
     int                 mnFaceMatch;
-    int                 mnHeightMatch;
-    int                 mnWidthMatch;
     const OUString*     mpTargetStyleName;
 };
 

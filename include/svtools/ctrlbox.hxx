@@ -422,7 +422,6 @@ private:
 
 class SVT_DLLPUBLIC FontSizeBox
 {
-    FontMetric      aFontMetric;
     const FontList* pFontList;
     int             nSavedValue;
     int             nMin;

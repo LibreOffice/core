@@ -263,11 +263,9 @@ void SAL_CALL FontSizeMenuController::statusChanged( const FeatureStateEvent& Ev
     if ( Event.State >>= aFontDescriptor )
     {
         osl::MutexGuard aLock( m_aMutex );
-        m_aFontDescriptor = aFontDescriptor;
 
         if ( m_xPopupMenu.is() )
             fillPopupMenu( m_xPopupMenu );
-
     }
     else if ( Event.State >>= aFontHeight )
     {
