@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02d1c612_34e7a06a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-10-12T08:48:53Z",
+      "side": 1,
+      "message": "I doubt anything else can be done easily to prevent this kind of bug :-(",
+      "revId": "3a2bff9e98f563222110ddd8a06fd4becd581a0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
