@@ -1373,6 +1373,9 @@ WinSalPrinter::~WinSalPrinter()
     HDC hDC = mhDC;
     if ( hDC )
     {
+        // explicitly reset(), so the mxGraphics's borrowed HDC defaults are
+        // restored and WinSalGraphics's destructor won't work on a deleted HDC.
+        mxGraphics.reset();
         DeleteDC( hDC );
     }
 
