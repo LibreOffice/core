@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b291700_df97e77a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-10-12T00:19:54Z",
+      "side": 1,
+      "message": "Hi Michael, is it so bad to comment out unit tests that will be fixed later? IMO these show there are issues. In actual fact I already have patches queued up to get these fixed. \n\nHopefully I was not too harsh in my response, seems to be a difference of opinion but Mike has removed himself from the patch and the bug report. ",
+      "revId": "0bc70c44ddb914b6a8473b97ac753813d9584abf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
