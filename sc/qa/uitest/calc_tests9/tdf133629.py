@@ -22,9 +22,9 @@ class tdf133629(UITestCase):
 
             self.xUITest.executeCommand(".uno:SelectAll")
 
-            # Check selection
+            # Check both sheets are selected
             self.assertIsNotNone(getattr(document.CurrentSelection, 'Sheet1.A1:AMJ1048576'))
-            self.assertIsNotNone(getattr(document.CurrentSelection, 'Sheet1.A2:AMJ1048576'))
+            self.assertIsNotNone(getattr(document.CurrentSelection, 'Sheet2.A1:AMJ1048576'))
 
             with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
