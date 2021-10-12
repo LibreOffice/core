@@ -1002,12 +1002,12 @@ void GtkSalMenu::CreateMenuBarWidget()
 #if !GTK_CHECK_VERSION(4, 0, 0)
     mpMenuAllowShrinkWidget = gtk_scrolled_window_new(nullptr, nullptr);
     gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(mpMenuAllowShrinkWidget), GTK_SHADOW_NONE);
+    // tdf#129634 don't allow this scrolled window as a candidate to tab into
+    gtk_widget_set_can_focus(GTK_WIDGET(mpMenuAllowShrinkWidget), false);
 #else
     mpMenuAllowShrinkWidget = gtk_scrolled_window_new();
     gtk_scrolled_window_set_has_frame(GTK_SCROLLED_WINDOW(mpMenuAllowShrinkWidget), false);
 #endif
-    // tdf#129634 don't allow this scrolled window as a candidate to tab into
-    gtk_widget_set_can_focus(GTK_WIDGET(mpMenuAllowShrinkWidget), false);
     // tdf#116290 external policy on scrolledwindow will not show a scrollbar,
     // but still allow scrolled window to not be sized to the child content.
     // So the menubar can be shrunk past its nominal smallest width.
