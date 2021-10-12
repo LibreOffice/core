@@ -81,9 +81,11 @@ while ($arg = shift) {
         # remove possible Windows line-ends
         chomp;
 
-        # patch all occurrences of openoffice in ICON line with
-        # $prefix
-        s/Icon=/Icon=$iconprefix/;
+        # patch all icons in ICON line with $prefix
+        if (! /Icon=document-new/ ) { # except for Icon=document-new which
+                                      # is a stock icon, not one of ours
+            s/Icon=/Icon=$iconprefix/;
+        }
 
         # patch all occurrences of openoffice in icon_filename
         # line with $prefix
