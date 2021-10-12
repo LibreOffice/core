@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8c76891_950ddc30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-10-12T17:53:46Z",
+      "side": 1,
+      "message": "Broken by\n\ncommit 2938f0956744e03ba0cc27a5b3fb1637811b267a\nAuthor: Chris Sherlock \u003cchris.sherlock79@gmail.com\u003e\nDate:   Sat Oct 2 11:04:37 2021 +1000\n\n    vcl: test OutputDevice::DrawPolyLine()\n    \n    Change-Id: Iac95e0d08043153c877c204fa40aa90b3b974156\n    Reviewed-on: https://gerrit.libreoffice.org/c/core/+/122973\n    Tested-by: Jenkins\n    Reviewed-by: Tomaž Vajngerl \u003cquikee@gmail.com\u003e\n",
+      "revId": "a46d6bc0e1268d033e04c039a834f87afda9a7ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
