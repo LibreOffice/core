@@ -878,7 +878,7 @@ public:
 
 }
 
-static void lcl_MinMaxNode( SwFrameFormat* pNd, SwMinMaxNodeArgs* pIn )
+static void lcl_MinMaxNode(SwFrameFormat* pNd, SwMinMaxNodeArgs& rIn)
 {
     const SwFormatAnchor& rFormatA = pNd->GetAnchor();
 
@@ -889,8 +889,8 @@ static void lcl_MinMaxNode( SwFrameFormat* pNd, SwMinMaxNodeArgs* pIn )
     }
 
     const SwPosition *pPos = rFormatA.GetContentAnchor();
-    OSL_ENSURE(pPos && pIn, "Unexpected NULL arguments");
-    if (!pPos || !pIn || pIn->m_nIndex != pPos->nNode.GetIndex())
+    OSL_ENSURE(pPos, "Unexpected NULL arguments");
+    if (!pPos || rIn.m_nIndex != pPos->nNode.GetIndex())
         return;
 
     tools::Long nMin, nMax;
@@ -953,7 +953,7 @@ static void lcl_MinMaxNode( SwFrameFormat* pNd, SwMinMaxNodeArgs* pIn )
 
     if( css::text::WrapTextMode_THROUGH == pNd->GetSurround().GetSurround() )
     {
-        pIn->Minimum( nMin );
+        rIn.Minimum( nMin );
         return;
     }
 
@@ -966,33 +966,33 @@ static void lcl_MinMaxNode( SwFrameFormat* pNd, SwMinMaxNodeArgs* pIn )
         {
             if( nDiff )
             {
-                pIn->m_nRightRest -= pIn->m_nRightDiff;
-                pIn->m_nRightDiff = nDiff;
+                rIn.m_nRightRest -= rIn.m_nRightDiff;
+                rIn.m_nRightDiff = nDiff;
             }
             if( text::RelOrientation::FRAME != rOrient.GetRelationOrient() )
             {
-                if (pIn->m_nRightRest > 0)
-                    pIn->m_nRightRest = 0;
+                if (rIn.m_nRightRest > 0)
+                    rIn.m_nRightRest = 0;
             }
-            pIn->m_nRightRest -= nMin;
+            rIn.m_nRightRest -= nMin;
             break;
         }
         case text::HoriOrientation::LEFT:
         {
             if( nDiff )
             {
-                pIn->m_nLeftRest -= pIn->m_nLeftDiff;
-                pIn->m_nLeftDiff = nDiff;
+                rIn.m_nLeftRest -= rIn.m_nLeftDiff;
+                rIn.m_nLeftDiff = nDiff;
             }
-            if (text::RelOrientation::FRAME != rOrient.GetRelationOrient() && pIn->m_nLeftRest < 0)
-                pIn->m_nLeftRest = 0;
-            pIn->m_nLeftRest -= nMin;
+            if (text::RelOrientation::FRAME != rOrient.GetRelationOrient() && rIn.m_nLeftRest < 0)
+                rIn.m_nLeftRest = 0;
+            rIn.m_nLeftRest -= nMin;
             break;
         }
         default:
         {
-            pIn->m_nMaxWidth += nMax;
-            pIn->Minimum( nMin );
+            rIn.m_nMaxWidth += nMax;
+            rIn.Minimum(nMin);
         }
     }
 }
@@ -1041,7 +1041,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
         {
             aNodeArgs.m_nIndex = nIndex;
             for( SwFrameFormat *pFormat : *pTmp )
-                lcl_MinMaxNode( pFormat, &aNodeArgs );
+                lcl_MinMaxNode(pFormat, aNodeArgs);
         }
     }
     if (aNodeArgs.m_nLeftRest < 0)
