@@ -1527,6 +1527,11 @@ void SfxViewShell::afterCallbackRegistered()
 {
 }
 
+void SfxViewShell::flushPendingLOKInvalidateTiles()
+{
+    // SfxViewShell itself does not delay any tile invalidations.
+}
+
 vcl::Window* SfxViewShell::GetEditWindowForActiveOLEObj() const
 {
     vcl::Window* pEditWin = nullptr;

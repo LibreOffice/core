@@ -1905,6 +1905,13 @@ tools::Rectangle SwView::getLOKVisibleArea() const
         return tools::Rectangle();
 }
 
+void SwView::flushPendingLOKInvalidateTiles()
+{
+    SwWrtShell* pSh = GetWrtShellPtr();
+    assert(pSh);
+    pSh->FlushPendingLOKInvalidateTiles();
+}
+
 OUString SwView::GetDataSourceName() const
 {
     uno::Reference<lang::XMultiServiceFactory> xFactory(GetDocShell()->GetModel(), uno::UNO_QUERY);

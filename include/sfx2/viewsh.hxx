@@ -340,6 +340,8 @@ public:
     virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) const override;
     virtual void libreOfficeKitViewCallback(int nType, const char* pPayload, int nViewId) const override;
     virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart) const override;
+    // Performs any pending calls to libreOfficeKitViewInvalidateTilesCallback() as necessary.
+    virtual void flushPendingLOKInvalidateTiles();
 
     /// Set if we are doing tiled searching.
     void setTiledSearching(bool bTiledSearching);
