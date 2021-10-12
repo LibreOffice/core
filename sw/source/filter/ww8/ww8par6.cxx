@@ -2730,8 +2730,11 @@ void SwWW8ImplReader::StopApo()
 
             aFlySet.ClearItem(RES_FRM_SIZE);
 
-            CalculateFlySize(aFlySet, m_xSFlyPara->xMainTextPos->nNode,
-                m_xSFlyPara->nWidth);
+            if (!m_bFuzzing)
+            {
+                CalculateFlySize(aFlySet, m_xSFlyPara->xMainTextPos->nNode,
+                    m_xSFlyPara->nWidth);
+            }
 
             nNewWidth = ItemGet<SwFormatFrameSize>(aFlySet, RES_FRM_SIZE).GetWidth();
 
