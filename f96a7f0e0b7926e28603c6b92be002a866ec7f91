@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28bf157d_d5714392",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-12T12:02:55Z",
+      "side": 1,
+      "message": "Tomaž: do you know if empty string is a valid input to the function? Thanks.",
+      "revId": "f96a7f0e0b7926e28603c6b92be002a866ec7f91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
