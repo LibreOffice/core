@@ -24,6 +24,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,breakpad,\
 	external/breakpad/c++20-allocator.patch \
 	external/breakpad/breakpad-dump_syms.patch.1 \
 	external/breakpad/breakpad-no-env.patch.1 \
+	external/breakpad/SIGSTKSZ.patch \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_files,breakpad,src/tools/windows/dump_syms,\
