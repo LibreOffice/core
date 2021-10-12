@@ -2143,6 +2143,12 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
         PutInOrder( nX1, nX2 );
         PutInOrder( nY1, nY2 );
 
+        SCCOL nPosX = mrViewData.GetPosX( eHWhich );
+        SCROW nPosY = mrViewData.GetPosY( eVWhich );
+        // is the selection visible at all?
+        if (nX2 < nPosX || nY2 < nPosY)
+            return;
+
         Point aScrStartPos = bInPrintTwips ? mrViewData.GetPrintTwipsPos(nX1, nY1) :
             mrViewData.GetScrPos(nX1, nY1, eWhich);
 
