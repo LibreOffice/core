@@ -432,54 +432,66 @@ bool SwRedlineTable::Insert(SwRangeRedline*& p)
 {
     if( p->HasValidRange() )
     {
-        std::pair<vector_type::const_iterator, bool> rv = maVector.insert( p );
+        std::pair<vector_type::const_iterator, bool> rv = maVectorAll.insert( p );
+        if (rv.second)
+            CheckOverlappingOnInsert(rv.first);
         size_type nP = rv.first - begin();
         LOKRedlineNotification(RedlineNotification::Add, p);
         p->CallDisplayFunc(nP);
-        if (rv.second)
-            CheckOverlapping(rv.first);
         return rv.second;
     }
     return InsertWithValidRanges( p );
-}
-
-void SwRedlineTable::CheckOverlapping(vector_type::const_iterator it)
-{
-    if (m_bHasOverlappingElements)
-        return;
-    if (maVector.size() <= 1) // a single element cannot be overlapping
-        return;
-    auto pCurr = *it;
-    auto itNext = it + 1;
-    if (itNext != maVector.end())
-    {
-        auto pNext = *itNext;
-        if (pCurr->End()->nNode.GetIndex() >= pNext->Start()->nNode.GetIndex())
-        {
-            m_bHasOverlappingElements = true;
-            return;
-        }
-    }
-    if (it != maVector.begin())
-    {
-        auto pPrev = *(it - 1);
-        if (pPrev->End()->nNode.GetIndex() >= pCurr->Start()->nNode.GetIndex())
-            m_bHasOverlappingElements = true;
-    }
 }
 
 bool SwRedlineTable::Insert(SwRangeRedline*& p, size_type& rP)
 {
     if( p->HasValidRange() )
     {
-        std::pair<vector_type::const_iterator, bool> rv = maVector.insert( p );
+        std::pair<vector_type::const_iterator, bool> rv = maVectorAll.insert( p );
+        if (rv.second)
+            CheckOverlappingOnInsert(rv.first);
         rP = rv.first - begin();
         p->CallDisplayFunc(rP);
-        if (rv.second)
-            CheckOverlapping(rv.first);
         return rv.second;
     }
     return InsertWithValidRanges( p, &rP );
+}
+
+/** Put a new element into either maVectorNonOverlapping or maVectorOverlapping */
+void SwRedlineTable::CheckOverlappingOnInsert(vector_type::const_iterator it)
+{
+    auto pCurr = *it;
+    if (maVectorAll.size() <= 1) // a single element cannot be overlapping
+    {
+        maVectorNonOverlapping.insert(pCurr);
+        return;
+    }
+    // because of the sorting, an element can only overlap with other elements after it
+    auto itNext = it + 1;
+    if (itNext != maVectorAll.end())
+    {
+        auto pNext = *itNext;
+        if (pCurr->End()->nNode.GetIndex() >= pNext->Start()->nNode.GetIndex())
+        {
+            maVectorOverlapping.insert(pCurr);
+            return;
+        }
+    }
+    // Check if the element to the left overlaps the new element, and if so, if the
+    // old element is perhaps in the wrong array (because it was inserted earlier)
+    if (it != maVectorAll.begin())
+    {
+        auto pPrev = *(it - 1);
+        if (pPrev->End()->nNode.GetIndex() >= pCurr->Start()->nNode.GetIndex())
+        {
+            if (maVectorOverlapping.find(pPrev) != maVectorOverlapping.end())
+            {
+                maVectorNonOverlapping.erase(pPrev);
+                maVectorOverlapping.insert(pPrev);
+            }
+        }
+    }
+    maVectorNonOverlapping.insert(pCurr);
 }
 
 namespace sw {
@@ -624,15 +636,86 @@ bool CompareSwRedlineTable::operator()(SwRangeRedline* const &lhs, SwRangeRedlin
 
 SwRedlineTable::~SwRedlineTable()
 {
-   maVector.DeleteAndDestroyAll();
+   maVectorAll.DeleteAndDestroyAll();
 }
 
 SwRedlineTable::size_type SwRedlineTable::GetPos(const SwRangeRedline* p) const
 {
-    vector_type::const_iterator it = maVector.find(const_cast<SwRangeRedline*>(p));
-    if( it == maVector.end() )
+    vector_type::const_iterator it = maVectorAll.find(const_cast<SwRangeRedline*>(p));
+    if( it == maVectorAll.end() )
         return npos;
-    return it - maVector.begin();
+    return it - maVectorAll.begin();
+}
+
+SwRedlineTable::size_type SwRedlineTable::GetRedlinePos( const SwNode& rNd, RedlineType nType ) const
+{
+    // This is very awkward because
+    // (a) the table is sorted by the tuple of [begin,end] and we sometimes
+    //     have overlapping redlines.
+    // (b) client code is heavily dependant on iterating through redlines based on the current sorting
+    //
+    // So....a smarter data-structure (like an r-tree or interval set) would be nice, but ...
+    // (a) typically there is only a small amount of overlap
+    // (b) the available general purpose code like the boost::rtree and boost::icl,
+    //    rely on scalar "position" values, which we don't have.
+    //
+    // So we employ a hybrid approach, where we do a linear search over the overlapping redlines,
+    // (which are presumed to be few in number), and then a binary search over the non-overlapping redlines
+    // (which should be the majority of them).
+    //
+    const sal_uLong nNdIdx = rNd.GetIndex();
+    SwRangeRedline* pFoundRedline = nullptr;
+
+    for( SwRedlineTable::size_type n = 0; n < maVectorOverlapping.size() ; ++n )
+    {
+        const SwRangeRedline* pTmp = maVectorOverlapping[ n ];
+        sal_uLong nPt = pTmp->GetPoint()->nNode.GetIndex(),
+                  nMk = pTmp->GetMark()->nNode.GetIndex();
+        if( nPt < nMk ) { tools::Long nTmp = nMk; nMk = nPt; nPt = nTmp; }
+
+        if( ( RedlineType::Any == nType || nType == pTmp->GetType()) &&
+            nMk <= nNdIdx && nNdIdx <= nPt )
+        {
+            pFoundRedline = maVectorOverlapping[n];
+            break;
+        }
+
+        if( nMk > nNdIdx )
+            break;
+    }
+
+    if (!pFoundRedline)
+    {
+        // binary search to the first redline with end >= the needle
+        auto it = std::lower_bound(maVectorNonOverlapping.begin(), maVectorNonOverlapping.end(), rNd,
+                [&nNdIdx](const SwRangeRedline* lhs, const SwNode& /*rhs*/)
+                {
+                    return lhs->End()->nNode.GetIndex() < nNdIdx;
+                });
+        for( ; it != maVectorNonOverlapping.end(); ++it)
+        {
+            SwRangeRedline* pTmp = *it;
+            sal_uLong nStart = pTmp->Start()->nNode.GetIndex(),
+                      nEnd = pTmp->End()->nNode.GetIndex();
+
+            if( ( RedlineType::Any == nType || nType == pTmp->GetType()) &&
+                nStart <= nNdIdx && nNdIdx <= nEnd )
+            {
+                pFoundRedline = pTmp;
+                break;
+            }
+
+            if( nStart > nNdIdx )
+                break;
+        }
+    }
+
+    SwRedlineTable::size_type nFoundPos = SwRedlineTable::npos;
+    if (pFoundRedline)
+        nFoundPos = maVectorAll.find(pFoundRedline) - maVectorAll.begin();
+    return nFoundPos;
+
+    // #TODO - add 'SwExtraRedlineTable' also ?
 }
 
 void SwRedlineTable::Remove( const SwRangeRedline* p )
@@ -645,12 +728,15 @@ void SwRedlineTable::Remove( const SwRangeRedline* p )
 
 void SwRedlineTable::Remove( size_type nP )
 {
-    LOKRedlineNotification(RedlineNotification::Remove, maVector[nP]);
+    SwRangeRedline* pRedline = maVectorAll[nP];
+    LOKRedlineNotification(RedlineNotification::Remove, pRedline);
     SwDoc* pDoc = nullptr;
     if( !nP && 1 == size() )
-        pDoc = &maVector.front()->GetDoc();
+        pDoc = &maVectorAll.front()->GetDoc();
 
-    maVector.erase( maVector.begin() + nP );
+    maVectorAll.erase( maVectorAll.begin() + nP );
+    maVectorOverlapping.erase(pRedline);
+    maVectorNonOverlapping.erase(pRedline);
 
     if( pDoc && !pDoc->IsInDtor() )
     {
@@ -662,20 +748,23 @@ void SwRedlineTable::Remove( size_type nP )
 
 void SwRedlineTable::DeleteAndDestroyAll()
 {
-    while (!maVector.empty())
+    while (!maVectorAll.empty())
     {
-        auto const pRedline = maVector.back();
-        maVector.erase_at(maVector.size() - 1);
+        auto const pRedline = maVectorAll.back();
+        maVectorAll.erase_at(maVectorAll.size() - 1);
         LOKRedlineNotification(RedlineNotification::Remove, pRedline);
         delete pRedline;
     }
-    m_bHasOverlappingElements = false;
+    maVectorOverlapping.clear();
+    maVectorNonOverlapping.clear();
 }
 
 void SwRedlineTable::DeleteAndDestroy(size_type const nP)
 {
-    auto const pRedline = maVector[nP];
-    maVector.erase(maVector.begin() + nP);
+    auto const pRedline = maVectorAll[nP];
+    maVectorAll.erase(maVectorAll.begin() + nP);
+    maVectorOverlapping.erase(pRedline);
+    maVectorNonOverlapping.erase(pRedline);
     LOKRedlineNotification(RedlineNotification::Remove, pRedline);
     delete pRedline;
 }
@@ -744,7 +833,7 @@ const SwRangeRedline* SwRedlineTable::FindAtPosition( const SwPosition& rSttPos,
                                         bool bNext ) const
 {
     const SwRangeRedline* pFnd = nullptr;
-    for( ; rPos < maVector.size() ; ++rPos )
+    for( ; rPos < maVectorAll.size() ; ++rPos )
     {
         const SwRangeRedline* pTmp = (*this)[ rPos ];
         if( pTmp->HasMark() && pTmp->IsVisible() )
