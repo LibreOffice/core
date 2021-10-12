@@ -223,19 +223,22 @@ public:
     typedef vector_type::size_type size_type;
     static constexpr size_type npos = SAL_MAX_INT32;
 private:
-    vector_type maVector;
-    /// Sometimes we load bad data, and we need to know if we can use
-    /// fast binary search, or if we have to fall back to a linear search
-    bool m_bHasOverlappingElements = false;
+    // see comments in GetRedlinePos for why we have 2 arrays
+    vector_type maVectorOverlapping;
+    vector_type maVectorAll;
 public:
     ~SwRedlineTable();
-    bool Contains(const SwRangeRedline* p) const { return maVector.find(const_cast<SwRangeRedline*>(p)) != maVector.end(); }
+    bool Contains(const SwRangeRedline* p) const
+    {
+        return maVectorAll.find(const_cast<SwRangeRedline*>(p)) != maVectorAll.end();
+    }
     size_type GetPos(const SwRangeRedline* p) const;
+    size_type GetRedlinePos( const SwNode& rNd, RedlineType nType ) const;
+    o3tl::sorted_vector<SwRangeRedline*> GetRedlinesThatIntersect( const SwNode& rNode ) const;
 
     bool Insert(SwRangeRedline*& p);
     bool Insert(SwRangeRedline*& p, size_type& rInsPos);
     bool InsertWithValidRanges(SwRangeRedline*& p, size_type* pInsPos = nullptr);
-    bool HasOverlappingElements() const { return m_bHasOverlappingElements; }
 
     void Remove( size_type nPos );
     void Remove( const SwRangeRedline* p );
@@ -261,18 +264,19 @@ public:
     */
     const SwRangeRedline* FindAtPosition( const SwPosition& startPosition, size_type& tableIndex, bool next = true ) const;
 
-    bool                        empty() const { return maVector.empty(); }
-    size_type                   size() const { return maVector.size(); }
-    SwRangeRedline*             operator[]( size_type idx ) const { return maVector[idx]; }
-    vector_type::const_iterator begin() const { return maVector.begin(); }
-    vector_type::const_iterator end() const { return maVector.end(); }
-    void                        Resort() { maVector.Resort(); }
+    bool                        empty() const { return maVectorAll.empty(); }
+    size_type                   size() const { return maVectorAll.size(); }
+    SwRangeRedline*             operator[]( size_type idx ) const { return maVectorAll[idx]; }
+    vector_type::const_iterator begin() const { return maVectorAll.begin(); }
+    vector_type::const_iterator end() const { return maVectorAll.end(); }
+    vector_type::const_reverse_iterator rbegin() const { return maVectorAll.rbegin(); }
+    vector_type::const_reverse_iterator rend() const { return maVectorAll.rend(); }
+    void                        Resort();
 
     // Notifies all LOK clients when redlines are added/modified/removed
     static void                 LOKRedlineNotification(RedlineNotification eType, SwRangeRedline* pRedline);
-
 private:
-    void CheckOverlapping(vector_type::const_iterator it);
+    void CheckOverlappingOnInsert(vector_type::const_iterator it);
 };
 
 /// Table that holds 'extra' redlines, such as 'table row insert/delete', 'paragraph moves' etc...

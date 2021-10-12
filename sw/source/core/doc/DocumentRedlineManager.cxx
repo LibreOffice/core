@@ -2430,6 +2430,7 @@ void DocumentRedlineManager::CompressRedlines()
                 (pPrev->*pFnc)(0, nPrevIndex, false);
         }
     }
+    maRedlineTable.Resort(); // to update the index vector
     CHECK_REDLINE( *this )
 
     // #TODO - add 'SwExtraRedlineTable' also ?
@@ -2636,50 +2637,12 @@ bool DocumentRedlineManager::DeleteRedline( const SwStartNode& rNode, bool bSave
 
 SwRedlineTable::size_type DocumentRedlineManager::GetRedlinePos( const SwNode& rNd, RedlineType nType ) const
 {
-    const sal_uLong nNdIdx = rNd.GetIndex();
-    // if the table only contains good (i.e. non-overlapping) data, we can do a binary search
-    if (!maRedlineTable.HasOverlappingElements())
-    {
-        // binary search to the first redline with end >= the needle
-        auto it = std::lower_bound(maRedlineTable.begin(), maRedlineTable.end(), rNd,
-            [&nNdIdx](const SwRangeRedline* lhs, const SwNode& /*rhs*/)
-            {
-                return lhs->End()->nNode.GetIndex() < nNdIdx;
-            });
-        for( ; it != maRedlineTable.end(); ++it)
-        {
-            const SwRangeRedline* pTmp = *it;
-            sal_uLong nStart = pTmp->Start()->nNode.GetIndex(),
-                      nEnd = pTmp->End()->nNode.GetIndex();
+    return maRedlineTable.GetRedlinePos(rNd, nType);
+}
 
-            if( ( RedlineType::Any == nType || nType == pTmp->GetType()) &&
-                nStart <= nNdIdx && nNdIdx <= nEnd )
-                return std::distance(maRedlineTable.begin(), it);
-
-            if( nStart > nNdIdx )
-                break;
-        }
-    }
-    else
-    {
-        for( SwRedlineTable::size_type n = 0; n < maRedlineTable.size() ; ++n )
-        {
-            const SwRangeRedline* pTmp = maRedlineTable[ n ];
-            sal_uLong nPt = pTmp->GetPoint()->nNode.GetIndex(),
-                  nMk = pTmp->GetMark()->nNode.GetIndex();
-            if( nPt < nMk ) { tools::Long nTmp = nMk; nMk = nPt; nPt = nTmp; }
-
-            if( ( RedlineType::Any == nType || nType == pTmp->GetType()) &&
-                nMk <= nNdIdx && nNdIdx <= nPt )
-                return n;
-
-            if( nMk > nNdIdx )
-                break;
-        }
-    }
-    return SwRedlineTable::npos;
-
-    // #TODO - add 'SwExtraRedlineTable' also ?
+o3tl::sorted_vector<SwRangeRedline*> DocumentRedlineManager::GetRedlinesThatIntersect( const SwNode& rNode ) const
+{
+    return maRedlineTable.GetRedlinesThatIntersect(rNode);
 }
 
 bool DocumentRedlineManager::HasRedline( const SwPaM& rPam, RedlineType nType, bool bStartOrEndInRange ) const
