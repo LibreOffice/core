@@ -21,6 +21,12 @@ hunspell_CPPFLAGS+=-D_GLIBCXX_DEBUG
 endif
 endif
 
+hunspell_CXXFLAGS:=$(CXXFLAGS) $(gb_LTOFLAGS) \
+       $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
+       $(if $(debug),$(gb_DEBUGINFO_FLAGS))
+
+hunspell_LDFLAGS:=$(gb_LTOFLAGS)
+
 $(call gb_ExternalProject_get_state_target,hunspell,build):
 	$(call gb_Trace_StartRange,hunspell,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
@@ -28,7 +34,8 @@ $(call gb_ExternalProject_get_state_target,hunspell,build):
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM))\
 			$(if $(filter AIX,$(OS)),CFLAGS="-D_LINUX_SOURCE_COMPAT") \
 			$(if $(hunspell_CPPFLAGS),CPPFLAGS='$(hunspell_CPPFLAGS)') \
-			CXXFLAGS="$(CXXFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) $(if $(debug),$(gb_DEBUGINFO_FLAGS))" \
+			$(if $(hunspell_CXXFLAGS),CXXFLAGS='$(hunspell_CXXFLAGS)') \
+			$(if $(hunspell_LDFLAGS),LDFLAGS='$(hunspell_LDFLAGS)') \
 		&& cd src/hunspell && $(MAKE) \
 	)
 	$(call gb_Trace_EndRange,hunspell,EXTERNAL)
