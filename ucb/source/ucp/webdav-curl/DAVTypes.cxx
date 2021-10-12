@@ -173,31 +173,6 @@ void DAVOptionsCache::addDAVOptions( DAVOptions & rDAVOptions, const sal_uInt32 
     m_aTheCache[ aEncodedUrl ] = rDAVOptions;
 }
 
-sal_uInt16 DAVOptionsCache::getHttpResponseStatusCode( const OUString & rURL, OUString & rHttpResponseStatusText )
-{
-    osl::MutexGuard aGuard( m_aMutex );
-    OUString aEncodedUrl( ucb_impl::urihelper::encodeURI( DecodeURI(rURL) ) );
-    normalizeURLLastChar( aEncodedUrl );
-
-    DAVOptionsMap::iterator it;
-    it = m_aTheCache.find( aEncodedUrl );
-    if ( it != m_aTheCache.end() )
-    {
-        // first check for stale
-        TimeValue t1;
-        osl_getSystemTime( &t1 );
-        if( (*it).second.getStaleTime() < t1.Seconds )
-        {
-            m_aTheCache.erase( it );
-            return 0;
-        }
-
-        rHttpResponseStatusText = (*it).second.getHttpResponseStatusText();
-        return (*it).second.getHttpResponseStatusCode();
-    }
-    return 0;
-}
-
 void DAVOptionsCache::setHeadAllowed( const OUString & rURL, const bool HeadAllowed )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -219,34 +194,6 @@ void DAVOptionsCache::setHeadAllowed( const OUString & rURL, const bool HeadAllo
         // check if the resource was present on server
         (*it).second.setHeadAllowed( HeadAllowed );
     }
-}
-
-bool DAVOptionsCache::isHeadAllowed( const OUString & rURL )
-{
-    osl::MutexGuard aGuard( m_aMutex );
-    OUString aEncodedUrl( ucb_impl::urihelper::encodeURI( DecodeURI(rURL) ) );
-    normalizeURLLastChar( aEncodedUrl );
-
-    DAVOptionsMap::iterator it;
-    it = m_aTheCache.find( aEncodedUrl );
-    if ( it != m_aTheCache.end() )
-    {
-        // first check for stale
-        TimeValue t1;
-        osl_getSystemTime( &t1 );
-        if( (*it).second.getStaleTime() < t1.Seconds )
-        {
-            m_aTheCache.erase( it );
-            return true; // to force again OPTIONS method
-        }
-
-        // check if the resource was present on server
-        return (*it).second.isHeadAllowed();
-    }
-    // this value is needed because some web server don't implement
-    // OPTIONS method, so the resource is considered found,
-    // until detected otherwise
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
