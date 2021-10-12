@@ -987,6 +987,8 @@ void DocxExport::WriteSettings()
     if( !pViewShell && !m_aSettings.hasData() && !m_pAttrOutput->HasFootnotes() && !m_pAttrOutput->HasEndnotes())
         return;
 
+    SwDocShell* pDocShell = m_rDoc.GetDocShell();
+
     m_rFilter.addRelation( m_pDocumentFS->getOutputStream(),
             oox::getRelationship(Relationship::SETTINGS),
             u"settings.xml" );
@@ -997,6 +999,61 @@ void DocxExport::WriteSettings()
 
     pFS->startElementNS( XML_w, XML_settings,
             FSNS( XML_xmlns, XML_w ), m_rFilter.getNamespaceURL(OOX_NS(doc)) );
+
+    // Write protection
+    const uno::Sequence<beans::PropertyValue> aInfo = pDocShell->GetModifyPasswordInfo();
+    if (aInfo.hasElements())
+    {
+        OUString sAlgorithm, sSalt, sHash;
+        sal_Int32 nCount = 0;
+        for (const auto& prop : aInfo)
+        {
+            if (prop.Name == "algorithm-name")
+                prop.Value >>= sAlgorithm;
+            else if (prop.Name == "salt")
+                prop.Value >>= sSalt;
+            else if (prop.Name == "iteration-count")
+                prop.Value >>= nCount;
+            else if (prop.Name == "hash")
+                prop.Value >>= sHash;
+        }
+        if (!sAlgorithm.isEmpty() && !sSalt.isEmpty() && !sHash.isEmpty())
+        {
+            sal_Int32 nAlgorithmSid = 0;
+            if (sAlgorithm == "MD2")
+                nAlgorithmSid = 1;
+            else if (sAlgorithm == "MD4")
+                nAlgorithmSid = 2;
+            else if (sAlgorithm == "MD5")
+                nAlgorithmSid = 3;
+            else if (sAlgorithm == "SHA-1")
+                nAlgorithmSid = 4;
+            else if (sAlgorithm == "MAC")
+                nAlgorithmSid = 5;
+            else if (sAlgorithm == "RIPEMD")
+                nAlgorithmSid = 6;
+            else if (sAlgorithm == "RIPEMD-160")
+                nAlgorithmSid = 7;
+            else if (sAlgorithm == "HMAC")
+                nAlgorithmSid = 9;
+            else if (sAlgorithm == "SHA-256")
+                nAlgorithmSid = 12;
+            else if (sAlgorithm == "SHA-384")
+                nAlgorithmSid = 13;
+            else if (sAlgorithm == "SHA-512")
+                nAlgorithmSid = 14;
+
+            if (nAlgorithmSid != 0)
+                pFS->singleElementNS(XML_w, XML_writeProtection,
+                    FSNS(XML_w, XML_cryptProviderType), "rsaAES",
+                    FSNS(XML_w, XML_cryptAlgorithmClass), "hash",
+                    FSNS(XML_w, XML_cryptAlgorithmType), "typeAny",
+                    FSNS(XML_w, XML_cryptAlgorithmSid), OString::number(nAlgorithmSid).getStr(),
+                    FSNS(XML_w, XML_cryptSpinCount), OString::number(nCount).getStr(),
+                    FSNS(XML_w, XML_hash), sHash.toUtf8().getStr(),
+                    FSNS(XML_w, XML_salt), sSalt.toUtf8().getStr());
+        }
+    }
 
     // View
     if (pViewShell && pViewShell->GetViewOptions()->getBrowseMode())
@@ -1114,7 +1171,7 @@ void DocxExport::WriteSettings()
         DocxAttributeOutput::WriteFootnoteEndnotePr( pFS, XML_endnotePr, m_rDoc.GetEndNoteInfo(), XML_endnote );
 
     // Has themeFontLang information
-    uno::Reference< beans::XPropertySet > xPropSet( m_rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPropSet( pDocShell->GetBaseModel(), uno::UNO_QUERY_THROW );
 
     bool bUseGrabBagProtection = false;
     bool bWriterWantsToProtect = false;
@@ -1274,7 +1331,7 @@ void DocxExport::WriteSettings()
                             else if ( nToken == XML_edit && sValue == "readOnly" )
                             {
                                 // Ignore the case where read-only was not enforced, but now is. That is handled by _MarkAsFinal
-                                bReadOnlyStatusUnchanged = m_rDoc.GetDocShell()->IsSecurityOptOpenReadOnly();
+                                bReadOnlyStatusUnchanged = pDocShell->IsSecurityOptOpenReadOnly();
                             }
                             else if ( nToken == XML_enforcement )
                                 bEnforced = sValue.toBoolean();

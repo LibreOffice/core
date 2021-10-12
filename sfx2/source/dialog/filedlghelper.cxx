@@ -2944,11 +2944,24 @@ ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, 
 
         if ( bMSType )
         {
-            // the empty password has 0 as Hash
-            sal_Int32 nHash = SfxMedium::CreatePasswordToModifyHash( pPasswordRequest->getPasswordToModify(),
-                                                                     pCurrentFilter->GetServiceName() == "com.sun.star.text.TextDocument" );
-            if ( nHash )
-                pSet->Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, uno::makeAny( nHash ) ) );
+            if (bOOXML)
+            {
+                uno::Sequence<beans::PropertyValue> aModifyPasswordInfo
+                    = ::comphelper::DocPasswordHelper::GenerateNewModifyPasswordInfoOOXML(
+                        pPasswordRequest->getPasswordToModify());
+                if (aModifyPasswordInfo.hasElements())
+                    pSet->Put(
+                        SfxUnoAnyItem(SID_MODIFYPASSWORDINFO, uno::makeAny(aModifyPasswordInfo)));
+            }
+            else
+            {
+                // the empty password has 0 as Hash
+                sal_Int32 nHash = SfxMedium::CreatePasswordToModifyHash(
+                    pPasswordRequest->getPasswordToModify(),
+                    pCurrentFilter->GetServiceName() == "com.sun.star.text.TextDocument");
+                if (nHash)
+                    pSet->Put(SfxUnoAnyItem(SID_MODIFYPASSWORDINFO, uno::makeAny(nHash)));
+            }
         }
         else
         {
