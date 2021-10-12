@@ -9,6 +9,7 @@
 
 #include "config_clang.h"
 #include "o3tl/cow_wrapper.hxx"
+#include <map>
 
 namespace drawinglayer::primitive2d
 {
@@ -21,7 +22,7 @@ struct Foo
 {
     drawinglayer::primitive2d::Primitive2DContainer maMine;
 
-    // expected-error@+2 {{rather use move && param [loplugin:moveparam]}}
+    // expected-error@+2 {{rather use move && param3 [loplugin:moveparam]}}
     Foo(drawinglayer::primitive2d::Primitive2DContainer const& rContainer)
         : maMine(rContainer)
     {
@@ -35,9 +36,25 @@ struct Foo
 
     void foo1(const drawinglayer::primitive2d::Primitive2DContainer& rContainer)
     {
-        // expected-error@+1 {{rather use move && param [loplugin:moveparam]}}
+        // expected-error@+1 {{rather use move && param1 [loplugin:moveparam]}}
         maMine = rContainer;
     }
 };
+
+namespace test2
+{
+typedef std::map<int, int> Map2Map;
+
+struct Foo
+{
+    Map2Map maMine;
+
+    // expected-error@+2 {{rather use move && param3 [loplugin:moveparam]}}
+    Foo(Map2Map const& rContainer)
+        : maMine(rContainer)
+    {
+    }
+};
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
