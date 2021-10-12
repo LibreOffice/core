@@ -10,6 +10,8 @@
 
 #include <test/Benchmarks.hxx>
 #include <basegfx/polygon/WaveLine.hxx>
+#include <vcl/bitmapex.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 
 const Color Benchmark::constBackgroundColor(COL_LIGHTGRAY);
 const Color Benchmark::constLineColor(COL_LIGHTBLUE);
@@ -66,6 +68,35 @@ Bitmap Benchmark::setupGrid()
     Bitmap aBitmap = mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
     m_xEnd = std::chrono::steady_clock::now();
     return aBitmap;
+}
+
+Bitmap Benchmark::setupBitmap()
+{
+    initialSetup(4096, 4096, constBackgroundColor);
+
+    m_xStart = std::chrono::steady_clock::now();
+
+    Size aBitmapSize(4095, 4095);
+    Bitmap aBitmap(aBitmapSize, vcl::PixelFormat::N24_BPP);
+
+    BitmapScopedWriteAccess aWriteAccess(aBitmap);
+    aWriteAccess->Erase(constFillColor);
+    aWriteAccess->SetLineColor(constLineColor);
+
+    for (int i = 1; i < 4095; i += 4)
+    {
+        aWriteAccess->DrawRect(tools::Rectangle(i, i, 4095 - i, 4095 - i));
+        aWriteAccess->DrawRect(tools::Rectangle(i + 1, i + 1, 4095 - i - 1, 4095 - i - 1));
+    }
+
+    Point aPoint((maVDRectangle.GetWidth() / 2.0) - (aBitmapSize.Width() / 2.0),
+                 (maVDRectangle.GetHeight() / 2.0) - (aBitmapSize.Height() / 2.0));
+
+    mpVirtualDevice->DrawBitmapEx(aPoint, BitmapEx(aBitmap));
+    Bitmap rBitmap = mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+
+    m_xEnd = std::chrono::steady_clock::now();
+    return rBitmap;
 }
 
 Bitmap Benchmark::setupMultiplePolygonsWithPolyPolygon()

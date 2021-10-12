@@ -31,5 +31,6 @@ public:
     sal_Int64 getElapsedTime();
     Bitmap setupWavelines();
     Bitmap setupGrid();
+    Bitmap setupBitmap();
     Bitmap setupMultiplePolygonsWithPolyPolygon();
 };
