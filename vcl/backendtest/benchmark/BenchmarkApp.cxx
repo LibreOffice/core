@@ -71,7 +71,7 @@ namespace
 class BenchMarkWindow : public WorkWindow
 {
 private:
-    static constexpr unsigned char gnNumberOfTests = 4;
+    static constexpr unsigned char gnNumberOfTests = 9;
     unsigned char mnTest;
     ScopedVclPtr<VirtualDevice> mpVDev;
 
@@ -180,6 +180,70 @@ public:
         drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
         updateResults(rRenderContext, aOutDevTest.getElapsedTime());
     }
+    static void drawBitmap(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
+    {
+        tools::Rectangle aRectangle;
+        size_t index = 0;
+
+        std::vector<tools::Rectangle> aRegions = setupRegions(1, 1, nWidth, nHeight);
+        aRectangle = aRegions[index++];
+        Benchmark aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupBitmap();
+        drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        updateResults(rRenderContext, aOutDevTest.getElapsedTime());
+    }
+
+    static void drawBitmapWithAlpha(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
+    {
+        tools::Rectangle aRectangle;
+        size_t index = 0;
+
+        std::vector<tools::Rectangle> aRegions = setupRegions(1, 1, nWidth, nHeight);
+        aRectangle = aRegions[index++];
+        Benchmark aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupBitmapWithAlpha();
+        drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        updateResults(rRenderContext, aOutDevTest.getElapsedTime());
+    }
+
+    static void drawScaledBitmap(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
+    {
+        tools::Rectangle aRectangle;
+        size_t index = 0;
+
+        std::vector<tools::Rectangle> aRegions = setupRegions(1, 1, nWidth, nHeight);
+        aRectangle = aRegions[index++];
+        Benchmark aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupScaledBitmap();
+        drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        updateResults(rRenderContext, aOutDevTest.getElapsedTime());
+    }
+
+    static void drawReducedBitmap(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
+    {
+        tools::Rectangle aRectangle;
+        size_t index = 0;
+
+        std::vector<tools::Rectangle> aRegions = setupRegions(1, 1, nWidth, nHeight);
+        aRectangle = aRegions[index++];
+        Benchmark aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupReducedBitmap();
+        drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        updateResults(rRenderContext, aOutDevTest.getElapsedTime());
+    }
+
+    static void drawRotatedBitmap(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
+    {
+        tools::Rectangle aRectangle;
+        size_t index = 0;
+
+        std::vector<tools::Rectangle> aRegions = setupRegions(1, 1, nWidth, nHeight);
+        aRectangle = aRegions[index++];
+        Benchmark aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupRotatedBitmap();
+        drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        updateResults(rRenderContext, aOutDevTest.getElapsedTime());
+    }
 
     virtual void Paint(vcl::RenderContext& rRenderContext,
                        const tools::Rectangle& /*rRect*/) override
@@ -204,6 +268,26 @@ public:
             drawGrid(rRenderContext, nWidth, nHeight);
         }
         else if (mnTest % gnNumberOfTests == 3)
+        {
+            drawBitmap(rRenderContext, nWidth, nHeight);
+        }
+        else if (mnTest % gnNumberOfTests == 4)
+        {
+            drawBitmapWithAlpha(rRenderContext, nWidth, nHeight);
+        }
+        else if (mnTest % gnNumberOfTests == 5)
+        {
+            drawScaledBitmap(rRenderContext, nWidth, nHeight);
+        }
+        else if (mnTest % gnNumberOfTests == 6)
+        {
+            drawReducedBitmap(rRenderContext, nWidth, nHeight);
+        }
+        else if (mnTest % gnNumberOfTests == 7)
+        {
+            drawRotatedBitmap(rRenderContext, nWidth, nHeight);
+        }
+        else if (mnTest % gnNumberOfTests == 8)
         {
             drawGridWithDottedLines(rRenderContext, nWidth, nHeight);
         }
