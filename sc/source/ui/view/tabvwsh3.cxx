@@ -374,9 +374,9 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 else
                 {
                     const RutlNameScope eScope = (bForceGlobalName ? RUTL_NAMES_GLOBAL : RUTL_NAMES);
-                    formula::FormulaGrammar::AddressConvention eConv = rDoc.GetAddressConvention();
-                    if( ScRangeUtil::MakeRangeFromName( aAddress, rDoc, nTab, aScRange, eScope, eConv ) ||
-                        ScRangeUtil::MakeRangeFromName( aAddress, rDoc, nTab, aScRange, RUTL_DBASE, eConv ) )
+                    ScAddress::Details aDetails( rDoc.GetAddressConvention(), rViewData.GetCurY(), rViewData.GetCurX());
+                    if (ScRangeUtil::MakeRangeFromName( aAddress, rDoc, nTab, aScRange, eScope, aDetails, true) ||
+                        ScRangeUtil::MakeRangeFromName( aAddress, rDoc, nTab, aScRange, RUTL_DBASE, aDetails, true))
                     {
                         nResult |= ScRefFlags::VALID;
                         if( aScRange.aStart.Tab() != nTab )
