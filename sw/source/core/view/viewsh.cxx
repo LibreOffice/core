@@ -551,6 +551,24 @@ void SwViewShell::InvalidateWindows( const SwRect &rRect )
     if ( Imp()->IsCalcLayoutProgress() )
         return;
 
+    if(comphelper::LibreOfficeKit::isActive())
+    {
+        // First collect all invalidations and perform them only later,
+        // otherwise the number of Invalidate() calls would be at least
+        // O(n^2) if not worse. The problem is that if any change in a document
+        // is made, SwEditShell::EndAllAction() is called, which calls EndAction()
+        // for every view. And every view does it own handling of paint rectangles,
+        // and then calls InvalidateWindows() based on that. On then this code
+        // would call Invalidate() for all views for each rectangle.
+        // So collect the rectangles, avoid duplicates (which there usually will
+        // be many because of the repetitions), FlushPendingLOKInvalidateTiles()
+        // will collect all rectangles from all related views, compress them
+        // and only with those relatively few rectangle it'd call Invalidate()
+        // for all views.
+        Imp()->AddPendingLOKInvalidation(rRect);
+        return;
+    }
+
     for(SwViewShell& rSh : GetRingContainer())
     {
         if ( rSh.GetWin() )
@@ -561,6 +579,37 @@ void SwViewShell::InvalidateWindows( const SwRect &rRect )
             // the rectangle is outside the visual area.
             else if ( rSh.VisArea().Overlaps( rRect ) || comphelper::LibreOfficeKit::isActive() )
                 rSh.GetWin()->Invalidate( rRect.SVRect() );
+        }
+    }
+}
+
+void SwViewShell::FlushPendingLOKInvalidateTiles()
+{
+    assert(comphelper::LibreOfficeKit::isActive());
+    SwRegionRects rects;
+    for(SwViewShell& rSh : GetRingContainer())
+    {
+        std::vector<SwRect> tmpRects = rSh.Imp()->TakePendingLOKInvalidations();
+        rects.insert( rects.end(), tmpRects.begin(), tmpRects.end());
+    }
+    rects.Compress( SwRegionRects::CompressFuzzy );
+    if(rects.empty())
+        return;
+    // This is basically the loop from SwViewShell::InvalidateWindows().
+    for(SwViewShell& rSh : GetRingContainer())
+    {
+        if ( rSh.GetWin() )
+        {
+            if ( rSh.IsPreview() )
+            {
+                for( const SwRect& rect : rects )
+                    ::RepaintPagePreview( &rSh, rect );
+            }
+            else
+            {
+                for( const SwRect& rect : rects )
+                    rSh.GetWin()->Invalidate( rect.SVRect() );
+            }
         }
     }
 }
