@@ -113,6 +113,8 @@ public:
     static css::uno::Sequence< css::beans::PropertyValue >
         GenerateNewModifyPasswordInfo( std::u16string_view aPassword );
 
+    static css::uno::Sequence<css::beans::PropertyValue>
+    GenerateNewModifyPasswordInfoOOXML(std::u16string_view aPassword);
 
     /** This helper function allows to check whether
         the "Password to modify" provided by user is the correct one.
