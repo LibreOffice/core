@@ -121,7 +121,7 @@ bool FieldCode::Read(HWPFile & hwpf)
 // book mark(6)
 bool Bookmark::Read(HWPFile & hwpf)
 {
-    tools::Long len;
+    uint len;
 
     hwpf.Read4b(&len, 1);
     if (!hwpf.Read2b(dummy))
