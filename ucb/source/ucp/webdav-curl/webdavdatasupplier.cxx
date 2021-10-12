@@ -104,7 +104,7 @@ struct DataSupplier_Impl
     ResultList                                   m_Results;
     rtl::Reference< Content >                    m_xContent;
     uno::Reference< uno::XComponentContext > m_xContext;
-    sal_Int32                                    m_nOpenMode;
+    sal_Int32 const                              m_nOpenMode;
     bool                                     m_bCountFinal;
     bool                                     m_bThrowException;
 
