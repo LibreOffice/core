@@ -2636,48 +2636,41 @@ bool DocumentRedlineManager::DeleteRedline( const SwStartNode& rNode, bool bSave
 
 SwRedlineTable::size_type DocumentRedlineManager::GetRedlinePos( const SwNode& rNd, RedlineType nType ) const
 {
+    // This is very awkward because the table is sorted by the tuple of [begin,end] and we sometimes
+    // have overlapping redlines.
+    //
+    // A smarter data-structure (like an r-tree or interval set) would be nice,
+    // but (a) typically there is only a small amount of overlap and (b) the available general purpose
+    // code like the boost::rtree and boost::icl, rely on scalar "position" values, which we don't have.
+    // So just pay the small cost of reading a few extra elements in the loop, rather than having to
+    // build a fully custom search data structure.
     const sal_uLong nNdIdx = rNd.GetIndex();
-    // if the table only contains good (i.e. non-overlapping) data, we can do a binary search
-    if (!maRedlineTable.HasOverlappingElements())
-    {
-        // binary search to the first redline with end >= the needle
-        auto it = std::lower_bound(maRedlineTable.begin(), maRedlineTable.end(), rNd,
-            [&nNdIdx](const SwRangeRedline* lhs, const SwNode& /*rhs*/)
-            {
-                return lhs->End()->nNode.GetIndex() < nNdIdx;
-            });
-        for( ; it != maRedlineTable.end(); ++it)
+    // binary search to the first redline with start > the needle i.e. past the end of the interesting range
+    auto it1 = std::upper_bound(maRedlineTable.begin(), maRedlineTable.end(), rNd,
+        [&nNdIdx](const SwNode& /*lhs*/, const SwRangeRedline* rhs)
         {
-            const SwRangeRedline* pTmp = *it;
-            sal_uLong nStart = pTmp->Start()->nNode.GetIndex(),
-                      nEnd = pTmp->End()->nNode.GetIndex();
-
-            if( ( RedlineType::Any == nType || nType == pTmp->GetType()) &&
-                nStart <= nNdIdx && nNdIdx <= nEnd )
-                return std::distance(maRedlineTable.begin(), it);
-
-            if( nStart > nNdIdx )
-                break;
-        }
-    }
-    else
+            return nNdIdx < rhs->Start()->nNode.GetIndex();
+        });
+    // then scan backward until we pass the beginning of the interesting range
+    auto it2 = std::make_reverse_iterator(it1);
+    SwRedlineTable::size_type nFoundPos = SwRedlineTable::npos;
+    for( ; it2 != maRedlineTable.rend(); ++it2)
     {
-        for( SwRedlineTable::size_type n = 0; n < maRedlineTable.size() ; ++n )
+        const SwRangeRedline* pTmp = *it2;
+        sal_uLong nStart = pTmp->Start()->nNode.GetIndex(),
+                  nEnd = pTmp->End()->nNode.GetIndex();
+
+        if( ( RedlineType::Any == nType || nType == pTmp->GetType()) &&
+            nStart <= nNdIdx && nNdIdx <= nEnd )
         {
-            const SwRangeRedline* pTmp = maRedlineTable[ n ];
-            sal_uLong nPt = pTmp->GetPoint()->nNode.GetIndex(),
-                  nMk = pTmp->GetMark()->nNode.GetIndex();
-            if( nPt < nMk ) { tools::Long nTmp = nMk; nMk = nPt; nPt = nTmp; }
-
-            if( ( RedlineType::Any == nType || nType == pTmp->GetType()) &&
-                nMk <= nNdIdx && nNdIdx <= nPt )
-                return n;
-
-            if( nMk > nNdIdx )
-                break;
+            // We cannot exit early, because callers rely on finding the __first__ redline that matches.
+            nFoundPos = maRedlineTable.size() - 1 - (it2 - maRedlineTable.rbegin());
         }
+
+        if( nStart > nNdIdx )
+            break;
     }
-    return SwRedlineTable::npos;
+    return nFoundPos;
 
     // #TODO - add 'SwExtraRedlineTable' also ?
 }
