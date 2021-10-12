@@ -269,7 +269,7 @@ void VclPhysicalFontFaceTest::testMatchStatusValue()
     rtl::Reference<TestFontFace> aTestedFontFace(new TestFontFace(aFontAttrs, FONTID));
 
     std::unique_ptr<OUString> pTargetStyleName(new OUString("Book"));
-    vcl::font::FontMatchStatus aFontMatchStatus = { 0, 0, 0, pTargetStyleName.get() };
+    vcl::font::FontMatchStatus aFontMatchStatus = { 0, pTargetStyleName.get() };
 
     vcl::Font aTestFont("DejaVu Sans", "Book", Size(0, 36));
 
