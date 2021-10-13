@@ -1020,14 +1020,14 @@ bool SwEditShell::GetGrammarCorrection(
                 // get suggestions to use for the specific error position
                 rSuggestions.realloc( 0 );
                 // return suggestions for first error that includes the given error position
-                auto pError = std::find_if(rResult.aErrors.begin(), rResult.aErrors.end(),
+                auto pError = std::find_if(std::cbegin(rResult.aErrors), std::cend(rResult.aErrors),
                     [rErrorPosInText, nLen](const linguistic2::SingleProofreadingError &rError) {
                         return rError.nErrorStart <= rErrorPosInText
                             && rErrorPosInText + nLen <= rError.nErrorStart + rError.nErrorLength; });
-                if (pError != rResult.aErrors.end())
+                if (pError != std::cend(rResult.aErrors))
                 {
                     rSuggestions = pError->aSuggestions;
-                    rErrorIndexInResult = static_cast<sal_Int32>(std::distance(rResult.aErrors.begin(), pError));
+                    rErrorIndexInResult = static_cast<sal_Int32>(std::distance(std::cbegin(rResult.aErrors), pError));
                 }
             }
 
@@ -1544,9 +1544,9 @@ void SwSpellIter::CreatePortion(uno::Reference< XSpellAlternatives > const & xAl
             aPortion.aGrammarError = pGrammarResult->aErrors[0];
             aPortion.sText = pGrammarResult->aText.copy( aPortion.aGrammarError.nErrorStart, aPortion.aGrammarError.nErrorLength );
             aPortion.xGrammarChecker = pGrammarResult->xProofreader;
-            auto pProperty = std::find_if(pGrammarResult->aProperties.begin(), pGrammarResult->aProperties.end(),
+            auto pProperty = std::find_if(std::cbegin(pGrammarResult->aProperties), std::cend(pGrammarResult->aProperties),
                 [](const beans::PropertyValue& rProperty) { return rProperty.Name == "DialogTitle"; });
-            if (pProperty != pGrammarResult->aProperties.end())
+            if (pProperty != std::cend(pGrammarResult->aProperties))
                 pProperty->Value >>= aPortion.sDialogTitle;
         }
     }

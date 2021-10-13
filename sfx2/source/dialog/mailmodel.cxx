@@ -175,7 +175,7 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
                             if( xFilterDialog->execute() )
                             {
                                 //get the filter data
-                                uno::Sequence< beans::PropertyValue > aPropsFromDialog = xFilterProperties->getPropertyValues();
+                                const uno::Sequence< beans::PropertyValue > aPropsFromDialog = xFilterProperties->getPropertyValues();
 
                                 //add them to the args
                                 auto pProp = std::find_if(aPropsFromDialog.begin(), aPropsFromDialog.end(),

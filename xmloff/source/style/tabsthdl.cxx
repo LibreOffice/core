@@ -39,7 +39,7 @@ bool XMLTabStopPropHdl::equals( const uno::Any& r1, const uno::Any& r2 ) const
         uno::Sequence< style::TabStop> aSeq2;
         if( r2 >>= aSeq2 )
         {
-            return std::equal(aSeq1.begin(), aSeq1.end(), aSeq2.begin(), aSeq2.end(),
+            return std::equal(std::cbegin(aSeq1), std::cend(aSeq1), std::cbegin(aSeq2), std::cend(aSeq2),
                 [](const style::TabStop& a, const style::TabStop& b) {
                     return a.Position == b.Position
                         && a.Alignment == b.Alignment

@@ -241,8 +241,8 @@ namespace sfx2
         // are returned from the configuration - it is completely undefined, and we need a _defined_ order.
         FilterClassReferrer aClassReferrer;
         ::std::for_each(
-            aGlobalClasses.begin(),
-            aGlobalClasses.end(),
+            std::cbegin(aGlobalClasses),
+            std::cend(aGlobalClasses),
             CreateEmptyClassRememberPos( _rGlobalClasses, aClassReferrer )
         );
             // now _rGlobalClasses contains a dummy entry for each global class,
@@ -253,7 +253,7 @@ namespace sfx2
         // go for all the single class entries
         OConfigurationNode aFilterClassesNode =
             _rFilterClassification.openNode( "GlobalFilters/Classes" );
-        Sequence< OUString > aFilterClasses = aFilterClassesNode.getNodeNames();
+        const Sequence< OUString > aFilterClasses = aFilterClassesNode.getNodeNames();
         ::std::for_each(
             aFilterClasses.begin(),
             aFilterClasses.end(),
@@ -297,7 +297,7 @@ namespace sfx2
         // the node for the local classes
         OConfigurationNode aFilterClassesNode =
             _rFilterClassification.openNode( "LocalFilters/Classes" );
-        Sequence< OUString > aFilterClasses = aFilterClassesNode.getNodeNames();
+        const Sequence< OUString > aFilterClasses = aFilterClassesNode.getNodeNames();
 
         ::std::for_each(
             aFilterClasses.begin(),

@@ -92,7 +92,7 @@ SignatureLineContext::SignatureLineContext(SvXMLImport& rImport, sal_Int32 /*nEl
             security::DocumentDigitalSignatures::createWithVersion(
                 comphelper::getProcessComponentContext(), aODFVersion));
 
-        Sequence<DocumentSignatureInformation> xSignatureInfo
+        const Sequence<DocumentSignatureInformation> xSignatureInfo
             = xSignatures->verifyDocumentContentSignatures(xStorage, Reference<XInputStream>());
 
         // Try to find matching signature line image - if none exists that is fine,

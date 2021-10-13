@@ -100,7 +100,7 @@ void LocaleDataWrapper::loadData()
     const css::lang::Locale& rMyLocale = maLanguageTag.getLocale();
 
     {
-        Sequence< Currency2 > aCurrSeq = getAllCurrencies();
+        const Sequence< Currency2 > aCurrSeq = getAllCurrencies();
         if ( !aCurrSeq.hasElements() )
         {
             if (areChecksEnabled())
@@ -133,7 +133,7 @@ void LocaleDataWrapper::loadData()
     {
         xDefaultCalendar.reset();
         xSecondaryCalendar.reset();
-        Sequence< Calendar2 > xCals = getAllCalendars();
+        const Sequence< Calendar2 > xCals = getAllCalendars();
         if (xCals.getLength() > 1)
         {
             auto pCal = std::find_if(xCals.begin(), xCals.end(),

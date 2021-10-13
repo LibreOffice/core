@@ -217,7 +217,7 @@ bool FilterConfigItem::ImplGetPropertyValue( Any& rAny, const Reference< XProper
 
 // if property is available it returns a pointer,
 // otherwise the result is null
-PropertyValue* FilterConfigItem::GetPropertyValue( Sequence< PropertyValue >& rPropSeq, const OUString& rName )
+const PropertyValue* FilterConfigItem::GetPropertyValue( const Sequence< PropertyValue >& rPropSeq, const OUString& rName )
 {
     auto pProp = std::find_if(rPropSeq.begin(), rPropSeq.end(),
         [&rName](const PropertyValue& rProp) { return rProp.Name == rName; });
@@ -235,9 +235,9 @@ bool FilterConfigItem::WritePropertyValue( Sequence< PropertyValue >& rPropSeq, 
     bool bRet = false;
     if ( !rPropValue.Name.isEmpty() )
     {
-        auto pProp = std::find_if(rPropSeq.begin(), rPropSeq.end(),
+        auto pProp = std::find_if(std::cbegin(rPropSeq), std::cend(rPropSeq),
             [&rPropValue](const PropertyValue& rProp) { return rProp.Name == rPropValue.Name; });
-        sal_Int32 i = std::distance(rPropSeq.begin(), pProp);
+        sal_Int32 i = std::distance(std::cbegin(rPropSeq), pProp);
         sal_Int32 nCount = rPropSeq.getLength();
         if ( i == nCount )
             rPropSeq.realloc( ++nCount );
@@ -253,7 +253,7 @@ bool FilterConfigItem::ReadBool( const OUString& rKey, bool bDefault )
 {
     Any aAny;
     bool bRetValue = bDefault;
-    PropertyValue* pPropVal = GetPropertyValue( aFilterData, rKey );
+    const PropertyValue* pPropVal = GetPropertyValue( aFilterData, rKey );
     if ( pPropVal )
     {
         pPropVal->Value >>= bRetValue;
@@ -273,7 +273,7 @@ sal_Int32 FilterConfigItem::ReadInt32( const OUString& rKey, sal_Int32 nDefault 
 {
     Any aAny;
     sal_Int32 nRetValue = nDefault;
-    PropertyValue* pPropVal = GetPropertyValue( aFilterData, rKey );
+    const PropertyValue* pPropVal = GetPropertyValue( aFilterData, rKey );
     if ( pPropVal )
     {
         pPropVal->Value >>= nRetValue;
@@ -293,7 +293,7 @@ OUString FilterConfigItem::ReadString( const OUString& rKey, const OUString& rDe
 {
     Any aAny;
     OUString aRetValue( rDefault );
-    PropertyValue* pPropVal = GetPropertyValue( aFilterData, rKey );
+    const PropertyValue* pPropVal = GetPropertyValue( aFilterData, rKey );
     if ( pPropVal )
     {
         pPropVal->Value >>= aRetValue;

@@ -93,19 +93,17 @@ void SettingsConfigItem::getValues()
 #if OSL_DEBUG_LEVEL > 2
         SAL_INFO( "vcl", "found settings data for " << aKeyName );
 #endif
-        Sequence< OUString > aKeys( GetNodeNames( aKeyName ) );
+        const Sequence< OUString > aKeys( GetNodeNames( aKeyName ) );
         Sequence< OUString > aSettingsKeys( aKeys.getLength() );
         std::transform(aKeys.begin(), aKeys.end(), aSettingsKeys.begin(),
             [&aKeyName](const OUString& rKey) -> OUString { return aKeyName + "/" + rKey; });
-        Sequence< Any > aValues( GetProperties( aSettingsKeys ) );
-        const OUString* pFrom = aKeys.getConstArray();
-        const Any* pValue = aValues.getConstArray();
-        for( int i = 0; i < aValues.getLength(); i++, pValue++ )
+        const Sequence< Any > aValues( GetProperties( aSettingsKeys ) );
+        for( int i = 0; i < aValues.getLength(); i++ )
         {
-            if( auto pLine = o3tl::tryAccess<OUString>(*pValue) )
+            if( auto pLine = o3tl::tryAccess<OUString>(aValues[i]) )
             {
                 if( !pLine->isEmpty() )
-                    m_aSettings[ aKeyName ][ pFrom[i] ] = *pLine;
+                    m_aSettings[ aKeyName ][ aKeys[i] ] = *pLine;
 #if OSL_DEBUG_LEVEL > 2
                 SAL_INFO( "vcl", "   \"" << aKeys.getConstArray()[i] << "\"=\"" << *pLine << "\"" );
 #endif

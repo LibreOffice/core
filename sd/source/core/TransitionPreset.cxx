@@ -61,7 +61,7 @@ namespace sd {
 TransitionPreset::TransitionPreset( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
 {
     // first locate preset id
-    Sequence< NamedValue > aUserData( xNode->getUserData() );
+    const Sequence< NamedValue > aUserData( xNode->getUserData() );
     const NamedValue* pProp = std::find_if(aUserData.begin(), aUserData.end(),
         [](const NamedValue& rProp) { return rProp.Name == "preset-id"; });
     if (pProp != aUserData.end())

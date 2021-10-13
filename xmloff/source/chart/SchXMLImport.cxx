@@ -143,7 +143,7 @@ void SchXMLImportHelper::DeleteDataSeries(
             for( const auto& rChartType : aChartTypes )
             {
                 Reference< chart2::XDataSeriesContainer > xSeriesCnt( rChartType, uno::UNO_QUERY_THROW );
-                Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xSeriesCnt->getDataSeries());
+                const Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xSeriesCnt->getDataSeries());
 
                 if (std::find(aSeriesSeq.begin(), aSeriesSeq.end(), xSeries) != aSeriesSeq.end())
                 {

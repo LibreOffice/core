@@ -305,7 +305,7 @@ namespace pcr
             OSL_ENSURE( xForms.is(), "EFormsHelper::getFormModelNames: invalid forms container!" );
             if ( xForms.is() )
             {
-                Sequence< OUString > aModelNames = xForms->getElementNames();
+                const Sequence< OUString > aModelNames = xForms->getElementNames();
                 _rModelNames.resize( aModelNames.getLength() );
                 std::copy( aModelNames.begin(), aModelNames.end(), _rModelNames.begin() );
             }
@@ -329,7 +329,7 @@ namespace pcr
                 OSL_ENSURE( xBindings.is(), "EFormsHelper::getBindingNames: invalid bindings container obtained from the model!" );
                 if ( xBindings.is() )
                 {
-                    Sequence< OUString > aNames = xBindings->getElementNames();
+                    const Sequence< OUString > aNames = xBindings->getElementNames();
                     _rBindingNames.resize( aNames.getLength() );
                     std::copy( aNames.begin(), aNames.end(), _rBindingNames.begin() );
                 }
@@ -590,7 +590,7 @@ namespace pcr
                 xInfo = _rxProps->getPropertySetInfo();
             if ( xInfo.is() )
             {
-                Sequence< Property > aProperties = xInfo->getProperties();
+                const Sequence< Property > aProperties = xInfo->getProperties();
                 std::for_each( aProperties.begin(), aProperties.end(),
                     PropertyBagInserter( _rBag )
                 );

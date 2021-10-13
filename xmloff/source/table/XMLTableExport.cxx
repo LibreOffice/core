@@ -167,7 +167,7 @@ XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExp
     Reference< XMultiServiceFactory > xFac( rExp.GetModel(), UNO_QUERY );
     if( xFac.is() ) try
     {
-        Sequence< OUString > sSNS( xFac->getAvailableServiceNames() );
+        const Sequence< OUString > sSNS( xFac->getAvailableServiceNames() );
         const OUString* pSNS = std::find_if(sSNS.begin(), sSNS.end(),
             [](const OUString& rSNS) {
                 return rSNS == "com.sun.star.drawing.TableShape"

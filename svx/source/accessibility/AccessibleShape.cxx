@@ -418,7 +418,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
                 xTempAccContext->getAccessibleStateSet();
             if (rState.is())
             {
-                css::uno::Sequence<short> aStates = rState->getStates();
+                const css::uno::Sequence<short> aStates = rState->getStates();
                 if (std::find(aStates.begin(), aStates.end(), AccessibleStateType::EDITABLE) != aStates.end())
                 {
                     pStateSet->AddState (AccessibleStateType::EDITABLE);
@@ -787,7 +787,7 @@ sal_Bool SAL_CALL AccessibleShape::isAccessibleChildSelected( sal_Int32 nChildIn
             if( !pRState.is() )
                 return false;
 
-            uno::Sequence<short> aStates = pRState->getStates();
+            const uno::Sequence<short> aStates = pRState->getStates();
             return std::find(aStates.begin(), aStates.end(), AccessibleStateType::SELECTED) != aStates.end();
         }
     }

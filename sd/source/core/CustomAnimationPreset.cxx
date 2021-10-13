@@ -123,7 +123,7 @@ CustomAnimationPreset::CustomAnimationPreset( const CustomAnimationEffectPtr& pE
     mfDuration = pEffect->getDuration();
     maDefaultSubTyp = pEffect->getPresetSubType();
 
-    Sequence< NamedValue > aUserData( pEffect->getNode()->getUserData() );
+    const Sequence< NamedValue > aUserData( pEffect->getNode()->getUserData() );
 
     mbIsTextOnly = std::any_of(aUserData.begin(), aUserData.end(),
         [](const NamedValue& rProp) { return rProp.Name == "text-only"; });

@@ -214,9 +214,9 @@ handleFilterOptionsRequest_(
             uno::Sequence < beans::PropertyValue > aProps;
             if ( xFilterCFG->getByName( aFilterName ) >>= aProps )
             {
-                auto pProp = std::find_if(aProps.begin(), aProps.end(),
+                auto pProp = std::find_if(std::cbegin(aProps), std::cend(aProps),
                     [](const beans::PropertyValue& rProp) { return rProp.Name == "UIComponent"; });
-                if (pProp != aProps.end())
+                if (pProp != std::cend(aProps))
                 {
                     OUString aServiceName;
                     pProp->Value >>= aServiceName;

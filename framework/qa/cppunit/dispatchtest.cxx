@@ -124,8 +124,8 @@ uno::Reference<frame::XDispatch> MyInterceptor::queryDispatch(const util::URL& r
                                                               const OUString& /*rTargetFrameName*/,
                                                               sal_Int32 /*SearchFlags*/)
 {
-    if (std::find(m_aDisabledCommands.begin(), m_aDisabledCommands.end(), rURL.Complete)
-        != m_aDisabledCommands.end())
+    if (std::find(std::cbegin(m_aDisabledCommands), std::cend(m_aDisabledCommands), rURL.Complete)
+        != std::cend(m_aDisabledCommands))
         ++m_nExpected;
     else
         ++m_nUnexpected;

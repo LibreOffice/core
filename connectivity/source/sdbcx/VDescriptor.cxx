@@ -74,10 +74,11 @@ namespace connectivity::sdbcx
             Sequence< Property > aProperties;
             describeProperties( aProperties );
 
+            auto [begin, end] = toNonConstRange(aProperties);
             if ( isNew() )
-                std::for_each( aProperties.begin(), aProperties.end(), ResetROAttribute() );
+                std::for_each( begin, end, ResetROAttribute() );
             else
-                std::for_each( aProperties.begin(), aProperties.end(), SetROAttribute() );
+                std::for_each( begin, end, SetROAttribute() );
 
             return new ::cppu::OPropertyArrayHelper( aProperties );
         }

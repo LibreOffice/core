@@ -313,8 +313,8 @@ namespace frm
             // copy to member
             ValueList().swap(m_aListSourceValues);
             ::std::copy(
-                aListSource.begin(),
-                aListSource.end(),
+                std::cbegin(aListSource),
+                std::cend(aListSource),
                 ::std::insert_iterator< ValueList >( m_aListSourceValues, m_aListSourceValues.end() )
             );
 
@@ -952,7 +952,7 @@ namespace frm
                     Reference<XNameAccess> xFieldNames = getTableFields(xConnection, sListSource);
                     if (xFieldNames.is())
                     {
-                        css::uno::Sequence<OUString> seqNames = xFieldNames->getElementNames();
+                        const css::uno::Sequence<OUString> seqNames = xFieldNames->getElementNames();
                         ::std::copy(
                             seqNames.begin(),
                             seqNames.end(),
@@ -1378,8 +1378,8 @@ namespace frm
             OSL_VERIFY( _rExternalValue >>= aSelectIndexesPure );
             aSelectIndexes.realloc( aSelectIndexesPure.getLength() );
             ::std::copy(
-                aSelectIndexesPure.begin(),
-                aSelectIndexesPure.end(),
+                std::cbegin(aSelectIndexesPure),
+                std::cend(aSelectIndexesPure),
                 aSelectIndexes.getArray()
             );
         }
@@ -1590,8 +1590,8 @@ namespace frm
             // expects int's
             Sequence< sal_Int32 > aTransformed( aSelectSequence.getLength() );
             ::std::copy(
-                aSelectSequence.begin(),
-                aSelectSequence.end(),
+                std::cbegin(aSelectSequence),
+                std::cend(aSelectSequence),
                 aTransformed.getArray()
             );
             aReturn <<= aTransformed;

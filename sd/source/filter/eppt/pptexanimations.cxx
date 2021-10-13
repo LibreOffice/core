@@ -374,7 +374,7 @@ void AnimationExporter::processAfterEffectNodes( const Reference< XAnimationNode
                                 {
                                     Reference< XAnimationNode > xMaster;
 
-                                    Sequence< NamedValue > aUserData( xChildNode3->getUserData() );
+                                    const Sequence< NamedValue > aUserData( xChildNode3->getUserData() );
                                     const NamedValue* p = std::find_if(aUserData.begin(), aUserData.end(),
                                         [](const NamedValue& rProp) { return rProp.Name == "master-element"; });
 

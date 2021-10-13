@@ -246,7 +246,7 @@ getAllDataSequences( const uno::Sequence<uno::Reference<chart2::XDataSeries> >& 
         Reference< chart2::data::XDataSource > xSource( dataSeries, uno::UNO_QUERY );
         if( xSource.is())
         {
-            Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeq( xSource->getDataSequences());
+            const Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeq( xSource->getDataSequences());
             aSeqVec.insert( aSeqVec.end(), aSeq.begin(), aSeq.end() );
         }
     }

@@ -374,16 +374,16 @@ public:
 
     beans::Property SAL_CALL getPropertyByName( const OUString& aName ) override
     {
-        auto pProp = std::find_if(m_aSeq.begin(), m_aSeq.end(),
+        auto pProp = std::find_if(std::cbegin(m_aSeq), std::cend(m_aSeq),
             [&aName](const beans::Property& rProp) { return aName == rProp.Name; });
-        if (pProp != m_aSeq.end())
+        if (pProp != std::cend(m_aSeq))
             return *pProp;
         throw beans::UnknownPropertyException(aName);
     }
 
     sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) override
     {
-        return std::any_of(m_aSeq.begin(), m_aSeq.end(),
+        return std::any_of(std::cbegin(m_aSeq), std::cend(m_aSeq),
             [&Name](const beans::Property& rProp) { return Name == rProp.Name; });
     }
 

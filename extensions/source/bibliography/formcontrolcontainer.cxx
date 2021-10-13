@@ -92,15 +92,16 @@ namespace bib
         try
         {
             Reference< XControlContainer > xControlCont = getControlContainer();
-            Sequence< Reference< XControl > > aControls;
             if ( xControlCont.is() )
-                aControls = xControlCont->getControls();
+            {
+                const Sequence<Reference<XControl>> aControls = xControlCont->getControls();
 
-            std::for_each(
-                aControls.begin(),
-                aControls.end(),
-                ControlModeSwitch( _bDesign )
-            );
+                std::for_each(
+                    aControls.begin(),
+                    aControls.end(),
+                    ControlModeSwitch( _bDesign )
+                );
+            }
         }
         catch( const Exception&)
         {

@@ -255,7 +255,7 @@ handleCertificateValidationRequest_(
                                               rRequest.Certificate );
     }
 
-    uno::Sequence< uno::Reference< security::XCertificateExtension > > extensions = rRequest.Certificate->getExtensions();
+    const uno::Sequence< uno::Reference< security::XCertificateExtension > > extensions = rRequest.Certificate->getExtensions();
     uno::Reference< security::XSanExtension > sanExtension;
     auto pExtension = std::find_if(extensions.begin(), extensions.end(),
         [](const uno::Reference< security::XCertificateExtension >& element) {

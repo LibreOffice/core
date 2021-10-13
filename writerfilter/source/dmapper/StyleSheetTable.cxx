@@ -350,7 +350,7 @@ void StyleSheetTable_Impl::SetPropertiesToDefault(const uno::Reference<style::XS
     // See if the existing style has any non-default properties. If so, reset them back to default.
     uno::Reference<beans::XPropertySet> xPropertySet(xStyle, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
-    uno::Sequence<beans::Property> aProperties = xPropertySetInfo->getProperties();
+    const uno::Sequence<beans::Property> aProperties = xPropertySetInfo->getProperties();
     std::vector<OUString> aPropertyNames;
     aPropertyNames.reserve(aProperties.getLength());
     std::transform(aProperties.begin(), aProperties.end(), std::back_inserter(aPropertyNames),

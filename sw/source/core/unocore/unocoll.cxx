@@ -112,7 +112,7 @@ public:
                     sProjectName =  mpDocShell->GetBasicManager()->GetName();
                 }
                 uno::Reference< container::XNameAccess > xLib( xLibContainer->getByName( sProjectName ), uno::UNO_QUERY_THROW );
-                uno::Sequence< OUString > sModuleNames = xLib->getElementNames();
+                const uno::Sequence< OUString > sModuleNames = xLib->getElementNames();
                 uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
 
                 auto pModuleName = std::find_if(sModuleNames.begin(), sModuleNames.end(), [&xVBAModuleInfo](const OUString& rName) {

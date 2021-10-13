@@ -120,7 +120,7 @@ ListControlHelper::AddItem( const uno::Any& pvargItem, const uno::Any& pvargInde
         sVec.push_back( sString );
 
         // point at first element to copy
-        sVec.insert( sVec.end(), std::next(sList.begin(), nIndex), sList.end() );
+        sVec.insert( sVec.end(), std::next(std::cbegin(sList), nIndex), std::cend(sList) );
 
         sList.realloc(  sList.getLength() + 1 );
 

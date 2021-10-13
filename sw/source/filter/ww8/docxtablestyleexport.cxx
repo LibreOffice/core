@@ -130,9 +130,9 @@ void DocxTableStyleExport::TableStyles(sal_Int32 nCountStylesToWrite)
     xPropertySet->getPropertyValue("InteropGrabBag") >>= aInteropGrabBag;
     uno::Sequence<beans::PropertyValue> aTableStyles;
     auto pProp = std::find_if(
-        aInteropGrabBag.begin(), aInteropGrabBag.end(),
+        std::cbegin(aInteropGrabBag), std::cend(aInteropGrabBag),
         [](const beans::PropertyValue& rProp) { return rProp.Name == "tableStyles"; });
-    if (pProp != aInteropGrabBag.end())
+    if (pProp != std::cend(aInteropGrabBag))
         pProp->Value >>= aTableStyles;
     if (!aTableStyles.hasElements())
         return;

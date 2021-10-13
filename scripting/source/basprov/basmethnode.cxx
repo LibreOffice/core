@@ -203,7 +203,7 @@ namespace basprov
                 sDocURL = xModel->getURL();
                 if ( sDocURL.isEmpty() )
                 {
-                    Sequence < PropertyValue > aProps = xModel->getArgs();
+                    const Sequence < PropertyValue > aProps = xModel->getArgs();
                     // TODO: according to MBA the property 'Title' may change in future
                     const PropertyValue* pProp = std::find_if(aProps.begin(), aProps.end(),
                         [](const PropertyValue& rProp) { return rProp.Name == "Title"; });

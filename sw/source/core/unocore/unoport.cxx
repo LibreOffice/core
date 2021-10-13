@@ -548,7 +548,7 @@ uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL SwXTextPortion::getPr
 {
     SolarMutexGuard aGuard;
 
-    uno::Sequence< beans::GetDirectPropertyTolerantResult > aTmpRes(
+    const uno::Sequence< beans::GetDirectPropertyTolerantResult > aTmpRes(
             GetPropertyValuesTolerant_Impl( rPropertyNames, false ) );
 
     // copy temporary result to final result type

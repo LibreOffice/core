@@ -116,7 +116,7 @@ namespace pcr
             TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EnumRepresentation::getDescriptions" );
         }
 
-        return std::vector< OUString >( aNames.begin(), aNames.end() );
+        return std::vector< OUString >( std::cbegin(aNames), std::cend(aNames) );
     }
 
     void EnumRepresentation::impl_getValues( Sequence< sal_Int32 >& _out_rValues ) const
@@ -162,7 +162,7 @@ namespace pcr
         Sequence< sal_Int32 > aValues;
         impl_getValues( aValues );
 
-        sal_Int32 index = std::find( aValues.begin(), aValues.end(), nAsInt ) - aValues.begin();
+        sal_Int32 index = std::find( std::cbegin(aValues), std::cend(aValues), nAsInt ) - std::cbegin(aValues);
 
         std::vector< OUString > aDescriptions( getDescriptions() );
         if ( ( index >= 0 ) && ( index < static_cast<sal_Int32>(aDescriptions.size()) ) )

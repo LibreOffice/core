@@ -5883,9 +5883,9 @@ static char* lo_getFilterTypes(LibreOfficeKit* pThis)
         uno::Sequence<beans::PropertyValue> aValues;
         if (xTypeDetection->getByName(rType) >>= aValues)
         {
-            auto it = std::find_if(aValues.begin(), aValues.end(), [](const beans::PropertyValue& rValue) { return rValue.Name == "MediaType"; });
+            auto it = std::find_if(std::cbegin(aValues), std::cend(aValues), [](const beans::PropertyValue& rValue) { return rValue.Name == "MediaType"; });
             OUString aValue;
-            if (it != aValues.end() && (it->Value >>= aValue) && !aValue.isEmpty())
+            if (it != std::cend(aValues) && (it->Value >>= aValue) && !aValue.isEmpty())
             {
                 auto typeNode = aJson.startNode(rType.toUtf8().getStr());
                 aJson.put("MediaType", aValue.toUtf8());

@@ -1919,7 +1919,7 @@ void SAL_CALL OReportDefinition::setMimeType( const OUString& _mimetype )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
-    uno::Sequence< OUString > aList = getAvailableMimeTypes();
+    const uno::Sequence< OUString > aList = getAvailableMimeTypes();
     if ( ::std::find(aList.begin(), aList.end(), _mimetype) == aList.end() )
         throwIllegallArgumentException("getAvailableMimeTypes()"
                         ,*this

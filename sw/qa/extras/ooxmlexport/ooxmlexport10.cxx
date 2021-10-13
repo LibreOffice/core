@@ -940,7 +940,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf89702, "tdf89702.docx")
     auto xLevels = getProperty< uno::Reference<container::XIndexAccess> >(xParagraph, "NumberingRules");
     uno::Sequence<beans::PropertyValue> aLevel;
     xLevels->getByIndex(1) >>= aLevel; // 2nd level
-    OUString aCharStyleName = std::find_if(aLevel.begin(), aLevel.end(), [](const beans::PropertyValue& rValue) { return rValue.Name == "CharStyleName"; })->Value.get<OUString>();
+    OUString aCharStyleName = std::find_if(std::cbegin(aLevel), std::cend(aLevel), [](const beans::PropertyValue& rValue) { return rValue.Name == "CharStyleName"; })->Value.get<OUString>();
 
     // Make sure that the font name is Arial, this was Verdana.
     uno::Reference<beans::XPropertySet> xStyle(getStyles("CharacterStyles")->getByName(aCharStyleName), uno::UNO_QUERY);
@@ -1052,7 +1052,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf92124, "tdf92124.docx")
     auto xLevels = getProperty< uno::Reference<container::XIndexAccess> >(xParagraph, "NumberingRules");
     uno::Sequence<beans::PropertyValue> aLevel;
     xLevels->getByIndex(0) >>= aLevel; // 1st level
-    OUString aSuffix = std::find_if(aLevel.begin(), aLevel.end(), [](const beans::PropertyValue& rValue) { return rValue.Name == "Suffix"; })->Value.get<OUString>();
+    OUString aSuffix = std::find_if(std::cbegin(aLevel), std::cend(aLevel), [](const beans::PropertyValue& rValue) { return rValue.Name == "Suffix"; })->Value.get<OUString>();
     // Make sure it's empty as the source document contains <w:suff w:val="nothing"/>.
     CPPUNIT_ASSERT(aSuffix.isEmpty());
 }
@@ -1165,7 +1165,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95213, "tdf95213.docx")
     auto xLevels = getProperty< uno::Reference<container::XIndexAccess> >(xParagraph, "NumberingRules");
     uno::Sequence<beans::PropertyValue> aLevel;
     xLevels->getByIndex(1) >>= aLevel; // 2nd level
-    OUString aName = std::find_if(aLevel.begin(), aLevel.end(), [](const beans::PropertyValue& rValue) { return rValue.Name == "CharStyleName"; })->Value.get<OUString>();
+    OUString aName = std::find_if(std::cbegin(aLevel), std::cend(aLevel), [](const beans::PropertyValue& rValue) { return rValue.Name == "CharStyleName"; })->Value.get<OUString>();
 
     uno::Reference<beans::XPropertySet> xStyle(getStyles("CharacterStyles")->getByName(aName), uno::UNO_QUERY);
     // This was awt::FontWeight::BOLD.

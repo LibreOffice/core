@@ -46,50 +46,36 @@ void TestOrdinalSuffix::tearDown()
 void TestOrdinalSuffix::testFrench()
 {
     lang::Locale aLocale("fr", "LU", "");
-    uno::Sequence< OUString > aSuffixes;
-    OUString *pStart, *pEnd, *pFind;
 
     //1er
-    aSuffixes = m_xOrdinal->getOrdinalSuffix(1, aLocale);
-    pStart = aSuffixes.begin();
-    pEnd = aSuffixes.end();
-    pFind = std::find(pStart, pEnd, OUString("er"));
-    CPPUNIT_ASSERT(pFind != pEnd);
+    uno::Sequence<OUString> aSuffixes = m_xOrdinal->getOrdinalSuffix(1, aLocale);
+    const OUString* pFind = std::find(std::cbegin(aSuffixes), std::cend(aSuffixes), OUString("er"));
+    CPPUNIT_ASSERT(pFind != std::cend(aSuffixes));
 
     //2e, 3e, etc.
     aSuffixes = m_xOrdinal->getOrdinalSuffix(2, aLocale);
-    pStart = aSuffixes.begin();
-    pEnd = aSuffixes.end();
-    pFind = std::find(pStart, pEnd, OUString("e"));
-    CPPUNIT_ASSERT(pFind != pEnd);
+    pFind = std::find(std::cbegin(aSuffixes), std::cend(aSuffixes), OUString("e"));
+    CPPUNIT_ASSERT(pFind != std::cend(aSuffixes));
 }
 
 void TestOrdinalSuffix::testEnglish()
 {
     lang::Locale aLocale("en", "US", "");
-    uno::Sequence< OUString > aSuffixes;
-    OUString *pStart, *pEnd, *pFind;
 
     //1st
-    aSuffixes = m_xOrdinal->getOrdinalSuffix(1, aLocale);
-    pStart = aSuffixes.begin();
-    pEnd = aSuffixes.end();
-    pFind = std::find(pStart, pEnd, OUString("st"));
-    CPPUNIT_ASSERT(pFind != pEnd);
+    uno::Sequence<OUString> aSuffixes = m_xOrdinal->getOrdinalSuffix(1, aLocale);
+    const OUString* pFind = std::find(std::cbegin(aSuffixes), std::cend(aSuffixes), OUString("st"));
+    CPPUNIT_ASSERT(pFind != std::cend(aSuffixes));
 
     //2nd
     aSuffixes = m_xOrdinal->getOrdinalSuffix(2, aLocale);
-    pStart = aSuffixes.begin();
-    pEnd = aSuffixes.end();
-    pFind = std::find(pStart, pEnd, OUString("nd"));
-    CPPUNIT_ASSERT(pFind != pEnd);
+    pFind = std::find(std::cbegin(aSuffixes), std::cend(aSuffixes), OUString("nd"));
+    CPPUNIT_ASSERT(pFind != std::cend(aSuffixes));
 
     //3rd
     aSuffixes = m_xOrdinal->getOrdinalSuffix(3, aLocale);
-    pStart = aSuffixes.begin();
-    pEnd = aSuffixes.end();
-    pFind = std::find(pStart, pEnd, OUString("rd"));
-    CPPUNIT_ASSERT(pFind != pEnd);
+    pFind = std::find(std::cbegin(aSuffixes), std::cend(aSuffixes), OUString("rd"));
+    CPPUNIT_ASSERT(pFind != std::cend(aSuffixes));
 }
 
 

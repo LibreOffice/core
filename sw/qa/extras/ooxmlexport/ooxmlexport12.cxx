@@ -993,7 +993,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf94628, "tdf94628.docx")
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
-    OUString sBulletChar = std::find_if(aProps.begin(), aProps.end(),
+    OUString sBulletChar = std::find_if(std::cbegin(aProps), std::cend(aProps),
                                         [](const beans::PropertyValue& rValue) {
                                             return rValue.Name == "BulletChar";
                                         })

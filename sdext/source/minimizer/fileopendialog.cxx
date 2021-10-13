@@ -114,9 +114,9 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
             if ( xTypes->getByName( rFilterEntry.maType ) >>= aTypeProperties )
             {
                 Sequence< OUString > aExtensions;
-                auto pProp = std::find_if(aTypeProperties.begin(), aTypeProperties.end(),
+                auto pProp = std::find_if(std::cbegin(aTypeProperties), std::cend(aTypeProperties),
                     [](const PropertyValue& rProp) { return rProp.Name == "Extensions"; });
-                if (pProp != aTypeProperties.end())
+                if (pProp != std::cend(aTypeProperties))
                     pProp->Value >>= aExtensions;
                 if ( aExtensions.hasElements() )
                 {
