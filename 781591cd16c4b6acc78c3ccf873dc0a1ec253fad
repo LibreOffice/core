@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75b31b0f_840602df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-13T19:54:58Z",
+      "side": 1,
+      "message": "This didn\u0027t actually fix the document in the bug report. Something else funny was happening on my dev box - a fake cache hit or something like that. OP\u0027s document has no rSepInfo.pSectionFormat, so nBreakCode is 2.\n\nPlus, as OP indicated, everything \"works fine\" except when a table splits the page, so this patch is off-track for this particular bug anyway.",
+      "revId": "781591cd16c4b6acc78c3ccf873dc0a1ec253fad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2bbe3d4_36574a90",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1754,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-13T19:54:58Z",
+      "side": 1,
+      "message": "There is only one existing unit test that hit this condition (ooxmlexport5\u0027s ooo96040-2.odt) but it didn\u0027t show anything conclusive about whether this is worth pursuing.\n\nQuite frankly this code should always be run EXCEPT when a section break is going to happen, but because of that awful soft-page hack, a section break normally does occur.",
+      "range": {
+        "startLine": 1754,
+        "startChar": 16,
+        "endLine": 1754,
+        "endChar": 57
+      },
+      "revId": "781591cd16c4b6acc78c3ccf873dc0a1ec253fad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
