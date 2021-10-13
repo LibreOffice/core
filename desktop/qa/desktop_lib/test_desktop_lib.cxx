@@ -2356,7 +2356,7 @@ void DesktopLOKTest::testCommentsCallbacksWriter()
 namespace
 {
 
-void addParameter(tools::JsonWriter& rJson, const char* sName, OString const & type, OString const & value)
+void addParameter(tools::JsonWriter& rJson, const char* sName, std::string_view type, std::string_view value)
 {
     auto testNode = rJson.startNode(sName);
     rJson.put("type", type);

@@ -46,7 +46,7 @@ void JsonWriterTest::test1()
     {
         auto testNode = aJson.startNode("node");
         aJson.put("oustring", OUString("val1"));
-        aJson.put("ostring", OString("val2"));
+        aJson.put("ostring", OString("val2").copy(0)); // Use copy to silence [loplugin:stringview]
         aJson.put("charptr", "val3");
         aJson.put("int", static_cast<sal_Int32>(12));
     }
