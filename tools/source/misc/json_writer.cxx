@@ -388,18 +388,22 @@ void JsonWriter::addCommaBeforeField()
     }
 }
 
-void JsonWriter::reallocBuffer(int noMoreBytesRequired)
+void JsonWriter::ensureSpace(int noMoreBytesRequired)
 {
+    assert(mpBuffer && "already extracted data");
     int currentUsed = mPos - mpBuffer;
-    auto newSize = std::max<int>(mSpaceAllocated * 2, (currentUsed + noMoreBytesRequired) * 2);
-    mpBuffer = static_cast<char*>(realloc(mpBuffer, newSize));
-    mPos = mpBuffer + currentUsed;
-    mSpaceAllocated = newSize;
+    if (currentUsed + noMoreBytesRequired >= mSpaceAllocated)
+    {
+        auto newSize = (currentUsed + noMoreBytesRequired) * 2;
+        mpBuffer = static_cast<char*>(realloc(mpBuffer, newSize));
+        mPos = mpBuffer + currentUsed;
+        mSpaceAllocated = newSize;
+    }
 }
 
 /** Hands ownership of the underlying storage buffer to the caller,
   * after this no more document modifications may be written. */
-char* JsonWriter::extractData()
+std::pair<char*, int> JsonWriter::extractDataImpl()
 {
     assert(mStartNodeCount == 0 && "did not close all nodes");
     assert(mpBuffer && "data already extracted");
@@ -409,24 +413,23 @@ char* JsonWriter::extractData()
     ++mPos;
     // null-terminate
     *mPos = 0;
+    const int sz = mPos - mpBuffer;
     mPos = nullptr;
-    char* pRet = nullptr;
-    std::swap(pRet, mpBuffer);
-    return pRet;
+    return { std::exchange(mpBuffer, nullptr), sz };
 }
 
 OString JsonWriter::extractAsOString()
 {
-    char* pChar = extractData();
-    OString ret(pChar);
+    auto[pChar, sz] = extractDataImpl();
+    OString ret(pChar, sz);
     free(pChar);
     return ret;
 }
 
 std::string JsonWriter::extractAsStdString()
 {
-    char* pChar = extractData();
-    std::string ret(pChar);
+    auto[pChar, sz] = extractDataImpl();
+    std::string ret(pChar, sz);
     free(pChar);
     return ret;
 }

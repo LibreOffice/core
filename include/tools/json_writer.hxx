@@ -17,6 +17,7 @@
 
 #include <string>
 #include <string_view>
+#include <utility>
 
 /** Simple JSON encoder designed specifically for LibreOfficeKit purposes.
  *
@@ -73,7 +74,7 @@ public:
 
     /** Hands ownership of the underlying storage buffer to the caller,
      * after this no more document modifications may be written. */
-    char* extractData();
+    char* extractData() { return extractDataImpl().first; }
     OString extractAsOString();
     std::string extractAsStdString();
 
@@ -85,17 +86,9 @@ private:
     void endArray();
     void endStruct();
     void addCommaBeforeField();
-    void reallocBuffer(int noMoreBytesRequired);
     void writeEscapedOUString(const OUString& rPropVal);
-
-    // this part inline to speed up the fast path
-    inline void ensureSpace(int noMoreBytesRequired)
-    {
-        assert(mpBuffer && "already extracted data");
-        int currentUsed = mPos - mpBuffer;
-        if (currentUsed + noMoreBytesRequired >= mSpaceAllocated)
-            reallocBuffer(noMoreBytesRequired);
-    }
+    std::pair<char*, int> extractDataImpl();
+    void ensureSpace(int noMoreBytesRequired);
 };
 
 /**
