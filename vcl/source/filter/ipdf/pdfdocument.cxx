@@ -2059,7 +2059,7 @@ OUString PDFDocument::DecodeHexStringUTF16BE(PDFHexStringElement const& rElement
     // only the latter supported is here
     if (encoded.size() < 2 || encoded[0] != 0xFE || encoded[1] != 0xFF || (encoded.size() & 1) != 0)
     {
-        return OUString();
+        return {};
     }
     OUStringBuffer buf(static_cast<unsigned int>(encoded.size() - 2));
     for (size_t i = 2; i < encoded.size(); i += 2)
@@ -3152,16 +3152,14 @@ size_t PDFObjectParser::parse(PDFElement* pParsingElement, size_t nStartIndex, i
                 nReturnIndex = i;
                 break;
             }
-            else
+
+            if (pParsingDictionary)
             {
-                if (pParsingDictionary)
-                {
-                    pParsingDictionary->SetKeyOffset(aName, nNameOffset);
-                    // Include the ending ']' in the length of the key - (array)value pair length.
-                    sal_uInt64 nLength = pCurrentEndArray->GetOffset() - nNameOffset + 1;
-                    pParsingDictionary->SetKeyValueLength(aName, nLength);
-                    aName.clear();
-                }
+                pParsingDictionary->SetKeyOffset(aName, nNameOffset);
+                // Include the ending ']' in the length of the key - (array)value pair length.
+                sal_uInt64 nLength = pCurrentEndArray->GetOffset() - nNameOffset + 1;
+                pParsingDictionary->SetKeyValueLength(aName, nLength);
+                aName.clear();
             }
             nDepth--;
         }
