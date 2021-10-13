@@ -16,6 +16,23 @@
       "message": "already submitted https://gerrit.libreoffice.org/c/core/+/123530 for this",
       "revId": "79f32703680778415b0f92fe90491f8f3082016e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "629d2cd9_cecbc2c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-10-13T18:28:48Z",
+      "side": 1,
+      "message": "... which was merged now",
+      "revId": "79f32703680778415b0f92fe90491f8f3082016e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
