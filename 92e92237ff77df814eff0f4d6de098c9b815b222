@@ -53,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "07d40b34_34b12dbd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-10-13T16:01:26Z",
+      "side": 1,
+      "message": "I imagine that if the app doesn\u0027t just toggle into dark or light mode when the system setting is toggled then the problem won\u0027t be considered solved. Personally I\u0027m reluctant to see more user-side customization, configuration \u0026 options.",
+      "parentUuid": "f92a7cff_9d47d239",
+      "revId": "92e92237ff77df814eff0f4d6de098c9b815b222",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "30f31461_4d6408d6",
