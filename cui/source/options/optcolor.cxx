@@ -34,6 +34,7 @@
 #include <dialmgr.hxx>
 #include "optcolor.hxx"
 #include <strings.hrc>
+#include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::svtools;
@@ -44,6 +45,7 @@ namespace
 // list of default groups
 enum Group
 {
+    Group_Application,
     Group_General,
     Group_Writer,
     Group_Html,
@@ -66,6 +68,7 @@ struct
 const vGroupInfo[] =
 {
     // the groups are in the same order as in enum Group above
+    { Group_Application, "application" },
     { Group_General, "general" },
     { Group_Writer, "writer" },
     { Group_Html, "html" },
@@ -96,6 +99,38 @@ const vEntryInfo[] =
         SAL_STRINGIFY(Name), SAL_STRINGIFY(Name##_lb), true
 
     // The list of these entries (enum ColorConfigEntry) are in colorcfg.hxx.
+    { Group_Application, IDS(windowcolor) },
+    { Group_Application, IDS(windowtextcolor) },
+    { Group_Application, IDS(dialogcolor) },
+    { Group_Application, IDS(dialogtextcolor) },
+    { Group_Application, IDS(facecolor) },
+    { Group_Application, IDS(activecolor) },
+    { Group_Application, IDS(activetextcolor) },
+    { Group_Application, IDS(activebordercolor) },
+    { Group_Application, IDS(systemfontcolor) },
+    { Group_Application, IDS(fieldcolor) },
+    { Group_Application, IDS(menubarcolor) },
+    { Group_Application, IDS(menubartextcolor) },
+    { Group_Application, IDS(menubarhighlighttextcolor) },
+    { Group_Application, IDS(menubarrollovercolor) },
+    { Group_Application, IDS(menubarrollovertextcolor) },
+    { Group_Application, IDS(menucolor) },
+    { Group_Application, IDS(menutextcolor) },
+    { Group_Application, IDS(menuhighlightcolor) },
+    { Group_Application, IDS(menuhighlighttextcolor) },
+    { Group_Application, IDS(menubordercolor) },
+    { Group_Application, IDS(shadowcolor) },
+    { Group_Application, IDS(darkshadowcolor) },
+    { Group_Application, IDS(checkedcolor) },
+    { Group_Application, IDS(deactivecolor) },
+    { Group_Application, IDS(deactivetextcolor) },
+    { Group_Application, IDS(deactivebordercolor) },
+    { Group_Application, IDS(disablecolor) },
+    { Group_Application, IDS(lightcolor) },
+    { Group_Application, IDS(lightbordercolor) },
+    { Group_Application, IDS(activetabcolor) },
+    { Group_Application, IDS(inactivetabcolor) },
+    { Group_Application, IDS(workspacecolor) },
 
     { Group_General, IDS(doccolor) },
     { Group_General, IDS_CB(docboundaries) },
@@ -559,6 +594,8 @@ bool ColorConfigWindow_Impl::IsGroupVisible (Group eGroup) const
 {
     switch (eGroup)
     {
+        case Group_Application:
+            return officecfg::Office::Common::Misc::ExperimentalMode::get();
         case Group_Writer:
         case Group_Html:
             return aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::WRITER);
