@@ -33,6 +33,24 @@
       "message": "No objections, these were added for manual testing before cppunit-based tests were capable of covering filter code.",
       "revId": "112dd46828b93041f6e63fb2e2c657f427710359",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8a2546d_0d338a62",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-10-13T11:55:19Z",
+      "side": 1,
+      "message": "great, thanks",
+      "parentUuid": "effcf0bd_b5fc61b6",
+      "revId": "112dd46828b93041f6e63fb2e2c657f427710359",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
