@@ -417,6 +417,13 @@ interface _Annotation
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
+    SID_ATTR_PARA_LINESPACE_115
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
     SID_ATTR_PARA_LINESPACE_15 // api:
     [
         ExecMethod = Exec ;

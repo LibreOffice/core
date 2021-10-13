@@ -363,6 +363,7 @@ SET_ADJUST:
         break;
         case SID_ATTR_PARA_LINESPACE_10:    ePropL = 100;   goto SET_LINESPACE;
         case SID_ATTR_PARA_LINESPACE_15:    ePropL = 150;   goto SET_LINESPACE;
+        case SID_ATTR_PARA_LINESPACE_115:   ePropL = 115;   goto SET_LINESPACE;
         case SID_ATTR_PARA_LINESPACE_20:    ePropL = 200;   goto SET_LINESPACE;
 
 SET_LINESPACE:
@@ -650,6 +651,9 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             break;
             case SID_ATTR_PARA_LINESPACE_10:
                 bFlag = nLineSpace == 100;
+            break;
+            case SID_ATTR_PARA_LINESPACE_115:
+                bFlag = nLineSpace == 115;
             break;
             case SID_ATTR_PARA_LINESPACE_15:
                 bFlag = nLineSpace == 150;

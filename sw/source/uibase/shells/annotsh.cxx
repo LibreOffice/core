@@ -297,6 +297,13 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             aNewAttr.Put(aItem);
         }
         break;
+        case SID_ATTR_PARA_LINESPACE_115:
+        {
+            SvxLineSpacingItem aItem(LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL);
+            aItem.SetPropLineSpace(115);
+            aNewAttr.Put(aItem);
+        }
+        break;
         case SID_ATTR_PARA_LINESPACE_15:
         {
             SvxLineSpacingItem aItem(LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL);
@@ -741,12 +748,15 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                     break;
                 }
             case SID_ATTR_PARA_LINESPACE_10:
+            case SID_ATTR_PARA_LINESPACE_115:
             case SID_ATTR_PARA_LINESPACE_15:
             case SID_ATTR_PARA_LINESPACE_20:
                 {
                     int nLSpace = 0;
                     if (nWhich==SID_ATTR_PARA_LINESPACE_10)
                         nLSpace = 100;
+                    else if (nWhich==SID_ATTR_PARA_LINESPACE_115)
+                        nLSpace = 115;
                     else if (nWhich==SID_ATTR_PARA_LINESPACE_15)
                         nLSpace = 150;
                     else if (nWhich==SID_ATTR_PARA_LINESPACE_20)

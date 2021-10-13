@@ -51,7 +51,6 @@
 #define SID_ATTR_CHAR_FONTLIST                          ( SID_SVX_START + 22 )
 #define SID_ATTR_BORDER_OUTER                           ( SID_SVX_START + 24 )
 #define SID_ATTR_BORDER_SHADOW                          ( SID_SVX_START + 25 )
-  // free
 #define SID_ATTR_PARA_ADJUST                            ( SID_SVX_START + 27 )
 #define SID_ATTR_PARA_ADJUST_LEFT                       ( SID_SVX_START + 28 )
 #define SID_ATTR_PARA_ADJUST_RIGHT                      ( SID_SVX_START + 29 )
@@ -60,6 +59,7 @@
 #define SID_ATTR_PARA_LINESPACE                         ( SID_SVX_START + 33 )
 #define SID_ATTR_PARA_LINESPACE_10                      ( SID_SVX_START + 34 )
 #define SID_ATTR_PARA_LINESPACE_15                      ( SID_SVX_START + 35 )
+#define SID_ATTR_PARA_LINESPACE_115                     ( SID_SVX_START + 26 )
 #define SID_ATTR_PARA_LINESPACE_20                      ( SID_SVX_START + 36 )
 #define SID_ATTR_PARA_PAGEBREAK                         ( SID_SVX_START + 37 )
 #define SID_ATTR_PARA_HYPHENZONE                        ( SID_SVX_START + 38 )
