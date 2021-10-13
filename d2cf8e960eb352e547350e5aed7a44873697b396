@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb1ea60a_f5e23064",
+        "filename": "hwpfilter/source/hwpread.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-13T08:19:07Z",
+      "side": 1,
+      "message": "It still looks strange.\nHWPFile::Read4b takes a reference to size_t - and that\u0027s platform-dependent; on Win64, it should be 8-byte, while unsigned int should be 4-byte?",
+      "revId": "d2cf8e960eb352e547350e5aed7a44873697b396",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
