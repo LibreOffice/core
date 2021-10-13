@@ -16,6 +16,24 @@
       "message": "never mind, this patch still broken, sigh.",
       "revId": "c461dcea117b58cf7c7f0346f32ed70e70470130",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95d6fde1_3d1816b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-10-13T10:31:32Z",
+      "side": 1,
+      "message": "Otherwise I like your approach very much. I believe, overlapping FORMATTING redlines exist only on paragraph-level (I\u0027ve found a crash during creating multi-paragraph FORMATTING redlines in \n\ncommit c364532e6b06391a0584f58142c2366d28c803dd\nAuthor: László Németh \u003cnemeth@numbertext.org\u003e\nDate:   Mon Sep 27 11:36:50 2021 +0200\n\n    tdf#144272 sw: track change of paragraph style\n\n), so your great optimization can work.",
+      "parentUuid": "4670f3f4_3567bcbd",
+      "revId": "c461dcea117b58cf7c7f0346f32ed70e70470130",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
