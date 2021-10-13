@@ -16,6 +16,23 @@
       "message": "Great catch! I assume that even if this was noticed with some Java thing, it could well happen with only C++ involved, too? Would it be possible to write a unit test to catch this problem on the future for some new platform?",
       "revId": "4605e72471c3063e4ec6d60c4ae4c13378732862",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9562bb98_1a7a3541",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-10-13T11:06:38Z",
+      "side": 1,
+      "message": "confirming that the change solves the problem in non-debug build.\nmacros are now showing up in the Tools|Macros → Run dialog (previously none were shown, also the python samples were missing, and can be run from there), as well as in the Tools|Macros → Organize → js/bs dialogs.",
+      "revId": "4605e72471c3063e4ec6d60c4ae4c13378732862",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
