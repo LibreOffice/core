@@ -103,6 +103,9 @@ private:
     bool                    bProtected:1;
     bool                    bLastIsSymbol:1;
     bool                    mbDocumentDisposing:1;
+    /// To indicate if there is a partial prefix completion.
+    bool                    mbPartialPrefix:1;
+
     sal_uLong                   nValidation;
     SvxCellHorJustify       eAttrAdjust;
 
@@ -265,6 +268,9 @@ public:
 
     bool            IsInEnterHandler() const                { return bInEnterHandler; }
     bool            IsInOwnChange() const                   { return bInOwnChange; }
+
+    /// Returns true if there is a partial autocomplete suggestion.
+    bool            HasPartialComplete() const              { return mbPartialPrefix; };
 
     bool            IsModalMode( const SfxObjectShell* pDocSh );
 
