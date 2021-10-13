@@ -3119,7 +3119,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/report/meta,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/resource,\
 	MissingResourceException \
-	XLocale \
 	XStringResourceManager \
 	XStringResourcePersistence \
 	XStringResourceResolver \

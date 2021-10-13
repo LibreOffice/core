@@ -33,16 +33,6 @@ module com {  module sun {  module star {  module lang {
     displaying a number is a locale-sensitive operation; the number
     should be formatted according to the customs/conventions of the
     user's native country, region, or culture.  </p>
-
-    <p> Because a <code>Locale</code> object is just an identifier for a
-    region, no validity check is performed.  If you want to see whether
-    particular resources are available for the <code>Locale</code>, use
-    the com::sun::star::resource::XLocale::getAvailableLocales() method to ask for the
-    locales it supports.</p>
-
-    <p> Each implementation that performs locale-sensitive operations
-    allows you to get all the available objects of that type. Use the
-    com::sun::star::resource::XLocale interface to set the locale. </p>
  */
 published struct Locale
 {

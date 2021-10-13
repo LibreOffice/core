@@ -9766,27 +9766,6 @@ module com {
    module resource {
     published exception MissingResourceException: ::com::sun::star::uno::RuntimeException {
     };
-    published interface XLocale {
-     interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::lang::Locale create([in] string aLanguage, [in] string aCountry, [in] string aVariant);
-     ::com::sun::star::lang::Locale getDefault();
-     void setDefault([in] ::com::sun::star::lang::Locale newLocale);
-     sequence< ::com::sun::star::lang::Locale > getAvailableLocales();
-     sequence< string > getISOCountries();
-     sequence< string > getISOLanguages();
-     sequence< string > getLanguagesForCountry([in] string country);
-     string getISO3Language([in] ::com::sun::star::lang::Locale locale) raises (::com::sun::star::resource::MissingResourceException);
-     string getISO3Country([in] ::com::sun::star::lang::Locale locale) raises (::com::sun::star::resource::MissingResourceException);
-     string getDisplayLanguage_Default([in] ::com::sun::star::lang::Locale locale);
-     string getDisplayLanguage([in] ::com::sun::star::lang::Locale locale, [in] ::com::sun::star::lang::Locale inLocale);
-     string getDisplayCountry_Default([in] ::com::sun::star::lang::Locale locale);
-     string getDisplayCountry([in] ::com::sun::star::lang::Locale locale, [in] ::com::sun::star::lang::Locale inLocale);
-     string getDisplayVariant_Default([in] ::com::sun::star::lang::Locale locale);
-     string getDisplayVariant([in] ::com::sun::star::lang::Locale locale, [in] ::com::sun::star::lang::Locale inLocale);
-     string getDisplayName_Default([in] ::com::sun::star::lang::Locale locale);
-     string getDisplayName([in] ::com::sun::star::lang::Locale locale, [in] ::com::sun::star::lang::Locale inLocale);
-     boolean equals([in] ::com::sun::star::lang::Locale l1, [in] ::com::sun::star::lang::Locale l2);
-    };
    };
    module scanner {
     published enum ScanError {
