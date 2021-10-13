@@ -119,6 +119,56 @@ void JsonWriter::endStruct()
     mbFirstFieldInNode = false;
 }
 
+static char getEscapementChar(char ch)
+{
+    switch (ch)
+    {
+        case '\b':
+            return 'b';
+        case '\t':
+            return 't';
+        case '\n':
+            return 'n';
+        case '\f':
+            return 'f';
+        case '\r':
+            return 'r';
+        default:
+            return ch;
+    }
+}
+
+static bool writeEscapedSequence(sal_uInt32 ch, char*& pos)
+{
+    switch (ch)
+    {
+        case '\b':
+        case '\t':
+        case '\n':
+        case '\f':
+        case '\r':
+        case '"':
+        case '/':
+        case '\\':
+            *pos++ = '\\';
+            *pos++ = getEscapementChar(ch);
+            return true;
+        // Special processing of U+2028 and U+2029, which are valid JSON, but invalid JavaScript
+        // Write them in escaped '\u2028' or '\u2029' form
+        case 0x2028:
+        case 0x2029:
+            *pos++ = '\\';
+            *pos++ = 'u';
+            *pos++ = '2';
+            *pos++ = '0';
+            *pos++ = '2';
+            *pos++ = ch == 0x2028 ? '8' : '9';
+            return true;
+        default:
+            return false;
+    }
+}
+
 void JsonWriter::writeEscapedOUString(const OUString& rPropVal)
 {
     // Convert from UTF-16 to UTF-8 and perform escaping
@@ -126,42 +176,9 @@ void JsonWriter::writeEscapedOUString(const OUString& rPropVal)
     while (i < rPropVal.getLength())
     {
         sal_uInt32 ch = rPropVal.iterateCodePoints(&i);
-        if (ch == '\\')
-        {
-            *mPos = static_cast<char>(ch);
-            ++mPos;
-            *mPos = static_cast<char>(ch);
-            ++mPos;
-        }
-        else if (ch == '"')
-        {
-            *mPos = '\\';
-            ++mPos;
-            *mPos = static_cast<char>(ch);
-            ++mPos;
-        }
-        else if (ch == '\n')
-        {
-            *mPos = '\\';
-            ++mPos;
-            *mPos = 'n';
-            ++mPos;
-        }
-        else if (ch == '\r')
-        {
-            *mPos = '\\';
-            ++mPos;
-            *mPos = 'r';
-            ++mPos;
-        }
-        else if (ch == '\f')
-        {
-            *mPos = '\\';
-            ++mPos;
-            *mPos = 'f';
-            ++mPos;
-        }
-        else if (ch <= 0x7F)
+        if (writeEscapedSequence(ch, mPos))
+            continue;
+        if (ch <= 0x7F)
         {
             *mPos = static_cast<char>(ch);
             ++mPos;
@@ -200,9 +217,8 @@ void JsonWriter::put(const char* pPropName, const OUString& rPropVal)
 {
     auto nPropNameLength = strlen(pPropName);
     // But values can be any UTF-8,
-    // see rtl_ImplGetFastUTF8ByteLen in sal/rtl/string.cxx for why a factor 3
-    // is the worst case
-    auto nWorstCasePropValLength = rPropVal.getLength() * 3;
+    // if the string only contains of 0x2028, it will be expanded 6 times (see writeEscapedSequence)
+    auto nWorstCasePropValLength = rPropVal.getLength() * 6;
     ensureSpace(nPropNameLength + nWorstCasePropValLength + 8);
 
     addCommaBeforeField();
@@ -241,24 +257,31 @@ void JsonWriter::put(const char* pPropName, std::string_view rPropVal)
     for (size_t i = 0; i < rPropVal.size(); ++i)
     {
         char ch = rPropVal[i];
-        if (ch == '\\')
+        switch (ch)
         {
-            *mPos = ch;
-            ++mPos;
-            *mPos = ch;
-            ++mPos;
-        }
-        else if (ch == '"')
-        {
-            *mPos = '\\';
-            ++mPos;
-            *mPos = ch;
-            ++mPos;
-        }
-        else
-        {
-            *mPos = ch;
-            ++mPos;
+            case '\b':
+            case '\t':
+            case '\n':
+            case '\f':
+            case '\r':
+            case '"':
+            case '/':
+            case '\\':
+                writeEscapedSequence(ch, mPos);
+                break;
+            case '\xE2': // Special processing of U+2028 and U+2029
+                if (i + 2 < rPropVal.size() && rPropVal[i + 1] == '\x80'
+                    && (rPropVal[i + 2] == '\xA8' || rPropVal[i + 2] == '\xA9'))
+                {
+                    writeEscapedSequence(rPropVal[i + 2] == '\xA8' ? 0x2028 : 0x2029, mPos);
+                    i += 2;
+                    break;
+                }
+                [[fallthrough]];
+            default:
+                *mPos = ch;
+                ++mPos;
+                break;
         }
     }
 
