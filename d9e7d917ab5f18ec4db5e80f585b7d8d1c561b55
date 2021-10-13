@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d0687e8_62500f65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-13T08:21:24Z",
+      "side": 1,
+      "message": "There are more places in the configure.ac where 2019 is mentioned, some of them possibly also need care - would you think it\u0027s possible to touch them in this change?",
+      "revId": "d9e7d917ab5f18ec4db5e80f585b7d8d1c561b55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
