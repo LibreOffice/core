@@ -146,8 +146,7 @@ executeUnknownAuthDialog(
     // Get correct resource string
     OUString aMessage;
 
-    std::vector< OUString > aArguments;
-    aArguments.push_back( getContentPart( rXCert->getSubjectName()) );
+    std::vector< OUString > aArguments { getContentPart( rXCert->getSubjectName()) };
 
     std::locale aResLocale(Translate::Create("uui"));
 
