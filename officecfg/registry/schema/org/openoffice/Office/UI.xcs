@@ -40,6 +40,326 @@
       <info>
         <desc>Defines the templates for color settings used to customize the appearance of the applications.</desc>
       </info>
+      <group oor:name="WindowColor">
+        <info>
+          <desc>Allows to overwrite the system window color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the window color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="WindowTextColor">
+        <info>
+          <desc>Allows to overwrite the system window text color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the window text color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="DialogColor">
+        <info>
+          <desc>Allows to overwrite the system dialog color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the dialog color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="DialogTextColor">
+        <info>
+          <desc>Allows to overwrite the system dialog text color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the dialog text color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="FaceColor">
+        <info>
+          <desc>Allows to overwrite the system face color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the face color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="ActiveColor">
+        <info>
+          <desc>Allows to overwrite the system active color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the active color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="ActiveTextColor">
+        <info>
+          <desc>Allows to overwrite the system active text color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the active text color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="ActiveBorderColor">
+        <info>
+          <desc>Allows to overwrite the system active border color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the active border color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="SystemFontColor">
+        <info>
+          <desc>Allows to overwrite the system font color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the font color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="FieldColor">
+        <info>
+          <desc>Allows to overwrite the system field color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the field color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="MenuBarColor">
+        <info>
+          <desc>Allows to overwrite the system menubar color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the menubar color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="MenuBarTextColor">
+        <info>
+          <desc>Allows to overwrite the system menubar text color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the menubar text color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="MenuBarHighlightTextColor">
+        <info>
+          <desc>Allows to overwrite the system menubar highlight text color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the menubar hihlight text color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="MenuBarRolloverColor">
+        <info>
+          <desc>Allows to overwrite the system menubar rollover color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the menubar rollover color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="MenuBarRolloverTextColor">
+        <info>
+          <desc>Allows to overwrite the system menubar rollover text color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the menubar rollover text color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="MenuColor">
+        <info>
+          <desc>Allows to overwrite the system menu color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the menu color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="MenuTextColor">
+        <info>
+          <desc>Allows to overwrite the system menu text color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the menu text color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="MenuHighlightColor">
+        <info>
+          <desc>Allows to overwrite the system menu highlight color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the menu highlight color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="MenuHighlightTextColor">
+        <info>
+          <desc>Allows to overwrite the system menu highlight text color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the menu highlight text color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="MenuBorderColor">
+        <info>
+          <desc>Allows to overwrite the system menu border color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the menu border color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="ShadowColor">
+        <info>
+          <desc>Allows to overwrite the system shadow color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the shadow color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="DarkShadowColor">
+        <info>
+          <desc>Allows to overwrite the system dark shadow border color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the dark shadow color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="CheckedColor">
+        <info>
+          <desc>Allows to overwrite the system checked color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the checked color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="DeactiveColor">
+        <info>
+          <desc>Allows to overwrite the system deactive color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the deactive color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="DeactiveTextColor">
+        <info>
+          <desc>Allows to overwrite the system deactive text color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the deactive text color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="DeactiveBorderColor">
+        <info>
+          <desc>Allows to overwrite the system deactive border color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the deactive border color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="DisableColor">
+        <info>
+          <desc>Allows to overwrite the system disable color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the disable color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="LightColor">
+        <info>
+          <desc>Allows to overwrite the system light color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the light color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="LightBorderColor">
+        <info>
+          <desc>Allows to overwrite the system light border color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the light border color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="ActiveTabColor">
+        <info>
+          <desc>Allows to overwrite the system active tab color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the active tab color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="InactiveTabColor">
+        <info>
+          <desc>Allows to overwrite the system inactive tab color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the inactive tab color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="WorkspaceColor">
+        <info>
+          <desc>Allows to overwrite the system workspace color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the workspace color.</desc>
+          </info>
+        </prop>
+      </group>
       <group oor:name="DocColor">
         <info>
           <desc>Specifies the color settings for the document.</desc>
