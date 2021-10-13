@@ -63,19 +63,20 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
             XMLOFF_WARN_UNKNOWN("sc", aIter);
     }
     bool bOn(::cppu::any2bool(xPropSet->getPropertyValue( sOn )));
-    if( bLeft )
+    if( bLeft || bFirst )
     {
+        const OUString sShare = bLeft ? sShareContent : sShareFirstContent;
         if( bOn && bDisplay )
         {
-            if( ::cppu::any2bool(xPropSet->getPropertyValue( sShareContent )) )
+            if( ::cppu::any2bool(xPropSet->getPropertyValue( sShare )) )
                 // Don't share headers any longer
-                xPropSet->setPropertyValue( sShareContent, uno::makeAny(false) );
+                xPropSet->setPropertyValue( sShare, uno::makeAny(false) );
         }
         else
         {
-            if( !::cppu::any2bool(xPropSet->getPropertyValue( sShareContent )) )
+            if( !::cppu::any2bool(xPropSet->getPropertyValue( sShare )) )
                 // share headers
-                xPropSet->setPropertyValue( sShareContent, uno::makeAny(true) );
+                xPropSet->setPropertyValue( sShare, uno::makeAny(true) );
         }
     }
     else
