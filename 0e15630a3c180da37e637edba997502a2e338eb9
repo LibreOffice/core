@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e05bc55e_a8f40fc4",
+        "filename": "include/tools/json_writer.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-10-13T13:15:49Z",
+      "side": 1,
+      "message": "similarly, this could be\n    void put(const char* pPropName, std::u16string_view rPropValue);",
+      "revId": "0e15630a3c180da37e637edba997502a2e338eb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
