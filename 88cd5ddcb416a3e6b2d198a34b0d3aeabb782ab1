@@ -16,6 +16,24 @@
       "message": "Hi László,\nshould the test go in uiwriter instead of implemented it as a UITest?",
       "revId": "88cd5ddcb416a3e6b2d198a34b0d3aeabb782ab1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fdfe3ceb_59618496",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-10-13T10:45:39Z",
+      "side": 1,
+      "message": "Hi Xisco, I\u0027ve made the following UIWriter test, but it doesn\u0027t work on Linux, so it cannot catch the regression of the fix or the fix itself:\n\ndiff --git a/dictionaries b/dictionaries\nindex 6c9f1f6c2546..01bb1d2c47c2 160000\n--- a/dictionaries\n+++ b/dictionaries\n@@ -1 +1 @@\n-Subproject commit 6c9f1f6c2546d192d1a3b25d5f48d8081170e8be\n+Subproject commit 01bb1d2c47c2c132adf6c6bef77cf7ec39d84535-dirty\ndiff --git a/helpcontent2 b/helpcontent2\nindex 80e65e1d4c34..17c560682a20 160000\n--- a/helpcontent2\n+++ b/helpcontent2\n@@ -1 +1 @@\n-Subproject commit 80e65e1d4c346cde0c056a2288dfc02c5aae8f92\n+Subproject commit 17c560682a20858b0860796165806116f8152c64-dirty\ndiff --git a/sw/qa/extras/uiwriter/uiwriter2.cxx b/sw/qa/extras/uiwriter/uiwriter2.cxx\nindex c0f47824153d..0f7f1895cd81 100644\n--- a/sw/qa/extras/uiwriter/uiwriter2.cxx\n+++ b/sw/qa/extras/uiwriter/uiwriter2.cxx\n@@ -953,6 +953,55 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf39721_bad_paragraph_deletion)\n     CPPUNIT_ASSERT_EQUAL(3, getParagraphs());\n }\n \n+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf145093)\n+{\n+    // check move down with redlining: jumping over an insertion\n+    // resulted bad deletion of the not deleted adjacent paragraph in Show Changes mode\n+    SwDoc* pDoc \u003d createSwDoc(DATA_DIRECTORY, \"tdf39721.fodt\");\n+\n+    //turn on red-lining and show changes\n+    pDoc-\u003egetIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete\n+                                                      | RedlineFlags::ShowInsert);\n+    CPPUNIT_ASSERT_MESSAGE(\"redlining should be on\",\n+                           pDoc-\u003egetIDocumentRedlineAccess().IsRedlineOn());\n+    CPPUNIT_ASSERT_MESSAGE(\n+        \"redlines should be visible\",\n+        IDocumentRedlineAccess::IsShowChanges(pDoc-\u003egetIDocumentRedlineAccess().GetRedlineFlags()));\n+\n+    // check the original bug report\n+    // (Move at the end of the document creates an extra insertion.\n+    // Jumping over this extra insertion resulted a crash, but all\n+    // the other existing tracked paragraph insertions were infected,\n+    // not only at the end of the document.)\n+\n+    SwWrtShell* pWrtShell \u003d pDoc-\u003eGetDocShell()-\u003eGetWrtShell();\n+    dispatchCommand(mxComponent, \".uno:MoveDown\", {});\n+    dispatchCommand(mxComponent, \".uno:MoveDown\", {});\n+\n+    // This results a bad insertion at the end of the document\n+    // TODO fix this other problem later\n+    dispatchCommand(mxComponent, \".uno:MoveUp\", {});\n+\n+    // This was a crash (using invalid pointer)\n+    dispatchCommand(mxComponent, \".uno:MoveDown\", {});\n+\n+    // accept all changes\n+    dispatchCommand(mxComponent, \".uno:AcceptAllTrackedChanges\", {});\n+\n+    // check the general problem (arbitrary existing paragraph insertion)\n+\n+    // create a tracked paragraph insertion\n+    pWrtShell-\u003eUp(/*bSelect\u003d*/false);\n+    pWrtShell-\u003eRight(CRSR_SKIP_CHARS, /*bSelect\u003d*/false, 1, /*bBasicCall\u003d*/false);\n+    // insert tracked paragraph break\n+    pWrtShell-\u003eSplitNode();\n+    pWrtShell-\u003eDown(/*bSelect\u003d*/false);\n+    dispatchCommand(mxComponent, \".uno:MoveUp\", {});\n+    dispatchCommand(mxComponent, \".uno:MoveUp\", {});\n+    // This was a crash (using invalid pointer)\n+    dispatchCommand(mxComponent, \".uno:MoveDown\", {});\n+}\n+\n CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf54819)\n {\n     SwDoc* pDoc \u003d createSwDoc(DATA_DIRECTORY, \"tdf54819.fodt\");\n\n\nMaybe this is not true for Windows, it\u0027s better to use a test, which works on all platforms.\n\nBy the way, I hope, this patch can fix an older problem here:\n\nCPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf39721)\n{\n// FIXME: disabled on Windows because of a not reproducible problem (not related to the patch)\n#if !defined(_WIN32)\n\nSo likely it\u0027s possible to remove that condition, finally creating an uiwriter test for the same problem. (But I\u0027m not sure.)",
+      "parentUuid": "78d93b34_c750d60f",
+      "revId": "88cd5ddcb416a3e6b2d198a34b0d3aeabb782ab1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
