@@ -291,15 +291,43 @@ void call(
         switch (rtd == nullptr ? typelib_TypeClass_VOID : rtd->eTypeClass) {
         case typelib_TypeClass_VOID:
             break;
+#if defined MACOSX
+        case typelib_TypeClass_BOOLEAN:
+            assert(rtd->nSize == sizeof (bool));
+            *gpr = static_cast<unsigned long>(*static_cast<bool *>(retin));
+            assert(!retConv);
+            break;
+        case typelib_TypeClass_BYTE:
+            assert(rtd->nSize == sizeof (sal_Int8));
+            *gpr = *static_cast<sal_Int8 *>(retin);
+            assert(!retConv);
+            break;
+        case typelib_TypeClass_SHORT:
+            assert(rtd->nSize == sizeof (sal_Int16));
+            *gpr = *static_cast<sal_Int16 *>(retin);
+            assert(!retConv);
+            break;
+        case typelib_TypeClass_UNSIGNED_SHORT:
+            assert(rtd->nSize == sizeof (sal_uInt16));
+            *gpr = *static_cast<sal_uInt16 *>(retin);
+            assert(!retConv);
+            break;
+        case typelib_TypeClass_CHAR:
+            assert(rtd->nSize == sizeof (sal_Unicode));
+            *gpr = *static_cast<sal_Unicode *>(retin);
+            assert(!retConv);
+            break;
+#else
         case typelib_TypeClass_BOOLEAN:
         case typelib_TypeClass_BYTE:
         case typelib_TypeClass_SHORT:
         case typelib_TypeClass_UNSIGNED_SHORT:
+        case typelib_TypeClass_CHAR:
+#endif
         case typelib_TypeClass_LONG:
         case typelib_TypeClass_UNSIGNED_LONG:
         case typelib_TypeClass_HYPER:
         case typelib_TypeClass_UNSIGNED_HYPER:
-        case typelib_TypeClass_CHAR:
         case typelib_TypeClass_ENUM:
             std::memcpy(gpr, retin, rtd->nSize);
             assert(!retConv);
