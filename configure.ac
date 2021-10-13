@@ -2511,9 +2511,9 @@ libo_FUZZ_ARG_WITH(doxygen,
 ,with_doxygen=yes)
 
 AC_ARG_WITH(visual-studio,
-    AS_HELP_STRING([--with-visual-studio=<2019>],
+    AS_HELP_STRING([--with-visual-studio=<2019/2022>],
         [Specify which Visual Studio version to use in case several are
-         installed. Currently only 2019 (default) is supported.]),
+         installed. Currently 2019 (default) and 2022 are supported.]),
 ,)
 
 AC_ARG_WITH(windows-sdk,
