@@ -221,56 +221,16 @@ void JsonWriter::put(const char* pPropName, const OUString& rPropVal)
     ++mPos;
 }
 
-void JsonWriter::put(const char* pPropName, const OString& rPropVal)
+void JsonWriter::put(const char* pPropName, const char* pPropVal)
+{
+    put(pPropName, pPropVal, strlen(pPropVal));
+}
+
+void JsonWriter::put(const char* pPropName, const char* pPropVal, size_t nPropValLength)
 {
     // we assume property names are ascii
     auto nPropNameLength = strlen(pPropName);
     // escaping can double the length
-    auto nWorstCasePropValLength = rPropVal.getLength() * 2;
-    ensureSpace(nPropNameLength + nWorstCasePropValLength + 8);
-
-    addCommaBeforeField();
-
-    *mPos = '"';
-    ++mPos;
-    memcpy(mPos, pPropName, nPropNameLength);
-    mPos += nPropNameLength;
-    memcpy(mPos, "\": \"", 4);
-    mPos += 4;
-
-    // copy and perform escaping
-    for (int i = 0; i < rPropVal.getLength(); ++i)
-    {
-        char ch = rPropVal[i];
-        if (ch == '\\')
-        {
-            *mPos = ch;
-            ++mPos;
-            *mPos = ch;
-            ++mPos;
-        }
-        else if (ch == '"')
-        {
-            *mPos = '\\';
-            ++mPos;
-            *mPos = ch;
-            ++mPos;
-        }
-        else
-        {
-            *mPos = ch;
-            ++mPos;
-        }
-    }
-
-    *mPos = '"';
-    ++mPos;
-}
-
-void JsonWriter::put(const char* pPropName, const char* pPropVal)
-{
-    auto nPropNameLength = strlen(pPropName);
-    auto nPropValLength = strlen(pPropVal);
     auto nWorstCasePropValLength = nPropValLength * 2;
     ensureSpace(nPropNameLength + nWorstCasePropValLength + 8);
 
@@ -284,12 +244,9 @@ void JsonWriter::put(const char* pPropName, const char* pPropVal)
     mPos += 4;
 
     // copy and perform escaping
-    for (;;)
+    for (int i = 0; i < nPropValLength; ++i)
     {
-        char ch = *pPropVal;
-        if (!ch)
-            break;
-        ++pPropVal;
+        char ch = pPropVal[i];
         if (ch == '\\')
         {
             *mPos = ch;
@@ -391,14 +348,14 @@ void JsonWriter::putSimpleValue(const OUString& rPropVal)
     ++mPos;
 }
 
-void JsonWriter::putRaw(const rtl::OStringBuffer& rRawBuf)
+void JsonWriter::putRaw(std::string_view aRawBuf)
 {
-    ensureSpace(rRawBuf.getLength() + 2);
+    ensureSpace(aRawBuf.size() + 2);
 
     addCommaBeforeField();
 
-    memcpy(mPos, rRawBuf.getStr(), rRawBuf.getLength());
-    mPos += rRawBuf.getLength();
+    memcpy(mPos, aRawBuf.data(), aRawBuf.size());
+    mPos += aRawBuf.size();
 }
 
 void JsonWriter::addCommaBeforeField()

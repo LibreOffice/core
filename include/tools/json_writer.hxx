@@ -8,8 +8,16 @@
  */
 #pragma once
 
+#include <sal/config.h>
+
 #include <tools/toolsdllapi.h>
+#include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/types.h>
+
+#include <cstring>
+#include <string>
+#include <string_view>
 
 namespace rtl
 {
@@ -49,12 +57,9 @@ public:
     [[nodiscard]] ScopedJsonWriterStruct startStruct();
 
     void put(const char* pPropName, const OUString& rPropValue);
-    void put(const char* pPropName, const OString& rPropValue);
-    void put(const char* pPropName, const char* pPropVal);
-    void put(const char* pPropName, const std::string& rPropValue)
-    {
-        put(pPropName, rPropValue.data());
-    }
+    inline void put(const char* pPropName, const OString& rPropValue);
+    inline void put(const char* pPropName, const char* pPropVal);
+    inline void put(const char* pPropName, const std::string& rPropValue);
 
     void put(const char* pPropName, sal_uInt16 nPropVal) { put(pPropName, sal_Int64(nPropVal)); }
     void put(const char* pPropName, sal_Int16 nPropVal) { put(pPropName, sal_Int64(nPropVal)); }
@@ -67,7 +72,7 @@ public:
     void putSimpleValue(const OUString& rPropValue);
 
     /// This assumes that this data belongs at this point in the stream, and is valid, and properly encoded
-    void putRaw(const rtl::OStringBuffer&);
+    void putRaw(std::string_view);
 
     /** Hands ownership of the underlying storage buffer to the caller,
      * after this no more document modifications may be written. */
@@ -85,6 +90,7 @@ private:
     void addCommaBeforeField();
     void reallocBuffer(int noMoreBytesRequired);
     void writeEscapedOUString(const OUString& rPropVal);
+    void put(const char* pPropName, const char* pPropVal, size_t nPropValLength);
 
     // this part inline to speed up the fast path
     inline void ensureSpace(int noMoreBytesRequired)
@@ -95,6 +101,19 @@ private:
             reallocBuffer(noMoreBytesRequired);
     }
 };
+
+inline void JsonWriter::put(const char* pPropName, const OString& rPropValue)
+{
+    put(pPropName, rPropValue.getStr(), rPropValue.getLength());
+}
+inline void JsonWriter::put(const char* pPropName, const char* pPropVal)
+{
+    put(pPropName, pPropVal, strlen(pPropVal));
+}
+inline void JsonWriter::put(const char* pPropName, const std::string& rPropValue)
+{
+    put(pPropName, rPropValue.data(), rPropValue.size());
+}
 
 /**
  * Auto-closes the node.
