@@ -33,6 +33,23 @@
       "message": "If the idea is to show libreoffice in some dark mode when the system has some dark mode setting set then why not do that in (for windows) vcl/win/window/salframe.cxx WinSalFrame::UpdateSettings where we detect the appropriate colors from the system. And not open up yet another route of customization if at all possible.",
       "revId": "92e92237ff77df814eff0f4d6de098c9b815b222",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30f31461_4d6408d6",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-13T11:48:10Z",
+      "side": 1,
+      "message": "here and below, there should be no need to explicitly set these default nil values",
+      "revId": "92e92237ff77df814eff0f4d6de098c9b815b222",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
