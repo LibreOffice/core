@@ -1376,7 +1376,7 @@ bool ODatabaseModelImpl::hasTrustedScriptingSignature(bool bAllowUIToAddAuthor)
         uno::Reference<security::XDocumentDigitalSignatures> xSigner(
             security::DocumentDigitalSignatures::createWithVersion(
                 comphelper::getProcessComponentContext(), aODFVersion));
-        uno::Sequence<security::DocumentSignatureInformation> aInfo
+        const uno::Sequence<security::DocumentSignatureInformation> aInfo
             = xSigner->verifyScriptingContentSignatures(xStorage,
                                                         uno::Reference<io::XInputStream>());
 

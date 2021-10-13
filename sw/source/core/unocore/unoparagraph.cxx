@@ -705,7 +705,7 @@ SwXParagraph::getPropertyValuesTolerant(
 {
     SolarMutexGuard aGuard;
 
-    uno::Sequence< beans::GetDirectPropertyTolerantResult > aTmpRes(
+    const uno::Sequence< beans::GetDirectPropertyTolerantResult > aTmpRes(
         m_pImpl->GetPropertyValuesTolerant_Impl( rPropertyNames, false ) );
 
     // copy temporary result to final result type

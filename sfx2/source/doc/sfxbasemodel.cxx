@@ -534,8 +534,8 @@ namespace
     {
         Sequence< uno::Type > aStrippedTypes( io_rTypes.getLength() - 1 );
         ::std::remove_copy_if(
-            io_rTypes.begin(),
-            io_rTypes.end(),
+            std::cbegin(io_rTypes),
+            std::cend(io_rTypes),
             aStrippedTypes.getArray(),
             [&i_rTypeToStrip](const uno::Type& aType) { return aType == i_rTypeToStrip; }
         );
@@ -1026,7 +1026,7 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs2(const Sequence<
 
             for ( const auto& rOrg : std::as_const(m_pData->m_seqArguments) )
             {
-                auto bNew = std::none_of(seqArgsOld.begin(), seqArgsOld.end(),
+                auto bNew = std::none_of(std::cbegin(seqArgsOld), std::cend(seqArgsOld),
                     [&rOrg](const beans::PropertyValue& rOld){ return rOld.Name == rOrg.Name; });
                 if ( bNew )
                 {
@@ -2792,9 +2792,10 @@ SfxMedium* SfxBaseModel::handleLoadError( ErrCode nError, SfxMedium* pMedium )
 
 static void addTitle_Impl( Sequence < beans::PropertyValue >& rSeq, const OUString& rTitle )
 {
-    auto pProp = std::find_if(rSeq.begin(), rSeq.end(),
+    auto [begin, end] = toNonConstRange(rSeq);
+    auto pProp = std::find_if(begin, end,
         [](const beans::PropertyValue& rProp) { return rProp.Name == "Title"; });
-    if (pProp != rSeq.end())
+    if (pProp != end)
     {
         pProp->Value <<= rTitle;
     }
@@ -2802,8 +2803,9 @@ static void addTitle_Impl( Sequence < beans::PropertyValue >& rSeq, const OUStri
     {
         sal_Int32 nCount = rSeq.getLength();
         rSeq.realloc( nCount+1 );
-        rSeq[nCount].Name = "Title";
-        rSeq[nCount].Value <<= rTitle;
+        auto& el = rSeq[nCount];
+        el.Name = "Title";
+        el.Value <<= rTitle;
     }
 }
 

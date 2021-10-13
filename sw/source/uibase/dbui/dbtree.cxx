@@ -150,8 +150,9 @@ void SwDBTreeList::InitTreeList()
     auto const sort = comphelper::string::NaturalStringSorter(
         comphelper::getProcessComponentContext(),
         Application::GetSettings().GetUILanguageTag().getLocale());
+    auto [begin, end] = toNonConstRange(aDBNames);
     std::sort(
-        aDBNames.begin(), aDBNames.end(),
+        begin, end,
         [&sort](OUString const & x, OUString const & y)
         { return sort.compare(x, y) < 0; });
 

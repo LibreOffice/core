@@ -982,17 +982,17 @@ void fillAutoIncrementValue(const Reference<XPropertySet>& _xDatasource,
     _xDatasource->getPropertyValue(PROPERTY_INFO) >>= aInfo;
 
     // search the right propertyvalue
-    const PropertyValue* pValue =std::find_if(aInfo.begin(), aInfo.end(),
+    const PropertyValue* pValue =std::find_if(std::cbegin(aInfo), std::cend(aInfo),
                                         [](const PropertyValue& lhs)
                                         {return lhs.Name == PROPERTY_AUTOINCREMENTCREATION;} );
 
-    if ( pValue != aInfo.end() )
+    if ( pValue != std::cend(aInfo) )
         pValue->Value >>= _rsAutoIncrementValue;
-    pValue =std::find_if(aInfo.begin(), aInfo.end(),
+    pValue =std::find_if(std::cbegin(aInfo), std::cend(aInfo),
                          [](const PropertyValue& lhs)
                          {return lhs.Name == "IsAutoRetrievingEnabled";} );
 
-    if ( pValue != aInfo.end() )
+    if ( pValue != std::cend(aInfo) )
         pValue->Value >>= _rAutoIncrementValueEnabled;
 }
 

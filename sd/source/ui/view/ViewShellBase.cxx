@@ -873,9 +873,9 @@ OUString ViewShellBase::GetInitialViewShellType() const
 
         // Search the properties for the one that tells us what page kind to
         // use.
-        auto pProperty = std::find_if(aProperties.begin(), aProperties.end(),
+        auto pProperty = std::find_if(std::cbegin(aProperties), std::cend(aProperties),
             [](const beans::PropertyValue& rProperty) { return rProperty.Name == sUNO_View_PageKind; });
-        if (pProperty != aProperties.end())
+        if (pProperty != std::cend(aProperties))
         {
             sal_Int16 nPageKind = 0;
             pProperty->Value >>= nPageKind;

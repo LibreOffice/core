@@ -111,7 +111,7 @@ private:
 
     /// export one event (start container-element if necessary)
     SAL_DLLPRIVATE void ExportEvent(
-        css::uno::Sequence<css::beans::PropertyValue>& rEventValues,
+        const css::uno::Sequence<css::beans::PropertyValue>& rEventValues,
         const XMLEventName& rXmlEventName,
         bool bUseWhitespace,
         bool& rExported);

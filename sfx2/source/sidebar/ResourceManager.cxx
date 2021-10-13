@@ -740,7 +740,7 @@ void ResourceManager::GetToolPanelNodeNames (
                         std::vector<OUString>& rMatchingNames,
                         const utl::OConfigurationTreeRoot& aRoot)
 {
-    Sequence<OUString> aChildNodeNames (aRoot.getNodeNames());
+    const Sequence<OUString> aChildNodeNames (aRoot.getNodeNames());
     std::copy_if(aChildNodeNames.begin(), aChildNodeNames.end(), std::back_inserter(rMatchingNames),
         [](const OUString& rChildNodeName) { return rChildNodeName.startsWith( "private:resource/toolpanel/" ); });
 }

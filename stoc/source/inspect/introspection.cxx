@@ -92,7 +92,7 @@ typedef WeakImplHelper< XIntrospectionAccess, XMaterialHolder, XExactName,
 // Method to assert, if a class is derived from another class
 bool isDerivedFrom( const Reference<XIdlClass>& xToTestClass, const Reference<XIdlClass>& xDerivedFromClass )
 {
-    Sequence< Reference<XIdlClass> > aClassesSeq = xToTestClass->getSuperclasses();
+    const Sequence< Reference<XIdlClass> > aClassesSeq = xToTestClass->getSuperclasses();
 
     return std::any_of(aClassesSeq.begin(), aClassesSeq.end(),
         [&xDerivedFromClass](const Reference<XIdlClass>& rxClass) {
@@ -2275,7 +2275,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
 
                             // Option 1: Search for parameters for a listener class
                             // Disadvantage: Superclasses should be searched recursively
-                            Sequence< Reference<XIdlClass> > aParams = rxMethod->getParameterTypes();
+                            const Sequence< Reference<XIdlClass> > aParams = rxMethod->getParameterTypes();
 
                             css::uno::Reference<css::reflection::XIdlClass>
                                 xEventListenerClass(

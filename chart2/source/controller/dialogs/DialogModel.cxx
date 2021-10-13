@@ -473,7 +473,7 @@ std::vector< Reference< XDataSeriesContainer > >
             for( Reference< XCoordinateSystem > const & coords : aCooSysSeq )
             {
                 Reference< XChartTypeContainer > xCTCnt( coords, uno::UNO_QUERY_THROW );
-                Sequence< Reference< XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
+                const Sequence< Reference< XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
                 std::transform(
                     aChartTypeSeq.begin(), aChartTypeSeq.end(),
                     std::back_inserter( aResult ),

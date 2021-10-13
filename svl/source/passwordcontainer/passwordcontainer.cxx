@@ -182,7 +182,7 @@ PasswordMap StorageItem::getInfo()
 {
     PasswordMap aResult;
 
-    Sequence< OUString > aNodeNames     = ConfigItem::GetNodeNames( "Store" );
+    const Sequence< OUString > aNodeNames     = ConfigItem::GetNodeNames( "Store" );
     sal_Int32 aNodeCount = aNodeNames.getLength();
     Sequence< OUString > aPropNames( aNodeCount );
 

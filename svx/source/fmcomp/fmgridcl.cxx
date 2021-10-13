@@ -1296,7 +1296,7 @@ void FmGridControl::DeleteSelectedRows()
         SetUpdateMode( true );
 
         // how many rows are deleted?
-        sal_Int32 nDeletedRows = static_cast<sal_Int32>(std::count_if(aDeletedRows.begin(), aDeletedRows.end(),
+        sal_Int32 nDeletedRows = static_cast<sal_Int32>(std::count_if(std::cbegin(aDeletedRows), std::cend(aDeletedRows),
                                                                       [](const sal_Int32 nRow) { return nRow != 0; }));
 
         // have rows been deleted?
@@ -1344,10 +1344,10 @@ void FmGridControl::DeleteSelectedRows()
                 // not all the rows where deleted, so move to the first row which remained in the resultset
                 else
                 {
-                    auto pRow = std::find(aDeletedRows.begin(), aDeletedRows.end(), 0);
-                    if (pRow != aDeletedRows.end())
+                    auto pRow = std::find(std::cbegin(aDeletedRows), std::cend(aDeletedRows), 0);
+                    if (pRow != std::cend(aDeletedRows))
                     {
-                        auto i = static_cast<sal_Int32>(std::distance(aDeletedRows.begin(), pRow));
+                        auto i = static_cast<sal_Int32>(std::distance(std::cbegin(aDeletedRows), pRow));
                         getDataSource()->moveToBookmark(aBookmarks[i]);
                     }
                 }

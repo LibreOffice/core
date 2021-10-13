@@ -958,7 +958,7 @@ void SchXMLChartContext::MergeSeriesForStockChart()
         for( const auto& rCooSys : aCooSysSeq )
         {
             uno::Reference< chart2::XChartTypeContainer > xCTCnt( rCooSys, uno::UNO_QUERY_THROW );
-            uno::Sequence< uno::Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
+            const uno::Sequence< uno::Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
             auto pChartType = std::find_if(aChartTypes.begin(), aChartTypes.end(),
                 [](const auto& rChartType) { return rChartType->getChartType() == "com.sun.star.chart2.CandleStickChartType"; });
             if (pChartType != aChartTypes.end())

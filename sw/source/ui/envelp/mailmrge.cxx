@@ -326,9 +326,9 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
             uno::Sequence< beans::PropertyValue > aFilterProperties;
             aProps >>= aFilterProperties;
             OUString sUIName2;
-            auto pProp = std::find_if(aFilterProperties.begin(), aFilterProperties.end(),
+            auto pProp = std::find_if(std::cbegin(aFilterProperties), std::cend(aFilterProperties),
                 [](const beans::PropertyValue& rProp) { return rProp.Name == "UIName"; });
-            if (pProp != aFilterProperties.end())
+            if (pProp != std::cend(aFilterProperties))
                 pProp->Value >>= sUIName2;
             if( !sUIName2.isEmpty() ) {
                 if( sFilter == "writer8" )

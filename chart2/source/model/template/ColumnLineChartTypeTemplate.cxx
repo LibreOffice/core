@@ -169,7 +169,7 @@ void ColumnLineChartTypeTemplate::createChartTypes(
     {
         Reference< lang::XMultiServiceFactory > xFact(
             GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW );
-        Sequence< Reference< XDataSeries > > aFlatSeriesSeq( FlattenSequence( aSeriesSeq ));
+        const Sequence< Reference< XDataSeries > > aFlatSeriesSeq( FlattenSequence( aSeriesSeq ));
         sal_Int32 nNumberOfSeries = aFlatSeriesSeq.getLength();
         sal_Int32 nNumberOfLines = 0;
         sal_Int32 nNumberOfColumns = 0;

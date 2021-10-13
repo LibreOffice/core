@@ -362,10 +362,10 @@ void SAL_CALL ScXMLContentValidationContext::endFastElement( sal_Int32 /*nElemen
         uno::Sequence<beans::PropertyValue> aValues;
         pEvents->GetEventSequence( "OnError", aValues );
 
-        auto pValue = std::find_if(aValues.begin(), aValues.end(),
+        auto pValue = std::find_if(std::cbegin(aValues), std::cend(aValues),
             [](const beans::PropertyValue& rValue) {
                 return rValue.Name == "MacroName" || rValue.Name == "Script"; });
-        if (pValue != aValues.end())
+        if (pValue != std::cend(aValues))
             pValue->Value >>= sErrorTitle;
     }
 

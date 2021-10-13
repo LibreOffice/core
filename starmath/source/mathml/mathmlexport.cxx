@@ -523,7 +523,7 @@ void SmXMLExport::GetConfigurationSettings(Sequence<PropertyValue>& rProps)
     if (!xPropertySetInfo.is())
         return;
 
-    Sequence<Property> aProps = xPropertySetInfo->getProperties();
+    const Sequence<Property> aProps = xPropertySetInfo->getProperties();
     const sal_Int32 nCount = aProps.getLength();
     if (!nCount)
         return;
@@ -533,7 +533,7 @@ void SmXMLExport::GetConfigurationSettings(Sequence<PropertyValue>& rProps)
     const bool bUsedSymbolsOnly = pConfig && pConfig->IsSaveOnlyUsedSymbols();
 
     std::transform(aProps.begin(), aProps.end(), rProps.begin(),
-                   [bUsedSymbolsOnly, &xProps](Property& prop) {
+                   [bUsedSymbolsOnly, &xProps](const Property& prop) {
                        PropertyValue aRet;
                        if (prop.Name != "Formula" && prop.Name != "BasicLibraries"
                            && prop.Name != "DialogLibraries" && prop.Name != "RuntimeUID")

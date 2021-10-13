@@ -148,16 +148,17 @@ uno::Sequence< OUString > SAL_CALL SvFilterOptionsDialog::getSupportedServiceNam
 // XPropertyAccess
 uno::Sequence< beans::PropertyValue > SvFilterOptionsDialog::getPropertyValues()
 {
-    auto pProp = std::find_if(maMediaDescriptor.begin(), maMediaDescriptor.end(),
+    auto pProp = std::find_if(std::cbegin(maMediaDescriptor), std::cend(maMediaDescriptor),
         [](const beans::PropertyValue& rProp) { return rProp.Name == "FilterData"; });
-    auto i = static_cast<sal_Int32>(std::distance(maMediaDescriptor.begin(), pProp));
+    auto i = static_cast<sal_Int32>(std::distance(std::cbegin(maMediaDescriptor), pProp));
     sal_Int32 nCount = maMediaDescriptor.getLength();
     if ( i == nCount )
         maMediaDescriptor.realloc( ++nCount );
 
     // the "FilterData" Property is an Any that will contain our PropertySequence of Values
-    maMediaDescriptor[ i ].Name = "FilterData";
-    maMediaDescriptor[ i ].Value <<= maFilterDataSequence;
+    auto& item = maMediaDescriptor[ i ];
+    item.Name = "FilterData";
+    item.Value <<= maFilterDataSequence;
     return maMediaDescriptor;
 }
 

@@ -52,8 +52,8 @@ class VCL_DLLPUBLIC FilterConfigItem
     void     ImpInitTree( std::u16string_view rTree );
 
 
-    static css::beans::PropertyValue* GetPropertyValue(
-                css::uno::Sequence< css::beans::PropertyValue >& rPropSeq,
+    static const css::beans::PropertyValue* GetPropertyValue(
+                const css::uno::Sequence< css::beans::PropertyValue >& rPropSeq,
                     const OUString& rName );
     static  bool WritePropertyValue(
                 css::uno::Sequence< css::beans::PropertyValue >& rPropSeq,

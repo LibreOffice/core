@@ -180,7 +180,7 @@ void XMLEventExport::ExportSingleEvent(
 
 /// export a single event
 void XMLEventExport::ExportEvent(
-    Sequence<PropertyValue>& rEventValues,
+    const Sequence<PropertyValue>& rEventValues,
     const XMLEventName& rXmlEventName,
     bool bUseWhitespace,
     bool& rExported )

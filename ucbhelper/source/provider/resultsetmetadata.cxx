@@ -284,7 +284,7 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
                 Reference< XPropertySetInfo > xInfo = PropertiesManager::create( m_xContext );
     // Less (remote) calls...
 
-                Sequence< Property > aProps = xInfo->getProperties();
+                const Sequence< Property > aProps = xInfo->getProperties();
 
                 for ( Property& rProp : m_aProps )
                 {

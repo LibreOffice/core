@@ -590,13 +590,13 @@ XResultSet_impl::getCapabilities()
 uno::Reference< sdbc::XResultSetMetaData > SAL_CALL
 XResultSet_impl::getMetaData()
 {
-    auto pProp = std::find_if(m_sProperty.begin(), m_sProperty.end(),
+    auto pProp = std::find_if(std::cbegin(m_sProperty), std::cend(m_sProperty),
         [](const beans::Property& rProp) { return rProp.Name == "Title"; });
-    if (pProp != m_sProperty.end())
+    if (pProp != std::cend(m_sProperty))
     {
         std::vector< ::ucbhelper::ResultSetColumnData >
                                 aColumnData( m_sProperty.getLength() );
-        auto n = std::distance(m_sProperty.begin(), pProp);
+        auto n = std::distance(std::cbegin(m_sProperty), pProp);
         // @@@ #82177# - Determine correct value!
         aColumnData[ n ].isCaseSensitive = false;
 

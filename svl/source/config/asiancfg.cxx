@@ -98,7 +98,7 @@ void SvxAsianConfig::SetCharDistanceCompression(CharCompressType value) {
 css::uno::Sequence< css::lang::Locale > SvxAsianConfig::GetStartEndCharLocales()
     const
 {
-    css::uno::Sequence< OUString > ns(
+    const css::uno::Sequence< OUString > ns(
         officecfg::Office::Common::AsianLayout::StartEndCharacters::get(
             impl_->context)->
         getElementNames());

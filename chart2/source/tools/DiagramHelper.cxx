@@ -672,7 +672,7 @@ std::vector< Reference< XDataSeries > >
             for( Reference< XChartType> const & chartType : aChartTypeSeq )
             {
                 Reference< XDataSeriesContainer > xDSCnt( chartType, uno::UNO_QUERY_THROW );
-                Sequence< Reference< XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries() );
+                const Sequence< Reference< XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries() );
                 aResult.insert( aResult.end(), aSeriesSeq.begin(), aSeriesSeq.end() );
             }
         }
@@ -1201,7 +1201,7 @@ Sequence< Reference< XChartType > >
             for( Reference< XCoordinateSystem > const & coords : aCooSysSeq )
             {
                 Reference< XChartTypeContainer > xCTCnt( coords, uno::UNO_QUERY_THROW );
-                Sequence< Reference< XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
+                const Sequence< Reference< XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
                 aResult.insert( aResult.end(), aChartTypeSeq.begin(), aChartTypeSeq.end() );
             }
         }

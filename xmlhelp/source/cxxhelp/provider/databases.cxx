@@ -1156,7 +1156,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetHelpPackageFromP
         OUString aHelpMediaType( "application/vnd.sun.star.help" );
         if( xPackage->isBundle() )
         {
-            Sequence< Reference< deployment::XPackage > > aPkgSeq = xPackage->getBundle
+            const Sequence< Reference< deployment::XPackage > > aPkgSeq = xPackage->getBundle
                 ( Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>() );
             auto pSubPkg = std::find_if(aPkgSeq.begin(), aPkgSeq.end(),
                 [&aHelpMediaType](const Reference< deployment::XPackage >& xSubPkg) {

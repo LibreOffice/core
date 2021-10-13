@@ -170,7 +170,7 @@ Sequence< double > SAL_CALL UncachedDataSequence::getNumericalData()
     MutexGuard aGuard( GetMutex() );
     if( m_xDataProvider.is())
     {
-        Sequence< uno::Any > aValues( m_xDataProvider->getDataByRangeRepresentation( m_aSourceRepresentation ));
+        const Sequence< uno::Any > aValues( m_xDataProvider->getDataByRangeRepresentation( m_aSourceRepresentation ));
         aResult.realloc( aValues.getLength());
         std::transform( aValues.begin(), aValues.end(),
                           aResult.getArray(), CommonFunctors::AnyToDouble());
@@ -185,7 +185,7 @@ Sequence< OUString > SAL_CALL UncachedDataSequence::getTextualData()
     MutexGuard aGuard( GetMutex() );
     if( m_xDataProvider.is())
     {
-        Sequence< uno::Any > aValues( m_xDataProvider->getDataByRangeRepresentation( m_aSourceRepresentation ));
+        const Sequence< uno::Any > aValues( m_xDataProvider->getDataByRangeRepresentation( m_aSourceRepresentation ));
         aResult.realloc( aValues.getLength());
         std::transform( aValues.begin(), aValues.end(),
                           aResult.getArray(), CommonFunctors::AnyToString());

@@ -385,7 +385,7 @@ bool ContentProviderImplHelper::copyAdditionalPropertySet(
         const uno::Sequence< beans::PropertyValue > aValues
             = xOldPropAccess->getPropertyValues();
 
-        uno::Sequence< beans::Property > aProps
+        const uno::Sequence< beans::Property > aProps
             = xPropSetInfo->getProperties();
 
         if ( aValues.hasElements() )

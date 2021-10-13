@@ -222,7 +222,7 @@ Reference<XAccessibleStateSet> SAL_CALL AccessibleCell::getAccessibleStateSet()
                         xTempAccContext->getAccessibleStateSet();
                     if( rState.is() )
                     {
-                        css::uno::Sequence<short> aStates = rState->getStates();
+                        const css::uno::Sequence<short> aStates = rState->getStates();
                         if (std::find(aStates.begin(), aStates.end(), AccessibleStateType::EDITABLE) != aStates.end())
                         {
                             pStateSet->AddState (AccessibleStateType::EDITABLE);

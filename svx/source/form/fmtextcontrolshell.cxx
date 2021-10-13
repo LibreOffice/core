@@ -1068,7 +1068,7 @@ namespace svx
 
         try
         {
-            Sequence< Reference< css::awt::XControl > > aControls( _rxController->getControls() );
+            const Sequence< Reference< css::awt::XControl > > aControls( _rxController->getControls() );
             m_aControlObservers.resize( 0 );
             m_aControlObservers.reserve( aControls.getLength() );
 

@@ -935,10 +935,10 @@ static bool getScaleXValue(const uno::Reference<beans::XPropertySet>& xSet)
         uno::Sequence<beans::PropertyValue> aTextPathProperties;
         aIterator->Value >>= aTextPathProperties;
         auto aIterator2 = std::find_if(
-            aTextPathProperties.begin(), aTextPathProperties.end(),
+            std::cbegin(aTextPathProperties), std::cend(aTextPathProperties),
             [](const beans::PropertyValue& rValue) { return rValue.Name == "ScaleX"; });
 
-        if (aIterator2 != aTextPathProperties.end())
+        if (aIterator2 != std::cend(aTextPathProperties))
         {
             aIterator2->Value >>= bScaleX;
         }

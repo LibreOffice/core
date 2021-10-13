@@ -77,7 +77,8 @@ ignoreIandEfollowedByYa_ja_JP::foldingImpl( const OUString& inStr, sal_Int32 sta
     if (pOffset) {
         // Allocate nCount length to offset argument.
         pOffset->realloc( nCount );
-        std::iota(pOffset->begin(), pOffset->end(), startPos);
+        auto [begin, end] = toNonConstRange(*pOffset);
+        std::iota(begin, end, startPos);
     }
 
 

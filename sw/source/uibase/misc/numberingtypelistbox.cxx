@@ -88,7 +88,8 @@ void SwNumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
                 if (nValue > style::NumberingType::CHARS_LOWER_LETTER_N)
                 {
                     // Insert only if offered by i18n framework per configuration.
-                    bInsert = std::find(aTypes.begin(), aTypes.end(), nValue) != aTypes.end();
+                    bInsert = std::find(std::cbegin(aTypes), std::cend(aTypes), nValue)
+                              != std::cend(aTypes);
                 }
         }
         if (bInsert)

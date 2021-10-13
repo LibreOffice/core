@@ -920,7 +920,7 @@ Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation
         else
         {
             // Maybe this 'else' part and the functions is not necessary anymore.
-            Sequence< OUString > aLabels = m_bDataInColumns ? getRowDescriptions() : getColumnDescriptions();
+            const Sequence< OUString > aLabels = m_bDataInColumns ? getRowDescriptions() : getColumnDescriptions();
             aResult.realloc( aLabels.getLength() );
             transform( aLabels.begin(), aLabels.end(),
                        aResult.getArray(), CommonFunctors::makeAny< OUString >() );
@@ -931,11 +931,9 @@ Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation
         sal_Int32 nIndex = aRange.toInt32();
         if( nIndex >= 0 )
         {
-            Sequence< double > aData;
-            if( m_bDataInColumns )
-                aData = m_aInternalData.getColumnValues(nIndex);
-            else
-                aData = m_aInternalData.getRowValues(nIndex);
+            const Sequence< double > aData = m_bDataInColumns
+                                                 ? m_aInternalData.getColumnValues(nIndex)
+                                                 : m_aInternalData.getRowValues(nIndex);
             if( aData.hasElements() )
             {
                 aResult.realloc( aData.getLength());

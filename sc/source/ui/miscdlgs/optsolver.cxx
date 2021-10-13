@@ -862,10 +862,11 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
         sal_Int32 nAdd = ( aRange.aEnd.Col() - aRange.aStart.Col() + 1 ) *
                          ( aRange.aEnd.Row() - aRange.aStart.Row() + 1 );
         aVariables.realloc( nVarPos + nAdd );
+        auto it = aVariables.begin() + nVarPos;
 
         for (SCROW nRow = aRange.aStart.Row(); nRow <= aRange.aEnd.Row(); ++nRow)
             for (SCCOL nCol = aRange.aStart.Col(); nCol <= aRange.aEnd.Col(); ++nCol)
-                aVariables[nVarPos++] = table::CellAddress( nTab, nCol, nRow );
+                *it++ = table::CellAddress( nTab, nCol, nRow );
     }
 
     uno::Sequence<sheet::SolverConstraint> aConstraints;
@@ -969,9 +970,8 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
     // copy old document values
 
     sal_Int32 nVarCount = aVariables.getLength();
-    uno::Sequence<double> aOldValues;
-    aOldValues.realloc( nVarCount );
-    std::transform(aVariables.begin(), aVariables.end(), aOldValues.begin(),
+    uno::Sequence<double> aOldValues( nVarCount );
+    std::transform(std::cbegin(aVariables), std::cend(aVariables), aOldValues.begin(),
         [this](const table::CellAddress& rVariable) -> double {
             ScAddress aCellPos;
             ScUnoConversion::FillScAddress( aCellPos, rVariable );
@@ -1026,7 +1026,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             for (nVarPos=0; nVarPos<nVarCount; ++nVarPos)
             {
                 ScAddress aCellPos;
-                ScUnoConversion::FillScAddress( aCellPos, aVariables[nVarPos] );
+                ScUnoConversion::FillScAddress( aCellPos, std::as_const(aVariables)[nVarPos] );
                 rFunc.SetValueCell(aCellPos, aSolution[nVarPos], false);
             }
             mpDocShell->UnlockPaint();
@@ -1064,7 +1064,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
         {
             ScAddress aCellPos;
             ScUnoConversion::FillScAddress( aCellPos, aVariables[nVarPos] );
-            rFunc.SetValueCell(aCellPos, aOldValues[nVarPos], false);
+            rFunc.SetValueCell(aCellPos, std::as_const(aOldValues)[nVarPos], false);
         }
         mpDocShell->UnlockPaint();
     }

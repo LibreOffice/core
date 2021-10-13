@@ -371,7 +371,7 @@ namespace xmloff
                         "OElementImport::implApplyGenericProperties: conversion to sequences other than 'sequence< short >' not implemented, yet!" );
 
 
-                    std::transform(aXMLValueList.begin(), aXMLValueList.end(), aPropertyValueList.begin(),
+                    std::transform(std::cbegin(aXMLValueList), std::cend(aXMLValueList), aPropertyValueList.begin(),
                         [](const Any& rXMLValue) -> sal_Int16 {
                             // only value sequences of numeric types implemented so far.
                             double nVal( 0 );

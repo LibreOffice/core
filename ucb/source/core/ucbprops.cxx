@@ -254,9 +254,9 @@ sal_Bool SAL_CALL UcbPropertiesManager::hasPropertyByName( const OUString& Name 
 bool UcbPropertiesManager::queryProperty(
                                 const OUString& rName, Property& rProp )
 {
-    auto pProp = std::find_if(m_pProps.begin(), m_pProps.end(),
+    auto pProp = std::find_if(std::cbegin(m_pProps), std::cend(m_pProps),
         [&rName](const Property& rCurrProp) { return rCurrProp.Name == rName; });
-    if (pProp != m_pProps.end())
+    if (pProp != std::cend(m_pProps))
     {
         rProp = *pProp;
         return true;

@@ -247,7 +247,7 @@ std::vector< std::shared_ptr< ClientInfo > > RemoteServer::getClients()
     // TODO: we should probably add some sort of extra labelling to mark
     // authorised AND connected client.
     Reference< XNameAccess > const xConfig = officecfg::Office::Impress::Misc::AuthorisedRemotes::get();
-    Sequence< OUString > aNames = xConfig->getElementNames();
+    const Sequence< OUString > aNames = xConfig->getElementNames();
     std::transform(aNames.begin(), aNames.end(), std::back_inserter(aClients),
         [](const OUString& rName) -> std::shared_ptr<ClientInfo> {
             return std::make_shared<ClientInfo>(rName, true); });
