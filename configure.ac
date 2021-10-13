@@ -2511,9 +2511,9 @@ libo_FUZZ_ARG_WITH(doxygen,
 ,with_doxygen=yes)
 
 AC_ARG_WITH(visual-studio,
-    AS_HELP_STRING([--with-visual-studio=<2019>],
+    AS_HELP_STRING([--with-visual-studio=<2019/2022>],
         [Specify which Visual Studio version to use in case several are
-         installed. Currently only 2019 (default) is supported.]),
+         installed. Currently 2019 (default) and 2022 are supported.]),
 ,)
 
 AC_ARG_WITH(windows-sdk,
@@ -3866,7 +3866,7 @@ vs_versions_to_check()
         map_vs_year_to_version "$1"
         vsversions=$vsversion
     else
-        # We accept only 2019
+        # Default version is 2019
         vsversions="16"
     fi
 }
@@ -3925,7 +3925,7 @@ find_ucrt()
 
 find_msvc()
 {
-    # Find Visual C++ 2019
+    # Find Visual C++
     # Args: $1 (optional) : The VS version year
     # Return values: $vctest, $vcyear, $vctoolset, $vcnumwithdot, $vcbuildnumber
 
@@ -4021,7 +4021,7 @@ if test "$_os" = "WINNT"; then
         if test -n "$with_visual_studio"; then
             AC_MSG_ERROR([no Visual Studio $with_visual_studio installation found])
         else
-            AC_MSG_ERROR([no Visual Studio 2019 installation found])
+            AC_MSG_ERROR([no Visual Studio installation found])
         fi
     fi
     AC_MSG_RESULT([])
@@ -14631,7 +14631,7 @@ place yourself in a working directory of you choice.
 
  git clone git://git.savannah.gnu.org/make.git
 
- [go to Start menu, open "Visual Studio 2019", click "x86 Native Tools Command Prompt" or "x64 Native Tools Command Prompt"]
+ [go to Start menu, open "Visual Studio 2019" or "Visual Studio 2022", and then click "x86 Native Tools Command Prompt" or "x64 Native Tools Command Prompt"]
  set PATH=%PATH%;C:\Cygwin\bin
  [or Cygwin64, if that is what you have]
  cd path-to-make-repo-you-cloned-above
