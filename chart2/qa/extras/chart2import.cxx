@@ -2001,7 +2001,7 @@ void Chart2ImportTest::testTdf116163()
     CPPUNIT_ASSERT(xTextualDataSequence.is());
 
     std::vector<OUString> aCategories;
-    Sequence<OUString> aTextData(xTextualDataSequence->getTextualData());
+    const Sequence<OUString> aTextData(xTextualDataSequence->getTextualData());
     ::std::copy(aTextData.begin(), aTextData.end(),
         ::std::back_inserter(aCategories));
 

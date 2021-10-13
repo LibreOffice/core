@@ -514,7 +514,7 @@ namespace svxform
             // let's see if the data source which the form belongs to (if any)
             // has a setting for the preferred line end format
             bool bDosLineEnds = false;
-            Sequence< PropertyValue > aInfo = lcl_getDataSourceIndirectProperties( _rxModel, m_xContext );
+            const Sequence< PropertyValue > aInfo = lcl_getDataSourceIndirectProperties( _rxModel, m_xContext );
             const PropertyValue* pInfo = std::find_if(aInfo.begin(), aInfo.end(),
                 [](const PropertyValue& rInfo) { return rInfo.Name == "PreferDosLikeLineEnds"; });
             if (pInfo != aInfo.end())

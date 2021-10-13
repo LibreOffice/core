@@ -375,15 +375,16 @@ namespace pcr
             Reference< XMultiServiceFactory > xDocumentFactory( m_xDocument, UNO_QUERY );
             OSL_ENSURE( xDocumentFactory.is(), "CellBindingHelper::isSpreadsheetDocumentWhichSupplies: spreadsheet document, but no factory?" );
 
-            Sequence< OUString > aAvailableServices;
             if ( xDocumentFactory.is() )
-                aAvailableServices = xDocumentFactory->getAvailableServiceNames( );
+            {
+                const Sequence<OUString> aAvailableServices = xDocumentFactory->getAvailableServiceNames( );
 
-            bYesItIs = std::any_of(
-                aAvailableServices.begin(),
-                aAvailableServices.end(),
-                StringCompare( _rService )
-            );
+                bYesItIs = std::any_of(
+                    aAvailableServices.begin(),
+                    aAvailableServices.end(),
+                    StringCompare( _rService )
+                );
+            }
         }
 
         return bYesItIs;

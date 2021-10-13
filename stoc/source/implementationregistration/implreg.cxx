@@ -254,7 +254,7 @@ OUString searchLinkTargetForImpl(const Reference < XRegistryKey >& xRootKey,
 
     if (xKey.is())
     {
-        Sequence< Reference < XRegistryKey > > subKeys = xKey->openKeys();
+        const Sequence< Reference < XRegistryKey > > subKeys = xKey->openKeys();
 
         OUString qualifiedLinkName( slash_UNO + linkName );
 
@@ -283,7 +283,7 @@ void createUniqueSubEntry(const Reference < XRegistryKey > & xSuperKey,
 
     if (xSuperKey->getValueType() == RegistryValueType_ASCIILIST)
     {
-        Sequence<OUString> implEntries = xSuperKey->getAsciiListValue();
+        const Sequence<OUString> implEntries = xSuperKey->getAsciiListValue();
         sal_Int32 length = implEntries.getLength();
 
         bool bReady = comphelper::findValue(implEntries, value) != -1;
@@ -320,7 +320,7 @@ bool deleteSubEntry(const Reference < XRegistryKey >& xSuperKey, const OUString&
 {
     if (xSuperKey->getValueType() == RegistryValueType_ASCIILIST)
     {
-        Sequence<OUString> implEntries = xSuperKey->getAsciiListValue();
+        const Sequence<OUString> implEntries = xSuperKey->getAsciiListValue();
         sal_Int32 length = implEntries.getLength();
         sal_Int32 equals = static_cast<sal_Int32>(std::count(implEntries.begin(), implEntries.end(), value));
         bool hasNoImplementations = false;
@@ -423,7 +423,7 @@ void deleteUserLink(const Reference < XRegistryKey >& xRootKey,
     {
         if (xOldKey->getValueType() == RegistryValueType_ASCIILIST)
         {
-            Sequence<OUString> implEntries = xOldKey->getAsciiListValue();
+            const Sequence<OUString> implEntries = xOldKey->getAsciiListValue();
             sal_Int32 length = implEntries.getLength();
             sal_Int32 equals = static_cast<sal_Int32>(std::count(implEntries.begin(), implEntries.end(), implName));
             bool hasNoImplementations = false;
@@ -438,20 +438,21 @@ void deleteUserLink(const Reference < XRegistryKey >& xRootKey,
                 if (length > equals + 1)
                 {
                     Sequence<OUString> implEntriesNew(length - equals - 1);
+                    auto pNewArray = implEntriesNew.getArray();
 
                     sal_Int32 j = 0;
                     bool first = true;
                     for (sal_Int32 i = 0; i < length; i++)
                     {
-                        if (implEntries.getConstArray()[i] != implName)
+                        if (implEntries[i] != implName)
                         {
                             if (first)
                             {
-                                oldImpl = implEntries.getConstArray()[i];
+                                oldImpl = implEntries[i];
                                 first = false;
                             } else
                             {
-                                implEntriesNew.getArray()[j++] = implEntries.getConstArray()[i];
+                                pNewArray[j++] = implEntries[i];
                             }
                         }
                     }
@@ -459,7 +460,7 @@ void deleteUserLink(const Reference < XRegistryKey >& xRootKey,
                     xOldKey->setAsciiListValue(implEntriesNew);
                 } else
                 {
-                    oldImpl = implEntries.getConstArray()[0];
+                    oldImpl = implEntries[0];
                     OUString path(xOldKey->getKeyName());
                     xOldKey->closeKey();
                     xRootKey->deleteKey(path);
@@ -727,7 +728,7 @@ void deleteAllServiceEntries(    const Reference < XSimpleRegistry >& xReg,
         {
             if (xServiceKey->getValueType() == RegistryValueType_ASCIILIST)
             {
-                Sequence<OUString> implEntries = xServiceKey->getAsciiListValue();
+                const Sequence<OUString> implEntries = xServiceKey->getAsciiListValue();
                 sal_Int32 length = implEntries.getLength();
                 sal_Int32 equals = static_cast<sal_Int32>(std::count(implEntries.begin(), implEntries.end(), implName));
 
@@ -779,7 +780,7 @@ bool is_supported_service(
 {
     if (xService_td->getName() == service_name)
         return true;
-    Sequence< Reference< reflection::XServiceTypeDescription > > seq(
+    const Sequence< Reference< reflection::XServiceTypeDescription > > seq(
         xService_td->getMandatoryServices() );
     return std::any_of(seq.begin(), seq.end(), [&service_name](const auto& rService) {
         return is_supported_service( service_name, rService ); });

@@ -2385,7 +2385,7 @@ uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
 {
     SolarMutexGuard aGuard;
     uno::Sequence< beans::PropertyState > aStates(aPropertyNames.getLength());
-    beans::PropertyState* pStates = aStates.getArray();
+    auto [pStates, end] = toNonConstRange(aStates);
     SwFrameFormat* pFormat = GetFrameFormat();
     if(pFormat)
     {
@@ -2458,7 +2458,7 @@ uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
     }
     else if(IsDescriptor())
     {
-        std::fill(aStates.begin(), aStates.end(), beans::PropertyState_DIRECT_VALUE);
+        std::fill(pStates, end, beans::PropertyState_DIRECT_VALUE);
     }
     else
         throw uno::RuntimeException();

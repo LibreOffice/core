@@ -734,9 +734,10 @@ uno::Any getPropertyValue( const uno::Sequence< beans::PropertyValue >& aProp, c
 
 bool setPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, const OUString& aName, const uno::Any& aValue )
 {
-    auto pProp = std::find_if(aProp.begin(), aProp.end(),
+    auto [begin, end] = toNonConstRange(aProp);
+    auto pProp = std::find_if(begin, end,
         [&aName](const beans::PropertyValue& rProp) { return rProp.Name == aName; });
-    if (pProp != aProp.end())
+    if (pProp != end)
     {
         pProp->Value = aValue;
         return true;

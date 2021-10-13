@@ -663,8 +663,8 @@ bool XMLTextColumnsPropertyHandler::equals(
           xColumns1->getReferenceValue() != xColumns2->getReferenceValue() )
         return false;
 
-    Sequence < TextColumn > aColumns1 = xColumns1->getColumns();
-    Sequence < TextColumn > aColumns2 = xColumns2->getColumns();
+    const Sequence < TextColumn > aColumns1 = xColumns1->getColumns();
+    const Sequence < TextColumn > aColumns2 = xColumns2->getColumns();
 
     return std::equal(aColumns1.begin(), aColumns1.end(), aColumns2.begin(), aColumns2.end(),
         [](const TextColumn& a, const TextColumn& b) {

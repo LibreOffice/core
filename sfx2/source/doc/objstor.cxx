@@ -872,9 +872,9 @@ ErrCode SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell const *
                 Any aAny = xFilterCFG->getByName( pFilter->GetName() );
                 if ( aAny >>= aProps )
                 {
-                    auto pProp = std::find_if(aProps.begin(), aProps.end(),
+                    auto pProp = std::find_if(std::cbegin(aProps), std::cend(aProps),
                         [](const PropertyValue& rProp) { return rProp.Name == "UIComponent"; });
-                    if (pProp != aProps.end())
+                    if (pProp != std::cend(aProps))
                     {
                         OUString aServiceName;
                         pProp->Value >>= aServiceName;
@@ -2179,9 +2179,9 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
     }
 
     OUString aFilterImplName;
-    auto pProp = std::find_if(aProps.begin(), aProps.end(),
+    auto pProp = std::find_if(std::cbegin(aProps), std::cend(aProps),
         [](const beans::PropertyValue& rFilterProp) { return rFilterProp.Name == "FilterService"; });
-    if (pProp != aProps.end())
+    if (pProp != std::cend(aProps))
         pProp->Value >>= aFilterImplName;
 
     uno::Reference< document::XFilter > xLoader;
@@ -2358,9 +2358,9 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
             xFilters->getByName( aFilterName ) >>= aProps;
 
         OUString aFilterImplName;
-        auto pProp = std::find_if(aProps.begin(), aProps.end(),
+        auto pProp = std::find_if(std::cbegin(aProps), std::cend(aProps),
             [](const beans::PropertyValue& rFilterProp) { return rFilterProp.Name == "FilterService"; });
-        if (pProp != aProps.end())
+        if (pProp != std::cend(aProps))
             pProp->Value >>= aFilterImplName;
 
         if ( !aFilterImplName.isEmpty() )

@@ -439,9 +439,9 @@ bool IsExperimental(const OUString& rsCommandName, const OUString& rModuleName)
             if (xNameAccess->getByName( rModuleName ) >>= xUICommandLabels )
                 xUICommandLabels->getByName(rsCommandName) >>= aProperties;
 
-            auto pProp = std::find_if(aProperties.begin(), aProperties.end(),
+            auto pProp = std::find_if(std::cbegin(aProperties), std::cend(aProperties),
                 [](const beans::PropertyValue& rProp) { return rProp.Name == "IsExperimental"; });
-            if (pProp != aProperties.end())
+            if (pProp != std::cend(aProperties))
             {
                 bool bValue;
                 return (pProp->Value >>= bValue) && bValue;

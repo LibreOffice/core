@@ -333,12 +333,13 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
     if(m_aSavedDocuments.hasElements())
     {
         uno::Sequence< OUString > aTempDocuments(m_aSavedDocuments.getLength());
-        OUString* pTempDocuments = std::copy_if(m_aSavedDocuments.begin(), m_aSavedDocuments.end(), aTempDocuments.begin(),
+        auto begin = aTempDocuments.begin();
+        OUString* pTempDocuments = std::copy_if(std::cbegin(m_aSavedDocuments), std::cend(m_aSavedDocuments), begin,
             [](const OUString& rDoc) { return SWUnoHelper::UCB_IsFile( rDoc ); });
-        sal_Int32 nIndex = static_cast<sal_Int32>(std::distance(aTempDocuments.begin(), pTempDocuments));
+        sal_Int32 nIndex = static_cast<sal_Int32>(std::distance(begin, pTempDocuments));
         if(nIndex < m_aSavedDocuments.getLength())
         {
-            m_aSavedDocuments = aTempDocuments;
+            m_aSavedDocuments.swap(aTempDocuments);
             m_aSavedDocuments.realloc(nIndex);
         }
     }

@@ -4253,7 +4253,8 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         {
             uno::Sequence< OUString > vListEntries;
             pListEntries->second >>= vListEntries;
-            copy(vListEntries.begin(), vListEntries.end(), back_inserter(aListItems));
+            aListItems.reserve(vListEntries.getLength());
+            copy(std::cbegin(vListEntries), std::cend(vListEntries), back_inserter(aListItems));
         }
     }
 

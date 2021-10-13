@@ -393,7 +393,7 @@ ScriptEventHelper::getEventListeners() const
     for ( const Type& listType : aControlListeners )
     {
         OUString sFullTypeName = listType.getTypeName();
-        Sequence< OUString > sMeths =
+        const Sequence< OUString > sMeths =
             comphelper::getEventMethodsForType( listType );
         std::transform(sMeths.begin(), sMeths.end(), std::back_inserter(eventMethods),
             [&sFullTypeName](const OUString& rMeth) -> OUString { return sFullTypeName + DELIM + rMeth; });

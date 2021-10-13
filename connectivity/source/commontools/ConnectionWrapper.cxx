@@ -199,7 +199,8 @@ void OConnectionWrapper::createUniqueId( const OUString& _rURL
     if ( !_rPassword.isEmpty() )
         sha1.update(reinterpret_cast<unsigned char const*>(_rPassword.getStr()), _rPassword.getLength() * sizeof(sal_Unicode));
     // now we need to sort the properties
-    std::sort(_rInfo.begin(),_rInfo.end(),TPropertyValueLessFunctor());
+    auto [begin, end] = toNonConstRange(_rInfo);
+    std::sort(begin,end,TPropertyValueLessFunctor());
 
     for (PropertyValue const & prop : std::as_const(_rInfo))
     {

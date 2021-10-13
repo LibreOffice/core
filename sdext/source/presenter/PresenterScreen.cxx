@@ -141,9 +141,9 @@ Any SAL_CALL PresenterScreenJob::execute(
         pArg->Value >>= lEnv;
 
     Reference<frame::XModel2> xModel;
-    auto pProp = std::find_if(lEnv.begin(), lEnv.end(),
+    auto pProp = std::find_if(std::cbegin(lEnv), std::cend(lEnv),
         [](const beans::NamedValue& rProp) { return rProp.Name == "Model"; });
-    if (pProp != lEnv.end())
+    if (pProp != std::cend(lEnv))
         pProp->Value >>= xModel;
 
     Reference< XServiceInfo > xInfo( xModel, UNO_QUERY );

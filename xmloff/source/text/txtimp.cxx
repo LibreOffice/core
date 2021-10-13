@@ -1479,9 +1479,9 @@ void XMLTextImportHelper::FindOutlineStyleName( OUString& rStyleName,
                 Sequence<PropertyValue> aProperties;
                 m_xImpl->m_xChapterNumbering->getByIndex( nOutlineLevel )
                     >>= aProperties;
-                auto pProp = std::find_if(aProperties.begin(), aProperties.end(),
+                auto pProp = std::find_if(std::cbegin(aProperties), std::cend(aProperties),
                     [](const PropertyValue& rProp) { return rProp.Name == "HeadingStyleName"; });
-                if (pProp != aProperties.end())
+                if (pProp != std::cend(aProperties))
                 {
                     OUString aOutlineStyle;
                     pProp->Value >>= aOutlineStyle;

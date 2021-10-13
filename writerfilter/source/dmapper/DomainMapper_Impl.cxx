@@ -7832,9 +7832,9 @@ uno::Reference<beans::XPropertySet> DomainMapper_Impl::GetCurrentNumberingCharSt
         }
         uno::Sequence<beans::PropertyValue> aProps;
         xLevels->getByIndex(nListLevel) >>= aProps;
-        auto pProp = std::find_if(aProps.begin(), aProps.end(),
+        auto pProp = std::find_if(std::cbegin(aProps), std::cend(aProps),
             [](const beans::PropertyValue& rProp) { return rProp.Name == "CharStyleName"; });
-        if (pProp != aProps.end())
+        if (pProp != std::cend(aProps))
         {
             OUString aCharStyle;
             pProp->Value >>= aCharStyle;
@@ -7903,9 +7903,9 @@ sal_Int32 DomainMapper_Impl::getNumberingProperty(const sal_Int32 nListId, sal_I
         {
             uno::Sequence<beans::PropertyValue> aProps;
             xNumberingRules->getByIndex(nNumberingLevel) >>= aProps;
-            auto pProp = std::find_if(aProps.begin(), aProps.end(),
+            auto pProp = std::find_if(std::cbegin(aProps), std::cend(aProps),
                 [&aProp](const beans::PropertyValue& rProp) { return rProp.Name == aProp; });
-            if (pProp != aProps.end())
+            if (pProp != std::cend(aProps))
                 pProp->Value >>= nRet;
         }
     }
@@ -7934,9 +7934,9 @@ sal_Int32 DomainMapper_Impl::getCurrentNumberingProperty(const OUString& aProp)
     {
         uno::Sequence<beans::PropertyValue> aProps;
         xNumberingRules->getByIndex(nNumberingLevel) >>= aProps;
-        auto pPropVal = std::find_if(aProps.begin(), aProps.end(),
+        auto pPropVal = std::find_if(std::cbegin(aProps), std::cend(aProps),
             [&aProp](const beans::PropertyValue& rProp) { return rProp.Name == aProp; });
-        if (pPropVal != aProps.end())
+        if (pPropVal != std::cend(aProps))
             pPropVal->Value >>= nRet;
     }
 

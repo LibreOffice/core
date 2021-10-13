@@ -73,7 +73,7 @@ void XDataPilotTable2::testGetDrillDownData()
         sheet::DataResult aRes = aResData.Result;
         double nVal = aRes.Value;
 
-        Sequence< Sequence<Any> > aData = xDPTable->getDrillDownData(rResultCell);
+        const Sequence< Sequence<Any> > aData = xDPTable->getDrillDownData(rResultCell);
         double sum = 0;
 
         if( aData.getLength() > 1 )

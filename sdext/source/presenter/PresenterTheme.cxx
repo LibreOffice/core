@@ -323,7 +323,7 @@ bool PresenterTheme::ConvertToColor (
     Sequence<sal_Int8> aByteSequence;
     if (rColorSequence >>= aByteSequence)
     {
-        rColor = std::accumulate(aByteSequence.begin(), aByteSequence.end(), sal_uInt32(0),
+        rColor = std::accumulate(std::cbegin(aByteSequence), std::cend(aByteSequence), sal_uInt32(0),
             [](const sal_uInt32 nRes, const sal_uInt8 nByte) { return (nRes << 8) | nByte; });
         return true;
     }

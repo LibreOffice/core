@@ -652,7 +652,7 @@ namespace svt::table
         else
         {
             ::std::vector< ::Color > aColors( aAPIColors.getLength() );
-            std::transform(aAPIColors.begin(), aAPIColors.end(), aColors.begin(),
+            std::transform(std::cbegin(aAPIColors), std::cend(aAPIColors), aColors.begin(),
                 [](const css::util::Color& rAPIColor) -> ::Color { return Color(ColorTransparency, rAPIColor); });
             m_aRowColors = aColors;
         }

@@ -700,12 +700,12 @@ void UnoControlContainer::removeTabController( const uno::Reference< awt::XTabCo
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    auto pTabController = std::find_if(maTabControllers.begin(), maTabControllers.end(),
+    auto pTabController = std::find_if(std::cbegin(maTabControllers), std::cend(maTabControllers),
         [&TabController](const uno::Reference< awt::XTabController >& rTabController) {
             return rTabController.get() == TabController.get(); });
-    if (pTabController != maTabControllers.end())
+    if (pTabController != std::cend(maTabControllers))
     {
-        auto n = static_cast<sal_Int32>(std::distance(maTabControllers.begin(), pTabController));
+        auto n = static_cast<sal_Int32>(std::distance(std::cbegin(maTabControllers), pTabController));
         ::comphelper::removeElementAt( maTabControllers, n );
     }
 }

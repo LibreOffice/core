@@ -30,6 +30,7 @@
 #if defined LIBO_INTERNAL_ONLY
 # include <type_traits>
 # include <ostream>
+# include <utility>
 #endif
 
 #include "osl/interlck.h"
@@ -203,6 +204,13 @@ inline void Sequence< E >::realloc( sal_Int32 nSize )
         throw ::std::bad_alloc();
 }
 
+#if defined LIBO_INTERNAL_ONLY
+template <class E> inline void Sequence<E>::swap(Sequence& other)
+{
+    std::swap(_pSequence, other._pSequence);
+}
+#endif
+
 inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
     const ::rtl::ByteSequence & rByteSequence )
 {
@@ -270,6 +278,22 @@ inline std::basic_ostream<charT, traits> &operator<<(std::basic_ostream<charT, t
     }
     return os;
 }
+
+template <class E> inline auto toNonConstRange(css::uno::Sequence<E>& s)
+{
+    // Two iterators [begin, end] representing the non-const range of the Sequence.
+    // It only calls Sequence::getArray once, to avoid the second COW overhead when
+    // Sequence::begin() and Sequence::end() are called in pairs.
+    // Inheriting from pair allows to use std::tie to unpack the two iterators.
+    struct SequenceRange : public std::pair<E*, E*>
+    {
+        SequenceRange(E* ptr, sal_Int32 len) : std::pair<E*, E*>(ptr, ptr + len) {}
+        // These allow to pass it as range-expression to range-based for loops
+        E* begin() { return std::pair<E*, E*>::first; }
+        E* end() { return std::pair<E*, E*>::second; }
+    };
+    return SequenceRange(s.begin(), s.getLength());
+};
 
 /// @endcond
 

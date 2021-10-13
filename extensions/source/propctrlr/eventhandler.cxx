@@ -276,7 +276,7 @@ namespace pcr
             Reference< XIntrospectionAccess > xIntrospectionAccess(
                 _rxIntrospection->inspect( makeAny( _rxComponent ) ), UNO_SET_THROW );
 
-            Sequence< Type > aListeners( xIntrospectionAccess->getSupportedListeners() );
+            const Sequence< Type > aListeners( xIntrospectionAccess->getSupportedListeners() );
 
             std::copy( aListeners.begin(), aListeners.end(),
                          std::insert_iterator< TypeBag >( _out_rTypes, _out_rTypes.begin() ) );
@@ -770,7 +770,7 @@ namespace pcr
         }
 
         // the initial selection in the dialog
-        Sequence< OUString > aNames( pEventHolder->getElementNames() );
+        const Sequence< OUString > aNames( pEventHolder->getElementNames() );
         const OUString* pChosenEvent = std::find( aNames.begin(), aNames.end(), rForEvent.sListenerMethodName );
         sal_uInt16 nInitialSelection = static_cast<sal_uInt16>( pChosenEvent - aNames.begin() );
 

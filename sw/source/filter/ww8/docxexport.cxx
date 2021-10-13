@@ -1369,9 +1369,9 @@ void DocxExport::WriteTheme()
     uno::Reference<xml::dom::XDocument> themeDom;
     uno::Sequence< beans::PropertyValue > propList;
     xPropSet->getPropertyValue( aName ) >>= propList;
-    auto pProp = std::find_if(propList.begin(), propList.end(),
+    auto pProp = std::find_if(std::cbegin(propList), std::cend(propList),
         [](const beans::PropertyValue& rProp) { return rProp.Name == "OOXTheme"; });
-    if (pProp != propList.end())
+    if (pProp != std::cend(propList))
         pProp->Value >>= themeDom;
 
     // no theme dom to write
@@ -1472,14 +1472,14 @@ void DocxExport::WriteCustomXml()
     uno::Sequence<uno::Reference<xml::dom::XDocument> > customXmlDomPropslist;
     uno::Sequence< beans::PropertyValue > propList;
     xPropSet->getPropertyValue( aName ) >>= propList;
-    auto pProp = std::find_if(propList.begin(), propList.end(),
+    auto pProp = std::find_if(std::cbegin(propList), std::cend(propList),
         [](const beans::PropertyValue& rProp) { return rProp.Name == "OOXCustomXml"; });
-    if (pProp != propList.end())
+    if (pProp != std::cend(propList))
         pProp->Value >>= customXmlDomlist;
 
-    pProp = std::find_if(propList.begin(), propList.end(),
+    pProp = std::find_if(std::cbegin(propList), std::cend(propList),
         [](const beans::PropertyValue& rProp) { return rProp.Name == "OOXCustomXmlProps"; });
-    if (pProp != propList.end())
+    if (pProp != std::cend(propList))
         pProp->Value >>= customXmlDomPropslist;
 
     for (sal_Int32 j = 0; j < customXmlDomlist.getLength(); j++)
@@ -1589,9 +1589,9 @@ void DocxExport::WriteEmbeddings()
     uno::Sequence< beans::PropertyValue > embeddingsList;
     uno::Sequence< beans::PropertyValue > propList;
     xPropSet->getPropertyValue( aName ) >>= propList;
-    auto pProp = std::find_if(propList.begin(), propList.end(),
+    auto pProp = std::find_if(std::cbegin(propList), std::cend(propList),
         [](const beans::PropertyValue& rProp) { return rProp.Name == "OOXEmbeddings"; });
-    if (pProp != propList.end())
+    if (pProp != std::cend(propList))
         pProp->Value >>= embeddingsList;
     for (const auto& rEmbedding : std::as_const(embeddingsList))
     {

@@ -155,8 +155,8 @@ constexpr OUStringLiteral GCM_PROPERTY_RESOURCERESOLVER = u"ResourceResolver";
             sal_Int32 nOldSize = aTypes.getLength();
             aTypes.realloc( nOldSize + aAggTypes.getLength() );
             ::std::copy(
-                aAggTypes.begin(),
-                aAggTypes.end(),
+                std::cbegin(aAggTypes),
+                std::cend(aAggTypes),
                 aTypes.getArray() + nOldSize
             );
         }
@@ -522,9 +522,10 @@ constexpr OUStringLiteral GCM_PROPERTY_RESOURCERESOLVER = u"ResourceResolver";
         // look for duplicates, and remember them
         IntArrayArray::value_type& rDuplicateIds = gAmbiguousPropertyIds[ _nId ];
         // for this, sort the aggregate properties
+        auto [begin, end] = toNonConstRange(aAggregateProps);
         ::std::sort(
-            aAggregateProps.begin(),
-            aAggregateProps.end(),
+            begin,
+            end,
             PropertyNameLess()
         );
 
@@ -532,11 +533,11 @@ constexpr OUStringLiteral GCM_PROPERTY_RESOURCERESOLVER = u"ResourceResolver";
         for ( const Property& rProp : std::as_const(aProps) )
         {
             // look for the current property in the properties of our aggregate
-            const Property* pAggPropPos = ::std::find_if( aAggregateProps.begin(), aAggregateProps.end(), PropertyNameEqual( rProp.Name ) );
-            if ( pAggPropPos != aAggregateProps.end() )
+            const Property* pAggPropPos = ::std::find_if( std::cbegin(aAggregateProps), std::cend(aAggregateProps), PropertyNameEqual( rProp.Name ) );
+            if ( pAggPropPos != std::cend(aAggregateProps) )
             {   // found a duplicate
                 // -> remove from the aggregate property sequence
-                ::comphelper::removeElementAt( aAggregateProps, pAggPropPos - aAggregateProps.begin() );
+                ::comphelper::removeElementAt( aAggregateProps, pAggPropPos - std::cbegin(aAggregateProps) );
 
                 // and additionally, remember the id of this property
                 rDuplicateIds.push_back( rProp.Handle );

@@ -83,7 +83,7 @@ static Sequence< OUString> lcl_ImplGetPropertyNames( const Reference< XMultiProp
     DBG_ASSERT( xPSInf.is(), "UpdateFromModel: No PropertySetInfo!" );
     if ( xPSInf.is() )
     {
-        Sequence< Property> aProps = xPSInf->getProperties();
+        const Sequence< Property> aProps = xPSInf->getProperties();
         sal_Int32 nLen = aProps.getLength();
         aNames = Sequence< OUString>( nLen );
         std::transform(aProps.begin(), aProps.end(), aNames.begin(),

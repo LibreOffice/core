@@ -52,7 +52,7 @@ using ::com::sun::star::uno::Sequence;
             for( const auto& rChartType : aChartTypeSeq )
             {
                 Reference< chart2::XDataSeriesContainer > xDSCnt( rChartType, uno::UNO_QUERY_THROW );
-                Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries() );
+                const Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries() );
                 aResult.insert( aResult.end(), aSeriesSeq.begin(), aSeriesSeq.end() );
             }
         }
@@ -118,7 +118,7 @@ uno::Reference< chart2::XChartType > lcl_getChartTypeOfSeries(
             if( !xDataSeriesContainer.is() )
                 continue;
 
-            uno::Sequence< uno::Reference< chart2::XDataSeries > > aSeriesList( xDataSeriesContainer->getDataSeries() );
+            const uno::Sequence< uno::Reference< chart2::XDataSeries > > aSeriesList( xDataSeriesContainer->getDataSeries() );
             if (std::find(aSeriesList.begin(), aSeriesList.end(), xSeries) != aSeriesList.end())
                 return xChartType;
         }

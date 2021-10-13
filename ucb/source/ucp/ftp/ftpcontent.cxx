@@ -807,7 +807,7 @@ Sequence<Any> FTPContent::setPropertyValues(
                     ret[i] <<= excep;
                 }
         } else {
-            Sequence<Property> props =
+            const Sequence<Property> props =
                 getProperties(Reference<XCommandEnvironment>(nullptr));
 
             // either unknown or read-only

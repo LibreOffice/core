@@ -316,7 +316,7 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const css::uno::Sequence< OUS
 
     // We must be sure to return a valid information every time!
     // Set default to non readonly... similar to the configuration handling of this property.
-    std::fill(lStates.begin(), lStates.end(), false);
+    std::fill_n(lStates.begin(), lStates.getLength(), false);
 
     // no access - no information...
     Reference< XHierarchicalNameAccess > xHierarchyAccess = GetTree();
@@ -655,7 +655,7 @@ static void lcl_normalizeLocalNames(Sequence< OUString >& _rNames, ConfigNameFor
                 OUString sTypeName = xTypeContainer->getElementTemplateName();
                 sTypeName = sTypeName.copy(sTypeName.lastIndexOf('/')+1);
 
-                std::transform(_rNames.begin(), _rNames.end(), _rNames.begin(),
+                std::transform(std::cbegin(_rNames), std::cend(_rNames), _rNames.begin(),
                     [&sTypeName](const OUString& rName) -> OUString { return wrapConfigurationElementName(rName,sTypeName); });
             }
             else
@@ -663,7 +663,7 @@ static void lcl_normalizeLocalNames(Sequence< OUString >& _rNames, ConfigNameFor
                 Reference<XServiceInfo> xSVI(_xParentNode, UNO_QUERY);
                 if (xSVI.is() && xSVI->supportsService("com.sun.star.configuration.SetAccess"))
                 {
-                    std::transform(_rNames.begin(), _rNames.end(), _rNames.begin(),
+                    std::transform(std::cbegin(_rNames), std::cend(_rNames), _rNames.begin(),
                         [](const OUString& rName) -> OUString { return wrapConfigurationElementName(rName); });
                 }
             }

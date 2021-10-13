@@ -608,7 +608,7 @@ void FileDialogHelper_Impl::updateVersions()
                 if ( !xStorage.is() )
                     throw uno::RuntimeException();
 
-                uno::Sequence < util::RevisionTag > xVersions = SfxMedium::GetVersionList( xStorage );
+                const uno::Sequence < util::RevisionTag > xVersions = SfxMedium::GetVersionList( xStorage );
 
                 aEntries.realloc( xVersions.getLength() + 1 );
                 aEntries[0] = SfxResId( STR_SFX_FILEDLG_ACTUALVERSION );

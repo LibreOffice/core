@@ -90,7 +90,7 @@ public:
      */
     void startTable(const TablePropertyMapPtr& pProps);
 
-    void ApplyParagraphPropertiesFromTableStyle(TableParagraph rParaProp, std::vector< PropertyIds > aAllTableProperties, css::beans::PropertyValues rCellProperties);
+    void ApplyParagraphPropertiesFromTableStyle(TableParagraph rParaProp, std::vector< PropertyIds > aAllTableProperties, const css::beans::PropertyValues rCellProperties);
 
     /// Handle end of table.
     void endTable(unsigned int nestedTableLevel, bool bTableStartsAtCellStart);

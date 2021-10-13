@@ -1184,7 +1184,7 @@ bool FmXFormShell::executeControlConversionSlot_Lock(const Reference<XFormCompon
                 // find the control for the model
                 Reference<XControlContainer> xControlContainer(getControlContainerForView_Lock());
 
-                Sequence< Reference< XControl> > aControls( xControlContainer->getControls() );
+                const Sequence< Reference< XControl> > aControls( xControlContainer->getControls() );
 
                 Reference< XControl> xControl;
                 auto pControl = std::find_if(aControls.begin(), aControls.end(),

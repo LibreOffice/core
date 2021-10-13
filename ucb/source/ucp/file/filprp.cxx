@@ -68,9 +68,9 @@ XPropertySetInfo_impl::~XPropertySetInfo_impl()
 beans::Property SAL_CALL
 XPropertySetInfo_impl::getPropertyByName( const OUString& aName )
 {
-    auto pProp = std::find_if(m_seq.begin(), m_seq.end(),
+    auto pProp = std::find_if(std::cbegin(m_seq), std::cend(m_seq),
         [&aName](const beans::Property& rProp) { return rProp.Name == aName; });
-    if (pProp != m_seq.end())
+    if (pProp != std::cend(m_seq))
         return *pProp;
 
     throw beans::UnknownPropertyException( aName );
@@ -87,7 +87,7 @@ XPropertySetInfo_impl::getProperties()
 sal_Bool SAL_CALL
 XPropertySetInfo_impl::hasPropertyByName( const OUString& aName )
 {
-    return std::any_of(m_seq.begin(), m_seq.end(),
+    return std::any_of(std::cbegin(m_seq), std::cend(m_seq),
         [&aName](const beans::Property& rProp) { return rProp.Name == aName; });
 }
 

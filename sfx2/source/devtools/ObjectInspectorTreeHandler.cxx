@@ -68,7 +68,7 @@ OUString enumValueToEnumName(uno::Any const& aValue,
     xTypeDescription.set(xManager->getByHierarchicalName(aValue.getValueType().getTypeName()),
                          uno::UNO_QUERY);
 
-    uno::Sequence<sal_Int32> aValues = xTypeDescription->getEnumValues();
+    const uno::Sequence<sal_Int32> aValues = xTypeDescription->getEnumValues();
     sal_Int32 nValuesIndex = std::find(aValues.begin(), aValues.end(), nIntValue) - aValues.begin();
     uno::Sequence<OUString> aNames = xTypeDescription->getEnumNames();
     return aNames[nValuesIndex];

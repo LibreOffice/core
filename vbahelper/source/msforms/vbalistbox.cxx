@@ -227,7 +227,7 @@ ScVbaListBox::getValueEvent()
     uno::Sequence< sal_Int16 > nList;
     m_xProps->getPropertyValue( "SelectedItems" ) >>= nList;
     sal_Int32 nIndex = m_nIndex;
-    bool bRet = std::find(nList.begin(), nList.end(), nIndex) != nList.end();
+    bool bRet = std::find(std::cbegin(nList), std::cend(nList), nIndex) != std::cend(nList);
 
     return uno::makeAny( bRet );
 }

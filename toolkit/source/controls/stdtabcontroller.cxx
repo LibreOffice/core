@@ -212,7 +212,7 @@ Sequence< Reference< XControl > > StdTabController::getControls(  )
 
     if ( mxControlContainer.is() )
     {
-        Sequence< Reference< XControlModel > > aModels = mxModel->getControlModels();
+        const Sequence< Reference< XControlModel > > aModels = mxModel->getControlModels();
 
         Sequence< Reference< XControl > > xCtrls = mxControlContainer->getControls();
 
@@ -389,14 +389,14 @@ Reference< XControl >  StdTabController::FindControl( Sequence< Reference< XCont
         throw lang::IllegalArgumentException("No valid XControlModel",
                                              uno::Reference<uno::XInterface>(), 0);
 
-    auto pCtrl = std::find_if(rCtrls.begin(), rCtrls.end(),
+    auto pCtrl = std::find_if(std::cbegin(rCtrls), std::cend(rCtrls),
         [&rxCtrlModel](const Reference< XControl >& rCtrl) {
             Reference< XControlModel >  xModel(rCtrl.is() ? rCtrl->getModel() : Reference< XControlModel > ());
             return xModel.get() == rxCtrlModel.get();
         });
-    if (pCtrl != rCtrls.end())
+    if (pCtrl != std::cend(rCtrls))
     {
-        auto n = static_cast<sal_Int32>(std::distance(rCtrls.begin(), pCtrl));
+        auto n = static_cast<sal_Int32>(std::distance(std::cbegin(rCtrls), pCtrl));
         Reference< XControl >  xCtrl( *pCtrl );
         ::comphelper::removeElementAt( rCtrls, n );
         return xCtrl;

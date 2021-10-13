@@ -214,10 +214,11 @@ Sequence< Type > SAL_CALL SbaTableQueryBrowser::getTypes(  )
     OSL_PRECOND( !!m_aDocScriptSupport, "SbaTableQueryBrowser::getTypes: did not initialize this, yet!" );
     if ( !m_aDocScriptSupport || !*m_aDocScriptSupport )
     {
-        auto newEnd = std::remove_if( aTypes.begin(), aTypes.end(),
+        auto [begin, end] = toNonConstRange(aTypes);
+        auto newEnd = std::remove_if( begin, end,
                                       [](const Type& type)
                                       { return type == cppu::UnoType<XScriptInvocationContext>::get(); } );
-        aTypes.realloc( std::distance(aTypes.begin(), newEnd) );
+        aTypes.realloc( std::distance(begin, newEnd) );
     }
     return aTypes;
 }

@@ -2125,8 +2125,8 @@ void SAL_CALL UnoControlListBoxModel::setFastPropertyValue_NoBroadcast( sal_Int3
 
     ::std::vector< ListItem > aItems( aStringItemList.getLength() );
     ::std::transform(
-        aStringItemList.begin(),
-        aStringItemList.end(),
+        std::cbegin(aStringItemList),
+        std::cend(aStringItemList),
         aItems.begin(),
         CreateListItem()
     );
@@ -2605,13 +2605,13 @@ void UnoListBoxControl::addItems( const uno::Sequence< OUString>& aItems, sal_In
         nPos = nOldLen;
 
     // Items before the Paste-Position
-    std::copy(aSeq.begin(), std::next(aSeq.begin(), nPos), aNewSeq.begin());
+    auto it = std::copy(std::cbegin(aSeq), std::next(std::cbegin(aSeq), nPos), aNewSeq.begin());
 
     // New Items
-    std::copy(aItems.begin(), aItems.end(), std::next(aNewSeq.begin(), nPos));
+    it = std::copy(aItems.begin(), aItems.end(), it);
 
     // Rest of old Items
-    std::copy(std::next(aSeq.begin(), nPos), aSeq.end(), std::next(aNewSeq.begin(), nPos + nNewItems));
+    std::copy(std::next(std::cbegin(aSeq), nPos), std::cend(aSeq), it);
 
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), uno::Any(aNewSeq), true );
 }
@@ -2633,10 +2633,10 @@ void UnoListBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount )
     uno::Sequence< OUString> aNewSeq( nNewLen );
 
     // Items before the Remove-Position
-    std::copy(aSeq.begin(), std::next(aSeq.begin(), nPos), aNewSeq.begin());
+    auto it = std::copy(std::cbegin(aSeq), std::next(std::cbegin(aSeq), nPos), aNewSeq.begin());
 
     // Rest of Items
-    std::copy(std::next(aSeq.begin(), nPos + nCount), aSeq.end(), std::next(aNewSeq.begin(), nPos));
+    std::copy(std::next(std::cbegin(aSeq), nPos + nCount), std::cend(aSeq), it);
 
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), uno::Any(aNewSeq), true );
 }
@@ -2932,8 +2932,8 @@ void SAL_CALL UnoControlComboBoxModel::setFastPropertyValue_NoBroadcast( sal_Int
 
     ::std::vector< ListItem > aItems( aStringItemList.getLength() );
     ::std::transform(
-        aStringItemList.begin(),
-        aStringItemList.end(),
+        std::cbegin(aStringItemList),
+        std::cend(aStringItemList),
         aItems.begin(),
         CreateListItem()
     );
@@ -3197,13 +3197,13 @@ void UnoComboBoxControl::addItems( const uno::Sequence< OUString>& aItems, sal_I
         nPos = nOldLen;
 
     // items before the insert position
-    std::copy(aSeq.begin(), std::next(aSeq.begin(), nPos), aNewSeq.begin());
+    auto it = std::copy(std::cbegin(aSeq), std::next(std::cbegin(aSeq), nPos), aNewSeq.begin());
 
     // New items
-    std::copy(aItems.begin(), aItems.end(), std::next(aNewSeq.begin(), nPos));
+    it = std::copy(aItems.begin(), aItems.end(), it);
 
     // remainder of old items
-    std::copy(std::next(aSeq.begin(), nPos), aSeq.end(), std::next(aNewSeq.begin(), nPos + nNewItems));
+    std::copy(std::next(std::cbegin(aSeq), nPos), std::cend(aSeq), it);
 
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), Any(aNewSeq), true );
 }
@@ -3225,10 +3225,10 @@ void UnoComboBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount )
     uno::Sequence< OUString> aNewSeq( nNewLen );
 
     // items before the deletion position
-    std::copy(aSeq.begin(), std::next(aSeq.begin(), nPos), aNewSeq.begin());
+    auto it = std::copy(std::cbegin(aSeq), std::next(std::cbegin(aSeq), nPos), aNewSeq.begin());
 
     // remainder of old items
-    std::copy(std::next(aSeq.begin(), nPos + nCount), aSeq.end(), std::next(aNewSeq.begin(), nPos));
+    std::copy(std::next(std::cbegin(aSeq), nPos + nCount), std::cend(aSeq), it);
 
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ), uno::Any(aNewSeq), true );
 }

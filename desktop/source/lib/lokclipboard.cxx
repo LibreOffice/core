@@ -219,11 +219,11 @@ uno::Sequence<datatransfer::DataFlavor> SAL_CALL LOKTransferable::getTransferDat
 
 sal_Bool SAL_CALL LOKTransferable::isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor)
 {
-    return std::find_if(m_aFlavors.begin(), m_aFlavors.end(),
+    return std::find_if(std::cbegin(m_aFlavors), std::cend(m_aFlavors),
                         [&rFlavor](const datatransfer::DataFlavor& i) {
                             return i.MimeType == rFlavor.MimeType && i.DataType == rFlavor.DataType;
                         })
-           != m_aFlavors.end();
+           != std::cend(m_aFlavors);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

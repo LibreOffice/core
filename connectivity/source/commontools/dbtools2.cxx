@@ -637,11 +637,11 @@ bool isDataSourcePropertyEnabled(const Reference<XInterface>& _xProp, const OUSt
         {
             Sequence< PropertyValue > aInfo;
             xProp->getPropertyValue("Info") >>= aInfo;
-            const PropertyValue* pValue =std::find_if(aInfo.begin(),
-                                                aInfo.end(),
+            const PropertyValue* pValue =std::find_if(std::cbegin(aInfo),
+                                                std::cend(aInfo),
                                                 [&_sProperty](const PropertyValue& lhs)
                                                 { return lhs.Name == _sProperty; });
-            if ( pValue != aInfo.end() )
+            if ( pValue != std::cend(aInfo) )
                 pValue->Value >>= bEnabled;
         }
     }

@@ -1059,7 +1059,7 @@ ErrCode GraphicFilter::readSVG(SvStream & rStream, Graphic & rGraphic, GfxLinkTy
                 // Make a uncompressed copy for GfxLink
                 rGraphicContentSize = nMemoryLength;
                 rpGraphicContent.reset(new sal_uInt8[rGraphicContentSize]);
-                std::copy(aNewData.begin(), aNewData.end(), rpGraphicContent.get());
+                std::copy(std::cbegin(aNewData), std::cend(aNewData), rpGraphicContent.get());
 
                 if (!aMemStream.GetError())
                 {

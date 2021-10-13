@@ -270,7 +270,7 @@ namespace toolkitform
             if( ! (_rxModel->getPropertyValue( "StringItemList" ) >>= aListEntries) ) {
                 SAL_WARN("toolkit.helper", "getStringItemVector: unable to get property StringItemList");
             }
-            _rVector.insert( _rVector.end(), aListEntries.begin(), aListEntries.end() );
+            _rVector.insert( _rVector.end(), std::cbegin(aListEntries), std::cend(aListEntries) );
         }
     }
 
@@ -611,7 +611,7 @@ namespace toolkitform
                 {
                     pListWidget->SelectedEntries.resize( 0 );
                     auto nEntriesSize = static_cast<sal_Int16>(pListWidget->Entries.size());
-                    std::copy_if(aSelectIndices.begin(), aSelectIndices.end(), std::back_inserter(pListWidget->SelectedEntries),
+                    std::copy_if(std::cbegin(aSelectIndices), std::cend(aSelectIndices), std::back_inserter(pListWidget->SelectedEntries),
                         [&nEntriesSize](const sal_Int16 nIndex) { return nIndex >= 0 && nIndex < nEntriesSize; });
                 }
             }

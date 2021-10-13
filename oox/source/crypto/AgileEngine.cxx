@@ -504,7 +504,7 @@ bool AgileEngine::readEncryptionInfo(uno::Reference<io::XInputStream> & rxInputS
     uno::Sequence<sal_Int8> aReadReservedBytes(sizeof(sal_uInt32));
     rxInputStream->readBytes(aReadReservedBytes, aReadReservedBytes.getLength());
 
-    if (!std::equal(aReadReservedBytes.begin(), aReadReservedBytes.end(), aExpectedReservedBytes.begin()))
+    if (!std::equal(std::cbegin(aReadReservedBytes), std::cend(aReadReservedBytes), aExpectedReservedBytes.begin()))
         return false;
 
     mInfo.spinCount = 0;

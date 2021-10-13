@@ -674,7 +674,7 @@ void FmSearchEngine::Init(const OUString& sVisibleFields)
         Reference< css::sdbcx::XColumnsSupplier >  xSupplyCols(IFACECAST(m_xSearchCursor), UNO_QUERY);
         DBG_ASSERT(xSupplyCols.is(), "FmSearchEngine::Init : invalid cursor (no columns supplier) !");
         Reference< css::container::XNameAccess >       xAllFieldNames = xSupplyCols->getColumns();
-        Sequence< OUString > seqFieldNames = xAllFieldNames->getElementNames();
+        const Sequence< OUString > seqFieldNames = xAllFieldNames->getElementNames();
 
         OUString sCurrentField;
         sal_Int32 nIndex = 0;

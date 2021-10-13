@@ -141,7 +141,7 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const css::beans::PropertyVal
     }
     else
     {   // it's a new property
-        assert(std::none_of(aPropSeq.begin(), aPropSeq.end(),
+        assert(std::none_of(std::cbegin(aPropSeq), std::cend(aPropSeq),
             [&rPropVal](beans::PropertyValue const& rVal)
                 { return rVal.Name == rPropVal.Name; } ));
         sal_uInt32 nIndex = aPropSeq.getLength();
@@ -167,7 +167,7 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const OUString& rSequenceName
             aValue.Name = rSequenceName;
             aValue.Value <<= aSeq;
 
-            assert(std::none_of(aPropSeq.begin(), aPropSeq.end(),
+            assert(std::none_of(std::cbegin(aPropSeq), std::cend(aPropSeq),
                 [&rSequenceName](beans::PropertyValue const& rV)
                     { return rV.Name == rSequenceName; } ));
             sal_uInt32 nIndex = aPropSeq.getLength();
@@ -279,7 +279,7 @@ bool SdrCustomShapeGeometryItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMe
     for (sal_Int32 i = 0; i < aPropSeq.getLength(); ++i)
     {
         const auto& rName = aPropSeq[i].Name;
-        bool isDuplicated = std::any_of(std::next(aPropSeq.begin(), i + 1), aPropSeq.end(),
+        bool isDuplicated = std::any_of(std::next(std::cbegin(aPropSeq), i + 1), std::cend(aPropSeq),
             [&rName](const css::beans::PropertyValue& rProp) { return rProp.Name == rName; });
         if (isDuplicated)
         {

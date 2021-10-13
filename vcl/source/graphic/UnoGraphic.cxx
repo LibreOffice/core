@@ -97,7 +97,7 @@ sal_Bool SAL_CALL Graphic::supportsService( const OUString& rServiceName )
 uno::Sequence< OUString > SAL_CALL Graphic::getSupportedServiceNames()
 {
     uno::Sequence< OUString >    aRet( ::unographic::GraphicDescriptor::getSupportedServiceNames() );
-    uno::Sequence< OUString >    aNew { "com.sun.star.graphic.Graphic" };
+    const uno::Sequence< OUString >    aNew { "com.sun.star.graphic.Graphic" };
     sal_Int32                           nOldCount = aRet.getLength();
 
     aRet.realloc( nOldCount + aNew.getLength() );

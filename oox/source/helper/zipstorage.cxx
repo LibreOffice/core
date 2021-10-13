@@ -110,10 +110,9 @@ Reference< XStorage > ZipStorage::implGetXStorage() const
 
 void ZipStorage::implGetElementNames( ::std::vector< OUString >& orElementNames ) const
 {
-    Sequence< OUString > aNames;
     if( mxStorage.is() ) try
     {
-        aNames = mxStorage->getElementNames();
+        const Sequence<OUString> aNames = mxStorage->getElementNames();
         if( aNames.hasElements() )
             orElementNames.insert( orElementNames.end(), aNames.begin(), aNames.end() );
     }
