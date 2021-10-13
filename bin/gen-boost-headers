@@ -9,6 +9,7 @@
 
 # generate a bunch of dummy headers that wrap the crappy boost headers and
 # suppress a myriad of warnings; requires GCC's #include_next extension
+# To run this do: make cmd cmd="bin/gen-boost-headers"
 
 set -euo pipefail
 IFS=$'\n\t'
