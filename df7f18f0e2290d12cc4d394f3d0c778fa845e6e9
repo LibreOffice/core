@@ -34,6 +34,23 @@
       "parentUuid": "66363f9a_70400e24",
       "revId": "df7f18f0e2290d12cc4d394f3d0c778fa845e6e9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8bc7467_1175f9d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-10-13T08:03:48Z",
+      "side": 1,
+      "message": "Indeed, also writerfilter uses overlapping redlines to handle tracked formatting changes since\n\ncommit 9dbf817fe5c5253fba0831aefa17575ae0ba3af1\nAuthor: Luboš Luňák \u003cl.lunak@collabora.com\u003e\nDate:   Wed Oct 1 19:12:47 2014 +0200\n\n    handle scope of w:pPrChange and w:rPrChange properly (bnc#821804)\n\n...\n+    // Writer core \"officially\" does not like overlapping redlines, and its UNO interface is stupid enough\n+    // to not prevent that. However, in practice in fact everything appears to work fine (except for the debug warnings\n+    // about redline table corruption, which may possibly be harmless in reality). So leave this as it is, since this\n+    // is a better representation of how the changes happened. If this will ever become a problem, overlapping redlines\n+    // will need to be merged into one, just like doing the changes in the UI does, which will lose some information\n+    // (and so if that happens, it may be better to fix Writer).\n+    // Create the redlines here from lowest (formats) to highest (inserts/removals) priority, since the last one is\n+    // what Writer presents graphically, so this will show deletes as deleted text and not as just formatted text being there.\n\nYou are right, we need a better data structure for redlines. (I just recognized, that using GetRedlineText() with its O(n) performance could be dangerous in a big table, so I must optimize \n\ncommit 915d3eebc1dc4f18d7a1992db801ee8313ee46c0\nAuthor: László Németh \u003cnemeth@numbertext.org\u003e\nDate:   Tue Sep 21 15:11:38 2021 +0200\n\n    tdf#39828 sw: fix table formula calculation at track changes\n\na little bit.)\n",
+      "revId": "df7f18f0e2290d12cc4d394f3d0c778fa845e6e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
