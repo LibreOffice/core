@@ -46,14 +46,13 @@ void JsonWriterTest::test1()
     {
         auto testNode = aJson.startNode("node");
         aJson.put("oustring", OUString("val1"));
-        aJson.put("ostring", OString("val2"));
         aJson.put("charptr", "val3");
         aJson.put("int", static_cast<sal_Int32>(12));
     }
 
     std::unique_ptr<char, o3tl::free_delete> result(aJson.extractData());
 
-    CPPUNIT_ASSERT_EQUAL(std::string("{ \"node\": { \"oustring\": \"val1\", \"ostring\": \"val2\", "
+    CPPUNIT_ASSERT_EQUAL(std::string("{ \"node\": { \"oustring\": \"val1\", "
                                      "\"charptr\": \"val3\", \"int\": 12}}"),
                          std::string(result.get()));
 }
