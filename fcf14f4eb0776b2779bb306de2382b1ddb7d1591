@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed554de9_42723e71",
+        "filename": "tools/source/misc/json_writer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-10-13T13:19:42Z",
+      "side": 1,
+      "message": "this will need to change, will need to become\n\n    auto nWorstCasePropValLength \u003d rPropVal.size() * 6;\n\nand the comment will need be modified, the worst case is now set by the code in writeEscapedSequence",
+      "revId": "fcf14f4eb0776b2779bb306de2382b1ddb7d1591",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "009c1ecb_6e7875fc",
+        "filename": "tools/source/misc/json_writer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-10-13T13:19:42Z",
+      "side": 1,
+      "message": "this will need to change, will need to become\n   auto nWorstCasePropValLength \u003d rPropVal.size() * 6;",
+      "revId": "fcf14f4eb0776b2779bb306de2382b1ddb7d1591",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
