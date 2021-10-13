@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "132c61ca_4058ddcb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-10-13T09:17:09Z",
+      "side": 1,
+      "message": "Caolan, what do you think about this approach? For now it applies just the one test color, though the window color has not much effect on the UI.\n\nI wonder if we should merge vcl/source/app/settings (colors) into svtool/colorcfg (out of my skills). And for later, if accepted, we should perhaps put the color categories into a dropdown as the list grows significantly with the application colors. And the workflow with init/apply/okay/cancel is not really consistent, but that\u0027s a different topic.",
+      "revId": "92e92237ff77df814eff0f4d6de098c9b815b222",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
