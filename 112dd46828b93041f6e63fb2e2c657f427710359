@@ -16,6 +16,23 @@
       "message": "Hi Miklos, Michael,\nDo you think of any reason why these file shouldn\u0027t be removed ?",
       "revId": "112dd46828b93041f6e63fb2e2c657f427710359",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "effcf0bd_b5fc61b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-13T11:51:59Z",
+      "side": 1,
+      "message": "No objections, these were added for manual testing before cppunit-based tests were capable of covering filter code.",
+      "revId": "112dd46828b93041f6e63fb2e2c657f427710359",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
