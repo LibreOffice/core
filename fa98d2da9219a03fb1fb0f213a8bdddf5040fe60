@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92127740_bc58093c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-10-13T07:04:06Z",
+      "side": 1,
+      "message": "Just FYI (since I don\u0027t intend to revert this), this worked for my ASAN build:\n\ndiff --git a/include/svl/itemset.hxx b/include/svl/itemset.hxx\nindex 5f9da72e3339..de85d22b7b30 100644\n--- a/include/svl/itemset.hxx\n+++ b/include/svl/itemset.hxx\n@@ -203,6 +203,11 @@ public:\n     bool                        Equals(const SfxItemSet \u0026, bool bComparePool) const;\n \n     void dumpAsXml(xmlTextWriterPtr pWriter) const;\n+\n+    /* Since we are allocating extra stuff after the end of the object, we need to handle the delete ourselves,\n+       in case the compiler is using sized-delete\n+    */\n+    static void operator delete(void * pointer);\n };\n \n inline void SfxItemSet::SetParent( const SfxItemSet* pNew )\ndiff --git a/svl/source/items/itemset.cxx b/svl/source/items/itemset.cxx\nindex 3b47719dbf04..2e57ef75e37d 100644\n--- a/svl/source/items/itemset.cxx\n+++ b/svl/source/items/itemset.cxx\n@@ -1581,4 +1581,12 @@ WhichRangesContainer WhichRangesContainer::MergeRange(sal_uInt16 nFrom,\n     return WhichRangesContainer(aRangesTable.data(), aRangesTable.size());\n }\n \n+/* Since we are allocating extra stuff after the end of the object, we need to handle the delete ourselves,\n+   in case the compiler is using sized-delete.\n+*/\n+void SfxItemSet::operator delete(void* p)\n+{\n+    ::operator delete(p);\n+}\n+\n",
+      "revId": "fa98d2da9219a03fb1fb0f213a8bdddf5040fe60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
