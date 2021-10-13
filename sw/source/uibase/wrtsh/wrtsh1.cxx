@@ -198,11 +198,6 @@ void SwWrtShell::Insert( const OUString &rStr )
          bCallIns = m_bIns /*|| bHasSel*/;
     bool bDeleted = false;
 
-    typedef svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_RSID - 1,
-                       RES_CHRATR_RSID + 1, RES_CHRATR_END - 1,
-                       RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT> CharItems;
-    SfxItemSet aCharAttrSet(GetAttrPool(), CharItems{});
-
     if( bHasSel || ( !m_bIns && SelectHiddenRange() ) )
     {
             // Only here parenthesizing, because the normal
@@ -220,12 +215,6 @@ void SwWrtShell::Insert( const OUString &rStr )
             aRewriter.AddRule(UndoArg3, aTmpStr);
         }
 
-        // tdf#79717 Save character formatting of the start of the selection
-        const SwPosition *pStart = GetCursor()->Start();
-        SwPaM aPaM(pStart->nNode.GetNode(), pStart->nContent.GetIndex(),
-                   pStart->nNode.GetNode(), pStart->nContent.GetIndex() + 1);
-        GetPaMAttr(&aPaM, aCharAttrSet);
-
         StartUndo(SwUndoId::REPLACE, &aRewriter);
         bStarted = true;
         Push();
@@ -237,16 +226,6 @@ void SwWrtShell::Insert( const OUString &rStr )
 
     bCallIns ?
         SwEditShell::Insert2( rStr, bDeleted ) : SwEditShell::Overwrite( rStr );
-
-    if( bDeleted )
-    {
-        // tdf#79717 Restore formatting of the deleted selection
-        SwPosition* pEnd = GetCursor()->Start();
-        SwPaM aPaM(pEnd->nNode.GetNode(), pEnd->nContent.GetIndex() - rStr.getLength(),
-                   pEnd->nNode.GetNode(), pEnd->nContent.GetIndex());
-
-        SetAttrSet(aCharAttrSet, SetAttrMode::DEFAULT, &aPaM);
-    }
 
     if( bStarted )
     {
