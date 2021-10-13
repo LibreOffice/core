@@ -29,6 +29,7 @@
 namespace svtools{
 enum ColorConfigEntry
 {
+    WINCOLOR            ,
     DOCCOLOR            ,
     DOCBOUNDARIES       ,
     APPBACKGROUND       ,

@@ -44,6 +44,7 @@ namespace
 // list of default groups
 enum Group
 {
+    Group_Application,
     Group_General,
     Group_Writer,
     Group_Html,
@@ -66,6 +67,7 @@ struct
 const vGroupInfo[] =
 {
     // the groups are in the same order as in enum Group above
+    { Group_Application, "application" },
     { Group_General, "general" },
     { Group_Writer, "writer" },
     { Group_Html, "html" },
@@ -96,6 +98,7 @@ const vEntryInfo[] =
         SAL_STRINGIFY(Name), SAL_STRINGIFY(Name##_lb), true
 
     // The list of these entries (enum ColorConfigEntry) are in colorcfg.hxx.
+    { Group_Application, IDS(wincolor) },
 
     { Group_General, IDS(doccolor) },
     { Group_General, IDS_CB(docboundaries) },

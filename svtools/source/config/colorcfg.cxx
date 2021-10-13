@@ -110,6 +110,7 @@ uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme)
     };
     static const ColorConfigEntryData_Impl cNames[] =
     {
+        { std::u16string_view(u"/WinColor")        ,false },
         { std::u16string_view(u"/DocColor")        ,false },
         { std::u16string_view(u"/DocBoundaries")   ,true },
         { std::u16string_view(u"/AppBackground")   ,false },
@@ -357,6 +358,8 @@ void ColorConfig_Impl::ImplUpdateApplicationSettings()
     AllSettings aSettings = Application::GetSettings();
     StyleSettings aStyleSettings( aSettings.GetStyleSettings() );
 
+    aStyleSettings.SetWindowColor(GetColorConfigValue(WINCOLOR).nColor);
+
     ColorConfigValue aRet = GetColorConfigValue(svtools::FONTCOLOR);
     if(COL_AUTO == aRet.nColor)
         aRet.nColor = ColorConfig::GetDefaultColor(svtools::FONTCOLOR);
@@ -364,12 +367,10 @@ void ColorConfig_Impl::ImplUpdateApplicationSettings()
     Color aFontColor(aRet.nColor);
 
     if( aStyleSettings.GetFontColor() != aFontColor )
-    {
         aStyleSettings.SetFontColor( aFontColor );
 
-        aSettings.SetStyleSettings( aStyleSettings );
-        Application::SetSettings( aSettings );
-    }
+    aSettings.SetStyleSettings( aStyleSettings );
+    Application::SetSettings( aSettings );
 }
 
 ColorConfig::ColorConfig()
@@ -403,6 +404,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
 {
     static const Color aAutoColors[] =
     {
+        COL_AUTO, //WINCOLOR - defaults to COL_WHITE in void ImplStyleData::SetStandardStyles()
         COL_WHITE, // DOCCOLOR
         COL_LIGHTGRAY, // DOCBOUNDARIES
         Color(0xDFDFDE), // APPBACKGROUND
@@ -457,6 +459,9 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
     Color aRet;
     switch(eEntry)
     {
+        case WINCOLOR :
+            aRet = Application::GetSettings().GetStyleSettings().GetWindowColor();
+            break;
         case APPBACKGROUND :
             aRet = Application::GetSettings().GetStyleSettings().GetWorkspaceColor();
             break;
@@ -579,6 +584,13 @@ void EditableColorConfig::SetModified()
 
 void EditableColorConfig::Commit()
 {
+/* crashes when set to automatic
+    AllSettings aAllSettings(Application::GetSettings());
+    StyleSettings aStyleSettings(aAllSettings.GetStyleSettings());
+    aStyleSettings.SetWindowColor(GetColorValue(WINCOLOR).nColor);
+    aAllSettings.SetStyleSettings(aStyleSettings);
+    Application::SetSettings(aAllSettings);
+*/
     if(m_bModified)
         m_pImpl->SetModified();
     if(m_pImpl->IsModified())

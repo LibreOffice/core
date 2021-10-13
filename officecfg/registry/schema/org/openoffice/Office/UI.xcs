@@ -40,6 +40,16 @@
       <info>
         <desc>Defines the templates for color settings used to customize the appearance of the applications.</desc>
       </info>
+      <group oor:name="WinColor">
+        <info>
+          <desc>Allows to overwrite the system window color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the window color.</desc>
+          </info>
+        </prop>
+      </group>
       <group oor:name="DocColor">
         <info>
           <desc>Specifies the color settings for the document.</desc>

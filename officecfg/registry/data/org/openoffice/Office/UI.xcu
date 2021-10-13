@@ -138,6 +138,11 @@
     </prop>
     <node oor:name="ColorSchemes">
       <node oor:name="${PRODUCTNAME}" oor:op="replace">
+        <node oor:name="WinColor">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
         <node oor:name="DocColor">
           <prop oor:name="Color">
             <value xsi:nil="true"/>
@@ -423,6 +428,11 @@
         </node>
       </node>
       <node oor:name="${PRODUCTNAME} Dark" oor:op="replace">
+        <node oor:name="WinColor">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
         <node oor:name="DocColor">
           <prop oor:name="Color">
             <value>3355443</value>
