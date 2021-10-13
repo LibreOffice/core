@@ -40,6 +40,7 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <rtl/instance.hxx>
+#include <officecfg/Office/Common.hxx>
 
 
 using namespace utl;
@@ -110,6 +111,38 @@ uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme)
     };
     static const ColorConfigEntryData_Impl cNames[] =
     {
+        { std::u16string_view(u"/WindowColor")     ,false },
+        { std::u16string_view(u"/WindowTextColor") ,false },
+        { std::u16string_view(u"/DialogColor")     ,false },
+        { std::u16string_view(u"/DialogTextColor") ,false },
+        { std::u16string_view(u"/FaceColor")     ,false },
+        { std::u16string_view(u"/ActiveColor")     ,false },
+        { std::u16string_view(u"/ActiveTextColor")     ,false },
+        { std::u16string_view(u"/ActiveBorderColor")     ,false },
+        { std::u16string_view(u"/SystemFontColor")     ,false },
+        { std::u16string_view(u"/FieldColor")     ,false },
+        { std::u16string_view(u"/MenuBarColor")     ,false },
+        { std::u16string_view(u"/MenuBarTextColor")     ,false },
+        { std::u16string_view(u"/MenuBarHighlightTextColor")     ,false },
+        { std::u16string_view(u"/MenuBarRolloverColor")     ,false },
+        { std::u16string_view(u"/MenuBarRolloverTextColor")     ,false },
+        { std::u16string_view(u"/MenuColor")     ,false },
+        { std::u16string_view(u"/MenuTextColor")     ,false },
+        { std::u16string_view(u"/MenuHighlightColor")     ,false },
+        { std::u16string_view(u"/MenuHighlightTextColor")     ,false },
+        { std::u16string_view(u"/MenuBorderColor")     ,false },
+        { std::u16string_view(u"/ShadowColor")     ,false },
+        { std::u16string_view(u"/DarkShadowColor")     ,false },
+        { std::u16string_view(u"/CheckedColor")     ,false },
+        { std::u16string_view(u"/DeactiveColor")     ,false },
+        { std::u16string_view(u"/DeactiveTextColor")     ,false },
+        { std::u16string_view(u"/DeactiveBorderColor")     ,false },
+        { std::u16string_view(u"/DisableColor")     ,false },
+        { std::u16string_view(u"/LightColor")     ,false },
+        { std::u16string_view(u"/LightBorderColor")     ,false },
+        { std::u16string_view(u"/ActiveTabColor")     ,false },
+        { std::u16string_view(u"/InactiveTabColor")     ,false },
+        { std::u16string_view(u"/WorkspaceColor")     ,false },
         { std::u16string_view(u"/DocColor")        ,false },
         { std::u16string_view(u"/DocBoundaries")   ,true },
         { std::u16string_view(u"/AppBackground")   ,false },
@@ -357,6 +390,42 @@ void ColorConfig_Impl::ImplUpdateApplicationSettings()
     AllSettings aSettings = Application::GetSettings();
     StyleSettings aStyleSettings( aSettings.GetStyleSettings() );
 
+    if (officecfg::Office::Common::Misc::ExperimentalMode::get())
+    {
+        aStyleSettings.SetWindowColor(GetColorConfigValue(WINDOWCOLOR).nColor);
+        aStyleSettings.SetWindowTextColor(GetColorConfigValue(WINDOWTEXTCOLOR).nColor);
+        aStyleSettings.SetDialogColor(GetColorConfigValue(DIALOGCOLOR).nColor);
+        aStyleSettings.SetDialogTextColor(GetColorConfigValue(DIALOGTEXTCOLOR).nColor);
+        aStyleSettings.SetFaceColor(GetColorConfigValue(FACECOLOR).nColor);
+        aStyleSettings.SetActiveColor(GetColorConfigValue(ACTIVECOLOR).nColor);
+        aStyleSettings.SetActiveTextColor(GetColorConfigValue(ACTIVETEXTCOLOR).nColor);
+        aStyleSettings.SetActiveBorderColor(GetColorConfigValue(ACTIVEBORDERCOLOR).nColor);
+        aStyleSettings.SetFontColor(GetColorConfigValue(SYSTEMFONTCOLOR).nColor);
+        aStyleSettings.SetFieldColor(GetColorConfigValue(FIELDCOLOR).nColor);
+        aStyleSettings.SetMenuBarColor(GetColorConfigValue(MENUBARCOLOR).nColor);
+        aStyleSettings.SetMenuBarHighlightTextColor(GetColorConfigValue(MENUBARHIGHLIGHTTEXTCOLOR).nColor);
+        aStyleSettings.SetMenuBarTextColor(GetColorConfigValue(MENUBARTEXTCOLOR).nColor);
+        aStyleSettings.SetMenuBarRolloverColor(GetColorConfigValue(MENUBARROLLOVERCOLOR).nColor);
+        aStyleSettings.SetMenuBarRolloverTextColor(GetColorConfigValue(MENUBARROLLOVERTEXTCOLOR).nColor);
+        aStyleSettings.SetMenuColor(GetColorConfigValue(MENUCOLOR).nColor);
+        aStyleSettings.SetMenuTextColor(GetColorConfigValue(MENUTEXTCOLOR).nColor);
+        aStyleSettings.SetMenuHighlightColor(GetColorConfigValue(MENUHIGHLIGHTCOLOR).nColor);
+        aStyleSettings.SetMenuHighlightTextColor(GetColorConfigValue(MENUHIGHLIGHTTEXTCOLOR).nColor);
+        aStyleSettings.SetMenuBorderColor(GetColorConfigValue(MENUBORDERCOLOR).nColor);
+        aStyleSettings.SetShadowColor(GetColorConfigValue(SHADOWCOLOR).nColor);
+        aStyleSettings.SetDarkShadowColor(GetColorConfigValue(DARKSHADOWCOLOR).nColor);
+        aStyleSettings.SetCheckedColor(GetColorConfigValue(CHECKEDCOLOR).nColor);
+        aStyleSettings.SetDeactiveColor(GetColorConfigValue(DEACTIVECOLOR).nColor);
+        aStyleSettings.SetDeactiveTextColor(GetColorConfigValue(DEACTIVETEXTCOLOR).nColor);
+        aStyleSettings.SetDeactiveBorderColor(GetColorConfigValue(DEACTIVEBORDERCOLOR).nColor);
+        aStyleSettings.SetDisableColor(GetColorConfigValue(DISABLECOLOR).nColor);
+        aStyleSettings.SetLightColor(GetColorConfigValue(LIGHTCOLOR).nColor);
+        aStyleSettings.SetLightBorderColor(GetColorConfigValue(LIGHTBORDERCOLOR).nColor);
+        aStyleSettings.SetActiveTabColor(GetColorConfigValue(ACVITVETABCOLOR).nColor);
+        aStyleSettings.SetInactiveTabColor(GetColorConfigValue(INACVITVETABCOLOR).nColor);
+        aStyleSettings.SetWorkspaceColor(GetColorConfigValue(WORKSPACECOLOR).nColor);
+    }
+
     ColorConfigValue aRet = GetColorConfigValue(svtools::FONTCOLOR);
     if(COL_AUTO == aRet.nColor)
         aRet.nColor = ColorConfig::GetDefaultColor(svtools::FONTCOLOR);
@@ -364,12 +433,10 @@ void ColorConfig_Impl::ImplUpdateApplicationSettings()
     Color aFontColor(aRet.nColor);
 
     if( aStyleSettings.GetFontColor() != aFontColor )
-    {
         aStyleSettings.SetFontColor( aFontColor );
 
-        aSettings.SetStyleSettings( aStyleSettings );
-        Application::SetSettings( aSettings );
-    }
+    aSettings.SetStyleSettings( aStyleSettings );
+    Application::SetSettings( aSettings );
 }
 
 ColorConfig::ColorConfig()
@@ -403,6 +470,38 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
 {
     static const Color aAutoColors[] =
     {
+        COL_AUTO, //WINDOWCOLOR - defaults to COL_WHITE in void ImplStyleData::SetStandardStyles()
+        COL_AUTO, //WINDOWTEXTCOLOR
+        COL_AUTO, //DIALOGCOLOR
+        COL_AUTO, //DIALOGTEXTCOLOR
+        COL_AUTO, //FACECOLOR
+        COL_AUTO, //ACTIVECOLOR
+        COL_AUTO, //ACTIVETEXTCOLOR
+        COL_AUTO, //ACTIVEBORDERCOLOR
+        COL_AUTO, //SYSTEMFONTCOLOR
+        COL_AUTO, //FIELDCOLOR
+        COL_AUTO, //MENUBARCOLOR
+        COL_AUTO, //MENUBARTEXTCOLOR
+        COL_AUTO, //MENUBARHIGHLIGHTTEXTCOLOR
+        COL_AUTO, //MENUBARROLLOVERCOLOR
+        COL_AUTO, //MENUBARROLLOVERTEXTCOLOR
+        COL_AUTO, //MENUCOLOR
+        COL_AUTO, //MENUTEXTCOLOR
+        COL_AUTO, //MENUHIGHLIGHTCOLOR
+        COL_AUTO, //MENUHIGHLIGHTTEXTCOLOR
+        COL_AUTO, //MENUBORDERCOLOR
+        COL_AUTO, //SYSTEMSHADOWCOLOR
+        COL_AUTO, //DARKSHADOWCOLOR
+        COL_AUTO, //CHECKEDCOLOR
+        COL_AUTO, //DEACTIVECOLOR
+        COL_AUTO, //DEACTIVETEXTCOLOR
+        COL_AUTO, //DEACTIVEBORDERCOLOR
+        COL_AUTO, //DISABLECOLOR
+        COL_AUTO, //LIGHTCOLOR
+        COL_AUTO, //LIGHTBORDERCOLOR
+        COL_AUTO, //ACVITVETABCOLOR
+        COL_AUTO, //INACVITVETABCOLOR
+        COL_AUTO, //WORKSPACECOLOR
         COL_WHITE, // DOCCOLOR
         COL_LIGHTGRAY, // DOCBOUNDARIES
         Color(0xDFDFDE), // APPBACKGROUND
@@ -455,6 +554,109 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         COL_GRAY, // SQLCOMMENT
     };
     Color aRet;
+    if (officecfg::Office::Common::Misc::ExperimentalMode::get())
+    {
+        switch(eEntry)
+        {
+            case WINDOWCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetWindowColor();
+                break;
+            case WINDOWTEXTCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
+                break;
+            case DIALOGCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetDialogColor();
+                break;
+            case DIALOGTEXTCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetDialogTextColor();
+                break;
+            case FACECOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetFaceColor();
+                break;
+            case ACTIVECOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetActiveColor();
+                break;
+            case ACTIVETEXTCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetActiveTextColor();
+                break;
+            case ACTIVEBORDERCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetActiveBorderColor();
+                break;
+            case SYSTEMFONTCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetFontColor();
+                break;
+            case FIELDCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetFieldColor();
+                break;
+            case MENUBARCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetMenuBarColor();
+                break;
+            case MENUBARTEXTCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetMenuBarTextColor();
+                break;
+            case MENUBARHIGHLIGHTTEXTCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetMenuBarHighlightTextColor();
+                break;
+            case MENUBARROLLOVERCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetMenuBarRolloverColor();
+                break;
+            case MENUBARROLLOVERTEXTCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetMenuBarRolloverTextColor();
+                break;
+            case MENUCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetMenuColor();
+                break;
+            case MENUTEXTCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetMenuTextColor();
+                break;
+            case MENUHIGHLIGHTCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetMenuHighlightColor();
+                break;
+            case MENUHIGHLIGHTTEXTCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetMenuHighlightTextColor();
+                break;
+            case MENUBORDERCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetMenuBorderColor();
+                break;
+            case SYSTEMSHADOWCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetShadowColor();
+                break;
+            case DARKSHADOWCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetDarkShadowColor();
+                break;
+            case CHECKEDCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetCheckedColor();
+                break;
+            case DEACTIVECOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetDeactiveColor();
+                break;
+            case DEACTIVETEXTCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetDeactiveTextColor();
+                break;
+            case DEACTIVEBORDERCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetDeactiveBorderColor();
+                break;
+            case DISABLECOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetDisableColor();
+                break;
+            case LIGHTCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetLightColor();
+                break;
+            case LIGHTBORDERCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetLightBorderColor();
+                break;
+            case ACVITVETABCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetActiveTabColor();
+                break;
+            case INACVITVETABCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetInactiveTabColor();
+                break;
+            case WORKSPACECOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetWorkspaceColor();
+                break;
+        } //switch
+    } //experimental
+
     switch(eEntry)
     {
         case APPBACKGROUND :
@@ -579,6 +781,13 @@ void EditableColorConfig::SetModified()
 
 void EditableColorConfig::Commit()
 {
+/* crashes when set to automatic
+    AllSettings aAllSettings(Application::GetSettings());
+    StyleSettings aStyleSettings(aAllSettings.GetStyleSettings());
+    aStyleSettings.SetWindowColor(GetColorValue(WINCOLOR).nColor);
+    aAllSettings.SetStyleSettings(aStyleSettings);
+    Application::SetSettings(aAllSettings);
+*/
     if(m_bModified)
         m_pImpl->SetModified();
     if(m_pImpl->IsModified())

@@ -138,6 +138,38 @@
     </prop>
     <node oor:name="ColorSchemes">
       <node oor:name="${PRODUCTNAME}" oor:op="replace">
+        <node oor:name="WindowColor"/>
+        <node oor:name="WindowTextColor"/>
+        <node oor:name="DialogColor"/>
+        <node oor:name="DialogTextColor"/>
+        <node oor:name="FaceColor"/>
+        <node oor:name="ActiveColor"/>
+        <node oor:name="ActiveTextColor"/>
+        <node oor:name="ActiveBorderColor"/>
+        <node oor:name="SystemFontColor"/>
+        <node oor:name="FieldColor"/>
+        <node oor:name="MenuBarColor"/>
+        <node oor:name="MenuBarTextColor"/>
+        <node oor:name="MenuBarHighlightTextColor"/>
+        <node oor:name="MenuBarRolloverColor"/>
+        <node oor:name="MenuBarRolloverTextColor"/>
+        <node oor:name="MenuColor"/>
+        <node oor:name="MenuTextColor"/>
+        <node oor:name="MenuHighlightColor"/>
+        <node oor:name="MenuHighlightTextColor"/>
+        <node oor:name="MenuBorderColor"/>
+        <node oor:name="ShadowColor"/>
+        <node oor:name="DarkShadowColor"/>
+        <node oor:name="CheckedColor"/>
+        <node oor:name="DeactiveColor"/>
+        <node oor:name="DeactiveTextColor"/>
+        <node oor:name="DeactiveBorderColor"/>
+        <node oor:name="DisableColor"/>
+        <node oor:name="LightColor"/>
+        <node oor:name="LightBorderColor"/>
+        <node oor:name="ActiveTabColor"/>
+        <node oor:name="InactiveTabColor"/>
+        <node oor:name="WorkspaceColor"/>
         <node oor:name="DocColor">
           <prop oor:name="Color">
             <value xsi:nil="true"/>
@@ -423,11 +455,6 @@
         </node>
       </node>
       <node oor:name="${PRODUCTNAME} Dark" oor:op="replace">
-        <node oor:name="DocColor">
-          <prop oor:name="Color">
-            <value>3355443</value>
-          </prop>
-        </node>
         <node oor:name="DocBoundaries">
           <prop oor:name="IsVisible">
             <value>true</value>
