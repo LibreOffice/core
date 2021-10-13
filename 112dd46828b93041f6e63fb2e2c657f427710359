@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd0e61e0_0c68493c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-10-13T10:22:30Z",
+      "side": 1,
+      "message": "Hi Miklos, Michael,\nDo you think of any reason why these file shouldn\u0027t be removed ?",
+      "revId": "112dd46828b93041f6e63fb2e2c657f427710359",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
