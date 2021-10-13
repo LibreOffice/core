@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17c2a693_959bcf99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-10-13T09:16:29Z",
+      "side": 1,
+      "message": "jenkins : new test failed on windows\n\nD:/cygwin/srv/Jenkins/workspace/04-LO-Win64/xmlsecurity/qa/unit/signing/signing.cxx(675) : error : Assertion\nTest name: testODFDoubleX509Certificate::TestBody\nassertion failed\n- Expression: (nActual \u003d\u003d SignatureState::NOTVALIDATED || nActual \u003d\u003d SignatureState::OK)\n- 2\n\nD:/cygwin/srv/Jenkins/workspace/04-LO-Win64/xmlsecurity/qa/unit/signing/signing.cxx(600) : error : Assertion\nTest name: testODFX509CertificateChain::TestBody\nequality assertion failed\n- Expected: 0\n- Actual  : 1",
+      "revId": "d0de3110fc229acd91b003c44097c6fe8e4b67bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
