@@ -1240,6 +1240,11 @@ bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
                 default:
                     bIsType = true;
             }
+        else if (nCode == KEY_RIGHT && !bControl && !bShift && !bAlt)
+        {
+            ScInputHandler* pHdl = pScMod->GetInputHdl(this);
+            bIsType = pHdl && pHdl->HasPartialComplete();
+        }
 
         if( bIsType )
             bUsed = pScMod->InputKeyEvent( rKEvt );     // input
