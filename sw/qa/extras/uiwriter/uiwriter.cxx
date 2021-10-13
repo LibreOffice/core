@@ -216,7 +216,6 @@ public:
     void testCaretPositionMovingUp();
     void testTdf93441();
     void testTdf81226();
-    void testTdf79717();
     void testTdf137532();
     void testFdo87448();
     void testTextCursorInvalidation();
@@ -451,7 +450,6 @@ public:
     CPPUNIT_TEST(testCaretPositionMovingUp);
     CPPUNIT_TEST(testTdf93441);
     CPPUNIT_TEST(testTdf81226);
-    CPPUNIT_TEST(testTdf79717);
     CPPUNIT_TEST(testTdf137532);
     CPPUNIT_TEST(testFdo87448);
     CPPUNIT_TEST(testTextCursorInvalidation);
