@@ -5893,7 +5893,7 @@ static char* lo_getFilterTypes(LibreOfficeKit* pThis)
         }
     }
 
-    return strdup(aJson.extractData());
+    return aJson.extractData();
 }
 
 static void lo_setOptionalFeatures(LibreOfficeKit* pThis, unsigned long long const features)
