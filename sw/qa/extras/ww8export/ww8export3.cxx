@@ -307,6 +307,15 @@ DECLARE_WW8EXPORT_TEST(testTdf139495_tinyHeader, "tdf139495_tinyHeader.doc")
     CPPUNIT_ASSERT(getPages() < 3);
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf124937, "tdf124937.doc")
+{
+    // Check it doesn't crash at import time
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 DECLARE_WW8EXPORT_TEST(testFdo53985, "fdo53985.doc")
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
