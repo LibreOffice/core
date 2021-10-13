@@ -16,6 +16,23 @@
       "message": "https://i.imgur.com/G6aVpks.png",
       "revId": "c27caf26e91a94b25646b0f6a3504a180e788023",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de74cb5a_29f12a11",
+        "filename": "vcl/backendtest/benchmark/outputdevice/Benchmarks.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-10-13T11:44:14Z",
+      "side": 1,
+      "message": "With Bitmaps you need to be careful with what you want to benchmark. Benchmarking drawing to the bitmap isn\u0027t really important as this is almost never done (we don\u0027t draw to the bitmap, we load an bitmap from a PNG / JPEG file and keep that in memory). We want to measure how long it takes to draw the bitmap to a VirtualDevice (OTOH this is what we do all the time when rendering a document).\n\nThere are many variants also - draw alpha bitmap, draw scaled bitmap (smaller bitmap to a bigger area and bigger bitmap to a smaller area), draw rotated bitmap.",
+      "revId": "c27caf26e91a94b25646b0f6a3504a180e788023",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
