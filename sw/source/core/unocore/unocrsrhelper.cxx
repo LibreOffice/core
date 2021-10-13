@@ -635,7 +635,8 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
             SwFrameFormat* pFormat;
             if(eType == SwFlyStartNode && nullptr != (pFormat = pSttNode->GetFlyFormat()))
             {
-                if( pAny )
+                // Create a wrapper only for text frames, not for graphic or OLE nodes.
+                if (pAny && !rPam.GetNode().IsNoTextNode())
                 {
                     uno::Reference<XTextFrame> const xFrame(
                         SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat));
