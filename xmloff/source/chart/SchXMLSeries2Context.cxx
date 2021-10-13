@@ -230,7 +230,7 @@ Reference< chart2::data::XLabeledDataSequence2 > lcl_createAndAddSequenceToSerie
     xLabeledSeq->setValues( xSeq );
 
     // add new sequence to data series / push to front to have the correct sequence order if charttype is changed afterwards
-    Sequence< Reference< chart2::data::XLabeledDataSequence > > aOldSeq( xSeriesSource->getDataSequences());
+    const Sequence< Reference< chart2::data::XLabeledDataSequence > > aOldSeq( xSeriesSource->getDataSequences());
     sal_Int32 nOldCount = aOldSeq.getLength();
     Sequence< Reference< chart2::data::XLabeledDataSequence > > aNewSeq( nOldCount + 1 );
     aNewSeq[0].set(xLabeledSeq, uno::UNO_QUERY_THROW);

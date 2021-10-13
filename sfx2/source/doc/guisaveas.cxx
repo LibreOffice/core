@@ -545,9 +545,9 @@ bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName )
         uno::Any aAny = m_pOwner->GetFilterConfiguration()->getByName( aFilterName );
         if ( aAny >>= aProps )
         {
-            auto pProp = std::find_if(aProps.begin(), aProps.end(),
+            auto pProp = std::find_if(std::cbegin(aProps), std::cend(aProps),
                 [](const beans::PropertyValue& rProp) { return rProp.Name == "UIComponent"; });
-            if (pProp != aProps.end())
+            if (pProp != std::cend(aProps))
             {
                 OUString aServiceName;
                 pProp->Value >>= aServiceName;

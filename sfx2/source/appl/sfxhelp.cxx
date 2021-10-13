@@ -473,9 +473,9 @@ OUString SfxHelp::GetHelpModuleName_Impl(std::u16string_view rHelpID)
                     ModuleManager::create(::comphelper::getProcessComponentContext()) );
                 Sequence< PropertyValue > lProps;
                 xModuleManager->getByName( aModuleIdentifier ) >>= lProps;
-                auto pProp = std::find_if(lProps.begin(), lProps.end(),
+                auto pProp = std::find_if(std::cbegin(lProps), std::cend(lProps),
                     [](const PropertyValue& rProp) { return rProp.Name == "ooSetupFactoryShortName"; });
-                if (pProp != lProps.end())
+                if (pProp != std::cend(lProps))
                     pProp->Value >>= aFactoryShortName;
             }
             catch (const Exception&)

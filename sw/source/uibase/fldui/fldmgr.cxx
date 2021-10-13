@@ -701,7 +701,7 @@ sal_uInt16 SwFieldMgr::GetFormatCount(SwFieldTypesEnum nTypeId, bool bHtmlMode) 
             GetNumberingInfo();
             if(m_xNumberingInfo.is())
             {
-                Sequence<sal_Int16> aTypes = m_xNumberingInfo->getSupportedNumberingTypes();
+                const Sequence<sal_Int16> aTypes = m_xNumberingInfo->getSupportedNumberingTypes();
                 // #i28073# it's not necessarily a sorted sequence
                 //skip all values below or equal to CHARS_LOWER_LETTER_N
                 nCount += std::count_if(aTypes.begin(), aTypes.end(),

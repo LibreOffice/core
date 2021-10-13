@@ -1329,7 +1329,7 @@ namespace pcr
                 std::vector< OUString > aListEntries;
 
                 Reference< XDatabaseContext > xDatabaseContext = sdb::DatabaseContext::create( m_xContext );
-                Sequence< OUString > aDatasources = xDatabaseContext->getElementNames();
+                const Sequence< OUString > aDatasources = xDatabaseContext->getElementNames();
                 aListEntries.resize( aDatasources.getLength() );
                 std::copy( aDatasources.begin(), aDatasources.end(), aListEntries.begin() );
                 aDescriptor.Control = PropertyHandlerHelper::createComboBoxControl(

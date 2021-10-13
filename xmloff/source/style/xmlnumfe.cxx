@@ -930,7 +930,7 @@ static OUString lcl_GetDefaultCalendar( SvNumberFormatter const * pFormatter, La
     {
         lang::Locale aLocale( LanguageTag::convertToLocale( nLang ) );
 
-        uno::Sequence<OUString> aCals = pCalendar->getAllCalendars( aLocale );
+        const uno::Sequence<OUString> aCals = pCalendar->getAllCalendars( aLocale );
         auto pCal = std::find_if(aCals.begin(), aCals.end(),
             [](const OUString& rCal) { return rCal != "gregorian"; });
         if (pCal != aCals.end())

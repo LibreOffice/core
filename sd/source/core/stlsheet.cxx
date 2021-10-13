@@ -305,7 +305,7 @@ bool SdStyleSheet::IsUsed() const
         cppu::OInterfaceContainerHelper * pContainer = mrBHelper.getContainer( cppu::UnoType<XModifyListener>::get() );
         if( pContainer )
         {
-            Sequence< Reference< XInterface > > aModifyListeners( pContainer->getElements() );
+            const Sequence< Reference< XInterface > > aModifyListeners( pContainer->getElements() );
             bResult = std::any_of(aModifyListeners.begin(), aModifyListeners.end(),
                 [](const Reference<XInterface>& rListener) {
                     Reference< XStyle > xStyle( rListener, UNO_QUERY );

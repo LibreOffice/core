@@ -3723,11 +3723,11 @@ void SfxMedium::RemoveVersion_Impl( const OUString& rName )
     if ( !pImpl->aVersions.hasElements() )
         return;
 
-    auto pVersion = std::find_if(pImpl->aVersions.begin(), pImpl->aVersions.end(),
+    auto pVersion = std::find_if(std::cbegin(pImpl->aVersions), std::cend(pImpl->aVersions),
         [&rName](const auto& rVersion) { return rVersion.Identifier == rName; });
-    if (pVersion != pImpl->aVersions.end())
+    if (pVersion != std::cend(pImpl->aVersions))
     {
-        auto nIndex = static_cast<sal_Int32>(std::distance(pImpl->aVersions.begin(), pVersion));
+        auto nIndex = static_cast<sal_Int32>(std::distance(std::cbegin(pImpl->aVersions), pVersion));
         comphelper::removeElementAt(pImpl->aVersions, nIndex);
     }
 }

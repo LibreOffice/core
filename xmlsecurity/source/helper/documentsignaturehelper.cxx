@@ -303,8 +303,8 @@ void DocumentSignatureHelper::AppendContentTypes(const uno::Reference<embed::XSt
         SAL_WARN("xmlsecurity.helper", "no defaults or overrides in aContentTypeInfo");
         return;
     }
-    uno::Sequence<beans::StringPair>& rDefaults = aContentTypeInfo[0];
-    uno::Sequence<beans::StringPair>& rOverrides = aContentTypeInfo[1];
+    const uno::Sequence<beans::StringPair>& rDefaults = aContentTypeInfo[0];
+    const uno::Sequence<beans::StringPair>& rOverrides = aContentTypeInfo[1];
 
     for (OUString& rElement : rElements)
     {

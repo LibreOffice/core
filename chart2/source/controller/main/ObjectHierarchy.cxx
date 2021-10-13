@@ -246,7 +246,7 @@ void ObjectHierarchy::createAxesTree(
 
     Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxesOfDiagram( xDiagram, /* bOnlyVisible = */ true ) );
     if( !m_bOrderingForElementSelector )
-        std::transform( aAxes.begin(), aAxes.end(),
+        std::transform( std::cbegin(aAxes), std::cend(aAxes),
                       std::back_inserter( rContainer ),
                       lcl_ObjectToOID( xChartDoc ));
 

@@ -301,7 +301,7 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
         uno::Reference< data::XDataSource > xDataSource(series, uno::UNO_QUERY);
         if( !xDataSource.is() )
             continue;
-        uno::Sequence< uno::Reference< data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
+        const uno::Sequence< uno::Reference< data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
         aResult.insert( aResult.end(), aDataSequences.begin(), aDataSequences.end() );
     }
 
@@ -325,7 +325,7 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
         uno::Reference< data::XDataSource > xDataSource(series, uno::UNO_QUERY);
         if( !xDataSource.is() )
             continue;
-        uno::Sequence< uno::Reference< data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
+        const uno::Sequence< uno::Reference< data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
         aResult.insert( aResult.end(), aDataSequences.begin(), aDataSequences.end() );
     }
 

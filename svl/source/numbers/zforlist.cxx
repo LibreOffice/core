@@ -2351,10 +2351,10 @@ sal_Int32 SvNumberFormatter::ImpGetFormatCodeIndex(
             css::uno::Sequence< css::i18n::NumberFormatCode >& rSeq,
             const NfIndexTableOffset nTabOff )
 {
-    auto pSeq = std::find_if(rSeq.begin(), rSeq.end(),
+    auto pSeq = std::find_if(std::cbegin(rSeq), std::cend(rSeq),
         [nTabOff](const css::i18n::NumberFormatCode& rCode) { return rCode.Index == nTabOff; });
-    if (pSeq != rSeq.end())
-        return static_cast<sal_Int32>(std::distance(rSeq.begin(), pSeq));
+    if (pSeq != std::cend(rSeq))
+        return static_cast<sal_Int32>(std::distance(std::cbegin(rSeq), pSeq));
     if (LocaleDataWrapper::areChecksEnabled() && (nTabOff < NF_CURRENCY_START
                 || NF_CURRENCY_END < nTabOff || nTabOff == NF_CURRENCY_1000INT
                 || nTabOff == NF_CURRENCY_1000INT_RED
@@ -2367,24 +2367,24 @@ sal_Int32 SvNumberFormatter::ImpGetFormatCodeIndex(
     if ( rSeq.hasElements() )
     {
         // look for a preset default
-        pSeq = std::find_if(rSeq.begin(), rSeq.end(),
+        pSeq = std::find_if(std::cbegin(rSeq), std::cend(rSeq),
             [](const css::i18n::NumberFormatCode& rCode) { return rCode.Default; });
-        if (pSeq != rSeq.end())
-            return static_cast<sal_Int32>(std::distance(rSeq.begin(), pSeq));
+        if (pSeq != std::cend(rSeq))
+            return static_cast<sal_Int32>(std::distance(std::cbegin(rSeq), pSeq));
         // currencies are special, not all format codes must exist, but all
         // builtin number format key index positions must have a format assigned
         if ( NF_CURRENCY_START <= nTabOff && nTabOff <= NF_CURRENCY_END )
         {
             // look for a format with decimals
-            pSeq = std::find_if(rSeq.begin(), rSeq.end(),
+            pSeq = std::find_if(std::cbegin(rSeq), std::cend(rSeq),
                 [](const css::i18n::NumberFormatCode& rCode) { return rCode.Index == NF_CURRENCY_1000DEC2; });
-            if (pSeq != rSeq.end())
-                return static_cast<sal_Int32>(std::distance(rSeq.begin(), pSeq));
+            if (pSeq != std::cend(rSeq))
+                return static_cast<sal_Int32>(std::distance(std::cbegin(rSeq), pSeq));
             // last resort: look for a format without decimals
-            pSeq = std::find_if(rSeq.begin(), rSeq.end(),
+            pSeq = std::find_if(std::cbegin(rSeq), std::cend(rSeq),
                 [](const css::i18n::NumberFormatCode& rCode) { return rCode.Index == NF_CURRENCY_1000INT; });
-            if (pSeq != rSeq.end())
-                return static_cast<sal_Int32>(std::distance(rSeq.begin(), pSeq));
+            if (pSeq != std::cend(rSeq))
+                return static_cast<sal_Int32>(std::distance(std::cbegin(rSeq), pSeq));
         }
     }
     else
@@ -4044,7 +4044,7 @@ const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry( bool & bFoundBank,
 void SvNumberFormatter::GetCompatibilityCurrency( OUString& rSymbol, OUString& rAbbrev ) const
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
-    css::uno::Sequence< css::i18n::Currency2 >
+    const css::uno::Sequence< css::i18n::Currency2 >
         xCurrencies( xLocaleData->getAllCurrencies() );
 
     auto pCurrency = std::find_if(xCurrencies.begin(), xCurrencies.end(),

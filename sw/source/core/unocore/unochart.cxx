@@ -1233,15 +1233,16 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     // build value for 'SequenceMapping'
 
     uno::Sequence< sal_Int32 > aSortedMapping( aSequenceMapping );
-    std::sort( aSortedMapping.begin(), aSortedMapping.end() );
+    auto [begin, end] = toNonConstRange(aSortedMapping);
+    std::sort(begin, end);
     bool bNeedSequenceMapping = false;
     for (sal_Int32 i = 0;  i < aSequenceMapping.getLength();  ++i)
     {
-        auto it = std::find( aSortedMapping.begin(), aSortedMapping.end(),
+        auto it = std::find( std::cbegin(aSortedMapping), std::cend(aSortedMapping),
                              aSequenceMapping[i] );
-        aSequenceMapping[i] = std::distance(aSortedMapping.begin(), it);
+        aSequenceMapping[i] = std::distance(std::cbegin(aSortedMapping), it);
 
-        if (i != aSequenceMapping[i])
+        if (i != std::as_const(aSequenceMapping)[i])
             bNeedSequenceMapping = true;
     }
 

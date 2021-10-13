@@ -882,7 +882,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                             Sequence < OUString > aTmp;
                             aRet >>= aTmp;
 
-                            aProtocols.insert(aProtocols.end(),aTmp.begin(),aTmp.end());
+                            aProtocols.insert(aProtocols.end(),std::cbegin(aTmp),std::cend(aTmp));
                         }
                     }
 
@@ -1037,11 +1037,11 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     // Any Referer (that was relevant in the above call to
     // SvtSecurityOptions::isSecureMacroUri) is no longer relevant, assuming
     // this "open" request is initiated directly by the user:
-    auto pArg = std::find_if(aArgs.begin(), aArgs.end(),
+    auto pArg = std::find_if(std::cbegin(aArgs), std::cend(aArgs),
         [](const PropertyValue& rArg) { return rArg.Name == "Referer"; });
-    if (pArg != aArgs.end())
+    if (pArg != std::cend(aArgs))
     {
-        auto nIndex = static_cast<sal_Int32>(std::distance(aArgs.begin(), pArg));
+        auto nIndex = static_cast<sal_Int32>(std::distance(std::cbegin(aArgs), pArg));
         comphelper::removeElementAt(aArgs, nIndex);
     }
 

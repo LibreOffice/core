@@ -651,9 +651,9 @@ bool DocxAttributeOutput::TextBoxIsFramePr(const SwFrameFormat& rFrameFormat)
     {
         uno::Sequence< beans::PropertyValue > propList;
         xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= propList;
-        auto pProp = std::find_if(propList.begin(), propList.end(),
+        auto pProp = std::find_if(std::cbegin(propList), std::cend(propList),
             [](const beans::PropertyValue& rProp) { return rProp.Name == "ParaFrameProperties"; });
-        if (pProp != propList.end())
+        if (pProp != std::cend(propList))
             aFrameProperties = pProp->Value;
     }
     bool bFrameProperties = false;
@@ -2820,10 +2820,10 @@ void DocxAttributeOutput::GetSdtEndBefore(const SdrObject* pSdrObj)
         xPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
     }
 
-    auto pProp = std::find_if(aGrabBag.begin(), aGrabBag.end(),
+    auto pProp = std::find_if(std::cbegin(aGrabBag), std::cend(aGrabBag),
         [this](const beans::PropertyValue& rProp) {
             return "SdtEndBefore" == rProp.Name && m_bStartedCharSdt && !m_bEndCharSdt; });
-    if (pProp != aGrabBag.end())
+    if (pProp != std::cend(aGrabBag))
         pProp->Value >>= m_bEndCharSdt;
 }
 
@@ -4701,9 +4701,9 @@ void DocxAttributeOutput::LatentStyles()
     uno::Sequence<beans::PropertyValue> aInteropGrabBag;
     xPropertySet->getPropertyValue("InteropGrabBag") >>= aInteropGrabBag;
     uno::Sequence<beans::PropertyValue> aLatentStyles;
-    auto pProp = std::find_if(aInteropGrabBag.begin(), aInteropGrabBag.end(),
+    auto pProp = std::find_if(std::cbegin(aInteropGrabBag), std::cend(aInteropGrabBag),
         [](const beans::PropertyValue& rProp) { return rProp.Name == "latentStyles"; });
-    if (pProp != aInteropGrabBag.end())
+    if (pProp != std::cend(aInteropGrabBag))
         pProp->Value >>= aLatentStyles;
     if (!aLatentStyles.hasElements())
         return;
@@ -5736,9 +5736,9 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
     uno::Reference< beans::XPropertySet > xPropSet( m_rExport.m_rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
     uno::Sequence< beans::PropertyValue > aGrabBag, aObjectsInteropList,aObjectInteropAttributes;
     xPropSet->getPropertyValue( UNO_NAME_MISC_OBJ_INTEROPGRABBAG ) >>= aGrabBag;
-    auto pProp = std::find_if(aGrabBag.begin(), aGrabBag.end(),
+    auto pProp = std::find_if(std::cbegin(aGrabBag), std::cend(aGrabBag),
         [](const beans::PropertyValue& rProp) { return rProp.Name == "EmbeddedObjects"; });
-    if (pProp != aGrabBag.end())
+    if (pProp != std::cend(aGrabBag))
         pProp->Value >>= aObjectsInteropList;
 
     SwOLEObj& aObject = rNode.GetOLEObj();
@@ -5757,9 +5757,9 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
         default:
             SAL_WARN("sw.ww8", "DocxAttributeOutput::WriteOLE: invalid aspect value");
     }
-    auto pObjectsInterop = std::find_if(aObjectsInteropList.begin(), aObjectsInteropList.end(),
+    auto pObjectsInterop = std::find_if(std::cbegin(aObjectsInteropList), std::cend(aObjectsInteropList),
         [&sObjectName](const beans::PropertyValue& rProp) { return rProp.Name == sObjectName; });
-    if (pObjectsInterop != aObjectsInteropList.end())
+    if (pObjectsInterop != std::cend(aObjectsInteropList))
         pObjectsInterop->Value >>= aObjectInteropAttributes;
 
     for( const auto& rObjectInteropAttribute : std::as_const(aObjectInteropAttributes) )

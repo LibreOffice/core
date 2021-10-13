@@ -175,9 +175,9 @@ void XMLTextNumRuleInfo::Set(
         Sequence<PropertyValue> aProps;
         mxNumRules->getByIndex( mnListLevel ) >>= aProps;
 
-        auto pProp = std::find_if(aProps.begin(), aProps.end(),
+        auto pProp = std::find_if(std::cbegin(aProps), std::cend(aProps),
             [](const PropertyValue& rProp) { return rProp.Name == "StartWith"; });
-        if (pProp != aProps.end())
+        if (pProp != std::cend(aProps))
         {
             pProp->Value >>= mnListLevelStartValue;
         }

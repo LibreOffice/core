@@ -288,9 +288,10 @@ void SAL_CALL OQueryController::getFastPropertyValue( Any& o_rValue, sal_Int32 i
         PropertyAttribute::READONLY
     );
 
+    auto [begin, end] = toNonConstRange(aProps);
     std::sort(
-        aProps.begin(),
-        aProps.end(),
+        begin,
+        end,
         ::comphelper::PropertyCompareByName()
     );
 

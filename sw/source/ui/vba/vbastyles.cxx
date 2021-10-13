@@ -222,7 +222,7 @@ public:
         }
         else
         {
-            uno::Sequence< OUString > sElementNames = mxParaStyles->getElementNames();
+            const uno::Sequence< OUString > sElementNames = mxParaStyles->getElementNames();
             auto pStyleName = std::find_if(sElementNames.begin(), sElementNames.end(),
                 [&aName](const OUString& rStyleName) { return rStyleName.equalsIgnoreAsciiCase( aName ); });
             if (pStyleName != sElementNames.end())

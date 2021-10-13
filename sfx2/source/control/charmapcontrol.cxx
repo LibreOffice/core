@@ -119,11 +119,11 @@ SfxCharmapCtrl::~SfxCharmapCtrl()
 void SfxCharmapCtrl::getFavCharacterList()
 {
     //retrieve recent character list
-    css::uno::Sequence< OUString > rFavCharList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::get() );
+    const css::uno::Sequence< OUString > rFavCharList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::get() );
     m_aFavCharList.insert( m_aFavCharList.end(), rFavCharList.begin(), rFavCharList.end() );
 
     //retrieve recent character font list
-    css::uno::Sequence< OUString > rFavCharFontList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::get() );
+    const css::uno::Sequence< OUString > rFavCharFontList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::get() );
     m_aFavCharFontList.insert( m_aFavCharFontList.end(), rFavCharFontList.begin(), rFavCharFontList.end() );
 
     // tdf#135997: make sure that the two lists are same length
@@ -158,11 +158,11 @@ void SfxCharmapCtrl::updateFavCharControl()
 void SfxCharmapCtrl::getRecentCharacterList()
 {
     //retrieve recent character list
-    css::uno::Sequence< OUString > rRecentCharList( officecfg::Office::Common::RecentCharacters::RecentCharacterList::get() );
+    const css::uno::Sequence< OUString > rRecentCharList( officecfg::Office::Common::RecentCharacters::RecentCharacterList::get() );
     m_aRecentCharList.insert( m_aRecentCharList.end(), rRecentCharList.begin(), rRecentCharList.end() );
 
     //retrieve recent character font list
-    css::uno::Sequence< OUString > rRecentCharFontList( officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::get() );
+    const css::uno::Sequence< OUString > rRecentCharFontList( officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::get() );
     m_aRecentCharFontList.insert( m_aRecentCharFontList.end(), rRecentCharFontList.begin(), rRecentCharFontList.end() );
 
     // tdf#135997: make sure that the two lists are same length

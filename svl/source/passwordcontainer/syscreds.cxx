@@ -169,7 +169,7 @@ void SysCredentialsConfig::initCfg()
     osl::MutexGuard aGuard( m_aMutex );
     if ( !m_bCfgInited )
     {
-        uno::Sequence< OUString > aURLs(
+        const uno::Sequence< OUString > aURLs(
             m_aConfigItem.getSystemCredentialsURLs() );
         m_aCfgContainer.insert( aURLs.begin(), aURLs.end() );
         m_bCfgInited = true;

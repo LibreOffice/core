@@ -3025,7 +3025,7 @@ Content::ResourceType Content::resourceTypeForLocks(
                                     uno::Sequence< ucb::LockEntry > aSupportedLocks;
                                     if ( rProp.Value >>= aSupportedLocks )
                                     {
-                                        bool isSupported = std::any_of(aSupportedLocks.begin(), aSupportedLocks.end(),
+                                        bool isSupported = std::any_of(std::cbegin(aSupportedLocks), std::cend(aSupportedLocks),
                                             [](const ucb::LockEntry& rLock) {
                                                 // TODO: if the lock type is changed from 'exclusive write' to 'shared write'
                                                 // e.g. to implement 'Calc shared file feature', the ucb::LockScope_EXCLUSIVE

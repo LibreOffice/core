@@ -338,9 +338,10 @@ public:
         uno::Sequence< beans::NamedValue > stats(
                 m_xDocProps->getDocumentStatistics());
 
-        auto pStat = std::find_if(stats.begin(), stats.end(),
+        auto [begin, end] = toNonConstRange(stats);
+        auto pStat = std::find_if(begin, end,
             [&rPropName](const beans::NamedValue& rStat) { return rPropName == rStat.Name; });
-        if (pStat != stats.end())
+        if (pStat != end)
         {
             pStat->Value = aValue;
             m_xDocProps->setDocumentStatistics(stats);
@@ -838,7 +839,7 @@ public:
 
     virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
-        uno::Sequence< beans::Property > aProps = mxUserDefinedProp->getPropertySetInfo()->getProperties();
+        const uno::Sequence< beans::Property > aProps = mxUserDefinedProp->getPropertySetInfo()->getProperties();
         uno::Sequence< OUString > aNames( aProps.getLength() );
         std::transform(aProps.begin(), aProps.end(), aNames.begin(),
             [](const beans::Property& rProp) -> OUString { return rProp.Name; });

@@ -2096,7 +2096,7 @@ void SAL_CALL ScDPLevel::setPropertyValue( const OUString& aPropertyName, const 
         uno::Sequence<sheet::GeneralFunction> aSeq;
         aValue >>= aSeq;
         aSubTotals.realloc(aSeq.getLength());
-        std::transform(aSeq.begin(), aSeq.end(), aSubTotals.begin(),
+        std::transform(std::cbegin(aSeq), std::cend(aSeq), aSubTotals.begin(),
             [](const sheet::GeneralFunction& rFunc) -> sal_Int16 {
                 return static_cast<sal_Int16>(rFunc); });
     }

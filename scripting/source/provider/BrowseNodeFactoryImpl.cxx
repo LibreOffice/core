@@ -102,7 +102,7 @@ public:
 
         Sequence< Reference < browse::XBrowseNode > > result( numChildren );
         sal_Int32 index = 0;
-        for ( Sequence< Reference < browse::XBrowseNode > >& children : seqs )
+        for ( const Sequence< Reference < browse::XBrowseNode > >& children : seqs )
         {
             std::copy(children.begin(), children.end(), std::next(result.begin(), index));
             index += children.getLength();

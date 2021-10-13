@@ -182,7 +182,7 @@ OUString VbaCommandBarHelper::findToolbarByName( const css::uno::Reference< css:
     if( !sResourceUrl.isEmpty() )
         return sResourceUrl;
 
-    uno::Sequence< OUString > allNames = xNameAccess->getElementNames();
+    const uno::Sequence< OUString > allNames = xNameAccess->getElementNames();
     auto pName = std::find_if(allNames.begin(), allNames.end(),
         [this, &sName](const OUString& rName) {
             return rName.startsWith( ITEM_TOOLBAR_URL )

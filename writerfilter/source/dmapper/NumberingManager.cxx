@@ -172,13 +172,11 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetCharStyleProperties( )
 {
     PropertyValueVector_t rProperties;
 
-    uno::Sequence< beans::PropertyValue > vPropVals = PropertyMap::GetPropertyValues();
-    beans::PropertyValue* aValIter = vPropVals.begin();
-    beans::PropertyValue* aEndIter = vPropVals.end();
+    const uno::Sequence< beans::PropertyValue > vPropVals = PropertyMap::GetPropertyValues();
     const bool bIsSymbol(GetBulletChar().getLength() <= 1);
-    for( ; aValIter != aEndIter; ++aValIter )
-        if (! IgnoreForCharStyle(aValIter->Name, bIsSymbol))
-            rProperties.emplace_back(aValIter->Name, 0, aValIter->Value, beans::PropertyState_DIRECT_VALUE);
+    for( const auto& rPropNal : vPropVals )
+        if (! IgnoreForCharStyle(rPropNal.Name, bIsSymbol))
+            rProperties.emplace_back(rPropNal.Name, 0, rPropNal.Value, beans::PropertyState_DIRECT_VALUE);
 
     return comphelper::containerToSequence(rProperties);
 }

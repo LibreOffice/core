@@ -458,7 +458,7 @@ Sequence< Reference< chart2::data::XLabeledDataSequence > > lcl_getAllSeriesSequ
             Reference< chart2::data::XDataSource > xDataSource( rSeries, uno::UNO_QUERY );
             if( !xDataSource.is() )
                 continue;
-            uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
+            const uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
             aContainer.insert( aContainer.end(), aDataSequences.begin(), aDataSequences.end() );
         }
     }
@@ -495,7 +495,7 @@ Reference< chart2::data::XDataSource > lcl_pressUsedDataIntoRectangularFormat( c
         aLabeledSeqVector.push_back( xCategories );
     rOutSourceHasCategoryLabels = xCategories.is();
 
-    Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeriesSeqVector(
+    const Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeriesSeqVector(
             lcl_getAllSeriesSequences( xChartDoc ) );
 
     //the first x-values is always the next sequence //todo ... other x-values get lost for old format
@@ -690,24 +690,25 @@ uno::Sequence< OUString > lcl_DataSequenceToStringSequence(
         if( aRole.match("values-x") )
         {
             //lcl_clearIfNoValuesButTextIsContained - replace by indices if the values are not appropriate
-            bool bHasValue = std::any_of(aValuesSequence.begin(), aValuesSequence.end(),
+            bool bHasValue = std::any_of(std::cbegin(aValuesSequence), std::cend(aValuesSequence),
                 [](double fValue) { return !std::isnan( fValue ); });
             if(!bHasValue)
             {
                 //no double value is contained
                 //is there any text?
-                uno::Sequence< OUString > aStrings( lcl_DataSequenceToStringSequence( xSeq ) );
+                const uno::Sequence< OUString > aStrings( lcl_DataSequenceToStringSequence( xSeq ) );
                 bool bHasText = std::any_of(aStrings.begin(), aStrings.end(),
                     [](const OUString& rString) { return !rString.isEmpty(); });
                 if( bHasText )
                 {
-                    std::iota(aValuesSequence.begin(), aValuesSequence.end(), 1);
+                    auto [begin, end] = toNonConstRange(aValuesSequence);
+                    std::iota(begin, end, 1);
                 }
             }
         }
     }
 
-    aResult.insert( aResult.end(), aValuesSequence.begin(), aValuesSequence.end() );
+    aResult.insert( aResult.end(), std::cbegin(aValuesSequence), std::cend(aValuesSequence) );
     return aResult;
 }
 
@@ -855,7 +856,7 @@ lcl_TableData lcl_getDataForLocalTable(
 
         //categories
         rCategories.clear();
-        rCategories.insert( rCategories.begin(), aSimpleCategories.begin(), aSimpleCategories.end() );
+        rCategories.insert( rCategories.begin(), std::cbegin(aSimpleCategories), std::cend(aSimpleCategories) );
         if( !rCategoriesRange.isEmpty() )
         {
             OUString aRange(rCategoriesRange);
@@ -2553,7 +2554,7 @@ namespace
         Reference< chart2::data::XNumericalDataSequence > xNumericalDataSequence( xDataSequence, uno::UNO_QUERY );
         if( xNumericalDataSequence.is() )
         {
-            Sequence< double >  aDoubles( xNumericalDataSequence->getNumericalData() );
+            const Sequence< double >  aDoubles( xNumericalDataSequence->getNumericalData() );
             if (std::any_of(aDoubles.begin(), aDoubles.end(), [](double fDouble) { return !std::isnan( fDouble ); }))
                 return false;//have double value
         }
@@ -2561,7 +2562,7 @@ namespace
         {
             aData = xDataSequence->getData();
             double fDouble = 0.0;
-            bool bHaveDouble = std::any_of(aData.begin(), aData.end(),
+            bool bHaveDouble = std::any_of(std::cbegin(aData), std::cend(aData),
                 [&fDouble](const uno::Any& rData) { return (rData >>= fDouble) && !std::isnan( fDouble ); });
             if (bHaveDouble)
                 return false;//have double value
@@ -2571,7 +2572,7 @@ namespace
         Reference< chart2::data::XTextualDataSequence > xTextualDataSequence( xDataSequence, uno::UNO_QUERY );
         if( xTextualDataSequence.is() )
         {
-            uno::Sequence< OUString > aStrings( xTextualDataSequence->getTextualData() );
+            const uno::Sequence< OUString > aStrings( xTextualDataSequence->getTextualData() );
             if (std::any_of(aStrings.begin(), aStrings.end(), [](const OUString& rString) { return !rString.isEmpty(); }))
                 return true;//have text
         }
@@ -2580,7 +2581,7 @@ namespace
             if( !aData.hasElements() )
                 aData = xDataSequence->getData();
             OUString aString;
-            bool bHaveText = std::any_of(aData.begin(), aData.end(),
+            bool bHaveText = std::any_of(std::cbegin(aData), std::cend(aData),
                 [&aString](const uno::Any& rData) { return (rData >>= aString) && !aString.isEmpty(); });
             if (bHaveText)
                 return true;//have text

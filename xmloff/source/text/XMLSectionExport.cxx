@@ -1798,9 +1798,9 @@ void XMLSectionExport::ExportMasterDocHeadingDummies()
         OUString sStyle;
         Sequence<PropertyValue> aProperties;
         xChapterNumbering->getByIndex( nLevel ) >>= aProperties;
-        auto pProp = std::find_if(aProperties.begin(), aProperties.end(),
+        auto pProp = std::find_if(std::cbegin(aProperties), std::cend(aProperties),
             [](const PropertyValue& rProp) { return rProp.Name == "HeadingStyleName"; });
-        if (pProp != aProperties.end())
+        if (pProp != std::cend(aProperties))
             pProp->Value >>= sStyle;
 
         if( !sStyle.isEmpty() )

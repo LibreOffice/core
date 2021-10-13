@@ -406,7 +406,7 @@ static void lcl_fillCategoriesIntoStringVector(
     if( xTextualDataSequence.is())
     {
         rOutCategories.clear();
-        Sequence< OUString > aTextData( xTextualDataSequence->getTextualData());
+        const Sequence< OUString > aTextData( xTextualDataSequence->getTextualData());
         rOutCategories.insert( rOutCategories.end(), aTextData.begin(), aTextData.end() );
     }
     else
@@ -425,7 +425,7 @@ static ::std::vector< double > lcl_getAllValuesFromSequence( const Reference< ch
     Reference< chart2::data::XNumericalDataSequence > xNumSeq( xSeq, uno::UNO_QUERY );
     if( xNumSeq.is())
     {
-        Sequence< double > aValues( xNumSeq->getNumericalData());
+        const Sequence< double > aValues( xNumSeq->getNumericalData());
         aResult.insert( aResult.end(), aValues.begin(), aValues.end() );
     }
     else if( xSeq.is())

@@ -738,16 +738,14 @@ void SvtModuleOptions_Impl::MakeReadonlyStatesAvailable()
         return;
 
     css::uno::Sequence< OUString > lFactories = GetNodeNames(OUString());
-    std::transform(lFactories.begin(), lFactories.end(), lFactories.begin(),
-        [](const OUString& rFactory) -> OUString {
-            return rFactory + PATHSEPARATOR PROPERTYNAME_DEFAULTFILTER;
-        });
+    for (OUString& rFactory : toNonConstRange(lFactories))
+        rFactory += PATHSEPARATOR PROPERTYNAME_DEFAULTFILTER;
 
     css::uno::Sequence< sal_Bool > lReadonlyStates = GetReadOnlyStates(lFactories);
     sal_Int32 c = lFactories.getLength();
     for (sal_Int32 i=0; i<c; ++i)
     {
-        OUString&            rFactoryName = lFactories[i];
+        const OUString&            rFactoryName = std::as_const(lFactories)[i];
         SvtModuleOptions::EFactory  eFactory;
 
         if (!ClassifyFactoryByName(rFactoryName, eFactory))

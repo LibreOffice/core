@@ -249,7 +249,7 @@ Sequence< sal_Bool >& CachedContentResultSet::CCRS_Cache
     {
         sal_Int32 nCount = m_pResult->Rows.getLength();
         m_pMappedReminder.emplace( nCount );
-        std::fill(m_pMappedReminder->begin(), m_pMappedReminder->end(), false);
+        std::fill_n(m_pMappedReminder->begin(), m_pMappedReminder->getLength(), false);
     }
     return *m_pMappedReminder;
 }

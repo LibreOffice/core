@@ -81,9 +81,9 @@ CommandInfo SAL_CALL
 XCommandInfo_impl::getCommandInfoByName(
     const OUString& aName )
 {
-    auto pCommand = std::find_if(m_pMyShell->m_sCommandInfo.begin(), m_pMyShell->m_sCommandInfo.end(),
+    auto pCommand = std::find_if(std::cbegin(m_pMyShell->m_sCommandInfo), std::cend(m_pMyShell->m_sCommandInfo),
             [&aName](const CommandInfo& rCommand) { return rCommand.Name == aName; });
-    if (pCommand != m_pMyShell->m_sCommandInfo.end())
+    if (pCommand != std::cend(m_pMyShell->m_sCommandInfo))
         return *pCommand;
 
     throw UnsupportedCommandException( THROW_WHERE );
@@ -94,9 +94,9 @@ CommandInfo SAL_CALL
 XCommandInfo_impl::getCommandInfoByHandle(
     sal_Int32 Handle )
 {
-    auto pCommand = std::find_if(m_pMyShell->m_sCommandInfo.begin(), m_pMyShell->m_sCommandInfo.end(),
+    auto pCommand = std::find_if(std::cbegin(m_pMyShell->m_sCommandInfo), std::cend(m_pMyShell->m_sCommandInfo),
             [&Handle](const CommandInfo& rCommand) { return rCommand.Handle == Handle; });
-    if (pCommand != m_pMyShell->m_sCommandInfo.end())
+    if (pCommand != std::cend(m_pMyShell->m_sCommandInfo))
         return *pCommand;
 
     throw UnsupportedCommandException( THROW_WHERE );
@@ -107,7 +107,7 @@ sal_Bool SAL_CALL
 XCommandInfo_impl::hasCommandByName(
     const OUString& aName )
 {
-    return std::any_of(m_pMyShell->m_sCommandInfo.begin(), m_pMyShell->m_sCommandInfo.end(),
+    return std::any_of(std::cbegin(m_pMyShell->m_sCommandInfo), std::cend(m_pMyShell->m_sCommandInfo),
         [&aName](const CommandInfo& rCommand) { return rCommand.Name == aName; });
 }
 
@@ -116,7 +116,7 @@ sal_Bool SAL_CALL
 XCommandInfo_impl::hasCommandByHandle(
     sal_Int32 Handle )
 {
-    return std::any_of(m_pMyShell->m_sCommandInfo.begin(), m_pMyShell->m_sCommandInfo.end(),
+    return std::any_of(std::cbegin(m_pMyShell->m_sCommandInfo), std::cend(m_pMyShell->m_sCommandInfo),
         [&Handle](const CommandInfo& rCommand) { return rCommand.Handle == Handle; });
 }
 

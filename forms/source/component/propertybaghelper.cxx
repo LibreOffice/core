@@ -256,7 +256,7 @@ namespace frm
         Reference< XMultiPropertySet > xMe( m_rContext.getPropertiesInterface(), css::uno::UNO_SET_THROW );
         Reference< XPropertySetInfo > xPSI( xMe->getPropertySetInfo(), css::uno::UNO_SET_THROW );
 
-        Sequence< Property > aProperties( xPSI->getProperties() );
+        const Sequence< Property > aProperties( xPSI->getProperties() );
         Sequence< OUString > aPropertyNames( aProperties.getLength() );
         ::std::transform( aProperties.begin(), aProperties.end(),
             aPropertyNames.getArray(), SelectNameOfProperty() );
