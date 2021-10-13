@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78d93b34_c750d60f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-10-13T10:30:27Z",
+      "side": 1,
+      "message": "Hi László,\nshould the test go in uiwriter instead of implemented it as a UITest?",
+      "revId": "88cd5ddcb416a3e6b2d198a34b0d3aeabb782ab1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
