@@ -165,9 +165,7 @@ public:
     void testPageScalingXLSX();
     void testActiveXCheckboxXLSX();
     void testtdf120301_xmlSpaceParsingXLSX();
-#ifdef UNX
     void testUnicodeFileNameGnumeric();
-#endif
     void testCondFormatFormulaListenerXLSX();
 
     void testMergedCellsXLSXML();
@@ -274,9 +272,7 @@ public:
     CPPUNIT_TEST(testPageScalingXLSX);
     CPPUNIT_TEST(testActiveXCheckboxXLSX);
     CPPUNIT_TEST(testtdf120301_xmlSpaceParsingXLSX);
-#ifdef UNX
     CPPUNIT_TEST(testUnicodeFileNameGnumeric);
-#endif
     CPPUNIT_TEST(testMergedCellsXLSXML);
     CPPUNIT_TEST(testBackgroundColorStandardXLSXML);
     CPPUNIT_TEST(testTdf131536);
@@ -1638,7 +1634,6 @@ void ScFiltersTest2::testTdf83672XLSX()
     xDocSh->DoClose();
 }
 
-#ifdef UNX
 void ScFiltersTest2::testUnicodeFileNameGnumeric()
 {
     // Mapping the LO-internal URL
@@ -1654,7 +1649,6 @@ void ScFiltersTest2::testUnicodeFileNameGnumeric()
 
     xDocSh->DoClose();
 }
-#endif
 
 void ScFiltersTest2::testMergedCellsXLSXML()
 {
