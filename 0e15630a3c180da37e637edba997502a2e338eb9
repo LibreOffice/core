@@ -16,6 +16,24 @@
       "message": "similarly, this could be\n    void put(const char* pPropName, std::u16string_view rPropValue);",
       "revId": "0e15630a3c180da37e637edba997502a2e338eb9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "474de201_051a8517",
+        "filename": "include/tools/json_writer.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-13T13:44:44Z",
+      "side": 1,
+      "message": "Right - I just was focused on unifying the char-taking variants, to make the following change in one single place :-)\n\nAnd we need to iterate codepoints - is that available for u16?",
+      "parentUuid": "e05bc55e_a8f40fc4",
+      "revId": "0e15630a3c180da37e637edba997502a2e338eb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
