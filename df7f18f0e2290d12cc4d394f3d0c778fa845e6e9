@@ -16,6 +16,24 @@
       "message": "Overlapping redlines ARE a thing, at least in Word. So we have to (and do!) support it to a degree. \nSee https://bugs.documentfoundation.org/show_bug.cgi?id\u003d142387 for such an example. \nEven the Manage changes dialog displays it in a \"structured\" way.\nOpening that particular file would hit this assert with this patch:\n\nsoffice.bin: /home/gabor/src/core/sw/source/core/doc/DocumentRedlineManager.cxx:2292: virtual IDocumentRedlineAccess::AppendResult sw::DocumentRedlineManager::AppendRedline(SwRangeRedline*, bool): Assertion `ret || !pNewRedl\u0027 failed.\n\n\nNot having overlapping redlines in ODF is bug https://bugs.documentfoundation.org/show_bug.cgi?id\u003d56266 \nand the example in https://bugs.documentfoundation.org/show_bug.cgi?id\u003d39721 also shows it\u0027s easy to create overlapping redlines (moving a numbered paragraph containing redline up/down with the toolbar is a cut\u0026paste... which too hits the above assert).\n\nWith more support for tracking text formatting and table structure changes added recently, I think overlapping redlines will only get more and more common and easy to create.\n\nSo please don\u0027t do this.",
       "revId": "df7f18f0e2290d12cc4d394f3d0c778fa845e6e9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95bd3cbf_c2b38344",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-10-13T07:14:22Z",
+      "side": 1,
+      "message": "\u003e \n\u003e So please don\u0027t do this.\n\nAh, that is a pity.\n\nWe will need a much fancier index to search redlines then, probably some kind of 1-D version of a spatial index.",
+      "parentUuid": "66363f9a_70400e24",
+      "revId": "df7f18f0e2290d12cc4d394f3d0c778fa845e6e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
