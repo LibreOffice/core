@@ -162,15 +162,42 @@ OUString getExactMatch(const ScTypedCaseStrSet& rDataSet, const OUString& rStrin
     return rString;
 }
 
+// This assumes that rResults is a sorted ring w.r.t ScTypedStrData::LessCaseInsensitive() or
+// in the reverse direction, whose origin is specified by nRingOrigin.
+sal_Int32 getLongestCommonPrefixLength(const std::vector<OUString>& rResults, const OUString& rUserEntry, sal_Int32 nRingOrigin)
+{
+    sal_Int32 nResults = rResults.size();
+    if (!nResults)
+        return 0;
+
+    if (nResults == 1)
+        return rResults[0].getLength();
+
+    sal_Int32 nMinLen = rUserEntry.getLength();
+    sal_Int32 nLastIdx = nRingOrigin ? nRingOrigin - 1 : nResults - 1;
+    const OUString& rFirst = rResults[nRingOrigin];
+    const OUString& rLast = rResults[nLastIdx];
+    const sal_Int32 nMaxLen = std::min(rFirst.getLength(), rLast.getLength());
+
+    for (sal_Int32 nLen = nMaxLen; nLen > nMinLen; --nLen)
+    {
+        if (ScGlobal::GetTransliteration().isMatch(rFirst.copy(0, nLen), rLast))
+            return nLen;
+    }
+
+    return nMinLen;
+}
+
 ScTypedCaseStrSet::const_iterator findTextAll(
     const ScTypedCaseStrSet& rDataSet, ScTypedCaseStrSet::const_iterator const & itPos,
-    const OUString& rStart, ::std::vector< OUString > &rResultVec, bool bBack, size_t nMax = 0)
+    const OUString& rStart, ::std::vector< OUString > &rResultVec, bool bBack, sal_Int32* pLongestPrefixLen = nullptr)
 {
     rResultVec.clear(); // clear contents
 
     if (!rDataSet.size())
         return rDataSet.end();
 
+    sal_Int32 nRingOrigin = 0;
     size_t nCount = 0;
     ScTypedCaseStrSet::const_iterator retit;
     if ( bBack ) // Backwards
@@ -198,7 +225,10 @@ ScTypedCaseStrSet::const_iterator findTextAll(
         {
             ++it;
             if ( it == rDataSet.rend() ) // go to the first if reach the end
+            {
                 it = rDataSet.rbegin();
+                nRingOrigin = nCount;
+            }
 
             if ( bFirstTime )
                 bFirstTime = false;
@@ -221,8 +251,6 @@ ScTypedCaseStrSet::const_iterator findTextAll(
                 std::advance(retit, nPos);
             }
             ++nCount;
-            if (nMax > 0 && nCount >= nMax)
-                break;
         }
     }
     else // Forwards
@@ -238,7 +266,10 @@ ScTypedCaseStrSet::const_iterator findTextAll(
         {
             ++it;
             if ( it == rDataSet.end() ) // go to the first if reach the end
+            {
                 it = rDataSet.begin();
+                nRingOrigin = nCount;
+            }
 
             if ( bFirstTime )
                 bFirstTime = false;
@@ -255,9 +286,19 @@ ScTypedCaseStrSet::const_iterator findTextAll(
             if ( nCount == 0 )
                 retit = it; // remember first match iterator
             ++nCount;
-            if (nMax > 0 && nCount >= nMax)
-                break;
         }
+    }
+
+    if (pLongestPrefixLen)
+    {
+        if (nRingOrigin >= static_cast<sal_Int32>(nCount))
+        {
+            // All matches were picked when rDataSet was read in one direction.
+            nRingOrigin = 0;
+        }
+        // rResultsVec is a sorted ring with nRingOrigin "origin".
+        // The direction of sorting is not important for getLongestCommonPrefixLength.
+        *pLongestPrefixLen = getLongestCommonPrefixLength(rResultVec, rStart, nRingOrigin);
     }
 
     if ( nCount > 0 ) // at least one function has matched
@@ -788,6 +829,7 @@ ScInputHandler::ScInputHandler()
         bProtected( false ),
         bLastIsSymbol( false ),
         mbDocumentDisposing(false),
+        mbPartialPrefix(false),
         nValidation( 0 ),
         eAttrAdjust( SvxCellHorJustify::Standard ),
         aScaleX( 1,1 ),
@@ -1971,24 +2013,28 @@ void ScInputHandler::UseColData() // When typing
 
     std::vector< OUString > aResultVec;
     OUString aNew;
+    sal_Int32 nLongestPrefixLen = 0;
     miAutoPosColumn = pColumnData->end();
-    miAutoPosColumn = findTextAll(*pColumnData, miAutoPosColumn, aText, aResultVec, false, 2);
-    bool bShowCompletion = (aResultVec.size() == 1);
-    bUseTab = (aResultVec.size() == 2);
-    if (bUseTab)
-    {
-        // Allow cycling through possible matches using shortcut.
-        // Make miAutoPosColumn invalid so that Ctrl+TAB provides the first matching one.
-        miAutoPosColumn = pColumnData->end();
-        aAutoSearch = aText;
+    mbPartialPrefix = false;
+    miAutoPosColumn = findTextAll(*pColumnData, miAutoPosColumn, aText, aResultVec, false, &nLongestPrefixLen);
+
+    if (nLongestPrefixLen <= 0 || aResultVec.empty())
         return;
+
+    if (aResultVec.size() > 1)
+    {
+        mbPartialPrefix = true;
+        bUseTab = true; // Allow Ctrl (+ Shift + ) + TAB cycling.
+        miAutoPosColumn = pColumnData->end();
+
+        // Display the rest of longest common prefix as suggestion.
+        aNew = aResultVec[0].copy(0, nLongestPrefixLen);
+    }
+    else
+    {
+        aNew = aResultVec[0];
     }
 
-    if (!bShowCompletion)
-        return;
-
-    assert(miAutoPosColumn != pColumnData->end());
-    aNew = aResultVec[0];
     // Strings can contain line endings (e.g. due to dBase import),
     // which would result in multiple paragraphs here, which is not desirable.
     //! Then GetExactMatch doesn't work either
@@ -2047,6 +2093,7 @@ void ScInputHandler::NextAutoEntry( bool bBack )
                         // match found!
                         miAutoPosColumn = itNew;
                         bInOwnChange = true;        // disable ModifyHdl (reset below)
+                        mbPartialPrefix = false;
 
                         lcl_RemoveLineEnd( aNew );
                         OUString aIns = aNew.copy(aAutoSearch.getLength());
@@ -2942,6 +2989,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
     if (bInEnterHandler) return;
     bInEnterHandler = true;
     bInOwnChange = true; // disable ModifyHdl (reset below)
+    mbPartialPrefix = false;
 
     ImplCreateEditEngine();
 
@@ -3306,6 +3354,7 @@ void ScInputHandler::CancelHandler()
     ImplCreateEditEngine();
 
     bModified = false;
+    mbPartialPrefix = false;
 
     // Don't rely on ShowRefFrame switching the active view synchronously
     // execute the function directly on the correct view's bindings instead
@@ -3597,6 +3646,22 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
     if (bAlt && !bControl && nCode != KEY_RETURN)
         // Alt-Return and Alt-Ctrl-* are accepted. Everything else with ALT are not.
         return false;
+
+    // There is a partial autocomplete suggestion.
+    // Allow its completion with right arrow key (without modifiers).
+    if (mbPartialPrefix && nCode == KEY_RIGHT && !bControl && !bShift && !bAlt &&
+        (pTopView || pTableView))
+    {
+        if (pTopView)
+            pTopView->PostKeyEvent(KeyEvent(0, css::awt::Key::MOVE_TO_END_OF_PARAGRAPH));
+        if (pTableView)
+            pTableView->PostKeyEvent(KeyEvent(0, css::awt::Key::MOVE_TO_END_OF_PARAGRAPH));
+
+        mbPartialPrefix = false;
+
+        // Indicate that this event has been consumed and ScTabViewShell should not act on this.
+        return true;
+    }
 
     if (!bControl && nCode == KEY_TAB)
     {

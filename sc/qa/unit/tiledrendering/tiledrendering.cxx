@@ -2712,12 +2712,12 @@ void ScTiledRenderingTest::testAutoInputExactMatch()
 
     ScAddress aA8(0, 7, 0);
     lcl_typeCharsInCell("S", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "S" in A8
-    // Should not autocomplete as there are multiple matches starting with "S".
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("1: A8 should have just S (should not autocomplete)", OUString("S"), pDoc->GetString(aA8));
+    // Should show the partial completion "i".
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("1: A8 should have partial completion Si", OUString("Si"), pDoc->GetString(aA8));
 
     lcl_typeCharsInCell("Si", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "Si" in A8
-    // Should not autocomplete as there are multiple matches starting with "Si".
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("2: A8 should not autocomplete", OUString("Si"), pDoc->GetString(aA8));
+    // Should not show any suggestions.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("2: A8 should not show suggestions", OUString("Si"), pDoc->GetString(aA8));
 
     lcl_typeCharsInCell("Sim", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "Sim" in A8
     // Should autocomplete to "Simple" which is the only match.
@@ -2727,9 +2727,9 @@ void ScTiledRenderingTest::testAutoInputExactMatch()
     // Should autocomplete to "Sing" which is the only match.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("4: A8 should autocomplete", OUString("Sing"), pDoc->GetString(aA8));
 
-    lcl_typeCharsInCell("Cas", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "Cas" in A8
-    // Should not autocomplete as there are multiple matches starting with "Cas".
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("5: A8 should not autocomplete", OUString("Cas"), pDoc->GetString(aA8));
+    lcl_typeCharsInCell("C", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "C" in A8
+    // Should show the partial completion "as".
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("5: A8 should have partial completion Cas", OUString("Cas"), pDoc->GetString(aA8));
 
     lcl_typeCharsInCell("Cast", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "Cast" in A8
     // Should autocomplete to "Castle" which is the only match.
