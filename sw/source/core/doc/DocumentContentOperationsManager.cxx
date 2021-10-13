@@ -935,8 +935,10 @@ namespace
         for(SaveRedline & rSvRedLine : rArr)
         {
             rSvRedLine.SetPos( nInsPos );
-            pDoc->getIDocumentRedlineAccess().AppendRedline( rSvRedLine.pRedl, true );
-            if (rSvRedLine.pRedl->GetType() == RedlineType::Delete)
+            IDocumentRedlineAccess::AppendResult const result(
+                pDoc->getIDocumentRedlineAccess().AppendRedline( rSvRedLine.pRedl, true ));
+            if ( IDocumentRedlineAccess::AppendResult::APPENDED == result &&
+                 rSvRedLine.pRedl->GetType() == RedlineType::Delete )
             {
                 UpdateFramesForAddDeleteRedline(*pDoc, *rSvRedLine.pRedl);
             }
