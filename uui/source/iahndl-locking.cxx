@@ -72,8 +72,7 @@ void handleReadOnlyOpenRequest_(
     std::locale aResLocale = Translate::Create("uui");
 
     OUString aMessage;
-    std::vector<OUString> aArguments;
-    aArguments.push_back(aDocumentURL);
+    std::vector<OUString> aArguments { aDocumentURL };
 
     aMessage = Translate::get(STR_READONLYOPEN_MSG, aResLocale);
     aMessage = UUIInteractionHelper::replaceMessageWithArguments(aMessage, aArguments);
@@ -102,8 +101,7 @@ void handleReloadEditableRequest_(
     std::locale aResLocale = Translate::Create("uui");
 
     OUString aMessage;
-    std::vector<OUString> aArguments;
-    aArguments.push_back(aDocumentURL);
+    std::vector<OUString> aArguments { aDocumentURL };
 
     aMessage = Translate::get(STR_RELOADEDITABLE_MSG, aResLocale);
     aMessage = UUIInteractionHelper::replaceMessageWithArguments(aMessage, aArguments);
@@ -140,8 +138,7 @@ handleLockedDocumentRequest_(
     std::locale aResLocale = Translate::Create("uui");
 
     OUString aMessage;
-    std::vector< OUString > aArguments;
-    aArguments.push_back( aDocumentURL );
+    std::vector< OUString > aArguments { aDocumentURL };
 
     bool bAllowOverride = xRetry.is() && officecfg::Office::Common::Misc::AllowOverrideLocking::get();
 

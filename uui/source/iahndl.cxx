@@ -463,7 +463,6 @@ UUIInteractionHelper::handleRequest_impl(
         ucb::UnsupportedNameClashException aUORequest;
         if (aAnyRequest >>= aUORequest)
         {
-            std::vector< OUString > aArguments;
 
             uno::Reference< task::XInteractionApprove > xApprove;
             uno::Reference< task::XInteractionDisapprove > xDisapprove;
@@ -472,6 +471,7 @@ UUIInteractionHelper::handleRequest_impl(
 
             if ( xApprove.is() && xDisapprove.is() )
             {
+                std::vector< OUString > aArguments;
                 handleErrorHandlerRequest( task::InteractionClassification_QUERY,
                                            ERRCODE_UUI_IO_UNSUPPORTEDOVERWRITE,
                                            aArguments,
@@ -553,8 +553,7 @@ UUIInteractionHelper::handleRequest_impl(
         {
             sal_Int32 nMedium = 0;
             aWrongMediumException.Medium >>= nMedium;
-            std::vector< OUString > aArguments;
-            aArguments.push_back(OUString::number(nMedium + 1));
+            std::vector< OUString > aArguments { OUString::number(nMedium + 1) };
             handleErrorHandlerRequest(aWrongMediumException.Classification,
                                       ERRCODE_UUI_WRONGMEDIUM,
                                       aArguments,
@@ -607,8 +606,7 @@ UUIInteractionHelper::handleRequest_impl(
                 ? ERRCODE_UUI_CONFIGURATION_BROKENDATA_WITHREMOVE
                 : ERRCODE_UUI_CONFIGURATION_BROKENDATA_NOREMOVE;
 
-            std::vector< OUString > aArguments;
-            aArguments.push_back(aMergeRecoveryRequest.ErrorLayerId);
+            std::vector< OUString > aArguments { aMergeRecoveryRequest.ErrorLayerId };
 
             handleErrorHandlerRequest(task::InteractionClassification_ERROR,
                                       nErrorCode,
@@ -631,8 +629,7 @@ UUIInteractionHelper::handleRequest_impl(
             if (aStratum.isEmpty())
                 aStratum = aStratumCreationException.StratumService;
 
-            std::vector< OUString > aArguments;
-            aArguments.push_back(aStratum);
+            std::vector< OUString > aArguments { aStratum };
 
             handleErrorHandlerRequest(task::InteractionClassification_ERROR,
                                       nErrorCode,
@@ -667,8 +664,7 @@ UUIInteractionHelper::handleRequest_impl(
         {
             ErrCode nErrorCode = aLLException.SelfOwned
                 ? ERRCODE_UUI_LOCKING_LOCKED_SELF : ERRCODE_UUI_LOCKING_LOCKED;
-            std::vector< OUString > aArguments;
-            aArguments.push_back( aLLException.Url );
+            std::vector< OUString > aArguments { aLLException.Url };
 
             handleErrorHandlerRequest( aLLException.Classification,
                                        nErrorCode,
@@ -683,8 +679,7 @@ UUIInteractionHelper::handleRequest_impl(
         ucb::InteractiveLockingNotLockedException aLNLException;
         if (aAnyRequest >>= aLNLException)
         {
-            std::vector< OUString > aArguments;
-            aArguments.push_back( aLNLException.Url );
+            std::vector< OUString > aArguments { aLNLException.Url };
 
             handleErrorHandlerRequest( aLNLException.Classification,
                                        ERRCODE_UUI_LOCKING_NOT_LOCKED,
@@ -699,8 +694,7 @@ UUIInteractionHelper::handleRequest_impl(
         ucb::InteractiveLockingLockExpiredException aLLEException;
         if (aAnyRequest >>= aLLEException)
         {
-            std::vector< OUString > aArguments;
-            aArguments.push_back( aLLEException.Url );
+            std::vector< OUString > aArguments { aLLEException.Url };
 
             handleErrorHandlerRequest( aLLEException.Classification,
                                        ERRCODE_UUI_LOCKING_LOCK_EXPIRED,
@@ -753,8 +747,7 @@ UUIInteractionHelper::handleRequest_impl(
         loader::CannotActivateFactoryException aCannotActivateFactoryException;
         if (aAnyRequest >>= aCannotActivateFactoryException)
         {
-            std::vector< OUString > aArguments;
-            aArguments.push_back( aCannotActivateFactoryException.Message );
+            std::vector< OUString > aArguments { aCannotActivateFactoryException.Message };
 
             handleErrorHandlerRequest( task::InteractionClassification_ERROR,
                                        ERRCODE_UUI_CANNOT_ACTIVATE_FACTORY,
