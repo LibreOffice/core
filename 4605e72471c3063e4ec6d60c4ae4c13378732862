@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a69b215b_e0832578",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-10-13T11:05:50Z",
+      "side": 1,
+      "message": "Great catch! I assume that even if this was noticed with some Java thing, it could well happen with only C++ involved, too? Would it be possible to write a unit test to catch this problem on the future for some new platform?",
+      "revId": "4605e72471c3063e4ec6d60c4ae4c13378732862",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
