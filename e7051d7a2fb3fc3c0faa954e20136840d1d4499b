@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba396306_b2fc0413",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-13T18:31:26Z",
+      "side": 1,
+      "message": "indeed, looks like I included that local file in the original commit by accident; thanks for spotting!",
+      "revId": "e7051d7a2fb3fc3c0faa954e20136840d1d4499b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
