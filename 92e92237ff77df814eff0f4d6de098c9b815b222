@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f92a7cff_9d47d239",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-10-13T11:55:49Z",
+      "side": 1,
+      "message": "Sure, it\u0027s kind of a workaround to fix bug 118320 (Windows) and bug 118017 (macOS). But is not so clear how to read the values from both OS under all conditions. And the customization is cheap, the clutter is limited to one list that has a good length right now, and allows tweaking the UI beyond the system theming. I believe many users would love to see LibreOffice being customizable like Firefox, for example, ideally per extension.\nThe missing dark mode support is mentioned most often in surveys and other comments on usability.",
+      "parentUuid": "347abbe4_008d9a05",
+      "revId": "92e92237ff77df814eff0f4d6de098c9b815b222",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "30f31461_4d6408d6",
