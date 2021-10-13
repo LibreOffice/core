@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "acd71a95_f226dab2",
+        "filename": "tools/source/misc/json_writer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-13T13:22:41Z",
+      "side": 1,
+      "message": "True ...",
+      "parentUuid": "ed554de9_42723e71",
+      "revId": "fcf14f4eb0776b2779bb306de2382b1ddb7d1591",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "009c1ecb_6e7875fc",
         "filename": "tools/source/misc/json_writer.cxx",
         "patchSetId": 2
@@ -31,6 +49,24 @@
       "writtenOn": "2021-10-13T13:19:42Z",
       "side": 1,
       "message": "this will need to change, will need to become\n   auto nWorstCasePropValLength \u003d rPropVal.size() * 6;",
+      "revId": "fcf14f4eb0776b2779bb306de2382b1ddb7d1591",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b3c3efa_959eb373",
+        "filename": "tools/source/misc/json_writer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-13T13:22:41Z",
+      "side": 1,
+      "message": "No, not here. 3-character sequence like \u0027\\xE2\\x80\\xA8\u0027 gets replaced with 6-character sequence \u0027\\\\u2028\u0027. Exactly 2x inflation, as before :-)",
+      "parentUuid": "009c1ecb_6e7875fc",
       "revId": "fcf14f4eb0776b2779bb306de2382b1ddb7d1591",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
