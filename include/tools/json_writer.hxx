@@ -8,13 +8,15 @@
  */
 #pragma once
 
-#include <tools/toolsdllapi.h>
-#include <rtl/ustring.hxx>
+#include <sal/config.h>
 
-namespace rtl
-{
-class OStringBuffer;
-}
+#include <tools/toolsdllapi.h>
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+
+#include <string>
+#include <string_view>
 
 /** Simple JSON encoder designed specifically for LibreOfficeKit purposes.
  *
@@ -49,11 +51,11 @@ public:
     [[nodiscard]] ScopedJsonWriterStruct startStruct();
 
     void put(const char* pPropName, const OUString& rPropValue);
-    void put(const char* pPropName, const OString& rPropValue);
-    void put(const char* pPropName, const char* pPropVal);
-    void put(const char* pPropName, const std::string& rPropValue)
+    // Assumes utf-8 property value encoding
+    void put(const char* pPropName, std::string_view rPropValue);
+    void put(const char* pPropName, const char* pPropVal)
     {
-        put(pPropName, rPropValue.data());
+        put(pPropName, std::string_view(pPropVal));
     }
 
     void put(const char* pPropName, sal_uInt16 nPropVal) { put(pPropName, sal_Int64(nPropVal)); }
@@ -67,7 +69,7 @@ public:
     void putSimpleValue(const OUString& rPropValue);
 
     /// This assumes that this data belongs at this point in the stream, and is valid, and properly encoded
-    void putRaw(const rtl::OStringBuffer&);
+    void putRaw(std::string_view);
 
     /** Hands ownership of the underlying storage buffer to the caller,
      * after this no more document modifications may be written. */
