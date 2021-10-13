@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d213d7c0_f963ec2d",
+        "filename": "framework/inc/helper/ocomponentenumeration.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-10-13T01:09:31Z",
+      "side": 1,
+      "message": "The other two verbs in these sentences should also get the -s ending for third-person singular... i.e. \"does the same\" and \"releases references\". Pls follow up",
+      "revId": "164ec9281aa57d52763e9622adb6e2e37d14bff8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
