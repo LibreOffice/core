@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7eefe8b9_481a547c",
+        "filename": "vcl/qa/cppunit/outdev.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1925,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-10-13T17:45:03Z",
+      "side": 1,
+      "message": "YOu\u0027ll need to remove UNLESS_MERGELIBS for MetaPolygonAction - or it will again break the mergelibs build",
+      "range": {
+        "startLine": 1925,
+        "startChar": 8,
+        "endLine": 1925,
+        "endChar": 25
+      },
+      "revId": "207cd91a243735acd6d6c4381084a587041ca999",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
