@@ -2720,7 +2720,7 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
     if (nRowGroupDepth > 0)
     {
         aRowGroupsBuffer.append(",\n");
-        rJsonWriter.putRaw(aRowGroupsBuffer.getStr());
+        rJsonWriter.putRaw(aRowGroupsBuffer);
     }
     ///  end collecting ROWS
 
@@ -2815,7 +2815,7 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
     if (nColGroupDepth > 0)
     {
         aColGroupsBuffer.append(",\n");
-        rJsonWriter.putRaw(aColGroupsBuffer.getStr());
+        rJsonWriter.putRaw(aColGroupsBuffer);
     }
     ///  end collecting COLs
 
