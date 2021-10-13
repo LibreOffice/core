@@ -27,6 +27,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 
 #include <comphelper/propertyvalue.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -42,6 +43,7 @@
 #include <flyfrm.hxx>
 #include <fmtanchr.hxx>
 #include <unotextrange.hxx>
+#include <view.hxx>
 
 using namespace ::com::sun::star;
 
@@ -106,6 +108,30 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, flyAtParaAnchor)
         xMSF->createInstance("com.sun.star.text.Fieldmark"), uno::UNO_QUERY_THROW);
     // this crashed because the anchor didn't have SwIndex
     xText->insertTextContent(xAnchor, xFieldmark, false);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testViewCursorTextFrame)
+{
+    // Given a document with a graphic and holding a reference to that graphic frame:
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    uno::Sequence<beans::PropertyValue> aInsertArgs = { comphelper::makePropertyValue(
+        "FileName", m_directories.getURLFromSrc(DATA_DIRECTORY) + "graphic.png") };
+    dispatchCommand(mxComponent, ".uno:InsertGraphic", aInsertArgs);
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
+        xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xViewCursor(xTextViewCursorSupplier->getViewCursor(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame;
+    xViewCursor->getPropertyValue("TextFrame") >>= xFrame;
+
+    // When saving to ODT, then make sure the store doesn't fail:
+    uno::Reference<frame::XStorable> xStorable(xModel, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreArgs
+        = { comphelper::makePropertyValue("FilterName", OUString("writer8")) };
+    // Without the accompanying fix in place, this test would have failed with:
+    // uno.RuntimeException: "SwXParagraph: disposed or invalid ..."
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreArgs);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
