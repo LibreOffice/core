@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e477eb3_19ced148",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2021-10-13T08:42:53Z",
+      "side": 1,
+      "message": "\u003e Patch Set 3:\n\u003e \n\u003e Build queued https://ci.libreoffice.org/job/gerrit_master/98219/\n\n",
+      "revId": "9ced6701405ce310af3631ddde37309b51a66739",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

@@ -16,6 +16,24 @@
       "message": "There are more places in the configure.ac where 2019 is mentioned, some of them possibly also need care - would you think it\u0027s possible to touch them in this change?",
       "revId": "d9e7d917ab5f18ec4db5e80f585b7d8d1c561b55",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30391289_f7e2a360",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2021-10-13T08:42:53Z",
+      "side": 1,
+      "message": "Thanks, I didn\u0027t notice.",
+      "parentUuid": "2d0687e8_62500f65",
+      "revId": "d9e7d917ab5f18ec4db5e80f585b7d8d1c561b55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
