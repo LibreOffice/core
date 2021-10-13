@@ -305,6 +305,13 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             aNewAttr.Put(aItem);
         }
         break;
+        case SID_ATTR_PARA_LINESPACE_115:
+        {
+            SvxLineSpacingItem aItem(LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL);
+            aItem.SetPropLineSpace(115);
+            aNewAttr.Put(aItem);
+        }
+        break;
         case SID_ATTR_PARA_LINESPACE_15:
         {
             SvxLineSpacingItem aItem(LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL);
@@ -783,6 +790,9 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
 
             case SID_ATTR_PARA_LINESPACE_10:
                 nLSpace = 100;
+                goto ASK_LINESPACE;
+            case SID_ATTR_PARA_LINESPACE_115:
+                nLSpace = 115;
                 goto ASK_LINESPACE;
             case SID_ATTR_PARA_LINESPACE_15:
                 nLSpace = 150;

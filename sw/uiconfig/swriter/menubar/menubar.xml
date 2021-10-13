@@ -400,6 +400,7 @@
       <menu:menu menu:id=".uno:FormatSpacingMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:SpacePara1"/>
+          <menu:menuitem menu:id=".uno:SpacePara115"/>
           <menu:menuitem menu:id=".uno:SpacePara15"/>
           <menu:menuitem menu:id=".uno:SpacePara2"/>
           <menu:menuseparator/>

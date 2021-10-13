@@ -1828,6 +1828,14 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
           <value>15</value>
         </prop>
       </node>
+      <node oor:name=".uno:SpacePara115" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Line Spacing: 1.15</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>15</value>
+        </prop>
+      </node>
       <node oor:name=".uno:SpacePara15" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Line Spacing: 1.5</value>
