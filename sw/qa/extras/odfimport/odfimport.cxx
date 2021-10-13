@@ -884,6 +884,14 @@ CPPUNIT_TEST_FIXTURE(Test, testBnc800714)
     CPPUNIT_ASSERT(getProperty<bool>(getParagraph(2), "ParaKeepTogether"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf92586)
+{
+    load(mpTestDocumentPath, "tdf92586.odt");
+    uno::Any aPageStyle = getStyles("PageStyles")->getByName("Standard");
+    // This was BitmapMode_NO_REPEAT.
+    CPPUNIT_ASSERT_EQUAL(drawing::BitmapMode_STRETCH, getProperty<drawing::BitmapMode>(aPageStyle, "FillBitmapMode"));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf103025)
 {
     load(mpTestDocumentPath, "tdf103025.odt");
