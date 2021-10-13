@@ -22,6 +22,30 @@
       },
       "revId": "207cd91a243735acd6d6c4381084a587041ca999",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1653f74b_ff95d8f2",
+        "filename": "vcl/qa/cppunit/outdev.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1925,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-10-13T19:59:20Z",
+      "side": 1,
+      "message": "Thanks, I\u0027ve fixed.",
+      "parentUuid": "7eefe8b9_481a547c",
+      "range": {
+        "startLine": 1925,
+        "startChar": 8,
+        "endLine": 1925,
+        "endChar": 25
+      },
+      "revId": "207cd91a243735acd6d6c4381084a587041ca999",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
