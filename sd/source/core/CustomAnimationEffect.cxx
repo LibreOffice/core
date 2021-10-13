@@ -387,7 +387,7 @@ sal_Int32 CustomAnimationEffect::get_node_type( const Reference< XAnimationNode 
 
     if( xNode.is() )
     {
-        Sequence< NamedValue > aUserData( xNode->getUserData() );
+        const Sequence< NamedValue > aUserData( xNode->getUserData() );
         if( aUserData.hasElements() )
         {
             const NamedValue* pProp = std::find_if(aUserData.begin(), aUserData.end(),
@@ -418,17 +418,18 @@ void CustomAnimationEffect::setPresetClassAndId( sal_Int16 nPresetClass, const O
     bool bFoundPresetId = false;
     if( nLength )
     {
-        NamedValue* pProp = std::find_if(aUserData.begin(), aUserData.end(),
+        auto [begin, end] = toNonConstRange(aUserData);
+        NamedValue* pProp = std::find_if(begin, end,
             [](const NamedValue& rProp) { return rProp.Name == "preset-class"; });
-        if (pProp != aUserData.end())
+        if (pProp != end)
         {
             pProp->Value <<= mnPresetClass;
             bFoundPresetClass = true;
         }
 
-        pProp = std::find_if(aUserData.begin(), aUserData.end(),
+        pProp = std::find_if(begin, end,
             [](const NamedValue& rProp) { return rProp.Name == "preset-id"; });
-        if (pProp != aUserData.end())
+        if (pProp != end)
         {
             pProp->Value <<= mnPresetClass;
             bFoundPresetId = true;
@@ -439,16 +440,18 @@ void CustomAnimationEffect::setPresetClassAndId( sal_Int16 nPresetClass, const O
     if( !bFoundPresetClass )
     {
         aUserData.realloc( nLength + 1);
-        aUserData[nLength].Name = "preset-class";
-        aUserData[nLength].Value <<= mnPresetClass;
+        auto& el = aUserData[nLength];
+        el.Name = "preset-class";
+        el.Value <<= mnPresetClass;
         ++nLength;
     }
 
     if( !bFoundPresetId && maPresetId.getLength() > 0 )
     {
         aUserData.realloc( nLength + 1);
-        aUserData[nLength].Name = "preset-id";
-        aUserData[nLength].Value <<= maPresetId;
+        auto& el = aUserData[nLength];
+        el.Name = "preset-id";
+        el.Value <<= maPresetId;
     }
 
     mxNode->setUserData( aUserData );
@@ -470,9 +473,10 @@ void CustomAnimationEffect::setNodeType( sal_Int16 nNodeType )
     bool bFound = false;
     if( nLength )
     {
-        NamedValue* pProp = std::find_if(aUserData.begin(), aUserData.end(),
+        auto [begin, end] = toNonConstRange(aUserData);
+        NamedValue* pProp = std::find_if(begin, end,
             [](const NamedValue& rProp) { return rProp.Name == "node-type"; });
-        if (pProp != aUserData.end())
+        if (pProp != end)
         {
             pProp->Value <<= mnNodeType;
             bFound = true;
@@ -483,8 +487,9 @@ void CustomAnimationEffect::setNodeType( sal_Int16 nNodeType )
     if( !bFound )
     {
         aUserData.realloc( nLength + 1);
-        aUserData[nLength].Name = "node-type";
-        aUserData[nLength].Value <<= mnNodeType;
+        auto& el = aUserData[nLength];
+        el.Name = "node-type";
+        el.Value <<= mnNodeType;
     }
 
     mxNode->setUserData( aUserData );
@@ -503,9 +508,10 @@ void CustomAnimationEffect::setGroupId( sal_Int32 nGroupId )
     bool bFound = false;
     if( nLength )
     {
-        NamedValue* pProp = std::find_if(aUserData.begin(), aUserData.end(),
+        auto [begin, end] = toNonConstRange(aUserData);
+        NamedValue* pProp = std::find_if(begin, end,
             [](const NamedValue& rProp) { return rProp.Name == "group-id"; });
-        if (pProp != aUserData.end())
+        if (pProp != end)
         {
             pProp->Value <<= mnGroupId;
             bFound = true;
@@ -516,8 +522,9 @@ void CustomAnimationEffect::setGroupId( sal_Int32 nGroupId )
     if( !bFound )
     {
         aUserData.realloc( nLength + 1);
-        aUserData[nLength].Name = "group-id";
-        aUserData[nLength].Value <<= mnGroupId;
+        auto& el = aUserData[nLength];
+        el.Name = "group-id";
+        el.Value <<= mnGroupId;
     }
 
     mxNode->setUserData( aUserData );
@@ -1677,7 +1684,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPres
             std::vector< NamedValue > aNewUserData;
             Sequence< NamedValue > aUserData( xNode->getUserData() );
 
-            std::copy_if(aUserData.begin(), aUserData.end(), std::back_inserter(aNewUserData),
+            std::copy_if(std::cbegin(aUserData), std::cend(aUserData), std::back_inserter(aNewUserData),
                 [](const NamedValue& rProp) { return rProp.Name != "text-only" && rProp.Name != "preset-property"; });
 
             if( !aNewUserData.empty() )
@@ -2972,7 +2979,7 @@ void EffectSequenceHelper::processAfterEffect( const Reference< XAnimationNode >
     {
         Reference< XAnimationNode > xMaster;
 
-        Sequence< NamedValue > aUserData( xNode->getUserData() );
+        const Sequence< NamedValue > aUserData( xNode->getUserData() );
         const NamedValue* pProp = std::find_if(aUserData.begin(), aUserData.end(),
             [](const NamedValue& rProp) { return rProp.Name == "master-element"; });
 

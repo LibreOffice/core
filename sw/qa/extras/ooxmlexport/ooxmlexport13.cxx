@@ -174,7 +174,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95848_2, "tdf95848_2.docx")
         auto xLevels = getProperty<uno::Reference<container::XIndexAccess>>(xPara, "NumberingRules");
         uno::Sequence<beans::PropertyValue> aLevel;
         xLevels->getByIndex(0) >>= aLevel; // top level
-        sal_Int32 nIndent = std::find_if(aLevel.begin(), aLevel.end(), [](const beans::PropertyValue& rValue) { return rValue.Name == "FirstLineIndent"; })->Value.get<sal_Int32>();
+        sal_Int32 nIndent = std::find_if(std::cbegin(aLevel), std::cend(aLevel), [](const beans::PropertyValue& rValue) { return rValue.Name == "FirstLineIndent"; })->Value.get<sal_Int32>();
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-635), nIndent);
     }
     {
@@ -192,7 +192,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95848_2, "tdf95848_2.docx")
         auto xLevels = getProperty<uno::Reference<container::XIndexAccess>>(xPara, "NumberingRules");
         uno::Sequence<beans::PropertyValue> aLevel;
         xLevels->getByIndex(0) >>= aLevel; // top level
-        sal_Int32 nIndent = std::find_if(aLevel.begin(), aLevel.end(), [](const beans::PropertyValue& rValue) { return rValue.Name == "FirstLineIndent"; })->Value.get<sal_Int32>();
+        sal_Int32 nIndent = std::find_if(std::cbegin(aLevel), std::cend(aLevel), [](const beans::PropertyValue& rValue) { return rValue.Name == "FirstLineIndent"; })->Value.get<sal_Int32>();
         CPPUNIT_ASSERT_EQUAL(sal_Int32(9366), nIndent);
     }
     {

@@ -170,7 +170,7 @@ static void impl_FillURLList( sfx2::FileDialogHelper const * _pFileDlg, std::vec
 {
     DBG_ASSERT( _pFileDlg, "DocumentInserter::fillURLList(): invalid file dialog" );
 
-    Sequence < OUString > aPathSeq = _pFileDlg->GetSelectedFiles();
+    const Sequence < OUString > aPathSeq = _pFileDlg->GetSelectedFiles();
 
     if ( aPathSeq.hasElements() )
     {

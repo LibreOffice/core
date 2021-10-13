@@ -1046,13 +1046,15 @@ void ODatabaseSource::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) con
                 // transform them so that only property values which fulfill certain
                 // criteria survive
                 Sequence< PropertyValue > aNonDefaultOrUserDefined( aValues.getLength() );
+                auto [begin, end] = toNonConstRange(aValues);
+                auto pCopyStart = aNonDefaultOrUserDefined.getArray();
                 const PropertyValue* pCopyEnd = std::remove_copy_if(
-                    aValues.begin(),
-                    aValues.end(),
-                    aNonDefaultOrUserDefined.getArray(),
+                    begin,
+                    end,
+                    pCopyStart,
                     IsDefaultAndNotRemoveable( aPropertyAttributes )
                 );
-                aNonDefaultOrUserDefined.realloc( pCopyEnd - aNonDefaultOrUserDefined.getArray() );
+                aNonDefaultOrUserDefined.realloc( pCopyEnd - pCopyStart );
                 rValue <<= aNonDefaultOrUserDefined;
             }
             catch( const Exception& )

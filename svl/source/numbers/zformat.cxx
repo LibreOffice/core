@@ -3405,7 +3405,7 @@ void SvNumberformat::SwitchToOtherCalendar( OUString& rOrgCalendar,
         return;
 
     using namespace ::com::sun::star::i18n;
-    css::uno::Sequence< OUString > xCals = rCal.getAllCalendars(
+    const css::uno::Sequence< OUString > xCals = rCal.getAllCalendars(
             rLoc().getLanguageTag().getLocale() );
     sal_Int32 nCnt = xCals.getLength();
     if ( nCnt <= 1 )

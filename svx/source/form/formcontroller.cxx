@@ -1275,7 +1275,7 @@ bool FormController::replaceControl( const Reference< XControl >& _rxExistentCon
         if ( xContainer.is() )
         {
             // look up the ID of _rxExistentControl
-            Sequence< sal_Int32 > aIdentifiers( xContainer->getIdentifiers() );
+            const Sequence< sal_Int32 > aIdentifiers( xContainer->getIdentifiers() );
             const sal_Int32* pIdentifiers = std::find_if(aIdentifiers.begin(), aIdentifiers.end(),
                 [&xContainer, &_rxExistentControl](const sal_Int32 nId) {
                     Reference< XControl > xCheck( xContainer->getByIdentifier( nId ), UNO_QUERY );
@@ -2320,19 +2320,17 @@ Reference< XControl >  FormController::findControl(Sequence< Reference< XControl
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
     DBG_ASSERT( xCtrlModel.is(), "findControl - which ?!" );
 
-    Reference< XControl >* pControls = std::find_if(_rControls.begin(), _rControls.end(),
+    const Reference< XControl >* pControls = std::find_if(std::cbegin(_rControls), std::cend(_rControls),
         [&xCtrlModel](const Reference< XControl >& rControl) {
             return rControl.is() && rControl->getModel().get() == xCtrlModel.get(); });
-    if (pControls != _rControls.end())
+    if (pControls != std::cend(_rControls))
     {
         Reference< XControl > xControl( *pControls );
+        auto i = static_cast<sal_Int32>(std::distance(std::cbegin(_rControls), pControls));
         if ( _bRemove )
-        {
-            auto i = static_cast<sal_Int32>(std::distance(_rControls.begin(), pControls));
             ::comphelper::removeElementAt( _rControls, i );
-        }
         else if ( _bOverWrite )
-            pControls->clear();
+            _rControls[i].clear();
         return xControl;
     }
     return Reference< XControl > ();
@@ -2449,11 +2447,11 @@ void FormController::insertControl(const Reference< XControl > & xControl)
 void FormController::removeControl(const Reference< XControl > & xControl)
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
-    auto pControl = std::find_if(m_aControls.begin(), m_aControls.end(),
+    auto pControl = std::find_if(std::cbegin(m_aControls), std::cend(m_aControls),
         [&xControl](const Reference< XControl >& rControl) { return xControl.get() == rControl.get(); });
-    if (pControl != m_aControls.end())
+    if (pControl != std::cend(m_aControls))
     {
-        auto nIndex = static_cast<sal_Int32>(std::distance(m_aControls.begin(), pControl));
+        auto nIndex = static_cast<sal_Int32>(std::distance(std::cbegin(m_aControls), pControl));
         ::comphelper::removeElementAt( m_aControls, nIndex );
     }
 

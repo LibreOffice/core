@@ -511,10 +511,10 @@ void XMLSignatureHelper::ExportSignatureContentTypes(const css::uno::Reference<c
     // Append rels and sigs to defaults, if it's not there already.
     uno::Sequence<beans::StringPair>& rDefaults = aContentTypeInfo[0];
     auto aDefaults = comphelper::sequenceToContainer< std::vector<beans::StringPair> >(rDefaults);
-    if (std::none_of(rDefaults.begin(), rDefaults.end(), [](const beans::StringPair& rPair) { return rPair.First == "rels"; }))
+    if (std::none_of(std::cbegin(rDefaults), std::cend(rDefaults), [](const beans::StringPair& rPair) { return rPair.First == "rels"; }))
         aDefaults.emplace_back("rels", "application/vnd.openxmlformats-package.relationships+xml");
 
-    if (std::none_of(rDefaults.begin(), rDefaults.end(), [](const beans::StringPair& rPair) { return rPair.First == "sigs"; }))
+    if (std::none_of(std::cbegin(rDefaults), std::cend(rDefaults), [](const beans::StringPair& rPair) { return rPair.First == "sigs"; }))
         aDefaults.emplace_back("sigs", "application/vnd.openxmlformats-package.digital-signature-origin");
     rDefaults = comphelper::containerToSequence(aDefaults);
 

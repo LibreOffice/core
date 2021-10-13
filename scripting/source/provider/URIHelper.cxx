@@ -142,7 +142,7 @@ ScriptingFrameworkURIHelper::initBaseURI()
         return false;
     }
 
-    uno::Sequence< OUString > children =
+    const uno::Sequence< OUString > children =
         m_xSimpleFileAccess->getFolderContents( uri, true );
 
     auto pChild = std::find_if(children.begin(), children.end(), [&test](const OUString& child) {

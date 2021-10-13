@@ -83,14 +83,14 @@ namespace comphelper
            && (_rArguments[1] >>= AllowEmptyPropertyName)
            && (_rArguments[2] >>= AutomaticAddition))
         {
-            m_aAllowedTypes.insert(aTypes.begin(), aTypes.end());
+            m_aAllowedTypes.insert(std::cbegin(aTypes), std::cend(aTypes));
             m_bAutoAddProperties = AutomaticAddition;
 
         } else {
             ::comphelper::NamedValueCollection aArguments( _rArguments );
 
             if ( aArguments.get_ensureType( "AllowedTypes", aTypes ) )
-                m_aAllowedTypes.insert( aTypes.begin(), aTypes.end());
+                m_aAllowedTypes.insert(std::cbegin(aTypes), std::cend(aTypes));
 
             aArguments.get_ensureType( "AutomaticAddition", m_bAutoAddProperties );
             aArguments.get_ensureType( "AllowEmptyPropertyName",
@@ -377,8 +377,8 @@ namespace comphelper
         // their names
         Sequence< OUString > aNames( aProperties.getLength() );
         std::transform(
-            aProperties.begin(),
-            aProperties.end(),
+            std::cbegin(aProperties),
+            std::cend(aProperties),
             aNames.getArray(),
             TransformPropertyToName< Property >()
         );
@@ -425,17 +425,18 @@ namespace comphelper
     {
         // sort (the XMultiPropertySet interface requires this)
         Sequence< PropertyValue > aProperties( _rProps );
+        auto [begin, end] = toNonConstRange(aProperties);
         std::sort(
-            aProperties.begin(),
-            aProperties.end(),
+            begin,
+            end,
             ComparePropertyValueByName()
         );
 
         // a sequence of names
         Sequence< OUString > aNames( aProperties.getLength() );
         std::transform(
-            aProperties.begin(),
-            aProperties.end(),
+            std::cbegin(aProperties),
+            std::cend(aProperties),
             aNames.getArray(),
             TransformPropertyToName< PropertyValue >()
         );
@@ -479,8 +480,8 @@ namespace comphelper
             // a sequence of values
             Sequence< Any > aValues( aProperties.getLength() );
             std::transform(
-                aProperties.begin(),
-                aProperties.end(),
+                std::cbegin(aProperties),
+                std::cend(aProperties),
                 aValues.getArray(),
                 ExtractPropertyValue()
             );

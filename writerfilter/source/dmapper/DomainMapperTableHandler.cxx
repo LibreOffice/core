@@ -1024,7 +1024,7 @@ static bool lcl_emptyRow(std::vector<RowSequence_t>& rTableRanges, sal_Int32 nRo
         return false;
     }
 
-    RowSequence_t rRowSeq = rTableRanges[nRow];
+    const RowSequence_t rRowSeq = rTableRanges[nRow];
     if (!rRowSeq.hasElements())
     {
         SAL_WARN("writerfilter.dmapper", "m_aCellProperties not in sync with rTableRanges?");
@@ -1107,7 +1107,7 @@ css::uno::Sequence<css::beans::PropertyValues> DomainMapperTableHandler::endTabl
 
 // table style has got bigger precedence than docDefault style,
 // but lower precedence than the paragraph styles and direct paragraph formatting
-void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParagraph rParaProp, std::vector< PropertyIds > aAllTableParaProperties, css::beans::PropertyValues rCellProperties)
+void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParagraph rParaProp, std::vector< PropertyIds > aAllTableParaProperties, const css::beans::PropertyValues rCellProperties)
 {
     for( auto const& eId : aAllTableParaProperties )
     {

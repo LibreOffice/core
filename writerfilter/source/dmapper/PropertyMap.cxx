@@ -168,7 +168,7 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues( bool bChar
             {
                 uno::Sequence< beans::PropertyValue > aSeq;
                 rPropPair.second.getValue() >>= aSeq;
-                std::copy(aSeq.begin(), aSeq.end(), pCellGrabBagValues + nCellGrabBagValue);
+                std::copy(std::cbegin(aSeq), std::cend(aSeq), pCellGrabBagValues + nCellGrabBagValue);
                 nCellGrabBagValue += aSeq.getLength();
             }
             else
@@ -1988,19 +1988,19 @@ void SectionPropertyMap::ApplyProperties_( const uno::Reference< beans::XPropert
     std::vector< uno::Any > vValues;
     {
         // Convert GetPropertyValues() value into something useful
-        uno::Sequence< beans::PropertyValue > vPropVals = GetPropertyValues();
+        const uno::Sequence< beans::PropertyValue > vPropVals = GetPropertyValues();
 
         //Temporarily store the items that are in grab bags
         uno::Sequence< beans::PropertyValue > vCharVals;
         uno::Sequence< beans::PropertyValue > vParaVals;
-        beans::PropertyValue* pCharGrabBag = std::find_if( vPropVals.begin(), vPropVals.end(), NamedPropertyValue( "CharInteropGrabBag" ) );
+        const beans::PropertyValue* pCharGrabBag = std::find_if( vPropVals.begin(), vPropVals.end(), NamedPropertyValue( "CharInteropGrabBag" ) );
         if ( pCharGrabBag != vPropVals.end() )
             (pCharGrabBag->Value) >>= vCharVals;
-        beans::PropertyValue* pParaGrabBag = std::find_if( vPropVals.begin(), vPropVals.end(), NamedPropertyValue( "ParaInteropGrabBag" ) );
+        const beans::PropertyValue* pParaGrabBag = std::find_if( vPropVals.begin(), vPropVals.end(), NamedPropertyValue( "ParaInteropGrabBag" ) );
         if ( pParaGrabBag != vPropVals.end() )
             (pParaGrabBag->Value) >>= vParaVals;
 
-        for ( beans::PropertyValue* pIter = vPropVals.begin(); pIter != vPropVals.end(); ++pIter )
+        for ( const beans::PropertyValue* pIter = vPropVals.begin(); pIter != vPropVals.end(); ++pIter )
         {
             if ( pIter != pCharGrabBag && pIter != pParaGrabBag
                  && pIter->Name != "IsProtected" //section-only property

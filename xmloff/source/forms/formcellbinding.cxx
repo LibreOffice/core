@@ -243,11 +243,12 @@ bool FormCellBindingHelper::isSpreadsheetDocumentWhichSupplies( const Reference<
             Reference< XMultiServiceFactory > xDocumentFactory( _rxDocument, UNO_QUERY );
             OSL_ENSURE( xDocumentFactory.is(), "FormCellBindingHelper::isSpreadsheetDocumentWhichSupplies: spreadsheet document, but no factory?" );
 
-            Sequence< OUString > aAvailableServices;
             if ( xDocumentFactory.is() )
-                aAvailableServices = xDocumentFactory->getAvailableServiceNames( );
+            {
+                const Sequence<OUString> aAvailableServices = xDocumentFactory->getAvailableServiceNames( );
 
-            bYesItIs = std::any_of( aAvailableServices.begin(), aAvailableServices.end(), StringCompare( _rService ) );
+                bYesItIs = std::any_of( aAvailableServices.begin(), aAvailableServices.end(), StringCompare( _rService ) );
+            }
         }
     }
     catch( const Exception& )

@@ -83,12 +83,13 @@ namespace pcr
         try
         {
             Reference< XDataTypeRepository > xRepository = getDataTypeRepository();
-            Sequence< OUString > aElements;
             if ( xRepository.is() )
-                aElements = xRepository->getElementNames();
+            {
+                const Sequence<OUString> aElements = xRepository->getElementNames();
 
-            _rNames.resize( aElements.getLength() );
-            std::copy( aElements.begin(), aElements.end(), _rNames.begin() );
+                _rNames.resize( aElements.getLength() );
+                std::copy( aElements.begin(), aElements.end(), _rNames.begin() );
+            }
         }
         catch( const Exception& )
         {

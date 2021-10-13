@@ -394,7 +394,8 @@ void OInterfaceContainer::transformEvents()
             if ( aChildEvents.hasElements() )
             {
                 // do the transformation
-                ::std::for_each( aChildEvents.begin(), aChildEvents.end(), TransformEventTo52Format() );
+                auto [begin, end] = toNonConstRange(aChildEvents);
+                ::std::for_each( begin, end, TransformEventTo52Format() );
 
                 // revoke the script events
                 m_xEventAttacher->revokeScriptEvents( i );

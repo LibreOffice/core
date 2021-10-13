@@ -83,7 +83,7 @@ OUString lclGetAnchorIdFromGrabBag(const SdrObject* pObj)
         aGrabBagName = "FrameInteropGrabBag";
     else
         aGrabBagName = "InteropGrabBag";
-    uno::Sequence<beans::PropertyValue> propList = lclGetProperty(xShape, aGrabBagName);
+    const uno::Sequence<beans::PropertyValue> propList = lclGetProperty(xShape, aGrabBagName);
     auto pProp
         = std::find_if(propList.begin(), propList.end(),
                        [](const beans::PropertyValue& rProp) { return rProp.Name == "AnchorId"; });
@@ -1385,7 +1385,7 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat
 
 static bool lcl_isLockedCanvas(const uno::Reference<drawing::XShape>& xShape)
 {
-    uno::Sequence<beans::PropertyValue> propList = lclGetProperty(xShape, "InteropGrabBag");
+    const uno::Sequence<beans::PropertyValue> propList = lclGetProperty(xShape, "InteropGrabBag");
     /*
      * Export as Locked Canvas only if the property
      * is in the PropertySet
@@ -1835,11 +1835,11 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
         {
             uno::Sequence<beans::PropertyValue> propList;
             xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= propList;
-            auto pProp = std::find_if(propList.begin(), propList.end(),
+            auto pProp = std::find_if(std::cbegin(propList), std::cend(propList),
                                       [](const beans::PropertyValue& rProp) {
                                           return rProp.Name == "mso-rotation-angle";
                                       });
-            if (pProp != propList.end())
+            if (pProp != std::cend(propList))
                 aRotation = pProp->Value;
         }
         sal_Int32 nTmp;
@@ -1867,11 +1867,11 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
         {
             uno::Sequence<beans::PropertyValue> propList;
             xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= propList;
-            auto pProp = std::find_if(propList.begin(), propList.end(),
+            auto pProp = std::find_if(std::cbegin(propList), std::cend(propList),
                                       [](const beans::PropertyValue& rProp) {
                                           return rProp.Name == "mso-orig-shape-type";
                                       });
-            if (pProp != propList.end())
+            if (pProp != std::cend(propList))
                 pProp->Value >>= shapeType;
         }
         //Empty shapeType will lead to corruption so to avoid that shapeType is set to default i.e. "rect"

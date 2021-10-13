@@ -144,7 +144,7 @@ ProviderCache::populateCache()
             Reference< lang::XSingleComponentFactory > factory( xEnum->nextElement(), UNO_QUERY_THROW );
             Reference< lang::XServiceInfo > xServiceInfo( factory, UNO_QUERY_THROW );
 
-            Sequence< OUString > serviceNames = xServiceInfo->getSupportedServiceNames();
+            const Sequence< OUString > serviceNames = xServiceInfo->getSupportedServiceNames();
 
             if ( serviceNames.hasElements() )
             {

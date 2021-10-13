@@ -184,7 +184,7 @@ ScVbaCommandBars::getCount()
 {
     // Filter out all toolbars from the window collection
     sal_Int32 nCount = 1; // there is a Menubar in OOo
-    uno::Sequence< ::OUString > allNames = m_xNameAccess->getElementNames();
+    const uno::Sequence< ::OUString > allNames = m_xNameAccess->getElementNames();
     nCount += std::count_if(allNames.begin(), allNames.end(),
         [](const OUString& rName) { return rName.indexOf( "private:resource/toolbar/" ) != -1; });
     return nCount;

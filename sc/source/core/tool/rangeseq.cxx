@@ -365,7 +365,7 @@ ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const css::uno::Any & rAny )
         sal_Int32 nMaxColCount = 0;
         if (nRowCount)
         {
-            auto pRow = std::max_element(aSequence.begin(), aSequence.end(),
+            auto pRow = std::max_element(std::cbegin(aSequence), std::cend(aSequence),
                 [](const uno::Sequence<uno::Any>& a, const uno::Sequence<uno::Any>& b) {
                     return a.getLength() < b.getLength(); });
             nMaxColCount = pRow->getLength();

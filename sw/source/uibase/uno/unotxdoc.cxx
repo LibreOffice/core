@@ -4101,7 +4101,7 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames()
     }
     else
     {
-        Sequence< OUString > aOrg = m_xRealAccess->getElementNames();
+        const Sequence< OUString > aOrg = m_xRealAccess->getElementNames();
         aRet.realloc(aOrg.getLength());
         std::transform(aOrg.begin(), aOrg.end(), aRet.begin(),
             [this](const OUString& rOrg) -> OUString { return rOrg + m_sLinkSuffix; });

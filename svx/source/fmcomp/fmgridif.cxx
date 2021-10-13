@@ -2535,7 +2535,7 @@ void FmXGridPeer::statusChanged(const css::frame::FeatureStateEvent& Event)
     DBG_ASSERT(m_pStateCache, "FmXGridPeer::statusChanged : invalid call !");
     DBG_ASSERT(m_pDispatchers, "FmXGridPeer::statusChanged : invalid call !");
 
-    Sequence< css::util::URL>& aUrls = getSupportedURLs();
+    const Sequence< css::util::URL>& aUrls = getSupportedURLs();
 
     const std::vector<DbGridControlNavigationBarState>& aSlots = getSupportedGridSlots();
 

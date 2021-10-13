@@ -1713,7 +1713,7 @@ void SAL_CALL ScDataPilotFieldObj::setPropertyValue( const OUString& aPropertyNa
         if( aValue >>= aSeq)
         {
             std::vector< ScGeneralFunction > aSubTotals(aSeq.getLength());
-            std::transform(aSeq.begin(), aSeq.end(), aSubTotals.begin(),
+            std::transform(std::cbegin(aSeq), std::cend(aSeq), aSubTotals.begin(),
                 [](const sheet::GeneralFunction& rValue) -> ScGeneralFunction {
                     const int nValAsInt = static_cast<int>(rValue);
                     return static_cast<ScGeneralFunction>(nValAsInt);
@@ -1727,7 +1727,7 @@ void SAL_CALL ScDataPilotFieldObj::setPropertyValue( const OUString& aPropertyNa
         if( aValue >>= aSeq )
         {
             std::vector< ScGeneralFunction > aSubTotals(aSeq.getLength());
-            std::transform(aSeq.begin(), aSeq.end(), aSubTotals.begin(),
+            std::transform(std::cbegin(aSeq), std::cend(aSeq), aSubTotals.begin(),
                 [](sal_Int16 nValue) -> ScGeneralFunction { return static_cast<ScGeneralFunction>(nValue); });
             setSubtotals( aSubTotals );
         }
@@ -2691,7 +2691,7 @@ bool lclExtractGroupMembers( ScFieldGroupMembers& rMembers, const Any& rElement 
     if( rElement >>= aSeq )
     {
         if( aSeq.hasElements() )
-            rMembers.insert( rMembers.end(), aSeq.begin(), aSeq.end() );
+            rMembers.insert( rMembers.end(), std::cbegin(aSeq), std::cend(aSeq) );
         return true;
     }
 

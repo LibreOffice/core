@@ -31,11 +31,11 @@ namespace
 inline bool setFilterPropsFromFormat(sal_Int32 nFormat,
                                      css::uno::Sequence<css::beans::PropertyValue>& rProps)
 {
-    auto pProp
-        = std::find_if(rProps.begin(), rProps.end(), [](const css::beans::PropertyValue& rProp) {
-              return rProp.Name == "FilterName";
-          });
-    if (pProp != rProps.end())
+    auto[begin, end] = toNonConstRange(rProps);
+    auto pProp = std::find_if(begin, end, [](const css::beans::PropertyValue& rProp) {
+        return rProp.Name == "FilterName";
+    });
+    if (pProp != end)
     {
         switch (nFormat)
         {

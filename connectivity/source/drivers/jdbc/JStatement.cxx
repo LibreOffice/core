@@ -124,9 +124,10 @@ Sequence< Type > SAL_CALL java_sql_Statement_Base::getTypes(  )
     Sequence< Type > aOldTypes = java_sql_Statement_BASE::getTypes();
     if ( m_pConnection.is() && !m_pConnection->isAutoRetrievingEnabled() )
     {
-        auto newEnd = std::remove(aOldTypes.begin(), aOldTypes.end(),
+        auto [begin, end] = toNonConstRange(aOldTypes);
+        auto newEnd = std::remove(begin, end,
                                   cppu::UnoType<XGeneratedResultSet>::get());
-        aOldTypes.realloc(std::distance(aOldTypes.begin(), newEnd));
+        aOldTypes.realloc(std::distance(begin, newEnd));
     }
 
     return ::comphelper::concatSequences(aTypes.getTypes(),aOldTypes);

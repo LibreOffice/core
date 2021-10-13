@@ -124,7 +124,7 @@ static bool lcl_getSelectedState(const SwAccessibleChild& aChild,
         Reference<XAccessibleStateSet> pRStateSet = pRContext->getAccessibleStateSet();
         if( pRStateSet.is() )
         {
-            Sequence<short> aStates = pRStateSet->getStates();
+            const Sequence<short> aStates = pRStateSet->getStates();
             if (std::find(aStates.begin(), aStates.end(), AccessibleStateType::SELECTED) != aStates.end())
                 return true;
         }

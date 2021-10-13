@@ -1213,7 +1213,8 @@ namespace basctl
         auto const sort = comphelper::string::NaturalStringSorter(
             comphelper::getProcessComponentContext(),
             Application::GetSettings().GetUILanguageTag().getLocale());
-        std::sort(aModuleNames.begin(), aModuleNames.end(),
+        auto [begin, end] = toNonConstRange(aModuleNames);
+        std::sort(begin, end,
                   [&sort](const OUString& rLHS, const OUString& rRHS) {
                       return sort.compare(rLHS, rRHS) < 0;
                   });
@@ -1227,7 +1228,7 @@ namespace basctl
 
         OUString aBaseName = _eType == E_SCRIPTS ? OUString("Module") : OUString("Dialog");
 
-        Sequence< OUString > aUsedNames( getObjectNames( _eType, _rLibName ) );
+        const Sequence< OUString > aUsedNames( getObjectNames( _eType, _rLibName ) );
         std::set< OUString > aUsedNamesCheck( aUsedNames.begin(), aUsedNames.end() );
 
         bool bValid = false;

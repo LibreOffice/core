@@ -469,15 +469,15 @@ void OPropertyContainerHelper::describeProperties(Sequence< Property >& _rProps)
     }
 
     // as our property vector is sorted by handles, not by name, we have to sort aOwnProps
-    std::sort(aOwnProps.begin(), aOwnProps.end(), PropertyCompareByName());
+    auto [begin, end] = toNonConstRange(aOwnProps);
+    std::sort(begin, end, PropertyCompareByName());
 
     // unfortunately the STL merge function does not allow the output range to overlap one of the input ranges,
     // so we need an extra sequence
-    Sequence< Property > aOutput;
-    aOutput.realloc(_rProps.getLength() + aOwnProps.getLength());
+    Sequence< Property > aOutput(_rProps.getLength() + aOwnProps.getLength());
     // do the merge
-    std::merge(   _rProps.begin(), _rProps.end(),       // input 1
-                  aOwnProps.begin(), aOwnProps.end(),   // input 2
+    std::merge(   std::cbegin(_rProps), std::cend(_rProps),       // input 1
+                  std::cbegin(aOwnProps), std::cend(aOwnProps),   // input 2
                   aOutput.getArray(),                   // output
                   PropertyCompareByName()               // compare operator
               );

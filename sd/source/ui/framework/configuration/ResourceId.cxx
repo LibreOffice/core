@@ -362,7 +362,7 @@ void SAL_CALL ResourceId::initialize (const Sequence<Any>& aArguments)
                 if (xAnchor.is())
                 {
                     maResourceURLs.push_back(xAnchor->getResourceURL());
-                    Sequence<OUString> aAnchorURLs (xAnchor->getAnchorURLs());
+                    const Sequence<OUString> aAnchorURLs (xAnchor->getAnchorURLs());
                     maResourceURLs.insert( maResourceURLs.end(), aAnchorURLs.begin(), aAnchorURLs.end() );
                 }
             }

@@ -361,10 +361,11 @@ const uno::Sequence< OUString >&    SwSelectAddressBlockDialog::GetAddressBlocks
     const sal_Int32 nSelect = static_cast<sal_Int32>(m_xPreview->GetSelectedAddress());
     if(nSelect)
     {
-        uno::Sequence< OUString >aTemp = m_aAddressBlocks;
-        aTemp[0] = m_aAddressBlocks[nSelect];
-        std::copy(m_aAddressBlocks.begin(), std::next(m_aAddressBlocks.begin(), nSelect), std::next(aTemp.begin()));
-        std::copy(std::next(m_aAddressBlocks.begin(), nSelect + 1), m_aAddressBlocks.end(), std::next(aTemp.begin(), nSelect + 1));
+        uno::Sequence< OUString >aTemp(m_aAddressBlocks.getLength());
+        auto it = aTemp.begin();
+        *it = std::as_const(m_aAddressBlocks)[nSelect];
+        it = std::copy_n(std::cbegin(m_aAddressBlocks), nSelect - 1, std::next(it));
+        std::copy(std::next(std::cbegin(m_aAddressBlocks), nSelect + 1), std::cend(m_aAddressBlocks), it);
         m_aAddressBlocks = aTemp;
     }
     return m_aAddressBlocks;

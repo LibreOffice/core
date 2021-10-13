@@ -81,7 +81,7 @@ Sequence< OUString > retrieveAsciiValueList(
             xEnum->nextElement() >>= xTempReg;
             if( xTempReg.is() )
             {
-                Sequence< OUString > seq2 = retrieveAsciiValueList( xTempReg, keyName );
+                const Sequence< OUString > seq2 = retrieveAsciiValueList( xTempReg, keyName );
 
                 if( seq2.hasElements() )
                 {
@@ -194,7 +194,7 @@ beans::Property PropertySetInfo_Impl::getPropertyByName( OUString const & name )
 
 sal_Bool PropertySetInfo_Impl::hasPropertyByName( OUString const & name )
 {
-    return std::any_of(m_properties.begin(), m_properties.end(),
+    return std::any_of(std::cbegin(m_properties), std::cend(m_properties),
         [&name](const beans::Property& rProp) { return rProp.Name == name; });
 }
 
@@ -1327,7 +1327,7 @@ void ORegistryServiceManager::fillAllNamesFromRegistry( HashSet_OWString & rSet 
         if( xServicesKey.is() )
         {
             sal_Int32 nPrefix = xServicesKey->getKeyName().getLength() +1;
-            Sequence<Reference<XRegistryKey > > aKeys = xServicesKey->openKeys();
+            const Sequence<Reference<XRegistryKey > > aKeys = xServicesKey->openKeys();
             std::transform(aKeys.begin(), aKeys.end(), std::inserter(rSet, rSet.end()),
                 [nPrefix](const Reference<XRegistryKey>& rKey) -> OUString {
                     return rKey->getKeyName().copy( nPrefix ); });

@@ -2044,7 +2044,7 @@ bool SwDBManager::GetColumnCnt(const OUString& rSourceName, const OUString& rTab
     if(pFound->aSelection.hasElements())
     {
         //the destination has to be an element of the selection
-        bool bFound = std::any_of(pFound->aSelection.begin(), pFound->aSelection.end(),
+        bool bFound = std::any_of(std::cbegin(pFound->aSelection), std::cend(pFound->aSelection),
             [nAbsRecordId](const uno::Any& rSelection) {
                 sal_Int32 nSelection = 0;
                 rSelection >>= nSelection;

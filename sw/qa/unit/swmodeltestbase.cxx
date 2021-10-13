@@ -357,9 +357,9 @@ sal_Int16 SwModelTestBase::getNumberingTypeOfParagraph(int nPara)
             uno::Sequence<beans::PropertyValue> aPropertyValue;
             xLevels->getByIndex(nNumberingLevel) >>= aPropertyValue;
             auto pProp = std::find_if(
-                aPropertyValue.begin(), aPropertyValue.end(),
+                std::cbegin(aPropertyValue), std::cend(aPropertyValue),
                 [](const beans::PropertyValue& rProp) { return rProp.Name == "NumberingType"; });
-            if (pProp != aPropertyValue.end())
+            if (pProp != std::cend(aPropertyValue))
                 nNumberingType = pProp->Value.get<sal_Int16>();
         }
     }

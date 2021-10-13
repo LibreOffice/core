@@ -803,7 +803,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         xShapeProps->getPropertyValue("InteropGrabBag") >>= aGrabBag;
                         // if the shape contains effects in the grab bag, we should not transform it
                         // in a XTextContent so those effects can be preserved
-                        bool bContainsEffects = std::any_of(aGrabBag.begin(), aGrabBag.end(), [](const auto& rProp) {
+                        bool bContainsEffects = std::any_of(std::cbegin(aGrabBag), std::cend(aGrabBag), [](const auto& rProp) {
                             return rProp.Name == "EffectProperties"
                                 || rProp.Name == "3DEffectProperties"
                                 || rProp.Name == "ArtisticEffectProperties";

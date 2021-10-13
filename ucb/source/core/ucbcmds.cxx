@@ -243,9 +243,9 @@ CommandProcessorInfo::getCommands()
 ucb::CommandInfo SAL_CALL
 CommandProcessorInfo::getCommandInfoByName( const OUString& Name )
 {
-    auto pInfo = std::find_if(m_xInfo->begin(), m_xInfo->end(),
+    auto pInfo = std::find_if(std::cbegin(*m_xInfo), std::cend(*m_xInfo),
         [&Name](const ucb::CommandInfo& rInfo) { return rInfo.Name == Name; });
-    if (pInfo != m_xInfo->end())
+    if (pInfo != std::cend(*m_xInfo))
         return *pInfo;
 
     throw ucb::UnsupportedCommandException();
@@ -256,9 +256,9 @@ CommandProcessorInfo::getCommandInfoByName( const OUString& Name )
 ucb::CommandInfo SAL_CALL
 CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
 {
-    auto pInfo = std::find_if(m_xInfo->begin(), m_xInfo->end(),
+    auto pInfo = std::find_if(std::cbegin(*m_xInfo), std::cend(*m_xInfo),
         [&Handle](const ucb::CommandInfo& rInfo) { return rInfo.Handle == Handle; });
-    if (pInfo != m_xInfo->end())
+    if (pInfo != std::cend(*m_xInfo))
         return *pInfo;
 
     throw ucb::UnsupportedCommandException();
@@ -269,7 +269,7 @@ CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
 sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName(
                                                 const OUString& Name )
 {
-    return std::any_of(m_xInfo->begin(), m_xInfo->end(),
+    return std::any_of(std::cbegin(*m_xInfo), std::cend(*m_xInfo),
         [&Name](const ucb::CommandInfo& rInfo) { return rInfo.Name == Name; });
 }
 
@@ -277,7 +277,7 @@ sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName(
 // virtual
 sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByHandle( sal_Int32 Handle )
 {
-    return std::any_of(m_xInfo->begin(), m_xInfo->end(),
+    return std::any_of(std::cbegin(*m_xInfo), std::cend(*m_xInfo),
         [&Handle](const ucb::CommandInfo& rInfo) { return rInfo.Handle == Handle; });
 }
 
@@ -604,9 +604,9 @@ uno::Reference< ucb::XContent > createNew(
     }
 
     uno::Reference< ucb::XContent > xNew;
-    auto pTypeInfo = std::find_if(aTypesInfo.begin(), aTypesInfo.end(),
+    auto pTypeInfo = std::find_if(std::cbegin(aTypesInfo), std::cend(aTypesInfo),
         [&lCompare](const ucb::ContentInfo& rTypeInfo) { return lCompare(rTypeInfo.Attributes); });
-    if (pTypeInfo != aTypesInfo.end())
+    if (pTypeInfo != std::cend(aTypesInfo))
     {
         // (3) Create a new, empty object of matched type.
 

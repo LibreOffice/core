@@ -179,7 +179,7 @@ void WpftLoader::impl_detectFilterName(uno::Sequence<beans::PropertyValue>& rDes
                                        const OUString& rTypeName)
 {
     bool bHasFilterName
-        = std::any_of(rDescriptor.begin(), rDescriptor.end(),
+        = std::any_of(std::cbegin(rDescriptor), std::cend(rDescriptor),
                       [](const beans::PropertyValue& rProp) { return "FilterName" == rProp.Name; });
     if (bHasFilterName)
         return;
@@ -194,8 +194,9 @@ void WpftLoader::impl_detectFilterName(uno::Sequence<beans::PropertyValue>& rDes
             {
                 const sal_Int32 nDescriptorLen = rDescriptor.getLength();
                 rDescriptor.realloc(nDescriptorLen + 1);
-                rDescriptor[nDescriptorLen].Name = "FilterName";
-                rDescriptor[nDescriptorLen].Value <<= aFilterName;
+                auto& el = rDescriptor[nDescriptorLen];
+                el.Name = "FilterName";
+                el.Value <<= aFilterName;
                 return;
             }
         }

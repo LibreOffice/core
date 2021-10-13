@@ -265,6 +265,16 @@ public:
     */
     uno_Sequence * SAL_CALL get() const
         { return _pSequence; }
+
+#if defined LIBO_INTERNAL_ONLY
+    /** Swaps sequences efficiently exchanging their underlying representations.
+
+        @param other another sequence of same type
+
+        @since LibreOffice 7.3
+    */
+    inline void swap(Sequence& other);
+#endif
 };
 
 // Find uses of illegal Sequence<bool> (instead of Sequence<sal_Bool>) during

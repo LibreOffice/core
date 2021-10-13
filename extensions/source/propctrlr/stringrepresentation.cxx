@@ -255,7 +255,8 @@ void SAL_CALL StringRepresentation::initialize(const uno::Sequence< uno::Any > &
     uno::Sequence<
         uno::Reference< reflection::XConstantTypeDescription > >
         cs(m_xTypeDescription->getConstants());
-    std::sort(cs.begin(), cs.end(), CompareConstants());
+    auto [begin, end] = toNonConstRange(cs);
+    std::sort(begin, end, CompareConstants());
     m_aConstants = cs;
 }
 

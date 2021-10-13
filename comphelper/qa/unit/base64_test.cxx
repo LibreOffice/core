@@ -72,18 +72,18 @@ void Base64Test::testBase64Decode()
 
     uno::Sequence<sal_Int8> expectedSequence = { 0, 0, 0, 0, 0, 1, 2, 3 };
     comphelper::Base64::decode(decodedSequence, "AAAAAAABAgM=");
-    CPPUNIT_ASSERT(
-        std::equal(expectedSequence.begin(), expectedSequence.end(), decodedSequence.begin()));
+    CPPUNIT_ASSERT(std::equal(std::cbegin(expectedSequence), std::cend(expectedSequence),
+                              std::cbegin(decodedSequence)));
 
     expectedSequence = { 5, 2, 3, 0, 0, 1, 2, 3 };
     comphelper::Base64::decode(decodedSequence, "BQIDAAABAgM=");
-    CPPUNIT_ASSERT(
-        std::equal(expectedSequence.begin(), expectedSequence.end(), decodedSequence.begin()));
+    CPPUNIT_ASSERT(std::equal(std::cbegin(expectedSequence), std::cend(expectedSequence),
+                              std::cbegin(decodedSequence)));
 
     expectedSequence = { sal_Int8(sal_uInt8(200)), 31, 77, 111, 0, 1, 2, 3 };
     comphelper::Base64::decode(decodedSequence, "yB9NbwABAgM=");
-    CPPUNIT_ASSERT(
-        std::equal(expectedSequence.begin(), expectedSequence.end(), decodedSequence.begin()));
+    CPPUNIT_ASSERT(std::equal(std::cbegin(expectedSequence), std::cend(expectedSequence),
+                              std::cbegin(decodedSequence)));
 }
 
 void Base64Test::testBase64EncodeForOStringBuffer()
