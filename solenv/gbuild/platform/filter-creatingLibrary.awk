@@ -13,14 +13,26 @@
 
 BEGIN {
     creatinglibrary_prefix = ENVIRON["CREATINGLIBRARY_PREFIX"];
+    generatingcode_message = ENVIRON["GENERATINGCODE_MESSAGE"];
+    finishedgeneratingcode_message = ENVIRON["FINISHEDGENERATINGCODE_MESSAGE"];
     if (!creatinglibrary_prefix) {
         creatinglibrary_prefix = "\\.lib.*\\.exp"
+    }
+    if (!generatingcode_message) {
+        generatingcode_message = "Generating code"
+    }
+    if (!finishedgeneratingcode_message) {
+        finishedgeneratingcode_message = "Finished generating code"
     }
     firstline = 1
 }
 
 {
     if (firstline && match($0, creatinglibrary_prefix)) {
+        # ignore
+    } else if (match($0, generatingcode_message)) {
+        # ignore
+    } else if (match($0, finishedgeneratingcode_message)) {
         # ignore
     } else {
         # because MSVC stupidly prints errors on stdout, it's
