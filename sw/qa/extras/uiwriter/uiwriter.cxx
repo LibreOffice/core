@@ -283,6 +283,7 @@ public:
     void testTdf89720();
     void testTdf88986();
     void testTdf78150();
+    void testTdf138873();
     void testTdf87922();
     void testTdf77014();
     void testTdf92648();
@@ -403,6 +404,7 @@ public:
     CPPUNIT_TEST(testTdf89720);
     CPPUNIT_TEST(testTdf88986);
     CPPUNIT_TEST(testTdf78150);
+    CPPUNIT_TEST(testTdf138873);
     CPPUNIT_TEST(testTdf87922);
     CPPUNIT_TEST(testTdf77014);
     CPPUNIT_TEST(testTdf92648);
@@ -4260,6 +4262,42 @@ void SwUiWriterTest::testTdf78150()
     //  - Expected:
     //  - Actual  : f
     CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
+}
+
+void SwUiWriterTest::testTdf138873()
+{
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("A B C");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("A B C"), getParagraph(1)->getString());
+
+    // Select B
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+
+    pWrtShell->Insert("DDD");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("A DDD C"), getParagraph(1)->getString());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("A B C"), getParagraph(1)->getString());
+
+    // Select B and C
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 2, /*bBasicCall=*/false);
+
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: A B C
+    // - Actual  : A  CB CB
+    CPPUNIT_ASSERT_EQUAL(OUString("A B C"), getParagraph(1)->getString());
 }
 
 void SwUiWriterTest::testTdf87922()
