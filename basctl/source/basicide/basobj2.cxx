@@ -100,21 +100,15 @@ Sequence< OUString > GetMergedLibraryNames( const Reference< script::XLibraryCon
     std::vector<OUString> aLibList;
     if ( xModLibContainer.is() )
     {
-        Sequence< OUString > aModLibNames = xModLibContainer->getElementNames();
-        sal_Int32 nModLibCount = aModLibNames.getLength();
-        const OUString* pModLibNames = aModLibNames.getConstArray();
-        for ( sal_Int32 i = 0 ; i < nModLibCount ; i++ )
-            aLibList.push_back( pModLibNames[ i ] );
+        const Sequence< OUString > aModLibNames = xModLibContainer->getElementNames();
+        aLibList.insert( aLibList.end(), aModLibNames.begin(), aModLibNames.end() );
     }
 
     // create a list of dialog library names
     if ( xDlgLibContainer.is() )
     {
-        Sequence< OUString > aDlgLibNames = xDlgLibContainer->getElementNames();
-        sal_Int32 nDlgLibCount = aDlgLibNames.getLength();
-        const OUString* pDlgLibNames = aDlgLibNames.getConstArray();
-        for ( sal_Int32 i = 0 ; i < nDlgLibCount ; i++ )
-            aLibList.push_back( pDlgLibNames[ i ] );
+        const Sequence< OUString > aDlgLibNames = xDlgLibContainer->getElementNames();
+        aLibList.insert( aLibList.end(), aDlgLibNames.begin(), aDlgLibNames.end() );
     }
 
     // sort list

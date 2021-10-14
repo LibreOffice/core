@@ -164,11 +164,8 @@ const ImageMap& IMapWindow::GetImageMap()
 void IMapWindow::SetTargetList( const TargetList& rTargetList )
 {
     // Delete old List
-    aTargetList.clear();
-
     // Fill with the provided list
-    for(const OUString & s : rTargetList)
-        aTargetList.push_back( s );
+    aTargetList = rTargetList;
 
     pModel->SetChanged( false );
 }

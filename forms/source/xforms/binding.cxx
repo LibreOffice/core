@@ -552,8 +552,7 @@ void Binding::bind( bool bForceRebind )
             lcl_removeListenerFromNode( eventNode, this );
         maEventNodes.clear();
         if( isSimpleBinding() )
-            for (auto const& node : aNodes)
-                maEventNodes.push_back(node);
+            maEventNodes.insert(maEventNodes.end(), aNodes.begin(), aNodes.end());
         else
             maEventNodes.emplace_back( aContext.mxContextNode->getOwnerDocument(),
                                   UNO_QUERY_THROW );

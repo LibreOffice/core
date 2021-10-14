@@ -290,14 +290,9 @@ bool EscherPropertyContainer::GetOpt( sal_uInt16 nPropId, EscherPropSortStruct& 
     return false;
 }
 
-EscherProperties EscherPropertyContainer::GetOpts() const
+const EscherProperties & EscherPropertyContainer::GetOpts() const
 {
-    EscherProperties aVector;
-
-    for ( size_t i = 0; i < pSortStruct.size(); ++i )
-        aVector.push_back( pSortStruct[ i ] );
-
-    return aVector;
+    return pSortStruct;
 }
 
 extern "C" {

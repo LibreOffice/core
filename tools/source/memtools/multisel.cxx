@@ -88,8 +88,7 @@ MultiSelection::MultiSelection( const MultiSelection& rOrig ) :
     }
 
     // copy the sub selections
-    for (const Range & rSel : rOrig.aSels)
-        aSels.push_back( rSel );
+    aSels.insert( aSels.end(), rOrig.aSels.begin(), rOrig.aSels.end() );
 }
 
 MultiSelection::MultiSelection( const Range& rRange ):
@@ -117,8 +116,7 @@ MultiSelection& MultiSelection::operator= ( const MultiSelection& rOrig )
 
     // clear the old and copy the sub selections
     ImplClear();
-    for (const Range& rSel : rOrig.aSels)
-        aSels.push_back( rSel );
+    aSels.insert( aSels.end(), rOrig.aSels.begin(), rOrig.aSels.end() );
     nSelCount = rOrig.nSelCount;
 
     return *this;

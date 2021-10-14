@@ -971,12 +971,8 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( bool bPreferred, const css:
             xAccess->getByName(sKey) >>= xKey;
             xKey->getByName(CFG_PROP_COMMAND) >>= xCommand;
 
-            css::uno::Sequence< OUString > lLocales = xCommand->getElementNames();
-            sal_Int32 nLocales = lLocales.getLength();
-            ::std::vector< OUString > aLocales;
-            aLocales.reserve(nLocales);
-            for (sal_Int32 j = 0; j < nLocales; ++j)
-                aLocales.push_back(lLocales[j]);
+            const css::uno::Sequence< OUString > lLocales = xCommand->getElementNames();
+            ::std::vector< OUString > aLocales { lLocales.begin(), lLocales.end() };
 
             OUString sLocale;
             for (auto const& locale : aLocales)

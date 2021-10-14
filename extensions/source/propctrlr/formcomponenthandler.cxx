@@ -2359,8 +2359,7 @@ namespace pcr
                     SAL_WARN("extensions.propctrlr", "impl_initFieldList_nothrow: unable to get property " PROPERTY_COMMANDTYPE);
 
                 const Sequence<OUString> aNames = ::dbtools::getFieldNamesByCommandDescriptor( m_xRowSetConnection, nObjectType, sObjectName );
-                for ( const OUString& rField : aNames )
-                    _rFieldNames.push_back( rField );
+                _rFieldNames.insert( _rFieldNames.end(), aNames.begin(), aNames.end() );
             }
         }
         catch (const Exception&)
@@ -2491,8 +2490,7 @@ namespace pcr
             return;
 
         const Sequence<OUString> aNames = xTableNames->getElementNames();
-        for ( const OUString& rTableName : aNames )
-            _out_rNames.push_back( rTableName );
+        _out_rNames.insert( _out_rNames.end(), aNames.begin(), aNames.end() );
     }
 
 

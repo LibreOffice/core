@@ -820,8 +820,7 @@ void SlideImpl::drawPolygons() const
 
 void SlideImpl::addPolygons(const PolyPolygonVector& rPolygons)
 {
-    for (const auto& rxPolygon : rPolygons)
-        maPolygons.push_back(rxPolygon);
+    maPolygons.insert(maPolygons.end(), rPolygons.begin(), rPolygons.end());
 }
 
 bool SlideImpl::isPaintOverlayActive() const
