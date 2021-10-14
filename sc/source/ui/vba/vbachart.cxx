@@ -624,7 +624,7 @@ uno::Sequence< OUString >
 ScVbaChart::getDefaultSeriesDescriptions( sal_Int32 _nCount )
 {
     uno::Sequence< OUString > sDescriptions ( _nCount );
-    std::generate_n(sDescriptions.begin(), _nCount,
+    std::generate_n(sDescriptions.getArray(), _nCount,
         [i = 1]() mutable -> OUString { return DEFAULTSERIESPREFIX + OUString::number(i++); });
     return sDescriptions;
 }

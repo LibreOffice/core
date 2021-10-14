@@ -554,7 +554,7 @@ uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL SwXTextPortion::getPr
     // copy temporary result to final result type
     sal_Int32 nLen = aTmpRes.getLength();
     uno::Sequence< beans::GetPropertyTolerantResult > aRes( nLen );
-    std::copy(aTmpRes.begin(), aTmpRes.end(), aRes.begin());
+    std::copy(aTmpRes.begin(), aTmpRes.end(), aRes.getArray());
     return aRes;
 }
 

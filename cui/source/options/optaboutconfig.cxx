@@ -352,7 +352,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
                     }
                     else if( sType == "[]byte" )
                     {
-                        uno::Sequence<sal_Int8> seq = aNode.get< uno::Sequence<sal_Int8> >();
+                        const uno::Sequence<sal_Int8> seq = aNode.get< uno::Sequence<sal_Int8> >();
                         for( sal_Int8 j : seq )
                         {
                             OUString s = OUString::number(
@@ -366,7 +366,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
                     }
                     else if( sType == "[][]byte" )
                     {
-                        uno::Sequence< uno::Sequence<sal_Int8> > seq = aNode.get< uno::Sequence< uno::Sequence<sal_Int8> > >();
+                        const uno::Sequence< uno::Sequence<sal_Int8> > seq = aNode.get< uno::Sequence< uno::Sequence<sal_Int8> > >();
                         for( sal_Int32 j = 0; j != seq.getLength(); ++j )
                         {
                             if( j != 0 )

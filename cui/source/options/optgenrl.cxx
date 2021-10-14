@@ -302,7 +302,7 @@ void SvxGeneralTabPage::InitCryptography()
 
             if (xCertificates.hasElements())
             {
-                for (auto& xCert : xCertificates)
+                for (auto& xCert : asNonConstRange(xCertificates))
                 {
                     m_xSigningKeyLB->append_text( xCert->getIssuerName());
                     m_xEncryptionKeyLB->append_text( xCert->getIssuerName());

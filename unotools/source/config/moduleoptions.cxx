@@ -364,7 +364,7 @@ void SvtModuleOptions_Impl::ImplCommit()
         sBasePath  = PATHSEPARATOR + rInfo.getFactory() + PATHSEPARATOR;
 
         const css::uno::Sequence< css::beans::PropertyValue > lChangedProperties = rInfo.getChangedProperties ( sBasePath );
-        std::copy(lChangedProperties.begin(), lChangedProperties.end(), std::next(lCommitProperties.begin(), nRealCount));
+        std::copy(lChangedProperties.begin(), lChangedProperties.end(), std::next(lCommitProperties.getArray(), nRealCount));
         nRealCount += lChangedProperties.getLength();
     }
     // Resize commit list to real size.
@@ -738,7 +738,7 @@ void SvtModuleOptions_Impl::MakeReadonlyStatesAvailable()
         return;
 
     css::uno::Sequence< OUString > lFactories = GetNodeNames(OUString());
-    for (OUString& rFactory : toNonConstRange(lFactories))
+    for (OUString& rFactory : asNonConstRange(lFactories))
         rFactory += PATHSEPARATOR PROPERTYNAME_DEFAULTFILTER;
 
     css::uno::Sequence< sal_Bool > lReadonlyStates = GetReadOnlyStates(lFactories);

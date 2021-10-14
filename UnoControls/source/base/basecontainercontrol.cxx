@@ -123,7 +123,7 @@ void SAL_CALL BaseContainerControl::createPeer( const   Reference< XToolkit >&  
     // create peers at all children
     Sequence< Reference< XControl > >   seqControlList  = getControls();
 
-    for ( auto& rxControl : seqControlList )
+    for ( auto& rxControl : asNonConstRange(seqControlList) )
     {
         rxControl->createPeer( xToolkit, getPeer() );
     }

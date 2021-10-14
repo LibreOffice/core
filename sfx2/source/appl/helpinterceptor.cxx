@@ -125,7 +125,7 @@ Sequence < Reference < XDispatch > > SAL_CALL HelpInterceptor_Impl::queryDispatc
 
 {
     Sequence< Reference< XDispatch > > aReturn( aDescripts.getLength() );
-    std::transform(aDescripts.begin(), aDescripts.end(), aReturn.begin(),
+    std::transform(aDescripts.begin(), aDescripts.end(), aReturn.getArray(),
         [this](const DispatchDescriptor& rDescr) -> Reference<XDispatch> {
             return queryDispatch(rDescr.FeatureURL, rDescr.FrameName, rDescr.SearchFlags); });
     return aReturn;

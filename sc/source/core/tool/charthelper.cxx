@@ -232,7 +232,7 @@ void ScChartHelper::SetChartRanges( const uno::Reference< chart2::XChartDocument
 
         uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aLabeledDataSequences( xDataSource->getDataSequences() );
         sal_Int32 nRange=0;
-        for( uno::Reference<chart2::data::XLabeledDataSequence>& xLabeledSequence : aLabeledDataSequences )
+        for( uno::Reference<chart2::data::XLabeledDataSequence>& xLabeledSequence : asNonConstRange(aLabeledDataSequences) )
         {
             if( nRange >= rRanges.getLength() )
                 break;

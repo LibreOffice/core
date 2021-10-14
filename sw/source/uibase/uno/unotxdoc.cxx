@@ -2210,7 +2210,7 @@ Sequence< PropertyState > SAL_CALL SwXTextDocument::getPropertyStates( const Seq
     const sal_Int32 nCount = rPropertyNames.getLength();
     Sequence < PropertyState > aRet ( nCount );
 
-    std::transform(rPropertyNames.begin(), rPropertyNames.end(), aRet.begin(),
+    std::transform(rPropertyNames.begin(), rPropertyNames.end(), aRet.getArray(),
         [this](const OUString& rName) -> PropertyState { return getPropertyState(rName); });
 
     return aRet;
@@ -4103,7 +4103,7 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames()
     {
         const Sequence< OUString > aOrg = m_xRealAccess->getElementNames();
         aRet.realloc(aOrg.getLength());
-        std::transform(aOrg.begin(), aOrg.end(), aRet.begin(),
+        std::transform(aOrg.begin(), aOrg.end(), aRet.getArray(),
             [this](const OUString& rOrg) -> OUString { return rOrg + m_sLinkSuffix; });
     }
     return aRet;

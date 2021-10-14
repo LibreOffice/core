@@ -190,7 +190,7 @@ namespace sd
             Sequence< NamedValue > aUserData( xNode->getUserData() );
             if( aUserData.hasElements() )
             {
-                for( NamedValue & namedValue : aUserData )
+                for( NamedValue & namedValue : asNonConstRange(aUserData) )
                 {
                     namedValue.Value = transformValue( namedValue.Value );
                 }
@@ -223,7 +223,7 @@ namespace sd
                 Sequence<Any> aSequence;
                 rValue >>= aSequence;
 
-                for( Any& rAny : aSequence )
+                for( Any& rAny : asNonConstRange(aSequence) )
                     rAny = transformValue( rAny );
 
                 return makeAny( aSequence );

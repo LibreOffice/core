@@ -362,7 +362,7 @@ const uno::Sequence< OUString >&    SwSelectAddressBlockDialog::GetAddressBlocks
     if(nSelect)
     {
         uno::Sequence< OUString >aTemp(m_aAddressBlocks.getLength());
-        auto it = aTemp.begin();
+        auto it = aTemp.getArray();
         *it = std::as_const(m_aAddressBlocks)[nSelect];
         it = std::copy_n(std::cbegin(m_aAddressBlocks), nSelect - 1, std::next(it));
         std::copy(std::next(std::cbegin(m_aAddressBlocks), nSelect + 1), std::cend(m_aAddressBlocks), it);

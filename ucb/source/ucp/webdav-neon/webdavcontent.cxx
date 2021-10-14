@@ -1370,7 +1370,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 if ( !m_aFailedPropNames.empty() )
                 {
                     sal_Int32 nProps = rProperties.getLength();
-                    std::copy(rProperties.begin(), rProperties.end(), aProperties.begin());
+                    std::copy(rProperties.begin(), rProperties.end(), aProperties.getArray());
 
                     aProperties.realloc( nProps );
                 }

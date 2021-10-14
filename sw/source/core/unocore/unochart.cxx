@@ -872,7 +872,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
         uno::Reference<chart2::data::XLabeledDataSequence>* pOld_LDS = aOld_LDS.getArray();
 
         sal_Int32 nNewCnt = 0;
-        for (sal_Int32 nIdx : aSequenceMapping)
+        for (sal_Int32 nIdx : std::as_const(aSequenceMapping))
         {
             // check that index to be used is valid
             // and has not yet been used
@@ -1233,7 +1233,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     // build value for 'SequenceMapping'
 
     uno::Sequence< sal_Int32 > aSortedMapping( aSequenceMapping );
-    auto [begin, end] = toNonConstRange(aSortedMapping);
+    auto [begin, end] = asNonConstRange(aSortedMapping);
     std::sort(begin, end);
     bool bNeedSequenceMapping = false;
     for (sal_Int32 i = 0;  i < aSequenceMapping.getLength();  ++i)
@@ -2038,7 +2038,7 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getTextualData()
     uno::Sequence< OUString > vTextData(vCells.size());
     std::transform(vCells.begin(),
         vCells.end(),
-        vTextData.begin(),
+        vTextData.getArray(),
         [] (decltype(vCells)::value_type& xCell)
             { return static_cast<SwXCell*>(xCell.get())->getString(); });
     return vTextData;
@@ -2051,7 +2051,7 @@ uno::Sequence< uno::Any > SAL_CALL SwChartDataSequence::getData()
     uno::Sequence< uno::Any > vAnyData(vCells.size());
     std::transform(vCells.begin(),
         vCells.end(),
-        vAnyData.begin(),
+        vAnyData.getArray(),
         [] (decltype(vCells)::value_type& xCell)
             { return static_cast<SwXCell*>(xCell.get())->GetAny(); });
     return vAnyData;
@@ -2064,7 +2064,7 @@ uno::Sequence< double > SAL_CALL SwChartDataSequence::getNumericalData()
     uno::Sequence< double > vNumData(vCells.size());
     std::transform(vCells.begin(),
         vCells.end(),
-        vNumData.begin(),
+        vNumData.getArray(),
         [] (decltype(vCells)::value_type& xCell)
             { return static_cast<SwXCell*>(xCell.get())->GetForcedNumericalValue(); });
     return vNumData;

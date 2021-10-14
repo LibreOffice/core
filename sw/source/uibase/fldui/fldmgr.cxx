@@ -738,7 +738,7 @@ OUString SwFieldMgr::GetFormatStr(SwFieldTypesEnum nTypeId, sal_uInt32 nFormatId
     {
         if (m_xNumberingInfo.is())
         {
-            Sequence<sal_Int16> aTypes = m_xNumberingInfo->getSupportedNumberingTypes();
+            const Sequence<sal_Int16> aTypes = m_xNumberingInfo->getSupportedNumberingTypes();
             sal_Int32 nOffset = aSwFields[nPos].nFormatLength;
             sal_uInt32 nValidEntry = 0;
             for (const sal_Int16 nCurrent : aTypes)
@@ -818,7 +818,7 @@ sal_uInt16 SwFieldMgr::GetFormatId(SwFieldTypesEnum nTypeId, sal_uInt32 nFormatI
             }
             else if (m_xNumberingInfo.is())
             {
-                Sequence<sal_Int16> aTypes = m_xNumberingInfo->getSupportedNumberingTypes();
+                const Sequence<sal_Int16> aTypes = m_xNumberingInfo->getSupportedNumberingTypes();
                 sal_Int32 nOffset = aSwFields[nPos].nFormatLength;
                 sal_Int32 nValidEntry = 0;
                 for (const sal_Int16 nCurrent : aTypes)

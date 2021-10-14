@@ -702,7 +702,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 // the TransformItems function overwrite aProps
                 TransformItems( nId, *rReq.GetArgs(), aProps, GetInterface()->GetSlot(nId) );
 
-                for ( auto& rProp : aProps )
+                for ( auto& rProp : asNonConstRange(aProps) )
                 {
                     if ( rProp.Name == "Copies" )
                     {

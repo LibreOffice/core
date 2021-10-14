@@ -825,7 +825,7 @@ SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
             std::vector<SwFormatField*> vpFields;
             pType->GatherFields(vpFields);
             uno::Sequence<uno::Reference <text::XDependentTextField> > aSeq(vpFields.size());
-            std::transform(vpFields.begin(), vpFields.end(), aSeq.begin(),
+            std::transform(vpFields.begin(), vpFields.end(), aSeq.getArray(),
                     [this](SwFormatField* pF) { return uno::Reference<text::XDependentTextField>(SwXTextField::CreateXTextField(m_pImpl->m_pDoc, pF), uno::UNO_QUERY); });
             aRet <<= aSeq;
         }

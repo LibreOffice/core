@@ -2605,7 +2605,7 @@ void UnoListBoxControl::addItems( const uno::Sequence< OUString>& aItems, sal_In
         nPos = nOldLen;
 
     // Items before the Paste-Position
-    auto it = std::copy(std::cbegin(aSeq), std::next(std::cbegin(aSeq), nPos), aNewSeq.begin());
+    auto it = std::copy(std::cbegin(aSeq), std::next(std::cbegin(aSeq), nPos), aNewSeq.getArray());
 
     // New Items
     it = std::copy(aItems.begin(), aItems.end(), it);
@@ -2633,7 +2633,7 @@ void UnoListBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount )
     uno::Sequence< OUString> aNewSeq( nNewLen );
 
     // Items before the Remove-Position
-    auto it = std::copy(std::cbegin(aSeq), std::next(std::cbegin(aSeq), nPos), aNewSeq.begin());
+    auto it = std::copy(std::cbegin(aSeq), std::next(std::cbegin(aSeq), nPos), aNewSeq.getArray());
 
     // Rest of Items
     std::copy(std::next(std::cbegin(aSeq), nPos + nCount), std::cend(aSeq), it);
@@ -3197,7 +3197,7 @@ void UnoComboBoxControl::addItems( const uno::Sequence< OUString>& aItems, sal_I
         nPos = nOldLen;
 
     // items before the insert position
-    auto it = std::copy(std::cbegin(aSeq), std::next(std::cbegin(aSeq), nPos), aNewSeq.begin());
+    auto it = std::copy(std::cbegin(aSeq), std::next(std::cbegin(aSeq), nPos), aNewSeq.getArray());
 
     // New items
     it = std::copy(aItems.begin(), aItems.end(), it);
@@ -3225,7 +3225,7 @@ void UnoComboBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount )
     uno::Sequence< OUString> aNewSeq( nNewLen );
 
     // items before the deletion position
-    auto it = std::copy(std::cbegin(aSeq), std::next(std::cbegin(aSeq), nPos), aNewSeq.begin());
+    auto it = std::copy(std::cbegin(aSeq), std::next(std::cbegin(aSeq), nPos), aNewSeq.getArray());
 
     // remainder of old items
     std::copy(std::next(std::cbegin(aSeq), nPos + nCount), std::cend(aSeq), it);

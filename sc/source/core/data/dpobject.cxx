@@ -2118,7 +2118,7 @@ static PivotFunc lcl_FirstSubTotal( const uno::Reference<beans::XPropertySet>& x
                 if ( aSubAny >>= aSeq )
                 {
                     PivotFunc nMask = PivotFunc::NONE;
-                    for (const sal_Int16 nElem : aSeq)
+                    for (const sal_Int16 nElem : std::as_const(aSeq))
                         nMask |= ScDataPilotConversion::FunctionBit(nElem);
                     return nMask;
                 }

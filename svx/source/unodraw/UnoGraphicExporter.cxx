@@ -495,7 +495,7 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
         {
             rValue.Value >>= rSettings.maFilterData;
 
-            for( PropertyValue& rDataValue : rSettings.maFilterData )
+            for( PropertyValue& rDataValue : asNonConstRange(rSettings.maFilterData) )
             {
                 if ( rDataValue.Name == "Translucent" )
                 {

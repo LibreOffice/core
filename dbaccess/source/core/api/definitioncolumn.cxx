@@ -487,7 +487,7 @@ Sequence< OUString > OTableColumnDescriptorWrapper::getSupportedServiceNames(  )
 
     if ( !m_bIsDescriptor )
     {
-        for ( auto & prop : aDescriptor )
+        for ( auto & prop : asNonConstRange(aDescriptor) )
         {
             prop.Attributes |= PropertyAttribute::READONLY;
         }

@@ -2057,7 +2057,7 @@ void ToolbarSaveInData::SetSystemStyle(
 
         if ( a >>= aProps )
         {
-            for ( beans::PropertyValue& prop : aProps )
+            for ( beans::PropertyValue& prop : asNonConstRange(aProps) )
             {
                 if ( prop.Name == ITEM_DESCRIPTOR_STYLE )
                 {

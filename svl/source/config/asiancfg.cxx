@@ -103,7 +103,7 @@ css::uno::Sequence< css::lang::Locale > SvxAsianConfig::GetStartEndCharLocales()
             impl_->context)->
         getElementNames());
     css::uno::Sequence< css::lang::Locale > ls(ns.getLength());
-    std::transform(ns.begin(), ns.end(), ls.begin(),
+    std::transform(ns.begin(), ns.end(), ls.getArray(),
         [](const OUString& rName) -> css::lang::Locale {
             return LanguageTag::convertToLocale( rName, false); });
     return ls;

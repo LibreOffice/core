@@ -862,11 +862,11 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
         sal_Int32 nAdd = ( aRange.aEnd.Col() - aRange.aStart.Col() + 1 ) *
                          ( aRange.aEnd.Row() - aRange.aStart.Row() + 1 );
         aVariables.realloc( nVarPos + nAdd );
-        auto it = aVariables.begin() + nVarPos;
+        auto pVariables = aVariables.getArray();
 
         for (SCROW nRow = aRange.aStart.Row(); nRow <= aRange.aEnd.Row(); ++nRow)
             for (SCCOL nCol = aRange.aStart.Col(); nCol <= aRange.aEnd.Col(); ++nCol)
-                *it++ = table::CellAddress( nTab, nCol, nRow );
+                pVariables[nVarPos++] = table::CellAddress( nTab, nCol, nRow );
     }
 
     uno::Sequence<sheet::SolverConstraint> aConstraints;
@@ -971,7 +971,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
 
     sal_Int32 nVarCount = aVariables.getLength();
     uno::Sequence<double> aOldValues( nVarCount );
-    std::transform(std::cbegin(aVariables), std::cend(aVariables), aOldValues.begin(),
+    std::transform(std::cbegin(aVariables), std::cend(aVariables), aOldValues.getArray(),
         [this](const table::CellAddress& rVariable) -> double {
             ScAddress aCellPos;
             ScUnoConversion::FillScAddress( aCellPos, rVariable );

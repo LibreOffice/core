@@ -499,7 +499,7 @@ private:
     {
         const uno::Sequence< rendering::ARGBColor > aTemp( convertIntegerToARGB(deviceColor) );
         uno::Sequence< rendering::RGBColor > aRes( aTemp.getLength() );
-        std::transform(aTemp.begin(), aTemp.end(), aRes.begin(),
+        std::transform(aTemp.begin(), aTemp.end(), aRes.getArray(),
             [](const rendering::ARGBColor& rColor) {
                 return rendering::RGBColor(rColor.Red,
                                            rColor.Green,
@@ -520,7 +520,7 @@ private:
 
         if( getPalette().is() )
         {
-            std::transform(deviceColor.begin(), deviceColor.end(), aRes.begin(),
+            std::transform(deviceColor.begin(), deviceColor.end(), aRes.getArray(),
                 [](sal_Int8 nIn) {
                     auto fColor = vcl::unotools::toDoubleColor(nIn);
                     return rendering::ARGBColor(1.0, fColor, fColor, fColor);
@@ -554,7 +554,7 @@ private:
 
         if( getPalette().is() )
         {
-            std::transform(deviceColor.begin(), deviceColor.end(), aRes.begin(),
+            std::transform(deviceColor.begin(), deviceColor.end(), aRes.getArray(),
                 [](sal_Int8 nIn) {
                     auto fColor = vcl::unotools::toDoubleColor(nIn);
                     return rendering::ARGBColor(1.0, fColor, fColor, fColor);
