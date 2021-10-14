@@ -280,7 +280,7 @@ public:
     const OUString& GetString() const { return maString;}
 
     /// return length including expanded fields
-    sal_uLong GetExpandedLen() const;
+    sal_Int32 GetExpandedLen() const;
     /// return content including expanded fields
     OUString  GetExpandedText(sal_Int32 nStartPos = 0, sal_Int32 nEndPos = -1) const;
     /// re-write offsets in the expanded text to string offsets
@@ -774,7 +774,7 @@ public:
     EditPaM         ConnectParagraphs( ContentNode* pLeft, ContentNode* pRight );
 
     OUString        GetText( LineEnd eEnd ) const;
-    sal_uLong       GetTextLen() const;
+    sal_Int32       GetTextLen() const;
 
     OUString       GetParaAsString( sal_Int32 nNode ) const;
     static OUString  GetParaAsString(const ContentNode* pNode, sal_Int32 nStartPos = 0, sal_Int32 nEndPos = -1);

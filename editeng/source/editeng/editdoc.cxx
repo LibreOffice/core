@@ -1584,9 +1584,9 @@ sal_Int32 ContentNode::Len() const
     return maString.getLength();
 }
 
-sal_uLong ContentNode::GetExpandedLen() const
+sal_Int32 ContentNode::GetExpandedLen() const
 {
-    sal_uLong nLen = maString.getLength();
+    sal_Int32 nLen = maString.getLength();
 
     // Fields can be longer than the placeholder in the Node
     const CharAttribList::AttribsType& rAttrs = GetCharAttribs().GetAttribs();
@@ -2127,7 +2127,7 @@ OUString EditDoc::GetText( LineEnd eEnd ) const
 
     const OUString aSep = EditDoc::GetSepStr( eEnd );
     const sal_Int32 nSepSize = aSep.getLength();
-    const sal_uInt32 nLen = GetTextLen() + (nNodes - 1)*nSepSize;
+    const sal_Int32 nLen = GetTextLen() + (nNodes - 1)*nSepSize;
 
     OUStringBuffer aBuffer(nLen + 16); // leave some slack
 
@@ -2166,9 +2166,9 @@ EditPaM EditDoc::GetEndPaM() const
     return EditPaM( pLastNode, pLastNode->Len() );
 }
 
-sal_uLong EditDoc::GetTextLen() const
+sal_Int32 EditDoc::GetTextLen() const
 {
-    sal_uLong nLen = 0;
+    sal_Int32 nLen = 0;
     for ( sal_Int32 nNode = 0; nNode < Count(); nNode++ )
     {
         const ContentNode* pNode = GetObject( nNode );

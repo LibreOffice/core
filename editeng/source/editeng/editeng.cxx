@@ -580,7 +580,7 @@ OUString EditEngine::GetText( const ESelection& rESelection ) const
     return pImpEditEngine->GetSelected( aSel );
 }
 
-sal_uInt32 EditEngine::GetTextLen() const
+sal_Int32 EditEngine::GetTextLen() const
 {
     return pImpEditEngine->GetEditDoc().GetTextLen();
 }
