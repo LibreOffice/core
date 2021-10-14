@@ -122,8 +122,14 @@ int SfxLokHelper::createView(int nDocId)
     return -1;
 }
 
+static void empty()
+{
+}
+
 void SfxLokHelper::destroyView(int nId)
 {
+    if(nId == 0)
+        empty();
     const SfxApplication* pApp = SfxApplication::Get();
     if (pApp == nullptr)
         return;
