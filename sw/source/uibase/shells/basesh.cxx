@@ -2714,7 +2714,8 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             if ( rSh.IsTableMode() )
             {
                 // Get background attributes of the table and put it in the set
-                std::unique_ptr<SvxBrushItem> aBrush;
+                // tdf#144843 calling GetBoxBackground *requires* an incarnation to be handed over
+                std::unique_ptr<SvxBrushItem> aBrush(std::make_unique<SvxBrushItem>(RES_BACKGROUND));
                 rSh.GetBoxBackground( aBrush );
                 pDlg.disposeAndReset(pFact->CreateSwBackgroundDialog(pMDI, aSet));
                 aSet.Put( *aBrush );
