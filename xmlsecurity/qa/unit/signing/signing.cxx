@@ -158,8 +158,12 @@ void SigningTest::setUp()
     OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
     OUString aTargetDir = m_directories.getURLFromWorkdir(
                               "/CppunitTest/xmlsecurity_signing.test.user/");
-    osl::File::copy(aSourceDir + "cert8.db", aTargetDir + "cert8.db");
-    osl::File::copy(aSourceDir + "key3.db", aTargetDir + "key3.db");
+
+    // Set up NSS database in workdir/CppunitTest/
+    osl::File::copy(aSourceDir + "cert9.db", aTargetDir + "cert9.db");
+    osl::File::copy(aSourceDir + "key4.db", aTargetDir + "key4.db");
+    osl::File::copy(aSourceDir + "pkcs11.txt", aTargetDir + "pkcs11.txt");
+
     OUString aTargetPath;
     osl::FileBase::getSystemPathFromFileURL(aTargetDir, aTargetPath);
     setenv("MOZILLA_CERTIFICATE_FOLDER", aTargetPath.toUtf8().getStr(), 1);
