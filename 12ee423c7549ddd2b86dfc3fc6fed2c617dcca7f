@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f877a94_72196209",
+        "filename": "sc/source/ui/docshell/externalrefmgr.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 1761,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-10-14T10:53:59Z",
+      "side": 1,
+      "message": "new ScDocument leaks here. https://gerrit.libreoffice.org/c/core/+/123583 is my guess as to a fix. (ScTokenArray ctor only needs the ScSheetLimits of the document, presumably the one belonging to mrDoc is good enough)",
+      "revId": "12ee423c7549ddd2b86dfc3fc6fed2c617dcca7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
