@@ -74,6 +74,30 @@
       },
       "revId": "3a2bff9e98f563222110ddd8a06fd4becd581a0c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b853c4bb_f820078d",
+        "filename": "vcl/win/gdi/salprn.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1377,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-10-14T10:24:14Z",
+      "side": 1,
+      "message": "I changed the comment to be more explicit about the real problems (use-after-free of HDC + freeing non-default HDC values). HTH",
+      "parentUuid": "bb9db0e2_66f05308",
+      "range": {
+        "startLine": 1377,
+        "startChar": 0,
+        "endLine": 1377,
+        "endChar": 49
+      },
+      "revId": "3a2bff9e98f563222110ddd8a06fd4becd581a0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

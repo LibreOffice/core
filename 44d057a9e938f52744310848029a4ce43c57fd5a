@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae9b6f8d_cfc29cf1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-10-14T10:24:14Z",
+      "side": 1,
+      "message": "@mike + @noel: FYI; see my comment about the HDC wrapping class. Not sure it would be more hassle then help.",
+      "revId": "44d057a9e938f52744310848029a4ce43c57fd5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
