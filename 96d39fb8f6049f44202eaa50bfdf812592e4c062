@@ -16,6 +16,24 @@
       "message": "i guess a general problem with this type is that currently 2 specific kinds of barcode are supported, but there are several dozen different kinds listed on https://en.wikipedia.org/wiki/Barcode\n\n... and we have no idea which \"parameters\" each of those would require.\n\nnot sure what we want to do about that?\n\nsomething like \"sequence\u003cbeans::NamedValue\u003e Properties;\" would be infinitely extensible but also annoying to use...",
       "revId": "96d39fb8f6049f44202eaa50bfdf812592e4c062",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8bc6086d_b9344427",
+        "filename": "offapi/com/sun/star/drawing/BarCode.idl",
+        "patchSetId": 12
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-10-14T08:54:43Z",
+      "side": 1,
+      "message": "Akshit: can you look into this? zxing-cpp supports 16 different barcode types at the moment.",
+      "parentUuid": "2613b5c6_55b0011f",
+      "revId": "96d39fb8f6049f44202eaa50bfdf812592e4c062",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
