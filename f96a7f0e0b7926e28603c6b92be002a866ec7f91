@@ -16,6 +16,24 @@
       "message": "Tomaž: do you know if empty string is a valid input to the function? Thanks.",
       "revId": "f96a7f0e0b7926e28603c6b92be002a866ec7f91",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "acb3f28f_3dae4d45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-10-14T12:04:09Z",
+      "side": 1,
+      "message": "I don\u0027t know, but looks fine to me.",
+      "parentUuid": "28bf157d_d5714392",
+      "revId": "f96a7f0e0b7926e28603c6b92be002a866ec7f91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
