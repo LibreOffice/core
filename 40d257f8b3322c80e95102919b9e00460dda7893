@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1639b73_db81685a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-14T08:09:04Z",
+      "side": 1,
+      "message": "+1 for this 7.2 backport.\n\nI have mixed feelings about submitting a backport to 7.1.7 since it has already started RC and will be the last one. But on the other hand, a simple revert like this OUGHT to be very safe and I do consider these direct-format-spamming bugs to be rather significant.",
+      "revId": "40d257f8b3322c80e95102919b9e00460dda7893",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
