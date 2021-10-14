@@ -93,7 +93,7 @@ namespace xmloff
         css::uno::Sequence<T> anySeq;
         bool bSuccess = value >>= anySeq;
         assert(bSuccess); (void)bSuccess;
-        for (T const & i : anySeq)
+        for (T const & i : std::as_const(anySeq))
         {
             OUString sValue(implConvertAny(makeAny(i)));
             AddAttribute(XML_NAMESPACE_OFFICE, eValueAttName, sValue );

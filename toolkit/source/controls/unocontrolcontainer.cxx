@@ -382,7 +382,7 @@ UnoControlContainer::~UnoControlContainer()
 
 void UnoControlContainer::ImplActivateTabControllers()
 {
-    for ( auto& rTabController : maTabControllers )
+    for ( auto& rTabController : asNonConstRange(maTabControllers) )
     {
         rTabController->setContainer( this );
         rTabController->activateTabOrder();
@@ -750,7 +750,7 @@ void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxT
         }
 
         uno::Sequence< uno::Reference< awt::XControl > > aCtrls = getControls();
-        for( auto& rCtrl : aCtrls )
+        for( auto& rCtrl : asNonConstRange(aCtrls) )
             rCtrl->createPeer( rxToolkit, getPeer() );
 
         uno::Reference< awt::XVclContainerPeer >  xC( getPeer(), uno::UNO_QUERY );

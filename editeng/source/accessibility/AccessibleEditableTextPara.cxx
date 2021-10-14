@@ -1229,7 +1229,7 @@ namespace accessibility
         // since SequenceAsHashMap ignores property handles and property state
         // we have to restore the property state here (property handles are
         // of no use to the accessibility API).
-        for (beans::PropertyValue & rRes : aRes)
+        for (beans::PropertyValue & rRes : asNonConstRange(aRes))
         {
             bool bIsDirectVal = false;
             for (auto const& rRunAttrib : aRunAttribs)

@@ -338,7 +338,7 @@ public:
         uno::Sequence< beans::NamedValue > stats(
                 m_xDocProps->getDocumentStatistics());
 
-        auto [begin, end] = toNonConstRange(stats);
+        auto [begin, end] = asNonConstRange(stats);
         auto pStat = std::find_if(begin, end,
             [&rPropName](const beans::NamedValue& rStat) { return rPropName == rStat.Name; });
         if (pStat != end)

@@ -279,7 +279,7 @@ inline std::basic_ostream<charT, traits> &operator<<(std::basic_ostream<charT, t
     return os;
 }
 
-template <class E> inline auto toNonConstRange(css::uno::Sequence<E>& s)
+template <class E> inline auto asNonConstRange(css::uno::Sequence<E>& s)
 {
     // Two iterators [begin, end] representing the non-const range of the Sequence.
     // It only calls Sequence::getArray once, to avoid the second COW overhead when

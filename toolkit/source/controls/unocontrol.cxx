@@ -278,7 +278,7 @@ void UnoControl::ImplSetPeerProperty( const OUString& rPropName, const Any& rVal
             }
             else if ( aConvertedValue >>= aSeqValue )
             {
-                for ( auto& rValue : aSeqValue )
+                for ( auto& rValue : asNonConstRange(aSeqValue) )
                     ImplCheckLocalize( rValue );
                 aConvertedValue <<= aSeqValue;
             }

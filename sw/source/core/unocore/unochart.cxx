@@ -1233,7 +1233,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     // build value for 'SequenceMapping'
 
     uno::Sequence< sal_Int32 > aSortedMapping( aSequenceMapping );
-    auto [begin, end] = toNonConstRange(aSortedMapping);
+    auto [begin, end] = asNonConstRange(aSortedMapping);
     std::sort(begin, end);
     bool bNeedSequenceMapping = false;
     for (sal_Int32 i = 0;  i < aSequenceMapping.getLength();  ++i)

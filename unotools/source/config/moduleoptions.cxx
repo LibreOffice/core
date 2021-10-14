@@ -738,7 +738,7 @@ void SvtModuleOptions_Impl::MakeReadonlyStatesAvailable()
         return;
 
     css::uno::Sequence< OUString > lFactories = GetNodeNames(OUString());
-    for (OUString& rFactory : toNonConstRange(lFactories))
+    for (OUString& rFactory : asNonConstRange(lFactories))
         rFactory += PATHSEPARATOR PROPERTYNAME_DEFAULTFILTER;
 
     css::uno::Sequence< sal_Bool > lReadonlyStates = GetReadOnlyStates(lFactories);

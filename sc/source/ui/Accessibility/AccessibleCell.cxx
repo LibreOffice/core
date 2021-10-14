@@ -522,7 +522,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScAccessibleCell::getCharacterAtt
     sal_uInt16 nParaIndent = mpDoc->GetAttr( maCellAddress, ATTR_INDENT )->GetValue();
     if (nParaIndent > 0)
     {
-        auto [begin, end] = toNonConstRange(aAttribs);
+        auto [begin, end] = asNonConstRange(aAttribs);
         auto pAttrib = std::find_if(begin, end,
             [](const beans::PropertyValue& rAttrib) { return "ParaLeftMargin" == rAttrib.Name; });
         if (pAttrib != end)

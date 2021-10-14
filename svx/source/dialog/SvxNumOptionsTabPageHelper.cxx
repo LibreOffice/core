@@ -53,7 +53,7 @@ void SvxNumOptionsTabPageHelper::GetI18nNumbering(weld::ComboBox& rFmtLB, sal_uI
     }
     if (xInfo.is())
     {
-        Sequence<sal_Int16> aTypes = xInfo->getSupportedNumberingTypes();
+        const Sequence<sal_Int16> aTypes = xInfo->getSupportedNumberingTypes();
         for (const sal_Int16 nCurrent : aTypes)
         {
             if (nCurrent > NumberingType::CHARS_LOWER_LETTER_N)

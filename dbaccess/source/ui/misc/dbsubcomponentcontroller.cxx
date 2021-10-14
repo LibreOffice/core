@@ -222,7 +222,7 @@ namespace dbaui
         Sequence< Type > aTypes( DBSubComponentController_Base::getTypes() );
         if ( !m_pImpl->documentHasScriptSupport() )
         {
-            auto [begin, end] = toNonConstRange(aTypes);
+            auto [begin, end] = asNonConstRange(aTypes);
             auto newEnd = std::remove_if( begin, end,
                                           [](const Type& type)
                                           { return type == cppu::UnoType<XScriptInvocationContext>::get(); } );

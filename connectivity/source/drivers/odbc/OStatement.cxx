@@ -131,7 +131,7 @@ Sequence< Type > SAL_CALL OStatement_Base::getTypes(  )
     Sequence< Type > aOldTypes = OStatement_BASE::getTypes();
     if ( m_pConnection.is() && !m_pConnection->isAutoRetrievingEnabled() )
     {
-        auto [begin, end] = toNonConstRange(aOldTypes);
+        auto [begin, end] = asNonConstRange(aOldTypes);
         auto newEnd = std::remove(begin, end,
                                   cppu::UnoType<XGeneratedResultSet>::get());
         aOldTypes.realloc(std::distance(begin, newEnd));
