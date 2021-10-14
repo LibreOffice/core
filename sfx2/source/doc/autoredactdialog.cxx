@@ -317,7 +317,11 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, EditHdl, weld::Button&, void)
     // And sync the targets box row with the actual target data
     m_xTargetsBox->setRowData(nSelectedRow, pTarget);
 }
-
+IMPL_LINK_NOARG(SfxAutoRedactDialog, DoubleClickEditHdl, weld::TreeView&, void)
+{
+    if (m_xEditBtn->get_sensitive())
+        m_xEditBtn->clicked();
+}
 IMPL_LINK_NOARG(SfxAutoRedactDialog, DeleteHdl, weld::Button&, void)
 {
     std::vector<int> aSelectedRows = m_xTargetsBox->get_selected_rows();
@@ -576,6 +580,7 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
     m_xAddBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, AddHdl));
     m_xEditBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, EditHdl));
     m_xDeleteBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, DeleteHdl));
+    m_xTargetsBox->connect_row_activated(LINK(this, SfxAutoRedactDialog, DoubleClickEditHdl));
 }
 
 SfxAutoRedactDialog::~SfxAutoRedactDialog()
