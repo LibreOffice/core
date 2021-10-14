@@ -13,6 +13,7 @@
 #include <vcl/TypeSerializer.hxx>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <IDocumentDrawModelAccess.hxx>
+#include <com/sun/star/table/TableBorder2.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
@@ -416,6 +417,46 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132597)
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf144840)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf144840.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
+    xTransfer->Cut();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+
+    // Paste special as RTF
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        { { "SelectedFormat", uno::makeAny(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
+
+    dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    uno::Reference<text::XTextTable> xTextTable(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+
+    table::TableBorder2 tableBorder = getProperty<table::TableBorder2>(xTextTable, "TableBorder2");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 4
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), tableBorder.TopLine.LineWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), tableBorder.LeftLine.LineWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), tableBorder.RightLine.LineWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), tableBorder.BottomLine.LineWidth);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf131963)
