@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57bbc3a0_82693481",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2021-10-14T06:03:36Z",
+      "side": 1,
+      "message": "TODO: Make this have an effect on the actual bars/points etc: bug 72514\nTODO: ODF import-export",
+      "revId": "3be6fec19df2f025b97fdba5618eae25aabbd078",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
