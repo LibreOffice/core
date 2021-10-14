@@ -1768,7 +1768,6 @@ SwFrameFormat* SwTableBox::ClaimFrameFormat()
     // If other SwTableBox objects currently listen to the same SwTableBoxFormat as
     // this one, something needs to be done
     SwTableBoxFormat *pRet = static_cast<SwTableBoxFormat*>(GetFrameFormat());
-    const bool bInImport = pRet->GetDoc()->IsInWriterfilterImport();
     SwIterator<SwTableBox,SwFormat> aIter( *pRet );
     for( SwTableBox* pLast = aIter.First(); pLast; pLast = aIter.Next() )
     {
@@ -1784,13 +1783,10 @@ SwFrameFormat* SwTableBox::ClaimFrameFormat()
             pNewFormat->UnlockModify();
 
             // re-register SwCellFrame objects that know me
-            if (!bInImport)
-            {
-                SwIterator<SwCellFrame,SwFormat> aFrameIter( *pRet );
-                for( SwCellFrame* pCell = aFrameIter.First(); pCell; pCell = aFrameIter.Next() )
-                    if( pCell->GetTabBox() == this )
-                        pCell->RegisterToFormat( *pNewFormat );
-            }
+            SwIterator<SwCellFrame,SwFormat> aFrameIter( *pRet );
+            for( SwCellFrame* pCell = aFrameIter.First(); pCell; pCell = aFrameIter.Next() )
+                if( pCell->GetTabBox() == this )
+                    pCell->RegisterToFormat( *pNewFormat );
 
             // re-register myself
             pNewFormat->Add( this );
