@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6aad700_5ce90653",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-14T06:21:25Z",
+      "side": 1,
+      "message": "Yes, my mistake. I first wrote the test with on on-disk document, then found out how to construct an in-memory document for the same (which is faster), but forgot to remove the bugdoc. Thanks!",
+      "revId": "8fb0c3d7ac20ae0e5c17077e425c990f11c572b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
