@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7da6491_ca6ddd79",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-10-14T18:35:33Z",
+      "side": 1,
+      "message": "add an assert to GetBoxBackground to verify this and prevent future mistakes?",
+      "revId": "6f7859ba23e8a12ddc87be596bf83668f677e358",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
