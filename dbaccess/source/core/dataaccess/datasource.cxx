@@ -866,7 +866,7 @@ sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & 
                 {
                     const PropertyValue* pInfoIter = aSettings.getConstArray();
                     const PropertyValue* checkValue = aValues.getConstArray();
-                    for ( ;!bModified && checkValue != aValues.end() ; ++checkValue,++pInfoIter)
+                    for ( ;!bModified && checkValue != std::cend(aValues) ; ++checkValue,++pInfoIter)
                     {
                         bModified = checkValue->Name != pInfoIter->Name;
                         if ( !bModified )
@@ -1046,7 +1046,7 @@ void ODatabaseSource::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) con
                 // transform them so that only property values which fulfill certain
                 // criteria survive
                 Sequence< PropertyValue > aNonDefaultOrUserDefined( aValues.getLength() );
-                auto [begin, end] = toNonConstRange(aValues);
+                auto [begin, end] = asNonConstRange(aValues);
                 auto pCopyStart = aNonDefaultOrUserDefined.getArray();
                 const PropertyValue* pCopyEnd = std::remove_copy_if(
                     begin,

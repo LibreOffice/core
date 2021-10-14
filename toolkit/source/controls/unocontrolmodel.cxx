@@ -665,7 +665,7 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
                 rValue >>= aSeq;
                 tools::Long nEntries = aSeq.getLength();
                 OutStream->writeLong( nEntries );
-                for ( const auto nVal : aSeq )
+                for ( const auto nVal : std::as_const(aSeq) )
                     OutStream->writeShort( nVal );
             }
             else if ( rType == cppu::UnoType< css::uno::Sequence<sal_Int16> >::get() )
@@ -674,7 +674,7 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
                 rValue >>= aSeq;
                 tools::Long nEntries = aSeq.getLength();
                 OutStream->writeLong( nEntries );
-                for ( const auto nVal : aSeq )
+                for ( const auto nVal : std::as_const(aSeq) )
                     OutStream->writeShort( nVal );
             }
             else if ( rType.getTypeClass() == TypeClass_ENUM )

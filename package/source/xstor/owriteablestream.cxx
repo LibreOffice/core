@@ -423,7 +423,7 @@ void OWriteStream_Impl::SetDecrypted()
     m_bHasCachedEncryptionData = false;
     m_aEncryptionData.clear();
 
-    for ( auto& rProp : m_aProps )
+    for ( auto& rProp : asNonConstRange(m_aProps) )
     {
         if ( rProp.Name == "Encrypted" )
             rProp.Value <<= false;
@@ -446,7 +446,7 @@ void OWriteStream_Impl::SetEncrypted( const ::comphelper::SequenceAsHashMap& aEn
     m_bHasDataToFlush = true;
 
     // introduce encryption info
-    for ( auto& rProp : m_aProps )
+    for ( auto& rProp : asNonConstRange(m_aProps) )
     {
         if ( rProp.Name == "Encrypted" )
             rProp.Value <<= true;
@@ -735,7 +735,7 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
 
         // if there are cached properties update them
         if ( rProp.Name == aMedTypePropName || rProp.Name == aComprPropName )
-            for ( auto& rMemProp : m_aProps )
+            for ( auto& rMemProp : asNonConstRange(m_aProps) )
             {
                 if ( rProp.Name == rMemProp.Name )
                     rMemProp.Value = rProp.Value;
@@ -825,7 +825,7 @@ void OWriteStream_Impl::Commit()
     // copy properties to the package stream
     uno::Reference< beans::XPropertySet > xPropertySet( xNewPackageStream, uno::UNO_QUERY_THROW );
 
-    for ( auto& rProp : m_aProps )
+    for ( auto& rProp : asNonConstRange(m_aProps) )
     {
         if ( rProp.Name == "Size" )
         {
@@ -1053,7 +1053,7 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::ReadPackageStreamProper
     // TODO: may be also raw stream should be marked
 
     uno::Reference< beans::XPropertySet > xPropSet( m_xPackageStream, uno::UNO_QUERY_THROW );
-    for ( auto& rProp : aResult )
+    for ( auto& rProp : asNonConstRange(aResult) )
     {
         try {
             rProp.Value = xPropSet->getPropertyValue( rProp.Name );
@@ -2177,7 +2177,7 @@ void OWriteStream::CloseOutput_Impl()
     if ( !m_xSeekable.is() )
         throw uno::RuntimeException();
 
-    for ( auto& rProp : m_pImpl->m_aProps )
+    for ( auto& rProp : asNonConstRange(m_pImpl->m_aProps) )
     {
         if ( rProp.Name == "Size" )
             rProp.Value <<= m_xSeekable->getLength();
@@ -2785,7 +2785,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
                 bCompressedValueFromType = false;
         }
 
-        for ( auto& rProp : m_pImpl->m_aProps )
+        for ( auto& rProp : asNonConstRange(m_pImpl->m_aProps) )
         {
             if ( aPropertyName == rProp.Name )
                 rProp.Value = aValue;
@@ -2797,7 +2797,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
     {
         // if the "Compressed" property is not set explicitly, the MediaType can change the default value
         m_pImpl->m_bCompressedSetExplicit = true;
-        for ( auto& rProp : m_pImpl->m_aProps )
+        for ( auto& rProp : asNonConstRange(m_pImpl->m_aProps) )
         {
             if ( aPropertyName == rProp.Name )
                 rProp.Value = aValue;
@@ -2828,7 +2828,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
     }
     else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aPropertyName == aMediaTypeString )
     {
-        for ( auto& rProp : m_pImpl->m_aProps )
+        for ( auto& rProp : asNonConstRange(m_pImpl->m_aProps) )
         {
             if ( aPropertyName == rProp.Name )
                 rProp.Value = aValue;

@@ -1549,7 +1549,7 @@ ScChart2DataProvider::createDataSource(
         aSeqVector.push_back(aSeq);
     }
 
-    for( const sal_Int32 nNewIndex : aSequenceMapping )
+    for( const sal_Int32 nNewIndex : std::as_const(aSequenceMapping) )
     {
         // note: assuming that the values in the sequence mapping are always non-negative
         ::std::vector< uno::Reference< chart2::data::XLabeledDataSequence > >::size_type nOldIndex( static_cast< sal_uInt32 >( nNewIndex ) );

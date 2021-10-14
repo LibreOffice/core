@@ -784,7 +784,7 @@ void AccessibleControlShape::initializeComposedState()
 #if OSL_DEBUG_LEVEL > 0
     // now, only states which are not in the responsibility of the UNO control should be part of this state set
     {
-        Sequence< sal_Int16 > aInitStates = pComposedStates->getStates();
+        const Sequence< sal_Int16 > aInitStates = pComposedStates->getStates();
         for ( sal_Int16 state : aInitStates )
             OSL_ENSURE( !isComposedState( state ),
                 "AccessibleControlShape::initializeComposedState: invalid initial composed state (should be controlled by the UNO-control)!" );
@@ -805,7 +805,7 @@ void AccessibleControlShape::initializeComposedState()
         aInnerStates = xInnerStates->getStates();
 
     // look which one are to be propagated to the composed context
-    for ( const sal_Int16 nState : aInnerStates )
+    for ( const sal_Int16 nState : std::as_const(aInnerStates) )
     {
         if ( isComposedState( nState ) && !pComposedStates->contains( nState ) )
         {

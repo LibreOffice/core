@@ -818,7 +818,7 @@ namespace sfx2
                         Sequence< StringPair > aFilters( comphelper::containerToSequence(_rGroup) );
                         if ( _bAddExtension )
                         {
-                            for ( StringPair & filter : aFilters )
+                            for ( StringPair & filter : asNonConstRange(aFilters) )
                                 filter.First = addExtension( filter.First, filter.Second, true, *m_pFileDlgImpl );
                         }
                         m_xFilterGroupManager->appendFilterGroup( OUString(), aFilters );

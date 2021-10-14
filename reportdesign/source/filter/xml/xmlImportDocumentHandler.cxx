@@ -261,7 +261,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const OUString & _sName, const
                 break;
             }
         }
-        for(beans::PropertyValue & propVal : m_aArguments)
+        for(beans::PropertyValue & propVal : asNonConstRange(m_aArguments))
         {
             if ( propVal.Name == "HasCategories" )
             {

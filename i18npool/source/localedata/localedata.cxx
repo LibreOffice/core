@@ -719,7 +719,7 @@ Sequence< CalendarItem2 > LocaleDataImpl::getCalendarItems(
             case REF_MONTHS:
             case REF_GMONTHS:
             case REF_PMONTHS:
-                for (CalendarItem2& rItem : aItems)
+                for (CalendarItem2& rItem : asNonConstRange(aItems))
                 {
                     rItem = CalendarItem2{ OUString(allCalendars[rnOffset]),
                             OUString(allCalendars[rnOffset+1]),
@@ -729,7 +729,7 @@ Sequence< CalendarItem2 > LocaleDataImpl::getCalendarItems(
                 break;
             case REF_ERAS:
                 // Absent narrow name.
-                for (CalendarItem2& rItem : aItems)
+                for (CalendarItem2& rItem : asNonConstRange(aItems))
                 {
                     rItem = CalendarItem2{ OUString(allCalendars[rnOffset]),
                             OUString(allCalendars[rnOffset+1]),
@@ -1260,7 +1260,7 @@ LocaleDataImpl::getContinuousNumberingLevels( const lang::Locale& rLocale )
 
         // allocate memory for nAttributes attributes for each of the nStyles styles.
         Sequence< Sequence<beans::PropertyValue> > pv( nStyles );
-        for( auto& i : pv ) {
+        for( auto& i : asNonConstRange(pv) ) {
             i = Sequence<beans::PropertyValue>( nAttributes );
         }
 

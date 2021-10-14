@@ -494,7 +494,7 @@ namespace ucb::ucp::ext
         aEvent.Further        = false;
         aEvent.PropertyHandle = -1;
 
-        for ( auto& rRet : aRet )
+        for ( auto& rRet : asNonConstRange(aRet) )
         {
             // all our properties are read-only ...
             rRet <<= IllegalAccessException("property is read-only.", *this );

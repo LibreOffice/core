@@ -281,7 +281,7 @@ Sequence< OUString > SvtCommandOptions_Impl::impl_GetPropertyNames()
     Sequence< OUString > lDisabledItems      = GetNodeNames( SETNODE_DISABLED, utl::ConfigNameFormat::LocalPath );
 
     // Expand all keys
-    for (OUString& rItem : toNonConstRange(lDisabledItems))
+    for (OUString& rItem : asNonConstRange(lDisabledItems))
         rItem =  SETNODE_DISABLED PATHDELIMITER + rItem + PATHDELIMITER PROPERTYNAME_CMD;
 
     // Return result.

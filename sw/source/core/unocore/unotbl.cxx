@@ -3562,10 +3562,10 @@ uno::Sequence<uno::Sequence<uno::Any>> SAL_CALL SwXCellRange::getDataArray()
     uno::Sequence< uno::Sequence< uno::Any > > aRowSeq(nRowCount);
     auto vCells(GetCells());
     auto pCurrentCell(vCells.begin());
-    for(auto& rRow : aRowSeq)
+    for(auto& rRow : asNonConstRange(aRowSeq))
     {
         rRow = uno::Sequence< uno::Any >(nColCount);
-        for(auto& rCellAny : rRow)
+        for(auto& rCellAny : asNonConstRange(rRow))
         {
             auto pCell(static_cast<SwXCell*>(pCurrentCell->get()));
             if(!pCell)
@@ -3631,10 +3631,10 @@ SwXCellRange::getData()
     uno::Sequence< uno::Sequence< double > > vRows(nRowCount);
     auto vCells(GetCells());
     auto pCurrentCell(vCells.begin());
-    for(auto& rRow : vRows)
+    for(auto& rRow : asNonConstRange(vRows))
     {
         rRow = uno::Sequence<double>(nColCount);
-        for(auto& rValue : rRow)
+        for(auto& rValue : asNonConstRange(rRow))
         {
             if(!(*pCurrentCell))
                 throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));

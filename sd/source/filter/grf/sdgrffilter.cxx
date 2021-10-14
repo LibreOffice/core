@@ -246,7 +246,7 @@ bool SdGRFFilter::Export()
                     OUString sShortName( rGraphicFilter.GetExportFormatShortName( nFilter ) );
 
                     bool    bFilterNameFound = false;
-                    for ( auto& rArg : aArgs )
+                    for ( auto& rArg : asNonConstRange(aArgs) )
                     {
                         OUString& rStr = rArg.Name;
                         if ( rStr == sFilterName )

@@ -84,7 +84,7 @@ ScVbaWorkbook::Colors( const ::uno::Any& Index )
 
 bool ScVbaWorkbook::setFilterPropsFromFormat( sal_Int32 nFormat, uno::Sequence< beans::PropertyValue >& rProps )
 {
-    auto [begin, end] = toNonConstRange(rProps);
+    auto [begin, end] = asNonConstRange(rProps);
     auto pProp = std::find_if(begin, end,
         [](const beans::PropertyValue& rProp) { return rProp.Name == "FilterName"; });
     bool bRes = pProp != end;

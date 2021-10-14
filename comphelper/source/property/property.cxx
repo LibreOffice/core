@@ -138,31 +138,25 @@ bool hasProperty(const OUString& _rName, const Reference<XPropertySet>& _rxSet)
 
 void RemoveProperty(Sequence<Property>& _rProps, const OUString& _rPropName)
 {
-    sal_Int32 nLen = _rProps.getLength();
-
     // binary search
-    const Property* pProperties = _rProps.getConstArray();
     Property aNameProp(_rPropName, 0, Type(), 0);
-    const Property* pResult = std::lower_bound(pProperties, pProperties + nLen, aNameProp, PropertyCompareByName());
+    const Property* pResult = std::lower_bound(std::cbegin(_rProps), std::cend(_rProps), aNameProp, PropertyCompareByName());
 
-    if ( pResult != _rProps.end() && pResult->Name == _rPropName )
+    if ( pResult != std::cend(_rProps) && pResult->Name == _rPropName)
     {
-        OSL_ENSURE(pResult->Name == _rPropName, "::RemoveProperty Properties not sorted");
-        removeElementAt(_rProps, pResult - pProperties);
+        removeElementAt(_rProps, pResult - std::cbegin(_rProps));
     }
 }
 
 
 void ModifyPropertyAttributes(Sequence<Property>& seqProps, const OUString& sPropName, sal_Int16 nAddAttrib, sal_Int16 nRemoveAttrib)
 {
-    sal_Int32 nLen = seqProps.getLength();
-
     // binary search
-    Property* pProperties = seqProps.getArray();
+    auto [begin, end] = asNonConstRange(seqProps);
     Property aNameProp(sPropName, 0, Type(), 0);
-    Property* pResult = std::lower_bound(pProperties, pProperties + nLen, aNameProp, PropertyCompareByName());
+    Property* pResult = std::lower_bound(begin, end, aNameProp, PropertyCompareByName());
 
-    if ( (pResult != seqProps.end()) && (pResult->Name == sPropName) )
+    if ( (pResult != end) && (pResult->Name == sPropName) )
     {
         pResult->Attributes |= nAddAttrib;
         pResult->Attributes &= ~nRemoveAttrib;
