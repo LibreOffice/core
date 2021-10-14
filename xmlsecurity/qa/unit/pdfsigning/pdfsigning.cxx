@@ -130,9 +130,10 @@ void PDFSigningTest::setUp()
     OUString caVar("LIBO_TEST_CRYPTOAPI_PKCS7");
     osl_setEnvironment(caVar.pData, aTargetPath.pData);
 #else
-    // Set up cert8.db and key3.db in workdir/CppunitTest/
-    osl::File::copy(aSourceDir + "cert8.db", aTargetDir + "cert8.db");
-    osl::File::copy(aSourceDir + "key3.db", aTargetDir + "key3.db");
+    // Set up NSS database in workdir/CppunitTest/
+    osl::File::copy(aSourceDir + "cert9.db", aTargetDir + "cert9.db");
+    osl::File::copy(aSourceDir + "key4.db", aTargetDir + "key4.db");
+    osl::File::copy(aSourceDir + "pkcs11.txt", aTargetDir + "pkcs11.txt");
     setenv("MOZILLA_CERTIFICATE_FOLDER", aTargetPath.toUtf8().getStr(), 1);
 #endif
 }
