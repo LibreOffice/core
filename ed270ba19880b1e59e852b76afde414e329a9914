@@ -34,6 +34,24 @@
       "parentUuid": "abf06278_6736ece9",
       "revId": "ed270ba19880b1e59e852b76afde414e329a9914",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9819fe26_a69a5d3a",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-14T11:43:44Z",
+      "side": 1,
+      "message": "No, you don\u0027t need to list those groups here.  With and without those groups listed here, all the props within those groups will have their default (nil) values.",
+      "parentUuid": "696aa4c2_d6c64e20",
+      "revId": "ed270ba19880b1e59e852b76afde414e329a9914",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
