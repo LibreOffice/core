@@ -1364,24 +1364,11 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 // Only DAV resources support PROPFIND
                 std::vector< OUString > aPropNames;
 
-                uno::Sequence< beans::Property > aProperties(
-                    rProperties.getLength() );
-
-                if ( !m_aFailedPropNames.empty() )
-                {
-                    sal_Int32 nProps = rProperties.getLength();
-                    std::copy(rProperties.begin(), rProperties.end(), aProperties.begin());
-
-                    aProperties.realloc( nProps );
-                }
-                else
-                {
-                    aProperties = rProperties;
-                }
-
-                if ( aProperties.hasElements() )
+                // FIXME: Should m_aFailedPropNames be checked here? It got effectively
+                // ignored since commit 26e6d4b05ab444e6a7529ffcac7fbe592fc94833.
+                if ( rProperties.hasElements() )
                     ContentProperties::UCBNamesToDAVNames(
-                        aProperties, aPropNames );
+                        rProperties, aPropNames );
 
                 if ( !aPropNames.empty() )
                 {
