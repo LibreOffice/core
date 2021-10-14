@@ -34,6 +34,24 @@
       "parentUuid": "2613b5c6_55b0011f",
       "revId": "96d39fb8f6049f44202eaa50bfdf812592e4c062",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25b51dcc_201386aa",
+        "filename": "offapi/com/sun/star/drawing/BarCode.idl",
+        "patchSetId": 12
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-10-14T10:06:27Z",
+      "side": 1,
+      "message": "So, should we include all the currently available barcode types offered by zxing-cpp within LO?",
+      "parentUuid": "8bc6086d_b9344427",
+      "revId": "96d39fb8f6049f44202eaa50bfdf812592e4c062",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
