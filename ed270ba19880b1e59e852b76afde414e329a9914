@@ -16,6 +16,24 @@
       "message": "why do you add all these empty nodes?",
       "revId": "ed270ba19880b1e59e852b76afde414e329a9914",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "696aa4c2_d6c64e20",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-10-14T11:39:38Z",
+      "side": 1,
+      "message": "Don\u0027t I have to define it here? If not, I can remove it of course.",
+      "parentUuid": "abf06278_6736ece9",
+      "revId": "ed270ba19880b1e59e852b76afde414e329a9914",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
