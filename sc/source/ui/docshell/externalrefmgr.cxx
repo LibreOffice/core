@@ -1758,7 +1758,7 @@ void ScExternalRefManager::storeRangeNameTokens(sal_uInt16 nFileId, const OUStri
     {
         // Parse all tokens in this external range data, and replace each absolute
         // reference token with an external reference token, and cache them.
-        pNewArray = std::make_shared<ScTokenArray>(*new ScDocument());
+        pNewArray = std::make_shared<ScTokenArray>(mrDoc);
         FormulaTokenArrayPlainIterator aIter(rArray);
         for (const FormulaToken* pToken = aIter.First(); pToken; pToken = aIter.Next())
         {
