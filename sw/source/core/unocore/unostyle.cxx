@@ -510,7 +510,7 @@ uno::Sequence< OUString > SwXStyleFamilies::getElementNames()
     auto pEntries(lcl_GetStyleFamilyEntries());
     uno::Sequence<OUString> aNames(pEntries->size());
     std::transform(pEntries->begin(), pEntries->end(),
-            aNames.begin(), [] (const StyleFamilyEntry& e) { return e.m_sName; });
+            aNames.getArray(), [] (const StyleFamilyEntry& e) { return e.m_sName; });
     return aNames;
 }
 
@@ -2257,7 +2257,7 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_PARA_STYLE_CONDITIONS>(const SfxItemP
     static_assert(COND_COMMAND_COUNT == 28, "invalid size of command count?");
     uno::Sequence<beans::NamedValue> aSeq(COND_COMMAND_COUNT);
     sal_uInt16 nIndex = 0;
-    for(auto& rNV : aSeq)
+    for(auto& rNV : asNonConstRange(aSeq))
     {
         rNV.Name = GetCommandContextByIndex(nIndex++);
         rNV.Value <<= OUString();

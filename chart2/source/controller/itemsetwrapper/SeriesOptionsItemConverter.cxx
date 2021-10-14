@@ -219,7 +219,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                             if(!bGroupBarsPerAxis)
                             {
                                 //set the same value for all axes
-                                for( auto & pos : aBarPositionSequence )
+                                for( auto & pos : asNonConstRange(aBarPositionSequence) )
                                     pos = rBarPosition;
                             }
                             else if( nAxisIndex >= 0 && nAxisIndex < aBarPositionSequence.getLength() )

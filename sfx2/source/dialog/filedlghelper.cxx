@@ -613,7 +613,7 @@ void FileDialogHelper_Impl::updateVersions()
                 aEntries.realloc( xVersions.getLength() + 1 );
                 aEntries[0] = SfxResId( STR_SFX_FILEDLG_ACTUALVERSION );
 
-                std::transform(xVersions.begin(), xVersions.end(), std::next(aEntries.begin()),
+                std::transform(xVersions.begin(), xVersions.end(), std::next(aEntries.getArray()),
                     [](const util::RevisionTag& rVersion) -> OUString { return rVersion.Identifier; });
             }
             catch( const uno::Exception& )

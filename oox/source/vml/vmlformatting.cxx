@@ -927,7 +927,7 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
         uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
         uno::Sequence<beans::PropertyValue> aGeomPropSeq = xPropertySet->getPropertyValue("CustomShapeGeometry").get< uno::Sequence<beans::PropertyValue> >();
         bool bFound = false;
-        for (beans::PropertyValue& rProp : aGeomPropSeq)
+        for (beans::PropertyValue& rProp : asNonConstRange(aGeomPropSeq))
         {
             if (rProp.Name == "TextPath")
             {

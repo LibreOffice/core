@@ -997,7 +997,7 @@ void AddonsOptions_Impl::ReadMergeMenuData( std::u16string_view aMergeAddonInstr
     aMergeMenuBaseNode += m_aPathDelimiter;
 
     // extend the node names to have full path strings
-    for ( OUString& rName : aSubMenuNodeNames )
+    for ( OUString& rName : asNonConstRange(aSubMenuNodeNames) )
         rName = aMergeMenuBaseNode + rName;
 
     ReadSubMenuEntries( aSubMenuNodeNames, rMergeMenu );
@@ -1302,7 +1302,7 @@ bool AddonsOptions_Impl::ReadMenuItem( std::u16string_view aMenuNodeName, Sequen
             // Continue to read the sub menu nodes
             Sequence< Sequence< PropertyValue > > aSubMenuSeq;
             OUString aSubMenuRootNodeName( aRootSubMenuName + m_aPathDelimiter );
-            for ( OUString& rName : aRootSubMenuNodeNames )
+            for ( OUString& rName : asNonConstRange(aRootSubMenuNodeNames) )
                 rName = aSubMenuRootNodeName + rName;
             ReadSubMenuEntries( aRootSubMenuNodeNames, aSubMenuSeq );
             aMenuItem[ OFFSET_MENUITEM_SUBMENU ].Value <<= aSubMenuSeq;
@@ -1366,7 +1366,7 @@ bool AddonsOptions_Impl::ReadPopupMenu( std::u16string_view aPopupMenuNodeName, 
             // Continue to read the sub menu nodes
             Sequence< Sequence< PropertyValue > > aSubMenuSeq;
             OUString aSubMenuRootNodeName( aRootSubMenuName + m_aPathDelimiter );
-            for ( OUString& rName : aRootSubMenuNodeNames )
+            for ( OUString& rName : asNonConstRange(aRootSubMenuNodeNames) )
                 rName = aSubMenuRootNodeName + rName;
             ReadSubMenuEntries( aRootSubMenuNodeNames, aSubMenuSeq );
             aPopupMenu[ OFFSET_POPUPMENU_SUBMENU ].Value <<= aSubMenuSeq;

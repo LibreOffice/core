@@ -861,7 +861,7 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testHighlightEdit_numbering)
 
     uno::Sequence<beans::PropertyValue> aGrabBag;
     aMap["CharInteropGrabBag"] >>= aGrabBag;
-    for (beans::PropertyValue& rProp : aGrabBag)
+    for (beans::PropertyValue& rProp : asNonConstRange(aGrabBag))
     {
         // The shading is no longer defined from import, so clear that flag.
         // BackColor 0xff00ff will now attempt to export as highlight, since we set that in SvtFilterOptions.

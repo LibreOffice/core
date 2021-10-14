@@ -1062,7 +1062,7 @@ void FixZOrder(uno::Reference<drawing::XShapes> const& xShapes,
         return; // nothing to do
     }
     uno::Sequence<sal_Int32> aNewOrder(nCount);
-    auto iterInsert(aNewOrder.begin());
+    auto iterInsert(aNewOrder.getArray());
     for (auto const& rLayer : layers)
     {
         assert(rLayer.nMin <= rLayer.nMax); // empty layers have been removed
@@ -1283,7 +1283,7 @@ void XMLShapeExport::ImpExportGluePoints( const uno::Reference< drawing::XShape 
 
     drawing::GluePoint2 aGluePoint;
 
-    uno::Sequence< sal_Int32 > aIdSequence( xGluePoints->getIdentifiers() );
+    const uno::Sequence< sal_Int32 > aIdSequence( xGluePoints->getIdentifiers() );
 
     for( const sal_Int32 nIdentifier : aIdSequence )
     {

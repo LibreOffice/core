@@ -78,7 +78,7 @@ Sequence< Reference< css::frame::XDispatch > > SAL_CALL PPPOptimizerDialog::quer
     const Sequence< css::frame::DispatchDescriptor >& aDescripts )
 {
     Sequence< Reference< css::frame::XDispatch> > aReturn( aDescripts.getLength() );
-    std::transform(aDescripts.begin(), aDescripts.end(), aReturn.begin(),
+    std::transform(aDescripts.begin(), aDescripts.end(), aReturn.getArray(),
         [this](const css::frame::DispatchDescriptor& rDescr) -> Reference<css::frame::XDispatch> {
             return queryDispatch(rDescr.FeatureURL, rDescr.FrameName, rDescr.SearchFlags); });
     return aReturn;

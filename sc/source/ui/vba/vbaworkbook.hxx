@@ -29,7 +29,6 @@ class ScVbaWorkbook : public ScVbaWorkbook_BASE
 {
     static css::uno::Sequence< sal_Int32 > ColorData;
     static bool setFilterPropsFromFormat( sal_Int32 nFormat, css::uno::Sequence< css::beans::PropertyValue >& rProps );
-    static void initColorData( const css::uno::Sequence< sal_Int32 >& sColors );
     void init();
 
 public:

@@ -125,7 +125,7 @@ ListControlHelper::AddItem( const uno::Any& pvargItem, const uno::Any& pvargInde
         sList.realloc(  sList.getLength() + 1 );
 
         // point at first element to be overwritten
-        std::copy(sVec.begin(), sVec.end(), std::next(sList.begin(), nIndex));
+        std::copy(sVec.begin(), sVec.end(), std::next(sList.getArray(), nIndex));
     }
 
     m_xProps->setPropertyValue( "StringItemList", uno::makeAny( sList ) );

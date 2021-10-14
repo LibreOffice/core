@@ -12,7 +12,6 @@
 #else
 
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <map>
 #include <list>
@@ -79,20 +78,8 @@ void foo(std::list<Struct1*> aList)
 }
 };
 
-namespace test6
-{
-void foo(css::uno::Sequence<css::uno::Reference<css::uno::XInterface>>& aSeq)
-{
-    // expected-error@+1 {{var can be const [loplugin:constvars]}}
-    for (css::uno::Reference<css::uno::XInterface>& x : aSeq)
-    {
-        x.get();
-    }
-}
-};
-
 // no warning expected
-namespace test7
+namespace test6
 {
 void foo(std::vector<std::vector<int>> aVecVec)
 {

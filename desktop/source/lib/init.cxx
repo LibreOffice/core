@@ -2548,7 +2548,7 @@ static bool lo_signDocument(LibreOfficeKit* /*pThis*/,
     else
     {
         aCertificateSequence.realloc(nCertificateBinarySize);
-        std::copy(pCertificateBinary, pCertificateBinary + nCertificateBinarySize, aCertificateSequence.begin());
+        std::copy(pCertificateBinary, pCertificateBinary + nCertificateBinarySize, aCertificateSequence.getArray());
     }
 
     uno::Sequence<sal_Int8> aPrivateKeySequence;
@@ -2562,7 +2562,7 @@ static bool lo_signDocument(LibreOfficeKit* /*pThis*/,
     else
     {
         aPrivateKeySequence.realloc(nPrivateKeyBinarySize);
-        std::copy(pPrivateKeyBinary, pPrivateKeyBinary + nPrivateKeyBinarySize, aPrivateKeySequence.begin());
+        std::copy(pPrivateKeyBinary, pPrivateKeyBinary + nPrivateKeyBinarySize, aPrivateKeySequence.getArray());
     }
 
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xContext);
@@ -5624,7 +5624,7 @@ static bool doc_insertCertificate(LibreOfficeKitDocument* pThis,
     else
     {
         aCertificateSequence.realloc(nCertificateBinarySize);
-        std::copy(pCertificateBinary, pCertificateBinary + nCertificateBinarySize, aCertificateSequence.begin());
+        std::copy(pCertificateBinary, pCertificateBinary + nCertificateBinarySize, aCertificateSequence.getArray());
     }
 
     uno::Sequence<sal_Int8> aPrivateKeySequence;
@@ -5638,7 +5638,7 @@ static bool doc_insertCertificate(LibreOfficeKitDocument* pThis,
     else
     {
         aPrivateKeySequence.realloc(nPrivateKeySize);
-        std::copy(pPrivateKeyBinary, pPrivateKeyBinary + nPrivateKeySize, aPrivateKeySequence.begin());
+        std::copy(pPrivateKeyBinary, pPrivateKeyBinary + nPrivateKeySize, aPrivateKeySequence.getArray());
     }
 
     uno::Reference<security::XCertificate> xCertificate = xCertificateCreator->createDERCertificateWithPrivateKey(aCertificateSequence, aPrivateKeySequence);
@@ -5696,7 +5696,7 @@ static bool doc_addCertificate(LibreOfficeKitDocument* pThis,
     else
     {
         aCertificateSequence.realloc(nCertificateBinarySize);
-        std::copy(pCertificateBinary, pCertificateBinary + nCertificateBinarySize, aCertificateSequence.begin());
+        std::copy(pCertificateBinary, pCertificateBinary + nCertificateBinarySize, aCertificateSequence.getArray());
     }
 
     uno::Reference<security::XCertificate> xCertificate = xCertificateCreator->addDERCertificateToTheDatabase(aCertificateSequence, "TCu,Cu,Tu");
@@ -6080,7 +6080,7 @@ static void preloadData()
     std::cerr << "Preloading dictionaries: ";
     css::uno::Reference<linguistic2::XSupportedLocales> xSpellLocales(xSpellChecker, css::uno::UNO_QUERY_THROW);
     uno::Sequence< css::lang::Locale > aLocales = xSpellLocales->getLocales();
-    for (auto &it : aLocales)
+    for (auto &it : std::as_const(aLocales))
     {
         std::cerr << LanguageTag::convertToBcp47(it) << " ";
         css::beans::PropertyValues aNone;
@@ -6101,7 +6101,7 @@ static void preloadData()
     css::uno::Reference<linguistic2::XSupportedLocales> xThesLocales(xSpellChecker, css::uno::UNO_QUERY_THROW);
     aLocales = xThesLocales->getLocales();
     std::cerr << "Preloading thesauri: ";
-    for (auto &it : aLocales)
+    for (auto &it : std::as_const(aLocales))
     {
         std::cerr << LanguageTag::convertToBcp47(it) << " ";
         css::beans::PropertyValues aNone;

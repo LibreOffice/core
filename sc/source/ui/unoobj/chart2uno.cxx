@@ -1549,7 +1549,7 @@ ScChart2DataProvider::createDataSource(
         aSeqVector.push_back(aSeq);
     }
 
-    for( const sal_Int32 nNewIndex : aSequenceMapping )
+    for( const sal_Int32 nNewIndex : std::as_const(aSequenceMapping) )
     {
         // note: assuming that the values in the sequence mapping are always non-negative
         ::std::vector< uno::Reference< chart2::data::XLabeledDataSequence > >::size_type nOldIndex( static_cast< sal_uInt32 >( nNewIndex ) );
@@ -2579,7 +2579,7 @@ void ScChart2DataSequence::BuildDataCache()
     // convert the hidden cell list to sequence.
     m_aHiddenValues.realloc(aHiddenValues.size());
     std::copy(
-        aHiddenValues.begin(), aHiddenValues.end(), m_aHiddenValues.begin());
+        aHiddenValues.begin(), aHiddenValues.end(), m_aHiddenValues.getArray());
 
     // Clear the data series cache when the array is re-built.
     m_aMixedDataCache.realloc(0);

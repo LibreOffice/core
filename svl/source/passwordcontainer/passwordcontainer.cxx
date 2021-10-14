@@ -186,7 +186,7 @@ PasswordMap StorageItem::getInfo()
     sal_Int32 aNodeCount = aNodeNames.getLength();
     Sequence< OUString > aPropNames( aNodeCount );
 
-    std::transform(aNodeNames.begin(), aNodeNames.end(), aPropNames.begin(),
+    std::transform(aNodeNames.begin(), aNodeNames.end(), aPropNames.getArray(),
         [](const OUString& rName) -> OUString {
             return "Store/Passwordstorage['" + rName + "']/Password"; });
 

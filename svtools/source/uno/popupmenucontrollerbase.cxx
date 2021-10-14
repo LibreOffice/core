@@ -221,7 +221,7 @@ Sequence< Reference< XDispatch > > SAL_CALL PopupMenuControllerBase::queryDispat
     uno::Sequence< uno::Reference< frame::XDispatch > > lDispatcher( nCount );
 
     // Step over all descriptors and try to get any dispatcher for it.
-    std::transform(lDescriptor.begin(), lDescriptor.end(), lDispatcher.begin(),
+    std::transform(lDescriptor.begin(), lDescriptor.end(), lDispatcher.getArray(),
         [this](const DispatchDescriptor& rDesc) -> uno::Reference< frame::XDispatch > {
             return queryDispatch(rDesc.FeatureURL, rDesc.FrameName, rDesc.SearchFlags); });
 

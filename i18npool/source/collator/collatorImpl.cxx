@@ -107,7 +107,7 @@ CollatorImpl::listCollatorAlgorithms( const lang::Locale& rLocale )
     nLocale = rLocale;
     const Sequence< Implementation > &imp = mxLocaleData->getCollatorImplementations(rLocale);
     Sequence< OUString > list(imp.getLength());
-    auto pBegin = list.begin();
+    auto pBegin = list.getArray();
     auto pId = pBegin;
 
     for (const auto& rImpl : imp) {
@@ -126,7 +126,7 @@ CollatorImpl::listCollatorOptions( const OUString& /*collatorAlgorithmName*/ )
     const Sequence< OUString > option_str = mxLocaleData->getCollationOptions(nLocale);
     Sequence< sal_Int32 > option_int(option_str.getLength());
 
-    std::transform(option_str.begin(), option_str.end(), option_int.begin(), [](const OUString& rOpt) {
+    std::transform(option_str.begin(), option_str.end(), option_int.getArray(), [](const OUString& rOpt) {
         return rOpt == "IGNORE_CASE" ?  CollatorOptions::CollatorOptions_IGNORE_CASE :
                rOpt == "IGNORE_KANA" ?  CollatorOptions::CollatorOptions_IGNORE_KANA :
                rOpt == "IGNORE_WIDTH" ?  CollatorOptions::CollatorOptions_IGNORE_WIDTH : 0; });

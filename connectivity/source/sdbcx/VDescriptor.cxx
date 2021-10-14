@@ -74,7 +74,7 @@ namespace connectivity::sdbcx
             Sequence< Property > aProperties;
             describeProperties( aProperties );
 
-            auto [begin, end] = toNonConstRange(aProperties);
+            auto [begin, end] = asNonConstRange(aProperties);
             if ( isNew() )
                 std::for_each( begin, end, ResetROAttribute() );
             else

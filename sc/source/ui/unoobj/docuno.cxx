@@ -344,7 +344,7 @@ void ScPrintUIOptions::SetDefaults()
         uno::Sequence<beans::PropertyValue> aUIProp;
         if ( rPropValue.Value >>= aUIProp )
         {
-            for (auto& rProp : aUIProp)
+            for (auto& rProp : asNonConstRange(aUIProp))
             {
                 OUString aName = rProp.Name;
                 if ( aName == "Property" )

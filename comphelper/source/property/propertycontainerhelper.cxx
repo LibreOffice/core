@@ -469,7 +469,7 @@ void OPropertyContainerHelper::describeProperties(Sequence< Property >& _rProps)
     }
 
     // as our property vector is sorted by handles, not by name, we have to sort aOwnProps
-    auto [begin, end] = toNonConstRange(aOwnProps);
+    auto [begin, end] = asNonConstRange(aOwnProps);
     std::sort(begin, end, PropertyCompareByName());
 
     // unfortunately the STL merge function does not allow the output range to overlap one of the input ranges,

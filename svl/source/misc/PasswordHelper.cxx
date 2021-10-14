@@ -32,7 +32,7 @@ void SvPasswordHelper::GetHashPasswordSHA256(uno::Sequence<sal_Int8>& rPassHash,
         reinterpret_cast<unsigned char const*>(tmp.getStr()), tmp.getLength(),
         ::comphelper::HashType::SHA256));
     rPassHash.realloc(hash.size());
-    ::std::copy(hash.begin(), hash.end(), rPassHash.begin());
+    ::std::copy(hash.begin(), hash.end(), rPassHash.getArray());
     rtl_secureZeroMemory(const_cast<char *>(tmp.getStr()), tmp.getLength());
 }
 
@@ -43,7 +43,7 @@ void SvPasswordHelper::GetHashPasswordSHA1UTF8(uno::Sequence<sal_Int8>& rPassHas
         reinterpret_cast<unsigned char const*>(tmp.getStr()), tmp.getLength(),
         ::comphelper::HashType::SHA1));
     rPassHash.realloc(hash.size());
-    ::std::copy(hash.begin(), hash.end(), rPassHash.begin());
+    ::std::copy(hash.begin(), hash.end(), rPassHash.getArray());
     rtl_secureZeroMemory(const_cast<char *>(tmp.getStr()), tmp.getLength());
 }
 

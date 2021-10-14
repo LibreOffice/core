@@ -182,7 +182,7 @@ namespace
         {
             uno::Sequence< OUString > seqValue;
             value >>= seqValue;
-            std::transform(seqValue.begin(), seqValue.end(), std::back_inserter(values),
+            std::transform(std::cbegin(seqValue), std::cend(seqValue), std::back_inserter(values),
                 [](const OUString& rValue) -> std::string { return OUSTR_TO_STDSTR( rValue ); });
             type = libcmis::PropertyType::String;
         }
@@ -190,7 +190,7 @@ namespace
         {
             uno::Sequence< sal_Bool > seqValue;
             value >>= seqValue;
-            std::transform(seqValue.begin(), seqValue.end(), std::back_inserter(values),
+            std::transform(std::cbegin(seqValue), std::cend(seqValue), std::back_inserter(values),
                 [](const bool nValue) -> std::string { return OUSTR_TO_STDSTR( OUString::boolean( nValue ) ); });
             type = libcmis::PropertyType::Bool;
         }
@@ -198,7 +198,7 @@ namespace
         {
             uno::Sequence< sal_Int64 > seqValue;
             value >>= seqValue;
-            std::transform(seqValue.begin(), seqValue.end(), std::back_inserter(values),
+            std::transform(std::cbegin(seqValue), std::cend(seqValue), std::back_inserter(values),
                 [](const sal_Int64 nValue) -> std::string { return OUSTR_TO_STDSTR( OUString::number( nValue ) ); });
             type = libcmis::PropertyType::Integer;
         }
@@ -206,7 +206,7 @@ namespace
         {
             uno::Sequence< double > seqValue;
             value >>= seqValue;
-            std::transform(seqValue.begin(), seqValue.end(), std::back_inserter(values),
+            std::transform(std::cbegin(seqValue), std::cend(seqValue), std::back_inserter(values),
                 [](const double fValue) -> std::string { return OUSTR_TO_STDSTR( OUString::number( fValue ) ); });
             type = libcmis::PropertyType::Decimal;
         }
@@ -214,7 +214,7 @@ namespace
         {
             uno::Sequence< util::DateTime > seqValue;
             value >>= seqValue;
-            std::transform(seqValue.begin(), seqValue.end(), std::back_inserter(values),
+            std::transform(std::cbegin(seqValue), std::cend(seqValue), std::back_inserter(values),
                 [](const util::DateTime& rValue) -> std::string {
                     OUStringBuffer aBuffer;
                     ::sax::Converter::convertDateTime( aBuffer, rValue, nullptr );

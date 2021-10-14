@@ -48,11 +48,6 @@ using namespace ::com::sun::star;
 
 uno::Sequence< sal_Int32 > ScVbaWorkbook::ColorData;
 
-void ScVbaWorkbook::initColorData( const uno::Sequence< sal_Int32 >& sColors )
-{
-    std::copy(sColors.begin(), sColors.end(), ColorData.begin());
-}
-
 void SAL_CALL
 ScVbaWorkbook::ResetColors(  )
 {
@@ -60,11 +55,9 @@ ScVbaWorkbook::ResetColors(  )
         sal_Int32 nLen = xIndexAccess->getCount();
         ColorData.realloc( nLen );
 
-        uno::Sequence< sal_Int32 > dDefaultColors( nLen );
-        sal_Int32* pDest = dDefaultColors.getArray();
+        sal_Int32* pDest = ColorData.getArray();
         for ( sal_Int32 index=0; index < nLen; ++pDest, ++index )
             xIndexAccess->getByIndex( index )  >>= *pDest;
-        initColorData( dDefaultColors );
 }
 
 ::uno::Any SAL_CALL
@@ -84,7 +77,7 @@ ScVbaWorkbook::Colors( const ::uno::Any& Index )
 
 bool ScVbaWorkbook::setFilterPropsFromFormat( sal_Int32 nFormat, uno::Sequence< beans::PropertyValue >& rProps )
 {
-    auto [begin, end] = toNonConstRange(rProps);
+    auto [begin, end] = asNonConstRange(rProps);
     auto pProp = std::find_if(begin, end,
         [](const beans::PropertyValue& rProp) { return rProp.Name == "FilterName"; });
     bool bRes = pProp != end;

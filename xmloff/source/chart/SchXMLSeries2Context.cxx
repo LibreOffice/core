@@ -234,7 +234,7 @@ Reference< chart2::data::XLabeledDataSequence2 > lcl_createAndAddSequenceToSerie
     sal_Int32 nOldCount = aOldSeq.getLength();
     Sequence< Reference< chart2::data::XLabeledDataSequence > > aNewSeq( nOldCount + 1 );
     aNewSeq[0].set(xLabeledSeq, uno::UNO_QUERY_THROW);
-    std::copy(aOldSeq.begin(), aOldSeq.end(), std::next(aNewSeq.begin()));
+    std::copy(aOldSeq.begin(), aOldSeq.end(), std::next(aNewSeq.getArray()));
     xSeriesSink->setData( aNewSeq );
 
     return xLabeledSeq;

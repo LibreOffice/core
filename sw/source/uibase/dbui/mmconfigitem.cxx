@@ -333,7 +333,7 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
     if(m_aSavedDocuments.hasElements())
     {
         uno::Sequence< OUString > aTempDocuments(m_aSavedDocuments.getLength());
-        auto begin = aTempDocuments.begin();
+        auto begin = aTempDocuments.getArray();
         OUString* pTempDocuments = std::copy_if(std::cbegin(m_aSavedDocuments), std::cend(m_aSavedDocuments), begin,
             [](const OUString& rDoc) { return SWUnoHelper::UCB_IsFile( rDoc ); });
         sal_Int32 nIndex = static_cast<sal_Int32>(std::distance(begin, pTempDocuments));
@@ -585,7 +585,7 @@ Sequence< OUString> SwMailMergeConfigItem_Impl::GetAddressBlocks(
         bool bConvertToConfig) const
 {
     Sequence< OUString> aRet(m_aAddressBlocks.size());
-    std::transform(m_aAddressBlocks.begin(), m_aAddressBlocks.end(), aRet.begin(),
+    std::transform(m_aAddressBlocks.begin(), m_aAddressBlocks.end(), aRet.getArray(),
         [this, bConvertToConfig](const OUString& rBlock) -> OUString {
             OUString sBlock = rBlock;
             if(bConvertToConfig)
@@ -619,7 +619,7 @@ Sequence< OUString>   SwMailMergeConfigItem_Impl::GetGreetings(
             eType == SwMailMergeConfigItem::MALE ? m_aMaleGreetingLines :
                                 m_aNeutralGreetingLines;
     Sequence< OUString> aRet(rGreetings.size());
-    std::transform(rGreetings.begin(), rGreetings.end(), aRet.begin(),
+    std::transform(rGreetings.begin(), rGreetings.end(), aRet.getArray(),
         [this, bConvertToConfig](const OUString& rGreeting) -> OUString {
             OUString sGreeting = rGreeting;
             if(bConvertToConfig)

@@ -418,7 +418,7 @@ void CustomAnimationEffect::setPresetClassAndId( sal_Int16 nPresetClass, const O
     bool bFoundPresetId = false;
     if( nLength )
     {
-        auto [begin, end] = toNonConstRange(aUserData);
+        auto [begin, end] = asNonConstRange(aUserData);
         NamedValue* pProp = std::find_if(begin, end,
             [](const NamedValue& rProp) { return rProp.Name == "preset-class"; });
         if (pProp != end)
@@ -473,7 +473,7 @@ void CustomAnimationEffect::setNodeType( sal_Int16 nNodeType )
     bool bFound = false;
     if( nLength )
     {
-        auto [begin, end] = toNonConstRange(aUserData);
+        auto [begin, end] = asNonConstRange(aUserData);
         NamedValue* pProp = std::find_if(begin, end,
             [](const NamedValue& rProp) { return rProp.Name == "node-type"; });
         if (pProp != end)
@@ -508,7 +508,7 @@ void CustomAnimationEffect::setGroupId( sal_Int32 nGroupId )
     bool bFound = false;
     if( nLength )
     {
-        auto [begin, end] = toNonConstRange(aUserData);
+        auto [begin, end] = asNonConstRange(aUserData);
         NamedValue* pProp = std::find_if(begin, end,
             [](const NamedValue& rProp) { return rProp.Name == "group-id"; });
         if (pProp != end)

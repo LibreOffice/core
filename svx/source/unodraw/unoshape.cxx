@@ -3016,7 +3016,7 @@ uno::Sequence< beans::PropertyState > SAL_CALL SvxShape::getPropertyStates( cons
     const sal_Int32 nCount = aPropertyName.getLength();
     uno::Sequence< beans::PropertyState > aRet( nCount );
 
-    std::transform(aPropertyName.begin(), aPropertyName.end(), aRet.begin(),
+    std::transform(aPropertyName.begin(), aPropertyName.end(), aRet.getArray(),
         [this](const OUString& rName) -> beans::PropertyState { return getPropertyState(rName); });
 
     return aRet;

@@ -443,7 +443,7 @@ void SAL_CALL OStyle::setPropertiesToDefault( const uno::Sequence< OUString >& a
 uno::Sequence< uno::Any > SAL_CALL OStyle::getPropertyDefaults( const uno::Sequence< OUString >& aPropertyNames )
 {
     uno::Sequence< uno::Any > aRet(aPropertyNames.getLength());
-    std::transform(aPropertyNames.begin(), aPropertyNames.end(), aRet.begin(),
+    std::transform(aPropertyNames.begin(), aPropertyNames.end(), aRet.getArray(),
         [this](const OUString& rName) -> uno::Any { return getPropertyDefault(rName); });
     return aRet;
 }
@@ -1512,8 +1512,9 @@ bool OReportDefinition::WriteThroughComponent(
 
     // prepare arguments (prepend doc handler to given arguments)
     uno::Sequence<uno::Any> aArgs( 1 + rArguments.getLength() );
-    aArgs[0] <<= xSaxWriter;
-    std::copy(rArguments.begin(), rArguments.end(), std::next(aArgs.begin()));
+    auto pArgs = aArgs.getArray();
+    *pArgs <<= xSaxWriter;
+    std::copy(rArguments.begin(), rArguments.end(), std::next(pArgs));
 
     // get filter component
     uno::Reference< document::XExporter > xExporter(
