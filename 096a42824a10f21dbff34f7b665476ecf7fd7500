@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fd08aaa_b0034a53",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-10-14T07:13:29Z",
+      "side": 1,
+      "message": "Note: verified by Jenkins on all platforms except Android x64 (which was verified already in patch set 1).",
+      "revId": "096a42824a10f21dbff34f7b665476ecf7fd7500",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
