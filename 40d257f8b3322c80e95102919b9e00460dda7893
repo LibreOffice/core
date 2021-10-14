@@ -16,6 +16,23 @@
       "message": "+1 for this 7.2 backport.\n\nI have mixed feelings about submitting a backport to 7.1.7 since it has already started RC and will be the last one. But on the other hand, a simple revert like this OUGHT to be very safe and I do consider these direct-format-spamming bugs to be rather significant.",
       "revId": "40d257f8b3322c80e95102919b9e00460dda7893",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e891e4c_a5fe62ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-14T08:17:17Z",
+      "side": 1,
+      "message": "This one is no doubts OK. Let Xisco decide on 7-1.",
+      "revId": "40d257f8b3322c80e95102919b9e00460dda7893",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
