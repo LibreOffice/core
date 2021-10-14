@@ -156,7 +156,7 @@ void Test::testLineSpacing()
     EditDoc &rDoc = aEditEngine.GetEditDoc();
 
     // Initially no text should be there
-    CPPUNIT_ASSERT_EQUAL(sal_uLong(0), rDoc.GetTextLen());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rDoc.GetTextLen());
     CPPUNIT_ASSERT_EQUAL(OUString(), rDoc.GetParaAsString(sal_Int32(0)));
 
     // Set initial text
@@ -166,7 +166,7 @@ void Test::testLineSpacing()
     aEditEngine.SetText(aText);
 
     // Assert changes - text insertion
-    CPPUNIT_ASSERT_EQUAL(sal_uLong(aTextLen), rDoc.GetTextLen());
+    CPPUNIT_ASSERT_EQUAL(aTextLen, rDoc.GetTextLen());
     CPPUNIT_ASSERT_EQUAL(aText, rDoc.GetParaAsString(sal_Int32(0)));
 
     // Select all paragraphs
@@ -563,7 +563,7 @@ void Test::testHyperlinkCopyPaste()
     EditDoc &rDoc = aEditEngine.GetEditDoc();
 
     // New instance must be empty - no initial text
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(0), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( OUString(), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Get corresponding Field Item for inserting URLs in text
@@ -585,7 +585,7 @@ void Test::testHyperlinkCopyPaste()
     aEditEngine.SetText( aParaText );
 
     // Assert changes
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aTextLen, rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( aParaText, rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Insert URL 1
@@ -605,7 +605,7 @@ void Test::testHyperlinkCopyPaste()
 
     // Assert URL Fields and text before copy
     // Check text
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + aRepres1.getLength() + aRepres2.getLength()), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aTextLen + aRepres1.getLength() + aRepres2.getLength(), rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( OUString("sampletextforuser@example.comtestingexample@domain.comfeaturefields"), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Check Field 1
@@ -638,7 +638,7 @@ void Test::testHyperlinkCopyPaste()
     CPPUNIT_ASSERT_EQUAL( sal_uInt16(3), aEditEngine.GetFieldCount(0) );
 
     // Check the updated text length
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + 10 + aRepres1.getLength()*2 + aRepres2.getLength()), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aTextLen + 10 + aRepres1.getLength()*2 + aRepres2.getLength(), rDoc.GetTextLen() );
 
     // Check the updated text contents
     CPPUNIT_ASSERT_EQUAL( OUString("sampletextforuser@example.comtestingexample@domain.comfeaturefieldsforuser@example.comtesting"), rDoc.GetParaAsString(sal_Int32(0)) );
@@ -682,7 +682,7 @@ void Test::testCopyPaste()
     EditDoc &rDoc = aEditEngine.GetEditDoc();
 
     // Initially no text should be there
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(0), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( OUString(), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Set initial text
@@ -691,7 +691,7 @@ void Test::testCopyPaste()
     aEditEngine.SetText( aText );
 
     // Assert changes
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aTextLen, rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( aText, rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Copy initial text using legacy format
@@ -701,7 +701,7 @@ void Test::testCopyPaste()
     aEditEngine.InsertText( xData, OUString(), rDoc.GetEndPaM(), true );
 
     // Assert changes
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + aTextLen), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aTextLen + aTextLen, rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( OUString(aText + aText), rDoc.GetParaAsString(sal_Int32(0)) );
 }
 
@@ -714,7 +714,7 @@ void Test::testMultiParaSelCopyPaste()
     EditDoc &rDoc = aEditEngine.GetEditDoc();
 
     // Initially no text should be there
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(0), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( OUString(), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Insert initial text
@@ -730,7 +730,7 @@ void Test::testMultiParaSelCopyPaste()
     sal_Int32 aCopyTextLen = aCopyText.getLength();
 
     // Assert changes
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aTextLen, rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( aFirstPara, rDoc.GetParaAsString(sal_Int32(0)) );
     CPPUNIT_ASSERT_EQUAL( aSecondPara, rDoc.GetParaAsString(sal_Int32(1)) );
     CPPUNIT_ASSERT_EQUAL( aThirdPara, rDoc.GetParaAsString(sal_Int32(2)) );
@@ -743,7 +743,7 @@ void Test::testMultiParaSelCopyPaste()
 
     // Assert changes
     OUString aThirdParaAfterCopyPaste = aThirdPara + "first paragraph";
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + aCopyTextLen), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aTextLen + aCopyTextLen, rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( aFirstPara, rDoc.GetParaAsString(sal_Int32(0)) );
     CPPUNIT_ASSERT_EQUAL( aSecondPara, rDoc.GetParaAsString(sal_Int32(1)) );
     CPPUNIT_ASSERT_EQUAL( aThirdParaAfterCopyPaste, rDoc.GetParaAsString(sal_Int32(2)) );
@@ -759,7 +759,7 @@ void Test::testTabsCopyPaste()
     EditDoc &rDoc = aEditEngine.GetEditDoc();
 
     // New instance must be empty - no initial text
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(0), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( OUString(), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Get corresponding Item for inserting tabs in the text
@@ -772,7 +772,7 @@ void Test::testTabsCopyPaste()
     aEditEngine.SetText( aParaText );
 
     // Assert changes
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aTextLen, rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( aParaText, rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Insert tab 1 at desired position
@@ -781,7 +781,7 @@ void Test::testTabsCopyPaste()
     aEditEngine.InsertFeature( aSel1, aTab );
 
     // Assert changes
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + 1), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aTextLen + 1, rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( OUString("sample\ttextfortestingtab"), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Insert tab 2 at desired position
@@ -789,7 +789,7 @@ void Test::testTabsCopyPaste()
     aEditEngine.InsertFeature( aSel2, aTab );
 
     // Assert changes
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + 2), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aTextLen + 2, rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( OUString("sample\ttextfortestingtab\t"), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Copy text using legacy format
@@ -799,7 +799,7 @@ void Test::testTabsCopyPaste()
     aEditEngine.InsertText( xData, OUString(), rDoc.GetEndPaM(), true );
 
     // Assert changes
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + aTextLen - 6 + 4 ), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aTextLen + aTextLen - 6 + 4, rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( OUString("sample\ttextfortestingtab\t\ttextfortestingtab\t"), rDoc.GetParaAsString(sal_Int32(0)) );
 }
 
@@ -837,10 +837,10 @@ void Test::testHyperlinkSearch()
     OUString aContent = pNode->GetExpandedText();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("get text", OUString("Please write email to jim@bob.com. if you find a fish(not a dog)."),
                            aContent);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong length", static_cast<sal_uLong>(aContent.getLength()), rDoc.GetTextLen());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong length", aContent.getLength(), rDoc.GetTextLen());
 
     // Check expansion and positioning re-work
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong length", static_cast<sal_uLong>(aContent.getLength()),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong length", aContent.getLength(),
                            pNode->GetExpandedLen());
     for (sal_Int32 n = 0; n < aContent.getLength(); n++)
     {
@@ -909,7 +909,7 @@ void Test::testBoldItalicCopyPaste()
     EditDoc &rDoc = aEditEngine.GetEditDoc();
 
     // New instance must be empty - no initial text
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(0), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( OUString(), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Get corresponding ItemSet for inserting Bold/Italic text
@@ -926,7 +926,7 @@ void Test::testBoldItalicCopyPaste()
     aEditEngine.SetText( aParaText );
 
     // Assert changes - text insertion
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aTextLen, rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( aParaText, rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Apply Bold to appropriate selection
@@ -1006,7 +1006,7 @@ void Test::testBoldItalicCopyPaste()
     aEditEngine.InsertText( xData, OUString(), rDoc.GetEndPaM(), true );
 
     // Assert changes
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + aTextLen - 2), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aTextLen + aTextLen - 2, rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( OUString(aParaText + "oldeditengineitali" ), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Check updated text for appropriate Bold/Italics
@@ -1090,7 +1090,7 @@ void Test::testUnderlineCopyPaste()
     EditDoc &rDoc = aEditEngine.GetEditDoc();
 
     // New instance must be empty - no initial text
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(0), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( OUString(), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Get corresponding ItemSet for inserting Underline text
@@ -1140,7 +1140,7 @@ void Test::testUnderlineCopyPaste()
     aEditEngine.InsertText( xData, OUString(), rDoc.GetEndPaM(), true );
 
     // Assert changes
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + (OUString("textforunder")).getLength()), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aTextLen + (OUString("textforunder")).getLength(), rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( OUString(aParaText + "textforunder" ), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Check updated text for appropriate Underline
@@ -1183,7 +1183,7 @@ void Test::testMultiParaCopyPaste()
     EditDoc &rDoc = aEditEngine.GetEditDoc();
 
     // Initially no text should be there
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(0), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( OUString(), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Insert initial text
@@ -1196,7 +1196,7 @@ void Test::testMultiParaCopyPaste()
     sal_Int32 aCopyTextLen = aFirstPara.getLength() + aSecondPara.getLength();
 
     // Assert changes
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aTextLen, rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( aFirstPara, rDoc.GetParaAsString(sal_Int32(0)) );
     CPPUNIT_ASSERT_EQUAL( aSecondPara, rDoc.GetParaAsString(sal_Int32(1)) );
     CPPUNIT_ASSERT_EQUAL( aThirdPara, rDoc.GetParaAsString(sal_Int32(2)) );
@@ -1209,7 +1209,7 @@ void Test::testMultiParaCopyPaste()
 
     // Assert changes
     OUString aThirdParaAfterCopyPaste = aThirdPara + aFirstPara;
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + aCopyTextLen), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aTextLen + aCopyTextLen, rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( aFirstPara, rDoc.GetParaAsString(sal_Int32(0)) );
     CPPUNIT_ASSERT_EQUAL( aSecondPara, rDoc.GetParaAsString(sal_Int32(1)) );
     CPPUNIT_ASSERT_EQUAL( aThirdParaAfterCopyPaste, rDoc.GetParaAsString(sal_Int32(2)) );
@@ -1225,7 +1225,7 @@ void Test::testParaBoldItalicCopyPaste()
     EditDoc &rDoc = aEditEngine.GetEditDoc();
 
     // Initially no text should be there
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(0), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( OUString(), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Get corresponding ItemSet for inserting Bold/Italic text
@@ -1252,7 +1252,7 @@ void Test::testParaBoldItalicCopyPaste()
     sal_Int32 aCopyTextLen = aCopyText.getLength();
 
     // Assert changes - text insertion
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aTextLen, rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( aFirstPara, rDoc.GetParaAsString(sal_Int32(0)) );
     CPPUNIT_ASSERT_EQUAL( aSecondPara, rDoc.GetParaAsString(sal_Int32(1)) );
     CPPUNIT_ASSERT_EQUAL( aThirdPara, rDoc.GetParaAsString(sal_Int32(2)) );
@@ -1381,7 +1381,7 @@ void Test::testParaBoldItalicCopyPaste()
 
     // Assert changes
     OUString aThirdParaAfterCopyPaste = aThirdPara + "first paragraph";
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + aCopyTextLen), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aTextLen + aCopyTextLen, rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( aFirstPara, rDoc.GetParaAsString(sal_Int32(0)) );
     CPPUNIT_ASSERT_EQUAL( aSecondPara, rDoc.GetParaAsString(sal_Int32(1)) );
     CPPUNIT_ASSERT_EQUAL( aThirdParaAfterCopyPaste, rDoc.GetParaAsString(sal_Int32(2)) );
@@ -1496,7 +1496,7 @@ void Test::testParaStartCopyPaste()
     EditDoc &rDoc = aEditEngine.GetEditDoc();
 
     // Initially no text should be there
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(0), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( OUString(), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Insert initial text
@@ -1512,7 +1512,7 @@ void Test::testParaStartCopyPaste()
     sal_Int32 aCopyTextLen = aCopyText.getLength();
 
     // Assert changes
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aTextLen, rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( aFirstPara, rDoc.GetParaAsString(sal_Int32(0)) );
     CPPUNIT_ASSERT_EQUAL( aSecondPara, rDoc.GetParaAsString(sal_Int32(1)) );
     CPPUNIT_ASSERT_EQUAL( aThirdPara, rDoc.GetParaAsString(sal_Int32(2)) );
@@ -1525,7 +1525,7 @@ void Test::testParaStartCopyPaste()
 
     // Assert changes
     OUString aSecondParaAfterCopyPaste = "This is second" + aFirstPara;
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + aCopyTextLen), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aTextLen + aCopyTextLen, rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( OUString("first paragraph"), rDoc.GetParaAsString(sal_Int32(0)) );
     CPPUNIT_ASSERT_EQUAL( aSecondParaAfterCopyPaste, rDoc.GetParaAsString(sal_Int32(1)) );
     CPPUNIT_ASSERT_EQUAL( aSecondPara, rDoc.GetParaAsString(sal_Int32(2)) );
@@ -1682,7 +1682,7 @@ void Test::testLargeParaCopyPaste()
     EditDoc &rDoc = aEditEngine.GetEditDoc();
 
     // Initially no text should be there
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(0), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( OUString(), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Insert initial text
@@ -1709,7 +1709,7 @@ void Test::testLargeParaCopyPaste()
     sal_Int32 aCopyTextLen = aCopyText.getLength();
 
     // Assert changes
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aTextLen, rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( aFirstPara, rDoc.GetParaAsString(sal_Int32(0)) );
     CPPUNIT_ASSERT_EQUAL( aSecondPara, rDoc.GetParaAsString(sal_Int32(1)) );
     CPPUNIT_ASSERT_EQUAL( aThirdPara, rDoc.GetParaAsString(sal_Int32(2)) );
@@ -1730,7 +1730,7 @@ void Test::testLargeParaCopyPaste()
 
     // Assert changes
     OUString aFourthParaAfterCopyPaste = aFourthPara + "sixth paragraph";
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + aCopyTextLen), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aTextLen + aCopyTextLen, rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( aFirstPara, rDoc.GetParaAsString(sal_Int32(0)) );
     CPPUNIT_ASSERT_EQUAL( aSecondPara, rDoc.GetParaAsString(sal_Int32(1)) );
     CPPUNIT_ASSERT_EQUAL( aThirdPara, rDoc.GetParaAsString(sal_Int32(2)) );

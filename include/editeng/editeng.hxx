@@ -278,7 +278,7 @@ public:
 
     OUString        GetText( LineEnd eEnd = LINEEND_LF ) const;
     OUString        GetText( const ESelection& rSelection ) const;
-    sal_uInt32      GetTextLen() const;
+    sal_Int32       GetTextLen() const;
     sal_uInt32      GetTextHeight() const;
     sal_uInt32      GetTextHeightNTP() const;
     sal_uInt32      CalcTextWidth();
