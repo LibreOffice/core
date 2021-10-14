@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4f5ef2dd_5dfa730e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-10-14T10:15:53Z",
+      "side": 1,
+      "message": "There are two / three problems to solve:\n1. Restoring the default values before \"deletion\"\n2.1 Use the correct function to free the HDC (DeleteDC or ReleaseDC)\n(2.2 \"create\" and \"delete\" in the same thread / window \"context\"; not sure about it, but we have SAL_MSG_RELEASEDC for cached DCs)\n\nTo solve 1, we could wrap all DCs in a class, which restores the defaults (basically using the existing code from WinSalGraphics) and no more direct manipulation of the HDC, and to solve 2 we provide a Deleter to the correct method to the std::shared_ptr. Feels like a lot of work.",
+      "parentUuid": "39637fa9_8db59e00",
+      "revId": "3a2bff9e98f563222110ddd8a06fd4becd581a0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bb9db0e2_66f05308",
         "filename": "vcl/win/gdi/salprn.cxx",
         "patchSetId": 1
