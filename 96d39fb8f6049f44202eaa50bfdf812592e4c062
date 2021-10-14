@@ -88,6 +88,24 @@
       "parentUuid": "3361d521_7d9b4c95",
       "revId": "96d39fb8f6049f44202eaa50bfdf812592e4c062",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00e96860_7b3bd12b",
+        "filename": "offapi/com/sun/star/drawing/BarCode.idl",
+        "patchSetId": 12
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-10-14T10:45:41Z",
+      "side": 1,
+      "message": "Michael was wondering about the parameters, but now that I look at the demo, it seems all the types use the same parameters: https://nu-book.github.io/zxing-cpp/demo_writer.html So maybe there is no work needed after all.",
+      "parentUuid": "839e41f9_329f5a41",
+      "revId": "96d39fb8f6049f44202eaa50bfdf812592e4c062",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
