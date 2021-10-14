@@ -550,7 +550,7 @@ static const SwRangeRedline* lcl_GetRedlineAtNodeInsertionOrDeletion( const SwTe
                 RedlineType::Insert == pTmp->GetType() )
             {
                 const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();
-                if( pRStt->nNode < nNdIdx && pREnd->nNode >= nNdIdx )
+                if( pRStt->nNode <= nNdIdx && pREnd->nNode > nNdIdx )
                     return pTmp;
             }
         }
