@@ -52,6 +52,24 @@
       "parentUuid": "8bc6086d_b9344427",
       "revId": "96d39fb8f6049f44202eaa50bfdf812592e4c062",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3361d521_7d9b4c95",
+        "filename": "offapi/com/sun/star/drawing/BarCode.idl",
+        "patchSetId": 12
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-10-14T10:12:59Z",
+      "side": 1,
+      "message": "Not in this patch, but could the type be generalised in case they are added later?",
+      "parentUuid": "25b51dcc_201386aa",
+      "revId": "96d39fb8f6049f44202eaa50bfdf812592e4c062",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
