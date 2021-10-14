@@ -16,6 +16,24 @@
       "message": "Heiko, apologies.\n\nI thought I\u0027d explore the cherry-pick option and did not know it would generate a new patchset. There has been no change from when you posted the code-review+2.\n\nApologies for creating unnecessary work for you.",
       "revId": "260239cdf1098ae4e1732b74c8430da9bb6eff2f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b430e2f_ad62658f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-10-14T12:24:12Z",
+      "side": 1,
+      "message": "It\u0027s my pleasure to be of service :-).",
+      "parentUuid": "51714bbe_fd5fe4d5",
+      "revId": "260239cdf1098ae4e1732b74c8430da9bb6eff2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
