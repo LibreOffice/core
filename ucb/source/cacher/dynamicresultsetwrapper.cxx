@@ -220,7 +220,7 @@ void DynamicResultSetWrapper::impl_notify( const ListEvent& Changes )
 
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        for( ListAction& rAction : aNewEvent.Changes )
+        for( ListAction& rAction : asNonConstRange(aNewEvent.Changes) )
         {
             if (m_bGotWelcome)
                 break;

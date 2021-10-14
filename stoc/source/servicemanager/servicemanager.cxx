@@ -89,7 +89,7 @@ Sequence< OUString > retrieveAsciiValueList(
                     sal_Int32 n2Len = seq2.getLength();
 
                     seq.realloc( n1Len + n2Len );
-                    std::copy(seq2.begin(), seq2.end(), std::next(seq.begin(), n1Len));
+                    std::copy(seq2.begin(), seq2.end(), std::next(seq.getArray(), n1Len));
                 }
             }
         }

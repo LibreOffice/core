@@ -105,7 +105,7 @@ uno::Sequence< uno::Reference< frame::XDispatch > > SwXDispatchProviderIntercept
 {
     DispatchMutexLock_Impl aLock;
     uno::Sequence< uno::Reference< frame::XDispatch> > aReturn(aDescripts.getLength());
-    std::transform(aDescripts.begin(), aDescripts.end(), aReturn.begin(),
+    std::transform(aDescripts.begin(), aDescripts.end(), aReturn.getArray(),
         [this](const frame::DispatchDescriptor& rDescr) -> uno::Reference<frame::XDispatch> {
             return queryDispatch(rDescr.FeatureURL, rDescr.FrameName, rDescr.SearchFlags); });
     return aReturn;

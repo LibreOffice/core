@@ -711,7 +711,7 @@ SwXParagraph::getPropertyValuesTolerant(
     // copy temporary result to final result type
     const sal_Int32 nLen = aTmpRes.getLength();
     uno::Sequence< beans::GetPropertyTolerantResult > aRes( nLen );
-    std::copy(aTmpRes.begin(), aTmpRes.end(), aRes.begin());
+    std::copy(aTmpRes.begin(), aTmpRes.end(), aRes.getArray());
     return aRes;
 }
 

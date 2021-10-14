@@ -4471,7 +4471,7 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
     }
     else
     {
-        for( auto& rOuterShdwProp : aOuterShdwProps )
+        for( auto& rOuterShdwProp : asNonConstRange(aOuterShdwProps) )
         {
             if( rOuterShdwProp.Name == "Attribs" )
             {
@@ -4485,7 +4485,7 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
                 rXPropSet->getPropertyValue( "ShadowBlur" ) >>= nBlur;
 
 
-                for( auto& rAttribsProp : aAttribsProps )
+                for( auto& rAttribsProp : asNonConstRange(aAttribsProps) )
                 {
                     if( rAttribsProp.Name == "dist" )
                     {

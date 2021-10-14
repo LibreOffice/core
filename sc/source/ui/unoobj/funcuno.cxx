@@ -410,15 +410,14 @@ public:
         sal_Int32 nStartRow = mrDocRow;
         sal_Int32 nRowCount = maSeq.getLength();
         sal_Int32 nMaxColCount = 0;
-        for ( const uno::Sequence< seq >& rRow : maSeq )
+        for ( const uno::Sequence< seq >& rRow : std::as_const(maSeq) )
         {
             sal_Int32 nColCount = rRow.getLength();
             if ( nColCount > nMaxColCount )
                 nMaxColCount = nColCount;
-            const seq* pColArr = rRow.getConstArray();
             for (sal_Int32 nCol=0; nCol<nColCount; nCol++)
                 if ( nCol <= mpDoc->MaxCol() && mrDocRow <= mpDoc->MaxRow() )
-                    aVisitor.visitElem( nCol, mrDocRow, pColArr[ nCol ] );
+                    aVisitor.visitElem( nCol, mrDocRow, rRow[ nCol ] );
                 else
                     mbOverflow=true;
             mrDocRow++;

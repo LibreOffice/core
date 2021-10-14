@@ -211,7 +211,7 @@ void ODBTable::construct()
     describeProperties(aProps);
     if(!_nId)
     {
-        for(Property & prop : aProps)
+        for(Property & prop : asNonConstRange(aProps))
         {
             if (prop.Name == PROPERTY_CATALOGNAME)
                 prop.Attributes = PropertyAttribute::READONLY;

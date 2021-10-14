@@ -387,8 +387,7 @@ void SvxRubyDialog::GetRubyText()
             Sequence<PropertyValues>& aRubyValues = m_pImpl->GetRubyValues();
             DBG_ASSERT(aRubyValues.getLength() > (i / 2 + nTempLastPos), "wrong index");
             SetModified(true);
-            Sequence<PropertyValue>& rProps = aRubyValues.getArray()[i / 2 + nTempLastPos];
-            for (PropertyValue& propVal : rProps)
+            for (PropertyValue& propVal : asNonConstRange(aRubyValues[i / 2 + nTempLastPos]))
             {
                 if (propVal.Name == cRubyBaseText)
                     propVal.Value <<= aEditArr[i]->get_text();
@@ -547,10 +546,9 @@ IMPL_LINK(SvxRubyDialog, AdjustHdl_Impl, weld::ComboBox&, rBox, void)
 {
     AssertOneEntry();
     sal_Int16 nAdjust = rBox.get_active();
-    Sequence<PropertyValues>& aRubyValues = m_pImpl->GetRubyValues();
-    for (PropertyValues& rProps : aRubyValues)
+    for (PropertyValues& rProps : asNonConstRange(m_pImpl->GetRubyValues()))
     {
-        for (PropertyValue& propVal : rProps)
+        for (PropertyValue& propVal : asNonConstRange(rProps))
         {
             if (propVal.Name == cRubyAdjust)
                 propVal.Value <<= nAdjust;
@@ -564,10 +562,9 @@ IMPL_LINK(SvxRubyDialog, PositionHdl_Impl, weld::ComboBox&, rBox, void)
 {
     AssertOneEntry();
     sal_Int16 nPosition = rBox.get_active();
-    Sequence<PropertyValues>& aRubyValues = m_pImpl->GetRubyValues();
-    for (PropertyValues& rProps : aRubyValues)
+    for (PropertyValues& rProps : asNonConstRange(m_pImpl->GetRubyValues()))
     {
-        for (PropertyValue& propVal : rProps)
+        for (PropertyValue& propVal : asNonConstRange(rProps))
         {
             if (propVal.Name == cRubyPosition)
                 propVal.Value <<= nPosition;
@@ -583,10 +580,9 @@ IMPL_LINK_NOARG(SvxRubyDialog, CharStyleHdl_Impl, weld::ComboBox&, void)
     OUString sStyleName;
     if (m_xCharStyleLB->get_active() != -1)
         sStyleName = m_xCharStyleLB->get_active_id();
-    Sequence<PropertyValues>& aRubyValues = m_pImpl->GetRubyValues();
-    for (PropertyValues& rProps : aRubyValues)
+    for (PropertyValues& rProps : asNonConstRange(m_pImpl->GetRubyValues()))
     {
-        for (PropertyValue& propVal : rProps)
+        for (PropertyValue& propVal : asNonConstRange(rProps))
         {
             if (propVal.Name == cRubyCharStyleName)
             {

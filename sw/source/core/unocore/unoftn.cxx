@@ -50,7 +50,7 @@ GetSupportedServiceNamesImpl(
 {
     uno::Sequence< OUString > ret(static_cast<sal_Int32>(nServices));
 
-    std::transform(pServices, pServices + nServices, ret.begin(),
+    std::transform(pServices, pServices + nServices, ret.getArray(),
         [](const char* pService) -> OUString { return OUString::createFromAscii(pService); });
 
     return ret;

@@ -496,7 +496,7 @@ css::uno::Sequence< css::beans::PropertyState > UnoControlModel::getPropertyStat
 
     css::uno::Sequence< css::beans::PropertyState > aStates( nNames );
 
-    std::transform(PropertyNames.begin(), PropertyNames.end(), aStates.begin(),
+    std::transform(PropertyNames.begin(), PropertyNames.end(), aStates.getArray(),
         [this](const OUString& rName) -> css::beans::PropertyState { return getPropertyState(rName); });
 
     return aStates;
@@ -665,7 +665,7 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
                 rValue >>= aSeq;
                 tools::Long nEntries = aSeq.getLength();
                 OutStream->writeLong( nEntries );
-                for ( const auto nVal : aSeq )
+                for ( const auto nVal : std::as_const(aSeq) )
                     OutStream->writeShort( nVal );
             }
             else if ( rType == cppu::UnoType< css::uno::Sequence<sal_Int16> >::get() )
@@ -674,7 +674,7 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
                 rValue >>= aSeq;
                 tools::Long nEntries = aSeq.getLength();
                 OutStream->writeLong( nEntries );
-                for ( const auto nVal : aSeq )
+                for ( const auto nVal : std::as_const(aSeq) )
                     OutStream->writeShort( nVal );
             }
             else if ( rType.getTypeClass() == TypeClass_ENUM )

@@ -547,7 +547,7 @@ void SfxDocTplService_Impl::getDirList()
         u"vnd.sun.star.expand:"  );
 
     sal_Int32 nIdx{ 0 };
-    for (auto& rTemplateDir : maTemplateDirs)
+    for (auto& rTemplateDir : asNonConstRange(maTemplateDirs))
     {
         aURL.SetSmartProtocol( INetProtocol::File );
         aURL.SetURL( aDirs.getToken( 0, C_DELIM, nIdx ) );
@@ -573,7 +573,7 @@ void SfxDocTplService_Impl::getDirList()
     Any aAny = xPathSettings->getPropertyValue( "Template_internal" );
     aAny >>= maInternalTemplateDirs;
 
-    for (auto& rInternalTemplateDir : maInternalTemplateDirs)
+    for (auto& rInternalTemplateDir : asNonConstRange(maInternalTemplateDirs))
     {
         //expand vnd.sun.star.expand: and remove "..." from them
         //to normalize into the expected url patterns
@@ -967,7 +967,7 @@ bool SfxDocTplService_Impl::setProperty( Content& rContent,
                 Sequence< OUString > aValues;
                 if ( rPropValue >>= aValues )
                 {
-                    for ( auto& rValue : aValues )
+                    for ( auto& rValue : asNonConstRange(aValues) )
                     {
                         maRelocator.makeRelocatableURL( rValue );
                     }
@@ -1026,7 +1026,7 @@ bool SfxDocTplService_Impl::getProperty(Content& rContent, const OUString& rProp
                 Sequence< OUString > aValues;
                 if ( rPropValue >>= aValues )
                 {
-                    for ( auto& rValue : aValues )
+                    for ( auto& rValue : asNonConstRange(aValues) )
                     {
                         maRelocator.makeAbsoluteURL( rValue );
                     }

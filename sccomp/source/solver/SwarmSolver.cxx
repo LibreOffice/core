@@ -582,7 +582,7 @@ void SAL_CALL SwarmSolver::solve()
     mbSuccess = true;
 
     maSolution.realloc(aSolution.size());
-    std::copy(aSolution.begin(), aSolution.end(), maSolution.begin());
+    std::copy(aSolution.begin(), aSolution.end(), maSolution.getArray());
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*

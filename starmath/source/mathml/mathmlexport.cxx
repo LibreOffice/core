@@ -532,7 +532,7 @@ void SmXMLExport::GetConfigurationSettings(Sequence<PropertyValue>& rProps)
     SmMathConfig* pConfig = SM_MOD()->GetConfig();
     const bool bUsedSymbolsOnly = pConfig && pConfig->IsSaveOnlyUsedSymbols();
 
-    std::transform(aProps.begin(), aProps.end(), rProps.begin(),
+    std::transform(aProps.begin(), aProps.end(), rProps.getArray(),
                    [bUsedSymbolsOnly, &xProps](const Property& prop) {
                        PropertyValue aRet;
                        if (prop.Name != "Formula" && prop.Name != "BasicLibraries"

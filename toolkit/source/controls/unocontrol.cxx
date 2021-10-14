@@ -86,7 +86,7 @@ static Sequence< OUString> lcl_ImplGetPropertyNames( const Reference< XMultiProp
         const Sequence< Property> aProps = xPSInf->getProperties();
         sal_Int32 nLen = aProps.getLength();
         aNames = Sequence< OUString>( nLen );
-        std::transform(aProps.begin(), aProps.end(), aNames.begin(),
+        std::transform(aProps.begin(), aProps.end(), aNames.getArray(),
             [](const Property& rProp) -> OUString { return rProp.Name; });
     }
     return aNames;
@@ -278,7 +278,7 @@ void UnoControl::ImplSetPeerProperty( const OUString& rPropName, const Any& rVal
             }
             else if ( aConvertedValue >>= aSeqValue )
             {
-                for ( auto& rValue : aSeqValue )
+                for ( auto& rValue : asNonConstRange(aSeqValue) )
                     ImplCheckLocalize( rValue );
                 aConvertedValue <<= aSeqValue;
             }

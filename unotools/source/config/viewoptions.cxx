@@ -319,7 +319,7 @@ css::uno::Sequence< css::beans::NamedValue > SvtViewOptions::GetUserData() const
             sal_Int32 c = lNames.getLength();
             css::uno::Sequence< css::beans::NamedValue > lUserData(c);
 
-            std::transform(lNames.begin(), lNames.end(), lUserData.begin(),
+            std::transform(lNames.begin(), lNames.end(), lUserData.getArray(),
                 [&xUserData](const OUString& rName) -> css::beans::NamedValue {
                     return { rName, xUserData->getByName(rName) }; });
 

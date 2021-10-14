@@ -286,7 +286,7 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
 
                 const Sequence< Property > aProps = xInfo->getProperties();
 
-                for ( Property& rProp : m_aProps )
+                for ( Property& rProp : asNonConstRange(m_aProps) )
                 {
                     auto pProp = std::find_if(aProps.begin(), aProps.end(),
                         [&rProp](const Property& rProp1) { return rProp.Name == rProp1.Name; });

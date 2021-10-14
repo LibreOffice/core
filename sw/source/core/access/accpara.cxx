@@ -1604,7 +1604,8 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
 
     uno::Sequence< PropertyValue > aValues( aDefAttrSeq.size() +
                                             ( bProvideMMToPixelRatio ? 1 : 0 ) );
-    std::transform(aDefAttrSeq.begin(), aDefAttrSeq.end(), aValues.begin(),
+    auto pValues = aValues.getArray();
+    std::transform(aDefAttrSeq.begin(), aDefAttrSeq.end(), pValues,
         [](const auto& rEntry) -> PropertyValue { return rEntry.second; });
 
     // #i92233#
@@ -1618,7 +1619,7 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
         rPropVal.Value <<= fRatio;
         rPropVal.Handle = -1;
         rPropVal.State = beans::PropertyState_DEFAULT_VALUE;
-        aValues[ aValues.getLength() - 1 ] = rPropVal;
+        pValues[ aValues.getLength() - 1 ] = rPropVal;
     }
 
     return aValues;

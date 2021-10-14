@@ -102,7 +102,7 @@ uno::Sequence< OUString > SAL_CALL Graphic::getSupportedServiceNames()
 
     aRet.realloc( nOldCount + aNew.getLength() );
 
-    std::copy(aNew.begin(), aNew.end(), std::next(aRet.begin(), nOldCount));
+    std::copy(aNew.begin(), aNew.end(), std::next(aRet.getArray(), nOldCount));
 
     return aRet;
 }

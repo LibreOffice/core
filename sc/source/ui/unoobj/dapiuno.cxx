@@ -1843,9 +1843,8 @@ Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyNam
     else if ( aPropertyName == SC_UNONAME_SUBTOTALS )
     {
         const uno::Sequence<sal_Int16> aSeq = getSubtotals();
-        uno::Sequence<sheet::GeneralFunction>  aNewSeq;
-        aNewSeq.realloc(aSeq.getLength());
-        std::transform(aSeq.begin(), aSeq.end(), aNewSeq.begin(),
+        uno::Sequence<sheet::GeneralFunction>  aNewSeq(aSeq.getLength());
+        std::transform(aSeq.begin(), aSeq.end(), aNewSeq.getArray(),
             [](sal_Int16 nFunc) -> sheet::GeneralFunction {
                 if (nFunc == sheet::GeneralFunction2::MEDIAN)
                     return sheet::GeneralFunction_NONE;

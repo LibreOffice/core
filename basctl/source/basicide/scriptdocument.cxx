@@ -1213,7 +1213,7 @@ namespace basctl
         auto const sort = comphelper::string::NaturalStringSorter(
             comphelper::getProcessComponentContext(),
             Application::GetSettings().GetUILanguageTag().getLocale());
-        auto [begin, end] = toNonConstRange(aModuleNames);
+        auto [begin, end] = asNonConstRange(aModuleNames);
         std::sort(begin, end,
                   [&sort](const OUString& rLHS, const OUString& rRHS) {
                       return sort.compare(rLHS, rRHS) < 0;

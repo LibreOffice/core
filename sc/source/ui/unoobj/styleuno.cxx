@@ -1212,7 +1212,7 @@ uno::Sequence<beans::PropertyState> SAL_CALL ScStyleObj::getPropertyStates( cons
     GetStyle_Impl();
 
     uno::Sequence<beans::PropertyState> aRet( aPropertyNames.getLength() );
-    std::transform(aPropertyNames.begin(), aPropertyNames.end(), aRet.begin(),
+    std::transform(aPropertyNames.begin(), aPropertyNames.end(), aRet.getArray(),
         [this](const OUString& rName) -> beans::PropertyState { return getPropertyState_Impl(rName); });
     return aRet;
 }
@@ -1326,7 +1326,7 @@ uno::Sequence<uno::Any> SAL_CALL ScStyleObj::getPropertyDefaults( const uno::Seq
     GetStyle_Impl();
 
     uno::Sequence<uno::Any> aSequence( aPropertyNames.getLength() );
-    std::transform(aPropertyNames.begin(), aPropertyNames.end(), aSequence.begin(),
+    std::transform(aPropertyNames.begin(), aPropertyNames.end(), aSequence.getArray(),
         [this](const OUString& rName) -> uno::Any { return getPropertyDefault_Impl(rName); });
     return aSequence;
 }
@@ -1358,7 +1358,7 @@ uno::Sequence<uno::Any> SAL_CALL ScStyleObj::getPropertyValues( const uno::Seque
     GetStyle_Impl();
 
     uno::Sequence<uno::Any> aSequence( aPropertyNames.getLength() );
-    std::transform(aPropertyNames.begin(), aPropertyNames.end(), aSequence.begin(),
+    std::transform(aPropertyNames.begin(), aPropertyNames.end(), aSequence.getArray(),
         [this](const OUString& rName) -> uno::Any { return getPropertyValue_Impl(rName); });
     return aSequence;
 }

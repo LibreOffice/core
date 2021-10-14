@@ -2647,9 +2647,9 @@ css::drawing::PolyPolygonBezierCoords SwXShape::ConvertPolyPolygonBezierToLayout
                 const basegfx::B2DHomMatrix aMatrix(basegfx::utils::createTranslateB2DHomMatrix(
                     aTranslateDiff.X, aTranslateDiff.Y));
 
-                for(drawing::PointSequence& rInnerSequence : aConvertedPath.Coordinates)
+                for(drawing::PointSequence& rInnerSequence : asNonConstRange(aConvertedPath.Coordinates))
                 {
-                    for(awt::Point& rPoint : rInnerSequence)
+                    for(awt::Point& rPoint : asNonConstRange(rInnerSequence))
                     {
                         basegfx::B2DPoint aNewCoordinatePair(rPoint.X, rPoint.Y);
                         aNewCoordinatePair *= aMatrix;

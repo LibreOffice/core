@@ -947,10 +947,7 @@ try
     Reference< XPropertySetInfo> xNewInfo( xNewProps->getPropertySetInfo());
 
     const Sequence< Property> aOldProperties = xOldInfo->getProperties();
-    Sequence< Property> aNewProperties = xNewInfo->getProperties();
-    int nNewLen = aNewProperties.getLength();
-
-    Property* pNewProps = aNewProperties.getArray();
+    const Sequence< Property> aNewProperties = xNewInfo->getProperties();
 
     static constexpr OUStringLiteral sPropFormatsSupplier(u"FormatsSupplier");
     static constexpr OUStringLiteral sPropCurrencySymbol(u"CurrencySymbol");
@@ -972,8 +969,8 @@ try
         if ( rOldProp.Name != "DefaultControl" && rOldProp.Name != "LabelControl" )
         {
             // binary search
-            Property* pResult = std::lower_bound(
-                pNewProps, pNewProps + nNewLen, rOldProp, ::comphelper::PropertyCompareByName());
+            const Property* pResult = std::lower_bound(
+                aNewProperties.begin(), aNewProperties.end(), rOldProp, ::comphelper::PropertyCompareByName());
 
             if (   ( pResult != aNewProperties.end() )
                 && ( pResult->Name == rOldProp.Name )

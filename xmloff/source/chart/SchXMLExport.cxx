@@ -701,7 +701,7 @@ uno::Sequence< OUString > lcl_DataSequenceToStringSequence(
                     [](const OUString& rString) { return !rString.isEmpty(); });
                 if( bHasText )
                 {
-                    auto [begin, end] = toNonConstRange(aValuesSequence);
+                    auto [begin, end] = asNonConstRange(aValuesSequence);
                     std::iota(begin, end, 1);
                 }
             }
@@ -3516,7 +3516,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
     }
     else
     {
-        for( sal_Int32 nCurrIndex : aDataPointSeq )
+        for( sal_Int32 nCurrIndex : std::as_const(aDataPointSeq) )
         {
             aPropertyStates.clear();
             aDataLabelPropertyStates.clear();

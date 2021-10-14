@@ -306,7 +306,7 @@ TransliterationImpl::transliterate( const OUString& inStr, sal_Int32 startPos, s
             tmpStr = bodyCascade[0]->transliterate(tmpStr, 0, nCount, offset);
             if ( startPos )
             {
-                for (sal_Int32 & j : toNonConstRange(offset))
+                for (sal_Int32 & j : asNonConstRange(offset))
                     j += startPos;
             }
             return tmpStr;
@@ -316,7 +316,7 @@ TransliterationImpl::transliterate( const OUString& inStr, sal_Int32 startPos, s
     {
         OUString tmpStr = inStr.copy(startPos, nCount);
 
-        auto [begin, end] = toNonConstRange(offset);
+        auto [begin, end] = asNonConstRange(offset);
         std::iota(begin, end, startPos);
 
         Sequence<sal_Int32> from(nCount);
@@ -328,7 +328,7 @@ TransliterationImpl::transliterate( const OUString& inStr, sal_Int32 startPos, s
 
             assert(from.getLength() == nCount);
             from.swap(to);
-            for (sal_Int32& ix : toNonConstRange(to))
+            for (sal_Int32& ix : asNonConstRange(to))
                 ix = std::as_const(from)[ix];
         }
         offset = to;
@@ -356,7 +356,7 @@ TransliterationImpl::folding( const OUString& inStr, sal_Int32 startPos, sal_Int
             tmpStr = bodyCascade[0]->folding(tmpStr, 0, nCount, offset);
             if ( startPos )
             {
-                for (sal_Int32 & j : offset)
+                for (sal_Int32 & j : asNonConstRange(offset))
                     j += startPos;
             }
             return tmpStr;
@@ -366,7 +366,7 @@ TransliterationImpl::folding( const OUString& inStr, sal_Int32 startPos, sal_Int
     {
         OUString tmpStr = inStr.copy(startPos, nCount);
 
-        auto [begin, end] = toNonConstRange(offset);
+        auto [begin, end] = asNonConstRange(offset);
         std::iota(begin, end, startPos);
 
         sal_Int16 from = 0, to = 1;

@@ -1054,7 +1054,7 @@ ErrCode GraphicFilter::readSVG(SvStream & rStream, Graphic & rGraphic, GfxLinkTy
             {
                 VectorGraphicDataArray aNewData(nMemoryLength);
                 aMemStream.Seek(STREAM_SEEK_TO_BEGIN);
-                aMemStream.ReadBytes(aNewData.begin(), nMemoryLength);
+                aMemStream.ReadBytes(aNewData.getArray(), nMemoryLength);
 
                 // Make a uncompressed copy for GfxLink
                 rGraphicContentSize = nMemoryLength;
@@ -1073,7 +1073,7 @@ ErrCode GraphicFilter::readSVG(SvStream & rStream, Graphic & rGraphic, GfxLinkTy
         else
         {
             VectorGraphicDataArray aNewData(nStreamLength);
-            rStream.ReadBytes(aNewData.begin(), nStreamLength);
+            rStream.ReadBytes(aNewData.getArray(), nStreamLength);
 
             if (!rStream.GetError())
             {
@@ -1125,7 +1125,7 @@ ErrCode GraphicFilter::readWMF_EMF(SvStream & rStream, Graphic & rGraphic, GfxLi
     const sal_uInt32 nStreamLength(rStream.remainingSize());
     VectorGraphicDataArray aNewData(nStreamLength);
 
-    rStream.ReadBytes(aNewData.begin(), nStreamLength);
+    rStream.ReadBytes(aNewData.getArray(), nStreamLength);
 
     if (!rStream.GetError())
     {

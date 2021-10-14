@@ -2322,7 +2322,7 @@ bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet* rSet )
                     aOldProps[i].Value >>= oldValue;
                     // We only edit hours and minutes
                     // don't compare NanoSeconds and Seconds
-                    for ( auto& rDateTime : oldValue )
+                    for ( auto& rDateTime : asNonConstRange(oldValue) )
                     {
                         rDateTime.NanoSeconds = 0;
                         rDateTime.Seconds = 0;
@@ -2357,7 +2357,7 @@ void SfxCmisPropertiesPage::Reset( const SfxItemSet* rItemSet )
     m_xPropertiesCtrl->ClearAllLines();
     const SfxDocumentInfoItem& rInfoItem = rItemSet->Get(SID_DOCINFO);
     uno::Sequence< document::CmisProperty > aCmisProps = rInfoItem.GetCmisProperties();
-    for ( auto& rCmisProp : aCmisProps )
+    for ( auto& rCmisProp : asNonConstRange(aCmisProps) )
     {
         m_xPropertiesCtrl->AddLine(rCmisProp.Id,
                                    rCmisProp.Name,
