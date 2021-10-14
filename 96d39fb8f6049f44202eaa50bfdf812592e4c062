@@ -70,6 +70,24 @@
       "parentUuid": "25b51dcc_201386aa",
       "revId": "96d39fb8f6049f44202eaa50bfdf812592e4c062",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "839e41f9_329f5a41",
+        "filename": "offapi/com/sun/star/drawing/BarCode.idl",
+        "patchSetId": 12
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-10-14T10:41:21Z",
+      "side": 1,
+      "message": "Let me see to it. BTW, the process of adding more kinds of barcodes wouldn\u0027t be a lot of work as it would only require adding the type(barcode type) to the method \"GetBarCodeType\" and assigning a particular integer to the type (for eg. 1 \u003d QR Code, 2 \u003d Code 128, etc.), would this serve as a solution or is there something I\u0027m missing?",
+      "parentUuid": "3361d521_7d9b4c95",
+      "revId": "96d39fb8f6049f44202eaa50bfdf812592e4c062",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
