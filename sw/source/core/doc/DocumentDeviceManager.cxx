@@ -282,10 +282,6 @@ SfxPrinter& DocumentDeviceManager::CreatePrinter_() const
 {
     OSL_ENSURE( ! mpPrt, "Do not call CreatePrinter_(), call getPrinter() instead" );
 
-#if OSL_DEBUG_LEVEL > 1
-    SAL_INFO("sw", "Printer will be created!" );
-#endif
-
     // We create a default SfxPrinter.
     // The ItemSet is deleted by Sfx!
     auto pSet = std::make_unique<SfxItemSetFixed<
