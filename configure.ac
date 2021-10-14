@@ -6471,7 +6471,7 @@ find_msvc_x64_dlls()
     msvcdllpath="$VC_PRODUCT_DIR/redist/x64/Microsoft.VC${VCVER}.CRT"
     case "$VCVER" in
     16.0 | 17.0)
-        for crtver in 141 142; do
+        for crtver in 141 142 143; do
             for l in `ls -1 $VC_PRODUCT_DIR/redist/MSVC/`; do
                 echo "$as_me:$LINENO: testing $VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC$crtver.CRT" >&5
                 if test -d "$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC$crtver.CRT"; then
