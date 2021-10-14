@@ -22,6 +22,8 @@
 #include <rtl/uuid.h>
 #include <osl/mutex.hxx>
 
+#include <algorithm>
+
 using namespace osl;
 using namespace com::sun::star::uno;
 
@@ -58,255 +60,177 @@ Sequence< sal_Int8 > OImplementationId::getImplementationId() const
     return *_pSeq;
 }
 
-
-static void copy( Sequence< Type > & rDest, const Sequence< Type > & rSource, sal_Int32 nOffset )
+namespace
 {
-    Type * pDest = rDest.getArray();
-    const Type * pSource = rSource.getConstArray();
-
-    for ( sal_Int32 nPos = rSource.getLength(); nPos--; )
-        pDest[nOffset+ nPos] = pSource[nPos];
+sal_Int32 TypeSeqLen(const Sequence<Type>& s) { return s.getLength(); }
+template <class... Args> sal_Int32 TypeSeqLen(const Type&, Args... args)
+{
+    return 1 + TypeSeqLen(args...);
 }
 
-
-OTypeCollection::OTypeCollection(
-    const Type & rType1,
-    const Sequence< Type > & rAddTypes )
-    : _aTypes( 1 + rAddTypes.getLength() )
+void PutToTypeSeq(Type* p, const Sequence<Type>& s) { std::copy(s.begin(), s.end(), p); }
+template <class... Args> void PutToTypeSeq(Type* p, const Type& t, Args... args)
 {
-    _aTypes[0] = rType1;
-    copy( _aTypes, rAddTypes, 1 );
+    *p = t;
+    PutToTypeSeq(p + 1, args...);
 }
 
-OTypeCollection::OTypeCollection(
-    const Type & rType1,
-    const Type & rType2,
-    const Sequence< Type > & rAddTypes )
-    : _aTypes( 2 + rAddTypes.getLength() )
+template <class... Args> Sequence<Type> InitTypeSeq(Args... args)
 {
-    _aTypes[0] = rType1;
-    _aTypes[1] = rType2;
-    copy( _aTypes, rAddTypes, 2 );
+    Sequence<Type> s(TypeSeqLen(args...));
+    PutToTypeSeq(s.getArray(), args...);
+    return s;
+}
 }
 
 OTypeCollection::OTypeCollection(
-    const Type & rType1,
-    const Type & rType2,
-    const Type & rType3,
-    const Sequence< Type > & rAddTypes )
-    : _aTypes( 3 + rAddTypes.getLength() )
+    const Type & rT1,
+    const Sequence< Type > & rMore )
+    : _aTypes(InitTypeSeq(rT1, rMore))
 {
-    _aTypes[0] = rType1;
-    _aTypes[1] = rType2;
-    _aTypes[2] = rType3;
-    copy( _aTypes, rAddTypes, 3 );
 }
 
 OTypeCollection::OTypeCollection(
-    const Type & rType1,
-    const Type & rType2,
-    const Type & rType3,
-    const Type & rType4,
-    const Sequence< Type > & rAddTypes )
-    : _aTypes( 4 + rAddTypes.getLength() )
+    const Type & rT1,
+    const Type & rT2,
+    const Sequence< Type > & rMore )
+    : _aTypes(InitTypeSeq(rT1, rT2, rMore))
 {
-    _aTypes[0] = rType1;
-    _aTypes[1] = rType2;
-    _aTypes[2] = rType3;
-    _aTypes[3] = rType4;
-    copy( _aTypes, rAddTypes, 4 );
 }
 
 OTypeCollection::OTypeCollection(
-    const Type & rType1,
-    const Type & rType2,
-    const Type & rType3,
-    const Type & rType4,
-    const Type & rType5,
-    const Sequence< Type > & rAddTypes )
-    : _aTypes( 5 + rAddTypes.getLength() )
+    const Type & rT1,
+    const Type & rT2,
+    const Type & rT3,
+    const Sequence< Type > & rMore )
+    : _aTypes(InitTypeSeq(rT1, rT2, rT3, rMore))
 {
-    _aTypes[0] = rType1;
-    _aTypes[1] = rType2;
-    _aTypes[2] = rType3;
-    _aTypes[3] = rType4;
-    _aTypes[4] = rType5;
-    copy( _aTypes, rAddTypes, 5 );
 }
 
 OTypeCollection::OTypeCollection(
-    const Type & rType1,
-    const Type & rType2,
-    const Type & rType3,
-    const Type & rType4,
-    const Type & rType5,
-    const Type & rType6,
-    const Sequence< Type > & rAddTypes )
-    : _aTypes( 6 + rAddTypes.getLength() )
+    const Type & rT1,
+    const Type & rT2,
+    const Type & rT3,
+    const Type & rT4,
+    const Sequence< Type > & rMore )
+    : _aTypes(InitTypeSeq(rT1, rT2, rT3, rT4, rMore))
 {
-    _aTypes[0] = rType1;
-    _aTypes[1] = rType2;
-    _aTypes[2] = rType3;
-    _aTypes[3] = rType4;
-    _aTypes[4] = rType5;
-    _aTypes[5] = rType6;
-    copy( _aTypes, rAddTypes, 6 );
 }
 
 OTypeCollection::OTypeCollection(
-    const Type & rType1,
-    const Type & rType2,
-    const Type & rType3,
-    const Type & rType4,
-    const Type & rType5,
-    const Type & rType6,
-    const Type & rType7,
-    const Sequence< Type > & rAddTypes )
-    : _aTypes( 7 + rAddTypes.getLength() )
+    const Type & rT1,
+    const Type & rT2,
+    const Type & rT3,
+    const Type & rT4,
+    const Type & rT5,
+    const Sequence< Type > & rMore )
+    : _aTypes(InitTypeSeq(rT1, rT2, rT3, rT4, rT5, rMore))
 {
-    _aTypes[0] = rType1;
-    _aTypes[1] = rType2;
-    _aTypes[2] = rType3;
-    _aTypes[3] = rType4;
-    _aTypes[4] = rType5;
-    _aTypes[5] = rType6;
-    _aTypes[6] = rType7;
-    copy( _aTypes, rAddTypes, 7 );
 }
 
 OTypeCollection::OTypeCollection(
-    const Type & rType1,
-    const Type & rType2,
-    const Type & rType3,
-    const Type & rType4,
-    const Type & rType5,
-    const Type & rType6,
-    const Type & rType7,
-    const Type & rType8,
-    const Sequence< Type > & rAddTypes )
-    : _aTypes( 8 + rAddTypes.getLength() )
+    const Type & rT1,
+    const Type & rT2,
+    const Type & rT3,
+    const Type & rT4,
+    const Type & rT5,
+    const Type & rT6,
+    const Sequence< Type > & rMore )
+    : _aTypes(InitTypeSeq(rT1, rT2, rT3, rT4, rT5, rT6, rMore))
 {
-    _aTypes[0] = rType1;
-    _aTypes[1] = rType2;
-    _aTypes[2] = rType3;
-    _aTypes[3] = rType4;
-    _aTypes[4] = rType5;
-    _aTypes[5] = rType6;
-    _aTypes[6] = rType7;
-    _aTypes[7] = rType8;
-    copy( _aTypes, rAddTypes, 8 );
 }
 
 OTypeCollection::OTypeCollection(
-    const Type & rType1,
-    const Type & rType2,
-    const Type & rType3,
-    const Type & rType4,
-    const Type & rType5,
-    const Type & rType6,
-    const Type & rType7,
-    const Type & rType8,
-    const Type & rType9,
-    const Sequence< Type > & rAddTypes )
-    : _aTypes( 9 + rAddTypes.getLength() )
+    const Type & rT1,
+    const Type & rT2,
+    const Type & rT3,
+    const Type & rT4,
+    const Type & rT5,
+    const Type & rT6,
+    const Type & rT7,
+    const Sequence< Type > & rMore )
+    : _aTypes(InitTypeSeq(rT1, rT2, rT3, rT4, rT5, rT6, rT7, rMore))
 {
-    _aTypes[0] = rType1;
-    _aTypes[1] = rType2;
-    _aTypes[2] = rType3;
-    _aTypes[3] = rType4;
-    _aTypes[4] = rType5;
-    _aTypes[5] = rType6;
-    _aTypes[6] = rType7;
-    _aTypes[7] = rType8;
-    _aTypes[8] = rType9;
-    copy( _aTypes, rAddTypes, 9 );
 }
 
 OTypeCollection::OTypeCollection(
-    const Type & rType1,
-    const Type & rType2,
-    const Type & rType3,
-    const Type & rType4,
-    const Type & rType5,
-    const Type & rType6,
-    const Type & rType7,
-    const Type & rType8,
-    const Type & rType9,
-    const Type & rType10,
-    const Sequence< Type > & rAddTypes )
-    : _aTypes( 10 + rAddTypes.getLength() )
+    const Type & rT1,
+    const Type & rT2,
+    const Type & rT3,
+    const Type & rT4,
+    const Type & rT5,
+    const Type & rT6,
+    const Type & rT7,
+    const Type & rT8,
+    const Sequence< Type > & rMore )
+    : _aTypes(InitTypeSeq(rT1, rT2, rT3, rT4, rT5, rT6, rT7, rT8, rMore))
 {
-    _aTypes[0] = rType1;
-    _aTypes[1] = rType2;
-    _aTypes[2] = rType3;
-    _aTypes[3] = rType4;
-    _aTypes[4] = rType5;
-    _aTypes[5] = rType6;
-    _aTypes[6] = rType7;
-    _aTypes[7] = rType8;
-    _aTypes[8] = rType9;
-    _aTypes[9] = rType10;
-    copy( _aTypes, rAddTypes, 10 );
 }
 
 OTypeCollection::OTypeCollection(
-    const Type & rType1,
-    const Type & rType2,
-    const Type & rType3,
-    const Type & rType4,
-    const Type & rType5,
-    const Type & rType6,
-    const Type & rType7,
-    const Type & rType8,
-    const Type & rType9,
-    const Type & rType10,
-    const Type & rType11,
-    const Sequence< Type > & rAddTypes )
-    : _aTypes( 11 + rAddTypes.getLength() )
+    const Type & rT1,
+    const Type & rT2,
+    const Type & rT3,
+    const Type & rT4,
+    const Type & rT5,
+    const Type & rT6,
+    const Type & rT7,
+    const Type & rT8,
+    const Type & rT9,
+    const Sequence< Type > & rMore )
+    : _aTypes(InitTypeSeq(rT1, rT2, rT3, rT4, rT5, rT6, rT7, rT8, rT9, rMore))
 {
-    _aTypes[0] = rType1;
-    _aTypes[1] = rType2;
-    _aTypes[2] = rType3;
-    _aTypes[3] = rType4;
-    _aTypes[4] = rType5;
-    _aTypes[5] = rType6;
-    _aTypes[6] = rType7;
-    _aTypes[7] = rType8;
-    _aTypes[8] = rType9;
-    _aTypes[9] = rType10;
-    _aTypes[10] = rType11;
-    copy( _aTypes, rAddTypes, 11 );
 }
 
 OTypeCollection::OTypeCollection(
-    const Type & rType1,
-    const Type & rType2,
-    const Type & rType3,
-    const Type & rType4,
-    const Type & rType5,
-    const Type & rType6,
-    const Type & rType7,
-    const Type & rType8,
-    const Type & rType9,
-    const Type & rType10,
-    const Type & rType11,
-    const Type & rType12,
-    const Sequence< Type > & rAddTypes )
-    : _aTypes( 12 + rAddTypes.getLength() )
+    const Type & rT1,
+    const Type & rT2,
+    const Type & rT3,
+    const Type & rT4,
+    const Type & rT5,
+    const Type & rT6,
+    const Type & rT7,
+    const Type & rT8,
+    const Type & rT9,
+    const Type & rT10,
+    const Sequence< Type > & rMore )
+    : _aTypes(InitTypeSeq(rT1, rT2, rT3, rT4, rT5, rT6, rT7, rT8, rT9, rT10, rMore))
 {
-    _aTypes[0] = rType1;
-    _aTypes[1] = rType2;
-    _aTypes[2] = rType3;
-    _aTypes[3] = rType4;
-    _aTypes[4] = rType5;
-    _aTypes[5] = rType6;
-    _aTypes[6] = rType7;
-    _aTypes[7] = rType8;
-    _aTypes[8] = rType9;
-    _aTypes[9] = rType10;
-    _aTypes[10] = rType11;
-    _aTypes[11] = rType12;
-    copy( _aTypes, rAddTypes, 12 );
+}
+
+OTypeCollection::OTypeCollection(
+    const Type & rT1,
+    const Type & rT2,
+    const Type & rT3,
+    const Type & rT4,
+    const Type & rT5,
+    const Type & rT6,
+    const Type & rT7,
+    const Type & rT8,
+    const Type & rT9,
+    const Type & rT10,
+    const Type & rT11,
+    const Sequence< Type > & rMore )
+    : _aTypes(InitTypeSeq(rT1, rT2, rT3, rT4, rT5, rT6, rT7, rT8, rT9, rT10, rT11, rMore))
+{
+}
+
+OTypeCollection::OTypeCollection(
+    const Type & rT1,
+    const Type & rT2,
+    const Type & rT3,
+    const Type & rT4,
+    const Type & rT5,
+    const Type & rT6,
+    const Type & rT7,
+    const Type & rT8,
+    const Type & rT9,
+    const Type & rT10,
+    const Type & rT11,
+    const Type & rT12,
+    const Sequence< Type > & rMore )
+    : _aTypes(InitTypeSeq(rT1, rT2, rT3, rT4, rT5, rT6, rT7, rT8, rT9, rT10, rT11, rT12, rMore))
+{
 }
 
 }
