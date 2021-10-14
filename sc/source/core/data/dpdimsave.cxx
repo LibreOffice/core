@@ -50,9 +50,7 @@ void ScDPSaveGroupItem::AddElement( const OUString& rName )
 void ScDPSaveGroupItem::AddElementsFromGroup( const ScDPSaveGroupItem& rGroup )
 {
     // add all elements of the other group (used for nested grouping)
-
-    for ( const auto& rElement : rGroup.aElements )
-        aElements.push_back( rElement );
+    aElements.insert( aElements.end(), rGroup.aElements.begin(), rGroup.aElements.end() );
 }
 
 bool ScDPSaveGroupItem::RemoveElement( const OUString& rName )

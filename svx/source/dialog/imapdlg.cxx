@@ -253,18 +253,14 @@ void SvxIMapDlg::UpdateLink( const Graphic& rGraphic, const ImageMap* pImageMap,
 
     // Delete UpdateTargetList, because this method can still be called several
     // times before the update timer is turned on
-    pOwnData->aUpdateTargetList.clear();
 
     // TargetList must be copied, since it is owned by the caller and can be
     // deleted immediately after this call the copied list will be deleted
     // again in the handler
     if( pTargetList )
-    {
-        TargetList aTargetList( *pTargetList );
-
-        for (const OUString & s : aTargetList)
-            pOwnData->aUpdateTargetList.push_back( s );
-    }
+        pOwnData->aUpdateTargetList = *pTargetList;
+    else
+        pOwnData->aUpdateTargetList.clear();
 
     pOwnData->aIdle.Start();
 }

@@ -335,12 +335,7 @@ IMPL_LINK_NOARG(TakeProgress, CleanUpHdl, void*, void)
         if( !aRemoveEntries[ i ] )
             aRemainingVector.push_back( m_pTabPage->aFoundList[i] );
 
-    m_pTabPage->aFoundList.clear();
-
-    for( i = 0, nCount = aRemainingVector.size(); i < nCount; ++i )
-        m_pTabPage->aFoundList.push_back( aRemainingVector[ i ] );
-
-    aRemainingVector.clear();
+    m_pTabPage->aFoundList = std::move(aRemainingVector);
 
     // refill list box
     for( i = 0, nCount = aRemoveEntries.size(); i < nCount; ++i )

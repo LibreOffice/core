@@ -721,7 +721,7 @@ public:
 
     bool        GetOpt( sal_uInt16 nPropertyID, EscherPropSortStruct& rPropValue ) const;
 
-    EscherProperties GetOpts() const;
+    const EscherProperties & GetOpts() const;
 
     void        Commit( SvStream& rSt, sal_uInt16 nVersion = 3, sal_uInt16 nRecType = ESCHER_OPT );
 

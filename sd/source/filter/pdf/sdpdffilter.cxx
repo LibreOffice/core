@@ -155,8 +155,9 @@ bool SdPdfFilter::Import()
                 {
                     auto* pMarker = static_cast<vcl::pdf::PDFAnnotationMarkerInk*>(
                         rPDFAnnotation.mpMarker.get());
-                    for (auto const& rPolygon : pMarker->maStrokes)
-                        rCustomAnnotationMarker.maPolygons.push_back(rPolygon);
+                    rCustomAnnotationMarker.maPolygons.insert(
+                        rCustomAnnotationMarker.maPolygons.end(), pMarker->maStrokes.begin(),
+                        pMarker->maStrokes.end());
                     rCustomAnnotationMarker.mnLineWidth = pMarker->mnWidth;
                     rCustomAnnotationMarker.maFillColor = pMarker->maFillColor;
                 }
@@ -166,8 +167,9 @@ bool SdPdfFilter::Import()
                         rCustomAnnotationMarker.maLineColor.SetAlpha(255 - 0x90);
                     auto* pMarker = static_cast<vcl::pdf::PDFAnnotationMarkerHighlight*>(
                         rPDFAnnotation.mpMarker.get());
-                    for (auto const& rPolygon : pMarker->maQuads)
-                        rCustomAnnotationMarker.maPolygons.push_back(rPolygon);
+                    rCustomAnnotationMarker.maPolygons.insert(
+                        rCustomAnnotationMarker.maPolygons.end(), pMarker->maQuads.begin(),
+                        pMarker->maQuads.end());
                     rCustomAnnotationMarker.mnLineWidth = 1;
                     rCustomAnnotationMarker.maFillColor = rPDFAnnotation.maColor;
                     if (!rCustomAnnotationMarker.maFillColor.IsTransparent())

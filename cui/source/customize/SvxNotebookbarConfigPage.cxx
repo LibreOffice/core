@@ -423,20 +423,15 @@ void SvxNotebookbarConfigPage::SelectElement()
         if (aEntries[nIdx].sClassId == "svtlo-ManagedMenuButton")
         {
             aTempEntries.push_back(aEntries[nIdx]);
-            std::vector<NotebookbarEntries> aGtkEntries;
             sal_Int32 rPos = 1;
             sActiveCategory = aEntries[nIdx].sUIItemId.getToken(rPos, ':', rPos);
-            FillFunctionsList(pNodePtr, aGtkEntries, aCategoryList, sActiveCategory);
-            for (std::size_t Idx = 0; Idx < aGtkEntries.size(); Idx++)
-                aTempEntries.push_back(aGtkEntries[Idx]);
-            aGtkEntries.clear();
+            FillFunctionsList(pNodePtr, aTempEntries, aCategoryList, sActiveCategory);
         }
         else
             aTempEntries.push_back(aEntries[nIdx]);
     }
 
-    aEntries = aTempEntries;
-    aTempEntries.clear();
+    aEntries = std::move(aTempEntries);
 
     weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
     rTreeView.bulk_insert_for_each(

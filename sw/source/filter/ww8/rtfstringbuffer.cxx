@@ -78,8 +78,7 @@ void RtfStringBuffer::append(const SwFlyFrameFormat* pFlyFrameFormat, const SwGr
 
 void RtfStringBuffer::appendAndClear(RtfStringBuffer& rBuf)
 {
-    for (const auto& rValue : rBuf.m_aValues)
-        m_aValues.push_back(rValue);
+    m_aValues.insert(m_aValues.end(), rBuf.m_aValues.begin(), rBuf.m_aValues.end());
     rBuf.clear();
 }
 

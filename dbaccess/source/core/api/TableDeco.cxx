@@ -532,11 +532,8 @@ void ODBTableDecorator::refreshColumns()
         xNames = m_xTable->getColumns();
         if(xNames.is())
         {
-            Sequence< OUString> aNames = xNames->getElementNames();
-            const OUString* pIter    = aNames.getConstArray();
-            const OUString* pEnd     = pIter + aNames.getLength();
-            for(;pIter != pEnd;++pIter)
-                aVector.push_back(*pIter);
+            const Sequence< OUString> aNames = xNames->getElementNames();
+            aVector.insert(aVector.end(), aNames.begin(), aNames.end());
         }
     }
     if(!m_pColumns)
