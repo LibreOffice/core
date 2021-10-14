@@ -1563,15 +1563,16 @@ void LocaleDataWrapper::loadDateAcceptancePatterns(
     }
 
     // Never overwrite the locale's full date pattern! The first.
-    if (aDateAcceptancePatterns[0] == rPatterns[0])
+    if (std::as_const(aDateAcceptancePatterns)[0] == rPatterns[0])
         aDateAcceptancePatterns = comphelper::containerToSequence(rPatterns);    // sane
     else
     {
         // Copy existing full date pattern and append the sequence passed.
         /* TODO: could check for duplicates and shrink target sequence */
         Sequence< OUString > aTmp( rPatterns.size() + 1 );
-        aTmp[0] = aDateAcceptancePatterns[0];
-        std::copy(rPatterns.begin(), rPatterns.end(), std::next(aTmp.begin()));
+        auto it = aTmp.getArray();
+        *it = std::as_const(aDateAcceptancePatterns)[0];
+        std::copy(rPatterns.begin(), rPatterns.end(), std::next(it));
         aDateAcceptancePatterns = aTmp;
     }
 }

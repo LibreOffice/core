@@ -1834,7 +1834,7 @@ uno::Sequence<beans::PropertyState> SAL_CALL ScCellRangesBase::getPropertyStates
     const SfxItemPropertyMap& rPropertyMap = GetItemPropertyMap();     // from derived class
 
     uno::Sequence<beans::PropertyState> aRet(aPropertyNames.getLength());
-    std::transform(aPropertyNames.begin(), aPropertyNames.end(), aRet.begin(),
+    std::transform(aPropertyNames.begin(), aPropertyNames.end(), aRet.getArray(),
         [this, &rPropertyMap](const auto& rName) -> beans::PropertyState {
             sal_uInt16 nItemWhich = 0;
             const SfxItemPropertyMapEntry* pEntry  = rPropertyMap.getByName( rName );

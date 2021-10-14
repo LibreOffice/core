@@ -104,7 +104,7 @@ public:
         sal_Int32 index = 0;
         for ( const Sequence< Reference < browse::XBrowseNode > >& children : seqs )
         {
-            std::copy(children.begin(), children.end(), std::next(result.begin(), index));
+            std::copy(children.begin(), children.end(), std::next(result.getArray(), index));
             index += children.getLength();
 
             if (index >= numChildren)

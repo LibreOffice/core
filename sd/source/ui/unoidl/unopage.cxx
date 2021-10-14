@@ -1324,7 +1324,7 @@ Sequence< Any > SAL_CALL SdGenericDrawPage::getPropertyValues( const Sequence< O
 {
     sal_Int32 nCount = aPropertyNames.getLength();
     Sequence< Any > aValues( nCount );
-    std::transform(aPropertyNames.begin(), aPropertyNames.end(), aValues.begin(),
+    std::transform(aPropertyNames.begin(), aPropertyNames.end(), aValues.getArray(),
         [this](const OUString& rName) -> Any {
             Any aValue;
             try

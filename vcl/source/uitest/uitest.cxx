@@ -39,7 +39,7 @@ bool UITest::executeCommandWithParameters(const OUString& rCommand,
         sal_uInt32 nIndex( lNewArgs.getLength() );
         lNewArgs.realloc( lNewArgs.getLength()+rArgs.getLength() );
 
-        std::copy(rArgs.begin(), rArgs.end(), std::next(lNewArgs.begin(), nIndex));
+        std::copy(rArgs.begin(), rArgs.end(), std::next(lNewArgs.getArray(), nIndex));
     }
     return comphelper::dispatchCommand(rCommand,lNewArgs);
 }

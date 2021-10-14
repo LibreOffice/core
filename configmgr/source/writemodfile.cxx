@@ -209,7 +209,7 @@ template< typename T > void writeListValue(
         if (i != 0) {
             handle.writeString(" ");
         }
-        writeValueContent_(handle, val[i]);
+        writeValueContent_(handle, std::as_const(val)[i]);
     }
     handle.writeString("</value>");
 }
@@ -220,7 +220,7 @@ template< typename T > void writeItemListValue(
     handle.writeString(">");
     css::uno::Sequence< T > val;
     value >>= val;
-    for (const auto & i : val) {
+    for (const auto & i : std::as_const(val)) {
         handle.writeString("<it>");
         writeValueContent_(handle, i);
         handle.writeString("</it>");

@@ -95,7 +95,7 @@ void SettingsConfigItem::getValues()
 #endif
         const Sequence< OUString > aKeys( GetNodeNames( aKeyName ) );
         Sequence< OUString > aSettingsKeys( aKeys.getLength() );
-        std::transform(aKeys.begin(), aKeys.end(), aSettingsKeys.begin(),
+        std::transform(aKeys.begin(), aKeys.end(), aSettingsKeys.getArray(),
             [&aKeyName](const OUString& rKey) -> OUString { return aKeyName + "/" + rKey; });
         const Sequence< Any > aValues( GetProperties( aSettingsKeys ) );
         for( int i = 0; i < aValues.getLength(); i++ )

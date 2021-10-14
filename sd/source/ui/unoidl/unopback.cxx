@@ -348,7 +348,7 @@ uno::Sequence< beans::PropertyState > SAL_CALL SdUnoPageBackground::getPropertyS
 
     uno::Sequence< beans::PropertyState > aPropertyStateSequence( nCount );
 
-    std::transform(aPropertyName.begin(), aPropertyName.end(), aPropertyStateSequence.begin(),
+    std::transform(aPropertyName.begin(), aPropertyName.end(), aPropertyStateSequence.getArray(),
         [this](const OUString& rName) -> beans::PropertyState { return getPropertyState(rName); });
 
     return aPropertyStateSequence;

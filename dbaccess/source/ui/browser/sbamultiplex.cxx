@@ -85,7 +85,7 @@ void SbaXPropertiesChangeMultiplexer::propertiesChange(const css::uno::Sequence<
     // forwards _all_ changes to _all_ listeners
 
     css::uno::Sequence< css::beans::PropertyChangeEvent> aMulti(aEvts);
-    for (css::beans::PropertyChangeEvent & rEvent : aMulti)
+    for (css::beans::PropertyChangeEvent & rEvent : asNonConstRange(aMulti))
         rEvent.Source = &m_rParent;
 
     ::comphelper::OInterfaceIteratorHelper2 aIt(*this);

@@ -3053,8 +3053,9 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
     // ImpGenerateFormats for old "automatic" currency formats.
     uno::Sequence< i18n::NumberFormatCode > aFormatSeq = rNumberFormatCode->getAllFormatCode( i18n::KNumberFormatUsage::CURRENCY, aLocale );
     sal_Int32 nCodes = aFormatSeq.getLength();
-    ImpAdjustFormatCodeDefault( aFormatSeq.getArray(), nCodes );
-    for ( i18n::NumberFormatCode& rFormat : aFormatSeq )
+    auto aNonConstRange = asNonConstRange(aFormatSeq);
+    ImpAdjustFormatCodeDefault( aNonConstRange.begin(), nCodes);
+    for ( i18n::NumberFormatCode& rFormat : aNonConstRange )
     {
         if ( nPos - CLOffset >= SV_COUNTRY_LANGUAGE_OFFSET )
         {

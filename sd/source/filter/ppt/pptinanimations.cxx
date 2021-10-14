@@ -535,7 +535,7 @@ bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >&
         Sequence< Any > aValues( xAnimate->getValues() );
         if( aValues.hasElements() )
         {
-            for( Any& rValue : aValues )
+            for( Any& rValue : asNonConstRange(aValues) )
                 oox::ppt::convertAnimationValue(eAttribute, rValue);
 
             xAnimate->setValues( aValues );

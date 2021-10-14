@@ -374,7 +374,7 @@ void SearchAndParseThread::Search()
 
 void SearchAndParseThread::CheckInstalledExtensions()
 {
-    uno::Sequence<uno::Sequence<uno::Reference<deployment::XPackage>>> xAllPackages
+    const uno::Sequence<uno::Sequence<uno::Reference<deployment::XPackage>>> xAllPackages
         = m_pAdditionsDialog->getInstalledExtensions();
 
     if (!xAllPackages.hasElements())

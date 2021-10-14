@@ -1096,7 +1096,7 @@ TaskManager::getv( sal_Int32 CommandId,
 
         PropertySet& propset = it->second.properties;
 
-        std::transform(properties.begin(), properties.end(), seq.begin(),
+        std::transform(properties.begin(), properties.end(), seq.getArray(),
             [&propset](const beans::Property& rProp) -> uno::Any {
                 MyProperty readProp( rProp.Name );
                 auto it1 = propset.find( readProp );
@@ -2518,7 +2518,7 @@ TaskManager::getv(
 
         PropertySet& propset = it->second.properties;
 
-        std::transform(properties.begin(), properties.end(), seq.begin(),
+        std::transform(properties.begin(), properties.end(), seq.getArray(),
             [&propset](const beans::Property& rProp) -> uno::Any {
                 MyProperty readProp( rProp.Name );
                 auto it1 = propset.find( readProp );

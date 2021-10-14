@@ -190,6 +190,9 @@ public:
 
         @since LibreOffice 4.2
     */
+#if defined LIBO_INTERNAL_ONLY
+    SAL_DEPRECATED("expensive; use asNonConstRange if you need a modifiable range")
+#endif
     inline E * begin();
 
     /** This function allows to use Sequence in standard algorithms, like std::find
@@ -204,6 +207,9 @@ public:
 
         @since LibreOffice 4.2
     */
+#if defined LIBO_INTERNAL_ONLY
+    SAL_DEPRECATED("expensive; use asNonConstRange if you need a modifiable range")
+#endif
     inline E * end();
 
     /** This function allows to use Sequence in standard algorithms, like std::find

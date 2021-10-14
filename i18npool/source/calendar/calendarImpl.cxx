@@ -139,7 +139,7 @@ CalendarImpl::getAllCalendars( const css::lang::Locale& rLocale )
 {
     const Sequence< Calendar2 > xC = LocaleDataImpl::get()->getAllCalendars2(rLocale);
     Sequence< OUString > xSeq( xC.getLength() );
-    std::transform(xC.begin(), xC.end(), xSeq.begin(),
+    std::transform(xC.begin(), xC.end(), xSeq.getArray(),
         [](const Calendar2& rCal) { return rCal.Name; });
     return xSeq;
 }

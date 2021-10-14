@@ -2096,7 +2096,7 @@ void SAL_CALL ScDPLevel::setPropertyValue( const OUString& aPropertyName, const 
         uno::Sequence<sheet::GeneralFunction> aSeq;
         aValue >>= aSeq;
         aSubTotals.realloc(aSeq.getLength());
-        std::transform(std::cbegin(aSeq), std::cend(aSeq), aSubTotals.begin(),
+        std::transform(std::cbegin(aSeq), std::cend(aSeq), aSubTotals.getArray(),
             [](const sheet::GeneralFunction& rFunc) -> sal_Int16 {
                 return static_cast<sal_Int16>(rFunc); });
     }
@@ -2124,9 +2124,8 @@ uno::Any SAL_CALL ScDPLevel::getPropertyValue( const OUString& aPropertyName )
     else if ( aPropertyName == SC_UNO_DP_SUBTOTAL )
     {
         const uno::Sequence<sal_Int16> aSeq = getSubTotals();
-        uno::Sequence<sheet::GeneralFunction> aNewSeq;
-        aNewSeq.realloc(aSeq.getLength());
-        std::transform(aSeq.begin(), aSeq.end(), aNewSeq.begin(),
+        uno::Sequence<sheet::GeneralFunction> aNewSeq(aSeq.getLength());
+        std::transform(aSeq.begin(), aSeq.end(), aNewSeq.getArray(),
             [](const sal_Int16 nFunc) -> sheet::GeneralFunction {
                 if (nFunc == sheet::GeneralFunction2::MEDIAN)
                     return sheet::GeneralFunction_NONE;

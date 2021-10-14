@@ -702,7 +702,7 @@ QAccessible::State QtAccessibleWidget::state() const
     if (!xStateSet.is())
         return state;
 
-    Sequence<sal_Int16> aStates = xStateSet->getStates();
+    const Sequence<sal_Int16> aStates = xStateSet->getStates();
 
     for (const sal_Int16 nState : aStates)
     {

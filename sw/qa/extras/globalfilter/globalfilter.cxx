@@ -771,7 +771,7 @@ void Test::testMSCharBackgroundEditing()
             xRun->setPropertyValue("CharHighlight", uno::makeAny(static_cast<sal_Int32>(COL_TRANSPARENT)));
             // Remove shading marker
             uno::Sequence<beans::PropertyValue> aGrabBag = getProperty<uno::Sequence<beans::PropertyValue> >(xRun,"CharInteropGrabBag");
-            for (beans::PropertyValue& rProp : aGrabBag)
+            for (beans::PropertyValue& rProp : asNonConstRange(aGrabBag))
             {
                 if (rProp.Name == "CharShadingMarker")
                 {

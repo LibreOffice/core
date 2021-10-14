@@ -50,7 +50,7 @@ namespace comphelper
     {
         // unary fold to disallow empty parameter pack: at least have one sequence in rSn
         css::uno::Sequence<T> aReturn(std::size(rS1) + (... + std::size(rSn)));
-        T* pReturn = std::copy(std::begin(rS1), std::end(rS1), aReturn.begin());
+        T* pReturn = std::copy(std::begin(rS1), std::end(rS1), aReturn.getArray());
         (..., (pReturn = std::copy(std::begin(rSn), std::end(rSn), pReturn)));
         return aReturn;
     }

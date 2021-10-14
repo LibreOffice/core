@@ -1717,7 +1717,7 @@ CPPUNIT_TEST_FIXTURE(Test, testVmlAdjustments)
     uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues =
         aGeometry["AdjustmentValues"].get<uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue>>();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aAdjustmentValues.getLength());
-    drawing::EnhancedCustomShapeAdjustmentValue aAdjustmentValue = *aAdjustmentValues.begin();
+    drawing::EnhancedCustomShapeAdjustmentValue aAdjustmentValue = *std::cbegin(aAdjustmentValues);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(17639), aAdjustmentValue.Value.get<sal_Int32>());
 }
 

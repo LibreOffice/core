@@ -1332,7 +1332,7 @@ Sequence< PropertyState > SAL_CALL SdStyleSheet::getPropertyStates( const Sequen
 
     Sequence< PropertyState > aPropertyStateSequence( nCount );
 
-    std::transform(aPropertyName.begin(), aPropertyName.end(), aPropertyStateSequence.begin(),
+    std::transform(aPropertyName.begin(), aPropertyName.end(), aPropertyStateSequence.getArray(),
         [this](const OUString& rName) -> PropertyState { return getPropertyState(rName); });
 
     return aPropertyStateSequence;
