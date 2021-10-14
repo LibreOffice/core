@@ -528,7 +528,7 @@ bool SwMailMergeDlg::ExecQryShell()
             uno::Reference< XResultSet > xRes(xRowLocate,UNO_QUERY);
             pImpl->xSelSupp->getSelection() >>= m_aSelection;
             if ( xRowLocate.is() ) {
-                for (Any& rRow : m_aSelection) {
+                for (Any& rRow : asNonConstRange(m_aSelection)) {
                     if ( xRowLocate->moveToBookmark(rRow) )
                         rRow <<= xRes->getRow();
                 }

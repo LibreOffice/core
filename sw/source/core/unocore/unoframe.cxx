@@ -2385,7 +2385,7 @@ uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
 {
     SolarMutexGuard aGuard;
     uno::Sequence< beans::PropertyState > aStates(aPropertyNames.getLength());
-    auto [pStates, end] = toNonConstRange(aStates);
+    auto [pStates, end] = asNonConstRange(aStates);
     SwFrameFormat* pFormat = GetFrameFormat();
     if(pFormat)
     {

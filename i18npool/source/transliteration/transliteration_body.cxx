@@ -260,7 +260,7 @@ static OUString transliterate_titlecase_Impl(
                xCharClassImpl->toLower( aText, 1, aText.getLength() - 1, rLocale );
         pOffset->realloc( aRes.getLength() );
 
-        auto [begin, end] = toNonConstRange(*pOffset);
+        auto [begin, end] = asNonConstRange(*pOffset);
         sal_Int32* pOffsetInt = std::fill_n(begin, nResolvedLen, 0);
         std::iota(pOffsetInt, end, 1);
     }

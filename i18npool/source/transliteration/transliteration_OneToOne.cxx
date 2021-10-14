@@ -68,7 +68,7 @@ transliteration_OneToOne::transliterateImpl( const OUString& inStr, sal_Int32 st
     // Allocate nCount length to offset argument.
     if (pOffset) {
         pOffset->realloc( nCount );
-        auto [begin, end] = toNonConstRange(*pOffset);
+        auto [begin, end] = asNonConstRange(*pOffset);
         std::iota(begin, end, startPos);
     }
 

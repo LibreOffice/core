@@ -6080,7 +6080,7 @@ static void preloadData()
     std::cerr << "Preloading dictionaries: ";
     css::uno::Reference<linguistic2::XSupportedLocales> xSpellLocales(xSpellChecker, css::uno::UNO_QUERY_THROW);
     uno::Sequence< css::lang::Locale > aLocales = xSpellLocales->getLocales();
-    for (auto &it : aLocales)
+    for (auto &it : std::as_const(aLocales))
     {
         std::cerr << LanguageTag::convertToBcp47(it) << " ";
         css::beans::PropertyValues aNone;
@@ -6101,7 +6101,7 @@ static void preloadData()
     css::uno::Reference<linguistic2::XSupportedLocales> xThesLocales(xSpellChecker, css::uno::UNO_QUERY_THROW);
     aLocales = xThesLocales->getLocales();
     std::cerr << "Preloading thesauri: ";
-    for (auto &it : aLocales)
+    for (auto &it : std::as_const(aLocales))
     {
         std::cerr << LanguageTag::convertToBcp47(it) << " ";
         css::beans::PropertyValues aNone;

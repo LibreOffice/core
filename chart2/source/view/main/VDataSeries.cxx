@@ -582,7 +582,7 @@ sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const uno::Refe
         if( xPointProps.is() )
             xPointProps->getPropertyValue("LabelPlacement") >>= nLabelPlacement;
 
-        uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
+        const uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
                 xChartType, bSwapXAndY, m_xDataSeries ) );
 
         for( sal_Int32 n : aAvailablePlacements )

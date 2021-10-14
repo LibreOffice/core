@@ -192,7 +192,7 @@ namespace utl
             {
                 aReturn = m_xDirectAccess->getElementNames();
                 // normalize the names
-                std::transform(std::cbegin(aReturn), std::cend(aReturn), aReturn.begin(),
+                std::transform(std::cbegin(aReturn), std::cend(aReturn), aReturn.getArray(),
                     [this](const OUString& rName) -> OUString { return normalizeName(rName, NO_CONFIGURATION); });
             }
             catch(Exception&)

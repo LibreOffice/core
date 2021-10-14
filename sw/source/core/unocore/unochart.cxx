@@ -872,7 +872,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
         uno::Reference<chart2::data::XLabeledDataSequence>* pOld_LDS = aOld_LDS.getArray();
 
         sal_Int32 nNewCnt = 0;
-        for (sal_Int32 nIdx : aSequenceMapping)
+        for (sal_Int32 nIdx : std::as_const(aSequenceMapping))
         {
             // check that index to be used is valid
             // and has not yet been used
@@ -1233,7 +1233,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     // build value for 'SequenceMapping'
 
     uno::Sequence< sal_Int32 > aSortedMapping( aSequenceMapping );
-    auto [begin, end] = toNonConstRange(aSortedMapping);
+    auto [begin, end] = asNonConstRange(aSortedMapping);
     std::sort(begin, end);
     bool bNeedSequenceMapping = false;
     for (sal_Int32 i = 0;  i < aSequenceMapping.getLength();  ++i)

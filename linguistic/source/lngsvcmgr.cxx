@@ -1145,7 +1145,7 @@ void LngSvcMgr::SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp )
 
     // append path prefix need for 'GetProperties' call below
     OUString aPrefix = aNode + "/";
-    for (OUString & name : aNames)
+    for (OUString & name : asNonConstRange(aNames))
     {
         name = aPrefix + name;
     }
@@ -1178,7 +1178,7 @@ void LngSvcMgr::SetCfgServiceLists( GrammarCheckingIterator &rGrammarDsp )
 
     // append path prefix need for 'GetProperties' call below
     OUString aPrefix = aNode  + "/";
-    for (OUString & name : aNames)
+    for (OUString & name : asNonConstRange(aNames))
     {
         name = aPrefix + name;
     }
@@ -1215,7 +1215,7 @@ void LngSvcMgr::SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp )
 
     // append path prefix need for 'GetProperties' call below
     OUString aPrefix = aNode + "/";
-    for (OUString & name : aNames)
+    for (OUString & name : asNonConstRange(aNames))
     {
         name = aPrefix + name;
     }
@@ -1252,7 +1252,7 @@ void LngSvcMgr::SetCfgServiceLists( ThesaurusDispatcher &rThesDsp )
 
     // append path prefix need for 'GetProperties' call below
     OUString aPrefix = aNode + "/";
-    for (OUString & name : aNames)
+    for (OUString & name : asNonConstRange(aNames))
     {
         name = aPrefix + name;
     }

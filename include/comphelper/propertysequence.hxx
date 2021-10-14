@@ -24,7 +24,7 @@ namespace comphelper
         ::std::initializer_list< ::std::pair< OUString, css::uno::Any > > vInit)
     {
         css::uno::Sequence< css::beans::PropertyValue> vResult{static_cast<sal_Int32>(vInit.size())};
-        std::transform(vInit.begin(), vInit.end(), vResult.begin(),
+        std::transform(vInit.begin(), vInit.end(), vResult.getArray(),
                        [](const std::pair<OUString, css::uno::Any>& rInit) {
                            return css::beans::PropertyValue(rInit.first, -1, rInit.second,
                                                             css::beans::PropertyState_DIRECT_VALUE);
@@ -40,7 +40,7 @@ namespace comphelper
         ::std::initializer_list< ::std::pair< OUString, css::uno::Any > > vInit)
     {
         css::uno::Sequence<css::uno::Any> vResult{static_cast<sal_Int32>(vInit.size())};
-        std::transform(vInit.begin(), vInit.end(), vResult.begin(),
+        std::transform(vInit.begin(), vInit.end(), vResult.getArray(),
                        [](const std::pair<OUString, css::uno::Any>& rInit) {
                            return css::uno::Any(
                                css::beans::PropertyValue(rInit.first, -1, rInit.second,

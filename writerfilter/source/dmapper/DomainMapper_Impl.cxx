@@ -2381,7 +2381,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
         uno::Sequence< beans::PropertyValue > aValues = pPropertyMap->GetPropertyValues(/*bCharGrabBag=*/!m_bIsInComments);
 
         if (m_bStartTOC || m_bStartIndex || m_bStartBibliography)
-            for( auto& rValue : aValues )
+            for( auto& rValue : asNonConstRange(aValues) )
             {
                 if (rValue.Name == "CharHidden")
                     rValue.Value <<= false;

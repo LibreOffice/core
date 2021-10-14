@@ -814,7 +814,7 @@ namespace pcr
         PropertyId nPropId( 0 );
         OUString sDisplayName;
 
-        for ( Property & rProperty : aAllProperties )
+        for ( Property & rProperty : asNonConstRange(aAllProperties) )
         {
             nPropId = m_pInfoService->getPropertyId( rProperty.Name );
             if ( nPropId == -1 )
