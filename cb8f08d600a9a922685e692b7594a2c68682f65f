@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f2691b9_6d4b6937",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-10-14T10:23:32Z",
+      "side": 1,
+      "message": "Just in time before the tagging of 7.1.7 RC1",
+      "revId": "cb8f08d600a9a922685e692b7594a2c68682f65f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
