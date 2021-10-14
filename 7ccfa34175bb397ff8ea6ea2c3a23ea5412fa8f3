@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd86487d_5af0bf73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-14T06:41:02Z",
+      "side": 1,
+      "message": "Mike: since the author isn\u0027t responding to the bug report, I\u0027ll ask you to approve reverting this.",
+      "revId": "7ccfa34175bb397ff8ea6ea2c3a23ea5412fa8f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
