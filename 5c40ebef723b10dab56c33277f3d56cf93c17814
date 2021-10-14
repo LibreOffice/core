@@ -34,6 +34,24 @@
       "parentUuid": "b02b35c9_7a40c9a2",
       "revId": "5c40ebef723b10dab56c33277f3d56cf93c17814",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad6feb88_bdfe37bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-14T14:56:19Z",
+      "side": 1,
+      "message": "\u003e What is the exact rationale behind this? Get rid of technical debt?\n\nyes\n\n\u003e * DevGuide is still hosted on openoffice.org - we have no chance of updating documentation as long as it\u0027s not on our infra. We should have the DevGuide on our infra before doing such a change. Then all our documentation needs updating to reflect this change.\n\ngood point; will wait for progress there\n\n\u003e * Although we allow incompatible changes in every release, users usually don\u0027t expect incompatible changes between point releases (7.2 -\u003e 7.3). We should wait until 8.0 (or do the 8.0 bump for the next release, currently 7.3).\n\nwe generally don\u0027t want to tie technical changes (on major and minor releases) to the marketing notion of major releases, see the discussion at \u003chttps://lists.freedesktop.org/archives/libreoffice/2021-October/087947.html\u003e \"ESC meeting minutes: 2021-10-14\" (the \"replace idlc/regmerge with unoidl-write\" part of the \"What’s cooking\")",
+      "parentUuid": "eea458ee_34955928",
+      "revId": "5c40ebef723b10dab56c33277f3d56cf93c17814",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
