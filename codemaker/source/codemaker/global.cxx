@@ -67,7 +67,7 @@ OString createFileNameFromType( const OString& destination,
 {
     OString type(typeName.replace('.', '/'));
 
-    sal_uInt32 length = destination.getLength();
+    sal_Int32 length = destination.getLength();
 
     bool bWithPoint = false;
     if (length == 0)
