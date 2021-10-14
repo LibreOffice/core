@@ -86,6 +86,24 @@
       "message": "here and below, there should be no need to explicitly set these default nil values",
       "revId": "92e92237ff77df814eff0f4d6de098c9b815b222",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "154d4b32_d9348041",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-10-14T10:58:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30f31461_4d6408d6",
+      "revId": "92e92237ff77df814eff0f4d6de098c9b815b222",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
