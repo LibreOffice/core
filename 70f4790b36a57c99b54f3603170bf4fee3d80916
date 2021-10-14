@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ce78936_37498ca9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-10-14T12:50:11Z",
+      "side": 1,
+      "message": "Oh, I forgot we use Clang for checks too, let me fix that first.\n",
+      "revId": "70f4790b36a57c99b54f3603170bf4fee3d80916",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
