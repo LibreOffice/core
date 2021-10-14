@@ -62,6 +62,7 @@
 #include <calbck.hxx>
 #include <frameformats.hxx>
 #include <osl/diagnose.h>
+#include <docsh.hxx>
 
 #include <memory>
 #include <utility>
@@ -1757,7 +1758,7 @@ void SwUndoTableNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
 
     // TL_CHART2: need to inform chart of probably changed cell names
     rDoc.UpdateCharts( pTableNd->GetTable().GetFrameFormat()->GetName() );
-
+    rDoc.GetDocShell()->GetFEShell()->UpdateTableStyleFormatting(pTableNd);
     if( IsDelBox() )
         m_nSttNode = pTableNd->GetIndex();
     ClearFEShellTabCols(rDoc, nullptr);
