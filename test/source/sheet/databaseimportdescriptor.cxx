@@ -30,7 +30,7 @@ void DatabaseImportDescriptor::testDatabaseImportDescriptorProperties()
     uno::Reference<util::XImportable> xImportable(getXImportable(), UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aPropValues = xImportable->createImportDescriptor(true);
 
-    for (auto& rPropValue : aPropValues)
+    for (auto& rPropValue : asNonConstRange(aPropValues))
     {
         uno::Any aOldValue;
         uno::Any aNewValue;

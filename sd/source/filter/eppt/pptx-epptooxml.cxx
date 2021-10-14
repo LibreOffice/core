@@ -2069,7 +2069,7 @@ bool PowerPointExport::WriteColorSchemes(const FSHelperPtr& pFS, const OUString&
                     OUString sName = PredefinedClrNames[static_cast<PredefinedClrSchemeId>(nId)];
                     sal_Int32 nColor = 0;
 
-                    for (auto aIt = aCurrentTheme.begin(); aIt != aCurrentTheme.end(); aIt++)
+                    for (auto aIt = std::cbegin(aCurrentTheme); aIt != std::cend(aCurrentTheme); aIt++)
                     {
                         if (aIt->Name == sName)
                         {

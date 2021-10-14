@@ -301,6 +301,7 @@ Sequence< PropertyValue > VCLXAccessibleEdit::getCharacterAttributes( sal_Int32 
 {
     OExternalLockGuard aGuard( this );
     Sequence< PropertyValue > aProperties = VCLXAccessibleTextComponent::getCharacterAttributes( nIndex, aRequestedAttributes );
+    auto aNonConstRange = asNonConstRange(aProperties);
 
     // Handle multiline edit character properties
     VclPtr<VclMultiLineEdit> pMulitLineEdit = GetAsDynamic< VclMultiLineEdit >();
@@ -311,7 +312,7 @@ Sequence< PropertyValue > VCLXAccessibleEdit::getCharacterAttributes( sal_Int32 
         const TextAttribFontColor* pFontColor = static_cast<const TextAttribFontColor* >(pTextEngine->FindAttrib( aCursor, TEXTATTR_FONTCOLOR ));
         if ( pFontColor )
         {
-            for (PropertyValue& aValue : aProperties )
+            for (PropertyValue& aValue : aNonConstRange )
             {
                 if (aValue.Name == "CharColor")
                 {
@@ -323,7 +324,7 @@ Sequence< PropertyValue > VCLXAccessibleEdit::getCharacterAttributes( sal_Int32 
     }
 
     // Set default character color if it is not set yet to a valid value
-    for (PropertyValue& aValue : aProperties )
+    for (PropertyValue& aValue : aNonConstRange )
     {
         if (aValue.Name == "CharColor")
         {

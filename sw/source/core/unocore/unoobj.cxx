@@ -2238,7 +2238,7 @@ SwXTextCursor::getPropertyValues( const uno::Sequence< OUString >& aPropertyName
 {
     // a banal implementation for now
     uno::Sequence< uno::Any > aValues( aPropertyNames.getLength() );
-    std::transform(aPropertyNames.begin(), aPropertyNames.end(), aValues.begin(),
+    std::transform(aPropertyNames.begin(), aPropertyNames.end(), aValues.getArray(),
         [this](const OUString& rName) -> uno::Any { return getPropertyValue( rName ); });
     return aValues;
 }

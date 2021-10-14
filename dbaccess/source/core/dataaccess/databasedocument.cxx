@@ -223,7 +223,7 @@ Sequence< Type > SAL_CALL ODatabaseDocument::getTypes(  )
     // allowed to contain macros, too.
     if ( !m_bAllowDocumentScripting )
     {
-        auto [begin, end] = toNonConstRange(aTypes);
+        auto [begin, end] = asNonConstRange(aTypes);
         auto newEnd = std::remove_if( begin, end,
                                       [](const Type& t)
                                       { return t == cppu::UnoType<XEmbeddedScripts>::get() ||

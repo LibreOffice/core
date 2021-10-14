@@ -204,7 +204,7 @@ void PropertyChangeNotifier::notifyPropertyChanged(
 {
     uno::Sequence< beans::PropertyChangeEvent > Changes  = seqChanged;
 
-    for( auto& rChange : Changes )
+    for( auto& rChange : asNonConstRange(Changes) )
         rChange.Source = m_xCreatorContent;
 
     // notify listeners for all Events

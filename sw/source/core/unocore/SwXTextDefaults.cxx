@@ -175,7 +175,7 @@ Sequence< PropertyState > SAL_CALL SwXTextDefaults::getPropertyStates( const Seq
     const sal_Int32 nCount = rPropertyNames.getLength();
     Sequence < PropertyState > aRet ( nCount );
 
-    std::transform(rPropertyNames.begin(), rPropertyNames.end(), aRet.begin(),
+    std::transform(rPropertyNames.begin(), rPropertyNames.end(), aRet.getArray(),
         [this](const OUString& rName) -> PropertyState { return getPropertyState(rName); });
 
     return aRet;

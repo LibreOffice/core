@@ -206,7 +206,7 @@ void VectorGraphicData::ensureSequenceAndRange()
         case VectorGraphicDataType::Svg:
         {
             css::uno::Sequence<sal_Int8> aDataSequence(maDataContainer.getSize());
-            std::copy(maDataContainer.cbegin(), maDataContainer.cend(), aDataSequence.begin());
+            std::copy(maDataContainer.cbegin(), maDataContainer.cend(), aDataSequence.getArray());
             const uno::Reference<io::XInputStream> xInputStream(new comphelper::SequenceInputStream(aDataSequence));
 
 
@@ -223,7 +223,7 @@ void VectorGraphicData::ensureSequenceAndRange()
             const uno::Reference< graphic::XEmfParser > xEmfParser = graphic::EmfTools::create(xContext);
 
             css::uno::Sequence<sal_Int8> aDataSequence(maDataContainer.getSize());
-            std::copy(maDataContainer.cbegin(), maDataContainer.cend(), aDataSequence.begin());
+            std::copy(maDataContainer.cbegin(), maDataContainer.cend(), aDataSequence.getArray());
             const uno::Reference<io::XInputStream> xInputStream(new comphelper::SequenceInputStream(aDataSequence));
 
             uno::Sequence< ::beans::PropertyValue > aPropertySequence;
@@ -336,11 +336,12 @@ VectorGraphicData::VectorGraphicData(
     if (nStmLen)
     {
         VectorGraphicDataArray aVectorGraphicDataArray(nStmLen);
-        rIStm.ReadBytes(aVectorGraphicDataArray.begin(), nStmLen);
+        auto pData = aVectorGraphicDataArray.getArray();
+        rIStm.ReadBytes(pData, nStmLen);
 
         if (!rIStm.GetError())
         {
-            maDataContainer = BinaryDataContainer(reinterpret_cast<const sal_uInt8*>(aVectorGraphicDataArray.begin()), aVectorGraphicDataArray.getLength());
+            maDataContainer = BinaryDataContainer(reinterpret_cast<const sal_uInt8*>(pData), nStmLen);
         }
     }
 }

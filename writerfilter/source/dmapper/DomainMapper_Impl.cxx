@@ -156,13 +156,13 @@ static void lcl_handleDropdownField( const uno::Reference< beans::XPropertySet >
 
     const FFDataHandler::DropDownEntries_t& rEntries = pFFDataHandler->getDropDownEntries();
     uno::Sequence< OUString > sItems( rEntries.size() );
-    ::std::copy( rEntries.begin(), rEntries.end(), sItems.begin());
+    ::std::copy( rEntries.begin(), rEntries.end(), sItems.getArray());
     if ( sItems.hasElements() )
         rxFieldProps->setPropertyValue( "Items", uno::makeAny( sItems ) );
 
     sal_Int32 nResult = pFFDataHandler->getDropDownResult().toInt32();
     if (nResult > 0 && o3tl::make_unsigned(nResult) < sItems.size())
-        rxFieldProps->setPropertyValue( "SelectedItem", uno::makeAny( sItems[ nResult ] ) );
+        rxFieldProps->setPropertyValue( "SelectedItem", uno::makeAny( std::as_const(sItems)[ nResult ] ) );
     if ( !pFFDataHandler->getHelpText().isEmpty() )
          rxFieldProps->setPropertyValue( "Help", uno::makeAny( pFFDataHandler->getHelpText() ) );
 }
@@ -2381,7 +2381,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
         uno::Sequence< beans::PropertyValue > aValues = pPropertyMap->GetPropertyValues(/*bCharGrabBag=*/!m_bIsInComments);
 
         if (m_bStartTOC || m_bStartIndex || m_bStartBibliography)
-            for( auto& rValue : aValues )
+            for( auto& rValue : asNonConstRange(aValues) )
             {
                 if (rValue.Name == "CharHidden")
                     rValue.Value <<= false;
@@ -5235,7 +5235,7 @@ static uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool
         pNewLevel[aNewLevel.getLength() - (bHyperlinks ? 3 : 1)] = aChapterSeparator;
     }
     //copy the 'old' entries except the last (page no)
-    std::copy(aLevel.begin(), std::prev(aLevel.end()), std::next(aNewLevel.begin()));
+    std::copy(aLevel.begin(), std::prev(aLevel.end()), std::next(pNewLevel));
     //copy page no entry (last or last but one depending on bHyperlinks
     sal_Int32 nPageNo = aNewLevel.getLength() - (bHyperlinks ? 2 : 3);
     pNewLevel[nPageNo] = aLevel[aLevel.getLength() - 1];

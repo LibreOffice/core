@@ -976,7 +976,7 @@ bool SvtLinguConfig::GetDictionaryEntry(
         if (bSuccess)
         {
             // get file URL's for the locations
-            for (OUString& rLocation : aLocations)
+            for (OUString& rLocation : asNonConstRange(aLocations))
             {
                 if (!lcl_GetFileUrlFromOrigin( rLocation, rLocation ))
                     bSuccess = false;

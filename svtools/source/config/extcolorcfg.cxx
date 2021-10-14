@@ -132,7 +132,7 @@ public:
 uno::Sequence< OUString> ExtendedColorConfig_Impl::GetPropertyNames(const OUString& rScheme)
 {
     uno::Sequence< OUString> aNames(GetNodeNames(rScheme));
-    for(OUString & i : aNames)
+    for(OUString & i : asNonConstRange(aNames))
     {
         i = rScheme + "/" + i;
     }
@@ -219,7 +219,7 @@ void ExtendedColorConfig_Impl::EnableBroadcast()
 
 static void lcl_addString(uno::Sequence < OUString >& _rSeq,std::u16string_view _sAdd)
 {
-    for(OUString & i : _rSeq)
+    for(OUString & i : asNonConstRange(_rSeq))
         i += _sAdd;
 }
 
@@ -233,7 +233,7 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
     TDisplayNames aDisplayNameMap;
     uno::Sequence < OUString > aComponentNames = GetPropertyNames("EntryNames");
     OUString sDisplayName("/DisplayName");
-    for(OUString & componentName : aComponentNames)
+    for(OUString & componentName : asNonConstRange(aComponentNames))
     {
         uno::Sequence< uno::Any > aComponentDisplayNamesValue = GetProperties( { componentName + sDisplayName } );
         OUString sComponentDisplayName;

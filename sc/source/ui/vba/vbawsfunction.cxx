@@ -76,7 +76,7 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::
     uno::Sequence< uno::Any > aParamTemp( Params );
     if( aParamTemp.hasElements() )
     {
-        for( uno::Any & rArray : aParamTemp )
+        for( uno::Any & rArray : asNonConstRange(aParamTemp) )
         {
             switch( rArray.getValueType().getTypeClass()  )
             {
@@ -186,8 +186,8 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::
         if( aRet.has< AnySeqSeq >() )
         {
             AnySeqSeq aAnySeqSeq = aRet.get< AnySeqSeq >();
-            for( auto& rAnySeq : aAnySeqSeq )
-                for( auto& rAny : rAnySeq )
+            for( auto& rAnySeq : asNonConstRange(aAnySeqSeq) )
+                for( auto& rAny : asNonConstRange(rAnySeq) )
                     lclConvertDoubleToBoolean( rAny );
             aRet <<= aAnySeqSeq;
         }

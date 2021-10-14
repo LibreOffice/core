@@ -132,7 +132,7 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     {
         bool bFound = false;
 
-        for (PropertyValue& rProp : aFilterData)
+        for (PropertyValue& rProp : asNonConstRange(aFilterData))
         {
             if (rProp.Name == "IsRedactMode")
             {

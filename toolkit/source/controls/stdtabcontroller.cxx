@@ -218,7 +218,7 @@ Sequence< Reference< XControl > > StdTabController::getControls(  )
 
         sal_Int32 nCtrls = aModels.getLength();
         aSeq = Sequence< Reference< XControl > >( nCtrls );
-        std::transform(aModels.begin(), aModels.end(), aSeq.begin(),
+        std::transform(aModels.begin(), aModels.end(), aSeq.getArray(),
             [&xCtrls](const Reference< XControlModel >& xCtrlModel) -> Reference< XControl > {
                 return FindControl( xCtrls, xCtrlModel ); });
     }
@@ -284,7 +284,7 @@ void StdTabController::autoTabOrder(  )
     }
 
     Sequence< Reference< XControlModel > > aNewSeq( nCtrls );
-    std::transform(aCtrls.begin(), aCtrls.end(), aNewSeq.begin(),
+    std::transform(aCtrls.begin(), aCtrls.end(), aNewSeq.getArray(),
         [](const ComponentEntry& rEntry) -> Reference< XControlModel > {
             Reference< XControl >  xUC( rEntry.pComponent, UNO_QUERY );
             return xUC->getModel();

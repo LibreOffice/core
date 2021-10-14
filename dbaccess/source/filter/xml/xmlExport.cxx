@@ -595,7 +595,7 @@ template< typename T > void ODBExport::exportDataSourceSettingsSequence(
     css::uno::Sequence<T> anySeq;
     bool bSuccess = in->Value >>= anySeq;
     assert(bSuccess); (void)bSuccess;
-    for (T const & i : anySeq )
+    for (T const & i : std::as_const(anySeq) )
     {
         SvXMLElementExport aDataValue(*this,XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_VALUE, true, false);
         // (no whitespace inside the tag)

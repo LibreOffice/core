@@ -398,7 +398,7 @@ SfxOwnFramesLocker::SfxOwnFramesLocker( SfxObjectShell const * pObjectShell )
 
 SfxOwnFramesLocker::~SfxOwnFramesLocker()
 {
-    for ( auto& rFrame : m_aLockedFrames )
+    for ( auto& rFrame : asNonConstRange(m_aLockedFrames) )
     {
         try
         {
@@ -1615,7 +1615,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
         nSlotId = SID_CHECKIN;
         sal_Int32 nLength = aSeqArgs.getLength( );
         aArgs = Sequence< beans::PropertyValue >( nLength - 1 );
-        std::copy_if(aSeqArgs.begin(), aSeqArgs.end(), aArgs.begin(),
+        std::copy_if(aSeqArgs.begin(), aSeqArgs.end(), aArgs.getArray(),
             [](const beans::PropertyValue& rProp) { return rProp.Name != "CheckIn"; });
     }
 
@@ -2792,7 +2792,7 @@ SfxMedium* SfxBaseModel::handleLoadError( ErrCode nError, SfxMedium* pMedium )
 
 static void addTitle_Impl( Sequence < beans::PropertyValue >& rSeq, const OUString& rTitle )
 {
-    auto [begin, end] = toNonConstRange(rSeq);
+    auto [begin, end] = asNonConstRange(rSeq);
     auto pProp = std::find_if(begin, end,
         [](const beans::PropertyValue& rProp) { return rProp.Name == "Title"; });
     if (pProp != end)

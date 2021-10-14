@@ -453,7 +453,7 @@ void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
         StateChangeNotification_Impl( true, nOldState, nNewState,aGuard );
 
         try {
-            for ( sal_Int32 state : aIntermediateStates )
+            for ( sal_Int32 state : std::as_const(aIntermediateStates) )
                 SwitchStateTo_Impl( state );
 
             SwitchStateTo_Impl( nNewState );

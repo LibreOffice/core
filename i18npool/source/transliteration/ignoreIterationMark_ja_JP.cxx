@@ -95,7 +95,7 @@ ignoreIterationMark_ja_JP::foldingImpl( const OUString& inStr, sal_Int32 startPo
     if (pOffset) {
         // Allocate nCount length to offset argument.
         pOffset->realloc( nCount );
-        auto [begin, end] = toNonConstRange(*pOffset);
+        auto [begin, end] = asNonConstRange(*pOffset);
         std::iota(begin, end, startPos);
     }
 

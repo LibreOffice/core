@@ -1326,7 +1326,7 @@ Sequence< css::beans::PropertyState> SAL_CALL SbaXFormAdapter::getPropertyStates
 
     // set them all to DEFAULT
     Sequence< css::beans::PropertyState> aReturn(aPropertyName.getLength());
-    for (css::beans::PropertyState& rState : aReturn)
+    for (css::beans::PropertyState& rState : asNonConstRange(aReturn))
         rState = css::beans::PropertyState_DEFAULT_VALUE;
     return aReturn;
 }

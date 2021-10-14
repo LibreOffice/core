@@ -759,7 +759,7 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
         else
             aValues = svx::OMultiColumnTransferable::extractDescriptor(aDropped);
 
-        for(beans::PropertyValue & propVal : aValues)
+        for(beans::PropertyValue & propVal : asNonConstRange(aValues))
         {
             uno::Sequence<beans::PropertyValue> aCurrent;
             propVal.Value >>= aCurrent;

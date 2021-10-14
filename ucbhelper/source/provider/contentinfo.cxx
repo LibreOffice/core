@@ -107,7 +107,7 @@ uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
                         m_xProps->realloc( nPos + nAddProps );
 
                         std::copy(rAddProps.begin(), rAddProps.end(),
-                                  std::next(m_xProps->begin(), nPos));
+                                  std::next(m_xProps->getArray(), nPos));
                     }
                 }
             }

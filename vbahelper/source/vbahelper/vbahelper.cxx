@@ -152,13 +152,12 @@ dispatchRequests (const uno::Reference< frame::XModel>& xModel, const OUString &
 
     uno::Reference<frame::XDispatch> xDispatcher = xDispatchProvider->queryDispatch(url,"",0);
 
-    uno::Sequence<beans::PropertyValue> dispatchProps(1);
-
     sal_Int32 nProps = sProps.getLength();
+    uno::Sequence<beans::PropertyValue> dispatchProps(nProps + 1);
+
     if ( nProps )
     {
-        dispatchProps.realloc( nProps + 1 );
-        std::copy(sProps.begin(), sProps.end(), dispatchProps.begin());
+        std::copy(sProps.begin(), sProps.end(), dispatchProps.getArray());
     }
 
     if ( xDispatcher.is() )
@@ -734,7 +733,7 @@ uno::Any getPropertyValue( const uno::Sequence< beans::PropertyValue >& aProp, c
 
 bool setPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, const OUString& aName, const uno::Any& aValue )
 {
-    auto [begin, end] = toNonConstRange(aProp);
+    auto [begin, end] = asNonConstRange(aProp);
     auto pProp = std::find_if(begin, end,
         [&aName](const beans::PropertyValue& rProp) { return rProp.Name == aName; });
     if (pProp != end)

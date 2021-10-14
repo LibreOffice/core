@@ -909,7 +909,7 @@ bool TemplateLocalView::IsInternalTemplate(const OUString& rPath)
     uno::Any aAny = xPathSettings->getPropertyValue("Template_internal");
     aAny >>= aInternalTemplateDirs;
     SfxURLRelocator_Impl aRelocator(xContext);
-    for (auto& rInternalTemplateDir : aInternalTemplateDirs)
+    for (OUString& rInternalTemplateDir : asNonConstRange(aInternalTemplateDirs))
     {
         aRelocator.makeRelocatableURL(rInternalTemplateDir);
         aRelocator.makeAbsoluteURL(rInternalTemplateDir);

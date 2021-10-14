@@ -114,8 +114,8 @@ void ThreadedDeflater::deflateWrite(
         if (!lastBatch)
         {
             assert(inputBytes == batchSize);
-            std::copy_n(inBuffer.begin() + (batchSize - MaxBlockSize), MaxBlockSize,
-                        prevDataBlock.begin());
+            std::copy_n(std::cbegin(inBuffer) + (batchSize - MaxBlockSize), MaxBlockSize,
+                        prevDataBlock.getArray());
         }
 
         processDeflatedBuffers();
@@ -130,7 +130,7 @@ void ThreadedDeflater::processDeflatedBuffers()
 
     css::uno::Sequence<sal_Int8> outBuffer(batchOutputSize);
 
-    auto pos = outBuffer.begin();
+    auto pos = outBuffer.getArray();
     for (auto& buffer : outBuffers)
     {
         pos = std::copy(buffer.begin(), buffer.end(), pos);
