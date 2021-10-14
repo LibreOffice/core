@@ -16,6 +16,24 @@
       "message": "add an assert to GetBoxBackground to verify this and prevent future mistakes?",
       "revId": "6f7859ba23e8a12ddc87be596bf83668f677e358",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5af4f20a_44019a04",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2021-10-14T19:02:44Z",
+      "side": 1,
+      "message": "Yes, just did not have a line a hand - do you have a suggestion? What is best for a unique_ptr? .get() or .is()? And return false at the beginning of SwDoc::GetBoxAttr (that is the method GetBoxBackground \u0026\u0026 GetBoxDirection use)?",
+      "parentUuid": "d7da6491_ca6ddd79",
+      "revId": "6f7859ba23e8a12ddc87be596bf83668f677e358",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
