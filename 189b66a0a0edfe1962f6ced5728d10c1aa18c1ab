@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63203e97_308999e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-10-14T11:21:55Z",
+      "side": 1,
+      "message": "ignoring the unrelated failure in the android x86 bot",
+      "revId": "189b66a0a0edfe1962f6ced5728d10c1aa18c1ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
