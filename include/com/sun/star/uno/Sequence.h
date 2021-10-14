@@ -185,12 +185,14 @@ public:
     */
     inline E * SAL_CALL getArray();
 
+#if !defined LIBO_INTERNAL_ONLY
     /** This function allows to use Sequence in standard algorithms, like std::find
         and others.
 
         @since LibreOffice 4.2
     */
     inline E * begin();
+#endif
 
     /** This function allows to use Sequence in standard algorithms, like std::find
         and others.
@@ -199,12 +201,14 @@ public:
     */
     inline E const * begin() const;
 
+#if !defined LIBO_INTERNAL_ONLY
     /** This function allows to use Sequence in standard algorithms, like std::find
         and others.
 
         @since LibreOffice 4.2
     */
     inline E * end();
+#endif
 
     /** This function allows to use Sequence in standard algorithms, like std::find
         and others.

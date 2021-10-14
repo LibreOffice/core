@@ -90,7 +90,7 @@ sal_Bool SAL_CALL X11Transferable::isDataFlavorSupported( const DataFlavor& aFla
             return false;
     }
 
-    Sequence< DataFlavor > aFlavors( getTransferDataFlavors() );
+    const Sequence< DataFlavor > aFlavors( getTransferDataFlavors() );
     return std::any_of(aFlavors.begin(), aFlavors.end(),
         [&aFlavor](const DataFlavor& rFlavor) {
             return aFlavor.MimeType.equalsIgnoreAsciiCase( rFlavor.MimeType )

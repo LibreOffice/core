@@ -232,7 +232,7 @@ uno::Any SAL_CALL Content::execute(
         uno::Sequence< uno::Any > ret(propertyValues.getLength());
         const uno::Sequence< beans::Property > props(getProperties(Environment));
         // No properties can be set
-        std::transform(std::cbegin(propertyValues), std::cend(propertyValues), ret.begin(),
+        std::transform(std::cbegin(propertyValues), std::cend(propertyValues), ret.getArray(),
             [&props](const beans::PropertyValue& rPropVal) {
                 if (std::any_of(props.begin(), props.end(),
                                 [&rPropVal](const beans::Property& rProp) { return rProp.Name == rPropVal.Name; }))

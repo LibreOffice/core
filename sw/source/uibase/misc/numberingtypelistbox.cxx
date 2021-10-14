@@ -101,7 +101,7 @@ void SwNumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
     if (!(nTypeFlags & SwInsertNumTypes::Extended))
         return;
 
-    for (sal_Int16 nCurrent : aTypes)
+    for (sal_Int16 nCurrent : std::as_const(aTypes))
     {
         if (nCurrent > style::NumberingType::CHARS_LOWER_LETTER_N)
         {

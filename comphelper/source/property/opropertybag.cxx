@@ -425,7 +425,7 @@ namespace comphelper
     {
         // sort (the XMultiPropertySet interface requires this)
         Sequence< PropertyValue > aProperties( _rProps );
-        auto [begin, end] = toNonConstRange(aProperties);
+        auto [begin, end] = asNonConstRange(aProperties);
         std::sort(
             begin,
             end,

@@ -107,7 +107,7 @@ const Sequence < DispatchDescriptor >& seqDescriptor )
 {
     sal_Int32 nCount = seqDescriptor.getLength();
     Sequence< Reference< XDispatch > > lDispatcher( nCount );
-    std::transform(seqDescriptor.begin(), seqDescriptor.end(), lDispatcher.begin(),
+    std::transform(seqDescriptor.begin(), seqDescriptor.end(), lDispatcher.getArray(),
         [this](const DispatchDescriptor& rDescr) -> Reference<XDispatch> {
             return queryDispatch(rDescr.FeatureURL, rDescr.FrameName, rDescr.SearchFlags); });
     return lDispatcher;

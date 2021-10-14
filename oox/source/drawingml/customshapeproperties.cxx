@@ -180,7 +180,7 @@ void CustomShapeProperties::pushToPropSet(
             static const OUStringLiteral sType = u"Type";
             if ( aGeoPropSet >>= aGeoPropSeq )
             {
-                for ( auto& rGeoProp : aGeoPropSeq )
+                for ( auto& rGeoProp : asNonConstRange(aGeoPropSeq) )
                 {
                     if ( rGeoProp.Name == sAdjustmentValues )
                     {

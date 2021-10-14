@@ -617,7 +617,7 @@ private:
                                     static_cast<rendering::XColorSpace*>(this), 0);
 
             uno::Sequence<double> aRes(nLen);
-            std::transform(deviceColor.begin(), deviceColor.end(), aRes.begin(),
+            std::transform(deviceColor.begin(), deviceColor.end(), aRes.getArray(),
                            vcl::unotools::toDoubleColor);
             return aRes;
         }

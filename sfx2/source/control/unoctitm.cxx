@@ -597,7 +597,7 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
         sal_uInt32 nIndex( lNewArgs.getLength() );
 
         lNewArgs.realloc( nIndex + nAddArgs );
-        std::copy(aAddArgs.begin(), aAddArgs.end(), std::next(lNewArgs.begin(), nIndex));
+        std::copy(aAddArgs.begin(), aAddArgs.end(), std::next(lNewArgs.getArray(), nIndex));
     }
 
     // Overwrite possible detected synchron argument, if real listener exists (currently no other way)
@@ -609,9 +609,9 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
         // we offer dispatches for SID_JUMPTOMARK if the URL points to a bookmark inside the document
         // so we must retrieve this as an argument from the parsed URL
         lNewArgs.realloc( lNewArgs.getLength()+1 );
-        nMarkArg = lNewArgs.getLength()-1;
-        lNewArgs[nMarkArg].Name = "Bookmark";
-        lNewArgs[nMarkArg].Value <<= aURL.Mark;
+        auto& el = lNewArgs[lNewArgs.getLength()-1];
+        el.Name = "Bookmark";
+        el.Value <<= aURL.Mark;
     }
 
     css::uno::Reference< css::frame::XFrame > xFrameRef(xFrame.get(), css::uno::UNO_QUERY);

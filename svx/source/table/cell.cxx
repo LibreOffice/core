@@ -1462,7 +1462,7 @@ Sequence< PropertyState > SAL_CALL Cell::getPropertyStates( const Sequence< OUSt
     const sal_Int32 nCount = aPropertyName.getLength();
     Sequence< PropertyState > aRet( nCount );
 
-    std::transform(aPropertyName.begin(), aPropertyName.end(), aRet.begin(),
+    std::transform(aPropertyName.begin(), aPropertyName.end(), aRet.getArray(),
         [this](const OUString& rName) -> PropertyState {
             try
             {
@@ -1602,7 +1602,7 @@ Sequence< Any > SAL_CALL Cell::getPropertyDefaults( const Sequence< OUString >& 
     sal_Int32 nCount = aPropertyNames.getLength();
     Sequence< Any > aDefaults( nCount );
 
-    std::transform(aPropertyNames.begin(), aPropertyNames.end(), aDefaults.begin(),
+    std::transform(aPropertyNames.begin(), aPropertyNames.end(), aDefaults.getArray(),
         [this](const OUString& rName) -> Any { return getPropertyDefault(rName); });
 
     return aDefaults;

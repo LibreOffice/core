@@ -291,17 +291,19 @@ void createUniqueSubEntry(const Reference < XRegistryKey > & xSuperKey,
         if (bReady)
         {
             Sequence<OUString> implEntriesNew(length);
-            implEntriesNew.getArray()[0] = value;
+            auto it = implEntriesNew.getArray();
+            *it = value;
 
-            std::copy_if(implEntries.begin(), implEntries.end(), std::next(implEntriesNew.begin()),
+            std::copy_if(implEntries.begin(), implEntries.end(), std::next(it),
                 [&value](const OUString& rEntry) { return rEntry != value; });
             xSuperKey->setAsciiListValue(implEntriesNew);
         } else
         {
             Sequence<OUString> implEntriesNew(length+1);
-            implEntriesNew.getArray()[0] = value;
+            auto it = implEntriesNew.getArray();
+            *it = value;
 
-            std::copy(implEntries.begin(), implEntries.end(), std::next(implEntriesNew.begin()));
+            std::copy(implEntries.begin(), implEntries.end(), std::next(it));
             xSuperKey->setAsciiListValue(implEntriesNew);
         }
     } else
@@ -332,7 +334,7 @@ bool deleteSubEntry(const Reference < XRegistryKey >& xSuperKey, const OUString&
         {
             Sequence<OUString> implEntriesNew(length - equals);
 
-            std::copy_if(implEntries.begin(), implEntries.end(), implEntriesNew.begin(),
+            std::copy_if(implEntries.begin(), implEntries.end(), implEntriesNew.getArray(),
                 [&value](const OUString& rEntry) { return rEntry != value; });
             xSuperKey->setAsciiListValue(implEntriesNew);
         }
@@ -741,7 +743,7 @@ void deleteAllServiceEntries(    const Reference < XSimpleRegistry >& xReg,
                     {
                         Sequence<OUString> implEntriesNew(length-equals);
 
-                        std::copy_if(implEntries.begin(), implEntries.end(), implEntriesNew.begin(),
+                        std::copy_if(implEntries.begin(), implEntries.end(), implEntriesNew.getArray(),
                             [&implName](const OUString& rEntry) { return rEntry != implName; });
 
                         xServiceKey->setAsciiListValue(implEntriesNew);

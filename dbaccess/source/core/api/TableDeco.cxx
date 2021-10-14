@@ -310,7 +310,7 @@ void ODBTableDecorator::construct()
     Reference<XPropertySetInfo> xInfo = xProp->getPropertySetInfo();
 
     Sequence< Property > aTableProps = xInfo->getProperties();
-    for (Property & prop : aTableProps)
+    for (Property & prop : asNonConstRange(aTableProps))
     {
         if (prop.Name == PROPERTY_CATALOGNAME)
             prop.Handle = PROPERTY_ID_CATALOGNAME;

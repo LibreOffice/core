@@ -1471,7 +1471,7 @@ void ControlContainerBase::setDesignMode( sal_Bool bOn )
     UnoControl::setDesignMode( bOn );
 
     Sequence< Reference< XControl > > xCtrls = getControls();
-    for ( Reference< XControl >& rControl : xCtrls )
+    for ( Reference< XControl >& rControl : asNonConstRange(xCtrls) )
         rControl->setDesignMode( bOn );
 
     // #109067# in design mode the tab controller is not notified about

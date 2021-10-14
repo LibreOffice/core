@@ -702,7 +702,7 @@ Sequence< Sequence< OUString > > ChartExport::getSplitCategoriesList( const OUSt
                             //sort the categories name
                             Sequence<Sequence<OUString>> aFinalSplitSource(aCategories.getLength());
                             std::transform(aCategories.begin(), aCategories.end(),
-                                std::reverse_iterator(aFinalSplitSource.end()),
+                                std::reverse_iterator(asNonConstRange(aFinalSplitSource).end()),
                                 [](const Reference<chart2::data::XLabeledDataSequence>& xCat) {
                                     return lcl_getLabelSequence(xCat->getValues()); });
                             return aFinalSplitSource;

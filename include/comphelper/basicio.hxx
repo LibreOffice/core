@@ -65,7 +65,7 @@ template <class ELEMENT>
 const css::uno::Reference<css::io::XObjectInputStream>& operator >> (const css::uno::Reference<css::io::XObjectInputStream>& _rxInStream, css::uno::Sequence<ELEMENT>& _rSeq)
 {
     _rSeq.realloc(_rxInStream->readLong());
-    for (ELEMENT& rElement : _rSeq)
+    for (ELEMENT& rElement : asNonConstRange(_rSeq))
         _rxInStream >> rElement;
     return _rxInStream;
 }

@@ -2597,7 +2597,7 @@ void ScFiltersTest2::testTextBoxBodyUpright()
     {
         uno::Sequence<beans::PropertyValue> aGrabBag;
         xShapeProperties->getPropertyValue("InteropGrabBag") >>= aGrabBag;
-        for (auto& aProp : aGrabBag)
+        for (auto& aProp : std::as_const(aGrabBag))
         {
             if (aProp.Name == "Upright")
             {

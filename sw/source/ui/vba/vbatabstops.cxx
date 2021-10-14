@@ -202,7 +202,7 @@ uno::Reference< word::XTabStop > SAL_CALL SwVbaTabStops::Add( float Position, co
     aTab.FillChar = cLeader;
 
     uno::Sequence< style::TabStop > aOldTabs = lcl_getTabStops( mxParaProps );
-    auto [begin, end] = toNonConstRange(aOldTabs);
+    auto [begin, end] = asNonConstRange(aOldTabs);
 
     style::TabStop* pOldTab = std::find_if(begin, end,
         [nPosition](const style::TabStop& rTab) { return rTab.Position == nPosition; });
@@ -217,7 +217,7 @@ uno::Reference< word::XTabStop > SAL_CALL SwVbaTabStops::Add( float Position, co
         sal_Int32 nTabs = aOldTabs.getLength();
         uno::Sequence< style::TabStop > aNewTabs( nTabs + 1 );
 
-        auto it = aNewTabs.begin();
+        auto it = aNewTabs.getArray();
         *it = aTab;
         std::copy(begin, end, std::next(it));
         lcl_setTabStops( mxParaProps, aNewTabs );

@@ -338,7 +338,7 @@ public:
         uno::Sequence< beans::NamedValue > stats(
                 m_xDocProps->getDocumentStatistics());
 
-        auto [begin, end] = toNonConstRange(stats);
+        auto [begin, end] = asNonConstRange(stats);
         auto pStat = std::find_if(begin, end,
             [&rPropName](const beans::NamedValue& rStat) { return rPropName == rStat.Name; });
         if (pStat != end)
@@ -841,7 +841,7 @@ public:
     {
         const uno::Sequence< beans::Property > aProps = mxUserDefinedProp->getPropertySetInfo()->getProperties();
         uno::Sequence< OUString > aNames( aProps.getLength() );
-        std::transform(aProps.begin(), aProps.end(), aNames.begin(),
+        std::transform(aProps.begin(), aProps.end(), aNames.getArray(),
             [](const beans::Property& rProp) -> OUString { return rProp.Name; });
         return aNames;
     }

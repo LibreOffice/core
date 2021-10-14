@@ -81,7 +81,7 @@ OUString readLockFile(const OUString& aSource)
     std::unique_ptr<sal_Int8[]> pBuffer(new sal_Int8[nSize]);
     aFileStream.ReadBytes(pBuffer.get(), nSize);
 
-    css::uno::Sequence<sal_Int8> aData(pBuffer.get(), nSize);
+    const css::uno::Sequence<sal_Int8> aData(pBuffer.get(), nSize);
     OStringBuffer aResult(static_cast<int>(nSize));
     for (sal_Int8 nByte : aData)
     {

@@ -522,7 +522,7 @@ constexpr OUStringLiteral GCM_PROPERTY_RESOURCERESOLVER = u"ResourceResolver";
         // look for duplicates, and remember them
         IntArrayArray::value_type& rDuplicateIds = gAmbiguousPropertyIds[ _nId ];
         // for this, sort the aggregate properties
-        auto [begin, end] = toNonConstRange(aAggregateProps);
+        auto [begin, end] = asNonConstRange(aAggregateProps);
         ::std::sort(
             begin,
             end,

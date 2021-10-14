@@ -124,7 +124,7 @@ bool PDFSigningTest::sign(const OUString& rInURL, const OUString& rOutURL,
         uno::Sequence<uno::Reference<security::XCertificate>> aCertificates
             = xSecurityEnvironment->getPersonalCertificates();
         DateTime now(DateTime::SYSTEM);
-        for (auto& cert : aCertificates)
+        for (auto& cert : asNonConstRange(aCertificates))
         {
             css::util::DateTime aNotValidAfter = cert->getNotValidAfter();
             css::util::DateTime aNotValidBefore = cert->getNotValidBefore();

@@ -771,8 +771,9 @@ uno::Sequence< uno::Any > ScVbaEventsHelper::implBuildArgumentList( const EventH
     {
         sal_Int32 nLength = aVbaArgs.getLength();
         uno::Sequence< uno::Any > aVbaArgs2( nLength + 1 );
-        aVbaArgs2[ 0 ] = createWorksheet( rArgs, 0 );
-        std::copy_n(aVbaArgs.begin(), nLength, std::next(aVbaArgs2.begin()));
+        auto pVbaArgs2 = aVbaArgs2.getArray();
+        *pVbaArgs2 = createWorksheet( rArgs, 0 );
+        std::copy_n(std::cbegin(aVbaArgs), nLength, std::next(pVbaArgs2));
         aVbaArgs = aVbaArgs2;
     }
 
