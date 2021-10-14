@@ -81,7 +81,6 @@ public:
     {
         m_xControl->connect_row_activated(rLink);
     };
-
 };
 
 namespace sfx2
