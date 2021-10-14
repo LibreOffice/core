@@ -1283,7 +1283,7 @@ void XMLShapeExport::ImpExportGluePoints( const uno::Reference< drawing::XShape 
 
     drawing::GluePoint2 aGluePoint;
 
-    uno::Sequence< sal_Int32 > aIdSequence( xGluePoints->getIdentifiers() );
+    const uno::Sequence< sal_Int32 > aIdSequence( xGluePoints->getIdentifiers() );
 
     for( const sal_Int32 nIdentifier : aIdSequence )
     {

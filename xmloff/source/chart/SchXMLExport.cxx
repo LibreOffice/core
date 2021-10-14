@@ -3516,7 +3516,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
     }
     else
     {
-        for( sal_Int32 nCurrIndex : aDataPointSeq )
+        for( sal_Int32 nCurrIndex : std::as_const(aDataPointSeq) )
         {
             aPropertyStates.clear();
             aDataLabelPropertyStates.clear();

@@ -356,7 +356,7 @@ TransliterationImpl::folding( const OUString& inStr, sal_Int32 startPos, sal_Int
             tmpStr = bodyCascade[0]->folding(tmpStr, 0, nCount, offset);
             if ( startPos )
             {
-                for (sal_Int32 & j : offset)
+                for (sal_Int32 & j : toNonConstRange(offset))
                     j += startPos;
             }
             return tmpStr;

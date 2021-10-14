@@ -204,6 +204,9 @@ public:
 
         @since LibreOffice 4.2
     */
+#if defined LIBO_INTERNAL_ONLY
+    SAL_DEPRECATED("Has hidden COW cost; use begin + getLength or toNonConstRange if you need a modifiable range")
+#endif
     inline E * end();
 
     /** This function allows to use Sequence in standard algorithms, like std::find
