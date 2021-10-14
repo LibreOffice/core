@@ -292,6 +292,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInNumbering)
     // Assert the tracked deletion of the number of joined list item and
     // the tracked insertion of the number after a split list item as not black elements
     assertXPath(pXmlDoc, "/metafile/push/push/push/textcolor[not(@color='#000000')]", 6);
+
+    // tdf#145068 numbering shows changes in the associated list item, not the next one
+    // This was 1 (black numbering of the first list item previously)
+    assertXPath(pXmlDoc, "/metafile/push/push/push/font[4][@color='#000000']", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf125300)
