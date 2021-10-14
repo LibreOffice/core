@@ -100,7 +100,7 @@
 #if __has_warning("-Wambiguous-reversed-operator")
 #pragma GCC diagnostic ignored "-Wambiguous-reversed-operator"
 #endif
-#endif
+#endif //
 
 #endif // INCLUDED_SAL_CONFIG_H
 
