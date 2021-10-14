@@ -62,6 +62,7 @@
 #include <vcl/weld.hxx>
 #include <editeng/editobj.hxx>
 #include <svl/numformat.hxx>
+#include <rtl/character.hxx>
 
 #include <memory>
 #include <string_view>
@@ -1096,26 +1097,24 @@ static bool lcl_PutString(
         sal_Int32 nStart[nMaxNumberParts];
         sal_Int32 nEnd[nMaxNumberParts];
 
+        bool bIso;
         sal_uInt16 nDP, nMP, nYP;
         switch ( nColFormat )
         {
-            case SC_COL_YMD: nDP = 2; nMP = 1; nYP = 0; break;
-            case SC_COL_MDY: nDP = 1; nMP = 0; nYP = 2; break;
+            case SC_COL_YMD: nDP = 2; nMP = 1; nYP = 0; bIso = true; break;
+            case SC_COL_MDY: nDP = 1; nMP = 0; nYP = 2; bIso = false; break;
             case SC_COL_DMY:
-            default:         nDP = 0; nMP = 1; nYP = 2; break;
+            default:         nDP = 0; nMP = 1; nYP = 2; bIso = false; break;
         }
 
         sal_uInt16 nFound = 0;
         bool bInNum = false;
-        for ( sal_Int32 nPos=0; nPos<nLen && (bInNum ||
-                    nFound<nMaxNumberParts); nPos++ )
+        for (sal_Int32 nPos = 0; nPos < nLen && (bInNum || nFound < nMaxNumberParts); ++nPos)
         {
-            if (bInNum && nFound == 3 && nColFormat == SC_COL_YMD &&
-                    nPos <= nStart[nFound]+2 && rStr[nPos] == 'T')
-                bInNum = false;     // ISO-8601: YYYY-MM-DDThh:mm...
-            else if ((((!bInNum && nFound==nMP) || (bInNum && nFound==nMP+1))
-                        && ScGlobal::getCharClass().isLetterNumeric( rStr, nPos))
-                    || ScGlobal::getCharClass().isDigit( rStr, nPos))
+            bool bLetter = false;
+            if (rtl::isAsciiDigit(rStr[nPos]) ||
+                    (((!bInNum && nFound==nMP) || (bInNum && nFound==nMP+1))
+                     && (bLetter = ScGlobal::getCharClass().isLetterNumeric( rStr, nPos))))
             {
                 if (!bInNum)
                 {
@@ -1124,9 +1123,98 @@ static bool lcl_PutString(
                     ++nFound;
                 }
                 nEnd[nFound-1] = nPos;
+                if (bIso && (bLetter || (2 <= nFound && nFound <= 6 && nPos > nStart[nFound-1] + 1)))
+                    // Each M,D,h,m,s at most 2 digits.
+                    bIso = false;
             }
             else
+            {
                 bInNum = false;
+                if (bIso)
+                {
+                    // ([+-])YYYY-MM-DD([T ]hh:mm(:ss(.fff)))(([+-])TZ)
+                    // XXX NOTE: timezone is accepted here, but number
+                    // formatter parser will not, so the end result will be
+                    // type Text to preserve timezone information.
+                    switch (rStr[nPos])
+                    {
+                        case '+':
+                            if (nFound >= 5 && nPos == nEnd[nFound-1] + 1)
+                                // Accept timezone offset.
+                                ;
+                            else if (nPos > 0)
+                                // Accept one leading sign.
+                                bIso = false;
+                        break;
+                        case '-':
+                            if (nFound >= 5 && nPos == nEnd[nFound-1] + 1)
+                                // Accept timezone offset.
+                                ;
+                            else if (nFound == 0 && nPos > 0)
+                                // Accept one leading sign.
+                                bIso = false;
+                            else if (nFound < 1 || 2 < nFound || nPos != nEnd[nFound-1] + 1)
+                                // Not immediately after 1 or 1-2
+                                bIso = false;
+                        break;
+                        case 'T':
+                        case ' ':
+                            if (nFound != 3 || nPos != nEnd[nFound-1] + 1)
+                                // Not immediately after 1-2-3
+                                bIso = false;
+                        break;
+                        case ':':
+                            if (nFound < 4 || 5 < nFound || nPos != nEnd[nFound-1] + 1)
+                                // Not at 1-2-3T4:5:
+                                bIso = false;
+                        break;
+                        case '.':
+                        case ',':
+                            if (nFound != 6 || nPos != nEnd[nFound-1] + 1)
+                                // Not at 1-2-3T4:5:6.
+                                bIso = false;
+                        break;
+                        case 'Z':
+                            if (nFound >= 5 && nPos == nEnd[nFound-1] + 1)
+                                // Accept Zero timezone.
+                                ;
+                            else
+                                bIso = false;
+                        break;
+                        default:
+                            bIso = false;
+                    }
+                }
+            }
+        }
+
+        if (nFound < 3)
+            bIso = false;
+
+        if (bIso)
+        {
+            // Leave conversion and detection of various possible number
+            // formats to the number formatter. ISO is recognized in any locale
+            // so we can directly use the document's formatter.
+            sal_uInt32 nFormat = 0;
+            double fVal = 0.0;
+            SvNumberFormatter* pDocFormatter = rDoc.GetFormatTable();
+            if (pDocFormatter->IsNumberFormat( rStr, nFormat, fVal))
+            {
+                if (pDocFormatter->GetType(nFormat) & SvNumFormatType::DATE)
+                {
+                    ScAddress aPos(nCol,nRow,nTab);
+                    if (bUseDocImport)
+                        rDocImport.setNumericCell(aPos, fVal);
+                    else
+                        rDoc.SetValue(aPos, fVal);
+                    rDoc.SetNumberFormat(aPos, nFormat);
+
+                    return bMultiLine;     // success
+                }
+            }
+            // If we reach here it is type Text (e.g. timezone or trailing
+            // characters). Handled below.
         }
 
         if ( nFound == 1 )
@@ -1163,7 +1251,7 @@ static bool lcl_PutString(
             }
         }
 
-        if ( nFound >= 3 )
+        if (!bIso && nFound >= 3)
         {
             using namespace ::com::sun::star;
             bool bSecondCal = false;
