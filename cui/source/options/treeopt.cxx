@@ -1281,17 +1281,17 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
         pItem = nullptr;
         if(SfxItemState::SET == rSet.GetItemState( SID_ATTR_LANGUAGE, false, &pItem ))
         {
-            pDispatch->ExecuteList(pItem->Which(), SfxCallMode::ASYNCHRON, { pItem });
+            pDispatch->ExecuteList(pItem->Which(), SfxCallMode::SYNCHRON, { pItem });
             bSaveSpellCheck = true;
         }
         if(SfxItemState::SET == rSet.GetItemState( SID_ATTR_CHAR_CTL_LANGUAGE, false, &pItem ))
         {
-            pDispatch->ExecuteList(pItem->Which(), SfxCallMode::ASYNCHRON, { pItem });
+            pDispatch->ExecuteList(pItem->Which(), SfxCallMode::SYNCHRON, { pItem });
             bSaveSpellCheck = true;
         }
         if(SfxItemState::SET == rSet.GetItemState( SID_ATTR_CHAR_CJK_LANGUAGE, false, &pItem ))
         {
-            pDispatch->ExecuteList(pItem->Which(), SfxCallMode::ASYNCHRON, { pItem });
+            pDispatch->ExecuteList(pItem->Which(), SfxCallMode::SYNCHRON, { pItem });
             bSaveSpellCheck = true;
         }
 
