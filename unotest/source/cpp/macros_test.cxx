@@ -91,9 +91,10 @@ void MacrosTest::setUpNssGpg(const test::Directories& rDirectories, const OUStri
     OUString aTargetDir
         = rDirectories.getURLFromWorkdir(OUString("CppunitTest/" + rTestName + ".test.user"));
 
-    // Set up cert8.db in workdir/CppunitTest/
-    osl::File::copy(aSourceDir + "cert8.db", aTargetDir + "/cert8.db");
-    osl::File::copy(aSourceDir + "key3.db", aTargetDir + "/key3.db");
+    // Set up NSS database in workdir/CppunitTest/
+    osl::File::copy(aSourceDir + "cert9.db", aTargetDir + "/cert9.db");
+    osl::File::copy(aSourceDir + "key4.db", aTargetDir + "/key4.db");
+    osl::File::copy(aSourceDir + "pkcs11.txt", aTargetDir + "/pkcs11.txt");
 
     // Make gpg use our own defined setup & keys
     osl::File::copy(aSourceDir + "pubring.gpg", aTargetDir + "/pubring.gpg");
