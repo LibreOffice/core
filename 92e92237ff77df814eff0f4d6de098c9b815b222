@@ -104,6 +104,23 @@
       "parentUuid": "30f31461_4d6408d6",
       "revId": "92e92237ff77df814eff0f4d6de098c9b815b222",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4393008_8c47f429",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-14T11:23:18Z",
+      "side": 1,
+      "message": "why do you drop this unrelated DocColor node?",
+      "revId": "92e92237ff77df814eff0f4d6de098c9b815b222",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

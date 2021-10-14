@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abf06278_6736ece9",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-14T11:23:18Z",
+      "side": 1,
+      "message": "why do you add all these empty nodes?",
+      "revId": "ed270ba19880b1e59e852b76afde414e329a9914",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
