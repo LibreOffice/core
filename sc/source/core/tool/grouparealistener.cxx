@@ -258,8 +258,7 @@ void FormulaGroupAreaListener::collectFormulaCells(
             if (nRow2 < nRefRow1 || nRefRow2 < nRow1)
                 return;
 
-            for (; pp != ppEnd; ++pp)
-                rCells.push_back(*pp);
+            rCells.insert(rCells.end(), pp, ppEnd);
         }
         else
         {
@@ -281,8 +280,7 @@ void FormulaGroupAreaListener::collectFormulaCells(
             assert(nRow1 <= nRefRow2);
 
             // Notify the first hit cell and all subsequent ones.
-            for (; pp != ppEnd; ++pp)
-                rCells.push_back(*pp);
+            rCells.insert(rCells.end(), pp, ppEnd);
         }
     }
     else if (mbEndFixed)
