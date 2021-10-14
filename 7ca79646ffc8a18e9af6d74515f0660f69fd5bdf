@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd2726f6_36f94325",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-14T08:28:40Z",
+      "side": 1,
+      "message": "All Jenkins ok except Android for unrelated reasons a priori.\nLet\u0027s push this one.",
+      "revId": "7ca79646ffc8a18e9af6d74515f0660f69fd5bdf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
