@@ -852,13 +852,9 @@ public:
                 if (!mbFormula)
                     return;
 
-                sc::formula_block::iterator it = sc::formula_block::begin(*node.data);
-                std::advance(it, nOffset);
-                sc::formula_block::iterator itEnd = it;
-                std::advance(itEnd, nDataSize);
-
-                for (; it != itEnd; ++it)
-                    maFormulaCells.push_back(*it);
+                sc::formula_block::iterator it = sc::formula_block::begin(*node.data) + nOffset;
+                sc::formula_block::iterator itEnd = it + nDataSize;
+                maFormulaCells.insert(maFormulaCells.end(), it, itEnd);
             }
             break;
             case sc::element_type_empty:

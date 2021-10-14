@@ -339,8 +339,7 @@ static void addIfNotInMyMap( const StylesBuffer& rStyles, std::map< FormatKeyPai
     {
         // add ranges from the rangelist to the existing rangelist for the
         // matching style ( should we check if they overlap ? )
-        for (size_t i = 0, nSize = rRangeList.size(); i < nSize; ++i)
-            it->second.push_back(rRangeList[i]);
+        it->second.insert(it->second.end(), rRangeList.begin(), rRangeList.end());
         return;
     }
     rMap[ FormatKeyPair( nXfId, nFormatId ) ] = rRangeList;

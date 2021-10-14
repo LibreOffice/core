@@ -45,8 +45,7 @@ SmFontPickList& SmFontPickList::operator = (const SmFontPickList& rList)
 {
     Clear();
     nMaxItems = rList.nMaxItems;
-    for (const auto & nPos : rList.aFontVec)
-        aFontVec.push_back( nPos );
+    aFontVec = rList.aFontVec;
 
     return *this;
 }
