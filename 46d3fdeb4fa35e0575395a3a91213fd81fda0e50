@@ -16,6 +16,24 @@
       "message": "This now became a memory leak - aJson.extractData already provides a memory that needs releasing using free(). It likely should be returned directly.",
       "revId": "46d3fdeb4fa35e0575395a3a91213fd81fda0e50",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e875781_4638f9c9",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 5837,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-14T06:42:04Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/c/core/+/123516 fixed that.",
+      "parentUuid": "a7ee0e1b_b0a0fa4f",
+      "revId": "46d3fdeb4fa35e0575395a3a91213fd81fda0e50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
