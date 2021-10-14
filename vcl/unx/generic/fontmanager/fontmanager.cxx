@@ -759,10 +759,7 @@ void PrintFontManager::fillPrintFontInfo(const PrintFont& rFont, FastPrintFontIn
     rInfo.m_eWeight         = rFont.m_eWeight;
     rInfo.m_ePitch          = rFont.m_ePitch;
     rInfo.m_aEncoding       = rFont.m_aEncoding;
-
-    rInfo.m_aAliases.clear();
-    for (auto const& aAlias : rFont.m_aAliases)
-        rInfo.m_aAliases.push_back(aAlias);
+    rInfo.m_aAliases        = rFont.m_aAliases;
 }
 
 void PrintFontManager::fillPrintFontInfo( PrintFont& rFont, PrintFontInfo& rInfo ) const

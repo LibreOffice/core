@@ -286,9 +286,7 @@ void ScDocument::UpdateChartArea( const OUString& rChartName,
 
                         aNewRanges = new ScRangeList;
                         aNewRanges->Parse( aRangesStr, *this, GetAddressConvention());
-
-                        for ( size_t nAdd = 0, nAddCount = rNewList->size(); nAdd < nAddCount; ++nAdd )
-                            aNewRanges->push_back( (*rNewList)[nAdd] );
+                        aNewRanges->insert( aNewRanges->begin(), rNewList->begin(), rNewList->end() );
                     }
                     else
                     {

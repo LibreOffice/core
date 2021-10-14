@@ -98,6 +98,8 @@ public:
     ::std::vector<ScRange>::const_iterator end() const { return maRanges.end(); }
     ::std::vector<ScRange>::iterator begin() { return maRanges.begin(); }
     ::std::vector<ScRange>::iterator end() { return maRanges.end(); }
+    void            insert(std::vector<ScRange>::iterator aPos, std::vector<ScRange>::const_iterator aSourceBegin, std::vector<ScRange>::const_iterator aSourceEnd)
+                    { maRanges.insert(aPos, aSourceBegin, aSourceEnd); }
 
     void swap( ScRangeList& r );
 

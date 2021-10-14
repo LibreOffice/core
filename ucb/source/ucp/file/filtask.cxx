@@ -2722,8 +2722,8 @@ TaskManager::getContentExchangedEventListeners( const OUString& aOldPrefix,
 
                     // Merge with preexisting notifiers
                     // However, these may be in status BaseContent::Deleted
-                    for( const auto& rCopyPtr : copyList )
-                        itnew->second.notifier.push_back( rCopyPtr );
+                    itnew->second.notifier.insert(itnew->second.notifier.end(),
+                        copyList.begin(), copyList.end() );
                 }
             }
         }

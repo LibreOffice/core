@@ -9145,8 +9145,7 @@ const ScRangeList& ScUniqueFormatsEntry::GetRanges()
     // fill and return ScRangeList
 
     aReturnRanges = new ScRangeList;
-    for ( const auto& rCompletedRange : aCompletedRanges )
-        aReturnRanges->push_back( rCompletedRange );
+    aReturnRanges->insert( aReturnRanges->end(), aCompletedRanges.begin(), aCompletedRanges.end() );
     aCompletedRanges.clear();
 
     return *aReturnRanges;

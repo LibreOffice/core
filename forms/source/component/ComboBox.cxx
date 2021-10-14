@@ -632,8 +632,7 @@ void OComboBoxModel::loadData( bool _bForce )
                 if (xFieldNames.is())
                 {
                     const Sequence<OUString> aFieldNames = xFieldNames->getElementNames();
-                    for (const OUString& rustrNames : aFieldNames)
-                        aStringList.push_back(rustrNames);
+                    aStringList.insert(aStringList.end(), aFieldNames.begin(), aFieldNames.end());
                 }
             }
             break;

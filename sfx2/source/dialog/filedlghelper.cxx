@@ -1350,14 +1350,6 @@ void FileDialogHelper_Impl::implStartExecute()
     }
 }
 
-static void lcl_saveLastURLs(std::vector<OUString>& rpURLList,
-                      ::std::vector< OUString >& lLastURLs )
-{
-    lLastURLs.clear();
-    for (auto const& url : rpURLList)
-        lLastURLs.push_back(url);
-}
-
 void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterface >& xPicker, std::vector<OUString>& rpURLList)
 {
     rpURLList.clear();
@@ -1397,7 +1389,7 @@ void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterfac
         }
     }
 
-    lcl_saveLastURLs(rpURLList, mlLastURLs);
+    mlLastURLs = rpURLList;
 }
 
 ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,

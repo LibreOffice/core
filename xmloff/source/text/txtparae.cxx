@@ -537,8 +537,7 @@ void XMLTextParagraphExport::Add( XmlStyleFamily nFamily,
     vector< XMLPropertyState > aPropStates =
             xPropMapper->Filter(GetExport(), rPropSet);
 
-    for (const XMLPropertyState& rState : aAddStates)
-        aPropStates.push_back( rState );
+    aPropStates.insert( aPropStates.end(), aAddStates.begin(), aAddStates.end() );
 
     if( aPropStates.empty() )
         return;
@@ -759,8 +758,7 @@ OUString XMLTextParagraphExport::Find(
     if( !xPropMapper.is() )
         return sName;
     vector<XMLPropertyState> aPropStates(xPropMapper->Filter(GetExport(), rPropSet));
-    for (const XMLPropertyState& rState : aAddStates)
-        aPropStates.push_back( rState );
+    aPropStates.insert( aPropStates.end(), aAddStates.begin(), aAddStates.end() );
     if( std::any_of( aPropStates.begin(), aPropStates.end(), lcl_validPropState ) )
         sName = GetAutoStylePool().Find( nFamily, sName, aPropStates );
 

@@ -499,10 +499,7 @@ void OStatement_Base::GetAssignValues()
         if (pOptColumnCommalist->count() == 0)
         {
             const Sequence< OUString>& aNames = m_xColNames->getElementNames();
-            const OUString* pBegin = aNames.getConstArray();
-            const OUString* pEnd = pBegin + aNames.getLength();
-            for (; pBegin != pEnd; ++pBegin)
-                aColumnNameList.push_back(*pBegin);
+            aColumnNameList.insert(aColumnNameList.end(), aNames.begin(), aNames.end());
         }
         else
         {

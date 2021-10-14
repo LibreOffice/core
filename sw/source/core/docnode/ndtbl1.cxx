@@ -550,8 +550,7 @@ void SwDoc::SetRowNotTracked( const SwCursor& rCursor, const SvxPrintItem &rNew,
     if ( bAll )
     {
         const SwTableLines &rLines = pTableNd->GetTable().GetTabLines();
-        for ( auto pLine : rLines )
-            aRowArr.push_back(pLine);
+        aRowArr.insert(aRowArr.end(), rLines.begin(), rLines.end());
     }
     else
         ::lcl_CollectLines( aRowArr, rCursor, true );
