@@ -12,6 +12,7 @@
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <property name="icon-name">svx/res/symphony/spacing_very_tight.png</property>
+    <property name="icon_size">1</property>
   </object>
   <object class="GtkImage" id="image_spacing_115">
     <property name="visible">True</property>
@@ -62,6 +63,7 @@
             <property name="receives-default">True</property>
             <property name="image">image_spacing_1</property>
             <property name="relief">none</property>
+            <property name="use-underline">True</property>
             <property name="xalign">0</property>
             <property name="always-show-image">True</property>
           </object>
@@ -78,6 +80,7 @@
             <property name="receives-default">True</property>
             <property name="image">image_spacing_115</property>
             <property name="relief">none</property>
+            <property name="use-underline">True</property>
             <property name="xalign">0</property>
             <property name="always-show-image">True</property>
           </object>
@@ -94,6 +97,7 @@
             <property name="receives-default">True</property>
             <property name="image">image_spacing_15</property>
             <property name="relief">none</property>
+            <property name="use-underline">True</property>
             <property name="xalign">0</property>
             <property name="always-show-image">True</property>
           </object>
@@ -110,6 +114,7 @@
             <property name="receives-default">True</property>
             <property name="image">image_spacing_2</property>
             <property name="relief">none</property>
+            <property name="use-underline">True</property>
             <property name="xalign">0</property>
             <property name="always-show-image">True</property>
           </object>
@@ -126,6 +131,7 @@
             <property name="receives-default">True</property>
             <property name="image">image_spacing_3</property>
             <property name="relief">none</property>
+            <property name="use-underline">True</property>
             <property name="xalign">0</property>
             <property name="always-show-image">True</property>
           </object>
@@ -142,6 +148,7 @@
             <property name="receives-default">True</property>
             <property name="image">image_spacing_4</property>
             <property name="relief">none</property>
+            <property name="use-underline">True</property>
             <property name="xalign">0</property>
             <property name="always-show-image">True</property>
           </object>
