@@ -34,6 +34,14 @@ $(eval $(call gb_CppunitTest_use_externals,xmlsecurity_pdfsigning,\
     boost_headers \
 ))
 
+ifneq ($(OS),WNT)
+ifneq (,$(ENABLE_NSS))
+$(eval $(call gb_CppunitTest_use_externals,xmlsecurity_pdfsigning,\
+    nssutil3 \
+))
+endif
+endif
+
 $(eval $(call gb_CppunitTest_set_include,xmlsecurity_pdfsigning,\
 	-I$(SRCDIR)/xmlsecurity/inc \
 	$$(INCLUDE) \
