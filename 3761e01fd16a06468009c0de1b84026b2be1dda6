@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ed651bd_bd7e7cc9",
+        "filename": "comphelper/source/misc/storagehelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-15T07:22:05Z",
+      "side": 1,
+      "message": "This ignores that in line 424, the sequence may be reallocated to nSha1Ind elements.",
+      "revId": "3761e01fd16a06468009c0de1b84026b2be1dda6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
