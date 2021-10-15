@@ -619,7 +619,7 @@ uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl
                      0) ;
                 CertAddStoreToCollection (
                      hCollectionStore ,
-                     m_hCertStore ,
+                     m_hKeyStore,
                      CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
                      0) ;
                 hAdditionalStore = hCollectionStore;
@@ -800,7 +800,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl::verifyCertificate(
                 0) ;
             CertAddStoreToCollection (
                 hCollectionStore ,
-                m_hCertStore ,
+                m_hKeyStore,
                 CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
                 0) ;
             CertAddStoreToCollection (
