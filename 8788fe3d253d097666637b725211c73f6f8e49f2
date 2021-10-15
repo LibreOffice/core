@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "544dc6e1_c59b8c22",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2021-10-15T18:12:59Z",
+      "side": 1,
+      "message": "(since ac398a5d)\n\nI hope I understand C++ correctly.\nIf the non-overrding ScEditWindow::GetEditEngine is what we should have, let me know.",
+      "revId": "8788fe3d253d097666637b725211c73f6f8e49f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
