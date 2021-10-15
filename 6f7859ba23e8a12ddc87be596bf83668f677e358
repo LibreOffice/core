@@ -34,6 +34,24 @@
       "parentUuid": "d7da6491_ca6ddd79",
       "revId": "6f7859ba23e8a12ddc87be596bf83668f677e358",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b8debd7_65e5a30e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-10-15T06:24:09Z",
+      "side": 1,
+      "message": "I would just add\n\n   assert(rToFill \u0026\u0026 \"requires object here\") \n\nto the beginning of GetBoxBackground, nothing else needed",
+      "parentUuid": "5af4f20a_44019a04",
+      "revId": "6f7859ba23e8a12ddc87be596bf83668f677e358",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
