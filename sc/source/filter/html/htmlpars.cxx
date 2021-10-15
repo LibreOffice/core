@@ -2103,6 +2103,9 @@ void ScHTMLTable::DataOn( const HtmlImportInfo& rInfo )
                     }
                 }
                 break;
+                case HtmlOptionId::XSTRING:
+                    nNumberFormat = NF_STANDARD_FORMAT_TEXT;
+                break;
                 default: break;
             }
         }

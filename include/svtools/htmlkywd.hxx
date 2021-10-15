@@ -417,6 +417,7 @@
 #define OOO_STRING_SVTOOLS_HTML_O_nowrap "nowrap"
 #define OOO_STRING_SVTOOLS_HTML_O_sdfixed "sdfixed"
 #define OOO_STRING_SVTOOLS_HTML_O_selected "selected"
+#define OOO_STRING_SVTOOLS_HTML_O_xstring "x:str"
 
 // attributes with a string as value
 #define OOO_STRING_SVTOOLS_HTML_O_accesskey "accesskey"

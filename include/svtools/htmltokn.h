@@ -313,6 +313,7 @@ BOOL_START          = 0x100,
     NOWRAP,
     SDFIXED,
     SELECTED,
+    XSTRING, // tdf#96499: <td class="xl68" x:str>123456789</td>
 BOOL_END,
 
 // attributes with a string as value

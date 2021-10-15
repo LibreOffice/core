@@ -492,6 +492,7 @@ static HTML_OptionEntry aHTMLOptionTab[] = {
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_nowrap),        HtmlOptionId::NOWRAP},
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_sdfixed),   HtmlOptionId::SDFIXED},
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_selected),      HtmlOptionId::SELECTED},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_xstring),    HtmlOptionId::XSTRING}, //// tdf#96499: excel <td class="xl68" x:str>123456789</td>
 
 // Attributes with a string value
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_accept),        HtmlOptionId::ACCEPT},
