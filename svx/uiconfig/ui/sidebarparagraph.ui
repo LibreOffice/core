@@ -232,7 +232,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:ParaspaceIncrease">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="can-focus">True</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -243,7 +243,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:ParaspaceDecrease">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="can-focus">True</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -422,7 +422,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:IncrementIndent">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="can-focus">True</property>
                     <property name="tooltip-text" translatable="yes" context="sidebarparagraph|increaseindent|tooltip_text">Increase Indent</property>
                     <property name="use-underline">True</property>
                   </object>
@@ -434,7 +434,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:DecrementIndent">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="can-focus">True</property>
                     <property name="tooltip-text" translatable="yes" context="sidebarparagraph|decreaseindent|tooltip_text">Decrease Indent</property>
                     <property name="use-underline">True</property>
                   </object>
@@ -446,7 +446,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:HangingIndent">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="can-focus">True</property>
                     <property name="tooltip-text" translatable="yes" context="sidebarparagraph|hangingindent|tooltip_text">Switch to Hanging Indent</property>
                     <property name="use-underline">True</property>
                   </object>
@@ -644,7 +644,7 @@
                 <child>
                   <object class="GtkMenuToolButton" id=".uno:DefaultBullet">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="can-focus">True</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -655,7 +655,7 @@
                 <child>
                   <object class="GtkMenuToolButton" id=".uno:DefaultNumbering">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="can-focus">True</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -666,7 +666,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:RemoveBullets">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="can-focus">True</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -694,7 +694,7 @@
                 <child>
                   <object class="GtkMenuToolButton" id=".uno:BackgroundColor">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="can-focus">True</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
