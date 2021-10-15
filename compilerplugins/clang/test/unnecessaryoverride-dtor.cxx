@@ -125,7 +125,7 @@ struct CompleteBase {
 // a class defined in a .hxx with the dtor declared (but not defined) as inline in the .hxx,
 // and then defined in the cxx (making it effectively only callable from within the cxx);
 // removing the dtor declaration from the class definition would change the dtor to be callable from everywhere
-MarkedInlineButNotDefined::~MarkedInlineButNotDefined() {}
+MarkedInlineButNotDefined::~MarkedInlineButNotDefined() = default;
 
 // avoid loplugin:unreffun:
 int main() {

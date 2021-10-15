@@ -193,13 +193,6 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
                 return true;
             }
         }
-        // corner case
-        if (methodDecl->isInlined()
-            && compiler.getSourceManager().isInMainFile(methodDecl->getLocation())
-            && !compiler.getSourceManager().isInMainFile(methodDecl->getCanonicalDecl()->getLocation()))
-        {
-            return true;
-        }
         if (methodDecl->isExplicitlyDefaulted()) {
             if (methodDecl->getPreviousDecl() != nullptr) {
                 return true;
