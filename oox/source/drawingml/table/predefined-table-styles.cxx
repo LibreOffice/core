@@ -462,13 +462,12 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
 
     OUString style_name = mStyleIdMap[styleId].first;
     OUString accent_name = mStyleIdMap[styleId].second;
-    sal_Int32 accent_val = tokens[mStyleIdMap[styleId].second];
 
     if (style_name == "Themed-Style-1")
     {
         if (!accent_name.isEmpty())
         {
-            accent_val = tokens[mStyleIdMap[styleId].second];
+            sal_Int32 accent_val = tokens[mStyleIdMap[styleId].second];
 
             wholeTblTextColor.setSchemeClr(XML_dk1);
             firstRowTextColor.setSchemeClr(XML_lt1);
@@ -516,6 +515,8 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     }
     else if (style_name == "Themed-Style-2")
     {
+        sal_Int32 accent_val;
+
         if (!accent_name.isEmpty())
         {
             wholeTblTextColor.setSchemeClr(XML_lt1);
@@ -555,6 +556,8 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     {
         wholeTblTextColor.setSchemeClr(XML_tx1);
 
+        sal_Int32 accent_val;
+
         if (!accent_name.isEmpty())
             accent_val = tokens[mStyleIdMap[styleId].second];
         else
@@ -577,6 +580,8 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     {
         wholeTblTextColor.setSchemeClr(XML_tx1);
         firstRowTextColor.setSchemeClr(XML_bg1);
+
+        sal_Int32 accent_val;
 
         if (!accent_name.isEmpty())
             accent_val = tokens[mStyleIdMap[styleId].second];
@@ -603,6 +608,8 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     else if (style_name == "Light-Style-3")
     {
         wholeTblTextColor.setSchemeClr(XML_tx1);
+
+        sal_Int32 accent_val;
 
         if (!accent_name.isEmpty())
             accent_val = tokens[mStyleIdMap[styleId].second];
@@ -631,6 +638,8 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
         firstRowTextColor.setSchemeClr(XML_lt1);
         pWholeTblFillProperties->maFillColor.setSchemeClr(XML_lt1);
         pLastRowFillProperties->maFillColor.setSchemeClr(XML_lt1);
+
+        sal_Int32 accent_val;
 
         if (!accent_name.isEmpty())
             accent_val = tokens[mStyleIdMap[styleId].second];
@@ -669,6 +678,8 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
         pWholeTblInsideHBorder->maLineFill.maFillColor.setSchemeClr(XML_lt1);
         pWholeTblInsideVBorder->maLineFill.maFillColor.setSchemeClr(XML_lt1);
 
+        sal_Int32 accent_val;
+
         if (!accent_name.isEmpty())
             accent_val = tokens[mStyleIdMap[styleId].second];
         else
@@ -702,6 +713,8 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
         pFirstRowBottomBorder->maLineFill.maFillColor.setSchemeClr(XML_dk1);
         pLastRowTopBorder->maLineFill.maFillColor.setSchemeClr(XML_dk1);
 
+        sal_Int32 accent_val;
+
         if (!accent_name.isEmpty())
             accent_val = tokens[mStyleIdMap[styleId].second];
         else
@@ -719,6 +732,8 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
         wholeTblTextColor.setSchemeClr(XML_dk1);
         pLastRowTopBorder->maLineFill.maFillColor.setSchemeClr(XML_dk1);
         pLastRowFillProperties->maFillColor.setSchemeClr(XML_dk1);
+
+        sal_Int32 accent_val;
 
         if (!accent_name.isEmpty())
             accent_val = tokens[mStyleIdMap[styleId].second];
@@ -754,6 +769,8 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
         pLastColLeftBorder->maLineFill.maFillColor.setSchemeClr(XML_lt1);
         pFirstRowFillProperties->maFillColor.setSchemeClr(XML_dk1);
         pLastRowTopBorder->maLineFill.maFillColor.setSchemeClr(XML_lt1);
+
+        sal_Int32 accent_val;
 
         if (!accent_name.isEmpty())
         {
@@ -794,6 +811,8 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
             pFirstRowFillProperties->maFillColor.setSchemeClr(XML_accent4);
         else if (accent_name == "Accent5")
             pFirstRowFillProperties->maFillColor.setSchemeClr(XML_accent6);
+
+        sal_Int32 accent_val;
 
         if (!accent_name.isEmpty())
             accent_val = tokens[mStyleIdMap[styleId].second];
