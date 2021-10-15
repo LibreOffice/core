@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "804f40fb_cd6ddf70",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-15T10:08:00Z",
+      "side": 1,
+      "message": "I must recognize I didn\u0027t understand http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4381.html.\nI don\u0027t know what\u0027s the purpose or why it\u0027s error-prone to use \"using std::swap;\"\nI mean why can\u0027t we just use \"std::swap\" and the compiler couldn\u0027t do the job correctly ?\nI wonder why C++ has so much tricks...\n\nAnyway, would it be possible to add it on code as a comment?",
+      "revId": "32d03f6d884c69474579b788671e4705c2dff75c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
