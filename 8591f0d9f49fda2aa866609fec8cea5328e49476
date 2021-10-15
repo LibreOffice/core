@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd1b9aba_7ee0267f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-15T14:34:54Z",
+      "side": 1,
+      "message": "Thought you might be interested in this one.\nI had to use o3tl::narrowing sometimes, hope it\u0027s ok.",
+      "revId": "8591f0d9f49fda2aa866609fec8cea5328e49476",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
