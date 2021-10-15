@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cc949c3_0ca8f911",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-15T06:20:39Z",
+      "side": 1,
+      "message": "documented as \u003chttps://wiki.documentfoundation.org/index.php?title\u003dReleaseNotes/7.3\u0026oldid\u003d401377\u003e \"XLocale removal\"",
+      "revId": "a74d15adced66dfcd63fbec0ce23bb4f7089824b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
