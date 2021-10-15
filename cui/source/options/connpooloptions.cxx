@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include "connpooloptions.hxx"
 #include "connpoolsettings.hxx"
@@ -60,9 +61,11 @@ namespace offapp
                                         m_xDriverList->get_height_rows(15));
         m_xDriverList->show();
 
-        std::vector<int> aWidths;
-        aWidths.push_back(m_xDriverList->get_approximate_digit_width() * 50);
-        aWidths.push_back(m_xDriverList->get_approximate_digit_width() * 8);
+        std::vector<int> aWidths
+        {
+            o3tl::narrowing<int>(m_xDriverList->get_approximate_digit_width() * 50),
+            o3tl::narrowing<int>(m_xDriverList->get_approximate_digit_width() * 8)
+        };
         m_xDriverList->set_column_fixed_widths(aWidths);
 
         m_xEnablePooling->connect_toggled( LINK(this, ConnectionPoolOptionsPage, OnEnabledDisabled) );

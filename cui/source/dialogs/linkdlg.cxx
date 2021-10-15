@@ -18,6 +18,7 @@
  */
 
 #include <linkdlg.hxx>
+#include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
 
 #include <tools/diagnose_ex.h>
@@ -102,10 +103,12 @@ SvBaseLinksDlg::SvBaseLinksDlg(weld::Window * pParent, LinkManager* pMgr, bool b
 
     m_xTbLinks->set_selection_mode(SelectionMode::Multiple);
 
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xTbLinks->get_approximate_digit_width() * 30);
-    aWidths.push_back(m_xTbLinks->get_approximate_digit_width() * 20);
-    aWidths.push_back(m_xTbLinks->get_approximate_digit_width() * 20);
+    std::vector<int> aWidths
+    {
+        o3tl::narrowing<int>(m_xTbLinks->get_approximate_digit_width() * 30),
+        o3tl::narrowing<int>(m_xTbLinks->get_approximate_digit_width() * 20),
+        o3tl::narrowing<int>(m_xTbLinks->get_approximate_digit_width() * 20)
+    };
     m_xTbLinks->set_column_fixed_widths(aWidths);
 
     // UpdateTimer for DDE-/Grf-links, which are waited for
