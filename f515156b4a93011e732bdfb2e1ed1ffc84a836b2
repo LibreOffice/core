@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b9981b4_7daa0510",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-15T06:30:36Z",
+      "side": 1,
+      "message": "Adding some reviewers based on \u0027git log sal/rtl/bootstrap.cxx\u0027 output.",
+      "revId": "f515156b4a93011e732bdfb2e1ed1ffc84a836b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
