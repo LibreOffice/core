@@ -200,6 +200,7 @@ public:
     void testTdf139258_rotated_image();
     void testTdf142854_GridVisibilityImportXlsxInHeadlessMode();
     void testTdf144642_RowHeightRounding();
+    void testTdf145129_DefaultRowHeightRounding();
     void testTdf140431();
     void testCheckboxFormControlXlsxExport();
     void testButtonFormControlXlsxExport();
@@ -311,6 +312,7 @@ public:
     CPPUNIT_TEST(testTdf139258_rotated_image);
     CPPUNIT_TEST(testTdf142854_GridVisibilityImportXlsxInHeadlessMode);
     CPPUNIT_TEST(testTdf144642_RowHeightRounding);
+    CPPUNIT_TEST(testTdf145129_DefaultRowHeightRounding);
     CPPUNIT_TEST(testTdf140431);
     CPPUNIT_TEST(testCheckboxFormControlXlsxExport);
     CPPUNIT_TEST(testButtonFormControlXlsxExport);
@@ -2569,6 +2571,20 @@ void ScExportTest2::testTdf144642_RowHeightRounding()
     // 555twips == 27.75pt == 9.79mm
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(555), rDoc2.GetRowHeight(0, 0));
     CPPUNIT_ASSERT_EQUAL(sal_uLong(555 * 26), rDoc2.GetRowHeight(0, 25, 0, true));
+    xShell->DoClose();
+}
+
+void ScExportTest2::testTdf145129_DefaultRowHeightRounding()
+{
+    // MS Excel round down row heights to 0.75pt
+    // Same as Tdf144642 but with default row height.
+
+    ScDocShellRef xShell = loadDoc(u"tdf145129_DefaultRowHeight_28.35pt_SavedByExcel.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+    ScDocument& rDoc = xShell->GetDocument();
+    // 555twips == 27.75pt == 9.79mm
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(555), rDoc.GetRowHeight(0, 0));
+    CPPUNIT_ASSERT_EQUAL(sal_uLong(555 * 52), rDoc.GetRowHeight(0, 51, 0, true));
     xShell->DoClose();
 }
 
