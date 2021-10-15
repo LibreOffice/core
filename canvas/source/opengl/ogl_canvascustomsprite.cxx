@@ -17,6 +17,7 @@
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <canvas/canvastools.hxx>
+#include <o3tl/safeint.hxx>
 #include <verifyinput.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -246,10 +247,7 @@ namespace oglcanvas
         glVertex2d(maSize.Width+4,maSize.Height+4);
         glEnd();
 
-        std::vector<double> aVec;
-        aVec.push_back(mfAlpha);
-        aVec.push_back(mfPriority);
-        aVec.push_back(maCanvasHelper.getRecordedActionCount());
+        std::vector<double> aVec { mfAlpha, mfPriority, o3tl::narrowing<double>(maCanvasHelper.getRecordedActionCount()) };
         renderOSD( aVec, 10 );
 
         return true;
