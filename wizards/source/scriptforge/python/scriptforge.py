@@ -2181,6 +2181,54 @@ class SFDocuments:
                                    printevenpages, printoddpages, printimages)
 
 
+# #####################################################################################################################
+#                       SFWidgets CLASS    (alias of SFWidgets Basic library)                                       ###
+# #####################################################################################################################
+class SFWidgets:
+    """
+        The SFWidgets class manages toolbars and popup menus
+        """
+    pass
+
+    # #########################################################################
+    # SF_PopupMenu CLASS
+    # #########################################################################
+    class SF_PopupMenu(SFServices):
+        """
+            Display a popup menu anywhere and any time.
+            A popup menu is usually triggered by a mouse action (typically a right-click) on a dialog, a form
+            or one of their controls. In this case the menu will be displayed below the clicked area.
+            When triggered by other events, including in the normal flow of a user script, the script should
+            provide the coordinates of the topleft edge of the menu versus the actual component.
+            The menu is described from top to bottom. Each menu item receives a numeric and a string identifier.
+            The execute() method returns the item selected by the user.
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'SFWidgets.PopupMenu'
+        servicesynonyms = ('popupmenu', 'sfwidgets.popupmenu')
+        serviceproperties = dict(ShortcutCharacter = False, SubmenuCharacter = False)
+
+        @classmethod
+        def ReviewServiceArgs(cls, event = None, x = 0, y = 0, submenuchar = ''):
+            """
+                Transform positional and keyword arguments into positional only
+                """
+            return event, x, y, submenuchar
+
+        def AddCheckBox(self, menuitem, name = '', status = False, icon = '', tooltip = ''):
+            return self.ExecMethod(self.vbMethod, 'AddCheckBox', menuitem, name, status, icon, tooltip)
+
+        def AddItem(self, menuitem, name = '', icon = '', tooltip = ''):
+            return self.ExecMethod(self.vbMethod, 'AddItem', menuitem, name, icon, tooltip)
+
+        def AddRadioButton(self, menuitem, name = '', status = False, icon = '', tooltip = ''):
+            return self.ExecMethod(self.vbMethod, 'AddRadioButton', menuitem, name, status, icon, tooltip)
+
+        def Execute(self, returnid = True):
+            return self.ExecMethod(self.vbMethod, 'Execute', returnid)
+
+
 # ##############################################False##################################################################
 #                           CreateScriptService()                                                                   ###
 # #####################################################################################################################

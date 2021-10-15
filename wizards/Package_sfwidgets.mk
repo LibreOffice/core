@@ -17,49 +17,14 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-$(eval $(call gb_Module_Module,wizards))
+$(eval $(call gb_Package_Package,wizards_basicsrvsfwidgets,$(SRCDIR)/wizards/source/sfwidgets))
 
-$(eval $(call gb_Module_add_targets,wizards,\
-	CustomTarget_share \
-	CustomTarget_wizards \
-	Package_access2base \
-	Package_depot \
-	Package_euro \
-	Package_form \
-	Package_gimmicks \
-	Package_import \
-	Package_share \
-	Package_scriptforge \
-	Package_sfdatabases \
-	Package_sfdialogs \
-	Package_sfdocuments \
-	Package_sfwidgets \
-	Package_standard \
-	Package_template \
-	Package_tools \
-	Package_tutorials \
-	Package_usr \
-	Package_wizards \
-	Package_wizards_properties \
-	Pyuno_fax \
-	Pyuno_letter \
-	Pyuno_agenda \
-	Pyuno_commonwizards \
+$(eval $(call gb_Package_add_files,wizards_basicsrvsfwidgets,$(LIBO_SHARE_FOLDER)/basic/SFWidgets,\
+	SF_PopupMenu.xba \
+	SF_Register.xba \
+	__License.xba \
+	dialog.xlb \
+	script.xlb \
 ))
-
-$(eval $(call gb_Module_add_l10n_targets,wizards,\
-	AllLangMoTarget_wiz \
-))
-
-ifeq ($(ENABLE_JAVA),TRUE)
-$(eval $(call gb_Module_add_targets,wizards,\
-	Jar_commonwizards \
-	Jar_form \
-	Jar_query \
-	Jar_report \
-	Jar_reportbuilder \
-	Jar_table \
-))
-endif
 
 # vim: set noet sw=4 ts=4:
