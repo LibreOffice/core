@@ -75,6 +75,7 @@ $(eval $(call gb_CppunitTest_use_packages,desktop_lib, \
     wizards_basicsrvsfdatabases \
     wizards_basicsrvsfdialogs \
     wizards_basicsrvsfdocuments \
+    wizards_basicsrvsfwidgets \
     wizards_basicsrvtemplate \
     wizards_basicsrvtools \
 ))

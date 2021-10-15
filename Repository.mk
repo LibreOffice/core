@@ -939,6 +939,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	wizards_basicsrvsfdatabases \
 	wizards_basicsrvsfdialogs \
 	wizards_basicsrvsfdocuments \
+	wizards_basicsrvsfwidgets \
 	wizards_basicsrvstandard \
 	wizards_basicsrvtemplate \
 	wizards_basicsrvtools \
