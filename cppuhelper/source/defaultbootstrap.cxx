@@ -57,27 +57,26 @@ cppu::defaultBootstrap_InitialComponentContext(OUString const & iniUri)
     smgr->init(getBootstrapVariable(bs, "UNO_SERVICES"));
     rtl::Reference tmgr(new cppuhelper::TypeManager);
     tmgr->init(getBootstrapVariable(bs, "UNO_TYPES"));
-    std::vector< cppu::ContextEntry_Init > context_values;
-    context_values.push_back(
+    std::vector< cppu::ContextEntry_Init > context_values
+    {
         cppu::ContextEntry_Init(
             "/singletons/com.sun.star.lang.theServiceManager",
             css::uno::Any(
                 css::uno::Reference< css::uno::XInterface >(
                     static_cast< cppu::OWeakObject * >(smgr.get()))),
-            false));
-    context_values.push_back(
+            false),
         cppu::ContextEntry_Init(
             "/singletons/com.sun.star.reflection.theTypeDescriptionManager",
             css::uno::Any(
                 css::uno::Reference< css::uno::XInterface >(
                     static_cast< cppu::OWeakObject * >(tmgr.get()))),
-            false));
-    context_values.push_back( //TODO: from services.rdb?
-        cppu::ContextEntry_Init(
+            false),
+        cppu::ContextEntry_Init( //TODO: from services.rdb?
             "/singletons/com.sun.star.util.theMacroExpander",
             css::uno::Any(
                 cppuhelper::detail::create_bootstrap_macro_expander_factory()),
-            true));
+            true)
+    };
     smgr->addSingletonContextEntries(&context_values);
     context_values.push_back(
         cppu::ContextEntry_Init(
