@@ -105,7 +105,12 @@ void MacrosTest::setUpNssGpg(const test::Directories& rDirectories, const OUStri
     OUString aTargetPath;
     osl::FileBase::getSystemPathFromFileURL(aTargetDir, aTargetPath);
 
-#ifndef _WIN32
+#ifdef _WIN32
+    // CryptoAPI test certificates
+    osl::File::copy(aSourceDir + "test.p7b", aTargetDir + "/test.p7b");
+    OUString caVar("LIBO_TEST_CRYPTOAPI_PKCS7");
+    osl_setEnvironment(caVar.pData, aTargetPath.pData);
+#else
     OUString mozCertVar("MOZILLA_CERTIFICATE_FOLDER");
     osl_setEnvironment(mozCertVar.pData, aTargetPath.pData);
 #endif
