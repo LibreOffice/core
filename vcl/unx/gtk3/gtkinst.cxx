@@ -2236,11 +2236,13 @@ namespace
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_container_remove(GTK_CONTAINER(pContainer), pChild);
 #else
-        assert(GTK_IS_BOX(pContainer) || GTK_IS_GRID(pContainer));
+        assert(GTK_IS_BOX(pContainer) || GTK_IS_GRID(pContainer) || GTK_IS_POPOVER(pContainer));
         if (GTK_IS_BOX(pContainer))
             gtk_box_remove(GTK_BOX(pContainer), pChild);
         else if (GTK_IS_GRID(pContainer))
             gtk_grid_remove(GTK_GRID(pContainer), pChild);
+        else if (GTK_IS_POPOVER(pContainer))
+            gtk_popover_set_child(GTK_POPOVER(pContainer), nullptr);
 #endif
     }
 
@@ -2249,11 +2251,13 @@ namespace
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_container_add(GTK_CONTAINER(pContainer), pChild);
 #else
-        assert(GTK_IS_BOX(pContainer) || GTK_IS_GRID(pContainer));
+        assert(GTK_IS_BOX(pContainer) || GTK_IS_GRID(pContainer) || GTK_IS_POPOVER(pContainer));
         if (GTK_IS_BOX(pContainer))
             gtk_box_append(GTK_BOX(pContainer), pChild);
         else if (GTK_IS_GRID(pContainer))
             gtk_grid_attach(GTK_GRID(pContainer), pChild, 0, 0, 1, 1);
+        else if (GTK_IS_POPOVER(pContainer))
+            gtk_popover_set_child(GTK_POPOVER(pContainer), pChild);
 #endif
     }
 
