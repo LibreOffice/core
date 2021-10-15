@@ -67,11 +67,6 @@ void ScEditWindow::makeEditEngine()
     m_xEditEngine.reset(new ScHeaderEditEngine(EditEngine::CreatePool().get()));
 }
 
-ScHeaderEditEngine* ScEditWindow::GetEditEngine() const
-{
-    return static_cast<ScHeaderEditEngine*>(m_xEditEngine.get());
-}
-
 void ScEditWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     OutputDevice& rDevice = pDrawingArea->get_ref_device();
@@ -118,7 +113,7 @@ ScEditWindow::~ScEditWindow()
 
 void ScEditWindow::SetNumType(SvxNumType eNumType)
 {
-    ScHeaderEditEngine* pEditEngine = GetEditEngine();
+    ScHeaderEditEngine* pEditEngine = static_cast<ScHeaderEditEngine*>(m_xEditEngine.get());
     pEditEngine->SetNumType(eNumType);
     pEditEngine->UpdateFields();
 }
@@ -147,12 +142,12 @@ void ScEditWindow::SetFont( const ScPatternAttr& rPattern )
     pSet->Put( rPattern.GetItem(ATTR_CTL_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CTL) );
     if (mbRTL)
         pSet->Put( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
-    GetEditEngine()->SetDefaults( std::move(pSet) );
+    static_cast<ScHeaderEditEngine*>(m_xEditEngine.get())->SetDefaults( std::move(pSet) );
 }
 
 void ScEditWindow::SetText( const EditTextObject& rTextObject )
 {
-    GetEditEngine()->SetTextCurrentDefaults(rTextObject);
+    static_cast<ScHeaderEditEngine*>(m_xEditEngine.get())->SetTextCurrentDefaults(rTextObject);
 }
 
 void ScEditWindow::InsertField( const SvxFieldItem& rFld )
