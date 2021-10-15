@@ -1263,7 +1263,8 @@ void Test::TestPdfInEmf()
     // - Actual  : 0
     // i.e. there was no size hint, the shape with 14cm height had a bitmap-from-PDF fill, the PDF
     // height was only 5cm, so it looked blurry.
-    CPPUNIT_ASSERT_EQUAL(14321.0, pVectorGraphicData->getSizeHint().getY());
+    // Tolerance was added later based on results on different systems.
+    CPPUNIT_ASSERT_LESSEQUAL(1.0, abs(14321.0 - pVectorGraphicData->getSizeHint().getY()));
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 0
