@@ -1101,6 +1101,13 @@ void ScFormulaCell::GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows )
         if (pMat)
         {
             pMat->GetDimensions( rCols, rRows );
+            if (pCode->IsHyperLink())
+            {
+                // Row 2 element is the URL that is not to be displayed and the
+                // result dimension not to be extended.
+                assert(rRows == 2);
+                rRows = 1;
+            }
             return;
         }
     }

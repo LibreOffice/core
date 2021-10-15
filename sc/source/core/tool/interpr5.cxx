@@ -3239,6 +3239,25 @@ void ScInterpreter::ScMatRef()
         pMat->GetDimensions( nCols, nRows );
         SCSIZE nC = static_cast<SCSIZE>(aPos.Col() - aAdr.Col());
         SCSIZE nR = static_cast<SCSIZE>(aPos.Row() - aAdr.Row());
+#if 0
+        // XXX: this could be an additional change for tdf#145085 to not
+        // display the URL in a voluntary entered 2-rows array context.
+        // However, that might as well be used on purpose to implement a check
+        // on the URL, which existing documents may have done, the more that
+        // before the accompanying change of
+        // ScFormulaCell::GetResultDimensions() the cell array was forced to
+        // two rows. Do not change without compelling reason. Note that this
+        // repeating top cell is what Excel implements, but it has no
+        // additional value so probably isn't used there. Exporting to and
+        // using in Excel though will lose this capability.
+        if (aCell.mpFormula->GetCode()->IsHyperLink())
+        {
+            // Row 2 element is the URL that is not to be displayed, fake a
+            // 1-row cell-text-only matrix that is repeated.
+            assert(nRows == 2);
+            nR = 0;
+        }
+#endif
         if ((nCols <= nC && nCols != 1) || (nRows <= nR && nRows != 1))
             PushNA();
         else
