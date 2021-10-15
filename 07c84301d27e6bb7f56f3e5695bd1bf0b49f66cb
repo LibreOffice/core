@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2378da2c_60f68ce0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-15T15:54:55Z",
+      "side": 1,
+      "message": "I\u0027m comfortable approving this without a reviewer because\n-This is only dealing with one situation - applying a paragraph style\n-IsTableMode() is used all over the place when checking ring container \u003e 1\n\nI understand IsTableMode means it has moved beyond just the paragraph and is now selecting a part of the table itself. So a paragraph that isn\u0027t selected (no has mark) must be in a cell that isn\u0027t selected, and thus we don\u0027t want to apply the paragraph style here. Simple. Targeted. Safe.",
+      "revId": "07c84301d27e6bb7f56f3e5695bd1bf0b49f66cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
