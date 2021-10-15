@@ -34,6 +34,24 @@
       "parentUuid": "e40d7682_3246587d",
       "revId": "51c9201abfc99c5acc001c12823d1dae9fe9c0d6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc7e2e6d_d5f5c2d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-15T08:02:44Z",
+      "side": 1,
+      "message": "Thanks!\n\n\u003e Do you plan to do that \"TODO: also drop non-const operator[], but introduce operator[] in SequenceRange\" in this or in a follow-up change?\n\nIn a follow-up. This one is too large already. Basically, my vision is eventually making Sequence have read-only internal API, and some explicit modifiable access functions, to make it conscious decision to trigger that.",
+      "parentUuid": "7d2ded50_f401a594",
+      "revId": "51c9201abfc99c5acc001c12823d1dae9fe9c0d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
