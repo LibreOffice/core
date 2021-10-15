@@ -667,8 +667,13 @@ void WorksheetFragment::importSheetFormatPr( const AttributeList& rAttribs )
     // XML_outlineLevelRow
     // XML_outlineLevelCol
     // as it will be updated during export to OOXML
+    double fDefaultRowHeight = rAttribs.getDouble(XML_defaultRowHeight, 0.0);
+    if (getFilter().isMSODocument())
+    {
+        fDefaultRowHeight -= fmod(fDefaultRowHeight, 0.75);  //round down to 0.75pt
+    }
     setDefaultRowSettings(
-        rAttribs.getDouble( XML_defaultRowHeight, 0.0 ),
+        fDefaultRowHeight,
         rAttribs.getBool( XML_customHeight, false ),
         rAttribs.getBool( XML_zeroHeight, false ),
         rAttribs.getBool( XML_thickTop, false ),
