@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "864a3d99_b2f83070",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-10-15T19:10:39Z",
+      "side": 1,
+      "message": "IIRC its not an error or mistake that it returns that, e.g. https://www.lwithers.me.uk/articles/covariant.html\nWe similarly typically overload SfxPoolItem\u0027s Clone() operator and the derivations return pointers to classes derived from the base class\u0027s return type",
+      "revId": "3d229346e11b14b6163660271a3b7d91ea9db93f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
