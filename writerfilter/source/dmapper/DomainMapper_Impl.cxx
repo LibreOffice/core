@@ -354,6 +354,11 @@ DomainMapper_Impl::DomainMapper_Impl(
 
     appendTableManager( );
     GetBodyText();
+    if (!m_xBodyText)
+    {
+        throw uno::Exception("failed to find body text", nullptr);
+    }
+
     uno::Reference< text::XTextAppend > xBodyTextAppend( m_xBodyText, uno::UNO_QUERY );
     m_aTextAppendStack.push(TextAppendContext(xBodyTextAppend,
                 m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : m_xBodyText->createTextCursorByRange(m_xInsertTextRange)));
