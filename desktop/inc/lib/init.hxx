@@ -103,6 +103,8 @@ namespace desktop {
         virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) override;
         virtual void libreOfficeKitViewCallbackWithViewId(int nType, const char* pPayload, int nViewId) override;
         virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart) override;
+        virtual void libreOfficeKitViewUpdatedCallback(int nType) override;
+        virtual void libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) override;
 
     private:
         struct CallbackData
@@ -171,6 +173,8 @@ namespace desktop {
         queue_type2::iterator toQueue2(queue_type1::iterator);
         queue_type2::reverse_iterator toQueue2(queue_type1::reverse_iterator);
         void queue(const int type, CallbackData& data);
+        void enqueueUpdatedTypes();
+        void enqueueUpdatedType( int type, SfxViewShell* sourceViewShell, int viewId );
 
         /** we frequently want to scan the queue, and mostly when we do so, we only care about the element type
             so we split the queue in 2 to make the scanning cache friendly. */
@@ -178,6 +182,25 @@ namespace desktop {
         queue_type2 m_queue2;
         std::map<int, std::string> m_states;
         std::unordered_map<int, std::unordered_map<int, std::string>> m_viewStates;
+
+        // For some types only the last message matters (see isUpdatedType()) or only the last message
+        // per each viewId value matters (see isUpdatedTypePerViewId()), so instead of using push model
+        // where we'd get flooded by repeated messages (which might be costly to generate and process),
+        // the preferred way is that libreOfficeKitViewUpdatedCallback()
+        // or libreOfficeKitViewUpdatedCallbackPerViewId() get called to notify about such a message being
+        // needed, and we'll set a flag here to fetch the actual message before flushing.
+        void setUpdatedType( int nType, bool value );
+        void setUpdatedTypePerViewId( int nType, int nViewId, int nSourceViewId, bool value );
+        void resetUpdatedType( int nType);
+        void resetUpdatedTypePerViewId( int nType, int nViewId );
+        std::vector<bool> m_updatedTypes; // index is type, value is if set
+        struct PerViewIdData
+        {
+            bool set; // value is if set
+            int sourceViewId;
+        };
+        std::unordered_map<int, std::vector<PerViewIdData>> m_updatedTypesPerViewId; // key is view, index is type
+
         LibreOfficeKitDocument* m_pDocument;
         int m_viewId = -1; // view id of the associated SfxViewShell
         LibreOfficeKitCallback m_pCallback;

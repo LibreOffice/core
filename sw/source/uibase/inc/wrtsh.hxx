@@ -493,6 +493,8 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     void ToggleOutlineContentVisibility(SwNode* pNd, bool bForceFold = false);
     void ToggleOutlineContentVisibility(const size_t nPos, bool bForceFold = false);
 
+    OString getLOKPayload(int nType, int nViewId) const;
+
 private:
 
     SAL_DLLPRIVATE void  OpenMark();

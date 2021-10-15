@@ -109,13 +109,27 @@ public:
     static void notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc, bool bInvalidateAll = true);
     /// Emits a LOK_CALLBACK_INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed.
     static void notifyInvalidation(SfxViewShell const* pThisView, tools::Rectangle const *);
-    /// Emits a LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, but tweaks it according to setOptionalFeatures() if needed.
-    static void notifyVisCursorInvalidation(OutlinerViewShell const* pThisView, const OString& rRectangle, bool bMispelledWord = false, const OString& rHyperlink = "");
     /// Notifies all views with the given type and payload.
     static void notifyAllViews(int nType, const OString& rPayload);
 
     /// Notify about the editing context change.
     static void notifyContextChange(SfxViewShell const* pViewShell, const OUString& aApplication, const OUString& aContext);
+
+    // Notify about the given type needing an update.
+    static void notifyUpdate(SfxViewShell const* pViewShell, int nType);
+    // Notify about the given type needing a per-viewid update.
+    static void notifyUpdatePerViewId(SfxViewShell const* pViewShell, int nType);
+    /// Same as notifyUpdatePerViewId(), pTargetShell will be notified, relevant viewId in pViewShell,
+    /// pSourceView->getLOKPayload() will be called to get the data.
+    static void notifyUpdatePerViewId(SfxViewShell const* pTargetShell, SfxViewShell const* pViewShell,
+        SfxViewShell const* pSourceShell, int nType);
+    // Notify other views about the given type needing a per-viewid update.
+    static void notifyOtherViewsUpdatePerViewId(SfxViewShell const* pViewShell, int nType);
+
+    static OString makePayloadJSON(const SfxViewShell* pThisView, int nViewId, const OString& rKey, const OString& rPayload);
+    /// Makes a LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR payload, but tweaks it according to setOptionalFeatures() if needed.
+    static OString makeVisCursorInvalidation(int nViewId, const OString& rRectangle,
+                                             bool bMispelledWord = false, const OString& rHyperlink = "");
 
     /// Helper for posting async key event
     static void postKeyEventAsync(const VclPtr<vcl::Window> &xWindow,

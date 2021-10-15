@@ -19,6 +19,8 @@
 
 #include <wrtsh.hxx>
 
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+
 // Private methods, which move the cursor over search.
 // The removal of the selection must be made on the level above.
 
@@ -230,6 +232,17 @@ bool SwWrtShell::BwdPara_()
     ClearMark();
     Combine();
     return bRet;
+}
+
+OString SwWrtShell::getLOKPayload(int nType, int nViewId) const
+{
+    switch(nType)
+    {
+        case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+        case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
+            return GetVisibleCursor()->getLOKPayload(nType, nViewId);
+    }
+    abort();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
