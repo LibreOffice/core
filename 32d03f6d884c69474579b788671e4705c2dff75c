@@ -16,6 +16,24 @@
       "message": "I must recognize I didn\u0027t understand http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4381.html.\nI don\u0027t know what\u0027s the purpose or why it\u0027s error-prone to use \"using std::swap;\"\nI mean why can\u0027t we just use \"std::swap\" and the compiler couldn\u0027t do the job correctly ?\nI wonder why C++ has so much tricks...\n\nAnyway, would it be possible to add it on code as a comment?",
       "revId": "32d03f6d884c69474579b788671e4705c2dff75c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d123ed7_28f57235",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-15T11:34:06Z",
+      "side": 1,
+      "message": "\u003e I don\u0027t know what\u0027s the purpose or why it\u0027s error-prone to use \"using std::swap;\"\n\u003e I mean why can\u0027t we just use \"std::swap\" and the compiler couldn\u0027t do the job correctly ?\n\nBecause, if the template parameter type RandItr is some user-provided class N::C, say, with a user-provided N::swap(C\u0026,C\u0026), then using qualified std::swap doesn\u0027t find that N::swap overload (but using unqualified swap does).\n\n\u003e Anyway, would it be possible to add it on code as a comment?\n\nIt\u0027s a standard idiom.  A comment would IMO be more noise than value-add.",
+      "parentUuid": "804f40fb_cd6ddf70",
+      "revId": "32d03f6d884c69474579b788671e4705c2dff75c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
