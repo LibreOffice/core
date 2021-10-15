@@ -18,7 +18,7 @@
  */
 
 #include <macroass.hxx>
-
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/string.hxx>
 #include <comphelper/processfactory.hxx>
@@ -326,8 +326,10 @@ void SfxMacroTabPage::InitAndSetHandler()
     mpImpl->m_xGroupLB->connect_changed(LINK(this, SfxMacroTabPage, SelectGroup_Impl));
     mpImpl->m_xMacroLB->connect_changed(LINK(this, SfxMacroTabPage, SelectMacro_Impl));
 
-    std::vector<int> aWidths;
-    aWidths.push_back(rListBox.get_approximate_digit_width() * 35);
+    std::vector<int> aWidths
+    {
+        o3tl::narrowing<int>(rListBox.get_approximate_digit_width() * 35)
+    };
     rListBox.set_column_fixed_widths(aWidths);
 
     mpImpl->m_xEventLB->show();

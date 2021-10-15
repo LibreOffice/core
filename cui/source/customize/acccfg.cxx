@@ -889,8 +889,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage,
     auto nNewTab = nMaxWidth + 5; // additional space
 
     // initialize Entriesbox
-    std::vector<int> aWidths;
-    aWidths.push_back(nNewTab);
+    std::vector<int> aWidths{ nNewTab };
     m_xEntriesBox->set_column_fixed_widths(aWidths);
 
     //Initialize search util

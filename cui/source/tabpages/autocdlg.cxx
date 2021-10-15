@@ -18,6 +18,7 @@
  */
 
 #include <i18nutil/unicode.hxx>
+#include <o3tl/safeint.hxx>
 #include <vcl/event.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/settings.hxx>
@@ -377,9 +378,11 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage(weld::Container* pPage, weld::D
     m_xCheckLB->connect_row_activated(LINK(this, OfaSwAutoFmtOptionsPage, DoubleClickEditHdl));
     m_xCheckLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xCheckLB->get_pixel_size(m_xCheckLB->get_column_title(0)).Width() * 2);
-    aWidths.push_back(m_xCheckLB->get_pixel_size(m_xCheckLB->get_column_title(1)).Width() * 2);
+    std::vector<int> aWidths
+    {
+        o3tl::narrowing<int>(m_xCheckLB->get_pixel_size(m_xCheckLB->get_column_title(0)).Width() * 2),
+        o3tl::narrowing<int>(m_xCheckLB->get_pixel_size(m_xCheckLB->get_column_title(1)).Width() * 2)
+    };
     m_xCheckLB->set_column_fixed_widths(aWidths);
 
     m_xEditPB->connect_clicked(LINK(this, OfaSwAutoFmtOptionsPage, EditHdl));
@@ -1584,9 +1587,11 @@ OfaQuoteTabPage::OfaQuoteTabPage(weld::Container* pPage, weld::DialogController*
     if ( bShowSWOptions )
     {
         m_xSwCheckLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
-        std::vector<int> aWidths;
-        aWidths.push_back(m_xSwCheckLB->get_pixel_size(m_xSwCheckLB->get_column_title(0)).Width() * 2);
-        aWidths.push_back(m_xSwCheckLB->get_pixel_size(m_xSwCheckLB->get_column_title(1)).Width() * 2);
+        std::vector<int> aWidths
+        {
+            o3tl::narrowing<int>(m_xSwCheckLB->get_pixel_size(m_xSwCheckLB->get_column_title(0)).Width() * 2),
+            o3tl::narrowing<int>(m_xSwCheckLB->get_pixel_size(m_xSwCheckLB->get_column_title(1)).Width() * 2)
+        };
         m_xSwCheckLB->set_column_fixed_widths(aWidths);
         m_xCheckLB->hide();
     }

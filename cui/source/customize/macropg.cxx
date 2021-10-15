@@ -27,6 +27,7 @@
 #include <helpids.h>
 #include <headertablistbox.hxx>
 #include "macropg_impl.hxx"
+#include <o3tl/safeint.hxx>
 #include <svl/macitem.hxx>
 #include <svx/svxids.hrc>
 #include <strings.hrc>
@@ -500,9 +501,11 @@ void SvxMacroTabPage_::InitAndSetHandler( const Reference< container::XNameRepla
     mpImpl->xEventLB->connect_row_activated( LINK(this, SvxMacroTabPage_, DoubleClickHdl_Impl ) );
     mpImpl->xEventLB->connect_changed( LINK( this, SvxMacroTabPage_, SelectEvent_Impl ));
 
-    std::vector<int> aWidths;
-    aWidths.push_back(mpImpl->xEventLB->get_approximate_digit_width() * 32);
-    aWidths.push_back(mpImpl->xEventLB->get_checkbox_column_width());
+    std::vector<int> aWidths
+    {
+        o3tl::narrowing<int>(mpImpl->xEventLB->get_approximate_digit_width() * 32),
+        mpImpl->xEventLB->get_checkbox_column_width()
+    };
     mpImpl->xEventLB->set_column_fixed_widths(aWidths);
 
     mpImpl->xEventLB->show();

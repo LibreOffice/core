@@ -19,6 +19,7 @@
 
 #include <dbregister.hxx>
 #include "dbregistersettings.hxx"
+#include <o3tl/safeint.hxx>
 #include <svl/filenotation.hxx>
 #include <helpids.h>
 #include <tools/debug.hxx>
@@ -93,8 +94,10 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage(weld::Container* pPage, wel
                       m_xPathBox->get_height_rows(12));
     m_xPathBox->set_size_request(aControlSize.Width(), aControlSize.Height());
 
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xPathBox->get_approximate_digit_width() * 20);
+    std::vector<int> aWidths
+    {
+        o3tl::narrowing<int>(m_xPathBox->get_approximate_digit_width() * 20)
+    };
     m_xPathBox->set_column_fixed_widths(aWidths);
 
     m_xNew->connect_clicked( LINK( this, DbRegistrationOptionsPage, NewHdl ) );
@@ -169,8 +172,10 @@ void DbRegistrationOptionsPage::Reset( const SfxItemSet* rSet )
     {
         sal_Int32 nIdx {0};
         // restore column width
-        std::vector<int> aWidths;
-        aWidths.push_back(aUserData.getToken(0, ';', nIdx).toInt32());
+        std::vector<int> aWidths
+        {
+            aUserData.getToken(0, ';', nIdx).toInt32()
+        };
         m_xPathBox->set_column_fixed_widths(aWidths);
         // restore sort direction
         bool bUp = aUserData.getToken(0, ';', nIdx).toInt32() != 0;
