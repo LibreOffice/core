@@ -127,6 +127,44 @@ void lcl_AssertRectEqualWithTolerance(std::string_view sInfo, const tools::Recta
                            std::abs(rExpected.GetHeight() - rActual.GetHeight()) <= nTolerance);
 }
 
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145111_anchor_in_Fontwork)
+{
+    // The tested positions depend on dpi.
+    if (!IsDefaultDPI())
+        return;
+
+    // tdf#145004 In case ScaleX is true in property TextPath, SDRTEXTVERTADJUST is
+    // evaluated and should shift the Fontwork text. That did not work for
+    // 'Top-Left' and 'Bottom-Left'.
+
+    // Load document
+    OUString aURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf145111_TL_BL_Fontwork.odp";
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.comp.presentation.PresentationDocument");
+
+    {
+        // First shape has anchor set to Top-Left, which shifts Fontwork text down.
+        uno::Reference<drawing::XShape> xShape(getShape(0));
+        SdrObjCustomShape& rSdrCustomShape(
+            static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
+
+        // Without the fix in place top was 2295, but should be 2916 for 96dpi.
+        // Was 2184, should be 2886 for 120dpi.
+        tools::Rectangle aBoundRect(rSdrCustomShape.GetCurrentBoundRect());
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(2916), aBoundRect.Top(), 5);
+    }
+    {
+        // Second shape has anchor set to Bottom-Left, which shifts Fontwork text up.
+        uno::Reference<drawing::XShape> xShape(getShape(1));
+        SdrObjCustomShape& rSdrCustomShape(
+            static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
+
+        // Without the fix in place top was 10294, but should be 9519 for 96dpi.
+        // Was 10184, should be 9481 for 120dpi.
+        tools::Rectangle aBoundRect(rSdrCustomShape.GetCurrentBoundRect());
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(9519), aBoundRect.Top(), 5);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145004_gap_by_ScaleX)
 {
     if (!IsDefaultDPI())

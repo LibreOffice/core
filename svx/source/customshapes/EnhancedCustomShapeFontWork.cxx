@@ -494,7 +494,7 @@ static bool GetFontWorkOutline(
                 else if ( eHorzAdjust == SDRTEXTHORZADJUST_RIGHT )
                     nHorzDiff = ( rFWData.fHorizontalTextScaling * rTextArea.aBoundRect.GetWidth() - rParagraph.aBoundRect.GetWidth() );
 
-                if (nHorzDiff)
+                if (nHorzDiff || nVertDiff)
                 {
                     for ( auto& rCharacter : rParagraph.vCharacters )
                     {
