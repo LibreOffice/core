@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e40d7682_3246587d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-15T05:33:25Z",
+      "side": 1,
+      "message": "Stephan, Noel: could you please review? Specifically, if the changes in Sequence.h* and in plugins make sense? Thank you!",
+      "revId": "51c9201abfc99c5acc001c12823d1dae9fe9c0d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
