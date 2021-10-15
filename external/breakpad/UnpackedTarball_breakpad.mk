@@ -15,7 +15,10 @@ $(eval $(call gb_UnpackedTarball_set_tarball,breakpad,$(BREAKPAD_TARBALL)))
 
 # external/breakpad/0001-Handle-race-between-ExceptionHandler-SignalHandler-a.patch upstreamed at
 #  <https://chromium-review.googlesource.com/c/breakpad/breakpad/+/1176811> "Handle race between
-#  ExceptionHandler::SignalHandler and ~ExceptionHandler":
+#  ExceptionHandler::SignalHandler and ~ExceptionHandler";
+# external/breakpad/SIGSTKSZ.patch upstreamed at
+#  <https://chromium-review.googlesource.com/c/breakpad/breakpad/+/3226470> "Adpat to SIGSTKSZ type
+#  in glibc 2.34":
 $(eval $(call gb_UnpackedTarball_add_patches,breakpad,\
 	external/breakpad/breakpad-use-correct-http-header.patch.1 \
 	external/breakpad/breakpad-wshadow.patch.1 \
