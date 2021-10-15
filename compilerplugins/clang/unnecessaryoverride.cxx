@@ -200,7 +200,11 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
         {
             return true;
         }
-        if (!methodDecl->isExplicitlyDefaulted()) {
+        if (methodDecl->isExplicitlyDefaulted()) {
+            if (methodDecl->getPreviousDecl() != nullptr) {
+                return true;
+            }
+        } else {
             if (!methodDecl->doesThisDeclarationHaveABody()
                 || methodDecl->isLateTemplateParsed())
             {

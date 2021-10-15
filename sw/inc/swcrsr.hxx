@@ -84,7 +84,7 @@ protected:
     void SaveState();
     void RestoreState();
 
-    const SwCursor_SavePos* GetSavePos() const { return m_vSavePos.empty() ? nullptr : &m_vSavePos.back(); }
+    inline const SwCursor_SavePos* GetSavePos() const;
 
     virtual const SwContentFrame* DoSetBidiLevelLeftRight(
         bool & io_rbLeft, bool bVisualAllowed, bool bInsertCursor);
@@ -96,7 +96,7 @@ public:
     SwCursor( const SwPosition &rPos, SwPaM* pRing );
     virtual ~SwCursor() override;
 
-    SwCursor & operator =(SwCursor const &) = default;
+    inline SwCursor & operator =(SwCursor const &);
 
     /// this takes a second parameter, which indicates the Ring that
     /// the new cursor should be part of (may be null)
@@ -309,6 +309,10 @@ public:
     SwTableCursor* GetPrev()             { return dynamic_cast<SwTableCursor *>(GetPrevInRing()); }
     const SwTableCursor* GetPrev() const { return dynamic_cast<SwTableCursor const *>(GetPrevInRing()); }
 };
+
+const SwCursor_SavePos* SwCursor::GetSavePos() const { return m_vSavePos.empty() ? nullptr : &m_vSavePos.back(); }
+
+SwCursor & SwCursor::operator =(SwCursor const &) = default;
 
 #endif
 

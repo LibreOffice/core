@@ -71,18 +71,14 @@ typedef std::vector<std::shared_ptr<Operation> > Operations_t;
 class TransitionScene
 {
 public:
-    TransitionScene(
+    inline TransitionScene(
             Primitives_t&& rLeavingSlidePrimitives,
             Primitives_t&& rEnteringSlidePrimitives,
             Operations_t&& rOverallOperations = Operations_t(),
             SceneObjects_t&& rSceneObjects = SceneObjects_t()
-    )
-        : maLeavingSlidePrimitives(std::move(rLeavingSlidePrimitives))
-        , maEnteringSlidePrimitives(std::move(rEnteringSlidePrimitives))
-        , maOverallOperations(std::move(rOverallOperations))
-        , maSceneObjects(std::move(rSceneObjects))
-    {
-    }
+    );
+
+    inline ~TransitionScene();
 
     TransitionScene(TransitionScene const& rOther);
     TransitionScene& operator=(const TransitionScene& rOther);
@@ -376,6 +372,21 @@ private:
     */
     std::vector<Vertex> Vertices;
 };
+
+TransitionScene::TransitionScene(
+        Primitives_t&& rLeavingSlidePrimitives,
+        Primitives_t&& rEnteringSlidePrimitives,
+        Operations_t&& rOverallOperations,
+        SceneObjects_t&& rSceneObjects
+)
+    : maLeavingSlidePrimitives(std::move(rLeavingSlidePrimitives))
+    , maEnteringSlidePrimitives(std::move(rEnteringSlidePrimitives))
+    , maOverallOperations(std::move(rOverallOperations))
+    , maSceneObjects(std::move(rSceneObjects))
+{
+}
+
+TransitionScene::~TransitionScene() = default;
 
 #endif // INCLUDED_SLIDESHOW_TRANSITION_HXX_
 

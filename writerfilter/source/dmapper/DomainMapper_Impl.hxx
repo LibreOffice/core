@@ -253,12 +253,7 @@ struct TextAppendContext
      */
     std::vector<AnchoredObjectInfo> m_aAnchoredObjects;
 
-    TextAppendContext(const css::uno::Reference<css::text::XTextAppend>& xAppend, const css::uno::Reference<css::text::XTextCursor>& xCur)
-        : xTextAppend(xAppend)
-    {
-        xCursor.set(xCur, css::uno::UNO_QUERY);
-        xInsertPosition = xCursor;
-    }
+    inline TextAppendContext(const css::uno::Reference<css::text::XTextAppend>& xAppend, const css::uno::Reference<css::text::XTextCursor>& xCur);
 };
 
 struct AnchoredContext
@@ -1171,6 +1166,13 @@ private:
 
     std::unordered_map<OUString, CommentProperties> m_aCommentProps;
 };
+
+TextAppendContext::TextAppendContext(const css::uno::Reference<css::text::XTextAppend>& xAppend, const css::uno::Reference<css::text::XTextCursor>& xCur)
+    : xTextAppend(xAppend)
+{
+    xCursor.set(xCur, css::uno::UNO_QUERY);
+    xInsertPosition = xCursor;
+}
 
 } //namespace writerfilter::dmapper
 

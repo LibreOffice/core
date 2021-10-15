@@ -78,10 +78,10 @@ struct DefaultDerived1: VirtualBase {
 };
 
 struct DefaultDerived2: VirtualBase {
-    ~DefaultDerived2() override; // expected-note {{declared here [loplugin:unnecessaryoverride]}}
+    ~DefaultDerived2() override;
 };
 
-DefaultDerived2::~DefaultDerived2() = default; // expected-error {{unnecessary user-declared destructor [loplugin:unnecessaryoverride]}}
+DefaultDerived2::~DefaultDerived2() = default;
 
 struct EmptyDerived1: VirtualBase {
     ~EmptyDerived1() override {}; // expected-error {{unnecessary user-declared destructor [loplugin:unnecessaryoverride]}}
