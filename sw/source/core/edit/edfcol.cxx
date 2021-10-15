@@ -2204,6 +2204,9 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
     GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::SETFMTCOLL, &aRewriter);
     for(SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
+        // If in table cells select mode, ignore the cells that aren't actually selected
+        if (IsTableMode() && !rPaM.HasMark())
+            continue;
 
         if ( !rPaM.HasReadonlySel( GetViewOptions()->IsFormView() ) )
         {
