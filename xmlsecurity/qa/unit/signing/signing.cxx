@@ -14,6 +14,10 @@
 
 #include <type_traits>
 
+#ifndef _WIN32
+#include <secoid.h>
+#endif
+
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 #include <test/xmltesttools.hxx>
@@ -235,6 +239,13 @@ void SigningTest::setUp()
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
     mxSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
     mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
+#ifndef _WIN32
+#ifdef NSS_USE_ALG_IN_ANY_SIGNATURE
+    // policy may disallow using SHA1 for signatures but unit test documents
+    // have such existing signatures (call this after createSecurityContext!)
+    NSS_SetAlgorithmPolicy(SEC_OID_SHA1, NSS_USE_ALG_IN_ANY_SIGNATURE, 0);
+#endif
+#endif
 }
 
 void SigningTest::tearDown()

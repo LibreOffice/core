@@ -34,6 +34,14 @@ $(eval $(call gb_CppunitTest_use_externals,xmlsecurity_signing,\
     libxml2 \
 ))
 
+ifneq ($(OS),WNT)
+ifneq (,$(ENABLE_NSS))
+$(eval $(call gb_CppunitTest_use_externals,xmlsecurity_signing,\
+    nssutil3 \
+))
+endif
+endif
+
 $(eval $(call gb_CppunitTest_set_include,xmlsecurity_signing,\
 	-I$(SRCDIR)/xmlsecurity/inc \
 	$$(INCLUDE) \
