@@ -657,7 +657,7 @@ Public Sub _Initialize(ByRef poPeer As Object _
 &apos;&apos;&apos;	Complete the object creation process:
 &apos;&apos;&apos;		- Initialize the dictionaries
 &apos;&apos;&apos;		- initialize the root popup menu
-&apos;&apos;&apos;		- intialize the display area
+&apos;&apos;&apos;		- initialize the display area
 &apos;&apos;&apos;		- store the arguments for later use
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		poPeer: a peer window
