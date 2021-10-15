@@ -26,6 +26,7 @@
 #include <ControllerLockGuard.hxx>
 #include <DataSourceHelper.hxx>
 #include "DialogModel.hxx"
+#include <o3tl/safeint.hxx>
 #include <TabPageNotifiable.hxx>
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
@@ -214,8 +215,7 @@ DataSourceTabPage::DataSourceTabPage(weld::Container* pPage, weld::DialogControl
     m_xEDT_CATEGORIES->connect_changed(LINK( this, DataSourceTabPage, RangeModifiedHdl));
 
     // init controls
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xLB_ROLE->get_approximate_digit_width() * 20);
+    std::vector<int> aWidths { o3tl::narrowing<int>(m_xLB_ROLE->get_approximate_digit_width() * 20) };
     m_xLB_ROLE->set_column_fixed_widths(aWidths);
     m_xLB_ROLE->show();
 
