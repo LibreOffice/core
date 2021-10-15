@@ -62,6 +62,8 @@ void SwEditShell::GCAttr()
                 rPaM.GetPoint()->nNode.GetNode().GetTextNode();
             if (pTextNode)
             {
+                SAL_WARN("JCL","::GCAttr in ring container. rPamHas no mark. IsTableMode["<<IsTableMode()<<"] size["<<GetCursor()->GetRingContainer().size()<<"]");
+                assert(GetCursor()->GetRingContainer().size() == 1 || !IsTableMode());
                 pTextNode->GCAttr();
             }
         }
