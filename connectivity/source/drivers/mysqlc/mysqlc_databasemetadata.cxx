@@ -565,9 +565,8 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getTableTypes()
     {
         if (m_rConnection.getMysqlVersion() >= requiredVersion[i])
         {
-            std::vector<Any> aRow{ Any() };
-            aRow.push_back(makeAny(mysqlc_sdbc_driver::convert(table_types[i], encoding)));
-            rRows.push_back(aRow);
+            rRows.push_back(
+                { { Any(), makeAny(mysqlc_sdbc_driver::convert(table_types[i], encoding)) } });
         }
     }
     lcl_setRows_throw(xResultSet, 5, rRows);
@@ -586,32 +585,19 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getTypeInfo()
     unsigned int i = 0;
     while (mysqlc_types[i].typeName)
     {
-        std::vector<Any> aRow{ Any() };
+        rRows.push_back(
+            { { Any(), makeAny(mysqlc_sdbc_driver::convert(mysqlc_types[i].typeName, encoding)),
+                makeAny(mysqlc_types[i].dataType), makeAny(mysqlc_types[i].precision),
+                makeAny(mysqlc_sdbc_driver::convert(mysqlc_types[i].literalPrefix, encoding)),
+                makeAny(mysqlc_sdbc_driver::convert(mysqlc_types[i].literalSuffix, encoding)),
+                makeAny(mysqlc_sdbc_driver::convert(mysqlc_types[i].createParams, encoding)),
+                makeAny(mysqlc_types[i].nullable), makeAny(mysqlc_types[i].caseSensitive),
+                makeAny(mysqlc_types[i].searchable), makeAny(mysqlc_types[i].isUnsigned),
+                makeAny(mysqlc_types[i].fixedPrecScale), makeAny(mysqlc_types[i].autoIncrement),
+                makeAny(mysqlc_sdbc_driver::convert(mysqlc_types[i].localTypeName, encoding)),
+                makeAny(mysqlc_types[i].minScale), makeAny(mysqlc_types[i].maxScale),
+                makeAny(sal_Int32(0)), makeAny(sal_Int32(0)), makeAny(sal_Int32(10)) } });
 
-        aRow.push_back(makeAny(mysqlc_sdbc_driver::convert(mysqlc_types[i].typeName, encoding)));
-        aRow.push_back(makeAny(mysqlc_types[i].dataType));
-        aRow.push_back(makeAny(mysqlc_types[i].precision));
-        aRow.push_back(
-            makeAny(mysqlc_sdbc_driver::convert(mysqlc_types[i].literalPrefix, encoding)));
-        aRow.push_back(
-            makeAny(mysqlc_sdbc_driver::convert(mysqlc_types[i].literalSuffix, encoding)));
-        aRow.push_back(
-            makeAny(mysqlc_sdbc_driver::convert(mysqlc_types[i].createParams, encoding)));
-        aRow.push_back(makeAny(mysqlc_types[i].nullable));
-        aRow.push_back(makeAny(mysqlc_types[i].caseSensitive));
-        aRow.push_back(makeAny(mysqlc_types[i].searchable));
-        aRow.push_back(makeAny(mysqlc_types[i].isUnsigned));
-        aRow.push_back(makeAny(mysqlc_types[i].fixedPrecScale));
-        aRow.push_back(makeAny(mysqlc_types[i].autoIncrement));
-        aRow.push_back(
-            makeAny(mysqlc_sdbc_driver::convert(mysqlc_types[i].localTypeName, encoding)));
-        aRow.push_back(makeAny(mysqlc_types[i].minScale));
-        aRow.push_back(makeAny(mysqlc_types[i].maxScale));
-        aRow.push_back(makeAny(sal_Int32(0)));
-        aRow.push_back(makeAny(sal_Int32(0)));
-        aRow.push_back(makeAny(sal_Int32(10)));
-
-        rRows.push_back(aRow);
         i++;
     }
 
