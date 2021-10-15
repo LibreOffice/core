@@ -33,6 +33,23 @@
       "message": "Mike: could you please review this? I assume that a failing paste is better than crashing the LOKit process.",
       "revId": "1d87d15a817e555ccb3b6bf0f5a870afa5cc68ce",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3824a683_b7fb7bca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-15T12:44:24Z",
+      "side": 1,
+      "message": "Makes perfect sense IMO.\n\nMy general perception is: no user input (which user files are) should crash the process, I suppose.",
+      "revId": "1d87d15a817e555ccb3b6bf0f5a870afa5cc68ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
