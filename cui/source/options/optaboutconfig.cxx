@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <o3tl/safeint.hxx>
 #include "optaboutconfig.hxx"
 
 #include <comphelper/processfactory.hxx>
@@ -155,10 +156,12 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage(weld::Window* pParent)
                                         util::SearchFlags::REG_NOT_ENDOFLINE);
 
     float fWidth = m_xPrefBox->get_approximate_digit_width();
-    std::vector<int> aWidths;
-    aWidths.push_back(fWidth * 65);
-    aWidths.push_back(fWidth * 20);
-    aWidths.push_back(fWidth * 8);
+    std::vector<int> aWidths
+    {
+        o3tl::narrowing<int>(fWidth * 65),
+        o3tl::narrowing<int>(fWidth * 20),
+        o3tl::narrowing<int>(fWidth * 8)
+    };
     m_xPrefBox->set_column_fixed_widths(aWidths);
 }
 

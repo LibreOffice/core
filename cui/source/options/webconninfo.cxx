@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/safeint.hxx>
 #include "webconninfo.hxx"
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/PasswordContainer.hpp>
@@ -41,8 +42,10 @@ WebConnectionInfoDialog::WebConnectionInfoDialog(weld::Window* pParent)
     , m_xChangeBtn(m_xBuilder->weld_button("change"))
     , m_xPasswordsLB(m_xBuilder->weld_tree_view("logins"))
 {
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xPasswordsLB->get_approximate_digit_width() * 50);
+    std::vector<int> aWidths
+    {
+        o3tl::narrowing<int>(m_xPasswordsLB->get_approximate_digit_width() * 50)
+    };
     m_xPasswordsLB->set_column_fixed_widths(aWidths);
     m_xPasswordsLB->set_size_request(m_xPasswordsLB->get_approximate_digit_width() * 70,
                                      m_xPasswordsLB->get_height_rows(8));

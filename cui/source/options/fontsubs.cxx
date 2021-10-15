@@ -121,10 +121,7 @@ void SvxFontSubstTabPage::setColSizes(const Size& rSize)
     nMax = std::max(nMax, nMin);
     const int nDoubleMax = 2*nMax;
     const int nRest = rSize.Width() - nDoubleMax;
-    std::vector<int> aWidths;
-    aWidths.push_back(nMax);
-    aWidths.push_back(nMax);
-    aWidths.push_back(nRest/2);
+    std::vector<int> aWidths { nMax, nMax, nRest/2 };
     m_xCheckLB->set_column_fixed_widths(aWidths);
 }
 

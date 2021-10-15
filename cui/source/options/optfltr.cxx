@@ -137,9 +137,11 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2(weld::Container* pPage, weld::DialogCon
     , m_xShadingRB(m_xBuilder->weld_radio_button("shading"))
     , m_xMSOLockFileCB(m_xBuilder->weld_check_button("mso_lockfile"))
 {
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xCheckLB->get_checkbox_column_width());
-    aWidths.push_back(m_xCheckLB->get_checkbox_column_width());
+    std::vector<int> aWidths
+    {
+        m_xCheckLB->get_checkbox_column_width(),
+        m_xCheckLB->get_checkbox_column_width()
+    };
     m_xCheckLB->set_column_fixed_widths(aWidths);
 }
 

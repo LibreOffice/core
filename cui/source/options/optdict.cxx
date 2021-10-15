@@ -18,6 +18,7 @@
  */
 
 #include <editeng/unolingu.hxx>
+#include <o3tl/safeint.hxx>
 #include <svx/dialmgr.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/linguistic2/XDictionary.hpp>
@@ -235,8 +236,10 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(weld::Window* pParent, std::u16
     m_xSingleColumnLB->connect_changed(LINK(this, SvxEditDictionaryDialog, SelectHdl));
     m_xDoubleColumnLB->connect_changed(LINK(this, SvxEditDictionaryDialog, SelectHdl));
 
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xDoubleColumnLB->get_approximate_digit_width() * 22);
+    std::vector<int> aWidths
+    {
+        o3tl::narrowing<int>(m_xDoubleColumnLB->get_approximate_digit_width() * 22)
+    };
     m_xDoubleColumnLB->set_column_fixed_widths(aWidths);
 
     // install handler

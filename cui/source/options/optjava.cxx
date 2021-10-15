@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/safeint.hxx>
 #include <sal/config.h>
 #include <sal/log.hxx>
 
@@ -91,9 +92,11 @@ SvxJavaOptionsPage::SvxJavaOptionsPage(weld::Container* pPage, weld::DialogContr
     m_xJavaList->connect_toggled( LINK( this, SvxJavaOptionsPage, CheckHdl_Impl ) );
     m_xJavaList->connect_changed( LINK( this, SvxJavaOptionsPage, SelectHdl_Impl ) );
 
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xJavaList->get_checkbox_column_width());
-    aWidths.push_back(m_xJavaList->get_pixel_size("Sun Microsystems Inc.").Width());
+    std::vector<int> aWidths
+    {
+        m_xJavaList->get_checkbox_column_width(),
+        o3tl::narrowing<int>(m_xJavaList->get_pixel_size("Sun Microsystems Inc.").Width())
+    };
     m_xJavaList->set_column_fixed_widths(aWidths);
 
     m_xJavaEnableCB->connect_toggled( LINK( this, SvxJavaOptionsPage, EnableHdl_Impl ) );
