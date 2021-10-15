@@ -9,6 +9,12 @@
 
 #include <sal/config.h>
 
+#include <config_crypto.h>
+
+#if USE_CRYPTO_NSS
+#include <secoid.h>
+#endif
+
 #include <string_view>
 
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
@@ -66,6 +72,18 @@ void PDFSigningTest::setUp()
 {
     test::BootstrapFixture::setUp();
     MacrosTest::setUpNssGpg(m_directories, "xmlsecurity_pdfsigning");
+
+    uno::Reference<xml::crypto::XSEInitializer> xSEInitializer
+        = xml::crypto::SEInitializer::create(mxComponentContext);
+    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext
+        = xSEInitializer->createSecurityContext(OUString());
+#if USE_CRYPTO_NSS
+#ifdef NSS_USE_ALG_IN_ANY_SIGNATURE
+    // policy may disallow using SHA1 for signatures but unit test documents
+    // have such existing signatures (call this after createSecurityContext!)
+    NSS_SetAlgorithmPolicy(SEC_OID_SHA1, NSS_USE_ALG_IN_ANY_SIGNATURE, 0);
+#endif
+#endif
 }
 
 void PDFSigningTest::tearDown()
