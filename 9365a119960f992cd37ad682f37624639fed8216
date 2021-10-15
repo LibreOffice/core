@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b91aa09_e57311b1",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-10-15T09:10:09Z",
+      "side": 1,
+      "message": "\u003e I\u0027m not really familiar with that boost wrapping of a union (I assume that is what is under the hood) - but any chance of a nice enum somewhere nearby instead of numbers ? \u003d) or does that make the code more ugly?\n\nNo, I can add it, I\u0027ll add it to my TODO.",
+      "parentUuid": "a9d61891_0d6986af",
+      "revId": "9365a119960f992cd37ad682f37624639fed8216",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "81d71931_23ed6a6a",
