@@ -16,6 +16,24 @@
       "message": "IIRC its not an error or mistake that it returns that, e.g. https://www.lwithers.me.uk/articles/covariant.html\nWe similarly typically overload SfxPoolItem\u0027s Clone() operator and the derivations return pointers to classes derived from the base class\u0027s return type",
       "revId": "3d229346e11b14b6163660271a3b7d91ea9db93f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d925e7e_de4d565c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2021-10-15T19:22:10Z",
+      "side": 1,
+      "message": "Thanks. Your information was useful, and I will abandon this patch.\n\nActually, I saw (somehow, a portion of) a warning of this type inconsistency, when I was building Libreoffice for the first time after this 6 months, during which I was working at a company.",
+      "parentUuid": "864a3d99_b2f83070",
+      "revId": "3d229346e11b14b6163660271a3b7d91ea9db93f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
