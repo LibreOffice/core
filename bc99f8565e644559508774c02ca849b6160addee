@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bed96419_38f5db71",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2021-10-15T09:00:19Z",
+      "side": 1,
+      "message": "Have no idea why ./logerrit did open a new task here, but well ...",
+      "revId": "bc99f8565e644559508774c02ca849b6160addee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
