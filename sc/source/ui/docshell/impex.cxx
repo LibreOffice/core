@@ -63,6 +63,7 @@
 #include <editeng/editobj.hxx>
 #include <svl/numformat.hxx>
 #include <rtl/character.hxx>
+#include <sax/tools/converter.hxx>
 
 #include <memory>
 #include <string_view>
@@ -1406,6 +1407,48 @@ static bool lcl_PutString(
     // Standard or date not determined -> SetString / EditCell
     if( rStr.indexOf( '\n' ) == -1 )
     {
+        if (!bDetectNumFormat && nColFormat == SC_COL_STANDARD)
+        {
+            // Import a strict ISO 8601 date(+time) string even without
+            // "Detect special numbers" or "Date (YMD)".
+            do
+            {
+                // Simple pre-check before calling more expensive parser.
+                // ([+-])(Y)YYYY-MM-DD
+                if (rStr.getLength() < 10)
+                    break;
+                const sal_Int32 n1 = rStr.indexOf('-', 1);
+                if (n1 < 4)
+                    break;
+                const sal_Int32 n2 = rStr.indexOf('-', n1 + 1);
+                if (n2 < 7 || n1 + 3 < n2)
+                    break;
+
+                css::util::DateTime aDateTime;
+                if (!sax::Converter::parseDateTime( aDateTime, rStr))
+                    break;
+
+                sal_uInt32 nFormat = 0;
+                double fVal = 0.0;
+                SvNumberFormatter* pDocFormatter = rDoc.GetFormatTable();
+                if (pDocFormatter->IsNumberFormat( rStr, nFormat, fVal))
+                {
+                    if (pDocFormatter->GetType(nFormat) & SvNumFormatType::DATE)
+                    {
+                        ScAddress aPos(nCol,nRow,nTab);
+                        if (bUseDocImport)
+                            rDocImport.setNumericCell(aPos, fVal);
+                        else
+                            rDoc.SetValue(aPos, fVal);
+                        rDoc.SetNumberFormat(aPos, nFormat);
+
+                        return bMultiLine;     // success
+                    }
+                }
+            }
+            while(false);
+        }
+
         ScSetStringParam aParam;
         aParam.mpNumFormatter = pFormatter;
         aParam.mbDetectNumberFormat = bDetectNumFormat;
