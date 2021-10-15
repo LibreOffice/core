@@ -16,6 +16,23 @@
       "message": "calc/alignment_options_spec.js failed, resume.",
       "revId": "1d87d15a817e555ccb3b6bf0f5a870afa5cc68ce",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33267d25_cfc61e0b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-15T12:29:53Z",
+      "side": 1,
+      "message": "Mike: could you please review this? I assume that a failing paste is better than crashing the LOKit process.",
+      "revId": "1d87d15a817e555ccb3b6bf0f5a870afa5cc68ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
