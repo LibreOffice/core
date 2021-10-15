@@ -35,6 +35,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1affbfa0_f16a7d82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-15T16:30:38Z",
+      "side": 1,
+      "message": "With the patch:\ndiff --git a/cui/source/customize/acccfg.cxx b/cui/source/customize/acccfg.cxx\nindex dbe8eff7c832..3df33a14620f 100644\n--- a/cui/source/customize/acccfg.cxx\n+++ b/cui/source/customize/acccfg.cxx\n@@ -889,8 +889,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage,\n     auto nNewTab \u003d nMaxWidth + 5; // additional space\n \n     // initialize Entriesbox\n-    std::vector\u003cint\u003e aWidths;\n-    aWidths.push_back(nNewTab);\n+    std::vector\u003cint\u003e aWidths { nNewTab };\n     m_xEntriesBox-\u003eset_column_fixed_widths(aWidths);\n \n     //Initialize search util\n\nI put a break on gdb, launched LO and selected Tools/Customize...\nHere\u0027s the result:\nThread 1 \"soffice.bin\" hit Breakpoint 1, SfxAcceleratorConfigPage::SfxAcceleratorConfigPage (this\u003d0x9667510, pPage\u003d0x9bfd9c0, pController\u003d0x575cf30, aSet\u003d\n    SfxItemSet of pool 0x333af70 with parent 0x0 and Which ranges: [(5904, 5904)] \u003d {...}) at cui/source/customize/acccfg.cxx:892\n892\t    std::vector\u003cint\u003e aWidths { nNewTab };\n(gdb) n\n893\t    m_xEntriesBox-\u003eset_column_fixed_widths(aWidths);\n(gdb) p nNewTab\n$1 \u003d 179\n(gdb) p aWidths.size()\n$2 \u003d 1\n",
+      "revId": "8591f0d9f49fda2aa866609fec8cea5328e49476",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "41bd2f83_5f6058be",
