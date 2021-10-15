@@ -1522,6 +1522,32 @@ void SfxViewShell::libreOfficeKitViewCallback(int nType, const char* pPayload) c
             << lokCallbackTypeToString(nType) << ": [" << pPayload << ']');
 }
 
+void SfxViewShell::libreOfficeKitViewUpdatedCallback(int nType) const
+{
+    if (ignoreLibreOfficeKitViewCallback(nType, pImpl.get()))
+        return;
+    if (pImpl->m_pLibreOfficeKitViewCallback)
+        pImpl->m_pLibreOfficeKitViewCallback->libreOfficeKitViewUpdatedCallback(nType);
+    else
+        SAL_INFO(
+            "sfx.view",
+            "SfxViewShell::libreOfficeKitViewUpdatedCallback no callback set! Dropped payload of type "
+            << lokCallbackTypeToString(nType));
+}
+
+void SfxViewShell::libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) const
+{
+    if (ignoreLibreOfficeKitViewCallback(nType, pImpl.get()))
+        return;
+    if (pImpl->m_pLibreOfficeKitViewCallback)
+        pImpl->m_pLibreOfficeKitViewCallback->libreOfficeKitViewUpdatedCallbackPerViewId(nType, nViewId, nSourceViewId);
+    else
+        SAL_INFO(
+            "sfx.view",
+            "SfxViewShell::libreOfficeKitViewUpdatedCallbackPerViewId no callback set! Dropped payload of type "
+            << lokCallbackTypeToString(nType));
+}
+
 void SfxViewShell::afterCallbackRegistered()
 {
 }
@@ -1529,6 +1555,13 @@ void SfxViewShell::afterCallbackRegistered()
 void SfxViewShell::flushPendingLOKInvalidateTiles()
 {
     // SfxViewShell itself does not delay any tile invalidations.
+}
+
+OString SfxViewShell::getLOKPayload(int nType, int /*nViewId*/) const
+{
+    // SfxViewShell itself currently doesn't handle any updated-payload types.
+    SAL_WARN("sfx.view", "SfxViewShell::getLOKPayload unhandled type " << lokCallbackTypeToString(nType));
+    abort();
 }
 
 vcl::Window* SfxViewShell::GetEditWindowForActiveOLEObj() const

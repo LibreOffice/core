@@ -15,28 +15,48 @@
 #include <sfx2/lokcallback.hxx>
 #include <vcl/idle.hxx>
 
+#include <vector>
+
 /**
 A helper to convert SfxLokCallbackInterface to a LIbreOfficeKitCallback for tests.
 
 It reimplements the specialized callbacks and converts them to the generic type/payload
 callback.
 */
-
 class OOO_DLLPUBLIC_TEST TestLokCallbackWrapper final : public SfxLokCallbackInterface, public Idle
 {
 public:
     TestLokCallbackWrapper(LibreOfficeKitCallback callback, void* data);
+    /// Discard all possibly still held events.
+    void clear();
+    /// Set the view id of the associated SfxViewShell.
+    void setLOKViewId(int viewId) { m_viewId = viewId; }
     virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) override;
     virtual void libreOfficeKitViewCallbackWithViewId(int nType, const char* pPayload,
                                                       int nViewId) override;
     virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect,
                                                            int nPart) override;
+    virtual void libreOfficeKitViewUpdatedCallback(int nType) override;
+    virtual void libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId,
+                                                            int nSourceViewId) override;
     virtual void Invoke() override;
 
 private:
-    void callCallback(int nType, const char* pPayload);
+    void callCallback(int nType, const char* pPayload, int nViewId);
+    void startTimer();
+    void flushLOKData();
+    void discardUpdatedTypes(int nType, int nViewId);
     LibreOfficeKitCallback m_callback;
     void* m_data;
+    int m_viewId = -1; // the associated SfxViewShell
+    std::vector<int> m_updatedTypes; // value is type
+    struct PerViewIdData
+    {
+        int type;
+        int viewId;
+        int sourceViewId;
+    };
+    std::vector<PerViewIdData> m_updatedTypesPerViewId;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

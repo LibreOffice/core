@@ -225,12 +225,64 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
             m_pCursorShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
         }
 
+        // This may get called often, so instead of sending data on each update, just notify
+        // that there's been an update, and the other side will pull the data using
+        // getLOKPayload() when it decides to.
+        m_aLastLOKRect = aRect;
+        if (pViewShell)
+        {
+            if (pViewShell == m_pCursorShell->GetSfxViewShell())
+            {
+                SfxLokHelper::notifyUpdatePerViewId(pViewShell, LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR);
+            }
+            else
+            {
+                SfxLokHelper::notifyUpdatePerViewId(pViewShell, m_pCursorShell->GetSfxViewShell(), pViewShell,
+                    LOK_CALLBACK_INVALIDATE_VIEW_CURSOR);
+            }
+        }
+        else
+        {
+            SfxLokHelper::notifyUpdatePerViewId(m_pCursorShell->GetSfxViewShell(), SfxViewShell::Current(),
+                m_pCursorShell->GetSfxViewShell(), LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR);
+            SfxLokHelper::notifyOtherViewsUpdatePerViewId(m_pCursorShell->GetSfxViewShell(), LOK_CALLBACK_INVALIDATE_VIEW_CURSOR);
+        }
+    }
+
+    if ( m_pCursorShell->IsCursorReadonly() && !m_pCursorShell->GetViewOptions()->IsSelectionInReadonly() )
+        return;
+
+    if ( m_pCursorShell->GetDrawView() )
+        const_cast<SwDrawView*>(static_cast<const SwDrawView*>(m_pCursorShell->GetDrawView()))->SetAnimationEnabled(
+                !m_pCursorShell->IsSelection() );
+
+    sal_uInt16 nStyle = m_bIsDragCursor ? CURSOR_SHADOW : 0;
+    if( nStyle != m_aTextCursor.GetStyle() )
+    {
+        m_aTextCursor.SetStyle( nStyle );
+        m_aTextCursor.SetWindow( m_bIsDragCursor ? m_pCursorShell->GetWin() : nullptr );
+    }
+
+    m_aTextCursor.Show();
+}
+
+OString SwVisibleCursor::getLOKPayload(int nType, int nViewId) const
+{
+    assert(nType == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR || nType == LOK_CALLBACK_INVALIDATE_VIEW_CURSOR);
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        SwRect aRect = m_aLastLOKRect;
+
         // notify about the cursor position & size
         tools::Rectangle aSVRect(aRect.Pos().getX(), aRect.Pos().getY(), aRect.Pos().getX() + aRect.SSize().Width(), aRect.Pos().getY() + aRect.SSize().Height());
         OString sRect = aSVRect.toString();
 
+        if(nType == LOK_CALLBACK_INVALIDATE_VIEW_CURSOR)
+            return SfxLokHelper::makePayloadJSON(m_pCursorShell->GetSfxViewShell(), nViewId, "rectangle", sRect);
+
         // is cursor at a misspelled word ?
         bool bIsWrong = false;
+        SwView* pView = dynamic_cast<SwView*>(m_pCursorShell->GetSfxViewShell());
         if (pView && pView->GetWrtShellPtr())
         {
             const SwViewOption* pVOpt = pView->GetWrtShell().GetViewOptions();
@@ -283,37 +335,10 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
             }
         }
 
-        if (pViewShell)
-        {
-            if (pViewShell == m_pCursorShell->GetSfxViewShell())
-            {
-                SfxLokHelper::notifyVisCursorInvalidation(pViewShell, sRect, bIsWrong, sHyperlink);
-            }
-            else
-                SfxLokHelper::notifyOtherView(m_pCursorShell->GetSfxViewShell(), pViewShell, LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", sRect);
-        }
-        else
-        {
-            SfxLokHelper::notifyVisCursorInvalidation(m_pCursorShell->GetSfxViewShell(), sRect, bIsWrong, sHyperlink);
-            SfxLokHelper::notifyOtherViews(m_pCursorShell->GetSfxViewShell(), LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", sRect);
-        }
+        return SfxLokHelper::makeVisCursorInvalidation(nViewId, sRect, bIsWrong, sHyperlink);
     }
-
-    if ( m_pCursorShell->IsCursorReadonly() && !m_pCursorShell->GetViewOptions()->IsSelectionInReadonly() )
-        return;
-
-    if ( m_pCursorShell->GetDrawView() )
-        const_cast<SwDrawView*>(static_cast<const SwDrawView*>(m_pCursorShell->GetDrawView()))->SetAnimationEnabled(
-                !m_pCursorShell->IsSelection() );
-
-    sal_uInt16 nStyle = m_bIsDragCursor ? CURSOR_SHADOW : 0;
-    if( nStyle != m_aTextCursor.GetStyle() )
-    {
-        m_aTextCursor.SetStyle( nStyle );
-        m_aTextCursor.SetWindow( m_bIsDragCursor ? m_pCursorShell->GetWin() : nullptr );
-    }
-
-    m_aTextCursor.Show();
+    else
+        abort();
 }
 
 const vcl::Cursor& SwVisibleCursor::GetTextCursor() const
