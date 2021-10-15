@@ -367,6 +367,8 @@ public:
     virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) const = 0;
     virtual void libreOfficeKitViewCallbackWithViewId(int nType, const char* pPayload, int nViewId) const = 0;
     virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart) const = 0;
+    virtual void libreOfficeKitViewUpdatedCallback(int nType) const = 0;
+    virtual void libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) const = 0;
     virtual ViewShellId GetViewShellId() const = 0;
     virtual ViewShellDocId GetDocId() const = 0;
     /// Wrapper around SfxLokHelper::notifyOtherViews().

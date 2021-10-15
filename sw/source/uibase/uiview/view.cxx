@@ -1892,6 +1892,13 @@ void SwView::flushPendingLOKInvalidateTiles()
     pSh->FlushPendingLOKInvalidateTiles();
 }
 
+OString SwView::getLOKPayload(int nType, int nViewId) const
+{
+    SwWrtShell* pSh = GetWrtShellPtr();
+    assert(pSh);
+    return pSh->getLOKPayload(nType, nViewId);
+}
+
 OUString SwView::GetDataSourceName() const
 {
     uno::Reference<lang::XMultiServiceFactory> xFactory(GetDocShell()->GetModel(), uno::UNO_QUERY);

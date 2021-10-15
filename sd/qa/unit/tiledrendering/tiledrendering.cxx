@@ -197,6 +197,7 @@ public:
 
 private:
     SdXImpressDocument* createDoc(const char* pName, const uno::Sequence<beans::PropertyValue>& rArguments = uno::Sequence<beans::PropertyValue>());
+    void setupLibreOfficeKitViewCallback(SfxViewShell& pViewShell);
     static void callback(int nType, const char* pPayload, void* pData);
     void callbackImpl(int nType, const char* pPayload);
     xmlDocUniquePtr parseXmlDump();
@@ -246,6 +247,7 @@ void SdTiledRenderingTest::tearDown()
     if (m_pXmlBuffer)
         xmlBufferFree(m_pXmlBuffer);
 
+    m_callbackWrapper.clear();
     comphelper::LibreOfficeKit::setActive(false);
 
     test::BootstrapFixture::tearDown();
@@ -260,6 +262,12 @@ SdXImpressDocument* SdTiledRenderingTest::createDoc(const char* pName, const uno
     CPPUNIT_ASSERT(pImpressDocument);
     pImpressDocument->initializeForTiledRendering(rArguments);
     return pImpressDocument;
+}
+
+void SdTiledRenderingTest::setupLibreOfficeKitViewCallback(SfxViewShell& pViewShell)
+{
+    pViewShell.setLibreOfficeKitViewCallback(&m_callbackWrapper);
+    m_callbackWrapper.setLOKViewId(SfxLokHelper::getView(&pViewShell));
 }
 
 void SdTiledRenderingTest::callback(int nType, const char* pPayload, void* pData)
@@ -398,7 +406,7 @@ void SdTiledRenderingTest::testRegisterCallback()
 {
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    pViewShell->GetViewShellBase().setLibreOfficeKitViewCallback(&m_callbackWrapper);
+    setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
 
     // Start text edit of the empty title shape.
     SdPage* pActualPage = pViewShell->GetActualPage();
@@ -628,7 +636,7 @@ void SdTiledRenderingTest::testInsertDeletePage()
 {
     SdXImpressDocument* pXImpressDocument = createDoc("insert-delete.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    pViewShell->GetViewShellBase().setLibreOfficeKitViewCallback(&m_callbackWrapper);
+    setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
 
     SdDrawDocument* pDoc = pXImpressDocument->GetDocShell()->GetDoc();
     CPPUNIT_ASSERT(pDoc);
@@ -915,6 +923,7 @@ public:
         mpViewShell = SfxViewShell::Current();
         mpViewShell->setLibreOfficeKitViewCallback(&m_callbackWrapper);
         mnView = SfxLokHelper::getView();
+        m_callbackWrapper.setLOKViewId( mnView );
     }
 
     ~ViewCallback()
@@ -2528,7 +2537,7 @@ void SdTiledRenderingTest::testCutSelectionChange()
     CPPUNIT_ASSERT(pXImpressDocument);
 
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    pViewShell->GetViewShellBase().setLibreOfficeKitViewCallback(&m_callbackWrapper);
+    setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
     Scheduler::ProcessEventsToIdle();
 
     // Select first text object
