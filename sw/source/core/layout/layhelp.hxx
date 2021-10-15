@@ -63,7 +63,7 @@ class SwLayCacheImpl
     void Insert( sal_uInt16 nType, sal_uLong nIndex, sal_Int32 nOffset );
 
 public:
-    SwLayCacheImpl() : m_bUseFlyCache(false) {}
+    inline SwLayCacheImpl();
 
     size_t size() const { return mIndices.size(); }
 
@@ -73,8 +73,8 @@ public:
     sal_Int32 GetBreakOfst( size_t nIdx ) const { return m_aOffset[ nIdx ]; }
     sal_uInt16 GetBreakType( size_t nIdx ) const { return m_aType[ nIdx ]; }
 
-    size_t GetFlyCount() const { return m_FlyCache.size(); }
-    SwFlyCache& GetFlyCache( size_t nIdx ) { return m_FlyCache[ nIdx ]; }
+    inline size_t GetFlyCount() const;
+    inline SwFlyCache& GetFlyCache( size_t nIdx );
 
     bool IsUseFlyCache() const { return m_bUseFlyCache; }
 };
@@ -211,6 +211,12 @@ public:
     SwFlyCache( sal_uInt16 nP, sal_uLong nO, tools::Long nXL, tools::Long nYL, tools::Long nWL, tools::Long nHL ) :
         SwRect( nXL, nYL, nWL, nHL ), nOrdNum( nO ), nPageNum( nP ){}
 };
+
+SwLayCacheImpl::SwLayCacheImpl() : m_bUseFlyCache(false) {}
+
+size_t SwLayCacheImpl::GetFlyCount() const { return m_FlyCache.size(); }
+
+SwFlyCache& SwLayCacheImpl::GetFlyCache( size_t nIdx ) { return m_FlyCache[ nIdx ]; }
 
 #endif
 
