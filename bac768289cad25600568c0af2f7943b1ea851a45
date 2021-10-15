@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59e27443_eeb1110f",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-10-15T08:58:08Z",
+      "side": 1,
+      "message": "if the result is IGNORED this is correct but i\u0027m not sure about MERGED; i think what should happen with MERGED is the UpdateFrames should be called on the PaM that is rSvRedLine.pRedl but that is now deleted... so it has to be copied to the stack before calling AppendRedline probably",
+      "revId": "bac768289cad25600568c0af2f7943b1ea851a45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
