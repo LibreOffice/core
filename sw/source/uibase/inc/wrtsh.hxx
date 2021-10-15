@@ -499,6 +499,8 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     void InvalidateOutlineContentVisibility();
     bool GetAttrOutlineContentVisible(const size_t nPos);
 
+    OString getLOKPayload(int nType, int nViewId) const;
+
 private:
 
     SAL_DLLPRIVATE void  OpenMark();

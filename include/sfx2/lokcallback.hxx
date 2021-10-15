@@ -11,6 +11,8 @@
 
 #include <sal/types.h>
 
+#include <vector>
+
 namespace tools
 {
 class Rectangle;
@@ -36,6 +38,15 @@ public:
     // nPart is either part, -1 for all-parts, or INT_MIN if
     // comphelper::LibreOfficeKit::isPartInInvalidation() is not set
     virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart)
+        = 0;
+    // A message of the given type should be sent, for performance purpose only a notification
+    // is given here, details about the message should be queried from SfxViewShell when necessary.
+    // This is used for messages that are generated often but only the last one is needed.
+    virtual void libreOfficeKitViewUpdatedCallback(int nType) = 0;
+    // Like libreOfficeKitViewUpdatedCallback(), but a last message is needed for each nViewId value.
+    // SfxViewShell:getLOKPayload() will be called on nSourceViewId view.
+    virtual void libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId,
+                                                            int nSourceViewId)
         = 0;
 };
 
