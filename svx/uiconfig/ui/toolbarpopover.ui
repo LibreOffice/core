@@ -3,13 +3,13 @@
 <interface domain="svx">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkPopover" id="ToolbarPopover">
-    <property name="can-focus">False</property>
+    <property name="can-focus">True</property>
     <property name="no-show-all">True</property>
     <property name="border-width">4</property>
     <child>
       <object class="GtkBox" id="container">
         <property name="visible">True</property>
-        <property name="can-focus">False</property>
+        <property name="can-focus">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
