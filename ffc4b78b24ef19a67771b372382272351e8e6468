@@ -52,6 +52,23 @@
       "parentUuid": "5c4d0227_5356162a",
       "revId": "ffc4b78b24ef19a67771b372382272351e8e6468",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d9fd56e_0de304ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-10-15T19:35:06Z",
+      "side": 1,
+      "message": "The way append is defined in std::string::append is: \"Extends the string by appending additional characters at the end of its current value\". In other words, it modifies the string variable. From the example in the commit message, and my understanding of the code, it appears this OUStringLiteral::append is returning a new OUStringLiteral, rather than modifying the existing one. ",
+      "revId": "ffc4b78b24ef19a67771b372382272351e8e6468",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
