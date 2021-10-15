@@ -16,6 +16,24 @@
       "message": "if the result is IGNORED this is correct but i\u0027m not sure about MERGED; i think what should happen with MERGED is the UpdateFrames should be called on the PaM that is rSvRedLine.pRedl but that is now deleted... so it has to be copied to the stack before calling AppendRedline probably",
       "revId": "bac768289cad25600568c0af2f7943b1ea851a45",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7f581ed_3c0aa7e2",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-10-15T16:20:50Z",
+      "side": 1,
+      "message": "Is it possible to check that we really need this? If yes, I could file the problem and add an unit test for the fix.",
+      "parentUuid": "59e27443_eeb1110f",
+      "revId": "bac768289cad25600568c0af2f7943b1ea851a45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
