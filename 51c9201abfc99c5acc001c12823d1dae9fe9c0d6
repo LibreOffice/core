@@ -16,6 +16,24 @@
       "message": "Stephan, Noel: could you please review? Specifically, if the changes in Sequence.h* and in plugins make sense? Thank you!",
       "revId": "51c9201abfc99c5acc001c12823d1dae9fe9c0d6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d2ded50_f401a594",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-15T07:51:25Z",
+      "side": 1,
+      "message": "Generally looks reasonable to me.\n\nDo you plan to do that \"TODO: also drop non-const operator[], but introduce operator[] in SequenceRange\" in this or in a follow-up change?",
+      "parentUuid": "e40d7682_3246587d",
+      "revId": "51c9201abfc99c5acc001c12823d1dae9fe9c0d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
