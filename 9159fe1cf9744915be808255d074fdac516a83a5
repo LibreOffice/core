@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f9efdd8_38ae8297",
+        "filename": "vcl/qa/cppunit/outdev.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 1977,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-10-15T11:35:15Z",
+      "side": 1,
+      "message": "Regina has a good point here.. probably it would be good to add a polygon that has a valid bezier control points. Maybe it would be easier to create a B2DPolygon and convert to tools::Polygon (see tests in basegfx).",
+      "range": {
+        "startLine": 1964,
+        "startChar": 0,
+        "endLine": 1977,
+        "endChar": 62
+      },
+      "revId": "9159fe1cf9744915be808255d074fdac516a83a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
