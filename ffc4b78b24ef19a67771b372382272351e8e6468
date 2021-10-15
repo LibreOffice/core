@@ -34,6 +34,24 @@
       "parentUuid": "32929957_93850988",
       "revId": "ffc4b78b24ef19a67771b372382272351e8e6468",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f226951_e5b7f7db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-15T11:28:58Z",
+      "side": 1,
+      "message": "I think the change as-is is a bit misguided, in that PREFIX itself will likely not be needed in an OUString-context, so should itself not be an OUStringLiteral, but rather a more canonic form of compile-time string literal (e.g., some consteval std::u16string_view).",
+      "parentUuid": "5c4d0227_5356162a",
+      "revId": "ffc4b78b24ef19a67771b372382272351e8e6468",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
