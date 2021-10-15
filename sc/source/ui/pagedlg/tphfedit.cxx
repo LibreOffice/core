@@ -67,11 +67,6 @@ void ScEditWindow::makeEditEngine()
     m_xEditEngine.reset(new ScHeaderEditEngine(EditEngine::CreatePool().get()));
 }
 
-ScHeaderEditEngine* ScEditWindow::GetEditEngine() const
-{
-    return static_cast<ScHeaderEditEngine*>(m_xEditEngine.get());
-}
-
 void ScEditWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     OutputDevice& rDevice = pDrawingArea->get_ref_device();
@@ -118,7 +113,7 @@ ScEditWindow::~ScEditWindow()
 
 void ScEditWindow::SetNumType(SvxNumType eNumType)
 {
-    ScHeaderEditEngine* pEditEngine = GetEditEngine();
+    ScHeaderEditEngine* pEditEngine = static_cast<ScHeaderEditEngine*>(m_xEditEngine.get());
     pEditEngine->SetNumType(eNumType);
     pEditEngine->UpdateFields();
 }
