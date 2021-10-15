@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9d61891_0d6986af",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-10-15T08:59:19Z",
+      "side": 1,
+      "message": "I\u0027m not really familiar with that boost wrapping of a union (I assume that is what is under the hood) - but any chance of a nice enum somewhere nearby instead of numbers ? \u003d) or does that make the code more ugly?",
+      "revId": "9365a119960f992cd37ad682f37624639fed8216",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81d71931_23ed6a6a",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1529,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-10-15T08:59:19Z",
+      "side": 1,
+      "message": "Not the loveliest code section - though pre-dates your work \u003d)",
+      "revId": "9365a119960f992cd37ad682f37624639fed8216",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83b826f2_4b25db91",
+        "filename": "sc/qa/unit/tiledrendering/tiledrendering.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-10-15T08:59:19Z",
+      "side": 1,
+      "message": "Good \u003d) glad it\u0027s ~complete.",
+      "revId": "9365a119960f992cd37ad682f37624639fed8216",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
