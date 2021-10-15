@@ -118,15 +118,21 @@ void PDFSigningTest::setUp()
 
     mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
 
-#ifndef _WIN32
-    // Set up cert8.db and key3.db in workdir/CppunitTest/
     OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
     OUString aTargetDir
         = m_directories.getURLFromWorkdir("/CppunitTest/xmlsecurity_pdfsigning.test.user/");
-    osl::File::copy(aSourceDir + "cert8.db", aTargetDir + "cert8.db");
-    osl::File::copy(aSourceDir + "key3.db", aTargetDir + "key3.db");
     OUString aTargetPath;
     osl::FileBase::getSystemPathFromFileURL(aTargetDir, aTargetPath);
+
+#ifdef _WIN32
+    // CryptoAPI test certificates
+    osl::File::copy(aSourceDir + "test.p7b", aTargetDir + "test.p7b");
+    OUString caVar("LIBO_TEST_CRYPTOAPI_PKCS7");
+    osl_setEnvironment(caVar.pData, aTargetPath.pData);
+#else
+    // Set up cert8.db and key3.db in workdir/CppunitTest/
+    osl::File::copy(aSourceDir + "cert8.db", aTargetDir + "cert8.db");
+    osl::File::copy(aSourceDir + "key3.db", aTargetDir + "key3.db");
     setenv("MOZILLA_CERTIFICATE_FOLDER", aTargetPath.toUtf8().getStr(), 1);
 #endif
 }

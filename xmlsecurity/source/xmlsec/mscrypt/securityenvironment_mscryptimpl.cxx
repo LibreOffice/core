@@ -770,6 +770,60 @@ HCERTSTORE getCertStoreForIntermediatCerts(
     return store;
 }
 
+static bool CheckUnitTestStore(PCCERT_CHAIN_CONTEXT const pChainContext, DWORD ignoreFlags)
+{
+    bool ret = false;
+    static char const*const pVar = getenv("LIBO_TEST_CRYPTOAPI_PKCS7");
+    if (!pVar)
+    {
+        return ret;
+    }
+    if (pChainContext->cChain == 0)
+    {
+        return ret;
+    }
+    PCERT_SIMPLE_CHAIN pSimpleChain = pChainContext->rgpChain[0];
+    // check if untrusted root is the only problem
+    if (pSimpleChain->TrustStatus.dwErrorStatus & ~(CERT_TRUST_IS_UNTRUSTED_ROOT | ignoreFlags))
+    {
+        return ret;
+    }
+
+    // leak this store, re-opening is a waste of time in tests
+    static HCERTSTORE const hExtra = CertOpenStore(
+            CERT_STORE_PROV_FILENAME_A,
+            PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
+            NULL,
+            CERT_STORE_OPEN_EXISTING_FLAG | CERT_STORE_READONLY_FLAG,
+            OString(OString::Concat(pVar) + "/test.p7b").getStr());
+    assert(hExtra != NULL);
+    if (pSimpleChain->cElement < 1)
+    {
+        SAL_WARN("xmlsecurity.xmlsec", "unexpected empty chain");
+        return ret;
+    }
+    PCCERT_CONTEXT const pRoot(pSimpleChain->rgpElement[pSimpleChain->cElement-1]->pCertContext);
+    PCCERT_CONTEXT const pIssuerCert = CertFindCertificateInStore(
+            hExtra,
+            PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
+            0,
+            CERT_FIND_SUBJECT_NAME,
+            &pRoot->pCertInfo->Subject,
+            NULL);
+    if (pIssuerCert)
+    {
+        // check that it signed itself
+        DWORD flags = CERT_STORE_SIGNATURE_FLAG;
+        BOOL result = CertVerifySubjectCertificateContext(pRoot, pIssuerCert, &flags);
+        if (result == TRUE && flags == 0)
+        {
+            ret = true;
+        }
+    }
+    CertFreeCertificateContext(pIssuerCert);
+    return ret;
+}
+
 //We return only valid or invalid, as long as the API documentation expresses
 //explicitly that all validation steps are carried out even if one or several
 //errors occur. See also
@@ -873,7 +927,8 @@ sal_Int32 SecurityEnvironment_MSCryptImpl::verifyCertificate(
             DWORD revocationFlags = CERT_TRUST_REVOCATION_STATUS_UNKNOWN |
                 CERT_TRUST_IS_OFFLINE_REVOCATION;
             DWORD otherErrorsMask = ~revocationFlags;
-            if( !(pSimpleChain->TrustStatus.dwErrorStatus & otherErrorsMask))
+            if (!(pSimpleChain->TrustStatus.dwErrorStatus & otherErrorsMask)
+                || CheckUnitTestStore(pChainContext, revocationFlags))
 
             {
                 //No errors except maybe those caused by missing revocation information
@@ -900,6 +955,11 @@ sal_Int32 SecurityEnvironment_MSCryptImpl::verifyCertificate(
                         && pChainContext->rgpChain[0]->TrustStatus.dwErrorStatus == CERT_TRUST_NO_ERROR)
                     {
                         SAL_INFO("xmlsecurity.xmlsec", "Certificate is valid.");
+                        validity = css::security::CertificateValidity::VALID;
+                    }
+                    else if (CheckUnitTestStore(pChainContext, 0))
+                    {
+                        SAL_INFO("xmlsecurity.xmlsec", "root certificate found in extra test store");
                         validity = css::security::CertificateValidity::VALID;
                     }
                     else
