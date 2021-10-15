@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c857efe_014d4637",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-15T06:36:41Z",
+      "side": 1,
+      "message": "documented as \u003chttps://wiki.documentfoundation.org/index.php?title\u003dReleaseNotes/7.3\u0026oldid\u003d401378\u003e \"reserved identifier renaming\"",
+      "revId": "04af4e4f55f3ef319a78edd4d0109e2e7eba90b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
