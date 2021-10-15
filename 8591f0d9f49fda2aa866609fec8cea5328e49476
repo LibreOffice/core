@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3b20446_7d8ba330",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-15T16:05:33Z",
+      "side": 1,
+      "message": "Thank you Mike for your feedback, I responded to it.",
+      "revId": "8591f0d9f49fda2aa866609fec8cea5328e49476",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "41bd2f83_5f6058be",
@@ -31,6 +48,24 @@
       "writtenOn": "2021-10-15T14:45:09Z",
       "side": 1,
       "message": "I admit I am not that proficient with C++, and I an unsure if this would call a ctor taking a single int - creating a vector consisting of nNewTab elements, each initialized to 0?\n\nCould you please check (maybe put an assert for the expected size, and then assert(false)) to make sure the code is executed/checked?\n\nOr maybe put the initializer list inside parentheses? Will it make a difference? I am really confused with the multitude of the initialization variants in C++ :-)",
+      "revId": "8591f0d9f49fda2aa866609fec8cea5328e49476",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c731e84_d39779f0",
+        "filename": "cui/source/customize/acccfg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-15T16:05:33Z",
+      "side": 1,
+      "message": "I completely agree, C++ is very tricky! :-)\nHere\u0027s a quick test I did:\n#include \u003ciostream\u003e\n#include \u003cvector\u003e\n\nint main()\n{\n   int nNewTab\u003d3;\n   std::vector\u003cint\u003e aWidths;\n   aWidths.push_back(nNewTab);\n   std::cerr \u003c\u003c \"aWidths.size()\u003d\" \u003c\u003c aWidths.size() \u003c\u003c \"\\n\";\n   std::vector\u003cint\u003e aWidths1 { nNewTab };\n   std::cerr \u003c\u003c \"aWidths1.size()\u003d\" \u003c\u003c aWidths1.size() \u003c\u003c \"\\n\";\n   std::vector\u003cint\u003e aWidths2(nNewTab);\n   std::cerr \u003c\u003c \"aWidths2.size()\u003d\" \u003c\u003c aWidths2.size() \u003c\u003c \"\\n\";\n   return 0;\n}\n\naWidths.size()\u003d1\naWidths1.size()\u003d1\naWidths2.size()\u003d3\n\nSo it should be ok.",
+      "parentUuid": "41bd2f83_5f6058be",
       "revId": "8591f0d9f49fda2aa866609fec8cea5328e49476",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
