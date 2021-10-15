@@ -430,7 +430,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
             if ( nError != rtl_Digest_E_None )
             {
                 aEncryptionData.realloc( nSha1Ind );
-                break;
+                return aEncryptionData;
             }
 
             // coverity[overrun-buffer-arg : FALSE] - coverity has difficulty with css::uno::Sequence
