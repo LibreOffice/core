@@ -661,7 +661,7 @@ Public Sub _Initialize(ByRef poPeer As Object _
 &apos;&apos;&apos;		- store the arguments for later use
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		poPeer: a peer window
-&apos;&apos;&apos;		plXPos, plYPos: the coordina
+&apos;&apos;&apos;		plXPos, plYPos: the coordinates
 
 Try:
 	&apos;	Initialize the dictionaries
