@@ -43,6 +43,7 @@ class SW_DLLPUBLIC SwVisibleCursor
 
     /// For LibreOfficeKit only - remember what page we were at the last time.
     sal_uInt16 m_nPageLastTime;
+    SwRect m_aLastLOKRect;
 
     bool m_bIsVisible;
     bool m_bIsDragCursor;
@@ -58,6 +59,8 @@ public:
     void SetDragCursor( bool bFlag = true ) { m_bIsDragCursor = bFlag; }
     void SetPosAndShow(SfxViewShell const * pViewShell);
     const vcl::Cursor& GetTextCursor() const;
+
+    OString getLOKPayload(int nType, int nViewId) const;
 };
 
 // From here classes/methods for selections.
