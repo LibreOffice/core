@@ -500,11 +500,12 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
         if (cert.is())
             aKeyID = cert->getSHA1Thumbprint();
 
-        std::vector<GpgME::Key> keys;
-        keys.push_back(
+        std::vector<GpgME::Key> keys
+        {
             ctx->key(
                 reinterpret_cast<const char*>(aKeyID.getConstArray()),
-                err, false));
+                err, false)
+        };
 
         // ctx is setup now, let's encrypt the lot!
         GpgME::Data plain(
