@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f68ab3cf_a6f9ec44",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-10-15T08:49:47Z",
+      "side": 1,
+      "message": "Well, I abandoned this because it was a misunderstanding. I did not found any specifications indicating the x:str means the cell should be in text format.\n\nRather, the test document has style class \".xl67\" or \".x168\" applied to each of the cells appearing as digits. Each of these two styles has the attribute mso-number-format:\"\\@\". Thus LibreOffice should get this attribute to set the cell format as TEXT. However, it failed to do so because it seems the stylesheet was never parsed! In \"ScHTMLTable::DataOn\", \"case HtmlOptionId::CLASS:\", \"rStyles \u003d mpParser-\u003eGetStyles()\" returned an empty style all the time.",
+      "revId": "107909fcfbecca92f1faa776c72ab04acf2badc9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
