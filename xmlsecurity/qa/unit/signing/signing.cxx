@@ -7,10 +7,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_crypto.h>
 #include <config_features.h>
 #include <config_gpgme.h>
 
 #include <sal/config.h>
+
+#if USE_CRYPTO_NSS
+#include <secoid.h>
+#endif
 
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
@@ -104,6 +109,13 @@ void SigningTest::setUp()
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
     mxSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
     mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
+#if USE_CRYPTO_NSS
+#ifdef NSS_USE_ALG_IN_ANY_SIGNATURE
+    // policy may disallow using SHA1 for signatures but unit test documents
+    // have such existing signatures (call this after createSecurityContext!)
+    NSS_SetAlgorithmPolicy(SEC_OID_SHA1, NSS_USE_ALG_IN_ANY_SIGNATURE, 0);
+#endif
+#endif
 }
 
 void SigningTest::tearDown()
