@@ -14,6 +14,7 @@
 #include <sfx2/viewsh.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/scheduler.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <test/lokcallback.hxx>
 
 #include <IDocumentStatistics.hxx>
@@ -134,6 +135,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTitleFieldInvalidate)
     ViewCallback aCallback;
     TestLokCallbackWrapper aCallbackWrapper(&ViewCallback::callback, &aCallback);
     pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&aCallbackWrapper);
+    aCallbackWrapper.setLOKViewId(SfxLokHelper::getView(pWrtShell->GetSfxViewShell()));
     Scheduler::ProcessEventsToIdle();
     aCallback.m_nInvalidations = 0;
 

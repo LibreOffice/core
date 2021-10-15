@@ -698,6 +698,27 @@ static bool lcl_isViewCallbackType(const int type)
     }
 }
 
+static bool isUpdatedType(int type)
+{
+    switch (type)
+    {
+        default:
+            return false;
+    }
+}
+
+static bool isUpdatedTypePerViewId(int type)
+{
+    switch (type)
+    {
+        case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+        case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
+            return true;
+        default:
+            return false;
+    }
+}
+
 static int lcl_getViewId(const std::string& payload)
 {
     // this is a cheap way how to get the viewId from a JSON message; proper
@@ -1455,6 +1476,48 @@ CallbackFlushHandler::queue_type2::reverse_iterator CallbackFlushHandler::toQueu
     return m_queue2.rbegin() + delta;
 }
 
+void CallbackFlushHandler::setUpdatedType( int nType, bool value )
+{
+    assert(isUpdatedType(nType));
+    if( m_updatedTypes.size() <= o3tl::make_unsigned( nType ))
+        m_updatedTypes.resize( nType + 1 ); // new are default-constructed, i.e. false
+    m_updatedTypes[ nType ] = value;
+}
+
+void CallbackFlushHandler::resetUpdatedType( int nType )
+{
+    setUpdatedType( nType, false );
+}
+
+void CallbackFlushHandler::setUpdatedTypePerViewId( int nType, int nViewId, int nSourceViewId, bool value )
+{
+    assert(isUpdatedTypePerViewId(nType));
+    std::vector<PerViewIdData>& types = m_updatedTypesPerViewId[ nViewId ];
+    if( types.size() <= o3tl::make_unsigned( nType ))
+        types.resize( nType + 1 ); // new are default-constructed, i.e. false
+    types[ nType ] = PerViewIdData{ value, nSourceViewId };
+}
+
+void CallbackFlushHandler::resetUpdatedTypePerViewId( int nType, int nViewId )
+{
+    assert(isUpdatedTypePerViewId(nType));
+    bool allViewIds = false;
+    // Handle specially messages that do not have viewId for backwards compatibility.
+    if( nType == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR && !comphelper::LibreOfficeKit::isViewIdForVisCursorInvalidation())
+        allViewIds = true;
+    if( !allViewIds )
+    {
+        setUpdatedTypePerViewId( nType, nViewId, -1, false );
+        return;
+    }
+    for( auto& it : m_updatedTypesPerViewId )
+    {
+        std::vector<PerViewIdData>& types = it.second;
+        if( types.size() >= o3tl::make_unsigned( nType ))
+            types[ nType ].set = false;
+    }
+}
+
 void CallbackFlushHandler::libreOfficeKitViewCallback(int nType, const char* pPayload)
 {
     CallbackData callbackData(pPayload);
@@ -1471,6 +1534,22 @@ void CallbackFlushHandler::libreOfficeKitViewInvalidateTilesCallback(const tools
 {
     CallbackData callbackData(pRect, nPart);
     queue(LOK_CALLBACK_INVALIDATE_TILES, callbackData);
+}
+
+void CallbackFlushHandler::libreOfficeKitViewUpdatedCallback(int nType)
+{
+    assert(isUpdatedType( nType ));
+    std::unique_lock<std::mutex> lock(m_mutex);
+    SAL_INFO("lok", "Updated: [" << nType << "]");
+    setUpdatedType(nType, true);
+}
+
+void CallbackFlushHandler::libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId)
+{
+    assert(isUpdatedTypePerViewId( nType ));
+    std::unique_lock<std::mutex> lock(m_mutex);
+    SAL_INFO("lok", "Updated: [" << nType << "]");
+    setUpdatedTypePerViewId(nType, nViewId, nSourceViewId, true);
 }
 
 void CallbackFlushHandler::queue(const int type, const char* data)
@@ -1535,6 +1614,20 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
     }
 
     std::unique_lock<std::mutex> lock(m_mutex);
+
+    // Update types should be received via the updated callbacks for performance,
+    // getting them as normal callbacks is technically not wrong, but probably should be avoided.
+    // Reset the updated flag if we get a normal message.
+    if(isUpdatedType(type))
+    {
+        SAL_INFO("lok", "Received event with updated type [" << type << "] as normal callback");
+        resetUpdatedType(type);
+    }
+    if(isUpdatedTypePerViewId(type))
+    {
+        SAL_INFO("lok", "Received event with updated type [" << type << "] as normal callback");
+        resetUpdatedTypePerViewId(type, aCallbackData.getViewId());
+    }
 
     // drop duplicate callbacks for the listed types
     switch (type)
@@ -2028,6 +2121,58 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
     return false;
 }
 
+void CallbackFlushHandler::enqueueUpdatedTypes()
+{
+    if( m_updatedTypes.empty() && m_updatedTypesPerViewId.empty())
+        return;
+    SfxViewShell* viewShell = SfxViewShell::GetFirst( false,
+        [this](const SfxViewShell* shell) { return shell->GetViewShellId().get() == m_viewId; } );
+    assert(viewShell != nullptr);
+    for( size_t type = 0; type < m_updatedTypes.size(); ++type )
+    {
+        if(m_updatedTypes[ type ])
+        {
+            assert(isUpdatedType( type ));
+            enqueueUpdatedType( type, viewShell, m_viewId );
+        }
+    }
+    for( auto it : m_updatedTypesPerViewId )
+    {
+        int viewId = it.first;
+        const std::vector<PerViewIdData>& types = it.second;
+        for( size_t type = 0; type < types.size(); ++type )
+        {
+            if(types[ type ].set)
+            {
+                assert(isUpdatedTypePerViewId( type ));
+                SfxViewShell* sourceViewShell = viewShell;
+                const int sourceViewId = types[ type ].sourceViewId;
+                if( sourceViewId != m_viewId )
+                    sourceViewShell = SfxViewShell::GetFirst( false,
+                    [sourceViewId](const SfxViewShell* shell) { return shell->GetViewShellId().get() == sourceViewId; } );
+                if(sourceViewShell == nullptr)
+                {
+                    SAL_INFO("lok", "View #" << sourceViewId << " no longer found for updated event [" << type << "]");
+                    continue; // View removed, probably cleaning up.
+                }
+                enqueueUpdatedType( type, sourceViewShell, viewId );
+            }
+        }
+    }
+    m_updatedTypes.clear();
+    m_updatedTypesPerViewId.clear();
+}
+
+void CallbackFlushHandler::enqueueUpdatedType( int type, SfxViewShell* viewShell, int viewId )
+{
+    OString payload = viewShell->getLOKPayload( type, viewId );
+    CallbackData callbackData(payload.getStr(), viewId);
+    m_queue1.emplace_back(type);
+    m_queue2.emplace_back(callbackData);
+    SAL_INFO("lok", "Queued updated [" << type << "]: [" << callbackData.getPayload()
+        << "] to have " << m_queue1.size() << " entries.");
+}
+
 void CallbackFlushHandler::Invoke()
 {
     comphelper::ProfileZone aZone("CallbackFlushHandler::Invoke");
@@ -2044,6 +2189,9 @@ void CallbackFlushHandler::Invoke()
     }
 
     std::scoped_lock<std::mutex> lock(m_mutex);
+
+    // Append messages for updated types, fetch them only now.
+    enqueueUpdatedTypes();
 
     SAL_INFO("lok", "Flushing " << m_queue1.size() << " elements.");
     auto it1 = m_queue1.begin();

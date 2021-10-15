@@ -179,6 +179,7 @@ public:
 
 private:
     ScModelObj* createDoc(const char* pName);
+    void setupLibreOfficeKitViewCallback(SfxViewShell* pViewShell);
     static void callback(int nType, const char* pPayload, void* pData);
     void callbackImpl(int nType, const char* pPayload);
 
@@ -220,6 +221,7 @@ void ScTiledRenderingTest::tearDown()
         }
         mxComponent->dispose();
     }
+    m_callbackWrapper.clear();
     comphelper::LibreOfficeKit::setActive(false);
 
     test::BootstrapFixture::tearDown();
@@ -234,6 +236,12 @@ ScModelObj* ScTiledRenderingTest::createDoc(const char* pName)
     CPPUNIT_ASSERT(pModelObj);
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     return pModelObj;
+}
+
+void ScTiledRenderingTest::setupLibreOfficeKitViewCallback(SfxViewShell* pViewShell)
+{
+    pViewShell->setLibreOfficeKitViewCallback(&m_callbackWrapper);
+    m_callbackWrapper.setLOKViewId(SfxLokHelper::getView(pViewShell));
 }
 
 void ScTiledRenderingTest::callback(int nType, const char* pPayload, void* pData)
@@ -398,7 +406,7 @@ void ScTiledRenderingTest::testDocumentSize()
     ScTabViewShell* pViewShell = pDocSh->GetBestViewShell(false);
     CPPUNIT_ASSERT(pViewShell);
 
-    pViewShell->setLibreOfficeKitViewCallback(&m_callbackWrapper);
+    setupLibreOfficeKitViewCallback(pViewShell);
 
     // check initial document size
     Size aDocSize = pModelObj->getDocumentSize();
@@ -598,6 +606,7 @@ public:
         mpViewShell = SfxViewShell::Current();
         mpViewShell->setLibreOfficeKitViewCallback(&m_callbackWrapper);
         mnView = SfxLokHelper::getView();
+        m_callbackWrapper.setLOKViewId( mnView );
         if (!bDeleteListenerOnDestruct)
             mpViewShell = nullptr;
     }
@@ -781,7 +790,7 @@ void ScTiledRenderingTest::testDocumentSizeChanged()
 
     // Load a document that doesn't have much content.
     createDoc("small.ods");
-    SfxViewShell::Current()->setLibreOfficeKitViewCallback(&m_callbackWrapper);
+    setupLibreOfficeKitViewCallback(SfxViewShell::Current());
 
     // Go to the A30 cell -- that will extend the document size.
     uno::Sequence<beans::PropertyValue> aPropertyValues =
@@ -883,7 +892,7 @@ void ScTiledRenderingTest::testColRowResize()
     ScTabViewShell* pViewShell = pDocSh->GetBestViewShell(false);
     CPPUNIT_ASSERT(pViewShell);
 
-    pViewShell->setLibreOfficeKitViewCallback(&m_callbackWrapper);
+    setupLibreOfficeKitViewCallback(pViewShell);
 
     ScDocument& rDoc = pDocSh->GetDocument();
 
