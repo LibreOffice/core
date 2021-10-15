@@ -16,6 +16,24 @@
       "message": "This ignores that in line 424, the sequence may be reallocated to nSha1Ind elements.",
       "revId": "3761e01fd16a06468009c0de1b84026b2be1dda6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "630a1ec4_3795f011",
+        "filename": "comphelper/source/misc/storagehelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-10-15T08:42:32Z",
+      "side": 1,
+      "message": "urgh, looks like i missed that... hopefully such errors are not possible in practice\n\nsee https://gerrit.libreoffice.org/c/core/+/123649",
+      "parentUuid": "2ed651bd_bd7e7cc9",
+      "revId": "3761e01fd16a06468009c0de1b84026b2be1dda6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
