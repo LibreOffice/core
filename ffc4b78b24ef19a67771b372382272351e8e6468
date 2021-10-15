@@ -16,6 +16,24 @@
       "message": "Stephan: possibly something like this could be nice; unfortunately, operator+ conflicts with concat - but maybe we could create something like constexpr concat - if all its elements are constexpr? then there could be a ctor for literal taking such concat...",
       "revId": "ffc4b78b24ef19a67771b372382272351e8e6468",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c4d0227_5356162a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-15T10:54:08Z",
+      "side": 1,
+      "message": "I like the effort. The patch works for me and it is useful, but for the syntax, is *, % or other meaningful operators usable?",
+      "parentUuid": "32929957_93850988",
+      "revId": "ffc4b78b24ef19a67771b372382272351e8e6468",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
