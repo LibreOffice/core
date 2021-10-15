@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef _WIN32
+#include <secoid.h>
+#endif
+
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 
@@ -135,6 +139,18 @@ void PDFSigningTest::setUp()
     osl::File::copy(aSourceDir + "key4.db", aTargetDir + "key4.db");
     osl::File::copy(aSourceDir + "pkcs11.txt", aTargetDir + "pkcs11.txt");
     setenv("MOZILLA_CERTIFICATE_FOLDER", aTargetPath.toUtf8().getStr(), 1);
+#endif
+
+    uno::Reference<xml::crypto::XSEInitializer> xSEInitializer
+        = xml::crypto::SEInitializer::create(mxComponentContext);
+    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext
+        = xSEInitializer->createSecurityContext(OUString());
+#ifndef _WIN32
+#ifdef NSS_USE_ALG_IN_ANY_SIGNATURE
+    // policy may disallow using SHA1 for signatures but unit test documents
+    // have such existing signatures (call this after createSecurityContext!)
+    NSS_SetAlgorithmPolicy(SEC_OID_SHA1, NSS_USE_ALG_IN_ANY_SIGNATURE, 0);
+#endif
 #endif
 }
 
