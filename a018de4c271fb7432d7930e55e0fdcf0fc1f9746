@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcdcb66b_fb89c750",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2021-10-15T18:19:59Z",
+      "side": 1,
+      "message": "patchset 3 version looks nicer to me, actually.",
+      "revId": "a018de4c271fb7432d7930e55e0fdcf0fc1f9746",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
