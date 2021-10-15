@@ -430,7 +430,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
             if ( nError != rtl_Digest_E_None )
             {
                 aEncryptionData.realloc( nSha1Ind );
-                break;
+                return aEncryptionData;
             }
 
             aEncryptionData[nSha1Ind+nInd].Value <<= uno::Sequence< sal_Int8 >( reinterpret_cast<sal_Int8*>(pBuffer), RTL_DIGEST_LENGTH_SHA1 );
