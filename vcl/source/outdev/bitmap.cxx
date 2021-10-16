@@ -67,6 +67,16 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
     if( ImplIsRecordLayout() )
         return;
 
+    if (mpMetaFile)
+        mpMetaFile->AddAction(new MetaBitmapContainerAction(meRasterOp, mnDrawMode,
+                                    rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, rBitmap, nAction));
+
+    if ( !IsDeviceOutputNecessary() )
+        return;
+
+    GDIMetaFile* pOldMetaFile = mpMetaFile;
+    mpMetaFile = nullptr;
+
     if ( RasterOp::Invert == meRasterOp )
     {
         DrawRect( tools::Rectangle( rDestPt, rDestSize ) );
@@ -93,6 +103,9 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
             SetFillColor( aCol );
             DrawRect( tools::Rectangle( rDestPt, rDestSize ) );
             Pop();
+
+            mpMetaFile = pOldMetaFile;
+
             return;
         }
         else if( !aBmp.IsEmpty() )
@@ -102,29 +115,7 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
         }
     }
 
-    if ( mpMetaFile )
-    {
-        switch( nAction )
-        {
-            case MetaActionType::BMP:
-                mpMetaFile->AddAction( new MetaBmpAction( rDestPt, aBmp ) );
-            break;
-
-            case MetaActionType::BMPSCALE:
-                mpMetaFile->AddAction( new MetaBmpScaleAction( rDestPt, rDestSize, aBmp ) );
-            break;
-
-            case MetaActionType::BMPSCALEPART:
-                mpMetaFile->AddAction( new MetaBmpScalePartAction(
-                    rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmp ) );
-            break;
-
-            default: break;
-        }
-    }
-
-    if ( !IsDeviceOutputNecessary() )
-        return;
+    mpMetaFile = pOldMetaFile;
 
     if (!mpGraphics && !AcquireGraphics())
         return;
