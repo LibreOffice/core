@@ -819,6 +819,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
             GradientContainerHandler(pMetaAction);
         }
         break;
+
+        case MetaActionType::BITMAPCONTAINER:
+        {
+            auto* pMetaAction = static_cast<MetaBitmapContainerAction*>(pAction);
+            BitmapContainerHandler(pMetaAction);
+        }
+        break;
     }
 }
 
@@ -1619,6 +1626,92 @@ void SvmWriter::GradientContainerHandler(const MetaGradientContainerAction* pAct
             {
                 auto* pMetaAction = static_cast<MetaISectRectClipRegionAction*>(pContainerAction);
                 ISectRectClipRegionHandler(pMetaAction);
+            }
+            break;
+
+            default:
+                break;
+        }
+    }
+}
+
+void SvmWriter::BitmapContainerHandler(const MetaBitmapContainerAction* pActionConst)
+{
+    MetaBitmapContainerAction* pAction = const_cast<MetaBitmapContainerAction*>(pActionConst);
+
+    for (auto* pContainerAction : *pAction)
+    {
+        MetaActionType nType = pAction->GetType();
+
+        switch (nType)
+        {
+            case MetaActionType::COMMENT:
+            {
+                auto* pMetaAction = static_cast<MetaCommentAction*>(pContainerAction);
+                CommentHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::LINECOLOR:
+            {
+                auto* pMetaAction = static_cast<MetaLineColorAction*>(pContainerAction);
+                LineColorHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::FILLCOLOR:
+            {
+                auto* pMetaAction = static_cast<MetaFillColorAction*>(pContainerAction);
+                FillColorHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::RECT:
+            {
+                auto* pMetaAction = static_cast<MetaRectAction*>(pContainerAction);
+                RectHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::BMP:
+            {
+                auto* pMetaAction = static_cast<MetaBmpAction*>(pContainerAction);
+                BmpHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::BMPSCALE:
+            {
+                auto* pMetaAction = static_cast<MetaBmpScaleAction*>(pContainerAction);
+                BmpScaleHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::BMPSCALEPART:
+            {
+                auto* pMetaAction = static_cast<MetaBmpScalePartAction*>(pContainerAction);
+                BmpScalePartHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::PUSH:
+            {
+                auto* pMetaAction = static_cast<MetaPushAction*>(pContainerAction);
+                PushHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::POP:
+            {
+                auto* pMetaAction = static_cast<MetaPopAction*>(pContainerAction);
+                PopHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::RASTEROP:
+            {
+                auto* pMetaAction = static_cast<MetaRasterOpAction*>(pContainerAction);
+                RasterOpHandler(pMetaAction);
             }
             break;
 
