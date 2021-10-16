@@ -143,13 +143,13 @@ LwpPara* LwpPara::GetParent()
         o3tl::sorted_vector<LwpPara*> aSeen;
         while (pPara)
         {
-            aSeen.insert(pPara);
+            bool bAlreadySeen = !aSeen.insert(pPara).second;
+            if (bAlreadySeen)
+                throw std::runtime_error("loop in conversion");
             otherlevel = pPara->GetLevel();
             if ((otherlevel < level) || (otherlevel && (level == 0)))
                 return pPara;
             pPara = dynamic_cast<LwpPara*>(pPara->GetPrevious().obj().get());
-            if (aSeen.find(pPara) != aSeen.end())
-                throw std::runtime_error("loop in conversion");
         }
     }
     return nullptr;

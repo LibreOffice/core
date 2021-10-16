@@ -97,13 +97,14 @@ void LwpRowLayout::SetRowMap()
     o3tl::sorted_vector<LwpCellLayout*> aSeen;
     while(pCellLayout)
     {
-        aSeen.insert(pCellLayout);
+        bool bAlreadySeen = !aSeen.insert(pCellLayout).second;
+        if (bAlreadySeen)
+            throw std::runtime_error("loop in conversion");
+
         pCellLayout->SetCellMap();
 
         pCellID = &pCellLayout->GetNext();
         pCellLayout = dynamic_cast<LwpCellLayout *>(pCellID->obj().get());
-        if (aSeen.find(pCellLayout) != aSeen.end())
-            throw std::runtime_error("loop in conversion");
     }
 }
 /**
@@ -141,15 +142,14 @@ void LwpRowLayout::RegisterStyle()
     o3tl::sorted_vector<LwpCellLayout*> aSeen;
     while (pCellLayout)
     {
-        aSeen.insert(pCellLayout);
+        bool bAlreadySeen = !aSeen.insert(pCellLayout).second;
+        if (bAlreadySeen)
+            throw std::runtime_error("loop in conversion");
 
         pCellLayout->SetFoundry(m_pFoundry);
         pCellLayout->RegisterStyle();
         pCellID = &pCellLayout->GetNext();
         pCellLayout = dynamic_cast<LwpCellLayout *>(pCellID->obj().get());
-
-        if (aSeen.find(pCellLayout) != aSeen.end())
-            throw std::runtime_error("loop in conversion");
     }
 
 }

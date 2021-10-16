@@ -492,15 +492,15 @@ void LwpHeadLayout::RegisterStyle()
     o3tl::sorted_vector<LwpVirtualLayout*> aSeen;
     while (xLayout.is())
     {
-        aSeen.insert(xLayout.get());
+        bool bAlreadySeen = !aSeen.insert(xLayout.get()).second;
+        if (bAlreadySeen)
+            throw std::runtime_error("loop in conversion");
         xLayout->SetFoundry(m_pFoundry);
         //if the layout is relative to para, the layout will be registered in para
         if (!xLayout->IsRelativeAnchored())
             xLayout->DoRegisterStyle();
         rtl::Reference<LwpVirtualLayout> xNext(
             dynamic_cast<LwpVirtualLayout*>(xLayout->GetNext().obj().get()));
-        if (aSeen.find(xNext.get()) != aSeen.end())
-            throw std::runtime_error("loop in conversion");
         xLayout = xNext;
     }
 }
@@ -516,14 +516,14 @@ rtl::Reference<LwpVirtualLayout> LwpHeadLayout::FindEnSuperTableLayout()
     o3tl::sorted_vector<LwpVirtualLayout*> aSeen;
     while (xLayout)
     {
-        aSeen.insert(xLayout.get());
+        bool bAlreadySeen = !aSeen.insert(xLayout.get()).second;
+        if (bAlreadySeen)
+            throw std::runtime_error("loop in conversion");
         if (xLayout->GetLayoutType() == LWP_ENDNOTE_SUPERTABLE_LAYOUT)
         {
             return xLayout;
         }
         xLayout.set(dynamic_cast<LwpVirtualLayout*>(xLayout->GetNext().obj().get()));
-        if (aSeen.find(xLayout.get()) != aSeen.end())
-            throw std::runtime_error("loop in conversion");
     }
     return rtl::Reference<LwpVirtualLayout>();
 }
@@ -1362,15 +1362,15 @@ rtl::Reference<LwpVirtualLayout> LwpMiddleLayout::GetWaterMarkLayout()
     o3tl::sorted_vector<LwpVirtualLayout*> aSeen;
     while (xLay.is())
     {
-        aSeen.insert(xLay.get());
+        bool bAlreadySeen = !aSeen.insert(xLay.get()).second;
+        if (bAlreadySeen)
+            throw std::runtime_error("loop in conversion");
         if (xLay->IsForWaterMark())
         {
             return xLay;
         }
         rtl::Reference<LwpVirtualLayout> xNext(
             dynamic_cast<LwpVirtualLayout*>(xLay->GetNext().obj().get()));
-        if (aSeen.find(xNext.get()) != aSeen.end())
-            throw std::runtime_error("loop in conversion");
         xLay = xNext;
     }
     return rtl::Reference<LwpVirtualLayout>();

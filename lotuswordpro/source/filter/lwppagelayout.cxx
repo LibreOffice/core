@@ -552,7 +552,9 @@ LwpPageLayout* LwpPageLayout::GetOddChildLayout()
         o3tl::sorted_vector<LwpVirtualLayout*> aSeen;
         while (xLay.is())
         {
-            aSeen.insert(xLay.get());
+            bool bAlreadySeen = !aSeen.insert(xLay.get()).second;
+            if (bAlreadySeen)
+                throw std::runtime_error("loop in conversion");
 
             if (xLay->GetLayoutType() == LWP_PAGE_LAYOUT)
             {
@@ -564,9 +566,6 @@ LwpPageLayout* LwpPageLayout::GetOddChildLayout()
                 }
             }
             xLay.set(dynamic_cast<LwpVirtualLayout*>(xLay->GetNext().obj().get()));
-
-            if (aSeen.find(xLay.get()) != aSeen.end())
-                throw std::runtime_error("loop in conversion");
         }
     }
     return nullptr;
@@ -610,7 +609,9 @@ sal_Int32 LwpPageLayout::GetPageNumber(sal_uInt16 nLayoutNumber)
     o3tl::sorted_vector<LwpPageHint*> aSeen;
     while (pPageHint)
     {
-        aSeen.insert(pPageHint);
+        bool bAlreadySeen = !aSeen.insert(pPageHint).second;
+        if (bAlreadySeen)
+            throw std::runtime_error("loop in conversion");
 
         if (GetObjectID() == pPageHint->GetPageLayoutID())
         {
@@ -640,9 +641,6 @@ sal_Int32 LwpPageLayout::GetPageNumber(sal_uInt16 nLayoutNumber)
         }
 
         pPageHint = dynamic_cast<LwpPageHint*>(pPageHint->GetNext().obj().get());
-
-        if (aSeen.find(pPageHint) != aSeen.end())
-            throw std::runtime_error("loop in conversion");
     }
     if (nPageNumber >= 0)
     {
