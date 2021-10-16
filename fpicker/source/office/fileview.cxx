@@ -428,8 +428,7 @@ ViewTabListBox_Impl::ViewTabListBox_Impl(std::unique_ptr<weld::TreeView> xTreeVi
     , mbEditing( false )
     , mbShowType(nFlags & FileViewFlags::SHOW_TYPE)
 {
-    std::vector<int> aWidths;
-    aWidths.push_back(180);
+    std::vector<int> aWidths { 180 };
     if (nFlags & FileViewFlags::SHOW_TYPE)
         aWidths.push_back(140);
     aWidths.push_back(80);
