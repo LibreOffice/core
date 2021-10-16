@@ -105,18 +105,19 @@ void LwpStory::XFConvert(XFContentContainer* pCont)
     //process para list
     XFContentContainer* pParaCont = pCont;
     rtl::Reference<LwpPara> xPara(dynamic_cast<LwpPara*>(GetFirstPara().obj().get()));
-    o3tl::sorted_vector<LwpPara*> aConverted;
+    o3tl::sorted_vector<LwpPara*> aSeen;
     while (xPara.is())
     {
+        bool bAlreadySeen = !aSeen.insert(xPara.get()).second;
+        if (bAlreadySeen)
+            throw std::runtime_error("loop in conversion");
+
         xPara->SetFoundry(m_pFoundry);
         xPara->XFConvert(pParaCont);
-        aConverted.insert(xPara.get());
 
         //Get the xfcontainer for the next para
         pParaCont = xPara->GetXFContainer();
         rtl::Reference<LwpPara> xNext(dynamic_cast<LwpPara*>(xPara->GetNext().obj().get()));
-        if (aConverted.find(xNext.get()) != aConverted.end())
-            throw std::runtime_error("loop in conversion");
         xPara = xNext;
     }
 
@@ -143,12 +144,12 @@ void LwpStory::RegisterStyle()
     o3tl::sorted_vector<LwpPara*> aSeen;
     while (xPara.is())
     {
-        aSeen.insert(xPara.get());
+        bool bAlreadySeen = !aSeen.insert(xPara.get()).second;
+        if (bAlreadySeen)
+            throw std::runtime_error("loop in register style");
         xPara->SetFoundry(m_pFoundry);
         xPara->DoRegisterStyle();
         xPara.set(dynamic_cast<LwpPara*>(xPara->GetNext().obj().get()));
-        if (aSeen.find(xPara.get()) != aSeen.end())
-            throw std::runtime_error("loop in register style");
     }
 }
 
@@ -326,7 +327,9 @@ void LwpStory::XFConvertFrameInPage(XFContentContainer* pCont)
         o3tl::sorted_vector<LwpVirtualLayout*> aSeen;
         while (xFrameLayout.is())
         {
-            aSeen.insert(xFrameLayout.get());
+            bool bAlreadySeen = !aSeen.insert(xFrameLayout.get()).second;
+            if (bAlreadySeen)
+                throw std::runtime_error("loop in conversion");
             if( xFrameLayout->IsAnchorPage()
                 && (xFrameLayout->IsFrame()
                     || xFrameLayout->IsSuperTable()
@@ -335,8 +338,6 @@ void LwpStory::XFConvertFrameInPage(XFContentContainer* pCont)
                 xFrameLayout->DoXFConvert(pCont);
             }
             xFrameLayout.set(dynamic_cast<LwpVirtualLayout*>(xFrameLayout->GetNext().obj().get()));
-            if (aSeen.find(xFrameLayout.get()) != aSeen.end())
-                throw std::runtime_error("loop in conversion");
         }
         xLayout = GetLayout(xLayout.get());
     }
@@ -353,14 +354,14 @@ void LwpStory::XFConvertFrameInFrame(XFContentContainer* pCont)
         o3tl::sorted_vector<LwpVirtualLayout*> aSeen;
         while (xFrameLayout.is())
         {
-            aSeen.insert(xFrameLayout.get());
+            bool bAlreadySeen = !aSeen.insert(xFrameLayout.get()).second;
+            if (bAlreadySeen)
+                throw std::runtime_error("loop in register style");
             if (xFrameLayout->IsAnchorFrame())
             {
                 xFrameLayout->DoXFConvert(pCont);
             }
             xFrameLayout.set(dynamic_cast<LwpVirtualLayout*>(xFrameLayout->GetNext().obj().get()));
-            if (aSeen.find(xFrameLayout.get()) != aSeen.end())
-                throw std::runtime_error("loop in register style");
         }
         xLayout = GetLayout(xLayout.get());
     }
