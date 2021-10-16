@@ -867,9 +867,6 @@ void Content::addProperty( const ucb::PropertyCommandArgument& aCmdArg,
     ProppatchValue aValue(
         PROPSET, aCmdArg.Property.Name, aCmdArg.DefaultValue );
 
-    std::vector< ProppatchValue > aProppatchValues;
-    aProppatchValues.push_back( aValue );
-
     try
     {
         // Set property value at server.
@@ -882,7 +879,7 @@ void Content::addProperty( const ucb::PropertyCommandArgument& aCmdArg,
         // clean cached value of PROPFIND property names
         // PROPPATCH can change them
         removeCachedPropertyNames( xResAccess->getURL() );
-        xResAccess->PROPPATCH( aProppatchValues, xEnv );
+        xResAccess->PROPPATCH( { aValue }, xEnv );
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
             m_xResAccess.reset(new DAVResourceAccess(*xResAccess));
@@ -958,9 +955,7 @@ void Content::removeProperty( const OUString& Name,
 
     try
     {
-        std::vector< ProppatchValue > aProppatchValues;
         ProppatchValue aValue( PROPREMOVE, Name, uno::Any() );
-        aProppatchValues.push_back( aValue );
 
         // Remove property value from server.
         std::unique_ptr< DAVResourceAccess > xResAccess;
@@ -972,7 +967,7 @@ void Content::removeProperty( const OUString& Name,
         // clean cached value of PROPFIND property names
         // PROPPATCH can change them
         removeCachedPropertyNames( xResAccess->getURL() );
-        xResAccess->PROPPATCH( aProppatchValues, xEnv );
+        xResAccess->PROPPATCH( { aValue }, xEnv );
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
             m_xResAccess.reset(new DAVResourceAccess(*xResAccess));
