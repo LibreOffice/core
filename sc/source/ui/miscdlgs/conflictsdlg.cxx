@@ -21,6 +21,7 @@
 #include <osl/diagnose.h>
 
 #include <conflictsdlg.hxx>
+#include <o3tl/safeint.hxx>
 #include <strings.hrc>
 #include <scresid.hxx>
 #include <viewdata.hxx>
@@ -355,9 +356,11 @@ ScConflictsDlg::ScConflictsDlg(weld::Window* pParent, ScViewData* pViewData, ScD
     weld::TreeView& rTreeView = m_xLbConflicts->GetWidget();
 
     auto nDigitWidth = rTreeView.get_approximate_digit_width();
-    std::vector<int> aWidths;
-    aWidths.push_back(nDigitWidth * 60);
-    aWidths.push_back(nDigitWidth * 20);
+    std::vector<int> aWidths
+    {
+        o3tl::narrowing<int>(nDigitWidth * 60),
+        o3tl::narrowing<int>(nDigitWidth * 20)
+    };
     rTreeView.set_column_fixed_widths(aWidths);
 
     rTreeView.set_selection_mode(SelectionMode::Multiple);

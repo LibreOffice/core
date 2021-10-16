@@ -435,8 +435,7 @@ void ScColumn::ConvertFormulaToValue(
     if (!GetDoc().ValidRow(nRow1) || !GetDoc().ValidRow(nRow2) || nRow1 > nRow2)
         return;
 
-    std::vector<SCROW> aBounds;
-    aBounds.push_back(nRow1);
+    std::vector<SCROW> aBounds { nRow1 };
     if (nRow2 < GetDoc().MaxRow()-1)
         aBounds.push_back(nRow2+1);
 
@@ -496,8 +495,7 @@ void ScColumn::SwapNonEmpty(
     sc::TableValues& rValues, sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt )
 {
     const ScRange& rRange = rValues.getRange();
-    std::vector<SCROW> aBounds;
-    aBounds.push_back(rRange.aStart.Row());
+    std::vector<SCROW> aBounds { rRange.aStart.Row() };
     if (rRange.aEnd.Row() < GetDoc().MaxRow()-1)
         aBounds.push_back(rRange.aEnd.Row()+1);
 

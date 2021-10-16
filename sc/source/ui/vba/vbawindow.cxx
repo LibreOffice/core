@@ -727,8 +727,7 @@ void SAL_CALL ScVbaWindow::setZoom(const uno::Any& _zoom)
     SCTAB nTab = 0;
     if ( !ScVbaWorksheets::nameExists (xSpreadDoc, xActiveSheet->getName(), nTab) )
         throw uno::RuntimeException();
-    std::vector< SCTAB > vTabs;
-    vTabs.push_back( nTab );
+    std::vector< SCTAB > vTabs { nTab };
     excel::implSetZoom( m_xModel, nZoom, vTabs );
 }
 

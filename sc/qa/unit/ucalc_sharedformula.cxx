@@ -1550,10 +1550,7 @@ void TestSharedFormula::testSharedFormulaMoveBlock()
     clearFormulaCellChangedFlag(*m_pDoc, aFormulaRange);
 
     // Make sure these formula cells in B1:B3 have correct positions even after the move.
-    std::vector<SCROW> aRows;
-    aRows.push_back(0);
-    aRows.push_back(1);
-    aRows.push_back(2);
+    std::vector<SCROW> aRows { 0, 1, 2 };
     bool bRes = checkFormulaPositions(*m_pDoc, 0, 1, aRows.data(), aRows.size());
     CPPUNIT_ASSERT(bRes);
 
@@ -1928,8 +1925,7 @@ void TestSharedFormula::testSharedFormulaUnshareAreaListeners()
                 // Set formula cell vector.
                 {
                     ScFormulaCell* pCell = new ScFormulaCell( *m_pDoc, aPos, "=B4");
-                    std::vector<ScFormulaCell*> aCells;
-                    aCells.push_back(pCell);
+                    std::vector<ScFormulaCell*> aCells { pCell };
                     m_pDoc->SetFormulaCells( aPos, aCells);
                 }
             break;

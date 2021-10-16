@@ -347,8 +347,7 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
                 rDoc.SetCodeName( sCodeName );
             }
 
-            std::vector< OUString > sDocModuleNames;
-            sDocModuleNames.push_back( sCodeName );
+            std::vector< OUString > sDocModuleNames { sCodeName };
 
             for ( SCTAB index = 0; index < rDoc.GetTableCount(); index++)
             {

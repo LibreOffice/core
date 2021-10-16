@@ -3063,8 +3063,7 @@ ScFormulaCell::HasRefListExpressibleAsOneReference(ScRange& rRange) const
     {
         // Collect all consecutive references, starting by the one
         // already found
-        std::vector<formula::FormulaToken*> aReferences;
-        aReferences.push_back(pFirstReference);
+        std::vector<formula::FormulaToken*> aReferences { pFirstReference };
         FormulaToken* pToken(aIter.NextRPN());
         FormulaToken* pFunction(nullptr);
         while (pToken)
