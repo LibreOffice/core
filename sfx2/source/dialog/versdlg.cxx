@@ -140,10 +140,7 @@ namespace
             }
         }
 
-        std::vector<int> aWidths;
-        aWidths.push_back(nMax);
-        aWidths.push_back(nMaxAuthorWidth);
-        rVersionBox.set_column_fixed_widths(aWidths);
+        rVersionBox.set_column_fixed_widths({ nMax, nMaxAuthorWidth });
     }
 }
 
