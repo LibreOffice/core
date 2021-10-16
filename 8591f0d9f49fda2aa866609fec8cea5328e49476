@@ -85,6 +85,24 @@
       "parentUuid": "41bd2f83_5f6058be",
       "revId": "8591f0d9f49fda2aa866609fec8cea5328e49476",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88e20ebc_85afb2f6",
+        "filename": "cui/source/customize/acccfg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-16T10:37:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c731e84_d39779f0",
+      "revId": "8591f0d9f49fda2aa866609fec8cea5328e49476",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
