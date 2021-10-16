@@ -49,17 +49,18 @@ CPPUNIT_TEST_FIXTURE(DrawinglayerBorderTest, testDoubleDecompositionSolid)
     basegfx::BColor aColorLeft;
     std::vector<double> aDashing(svtools::GetLineDashing(SvxBorderLineStyle::DOUBLE, 10.0));
     const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(std::move(aDashing));
-    std::vector<drawinglayer::primitive2d::BorderLine> aBorderlines;
+    std::vector<drawinglayer::primitive2d::BorderLine> aBorderlines{
 
-    aBorderlines.push_back(drawinglayer::primitive2d::BorderLine(
-        drawinglayer::attribute::LineAttribute(aColorLeft, fLeftWidth), fExtendLeftStart,
-        fExtendLeftStart, fExtendLeftEnd, fExtendLeftEnd));
+        drawinglayer::primitive2d::BorderLine(
+            drawinglayer::attribute::LineAttribute(aColorLeft, fLeftWidth), fExtendLeftStart,
+            fExtendLeftStart, fExtendLeftEnd, fExtendLeftEnd),
 
-    aBorderlines.push_back(drawinglayer::primitive2d::BorderLine(fDistance));
+        drawinglayer::primitive2d::BorderLine(fDistance),
 
-    aBorderlines.push_back(drawinglayer::primitive2d::BorderLine(
-        drawinglayer::attribute::LineAttribute(aColorRight, fRightWidth), fExtendRightStart,
-        fExtendRightStart, fExtendRightEnd, fExtendRightEnd));
+        drawinglayer::primitive2d::BorderLine(
+            drawinglayer::attribute::LineAttribute(aColorRight, fRightWidth), fExtendRightStart,
+            fExtendRightStart, fExtendRightEnd, fExtendRightEnd)
+    };
 
     rtl::Reference<drawinglayer::primitive2d::BorderLinePrimitive2D> aBorder(
         new drawinglayer::primitive2d::BorderLinePrimitive2D(aStart, aEnd, std::move(aBorderlines),
@@ -113,17 +114,17 @@ CPPUNIT_TEST_FIXTURE(DrawinglayerBorderTest, testDoublePixelProcessing)
     basegfx::BColor aColorLeft;
     std::vector<double> aDashing(svtools::GetLineDashing(SvxBorderLineStyle::DOUBLE, 10.0));
     const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(std::move(aDashing));
-    std::vector<drawinglayer::primitive2d::BorderLine> aBorderlines;
+    std::vector<drawinglayer::primitive2d::BorderLine> aBorderlines{
+        drawinglayer::primitive2d::BorderLine(
+            drawinglayer::attribute::LineAttribute(aColorLeft, fLeftWidth), fExtendLeftStart,
+            fExtendLeftStart, fExtendLeftEnd, fExtendLeftEnd),
 
-    aBorderlines.push_back(drawinglayer::primitive2d::BorderLine(
-        drawinglayer::attribute::LineAttribute(aColorLeft, fLeftWidth), fExtendLeftStart,
-        fExtendLeftStart, fExtendLeftEnd, fExtendLeftEnd));
+        drawinglayer::primitive2d::BorderLine(fDistance),
 
-    aBorderlines.push_back(drawinglayer::primitive2d::BorderLine(fDistance));
-
-    aBorderlines.push_back(drawinglayer::primitive2d::BorderLine(
-        drawinglayer::attribute::LineAttribute(aColorRight, fRightWidth), fExtendRightStart,
-        fExtendRightStart, fExtendRightEnd, fExtendRightEnd));
+        drawinglayer::primitive2d::BorderLine(
+            drawinglayer::attribute::LineAttribute(aColorRight, fRightWidth), fExtendRightStart,
+            fExtendRightStart, fExtendRightEnd, fExtendRightEnd)
+    };
 
     rtl::Reference<drawinglayer::primitive2d::BorderLinePrimitive2D> aBorder(
         new drawinglayer::primitive2d::BorderLinePrimitive2D(aStart, aEnd, std::move(aBorderlines),
