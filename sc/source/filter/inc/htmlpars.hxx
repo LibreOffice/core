@@ -609,7 +609,7 @@ private:
     /** Closes the current table, regardless on opening tag. */
     void                CloseTable( const HtmlImportInfo& rInfo );
 
-    static void         ParseStyle(std::u16string_view rStrm);
+    void         ParseStyle(std::u16string_view rStrm);
 
     DECL_LINK( HTMLImportHdl, HtmlImportInfo&, void );
 
