@@ -232,9 +232,11 @@ SwSendMailDialog::SwSendMailDialog(weld::Window *pParent, SwMailMergeConfigItem&
     m_xStop->connect_clicked(LINK( this, SwSendMailDialog, StopHdl_Impl));
     m_xCancel->connect_clicked(LINK( this, SwSendMailDialog, CancelHdl_Impl));
 
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xStatus->get_checkbox_column_width());
-    aWidths.push_back(aSize.Width()/3 * 2);
+    std::vector<int> aWidths
+    {
+        o3tl::narrowing<int>(m_xStatus->get_checkbox_column_width()),
+        o3tl::narrowing<int>(aSize.Width()/3 * 2)
+    };
     m_xStatus->set_column_fixed_widths(aWidths);
 
     m_xPaused->set_visible(false);

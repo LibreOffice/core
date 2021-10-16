@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/safeint.hxx>
 #include <swtypes.hxx>
 #include "selectdbtabledialog.hxx"
 #include "dbtablepreviewdialog.hxx"
@@ -48,8 +49,7 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(weld::Window* pParent,
     m_xTable->set_size_request(m_xTable->get_approximate_digit_width() * 60,
                                m_xTable->get_height_rows(6));
 
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xTable->get_approximate_digit_width() * 30);
+    std::vector<int> aWidths{ o3tl::narrowing<int>(m_xTable->get_approximate_digit_width() * 30) };
     m_xTable->set_column_fixed_widths(aWidths);
 
     m_xPreviewPB->connect_clicked(LINK(this, SwSelectDBTableDialog, PreviewHdl));

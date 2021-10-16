@@ -388,12 +388,7 @@ BookmarkTable::BookmarkTable(std::unique_ptr<weld::TreeView> xControl)
     : m_xControl(std::move(xControl))
 {
     m_xControl->set_size_request(450, 250);
-    std::vector<int> aWidths;
-    aWidths.push_back(40);
-    aWidths.push_back(110);
-    aWidths.push_back(150);
-    aWidths.push_back(60);
-    m_xControl->set_column_fixed_widths(aWidths);
+    m_xControl->set_column_fixed_widths({ 40, 110, 150, 160 });
     m_xControl->set_selection_mode(SelectionMode::Multiple);
 }
 

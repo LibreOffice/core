@@ -1494,14 +1494,16 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 sal_uInt16 nPage, nLogPage;
                 OUString sDisplay;
                 rShell.GetPageNumber( -1, rShell.IsCursorVisible(), nPage, nLogPage, sDisplay );
-                std::vector<OUString> aStringList;
-                aStringList.push_back(GetPageStr(nPage, nLogPage, sDisplay));
                 bool bExtendedTooltip(!sDisplay.isEmpty() &&
                                       std::u16string_view(OUString::number(nPage)) != sDisplay &&
                                       nPage != nLogPage);
                 OUString aTooltip = bExtendedTooltip ? SwResId(STR_BOOKCTRL_HINT_EXTENDED)
                                                      : SwResId(STR_BOOKCTRL_HINT);
-                aStringList.push_back(aTooltip);
+                std::vector<OUString> aStringList
+                {
+                    GetPageStr(nPage, nLogPage, sDisplay),
+                    aTooltip
+                };
                 rSet.Put(SfxStringListItem(FN_STAT_PAGE, &aStringList));
                 //if existing page number is not equal to old page number, send out this event.
                 if (m_nOldPageNum != nLogPage )

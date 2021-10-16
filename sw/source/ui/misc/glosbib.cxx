@@ -57,9 +57,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(weld::Window * pParent,
     //just has to be something small, real size will be available space
     m_xGroupTLB->set_size_request(nWidth, m_xGroupTLB->get_height_rows(10));
 
-    std::vector<int> aWidths;
-    aWidths.push_back(nWidth);
-    m_xGroupTLB->set_column_fixed_widths(aWidths);
+    m_xGroupTLB->set_column_fixed_widths( { nWidth } );
     m_xGroupTLB->connect_changed(LINK(this, SwGlossaryGroupDlg, SelectHdl));
 
     m_xNewPB->connect_clicked(LINK(this, SwGlossaryGroupDlg, NewHdl));

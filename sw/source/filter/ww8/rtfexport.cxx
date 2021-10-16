@@ -144,11 +144,8 @@ void RtfExport::AppendBookmarks(const SwTextNode& rNode, sal_Int32 nCurrentPos, 
 
 void RtfExport::AppendBookmark(const OUString& rName)
 {
-    std::vector<OUString> aStarts;
-    std::vector<OUString> aEnds;
-
-    aStarts.push_back(rName);
-    aEnds.push_back(rName);
+    std::vector<OUString> aStarts{ rName };
+    std::vector<OUString> aEnds{ rName };
 
     m_pAttrOutput->WriteBookmarks_Impl(aStarts, aEnds);
 }
@@ -429,10 +426,10 @@ void RtfExport::WriteMainText()
         Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_SHP);
         Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPINST);
 
-        std::vector<std::pair<OString, OString>> aProperties;
-        aProperties.push_back(std::make_pair<OString, OString>("shapeType", "1"));
-        aProperties.push_back(std::make_pair<OString, OString>(
-            "fillColor", OString::number(wwUtility::RGBToBGR(oBrush->GetColor()))));
+        std::vector<std::pair<OString, OString>> aProperties{
+            { "shapeType", "1" },
+            { "fillColor", OString::number(wwUtility::RGBToBGR(oBrush->GetColor())) }
+        };
         for (const std::pair<OString, OString>& rPair : aProperties)
         {
             Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_SP "{");

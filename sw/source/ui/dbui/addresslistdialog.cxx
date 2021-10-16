@@ -46,6 +46,7 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <o3tl/safeint.hxx>
 #include <swunohelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/diagnose_ex.h>
@@ -147,8 +148,10 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
     m_xListLB->set_size_request(m_xListLB->get_approximate_digit_width() * 52,
                                 m_xListLB->get_height_rows(9));
 
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xListLB->get_approximate_digit_width() * 26);
+    std::vector<int> aWidths
+    {
+        o3tl::narrowing<int>(m_xListLB->get_approximate_digit_width() * 26)
+    };
     m_xListLB->set_column_fixed_widths(aWidths);
 
     m_xListLB->make_sorted();
