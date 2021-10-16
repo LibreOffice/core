@@ -1776,10 +1776,8 @@ bool NeonSession::removeExpiredLocktoken( const OUString & inURL,
         // @@@ Alternative: use ne_lock_discover() => less overhead
 
         std::vector< DAVResource > aResources;
-        std::vector< OUString > aPropNames;
-        aPropNames.push_back( DAVProperties::LOCKDISCOVERY );
 
-        PROPFIND( rEnv.m_aRequestURI, DAVZERO, aPropNames, aResources, rEnv );
+        PROPFIND( rEnv.m_aRequestURI, DAVZERO, { DAVProperties::LOCKDISCOVERY }, aResources, rEnv );
 
         if ( aResources.empty() )
             return false;

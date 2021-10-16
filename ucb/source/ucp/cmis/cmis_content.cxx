@@ -2080,8 +2080,6 @@ namespace cmis
             return;
 
         std::map< std::string, libcmis::PropertyPtr >::iterator propIt = m_pObjectProps.find(rName);
-        std::vector< std::string > values;
-        values.push_back(rValue);
 
         if ( propIt == m_pObjectProps.end( ) && getObjectType( xEnv ).get( ) )
         {
@@ -2091,13 +2089,13 @@ namespace cmis
             if ( typeIt != propsTypes.end( ) )
             {
                 libcmis::PropertyTypePtr propType = typeIt->second;
-                libcmis::PropertyPtr property( new libcmis::Property( propType, values ) );
+                libcmis::PropertyPtr property( new libcmis::Property( propType, { rValue }) );
                 m_pObjectProps.insert(std::pair< std::string, libcmis::PropertyPtr >(rName, property));
             }
         }
         else if ( propIt != m_pObjectProps.end( ) )
         {
-            propIt->second->setValues( values );
+            propIt->second->setValues( { rValue } );
         }
     }
 }
