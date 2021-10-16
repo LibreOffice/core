@@ -3014,7 +3014,7 @@ namespace {
 /**
  * Handler class for the CSS parser.
  */
-class CSSHandler
+class CSSHandler: public orcus::css_handler
 {
     struct MemStr
     {
@@ -3023,19 +3023,52 @@ class CSSHandler
 
         MemStr() : mp(nullptr), mn(0) {}
         MemStr(const char* p, size_t n) : mp(p), mn(n) {}
+        MemStr(const MemStr& r) : mp(r.mp), mn(r.mn) {}
         MemStr& operator=(const MemStr& r) = default;
     };
 
-    MemStr maPropName;  /// current property name.
-    MemStr maPropValue; /// current property value.
+    typedef std::pair<MemStr, MemStr> SelectorName;     // element : class
+    typedef std::vector<SelectorName> SelectorNames;
+
+    SelectorNames maSelectorNames;      // current selector names
+    MemStr maPropName;                  // current property name.
+    MemStr maPropValue;                 // current property value.
+    ScHTMLStyles& mrStyles;
 
 public:
-    explicit CSSHandler() {}
+    explicit CSSHandler(ScHTMLStyles& rStyles):
+        maPropName(),
+        maPropValue(),
+        mrStyles(rStyles)
+     {}
 
+    // selector name starting with "@"
     static void at_rule_name(const char* /*p*/, size_t /*n*/)
     {
         // TODO: For now, we ignore at-rule properties
     }
+
+    // selector name not starting with "." or "#" (i.e. element selectors)
+    void simple_selector_type(const char* pElem, size_t nElem)
+    {
+        MemStr aElem(pElem, nElem); // element given
+        MemStr aClass(nullptr, 0);  // class name not given - to be added in the "element global" storage
+        SelectorName aName(aElem, aClass);
+
+        maSelectorNames.push_back(aName);
+    }
+
+    // selector names starting with a "." (i.e. class selector)
+    void simple_selector_class(const char* pClassName, size_t nClassName)
+    {
+        MemStr aElem(nullptr, 0);   // no element given - should be added in the "global" storage
+        MemStr aClass(pClassName, nClassName);
+        SelectorName aName(aElem, aClass);
+
+        maSelectorNames.push_back(aName);
+    }
+
+    // TODO: Add other selectors
 
     void property_name(const char* p, size_t n)
     {
@@ -3047,48 +3080,26 @@ public:
         maPropValue = MemStr(p, n);
     }
 
-    static void begin_parse() {}
-
-    static void end_parse() {}
-
-    static void begin_block() {}
-
-    static void end_block() {}
-
-    static void begin_property() {}
+    void end_block() {
+        maSelectorNames.clear();
+    }
 
     void end_property()
     {
+        SelectorNames::const_iterator itr = maSelectorNames.begin(), itrEnd = maSelectorNames.end();
+        for (; itr != itrEnd; ++itr)
+        {
+            // Add this property to the collection for each selector.
+            const SelectorName& rSelName = *itr;
+            const MemStr& rElem = rSelName.first;
+            const MemStr& rClass = rSelName.second;
+            OUString aName(maPropName.mp, maPropName.mn, RTL_TEXTENCODING_UTF8);
+            OUString aValue(maPropValue.mp, maPropValue.mn, RTL_TEXTENCODING_UTF8);
+            mrStyles.add(rElem.mp, rElem.mn, rClass.mp, rClass.mn, aName, aValue);
+        }
         maPropName = MemStr();
         maPropValue = MemStr();
     }
-
-    // new members
-    static void simple_selector_type(const char* /*p*/, size_t /*n*/) {}
-
-    static void simple_selector_class(const char* /*p*/, size_t /*n*/) {}
-
-    static void simple_selector_pseudo_element(orcus::css::pseudo_element_t /*pe*/) {}
-
-    static void simple_selector_pseudo_class(orcus::css::pseudo_class_t /*pc*/) {}
-
-    static void simple_selector_id(const char* /*p*/, size_t /*n*/) {}
-
-    static void end_simple_selector() {}
-
-    static void end_selector() {}
-
-    static void combinator(orcus::css::combinator_t /*combinator*/) {}
-
-    static void rgb(uint8_t /*red*/ , uint8_t /*green*/ , uint8_t /*blue*/ ) {}
-
-    static void rgba(uint8_t /*red*/ , uint8_t /*green*/ , uint8_t /*blue*/ , double /*alpha*/ ) {}
-
-    static void hsl(uint8_t /*hue*/ , uint8_t /*sat*/ , uint8_t /*light*/ ) {}
-
-    static void hsla(uint8_t /*hue*/ , uint8_t /*sat*/ , uint8_t /*light*/ , double /*alpha*/ ) {}
-
-    static void url(const char* /*p*/, size_t /*n*/) {}
 
 };
 
@@ -3097,7 +3108,7 @@ public:
 void ScHTMLQueryParser::ParseStyle(std::u16string_view rStrm)
 {
     OString aStr = OUStringToOString(rStrm, RTL_TEXTENCODING_UTF8);
-    CSSHandler aHdl;
+    CSSHandler aHdl(GetStyles());
     orcus::css_parser<CSSHandler> aParser(aStr.getStr(), aStr.getLength(), aHdl);
     try
     {
@@ -3105,6 +3116,7 @@ void ScHTMLQueryParser::ParseStyle(std::u16string_view rStrm)
     }
     catch (const orcus::css::parse_error&)
     {
+        SAL_WARN("sc", "ScHTMLQueryParser::ParseStyle: FIXME: orcus has failed to parse CSS stylesheet!");
         // TODO: Parsing of CSS failed.  Do nothing for now.
     }
 }
