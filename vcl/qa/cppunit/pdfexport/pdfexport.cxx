@@ -2945,6 +2945,48 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageRotate180)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, aScale.getX(), 0.01);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf144222)
+{
+// Assume Windows has the font for U+4E2D
+#ifdef _WIN32
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf144222.ods";
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("calc_pdf_Export");
+    auto pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
+
+    // The document has one page.
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pTextPage);
+
+    int nPageObjectCount = pPdfPage->getObjectCount();
+    const OUString sChar = u"\u4E2D";
+    basegfx::B2DRectangle aRect1, aRect2;
+    int nCount = 0;
+
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        std::unique_ptr<vcl::pdf::PDFiumPageObject> pPdfPageObject = pPdfPage->getObject(i);
+        if (pPdfPageObject->getType() == vcl::pdf::PDFPageObjectType::Text)
+        {
+            ++nCount;
+            OUString sText = pPdfPageObject->getText(pTextPage);
+            if (sText == sChar)
+                aRect1 = pPdfPageObject->getBounds();
+            else
+                aRect2 = pPdfPageObject->getBounds();
+        }
+    }
+
+    CPPUNIT_ASSERT_EQUAL(2, nCount);
+    CPPUNIT_ASSERT(!aRect1.isEmpty());
+    CPPUNIT_ASSERT(!aRect2.isEmpty());
+    CPPUNIT_ASSERT(!aRect1.overlaps(aRect2));
+#endif
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
