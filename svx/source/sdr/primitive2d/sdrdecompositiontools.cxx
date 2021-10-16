@@ -498,10 +498,7 @@ basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
                         pNew.clear();
 
                         // create a new animatedInterpolatePrimitive and add it
-                        std::vector< basegfx::B2DHomMatrix > aMatrixStack;
-                        aMatrixStack.push_back(aLeft);
-                        aMatrixStack.push_back(aRight);
-                        Primitive2DReference xRefA(new AnimatedInterpolatePrimitive2D(aMatrixStack, aAnimationList, std::move(aAnimSequence)));
+                        Primitive2DReference xRefA(new AnimatedInterpolatePrimitive2D({ aLeft, aRight }, aAnimationList, std::move(aAnimSequence)));
                         Primitive2DContainer aContent { xRefA };
 
                         // scrolling needs an encapsulating clipping primitive

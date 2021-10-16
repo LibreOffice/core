@@ -27,6 +27,7 @@
 #include <com/sun/star/linguistic2/XConversionPropertyType.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <o3tl/safeint.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
 #include <osl/diagnose.h>
@@ -278,9 +279,11 @@ void DictionaryList::init(const Reference< linguistic2::XConversionDictionary>& 
     m_xControl->set_sort_column(0);
     m_xControl->set_sort_indicator(TRISTATE_TRUE, 0);
 
-    std::vector<int> aWidths;
-    aWidths.push_back(m_pED_Term->get_preferred_size().Width());
-    aWidths.push_back(m_pED_Mapping->get_preferred_size().Width());
+    std::vector<int> aWidths
+    {
+        o3tl::narrowing<int>(m_pED_Term->get_preferred_size().Width()),
+        o3tl::narrowing<int>(m_pED_Mapping->get_preferred_size().Width())
+    };
     m_xControl->set_column_fixed_widths(aWidths);
 }
 
