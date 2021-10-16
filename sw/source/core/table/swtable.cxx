@@ -1045,9 +1045,8 @@ static void lcl_CalcNewWidths( std::vector<sal_uInt16> &rSpanPos, ChangeList& rC
         return;
     }
     std::vector<sal_uInt16> aNewSpanPos;
-    ChangeList aNewChanges;
     ChangeList::iterator pCurr = rChanges.begin();
-    aNewChanges.push_back( *pCurr ); // Nullposition
+    ChangeList aNewChanges { *pCurr }; // Nullposition
     std::vector<sal_uInt16>::iterator pSpan = rSpanPos.begin();
     sal_uInt16 nCurr = 0;
     SwTwips nOrgSum = 0;

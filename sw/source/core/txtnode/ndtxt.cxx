@@ -2972,9 +2972,7 @@ SwTextNode* SwTextNode::MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
         // #i75353#
         if ( bClearHardSetNumRuleWhenFormatCollChanges )
         {
-            std::vector<sal_uInt16> aClearWhichIds;
-            aClearWhichIds.push_back( RES_PARATR_NUMRULE );
-            if ( ClearItemsFromAttrSet( aClearWhichIds ) != 0 )
+            if ( ClearItemsFromAttrSet( { RES_PARATR_NUMRULE } ) != 0 )
             {
                 InvalidateInSwCache(RES_ATTRSET_CHG);
             }

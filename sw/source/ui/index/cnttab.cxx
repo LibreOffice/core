@@ -502,8 +502,10 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(weld::Window* pParent,
     m_xHeaderTree->enable_toggle_buttons(weld::ColumnToggleType::Radio);
     m_xHeaderTree->connect_toggled(LINK(this, SwAddStylesDlg_Impl, RadioToggleOnHdl));
 
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xHeaderTree->get_approximate_digit_width() * 30);
+    std::vector<int> aWidths
+    {
+        o3tl::narrowing<int>(m_xHeaderTree->get_approximate_digit_width() * 30)
+    };
     int nPadding = m_xHeaderTree->get_approximate_digit_width() * 2;
     OUString sTitle(m_xHeaderTree->get_column_title(1));
     for (sal_uInt16 i = 0; i <= MAXLEVEL; ++i)
@@ -579,8 +581,7 @@ IMPL_LINK(SwAddStylesDlg_Impl, TreeSizeAllocHdl, const Size&, rSize, void)
 {
     auto nWidth = rSize.Width() - Application::GetSettings().GetStyleSettings().GetScrollBarSize();
 
-    std::vector<int> aWidths;
-    aWidths.push_back(0);
+    std::vector<int> aWidths { 0 };
     int nPadding = m_xHeaderTree->get_approximate_digit_width() * 2;
     for (sal_uInt16 i = 0; i <= MAXLEVEL; ++i)
     {

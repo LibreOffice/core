@@ -4067,29 +4067,29 @@ void WW8RStyle::ScanStyles()        // investigate style dependencies
 
 std::vector<sal_uInt8> ChpxToSprms(const Word2CHPX &rChpx)
 {
-    std::vector<sal_uInt8> aRet;
+    std::vector<sal_uInt8> aRet
+    {
+        60,
+        static_cast< sal_uInt8 >(128 + rChpx.fBold),
 
-    aRet.push_back(60);
-    aRet.push_back( static_cast< sal_uInt8 >(128 + rChpx.fBold) );
+        61,
+        static_cast< sal_uInt8 >(128 + rChpx.fItalic),
 
-    aRet.push_back(61);
-    aRet.push_back( static_cast< sal_uInt8 >(128 + rChpx.fItalic) );
+        62,
+        static_cast< sal_uInt8 >(128 + rChpx.fStrike),
 
-    aRet.push_back(62);
-    aRet.push_back( static_cast< sal_uInt8 >(128 + rChpx.fStrike) );
+        63,
+        static_cast< sal_uInt8 >(128 + rChpx.fOutline),
 
-    aRet.push_back(63);
-    aRet.push_back( static_cast< sal_uInt8 >(128 + rChpx.fOutline) );
+        65,
+        static_cast< sal_uInt8 >(128 + rChpx.fSmallCaps),
 
-    aRet.push_back(65);
-    aRet.push_back( static_cast< sal_uInt8 >(128 + rChpx.fSmallCaps) );
+        66,
+        static_cast< sal_uInt8 >(128 + rChpx.fCaps),
 
-    aRet.push_back(66);
-    aRet.push_back( static_cast< sal_uInt8 >(128 + rChpx.fCaps) );
-
-    aRet.push_back(67);
-    aRet.push_back( static_cast< sal_uInt8 >(128 + rChpx.fVanish) );
-
+        67,
+        static_cast< sal_uInt8 >(128 + rChpx.fVanish)
+    };
     if (rChpx.fsFtc)
     {
         aRet.push_back(68);

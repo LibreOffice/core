@@ -1668,9 +1668,7 @@ bool SwContentNode::ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
         sal_uInt16 nDel = 0;
         if ( !nWhich2 || nWhich2 < nWhich1 )
         {
-            std::vector<sal_uInt16> aClearWhichIds;
-            aClearWhichIds.push_back( nWhich1 );
-            nDel = ClearItemsFromAttrSet( aClearWhichIds );
+            nDel = ClearItemsFromAttrSet( { nWhich1 } );
         }
         else
             nDel = AttrSetHandleHelper::ClearItem_BC( mpAttrSet, *this, nWhich1, nWhich2, nullptr, nullptr );
@@ -1736,9 +1734,7 @@ sal_uInt16 SwContentNode::ResetAllAttr()
     // If Modify is locked, do not send out any Modifys
     if( IsModifyLocked() )
     {
-        std::vector<sal_uInt16> aClearWhichIds;
-        aClearWhichIds.push_back(0);
-        sal_uInt16 nDel = ClearItemsFromAttrSet( aClearWhichIds );
+        sal_uInt16 nDel = ClearItemsFromAttrSet( { 0 } );
         if( !GetpSwAttrSet()->Count() ) // Empty? Delete
             mpAttrSet.reset();
         return nDel;

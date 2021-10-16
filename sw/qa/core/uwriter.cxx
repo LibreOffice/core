@@ -1564,12 +1564,14 @@ namespace
 void SwDocTest::testIntrusiveRing()
 {
     TestRing aRing1, aRing2, aRing3, aRing4, aRing5;
-    std::vector<TestRing*> vRings;
-    vRings.push_back(&aRing1);
-    vRings.push_back(&aRing2);
-    vRings.push_back(&aRing3);
-    vRings.push_back(&aRing4);
-    vRings.push_back(&aRing5);
+    std::vector<TestRing*> vRings
+    {
+        &aRing1,
+        &aRing2,
+        &aRing3,
+        &aRing4,
+        &aRing5
+    };
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aRing1.GetRingContainer().size());
     CPPUNIT_ASSERT(aRing1.lonely());
     CPPUNIT_ASSERT(aRing2.lonely());

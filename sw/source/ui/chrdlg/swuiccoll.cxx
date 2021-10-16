@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <cmdid.h>
+#include <o3tl/safeint.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
@@ -49,8 +50,10 @@ SwCondCollPage::SwCondCollPage(weld::Container* pPage, weld::DialogController* p
     const auto nHeightRequest = m_xStyleLB->get_height_rows(12);
     m_xStyleLB->set_size_request(-1, nHeightRequest);
     m_xTbLinks->set_size_request(-1, nHeightRequest);
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xTbLinks->get_approximate_digit_width() * 40);
+    std::vector<int> aWidths
+    {
+        o3tl::narrowing<int>(m_xTbLinks->get_approximate_digit_width() * 40)
+    };
     m_xTbLinks->set_column_fixed_widths(aWidths);
 
     const sal_Int32 nStrCount = m_xFilterLB->get_count();

@@ -4242,16 +4242,14 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
         m_rExport.SetRTFFlySyntax(false);
         m_rExport.m_pParentFrame = nullptr;
         m_pFlyFrameSize = nullptr;
+        std::vector<std::pair<OString, OString>> aFlyProperties{
+            { "shapeType", OString::number(ESCHER_ShpInst_PictureFrame) },
 
-        std::vector<std::pair<OString, OString>> aFlyProperties;
-        aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "shapeType", OString::number(ESCHER_ShpInst_PictureFrame)));
-        aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "wzDescription", msfilter::rtfutil::OutString(pFlyFrameFormat->GetObjDescription(),
-                                                          m_rExport.GetCurrentEncoding())));
-        aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "wzName", msfilter::rtfutil::OutString(pFlyFrameFormat->GetObjTitle(),
-                                                   m_rExport.GetCurrentEncoding())));
+            { "wzDescription", msfilter::rtfutil::OutString(pFlyFrameFormat->GetObjDescription(),
+                                                            m_rExport.GetCurrentEncoding()) },
+            { "wzName", msfilter::rtfutil::OutString(pFlyFrameFormat->GetObjTitle(),
+                                                     m_rExport.GetCurrentEncoding()) }
+        };
 
         // If we have a wrap polygon, then handle that here.
         if (pFlyFrameFormat->GetSurround().IsContour())
