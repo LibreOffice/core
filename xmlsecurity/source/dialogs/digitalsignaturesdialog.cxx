@@ -379,8 +379,10 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, weld::Button&, void)
         return;
     try
     {
-        std::vector<uno::Reference<xml::crypto::XXMLSecurityContext>> xSecContexts;
-        xSecContexts.push_back(maSignatureManager.getSecurityContext());
+        std::vector<uno::Reference<xml::crypto::XXMLSecurityContext>> xSecContexts
+        {
+            maSignatureManager.getSecurityContext()
+        };
         // Gpg signing is only possible with ODF >= 1.2 documents
         if (DocumentSignatureHelper::CanSignWithGPG(maSignatureManager.getStore(), m_sODFVersion))
             xSecContexts.push_back(maSignatureManager.getGpgSecurityContext());

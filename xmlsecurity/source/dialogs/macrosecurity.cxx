@@ -24,6 +24,7 @@
 #include <resourcemanager.hxx>
 #include <strings.hrc>
 
+#include <o3tl/safeint.hxx>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
 
@@ -374,9 +375,11 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP(weld::Container* pP
     , m_xRemoveLocPB(m_xBuilder->weld_button("removefile"))
 {
     auto nColWidth = m_xTrustCertLB->get_approximate_digit_width() * 12;
-    std::vector<int> aWidths;
-    aWidths.push_back(nColWidth * 2);
-    aWidths.push_back(nColWidth * 2);
+    std::vector<int> aWidths
+    {
+        o3tl::narrowing<int>(nColWidth * 2),
+        o3tl::narrowing<int>(nColWidth * 2)
+    };
     m_xTrustCertLB->set_column_fixed_widths(aWidths);
     m_xTrustCertLB->set_size_request(nColWidth * 5.5, m_xTrustCertLB->get_height_rows(5));
 
