@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <o3tl/safeint.hxx>
 #include "xmlExport.hxx"
 #include "xmlAutoStyle.hxx"
 #include <xmloff/xmltoken.hxx>
@@ -497,15 +498,19 @@ void ORptExport::exportSectionAutoStyle(const Reference<XSection>& _xProp)
     const sal_Int32 nOffset = rptui::getStyleProperty<sal_Int32>(xReport,PROPERTY_LEFTMARGIN);
     const sal_Int32 nCount  = _xProp->getCount();
 
-    ::std::vector<sal_Int32> aColumnPos;
+    ::std::vector<sal_Int32> aColumnPos
+    {
+        nOffset,
+        aSize.Width - rptui::getStyleProperty<sal_Int32>(xReport,PROPERTY_RIGHTMARGIN)
+    };
     aColumnPos.reserve(2*(nCount + 1));
-    aColumnPos.push_back(nOffset);
-    aColumnPos.push_back(aSize.Width - rptui::getStyleProperty<sal_Int32>(xReport,PROPERTY_RIGHTMARGIN));
 
-    ::std::vector<sal_Int32> aRowPos;
+    ::std::vector<sal_Int32> aRowPos
+    {
+        0,
+        o3tl::narrowing<sal_Int32>(_xProp->getHeight())
+    };
     aRowPos.reserve(2*(nCount + 1));
-    aRowPos.push_back(0);
-    aRowPos.push_back(_xProp->getHeight());
 
 
     ::std::vector<sal_Int32> aRowPosAutoGrow;
