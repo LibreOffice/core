@@ -34,6 +34,24 @@
       "parentUuid": "f95d725f_77ae3146",
       "revId": "0b156843413d949da45ba994cf0858f43789df2a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b88097b7_53ba51c6",
+        "filename": "lotuswordpro/source/filter/lwppagelayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-10-16T18:36:35Z",
+      "side": 1,
+      "message": "its a reasonable point, we have about 20 of this pattern so I\u0027ll do a follow up to consistently tweak the bunch",
+      "parentUuid": "ec64bc56_dd3c13c8",
+      "revId": "0b156843413d949da45ba994cf0858f43789df2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
