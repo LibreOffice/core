@@ -40,6 +40,7 @@
 #include <osl/file.hxx>
 #include <rtl/ref.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <systools/win32/comtools.hxx>
 #include <vcl/threadex.hxx>
 
 #include "graphconvert.hxx"
@@ -57,123 +58,6 @@ using namespace ::comphelper;
 #define     MAX_ENUM_ELE     20
 #define     FORMATS_NUM      3
 
-// ============ class ComSmart =====================
-namespace {
-
-template< class T > class ComSmart
-{
-    T* m_pInterface;
-
-    void OwnRelease()
-    {
-        if ( m_pInterface )
-        {
-            T* pInterface = m_pInterface;
-            m_pInterface = nullptr;
-            pInterface->Release();
-        }
-    }
-
-public:
-    ComSmart()
-    : m_pInterface( nullptr )
-    {}
-
-    ComSmart( const ComSmart<T>& rObj )
-    : m_pInterface( rObj.m_pInterface )
-    {
-        if ( m_pInterface != NULL )
-            m_pInterface->AddRef();
-    }
-
-    ComSmart( T* pInterface )
-    : m_pInterface( pInterface )
-    {
-         if ( m_pInterface != NULL )
-            m_pInterface->AddRef();
-    }
-
-    ~ComSmart()
-    {
-        OwnRelease();
-    }
-
-    ComSmart& operator=( const ComSmart<T>& rObj )
-    {
-        if(this == &rObj)
-            return *this;
-
-        OwnRelease();
-
-        m_pInterface = rObj.m_pInterface;
-
-        if ( m_pInterface != NULL )
-            m_pInterface->AddRef();
-
-        return *this;
-    }
-
-    ComSmart<T>& operator=( T* pInterface )
-    {
-        OwnRelease();
-
-        m_pInterface = pInterface;
-
-        if ( m_pInterface != NULL )
-            m_pInterface->AddRef();
-
-        return *this;
-    }
-
-    operator T*() const
-    {
-        return m_pInterface;
-    }
-
-    T& operator*() const
-    {
-        return *m_pInterface;
-    }
-
-    T** operator&()
-    {
-        OwnRelease();
-
-        m_pInterface = nullptr;
-
-        return &m_pInterface;
-    }
-
-    T* operator->() const
-    {
-        return m_pInterface;
-    }
-
-    bool operator==( const ComSmart<T>& rObj ) const
-    {
-        return ( m_pInterface == rObj.m_pInterface );
-    }
-
-    bool operator!=( const ComSmart<T>& rObj ) const
-    {
-        return ( m_pInterface != rObj.m_pInterface );
-    }
-
-    bool operator==( const T* pInterface ) const
-    {
-        return ( m_pInterface == pInterface );
-    }
-
-    bool operator!=( const T* pInterface ) const
-    {
-        return ( m_pInterface != pInterface );
-    }
-};
-
-}
-
-// ============ class ComSmart =====================
-
 typedef std::vector< FORMATETC* > FormatEtcList;
 
 FORMATETC const pFormatTemplates[FORMATS_NUM] = {
@@ -183,10 +67,10 @@ FORMATETC const pFormatTemplates[FORMATS_NUM] = {
 
 
 struct OleComponentNative_Impl {
-    ComSmart< IUnknown > m_pObj;
-    ComSmart< IOleObject > m_pOleObject;
-    ComSmart< IViewObject2 > m_pViewObject2;
-    ComSmart< IStorage > m_pIStorage;
+    sal::systools::COMReference< IUnknown > m_pObj;
+    sal::systools::COMReference< IOleObject > m_pOleObject;
+    sal::systools::COMReference< IViewObject2 > m_pViewObject2;
+    sal::systools::COMReference< IStorage > m_pIStorage;
     FormatEtcList m_aFormatsList;
     uno::Sequence< datatransfer::DataFlavor > m_aSupportedGraphFormats;
 
@@ -599,12 +483,11 @@ void OleComponent::RetrieveObjectDataFlavors_Impl()
 
     if ( !m_aDataFlavors.getLength() )
     {
-        ComSmart< IDataObject > pDataObject;
-        HRESULT hr = m_pNativeImpl->m_pObj->QueryInterface( IID_IDataObject, reinterpret_cast<void**>(&pDataObject) );
-        if ( SUCCEEDED( hr ) && pDataObject )
+        sal::systools::COMReference< IDataObject > pDataObject(m_pNativeImpl->m_pObj, sal::systools::COM_QUERY);
+        if ( pDataObject )
         {
-            ComSmart< IEnumFORMATETC > pFormatEnum;
-            hr = pDataObject->EnumFormatEtc( DATADIR_GET, &pFormatEnum );
+            sal::systools::COMReference< IEnumFORMATETC > pFormatEnum;
+            HRESULT hr = pDataObject->EnumFormatEtc( DATADIR_GET, &pFormatEnum );
             if ( SUCCEEDED( hr ) && pFormatEnum )
             {
                 FORMATETC pElem[ MAX_ENUM_ELE ];
@@ -651,20 +534,15 @@ bool OleComponent::InitializeObject_Impl()
         return false;
 
     // the linked object will be detected here
-    ComSmart< IOleLink > pOleLink;
-    HRESULT hr = m_pNativeImpl->m_pObj->QueryInterface( IID_IOleLink, reinterpret_cast<void**>(&pOleLink) );
     OSL_ENSURE( m_pUnoOleObject, "Unexpected object absence!" );
     if ( m_pUnoOleObject )
-        m_pUnoOleObject->SetObjectIsLink_Impl( pOleLink != nullptr );
+        m_pUnoOleObject->SetObjectIsLink_Impl( m_pNativeImpl->m_pObj.QueryInterface<IOleLink>(sal::systools::COM_QUERY).is() );
 
-
-    hr = m_pNativeImpl->m_pObj->QueryInterface( IID_IViewObject2, reinterpret_cast<void**>(&m_pNativeImpl->m_pViewObject2) );
-    if ( FAILED( hr ) || !m_pNativeImpl->m_pViewObject2 )
+    if ( !m_pNativeImpl->m_pViewObject2.set(m_pNativeImpl->m_pObj, sal::systools::COM_QUERY) )
         return false;
 
     // remove all the caches
-    IOleCache* pIOleCache = nullptr;
-    if ( SUCCEEDED( m_pNativeImpl->m_pObj->QueryInterface( IID_IOleCache, reinterpret_cast<void**>(&pIOleCache) ) ) && pIOleCache )
+    if ( sal::systools::COMReference< IOleCache > pIOleCache{ m_pNativeImpl->m_pObj, sal::systools::COM_QUERY } )
     {
         IEnumSTATDATA* pEnumSD = nullptr;
         HRESULT hr2 = pIOleCache->EnumCache( &pEnumSD );
@@ -682,13 +560,9 @@ bool OleComponent::InitializeObject_Impl()
         DWORD nConn;
         FORMATETC aFormat = { 0, nullptr, DVASPECT_CONTENT, -1, TYMED_MFPICT };
         hr2 = pIOleCache->Cache( &aFormat, ADVFCACHE_ONSAVE, &nConn );
-
-        pIOleCache->Release();
-        pIOleCache = nullptr;
     }
 
-    hr = m_pNativeImpl->m_pObj->QueryInterface( IID_IOleObject, reinterpret_cast<void**>(&m_pNativeImpl->m_pOleObject) );
-    if ( FAILED( hr ) || !m_pNativeImpl->m_pOleObject )
+    if ( !m_pNativeImpl->m_pOleObject.set(m_pNativeImpl->m_pObj, sal::systools::COM_QUERY) )
         return false; // Static objects are not supported, they should be inserted as graphics
 
     m_pNativeImpl->m_pOleObject->GetMiscStatus( DVASPECT_CONTENT, reinterpret_cast<DWORD*>(&m_nOLEMiscFlags) );
@@ -897,16 +771,15 @@ void OleComponent::InitEmbeddedCopyOfLink( rtl::Reference<OleComponent> const & 
     if ( m_pNativeImpl->m_pIStorage )
         throw io::IOException(); // TODO:the object is already initialized
 
-    ComSmart< IDataObject > pDataObject;
-    HRESULT hr = pOleLinkComponent->m_pNativeImpl->m_pObj->QueryInterface( IID_IDataObject, reinterpret_cast<void**>(&pDataObject) );
-    if ( SUCCEEDED( hr ) && pDataObject && SUCCEEDED( OleQueryCreateFromData( pDataObject ) ) )
+    sal::systools::COMReference< IDataObject > pDataObject(pOleLinkComponent->m_pNativeImpl->m_pObj, sal::systools::COM_QUERY);
+    if ( pDataObject && SUCCEEDED( OleQueryCreateFromData( pDataObject ) ) )
     {
         // the object must be already disconnected from the temporary URL
         CreateNewIStorage_Impl();
         if ( !m_pNativeImpl->m_pIStorage )
             throw uno::RuntimeException(); // TODO:
 
-        hr = OleCreateFromData( pDataObject,
+        OleCreateFromData( pDataObject,
                                 IID_IUnknown,
                                 OLERENDER_DRAW,
                                 nullptr,
@@ -917,13 +790,12 @@ void OleComponent::InitEmbeddedCopyOfLink( rtl::Reference<OleComponent> const & 
 
     if ( !m_pNativeImpl->m_pObj )
     {
-        ComSmart< IOleLink > pOleLink;
-        hr = pOleLinkComponent->m_pNativeImpl->m_pObj->QueryInterface( IID_IOleLink, reinterpret_cast<void**>(&pOleLink) );
-        if ( FAILED( hr ) || !pOleLink )
+        sal::systools::COMReference< IOleLink > pOleLink(m_pNativeImpl->m_pObj, sal::systools::COM_QUERY);
+        if ( !pOleLink )
             throw io::IOException(); // TODO: the object doesn't support IOleLink
 
-        ComSmart< IMoniker > pMoniker;
-        hr = pOleLink->GetSourceMoniker( &pMoniker );
+        sal::systools::COMReference< IMoniker > pMoniker;
+        HRESULT hr = pOleLink->GetSourceMoniker( &pMoniker );
         if ( FAILED( hr ) || !pMoniker )
             throw io::IOException(); // TODO: can not retrieve moniker
 
@@ -932,7 +804,7 @@ void OleComponent::InitEmbeddedCopyOfLink( rtl::Reference<OleComponent> const & 
         hr = pMoniker->IsSystemMoniker( &aMonType );
         if ( SUCCEEDED( hr ) && aMonType == MKSYS_FILEMONIKER )
         {
-            ComSmart< IMalloc > pMalloc;
+            sal::systools::COMReference< IMalloc > pMalloc;
             hr = CoGetMalloc( 1, &pMalloc ); // if fails there will be a memory leak
             OSL_ENSURE(SUCCEEDED(hr) && pMalloc, "CoGetMalloc() failed!");
 
@@ -958,11 +830,11 @@ void OleComponent::InitEmbeddedCopyOfLink( rtl::Reference<OleComponent> const & 
         // in case of other moniker types the only way is to get storage
         if ( !m_pNativeImpl->m_pObj )
         {
-            ComSmart< IBindCtx > pBindCtx;
+            sal::systools::COMReference< IBindCtx > pBindCtx;
             hr = CreateBindCtx( 0, &pBindCtx );
             if ( SUCCEEDED( hr ) && pBindCtx )
             {
-                ComSmart< IStorage > pObjectStorage;
+                sal::systools::COMReference< IStorage > pObjectStorage;
                 hr = pMoniker->BindToStorage( pBindCtx, nullptr, IID_IStorage, reinterpret_cast<void**>(&pObjectStorage) );
                 if ( SUCCEEDED( hr ) && pObjectStorage )
                 {
@@ -975,7 +847,7 @@ void OleComponent::InitEmbeddedCopyOfLink( rtl::Reference<OleComponent> const & 
     }
 
     // If object could not be created the only way is to use graphical representation
-    if ( FAILED( hr ) || !m_pNativeImpl->m_pObj )
+    if ( !m_pNativeImpl->m_pObj )
         throw uno::RuntimeException(); // TODO
 
     if ( !InitializeObject_Impl() )
@@ -1037,7 +909,7 @@ uno::Sequence< embed::VerbDescriptor > OleComponent::GetVerbList()
 
     if( !m_aVerbList.getLength() )
     {
-        ComSmart< IEnumOLEVERB > pEnum;
+        sal::systools::COMReference< IEnumOLEVERB > pEnum;
         if( SUCCEEDED( m_pNativeImpl->m_pOleObject->EnumVerbs( &pEnum ) ) )
         {
             OLEVERB     szEle[ MAX_ENUM_ELE ];
@@ -1130,15 +1002,14 @@ awt::Size OleComponent::GetExtent( sal_Int64 nAspect )
     if ( nMSAspect == DVASPECT_CONTENT )
     {
         // Try to get the size from the replacement image first
-        ComSmart< IDataObject > pDataObject;
-        HRESULT hr = m_pNativeImpl->m_pObj->QueryInterface( IID_IDataObject, reinterpret_cast<void**>(&pDataObject) );
-        if ( SUCCEEDED( hr ) || pDataObject )
+        sal::systools::COMReference< IDataObject > pDataObject(m_pNativeImpl->m_pObj, sal::systools::COM_QUERY);
+        if ( pDataObject )
         {
             STGMEDIUM aMedium;
             FORMATETC aFormat = pFormatTemplates[1]; // use windows metafile format
             aFormat.dwAspect = nMSAspect;
 
-            hr = pDataObject->GetData( &aFormat, &aMedium );
+            HRESULT hr = pDataObject->GetData( &aFormat, &aMedium );
 
             if (hr == RPC_E_WRONG_THREAD)
             {
@@ -1298,12 +1169,11 @@ bool OleComponent::IsDirty()
     if ( IsWorkaroundActive() )
         return true;
 
-    ComSmart< IPersistStorage > pPersistStorage;
-    HRESULT hr = m_pNativeImpl->m_pObj->QueryInterface( IID_IPersistStorage, reinterpret_cast<void**>(&pPersistStorage) );
-    if ( FAILED( hr ) || !pPersistStorage )
+    sal::systools::COMReference< IPersistStorage > pPersistStorage(m_pNativeImpl->m_pObj, sal::systools::COM_QUERY);
+    if ( !pPersistStorage )
         throw io::IOException(); // TODO
 
-    hr = pPersistStorage->IsDirty();
+    HRESULT hr = pPersistStorage->IsDirty();
     return ( hr != S_FALSE );
 }
 
@@ -1313,14 +1183,13 @@ void OleComponent::StoreOwnTmpIfNecessary()
     if ( !m_pNativeImpl->m_pOleObject )
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
-    ComSmart< IPersistStorage > pPersistStorage;
-    HRESULT hr = m_pNativeImpl->m_pObj->QueryInterface( IID_IPersistStorage, reinterpret_cast<void**>(&pPersistStorage) );
-    if ( FAILED( hr ) || !pPersistStorage )
+    sal::systools::COMReference< IPersistStorage > pPersistStorage(m_pNativeImpl->m_pObj, sal::systools::COM_QUERY);
+    if ( !pPersistStorage )
         throw io::IOException(); // TODO
 
     if ( m_bWorkaroundActive || pPersistStorage->IsDirty() != S_FALSE )
     {
-        hr = OleSave( pPersistStorage, m_pNativeImpl->m_pIStorage, TRUE );
+        HRESULT hr = OleSave( pPersistStorage, m_pNativeImpl->m_pIStorage, TRUE );
         if ( FAILED( hr ) )
         {
             // Till now was required only for AcrobatReader7.0.8
@@ -1548,9 +1417,8 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
         DWORD nRequestedAspect = GetAspectFromFlavor( aFlavor );
         // if own icon is set and icon aspect is requested the own icon can be returned directly
 
-        ComSmart< IDataObject > pDataObject;
-        HRESULT hr = m_pNativeImpl->m_pObj->QueryInterface( IID_IDataObject, reinterpret_cast<void**>(&pDataObject) );
-        if ( FAILED( hr ) || !pDataObject )
+        sal::systools::COMReference< IDataObject > pDataObject(m_pNativeImpl->m_pObj, sal::systools::COM_QUERY);
+        if ( !pDataObject )
             throw io::IOException(); // TODO: transport error code
 
         // The following optimization does not make much sense currently just because
@@ -1576,7 +1444,7 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
                 FORMATETC aFormat = pFormatTemplates[nInd];
                 aFormat.dwAspect = nRequestedAspect;
 
-                hr = pDataObject->GetData( &aFormat, &aMedium );
+                HRESULT hr = pDataObject->GetData( &aFormat, &aMedium );
                 if ( SUCCEEDED( hr ) )
                 {
                     bSupportedFlavor = m_pNativeImpl->ConvertDataForFlavor( aMedium, aFlavor, aResult );

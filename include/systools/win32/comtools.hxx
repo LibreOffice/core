@@ -22,6 +22,8 @@
 #include <string>
 #include <stdexcept>
 #include <type_traits>
+#include <utility>
+
 #include <prewin.h>
 #include <objbase.h>
 #include <postwin.h>
@@ -59,13 +61,12 @@ namespace sal::systools
             com_ptr_(comptr)
         {
             if (bAddRef)
-                addRef();
+                addRef(com_ptr_);
         }
 
         COMReference(const COMReference<T>& other) :
-            com_ptr_(other.com_ptr_)
+            COMReference(other.com_ptr_)
         {
-            addRef();
         }
 
         // Query from IUnknown*, using COM_QUERY or COM_QUERY_THROW tags
@@ -77,21 +78,16 @@ namespace sal::systools
 
         COMReference<T>& operator=(const COMReference<T>& other)
         {
-            other.addRef();
-            release();
-            com_ptr_ = other.com_ptr_;
-            return *this;
+            return operator=(other.com_ptr_);
         }
 
         COMReference<T>& operator=(T* comptr)
         {
-            release();
-            com_ptr_ = comptr;
-            addRef();
+            assign(comptr);
             return *this;
         }
 
-        ~COMReference() { release(); }
+        ~COMReference() { release(com_ptr_); }
 
         template <typename T2, typename TAG, std::enable_if_t<is_COM_query_tag<TAG>, int> = 0>
         COMReference<T2> QueryInterface(TAG) const
@@ -106,6 +102,12 @@ namespace sal::systools
                     throw ComError("QueryInterface failed: Interface not supported!", hr);
 
             return { static_cast<T2*>(ip), false };
+        }
+
+        template <typename T2, typename TAG>
+        COMReference<T>& set(const COMReference<T2>& p, TAG t)
+        {
+            return operator=(p.template QueryInterface<T>(t));
         }
 
         COMReference<T>& CoCreateInstance(REFCLSID clsid, IUnknown* pOuter = nullptr,
@@ -133,26 +135,32 @@ namespace sal::systools
         }
 
         T* get() const { return com_ptr_; }
+        operator T* () const { return get(); }
 
-        void clear()
-        {
-            release();
-            com_ptr_ = nullptr;
-        }
+        void clear() { assign(nullptr); }
 
         bool is() const { return (com_ptr_ != nullptr); }
+        operator bool() const { return is(); }
 
     private:
-        void addRef() const
+        static void addRef(T* ptr)
         {
-            if (com_ptr_)
-                com_ptr_->AddRef();
+            if (ptr)
+                ptr->AddRef();
         }
 
-        void release() const
+        static void release(T* ptr)
         {
-            if (com_ptr_)
-                com_ptr_->Release();
+            if (ptr)
+                ptr->Release();
+        }
+
+        void assign(T* ptr)
+        {
+            if (com_ptr_ == ptr)
+                return;
+            addRef(ptr);
+            release(std::exchange(com_ptr_, ptr));
         }
 
         T* com_ptr_;
