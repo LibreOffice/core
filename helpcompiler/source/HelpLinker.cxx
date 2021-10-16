@@ -856,11 +856,13 @@ bool compileExtensionHelp
 {
     bool bSuccess = true;
 
-    std::vector<std::string> args;
-    args.reserve(nXhpFileCount + 2);
-    args.push_back(std::string("-mod"));
     OString aOExtensionName = OUStringToOString( aExtensionName, osl_getThreadTextEncoding() );
-    args.push_back(std::string(aOExtensionName.getStr()));
+    std::vector<std::string> args
+    {
+        std::string("-mod"),
+        std::string(aOExtensionName.getStr())
+    };
+    args.reserve(nXhpFileCount + 2);
 
     for( sal_Int32 iXhp = 0 ; iXhp < nXhpFileCount ; ++iXhp )
     {
