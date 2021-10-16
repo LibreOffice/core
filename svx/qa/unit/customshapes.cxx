@@ -127,6 +127,30 @@ void lcl_AssertRectEqualWithTolerance(std::string_view sInfo, const tools::Recta
                            std::abs(rExpected.GetHeight() - rActual.GetHeight()) <= nTolerance);
 }
 
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145111_Fontwork_rendering_font_size)
+{
+    // The tested position and height depend on dpi.
+    if (!IsDefaultDPI())
+        return;
+
+    // tdf#144988 In case ScaleX is true in property TextPath, the rendering font size should be
+    // reduced in case any of the paragraphs would be longer as its sub-path. That was wrong, if
+    // the first paragraph was too long and the second would fit. It resulted in wrong position
+    // and height and overlapping characters.
+
+    OUString aURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf144988_Fontwork_FontSize.odp";
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.comp.presentation.PresentationDocument");
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    SdrObjCustomShape& rSdrCustomShape(
+        static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
+
+    // Without the fix in place left|top, width x height was 1279|1279, 2815 x 2448.
+    // The expected values 1501|1777, 3941 x 1446 are only valid for 96dpi.
+    tools::Rectangle aBoundRect(rSdrCustomShape.GetCurrentBoundRect());
+    tools::Rectangle aExpected(Point(1501, 1777), Size(3941, 1446));
+    lcl_AssertRectEqualWithTolerance("Wrong text rendering", aExpected, aBoundRect, 5);
+}
+
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145111_anchor_in_Fontwork)
 {
     // The tested positions depend on dpi.
