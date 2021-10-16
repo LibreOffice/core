@@ -1047,8 +1047,7 @@ void restartOnMac(bool passArguments) {
     {
         std::abort();
     }
-    std::vector< OString > args;
-    args.push_back(execPath8);
+    std::vector< OString > args { execPath8 };
     bool wait = false;
     if (passArguments) {
         sal_uInt32 n = osl_getCommandArgCount();

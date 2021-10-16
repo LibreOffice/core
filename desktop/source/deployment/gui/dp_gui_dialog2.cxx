@@ -592,8 +592,7 @@ void ExtMgrDialog::updatePackage( const uno::Reference< deployment::XPackage > &
     uno::Reference<deployment::XPackage> extension =
         dp_misc::getExtensionWithHighestVersion(seqExtensions);
     OSL_ASSERT(extension.is());
-    std::vector< css::uno::Reference< css::deployment::XPackage > > vEntries;
-    vEntries.push_back(extension);
+    std::vector< css::uno::Reference< css::deployment::XPackage > > vEntries { extension };
 
     m_pManager->getCmdQueue()->checkForUpdates( std::move(vEntries) );
 }
