@@ -449,13 +449,14 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     maConfigItem.WriteBool( "EnableCopyingOfContent", mbCanCopyOrExtract );
     maConfigItem.WriteBool( "EnableTextAccessForAccessibilityTools", mbCanExtractForAccessibility );
 
-    std::vector<beans::PropertyValue> aRet;
-
-    aRet.push_back(comphelper::makePropertyValue("Watermark", maWatermarkText));
-    aRet.push_back(comphelper::makePropertyValue("EncryptFile", mbEncrypt));
-    aRet.push_back(comphelper::makePropertyValue("PreparedPasswords", mxPreparedPasswords));
-    aRet.push_back(comphelper::makePropertyValue("RestrictPermissions", mbRestrictPermissions));
-    aRet.push_back(comphelper::makePropertyValue("PreparedPermissionPassword", maPreparedOwnerPassword));
+    std::vector<beans::PropertyValue> aRet
+    {
+        comphelper::makePropertyValue("Watermark", maWatermarkText),
+        comphelper::makePropertyValue("EncryptFile", mbEncrypt),
+        comphelper::makePropertyValue("PreparedPasswords", mxPreparedPasswords),
+        comphelper::makePropertyValue("RestrictPermissions", mbRestrictPermissions),
+        comphelper::makePropertyValue("PreparedPermissionPassword", maPreparedOwnerPassword)
+    };
     if( mbIsRangeChecked )
         aRet.push_back(comphelper::makePropertyValue("PageRange", msPageRange));
     else if( mbSelectionIsChecked )

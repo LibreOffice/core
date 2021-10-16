@@ -1907,14 +1907,20 @@ bool EscherPropertyContainer::CreatePolygonProperties(
 
     const sal_uInt16 nPolyCount(aPolyPolygon.Count());
     sal_uInt32 nTotalPoints(0);
-    std::vector< sal_uInt8 > aVertices(4, 0);
-    std::vector< sal_uInt8 > aSegments(4, 0);
 
-    aVertices.push_back(static_cast<sal_uInt8>(0xf0));
-    aVertices.push_back(static_cast<sal_uInt8>(0xff));
+    std::vector< sal_uInt8 > aVertices
+    {
+        0, 0, 0, 0,
+        static_cast<sal_uInt8>(0xf0),
+        static_cast<sal_uInt8>(0xff)
+    };
 
-    aSegments.push_back(static_cast<sal_uInt8>(2));
-    aSegments.push_back(static_cast<sal_uInt8>(0));
+    std::vector< sal_uInt8 > aSegments
+    {
+        0, 0, 0, 0,
+        static_cast<sal_uInt8>(2),
+        static_cast<sal_uInt8>(0)
+    };
 
     for(sal_uInt16 j(0); j < nPolyCount; ++j)
     {
