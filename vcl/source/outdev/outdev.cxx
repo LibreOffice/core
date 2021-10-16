@@ -414,16 +414,27 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
     if( ImplIsRecordLayout() )
         return;
 
+    if (mpMetaFile)
+    {
+        if (meRasterOp == RasterOp::Invert)
+        {
+            mpMetaFile->AddAction(new MetaRectAction(tools::Rectangle(rDestPt, rDestSize)));
+        }
+        else
+        {
+            const Bitmap aBmp(GetBitmap(rSrcPt, rSrcSize));
+            mpMetaFile->AddAction(new MetaBmpScaleAction(rDestPt, rDestSize, aBmp));
+        }
+    }
+
+    GDIMetaFile* pOldMetaFile = mpMetaFile;
+    mpMetaFile = nullptr;
+
     if ( RasterOp::Invert == meRasterOp )
     {
         DrawRect( tools::Rectangle( rDestPt, rDestSize ) );
+        mpMetaFile = pOldMetaFile;
         return;
-    }
-
-    if ( mpMetaFile )
-    {
-        const Bitmap aBmp( GetBitmap( rSrcPt, rSrcSize ) );
-        mpMetaFile->AddAction( new MetaBmpScaleAction( rDestPt, rDestSize, aBmp ) );
     }
 
     if ( !IsDeviceOutputNecessary() )
@@ -459,6 +470,8 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawOutDev( rDestPt, rDestSize, rSrcPt, rSrcSize );
+
+    mpMetaFile = pOldMetaFile;
 }
 
 void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
@@ -468,24 +481,35 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
     if ( ImplIsRecordLayout() )
         return;
 
-    if ( RasterOp::Invert == meRasterOp )
+    if (mpMetaFile)
     {
-        DrawRect( tools::Rectangle( rDestPt, rDestSize ) );
-        return;
-    }
-
-    if ( mpMetaFile )
-    {
-        if (rOutDev.mpAlphaVDev)
+        if (RasterOp::Invert == meRasterOp)
         {
-            const BitmapEx aBmpEx(rOutDev.GetBitmapEx(rSrcPt, rSrcSize));
-            mpMetaFile->AddAction(new MetaBmpExScaleAction(rDestPt, rDestSize, aBmpEx));
+            DrawRect(tools::Rectangle(rDestPt, rDestSize));
         }
         else
         {
-            const Bitmap aBmp(rOutDev.GetBitmap(rSrcPt, rSrcSize));
-            mpMetaFile->AddAction(new MetaBmpScaleAction(rDestPt, rDestSize, aBmp));
+            if (rOutDev.mpAlphaVDev)
+            {
+                const BitmapEx aBmpEx(rOutDev.GetBitmapEx(rSrcPt, rSrcSize));
+                mpMetaFile->AddAction(new MetaBmpExScaleAction(rDestPt, rDestSize, aBmpEx));
+            }
+            else
+            {
+                const Bitmap aBmp(rOutDev.GetBitmap(rSrcPt, rSrcSize));
+                mpMetaFile->AddAction(new MetaBmpScaleAction(rDestPt, rDestSize, aBmp));
+            }
         }
+    }
+
+    GDIMetaFile* pOldMetaFile = mpMetaFile;
+    mpMetaFile = nullptr;
+
+    if ( RasterOp::Invert == meRasterOp )
+    {
+        DrawRect( tools::Rectangle( rDestPt, rDestSize ) );
+        mpMetaFile = pOldMetaFile;
+        return;
     }
 
     if ( !IsDeviceOutputNecessary() )
@@ -523,6 +547,8 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
         if (mpAlphaVDev)
             mpAlphaVDev->ImplFillOpaqueRectangle(tools::Rectangle(rDestPt, rDestSize));
     }
+
+    mpMetaFile = pOldMetaFile;
 }
 
 void OutputDevice::CopyArea( const Point& rDestPt,
