@@ -784,6 +784,9 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
         nLen = rStr.getLength() - nIndex;
     }
 
+    if (mpMetaFile)
+        mpMetaFile->AddAction(new MetaTextAction(rStartPt, rStr, nIndex, nLen));
+
     if (mpOutDevData->mpRecordLayout)
     {
         pVector = &mpOutDevData->mpRecordLayout->m_aUnicodeBoundRects;
@@ -794,8 +797,6 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
     SAL_INFO("vcl.gdi", "OutputDevice::DrawText(\"" << rStr << "\")");
 #endif
 
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaTextAction( rStartPt, rStr, nIndex, nLen ) );
     if( pVector )
     {
         vcl::Region aClip(GetOutputBoundsClipRegion());
@@ -1736,15 +1737,15 @@ void OutputDevice::DrawText( const tools::Rectangle& rRect, const OUString& rOri
 {
     assert(!is_double_buffered_window());
 
+    bool bDecomposeTextRectAction = ( _pTextLayout != nullptr ) && _pTextLayout->DecomposeTextRectAction();
+    if ( mpMetaFile && !bDecomposeTextRectAction )
+        mpMetaFile->AddAction( new MetaTextRectAction( rRect, rOrigStr, nStyle ) );
+
     if (mpOutDevData->mpRecordLayout)
     {
         pVector = &mpOutDevData->mpRecordLayout->m_aUnicodeBoundRects;
         pDisplayText = &mpOutDevData->mpRecordLayout->m_aDisplayText;
     }
-
-    bool bDecomposeTextRectAction = ( _pTextLayout != nullptr ) && _pTextLayout->DecomposeTextRectAction();
-    if ( mpMetaFile && !bDecomposeTextRectAction )
-        mpMetaFile->AddAction( new MetaTextRectAction( rRect, rOrigStr, nStyle ) );
 
     if ( ( !IsDeviceOutputNecessary() && !pVector && !bDecomposeTextRectAction ) || rOrigStr.isEmpty() || rRect.IsEmpty() )
         return;
