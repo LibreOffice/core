@@ -1868,6 +1868,37 @@ public:
     bool empty() const { return maActions.empty(); }
 };
 
+class VCL_DLLPUBLIC MetaBitmapExContainerAction : public MetaAction
+{
+    using ActionsType = std::vector<MetaAction*>;
+
+private:
+    ActionsType maActions;
+
+public:
+    MetaBitmapExContainerAction(RasterOp eRasterOp, DrawModeFlags eDrawMode,
+                              Point const& rDestPt, Size const& rDestSize,
+                              Point const& rSrcPtPixel, Size const& rSrcSizePixel,
+                              BitmapEx const& rBitmapEx, const MetaActionType nAction);
+    MetaBitmapExContainerAction(MetaBitmapExContainerAction const &) = default;
+    MetaBitmapExContainerAction(MetaBitmapExContainerAction &&) = default;
+    MetaBitmapExContainerAction & operator =(MetaBitmapExContainerAction const &) = delete; // due to MetaAction
+    MetaBitmapExContainerAction & operator =(MetaBitmapExContainerAction &&) = delete; // due to MetaAction
+
+public:
+    virtual void Execute(OutputDevice* pOut) override;
+    virtual void Move(tools::Long nHorzMove, tools::Long nVertMove) override;
+    virtual void Scale(double fScaleX, double fScaleY) override;
+
+    MetaAction* GetAction(size_t nIndex) const { return maActions[nIndex]; }
+
+    ActionsType::iterator begin() { return maActions.begin(); }
+    ActionsType::iterator end() { return maActions.end(); }
+
+    size_t size() const { return maActions.size(); }
+    bool empty() const { return maActions.empty(); }
+};
+
 #endif // INCLUDED_VCL_METAACT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
