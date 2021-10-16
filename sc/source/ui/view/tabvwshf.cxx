@@ -96,8 +96,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 }
                 else                        // fade in
                 {
-                    std::vector<OUString> rNames;
-                    rNames.push_back(aName);
+                    std::vector<OUString> rNames { aName };
                     ShowTable( rNames );
                 }
             }

@@ -18,6 +18,7 @@
  */
 
 #include <checklistmenu.hxx>
+#include <o3tl/safeint.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 
@@ -150,8 +151,10 @@ void ScCheckListMenuControl::addSeparator()
 IMPL_LINK(ScCheckListMenuControl, TreeSizeAllocHdl, const Size&, rSize, void)
 {
     assert(mbCanHaveSubMenu);
-    std::vector<int> aWidths;
-    aWidths.push_back(rSize.Width() - (mxMenu->get_text_height() * 3) / 4 - 6);
+    std::vector<int> aWidths
+    {
+        o3tl::narrowing<int>(rSize.Width() - (mxMenu->get_text_height() * 3) / 4 - 6)
+    };
     mxMenu->set_column_fixed_widths(aWidths);
 }
 

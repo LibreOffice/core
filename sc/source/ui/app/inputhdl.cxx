@@ -1316,8 +1316,7 @@ bool ScInputHandler::GetFuncName( OUString& aStart, OUString& aResult )
     if ( p == maFormulaChar.end() )
         return false; // last character is not part of any function name, quit
 
-    ::std::vector<sal_Unicode> aTemp;
-    aTemp.push_back( c );
+    ::std::vector<sal_Unicode> aTemp { c };
     for(sal_Int32 i = nPos - 1; i >= 0; --i)
     {
         c = aStart[ i ];

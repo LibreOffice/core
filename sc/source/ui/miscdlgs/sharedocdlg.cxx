@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/safeint.hxx>
 #include <osl/security.hxx>
 #include <osl/diagnose.h>
 #include <sfx2/dialoghelper.hxx>
@@ -39,9 +40,11 @@ using namespace ::com::sun::star;
 IMPL_LINK(ScShareDocumentDlg, SizeAllocated, const Size&, rSize, void)
 {
     OUString sWidestAccessString = getWidestTime(ScGlobal::getLocaleData());
-    std::vector<int> aWidths;
     const int nAccessWidth = m_xLbUsers->get_pixel_size(sWidestAccessString).Width() * 2;
-    aWidths.push_back(rSize.Width() - nAccessWidth);
+    std::vector<int> aWidths
+    {
+        o3tl::narrowing<int>(rSize.Width() - nAccessWidth)
+    };
     m_xLbUsers->set_column_fixed_widths(aWidths);
 }
 
@@ -62,8 +65,10 @@ ScShareDocumentDlg::ScShareDocumentDlg(weld::Window* pParent, const ScViewData* 
     mpDocShell = ( pViewData ? pViewData->GetDocShell() : nullptr );
     OSL_ENSURE( mpDocShell, "ScShareDocumentDlg CTOR: mpDocShell is null!" );
 
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xLbUsers->get_approximate_digit_width() * 25);
+    std::vector<int> aWidths
+    {
+        o3tl::narrowing<int>(m_xLbUsers->get_approximate_digit_width() * 25)
+    };
     m_xLbUsers->set_column_fixed_widths(aWidths);
 
     m_xLbUsers->set_size_request(-1, m_xLbUsers->get_height_rows(9));

@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <o3tl/safeint.hxx>
 #include <searchresults.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -33,9 +34,11 @@ SearchResultsDlg::SearchResultsDlg(SfxBindings* _pBindings, weld::Window* pParen
 {
     mxList->set_size_request(mxList->get_approximate_digit_width() * 50, mxList->get_height_rows(15));
     mxShowDialog->connect_toggled(LINK(this, SearchResultsDlg, OnShowToggled));
-    std::vector<int> aWidths;
-    aWidths.push_back(mxList->get_approximate_digit_width() * 10);
-    aWidths.push_back(mxList->get_approximate_digit_width() * 10);
+    std::vector<int> aWidths
+    {
+        o3tl::narrowing<int>(mxList->get_approximate_digit_width() * 10),
+        o3tl::narrowing<int>(mxList->get_approximate_digit_width() * 10)
+    };
     mxList->set_column_fixed_widths(aWidths);
     mxList->connect_changed(LINK(this, SearchResultsDlg, ListSelectHdl));
     mxList->connect_column_clicked(LINK(this, SearchResultsDlg, HeaderBarClick));
