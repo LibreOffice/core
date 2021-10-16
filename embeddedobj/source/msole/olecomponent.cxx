@@ -215,7 +215,7 @@ struct OleComponentNative_Impl {
             "PNG",
             cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
 
-        m_aSupportedGraphFormats[0] = datatransfer::DataFlavor(
+        m_aSupportedGraphFormats[4] = datatransfer::DataFlavor(
             "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"",
             "GDIMetafile",
             cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
