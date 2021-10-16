@@ -163,7 +163,6 @@ static void CalculateHorizontalScalingFactor(
     const tools::PolyPolygon& rOutline2d)
 {
     double fScalingFactor = 1.0;
-    bool bScalingFactorDefined = false;
     rFWData.fVerticalTextScaling = 1.0;
 
     sal_uInt16 i = 0;
@@ -199,9 +198,14 @@ static void CalculateHorizontalScalingFactor(
     if ( nOutlinesCount2d & 1 )
         bSingleLineMode = true;
 
+    // In case of rFWData.bScaleX == true it loops with reduced font size until the current run
+    // results in a fScalingFactor >=1.0. The fact, that case rFWData.bScaleX == true keeps font
+    // size if possible, is not done here with scaling factor 1 but is done in method
+    // FitTextOutlinesToShapeOutlines()
     do
     {
         i = 0;
+        bool bScalingFactorDefined = false; // New calculation for each font size
         for( const auto& rTextArea : rFWData.vTextAreas )
         {
             // calculating the width of the corresponding 2d text area
@@ -223,7 +227,7 @@ static void CalculateHorizontalScalingFactor(
                         fScalingFactor = fScale;
                         bScalingFactorDefined = true;
                     }
-                    else if ( fScale < fScalingFactor || ( rFWData.bScaleX && fScalingFactor < 1.0 ) )
+                    else if (fScale < fScalingFactor)
                     {
                         fScalingFactor = fScale;
                     }
