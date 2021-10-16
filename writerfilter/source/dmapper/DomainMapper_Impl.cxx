@@ -2808,19 +2808,20 @@ void DomainMapper_Impl::ConvertHeaderFooterToTextFrame(bool bDynamicHeightTop, b
             xCursor->gotoEnd(false);
             xRangeEnd = xCursor->getStart();
 
-            std::vector<beans::PropertyValue> aFrameProperties;
-
-            aFrameProperties.push_back(comphelper::makePropertyValue("TextWrap", css::text::WrapTextMode_THROUGH));
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT), text::HoriOrientation::LEFT));
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_OPAQUE), false));
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_WIDTH_TYPE), text::SizeType::MIN));
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SIZE_TYPE), text::SizeType::MIN));
+            std::vector<beans::PropertyValue> aFrameProperties
+            {
+                comphelper::makePropertyValue("TextWrap", css::text::WrapTextMode_THROUGH),
+                comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT), text::HoriOrientation::LEFT),
+                comphelper::makePropertyValue(getPropertyName(PROP_OPAQUE), false),
+                comphelper::makePropertyValue(getPropertyName(PROP_WIDTH_TYPE), text::SizeType::MIN),
+                comphelper::makePropertyValue(getPropertyName(PROP_SIZE_TYPE), text::SizeType::MIN),
             // tdf#143384 If the header/footer started with a table, convertToTextFrame could not
             // convert the table, because it used createTextCursor() -which ignore tables-
             // to set the conversion range.
             // This dummy property is set to make convertToTextFrame to use another CreateTextCursor
             // method that can be parameterized to not ignore tables.
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_CURSOR_NOT_IGNORE_TABLES_IN_HF), true));
+                comphelper::makePropertyValue(getPropertyName(PROP_CURSOR_NOT_IGNORE_TABLES_IN_HF), true)
+            };
 
             fillEmptyFrameProperties(aFrameProperties, false);
 
