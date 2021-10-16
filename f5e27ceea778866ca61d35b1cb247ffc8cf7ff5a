@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4fb6ce1_a2006e68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-10-16T14:09:11Z",
+      "side": 1,
+      "message": "scaled bitmap: https://i.imgur.com/OptECNj.png\nreduced bitmap: https://i.imgur.com/bCH0THv.png\nrotated is as same as the normal bitmap",
+      "revId": "f5e27ceea778866ca61d35b1cb247ffc8cf7ff5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
