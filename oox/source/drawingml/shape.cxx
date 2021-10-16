@@ -1349,10 +1349,12 @@ Reference< XShape > const & Shape::createAndInsert(
             }
 
             // Store original fill and line colors of the shape and the theme color name to InteropGrabBag
-            std::vector<beans::PropertyValue> aProperties;
-            aProperties.push_back(comphelper::makePropertyValue("EmuLineWidth", aLineProperties.moLineWidth.get(0)));
-            aProperties.push_back(comphelper::makePropertyValue("OriginalSolidFillClr", aShapeProps.getProperty(PROP_FillColor)));
-            aProperties.push_back(comphelper::makePropertyValue("OriginalLnSolidFillClr", aShapeProps.getProperty(PROP_LineColor)));
+            std::vector<beans::PropertyValue> aProperties
+            {
+                comphelper::makePropertyValue("EmuLineWidth", aLineProperties.moLineWidth.get(0)),
+                comphelper::makePropertyValue("OriginalSolidFillClr", aShapeProps.getProperty(PROP_FillColor)),
+                comphelper::makePropertyValue("OriginalLnSolidFillClr", aShapeProps.getProperty(PROP_LineColor))
+            };
             OUString sColorFillScheme = aFillProperties.maFillColor.getSchemeName();
             if( !aFillProperties.maFillColor.isPlaceHolder() && !sColorFillScheme.isEmpty() )
             {
@@ -1380,8 +1382,10 @@ Reference< XShape > const & Shape::createAndInsert(
                 { // for each stop in the gradient definition:
 
                     // save position
-                    std::vector<beans::PropertyValue> aGradientStop;
-                    aGradientStop.push_back(comphelper::makePropertyValue("Pos", rPos));
+                    std::vector<beans::PropertyValue> aGradientStop
+                    {
+                        comphelper::makePropertyValue("Pos", rPos)
+                    };
 
                     OUString sStopColorScheme = rColor.getSchemeName();
                     if( sStopColorScheme.isEmpty() )
@@ -1422,8 +1426,10 @@ Reference< XShape > const & Shape::createAndInsert(
                     PropertyValue aEffect = it->getEffect();
                     if( !aEffect.Name.isEmpty() )
                     {
-                        std::vector<beans::PropertyValue> aEffectsGrabBag;
-                        aEffectsGrabBag.push_back(comphelper::makePropertyValue("Attribs", aEffect.Value));
+                        std::vector<beans::PropertyValue> aEffectsGrabBag
+                        {
+                            comphelper::makePropertyValue("Attribs", aEffect.Value)
+                        };
 
                         Color& aColor( it->moColor );
                         OUString sColorScheme = aColor.getSchemeName();
