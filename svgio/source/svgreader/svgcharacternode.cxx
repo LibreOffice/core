@@ -280,9 +280,9 @@ namespace svgio::svgreader
                         ::std::vector< double > aExtendArray(aTextLayouterDevice.getTextArray(getText(), nArray, nLength - nArray));
                         aTextArray.reserve(nLength);
 
-                        for(size_t a(0); a < aExtendArray.size(); a++)
+                        for(auto a : aExtendArray)
                         {
-                            aTextArray.push_back(aExtendArray[a] + fStartX);
+                            aTextArray.push_back(a + fStartX);
                         }
                     }
                 }
@@ -305,9 +305,9 @@ namespace svgio::svgreader
                             aTextArray = aTextLayouterDevice.getTextArray(getText(), nIndex, nLength);
                         }
 
-                        for(size_t a(0); a < aTextArray.size(); a++)
+                        for(auto a : aTextArray)
                         {
-                            aTextArray[a] *= fFactor;
+                            a *= fFactor;
                         }
                     }
                     else

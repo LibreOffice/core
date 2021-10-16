@@ -117,9 +117,9 @@ namespace svgio::svgreader
             OUStringBuffer aConcatenatedSelector;
 
             // re-combine without spaces, create a unique name (for now)
-            for(size_t a(0); a < aSelectorParts.size(); a++)
+            for(auto &a : aSelectorParts)
             {
-                aConcatenatedSelector.append(aSelectorParts[a]);
+                aConcatenatedSelector.append(a);
             }
 
             // CssStyles in SVG are currently not completely supported; the current idea for
