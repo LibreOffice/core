@@ -99,10 +99,12 @@ void Throbber::initImages()
 {
     try
     {
-        ::std::vector< ::std::vector< Image > > aImageSets;
-        aImageSets.push_back( lcl_loadImageSet( ImageSet::N16px ) );
-        aImageSets.push_back( lcl_loadImageSet( ImageSet::N32px ) );
-        aImageSets.push_back( lcl_loadImageSet( ImageSet::N64px ) );
+        ::std::vector< ::std::vector< Image > > aImageSets
+        {
+            lcl_loadImageSet( ImageSet::N16px ),
+            lcl_loadImageSet( ImageSet::N32px ),
+            lcl_loadImageSet( ImageSet::N64px )
+        };
 
         // find the best matching image set (size-wise)
         const ::Size aWindowSizePixel = GetSizePixel();

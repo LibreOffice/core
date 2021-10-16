@@ -660,8 +660,7 @@ static int GetTTGlyphOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, Cont
     }
     else
     {
-        std::vector< sal_uInt32 > aPrivList;
-        aPrivList.push_back( glyphID );
+        std::vector< sal_uInt32 > aPrivList { glyphID };
         res = GetCompoundTTOutline(ttf, glyphID, pointArray, metrics, glyphlist ? *glyphlist : aPrivList );
     }
 

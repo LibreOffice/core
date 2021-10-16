@@ -3748,8 +3748,7 @@ void SalInstanceTreeView::thaw()
 
 void SalInstanceTreeView::set_column_fixed_widths(const std::vector<int>& rWidths)
 {
-    std::vector<tools::Long> aTabPositions;
-    aTabPositions.push_back(0);
+    std::vector<tools::Long> aTabPositions{ 0 };
     for (size_t i = 0; i < rWidths.size(); ++i)
         aTabPositions.push_back(aTabPositions[i] + rWidths[i]);
     m_xTreeView->SetTabs(aTabPositions.size(), aTabPositions.data(), MapUnit::MapPixel);
@@ -5096,8 +5095,7 @@ IMPL_LINK_NOARG(SalInstanceTreeView, DoubleClickHdl, SvTreeListBox*, bool)
 
 IMPL_LINK(SalInstanceTreeView, EndDragHdl, HeaderBar*, pHeaderBar, void)
 {
-    std::vector<tools::Long> aTabPositions;
-    aTabPositions.push_back(0);
+    std::vector<tools::Long> aTabPositions{ 0 };
     for (int i = 0; i < pHeaderBar->GetItemCount() - 1; ++i)
         aTabPositions.push_back(aTabPositions[i]
                                 + pHeaderBar->GetItemSize(pHeaderBar->GetItemId(i)));

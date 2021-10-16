@@ -226,8 +226,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 -(BOOL)application: (NSApplication*)app openFile: (NSString*)pFile
 {
     (void)app;
-    std::vector<OUString> aFile;
-    aFile.push_back( GetOUString( pFile ) );
+    std::vector<OUString> aFile { GetOUString( pFile ) };
     if( ! AquaSalInstance::isOnCommandLine( aFile[0] ) )
     {
         const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::Type::Open, std::move(aFile));
@@ -272,8 +271,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 -(BOOL)application: (NSApplication*)app printFile: (NSString*)pFile
 {
     (void)app;
-    std::vector<OUString> aFile;
-    aFile.push_back( GetOUString( pFile ) );
+    std::vector<OUString> aFile {  GetOUString( pFile ) };
     const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::Type::Print, std::move(aFile));
     AquaSalInstance::aAppEventList.push_back( pAppEvent );
     AquaSalInstance *pInst = GetSalData()->mpInstance;
