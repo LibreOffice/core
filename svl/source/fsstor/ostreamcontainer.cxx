@@ -141,9 +141,11 @@ uno::Sequence< uno::Type > SAL_CALL OFSStreamContainer::getTypes()
 
         if ( !m_aTypes.hasElements() )
         {
-            std::vector<uno::Type> tmp;
-            tmp.push_back(cppu::UnoType<lang::XTypeProvider>::get());
-            tmp.push_back(cppu::UnoType<embed::XExtendedStorageStream>::get());
+            std::vector<uno::Type> tmp
+            {
+                cppu::UnoType<lang::XTypeProvider>::get(),
+                cppu::UnoType<embed::XExtendedStorageStream>::get()
+            };
 
             if ( m_xSeekable.is() )
                 tmp.push_back(cppu::UnoType<io::XSeekable>::get());
