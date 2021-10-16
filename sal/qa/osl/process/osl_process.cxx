@@ -382,10 +382,12 @@ public:
 
         osl_freeProcessHandle(process);
 
-        std::vector<OString> different_child_env_vars;
-        different_child_env_vars.push_back(ENV1);
-        different_child_env_vars.push_back(ENV2);
-        different_child_env_vars.push_back(ENV4);
+        std::vector<OString> different_child_env_vars
+        {
+            ENV1,
+            ENV2,
+            ENV4
+        };
 
         CPPUNIT_ASSERT_MESSAGE
         (
