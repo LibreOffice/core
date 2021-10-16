@@ -53,6 +53,7 @@ public:
     void testDrawWhiteBitmap();
     void testDrawGrayBitmap();
     void testDrawBitmap();
+    void testDrawBitmapEx();
     void testDrawScaleBitmap();
     void testDrawScalePartBitmap();
     void testDrawTransformedBitmapEx();
@@ -114,6 +115,7 @@ public:
     CPPUNIT_TEST(testDrawWhiteBitmap);
     CPPUNIT_TEST(testDrawGrayBitmap);
     CPPUNIT_TEST(testDrawBitmap);
+    CPPUNIT_TEST(testDrawBitmapEx);
     CPPUNIT_TEST(testDrawScaleBitmap);
     CPPUNIT_TEST(testDrawScalePartBitmap);
     CPPUNIT_TEST(testGetReadableFontColorPrinter);
@@ -443,6 +445,35 @@ void VclOutdevTest::testDrawBitmap()
     CPPUNIT_ASSERT_EQUAL(MetaActionType::COMMENT, pAction->GetType());
 }
 
+void VclOutdevTest::testDrawBitmapEx()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    BitmapEx aBitmapEx(Bitmap(Size(16, 16), vcl::PixelFormat::N24_BPP), COL_TRANSPARENT);
+
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    pVDev->DrawBitmapEx(Point(0, 0), Size(10, 10), Point(0, 0), Size(10, 10), aBitmapEx,
+                        MetaActionType::BMPEX);
+
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::BITMAPEXCONTAINER, pAction->GetType());
+    auto pBitmapExContainerAction = static_cast<MetaBitmapExContainerAction*>(pAction);
+
+    pAction = pBitmapExContainerAction->GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::COMMENT, pAction->GetType());
+
+    pAction = pBitmapExContainerAction->GetAction(1);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::BMPEX, pAction->GetType());
+    auto pBmpExAction = static_cast<MetaBmpExAction*>(pAction);
+
+    CPPUNIT_ASSERT_EQUAL(Size(16, 16), pBmpExAction->GetBitmapEx().GetSizePixel());
+    CPPUNIT_ASSERT_EQUAL(Point(0, 0), pBmpExAction->GetPoint());
+
+    pAction = pBitmapExContainerAction->GetAction(2);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::COMMENT, pAction->GetType());
+}
+
 void VclOutdevTest::testDrawScaleBitmap()
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
@@ -564,9 +595,20 @@ void VclOutdevTest::testDrawTransformedBitmapEx()
     // Draw the rotated bitmap on the vdev.
     pVDev->DrawTransformedBitmapEx(aMatrix, aBitmapEx);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aMtf.GetActionSize());
+
     MetaAction* pAction = aMtf.GetAction(0);
+    auto pBitmapContainerAction = static_cast<MetaBitmapContainerAction*>(pAction);
+
+    pAction = pBitmapContainerAction->GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::COMMENT, pAction->GetType());
+
+    pAction = pBitmapContainerAction->GetAction(1);
     CPPUNIT_ASSERT_EQUAL(MetaActionType::BMPEXSCALE, pAction->GetType());
     auto pBitmapAction = static_cast<MetaBmpExScaleAction*>(pAction);
+
+    pAction = pBitmapContainerAction->GetAction(2);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::COMMENT, pAction->GetType());
+
     const BitmapEx& rBitmapEx = pBitmapAction->GetBitmapEx();
     Size aTransformedSize = rBitmapEx.GetSizePixel();
     // Without the accompanying fix in place, this test would have failed with:
@@ -630,8 +672,18 @@ void VclOutdevTest::testDrawTransformedBitmapExFlip()
     pVDev->DrawTransformedBitmapEx(aMatrix, aBitmapEx);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aMtf.GetActionSize());
     MetaAction* pAction = aMtf.GetAction(0);
+    auto pBitmapContainerAction = static_cast<MetaBitmapContainerAction*>(pAction);
+
+    pAction = pBitmapContainerAction->GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::COMMENT, pAction->GetType());
+
+    pAction = pBitmapContainerAction->GetAction(1);
     CPPUNIT_ASSERT_EQUAL(MetaActionType::BMPEXSCALE, pAction->GetType());
     auto pBitmapAction = static_cast<MetaBmpExScaleAction*>(pAction);
+
+    pAction = pBitmapContainerAction->GetAction(2);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::COMMENT, pAction->GetType());
+
     const BitmapEx& rBitmapEx = pBitmapAction->GetBitmapEx();
 
     aBitmap = rBitmapEx.GetBitmap();
@@ -1879,7 +1931,7 @@ void VclOutdevTest::testDrawWaveLine()
     pVDev->DrawWaveLine(Point(0, 0), Point(50, 0));
 
     MetaAction* pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a bitmap action", MetaActionType::BMPEXSCALEPART,
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a bitmap container action", MetaActionType::BITMAPEXCONTAINER,
                                  pAction->GetType());
 }
 

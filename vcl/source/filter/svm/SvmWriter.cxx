@@ -826,6 +826,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
             BitmapContainerHandler(pMetaAction);
         }
         break;
+
+        case MetaActionType::BITMAPEXCONTAINER:
+        {
+            auto* pMetaAction = static_cast<MetaBitmapExContainerAction*>(pAction);
+            BitmapExContainerHandler(pMetaAction);
+        }
+        break;
     }
 }
 
@@ -1721,4 +1728,61 @@ void SvmWriter::BitmapContainerHandler(const MetaBitmapContainerAction* pActionC
     }
 }
 
+void SvmWriter::BitmapExContainerHandler(const MetaBitmapExContainerAction* pActionConst)
+{
+    MetaBitmapExContainerAction* pAction = const_cast<MetaBitmapExContainerAction*>(pActionConst);
+
+    for (auto* pContainerAction : *pAction)
+    {
+        MetaActionType nType = pAction->GetType();
+
+        switch (nType)
+        {
+            case MetaActionType::COMMENT:
+            {
+                auto* pMetaAction = static_cast<MetaCommentAction*>(pContainerAction);
+                CommentHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::RECT:
+            {
+                auto* pMetaAction = static_cast<MetaRectAction*>(pContainerAction);
+                RectHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::BMPEX:
+            {
+                auto* pMetaAction = static_cast<MetaBmpExAction*>(pContainerAction);
+                BmpExHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::BMPSCALE:
+            {
+                auto* pMetaAction = static_cast<MetaBmpExScaleAction*>(pContainerAction);
+                BmpExScaleHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::BMPSCALEPART:
+            {
+                auto* pMetaAction = static_cast<MetaBmpExScalePartAction*>(pContainerAction);
+                BmpExScalePartHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::RASTEROP:
+            {
+                auto* pMetaAction = static_cast<MetaRasterOpAction*>(pContainerAction);
+                RasterOpHandler(pMetaAction);
+            }
+            break;
+
+            default:
+                break;
+        }
+    }
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
