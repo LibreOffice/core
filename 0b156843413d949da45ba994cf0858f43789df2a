@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f95d725f_77ae3146",
+        "filename": "lotuswordpro/source/filter/lwppagelayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-10-16T18:03:42Z",
+      "side": 1,
+      "message": "cheaper to check here perhaps?",
+      "revId": "0b156843413d949da45ba994cf0858f43789df2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
