@@ -35,6 +35,8 @@
 #include <unotools/fontdefs.hxx>
 #include <vcl/TypeSerializer.hxx>
 
+#include <drawmode.hxx>
+
 namespace
 {
 
@@ -2681,6 +2683,80 @@ void MetaBitmapContainerAction::Move(tools::Long nHorzMove, tools::Long nVertMov
 }
 
 void MetaBitmapContainerAction::Scale(double fScaleX, double fScaleY)
+{
+    for (MetaAction* pAction : maActions)
+    {
+        pAction->Scale(fScaleX, fScaleY);
+    }
+}
+
+MetaBitmapExContainerAction::MetaBitmapExContainerAction(RasterOp eRasterOp, DrawModeFlags eDrawMode,
+                              Point const& rDestPt, Size const& rDestSize,
+                              Point const& rSrcPtPixel, Size const& rSrcSizePixel,
+                              BitmapEx const& rBitmapEx, const MetaActionType nAction)
+    : MetaAction(MetaActionType::BITMAPEXCONTAINER)
+{
+    maActions.push_back(new MetaCommentAction("XBMPEX_CONTAINER_BEGIN"));
+
+    if (!rBitmapEx.IsAlpha())
+    {
+        maActions.push_back(new MetaBitmapContainerAction(eRasterOp, eDrawMode,
+                    rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, rBitmapEx.GetBitmap(), MetaActionType::BMPSCALEPART));
+    }
+    else
+    {
+        if (eRasterOp == RasterOp::Invert)
+        {
+            maActions.push_back(new MetaRasterOpAction(RasterOp::Invert));
+            maActions.push_back(new MetaRectAction(tools::Rectangle(rDestPt, rDestSize)));
+            maActions.push_back(new MetaCommentAction("XBMPEX_CONTAINER_END"));
+
+            return;
+        }
+
+        BitmapEx aBmpEx(vcl::drawmode::GetBitmapEx(rBitmapEx, eDrawMode));
+
+        switch (nAction)
+        {
+            case MetaActionType::BMPEX:
+                maActions.push_back(new MetaBmpExAction(rDestPt, aBmpEx));
+            break;
+
+            case MetaActionType::BMPEXSCALE:
+                maActions.push_back(new MetaBmpExScaleAction(rDestPt, rDestSize, aBmpEx));
+            break;
+
+            case MetaActionType::BMPEXSCALEPART:
+                maActions.push_back(new MetaBmpExScalePartAction(rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmpEx));
+            break;
+
+            default:
+                SAL_WARN("vcl.gdi", "Not a bitmapex action");
+                assert(false);
+            break;
+        }
+    }
+
+    maActions.push_back(new MetaCommentAction("XBMPEX_CONTAINER_END"));
+}
+
+void MetaBitmapExContainerAction::Execute(OutputDevice* pOutDev)
+{
+    for (MetaAction* pAction : maActions)
+    {
+        pAction->Execute(pOutDev);
+    }
+}
+
+void MetaBitmapExContainerAction::Move(tools::Long nHorzMove, tools::Long nVertMove)
+{
+    for (MetaAction* pAction : maActions)
+    {
+        pAction->Move(nHorzMove, nVertMove);
+    }
+}
+
+void MetaBitmapExContainerAction::Scale(double fScaleX, double fScaleY)
 {
     for (MetaAction* pAction : maActions)
     {
