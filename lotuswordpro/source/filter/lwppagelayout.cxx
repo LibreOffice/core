@@ -607,8 +607,11 @@ sal_Int32 LwpPageLayout::GetPageNumber(sal_uInt16 nLayoutNumber)
 
     //get first pagehint
     LwpPageHint* pPageHint = dynamic_cast<LwpPageHint*>(pHeadTail->GetHead().obj().get());
+    o3tl::sorted_vector<LwpPageHint*> aSeen;
     while (pPageHint)
     {
+        aSeen.insert(pPageHint);
+
         if (GetObjectID() == pPageHint->GetPageLayoutID())
         {
             sal_uInt16 nNumber = pPageHint->GetPageNumber();
@@ -635,7 +638,11 @@ sal_Int32 LwpPageLayout::GetPageNumber(sal_uInt16 nLayoutNumber)
                 break;
             }
         }
+
         pPageHint = dynamic_cast<LwpPageHint*>(pPageHint->GetNext().obj().get());
+
+        if (aSeen.find(pPageHint) != aSeen.end())
+            throw std::runtime_error("loop in conversion");
     }
     if (nPageNumber >= 0)
     {
