@@ -110,8 +110,7 @@ uno::Sequence< sal_Int32 > OleEmbeddedObject::GetIntermediateVerbsSequence_Impl(
     // actually there will be only one verb
     if ( m_nObjectState == embed::EmbedStates::RUNNING && nNewState == embed::EmbedStates::ACTIVE )
     {
-        uno::Sequence< sal_Int32 > aVerbs( 1 );
-        aVerbs[0] = embed::EmbedVerbs::MS_OLEVERB_OPEN;
+        return { embed::EmbedVerbs::MS_OLEVERB_OPEN };
     }
 
     return uno::Sequence< sal_Int32 >();
