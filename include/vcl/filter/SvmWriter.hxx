@@ -96,4 +96,5 @@ public:
     void LinearGradientHandler(const MetaLinearGradientAction* pAction);
     void ComplexGradientHandler(const MetaComplexGradientAction* pAction);
     void GradientContainerHandler(const MetaGradientContainerAction* pAction);
+    void BitmapContainerHandler(const MetaBitmapContainerAction* pAction);
 };
