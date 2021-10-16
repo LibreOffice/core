@@ -49,12 +49,13 @@ ListView::ListView(std::unique_ptr<weld::TreeView> xTreeView)
     , mnSortColumn(-2)
 {
     auto nDigitWidth = mxTreeView->get_approximate_digit_width();
-    std::vector<int> aWidths;
-    aWidths.push_back(static_cast<int>(nDigitWidth * 5)); /* Icon Column */
-    aWidths.push_back(static_cast<int>(nDigitWidth * 24)); /* Name Column */
-    aWidths.push_back(static_cast<int>(nDigitWidth * 22)); /* Category Column */
-    aWidths.push_back(static_cast<int>(nDigitWidth * 15)); /* Application Column */
-    aWidths.push_back(static_cast<int>(nDigitWidth * 18)); /* Modify Column */
+    std::vector<int> aWidths{
+        static_cast<int>(nDigitWidth * 5), /* Icon Column */
+        static_cast<int>(nDigitWidth * 24), /* Name Column */
+        static_cast<int>(nDigitWidth * 22), /* Category Column */
+        static_cast<int>(nDigitWidth * 15), /* Application Column */
+        static_cast<int>(nDigitWidth * 18) /* Modify Column */
+    };
 
     mxTreeView->set_column_fixed_widths(aWidths);
     mxTreeView->set_selection_mode(SelectionMode::Multiple);

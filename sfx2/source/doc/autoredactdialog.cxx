@@ -43,12 +43,7 @@ TargetsTable::TargetsTable(std::unique_ptr<weld::TreeView> xControl)
     : m_xControl(std::move(xControl))
 {
     m_xControl->set_size_request(555, 250);
-    std::vector<int> aWidths;
-    aWidths.push_back(100);
-    aWidths.push_back(50);
-    aWidths.push_back(200);
-    aWidths.push_back(105);
-    aWidths.push_back(105);
+    std::vector<int> aWidths{ 100, 50, 200, 105, 105 };
     m_xControl->set_column_fixed_widths(aWidths);
     m_xControl->set_selection_mode(SelectionMode::Multiple);
 }
