@@ -235,7 +235,9 @@ double LwpSuperTableLayout::GetTableWidth()
             o3tl::sorted_vector<LwpColumnLayout*> aSeen;
             while (pColumnLayout)
             {
-                aSeen.insert(pColumnLayout);
+                bool bAlreadySeen = !aSeen.insert(pColumnLayout).second;
+                if (bAlreadySeen)
+                    throw std::runtime_error("loop in conversion");
                 if(pColumnLayout->GetColumnID() == i)
                 {
                     dColumnWidth = pColumnLayout->GetWidth();
@@ -243,8 +245,6 @@ double LwpSuperTableLayout::GetTableWidth()
                 }
                 pColumnID = &pColumnLayout->GetNext();
                 pColumnLayout = dynamic_cast<LwpColumnLayout *>(pColumnID->obj().get());
-                if (aSeen.find(pColumnLayout) != aSeen.end())
-                    throw std::runtime_error("loop in conversion");
             }
             dWidth += dColumnWidth;
         }
@@ -456,7 +456,9 @@ void LwpTableLayout::TraverseTable()
     o3tl::sorted_vector<LwpRowLayout*> aSeen;
     while (pRowLayout)
     {
-        aSeen.insert(pRowLayout);
+        bool bAlreadySeen = !aSeen.insert(pRowLayout).second;
+        if (bAlreadySeen)
+            throw std::runtime_error("loop in conversion");
 
         pRowLayout->SetRowMap();
 
@@ -467,8 +469,6 @@ void LwpTableLayout::TraverseTable()
 
         pRowID = &pRowLayout->GetNext();
         pRowLayout = dynamic_cast<LwpRowLayout *>(pRowID->obj().get());
-        if (aSeen.find(pRowLayout) != aSeen.end())
-            throw std::runtime_error("loop in conversion");
     }
 }
 
@@ -574,7 +574,9 @@ void LwpTableLayout::RegisterColumns()
     o3tl::sorted_vector<LwpColumnLayout*> aSeen;
     while (pColumnLayout)
     {
-        aSeen.insert(pColumnLayout);
+        bool bAlreadySeen = !aSeen.insert(pColumnLayout).second;
+        if (bAlreadySeen)
+            throw std::runtime_error("loop in conversion");
 
         auto nColId = pColumnLayout->GetColumnID();
         if (nColId >= nCols)
@@ -591,9 +593,6 @@ void LwpTableLayout::RegisterColumns()
 
         pColumnID = &pColumnLayout->GetNext();
         pColumnLayout = dynamic_cast<LwpColumnLayout *>(pColumnID->obj().get());
-
-        if (aSeen.find(pColumnLayout) != aSeen.end())
-            throw std::runtime_error("loop in conversion");
     }
 
     // if all columns are not justifiable, the rightmost column will be changed to justifiable
@@ -1147,15 +1146,15 @@ void LwpTableLayout::PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID)
         o3tl::sorted_vector<LwpTableRange*> aTableSeen;
         while (pTableRange)
         {
-            aTableSeen.insert(pTableRange);
+            bool bAlreadySeenTable = !aTableSeen.insert(pTableRange).second;
+            if (bAlreadySeenTable)
+                throw std::runtime_error("loop in conversion");
             LwpObjectID aID = pTableRange->GetTableID();
             if (aID == aTableID)
             {
                 break;
             }
             pTableRange = pTableRange->GetNext();
-            if (aTableSeen.find(pTableRange) != aTableSeen.end())
-                throw std::runtime_error("loop in conversion");
         }
 
         if (!pTableRange)
@@ -1176,7 +1175,9 @@ void LwpTableLayout::PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID)
         o3tl::sorted_vector<LwpRowList*> aOuterSeen;
         while (pRowList)
         {
-            aOuterSeen.insert(pRowList);
+            bool bAlreadySeenOuter = !aOuterSeen.insert(pRowList).second;
+            if (bAlreadySeenOuter)
+                throw std::runtime_error("loop in conversion");
             sal_uInt16 nRowID =  pRowList->GetRowID();
             {
                 LwpCellList* pCellList = dynamic_cast<LwpCellList*>(pRowList->GetChildHeadID().obj().get());
@@ -1184,7 +1185,10 @@ void LwpTableLayout::PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID)
                 o3tl::sorted_vector<LwpCellList*> aSeen;
                 while (pCellList)
                 {
-                    aSeen.insert(pCellList);
+                    bool bAlreadySeen = !aSeen.insert(pCellList).second;
+                    if (bAlreadySeen)
+                        throw std::runtime_error("loop in conversion");
+
                     {//put cell
                         sal_uInt16 nColID = pCellList->GetColumnID();
 
@@ -1201,13 +1205,9 @@ void LwpTableLayout::PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID)
 
                     }
                     pCellList = dynamic_cast<LwpCellList*>(pCellList->GetNextID().obj().get());
-                    if (aSeen.find(pCellList) != aSeen.end())
-                        throw std::runtime_error("loop in conversion");
                 }
             }
             pRowList = dynamic_cast<LwpRowList*>(pRowList->GetNextID().obj().get());
-            if (aOuterSeen.find(pRowList) != aOuterSeen.end())
-                throw std::runtime_error("loop in conversion");
         }
 
     }catch (...) {

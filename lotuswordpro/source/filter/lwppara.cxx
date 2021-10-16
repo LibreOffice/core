@@ -497,7 +497,9 @@ void LwpPara::RegisterStyle()
                     o3tl::sorted_vector<LwpPara*> aSeen;
                     while(true)
                     {
-                        aSeen.insert(pPara);
+                        bool bAlreadySeen = !aSeen.insert(pPara).second;
+                        if (bAlreadySeen)
+                            throw std::runtime_error("loop in conversion");
                         LwpSilverBullet* pParaSilverBullet = pPara->GetSilverBullet();
                         pNumbering = pPara->GetParaNumbering();
 
@@ -587,8 +589,6 @@ void LwpPara::RegisterStyle()
                             }
                         }
                         pPara = pPrePara;
-                        if (aSeen.find(pPara) != aSeen.end())
-                            throw std::runtime_error("loop in conversion");
                     }
                     nNum = nNum ? nNum : 1;
 

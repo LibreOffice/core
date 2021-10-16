@@ -298,13 +298,13 @@ void LwpDocument::RegisterStylesInPara()
     o3tl::sorted_vector<LwpStory*> aSeen;
     while (xStory.is())
     {
-        aSeen.insert(xStory.get());
+        bool bAlreadySeen = !aSeen.insert(xStory.get()).second;
+        if (bAlreadySeen)
+            throw std::runtime_error("loop in conversion");
         //Register the child para
         xStory->SetFoundry(m_xOwnedFoundry.get());
         xStory->DoRegisterStyle();
         xStory.set(dynamic_cast<LwpStory*>(xStory->GetNext().obj(VO_STORY).get()));
-        if (aSeen.find(xStory.get()) != aSeen.end())
-            throw std::runtime_error("loop in conversion");
     }
 }
 /**
@@ -323,12 +323,12 @@ void LwpDocument::RegisterBulletStyles()
     o3tl::sorted_vector<LwpSilverBullet*> aSeen;
     while (pBullet)
     {
-        aSeen.insert(pBullet);
+        bool bAlreadySeen = !aSeen.insert(pBullet).second;
+        if (bAlreadySeen)
+            throw std::runtime_error("loop in conversion");
         pBullet->SetFoundry(m_xOwnedFoundry.get());
         pBullet->RegisterStyle();
         pBullet = dynamic_cast<LwpSilverBullet*>(pBullet->GetNext().obj().get());
-        if (aSeen.find(pBullet) != aSeen.end())
-            throw std::runtime_error("loop in conversion");
     }
 }
 /**
@@ -574,7 +574,9 @@ LwpDocument* LwpDocument::GetLastDivisionWithContents()
         o3tl::sorted_vector<LwpDocument*> aSeen;
         while (pDivision && pDivision != this)
         {
-            aSeen.insert(pDivision);
+            bool bAlreadySeen = !aSeen.insert(pDivision).second;
+            if (bAlreadySeen)
+                throw std::runtime_error("loop in conversion");
             LwpDocument* pContentDivision = pDivision->GetLastDivisionWithContents();
             if (pContentDivision)
             {
@@ -582,8 +584,6 @@ LwpDocument* LwpDocument::GetLastDivisionWithContents()
                 break;
             }
             pDivision = pDivision->GetPreviousDivision();
-            if (aSeen.find(pDivision) != aSeen.end())
-                throw std::runtime_error("loop in conversion");
         }
     }
 
@@ -640,12 +640,12 @@ LwpDocument* LwpDocument::GetRootDocument()
     o3tl::sorted_vector<LwpDocument*> aSeen;
     while (pRoot)
     {
-        aSeen.insert(pRoot);
+        bool bAlreadySeen = !aSeen.insert(pRoot).second;
+        if (bAlreadySeen)
+            throw std::runtime_error("loop in conversion");
         if (!pRoot->IsChildDoc())
             return pRoot;
         pRoot = pRoot->GetParentDivision();
-        if (aSeen.find(pRoot) != aSeen.end())
-            throw std::runtime_error("loop in conversion");
     }
     return nullptr;
 }
@@ -662,13 +662,13 @@ LwpDocument* LwpDocument::ImplGetFirstDivisionWithContentsThatIsNotOLE()
     o3tl::sorted_vector<LwpDocument*> aSeen;
     while (pDivision)
     {
-        aSeen.insert(pDivision);
+        bool bAlreadySeen = !aSeen.insert(pDivision).second;
+        if (bAlreadySeen)
+            throw std::runtime_error("loop in conversion");
         LwpDocument* pContentDivision = pDivision->GetFirstDivisionWithContentsThatIsNotOLE();
         if (pContentDivision)
             return pContentDivision;
         pDivision = pDivision->GetNextDivision();
-        if (aSeen.find(pDivision) != aSeen.end())
-            throw std::runtime_error("loop in conversion");
     }
     return nullptr;
 }
@@ -682,12 +682,12 @@ LwpDocument* LwpDocument::GetLastDivisionThatHasEndnote()
     o3tl::sorted_vector<LwpDocument*> aSeen;
     while (pLastDoc)
     {
-        aSeen.insert(pLastDoc);
+        bool bAlreadySeen = !aSeen.insert(pLastDoc).second;
+        if (bAlreadySeen)
+            throw std::runtime_error("loop in conversion");
         if (pLastDoc->GetEnSuperTableLayout().is())
             return pLastDoc;
         pLastDoc = pLastDoc->GetPreviousDivisionWithContents();
-        if (aSeen.find(pLastDoc) != aSeen.end())
-            throw std::runtime_error("loop in conversion");
     }
     return nullptr;
 }
