@@ -88,8 +88,7 @@ SdPageLink::~SdPageLink()
                 pPage->SetBookmarkName(aBookmarkName);
             }
 
-            std::vector<OUString> aBookmarkList;
-            aBookmarkList.push_back(aBookmarkName);
+            std::vector<OUString> aBookmarkList { aBookmarkName };
             sal_uInt16 nInsertPos = pPage->GetPageNum();
             bool bNoDialogs = false;
             bool bCopy = false;

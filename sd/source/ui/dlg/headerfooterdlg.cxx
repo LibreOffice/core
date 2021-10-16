@@ -671,10 +671,12 @@ void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, SdrTextObj con
     // apply line pattern if wanted
     if (bDotted)
     {
-        std::vector<double> aPattern;
         static const double fFactor(1.0);
-        aPattern.push_back(3.0 * fFactor);
-        aPattern.push_back(1.0 * fFactor);
+        std::vector<double> aPattern
+        {
+            3.0 * fFactor,
+            1.0 * fFactor
+        };
 
         basegfx::B2DPolyPolygon aDashed;
         basegfx::utils::applyLineDashing(aGeometry, aPattern, &aDashed);

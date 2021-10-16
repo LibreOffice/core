@@ -258,10 +258,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
                         aPolygon.transform(aObjectMatrix);
 
                         // create line and stroke attribute
-                        ::std::vector< double > aDotDashArray;
-
-                        aDotDashArray.push_back(160.0);
-                        aDotDashArray.push_back(80.0);
+                        ::std::vector< double > aDotDashArray { 160.0, 80.0 };
 
                         const double fFullDotDashLen(::std::accumulate(aDotDashArray.begin(), aDotDashArray.end(), 0.0));
                         const drawinglayer::attribute::LineAttribute aLine(aRGBColor);
