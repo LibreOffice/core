@@ -2594,4 +2594,98 @@ void MetaGradientContainerAction::Scale(double fScaleX, double fScaleY)
     }
 }
 
+MetaBitmapContainerAction::MetaBitmapContainerAction(RasterOp eRasterOp, DrawModeFlags eDrawMode,
+                              Point const& rDestPt, Size const& rDestSize,
+                              Point const& rSrcPtPixel, Size const& rSrcSizePixel,
+                              Bitmap const& rBitmap, const MetaActionType nAction)
+    : MetaAction(MetaActionType::BITMAPCONTAINER)
+{
+    maActions.push_back(new MetaCommentAction("XBMP_CONTAINER_BEGIN"));
+
+    if (eRasterOp == RasterOp::Invert)
+    {
+        maActions.push_back(new MetaRasterOpAction(RasterOp::Invert));
+        maActions.push_back(new MetaRectAction(tools::Rectangle(rDestPt, rDestSize)));
+        maActions.push_back(new MetaCommentAction("XBMP_CONTAINER_END"));
+
+        return;
+    }
+
+    Bitmap aBmp(rBitmap);
+
+    if (eDrawMode & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap | DrawModeFlags::GrayBitmap))
+    {
+        if (eDrawMode & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap))
+        {
+            sal_uInt8 cCmpVal;
+
+            if (eDrawMode & DrawModeFlags::BlackBitmap)
+                cCmpVal = 0;
+            else
+                cCmpVal = 255;
+
+            Color aCol(cCmpVal, cCmpVal, cCmpVal);
+            maActions.push_back(new MetaPushAction(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR));
+            maActions.push_back(new MetaLineColorAction(aCol, true));
+            maActions.push_back(new MetaFillColorAction(aCol, true));
+            maActions.push_back(new MetaRectAction(tools::Rectangle(rDestPt, rDestSize)));
+            maActions.push_back(new MetaPopAction());
+            maActions.push_back(new MetaCommentAction("XBMP_CONTAINER_END"));
+
+            return;
+        }
+        else if (!aBmp.IsEmpty())
+        {
+            if (eDrawMode & DrawModeFlags::GrayBitmap)
+                aBmp.Convert(BmpConversion::N8BitGreys);
+        }
+    }
+
+    switch (nAction)
+    {
+        case MetaActionType::BMP:
+            maActions.push_back(new MetaBmpAction(rDestPt, aBmp));
+        break;
+
+        case MetaActionType::BMPSCALE:
+            maActions.push_back(new MetaBmpScaleAction(rDestPt, rDestSize, aBmp));
+        break;
+
+        case MetaActionType::BMPSCALEPART:
+            maActions.push_back(new MetaBmpScalePartAction(rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmp));
+        break;
+
+        default:
+            SAL_WARN("vcl.gdi", "Not a bitmap action");
+            assert(false);
+        break;
+    }
+
+    maActions.push_back(new MetaCommentAction("XBMP_CONTAINER_END"));
+}
+
+void MetaBitmapContainerAction::Execute(OutputDevice* pOutDev)
+{
+    for (MetaAction* pAction : maActions)
+    {
+        pAction->Execute(pOutDev);
+    }
+}
+
+void MetaBitmapContainerAction::Move(tools::Long nHorzMove, tools::Long nVertMove)
+{
+    for (MetaAction* pAction : maActions)
+    {
+        pAction->Move(nHorzMove, nVertMove);
+    }
+}
+
+void MetaBitmapContainerAction::Scale(double fScaleX, double fScaleY)
+{
+    for (MetaAction* pAction : maActions)
+    {
+        pAction->Scale(fScaleX, fScaleY);
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
