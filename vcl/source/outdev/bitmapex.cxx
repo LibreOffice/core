@@ -95,6 +95,13 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
     if( ImplIsRecordLayout() )
         return;
 
+    if (mpMetaFile)
+        mpMetaFile->AddAction(new MetaBitmapExContainerAction(meRasterOp, mnDrawMode,
+                    rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, rBitmapEx, nAction));
+
+    GDIMetaFile* pOldMetaFile = mpMetaFile;
+    mpMetaFile = nullptr;
+
     if( !rBitmapEx.IsAlpha() )
     {
         DrawBitmap( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, rBitmapEx.GetBitmap() );
@@ -108,27 +115,6 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
         }
 
         BitmapEx aBmpEx(vcl::drawmode::GetBitmapEx(rBitmapEx, GetDrawMode()));
-
-        if ( mpMetaFile )
-        {
-            switch( nAction )
-            {
-                case MetaActionType::BMPEX:
-                    mpMetaFile->AddAction( new MetaBmpExAction( rDestPt, aBmpEx ) );
-                break;
-
-                case MetaActionType::BMPEXSCALE:
-                    mpMetaFile->AddAction( new MetaBmpExScaleAction( rDestPt, rDestSize, aBmpEx ) );
-                break;
-
-                case MetaActionType::BMPEXSCALEPART:
-                    mpMetaFile->AddAction( new MetaBmpExScalePartAction( rDestPt, rDestSize,
-                                                                         rSrcPtPixel, rSrcSizePixel, aBmpEx ) );
-                break;
-
-                default: break;
-            }
-        }
 
         if ( !IsDeviceOutputNecessary() )
             return;
@@ -144,6 +130,8 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
 
         DrawDeviceBitmapEx( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmpEx );
     }
+
+    mpMetaFile = pOldMetaFile;
 }
 
 BitmapEx OutputDevice::GetBitmapEx( const Point& rSrcPt, const Size& rSize ) const

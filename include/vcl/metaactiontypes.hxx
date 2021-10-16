@@ -79,6 +79,7 @@ enum class MetaActionType
     COMPLEXGRADIENT         = 153,
     GRADIENTCONTAINER       = 154,
     BITMAPCONTAINER         = 155,
+    BITMAPEXCONTAINER       = 156,
 
     COMMENT                 = 512,
     LAST                    = COMMENT
