@@ -28,6 +28,7 @@
 #include <com/sun/star/security/NoPasswordException.hpp>
 #include <com/sun/star/security/CertificateCharacters.hpp>
 
+#include <o3tl/safeint.hxx>
 #include <unotools/datetime.hxx>
 #include <unotools/useroptions.hxx>
 
@@ -53,11 +54,13 @@ CertificateChooser::CertificateChooser(weld::Window* _pParent,
     auto nControlWidth = m_xCertLB->get_approximate_digit_width() * 105;
     m_xCertLB->set_size_request(nControlWidth, m_xCertLB->get_height_rows(12));
 
-    std::vector<int> aWidths;
-    aWidths.push_back(30*nControlWidth/100);
-    aWidths.push_back(30*nControlWidth/100);
-    aWidths.push_back(10*nControlWidth/100);
-    aWidths.push_back(20*nControlWidth/100);
+    std::vector<int> aWidths
+    {
+        o3tl::narrowing<int>(30*nControlWidth/100),
+        o3tl::narrowing<int>(30*nControlWidth/100),
+        o3tl::narrowing<int>(10*nControlWidth/100),
+        o3tl::narrowing<int>(20*nControlWidth/100)
+    };
     m_xCertLB->set_column_fixed_widths(aWidths);
     m_xCertLB->connect_changed( LINK( this, CertificateChooser, CertificateHighlightHdl ) );
     m_xCertLB->connect_row_activated( LINK( this, CertificateChooser, CertificateSelectHdl ) );

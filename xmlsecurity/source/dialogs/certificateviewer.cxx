@@ -165,9 +165,7 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP(weld::Container* pParent,
     const int nHeight = m_xElementsLB->get_height_rows(8);
     m_xElementsLB->set_size_request(nWidth, nHeight);
     m_xValueDetails->set_size_request(nWidth, nHeight);
-    std::vector<int> aWidths;
-    aWidths.push_back(nWidth / 2);
-    m_xElementsLB->set_column_fixed_widths(aWidths);
+    m_xElementsLB->set_column_fixed_widths( { nWidth / 2 } );
 
     // fill list box
     Reference< security::XCertificate > xCert = mpDlg->mxCert;
