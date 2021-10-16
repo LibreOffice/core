@@ -545,8 +545,7 @@ std::shared_ptr<SdTransferable::UserData> Clipboard::CreateTransferableUserData 
         //        pTransferable->SetView(&mrSlideSorter.GetView());
 
         // Set page bookmark list.
-        std::vector<OUString> aPageBookmarks;
-        aPageBookmarks.push_back(sBookmark);
+        std::vector<OUString> aPageBookmarks { sBookmark };
         pTransferable->SetPageBookmarks(std::move(aPageBookmarks), false);
 
         // Replace the view referenced by the transferable with the
