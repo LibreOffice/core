@@ -27,6 +27,7 @@
 
 #include <bitmaps.hlst>
 #include <fpicker/strings.hrc>
+#include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <svx/svxids.hrc>
 #include <tools/diagnose_ex.h>
@@ -2636,8 +2637,10 @@ namespace svxform
         m_xNamespacesList->set_size_request(m_xNamespacesList->get_approximate_digit_width() * 80,
                                             m_xNamespacesList->get_height_rows(8));
 
-        std::vector<int> aWidths;
-        aWidths.push_back(m_xNamespacesList->get_approximate_digit_width() * 20);
+        std::vector<int> aWidths
+        {
+            o3tl::narrowing<int>(m_xNamespacesList->get_approximate_digit_width() * 20)
+        };
         m_xNamespacesList->set_column_fixed_widths(aWidths);
 
         m_xNamespacesList->connect_changed( LINK( this, NamespaceItemDialog, SelectHdl ) );

@@ -178,9 +178,10 @@ void PaletteManager::ReloadRecentColorSet(SvxColorValueSet& rColorSet)
 
 std::vector<OUString> PaletteManager::GetPaletteList()
 {
-    std::vector<OUString> aPaletteNames;
-
-    aPaletteNames.push_back( SvxResId( RID_SVXSTR_CUSTOM_PAL ) );
+    std::vector<OUString> aPaletteNames
+    {
+        SvxResId( RID_SVXSTR_CUSTOM_PAL )
+    };
     for (auto const& it : m_Palettes)
     {
         aPaletteNames.push_back( (*it).GetName() );

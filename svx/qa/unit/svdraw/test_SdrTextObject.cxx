@@ -27,11 +27,8 @@ public:
 
 void SdrTextObjTest::AllFamiliesCanBeRestoredFromSavedString()
 {
-    std::vector<SfxStyleFamily> allFamilies;
-    allFamilies.push_back(SfxStyleFamily::Char);
-    allFamilies.push_back(SfxStyleFamily::Para);
-    allFamilies.push_back(SfxStyleFamily::Page);
-    allFamilies.push_back(SfxStyleFamily::Pseudo);
+    std::vector<SfxStyleFamily> allFamilies{ SfxStyleFamily::Char, SfxStyleFamily::Para,
+                                             SfxStyleFamily::Page, SfxStyleFamily::Pseudo };
 
     for (SfxStyleFamily family : allFamilies)
     {

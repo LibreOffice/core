@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/safeint.hxx>
 #include <sal/config.h>
 
 #include <string_view>
@@ -51,8 +52,7 @@ InspectorTextPanel::InspectorTextPanel(weld::Widget* pParent)
 {
     mpListBoxStyles->set_size_request(MinimumPanelWidth, -1);
     float fWidth = mpListBoxStyles->get_approximate_digit_width();
-    std::vector<int> aWidths;
-    aWidths.push_back(fWidth * 29);
+    std::vector<int> aWidths{ o3tl::narrowing<int>(fWidth * 29) };
     // 2nd column will fill remaining space
     mpListBoxStyles->set_column_fixed_widths(aWidths);
 }

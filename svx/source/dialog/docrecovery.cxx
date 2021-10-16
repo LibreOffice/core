@@ -24,6 +24,7 @@
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/string.hxx>
+#include <o3tl/safeint.hxx>
 #include <svtools/imagemgr.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <tools/urlobj.hxx>
@@ -657,10 +658,12 @@ RecoveryDialog::RecoveryDialog(weld::Window* pParent, RecoveryCore* pCore)
     m_xProgressBar->set_size_request(m_xProgressBar->get_approximate_digit_width() * 50, -1);
     m_xProgress = new PluginProgress(m_xProgressBar.get());
 
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xFileListLB->get_checkbox_column_width());
-    aWidths.push_back(60 * nWidth / 100);
-    aWidths.push_back(m_xFileListLB->get_checkbox_column_width());
+    std::vector<int> aWidths
+    {
+        o3tl::narrowing<int>(m_xFileListLB->get_checkbox_column_width()),
+        o3tl::narrowing<int>(60 * nWidth / 100),
+        o3tl::narrowing<int>(m_xFileListLB->get_checkbox_column_width())
+    };
     m_xFileListLB->set_column_fixed_widths(aWidths);
 
     m_xNextBtn->set_sensitive(true);

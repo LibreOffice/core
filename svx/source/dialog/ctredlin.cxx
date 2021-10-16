@@ -20,6 +20,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/weldutils.hxx>
@@ -358,10 +359,12 @@ void SvxRedlinTable::SetWriterView()
     pTreeView = xWriterTreeView.get();
 
     auto nDigitWidth = pTreeView->get_approximate_digit_width();
-    std::vector<int> aWidths;
-    aWidths.push_back(nDigitWidth * 10);
-    aWidths.push_back(nDigitWidth * 20);
-    aWidths.push_back(nDigitWidth * 20);
+    std::vector<int> aWidths
+    {
+        o3tl::narrowing<int>(nDigitWidth * 10),
+        o3tl::narrowing<int>(nDigitWidth * 20),
+        o3tl::narrowing<int>(nDigitWidth * 20)
+    };
     pTreeView->set_column_fixed_widths(aWidths);
 }
 
@@ -374,11 +377,13 @@ void SvxRedlinTable::SetCalcView()
     pTreeView = xCalcTreeView.get();
 
     auto nDigitWidth = pTreeView->get_approximate_digit_width();
-    std::vector<int> aWidths;
-    aWidths.push_back(nDigitWidth * 20);
-    aWidths.push_back(nDigitWidth * 20);
-    aWidths.push_back(nDigitWidth * 20);
-    aWidths.push_back(nDigitWidth * 20);
+    std::vector<int> aWidths
+    {
+        o3tl::narrowing<int>(nDigitWidth * 20),
+        o3tl::narrowing<int>(nDigitWidth * 20),
+        o3tl::narrowing<int>(nDigitWidth * 20),
+        o3tl::narrowing<int>(nDigitWidth * 20)
+    };
     pTreeView->set_column_fixed_widths(aWidths);
 }
 
