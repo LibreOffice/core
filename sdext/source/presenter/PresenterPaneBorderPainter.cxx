@@ -700,9 +700,11 @@ void PresenterPaneBorderPainter::Renderer::SetupClipping (
     {
         awt::Rectangle aInnerBox (
             pStyle->RemoveBorder(rOuterBox, drawing::framework::BorderType_TOTAL_BORDER));
-        ::std::vector<awt::Rectangle> aRectangles;
-        aRectangles.push_back(PresenterGeometryHelper::Intersection(rUpdateBox, rOuterBox));
-        aRectangles.push_back(PresenterGeometryHelper::Intersection(rUpdateBox, aInnerBox));
+        ::std::vector<awt::Rectangle> aRectangles
+        {
+            PresenterGeometryHelper::Intersection(rUpdateBox, rOuterBox),
+            PresenterGeometryHelper::Intersection(rUpdateBox, aInnerBox)
+        };
         mxViewStateClip = PresenterGeometryHelper::CreatePolygon(
             aRectangles,
             mxCanvas->getDevice());

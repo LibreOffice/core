@@ -419,13 +419,15 @@ void OptimizerDialog::UpdateControlStatesPage0()
 void OptimizerDialog::InitPage0()
 {
     Sequence< OUString > aItemList;
-    std::vector< OUString > aControlList;
-    aControlList.push_back( InsertFixedText( *this, "FixedText0Pg0", getString( STR_INTRODUCTION ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, false, true, mnTabIndex++ ) );
-    aControlList.push_back( InsertFixedText( *this, "FixedText1Pg0", getString( STR_INTRODUCTION_T ), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, 100, true, false, mnTabIndex++ ) );
-    aControlList.push_back( InsertSeparator( *this, "Separator1Pg0", 0, PAGE_POS_X + 6, DIALOG_HEIGHT - 66, PAGE_WIDTH - 12, 1 ) );
-    aControlList.push_back( InsertFixedText( *this, "FixedText2Pg0", getString( STR_CHOSE_SETTINGS ), PAGE_POS_X + 6, DIALOG_HEIGHT - 60, PAGE_WIDTH - 12, 8, true, false, mnTabIndex++ ) );
-    aControlList.push_back( InsertListBox(  *this, "ListBox0Pg0", mxActionListenerListBox0Pg0, true, aItemList, PAGE_POS_X + 6, DIALOG_HEIGHT - 48, ( OD_DIALOG_WIDTH - 50 ) - ( PAGE_POS_X + 6 ), mnTabIndex++ ) );
-    aControlList.push_back( InsertButton( *this, "Button0Pg0", mxActionListener, OD_DIALOG_WIDTH - 46, DIALOG_HEIGHT - 49, 40, mnTabIndex++, true, STR_REMOVE, PushButtonType_STANDARD ) );
+    std::vector< OUString > aControlList
+    {
+        InsertFixedText( *this, "FixedText0Pg0", getString( STR_INTRODUCTION ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, false, true, mnTabIndex++ ),
+        InsertFixedText( *this, "FixedText1Pg0", getString( STR_INTRODUCTION_T ), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, 100, true, false, mnTabIndex++ ),
+        InsertSeparator( *this, "Separator1Pg0", 0, PAGE_POS_X + 6, DIALOG_HEIGHT - 66, PAGE_WIDTH - 12, 1 ),
+        InsertFixedText( *this, "FixedText2Pg0", getString( STR_CHOSE_SETTINGS ), PAGE_POS_X + 6, DIALOG_HEIGHT - 60, PAGE_WIDTH - 12, 8, true, false, mnTabIndex++ ),
+        InsertListBox(  *this, "ListBox0Pg0", mxActionListenerListBox0Pg0, true, aItemList, PAGE_POS_X + 6, DIALOG_HEIGHT - 48, ( OD_DIALOG_WIDTH - 50 ) - ( PAGE_POS_X + 6 ), mnTabIndex++ ),
+        InsertButton( *this, "Button0Pg0", mxActionListener, OD_DIALOG_WIDTH - 46, DIALOG_HEIGHT - 49, 40, mnTabIndex++, true, STR_REMOVE, PushButtonType_STANDARD )
+    };
     maControlPages.push_back( aControlList );
     DeactivatePage( 0 );
     UpdateControlStatesPage0();
@@ -453,13 +455,15 @@ void OptimizerDialog::InitPage1()
         if ( aXCont.is() )
             aCustomShowList = aXCont->getElementNames();
     }
-    std::vector< OUString > aControlList;
-    aControlList.push_back( InsertFixedText( *this, "FixedText0Pg3", getString( STR_CHOOSE_SLIDES ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, false, true, mnTabIndex++ ) );
-    aControlList.push_back( InsertCheckBox(  *this, "CheckBox0Pg3", mxItemListener, getString( STR_DELETE_MASTER_PAGES ), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, mnTabIndex++ ) );
-    aControlList.push_back( InsertCheckBox(  *this, "CheckBox2Pg3", mxItemListener, getString( STR_DELETE_HIDDEN_SLIDES ), PAGE_POS_X + 6, PAGE_POS_Y + 28, PAGE_WIDTH - 12, mnTabIndex++ ) );
-    aControlList.push_back( InsertCheckBox(  *this, "CheckBox3Pg3", mxItemListener, getString( STR_CUSTOM_SHOW ), PAGE_POS_X + 6, PAGE_POS_Y + 42, PAGE_WIDTH - 12, mnTabIndex++ ) );
-    aControlList.push_back( InsertListBox(  *this, "ListBox0Pg3", mxActionListener, true, aCustomShowList, PAGE_POS_X + 14, PAGE_POS_Y + 54, 150, mnTabIndex++ ) );
-    aControlList.push_back( InsertCheckBox(  *this, "CheckBox1Pg3", mxItemListener, getString( STR_DELETE_NOTES_PAGES ), PAGE_POS_X + 6, PAGE_POS_Y + 70, PAGE_WIDTH - 12, mnTabIndex++ ) );
+    std::vector< OUString > aControlList
+    {
+        InsertFixedText( *this, "FixedText0Pg3", getString( STR_CHOOSE_SLIDES ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, false, true, mnTabIndex++ ),
+        InsertCheckBox(  *this, "CheckBox0Pg3", mxItemListener, getString( STR_DELETE_MASTER_PAGES ), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, mnTabIndex++ ),
+        InsertCheckBox(  *this, "CheckBox2Pg3", mxItemListener, getString( STR_DELETE_HIDDEN_SLIDES ), PAGE_POS_X + 6, PAGE_POS_Y + 28, PAGE_WIDTH - 12, mnTabIndex++ ),
+        InsertCheckBox(  *this, "CheckBox3Pg3", mxItemListener, getString( STR_CUSTOM_SHOW ), PAGE_POS_X + 6, PAGE_POS_Y + 42, PAGE_WIDTH - 12, mnTabIndex++ ),
+        InsertListBox(  *this, "ListBox0Pg3", mxActionListener, true, aCustomShowList, PAGE_POS_X + 14, PAGE_POS_Y + 54, 150, mnTabIndex++ ),
+        InsertCheckBox(  *this, "CheckBox1Pg3", mxItemListener, getString( STR_DELETE_NOTES_PAGES ), PAGE_POS_X + 6, PAGE_POS_Y + 70, PAGE_WIDTH - 12, mnTabIndex++ )
+    };
     maControlPages.push_back( aControlList );
     DeactivatePage( 1 );
 
@@ -519,16 +523,18 @@ void OptimizerDialog::InitPage2()
     aResolutionItemList[ 2 ] = getString( STR_IMAGE_RESOLUTION_2 ).getToken( 1, ';' );
     aResolutionItemList[ 3 ] = getString( STR_IMAGE_RESOLUTION_3 ).getToken( 1, ';' );
 
-    std::vector< OUString > aControlList;
-    aControlList.push_back( InsertFixedText( *this, "FixedText0Pg1", getString( STR_GRAPHIC_OPTIMIZATION ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, false, true, mnTabIndex++ ) );
-    aControlList.push_back( InsertRadioButton( *this, "RadioButton0Pg1", mxItemListener, getString( STR_LOSSLESS_COMPRESSION ), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, mnTabIndex++ ) );
-    aControlList.push_back( InsertRadioButton( *this, "RadioButton1Pg1", mxItemListener, getString( STR_JPEG_COMPRESSION ), PAGE_POS_X + 6, PAGE_POS_Y + 28, PAGE_WIDTH - 12, mnTabIndex++ ) );
-    aControlList.push_back( InsertFixedText( *this, "FixedText1Pg1", getString( STR_QUALITY ), PAGE_POS_X + 20, PAGE_POS_Y + 40, 72, 8, false, false, mnTabIndex++ ) );
-    aControlList.push_back( InsertFormattedField( *this, "FormattedField0Pg1", mxTextListenerFormattedField0Pg1, mxSpinListenerFormattedField0Pg1, PAGE_POS_X + 106, PAGE_POS_Y + 38, 0, 100, mnTabIndex++ ) );
-    aControlList.push_back( InsertFixedText( *this, "FixedText2Pg1", getString( STR_IMAGE_RESOLUTION ), PAGE_POS_X + 6, PAGE_POS_Y + 54, 94, 8, false, false, mnTabIndex++ ) );
-    aControlList.push_back( InsertComboBox(  *this, "ComboBox0Pg1", mxTextListenerComboBox0Pg1, true, aResolutionItemList, PAGE_POS_X + 106, PAGE_POS_Y + 52, mnTabIndex++ ) );
-    aControlList.push_back( InsertCheckBox(  *this, "CheckBox1Pg1", mxItemListener, getString( STR_REMOVE_CROP_AREA ), PAGE_POS_X + 6, PAGE_POS_Y + 68, PAGE_WIDTH - 12, mnTabIndex++ ) );
-    aControlList.push_back( InsertCheckBox(  *this, "CheckBox2Pg1", mxItemListener, getString( STR_EMBED_LINKED_GRAPHICS ), PAGE_POS_X + 6, PAGE_POS_Y + 82, PAGE_WIDTH - 12, mnTabIndex++ ) );
+    std::vector< OUString > aControlList
+    {
+        InsertFixedText( *this, "FixedText0Pg1", getString( STR_GRAPHIC_OPTIMIZATION ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, false, true, mnTabIndex++ ),
+        InsertRadioButton( *this, "RadioButton0Pg1", mxItemListener, getString( STR_LOSSLESS_COMPRESSION ), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, mnTabIndex++ ),
+        InsertRadioButton( *this, "RadioButton1Pg1", mxItemListener, getString( STR_JPEG_COMPRESSION ), PAGE_POS_X + 6, PAGE_POS_Y + 28, PAGE_WIDTH - 12, mnTabIndex++ ),
+        InsertFixedText( *this, "FixedText1Pg1", getString( STR_QUALITY ), PAGE_POS_X + 20, PAGE_POS_Y + 40, 72, 8, false, false, mnTabIndex++ ),
+        InsertFormattedField( *this, "FormattedField0Pg1", mxTextListenerFormattedField0Pg1, mxSpinListenerFormattedField0Pg1, PAGE_POS_X + 106, PAGE_POS_Y + 38, 0, 100, mnTabIndex++ ),
+        InsertFixedText( *this, "FixedText2Pg1", getString( STR_IMAGE_RESOLUTION ), PAGE_POS_X + 6, PAGE_POS_Y + 54, 94, 8, false, false, mnTabIndex++ ),
+        InsertComboBox(  *this, "ComboBox0Pg1", mxTextListenerComboBox0Pg1, true, aResolutionItemList, PAGE_POS_X + 106, PAGE_POS_Y + 52, mnTabIndex++ ),
+        InsertCheckBox(  *this, "CheckBox1Pg1", mxItemListener, getString( STR_REMOVE_CROP_AREA ), PAGE_POS_X + 6, PAGE_POS_Y + 68, PAGE_WIDTH - 12, mnTabIndex++ ),
+        InsertCheckBox(  *this, "CheckBox2Pg1", mxItemListener, getString( STR_EMBED_LINKED_GRAPHICS ), PAGE_POS_X + 6, PAGE_POS_Y + 82, PAGE_WIDTH - 12, mnTabIndex++ )
+    };
     maControlPages.push_back( aControlList );
     DeactivatePage( 2 );
     UpdateControlStatesPage2();
@@ -563,12 +569,14 @@ void OptimizerDialog::InitPage3()
         }
     }
 
-    std::vector< OUString > aControlList;
-    aControlList.push_back( InsertFixedText( *this, "FixedText0Pg2", getString( STR_OLE_OPTIMIZATION ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, false, true, mnTabIndex++ ) );
-    aControlList.push_back( InsertCheckBox(  *this, "CheckBox0Pg2", mxItemListener, getString( STR_OLE_REPLACE ), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, mnTabIndex++ ) );
-    aControlList.push_back( InsertRadioButton( *this, "RadioButton0Pg2", mxItemListener, getString( STR_ALL_OLE_OBJECTS ), PAGE_POS_X + 14, PAGE_POS_Y + 28, PAGE_WIDTH - 22, mnTabIndex++ ) );
-    aControlList.push_back( InsertRadioButton( *this, "RadioButton1Pg2", mxItemListener, getString( STR_ALIEN_OLE_OBJECTS_ONLY ), PAGE_POS_X + 14, PAGE_POS_Y + 40, PAGE_WIDTH - 22, mnTabIndex++ ) );
-    aControlList.push_back( InsertFixedText( *this, "FixedText1Pg2", nOLECount ? getString( STR_OLE_OBJECTS_DESC ) : getString( STR_NO_OLE_OBJECTS_DESC ), PAGE_POS_X + 6, PAGE_POS_Y + 64, PAGE_WIDTH - 22, 50, true, false, mnTabIndex++ ) );
+    std::vector< OUString > aControlList
+    {
+        InsertFixedText( *this, "FixedText0Pg2", getString( STR_OLE_OPTIMIZATION ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, false, true, mnTabIndex++ ),
+        InsertCheckBox(  *this, "CheckBox0Pg2", mxItemListener, getString( STR_OLE_REPLACE ), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, mnTabIndex++ ),
+        InsertRadioButton( *this, "RadioButton0Pg2", mxItemListener, getString( STR_ALL_OLE_OBJECTS ), PAGE_POS_X + 14, PAGE_POS_Y + 28, PAGE_WIDTH - 22, mnTabIndex++ ),
+        InsertRadioButton( *this, "RadioButton1Pg2", mxItemListener, getString( STR_ALIEN_OLE_OBJECTS_ONLY ), PAGE_POS_X + 14, PAGE_POS_Y + 40, PAGE_WIDTH - 22, mnTabIndex++ ),
+        InsertFixedText( *this, "FixedText1Pg2", nOLECount ? getString( STR_OLE_OBJECTS_DESC ) : getString( STR_NO_OLE_OBJECTS_DESC ), PAGE_POS_X + 6, PAGE_POS_Y + 64, PAGE_WIDTH - 22, 50, true, false, mnTabIndex++ )
+    };
     maControlPages.push_back( aControlList );
     DeactivatePage( 3 );
     UpdateControlStatesPage3();
@@ -820,16 +828,18 @@ void OptimizerDialog::InitPage4()
     }
     Reference< XTextListener > xTextListener;
     Sequence< OUString > aItemList;
-    std::vector< OUString > aControlList;
-    aControlList.push_back( InsertFixedText( *this, "FixedText0Pg4", getString( STR_SUMMARY_TITLE ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, false, true, mnTabIndex++ ) );
-//  aControlList.push_back( InsertSeparator( *this, "Separator0Pg4", 0, PAGE_POS_X + 6, PAGE_POS_Y + 90, PAGE_WIDTH - 12, 1 ) );
+    std::vector< OUString > aControlList
+    {
+        InsertFixedText( *this, "FixedText0Pg4", getString( STR_SUMMARY_TITLE ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, false, true, mnTabIndex++ ),
+        //  InsertSeparator( *this, "Separator0Pg4", 0, PAGE_POS_X + 6, PAGE_POS_Y + 90, PAGE_WIDTH - 12, 1 ),
 
-    aControlList.push_back( InsertFixedText( *this, "FixedText4Pg4", OUString(), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, 8, false, false, mnTabIndex++ ) );
-    aControlList.push_back( InsertFixedText( *this, "FixedText5Pg4", OUString(), PAGE_POS_X + 6, PAGE_POS_Y + 22, PAGE_WIDTH - 12, 8, false, false, mnTabIndex++ ) );
-    aControlList.push_back( InsertFixedText( *this, "FixedText6Pg4", OUString(), PAGE_POS_X + 6, PAGE_POS_Y + 30, PAGE_WIDTH - 12, 8, false, false, mnTabIndex++ ) );
+        InsertFixedText( *this, "FixedText4Pg4", OUString(), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, 8, false, false, mnTabIndex++ ),
+        InsertFixedText( *this, "FixedText5Pg4", OUString(), PAGE_POS_X + 6, PAGE_POS_Y + 22, PAGE_WIDTH - 12, 8, false, false, mnTabIndex++ ),
+        InsertFixedText( *this, "FixedText6Pg4", OUString(), PAGE_POS_X + 6, PAGE_POS_Y + 30, PAGE_WIDTH - 12, 8, false, false, mnTabIndex++ ),
 
-    aControlList.push_back( InsertFixedText( *this, "FixedText2Pg4", getString( STR_CURRENT_FILESIZE ), PAGE_POS_X + 6, PAGE_POS_Y + 50, 88, 8, false, false, mnTabIndex++ ) );
-    aControlList.push_back( InsertFixedText( *this, "FixedText7Pg4", OUString(), PAGE_POS_X + 100, PAGE_POS_Y + 50, 30, 8, false, false, mnTabIndex++ ) );
+        InsertFixedText( *this, "FixedText2Pg4", getString( STR_CURRENT_FILESIZE ), PAGE_POS_X + 6, PAGE_POS_Y + 50, 88, 8, false, false, mnTabIndex++ ),
+        InsertFixedText( *this, "FixedText7Pg4", OUString(), PAGE_POS_X + 100, PAGE_POS_Y + 50, 30, 8, false, false, mnTabIndex++ )
+    };
     setControlProperty( "FixedText7Pg4", "Align", Any( static_cast< short >( 2 ) ) );
     aControlList.push_back( InsertFixedText( *this, "FixedText3Pg4", getString( STR_ESTIMATED_FILESIZE ), PAGE_POS_X + 6, PAGE_POS_Y + 58, 88, 8, false, false, mnTabIndex++ ) );
     aControlList.push_back( InsertFixedText( *this, "FixedText8Pg4", OUString(), PAGE_POS_X + 100, PAGE_POS_Y + 58, 30, 8, false, false, mnTabIndex++ ) );

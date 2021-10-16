@@ -1450,12 +1450,14 @@ awt::Size Button::CreateBoundingSize (
     geometry::RealRectangle2D aTextBBoxSelected (mpSelected->maText.GetBoundingBox(rxCanvas));
     geometry::RealRectangle2D aTextBBoxDisabled (mpDisabled->maText.GetBoundingBox(rxCanvas));
     geometry::RealRectangle2D aTextBBoxMouseOverSelected (mpMouseOverSelected->maText.GetBoundingBox(rxCanvas));
-    std::vector<sal_Int32> widths;
-    widths.push_back(sal::static_int_cast<sal_Int32>(0.5 + aTextBBoxNormal.X2 - aTextBBoxNormal.X1));
-    widths.push_back(sal::static_int_cast<sal_Int32>(0.5 + aTextBBoxMouseOver.X2 - aTextBBoxMouseOver.X1));
-    widths.push_back(sal::static_int_cast<sal_Int32>(0.5 + aTextBBoxSelected.X2 - aTextBBoxSelected.X1));
-    widths.push_back(sal::static_int_cast<sal_Int32>(0.5 + aTextBBoxDisabled.X2 - aTextBBoxDisabled.X1));
-    widths.push_back(sal::static_int_cast<sal_Int32>(0.5 + aTextBBoxMouseOverSelected.X2 - aTextBBoxMouseOverSelected.X1));
+    std::vector<sal_Int32> widths
+    {
+        sal::static_int_cast<sal_Int32>(0.5 + aTextBBoxNormal.X2 - aTextBBoxNormal.X1),
+        sal::static_int_cast<sal_Int32>(0.5 + aTextBBoxMouseOver.X2 - aTextBBoxMouseOver.X1),
+        sal::static_int_cast<sal_Int32>(0.5 + aTextBBoxSelected.X2 - aTextBBoxSelected.X1),
+        sal::static_int_cast<sal_Int32>(0.5 + aTextBBoxDisabled.X2 - aTextBBoxDisabled.X1),
+        sal::static_int_cast<sal_Int32>(0.5 + aTextBBoxMouseOverSelected.X2 - aTextBBoxMouseOverSelected.X1)
+    };
 
     sal_Int32 nTextHeight (sal::static_int_cast<sal_Int32>(0.5 + aTextBBox.Y2 - aTextBBox.Y1));
     Reference<rendering::XBitmap> xBitmap;
