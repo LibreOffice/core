@@ -11,6 +11,7 @@
 #include <memory>
 #include <global.hxx>
 #include <globstr.hrc>
+#include <o3tl/safeint.hxx>
 #include <scresid.hxx>
 #include <globalnames.hxx>
 #include <namemgrtable.hxx>
@@ -63,9 +64,8 @@ ScRangeManagerTable::ScRangeManagerTable(
     , mbNeedUpdate(true)
 {
     auto nColWidth = m_xTreeView->get_size_request().Width() / 7;
-    std::vector<int> aWidths;
-    aWidths.push_back(nColWidth * 2);
-    aWidths.push_back(nColWidth * 3);
+    std::vector<int> aWidths{ o3tl::narrowing<int>(nColWidth * 2),
+                              o3tl::narrowing<int>(nColWidth * 3) };
     m_xTreeView->set_column_fixed_widths(aWidths);
 
     Init();

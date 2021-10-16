@@ -3445,8 +3445,7 @@ void ScDocFunc::SetTableVisible( SCTAB nTab, bool bVisible, bool bApi )
     rDoc.SetVisible( nTab, bVisible );
     if (bUndo)
     {
-        std::vector<SCTAB> undoTabs;
-        undoTabs.push_back(nTab);
+        std::vector<SCTAB> undoTabs { nTab };
         rDocShell.GetUndoManager()->AddUndoAction( std::make_unique<ScUndoShowHideTab>( &rDocShell, std::move(undoTabs), bVisible ) );
     }
 

@@ -432,11 +432,8 @@ void ScPivotTableFiltersTest::testPivotTableSharedCacheGroupODS()
                 }
 
                 std::sort(aGrpValues.begin(), aGrpValues.end());
-                std::vector<sal_Int32> aChecks;
-                aChecks.push_back(ScDPItemData::DateFirst);
-                aChecks.push_back(2012);
-                aChecks.push_back(2013);
-                aChecks.push_back(ScDPItemData::DateLast);
+                std::vector<sal_Int32> aChecks{ ScDPItemData::DateFirst, 2012, 2013,
+                                                ScDPItemData::DateLast };
                 CPPUNIT_ASSERT_MESSAGE("Unexpected group values for the year group.",
                                        bool(aGrpValues == aChecks));
             }

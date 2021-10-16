@@ -41,9 +41,7 @@ bool ScDPFilteredCache::SingleFilter::match(const ScDPItemData& rCellData) const
 
 std::vector<ScDPItemData> ScDPFilteredCache::SingleFilter::getMatchValues() const
 {
-    std::vector<ScDPItemData> aValues;
-    aValues.push_back(maItem);
-    return aValues;
+    return { maItem };
 }
 
 ScDPFilteredCache::GroupFilter::GroupFilter()

@@ -1138,10 +1138,11 @@ void ScTable::SortReorderByRow( ScSortInfoArray* pArray, SCCOL nCol1, SCCOL nCol
     // Split formula groups at the sort range boundaries (if applicable).
     if (!bOnlyDataAreaExtras)
     {
-        std::vector<SCROW> aRowBounds;
-        aRowBounds.reserve(2);
-        aRowBounds.push_back(nRow1);
-        aRowBounds.push_back(nRow2+1);
+        std::vector<SCROW> aRowBounds
+        {
+            nRow1,
+            nRow2+1
+        };
         for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
             SplitFormulaGroups(nCol, aRowBounds);
     }
@@ -1331,10 +1332,11 @@ void ScTable::SortReorderByRowRefUpdate(
     }
 
     // Split formula groups at the sort range boundaries (if applicable).
-    std::vector<SCROW> aRowBounds;
-    aRowBounds.reserve(2);
-    aRowBounds.push_back(nRow1);
-    aRowBounds.push_back(nRow2+1);
+    std::vector<SCROW> aRowBounds
+    {
+        nRow1,
+        nRow2+1
+    };
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
         SplitFormulaGroups(nCol, aRowBounds);
 

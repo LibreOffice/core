@@ -12,6 +12,7 @@
 #include <condformatdlg.hxx>
 #include <document.hxx>
 #include <conditio.hxx>
+#include <o3tl/safeint.hxx>
 
 ScCondFormatManagerWindow::ScCondFormatManagerWindow(weld::TreeView& rTreeView,
     ScDocument& rDoc, ScConditionalFormatList* pFormatList)
@@ -76,8 +77,10 @@ ScConditionalFormat* ScCondFormatManagerWindow::GetSelection()
 
 void ScCondFormatManagerWindow::setColSizes()
 {
-    std::vector<int> aWidths;
-    aWidths.push_back(mrTreeView.get_size_request().Width() / 2);
+    std::vector<int> aWidths
+    {
+        o3tl::narrowing<int>(mrTreeView.get_size_request().Width() / 2)
+    };
     mrTreeView.set_column_fixed_widths(aWidths);
 }
 

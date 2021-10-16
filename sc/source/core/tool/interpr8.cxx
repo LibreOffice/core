@@ -275,8 +275,7 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
 
                 case 5 : // MEDIAN
                          {
-                             std::vector< double > aTmp;
-                             aTmp.push_back( maRange[ i - 1 ].Y );
+                             std::vector< double > aTmp { maRange[ i - 1 ].Y };
                              while ( i < mnCount && maRange[ i ].X == maRange[ i - 1 ].X )
                              {
                                  aTmp.push_back( maRange[ i ].Y );
