@@ -1148,7 +1148,8 @@ void ScTable::EndListening(sc::EndListeningContext& rCxt, const ScAddress& rAddr
     if (!ValidCol(rAddress.Col()))
         return;
 
-    aCol[rAddress.Col()].EndListening(rCxt, rAddress, rListener);
+    if (rAddress.Col() < aCol.size())
+        aCol[rAddress.Col()].EndListening(rCxt, rAddress, rListener);
 }
 
 void ScTable::SetPageStyle(const OUString& rName)
