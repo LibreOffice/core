@@ -37,8 +37,7 @@ namespace drawinglayer::primitive3d
 
             if(getPolyPolygon3D().count())
             {
-                std::vector< basegfx::B3DPolyPolygon > aFill;
-                aFill.push_back(getPolyPolygon3D());
+                std::vector< basegfx::B3DPolyPolygon > aFill { getPolyPolygon3D() };
 
                 // get full range
                 const basegfx::B3DRange aRange(getRangeFrom3DGeometry(aFill));
