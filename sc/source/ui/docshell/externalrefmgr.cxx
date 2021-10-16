@@ -1768,7 +1768,8 @@ void ScExternalRefManager::storeRangeNameTokens(sal_uInt16 nFileId, const OUStri
                 case svSingleRef:
                 {
                     const ScSingleRefData& rRef = *pToken->GetSingleRef();
-                    OUString aTabName = maRefCache.getTableName(nFileId, rRef.Tab());
+                    size_t nCacheId = rRef.Tab();
+                    OUString aTabName = maRefCache.getTableName(nFileId, nCacheId);
                     ScExternalSingleRefToken aNewToken(nFileId, svl::SharedString(aTabName),   // string not interned
                         *pToken->GetSingleRef());
                     pNewArray->AddToken(aNewToken);
@@ -1778,7 +1779,8 @@ void ScExternalRefManager::storeRangeNameTokens(sal_uInt16 nFileId, const OUStri
                 case svDoubleRef:
                 {
                     const ScSingleRefData& rRef = *pToken->GetSingleRef();
-                    OUString aTabName = maRefCache.getTableName(nFileId, rRef.Tab());
+                    size_t nCacheId = rRef.Tab();
+                    OUString aTabName = maRefCache.getTableName(nFileId, nCacheId);
                     ScExternalDoubleRefToken aNewToken(nFileId, svl::SharedString(aTabName),   // string not interned
                         *pToken->GetDoubleRef());
                     pNewArray->AddToken(aNewToken);
