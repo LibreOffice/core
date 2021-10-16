@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4805881b_dcde8959",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-10-16T06:35:51Z",
+      "side": 1,
+      "message": "Regina and Tomaz, I have simplified the polypolygon generation. ",
+      "revId": "edf68e8fc1ec8570be1c480773801c3bc8feb77c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
