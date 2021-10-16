@@ -5841,8 +5841,6 @@ void PDFWriterImpl::drawVerticalGlyphs(
         if (rGlyphs[i].m_pGlyph->IsVertical())
         {
             fDeltaAngle = M_PI/2.0;
-            aDeltaPos.setX( GetFontMetric().GetAscent() );
-            aDeltaPos.setY( static_cast<int>(static_cast<double>(GetFontMetric().GetDescent()) * fXScale) );
             fYScale = fXScale;
             fTempXScale = 1.0;
             fSkewA = -fSkewB;
