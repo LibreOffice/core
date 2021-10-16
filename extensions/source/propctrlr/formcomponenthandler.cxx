@@ -878,30 +878,31 @@ namespace pcr
     Sequence< OUString > SAL_CALL FormComponentPropertyHandler::getActuatingProperties( )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        std::vector< OUString > aInterestingProperties;
-        aInterestingProperties.push_back(  PROPERTY_DATASOURCE );
-        aInterestingProperties.push_back(  PROPERTY_COMMAND );
-        aInterestingProperties.push_back(  PROPERTY_COMMANDTYPE );
-        aInterestingProperties.push_back(  PROPERTY_LISTSOURCE );
-        aInterestingProperties.push_back(  PROPERTY_LISTSOURCETYPE );
-        aInterestingProperties.push_back(  PROPERTY_SUBMIT_ENCODING );
-        aInterestingProperties.push_back(  PROPERTY_REPEAT );
-        aInterestingProperties.push_back(  PROPERTY_TABSTOP );
-        aInterestingProperties.push_back(  PROPERTY_BORDER );
-        aInterestingProperties.push_back(  PROPERTY_CONTROLSOURCE );
-        aInterestingProperties.push_back(  PROPERTY_DROPDOWN );
-        aInterestingProperties.push_back(  PROPERTY_IMAGE_URL );
-        aInterestingProperties.push_back(  PROPERTY_TARGET_URL );
-        aInterestingProperties.push_back(  PROPERTY_STRINGITEMLIST );
-        aInterestingProperties.push_back(  PROPERTY_BUTTONTYPE );
-        aInterestingProperties.push_back(  PROPERTY_ESCAPE_PROCESSING );
-        aInterestingProperties.push_back(  PROPERTY_TRISTATE );
-        aInterestingProperties.push_back(  PROPERTY_DECIMAL_ACCURACY );
-        aInterestingProperties.push_back(  PROPERTY_SHOWTHOUSANDSEP );
-        aInterestingProperties.push_back(  PROPERTY_FORMATKEY );
-        aInterestingProperties.push_back(  PROPERTY_EMPTY_IS_NULL );
-        aInterestingProperties.push_back(  PROPERTY_TOGGLE );
-        return comphelper::containerToSequence(aInterestingProperties);
+        return
+        {
+            PROPERTY_DATASOURCE,
+            PROPERTY_COMMAND,
+            PROPERTY_COMMANDTYPE,
+            PROPERTY_LISTSOURCE,
+            PROPERTY_LISTSOURCETYPE,
+            PROPERTY_SUBMIT_ENCODING,
+            PROPERTY_REPEAT,
+            PROPERTY_TABSTOP,
+            PROPERTY_BORDER,
+            PROPERTY_CONTROLSOURCE,
+            PROPERTY_DROPDOWN,
+            PROPERTY_IMAGE_URL,
+            PROPERTY_TARGET_URL,
+            PROPERTY_STRINGITEMLIST,
+            PROPERTY_BUTTONTYPE,
+            PROPERTY_ESCAPE_PROCESSING,
+            PROPERTY_TRISTATE,
+            PROPERTY_DECIMAL_ACCURACY,
+            PROPERTY_SHOWTHOUSANDSEP,
+            PROPERTY_FORMATKEY,
+            PROPERTY_EMPTY_IS_NULL,
+            PROPERTY_TOGGLE
+        };
     }
 
     LineDescriptor SAL_CALL FormComponentPropertyHandler::describePropertyLine( const OUString& _rPropertyName,
