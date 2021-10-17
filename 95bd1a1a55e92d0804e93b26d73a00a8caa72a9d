@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96cf2c74_888afcc2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-10-17T13:09:23Z",
+      "side": 1,
+      "message": "\u003e build likely got stuck and was aborted due to not producing any output to the log\nCould someone rerun the Jenkins builds?",
+      "revId": "95bd1a1a55e92d0804e93b26d73a00a8caa72a9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
