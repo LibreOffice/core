@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d0f885e_9b38fc00",
+        "filename": "svgio/source/svgreader/svgcharacternode.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-17T07:34:26Z",
+      "side": 1,
+      "message": "This declares a as a temporary double, which value is discarded after the iteration.\nSince you need to modify the values in the array, you need to use reference:\n\n    for (auto\u0026 a : aTextArray)",
+      "revId": "396355b0ddd19a260c964b2b035b7f09f01de574",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f07811b_3c69866c",
+        "filename": "svgio/source/svgreader/svgnode.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-17T07:34:26Z",
+      "side": 1,
+      "message": "Use const references where you don\u0027t need to modify values. This also makes it easy for reader to immediately understand if the loop modifies the range itself, or does something external.",
+      "revId": "396355b0ddd19a260c964b2b035b7f09f01de574",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4a5b0d8_16db7958",
+        "filename": "svgio/source/svgreader/svgnode.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-17T07:34:26Z",
+      "side": 1,
+      "message": "I don\u0027t think this comment has any value. You state your intent to change this to range-based loop - for what purpose? It doesn\u0027t make much sense here, since your loop uses *two adjacent* elements of the vector, something not naturally fitting to range-based loops.",
+      "revId": "396355b0ddd19a260c964b2b035b7f09f01de574",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12b06cd3_53f2dbdf",
+        "filename": "svgio/source/svgreader/svgnode.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-17T07:34:26Z",
+      "side": 1,
+      "message": "What do you mean?",
+      "revId": "396355b0ddd19a260c964b2b035b7f09f01de574",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11864e4b_7b1099ac",
+        "filename": "svgio/source/svgreader/svgstylenode.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-17T07:34:26Z",
+      "side": 1,
+      "message": "Use const references where you don\u0027t need to modify values. This also makes it easy for reader to immediately understand if the loop modifies the range itself, or does something external.",
+      "revId": "396355b0ddd19a260c964b2b035b7f09f01de574",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
