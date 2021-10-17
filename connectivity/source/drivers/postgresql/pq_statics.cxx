@@ -89,9 +89,10 @@ static cppu::IPropertyArrayHelper * createPropertyArrayHelper(
     PropertyDef const *props, int count , sal_Int16 attr )
 {
     Sequence< Property > seq( count );
+    auto seqRange = asNonConstRange(seq);
     for( int i = 0 ; i < count ; i ++ )
     {
-        seq[i] = Property( props[i].name, i, props[i].type, attr );
+        seqRange[i] = Property( props[i].name, i, props[i].type, attr );
     }
     return new cppu::OPropertyArrayHelper( seq, true );
 }
@@ -100,9 +101,10 @@ static cppu::IPropertyArrayHelper * createPropertyArrayHelper(
     PropertyDefEx const *props, int count )
 {
     Sequence< Property > seq( count );
+    auto seqRange = asNonConstRange(seq);
     for( int i = 0 ; i < count ; i ++ )
     {
-        seq[i] = Property( props[i].name, i, props[i].type, props[i].attribute );
+        seqRange[i] = Property( props[i].name, i, props[i].type, props[i].attribute );
     }
     return new cppu::OPropertyArrayHelper( seq, true );
 }
@@ -184,8 +186,7 @@ Statics & getStatics()
             // Table props set
             ImplementationStatics &ist = statics.refl.table;
             ist.implName = "org.openoffice.comp.pq.sdbcx.Table";
-            ist.serviceNames = Sequence< OUString > ( 1 );
-            ist.serviceNames[0] = "com.sun.star.sdbcx.Table";
+            ist.serviceNames = { "com.sun.star.sdbcx.Table" };
             PropertyDef tableDef[] =
                 {
                     PropertyDef( statics.CATALOG_NAME , tString ),
@@ -214,8 +215,7 @@ Statics & getStatics()
 
             // Column props set
             statics.refl.column.implName = "org.openoffice.comp.pq.sdbcx.Column";
-            statics.refl.column.serviceNames = Sequence< OUString > ( 1 );
-            statics.refl.column.serviceNames[0] = "com.sun.star.sdbcx.Column";
+            statics.refl.column.serviceNames = { "com.sun.star.sdbcx.Column" };
             PropertyDefEx columnDef[] =
                 {
                     PropertyDefEx( statics.CATALOG_NAME , tString, READONLY ),
@@ -237,9 +237,7 @@ Statics & getStatics()
 
             statics.refl.columnDescriptor.implName =
                 "org.openoffice.comp.pq.sdbcx.ColumnDescriptor";
-            statics.refl.columnDescriptor.serviceNames = Sequence< OUString > ( 1 );
-            statics.refl.columnDescriptor.serviceNames[0] =
-                "com.sun.star.sdbcx.ColumnDescriptor";
+            statics.refl.columnDescriptor.serviceNames = { "com.sun.star.sdbcx.ColumnDescriptor" };
             PropertyDef columnDescDef[] =
                 {
                     PropertyDef( statics.CATALOG_NAME , tString ),
@@ -262,8 +260,7 @@ Statics & getStatics()
 
             // Key properties
             statics.refl.key.implName = "org.openoffice.comp.pq.sdbcx.Key";
-            statics.refl.key.serviceNames = Sequence< OUString > ( 1 );
-            statics.refl.key.serviceNames[0] = "com.sun.star.sdbcx.Key";
+            statics.refl.key.serviceNames = { "com.sun.star.sdbcx.Key" };
             PropertyDef keyDef[] =
                 {
                     PropertyDef( statics.DELETE_RULE, tInt ),
@@ -281,9 +278,7 @@ Statics & getStatics()
             // Key properties
             statics.refl.keyDescriptor.implName =
                 "org.openoffice.comp.pq.sdbcx.KeyDescriptor";
-            statics.refl.keyDescriptor.serviceNames = Sequence< OUString > ( 1 );
-            statics.refl.keyDescriptor.serviceNames[0] =
-                "com.sun.star.sdbcx.KeyDescriptor";
+            statics.refl.keyDescriptor.serviceNames = { "com.sun.star.sdbcx.KeyDescriptor" };
             PropertyDef keyDescDef[] =
                 {
                     PropertyDef( statics.DELETE_RULE, tInt ),
@@ -298,8 +293,7 @@ Statics & getStatics()
 
             // KeyColumn props set
             statics.refl.keycolumn.implName = "org.openoffice.comp.pq.sdbcx.KeyColumn";
-            statics.refl.keycolumn.serviceNames = Sequence< OUString > ( 1 );
-            statics.refl.keycolumn.serviceNames[0] = "com.sun.star.sdbcx.KeyColumn";
+            statics.refl.keycolumn.serviceNames = { "com.sun.star.sdbcx.KeyColumn" };
             PropertyDef keycolumnDef[] =
                 {
                     PropertyDef( statics.CATALOG_NAME , tString ),
@@ -322,9 +316,8 @@ Statics & getStatics()
             // KeyColumn props set
             statics.refl.keycolumnDescriptor.implName =
                 "org.openoffice.comp.pq.sdbcx.KeyColumnDescriptor";
-            statics.refl.keycolumnDescriptor.serviceNames = Sequence< OUString > ( 1 );
-            statics.refl.keycolumnDescriptor.serviceNames[0] =
-                "com.sun.star.sdbcx.KeyColumnDescriptor";
+            statics.refl.keycolumnDescriptor.serviceNames =
+                { "com.sun.star.sdbcx.KeyColumnDescriptor" };
             PropertyDef keycolumnDescDef[] =
                 {
                     PropertyDef( statics.NAME , tString ),
@@ -335,8 +328,7 @@ Statics & getStatics()
 
             // view props set
             statics.refl.view.implName = "org.openoffice.comp.pq.sdbcx.View";
-            statics.refl.view.serviceNames = Sequence< OUString > ( 1 );
-            statics.refl.view.serviceNames[0] = "com.sun.star.sdbcx.View";
+            statics.refl.view.serviceNames = { "com.sun.star.sdbcx.View" };
             PropertyDef viewDef[] =
                 {
                     PropertyDef( statics.CATALOG_NAME , tString ),
@@ -350,14 +342,12 @@ Statics & getStatics()
 
             // view props set
             statics.refl.viewDescriptor.implName = "org.openoffice.comp.pq.sdbcx.ViewDescriptor";
-            statics.refl.viewDescriptor.serviceNames = Sequence< OUString > ( 1 );
-            statics.refl.viewDescriptor.serviceNames[0] = "com.sun.star.sdbcx.ViewDescriptor";
+            statics.refl.viewDescriptor.serviceNames = { "com.sun.star.sdbcx.ViewDescriptor" };
             statics.refl.viewDescriptor.pProps = createPropertyArrayHelper(
                 viewDef, SAL_N_ELEMENTS(viewDef), 0 ); // reuse view, as it is identical
             // user props set
             statics.refl.user.implName = "org.openoffice.comp.pq.sdbcx.User";
-            statics.refl.user.serviceNames = Sequence< OUString > ( 1 );
-            statics.refl.user.serviceNames[0] = "com.sun.star.sdbcx.User";
+            statics.refl.user.serviceNames = { "com.sun.star.sdbcx.User" };
             PropertyDef userDefRO[] =
                 {
                     PropertyDef( statics.NAME , tString )
@@ -368,9 +358,7 @@ Statics & getStatics()
             // user props set
             statics.refl.userDescriptor.implName =
                 "org.openoffice.comp.pq.sdbcx.UserDescriptor";
-            statics.refl.userDescriptor.serviceNames = Sequence< OUString > ( 1 );
-            statics.refl.userDescriptor.serviceNames[0] =
-                "com.sun.star.sdbcx.UserDescriptor";
+            statics.refl.userDescriptor.serviceNames = { "com.sun.star.sdbcx.UserDescriptor" };
             PropertyDef userDefWR[] =
                 {
                     PropertyDef( statics.NAME , tString ),
@@ -381,8 +369,7 @@ Statics & getStatics()
 
             // index props set
             statics.refl.index.implName = "org.openoffice.comp.pq.sdbcx.Index";
-            statics.refl.index.serviceNames = Sequence< OUString > ( 1 );
-            statics.refl.index.serviceNames[0] = "com.sun.star.sdbcx.Index";
+            statics.refl.index.serviceNames = { "com.sun.star.sdbcx.Index" };
             PropertyDef indexDef[] =
                 {
                     PropertyDef( statics.CATALOG , tString ),
@@ -398,16 +385,13 @@ Statics & getStatics()
             // index props set
             statics.refl.indexDescriptor.implName =
                 "org.openoffice.comp.pq.sdbcx.IndexDescriptor";
-            statics.refl.indexDescriptor.serviceNames = Sequence< OUString > ( 1 );
-            statics.refl.indexDescriptor.serviceNames[0] =
-                "com.sun.star.sdbcx.IndexDescriptor";
+            statics.refl.indexDescriptor.serviceNames = { "com.sun.star.sdbcx.IndexDescriptor" };
             statics.refl.indexDescriptor.pProps = createPropertyArrayHelper(
                 indexDef, SAL_N_ELEMENTS(indexDef), 0 );
 
             // indexColumn props set
             statics.refl.indexColumn.implName = "org.openoffice.comp.pq.sdbcx.IndexColumn";
-            statics.refl.indexColumn.serviceNames = Sequence< OUString > ( 1 );
-            statics.refl.indexColumn.serviceNames[0] = "com.sun.star.sdbcx.IndexColumn";
+            statics.refl.indexColumn.serviceNames = { "com.sun.star.sdbcx.IndexColumn" };
             PropertyDef indexColumnDef[] =
                 {
                     PropertyDef( statics.CATALOG_NAME , tString ),
@@ -430,9 +414,8 @@ Statics & getStatics()
             // indexColumn props set
             statics.refl.indexColumnDescriptor.implName =
                 "org.openoffice.comp.pq.sdbcx.IndexColumnDescriptor";
-            statics.refl.indexColumnDescriptor.serviceNames = Sequence< OUString > ( 1 );
-            statics.refl.indexColumnDescriptor.serviceNames[0] =
-                "com.sun.star.sdbcx.IndexColumnDescriptor";
+            statics.refl.indexColumnDescriptor.serviceNames =
+                { "com.sun.star.sdbcx.IndexColumnDescriptor" };
             PropertyDef indexColumnDescDef[] =
                 {
                     PropertyDef( statics.IS_ASCENDING, tBool ),
@@ -443,8 +426,7 @@ Statics & getStatics()
 
             // resultset
             statics.refl.resultSet.implName = "org.openoffice.comp.pq.ResultSet";
-            statics.refl.resultSet.serviceNames = Sequence< OUString > ( 1 );
-            statics.refl.resultSet.serviceNames[0] = "com.sun.star.sdbc.ResultSet";
+            statics.refl.resultSet.serviceNames = { "com.sun.star.sdbc.ResultSet" };
             statics.refl.resultSet.types = UpdateableResultSet::getStaticTypes( false /* updateable */ );
             PropertyDef resultSet[] =
                 {
@@ -461,8 +443,7 @@ Statics & getStatics()
 
             // updateableResultset
             statics.refl.updateableResultSet.implName = "org.openoffice.comp.pq.UpdateableResultSet";
-            statics.refl.updateableResultSet.serviceNames = Sequence< OUString > ( 1 );
-            statics.refl.updateableResultSet.serviceNames[0] = "com.sun.star.sdbc.ResultSet";
+            statics.refl.updateableResultSet.serviceNames = { "com.sun.star.sdbc.ResultSet" };
             statics.refl.updateableResultSet.types = UpdateableResultSet::getStaticTypes( true /* updateable */ );
             statics.refl.updateableResultSet.pProps = createPropertyArrayHelper(
                 resultSet, SAL_N_ELEMENTS(resultSet), 0 );

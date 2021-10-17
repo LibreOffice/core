@@ -137,6 +137,7 @@ sal_Int32 SAL_CALL XBufferedThreadedStream::readBytes( Sequence< sal_Int8 >& rDa
 
     const sal_Int32 nAvailableSize = static_cast< sal_Int32 > ( std::min< sal_Int64 >( nBytesToRead, remainingSize() ) );
     rData.realloc( nAvailableSize );
+    auto pData = rData.getArray();
     sal_Int32 i = 0, nPendingBytes = nAvailableSize;
 
     while( nPendingBytes )
@@ -149,7 +150,7 @@ sal_Int32 SAL_CALL XBufferedThreadedStream::readBytes( Sequence< sal_Int8 >& rDa
         }
         const sal_Int32 limit = std::min<sal_Int32>( nPendingBytes, pBuffer.getLength() - mnOffset );
 
-        memcpy( &rData[i], &pBuffer[mnOffset], limit );
+        memcpy( &pData[i], &pBuffer[mnOffset], limit );
 
         nPendingBytes -= limit;
         mnOffset += limit;

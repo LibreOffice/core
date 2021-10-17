@@ -215,7 +215,7 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
     if(bTimeBased)
     {
         aArguments.realloc( aArguments.getLength() + 1 );
-        aArguments[aArguments.getLength() - 1] =
+        aArguments.getArray()[aArguments.getLength() - 1] =
             beans::PropertyValue( "TimeBased", -1, uno::Any(bTimeBased),
                     beans::PropertyState_DIRECT_VALUE );
     }
@@ -226,7 +226,7 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
 
     m_rDialogModel.setTemplate( m_xCurrentChartTypeTemplate );
     aArguments.realloc( aArguments.getLength() + 1 );
-    aArguments[aArguments.getLength() - 1] =
+    aArguments.getArray()[aArguments.getLength() - 1] =
         beans::PropertyValue( "CellRangeRepresentation" , -1,
                               uno::Any( m_aLastValidRangeString ),
                               beans::PropertyState_DIRECT_VALUE );

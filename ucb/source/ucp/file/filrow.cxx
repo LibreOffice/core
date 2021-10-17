@@ -38,7 +38,7 @@ using namespace css::uno;
 template< class _type_ >
 static bool convert( TaskManager const * pShell,
                   uno::Reference< script::XTypeConverter >& xConverter,
-                  uno::Any& rValue,
+                  const uno::Any& rValue,
                   _type_& aReturn  )
 {
     // Try first without converting

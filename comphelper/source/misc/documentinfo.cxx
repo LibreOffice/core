@@ -166,8 +166,9 @@ namespace comphelper {
         css::uno::Sequence<css::beans::PropertyValue> aMedDescr = rModel->getArgs();
         sal_Int32 nNewLen = aMedDescr.getLength() + 1;
         aMedDescr.realloc(nNewLen);
-        aMedDescr[nNewLen-1].Name = "MacroEventRead";
-        aMedDescr[nNewLen-1].Value <<= true;
+        auto pMedDescr = aMedDescr.getArray();
+        pMedDescr[nNewLen-1].Name = "MacroEventRead";
+        pMedDescr[nNewLen-1].Value <<= true;
         rModel->attachResource(rModel->getURL(), aMedDescr);
     }
 

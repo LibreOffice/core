@@ -315,7 +315,7 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
                 // minor increment
                 Sequence< SubIncrement >& rSubIncrementSeq = rIncrementData.SubIncrements;
                 rSubIncrementSeq.realloc( 1 );
-                Any& rIntervalCount = rSubIncrementSeq[ 0 ].IntervalCount;
+                Any& rIntervalCount = rSubIncrementSeq.getArray()[ 0 ].IntervalCount;
                 rIntervalCount.clear();
                 if( bLogScale )
                 {

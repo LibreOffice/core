@@ -423,14 +423,14 @@ IMPL_LINK(SwSelectAddressBlockDialog, NewCustomizeHdl_Impl, weld::Button&, rButt
     if(bCustomize)
     {
         m_xPreview->ReplaceSelectedAddress(sNew);
-        m_aAddressBlocks[m_xPreview->GetSelectedAddress()] = sNew;
+        m_aAddressBlocks.getArray()[m_xPreview->GetSelectedAddress()] = sNew;
     }
     else
     {
         m_xPreview->AddAddress(sNew);
         m_aAddressBlocks.realloc(m_aAddressBlocks.getLength() + 1);
         const sal_Int32 nSelect = m_aAddressBlocks.getLength() - 1;
-        m_aAddressBlocks[nSelect] = sNew;
+        m_aAddressBlocks.getArray()[nSelect] = sNew;
         m_xPreview->SelectAddress(o3tl::narrowing<sal_uInt16>(nSelect));
     }
     m_xDeletePB->set_sensitive(m_aAddressBlocks.getLength() > 1);
@@ -1474,7 +1474,7 @@ namespace
             auto aReplacement(dtdee);
             // replace what the treeview is offering with what ImpEditView::dragEnter wants
             aReplacement.SupportedDataFlavors.realloc(1);
-            SotExchange::GetFormatDataFlavor(SotClipboardFormatId::STRING, aReplacement.SupportedDataFlavors[0]);
+            SotExchange::GetFormatDataFlavor(SotClipboardFormatId::STRING, aReplacement.SupportedDataFlavors.getArray()[0]);
 
             std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
             for (auto const& listener : aListeners)

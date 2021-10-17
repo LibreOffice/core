@@ -288,8 +288,9 @@ uno::Any VbaDocumentsBase::openDocument( const OUString& rFileName, const uno::A
 
     uno::Sequence< beans::PropertyValue > sProps( rProps );
     sProps.realloc( sProps.getLength() + 1 );
-    sProps[ sProps.getLength() - 1 ].Name = "MacroExecutionMode";
-    sProps[ sProps.getLength() - 1 ].Value <<= document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
+    auto pProps = sProps.getArray();
+    pProps[ sProps.getLength() - 1 ].Name = "MacroExecutionMode";
+    pProps[ sProps.getLength() - 1 ].Value <<= document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
 
     if ( ReadOnly.hasValue()  )
     {
@@ -298,8 +299,9 @@ uno::Any VbaDocumentsBase::openDocument( const OUString& rFileName, const uno::A
         if ( bIsReadOnly )
         {
             sProps.realloc( sProps.getLength() + 1 );
-            sProps[ sProps.getLength() - 1 ].Name = "ReadOnly";
-            sProps[ sProps.getLength() - 1 ].Value <<= true;
+            pProps = sProps.getArray();
+            pProps[ sProps.getLength() - 1 ].Name = "ReadOnly";
+            pProps[ sProps.getLength() - 1 ].Value <<= true;
         }
     }
 

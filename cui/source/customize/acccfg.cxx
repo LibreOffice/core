@@ -1319,9 +1319,8 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*, void
         // don't forget to release the storage afterwards!
         uno::Reference<lang::XSingleServiceFactory> xStorageFactory(
             embed::StorageFactory::create(m_xContext));
-        uno::Sequence<uno::Any> lArgs(2);
-        lArgs[0] <<= sCfgName;
-        lArgs[1] <<= css::embed::ElementModes::READ;
+        uno::Sequence<uno::Any> lArgs{ uno::Any(sCfgName),
+                                       uno::Any(css::embed::ElementModes::READ) };
 
         xRootStorage.set(xStorageFactory->createInstanceWithArguments(lArgs), uno::UNO_QUERY_THROW);
         uno::Reference<embed::XStorage> xUIConfig
@@ -1390,9 +1389,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, void
     {
         uno::Reference<lang::XSingleServiceFactory> xStorageFactory(
             embed::StorageFactory::create(m_xContext));
-        uno::Sequence<uno::Any> lArgs(2);
-        lArgs[0] <<= sCfgName;
-        lArgs[1] <<= embed::ElementModes::WRITE;
+        uno::Sequence<uno::Any> lArgs{ uno::Any(sCfgName), uno::Any(embed::ElementModes::WRITE) };
 
         xRootStorage.set(xStorageFactory->createInstanceWithArguments(lArgs), uno::UNO_QUERY_THROW);
 

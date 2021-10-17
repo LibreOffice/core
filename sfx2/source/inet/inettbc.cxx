@@ -25,6 +25,8 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+
+#include <comphelper/propertyvalue.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/historyoptions.hxx>
 #include <vcl/toolbox.hxx>
@@ -144,11 +146,10 @@ void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName ) const
     if ( !xDispatch.is() )
         return;
 
-    Sequence< PropertyValue > aArgs( 2 );
-    aArgs[0].Name = "Referer";
-    aArgs[0].Value <<= OUString( "private:user" );
-    aArgs[1].Name = "FileName";
-    aArgs[1].Value <<= aName;
+    Sequence< PropertyValue > aArgs{
+        comphelper::makePropertyValue("Referer", OUString( "private:user" )),
+        comphelper::makePropertyValue("FileName", aName)
+    };
 
     SfxURLToolBoxControl_Impl::ExecuteInfo* pExecuteInfo = new SfxURLToolBoxControl_Impl::ExecuteInfo;
     pExecuteInfo->xDispatch     = xDispatch;

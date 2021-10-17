@@ -218,9 +218,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
             const bool bNeedClassID = !aClassID.hasElements() && sURL.isEmpty() ;
             if ( xCopyFrom.is() )
             {
-                Sequence<Any> aIni(2);
-                aIni[0] <<= getContainerStorage();
-                aIni[1] <<= sPersistentName;
+                Sequence<Any> aIni{ Any(getContainerStorage()), Any(sPersistentName) };
                 Command aCommand;
                 aCommand.Name = "copyTo";
                 aCommand.Argument <<= aIni;
@@ -279,8 +277,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
 
         if ( !sURL.isEmpty() )
         {
-            Sequence<Any> aIni(2);
-            aIni[0] <<= sURL;
+            Sequence<Any> aIni{ Any(sURL) };
             Command aCommand;
             aCommand.Name = "insert";
             aCommand.Argument <<= aIni;

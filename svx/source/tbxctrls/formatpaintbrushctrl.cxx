@@ -20,6 +20,7 @@
 
 #include <svx/formatpaintbrushctrl.hxx>
 
+#include <comphelper/propertyvalue.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
@@ -54,9 +55,8 @@ FormatPaintBrushToolBoxControl::~FormatPaintBrushToolBoxControl()
 
 void FormatPaintBrushToolBoxControl::impl_executePaintBrush()
 {
-    Sequence< PropertyValue > aArgs( 1 );
-    aArgs[0].Name  = "PersistentCopy";
-    aArgs[0].Value <<= m_bPersistentCopy;
+    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("PersistentCopy",
+                                                                   m_bPersistentCopy) };
     Dispatch( ".uno:FormatPaintbrush"
         , aArgs );
 }

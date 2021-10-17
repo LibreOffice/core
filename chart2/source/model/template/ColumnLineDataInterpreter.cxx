@@ -60,9 +60,10 @@ InterpretedData SAL_CALL ColumnLineDataInterpreter::interpretDataSource(
         {
             sal_Int32 nNumOfLines = std::min( m_nNumberOfLines, nNumberOfSeries - 1 );
             aResult.Series.realloc(2);
+            auto pSeries = aResult.Series.getArray();
 
-            Sequence< Reference< XDataSeries > > & rColumnDataSeries = aResult.Series[0];
-            Sequence< Reference< XDataSeries > > & rLineDataSeries   = aResult.Series[1];
+            Sequence< Reference< XDataSeries > > & rColumnDataSeries = pSeries[0];
+            Sequence< Reference< XDataSeries > > & rLineDataSeries   = pSeries[1];
             rLineDataSeries.realloc( nNumOfLines );
             std::copy( std::cbegin(rColumnDataSeries) + nNumberOfSeries - nNumOfLines,
                          std::cbegin(rColumnDataSeries) + nNumberOfSeries,

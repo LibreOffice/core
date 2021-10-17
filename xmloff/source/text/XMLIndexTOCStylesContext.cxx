@@ -86,9 +86,10 @@ void XMLIndexTOCStylesContext::endFastElement(sal_Int32 )
     // copy vector into sequence
     const sal_Int32 nCount = aStyleNames.size();
     Sequence<OUString> aStyleNamesSequence(nCount);
+    auto aStyleNamesSequenceRange = asNonConstRange(aStyleNamesSequence);
     for(sal_Int32 i = 0; i < nCount; i++)
     {
-        aStyleNamesSequence[i] = GetImport().GetStyleDisplayName(
+        aStyleNamesSequenceRange[i] = GetImport().GetStyleDisplayName(
                         XmlStyleFamily::TEXT_PARAGRAPH,
                            aStyleNames[i] );
     }

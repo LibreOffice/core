@@ -20,7 +20,11 @@
 #include <sfx2/zoomitem.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+
+#include <comphelper/propertyvalue.hxx>
 #include <osl/diagnose.h>
+
+#include <cassert>
 
 
 SfxPoolItem* SvxZoomItem::CreateDefault() { return new SvxZoomItem; }
@@ -66,13 +70,12 @@ bool SvxZoomItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         case 0:
         {
-            css::uno::Sequence< css::beans::PropertyValue > aSeq( ZOOM_PARAMS );
-            aSeq[0].Name = ZOOM_PARAM_VALUE;
-            aSeq[0].Value <<= sal_Int32( GetValue() );
-            aSeq[1].Name = ZOOM_PARAM_VALUESET;
-            aSeq[1].Value <<= sal_Int16( nValueSet );
-            aSeq[2].Name = ZOOM_PARAM_TYPE;
-            aSeq[2].Value <<= sal_Int16( eType );
+            css::uno::Sequence< css::beans::PropertyValue > aSeq{
+                comphelper::makePropertyValue(ZOOM_PARAM_VALUE, sal_Int32( GetValue() )),
+                comphelper::makePropertyValue(ZOOM_PARAM_VALUESET, sal_Int16( nValueSet )),
+                comphelper::makePropertyValue(ZOOM_PARAM_TYPE, sal_Int16( eType ))
+            };
+            assert(aSeq.getLength() == ZOOM_PARAMS);
             rVal <<= aSeq;
             break;
         }

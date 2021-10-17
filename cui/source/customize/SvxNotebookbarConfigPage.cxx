@@ -476,22 +476,23 @@ static void EditRegistryFile(std::u16string_view sUIItemId, const OUString& sSet
     Sequence<OUString> aOldEntries
         = CustomNotebookbarGenerator::getCustomizedUIItem(sNotebookbarInterface);
     Sequence<OUString> aNewEntries(aOldEntries.getLength() + 1);
+    auto pNewEntries = aNewEntries.getArray();
     for (int nIdx = 0; nIdx < aOldEntries.getLength(); nIdx++)
     {
         sal_Int32 rPos = 0;
         OUString sFirstValue = aOldEntries[nIdx].getToken(rPos, ',', rPos);
         if (sFirstValue == sUIItemId)
         {
-            aOldEntries[nIdx] = sSetEntry;
+            aOldEntries.getArray()[nIdx] = sSetEntry;
             nFlag = 1;
             break;
         }
-        aNewEntries[nIdx] = aOldEntries[nIdx];
+        pNewEntries[nIdx] = aOldEntries[nIdx];
     }
 
     if (nFlag == 0)
     {
-        aNewEntries[aOldEntries.getLength()] = sSetEntry;
+        pNewEntries[aOldEntries.getLength()] = sSetEntry;
         CustomNotebookbarGenerator::setCustomizedUIItem(aNewEntries, sNotebookbarInterface);
     }
     else

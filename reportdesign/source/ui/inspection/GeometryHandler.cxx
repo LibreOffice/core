@@ -898,8 +898,9 @@ uno::Any GeometryHandler::getConstantValue(bool _bToControlValue,const Translate
     for (const TranslateId* pItem = pResId; *pItem; ++pItem)
         aList.push_back(RptResId(*pItem));
     uno::Sequence< OUString > aSeq(aList.size());
+    auto aSeqRange = asNonConstRange(aSeq);
     for (size_t i = 0; i < aList.size(); ++i)
-        aSeq[i] = aList[i];
+        aSeqRange[i] = aList[i];
 
     uno::Reference< inspection::XStringRepresentation > xConversionHelper = inspection::StringRepresentation::createConstant( m_xContext,m_xTypeConverter,_sConstantName,aSeq);
     if ( _bToControlValue )

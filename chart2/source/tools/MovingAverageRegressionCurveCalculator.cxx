@@ -22,6 +22,7 @@
 #include <ResId.hxx>
 #include <strings.hrc>
 
+#include <algorithm>
 #include <limits>
 
 #include <com/sun/star/chart2/MovingAverageType.hpp>
@@ -145,12 +146,8 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL MovingAverageRegressionCurveCalc
 {
     size_t nSize = std::min(aXList.size(), aYList.size());
     uno::Sequence< geometry::RealPoint2D > aResult( nSize );
-
-    for( size_t i = 0; i < nSize; ++i )
-    {
-        aResult[i].X = aXList[i];
-        aResult[i].Y = aYList[i];
-    }
+    std::transform(aXList.begin(), aXList.begin() + nSize, aYList.begin(), aResult.getArray(),
+                   [](const auto& x, const auto& y) { return geometry::RealPoint2D(x, y); });
     return aResult;
 }
 

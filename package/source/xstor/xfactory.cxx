@@ -30,6 +30,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
@@ -161,9 +162,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
         {
             if ( !aURL.isEmpty() )
             {
-                aPropsToSet.realloc(1);
-                aPropsToSet[0].Name = "URL";
-                aPropsToSet[0].Value <<= aURL;
+                aPropsToSet = { comphelper::makePropertyValue("URL", aURL) };
             }
 
             sal_Int32 nNumArgs = 1;
@@ -175,8 +174,9 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
                   || rProp.Name == "StatusIndicator" )
                 {
                     aPropsToSet.realloc( ++nNumArgs );
-                    aPropsToSet[nNumArgs-1].Name = rProp.Name;
-                    aPropsToSet[nNumArgs-1].Value = rProp.Value;
+                    auto pPropsToSet = aPropsToSet.getArray();
+                    pPropsToSet[nNumArgs-1].Name = rProp.Name;
+                    pPropsToSet[nNumArgs-1].Value = rProp.Value;
                 }
                 else if ( rProp.Name == "StorageFormat" )
                 {
@@ -209,8 +209,9 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
                 {
                     // Forward NoFileSync to the storage.
                     aPropsToSet.realloc(++nNumArgs);
-                    aPropsToSet[nNumArgs - 1].Name = rProp.Name;
-                    aPropsToSet[nNumArgs - 1].Value = rProp.Value;
+                    auto pPropsToSet = aPropsToSet.getArray();
+                    pPropsToSet[nNumArgs - 1].Name = rProp.Name;
+                    pPropsToSet[nNumArgs - 1].Value = rProp.Value;
                 }
                 else
                     OSL_FAIL( "Unacceptable property, will be ignored!" );

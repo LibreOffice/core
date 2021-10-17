@@ -168,7 +168,7 @@ void OXMLControlProperty::addValue(const OUString& _sValue)
     {
         sal_Int32 nPos = m_aSequence.getLength();
         m_aSequence.realloc(nPos+1);
-        m_aSequence[nPos] = aValue;
+        m_aSequence.getArray()[nPos] = aValue;
     }
 }
 

@@ -176,9 +176,10 @@ void DropDownFormFieldDialog::Apply()
     mark::IFieldmark::parameter_map_t* pParameters = m_pDropDownField->GetParameters();
 
     css::uno::Sequence<OUString> vListEntries(m_xListItemsTreeView->n_children());
+    auto vListEntriesRange = asNonConstRange(vListEntries);
     for (int nIndex = 0; nIndex < m_xListItemsTreeView->n_children(); ++nIndex)
     {
-        vListEntries[nIndex] = m_xListItemsTreeView->get_text(nIndex);
+        vListEntriesRange[nIndex] = m_xListItemsTreeView->get_text(nIndex);
     }
 
     if (m_xListItemsTreeView->n_children() != 0)

@@ -144,10 +144,7 @@ void SvNumberFormatsSupplierServiceObject::implEnsureFormatter()
         css::lang::Locale aOfficeLocale = aSysLocale.GetLocaleData().getLanguageTag().getLocale();
 
         // initialize with this locale
-        Sequence< Any > aFakedInitProps( 1 );
-        aFakedInitProps[0] <<= aOfficeLocale;
-
-        initialize( aFakedInitProps );
+        initialize({ Any(aOfficeLocale) });
     }
 }
 

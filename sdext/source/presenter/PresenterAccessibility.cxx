@@ -1278,8 +1278,7 @@ void AccessibleRelationSet::AddRelation (
 {
     maRelations.emplace_back();
     maRelations.back().RelationType = nRelationType;
-    maRelations.back().TargetSet.realloc(1);
-    maRelations.back().TargetSet[0] = rxObject;
+    maRelations.back().TargetSet = { rxObject };
 }
 
 //----- XAccessibleRelationSet ------------------------------------------------

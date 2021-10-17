@@ -38,6 +38,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <algorithm>
 
 using namespace ::std;
 using namespace ::xmloff::token;
@@ -131,10 +132,7 @@ void XMLIndexTemplateContext::endFastElement(sal_Int32 )
 
     const sal_Int32 nCount = aValueVector.size();
     Sequence<PropertyValues> aValueSequence(nCount);
-    for(sal_Int32 i = 0; i<nCount; i++)
-    {
-        aValueSequence[i] = aValueVector[i];
-    }
+    std::copy(aValueVector.begin(), aValueVector.end(), aValueSequence.getArray());
 
     // get LevelFormat IndexReplace ...
     Any aAny = rPropertySet->getPropertyValue("LevelFormat");

@@ -193,8 +193,8 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
                 else
                 {
                     // objects without persistence will be initialized internally
-                    uno::Sequence < uno::Any > aArgs(1);
-                    aArgs[0] <<= uno::Reference < embed::XEmbeddedObject >( this );
+                    uno::Sequence < uno::Any > aArgs{ uno::Any(
+                        uno::Reference < embed::XEmbeddedObject >( this )) };
                     uno::Reference< util::XCloseable > xDocument(
                             m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( GetDocumentServiceName(), aArgs, m_xContext),
                             uno::UNO_QUERY );

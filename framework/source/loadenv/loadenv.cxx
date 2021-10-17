@@ -954,13 +954,13 @@ bool LoadEnv::impl_furtherDocsAllowed()
         if (xInteraction.is())
         {
             css::uno::Any                                                                    aInteraction;
-            css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations(2);
 
             rtl::Reference<comphelper::OInteractionAbort>   pAbort   = new comphelper::OInteractionAbort();
             rtl::Reference<comphelper::OInteractionApprove> pApprove = new comphelper::OInteractionApprove();
 
-            lContinuations[0] = pAbort;
-            lContinuations[1] = pApprove;
+            css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations{
+                pAbort, pApprove
+            };
 
             css::task::ErrorCodeRequest aErrorCode;
             aErrorCode.ErrCode = sal_uInt32(ERRCODE_SFX_NOMOREDOCUMENTSALLOWED);

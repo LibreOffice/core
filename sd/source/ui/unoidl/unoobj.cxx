@@ -324,7 +324,7 @@ uno::Sequence< uno::Type > SAL_CALL SdXShape::getTypes()
             aTypes = mpShape->_getTypes();
             sal_uInt32 nCount = aTypes.getLength();
             aTypes.realloc( nCount+1 );
-            aTypes[nCount] = cppu::UnoType<lang::XTypeProvider>::get();
+            aTypes.getArray()[nCount] = cppu::UnoType<lang::XTypeProvider>::get();
 
             gImplTypesCache.insert(std::make_pair(nObjId, aTypes));
         }

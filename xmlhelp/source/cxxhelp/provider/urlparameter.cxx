@@ -41,6 +41,7 @@
 #include "urlparameter.hxx"
 #include "databases.hxx"
 
+#include <algorithm>
 #include <memory>
 #include <mutex>
 
@@ -914,8 +915,8 @@ sal_Int32 SAL_CALL InputStreamTransformer::readBytes( Sequence< sal_Int8 >& aDat
     if( 0 <= curr && aData.getLength() < curr )
         aData.realloc( curr );
 
-    for( int k = 0; k < curr; ++k )
-        aData[k] = buffer[pos++];
+    std::copy_n(buffer.getStr() + pos, curr, aData.getArray());
+    pos += curr;
 
     return std::max(curr, 0);
 }

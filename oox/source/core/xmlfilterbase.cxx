@@ -515,14 +515,15 @@ OUString lclAddRelation( const Reference< XRelationshipAccess >& rRelations, sal
     OUString sId = "rId" + OUString::number( nId );
 
     Sequence< StringPair > aEntry( bExternal ? 3 : 2 );
-    aEntry[0].First = "Type";
-    aEntry[0].Second = rType;
-    aEntry[1].First = "Target";
-    aEntry[1].Second = INetURLObject::decode(rTarget, INetURLObject::DecodeMechanism::ToIUri, RTL_TEXTENCODING_UTF8);
+    auto pEntry = aEntry.getArray();
+    pEntry[0].First = "Type";
+    pEntry[0].Second = rType;
+    pEntry[1].First = "Target";
+    pEntry[1].Second = INetURLObject::decode(rTarget, INetURLObject::DecodeMechanism::ToIUri, RTL_TEXTENCODING_UTF8);
     if( bExternal )
     {
-        aEntry[2].First = "TargetMode";
-        aEntry[2].Second = "External";
+        pEntry[2].First = "TargetMode";
+        pEntry[2].Second = "External";
     }
     rRelations->insertRelationshipByID( sId, aEntry, true );
 

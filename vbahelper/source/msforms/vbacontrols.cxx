@@ -61,7 +61,7 @@ private:
             if ( nIndex >= msNames.getLength() )
                 msNames.realloc( nIndex );
 
-            msNames[ nIndex ] = getControlName( xCtrl );
+            msNames.getArray()[ nIndex ] = getControlName( xCtrl );
             mControls.push_back( xCtrl );
             mIndices[ msNames[ nIndex ] ] = nIndex;
         }
@@ -382,8 +382,7 @@ uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& St
             {
                 uno::Reference< script::XInvocation > xControlInvoke( xNewControl, uno::UNO_QUERY_THROW );
 
-                uno::Sequence< uno::Any > aArgs( 1 );
-                aArgs[0] <<= aComServiceName;
+                uno::Sequence< uno::Any > aArgs{ uno::Any(aComServiceName) };
                 uno::Sequence< sal_Int16 > aOutIDDummy;
                 uno::Sequence< uno::Any > aOutDummy;
                 xControlInvoke->invoke( "SOAddAXControl" , aArgs, aOutIDDummy, aOutDummy );

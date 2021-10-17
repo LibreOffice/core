@@ -27,6 +27,7 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/gdimtf.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -156,14 +157,15 @@ bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
 
         bool bExportNotesPages = false;
 
+        auto rRenderOptionsRange = asNonConstRange(rRenderOptions);
         for( sal_Int32 nData = 0, nDataCount = rRenderOptions.getLength(); nData < nDataCount; ++nData )
         {
             if ( rRenderOptions[ nData ].Name == "IsFirstPage" )
-                pFirstPage = &rRenderOptions[ nData ].Value;
+                pFirstPage = &rRenderOptionsRange[ nData ].Value;
             else if ( rRenderOptions[ nData ].Name == "IsLastPage" )
-                pLastPage = &rRenderOptions[ nData ].Value;
+                pLastPage = &rRenderOptionsRange[ nData ].Value;
             else if ( rRenderOptions[ nData ].Name == "ExportNotesPages" )
-                rRenderOptions[ nData ].Value >>= bExportNotesPages;
+                rRenderOptionsRange[ nData ].Value >>= bExportNotesPages;
         }
 
         OutputDevice* pOut = rPDFWriter.GetReferenceDevice();
@@ -332,11 +334,10 @@ static OUString getMimetypeForDocument( const Reference< XComponentContext >& xC
                 // get the actual filter name
                 Reference< lang::XMultiServiceFactory > xConfigProvider =
                     configuration::theDefaultProvider::get( xContext );
-                uno::Sequence< uno::Any > aArgs( 1 );
                 beans::NamedValue aPathProp;
                 aPathProp.Name = "nodepath";
                 aPathProp.Value <<= OUString( "/org.openoffice.Setup/Office/Factories/" );
-                aArgs[0] <<= aPathProp;
+                uno::Sequence< uno::Any > aArgs{ uno::Any(aPathProp) };
 
                 Reference< container::XNameAccess > xSOFConfig(
                     xConfigProvider->createInstanceWithArguments(
@@ -867,24 +868,17 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 aPDFExtOutDevData.SetIsReduceImageResolution( mbReduceImageResolution );
                 aPDFExtOutDevData.SetIsExportNamedDestinations( mbExportBmkToDest );
 
-                Sequence< PropertyValue > aRenderOptions( 8 );
-                aRenderOptions[ 0 ].Name = "RenderDevice";
-                aRenderOptions[ 0 ].Value <<= uno::Reference<awt::XDevice>(xDevice);
-                aRenderOptions[ 1 ].Name = "ExportNotesPages";
-                aRenderOptions[ 1 ].Value <<= false;
-                Any& rExportNotesValue = aRenderOptions[ 1 ].Value;
-                aRenderOptions[ 2 ].Name = "IsFirstPage";
-                aRenderOptions[ 2 ].Value <<= true;
-                aRenderOptions[ 3 ].Name = "IsLastPage";
-                aRenderOptions[ 3 ].Value <<= false;
-                aRenderOptions[ 4 ].Name = "IsSkipEmptyPages";
-                aRenderOptions[ 4 ].Value <<= mbSkipEmptyPages;
-                aRenderOptions[ 5 ].Name = "PageRange";
-                aRenderOptions[ 5 ].Value <<= aPageRange;
-                aRenderOptions[ 6 ].Name = "ExportPlaceholders";
-                aRenderOptions[ 6 ].Value <<= mbExportPlaceholders;
-                aRenderOptions[ 7 ].Name = "SinglePageSheets";
-                aRenderOptions[ 7 ].Value <<= mbSinglePageSheets;
+                Sequence< PropertyValue > aRenderOptions{
+                    comphelper::makePropertyValue("RenderDevice", uno::Reference<awt::XDevice>(xDevice)),
+                    comphelper::makePropertyValue("ExportNotesPages", false),
+                    comphelper::makePropertyValue("IsFirstPage", true),
+                    comphelper::makePropertyValue("IsLastPage", false),
+                    comphelper::makePropertyValue("IsSkipEmptyPages", mbSkipEmptyPages),
+                    comphelper::makePropertyValue("PageRange", aPageRange),
+                    comphelper::makePropertyValue("ExportPlaceholders", mbExportPlaceholders),
+                    comphelper::makePropertyValue("SinglePageSheets", mbSinglePageSheets)
+                };
+                Any& rExportNotesValue = aRenderOptions.getArray()[ 1 ].Value;
 
                 if( !aPageRange.isEmpty() || !aSelection.hasValue() )
                 {

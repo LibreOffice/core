@@ -205,9 +205,9 @@ OUString SAL_CALL FilterDetect::detect( css::uno::Sequence< css::beans::Property
         if (location == aArguments.getLength())
         {
             aArguments.realloc(nLength+1);
-            aArguments[location].Name = "TypeName";
+            aArguments.getArray()[location].Name = "TypeName";
         }
-        aArguments[location].Value <<=sTypeName;
+        aArguments.getArray()[location].Value <<=sTypeName;
     }
 
     return sTypeName;

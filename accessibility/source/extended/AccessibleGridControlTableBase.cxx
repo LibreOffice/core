@@ -203,8 +203,9 @@ void AccessibleGridControlTableBase::implGetSelectedRows( Sequence< sal_Int32 >&
 {
     sal_Int32 const selectionCount( m_aTable.GetSelectedRowCount() );
     rSeq.realloc( selectionCount );
+    auto pSeq = rSeq.getArray();
     for ( sal_Int32 i=0; i<selectionCount; ++i )
-        rSeq[i] = m_aTable.GetSelectedRowIndex(i);
+        pSeq[i] = m_aTable.GetSelectedRowIndex(i);
 }
 
 void AccessibleGridControlTableBase::ensureIsValidRow( sal_Int32 nRow )

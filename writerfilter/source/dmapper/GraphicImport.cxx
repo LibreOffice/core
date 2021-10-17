@@ -52,6 +52,7 @@
 #include <sal/log.hxx>
 #include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequence.hxx>
@@ -1925,11 +1926,9 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
 
 void GraphicImport::data(const sal_uInt8* buf, size_t len)
 {
-    beans::PropertyValues aMediaProperties( 1 );
-    aMediaProperties[0].Name = getPropertyName(PROP_INPUT_STREAM);
-
     uno::Reference< io::XInputStream > xIStream = new XInputStreamHelper( buf, len );
-    aMediaProperties[0].Value <<= xIStream;
+    beans::PropertyValues aMediaProperties{ comphelper::makePropertyValue(
+        getPropertyName(PROP_INPUT_STREAM), xIStream) };
 
     uno::Reference<beans::XPropertySet> xPropertySet;
     uno::Reference<graphic::XGraphicProvider> xGraphicProvider(graphic::GraphicProvider::create(m_xComponentContext));

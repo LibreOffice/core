@@ -282,8 +282,9 @@ template< typename MatrixType >
     if( !rMatrix.empty() )
     {
         aSeq.realloc( static_cast< sal_Int32 >( rMatrix.height() ) );
+        auto pSeq = aSeq.getArray();
         for( size_t nRow = 0, nHeight = rMatrix.height(); nRow < nHeight; ++nRow )
-            aSeq[ static_cast< sal_Int32 >( nRow ) ] =
+            pSeq[ static_cast< sal_Int32 >( nRow ) ] =
                 css::uno::Sequence< ValueType >( &rMatrix.row_front( nRow ), static_cast< sal_Int32 >( rMatrix.width() ) );
     }
     return aSeq;

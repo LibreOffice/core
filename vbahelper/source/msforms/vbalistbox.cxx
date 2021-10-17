@@ -187,9 +187,10 @@ ScVbaListBox::setValueEvent( const uno::Any& value )
         {
             if( !bValue )
             {
+                auto pList = nList.getArray();
                 for( ; i < nLength - 1; i++ )
                 {
-                    nList[i] = nList[i + 1];
+                    pList[i] = nList[i + 1];
                 }
                 nList.realloc( nLength - 1 );
                 //m_xProps->setPropertyValue( sSourceName, uno::makeAny( nList ) );
@@ -205,12 +206,11 @@ ScVbaListBox::setValueEvent( const uno::Any& value )
     if( getMultiSelect() )
     {
         nList.realloc( nLength + 1 );
-        nList[nLength] = nIndex;
+        nList.getArray()[nLength] = nIndex;
     }
     else
     {
-        nList.realloc( 1 );
-        nList[0] = nIndex;
+        nList = { nIndex };
     }
     //m_xProps->setPropertyValue( sSourceName, uno::makeAny( nList ) );
     fireClickEvent();

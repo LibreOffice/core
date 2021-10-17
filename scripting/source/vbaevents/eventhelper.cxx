@@ -102,56 +102,42 @@ static Sequence< Any > ooMouseEvtToVBADblClick( const Sequence< Any >& params )
 
 static Sequence< Any > ooMouseEvtToVBAMouseEvt( const Sequence< Any >& params )
 {
-    Sequence< Any > translatedParams;
     awt::MouseEvent evt;
 
     if ( !isMouseEventOk(evt, params) )
         return Sequence< Any >();
 
-    translatedParams.realloc(4);
-
-    // Buttons
-    translatedParams[ 0 ] <<= evt.Buttons;
-    // Shift
-    translatedParams[ 1 ] <<= evt.Modifiers;
-    // X
-    translatedParams[ 2 ] <<= evt.X;
-    // Y
-    translatedParams[ 3 ] <<= evt.Y;
+    Sequence< Any > translatedParams{ Any(evt.Buttons), // Buttons
+                                      Any(evt.Modifiers), // Shift
+                                      Any(evt.X), // X
+                                      Any(evt.Y) }; // Y
     return translatedParams;
 }
 
 static Sequence< Any > ooKeyPressedToVBAKeyPressed( const Sequence< Any >& params )
 {
-    Sequence< Any > translatedParams;
     awt::KeyEvent evt;
 
     if ( !isKeyEventOk( evt, params ) )
         return Sequence< Any >();
 
-    translatedParams.realloc(1);
-
     Reference< msforms::XReturnInteger> xKeyCode = new ReturnInteger(  sal_Int32( evt.KeyCode ) );
-    translatedParams[0] <<= xKeyCode;
+    Sequence< Any > translatedParams{ Any(xKeyCode) };
     return  translatedParams;
 }
 
 static Sequence< Any > ooKeyPressedToVBAKeyUpDown( const Sequence< Any >& params )
 {
-    Sequence< Any > translatedParams;
     awt::KeyEvent evt;
 
     if ( !isKeyEventOk( evt, params ) )
         return Sequence< Any >();
 
-    translatedParams.realloc(2);
-
     Reference< msforms::XReturnInteger> xKeyCode = new ReturnInteger(  evt.KeyCode );
     sal_Int8 shift = sal::static_int_cast<sal_Int8>( evt.Modifiers );
 
     // #TODO check whether values from OOO conform to values generated from vba
-    translatedParams[0] <<= xKeyCode;
-    translatedParams[1] <<= shift;
+    Sequence< Any > translatedParams{ Any(xKeyCode), Any(shift) };
     return  translatedParams;
 }
 
@@ -423,7 +409,7 @@ ScriptEventHelper::createEvents( const OUString& sCodeName )
             ++nEvts;
             if ( nEvts > aDest.getLength() )
                 aDest.realloc( nEvts );// should never happen
-            aDest[ dIndex ] = evtDesc;
+            aDest.getArray()[ dIndex ] = evtDesc;
         }
     }
     aDest.realloc( nEvts );

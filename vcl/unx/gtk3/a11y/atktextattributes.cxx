@@ -1351,6 +1351,7 @@ attribute_set_map_to_property_values(
 {
     // Ensure enough space ..
     uno::Sequence< beans::PropertyValue > aAttributeList (SAL_N_ELEMENTS(g_TextAttrMap));
+    auto pAttributeList = aAttributeList.getArray();
 
     sal_Int32 nIndex = 0;
     for( GSList * item = attribute_set; item != nullptr; item = g_slist_next( item ) )
@@ -1362,11 +1363,11 @@ attribute_set_map_to_property_values(
         {
             if( g_TextAttrMap[text_attr].name[0] != '\0' )
             {
-                if( ! g_TextAttrMap[text_attr].toPropertyValue( aAttributeList[nIndex].Value, attribute->value) )
+                if( ! g_TextAttrMap[text_attr].toPropertyValue( pAttributeList[nIndex].Value, attribute->value) )
                     return false;
 
-                aAttributeList[nIndex].Name = OUString::createFromAscii( g_TextAttrMap[text_attr].name );
-                aAttributeList[nIndex].State = beans::PropertyState_DIRECT_VALUE;
+                pAttributeList[nIndex].Name = OUString::createFromAscii( g_TextAttrMap[text_attr].name );
+                pAttributeList[nIndex].State = beans::PropertyState_DIRECT_VALUE;
                 ++nIndex;
             }
         }

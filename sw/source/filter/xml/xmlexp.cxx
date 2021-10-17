@@ -411,13 +411,13 @@ void SwXMLExport::GetConfigurationSettings( Sequence < PropertyValue >& rProps)
         return;
 
     Sequence<PropertyValue> aFilteredProps(rProps.getLength());
+    auto aFilteredPropsRange = asNonConstRange(aFilteredProps);
     sal_Int32 nFilteredPropLen = 0;
-    PropertyValue *pValue = rProps.getArray();
     for (sal_Int32 i = 0; i < rProps.getLength(); ++i)
     {
-        if (pValue[i].Name == "EmbeddedDatabaseName")
+        if (rProps[i].Name == "EmbeddedDatabaseName")
             continue;
-        aFilteredProps[nFilteredPropLen] = rProps[i];
+        aFilteredPropsRange[nFilteredPropLen] = rProps[i];
         ++nFilteredPropLen;
     }
     aFilteredProps.realloc(nFilteredPropLen);

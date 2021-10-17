@@ -142,16 +142,17 @@ namespace frm
         if (_rEvent.Position + _rEvent.Count <= m_aTypedItems.getLength())
         {
             Sequence<Any> aTmp( m_aTypedItems.getLength() - _rEvent.Count );
+            auto aTmpRange = asNonConstRange(aTmp);
             sal_Int32 nStop = _rEvent.Position;
             sal_Int32 i = 0;
             for ( ; i < nStop; ++i)
             {
-                aTmp[i] = m_aTypedItems[i];
+                aTmpRange[i] = m_aTypedItems[i];
             }
             nStop = aTmp.getLength();
             for (sal_Int32 j = _rEvent.Position + _rEvent.Count; i < nStop; ++i, ++j)
             {
-                aTmp[i] = m_aTypedItems[j];
+                aTmpRange[i] = m_aTypedItems[j];
             }
             m_aTypedItems = aTmp;
         }

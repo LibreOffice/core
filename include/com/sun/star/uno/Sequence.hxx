@@ -180,6 +180,7 @@ template<class E> E * Sequence<E>::end() { return begin() + getLength(); }
 template<class E> E const * Sequence<E>::end() const
 { return begin() + getLength(); }
 
+#if !defined LIBO_INTERNAL_ONLY
 template< class E >
 inline E & Sequence< E >::operator [] ( sal_Int32 nIndex )
 {
@@ -187,6 +188,7 @@ inline E & Sequence< E >::operator [] ( sal_Int32 nIndex )
     assert(nIndex >= 0 && static_cast<sal_uInt32>(nIndex) < static_cast<sal_uInt32>(getLength()));
     return getArray()[ nIndex ];
 }
+#endif
 
 template< class E >
 inline const E & Sequence< E >::operator [] ( sal_Int32 nIndex ) const
@@ -295,8 +297,9 @@ template <class E> inline auto asNonConstRange(css::uno::Sequence<E>& s)
         // These allow to pass it as range-expression to range-based for loops
         E* begin() { return std::pair<E*, E*>::first; }
         E* end() { return std::pair<E*, E*>::second; }
+        E& operator[](sal_Int32 i) { assert(i >= 0 && i < end() - begin()); return begin()[i]; }
     };
-    return SequenceRange(s.getArray(), s.getLength());
+    return SequenceRange(s.getLength() ? s.getArray() : nullptr, s.getLength());
 };
 
 /// @endcond

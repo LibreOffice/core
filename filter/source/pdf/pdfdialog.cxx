@@ -100,9 +100,10 @@ Sequence< PropertyValue > SAL_CALL PDFDialog::getPropertyValues()
 
     if( i == nCount )
         maMediaDescriptor.realloc( ++nCount );
+    auto pMediaDescriptor = maMediaDescriptor.getArray();
 
-    maMediaDescriptor[ i ].Name = "FilterData";
-    maMediaDescriptor[ i ].Value <<= maFilterData;
+    pMediaDescriptor[ i ].Name = "FilterData";
+    pMediaDescriptor[ i ].Value <<= maFilterData;
 
     return maMediaDescriptor;
 }

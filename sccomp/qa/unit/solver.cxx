@@ -90,10 +90,11 @@ void LpSolverTest::testSolver(OUString const & rName)
     uno::Sequence<table::CellAddress> aVariables { {0, 0, 0 } };
 
     // constraints
-    uno::Sequence<sheet::SolverConstraint> aConstraints(1);
-    aConstraints[0].Left = table::CellAddress(0, 0, 0);
-    aConstraints[0].Operator = sheet::SolverConstraintOperator_LESS_EQUAL;
-    aConstraints[0].Right <<= 5.0;
+    uno::Sequence<sheet::SolverConstraint> aConstraints{
+        { /* Left     */ table::CellAddress(0, 0, 0),
+          /* Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
+          /* Right    */ uno::Any(5.0) }
+    };
 
     // initialize solver
     xSolver->setDocument( m_xDocument );

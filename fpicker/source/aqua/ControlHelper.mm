@@ -66,12 +66,13 @@ uno::Any HandleGetListValue(const NSControl* pControl, const sal_Int16 nControlA
             int nItems = [rMenu numberOfItems];
             if (nItems > 0) {
                 aItemList.realloc(nItems);
-            }
-            for (int i = 0; i < nItems; i++) {
-                NSString* sCFItem = [pButton itemTitleAtIndex:i];
-                if (nil != sCFItem) {
-                    aItemList[i] = [sCFItem OUString];
-                    SAL_INFO("fpicker.aqua","Return value[" << (i - 1) << "]: " << aItemList[i - 1]);
+                OUString* pItemList = aItemList.getArray();
+                for (int i = 0; i < nItems; i++) {
+                    NSString* sCFItem = [pButton itemTitleAtIndex:i];
+                    if (nil != sCFItem) {
+                        pItemList[i] = [sCFItem OUString];
+                        SAL_INFO("fpicker.aqua","Return value[" << (i - 1) << "]: " << aItemList[i - 1]);
+                    }
                 }
             }
 
