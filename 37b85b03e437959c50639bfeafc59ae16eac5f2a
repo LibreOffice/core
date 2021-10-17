@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4176633_768deae8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2021-10-17T19:27:04Z",
+      "side": 1,
+      "message": "Hi Noel,\n\nDo you think it\u0027s a good idea to use static var in this case ?\n\nThanks",
+      "revId": "37b85b03e437959c50639bfeafc59ae16eac5f2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
