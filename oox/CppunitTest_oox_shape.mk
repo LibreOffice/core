@@ -24,6 +24,9 @@ $(eval $(call gb_CppunitTest_use_libraries,oox_shape, \
     cppu \
     oox \
     sal \
+    svx \
+    svxcore \
+    tl \
     test \
     unotest \
     utl \
