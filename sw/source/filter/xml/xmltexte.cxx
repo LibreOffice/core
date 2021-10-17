@@ -390,7 +390,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                 sal_Int32 i = aProps.getLength();
                 while ( i > 0 )
                 {
-                    beans::PropertyValue& aProp = aProps[--i];
+                    const beans::PropertyValue& aProp = aProps[--i];
                     const SwHtmlOptType nType2 = SwApplet_Impl::GetOptionType( aProp.Name, true );
                     if ( nType2 == SwHtmlOptType::TAG)
                     {
@@ -485,7 +485,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                     sal_Int32 i = aProps.getLength();
                     while ( i > 0 )
                     {
-                        beans::PropertyValue& aProp = aProps[--i];
+                        const beans::PropertyValue& aProp = aProps[--i];
                         const SwHtmlOptType nType2 = SwApplet_Impl::GetOptionType( aProp.Name, true );
                         if (SwHtmlOptType::PARAM == nType2 || SwHtmlOptType::SIZE == nType2 )
                         {
@@ -511,7 +511,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                     sal_Int32 i = aProps.getLength();
                     while ( i > 0 )
                     {
-                        beans::PropertyValue& aProp = aProps[--i];
+                        const beans::PropertyValue& aProp = aProps[--i];
                         const SwHtmlOptType nType2 = SwApplet_Impl::GetOptionType( aProp.Name, false );
                         if ( nType2 == SwHtmlOptType::TAG)
                         {

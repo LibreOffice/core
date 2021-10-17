@@ -77,32 +77,33 @@ struct OleComponentNative_Impl {
     OleComponentNative_Impl()
     {
         // TODO: Extend format list
-        m_aSupportedGraphFormats.realloc( 5 );
+        m_aSupportedGraphFormats = {
 
-        m_aSupportedGraphFormats[0] = datatransfer::DataFlavor(
+        datatransfer::DataFlavor(
             "application/x-openoffice-emf;windows_formatname=\"Image EMF\"",
             "Windows Enhanced Metafile",
-            cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
+            cppu::UnoType<uno::Sequence< sal_Int8 >>::get() ),
 
-        m_aSupportedGraphFormats[1] = datatransfer::DataFlavor(
+        datatransfer::DataFlavor(
             "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"",
             "Windows Metafile",
-            cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
+            cppu::UnoType<uno::Sequence< sal_Int8 >>::get() ),
 
-        m_aSupportedGraphFormats[2] = datatransfer::DataFlavor(
+        datatransfer::DataFlavor(
             "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"",
             "Bitmap",
-            cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
+            cppu::UnoType<uno::Sequence< sal_Int8 >>::get() ),
 
-        m_aSupportedGraphFormats[3] = datatransfer::DataFlavor(
+        datatransfer::DataFlavor(
             "image/png",
             "PNG",
-            cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
+            cppu::UnoType<uno::Sequence< sal_Int8 >>::get() ),
 
-        m_aSupportedGraphFormats[4] = datatransfer::DataFlavor(
+        datatransfer::DataFlavor(
             "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"",
             "GDIMetafile",
-            cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
+            cppu::UnoType<uno::Sequence< sal_Int8 >>::get() )
+        };
     }
 
     bool ConvertDataForFlavor( const STGMEDIUM& aMedium,
@@ -462,13 +463,13 @@ uno::Sequence< datatransfer::DataFlavor > OleComponentNative_Impl::GetFlavorsFor
             OUString aAspectSuffix = GetFlavorSuffixFromAspect( nAsp );
 
             sal_Int32 nLength = aResult.getLength();
-            aResult.realloc( nLength + m_aSupportedGraphFormats.getLength() );
+            auto pResult = aResult.realloc( nLength + m_aSupportedGraphFormats.getLength() );
 
             for ( sal_Int32 nInd = 0; nInd < m_aSupportedGraphFormats.getLength(); nInd++ )
             {
-                aResult[nLength + nInd].MimeType = m_aSupportedGraphFormats[nInd].MimeType + aAspectSuffix;
-                aResult[nLength + nInd].HumanPresentableName = m_aSupportedGraphFormats[nInd].HumanPresentableName;
-                aResult[nLength + nInd].DataType = m_aSupportedGraphFormats[nInd].DataType;
+                pResult[nLength + nInd].MimeType = m_aSupportedGraphFormats[nInd].MimeType + aAspectSuffix;
+                pResult[nLength + nInd].HumanPresentableName = m_aSupportedGraphFormats[nInd].HumanPresentableName;
+                pResult[nLength + nInd].DataType = m_aSupportedGraphFormats[nInd].DataType;
             }
         }
 
@@ -921,13 +922,13 @@ uno::Sequence< embed::VerbDescriptor > OleComponent::GetVerbList()
                 HRESULT hr = pEnum->Next( MAX_ENUM_ELE, szEle, &nNum );
                 if( hr == S_OK || hr == S_FALSE )
                 {
-                    m_aVerbList.realloc( nSeqSize += nNum );
+                    auto pVerbList = m_aVerbList.realloc( nSeqSize += nNum );
                     for( sal_uInt32 nInd = 0; nInd < nNum; nInd++ )
                     {
-                        m_aVerbList[nSeqSize-nNum+nInd].VerbID = szEle[ nInd ].lVerb;
-                        m_aVerbList[nSeqSize-nNum+nInd].VerbName = WinAccToVcl_Impl( o3tl::toU(szEle[ nInd ].lpszVerbName) );
-                        m_aVerbList[nSeqSize-nNum+nInd].VerbFlags = szEle[ nInd ].fuFlags;
-                        m_aVerbList[nSeqSize-nNum+nInd].VerbAttributes = szEle[ nInd ].grfAttribs;
+                        pVerbList[nSeqSize-nNum+nInd].VerbID = szEle[ nInd ].lVerb;
+                        pVerbList[nSeqSize-nNum+nInd].VerbName = WinAccToVcl_Impl( o3tl::toU(szEle[ nInd ].lpszVerbName) );
+                        pVerbList[nSeqSize-nNum+nInd].VerbFlags = szEle[ nInd ].fuFlags;
+                        pVerbList[nSeqSize-nNum+nInd].VerbAttributes = szEle[ nInd ].grfAttribs;
                     }
                 }
                 else

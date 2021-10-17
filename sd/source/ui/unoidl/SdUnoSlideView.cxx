@@ -90,11 +90,12 @@ Any SAL_CALL SdUnoSlideView::getSelection()
         mrSlideSorter.GetController().GetPageSelector().GetSelectedPageCount());
 
     Sequence<Reference<XInterface> > aPages(nSelectedPageCount);
+    auto aPagesRange = asNonConstRange(aPages);
     int nIndex = 0;
     while (aSelectedPages.HasMoreElements() && nIndex<nSelectedPageCount)
     {
         slidesorter::model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
-        aPages[nIndex++] = pDescriptor->GetPage()->getUnoPage();
+        aPagesRange[nIndex++] = pDescriptor->GetPage()->getUnoPage();
     }
     aResult <<= aPages;
 

@@ -154,6 +154,7 @@ std::vector< o3tl::enumarray< LockFileComponent, OUString > > ShareControlFile::
         m_xSeekable->seek( 0 );
 
         sal_Int32 nRead = m_xInputStream->readBytes( aBuffer, static_cast<sal_Int32>(nLength) );
+        auto aBufferRange = asNonConstRange(aBuffer);
         nLength -= nRead;
         while ( nLength > 0 )
         {
@@ -163,7 +164,7 @@ std::vector< o3tl::enumarray< LockFileComponent, OUString > > ShareControlFile::
                 throw uno::RuntimeException();
 
             for ( sal_Int32 nInd = 0; nInd < nRead; nInd++ )
-                aBuffer[aBuffer.getLength() - static_cast<sal_Int32>(nLength) + nInd] = aTmpBuf[nInd];
+                aBufferRange[aBuffer.getLength() - static_cast<sal_Int32>(nLength) + nInd] = aTmpBuf[nInd];
             nLength -= nRead;
         }
 

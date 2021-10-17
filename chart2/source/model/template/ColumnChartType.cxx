@@ -65,12 +65,10 @@ struct StaticColumnChartTypeDefaults_Initializer
 private:
     static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
     {
-        Sequence< sal_Int32 > aSeq(2);
-
-        aSeq[0] = aSeq[1] = 0;
+        Sequence< sal_Int32 > aSeq{ 0, 0 };
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_BARCHARTTYPE_OVERLAP_SEQUENCE, aSeq );
 
-        aSeq[0] = aSeq[1] = 100;
+        aSeq = { 100, 100 };
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_BARCHARTTYPE_GAPWIDTH_SEQUENCE, aSeq );
     }
 };

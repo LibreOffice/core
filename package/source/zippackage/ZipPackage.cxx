@@ -1092,6 +1092,7 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const std::vector<
     };
 
     uno::Sequence< beans::StringPair > aOverridesSequence(aManList.size());
+    auto aOverridesSequenceRange = asNonConstRange(aOverridesSequence);
     sal_Int32 nOverSeqLength = 0;
     for (const auto& rMan : aManList)
     {
@@ -1105,8 +1106,8 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const std::vector<
             // only nonempty type makes sense here
             rMan[PKG_MNFST_FULLPATH].Value >>= aPath;
             //FIXME: For now we have no way of differentiating defaults from others.
-            aOverridesSequence[nOverSeqLength].First = "/" + aPath;
-            aOverridesSequence[nOverSeqLength].Second = aType;
+            aOverridesSequenceRange[nOverSeqLength].First = "/" + aPath;
+            aOverridesSequenceRange[nOverSeqLength].Second = aType;
             ++nOverSeqLength;
         }
     }
@@ -1255,17 +1256,18 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
         {
             uno::Sequence < PropertyValue > aPropSeq(
                 bIsGpgEncrypt ? PKG_SIZE_NOENCR_MNFST+1 : PKG_SIZE_NOENCR_MNFST );
-            aPropSeq [PKG_MNFST_MEDIATYPE].Name = sMediaType;
-            aPropSeq [PKG_MNFST_MEDIATYPE].Value <<= m_xRootFolder->GetMediaType();
-            aPropSeq [PKG_MNFST_VERSION].Name = sVersion;
-            aPropSeq [PKG_MNFST_VERSION].Value <<= m_xRootFolder->GetVersion();
-            aPropSeq [PKG_MNFST_FULLPATH].Name = sFullPath;
-            aPropSeq [PKG_MNFST_FULLPATH].Value <<= OUString("/");
+            auto pPropSeq = aPropSeq.getArray();
+            pPropSeq [PKG_MNFST_MEDIATYPE].Name = sMediaType;
+            pPropSeq [PKG_MNFST_MEDIATYPE].Value <<= m_xRootFolder->GetMediaType();
+            pPropSeq [PKG_MNFST_VERSION].Name = sVersion;
+            pPropSeq [PKG_MNFST_VERSION].Value <<= m_xRootFolder->GetVersion();
+            pPropSeq [PKG_MNFST_FULLPATH].Name = sFullPath;
+            pPropSeq [PKG_MNFST_FULLPATH].Value <<= OUString("/");
 
             if( bIsGpgEncrypt )
             {
-                aPropSeq[PKG_SIZE_NOENCR_MNFST].Name = "KeyInfo";
-                aPropSeq[PKG_SIZE_NOENCR_MNFST].Value <<= m_aGpgProps;
+                pPropSeq[PKG_SIZE_NOENCR_MNFST].Name = "KeyInfo";
+                pPropSeq[PKG_SIZE_NOENCR_MNFST].Value <<= m_aGpgProps;
             }
             aManList.push_back( aPropSeq );
         }

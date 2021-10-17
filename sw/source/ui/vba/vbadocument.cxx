@@ -29,6 +29,8 @@
 #include "vbamailmerge.hxx"
 #include "vbavariables.hxx"
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
+
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -504,8 +506,7 @@ SwVbaDocument::SaveAs2000( const uno::Any& FileName, const uno::Any& FileFormat,
     sal_Int32 nFileFormat = word::WdSaveFormat::wdFormatDocument;
     FileFormat >>= nFileFormat;
 
-    uno::Sequence<  beans::PropertyValue > storeProps(1);
-    storeProps[0].Name = "FilterName" ;
+    uno::Sequence storeProps{ comphelper::makePropertyValue("FilterName", uno::Any()) };
 
     setFilterPropsFromFormat( nFileFormat, storeProps );
 
@@ -533,9 +534,8 @@ SwVbaDocument::SavePreviewPngAs( const uno::Any& FileName )
     OUString sURL;
     osl::FileBase::getFileURLFromSystemPath( sFileName, sURL );
 
-    uno::Sequence<  beans::PropertyValue > storeProps(1);
-    storeProps[0].Name = "FilterName" ;
-    storeProps[0].Value <<= OUString("writer_png_Export");
+    uno::Sequence storeProps{ comphelper::makePropertyValue("FilterName",
+                                                            OUString("writer_png_Export")) };
 
     uno::Reference< frame::XStorable > xStor( getModel(), uno::UNO_QUERY_THROW );
     xStor->storeToURL( sURL, storeProps );

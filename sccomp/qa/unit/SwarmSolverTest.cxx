@@ -127,14 +127,14 @@ void SwarmSolverTest::testVariableBounded()
     uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
 
     // constraints
-    uno::Sequence<sheet::SolverConstraint> aConstraints(2);
-    aConstraints[0].Left = table::CellAddress(0, 1, 0);
-    aConstraints[0].Operator = sheet::SolverConstraintOperator_LESS_EQUAL;
-    aConstraints[0].Right <<= 100.0;
-
-    aConstraints[1].Left = table::CellAddress(0, 1, 0);
-    aConstraints[1].Operator = sheet::SolverConstraintOperator_GREATER_EQUAL;
-    aConstraints[1].Right <<= -100.0;
+    uno::Sequence<sheet::SolverConstraint> aConstraints{
+        { /* [0] Left     */ table::CellAddress(0, 1, 0),
+          /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
+          /*     Right    */ uno::Any(100.0) },
+        { /* [1] Left     */ table::CellAddress(0, 1, 0),
+          /*     Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
+          /*     Right    */ uno::Any(-100.0) }
+    };
 
     // initialize solver
     xSolver->setDocument(xDocument);
@@ -178,18 +178,17 @@ void SwarmSolverTest::testVariableConstrained()
     uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
 
     // constraints
-    uno::Sequence<sheet::SolverConstraint> aConstraints(3);
-    aConstraints[0].Left = table::CellAddress(0, 1, 0);
-    aConstraints[0].Operator = sheet::SolverConstraintOperator_GREATER_EQUAL;
-    aConstraints[0].Right <<= -50000.0;
-
-    aConstraints[1].Left = table::CellAddress(0, 1, 0);
-    aConstraints[1].Operator = sheet::SolverConstraintOperator_LESS_EQUAL;
-    aConstraints[1].Right <<= 0.0;
-
-    aConstraints[2].Left = table::CellAddress(0, 1, 1);
-    aConstraints[2].Operator = sheet::SolverConstraintOperator_GREATER_EQUAL;
-    aConstraints[2].Right <<= 10.0;
+    uno::Sequence<sheet::SolverConstraint> aConstraints{
+        { /* [0] Left     */ table::CellAddress(0, 1, 0),
+          /*     Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
+          /*     Right    */ uno::Any(-50000.0) },
+        { /* [1] Left     */ table::CellAddress(0, 1, 0),
+          /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
+          /*     Right    */ uno::Any(0.0) },
+        { /* [2] Left     */ table::CellAddress(0, 1, 1),
+          /*     Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
+          /*     Right    */ uno::Any(10.0) }
+    };
 
     // initialize solver
     xSolver->setDocument(xDocument);
@@ -233,23 +232,20 @@ void SwarmSolverTest::testTwoVariables()
     uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 2 }, { 0, 1, 3 } };
 
     // constraints
-    uno::Sequence<sheet::SolverConstraint> aConstraints(4);
-
-    aConstraints[0].Left = table::CellAddress(0, 1, 2);
-    aConstraints[0].Operator = sheet::SolverConstraintOperator_GREATER_EQUAL;
-    aConstraints[0].Right <<= -100.0;
-
-    aConstraints[1].Left = table::CellAddress(0, 1, 3);
-    aConstraints[1].Operator = sheet::SolverConstraintOperator_GREATER_EQUAL;
-    aConstraints[1].Right <<= -100.0;
-
-    aConstraints[2].Left = table::CellAddress(0, 1, 2);
-    aConstraints[2].Operator = sheet::SolverConstraintOperator_LESS_EQUAL;
-    aConstraints[2].Right <<= 100.0;
-
-    aConstraints[3].Left = table::CellAddress(0, 1, 3);
-    aConstraints[3].Operator = sheet::SolverConstraintOperator_LESS_EQUAL;
-    aConstraints[3].Right <<= 100.0;
+    uno::Sequence<sheet::SolverConstraint> aConstraints{
+        { /* [0] Left     */ table::CellAddress(0, 1, 2),
+          /*     Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
+          /*     Right    */ uno::Any(-100.0) },
+        { /* [1] Left     */ table::CellAddress(0, 1, 3),
+          /*     Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
+          /*     Right    */ uno::Any(-100.0) },
+        { /* [2] Left     */ table::CellAddress(0, 1, 2),
+          /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
+          /*     Right    */ uno::Any(100.0) },
+        { /* [3] Left     */ table::CellAddress(0, 1, 3),
+          /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
+          /*     Right    */ uno::Any(100.0) }
+    };
 
     // initialize solver
     xSolver->setDocument(xDocument);
@@ -299,55 +295,44 @@ void SwarmSolverTest::testMultipleVariables()
     };
 
     // constraints
-    uno::Sequence<sheet::SolverConstraint> aConstraints(12);
-
-    aConstraints[0].Left = table::CellAddress(0, 1, 5);
-    aConstraints[0].Operator = sheet::SolverConstraintOperator_GREATER_EQUAL;
-    aConstraints[0].Right <<= table::CellAddress(0, 1, 6);
-
-    aConstraints[1].Left = table::CellAddress(0, 2, 5);
-    aConstraints[1].Operator = sheet::SolverConstraintOperator_GREATER_EQUAL;
-    aConstraints[1].Right <<= table::CellAddress(0, 2, 6);
-
-    aConstraints[2].Left = table::CellAddress(0, 3, 5);
-    aConstraints[2].Operator = sheet::SolverConstraintOperator_GREATER_EQUAL;
-    aConstraints[2].Right <<= table::CellAddress(0, 3, 6);
-
-    aConstraints[3].Left = table::CellAddress(0, 4, 5);
-    aConstraints[3].Operator = sheet::SolverConstraintOperator_GREATER_EQUAL;
-    aConstraints[3].Right <<= table::CellAddress(0, 4, 6);
-
-    aConstraints[4].Left = table::CellAddress(0, 6, 1);
-    aConstraints[4].Operator = sheet::SolverConstraintOperator_GREATER_EQUAL;
-    aConstraints[4].Right <<= 0.0;
-
-    aConstraints[5].Left = table::CellAddress(0, 6, 2);
-    aConstraints[5].Operator = sheet::SolverConstraintOperator_GREATER_EQUAL;
-    aConstraints[5].Right <<= 0.0;
-
-    aConstraints[6].Left = table::CellAddress(0, 6, 3);
-    aConstraints[6].Operator = sheet::SolverConstraintOperator_GREATER_EQUAL;
-    aConstraints[6].Right <<= 0.0;
-
-    aConstraints[7].Left = table::CellAddress(0, 6, 4);
-    aConstraints[7].Operator = sheet::SolverConstraintOperator_GREATER_EQUAL;
-    aConstraints[7].Right <<= 0.0;
-
-    aConstraints[8].Left = table::CellAddress(0, 6, 1);
-    aConstraints[8].Operator = sheet::SolverConstraintOperator_LESS_EQUAL;
-    aConstraints[8].Right <<= 10000.0;
-
-    aConstraints[9].Left = table::CellAddress(0, 6, 2);
-    aConstraints[9].Operator = sheet::SolverConstraintOperator_LESS_EQUAL;
-    aConstraints[9].Right <<= 10000.0;
-
-    aConstraints[10].Left = table::CellAddress(0, 6, 3);
-    aConstraints[10].Operator = sheet::SolverConstraintOperator_LESS_EQUAL;
-    aConstraints[10].Right <<= 10000.0;
-
-    aConstraints[11].Left = table::CellAddress(0, 6, 4);
-    aConstraints[11].Operator = sheet::SolverConstraintOperator_LESS_EQUAL;
-    aConstraints[11].Right <<= 10000.0;
+    uno::Sequence<sheet::SolverConstraint> aConstraints{
+        { /* [ 0] Left     */ table::CellAddress(0, 1, 5),
+          /*      Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
+          /*      Right    */ uno::Any(table::CellAddress(0, 1, 6)) },
+        { /* [ 1] Left     */ table::CellAddress(0, 2, 5),
+          /*      Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
+          /*      Right    */ uno::Any(table::CellAddress(0, 2, 6)) },
+        { /* [ 2] Left     */ table::CellAddress(0, 3, 5),
+          /*      Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
+          /*      Right    */ uno::Any(table::CellAddress(0, 3, 6)) },
+        { /* [ 3] Left     */ table::CellAddress(0, 4, 5),
+          /*      Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
+          /*      Right    */ uno::Any(table::CellAddress(0, 4, 6)) },
+        { /* [ 4] Left     */ table::CellAddress(0, 6, 1),
+          /*      Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
+          /*      Right    */ uno::Any(0.0) },
+        { /* [ 5] Left     */ table::CellAddress(0, 6, 2),
+          /*      Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
+          /*      Right    */ uno::Any(0.0) },
+        { /* [ 6] Left     */ table::CellAddress(0, 6, 3),
+          /*      Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
+          /*      Right    */ uno::Any(0.0) },
+        { /* [ 7] Left     */ table::CellAddress(0, 6, 4),
+          /*      Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
+          /*      Right    */ uno::Any(0.0) },
+        { /* [ 8] Left     */ table::CellAddress(0, 6, 1),
+          /*      Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
+          /*      Right    */ uno::Any(10000.0) },
+        { /* [ 9] Left     */ table::CellAddress(0, 6, 2),
+          /*      Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
+          /*      Right    */ uno::Any(10000.0) },
+        { /* [10] Left     */ table::CellAddress(0, 6, 3),
+          /*      Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
+          /*      Right    */ uno::Any(10000.0) },
+        { /* [11] Left     */ table::CellAddress(0, 6, 4),
+          /*      Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
+          /*      Right    */ uno::Any(10000.0) }
+    };
 
     // initialize solver
     xSolver->setDocument(xDocument);

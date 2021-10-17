@@ -32,6 +32,7 @@
 #include <comphelper/classids.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
@@ -446,16 +447,15 @@ void SvxOle2Shape::createLink( const OUString& aLinkURL )
 
     ::comphelper::IEmbeddedHelper* pPersist = GetSdrObject()->getSdrModelFromSdrObject().GetPersist();
 
-    uno::Sequence< beans::PropertyValue > aMediaDescr( 1 );
-    aMediaDescr[0].Name = "URL";
-    aMediaDescr[0].Value <<= aLinkURL;
+    uno::Sequence< beans::PropertyValue > aMediaDescr{ comphelper::makePropertyValue("URL",
+                                                                                     aLinkURL) };
 
     uno::Reference< task::XInteractionHandler > xInteraction = pPersist->getInteractionHandler();
     if ( xInteraction.is() )
     {
-        aMediaDescr.realloc( 2 );
-        aMediaDescr[1].Name = "InteractionHandler";
-        aMediaDescr[1].Value <<= xInteraction;
+        auto pMediaDescr = aMediaDescr.realloc( 2 );
+        pMediaDescr[1].Name = "InteractionHandler";
+        pMediaDescr[1].Value <<= xInteraction;
     }
 
     //TODO/LATER: how to cope with creation failure?!

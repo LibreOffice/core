@@ -179,6 +179,7 @@ ScVbaListBox::setValueEvent( const uno::Any& value )
         throw uno::RuntimeException( "Invalid type. need boolean." );
     uno::Sequence< sal_Int16 > nList;
     m_xProps->getPropertyValue( "SelectedItems" ) >>= nList;
+    auto pList = nList.getArray();
     sal_Int16 nLength = static_cast<sal_Int16>( nList.getLength() );
     sal_Int16 nIndex = m_nIndex;
     for( sal_Int16 i = 0; i < nLength; i++ )
@@ -189,9 +190,9 @@ ScVbaListBox::setValueEvent( const uno::Any& value )
             {
                 for( ; i < nLength - 1; i++ )
                 {
-                    nList[i] = nList[i + 1];
+                    pList[i] = nList[i + 1];
                 }
-                nList.realloc( nLength - 1 );
+                pList = nList.realloc( nLength - 1 );
                 //m_xProps->setPropertyValue( sSourceName, uno::makeAny( nList ) );
                 fireClickEvent();
                 m_xProps->setPropertyValue( "SelectedItems", uno::makeAny( nList ) );
@@ -204,13 +205,12 @@ ScVbaListBox::setValueEvent( const uno::Any& value )
 
     if( getMultiSelect() )
     {
-        nList.realloc( nLength + 1 );
-        nList[nLength] = nIndex;
+        pList = nList.realloc( nLength + 1 );
+        pList[nLength] = nIndex;
     }
     else
     {
-        nList.realloc( 1 );
-        nList[0] = nIndex;
+        nList = { nIndex };
     }
     //m_xProps->setPropertyValue( sSourceName, uno::makeAny( nList ) );
     fireClickEvent();

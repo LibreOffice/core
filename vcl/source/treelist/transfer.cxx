@@ -655,9 +655,10 @@ bool TransferableHelper::SetString( const OUString& rString, const DataFlavor& r
     {
         const OString aByteStr(OUStringToOString(rString, osl_getThreadTextEncoding()));
         Sequence< sal_Int8 >    aSeq( aByteStr.getLength() + 1 );
+        auto pSeq = aSeq.getArray();
 
-        memcpy( aSeq.getArray(), aByteStr.getStr(), aByteStr.getLength() );
-        aSeq[ aByteStr.getLength() ] = 0;
+        memcpy( pSeq, aByteStr.getStr(), aByteStr.getLength() );
+        pSeq[ aByteStr.getLength() ] = 0;
         maAny <<= aSeq;
     }
     else

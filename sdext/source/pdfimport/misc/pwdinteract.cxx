@@ -92,9 +92,7 @@ uno::Any PDFPasswordRequest::getRequest()
 
 uno::Sequence< uno::Reference< task::XInteractionContinuation > > PDFPasswordRequest::getContinuations()
 {
-    uno::Sequence< uno::Reference< task::XInteractionContinuation > > aRet( 1 );
-    aRet[0] = this;
-    return aRet;
+    return { this };
 }
 
 void PDFPasswordRequest::setPassword( const OUString& rPwd )

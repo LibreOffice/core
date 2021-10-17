@@ -170,8 +170,7 @@ SvxProxyTabPage::SvxProxyTabPage(weld::Container* pPage, weld::DialogController*
     aProperty.Name  = "nodepath";
     aProperty.Value <<= OUString( "org.openoffice.Inet/Settings" );
 
-    Sequence< Any > aArgumentList( 1 );
-    aArgumentList[0] <<= aProperty;
+    Sequence< Any > aArgumentList{ Any(aProperty) };
 
     m_xConfigurationUpdateAccess = xConfigurationProvider->createInstanceWithArguments(
         "com.sun.star.configuration.ConfigurationUpdateAccess",

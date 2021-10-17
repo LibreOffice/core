@@ -202,8 +202,8 @@ void XSecController::createXSecComponent( )
      */
         return;
 
-    css::uno::Sequence <css::uno::Any> arg(1);
-    arg[0] <<= uno::Reference<xml::wrapper::XXMLDocumentWrapper>(m_xXMLDocumentWrapper);
+    css::uno::Sequence <css::uno::Any> arg{ css::uno::Any(
+        uno::Reference<xml::wrapper::XXMLDocumentWrapper>(m_xXMLDocumentWrapper)) };
     m_xSAXEventKeeper->initialize(arg);
 
     css::uno::Reference< css::xml::crypto::sax::XSAXEventKeeperStatusChangeListener >
@@ -280,9 +280,7 @@ bool XSecController::chainOn()
                     css::uno::Reference< css::lang::XInitialization > xInitialization
                         (m_xPreviousNodeOnSAXChain, css::uno::UNO_QUERY);
 
-                    css::uno::Sequence<css::uno::Any> aArgs( 1 );
-                    aArgs[0] <<= xSEKHandler;
-                    xInitialization->initialize(aArgs);
+                    xInitialization->initialize({ css::uno::Any(xSEKHandler) });
                 }
                 else
                 {
@@ -328,8 +326,8 @@ void XSecController::chainOff()
             css::uno::Reference< css::lang::XInitialization > xInitialization
                 (m_xPreviousNodeOnSAXChain, css::uno::UNO_QUERY);
 
-            css::uno::Sequence<css::uno::Any> aArgs( 1 );
-            aArgs[0] <<= uno::Reference<xml::sax::XDocumentHandler>();
+            css::uno::Sequence<css::uno::Any> aArgs{ css::uno::Any(
+                uno::Reference<xml::sax::XDocumentHandler>()) };
             xInitialization->initialize(aArgs);
         }
         else

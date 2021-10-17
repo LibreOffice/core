@@ -280,9 +280,10 @@ bool SwMailMergeGreetingsPage::commitPage( ::vcl::WizardTypes::CommitPageReason 
     {
         const SwDBData& rDBData = m_rConfigItem.GetCurrentDBData();
         Sequence< OUString> aAssignment = m_rConfigItem.GetColumnAssignment( rDBData );
-        if(aAssignment.getLength() <= MM_PART_GENDER)
-            aAssignment.realloc(MM_PART_GENDER + 1);
-        aAssignment[MM_PART_GENDER] = m_xFemaleColumnLB->get_active_text();
+        auto pAssignment = (aAssignment.getLength() <= MM_PART_GENDER)
+                               ? aAssignment.realloc(MM_PART_GENDER + 1)
+                               : aAssignment.getArray();
+        pAssignment[MM_PART_GENDER] = m_xFemaleColumnLB->get_active_text();
         m_rConfigItem.SetColumnAssignment( rDBData, aAssignment );
     }
     if (m_xFemaleFieldCB->get_value_changed_from_saved())
@@ -405,12 +406,13 @@ IMPL_LINK_NOARG(SwMailBodyDialog, OKHdl, weld::Button&, void)
         const SwDBData& rDBData = m_rConfigItem.GetCurrentDBData();
         Sequence< OUString> aAssignment = m_rConfigItem.GetColumnAssignment( rDBData );
         sal_Int32 nPos = m_xFemaleColumnLB->get_active();
-        if(aAssignment.getLength() < MM_PART_GENDER)
-            aAssignment.realloc(MM_PART_GENDER);
+        auto pAssignment = (aAssignment.getLength() <= MM_PART_GENDER)
+                               ? aAssignment.realloc(MM_PART_GENDER + 1)
+                               : aAssignment.getArray();
         if( nPos > 0 )
-            aAssignment[MM_PART_GENDER] = m_xFemaleColumnLB->get_active_text();
+            pAssignment[MM_PART_GENDER] = m_xFemaleColumnLB->get_active_text();
         else
-            aAssignment[MM_PART_GENDER].clear();
+            pAssignment[MM_PART_GENDER].clear();
         m_rConfigItem.SetColumnAssignment( rDBData, aAssignment );
     }
     if (m_xFemaleFieldCB->get_value_changed_from_saved())

@@ -96,7 +96,6 @@ static Reference< XInterface > openConfig(const char* sPackage)
         // get access to config API (not to file!)
         Reference< XMultiServiceFactory > xConfigProvider = theDefaultProvider::get( xContext );
 
-        Sequence< Any > lParams(1);
         PropertyValue   aParam    ;
 
         // define cfg path for open
@@ -105,7 +104,7 @@ static Reference< XInterface > openConfig(const char* sPackage)
             aParam.Value <<= OUString( "/org.openoffice.TypeDetection.Types/Types" );
         if (rtl_str_compareIgnoreAsciiCase(sPackage, "filters") == 0)
             aParam.Value <<= OUString( "/org.openoffice.TypeDetection.GraphicFilter/Filters" );
-        lParams[0] <<= aParam;
+        Sequence< Any > lParams{ Any(aParam) };
 
         // get access to file
         xCfg = xConfigProvider->createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", lParams);

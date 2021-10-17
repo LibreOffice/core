@@ -694,12 +694,9 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
 
               if (xDom.is())
               {
-                  uno::Sequence< uno::Any > glossaryTuple (5);
-                  glossaryTuple[0] <<= xDom;
-                  glossaryTuple[1] <<= gId;
-                  glossaryTuple[2] <<= gType;
-                  glossaryTuple[3] <<= gTarget;
-                  glossaryTuple[4] <<= contentType;
+                  uno::Sequence< uno::Any > glossaryTuple{ uno::Any(xDom), uno::Any(gId),
+                                                           uno::Any(gType), uno::Any(gTarget),
+                                                           uno::Any(contentType) };
                   aGlossaryDomList.push_back(glossaryTuple);
               }
           }

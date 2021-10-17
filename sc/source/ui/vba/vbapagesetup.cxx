@@ -100,12 +100,13 @@ void SAL_CALL ScVbaPageSetup::setPrintArea( const OUString& rAreas )
         if( getScRangeListForAddress( rAreas, excel::getDocShell( mxModel ) , aRange, aCellRanges ) )
         {
             uno::Sequence< table::CellRangeAddress > aSeq( aCellRanges.size() );
+            auto aSeqRange = asNonConstRange(aSeq);
             for ( size_t i = 0, nRanges = aCellRanges.size(); i < nRanges; ++i )
             {
                 ScRange & rRange = aCellRanges[ i ];
                 table::CellRangeAddress aRangeAddress;
                 ScUnoConversion::FillApiRange( aRangeAddress, rRange );
-                aSeq[ i++ ] = aRangeAddress;
+                aSeqRange[ i++ ] = aRangeAddress;
             }
             xPrintAreas->setPrintAreas( aSeq );
         }

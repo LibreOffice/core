@@ -199,8 +199,7 @@ ErrCode SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
         // reference counting!
         rtl::Reference<SvMacroTableEventDescriptor> pDescriptor =
             new SvMacroTableEventDescriptor(aAutotextEvents);
-        Sequence<Any> aFilterArguments( 1 );
-        aFilterArguments[0] <<= uno::Reference<XNameReplace>(pDescriptor);
+        Sequence<Any> aFilterArguments{ Any(uno::Reference<XNameReplace>(pDescriptor)) };
 
         // get filter
         OUString sFilterComponent = bOasis
@@ -509,9 +508,7 @@ ErrCode SwXMLTextBlocks::SetMacroTable(
                 new SvMacroTableEventDescriptor(rMacroTable,aAutotextEvents);
 
             // prepare arguments (prepend doc handler to given arguments)
-            Sequence<Any> aParams(2);
-            aParams[0] <<= xSaxWriter;
-            aParams[1] <<= xEvents;
+            Sequence<Any> aParams{ Any(xSaxWriter), Any(xEvents) };
 
             // get filter component
             OUString sFilterComponent = bOasis

@@ -824,35 +824,36 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 uno::Sequence < uno::Sequence < uno::Any >  > aAnySeq;
                 if (!(rVal >>= aAnySeq))
                     return false;
+                auto aAnySeqRange = asNonConstRange(aAnySeq);
                 sal_Int32 nLength = aAnySeq.getLength();
-                aSeq.realloc( nLength );
+                auto pSeq = aSeq.realloc( nLength );
                 for ( sal_Int32 n=0; n<nLength; n++ )
                 {
-                    uno::Sequence < uno::Any >& rAnySeq = aAnySeq[n];
+                    uno::Sequence < uno::Any >& rAnySeq = aAnySeqRange[n];
                     if ( rAnySeq.getLength() == 4 )
                     {
-                        if (!(rAnySeq[0] >>= aSeq[n].Position)) return false;
-                        if (!(rAnySeq[1] >>= aSeq[n].Alignment))
+                        if (!(rAnySeq[0] >>= pSeq[n].Position)) return false;
+                        if (!(rAnySeq[1] >>= pSeq[n].Alignment))
                         {
                             sal_Int32 nVal = 0;
                             if (rAnySeq[1] >>= nVal)
-                                aSeq[n].Alignment = static_cast<css::style::TabAlign>(nVal);
+                                pSeq[n].Alignment = static_cast<css::style::TabAlign>(nVal);
                             else
                                 return false;
                         }
-                        if (!(rAnySeq[2] >>= aSeq[n].DecimalChar))
+                        if (!(rAnySeq[2] >>= pSeq[n].DecimalChar))
                         {
                             OUString aVal;
                             if ( (rAnySeq[2] >>= aVal) && aVal.getLength() == 1 )
-                                aSeq[n].DecimalChar = aVal.toChar();
+                                pSeq[n].DecimalChar = aVal.toChar();
                             else
                                 return false;
                         }
-                        if (!(rAnySeq[3] >>= aSeq[n].FillChar))
+                        if (!(rAnySeq[3] >>= pSeq[n].FillChar))
                         {
                             OUString aVal;
                             if ( (rAnySeq[3] >>= aVal) && aVal.getLength() == 1 )
-                                aSeq[n].FillChar = aVal.toChar();
+                                pSeq[n].FillChar = aVal.toChar();
                             else
                                 return false;
                         }

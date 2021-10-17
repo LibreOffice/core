@@ -261,6 +261,7 @@ uno::Sequence<OUString> SAL_CALL QtFilePicker::getSelectedFiles()
     pSalInst->RunInMainThread([&urls, this]() { urls = m_pFileDialog->selectedUrls(); });
 
     uno::Sequence<OUString> seq(urls.size());
+    auto seqRange = asNonConstRange(seq);
 
     auto const trans = css::uri::ExternalUriReferenceTranslator::create(m_context);
     size_t i = 0;
@@ -283,7 +284,7 @@ uno::Sequence<OUString> SAL_CALL QtFilePicker::getSelectedFiles()
             SAL_WARN("vcl.qt", "cannot convert <" << extUrl << "> from locale encoding to UTF-8");
             intUrl = extUrl;
         }
-        seq[i++] = intUrl;
+        seqRange[i++] = intUrl;
     }
 
     return seq;
@@ -379,8 +380,9 @@ uno::Any QtFilePicker::handleGetListValue(const QComboBox* pWidget, sal_Int16 nC
         case ControlActions::GET_ITEMS:
         {
             Sequence<OUString> aItemList(pWidget->count());
+            auto aItemListRange = asNonConstRange(aItemList);
             for (sal_Int32 i = 0; i < pWidget->count(); ++i)
-                aItemList[i] = toOUString(pWidget->itemText(i));
+                aItemListRange[i] = toOUString(pWidget->itemText(i));
             aAny <<= aItemList;
             break;
         }

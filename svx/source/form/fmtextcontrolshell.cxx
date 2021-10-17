@@ -37,6 +37,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
@@ -695,9 +696,8 @@ namespace svx
                             DBG_ASSERT( pBoolItem, "FmTextControlShell::executeAttributeDialog: no bool item?!" );
                             if ( pBoolItem )
                             {
-                                aArgs.realloc( 1 );
-                                aArgs[ 0 ].Name = "Enable";
-                                aArgs[ 0 ].Value <<= pBoolItem->GetValue();
+                                aArgs = { comphelper::makePropertyValue("Enable",
+                                                                        pBoolItem->GetValue()) };
                             }
                         }
 

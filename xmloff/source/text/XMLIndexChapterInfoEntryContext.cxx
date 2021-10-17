@@ -167,18 +167,19 @@ void XMLIndexChapterInfoEntryContext::FillPropertyValues(
     XMLIndexSimpleEntryContext::FillPropertyValues(rValues);
 
     sal_Int32 nIndex = m_bCharStyleNameOK ? 2 : 1;
+    auto pValues = rValues.getArray();
 
     if( bChapterInfoOK )
     {
         // chapter info field
-        rValues[nIndex].Name = "ChapterFormat";
-        rValues[nIndex].Value <<= nChapterInfo;
+        pValues[nIndex].Name = "ChapterFormat";
+        pValues[nIndex].Value <<= nChapterInfo;
         nIndex++;
     }
     if( bOutlineLevelOK )
     {
-        rValues[nIndex].Name = "ChapterLevel";
-        rValues[nIndex].Value <<= nOutlineLevel;
+        pValues[nIndex].Name = "ChapterLevel";
+        pValues[nIndex].Value <<= nOutlineLevel;
     }
 }
 

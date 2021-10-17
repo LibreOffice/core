@@ -265,16 +265,17 @@ Sequence< OUString > lcl_CopyExcludingValuesFirst(
     Sequence< OUString > const & i_aInput )
 {
     Sequence< OUString > aOutput( i_aInput.getLength());
+    auto pOutput = aOutput.getArray();
     int nSourceIndex, nDestIndex;
     for( nSourceIndex = nDestIndex = 0; nSourceIndex < i_aInput.getLength(); nSourceIndex++ )
     {
         if( i_aInput[nSourceIndex] == "values-first" )
         {
-            aOutput.realloc( aOutput.getLength() - 1 );
+            pOutput = aOutput.realloc( aOutput.getLength() - 1 );
         }
         else
         {
-            aOutput[nDestIndex] = i_aInput[nSourceIndex];
+            pOutput[nDestIndex] = i_aInput[nSourceIndex];
             nDestIndex++;
         }
     }

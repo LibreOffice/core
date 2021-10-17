@@ -340,11 +340,12 @@ namespace slideshow::internal
 
         // output to result sequence
         uno::Sequence< animations::TargetProperties > aRes( aShapeHash.size() );
+        auto aResRange = asNonConstRange(aRes);
 
         ::std::size_t                       nCurrIndex(0);
         for( const auto& rIter : aShapeHash )
         {
-            animations::TargetProperties& rCurrProps( aRes[ nCurrIndex++ ] );
+            animations::TargetProperties& rCurrProps( aResRange[ nCurrIndex++ ] );
 
             if( rIter.first.mnParagraphIndex == -1 )
             {

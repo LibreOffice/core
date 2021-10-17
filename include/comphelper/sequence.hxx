@@ -24,6 +24,7 @@
 #include <osl/diagnose.h>
 
 #include <algorithm>
+#include <valarray>
 #include <vector>
 
 namespace comphelper
@@ -64,7 +65,8 @@ namespace comphelper
         sal_Int32 n1 = left.getLength();
         css::uno::Sequence<T> ret(n1 + right.getLength());
             //TODO: check for overflow
-        std::copy_n(left.getConstArray(), n1, ret.getArray());
+        auto pRet = ret.getArray();
+        std::copy_n(left.getConstArray(), n1, pRet);
         sal_Int32 n2 = n1;
         for (sal_Int32 i = 0; i != right.getLength(); ++i) {
             bool found = false;
@@ -75,7 +77,7 @@ namespace comphelper
                 }
             }
             if (!found) {
-                ret[n2++] = right[i];
+                pRet[n2++] = right[i];
             }
         }
         ret.realloc(n2);
@@ -206,6 +208,16 @@ namespace comphelper
     {
         return css::uno::Sequence<T>(
             v.data(), static_cast<sal_Int32>(v.size()) );
+    }
+
+    template <typename T>
+    inline css::uno::Sequence<T> containerToSequence(::std::valarray<T> const& v)
+    {
+        css::uno::Sequence<T> result(v.size());
+        auto resultRange = asNonConstRange(result);
+        for (size_t i = 0; i < v.size(); ++i)
+            resultRange[i] = v[i];
+        return result;
     }
 
 

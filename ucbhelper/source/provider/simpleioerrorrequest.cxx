@@ -42,11 +42,7 @@ SimpleIOErrorRequest::SimpleIOErrorRequest(
     setRequest( uno::makeAny( aRequest ) );
 
     // Fill continuations...
-    uno::Sequence< uno::Reference<
-            task::XInteractionContinuation > > aContinuations( 1 );
-    aContinuations[ 0 ] = new InteractionAbort( this );
-
-    setContinuations( aContinuations );
+    setContinuations({ new InteractionAbort(this) });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

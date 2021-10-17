@@ -216,10 +216,9 @@ namespace pcr
         if (!m_pHelper)
             return Sequence< OUString >();
 
-        Sequence< OUString > aReturn( 3 );
-        aReturn[ 0 ] = PROPERTY_TARGET_URL;
-        aReturn[ 1 ] = PROPERTY_TARGET_FRAME;
-        aReturn[ 2 ] = PROPERTY_BUTTONTYPE;
+        Sequence< OUString > aReturn{ PROPERTY_TARGET_URL,
+                                      PROPERTY_TARGET_FRAME,
+                                      PROPERTY_BUTTONTYPE };
         return aReturn;
     }
 

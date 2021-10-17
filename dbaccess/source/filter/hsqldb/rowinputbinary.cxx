@@ -309,10 +309,8 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const std::vector<ColumnDefiniti
                 sal_Int32 nScale = 0;
                 m_pStream->ReadInt32(nScale);
 
-                Sequence<Any> result(2);
                 OUString sNum = lcl_makeStringFromBigint(std::move(aBytes));
-                result[0] <<= lcl_putDot(sNum, nScale);
-                result[1] <<= nScale;
+                Sequence<Any> result{ Any(lcl_putDot(sNum, nScale)), Any(nScale) };
                 aData.push_back(makeAny(result));
             }
             break;

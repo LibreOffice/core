@@ -561,10 +561,11 @@ cairo::SurfaceSharedPtr X11SalGraphics::CreateBitmapSurface( const OutputDevice&
 css::uno::Any X11SalGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& /*rSize*/) const
 {
     cairo::X11Surface& rXlibSurface=dynamic_cast<cairo::X11Surface&>(*rSurface);
-    css::uno::Sequence< css::uno::Any > args( 3 );
-    args[0] <<= false;  // do not call XFreePixmap on it
-    args[1] <<= sal_Int64(rXlibSurface.getPixmap()->mhDrawable);
-    args[2] <<= sal_Int32( rXlibSurface.getDepth() );
+    css::uno::Sequence< css::uno::Any > args{
+        css::uno::Any(false), // do not call XFreePixmap on it
+        css::uno::Any(sal_Int64(rXlibSurface.getPixmap()->mhDrawable)),
+        css::uno::Any(sal_Int32( rXlibSurface.getDepth() ))
+    };
     return css::uno::Any(args);
 }
 

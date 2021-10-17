@@ -22,6 +22,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/URL.hpp>
 
+#include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <sal/log.hxx>
@@ -803,9 +804,7 @@ void SAL_CALL SlideShow::end()
 
 void SAL_CALL SlideShow::rehearseTimings()
 {
-    Sequence< PropertyValue > aArguments(1);
-    aArguments[0].Name = "RehearseTimings";
-    aArguments[0].Value <<= true;
+    Sequence< PropertyValue > aArguments{ comphelper::makePropertyValue("RehearseTimings", true) };
     startWithArguments( aArguments );
 }
 
@@ -910,19 +909,12 @@ void SAL_CALL SlideShow::disposing()
 
 void SlideShow::startPreview( const Reference< XDrawPage >& xDrawPage, const Reference< XAnimationNode >& xAnimationNode )
 {
-    Sequence< PropertyValue > aArguments(4);
-
-    aArguments[0].Name = "Preview";
-    aArguments[0].Value <<= true;
-
-    aArguments[1].Name = "FirstPage";
-    aArguments[1].Value <<= xDrawPage;
-
-    aArguments[2].Name = "AnimationNode";
-    aArguments[2].Value <<= xAnimationNode;
-
-    aArguments[3].Name = "ParentWindow";
-    aArguments[3].Value <<= Reference< XWindow >();
+    Sequence< PropertyValue > aArguments{
+        comphelper::makePropertyValue("Preview", true),
+        comphelper::makePropertyValue("FirstPage", xDrawPage),
+        comphelper::makePropertyValue("AnimationNode", xAnimationNode),
+        comphelper::makePropertyValue("ParentWindow", Reference< XWindow >()),
+    };
 
     startWithArguments( aArguments );
 }

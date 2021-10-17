@@ -235,10 +235,11 @@ Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
 
     const sal_Int32 nCount (rBoxes.size());
     Sequence<Sequence<geometry::RealPoint2D> > aPoints(nCount);
+    auto aPointsRange = asNonConstRange(aPoints);
     for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
     {
         const awt::Rectangle& rBox (rBoxes[nIndex]);
-        aPoints[nIndex] = Sequence<geometry::RealPoint2D>
+        aPointsRange[nIndex] = Sequence<geometry::RealPoint2D>
         {
             { o3tl::narrowing<double>(rBox.X), o3tl::narrowing<double>(rBox.Y) },
             { o3tl::narrowing<double>(rBox.X), o3tl::narrowing<double>(rBox.Y+rBox.Height) },

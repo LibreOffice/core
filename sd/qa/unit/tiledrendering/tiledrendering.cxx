@@ -22,6 +22,7 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editids.hrc>
@@ -1674,9 +1675,7 @@ void SdTiledRenderingTest::testTdf104405()
     rEditView.SetSelection(ESelection(0, 0, 0, 3)); // start para, start char, end para, end char.
 
     // trigger the clone-formatting/paintbrush command to copy formatting contents of cell
-    uno::Sequence< beans::PropertyValue > aArgs(1);
-    aArgs[0].Name  = "PersistentCopy";
-    aArgs[0].Value <<= true;
+    uno::Sequence aArgs{ comphelper::makePropertyValue("PersistentCopy", true) };
     comphelper::dispatchCommand(".uno:FormatPaintbrush", aArgs);
 
     Scheduler::ProcessEventsToIdle();

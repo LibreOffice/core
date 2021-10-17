@@ -136,8 +136,8 @@ void SmartTagMgr::GetActionSequences( std::vector< OUString >& rSmartTagTypes,
                                       Sequence < Sequence< Reference< smarttags::XSmartTagAction > > >& rActionComponentsSequence,
                                       Sequence < Sequence< sal_Int32 > >& rActionIndicesSequence ) const
 {
-    rActionComponentsSequence.realloc( rSmartTagTypes.size() );
-    rActionIndicesSequence.realloc( rSmartTagTypes.size() );
+    auto pActionComponentsSequence = rActionComponentsSequence.realloc( rSmartTagTypes.size() );
+    auto pActionIndicesSequence = rActionIndicesSequence.realloc( rSmartTagTypes.size() );
 
     for ( size_t j = 0; j < rSmartTagTypes.size(); ++j )
     {
@@ -146,19 +146,21 @@ void SmartTagMgr::GetActionSequences( std::vector< OUString >& rSmartTagTypes,
         const sal_Int32 nNumberOfActionRefs = maSmartTagMap.count( rSmartTagType );
 
         Sequence< Reference< smarttags::XSmartTagAction > > aActions( nNumberOfActionRefs );
+        auto aActionsRange = asNonConstRange(aActions);
         Sequence< sal_Int32 > aIndices( nNumberOfActionRefs );
+        auto aIndicesRange = asNonConstRange(aIndices);
 
         sal_uInt16 i = 0;
         auto iters = maSmartTagMap.equal_range( rSmartTagType );
 
         for ( auto aActionsIter = iters.first; aActionsIter != iters.second; ++aActionsIter )
         {
-            aActions[ i ] = (*aActionsIter).second.mxSmartTagAction;
-            aIndices[ i++ ] = (*aActionsIter).second.mnSmartTagIndex;
+            aActionsRange[ i ] = (*aActionsIter).second.mxSmartTagAction;
+            aIndicesRange[ i++ ] = (*aActionsIter).second.mnSmartTagIndex;
         }
 
-        rActionComponentsSequence[ j ] = aActions;
-        rActionIndicesSequence[ j ]  = aIndices;
+        pActionComponentsSequence[ j ] = aActions;
+        pActionIndicesSequence[ j ]  = aIndices;
     }
 }
 
@@ -375,8 +377,7 @@ void SmartTagMgr::PrepareConfiguration( std::u16string_view rConfigurationGroupN
     beans::PropertyValue aPathArgument;
     aPathArgument.Name = "nodepath";
     aPathArgument.Value = aAny;
-    Sequence< Any > aArguments( 1 );
-    aArguments[ 0 ] <<= aPathArgument;
+    Sequence< Any > aArguments{ Any(aPathArgument) };
     Reference< lang::XMultiServiceFactory > xConfProv = configuration::theDefaultProvider::get( mxContext );
 
     // try to get read-write access to configuration:

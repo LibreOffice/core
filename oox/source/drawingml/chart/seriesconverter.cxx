@@ -309,7 +309,6 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
         if( bCustomLabelField )
         {
             css::uno::Reference< XComponentContext > xContext = getComponentContext();
-            uno::Sequence< css::uno::Reference< XDataPointCustomLabelField > > aSequence;
 
             auto& rParagraphs = mrModel.mxText->mxTextBody->getParagraphs();
 
@@ -336,7 +335,8 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
                 }
             }
 
-            aSequence.realloc( nSequenceSize );
+            uno::Sequence< css::uno::Reference< XDataPointCustomLabelField > > aSequence( nSequenceSize );
+            auto aSequenceRange = asNonConstRange(aSequence);
 
             int nPos = 0;
 
@@ -373,7 +373,7 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
                         xCustomLabel->setString( pRun->getText() );
                         xCustomLabel->setFieldType( DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT );
                     }
-                    aSequence[ nPos++ ] = xCustomLabel;
+                    aSequenceRange[ nPos++ ] = xCustomLabel;
                 }
 
                 if( nParagraphs > 1 && nPos < nSequenceSize )
@@ -381,7 +381,7 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
                     css::uno::Reference< XDataPointCustomLabelField > xCustomLabel = DataPointCustomLabelField::create( xContext );
                     xCustomLabel->setFieldType( DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_NEWLINE );
                     xCustomLabel->setString("\n");
-                    aSequence[ nPos++ ] = xCustomLabel;
+                    aSequenceRange[ nPos++ ] = xCustomLabel;
                 }
             }
 

@@ -21,6 +21,7 @@
 #include <ResId.hxx>
 #include <strings.hrc>
 
+#include <comphelper/sequence.hxx>
 #include <osl/diagnose.h>
 
 #ifdef DEBUG_CHART2_TOOLS
@@ -64,16 +65,6 @@ private:
     const sal_Int32 m_nStubStartIndex;
     const sal_Int32 m_nWildcardLength;
 };
-
-template< typename T >
-    Sequence< T > lcl_ValarrayToSequence( const std::valarray< T > & rValarray )
-{
-    // is there a more elegant way of conversion?
-    Sequence< T > aResult( rValarray.size());
-    for( size_t i = 0; i < rValarray.size(); ++i )
-        aResult[i] = rValarray[i];
-    return aResult;
-}
 
 } // anonymous namespace
 
@@ -147,9 +138,10 @@ void InternalData::setData( const Sequence< Sequence< double > >& rDataInRows )
 Sequence< Sequence< double > > InternalData::getData() const
 {
     Sequence< Sequence< double > > aResult( m_nRowCount );
+    auto aResultRange = asNonConstRange(aResult);
 
     for( sal_Int32 i=0; i<m_nRowCount; ++i )
-        aResult[i] = lcl_ValarrayToSequence< tDataType::value_type >(
+        aResultRange[i] = comphelper::containerToSequence(
             m_aData[ std::slice( i*m_nColumnCount, m_nColumnCount, 1 ) ] );
 
     return aResult;
@@ -158,14 +150,14 @@ Sequence< Sequence< double > > InternalData::getData() const
 Sequence< double > InternalData::getColumnValues( sal_Int32 nColumnIndex ) const
 {
     if( nColumnIndex >= 0 && nColumnIndex < m_nColumnCount )
-        return lcl_ValarrayToSequence< tDataType::value_type >(
+        return comphelper::containerToSequence(
             m_aData[ std::slice( nColumnIndex, m_nRowCount, m_nColumnCount ) ] );
     return Sequence< double >();
 }
 Sequence< double > InternalData::getRowValues( sal_Int32 nRowIndex ) const
 {
     if( nRowIndex >= 0 && nRowIndex < m_nRowCount )
-        return lcl_ValarrayToSequence< tDataType::value_type >(
+        return comphelper::containerToSequence(
             m_aData[ std::slice( nRowIndex*m_nColumnCount, m_nColumnCount, 1 ) ] );
     return Sequence< double >();
 }

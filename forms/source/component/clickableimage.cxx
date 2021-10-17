@@ -44,6 +44,7 @@
 #include <services.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <svtools/imageresourceaccess.hxx>
@@ -317,15 +318,12 @@ namespace frm
 
                     if ( xDisp.is() )
                     {
-                        Sequence<PropertyValue> aProps(3);
-                        aProps[0].Name  = "URL";
-                        aProps[0].Value <<= aURL.Complete;
-
-                        aProps[1].Name  = "FrameName";
-                        aProps[1].Value = xSet->getPropertyValue(PROPERTY_TARGET_FRAME);
-
-                        aProps[2].Name  = "Referer";
-                        aProps[2].Value <<= xModel->getURL();
+                        Sequence<PropertyValue> aProps{
+                            comphelper::makePropertyValue("URL", aURL.Complete),
+                            comphelper::makePropertyValue(
+                                "FrameName", xSet->getPropertyValue(PROPERTY_TARGET_FRAME)),
+                            comphelper::makePropertyValue("Referer", xModel->getURL())
+                        };
 
                         xDisp->dispatch( aHyperLink, aProps );
                     }

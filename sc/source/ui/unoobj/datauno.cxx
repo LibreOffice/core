@@ -1266,15 +1266,15 @@ uno::Sequence<sheet::TableFilterField3> SAL_CALL ScFilterDescriptorBase::getFilt
             if (rEntry.IsQueryByEmpty())
             {
                 aField.Operator = sheet::FilterOperator2::EMPTY;
-                aField.Values.realloc(1);
-                aField.Values[0].NumericValue = 0;
+                auto pValues = aField.Values.realloc(1);
+                pValues[0].NumericValue = 0;
                 bByEmpty = true;
             }
             else if (rEntry.IsQueryByNonEmpty())
             {
                 aField.Operator = sheet::FilterOperator2::NOT_EMPTY;
-                aField.Values.realloc(1);
-                aField.Values[0].NumericValue = 0;
+                auto pValues = aField.Values.realloc(1);
+                pValues[0].NumericValue = 0;
                 bByEmpty = true;
             }
         }
@@ -1283,13 +1283,13 @@ uno::Sequence<sheet::TableFilterField3> SAL_CALL ScFilterDescriptorBase::getFilt
         {
             const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
             size_t nItemCount = rItems.size();
-            aField.Values.realloc(nItemCount);
+            auto pValues = aField.Values.realloc(nItemCount);
             size_t j = 0;
             for (const auto& rItem : rItems)
             {
-                aField.Values[j].IsNumeric = rItem.meType != ScQueryEntry::ByString;
-                aField.Values[j].StringValue = rItem.maString.getString();
-                aField.Values[j].NumericValue = rItem.mfVal;
+                pValues[j].IsNumeric = rItem.meType != ScQueryEntry::ByString;
+                pValues[j].StringValue = rItem.maString.getString();
+                pValues[j].NumericValue = rItem.mfVal;
                 ++j;
             }
         }
@@ -2285,10 +2285,11 @@ uno::Sequence<OUString> SAL_CALL ScDatabaseRangesObj::getElementNames()
         {
             const ScDBCollection::NamedDBs& rDBs = pNames->getNamedDBs();
             uno::Sequence<OUString> aSeq(rDBs.size());
+            auto aSeqRange = asNonConstRange(aSeq);
             size_t i = 0;
             for (const auto& rDB : rDBs)
             {
-                aSeq[i] = rDB->GetName();
+                aSeqRange[i] = rDB->GetName();
                 ++i;
             }
 

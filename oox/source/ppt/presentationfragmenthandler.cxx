@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/anytostring.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <sal/log.hxx>
 #include <tools/multisel.hxx>
@@ -225,11 +226,11 @@ void PresentationFragmentHandler::saveThemeToGrabBag(const oox::drawingml::Theme
                 // get existing grab bag
                 comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(aGrabBagPropName));
 
-                uno::Sequence<beans::PropertyValue> aTheme(2);
                 comphelper::SequenceAsHashMap aThemesHashMap;
 
                 // create current theme
                 uno::Sequence<beans::PropertyValue> aCurrentTheme(PredefinedClrSchemeId::Count);
+                auto pCurrentTheme = aCurrentTheme.getArray();
 
                 ClrScheme rClrScheme = pThemePtr->getClrScheme();
                 for (int nId = PredefinedClrSchemeId::dk2; nId != PredefinedClrSchemeId::Count; nId++)
@@ -241,22 +242,20 @@ void PresentationFragmentHandler::saveThemeToGrabBag(const oox::drawingml::Theme
                     rClrScheme.getColor(nToken, nColor);
                     const uno::Any& rColor = uno::makeAny(nColor);
 
-                    aCurrentTheme[nId].Name = sName;
-                    aCurrentTheme[nId].Value = rColor;
+                    pCurrentTheme[nId].Name = sName;
+                    pCurrentTheme[nId].Value = rColor;
                 }
 
 
-                // add new theme to the sequence
-                // Export code uses the master slide's index to find the right theme
-                // so use the same index in the grabbag.
-                aTheme[0].Name = "ppt/theme/theme" + OUString::number(nThemeIdx) + ".xml";
-                const uno::Any& rCurrentTheme = makeAny(aCurrentTheme);
-                aTheme[0].Value = rCurrentTheme;
-
-                // store DOM fragment for SmartArt re-generation
-                aTheme[1].Name = "OOXTheme";
-                const uno::Any& rOOXTheme = makeAny(pThemePtr->getFragment());
-                aTheme[1].Value = rOOXTheme;
+                uno::Sequence<beans::PropertyValue> aTheme{
+                    // add new theme to the sequence
+                    // Export code uses the master slide's index to find the right theme
+                    // so use the same index in the grabbag.
+                    comphelper::makePropertyValue(
+                        "ppt/theme/theme" + OUString::number(nThemeIdx) + ".xml", aCurrentTheme),
+                    // store DOM fragment for SmartArt re-generation
+                    comphelper::makePropertyValue("OOXTheme", pThemePtr->getFragment())
+                };
 
                 aThemesHashMap << aTheme;
 
@@ -650,16 +649,12 @@ void PresentationFragmentHandler::finalizeImport()
 
             if (!sAlgorithmName.isEmpty())
             {
-                uno::Sequence<beans::PropertyValue> aResult;
-                aResult.realloc(4);
-                aResult[0].Name = "algorithm-name";
-                aResult[0].Value <<= sAlgorithmName;
-                aResult[1].Name = "salt";
-                aResult[1].Value <<= sSalt;
-                aResult[2].Name = "iteration-count";
-                aResult[2].Value <<= nSpinCount;
-                aResult[3].Name = "hash";
-                aResult[3].Value <<= sHash;
+                uno::Sequence<beans::PropertyValue> aResult{
+                    comphelper::makePropertyValue("algorithm-name", sAlgorithmName),
+                    comphelper::makePropertyValue("salt", sSalt),
+                    comphelper::makePropertyValue("iteration-count", nSpinCount),
+                    comphelper::makePropertyValue("hash", sHash)
+                };
                 try
                 {
                     uno::Reference<beans::XPropertySet> xDocSettings(

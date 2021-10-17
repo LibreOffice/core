@@ -93,12 +93,10 @@ uno::Reference<uno::XInterface> ScModelObj::init()
     uno::Reference<container::XIndexAccess> xIA(xSheets, UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIA->getByIndex(0), UNO_QUERY_THROW);
 
-    m_xCells.realloc(3);
-    m_xCells[0] = xSheet->getCellByPosition(4, 5);
+    m_xCells = { xSheet->getCellByPosition(4, 5), xSheet->getCellByPosition(5, 5),
+                 xSheet->getCellByPosition(6, 5) };
     m_xCells[0]->setValue(15);
-    m_xCells[1] = xSheet->getCellByPosition(5, 5);
     m_xCells[1]->setValue(10);
-    m_xCells[2] = xSheet->getCellByPosition(6, 5);
     m_xCells[2]->setFormula("= E6 * F6");
 
     return xModel;

@@ -252,8 +252,7 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(const Reference<io::XInputStrea
     xml::sax::InputSource aParserInput;
     aParserInput.aInputStream = xInputStream;
 
-    Sequence<Any> aArgs(1);
-    aArgs[0] <<= rPropSet;
+    Sequence<Any> aArgs{ Any(rPropSet) };
 
     // get filter
     Reference<XInterface> xFilter

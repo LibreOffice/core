@@ -1388,16 +1388,17 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case 0:
         {
             // 4 Borders and 5 distances
-            uno::Sequence< uno::Any > aSeq( 9 );
-            aSeq[0] <<= SvxBoxItem::SvxLineToLine(GetLeft(), bConvert);
-            aSeq[1] <<= SvxBoxItem::SvxLineToLine(GetRight(), bConvert);
-            aSeq[2] <<= SvxBoxItem::SvxLineToLine(GetBottom(), bConvert);
-            aSeq[3] <<= SvxBoxItem::SvxLineToLine(GetTop(), bConvert);
-            aSeq[4] <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100( GetSmallestDistance()) : GetSmallestDistance());
-            aSeq[5] <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100( nTopDist ) : nTopDist );
-            aSeq[6] <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100( nBottomDist ) : nBottomDist );
-            aSeq[7] <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100( nLeftDist ) : nLeftDist );
-            aSeq[8] <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100( nRightDist ) : nRightDist );
+            uno::Sequence< uno::Any > aSeq{
+                uno::Any(SvxBoxItem::SvxLineToLine(GetLeft(), bConvert)),
+                uno::Any(SvxBoxItem::SvxLineToLine(GetRight(), bConvert)),
+                uno::Any(SvxBoxItem::SvxLineToLine(GetBottom(), bConvert)),
+                uno::Any(SvxBoxItem::SvxLineToLine(GetTop(), bConvert)),
+                uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100( GetSmallestDistance()) : GetSmallestDistance())),
+                uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100( nTopDist ) : nTopDist )),
+                uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100( nBottomDist ) : nBottomDist )),
+                uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100( nLeftDist ) : nLeftDist )),
+                uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100( nRightDist ) : nRightDist ))
+            };
             rVal <<= aSeq;
             return true;
         }
@@ -2209,18 +2210,19 @@ bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case 0:
         {
             // 2 BorderLines, flags, valid flags and distance
-            css::uno::Sequence< css::uno::Any > aSeq( 5 );
-            aSeq[0] <<= SvxBoxItem::SvxLineToLine( pHori.get(), bConvert);
-            aSeq[1] <<= SvxBoxItem::SvxLineToLine( pVert.get(), bConvert);
             if ( IsTable() )
                 nVal |= 0x01;
             if ( IsDist() )
                 nVal |= 0x02;
             if ( IsMinDist() )
                 nVal |= 0x04;
-            aSeq[2] <<= nVal;
-            aSeq[3] <<= static_cast<sal_Int16>(nValidFlags);
-            aSeq[4] <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100(GetDefDist()) : GetDefDist());
+            css::uno::Sequence< css::uno::Any > aSeq{
+                uno::Any(SvxBoxItem::SvxLineToLine( pHori.get(), bConvert)),
+                uno::Any(SvxBoxItem::SvxLineToLine( pVert.get(), bConvert)),
+                uno::Any(nVal),
+                uno::Any(static_cast<sal_Int16>(nValidFlags)),
+                uno::Any(static_cast<sal_Int32>(bConvert ? convertTwipToMm100(GetDefDist()) : GetDefDist()))
+            };
             rVal <<= aSeq;
             return true;
         }

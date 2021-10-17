@@ -358,9 +358,7 @@ ImplEventAttacherManager::ImplEventAttacherManager( const Reference< XIntrospect
     Reference< XInitialization > xInit( xAttacher, UNO_QUERY );
     if( xInit.is() )
     {
-        Sequence< Any > Arguments( 1 );
-        Arguments[0] <<= rIntrospection;
-        xInit->initialize( Arguments );
+        xInit->initialize({ Any(rIntrospection) });
     }
 }
 

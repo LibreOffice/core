@@ -44,6 +44,7 @@
 #include <svl/zforlist.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <connectivity/dbtools.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
@@ -777,14 +778,10 @@ void SbaGridControl::SetBrowserAttrs()
     try
     {
         Reference< XComponentContext > xContext = getContext();
-        css::beans::PropertyValue aArg;
-        css::uno::Sequence<css::uno::Any> aArguments(2);
-        aArg.Name = "IntrospectedObject";
-        aArg.Value <<= xGridModel;
-        aArguments[0] <<= aArg;
-        aArg.Name = "ParentWindow";
-        aArg.Value <<= VCLUnoHelper::GetInterface(this);
-        aArguments[1] <<= aArg;
+        css::uno::Sequence<css::uno::Any> aArguments{
+            Any(comphelper::makePropertyValue("IntrospectedObject", xGridModel)),
+            Any(comphelper::makePropertyValue("ParentWindow", VCLUnoHelper::GetInterface(this)))
+        };
         Reference<XExecutableDialog> xExecute(xContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.form.ControlFontDialog",
                                               aArguments, xContext), css::uno::UNO_QUERY_THROW);
         xExecute->execute();
@@ -1063,8 +1060,7 @@ void SbaGridControl::implTransferSelectedRows( sal_Int16 nRowPos, bool _bTrueIfC
     // collect the affected rows
     if ((GetSelectRowCount() == 0) && (nRowPos >= 0))
     {
-        aSelectedRows.realloc( 1 );
-        aSelectedRows[0] <<= static_cast<sal_Int32>(nRowPos + 1);
+        aSelectedRows = { Any(static_cast<sal_Int32>(nRowPos + 1)) };
         bSelectionBookmarks = false;
     }
     else if ( !IsAllSelected() && GetSelectRowCount() )

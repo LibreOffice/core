@@ -20,6 +20,8 @@
 #include <drawingml/shape3dproperties.hxx>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
+
+#include <comphelper/propertyvalue.hxx>
 #include <oox/token/tokens.hxx>
 #include <sal/log.hxx>
 
@@ -203,41 +205,42 @@ OUString Generic3DProperties::getPresetMaterialTypeString( sal_Int32 nType )
 css::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getCameraAttributes()
 {
     css::uno::Sequence<css::beans::PropertyValue> aSeq(6);
+    auto pSeq = aSeq.getArray();
     sal_Int32 nSize = 0;
     if( mfFieldOfVision.has() )
     {
-        aSeq[nSize].Name = "fov";
-        aSeq[nSize].Value <<= mfFieldOfVision.use();
+        pSeq[nSize].Name = "fov";
+        pSeq[nSize].Value <<= mfFieldOfVision.use();
         nSize++;
     }
     if( mfZoom.has() )
     {
-        aSeq[nSize].Name = "zoom";
-        aSeq[nSize].Value <<= mfZoom.use();
+        pSeq[nSize].Name = "zoom";
+        pSeq[nSize].Value <<= mfZoom.use();
         nSize++;
     }
     if( mnPreset.has() )
     {
-        aSeq[nSize].Name = "prst";
-        aSeq[nSize].Value <<= getCameraPrstName( mnPreset.use() );
+        pSeq[nSize].Name = "prst";
+        pSeq[nSize].Value <<= getCameraPrstName( mnPreset.use() );
         nSize++;
     }
     if( maCameraRotation.mnLatitude.has() )
     {
-        aSeq[nSize].Name = "rotLat";
-        aSeq[nSize].Value <<= maCameraRotation.mnLatitude.use();
+        pSeq[nSize].Name = "rotLat";
+        pSeq[nSize].Value <<= maCameraRotation.mnLatitude.use();
         nSize++;
     }
     if( maCameraRotation.mnLongitude.has() )
     {
-        aSeq[nSize].Name = "rotLon";
-        aSeq[nSize].Value <<= maCameraRotation.mnLongitude.use();
+        pSeq[nSize].Name = "rotLon";
+        pSeq[nSize].Value <<= maCameraRotation.mnLongitude.use();
         nSize++;
     }
     if( maCameraRotation.mnRevolution.has() )
     {
-        aSeq[nSize].Name = "rotRev";
-        aSeq[nSize].Value <<= maCameraRotation.mnRevolution.use();
+        pSeq[nSize].Name = "rotRev";
+        pSeq[nSize].Value <<= maCameraRotation.mnRevolution.use();
         nSize++;
     }
     aSeq.realloc( nSize );
@@ -247,35 +250,36 @@ css::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getCameraAt
 css::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getLightRigAttributes()
 {
     css::uno::Sequence<css::beans::PropertyValue> aSeq(5);
+    auto pSeq = aSeq.getArray();
     sal_Int32 nSize = 0;
     if( mnLightRigDirection.has() )
     {
-        aSeq[nSize].Name = "dir";
-        aSeq[nSize].Value <<= getLightRigDirName( mnLightRigDirection.use() );
+        pSeq[nSize].Name = "dir";
+        pSeq[nSize].Value <<= getLightRigDirName( mnLightRigDirection.use() );
         nSize++;
     }
     if( mnLightRigType.has() )
     {
-        aSeq[nSize].Name = "rig";
-        aSeq[nSize].Value <<= getLightRigName( mnLightRigType.use() );
+        pSeq[nSize].Name = "rig";
+        pSeq[nSize].Value <<= getLightRigName( mnLightRigType.use() );
         nSize++;
     }
     if( maLightRigRotation.mnLatitude.has() )
     {
-        aSeq[nSize].Name = "rotLat";
-        aSeq[nSize].Value <<= maLightRigRotation.mnLatitude.use();
+        pSeq[nSize].Name = "rotLat";
+        pSeq[nSize].Value <<= maLightRigRotation.mnLatitude.use();
         nSize++;
     }
     if( maLightRigRotation.mnLongitude.has() )
     {
-        aSeq[nSize].Name = "rotLon";
-        aSeq[nSize].Value <<= maLightRigRotation.mnLongitude.use();
+        pSeq[nSize].Name = "rotLon";
+        pSeq[nSize].Value <<= maLightRigRotation.mnLongitude.use();
         nSize++;
     }
     if( maLightRigRotation.mnRevolution.has() )
     {
-        aSeq[nSize].Name = "rotRev";
-        aSeq[nSize].Value <<= maLightRigRotation.mnRevolution.use();
+        pSeq[nSize].Name = "rotRev";
+        pSeq[nSize].Value <<= maLightRigRotation.mnRevolution.use();
         nSize++;
     }
     aSeq.realloc( nSize );
@@ -285,23 +289,24 @@ css::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getLightRig
 css::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getBevelAttributes( BevelProperties rProps )
 {
     css::uno::Sequence<css::beans::PropertyValue> aSeq(3);
+    auto pSeq = aSeq.getArray();
     sal_Int32 nSize = 0;
     if( rProps.mnPreset.has() )
     {
-        aSeq[nSize].Name = "prst";
-        aSeq[nSize].Value <<= getBevelPresetTypeString( rProps.mnPreset.use() );
+        pSeq[nSize].Name = "prst";
+        pSeq[nSize].Value <<= getBevelPresetTypeString( rProps.mnPreset.use() );
         nSize++;
     }
     if( rProps.mnWidth.has() )
     {
-        aSeq[nSize].Name = "w";
-        aSeq[nSize].Value <<= rProps.mnWidth.use();
+        pSeq[nSize].Name = "w";
+        pSeq[nSize].Value <<= rProps.mnWidth.use();
         nSize++;
     }
     if( rProps.mnHeight.has() )
     {
-        aSeq[nSize].Name = "h";
-        aSeq[nSize].Value <<= rProps.mnHeight.use();
+        pSeq[nSize].Name = "h";
+        pSeq[nSize].Value <<= rProps.mnHeight.use();
         nSize++;
     }
     aSeq.realloc( nSize );
@@ -311,78 +316,71 @@ css::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getBevelAtt
 css::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getColorAttributes(
         const Color& rColor, const GraphicHelper& rGraphicHelper, ::Color rPhClr )
 {
-    css::uno::Sequence<css::beans::PropertyValue> aSeq(2);
     const OUString& sColorScheme = rColor.getSchemeName();
     if( sColorScheme.isEmpty() )
     {
         // RGB color and transparency value
-        aSeq[0].Name = "rgbClr";
-        aSeq[0].Value <<= rColor.getColor( rGraphicHelper, rPhClr );
-        aSeq[1].Name = "rgbClrTransparency";
-        aSeq[1].Value <<= rColor.getTransparency();
+        return { comphelper::makePropertyValue("rgbClr", rColor.getColor( rGraphicHelper, rPhClr )),
+                 comphelper::makePropertyValue("rgbClrTransparency", rColor.getTransparency()) };
     }
-    else
-    {
-        // scheme color with name and transformations
-        aSeq[0].Name = "schemeClr";
-        aSeq[0].Value <<= sColorScheme;
-        aSeq[1].Name = "schemeClrTransformations";
-        aSeq[1].Value <<= rColor.getTransformations();
-    }
-    return aSeq;
+    // scheme color with name and transformations
+    return { comphelper::makePropertyValue("schemeClr", sColorScheme),
+             comphelper::makePropertyValue("schemeClrTransformations",
+                                           rColor.getTransformations()) };
 }
 
 css::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getShape3DAttributes(
         const GraphicHelper& rGraphicHelper, ::Color rPhClr )
 {
     css::uno::Sequence<css::beans::PropertyValue> aSeq(8);
+    auto pSeq = aSeq.getArray();
     sal_Int32 nSize = 0;
     if( mnExtrusionH.has() )
     {
-        aSeq[nSize].Name = "extrusionH";
-        aSeq[nSize].Value <<= mnExtrusionH.use();
+        pSeq[nSize].Name = "extrusionH";
+        pSeq[nSize].Value <<= mnExtrusionH.use();
         nSize++;
     }
     if( mnContourW.has() )
     {
-        aSeq[nSize].Name = "contourW";
-        aSeq[nSize].Value <<= mnContourW.use();
+        pSeq[nSize].Name = "contourW";
+        pSeq[nSize].Value <<= mnContourW.use();
         nSize++;
     }
     if( mnShapeZ.has() )
     {
-        aSeq[nSize].Name = "z";
-        aSeq[nSize].Value <<= mnShapeZ.use();
+        pSeq[nSize].Name = "z";
+        pSeq[nSize].Value <<= mnShapeZ.use();
         nSize++;
     }
     if( mnMaterial.has() )
     {
-        aSeq[nSize].Name = "prstMaterial";
-        aSeq[nSize].Value <<= getPresetMaterialTypeString( mnMaterial.use() );
+        pSeq[nSize].Name = "prstMaterial";
+        pSeq[nSize].Value <<= getPresetMaterialTypeString( mnMaterial.use() );
         nSize++;
     }
     if( maTopBevelProperties.has() )
     {
-        aSeq[nSize].Name = "bevelT";
-        aSeq[nSize].Value <<= getBevelAttributes( maTopBevelProperties.use() );
+        pSeq[nSize].Name = "bevelT";
+        pSeq[nSize].Value <<= getBevelAttributes( maTopBevelProperties.use() );
         nSize++;
     }
     if( maBottomBevelProperties.has() )
     {
-        aSeq[nSize].Name = "bevelB";
-        aSeq[nSize].Value <<= getBevelAttributes( maBottomBevelProperties.use() );
+        pSeq[nSize].Name = "bevelB";
+        pSeq[nSize].Value <<= getBevelAttributes( maBottomBevelProperties.use() );
         nSize++;
     }
     if( maExtrusionColor.isUsed() )
     {
-        aSeq[nSize].Name = "extrusionClr";
-        aSeq[nSize].Value <<= getColorAttributes( maExtrusionColor, rGraphicHelper, rPhClr );
+        pSeq[nSize].Name = "extrusionClr";
+        pSeq[nSize].Value <<= getColorAttributes( maExtrusionColor, rGraphicHelper, rPhClr );
         nSize++;
     }
     if( maContourColor.isUsed() )
     {
-        aSeq[nSize].Name = "contourClr";
-        aSeq[nSize].Value <<= getColorAttributes( maContourColor, rGraphicHelper, rPhClr );
+        pSeq[nSize].Name = "contourClr";
+        pSeq[nSize].Value <<= getColorAttributes( maContourColor, rGraphicHelper, rPhClr );
         nSize++;
     }
     aSeq.realloc( nSize );

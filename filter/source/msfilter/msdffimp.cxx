@@ -719,7 +719,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                         if ( nPt < o3tl::make_unsigned(aCoordinates.getLength()) )
                                         {
                                             nId = 4;
-                                            css::drawing::EnhancedCustomShapeParameterPair& rPara = aCoordinates[ nPt ];
+                                            css::drawing::EnhancedCustomShapeParameterPair& rPara = aCoordinates.getArray()[ nPt ];
                                             sal_Int32 nX = 0, nY = 0;
                                             if ( ( rPara.First.Value >>= nX ) && ( rPara.Second.Value >>= nY ) )
                                             {
@@ -729,9 +729,9 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                                 if ( pAny )
                                                     *pAny >>= aGluePoints;
                                                 sal_Int32 nGluePoints = aGluePoints.getLength();
-                                                aGluePoints.realloc( nGluePoints + 1 );
-                                                EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aGluePoints[ nGluePoints ].First, nX );
-                                                EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aGluePoints[ nGluePoints ].Second, nY );
+                                                auto pGluePoints = aGluePoints.realloc( nGluePoints + 1 );
+                                                EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pGluePoints[ nGluePoints ].First, nX );
+                                                EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pGluePoints[ nGluePoints ].Second, nY );
                                                 PropertyValue aProp;
                                                 aProp.Name = sGluePoints;
                                                 aProp.Value <<= aGluePoints;
@@ -1913,12 +1913,12 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( nNumElem <= 128 )
         {
             uno::Sequence< OUString > aEquations( nNumElem );
-            for ( sal_uInt16 i = 0; i < nNumElem; i++ )
+            for ( auto& rEquation : asNonConstRange(aEquations) )
             {
                 sal_Int16 nP1(0), nP2(0), nP3(0);
                 sal_uInt16 nFlags(0);
                 rIn.ReadUInt16( nFlags ).ReadInt16( nP1 ).ReadInt16( nP2 ).ReadInt16( nP3 );
-                aEquations[ i ] = EnhancedCustomShape2d::GetEquation( nFlags, nP1, nP2, nP3 );
+                rEquation = EnhancedCustomShape2d::GetEquation( nFlags, nP1, nP2, nP3 );
             }
             // pushing the whole Equations element
             aProp.Name = "Equations";
@@ -1949,6 +1949,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if (bImport)
         {
             uno::Sequence< beans::PropertyValues > aHandles( nNumElem );
+            auto aHandlesRange = asNonConstRange(aHandles);
             for (sal_uInt32 i = 0; i < nNumElem; ++i)
             {
                 PropVec aHandlePropVec;
@@ -2095,7 +2096,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 }
                 if ( !aHandlePropVec.empty() )
                 {
-                    aHandles[ i ] = comphelper::containerToSequence(aHandlePropVec);
+                    aHandlesRange[ i ] = comphelper::containerToSequence(aHandlePropVec);
                 }
             }
             // pushing the whole Handles element
@@ -2172,7 +2173,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             if (bImport)
             {
                 aCoordinates.realloc( nNumElemVert );
-                for (sal_uInt16 i = 0; i < nNumElemVert; ++i)
+                for (auto& rCoordinate : asNonConstRange(aCoordinates))
                 {
                     sal_Int32 nX(0), nY(0);
 
@@ -2203,8 +2204,8 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                             nY = nTmpB;
                         }
                     }
-                    EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aCoordinates[ i ].First, nX );
-                    EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aCoordinates[ i ].Second, nY );
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( rCoordinate.First, nX );
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( rCoordinate.Second, nY );
                 }
             }
             aProp.Name = "Coordinates";
@@ -2233,7 +2234,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             if ( nNumElemSeg )
             {
                 aSegments.realloc( nNumElemSeg );
-                for (sal_uInt16 i = 0; i < nNumElemSeg; ++i)
+                for (auto& rSegment : asNonConstRange(aSegments))
                 {
                     sal_uInt16 nTmp(0);
                     rIn.ReadUInt16( nTmp );
@@ -2333,8 +2334,8 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     // if the command is unknown, we will store all the data in nCnt, so it will be possible to export without loss
                     if ( nCommand == EnhancedCustomShapeSegmentCommand::UNKNOWN )
                         nCnt = static_cast<sal_Int16>(nTmp);
-                    aSegments[ i ].Command = nCommand;
-                    aSegments[ i ].Count = nCnt;
+                    rSegment.Command = nCommand;
+                    rSegment.Count = nCnt;
                 }
             }
             aProp.Name = "Segments";
@@ -2377,7 +2378,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             if (bImport)
             {
                 css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > aTextFrames( nNumElem );
-                for (sal_uInt16 i = 0; i < nNumElem; ++i)
+                for (auto& rTextFrame : asNonConstRange(aTextFrames))
                 {
                     sal_Int32 nLeft(0), nTop(0), nRight(0), nBottom(0);
 
@@ -2386,10 +2387,10 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                        .ReadInt32( nRight )
                        .ReadInt32( nBottom );
 
-                    EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrames[ i ].TopLeft.First,  nLeft );
-                    EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrames[ i ].TopLeft.Second, nTop  );
-                    EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrames[ i ].BottomRight.First,  nRight );
-                    EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrames[ i ].BottomRight.Second, nBottom);
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( rTextFrame.TopLeft.First,  nLeft );
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( rTextFrame.TopLeft.Second, nTop  );
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( rTextFrame.BottomRight.First,  nRight );
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( rTextFrame.BottomRight.Second, nBottom);
                 }
                 aProp.Name = "TextFrames";
                 aProp.Value <<= aTextFrames;
@@ -2418,7 +2419,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             if (bImport)
             {
                 aGluePoints.realloc( nNumElemVert );
-                for (sal_uInt16 i = 0; i < nNumElemVert; ++i)
+                for (auto& rGluePoint : asNonConstRange(aGluePoints))
                 {
                     sal_Int32 nX(0), nY(0);
                     if ( nElemSizeVert == 8 )
@@ -2436,8 +2437,8 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                         nX = nTmpA;
                         nY = nTmpB;
                     }
-                    EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aGluePoints[ i ].First,  nX );
-                    EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aGluePoints[ i ].Second, nY );
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( rGluePoint.First,  nX );
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( rGluePoint.Second, nY );
                 }
             }
             aProp.Name = "GluePoints";
@@ -2529,6 +2530,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
     if ( nAdjustmentValues )
     {
         uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq( nAdjustmentValues );
+        auto pAdjustmentSeq = aAdjustmentSeq.getArray();
         while( --nAdjustmentValues >= 0 )
         {
             sal_Int32 nValue = 0;
@@ -2542,11 +2544,11 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             {
                 double fValue = nValue;
                 fValue /= 65536;
-                aAdjustmentSeq[ nAdjustmentValues ].Value <<= fValue;
+                pAdjustmentSeq[ nAdjustmentValues ].Value <<= fValue;
             }
             else
-                aAdjustmentSeq[ nAdjustmentValues ].Value <<= nValue;
-            aAdjustmentSeq[ nAdjustmentValues ].State = ePropertyState;
+                pAdjustmentSeq[ nAdjustmentValues ].Value <<= nValue;
+            pAdjustmentSeq[ nAdjustmentValues ].State = ePropertyState;
             i--;
         }
         aProp.Name = "AdjustmentValues";
@@ -4523,15 +4525,16 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         const uno::Any* pAny = aGeometryItem.GetPropertyValueByName(sAdjustmentValues);
                         if (pAny && (*pAny >>= seqAdjustmentValues) && seqAdjustmentValues.getLength() > 1)
                         {
+                            auto pseqAdjustmentValues = seqAdjustmentValues.getArray();
                             if (seqAdjustmentValues[0].State == css::beans::PropertyState_DEFAULT_VALUE)
                             {
-                                seqAdjustmentValues[0].Value <<= -90.0;
-                                seqAdjustmentValues[0].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
+                                pseqAdjustmentValues[0].Value <<= -90.0;
+                                pseqAdjustmentValues[0].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
                             }
                             if (seqAdjustmentValues[1].State == css::beans::PropertyState_DEFAULT_VALUE)
                             {
-                                seqAdjustmentValues[1].Value <<= 0.0;
-                                seqAdjustmentValues[1].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
+                                pseqAdjustmentValues[1].Value <<= 0.0;
+                                pseqAdjustmentValues[1].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
                             }
                             seqAdjustmentValues[0].Value >>= fStartAngle;
                             seqAdjustmentValues[1].Value >>= fEndAngle;
@@ -4667,10 +4670,11 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         sal_Int32 nRight = static_cast<sal_Int32>((aPieRect_MS.getMaxX() - aEllipseRect_MS.getMinX()) * fTextFrameScaleX );
                         sal_Int32 nBottom= static_cast<sal_Int32>((aPieRect_MS.getMaxY() - aEllipseRect_MS.getMinY()) * fTextFrameScaleY );
                         css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > aTextFrame( 1 );
-                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrame[ 0 ].TopLeft.First,     nLeft );
-                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrame[ 0 ].TopLeft.Second,    nTop );
-                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrame[ 0 ].BottomRight.First, nRight );
-                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrame[ 0 ].BottomRight.Second,nBottom );
+                        auto pTextFrame = aTextFrame.getArray();
+                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pTextFrame[ 0 ].TopLeft.First,     nLeft );
+                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pTextFrame[ 0 ].TopLeft.Second,    nTop );
+                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pTextFrame[ 0 ].BottomRight.First, nRight );
+                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pTextFrame[ 0 ].BottomRight.Second,nBottom );
                         PropertyValue aProp;
                         aProp.Name = "TextFrames";
                         aProp.Value <<= aTextFrame;
@@ -7107,18 +7111,19 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
                 aFilterName = SvxMSDffManager::GetFilterNameFromClassID( aStgNm );
 
             uno::Sequence<beans::PropertyValue> aMedium(aFilterName.isEmpty() ? 3 : 4);
-            aMedium[0].Name = "InputStream";
+            auto pMedium = aMedium.getArray();
+            pMedium[0].Name = "InputStream";
             uno::Reference < io::XInputStream > xStream = new ::utl::OSeekableInputStreamWrapper( aMemStream );
-            aMedium[0].Value <<= xStream;
-            aMedium[1].Name = "URL";
-            aMedium[1].Value <<= OUString( "private:stream" );
-            aMedium[2].Name = "DocumentBaseURL";
-            aMedium[2].Value <<= rBaseURL;
+            pMedium[0].Value <<= xStream;
+            pMedium[1].Name = "URL";
+            pMedium[1].Value <<= OUString( "private:stream" );
+            pMedium[2].Name = "DocumentBaseURL";
+            pMedium[2].Value <<= rBaseURL;
 
             if ( !aFilterName.isEmpty() )
             {
-                aMedium[3].Name = "FilterName";
-                aMedium[3].Value <<= aFilterName;
+                pMedium[3].Name = "FilterName";
+                pMedium[3].Value <<= aFilterName;
             }
 
             OUString aName( aDstStgName );

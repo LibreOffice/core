@@ -45,8 +45,7 @@ struct LangSvcEntries
     explicit LangSvcEntries( const OUString &rSvcImplName ) :
         nLastTriedSvcIndex(-1)
     {
-        aSvcImplNames.realloc(1);
-        aSvcImplNames[0] = rSvcImplName;
+        aSvcImplNames = { rSvcImplName };
     }
 
     void Clear()

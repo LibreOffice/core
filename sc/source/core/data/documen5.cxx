@@ -80,19 +80,20 @@ static void lcl_SetChartParameters( const uno::Reference< chart2::data::XDataRec
     if ( !xReceiver.is() )
         return;
 
-    uno::Sequence< beans::PropertyValue > aArgs( 4 );
-    aArgs[0] = beans::PropertyValue(
-        "CellRangeRepresentation", -1,
-        uno::makeAny( rRanges ), beans::PropertyState_DIRECT_VALUE );
-    aArgs[1] = beans::PropertyValue(
-        "HasCategories", -1,
-        uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE );
-    aArgs[2] = beans::PropertyValue(
-        "FirstCellAsLabel", -1,
-        uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE );
-    aArgs[3] = beans::PropertyValue(
-        "DataRowSource", -1,
-        uno::makeAny( eDataRowSource ), beans::PropertyState_DIRECT_VALUE );
+    uno::Sequence< beans::PropertyValue > aArgs{
+        beans::PropertyValue(
+            "CellRangeRepresentation", -1,
+            uno::makeAny( rRanges ), beans::PropertyState_DIRECT_VALUE ),
+        beans::PropertyValue(
+            "HasCategories", -1,
+            uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE ),
+        beans::PropertyValue(
+            "FirstCellAsLabel", -1,
+            uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE ),
+        beans::PropertyValue(
+            "DataRowSource", -1,
+            uno::makeAny( eDataRowSource ), beans::PropertyState_DIRECT_VALUE )
+    };
     xReceiver->setArguments( aArgs );
 }
 
@@ -189,12 +190,13 @@ void ScDocument::SetChartRanges( std::u16string_view rChartName, const ::std::ve
 
     sal_Int32 nCount = static_cast<sal_Int32>( rRangesVector.size() );
     uno::Sequence< OUString > aRangeStrings(nCount);
+    auto aRangeStringsRange = asNonConstRange(aRangeStrings);
     for( sal_Int32 nN=0; nN<nCount; nN++ )
     {
         ScRangeList aScRangeList( rRangesVector[nN] );
         OUString sRangeStr;
         aScRangeList.Format( sRangeStr, ScRefFlags::RANGE_ABS_3D, *this, GetAddressConvention() );
-        aRangeStrings[nN]=sRangeStr;
+        aRangeStringsRange[nN]=sRangeStr;
     }
     ScChartHelper::SetChartRanges( xChartDoc, aRangeStrings );
 }

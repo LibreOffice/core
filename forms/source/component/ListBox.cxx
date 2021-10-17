@@ -1178,8 +1178,7 @@ namespace frm
         {
             if ( m_nNULLPos != -1 )
             {
-                aSelectionIndicies.realloc(1);
-                aSelectionIndicies[0] = m_nNULLPos;
+                aSelectionIndicies = { m_nNULLPos };
             }
         }
         else
@@ -1191,8 +1190,7 @@ namespace frm
             ValueList::const_iterator curValuePos = ::std::find( aValues.begin(), aValues.end(), v );
             if ( curValuePos != aValues.end() )
             {
-                aSelectionIndicies.realloc( 1 );
-                aSelectionIndicies[0] = curValuePos - aValues.begin();
+                aSelectionIndicies = { o3tl::narrowing<sal_Int16>(curValuePos - aValues.begin()) };
             }
         }
 
@@ -1391,8 +1389,7 @@ namespace frm
             OSL_VERIFY( _rExternalValue >>= nSelectIndex );
             if ( ( nSelectIndex >= 0 ) && ( nSelectIndex < static_cast<sal_Int32>(getStringItemList().size()) ) )
             {
-                aSelectIndexes.realloc( 1 );
-                aSelectIndexes[ 0 ] = static_cast< sal_Int16 >( nSelectIndex );
+                aSelectIndexes = { o3tl::narrowing<sal_Int16>(nSelectIndex) };
             }
         }
         break;

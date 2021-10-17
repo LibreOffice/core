@@ -27,6 +27,8 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
+#include <comphelper/propertyvalue.hxx>
+
 using namespace css;
 using namespace css::uno;
 
@@ -73,17 +75,13 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_TableConditionalEntryEnumerat
     xSheet0->getCellByPosition(1, 4)->setValue(10);
     xSheet0->getCellByPosition(2, 0)->setValue(-5.15);
 
-    uno::Sequence<beans::PropertyValue> aConditions(5);
-    aConditions[0].Name = "StyleName";
-    aConditions[0].Value <<= OUString("Result2");
-    aConditions[1].Name = "Formula1";
-    aConditions[1].Value <<= OUString("$Sheet1.$B$5");
-    aConditions[2].Name = "Formula2";
-    aConditions[2].Value <<= OUString("");
-    aConditions[3].Name = "Operator";
-    aConditions[3].Value <<= sheet::ConditionOperator_EQUAL;
-    aConditions[4].Name = "SourcePosition";
-    aConditions[4].Value <<= table::CellAddress(0, 1, 5);
+    uno::Sequence<beans::PropertyValue> aConditions{
+        comphelper::makePropertyValue("StyleName", OUString("Result2")),
+        comphelper::makePropertyValue("Formula1", OUString("$Sheet1.$B$5")),
+        comphelper::makePropertyValue("Formula2", OUString("")),
+        comphelper::makePropertyValue("Operator", sheet::ConditionOperator_EQUAL),
+        comphelper::makePropertyValue("SourcePosition", table::CellAddress(0, 1, 5))
+    };
 
     uno::Reference<beans::XPropertySet> xPropertySet(xSheet0, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetConditionalEntries> xSCE(

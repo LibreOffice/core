@@ -758,6 +758,7 @@ LocaleDataImpl::getAllCalendars2( const Locale& rLocale )
         allCalendars = func(calendarsCount);
 
         Sequence< Calendar2 > calendarsSeq(calendarsCount);
+        auto calendarsSeqRange = asNonConstRange(calendarsSeq);
         sal_Int16 offset = REF_OFFSET_COUNT;
         for(sal_Int16 i = 0; i < calendarsCount; i++) {
             OUString calendarID(allCalendars[offset]);
@@ -780,7 +781,7 @@ LocaleDataImpl::getAllCalendars2( const Locale& rLocale )
             offset++;
             Calendar2 aCalendar(days, months, gmonths, pmonths, eras, startOfWeekDay,
                     minimalDaysInFirstWeek, defaultCalendar, calendarID);
-            calendarsSeq[i] = aCalendar;
+            calendarsSeqRange[i] = aCalendar;
         }
         return calendarsSeq;
     }
@@ -812,6 +813,7 @@ LocaleDataImpl::getAllCurrencies2( const Locale& rLocale )
         sal_Unicode **allCurrencies = func(currencyCount);
 
         Sequence< Currency2 > seq(currencyCount);
+        auto seqRange = asNonConstRange(seq);
         for(int i = 0, nOff = 0; i < currencyCount; i++, nOff += 8 ) {
             Currency2 cur(
                     OUString(allCurrencies[nOff]), // string ID
@@ -823,7 +825,7 @@ LocaleDataImpl::getAllCurrencies2( const Locale& rLocale )
                     allCurrencies[nOff+6][0],   // short DecimalPlaces
                     allCurrencies[nOff+7][0] != 0 // boolean LegacyOnly
                     );
-            seq[i] = cur;
+            seqRange[i] = cur;
         }
         return seq;
     }
@@ -867,6 +869,7 @@ LocaleDataImpl::getAllFormats( const Locale& rLocale )
     formatCount += section[1].getFunc( *this, rLocale, "getAllFormats1");
 
     Sequence< FormatElement > seq(formatCount);
+    auto seqRange = asNonConstRange(seq);
     sal_Int32 f = 0;
     for (const FormatSection & s : section)
     {
@@ -883,7 +886,7 @@ LocaleDataImpl::getAllFormats( const Locale& rLocale )
                         OUString(formatArray[nOff + 4]),
                         formatArray[nOff + 5][0],
                         formatArray[nOff + 6][0] != 0);
-                seq[f] = elem;
+                seqRange[f] = elem;
             }
         }
     }
@@ -901,9 +904,10 @@ LocaleDataImpl::getDateAcceptancePatterns( const Locale& rLocale )
         sal_Int16 patternsCount = 0;
         sal_Unicode **patternsArray = func( patternsCount );
         Sequence< OUString > seq( patternsCount );
+        auto seqRange = asNonConstRange(seq);
         for (sal_Int16 i = 0; i < patternsCount; ++i)
         {
-            seq[i] = OUString( patternsArray[i] );
+            seqRange[i] = OUString( patternsArray[i] );
         }
         return seq;
     }
@@ -943,11 +947,12 @@ LocaleDataImpl::getCollatorImplementations( const Locale& rLocale )
         sal_Int16 collatorCount = 0;
         sal_Unicode **collatorArray = func(collatorCount);
         Sequence< Implementation > seq(collatorCount);
+        auto seqRange = asNonConstRange(seq);
         for(sal_Int16 i = 0; i < collatorCount; i++) {
             Implementation impl(
                     OUString(collatorArray[i * COLLATOR_ELEMENTS + COLLATOR_OFFSET_ALGO]),
                     collatorArray[i * COLLATOR_ELEMENTS + COLLATOR_OFFSET_DEFAULT][0] != 0);
-            seq[i] = impl;
+            seqRange[i] = impl;
         }
         return seq;
     }
@@ -965,8 +970,9 @@ LocaleDataImpl::getCollationOptions( const Locale& rLocale )
         sal_Int16 optionsCount = 0;
         sal_Unicode **optionsArray = func(optionsCount);
         Sequence< OUString > seq(optionsCount);
+        auto seqRange = asNonConstRange(seq);
         for(sal_Int16 i = 0; i < optionsCount; i++) {
-            seq[i] = OUString( optionsArray[i] );
+            seqRange[i] = OUString( optionsArray[i] );
         }
         return seq;
     }
@@ -984,8 +990,9 @@ LocaleDataImpl::getSearchOptions( const Locale& rLocale )
         sal_Int16 optionsCount = 0;
         sal_Unicode **optionsArray = func(optionsCount);
         Sequence< OUString > seq(optionsCount);
+        auto seqRange = asNonConstRange(seq);
         for(sal_Int16 i = 0; i < optionsCount; i++) {
-            seq[i] = OUString( optionsArray[i] );
+            seqRange[i] = OUString( optionsArray[i] );
         }
         return seq;
     }
@@ -1012,8 +1019,9 @@ LocaleDataImpl::getIndexAlgorithm( const Locale& rLocale )
 
     if ( indexArray ) {
         Sequence< OUString > seq(indexCount);
+        auto seqRange = asNonConstRange(seq);
         for(sal_Int16 i = 0; i < indexCount; i++) {
-            seq[i] = indexArray[i*5];
+            seqRange[i] = indexArray[i*5];
         }
         return seq;
     }
@@ -1096,8 +1104,9 @@ LocaleDataImpl::getUnicodeScripts( const Locale& rLocale )
         sal_Int16 scriptCount = 0;
         sal_Unicode **scriptArray = func(scriptCount);
         Sequence< UnicodeScript > seq(scriptCount);
+        auto seqRange = asNonConstRange(seq);
         for(sal_Int16 i = 0; i < scriptCount; i++) {
-            seq[i] = UnicodeScript( OUString(scriptArray[i]).toInt32() );
+            seqRange[i] = UnicodeScript( OUString(scriptArray[i]).toInt32() );
         }
         return seq;
     }
@@ -1115,8 +1124,9 @@ LocaleDataImpl::getFollowPageWords( const Locale& rLocale )
         sal_Int16 wordCount = 0;
         sal_Unicode **wordArray = func(wordCount);
         Sequence< OUString > seq(wordCount);
+        auto seqRange = asNonConstRange(seq);
         for(sal_Int16 i = 0; i < wordCount; i++) {
-            seq[i] = OUString(wordArray[i]);
+            seqRange[i] = OUString(wordArray[i]);
         }
         return seq;
     }
@@ -1135,9 +1145,10 @@ LocaleDataImpl::getTransliterations( const Locale& rLocale )
         sal_Unicode **transliterationsArray = func(transliterationsCount);
 
         Sequence< OUString > seq(transliterationsCount);
+        auto seqRange = asNonConstRange(seq);
         for(int i = 0; i < transliterationsCount; i++) {
             OUString  elem(transliterationsArray[i]);
-            seq[i] = elem;
+            seqRange[i] = elem;
         }
         return seq;
     }
@@ -1213,9 +1224,10 @@ LocaleDataImpl::getBreakIteratorRules( const Locale& rLocale  )
         sal_Int16 LCBreakIteratorRuleCount = 0;
         sal_Unicode **LCBreakIteratorRulesArray = func(LCBreakIteratorRuleCount);
         Sequence< OUString > seq(LCBreakIteratorRuleCount);
+        auto seqRange = asNonConstRange(seq);
         for(int i = 0; i < LCBreakIteratorRuleCount; i++) {
             OUString  elem(LCBreakIteratorRulesArray[i]);
-            seq[i] = elem;
+            seqRange[i] = elem;
         }
         return seq;
     }
@@ -1234,9 +1246,10 @@ LocaleDataImpl::getReservedWord( const Locale& rLocale  )
         sal_Int16 LCReservedWordsCount = 0;
         sal_Unicode **LCReservedWordsArray = func(LCReservedWordsCount);
         Sequence< OUString > seq(LCReservedWordsCount);
+        auto seqRange = asNonConstRange(seq);
         for(int i = 0; i < LCReservedWordsCount; i++) {
             OUString  elem(LCReservedWordsArray[i]);
-            seq[i] = elem;
+            seqRange[i] = elem;
         }
         return seq;
     }
@@ -1261,16 +1274,18 @@ LocaleDataImpl::getContinuousNumberingLevels( const lang::Locale& rLocale )
 
         // allocate memory for nAttributes attributes for each of the nStyles styles.
         Sequence< Sequence<beans::PropertyValue> > pv( nStyles );
-        for( auto& i : asNonConstRange(pv) ) {
+        auto pvRange = asNonConstRange(pv);
+        for( auto& i : pvRange ) {
             i = Sequence<beans::PropertyValue>( nAttributes );
         }
 
         sal_Unicode const *** pStyle = p0;
         for( int i=0;  i<nStyles;  i++ ) {
             sal_Unicode const ** pAttribute = pStyle[i];
+            auto pvElementRange = asNonConstRange(pvRange[i]);
             for( int j=0;  j<nAttributes;  j++ ) { // prefix, numberingtype, ...
                 sal_Unicode const * pString = pAttribute[j];
-                beans::PropertyValue& rVal = pv[i][j];
+                beans::PropertyValue& rVal = pvElementRange[j];
                 OUString sVal;
                 if( pString ) {
                     if( 0 != j && 2 != j )
@@ -1367,7 +1382,7 @@ LocaleDataImpl::getOutlineNumberingLevels( const lang::Locale& rLocale )
         sal_Unicode const **** p0 = func( nStyles, nLevels, nAttributes );
 
         Sequence< Reference<container::XIndexAccess> > aRet( nStyles );
-
+        auto aRetRange = asNonConstRange(aRet);
         sal_Unicode const **** pStyle = p0;
         for( i=0;  i<nStyles;  i++ )
         {
@@ -1411,7 +1426,7 @@ LocaleDataImpl::getOutlineNumberingLevels( const lang::Locale& rLocale )
             level[j].nFirstLineOffset    = 0;
             level[j].sTransliteration.clear();
             level[j].nNatNum             = 0;
-            aRet[i] = new OutlineNumbering( std::move(level), nLevels );
+            aRetRange[i] = new OutlineNumbering( std::move(level), nLevels );
         }
         return aRet;
     }
@@ -1472,6 +1487,7 @@ Sequence< Locale > SAL_CALL
 LocaleDataImpl::getAllInstalledLocaleNames()
 {
     Sequence< lang::Locale > seq( nbOfLocales );
+    auto seqRange = asNonConstRange(seq);
     sal_Int16 nInstalled = 0;
 
     for(const auto & i : aLibTable) {
@@ -1483,7 +1499,7 @@ LocaleDataImpl::getAllInstalledLocaleNames()
         if (lcl_LookupTableStatic::get().getFunctionSymbolByName( name, "getLocaleItem", &pCachedItem )) {
             if( pCachedItem )
                 cachedItem = std::move( pCachedItem );
-            seq[nInstalled++] = LanguageTag::convertToLocale( name.replace( cUnder, cHyphen), false);
+            seqRange[nInstalled++] = LanguageTag::convertToLocale( name.replace( cUnder, cHyphen), false);
         }
     }
     if ( nInstalled < nbOfLocales )

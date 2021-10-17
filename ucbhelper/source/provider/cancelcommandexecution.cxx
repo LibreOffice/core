@@ -51,12 +51,7 @@ void cancelCommandExecution( const uno::Any & rException,
             rtl::Reference< ucbhelper::InteractionRequest > xRequest
                 = new ucbhelper::InteractionRequest( rException );
 
-            uno::Sequence< uno::Reference< task::XInteractionContinuation > >
-                aContinuations( 1 );
-            aContinuations[ 0 ]
-                = new ucbhelper::InteractionAbort( xRequest.get() );
-
-            xRequest->setContinuations( aContinuations );
+            xRequest->setContinuations({ new ucbhelper::InteractionAbort(xRequest.get()) });
 
             xIH->handle( xRequest );
 

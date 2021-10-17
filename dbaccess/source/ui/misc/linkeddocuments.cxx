@@ -65,24 +65,22 @@ namespace dbaui
                                                     sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
                                                     sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 )
         {
-            Sequence< sal_Int8 > aResult( 16 );
-            aResult[0] = static_cast<sal_Int8>(n1 >> 24);
-            aResult[1] = static_cast<sal_Int8>(( n1 << 8 ) >> 24);
-            aResult[2] = static_cast<sal_Int8>(( n1 << 16 ) >> 24);
-            aResult[3] = static_cast<sal_Int8>(( n1 << 24 ) >> 24);
-            aResult[4] = static_cast<sal_Int8>(n2 >> 8);
-            aResult[5] = static_cast<sal_Int8>(( n2 << 8 ) >> 8);
-            aResult[6] = static_cast<sal_Int8>(n3 >> 8);
-            aResult[7] = static_cast<sal_Int8>(( n3 << 8 ) >> 8);
-            aResult[8] = b8;
-            aResult[9] = b9;
-            aResult[10] = b10;
-            aResult[11] = b11;
-            aResult[12] = b12;
-            aResult[13] = b13;
-            aResult[14] = b14;
-            aResult[15] = b15;
-
+            Sequence< sal_Int8 > aResult{ /* [ 0] */ static_cast<sal_Int8>(n1 >> 24),
+                                          /* [ 1] */ static_cast<sal_Int8>(( n1 << 8 ) >> 24),
+                                          /* [ 2] */ static_cast<sal_Int8>(( n1 << 16 ) >> 24),
+                                          /* [ 3] */ static_cast<sal_Int8>(( n1 << 24 ) >> 24),
+                                          /* [ 4] */ static_cast<sal_Int8>(n2 >> 8),
+                                          /* [ 5] */ static_cast<sal_Int8>(( n2 << 8 ) >> 8),
+                                          /* [ 6] */ static_cast<sal_Int8>(n3 >> 8),
+                                          /* [ 7] */ static_cast<sal_Int8>(( n3 << 8 ) >> 8),
+                                          /* [ 8] */ static_cast<sal_Int8>(b8),
+                                          /* [ 9] */ static_cast<sal_Int8>(b9),
+                                          /* [10] */ static_cast<sal_Int8>(b10),
+                                          /* [11] */ static_cast<sal_Int8>(b11),
+                                          /* [12] */ static_cast<sal_Int8>(b12),
+                                          /* [13] */ static_cast<sal_Int8>(b13),
+                                          /* [14] */ static_cast<sal_Int8>(b14),
+                                          /* [15] */ static_cast<sal_Int8>(b15) };
             return aResult;
         }
     }

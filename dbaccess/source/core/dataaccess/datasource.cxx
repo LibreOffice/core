@@ -348,11 +348,11 @@ Reference<XConnection> OSharedConnectionManager::getConnection( const OUString& 
     TConnectionMap::key_type nId;
     Sequence< PropertyValue > aInfoCopy(_aInfo);
     sal_Int32 nPos = aInfoCopy.getLength();
-    aInfoCopy.realloc( nPos + 2 );
-    aInfoCopy[nPos].Name      = "TableFilter";
-    aInfoCopy[nPos++].Value <<= _pDataSource->m_pImpl->m_aTableFilter;
-    aInfoCopy[nPos].Name      = "TableTypeFilter";
-    aInfoCopy[nPos++].Value <<= _pDataSource->m_pImpl->m_aTableTypeFilter;
+    auto pInfoCopy = aInfoCopy.realloc( nPos + 2 );
+    pInfoCopy[nPos].Name      = "TableFilter";
+    pInfoCopy[nPos++].Value <<= _pDataSource->m_pImpl->m_aTableFilter;
+    pInfoCopy[nPos].Name      = "TableTypeFilter";
+    pInfoCopy[nPos++].Value <<= _pDataSource->m_pImpl->m_aTableTypeFilter;
 
     OUString sUser = user;
     OUString sPassword = password;
@@ -684,17 +684,18 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
         if (!sPwd.isEmpty()) ++nAdditionalArgs;
 
         Sequence< PropertyValue > aUserPwd(nAdditionalArgs);
+        auto aUserPwdRange = asNonConstRange(aUserPwd);
         sal_Int32 nArgPos = 0;
         if (!sUser.isEmpty())
         {
-            aUserPwd[ nArgPos ].Name = "user";
-            aUserPwd[ nArgPos ].Value <<= sUser;
+            aUserPwdRange[ nArgPos ].Name = "user";
+            aUserPwdRange[ nArgPos ].Value <<= sUser;
             ++nArgPos;
         }
         if (!sPwd.isEmpty())
         {
-            aUserPwd[ nArgPos ].Name = "password";
-            aUserPwd[ nArgPos ].Value <<= sPwd;
+            aUserPwdRange[ nArgPos ].Name = "password";
+            aUserPwdRange[ nArgPos ].Value <<= sPwd;
         }
         Reference< XDriver > xDriver;
         try
@@ -728,17 +729,17 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
             if ( m_pImpl->isEmbeddedDatabase() )
             {
                 sal_Int32 nCount = aDriverInfo.getLength();
-                aDriverInfo.realloc(nCount + 3 );
+                auto pDriverInfo = aDriverInfo.realloc(nCount + 3 );
 
-                aDriverInfo[nCount].Name = "URL";
-                aDriverInfo[nCount++].Value <<= m_pImpl->getURL();
+                pDriverInfo[nCount].Name = "URL";
+                pDriverInfo[nCount++].Value <<= m_pImpl->getURL();
 
-                aDriverInfo[nCount].Name = "Storage";
+                pDriverInfo[nCount].Name = "Storage";
                 Reference< css::document::XDocumentSubStorageSupplier> xDocSup( m_pImpl->getDocumentSubStorageSupplier() );
-                aDriverInfo[nCount++].Value <<= xDocSup->getDocumentSubStorage("database",ElementModes::READWRITE);
+                pDriverInfo[nCount++].Value <<= xDocSup->getDocumentSubStorage("database",ElementModes::READWRITE);
 
-                aDriverInfo[nCount].Name = "Document";
-                aDriverInfo[nCount++].Value <<= getDatabaseDocument();
+                pDriverInfo[nCount].Name = "Document";
+                pDriverInfo[nCount++].Value <<= getDatabaseDocument();
             }
             if (nAdditionalArgs)
                 xReturn = xManager->getConnectionWithInfo(m_pImpl->m_sConnectURL, ::comphelper::concatSequences(aUserPwd,aDriverInfo));
@@ -1271,8 +1272,7 @@ Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( )
             aValue >>= sSupportService;
             if ( !sSupportService.isEmpty() )
             {
-                Sequence<Any> aArgs(1);
-                aArgs[0] <<= NamedValue("DataSource",makeAny(xMy));
+                Sequence<Any> aArgs{ Any(NamedValue("DataSource",makeAny(xMy))) };
                 xContainer.set( m_pImpl->m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext(sSupportService, aArgs, m_pImpl->m_aContext), UNO_QUERY);
             }
         }

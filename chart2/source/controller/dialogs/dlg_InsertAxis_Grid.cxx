@@ -23,14 +23,9 @@ namespace chart
 {
 
 InsertAxisOrGridDialogData::InsertAxisOrGridDialogData()
-        : aPossibilityList(6)
-        , aExistenceList(6)
+        : aPossibilityList{ true, true, true, true, true, true }
+        , aExistenceList{ false, false, false, false, false, false }
 {
-    sal_Int32 nN = 0;
-    for(nN=6;nN--;)
-        aPossibilityList[nN]=true;
-    for(nN=6;nN--;)
-        aExistenceList[nN]=false;
 }
 
 // SchAxisDlg
@@ -74,12 +69,13 @@ SchAxisDlg::SchAxisDlg(weld::Window* pWindow,
 
 void SchAxisDlg::getResult( InsertAxisOrGridDialogData& rOutput )
 {
-    rOutput.aExistenceList[0]=m_xCbPrimaryX->get_active();
-    rOutput.aExistenceList[1]=m_xCbPrimaryY->get_active();
-    rOutput.aExistenceList[2]=m_xCbPrimaryZ->get_active();
-    rOutput.aExistenceList[3]=m_xCbSecondaryX->get_active();
-    rOutput.aExistenceList[4]=m_xCbSecondaryY->get_active();
-    rOutput.aExistenceList[5]=m_xCbSecondaryZ->get_active();
+    auto pExistenceList = rOutput.aExistenceList.getArray();
+    pExistenceList[0]=m_xCbPrimaryX->get_active();
+    pExistenceList[1]=m_xCbPrimaryY->get_active();
+    pExistenceList[2]=m_xCbPrimaryZ->get_active();
+    pExistenceList[3]=m_xCbSecondaryX->get_active();
+    pExistenceList[4]=m_xCbSecondaryY->get_active();
+    pExistenceList[5]=m_xCbSecondaryZ->get_active();
 }
 
 SchGridDlg::SchGridDlg(weld::Window* pParent, const InsertAxisOrGridDialogData& rInput)
