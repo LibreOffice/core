@@ -104,18 +104,17 @@ Reference< XSpreadsheetDocument> const & OCalcConnection::acquireDoc()
         return m_xDoc;
     }
     //  open read-only as long as updating isn't implemented
-    Sequence<PropertyValue> aArgs(2);
-    aArgs[0].Name = "Hidden";
-    aArgs[0].Value <<= true;
-    aArgs[1].Name = "ReadOnly";
-    aArgs[1].Value <<= true;
+    Sequence<PropertyValue> aArgs(m_sPassword.isEmpty() ? 2 : 3);
+    auto pArgs = aArgs.getArray();
+    pArgs[0].Name = "Hidden";
+    pArgs[0].Value <<= true;
+    pArgs[1].Name = "ReadOnly";
+    pArgs[1].Value <<= true;
 
     if ( !m_sPassword.isEmpty() )
     {
-        const sal_Int32 nPos = aArgs.getLength();
-        aArgs.realloc(nPos+1);
-        aArgs[nPos].Name = "Password";
-        aArgs[nPos].Value <<= m_sPassword;
+        pArgs[2].Name = "Password";
+        pArgs[2].Value <<= m_sPassword;
     }
 
     Reference< XDesktop2 > xDesktop = Desktop::create( getDriver()->getComponentContext() );

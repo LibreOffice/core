@@ -20,6 +20,7 @@
 #include <sal/types.h>
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
@@ -1456,12 +1457,13 @@ css::uno::Sequence< css::beans::PropertyValue > PrinterController::getJobPropert
         aMergeSet.insert( rPropVal.Name );
 
     css::uno::Sequence< css::beans::PropertyValue > aResult( nResultLen );
-    std::copy(i_rMergeList.begin(), i_rMergeList.end(), aResult.getArray());
+    auto pResult = aResult.getArray();
+    std::copy(i_rMergeList.begin(), i_rMergeList.end(), pResult);
     int nCur = i_rMergeList.getLength();
     for(const css::beans::PropertyValue & rPropVal : mpImplData->maUIProperties)
     {
         if( aMergeSet.find( rPropVal.Name ) == aMergeSet.end() )
-            aResult[nCur++] = rPropVal;
+            pResult[nCur++] = rPropVal;
     }
     // append IsFirstPage
     if( aMergeSet.find( "IsFirstPage" ) == aMergeSet.end() )
@@ -1469,7 +1471,7 @@ css::uno::Sequence< css::beans::PropertyValue > PrinterController::getJobPropert
         css::beans::PropertyValue aVal;
         aVal.Name = "IsFirstPage";
         aVal.Value <<= mpImplData->mbFirstPage;
-        aResult[nCur++] = aVal;
+        pResult[nCur++] = aVal;
     }
     // append IsLastPage
     if( aMergeSet.find( "IsLastPage" ) == aMergeSet.end() )
@@ -1477,7 +1479,7 @@ css::uno::Sequence< css::beans::PropertyValue > PrinterController::getJobPropert
         css::beans::PropertyValue aVal;
         aVal.Name = "IsLastPage";
         aVal.Value <<= mpImplData->mbLastPage;
-        aResult[nCur++] = aVal;
+        pResult[nCur++] = aVal;
     }
     // append IsPrinter
     if( aMergeSet.find( "IsPrinter" ) == aMergeSet.end() )
@@ -1485,7 +1487,7 @@ css::uno::Sequence< css::beans::PropertyValue > PrinterController::getJobPropert
         css::beans::PropertyValue aVal;
         aVal.Name = "IsPrinter";
         aVal.Value <<= true;
-        aResult[nCur++] = aVal;
+        pResult[nCur++] = aVal;
     }
     aResult.realloc( nCur );
     return aResult;
@@ -1879,11 +1881,10 @@ void PrinterOptionsHelper::appendPrintUIOptions( css::uno::Sequence< css::beans:
     if( !m_aUIProperties.empty() )
     {
         sal_Int32 nIndex = io_rProps.getLength();
-        io_rProps.realloc( nIndex+1 );
-        css::beans::PropertyValue aVal;
-        aVal.Name = "ExtraPrintUIOptions";
-        aVal.Value <<= comphelper::containerToSequence(m_aUIProperties);
-        io_rProps[ nIndex ] = aVal;
+        auto pio_rProps = io_rProps.realloc( nIndex+1 );
+        css::beans::PropertyValue aVal = comphelper::makePropertyValue(
+            "ExtraPrintUIOptions", comphelper::containerToSequence(m_aUIProperties));
+        pio_rProps[ nIndex ] = aVal;
     }
 }
 
@@ -1914,60 +1915,61 @@ css::uno::Any PrinterOptionsHelper::setUIControlOpt(const css::uno::Sequence< OU
     }
 
     css::uno::Sequence< css::beans::PropertyValue > aCtrl( nElements );
+    auto pCtrl = aCtrl.getArray();
     sal_Int32 nUsed = 0;
     if( !i_rTitle.isEmpty() )
     {
-        aCtrl[nUsed  ].Name  = "Text";
-        aCtrl[nUsed++].Value <<= i_rTitle;
+        pCtrl[nUsed  ].Name  = "Text";
+        pCtrl[nUsed++].Value <<= i_rTitle;
     }
     if( i_rHelpIds.hasElements() )
     {
-        aCtrl[nUsed  ].Name = "HelpId";
-        aCtrl[nUsed++].Value <<= i_rHelpIds;
+        pCtrl[nUsed  ].Name = "HelpId";
+        pCtrl[nUsed++].Value <<= i_rHelpIds;
     }
-    aCtrl[nUsed  ].Name  = "ControlType";
-    aCtrl[nUsed++].Value <<= i_rType;
-    aCtrl[nUsed  ].Name  = "ID";
-    aCtrl[nUsed++].Value <<= i_rIDs;
+    pCtrl[nUsed  ].Name  = "ControlType";
+    pCtrl[nUsed++].Value <<= i_rType;
+    pCtrl[nUsed  ].Name  = "ID";
+    pCtrl[nUsed++].Value <<= i_rIDs;
     if( i_pVal )
     {
-        aCtrl[nUsed  ].Name  = "Property";
-        aCtrl[nUsed++].Value <<= *i_pVal;
+        pCtrl[nUsed  ].Name  = "Property";
+        pCtrl[nUsed++].Value <<= *i_pVal;
     }
     if( !i_rControlOptions.maDependsOnName.isEmpty() )
     {
-        aCtrl[nUsed  ].Name  = "DependsOnName";
-        aCtrl[nUsed++].Value <<= i_rControlOptions.maDependsOnName;
+        pCtrl[nUsed  ].Name  = "DependsOnName";
+        pCtrl[nUsed++].Value <<= i_rControlOptions.maDependsOnName;
         if( i_rControlOptions.mnDependsOnEntry != -1 )
         {
-            aCtrl[nUsed  ].Name  = "DependsOnEntry";
-            aCtrl[nUsed++].Value <<= i_rControlOptions.mnDependsOnEntry;
+            pCtrl[nUsed  ].Name  = "DependsOnEntry";
+            pCtrl[nUsed++].Value <<= i_rControlOptions.mnDependsOnEntry;
         }
         if( i_rControlOptions.mbAttachToDependency )
         {
-            aCtrl[nUsed  ].Name  = "AttachToDependency";
-            aCtrl[nUsed++].Value <<= i_rControlOptions.mbAttachToDependency;
+            pCtrl[nUsed  ].Name  = "AttachToDependency";
+            pCtrl[nUsed++].Value <<= i_rControlOptions.mbAttachToDependency;
         }
     }
     if( !i_rControlOptions.maGroupHint.isEmpty() )
     {
-        aCtrl[nUsed  ].Name    = "GroupingHint";
-        aCtrl[nUsed++].Value <<= i_rControlOptions.maGroupHint;
+        pCtrl[nUsed  ].Name    = "GroupingHint";
+        pCtrl[nUsed++].Value <<= i_rControlOptions.maGroupHint;
     }
     if( i_rControlOptions.mbInternalOnly )
     {
-        aCtrl[nUsed  ].Name    = "InternalUIOnly";
-        aCtrl[nUsed++].Value <<= true;
+        pCtrl[nUsed  ].Name    = "InternalUIOnly";
+        pCtrl[nUsed++].Value <<= true;
     }
     if( ! i_rControlOptions.mbEnabled )
     {
-        aCtrl[nUsed  ].Name    = "Enabled";
-        aCtrl[nUsed++].Value <<= false;
+        pCtrl[nUsed  ].Name    = "Enabled";
+        pCtrl[nUsed++].Value <<= false;
     }
 
     sal_Int32 nAddProps = i_rControlOptions.maAddProps.size();
     for( sal_Int32 i = 0; i < nAddProps; i++ )
-        aCtrl[ nUsed++ ] = i_rControlOptions.maAddProps[i];
+        pCtrl[ nUsed++ ] = i_rControlOptions.maAddProps[i];
 
     SAL_WARN_IF( nUsed != nElements, "vcl.gdi", "nUsed != nElements, probable heap corruption" );
 

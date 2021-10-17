@@ -305,8 +305,9 @@ css::uno::Sequence< sal_Int32 > Key::getLongListValue()
             static_cast< OWeakObject * >(this));
     }
     css::uno::Sequence< sal_Int32 > value(static_cast< sal_Int32 >(n));
+    auto aValueRange = asNonConstRange(value);
     for (sal_uInt32 i = 0; i < n; ++i) {
-        value[static_cast< sal_Int32 >(i)] = list.getElement(i);
+        aValueRange[static_cast< sal_Int32 >(i)] = list.getElement(i);
     }
     return value;
 }
@@ -446,11 +447,12 @@ css::uno::Sequence< OUString > Key::getAsciiListValue()
             static_cast< OWeakObject * >(this));
     }
     css::uno::Sequence< OUString > value(static_cast< sal_Int32 >(n));
+    auto aValueRange = asNonConstRange(value);
     for (sal_uInt32 i = 0; i < n; ++i) {
         char * el = list.getElement(i);
         sal_Int32 size = rtl_str_getLength(el);
         if (!rtl_convertStringToUString(
-                &value[static_cast< sal_Int32 >(i)].pData, el, size,
+                &aValueRange[static_cast< sal_Int32 >(i)].pData, el, size,
                 RTL_TEXTENCODING_UTF8,
                 (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
                  RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
@@ -600,8 +602,9 @@ css::uno::Sequence< OUString > Key::getStringListValue()
             static_cast< OWeakObject * >(this));
     }
     css::uno::Sequence< OUString > value(static_cast< sal_Int32 >(n));
+    auto aValueRange = asNonConstRange(value);
     for (sal_uInt32 i = 0; i < n; ++i) {
-        value[static_cast< sal_Int32 >(i)] = list.getElement(i);
+        aValueRange[static_cast< sal_Int32 >(i)] = list.getElement(i);
     }
     return value;
 }
@@ -758,8 +761,9 @@ Key::openKeys()
     }
     css::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
         keys(static_cast< sal_Int32 >(n));
+    auto aKeysRange = asNonConstRange(keys);
     for (sal_uInt32 i = 0; i < n; ++i) {
-        keys[static_cast< sal_Int32 >(i)] = new Key(
+        aKeysRange[static_cast< sal_Int32 >(i)] = new Key(
             registry_, list.getElement(i));
     }
     return keys;
@@ -784,8 +788,9 @@ css::uno::Sequence< OUString > Key::getKeyNames()
             static_cast< OWeakObject * >(this));
     }
     css::uno::Sequence< OUString > names(static_cast< sal_Int32 >(n));
+    auto aNamesRange = asNonConstRange(names);
     for (sal_uInt32 i = 0; i < n; ++i) {
-        names[static_cast< sal_Int32 >(i)] = list.getElement(i);
+        aNamesRange[static_cast< sal_Int32 >(i)] = list.getElement(i);
     }
     return names;
 }

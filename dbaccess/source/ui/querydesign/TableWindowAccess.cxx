@@ -191,8 +191,7 @@ namespace dbaui
         {
             OJoinTableView* pView = m_pTable->getTableView();
             auto aIter = pView->getTableConnections(m_pTable) + nIndex;
-            aRet.TargetSet.realloc(1);
-            aRet.TargetSet[0] = getParentChild(aIter - pView->getTableConnections().begin());
+            aRet.TargetSet = { getParentChild(aIter - pView->getTableConnections().begin()) };
             aRet.RelationType = AccessibleRelationType::CONTROLLER_FOR;
         }
         return aRet;

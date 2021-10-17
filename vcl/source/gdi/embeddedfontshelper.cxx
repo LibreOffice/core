@@ -87,10 +87,11 @@ bool EmbeddedFontsHelper::addEmbeddedFont( const uno::Reference< io::XInputStrea
     {
         uno::Sequence< sal_Int8 > buffer;
         sal_uInt64 read = stream->readBytes( buffer, 1024 );
+        auto bufferRange = asNonConstRange(buffer);
         for( sal_uInt64 pos = 0;
              pos < read && keyPos < key.size();
              ++pos )
-            buffer[ pos ] ^= key[ keyPos++ ];
+            bufferRange[ pos ] ^= key[ keyPos++ ];
         // if eot, don't write the file out yet, since we need to unpack it first.
         if( !eot && read > 0 )
         {

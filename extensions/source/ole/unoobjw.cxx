@@ -2326,6 +2326,7 @@ Sink::Call( const OUString& Method, Sequence< Any >& Arguments )
            aMethods.getLength() > 0);
 
     int nMemId = 1;
+    auto ArgumentsRange = asNonConstRange(Arguments);
     // Skip the three XInterface methods
     for (int i = 3; i < aMethods.getLength(); i++)
     {
@@ -2419,21 +2420,21 @@ Sink::Call( const OUString& Method, Sequence< Any >& Arguments )
                     case VT_BYREF|VT_I2:
                         {
                             SHORT *pI = static_cast<SHORT*>(aDispParams.rgvarg[j].byref);
-                            Arguments[nIncomingArgIndex] <<= static_cast<sal_Int16>(*pI);
+                            ArgumentsRange[nIncomingArgIndex] <<= static_cast<sal_Int16>(*pI);
                             delete pI;
                         }
                         break;
                     case VT_BYREF|VT_I4:
                         {
                             LONG *pL = static_cast<LONG*>(aDispParams.rgvarg[j].byref);
-                            Arguments[nIncomingArgIndex] <<= static_cast<sal_Int32>(*pL);
+                            ArgumentsRange[nIncomingArgIndex] <<= static_cast<sal_Int32>(*pL);
                             delete pL;
                         }
                         break;
                     case VT_BYREF|VT_BSTR:
                         {
                             BSTR *pBstr = static_cast<BSTR*>(aDispParams.rgvarg[j].byref);
-                            Arguments[nIncomingArgIndex] <<= OUString(o3tl::toU(*pBstr));
+                            ArgumentsRange[nIncomingArgIndex] <<= OUString(o3tl::toU(*pBstr));
                             // Undo SysAllocString() done in anyToVariant()
                             SysFreeString(*pBstr);
                             delete pBstr;
@@ -2443,7 +2444,7 @@ Sink::Call( const OUString& Method, Sequence< Any >& Arguments )
                         {
                             VARIANT_BOOL *pBool = static_cast<VARIANT_BOOL*>(aDispParams.rgvarg[j].byref);
                             // SAL_ DEBUG("===> VT_BOOL: byref is now " << aDispParams.rgvarg[j].byref << ", " << (int)*pBool);
-                            Arguments[nIncomingArgIndex] <<= (*pBool != VARIANT_FALSE);
+                            ArgumentsRange[nIncomingArgIndex] <<= (*pBool != VARIANT_FALSE);
                             delete pBool;
                         }
                         break;

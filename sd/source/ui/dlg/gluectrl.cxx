@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <comphelper/propertyvalue.hxx>
 #include <svx/svdglue.hxx>
 #include <svl/intitem.hxx>
 #include <vcl/toolbox.hxx>
@@ -99,10 +102,8 @@ IMPL_LINK(GlueEscDirLB, SelectHdl, weld::ComboBox&, rBox, void)
     if ( m_xFrame.is() )
     {
         Any a;
-        Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name   = "GlueEscapeDirection";
         aItem.QueryValue( a );
-        aArgs[0].Value  = a;
+        Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("GlueEscapeDirection", a) };
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ),
                                     ".uno:GlueEscapeDirection",
                                     aArgs );

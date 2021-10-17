@@ -177,11 +177,11 @@ namespace vclcanvas
             ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length),
             aMetricVector))
         {
-            aBoundingBoxes.realloc(aMetricVector.size());
+            auto pBoundingBoxes = aBoundingBoxes.realloc(aMetricVector.size());
             sal_Int32 nIndex (0);
             for (auto const& metric : aMetricVector)
             {
-                aBoundingBoxes[nIndex++] = geometry::RealRectangle2D(
+                pBoundingBoxes[nIndex++] = geometry::RealRectangle2D(
                     metric.Left(),
                     metric.Top(),
                     metric.Right(),

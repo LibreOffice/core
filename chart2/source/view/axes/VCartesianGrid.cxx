@@ -62,10 +62,7 @@ GridLinePoints::GridLinePoints( const PlottingPositionHelper* pPosHelper, sal_In
                 , CuboidPlanePosition eLeftWallPos
                 , CuboidPlanePosition eBackWallPos
                 , CuboidPlanePosition eBottomPos )
-                : P0(3)
-                , P1(3)
-                , P2(3)
-                , m_nDimensionIndex(nDimensionIndex)
+                : m_nDimensionIndex(nDimensionIndex)
 {
     double MinX = pPosHelper->getLogicMinX();
     double MinY = pPosHelper->getLogicMinY();
@@ -101,28 +98,29 @@ GridLinePoints::GridLinePoints( const PlottingPositionHelper* pPosHelper, sal_In
     //P1: point on both walls
     //P2: point on 'left' wall not on 'back' wall
 
-    P0[0]=P1[0]=P2[0]= (eLeftWallPos == CuboidPlanePosition_Left || bSwapXY) ? MinX : MaxX;
-    P0[1]=P1[1]=P2[1]= (eLeftWallPos == CuboidPlanePosition_Left || !bSwapXY) ? MinY : MaxY;
-    P0[2]=P1[2]=P2[2]= (eBackWallPos == CuboidPlanePosition_Back) ? MinZ : MaxZ;
+    const double v0 = (eLeftWallPos == CuboidPlanePosition_Left || bSwapXY) ? MinX : MaxX;
+    const double v1 = (eLeftWallPos == CuboidPlanePosition_Left || !bSwapXY) ? MinY : MaxY;
+    const double v2 = (eBackWallPos == CuboidPlanePosition_Back) ? MinZ : MaxZ;
+    P0 = P1 = P2 = { v0, v1, v2 };
 
     if(m_nDimensionIndex==0)
     {
-        P0[1]= (eLeftWallPos == CuboidPlanePosition_Left || !bSwapXY) ? MaxY : MinY;
-        P2[2]= (eBackWallPos == CuboidPlanePosition_Back) ? MaxZ : MinZ;
+        P0.getArray()[1] = (eLeftWallPos == CuboidPlanePosition_Left || !bSwapXY) ? MaxY : MinY;
+        P2.getArray()[2]= (eBackWallPos == CuboidPlanePosition_Back) ? MaxZ : MinZ;
         if( eBottomPos != CuboidPlanePosition_Bottom && !bSwapXY )
             P2=P1;
     }
     else if(m_nDimensionIndex==1)
     {
-        P0[0]= (eLeftWallPos == CuboidPlanePosition_Left || bSwapXY) ? MaxX : MinX;
-        P2[2]= (eBackWallPos == CuboidPlanePosition_Back) ? MaxZ : MinZ;
+        P0.getArray()[0]= (eLeftWallPos == CuboidPlanePosition_Left || bSwapXY) ? MaxX : MinX;
+        P2.getArray()[2]= (eBackWallPos == CuboidPlanePosition_Back) ? MaxZ : MinZ;
         if( eBottomPos != CuboidPlanePosition_Bottom && bSwapXY )
             P2=P1;
     }
     else if(m_nDimensionIndex==2)
     {
-        P0[0]= (eLeftWallPos == CuboidPlanePosition_Left || bSwapXY) ? MaxX : MinX;
-        P2[1]= (eLeftWallPos == CuboidPlanePosition_Left || !bSwapXY) ? MaxY : MinY;
+        P0.getArray()[0]= (eLeftWallPos == CuboidPlanePosition_Left || bSwapXY) ? MaxX : MinX;
+        P2.getArray()[1]= (eLeftWallPos == CuboidPlanePosition_Left || !bSwapXY) ? MaxY : MinY;
         if( eBottomPos != CuboidPlanePosition_Bottom )
         {
             if( !bSwapXY )
@@ -135,7 +133,7 @@ GridLinePoints::GridLinePoints( const PlottingPositionHelper* pPosHelper, sal_In
 
 void GridLinePoints::update( double fScaledTickValue )
 {
-    P0[m_nDimensionIndex] = P1[m_nDimensionIndex] = P2[m_nDimensionIndex] = fScaledTickValue;
+    P0.getArray()[m_nDimensionIndex] = P1.getArray()[m_nDimensionIndex] = P2.getArray()[m_nDimensionIndex] = fScaledTickValue;
 }
 
 static void addLine2D( drawing::PointSequenceSequence& rPoints, sal_Int32 nIndex
@@ -146,11 +144,9 @@ static void addLine2D( drawing::PointSequenceSequence& rPoints, sal_Int32 nIndex
     drawing::Position3D aPA = SequenceToPosition3D( xTransformation->transform( rScaledLogicPoints.P0 ) );
     drawing::Position3D aPB = SequenceToPosition3D( xTransformation->transform( rScaledLogicPoints.P1 ) );
 
-    rPoints[nIndex].realloc(2);
-    rPoints[nIndex][0].X = static_cast<sal_Int32>(aPA.PositionX);
-    rPoints[nIndex][0].Y = static_cast<sal_Int32>(aPA.PositionY);
-    rPoints[nIndex][1].X = static_cast<sal_Int32>(aPB.PositionX);
-    rPoints[nIndex][1].Y = static_cast<sal_Int32>(aPB.PositionY);
+    rPoints.getArray()[nIndex]
+        = { { static_cast<sal_Int32>(aPA.PositionX), static_cast<sal_Int32>(aPA.PositionY) },
+            { static_cast<sal_Int32>(aPB.PositionX), static_cast<sal_Int32>(aPB.PositionY) } };
 }
 
 static void addLine3D( drawing::PolyPolygonShape3D& rPoints, sal_Int32 nIndex
@@ -267,10 +263,9 @@ void VCartesianGrid::createShapes()
 
             //prepare polygon for handle shape:
             drawing::PointSequenceSequence aHandlesPoints(1);
-            sal_Int32 nOldHandleCount = aHandlesPoints[0].getLength();
-            aHandlesPoints[0].realloc(nOldHandleCount+nRealPointCount);
+            auto pHandlesPoints = aHandlesPoints.getArray()[0].realloc(nRealPointCount);
             for( sal_Int32 nN = 0; nN<nRealPointCount; nN++)
-                aHandlesPoints[0][nOldHandleCount+nN] = aPoints[nN][1];
+                pHandlesPoints[nN] = aPoints[nN][1];
 
             //create handle shape:
             VLineProperties aHandleLineProperties;

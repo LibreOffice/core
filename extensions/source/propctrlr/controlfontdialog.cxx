@@ -21,6 +21,8 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include "controlfontdialog.hxx"
+
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/svapp.hxx>
 #include "fontdialog.hxx"
 #include "formstrings.hxx"
@@ -80,11 +82,8 @@ namespace pcr
         Reference<XPropertySet> xGridModel;
         if (aArguments.getLength() == 1 && (aArguments[0] >>= xGridModel))
         {
-            PropertyValue aArg;
-            aArg.Name = "IntrospectedObject";
-            aArg.Value <<= xGridModel;
-            Sequence< Any > aNewArguments(1);
-            aNewArguments[0] <<= aArg;
+            Sequence aNewArguments{ Any(comphelper::makePropertyValue("IntrospectedObject",
+                                                                      xGridModel)) };
             OControlFontDialog_DBase::initialize(aNewArguments);
         }
         else

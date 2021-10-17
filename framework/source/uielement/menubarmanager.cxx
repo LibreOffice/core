@@ -42,6 +42,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <svtools/javainteractionhandler.hxx>
 #include <uno/current_context.hxx>
@@ -795,9 +796,7 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu, bool )
                 if ( pMenu->GetUserValue( nCurItemId ) )
                 {
                     // addon menu item selected
-                    aArgs.realloc( 1 );
-                    aArgs[0].Name = "Referer";
-                    aArgs[0].Value <<= OUString( "private:user" );
+                    aArgs = { comphelper::makePropertyValue("Referer", OUString("private:user")) };
                 }
 
                 xDispatch = pMenuItemHandler->xMenuItemDispatch;
@@ -1190,10 +1189,11 @@ void MenuBarManager::RetrieveShortcuts( std::vector< std::unique_ptr<MenuItemHan
 
     vcl::KeyCode aEmptyKeyCode;
     Sequence< OUString > aSeq( aMenuShortCuts.size() );
+    auto aSeqRange = asNonConstRange(aSeq);
     const sal_uInt32 nCount = aMenuShortCuts.size();
     for ( sal_uInt32 i = 0; i < nCount; ++i )
     {
-        aSeq[i] = aMenuShortCuts[i]->aMenuItemURL;
+        aSeqRange[i] = aMenuShortCuts[i]->aMenuItemURL;
         aMenuShortCuts[i]->aKeyCode = aEmptyKeyCode;
     }
 

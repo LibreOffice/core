@@ -454,7 +454,7 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleMenuItem::getAccessibleActionKe
         {
             Reference< XAccessibleContext > xParentContext( xParent->getAccessibleContext() );
             if ( xParentContext.is() && xParentContext->getAccessibleRole() == AccessibleRole::MENU_BAR )
-                aSeq1[0].Modifiers |= awt::KeyModifier::MOD2;
+                aSeq1.getArray()[0].Modifiers |= awt::KeyModifier::MOD2;
         }
         pKeyBindingHelper->AddKeyBinding( aSeq1 );
 
@@ -490,14 +490,18 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleMenuItem::getAccessibleActionKe
                     static_cast< sal_Int16 >(aAccelKeyCode.GetFunction())
                 }
             };
-            if ( aAccelKeyCode.IsShift() )
-                aSeq3[0].Modifiers |= awt::KeyModifier::SHIFT;
-            if ( aAccelKeyCode.IsMod1() )
-                aSeq3[0].Modifiers |= awt::KeyModifier::MOD1;
-            if ( aAccelKeyCode.IsMod2() )
-                aSeq3[0].Modifiers |= awt::KeyModifier::MOD2;
-            if ( aAccelKeyCode.IsMod3() )
-                aSeq3[0].Modifiers |= awt::KeyModifier::MOD3;
+            if (aAccelKeyCode.GetModifier() != 0)
+            {
+                auto pSeq3 = aSeq3.getArray();
+                if ( aAccelKeyCode.IsShift() )
+                    pSeq3[0].Modifiers |= awt::KeyModifier::SHIFT;
+                if ( aAccelKeyCode.IsMod1() )
+                    pSeq3[0].Modifiers |= awt::KeyModifier::MOD1;
+                if ( aAccelKeyCode.IsMod2() )
+                    pSeq3[0].Modifiers |= awt::KeyModifier::MOD2;
+                if ( aAccelKeyCode.IsMod3() )
+                    pSeq3[0].Modifiers |= awt::KeyModifier::MOD3;
+            }
             pKeyBindingHelper->AddKeyBinding( aSeq3 );
         }
     }

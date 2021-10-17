@@ -134,29 +134,30 @@ void SAL_CALL ScXMLSortContext::endFastElement( sal_Int32 /*nElement*/ )
     if (nAlgoLength)
         ++i;
     uno::Sequence <beans::PropertyValue> aSortDescriptor(7 + i);
-    aSortDescriptor[0].Name = SC_UNONAME_BINDFMT;
-    aSortDescriptor[0].Value <<= bBindFormatsToContent;
-    aSortDescriptor[1].Name = SC_UNONAME_COPYOUT;
-    aSortDescriptor[1].Value <<= bCopyOutputData;
-    aSortDescriptor[2].Name = SC_UNONAME_ISCASE;
-    aSortDescriptor[2].Value <<= bIsCaseSensitive;
-    aSortDescriptor[3].Name = SC_UNONAME_ISULIST;
-    aSortDescriptor[3].Value <<= bEnabledUserList;
-    aSortDescriptor[4].Name = SC_UNONAME_OUTPOS;
-    aSortDescriptor[4].Value <<= aOutputPosition;
-    aSortDescriptor[5].Name = SC_UNONAME_UINDEX;
-    aSortDescriptor[5].Value <<= nUserListIndex;
-    aSortDescriptor[6].Name = SC_UNONAME_SORTFLD;
-    aSortDescriptor[6].Value <<= aSortFields;
+    auto pSortDescriptor = aSortDescriptor.getArray();
+    pSortDescriptor[0].Name = SC_UNONAME_BINDFMT;
+    pSortDescriptor[0].Value <<= bBindFormatsToContent;
+    pSortDescriptor[1].Name = SC_UNONAME_COPYOUT;
+    pSortDescriptor[1].Value <<= bCopyOutputData;
+    pSortDescriptor[2].Name = SC_UNONAME_ISCASE;
+    pSortDescriptor[2].Value <<= bIsCaseSensitive;
+    pSortDescriptor[3].Name = SC_UNONAME_ISULIST;
+    pSortDescriptor[3].Value <<= bEnabledUserList;
+    pSortDescriptor[4].Name = SC_UNONAME_OUTPOS;
+    pSortDescriptor[4].Value <<= aOutputPosition;
+    pSortDescriptor[5].Name = SC_UNONAME_UINDEX;
+    pSortDescriptor[5].Value <<= nUserListIndex;
+    pSortDescriptor[6].Name = SC_UNONAME_SORTFLD;
+    pSortDescriptor[6].Value <<= aSortFields;
     if (!maLanguageTagODF.isEmpty())
     {
-        aSortDescriptor[7].Name = SC_UNONAME_COLLLOC;
-        aSortDescriptor[7].Value <<= maLanguageTagODF.getLanguageTag().getLocale( false);
+        pSortDescriptor[7].Name = SC_UNONAME_COLLLOC;
+        pSortDescriptor[7].Value <<= maLanguageTagODF.getLanguageTag().getLocale( false);
     }
     if (nAlgoLength)
     {
-        aSortDescriptor[6 + i].Name = SC_UNONAME_COLLALG;
-        aSortDescriptor[6 + i].Value <<= sAlgorithm;
+        pSortDescriptor[6 + i].Name = SC_UNONAME_COLLALG;
+        pSortDescriptor[6 + i].Value <<= sAlgorithm;
     }
     pDatabaseRangeContext->SetSortSequence(aSortDescriptor);
 }
@@ -191,8 +192,8 @@ void ScXMLSortContext::AddSortField(const OUString& sFieldNumber, const OUString
         else if (IsXMLToken(sDataType, XML_NUMBER))
             aSortField.FieldType = util::SortFieldType_NUMERIC;
     }
-    aSortFields.realloc(aSortFields.getLength() + 1);
-    aSortFields[aSortFields.getLength() - 1] = aSortField;
+    auto pSortFields = aSortFields.realloc(aSortFields.getLength() + 1);
+    pSortFields[aSortFields.getLength() - 1] = aSortField;
 }
 
 ScXMLSortByContext::ScXMLSortByContext( ScXMLImport& rImport,

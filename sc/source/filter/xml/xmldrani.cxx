@@ -296,13 +296,13 @@ std::unique_ptr<ScDBData> ScXMLDatabaseRangeContext::ConvertToDBData(const OUStr
     if (bContainsSort)
     {
         size_t nOldSize = aSortSequence.getLength();
-        aSortSequence.realloc(nOldSize + 1);
+        auto pSortSequence = aSortSequence.realloc(nOldSize + 1);
         beans::PropertyValue aProperty;
         aProperty.Name = SC_UNONAME_ORIENT;
         table::TableOrientation eOrient = mpQueryParam->bByRow ?
             table::TableOrientation_ROWS : table::TableOrientation_COLUMNS;
         aProperty.Value <<= eOrient;
-        aSortSequence[nOldSize] = aProperty;
+        pSortSequence[nOldSize] = aProperty;
         ScSortParam aParam;
         ScSortDescriptor::FillSortParam(aParam, aSortSequence);
 

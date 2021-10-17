@@ -30,6 +30,7 @@
 #include "vbaworkbooks.hxx"
 #include <vbahelper/vbahelper.hxx>
 
+#include <comphelper/propertyvalue.hxx>
 #include <o3tl/string_view.hxx>
 #include <osl/file.hxx>
 #include <rtl/ref.hxx>
@@ -178,9 +179,7 @@ OUString
 ScVbaWorkbooks::getFileFilterType( const OUString& rFileName )
 {
     uno::Reference< document::XTypeDetection > xTypeDetect( mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", mxContext), uno::UNO_QUERY_THROW );
-    uno::Sequence< beans::PropertyValue > aMediaDesc(1);
-    aMediaDesc[ 0 ].Name = "URL";
-    aMediaDesc[ 0 ].Value <<= rFileName;
+    uno::Sequence aMediaDesc{ comphelper::makePropertyValue("URL", rFileName) };
     OUString sType = xTypeDetect->queryTypeByDescriptor( aMediaDesc, true );
     return sType;
 }
@@ -199,13 +198,12 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/
     else
         osl::FileBase::getFileURLFromSystemPath( rFileName, aURL );
 
-    uno::Sequence< beans::PropertyValue > sProps(0);
+    uno::Sequence< beans::PropertyValue > sProps;
 
     OUString sType = getFileFilterType( aURL );
     // A text file means it needs to be processed as a csv file
     if ( isTextFile( sType ) )
     {
-        sal_Int32 nIndex = 0;
         // Values for format
         // 1 Tabs
         // 2 Commas
@@ -214,8 +212,6 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/
         // 5 Nothing
         // 6 Custom character (see the Delimiter argument
         // no format means use the current delimiter
-        sProps.realloc( 3 );
-        sProps[ nIndex ].Name = "FilterOptions";
         sal_Int16 const delims[] { 0 /*default not used*/, 9/*tab*/, 44/*comma*/, 32/*space*/, 59/*semicolon*/ };
 
         OUString sFormat;
@@ -252,13 +248,13 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/
         getCurrentDelim() = nDelim; //set new current
 
         sFormat = OUString::number( nDelim ) + ",34,0,1";
-        sProps[ nIndex++ ].Value <<= sFormat;
-        sProps[ nIndex ].Name = "FilterName";
-        sProps[ nIndex++ ].Value <<= OUString( SC_TEXT_CSV_FILTER_NAME );
-        // Ensure WORKAROUND_CSV_TXT_BUG_i60158 gets called in typedetection.cxx so
-        // csv is forced for deep detected 'writerxxx' types
-        sProps[ nIndex ].Name = "DocumentService";
-        sProps[ nIndex ].Value <<= OUString("com.sun.star.sheet.SpreadsheetDocument");
+
+        sProps = { comphelper::makePropertyValue("FilterOptions", sFormat),
+                   comphelper::makePropertyValue("FilterName", OUString( SC_TEXT_CSV_FILTER_NAME )),
+                   // Ensure WORKAROUND_CSV_TXT_BUG_i60158 gets called in typedetection.cxx so
+                   // csv is forced for deep detected 'writerxxx' types
+                   comphelper::makePropertyValue(
+                       "DocumentService", OUString("com.sun.star.sheet.SpreadsheetDocument")) };
     }
     else if ( !isSpreadSheetFile( sType ) )
         throw uno::RuntimeException("Bad Format" );

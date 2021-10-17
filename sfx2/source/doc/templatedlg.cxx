@@ -13,6 +13,7 @@
 #include <sfx2/module.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <sfx2/app.hxx>
@@ -652,9 +653,8 @@ void SfxTemplateManagerDlg::ImportActionHdl()
 
 void SfxTemplateManagerDlg::ExtensionsActionHdl()
 {
-    uno::Sequence<beans::PropertyValue> aArgs(1);
-    aArgs[0].Name = "AdditionsTag";
-    aArgs[0].Value <<= OUString("Templates");
+    uno::Sequence<beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
+        "AdditionsTag", OUString("Templates")) };
     comphelper::dispatchCommand(".uno:AdditionsDialog", aArgs);
 }
 
@@ -708,17 +708,13 @@ IMPL_LINK(SfxTemplateManagerDlg, CreateContextMenuHdl, ThumbnailViewItem*, pItem
 
 IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
 {
-    uno::Sequence< PropertyValue > aArgs(5);
-    aArgs[0].Name = "AsTemplate";
-    aArgs[0].Value <<= true;
-    aArgs[1].Name = "MacroExecutionMode";
-    aArgs[1].Value <<= MacroExecMode::USE_CONFIG;
-    aArgs[2].Name = "UpdateDocMode";
-    aArgs[2].Value <<= UpdateDocMode::ACCORDING_TO_CONFIG;
-    aArgs[3].Name = "InteractionHandler";
-    aArgs[3].Value <<= task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr );
-    aArgs[4].Name = "ReadOnly";
-    aArgs[4].Value <<= true;
+    uno::Sequence< PropertyValue > aArgs{
+        comphelper::makePropertyValue("AsTemplate", true),
+        comphelper::makePropertyValue("MacroExecutionMode", MacroExecMode::USE_CONFIG),
+        comphelper::makePropertyValue("UpdateDocMode", UpdateDocMode::ACCORDING_TO_CONFIG),
+        comphelper::makePropertyValue("InteractionHandler", task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr )),
+        comphelper::makePropertyValue("ReadOnly", true)
+    };
 
     TemplateViewItem *pTemplateItem = static_cast<TemplateViewItem*>(pItem);
 
@@ -735,13 +731,11 @@ IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem, voi
 
 IMPL_LINK(SfxTemplateManagerDlg, EditTemplateHdl, ThumbnailViewItem*, pItem, void)
 {
-    uno::Sequence< PropertyValue > aArgs(3);
-    aArgs[0].Name = "AsTemplate";
-    aArgs[0].Value <<= false;
-    aArgs[1].Name = "MacroExecutionMode";
-    aArgs[1].Value <<= MacroExecMode::USE_CONFIG;
-    aArgs[2].Name = "UpdateDocMode";
-    aArgs[2].Value <<= UpdateDocMode::ACCORDING_TO_CONFIG;
+    uno::Sequence< PropertyValue > aArgs{
+        comphelper::makePropertyValue("AsTemplate", false),
+        comphelper::makePropertyValue("MacroExecutionMode", MacroExecMode::USE_CONFIG),
+        comphelper::makePropertyValue("UpdateDocMode", UpdateDocMode::ACCORDING_TO_CONFIG)
+    };
 
     uno::Reference< XStorable > xStorable;
     TemplateViewItem *pViewItem = static_cast<TemplateViewItem*>(pItem);

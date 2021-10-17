@@ -62,11 +62,10 @@ void CanvasTest::testComposite()
     {
         // render something
         rendering::RenderState aDefaultState;
-        uno::Sequence< double > aRedTransparent( 4 );
-        aRedTransparent[0] = 1.0; // R
-        aRedTransparent[1] = 0.0; // G
-        aRedTransparent[2] = 0.0; // B
-        aRedTransparent[3] = 0.5; // A
+        uno::Sequence< double > aRedTransparent{ 1.0, // R
+                                                 0.0, // G
+                                                 0.0, // B
+                                                 0.5 }; // A
         aDefaultState.DeviceColor = aRedTransparent;
 #if 0
         // words fail me to describe the sheer beauty of allocating a UNO

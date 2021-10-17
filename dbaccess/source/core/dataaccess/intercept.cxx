@@ -65,17 +65,14 @@ void OInterceptor::dispose()
 
 OInterceptor::OInterceptor( ODocumentDefinition* _pContentHolder )
     :m_pContentHolder( _pContentHolder )
-    ,m_aInterceptedURL(7)
+    ,m_aInterceptedURL{ /* DISPATCH_SAVEAS     */ ".uno:SaveAs",
+                        /* DISPATCH_SAVE       */ ".uno:Save",
+                        /* DISPATCH_CLOSEDOC   */ ".uno:CloseDoc",
+                        /* DISPATCH_CLOSEWIN   */ ".uno:CloseWin",
+                        /* DISPATCH_CLOSEFRAME */ ".uno:CloseFrame",
+                        /* DISPATCH_RELOAD     */ ".uno:Reload" }
 {
-
     OSL_ENSURE(DISPATCH_RELOAD < m_aInterceptedURL.getLength(),"Illegal size.");
-
-    m_aInterceptedURL[DISPATCH_SAVEAS]      = ".uno:SaveAs";
-    m_aInterceptedURL[DISPATCH_SAVE]        = ".uno:Save";
-    m_aInterceptedURL[DISPATCH_CLOSEDOC]    = ".uno:CloseDoc";
-    m_aInterceptedURL[DISPATCH_CLOSEWIN]    = ".uno:CloseWin";
-    m_aInterceptedURL[DISPATCH_CLOSEFRAME]  = ".uno:CloseFrame";
-    m_aInterceptedURL[DISPATCH_RELOAD]      = ".uno:Reload";
 }
 
 
@@ -131,7 +128,7 @@ void SAL_CALL OInterceptor::dispatch( const URL& URL,const Sequence<PropertyValu
             {
                 if ( aNewArgs[nInd].Name == "SaveTo" )
                 {
-                    aNewArgs[nInd].Value <<= true;
+                    aNewArgs.getArray()[nInd].Value <<= true;
                     break;
                 }
                 nInd++;
@@ -139,9 +136,9 @@ void SAL_CALL OInterceptor::dispatch( const URL& URL,const Sequence<PropertyValu
 
             if ( nInd == aNewArgs.getLength() )
             {
-                aNewArgs.realloc( nInd + 1 );
-                aNewArgs[nInd].Name = "SaveTo";
-                aNewArgs[nInd].Value <<= true;
+                auto pNewArgs = aNewArgs.realloc( nInd + 1 );
+                pNewArgs[nInd].Name = "SaveTo";
+                pNewArgs[nInd].Value <<= true;
             }
 
             Reference< XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(URL, "_self", 0 );
@@ -311,6 +308,7 @@ Sequence< Reference< XDispatch > > SAL_CALL OInterceptor::queryDispatches(  cons
         aRet = m_xSlaveDispatchProvider->queryDispatches(Requests);
     else
         aRet.realloc(Requests.getLength());
+    auto aRetRange = asNonConstRange(aRet);
 
     for(sal_Int32 i = 0; i < Requests.getLength(); ++i)
     {
@@ -320,7 +318,7 @@ Sequence< Reference< XDispatch > > SAL_CALL OInterceptor::queryDispatches(  cons
         {
             if ( Requests[i].FeatureURL.Complete == *pIter )
             {
-                aRet[i] = static_cast<XDispatch*>(this);
+                aRetRange[i] = static_cast<XDispatch*>(this);
                 break;
             }
         }

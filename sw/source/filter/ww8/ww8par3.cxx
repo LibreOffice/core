@@ -2434,8 +2434,9 @@ bool WW8FormulaListBox::Import(const uno::Reference <
     {
         sal_uInt32 nLen = maListEntries.size();
         uno::Sequence< OUString > aListSource(nLen);
+        auto aListSourceRange = asNonConstRange(aListSource);
         for (sal_uInt32 nI = 0; nI < nLen; ++nI)
-            aListSource[nI] = maListEntries[nI];
+            aListSourceRange[nI] = maListEntries[nI];
         aTmp <<= aListSource;
         xPropSet->setPropertyValue("StringItemList", aTmp );
 

@@ -1685,8 +1685,7 @@ void DlgEdObj::MakeDataAware( const Reference< frame::XModel >& xModel )
     aValue.Name = "BoundCell";
     aValue.Value <<= aApiAddress;
 
-    Sequence< Any > aArgs( 1 );
-    aArgs[ 0 ] <<= aValue;
+    Sequence< Any > aArgs{ Any(aValue) };
 
     if ( xBindable.is() )
     {

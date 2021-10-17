@@ -115,9 +115,8 @@ void ScShapeTest::saveAndReload(css::uno::Reference<css::lang::XComponent>& xCom
 {
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
-    css::uno::Sequence<css::beans::PropertyValue> aArgs(1);
-    aArgs[0].Name = "FilterName";
-    aArgs[0].Value <<= rFilter; // e.g. "calc8"
+    css::uno::Sequence aArgs{ comphelper::makePropertyValue("FilterName",
+                                                            rFilter) }; // e.g. "calc8"
     css::uno::Reference<css::frame::XStorable> xStorable(xComponent, css::uno::UNO_QUERY_THROW);
     xStorable->storeAsURL(aTempFile.GetURL(), aArgs);
     css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);

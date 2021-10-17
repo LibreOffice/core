@@ -29,13 +29,14 @@ using namespace ::ooo::vba;
 SwVbaGlobals::SwVbaGlobals(  uno::Sequence< uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& rxContext ) : SwVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, "WordDocumentContext" )
 {
     SAL_INFO("sw.vba", "SwVbaGlobals::SwVbaGlobals()");
-    uno::Sequence< beans::PropertyValue > aInitArgs( aArgs.getLength() + 1 );
-    aInitArgs[ 0 ].Name = "Application";
-    aInitArgs[ 0 ].Value <<= getApplication();
+    uno::Sequence< beans::PropertyValue > aInitArgs( aArgs.hasElements() ? 2 : 1 );
+    auto pInitArgs = aInitArgs.getArray();
+    pInitArgs[ 0 ].Name = "Application";
+    pInitArgs[ 0 ].Value <<= getApplication();
     if ( aArgs.hasElements() )
     {
-        aInitArgs[ 1 ].Name = "WordDocumentContext";
-        aInitArgs[ 1 ].Value <<= getXSomethingFromArgs< frame::XModel >( aArgs, 0 );
+        pInitArgs[ 1 ].Name = "WordDocumentContext";
+        pInitArgs[ 1 ].Value <<= getXSomethingFromArgs< frame::XModel >( aArgs, 0 );
     }
     init( aInitArgs );
 }
@@ -146,8 +147,8 @@ SwVbaGlobals::getAvailableServiceNames(  )
     static uno::Sequence< OUString > const serviceNames = [&]()
     {
         uno::Sequence< OUString > tmp = SwVbaGlobals_BASE::getAvailableServiceNames();
-        tmp.realloc( tmp.getLength() + 1 );
-        tmp[ tmp.getLength() - 1 ] = "ooo.vba.word.Document";
+        auto ptmp = tmp.realloc( tmp.getLength() + 1 );
+        ptmp[ tmp.getLength() - 1 ] = "ooo.vba.word.Document";
 //            #FIXME #TODO make Application a proper service
 //            OUString( "ooo.vba.word.Application" ),
         return tmp;

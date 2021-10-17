@@ -224,9 +224,7 @@ Sequence< ScannerContext > ScannerManager::getAvailableScanners()
 
     if( Sane::IsSane() )
     {
-        Sequence< ScannerContext > aRet(1);
-        aRet[0].ScannerName      = "SANE";
-        aRet[0].InternalData     = 0;
+        Sequence< ScannerContext > aRet{ { /* ScannerName */ "SANE", /* InternalData */ 0 } };
         return aRet;
     }
 

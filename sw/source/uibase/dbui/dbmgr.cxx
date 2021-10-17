@@ -85,6 +85,7 @@
 #include <com/sun/star/mail/MailAttachment.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
@@ -837,13 +838,10 @@ static void lcl_PreparePrinterOptions(
     // printing should be done synchronously otherwise the document
     // might already become invalid during the process
 
-    const sal_Int32 nOffset = 1;
-    rOutPrintOptions.realloc( nOffset );
-    rOutPrintOptions[ 0 ].Name = "Wait";
-    rOutPrintOptions[ 0 ].Value <<= true;
+    rOutPrintOptions = { comphelper::makePropertyValue("Wait", true) };
 
     // copy print options
-    sal_Int32 nIndex = nOffset;
+    sal_Int32 nIndex = 1;
     for( const beans::PropertyValue& rOption : rInPrintOptions)
     {
         if( rOption.Name == "CopyCount" || rOption.Name == "FileName"
@@ -851,9 +849,9 @@ static void lcl_PreparePrinterOptions(
             || rOption.Name == "Wait" || rOption.Name == "PrinterName" )
         {
             // add an option
-            rOutPrintOptions.realloc( nIndex + 1 );
-            rOutPrintOptions[ nIndex ].Name = rOption.Name;
-            rOutPrintOptions[ nIndex++ ].Value = rOption.Value ;
+            auto pOutPrintOptions = rOutPrintOptions.realloc( nIndex + 1 );
+            pOutPrintOptions[ nIndex ].Name = rOption.Name;
+            pOutPrintOptions[ nIndex++ ].Value = rOption.Value ;
         }
     }
 }
@@ -863,20 +861,17 @@ static void lcl_PrepareSaveFilterDataOptions(
     uno::Sequence< beans::PropertyValue >& rOutSaveFilterDataOptions,
     const OUString& sPassword)
 {
-    const sal_Int32 nOffset = 2;
-    rOutSaveFilterDataOptions.realloc( nOffset );
-    rOutSaveFilterDataOptions[ 0 ].Name = "EncryptFile";
-    rOutSaveFilterDataOptions[ 0 ].Value <<= true;
-    rOutSaveFilterDataOptions[ 1 ].Name = "DocumentOpenPassword";
-    rOutSaveFilterDataOptions[ 1 ].Value <<= sPassword;
+    rOutSaveFilterDataOptions
+        = { comphelper::makePropertyValue("EncryptFile", true),
+            comphelper::makePropertyValue("DocumentOpenPassword", sPassword) };
 
     // copy other options
-    sal_Int32 nIndex = nOffset;
+    sal_Int32 nIndex = 2;
     for( const beans::PropertyValue& rOption : rInSaveFilterDataptions)
     {
-         rOutSaveFilterDataOptions.realloc( nIndex + 1 );
-         rOutSaveFilterDataOptions[ nIndex ].Name = rOption.Name;
-         rOutSaveFilterDataOptions[ nIndex++ ].Value = rOption.Value ;
+         auto pOutSaveFilterDataOptions = rOutSaveFilterDataOptions.realloc( nIndex + 1 );
+         pOutSaveFilterDataOptions[ nIndex ].Name = rOption.Name;
+         pOutSaveFilterDataOptions[ nIndex++ ].Value = rOption.Value ;
     }
 
 }

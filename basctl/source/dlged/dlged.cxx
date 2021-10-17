@@ -182,8 +182,14 @@ DlgEditor::DlgEditor (
     ,pVScroll(nullptr)
     ,pDlgEdModel(new DlgEdModel())
     ,pDlgEdPage(new DlgEdPage(*pDlgEdModel))
-    ,m_ClipboardDataFlavors(1)
-    ,m_ClipboardDataFlavorsResource(2)
+    // set clipboard data flavors
+    ,m_ClipboardDataFlavors{ { /* MimeType */ "application/vnd.sun.xml.dialog",
+                               /* HumanPresentableName */ "Dialog 6.0",
+                               /* DataType */ cppu::UnoType<Sequence< sal_Int8 >>::get() } }
+    ,m_ClipboardDataFlavorsResource{ m_ClipboardDataFlavors[0],
+                                     { /* MimeType */ "application/vnd.sun.xml.dialogwithresource",
+                                       /* HumanPresentableName */ "Dialog 8.0",
+                                       /* DataType */ cppu::UnoType<Sequence< sal_Int8 >>::get() } }
     ,pObjFac(new DlgEdFactory(xModel))
     ,rWindow(rWindow_)
     ,pFunc(new DlgEdFuncSelect(*this))
@@ -206,16 +212,6 @@ DlgEditor::DlgEditor (
     rAdmin.NewLayer( "HiddenLayer" );
 
     pDlgEdModel->InsertPage(pDlgEdPage);
-
-    // set clipboard data flavors
-    m_ClipboardDataFlavors[0].MimeType =             "application/vnd.sun.xml.dialog" ;
-    m_ClipboardDataFlavors[0].HumanPresentableName = "Dialog 6.0" ;
-    m_ClipboardDataFlavors[0].DataType =             cppu::UnoType<Sequence< sal_Int8 >>::get();
-
-    m_ClipboardDataFlavorsResource[0] =                      m_ClipboardDataFlavors[0];
-    m_ClipboardDataFlavorsResource[1].MimeType =             "application/vnd.sun.xml.dialogwithresource" ;
-    m_ClipboardDataFlavorsResource[1].HumanPresentableName = "Dialog 8.0" ;
-    m_ClipboardDataFlavorsResource[1].DataType =             cppu::UnoType<Sequence< sal_Int8 >>::get();
 
     aMarkIdle.SetInvokeHandler( LINK( this, DlgEditor, MarkTimeout ) );
 

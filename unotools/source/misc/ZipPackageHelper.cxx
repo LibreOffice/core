@@ -58,14 +58,11 @@ ZipPackageHelper::ZipPackageHelper(
 : mxContext( rxContext )
 {
     // create the package zip file
-    Sequence< Any > aArguments( 2 );
-    aArguments[ 0 ] <<= sPackageURL;
-
-    // let ZipPackage be used
-    beans::NamedValue aArg;
-    aArg.Name = "StorageFormat";
-    aArg.Value <<= OUString(ZIP_STORAGE_FORMAT_STRING);
-    aArguments[ 1 ] <<= aArg;
+    Sequence< Any > aArguments{
+        Any(sPackageURL),
+        // let ZipPackage be used
+        Any(beans::NamedValue("StorageFormat", Any(OUString(ZIP_STORAGE_FORMAT_STRING))))
+    };
 
     Reference< XHierarchicalNameAccess > xHNameAccess(
         mxContext->getServiceManager()->createInstanceWithArgumentsAndContext(

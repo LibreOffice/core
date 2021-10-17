@@ -50,7 +50,7 @@ enum XclTracerId
 class XclTracer final
 {
 public:
-    explicit                    XclTracer( const OUString& rDocUrl );
+    explicit                    XclTracer( std::u16string_view rDocUrl );
                                 ~XclTracer();
 
     /** Returns true, if tracing is enabled. */

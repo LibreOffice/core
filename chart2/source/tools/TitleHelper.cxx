@@ -351,12 +351,12 @@ void TitleHelper::setCompleteString( const OUString& rNewText
         aNewText = aUnstackedStr.makeStringAndClear();
     }
 
-    uno::Sequence< uno::Reference< XFormattedString > > aNewStringList(1);
+    uno::Sequence< uno::Reference< XFormattedString > > aNewStringList;
 
     uno::Sequence< uno::Reference< XFormattedString > >  aOldStringList = xTitle->getText();
     if( aOldStringList.hasElements() )
     {
-        aNewStringList[0].set( aOldStringList[0] );
+        aNewStringList = { aOldStringList[0] };
         aNewStringList[0]->setString( aNewText );
     }
     else
@@ -365,7 +365,7 @@ void TitleHelper::setCompleteString( const OUString& rNewText
             chart2::FormattedString::create( xContext );
 
         xFormattedString->setString( aNewText );
-        aNewStringList[0].set( xFormattedString );
+        aNewStringList = { xFormattedString };
         if( pDefaultCharHeight != nullptr )
         {
             try

@@ -256,11 +256,7 @@ void OOXMLDocPropHandler::UpdateDocStatistic( const OUString& aChars )
     if (nInd == aSet.getLength())
         aSet.realloc( nInd + 1 );
 
-    beans::NamedValue aProp;
-    aProp.Name = aName;
-    aProp.Value <<= aChars.toInt32();
-
-    aSet[nInd] = aProp;
+    aSet.getArray()[nInd] = { aName, uno::Any(aChars.toInt32()) };
 
     m_xDocProp->setDocumentStatistics( aSet );
 }

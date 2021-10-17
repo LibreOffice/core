@@ -56,17 +56,7 @@ void SAL_CALL XMLSignatureTemplateImpl::setTarget( const css::uno::Reference< cs
 
 css::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > > SAL_CALL XMLSignatureTemplateImpl::getTargets()
 {
-    sal_Int32 length = targets.size();
-    css::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > > aTargets (length);
-
-    sal_Int32 i;
-
-    for (i=0; i<length; i++)
-    {
-        aTargets[i] = targets[i];
-    }
-
-    return aTargets;
+    return comphelper::containerToSequence(targets);
 }
 
 void SAL_CALL XMLSignatureTemplateImpl::setBinding(

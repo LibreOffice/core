@@ -943,9 +943,7 @@ void PresenterSlideShowView::impl_addAndConfigureView()
     // disabling sound for the new slide show view.
     beans::PropertyValue aProperty;
     aProperty.Name = "IsSoundEnabled";
-    Sequence<Any> aValues (2);
-    aValues[0] <<= xView;
-    aValues[1] <<= false;
+    Sequence<Any> aValues{ Any(xView), Any(false) };
     aProperty.Value <<= aValues;
     mxSlideShow->setProperty(aProperty);
 }

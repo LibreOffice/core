@@ -14,6 +14,7 @@
 #include <vcl/scheduler.hxx>
 #include <vcl/keycodes.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <defaultsoptions.hxx>
 #include <scmod.hxx>
@@ -85,9 +86,7 @@ void ScFiltersTest::testTdf133033()
         = frame::Desktop::create(::comphelper::getProcessComponentContext());
     CPPUNIT_ASSERT(xDesktop.is());
 
-    Sequence<beans::PropertyValue> args(1);
-    args[0].Name = "Hidden";
-    args[0].Value <<= true;
+    Sequence<beans::PropertyValue> args{ comphelper::makePropertyValue("Hidden", true) };
 
     m_xCalcComponent = xDesktop->loadComponentFromURL("private:factory/scalc", "_blank", 0, args);
     CPPUNIT_ASSERT(m_xCalcComponent.is());

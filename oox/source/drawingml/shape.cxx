@@ -457,7 +457,7 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
     auto aAdjGdList = pCustomShapePropertiesPtr->getAdjustmentGuideList();
     Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustment(
         !aAdjGdList.empty() ? aAdjGdList.size() : 1 );
-
+    auto pAdjustment = aAdjustment.getArray();
     int nIndex = 0;
     for (const auto& aEntry : aAdjGdList)
     {
@@ -505,8 +505,8 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
             }
         }
 
-        aAdjustment[nIndex].Value <<= fValue;
-        aAdjustment[nIndex++].State = css::beans::PropertyState_DIRECT_VALUE;
+        pAdjustment[nIndex].Value <<= fValue;
+        pAdjustment[nIndex++].State = css::beans::PropertyState_DIRECT_VALUE;
     }
 
     // Set properties
@@ -1170,13 +1170,13 @@ Reference< XShape > const & Shape::createAndInsert(
                     uno::Sequence<beans::PropertyValue> aGrabBag;
                     propertySet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
                     sal_Int32 length = aGrabBag.getLength();
-                    aGrabBag.realloc( length+1);
-                    aGrabBag[length].Name = "mso-orig-shape-type";
+                    auto pGrabBag = aGrabBag.realloc( length+1);
+                    pGrabBag[length].Name = "mso-orig-shape-type";
                     uno::Sequence< sal_Int8 > const & aNameSeq =
                         mpCustomShapePropertiesPtr->getShapePresetTypeName();
                     OUString sShapePresetTypeName(reinterpret_cast< const char* >(
                         aNameSeq.getConstArray()), aNameSeq.getLength(), RTL_TEXTENCODING_UTF8);
-                    aGrabBag[length].Value <<= sShapePresetTypeName;
+                    pGrabBag[length].Value <<= sShapePresetTypeName;
                     propertySet->setPropertyValue("FrameInteropGrabBag",uno::makeAny(aGrabBag));
                 }
                 //If the text box has links then save the link information so that
@@ -1187,13 +1187,13 @@ Reference< XShape > const & Shape::createAndInsert(
                     uno::Sequence<beans::PropertyValue> aGrabBag;
                     propertySet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
                     sal_Int32 length = aGrabBag.getLength();
-                    aGrabBag.realloc( length + 3 );
-                    aGrabBag[length].Name = "TxbxHasLink";
-                    aGrabBag[length].Value <<= isLinkedTxbx();
-                    aGrabBag[length + 1 ].Name = "Txbx-Id";
-                    aGrabBag[length + 1 ].Value <<= getLinkedTxbxAttributes().id;
-                    aGrabBag[length + 2 ].Name = "Txbx-Seq";
-                    aGrabBag[length + 2 ].Value <<= getLinkedTxbxAttributes().seq;
+                    auto pGrabBag = aGrabBag.realloc( length + 3 );
+                    pGrabBag[length].Name = "TxbxHasLink";
+                    pGrabBag[length].Value <<= isLinkedTxbx();
+                    pGrabBag[length + 1 ].Name = "Txbx-Id";
+                    pGrabBag[length + 1 ].Value <<= getLinkedTxbxAttributes().id;
+                    pGrabBag[length + 2 ].Name = "Txbx-Seq";
+                    pGrabBag[length + 2 ].Value <<= getLinkedTxbxAttributes().seq;
                     propertySet->setPropertyValue("FrameInteropGrabBag",uno::makeAny(aGrabBag));
                 }
 
@@ -1248,19 +1248,17 @@ Reference< XShape > const & Shape::createAndInsert(
                     static const OUStringLiteral aGrabBagPropName = u"FrameInteropGrabBag";
                     uno::Sequence<beans::PropertyValue> aGrabBag;
                     xPropertySet->getPropertyValue(aGrabBagPropName) >>= aGrabBag;
-                    beans::PropertyValue aPair;
-                    aPair.Name = "mso-rotation-angle";
-                    aPair.Value <<= mnRotation;
+                    beans::PropertyValue aPair(comphelper::makePropertyValue("mso-rotation-angle",
+                                                                             mnRotation));
                     if (aGrabBag.hasElements())
                     {
                         sal_Int32 nLength = aGrabBag.getLength();
-                        aGrabBag.realloc(nLength + 1);
-                        aGrabBag[nLength] = aPair;
+                        auto pGrabBag = aGrabBag.realloc(nLength + 1);
+                        pGrabBag[nLength] = aPair;
                     }
                     else
                     {
-                        aGrabBag.realloc(1);
-                        aGrabBag[0] = aPair;
+                        aGrabBag = { aPair };
                     }
                     xPropertySet->setPropertyValue(aGrabBagPropName, uno::makeAny(aGrabBag));
                 }
@@ -1326,13 +1324,13 @@ Reference< XShape > const & Shape::createAndInsert(
                 uno::Sequence<beans::PropertyValue> aGrabBag;
                 propertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
                 sal_Int32 length = aGrabBag.getLength();
-                aGrabBag.realloc( length + 3 );
-                aGrabBag[length].Name = "TxbxHasLink";
-                aGrabBag[length].Value <<= isLinkedTxbx();
-                aGrabBag[length + 1 ].Name = "Txbx-Id";
-                aGrabBag[length + 1 ].Value <<= getLinkedTxbxAttributes().id;
-                aGrabBag[length + 2 ].Name = "Txbx-Seq";
-                aGrabBag[length + 2 ].Value <<= getLinkedTxbxAttributes().seq;
+                auto pGrabBag = aGrabBag.realloc( length + 3 );
+                pGrabBag[length].Name = "TxbxHasLink";
+                pGrabBag[length].Value <<= isLinkedTxbx();
+                pGrabBag[length + 1 ].Name = "Txbx-Id";
+                pGrabBag[length + 1 ].Value <<= getLinkedTxbxAttributes().id;
+                pGrabBag[length + 2 ].Name = "Txbx-Seq";
+                pGrabBag[length + 2 ].Value <<= getLinkedTxbxAttributes().seq;
                 propertySet->setPropertyValue("InteropGrabBag",uno::makeAny(aGrabBag));
             }
 
@@ -1662,16 +1660,16 @@ Reference< XShape > const & Shape::createAndInsert(
 
 void Shape::keepDiagramDrawing(XmlFilterBase& rFilterBase, const OUString& rFragmentPath)
 {
-    uno::Sequence<uno::Any> diagramDrawing(2);
-    // drawingValue[0] => dom, drawingValue[1] => Sequence of associated relationships
 
     sal_Int32 length = maDiagramDoms.getLength();
-    maDiagramDoms.realloc(length + 1);
+    beans::PropertyValue* pValue = maDiagramDoms.realloc(length + 1);
 
-    diagramDrawing[0] <<= rFilterBase.importFragment(rFragmentPath);
-    diagramDrawing[1] <<= resolveRelationshipsOfTypeFromOfficeDoc(rFilterBase, rFragmentPath, u"image");
+    // drawingValue[0] => dom, drawingValue[1] => Sequence of associated relationships
+    uno::Sequence<uno::Any> diagramDrawing{
+        uno::Any(rFilterBase.importFragment(rFragmentPath)),
+        uno::Any(resolveRelationshipsOfTypeFromOfficeDoc(rFilterBase, rFragmentPath, u"image"))
+    };
 
-    beans::PropertyValue* pValue = maDiagramDoms.getArray();
     pValue[length].Name = "OOXDrawing";
     pValue[length].Value <<= diagramDrawing;
 }
@@ -1795,23 +1793,18 @@ Reference < XShape > Shape::renderDiagramToGraphic( XmlFilterBase const & rFilte
         awt::Size aSize( static_cast < sal_Int32 > ( ( fPixelsPer100thmm * aActualSize.Width ) + 0.5 ),
                          static_cast < sal_Int32 > ( ( fPixelsPer100thmm * aActualSize.Height ) + 0.5 ) );
 
-        Sequence< PropertyValue > aFilterData( 4 );
-        aFilterData[ 0 ].Name = "PixelWidth";
-        aFilterData[ 0 ].Value <<= aSize.Width;
-        aFilterData[ 1 ].Name = "PixelHeight";
-        aFilterData[ 1 ].Value <<= aSize.Height;
-        aFilterData[ 2 ].Name = "LogicalWidth";
-        aFilterData[ 2 ].Value <<= aActualSize.Width;
-        aFilterData[ 3 ].Name = "LogicalHeight";
-        aFilterData[ 3 ].Value <<= aActualSize.Height;
+        Sequence< PropertyValue > aFilterData{
+            comphelper::makePropertyValue("PixelWidth", aSize.Width),
+            comphelper::makePropertyValue("PixelHeight", aSize.Height),
+            comphelper::makePropertyValue("LogicalWidth", aActualSize.Width),
+            comphelper::makePropertyValue("LogicalHeight", aActualSize.Height)
+        };
 
-        Sequence < PropertyValue > aDescriptor( 3 );
-        aDescriptor[ 0 ].Name = "OutputStream";
-        aDescriptor[ 0 ].Value <<= xOutputStream;
-        aDescriptor[ 1 ].Name = "FilterName";
-        aDescriptor[ 1 ].Value <<= OUString("SVM"); // Rendering format
-        aDescriptor[ 2 ].Name = "FilterData";
-        aDescriptor[ 2 ].Value <<= aFilterData;
+        Sequence < PropertyValue > aDescriptor{
+            comphelper::makePropertyValue("OutputStream", xOutputStream),
+            comphelper::makePropertyValue("FilterName", OUString("SVM")), // Rendering format
+            comphelper::makePropertyValue("FilterData", aFilterData)
+        };
 
         Reference < lang::XComponent > xSourceDoc( mxShape, UNO_QUERY_THROW );
         Reference < XGraphicExportFilter > xGraphicExporter = GraphicExportFilter::create( rFilterBase.getComponentContext() );
@@ -1985,8 +1978,8 @@ void Shape::putPropertyToGrabBag( const PropertyValue& pProperty )
         xSet->getPropertyValue( aGrabBagPropName ) >>= aGrabBag;
 
         sal_Int32 length = aGrabBag.getLength();
-        aGrabBag.realloc( length + 1 );
-        aGrabBag[length] = pProperty;
+        auto pGrabBag = aGrabBag.realloc( length + 1 );
+        pGrabBag[length] = pProperty;
 
         xSet->setPropertyValue( aGrabBagPropName, Any( aGrabBag ) );
     }
@@ -2107,26 +2100,27 @@ uno::Sequence< uno::Sequence< uno::Any > >  Shape::resolveRelationshipsOfTypeFro
         core::RelationsRef xImageRels = xRels->getRelationsFromTypeFromOfficeDoc( sType );
         if ( xImageRels )
         {
-            xRelListTemp.realloc( xImageRels->size() );
+            auto pxRelListTemp = xRelListTemp.realloc( xImageRels->size() );
             for (auto const& imageRel : *xImageRels)
             {
                 uno::Sequence< uno::Any > diagramRelTuple (3);
+                auto pdiagramRelTuple = diagramRelTuple.getArray();
                 // [0] => RID, [1] => InputStream [2] => extension
                 OUString sRelId = imageRel.second.maId;
 
-                diagramRelTuple[0] <<= sRelId;
+                pdiagramRelTuple[0] <<= sRelId;
                 OUString sTarget = xImageRels->getFragmentPathFromRelId( sRelId );
 
                 uno::Reference< io::XInputStream > xImageInputStrm( rFilter.openInputStream( sTarget ), uno::UNO_SET_THROW );
                 StreamDataSequence dataSeq;
                 if ( rFilter.importBinaryData( dataSeq, sTarget ) )
                 {
-                    diagramRelTuple[1] <<= dataSeq;
+                    pdiagramRelTuple[1] <<= dataSeq;
                 }
 
-                diagramRelTuple[2] <<= sTarget.copy( sTarget.lastIndexOf(".") );
+                pdiagramRelTuple[2] <<= sTarget.copy( sTarget.lastIndexOf(".") );
 
-                xRelListTemp[counter] = diagramRelTuple;
+                pxRelListTemp[counter] = diagramRelTuple;
                 ++counter;
             }
             xRelListTemp.realloc(counter);

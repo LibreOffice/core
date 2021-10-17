@@ -224,8 +224,8 @@ static int LockSequence_chardata_callback(
         {
             // collect hrefs.
             sal_Int32 nPos = pCtx->pLock->LockTokens.getLength();
-            pCtx->pLock->LockTokens.realloc( nPos + 1 );
-            pCtx->pLock->LockTokens[ nPos ]
+            auto pLockTokens = pCtx->pLock->LockTokens.realloc( nPos + 1 );
+            pLockTokens[ nPos ]
                 = OUString( buf, len, RTL_TEXTENCODING_ASCII_US );
             pCtx->hasHREF = true;
             break;
@@ -344,10 +344,11 @@ bool LockSequence::createFromXML( const OString & rInData,
         if ( aCtx.pLock )
         {
             nCount++;
-            if ( nCount > rOutData.getLength() )
-                rOutData.realloc( rOutData.getLength() + 1 );
+            auto pOutData = ( nCount > rOutData.getLength() )
+                                ? rOutData.realloc( rOutData.getLength() + 1 )
+                                : rOutData.getArray();
 
-            rOutData[ nCount - 1 ] = *aCtx.pLock;
+            pOutData[ nCount - 1 ] = *aCtx.pLock;
         }
 
         nStart = nEnd + TOKEN_LENGTH;

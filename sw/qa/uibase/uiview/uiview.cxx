@@ -65,9 +65,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testUpdateAllObjectReplacements)
     uno::Reference<uno::XInterface> xInterface
         = xFactory->createInstance("com.sun.star.frame.Desktop");
     uno::Reference<frame::XComponentLoader> xComponentLoader(xInterface, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aLoadArgs(1);
-    aLoadArgs[0].Name = "Hidden";
-    aLoadArgs[0].Value <<= true;
+    uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue("Hidden", true) };
     mxComponent = xComponentLoader->loadComponentFromURL(sTempCopy, "_default", 0, aLoadArgs);
 
     // Perform the .uno:UpdateAll call and save
