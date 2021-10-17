@@ -107,10 +107,10 @@ namespace svgio::svgreader
                         }
                     }
 
-                    for(size_t a(0); a < aParts.size(); a++)
+                    for(const auto &a : aParts)
                     {
                         const OUString aNewConcatenated(
-                            "." + aParts[a] + aConcatenated);
+                            "." + a + aConcatenated);
 
                         if(pParent)
                         {
@@ -246,10 +246,10 @@ namespace svgio::svgreader
                 // as current
                 SvgStyleAttributes* pCurrent = const_cast< SvgStyleAttributes* >(maCssStyleVector[0]);
 
+                // Note that data which maCssStyleVector has its pointers is modifed here
                 for(size_t a(1); a < maCssStyleVector.size(); a++)
                 {
                     SvgStyleAttributes* pNext = const_cast< SvgStyleAttributes* >(maCssStyleVector[a]);
-
                     pCurrent->setCssStyleParent(pNext);
                     pCurrent = pNext;
                 }
