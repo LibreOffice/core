@@ -34,6 +34,7 @@
 #include <strings.hrc>
 #include <rptui_slotid.hrc>
 #include <comphelper/propmultiplex.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/containermultiplexer.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/SelectionMultiplex.hxx>
@@ -306,16 +307,14 @@ IMPL_LINK(NavigatorTree, CommandHdl, const CommandEvent&, rEvt, bool)
                 uno::Sequence< beans::PropertyValue> aArgs;
                 if ( nId == SID_RPT_NEW_FUNCTION )
                 {
-                    aArgs.realloc(1);
-                    aArgs[0].Value <<= (xFunctions.is() ? xFunctions : xSupplier->getFunctions());
+                    auto pArgs = aArgs.realloc(1);
+                    pArgs[0].Value <<= (xFunctions.is() ? xFunctions : xSupplier->getFunctions());
                 }
                 else if ( nId == SID_DELETE )
                 {
                     if ( xGroup.is() )
                         nId = SID_GROUP_REMOVE;
-                    aArgs.realloc(1);
-                    aArgs[0].Name = PROPERTY_GROUP;
-                    aArgs[0].Value <<= pData->getContent();
+                    aArgs = { comphelper::makePropertyValue(PROPERTY_GROUP, pData->getContent()) };
                 }
                 m_rController.executeUnChecked(nId,aArgs);
             }

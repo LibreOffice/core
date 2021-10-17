@@ -13,6 +13,7 @@
 
 #include <test/bootstrapfixture.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <docsh.hxx>
 #include <docfunc.hxx>
@@ -131,9 +132,7 @@ void ScCopyPasteTest::testCopyPasteXLS()
     xDocSh->DoClose();
 
     // 5. Create a new Spreadsheet
-    Sequence < beans::PropertyValue > args(1);
-    args[0].Name = "Hidden";
-    args[0].Value <<= true;
+    Sequence < beans::PropertyValue > args{ comphelper::makePropertyValue("Hidden", true) };
 
     uno::Reference< lang::XComponent > xComponent = xDesktop->loadComponentFromURL(
             "private:factory/scalc",

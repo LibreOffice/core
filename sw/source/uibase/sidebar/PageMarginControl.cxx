@@ -549,30 +549,31 @@ void PageMarginControl::StoreUserCustomValues()
     }
 
     css::uno::Sequence < css::beans::NamedValue > aSeq( 1 );
+    auto pSeq = aSeq.getArray();
     SvtViewOptions aWinOpt( EViewType::Window, SWPAGE_LEFT_GVALUE );
 
-    aSeq[0].Name = "mnPageLeftMargin";
-    aSeq[0].Value <<= OUString::number( m_nPageLeftMargin );
+    pSeq[0].Name = "mnPageLeftMargin";
+    pSeq[0].Value <<= OUString::number( m_nPageLeftMargin );
     aWinOpt.SetUserData( aSeq );
 
     SvtViewOptions aWinOpt2( EViewType::Window, SWPAGE_RIGHT_GVALUE );
-    aSeq[0].Name = "mnPageRightMargin";
-    aSeq[0].Value <<= OUString::number( m_nPageRightMargin );
+    pSeq[0].Name = "mnPageRightMargin";
+    pSeq[0].Value <<= OUString::number( m_nPageRightMargin );
     aWinOpt2.SetUserData( aSeq );
 
     SvtViewOptions aWinOpt3( EViewType::Window, SWPAGE_TOP_GVALUE );
-    aSeq[0].Name = "mnPageTopMargin";
-    aSeq[0].Value <<= OUString::number( m_nPageTopMargin );
+    pSeq[0].Name = "mnPageTopMargin";
+    pSeq[0].Value <<= OUString::number( m_nPageTopMargin );
     aWinOpt3.SetUserData( aSeq );
 
     SvtViewOptions aWinOpt4( EViewType::Window, SWPAGE_DOWN_GVALUE );
-    aSeq[0].Name = "mnPageBottomMargin";
-    aSeq[0].Value <<= OUString::number( m_nPageBottomMargin );
+    pSeq[0].Name = "mnPageBottomMargin";
+    pSeq[0].Value <<= OUString::number( m_nPageBottomMargin );
     aWinOpt4.SetUserData( aSeq );
 
     SvtViewOptions aWinOpt5( EViewType::Window, SWPAGE_MIRROR_GVALUE );
-    aSeq[0].Name = "mbMirrored";
-    aSeq[0].Value <<= OUString::number( m_bMirrored ? 1 : 0 );
+    pSeq[0].Name = "mbMirrored";
+    pSeq[0].Value <<= OUString::number( m_bMirrored ? 1 : 0 );
     aWinOpt5.SetUserData( aSeq );
 }
 

@@ -753,8 +753,8 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
         {
             svx::ODataAccessDescriptor aDescriptor = svx::OColumnTransferable::extractColumnDescriptor(aDropped);
 
-            aValues.realloc(1);
-            aValues[0].Value <<= aDescriptor.createPropertyValueSequence();
+            auto pValues = aValues.realloc(1);
+            pValues[0].Value <<= aDescriptor.createPropertyValueSequence();
         }
         else
             aValues = svx::OMultiColumnTransferable::extractDescriptor(aDropped);
@@ -766,15 +766,15 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
             sal_Int32 nLength = aCurrent.getLength();
             if ( nLength )
             {
-                aCurrent.realloc(nLength + 3);
-                aCurrent[nLength].Name = PROPERTY_POSITION;
-                aCurrent[nLength++].Value <<= AWTPoint(aDropPos);
+                auto pCurrent = aCurrent.realloc(nLength + 3);
+                pCurrent[nLength].Name = PROPERTY_POSITION;
+                pCurrent[nLength++].Value <<= AWTPoint(aDropPos);
                 // give also the DND Action (Shift|Ctrl) Key to really say what we want
-                aCurrent[nLength].Name = "DNDAction";
-                aCurrent[nLength++].Value <<= _rEvt.mnAction;
+                pCurrent[nLength].Name = "DNDAction";
+                pCurrent[nLength++].Value <<= _rEvt.mnAction;
 
-                aCurrent[nLength].Name = "Section";
-                aCurrent[nLength++].Value <<= getSection();
+                pCurrent[nLength].Name = "Section";
+                pCurrent[nLength++].Value <<= getSection();
                 propVal.Value <<= aCurrent;
             }
         }

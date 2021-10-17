@@ -125,9 +125,10 @@ const uno::Sequence<beans::PropertyValue>& ScSolverOptionsDialog::GetProperties(
     sal_Int32 nEntryCount = maProperties.getLength();
     if (nEntryCount == m_xLbSettings->n_children())
     {
+        auto maPropertiesRange = asNonConstRange(maProperties);
         for (sal_Int32 nEntryPos=0; nEntryPos<nEntryCount; ++nEntryPos)
         {
-            uno::Any& rValue = maProperties[nEntryPos].Value;
+            uno::Any& rValue = maPropertiesRange[nEntryPos].Value;
             if (ScSolverOptionsString* pStringItem = reinterpret_cast<ScSolverOptionsString*>(m_xLbSettings->get_id(nEntryPos).toInt64()))
             {
                 if (pStringItem->IsDouble())

@@ -374,8 +374,7 @@ ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XComponentContext >& _r
 {
     // some kind of default
     m_sConnectURL = "jdbc:";
-    m_aTableFilter.realloc(1);
-    m_aTableFilter[0] = "%";
+    m_aTableFilter = { "%" };
     impl_construct_nothrow();
 }
 
@@ -766,9 +765,7 @@ Reference< XStorage > const & ODatabaseModelImpl::getOrCreateRootStorage()
 
         if ( aSource.hasValue() )
         {
-            Sequence< Any > aStorageCreationArgs(2);
-            aStorageCreationArgs[0] = aSource;
-            aStorageCreationArgs[1] <<= ElementModes::READWRITE;
+            Sequence< Any > aStorageCreationArgs{ aSource, Any(ElementModes::READWRITE) };
 
             Reference< XStorage > xDocumentStorage;
             OUString sURL;
@@ -783,7 +780,7 @@ Reference< XStorage > const & ODatabaseModelImpl::getOrCreateRootStorage()
                 catch( const Exception& )
                 {
                     m_bDocumentReadOnly = true;
-                    aStorageCreationArgs[1] <<= ElementModes::READ;
+                    aStorageCreationArgs.getArray()[1] <<= ElementModes::READ;
                     try
                     {
                         xDocumentStorage.set( xStorageFactory->createInstanceWithArguments( aStorageCreationArgs ), UNO_QUERY_THROW );

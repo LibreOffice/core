@@ -1044,8 +1044,7 @@ uno::Reference< util::XChangesBatch > const & GrammarCheckingIterator::GetUpdate
             beans::PropertyValue aValue;
             aValue.Name  = "nodepath";
             aValue.Value <<= OUString("org.openoffice.Office.Linguistic/ServiceManager");
-            uno::Sequence< uno::Any > aProps(1);
-            aProps[0] <<= aValue;
+            uno::Sequence< uno::Any > aProps{ uno::Any(aValue) };
             m_xUpdateAccess.set(
                     xConfigurationProvider->createInstanceWithArguments(
                         "com.sun.star.configuration.ConfigurationUpdateAccess", aProps ),

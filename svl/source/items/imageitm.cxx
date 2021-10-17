@@ -54,12 +54,10 @@ bool SfxImageItem::operator==( const SfxPoolItem& rItem ) const
 
 bool SfxImageItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
 {
-    css::uno::Sequence< css::uno::Any > aSeq( 4 );
-    aSeq[0] <<= GetValue();
-    aSeq[1] <<= sal_Int16(mnAngle);
-    aSeq[2] <<= mbMirrored;
-    aSeq[3] <<= maURL;
-
+    css::uno::Sequence< css::uno::Any > aSeq{ css::uno::Any(GetValue()),
+                                              css::uno::Any(sal_Int16(mnAngle)),
+                                              css::uno::Any(mbMirrored),
+                                              css::uno::Any(maURL) };
     rVal <<= aSeq;
     return true;
 }

@@ -27,6 +27,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -526,11 +527,10 @@ IPropertyArrayHelper* ODocumentDefinition::createArrayHelper( ) const
     describeProperties( aProps );
 
     // properties not maintained by our base class
-    Sequence< Property > aManualProps( 1 );
-    aManualProps[0].Name = PROPERTY_PERSISTENT_PATH;
-    aManualProps[0].Handle = PROPERTY_ID_PERSISTENT_PATH;
-    aManualProps[0].Type = ::cppu::UnoType<OUString>::get();
-    aManualProps[0].Attributes = PropertyAttribute::READONLY;
+    Sequence< Property > aManualProps{ { /* Name       */ PROPERTY_PERSISTENT_PATH,
+                                         /* Handle     */ PROPERTY_ID_PERSISTENT_PATH,
+                                         /* Type       */ ::cppu::UnoType<OUString>::get(),
+                                         /* Attributes */ PropertyAttribute::READONLY } };
 
     return new OPropertyArrayHelper( ::comphelper::concatSequences( aProps, aManualProps ) );
 }
@@ -1165,9 +1165,9 @@ void ODocumentDefinition::onCommandInsert( const OUString& _sURL, const Referenc
         if ( xStorage.is() )
         {
             Reference< XEmbeddedObjectCreator> xEmbedFactory = EmbeddedObjectCreator::create(m_aContext);
-            Sequence<PropertyValue> aEmpty,aMediaDesc(1);
-            aMediaDesc[0].Name = PROPERTY_URL;
-            aMediaDesc[0].Value <<= _sURL;
+            Sequence<PropertyValue> aEmpty;
+            Sequence<PropertyValue> aMediaDesc{ comphelper::makePropertyValue(PROPERTY_URL,
+                                                                              _sURL) };
             m_xEmbeddedObject.set(xEmbedFactory->createInstanceInitFromMediaDescriptor( xStorage
                                                                             ,m_pImpl->m_aProps.sPersistentName
                                                                             ,aMediaDesc

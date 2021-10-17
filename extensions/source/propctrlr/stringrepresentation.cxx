@@ -344,8 +344,8 @@ namespace
         sal_Int32 tokenPos = 0;
         do
         {
-            _out_SplitUp.realloc( _out_SplitUp.getLength() + 1 );
-            _out_SplitUp[ _out_SplitUp.getLength() - 1 ] = static_cast<ElementType>(_rTransformer( _rComposed.getToken( 0, '\n', tokenPos ) ));
+            auto p_out_SplitUp = _out_SplitUp.realloc( _out_SplitUp.getLength() + 1 );
+            p_out_SplitUp[ _out_SplitUp.getLength() - 1 ] = static_cast<ElementType>(_rTransformer( _rComposed.getToken( 0, '\n', tokenPos ) ));
         }
         while ( tokenPos != -1 );
     }

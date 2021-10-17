@@ -41,6 +41,7 @@
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/theWindowStateConfiguration.hpp>
 
+#include <comphelper/propertyvalue.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
@@ -282,17 +283,16 @@ Sequence< Sequence< css::beans::PropertyValue > > ToolbarsMenuController::getLay
         }
     }
 
-    Sequence< css::beans::PropertyValue > aTbSeq( 2 );
-    aTbSeq[0].Name = g_aPropUIName;
-    aTbSeq[1].Name = g_aPropResourceURL;
-
     Sequence< Sequence< css::beans::PropertyValue > > aSeq( aToolBarArray.size() );
+    auto pSeq = aSeq.getArray();
     const sal_uInt32 nCount = aToolBarArray.size();
     for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
-        aTbSeq[0].Value <<= aToolBarArray[i].aToolBarUIName;
-        aTbSeq[1].Value <<= aToolBarArray[i].aToolBarResName;
-        aSeq[i] = aTbSeq;
+        Sequence< css::beans::PropertyValue > aTbSeq{
+            comphelper::makePropertyValue(g_aPropUIName, aToolBarArray[i].aToolBarUIName),
+            comphelper::makePropertyValue(g_aPropResourceURL, aToolBarArray[i].aToolBarResName)
+        };
+        pSeq[i] = aTbSeq;
     }
 
     return aSeq;
@@ -603,7 +603,7 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
                             if ( !bVisible && bContextSensitive && nVisibleIndex >= 0 )
                             {
                                 // Default is: Every context sensitive toolbar is visible
-                                aWindowState[nVisibleIndex].Value <<= true;
+                                aWindowState.getArray()[nVisibleIndex].Value <<= true;
                                 xNameReplace->replaceByName( aElementName, makeAny( aWindowState ));
                                 bRefreshToolbars = true;
                             }

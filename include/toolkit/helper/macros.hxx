@@ -148,8 +148,8 @@ IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodNa
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override   \
                             { \
                                 css::uno::Sequence< OUString > aNames = BaseClass::getSupportedServiceNames( ); \
-                                aNames.realloc( aNames.getLength() + 1 ); \
-                                aNames[ aNames.getLength() - 1 ] = ServiceName; \
+                                auto pNames = aNames.realloc( aNames.getLength() + 1 ); \
+                                pNames[ aNames.getLength() - 1 ] = ServiceName; \
                                 return aNames; \
                             } \
 

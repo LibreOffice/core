@@ -621,7 +621,7 @@ void SdXMLExport::ImpPrepAutoLayoutInfos()
         return;
 
     OUString aStr;
-
+    auto DrawPagesAutoLayoutNamesRange = asNonConstRange(maDrawPagesAutoLayoutNames);
     Reference< presentation::XHandoutMasterSupplier > xHandoutSupp( GetModel(), UNO_QUERY );
     if( xHandoutSupp.is() )
     {
@@ -629,7 +629,7 @@ void SdXMLExport::ImpPrepAutoLayoutInfos()
         if( xHandoutPage.is() )
         {
             if(ImpPrepAutoLayoutInfo(xHandoutPage, aStr))
-                maDrawPagesAutoLayoutNames[0] = aStr;
+                DrawPagesAutoLayoutNamesRange[0] = aStr;
         }
     }
 
@@ -642,7 +642,7 @@ void SdXMLExport::ImpPrepAutoLayoutInfos()
         if((aAny >>= xDrawPage) && xDrawPage.is())
         {
             if(ImpPrepAutoLayoutInfo(xDrawPage, aStr))
-                maDrawPagesAutoLayoutNames[nCnt+1] = aStr;
+                DrawPagesAutoLayoutNamesRange[nCnt+1] = aStr;
         }
     }
 }

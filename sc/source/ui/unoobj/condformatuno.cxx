@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <algorithm>
 #include <memory>
 #include <condformatuno.hxx>
 
@@ -375,13 +378,9 @@ uno::Sequence<uno::Reference<sheet::XConditionalFormat> > ScCondFormatsObj::getC
     ScConditionalFormatList* pFormatList = getCoreObject();
     size_t n = pFormatList->size();
     uno::Sequence<uno::Reference<sheet::XConditionalFormat> > aCondFormats(n);
-    sal_Int32 i = 0;
-    for (const auto& rFormat : *pFormatList)
-    {
-        uno::Reference<sheet::XConditionalFormat> xCondFormat(new ScCondFormatObj(mpDocShell, this, rFormat->GetKey()));
-        aCondFormats[i] = xCondFormat;
-        ++i;
-    }
+    std::transform(pFormatList->begin(), pFormatList->end(), aCondFormats.getArray(),
+                   [this](const auto& rFormat)
+                   { return new ScCondFormatObj(mpDocShell, this, rFormat->GetKey()); });
 
     return aCondFormats;
 }
@@ -954,9 +953,10 @@ uno::Any SAL_CALL ScColorScaleFormatObj::getPropertyValue( const OUString& aProp
         case ColorScaleEntries:
         {
             uno::Sequence<uno::Reference<sheet::XColorScaleEntry> > aEntries(getCoreObject()->size());
+            auto aEntriesRange = asNonConstRange(aEntries);
             for (size_t i = 0; i < getCoreObject()->size(); ++i)
             {
-                aEntries[i] = new ScColorScaleEntryObj(this, i);
+                aEntriesRange[i] = new ScColorScaleEntryObj(this, i);
             }
             aAny <<= aEntries;
         }
@@ -1638,9 +1638,10 @@ uno::Any SAL_CALL ScIconSetFormatObj::getPropertyValue( const OUString& aPropert
         {
             size_t nSize = getCoreObject()->size();
             uno::Sequence<uno::Reference<sheet::XIconSetEntry> > aEntries(nSize);
+            auto aEntriesRange = asNonConstRange(aEntries);
             for (size_t i = 0; i < nSize; ++i)
             {
-                aEntries[i] = new ScIconSetEntryObj(this, i);
+                aEntriesRange[i] = new ScIconSetEntryObj(this, i);
             }
             aAny <<= aEntries;
         }

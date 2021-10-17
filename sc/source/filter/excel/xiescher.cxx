@@ -51,6 +51,7 @@
 #include <vcl/wmf.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/documentinfo.hxx>
+#include <o3tl/safeint.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -1926,8 +1927,7 @@ void XclImpControlHelper::ApplySheetLinkProps() const
         aValue.Name = SC_UNONAME_BOUNDCELL;
         aValue.Value <<= aApiAddress;
 
-        Sequence< Any > aArgs( 1 );
-        aArgs[ 0 ] <<= aValue;
+        Sequence< Any > aArgs{ Any(aValue) };
 
         // create the CellValueBinding instance and set at the control model
         OUString aServiceName;
@@ -1960,8 +1960,7 @@ void XclImpControlHelper::ApplySheetLinkProps() const
         aValue.Name = SC_UNONAME_CELLRANGE;
         aValue.Value <<= aApiRange;
 
-        Sequence< Any > aArgs( 1 );
-        aArgs[ 0 ] <<= aValue;
+        Sequence< Any > aArgs{ Any(aValue) };
 
         // create the EntrySource instance and set at the control model
         Reference< XListEntrySource > xEntrySource( xFactory->createInstanceWithArguments(
@@ -2897,8 +2896,7 @@ void XclImpDropDownObj::DoProcessControl( ScfPropertySet& rPropSet ) const
         // selection (do not set, if dropdown is linked to a cell)
         if( !HasCellLink() && (mnSelEntry > 0) )
         {
-            Sequence< sal_Int16 > aSelSeq( 1 );
-            aSelSeq[ 0 ] = mnSelEntry - 1;
+            Sequence< sal_Int16 > aSelSeq{ o3tl::narrowing<sal_Int16>(mnSelEntry - 1) };
             rPropSet.SetProperty( "DefaultSelection", aSelSeq );
         }
     }

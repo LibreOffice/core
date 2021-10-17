@@ -30,6 +30,7 @@
 #include <vcl/weld.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -307,11 +308,10 @@ OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGra
 
                 OUString aExportFilter = rGraphicFilter.GetExportInternalFilterName(nFilter);
 
-                Sequence< PropertyValue > aPropsForDialog(2);
-                aPropsForDialog[0].Name = "Graphic";
-                aPropsForDialog[0].Value <<= xGraphic;
-                aPropsForDialog[1].Name = "FilterName";
-                aPropsForDialog[1].Value <<= aExportFilter;
+                Sequence< PropertyValue > aPropsForDialog{
+                    comphelper::makePropertyValue("Graphic", xGraphic),
+                    comphelper::makePropertyValue("FilterName", aExportFilter)
+                };
 
                 Sequence< PropertyValue > aFilterData;
                 bool bStatus = lcl_ExecuteFilterDialog(aPropsForDialog, aFilterData);
@@ -417,11 +417,10 @@ void GraphicHelper::SaveShapeAsGraphic(weld::Window* pParent,  const Reference< 
             {
                 Reference<css::drawing::XGraphicExportFilter> xGraphicExporter = css::drawing::GraphicExportFilter::create( xContext );
 
-                Sequence<PropertyValue> aDescriptor( 2 );
-                aDescriptor[0].Name = "MediaType";
-                aDescriptor[0].Value <<= aExportMimeType;
-                aDescriptor[1].Name = "URL";
-                aDescriptor[1].Value <<= sPath;
+                Sequence<PropertyValue> aDescriptor{
+                    comphelper::makePropertyValue("MediaType", aExportMimeType),
+                    comphelper::makePropertyValue("URL", sPath)
+                };
 
                 Reference< XComponent > xSourceDocument( xShape, UNO_QUERY_THROW );
                 xGraphicExporter->setSourceDocument( xSourceDocument );

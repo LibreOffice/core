@@ -171,8 +171,8 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
         case SCALE_PROP_STEPHELP:
         {
             Sequence< chart2::SubIncrement >& rSubIncrements( aScaleData.IncrementData.SubIncrements );
-            if( !rSubIncrements.hasElements() )
-                rSubIncrements.realloc( 1 );
+            auto pSubIncrements = !rSubIncrements.hasElements() ? rSubIncrements.realloc( 1 )
+                                                                : rSubIncrements.getArray();
 
             double fStepHelp = 0;
             if( rOuterValue >>= fStepHelp )
@@ -181,14 +181,14 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
                 if( AxisHelper::isLogarithmic(aScaleData.Scaling) )
                 {
                     sal_Int32 nIntervalCount = static_cast< sal_Int32 >(fStepHelp);
-                    rSubIncrements[ 0 ].IntervalCount <<= nIntervalCount;
+                    pSubIncrements[ 0 ].IntervalCount <<= nIntervalCount;
                 }
                 else if( (fStepHelp != 0.0) &&
                     (aScaleData.IncrementData.Distance >>= fStepMain) )
                 {
                     // approximate interval count
                     sal_Int32 nIntervalCount = static_cast< sal_Int32 >(fStepMain / fStepHelp);//cppcheck-suppress zerodiv
-                    rSubIncrements[ 0 ].IntervalCount <<= nIntervalCount;
+                    pSubIncrements[ 0 ].IntervalCount <<= nIntervalCount;
                 }
             }
             bSetScaleData = true;
@@ -197,13 +197,13 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
         case SCALE_PROP_STEPHELP_COUNT:
         {
             Sequence< chart2::SubIncrement >& rSubIncrements( aScaleData.IncrementData.SubIncrements );
-            if( !rSubIncrements.hasElements() )
-                rSubIncrements.realloc( 1 );
+            auto pSubIncrements = !rSubIncrements.hasElements() ? rSubIncrements.realloc( 1 )
+                                                                : rSubIncrements.getArray();
             sal_Int32 nIntervalCount=0;
             if( rOuterValue>>=nIntervalCount )
-                rSubIncrements[ 0 ].IntervalCount <<= nIntervalCount;
+                pSubIncrements[ 0 ].IntervalCount <<= nIntervalCount;
             else
-                rSubIncrements[ 0 ].IntervalCount  = Any();
+                pSubIncrements[ 0 ].IntervalCount  = Any();
             bSetScaleData = true;
             break;
         }
@@ -237,13 +237,13 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
         case SCALE_PROP_AUTO_STEPHELP:
         {
             Sequence< chart2::SubIncrement >& rSubIncrements( aScaleData.IncrementData.SubIncrements );
-            if( !rSubIncrements.hasElements() )
-                rSubIncrements.realloc( 1 );
+            auto pSubIncrements = !rSubIncrements.hasElements() ? rSubIncrements.realloc( 1 )
+                                                                : rSubIncrements.getArray();
 
             if( (rOuterValue >>= bBool) && bBool )
-                rSubIncrements[ 0 ].IntervalCount = Any();
+                pSubIncrements[ 0 ].IntervalCount = Any();
             else
-                rSubIncrements[ 0 ].IntervalCount = getPropertyValue( SCALE_PROP_STEPHELP_COUNT, xInnerPropertySet );
+                pSubIncrements[ 0 ].IntervalCount = getPropertyValue( SCALE_PROP_STEPHELP_COUNT, xInnerPropertySet );
             bSetScaleData = true;
             break;
         }

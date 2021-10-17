@@ -53,10 +53,11 @@ void XMLIndexSpanEntryContext::FillPropertyValues(
     XMLIndexSimpleEntryContext::FillPropertyValues(rValues);
 
     // content
+    auto pValues = rValues.getArray();
     Any aAny;
     aAny <<= sContent.makeStringAndClear();
-    rValues[m_nValues-1].Name = "Text";
-    rValues[m_nValues-1].Value = aAny;
+    pValues[m_nValues-1].Name = "Text";
+    pValues[m_nValues-1].Value = aAny;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

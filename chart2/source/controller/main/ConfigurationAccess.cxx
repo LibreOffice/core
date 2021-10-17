@@ -64,11 +64,11 @@ FieldUnit CalcConfigItem::getFieldUnit()
 {
     FieldUnit eResult( FieldUnit::CM );
 
-    uno::Sequence< OUString > aNames( 1 );
+    uno::Sequence< OUString > aNames;
     if( lcl_IsMetric() )
-        aNames[ 0 ] = "Other/MeasureUnit/Metric";
+        aNames = { "Other/MeasureUnit/Metric" };
     else
-        aNames[ 0 ] = "Other/MeasureUnit/NonMetric";
+        aNames = { "Other/MeasureUnit/NonMetric" };
 
     uno::Sequence< uno::Any > aResult( GetProperties( aNames ));
     sal_Int32 nValue = 0;

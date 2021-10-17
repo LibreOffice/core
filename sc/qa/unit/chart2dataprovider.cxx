@@ -8,6 +8,8 @@
  */
 
 #include <sal/config.h>
+
+#include <comphelper/propertyvalue.hxx>
 #include <test/bootstrapfixture.hxx>
 
 #include <docsh.hxx>
@@ -46,19 +48,12 @@ static void lcl_createAndCheckDataProvider(ScDocument& rDoc, const OUString& cel
     uno::Reference<chart2::data::XDataProvider> xDataProvider = new ScChart2DataProvider(&rDoc);
     CPPUNIT_ASSERT(xDataProvider.is());
 
-    uno::Sequence<beans::PropertyValue> aArgs(4);
-
-    aArgs[0].Name = "CellRangeRepresentation";
-    aArgs[0].Value <<= cellRange;
-
-    aArgs[1].Name = "HasCategories";
-    aArgs[1].Value <<= hasCategories;
-
-    aArgs[2].Name = "FirstCellAsLabel";
-    aArgs[2].Value <<= firstCellAsLabel;
-
-    aArgs[3].Name = "DataRowSource";
-    aArgs[3].Value <<= chart::ChartDataRowSource_COLUMNS;
+    uno::Sequence<beans::PropertyValue> aArgs{
+        comphelper::makePropertyValue("CellRangeRepresentation", cellRange),
+        comphelper::makePropertyValue("HasCategories", hasCategories),
+        comphelper::makePropertyValue("FirstCellAsLabel", firstCellAsLabel),
+        comphelper::makePropertyValue("DataRowSource", chart::ChartDataRowSource_COLUMNS)
+    };
 
     uno::Reference<chart2::data::XDataSource> xDataSource = xDataProvider->createDataSource(aArgs);
     CPPUNIT_ASSERT(xDataSource.is());

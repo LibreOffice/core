@@ -96,8 +96,7 @@ bool LdapUserProfileBe::readLdapConfiguration(
 
         css::beans::NamedValue aPath("nodepath", uno::makeAny(OUString("org.openoffice.LDAP/UserDirectory")) );
 
-        uno::Sequence< uno::Any > aArgs(1);
-        aArgs[0] <<=  aPath;
+        uno::Sequence< uno::Any > aArgs{ uno::Any(aPath) };
 
         xIface = xCfgProvider->createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", aArgs);
 

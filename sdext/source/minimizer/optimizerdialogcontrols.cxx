@@ -392,10 +392,10 @@ void OptimizerDialog::UpdateControlStatesPage0()
     const std::vector< OptimizerSettings >& rList( GetOptimizerSettings() );
     if ( rList.size() > 1 ) // the first session in the list is the actual one -> skipping first one
     {
-        aItemList.realloc( rList.size() - 1 );
+        auto pItemList = aItemList.realloc( rList.size() - 1 );
         for ( std::vector<OptimizerSettings>::size_type i = 1; i < rList.size(); i++ )
         {
-            aItemList[ i - 1 ] = rList[ i ].maName;
+            pItemList[ i - 1 ] = rList[ i ].maName;
             if ( nSelectedItem < 0 )
             {
                 if ( rList[ i ] == rList[ 0 ] )
@@ -407,8 +407,7 @@ void OptimizerDialog::UpdateControlStatesPage0()
     Sequence< short > aSelectedItems;
     if ( nSelectedItem >= 0 )
     {
-        aSelectedItems.realloc( 1 );
-        aSelectedItems[ 0 ] = nSelectedItem;
+        aSelectedItems = { nSelectedItem };
         if ( nSelectedItem > 2 )    // only allowing to delete custom themes, the first can|t be deleted
             bRemoveButtonEnabled = true;
     }
@@ -517,11 +516,12 @@ void OptimizerDialog::UpdateControlStatesPage2()
 }
 void OptimizerDialog::InitPage2()
 {
-    Sequence< OUString > aResolutionItemList( 4 );
-    aResolutionItemList[ 0 ] = getString( STR_IMAGE_RESOLUTION_0 ).getToken( 1, ';' );
-    aResolutionItemList[ 1 ] = getString( STR_IMAGE_RESOLUTION_1 ).getToken( 1, ';' );
-    aResolutionItemList[ 2 ] = getString( STR_IMAGE_RESOLUTION_2 ).getToken( 1, ';' );
-    aResolutionItemList[ 3 ] = getString( STR_IMAGE_RESOLUTION_3 ).getToken( 1, ';' );
+    Sequence< OUString > aResolutionItemList{
+        getString( STR_IMAGE_RESOLUTION_0 ).getToken( 1, ';' ),
+        getString( STR_IMAGE_RESOLUTION_1 ).getToken( 1, ';' ),
+        getString( STR_IMAGE_RESOLUTION_2 ).getToken( 1, ';' ),
+        getString( STR_IMAGE_RESOLUTION_3 ).getToken( 1, ';' )
+    };
 
     std::vector< OUString > aControlList
     {
@@ -618,9 +618,9 @@ void OptimizerDialog::UpdateControlStatesPage4()
     const std::vector< OptimizerSettings >& rList( GetOptimizerSettings() );
     if ( rList.size() > 1 ) // the first session in the list is the actual one -> skipping first one
     {
-        aItemList.realloc( rList.size() - 1 );
+        auto pItemList = aItemList.realloc( rList.size() - 1 );
         for ( std::vector<OptimizerSettings>::size_type w = 1; w < rList.size(); w++ )
-            aItemList[ w - 1 ] = rList[ w ].maName;
+            pItemList[ w - 1 ] = rList[ w ].maName;
     }
     setControlProperty( "ComboBox0Pg4", "StringItemList", Any( aItemList ) );
 

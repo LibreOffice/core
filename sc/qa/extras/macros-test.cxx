@@ -16,6 +16,7 @@
 #include <editeng/borderline.hxx>
 #include <svx/svdpage.hxx>
 #include <unotools/mediadescriptor.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <docsh.hxx>
 #include <document.hxx>
@@ -115,9 +116,7 @@ void ScMacrosTest::saveAndReload(css::uno::Reference<css::lang::XComponent>& xCo
 {
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
-    css::uno::Sequence<css::beans::PropertyValue> aArgs(1);
-    aArgs[0].Name = "FilterName";
-    aArgs[0].Value <<= rFilter;
+    css::uno::Sequence aArgs{ comphelper::makePropertyValue("FilterName", rFilter) };
     css::uno::Reference<css::frame::XStorable> xStorable(xComponent, css::uno::UNO_QUERY_THROW);
     xStorable->storeAsURL(aTempFile.GetURL(), aArgs);
     css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
@@ -378,9 +377,7 @@ void ScMacrosTest::testVba()
 
         if ( bWorkbooksHandling )
         {
-            aParams.realloc(2);
-            aParams[ 0 ] <<= sTempDir;
-            aParams[ 1 ] <<= sTestFileName;
+            aParams = { uno::Any(sTempDir), uno::Any(sTestFileName) };
         }
 
         SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);

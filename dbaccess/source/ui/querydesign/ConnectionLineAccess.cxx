@@ -144,11 +144,11 @@ namespace dbaui
         if( nIndex < 0 || nIndex >= getRelationCount() )
             throw IndexOutOfBoundsException();
 
-        Sequence< Reference<XInterface> > aSeq(m_pLine ? 2 : 0);
+        Sequence< Reference<XInterface> > aSeq;
         if( m_pLine )
         {
-            aSeq[0] = m_pLine->GetSourceWin()->GetAccessible();
-            aSeq[1] = m_pLine->GetDestWin()->GetAccessible();
+            aSeq = { m_pLine->GetSourceWin()->GetAccessible(),
+                     m_pLine->GetDestWin()->GetAccessible() };
         }
 
         return AccessibleRelation(AccessibleRelationType::CONTROLLED_BY,aSeq);

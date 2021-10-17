@@ -162,12 +162,13 @@ IMPL_LINK_NOARG(ManageLanguageDialog, DeleteHdl, weld::Button&, void)
     int nPos = m_xLanguageLB->get_selected_index();
     // remove locales
     Sequence< Locale > aLocaleSeq( nCount );
+    auto aLocaleSeqRange = asNonConstRange(aLocaleSeq);
     for (int i = 0; i < nCount; ++i)
     {
         const sal_Int32 nSelPos = aSelection[i];
         LanguageEntry* pEntry = reinterpret_cast<LanguageEntry*>(m_xLanguageLB->get_id(nSelPos).toInt64());
         if ( pEntry )
-            aLocaleSeq[i] = pEntry->m_aLocale;
+            aLocaleSeqRange[i] = pEntry->m_aLocale;
     }
     m_xLocalizationMgr->handleRemoveLocales( aLocaleSeq );
     // update listbox

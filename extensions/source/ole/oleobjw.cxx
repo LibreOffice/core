@@ -1017,8 +1017,8 @@ Any  IUnknownWrapper::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
     {
         if( outParameterCount && pMethod)
         {
-            OutParamIndex.realloc( outParameterCount);
-            OutParam.realloc( outParameterCount);
+            auto pOutParamIndex = OutParamIndex.realloc( outParameterCount);
+            auto pOutParam = OutParam.realloc( outParameterCount);
             sal_Int32 outIndex=0;
             int i = 0;
             try
@@ -1027,13 +1027,13 @@ Any  IUnknownWrapper::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                 {
                     if( pMethod->pParams[i].bOut )
                     {
-                        OutParamIndex[outIndex]= static_cast<sal_Int16>(i);
+                        pOutParamIndex[outIndex]= static_cast<sal_Int16>(i);
                         Any outAny;
                         if( !bJScriptObject)
                         {
                             variantToAny( &pVarParamsRef[outIndex], outAny,
                                         Type(pMethod->pParams[i].pTypeRef), false);
-                            OutParam[outIndex++]= outAny;
+                            pOutParam[outIndex++]= outAny;
                         }
                         else //JScriptObject
                         {
@@ -1047,7 +1047,7 @@ Any  IUnknownWrapper::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                                     {
                                         variantToAny( &varOut, outAny,
                                                     Type(pMethod->pParams[parameterCount - 1 - i].pTypeRef), false);
-                                        OutParam[outParameterCount - 1 - outIndex++]= outAny;
+                                        pOutParam[outParameterCount - 1 - outIndex++]= outAny;
                                     }
                                     else
                                         bConvRet= false;
@@ -1980,8 +1980,8 @@ Any  IUnknownWrapper::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
                 outParamsCount++;
         }
 
-        OutParamIndex.realloc(outParamsCount);
-        OutParam.realloc(outParamsCount);
+        auto pOutParamIndex = OutParamIndex.realloc(outParamsCount);
+        auto pOutParam = OutParam.realloc(outParamsCount);
         // Convert out params
         if (outParamsCount)
         {
@@ -2021,8 +2021,8 @@ Any  IUnknownWrapper::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
                     e.ArgumentIndex = paramIndex;
                     throw;
                 }
-                OutParam[outParamIndex] = outAny;
-                OutParamIndex[outParamIndex] = ::sal::static_int_cast< sal_Int16, int >( paramIndex );
+                pOutParam[outParamIndex] = outAny;
+                pOutParamIndex[outParamIndex] = ::sal::static_int_cast< sal_Int16, int >( paramIndex );
                 outParamIndex++;
             }
             OutParam.realloc(outParamIndex);

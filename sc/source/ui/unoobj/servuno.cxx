@@ -92,10 +92,11 @@ class ScVbaObjectForCodeNameProvider : public ::cppu::WeakImplHelper< container:
 public:
     explicit ScVbaObjectForCodeNameProvider( ScDocShell* pDocShell ) : mpDocShell( pDocShell )
     {
-        uno::Sequence< uno::Any > aArgs(2);
-        // access the application object ( parent for workbook )
-        aArgs[0] <<= ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.Application", uno::Sequence< uno::Any >() );
-        aArgs[1] <<= mpDocShell->GetModel();
+        uno::Sequence< uno::Any > aArgs{
+            // access the application object ( parent for workbook )
+            uno::Any(ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.Application", {} )),
+            uno::Any(mpDocShell->GetModel())
+        };
         maWorkbook <<= ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.excel.Workbook", aArgs );
     }
 
@@ -128,10 +129,7 @@ public:
                         uno::Reference<sheet::XSpreadsheets > xSheets( xSpreadDoc->getSheets(), uno::UNO_SET_THROW );
                         uno::Reference< container::XIndexAccess > xIndexAccess( xSheets, uno::UNO_QUERY_THROW );
                         uno::Reference< sheet::XSpreadsheet > xSheet( xIndexAccess->getByIndex( i ), uno::UNO_QUERY_THROW );
-                        uno::Sequence< uno::Any > aArgs(3);
-                        aArgs[0] = maWorkbook;
-                        aArgs[1] <<= xModel;
-                        aArgs[2] <<= sSheetName;
+                        uno::Sequence< uno::Any > aArgs{ maWorkbook, uno::Any(xModel), uno::Any(sSheetName) };
                         // use the convenience function
                         maCachedObject <<= ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.excel.Worksheet", aArgs );
                         break;
@@ -155,14 +153,15 @@ public:
         ScDocument& rDoc = mpDocShell->GetDocument();
         SCTAB nCount = rDoc.GetTableCount();
         uno::Sequence< OUString > aNames( nCount + 1 );
+        auto pNames = aNames.getArray();
         SCTAB index = 0;
         OUString sCodeName;
         for( ; index < nCount; ++index )
         {
             rDoc.GetCodeName( index, sCodeName );
-            aNames[ index ] = sCodeName;
+            pNames[ index ] = sCodeName;
         }
-        aNames[ index ] = rDoc.GetCodeName();
+        pNames[ index ] = rDoc.GetCodeName();
         return aNames;
     }
     // XElemenAccess
@@ -585,8 +584,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
                 uno::Any aGlobs;
                 if ( !pDocShell->GetBasicManager()->GetGlobalUNOConstant( "VBAGlobals", aGlobs ) )
                 {
-                    uno::Sequence< uno::Any > aArgs(1);
-                    aArgs[ 0 ] <<= pDocShell->GetModel();
+                    uno::Sequence< uno::Any > aArgs{ uno::Any(pDocShell->GetModel()) };
                     xRet = ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( "ooo.vba.excel.Globals", aArgs );
                     pDocShell->GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", uno::Any( xRet ) );
                     BasicManager* pAppMgr = SfxApplication::GetBasicManager();

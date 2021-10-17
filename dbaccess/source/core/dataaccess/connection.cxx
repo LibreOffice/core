@@ -85,8 +85,8 @@ Sequence< OUString > OConnection::getSupportedServiceNames(  )
     if ( comphelper::findValue( aSupported, SERVICE_SDB_CONNECTION ) == -1 )
     {
         sal_Int32 nLen = aSupported.getLength();
-        aSupported.realloc( nLen + 1 );
-        aSupported[ nLen ] = SERVICE_SDB_CONNECTION;
+        auto pSupported = aSupported.realloc( nLen + 1 );
+        pSupported[ nLen ] = SERVICE_SDB_CONNECTION;
     }
 
     return aSupported;
@@ -628,9 +628,8 @@ Reference< XInterface > SAL_CALL OConnection::createInstance( const OUString& _s
             TSupportServices::const_iterator aFind = m_aSupportServices.find(_sServiceSpecifier);
             if ( aFind == m_aSupportServices.end() )
             {
-                Sequence<Any> aArgs(1);
                 Reference<XConnection> xMy(this);
-                aArgs[0] <<= NamedValue("ActiveConnection",makeAny(xMy));
+                Sequence<Any> aArgs{ Any(NamedValue("ActiveConnection",makeAny(xMy))) };
                 aFind = m_aSupportServices.emplace(
                                _sServiceSpecifier,
                                m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext(_sServiceSpecifier, aArgs, m_aContext)

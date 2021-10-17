@@ -310,6 +310,7 @@ void SvtMiscOptions_Impl::ImplCommit()
     Sequence< OUString >    seqNames    = GetPropertyNames  ();
     sal_Int32               nCount      = seqNames.getLength();
     Sequence< Any >         seqValues   ( nCount );
+    auto seqValuesRange = asNonConstRange(seqValues);
     for( sal_Int32 nProperty=0; nProperty<nCount; ++nProperty )
     {
         switch( nProperty )
@@ -317,7 +318,7 @@ void SvtMiscOptions_Impl::ImplCommit()
             case PROPERTYHANDLE_SYMBOLSET :
             {
                 if ( !m_bIsSymbolsSizeRO )
-                   seqValues[nProperty] <<= m_nSymbolsSize;
+                   seqValuesRange[nProperty] <<= m_nSymbolsSize;
                 break;
             }
 
@@ -331,7 +332,7 @@ void SvtMiscOptions_Impl::ImplCommit()
                     else {
                         value = GetIconTheme();
                     }
-                    seqValues[nProperty] <<= value;
+                    seqValuesRange[nProperty] <<= value;
                 }
                 break;
             }

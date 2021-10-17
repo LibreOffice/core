@@ -1588,8 +1588,7 @@ void NeonSession::LOCK( const OUString & inPath,
                                   lastChanceToSendRefreshRequest(
                                       startCall, theLock->timeout ) );
 
-        uno::Sequence< OUString > aTokens( 1 );
-        aTokens[ 0 ] = OUString::createFromAscii( theLock->token );
+        uno::Sequence< OUString > aTokens{ OUString::createFromAscii( theLock->token ) };
         rLock.LockTokens = aTokens;
 
         SAL_INFO( "ucb.ucp.webdav", "LOCK (create) - Created lock for <" << makeAbsoluteURL( inPath )
@@ -2241,8 +2240,8 @@ NeonSession::getDataFromInputStream(
                 {
                     if ( bAppendTrailingZeroByte )
                     {
-                        rData.realloc( nSize + 1 );
-                        rData[ nSize ] = sal_Int8( 0 );
+                        auto pData = rData.realloc( nSize + 1 );
+                        pData[ nSize ] = sal_Int8( 0 );
                     }
                     return true;
                 }
@@ -2285,8 +2284,8 @@ NeonSession::getDataFromInputStream(
 
                 if ( bAppendTrailingZeroByte )
                 {
-                    rData.realloc( nPos + 1 );
-                    rData[ nPos ] = sal_Int8( 0 );
+                    auto pData = rData.realloc( nPos + 1 );
+                    pData[ nPos ] = sal_Int8( 0 );
                 }
                 return true;
             }

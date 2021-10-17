@@ -173,19 +173,15 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
             m_nBitsPerInputPixel = 32;
             m_aLayout.IsMsbFirst = false; // doesn't matter
 
-            m_aComponentTags.realloc(4);
-            sal_Int8* pTags = m_aComponentTags.getArray();
-            pTags[0]        = rendering::ColorComponentTag::ALPHA;
-            pTags[1]        = rendering::ColorComponentTag::RGB_BLUE;
-            pTags[2]        = rendering::ColorComponentTag::RGB_GREEN;
-            pTags[3]        = rendering::ColorComponentTag::RGB_RED;
+            m_aComponentTags = { /* 0 */ rendering::ColorComponentTag::ALPHA,
+                                 /* 1 */ rendering::ColorComponentTag::RGB_BLUE,
+                                 /* 2 */ rendering::ColorComponentTag::RGB_GREEN,
+                                 /* 3 */ rendering::ColorComponentTag::RGB_RED };
 
-            m_aComponentBitCounts.realloc(4);
-            sal_Int32* pCounts = m_aComponentBitCounts.getArray();
-            pCounts[0]         = 8;
-            pCounts[1]         = 8;
-            pCounts[2]         = 8;
-            pCounts[3]         = 8;
+            m_aComponentBitCounts = { /* 0 */ 8,
+                                      /* 1 */ 8,
+                                      /* 2 */ 8,
+                                      /* 3 */ 8 };
 
             m_nRedIndex   = 3;
             m_nGreenIndex = 2;
@@ -200,19 +196,15 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
             m_nBitsPerInputPixel = 32;
             m_aLayout.IsMsbFirst = false; // doesn't matter
 
-            m_aComponentTags.realloc(4);
-            sal_Int8* pTags = m_aComponentTags.getArray();
-            pTags[0]        = rendering::ColorComponentTag::ALPHA;
-            pTags[1]        = rendering::ColorComponentTag::RGB_RED;
-            pTags[2]        = rendering::ColorComponentTag::RGB_GREEN;
-            pTags[3]        = rendering::ColorComponentTag::RGB_BLUE;
+            m_aComponentTags = { /* 0 */ rendering::ColorComponentTag::ALPHA,
+                                 /* 1 */ rendering::ColorComponentTag::RGB_RED,
+                                 /* 2 */ rendering::ColorComponentTag::RGB_GREEN,
+                                 /* 3 */ rendering::ColorComponentTag::RGB_BLUE };
 
-            m_aComponentBitCounts.realloc(4);
-            sal_Int32* pCounts = m_aComponentBitCounts.getArray();
-            pCounts[0]         = 8;
-            pCounts[1]         = 8;
-            pCounts[2]         = 8;
-            pCounts[3]         = 8;
+            m_aComponentBitCounts = { /* 0 */ 8,
+                                      /* 1 */ 8,
+                                      /* 2 */ 8,
+                                      /* 3 */ 8 };
 
             m_nRedIndex   = 1;
             m_nGreenIndex = 2;
@@ -227,19 +219,15 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
             m_nBitsPerInputPixel = 32;
             m_aLayout.IsMsbFirst = false; // doesn't matter
 
-            m_aComponentTags.realloc(4);
-            sal_Int8* pTags = m_aComponentTags.getArray();
-            pTags[0]        = rendering::ColorComponentTag::RGB_BLUE;
-            pTags[1]        = rendering::ColorComponentTag::RGB_GREEN;
-            pTags[2]        = rendering::ColorComponentTag::RGB_RED;
-            pTags[3]        = rendering::ColorComponentTag::ALPHA;
+            m_aComponentTags = { /* 0 */ rendering::ColorComponentTag::RGB_BLUE,
+                                 /* 1 */ rendering::ColorComponentTag::RGB_GREEN,
+                                 /* 2 */ rendering::ColorComponentTag::RGB_RED,
+                                 /* 3 */ rendering::ColorComponentTag::ALPHA };
 
-            m_aComponentBitCounts.realloc(4);
-            sal_Int32* pCounts = m_aComponentBitCounts.getArray();
-            pCounts[0]         = 8;
-            pCounts[1]         = 8;
-            pCounts[2]         = 8;
-            pCounts[3]         = 8;
+            m_aComponentBitCounts = { /* 0 */ 8,
+                                      /* 1 */ 8,
+                                      /* 2 */ 8,
+                                      /* 3 */ 8 };
 
             m_nRedIndex   = 2;
             m_nGreenIndex = 1;
@@ -254,19 +242,15 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
             m_nBitsPerInputPixel = 32;
             m_aLayout.IsMsbFirst = false; // doesn't matter
 
-            m_aComponentTags.realloc(4);
-            sal_Int8* pTags = m_aComponentTags.getArray();
-            pTags[0]        = rendering::ColorComponentTag::RGB_RED;
-            pTags[1]        = rendering::ColorComponentTag::RGB_GREEN;
-            pTags[2]        = rendering::ColorComponentTag::RGB_BLUE;
-            pTags[3]        = rendering::ColorComponentTag::ALPHA;
+            m_aComponentTags = { /* 0 */ rendering::ColorComponentTag::RGB_RED,
+                                 /* 1 */ rendering::ColorComponentTag::RGB_GREEN,
+                                 /* 2 */ rendering::ColorComponentTag::RGB_BLUE,
+                                 /* 3 */ rendering::ColorComponentTag::ALPHA };
 
-            m_aComponentBitCounts.realloc(4);
-            sal_Int32* pCounts = m_aComponentBitCounts.getArray();
-            pCounts[0]         = 8;
-            pCounts[1]         = 8;
-            pCounts[2]         = 8;
-            pCounts[3]         = 8;
+            m_aComponentBitCounts = { /* 0 */ 8,
+                                      /* 1 */ 8,
+                                      /* 2 */ 8,
+                                      /* 3 */ 8 };
 
             m_nRedIndex   = 0;
             m_nGreenIndex = 1;
@@ -291,11 +275,9 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
 
     if( m_bPalette )
     {
-        m_aComponentTags.realloc(1);
-        m_aComponentTags[0] = rendering::ColorComponentTag::INDEX;
+        m_aComponentTags = { rendering::ColorComponentTag::INDEX };
 
-        m_aComponentBitCounts.realloc(1);
-        m_aComponentBitCounts[0] = m_nBitsPerInputPixel;
+        m_aComponentBitCounts = { m_nBitsPerInputPixel };
 
         m_nIndexIndex = 0;
     }
@@ -317,11 +299,11 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
     // TODO(Q1): slight catch - in the case of the
     // BMP_FORMAT_32BIT_XX_ARGB formats, duplicate alpha
     // channels might happen!
-    m_aComponentTags.realloc(m_aComponentTags.getLength()+1);
-    m_aComponentTags[m_aComponentTags.getLength()-1] = rendering::ColorComponentTag::ALPHA;
+    auto pComponentTags = m_aComponentTags.realloc(m_aComponentTags.getLength()+1);
+    pComponentTags[m_aComponentTags.getLength()-1] = rendering::ColorComponentTag::ALPHA;
 
-    m_aComponentBitCounts.realloc(m_aComponentBitCounts.getLength()+1);
-    m_aComponentBitCounts[m_aComponentBitCounts.getLength()-1] = m_aBmpEx.IsAlpha() ? 8 : 1;
+    auto pComponentBitCounts = m_aComponentBitCounts.realloc(m_aComponentBitCounts.getLength()+1);
+    pComponentBitCounts[m_aComponentBitCounts.getLength()-1] = m_aBmpEx.IsAlpha() ? 8 : 1;
 
     // always add a full byte to the pixel size, otherwise
     // pixel packing hell breaks loose.

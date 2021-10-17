@@ -35,6 +35,7 @@
 #include <com/sun/star/formula/SymbolDescriptor.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <comphelper/propertysetinfo.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -143,9 +144,7 @@ SmPrintUIOptions::SmPrintUIOptions()
                                                      1000,   // max value
                                                      aRangeOpt);
 
-    Sequence< PropertyValue > aHintNoLayoutPage( 1 );
-    aHintNoLayoutPage[0].Name = "HintNoLayoutPage";
-    aHintNoLayoutPage[0].Value <<= true;
+    Sequence aHintNoLayoutPage{ comphelper::makePropertyValue("HintNoLayoutPage", true) };
     m_aUIProperties[nIdx++].Value <<= aHintNoLayoutPage;
 
     assert(nIdx == nNumProps);

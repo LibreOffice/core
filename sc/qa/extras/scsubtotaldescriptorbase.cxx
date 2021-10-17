@@ -107,10 +107,8 @@ uno::Reference<uno::XInterface> ScSubTotalDescriptorBase::init()
     uno::Reference<sheet::XSubTotalCalculatable> xSTC(xSheet, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSubTotalDescriptor> xSTD = xSTC->createSubTotalDescriptor(true);
 
-    uno::Sequence<sheet::SubTotalColumn> xCols;
-    xCols.realloc(1);
-    xCols[0].Column = 5;
-    xCols[0].Function = sheet::GeneralFunction_SUM;
+    uno::Sequence<sheet::SubTotalColumn> xCols{ { /* Column   */ 5,
+                                                  /* Function */ sheet::GeneralFunction_SUM } };
     xSTD->addNew(xCols, 10);
 
     return xSTD;

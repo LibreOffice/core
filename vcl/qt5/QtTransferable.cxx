@@ -64,6 +64,7 @@ css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL QtTransferable::getTr
     const int nMimeTypeSeqSize = aFormatList.size() + 1;
     bool bHaveNoCharset = false, bHaveUTF16 = false;
     css::uno::Sequence<css::datatransfer::DataFlavor> aMimeTypeSeq(nMimeTypeSeqSize);
+    auto pMimeTypeSeq = aMimeTypeSeq.getArray();
 
     css::datatransfer::DataFlavor aFlavor;
     int nMimeTypeCount = 0;
@@ -94,7 +95,7 @@ css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL QtTransferable::getTr
 
         aFlavor.MimeType = toOUString(rMimeType);
         assert(nMimeTypeCount < nMimeTypeSeqSize);
-        aMimeTypeSeq[nMimeTypeCount] = aFlavor;
+        pMimeTypeSeq[nMimeTypeCount] = aFlavor;
         nMimeTypeCount++;
     }
 
@@ -104,7 +105,7 @@ css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL QtTransferable::getTr
         aFlavor.MimeType = "text/plain;charset=utf-16";
         aFlavor.DataType = cppu::UnoType<OUString>::get();
         assert(nMimeTypeCount < nMimeTypeSeqSize);
-        aMimeTypeSeq[nMimeTypeCount] = aFlavor;
+        pMimeTypeSeq[nMimeTypeCount] = aFlavor;
         nMimeTypeCount++;
     }
 

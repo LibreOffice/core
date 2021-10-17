@@ -188,11 +188,8 @@ BackendImpl::BackendImpl(
                                  "*.xcs",
                                  DpResId(RID_STR_CONF_SCHEMA)
                                  ) ),
-      m_typeInfos( 2 )
+      m_typeInfos{ m_xConfDataTypeInfo, m_xConfSchemaTypeInfo }
 {
-    m_typeInfos[ 0 ] = m_xConfDataTypeInfo;
-    m_typeInfos[ 1 ] = m_xConfSchemaTypeInfo;
-
     const Reference<XCommandEnvironment> xCmdEnv;
 
     if (transientMode())

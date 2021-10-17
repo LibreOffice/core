@@ -204,9 +204,9 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
                         if( bPushLastChartType && aChartTypes.hasElements())
                         {
                             sal_Int32 nIndex( aChartTypes.getLength() - 1 );
-                            aChartTypes.realloc( aChartTypes.getLength() + 1 );
-                            aChartTypes[ nIndex + 1 ] = aChartTypes[ nIndex ];
-                            aChartTypes[ nIndex ] = xCurrentType;
+                            auto pChartTypes = aChartTypes.realloc( aChartTypes.getLength() + 1 );
+                            pChartTypes[ nIndex + 1 ] = aChartTypes[ nIndex ];
+                            pChartTypes[ nIndex ] = xCurrentType;
                             xCTCnt->setChartTypes( aChartTypes );
                         }
                         else

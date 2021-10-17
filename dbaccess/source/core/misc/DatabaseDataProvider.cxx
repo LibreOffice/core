@@ -202,9 +202,8 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::creat
             uno::Reference< lang::XInitialization> xIni(m_xInternal,uno::UNO_QUERY);
             if ( xIni.is() )
             {
-                uno::Sequence< uno::Any > aInitArgs(1);
                 beans::NamedValue aParam("CreateDefaultData",uno::makeAny(true));
-                aInitArgs[0] <<= aParam;
+                uno::Sequence< uno::Any > aInitArgs{ uno::Any(aParam) };
                 xIni->initialize(aInitArgs);
             }
         }
@@ -660,7 +659,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(bool _bHasCategor
         {
             const sal_Int32 nAssumedRowSetColumnIndex = _bHasCategories ? 1 : 0;
             if ( nAssumedRowSetColumnIndex < aRowSetColumnNames.getLength() )
-                aImposedColumnNames[0] = aRowSetColumnNames[ nAssumedRowSetColumnIndex ];
+                aImposedColumnNames.getArray()[0] = aRowSetColumnNames[ nAssumedRowSetColumnIndex ];
         }
 
         const sal_Int32 nCount = aImposedColumnNames.getLength();

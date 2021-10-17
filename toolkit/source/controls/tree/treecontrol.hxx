@@ -52,8 +52,8 @@ public:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         auto s(UnoControlModel::getSupportedServiceNames());
-        s.realloc(s.getLength() + 1);
-        s[s.getLength() - 1] = "com.sun.star.awt.tree.TreeControlModel";
+        auto ps = s.realloc(s.getLength() + 1);
+        ps[s.getLength() - 1] = "com.sun.star.awt.tree.TreeControlModel";
         return s;
     }
 };

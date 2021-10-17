@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
+#include <comphelper/propertyvalue.hxx>
 #include <rtl/math.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
@@ -219,9 +220,8 @@ void SvxFontSizeBox_Base::Select()
     sal_Int64 nSelVal = m_xWidget->get_value();
     float fSelVal     = float( nSelVal ) / 10;
 
-    uno::Sequence< beans::PropertyValue > aArgs( 1 );
-    aArgs[0].Name  = "FontHeight.Height";
-    aArgs[0].Value <<= fSelVal;
+    uno::Sequence< beans::PropertyValue > aArgs{ comphelper::makePropertyValue("FontHeight.Height",
+                                                                               fSelVal) };
 
     /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
         This instance may be deleted in the meantime (i.e. when a dialog is opened

@@ -162,11 +162,11 @@ void OGridControlModel::cloneColumns( const OGridControlModel* _pOriginalContain
 css::uno::Sequence<OUString> OGridControlModel::getSupportedServiceNames()
 {
     css::uno::Sequence<OUString> aSupported = OControlModel::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 4);
-    aSupported[aSupported.getLength()-4] = "com.sun.star.awt.UnoControlModel";
-    aSupported[aSupported.getLength()-3] = FRM_SUN_COMPONENT_GRIDCONTROL;
-    aSupported[aSupported.getLength()-2] = FRM_COMPONENT_GRID;
-    aSupported[aSupported.getLength()-1] = FRM_COMPONENT_GRIDCONTROL;
+    auto pSupported = aSupported.realloc(aSupported.getLength() + 4);
+    pSupported[aSupported.getLength()-4] = "com.sun.star.awt.UnoControlModel";
+    pSupported[aSupported.getLength()-3] = FRM_SUN_COMPONENT_GRIDCONTROL;
+    pSupported[aSupported.getLength()-2] = FRM_COMPONENT_GRID;
+    pSupported[aSupported.getLength()-1] = FRM_COMPONENT_GRIDCONTROL;
     return aSupported;
 }
 Any SAL_CALL OGridControlModel::queryAggregation( const Type& _rType )

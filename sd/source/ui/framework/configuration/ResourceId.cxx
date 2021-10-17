@@ -25,6 +25,8 @@
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ref.hxx>
 
+#include <algorithm>
+
 namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
@@ -152,8 +154,7 @@ Sequence<OUString> SAL_CALL
     if (nAnchorCount > 0)
     {
         Sequence<OUString> aAnchorURLs (nAnchorCount);
-        for (sal_Int32 nIndex=0; nIndex<nAnchorCount; ++nIndex)
-            aAnchorURLs[nIndex] = maResourceURLs[nIndex+1];
+        std::copy_n(maResourceURLs.begin() + 1, nAnchorCount, aAnchorURLs.getArray());
         return aAnchorURLs;
     }
     else
