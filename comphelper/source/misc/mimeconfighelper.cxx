@@ -32,6 +32,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <rtl/ustrbuf.hxx>
 
 
@@ -88,6 +89,7 @@ uno::Sequence< sal_Int8 > MimeConfigurationHelper::GetSequenceClassIDRepresentat
     {
         OString aCharClassID = OUStringToOString( aClassID, RTL_TEXTENCODING_ASCII_US );
         uno::Sequence< sal_Int8 > aResult( 16 );
+        auto pResult = aResult.getArray();
 
         sal_Int32 nStrPointer = 0;
         sal_Int32 nSeqInd = 0;
@@ -99,7 +101,7 @@ uno::Sequence< sal_Int8 > MimeConfigurationHelper::GetSequenceClassIDRepresentat
             if ( nDigit1 > 15 || nDigit2 > 15 )
                 break;
 
-            aResult[nSeqInd++] = static_cast<sal_Int8>( nDigit1 * 16 + nDigit2 );
+            pResult[nSeqInd++] = static_cast<sal_Int8>( nDigit1 * 16 + nDigit2 );
 
             if ( nStrPointer < nLength && aCharClassID[nStrPointer] == '-' )
                 nStrPointer++;
@@ -296,15 +298,15 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjPropsFromConfi
     {
         try
         {
-            uno::Sequence< OUString > aObjPropNames = xObjectProps->getElementNames();
+            const uno::Sequence< OUString > aObjPropNames = xObjectProps->getElementNames();
 
             aResult.realloc( aObjPropNames.getLength() + 1 );
-            aResult[0].Name = "ClassID";
-            aResult[0].Value <<= aClassID;
+            auto pResult = aResult.getArray();
+            pResult[0] = { "ClassID", uno::Any(aClassID) };
 
             for ( sal_Int32 nInd = 0; nInd < aObjPropNames.getLength(); nInd++ )
             {
-                aResult[nInd + 1].Name = aObjPropNames[nInd];
+                pResult[nInd + 1].Name = aObjPropNames[nInd];
 
                 if ( aObjPropNames[nInd] == "ObjectVerbs" )
                 {
@@ -312,14 +314,15 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjPropsFromConfi
                     if ( !(xObjectProps->getByName( aObjPropNames[nInd] ) >>= aVerbShortcuts) )
                         throw uno::RuntimeException();
                     uno::Sequence< embed::VerbDescriptor > aVerbDescriptors( aVerbShortcuts.getLength() );
+                    auto aVerbDescriptorsRange = asNonConstRange(aVerbDescriptors);
                     for ( sal_Int32 nVerbI = 0; nVerbI < aVerbShortcuts.getLength(); nVerbI++ )
-                        if ( !GetVerbByShortcut( aVerbShortcuts[nVerbI], aVerbDescriptors[nVerbI] ) )
+                        if ( !GetVerbByShortcut( aVerbShortcuts[nVerbI], aVerbDescriptorsRange[nVerbI] ) )
                             throw uno::RuntimeException();
 
-                    aResult[nInd+1].Value <<= aVerbDescriptors;
+                    pResult[nInd+1].Value <<= aVerbDescriptors;
                 }
                 else
-                    aResult[nInd+1].Value = xObjectProps->getByName( aObjPropNames[nInd] );
+                    pResult[nInd+1].Value = xObjectProps->getByName( aObjPropNames[nInd] );
             }
         }
         catch( uno::Exception& )
@@ -359,11 +362,9 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByStri
     uno::Sequence< sal_Int8 > aClassID = GetSequenceClassIDRepresentation( aStringClassID );
     if ( ClassIDsEqual( aClassID, GetSequenceClassID( SO3_DUMMY_CLASSID ) ) )
     {
-        aObjProps.realloc(2);
-        aObjProps[0].Name = "ObjectFactory";
-        aObjProps[0].Value <<= OUString( "com.sun.star.embed.OOoSpecialEmbeddedObjectFactory" );
-        aObjProps[1].Name = "ClassID";
-        aObjProps[1].Value <<= aClassID;
+        aObjProps = { { "ObjectFactory",
+                        uno::Any(OUString("com.sun.star.embed.OOoSpecialEmbeddedObjectFactory")) },
+                      { "ClassID", uno::Any(aClassID) } };
         return aObjProps;
     }
 
@@ -392,11 +393,9 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByClas
     uno::Sequence< beans::NamedValue > aObjProps;
     if ( ClassIDsEqual( aClassID, GetSequenceClassID( SO3_DUMMY_CLASSID ) ) )
     {
-        aObjProps.realloc(2);
-        aObjProps[0].Name = "ObjectFactory";
-        aObjProps[0].Value <<= OUString( "com.sun.star.embed.OOoSpecialEmbeddedObjectFactory" );
-        aObjProps[1].Name = "ClassID";
-        aObjProps[1].Value <<= aClassID;
+        aObjProps = { { "ObjectFactory",
+                        uno::Any(OUString("com.sun.star.embed.OOoSpecialEmbeddedObjectFactory")) },
+                      { "ClassID", uno::Any(aClassID) } };
     }
 
     OUString aStringClassID = GetStringClassIDRepresentation( aClassID );
@@ -590,8 +589,8 @@ OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
         {
             sal_Int32 nOldLen = aMediaDescr.getLength();
             aMediaDescr.realloc( nOldLen + 1 );
-            aMediaDescr[nOldLen].Name = "FilterName";
-            aMediaDescr[ nOldLen ].Value <<= aFilterName;
+            aMediaDescr.getArray()[nOldLen]
+                = comphelper::makePropertyValue("FilterName", aFilterName);
 
         }
         else if ( !aTypeName.isEmpty() && !bIgnoreType )
@@ -607,8 +606,8 @@ OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
                     {
                         sal_Int32 nOldLen = aMediaDescr.getLength();
                         aMediaDescr.realloc( nOldLen + 1 );
-                        aMediaDescr[nOldLen].Name = "FilterName";
-                        aMediaDescr[ nOldLen ].Value = prop.Value;
+                        aMediaDescr.getArray()[nOldLen]
+                            = comphelper::makePropertyValue("FilterName", prop.Value);
                         break;
                     }
                 }
@@ -638,7 +637,7 @@ OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
     for ( sal_Int32 nMedInd = 0; nMedInd < aMediaDescr.getLength(); nMedInd++ )
         if ( aMediaDescr[nMedInd].Name == "DocumentService" )
         {
-            aMediaDescr[nMedInd].Value <<= aDocName;
+            aMediaDescr.getArray()[nMedInd].Value <<= aDocName;
             bNeedsAddition = false;
             break;
         }
@@ -647,8 +646,8 @@ OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
     {
         sal_Int32 nOldLen = aMediaDescr.getLength();
         aMediaDescr.realloc( nOldLen + 1 );
-        aMediaDescr[nOldLen].Name = "DocumentService";
-        aMediaDescr[nOldLen].Value <<= aDocName;
+        aMediaDescr.getArray()[nOldLen]
+            = comphelper::makePropertyValue("DocumentService", aDocName);
     }
 
     return UpdateMediaDescriptorWithFilterName( aMediaDescr, true );
@@ -870,23 +869,24 @@ uno::Sequence< sal_Int8 > MimeConfigurationHelper::GetSequenceClassID( sal_uInt3
                                                 sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
                                                 sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 )
 {
-    uno::Sequence< sal_Int8 > aResult( 16 );
-    aResult[0] = static_cast<sal_Int8>( n1 >> 24 );
-    aResult[1] = static_cast<sal_Int8>( ( n1 << 8 ) >> 24 );
-    aResult[2] = static_cast<sal_Int8>( ( n1 << 16 ) >> 24 );
-    aResult[3] = static_cast<sal_Int8>( ( n1 << 24 ) >> 24 );
-    aResult[4] = static_cast<sal_Int8>( n2 >> 8 );
-    aResult[5] = static_cast<sal_Int8>( ( n2 << 8 ) >> 8 );
-    aResult[6] = static_cast<sal_Int8>( n3 >> 8 );
-    aResult[7] = static_cast<sal_Int8>( ( n3 << 8 ) >> 8 );
-    aResult[8] = b8;
-    aResult[9] = b9;
-    aResult[10] = b10;
-    aResult[11] = b11;
-    aResult[12] = b12;
-    aResult[13] = b13;
-    aResult[14] = b14;
-    aResult[15] = b15;
+    uno::Sequence< sal_Int8 > aResult{
+        /* [ 0] */ static_cast<sal_Int8>( n1 >> 24 ),
+        /* [ 1] */ static_cast<sal_Int8>( ( n1 << 8 ) >> 24 ),
+        /* [ 2] */ static_cast<sal_Int8>( ( n1 << 16 ) >> 24 ),
+        /* [ 3] */ static_cast<sal_Int8>( ( n1 << 24 ) >> 24 ),
+        /* [ 4] */ static_cast<sal_Int8>( n2 >> 8 ),
+        /* [ 5] */ static_cast<sal_Int8>( ( n2 << 8 ) >> 8 ),
+        /* [ 6] */ static_cast<sal_Int8>( n3 >> 8 ),
+        /* [ 7] */ static_cast<sal_Int8>( ( n3 << 8 ) >> 8 ),
+        /* [ 8] */ static_cast<sal_Int8>( b8 ),
+        /* [ 9] */ static_cast<sal_Int8>( b9 ),
+        /* [10] */ static_cast<sal_Int8>( b10 ),
+        /* [11] */ static_cast<sal_Int8>( b11 ),
+        /* [12] */ static_cast<sal_Int8>( b12 ),
+        /* [13] */ static_cast<sal_Int8>( b13 ),
+        /* [14] */ static_cast<sal_Int8>( b14 ),
+        /* [15] */ static_cast<sal_Int8>( b15 )
+    };
 
     return aResult;
 }

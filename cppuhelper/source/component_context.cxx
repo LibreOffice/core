@@ -288,8 +288,7 @@ Any ComponentContext::lookupMap( OUString const & rName )
         Sequence<Any> args;
         if (args_.hasValue() && !(args_ >>= args))
         {
-            args.realloc( 1 );
-            args[ 0 ] = args_;
+            args = { args_ };
         }
 
         Reference< lang::XSingleComponentFactory > xFac;

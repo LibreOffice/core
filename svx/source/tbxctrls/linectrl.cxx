@@ -47,6 +47,7 @@
 #include <memory>
 
 #include <comphelper/lok.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -327,21 +328,20 @@ IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl, ValueSet*, void)
         pLineEndItem.reset(new XLineEndItem(pEntry->GetName(), pEntry->GetLineEnd()));
     }
 
-    Sequence< PropertyValue > aArgs( 1 );
+    OUString name;
     Any a;
 
     if ( pLineStartItem )
     {
-        aArgs[0].Name = "LineStart";
+        name = "LineStart";
         pLineStartItem->QueryValue( a );
-        aArgs[0].Value = a;
     }
     else
     {
-        aArgs[0].Name = "LineEnd";
+        name = "LineEnd";
         pLineEndItem->QueryValue( a );
-        aArgs[0].Value = a;
     }
+    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(name, a) };
 
     /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
         This instance may be deleted in the meantime (i.e. when a dialog is opened
@@ -611,10 +611,8 @@ IMPL_LINK_NOARG(SvxLineBox, SelectHdl, ValueSet*, void)
                 XLineDashItem aLineDashItem(pEntry->GetName(), pEntry->GetDash());
 
                 Any a;
-                Sequence< PropertyValue > aArgs( 1 );
-                aArgs[0].Name = "LineDash";
                 aLineDashItem.QueryValue ( a );
-                aArgs[0].Value = a;
+                Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("LineDash", a) };
                 mxControl->dispatchLineStyleCommand(".uno:LineDash", aArgs);
 
                 // set also cap style using the toolbar line style selection popup
@@ -623,10 +621,8 @@ IMPL_LINK_NOARG(SvxLineBox, SelectHdl, ValueSet*, void)
                     eStyle == drawing::DashStyle_RECT || eStyle == drawing::DashStyle_RECTRELATIVE
                                 ? css::drawing::LineCap_BUTT
                                 : css::drawing::LineCap_ROUND );
-                Sequence< PropertyValue > aArgs2( 1 );
-                aArgs2[0].Name = "LineCap";
                 aLineCapItem.QueryValue ( a );
-                aArgs2[0].Value = a;
+                Sequence< PropertyValue > aArgs2{ comphelper::makePropertyValue("LineCap", a) };
                 mxControl->dispatchLineStyleCommand(".uno:LineCap", aArgs2);
             }
         }
@@ -635,10 +631,8 @@ IMPL_LINK_NOARG(SvxLineBox, SelectHdl, ValueSet*, void)
 
     XLineStyleItem aLineStyleItem( eXLS );
     Any a;
-    Sequence< PropertyValue > aArgs( 1 );
-    aArgs[0].Name = "XLineStyle";
     aLineStyleItem.QueryValue ( a );
-    aArgs[0].Value = a;
+    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("XLineStyle", a) };
     mxControl->dispatchLineStyleCommand(".uno:XLineStyle", aArgs);
 
     mxControl->EndPopupMode();

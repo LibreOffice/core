@@ -63,6 +63,7 @@
 #include <svtools/soerr.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -901,9 +902,9 @@ ErrCode SfxInPlaceClient::DoVerb(sal_Int32 nVerb)
                 try
                 {
                     SfxStoringHelper aHelper;
-                    uno::Sequence< beans::PropertyValue > aDispatchArgs( 1 );
-                    aDispatchArgs[0].Name = "SaveTo";
-                    aDispatchArgs[0].Value <<= true;
+                    uno::Sequence< beans::PropertyValue > aDispatchArgs{
+                        comphelper::makePropertyValue("SaveTo", true)
+                    };
 
                     aHelper.GUIStoreModel( xEmbModel,
                                             u"SaveAs",

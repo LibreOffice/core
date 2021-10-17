@@ -211,7 +211,7 @@ FetchResult CachedContentResultSetStub::impl_fetchHelper(
 
         try
         {
-            impl_loadRow( aRet.Rows[0] );
+            impl_loadRow( aRet.Rows.getArray()[0] );
         }
         catch( SQLException& )
         {
@@ -255,9 +255,10 @@ FetchResult CachedContentResultSetStub::impl_fetchHelper(
 
             return aRet;
         }
+        auto aRetRowsRange = asNonConstRange(aRet.Rows);
         for( ; nN <= nRowCount; )
         {
-            impl_loadRow( aRet.Rows[nN-1] );
+            impl_loadRow( aRetRowsRange[nN-1] );
             nN++;
             if( nN <= nRowCount )
             {
@@ -344,9 +345,10 @@ void CachedContentResultSetStub
     sal_Int32 nCount = impl_getColumnCount();
 
     Sequence< Any > aContent( nCount );
+    auto aContentRange = asNonConstRange(aContent);
     for( sal_Int32 nN = 1; nN <= nCount; nN++ )
     {
-        aContent[nN-1] = xRow->getObject( nN, nullptr );
+        aContentRange[nN-1] = xRow->getObject( nN, nullptr );
     }
 
     rRowContent <<= aContent;

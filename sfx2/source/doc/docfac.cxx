@@ -25,6 +25,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/configurationhelper.hxx>
@@ -200,20 +201,17 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
             OUString aFilterName =
                 aProps2.getUnpackedValueOrDefault("PreferredFilter", OUString() );
 
-            uno::Sequence< beans::PropertyValue > aArgs( 3 );
-            aArgs[0].Name = "FilterName";
-            aArgs[0].Value <<= aFilterName;
-            aArgs[1].Name = "AsTemplate";
-            aArgs[1].Value <<= true;
-            aArgs[2].Name = "URL";
-            aArgs[2].Value <<= rTemplateName;
+            uno::Sequence< beans::PropertyValue > aArgs{
+                comphelper::makePropertyValue("FilterName", aFilterName),
+                comphelper::makePropertyValue("AsTemplate", true),
+                comphelper::makePropertyValue("URL", rTemplateName)
+            };
 
             uno::Reference< frame::XLoadable > xLoadable( xFactory->createInstance( rServiceName ), uno::UNO_QUERY );
             xLoadable->load( aArgs );
 
             aArgs.realloc( 2 );
-            aArgs[1].Name = "Overwrite";
-            aArgs[1].Value <<= true;
+            aArgs.getArray()[1] = comphelper::makePropertyValue("Overwrite", true);
 
             uno::Reference< frame::XStorable > xStorable( xLoadable, uno::UNO_QUERY );
             xStorable->storeToURL( sUserTemplateURL, aArgs );

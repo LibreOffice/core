@@ -564,8 +564,9 @@ css::uno::Sequence< OUString > DescriptionInfoset::getUrls(
         }
     }
     css::uno::Sequence< OUString > urls(ns.is() ? ns->getLength() : 0);
+    auto urlsRange = asNonConstRange(urls);
     for (::sal_Int32 i = 0; i < urls.getLength(); ++i) {
-        urls[i] = getNodeValue(ns->item(i));
+        urlsRange[i] = getNodeValue(ns->item(i));
     }
     return urls;
 }

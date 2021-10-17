@@ -126,7 +126,7 @@ public:
     {
         Sequence< OUString > aServices( AnimatedImagesControl_Base::getSupportedServiceNames() );
         aServices.realloc( aServices.getLength() + 1 );
-        aServices[ aServices.getLength() - 1 ] = "com.sun.star.awt.AnimatedImagesControl";
+        aServices.getArray()[ aServices.getLength() - 1 ] = "com.sun.star.awt.AnimatedImagesControl";
         return aServices;
     }
 

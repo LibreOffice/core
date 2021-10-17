@@ -54,6 +54,7 @@
 #include <tools/globname.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/classids.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <sot/formats.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -894,9 +895,8 @@ bool SdrOle2Obj::UpdateLinkURL_Impl()
                             mpImpl->mxObjRef->changeState(embed::EmbedStates::LOADED);
 
                         // TODO/LATER: there should be possible to get current mediadescriptor settings from the object
-                        uno::Sequence< beans::PropertyValue > aArgs( 1 );
-                        aArgs[0].Name = "URL";
-                        aArgs[0].Value <<= aNewLinkURL;
+                        uno::Sequence< beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
+                            "URL", aNewLinkURL) };
                         xPersObj->reload( aArgs, uno::Sequence< beans::PropertyValue >() );
 
                         mpImpl->maLinkURL = aNewLinkURL;

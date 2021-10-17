@@ -37,6 +37,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <comphelper/interaction.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <framework/interaction.hxx>
 #include <com/sun/star/drawing/GraphicFilterRequest.hpp>
 #include <com/sun/star/util/URL.hpp>
@@ -591,8 +592,8 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
     {
         int i = rSettings.maFilterData.getLength();
         rSettings.maFilterData.realloc( i + 1 );
-        rSettings.maFilterData[ i ].Name = "StatusIndicator";
-        rSettings.maFilterData[ i ].Value <<= rSettings.mxStatusIndicator;
+        rSettings.maFilterData.getArray()[ i ] = comphelper::makePropertyValue(
+            "StatusIndicator", rSettings.mxStatusIndicator);
     }
 }
 
@@ -1076,8 +1077,9 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     if ( aSettings.mxInteractionHandler.is() && ( nStatus != ERRCODE_NONE ) )
     {
         Any aInteraction;
-        Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations(1);
-        lContinuations[0] = new ::comphelper::OInteractionApprove();
+        Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations{
+            new ::comphelper::OInteractionApprove()
+        };
 
         GraphicFilterRequest aErrorCode;
         aErrorCode.ErrCode = sal_uInt32(nStatus);

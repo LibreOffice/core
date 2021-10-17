@@ -911,8 +911,9 @@ bool EnhancedCustomShape2d::SetAdjustValueAsDouble( const double& rValue, const 
     if ( nIndex < seqAdjustmentValues.getLength() )
     {
         // updating our local adjustment sequence
-        seqAdjustmentValues[ nIndex ].Value <<= rValue;
-        seqAdjustmentValues[ nIndex ].State = css::beans::PropertyState_DIRECT_VALUE;
+        auto pseqAdjustmentValues = seqAdjustmentValues.getArray();
+        pseqAdjustmentValues[ nIndex ].Value <<= rValue;
+        pseqAdjustmentValues[ nIndex ].State = css::beans::PropertyState_DIRECT_VALUE;
         bRetValue = true;
     }
     return bRetValue;

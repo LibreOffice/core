@@ -18,6 +18,8 @@
  */
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+
+#include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <sfx2/event.hxx>
@@ -54,31 +56,13 @@ void getAnyFromMacro(Any& rAny, const SvxMacro& rMacro)
             case STARBASIC:
             {
                 // create sequence
-                Sequence<PropertyValue> aSequence(3);
-                Any aTmp;
-
-                // create type
-                PropertyValue aTypeValue;
-                aTypeValue.Name = sEventType;
-                aTmp <<= OUString(sStarBasic);
-                aTypeValue.Value = aTmp;
-                aSequence[0] = aTypeValue;
-
-                // macro name
-                PropertyValue aNameValue;
-                aNameValue.Name = sMacroName;
-                const OUString& sNameTmp(rMacro.GetMacName());
-                aTmp <<= sNameTmp;
-                aNameValue.Value = aTmp;
-                aSequence[1] = aNameValue;
-
-                // library name
-                PropertyValue aLibValue;
-                aLibValue.Name = sLibrary;
-                const OUString& sLibTmp(rMacro.GetLibName());
-                aTmp <<= sLibTmp;
-                aLibValue.Value = aTmp;
-                aSequence[2] = aLibValue;
+                Sequence<PropertyValue> aSequence(
+                      // create type
+                    { comphelper::makePropertyValue(sEventType, sStarBasic),
+                      // macro name
+                      comphelper::makePropertyValue(sMacroName, rMacro.GetMacName()),
+                      // library name
+                      comphelper::makePropertyValue(sLibrary, rMacro.GetLibName()) });
 
                 rAny <<= aSequence;
                 bRetValueOK = true;
@@ -87,23 +71,11 @@ void getAnyFromMacro(Any& rAny, const SvxMacro& rMacro)
             case EXTENDED_STYPE:
             {
                 // create sequence
-                Sequence<PropertyValue> aSequence(2);
-                Any aTmp;
-
-                // create type
-                PropertyValue aTypeValue;
-                aTypeValue.Name = sEventType;
-                aTmp <<= OUString(sScript);
-                aTypeValue.Value = aTmp;
-                aSequence[0] = aTypeValue;
-
-                // macro name
-                PropertyValue aNameValue;
-                aNameValue.Name = sScript;
-                const OUString& sNameTmp(rMacro.GetMacName());
-                aTmp <<= sNameTmp;
-                aNameValue.Value = aTmp;
-                aSequence[1] = aNameValue;
+                Sequence<PropertyValue> aSequence(
+                      // create type
+                    { comphelper::makePropertyValue(sEventType, sScript),
+                      // macro name
+                      comphelper::makePropertyValue(sScript, rMacro.GetMacName()) });
 
                 rAny <<= aSequence;
                 bRetValueOK = true;
@@ -121,15 +93,7 @@ void getAnyFromMacro(Any& rAny, const SvxMacro& rMacro)
         return;
 
     // create "None" macro
-    Sequence<PropertyValue> aSequence(1);
-
-    PropertyValue aKindValue;
-    aKindValue.Name = sEventType;
-    Any aTmp;
-    aTmp <<= OUString(sNone);
-    aKindValue.Value = aTmp;
-    aSequence[0] = aKindValue;
-
+    Sequence<PropertyValue> aSequence{ comphelper::makePropertyValue(sEventType, sNone) };
     rAny <<= aSequence;
 }
 
@@ -284,9 +248,10 @@ Sequence<OUString> SvBaseEventDescriptor::getElementNames()
 {
     // create and fill sequence
     Sequence<OUString> aSequence(mnMacroItems);
+    auto aSequenceRange = asNonConstRange(aSequence);
     for( sal_Int16 i = 0; i < mnMacroItems; i++)
     {
-        aSequence[i] = OUString::createFromAscii( mpSupportedMacroItems[i].mpEventName );
+        aSequenceRange[i] = OUString::createFromAscii( mpSupportedMacroItems[i].mpEventName );
     }
 
     return aSequence;

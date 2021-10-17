@@ -31,6 +31,7 @@
 #include <sax/tools/converter.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
@@ -780,18 +781,16 @@ void getXFormsSettings( const Reference< XNameAccess >& _rXForms, Sequence< Prop
         {
             Reference< XPropertySet > xModelProps( _rXForms->getByName( modelName ), UNO_QUERY_THROW );
 
-            Sequence< PropertyValue > aModelSettings( 1 );
-            aModelSettings[0].Name = "ExternalData";
-            aModelSettings[0].Value = xModelProps->getPropertyValue( aModelSettings[0].Name );
+            static constexpr OUStringLiteral sExternalData = u"ExternalData";
+            Sequence<PropertyValue> aModelSettings{ comphelper::makePropertyValue(
+                sExternalData, xModelProps->getPropertyValue(sExternalData)) };
 
             xModelSettings->insertByName( modelName, makeAny( aModelSettings ) );
         }
 
         if ( xModelSettings->hasElements() )
         {
-            _out_rSettings.realloc( 1 );
-            _out_rSettings[0].Name = "XFormModels";
-            _out_rSettings[0].Value <<= xModelSettings;
+            _out_rSettings = { comphelper::makePropertyValue("XFormModels", xModelSettings) };
         }
     }
     catch( const Exception& )

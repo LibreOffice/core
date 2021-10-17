@@ -314,6 +314,7 @@ static void lcl_SortAndExpandPropertyNames( const Sequence< OUString >& lSource 
     sal_Int32           nDestinationStep = lDestination.getLength(); // start on end of current list ...!
 
     lDestination.realloc( (nSourceCount*PROPERTYCOUNT)+nDestinationStep ); // get enough memory for copy operations after nDestination ...
+    auto alDestinationRange = asNonConstRange(lDestination);
 
     // Copy all items to temp. vector to use fast sort operations :-)
     lTemp.insert( lTemp.end(), lSource.begin(), lSource.end() );
@@ -328,10 +329,10 @@ static void lcl_SortAndExpandPropertyNames( const Sequence< OUString >& lSource 
     for( const auto& rItem : lTemp )
     {
         OUString sFixPath(OUString::Concat(sSetNode) + PATHDELIMITER + rItem + PATHDELIMITER);
-        lDestination[nDestinationStep++] = sFixPath + PROPERTYNAME_URL;
-        lDestination[nDestinationStep++] = sFixPath + PROPERTYNAME_TITLE;
-        lDestination[nDestinationStep++] = sFixPath + PROPERTYNAME_IMAGEIDENTIFIER;
-        lDestination[nDestinationStep++] = sFixPath + PROPERTYNAME_TARGETNAME;
+        alDestinationRange[nDestinationStep++] = sFixPath + PROPERTYNAME_URL;
+        alDestinationRange[nDestinationStep++] = sFixPath + PROPERTYNAME_TITLE;
+        alDestinationRange[nDestinationStep++] = sFixPath + PROPERTYNAME_IMAGEIDENTIFIER;
+        alDestinationRange[nDestinationStep++] = sFixPath + PROPERTYNAME_TARGETNAME;
     }
 }
 

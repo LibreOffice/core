@@ -582,6 +582,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
     ::utl::TempFile* pUCBPrintTempFile = nullptr;
 
     uno::Sequence < beans::PropertyValue > aCheckedArgs( rOptions.getLength() );
+    auto aCheckedArgsRange = asNonConstRange(aCheckedArgs);
     sal_Int32 nProps = 0;
     bool  bWaitUntilEnd = false;
     sal_Int16 nDuplexMode = css::view::DuplexMode::UNKNOWN;
@@ -618,12 +619,13 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 OUString sFileURL;
                 if (::osl::FileBase::getFileURLFromSystemPath(sSystemPath,sFileURL)!=::osl::FileBase::E_None)
                     throw css::lang::IllegalArgumentException();
-                aCheckedArgs[nProps].Name = rProp.Name;
-                aCheckedArgs[nProps++].Value <<= sFileURL;
+                aCheckedArgsRange[nProps].Name = rProp.Name;
+                aCheckedArgsRange[nProps++].Value <<= sFileURL;
                 // and append the local filename
                 aCheckedArgs.realloc( aCheckedArgs.getLength()+1 );
-                aCheckedArgs[nProps].Name = "LocalFileName";
-                aCheckedArgs[nProps++].Value <<= sTemp;
+                aCheckedArgsRange = asNonConstRange(aCheckedArgs);
+                aCheckedArgsRange[nProps].Name = "LocalFileName";
+                aCheckedArgsRange[nProps++].Value <<= sTemp;
             }
             else
             // It's a valid URL. but now we must know, if it is a local one or not.
@@ -634,12 +636,13 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 // And we have to use the system notation of the incoming URL.
                 // But it into the descriptor and let the slot be executed at
                 // the end of this method.
-                aCheckedArgs[nProps].Name = rProp.Name;
-                aCheckedArgs[nProps++].Value <<= sTemp;
+                aCheckedArgsRange[nProps].Name = rProp.Name;
+                aCheckedArgsRange[nProps++].Value <<= sTemp;
                 // and append the local filename
                 aCheckedArgs.realloc( aCheckedArgs.getLength()+1 );
-                aCheckedArgs[nProps].Name = "LocalFileName";
-                aCheckedArgs[nProps++].Value <<= sPath;
+                aCheckedArgsRange = asNonConstRange(aCheckedArgs);
+                aCheckedArgsRange[nProps].Name = "LocalFileName";
+                aCheckedArgsRange[nProps++].Value <<= sPath;
             }
             else
             {
@@ -657,8 +660,8 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 pUCBPrintTempFile->EnableKillingFile();
 
                 //FIXME: does it work?
-                aCheckedArgs[nProps].Name = "LocalFileName";
-                aCheckedArgs[nProps++].Value <<= pUCBPrintTempFile->GetFileName();
+                aCheckedArgsRange[nProps].Name = "LocalFileName";
+                aCheckedArgsRange[nProps++].Value <<= pUCBPrintTempFile->GetFileName();
                 sUcbUrl = sURL;
             }
         }
@@ -669,8 +672,8 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
             sal_Int32 nCopies = 0;
             if ( !( rProp.Value >>= nCopies ) )
                 throw css::lang::IllegalArgumentException();
-            aCheckedArgs[nProps].Name = rProp.Name;
-            aCheckedArgs[nProps++].Value <<= nCopies;
+            aCheckedArgsRange[nProps].Name = rProp.Name;
+            aCheckedArgsRange[nProps++].Value <<= nCopies;
         }
 
         // Collate-Property
@@ -680,8 +683,8 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
             bool bTemp;
             if ( !(rProp.Value >>= bTemp) )
                 throw css::lang::IllegalArgumentException();
-            aCheckedArgs[nProps].Name = "Collate";
-            aCheckedArgs[nProps++].Value <<= bTemp;
+            aCheckedArgsRange[nProps].Name = "Collate";
+            aCheckedArgsRange[nProps++].Value <<= bTemp;
         }
 
         else if ( rProp.Name == "SinglePrintJobs" )
@@ -689,8 +692,8 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
             bool bTemp;
             if ( !(rProp.Value >>= bTemp) )
                 throw css::lang::IllegalArgumentException();
-            aCheckedArgs[nProps].Name = "SinglePrintJobs";
-            aCheckedArgs[nProps++].Value <<= bTemp;
+            aCheckedArgsRange[nProps].Name = "SinglePrintJobs";
+            aCheckedArgsRange[nProps++].Value <<= bTemp;
         }
 
         // Pages-Property
@@ -699,8 +702,8 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
             OUString sTemp;
             if( !(rProp.Value >>= sTemp) )
                 throw css::lang::IllegalArgumentException();
-            aCheckedArgs[nProps].Name = rProp.Name;
-            aCheckedArgs[nProps++].Value <<= sTemp;
+            aCheckedArgsRange[nProps].Name = rProp.Name;
+            aCheckedArgsRange[nProps++].Value <<= sTemp;
         }
 
         // MonitorVisible
@@ -708,8 +711,8 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         {
             if( !(rProp.Value >>= bMonitor) )
                 throw css::lang::IllegalArgumentException();
-            aCheckedArgs[nProps].Name = rProp.Name;
-            aCheckedArgs[nProps++].Value <<= bMonitor;
+            aCheckedArgsRange[nProps].Name = rProp.Name;
+            aCheckedArgsRange[nProps++].Value <<= bMonitor;
         }
 
         // Wait
@@ -717,16 +720,16 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         {
             if ( !(rProp.Value >>= bWaitUntilEnd) )
                 throw css::lang::IllegalArgumentException();
-            aCheckedArgs[nProps].Name = rProp.Name;
-            aCheckedArgs[nProps++].Value <<= bWaitUntilEnd;
+            aCheckedArgsRange[nProps].Name = rProp.Name;
+            aCheckedArgsRange[nProps++].Value <<= bWaitUntilEnd;
         }
 
         else if ( rProp.Name == "DuplexMode" )
         {
             if ( !(rProp.Value >>= nDuplexMode ) )
                 throw css::lang::IllegalArgumentException();
-            aCheckedArgs[nProps].Name = rProp.Name;
-            aCheckedArgs[nProps++].Value <<= nDuplexMode;
+            aCheckedArgsRange[nProps].Name = rProp.Name;
+            aCheckedArgsRange[nProps++].Value <<= nDuplexMode;
         }
     }
 

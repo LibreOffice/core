@@ -250,6 +250,7 @@ void SvtCompatibilityOptions_Impl::ImplCommit()
     ClearNodeSet( SETNODE_ALLFILEFORMATS );
 
     Sequence< PropertyValue > lPropertyValues( SvtCompatibilityEntry::getElementCount() - 1 );
+    auto lPropertyValuesRange = asNonConstRange(lPropertyValues);
     sal_uInt32 nNewCount = m_aOptions.size();
     for ( sal_uInt32 nItem = 0; nItem < nNewCount; ++nItem )
     {
@@ -258,8 +259,8 @@ void SvtCompatibilityOptions_Impl::ImplCommit()
 
         for ( int i = static_cast<int>(SvtCompatibilityEntry::Index::Module); i < static_cast<int>(SvtCompatibilityEntry::Index::INVALID); ++i )
         {
-            lPropertyValues[ i - 1 ].Name  = sNode + SvtCompatibilityEntry::getName( SvtCompatibilityEntry::Index(i) );
-            lPropertyValues[ i - 1 ].Value = aItem.getValue( SvtCompatibilityEntry::Index(i) );
+            lPropertyValuesRange[ i - 1 ].Name  = sNode + SvtCompatibilityEntry::getName( SvtCompatibilityEntry::Index(i) );
+            lPropertyValuesRange[ i - 1 ].Value = aItem.getValue( SvtCompatibilityEntry::Index(i) );
         }
 
         SetSetProperties( SETNODE_ALLFILEFORMATS, lPropertyValues );
@@ -273,6 +274,7 @@ Sequence< OUString > SvtCompatibilityOptions_Impl::impl_GetPropertyNames( Sequen
 
     // expand list to result list ...
     Sequence< OUString > lProperties( rItems.getLength() * ( SvtCompatibilityEntry::getElementCount() - 1 ) );
+    auto lPropertiesRange = asNonConstRange(lProperties);
 
     sal_Int32 nDestStep    = 0;
     // Copy entries to destination and expand every item with 2 supported sub properties.
@@ -281,7 +283,7 @@ Sequence< OUString > SvtCompatibilityOptions_Impl::impl_GetPropertyNames( Sequen
         OUString sFixPath = SETNODE_ALLFILEFORMATS PATHDELIMITER + rItem + PATHDELIMITER;
         for ( int i = static_cast<int>(SvtCompatibilityEntry::Index::Module); i < static_cast<int>(SvtCompatibilityEntry::Index::INVALID); ++i )
         {
-            lProperties[ nDestStep ] = sFixPath + SvtCompatibilityEntry::getName( SvtCompatibilityEntry::Index(i) );
+            lPropertiesRange[ nDestStep ] = sFixPath + SvtCompatibilityEntry::getName( SvtCompatibilityEntry::Index(i) );
             nDestStep++;
         }
     }

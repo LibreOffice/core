@@ -436,52 +436,53 @@ void SfxDispatchController_Impl::addParametersToArgs( const css::util::URL& aURL
 
         sal_Int32 nLen = rArgs.getLength();
         rArgs.realloc( nLen+1 );
-        rArgs[nLen].Name = aParamName;
+        auto pArgs = rArgs.getArray();
+        pArgs[nLen].Name = aParamName;
 
         if ( aParamType.isEmpty() )
         {
             // Default: LONG
-            rArgs[nLen].Value <<= aValue.toInt32();
+            pArgs[nLen].Value <<= aValue.toInt32();
         }
         else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_BOOL], 4 ))
         {
             // sal_Bool support
-            rArgs[nLen].Value <<= aValue.toBoolean();
+            pArgs[nLen].Value <<= aValue.toBoolean();
         }
         else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_BYTE], 4 ))
         {
             // sal_uInt8 support
-            rArgs[nLen].Value <<= sal_Int8( aValue.toInt32() );
+            pArgs[nLen].Value <<= sal_Int8( aValue.toInt32() );
         }
         else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_LONG], 4 ))
         {
             // LONG support
-            rArgs[nLen].Value <<= aValue.toInt32();
+            pArgs[nLen].Value <<= aValue.toInt32();
         }
         else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_SHORT], 5 ))
         {
             // SHORT support
-            rArgs[nLen].Value <<= sal_Int16( aValue.toInt32() );
+            pArgs[nLen].Value <<= sal_Int16( aValue.toInt32() );
         }
         else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_HYPER], 5 ))
         {
             // HYPER support
-            rArgs[nLen].Value <<= aValue.toInt64();
+            pArgs[nLen].Value <<= aValue.toInt64();
         }
         else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_FLOAT], 5 ))
         {
             // FLOAT support
-            rArgs[nLen].Value <<= aValue.toFloat();
+            pArgs[nLen].Value <<= aValue.toFloat();
         }
         else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_STRING], 6 ))
         {
             // STRING support
-            rArgs[nLen].Value <<= INetURLObject::decode( aValue, INetURLObject::DecodeMechanism::WithCharset );
+            pArgs[nLen].Value <<= INetURLObject::decode( aValue, INetURLObject::DecodeMechanism::WithCharset );
         }
         else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_DOUBLE], 6))
         {
             // DOUBLE support
-            rArgs[nLen].Value <<= aValue.toDouble();
+            pArgs[nLen].Value <<= aValue.toDouble();
         }
     }
     while ( nIndex >= 0 );
@@ -609,7 +610,7 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
         // we offer dispatches for SID_JUMPTOMARK if the URL points to a bookmark inside the document
         // so we must retrieve this as an argument from the parsed URL
         lNewArgs.realloc( lNewArgs.getLength()+1 );
-        auto& el = lNewArgs[lNewArgs.getLength()-1];
+        auto& el = lNewArgs.getArray()[lNewArgs.getLength()-1];
         el.Name = "Bookmark";
         el.Value <<= aURL.Mark;
     }
@@ -651,8 +652,9 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                         // have an argument that has the same name as the master slot and type is SfxStringItem.
                         sal_Int32 nIndex = lNewArgs.getLength();
                         lNewArgs.realloc( nIndex+1 );
-                        lNewArgs[nIndex].Name   = OUString::createFromAscii( pSlot->pUnoName );
-                        lNewArgs[nIndex].Value  <<= SfxDispatchController_Impl::getSlaveCommand( aDispatchURL );
+                        auto plNewArgs = lNewArgs.getArray();
+                        plNewArgs[nIndex].Name   = OUString::createFromAscii( pSlot->pUnoName );
+                        plNewArgs[nIndex].Value  <<= SfxDispatchController_Impl::getSlaveCommand( aDispatchURL );
                     }
 
                     eMapUnit = GetCoreMetric( pShell->GetPool(), GetId() );

@@ -54,6 +54,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
@@ -82,7 +83,7 @@ uno::Sequence< beans::PropertyValue > GetValuableArgs_Impl( const uno::Sequence<
           || (prop.Name == "DocumentBaseURL" && bCanUseDocumentBaseURL) )
         {
             aResult.realloc( ++nResLen );
-            aResult[nResLen-1] = prop;
+            aResult.getArray()[nResLen-1] = prop;
         }
     }
 
@@ -94,25 +95,24 @@ static uno::Sequence< beans::PropertyValue > addAsTemplate( const uno::Sequence<
 {
     bool bAsTemplateSet = false;
     sal_Int32 nLength = aOrig.getLength();
-    uno::Sequence< beans::PropertyValue > aResult( nLength );
+    uno::Sequence< beans::PropertyValue > aResult( aOrig );
 
     for ( sal_Int32 nInd = 0; nInd < nLength; nInd++ )
     {
-        aResult[nInd].Name = aOrig[nInd].Name;
         if ( aResult[nInd].Name == "AsTemplate" )
         {
-            aResult[nInd].Value <<= true;
+            aResult.getArray()[nInd].Value <<= true;
             bAsTemplateSet = true;
+            break;
         }
-        else
-            aResult[nInd].Value = aOrig[nInd].Value;
     }
 
     if ( !bAsTemplateSet )
     {
         aResult.realloc( nLength + 1 );
-        aResult[nLength].Name = "AsTemplate";
-        aResult[nLength].Value <<= true;
+        auto pResult = aResult.getArray();
+        pResult[nLength].Name = "AsTemplate";
+        pResult[nLength].Value <<= true;
     }
 
     return aResult;
@@ -131,9 +131,8 @@ static uno::Reference< io::XInputStream > createTempInpStreamFromStor(
 
     uno::Reference < lang::XSingleServiceFactory > xStorageFactory( embed::StorageFactory::create(xContext) );
 
-    uno::Sequence< uno::Any > aArgs( 2 );
-    aArgs[0] <<= xTempStream;
-    aArgs[1] <<= embed::ElementModes::READWRITE;
+    uno::Sequence< uno::Any > aArgs{ uno::Any(xTempStream),
+                                     uno::Any(embed::ElementModes::READWRITE) };
     uno::Reference< embed::XStorage > xTempStorage( xStorageFactory->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY_THROW );
 
@@ -223,9 +222,7 @@ static void SetDocToEmbedded( const uno::Reference< frame::XModel >& rDocument, 
     if (!rDocument.is())
         return;
 
-    uno::Sequence< beans::PropertyValue > aSeq( 1 );
-    aSeq[0].Name = "SetEmbedded";
-    aSeq[0].Value <<= true;
+    uno::Sequence< beans::PropertyValue > aSeq{ comphelper::makePropertyValue("SetEmbedded", true) };
     rDocument->attachResource( OUString(), aSeq );
 
     if ( !aModuleName.isEmpty() )
@@ -370,30 +367,29 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
 
     uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY_THROW );
 
-    sal_Int32 nLen = 2;
-    uno::Sequence< beans::PropertyValue > aArgs( nLen );
+    sal_Int32 nLen = m_bLinkHasPassword ? 3 : 2;
+    uno::Sequence< beans::PropertyValue > aArgs( m_aDocMediaDescriptor.getLength() + nLen );
+    auto pArgs = aArgs.getArray();
 
-    aArgs[0].Name = "URL";
+    pArgs[0].Name = "URL";
     if(m_aLinkTempFile.is())
-        aArgs[0].Value <<= m_aLinkTempFile->getUri();
+        pArgs[0].Value <<= m_aLinkTempFile->getUri();
     else
-        aArgs[0].Value <<= m_aLinkURL;
+        pArgs[0].Value <<= m_aLinkURL;
 
-    aArgs[1].Name = "FilterName";
-    aArgs[1].Value <<= m_aLinkFilterName;
+    pArgs[1].Name = "FilterName";
+    pArgs[1].Value <<= m_aLinkFilterName;
 
     if ( m_bLinkHasPassword )
     {
-        aArgs.realloc( ++nLen );
-        aArgs[nLen-1].Name = "Password";
-        aArgs[nLen-1].Value <<= m_aLinkPassword;
+        pArgs[2].Name = "Password";
+        pArgs[2].Value <<= m_aLinkPassword;
     }
 
-    aArgs.realloc( m_aDocMediaDescriptor.getLength() + nLen );
     for ( sal_Int32 nInd = 0; nInd < m_aDocMediaDescriptor.getLength(); nInd++ )
     {
-        aArgs[nInd+nLen].Name = m_aDocMediaDescriptor[nInd].Name;
-        aArgs[nInd+nLen].Value = m_aDocMediaDescriptor[nInd].Value;
+        pArgs[nInd+nLen].Name = m_aDocMediaDescriptor[nInd].Name;
+        pArgs[nInd+nLen].Value = m_aDocMediaDescriptor[nInd].Value;
     }
 
     try
@@ -595,15 +591,12 @@ uno::Reference< io::XInputStream > OCommonEmbeddedObject::StoreDocumentToTempStr
     if ( aFilterName.isEmpty() )
         throw io::IOException(); // TODO:
 
-    uno::Sequence< beans::PropertyValue > aArgs( 4 );
-    aArgs[0].Name = "FilterName";
-    aArgs[0].Value <<= aFilterName;
-    aArgs[1].Name = "OutputStream";
-    aArgs[1].Value <<= xTempOut;
-    aArgs[2].Name = "DocumentBaseURL";
-    aArgs[2].Value <<= aBaseURL;
-    aArgs[3].Name = "HierarchicalDocumentName";
-    aArgs[3].Value <<= aHierarchName;
+    uno::Sequence< beans::PropertyValue > aArgs{
+        comphelper::makePropertyValue("FilterName", aFilterName),
+        comphelper::makePropertyValue("OutputStream", xTempOut),
+        comphelper::makePropertyValue("DocumentBaseURL", aBaseURL),
+        comphelper::makePropertyValue("HierarchicalDocumentName", aHierarchName)
+    };
 
     xStorable->storeToURL( "private:stream", aArgs );
     try
@@ -776,17 +769,15 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl(
         if ( aFilterName.isEmpty() )
             throw io::IOException(); // TODO:
 
-        uno::Sequence<beans::PropertyValue> aArgs(5);
-        aArgs[0].Name = "FilterName";
-        aArgs[0].Value <<= aFilterName;
-        aArgs[1].Name = "HierarchicalDocumentName";
-        aArgs[1].Value <<= aHierarchName;
-        aArgs[2].Name = "DocumentBaseURL";
-        aArgs[2].Value <<= aBaseURL;
-        aArgs[3].Name = "SourceShellID";
-        aArgs[3].Value <<= getStringPropertyValue(rObjArgs, u"SourceShellID");
-        aArgs[4].Name = "DestinationShellID";
-        aArgs[4].Value <<= getStringPropertyValue(rObjArgs, u"DestinationShellID");
+        uno::Sequence<beans::PropertyValue> aArgs{
+            comphelper::makePropertyValue("FilterName", aFilterName),
+            comphelper::makePropertyValue("HierarchicalDocumentName", aHierarchName),
+            comphelper::makePropertyValue("DocumentBaseURL", aBaseURL),
+            comphelper::makePropertyValue("SourceShellID",
+                                          getStringPropertyValue(rObjArgs, u"SourceShellID")),
+            comphelper::makePropertyValue(
+                "DestinationShellID", getStringPropertyValue(rObjArgs, u"DestinationShellID"))
+        };
 
         xDoc->storeToStorage( xStorage, aArgs );
         if ( bAttachToTheStorage )
@@ -802,8 +793,7 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl(
         // open storage based on document temporary file for reading
         uno::Reference < lang::XSingleServiceFactory > xStorageFactory = embed::StorageFactory::create(m_xContext);
 
-        uno::Sequence< uno::Any > aArgs(1);
-        aArgs[0] <<= xTempIn;
+        uno::Sequence< uno::Any > aArgs{ uno::Any(xTempIn) };
         uno::Reference< embed::XStorage > xTempStorage( xStorageFactory->createInstanceWithArguments( aArgs ),
                                                             uno::UNO_QUERY_THROW );
 
@@ -891,27 +881,19 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateTempDocFromLink_
 
         SAL_WARN_IF( aTempFileURL.isEmpty(), "embeddedobj.common", "Couldn't retrieve temporary file URL!" );
 
-        aTempMediaDescr[0].Name = "URL";
-        aTempMediaDescr[0].Value <<= aTempFileURL;
-        aTempMediaDescr[1].Name = "InputStream";
-        aTempMediaDescr[1].Value <<= xTempStream;
-        aTempMediaDescr[2].Name = "FilterName";
-        aTempMediaDescr[2].Value <<= GetFilterName( nStorageFormat );
-        aTempMediaDescr[3].Name = "AsTemplate";
-        aTempMediaDescr[3].Value <<= true;
+        aTempMediaDescr
+            = { comphelper::makePropertyValue("URL", aTempFileURL),
+                comphelper::makePropertyValue("InputStream", xTempStream),
+                comphelper::makePropertyValue("FilterName", GetFilterName( nStorageFormat )),
+                comphelper::makePropertyValue("AsTemplate", true) };
     }
     else
     {
-        aTempMediaDescr.realloc( 2 );
-        aTempMediaDescr[0].Name = "URL";
-
-        // tdf#141529 use URL of the linked TempFile if it exists
-        aTempMediaDescr[0].Value <<= m_aLinkTempFile.is()
-            ? m_aLinkTempFile->getUri()
-            : m_aLinkURL;
-
-        aTempMediaDescr[1].Name = "FilterName";
-        aTempMediaDescr[1].Value <<= m_aLinkFilterName;
+        aTempMediaDescr = { comphelper::makePropertyValue(
+                                "URL",
+                                // tdf#141529 use URL of the linked TempFile if it exists
+                                m_aLinkTempFile.is() ? m_aLinkTempFile->getUri() : m_aLinkURL),
+                            comphelper::makePropertyValue("FilterName", m_aLinkFilterName) };
     }
 
     xResult = CreateDocFromMediaDescr_Impl( aTempMediaDescr );
@@ -1619,9 +1601,8 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
 
         aGuard.clear();
         uno::Sequence<beans::PropertyValue> aEmpty;
-        uno::Sequence<beans::PropertyValue> aMediaArgs(1);
-        aMediaArgs[0].Name = "DocumentBaseURL";
-        aMediaArgs[0].Value <<= GetBaseURL_Impl();
+        uno::Sequence<beans::PropertyValue> aMediaArgs{ comphelper::makePropertyValue(
+            "DocumentBaseURL", GetBaseURL_Impl()) };
         StoreDocToStorage_Impl( m_xObjectStorage, aMediaArgs, aEmpty, nStorageFormat, m_aEntryName, true );
         aGuard.reset();
     }
@@ -1715,9 +1696,8 @@ void SAL_CALL OCommonEmbeddedObject::reload(
                 m_aLinkFilterName = aNewLinkFilter;
             else
             {
-                uno::Sequence< beans::PropertyValue > aArgs( 1 );
-                aArgs[0].Name = "URL";
-                aArgs[0].Value <<= m_aLinkURL;
+                uno::Sequence< beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
+                    "URL", m_aLinkURL) };
                 m_aLinkFilterName = aHelper.UpdateMediaDescriptorWithFilterName( aArgs, false );
             }
         }

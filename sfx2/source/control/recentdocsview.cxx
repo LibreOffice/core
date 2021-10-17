@@ -68,9 +68,7 @@ bool IsDocEncrypted(const OUString& rURL)
     {
         uno::Reference<lang::XSingleServiceFactory> xStorageFactory = embed::StorageFactory::create(xContext);
 
-        uno::Sequence<uno::Any> aArgs (2);
-        aArgs[0] <<= rURL;
-        aArgs[1] <<= embed::ElementModes::READ;
+        uno::Sequence<uno::Any> aArgs{ uno::Any(rURL), uno::Any(embed::ElementModes::READ) };
         uno::Reference<embed::XStorage> xDocStorage (
             xStorageFactory->createInstanceWithArguments(aArgs),
             uno::UNO_QUERY);

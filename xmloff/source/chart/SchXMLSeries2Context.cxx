@@ -233,8 +233,9 @@ Reference< chart2::data::XLabeledDataSequence2 > lcl_createAndAddSequenceToSerie
     const Sequence< Reference< chart2::data::XLabeledDataSequence > > aOldSeq( xSeriesSource->getDataSequences());
     sal_Int32 nOldCount = aOldSeq.getLength();
     Sequence< Reference< chart2::data::XLabeledDataSequence > > aNewSeq( nOldCount + 1 );
-    aNewSeq[0].set(xLabeledSeq, uno::UNO_QUERY_THROW);
-    std::copy(aOldSeq.begin(), aOldSeq.end(), std::next(aNewSeq.getArray()));
+    auto pNewSeq = aNewSeq.getArray();
+    pNewSeq[0].set(xLabeledSeq, uno::UNO_QUERY_THROW);
+    std::copy(aOldSeq.begin(), aOldSeq.end(), std::next(pNewSeq));
     xSeriesSink->setData( aNewSeq );
 
     return xLabeledSeq;
@@ -1219,11 +1220,12 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                     auto& rCustomLabels = seriesStyle.mCustomLabels;
 
                     Sequence< Reference<chart2::XDataPointCustomLabelField>> xLabels(nLabelCount);
+                    auto pxLabels = xLabels.getArray();
                     Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
                     for( size_t j = 0; j < nLabelCount; ++j )
                     {
                         Reference< chart2::XDataPointCustomLabelField > xCustomLabel = chart2::DataPointCustomLabelField::create(xContext);
-                        xLabels[j] = xCustomLabel;
+                        pxLabels[j] = xCustomLabel;
                         xCustomLabel->setString(rCustomLabels.mLabels[j]);
                         if ( j == 0 && rCustomLabels.mbDataLabelsRange)
                         {

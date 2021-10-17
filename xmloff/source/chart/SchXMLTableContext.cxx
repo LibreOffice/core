@@ -73,10 +73,11 @@ struct lcl_ApplyCellToData
     {
         if( m_nIndex < m_nSize )
         {
+            auto pData = m_rData.getArray();
             if( rCell.eType == SCH_CELL_TYPE_FLOAT )
-                m_rData[m_nIndex] = rCell.fValue;
+                pData[m_nIndex] = rCell.fValue;
             else
-                m_rData[m_nIndex] = std::numeric_limits<double>::quiet_NaN();
+                pData[m_nIndex] = std::numeric_limits<double>::quiet_NaN();
         }
         ++m_nIndex;
     }
@@ -661,20 +662,19 @@ static void lcl_ApplyCellToComplexLabel( const SchXMLCell& rCell, Sequence< uno:
 {
     if( rCell.eType == SCH_CELL_TYPE_STRING )
     {
-        rComplexLabel.realloc(1);
-        rComplexLabel[0] <<= rCell.aString;
+        rComplexLabel = { uno::Any(rCell.aString) };
     }
     else if( rCell.aComplexString.hasElements() && rCell.eType == SCH_CELL_TYPE_COMPLEX_STRING )
     {
         sal_Int32 nCount = rCell.aComplexString.getLength();
         rComplexLabel.realloc( nCount );
+        auto rComplexLabelRange = asNonConstRange(rComplexLabel);;
         for( sal_Int32 nN=0; nN<nCount; nN++)
-            rComplexLabel[nN] <<= (rCell.aComplexString)[nN];
+            rComplexLabelRange[nN] <<= (rCell.aComplexString)[nN];
     }
     else if( rCell.eType == SCH_CELL_TYPE_FLOAT )
     {
-        rComplexLabel.realloc(1);
-        rComplexLabel[0] <<= rCell.fValue;
+        rComplexLabel = { uno::Any(rCell.fValue) };
     }
 }
 
@@ -706,10 +706,13 @@ void SchXMLTableHelper::applyTableToInternalDataProvider(
     }
 
     Sequence< Sequence< double > > aDataInRows( nNumRows );
+    auto aDataInRowsRange = asNonConstRange(aDataInRows);
     Sequence< Sequence< uno::Any > > aComplexRowDescriptions( nNumRows );
+    auto aComplexRowDescriptionsRange = asNonConstRange(aComplexRowDescriptions);
     Sequence< Sequence< uno::Any > > aComplexColumnDescriptions( nNumColumns );
+    auto aComplexColumnDescriptionsRange = asNonConstRange(aComplexColumnDescriptions);
     for( sal_Int32 i=0; i<nNumRows; ++i )
-        aDataInRows[i].realloc( nNumColumns );
+        aDataInRowsRange[i].realloc( nNumColumns );
 
     if( !rTable.aData.empty() )
     {
@@ -721,7 +724,7 @@ void SchXMLTableHelper::applyTableToInternalDataProvider(
             const sal_Int32 nMax = ::std::min< sal_Int32 >( nColumnLabelsSize, static_cast< sal_Int32 >( rFirstRow.size()) - nColOffset );
             SAL_WARN_IF( nMax != nColumnLabelsSize, "xmloff.chart", "nMax != nColumnLabelsSize");
             for( sal_Int32 i=0; i<nMax; ++i )
-                lcl_ApplyCellToComplexLabel( rFirstRow[i+nColOffset], aComplexColumnDescriptions[i] );
+                lcl_ApplyCellToComplexLabel( rFirstRow[i+nColOffset], aComplexColumnDescriptionsRange[i] );
         }
 
         std::vector< ::std::vector< SchXMLCell > >::const_iterator aRowIter( rTable.aData.begin() + nRowOffset );
@@ -733,13 +736,14 @@ void SchXMLTableHelper::applyTableToInternalDataProvider(
             {
                 // row label
                 if( rTable.bHasHeaderColumn )
-                    lcl_ApplyCellToComplexLabel( rRow.front(), aComplexRowDescriptions[nRow] );
+                    lcl_ApplyCellToComplexLabel( rRow.front(), aComplexRowDescriptionsRange[nRow] );
 
                 // values
-                Sequence< double >& rTargetRow = aDataInRows[nRow];
+                Sequence< double >& rTargetRow = aDataInRowsRange[nRow];
+                auto pTargetRow = rTargetRow.getArray();
                 lcl_ApplyCellToData aApplyCellToData = ::std::for_each( rRow.begin() + nColOffset, rRow.end(), lcl_ApplyCellToData( rTargetRow ) );
                 for( sal_Int32 nCurrentIndex = aApplyCellToData.getCurrentIndex(); nCurrentIndex<nNumColumns; nCurrentIndex++ )
-                    rTargetRow[nCurrentIndex] = std::numeric_limits<double>::quiet_NaN();//#i110615#
+                    pTargetRow[nCurrentIndex] = std::numeric_limits<double>::quiet_NaN();//#i110615#
             }
         }
     }

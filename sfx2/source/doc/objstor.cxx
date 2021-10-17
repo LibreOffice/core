@@ -63,6 +63,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <svtools/langtab.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/configmgr.hxx>
@@ -352,9 +353,10 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
         {
         }
 
-        aEncryptionAlgs[0].Value <<= xml::crypto::DigestID::SHA256;
-        aEncryptionAlgs[2].Value <<= xml::crypto::DigestID::SHA256_1K;
-        aEncryptionAlgs[1].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
+        auto pEncryptionAlgs = aEncryptionAlgs.getArray();
+        pEncryptionAlgs[0].Value <<= xml::crypto::DigestID::SHA256;
+        pEncryptionAlgs[2].Value <<= xml::crypto::DigestID::SHA256_1K;
+        pEncryptionAlgs[1].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
     }
 
     try
@@ -482,8 +484,8 @@ bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
             TransformItems( SID_OPENDOC, *pSet, aArgs );
             sal_Int32 nLength = aArgs.getLength();
             aArgs.realloc( nLength + 1 );
-            aArgs[nLength].Name = "Title";
-            aArgs[nLength].Value <<= GetTitle( SFX_TITLE_DETECT );
+            aArgs.getArray()[nLength]
+                = comphelper::makePropertyValue("Title", GetTitle( SFX_TITLE_DETECT ));
             xModel->attachResource( OUString(), aArgs );
             if (!utl::ConfigManager::IsFuzzing())
                 impl_addToModelCollection(xModel);
@@ -2230,24 +2232,23 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
             if ( !bHasInputStream )
             {
                 aArgs.realloc ( ++nEnd );
-                aArgs[nEnd-1].Name = sInputStream;
-                aArgs[nEnd-1].Value <<= css::uno::Reference < css::io::XInputStream > ( new utl::OSeekableInputStreamWrapper ( *rMedium.GetInStream() ) );
+                aArgs.getArray()[nEnd-1] = comphelper::makePropertyValue(
+                    sInputStream, css::uno::Reference < css::io::XInputStream > ( new utl::OSeekableInputStreamWrapper ( *rMedium.GetInStream() ) ));
             }
 
             if ( !bHasBaseURL )
             {
                 aArgs.realloc ( ++nEnd );
-                aArgs[nEnd-1].Name = "DocumentBaseURL";
-                aArgs[nEnd-1].Value <<= rMedium.GetBaseURL();
+                aArgs.getArray()[nEnd-1] = comphelper::makePropertyValue("DocumentBaseURL",
+                                                                         rMedium.GetBaseURL());
             }
 
             if (xInsertPosition.is()) {
-                aArgs.realloc( ++nEnd );
-                aArgs[nEnd-1].Name = "InsertMode";
-                aArgs[nEnd-1].Value <<= true;
-                aArgs.realloc( ++nEnd );
-                aArgs[nEnd-1].Name = "TextInsertModeRange";
-                aArgs[nEnd-1].Value <<= xInsertPosition;
+                aArgs.realloc( nEnd += 2 );
+                auto pArgs = aArgs.getArray();
+                pArgs[nEnd-2] = comphelper::makePropertyValue("InsertMode", true);
+                pArgs[nEnd-1] = comphelper::makePropertyValue("TextInsertModeRange",
+                                                              xInsertPosition);
             }
 
             // #i119492# During loading, some OLE objects like chart will be set
@@ -2423,37 +2424,35 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         if ( !bHasOutputStream )
         {
             aArgs.realloc ( ++nEnd );
-            aArgs[nEnd-1].Name = sOutputStream;
-            aArgs[nEnd-1].Value <<= css::uno::Reference < css::io::XOutputStream > ( new utl::OOutputStreamWrapper ( *rMedium.GetOutStream() ) );
+            aArgs.getArray()[nEnd-1] = comphelper::makePropertyValue(
+                sOutputStream, css::uno::Reference < css::io::XOutputStream > ( new utl::OOutputStreamWrapper ( *rMedium.GetOutStream() ) ));
         }
 
         // add stream as well, for OOX export and maybe others
         if ( !bHasStream )
         {
             aArgs.realloc ( ++nEnd );
-            aArgs[nEnd-1].Name = sStream;
-            aArgs[nEnd-1].Value <<= css::uno::Reference < css::io::XStream > ( new utl::OStreamWrapper ( *rMedium.GetOutStream() ) );
+            aArgs.getArray()[nEnd-1] = comphelper::makePropertyValue(
+                sStream, css::uno::Reference < css::io::XStream > ( new utl::OStreamWrapper ( *rMedium.GetOutStream() ) ));
         }
 
         if ( !bHasBaseURL )
         {
             aArgs.realloc ( ++nEnd );
-            aArgs[nEnd-1].Name = "DocumentBaseURL";
-            aArgs[nEnd-1].Value <<= rMedium.GetBaseURL( true );
+            aArgs.getArray()[nEnd-1] = comphelper::makePropertyValue("DocumentBaseURL",
+                                                                     rMedium.GetBaseURL( true ));
         }
 
         if( !bHasFilterName )
         {
             aArgs.realloc( ++nEnd );
-            aArgs[nEnd-1].Name = "FilterName";
-            aArgs[nEnd-1].Value <<= aFilterName;
+            aArgs.getArray()[nEnd-1] = comphelper::makePropertyValue("FilterName", aFilterName);
         }
 
         if (bIsRedactMode)
         {
             aArgs.realloc( ++nEnd );
-            aArgs[nEnd-1].Name = "IsRedactMode";
-            aArgs[nEnd-1].Value <<= bIsRedactMode;
+            aArgs.getArray()[nEnd-1] = comphelper::makePropertyValue("IsRedactMode", bIsRedactMode);
         }
 
         return xFilter->filter( aArgs );
@@ -2878,6 +2877,7 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
         if(aFilterName == "writer_pdf_Export" && pNewFile->GetItemSet())
         {
             uno::Sequence< beans::PropertyValue > aSaveToFilterDataOptions(2);
+            auto pSaveToFilterDataOptions = aSaveToFilterDataOptions.getArray();
             bool bRet = false;
 
             for(int i = 0 ; i< rArgs.getLength() ; ++i)
@@ -2885,14 +2885,14 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
                 auto aProp = rArgs[i];
                 if(aProp.Name == "EncryptFile")
                 {
-                    aSaveToFilterDataOptions[0].Name = aProp.Name;
-                    aSaveToFilterDataOptions[0].Value = aProp.Value;
+                    pSaveToFilterDataOptions[0].Name = aProp.Name;
+                    pSaveToFilterDataOptions[0].Value = aProp.Value;
                     bRet = true;
                 }
                 if(aProp.Name == "DocumentOpenPassword")
                 {
-                    aSaveToFilterDataOptions[1].Name = aProp.Name;
-                    aSaveToFilterDataOptions[1].Value = aProp.Value;
+                    pSaveToFilterDataOptions[1].Name = aProp.Name;
+                    pSaveToFilterDataOptions[1].Value = aProp.Value;
                     bRet = true;
                 }
             }

@@ -40,6 +40,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/window.hxx>
@@ -75,10 +76,7 @@ ImageHelper::getGraphicFromURL_nothrow( const OUString& _rURL )
     {
         uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
         uno::Reference< graphic::XGraphicProvider > xProvider( graphic::GraphicProvider::create(xContext) );
-        uno::Sequence< beans::PropertyValue > aMediaProperties(1);
-        aMediaProperties[0].Name = "URL";
-        aMediaProperties[0].Value <<= _rURL;
-        xGraphic = xProvider->queryGraphic( aMediaProperties );
+        xGraphic = xProvider->queryGraphic({ comphelper::makePropertyValue("URL", _rURL) });
     }
     catch (const Exception&)
     {

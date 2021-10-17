@@ -57,6 +57,7 @@
 #include <framework/actiontriggerhelper.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/settings.hxx>
@@ -623,9 +624,9 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 
                 OUString aFileURL = aFilePathObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
-                css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
-                aArgs[0].Name  = "FilterName";
-                aArgs[0].Value <<= aFilterName;
+                css::uno::Sequence< css::beans::PropertyValue > aArgs{
+                    comphelper::makePropertyValue("FilterName", aFilterName)
+                };
 
                 // Store document in the html format
                 try

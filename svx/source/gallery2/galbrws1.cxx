@@ -35,6 +35,7 @@
 #include <algorithm>
 #include <svx/dialmgr.hxx>
 #include <comphelper/dispatchcommand.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <svx/svxdlg.hxx>
 #include <memory>
@@ -362,9 +363,9 @@ void GalleryBrowser1::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 IMPL_STATIC_LINK_NOARG( GalleryBrowser1, OnMoreGalleriesClick, weld::Button&, void)
 {
-    css::uno::Sequence<css::beans::PropertyValue> aArgs(1);
-    aArgs[0].Name = "AdditionsTag";
-    aArgs[0].Value <<= OUString("Gallery");
+    css::uno::Sequence<css::beans::PropertyValue> aArgs{
+        comphelper::makePropertyValue("AdditionsTag", OUString("Gallery"))
+    };
     comphelper::dispatchCommand(".uno:AdditionsDialog", aArgs);
 }
 

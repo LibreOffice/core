@@ -27,6 +27,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 using namespace css;
 using namespace css::beans;
@@ -81,9 +82,8 @@ GraphicMimeTypeHelper::GetMimeTypeForImageStream(const Reference<XInputStream>& 
     // Create the graphic to retrieve the mimetype from it
     Reference<XGraphicProvider> xProvider
         = css::graphic::GraphicProvider::create(comphelper::getProcessComponentContext());
-    Sequence<PropertyValue> aMediaProperties(1);
-    aMediaProperties[0].Name = "InputStream";
-    aMediaProperties[0].Value <<= xInputStream;
+    Sequence<PropertyValue> aMediaProperties{ comphelper::makePropertyValue("InputStream",
+                                                                            xInputStream) };
     Reference<XGraphic> xGraphic(xProvider->queryGraphic(aMediaProperties));
 
     return GetMimeTypeForXGraphic(xGraphic);

@@ -56,11 +56,13 @@ bool SvxClipboardFormatItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMembe
     css::frame::status::ClipboardFormats aClipFormats;
 
     aClipFormats.Identifiers.realloc( nCount );
+    auto aClipFormatsIdentifiersRange = asNonConstRange(aClipFormats.Identifiers);
     aClipFormats.Names.realloc( nCount );
+    auto aClipFormatsNamesRange = asNonConstRange(aClipFormats.Names);
     for ( sal_uInt16 n=0; n < nCount; n++ )
     {
-        aClipFormats.Identifiers[n] = static_cast<sal_Int64>(GetClipbrdFormatId( n ));
-        aClipFormats.Names[n] = GetClipbrdFormatName( n );
+        aClipFormatsIdentifiersRange[n] = static_cast<sal_Int64>(GetClipbrdFormatId( n ));
+        aClipFormatsNamesRange[n] = GetClipbrdFormatName( n );
     }
 
     rVal <<= aClipFormats;

@@ -1706,10 +1706,11 @@ void SfxDispatcher::ExecutePopup( vcl::Window *pWin, const Point *pPos )
 
 void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window* pWin, const Point* pPos )
 {
-    css::uno::Sequence< css::uno::Any > aArgs( 3 );
-    aArgs[0] <<= comphelper::makePropertyValue( "Value", rResName );
-    aArgs[1] <<= comphelper::makePropertyValue( "Frame", GetFrame()->GetFrame().GetFrameInterface() );
-    aArgs[2] <<= comphelper::makePropertyValue( "IsContextMenu", true );
+    css::uno::Sequence< css::uno::Any > aArgs{
+        css::uno::Any(comphelper::makePropertyValue( "Value", rResName )),
+        css::uno::Any(comphelper::makePropertyValue( "Frame", GetFrame()->GetFrame().GetFrameInterface() )),
+        css::uno::Any(comphelper::makePropertyValue( "IsContextMenu", true ))
+    };
 
     css::uno::Reference< css::uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
     css::uno::Reference< css::frame::XPopupMenuController > xPopupController(

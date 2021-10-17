@@ -259,13 +259,7 @@ TVRead::getByName( const OUString& aName )
 Sequence< OUString > SAL_CALL
 TVRead::getElementNames( )
 {
-    Sequence< OUString > seq( 3 );
-
-    seq[0] = "Title";
-    seq[1] = "TargetURL";
-    seq[2] = "Children";
-
-    return seq;
+    return { "Title", "TargetURL", "Children" };
 }
 
 sal_Bool SAL_CALL
@@ -519,8 +513,9 @@ Sequence< OUString > SAL_CALL
 TVChildTarget::getElementNames( )
 {
     Sequence< OUString > seq( Elements.size() );
+    auto seqRange = asNonConstRange(seq);
     for( size_t i = 0; i < Elements.size(); ++i )
-        seq[i] = OUString::number( 1+i );
+        seqRange[i] = OUString::number( 1+i );
 
     return seq;
 }

@@ -22,6 +22,8 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/view/XRenderable.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+
+#include <comphelper/propertyvalue.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sal/log.hxx>
 #include <svl/itempool.hxx>
@@ -131,12 +133,11 @@ SfxPrinterController::SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
         for (const auto& rProp : rProps)
             setValue( rProp.Name, rProp.Value );
 
-        Sequence< beans::PropertyValue > aRenderOptions( 3 );
-        aRenderOptions[0].Name = "ExtraPrintUIOptions";
-        aRenderOptions[1].Name = "View" ;
-        aRenderOptions[1].Value = i_rViewProp;
-        aRenderOptions[2].Name = "IsPrinter";
-        aRenderOptions[2].Value <<= true;
+        Sequence< beans::PropertyValue > aRenderOptions{
+            comphelper::makePropertyValue("ExtraPrintUIOptions", Any{}),
+            comphelper::makePropertyValue("View", i_rViewProp),
+            comphelper::makePropertyValue("IsPrinter", true)
+        };
         try
         {
             const Sequence< beans::PropertyValue > aRenderParms( mxRenderable->getRenderer( 0 , getSelectionObject(), aRenderOptions ) );
@@ -209,9 +210,8 @@ Sequence< beans::PropertyValue > SfxPrinterController::getMergedOptions() const
         mxDevice.set( pXDevice );
     }
 
-    Sequence< beans::PropertyValue > aRenderOptions( 1 );
-    aRenderOptions[ 0 ].Name = "RenderDevice";
-    aRenderOptions[ 0 ].Value <<= mxDevice;
+    Sequence< beans::PropertyValue > aRenderOptions{ comphelper::makePropertyValue(
+        "RenderDevice", mxDevice) };
 
     aRenderOptions = getJobProperties( aRenderOptions );
     return aRenderOptions;
@@ -741,14 +741,14 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             // it would be better if writer handled this internally
             if( nId == SID_PRINTDOCDIRECT )
             {
-                aProps[nLen].Name = "PrintSelectionOnly";
-                aProps[nLen].Value <<= bSelection;
+                aProps.getArray()[nLen] = comphelper::makePropertyValue("PrintSelectionOnly",
+                                                                        bSelection);
             }
             else // if nId == SID_PRINTDOC ; nothing to do with the previous HACK
             {
                 // should the printer selection and properties dialogue display an help button
-                aProps[nLen].Name = "HideHelpButton";
-                aProps[nLen].Value <<= bPrintOnHelp;
+                aProps.getArray()[nLen] = comphelper::makePropertyValue("HideHelpButton",
+                                                                        bPrintOnHelp);
             }
 
             ExecPrint( aProps, bIsAPI, (nId == SID_PRINTDOCDIRECT) );

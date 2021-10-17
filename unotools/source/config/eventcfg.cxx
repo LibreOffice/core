@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <comphelper/propertyvalue.hxx>
 #include <unotools/eventcfg.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
@@ -160,7 +163,6 @@ void GlobalEventConfig_Impl::ImplCommit()
     SAL_INFO("unotools", "In GlobalEventConfig_Impl::ImplCommit");
     // clear the existing nodes
     ClearNodeSet( SETNODE_BINDINGS );
-    Sequence< beans::PropertyValue > seqValues( 1 );
     OUString sNode;
     //step through the list of events
     for(const auto& rEntry : m_eventBindingHash)
@@ -172,10 +174,8 @@ void GlobalEventConfig_Impl::ImplCommit()
                 rEntry.first +
                 "']" PATHDELIMITER PROPERTYNAME_BINDINGURL;
         SAL_INFO("unotools", "writing binding for: " << sNode);
-        seqValues[ 0 ].Name = sNode;
-        seqValues[ 0 ].Value <<= rEntry.second;
         //write the data to the registry
-        SetSetProperties(SETNODE_BINDINGS,seqValues);
+        SetSetProperties(SETNODE_BINDINGS,{ comphelper::makePropertyValue(sNode, rEntry.second) });
     }
 }
 
@@ -191,9 +191,10 @@ void GlobalEventConfig_Impl::initBindingInfo()
 
     // Expand all keys
     Sequence< OUString > lMacros(1);
+    auto plMacros = lMacros.getArray();
     for (const auto& rEventName : lEventNames )
     {
-        lMacros[0] = aSetNode + rEventName + aCommandKey;
+        plMacros[0] = aSetNode + rEventName + aCommandKey;
         SAL_INFO("unotools", "reading binding for: " << lMacros[0]);
         Sequence< Any > lValues = GetProperties( lMacros );
         if( lValues.hasElements() )
@@ -235,13 +236,14 @@ Any GlobalEventConfig_Impl::getByName( const OUString& aName )
 {
     Any aRet;
     Sequence< beans::PropertyValue > props(2);
-    props[0].Name = "EventType";
-    props[0].Value <<= OUString("Script");
-    props[1].Name = "Script";
+    auto pProps = props.getArray();
+    pProps[0].Name = "EventType";
+    pProps[0].Value <<= OUString("Script");
+    pProps[1].Name = "Script";
     EventBindingHash::const_iterator it = m_eventBindingHash.find( aName );
     if( it != m_eventBindingHash.end() )
     {
-        props[1].Value <<= it->second;
+        pProps[1].Value <<= it->second;
     }
     else
     {
@@ -251,7 +253,7 @@ Any GlobalEventConfig_Impl::getByName( const OUString& aName )
         if ( pos == m_supportedEvents.end() )
             throw container::NoSuchElementException( aName );
 
-        props[1].Value <<= OUString();
+        pProps[1].Value <<= OUString();
     }
     aRet <<= props;
     return aRet;

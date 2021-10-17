@@ -40,7 +40,7 @@ SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem( const uno::Sequence< bea
 
     for ( i = 0; i < aPropSeq.getLength(); i++ )
     {
-        beans::PropertyValue& rPropVal = aPropSeq[ i ];
+        const beans::PropertyValue& rPropVal = aPropSeq[ i ];
         std::pair<PropertyHashMap::iterator, bool> const ret(
                 aPropHashMap.insert(std::make_pair(rPropVal.Name, i)));
         assert(ret.second); // serious bug: duplicate xml attribute exported
@@ -66,7 +66,7 @@ css::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( const OUStrin
     css::uno::Any* pRet = nullptr;
     PropertyHashMap::iterator aHashIter( aPropHashMap.find( rPropName ) );
     if ( aHashIter != aPropHashMap.end() )
-        pRet = &aPropSeq[ (*aHashIter).second ].Value;
+        pRet = &aPropSeq.getArray()[ (*aHashIter).second ].Value;
     return pRet;
 }
 
@@ -90,7 +90,7 @@ css::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( const OUStrin
             PropertyPairHashMap::iterator aHashIter( aPropPairHashMap.find( PropertyPair( rSequenceName, rPropName ) ) );
             if ( aHashIter != aPropPairHashMap.end() )
             {
-                pRet = &const_cast<css::uno::Sequence<css::beans::PropertyValue> &>(*rSecSequence)[ (*aHashIter).second ].Value;
+                pRet = &const_cast<css::uno::Sequence<css::beans::PropertyValue> &>(*rSecSequence).getArray()[ (*aHashIter).second ].Value;
             }
         }
     }
@@ -146,7 +146,7 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const css::beans::PropertyVal
                 { return rVal.Name == rPropVal.Name; } ));
         sal_uInt32 nIndex = aPropSeq.getLength();
         aPropSeq.realloc( nIndex + 1 );
-        aPropSeq[ nIndex ] = rPropVal ;
+        aPropSeq.getArray()[ nIndex ] = rPropVal ;
 
         aPropHashMap[ rPropVal.Name ] = nIndex;
     }
@@ -172,10 +172,11 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const OUString& rSequenceName
                     { return rV.Name == rSequenceName; } ));
             sal_uInt32 nIndex = aPropSeq.getLength();
             aPropSeq.realloc( nIndex + 1 );
-            aPropSeq[ nIndex ] = aValue;
+            auto pPropSeq = aPropSeq.getArray();
+            pPropSeq[ nIndex ] = aValue;
             aPropHashMap[ rSequenceName ] = nIndex;
 
-            pSeqAny = &aPropSeq[ nIndex ].Value;
+            pSeqAny = &pPropSeq[ nIndex ].Value;
         }
 
         if (auto pSecSequence = o3tl::tryAccess<css::uno::Sequence<beans::PropertyValue>>(*pSeqAny))
@@ -185,13 +186,13 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const OUString& rSequenceName
             auto& rSeq = const_cast<css::uno::Sequence<css::beans::PropertyValue>&>(*pSecSequence);
             if (aHashIter != aPropPairHashMap.end())
             {
-                rSeq[(*aHashIter).second].Value = rPropVal.Value;
+                rSeq.getArray()[(*aHashIter).second].Value = rPropVal.Value;
             }
             else
             {
                 const sal_Int32 nCount = pSecSequence->getLength();
                 rSeq.realloc(nCount + 1);
-                rSeq[nCount] = rPropVal;
+                rSeq.getArray()[nCount] = rPropVal;
 
                 aPropPairHashMap[PropertyPair(rSequenceName, rPropVal.Name)] = nCount;
             }
@@ -208,7 +209,8 @@ void SdrCustomShapeGeometryItem::ClearPropertyValue( const OUString& rPropName )
     if ( aHashIter == aPropHashMap.end() )
         return;
 
-    css::uno::Any& rSeqAny = aPropSeq[(*aHashIter).second].Value;
+    auto pPropSeq = aPropSeq.getArray();
+    css::uno::Any& rSeqAny = pPropSeq[(*aHashIter).second].Value;
     if (auto pSecSequence
         = o3tl::tryAccess<css::uno::Sequence<beans::PropertyValue>>(rSeqAny))
     {
@@ -227,7 +229,7 @@ void SdrCustomShapeGeometryItem::ClearPropertyValue( const OUString& rPropName )
         {
             PropertyHashMap::iterator aHashIter2( aPropHashMap.find( aPropSeq[ nLength - 1 ].Name ) );
             (*aHashIter2).second = nIndex;
-            aPropSeq[ nIndex ] = aPropSeq[ nLength - 1 ];
+            pPropSeq[ nIndex ] = aPropSeq[ nLength - 1 ];
         }
         aPropSeq.realloc( nLength - 1 );
     }

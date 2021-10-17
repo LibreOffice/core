@@ -76,7 +76,7 @@ void XStyleLoader::testLoadStylesFromStream()
     uno::Any aTmp;
     aTmp <<= xInputStream;
     aInputStream.Value = aTmp;
-    aOptions[nLength] = aInputStream;
+    aOptions.getArray()[nLength] = aInputStream;
 
     xStyleLoader->loadStylesFromURL("private:stream", aOptions);
 

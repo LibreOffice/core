@@ -1016,12 +1016,13 @@ namespace sfx2
             if ( !aImportantFilterGroup.empty() )
             {
                 Sequence< StringPair > aFilters( aImportantFilterGroup.size() );
+                auto pFilters = aFilters.getArray();
                 for ( sal_Int32 i = 0; i < static_cast<sal_Int32>(aImportantFilterGroup.size()); i++ )
                 {
-                    aFilters[i].First   = addExtension( aImportantFilterGroup[i].aUIName,
+                    pFilters[i].First   = addExtension( aImportantFilterGroup[i].aUIName,
                                                         aImportantFilterGroup[i].aWildcard,
                                                         false, _rFileDlgImpl );
-                    aFilters[i].Second  = aImportantFilterGroup[i].aWildcard;
+                    pFilters[i].Second  = aImportantFilterGroup[i].aWildcard;
                 }
 
                 try
@@ -1036,12 +1037,13 @@ namespace sfx2
             if ( !aFilterGroup.empty() )
             {
                 Sequence< StringPair > aFilters( aFilterGroup.size() );
+                auto pFilters = aFilters.getArray();
                 for ( sal_Int32 i = 0; i < static_cast<sal_Int32>(aFilterGroup.size()); i++ )
                 {
-                    aFilters[i].First   = addExtension( aFilterGroup[i].aUIName,
+                    pFilters[i].First   = addExtension( aFilterGroup[i].aUIName,
                                                         aFilterGroup[i].aWildcard,
                                                         false, _rFileDlgImpl );
-                    aFilters[i].Second  = aFilterGroup[i].aWildcard;
+                    pFilters[i].Second  = aFilterGroup[i].aWildcard;
                 }
 
                 try

@@ -355,21 +355,22 @@ void SdXMLShapeContext::endFastElement(sal_Int32 )
         {
             Reference< XNameReplace > xEvents( xEventsSupplier->getEvents(), UNO_SET_THROW );
 
-            uno::Sequence< beans::PropertyValue > aProperties( 3 );
-            aProperties[0].Name = "EventType";
-            aProperties[0].Handle = -1;
-            aProperties[0].Value <<= OUString( "Presentation" );
-            aProperties[0].State = beans::PropertyState_DIRECT_VALUE;
+            uno::Sequence< beans::PropertyValue > aProperties{
+                { /* Name   */ "EventType",
+                  /* Handle */ -1,
+                  /* Value  */ uno::Any(OUString( "Presentation" )),
+                  /* State  */ beans::PropertyState_DIRECT_VALUE },
 
-            aProperties[1].Name = "ClickAction";
-            aProperties[1].Handle = -1;
-            aProperties[1].Value <<= css::presentation::ClickAction_DOCUMENT;
-            aProperties[1].State = beans::PropertyState_DIRECT_VALUE;
+                { /* Name   */ "ClickAction",
+                  /* Handle */ -1,
+                  /* Value  */ uno::Any(css::presentation::ClickAction_DOCUMENT),
+                  /* State  */ beans::PropertyState_DIRECT_VALUE },
 
-            aProperties[2].Name = "Bookmark";
-            aProperties[2].Handle = -1;
-            aProperties[2].Value <<= msHyperlink;
-            aProperties[2].State = beans::PropertyState_DIRECT_VALUE;
+                { /* Name   */ "Bookmark",
+                  /* Handle */ -1,
+                  /* Value  */ uno::Any(msHyperlink),
+                  /* State  */ beans::PropertyState_DIRECT_VALUE }
+            };
 
             xEvents->replaceByName( "OnClick", Any( aProperties ) );
         }
@@ -2810,10 +2811,10 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLAppletShapeContex
         {
             sal_Int32 nIndex = maParams.getLength();
             maParams.realloc( nIndex + 1 );
-            maParams[nIndex].Name = aParamName;
-            maParams[nIndex].Handle = -1;
-            maParams[nIndex].Value <<= aParamValue;
-            maParams[nIndex].State = beans::PropertyState_DIRECT_VALUE;
+            maParams.getArray()[nIndex] = { /* Name   */ aParamName,
+                                            /* Handle */ -1,
+                                            /* Value  */ uno::Any(aParamValue),
+                                            /* State  */ beans::PropertyState_DIRECT_VALUE };
         }
 
         return new SvXMLImportContext( GetImport() );
@@ -3055,10 +3056,10 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLPluginShapeContex
         {
             sal_Int32 nIndex = maParams.getLength();
             maParams.realloc( nIndex + 1 );
-            maParams[nIndex].Name = aParamName;
-            maParams[nIndex].Handle = -1;
-            maParams[nIndex].Value <<= aParamValue;
-            maParams[nIndex].State = beans::PropertyState_DIRECT_VALUE;
+            maParams.getArray()[nIndex] = { /* Name   */ aParamName,
+                                            /* Handle */ -1,
+                                            /* Value  */ uno::Any(aParamValue),
+                                            /* State  */ beans::PropertyState_DIRECT_VALUE };
         }
 
         return new SvXMLImportContext( GetImport() );

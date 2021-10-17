@@ -160,8 +160,9 @@ public:
     {
         auto s(ControlModelContainerBase::getSupportedServiceNames());
         s.realloc(s.getLength() + 2);
-        s[s.getLength() - 2] = "com.sun.star.awt.UnoControlDialogModel";
-        s[s.getLength() - 1] = "stardiv.vcl.controlmodel.Dialog";
+        auto ps = s.getArray();
+        ps[s.getLength() - 2] = "com.sun.star.awt.UnoControlDialogModel";
+        ps[s.getLength() - 1] = "stardiv.vcl.controlmodel.Dialog";
         return s;
     }
 };
@@ -509,15 +510,14 @@ void SAL_CALL UnoDialogControl::windowResized( const css::awt::WindowEvent& e )
     // Remember that changes have been done by listener. No need to
     // update the position because of property change event.
     mbSizeModified = true;
-    Sequence< OUString > aProps( 2 );
-    Sequence< Any > aValues( 2 );
     // Properties in a sequence must be sorted!
-    aProps[0] = "Height";
-    aProps[1] = "Width";
-    aValues[0] <<= sal_Int32(
-        std::clamp(aAppFontSize.Height(), tools::Long(SAL_MIN_INT32), tools::Long(SAL_MAX_INT32)));
-    aValues[1] <<= sal_Int32(
-        std::clamp(aAppFontSize.Width(), tools::Long(SAL_MIN_INT32), tools::Long(SAL_MAX_INT32)));
+    Sequence< OUString > aProps{ "Height", "Width" };
+    Sequence< Any > aValues{
+        Any(sal_Int32(
+          std::clamp(aAppFontSize.Height(), tools::Long(SAL_MIN_INT32), tools::Long(SAL_MAX_INT32)))),
+        Any(sal_Int32(
+          std::clamp(aAppFontSize.Width(), tools::Long(SAL_MIN_INT32), tools::Long(SAL_MAX_INT32))))
+    };
 
     ImplSetPropertyValues( aProps, aValues, true );
     mbSizeModified = false;
@@ -538,14 +538,13 @@ void SAL_CALL UnoDialogControl::windowMoved( const css::awt::WindowEvent& e )
     // Remember that changes have been done by listener. No need to
     // update the position because of property change event.
     mbPosModified = true;
-    Sequence< OUString > aProps( 2 );
-    Sequence< Any > aValues( 2 );
-    aProps[0] = "PositionX";
-    aProps[1] = "PositionY";
-    aValues[0] <<= sal_Int32(
-        std::clamp(aTmp.Width(), tools::Long(SAL_MIN_INT32), tools::Long(SAL_MAX_INT32)));
-    aValues[1] <<= sal_Int32(
-        std::clamp(aTmp.Height(), tools::Long(SAL_MIN_INT32), tools::Long(SAL_MAX_INT32)));
+    Sequence< OUString > aProps{ "PositionX", "PositionY" };
+    Sequence< Any > aValues{
+        Any(sal_Int32(
+          std::clamp(aTmp.Width(), tools::Long(SAL_MIN_INT32), tools::Long(SAL_MAX_INT32)))),
+        Any(sal_Int32(
+          std::clamp(aTmp.Height(), tools::Long(SAL_MIN_INT32), tools::Long(SAL_MAX_INT32))))
+    };
 
     ImplSetPropertyValues( aProps, aValues, true );
     mbPosModified = false;

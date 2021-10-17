@@ -194,7 +194,7 @@ XMLVersionContext::XMLVersionContext( XMLVersionListImport& rImport,
     uno::Sequence < util::RevisionTag >& aList = rImport.GetList();
     sal_Int32 nLength = aList.getLength();
     aList.realloc( nLength+1 );
-    aList[nLength] = aInfo;
+    aList.getArray()[nLength] = aInfo;
 }
 
 XMLVersionContext::~XMLVersionContext()

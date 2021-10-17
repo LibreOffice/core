@@ -21,6 +21,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 
 #include <comphelper/lok.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <vcl/toolbox.hxx>
 #include <vcl/virdev.hxx>
@@ -368,9 +369,8 @@ IMPL_LINK(FontworkAlignmentWindow, SelectHdl, weld::Toggleable&, rButton, void)
     else
         nAlignment = 4;
 
-    Sequence< PropertyValue > aArgs( 1 );
-    aArgs[0].Name = OUString(gsFontworkAlignment).copy(5);
-    aArgs[0].Value <<= nAlignment;
+    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(
+        OUString(gsFontworkAlignment).copy(5), nAlignment) };
 
     mxControl->dispatchCommand( gsFontworkAlignment, aArgs );
 
@@ -607,10 +607,9 @@ IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, KernSelectHdl, weld::Toggleable&
     if (mbSettingValue)
         return;
 
-    Sequence< PropertyValue > aArgs( 1 );
-    aArgs[0].Name = OUString(gsFontworkKernCharacterPairs).copy(5);
     bool bKernOnOff = mxKernPairs->get_active();
-    aArgs[0].Value <<= bKernOnOff;
+    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(
+        OUString(gsFontworkKernCharacterPairs).copy(5), bKernOnOff) };
 
     mxControl->dispatchCommand( gsFontworkKernCharacterPairs, aArgs );
 
@@ -629,9 +628,8 @@ IMPL_LINK(FontworkCharacterSpacingWindow, SelectHdl, weld::Toggleable&, rButton,
 
     if (mxCustom->get_active())
     {
-        Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = OUString(gsFontworkCharacterSpacing).copy(5);
-        aArgs[0].Value <<= sal_Int32(100);
+        Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(
+            OUString(gsFontworkCharacterSpacing).copy(5), sal_Int32(100)) };
 
         rtl::Reference<svt::PopupWindowController> xControl(mxControl);
         xControl->EndPopupMode();
@@ -651,9 +649,8 @@ IMPL_LINK(FontworkCharacterSpacingWindow, SelectHdl, weld::Toggleable&, rButton,
         else
             nCharacterSpacing = 100;
 
-        Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = OUString(gsFontworkCharacterSpacing).copy(5);
-        aArgs[0].Value <<= nCharacterSpacing;
+        Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(
+            OUString(gsFontworkCharacterSpacing).copy(5), nCharacterSpacing) };
 
         mxControl->dispatchCommand( gsFontworkCharacterSpacing,  aArgs );
 

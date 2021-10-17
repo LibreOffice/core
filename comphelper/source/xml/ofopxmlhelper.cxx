@@ -329,7 +329,9 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
             sal_Int32 nNewEntryNum = m_aResultSeq.getLength() + 1;
             m_aResultSeq.realloc( nNewEntryNum );
             sal_Int32 nAttrNum = 0;
-            m_aResultSeq[nNewEntryNum-1].realloc( 4 ); // the maximal expected number of arguments is 4
+            auto& rAttrs = m_aResultSeq.getArray()[nNewEntryNum-1];
+            rAttrs.realloc( 4 ); // the maximal expected number of arguments is 4
+            auto pAttrs = rAttrs.getArray();
 
             OUString aIDValue = xAttribs->getValueByName( g_aIDAttr );
             if ( aIDValue.isEmpty() )
@@ -339,28 +341,28 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
             OUString aTargetValue = xAttribs->getValueByName( g_aTargetAttr );
             OUString aTargetModeValue = xAttribs->getValueByName( g_aTargetModeAttr );
 
-            m_aResultSeq[nNewEntryNum-1][++nAttrNum - 1].First = g_aIDAttr;
-            m_aResultSeq[nNewEntryNum-1][nAttrNum - 1].Second = aIDValue;
+            pAttrs[++nAttrNum - 1].First = g_aIDAttr;
+            pAttrs[nAttrNum - 1].Second = aIDValue;
 
             if ( !aTypeValue.isEmpty() )
             {
-                m_aResultSeq[nNewEntryNum-1][++nAttrNum - 1].First = g_aTypeAttr;
-                m_aResultSeq[nNewEntryNum-1][nAttrNum - 1].Second = aTypeValue;
+                pAttrs[++nAttrNum - 1].First = g_aTypeAttr;
+                pAttrs[nAttrNum - 1].Second = aTypeValue;
             }
 
             if ( !aTargetValue.isEmpty() )
             {
-                m_aResultSeq[nNewEntryNum-1][++nAttrNum - 1].First = g_aTargetAttr;
-                m_aResultSeq[nNewEntryNum-1][nAttrNum - 1].Second = aTargetValue;
+                pAttrs[++nAttrNum - 1].First = g_aTargetAttr;
+                pAttrs[nAttrNum - 1].Second = aTargetValue;
             }
 
             if ( !aTargetModeValue.isEmpty() )
             {
-                m_aResultSeq[nNewEntryNum-1][++nAttrNum - 1].First = g_aTargetModeAttr;
-                m_aResultSeq[nNewEntryNum-1][nAttrNum - 1].Second = aTargetModeValue;
+                pAttrs[++nAttrNum - 1].First = g_aTargetModeAttr;
+                pAttrs[nAttrNum - 1].Second = aTargetModeValue;
             }
 
-            m_aResultSeq[nNewEntryNum-1].realloc( nAttrNum );
+            rAttrs.realloc( nAttrNum );
         }
         else
             throw css::xml::sax::SAXException(); // TODO: no other elements expected!
@@ -403,11 +405,12 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
             if ( aContentTypeValue.isEmpty() )
                 throw css::xml::sax::SAXException(); // TODO: the ContentType value must present
 
-            const sal_Int32 nNewResultLen = m_aResultSeq[0].getLength() + 1;
-            m_aResultSeq[0].realloc( nNewResultLen );
-
-            m_aResultSeq[0][nNewResultLen-1].First = aExtensionValue;
-            m_aResultSeq[0][nNewResultLen-1].Second = aContentTypeValue;
+            auto& rSeq = m_aResultSeq.getArray()[0];
+            const sal_Int32 nNewResultLen = rSeq.getLength() + 1;
+            rSeq.realloc( nNewResultLen );
+            auto pSeq = rSeq.getArray();
+            pSeq[nNewResultLen-1].First = aExtensionValue;
+            pSeq[nNewResultLen-1].Second = aContentTypeValue;
         }
         else if ( aName == g_aOverrideElement )
         {
@@ -431,11 +434,12 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
             if ( aContentTypeValue.isEmpty() )
                 throw css::xml::sax::SAXException(); // TODO: the ContentType value must present
 
-            sal_Int32 nNewResultLen = m_aResultSeq[1].getLength() + 1;
-            m_aResultSeq[1].realloc( nNewResultLen );
-
-            m_aResultSeq[1][nNewResultLen-1].First = aPartNameValue;
-            m_aResultSeq[1][nNewResultLen-1].Second = aContentTypeValue;
+            auto& rSeq = m_aResultSeq.getArray()[1];
+            sal_Int32 nNewResultLen = rSeq.getLength() + 1;
+            rSeq.realloc( nNewResultLen );
+            auto pSeq = rSeq.getArray();
+            pSeq[nNewResultLen-1].First = aPartNameValue;
+            pSeq[nNewResultLen-1].Second = aContentTypeValue;
         }
         else
             throw css::xml::sax::SAXException(); // TODO: no other elements expected!

@@ -23,6 +23,8 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include <cassert>
+
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
 
@@ -84,10 +86,13 @@ static void ReadNode(
         }
     }
 
+    assert(nLen > 0);
+
     Sequence< OUString > lResult( nLen );
-    lResult[0] = sNode + "Hide";
+    auto plResult = lResult.getArray();
+    plResult[0] = sNode + "Hide";
     if ( _eType != NT_Option )
-        lResult[1] = sNode + sSet;
+        plResult[1] = sNode + sSet;
 
     Sequence< Any > aValues = utl::ConfigItem::GetProperties( xHierarchyAccess, lResult, /*bAllLocales*/false );
     bool bHide = false;

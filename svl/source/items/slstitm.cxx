@@ -153,8 +153,9 @@ void SfxStringListItem::GetStringList( css::uno::Sequence< OUString >& rList ) c
     size_t nCount = mpList->size();
 
     rList.realloc( nCount );
+    auto aListRange = asNonConstRange(rList);
     for( size_t i=0; i < nCount; i++ )
-        rList[i] = (*mpList)[i];
+        aListRange[i] = (*mpList)[i];
 }
 
 // virtual

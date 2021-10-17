@@ -23,6 +23,7 @@
 #include <string_view>
 
 #include <comphelper/docpasswordhelper.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/hash.hxx>
 #include <comphelper/base64.hxx>
@@ -95,15 +96,10 @@ uno::Sequence< beans::PropertyValue > DocPasswordHelper::GenerateNewModifyPasswo
     uno::Sequence< sal_Int8 > aNewHash = GeneratePBKDF2Hash(aPassword, aSalt, nPBKDF2IterationCount, 16);
     if ( aNewHash.hasElements() )
     {
-        aResult.realloc( 4 );
-        aResult[0].Name = "algorithm-name";
-        aResult[0].Value <<= OUString( "PBKDF2" );
-        aResult[1].Name = "salt";
-        aResult[1].Value <<= aSalt;
-        aResult[2].Name = "iteration-count";
-        aResult[2].Value <<= nPBKDF2IterationCount;
-        aResult[3].Name = "hash";
-        aResult[3].Value <<= aNewHash;
+        aResult = { comphelper::makePropertyValue("algorithm-name", OUString( "PBKDF2" )),
+                    comphelper::makePropertyValue("salt", aSalt),
+                    comphelper::makePropertyValue("iteration-count", nPBKDF2IterationCount),
+                    comphelper::makePropertyValue("hash", aNewHash) };
     }
 
     return aResult;
@@ -578,7 +574,7 @@ OUString DocPasswordHelper::GetOoxHashAsBase64(
     if ( !rGpgProperties.hasElements() )
         return uno::Sequence< beans::NamedValue >();
 
-    uno::Sequence< beans::NamedValue > aEncryptionData(1);
+    uno::Sequence< beans::NamedValue > aEncryptionData;
     std::unique_ptr<GpgME::Context> ctx;
     GpgME::initializeLibrary();
     GpgME::Error err = GpgME::checkEngine(GpgME::OpenPGP);
@@ -633,19 +629,16 @@ OUString DocPasswordHelper::GetOoxHashAsBase64(
 
             SAL_INFO("comphelper.crypto", "Extracted gpg session key of length: " << len);
 
-            aEncryptionData[0].Name = PACKAGE_ENCRYPTIONDATA_SHA256UTF8;
-            aEncryptionData[0].Value <<= aKeyValue;
+            aEncryptionData = { { PACKAGE_ENCRYPTIONDATA_SHA256UTF8, uno::Any(aKeyValue) } };
             break;
         }
     }
 
-    if ( aEncryptionData[0].Value.hasValue() )
+    if ( aEncryptionData.hasElements() )
     {
-        uno::Sequence< beans::NamedValue > aContainer(2);
-        aContainer[0].Name = "GpgInfos";
-        aContainer[0].Value <<= rGpgProperties;
-        aContainer[1].Name = "EncryptionKey";
-        aContainer[1].Value <<= aEncryptionData;
+        uno::Sequence< beans::NamedValue > aContainer{
+            { "GpgInfos", uno::Any(rGpgProperties) }, { "EncryptionKey", uno::Any(aEncryptionData) }
+        };
 
         return aContainer;
     }

@@ -51,6 +51,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 
 #include <comphelper/lok.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/status.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/window.hxx>
@@ -672,28 +673,21 @@ void LayoutManager::implts_writeWindowStateData( const OUString& aName, const UI
 
     try
     {
-        Sequence< PropertyValue > aWindowState( 8 );
-
-        aWindowState[0].Name  = WINDOWSTATE_PROPERTY_DOCKED;
-        aWindowState[0].Value <<= !rElementData.m_bFloating;
-        aWindowState[1].Name  = WINDOWSTATE_PROPERTY_VISIBLE;
-        aWindowState[1].Value <<= rElementData.m_bVisible;
-
-        aWindowState[2].Name  = WINDOWSTATE_PROPERTY_DOCKINGAREA;
-        aWindowState[2].Value <<= rElementData.m_aDockedData.m_nDockedArea;
-
-        aWindowState[3].Name = WINDOWSTATE_PROPERTY_DOCKPOS;
-        aWindowState[3].Value <<= rElementData.m_aDockedData.m_aPos;
-
-        aWindowState[4].Name = WINDOWSTATE_PROPERTY_POS;
-        aWindowState[4].Value <<= rElementData.m_aFloatingData.m_aPos;
-
-        aWindowState[5].Name  = WINDOWSTATE_PROPERTY_SIZE;
-        aWindowState[5].Value <<= rElementData.m_aFloatingData.m_aSize;
-        aWindowState[6].Name  = WINDOWSTATE_PROPERTY_UINAME;
-        aWindowState[6].Value <<= rElementData.m_aUIName;
-        aWindowState[7].Name  = WINDOWSTATE_PROPERTY_LOCKED;
-        aWindowState[7].Value <<= rElementData.m_aDockedData.m_bLocked;
+        Sequence< PropertyValue > aWindowState{
+            comphelper::makePropertyValue(WINDOWSTATE_PROPERTY_DOCKED, !rElementData.m_bFloating),
+            comphelper::makePropertyValue(WINDOWSTATE_PROPERTY_VISIBLE, rElementData.m_bVisible),
+            comphelper::makePropertyValue(WINDOWSTATE_PROPERTY_DOCKINGAREA,
+                                          rElementData.m_aDockedData.m_nDockedArea),
+            comphelper::makePropertyValue(WINDOWSTATE_PROPERTY_DOCKPOS,
+                                          rElementData.m_aDockedData.m_aPos),
+            comphelper::makePropertyValue(WINDOWSTATE_PROPERTY_POS,
+                                          rElementData.m_aFloatingData.m_aPos),
+            comphelper::makePropertyValue(WINDOWSTATE_PROPERTY_SIZE,
+                                          rElementData.m_aFloatingData.m_aSize),
+            comphelper::makePropertyValue(WINDOWSTATE_PROPERTY_UINAME, rElementData.m_aUIName),
+            comphelper::makePropertyValue(WINDOWSTATE_PROPERTY_LOCKED,
+                                          rElementData.m_aDockedData.m_bLocked)
+        };
 
         if ( xPersistentWindowState->hasByName( aName ))
         {
@@ -730,11 +724,8 @@ Reference< XUIElement > LayoutManager::implts_createElement( const OUString& aNa
     Reference< ui::XUIElement > xUIElement;
 
     SolarMutexGuard g;
-    Sequence< PropertyValue > aPropSeq( 2 );
-    aPropSeq[0].Name = "Frame";
-    aPropSeq[0].Value <<= m_xFrame;
-    aPropSeq[1].Name = "Persistent";
-    aPropSeq[1].Value <<= true;
+    Sequence< PropertyValue > aPropSeq{ comphelper::makePropertyValue("Frame", m_xFrame),
+                                        comphelper::makePropertyValue("Persistent", true) };
 
     try
     {
@@ -1681,10 +1672,11 @@ Sequence< Reference< ui::XUIElement > > SAL_CALL LayoutManager::getElements()
     }
 
     aSeq.realloc(nSize);
+    auto aSeqRange = asNonConstRange(aSeq);
     if ( nMenuBarIndex >= 0 )
-        aSeq[nMenuBarIndex] = xMenuBar;
+        aSeqRange[nMenuBarIndex] = xMenuBar;
     if ( nStatusBarIndex >= 0 )
-        aSeq[nStatusBarIndex] = xStatusBar;
+        aSeqRange[nStatusBarIndex] = xStatusBar;
 
     return aSeq;
 }

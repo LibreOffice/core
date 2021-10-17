@@ -799,11 +799,12 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::startElement( const OUString& aName
 {
     sal_Int32 nLength = xAttribs->getLength();
     uno::Sequence< css::xml::csax::XMLAttribute > aAttributes (nLength);
+    auto aAttributesRange = asNonConstRange(aAttributes);
 
     for (int i = 0; i < nLength; ++i)
     {
-        aAttributes[i].sName = xAttribs->getNameByIndex(static_cast<short>(i));
-        aAttributes[i].sValue =xAttribs->getValueByIndex(static_cast<short>(i));
+        aAttributesRange[i].sName = xAttribs->getNameByIndex(static_cast<short>(i));
+        aAttributesRange[i].sValue =xAttribs->getValueByIndex(static_cast<short>(i));
     }
 
     compressedStartElement(aName, aAttributes);

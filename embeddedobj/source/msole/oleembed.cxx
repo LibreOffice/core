@@ -49,6 +49,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/multicontainer2.hxx>
 #include <comphelper/mimeconfighelper.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -96,7 +97,8 @@ uno::Sequence< sal_Int32 > OleEmbeddedObject::GetReachableStatesList_Impl(
         if ( vd.VerbID == embed::EmbedVerbs::MS_OLEVERB_OPEN )
         {
             aStates.realloc(3);
-            aStates[2] = embed::EmbedStates::ACTIVE;
+            aStates.getArray()[2] = embed::EmbedStates::ACTIVE;
+            break;
         }
 
     return aStates;
@@ -283,8 +285,8 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
             if ( !aDocServiceName.isEmpty() )
             {
                 // create the model
-                uno::Sequence< uno::Any > aArguments(1);
-                aArguments[0] <<= beans::NamedValue( "EmbeddedObject", uno::makeAny( true ));
+                uno::Sequence< uno::Any > aArguments{ uno::Any(
+                    beans::NamedValue("EmbeddedObject", uno::makeAny(true))) };
 
                 uno::Reference< util::XCloseable > xDocument( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( aDocServiceName, aArguments, m_xContext ), uno::UNO_QUERY_THROW );
                 uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY_THROW );
@@ -292,23 +294,18 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
 
                 // let the model behave as embedded one
                 uno::Reference< frame::XModel > xModel( xDocument, uno::UNO_QUERY_THROW );
-                uno::Sequence< beans::PropertyValue > aSeq( 1 );
-                aSeq[0].Name = "SetEmbedded";
-                aSeq[0].Value <<= true;
+                uno::Sequence< beans::PropertyValue > aSeq{ comphelper::makePropertyValue(
+                    "SetEmbedded", true) };
                 xModel->attachResource( OUString(), aSeq );
 
                 // load the model from the stream
-                uno::Sequence< beans::PropertyValue > aArgs( 5 );
-                aArgs[0].Name = "HierarchicalDocumentName";
-                aArgs[0].Value <<= m_aEntryName;
-                aArgs[1].Name = "ReadOnly";
-                aArgs[1].Value <<= true;
-                aArgs[2].Name = "FilterName";
-                aArgs[2].Value <<= m_aFilterName;
-                aArgs[3].Name = "URL";
-                aArgs[3].Value <<= OUString( "private:stream" );
-                aArgs[4].Name = "InputStream";
-                aArgs[4].Value <<= xStream->getInputStream();
+                uno::Sequence< beans::PropertyValue > aArgs{
+                    comphelper::makePropertyValue("HierarchicalDocumentName", m_aEntryName),
+                    comphelper::makePropertyValue("ReadOnly", true),
+                    comphelper::makePropertyValue("FilterName", m_aFilterName),
+                    comphelper::makePropertyValue("URL", OUString( "private:stream" )),
+                    comphelper::makePropertyValue("InputStream", xStream->getInputStream())
+                };
 
                 xSeekable->seek( 0 );
                 xLoadable->load( aArgs );
@@ -689,9 +686,8 @@ namespace
             uno::UNO_QUERY_THROW);
         uno::Reference < io::XStream > xStream(xNativeTempFile, uno::UNO_QUERY_THROW);
 
-        uno::Sequence< uno::Any > aArgs( 2 );
-        aArgs[0] <<= xObjectStream;
-        aArgs[1] <<= true; // do not create copy
+        uno::Sequence< uno::Any > aArgs{ uno::Any(xObjectStream),
+                                         uno::Any(true) }; // do not create copy
         uno::Reference< container::XNameContainer > xNameContainer(
             xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                 "com.sun.star.embed.OLESimpleStorage",
@@ -1005,7 +1001,7 @@ uno::Sequence< embed::VerbDescriptor > SAL_CALL OleEmbeddedObject::getSupportedV
         // So in SfxViewFrame::GetState_Impl in case SID_OBJECT hasVerbs is not
         // empty, so that the doVerb attempt with -9 fallback is attempted
         uno::Sequence<embed::VerbDescriptor> aRet(1);
-        aRet[0].VerbID = -9;
+        aRet.getArray()[0].VerbID = -9;
         return aRet;
     }
 }

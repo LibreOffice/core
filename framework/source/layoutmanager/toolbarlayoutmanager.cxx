@@ -33,6 +33,7 @@
 #include <com/sun/star/ui/XUIElementSettings.hpp>
 #include <com/sun/star/ui/XUIFunctionListener.hpp>
 
+#include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <o3tl/string_view.hxx>
 #include <unotools/cmdoptions.hxx>
@@ -450,11 +451,10 @@ bool ToolbarLayoutManager::createToolbar( const OUString& rResourceURL )
     {
         uno::Reference< ui::XUIElement > xUIElement;
 
-        uno::Sequence< beans::PropertyValue > aPropSeq( 2 );
-        aPropSeq[0].Name = "Frame";
-        aPropSeq[0].Value <<= xFrame;
-        aPropSeq[1].Name = "Persistent";
-        aPropSeq[1].Value <<= true;
+        uno::Sequence< beans::PropertyValue > aPropSeq{
+            comphelper::makePropertyValue("Frame", xFrame),
+            comphelper::makePropertyValue("Persistent", true)
+        };
         uno::Reference<ui::XUIElementFactory> xUIElementFactory;
         {
             SolarMutexGuard aReadLock;
@@ -1080,15 +1080,16 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
     sal_uInt32 nCount = m_pAddonOptions->GetAddonsToolBarCount();
 
     uno::Sequence< beans::PropertyValue > aPropSeq( 2 );
-    aPropSeq[0].Name = "Frame";
-    aPropSeq[0].Value <<= xFrame;
-    aPropSeq[1].Name = "ConfigurationData";
+    auto pPropSeq = aPropSeq.getArray();
+    pPropSeq[0].Name = "Frame";
+    pPropSeq[0].Value <<= xFrame;
+    pPropSeq[1].Name = "ConfigurationData";
     for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
         OUString aAddonToolBarName( "private:resource/toolbar/addon_" +
                 m_pAddonOptions->GetAddonsToolbarResourceName(i) );
         aAddonToolBarData = m_pAddonOptions->GetAddonsToolBarPart( i );
-        aPropSeq[1].Value <<= aAddonToolBarData;
+        pPropSeq[1].Value <<= aAddonToolBarData;
 
         UIElement aElement = implts_findToolbar( aAddonToolBarName );
 
@@ -1563,31 +1564,23 @@ void ToolbarLayoutManager::implts_writeWindowStateData( const UIElement& rElemen
 
     try
     {
-        uno::Sequence< beans::PropertyValue > aWindowState( 9 );
-
-        aWindowState[0].Name  = WINDOWSTATE_PROPERTY_DOCKED;
-        aWindowState[0].Value <<= !rElementData.m_bFloating;
-        aWindowState[1].Name  = WINDOWSTATE_PROPERTY_VISIBLE;
-        aWindowState[1].Value <<= rElementData.m_bVisible;
-        aWindowState[2].Name  = WINDOWSTATE_PROPERTY_DOCKINGAREA;
-        aWindowState[2].Value <<= rElementData.m_aDockedData.m_nDockedArea;
-
-        awt::Point aPos = rElementData.m_aDockedData.m_aPos;
-        aWindowState[3].Name  = WINDOWSTATE_PROPERTY_DOCKPOS;
-        aWindowState[3].Value <<= aPos;
-
-        aPos = rElementData.m_aFloatingData.m_aPos;
-        aWindowState[4].Name  = WINDOWSTATE_PROPERTY_POS;
-        aWindowState[4].Value <<= aPos;
-
-        aWindowState[5].Name  = WINDOWSTATE_PROPERTY_SIZE;
-        aWindowState[5].Value <<= rElementData.m_aFloatingData.m_aSize;
-        aWindowState[6].Name  = WINDOWSTATE_PROPERTY_UINAME;
-        aWindowState[6].Value <<= rElementData.m_aUIName;
-        aWindowState[7].Name  = WINDOWSTATE_PROPERTY_LOCKED;
-        aWindowState[7].Value <<= rElementData.m_aDockedData.m_bLocked;
-        aWindowState[8].Name  = WINDOWSTATE_PROPERTY_STYLE;
-        aWindowState[8].Value <<= static_cast<sal_uInt16>(rElementData.m_nStyle);
+        uno::Sequence<beans::PropertyValue> aWindowState{
+            comphelper::makePropertyValue(WINDOWSTATE_PROPERTY_DOCKED, !rElementData.m_bFloating),
+            comphelper::makePropertyValue(WINDOWSTATE_PROPERTY_VISIBLE, rElementData.m_bVisible),
+            comphelper::makePropertyValue(WINDOWSTATE_PROPERTY_DOCKINGAREA,
+                                          rElementData.m_aDockedData.m_nDockedArea),
+            comphelper::makePropertyValue(WINDOWSTATE_PROPERTY_DOCKPOS,
+                                          rElementData.m_aDockedData.m_aPos),
+            comphelper::makePropertyValue(WINDOWSTATE_PROPERTY_POS,
+                                          rElementData.m_aFloatingData.m_aPos),
+            comphelper::makePropertyValue(WINDOWSTATE_PROPERTY_SIZE,
+                                          rElementData.m_aFloatingData.m_aSize),
+            comphelper::makePropertyValue(WINDOWSTATE_PROPERTY_UINAME, rElementData.m_aUIName),
+            comphelper::makePropertyValue(WINDOWSTATE_PROPERTY_LOCKED,
+                                          rElementData.m_aDockedData.m_bLocked),
+            comphelper::makePropertyValue(WINDOWSTATE_PROPERTY_STYLE,
+                                          static_cast<sal_uInt16>(rElementData.m_nStyle))
+        };
 
         OUString aName = rElementData.m_aName;
         if ( xPersistentWindowState->hasByName( aName ))
@@ -3930,7 +3923,7 @@ uno::Sequence< uno::Reference< ui::XUIElement > > ToolbarLayoutManager::getToolb
             {
                 ++nCount;
                 aSeq.realloc( nCount );
-                aSeq[nCount-1] = elem.m_xUIElement;
+                aSeq.getArray()[nCount-1] = elem.m_xUIElement;
             }
         }
     }

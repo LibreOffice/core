@@ -255,7 +255,7 @@ void PopupMenuToolbarController::createPopupMenuController()
             {
                 sal_Int32 nAppendIndex = aArgs.getLength();
                 aArgs.realloc(nAppendIndex + 1);
-                aArgs[nAppendIndex] <<= comphelper::makePropertyValue("ResourceURL", m_aPopupCommand);
+                aArgs.getArray()[nAppendIndex] <<= comphelper::makePropertyValue("ResourceURL", m_aPopupCommand);
 
                 m_xPopupMenuController.set( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                     "com.sun.star.comp.framework.ResourceMenuController", aArgs, m_xContext), css::uno::UNO_QUERY_THROW );
@@ -707,9 +707,8 @@ void SAL_CALL NewToolbarController::execute( sal_Int16 /*KeyModifier*/ )
     else
         aURL = m_aCommandURL;
 
-    css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
-    aArgs[0].Name = "Referer";
-    aArgs[0].Value <<= OUString( "private:user" );
+    css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
+        "Referer", OUString( "private:user" )) };
 
     dispatchCommand( aURL, aArgs, aTarget );
 }

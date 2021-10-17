@@ -75,6 +75,7 @@ uno::Sequence< OUString > OZipFileAccess::GetPatternsFromString_Impl( const OUSt
         return uno::Sequence< OUString >();
 
     uno::Sequence< OUString > aPattern( 1 );
+    auto pPattern = aPattern.getArray();
     sal_Int32 nInd = 0;
 
     const sal_Unicode* pString = aString.getStr();
@@ -86,28 +87,29 @@ uno::Sequence< OUString > OZipFileAccess::GetPatternsFromString_Impl( const OUSt
 
             if ( *pString == '\\' )
             {
-                aPattern[nInd] += "\\";
+                pPattern[nInd] += "\\";
                 pString++;
             }
             else if ( *pString == '*' )
             {
-                aPattern[nInd] += "*";
+                pPattern[nInd] += "*";
                 pString++;
             }
             else
             {
                 OSL_FAIL( "The backslash is not guarded!" );
-                aPattern[nInd] += "\\";
+                pPattern[nInd] += "\\";
             }
         }
         else if ( *pString == '*' )
         {
             aPattern.realloc( ( ++nInd ) + 1 );
+            pPattern = aPattern.getArray();
             pString++;
         }
         else
         {
-            aPattern[nInd] += OUStringChar( *pString );
+            pPattern[nInd] += OUStringChar( *pString );
             pString++;
         }
     }
@@ -306,6 +308,7 @@ uno::Sequence< OUString > SAL_CALL OZipFileAccess::getElementNames()
         throw uno::RuntimeException(THROW_WHERE);
 
     uno::Sequence< OUString > aNames( m_pZipFile->GetEntryHash().size() );
+    auto aNamesRange = asNonConstRange(aNames);
     sal_Int32 nLen = 0;
 
     for ( const auto& rEntry : m_pZipFile->GetEntryHash() )
@@ -314,9 +317,10 @@ uno::Sequence< OUString > SAL_CALL OZipFileAccess::getElementNames()
         {
             OSL_FAIL( "The size must be the same!" );
             aNames.realloc( nLen );
+            aNamesRange = asNonConstRange(aNames);
         }
 
-        aNames[nLen-1] = rEntry.second.sPath;
+        aNamesRange[nLen-1] = rEntry.second.sPath;
     }
 
     if ( aNames.getLength() != nLen )
