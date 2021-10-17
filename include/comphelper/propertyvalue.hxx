@@ -27,10 +27,8 @@ namespace comphelper
  */
 template <typename T> css::beans::PropertyValue makePropertyValue(const OUString& rName, T&& rValue)
 {
-    css::beans::PropertyValue aValue;
-    aValue.Name = rName;
-    aValue.Value = css::uno::toAny(std::forward<T>(rValue));
-    return aValue;
+    return { rName, 0, css::uno::Any(std::forward<T>(rValue)),
+             css::beans::PropertyState_DIRECT_VALUE };
 }
 }
 
