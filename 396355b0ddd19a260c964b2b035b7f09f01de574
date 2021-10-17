@@ -159,6 +159,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d26e64cf_991dd9e5",
+        "filename": "svgio/source/svgreader/svgnode.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-17T13:30:48Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "221e9d6a_b3ab53a5",
+      "revId": "396355b0ddd19a260c964b2b035b7f09f01de574",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "11864e4b_7b1099ac",
