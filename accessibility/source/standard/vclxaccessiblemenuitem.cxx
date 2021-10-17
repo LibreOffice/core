@@ -440,8 +440,15 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleMenuItem::getAccessibleActionKe
         // activation key
         KeyEvent aKeyEvent = m_pParent->GetActivationKey( m_pParent->GetItemId( m_nItemPos ) );
         vcl::KeyCode aKeyCode = aKeyEvent.GetKeyCode();
-        Sequence< awt::KeyStroke > aSeq1(1);
-        aSeq1[0].Modifiers = 0;
+        Sequence< awt::KeyStroke > aSeq1
+        {
+            {
+                0, // Modifiers
+                aKeyCode.GetCode(),
+                aKeyEvent.GetCharCode(),
+                static_cast< sal_Int16 >( aKeyCode.GetFunction())
+            }
+        };
         Reference< XAccessible > xParent( getAccessibleParent() );
         if ( xParent.is() )
         {
@@ -449,9 +456,6 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleMenuItem::getAccessibleActionKe
             if ( xParentContext.is() && xParentContext->getAccessibleRole() == AccessibleRole::MENU_BAR )
                 aSeq1[0].Modifiers |= awt::KeyModifier::MOD2;
         }
-        aSeq1[0].KeyCode = aKeyCode.GetCode();
-        aSeq1[0].KeyChar = aKeyEvent.GetCharCode();
-        aSeq1[0].KeyFunc = static_cast< sal_Int16 >( aKeyCode.GetFunction() );
         pKeyBindingHelper->AddKeyBinding( aSeq1 );
 
         // complete menu activation key sequence
@@ -477,8 +481,15 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleMenuItem::getAccessibleActionKe
         vcl::KeyCode aAccelKeyCode = m_pParent->GetAccelKey( m_pParent->GetItemId( m_nItemPos ) );
         if ( aAccelKeyCode.GetCode() != 0 )
         {
-            Sequence< awt::KeyStroke > aSeq3(1);
-            aSeq3[0].Modifiers = 0;
+            Sequence< awt::KeyStroke > aSeq3
+            {
+                {
+                    0, // Modifiers
+                    aAccelKeyCode.GetCode(),
+                    aKeyEvent.GetCharCode(),
+                    static_cast< sal_Int16 >(aAccelKeyCode.GetFunction())
+                }
+            };
             if ( aAccelKeyCode.IsShift() )
                 aSeq3[0].Modifiers |= awt::KeyModifier::SHIFT;
             if ( aAccelKeyCode.IsMod1() )
@@ -487,8 +498,6 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleMenuItem::getAccessibleActionKe
                 aSeq3[0].Modifiers |= awt::KeyModifier::MOD2;
             if ( aAccelKeyCode.IsMod3() )
                 aSeq3[0].Modifiers |= awt::KeyModifier::MOD3;
-            aSeq3[0].KeyCode = aAccelKeyCode.GetCode();
-            aSeq3[0].KeyFunc = static_cast< sal_Int16 >( aAccelKeyCode.GetFunction() );
             pKeyBindingHelper->AddKeyBinding( aSeq3 );
         }
     }
