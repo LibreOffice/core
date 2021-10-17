@@ -25,6 +25,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <sal/macros.h>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
@@ -427,38 +428,24 @@ sal_Int32 ConfigurationAccess::GetConfigProperty( const PPPOptimizerTokenEnum eP
 
 Sequence< PropertyValue > ConfigurationAccess::GetConfigurationSequence()
 {
-    Sequence< PropertyValue > aRet( 15 );
     OptimizerSettings& rSettings( maSettings.front() );
-    aRet[ 0 ].Name  = "JPEGCompression";
-    aRet[ 0 ].Value <<= rSettings.mbJPEGCompression;
-    aRet[ 1 ].Name  = "JPEGQuality";
-    aRet[ 1 ].Value <<= rSettings.mnJPEGQuality;
-    aRet[ 2 ].Name  = "RemoveCropArea";
-    aRet[ 2 ].Value <<= rSettings.mbRemoveCropArea;
-    aRet[ 3 ].Name  = "ImageResolution";
-    aRet[ 3 ].Value <<= rSettings.mnImageResolution;
-    aRet[ 4 ].Name  = "EmbedLinkedGraphics";
-    aRet[ 4 ].Value <<= rSettings.mbEmbedLinkedGraphics;
-    aRet[ 5 ].Name  = "OLEOptimization";
-    aRet[ 5 ].Value <<= rSettings.mbOLEOptimization;
-    aRet[ 6 ].Name  = "OLEOptimizationType";
-    aRet[ 6 ].Value <<= rSettings.mnOLEOptimizationType;
-    aRet[ 7 ].Name  = "DeleteUnusedMasterPages";
-    aRet[ 7 ].Value <<= rSettings.mbDeleteUnusedMasterPages;
-    aRet[ 8 ].Name  = "DeleteHiddenSlides";
-    aRet[ 8 ].Value <<= rSettings.mbDeleteHiddenSlides;
-    aRet[ 9 ].Name  = "DeleteNotesPages";
-    aRet[ 9 ].Value <<= rSettings.mbDeleteNotesPages;
-    aRet[ 10].Name  = "CustomShowName";
-    aRet[ 10].Value <<= rSettings.maCustomShowName;
-    aRet[ 11].Name  = "SaveAsURL";
-    aRet[ 11].Value <<= rSettings.maSaveAsURL;
-    aRet[ 12].Name  = "FilterName";
-    aRet[ 12].Value <<= rSettings.maFilterName;
-    aRet[ 13].Name  = "OpenNewDocument";
-    aRet[ 13].Value <<= rSettings.mbOpenNewDocument;
-    aRet[ 14].Name  = "EstimatedFileSize";
-    aRet[ 14].Value <<= rSettings.mnEstimatedFileSize;
+    Sequence< PropertyValue > aRet{
+        comphelper::makePropertyValue("JPEGCompression", rSettings.mbJPEGCompression),
+        comphelper::makePropertyValue("JPEGQuality", rSettings.mnJPEGQuality),
+        comphelper::makePropertyValue("RemoveCropArea", rSettings.mbRemoveCropArea),
+        comphelper::makePropertyValue("ImageResolution", rSettings.mnImageResolution),
+        comphelper::makePropertyValue("EmbedLinkedGraphics", rSettings.mbEmbedLinkedGraphics),
+        comphelper::makePropertyValue("OLEOptimization", rSettings.mbOLEOptimization),
+        comphelper::makePropertyValue("OLEOptimizationType", rSettings.mnOLEOptimizationType),
+        comphelper::makePropertyValue("DeleteUnusedMasterPages", rSettings.mbDeleteUnusedMasterPages),
+        comphelper::makePropertyValue("DeleteHiddenSlides", rSettings.mbDeleteHiddenSlides),
+        comphelper::makePropertyValue("DeleteNotesPages", rSettings.mbDeleteNotesPages),
+        comphelper::makePropertyValue("CustomShowName", rSettings.maCustomShowName),
+        comphelper::makePropertyValue("SaveAsURL", rSettings.maSaveAsURL),
+        comphelper::makePropertyValue("FilterName", rSettings.maFilterName),
+        comphelper::makePropertyValue("OpenNewDocument", rSettings.mbOpenNewDocument),
+        comphelper::makePropertyValue("EstimatedFileSize", rSettings.mnEstimatedFileSize)
+    };
     return aRet;
 }
 

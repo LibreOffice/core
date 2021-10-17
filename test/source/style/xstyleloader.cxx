@@ -70,13 +70,13 @@ void XStyleLoader::testLoadStylesFromStream()
 
     uno::Sequence<beans::PropertyValue> aOptions = xStyleLoader->getStyleLoaderOptions();
     auto nLength = aOptions.getLength();
-    aOptions.realloc(nLength + 1);
+    auto pOptions = aOptions.realloc(nLength + 1);
     beans::PropertyValue aInputStream;
     aInputStream.Name = "InputStream";
     uno::Any aTmp;
     aTmp <<= xInputStream;
     aInputStream.Value = aTmp;
-    aOptions[nLength] = aInputStream;
+    pOptions[nLength] = aInputStream;
 
     xStyleLoader->loadStylesFromURL("private:stream", aOptions);
 

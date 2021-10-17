@@ -127,11 +127,11 @@ Sequence< PropertyValue > SdHtmlOptionsDialog::getPropertyValues()
         [](const PropertyValue& rProp) { return rProp.Name == "FilterData"; });
     auto i = static_cast<sal_Int32>(std::distance(std::cbegin(maMediaDescriptor), pProp));
     sal_Int32 nCount = maMediaDescriptor.getLength();
-    if ( i == nCount )
-        maMediaDescriptor.realloc( ++nCount );
+    auto pMediaDescriptor = ( i == nCount ) ? maMediaDescriptor.realloc( ++nCount )
+                                            : maMediaDescriptor.getArray();
 
     // the "FilterData" Property is an Any that will contain our PropertySequence of Values
-    auto& el = maMediaDescriptor[ i ];
+    auto& el = pMediaDescriptor[ i ];
     el.Name = "FilterData";
     el.Value <<= maFilterDataSequence;
     return maMediaDescriptor;

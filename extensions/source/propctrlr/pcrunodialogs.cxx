@@ -111,19 +111,20 @@ namespace pcr
         Reference<css::awt::XWindow> xParentWindow;
         if (aArguments.getLength() == 3 && (aArguments[0] >>= xTabbingModel) && (aArguments[1] >>= xControlContext) && (aArguments[2] >>= xParentWindow))
         {
-            Sequence< Any > aNewArguments( 3 );
-            aNewArguments[0] <<= NamedValue(
-                "TabbingModel",
-                makeAny( xTabbingModel )
-            );
-            aNewArguments[1] <<= NamedValue(
-                "ControlContext",
-                makeAny( xControlContext )
-            );
-            aNewArguments[2] <<= NamedValue(
-                "ParentWindow",
-                makeAny( xParentWindow )
-            );
+            Sequence< Any > aNewArguments{
+                Any(NamedValue(
+                    "TabbingModel",
+                    makeAny( xTabbingModel )
+                )),
+                Any(NamedValue(
+                    "ControlContext",
+                    makeAny( xControlContext )
+                )),
+                Any(NamedValue(
+                    "ParentWindow",
+                    makeAny( xParentWindow )
+                ))
+            };
             OTabOrderDialog_DBase::initialize(aNewArguments);
         }
         else

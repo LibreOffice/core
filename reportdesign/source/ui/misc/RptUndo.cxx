@@ -29,6 +29,7 @@
 
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/types.hxx>
 #include <svx/unoshape.hxx>
 #include <utility>
@@ -283,12 +284,11 @@ OUString OGroupSectionUndo::GetComment() const
 
 void OGroupSectionUndo::implReInsert( )
 {
-    uno::Sequence< beans::PropertyValue > aArgs(2);
-
-    aArgs[0].Name = SID_GROUPHEADER_WITHOUT_UNDO == m_nSlot? std::u16string_view(u"" PROPERTY_HEADERON) : std::u16string_view(u"" PROPERTY_FOOTERON);
-    aArgs[0].Value <<= true;
-    aArgs[1].Name = PROPERTY_GROUP;
-    aArgs[1].Value <<= m_aGroupHelper.getGroup();
+    const OUString aHeaderFooterOnName(SID_GROUPHEADER_WITHOUT_UNDO == m_nSlot? std::u16string_view(u"" PROPERTY_HEADERON) : std::u16string_view(u"" PROPERTY_FOOTERON));
+    uno::Sequence< beans::PropertyValue > aArgs{
+        comphelper::makePropertyValue(aHeaderFooterOnName, true),
+        comphelper::makePropertyValue(PROPERTY_GROUP, m_aGroupHelper.getGroup())
+    };
     m_pController->executeChecked(m_nSlot,aArgs);
 
     uno::Reference< report::XSection > xSection = m_pMemberFunction(&m_aGroupHelper);
@@ -302,12 +302,11 @@ void OGroupSectionUndo::implReRemove( )
     if( m_eAction == Removed )
         collectControls(m_pMemberFunction(&m_aGroupHelper));
 
-    uno::Sequence< beans::PropertyValue > aArgs(2);
-
-    aArgs[0].Name = SID_GROUPHEADER_WITHOUT_UNDO == m_nSlot? std::u16string_view(u"" PROPERTY_HEADERON) : std::u16string_view(u"" PROPERTY_FOOTERON);
-    aArgs[0].Value <<= false;
-    aArgs[1].Name = PROPERTY_GROUP;
-    aArgs[1].Value <<= m_aGroupHelper.getGroup();
+    const OUString aHeaderFooterOnName(SID_GROUPHEADER_WITHOUT_UNDO == m_nSlot? std::u16string_view(u"" PROPERTY_HEADERON) : std::u16string_view(u"" PROPERTY_FOOTERON));
+    uno::Sequence< beans::PropertyValue > aArgs{
+        comphelper::makePropertyValue(aHeaderFooterOnName, false),
+        comphelper::makePropertyValue(PROPERTY_GROUP, m_aGroupHelper.getGroup())
+    };
 
     m_pController->executeChecked(m_nSlot,aArgs);
     m_bInserted = false;

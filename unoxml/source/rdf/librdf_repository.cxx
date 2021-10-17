@@ -670,8 +670,9 @@ librdf_QuerySelectResult::nextElement()
             uno::makeAny(e));
     }
     uno::Sequence< uno::Reference< rdf::XNode > > ret(count);
+    auto retRange = asNonConstRange(ret);
     for (int i = 0; i < count; ++i) {
-        ret[i] = m_xRep->getTypeConverter().convertToXNode(aNodes[i]);
+        retRange[i] = m_xRep->getTypeConverter().convertToXNode(aNodes[i]);
     }
     // NB: this will invalidate current item.
     librdf_query_results_next(m_pQueryResult.get());
@@ -1403,6 +1404,7 @@ librdf_Repository::querySelect(const OUString & i_rQuery)
             "librdf_query_results_get_bindings_count failed", *this);
     }
     uno::Sequence< OUString > names(count);
+    auto namesRange = asNonConstRange(names);
     for (int i = 0; i < count; ++i) {
         const char* name( librdf_query_results_get_binding_name(
             pResults.get(), i) );
@@ -1411,7 +1413,7 @@ librdf_Repository::querySelect(const OUString & i_rQuery)
                 "librdf_Repository::querySelect: binding is null", *this);
         }
 
-        names[i] = OUString::createFromAscii(name);
+        namesRange[i] = OUString::createFromAscii(name);
     }
 
     return new librdf_QuerySelectResult(this, m_aMutex,

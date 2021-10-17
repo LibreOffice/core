@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/wmfexternal.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -30,20 +33,14 @@ WmfExternal::WmfExternal()
 
 css::uno::Sequence<css::beans::PropertyValue> WmfExternal::getSequence() const
 {
-    css::uno::Sequence<css::beans::PropertyValue> aSequence;
-
     if (0 != xExt || 0 != yExt || 0 != mapMode)
     {
-        aSequence.realloc(3);
-        aSequence[0].Name = "Width";
-        aSequence[0].Value <<= static_cast<sal_Int16>(xExt);
-        aSequence[1].Name = "Height";
-        aSequence[1].Value <<= static_cast<sal_Int16>(yExt);
-        aSequence[2].Name = "MapMode";
-        aSequence[2].Value <<= static_cast<sal_Int16>(mapMode);
+        return { comphelper::makePropertyValue("Width", static_cast<sal_Int16>(xExt)),
+                 comphelper::makePropertyValue("Height", static_cast<sal_Int16>(yExt)),
+                 comphelper::makePropertyValue("MapMode", static_cast<sal_Int16>(mapMode)) };
     }
 
-    return aSequence;
+    return {};
 }
 
 bool WmfExternal::setSequence(const css::uno::Sequence<css::beans::PropertyValue>& rSequence)

@@ -103,19 +103,20 @@ void XMLIndexSimpleEntryContext::FillPropertyValues(
     // only use slot so-and-so.
 
     Any aAny;
+    auto pValues = rValues.getArray();
 
     // token type
-    rValues[0].Name = "TokenType";
-    rValues[0].Value <<= m_rEntryType;
+    pValues[0].Name = "TokenType";
+    pValues[0].Value <<= m_rEntryType;
 
     // char style
     if (m_bCharStyleNameOK)
     {
-        rValues[1].Name = "CharacterStyleName";
+        pValues[1].Name = "CharacterStyleName";
         aAny <<= GetImport().GetStyleDisplayName(
                                     XmlStyleFamily::TEXT_TEXT,
                                     m_sCharStyleName );
-        rValues[1].Value = aAny;
+        pValues[1].Value = aAny;
     }
 
 }

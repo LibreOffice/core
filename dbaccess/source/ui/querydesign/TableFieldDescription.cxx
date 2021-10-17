@@ -182,10 +182,11 @@ void OTableFieldDesc::Save( ::comphelper::NamedValueCollection& o_rSettings, con
 
     sal_Int32 c = 0;
     Sequence< PropertyValue > aCriteria( m_aCriteria.size() );
+    auto pCriteria = aCriteria.getArray();
     for (auto const& criteria : m_aCriteria)
     {
-        aCriteria[c].Name = "Criterion_" + OUString::number( c );
-        aCriteria[c].Value <<= criteria;
+        pCriteria[c].Name = "Criterion_" + OUString::number( c );
+        pCriteria[c].Value <<= criteria;
         ++c;
     }
 

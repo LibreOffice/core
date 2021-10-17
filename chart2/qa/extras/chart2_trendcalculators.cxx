@@ -112,12 +112,14 @@ void Chart2TrendCalculators::testPotentialRegression1()
     loadCalculatorFromSheet( SHEET_POTENTIAL1 );
     m_xRegressionCurveCalculator->setRegressionProperties( 0, false, 0, 0, 0 );
     Sequence< double > xValues( 7 );
+    auto pxValues = xValues.getArray();
     Sequence< double > yValues( 7 );
+    auto pyValues = yValues.getArray();
     for (int i=0; i<7; i++)
     {
         const double d = static_cast<double>(i);
-        xValues[i] = d;
-        yValues[i] = 2.0 * pow ( d, 3 );
+        pxValues[i] = d;
+        pyValues[i] = 2.0 * pow ( d, 3 );
     }
     checkCalculator( xValues, yValues, "f(x) = 2 x^3");
 }
@@ -128,12 +130,14 @@ void Chart2TrendCalculators::testPotentialRegression2()
     loadCalculatorFromSheet( SHEET_POTENTIAL2 );
     m_xRegressionCurveCalculator->setRegressionProperties( 0, false, 0, 0, 0 );
     Sequence< double > xValues( 7 );
+    auto pxValues = xValues.getArray();
     Sequence< double > yValues( 7 );
+    auto pyValues = yValues.getArray();
     for (int i=0; i<7; i++)
     {
         const double d = static_cast<double>(i);
-        xValues[i] = d;
-        yValues[i] = -2.0 * pow ( d, 3 );
+        pxValues[i] = d;
+        pyValues[i] = -2.0 * pow ( d, 3 );
     }
     checkCalculator( xValues, yValues, "f(x) = "+ OUStringChar(aMinusSign) +" 2 x^3");
 }
@@ -144,12 +148,14 @@ void Chart2TrendCalculators::testLinearRegression1()
     loadCalculatorFromSheet( SHEET_LINEAR1 );
     m_xRegressionCurveCalculator->setRegressionProperties( 1, false, 0, 0, 0 );
     Sequence< double > xValues( 7 );
+    auto pxValues = xValues.getArray();
     Sequence< double > yValues( 7 );
+    auto pyValues = yValues.getArray();
     for (int i=0; i<7; i++)
     {
         const double d = static_cast<double>(i);
-        xValues[i] = d;
-        yValues[i] = - 2.0 * d - 5.0 ;
+        pxValues[i] = d;
+        pyValues[i] = - 2.0 * d - 5.0 ;
     }
     checkCalculator( xValues, yValues, "f(x) = "+ OUStringChar(aMinusSign) +" 2 x "+ OUStringChar(aMinusSign) +" 5");
 }
@@ -160,12 +166,14 @@ void Chart2TrendCalculators::testPolynomialRegression1()
     loadCalculatorFromSheet( SHEET_POLYNOMIAL1 );
     m_xRegressionCurveCalculator->setRegressionProperties( 2, false, 0, 0, 0 );
     Sequence< double > xValues( 7 );
+    auto pxValues = xValues.getArray();
     Sequence< double > yValues( 7 );
+    auto pyValues = yValues.getArray();
     for (int i=0; i<7; i++)
     {
         const double d = static_cast<double>(i);
-        xValues[i] = d;
-        yValues[i] =  - 2.0 * d * d + 4 * d - 5;
+        pxValues[i] = d;
+        pyValues[i] =  - 2.0 * d * d + 4 * d - 5;
     }
     OUString sExpectedFormula( "f(x) = "+ OUStringChar(aMinusSign) +" 2 x" + OUStringChar( aSuperscriptFigures[2] ) + " + 4 x "+ OUStringChar(aMinusSign) +" 5" );
     checkCalculator( xValues, yValues, sExpectedFormula );
@@ -176,12 +184,14 @@ void Chart2TrendCalculators::testExponentialRegression1()
     loadCalculatorFromSheet( SHEET_EXPONENTIAL1 );
     m_xRegressionCurveCalculator->setRegressionProperties( 0, false, 0, 0, 0 );
     Sequence< double > xValues( 7 );
+    auto pxValues = xValues.getArray();
     Sequence< double > yValues( 7 );
+    auto pyValues = yValues.getArray();
     for (int i=0; i<7; i++)
     {
         const double d = static_cast<double>(i);
-        xValues[i] = d;
-        yValues[i] = 2.0 * exp ( 0.3 * d );
+        pxValues[i] = d;
+        pyValues[i] = 2.0 * exp ( 0.3 * d );
     }
     checkCalculator( xValues, yValues, "f(x) = 2 exp( 0.3 x )");
 }
@@ -191,12 +201,14 @@ void Chart2TrendCalculators::testExponentialRegression2()
     loadCalculatorFromSheet( SHEET_EXPONENTIAL2 );
     m_xRegressionCurveCalculator->setRegressionProperties( 0, false, 0, 0, 0 );
     Sequence< double > xValues( 7 );
+    auto pxValues = xValues.getArray();
     Sequence< double > yValues( 7 );
+    auto pyValues = yValues.getArray();
     for (int i=0; i<7; i++)
     {
         const double d = static_cast<double>(i);
-        xValues[i] = d;
-        yValues[i] = -2.0 * exp ( 0.3 * d );
+        pxValues[i] = d;
+        pyValues[i] = -2.0 * exp ( 0.3 * d );
     }
     checkCalculator( xValues, yValues, "f(x) = "+ OUStringChar(aMinusSign) + " 2 exp( 0.3 x )");
 }

@@ -120,11 +120,9 @@ static void GetOldStyleDicsInDir(
             {
                 // add the dictionary to the resulting vector
                 SvtLinguConfigDictionaryEntry aDicEntry;
-                aDicEntry.aLocations.realloc(1);
-                aDicEntry.aLocaleNames.realloc(1);
-                aDicEntry.aLocations[0] = sPath;
+                aDicEntry.aLocations = { sPath };
+                aDicEntry.aLocaleNames = { aLocaleName };
                 aDicEntry.aFormatName = aFormatName;
-                aDicEntry.aLocaleNames[0] = aLocaleName;
                 aRes.push_back( aDicEntry );
             }
         }

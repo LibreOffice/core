@@ -53,12 +53,8 @@ namespace
         BootstrapFixtureBase::setUp();
         OUString aURL = m_directories.getURLFromSrc(u"/package/qa/cppunit/data/a2z.zip");
 
-        uno::Sequence<beans::NamedValue> aNVs(1);
-        aNVs[0].Name = "URL";
-        aNVs[0].Value <<= aURL;
-
-        uno::Sequence<uno::Any> aArgs(1);
-        aArgs[0] <<= aNVs;
+        uno::Sequence<beans::NamedValue> aNVs{ { "URL", uno::Any(aURL) } };
+        uno::Sequence<uno::Any> aArgs{ uno::Any(aNVs) };
 
         uno::Reference<uno::XComponentContext> xCxt = comphelper::getProcessComponentContext();
         uno::Reference<lang::XMultiComponentFactory> xSvcMgr = xCxt->getServiceManager();

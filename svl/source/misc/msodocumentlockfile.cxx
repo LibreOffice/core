@@ -92,12 +92,13 @@ void MSODocumentLockFile::WriteEntryToStream(
     int nLockFileSize = m_eAppType == AppType::Word ? MSO_WORD_LOCKFILE_SIZE
                                                     : MSO_EXCEL_AND_POWERPOINT_LOCKFILE_SIZE;
     css::uno::Sequence<sal_Int8> aData(nLockFileSize);
+    auto pData = aData.getArray();
 
     // Write out the user name's length as a single byte integer
     // The maximum length is 52 in MSO, so we'll need to truncate the user name if it's longer
     OUString aUserName = aEntry[LockFileComponent::OOOUSERNAME];
     int nIndex = 0;
-    aData[nIndex] = static_cast<sal_Int8>(
+    pData[nIndex] = static_cast<sal_Int8>(
         std::min(aUserName.getLength(), sal_Int32(MSO_USERNAME_MAX_LENGTH)));
 
     if (aUserName.getLength() > MSO_USERNAME_MAX_LENGTH)
@@ -107,7 +108,7 @@ void MSODocumentLockFile::WriteEntryToStream(
     nIndex = 1;
     for (int nChar = 0; nChar < aUserName.getLength(); ++nChar)
     {
-        aData[nIndex] = static_cast<sal_Int8>(aUserName[nChar]);
+        pData[nIndex] = static_cast<sal_Int8>(aUserName[nChar]);
         ++nIndex;
     }
 
@@ -117,36 +118,36 @@ void MSODocumentLockFile::WriteEntryToStream(
         case AppType::Word:
             while (nIndex < MSO_USERNAME_MAX_LENGTH + 2)
             {
-                aData[nIndex] = static_cast<sal_Int8>(0);
+                pData[nIndex] = static_cast<sal_Int8>(0);
                 ++nIndex;
             }
             break;
         case AppType::PowerPoint:
-            aData[nIndex] = static_cast<sal_Int8>(0);
+            pData[nIndex] = static_cast<sal_Int8>(0);
             ++nIndex;
             [[fallthrough]];
         case AppType::Excel:
             while (nIndex < MSO_USERNAME_MAX_LENGTH + 3)
             {
-                aData[nIndex] = static_cast<sal_Int8>(0x20);
+                pData[nIndex] = static_cast<sal_Int8>(0x20);
                 ++nIndex;
             }
             break;
     }
 
     // At the next position we have the user name's length again, but now as a 2 byte integer
-    aData[nIndex] = static_cast<sal_Int8>(
+    pData[nIndex] = static_cast<sal_Int8>(
         std::min(aUserName.getLength(), sal_Int32(MSO_USERNAME_MAX_LENGTH)));
     ++nIndex;
-    aData[nIndex] = 0;
+    pData[nIndex] = 0;
     ++nIndex;
 
     // And the user name again with unicode characters
     for (int nChar = 0; nChar < aUserName.getLength(); ++nChar)
     {
-        aData[nIndex] = static_cast<sal_Int8>(aUserName[nChar] & 0xff);
+        pData[nIndex] = static_cast<sal_Int8>(aUserName[nChar] & 0xff);
         ++nIndex;
-        aData[nIndex] = static_cast<sal_Int8>(aUserName[nChar] >> 8);
+        pData[nIndex] = static_cast<sal_Int8>(aUserName[nChar] >> 8);
         ++nIndex;
     }
 
@@ -156,7 +157,7 @@ void MSODocumentLockFile::WriteEntryToStream(
         case AppType::Word:
             while (nIndex < nLockFileSize)
             {
-                aData[nIndex] = static_cast<sal_Int8>(0);
+                pData[nIndex] = static_cast<sal_Int8>(0);
                 ++nIndex;
             }
             break;
@@ -164,11 +165,11 @@ void MSODocumentLockFile::WriteEntryToStream(
         case AppType::PowerPoint:
             while (nIndex < nLockFileSize)
             {
-                aData[nIndex] = static_cast<sal_Int8>(0x20);
+                pData[nIndex] = static_cast<sal_Int8>(0x20);
                 ++nIndex;
                 if (nIndex < nLockFileSize)
                 {
-                    aData[nIndex] = static_cast<sal_Int8>(0);
+                    pData[nIndex] = static_cast<sal_Int8>(0);
                     ++nIndex;
                 }
             }

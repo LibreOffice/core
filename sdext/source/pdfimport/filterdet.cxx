@@ -316,40 +316,46 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
     {
         if( !aOutFilterName.isEmpty() )
         {
+            css::beans::PropertyValue* pFilterData;
             if( nFilterNamePos == -1 )
             {
                 nFilterNamePos = nAttribs;
-                rFilterData.realloc( ++nAttribs );
-                rFilterData[ nFilterNamePos ].Name = "FilterName";
+                pFilterData = rFilterData.realloc( ++nAttribs );
+                pFilterData[ nFilterNamePos ].Name = "FilterName";
             }
+            else
+                pFilterData = rFilterData.getArray();
             aOutTypeName = "pdf_Portable_Document_Format";
 
-            rFilterData[nFilterNamePos].Value <<= aOutFilterName;
+            pFilterData[nFilterNamePos].Value <<= aOutFilterName;
             if( xEmbedStream.is() )
             {
-                rFilterData.realloc( ++nAttribs );
-                rFilterData[nAttribs-1].Name = "EmbeddedSubstream";
-                rFilterData[nAttribs-1].Value <<= xEmbedStream;
+                pFilterData = rFilterData.realloc( ++nAttribs );
+                pFilterData[nAttribs-1].Name = "EmbeddedSubstream";
+                pFilterData[nAttribs-1].Value <<= xEmbedStream;
             }
             if( !aPwd.isEmpty() )
             {
                 if( nPwdPos == -1 )
                 {
                     nPwdPos = nAttribs;
-                    rFilterData.realloc( ++nAttribs );
-                    rFilterData[ nPwdPos ].Name = "Password";
+                    pFilterData = rFilterData.realloc( ++nAttribs );
+                    pFilterData[ nPwdPos ].Name = "Password";
                 }
-                rFilterData[ nPwdPos ].Value <<= aPwd;
+                pFilterData[ nPwdPos ].Value <<= aPwd;
             }
         }
         else
         {
+            css::beans::PropertyValue* pFilterData;
             if( nFilterNamePos == -1 )
             {
                 nFilterNamePos = nAttribs;
-                rFilterData.realloc( ++nAttribs );
-                rFilterData[ nFilterNamePos ].Name = "FilterName";
+                pFilterData = rFilterData.realloc( ++nAttribs );
+                pFilterData[ nFilterNamePos ].Name = "FilterName";
             }
+            else
+                pFilterData = rFilterData.getArray();
 
             const sal_Int32 nDocumentType = 0; //const sal_Int32 nDocumentType = queryDocumentTypeDialog(m_xContext,aURL);
             if( nDocumentType < 0 )
@@ -359,15 +365,15 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
             else switch( nDocumentType )
             {
                 case 0:
-                    rFilterData[nFilterNamePos].Value <<= OUString( "draw_pdf_import" );
+                    pFilterData[nFilterNamePos].Value <<= OUString( "draw_pdf_import" );
                     break;
 
                 case 1:
-                    rFilterData[nFilterNamePos].Value <<= OUString( "impress_pdf_import" );
+                    pFilterData[nFilterNamePos].Value <<= OUString( "impress_pdf_import" );
                     break;
 
                 case 2:
-                    rFilterData[nFilterNamePos].Value <<= OUString( "writer_pdf_import" );
+                    pFilterData[nFilterNamePos].Value <<= OUString( "writer_pdf_import" );
                     break;
 
                 default:

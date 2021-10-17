@@ -762,8 +762,8 @@ bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
             if (!bFound)
             {
                 sal_Int32 nOldLen = aStringItemList.getLength();
-                aStringItemList.realloc( nOldLen + 1 );
-                aStringItemList[ nOldLen ] = sNewValue;
+                auto pStringItemList = aStringItemList.realloc( nOldLen + 1 );
+                pStringItemList[ nOldLen ] = sNewValue;
 
                 setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( aStringItemList ) );
                 setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, makeAny( css::uno::Sequence<css::uno::Any>() ) );

@@ -264,13 +264,7 @@ namespace pcr
             {
                 if ( !_rArgumentName.isEmpty() )
                 {
-                    NamedValue aArg;
-                    aArg.Name = _rArgumentName;
-                    aArg.Value = _rArgumentValue;
-
-                    Sequence< Any > aArgs( 1 );
-                    aArgs[ 0 ] <<= aArg;
-
+                    Sequence aArgs{ Any(NamedValue(_rArgumentName, _rArgumentValue)) };
                     xReturn = xDocumentFactory->createInstanceWithArguments( _rService, aArgs );
                 }
                 else

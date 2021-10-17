@@ -51,6 +51,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <tools/globname.hxx>
 #include <comphelper/fileformat.h>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -1119,39 +1120,23 @@ void ChartView::getMetaFile( const uno::Reference< io::XOutputStream >& xOutStre
     // creating the graphic exporter
     uno::Reference< drawing::XGraphicExportFilter > xExporter = drawing::GraphicExportFilter::create( m_xCC );
 
-    uno::Sequence< beans::PropertyValue > aProps(3);
-    aProps[0].Name = "FilterName";
-    aProps[0].Value <<= OUString("SVM");
+    uno::Sequence< beans::PropertyValue > aFilterData{
+        comphelper::makePropertyValue("ExportOnlyBackground", false),
+        comphelper::makePropertyValue("HighContrast", bUseHighContrast),
+        comphelper::makePropertyValue("Version", sal_Int32(SOFFICE_FILEFORMAT_50)),
+        comphelper::makePropertyValue("CurrentPage", uno::Reference< uno::XInterface >( m_xDrawPage, uno::UNO_QUERY )),
+        //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
+        comphelper::makePropertyValue("ScaleXNumerator", m_nScaleXNumerator),
+        comphelper::makePropertyValue("ScaleXDenominator", m_nScaleXDenominator),
+        comphelper::makePropertyValue("ScaleYNumerator", m_nScaleYNumerator),
+        comphelper::makePropertyValue("ScaleYDenominator", m_nScaleYDenominator)
+    };
 
-    aProps[1].Name = "OutputStream";
-    aProps[1].Value <<= xOutStream;
-
-    uno::Sequence< beans::PropertyValue > aFilterData(8);
-    aFilterData[0].Name = "ExportOnlyBackground";
-    aFilterData[0].Value <<= false;
-    aFilterData[1].Name = "HighContrast";
-    aFilterData[1].Value <<= bUseHighContrast;
-
-    aFilterData[2].Name = "Version";
-    const sal_Int32 nVersion = SOFFICE_FILEFORMAT_50;
-    aFilterData[2].Value <<= nVersion;
-
-    aFilterData[3].Name = "CurrentPage";
-    aFilterData[3].Value <<= uno::Reference< uno::XInterface >( m_xDrawPage, uno::UNO_QUERY );
-
-    //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
-    aFilterData[4].Name = "ScaleXNumerator";
-    aFilterData[4].Value <<= m_nScaleXNumerator;
-    aFilterData[5].Name = "ScaleXDenominator";
-    aFilterData[5].Value <<= m_nScaleXDenominator;
-    aFilterData[6].Name = "ScaleYNumerator";
-    aFilterData[6].Value <<= m_nScaleYNumerator;
-    aFilterData[7].Name = "ScaleYDenominator";
-    aFilterData[7].Value <<= m_nScaleYDenominator;
-
-
-    aProps[2].Name = "FilterData";
-    aProps[2].Value <<= aFilterData;
+    uno::Sequence< beans::PropertyValue > aProps{
+        comphelper::makePropertyValue("FilterName", OUString("SVM")),
+        comphelper::makePropertyValue("OutputStream", xOutStream),
+        comphelper::makePropertyValue("FilterData", aFilterData)
+    };
 
     xExporter->setSourceDocument( uno::Reference< lang::XComponent >( m_xDrawPage, uno::UNO_QUERY) );
     if( xExporter->filter( aProps ) )
@@ -2827,14 +2812,12 @@ Reference< uno::XInterface > ChartView::createInstanceWithArguments( const OUStr
 
 uno::Sequence< OUString > ChartView::getAvailableServiceNames()
 {
-    uno::Sequence< OUString > aServiceNames( 6 );
-
-    aServiceNames[0] = "com.sun.star.drawing.DashTable";
-    aServiceNames[1] = "com.sun.star.drawing.GradientTable";
-    aServiceNames[2] = "com.sun.star.drawing.HatchTable";
-    aServiceNames[3] = "com.sun.star.drawing.BitmapTable";
-    aServiceNames[4] = "com.sun.star.drawing.TransparencyGradientTable";
-    aServiceNames[5] = "com.sun.star.drawing.MarkerTable";
+    uno::Sequence< OUString > aServiceNames{ "com.sun.star.drawing.DashTable",
+                                             "com.sun.star.drawing.GradientTable",
+                                             "com.sun.star.drawing.HatchTable",
+                                             "com.sun.star.drawing.BitmapTable",
+                                             "com.sun.star.drawing.TransparencyGradientTable",
+                                             "com.sun.star.drawing.MarkerTable" };
 
     return aServiceNames;
 }

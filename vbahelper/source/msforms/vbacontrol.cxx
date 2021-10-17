@@ -515,7 +515,7 @@ void SAL_CALL ScVbaControl::fireEvent( const script::ScriptEvent& rEvt )
     uno::Reference< msforms::XControl > xThisControl( this );
     try
     {
-        evt.Arguments.realloc( 1 );
+        auto pArguments = evt.Arguments.realloc( 1 );
         lang::EventObject aEvt;
 
         uno::Reference< drawing::XControlShape > xControlShape( m_xControl, uno::UNO_QUERY ) ;
@@ -532,7 +532,7 @@ void SAL_CALL ScVbaControl::fireEvent( const script::ScriptEvent& rEvt )
             evt.ScriptCode = xNameQuery->getCodeNameForObject( xIf );
             // handle if we passed in our own arguments
             if ( !rEvt.Arguments.hasElements() )
-                evt.Arguments[ 0 ] <<= aEvt;
+                pArguments[ 0 ] <<= aEvt;
             xScriptListener->firing( evt );
         }
         else
@@ -546,7 +546,7 @@ void SAL_CALL ScVbaControl::fireEvent( const script::ScriptEvent& rEvt )
                 evt.Source = xThisControl;
                 aEvt.Source = xControl;
                 evt.ScriptCode = m_sLibraryAndCodeName;
-                evt.Arguments[ 0 ] <<= aEvt;
+                pArguments[ 0 ] <<= aEvt;
                 xScriptListener->firing( evt );
             }
         }

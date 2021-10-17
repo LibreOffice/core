@@ -793,8 +793,8 @@ uno::Sequence< OUString > SAL_CALL FSStorage::getElementNames()
             while ( xResultSet->next() )
             {
                 OUString aName( xRow->getString( 1 ) );
-                aResult.realloc( ++nSize );
-                aResult[nSize-1] = aName;
+                auto pResult = aResult.realloc( ++nSize );
+                pResult[nSize-1] = aName;
             }
         }
     }

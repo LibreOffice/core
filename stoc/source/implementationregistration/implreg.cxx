@@ -674,18 +674,18 @@ void delete_all_singleton_entries(
             catch (registry::InvalidValueException &)
             {
             }
-            OUString const * p = registered_implnames.getConstArray();
+            auto aNonConstRange = asNonConstRange(registered_implnames);
             sal_Int32 nOrigRegLength = registered_implnames.getLength();
             sal_Int32 nNewLength = nOrigRegLength;
             for ( sal_Int32 n = nOrigRegLength; n--; )
             {
-                OUString const & registered_implname = p[ n ];
+                OUString const & registered_implname = registered_implnames[ n ];
 
                 for (auto const& impl_name : impl_names)
                 {
                     if (impl_name == registered_implname)
                     {
-                        registered_implnames[ n ] = p[ nNewLength -1 ];
+                        aNonConstRange[ n ] = registered_implnames[ nNewLength -1 ];
                         --nNewLength;
                     }
                 }
@@ -889,8 +889,8 @@ void insert_singletons(
         if (comphelper::findValue(implnames, implname) == -1)
         {
             // append and write back
-            implnames.realloc( implnames.getLength() +1 );
-            implnames[ implnames.getLength() -1 ] = implname;
+            auto pimplnames = implnames.realloc( implnames.getLength() +1 );
+            pimplnames[ implnames.getLength() -1 ] = implname;
             xRegisteredImplNames->setAsciiListValue( implnames );
         }
     }

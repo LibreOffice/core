@@ -104,12 +104,9 @@ Reference< XInterface > SAL_CALL RootActionTriggerContainer::createInstanceWithA
 
 Sequence< OUString > SAL_CALL RootActionTriggerContainer::getAvailableServiceNames()
 {
-    Sequence< OUString > aSeq( 3 );
-
-    aSeq[0] = SERVICENAME_ACTIONTRIGGER;
-    aSeq[1] = SERVICENAME_ACTIONTRIGGERCONTAINER;
-    aSeq[2] = SERVICENAME_ACTIONTRIGGERSEPARATOR;
-
+    Sequence< OUString > aSeq{ SERVICENAME_ACTIONTRIGGER,
+                               SERVICENAME_ACTIONTRIGGERCONTAINER,
+                               SERVICENAME_ACTIONTRIGGERSEPARATOR };
     return aSeq;
 }
 

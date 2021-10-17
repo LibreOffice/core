@@ -19,6 +19,8 @@
 
 #include <vcl/svapp.hxx>
 
+#include <algorithm>
+
 using namespace css;
 using namespace ::sfx2::sidebar;
 
@@ -63,15 +65,9 @@ uno::Sequence< OUString > SAL_CALL SfxUnoDecks::getElementNames()
             pSidebarController->IsDocumentReadOnly(),
             xFrame->getController());
 
-        deckList.realloc(aDecks.size());
-
-        tools::Long n = 0;
-
-        for (const auto& rDeck : aDecks)
-        {
-            deckList[n] = rDeck.msId;
-            n++;
-        }
+        auto pdeckList = deckList.realloc(aDecks.size());
+        std::transform(aDecks.begin(), aDecks.end(), pdeckList,
+            [](const auto& rDeck) { return rDeck.msId; });
     }
 
     return deckList;

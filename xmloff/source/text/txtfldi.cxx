@@ -2997,9 +2997,10 @@ void XMLBibliographyFieldImportContext::PrepareField(
     // convert vector into sequence
     sal_Int32 nCount = aValues.size();
     Sequence<PropertyValue> aValueSequence(nCount);
+    auto aValueSequenceRange = asNonConstRange(aValueSequence);
     for(sal_Int32 i = 0; i < nCount; i++)
     {
-        aValueSequence[i] = aValues[i];
+        aValueSequenceRange[i] = aValues[i];
     }
 
     // set sequence

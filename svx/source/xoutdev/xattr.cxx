@@ -30,6 +30,8 @@
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+
+#include <comphelper/propertyvalue.hxx>
 #include <o3tl/any.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/memberids.h>
@@ -632,8 +634,6 @@ bool XLineDashItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         case 0:
         {
-            uno::Sequence< beans::PropertyValue > aPropSeq( 2 );
-
             css::drawing::LineDash aLineDash;
 
             const XDash& rXD = GetDashValue();
@@ -644,10 +644,10 @@ bool XLineDashItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
             aLineDash.DashLen = rXD.GetDashLen();
             aLineDash.Distance = rXD.GetDistance();
 
-            aPropSeq[0].Name    = "Name";
-            aPropSeq[0].Value   <<= SvxUnogetApiNameForItem(Which(), GetName());
-            aPropSeq[1].Name    = "LineDash";
-            aPropSeq[1].Value   <<= aLineDash;
+            uno::Sequence< beans::PropertyValue > aPropSeq{
+                comphelper::makePropertyValue("Name", SvxUnogetApiNameForItem(Which(), GetName())),
+                comphelper::makePropertyValue("LineDash", aLineDash)
+            };
             rVal <<= aPropSeq;
             break;
         }
@@ -2185,8 +2185,6 @@ bool XFillGradientItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) c
     {
         case 0:
         {
-            uno::Sequence< beans::PropertyValue > aPropSeq( 2 );
-
             css::awt::Gradient aGradient2;
 
             const XGradient& aXGradient = GetGradientValue();
@@ -2201,10 +2199,10 @@ bool XFillGradientItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) c
             aGradient2.EndIntensity = aXGradient.GetEndIntens();
             aGradient2.StepCount = aXGradient.GetSteps();
 
-            aPropSeq[0].Name    = "Name";
-            aPropSeq[0].Value   <<= SvxUnogetApiNameForItem(Which(), GetName());
-            aPropSeq[1].Name    = "FillGradient";
-            aPropSeq[1].Value   <<= aGradient2;
+            uno::Sequence< beans::PropertyValue > aPropSeq{
+                comphelper::makePropertyValue("Name", SvxUnogetApiNameForItem(Which(), GetName())),
+                comphelper::makePropertyValue("FillGradient", aGradient2)
+            };
             rVal <<= aPropSeq;
             break;
         }
@@ -2629,8 +2627,6 @@ bool XFillHatchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
     {
         case 0:
         {
-            uno::Sequence< beans::PropertyValue > aPropSeq( 2 );
-
             css::drawing::Hatch aUnoHatch;
 
             aUnoHatch.Style = aHatch.GetHatchStyle();
@@ -2638,10 +2634,10 @@ bool XFillHatchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
             aUnoHatch.Distance = aHatch.GetDistance();
             aUnoHatch.Angle = aHatch.GetAngle().get();
 
-            aPropSeq[0].Name    = "Name";
-            aPropSeq[0].Value   <<= SvxUnogetApiNameForItem(Which(), GetName());
-            aPropSeq[1].Name    = "FillHatch";
-            aPropSeq[1].Value   <<= aUnoHatch;
+            uno::Sequence< beans::PropertyValue > aPropSeq{
+                comphelper::makePropertyValue("Name", SvxUnogetApiNameForItem(Which(), GetName())),
+                comphelper::makePropertyValue("FillHatch", aUnoHatch)
+            };
             rVal <<= aPropSeq;
             break;
         }

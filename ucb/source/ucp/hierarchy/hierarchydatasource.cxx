@@ -30,6 +30,7 @@
 #include <osl/diagnose.h>
 
 #include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -268,12 +269,10 @@ HierarchyDataSource::createInstance( const OUString & aServiceSpecifier )
 {
     // Create view to root node.
 
-    beans::PropertyValue aProp;
-    aProp.Name = CFGPROPERTY_NODEPATH;
-    aProp.Value <<= OUString( CONFIG_DATA_ROOT_KEY  );
+    beans::PropertyValue aProp = comphelper::makePropertyValue(CFGPROPERTY_NODEPATH,
+                                                               OUString( CONFIG_DATA_ROOT_KEY  ));
 
-    uno::Sequence< uno::Any > aArguments( 1 );
-    aArguments[ 0 ] <<= aProp;
+    uno::Sequence< uno::Any > aArguments{ uno::Any(aProp) };
 
     return createInstanceWithArguments( aServiceSpecifier, aArguments, false );
 }
@@ -293,10 +292,7 @@ HierarchyDataSource::createInstanceWithArguments(
 uno::Sequence< OUString > SAL_CALL
 HierarchyDataSource::getAvailableServiceNames()
 {
-    uno::Sequence< OUString > aNames( 2 );
-    aNames[ 0 ] = READ_SERVICE_NAME;
-    aNames[ 1 ] = READWRITE_SERVICE_NAME;
-    return aNames;
+    return { READ_SERVICE_NAME, READWRITE_SERVICE_NAME };
 }
 
 
@@ -323,6 +319,7 @@ HierarchyDataSource::createInstanceWithArguments(
     }
 
     uno::Sequence< uno::Any > aNewArgs( Arguments );
+    auto aNewArgsRange = asNonConstRange(aNewArgs);
 
     if ( bCheckArgs )
     {
@@ -354,7 +351,7 @@ HierarchyDataSource::createInstanceWithArguments(
                         aProp.Value <<= aConfigPath;
 
                         // Set new path in arguments.
-                        aNewArgs[ n ] <<= aProp;
+                        aNewArgsRange[ n ] <<= aProp;
 
                         break;
                     }

@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <comphelper/propertyvalue.hxx>
 #include <tools/urlobj.hxx>
 
 #include <com/sun/star/util/XProtectable.hpp>
@@ -299,9 +302,8 @@ ScVbaWorkbook::SaveCopyAs( const OUString& sFileName )
     OUString aURL;
     osl::FileBase::getFileURLFromSystemPath( sFileName, aURL );
     uno::Reference< frame::XStorable > xStor( getModel(), uno::UNO_QUERY_THROW );
-    uno::Sequence<  beans::PropertyValue > storeProps(1);
-    storeProps[0].Name = "FilterName";
-    storeProps[0].Value <<= OUString( "MS Excel 97" );
+    uno::Sequence<  beans::PropertyValue > storeProps{ comphelper::makePropertyValue(
+        "FilterName", OUString( "MS Excel 97" )) };
     xStor->storeToURL( aURL, storeProps );
 }
 
@@ -343,9 +345,7 @@ ScVbaWorkbook::SaveAs( const uno::Any& FileName, const uno::Any& FileFormat, con
     sal_Int32 nFileFormat = excel::XlFileFormat::xlExcel9795;
     FileFormat >>= nFileFormat;
 
-    uno::Sequence<  beans::PropertyValue > storeProps(1);
-    storeProps[0].Name = "FilterName" ;
-
+    uno::Sequence storeProps{ comphelper::makePropertyValue("FilterName", uno::Any()) };
     setFilterPropsFromFormat( nFileFormat, storeProps );
 
     uno::Reference< frame::XStorable > xStor( getModel(), uno::UNO_QUERY_THROW );

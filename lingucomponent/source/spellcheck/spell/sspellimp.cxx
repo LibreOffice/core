@@ -178,13 +178,10 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
                 }
             }
             // ... and add them to the resulting sequence
-            m_aSuppLocales.realloc( aLocaleNamesSet.size() );
-            sal_Int32 k = 0;
-            for (auto const& localeName : aLocaleNamesSet)
-            {
-                Locale aTmp( LanguageTag::convertToLocale(localeName));
-                m_aSuppLocales[k++] = aTmp;
-            }
+            auto pSuppLocales = m_aSuppLocales.realloc( aLocaleNamesSet.size() );
+            std::transform(
+                aLocaleNamesSet.begin(), aLocaleNamesSet.end(), pSuppLocales,
+                [](auto const& localeName) { return LanguageTag::convertToLocale(localeName); });
 
             //! For each dictionary and each locale we need a separate entry.
             //! If this results in more than one dictionary per locale than (for now)

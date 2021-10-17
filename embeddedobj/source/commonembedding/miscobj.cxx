@@ -42,6 +42,8 @@
 
 #include "persistence.hxx"
 
+#include <cassert>
+
 using namespace ::com::sun::star;
 
 
@@ -123,13 +125,12 @@ void OCommonEmbeddedObject::CommonInit_Impl( const uno::Sequence< beans::NamedVa
         throw uno::RuntimeException(); // something goes really wrong
 
     // accepted states
-    m_aAcceptedStates.realloc( NUM_SUPPORTED_STATES );
-
-    m_aAcceptedStates[0] = embed::EmbedStates::LOADED;
-    m_aAcceptedStates[1] = embed::EmbedStates::RUNNING;
-    m_aAcceptedStates[2] = embed::EmbedStates::INPLACE_ACTIVE;
-    m_aAcceptedStates[3] = embed::EmbedStates::UI_ACTIVE;
-    m_aAcceptedStates[4] = embed::EmbedStates::ACTIVE;
+    m_aAcceptedStates = { /* [0] */ embed::EmbedStates::LOADED,
+                          /* [1] */ embed::EmbedStates::RUNNING,
+                          /* [2] */ embed::EmbedStates::INPLACE_ACTIVE,
+                          /* [3] */ embed::EmbedStates::UI_ACTIVE,
+                          /* [4] */ embed::EmbedStates::ACTIVE };
+    assert(m_aAcceptedStates.getLength() == NUM_SUPPORTED_STATES);
 
 
     // intermediate states
@@ -141,31 +142,23 @@ void OCommonEmbeddedObject::CommonInit_Impl( const uno::Sequence< beans::NamedVa
     // state to the target state is forbidden, only if direct switch is possible
     // the state can be reached.
 
-    m_pIntermediateStatesSeqs[0][2].realloc( 1 );
-    m_pIntermediateStatesSeqs[0][2][0] = embed::EmbedStates::RUNNING;
+    m_pIntermediateStatesSeqs[0][2] = { embed::EmbedStates::RUNNING };
 
-    m_pIntermediateStatesSeqs[0][3].realloc( 2 );
-    m_pIntermediateStatesSeqs[0][3][0] = embed::EmbedStates::RUNNING;
-    m_pIntermediateStatesSeqs[0][3][1] = embed::EmbedStates::INPLACE_ACTIVE;
+    m_pIntermediateStatesSeqs[0][3] = { embed::EmbedStates::RUNNING,
+                                        embed::EmbedStates::INPLACE_ACTIVE };
 
-    m_pIntermediateStatesSeqs[0][4].realloc( 1 );
-    m_pIntermediateStatesSeqs[0][4][0] = embed::EmbedStates::RUNNING;
+    m_pIntermediateStatesSeqs[0][4] = {embed::EmbedStates::RUNNING};
 
-    m_pIntermediateStatesSeqs[1][3].realloc( 1 );
-    m_pIntermediateStatesSeqs[1][3][0] = embed::EmbedStates::INPLACE_ACTIVE;
+    m_pIntermediateStatesSeqs[1][3] = { embed::EmbedStates::INPLACE_ACTIVE };
 
-    m_pIntermediateStatesSeqs[2][0].realloc( 1 );
-    m_pIntermediateStatesSeqs[2][0][0] = embed::EmbedStates::RUNNING;
+    m_pIntermediateStatesSeqs[2][0] = { embed::EmbedStates::RUNNING };
 
-    m_pIntermediateStatesSeqs[3][0].realloc( 2 );
-    m_pIntermediateStatesSeqs[3][0][0] = embed::EmbedStates::INPLACE_ACTIVE;
-    m_pIntermediateStatesSeqs[3][0][1] = embed::EmbedStates::RUNNING;
+    m_pIntermediateStatesSeqs[3][0] = { embed::EmbedStates::INPLACE_ACTIVE,
+                                        embed::EmbedStates::RUNNING };
 
-    m_pIntermediateStatesSeqs[3][1].realloc( 1 );
-    m_pIntermediateStatesSeqs[3][1][0] = embed::EmbedStates::INPLACE_ACTIVE;
+    m_pIntermediateStatesSeqs[3][1] = { embed::EmbedStates::INPLACE_ACTIVE };
 
-    m_pIntermediateStatesSeqs[4][0].realloc( 1 );
-    m_pIntermediateStatesSeqs[4][0][0] = embed::EmbedStates::RUNNING;
+    m_pIntermediateStatesSeqs[4][0] = { embed::EmbedStates::RUNNING };
 
     // verbs table
     for ( auto const & verb : std::as_const(m_aObjectVerbs) )
@@ -257,11 +250,12 @@ void OCommonEmbeddedObject::LinkInit_Impl(
     if(m_aLinkTempFile.is())
     {
         uno::Sequence< beans::PropertyValue > aAlternativeMediaDescr(aMediaDescr.getLength());
+        auto aAlternativeMediaDescrRange = asNonConstRange(aAlternativeMediaDescr);
 
         for ( sal_Int32 a(0); a < aMediaDescr.getLength(); a++ )
         {
             const beans::PropertyValue& rSource(aMediaDescr[a]);
-            beans::PropertyValue& rDestination(aAlternativeMediaDescr[a]);
+            beans::PropertyValue& rDestination(aAlternativeMediaDescrRange[a]);
 
             rDestination.Name = rSource.Name;
             if(rSource.Name == "URL")

@@ -138,9 +138,9 @@ DispatchHelper::executeDispatch(const css::uno::Reference<css::frame::XDispatch>
         // make sure that synchronous execution is used (if possible)
         css::uno::Sequence<css::beans::PropertyValue> aArguments(lArguments);
         sal_Int32 nLength = lArguments.getLength();
-        aArguments.realloc(nLength + 1);
-        aArguments[nLength].Name = "SynchronMode";
-        aArguments[nLength].Value <<= SyncronFlag;
+        auto pArguments = aArguments.realloc(nLength + 1);
+        pArguments[nLength].Name = "SynchronMode";
+        pArguments[nLength].Value <<= SyncronFlag;
 
         if (xNotifyDispatch.is())
         {

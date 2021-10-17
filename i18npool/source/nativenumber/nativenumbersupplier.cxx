@@ -85,8 +85,7 @@ static OUString AsciiToNativeChar( const OUString& inStr, sal_Int32 nCount,
 {
     const sal_Unicode *src = inStr.getStr();
     rtl_uString *newStr = rtl_uString_alloc(nCount);
-    if (pOffset)
-        pOffset->realloc(nCount);
+    auto ppOffset = pOffset ? pOffset->realloc(nCount) : nullptr;
 
     for (sal_Int32 i = 0; i < nCount; i++)
     {
@@ -102,8 +101,8 @@ static OUString AsciiToNativeChar( const OUString& inStr, sal_Int32 nCount,
         }
         else
             newStr->buffer[i] = ch;
-        if (pOffset)
-            (*pOffset)[i] = i;
+        if (ppOffset)
+            ppOffset[i] = i;
     }
     return OUString(newStr, SAL_NO_ACQUIRE); // take ownership
 }
@@ -113,42 +112,43 @@ static bool AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 begin, s
  const Number *number, const sal_Unicode* numberChar)
 {
     sal_Unicode multiChar = (multiChar_index == -1 ? 0 : number->multiplierChar[multiChar_index]);
+    auto ppOffset = pOffset ? pOffset->getArray() : nullptr;
     if ( len <= number->multiplierExponent[number->exponentCount-1] ) {
         if (number->multiplierExponent[number->exponentCount-1] > 1) {
             bool bNotZero = false;
             for (const sal_Int32 end = begin+len; begin < end; begin++) {
                 if (bNotZero || str[begin] != NUMBER_ZERO) {
                     dst[count] = numberChar[str[begin] - NUMBER_ZERO];
-                    if (pOffset)
-                        (*pOffset)[count] = begin + startPos;
+                    if (ppOffset)
+                        ppOffset[count] = begin + startPos;
                     count++;
                     bNotZero = true;
                 }
             }
             if (bNotZero && multiChar > 0) {
                 dst[count] = multiChar;
-                if (pOffset)
-                    (*pOffset)[count] = begin + startPos;
+                if (ppOffset)
+                    ppOffset[count] = begin + startPos;
                 count++;
             }
             return bNotZero;
         } else if (str[begin] != NUMBER_ZERO) {
             if (!(number->numberFlag & (multiChar_index < 0 ? 0 : NUMBER_OMIT_ONE_CHECK(multiChar_index))) || str[begin] != NUMBER_ONE) {
                 dst[count] = numberChar[str[begin] - NUMBER_ZERO];
-                if (pOffset)
-                    (*pOffset)[count] = begin + startPos;
+                if (ppOffset)
+                    ppOffset[count] = begin + startPos;
                 count++;
             }
             if (multiChar > 0) {
                 dst[count] = multiChar;
-                if (pOffset)
-                    (*pOffset)[count] = begin + startPos;
+                if (ppOffset)
+                    ppOffset[count] = begin + startPos;
                 count++;
             }
         } else if (!(number->numberFlag & NUMBER_OMIT_ZERO) && count > 0 && dst[count-1] != numberChar[0]) {
             dst[count] = numberChar[0];
-            if (pOffset)
-                (*pOffset)[count] = begin + startPos;
+            if (ppOffset)
+                ppOffset[count] = begin + startPos;
             count++;
         }
         return str[begin] != NUMBER_ZERO;
@@ -170,8 +170,8 @@ static bool AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 begin, s
                 count--;
             if (multiChar > 0) {
                 dst[count] = multiChar;
-                if (pOffset)
-                    (*pOffset)[count] = begin + startPos;
+                if (ppOffset)
+                    ppOffset[count] = begin + startPos;
                 count++;
             }
         }
@@ -198,8 +198,7 @@ static OUString AsciiToNative( const OUString& inStr, sal_Int32 nCount,
         std::unique_ptr<sal_Unicode[]> srcStr(new sal_Unicode[nCount + 1]); // for keeping number without comma
         sal_Int32 i, len = 0, count = 0;
 
-        if (pOffset)
-            pOffset->realloc( nCount * 2 );
+        auto ppOffset = pOffset ? pOffset->realloc( nCount * 2 ) : nullptr;
         bool bDoDecimal = false;
 
         for (i = 0; i <= nCount; i++)
@@ -207,8 +206,8 @@ static OUString AsciiToNative( const OUString& inStr, sal_Int32 nCount,
             if (i < nCount && isNumber(str[i])) {
                 if (bDoDecimal) {
                     newStr[count] = numberChar[str[i] - NUMBER_ZERO];
-                    if (pOffset)
-                        (*pOffset)[count] = i;
+                    if (ppOffset)
+                        ppOffset[count] = i;
                     count++;
                 }
                 else
@@ -229,15 +228,15 @@ static OUString AsciiToNative( const OUString& inStr, sal_Int32 nCount,
                             count--;
                         if (bNotZero && _count == count && end != len) {
                             newStr[count] = number->multiplierChar[0];
-                            if (pOffset)
-                                (*pOffset)[count] = i - len;
+                            if (ppOffset)
+                                ppOffset[count] = i - len;
                             count++;
                         }
                     }
                     if (! bNotZero && ! (number->numberFlag & NUMBER_OMIT_ONLY_ZERO)) {
                         newStr[count] = numberChar[0];
-                        if (pOffset)
-                            (*pOffset)[count] = i - len;
+                        if (ppOffset)
+                            ppOffset[count] = i - len;
                         count++;
                     }
                     len = 0;
@@ -252,8 +251,8 @@ static OUString AsciiToNative( const OUString& inStr, sal_Int32 nCount,
                         newStr[count] = (SeparatorChar[number->number] ? SeparatorChar[number->number] : str[i]);
                     else
                         newStr[count] = str[i];
-                    if (pOffset)
-                        (*pOffset)[count] = i;
+                    if (ppOffset)
+                        ppOffset[count] = i;
                     count++;
                 }
             }
@@ -272,6 +271,7 @@ void NativeToAscii_numberMaker(sal_Int16 max, sal_Int16 prev, const sal_Unicode 
         sal_Int32& i, sal_Int32 nCount, sal_Unicode *dst, sal_Int32& count, Sequence< sal_Int32 >* pOffset,
         OUString& numberChar, OUString& multiplierChar)
 {
+    auto ppOffset = pOffset ? pOffset->getArray() : nullptr;
     sal_Int16 curr = 0, num = 0, end = 0, shift = 0;
     while (++i < nCount) {
         if ((curr = sal::static_int_cast<sal_Int16>( numberChar.indexOf(str[i]) )) >= 0) {
@@ -290,16 +290,16 @@ void NativeToAscii_numberMaker(sal_Int16 max, sal_Int16 prev, const sal_Unicode 
                 end = curr;
             while (end++ < prev) {
                 dst[count] = NUMBER_ZERO + (end == prev ? num : 0);
-                if (pOffset)
-                    (*pOffset)[count] = i;
+                if (ppOffset)
+                    ppOffset[count] = i;
                 count++;
             }
             if (shift) {
                 count -= max;
                 for (const sal_Int32 countEnd = count+shift; count < countEnd; count++) {
                     dst[count] = dst[count + curr];
-                    if (pOffset)
-                        (*pOffset)[count] = (*pOffset)[count + curr];
+                    if (ppOffset)
+                        ppOffset[count] = ppOffset[count + curr];
                 }
                 max = curr;
             }
@@ -311,8 +311,8 @@ void NativeToAscii_numberMaker(sal_Int16 max, sal_Int16 prev, const sal_Unicode 
     }
     while (end++ < prev) {
         dst[count] = NUMBER_ZERO + (end == prev ? num : 0);
-        if (pOffset)
-            (*pOffset)[count] = i - 1;
+        if (ppOffset)
+            ppOffset[count] = i - 1;
         count++;
     }
 }
@@ -331,8 +331,8 @@ OUString NativeToAscii(const OUString& inStr,
     if (nCount > 0) {
         const sal_Unicode *str = inStr.getStr();
         std::unique_ptr<sal_Unicode[]> newStr(new sal_Unicode[nCount * MultiplierExponent_7_CJK[0] + 2]);
-        if (pOffset)
-            pOffset->realloc( nCount * MultiplierExponent_7_CJK[0] + 1 );
+        auto ppOffset
+            = pOffset ? pOffset->realloc( nCount * MultiplierExponent_7_CJK[0] + 1 ) : nullptr;
         sal_Int32 count = 0, index;
         sal_Int32 i;
 
@@ -348,8 +348,8 @@ OUString NativeToAscii(const OUString& inStr,
             if ((index = multiplierChar.indexOf(str[i])) >= 0) {
                 if (count == 0 || !isNumber(newStr[count-1])) { // add 1 in front of multiplier
                     newStr[count] = NUMBER_ONE;
-                    if (pOffset)
-                        (*pOffset)[count] = i;
+                    if (ppOffset)
+                        ppOffset[count] = i;
                     count++;
                 }
                 index = MultiplierExponent_7_CJK[index % ExponentCount_7_CJK];
@@ -378,8 +378,8 @@ OUString NativeToAscii(const OUString& inStr,
                     newStr[count] = MinusChar[NumberChar_HalfWidth];
                 else
                     newStr[count] = str[i];
-                if (pOffset)
-                    (*pOffset)[count] = i;
+                if (ppOffset)
+                    ppOffset[count] = i;
                 count++;
             }
         }

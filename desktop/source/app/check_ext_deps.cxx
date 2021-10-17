@@ -315,10 +315,9 @@ static void impl_setNeedsCompatCheck()
             configuration::theDefaultProvider::get(
                 comphelper::getProcessComponentContext() ) );
 
-        Sequence< Any > theArgs(1);
         beans::NamedValue v( "nodepath",
                       makeAny( OUString("org.openoffice.Setup/Office") ) );
-        theArgs[0] <<= v;
+        Sequence< Any > theArgs{ Any(v) };
         Reference< beans::XPropertySet > pset(
             theConfigProvider->createInstanceWithArguments( aAccessSrvc, theArgs ), UNO_QUERY_THROW );
 
@@ -346,10 +345,9 @@ static bool impl_needsCompatCheck()
             configuration::theDefaultProvider::get(
                 comphelper::getProcessComponentContext() ) );
 
-        Sequence< Any > theArgs(1);
         beans::NamedValue v( "nodepath",
                       makeAny( OUString("org.openoffice.Setup/Office") ) );
-        theArgs[0] <<= v;
+        Sequence< Any > theArgs{ Any(v) };
         Reference< beans::XPropertySet > pset(
             theConfigProvider->createInstanceWithArguments( aAccessSrvc, theArgs ), UNO_QUERY_THROW );
 

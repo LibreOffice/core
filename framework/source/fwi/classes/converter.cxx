@@ -29,10 +29,11 @@ css::uno::Sequence< css::beans::NamedValue > Converter::convert_seqPropVal2seqNa
 {
     sal_Int32 nCount = lSource.getLength();
     css::uno::Sequence< css::beans::NamedValue > lDestination(nCount);
+    auto lDestinationRange = asNonConstRange(lDestination);
     for (sal_Int32 nItem=0; nItem<nCount; ++nItem)
     {
-        lDestination[nItem].Name  = lSource[nItem].Name;
-        lDestination[nItem].Value = lSource[nItem].Value;
+        lDestinationRange[nItem].Name  = lSource[nItem].Name;
+        lDestinationRange[nItem].Value = lSource[nItem].Value;
     }
     return lDestination;
 }

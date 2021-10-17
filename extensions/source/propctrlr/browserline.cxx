@@ -25,6 +25,7 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
@@ -314,9 +315,7 @@ namespace pcr
             Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
             Reference< XGraphicProvider > xGraphicProvider( GraphicProvider::create(xContext) );
 
-            Sequence< PropertyValue > aMediaProperties(1);
-            aMediaProperties[0].Name = "URL";
-            aMediaProperties[0].Value <<= rImageURL;
+            Sequence aMediaProperties{ comphelper::makePropertyValue("URL", rImageURL) };
 
             xGraphic = Reference<XGraphic>(xGraphicProvider->queryGraphic(aMediaProperties), css::uno::UNO_SET_THROW);
         }

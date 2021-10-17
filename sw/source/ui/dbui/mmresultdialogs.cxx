@@ -71,6 +71,7 @@
 #include <doc.hxx>
 #include <sfx2/app.hxx>
 #include <strings.hrc>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>
 #include <iodetect.hxx>
 
@@ -821,11 +822,8 @@ IMPL_LINK_NOARG(SwMMResultPrintDialog, PrintHdl_Impl, weld::Button&, void)
     SfxObjectShell* pObjSh = pTargetView->GetViewFrame()->GetObjectShell();
     SfxGetpApp()->NotifyEvent(SfxEventHint(SfxEventHintId::SwMailMerge, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE), pObjSh));
 
-    uno::Sequence < beans::PropertyValue > aProps( 2 );
-    aProps[0]. Name = "MonitorVisible";
-    aProps[0].Value <<= true;
-    aProps[1]. Name = "Pages";
-    aProps[1]. Value <<= sPages;
+    uno::Sequence aProps{ comphelper::makePropertyValue("MonitorVisible", true),
+                          comphelper::makePropertyValue("Pages", sPages) };
 
     pTargetView->ExecPrint( aProps, false, true );
     SfxGetpApp()->NotifyEvent(SfxEventHint(SfxEventHintId::SwMailMergeEnd, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE_END), pObjSh));

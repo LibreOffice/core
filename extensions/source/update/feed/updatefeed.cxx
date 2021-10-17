@@ -302,8 +302,9 @@ UpdateInformationProvider::UpdateInformationProvider(
     uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider(
         css::configuration::theDefaultProvider::get(m_xContext));
 
-    m_aRequestHeaderList[0].First = "Accept-Language";
-    m_aRequestHeaderList[0].Second = getConfigurationItem( xConfigurationProvider, "org.openoffice.Setup/L10N", "ooLocale" );
+    auto pRequestHeaderList = m_aRequestHeaderList.getArray();
+    pRequestHeaderList[0].First = "Accept-Language";
+    pRequestHeaderList[0].Second = getConfigurationItem( xConfigurationProvider, "org.openoffice.Setup/L10N", "ooLocale" );
 }
 
 bool
@@ -385,8 +386,9 @@ uno::Sequence< beans::StringPair > SAL_CALL UpdateInformationProvider::getUserRe
         aPair.realloc(1);
     else
     {
-        aPair[1].First = "User-Agent";
-        aPair[1].Second = aUserAgent;
+        auto pPair = aPair.getArray();
+        pPair[1].First = "User-Agent";
+        pPair[1].Second = aUserAgent;
     }
 
     return aPair;
@@ -403,9 +405,7 @@ UpdateInformationProvider::getConfigurationItemAny(uno::Reference<lang::XMultiSe
     aProperty.Name  = "nodepath";
     aProperty.Value <<= node;
 
-    uno::Sequence< uno::Any > aArgumentList( 1 );
-    aArgumentList[0] <<= aProperty;
-
+    uno::Sequence< uno::Any > aArgumentList{ uno::Any(aProperty) };
     uno::Reference< container::XNameAccess > xNameAccess(
         configurationProvider->createInstanceWithArguments(
             "com.sun.star.configuration.ConfigurationAccess",

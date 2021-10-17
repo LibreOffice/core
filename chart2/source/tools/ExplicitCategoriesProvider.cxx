@@ -118,8 +118,7 @@ ExplicitCategoriesProvider::ExplicitCategoriesProvider( const Reference< chart2:
             }
             if( !m_aSplitCategoriesList.hasElements() )
             {
-                m_aSplitCategoriesList.realloc(1);
-                m_aSplitCategoriesList[0]=m_xOriginalCategories;
+                m_aSplitCategoriesList = { m_xOriginalCategories };
             }
         }
     }
@@ -170,7 +169,7 @@ void ExplicitCategoriesProvider::convertCategoryAnysToText( uno::Sequence< OUStr
     sal_Int32 nCount = rInAnys.getLength();
     if(!nCount)
         return;
-    rOutTexts.realloc(nCount);
+    auto pOutTexts = rOutTexts.realloc(nCount);
 
     sal_Int32 nAxisNumberFormat = 0;
     Reference< XCoordinateSystem > xCooSysModel( ChartModelHelper::getFirstCoordinateSystem( rModel ) );
@@ -204,7 +203,7 @@ void ExplicitCategoriesProvider::convertCategoryAnysToText( uno::Sequence< OUStr
                 aAny>>=aText;
             }
         }
-        rOutTexts[nN] = aText;
+        pOutTexts[nN] = aText;
     }
 }
 
@@ -358,7 +357,7 @@ static Sequence< OUString > lcl_getExplicitSimpleCategories(
 
     if(nMaxCategoryCount)
     {
-        aRet.realloc(nMaxCategoryCount);
+        auto pRet = aRet.realloc(nMaxCategoryCount);
         for(sal_Int32 nN=0; nN<nMaxCategoryCount; nN++)
         {
             OUStringBuffer aText;
@@ -375,7 +374,7 @@ static Sequence< OUString > lcl_getExplicitSimpleCategories(
                     }
                 }
             }
-            aRet[nN]=aText.makeStringAndClear();
+            pRet[nN]=aText.makeStringAndClear();
         }
     }
     return aRet;

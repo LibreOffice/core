@@ -84,15 +84,18 @@ void WrappedBarPositionProperty_Base::setPropertyValue( const Any& rOuterValue, 
                 xProp->getPropertyValue( m_InnerSequencePropertyName ) >>= aBarPositionSequence;
 
                 tools::Long nOldLength = aBarPositionSequence.getLength();
+                sal_Int32* pBarPositionSequence;
                 if( nOldLength <= m_nAxisIndex  )
                 {
-                    aBarPositionSequence.realloc( m_nAxisIndex+1 );
+                    pBarPositionSequence = aBarPositionSequence.realloc( m_nAxisIndex+1 );
                     for( sal_Int32 i=nOldLength; i<m_nAxisIndex; i++ )
                     {
-                        aBarPositionSequence[i] = m_nDefaultValue;
+                        pBarPositionSequence[i] = m_nDefaultValue;
                     }
                 }
-                aBarPositionSequence[m_nAxisIndex] = nNewValue;
+                else
+                    pBarPositionSequence = aBarPositionSequence.getArray();
+                pBarPositionSequence[m_nAxisIndex] = nNewValue;
 
                 xProp->setPropertyValue( m_InnerSequencePropertyName, uno::Any( aBarPositionSequence ) );
             }

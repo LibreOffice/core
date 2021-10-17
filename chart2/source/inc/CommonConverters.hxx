@@ -184,12 +184,13 @@ css::uno::Sequence< T >
     for( nOuter=0; nOuter<nOuterSize; ++nOuter )
         nResultSize += aSeqSeq[nOuter].getLength();
     css::uno::Sequence< T > aResult( nResultSize );
+    auto aResultRange = asNonConstRange(aResult);
 
     for( nOuter=0; nOuter<nOuterSize; ++nOuter )
     {
         const sal_Int32 nInnerSize = aSeqSeq[nOuter].getLength();
         for( nInner=0; nInner<nInnerSize; ++nInner, ++nCount )
-            aResult[nCount] = aSeqSeq[nOuter][nInner];
+            aResultRange[nCount] = aSeqSeq[nOuter][nInner];
     }
     return aResult;
 }

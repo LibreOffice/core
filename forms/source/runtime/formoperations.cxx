@@ -721,15 +721,10 @@ namespace frm
                 OSL_ENSURE( xProperties.is(), "FormOperations::execute: no multi property access!" );
                 if ( xProperties.is() )
                 {
-                    Sequence< OUString > aNames( 3 );
-                    aNames[0] = PROPERTY_FILTER;
-                    aNames[1] = PROPERTY_HAVINGCLAUSE;
-                    aNames[2] = PROPERTY_SORT;
+                    Sequence< OUString > aNames{ PROPERTY_FILTER, PROPERTY_HAVINGCLAUSE,
+                                                 PROPERTY_SORT };
 
-                    Sequence< Any> aValues( 3 );
-                    aValues[0] <<= OUString();
-                    aValues[1] <<= OUString();
-                    aValues[2] <<= OUString();
+                    Sequence< Any> aValues{ Any(OUString()), Any(OUString()), Any(OUString()) };
 
                     weld::WaitObject aWO(Application::GetFrameWeld(GetDialogParent()));
                     xProperties->setPropertyValues( aNames, aValues );

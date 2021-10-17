@@ -1010,13 +1010,14 @@ bool implImportDialog(weld::Window* pWin, const ScriptDocument& rDocument, const
                     if( nOnlyInImportLanguageCount > 1 )
                     {
                         Sequence< lang::Locale > aRemainingLocaleSeq( nOnlyInImportLanguageCount - 1 );
+                        auto pRemainingLocaleSeq = aRemainingLocaleSeq.getArray();
                         lang::Locale aTmpLocale;
                         int iSeq = 0;
                         for( int i = 0 ; i < nOnlyInImportLanguageCount ; ++i )
                         {
                             aTmpLocale = aOnlyInImportLanguages[i];
                             if( !localesAreEqual( aFirstLocale, aTmpLocale ) )
-                                aRemainingLocaleSeq[iSeq++] = aTmpLocale;
+                                pRemainingLocaleSeq[iSeq++] = aTmpLocale;
                         }
                         pCurMgr->handleAddLocales( aRemainingLocaleSeq );
                     }
