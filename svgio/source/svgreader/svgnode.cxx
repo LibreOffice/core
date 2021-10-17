@@ -107,10 +107,10 @@ namespace svgio::svgreader
                         }
                     }
 
-                    for(size_t a(0); a < aParts.size(); a++)
+                    for(auto &a : aParts)
                     {
                         const OUString aNewConcatenated(
-                            "." + aParts[a] + aConcatenated);
+                            "." + a + aConcatenated);
 
                         if(pParent)
                         {
@@ -246,10 +246,13 @@ namespace svgio::svgreader
                 // as current
                 SvgStyleAttributes* pCurrent = const_cast< SvgStyleAttributes* >(maCssStyleVector[0]);
 
+                // We should skip the one item, but in C++<=17 there is no easy way to do this
+                // with range-based iterators. For C++20, std::ranges::views::drop can be used.
+
+                // Note that data which maCssStyleVector has its pointers are modifed here
                 for(size_t a(1); a < maCssStyleVector.size(); a++)
                 {
                     SvgStyleAttributes* pNext = const_cast< SvgStyleAttributes* >(maCssStyleVector[a]);
-
                     pCurrent->setCssStyleParent(pNext);
                     pCurrent = pNext;
                 }
