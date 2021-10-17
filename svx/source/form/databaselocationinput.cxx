@@ -171,8 +171,7 @@ namespace svx
             "DatabaseLocationInputController_Impl::impl_initFilterProperties_nothrow: unable to determine the file extension(s)!" );
         if ( !m_aFilterExtensions.hasElements() )
         {
-            m_aFilterExtensions.realloc(1);
-            m_aFilterExtensions[0] = "*.odb";
+            m_aFilterExtensions = { "*.odb" };
         }
     }
 

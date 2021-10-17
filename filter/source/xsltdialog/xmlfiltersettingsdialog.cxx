@@ -24,6 +24,8 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+
+#include <comphelper/propertyvalue.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
@@ -272,6 +274,7 @@ static Sequence< OUString > createExtensionsSequence( const OUString& rExtension
     }
 
     Sequence< OUString > aExtensions( nExtensions );
+    auto aExtensionsRange = asNonConstRange(aExtensions);
 
     // extract the extensions from the source string and fill the sequence
 
@@ -285,12 +288,12 @@ static Sequence< OUString > createExtensionsSequence( const OUString& rExtension
 
         if( nLastIndex == -1 )
         {
-            aExtensions[i] = rExtensions.copy( nCurrentIndex );
+            aExtensionsRange[i] = rExtensions.copy( nCurrentIndex );
             break;
         }
         else
         {
-            aExtensions[i] = rExtensions.copy( nCurrentIndex, nLastIndex - nCurrentIndex );
+            aExtensionsRange[i] = rExtensions.copy( nCurrentIndex, nLastIndex - nCurrentIndex );
             nCurrentIndex = nLastIndex + 1;
             nLastIndex = nCurrentIndex;
         }
@@ -496,31 +499,16 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
         Sequence< OUString > aUserData( pFilterEntry->getFilterUserData());
 
         // 3. create property values for filter entry
-        Sequence< PropertyValue > aFilterData( 8 );
-
-        aFilterData[0].Name = "Type";
-        aFilterData[0].Value <<= pFilterEntry->maType;
-
-        aFilterData[1].Name = "UIName";
-        aFilterData[1].Value <<= pFilterEntry->maInterfaceName;
-
-        aFilterData[2].Name = "DocumentService";
-        aFilterData[2].Value <<= pFilterEntry->maDocumentService;
-
-        aFilterData[3].Name = "FilterService";
-        aFilterData[3].Value <<= OUString( "com.sun.star.comp.Writer.XmlFilterAdaptor" );
-
-        aFilterData[4].Name = "Flags";
-        aFilterData[4].Value <<= pFilterEntry->maFlags;
-
-        aFilterData[5].Name = "UserData";
-        aFilterData[5].Value <<= aUserData;
-
-        aFilterData[6].Name = "FileFormatVersion";
-        aFilterData[6].Value <<= pFilterEntry->maFileFormatVersion;
-
-        aFilterData[7].Name = "TemplateName";
-        aFilterData[7].Value <<= pFilterEntry->maImportTemplate;
+        Sequence< PropertyValue > aFilterData{
+            comphelper::makePropertyValue("Type", pFilterEntry->maType),
+            comphelper::makePropertyValue("UIName", pFilterEntry->maInterfaceName),
+            comphelper::makePropertyValue("DocumentService", pFilterEntry->maDocumentService),
+            comphelper::makePropertyValue("FilterService", OUString( "com.sun.star.comp.Writer.XmlFilterAdaptor" )),
+            comphelper::makePropertyValue("Flags", pFilterEntry->maFlags),
+            comphelper::makePropertyValue("UserData", aUserData),
+            comphelper::makePropertyValue("FileFormatVersion", pFilterEntry->maFileFormatVersion),
+            comphelper::makePropertyValue("TemplateName", pFilterEntry->maImportTemplate)
+        };
 
         // 4. insert new or replace existing filter
         try
@@ -545,11 +533,6 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
     // 5. prepare type information
     if( bOk )
     {
-        Sequence< PropertyValue > aValues(4);
-
-        aValues[0].Name = "UIName";
-        aValues[0].Value <<= pFilterEntry->maInterfaceName;
-        aValues[1].Name = "ClipboardFormat";
         OUString aDocType;
         if( !pFilterEntry->maDocType.match( m_sDocTypePrefix ) )
         {
@@ -560,22 +543,21 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
             aDocType = pFilterEntry->maDocType;
         }
         if (aDocType == m_sDocTypePrefix)
-            aValues[1].Value <<= OUString();
-        else
-            aValues[1].Value <<= aDocType;
+            aDocType.clear();
 
-        aValues[2].Name = "DocumentIconID";
-        aValues[2].Value <<= pFilterEntry->mnDocumentIconID;
-
-        aValues[3].Name = "Extensions";
-        aValues[3].Value <<= createExtensionsSequence( pFilterEntry->maExtension );
+        Sequence< PropertyValue > aValues{
+            comphelper::makePropertyValue("UIName", pFilterEntry->maInterfaceName),
+            comphelper::makePropertyValue("ClipboardFormat", aDocType),
+            comphelper::makePropertyValue("DocumentIconID", pFilterEntry->mnDocumentIconID),
+            comphelper::makePropertyValue("Extensions", createExtensionsSequence( pFilterEntry->maExtension ))
+        };
 
         // the detect service will only be registered, if a doctype/search token was specified
         if (aDocType.getLength() > m_sDocTypePrefix.getLength())
         {
-            aValues.realloc(5);
-            aValues[4].Name = "DetectService";
-            aValues[4].Value <<= OUString( "com.sun.star.comp.filters.XMLFilterDetect" );
+            auto pValues = aValues.realloc(5);
+            pValues[4].Name = "DetectService";
+            pValues[4].Value <<= OUString( "com.sun.star.comp.filters.XMLFilterDetect" );
         }
 
         // 6. insert new or replace existing type information
@@ -668,6 +650,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
                 Sequence< PropertyValue > aSequence;
                 if( mxExtendedTypeDetection->getByName( sFilterDetectService ) >>= aSequence )
                 {
+                    auto aSequenceRange = asNonConstRange(aSequence);
                     sal_Int32 nCount = aSequence.getLength();
                     sal_Int32 nIndex;
                     for( nIndex = 0; nIndex < nCount; nIndex++ )
@@ -687,10 +670,10 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
 
                                 if( nStr == nStrCount )
                                 {
-                                    aTypes.realloc( nStrCount + 1 );
-                                    aTypes[nStrCount] = pFilterEntry->maType;
+                                    auto pTypes = aTypes.realloc( nStrCount + 1 );
+                                    pTypes[nStrCount] = pFilterEntry->maType;
 
-                                    aSequence[nIndex].Value <<= aTypes;
+                                    aSequenceRange[nIndex].Value <<= aTypes;
 
                                     mxExtendedTypeDetection->replaceByName( sFilterDetectService, makeAny( aSequence ) );
 

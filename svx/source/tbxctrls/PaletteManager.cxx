@@ -19,6 +19,8 @@
 
 #include <memory>
 #include <svx/PaletteManager.hxx>
+
+#include <comphelper/propertyvalue.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include <unotools/pathoptions.hxx>
@@ -275,11 +277,13 @@ void PaletteManager::AddRecentColor(const Color& rRecentColor, const OUString& r
     else
         maRecentColors.emplace_back(rRecentColor, rName);
     css::uno::Sequence< sal_Int32 > aColorList(maRecentColors.size());
+    auto aColorListRange = asNonConstRange(aColorList);
     css::uno::Sequence< OUString > aColorNameList(maRecentColors.size());
+    auto aColorNameListRange = asNonConstRange(aColorNameList);
     for (size_t i = 0; i < maRecentColors.size(); ++i)
     {
-        aColorList[i] = static_cast<sal_Int32>(maRecentColors[i].first);
-        aColorNameList[i] = maRecentColors[i].second;
+        aColorListRange[i] = static_cast<sal_Int32>(maRecentColors[i].first);
+        aColorNameListRange[i] = maRecentColors[i].second;
     }
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
     officecfg::Office::Common::UserColors::RecentColor::set(aColorList, batch);
@@ -334,9 +338,8 @@ void PaletteManager::DispatchColorCommand(const OUString& aCommand, const NamedC
 
     INetURLObject aObj( aCommand );
 
-    Sequence<PropertyValue> aArgs(1);
-    aArgs[0].Name = aObj.GetURLPath();
-    aArgs[0].Value <<= sal_Int32(rColor.first);
+    Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue(aObj.GetURLPath(),
+                                                                 sal_Int32(rColor.first)) };
 
     URL aTargetURL;
     aTargetURL.Complete = aCommand;

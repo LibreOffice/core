@@ -31,6 +31,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/attributelist.hxx>
 
 #ifdef ATTRIBUTE_HELPID
@@ -191,20 +192,22 @@ void ReadMenuDocumentHandlerBase::initPropertyCommon(
     Sequence< PropertyValue > &rProps, const OUString &rCommandURL,
     const OUString &rHelpId, const OUString &rLabel, sal_Int16 nItemStyleBits )
 {
-    rProps[0].Name = m_aCommandURL;
-    rProps[1].Name = m_aHelpURL;
-    rProps[2].Name = m_aContainer;
-    rProps[3].Name = m_aLabel;
-    rProps[4].Name = m_aStyle;
-    rProps[5].Name = m_aType;
+    auto pProps = rProps.getArray();
+
+    pProps[0].Name = m_aCommandURL;
+    pProps[1].Name = m_aHelpURL;
+    pProps[2].Name = m_aContainer;
+    pProps[3].Name = m_aLabel;
+    pProps[4].Name = m_aStyle;
+    pProps[5].Name = m_aType;
 
     // Common values
-    rProps[0].Value <<= rCommandURL.intern();
-    rProps[1].Value <<= rHelpId;
-    rProps[2].Value <<= Reference< XIndexContainer >();
-    rProps[3].Value <<= rLabel;
-    rProps[4].Value <<= nItemStyleBits;
-    rProps[5].Value <<= css::ui::ItemType::DEFAULT;
+    pProps[0].Value <<= rCommandURL.intern();
+    pProps[1].Value <<= rHelpId;
+    pProps[2].Value <<= Reference< XIndexContainer >();
+    pProps[3].Value <<= rLabel;
+    pProps[4].Value <<= nItemStyleBits;
+    pProps[5].Value <<= css::ui::ItemType::DEFAULT;
 }
 
 OReadMenuDocumentHandler::OReadMenuDocumentHandler(
@@ -376,7 +379,7 @@ void SAL_CALL OReadMenuBarHandler::startElement(
             {
                 Sequence< PropertyValue > aSubMenuProp( 6 );
                 initPropertyCommon( aSubMenuProp, aCommandId, aHelpId, aLabel, nItemBits );
-                aSubMenuProp[2].Value <<= xSubItemContainer;
+                aSubMenuProp.getArray()[2].Value <<= xSubItemContainer;
 
                 m_xMenuBarContainer->insertByIndex( m_xMenuBarContainer->getCount(), makeAny( aSubMenuProp ) );
             }
@@ -577,7 +580,7 @@ void SAL_CALL OReadMenuPopupHandler::startElement(
         {
             Sequence< PropertyValue > aSubMenuProp( 6 );
             initPropertyCommon( aSubMenuProp, aCommandId, aHelpId, aLabel, nItemBits );
-            aSubMenuProp[2].Value <<= xSubItemContainer;
+            aSubMenuProp.getArray()[2].Value <<= xSubItemContainer;
 
             m_xMenuContainer->insertByIndex( m_xMenuContainer->getCount(), makeAny( aSubMenuProp ) );
         }
@@ -633,7 +636,7 @@ void SAL_CALL OReadMenuPopupHandler::startElement(
         {
             Sequence< PropertyValue > aMenuItem( 6 );
             initPropertyCommon( aMenuItem, aCommandId, aHelpId, aLabel, nItemBits );
-            aMenuItem[2].Value <<= Reference< XIndexContainer >();
+            aMenuItem.getArray()[2].Value <<= Reference< XIndexContainer >();
 
             m_xMenuContainer->insertByIndex( m_xMenuContainer->getCount(), makeAny( aMenuItem ) );
         }
@@ -642,9 +645,8 @@ void SAL_CALL OReadMenuPopupHandler::startElement(
     }
     else if ( rName == ELEMENT_MENUSEPARATOR )
     {
-        Sequence< PropertyValue > aMenuSeparator( 1 );
-        aMenuSeparator[0].Name = ITEM_DESCRIPTOR_TYPE;
-        aMenuSeparator[0].Value <<= css::ui::ItemType::SEPARATOR_LINE;
+        Sequence< PropertyValue > aMenuSeparator{ comphelper::makePropertyValue(
+            ITEM_DESCRIPTOR_TYPE, css::ui::ItemType::SEPARATOR_LINE) };
 
         m_xMenuContainer->insertByIndex( m_xMenuContainer->getCount(), makeAny( aMenuSeparator ) );
 

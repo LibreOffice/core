@@ -10,6 +10,7 @@
 #include <sfx2/lokcharthelper.hxx>
 
 #include <comphelper/lok.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/ipclient.hxx>
 #include <sfx2/lokhelper.hxx>
@@ -315,10 +316,11 @@ bool LokChartHelper::setTextSelection(int nType, int nX, int nY)
             // that are converted to hmm
             util::URL aURL;
             aURL.Path = "LOKSetTextSelection";
-            uno::Sequence< beans::PropertyValue > aArgs(3);
-            aArgs[0].Value <<= static_cast<sal_Int32>(nType);
-            aArgs[1].Value <<= static_cast<sal_Int32>(nChartWinX);
-            aArgs[2].Value <<= static_cast<sal_Int32>(nChartWinY);
+            uno::Sequence< beans::PropertyValue > aArgs{
+                comphelper::makePropertyValue({}, static_cast<sal_Int32>(nType)), // Why no name?
+                comphelper::makePropertyValue({}, static_cast<sal_Int32>(nChartWinX)),
+                comphelper::makePropertyValue({}, static_cast<sal_Int32>(nChartWinY))
+            };
             xDispatcher->dispatch(aURL, aArgs);
         }
         return true;

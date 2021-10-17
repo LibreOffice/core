@@ -218,16 +218,19 @@ awt::Point PlottingPositionHelper::transformSceneToScreenPosition( const drawing
 void PlottingPositionHelper::transformScaledLogicToScene( drawing::PolyPolygonShape3D& rPolygon ) const
 {
     drawing::Position3D aScenePosition;
+    auto SequenceXRange = asNonConstRange(rPolygon.SequenceX);
+    auto SequenceYRange = asNonConstRange(rPolygon.SequenceY);
+    auto SequenceZRange = asNonConstRange(rPolygon.SequenceZ);
     for( sal_Int32 nS = rPolygon.SequenceX.getLength(); nS--;)
     {
-        drawing::DoubleSequence& xValues = rPolygon.SequenceX[nS];
-        drawing::DoubleSequence& yValues = rPolygon.SequenceY[nS];
-        drawing::DoubleSequence& zValues = rPolygon.SequenceZ[nS];
-        for( sal_Int32 nP = xValues.getLength(); nP--; )
+        auto xValuesRange = asNonConstRange(SequenceXRange[nS]);
+        auto yValuesRange = asNonConstRange(SequenceYRange[nS]);
+        auto zValuesRange = asNonConstRange(SequenceZRange[nS]);
+        for( sal_Int32 nP = SequenceXRange[nS].getLength(); nP--; )
         {
-            double& fX = xValues[nP];
-            double& fY = yValues[nP];
-            double& fZ = zValues[nP];
+            double& fX = xValuesRange[nP];
+            double& fY = yValuesRange[nP];
+            double& fZ = zValuesRange[nP];
             aScenePosition = transformScaledLogicToScene( fX,fY,fZ,true );
             fX = aScenePosition.PositionX;
             fY = aScenePosition.PositionY;

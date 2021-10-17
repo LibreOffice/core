@@ -96,13 +96,12 @@ uno::Reference< embed::XStorage > lcl_getWriteStorage(
                 xStorage.set( aMDHelper.Storage );
             else
             {
-                Sequence< uno::Any > aStorageArgs( 3 );
-                if( aMDHelper.ISSET_OutputStream  )
-                    aStorageArgs[0] <<= aMDHelper.OutputStream;
-                else
-                    aStorageArgs[0] <<= aMDHelper.URL;
-                aStorageArgs[1] <<= (embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE);
-                aStorageArgs[2] <<= comphelper::containerToSequence( aPropertiesForStorage );
+                Sequence< uno::Any > aStorageArgs{
+                    aMDHelper.ISSET_OutputStream ? uno::Any(aMDHelper.OutputStream)
+                                                 : uno::Any(aMDHelper.URL),
+                    uno::Any(embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE),
+                    uno::Any(comphelper::containerToSequence( aPropertiesForStorage ))
+                };
 
                 xStorage.set(
                     xStorageFact->createInstanceWithArguments( aStorageArgs ),
@@ -163,10 +162,11 @@ uno::Reference< embed::XStorage > lcl_getReadStorage(
 
             // convert XInputStream to XStorage via the storage factory
             Reference< lang::XSingleServiceFactory > xStorageFact( embed::StorageFactory::create( xContext ) );
-            Sequence< uno::Any > aStorageArgs( 3 );
-            aStorageArgs[0] <<= xStream;
-            aStorageArgs[1] <<= (embed::ElementModes::READ | embed::ElementModes::NOCREATE);
-            aStorageArgs[2] <<= comphelper::containerToSequence( aPropertiesForStorage );
+            Sequence< uno::Any > aStorageArgs{
+                uno::Any(xStream),
+                uno::Any(embed::ElementModes::READ | embed::ElementModes::NOCREATE),
+                uno::Any(comphelper::containerToSequence( aPropertiesForStorage ))
+            };
             xStorage.set(
                 xStorageFact->createInstanceWithArguments( aStorageArgs ), uno::UNO_QUERY_THROW );
         }
@@ -301,8 +301,7 @@ ErrCode XMLFilter::impl_Import(
         uno::Reference<lang::XMultiServiceFactory> xServiceFactory(xFactory, uno::UNO_QUERY);
         if (xServiceFactory.is())
         {
-            uno::Sequence<uno::Any> aArgs(1);
-            aArgs[0] <<= xStorage;
+            uno::Sequence<uno::Any> aArgs{ uno::Any(xStorage) };
             xGraphicStorageHandler.set(
                 xServiceFactory->createInstanceWithArguments(
                     "com.sun.star.comp.Svx.GraphicImportHelper", aArgs), uno::UNO_QUERY);
@@ -430,12 +429,13 @@ ErrCode XMLFilter::impl_ImportStream(
                     nArgs++;
 
                 uno::Sequence< uno::Any > aFilterCompArgs( nArgs );
+                auto aFilterCompArgsRange = asNonConstRange(aFilterCompArgs);
 
                 nArgs = 0;
                 if( xGraphicStorageHandler.is())
-                    aFilterCompArgs[nArgs++] <<= xGraphicStorageHandler;
+                    aFilterCompArgsRange[nArgs++] <<= xGraphicStorageHandler;
                 if( xImportInfo.is())
-                    aFilterCompArgs[ nArgs++ ] <<= xImportInfo;
+                    aFilterCompArgsRange[ nArgs++ ] <<= xImportInfo;
 
                 // the underlying SvXMLImport implements XFastParser, XImporter, XFastDocumentHandler
                 Reference< XInterface  > xFilter =
@@ -449,14 +449,10 @@ ErrCode XMLFilter::impl_ImportStream(
                 {
                     try
                     {
-                        uno::Sequence< uno::Any > aArgs(2);
-                        beans::NamedValue aValue;
-                        aValue.Name = "DocumentHandler";
-                        aValue.Value <<= xFilter;
-                        aArgs[0] <<= aValue;
-                        aValue.Name = "Model";
-                        aValue.Value <<= m_xTargetDoc;
-                        aArgs[1] <<= aValue;
+                        uno::Sequence< uno::Any > aArgs{
+                            uno::Any(beans::NamedValue("DocumentHandler", uno::Any(xFilter))),
+                            uno::Any(beans::NamedValue("Model", uno::Any(m_xTargetDoc)))
+                        };
 
                         xFilter = xFactory->createInstanceWithArgumentsAndContext(m_sDocumentHandler,aArgs,m_xContext);
                     }
@@ -556,14 +552,10 @@ ErrCode XMLFilter::impl_Export(
         {
             try
             {
-                uno::Sequence< uno::Any > aArgs(2);
-                beans::NamedValue aValue;
-                aValue.Name = "DocumentHandler";
-                aValue.Value <<= xDocHandler;
-                aArgs[0] <<= aValue;
-                aValue.Name = "Model";
-                aValue.Value <<= xDocumentComp;
-                aArgs[1] <<= aValue;
+                uno::Sequence< uno::Any > aArgs{
+                    uno::Any(beans::NamedValue("DocumentHandler", uno::Any(xDocHandler))),
+                    uno::Any(beans::NamedValue("Model", uno::Any(xDocumentComp)))
+                };
 
                 xDocHandler.set(xServiceFactory->createInstanceWithArguments(m_sDocumentHandler,aArgs), uno::UNO_QUERY );
                 xSaxWriter.set(xDocHandler,uno::UNO_QUERY);
@@ -602,11 +594,12 @@ ErrCode XMLFilter::impl_Export(
 
         uno::Sequence< uno::Any > aFilterProperties( nArgs );
         {
+            auto pFilterProperties = aFilterProperties.getArray();
             nArgs = 0;
-            aFilterProperties[ nArgs++ ] <<= xInfoSet;
-            aFilterProperties[ nArgs++ ] <<= xDocHandler;
+            pFilterProperties[ nArgs++ ] <<= xInfoSet;
+            pFilterProperties[ nArgs++ ] <<= xDocHandler;
             if( xGraphicStorageHandler.is())
-                aFilterProperties[ nArgs++ ] <<= xGraphicStorageHandler;
+                pFilterProperties[ nArgs++ ] <<= xGraphicStorageHandler;
         }
 
         // export meta information

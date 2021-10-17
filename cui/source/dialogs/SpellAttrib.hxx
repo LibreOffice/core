@@ -86,16 +86,15 @@ struct SpellErrorDescription
 
     css::uno::Sequence<css::uno::Any> toSequence() const
     {
-        css::uno::Sequence<css::uno::Any> aEntries(9);
-        aEntries[0] <<= bIsGrammarError;
-        aEntries[1] <<= sErrorText;
-        aEntries[2] <<= sDialogTitle;
-        aEntries[3] <<= sExplanation;
-        aEntries[4] <<= sExplanationURL;
-        aEntries[5] <<= aLocale;
-        aEntries[6] <<= xGrammarChecker;
-        aEntries[7] <<= aSuggestions;
-        aEntries[8] <<= sRuleId;
+        css::uno::Sequence<css::uno::Any> aEntries{ css::uno::Any(bIsGrammarError),
+                                                    css::uno::Any(sErrorText),
+                                                    css::uno::Any(sDialogTitle),
+                                                    css::uno::Any(sExplanation),
+                                                    css::uno::Any(sExplanationURL),
+                                                    css::uno::Any(aLocale),
+                                                    css::uno::Any(xGrammarChecker),
+                                                    css::uno::Any(aSuggestions),
+                                                    css::uno::Any(sRuleId) };
         return aEntries;
     }
 

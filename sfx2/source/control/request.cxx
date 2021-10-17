@@ -355,7 +355,7 @@ void SfxRequest_Impl::Record
                 aStatement.aArgs[0].Value >>= aStr;
                 rArgs[0].Value >>= aNew;
                 aStr += aNew;
-                aStatement.aArgs[0].Value <<= aStr;
+                aStatement.aArgs.getArray()[0].Value <<= aStr;
                 aElement <<= aStatement;
                 xReplace->replaceByIndex( nCount-1, aElement );
                 return;

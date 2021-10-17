@@ -1279,9 +1279,7 @@ void cppuhelper::ServiceManager::removeVetoableChangeListener(
 
 css::uno::Sequence< css::beans::Property >
 cppuhelper::ServiceManager::getProperties() {
-    css::uno::Sequence< css::beans::Property > props(1);
-    props[0] = getDefaultContextProperty();
-    return props;
+    return { getDefaultContextProperty() };
 }
 
 css::beans::Property cppuhelper::ServiceManager::getPropertyByName(

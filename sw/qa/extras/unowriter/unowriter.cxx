@@ -668,11 +668,10 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSetPagePrintSettings)
     uno::Reference<text::XPagePrintable> xPagePrintable(mxComponent, uno::UNO_QUERY);
 
     // set some stuff, try to get it back
-    uno::Sequence<beans::PropertyValue> aProps(2);
-    aProps[0].Name = "PageColumns";
-    aProps[0].Value <<= sal_Int16(2);
-    aProps[1].Name = "IsLandscape";
-    aProps[1].Value <<= true;
+    uno::Sequence<beans::PropertyValue> aProps{
+        comphelper::makePropertyValue("PageColumns", sal_Int16(2)),
+        comphelper::makePropertyValue("IsLandscape", true)
+    };
 
     xPagePrintable->setPagePrintSettings(aProps);
     const comphelper::SequenceAsHashMap aMap(xPagePrintable->getPagePrintSettings());

@@ -947,6 +947,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
     uno::Sequence< uno::Any > aRet( rValues.getLength() );
+    auto aRetRange = asNonConstRange(aRet);
     uno::Sequence< beans::PropertyChangeEvent > aChanges( rValues.getLength() );
     sal_Int32 nChanged = 0;
 
@@ -975,28 +976,28 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         if ( rValue.Name == "ContentType" )
         {
             // Read-only property!
-            aRet[ n ] <<= lang::IllegalAccessException(
+            aRetRange[ n ] <<= lang::IllegalAccessException(
                             "Property is read-only!",
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name == "IsDocument" )
         {
             // Read-only property!
-            aRet[ n ] <<= lang::IllegalAccessException(
+            aRetRange[ n ] <<= lang::IllegalAccessException(
                             "Property is read-only!",
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name == "IsFolder" )
         {
             // Read-only property!
-            aRet[ n ] <<= lang::IllegalAccessException(
+            aRetRange[ n ] <<= lang::IllegalAccessException(
                             "Property is read-only!",
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name == "CreatableContentsInfo" )
         {
             // Read-only property!
-            aRet[ n ] <<= lang::IllegalAccessException(
+            aRetRange[ n ] <<= lang::IllegalAccessException(
                             "Property is read-only!",
                             static_cast< cppu::OWeakObject * >( this ) );
         }
@@ -1005,7 +1006,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             if ( m_aUri.isRootFolder() )
             {
                 // Read-only property!
-                aRet[ n ] <<= lang::IllegalAccessException(
+                aRetRange[ n ] <<= lang::IllegalAccessException(
                                 "Property is read-only!",
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
@@ -1033,7 +1034,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                     }
                     else
                     {
-                        aRet[ n ] <<=
+                        aRetRange[ n ] <<=
                             lang::IllegalArgumentException(
                                 "Empty title not allowed!",
                                 static_cast< cppu::OWeakObject * >( this ),
@@ -1042,7 +1043,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 }
                 else
                 {
-                    aRet[ n ] <<=
+                    aRetRange[ n ] <<=
                         beans::IllegalTypeException(
                             "Property value has wrong type!",
                             static_cast< cppu::OWeakObject * >( this ) );
@@ -1068,7 +1069,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             }
             else
             {
-                aRet[ n ] <<= beans::IllegalTypeException(
+                aRetRange[ n ] <<= beans::IllegalTypeException(
                                 "Property value has wrong type!",
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
@@ -1076,7 +1077,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         else if ( rValue.Name == "Size" )
         {
             // Read-only property!
-            aRet[ n ] <<= lang::IllegalAccessException(
+            aRetRange[ n ] <<= lang::IllegalAccessException(
                             "Property is read-only!",
                             static_cast< cppu::OWeakObject * >( this ) );
         }
@@ -1102,14 +1103,14 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 }
                 else
                 {
-                    aRet[ n ] <<= beans::IllegalTypeException(
+                    aRetRange[ n ] <<= beans::IllegalTypeException(
                                 "Property value has wrong type!",
                                 static_cast< cppu::OWeakObject * >( this ) );
                 }
             }
             else
             {
-                aRet[ n ] <<= beans::UnknownPropertyException(
+                aRetRange[ n ] <<= beans::UnknownPropertyException(
                                 "Compressed only supported by streams!",
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
@@ -1136,14 +1137,14 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 }
                 else
                 {
-                    aRet[ n ] <<= beans::IllegalTypeException(
+                    aRetRange[ n ] <<= beans::IllegalTypeException(
                                 "Property value has wrong type!",
                                 static_cast< cppu::OWeakObject * >( this ) );
                 }
             }
             else
             {
-                aRet[ n ] <<= beans::UnknownPropertyException(
+                aRetRange[ n ] <<= beans::UnknownPropertyException(
                                 "Encrypted only supported by streams!",
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
@@ -1151,7 +1152,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         else if ( rValue.Name == "HasEncryptedEntries" )
         {
             // Read-only property!
-            aRet[ n ] <<= lang::IllegalAccessException(
+            aRetRange[ n ] <<= lang::IllegalAccessException(
                             "Property is read-only!",
                             static_cast< cppu::OWeakObject * >( this ) );
         }
@@ -1181,14 +1182,14 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 }
                 else
                 {
-                    aRet[ n ] <<= beans::IllegalTypeException(
+                    aRetRange[ n ] <<= beans::IllegalTypeException(
                                 "Property value has wrong type!",
                                 static_cast< cppu::OWeakObject * >( this ) );
                 }
             }
             else
             {
-                aRet[ n ] <<= beans::UnknownPropertyException(
+                aRetRange[ n ] <<= beans::UnknownPropertyException(
                         "EncryptionKey not supported by non-root folder!",
                         static_cast< cppu::OWeakObject * >( this ) );
             }
@@ -1224,24 +1225,24 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 }
                 catch ( beans::UnknownPropertyException const & e )
                 {
-                    aRet[ n ] <<= e;
+                    aRetRange[ n ] <<= e;
                 }
                 catch ( lang::WrappedTargetException const & e )
                 {
-                    aRet[ n ] <<= e;
+                    aRetRange[ n ] <<= e;
                 }
                 catch ( beans::PropertyVetoException const & e )
                 {
-                    aRet[ n ] <<= e;
+                    aRetRange[ n ] <<= e;
                 }
                 catch ( lang::IllegalArgumentException const & e )
                 {
-                    aRet[ n ] <<= e;
+                    aRetRange[ n ] <<= e;
                 }
             }
             else
             {
-                aRet[ n ] <<= uno::Exception(
+                aRetRange[ n ] <<= uno::Exception(
                                 "No property set for storing the value!",
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
@@ -1274,7 +1275,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             aNewTitle.clear();
 
             // Set error .
-            aRet[ nTitlePos ] <<= uno::Exception(
+            aRetRange[ nTitlePos ] <<= uno::Exception(
                     "Exchange failed!",
                     static_cast< cppu::OWeakObject * >( this ) );
         }
@@ -2372,8 +2373,7 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
                 return false;
             }
 
-            uno::Sequence< uno::Any > aArgs( 1 );
-            aArgs[ 0 ] <<= isFolder();
+            uno::Sequence< uno::Any > aArgs{ uno::Any(isFolder()) };
 
             uno::Reference< uno::XInterface > xNew
                 = xFac->createInstanceWithArguments( aArgs );

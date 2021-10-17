@@ -1227,13 +1227,14 @@ Sequence< Any > SAL_CALL SbaXFormAdapter::getPropertyValues(const Sequence< OUSt
         return Sequence< Any>(aPropertyNames.getLength());
 
     Sequence< Any> aReturn = xSet->getPropertyValues(aPropertyNames);
+    auto aReturnRange = asNonConstRange(aReturn);
 
     // search for (and fake) the NAME property
     OSL_ENSURE(aReturn.getLength() == aPropertyNames.getLength(), "SAL_CALL SbaXFormAdapter::getPropertyValues : the main form returned an invalid-length sequence !");
     for (sal_Int32 i=0; i<aPropertyNames.getLength(); ++i)
         if (aPropertyNames[i] == PROPERTY_NAME)
         {
-            aReturn[i] <<= m_sName;
+            aReturnRange[i] <<= m_sName;
             break;
         }
 

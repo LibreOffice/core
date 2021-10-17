@@ -275,19 +275,18 @@ ActiveMSPList::createNonDocMSPs()
 {
     // do creation of user and share MSPs here
     OUString serviceName("com.sun.star.script.provider.MasterScriptProvider");
-    Sequence< Any > args(1);
 
-    args[ 0 ] <<= userDirString;
+    Sequence< Any > args{ Any(userDirString) };
     Reference< provider::XScriptProvider > userMsp( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
     // should check if provider reference is valid
     m_hMsps[ userDirString ] = userMsp;
 
-    args[ 0 ] <<= shareDirString;
+    args = { Any(shareDirString) };
     Reference< provider::XScriptProvider > shareMsp( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
     // should check if provider reference is valid
     m_hMsps[ shareDirString ] = shareMsp;
 
-    args[ 0 ] <<= bundledDirString;
+    args = { Any(bundledDirString) };
     Reference< provider::XScriptProvider > bundledMsp( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
     // should check if provider reference is valid
     m_hMsps[ bundledDirString ] = bundledMsp;

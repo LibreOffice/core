@@ -44,25 +44,26 @@ Sequence< double > SAL_CALL Linear3DTransformation::transform(
     if(m_bSwapXAndY)
         std::swap(fX,fY);
     Sequence< double > aNewVec(3);
+    auto pNewVec = aNewVec.getArray();
     double fZwi;
 
     fZwi = m_Matrix.Line1.Column1 * fX
          + m_Matrix.Line1.Column2 * fY
          + m_Matrix.Line1.Column3 * fZ
          + m_Matrix.Line1.Column4;
-    aNewVec[0] = fZwi;
+    pNewVec[0] = fZwi;
 
     fZwi = m_Matrix.Line2.Column1 * fX
          + m_Matrix.Line2.Column2 * fY
          + m_Matrix.Line2.Column3 * fZ
          + m_Matrix.Line2.Column4;
-    aNewVec[1] = fZwi;
+    pNewVec[1] = fZwi;
 
     fZwi = m_Matrix.Line3.Column1 * fX
          + m_Matrix.Line3.Column2 * fY
          + m_Matrix.Line3.Column3 * fZ
          + m_Matrix.Line3.Column4;
-    aNewVec[2] = fZwi;
+    pNewVec[2] = fZwi;
 
     fZwi = m_Matrix.Line4.Column1 * fX
          + m_Matrix.Line4.Column2 * fY
@@ -70,9 +71,9 @@ Sequence< double > SAL_CALL Linear3DTransformation::transform(
          + m_Matrix.Line4.Column4;
     if(fZwi != 1.0 && fZwi != 0.0)
     {
-        aNewVec[0] /= fZwi;
-        aNewVec[1] /= fZwi;
-        aNewVec[2] /= fZwi;
+        pNewVec[0] /= fZwi;
+        pNewVec[1] /= fZwi;
+        pNewVec[2] /= fZwi;
     }
     return aNewVec;
 }

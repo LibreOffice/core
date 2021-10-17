@@ -136,13 +136,11 @@ public:
         {
             assert(!sTypeName.isEmpty());
 
-            if (location == nLength)
-            {
-                Descriptor.realloc(nLength + 1);
-                Descriptor[location].Name = "TypeName";
-            }
+            auto pDescriptor
+                = (location == nLength) ? Descriptor.realloc(nLength + 1) : Descriptor.getArray();
 
-            Descriptor[location].Value <<= sTypeName;
+            pDescriptor[location].Name = "TypeName";
+            pDescriptor[location].Value <<= sTypeName;
         }
 
         return sTypeName;

@@ -26,6 +26,7 @@
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <com/sun/star/frame/ControlCommand.hpp>
 
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/weld.hxx>
@@ -150,11 +151,9 @@ void SAL_CALL GenericToolbarController::execute( sal_Int16 KeyModifier )
         return;
 
     css::util::URL aTargetURL;
-    Sequence<PropertyValue>   aArgs( 1 );
 
     // Add key modifier to argument list
-    aArgs[0].Name  = "KeyModifier";
-    aArgs[0].Value <<= KeyModifier;
+    Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue("KeyModifier", KeyModifier) };
 
     aTargetURL.Complete = aCommandURL;
     if ( m_xUrlTransformer.is() )

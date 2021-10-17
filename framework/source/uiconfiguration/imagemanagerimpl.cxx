@@ -715,6 +715,7 @@ Sequence< uno::Reference< XGraphic > > ImageManagerImpl::getImages(
     // 1. user image list (read/write)
     // 2. module image list (read)
     // 3. global image list (read)
+    auto aGraphSeqRange = asNonConstRange(aGraphSeq);
     sal_Int32 n = 0;
     for ( const OUString& rURL : aCommandURLSequence )
     {
@@ -726,7 +727,7 @@ Sequence< uno::Reference< XGraphic > > ImageManagerImpl::getImages(
                 aImage = rGlobalImageList->getImageFromCommandURL( nIndex, rURL );
         }
 
-        aGraphSeq[n++] = GetXGraphic(aImage);
+        aGraphSeqRange[n++] = GetXGraphic(aImage);
     }
 
     return aGraphSeq;

@@ -269,14 +269,12 @@ constexpr OStringLiteral gaClosingCData( "]]>" );
 InputStream::InputStream( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& rxInStrm ) :
     // use single-byte ISO-8859-1 encoding which maps all byte characters to the first 256 Unicode characters
     mxTextStrm( TextInputStream::createXTextInputStream( rxContext, rxInStrm, RTL_TEXTENCODING_ISO_8859_1 ) ),
-    maOpeningBracket( 1 ),
-    maClosingBracket( 1 ),
+    maOpeningBracket{ '<' },
+    maClosingBracket{ '>' },
     mnBufferPos( 0 )
 {
     if (!mxTextStrm.is())
         throw IOException();
-    maOpeningBracket[ 0 ] = '<';
-    maClosingBracket[ 0 ] = '>';
 }
 
 InputStream::~InputStream()

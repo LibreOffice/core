@@ -185,9 +185,10 @@ MultiPropertySetHandler::MultiPropertySetHandler (css::uno::Reference<
 bool    MultiPropertySetHandler::GetProperties()
 {
     css::uno::Sequence< OUString> aNameList (aPropertyList.size());
+    auto aNameListRange = asNonConstRange(aNameList);
     int i = 0;
     for (const auto& rProperty : aPropertyList)
-        aNameList[i++] = rProperty.second->msName;
+        aNameListRange[i++] = rProperty.second->msName;
     if ( ! MultiGet(aNameList))
         if ( ! SingleGet(aNameList))
             return false;

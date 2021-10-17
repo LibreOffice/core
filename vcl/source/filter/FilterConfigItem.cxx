@@ -21,6 +21,7 @@
 
 #include <unotools/configmgr.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -51,12 +52,9 @@ static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory > const & rXCfgP
             ++nIdx;
 
         // creation arguments: nodepath
-        PropertyValue aPathArgument;
-        aPathArgument.Name = "nodepath";
-        aPathArgument.Value <<= rTree.getToken(0, '/', nIdx);
-
-        Sequence< Any > aArguments( 1 );
-        aArguments[ 0 ] <<= aPathArgument;
+        PropertyValue aPathArgument = comphelper::makePropertyValue("nodepath",
+                                                                    rTree.getToken(0, '/', nIdx));
+        Sequence< Any > aArguments{ Any(aPathArgument) };
 
         Reference< XInterface > xReadAccess;
         try
@@ -113,8 +111,7 @@ void FilterConfigItem::ImpInitTree( std::u16string_view rSubTree )
     aPathArgument.Name = "nodepath";
     aPathArgument.Value <<= sTree;
 
-    Sequence< Any > aArguments( 1 );
-    aArguments[ 0 ] <<= aPathArgument;
+    Sequence< Any > aArguments{ Any(aPathArgument) };
 
     try
     {
@@ -239,10 +236,9 @@ bool FilterConfigItem::WritePropertyValue( Sequence< PropertyValue >& rPropSeq, 
             [&rPropValue](const PropertyValue& rProp) { return rProp.Name == rPropValue.Name; });
         sal_Int32 i = std::distance(std::cbegin(rPropSeq), pProp);
         sal_Int32 nCount = rPropSeq.getLength();
-        if ( i == nCount )
-            rPropSeq.realloc( ++nCount );
+        auto pPropSeq = ( i == nCount ) ? rPropSeq.realloc( ++nCount ) : rPropSeq.getArray();
 
-        rPropSeq[ i ] = rPropValue;
+        pPropSeq[ i ] = rPropValue;
 
         bRet = true;
     }

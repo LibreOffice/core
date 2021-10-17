@@ -45,9 +45,7 @@ namespace dxcanvas
     {
         try
         {
-            uno::Sequence< OUString > aName { "DeviceDenylist" };
-
-            uno::Sequence< uno::Any > aProps( GetProperties( aName ));
+            uno::Sequence< uno::Any > aProps( GetProperties( { "DeviceDenylist" } ));
             uno::Sequence< sal_Int32 > aValues;
 
             if( aProps.getLength() > 0 &&
@@ -70,13 +68,11 @@ namespace dxcanvas
                 }
             }
 
-            aName[0] = "DenylistCurrentDevice";
-            aProps = GetProperties( aName );
+            aProps = GetProperties( { "DenylistCurrentDevice" } );
             if( aProps.getLength() > 0 )
                 aProps[0] >>= mbDenylistCurrentDevice;
 
-            aName[0] = "MaxTextureSize";
-            aProps = GetProperties( aName );
+            aProps = GetProperties( { "MaxTextureSize" } );
             if( aProps.getLength() > 0 )
                 maMaxTextureSize = aProps[0].get<sal_Int32>();
             else

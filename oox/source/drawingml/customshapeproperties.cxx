@@ -33,6 +33,8 @@
 #include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
 
+#include <algorithm>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -187,6 +189,7 @@ void CustomShapeProperties::pushToPropSet(
                         uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
                         if ( rGeoProp.Value >>= aAdjustmentSeq )
                         {
+                            auto aAdjustmentSeqRange = asNonConstRange(aAdjustmentSeq);
                             int nIndex=0;
                             for (auto const& adjustmentGuide : maAdjustmentGuideList)
                             {
@@ -199,7 +202,7 @@ void CustomShapeProperties::pushToPropSet(
                                         aAdjustmentVal.Value <<= adjustmentGuide.maFormula.toInt32();
                                         aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
                                         aAdjustmentVal.Name = adjustmentGuide.maName;
-                                        aAdjustmentSeq[ nAdjustmentIndex ] = aAdjustmentVal;
+                                        aAdjustmentSeqRange[ nAdjustmentIndex ] = aAdjustmentVal;
                                     }
                                 } else if ( aAdjustmentSeq.hasElements() ) {
                                     EnhancedCustomShapeAdjustmentValue aAdjustmentVal;
@@ -208,7 +211,7 @@ void CustomShapeProperties::pushToPropSet(
                                     aAdjustmentVal.Name = adjustmentGuide.maName;
                                     if (nIndex < aAdjustmentSeq.getLength())
                                     {
-                                        aAdjustmentSeq[nIndex] = aAdjustmentVal;
+                                        aAdjustmentSeqRange[nIndex] = aAdjustmentVal;
                                         ++nIndex;
                                     }
                                 }
@@ -246,13 +249,14 @@ void CustomShapeProperties::pushToPropSet(
         aPropertyMap.setProperty( PROP_ViewBox, aViewBox);
 
         Sequence< EnhancedCustomShapeAdjustmentValue > aAdjustmentValues( maAdjustmentGuideList.size() );
+        auto aAdjustmentValuesRange = asNonConstRange(aAdjustmentValues);
         for ( std::vector<CustomShapeGuide>::size_type i = 0; i < maAdjustmentGuideList.size(); i++ )
         {
             EnhancedCustomShapeAdjustmentValue aAdjustmentVal;
             aAdjustmentVal.Value <<= maAdjustmentGuideList[ i ].maFormula.toInt32();
             aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
             aAdjustmentVal.Name = maAdjustmentGuideList[ i ].maName;
-            aAdjustmentValues[ i ] = aAdjustmentVal;
+            aAdjustmentValuesRange[ i ] = aAdjustmentVal;
         }
         aPropertyMap.setProperty( PROP_AdjustmentValues, aAdjustmentValues);
 
@@ -261,11 +265,10 @@ void CustomShapeProperties::pushToPropSet(
         aPath.setProperty( PROP_Segments, comphelper::containerToSequence(maSegments) );
 
         if ( maTextRect.has() ) {
-            Sequence< EnhancedCustomShapeTextFrame > aTextFrames(1);
-            aTextFrames[0].TopLeft.First = maTextRect.get().l;
-            aTextFrames[0].TopLeft.Second = maTextRect.get().t;
-            aTextFrames[0].BottomRight.First = maTextRect.get().r;
-            aTextFrames[0].BottomRight.Second = maTextRect.get().b;
+            Sequence< EnhancedCustomShapeTextFrame > aTextFrames{
+                { /* tl */ { maTextRect.get().l, maTextRect.get().t },
+                  /* br */ { maTextRect.get().r, maTextRect.get().b } }
+            };
             aPath.setProperty( PROP_TextFrames, aTextFrames);
         }
 
@@ -274,10 +277,11 @@ void CustomShapeProperties::pushToPropSet(
             nParameterPairs += i.parameter.size();
 
         Sequence< EnhancedCustomShapeParameterPair > aParameterPairs( nParameterPairs );
+        auto aParameterPairsRange = asNonConstRange(aParameterPairs);
         sal_uInt32 k = 0;
         for ( auto const & i: maPath2DList )
             for ( auto const & j: i.parameter )
-                aParameterPairs[ k++ ] = j;
+                aParameterPairsRange[ k++ ] = j;
         aPath.setProperty( PROP_Coordinates, aParameterPairs);
 
         if ( !maPath2DList.empty() )
@@ -293,15 +297,13 @@ void CustomShapeProperties::pushToPropSet(
 
             if ( !bAllZero ) {
                 Sequence< awt::Size > aSubViewSize( maPath2DList.size() );
-                for ( std::vector<Path2D>::size_type i=0; i < maPath2DList.size(); i++ )
-                {
-                    aSubViewSize[i].Width = static_cast< sal_Int32 >( maPath2DList[i].w );
-                    aSubViewSize[i].Height = static_cast< sal_Int32 >( maPath2DList[i].h );
-                    SAL_INFO(
-                        "oox.cscode",
-                        "set subpath " << i << " size: " << maPath2DList[i].w
-                            << " x " << maPath2DList[i].h);
-                }
+                std::transform(maPath2DList.begin(), maPath2DList.end(), aSubViewSize.getArray(),
+                               [](const auto& p2d)
+                               {
+                                   SAL_INFO("oox.cscode",
+                                            "set subpath; size: " << p2d.w << " x " << p2d.h);
+                                   return awt::Size(p2d.w, p2d.h);
+                               });
                 aPath.setProperty( PROP_SubViewSize, aSubViewSize);
             }
         }
@@ -310,11 +312,12 @@ void CustomShapeProperties::pushToPropSet(
         aPropertyMap.setProperty( PROP_Path, aPathSequence);
 
         Sequence< OUString > aEquations( maGuideList.size() );
-        for ( std::vector<CustomShapeGuide>::size_type i = 0; i < maGuideList.size(); i++ )
-            aEquations[ i ] = maGuideList[ i ].maFormula;
+        std::transform(maGuideList.begin(), maGuideList.end(), aEquations.getArray(),
+                       [](const auto& g) { return g.maFormula; });
         aPropertyMap.setProperty( PROP_Equations, aEquations);
 
         Sequence< PropertyValues > aHandles( maAdjustHandleList.size() );
+        auto aHandlesRange = asNonConstRange(aHandles);
         for ( std::vector<AdjustHandle>::size_type i = 0; i < maAdjustHandleList.size(); i++ )
         {
             PropertyMap aHandle;
@@ -383,7 +386,7 @@ void CustomShapeProperties::pushToPropSet(
                 if ( maAdjustHandleList[ i ].max2.has() )
                     aHandle.setProperty( PROP_RangeYMaximum, maAdjustHandleList[ i ].max2.get());
             }
-            aHandles[ i ] = aHandle.makePropertyValueSequence();
+            aHandlesRange[ i ] = aHandle.makePropertyValueSequence();
         }
         aPropertyMap.setProperty( PROP_Handles, aHandles);
 

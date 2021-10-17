@@ -330,9 +330,7 @@ void SAL_CALL UniversalContentBroker::initialize( const css::uno::Sequence< Any 
         }
         if (!aArguments.hasElements())
         {
-            m_aArguments.realloc(2);
-            m_aArguments[0] <<= OUString("Local");
-            m_aArguments[1] <<= OUString("Office");
+            m_aArguments = { Any(OUString("Local")), Any(OUString("Office")) };
         }
         else
         {

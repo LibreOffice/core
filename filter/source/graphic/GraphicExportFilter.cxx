@@ -203,7 +203,7 @@ bool GraphicExportFilter::filterExportShape(
     {
         if (aDescriptor[i].Name == "FilterName")
         {
-            aDescriptor[i].Value <<= maFilterExtension;
+            aDescriptor.getArray()[i].Value <<= maFilterExtension;
             break;
         }
     }

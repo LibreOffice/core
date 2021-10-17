@@ -606,13 +606,9 @@ void SplineCalculater::CalculateCubicSplines(
         }
 
         // fill result polygon with calculated values
-        rResult.SequenceX[nOuter].realloc( nMaxIndexPoints*nGranularity + 1);
-        rResult.SequenceY[nOuter].realloc( nMaxIndexPoints*nGranularity + 1);
-        rResult.SequenceZ[nOuter].realloc( nMaxIndexPoints*nGranularity + 1);
-
-        double* pNewX = rResult.SequenceX[nOuter].getArray();
-        double* pNewY = rResult.SequenceY[nOuter].getArray();
-        double* pNewZ = rResult.SequenceZ[nOuter].getArray();
+        double* pNewX = rResult.SequenceX.getArray()[nOuter].realloc( nMaxIndexPoints*nGranularity + 1);
+        double* pNewY = rResult.SequenceY.getArray()[nOuter].realloc( nMaxIndexPoints*nGranularity + 1);
+        double* pNewZ = rResult.SequenceZ.getArray()[nOuter].realloc( nMaxIndexPoints*nGranularity + 1);
 
         sal_uInt32 nNewPointIndex = 0; // Index in result points
 
@@ -852,12 +848,9 @@ void SplineCalculater::CalculateBSplines(
             // calculate the intermediate points according given resolution
             // using deBoor-Cox algorithm
             lcl_tSizeType nNewSize = nResolution * n + 1;
-            rResult.SequenceX[nOuter].realloc(nNewSize);
-            rResult.SequenceY[nOuter].realloc(nNewSize);
-            rResult.SequenceZ[nOuter].realloc(nNewSize);
-            double* pNewX = rResult.SequenceX[nOuter].getArray();
-            double* pNewY = rResult.SequenceY[nOuter].getArray();
-            double* pNewZ = rResult.SequenceZ[nOuter].getArray();
+            double* pNewX = rResult.SequenceX.getArray()[nOuter].realloc(nNewSize);
+            double* pNewY = rResult.SequenceY.getArray()[nOuter].realloc(nNewSize);
+            double* pNewZ = rResult.SequenceZ.getArray()[nOuter].realloc(nNewSize);
             pNewX[0] = aPointsIn[0].first;
             pNewY[0] = aPointsIn[0].second;
             pNewZ[0] = fZCoordinate; // Precondition: z-coordinates of all points of a series are equal

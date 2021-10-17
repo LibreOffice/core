@@ -964,7 +964,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             if ((xPropertySet->getPropertyValue("PolyPolygon") >>= aPolyPolySequence)
                 && aPolyPolySequence.hasElements())
             {
-                uno::Sequence<awt::Point>& rPolygon = aPolyPolySequence[0];
+                uno::Sequence<awt::Point>& rPolygon = aPolyPolySequence.getArray()[0];
                 basegfx::B2DPolygon aPoly;
                 for (const awt::Point& rPoint : std::as_const(rPolygon))
                 {
@@ -973,10 +973,11 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                 basegfx::B2DHomMatrix aTransformation;
                 aTransformation.scale(1.0, *obRelFlipV ? -1.0 : 1.0);
                 aPoly.transform(aTransformation);
+                auto pPolygon = rPolygon.getArray();
                 for (sal_Int32 i = 0; i < rPolygon.getLength(); ++i)
                 {
                     basegfx::B2DPoint aPoint(aPoly.getB2DPoint(i));
-                    rPolygon[i] = awt::Point(static_cast<sal_Int32>(aPoint.getX()),
+                    pPolygon[i] = awt::Point(static_cast<sal_Int32>(aPoint.getX()),
                                              static_cast<sal_Int32>(aPoint.getY()));
                 }
                 xPropertySet->setPropertyValue("PolyPolygon", uno::makeAny(aPolyPolySequence));

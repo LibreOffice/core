@@ -199,15 +199,15 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextAndDis
         // W3CPadding handling for encryption
         sal_Int32 nPaddingSize = m_nBlockSize - nSizeForPadding;
         sal_Int32 nOldLastBlockLen = m_aLastBlock.getLength();
-        m_aLastBlock.realloc( nOldLastBlockLen + nPaddingSize );
+        auto pLastBlock = m_aLastBlock.realloc( nOldLastBlockLen + nPaddingSize );
 
         if ( nPaddingSize > 1 )
         {
             rtlRandomPool aRandomPool = rtl_random_createPool();
-            rtl_random_getBytes( aRandomPool, m_aLastBlock.getArray() + nOldLastBlockLen, nPaddingSize - 1 );
+            rtl_random_getBytes( aRandomPool, pLastBlock + nOldLastBlockLen, nPaddingSize - 1 );
             rtl_random_destroyPool ( aRandomPool );
         }
-        m_aLastBlock[m_aLastBlock.getLength() - 1] = static_cast< sal_Int8 >( nPaddingSize );
+        pLastBlock[m_aLastBlock.getLength() - 1] = static_cast< sal_Int8 >( nPaddingSize );
     }
 
     // finally should the last block be smaller than two standard blocks

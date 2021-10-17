@@ -123,16 +123,13 @@ namespace
 
 Reference< XTabPageModel > SAL_CALL UnoControlTabPageContainerModel::createTabPage( ::sal_Int16 i_tabPageID )
 {
-    Sequence< Any > aInitArgs(1);
-    aInitArgs[0] <<= i_tabPageID;
+    Sequence< Any > aInitArgs{ Any(i_tabPageID) };
     return lcl_createTabPageModel( m_xContext, aInitArgs, this );
 }
 
 Reference< XTabPageModel > SAL_CALL UnoControlTabPageContainerModel::loadTabPage( ::sal_Int16 i_tabPageID, const OUString& i_resourceURL )
 {
-    Sequence< Any > aInitArgs(2);
-    aInitArgs[0] <<= i_tabPageID;
-    aInitArgs[1] <<= i_resourceURL;
+    Sequence< Any > aInitArgs{ Any(i_tabPageID), Any(i_resourceURL) };
     return lcl_createTabPageModel( m_xContext, aInitArgs, this );
 }
 

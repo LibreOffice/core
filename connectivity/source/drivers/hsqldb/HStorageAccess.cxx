@@ -26,6 +26,8 @@
 
 #include <string.h>
 
+#include <algorithm>
+
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::embed;
@@ -229,7 +231,7 @@ jint read_from_storage_stream_into_buffer( JNIEnv * env, jstring name, jstring k
 
         if (nBytesRead <= 0)
             return -1;
-        env->SetByteArrayRegion(buffer,off,nBytesRead,reinterpret_cast<jbyte*>(&aData[0]));
+        env->SetByteArrayRegion(buffer,off,nBytesRead,reinterpret_cast<const jbyte*>(&aData[0]));
 
         return nBytesRead;
     }
@@ -299,10 +301,8 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Nativ
         }
 
         Sequence< sal_Int32 > ch(4);
-        for(sal_Int32 i = 0;i < 4; ++i)
-        {
-            ch[i] = static_cast<unsigned char>(aData[i]);
-        }
+        std::transform(aData.begin(), aData.end(), ch.getArray(),
+                       [](auto c) { return static_cast<unsigned char>(c); });
 
         if ((ch[0] | ch[1] | ch[2] | ch[3]) < 0)
         {

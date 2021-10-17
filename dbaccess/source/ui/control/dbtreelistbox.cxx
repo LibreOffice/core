@@ -366,10 +366,11 @@ IMPL_LINK(TreeListBox, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (aResourceName.isEmpty())
         return false;
 
-    css::uno::Sequence< css::uno::Any > aArgs( 3 );
-    aArgs[0] <<= comphelper::makePropertyValue( "Value", aResourceName );
-    aArgs[1] <<= comphelper::makePropertyValue( "Frame", m_pContextMenuProvider->getCommandController().getXController()->getFrame() );
-    aArgs[2] <<= comphelper::makePropertyValue( "IsContextMenu", true );
+    css::uno::Sequence< css::uno::Any > aArgs{
+        css::uno::Any(comphelper::makePropertyValue( "Value", aResourceName )),
+        css::uno::Any(comphelper::makePropertyValue( "Frame", m_pContextMenuProvider->getCommandController().getXController()->getFrame() )),
+        css::uno::Any(comphelper::makePropertyValue( "IsContextMenu", true ))
+    };
 
     css::uno::Reference< css::uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
     css::uno::Reference<css::frame::XPopupMenuController> xMenuController

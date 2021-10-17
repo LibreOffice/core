@@ -69,8 +69,7 @@ transliteration_Numeric::transliterateBullet( const OUString& inStr, sal_Int32 s
     rtl_uString* pStr = rtl_uString_alloc(nCount);
     sal_Unicode* out = pStr->buffer;
 
-    if (pOffset)
-        pOffset->realloc(nCount);
+    auto ppOffset = pOffset ? pOffset->realloc(nCount) : nullptr;
 
     for (sal_Int32 i = startPos; i < endPos; i++) {
         if (isNumber(inStr[i]))
@@ -83,22 +82,22 @@ transliteration_Numeric::transliterateBullet( const OUString& inStr, sal_Int32 s
             }
         } else {
             if (number == 0) {
-                if (pOffset)
-                    (*pOffset)[j] = startPos;
+                if (ppOffset)
+                    ppOffset[j] = startPos;
                 out[j++] = NUMBER_ZERO;
             } else if (number > tableSize && !recycleSymbol) {
                 for (sal_Int32 k = startPos; k < i; k++) {
-                    if (pOffset)
-                        (*pOffset)[j] = k;
+                    if (ppOffset)
+                        ppOffset[j] = k;
                     out[j++] = inStr[k];
                 }
             } else if (number > 0) {
-                if (pOffset)
-                    (*pOffset)[j] = startPos;
+                if (ppOffset)
+                    ppOffset[j] = startPos;
                 out[j++] = table[--number % tableSize];
             } else if (i < endPos) {
-                if (pOffset)
-                    (*pOffset)[j] = i;
+                if (ppOffset)
+                    ppOffset[j] = i;
                 out[j++] = inStr[i];
             }
             number = -1;

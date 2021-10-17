@@ -39,6 +39,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <editeng/editstat.hxx>
@@ -62,6 +63,7 @@
 #include <officecfg/Office/Draw.hxx>
 #include <officecfg/Office/Impress.hxx>
 
+#include <algorithm>
 #include <memory>
 #include <vector>
 
@@ -387,8 +389,7 @@ namespace {
             uno::Sequence< OUString > aHelpIds, aWidgetIds;
             if( mbImpress )
             {
-                aHelpIds.realloc( 1 );
-                aHelpIds[0] = ".HelpID:vcl:PrintDialog:PageContentType:ListBox" ;
+                aHelpIds = { ".HelpID:vcl:PrintDialog:PageContentType:ListBox" };
                 AddDialogControl( vcl::PrinterOptionsHelper::setChoiceListControlOpt(
                                     "impressdocument",
                                     SdResId(STR_IMPRESS_PRINT_UI_CONTENT),
@@ -398,7 +399,7 @@ namespace {
                                     0)
                                 );
 
-                aHelpIds[0] = ".HelpID:vcl:PrintDialog:SlidesPerPage:ListBox" ;
+                aHelpIds = { ".HelpID:vcl:PrintDialog:SlidesPerPage:ListBox" };
                 vcl::PrinterOptionsHelper::UIControlOptions aContentOpt( "PageContentType" , 1 );
                 AddDialogControl( vcl::PrinterOptionsHelper::setChoiceListControlOpt(
                                     "slidesperpage",
@@ -412,7 +413,7 @@ namespace {
                                     )
                                 );
 
-                aHelpIds[0] = ".HelpID:vcl:PrintDialog:SlidesPerPageOrder:ListBox" ;
+                aHelpIds = { ".HelpID:vcl:PrintDialog:SlidesPerPageOrder:ListBox" };
                 vcl::PrinterOptionsHelper::UIControlOptions aSlidesPerPageOpt( "SlidesPerPage" , -1, true );
                 AddDialogControl( vcl::PrinterOptionsHelper::setChoiceListControlOpt(
                                     "slidesperpageorder",
@@ -477,14 +478,10 @@ namespace {
             AddDialogControl( vcl::PrinterOptionsHelper::setSubgroupControlOpt("color",
                                SdResId(STR_IMPRESS_PRINT_UI_QUALITY), "" ) );
 
-            aHelpIds.realloc( 3 );
-            aHelpIds[0] = ".HelpID:vcl:PrintDialog:Quality:RadioButton:0" ;
-            aHelpIds[1] = ".HelpID:vcl:PrintDialog:Quality:RadioButton:1" ;
-            aHelpIds[2] = ".HelpID:vcl:PrintDialog:Quality:RadioButton:2" ;
-            aWidgetIds.realloc( 3 );
-            aWidgetIds[0] = "originalcolors";
-            aWidgetIds[1] = "grayscale";
-            aWidgetIds[2] = "blackandwhite";
+            aHelpIds = { ".HelpID:vcl:PrintDialog:Quality:RadioButton:0",
+                         ".HelpID:vcl:PrintDialog:Quality:RadioButton:1",
+                         ".HelpID:vcl:PrintDialog:Quality:RadioButton:2" };
+            aWidgetIds = { "originalcolors", "grayscale", "blackandwhite" };
             AddDialogControl( vcl::PrinterOptionsHelper::setChoiceRadiosControlOpt(
                                 aWidgetIds,
                                 "",
@@ -499,16 +496,11 @@ namespace {
             AddDialogControl( vcl::PrinterOptionsHelper::setSubgroupControlOpt("pagesizes",
                                SdResId(STR_IMPRESS_PRINT_UI_PAGE_OPTIONS), "" ) );
 
-            aHelpIds.realloc( 4 );
-            aHelpIds[0] = ".HelpID:vcl:PrintDialog:PageOptions:RadioButton:0" ;
-            aHelpIds[1] = ".HelpID:vcl:PrintDialog:PageOptions:RadioButton:1" ;
-            aHelpIds[2] = ".HelpID:vcl:PrintDialog:PageOptions:RadioButton:2" ;
-            aHelpIds[3] = ".HelpID:vcl:PrintDialog:PageOptions:RadioButton:3" ;
-            aWidgetIds.realloc( 4 );
-            aWidgetIds[0] = "originalsize";
-            aWidgetIds[1] = "fittoprintable";
-            aWidgetIds[2] = "distributeonmultiple";
-            aWidgetIds[3] = "tilesheet";
+            aHelpIds = { ".HelpID:vcl:PrintDialog:PageOptions:RadioButton:0",
+                         ".HelpID:vcl:PrintDialog:PageOptions:RadioButton:1",
+                         ".HelpID:vcl:PrintDialog:PageOptions:RadioButton:2",
+                         ".HelpID:vcl:PrintDialog:PageOptions:RadioButton:3" };
+            aWidgetIds = { "originalsize", "fittoprintable", "distributeonmultiple", "tilesheet" };
 
             // Mutually exclusive page options settings are stored in separate config keys...
             // TODO: There is no config key to set the distributeonmultiple option as default
@@ -557,8 +549,7 @@ namespace {
             vcl::PrinterOptionsHelper::UIControlOptions
                 aIncludeOpt( "PrintProspect" , -1, false );
             aIncludeOpt.maGroupHint =  "LayoutPage" ;
-            aHelpIds.realloc( 1 );
-            aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintProspectInclude:ListBox" ;
+            aHelpIds = { ".HelpID:vcl:PrintDialog:PrintProspectInclude:ListBox" };
             AddDialogControl( vcl::PrinterOptionsHelper::setChoiceListControlOpt(
                                 "brochureinclude",
                                 SdResId(STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE),
@@ -629,14 +620,10 @@ namespace {
                                 nPrintRange ) );
 */
             OUString aPrintRangeName( "PrintContent" );
-            aHelpIds.realloc( 3 );
-            aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0" ;
-            aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1" ;
-            aHelpIds[2] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2" ;
-            aWidgetIds.realloc( 3 );
-            aWidgetIds[0] = "rbAllPages";
-            aWidgetIds[1] = "rbRangePages";
-            aWidgetIds[2] = "rbRangeSelection";
+            aHelpIds = { ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0",
+                         ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1",
+                         ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2" };
+            aWidgetIds = { "rbAllPages", "rbRangePages", "rbRangeSelection" };
 
             AddDialogControl( vcl::PrinterOptionsHelper::setChoiceRadiosControlOpt(aWidgetIds, OUString(),
                                 aHelpIds, aPrintRangeName,
@@ -665,8 +652,8 @@ namespace {
         static Sequence<OUString> CreateChoice(const TranslateId* pResourceId, size_t nCount)
         {
             Sequence<OUString> aChoices (nCount);
-            for (size_t nIndex=0; nIndex < nCount; ++nIndex)
-                aChoices[nIndex] = SdResId(pResourceId[nIndex]);
+            std::transform(pResourceId, pResourceId + nCount, aChoices.getArray(),
+                           [](const auto& id) { return SdResId(id); });
             return aChoices;
         }
 
@@ -1239,17 +1226,13 @@ public:
     */
     css::uno::Sequence<css::beans::PropertyValue> GetProperties () const
     {
-        css::uno::Sequence<css::beans::PropertyValue> aProperties (3);
-
-        aProperties[0].Name = "ExtraPrintUIOptions";
-        aProperties[0].Value <<= comphelper::containerToSequence(m_aUIProperties);
-
-        aProperties[1].Name = "PageSize";
-        aProperties[1].Value <<= maPrintSize;
-
-        // FIXME: is this always true ?
-        aProperties[2].Name = "PageIncludesNonprintableArea";
-        aProperties[2].Value <<= true;
+        css::uno::Sequence<css::beans::PropertyValue> aProperties{
+            comphelper::makePropertyValue("ExtraPrintUIOptions",
+                                          comphelper::containerToSequence(m_aUIProperties)),
+            comphelper::makePropertyValue("PageSize", maPrintSize),
+            // FIXME: is this always true ?
+            comphelper::makePropertyValue("PageIncludesNonprintableArea", true)
+        };
 
         return aProperties;
     }

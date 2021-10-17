@@ -960,8 +960,7 @@ bool T602ImportFilterDialog::OptionsDlg()
     any <<= ous;
     xPSetCodeLB->setPropertyValue("StringItemList", any);
 
-    Sequence < sal_Int16 > shr(1);
-    shr[0] = ini.forcecode ? static_cast<sal_Int16>(ini.xcode) + 1 : 0;
+    Sequence < sal_Int16 > shr{ static_cast<sal_Int16>(ini.forcecode ? ini.xcode + 1 : 0) };
     any <<= shr;
     xPSetCodeLB->setPropertyValue("SelectedItems", any);
 

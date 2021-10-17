@@ -93,8 +93,7 @@ void SAL_CALL Oxt_Handler::dispatchWithNotification( const css::util::URL& aURL,
 {
     osl::MutexGuard g(m_mutex);
 
-    css::uno::Sequence< css::uno::Any > lParams(1);
-    lParams[0] <<= aURL.Main;
+    css::uno::Sequence< css::uno::Any > lParams{ css::uno::Any(aURL.Main) };
 
     css::uno::Reference< css::uno::XInterface > xService = m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( "com.sun.star.deployment.ui.PackageManagerDialog", lParams, m_xContext );
     css::uno::Reference< css::task::XJobExecutor > xExecutable( xService, css::uno::UNO_QUERY );

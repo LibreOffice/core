@@ -75,6 +75,7 @@
 #include <unotools/tempfile.hxx>
 #include <comphelper/fileurl.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/simplefileaccessinteraction.hxx>
@@ -526,9 +527,10 @@ void SfxMedium::CheckFileDate( const util::DateTime& aInitDate )
     {
         ::rtl::Reference< ::ucbhelper::InteractionRequest > xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::makeAny(
             document::ChangedByOthersRequest() ) );
-        uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( 3 );
-        aContinuations[0] = new ::ucbhelper::InteractionAbort( xInteractionRequestImpl.get() );
-        aContinuations[1] = new ::ucbhelper::InteractionApprove( xInteractionRequestImpl.get() );
+        uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations{
+            new ::ucbhelper::InteractionAbort( xInteractionRequestImpl.get() ),
+            new ::ucbhelper::InteractionApprove( xInteractionRequestImpl.get() )
+        };
         xInteractionRequestImpl->setContinuations( aContinuations );
 
         xHandler->handle( xInteractionRequestImpl );
@@ -1096,14 +1098,15 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog(const LockFileEntr
         }
 
         uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations(nContinuations);
-        aContinuations[0] = new ::ucbhelper::InteractionAbort( xInteractionRequestImpl.get() );
-        aContinuations[1] = new ::ucbhelper::InteractionApprove( xInteractionRequestImpl.get() );
-        aContinuations[2] = new ::ucbhelper::InteractionDisapprove( xInteractionRequestImpl.get() );
+        auto pContinuations = aContinuations.getArray();
+        pContinuations[0] = new ::ucbhelper::InteractionAbort( xInteractionRequestImpl.get() );
+        pContinuations[1] = new ::ucbhelper::InteractionApprove( xInteractionRequestImpl.get() );
+        pContinuations[2] = new ::ucbhelper::InteractionDisapprove( xInteractionRequestImpl.get() );
         if (nContinuations > 3)
         {
             // We use InteractionRetry to reflect that user wants to
             // ignore the (stale?) alien lock file and open/overwrite the document
-            aContinuations[3] = new ::ucbhelper::InteractionRetry(xInteractionRequestImpl.get());
+            pContinuations[3] = new ::ucbhelper::InteractionRetry(xInteractionRequestImpl.get());
         }
         xInteractionRequestImpl->setContinuations( aContinuations );
 
@@ -1187,11 +1190,10 @@ bool SfxMedium::ShowReadOnlyOpenDialog()
                 OUString(), uno::Reference<uno::XInterface>(), aDocumentURL)));
         if (xInteractionRequestImpl != nullptr)
         {
-            sal_Int32 nContinuations = 2;
-            uno::Sequence<uno::Reference<task::XInteractionContinuation>> aContinuations(
-                nContinuations);
-            aContinuations[0] = new ::ucbhelper::InteractionAbort(xInteractionRequestImpl.get());
-            aContinuations[1] = new ::ucbhelper::InteractionApprove(xInteractionRequestImpl.get());
+            uno::Sequence<uno::Reference<task::XInteractionContinuation>> aContinuations{
+                new ::ucbhelper::InteractionAbort(xInteractionRequestImpl.get()),
+                new ::ucbhelper::InteractionApprove(xInteractionRequestImpl.get())
+            };
             xInteractionRequestImpl->setContinuations(aContinuations);
             xHandler->handle(xInteractionRequestImpl);
             ::rtl::Reference<::ucbhelper::InteractionContinuation> xSelected
@@ -1231,9 +1233,10 @@ bool SfxMedium::ShowLockFileProblemDialog(MessageDlg nWhichDlg)
                 break;
         }
 
-        uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations(2);
-        aContinuations[0] = new ::ucbhelper::InteractionAbort(xIgnoreRequestImpl.get());
-        aContinuations[1] = new ::ucbhelper::InteractionApprove(xIgnoreRequestImpl.get());
+        uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations{
+            new ::ucbhelper::InteractionAbort(xIgnoreRequestImpl.get()),
+            new ::ucbhelper::InteractionApprove(xIgnoreRequestImpl.get())
+        };
         xIgnoreRequestImpl->setContinuations(aContinuations);
 
         xHandler->handle(xIgnoreRequestImpl);
@@ -1693,6 +1696,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
         return pImpl->xStorage;
 
     uno::Sequence< uno::Any > aArgs( 2 );
+    auto pArgs = aArgs.getArray();
 
     // the medium should be retrieved before temporary file creation
     // to let the MediaDescriptor be filled with the streams
@@ -1720,44 +1724,43 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
         if( pxProgressItem && ( pxProgressItem->GetValue() >>= xStatusIndicator ) )
             xProgressHandler.set( new utl::ProgressHandlerWrap( xStatusIndicator ) );
 
-        uno::Sequence< beans::PropertyValue > aAddProps( 2 );
-        aAddProps[0].Name = "RepairPackage";
-        aAddProps[0].Value <<= true;
-        aAddProps[1].Name = "StatusIndicator";
-        aAddProps[1].Value <<= xProgressHandler;
+        uno::Sequence< beans::PropertyValue > aAddProps{
+            comphelper::makePropertyValue("RepairPackage", true),
+            comphelper::makePropertyValue("StatusIndicator", xProgressHandler)
+        };
 
         // the first arguments will be filled later
-        aArgs.realloc( 3 );
-        aArgs[2] <<= aAddProps;
+        pArgs = aArgs.realloc( 3 );
+        pArgs[2] <<= aAddProps;
     }
 
     if ( pImpl->xStream.is() )
     {
         // since the storage is based on temporary stream we open it always read-write
-        aArgs[0] <<= pImpl->xStream;
-        aArgs[1] <<= embed::ElementModes::READWRITE;
+        pArgs[0] <<= pImpl->xStream;
+        pArgs[1] <<= embed::ElementModes::READWRITE;
         pImpl->bStorageBasedOnInStream = true;
         if (pImpl->m_bDisableFileSync)
         {
             // Forward NoFileSync to the storage factory.
-            aArgs.realloc(3);
+            pArgs = aArgs.realloc(3); // ??? this may re-write the data added above for pRepairItem
             uno::Sequence<beans::PropertyValue> aProperties(
                 comphelper::InitPropertySequence({ { "NoFileSync", uno::makeAny(true) } }));
-            aArgs[2] <<= aProperties;
+            pArgs[2] <<= aProperties;
         }
     }
     else if ( pImpl->xInputStream.is() )
     {
         // since the storage is based on temporary stream we open it always read-write
-        aArgs[0] <<= pImpl->xInputStream;
-        aArgs[1] <<= embed::ElementModes::READ;
+        pArgs[0] <<= pImpl->xInputStream;
+        pArgs[1] <<= embed::ElementModes::READ;
         pImpl->bStorageBasedOnInStream = true;
     }
     else
     {
         CloseStreams_Impl();
-        aArgs[0] <<= pImpl->m_aName;
-        aArgs[1] <<= embed::ElementModes::READ;
+        pArgs[0] <<= pImpl->m_aName;
+        pArgs[1] <<= embed::ElementModes::READ;
         pImpl->bStorageBasedOnInStream = false;
     }
 
@@ -1806,7 +1809,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
             else // nVersion > 0; pVersion->GetValue() != 0 was the condition to this block
                 nVersion--;
 
-            util::RevisionTag& rTag = pImpl->aVersions[nVersion];
+            const util::RevisionTag& rTag = pImpl->aVersions[nVersion];
             {
                 // Open SubStorage for all versions
                 uno::Reference < embed::XStorage > xSub = pImpl->xStorage->openStorageElement( "Versions",
@@ -3713,9 +3716,9 @@ void SfxMedium::AddVersion_Impl( util::RevisionTag& rRevision )
             break;
 
     OUString aRevName = "Version" + OUString::number( nKey + 1 );
-    pImpl->aVersions.realloc( nLength+1 );
+    auto pVersions = pImpl->aVersions.realloc( nLength+1 );
     rRevision.Identifier = aRevName;
-    pImpl->aVersions[nLength] = rRevision;
+    pVersions[nLength] = rRevision;
 }
 
 void SfxMedium::RemoveVersion_Impl( const OUString& rName )
@@ -4348,14 +4351,15 @@ bool SfxMedium::CallApproveHandler(const uno::Reference< task::XInteractionHandl
         try
         {
             uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( bAllowAbort ? 2 : 1 );
+            auto pContinuations = aContinuations.getArray();
 
             ::rtl::Reference< ::comphelper::OInteractionApprove > pApprove( new ::comphelper::OInteractionApprove );
-            aContinuations[ 0 ] = pApprove.get();
+            pContinuations[ 0 ] = pApprove.get();
 
             if ( bAllowAbort )
             {
                 ::rtl::Reference< ::comphelper::OInteractionAbort > pAbort( new ::comphelper::OInteractionAbort );
-                aContinuations[ 1 ] = pAbort.get();
+                pContinuations[ 1 ] = pAbort.get();
             }
 
             xHandler->handle(::framework::InteractionRequest::CreateRequest(rRequest, aContinuations));
@@ -4620,11 +4624,10 @@ IMPL_STATIC_LINK(SfxMedium, ShowReloadEditableDialog, void*, p, void)
                 OUString(), uno::Reference<uno::XInterface>(), aDocumentURL)));
         if (xInteractionRequestImpl != nullptr)
         {
-            sal_Int32 nContinuations = 2;
-            uno::Sequence<uno::Reference<task::XInteractionContinuation>> aContinuations(
-                nContinuations);
-            aContinuations[0] = new ::ucbhelper::InteractionAbort(xInteractionRequestImpl.get());
-            aContinuations[1] = new ::ucbhelper::InteractionApprove(xInteractionRequestImpl.get());
+            uno::Sequence<uno::Reference<task::XInteractionContinuation>> aContinuations{
+                new ::ucbhelper::InteractionAbort(xInteractionRequestImpl.get()),
+                new ::ucbhelper::InteractionApprove(xInteractionRequestImpl.get())
+            };
             xInteractionRequestImpl->setContinuations(aContinuations);
             xHandler->handle(xInteractionRequestImpl);
             ::rtl::Reference<::ucbhelper::InteractionContinuation> xSelected

@@ -48,15 +48,16 @@ uno::Sequence< sal_Int32 > VPolarCoordinateSystem::getCoordinateSystemResolution
 
     if( aResolution.getLength() >= 2 )
     {
+        auto pResolution = aResolution.getArray();
         if( getPropertySwapXAndYAxis() )
         {
-            aResolution[0]/=2;//radius
-            aResolution[1]*=4;//outer circle resolution
+            pResolution[0]/=2;//radius
+            pResolution[1]*=4;//outer circle resolution
         }
         else
         {
-            aResolution[0]*=4;//outer circle resolution
-            aResolution[1]/=2;//radius
+            pResolution[0]*=4;//outer circle resolution
+            pResolution[1]/=2;//radius
         }
     }
 

@@ -64,7 +64,8 @@ namespace comphelper
         sal_Int32 n1 = left.getLength();
         css::uno::Sequence<T> ret(n1 + right.getLength());
             //TODO: check for overflow
-        std::copy_n(left.getConstArray(), n1, ret.getArray());
+        auto pRet = ret.getArray();
+        std::copy_n(left.getConstArray(), n1, pRet);
         sal_Int32 n2 = n1;
         for (sal_Int32 i = 0; i != right.getLength(); ++i) {
             bool found = false;
@@ -75,7 +76,7 @@ namespace comphelper
                 }
             }
             if (!found) {
-                ret[n2++] = right[i];
+                pRet[n2++] = right[i];
             }
         }
         ret.realloc(n2);

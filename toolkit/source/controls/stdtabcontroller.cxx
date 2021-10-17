@@ -63,6 +63,7 @@ bool StdTabController::ImplCreateComponentSequence(
     if (nModels != rControls.getLength())
     {
         Sequence< Reference< XControl > > aSeq( nModels );
+        auto aSeqRange = asNonConstRange(aSeq);
         Reference< XControl >  xCurrentControl;
 
         sal_Int32 nRealControls = 0;
@@ -70,7 +71,7 @@ bool StdTabController::ImplCreateComponentSequence(
         {
             xCurrentControl = FindControl(rControls, rModel);
             if (xCurrentControl.is())
-                aSeq[nRealControls++] = xCurrentControl;
+                aSeqRange[nRealControls++] = xCurrentControl;
         }
         aSeq.realloc(nRealControls);
         rControls = aSeq;

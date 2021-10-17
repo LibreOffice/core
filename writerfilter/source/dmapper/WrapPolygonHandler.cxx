@@ -156,10 +156,7 @@ WrapPolygon::Pointer_t WrapPolygon::correctCrop(const awt::Size& rGraphicSize,
 
 drawing::PointSequenceSequence WrapPolygon::getPointSequenceSequence() const
 {
-    drawing::PointSequenceSequence aPolyPolygon(1);
-    drawing::PointSequence aPolygon = comphelper::containerToSequence(mPoints);
-    aPolyPolygon[0] = aPolygon;
-    return aPolyPolygon;
+    return { comphelper::containerToSequence(mPoints) };
 }
 
 WrapPolygonHandler::WrapPolygonHandler()

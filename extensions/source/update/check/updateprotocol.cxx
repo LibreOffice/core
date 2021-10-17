@@ -61,8 +61,7 @@ getBootstrapData(
 
     if( !aValue.isEmpty() )
     {
-        rRepositoryList.realloc(1);
-        rRepositoryList[0] = aValue;
+        rRepositoryList = { aValue };
     }
 
     return true;

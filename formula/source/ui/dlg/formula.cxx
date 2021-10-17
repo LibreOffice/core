@@ -419,7 +419,7 @@ sal_Int32 FormulaDlg_Impl::GetFunctionPos(sal_Int32 nPos)
                 }
                 if ( pNextToken != pEnd )
                 {
-                    aArgs[0] = *pNextToken;
+                    aArgs.getArray()[0] = *pNextToken;
                     const OUString a2String = xParser->printFormula( aArgs, aRefPos);
                     const sal_Int32 n3 = nXXX < 0 ? -1 : aFormString.indexOf( a2String, nXXX);
                     if (n3 < nTokPos && n3 != -1)

@@ -88,13 +88,15 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
     sal_Int32 nNumberOfGroups( bHasVolume ? 2 : 1 );
     // sequences of data::XLabeledDataSequence per series per group
     Sequence< Sequence< Sequence< Reference< data::XLabeledDataSequence > > > > aSequences( nNumberOfGroups );
-    sal_Int32 nBarGroupIndex( 0 );
-    sal_Int32 nCandleStickGroupIndex( nNumberOfGroups - 1 );
+    auto pSequences = aSequences.getArray();
+    const sal_Int32 nBarGroupIndex( 0 );
+    const sal_Int32 nCandleStickGroupIndex( nNumberOfGroups - 1 );
 
     // allocate space for labeled sequences
     if( nRemaining > 0  )
         ++nCandleStickSeries;
-    aSequences[nCandleStickGroupIndex].realloc( nCandleStickSeries );
+    Sequence<Reference<data::XLabeledDataSequence>>* pCandleStickGroup = pSequences[nCandleStickGroupIndex].realloc( nCandleStickSeries );
+    Sequence<Reference<data::XLabeledDataSequence>>* pBarGroup;
     if( bHasVolume )
     {
         // if there are remaining sequences, the first one is taken for
@@ -102,8 +104,10 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
         // is used
         if( nRemaining > 1 )
             ++nVolumeSeries;
-        aSequences[nBarGroupIndex].realloc( nVolumeSeries );
+        pBarGroup = pSequences[nBarGroupIndex].realloc( nVolumeSeries );
     }
+    else
+        pBarGroup = pSequences[nBarGroupIndex].getArray();
 
     // create data
     sal_Int32 nSourceIndex = 0;   // index into aData sequence
@@ -121,39 +125,40 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
         // bar
         if( bHasVolume )
         {
-            aSequences[nBarGroupIndex][nLabeledSeqIdx].realloc( 1 );
-            aSequences[nBarGroupIndex][nLabeledSeqIdx][0].set( aData[nSourceIndex] );
+            auto pLabeledSeq = pBarGroup[nLabeledSeqIdx].realloc( 1 );
+            pLabeledSeq[0].set( aData[nSourceIndex] );
             if( aData[nSourceIndex].is())
                 SetRole( aData[nSourceIndex]->getValues(), "values-y");
             ++nSourceIndex;
         }
 
+        Reference<data::XLabeledDataSequence>* pLabeledSeq;
         sal_Int32 nSeqIdx = 0;
         if( bHasOpenValues )
         {
-            aSequences[nCandleStickGroupIndex][nLabeledSeqIdx].realloc( 4 );
-            aSequences[nCandleStickGroupIndex][nLabeledSeqIdx][nSeqIdx].set( aData[nSourceIndex] );
+            pLabeledSeq = pCandleStickGroup[nLabeledSeqIdx].realloc( 4 );
+            pLabeledSeq[nSeqIdx].set( aData[nSourceIndex] );
             if( aData[nSourceIndex].is())
                 SetRole( aData[nSourceIndex]->getValues(), "values-first");
             ++nSourceIndex;
             ++nSeqIdx;
         }
         else
-            aSequences[nCandleStickGroupIndex][nLabeledSeqIdx].realloc( 3 );
+            pLabeledSeq = pCandleStickGroup[nLabeledSeqIdx].realloc( 3 );
 
-        aSequences[nCandleStickGroupIndex][nLabeledSeqIdx][nSeqIdx].set( aData[nSourceIndex] );
+        pLabeledSeq[nSeqIdx].set( aData[nSourceIndex] );
         if( aData[nSourceIndex].is())
             SetRole( aData[nSourceIndex]->getValues(), "values-min");
         ++nSourceIndex;
         ++nSeqIdx;
 
-        aSequences[nCandleStickGroupIndex][nLabeledSeqIdx][nSeqIdx].set( aData[nSourceIndex] );
+        pLabeledSeq[nSeqIdx].set( aData[nSourceIndex] );
         if( aData[nSourceIndex].is())
             SetRole( aData[nSourceIndex]->getValues(), "values-max");
         ++nSourceIndex;
         ++nSeqIdx;
 
-        aSequences[nCandleStickGroupIndex][nLabeledSeqIdx][nSeqIdx].set( aData[nSourceIndex] );
+        pLabeledSeq[nSeqIdx].set( aData[nSourceIndex] );
         if( aData[nSourceIndex].is())
             SetRole( aData[nSourceIndex]->getValues(), "values-last");
         ++nSourceIndex;
@@ -164,11 +169,11 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
     if( bHasVolume && nRemaining > 1 )
     {
         OSL_ASSERT( nVolumeSeries > nNumOfFullSeries );
-        aSequences[nBarGroupIndex][nVolumeSeries - 1].realloc( 1 );
+        auto pLabeledSeq = pBarGroup[nVolumeSeries - 1].realloc( 1 );
         OSL_ASSERT( nDataCount > nSourceIndex );
         if( aData[nSourceIndex].is())
             SetRole( aData[nSourceIndex]->getValues(), "values-y");
-        aSequences[nBarGroupIndex][nVolumeSeries - 1][0].set( aData[nSourceIndex] );
+        pLabeledSeq[0].set( aData[nSourceIndex] );
         ++nSourceIndex;
         --nRemaining;
         OSL_ENSURE( nRemaining, "additional bar should only be used if there is at least one more sequence for a candle stick" );
@@ -179,12 +184,12 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
     {
         OSL_ASSERT( nCandleStickSeries > nNumOfFullSeries );
         const sal_Int32 nSeriesIndex = nCandleStickSeries - 1;
-        aSequences[nCandleStickGroupIndex][nSeriesIndex].realloc( nRemaining );
+        auto pLabeledSeq = pCandleStickGroup[nSeriesIndex].realloc( nRemaining );
         OSL_ASSERT( nDataCount > nSourceIndex );
 
         // 1. low
         sal_Int32 nSeqIdx( 0 );
-        aSequences[nCandleStickGroupIndex][nSeriesIndex][nSeqIdx].set( aData[nSourceIndex] );
+        pLabeledSeq[nSeqIdx].set( aData[nSourceIndex] );
         if( aData[nSourceIndex].is())
             SetRole( aData[nSourceIndex]->getValues(), "values-min");
         ++nSourceIndex;
@@ -193,7 +198,7 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
         // 2. high
         if( nSeqIdx < nRemaining )
         {
-            aSequences[nCandleStickGroupIndex][nSeriesIndex][nSeqIdx].set( aData[nSourceIndex] );
+            pLabeledSeq[nSeqIdx].set( aData[nSourceIndex] );
             if( aData[nSourceIndex].is())
                 SetRole( aData[nSourceIndex]->getValues(), "values-max");
             ++nSourceIndex;
@@ -204,7 +209,7 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
         OSL_ENSURE( bHasOpenValues || nSeqIdx >= nRemaining, "could have created full series" );
         if( nSeqIdx < nRemaining )
         {
-            aSequences[nCandleStickGroupIndex][nSeriesIndex][nSeqIdx].set( aData[nSourceIndex] );
+            pLabeledSeq[nSeqIdx].set( aData[nSourceIndex] );
             if( aData[nSourceIndex].is())
                 SetRole( aData[nSourceIndex]->getValues(), "values-last");
             ++nSourceIndex;
@@ -217,11 +222,12 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
 
     // create DataSeries
     Sequence< Sequence< Reference< XDataSeries > > > aResultSeries( nNumberOfGroups );
+    auto pResultSeries = aResultSeries.getArray();
     sal_Int32 nGroupIndex, nReUsedSeriesIdx = 0;
     for( nGroupIndex=0; nGroupIndex<nNumberOfGroups; ++nGroupIndex )
     {
         const sal_Int32 nNumSeriesData = aSequences[nGroupIndex].getLength();
-        aResultSeries[nGroupIndex].realloc( nNumSeriesData );
+        auto pResultSerie = pResultSeries[nGroupIndex].realloc( nNumSeriesData );
         for( sal_Int32 nSeriesIdx = 0; nSeriesIdx < nNumSeriesData; ++nSeriesIdx, ++nReUsedSeriesIdx )
         {
             try
@@ -234,7 +240,7 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
                 OSL_ASSERT( xSeries.is() );
                 Reference< data::XDataSink > xSink( xSeries, uno::UNO_QUERY_THROW );
                 xSink->setData( aSequences[nGroupIndex][nSeriesIdx] );
-                aResultSeries[nGroupIndex][nSeriesIdx].set( xSeries );
+                pResultSerie[nSeriesIdx].set( xSeries );
             }
             catch( const uno::Exception & )
             {

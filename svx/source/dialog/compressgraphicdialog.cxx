@@ -34,6 +34,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/module.hxx>
 #include <comphelper/fileformat.h>
+#include <comphelper/propertyvalue.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/stream.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -222,13 +223,11 @@ void CompressGraphicsDialog::Compress(SvStream& aStream)
     Graphic aScaledGraphic( aBitmap );
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
 
-    Sequence< PropertyValue > aFilterData( 3 );
-    aFilterData[ 0 ].Name = "Interlaced";
-    aFilterData[ 0 ].Value <<= sal_Int32(0);
-    aFilterData[ 1 ].Name = "Compression";
-    aFilterData[ 1 ].Value <<= static_cast<sal_Int32>(m_xCompressionMF->get_value());
-    aFilterData[ 2 ].Name = "Quality";
-    aFilterData[ 2 ].Value <<= static_cast<sal_Int32>(m_xQualityMF->get_value());
+    Sequence< PropertyValue > aFilterData{
+        comphelper::makePropertyValue("Interlaced", sal_Int32(0)),
+        comphelper::makePropertyValue("Compression", static_cast<sal_Int32>(m_xCompressionMF->get_value())),
+        comphelper::makePropertyValue("Quality", static_cast<sal_Int32>(m_xQualityMF->get_value()))
+    };
 
     OUString aGraphicFormatName = m_xLosslessRB->get_active() ? OUString( "png" ) : OUString( "jpg" );
 

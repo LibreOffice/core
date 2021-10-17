@@ -19,6 +19,8 @@
 #include "vbacommandbarcontrols.hxx"
 #include "vbacommandbarcontrol.hxx"
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
+
+#include <comphelper/propertyvalue.hxx>
 #include <rtl/ref.hxx>
 
 using namespace com::sun::star;
@@ -63,22 +65,15 @@ uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateMenuItemDat
                                                                                    bool isVisible,
                                                                                    bool isEnabled )
 {
-    uno::Sequence< beans::PropertyValue > aProps(7);
-
-    aProps[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
-    aProps[0].Value <<= sCommandURL;
-    aProps[1].Name = ITEM_DESCRIPTOR_HELPURL;
-    aProps[1].Value <<= sHelpURL;
-    aProps[2].Name = ITEM_DESCRIPTOR_LABEL;
-    aProps[2].Value <<= sLabel;
-    aProps[3].Name = ITEM_DESCRIPTOR_TYPE;
-    aProps[3].Value <<= nType;
-    aProps[4].Name = ITEM_DESCRIPTOR_CONTAINER;
-    aProps[4].Value = aSubMenu;
-    aProps[5].Name = ITEM_DESCRIPTOR_ISVISIBLE;
-    aProps[5].Value <<= isVisible;
-    aProps[6].Name = ITEM_DESCRIPTOR_ENABLED;
-    aProps[6].Value <<= isEnabled;
+    uno::Sequence< beans::PropertyValue > aProps{
+        comphelper::makePropertyValue(ITEM_DESCRIPTOR_COMMANDURL, sCommandURL),
+        comphelper::makePropertyValue(ITEM_DESCRIPTOR_HELPURL, sHelpURL),
+        comphelper::makePropertyValue(ITEM_DESCRIPTOR_LABEL, sLabel),
+        comphelper::makePropertyValue(ITEM_DESCRIPTOR_TYPE, nType),
+        comphelper::makePropertyValue(ITEM_DESCRIPTOR_CONTAINER, aSubMenu),
+        comphelper::makePropertyValue(ITEM_DESCRIPTOR_ISVISIBLE, isVisible),
+        comphelper::makePropertyValue(ITEM_DESCRIPTOR_ENABLED, isEnabled)
+    };
 
     return aProps;
 }
@@ -91,22 +86,15 @@ uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateToolbarItem
                                                                                       bool isVisible,
                                                                                       sal_Int32 nStyle )
 {
-    uno::Sequence< beans::PropertyValue > aProps(7);
-
-    aProps[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
-    aProps[0].Value <<= sCommandURL;
-    aProps[1].Name = ITEM_DESCRIPTOR_HELPURL;
-    aProps[1].Value <<= sHelpURL;
-    aProps[2].Name = ITEM_DESCRIPTOR_LABEL;
-    aProps[2].Value <<= sLabel;
-    aProps[3].Name = ITEM_DESCRIPTOR_TYPE;
-    aProps[3].Value <<= nType;
-    aProps[4].Name = ITEM_DESCRIPTOR_CONTAINER;
-    aProps[4].Value = aSubMenu;
-    aProps[5].Name = ITEM_DESCRIPTOR_ISVISIBLE;
-    aProps[5].Value <<= isVisible;
-    aProps[6].Name = ITEM_DESCRIPTOR_STYLE;
-    aProps[6].Value <<= nStyle;
+    uno::Sequence< beans::PropertyValue > aProps{
+        comphelper::makePropertyValue(ITEM_DESCRIPTOR_COMMANDURL, sCommandURL),
+        comphelper::makePropertyValue(ITEM_DESCRIPTOR_HELPURL, sHelpURL),
+        comphelper::makePropertyValue(ITEM_DESCRIPTOR_LABEL, sLabel),
+        comphelper::makePropertyValue(ITEM_DESCRIPTOR_TYPE, nType),
+        comphelper::makePropertyValue(ITEM_DESCRIPTOR_CONTAINER, aSubMenu),
+        comphelper::makePropertyValue(ITEM_DESCRIPTOR_ISVISIBLE, isVisible),
+        comphelper::makePropertyValue(ITEM_DESCRIPTOR_STYLE, nStyle)
+    };
 
     return aProps;
 }

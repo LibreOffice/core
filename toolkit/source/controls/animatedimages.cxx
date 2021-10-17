@@ -125,8 +125,8 @@ public:
     Sequence< OUString > SAL_CALL AnimatedImagesControl::getSupportedServiceNames()
     {
         Sequence< OUString > aServices( AnimatedImagesControl_Base::getSupportedServiceNames() );
-        aServices.realloc( aServices.getLength() + 1 );
-        aServices[ aServices.getLength() - 1 ] = "com.sun.star.awt.AnimatedImagesControl";
+        auto pServices = aServices.realloc( aServices.getLength() + 1 );
+        pServices[ aServices.getLength() - 1 ] = "com.sun.star.awt.AnimatedImagesControl";
         return aServices;
     }
 

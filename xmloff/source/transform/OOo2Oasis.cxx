@@ -1931,8 +1931,9 @@ void OOo2OasisTransformer::Initialize(
     if (xFilter.is())
     {
         Sequence<Any> aArgs( 1 + rArguments.getLength() );
-        aArgs[0] <<= xFilter;
-        std::copy(rArguments.begin(), rArguments.end(), std::next(aArgs.getArray()));
+        auto pArgs = aArgs.getArray();
+        pArgs[0] <<= xFilter;
+        std::copy(rArguments.begin(), rArguments.end(), std::next(pArgs));
         XMLTransformerBase::initialize( aArgs );
 
         OSL_ENSURE( GetDocHandler() == xFilter,

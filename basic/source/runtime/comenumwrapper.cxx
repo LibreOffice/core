@@ -47,9 +47,7 @@ uno::Any SAL_CALL ComEnumerationWrapper::nextElement()
         {
             uno::Sequence< sal_Int16 > aNamedParamIndex;
             uno::Sequence< uno::Any > aNamedParam;
-            uno::Sequence< uno::Any > aArgs( 1 );
-
-            aArgs[0] <<= m_nCurInd++;
+            uno::Sequence< uno::Any > aArgs{ uno::Any(m_nCurInd++) };
 
             return m_xInvocation->invoke( "item",
                                           aArgs,

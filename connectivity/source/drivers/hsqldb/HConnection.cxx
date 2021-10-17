@@ -32,6 +32,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData2.hpp>
 
+#include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -315,13 +316,12 @@ namespace connectivity::hsqldb
                 xProvider.set( GraphicProvider::create(m_xContext) );
 
             // ask the provider to obtain a graphic
-            Sequence< PropertyValue > aMediaProperties( 1 );
-            aMediaProperties[0].Name = "URL";
-            aMediaProperties[0].Value <<= OUString(
-            // load the graphic from the global graphic repository
-                "private:graphicrepository/"
-            // the relative path within the images.zip
-                LINKED_TEXT_TABLE_IMAGE_RESOURCE);
+            Sequence< PropertyValue > aMediaProperties{ comphelper::makePropertyValue(
+                "URL", OUString(
+                           // load the graphic from the global graphic repository
+                           "private:graphicrepository/"
+                           // the relative path within the images.zip
+                           LINKED_TEXT_TABLE_IMAGE_RESOURCE)) };
             xGraphic = xProvider->queryGraphic( aMediaProperties );
             OSL_ENSURE( xGraphic.is(), "OHsqlConnection::impl_getTextTableIcon_nothrow: the provider did not give us a graphic object!" );
         }

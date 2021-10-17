@@ -987,6 +987,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
     osl::ResettableGuard< osl::Mutex > aGuard( m_aMutex );
 
     uno::Sequence< uno::Any > aRet( rValues.getLength() );
+    auto aRetRange = asNonConstRange(aRet);
     uno::Sequence< beans::PropertyChangeEvent > aChanges( rValues.getLength() );
     sal_Int32 nChanged = 0;
 
@@ -1016,28 +1017,28 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
         if ( rValue.Name == "ContentType" )
         {
             // Read-only property!
-            aRet[ n ] <<= lang::IllegalAccessException(
+            aRetRange[ n ] <<= lang::IllegalAccessException(
                             "Property is read-only!",
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name == "IsDocument" )
         {
             // Read-only property!
-            aRet[ n ] <<= lang::IllegalAccessException(
+            aRetRange[ n ] <<= lang::IllegalAccessException(
                             "Property is read-only!",
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name == "IsFolder" )
         {
             // Read-only property!
-            aRet[ n ] <<= lang::IllegalAccessException(
+            aRetRange[ n ] <<= lang::IllegalAccessException(
                             "Property is read-only!",
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name == "CreatableContentsInfo" )
         {
             // Read-only property!
-            aRet[ n ] <<= lang::IllegalAccessException(
+            aRetRange[ n ] <<= lang::IllegalAccessException(
                             "Property is read-only!",
                             static_cast< cppu::OWeakObject * >( this ) );
         }
@@ -1045,7 +1046,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
         {
             if ( isReadOnly() )
             {
-                aRet[ n ] <<= lang::IllegalAccessException(
+                aRetRange[ n ] <<= lang::IllegalAccessException(
                                 "Property is read-only!",
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
@@ -1080,7 +1081,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                     }
                     else
                     {
-                        aRet[ n ] <<= lang::IllegalArgumentException(
+                        aRetRange[ n ] <<= lang::IllegalArgumentException(
                                     "Empty title not allowed!",
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 );
@@ -1088,7 +1089,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                 }
                 else
                 {
-                    aRet[ n ] <<= beans::IllegalTypeException(
+                    aRetRange[ n ] <<= beans::IllegalTypeException(
                                 "Property value has wrong type!",
                                 static_cast< cppu::OWeakObject * >( this ) );
                 }
@@ -1098,7 +1099,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
         {
             if ( isReadOnly() )
             {
-                aRet[ n ] <<= lang::IllegalAccessException(
+                aRetRange[ n ] <<= lang::IllegalAccessException(
                                 "Property is read-only!",
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
@@ -1128,7 +1129,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                         }
                         else
                         {
-                            aRet[ n ] <<= lang::IllegalArgumentException(
+                            aRetRange[ n ] <<= lang::IllegalArgumentException(
                                     "Empty target URL not allowed!",
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 );
@@ -1136,14 +1137,14 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                     }
                     else
                     {
-                        aRet[ n ] <<= beans::IllegalTypeException(
+                        aRetRange[ n ] <<= beans::IllegalTypeException(
                                 "Property value has wrong type!",
                                 static_cast< cppu::OWeakObject * >( this ) );
                     }
                 }
                 else
                 {
-                    aRet[ n ] <<= beans::UnknownPropertyException(
+                    aRetRange[ n ] <<= beans::UnknownPropertyException(
                                 "TargetURL only supported by links!",
                                 static_cast< cppu::OWeakObject * >( this ) );
                 }
@@ -1180,24 +1181,24 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                 }
                 catch ( beans::UnknownPropertyException const & e )
                 {
-                    aRet[ n ] <<= e;
+                    aRetRange[ n ] <<= e;
                 }
                 catch ( lang::WrappedTargetException const & e )
                 {
-                    aRet[ n ] <<= e;
+                    aRetRange[ n ] <<= e;
                 }
                 catch ( beans::PropertyVetoException const & e )
                 {
-                    aRet[ n ] <<= e;
+                    aRetRange[ n ] <<= e;
                 }
                 catch ( lang::IllegalArgumentException const & e )
                 {
-                    aRet[ n ] <<= e;
+                    aRetRange[ n ] <<= e;
                 }
             }
             else
             {
-                aRet[ n ] <<= uno::Exception(
+                aRetRange[ n ] <<= uno::Exception(
                                 "No property set for storing the value!",
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
@@ -1231,7 +1232,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
             aOldName.clear();
 
             // Set error .
-            aRet[ nTitlePos ] <<= uno::Exception(
+            aRetRange[ nTitlePos ] <<= uno::Exception(
                     "Exchange failed!",
                     static_cast< cppu::OWeakObject * >( this ) );
         }

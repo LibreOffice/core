@@ -123,9 +123,7 @@ InterpretedData SAL_CALL DataInterpreter::interpretDataSource(
         ++nSeriesIndex;
     }
 
-    Sequence< Sequence< Reference< XDataSeries > > > aSeries(1);
-    aSeries[0] = comphelper::containerToSequence( aSeriesVec );
-    return InterpretedData( aSeries, xCategories );
+    return InterpretedData( { comphelper::containerToSequence( aSeriesVec ) }, xCategories );
 }
 
 InterpretedData SAL_CALL DataInterpreter::reinterpretDataSeries(
@@ -156,8 +154,7 @@ InterpretedData SAL_CALL DataInterpreter::reinterpretDataSeries(
             }
             if( xValuesY.is())
             {
-                aNewSequences.realloc(1);
-                aNewSequences[0] = xValuesY;
+                aNewSequences = { xValuesY };
             }
 
             Sequence< Reference< data::XLabeledDataSequence > > aSeqs( xSeriesSource->getDataSequences());

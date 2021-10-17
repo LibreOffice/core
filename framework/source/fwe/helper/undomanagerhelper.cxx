@@ -958,9 +958,10 @@ namespace framework
                                 :   rUndoManager.GetRedoActionCount( SfxUndoManager::TopLevel );
 
             Sequence< OUString > aTitles( nCount );
+            auto aTitlesRange = asNonConstRange(aTitles);
             for ( size_t i=0; i<nCount; ++i )
             {
-                aTitles[i] =    i_undo
+                aTitlesRange[i] =    i_undo
                             ?   rUndoManager.GetUndoActionComment( i, SfxUndoManager::TopLevel )
                             :   rUndoManager.GetRedoActionComment( i, SfxUndoManager::TopLevel );
             }

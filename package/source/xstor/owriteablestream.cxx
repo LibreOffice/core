@@ -775,8 +775,7 @@ void OWriteStream_Impl::Commit()
         return;
 
     uno::Reference< packages::XDataSinkEncrSupport > xNewPackageStream;
-    uno::Sequence< uno::Any > aSeq( 1 );
-    aSeq[0] <<= false;
+    uno::Sequence< uno::Any > aSeq{ uno::Any(false) };
 
     if ( m_xCacheStream.is() )
     {
@@ -953,13 +952,16 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::InsertOwnProps(
     }
     if (!aPropVal.Name.isEmpty())
     {
-        sal_Int32 i = 0;
-        for (auto p = aResult.getConstArray(); i < aResult.getLength(); ++i)
-            if (p[i].Name == aPropVal.Name)
-                break;
-        if (i == aResult.getLength())
-            aResult.realloc(i + 1);
-        aResult[i] = aPropVal;
+        css::beans::PropertyValue* pPropVal = nullptr;
+        for (sal_Int32 i = 0; !pPropVal && i < aResult.getLength(); ++i)
+            if (aResult[i].Name == aPropVal.Name)
+                pPropVal = &aResult.getArray()[i];
+        if (!pPropVal)
+        {
+            const sal_Int32 i = aResult.getLength();
+            pPropVal = aResult.realloc(i + 1) + i;
+        }
+        *pPropVal = aPropVal;
     }
 
     return aResult;
@@ -1030,30 +1032,32 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::ReadPackageStreamProper
         nPropNum = 3;
     else if ( m_nStorageType == embed::StorageFormats::PACKAGE )
         nPropNum = 4;
+    assert(nPropNum >= 2);
     uno::Sequence< beans::PropertyValue > aResult( nPropNum );
+    auto aResultRange = asNonConstRange(aResult);
 
     // The "Compressed" property must be set after "MediaType" property,
     // since the setting of the last one can change the value of the first one
 
     if ( m_nStorageType == embed::StorageFormats::OFOPXML || m_nStorageType == embed::StorageFormats::PACKAGE )
     {
-        aResult[0].Name = "MediaType";
-        aResult[1].Name = "Compressed";
-        aResult[2].Name = "Size";
+        aResultRange[0].Name = "MediaType";
+        aResultRange[1].Name = "Compressed";
+        aResultRange[2].Name = "Size";
 
         if ( m_nStorageType == embed::StorageFormats::PACKAGE )
-            aResult[3].Name = "Encrypted";
+            aResultRange[3].Name = "Encrypted";
     }
     else
     {
-        aResult[0].Name = "Compressed";
-        aResult[1].Name = "Size";
+        aResultRange[0].Name = "Compressed";
+        aResultRange[1].Name = "Size";
     }
 
     // TODO: may be also raw stream should be marked
 
     uno::Reference< beans::XPropertySet > xPropSet( m_xPackageStream, uno::UNO_QUERY_THROW );
-    for ( auto& rProp : asNonConstRange(aResult) )
+    for ( auto& rProp : aResultRange )
     {
         try {
             rProp.Value = xPropSet->getPropertyValue( rProp.Name );
@@ -2612,7 +2616,7 @@ void SAL_CALL OWriteStream::insertRelationshipByID(  const OUString& sID, const 
 
     const beans::StringPair aIDRel("Id", sID);
 
-    sal_Int32 nIDInd = -1;
+    uno::Sequence<beans::StringPair>* pPair = nullptr;
 
     // TODO/LATER: in future the unification of the ID could be checked
     uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
@@ -2620,16 +2624,16 @@ void SAL_CALL OWriteStream::insertRelationshipByID(  const OUString& sID, const 
     {
         const auto& rRel = aSeq[nInd];
         if (std::find(rRel.begin(), rRel.end(), aIDRel) != rRel.end())
-            nIDInd = nInd;
+            pPair = &aSeq.getArray()[nInd];
     }
 
-    if ( nIDInd != -1 && !bReplace )
+    if ( pPair && !bReplace )
         throw container::ElementExistException(); // TODO
 
-    if ( nIDInd == -1 )
+    if ( !pPair )
     {
-        nIDInd = aSeq.getLength();
-        aSeq.realloc( nIDInd + 1 );
+        sal_Int32 nIDInd = aSeq.getLength();
+        pPair = aSeq.realloc( nIDInd + 1 ) + nIDInd;
     }
 
     std::vector<beans::StringPair> aResult;
@@ -2639,7 +2643,7 @@ void SAL_CALL OWriteStream::insertRelationshipByID(  const OUString& sID, const 
     std::copy_if(aEntry.begin(), aEntry.end(), std::back_inserter(aResult),
         [](const beans::StringPair& rRel) { return rRel.First != "Id"; });
 
-    aSeq[nIDInd] = comphelper::containerToSequence(aResult);
+    *pPair = comphelper::containerToSequence(aResult);
 
     m_pImpl->m_aNewRelInfo = aSeq;
     m_pImpl->m_xNewRelInfoStream.clear();

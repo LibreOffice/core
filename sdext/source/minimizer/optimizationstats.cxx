@@ -23,6 +23,10 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 
+#include <comphelper/propertyvalue.hxx>
+
+#include <algorithm>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -51,13 +55,10 @@ const uno::Any* OptimizationStats::GetStatusValue( const PPPOptimizerTokenEnum e
 
 css::beans::PropertyValues OptimizationStats::GetStatusSequence()
 {
-    int i = 0;
     uno::Sequence< PropertyValue > aStatsSequence( maStats.size() );
-    for( const auto& rEntry : maStats )
-    {
-        aStatsSequence[ i ].Name = TKGet( rEntry.first );
-        aStatsSequence[ i++ ].Value = rEntry.second;
-    }
+    std::transform(maStats.begin(), maStats.end(), aStatsSequence.getArray(),
+                   [](const auto& rEntry)
+                   { return comphelper::makePropertyValue(rEntry.first, rEntry.second); });
     return aStatsSequence;
 }
 

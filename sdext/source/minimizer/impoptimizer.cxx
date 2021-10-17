@@ -50,6 +50,8 @@
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
+#include <comphelper/propertyvalue.hxx>
+
 using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::io;
@@ -202,31 +204,22 @@ static void ImpCompressGraphic( Reference< XGraphicProvider > const & rxGraphicP
     {
         if ( rxGraphicProvider.is() && rxOutputStream.is() )
         {
-            Sequence< PropertyValue > aFilterData( 8 );
-            aFilterData[ 0 ].Name = "ImageResolution";
-            aFilterData[ 0 ].Value <<= nImageResolution;
-            aFilterData[ 1 ].Name = "ColorMode";      // todo: jpeg color mode (0->true color, 1->greyscale)
-            aFilterData[ 1 ].Value <<= sal_Int32(0);
-            aFilterData[ 2 ].Name = "Quality";        // quality that is used if we export to jpeg
-            aFilterData[ 2 ].Value <<= nJPEGQuality;
-            aFilterData[ 3 ].Name = "Compression";    // compression that is used if we export to png
-            aFilterData[ 3 ].Value <<= sal_Int32(6);
-            aFilterData[ 4 ].Name = "Interlaced";     // interlaced is turned off if we export to png
-            aFilterData[ 4 ].Value <<= sal_Int32(0);
-            aFilterData[ 5 ].Name = "LogicalSize";
-            aFilterData[ 5 ].Value <<= rLogicalSize;
-            aFilterData[ 6 ].Name = "RemoveCropArea";
-            aFilterData[ 6 ].Value <<= bRemoveCropping;
-            aFilterData[ 7 ].Name = "GraphicCropLogic";
-            aFilterData[ 7 ].Value <<= rGraphicCropLogic;
+            Sequence< PropertyValue > aFilterData{
+                comphelper::makePropertyValue("ImageResolution", nImageResolution),
+                comphelper::makePropertyValue("ColorMode", sal_Int32(0)), // todo: jpeg color mode (0->true color, 1->greyscale)
+                comphelper::makePropertyValue("Quality", nJPEGQuality), // quality that is used if we export to jpeg
+                comphelper::makePropertyValue("Compression", sal_Int32(6)), // compression that is used if we export to png
+                comphelper::makePropertyValue("Interlaced", sal_Int32(0)), // interlaced is turned off if we export to png
+                comphelper::makePropertyValue("LogicalSize", rLogicalSize),
+                comphelper::makePropertyValue("RemoveCropArea", bRemoveCropping),
+                comphelper::makePropertyValue("GraphicCropLogic", rGraphicCropLogic)
+            };
 
-            Sequence< PropertyValue > aArgs( 3 );
-            aArgs[ 0 ].Name = "MimeType";             // the GraphicProvider is using "MimeType", the GraphicExporter "MediaType"...
-            aArgs[ 0 ].Value <<= rDestMimeType;
-            aArgs[ 1 ].Name = "OutputStream";
-            aArgs[ 1 ].Value <<= rxOutputStream;
-            aArgs[ 2 ].Name = "FilterData";
-            aArgs[ 2 ].Value <<= aFilterData;
+            Sequence< PropertyValue > aArgs{
+                comphelper::makePropertyValue("MimeType", rDestMimeType), // the GraphicProvider is using "MimeType", the GraphicExporter "MediaType"...
+                comphelper::makePropertyValue("OutputStream", rxOutputStream),
+                comphelper::makePropertyValue("FilterData", aFilterData)
+            };
 
             rxGraphicProvider->storeGraphic( rxGraphic, aArgs );
         }
@@ -328,9 +321,8 @@ static Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentCont
                                 Reference< XInputStream > xInputStream( xTempFile->getInputStream() );
                                 Reference< XSeekable > xSeekable( xInputStream, UNO_QUERY_THROW );
                                 xSeekable->seek( 0 );
-                                Sequence< PropertyValue > aArgs( 1 );
-                                aArgs[ 0 ].Name = "InputStream";
-                                aArgs[ 0 ].Value <<= xInputStream;
+                                Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(
+                                    "InputStream", xInputStream) };
                                 xNewGraphic = xGraphicProvider->queryGraphic( aArgs );
                             }
                         }
@@ -347,9 +339,8 @@ static Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentCont
                 Reference< XInputStream > xInputStream( xTempFile->getInputStream() );
                 Reference< XSeekable > xSeekable( xInputStream, UNO_QUERY_THROW );
                 xSeekable->seek( 0 );
-                Sequence< PropertyValue > aArgs( 1 );
-                aArgs[ 0 ].Name = "InputStream";
-                aArgs[ 0 ].Value <<= xInputStream;
+                Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("InputStream",
+                                                                               xInputStream) };
                 xNewGraphic = xGraphicProvider->queryGraphic( aArgs );
             }
         }
@@ -632,9 +623,9 @@ void ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
             if ( !maFilterName.isEmpty() )
             {
                 int nLength = aArguments.getLength();
-                aArguments.realloc( nLength + 1 );
-                aArguments[ nLength ].Name = "FilterName";
-                aArguments[ nLength ].Value <<= maFilterName;
+                auto pArguments = aArguments.realloc( nLength + 1 );
+                pArguments[ nLength ].Name = "FilterName";
+                pArguments[ nLength ].Value <<= maFilterName;
             }
             xStorable->storeToURL( maSaveAsURL, aArguments );
             if ( !nSourceSize )
@@ -648,9 +639,7 @@ void ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
             xSelf = xDesktop->findFrame( "_blank", FrameSearchFlag::CREATE );
             Reference< XComponentLoader > xComponentLoader( xSelf, UNO_QUERY );
 
-            Sequence< PropertyValue > aLoadProps( 1 );
-            aLoadProps[ 0 ].Name = "Hidden";
-            aLoadProps[ 0 ].Value <<= true;
+            Sequence< PropertyValue > aLoadProps{ comphelper::makePropertyValue("Hidden", true) };
             mxModel.set( xComponentLoader->loadComponentFromURL(
                 maSaveAsURL, "_self", 0, aLoadProps ), UNO_QUERY );
         }

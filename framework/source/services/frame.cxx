@@ -1989,10 +1989,10 @@ css::uno::Sequence< css::beans::Property > SAL_CALL XFrameImpl::getProperties()
 
     sal_Int32 c = static_cast<sal_Int32>(m_lProps.size());
     css::uno::Sequence< css::beans::Property > lProps(c);
-
+    auto lPropsRange = asNonConstRange(lProps);
     for (auto const& elem : m_lProps)
     {
-        lProps[--c] = elem.second;
+        lPropsRange[--c] = elem.second;
     }
 
     return lProps;

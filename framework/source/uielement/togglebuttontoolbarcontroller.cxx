@@ -19,6 +19,7 @@
 
 #include <uielement/togglebuttontoolbarcontroller.hxx>
 
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/menu.hxx>
@@ -61,13 +62,9 @@ void SAL_CALL ToggleButtonToolbarController::dispose()
 
 Sequence<PropertyValue> ToggleButtonToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
-    Sequence<PropertyValue> aArgs( 2 );
-
-    // Add key modifier to argument list
-    aArgs[0].Name = "KeyModifier";
-    aArgs[0].Value <<= KeyModifier;
-    aArgs[1].Name = "Text";
-    aArgs[1].Value <<= m_aCurrentSelection;
+    Sequence<PropertyValue> aArgs{ // Add key modifier to argument list
+                                   comphelper::makePropertyValue("KeyModifier", KeyModifier),
+                                   comphelper::makePropertyValue("Text", m_aCurrentSelection) };
     return aArgs;
 }
 

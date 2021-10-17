@@ -646,7 +646,7 @@ private:
             return;
         }
 
-        mnFirstBytes.realloc(mnFirstBytesSize);
+        auto pFirstBytes = mnFirstBytes.realloc(mnFirstBytesSize);
 
         if(mnFirstBytesSize != mnFirstBytes.getLength())
         {
@@ -668,7 +668,7 @@ private:
         }
 
         mnFirstRead = aStream->ReadBytes(
-            &mnFirstBytes[0],
+            &pFirstBytes[0],
             std::min(nStreamLen, static_cast<sal_uInt64>(mnFirstBytesSize)));
 
         if(aStream->GetError())

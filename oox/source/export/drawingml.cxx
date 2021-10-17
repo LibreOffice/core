@@ -100,6 +100,7 @@
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/random.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -4438,30 +4439,24 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
             WriteGlowEffect(rXPropSet);
             if( bHasShadow )
             {
-                Sequence< PropertyValue > aShadowGrabBag( 3 );
-                Sequence< PropertyValue > aShadowAttribsGrabBag( 4 );
-
                 double dX = +0.0, dY = +0.0;
                 sal_Int32 nBlur =0;
                 rXPropSet->getPropertyValue( "ShadowXDistance" ) >>= dX;
                 rXPropSet->getPropertyValue( "ShadowYDistance" ) >>= dY;
                 rXPropSet->getPropertyValue( "ShadowBlur" ) >>= nBlur;
 
-                aShadowAttribsGrabBag[0].Name = "dist";
-                aShadowAttribsGrabBag[0].Value <<= lcl_CalculateDist(dX, dY);
-                aShadowAttribsGrabBag[1].Name = "dir";
-                aShadowAttribsGrabBag[1].Value <<= lcl_CalculateDir(dX, dY);
-                aShadowAttribsGrabBag[2].Name = "blurRad";
-                aShadowAttribsGrabBag[2].Value <<=  oox::drawingml::convertHmmToEmu(nBlur);
-                aShadowAttribsGrabBag[3].Name = "rotWithShape";
-                aShadowAttribsGrabBag[3].Value <<= false; //ooxml default is 'true', so must write it
+                Sequence< PropertyValue > aShadowAttribsGrabBag{
+                    comphelper::makePropertyValue("dist", lcl_CalculateDist(dX, dY)),
+                    comphelper::makePropertyValue("dir", lcl_CalculateDir(dX, dY)),
+                    comphelper::makePropertyValue("blurRad", oox::drawingml::convertHmmToEmu(nBlur)),
+                    comphelper::makePropertyValue("rotWithShape", false) //ooxml default is 'true', so must write it
+                };
 
-                aShadowGrabBag[0].Name = "Attribs";
-                aShadowGrabBag[0].Value <<= aShadowAttribsGrabBag;
-                aShadowGrabBag[1].Name = "RgbClr";
-                aShadowGrabBag[1].Value = rXPropSet->getPropertyValue( "ShadowColor" );
-                aShadowGrabBag[2].Name = "RgbClrTransparency";
-                aShadowGrabBag[2].Value = rXPropSet->getPropertyValue( "ShadowTransparence" );
+                Sequence< PropertyValue > aShadowGrabBag{
+                    comphelper::makePropertyValue("Attribs", aShadowAttribsGrabBag),
+                    comphelper::makePropertyValue("RgbClr", rXPropSet->getPropertyValue( "ShadowColor" )),
+                    comphelper::makePropertyValue("RgbClrTransparency", rXPropSet->getPropertyValue( "ShadowTransparence" ))
+                };
 
                 WriteShapeEffect( u"outerShdw", aShadowGrabBag );
             }
@@ -4557,16 +4552,13 @@ void DrawingML::WriteGlowEffect(const Reference< XPropertySet >& rXPropSet)
     if (!nRad)
         return;
 
-    Sequence< PropertyValue > aGlowAttribs(1);
-    aGlowAttribs[0].Name = "rad";
-    aGlowAttribs[0].Value <<= oox::drawingml::convertHmmToEmu(nRad);
-    Sequence< PropertyValue > aGlowProps(3);
-    aGlowProps[0].Name = "Attribs";
-    aGlowProps[0].Value <<= aGlowAttribs;
-    aGlowProps[1].Name = "RgbClr";
-    aGlowProps[1].Value = rXPropSet->getPropertyValue("GlowEffectColor");
-    aGlowProps[2].Name = "RgbClrTransparency";
-    aGlowProps[2].Value = rXPropSet->getPropertyValue("GlowEffectTransparency");
+    Sequence< PropertyValue > aGlowAttribs{ comphelper::makePropertyValue(
+        "rad", oox::drawingml::convertHmmToEmu(nRad)) };
+    Sequence< PropertyValue > aGlowProps{
+        comphelper::makePropertyValue("Attribs", aGlowAttribs),
+        comphelper::makePropertyValue("RgbClr", rXPropSet->getPropertyValue("GlowEffectColor")),
+        comphelper::makePropertyValue("RgbClrTransparency", rXPropSet->getPropertyValue("GlowEffectTransparency"))
+    };
     // TODO other stuff like saturation or luminance
 
     WriteShapeEffect(u"glow", aGlowProps);
@@ -4584,12 +4576,10 @@ void DrawingML::WriteSoftEdgeEffect(const css::uno::Reference<css::beans::XPrope
     if (!nRad)
         return;
 
-    css::uno::Sequence<css::beans::PropertyValue> aAttribs(1);
-    aAttribs[0].Name = "rad";
-    aAttribs[0].Value <<= oox::drawingml::convertHmmToEmu(nRad);
-    css::uno::Sequence<css::beans::PropertyValue> aProps(1);
-    aProps[0].Name = "Attribs";
-    aProps[0].Value <<= aAttribs;
+    css::uno::Sequence<css::beans::PropertyValue> aAttribs{ comphelper::makePropertyValue(
+        "rad", oox::drawingml::convertHmmToEmu(nRad)) };
+    css::uno::Sequence<css::beans::PropertyValue> aProps{ comphelper::makePropertyValue("Attribs",
+                                                                                        aAttribs) };
 
     WriteShapeEffect(u"softEdge", aProps);
 }

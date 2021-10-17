@@ -238,26 +238,21 @@ namespace
 
     uno::Sequence< uno::Any > generateErrorArguments( const cmis::URL & rURL )
     {
-        uno::Sequence< uno::Any > aArguments(3);
-
-        size_t i = 0;
-        aArguments[i++] <<= beans::PropertyValue(
-            "Binding URL",
-            - 1,
-            uno::makeAny( rURL.getBindingUrl() ),
-            beans::PropertyState_DIRECT_VALUE );
-
-        aArguments[i++] <<= beans::PropertyValue(
-            "Username",
-            -1,
-            uno::makeAny( rURL.getUsername() ),
-            beans::PropertyState_DIRECT_VALUE );
-
-        aArguments[i++] <<= beans::PropertyValue(
-            "Repository Id",
-            -1,
-            uno::makeAny( rURL.getRepositoryId() ),
-            beans::PropertyState_DIRECT_VALUE );
+        uno::Sequence< uno::Any > aArguments{ uno::Any(beans::PropertyValue(
+                                                           "Binding URL",
+                                                           - 1,
+                                                           uno::makeAny( rURL.getBindingUrl() ),
+                                                           beans::PropertyState_DIRECT_VALUE )),
+                                              uno::Any(beans::PropertyValue(
+                                                           "Username",
+                                                           -1,
+                                                           uno::makeAny( rURL.getUsername() ),
+                                                           beans::PropertyState_DIRECT_VALUE )),
+                                              uno::Any(beans::PropertyValue(
+                                                           "Repository Id",
+                                                           -1,
+                                                           uno::makeAny( rURL.getRepositoryId() ),
+                                                           beans::PropertyState_DIRECT_VALUE )) };
 
         return aArguments;
     }
@@ -974,8 +969,7 @@ namespace cmis
         // Handle the case of the non-existing file
         if ( !getObject( xEnv ) )
         {
-            uno::Sequence< uno::Any > aArgs( 1 );
-            aArgs[ 0 ] <<= m_xIdentifier->getContentIdentifier();
+            uno::Sequence< uno::Any > aArgs{ uno::Any(m_xIdentifier->getContentIdentifier()) };
             uno::Any aErr = uno::makeAny(
                 ucb::InteractiveAugmentedIOException(OUString(), static_cast< cppu::OWeakObject * >( this ),
                     task::InteractionClassification_ERROR,
@@ -1229,14 +1223,15 @@ namespace cmis
             }
             std::vector< libcmis::DocumentPtr > aCmisVersions = pDoc->getAllVersions( );
             uno::Sequence< document::CmisVersion > aVersions( aCmisVersions.size( ) );
+            auto aVersionsRange = asNonConstRange(aVersions);
             int i = 0;
             for ( const auto& rVersion : aCmisVersions )
             {
                 libcmis::DocumentPtr pVersion = rVersion;
-                aVersions[i].Id = STD_TO_OUSTR( pVersion->getId( ) );
-                aVersions[i].Author = STD_TO_OUSTR( pVersion->getCreatedBy( ) );
-                aVersions[i].TimeStamp = lcl_boostToUnoTime( pVersion->getLastModificationDate( ) );
-                aVersions[i].Comment = STD_TO_OUSTR( pVersion->getStringProperty("cmis:checkinComment") );
+                aVersionsRange[i].Id = STD_TO_OUSTR( pVersion->getId( ) );
+                aVersionsRange[i].Author = STD_TO_OUSTR( pVersion->getCreatedBy( ) );
+                aVersionsRange[i].TimeStamp = lcl_boostToUnoTime( pVersion->getLastModificationDate( ) );
+                aVersionsRange[i].Comment = STD_TO_OUSTR( pVersion->getStringProperty("cmis:checkinComment") );
                 ++i;
             }
             return aVersions;
@@ -1460,7 +1455,7 @@ namespace cmis
 
         sal_Int32 nCount = rValues.getLength();
         uno::Sequence< uno::Any > aRet( nCount );
-
+        auto aRetRange = asNonConstRange(aRet);
         bool bChanged = false;
         const beans::PropertyValue* pValues = rValues.getConstArray();
         for ( sal_Int32 n = 0; n < nCount; ++n )
@@ -1475,14 +1470,14 @@ namespace cmis
             {
                 lang::IllegalAccessException e ( "Property is read-only!",
                        static_cast< cppu::OWeakObject* >( this ) );
-                aRet[ n ] <<= e;
+                aRetRange[ n ] <<= e;
             }
             else if ( rValue.Name == "Title" )
             {
                 OUString aNewTitle;
                 if (!( rValue.Value >>= aNewTitle ))
                 {
-                    aRet[ n ] <<= beans::IllegalTypeException
+                    aRetRange[ n ] <<= beans::IllegalTypeException
                         ( "Property value has wrong type!",
                           static_cast< cppu::OWeakObject * >( this ) );
                     continue;
@@ -1490,7 +1485,7 @@ namespace cmis
 
                 if ( aNewTitle.isEmpty() )
                 {
-                    aRet[ n ] <<= lang::IllegalArgumentException
+                    aRetRange[ n ] <<= lang::IllegalArgumentException
                         ( "Empty title not allowed!",
                           static_cast< cppu::OWeakObject * >( this ), -1 );
                     continue;
@@ -1505,7 +1500,7 @@ namespace cmis
                 SAL_INFO( "ucb.ucp.cmis", "Couldn't set property: " << rValue.Name );
                 lang::IllegalAccessException e ( "Property is read-only!",
                        static_cast< cppu::OWeakObject* >( this ) );
-                aRet[ n ] <<= e;
+                aRetRange[ n ] <<= e;
             }
         }
 

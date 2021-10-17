@@ -30,6 +30,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandinfoprovider.hxx>
@@ -232,17 +233,18 @@ void NewMenuController::setAccelerators( PopupMenu* pPopupMenu )
         nSeqCount+=1;
 
     Sequence< OUString > aSeq( nSeqCount );
+    auto aSeqRange = asNonConstRange(aSeq);
 
     // Add a special command for our "New" menu.
     if ( m_bNewMenu )
     {
-        aSeq[nSeqCount-1] = m_aCommandURL;
+        aSeqRange[nSeqCount-1] = m_aCommandURL;
         aMenuShortCuts.push_back( aEmptyKeyCode );
     }
 
     const sal_uInt32 nCount = aCmds.size();
     for ( sal_uInt32 i = 0; i < nCount; i++ )
-        aSeq[i] = aCmds[i];
+        aSeqRange[i] = aCmds[i];
 
     if ( m_xGlobalAcceleratorManager.is() )
         retrieveShortcutsFromConfiguration( xGlobalAccelCfg, aSeq, aMenuShortCuts );
@@ -405,9 +407,8 @@ void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent
             aTargetFrame = pAttributes->aTargetFrame;
     }
 
-    Sequence< PropertyValue > aArgsList( 1 );
-    aArgsList[0].Name = "Referer";
-    aArgsList[0].Value <<= OUString( "private:user" );
+    Sequence< PropertyValue > aArgsList{ comphelper::makePropertyValue("Referer",
+                                                                       OUString( "private:user" )) };
 
     dispatchCommand( aURL, aArgsList, aTargetFrame );
 }

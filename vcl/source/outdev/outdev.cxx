@@ -829,12 +829,13 @@ com::sun::star::uno::Reference< css::rendering::XCanvas > OutputDevice::ImplGetC
        3: XWindow for creating Window (or empty for VirtualDevice)
        4: SystemGraphicsData as a streamed Any
      */
-    Sequence< Any > aArg(5);
-    aArg[ 0 ] <<= reinterpret_cast<sal_Int64>(this);
-    aArg[ 1 ] <<= css::awt::Rectangle( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight );
-    aArg[ 2 ] <<= false;
-    aArg[ 3 ] <<= Reference< css::awt::XWindow >();
-    aArg[ 4 ] = GetSystemGfxDataAny();
+    Sequence< Any > aArg{
+        Any(reinterpret_cast<sal_Int64>(this)),
+        Any(css::awt::Rectangle( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight )),
+        Any(false),
+        Any(Reference< css::awt::XWindow >()),
+        GetSystemGfxDataAny()
+    };
 
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
 

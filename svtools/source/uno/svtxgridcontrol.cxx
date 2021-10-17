@@ -36,6 +36,8 @@
 
 #include <vcl/svapp.hxx>
 
+#include <algorithm>
+
 using css::uno::Reference;
 using css::uno::Exception;
 using css::uno::UNO_QUERY;
@@ -540,10 +542,8 @@ Any SVTXGridControl::getProperty( const OUString& PropertyName )
         else
         {
             Sequence< css::util::Color > aAPIColors( aColors->size() );
-            for ( size_t i=0; i<aColors->size(); ++i )
-            {
-                aAPIColors[i] = sal_Int32(aColors->at(i));
-            }
+            std::transform(aColors->begin(), aColors->end(), aAPIColors.getArray(),
+                           [](const auto& color) { return sal_Int32(color); });
             aPropertyValue <<= aAPIColors;
         }
     }
@@ -728,8 +728,9 @@ Sequence< ::sal_Int32 > SAL_CALL SVTXGridControl::getSelectedRows()
 
     sal_Int32 selectionCount = pTable->GetSelectedRowCount();
     Sequence< sal_Int32 > selectedRows( selectionCount );
+    auto selectedRowsRange = asNonConstRange(selectedRows);
     for ( sal_Int32 i=0; i<selectionCount; ++i )
-        selectedRows[i] = pTable->GetSelectedRowIndex(i);
+        selectedRowsRange[i] = pTable->GetSelectedRowIndex(i);
     return selectedRows;
 }
 
@@ -870,9 +871,9 @@ void SVTXGridControl::ImplCallItemListeners()
         aEvent.Source = static_cast<cppu::OWeakObject*>(this);
 
         sal_Int32 const nSelectedRowCount( pTable->GetSelectedRowCount() );
-        aEvent.SelectedRowIndexes.realloc( nSelectedRowCount );
+        auto pSelectedRowIndexes = aEvent.SelectedRowIndexes.realloc( nSelectedRowCount );
         for ( sal_Int32 i=0; i<nSelectedRowCount; ++i )
-            aEvent.SelectedRowIndexes[i] = pTable->GetSelectedRowIndex( i );
+            pSelectedRowIndexes[i] = pTable->GetSelectedRowIndex( i );
         m_aSelectionListeners.selectionChanged( aEvent );
     }
 }

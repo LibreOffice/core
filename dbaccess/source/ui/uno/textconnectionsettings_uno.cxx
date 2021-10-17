@@ -148,44 +148,44 @@ namespace dbaui
         // more properties which are not even handled by the PropertyContainer implementation,
         // but whose values are stored in our item set
         sal_Int32 nProp = aProps.getLength();
-        aProps.realloc( nProp + 6 );
+        auto pProps = aProps.realloc( nProp + 6 );
 
-        aProps[ nProp++ ] = Property(
+        pProps[ nProp++ ] = Property(
             "HeaderLine",
             PROPERTY_ID_HEADER_LINE,
             ::cppu::UnoType< sal_Bool >::get(),
             PropertyAttribute::TRANSIENT
         );
 
-        aProps[ nProp++ ] = Property(
+        pProps[ nProp++ ] = Property(
             "FieldDelimiter",
             PROPERTY_ID_FIELD_DELIMITER,
             ::cppu::UnoType< OUString >::get(),
             PropertyAttribute::TRANSIENT
         );
 
-        aProps[ nProp++ ] = Property(
+        pProps[ nProp++ ] = Property(
             "StringDelimiter",
             PROPERTY_ID_STRING_DELIMITER,
             ::cppu::UnoType< OUString >::get(),
             PropertyAttribute::TRANSIENT
         );
 
-        aProps[ nProp++ ] = Property(
+        pProps[ nProp++ ] = Property(
             "DecimalDelimiter",
             PROPERTY_ID_DECIMAL_DELIMITER,
             ::cppu::UnoType< OUString >::get(),
             PropertyAttribute::TRANSIENT
         );
 
-        aProps[ nProp++ ] = Property(
+        pProps[ nProp++ ] = Property(
             "ThousandDelimiter",
             PROPERTY_ID_THOUSAND_DELIMITER,
             ::cppu::UnoType< OUString >::get(),
             PropertyAttribute::TRANSIENT
         );
 
-        aProps[ nProp++ ] = Property(
+        pProps[ nProp++ ] = Property(
             "CharSet",
             PROPERTY_ID_ENCODING,
             ::cppu::UnoType< OUString >::get(),

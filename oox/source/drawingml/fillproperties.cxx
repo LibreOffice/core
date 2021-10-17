@@ -21,6 +21,7 @@
 
 #include <iterator>
 
+#include <comphelper/propertyvalue.hxx>
 #include <drawingml/graphicproperties.hxx>
 #include <vcl/graph.hxx>
 
@@ -970,24 +971,24 @@ css::beans::PropertyValue ArtisticEffectProperties::getEffect()
         return aRet;
 
     css::uno::Sequence< css::beans::PropertyValue > aSeq( maAttribs.size() + 1 );
+    auto pSeq = aSeq.getArray();
     sal_uInt32 i = 0;
     for (auto const& attrib : maAttribs)
     {
-        aSeq[i].Name = attrib.first;
-        aSeq[i].Value = attrib.second;
+        pSeq[i].Name = attrib.first;
+        pSeq[i].Value = attrib.second;
         i++;
     }
 
     if( mrOleObjectInfo.maEmbeddedData.hasElements() )
     {
-        css::uno::Sequence< css::beans::PropertyValue > aGraphicSeq( 2 );
-        aGraphicSeq[0].Name = "Id";
-        aGraphicSeq[0].Value <<= mrOleObjectInfo.maProgId;
-        aGraphicSeq[1].Name = "Data";
-        aGraphicSeq[1].Value <<= mrOleObjectInfo.maEmbeddedData;
+        css::uno::Sequence< css::beans::PropertyValue > aGraphicSeq{
+            comphelper::makePropertyValue("Id", mrOleObjectInfo.maProgId),
+            comphelper::makePropertyValue("Data", mrOleObjectInfo.maEmbeddedData)
+        };
 
-        aSeq[i].Name = "OriginalGraphic";
-        aSeq[i].Value <<= aGraphicSeq;
+        pSeq[i].Name = "OriginalGraphic";
+        pSeq[i].Value <<= aGraphicSeq;
     }
 
     aRet.Name = msName;

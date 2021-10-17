@@ -20,6 +20,7 @@
 #include <strings.hrc>
 #include <classes/fwkresid.hxx>
 
+#include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>
@@ -245,18 +246,15 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
         ( nIndex >= sal::static_int_cast<sal_Int32>( m_aRecentFilesItems.size() )))
         return;
 
-    Sequence< PropertyValue > aArgsList(3);
-    aArgsList[0].Name = "Referer";
-    aArgsList[0].Value <<= OUString( "private:user" );
+    Sequence< PropertyValue > aArgsList{
+        comphelper::makePropertyValue("Referer", OUString( "private:user" )),
 
-    // documents in the picklist will never be opened as templates
-    aArgsList[1].Name = "AsTemplate";
-    aArgsList[1].Value <<= false;
+        // documents in the picklist will never be opened as templates
+        comphelper::makePropertyValue("AsTemplate", false),
 
-    // Type detection needs to know which app we are opening it from.
-    aArgsList[2].Name = "DocumentService";
-    aArgsList[2].Value <<= m_aModuleName;
-
+        // Type detection needs to know which app we are opening it from.
+        comphelper::makePropertyValue("DocumentService", m_aModuleName)
+    };
     dispatchCommand( m_aRecentFilesItems[ nIndex ], aArgsList, "_default" );
 }
 

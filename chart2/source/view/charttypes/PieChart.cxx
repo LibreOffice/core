@@ -518,12 +518,7 @@ void PieChart::createTextLabelShape(
                                                    + double(nPageHeight) * double(nPageHeight));
                 if ((aLength.getLength() / fPageDiagonaleLength) >= 0.01)
                 {
-                    drawing::PointSequenceSequence aPoints(1);
-                    aPoints[0].realloc(2);
-                    aPoints[0][0].X = nX1;
-                    aPoints[0][0].Y = nY1;
-                    aPoints[0][1].X = nX2;
-                    aPoints[0][1].Y = nY2;
+                    drawing::PointSequenceSequence aPoints{ { {nX1, nY1}, {nX2, nY2} } };
 
                     uno::Reference<beans::XPropertySet> xProp(aPieLabelInfo.xTextShape,
                                                               uno::UNO_QUERY);
@@ -1298,12 +1293,7 @@ void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSi
             if( (aLength.getLength()/fPageDiagonaleLength) < 0.01 )
                 continue;
 
-            drawing::PointSequenceSequence aPoints(1);
-            aPoints[0].realloc(2);
-            aPoints[0][0].X = nX1;
-            aPoints[0][0].Y = nY1;
-            aPoints[0][1].X = nX2;
-            aPoints[0][1].Y = nY2;
+            drawing::PointSequenceSequence aPoints{ { {nX1, nY1}, {nX2, nY2} } };
 
             uno::Reference< beans::XPropertySet > xProp( labelInfo.xTextShape, uno::UNO_QUERY);
             if( xProp.is() )

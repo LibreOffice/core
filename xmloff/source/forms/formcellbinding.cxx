@@ -381,9 +381,7 @@ Reference< XInterface > FormCellBindingHelper::createDocumentDependentInstance( 
                 aArg.Name = _rArgumentName;
                 aArg.Value = _rArgumentValue;
 
-                Sequence< Any > aArgs( 1 );
-                aArgs[ 0 ] <<= aArg;
-
+                Sequence< Any > aArgs{ Any(aArg) };
                 xReturn = xDocumentFactory->createInstanceWithArguments( _rService, aArgs );
             }
             else

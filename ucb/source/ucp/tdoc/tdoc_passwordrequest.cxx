@@ -179,10 +179,11 @@ DocumentPasswordRequest::DocumentPasswordRequest(
 
     // Fill continuations...
     uno::Sequence<
-        uno::Reference< task::XInteractionContinuation > > aContinuations( 3 );
-    aContinuations[ 0 ] = new ucbhelper::InteractionAbort( this );
-    aContinuations[ 1 ] = new ucbhelper::InteractionRetry( this );
-    aContinuations[ 2 ] = new InteractionSupplyPassword( this );
+        uno::Reference< task::XInteractionContinuation > > aContinuations{
+            new ucbhelper::InteractionAbort( this ),
+            new ucbhelper::InteractionRetry( this ),
+            new InteractionSupplyPassword( this )
+    };
 
     setContinuations( aContinuations );
 }

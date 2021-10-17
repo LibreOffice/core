@@ -32,6 +32,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <comphelper/property.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <algorithm>
 #include <UndoActions.hxx>
@@ -305,16 +306,11 @@ namespace rptui
         {
             Reference< XReportControlFormat > xReportControlFormat( m_xCopy->getByIndex( _nCondIndex ), UNO_QUERY_THROW );
 
-            Sequence< PropertyValue > aArgs(3);
-
-            aArgs[0].Name = REPORTCONTROLFORMAT;
-            aArgs[0].Value <<= xReportControlFormat;
-
-            aArgs[1].Name = CURRENT_WINDOW;
-            aArgs[1].Value <<= m_xDialog->GetXWindow();
-
-            aArgs[2].Name = PROPERTY_FONTCOLOR;
-            aArgs[2].Value <<= rColor;
+            Sequence< PropertyValue > aArgs{
+                comphelper::makePropertyValue(REPORTCONTROLFORMAT, xReportControlFormat),
+                comphelper::makePropertyValue(CURRENT_WINDOW, m_xDialog->GetXWindow()),
+                comphelper::makePropertyValue(PROPERTY_FONTCOLOR, rColor)
+            };
 
             // we use this way to create undo actions
             m_rController.executeUnChecked(_nCommandId,aArgs);

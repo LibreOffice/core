@@ -13,6 +13,7 @@
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/xmlsechelper.hxx>
@@ -117,9 +118,8 @@ uno::Reference<graphic::XGraphic> importSVG(std::u16string_view rSVG)
     uno::Reference<graphic::XGraphicProvider> xProvider
         = graphic::GraphicProvider::create(xContext);
 
-    uno::Sequence<beans::PropertyValue> aMediaProperties(1);
-    aMediaProperties[0].Name = "InputStream";
-    aMediaProperties[0].Value <<= xInputStream;
+    uno::Sequence<beans::PropertyValue> aMediaProperties{ comphelper::makePropertyValue(
+        "InputStream", xInputStream) };
     uno::Reference<graphic::XGraphic> xGraphic(xProvider->queryGraphic(aMediaProperties));
     return xGraphic;
 }

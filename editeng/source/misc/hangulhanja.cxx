@@ -407,13 +407,14 @@ namespace editeng
                 {
                     sal_Int32 nCount = m_aCurrentSuggestions.getLength();
                     Sequence< OUString > aTmp(nCount);
-                    aTmp[0]=aRecentlyUsed->second;
+                    auto pTmp = aTmp.getArray();
+                    pTmp[0]=aRecentlyUsed->second;
                     sal_Int32 nDiff = 1;
                     for( sal_Int32 n=1; n<nCount; n++)//we had 0 already
                     {
                         if( nDiff && m_aCurrentSuggestions[n-nDiff]==aRecentlyUsed->second )
                             nDiff=0;
-                        aTmp[n]=m_aCurrentSuggestions[n-nDiff];
+                        pTmp[n]=m_aCurrentSuggestions[n-nDiff];
                     }
                     m_aCurrentSuggestions = aTmp;
                 }

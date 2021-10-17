@@ -21,6 +21,7 @@
 
 #include <string_view>
 
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/event.hxx>
 #include <vcl/status.hxx>
 #include <vcl/svapp.hxx>
@@ -158,13 +159,11 @@ bool SvxSelectionModeControl::MouseButtonDown( const MouseEvent& rEvt )
 
             css::uno::Any a;
             SfxUInt16Item aState( GetSlotId(), mnState );
+            aState.QueryValue( a );
             INetURLObject aObj( m_aCommandURL );
 
-            css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
-            aArgs[0].Name  = aObj.GetURLPath();
-            aState.QueryValue( a );
-            aArgs[0].Value = a;
-
+            css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
+                aObj.GetURLPath(), a) };
             execute( aArgs );
         }
     }

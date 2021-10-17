@@ -136,7 +136,7 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
         // underlying JavaVM pointer:
         Sequence<sal_Int8> processID(17);
         rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8 *>(processID.getArray()));
-        processID[16] = 1;
+        processID.getArray()[16] = 1;
 
         // We get a non-refcounted pointer to a jvmaccess::UnoVirtualMachine
         // from the XJavaVM service (the pointer is guaranteed to be valid

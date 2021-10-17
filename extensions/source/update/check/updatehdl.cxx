@@ -782,8 +782,7 @@ void UpdateHandler::setFullVersion( OUString& rString )
     aProperty.Name  = "nodepath";
     aProperty.Value <<= OUString("org.openoffice.Setup/Product");
 
-    uno::Sequence< uno::Any > aArgumentList( 1 );
-    aArgumentList[0] <<= aProperty;
+    uno::Sequence< uno::Any > aArgumentList{ uno::Any(aProperty) };
 
     uno::Reference< uno::XInterface > xConfigAccess = xConfigurationProvider->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess",
                                                                          aArgumentList );

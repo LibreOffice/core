@@ -30,6 +30,8 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 
+#include <algorithm>
+
 SAXEventKeeperImpl::SAXEventKeeperImpl( )
     :m_pCurrentBufferNode(nullptr),
      m_nNextElementMarkId(1),
@@ -345,12 +347,8 @@ css::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >
     css::uno::Sequence < css::uno::Reference<
         css::xml::wrapper::XXMLElementWrapper > > aChildrenCollection ( vChildren.size());
 
-    sal_Int32 nIndex = 0;
-    for( const auto& i : vChildren )
-    {
-        aChildrenCollection[nIndex] = i->getXMLElement();
-        nIndex++;
-    }
+    std::transform(vChildren.begin(), vChildren.end(), aChildrenCollection.getArray(),
+                   [](const auto& i) { return i->getXMLElement(); });
 
     return aChildrenCollection;
 }
@@ -998,11 +996,12 @@ void SAL_CALL SAXEventKeeperImpl::startElement(
     {
         sal_Int32 nLength = xAttribs->getLength();
         css::uno::Sequence< css::xml::csax::XMLAttribute > aAttributes (nLength);
+        auto aAttributesRange = asNonConstRange(aAttributes);
 
         for ( int i = 0; i<nLength; ++i )
         {
-            aAttributes[i].sName = xAttribs->getNameByIndex(static_cast<short>(i));
-            aAttributes[i].sValue =xAttribs->getValueByIndex(static_cast<short>(i));
+            aAttributesRange[i].sName = xAttribs->getNameByIndex(static_cast<short>(i));
+            aAttributesRange[i].sValue =xAttribs->getValueByIndex(static_cast<short>(i));
         }
 
         m_xCompressedDocumentHandler->compressedStartElement(aName, aAttributes);

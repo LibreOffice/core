@@ -103,21 +103,10 @@ namespace dbaui
                 if ( !m_xFrameLoader.is() )
                 {
                     Reference< XSingleServiceFactory > xFact = TaskCreator::create(m_xORB);
-                    Sequence< Any > lArgs(3);
-                    NamedValue      aProp;
-                    sal_Int32       nArg = 0;
-
-                    aProp.Name    = "ParentFrame";
-                    aProp.Value <<= m_xParentFrame;
-                    lArgs[nArg++] <<= aProp;
-
-                    aProp.Name    = "TopWindow";
-                    aProp.Value <<= true;
-                    lArgs[nArg++] <<= aProp;
-
-                    aProp.Name    = "SupportPersistentWindowState";
-                    aProp.Value <<= true;
-                    lArgs[nArg++] <<= aProp;
+                    Sequence< Any > lArgs{ Any(NamedValue("ParentFrame", Any(m_xParentFrame))),
+                                           Any(NamedValue("TopWindow", Any(true))),
+                                           Any(NamedValue("SupportPersistentWindowState",
+                                                          Any(true))) };
 
                     m_xFrameLoader.set(xFact->createInstanceWithArguments(lArgs), UNO_QUERY_THROW);
 

@@ -59,14 +59,12 @@ Any addToSequence( const Any& rOldValue, const Any& rNewValue )
         if( rOldValue >>= aNewSeq )
         {
             sal_Int32 nSize = aNewSeq.getLength();
-            aNewSeq.realloc(nSize+1);
-            aNewSeq[nSize] = rNewValue;
+            auto pNewSeq = aNewSeq.realloc(nSize+1);
+            pNewSeq[nSize] = rNewValue;
         }
         else
         {
-            aNewSeq.realloc(2);
-            aNewSeq[0] = rOldValue;
-            aNewSeq[1] = rNewValue;
+            aNewSeq = { rOldValue, rNewValue };
         }
         return makeAny( aNewSeq );
     }

@@ -1687,6 +1687,7 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
                     if ( xHierNameAccess.is() )
                     {
                         Sequence< PropertyValue > aValues( nCount );
+                        auto pValues = aValues.getArray();
 
                         static const OUStringLiteral aHandleName(u"/Handle");
                         static const OUStringLiteral aValueName(u"/Value");
@@ -1694,7 +1695,7 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
 
                         for ( sal_Int32 n = 0; n < nCount; ++n )
                         {
-                            PropertyValue& rValue = aValues[ n ];
+                            PropertyValue& rValue = pValues[ n ];
                             OUString rName    = aElems[ n ];
                             OUString aXMLName
                                         = makeHierarchalNameSegment( rName );

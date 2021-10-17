@@ -33,6 +33,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include "ConversionHelper.hxx"
 #include "DomainMapper.hxx"
@@ -172,31 +173,31 @@ void SettingsTable::lcl_attribute(Id nName, Value & val)
         m_pImpl->m_nZoomType = lcl_GetZoomType(nIntValue);
         break;
     case NS_ooxml::LN_CT_Language_val:
-        m_pImpl->m_pThemeFontLangProps[0].Name = "val";
-        m_pImpl->m_pThemeFontLangProps[0].Value <<= sStringValue;
+        m_pImpl->m_pThemeFontLangProps.getArray()[0]
+            = comphelper::makePropertyValue("val", sStringValue);
         break;
     case NS_ooxml::LN_CT_Language_eastAsia:
-        m_pImpl->m_pThemeFontLangProps[1].Name = "eastAsia";
-        m_pImpl->m_pThemeFontLangProps[1].Value <<= sStringValue;
+        m_pImpl->m_pThemeFontLangProps.getArray()[1]
+            = comphelper::makePropertyValue("eastAsia", sStringValue);
         break;
     case NS_ooxml::LN_CT_Language_bidi:
-        m_pImpl->m_pThemeFontLangProps[2].Name = "bidi";
-        m_pImpl->m_pThemeFontLangProps[2].Value <<= sStringValue;
+        m_pImpl->m_pThemeFontLangProps.getArray()[2]
+            = comphelper::makePropertyValue("bidi", sStringValue);
         break;
     case NS_ooxml::LN_CT_View_val:
         m_pImpl->m_nView = nIntValue;
         break;
     case NS_ooxml::LN_CT_CompatSetting_name:
-        m_pImpl->m_pCurrentCompatSetting[0].Name = "name";
-        m_pImpl->m_pCurrentCompatSetting[0].Value <<= sStringValue;
+        m_pImpl->m_pCurrentCompatSetting.getArray()[0]
+            = comphelper::makePropertyValue("name", sStringValue);
         break;
     case NS_ooxml::LN_CT_CompatSetting_uri:
-        m_pImpl->m_pCurrentCompatSetting[1].Name = "uri";
-        m_pImpl->m_pCurrentCompatSetting[1].Value <<= sStringValue;
+        m_pImpl->m_pCurrentCompatSetting.getArray()[1]
+            = comphelper::makePropertyValue("uri", sStringValue);
         break;
     case NS_ooxml::LN_CT_CompatSetting_val:
-        m_pImpl->m_pCurrentCompatSetting[2].Name = "val";
-        m_pImpl->m_pCurrentCompatSetting[2].Value <<= sStringValue;
+        m_pImpl->m_pCurrentCompatSetting.getArray()[2]
+            = comphelper::makePropertyValue("val", sStringValue);
         break;
     case NS_ooxml::LN_CT_TrackChangesView_insDel:
         m_pImpl->m_bShowInsDelChanges = (nIntValue != 0);

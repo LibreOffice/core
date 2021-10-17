@@ -84,13 +84,13 @@ static void lcl_mergeProperties( const uno::Sequence< beans::PropertyValue >& aS
         if ( nPos >= 0 )
         {
             // Replace the property value by the one in aSrc
-            aDst[nPos] = rProp;
+            aDst.getArray()[nPos] = rProp;
         }
         else
         {
             // Simply add the new value
-            aDst.realloc( aDst.getLength( ) + 1 );
-            aDst[ aDst.getLength( ) - 1 ] = rProp;
+            auto pDst = aDst.realloc( aDst.getLength( ) + 1 );
+            pDst[ aDst.getLength( ) - 1 ] = rProp;
         }
     }
 }
@@ -300,15 +300,15 @@ void ListLevel::AddParaProperties( uno::Sequence< beans::PropertyValue >* props 
     {
         if ( !hasFirstLineIndent && rParaProp.Name == sParaIndent )
         {
-            aProps.realloc( aProps.getLength() + 1 );
-            aProps[aProps.getLength( ) - 1] = rParaProp;
-            aProps[aProps.getLength( ) - 1].Name = sFirstLineIndent;
+            auto pProps = aProps.realloc( aProps.getLength() + 1 );
+            pProps[aProps.getLength( ) - 1] = rParaProp;
+            pProps[aProps.getLength( ) - 1].Name = sFirstLineIndent;
         }
         else if ( !hasIndentAt && rParaProp.Name == sParaLeftMargin )
         {
-            aProps.realloc( aProps.getLength() + 1 );
-            aProps[aProps.getLength( ) - 1] = rParaProp;
-            aProps[aProps.getLength( ) - 1].Name = sIndentAt;
+            auto pProps = aProps.realloc( aProps.getLength() + 1 );
+            pProps[aProps.getLength( ) - 1] = rParaProp;
+            pProps[aProps.getLength( ) - 1].Name = sIndentAt;
         }
 
     }
@@ -438,6 +438,7 @@ uno::Sequence<uno::Sequence<beans::PropertyValue>> ListDef::GetMergedPropertyVal
     // [1] Call the same method on the abstract list
     uno::Sequence<uno::Sequence<beans::PropertyValue>> aAbstract
         = m_pAbstractDef->GetPropertyValues(/*bDefaults=*/true);
+    auto aAbstractRange = asNonConstRange(aAbstract);
 
     // [2] Call the upper class method
     uno::Sequence<uno::Sequence<beans::PropertyValue>> aThis
@@ -452,7 +453,7 @@ uno::Sequence<uno::Sequence<beans::PropertyValue>> ListDef::GetMergedPropertyVal
         if (level.hasElements() && GetLevel(i)->HasValues())
         {
             // If the element contains something, merge it, but ignore stub overrides.
-            lcl_mergeProperties( level, aAbstract[i] );
+            lcl_mergeProperties( level, aAbstractRange[i] );
         }
     }
 

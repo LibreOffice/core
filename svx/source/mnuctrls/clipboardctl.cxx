@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <comphelper/propertyvalue.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <svl/intitem.hxx>
 #include <vcl/svapp.hxx>
@@ -82,10 +85,8 @@ void SvxClipBoardControl::CreatePopupWindow()
         SfxUInt32Item aItem(SID_CLIPBOARD_FORMAT_ITEMS, sResult.toUInt32());
 
         Any a;
-        Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = "SelectedFormat";
         aItem.QueryValue( a );
-        aArgs[0].Value = a;
+        Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("SelectedFormat", a) };
         Dispatch( ".uno:ClipboardFormatItems",
                   aArgs );
     }
