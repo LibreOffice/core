@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4700de5f_afdf653d",
+        "filename": "svgio/source/svgreader/svgcharacternode.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-17T07:57:54Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "2d0f885e_9b38fc00",
+      "revId": "396355b0ddd19a260c964b2b035b7f09f01de574",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5f07811b_3c69866c",
@@ -35,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8aae3f1_e271f926",
+        "filename": "svgio/source/svgreader/svgnode.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-17T07:57:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f07811b_3c69866c",
+      "revId": "396355b0ddd19a260c964b2b035b7f09f01de574",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d4a5b0d8_16db7958",
@@ -48,6 +84,24 @@
       "writtenOn": "2021-10-17T07:34:26Z",
       "side": 1,
       "message": "I don\u0027t think this comment has any value. You state your intent to change this to range-based loop - for what purpose? It doesn\u0027t make much sense here, since your loop uses *two adjacent* elements of the vector, something not naturally fitting to range-based loops.",
+      "revId": "396355b0ddd19a260c964b2b035b7f09f01de574",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69d80a9a_1b247d57",
+        "filename": "svgio/source/svgreader/svgnode.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-17T07:57:54Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "d4a5b0d8_16db7958",
       "revId": "396355b0ddd19a260c964b2b035b7f09f01de574",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -71,6 +125,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4bf275b3_55938c9b",
+        "filename": "svgio/source/svgreader/svgnode.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-17T07:57:54Z",
+      "side": 1,
+      "message": "I wrote this comment because the method is declared as const, but it modifies the contents pointed by the member variable maCssStyleVector. Possibly, using std::list instead of std::vector can help to avoid these modifications.",
+      "parentUuid": "12b06cd3_53f2dbdf",
+      "revId": "396355b0ddd19a260c964b2b035b7f09f01de574",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "11864e4b_7b1099ac",
         "filename": "svgio/source/svgreader/svgstylenode.cxx",
         "patchSetId": 3
@@ -82,6 +154,24 @@
       "writtenOn": "2021-10-17T07:34:26Z",
       "side": 1,
       "message": "Use const references where you don\u0027t need to modify values. This also makes it easy for reader to immediately understand if the loop modifies the range itself, or does something external.",
+      "revId": "396355b0ddd19a260c964b2b035b7f09f01de574",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e319896_d3c4b421",
+        "filename": "svgio/source/svgreader/svgstylenode.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-17T07:57:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11864e4b_7b1099ac",
       "revId": "396355b0ddd19a260c964b2b035b7f09f01de574",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
