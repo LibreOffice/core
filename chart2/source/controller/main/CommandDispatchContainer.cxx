@@ -144,11 +144,12 @@ Sequence< Reference< frame::XDispatch > > CommandDispatchContainer::getDispatche
 {
     sal_Int32 nCount = aDescriptors.getLength();
     uno::Sequence< uno::Reference< frame::XDispatch > > aRet( nCount );
+    auto aRetRange = asNonConstRange(aRet);
 
     for( sal_Int32 nPos = 0; nPos < nCount; ++nPos )
     {
         if ( aDescriptors[ nPos ].FrameName == "_self" )
-            aRet[ nPos ] = getDispatchForURL( aDescriptors[ nPos ].FeatureURL );
+            aRetRange[ nPos ] = getDispatchForURL( aDescriptors[ nPos ].FeatureURL );
     }
     return aRet;
 }

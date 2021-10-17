@@ -1121,11 +1121,12 @@ OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
         OUStringBuffer result;
         Locale aLocale("en", OUString(), OUString());
         Sequence<beans::PropertyValue> aProperties(2);
-        aProperties[0].Name = "NumberingType";
-        aProperties[0].Value <<= aSupportedTypes[index].nType;
-        aProperties[1].Name = "Value";
+        auto aPropertiesRange = asNonConstRange(aProperties);
+        aPropertiesRange[0].Name = "NumberingType";
+        aPropertiesRange[0].Value <<= aSupportedTypes[index].nType;
+        aPropertiesRange[1].Name = "Value";
         for (sal_Int32 j = 1; j <= 3; j++) {
-            aProperties[1].Value <<= j;
+            aPropertiesRange[1].Value <<= j;
             result.append( makeNumberingString( aProperties, aLocale ) );
             result.append(", ");
         }

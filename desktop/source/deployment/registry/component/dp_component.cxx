@@ -514,15 +514,9 @@ BackendImpl::BackendImpl(
                                   "*.jar",
                                   DpResId(RID_STR_JAVA_TYPELIB)
                                   ) ),
-      m_typeInfos( 6 )
+      m_typeInfos{ m_xDynComponentTypeInfo, m_xJavaComponentTypeInfo, m_xPythonComponentTypeInfo,
+                   m_xComponentsTypeInfo, m_xRDBTypelibTypeInfo, m_xJavaTypelibTypeInfo }
 {
-    m_typeInfos[ 0 ] = m_xDynComponentTypeInfo;
-    m_typeInfos[ 1 ] = m_xJavaComponentTypeInfo;
-    m_typeInfos[ 2 ] = m_xPythonComponentTypeInfo;
-    m_typeInfos[ 3 ] = m_xComponentsTypeInfo;
-    m_typeInfos[ 4 ] = m_xRDBTypelibTypeInfo;
-    m_typeInfos[ 5 ] = m_xJavaTypelibTypeInfo;
-
     const Reference<XCommandEnvironment> xCmdEnv;
 
     if (transientMode())

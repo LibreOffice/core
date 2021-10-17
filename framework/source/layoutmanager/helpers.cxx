@@ -29,6 +29,7 @@
 #include <com/sun/star/ui/XUIElement.hpp>
 
 #include <comphelper/lok.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -297,9 +298,8 @@ void impl_setDockingWindowVisibility( const css::uno::Reference< css::uno::XComp
 
     OUString aDockWinArgName = "DockingWindow" + OUString::number( nIndex );
 
-    css::uno::Sequence< css::beans::PropertyValue > aArgs(1);
-    aArgs[0].Name  = aDockWinArgName;
-    aArgs[0].Value <<= bVisible;
+    css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
+        aDockWinArgName, bVisible) };
 
     css::uno::Reference< css::frame::XDispatchHelper > xDispatcher = css::frame::DispatchHelper::create( rxContext );
 

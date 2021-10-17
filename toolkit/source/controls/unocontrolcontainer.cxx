@@ -692,8 +692,8 @@ void UnoControlContainer::addTabController( const uno::Reference< awt::XTabContr
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     sal_uInt32 nCount = maTabControllers.getLength();
-    maTabControllers.realloc( nCount + 1 );
-    maTabControllers[ nCount ] = TabController;
+    auto pTabControllers = maTabControllers.realloc( nCount + 1 );
+    pTabControllers[ nCount ] = TabController;
 }
 
 void UnoControlContainer::removeTabController( const uno::Reference< awt::XTabController >& TabController )
@@ -783,9 +783,9 @@ OUString UnoControlContainer::getImplementationName()
 css::uno::Sequence<OUString> UnoControlContainer::getSupportedServiceNames()
 {
     auto s(UnoControlBase::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlContainer";
-    s[s.getLength() - 1] = "stardiv.vcl.control.ControlContainer";
+    auto ps = s.realloc(s.getLength() + 2);
+    ps[s.getLength() - 2] = "com.sun.star.awt.UnoControlContainer";
+    ps[s.getLength() - 1] = "stardiv.vcl.control.ControlContainer";
     return s;
 }
 

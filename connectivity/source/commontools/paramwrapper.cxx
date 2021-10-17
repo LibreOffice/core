@@ -157,8 +157,8 @@ namespace dbtools::param
             {
                 aProperties = m_xDelegatorPSI->getProperties();
                 sal_Int32 nProperties( aProperties.getLength() );
-                aProperties.realloc( nProperties + 1 );
-                aProperties[ nProperties ] = Property(
+                auto pProperties = aProperties.realloc( nProperties + 1 );
+                pProperties[ nProperties ] = Property(
                     "Value",
                     PROPERTY_ID_VALUE,
                     ::cppu::UnoType< Any >::get(),

@@ -21,6 +21,8 @@
 #include <ViewShellBase.hxx>
 #include <slideshow.hxx>
 #include "SlideShowRestarter.hxx"
+
+#include <comphelper/propertyvalue.hxx>
 #include <framework/ConfigurationController.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <sfx2/dispatch.hxx>
@@ -141,9 +143,8 @@ void SlideShowRestarter::StartPresentation()
         mpDispatcher->Execute(SID_PRESENTATION, SfxCallMode::ASYNCHRON);
         if (mpSlideShow.is())
         {
-            Sequence<css::beans::PropertyValue> aProperties (1);
-            aProperties[0].Name = "FirstPage";
-            aProperties[0].Value <<= "page" + OUString::number(mnCurrentSlideNumber+1);
+            Sequence aProperties{ comphelper::makePropertyValue("FirstPage",
+                                  "page" + OUString::number(mnCurrentSlideNumber+1)) };
             mpSlideShow->startWithArguments(aProperties);
         }
         mpSelf.reset();

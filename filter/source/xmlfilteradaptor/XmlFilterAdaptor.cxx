@@ -70,7 +70,6 @@ bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& 
         xStatusIndicator->start( "Loading :", 4);
     }
 
-    Sequence< Any > aAnys(1);
     OUString aBaseURI;
     if (aMediaMap.find(OUString( "URL" ))->second >>= aBaseURI)
     {
@@ -104,7 +103,7 @@ bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& 
         Sequence<PropertyValue> aSettings{ EmptyDbFieldHidesPara };
         xInfoSet->setPropertyValue("DefaultDocumentSettings", makeAny(aSettings));
     }
-    aAnys[0] <<= xInfoSet;
+    Sequence< Any > aAnys{ Any(xInfoSet) };
 
 
     // the underlying SvXMLImport implements XFastParser, XImporter, XFastDocumentHandler
@@ -259,9 +258,6 @@ bool XmlFilterAdaptor::exportImpl( const Sequence< css::beans::PropertyValue >& 
     try{
         // create the xml exporter service and supply the converter component
         // which implements the document handler
-        Sequence < Any > aAnys (2);
-        aAnys[0] <<= xConverter;
-
 
         // pretty printing is confusing for some filters so it is disabled by default
         bool bPrettyPrint =
@@ -299,7 +295,7 @@ bool XmlFilterAdaptor::exportImpl( const Sequence< css::beans::PropertyValue >& 
                         "ExportTextNumberElement",
                         makeAny( bExportTextNumberElementForListItems ));
         xInfoSet->setPropertyValue("BaseURI", makeAny( aBaseURI ));
-        aAnys[1] <<= xInfoSet;
+        Sequence < Any > aAnys{ Any(xConverter), Any(xInfoSet) };
 
         Reference< XExporter > xExporter( mxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                        udExport, aAnys, mxContext ), UNO_QUERY_THROW );

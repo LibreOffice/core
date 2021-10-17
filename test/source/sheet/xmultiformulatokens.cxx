@@ -32,8 +32,7 @@ void XMultiFormulaTokens::testGetSetTokens()
 {
     uno::Reference<sheet::XMultiFormulaTokens> xMFT(init(), uno::UNO_QUERY_THROW);
 
-    uno::Sequence<sheet::FormulaToken> aTokens(1);
-    aTokens[0].OpCode = 2;
+    uno::Sequence<sheet::FormulaToken> aTokens{ { /* OpCode */ 2, /* Data */ {} } };
     xMFT->setTokens(0, aTokens);
 
     CPPUNIT_ASSERT_EQUAL(aTokens[0].OpCode, xMFT->getTokens(0)[0].OpCode);

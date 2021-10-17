@@ -65,6 +65,7 @@
 #include <editeng/colritem.hxx>
 #include <formula/grammar.hxx>
 #include <unotools/useroptions.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <tools/datetime.hxx>
@@ -1788,9 +1789,7 @@ void ScExportTest2::testTdf143979()
         = css::frame::Desktop::create(comphelper::getProcessComponentContext());
     CPPUNIT_ASSERT(xDesktop);
 
-    css::uno::Sequence<css::beans::PropertyValue> args(1);
-    args[0].Name = "Hidden";
-    args[0].Value <<= true;
+    css::uno::Sequence args{ comphelper::makePropertyValue("Hidden", true) };
 
     css::uno::Reference<css::lang::XComponent> xComponent
         = xDesktop->loadComponentFromURL("private:factory/scalc", "_blank", 0, args);
@@ -1841,9 +1840,7 @@ void ScExportTest2::testTdf120502()
         = css::frame::Desktop::create(comphelper::getProcessComponentContext());
     CPPUNIT_ASSERT(xDesktop);
 
-    css::uno::Sequence<css::beans::PropertyValue> args(1);
-    args[0].Name = "Hidden";
-    args[0].Value <<= true;
+    css::uno::Sequence args{ comphelper::makePropertyValue("Hidden", true) };
 
     css::uno::Reference<css::lang::XComponent> xComponent
         = xDesktop->loadComponentFromURL("private:factory/scalc", "_blank", 0, args);

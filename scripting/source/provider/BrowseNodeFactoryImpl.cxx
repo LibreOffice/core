@@ -182,11 +182,12 @@ public:
         }
 
         Sequence<  Reference< browse::XBrowseNode > > children( m_hBNA->size() );
+        auto childrenRange = asNonConstRange(children);
         sal_Int32 index = 0;
 
         for ( const auto& str : m_vStr )
         {
-            children[ index ].set( m_hBNA->find( str )->second );
+            childrenRange[ index ].set( m_hBNA->find( str )->second );
             ++index;
         }
 
@@ -404,10 +405,11 @@ public:
 
             ::std::sort( aVNodes.begin(), aVNodes.end(), alphaSortForBNodes() );
             Sequence < Reference< browse::XBrowseNode > > children( aVNodes.size() );
+            auto childrenRange = asNonConstRange(children);
             sal_Int32 i = 0;
             for ( const auto& rxNode : aVNodes )
             {
-                children[ i ].set( rxNode );
+                childrenRange[ i ].set( rxNode );
                 i++;
             }
             return children;
@@ -495,10 +497,11 @@ public:
         // no need to sort user, share, doc1...docN
         //::std::sort( m_vNodes.begin(), m_vNodes.end(), alphaSortForBNodes() );
         Sequence < Reference< browse::XBrowseNode > > children( m_vNodes.size() );
+        auto childrenRange = asNonConstRange(children);
         sal_Int32 i = 0;
         for ( const auto& rxNode : m_vNodes )
         {
-            children[ i ].set( rxNode );
+            childrenRange[ i ].set( rxNode );
             i++;
         }
         return children;
@@ -553,10 +556,11 @@ public:
 
         Sequence<  Reference< browse::XBrowseNode > > children(
             locnBNs.size() );
+        auto childrenRange = asNonConstRange(children);
 
         for ( size_t j = 0; j < locnBNs.size(); j++ )
         {
-            children[j] = new LocationBrowseNode( locnBNs[j] );
+            childrenRange[j] = new LocationBrowseNode( locnBNs[j] );
         }
 
         return children;

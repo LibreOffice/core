@@ -91,6 +91,7 @@
 
 #include <stlpool.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/graphicmimetype.hxx>
 #include <comphelper/lok.hxx>
@@ -1879,22 +1880,19 @@ void SdImportTest::testTdf113163()
     uno::Reference < uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     uno::Reference< drawing::XGraphicExportFilter > xGraphicExporter = drawing::GraphicExportFilter::create(xContext);
 
-    uno::Sequence< beans::PropertyValue > aFilterData(2);
-    aFilterData[0].Name = "PixelWidth";
-    aFilterData[0].Value <<= sal_Int32(100);
-    aFilterData[1].Name = "PixelHeight";
-    aFilterData[1].Value <<= sal_Int32(100);
+    uno::Sequence< beans::PropertyValue > aFilterData{
+        comphelper::makePropertyValue("PixelWidth", sal_Int32(100)),
+        comphelper::makePropertyValue("PixelHeight", sal_Int32(100))
+    };
 
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
 
-    uno::Sequence< beans::PropertyValue > aDescriptor(3);
-    aDescriptor[0].Name = "URL";
-    aDescriptor[0].Value <<= aTempFile.GetURL();
-    aDescriptor[1].Name = "FilterName";
-    aDescriptor[1].Value <<= OUString("PNG");
-    aDescriptor[2].Name = "FilterData";
-    aDescriptor[2].Value <<= aFilterData;
+    uno::Sequence< beans::PropertyValue > aDescriptor{
+        comphelper::makePropertyValue("URL", aTempFile.GetURL()),
+        comphelper::makePropertyValue("FilterName", OUString("PNG")),
+        comphelper::makePropertyValue("FilterData", aFilterData)
+    };
 
     uno::Reference< lang::XComponent > xPage(getPage(0, xDocShRef), uno::UNO_QUERY);
     xGraphicExporter->setSourceDocument(xPage);
@@ -1932,22 +1930,19 @@ void SdImportTest::testTdf93124()
     uno::Reference < uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     uno::Reference< drawing::XGraphicExportFilter > xGraphicExporter = drawing::GraphicExportFilter::create(xContext);
 
-    uno::Sequence< beans::PropertyValue > aFilterData(2);
-    aFilterData[0].Name = "PixelWidth";
-    aFilterData[0].Value <<= sal_Int32(320);
-    aFilterData[1].Name = "PixelHeight";
-    aFilterData[1].Value <<= sal_Int32(180);
+    uno::Sequence< beans::PropertyValue > aFilterData{
+        comphelper::makePropertyValue("PixelWidth", sal_Int32(320)),
+        comphelper::makePropertyValue("PixelHeight", sal_Int32(180))
+    };
 
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
 
-    uno::Sequence< beans::PropertyValue > aDescriptor(3);
-    aDescriptor[0].Name = "URL";
-    aDescriptor[0].Value <<= aTempFile.GetURL();
-    aDescriptor[1].Name = "FilterName";
-    aDescriptor[1].Value <<= OUString("PNG");
-    aDescriptor[2].Name = "FilterData";
-    aDescriptor[2].Value <<= aFilterData;
+    uno::Sequence< beans::PropertyValue > aDescriptor{
+        comphelper::makePropertyValue("URL", aTempFile.GetURL()),
+        comphelper::makePropertyValue("FilterName", OUString("PNG")),
+        comphelper::makePropertyValue("FilterData", aFilterData)
+    };
 
     uno::Reference< lang::XComponent > xPage(getPage(0, xDocShRef), uno::UNO_QUERY);
     xGraphicExporter->setSourceDocument(xPage);
@@ -1994,22 +1989,19 @@ void SdImportTest::testTdf99729()
         uno::Reference< drawing::XGraphicExportFilter > xGraphicExporter = drawing::GraphicExportFilter::create(xContext);
         CPPUNIT_ASSERT(xGraphicExporter.is());
 
-        uno::Sequence< beans::PropertyValue > aFilterData(2);
-        aFilterData[0].Name = "PixelWidth";
-        aFilterData[0].Value <<= sal_Int32(320);
-        aFilterData[1].Name = "PixelHeight";
-        aFilterData[1].Value <<= sal_Int32(240);
+        uno::Sequence< beans::PropertyValue > aFilterData{
+            comphelper::makePropertyValue("PixelWidth", sal_Int32(320)),
+            comphelper::makePropertyValue("PixelHeight", sal_Int32(240))
+        };
 
         utl::TempFile aTempFile;
         aTempFile.EnableKillingFile();
 
-        uno::Sequence< beans::PropertyValue > aDescriptor(3);
-        aDescriptor[0].Name = "URL";
-        aDescriptor[0].Value <<= aTempFile.GetURL();
-        aDescriptor[1].Name = "FilterName";
-        aDescriptor[1].Value <<= OUString("PNG");
-        aDescriptor[2].Name = "FilterData";
-        aDescriptor[2].Value <<= aFilterData;
+        uno::Sequence< beans::PropertyValue > aDescriptor{
+            comphelper::makePropertyValue("URL", aTempFile.GetURL()),
+            comphelper::makePropertyValue("FilterName", OUString("PNG")),
+            comphelper::makePropertyValue("FilterData", aFilterData)
+        };
 
         uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xComponent, uno::UNO_QUERY);
         uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),

@@ -606,23 +606,18 @@ public:
     {
         if( bPalette )
         {
-            maComponentTags.realloc(1);
-            maComponentTags[0] = rendering::ColorComponentTag::INDEX;
-
-            maComponentBitCounts.realloc(1);
-            maComponentBitCounts[0] = 8;
+            maComponentTags = { rendering::ColorComponentTag::INDEX };
+            maComponentBitCounts = { 8 };
         }
         else
         {
-            maComponentTags.realloc(4);
-            sal_Int8* pTags = maComponentTags.getArray();
+            sal_Int8* pTags = maComponentTags.realloc(4);
             pTags[0]        = rendering::ColorComponentTag::RGB_BLUE;
             pTags[1]        = rendering::ColorComponentTag::RGB_GREEN;
             pTags[2]        = rendering::ColorComponentTag::RGB_RED;
             pTags[3]        = rendering::ColorComponentTag::ALPHA;
 
-            maComponentBitCounts.realloc(4);
-            sal_Int32* pCounts = maComponentBitCounts.getArray();
+            sal_Int32* pCounts = maComponentBitCounts.realloc(4);
             pCounts[0]         = 8;
             pCounts[1]         = 8;
             pCounts[2]         = 8;

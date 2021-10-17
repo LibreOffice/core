@@ -87,6 +87,7 @@
 #include <com/sun/star/util/thePathSettings.hpp>
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
 
@@ -275,12 +276,10 @@ SaveInData::SaveInData(
             bDocConfig( isDocConfig ),
             bReadOnly( false ),
             m_xCfgMgr( xCfgMgr ),
-            m_xParentCfgMgr( xParentCfgMgr )
+            m_xParentCfgMgr( xParentCfgMgr ),
+            m_aSeparatorSeq{ comphelper::makePropertyValue(ITEM_DESCRIPTOR_TYPE,
+                                                           css::ui::ItemType::SEPARATOR_LINE) }
 {
-    m_aSeparatorSeq.realloc( 1 );
-    m_aSeparatorSeq[0].Name  = ITEM_DESCRIPTOR_TYPE;
-    m_aSeparatorSeq[0].Value <<= css::ui::ItemType::SEPARATOR_LINE;
-
     if ( bDocConfig )
     {
         uno::Reference< css::ui::XUIConfigurationPersistence >
@@ -602,9 +601,9 @@ void MenuSaveInData::Apply(
             uno::UNO_QUERY );
 
         sal_Int32 nIndex = aPropValueSeq.getLength();
-        aPropValueSeq.realloc( nIndex + 1 );
-        aPropValueSeq[nIndex].Name = m_aDescriptorContainer;
-        aPropValueSeq[nIndex].Value <<= xSubMenuBar;
+        auto pPropValueSeq = aPropValueSeq.realloc( nIndex + 1 );
+        pPropValueSeq[nIndex].Name = m_aDescriptorContainer;
+        pPropValueSeq[nIndex].Value <<= xSubMenuBar;
         rMenuBar->insertByIndex(
             rMenuBar->getCount(), uno::Any( aPropValueSeq ));
         ApplyMenu( xSubMenuBar, rFactory, entryData );
@@ -630,9 +629,9 @@ void SaveInData::ApplyMenu(
                     uno::UNO_QUERY );
 
             sal_Int32 nIndex = aPropValueSeq.getLength();
-            aPropValueSeq.realloc( nIndex + 1 );
-            aPropValueSeq[nIndex].Name = ITEM_DESCRIPTOR_CONTAINER;
-            aPropValueSeq[nIndex].Value <<= xSubMenuBar;
+            auto pPropValueSeq = aPropValueSeq.realloc( nIndex + 1 );
+            pPropValueSeq[nIndex].Name = ITEM_DESCRIPTOR_CONTAINER;
+            pPropValueSeq[nIndex].Value <<= xSubMenuBar;
 
             rMenuBar->insertByIndex(
                 rMenuBar->getCount(), uno::Any( aPropValueSeq ));
@@ -2393,9 +2392,9 @@ void ToolbarSaveInData::ApplyToolbar(
                     uno::UNO_QUERY );
 
             sal_Int32 nIndex = aPropValueSeq.getLength();
-            aPropValueSeq.realloc( nIndex + 1 );
-            aPropValueSeq[nIndex].Name = m_aDescriptorContainer;
-            aPropValueSeq[nIndex].Value <<= xSubMenuBar;
+            auto pPropValueSeq = aPropValueSeq.realloc( nIndex + 1 );
+            pPropValueSeq[nIndex].Name = m_aDescriptorContainer;
+            pPropValueSeq[nIndex].Value <<= xSubMenuBar;
             rToolbarBar->insertByIndex(
                 rToolbarBar->getCount(), uno::Any( aPropValueSeq ));
 
@@ -2555,9 +2554,10 @@ void ToolbarSaveInData::RestoreToolbar( SvxConfigEntry* pToolbar )
         // After reloading, ensure that the icon is reset of each entry
         // in the toolbar
         uno::Sequence< OUString > aURLSeq( 1 );
+        auto pURLSeq = aURLSeq.getArray();
         for (auto const& entry : *pToolbar->GetEntries())
         {
-            aURLSeq[ 0 ] = entry->GetCommand();
+            pURLSeq[ 0 ] = entry->GetCommand();
 
             try
             {
@@ -2738,9 +2738,8 @@ SvxIconSelectorDialog::SvxIconSelectorDialog(weld::Window *pWindow,
     uno::Reference< lang::XSingleServiceFactory > xStorageFactory(
           css::embed::FileSystemStorageFactory::create( xComponentContext ) );
 
-    uno::Sequence< uno::Any > aArgs( 2 );
-    aArgs[ 0 ] <<= aDirectory;
-    aArgs[ 1 ] <<= css::embed::ElementModes::READWRITE;
+    uno::Sequence< uno::Any > aArgs{ uno::Any(aDirectory),
+                                     uno::Any(css::embed::ElementModes::READWRITE) };
 
     uno::Reference< css::embed::XStorage > xStorage(
         xStorageFactory->createInstanceWithArguments( aArgs ), uno::UNO_QUERY );
@@ -2762,9 +2761,10 @@ SvxIconSelectorDialog::SvxIconSelectorDialog(weld::Window *pWindow,
     }
 
     uno::Sequence< OUString > name( 1 );
+    auto pname = name.getArray();
     for (auto const& elem : aImageInfo1)
     {
-        name[ 0 ] = elem.first;
+        pname[ 0 ] = elem.first;
         uno::Sequence< uno::Reference< graphic::XGraphic> > graphics = m_xImportedImageManager->getImages( SvxConfigPageHelper::GetImageType(), name );
         if ( graphics.hasElements() )
         {
@@ -2796,7 +2796,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog(weld::Window *pWindow,
     // large growth factor, expecting many entries
     for (auto const& elem : aImageInfo)
     {
-        name[ 0 ] = elem.first;
+        pname[ 0 ] = elem.first;
 
         uno::Sequence< uno::Reference< graphic::XGraphic> > graphics;
         try
@@ -2920,13 +2920,8 @@ IMPL_LINK_NOARG(SvxIconSelectorDialog, DeleteHdl, weld::Button&, void)
 bool SvxIconSelectorDialog::ReplaceGraphicItem(
     const OUString& aURL )
 {
-    uno::Sequence< OUString > URLs(1);
-    uno::Sequence< uno::Reference<graphic::XGraphic > > aImportGraph( 1 );
-
     uno::Reference< graphic::XGraphic > xGraphic;
-    uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-    aMediaProps[0].Name = "URL";
-    aMediaProps[0].Value <<= aURL;
+    uno::Sequence< beans::PropertyValue > aMediaProps{ comphelper::makePropertyValue("URL", aURL) };
 
     css::awt::Size aSize;
     bool bOK = false;
@@ -2962,7 +2957,6 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
                 size_t nPos = nId - 1;
                 assert(nPos == m_xTbSymbol->GetItemPos(nId));
                 m_xTbSymbol->RemoveItem(nId);
-                aMediaProps[0].Value <<= aURL;
 
                 Image aImage( xGraphic );
                 if ( bOK && ((aSize.Width != m_nExpectedSize) || (aSize.Height != m_nExpectedSize)) )
@@ -2975,9 +2969,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
 
                 m_aGraphics[nPos] = Graphic(aImage.GetBitmapEx()).GetXGraphic();
 
-                URLs[0] = aURL;
-                aImportGraph[ 0 ] = xGraphic;
-                m_xImportedImageManager->replaceImages( SvxConfigPageHelper::GetImageType(), URLs, aImportGraph );
+                m_xImportedImageManager->replaceImages( SvxConfigPageHelper::GetImageType(), { aURL }, { xGraphic } );
                 m_xImportedImageManager->store();
 
                 bResult = true;
@@ -3132,11 +3124,8 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
 {
     bool result = false;
 
-    uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-    aMediaProps[0].Name = "URL";
+    uno::Sequence< beans::PropertyValue > aMediaProps{ comphelper::makePropertyValue("URL", aURL) };
 
-    uno::Reference< graphic::XGraphic > xGraphic;
-    aMediaProps[0].Value <<= aURL;
     try
     {
         uno::Reference< beans::XPropertySet > props =
@@ -3144,7 +3133,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
 
         uno::Any a = props->getPropertyValue("SizePixel");
 
-        xGraphic = m_xGraphProvider->queryGraphic( aMediaProps );
+        uno::Reference< graphic::XGraphic > xGraphic = m_xGraphProvider->queryGraphic( aMediaProps );
         if ( xGraphic.is() )
         {
             bool bOK = true;
@@ -3168,8 +3157,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
                 m_xTbSymbol->InsertItem(m_aGraphics.size(), aImage, aURL);
 
                 uno::Sequence<OUString> aImportURL { aURL };
-                uno::Sequence< uno::Reference<graphic::XGraphic > > aImportGraph( 1 );
-                aImportGraph[ 0 ] = xGraphic;
+                uno::Sequence< uno::Reference<graphic::XGraphic > > aImportGraph{ xGraphic };
                 m_xImportedImageManager->insertImages( SvxConfigPageHelper::GetImageType(), aImportURL, aImportGraph );
                 if ( m_xImportedImageManager->isModified() )
                 {

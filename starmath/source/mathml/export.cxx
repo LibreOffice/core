@@ -312,9 +312,7 @@ bool SmMLExportWrapper::WriteThroughComponentOS(const Reference<io::XOutputStrea
         xSaxWriter->setCustomEntityNames(starmathdatabase::icustomMathmlHtmlEntitiesExport);
 
     // prepare arguments (prepend doc handler to given arguments)
-    Sequence<Any> aArgs(2);
-    aArgs[0] <<= xSaxWriter;
-    aArgs[1] <<= rPropSet;
+    Sequence<Any> aArgs{ Any(xSaxWriter), Any(rPropSet) };
 
     // get filter component
     auto xExporterData = rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
@@ -593,7 +591,7 @@ void SmMLExport::GetConfigurationSettings(Sequence<PropertyValue>& rProps)
     // Allocate to store the properties
     Sequence<Property> aProps = xPropertySetInfo->getProperties();
     const sal_Int32 nCount = aProps.getLength();
-    rProps.realloc(nCount);
+    auto pProps = rProps.realloc(nCount);
 
     // Copy properties
     // This needs further revision
@@ -603,8 +601,8 @@ void SmMLExport::GetConfigurationSettings(Sequence<PropertyValue>& rProps)
         if (aProps[i].Name != "Formula" && aProps[i].Name != "BasicLibraries"
             && aProps[i].Name != "DialogLibraries" && aProps[i].Name != "RuntimeUID")
         {
-            rProps[i].Name = aProps[i].Name;
-            rProps[i].Value = xProps->getPropertyValue(aProps[i].Name);
+            pProps[i].Name = aProps[i].Name;
+            pProps[i].Value = xProps->getPropertyValue(aProps[i].Name);
         }
     }
 }

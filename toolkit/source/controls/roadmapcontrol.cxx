@@ -91,9 +91,9 @@ static void lcl_throwIndexOutOfBoundsException( )
     UnoControlRoadmapModel::getSupportedServiceNames()
     {
         auto s(UnoControlRoadmapModel_Base::getSupportedServiceNames());
-        s.realloc(s.getLength() + 2);
-        s[s.getLength() - 2] = "com.sun.star.awt.UnoControlRoadmapModel";
-        s[s.getLength() - 1] = "stardiv.vcl.controlmodel.Roadmap";
+        auto ps = s.realloc(s.getLength() + 2);
+        ps[s.getLength() - 2] = "com.sun.star.awt.UnoControlRoadmapModel";
+        ps[s.getLength() - 1] = "stardiv.vcl.controlmodel.Roadmap";
         return s;
     }
 
@@ -485,9 +485,9 @@ OUString UnoRoadmapControl::getImplementationName()
 css::uno::Sequence<OUString> UnoRoadmapControl::getSupportedServiceNames()
 {
     auto s(UnoControlBase::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlRoadmap";
-    s[s.getLength() - 1] = "stardiv.vcl.control.Roadmap";
+    auto ps = s.realloc(s.getLength() + 2);
+    ps[s.getLength() - 2] = "com.sun.star.awt.UnoControlRoadmap";
+    ps[s.getLength() - 1] = "stardiv.vcl.control.Roadmap";
     return s;
 }
 

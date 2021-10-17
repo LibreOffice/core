@@ -153,11 +153,8 @@ BackendImpl::BackendImpl(
                                 OUString() /* no file filter */,
                                 DpResId(RID_STR_DIALOG_LIB)
                                 ) ),
-      m_typeInfos( 2 )
+      m_typeInfos{ m_xBasicLibTypeInfo, m_xDialogLibTypeInfo }
 {
-    m_typeInfos[ 0 ] = m_xBasicLibTypeInfo;
-    m_typeInfos[ 1 ] = m_xDialogLibTypeInfo;
-
     OSL_ASSERT( ! transientMode() );
 
     if (!transientMode())

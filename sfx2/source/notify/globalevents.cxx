@@ -397,9 +397,10 @@ uno::Reference< container::XEnumeration > SAL_CALL SfxGlobalEvents_Impl::createE
         throw css::lang::DisposedException();
     }
     uno::Sequence<uno::Any> models(m_lModels.size());
+    auto modelsRange = asNonConstRange(models);
     for (size_t i = 0; i < m_lModels.size(); ++i)
     {
-        models[i] <<= m_lModels[i];
+        modelsRange[i] <<= m_lModels[i];
     }
     uno::Reference<container::XEnumeration> xEnum(new ::comphelper::OAnyEnumeration(models));
     // <- SAFE

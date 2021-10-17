@@ -67,10 +67,8 @@ uno::Reference<uno::XInterface> ScSubTotalFieldObj::init()
     uno::Reference<sheet::XSubTotalDescriptor> xSubTotalDesc
         = xSubTotalCalc->createSubTotalDescriptor(true);
 
-    uno::Sequence<sheet::SubTotalColumn> xCols;
-    xCols.realloc(1);
-    xCols[0].Column = 5;
-    xCols[0].Function = sheet::GeneralFunction_SUM;
+    uno::Sequence<sheet::SubTotalColumn> xCols{ { /* Column   */ 5,
+                                                  /* Function */ sheet::GeneralFunction_SUM } };
     xSubTotalDesc->addNew(xCols, 1);
 
     uno::Reference<container::XIndexAccess> xDescIndex(xSubTotalDesc, uno::UNO_QUERY_THROW);

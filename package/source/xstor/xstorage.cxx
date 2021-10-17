@@ -120,15 +120,10 @@ void OStorage_Impl::completeStorageStreamCopy_Impl(
         // TODO: headers of encrypted streams should be copied also
         ::comphelper::OStorageHelper::CopyInputToOutput( xSourceInStream, xDestOutStream );
 
-        uno::Sequence<OUString> aPropNames { "Compressed" };
+        uno::Sequence<OUString> aPropNames { "Compressed", "MediaType",
+                                             "UseCommonStoragePasswordEncryption" };
 
-        if ( nStorageType == embed::StorageFormats::PACKAGE )
-        {
-            aPropNames.realloc( 3 );
-            aPropNames[1] = "MediaType";
-            aPropNames[2] = "UseCommonStoragePasswordEncryption";
-        }
-        else if ( nStorageType == embed::StorageFormats::OFOPXML )
+        if ( nStorageType == embed::StorageFormats::OFOPXML )
         {
             // TODO/LATER: in future it might make sense to provide the stream if there is one
             uno::Reference< embed::XRelationshipAccess > xRelAccess( xDest, uno::UNO_QUERY_THROW );
@@ -136,7 +131,10 @@ void OStorage_Impl::completeStorageStreamCopy_Impl(
             xRelAccess->insertRelationships( aRelInfo, false );
 
             aPropNames.realloc( 2 );
-            aPropNames[1] = "MediaType";
+        }
+        else if ( nStorageType != embed::StorageFormats::PACKAGE )
+        {
+            aPropNames.realloc( 1 );
         }
 
         for ( const auto& rPropName : std::as_const(aPropNames) )
@@ -409,18 +407,19 @@ void OStorage_Impl::OpenOwnPackage()
         if ( !m_xPackage.is() )
         {
             uno::Sequence< uno::Any > aArguments( 2 );
+            auto pArguments = aArguments.getArray();
             if ( m_nStorageMode & embed::ElementModes::WRITE )
-                aArguments[ 0 ] <<= m_xStream;
+                pArguments[ 0 ] <<= m_xStream;
             else
             {
                 SAL_WARN_IF( !m_xInputStream.is(), "package.xstor", "Input stream must be set for readonly access!" );
-                aArguments[ 0 ] <<= m_xInputStream;
+                pArguments[ 0 ] <<= m_xInputStream;
                 // TODO: if input stream is not seekable or XSeekable interface is supported
                 // on XStream object a wrapper must be used
             }
 
             // do not allow elements to remove themself from the old container in case of insertion to another container
-            aArguments[ 1 ] <<= beans::NamedValue( "AllowRemoveOnInsert",
+            pArguments[ 1 ] <<= beans::NamedValue( "AllowRemoveOnInsert",
                                                     uno::makeAny( false ) );
 
             sal_Int32 nArgNum = 2;
@@ -432,8 +431,8 @@ void OStorage_Impl::OpenOwnPackage()
                 {
                     // Forward these to the package.
                     beans::NamedValue aNamedValue( rProp.Name, rProp.Value );
-                    aArguments.realloc( ++nArgNum );
-                    aArguments[nArgNum-1] <<= aNamedValue;
+                    pArguments = aArguments.realloc( ++nArgNum );
+                    pArguments[nArgNum-1] <<= aNamedValue;
                 }
                 else if ( rProp.Name == "Password" )
                 {
@@ -448,8 +447,8 @@ void OStorage_Impl::OpenOwnPackage()
                 beans::NamedValue aNamedValue;
                 aNamedValue.Name = "StorageFormat";
                 aNamedValue.Value <<= OUString( "ZipFormat" );
-                aArguments.realloc( ++nArgNum );
-                aArguments[nArgNum-1] <<= aNamedValue;
+                pArguments = aArguments.realloc( ++nArgNum );
+                pArguments[nArgNum-1] <<= aNamedValue;
             }
             else if ( m_nStorageType == embed::StorageFormats::OFOPXML )
             {
@@ -457,8 +456,8 @@ void OStorage_Impl::OpenOwnPackage()
                 beans::NamedValue aNamedValue;
                 aNamedValue.Name = "StorageFormat";
                 aNamedValue.Value <<= OUString( "OFOPXMLFormat" );
-                aArguments.realloc( ++nArgNum );
-                aArguments[nArgNum-1] <<= aNamedValue;
+                pArguments = aArguments.realloc( ++nArgNum );
+                pArguments[nArgNum-1] <<= aNamedValue;
             }
 
             m_xPackage.set( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
@@ -769,17 +768,17 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                 {
                     if ( rSrcPkgProp.Name == "MediaType" || rSrcPkgProp.Name == "Compressed" )
                     {
-                        aStrProps.realloc( ++nNum );
-                        aStrProps[nNum-1].Name = rSrcPkgProp.Name;
-                        aStrProps[nNum-1].Value = rSrcPkgProp.Value;
+                        auto pStrProps = aStrProps.realloc( ++nNum );
+                        pStrProps[nNum-1].Name = rSrcPkgProp.Name;
+                        pStrProps[nNum-1].Value = rSrcPkgProp.Value;
                     }
                 }
 
                 if ( m_nStorageType == embed::StorageFormats::PACKAGE )
                 {
-                    aStrProps.realloc( ++nNum );
-                    aStrProps[nNum-1].Name = "UseCommonStoragePasswordEncryption";
-                    aStrProps[nNum-1].Value <<= pElement->m_xStream->UsesCommonEncryption_Impl();
+                    auto pStrProps = aStrProps.realloc( ++nNum );
+                    pStrProps[nNum-1].Name = "UseCommonStoragePasswordEncryption";
+                    pStrProps[nNum-1].Value <<= pElement->m_xStream->UsesCommonEncryption_Impl();
                 }
                 else if ( m_nStorageType == embed::StorageFormats::OFOPXML )
                 {
@@ -991,9 +990,7 @@ void OStorage_Impl::Commit()
     // it can be detected by m_bCommited flag ( root storage doesn't need temporary representation )
     if ( !m_bCommited && !m_bIsRoot )
     {
-        uno::Sequence< uno::Any > aSeq( 1 );
-        aSeq[0] <<= true;
-
+        uno::Sequence< uno::Any > aSeq{ uno::Any(true) };
         xNewPackageFolder.set( m_xPackage->createInstanceWithArguments( aSeq ),
                                uno::UNO_QUERY );
     }
@@ -1307,8 +1304,7 @@ SotElement_Impl* OStorage_Impl::InsertStream( const OUString& aName, bool bEncr 
     if ( !m_xPackage.is() )
         throw embed::InvalidStorageException( THROW_WHERE);
 
-    uno::Sequence< uno::Any > aSeq( 1 );
-    aSeq[0] <<= false;
+    uno::Sequence< uno::Any > aSeq{ uno::Any(false) };
     uno::Reference< lang::XUnoTunnel > xNewElement( m_xPackage->createInstanceWithArguments( aSeq ),
                                                     uno::UNO_QUERY );
 
@@ -1347,8 +1343,7 @@ void OStorage_Impl::InsertRawStream( const OUString& aName, const uno::Reference
     uno::Reference< io::XInputStream > xInStrToInsert = xSeek.is() ? xInStream :
                                                                      GetSeekableTempCopy( xInStream, m_xContext );
 
-    uno::Sequence< uno::Any > aSeq( 1 );
-    aSeq[0] <<= false;
+    uno::Sequence< uno::Any > aSeq{ uno::Any(false) };
     uno::Reference< lang::XUnoTunnel > xNewElement( m_xPackage->createInstanceWithArguments( aSeq ),
                                                     uno::UNO_QUERY );
 
@@ -1376,8 +1371,7 @@ std::unique_ptr<OStorage_Impl> OStorage_Impl::CreateNewStorageImpl( sal_Int32 nS
     if ( !m_xPackage.is() )
         throw embed::InvalidStorageException( THROW_WHERE );
 
-    uno::Sequence< uno::Any > aSeq( 1 );
-    aSeq[0] <<= true;
+    uno::Sequence< uno::Any > aSeq{ uno::Any(true) };
     uno::Reference< lang::XUnoTunnel > xNewElement( m_xPackage->createInstanceWithArguments( aSeq ),
                                                     uno::UNO_QUERY );
 
@@ -4779,7 +4773,7 @@ void SAL_CALL OStorage::insertRelationshipByID(  const OUString& sID, const uno:
 
     const beans::StringPair aIDRel("Id", sID);
 
-    sal_Int32 nIDInd = -1;
+    uno::Sequence<beans::StringPair>* pResult = nullptr;
 
     // TODO/LATER: in future the unification of the ID could be checked
     uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
@@ -4787,16 +4781,16 @@ void SAL_CALL OStorage::insertRelationshipByID(  const OUString& sID, const uno:
     {
         const auto& rRel = aSeq[nInd];
         if (std::find(rRel.begin(), rRel.end(), aIDRel) != rRel.end())
-            nIDInd = nInd;
+            pResult = &aSeq.getArray()[nInd];
     }
 
-    if ( nIDInd != -1 && !bReplace )
+    if ( pResult && !bReplace )
         throw container::ElementExistException( THROW_WHERE );
 
-    if ( nIDInd == -1 )
+    if ( !pResult )
     {
-        nIDInd = aSeq.getLength();
-        aSeq.realloc( nIDInd + 1 );
+        const sal_Int32 nIDInd = aSeq.getLength();
+        pResult = aSeq.realloc( nIDInd + 1 ) + nIDInd;
     }
 
     std::vector<beans::StringPair> aResult;
@@ -4806,7 +4800,7 @@ void SAL_CALL OStorage::insertRelationshipByID(  const OUString& sID, const uno:
     std::copy_if(aEntry.begin(), aEntry.end(), std::back_inserter(aResult),
         [](const beans::StringPair& rPair) { return rPair.First != "Id"; });
 
-    aSeq[nIDInd] = comphelper::containerToSequence(aResult);
+    *pResult = comphelper::containerToSequence(aResult);
 
     m_pImpl->m_aRelInfo = aSeq;
     m_pImpl->m_xNewRelInfoStream.clear();

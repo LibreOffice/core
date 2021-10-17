@@ -81,10 +81,9 @@ namespace pcr
 
     Sequence< OUString > SAL_CALL CellBindingPropertyHandler::getActuatingProperties( )
     {
-        Sequence< OUString > aInterestingProperties( 3 );
-        aInterestingProperties[0] = PROPERTY_LIST_CELL_RANGE;
-        aInterestingProperties[1] = PROPERTY_BOUND_CELL;
-        aInterestingProperties[2] = PROPERTY_CONTROLSOURCE;
+        Sequence< OUString > aInterestingProperties{ PROPERTY_LIST_CELL_RANGE,
+                                                     PROPERTY_BOUND_CELL,
+                                                     PROPERTY_CONTROLSOURCE };
         return aInterestingProperties;
     }
 

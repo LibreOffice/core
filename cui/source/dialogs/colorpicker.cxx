@@ -24,6 +24,8 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
+
+#include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -1292,9 +1294,7 @@ Sequence< OUString > SAL_CALL ColorPicker::getSupportedServiceNames(  )
 // XPropertyAccess
 Sequence< PropertyValue > SAL_CALL ColorPicker::getPropertyValues(  )
 {
-    Sequence< PropertyValue > props(1);
-    props[0].Name = gsColorKey;
-    props[0].Value <<= mnColor;
+    Sequence< PropertyValue > props{ comphelper::makePropertyValue(gsColorKey, mnColor) };
     return props;
 }
 

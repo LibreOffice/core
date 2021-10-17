@@ -371,12 +371,10 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
             if( !aPoints.empty() )
             {
                 PolyPolygonBezierCoords aMarkerCoords;
-                aMarkerCoords.Coordinates.realloc( 1 );
-                aMarkerCoords.Coordinates[ 0 ] = comphelper::containerToSequence( aPoints );
+                aMarkerCoords.Coordinates = { comphelper::containerToSequence( aPoints ) };
 
                 ::std::vector< PolygonFlags > aFlags( aPoints.size(), PolygonFlags_NORMAL );
-                aMarkerCoords.Flags.realloc( 1 );
-                aMarkerCoords.Flags[ 0 ] = comphelper::containerToSequence( aFlags );
+                aMarkerCoords.Flags = { comphelper::containerToSequence( aFlags ) };
 
                 aNamedMarker.Name = aMarkerName;
                 aNamedMarker.Value <<= aMarkerCoords;

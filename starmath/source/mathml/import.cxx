@@ -391,8 +391,7 @@ ErrCode SmMLImportWrapper::ReadThroughComponentIS(
     aParserInput.aInputStream = xInputStream;
 
     // Prepare property list
-    Sequence<Any> aArgs(1);
-    aArgs[0] <<= rPropSet;
+    Sequence<Any> aArgs{ Any(rPropSet) };
 
     // Get filter
     Reference<XInterface> xFilter

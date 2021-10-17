@@ -30,6 +30,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 
+#include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
@@ -180,17 +181,10 @@ Reference< XUIElement > SAL_CALL AddonsToolBarFactory::createUIElement(
          aConfigData.hasElements() &&
          hasButtonsInContext( aConfigData, xFrame ))
     {
-        PropertyValue aPropValue;
-        Sequence< Any > aPropSeq( 3 );
-        aPropValue.Name = "Frame";
-        aPropValue.Value <<= xFrame;
-        aPropSeq[0] <<= aPropValue;
-        aPropValue.Name = "ConfigurationData";
-        aPropValue.Value <<= aConfigData;
-        aPropSeq[1] <<= aPropValue;
-        aPropValue.Name = "ResourceURL";
-        aPropValue.Value <<= aResourceURL;
-        aPropSeq[2] <<= aPropValue;
+        Sequence< Any > aPropSeq{ Any(comphelper::makePropertyValue("Frame", xFrame)),
+                                  Any(comphelper::makePropertyValue("ConfigurationData",
+                                                                    aConfigData)),
+                                  Any(comphelper::makePropertyValue("ResourceURL", aResourceURL)) };
 
         SolarMutexGuard aGuard;
         rtl::Reference<AddonsToolBarWrapper> pToolBarWrapper = new AddonsToolBarWrapper( m_xContext );

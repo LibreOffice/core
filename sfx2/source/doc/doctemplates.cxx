@@ -27,6 +27,7 @@
 #include <unotools/pathoptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
@@ -699,10 +700,7 @@ bool SfxDocTplService_Impl::addEntry( Content& rParentFolder,
 
     if ( ! Content::create( aLinkURL, maCmdEnv, comphelper::getProcessComponentContext(), aLink ) )
     {
-        Sequence< Any > aValues(3);
-        aValues[0] <<= rTitle;
-        aValues[1] <<= false;
-        aValues[2] <<= rTargetURL;
+        Sequence< Any > aValues{ Any(rTitle), Any(false), Any(rTargetURL) };
 
         try
         {
@@ -742,10 +740,7 @@ bool SfxDocTplService_Impl::createFolder( const OUString& rNewFolderURL,
     {
         try
         {
-            Sequence< Any > aValues(2);
-            aValues[0] <<= aFolderName;
-            aValues[1] <<= true;
-
+            Sequence< Any > aValues{ Any(aFolderName), Any(true) };
             OUString aType;
 
             if ( bFsysFolder )
@@ -799,10 +794,7 @@ bool SfxDocTplService_Impl::CreateNewUniqueFolderWithPrefix( const OUString& aPa
 
             try
             {
-                Sequence< Any > aValues(2);
-                aValues[0] <<= aTryName;
-                aValues[1] <<= true;
-
+                Sequence< Any > aValues{ Any(aTryName), Any(true) };
                 bCreated = aParent.insertNewContent( TYPE_FSYS_FOLDER, { TITLE, IS_FOLDER }, aValues, aNewFolder );
             }
             catch( ucb::NameClashException& )
@@ -859,10 +851,7 @@ OUString SfxDocTplService_Impl::CreateNewUniqueFileWithPrefix( const OUString& a
 
             try
             {
-                Sequence< Any > aValues(2);
-                aValues[0] <<= aTryName;
-                aValues[1] <<= true;
-
+                Sequence< Any > aValues{ Any(aTryName), Any(true) };
                 bCreated = aParent.insertNewContent( TYPE_FSYS_FILE, { TITLE, IS_DOCUMENT }, aValues, aNewFile );
             }
             catch( ucb::NameClashException& )
@@ -1785,11 +1774,10 @@ bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
         }
 
         // store template
-        uno::Sequence< PropertyValue > aStoreArgs( 2 );
-        aStoreArgs[0].Name = "FilterName";
-        aStoreArgs[0].Value <<= aFilterName;
-        aStoreArgs[1].Name = "DocumentTitle";
-        aStoreArgs[1].Value <<= rTemplateName;
+        uno::Sequence< PropertyValue > aStoreArgs{
+            comphelper::makePropertyValue("FilterName", aFilterName),
+            comphelper::makePropertyValue("DocumentTitle", rTemplateName)
+        };
 
         if( !::utl::UCBContentHelper::EqualURLs( aNewTemplateTargetURL, rStorable->getLocation() ))
             rStorable->storeToURL( aNewTemplateTargetURL, aStoreArgs );

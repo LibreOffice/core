@@ -35,6 +35,7 @@
 #include <ReportController.hxx>
 #include <ColumnInfo.hxx>
 
+#include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
@@ -318,18 +319,17 @@ void OFieldExpressionControl::moveGroups(const uno::Sequence<uno::Any>& _aGroups
             uno::Reference< report::XGroup> xGroup(rGroup,uno::UNO_QUERY);
             if ( xGroup.is() )
             {
-                uno::Sequence< beans::PropertyValue > aArgs(1);
-                aArgs[0].Name = PROPERTY_GROUP;
-                aArgs[0].Value <<= xGroup;
+                uno::Sequence< beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
+                    PROPERTY_GROUP, xGroup) };
                 // we use this way to create undo actions
                 m_pParent->m_pController->executeChecked(SID_GROUP_REMOVE,aArgs);
-                aArgs.realloc(2);
+                auto pArgs = aArgs.realloc(2);
                 if ( nRow > xGroups->getCount() )
                     nRow = xGroups->getCount();
                 if ( _bSelect )
                     SelectRow(nRow);
-                aArgs[1].Name = PROPERTY_POSITIONY;
-                aArgs[1].Value <<= nRow;
+                pArgs[1].Name = PROPERTY_POSITIONY;
+                pArgs[1].Value <<= nRow;
                 m_pParent->m_pController->executeChecked(SID_GROUP_APPEND,aArgs);
                 ++nRow;
             }
@@ -420,9 +420,6 @@ bool OFieldExpressionControl::SaveModified()
                 xGroup = m_pParent->getGroups()->createGroup();
                 xGroup->setHeaderOn(true);
 
-                uno::Sequence< beans::PropertyValue > aArgs(2);
-                aArgs[0].Name = PROPERTY_GROUP;
-                aArgs[0].Value <<= xGroup;
                 // find position where to insert the new group
                 sal_Int32 nGroupPos = 0;
                 ::std::vector<sal_Int32>::iterator aIter = m_aGroupPositions.begin();
@@ -430,8 +427,10 @@ bool OFieldExpressionControl::SaveModified()
                 for(;aIter != aEnd;++aIter)
                     if ( *aIter != NO_GROUP )
                         nGroupPos = *aIter + 1;
-                aArgs[1].Name = PROPERTY_POSITIONY;
-                aArgs[1].Value <<= nGroupPos;
+                uno::Sequence< beans::PropertyValue > aArgs{
+                    comphelper::makePropertyValue(PROPERTY_GROUP, xGroup),
+                    comphelper::makePropertyValue(PROPERTY_POSITIONY, nGroupPos)
+                };
                 m_bIgnoreEvent = true;
                 m_pParent->m_pController->executeChecked(SID_GROUP_APPEND,aArgs);
                 m_bIgnoreEvent = false;
@@ -727,8 +726,6 @@ void OFieldExpressionControl::DeleteRows()
     bool bFirstTime = true;
 
     tools::Long nOldDataPos = nIndex;
-    uno::Sequence< beans::PropertyValue > aArgs(1);
-    aArgs[0].Name = PROPERTY_GROUP;
     m_bIgnoreEvent = true;
     while( nIndex >= 0 )
     {
@@ -743,7 +740,8 @@ void OFieldExpressionControl::DeleteRows()
 
             sal_Int32 nGroupPos = m_aGroupPositions[nIndex];
             uno::Reference< report::XGroup> xGroup = m_pParent->getGroup(nGroupPos);
-            aArgs[0].Value <<= xGroup;
+            uno::Sequence< beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
+                PROPERTY_GROUP, xGroup) };
             // we use this way to create undo actions
             m_pParent->m_pController->executeChecked(SID_GROUP_REMOVE,aArgs);
 
@@ -982,8 +980,7 @@ IMPL_LINK(OGroupsSortingDialog, OnFormatAction, const OString&, rCommand, void)
     uno::Sequence<uno::Any> aClipboardList;
     if ( nIndex >= 0 && nGroupPos != NO_GROUP )
     {
-        aClipboardList.realloc(1);
-        aClipboardList[0] = m_xGroups->getByIndex(nGroupPos);
+        aClipboardList = { m_xGroups->getByIndex(nGroupPos) };
     }
     if (rCommand == "up")
     {
@@ -1028,16 +1025,13 @@ IMPL_LINK( OGroupsSortingDialog, LBChangeHdl, weld::ComboBox&, rListBox, void )
     else if ( nGroupPos != NO_GROUP )
     {
         uno::Reference< report::XGroup> xGroup = getGroup(nGroupPos);
-        uno::Sequence< beans::PropertyValue > aArgs(2);
-        aArgs[1].Name = PROPERTY_GROUP;
-        aArgs[1].Value <<= xGroup;
-
-        if ( m_xHeaderLst.get() == &rListBox )
-            aArgs[0].Name = PROPERTY_HEADERON;
-        else
-            aArgs[0].Name = PROPERTY_FOOTERON;
-
-        aArgs[0].Value <<= rListBox.get_active() == 0;
+        const OUString aHeaderFooterOnName(( m_xHeaderLst.get() == &rListBox )
+                                               ? std::u16string_view(PROPERTY_HEADERON)
+                                               : std::u16string_view(PROPERTY_FOOTERON));
+        uno::Sequence< beans::PropertyValue > aArgs{
+            comphelper::makePropertyValue(aHeaderFooterOnName, rListBox.get_active() == 0),
+            comphelper::makePropertyValue(PROPERTY_GROUP, xGroup)
+        };
         m_pController->executeChecked(m_xHeaderLst.get() == &rListBox ? SID_GROUPHEADER : SID_GROUPFOOTER, aArgs);
         m_xFieldExpression->InvalidateHandleColumn();
     }

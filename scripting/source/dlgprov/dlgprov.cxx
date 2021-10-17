@@ -71,15 +71,15 @@ namespace dlgprov
         OUString aDlgLocation = aInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         css::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
 
-        Sequence<Any> aArgs( 6 );
-        aArgs[0] <<= aDlgLocation;
-        aArgs[1] <<= true; // bReadOnly
-        aArgs[2] <<= aLocale;
-        aArgs[3] <<= aDlgName;
-        aArgs[4] <<= OUString();
-
         Reference< task::XInteractionHandler > xDummyHandler;
-        aArgs[5] <<= xDummyHandler;
+
+        Sequence<Any> aArgs{ Any(aDlgLocation),
+                             Any(true), // bReadOnly
+                             Any(aLocale),
+                             Any(aDlgName),
+                             Any(OUString()),
+                             Any(xDummyHandler) };
+
         Reference< XMultiComponentFactory > xSMgr_( i_xContext->getServiceManager(), UNO_SET_THROW );
         // TODO: Ctor
         Reference< resource::XStringResourceManager > xStringResourceManager( xSMgr_->createInstanceWithContext

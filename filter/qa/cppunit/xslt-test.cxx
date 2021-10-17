@@ -96,16 +96,17 @@ void XsltFilterTest::testXsltCopyNew()
 
     OUString source(
             m_directories.getURLFromSrc(u"/filter/source/xsltfilter/xsltfilter.component"));
-    uno::Sequence<uno::Any> args(7);
-    args[0] <<= beans::NamedValue("StylesheetURL",
-        uno::makeAny(m_directories.getURLFromSrc(u"/filter/qa/cppunit/data/xslt/copy.xslt")));
-    args[1] <<= beans::NamedValue("SourceURL", uno::makeAny(source));
-    args[2] <<= beans::NamedValue("TargetURL", uno::makeAny(tempURL));
-    args[3] <<= beans::NamedValue("SourceBaseURL",
-        uno::makeAny(m_directories.getURLFromSrc(u"/filter/source/xsltfilter/")));
-    args[4] <<= beans::NamedValue("TargetBaseURL", uno::makeAny(tempDirURL));
-    args[5] <<= beans::NamedValue("SystemType", uno::makeAny(OUString()));
-    args[6] <<= beans::NamedValue("PublicType", uno::makeAny(OUString()));
+    uno::Sequence<uno::Any> args{
+        uno::Any(beans::NamedValue("StylesheetURL",
+            uno::makeAny(m_directories.getURLFromSrc(u"/filter/qa/cppunit/data/xslt/copy.xslt")))),
+        uno::Any(beans::NamedValue("SourceURL", uno::makeAny(source))),
+        uno::Any(beans::NamedValue("TargetURL", uno::makeAny(tempURL))),
+        uno::Any(beans::NamedValue("SourceBaseURL",
+            uno::makeAny(m_directories.getURLFromSrc(u"/filter/source/xsltfilter/")))),
+        uno::Any(beans::NamedValue("TargetBaseURL", uno::makeAny(tempDirURL))),
+        uno::Any(beans::NamedValue("SystemType", uno::makeAny(OUString()))),
+        uno::Any(beans::NamedValue("PublicType", uno::makeAny(OUString())))
+    };
 
     uno::Reference<ucb::XSimpleFileAccess3> xSFA =
         ucb::SimpleFileAccess::create(getComponentContext());
@@ -150,17 +151,17 @@ void XsltFilterTest::testXsltCopyOld()
 
     OUString source(
             m_directories.getURLFromSrc(u"/filter/source/xsltfilter/xsltfilter.component"));
-    uno::Sequence<uno::Any> args(7);
-    args[0] <<= beans::NamedValue("StylesheetURL",
-        uno::makeAny(m_directories.getURLFromSrc(u"/filter/qa/cppunit/data/xslt/copy.xslt")));
-    args[1] <<= beans::NamedValue("SourceURL", uno::makeAny(source));
-    args[2] <<= beans::NamedValue("TargetURL", uno::makeAny(tempURL));
-    args[3] <<= beans::NamedValue("SourceBaseURL",
-        uno::makeAny(m_directories.getURLFromSrc(u"/filter/source/xsltfilter/")));
-    args[4] <<= beans::NamedValue("TargetBaseURL", uno::makeAny(tempDirURL));
-    args[5] <<= beans::NamedValue("SystemType", uno::makeAny(OUString()));
-    args[6] <<= beans::NamedValue("PublicType", uno::makeAny(OUString()));
-
+    uno::Sequence<uno::Any> args{
+        uno::Any(beans::NamedValue("StylesheetURL",
+            uno::makeAny(m_directories.getURLFromSrc(u"/filter/qa/cppunit/data/xslt/copy.xslt")))),
+        uno::Any(beans::NamedValue("SourceURL", uno::makeAny(source))),
+        uno::Any(beans::NamedValue("TargetURL", uno::makeAny(tempURL))),
+        uno::Any(beans::NamedValue("SourceBaseURL",
+            uno::makeAny(m_directories.getURLFromSrc(u"/filter/source/xsltfilter/")))),
+        uno::Any(beans::NamedValue("TargetBaseURL", uno::makeAny(tempDirURL))),
+        uno::Any(beans::NamedValue("SystemType", uno::makeAny(OUString()))),
+        uno::Any(beans::NamedValue("PublicType", uno::makeAny(OUString())))
+    };
 
     uno::Reference<ucb::XSimpleFileAccess3> xSFA =
         ucb::SimpleFileAccess::create(getComponentContext());

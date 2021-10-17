@@ -523,9 +523,7 @@ void VbaProject::attachMacros()
         comphelper::DocumentInfo::notifyMacroEventRead(mxDocModel);
 
         Reference< XMultiComponentFactory > xFactory( mxContext->getServiceManager(), UNO_SET_THROW );
-        Sequence< Any > aArgs( 2 );
-        aArgs[ 0 ] <<= mxDocModel;
-        aArgs[ 1 ] <<= maPrjName;
+        Sequence< Any > aArgs{ Any(mxDocModel), Any(maPrjName) };
         Reference< XVBAMacroResolver > xResolver( xFactory->createInstanceWithArgumentsAndContext(
             "com.sun.star.script.vba.VBAMacroResolver", aArgs, mxContext ), UNO_QUERY_THROW );
         maMacroAttachers.forEachMem( &VbaMacroAttacherBase::resolveAndAttachMacro, ::std::cref( xResolver ) );

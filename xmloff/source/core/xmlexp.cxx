@@ -43,6 +43,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysetinfo.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -1266,11 +1267,7 @@ ErrCode SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
                                                      xConvPropSet )
                 : xConvPropSet;
 
-            Sequence<Any> aArgs( 3 );
-            aArgs[0] <<= mxHandler;
-            aArgs[1] <<= xPropSet;
-            aArgs[2] <<= mxModel;
-
+            Sequence<Any> aArgs{ Any(mxHandler), Any(xPropSet), Any(mxModel) };
             // get filter component
             Reference< xml::sax::XDocumentHandler > xTmpDocHandler(
                 m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.comp.Oasis2OOoTransformer", aArgs, m_xContext),
@@ -1746,11 +1743,9 @@ void SvXMLExport::GetViewSettingsAndViews(uno::Sequence<beans::PropertyValue>& r
     if( bAdd )
     {
         sal_Int32 nOldLength(rProps.getLength());
-        rProps.realloc(nOldLength + 1);
-        beans::PropertyValue aProp;
-        aProp.Name = "Views";
-        aProp.Value <<= xIndexAccess;
-        rProps[nOldLength] = aProp;
+        auto pProps = rProps.realloc(nOldLength + 1);
+        beans::PropertyValue aProp = comphelper::makePropertyValue("Views", xIndexAccess);
+        pProps[nOldLength] = aProp;
     }
 }
 
@@ -2043,9 +2038,7 @@ void SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent > const & rComp
     Reference < XDocumentHandler > xHdl =
         new XMLEmbeddedObjectExportFilter( mxHandler );
 
-    Sequence < Any > aArgs( 1 );
-    aArgs[0] <<= xHdl;
-
+    Sequence < Any > aArgs{ Any(xHdl) };
     Reference< document::XExporter > xExporter(
         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(sFilterService, aArgs, m_xContext),
         UNO_QUERY);

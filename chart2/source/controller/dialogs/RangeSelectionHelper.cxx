@@ -109,21 +109,21 @@ bool RangeSelectionHelper::chooseRange(
         Reference< sheet::XRangeSelection > xRangeSel( getRangeSelection());
         if( xRangeSel.is())
         {
-            Sequence< beans::PropertyValue > aArgs( 4 );
-            aArgs[0] = beans::PropertyValue(
-                "InitialValue", -1, uno::Any( aCurrentRange ),
-                beans::PropertyState_DIRECT_VALUE );
-            aArgs[1] = beans::PropertyValue(
-                "Title", -1,
-                uno::Any( aUIString ),
-                beans::PropertyState_DIRECT_VALUE );
-            aArgs[2] = beans::PropertyValue(
-                "CloseOnMouseRelease", -1, uno::Any( true ),
-                beans::PropertyState_DIRECT_VALUE );
-            aArgs[3] = beans::PropertyValue(
-                "MultiSelectionMode", -1, uno::Any( true ),
-                beans::PropertyState_DIRECT_VALUE );
-
+            Sequence< beans::PropertyValue > aArgs{
+                beans::PropertyValue(
+                    "InitialValue", -1, uno::Any( aCurrentRange ),
+                    beans::PropertyState_DIRECT_VALUE ),
+                beans::PropertyValue(
+                    "Title", -1,
+                    uno::Any( aUIString ),
+                    beans::PropertyState_DIRECT_VALUE ),
+                beans::PropertyValue(
+                    "CloseOnMouseRelease", -1, uno::Any( true ),
+                    beans::PropertyState_DIRECT_VALUE ),
+                beans::PropertyValue(
+                    "MultiSelectionMode", -1, uno::Any( true ),
+                    beans::PropertyState_DIRECT_VALUE )
+            };
             if( m_xRangeSelectionListener.is() )
                 stopRangeListening();
             m_xRangeSelectionListener.set( Reference< sheet::XRangeSelectionListener >(

@@ -183,9 +183,7 @@ namespace pcr
 
     Sequence< OUString > SAL_CALL ButtonNavigationHandler::getActuatingProperties( )
     {
-        Sequence< OUString > aActuating( 2 );
-        aActuating[0] = PROPERTY_BUTTONTYPE;
-        aActuating[1] = PROPERTY_TARGET_URL;
+        Sequence< OUString > aActuating{ PROPERTY_BUTTONTYPE, PROPERTY_TARGET_URL };
         return aActuating;
     }
 

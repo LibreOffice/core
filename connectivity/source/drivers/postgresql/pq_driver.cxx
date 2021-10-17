@@ -70,9 +70,7 @@ Reference< XConnection > Driver::connect(
     if( ! acceptsURL( url ) )  // XDriver spec tells me to do so ...
         return Reference< XConnection > ();
 
-    Sequence< Any > seq ( 2 );
-    seq[0] <<= url;
-    seq[1] <<= info;
+    Sequence< Any > seq{ Any(url), Any(info) };
     return Reference< XConnection> (
         m_smgr->createInstanceWithArgumentsAndContext(
             "org.openoffice.comp.connectivity.pq.Connection.noext",

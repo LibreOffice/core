@@ -396,12 +396,7 @@ uno::Sequence<double> ScDPSource::getFilteredResults(
     const ScDPResultTree::ValuesType* pVals = maResFilterSet.getResults(aFilters);
     if (pVals && !pVals->empty())
     {
-        size_t n = pVals->size();
-        uno::Sequence<double> aRet(n);
-        for (size_t i = 0; i < n; ++i)
-            aRet[i] = (*pVals)[i];
-
-        return aRet;
+        return comphelper::containerToSequence(*pVals);
     }
 
     if (aFilters.getLength() == 1)

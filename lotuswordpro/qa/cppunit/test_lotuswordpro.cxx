@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <comphelper/propertyvalue.hxx>
+
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <com/sun/star/document/XFilter.hpp>
@@ -50,9 +54,7 @@ namespace
         const OUString &rURL, const OUString &,
         SfxFilterFlags, SotClipboardFormatId, unsigned int)
     {
-        uno::Sequence< beans::PropertyValue > aDescriptor(1);
-        aDescriptor[0].Name = "URL";
-        aDescriptor[0].Value <<= rURL;
+        uno::Sequence aDescriptor{ comphelper::makePropertyValue("URL", rURL) };
         return m_xFilter->filter(aDescriptor);
     }
 

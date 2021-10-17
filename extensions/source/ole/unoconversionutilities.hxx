@@ -1280,7 +1280,7 @@ void  UnoConversionUtilities<T>::getElementCountAndTypeOfSequence( const Any& rS
 {
     sal_Int32 dimCount= (*static_cast<uno_Sequence* const *>(rSeq.getValue()))->nElements;
     if( dimCount > seqElementCounts[ dim-1])
-        seqElementCounts[ dim-1]= dimCount;
+        seqElementCounts.getArray()[ dim-1]= dimCount;
 
     // we need the element type to construct the any that is
     // passed into getElementCountAndTypeOfSequence again
@@ -2330,12 +2330,12 @@ Sequence<Type> UnoConversionUtilities<T>::getImplementedInterfaces(IUnknown* pUn
             Sequence<Any> seqAny;
             if( anyNames >>= seqAny)
             {
-                seqTypes.realloc( seqAny.getLength());
+                auto pseqTypes = seqTypes.realloc( seqAny.getLength());
                 for( sal_Int32 i=0; i < seqAny.getLength(); i++)
                 {
                     OUString typeName;
                     seqAny[i] >>= typeName;
-                    seqTypes[i]= Type( TypeClass_INTERFACE, typeName);
+                    pseqTypes[i]= Type( TypeClass_INTERFACE, typeName);
                 }
             }
         }

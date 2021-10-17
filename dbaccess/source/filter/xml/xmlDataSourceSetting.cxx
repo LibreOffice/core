@@ -142,8 +142,8 @@ void OXMLDataSourceSetting::addValue(const OUString& _sValue)
     else
     {
         sal_Int32 nPos = m_aInfoSequence.getLength();
-        m_aInfoSequence.realloc(nPos+1);
-        m_aInfoSequence[nPos] = aValue;
+        auto pInfoSequence = m_aInfoSequence.realloc(nPos+1);
+        pInfoSequence[nPos] = aValue;
     }
 }
 

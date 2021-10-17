@@ -506,18 +506,19 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             nTextListLength = ( nCustomLabelsCount > 3 ) ? nCustomLabelsCount : 3;
             aSeparator = "";
             aTextList = Sequence< OUString >( nTextListLength );
+            auto pTextList = aTextList.getArray();
             for( sal_uInt32 i = 0; i < nCustomLabelsCount; ++i )
             {
                 switch( aCustomLabels[i]->getFieldType() )
                 {
                     case DataPointCustomLabelFieldType_VALUE:
                     {
-                        aTextList[i] = getLabelTextForValue( rDataSeries, nPointIndex, fValue, false );
+                        pTextList[i] = getLabelTextForValue( rDataSeries, nPointIndex, fValue, false );
                         break;
                     }
                     case DataPointCustomLabelFieldType_CATEGORYNAME:
                     {
-                        aTextList[i] = getCategoryName( nPointIndex );
+                        pTextList[i] = getCategoryName( nPointIndex );
                         break;
                     }
                     case DataPointCustomLabelFieldType_SERIESNAME:
@@ -526,7 +527,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                         if ( m_xChartTypeModel )
                             aRole = m_xChartTypeModel->getRoleOfSequenceForSeriesLabel();
                         const uno::Reference< XDataSeries >& xSeries( rDataSeries.getModel() );
-                        aTextList[i] = DataSeriesHelper::getDataSeriesLabel( xSeries, aRole );
+                        pTextList[i] = DataSeriesHelper::getDataSeriesLabel( xSeries, aRole );
                         break;
                     }
                     case DataPointCustomLabelFieldType_PERCENTAGE:
@@ -537,31 +538,31 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                         if(fValue < 0)
                            fValue *= -1.0;
 
-                        aTextList[i] = getLabelTextForValue(rDataSeries, nPointIndex, fValue, true);
+                        pTextList[i] = getLabelTextForValue(rDataSeries, nPointIndex, fValue, true);
                         break;
                     }
                     case DataPointCustomLabelFieldType_CELLRANGE:
                     {
                         if (aCustomLabels[i]->getDataLabelsRange())
-                            aTextList[i] = aCustomLabels[i]->getString();
+                            pTextList[i] = aCustomLabels[i]->getString();
                         else
-                            aTextList[i] = OUString();
+                            pTextList[i] = OUString();
                         break;
                     }
                     case DataPointCustomLabelFieldType_CELLREF:
                     {
                         // TODO: for now doesn't show placeholder
-                        aTextList[i] = OUString();
+                        pTextList[i] = OUString();
                         break;
                     }
                     case DataPointCustomLabelFieldType_TEXT:
                     {
-                        aTextList[i] = aCustomLabels[i]->getString();
+                        pTextList[i] = aCustomLabels[i]->getString();
                         break;
                     }
                     case DataPointCustomLabelFieldType_NEWLINE:
                     {
-                        aTextList[i] = "\n";
+                        pTextList[i] = "\n";
                         break;
                     }
                     default:
@@ -572,9 +573,10 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         }
         else
         {
+            auto pTextList = aTextList.getArray();
             if( pLabel->ShowCategoryName )
             {
-                aTextList[0] = getCategoryName( nPointIndex );
+                pTextList[0] = getCategoryName( nPointIndex );
             }
 
             if( pLabel->ShowSeriesName )
@@ -583,12 +585,12 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                 if ( m_xChartTypeModel )
                     aRole = m_xChartTypeModel->getRoleOfSequenceForSeriesLabel();
                 const uno::Reference< XDataSeries >& xSeries( rDataSeries.getModel() );
-                aTextList[1] = DataSeriesHelper::getDataSeriesLabel( xSeries, aRole );
+                pTextList[1] = DataSeriesHelper::getDataSeriesLabel( xSeries, aRole );
             }
 
             if( pLabel->ShowNumber )
             {
-                aTextList[2] = getLabelTextForValue(rDataSeries, nPointIndex, fValue, false);
+                pTextList[2] = getLabelTextForValue(rDataSeries, nPointIndex, fValue, false);
             }
 
             if( pLabel->ShowNumberInPercent )
@@ -599,7 +601,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                 if( fValue < 0 )
                     fValue*=-1.0;
 
-                aTextList[3] = getLabelTextForValue(rDataSeries, nPointIndex, fValue, true);
+                pTextList[3] = getLabelTextForValue(rDataSeries, nPointIndex, fValue, true);
             }
         }
 
@@ -628,11 +630,8 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
 
         if( bUseCustomLabel )
         {
-            Sequence< uno::Reference< XFormattedString > > aFormattedLabels( aCustomLabels.getLength() );
-            for( int i = 0; i < aFormattedLabels.getLength(); i++ )
-            {
-                aFormattedLabels[i] = aCustomLabels[i];
-            }
+            Sequence< uno::Reference< XFormattedString > > aFormattedLabels(
+                comphelper::containerToSequence<uno::Reference<XFormattedString>>(aCustomLabels));
 
             // create text shape
             xTextShape = ShapeFactory::getOrCreateShapeFactory( m_xShapeFactory )->
@@ -740,12 +739,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                     double fPageDiagonaleLength = sqrt(double(m_aPageReferenceSize.Width)*double(m_aPageReferenceSize.Width) + double(m_aPageReferenceSize.Height)*double(m_aPageReferenceSize.Height));
                     if ((aLength.getLength() / fPageDiagonaleLength) >= 0.01)
                     {
-                        drawing::PointSequenceSequence aPoints(1);
-                        aPoints[0].realloc(2);
-                        aPoints[0][0].X = nX1;
-                        aPoints[0][0].Y = nY1;
-                        aPoints[0][1].X = nX2;
-                        aPoints[0][1].Y = nY2;
+                        drawing::PointSequenceSequence aPoints{ { {nX1, nY1}, {nX2, nY2} } };
 
                         VLineProperties aVLineProperties;
                         m_pShapeFactory->createLine2D(xTarget, aPoints, &aVLineProperties);
@@ -1401,12 +1395,11 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSer
         nPointCount = aCalculatedPoints.getLength();
 
         drawing::PolyPolygonShape3D aRegressionPoly;
-        aRegressionPoly.SequenceX.realloc(1);
-        aRegressionPoly.SequenceY.realloc(1);
-        aRegressionPoly.SequenceZ.realloc(1);
-        aRegressionPoly.SequenceX[0].realloc(nPointCount);
-        aRegressionPoly.SequenceY[0].realloc(nPointCount);
-        aRegressionPoly.SequenceZ[0].realloc(nPointCount);
+        auto pSequenceX = aRegressionPoly.SequenceX.realloc(1);
+        auto pSequenceY = aRegressionPoly.SequenceY.realloc(1);
+        auto pSequenceZ = aRegressionPoly.SequenceZ.realloc(1);
+        auto pSequenceX0 = pSequenceX[0].realloc(nPointCount);
+        auto pSequenceY0 = pSequenceY[0].realloc(nPointCount);
 
         sal_Int32 nRealPointCount = 0;
 
@@ -1424,14 +1417,14 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSer
                !std::isnan(fLogicY) && !std::isinf(fLogicY) &&
                !std::isnan(fLogicZ) && !std::isinf(fLogicZ) )
             {
-                aRegressionPoly.SequenceX[0][nRealPointCount] = fLogicX;
-                aRegressionPoly.SequenceY[0][nRealPointCount] = fLogicY;
+                pSequenceX0[nRealPointCount] = fLogicX;
+                pSequenceY0[nRealPointCount] = fLogicY;
                 nRealPointCount++;
             }
         }
-        aRegressionPoly.SequenceX[0].realloc(nRealPointCount);
-        aRegressionPoly.SequenceY[0].realloc(nRealPointCount);
-        aRegressionPoly.SequenceZ[0].realloc(nRealPointCount);
+        pSequenceX[0].realloc(nRealPointCount);
+        pSequenceY[0].realloc(nRealPointCount);
+        pSequenceZ[0].realloc(nRealPointCount);
 
         drawing::PolyPolygonShape3D aClippedPoly;
         Clipping::clipPolygonAtRectangle( aRegressionPoly, m_pPosHelper->getScaledLogicClipDoubleRect(), aClippedPoly );

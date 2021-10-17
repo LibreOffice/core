@@ -226,8 +226,7 @@ UpdateCheckConfig::get(
     aProperty.Name  = "nodepath";
     aProperty.Value <<= OUString("org.openoffice.Office.Jobs/Jobs/UpdateCheck/Arguments");
 
-    uno::Sequence< uno::Any > aArgumentList( 1 );
-    aArgumentList[0] <<= aProperty;
+    uno::Sequence< uno::Any > aArgumentList{ uno::Any(aProperty) };
 
     uno::Reference< container::XNameContainer > xContainer(
         xConfigProvider->createInstanceWithArguments(
@@ -235,11 +234,11 @@ UpdateCheckConfig::get(
         uno::UNO_QUERY_THROW );
 
     aProperty.Value <<= OUString("/org.openoffice.Office.ExtensionManager/ExtensionUpdateData/IgnoredUpdates");
-    aArgumentList[0] <<= aProperty;
+    aArgumentList = { uno::Any(aProperty) };
     uno::Reference< container::XNameContainer > xIgnoredExt( xConfigProvider->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationUpdateAccess", aArgumentList ), uno::UNO_QUERY_THROW );
 
     aProperty.Value <<= OUString("/org.openoffice.Office.ExtensionManager/ExtensionUpdateData/AvailableUpdates");
-    aArgumentList[0] <<= aProperty;
+    aArgumentList = { uno::Any(aProperty) };
     uno::Reference< container::XNameContainer > xUpdateAvail( xConfigProvider->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationUpdateAccess", aArgumentList ), uno::UNO_QUERY_THROW );
 
     return new UpdateCheckConfig( xContainer, xUpdateAvail, xIgnoredExt, rListener );

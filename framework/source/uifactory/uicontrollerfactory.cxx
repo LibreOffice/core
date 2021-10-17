@@ -141,20 +141,20 @@ Reference< XInterface > SAL_CALL UIControllerFactory::createInstanceWithArgument
     Sequence< Any > aNewArgs( Arguments );
 
     sal_Int32 nAppendIndex = aNewArgs.getLength();
-    aNewArgs.realloc( aNewArgs.getLength() + 2 );
+    auto pNewArgs = aNewArgs.realloc( aNewArgs.getLength() + 2 );
 
     // Append the command URL to the Arguments sequence so that one controller can be
     // used for more than one command URL.
     aPropValue.Name     = "CommandURL";
     aPropValue.Value  <<= ServiceSpecifier;
-    aNewArgs[nAppendIndex] <<= aPropValue;
+    pNewArgs[nAppendIndex] <<= aPropValue;
 
     // Append the optional value argument. It's an empty string if no additional info
     // is provided to the controller.
     OUString aValue = m_pConfigAccess->getValueFromCommandModule( ServiceSpecifier, aPropName );
     aPropValue.Name = "Value";
     aPropValue.Value <<= aValue;
-    aNewArgs[nAppendIndex+1] <<= aPropValue;
+    pNewArgs[nAppendIndex+1] <<= aPropValue;
 
     {
         OUString aServiceName;

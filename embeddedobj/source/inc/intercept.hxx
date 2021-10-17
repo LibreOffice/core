@@ -109,7 +109,7 @@ private:
     css::uno::Reference< css::frame::XDispatchProvider > m_xSlaveDispatchProvider;
     css::uno::Reference< css::frame::XDispatchProvider > m_xMasterDispatchProvider;
 
-    static css::uno::Sequence< OUString > m_aInterceptedURL;
+    static const css::uno::Sequence< OUString > m_aInterceptedURL;
 
     std::unique_ptr<StatusChangeListenerContainer>    m_pStatCL;
 };

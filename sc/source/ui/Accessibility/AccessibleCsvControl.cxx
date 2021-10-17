@@ -237,13 +237,14 @@ static void lcl_FillFontAttributes( Sequence< PropertyValue >& rSeq, const vcl::
     SvxLanguageItem aLangItem( rFont.GetLanguage(), ATTR_FONT_LANGUAGE );
 
     sal_Int32 nIndex = lcl_ExpandSequence( rSeq, 7 );
-    lcl_FillProperty( rSeq[ nIndex++ ], "CharFontName",      aFontItem,   MID_FONT_FAMILY_NAME );
-    lcl_FillProperty( rSeq[ nIndex++ ], "CharFontFamily",    aFontItem,   MID_FONT_FAMILY );
-    lcl_FillProperty( rSeq[ nIndex++ ], "CharFontStyleName", aFontItem,   MID_FONT_STYLE_NAME );
-    lcl_FillProperty( rSeq[ nIndex++ ], "CharFontCharSet",   aFontItem,   MID_FONT_PITCH );
-    lcl_FillProperty( rSeq[ nIndex++ ], "CharFontPitch",     aFontItem,   MID_FONT_CHAR_SET );
-    lcl_FillProperty( rSeq[ nIndex++ ], "CharHeight",        aHeightItem, MID_FONTHEIGHT );
-    lcl_FillProperty( rSeq[ nIndex++ ], "CharLocale",        aLangItem,   MID_LANG_LOCALE );
+    auto pSeq = rSeq.getArray();
+    lcl_FillProperty( pSeq[ nIndex++ ], "CharFontName",      aFontItem,   MID_FONT_FAMILY_NAME );
+    lcl_FillProperty( pSeq[ nIndex++ ], "CharFontFamily",    aFontItem,   MID_FONT_FAMILY );
+    lcl_FillProperty( pSeq[ nIndex++ ], "CharFontStyleName", aFontItem,   MID_FONT_STYLE_NAME );
+    lcl_FillProperty( pSeq[ nIndex++ ], "CharFontCharSet",   aFontItem,   MID_FONT_PITCH );
+    lcl_FillProperty( pSeq[ nIndex++ ], "CharFontPitch",     aFontItem,   MID_FONT_CHAR_SET );
+    lcl_FillProperty( pSeq[ nIndex++ ], "CharHeight",        aHeightItem, MID_FONTHEIGHT );
+    lcl_FillProperty( pSeq[ nIndex++ ], "CharLocale",        aLangItem,   MID_LANG_LOCALE );
 }
 
 ScAccessibleCsvRuler::ScAccessibleCsvRuler(ScCsvRuler& rRuler)
@@ -300,8 +301,7 @@ Reference< XAccessibleRelationSet > SAL_CALL ScAccessibleCsvRuler::getAccessible
     css::uno::Reference<css::accessibility::XAccessible> xAccObj(static_cast<ScAccessibleCsvGrid*>(rGrid.GetAccessible()));
     if( xAccObj.is() )
     {
-        Sequence< Reference< XInterface > > aSeq( 1 );
-        aSeq[ 0 ] = xAccObj;
+        Sequence< Reference< XInterface > > aSeq{ xAccObj };
         pRelationSet->AddRelation( AccessibleRelation( AccessibleRelationType::CONTROLLER_FOR, aSeq ) );
     }
 
@@ -862,8 +862,7 @@ Reference< XAccessibleRelationSet > SAL_CALL ScAccessibleCsvGrid::getAccessibleR
         css::uno::Reference<css::accessibility::XAccessible> xAccObj(static_cast<ScAccessibleCsvGrid*>(rRuler.GetAccessible()));
         if( xAccObj.is() )
         {
-            Sequence< Reference< XInterface > > aSeq( 1 );
-            aSeq[ 0 ] = xAccObj;
+            Sequence< Reference< XInterface > > aSeq{ xAccObj };
             pRelationSet->AddRelation( AccessibleRelation( AccessibleRelationType::CONTROLLED_BY, aSeq ) );
         }
     }
@@ -959,11 +958,12 @@ Sequence< sal_Int32 > SAL_CALL ScAccessibleCsvGrid::getSelectedAccessibleColumns
 
     ScCsvGrid& rGrid = implGetGrid();
     Sequence< sal_Int32 > aSeq( implGetColumnCount() );
+    auto pSeq = aSeq.getArray();
 
     sal_Int32 nSeqIx = 0;
     sal_uInt32 nColIx = rGrid.GetFirstSelected();
     for( ; nColIx != CSV_COLUMN_INVALID; ++nSeqIx, nColIx = rGrid.GetNextSelected( nColIx ) )
-        aSeq[ nSeqIx ] = lcl_GetApiColumn( nColIx );
+        pSeq[ nSeqIx ] = lcl_GetApiColumn( nColIx );
 
     aSeq.realloc( nSeqIx );
     return aSeq;

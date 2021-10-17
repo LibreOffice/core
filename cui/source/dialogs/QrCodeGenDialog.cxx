@@ -10,6 +10,7 @@
 #include <QrCodeGenDialog.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <tools/stream.hxx>
 #include <dialmgr.hxx>
 #include <strings.hrc>
@@ -256,9 +257,8 @@ void QrCodeGenDialog::Apply()
     Reference<XComponentContext> xContext(comphelper::getProcessComponentContext());
     Reference<XGraphicProvider> xProvider = css::graphic::GraphicProvider::create(xContext);
 
-    Sequence<PropertyValue> aMediaProperties(1);
-    aMediaProperties[0].Name = "InputStream";
-    aMediaProperties[0].Value <<= xInputStream;
+    Sequence<PropertyValue> aMediaProperties{ comphelper::makePropertyValue("InputStream",
+                                                                            xInputStream) };
     Reference<XGraphic> xGraphic(xProvider->queryGraphic(aMediaProperties));
 
     bool bIsExistingQRCode = m_xExistingShapeProperties.is();
