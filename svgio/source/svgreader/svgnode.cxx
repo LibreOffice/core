@@ -107,10 +107,10 @@ namespace svgio::svgreader
                         }
                     }
 
-                    for(size_t a(0); a < aParts.size(); a++)
+                    for(const auto &a : aParts)
                     {
                         const OUString aNewConcatenated(
-                            "." + aParts[a] + aConcatenated);
+                            "." + a + aConcatenated);
 
                         if(pParent)
                         {
