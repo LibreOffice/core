@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96791171_f8fee0ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-10-17T20:30:59Z",
+      "side": 1,
+      "message": "Hrm. If this was backported then https://gerrit.libreoffice.org/c/core/+/123586 should also be backported?\n\n(Even though --with-system-nss - which worked before - now fails with this patch and that one above in master.)",
+      "revId": "a4d5f880ebcca21f126098729b1137431bc54c6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
