@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afd93338_2fd703f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-17T09:38:56Z",
+      "side": 1,
+      "message": "Thought you might be interested in this one.\nI\u0027ll push this if Jenkins is ok unless you see before something wrong here.",
+      "revId": "ef0c3c8a90eac40aaf95ed7d3a395ef7acf952de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
