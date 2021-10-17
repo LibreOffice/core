@@ -2609,11 +2609,13 @@ void SbUserFormModule::InitObject()
             m_xDialog = xProvider->createDialog( sDialogUrl );
 
             // create vba api object
-            uno::Sequence< uno::Any > aArgs(4);
-            aArgs[ 0 ] = uno::Any();
-            aArgs[ 1 ] <<= m_xDialog;
-            aArgs[ 2 ] <<= m_xModel;
-            aArgs[ 3 ] <<= GetParent()->GetName();
+            uno::Sequence< uno::Any > aArgs
+            {
+                uno::Any(),
+                makeAny(m_xDialog),
+                makeAny(m_xModel),
+                makeAny(GetParent()->GetName())
+            };
             pDocObject = new SbUnoObject( GetName(), uno::Any( xVBAFactory->createInstanceWithArguments( "ooo.vba.msforms.UserForm", aArgs  ) ) );
 
             uno::Reference< lang::XComponent > xComponent( m_xDialog, uno::UNO_QUERY_THROW );

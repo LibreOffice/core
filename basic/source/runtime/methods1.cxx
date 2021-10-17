@@ -2448,11 +2448,13 @@ void SbRtl_SYD(StarBASIC *, SbxArray & rPar, bool)
 
     // retrieve non-optional params
 
-    Sequence< Any > aParams( 4 );
-    aParams[0] <<= rPar.Get(1)->GetDouble();
-    aParams[1] <<= rPar.Get(2)->GetDouble();
-    aParams[2] <<= rPar.Get(3)->GetDouble();
-    aParams[3] <<= rPar.Get(4)->GetDouble();
+    Sequence< Any > aParams
+    {
+        makeAny(rPar.Get(1)->GetDouble()),
+        makeAny(rPar.Get(2)->GetDouble()),
+        makeAny(rPar.Get(3)->GetDouble()),
+        makeAny(rPar.Get(4)->GetDouble())
+    };
 
     CallFunctionAccessFunction(aParams, "SYD", rPar.Get(0));
 }
@@ -2469,10 +2471,12 @@ void SbRtl_SLN(StarBASIC *, SbxArray & rPar, bool)
 
     // retrieve non-optional params
 
-    Sequence< Any > aParams( 3 );
-    aParams[0] <<= rPar.Get(1)->GetDouble();
-    aParams[1] <<= rPar.Get(2)->GetDouble();
-    aParams[2] <<= rPar.Get(3)->GetDouble();
+    Sequence< Any > aParams
+    {
+        makeAny(rPar.Get(1)->GetDouble()),
+        makeAny(rPar.Get(2)->GetDouble()),
+        makeAny(rPar.Get(3)->GetDouble())
+    };
 
     CallFunctionAccessFunction(aParams, "SLN", rPar.Get(0));
 }
@@ -2509,12 +2513,14 @@ void SbRtl_Pmt(StarBASIC *, SbxArray & rPar, bool)
             type = rPar.Get(5)->GetDouble();
     }
 
-    Sequence< Any > aParams( 5 );
-    aParams[ 0 ] <<= rate;
-    aParams[ 1 ] <<= nper;
-    aParams[ 2 ] <<= pmt;
-    aParams[ 3 ] <<= fv;
-    aParams[ 4 ] <<= type;
+    Sequence< Any > aParams
+    {
+        makeAny(rate),
+        makeAny(nper),
+        makeAny(pmt),
+        makeAny(fv),
+        makeAny(type)
+    };
 
     CallFunctionAccessFunction(aParams, "Pmt", rPar.Get(0));
 }
@@ -2552,13 +2558,15 @@ void SbRtl_PPmt(StarBASIC *, SbxArray & rPar, bool)
             type = rPar.Get(6)->GetDouble();
     }
 
-    Sequence< Any > aParams( 6 );
-    aParams[ 0 ] <<= rate;
-    aParams[ 1 ] <<= per;
-    aParams[ 2 ] <<= nper;
-    aParams[ 3 ] <<= pv;
-    aParams[ 4 ] <<= fv;
-    aParams[ 5 ] <<= type;
+    Sequence< Any > aParams
+    {
+        makeAny(rate),
+        makeAny(per),
+        makeAny(nper),
+        makeAny(pv),
+        makeAny(fv),
+        makeAny(type)
+    };
 
     CallFunctionAccessFunction(aParams, "PPmt", rPar.Get(0));
 }
@@ -2595,12 +2603,14 @@ void SbRtl_PV(StarBASIC *, SbxArray & rPar, bool)
             type = rPar.Get(5)->GetDouble();
     }
 
-    Sequence< Any > aParams( 5 );
-    aParams[ 0 ] <<= rate;
-    aParams[ 1 ] <<= nper;
-    aParams[ 2 ] <<= pmt;
-    aParams[ 3 ] <<= fv;
-    aParams[ 4 ] <<= type;
+    Sequence< Any > aParams
+    {
+        makeAny(rate),
+        makeAny(nper),
+        makeAny(pmt),
+        makeAny(fv),
+        makeAny(type)
+    };
 
     CallFunctionAccessFunction(aParams, "PV", rPar.Get(0));
 }
@@ -2615,8 +2625,6 @@ void SbRtl_NPV(StarBASIC *, SbxArray & rPar, bool)
         return;
     }
 
-    Sequence< Any > aParams( 2 );
-    aParams[0] <<= rPar.Get(1)->GetDouble();
     Any aValues = sbxToUnoValue(rPar.Get(2),
                 cppu::UnoType<Sequence<double>>::get() );
 
@@ -2625,7 +2633,11 @@ void SbRtl_NPV(StarBASIC *, SbxArray & rPar, bool)
     aValues >>= sValues[ 0 ];
     aValues <<= sValues;
 
-    aParams[ 1 ] = aValues;
+    Sequence< Any > aParams
+    {
+        makeAny(rPar.Get(1)->GetDouble()),
+        aValues
+    };
 
     CallFunctionAccessFunction(aParams, "NPV", rPar.Get(0));
 }
@@ -2662,12 +2674,14 @@ void SbRtl_NPer(StarBASIC *, SbxArray & rPar, bool)
             type = rPar.Get(5)->GetDouble();
     }
 
-    Sequence< Any > aParams( 5 );
-    aParams[ 0 ] <<= rate;
-    aParams[ 1 ] <<= pmt;
-    aParams[ 2 ] <<= pv;
-    aParams[ 3 ] <<= fv;
-    aParams[ 4 ] <<= type;
+    Sequence< Any > aParams
+    {
+        makeAny(rate),
+        makeAny(pmt),
+        makeAny(pv),
+        makeAny(fv),
+        makeAny(type)
+    };
 
     CallFunctionAccessFunction(aParams, "NPer", rPar.Get(0));
 }
@@ -2684,7 +2698,6 @@ void SbRtl_MIRR(StarBASIC *, SbxArray & rPar, bool)
 
     // retrieve non-optional params
 
-    Sequence< Any > aParams( 3 );
     Any aValues = sbxToUnoValue(rPar.Get(1),
                 cppu::UnoType<Sequence<double>>::get() );
 
@@ -2693,9 +2706,12 @@ void SbRtl_MIRR(StarBASIC *, SbxArray & rPar, bool)
     aValues >>= sValues[ 0 ];
     aValues <<= sValues;
 
-    aParams[ 0 ] = aValues;
-    aParams[1] <<= rPar.Get(2)->GetDouble();
-    aParams[2] <<= rPar.Get(3)->GetDouble();
+    Sequence< Any > aParams
+    {
+        aValues,
+        makeAny(rPar.Get(2)->GetDouble()),
+        makeAny(rPar.Get(3)->GetDouble())
+    };
 
     CallFunctionAccessFunction(aParams, "MIRR", rPar.Get(0));
 }
@@ -2727,9 +2743,11 @@ void SbRtl_IRR(StarBASIC *, SbxArray & rPar, bool)
             guess = rPar.Get(2)->GetDouble();
     }
 
-    Sequence< Any > aParams( 2 );
-    aParams[ 0 ] = aValues;
-    aParams[ 1 ] <<= guess;
+    Sequence< Any > aParams
+    {
+        aValues,
+        makeAny(guess)
+    };
 
     CallFunctionAccessFunction(aParams, "IRR", rPar.Get(0));
 }
@@ -2767,13 +2785,15 @@ void SbRtl_IPmt(StarBASIC *, SbxArray & rPar, bool)
             type = rPar.Get(6)->GetDouble();
     }
 
-    Sequence< Any > aParams( 6 );
-    aParams[ 0 ] <<= rate;
-    aParams[ 1 ] <<= per;
-    aParams[ 2 ] <<= nper;
-    aParams[ 3 ] <<= pv;
-    aParams[ 4 ] <<= fv;
-    aParams[ 5 ] <<= type;
+    Sequence< Any > aParams
+    {
+        makeAny(rate),
+        makeAny(per),
+        makeAny(nper),
+        makeAny(pv),
+        makeAny(fv),
+        makeAny(type)
+    };
 
     CallFunctionAccessFunction(aParams, "IPmt", rPar.Get(0));
 }
@@ -2810,12 +2830,14 @@ void SbRtl_FV(StarBASIC *, SbxArray & rPar, bool)
             type = rPar.Get(5)->GetDouble();
     }
 
-    Sequence< Any > aParams( 5 );
-    aParams[ 0 ] <<= rate;
-    aParams[ 1 ] <<= nper;
-    aParams[ 2 ] <<= pmt;
-    aParams[ 3 ] <<= pv;
-    aParams[ 4 ] <<= type;
+    Sequence< Any > aParams
+    {
+        makeAny(rate),
+        makeAny(nper),
+        makeAny(pmt),
+        makeAny(pv),
+        makeAny(type)
+    };
 
     CallFunctionAccessFunction(aParams, "FV", rPar.Get(0));
 }
@@ -2846,12 +2868,14 @@ void SbRtl_DDB(StarBASIC *, SbxArray & rPar, bool)
             factor = rPar.Get(5)->GetDouble();
     }
 
-    Sequence< Any > aParams( 5 );
-    aParams[ 0 ] <<= cost;
-    aParams[ 1 ] <<= salvage;
-    aParams[ 2 ] <<= life;
-    aParams[ 3 ] <<= period;
-    aParams[ 4 ] <<= factor;
+    Sequence< Any > aParams
+    {
+        makeAny(cost),
+        makeAny(salvage),
+        makeAny(life),
+        makeAny(period),
+        makeAny(factor)
+    };
 
     CallFunctionAccessFunction(aParams, "DDB", rPar.Get(0));
 }
@@ -2901,13 +2925,15 @@ void SbRtl_Rate(StarBASIC *, SbxArray & rPar, bool)
             guess = rPar.Get(6)->GetDouble();
     }
 
-    Sequence< Any > aParams( 6 );
-    aParams[ 0 ] <<= nper;
-    aParams[ 1 ] <<= pmt;
-    aParams[ 2 ] <<= pv;
-    aParams[ 3 ] <<= fv;
-    aParams[ 4 ] <<= type;
-    aParams[ 5 ] <<= guess;
+    Sequence< Any > aParams
+    {
+        makeAny(nper),
+        makeAny(pmt),
+        makeAny(pv),
+        makeAny(fv),
+        makeAny(type),
+        makeAny(guess)
+    };
 
     CallFunctionAccessFunction(aParams, "Rate", rPar.Get(0));
 }

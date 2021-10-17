@@ -763,10 +763,8 @@ void DlgEditor::Copy()
         xStream2->closeInput();
 
         // Old format contains dialog with replaced ids
-        Sequence< Any > aSeqData(2);
         Any aNoResourceDialogModelBytesAny;
         aNoResourceDialogModelBytesAny <<= NoResourceDialogModelBytes;
-        aSeqData[0] = aNoResourceDialogModelBytesAny;
 
         // New format contains dialog and resource
         Sequence< sal_Int8 > aResData = xStringResourcePersistence->exportBinary();
@@ -792,18 +790,18 @@ void DlgEditor::Copy()
         memcpy( pCombinedData + 4, DialogModelBytes.getConstArray(), nDialogDataLen );
         memcpy( pCombinedData + nResOffset, aResData.getConstArray(), nResDataLen );
 
-        aSeqData[1] <<= aCombinedData;
+        Sequence< Any > aSeqData
+        {
+            aNoResourceDialogModelBytesAny,
+            makeAny(aCombinedData)
+        };
 
         pTrans = new DlgEdTransferableImpl( m_ClipboardDataFlavorsResource, aSeqData );
     }
     else
     {
         // No resource, support only old format
-        Sequence< Any > aSeqData(1);
-        Any aDialogModelBytesAny;
-        aDialogModelBytesAny <<= DialogModelBytes;
-        aSeqData[0] = aDialogModelBytesAny;
-        pTrans = new DlgEdTransferableImpl( m_ClipboardDataFlavors , aSeqData );
+        pTrans = new DlgEdTransferableImpl( m_ClipboardDataFlavors , { makeAny(DialogModelBytes) } );
     }
     SolarMutexReleaser aReleaser;
     xClipboard->setContents( pTrans , pTrans );
