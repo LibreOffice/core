@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa8df7a0_9c781426",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-17T11:26:52Z",
+      "side": 1,
+      "message": "I used static_cast because it was already used for aKeyCode.GetFunction() but perhaps I should use o3tl::narrowing.\nAlso for aSeq3, it wasn\u0027t initialized before, I used aKeyEvent.GetCharCode() thinking perhaps someone had forgotten it.",
+      "revId": "63c47ec95e841ad5e9c78b80e137700890c3e9ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
