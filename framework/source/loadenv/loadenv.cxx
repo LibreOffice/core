@@ -606,29 +606,26 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
 
     OUString sType = xDetect->queryTypeByURL(sURL);
 
-    css::uno::Sequence< css::beans::NamedValue >           lQuery(1);
     css::uno::Reference< css::frame::XLoaderFactory >      xLoaderFactory;
     css::uno::Reference< css::container::XEnumeration >    xSet;
-    css::uno::Sequence< OUString >                  lTypesReg(1);
 
     // (iii) If a FrameLoader service (or at least
     //      a Filter) can be found, which supports
     //      this URL - it must be a loadable content.
     //      Because both items are registered for types
     //      it's enough to check for frame loaders only.
-    //      Mos of our filters are handled by our global
+    //      Most of our filters are handled by our global
     //      default loader. But there exist some specialized
     //      loader, which does not work on top of filters!
     //      So it's not enough to search on the filter configuration.
     //      Further it's not enough to search for types!
     //      Because there exist some types, which are referenced by
-    //      other objects... but not by filters nor frame loaders!
-
-    OUString sPROP_TYPES(PROP_TYPES);
-
-    lTypesReg[0]      = sType;
-    lQuery[0].Name    = sPROP_TYPES;
-    lQuery[0].Value <<= lTypesReg;
+    //      other objects... but neither by filters nor frame loaders!
+    css::uno::Sequence< OUString > lTypesReg { sType };
+    css::uno::Sequence< css::beans::NamedValue >           lQuery
+    {
+        css::beans::NamedValue(PROP_TYPES, makeAny(lTypesReg))
+    };
 
     xLoaderFactory = css::frame::FrameLoaderFactory::create(xContext);
     xSet       = xLoaderFactory->createSubSetEnumerationByProperties(lQuery);
@@ -639,10 +636,6 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     // (iv) Some URL protocols are supported by special services.
     //      E.g. ContentHandler.
     //      Such contents can be handled ... but not loaded.
-
-    lTypesReg[0]      = sType;
-    lQuery[0].Name    = sPROP_TYPES;
-    lQuery[0].Value <<= lTypesReg;
 
     xLoaderFactory = css::frame::ContentHandlerFactory::create(xContext);
     xSet       = xLoaderFactory->createSubSetEnumerationByProperties(lQuery);
