@@ -83,10 +83,11 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
             xWriter->setOutputStream( xOut );
 
             uno::Sequence< uno::Any > aArgs( xObjectResolver.is() ? 3 : 2 );
-            aArgs[0] <<= xHandler;
-            aArgs[1] <<= xGraphicStorageHandler;
+            auto pArgs = aArgs.getArray();
+            pArgs[0] <<= xHandler;
+            pArgs[1] <<= xGraphicStorageHandler;
             if( xObjectResolver.is() )
-                aArgs[2] <<= xObjectResolver;
+                pArgs[2] <<= xObjectResolver;
 
             uno::Reference< document::XFilter > xFilter( xContext->getServiceManager()->createInstanceWithArgumentsAndContext( OUString::createFromAscii( pExportService ), aArgs, xContext ), uno::UNO_QUERY );
             if( !xFilter.is() )

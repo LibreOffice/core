@@ -27,9 +27,9 @@
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
+#include <algorithm>
 #include <memory>
 #include <vector>
-#include <iostream>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
@@ -487,8 +487,7 @@ Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess( const OUString&
     aProperty.Name = "nodepath";
     aProperty.Value <<= sNodePath;
 
-    uno::Sequence< uno::Any > aArgumentList( 1 );
-    aArgumentList[0] <<= aProperty;
+    uno::Sequence< uno::Any > aArgumentList{ uno::Any(aProperty) };
 
     OUString sAccessString;
 
@@ -688,10 +687,9 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void )
                     //create appropriate sequence with same size as string sequence
                     uno::Sequence< sal_Int16 > seqShort( seqStr.size() );
                     //convert all strings to appropriate type
-                    for( size_t i = 0; i < seqStr.size(); ++i )
-                    {
-                        seqShort[i] = static_cast<sal_Int16>(seqStr[i].toInt32());
-                    }
+                    std::transform(seqStr.begin(), seqStr.end(), seqShort.getArray(),
+                                   [](const auto& str)
+                                   { return static_cast<sal_Int16>(str.toInt32()); });
                     pProperty->Value <<= seqShort;
                 }
                 else if( sPropertyType == "[]long" )
@@ -699,40 +697,32 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void )
                     std::vector< OUString > seqStrLong = commaStringToSequence( sNewValue );
 
                     uno::Sequence< sal_Int32 > seqLong( seqStrLong.size() );
-                    for( size_t i = 0; i < seqStrLong.size(); ++i )
-                    {
-                        seqLong[i] = seqStrLong[i].toInt32();
-                    }
+                    std::transform(seqStrLong.begin(), seqStrLong.end(), seqLong.getArray(),
+                        [](const auto& str) { return str.toInt32(); });
                     pProperty->Value <<= seqLong;
                 }
                 else if( sPropertyType == "[]hyper" )
                 {
                     std::vector< OUString > seqStrHyper = commaStringToSequence( sNewValue );
                     uno::Sequence< sal_Int64 > seqHyper( seqStrHyper.size() );
-                    for( size_t i = 0; i < seqStrHyper.size(); ++i )
-                    {
-                        seqHyper[i] = seqStrHyper[i].toInt64();
-                    }
+                    std::transform(seqStrHyper.begin(), seqStrHyper.end(), seqHyper.getArray(),
+                        [](const auto& str) { return str.toInt64(); });
                     pProperty->Value <<= seqHyper;
                 }
                 else if( sPropertyType == "[]double" )
                 {
                     std::vector< OUString > seqStrDoub = commaStringToSequence( sNewValue );
                     uno::Sequence< double > seqDoub( seqStrDoub.size() );
-                    for( size_t i = 0; i < seqStrDoub.size(); ++i )
-                    {
-                        seqDoub[i] = seqStrDoub[i].toDouble();
-                    }
+                    std::transform(seqStrDoub.begin(), seqStrDoub.end(), seqDoub.getArray(),
+                        [](const auto& str) { return str.toDouble(); });
                     pProperty->Value <<= seqDoub;
                 }
                 else if( sPropertyType == "[]float" )
                 {
                     std::vector< OUString > seqStrFloat = commaStringToSequence( sNewValue );
                     uno::Sequence< sal_Int16 > seqFloat( seqStrFloat.size() );
-                    for( size_t i = 0; i < seqStrFloat.size(); ++i )
-                    {
-                        seqFloat[i] = seqStrFloat[i].toFloat();
-                    }
+                    std::transform(seqStrFloat.begin(), seqStrFloat.end(), seqFloat.getArray(),
+                        [](const auto& str) { return str.toFloat(); });
                     pProperty->Value <<= seqFloat;
                 }
                 else if( sPropertyType == "[]string" )

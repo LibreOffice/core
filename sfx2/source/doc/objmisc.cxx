@@ -1419,8 +1419,7 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
             Reference< beans::XPropertySet > xProps( xScript, uno::UNO_QUERY );
             if ( xProps.is() )
             {
-                Sequence< uno::Any > aArgs( 1 );
-                aArgs[ 0 ] = *pCaller;
+                Sequence< uno::Any > aArgs{ uno::Any(*pCaller) };
                 xProps->setPropertyValue("Caller", uno::makeAny( aArgs ) );
             }
         }
@@ -1690,11 +1689,11 @@ bool SfxObjectShell::UseInteractionToHandleError(
         try
         {
             uno::Any aInteraction;
-            uno::Sequence< uno::Reference< task::XInteractionContinuation > > lContinuations(2);
             rtl::Reference<::comphelper::OInteractionAbort> pAbort = new ::comphelper::OInteractionAbort();
             rtl::Reference<::comphelper::OInteractionApprove> pApprove = new ::comphelper::OInteractionApprove();
-            lContinuations[0] = pAbort;
-            lContinuations[1] = pApprove;
+            uno::Sequence< uno::Reference< task::XInteractionContinuation > > lContinuations{
+                pAbort, pApprove
+            };
 
             task::ErrorCodeRequest aErrorCode;
             aErrorCode.ErrCode = sal_uInt32(nError);

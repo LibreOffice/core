@@ -107,7 +107,7 @@ sal_Bool SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, cons
                 {
                     if( rInfo.mnCancelIndex >= aVbaArgs.getLength() )
                         throw lang::IllegalArgumentException();
-                    aVbaArgs[ rInfo.mnCancelIndex ] <<= bCancel;
+                    aVbaArgs.getArray()[ rInfo.mnCancelIndex ] <<= bCancel;
                 }
                 // execute the event handler
                 uno::Any aRet, aCaller;

@@ -411,6 +411,7 @@ void SwXTextPortion::SetPropertyValues_Impl(
         const uno::Any* pValues = rValues.getConstArray();
         const SfxItemPropertyMap& rMap = m_pPropSet->getPropertyMap();
         uno::Sequence< beans::PropertyValue > aValues( rPropertyNames.getLength() );
+        auto aValuesRange = asNonConstRange(aValues);
         for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
         {
             const SfxItemPropertyMapEntry* pEntry = rMap.getByName(pPropertyNames[nProp]);
@@ -419,8 +420,8 @@ void SwXTextPortion::SetPropertyValues_Impl(
             if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
                 throw beans::PropertyVetoException ("Property is read-only: " + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
 
-            aValues[nProp].Name = pPropertyNames[nProp];
-            aValues[nProp].Value = pValues[nProp];
+            aValuesRange[nProp].Name = pPropertyNames[nProp];
+            aValuesRange[nProp].Value = pValues[nProp];
         }
         SwUnoCursorHelper::SetPropertyValues( rUnoCursor, *m_pPropSet, aValues );
     }

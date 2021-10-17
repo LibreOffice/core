@@ -18,6 +18,7 @@
 #include <fstream>
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <o3tl/safeint.hxx>
 #include <sfx2/objsh.hxx>
@@ -291,17 +292,14 @@ bool Customization::ImportMenu( SwCTBWrapper& rWrapper, CustomToolBarImportHelpe
                     uno::Reference< lang::XSingleComponentFactory > xSCF( xIndexContainer, uno::UNO_QUERY_THROW );
                     uno::Reference< uno::XComponentContext > xContext(
                         comphelper::getProcessComponentContext() );
-                    // create the popup menu
-                    uno::Sequence< beans::PropertyValue > aPopupMenu( 4 );
-                    aPopupMenu[0].Name = "CommandURL";
-                    aPopupMenu[0].Value <<= "vnd.openoffice.org:" + sMenuName;
-                    aPopupMenu[1].Name = "Label";
-                    aPopupMenu[1].Value <<= sMenuName;
-                    aPopupMenu[2].Name = "Type";
-                    aPopupMenu[2].Value <<= sal_Int32( 0 );
-                    aPopupMenu[3].Name = "ItemDescriptorContainer";
                     uno::Reference< container::XIndexContainer > xMenuContainer( xSCF->createInstanceWithContext( xContext ), uno::UNO_QUERY_THROW );
-                    aPopupMenu[3].Value <<= xMenuContainer;
+                    // create the popup menu
+                    uno::Sequence< beans::PropertyValue > aPopupMenu{
+                        comphelper::makePropertyValue("CommandURL", "vnd.openoffice.org:" + sMenuName),
+                        comphelper::makePropertyValue("Label", sMenuName),
+                        comphelper::makePropertyValue("Type", sal_Int32( 0 )),
+                        comphelper::makePropertyValue("ItemDescriptorContainer", xMenuContainer)
+                    };
                     if ( pCust->customizationDataCTB && !pCust->customizationDataCTB->ImportMenuTB( rWrapper, xMenuContainer, helper ) )
                         return false;
                     SAL_INFO("sw.ww8","** there are " << xIndexContainer->getCount() << " menu items on the bar, inserting after that");
@@ -591,9 +589,8 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
         if ( bBeginGroup )
         {
             // insert spacer
-            uno::Sequence< beans::PropertyValue > sProps( 1 );
-            sProps[ 0 ].Name = "Type";
-            sProps[ 0 ].Value <<= ui::ItemType::SEPARATOR_LINE;
+            uno::Sequence< beans::PropertyValue > sProps{ comphelper::makePropertyValue(
+                "Type", ui::ItemType::SEPARATOR_LINE) };
             toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), uno::makeAny( sProps ) );
         }
 

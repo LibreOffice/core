@@ -1043,8 +1043,8 @@ static void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocume
     uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences(
         xDataSource->getDataSequences());
 
-    aSequences.realloc( aSequences.getLength() + 1 );
-    aSequences[ aSequences.getLength() - 1 ] = xLabelSeq;
+    auto pSequences = aSequences.realloc( aSequences.getLength() + 1 );
+    pSequences[ aSequences.getLength() - 1 ] = xLabelSeq;
     xDataSink->setData( aSequences );
 
 }

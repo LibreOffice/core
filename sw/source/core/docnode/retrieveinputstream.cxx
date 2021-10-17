@@ -18,6 +18,8 @@
  */
 
 #include <retrieveinputstream.hxx>
+
+#include <comphelper/propertyvalue.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -53,11 +55,10 @@ void SwAsyncRetrieveInputStreamThread::threadFunction()
 {
     osl_setThreadName("SwAsyncRetrieveInputStreamThread");
 
-    css::uno::Sequence < css::beans::PropertyValue > xProps( 2 );
-    xProps[0].Name = "URL";
-    xProps[0].Value <<= mrLinkedURL;
-    xProps[1].Name = "Referer";
-    xProps[1].Value <<= mrReferer;
+    css::uno::Sequence < css::beans::PropertyValue > xProps{
+        comphelper::makePropertyValue("URL", mrLinkedURL),
+        comphelper::makePropertyValue("Referer", mrReferer)
+    };
     utl::MediaDescriptor aMedium( xProps );
 
     aMedium.addInputStream();

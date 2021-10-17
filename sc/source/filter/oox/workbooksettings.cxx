@@ -24,6 +24,8 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
+#include <comphelper/propertyvalue.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <oox/core/binarycodec.hxx>
 #include <oox/core/filterbase.hxx>
@@ -212,16 +214,12 @@ void WorkbookSettings::finalizeImport()
 
         if (!maFileSharing.maHashValue.isEmpty())
         {
-            Sequence<PropertyValue> aResult;
-            aResult.realloc(4);
-            aResult[0].Name = "algorithm-name";
-            aResult[0].Value <<= maFileSharing.maAlgorithmName;
-            aResult[1].Name = "salt";
-            aResult[1].Value <<= maFileSharing.maSaltValue;
-            aResult[2].Name = "iteration-count";
-            aResult[2].Value <<= maFileSharing.mnSpinCount;
-            aResult[3].Name = "hash";
-            aResult[3].Value <<= maFileSharing.maHashValue;
+            Sequence<PropertyValue> aResult{
+                comphelper::makePropertyValue("algorithm-name", maFileSharing.maAlgorithmName),
+                comphelper::makePropertyValue("salt", maFileSharing.maSaltValue),
+                comphelper::makePropertyValue("iteration-count", maFileSharing.mnSpinCount),
+                comphelper::makePropertyValue("hash", maFileSharing.maHashValue)
+            };
             aSettingsProp.setProperty(PROP_ModifyPasswordInfo, aResult);
         }
 

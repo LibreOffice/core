@@ -28,6 +28,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 
+#include <o3tl/safeint.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/event.hxx>
@@ -673,8 +674,7 @@ namespace
                 return;
             m_bSelfChanging = true;
 
-            Sequence<sal_Int16> aSelection(1);
-            aSelection[0] = m_rComboBox.get_active();
+            Sequence<sal_Int16> aSelection{ o3tl::narrowing<sal_Int16>(m_rComboBox.get_active()) };
             m_xPropSet->setPropertyValue("SelectedItems", makeAny(aSelection));
 
             css::uno::Reference<css::form::XBoundComponent> xBound(m_xPropSet, css::uno::UNO_QUERY);

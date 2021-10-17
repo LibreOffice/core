@@ -35,6 +35,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <sfx2/app.hxx>
 #include <officecfg/Office/Common.hxx>
 
@@ -658,15 +659,12 @@ IMPL_LINK(BackingWindow, CreateContextMenuHdl, ThumbnailViewItem*, pItem, void)
 
 IMPL_LINK(BackingWindow, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
 {
-    uno::Sequence< PropertyValue > aArgs(4);
-    aArgs[0].Name = "AsTemplate";
-    aArgs[0].Value <<= true;
-    aArgs[1].Name = "MacroExecutionMode";
-    aArgs[1].Value <<= MacroExecMode::USE_CONFIG;
-    aArgs[2].Name = "UpdateDocMode";
-    aArgs[2].Value <<= UpdateDocMode::ACCORDING_TO_CONFIG;
-    aArgs[3].Name = "InteractionHandler";
-    aArgs[3].Value <<= task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr );
+    uno::Sequence< PropertyValue > aArgs{
+        comphelper::makePropertyValue("AsTemplate", true),
+        comphelper::makePropertyValue("MacroExecutionMode", MacroExecMode::USE_CONFIG),
+        comphelper::makePropertyValue("UpdateDocMode", UpdateDocMode::ACCORDING_TO_CONFIG),
+        comphelper::makePropertyValue("InteractionHandler", task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr ))
+    };
 
     TemplateViewItem *pTemplateItem = static_cast<TemplateViewItem*>(pItem);
 
@@ -683,13 +681,11 @@ IMPL_LINK(BackingWindow, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
 
 IMPL_LINK(BackingWindow, EditTemplateHdl, ThumbnailViewItem*, pItem, void)
 {
-    uno::Sequence< PropertyValue > aArgs(3);
-    aArgs[0].Name = "AsTemplate";
-    aArgs[0].Value <<= false;
-    aArgs[1].Name = "MacroExecutionMode";
-    aArgs[1].Value <<= MacroExecMode::USE_CONFIG;
-    aArgs[2].Name = "UpdateDocMode";
-    aArgs[2].Value <<= UpdateDocMode::ACCORDING_TO_CONFIG;
+    uno::Sequence< PropertyValue > aArgs{
+        comphelper::makePropertyValue("AsTemplate", false),
+        comphelper::makePropertyValue("MacroExecutionMode", MacroExecMode::USE_CONFIG),
+        comphelper::makePropertyValue("UpdateDocMode", UpdateDocMode::ACCORDING_TO_CONFIG),
+    };
 
     TemplateViewItem *pViewItem = static_cast<TemplateViewItem*>(pItem);
 

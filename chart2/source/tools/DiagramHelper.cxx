@@ -977,16 +977,16 @@ void lcl_switchToDateCategories( const Reference< XChartDocument >& xChartDoc, c
         if( xDataAccess.is() )
         {
             Sequence< Sequence< Any > > aAnyCategories( xDataAccess->getAnyRowDescriptions() );
+            auto aAnyCategoriesRange = asNonConstRange(aAnyCategories);
             double fTest = 0.0;
             sal_Int32 nN = aAnyCategories.getLength();
             for( ; nN--; )
             {
-                Sequence< Any >& rCat = aAnyCategories[nN];
-                if( rCat.getLength() > 1 )
-                    rCat.realloc(1);
+                Sequence< Any >& rCat = aAnyCategoriesRange[nN];
+                auto pCat = rCat.getLength() > 1 ? rCat.realloc(1) : rCat.getArray();
                 if( rCat.getLength() == 1 )
                 {
-                    Any& rAny = rCat[0];
+                    Any& rAny = pCat[0];
                     if( !(rAny>>=fTest) )
                     {
                         rAny <<= std::numeric_limits<double>::quiet_NaN();
@@ -1300,6 +1300,7 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
                         continue;
 
                     uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xDataSeriesContainer->getDataSeries() );
+                    auto aSeriesListRange = asNonConstRange(aSeriesList);
 
                     for( sal_Int32 nS = 0; !bFound && nS < aSeriesList.getLength(); ++nS )
                     {
@@ -1326,8 +1327,8 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
                                     bMovedOrMoveAllowed = true;
                                     if( bDoMove )
                                     {
-                                        aSeriesList[ nOldSeriesIndex ] = aSeriesList[ nNewSeriesIndex ];
-                                        aSeriesList[ nNewSeriesIndex ] = xGivenDataSeries;
+                                        aSeriesListRange[ nOldSeriesIndex ] = aSeriesList[ nNewSeriesIndex ];
+                                        aSeriesListRange[ nNewSeriesIndex ] = xGivenDataSeries;
                                         xDataSeriesContainer->setDataSeries( aSeriesList );
                                     }
                                 }
@@ -1347,10 +1348,10 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
                                                 if( nOtherSeriesIndex >= 0 && nOtherSeriesIndex < aOtherSeriesList.getLength() )
                                                 {
                                                     uno::Reference< XDataSeries > xExchangeSeries( aOtherSeriesList[nOtherSeriesIndex] );
-                                                    aOtherSeriesList[nOtherSeriesIndex] = xGivenDataSeries;
+                                                    aOtherSeriesList.getArray()[nOtherSeriesIndex] = xGivenDataSeries;
                                                     xOtherDataSeriesContainer->setDataSeries(aOtherSeriesList);
 
-                                                    aSeriesList[nOldSeriesIndex]=xExchangeSeries;
+                                                    aSeriesListRange[nOldSeriesIndex]=xExchangeSeries;
                                                     xDataSeriesContainer->setDataSeries(aSeriesList);
                                                 }
                                             }
@@ -1373,10 +1374,10 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
                                                 if( aOtherSeriesList.hasElements() )
                                                 {
                                                     uno::Reference< XDataSeries > xExchangeSeries( aOtherSeriesList[0] );
-                                                    aOtherSeriesList[0] = xGivenDataSeries;
+                                                    aOtherSeriesList.getArray()[0] = xGivenDataSeries;
                                                     xOtherDataSeriesContainer->setDataSeries(aOtherSeriesList);
 
-                                                    aSeriesList[nOldSeriesIndex]=xExchangeSeries;
+                                                    aSeriesListRange[nOldSeriesIndex]=xExchangeSeries;
                                                     xDataSeriesContainer->setDataSeries(aSeriesList);
                                                 }
                                             }

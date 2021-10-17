@@ -19,6 +19,7 @@
 
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <tools/gen.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/outdev.hxx>
@@ -120,9 +121,9 @@ namespace sdr::overlay
         {
             // set Property 'ReducedDisplayQuality' to true to allow simpler interaction
             // visualisations
-            uno::Sequence< beans::PropertyValue > xProperties(1);
-            xProperties[0].Name = "ReducedDisplayQuality";
-            xProperties[0].Value <<= true;
+            uno::Sequence< beans::PropertyValue > xProperties{
+                comphelper::makePropertyValue("ReducedDisplayQuality", true)
+            };
             maViewInformation2D = drawinglayer::geometry::createViewInformation2D(xProperties);
         }
 

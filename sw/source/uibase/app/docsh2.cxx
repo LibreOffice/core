@@ -24,6 +24,7 @@
 #include <ooo/vba/word/XDocument.hpp>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <sal/log.hxx>
 #include <edtwin.hxx>
@@ -262,8 +263,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 {
                     uno::Any aDocument;
                     aDocument <<= mxAutomationDocumentObject;
-                    uno::Sequence< uno::Any > aArgs(1);
-                    aArgs[0] = aDocument;
+                    uno::Sequence< uno::Any > aArgs{ uno::Any(aDocument) };
                     SW_MOD()->CallAutomationApplicationEventSinks( "NewDocument", aArgs );
                 }
                 break;
@@ -271,8 +271,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 {
                     uno::Any aDocument;
                     aDocument <<= mxAutomationDocumentObject;
-                    uno::Sequence< uno::Any > aArgs(1);
-                    aArgs[0] = aDocument;
+                    uno::Sequence< uno::Any > aArgs{ uno::Any(aDocument) };
                     SW_MOD()->CallAutomationApplicationEventSinks( "DocumentOpen", aArgs );
                 }
                 break;
@@ -358,11 +357,11 @@ bool SwDocShell::PrepareClose( bool bUI )
         uno::Any aDocument;
         aDocument <<= mxAutomationDocumentObject;
 
-        uno::Sequence< uno::Any > aArgs(2);
-        // Arg 0: Document
-        aArgs[0] = aDocument;
-        // Arg 1: Cancel
-        aArgs[1] <<= false;
+        uno::Sequence<uno::Any> aArgs{ // Arg 0: Document
+                                       aDocument,
+                                       // Arg 1: Cancel
+                                       uno::Any(false)
+        };
 
         SW_MOD()->CallAutomationApplicationEventSinks( "DocumentBeforeClose", aArgs );
 
@@ -786,9 +785,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             uno::Sequence< sal_Int8 > aSeq( nLen );
                             aLockBytes.ReadAt( 0, aSeq.getArray(), nLen, &nRead );
 
-                            uno::Sequence< beans::PropertyValue > aArgs(1);
-                            aArgs[0].Name = "RtfOutline";
-                            aArgs[0].Value <<= aSeq;
+                            uno::Sequence< beans::PropertyValue > aArgs{
+                                comphelper::makePropertyValue("RtfOutline", aSeq)
+                            };
                             xHelper->executeDispatch( xProv, "SendOutlineToImpress", OUString(), 0, aArgs );
                         }
                     }
@@ -850,9 +849,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             uno::Sequence< sal_Int8 > aSeq( nLen );
                             aLockBytes.ReadAt( 0, aSeq.getArray(), nLen, &nRead );
 
-                            uno::Sequence< beans::PropertyValue > aArgs(1);
-                            aArgs[0].Name = "RtfOutline";
-                            aArgs[0].Value <<= aSeq;
+                            uno::Sequence< beans::PropertyValue > aArgs{
+                                comphelper::makePropertyValue("RtfOutline", aSeq)
+                            };
                             xHelper->executeDispatch( xProv, "SendOutlineToImpress", OUString(), 0, aArgs );
                         }
                     }

@@ -244,9 +244,8 @@ public:
     {
         if ( !hasByName( aName ) )
              throw container::NoSuchElementException();
-        uno::Sequence< uno::Any > aArgs( 2 );
-        aArgs[0] <<= uno::Reference< uno::XInterface >();
-        aArgs[1] <<= mpDocShell->GetModel();
+        uno::Sequence< uno::Any > aArgs{ uno::Any(uno::Reference< uno::XInterface >()),
+                                         uno::Any(mpDocShell->GetModel()) };
         uno::Reference< uno::XInterface > xDocObj = ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.word.Document" , aArgs );
         SAL_INFO("sw.uno",
             "Creating Object ( ooo.vba.word.Document ) 0x" << xDocObj.get());
@@ -591,8 +590,7 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
             BasicManager *pBasicMan = rDoc.GetDocShell()->GetBasicManager();
             if (pBasicMan && !pBasicMan->GetGlobalUNOConstant("VBAGlobals", aGlobs))
             {
-                uno::Sequence< uno::Any > aArgs(1);
-                aArgs[ 0 ] <<= rDoc.GetDocShell()->GetModel();
+                uno::Sequence< uno::Any > aArgs{ uno::Any(rDoc.GetDocShell()->GetModel()) };
                 aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( "ooo.vba.word.Globals", aArgs );
                 pBasicMan->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
             }

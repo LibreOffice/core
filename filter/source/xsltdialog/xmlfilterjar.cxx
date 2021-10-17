@@ -85,8 +85,7 @@ static Reference< XInterface > addFolder( Reference< XInterface > const & xRootF
     if ( rName == ".." || rName == "." )
         throw lang::IllegalArgumentException();
 
-    Sequence< Any > aArgs(1);
-    aArgs[0] <<= true;
+    Sequence< Any > aArgs{ Any(true) };
 
     Reference< XInterface > xFolder( xFactory->createInstanceWithArguments(aArgs) );
     Reference< XNamed > xNamed( xFolder, UNO_QUERY );
@@ -147,14 +146,10 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const std::ve
 
         // create the package jar file
 
-        Sequence< Any > aArguments( 2 );
-        aArguments[ 0 ] <<= rPackageURL;
-
-        // let ZipPackage be used ( no manifest.xml is required )
-        beans::NamedValue aArg;
-        aArg.Name = "StorageFormat";
-        aArg.Value <<= OUString(ZIP_STORAGE_FORMAT_STRING);
-        aArguments[ 1 ] <<= aArg;
+        Sequence< Any > aArguments{ Any(rPackageURL),
+                                    // let ZipPackage be used ( no manifest.xml is required )
+                                    Any(beans::NamedValue(
+                                        "StorageFormat", Any(OUString(ZIP_STORAGE_FORMAT_STRING)))) };
 
         Reference< XHierarchicalNameAccess > xIfc(
             mxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
@@ -237,14 +232,11 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL,
     {
         // create the package jar file
 
-        Sequence< Any > aArguments( 2 );
-        aArguments[ 0 ] <<= rPackageURL;
-
         // let ZipPackage be used ( no manifest.xml is required )
         beans::NamedValue aArg;
         aArg.Name = "StorageFormat";
         aArg.Value <<= OUString(ZIP_STORAGE_FORMAT_STRING);
-        aArguments[ 1 ] <<= aArg;
+        Sequence< Any > aArguments{ Any(rPackageURL), Any(aArg) };
 
         Reference< XHierarchicalNameAccess > xIfc(
             mxContext->getServiceManager()->createInstanceWithArgumentsAndContext(

@@ -363,9 +363,10 @@ beans::PropertyState ErrorBar::getPropertyState( const OUString& rPropName )
 uno::Sequence< beans::PropertyState > ErrorBar::getPropertyStates( const uno::Sequence< OUString >& rPropNames )
 {
     uno::Sequence< beans::PropertyState > aRet( rPropNames.getLength() );
+    auto aRetRange = asNonConstRange(aRet);
     for(sal_Int32 i = 0; i < rPropNames.getLength(); ++i)
     {
-        aRet[i] = getPropertyState(rPropNames[i]);
+        aRetRange[i] = getPropertyState(rPropNames[i]);
     }
     return aRet;
 }

@@ -34,6 +34,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -443,14 +444,7 @@ bool ViewTabBar::HasTabBarButton (
 css::uno::Sequence<css::drawing::framework::TabBarButton>
     ViewTabBar::GetTabBarButtons()
 {
-    sal_uInt32 nCount (maTabBarButtons.size());
-    css::uno::Sequence<css::drawing::framework::TabBarButton>
-          aList (nCount);
-
-    for (sal_uInt32 nIndex=0; nIndex<nCount; ++nIndex)
-        aList[nIndex] = maTabBarButtons[nIndex];
-
-    return aList;
+    return comphelper::containerToSequence(maTabBarButtons);
 }
 
 void ViewTabBar::UpdateActiveButton()

@@ -33,9 +33,9 @@ public:
     // member
 private:
     css::uno::Any m_aRequest;
-    css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> m_lContinuations;
     css::uno::Reference<css::task::XInteractionContinuation> m_xAbort;
     css::uno::Reference<css::task::XInteractionContinuation> m_xApprove;
+    css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> m_lContinuations;
 };
 
 #endif

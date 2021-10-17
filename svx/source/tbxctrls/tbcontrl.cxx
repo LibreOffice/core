@@ -21,6 +21,7 @@
 
 #include <comphelper/configurationlistener.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <tools/color.hxx>
 #include <svl/numformat.hxx>
 #include <svl/poolitem.hxx>
@@ -915,11 +916,9 @@ IMPL_LINK(SvxStyleBox_Base, MenuSelectHdl, const OString&, rMenuIdent, void)
     OUString sEntry = m_xWidget->get_text(m_nLastItemWithMenu);
 
     ReleaseFocus(); // It must be after getting entry pos!
-    Sequence<PropertyValue> aArgs(2);
-    aArgs[0].Name   = "Param";
-    aArgs[0].Value  <<= sEntry;
-    aArgs[1].Name   = "Family";
-    aArgs[1].Value  <<= sal_Int16( eStyleFamily );
+    Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue("Param", sEntry),
+                                   comphelper::makePropertyValue("Family",
+                                                                 sal_Int16( eStyleFamily )) };
 
     if (rMenuIdent == "update")
     {
@@ -1015,17 +1014,18 @@ void SvxStyleBox_Base::Select(bool bNonTravelSelect)
     m_xWidget->save_value();
 
     Sequence< PropertyValue > aArgs( 2 );
-    aArgs[0].Value  <<= aSearchEntry;
-    aArgs[1].Name   = "Family";
-    aArgs[1].Value  <<= sal_Int16( eStyleFamily );
+    auto pArgs = aArgs.getArray();
+    pArgs[0].Value  <<= aSearchEntry;
+    pArgs[1].Name   = "Family";
+    pArgs[1].Value  <<= sal_Int16( eStyleFamily );
     if( bCreateNew )
     {
-        aArgs[0].Name   = "Param";
+        pArgs[0].Name   = "Param";
         SfxToolBoxControl::Dispatch( m_xDispatchProvider, ".uno:StyleNewByExample", aArgs);
     }
     else
     {
-        aArgs[0].Name   = "Template";
+        pArgs[0].Name   = "Template";
         SfxToolBoxControl::Dispatch( m_xDispatchProvider, m_aCommand, aArgs );
     }
 }
@@ -1684,6 +1684,7 @@ IMPL_LINK_NOARG(SvxFontNameBox_Base, ActivateHdl, weld::ComboBox&, bool)
 void SvxFontNameBox_Base::Select(bool bNonTravelSelect)
 {
     Sequence< PropertyValue > aArgs( 1 );
+    auto pArgs = aArgs.getArray();
     std::unique_ptr<SvxFontItem> pFontItem;
     if ( pFontList )
     {
@@ -1701,7 +1702,7 @@ void SvxFontNameBox_Base::Select(bool bNonTravelSelect)
 
         Any a;
         pFontItem->QueryValue( a );
-        aArgs[0].Value  = a;
+        pArgs[0].Value  = a;
     }
 
     if (bNonTravelSelect)
@@ -1714,7 +1715,7 @@ void SvxFontNameBox_Base::Select(bool bNonTravelSelect)
         EndPreview();
         if (pFontItem)
         {
-            aArgs[0].Name   = "CharFontName";
+            pArgs[0].Name   = "CharFontName";
             SfxToolBoxControl::Dispatch( m_xDispatchProvider,
                                          ".uno:CharFontName",
                                          aArgs );
@@ -1724,7 +1725,7 @@ void SvxFontNameBox_Base::Select(bool bNonTravelSelect)
     {
         if (pFontItem)
         {
-            aArgs[0].Name   = "CharPreviewFontName";
+            pArgs[0].Name   = "CharPreviewFontName";
             SfxToolBoxControl::Dispatch( m_xDispatchProvider,
                                          ".uno:CharPreviewFontName",
                                          aArgs );
@@ -2349,14 +2350,11 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
         aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISTANCE );
         aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISABLE,   false );
 
-        Any a;
-        Sequence< PropertyValue > aArgs( 2 );
-        aArgs[0].Name = "OuterBorder";
-        aBorderOuter.QueryValue( a );
-        aArgs[0].Value = a;
-        aArgs[1].Name = "InnerBorder";
-        aBorderInner.QueryValue( a );
-        aArgs[1].Value = a;
+        Any a1, a2;
+        aBorderOuter.QueryValue( a1 );
+        aBorderInner.QueryValue( a2 );
+        Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("OuterBorder", a1),
+                                         comphelper::makePropertyValue("InnerBorder", a2) };
 
         mxControl->dispatchCommand( ".uno:SetBorderStyle", aArgs );
     }
@@ -2376,10 +2374,8 @@ void SvxFrameWindow_Impl::SetDiagonalDownBorder(const SvxLineItem& dDownLineItem
 {
     // apply diagonal down border
     Any a;
-    Sequence<PropertyValue> aArgs(1);
-    aArgs[0].Name = "BorderTLBR";
     dDownLineItem.QueryValue(a);
-    aArgs[0].Value = a;
+    Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue("BorderTLBR", a) };
 
     mxControl->dispatchCommand(".uno:BorderTLBR", aArgs);
 }
@@ -2388,10 +2384,8 @@ void SvxFrameWindow_Impl::SetDiagonalUpBorder(const SvxLineItem& dUpLineItem)
 {
     // apply diagonal up border
     Any a;
-    Sequence<PropertyValue> aArgs(1);
-    aArgs[0].Name = "BorderBLTR";
     dUpLineItem.QueryValue(a);
-    aArgs[0].Value = a;
+    Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue("BorderBLTR", a) };
 
     mxControl->dispatchCommand(".uno:BorderBLTR", aArgs);
 }
@@ -2547,10 +2541,8 @@ IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl, ValueSet*, void)
         aLineItem.SetLine( nullptr );
 
     Any a;
-    Sequence< PropertyValue > aArgs( 1 );
-    aArgs[0].Name = "LineStyle";
     aLineItem.QueryValue( a, m_bIsWriter ? CONVERT_TWIPS : 0 );
-    aArgs[0].Value = a;
+    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("LineStyle", a) };
 
     m_xControl->dispatchCommand( ".uno:LineStyle", aArgs );
 
@@ -3766,9 +3758,8 @@ void SvxCurrencyToolBoxControl::execute( sal_Int16 nSelectModifier )
 
     if( nFormatKey != NUMBERFORMAT_ENTRY_NOT_FOUND )
     {
-        Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = "NumberFormatCurrency";
-        aArgs[0].Value <<= nFormatKey;
+        Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("NumberFormatCurrency",
+                                                                       nFormatKey) };
         dispatchCommand( m_aCommandURL, aArgs );
         m_nFormatKey = nFormatKey;
     }

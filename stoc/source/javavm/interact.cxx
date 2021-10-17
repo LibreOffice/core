@@ -81,10 +81,8 @@ bool InteractionRequest::RetryContinuation::isSelected() const
 InteractionRequest::InteractionRequest(css::uno::Any const & rRequest):
     m_aRequest(rRequest)
 {
-    m_aContinuations.realloc(2);
     m_xRetryContinuation = new RetryContinuation;
-    m_aContinuations[0] = new AbortContinuation;
-    m_aContinuations[1] = m_xRetryContinuation.get();
+    m_aContinuations = { new AbortContinuation, m_xRetryContinuation.get() };
 }
 
 css::uno::Any SAL_CALL InteractionRequest::getRequest()

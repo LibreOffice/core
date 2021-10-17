@@ -113,10 +113,10 @@ SvxFontListItem::SvxFontListItem( const FontList* pFontLst,
     if ( pFontList )
     {
         sal_Int32 nCount = pFontList->GetFontNameCount();
-        aFontNameSeq.realloc( nCount );
+        auto pFontNameSeq = aFontNameSeq.realloc( nCount );
 
         for ( sal_Int32 i = 0; i < nCount; i++ )
-            aFontNameSeq[i] = pFontList->GetFontName(i).GetFamilyName();
+            pFontNameSeq[i] = pFontList->GetFontName(i).GetFamilyName();
     }
 }
 

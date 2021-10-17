@@ -26,6 +26,7 @@
 #include <editeng/justifyitem.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/classids.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <formula/errorcodes.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
@@ -648,8 +649,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
             uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = m_aDocument.GetVbaEventProcessor();
             if ( xVbaEvents.is() ) try
             {
-                uno::Sequence< uno::Any > aArgs( 1 );
-                aArgs[0] <<= pScHint->GetTab1();
+                uno::Sequence< uno::Any > aArgs{ uno::Any(pScHint->GetTab1()) };
                 xVbaEvents->processVbaEvent( script::vba::VBAEventId::WORKBOOK_NEWSHEET, aArgs );
             }
             catch( uno::Exception& )
@@ -893,16 +893,18 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
                                             uno::Reference< frame::XStorable > xStor( GetModel(), uno::UNO_QUERY_THROW );
                                             // TODO/LATER: More entries from the MediaDescriptor might be interesting for the merge
-                                            uno::Sequence< beans::PropertyValue > aValues(1);
-                                            aValues[0].Name = "FilterName";
-                                            aValues[0].Value <<= GetMedium()->GetFilter()->GetFilterName();
+                                            uno::Sequence< beans::PropertyValue > aValues{
+                                                comphelper::makePropertyValue(
+                                                    "FilterName",
+                                                    GetMedium()->GetFilter()->GetFilterName())
+                                            };
 
                                             const SfxStringItem* pPasswordItem = SfxItemSet::GetItem<SfxStringItem>(GetMedium()->GetItemSet(), SID_PASSWORD, false);
                                             if ( pPasswordItem && !pPasswordItem->GetValue().isEmpty() )
                                             {
-                                                aValues.realloc( 2 );
-                                                aValues[1].Name = "Password";
-                                                aValues[1].Value <<= pPasswordItem->GetValue();
+                                                auto pValues = aValues.realloc( 2 );
+                                                pValues[1].Name = "Password";
+                                                pValues[1].Value <<= pPasswordItem->GetValue();
                                             }
 
                                             SC_MOD()->SetInSharedDocSaving( true );
@@ -1049,8 +1051,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
             {
                 uno::Any aWorkbook;
                 aWorkbook <<= mxAutomationWorkbookObject;
-                uno::Sequence< uno::Any > aArgs(1);
-                aArgs[0] = aWorkbook;
+                uno::Sequence< uno::Any > aArgs{ aWorkbook };
                 SC_MOD()->CallAutomationApplicationEventSinks( "NewWorkbook", aArgs );
             }
             break;
@@ -1058,8 +1059,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
             {
                 uno::Any aWorkbook;
                 aWorkbook <<= mxAutomationWorkbookObject;
-                uno::Sequence< uno::Any > aArgs(1);
-                aArgs[0] = aWorkbook;
+                uno::Sequence< uno::Any > aArgs{ aWorkbook };
                 SC_MOD()->CallAutomationApplicationEventSinks( "WorkbookOpen", aArgs );
             }
             break;
@@ -2718,8 +2718,7 @@ bool ScDocShell::QuerySlotExecutable( sal_uInt16 nSlotId )
         case SID_SAVEDOC:
         case SID_SAVEASDOC:
             nVbaEventId = VBAEventId::WORKBOOK_BEFORESAVE;
-            aArgs.realloc( 1 );
-            aArgs[ 0 ] <<= (nSlotId == SID_SAVEASDOC);
+            aArgs = { uno::Any(nSlotId == SID_SAVEASDOC) };
         break;
         case SID_PRINTDOC:
         case SID_PRINTDOCDIRECT:

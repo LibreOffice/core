@@ -31,6 +31,7 @@
 #include <unotools/tempfile.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
@@ -2332,9 +2333,8 @@ bool SwTransferable::PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                 if (rData.GetString(nFormat, sFile) && !sFile.isEmpty())
                 {
                     // Copied from sd::View::DropInsertFileHdl
-                    uno::Sequence< beans::PropertyValue > aMedium(1);
-                    aMedium[0].Name = "URL";
-                    aMedium[0].Value <<= sFile;
+                    uno::Sequence< beans::PropertyValue > aMedium{ comphelper::makePropertyValue(
+                        "URL", sFile) };
                     SwDocShell* pDocSh = rSh.GetDoc()->GetDocShell();
                     xObj = pDocSh->GetEmbeddedObjectContainer().InsertEmbeddedObject(aMedium, aName);
                 }

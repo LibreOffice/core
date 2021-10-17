@@ -73,8 +73,7 @@ ScaleData AxisHelper::createDefaultScale()
     aScaleData.AxisType = chart2::AxisType::REALNUMBER;
     aScaleData.AutoDateAxis = true;
     aScaleData.ShiftedCategoryPosition = false;
-    Sequence< SubIncrement > aSubIncrements(1);
-    aSubIncrements[0] = SubIncrement();
+    Sequence< SubIncrement > aSubIncrements{ SubIncrement() };
     aScaleData.IncrementData.SubIncrements = aSubIncrements;
     return aScaleData;
 }
@@ -885,7 +884,7 @@ Sequence< Reference< beans::XPropertySet > > AxisHelper::getAllGrids( const Refe
 void AxisHelper::getAxisOrGridPossibilities( Sequence< sal_Bool >& rPossibilityList
         , const Reference< XDiagram>& xDiagram, bool bAxis )
 {
-    rPossibilityList.realloc(6);
+    auto pPossibilityList = rPossibilityList.realloc(6);
 
     sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
 
@@ -893,12 +892,12 @@ void AxisHelper::getAxisOrGridPossibilities( Sequence< sal_Bool >& rPossibilityL
     sal_Int32 nIndex=0;
     Reference< XChartType > xChartType = DiagramHelper::getChartTypeByIndex( xDiagram, 0 );
     for(nIndex=0;nIndex<3;nIndex++)
-        rPossibilityList[nIndex]=ChartTypeHelper::isSupportingMainAxis(xChartType,nDimensionCount,nIndex);
+        pPossibilityList[nIndex]=ChartTypeHelper::isSupportingMainAxis(xChartType,nDimensionCount,nIndex);
     for(nIndex=3;nIndex<6;nIndex++)
         if( bAxis )
-            rPossibilityList[nIndex]=ChartTypeHelper::isSupportingSecondaryAxis(xChartType,nDimensionCount);
+            pPossibilityList[nIndex]=ChartTypeHelper::isSupportingSecondaryAxis(xChartType,nDimensionCount);
         else
-            rPossibilityList[nIndex] = rPossibilityList[nIndex-3];
+            pPossibilityList[nIndex] = rPossibilityList[nIndex-3];
 }
 
 bool AxisHelper::isSecondaryYAxisNeeded( const Reference< XCoordinateSystem >& xCooSys )
@@ -957,24 +956,24 @@ bool AxisHelper::shouldAxisBeDisplayed( const Reference< XAxis >& xAxis
 void AxisHelper::getAxisOrGridExistence( Sequence< sal_Bool >& rExistenceList
         , const Reference< XDiagram>& xDiagram, bool bAxis )
 {
-    rExistenceList.realloc(6);
+    auto pExistenceList = rExistenceList.realloc(6);
 
     if(bAxis)
     {
         sal_Int32 nN;
         for(nN=0;nN<3;nN++)
-            rExistenceList[nN] = AxisHelper::isAxisShown( nN, true, xDiagram );
+            pExistenceList[nN] = AxisHelper::isAxisShown( nN, true, xDiagram );
         for(nN=3;nN<6;nN++)
-            rExistenceList[nN] = AxisHelper::isAxisShown( nN%3, false, xDiagram );
+            pExistenceList[nN] = AxisHelper::isAxisShown( nN%3, false, xDiagram );
     }
     else
     {
         sal_Int32 nN;
 
         for(nN=0;nN<3;nN++)
-            rExistenceList[nN] = AxisHelper::isGridShown( nN, 0, true, xDiagram );
+            pExistenceList[nN] = AxisHelper::isGridShown( nN, 0, true, xDiagram );
         for(nN=3;nN<6;nN++)
-            rExistenceList[nN] = AxisHelper::isGridShown( nN%3, 0, false, xDiagram );
+            pExistenceList[nN] = AxisHelper::isGridShown( nN%3, 0, false, xDiagram );
     }
 }
 

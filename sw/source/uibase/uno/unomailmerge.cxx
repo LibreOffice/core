@@ -27,6 +27,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/timer.hxx>
@@ -136,9 +137,7 @@ static bool LoadFromURL_impl(
 {
     // try to open the document readonly and hidden
     Reference< frame::XModel > xTmpModel;
-    Sequence < PropertyValue > aArgs( 1 );
-    aArgs[0].Name = "Hidden";
-    aArgs[0].Value <<= true;
+    Sequence < PropertyValue > aArgs{ comphelper::makePropertyValue("Hidden", true) };
     try
     {
         Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );

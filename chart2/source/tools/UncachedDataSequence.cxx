@@ -233,7 +233,7 @@ void SAL_CALL UncachedDataSequence::replaceByIndex( ::sal_Int32 Index, const uno
     if( Index < aData.getLength() &&
         m_xDataProvider.is() )
     {
-        aData[Index] = Element;
+        aData.getArray()[Index] = Element;
         m_xDataProvider->setDataByRangeRepresentation( m_aSourceRepresentation, aData );
         fireModifyEvent();
     }

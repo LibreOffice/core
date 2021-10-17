@@ -20,6 +20,8 @@
 #include "XMLCodeNameProvider.hxx"
 #include <document.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 
 using namespace com::sun::star;
@@ -80,13 +82,10 @@ sal_Bool SAL_CALL XMLCodeNameProvider::hasByName( const OUString& aName )
 uno::Any SAL_CALL XMLCodeNameProvider::getByName( const OUString& aName )
 {
     uno::Any aRet;
-    uno::Sequence<beans::PropertyValue> aProps(1);
-    aProps[0].Name = gsCodeNameProp;
     if( aName == gsDocName )
     {
         OUString sUCodeName( mpDoc->GetCodeName() );
-        aProps[0].Value <<= sUCodeName;
-        aRet <<= aProps;
+        aRet <<= uno::Sequence{ comphelper::makePropertyValue(gsCodeNameProp, sUCodeName) };
         return aRet;
     }
 
@@ -97,8 +96,7 @@ uno::Any SAL_CALL XMLCodeNameProvider::getByName( const OUString& aName )
         if( mpDoc->GetName( i, sSheetName ) && sSheetName == aName )
         {
             mpDoc->GetCodeName( i, sCodeName );
-            aProps[0].Value <<= sCodeName;
-            aRet <<= aProps;
+            aRet <<= uno::Sequence{ comphelper::makePropertyValue(gsCodeNameProp, sCodeName) };
             return aRet;
         }
     }

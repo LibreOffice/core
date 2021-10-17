@@ -36,12 +36,7 @@ SimpleCertificateValidationRequest::SimpleCertificateValidationRequest( sal_Int3
 
     setRequest( uno::makeAny( aRequest ) );
 
-    uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( 2 );
-    aContinuations[ 0 ] = new InteractionAbort( this );
-    aContinuations[ 1 ] = new InteractionApprove( this );
-
-    setContinuations( aContinuations );
-    certificate.get();
+    setContinuations({ new InteractionAbort(this), new InteractionApprove(this) });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

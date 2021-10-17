@@ -25,12 +25,7 @@ AuthenticationFallbackRequest::AuthenticationFallbackRequest(
     setRequest( uno::makeAny( aRequest ) );
     m_xAuthFallback = new InteractionAuthFallback( this );
 
-    uno::Sequence<
-        uno::Reference< task::XInteractionContinuation > > aContinuations( 2 );
-    aContinuations[ 0 ] = new InteractionAbort( this );
-    aContinuations[ 1 ] = m_xAuthFallback.get( );
-
-    setContinuations( aContinuations );
+    setContinuations({ new InteractionAbort(this), m_xAuthFallback.get() });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

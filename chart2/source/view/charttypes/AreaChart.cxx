@@ -259,13 +259,9 @@ bool AreaChart::create_stepped_line( drawing::PolyPolygonShape3D aStartPoly, cha
         const double* pOldY = aStartPoly.SequenceY[nOuter].getConstArray();
         const double* pOldZ = aStartPoly.SequenceZ[nOuter].getConstArray();
 
-        aSteppedPoly.SequenceX[nOuter].realloc( nNewIndexPoints );
-        aSteppedPoly.SequenceY[nOuter].realloc( nNewIndexPoints );
-        aSteppedPoly.SequenceZ[nOuter].realloc( nNewIndexPoints );
-
-        double* pNewX = aSteppedPoly.SequenceX[nOuter].getArray();
-        double* pNewY = aSteppedPoly.SequenceY[nOuter].getArray();
-        double* pNewZ = aSteppedPoly.SequenceZ[nOuter].getArray();
+        double* pNewX = aSteppedPoly.SequenceX.getArray()[nOuter].realloc( nNewIndexPoints );
+        double* pNewY = aSteppedPoly.SequenceY.getArray()[nOuter].realloc( nNewIndexPoints );
+        double* pNewZ = aSteppedPoly.SequenceZ.getArray()[nOuter].realloc( nNewIndexPoints );
 
         pNewX[0] = pOldX[0];
         pNewY[0] = pOldY[0];

@@ -120,6 +120,7 @@ struct lcl_internalizeSeries
 
         Sequence< Reference< chart2::data::XLabeledDataSequence > > aOldSeriesData = xSource->getDataSequences();
         Sequence< Reference< chart2::data::XLabeledDataSequence > > aNewSeriesData( aOldSeriesData.getLength() );
+        auto aNewSeriesDataRange = asNonConstRange(aNewSeriesData);
         for( sal_Int32 i=0; i<aOldSeriesData.getLength(); ++i )
         {
             sal_Int32 nNewIndex( m_bDataInColumns ? m_rInternalData.appendColumn() : m_rInternalData.appendRow() );
@@ -158,13 +159,13 @@ struct lcl_internalizeSeries
                     comphelper::copyProperties(
                         Reference< beans::XPropertySet >( xLabel, uno::UNO_QUERY ),
                         Reference< beans::XPropertySet >( xNewLabel, uno::UNO_QUERY ));
-                    aNewSeriesData[i].set( new LabeledDataSequence( xNewValues, xNewLabel ) );
+                    aNewSeriesDataRange[i].set( new LabeledDataSequence( xNewValues, xNewLabel ) );
                 }
             }
             else
             {
                 if( m_bConnectToModel )
-                    aNewSeriesData[i].set( new LabeledDataSequence( xNewValues ) );
+                    aNewSeriesDataRange[i].set( new LabeledDataSequence( xNewValues ) );
             }
         }
         if( m_bConnectToModel )
@@ -780,22 +781,22 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
 Sequence< beans::PropertyValue > SAL_CALL InternalDataProvider::detectArguments(
     const Reference< chart2::data::XDataSource >& /* xDataSource */ )
 {
-    Sequence< beans::PropertyValue > aArguments( 4 );
-    aArguments[0] = beans::PropertyValue(
-        "CellRangeRepresentation", -1, uno::Any( OUString(lcl_aCompleteRange) ),
-        beans::PropertyState_DIRECT_VALUE );
-    aArguments[1] = beans::PropertyValue(
-        "DataRowSource", -1, uno::Any(
-            m_bDataInColumns
-            ? css::chart::ChartDataRowSource_COLUMNS
-            : css::chart::ChartDataRowSource_ROWS ),
-        beans::PropertyState_DIRECT_VALUE );
-    // internal data always contains labels and categories
-    aArguments[2] = beans::PropertyValue(
-        "FirstCellAsLabel", -1, uno::Any( true ), beans::PropertyState_DIRECT_VALUE );
-    aArguments[3] = beans::PropertyValue(
-        "HasCategories", -1, uno::Any( true ), beans::PropertyState_DIRECT_VALUE );
-
+    Sequence< beans::PropertyValue > aArguments{
+        beans::PropertyValue(
+            "CellRangeRepresentation", -1, uno::Any( OUString(lcl_aCompleteRange) ),
+            beans::PropertyState_DIRECT_VALUE ),
+        beans::PropertyValue(
+            "DataRowSource", -1, uno::Any(
+                m_bDataInColumns
+                ? css::chart::ChartDataRowSource_COLUMNS
+                : css::chart::ChartDataRowSource_ROWS ),
+            beans::PropertyState_DIRECT_VALUE ),
+        // internal data always contains labels and categories
+        beans::PropertyValue(
+            "FirstCellAsLabel", -1, uno::Any( true ), beans::PropertyState_DIRECT_VALUE ),
+        beans::PropertyValue(
+            "HasCategories", -1, uno::Any( true ), beans::PropertyState_DIRECT_VALUE )
+    };
     // #i85913# Sequence Mapping is not needed for internal data, as it is
     // applied to the data when the data source is created.
 
@@ -1292,9 +1293,9 @@ Sequence< Sequence< Type > > lcl_convertVectorVectorToSequenceSequence( const ve
     sal_Int32 nOuterCount = rIn.size();
     if( nOuterCount )
     {
-        aRet.realloc(nOuterCount);
+        auto pRet = aRet.realloc(nOuterCount);
         for( sal_Int32 nN=0; nN<nOuterCount; nN++)
-            aRet[nN]= comphelper::containerToSequence( rIn[nN] );
+            pRet[nN]= comphelper::containerToSequence( rIn[nN] );
     }
     return aRet;
 }
@@ -1375,13 +1376,14 @@ Sequence< double > SAL_CALL InternalDataProvider::getDateCategories()
     vector< vector< uno::Any > > aCategories( m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels());
     sal_Int32 nCount = aCategories.size();
     Sequence< double > aDoubles( nCount );
+    auto aDoublesRange = asNonConstRange(aDoubles);
     sal_Int32 nN=0;
     for (auto const& category : aCategories)
     {
         double fValue;
         if( category.empty() || !(category[0]>>=fValue) )
             fValue = std::numeric_limits<double>::quiet_NaN();
-        aDoubles[nN++]=fValue;
+        aDoublesRange[nN++]=fValue;
     }
     return aDoubles;
 }

@@ -157,8 +157,7 @@ void SAL_CALL FullScreenPane::setAccessible (
         Reference<css::accessibility::XAccessible> xAccessibleParent;
         if (pParentWindow != nullptr)
             xAccessibleParent = pParentWindow->GetAccessible();
-        Sequence<Any> aArguments (1);
-        aArguments[0] <<= xAccessibleParent;
+        Sequence<Any> aArguments{ Any(xAccessibleParent) };
         xInitializable->initialize(aArguments);
     }
     GetWindow()->SetAccessible(rxAccessible);
@@ -189,13 +188,12 @@ Reference<rendering::XCanvas> FullScreenPane::CreateCanvas()
     if (!pWindow)
         throw RuntimeException();
 
-    Sequence<Any> aArg(4);
-
-    // common: first any is VCL pointer to window (for VCL canvas)
-    aArg[0] <<= reinterpret_cast<sal_Int64>(pWindow.get());
-    aArg[1] <<= css::awt::Rectangle();
-    aArg[2] <<= false;
-    aArg[3] <<= mxWindow;
+    Sequence<Any> aArg{ // common: first any is VCL pointer to window (for VCL canvas)
+                        Any(reinterpret_cast<sal_Int64>(pWindow.get())),
+                        Any(css::awt::Rectangle()),
+                        Any(false),
+                        Any(mxWindow)
+    };
 
     Reference<lang::XMultiServiceFactory> xFactory (
         mxComponentContext->getServiceManager(), UNO_QUERY_THROW);

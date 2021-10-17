@@ -123,21 +123,22 @@ bool WpftLoader::impl_load()
         xImporter->setTargetDocument(m_xDoc);
 
         uno::Sequence<beans::PropertyValue> aDescriptor(3);
-        aDescriptor[0].Name = "URL";
-        aDescriptor[0].Value <<= m_aURL;
+        auto pDescriptor = aDescriptor.getArray();
+        pDescriptor[0].Name = "URL";
+        pDescriptor[0].Value <<= m_aURL;
         if (m_xInputStream.is())
         {
-            aDescriptor[1].Name = "InputStream";
-            aDescriptor[1].Value <<= m_xInputStream;
+            pDescriptor[1].Name = "InputStream";
+            pDescriptor[1].Value <<= m_xInputStream;
         }
         else
         {
             ucbhelper::Content aContent(m_aURL, uno::Reference<ucb::XCommandEnvironment>(),
                                         m_xContext);
-            aDescriptor[1].Name = "InputStream";
-            aDescriptor[1].Value <<= aContent.openStream();
-            aDescriptor[2].Name = "UCBContent";
-            aDescriptor[2].Value <<= aContent.get();
+            pDescriptor[1].Name = "InputStream";
+            pDescriptor[1].Value <<= aContent.openStream();
+            pDescriptor[2].Name = "UCBContent";
+            pDescriptor[2].Value <<= aContent.get();
         }
 
         const uno::Reference<document::XExtendedFilterDetection> xDetector(m_xFilter,
@@ -193,8 +194,8 @@ void WpftLoader::impl_detectFilterName(uno::Sequence<beans::PropertyValue>& rDes
             if (("PreferredFilter" == rType.Name) && (rType.Value >>= aFilterName))
             {
                 const sal_Int32 nDescriptorLen = rDescriptor.getLength();
-                rDescriptor.realloc(nDescriptorLen + 1);
-                auto& el = rDescriptor[nDescriptorLen];
+                auto pDescriptor = rDescriptor.realloc(nDescriptorLen + 1);
+                auto& el = pDescriptor[nDescriptorLen];
                 el.Name = "FilterName";
                 el.Value <<= aFilterName;
                 return;

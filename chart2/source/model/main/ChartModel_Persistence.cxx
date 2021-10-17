@@ -103,8 +103,8 @@ void lcl_addStorageToMediaDescriptor(
     Sequence< beans::PropertyValue > & rOutMD,
     const Reference< embed::XStorage > & xStorage )
 {
-    rOutMD.realloc( rOutMD.getLength() + 1 );
-    rOutMD[rOutMD.getLength() - 1] = beans::PropertyValue(
+    auto pOutMD = rOutMD.realloc( rOutMD.getLength() + 1 );
+    pOutMD[rOutMD.getLength() - 1] = beans::PropertyValue(
         "Storage", -1, uno::Any( xStorage ), beans::PropertyState_DIRECT_VALUE );
 }
 
@@ -125,10 +125,9 @@ Reference< embed::XStorage > lcl_createStorage(
             uno::UNO_QUERY );
 
         Reference< lang::XSingleServiceFactory > xStorageFact( embed::StorageFactory::create( xContext ) );
-        Sequence< uno::Any > aStorageArgs( 3 );
-        aStorageArgs[0] <<= xStream;
-        aStorageArgs[1] <<= embed::ElementModes::READWRITE;
-        aStorageArgs[2] <<= rMediaDescriptor;
+        Sequence< uno::Any > aStorageArgs{ uno::Any(xStream),
+                                           uno::Any(embed::ElementModes::READWRITE),
+                                           uno::Any(rMediaDescriptor) };
         xStorage.set(
             xStorageFact->createInstanceWithArguments( aStorageArgs ), uno::UNO_QUERY_THROW );
     }
@@ -396,9 +395,8 @@ void ChartModel::insertDefaultChart()
                 bool bSupportsCategories = xTemplate->supportsCategories();
                 if( bSupportsCategories )
                 {
-                    aParam.realloc( 1 );
-                    aParam[0] = beans::PropertyValue( "HasCategories", -1, uno::Any( true ),
-                                                      beans::PropertyState_DIRECT_VALUE );
+                    aParam = { beans::PropertyValue( "HasCategories", -1, uno::Any( true ),
+                                                     beans::PropertyState_DIRECT_VALUE ) };
                 }
 
                 Reference< chart2::XDiagram > xDiagram( xTemplate->createDiagramByDataSource( xDataSource, aParam ) );
@@ -510,10 +508,9 @@ void SAL_CALL ChartModel::load(
             if( aMDHelper.ISSET_Stream )
             {
                 // convert XStream to XStorage via the storage factory
-                Sequence< uno::Any > aStorageArgs( 2 );
-                aStorageArgs[0] <<= aMDHelper.Stream;
-                // todo: check if stream is read-only
-                aStorageArgs[1] <<= embed::ElementModes::READ; //WRITE | embed::ElementModes::NOCREATE);
+                Sequence< uno::Any > aStorageArgs{ uno::Any(aMDHelper.Stream),
+                                                   // todo: check if stream is read-only
+                                                   uno::Any(embed::ElementModes::READ) }; //WRITE | embed::ElementModes::NOCREATE);
 
                 xStorage.set( xStorageFact->createInstanceWithArguments( aStorageArgs ),
                     uno::UNO_QUERY_THROW );
@@ -522,9 +519,8 @@ void SAL_CALL ChartModel::load(
             {
                 OSL_ASSERT( aMDHelper.ISSET_InputStream );
                 // convert XInputStream to XStorage via the storage factory
-                Sequence< uno::Any > aStorageArgs( 2 );
-                aStorageArgs[0] <<= aMDHelper.InputStream;
-                aStorageArgs[1] <<= embed::ElementModes::READ;
+                Sequence< uno::Any > aStorageArgs{ uno::Any(aMDHelper.InputStream),
+                                                   uno::Any(embed::ElementModes::READ) };
 
                 xStorage.set( xStorageFact->createInstanceWithArguments( aStorageArgs ),
                     uno::UNO_QUERY_THROW );

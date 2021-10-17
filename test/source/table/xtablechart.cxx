@@ -49,7 +49,7 @@ void XTableChart::testGetSetRanges()
     uno::Reference<table::XTableChart> xTC(init(), uno::UNO_QUERY_THROW);
 
     uno::Sequence<table::CellRangeAddress> aCRA = xTC->getRanges();
-    aCRA[0].EndRow = 1;
+    aCRA.getArray()[0].EndRow = 1;
 
     xTC->setRanges(aCRA);
 

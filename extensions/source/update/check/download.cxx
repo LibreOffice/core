@@ -178,8 +178,7 @@ Download::getProxyForURL(std::u16string_view rURL, OString& rHost, sal_Int32& rP
     aProperty.Name  = "nodepath";
     aProperty.Value <<= OUString("org.openoffice.Inet/Settings");
 
-    uno::Sequence< uno::Any > aArgumentList( 1 );
-    aArgumentList[0] <<= aProperty;
+    uno::Sequence< uno::Any > aArgumentList{ uno::Any(aProperty) };
 
     uno::Reference< container::XNameAccess > xNameAccess(
         xConfigProvider->createInstanceWithArguments(

@@ -28,6 +28,8 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 
+#include <comphelper/propertyvalue.hxx>
+
 using namespace css;
 using namespace css::uno;
 using namespace com::sun::star;
@@ -83,17 +85,13 @@ uno::Reference<uno::XInterface> ScTableConditionalEntryObj::init()
     xSheetConditionalEntries.set(xPropSet->getPropertyValue(SC_UNONAME_CONDFMT),
                                  uno::UNO_QUERY_THROW);
 
-    uno::Sequence<beans::PropertyValue> aPropValue(5);
-    aPropValue[0].Name = SC_UNONAME_STYLENAME;
-    aPropValue[0].Value <<= OUString("Result2");
-    aPropValue[1].Name = SC_UNONAME_FORMULA1;
-    aPropValue[1].Value <<= OUString("$Sheet1.$B$5");
-    aPropValue[2].Name = SC_UNONAME_FORMULA2;
-    aPropValue[2].Value <<= OUString("");
-    aPropValue[3].Name = SC_UNONAME_OPERATOR;
-    aPropValue[3].Value <<= sheet::ConditionOperator_EQUAL;
-    aPropValue[4].Name = SC_UNONAME_SOURCEPOS;
-    aPropValue[4].Value <<= table::CellAddress(0, 1, 5);
+    uno::Sequence<beans::PropertyValue> aPropValue{
+        comphelper::makePropertyValue(SC_UNONAME_STYLENAME, OUString("Result2")),
+        comphelper::makePropertyValue(SC_UNONAME_FORMULA1, OUString("$Sheet1.$B$5")),
+        comphelper::makePropertyValue(SC_UNONAME_FORMULA2, OUString("")),
+        comphelper::makePropertyValue(SC_UNONAME_OPERATOR, sheet::ConditionOperator_EQUAL),
+        comphelper::makePropertyValue(SC_UNONAME_SOURCEPOS, table::CellAddress(0, 1, 5))
+    };
     xSheetConditionalEntries->addNew(aPropValue);
 
     uno::Reference<sheet::XSheetConditionalEntry> xSheetConditionalEntry(

@@ -33,6 +33,7 @@
 
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -1093,60 +1094,52 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames(
 
     const uno::Sequence< OUString > aSNS_ORG( SvxFmMSFactory::getAvailableServiceNames() );
 
-    uno::Sequence< OUString > aSNS( mbImpressDoc ? 36 : 19 );
+    uno::Sequence< OUString > aSNS_Common{ "com.sun.star.drawing.DashTable",
+                                           "com.sun.star.drawing.GradientTable",
+                                           "com.sun.star.drawing.HatchTable",
+                                           "com.sun.star.drawing.BitmapTable",
+                                           "com.sun.star.drawing.TransparencyGradientTable",
+                                           "com.sun.star.drawing.MarkerTable",
+                                           "com.sun.star.text.NumberingRules",
+                                           "com.sun.star.drawing.Background",
+                                           "com.sun.star.document.Settings",
+                                           sUNO_Service_ImageMapRectangleObject,
+                                           sUNO_Service_ImageMapCircleObject,
+                                           sUNO_Service_ImageMapPolygonObject,
+                                           "com.sun.star.xml.NamespaceMap",
 
-    sal_uInt16 i(0);
+                                           // Support creation of GraphicStorageHandler and EmbeddedObjectResolver
+                                           "com.sun.star.document.ExportGraphicStorageHandler",
+                                           "com.sun.star.document.ImportGraphicStorageHandler",
+                                           "com.sun.star.document.ExportEmbeddedObjectResolver",
+                                           "com.sun.star.document.ImportEmbeddedObjectResolver",
+                                           "com.sun.star.drawing.TableShape" };
 
-    aSNS[i++] = "com.sun.star.drawing.DashTable";
-    aSNS[i++] = "com.sun.star.drawing.GradientTable";
-    aSNS[i++] = "com.sun.star.drawing.HatchTable";
-    aSNS[i++] = "com.sun.star.drawing.BitmapTable";
-    aSNS[i++] = "com.sun.star.drawing.TransparencyGradientTable";
-    aSNS[i++] = "com.sun.star.drawing.MarkerTable";
-    aSNS[i++] = "com.sun.star.text.NumberingRules";
-    aSNS[i++] = "com.sun.star.drawing.Background";
-    aSNS[i++] = "com.sun.star.document.Settings";
-    aSNS[i++] = sUNO_Service_ImageMapRectangleObject;
-    aSNS[i++] = sUNO_Service_ImageMapCircleObject;
-    aSNS[i++] = sUNO_Service_ImageMapPolygonObject;
-    aSNS[i++] = "com.sun.star.xml.NamespaceMap";
-
-    // Support creation of GraphicStorageHandler and EmbeddedObjectResolver
-    aSNS[i++] = "com.sun.star.document.ExportGraphicStorageHandler";
-    aSNS[i++] = "com.sun.star.document.ImportGraphicStorageHandler";
-    aSNS[i++] = "com.sun.star.document.ExportEmbeddedObjectResolver";
-    aSNS[i++] = "com.sun.star.document.ImportEmbeddedObjectResolver";
-    aSNS[i++] = "com.sun.star.drawing.TableShape";
+    uno::Sequence< OUString > aSNS_Specific;
 
     if(mbImpressDoc)
-    {
-        aSNS[i++] = "com.sun.star.presentation.TitleTextShape";
-        aSNS[i++] = "com.sun.star.presentation.OutlinerShape";
-        aSNS[i++] = "com.sun.star.presentation.SubtitleShape";
-        aSNS[i++] = "com.sun.star.presentation.GraphicObjectShape";
-        aSNS[i++] = "com.sun.star.presentation.ChartShape";
-        aSNS[i++] = "com.sun.star.presentation.PageShape";
-        aSNS[i++] = "com.sun.star.presentation.OLE2Shape";
-        aSNS[i++] = "com.sun.star.presentation.TableShape";
-        aSNS[i++] = "com.sun.star.presentation.OrgChartShape";
-        aSNS[i++] = "com.sun.star.presentation.NotesShape";
-        aSNS[i++] = "com.sun.star.presentation.HandoutShape";
-        aSNS[i++] = "com.sun.star.presentation.DocumentSettings";
-        aSNS[i++] = "com.sun.star.presentation.FooterShape";
-        aSNS[i++] = "com.sun.star.presentation.HeaderShape";
-        aSNS[i++] = "com.sun.star.presentation.SlideNumberShape";
-        aSNS[i++] = "com.sun.star.presentation.DateTimeShape";
-        aSNS[i++] = "com.sun.star.presentation.CalcShape";
-        aSNS[i++] = "com.sun.star.presentation.MediaShape";
-    }
+        aSNS_Specific = { "com.sun.star.presentation.TitleTextShape",
+                          "com.sun.star.presentation.OutlinerShape",
+                          "com.sun.star.presentation.SubtitleShape",
+                          "com.sun.star.presentation.GraphicObjectShape",
+                          "com.sun.star.presentation.ChartShape",
+                          "com.sun.star.presentation.PageShape",
+                          "com.sun.star.presentation.OLE2Shape",
+                          "com.sun.star.presentation.TableShape",
+                          "com.sun.star.presentation.OrgChartShape",
+                          "com.sun.star.presentation.NotesShape",
+                          "com.sun.star.presentation.HandoutShape",
+                          "com.sun.star.presentation.DocumentSettings",
+                          "com.sun.star.presentation.FooterShape",
+                          "com.sun.star.presentation.HeaderShape",
+                          "com.sun.star.presentation.SlideNumberShape",
+                          "com.sun.star.presentation.DateTimeShape",
+                          "com.sun.star.presentation.CalcShape",
+                          "com.sun.star.presentation.MediaShape" };
     else
-    {
-        aSNS[i++] = "com.sun.star.drawing.DocumentSettings";
-    }
+        aSNS_Specific = { "com.sun.star.drawing.DocumentSettings" };
 
-    DBG_ASSERT( i == aSNS.getLength(), "Sequence overrun!" );
-
-    return comphelper::concatSequences( aSNS_ORG, aSNS );
+    return comphelper::concatSequences( aSNS_ORG, aSNS_Common, aSNS_Specific );
 }
 
 // lang::XServiceInfo
@@ -1345,26 +1338,26 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
                 {
                     sal_uInt32 nItems = rPool.GetItemCount2( nWhichId );
 
-                    aSeq.realloc( aSeq.getLength() + nItems*5 + 5 );
+                    auto pSeq = aSeq.realloc( aSeq.getLength() + nItems*5 + 5 );
 
                     for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(nWhichId))
                     {
                         const SvxFontItem *pFont = static_cast<const SvxFontItem *>(pItem);
 
-                        aSeq[nSeqIndex++] <<= pFont->GetFamilyName();
-                        aSeq[nSeqIndex++] <<= pFont->GetStyleName();
-                        aSeq[nSeqIndex++] <<= sal_Int16(pFont->GetFamily());
-                        aSeq[nSeqIndex++] <<= sal_Int16(pFont->GetPitch());
-                        aSeq[nSeqIndex++] <<= sal_Int16(pFont->GetCharSet());
+                        pSeq[nSeqIndex++] <<= pFont->GetFamilyName();
+                        pSeq[nSeqIndex++] <<= pFont->GetStyleName();
+                        pSeq[nSeqIndex++] <<= sal_Int16(pFont->GetFamily());
+                        pSeq[nSeqIndex++] <<= sal_Int16(pFont->GetPitch());
+                        pSeq[nSeqIndex++] <<= sal_Int16(pFont->GetCharSet());
                     }
 
                     const SvxFontItem& rFont = static_cast<const SvxFontItem&>(rPool.GetDefaultItem( nWhichId ));
 
-                    aSeq[nSeqIndex++] <<= rFont.GetFamilyName();
-                    aSeq[nSeqIndex++] <<= rFont.GetStyleName();
-                    aSeq[nSeqIndex++] <<= sal_Int16(rFont.GetFamily());
-                    aSeq[nSeqIndex++] <<= sal_Int16(rFont.GetPitch());
-                    aSeq[nSeqIndex++] <<= sal_Int16(rFont.GetCharSet());
+                    pSeq[nSeqIndex++] <<= rFont.GetFamilyName();
+                    pSeq[nSeqIndex++] <<= rFont.GetStyleName();
+                    pSeq[nSeqIndex++] <<= sal_Int16(rFont.GetFamily());
+                    pSeq[nSeqIndex++] <<= sal_Int16(rFont.GetPitch());
+                    pSeq[nSeqIndex++] <<= sal_Int16(rFont.GetCharSet());
 
                 }
 
@@ -1478,10 +1471,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( 
             const ::tools::Rectangle aVisArea( mpDocShell->GetVisArea( embed::Aspects::MSOLE_DOCPRINT ) );
             aPageSize = awt::Size( aVisArea.GetWidth(), aVisArea.GetHeight() );
         }
-        aRenderer.realloc( 1 );
-
-        aRenderer[ 0 ].Name = "PageSize" ;
-        aRenderer[ 0 ].Value <<= aPageSize;
+        aRenderer = { comphelper::makePropertyValue("PageSize", aPageSize) };
     }
     return aRenderer;
 }

@@ -46,6 +46,7 @@
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/classids.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/viewsh.hxx>
@@ -288,17 +289,15 @@ short SvInsertOleDlg::run()
 
             if ( !aFileName.isEmpty() )
             {
-                // create MediaDescriptor for file to create object from
-                uno::Sequence < beans::PropertyValue > aMedium( 2 );
-                aMedium[0].Name = "URL";
-                aMedium[0].Value <<= aFileName;
-
                 uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                 uno::Reference< task::XInteractionHandler2 > xInteraction(
                     task::InteractionHandler::createWithParent(xContext, nullptr) );
 
-                aMedium[1].Name = "InteractionHandler";
-                aMedium[1].Value <<= xInteraction;
+                // create MediaDescriptor for file to create object from
+                uno::Sequence < beans::PropertyValue > aMedium{
+                    comphelper::makePropertyValue("URL", aFileName),
+                    comphelper::makePropertyValue("InteractionHandler", xInteraction)
+                };
 
                 // create object from media descriptor
 

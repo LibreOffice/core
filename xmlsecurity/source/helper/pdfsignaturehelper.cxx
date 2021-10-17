@@ -493,11 +493,12 @@ PDFSignatureHelper::GetDocumentSignatureInformations(
     const uno::Reference<xml::crypto::XSecurityEnvironment>& xSecEnv) const
 {
     uno::Sequence<security::DocumentSignatureInformation> aRet(m_aSignatureInfos.size());
+    auto aRetRange = asNonConstRange(aRet);
 
     for (size_t i = 0; i < m_aSignatureInfos.size(); ++i)
     {
         const SignatureInformation& rInternal = m_aSignatureInfos[i];
-        security::DocumentSignatureInformation& rExternal = aRet[i];
+        security::DocumentSignatureInformation& rExternal = aRetRange[i];
         rExternal.SignatureIsValid
             = rInternal.nStatus == xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
         if (rInternal.GetSigningCertificate()

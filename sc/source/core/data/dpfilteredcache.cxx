@@ -303,12 +303,13 @@ void ScDPFilteredCache::filterTable(const vector<Criterion>& rCriteria, Sequence
 
     // Header first.
     Sequence<Any> headerRow(nColSize);
+    auto pRow = headerRow.getArray();
     for (SCCOL  nCol = 0; nCol < nColSize; ++nCol)
     {
         OUString str = getFieldName( nCol);
         Any any;
         any <<= str;
-        headerRow[nCol] = any;
+        pRow[nCol] = any;
     }
     tableData.push_back(headerRow);
 
@@ -328,6 +329,7 @@ void ScDPFilteredCache::filterTable(const vector<Criterion>& rCriteria, Sequence
         // Insert this row into table.
 
         Sequence<Any> row(nColSize);
+        pRow = row.getArray();
         for (SCCOL nCol = 0; nCol < nColSize; ++nCol)
         {
             Any any;
@@ -340,16 +342,16 @@ void ScDPFilteredCache::filterTable(const vector<Criterion>& rCriteria, Sequence
                   OUString string (pData->GetString() );
                   any <<= string;
             }
-            row[nCol] = any;
+            pRow[nCol] = any;
         }
         tableData.push_back(row);
     }
 
     // convert vector to Sequence
     sal_Int32 nTabSize = static_cast<sal_Int32>(tableData.size());
-    rTabData.realloc(nTabSize);
+    auto pTabData = rTabData.realloc(nTabSize);
     for (sal_Int32 i = 0; i < nTabSize; ++i)
-        rTabData[i] = tableData[i];
+        pTabData[i] = tableData[i];
 }
 
 void ScDPFilteredCache::clear()

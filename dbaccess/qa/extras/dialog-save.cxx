@@ -92,8 +92,7 @@ void DialogSaveTest::test()
         // All our uno::References are (should?) be invalid now -> let them go out of scope
     }
     {
-        uno::Sequence<uno::Any> args(1);
-        args[0] <<= aFileName;
+        uno::Sequence<uno::Any> args{ uno::Any(aFileName) };
         Reference<container::XHierarchicalNameAccess> xHNA(getMultiServiceFactory()->createInstanceWithArguments("com.sun.star.packages.Package", args), UNO_QUERY_THROW);
         Reference< beans::XPropertySet > xPS(xHNA->getByHierarchicalName("Dialogs/Standard/Dialog1.xml"), UNO_QUERY_THROW);
         sal_Int64 nSize = 0;

@@ -68,6 +68,7 @@
 #include <unoparaframeenum.hxx>
 #include <unoparagraph.hxx>
 #include <iodetect.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/profilezone.hxx>
 
@@ -1735,9 +1736,8 @@ void SwUnoCursorHelper::SetPropertyValue(
     const uno::Any& rValue,
     const SetAttrMode nAttrMode)
 {
-    uno::Sequence< beans::PropertyValue > aValues(1);
-    aValues[0].Name = rPropertyName;
-    aValues[0].Value = rValue;
+    uno::Sequence< beans::PropertyValue > aValues{ comphelper::makePropertyValue(rPropertyName,
+                                                                                 rValue)};
     SetPropertyValues(rPaM, rPropSet, aValues, nAttrMode);
 }
 
@@ -2208,6 +2208,7 @@ void SAL_CALL SwXTextCursor::setPropertyValues(
 
     // a little lame to have to copy into this.
     uno::Sequence< beans::PropertyValue > aPropertyValues( aValues.getLength() );
+    auto aPropertyValuesRange = asNonConstRange(aPropertyValues);
     for ( sal_Int32 i = 0; i < aPropertyNames.getLength(); i++ )
     {
         if ( aPropertyNames[ i ] == UNO_NAME_IS_SKIP_HIDDEN_TEXT ||
@@ -2217,8 +2218,8 @@ void SAL_CALL SwXTextCursor::setPropertyValues(
             OSL_FAIL("invalid property name for batch setting");
             throw lang::IllegalArgumentException();
         }
-        aPropertyValues[ i ].Name = aPropertyNames[ i ];
-        aPropertyValues[ i ].Value = aValues[ i ];
+        aPropertyValuesRange[ i ].Name = aPropertyNames[ i ];
+        aPropertyValuesRange[ i ].Value = aValues[ i ];
     }
     try
     {

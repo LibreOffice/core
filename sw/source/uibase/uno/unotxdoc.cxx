@@ -117,6 +117,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <osl/file.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/saveopt.hxx>
@@ -1686,7 +1687,7 @@ Sequence< OUString > SwXTextDocument::getAvailableServiceNames()
         if (i != -1)
         {
             auto nLength = aRet.getLength();
-            aRet[i] = aRet[nLength - 1];
+            aRet.getArray()[i] = aRet[nLength - 1];
             aRet.realloc( nLength - 1 );
         }
         Sequence< OUString > aOwn = SwXServiceProvider::GetAllServiceNames();
@@ -2731,26 +2732,22 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
         }
 
         sal_Int32 nLen = 3;
-        aRenderer.realloc(3);
-        aRenderer[0].Name  = "PageSize";
-        aRenderer[0].Value <<= aPageSize;
-        aRenderer[1].Name  = "PageIncludesNonprintableArea";
-        aRenderer[1].Value <<= true;
-        aRenderer[2].Name = "PagePos";
-        aRenderer[2].Value <<= aPagePos;
+        aRenderer = { comphelper::makePropertyValue("PageSize", aPageSize),
+                      comphelper::makePropertyValue("PageIncludesNonprintableArea", true),
+                      comphelper::makePropertyValue("PagePos", aPagePos) };
         if (aPreferredPageSize.Width && aPreferredPageSize.Height)
         {
             ++nLen;
-            aRenderer.realloc( nLen );
-            aRenderer[ nLen - 1 ].Name  = "PreferredPageSize";
-            aRenderer[ nLen - 1 ].Value <<= aPreferredPageSize;
+            auto pRenderer = aRenderer.realloc( nLen );
+            pRenderer[ nLen - 1 ].Name  = "PreferredPageSize";
+            pRenderer[ nLen - 1 ].Value <<= aPreferredPageSize;
         }
         if (nPrinterPaperTray >= 0)
         {
             ++nLen;
-            aRenderer.realloc( nLen );
-            aRenderer[ nLen - 1 ].Name  = "PrinterPaperTray";
-            aRenderer[ nLen - 1 ].Value <<= nPrinterPaperTray;
+            auto pRenderer = aRenderer.realloc( nLen );
+            pRenderer[ nLen - 1 ].Name  = "PrinterPaperTray";
+            pRenderer[ nLen - 1 ].Value <<= nPrinterPaperTray;
         }
     }
 
@@ -2767,26 +2764,26 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
             sal_Int32 nLen = aRenderer.getLength();
             const sal_Int32 nRenderDataIdxStart = nLen;
             nLen += 9;
-            aRenderer.realloc( nLen );
+            auto pRenderer = aRenderer.realloc( nLen );
             // put page print settings attribute into render data
             const sal_Int32 nRow = pPagePrintSettings->GetRow();
-            aRenderer[ nRenderDataIdxStart + 0 ].Name  = "NUpRows";
-            aRenderer[ nRenderDataIdxStart + 0 ].Value <<= std::max<sal_Int32>( nRow, 1);
+            pRenderer[ nRenderDataIdxStart + 0 ].Name  = "NUpRows";
+            pRenderer[ nRenderDataIdxStart + 0 ].Value <<= std::max<sal_Int32>( nRow, 1);
             const sal_Int32 nCol = pPagePrintSettings->GetCol();
-            aRenderer[ nRenderDataIdxStart + 1 ].Name  = "NUpColumns";
-            aRenderer[ nRenderDataIdxStart + 1 ].Value <<= std::max<sal_Int32>( nCol, 1);
-            aRenderer[ nRenderDataIdxStart + 2 ].Name  = "NUpPageMarginLeft";
-            aRenderer[ nRenderDataIdxStart + 2 ].Value <<= pPagePrintSettings->GetLeftSpace();
-            aRenderer[ nRenderDataIdxStart + 3 ].Name  = "NUpPageMarginRight";
-            aRenderer[ nRenderDataIdxStart + 3 ].Value <<= pPagePrintSettings->GetRightSpace();
-            aRenderer[ nRenderDataIdxStart + 4 ].Name  = "NUpPageMarginTop";
-            aRenderer[ nRenderDataIdxStart + 4 ].Value <<= pPagePrintSettings->GetTopSpace();
-            aRenderer[ nRenderDataIdxStart + 5 ].Name  = "NUpPageMarginBottom";
-            aRenderer[ nRenderDataIdxStart + 5 ].Value <<= pPagePrintSettings->GetBottomSpace();
-            aRenderer[ nRenderDataIdxStart + 6 ].Name  = "NUpHorizontalSpacing";
-            aRenderer[ nRenderDataIdxStart + 6 ].Value <<= pPagePrintSettings->GetHorzSpace();
-            aRenderer[ nRenderDataIdxStart + 7 ].Name  = "NUpVerticalSpacing";
-            aRenderer[ nRenderDataIdxStart + 7 ].Value <<= pPagePrintSettings->GetVertSpace();
+            pRenderer[ nRenderDataIdxStart + 1 ].Name  = "NUpColumns";
+            pRenderer[ nRenderDataIdxStart + 1 ].Value <<= std::max<sal_Int32>( nCol, 1);
+            pRenderer[ nRenderDataIdxStart + 2 ].Name  = "NUpPageMarginLeft";
+            pRenderer[ nRenderDataIdxStart + 2 ].Value <<= pPagePrintSettings->GetLeftSpace();
+            pRenderer[ nRenderDataIdxStart + 3 ].Name  = "NUpPageMarginRight";
+            pRenderer[ nRenderDataIdxStart + 3 ].Value <<= pPagePrintSettings->GetRightSpace();
+            pRenderer[ nRenderDataIdxStart + 4 ].Name  = "NUpPageMarginTop";
+            pRenderer[ nRenderDataIdxStart + 4 ].Value <<= pPagePrintSettings->GetTopSpace();
+            pRenderer[ nRenderDataIdxStart + 5 ].Name  = "NUpPageMarginBottom";
+            pRenderer[ nRenderDataIdxStart + 5 ].Value <<= pPagePrintSettings->GetBottomSpace();
+            pRenderer[ nRenderDataIdxStart + 6 ].Name  = "NUpHorizontalSpacing";
+            pRenderer[ nRenderDataIdxStart + 6 ].Value <<= pPagePrintSettings->GetHorzSpace();
+            pRenderer[ nRenderDataIdxStart + 7 ].Name  = "NUpVerticalSpacing";
+            pRenderer[ nRenderDataIdxStart + 7 ].Value <<= pPagePrintSettings->GetVertSpace();
             {
                 Printer* pPrinter = m_pDocShell->GetDoc()->getIDocumentDeviceAccess().getPrinter( false );
                 if ( pPrinter )
@@ -2801,8 +2798,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
                     {
                         aNewPageSize = awt::Size( aPageSize.Height(), aPageSize.Width() );
                     }
-                    aRenderer[ nRenderDataIdxStart + 8 ].Name  = "NUpPaperSize";
-                    aRenderer[ nRenderDataIdxStart + 8 ].Value <<= aNewPageSize;
+                    pRenderer[ nRenderDataIdxStart + 8 ].Name  = "NUpPaperSize";
+                    pRenderer[ nRenderDataIdxStart + 8 ].Value <<= aNewPageSize;
                 }
             }
         }

@@ -415,12 +415,12 @@ void Axis::AllocateSubGrids()
         }
         else if( nOldSubIncCount < nNewSubIncCount )
         {
-            m_aSubGridProperties.realloc( nNewSubIncCount );
+            auto pSubGridProperties = m_aSubGridProperties.realloc( nNewSubIncCount );
 
             // allocate new entries
             for( sal_Int32 i = nOldSubIncCount; i < nNewSubIncCount; ++i )
             {
-                m_aSubGridProperties[ i ] = new GridProperties();
+                pSubGridProperties[ i ] = new GridProperties();
                 LinePropertiesHelper::SetLineInvisible( m_aSubGridProperties[ i ] );
                 LinePropertiesHelper::SetLineColor( m_aSubGridProperties[ i ], static_cast<sal_Int32>(0xdddddd) ); //gray2
                 aNewBroadcasters.push_back( m_aSubGridProperties[ i ] );

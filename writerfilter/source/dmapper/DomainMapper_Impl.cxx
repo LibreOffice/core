@@ -5216,28 +5216,29 @@ static uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool
     beans::PropertyValues* pNewLevel = aNewLevel.getArray();
     if( bHyperlinks )
     {
-        beans::PropertyValues aHyperlink(1);
-        aHyperlink[0].Name = getPropertyName( PROP_TOKEN_TYPE );
-        aHyperlink[0].Value <<= getPropertyName( PROP_TOKEN_HYPERLINK_START );
+        beans::PropertyValues aHyperlink{ comphelper::makePropertyValue(
+            getPropertyName( PROP_TOKEN_TYPE ), getPropertyName( PROP_TOKEN_HYPERLINK_START )) };
         pNewLevel[0] = aHyperlink;
-        aHyperlink[0].Value <<= getPropertyName( PROP_TOKEN_HYPERLINK_END );
+        aHyperlink = { comphelper::makePropertyValue(
+            getPropertyName(PROP_TOKEN_TYPE), getPropertyName( PROP_TOKEN_HYPERLINK_END )) };
         pNewLevel[aNewLevel.getLength() -1] = aHyperlink;
     }
     if( bChapterNoSeparator )
     {
-        beans::PropertyValues aChapterNo(2);
-        aChapterNo[0].Name = getPropertyName( PROP_TOKEN_TYPE );
-        aChapterNo[0].Value <<= getPropertyName( PROP_TOKEN_CHAPTER_INFO );
-        aChapterNo[1].Name = getPropertyName( PROP_CHAPTER_FORMAT );
-        //todo: is ChapterFormat::Number correct?
-        aChapterNo[1].Value <<= sal_Int16(text::ChapterFormat::NUMBER);
+        beans::PropertyValues aChapterNo{
+            comphelper::makePropertyValue(getPropertyName( PROP_TOKEN_TYPE ),
+                                          getPropertyName( PROP_TOKEN_CHAPTER_INFO )),
+            comphelper::makePropertyValue(getPropertyName( PROP_CHAPTER_FORMAT ),
+                                          //todo: is ChapterFormat::Number correct?
+                                          sal_Int16(text::ChapterFormat::NUMBER))
+        };
         pNewLevel[aNewLevel.getLength() - (bHyperlinks ? 4 : 2) ] = aChapterNo;
 
-        beans::PropertyValues aChapterSeparator(2);
-        aChapterSeparator[0].Name = getPropertyName( PROP_TOKEN_TYPE );
-        aChapterSeparator[0].Value <<= getPropertyName( PROP_TOKEN_TEXT );
-        aChapterSeparator[1].Name = getPropertyName( PROP_TEXT );
-        aChapterSeparator[1].Value <<= sChapterNoSeparator;
+        beans::PropertyValues aChapterSeparator{
+            comphelper::makePropertyValue(getPropertyName( PROP_TOKEN_TYPE ),
+                                          getPropertyName( PROP_TOKEN_TEXT )),
+            comphelper::makePropertyValue(getPropertyName( PROP_TEXT ), sChapterNoSeparator)
+        };
         pNewLevel[aNewLevel.getLength() - (bHyperlinks ? 3 : 1)] = aChapterSeparator;
     }
     //copy the 'old' entries except the last (page no)
@@ -5521,9 +5522,9 @@ void DomainMapper_Impl::handleToc
                     TOCStyleMap::iterator aTOCStyleIter = aMap.find( nLevel );
 
                     uno::Sequence< OUString> aStyles( nLevelCount );
-                    for ( sal_Int32 nStyle = 0; nStyle < nLevelCount; ++nStyle, ++aTOCStyleIter )
+                    for ( auto& rStyle : asNonConstRange(aStyles) )
                     {
-                        aStyles[nStyle] = aTOCStyleIter->second;
+                        rStyle = (aTOCStyleIter++)->second;
                     }
                     xParaStyles->replaceByIndex(nLevel - 1, uno::makeAny(aStyles));
                 }
@@ -6736,14 +6737,14 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                             aValue >>= titleStr;
                             titleStr += rResult;
                             propertyVal.Value <<= titleStr;
-                            aValues[nTitleFoundIndex] = propertyVal;
+                            aValues.getArray()[nTitleFoundIndex] = propertyVal;
                         }
                         else
                         {
-                            aValues.realloc(aValues.getLength() + 1);
+                            auto pValues = aValues.realloc(aValues.getLength() + 1);
                             propertyVal.Name = "Title";
                             propertyVal.Value <<= rResult;
-                            aValues[aValues.getLength() - 1] = propertyVal;
+                            pValues[aValues.getLength() - 1] = propertyVal;
                         }
                         xFieldProperties->setPropertyValue("Fields",
                                 uno::makeAny(aValues));

@@ -48,15 +48,15 @@ uno::Sequence< uno::Sequence< double > > lcl_getNANInsteadDBL_MIN( const uno::Se
 {
     uno::Sequence< uno::Sequence< double > > aRet;
     const sal_Int32 nOuterSize = rData.getLength();
-    aRet.realloc( nOuterSize );
+    auto pRet = aRet.realloc( nOuterSize );
     for( sal_Int32 nOuter=0; nOuter<nOuterSize; ++nOuter )
     {
         sal_Int32 nInnerSize = rData[nOuter].getLength();
-        aRet[nOuter].realloc( nInnerSize );
+        auto pRet_nOuter = pRet[nOuter].realloc( nInnerSize );
         for( sal_Int32 nInner=0; nInner<nInnerSize; ++nInner )
         {
-            aRet[nOuter][nInner] = rData[nOuter][nInner];
-            double& rValue = aRet[nOuter][nInner];
+            pRet_nOuter[nInner] = rData[nOuter][nInner];
+            double& rValue = pRet_nOuter[nInner];
             if( rValue == DBL_MIN )
                 rValue = std::numeric_limits<double>::quiet_NaN();
         }
@@ -68,15 +68,15 @@ uno::Sequence< uno::Sequence< double > > lcl_getDBL_MINInsteadNAN( const uno::Se
 {
     uno::Sequence< uno::Sequence< double > > aRet;
     const sal_Int32 nOuterSize = rData.getLength();
-    aRet.realloc( nOuterSize );
+    auto pRet = aRet.realloc( nOuterSize );
     for( sal_Int32 nOuter=0; nOuter<nOuterSize; ++nOuter )
     {
         sal_Int32 nInnerSize = rData[nOuter].getLength();
-        aRet[nOuter].realloc( nInnerSize );
+        auto pRet_nOuter = pRet[nOuter].realloc( nInnerSize );
         for( sal_Int32 nInner=0; nInner<nInnerSize; ++nInner )
         {
-            aRet[nOuter][nInner] = rData[nOuter][nInner];
-            double& rValue = aRet[nOuter][nInner];
+            pRet_nOuter[nInner] = rData[nOuter][nInner];
+            double& rValue = pRet_nOuter[nInner];
             if( std::isnan( rValue ) )
                 rValue = DBL_MIN;
         }

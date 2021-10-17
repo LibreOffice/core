@@ -24,6 +24,7 @@
 #include <sal/macros.h>
 #include <osl/diagnose.h>
 
+#include <comphelper/propertyvalue.hxx>
 #include <unotools/searchopt.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -402,33 +403,26 @@ bool SvxSearchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         case 0 :
         {
-            Sequence< PropertyValue > aSeq( SRCH_PARAMS );
-            aSeq[0].Name = SRCH_PARA_OPTIONS;
-            aSeq[0].Value <<= m_aSearchOpt.toUnoSearchOptions2();
-            aSeq[1].Name = SRCH_PARA_FAMILY;
-            aSeq[1].Value <<= sal_Int16( m_eFamily );
-            aSeq[2].Name = SRCH_PARA_COMMAND;
-            aSeq[2].Value <<= static_cast<sal_uInt16>(m_nCommand);
-            aSeq[3].Name = SRCH_PARA_CELLTYPE;
-            aSeq[3].Value <<= static_cast<sal_uInt16>(m_nCellType);
-            aSeq[4].Name = SRCH_PARA_APPFLAG;
-            aSeq[4].Value <<= static_cast<sal_uInt16>(m_nAppFlag);
-            aSeq[5].Name = SRCH_PARA_ROWDIR;
-            aSeq[5].Value <<= m_bRowDirection;
-            aSeq[6].Name = SRCH_PARA_ALLTABLES;
-            aSeq[6].Value <<= m_bAllTables;
-            aSeq[7].Name = SRCH_PARA_SEARCHFILTERED;
-            aSeq[7].Value <<= m_bSearchFiltered;
-            aSeq[8].Name = SRCH_PARA_SEARCHFORMATTED;
-            aSeq[8].Value <<= m_bSearchFormatted;
-            aSeq[9].Name = SRCH_PARA_BACKWARD;
-            aSeq[9].Value <<= m_bBackward;
-            aSeq[10].Name = SRCH_PARA_PATTERN;
-            aSeq[10].Value <<= m_bPattern;
-            aSeq[11].Name = SRCH_PARA_CONTENT;
-            aSeq[11].Value <<= m_bContent;
-            aSeq[12].Name = SRCH_PARA_ASIANOPT;
-            aSeq[12].Value <<= m_bAsianOptions;
+            Sequence<PropertyValue> aSeq{
+                comphelper::makePropertyValue(SRCH_PARA_OPTIONS,
+                                              m_aSearchOpt.toUnoSearchOptions2()),
+                comphelper::makePropertyValue(SRCH_PARA_FAMILY, sal_Int16(m_eFamily)),
+                comphelper::makePropertyValue(SRCH_PARA_COMMAND,
+                                              static_cast<sal_uInt16>(m_nCommand)),
+                comphelper::makePropertyValue(SRCH_PARA_CELLTYPE,
+                                              static_cast<sal_uInt16>(m_nCellType)),
+                comphelper::makePropertyValue(SRCH_PARA_APPFLAG,
+                                              static_cast<sal_uInt16>(m_nAppFlag)),
+                comphelper::makePropertyValue(SRCH_PARA_ROWDIR, m_bRowDirection),
+                comphelper::makePropertyValue(SRCH_PARA_ALLTABLES, m_bAllTables),
+                comphelper::makePropertyValue(SRCH_PARA_SEARCHFILTERED, m_bSearchFiltered),
+                comphelper::makePropertyValue(SRCH_PARA_SEARCHFORMATTED, m_bSearchFormatted),
+                comphelper::makePropertyValue(SRCH_PARA_BACKWARD, m_bBackward),
+                comphelper::makePropertyValue(SRCH_PARA_PATTERN, m_bPattern),
+                comphelper::makePropertyValue(SRCH_PARA_CONTENT, m_bContent),
+                comphelper::makePropertyValue(SRCH_PARA_ASIANOPT, m_bAsianOptions)
+            };
+            assert(aSeq.getLength() == SRCH_PARAMS);
             rVal <<= aSeq;
         }
         break;

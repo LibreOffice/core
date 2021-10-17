@@ -24,6 +24,7 @@
 #include <chartlis.hxx>
 #include <docuno.hxx>
 
+#include <comphelper/propertyvalue.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
@@ -415,9 +416,9 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument& rDoc, co
                         ScRange aRange( rDoc.GetRange( nTab, aRectangle ) );
                         ScRangeList aChangeRanges( aRange );
 
-                        uno::Sequence< beans::PropertyValue > aProperties( 1 );
-                        aProperties[ 0 ].Name = "Name";
-                        aProperties[ 0 ].Value <<= aChartName;
+                        uno::Sequence< beans::PropertyValue > aProperties{
+                            comphelper::makePropertyValue("Name", aChartName)
+                        };
 
                         pModelObj->NotifyChanges( "insert-chart", aChangeRanges, aProperties );
                     }

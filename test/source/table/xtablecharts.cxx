@@ -26,8 +26,7 @@ void XTableCharts::testAddNewRemoveByName()
 {
     uno::Reference<table::XTableCharts> xTC(init(), uno::UNO_QUERY_THROW);
 
-    uno::Sequence<table::CellRangeAddress> aRanges(1);
-    aRanges[0] = table::CellRangeAddress(0, 1, 1, 14, 4);
+    uno::Sequence<table::CellRangeAddress> aRanges{ table::CellRangeAddress(0, 1, 1, 14, 4) };
     xTC->addNewByName("XTableCharts", awt::Rectangle(500, 3000, 25000, 11000), aRanges, true, true);
     CPPUNIT_ASSERT(xTC->hasByName("XTableCharts"));
 

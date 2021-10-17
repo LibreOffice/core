@@ -144,8 +144,7 @@ OUString TextInputStream::readToChar( sal_Unicode cChar, bool bIncludeChar )
 {
     if( mxTextStrm.is() ) try
     {
-        Sequence< sal_Unicode > aDelimiters( 1 );
-        aDelimiters[ 0 ] = cChar;
+        Sequence< sal_Unicode > aDelimiters{ cChar };
         /*  Always get the delimiter character from the UNO text input stream.
             In difference to this implementation, it will not return it in the
             next call but silently skip it. If caller specifies to exclude the

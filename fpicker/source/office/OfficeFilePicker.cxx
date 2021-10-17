@@ -773,12 +773,7 @@ Sequence< sal_Int16 > SAL_CALL SvtFilePicker::getSupportedImageFormats()
 {
     checkAlive();
 
-    SolarMutexGuard aGuard;
-    Sequence< sal_Int16 > aFormats( 1 );
-
-    aFormats[0] = FilePreviewImageFormats::BITMAP;
-
-    return aFormats;
+    return { FilePreviewImageFormats::BITMAP };
 }
 
 sal_Int32 SAL_CALL SvtFilePicker::getTargetColorDepth()
@@ -953,19 +948,19 @@ void SAL_CALL SvtFilePicker::initialize( const Sequence< Any >& _rArguments )
     {
         // compatibility: one argument, type sal_Int16 , specifies the service type
         int index = 0;
-
+        auto pArguments = aArguments.getArray();
         if (_rArguments[0] >>= m_nServiceType)
         {
             // skip the first entry if it was the ServiceType, because it's not needed in OCommonPicker::initialize and it's not a NamedValue
             NamedValue emptyNamedValue;
-            aArguments[0] <<= emptyNamedValue;
+            pArguments[0] <<= emptyNamedValue;
             index = 1;
 
         }
         for ( int i = index; i < _rArguments.getLength(); i++)
         {
             NamedValue namedValue;
-            aArguments[i] = _rArguments[i];
+            pArguments[i] = _rArguments[i];
 
             if (aArguments[i] >>= namedValue )
             {

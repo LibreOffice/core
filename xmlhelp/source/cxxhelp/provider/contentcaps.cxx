@@ -43,44 +43,45 @@ uno::Sequence< beans::Property > Content::getProperties(
     if( isFile )   num++;
 
     uno::Sequence< beans::Property > props(num);
+    auto pprops = props.getArray();
 
     sal_Int32 idx = 0;
-    props[idx++] =
+    pprops[idx++] =
         beans::Property(
             "ContentType",
             -1,
             cppu::UnoType<OUString>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
-    props[idx++] =
+    pprops[idx++] =
         beans::Property(
             "IsReadOnly",
             -1,
             cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
-    props[idx++] =
+    pprops[idx++] =
         beans::Property(
             "IsErrorDocument",
             -1,
             cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
-    props[idx++] =
+    pprops[idx++] =
         beans::Property(
             "IsDocument",
             -1,
             cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
-    props[idx++] =
+    pprops[idx++] =
         beans::Property(
             "IsFolder",
             -1,
             cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
-    props[idx++] =
+    pprops[idx++] =
         beans::Property(
             "Title",
             -1,
@@ -88,7 +89,7 @@ uno::Sequence< beans::Property > Content::getProperties(
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
     if( withMediaType )
-        props[idx++] =
+        pprops[idx++] =
             beans::Property(
                 "MediaType",
                 -1,
@@ -97,42 +98,42 @@ uno::Sequence< beans::Property > Content::getProperties(
 
     if( isModule )
     {
-        props[idx++] =
+        pprops[idx++] =
             beans::Property(
                 "Order",
                 -1,
                 cppu::UnoType<sal_Int32>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
-        props[idx++] =
+        pprops[idx++] =
             beans::Property(
                 "KeywordList",
                 -1,
                 cppu::UnoType<uno::Sequence< OUString >>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
-        props[idx++] =
+        pprops[idx++] =
             beans::Property(
                 "KeywordRef",
                 -1,
                 cppu::UnoType<uno::Sequence< uno::Sequence< OUString > >>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
-        props[idx++] =
+        pprops[idx++] =
             beans::Property(
                 "KeywordTitleForRef",
                 -1,
                 cppu::UnoType<uno::Sequence< uno::Sequence< OUString > >>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
-        props[idx++] =
+        pprops[idx++] =
             beans::Property(
                 "KeywordAnchorForRef",
                 -1,
                 cppu::UnoType<uno::Sequence< uno::Sequence< OUString > >>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
-        props[idx++] =
+        pprops[idx++] =
             beans::Property(
                 "SearchScopes",
                 -1,
@@ -142,7 +143,7 @@ uno::Sequence< beans::Property > Content::getProperties(
 
     if( isFile )
     {
-        props[idx++] =
+        pprops[idx++] =
             beans::Property(
                 "AnchorName",
                 -1,

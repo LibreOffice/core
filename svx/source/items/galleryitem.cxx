@@ -24,6 +24,10 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include <comphelper/propertyvalue.hxx>
+
+#include <cassert>
+
 
 SfxPoolItem* SvxGalleryItem::CreateDefault() { return new SvxGalleryItem; }
 
@@ -47,18 +51,14 @@ SvxGalleryItem::~SvxGalleryItem()
 
 bool SvxGalleryItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /* nMemberId */ ) const
 {
-    css::uno::Sequence< css::beans::PropertyValue > aSeq( SVXGALLERYITEM_PARAMS );
-
-    aSeq[0].Name = SVXGALLERYITEM_TYPE;
-    aSeq[0].Value <<= m_nType;
-    aSeq[1].Name = SVXGALLERYITEM_URL;
-    aSeq[1].Value <<= m_aURL;
-    aSeq[2].Name = SVXGALLERYITEM_FILTER;
-    aSeq[2].Value <<= m_aURL;
-    aSeq[3].Name = SVXGALLERYITEM_DRAWING;
-    aSeq[3].Value <<= m_xDrawing;
-    aSeq[4].Name = SVXGALLERYITEM_GRAPHIC;
-    aSeq[4].Value <<= m_xGraphic;
+    css::uno::Sequence< css::beans::PropertyValue > aSeq{
+        comphelper::makePropertyValue(SVXGALLERYITEM_TYPE, m_nType),
+        comphelper::makePropertyValue(SVXGALLERYITEM_URL, m_aURL),
+        comphelper::makePropertyValue(SVXGALLERYITEM_FILTER, m_aURL),
+        comphelper::makePropertyValue(SVXGALLERYITEM_DRAWING, m_xDrawing),
+        comphelper::makePropertyValue(SVXGALLERYITEM_GRAPHIC, m_xGraphic)
+    };
+    assert(aSeq.getLength() == SVXGALLERYITEM_PARAMS);
 
     rVal <<= aSeq;
 

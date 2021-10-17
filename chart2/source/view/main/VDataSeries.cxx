@@ -273,13 +273,13 @@ void VDataSeries::doSortByXValues()
     std::stable_sort( aTmp.begin(), aTmp.end(), lcl_LessXOfPoint() );
 
     //fill the sorted points back to the members
-    m_aValues_X.Doubles.realloc( m_nPointCount );
+    auto pDoubles = m_aValues_X.Doubles.realloc( m_nPointCount );
     m_aValues_Y.Doubles.realloc( m_nPointCount );
 
     for( nPointIndex=0; nPointIndex < m_nPointCount; nPointIndex++ )
     {
-        m_aValues_X.Doubles[nPointIndex]=aTmp[nPointIndex][0];
-        m_aValues_Y.Doubles[nPointIndex]=aTmp[nPointIndex][1];
+        pDoubles[nPointIndex]=aTmp[nPointIndex][0];
+        pDoubles[nPointIndex]=aTmp[nPointIndex][1];
     }
 }
 
@@ -723,9 +723,9 @@ uno::Sequence< double > const & VDataSeries::getAllX() const
     {
         //init x values from category indexes
         //first category (index 0) matches with real number 1.0
-        m_aValues_X.Doubles.realloc( m_nPointCount );
+        auto pDoubles = m_aValues_X.Doubles.realloc( m_nPointCount );
         for(sal_Int32 nN=m_aValues_X.getLength();nN--;)
-            m_aValues_X.Doubles[nN] = nN+1;
+            pDoubles[nN] = nN+1;
     }
     return m_aValues_X.Doubles;
 }
@@ -736,9 +736,9 @@ uno::Sequence< double > const & VDataSeries::getAllY() const
     {
         //init y values from indexes
         //first y-value (index 0) matches with real number 1.0
-        m_aValues_Y.Doubles.realloc( m_nPointCount );
+        auto pDoubles = m_aValues_Y.Doubles.realloc( m_nPointCount );
         for(sal_Int32 nN=m_aValues_Y.getLength();nN--;)
-            m_aValues_Y.Doubles[nN] = nN+1;
+            pDoubles[nN] = nN+1;
     }
     return m_aValues_Y.Doubles;
 }

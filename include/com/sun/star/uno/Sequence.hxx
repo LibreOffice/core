@@ -180,6 +180,7 @@ template<class E> E * Sequence<E>::end() { return begin() + getLength(); }
 template<class E> E const * Sequence<E>::end() const
 { return begin() + getLength(); }
 
+#if !defined LIBO_INTERNAL_ONLY
 template< class E >
 inline E & Sequence< E >::operator [] ( sal_Int32 nIndex )
 {
@@ -187,6 +188,7 @@ inline E & Sequence< E >::operator [] ( sal_Int32 nIndex )
     assert(nIndex >= 0 && static_cast<sal_uInt32>(nIndex) < static_cast<sal_uInt32>(getLength()));
     return getArray()[ nIndex ];
 }
+#endif
 
 template< class E >
 inline const E & Sequence< E >::operator [] ( sal_Int32 nIndex ) const
@@ -197,8 +199,18 @@ inline const E & Sequence< E >::operator [] ( sal_Int32 nIndex ) const
 }
 
 template< class E >
-inline void Sequence< E >::realloc( sal_Int32 nSize )
+inline
+#if defined LIBO_INTERNAL_ONLY
+E*
+#else
+void
+#endif
+Sequence< E >::realloc( sal_Int32 nSize )
 {
+#if defined LIBO_INTERNAL_ONLY
+    if (nSize == getLength())
+        return getArray(); // Make sure it's unique
+#endif
     const Type & rType = ::cppu::getTypeFavourUnsigned( this );
     bool success =
     ::uno_type_sequence_realloc(
@@ -206,6 +218,9 @@ inline void Sequence< E >::realloc( sal_Int32 nSize )
         cpp_acquire, cpp_release );
     if (!success)
         throw ::std::bad_alloc();
+#if defined LIBO_INTERNAL_ONLY
+    return reinterpret_cast<E*>(_pSequence->elements);
+#endif
 }
 
 #if defined LIBO_INTERNAL_ONLY
@@ -295,8 +310,9 @@ template <class E> inline auto asNonConstRange(css::uno::Sequence<E>& s)
         // These allow to pass it as range-expression to range-based for loops
         E* begin() { return std::pair<E*, E*>::first; }
         E* end() { return std::pair<E*, E*>::second; }
+        E& operator[](sal_Int32 i) { assert(i >= 0 && i < end() - begin()); return begin()[i]; }
     };
-    return SequenceRange(s.getArray(), s.getLength());
+    return SequenceRange(s.getLength() ? s.getArray() : nullptr, s.getLength());
 };
 
 /// @endcond

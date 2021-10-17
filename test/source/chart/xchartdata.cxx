@@ -75,7 +75,8 @@ void XChartData::testChartDataChangeEventListener()
 
     uno::Reference<chart::XChartDataArray> xCDD(xCD, uno::UNO_QUERY_THROW);
     uno::Sequence<uno::Sequence<double>> aData = xCDD->getData();
-    aData[0][0] += 1.0;
+    auto& rFirstCell = aData.getArray()[0].getArray()[0];
+    rFirstCell += 1.0;
     xCDD->setData(aData);
     CPPUNIT_ASSERT(pListener0->m_bListenerCalled);
     CPPUNIT_ASSERT(pListener1->m_bListenerCalled);
@@ -85,7 +86,7 @@ void XChartData::testChartDataChangeEventListener()
 
     xCD->removeChartDataChangeEventListener(
         uno::Reference<chart::XChartDataChangeEventListener>(pListener1));
-    aData[0][0] += 1.0;
+    rFirstCell += 1.0;
     xCDD->setData(aData);
     CPPUNIT_ASSERT(pListener0->m_bListenerCalled);
     CPPUNIT_ASSERT(!pListener1->m_bListenerCalled);

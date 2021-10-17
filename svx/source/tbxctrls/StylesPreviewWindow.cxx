@@ -19,6 +19,7 @@
 
 #include <StylesPreviewWindow.hxx>
 
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/objsh.hxx>
@@ -375,12 +376,10 @@ IMPL_LINK(StylesPreviewWindow_Base, Selected, weld::IconView&, rIconView, void)
 {
     OUString sStyleName = rIconView.get_selected_text();
 
-    css::uno::Sequence<css::beans::PropertyValue> aArgs(2);
-    aArgs[0].Value <<= sStyleName;
-    aArgs[1].Name = "Family";
-    aArgs[1].Value <<= sal_Int16(SfxStyleFamily::Para);
-
-    aArgs[0].Name = "Template";
+    css::uno::Sequence<css::beans::PropertyValue> aArgs{
+        comphelper::makePropertyValue("Template", sStyleName),
+        comphelper::makePropertyValue("Family", sal_Int16(SfxStyleFamily::Para))
+    };
     SfxToolBoxControl::Dispatch(m_xDispatchProvider, ".uno:StyleApply", aArgs);
 }
 
@@ -388,12 +387,10 @@ IMPL_LINK(StylesPreviewWindow_Base, DoubleClick, weld::IconView&, rIconView, boo
 {
     OUString sStyleName = rIconView.get_selected_text();
 
-    css::uno::Sequence<css::beans::PropertyValue> aArgs(2);
-    aArgs[0].Name = "Param";
-    aArgs[0].Value <<= sStyleName;
-    aArgs[1].Name = "Family";
-    aArgs[1].Value <<= sal_Int16(SfxStyleFamily::Para);
-
+    css::uno::Sequence<css::beans::PropertyValue> aArgs{
+        comphelper::makePropertyValue("Param", sStyleName),
+        comphelper::makePropertyValue("Family", sal_Int16(SfxStyleFamily::Para))
+    };
     SfxToolBoxControl::Dispatch(m_xDispatchProvider, ".uno:EditStyle", aArgs);
 
     return true;

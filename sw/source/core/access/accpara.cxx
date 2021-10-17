@@ -1139,7 +1139,7 @@ css::uno::Sequence< css::style::TabStop > SwAccessibleParagraph::GetCurrentTabSt
         Point aFramePixPos( GetMap()->CoreToPixel( aFrameLogBounds ).TopLeft() );
         aScreenRect.Move( -aFramePixPos.X(), -aFramePixPos.Y() );
 
-        tabs[0].Position = aScreenRect.GetWidth();
+        tabs.getArray()[0].Position = aScreenRect.GetWidth();
     }
 
     return tabs;
@@ -2001,7 +2001,6 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
             css::uno::Sequence< css::style::TabStop > tabs = GetCurrentTabStop( nIndex );
             if( !tabs.hasElements() )
             {
-                tabs.realloc(1);
                 css::style::TabStop ts;
                 css::awt::Rectangle rc0 = getCharacterBounds(0);
                 css::awt::Rectangle rc1 = getCharacterBounds(nIndex);
@@ -2012,7 +2011,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
                 ts.DecimalChar = ' ';
                 ts.FillChar = ' ';
                 ts.Alignment = css::style::TabAlign_LEFT;
-                tabs[0] = ts;
+                tabs = { ts };
             }
             rValue.Value <<= tabs;
             continue;

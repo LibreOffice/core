@@ -389,6 +389,7 @@ void SwXParagraph::Impl::SetPropertyValues_Impl(
     SwParaSelection aParaSel( aCursor );
 
     uno::Sequence< beans::PropertyValue > aValues( rPropertyNames.getLength() );
+    auto aValuesRange = asNonConstRange(aValues);
     for (sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
     {
         SfxItemPropertyMapEntry const*const pEntry =
@@ -405,8 +406,8 @@ void SwXParagraph::Impl::SetPropertyValues_Impl(
                 "Property is read-only: " + pPropertyNames[nProp],
                 static_cast< cppu::OWeakObject * >(&m_rThis));
         }
-        aValues[nProp].Name = pPropertyNames[nProp];
-        aValues[nProp].Value = pValues[nProp];
+        aValuesRange[nProp].Name = pPropertyNames[nProp];
+        aValuesRange[nProp].Value = pValues[nProp];
     }
     SwUnoCursorHelper::SetPropertyValues(aCursor, m_rPropSet, aValues);
 }

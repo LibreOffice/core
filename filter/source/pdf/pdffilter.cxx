@@ -145,9 +145,9 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         if (!bFound)
         {
             sal_Int32 nNewSize = aFilterData.getLength() + 1;
-            aFilterData.realloc( nNewSize );
-            aFilterData[nNewSize - 1].Name = "IsRedactMode";
-            aFilterData[nNewSize - 1].Value <<= bIsRedactMode;
+            auto pFilterData = aFilterData.realloc( nNewSize );
+            pFilterData[nNewSize - 1].Name = "IsRedactMode";
+            pFilterData[nNewSize - 1].Value <<= bIsRedactMode;
         }
     }
 

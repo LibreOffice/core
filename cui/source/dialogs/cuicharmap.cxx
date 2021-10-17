@@ -36,6 +36,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/dispatchcommand.hxx>
 
 #include <dialmgr.hxx>
@@ -341,12 +342,14 @@ void SvxCharacterMap::updateRecentCharacterList(const OUString& sTitle, const OU
     maRecentCharFontList.push_front(rFont);
 
     css::uno::Sequence< OUString > aRecentCharList(maRecentCharList.size());
+    auto aRecentCharListRange = asNonConstRange(aRecentCharList);
     css::uno::Sequence< OUString > aRecentCharFontList(maRecentCharFontList.size());
+    auto aRecentCharFontListRange = asNonConstRange(aRecentCharFontList);
 
     for (size_t i = 0; i < maRecentCharList.size(); ++i)
     {
-        aRecentCharList[i] = maRecentCharList[i];
-        aRecentCharFontList[i] = maRecentCharFontList[i];
+        aRecentCharListRange[i] = maRecentCharList[i];
+        aRecentCharFontListRange[i] = maRecentCharFontList[i];
     }
 
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(mxContext));
@@ -378,12 +381,14 @@ void SvxCharacterMap::updateFavCharacterList(const OUString& sTitle, const OUStr
     maFavCharFontList.push_back(rFont);
 
     css::uno::Sequence< OUString > aFavCharList(maFavCharList.size());
+    auto aFavCharListRange = asNonConstRange(aFavCharList);
     css::uno::Sequence< OUString > aFavCharFontList(maFavCharFontList.size());
+    auto aFavCharFontListRange = asNonConstRange(aFavCharFontList);
 
     for (size_t i = 0; i < maFavCharList.size(); ++i)
     {
-        aFavCharList[i] = maFavCharList[i];
-        aFavCharFontList[i] = maFavCharFontList[i];
+        aFavCharListRange[i] = maFavCharList[i];
+        aFavCharFontListRange[i] = maFavCharFontList[i];
     }
 
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(mxContext));
@@ -429,12 +434,14 @@ void SvxCharacterMap::deleteFavCharacterFromList(std::u16string_view sTitle, std
     }
 
     css::uno::Sequence< OUString > aFavCharList(maFavCharList.size());
+    auto aFavCharListRange = asNonConstRange(aFavCharList);
     css::uno::Sequence< OUString > aFavCharFontList(maFavCharFontList.size());
+    auto aFavCharFontListRange = asNonConstRange(aFavCharFontList);
 
     for (size_t i = 0; i < maFavCharList.size(); ++i)
     {
-        aFavCharList[i] = maFavCharList[i];
-        aFavCharFontList[i] = maFavCharFontList[i];
+        aFavCharListRange[i] = maFavCharList[i];
+        aFavCharFontListRange[i] = maFavCharFontList[i];
     }
 
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(mxContext));
@@ -635,12 +642,10 @@ void SvxCharacterMap::insertCharToDoc(const OUString& sGlyph)
         return;
 
     if (m_xFrame.is()) {
-        uno::Sequence<beans::PropertyValue> aArgs(2);
-        aArgs[0].Name = "Symbols";
-        aArgs[0].Value <<= sGlyph;
-
-        aArgs[1].Name = "FontName";
-        aArgs[1].Value <<= aFont.GetFamilyName();
+        uno::Sequence<beans::PropertyValue> aArgs{
+            comphelper::makePropertyValue("Symbols", sGlyph),
+            comphelper::makePropertyValue("FontName", aFont.GetFamilyName())
+        };
         comphelper::dispatchCommand(".uno:InsertSymbol", m_xFrame, aArgs);
 
         updateRecentCharacterList(sGlyph, aFont.GetFamilyName());
@@ -784,12 +789,14 @@ IMPL_LINK(SvxCharacterMap, RecentClearClickHdl, SvxCharView*, rView, void)
     }
 
     css::uno::Sequence< OUString > aRecentCharList(maRecentCharList.size());
+    auto aRecentCharListRange = asNonConstRange(aRecentCharList);
     css::uno::Sequence< OUString > aRecentCharFontList(maRecentCharFontList.size());
+    auto aRecentCharFontListRange = asNonConstRange(aRecentCharFontList);
 
     for (size_t i = 0; i < maRecentCharList.size(); ++i)
     {
-        aRecentCharList[i] = maRecentCharList[i];
-        aRecentCharFontList[i] = maRecentCharFontList[i];
+        aRecentCharListRange[i] = maRecentCharList[i];
+        aRecentCharFontListRange[i] = maRecentCharFontList[i];
     }
 
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(mxContext));

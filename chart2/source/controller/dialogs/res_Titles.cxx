@@ -108,21 +108,23 @@ void TitleResources::writeToResources(const TitleDialogData& rInput)
 
 void TitleResources::readFromResources(TitleDialogData& rOutput)
 {
-    rOutput.aExistenceList[0] = !m_xEd_Main->get_text().isEmpty();
-    rOutput.aExistenceList[1] = !m_xEd_Sub->get_text().isEmpty();
-    rOutput.aExistenceList[2] = !m_xEd_XAxis->get_text().isEmpty();
-    rOutput.aExistenceList[3] = !m_xEd_YAxis->get_text().isEmpty();
-    rOutput.aExistenceList[4] = !m_xEd_ZAxis->get_text().isEmpty();
-    rOutput.aExistenceList[5] = !m_xEd_SecondaryXAxis->get_text().isEmpty();
-    rOutput.aExistenceList[6] = !m_xEd_SecondaryYAxis->get_text().isEmpty();
+    auto pExistenceList = rOutput.aExistenceList.getArray();
+    pExistenceList[0] = !m_xEd_Main->get_text().isEmpty();
+    pExistenceList[1] = !m_xEd_Sub->get_text().isEmpty();
+    pExistenceList[2] = !m_xEd_XAxis->get_text().isEmpty();
+    pExistenceList[3] = !m_xEd_YAxis->get_text().isEmpty();
+    pExistenceList[4] = !m_xEd_ZAxis->get_text().isEmpty();
+    pExistenceList[5] = !m_xEd_SecondaryXAxis->get_text().isEmpty();
+    pExistenceList[6] = !m_xEd_SecondaryYAxis->get_text().isEmpty();
 
-    rOutput.aTextList[0] = m_xEd_Main->get_text();
-    rOutput.aTextList[1] = m_xEd_Sub->get_text();
-    rOutput.aTextList[2] = m_xEd_XAxis->get_text();
-    rOutput.aTextList[3] = m_xEd_YAxis->get_text();
-    rOutput.aTextList[4] = m_xEd_ZAxis->get_text();
-    rOutput.aTextList[5] = m_xEd_SecondaryXAxis->get_text();
-    rOutput.aTextList[6] = m_xEd_SecondaryYAxis->get_text();
+    auto pTextList = rOutput.aTextList.getArray();
+    pTextList[0] = m_xEd_Main->get_text();
+    pTextList[1] = m_xEd_Sub->get_text();
+    pTextList[2] = m_xEd_XAxis->get_text();
+    pTextList[3] = m_xEd_YAxis->get_text();
+    pTextList[4] = m_xEd_ZAxis->get_text();
+    pTextList[5] = m_xEd_SecondaryXAxis->get_text();
+    pTextList[6] = m_xEd_SecondaryYAxis->get_text();
 }
 
 } //namespace chart

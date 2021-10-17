@@ -99,11 +99,8 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL MeanValueRegressionCurveCalculat
     if( bMaySkipPointsInCalculation )
     {
         // optimize result
-        uno::Sequence< geometry::RealPoint2D > aResult( 2 );
-        aResult[0].X = min;
-        aResult[0].Y = m_fMeanValue;
-        aResult[1].X = max;
-        aResult[1].Y = m_fMeanValue;
+        uno::Sequence< geometry::RealPoint2D > aResult{ { min, m_fMeanValue },
+                                                        { max, m_fMeanValue } };
 
         return aResult;
     }

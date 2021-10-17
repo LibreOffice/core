@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/oldprintadaptor.hxx>
 #include <vcl/gdimtf.hxx>
 
@@ -88,16 +91,10 @@ int  OldStylePrintAdaptor::getPageCount() const
 
 Sequence< PropertyValue > OldStylePrintAdaptor::getPageParameters( int i_nPage ) const
 {
-    Sequence< PropertyValue > aRet( 1 );
-    aRet[0].Name = "PageSize";
+    css::awt::Size aSize;
     if( i_nPage < int(mpData->maPages.size() ) )
-        aRet[0].Value <<= mpData->maPages[i_nPage].maPageSize;
-    else
-    {
-        awt::Size aEmpty( 0, 0  );
-        aRet[0].Value <<= aEmpty;
-    }
-    return aRet;
+        aSize = mpData->maPages[i_nPage].maPageSize;
+    return { comphelper::makePropertyValue("PageSize", css::uno::Any(aSize)) };
 }
 
 void OldStylePrintAdaptor::printPage( int i_nPage ) const

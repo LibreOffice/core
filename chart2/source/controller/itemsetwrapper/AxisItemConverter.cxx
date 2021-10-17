@@ -616,7 +616,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                 if( aScale.IncrementData.SubIncrements.hasElements() &&
                     aScale.IncrementData.SubIncrements[0].IntervalCount.hasValue() )
                 {
-                        aScale.IncrementData.SubIncrements[0].IntervalCount.clear();
+                        aScale.IncrementData.SubIncrements.getArray()[0].IntervalCount.clear();
                         bSetScale = true;
                 }
                 if( aScale.TimeIncrement.MinorTimeInterval.hasValue() )
@@ -661,7 +661,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                         aScale.IncrementData.SubIncrements[0].IntervalCount != aValue )
                     {
                         OSL_ASSERT( aValue.getValueTypeClass() == uno::TypeClass_LONG );
-                        aScale.IncrementData.SubIncrements[0].IntervalCount = aValue;
+                        aScale.IncrementData.SubIncrements.getArray()[0].IntervalCount = aValue;
                         bSetScale = true;
                     }
                 }

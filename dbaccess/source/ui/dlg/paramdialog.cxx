@@ -280,7 +280,7 @@ namespace dbaui
                 return true;
             }
 
-            m_aFinalValues[m_nCurrentlySelected].Value <<= m_xParam->get_text();
+            m_aFinalValues.getArray()[m_nCurrentlySelected].Value <<= m_xParam->get_text();
         }
 
         // initialize the controls with the new values

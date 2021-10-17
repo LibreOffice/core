@@ -932,20 +932,22 @@ Sequence< Sequence< OUString > > FormController::getPredicateExpressions()
     impl_checkDisposed_throw();
 
     Sequence< Sequence< OUString > > aExpressions( m_aFilterRows.size() );
+    auto aExpressionsRange = asNonConstRange(aExpressions);
     sal_Int32 termIndex = 0;
     for (const FmFilterRow& rRow : m_aFilterRows)
     {
         Sequence< OUString > aConjunction( m_aFilterComponents.size() );
+        auto aConjunctionRange = asNonConstRange(aConjunction);
         sal_Int32 componentIndex = 0;
         for (const auto& rComp : m_aFilterComponents)
         {
             FmFilterRow::const_iterator predicate = rRow.find( rComp );
             if ( predicate != rRow.end() )
-                aConjunction[ componentIndex ] = predicate->second;
+                aConjunctionRange[ componentIndex ] = predicate->second;
             ++componentIndex;
         }
 
-        aExpressions[ termIndex ] = aConjunction;
+        aExpressionsRange[ termIndex ] = aConjunction;
         ++termIndex;
     }
 
@@ -2330,7 +2332,7 @@ Reference< XControl >  FormController::findControl(Sequence< Reference< XControl
         if ( _bRemove )
             ::comphelper::removeElementAt( _rControls, i );
         else if ( _bOverWrite )
-            _rControls[i].clear();
+            _rControls.getArray()[i].clear();
         return xControl;
     }
     return Reference< XControl > ();

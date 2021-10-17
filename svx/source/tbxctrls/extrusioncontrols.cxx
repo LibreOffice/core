@@ -21,6 +21,7 @@
 
 #include <string_view>
 
+#include <comphelper/propertyvalue.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <vcl/toolbox.hxx>
 
@@ -223,9 +224,9 @@ void ExtrusionDirectionWindow::statusChanged(
 
 IMPL_LINK_NOARG(ExtrusionDirectionWindow, SelectValueSetHdl, ValueSet*, void)
 {
-    Sequence< PropertyValue > aArgs( 1 );
-    aArgs[0].Name = OUString(g_sExtrusionDirection).copy(5);
-    aArgs[0].Value <<= gSkewList[mxDirectionSet->GetSelectedItemId()-1];
+    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(
+        OUString(g_sExtrusionDirection).copy(5),
+        gSkewList[mxDirectionSet->GetSelectedItemId()-1]) };
 
     mxControl->dispatchCommand( g_sExtrusionDirection, aArgs );
 
@@ -236,9 +237,8 @@ IMPL_LINK_NOARG(ExtrusionDirectionWindow, SelectToolbarMenuHdl, weld::Toggleable
 {
     int nProjection = mxPerspective->get_active() ? 0 : 1;
 
-    Sequence< PropertyValue > aArgs( 1 );
-    aArgs[0].Name = OUString(g_sExtrusionProjection).copy(5);
-    aArgs[0].Value <<= static_cast<sal_Int32>(nProjection);
+    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(
+        OUString(g_sExtrusionProjection).copy(5), static_cast<sal_Int32>(nProjection)) };
 
     mxControl->dispatchCommand( g_sExtrusionProjection, aArgs );
     implSetProjection( nProjection, true );
@@ -450,11 +450,10 @@ IMPL_LINK(ExtrusionDepthWindow, SelectHdl, weld::Toggleable&, rButton, void)
 
     if (mxCustom->get_active())
     {
-        Sequence< PropertyValue > aArgs( 2 );
-        aArgs[0].Name = "Depth";
-        aArgs[0].Value <<= mfDepth;
-        aArgs[1].Name = "Metric";
-        aArgs[1].Value <<= static_cast<sal_Int32>( meUnit );
+        Sequence< PropertyValue > aArgs{
+            comphelper::makePropertyValue("Depth", mfDepth),
+            comphelper::makePropertyValue("Metric", static_cast<sal_Int32>( meUnit ))
+        };
 
         rtl::Reference<svt::PopupWindowController> xControl(mxControl);
         xControl->EndPopupMode();
@@ -485,9 +484,8 @@ IMPL_LINK(ExtrusionDepthWindow, SelectHdl, weld::Toggleable&, rButton, void)
             fDepth = IsMetric( meUnit ) ? aDepthListMM[nSelected] : aDepthListInch[nSelected];
         }
 
-        Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = OUString(gsExtrusionDepth).copy(5);
-        aArgs[0].Value <<= fDepth;
+        Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(
+            OUString(gsExtrusionDepth).copy(5), fDepth) };
 
         mxControl->dispatchCommand( gsExtrusionDepth,  aArgs );
         implSetDepth( fDepth );
@@ -697,9 +695,8 @@ IMPL_LINK_NOARG(ExtrusionLightingWindow, SelectValueSetHdl, ValueSet*, void)
     {
         nDirection--;
 
-        Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = OUString(g_sExtrusionLightingDirection).copy(5);
-        aArgs[0].Value <<= nDirection;
+        Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(
+            OUString(g_sExtrusionLightingDirection).copy(5), nDirection) };
 
         mxControl->dispatchCommand( g_sExtrusionLightingDirection, aArgs );
 
@@ -722,9 +719,8 @@ IMPL_LINK(ExtrusionLightingWindow, SelectToolbarMenuHdl, weld::Toggleable&, rBut
     else
         nLevel = 2;
 
-    Sequence< PropertyValue > aArgs( 1 );
-    aArgs[0].Name = OUString(g_sExtrusionLightingIntensity).copy(5);
-    aArgs[0].Value <<= static_cast<sal_Int32>(nLevel);
+    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(
+        OUString(g_sExtrusionLightingIntensity).copy(5), static_cast<sal_Int32>(nLevel)) };
 
     mxControl->dispatchCommand( g_sExtrusionLightingIntensity, aArgs );
 
@@ -861,9 +857,8 @@ IMPL_LINK(ExtrusionSurfaceWindow, SelectHdl, weld::Toggleable&, rButton, void)
     else
         nSurface = 3;
 
-    Sequence< PropertyValue > aArgs( 1 );
-    aArgs[0].Name = OUString(g_sExtrusionSurface).copy(5);
-    aArgs[0].Value <<= nSurface;
+    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(
+        OUString(g_sExtrusionSurface).copy(5), nSurface) };
 
     mxControl->dispatchCommand( g_sExtrusionSurface, aArgs );
 

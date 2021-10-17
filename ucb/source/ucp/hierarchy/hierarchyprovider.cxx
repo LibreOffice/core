@@ -231,11 +231,10 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
 
             if ( xConfigProv.is() )
             {
-                uno::Sequence< uno::Any > aArguments( 1 );
                 beans::PropertyValue      aProperty;
                 aProperty.Name = "nodepath" ;
                 aProperty.Value <<= OUString(); // root path
-                aArguments[ 0 ] <<= aProperty;
+                uno::Sequence< uno::Any > aArguments{ uno::Any(aProperty) };
 
                 (*it).second.bTriedToGetRootReadAccess = true;
 

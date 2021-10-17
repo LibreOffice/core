@@ -208,9 +208,9 @@ void addPolygon( drawing::PolyPolygonShape3D& rRet, const drawing::PolyPolygonSh
 {
     sal_Int32 nAddOuterCount = rAdd.SequenceX.getLength();
     sal_Int32 nOuterCount = rRet.SequenceX.getLength() + nAddOuterCount;
-    rRet.SequenceX.realloc( nOuterCount );
-    rRet.SequenceY.realloc( nOuterCount );
-    rRet.SequenceZ.realloc( nOuterCount );
+    auto pSequenceX = rRet.SequenceX.realloc( nOuterCount );
+    auto pSequenceY = rRet.SequenceY.realloc( nOuterCount );
+    auto pSequenceZ = rRet.SequenceZ.realloc( nOuterCount );
 
     sal_Int32 nIndex = 0;
     sal_Int32 nOuter = nOuterCount - nAddOuterCount;
@@ -219,9 +219,9 @@ void addPolygon( drawing::PolyPolygonShape3D& rRet, const drawing::PolyPolygonSh
         if( nIndex >= nAddOuterCount )
             break;
 
-        rRet.SequenceX[nOuter] = rAdd.SequenceX[nIndex];
-        rRet.SequenceY[nOuter] = rAdd.SequenceY[nIndex];
-        rRet.SequenceZ[nOuter] = rAdd.SequenceZ[nIndex];
+        pSequenceX[nOuter] = rAdd.SequenceX[nIndex];
+        pSequenceY[nOuter] = rAdd.SequenceY[nIndex];
+        pSequenceZ[nOuter] = rAdd.SequenceZ[nIndex];
 
         nIndex++;
     }
@@ -230,9 +230,9 @@ void addPolygon( drawing::PolyPolygonShape3D& rRet, const drawing::PolyPolygonSh
 void appendPoly( drawing::PolyPolygonShape3D& rRet, const drawing::PolyPolygonShape3D& rAdd )
 {
     sal_Int32 nOuterCount = std::max( rRet.SequenceX.getLength(), rAdd.SequenceX.getLength() );
-    rRet.SequenceX.realloc(nOuterCount);
-    rRet.SequenceY.realloc(nOuterCount);
-    rRet.SequenceZ.realloc(nOuterCount);
+    auto pSequenceX = rRet.SequenceX.realloc(nOuterCount);
+    auto pSequenceY = rRet.SequenceY.realloc(nOuterCount);
+    auto pSequenceZ = rRet.SequenceZ.realloc(nOuterCount);
 
     for( sal_Int32 nOuter=0;nOuter<nOuterCount;nOuter++ )
     {
@@ -245,17 +245,17 @@ void appendPoly( drawing::PolyPolygonShape3D& rRet, const drawing::PolyPolygonSh
 
         sal_Int32 nNewPointCount = nOldPointCount + nAddPointCount;
 
-        rRet.SequenceX[nOuter].realloc(nNewPointCount);
-        rRet.SequenceY[nOuter].realloc(nNewPointCount);
-        rRet.SequenceZ[nOuter].realloc(nNewPointCount);
+        auto pSequenceX_nOuter = pSequenceX[nOuter].realloc(nNewPointCount);
+        auto pSequenceY_nOuter = pSequenceY[nOuter].realloc(nNewPointCount);
+        auto pSequenceZ_nOuter = pSequenceZ[nOuter].realloc(nNewPointCount);
 
         sal_Int32 nPointTarget=nOldPointCount;
         sal_Int32 nPointSource=nAddPointCount;
         for( ; nPointSource-- ; nPointTarget++ )
         {
-            rRet.SequenceX[nOuter][nPointTarget] = rAdd.SequenceX[nOuter][nPointSource];
-            rRet.SequenceY[nOuter][nPointTarget] = rAdd.SequenceY[nOuter][nPointSource];
-            rRet.SequenceZ[nOuter][nPointTarget] = rAdd.SequenceZ[nOuter][nPointSource];
+            pSequenceX_nOuter[nPointTarget] = rAdd.SequenceX[nOuter][nPointSource];
+            pSequenceY_nOuter[nPointTarget] = rAdd.SequenceY[nOuter][nPointSource];
+            pSequenceZ_nOuter[nPointTarget] = rAdd.SequenceZ[nOuter][nPointSource];
         }
     }
 }
@@ -266,17 +266,17 @@ drawing::PolyPolygonShape3D BezierToPoly(
     const drawing::PointSequenceSequence& rPointSequence = rBezier.Coordinates;
 
     drawing::PolyPolygonShape3D aRet;
-    aRet.SequenceX.realloc( rPointSequence.getLength() );
-    aRet.SequenceY.realloc( rPointSequence.getLength() );
-    aRet.SequenceZ.realloc( rPointSequence.getLength() );
+    auto pSequenceX = aRet.SequenceX.realloc( rPointSequence.getLength() );
+    auto pSequenceY = aRet.SequenceY.realloc( rPointSequence.getLength() );
+    auto pSequenceZ = aRet.SequenceZ.realloc( rPointSequence.getLength() );
 
     sal_Int32 nRealOuter = 0;
     for(sal_Int32 nN = 0; nN < rPointSequence.getLength(); nN++)
     {
         sal_Int32 nInnerLength = rPointSequence[nN].getLength();
-        aRet.SequenceX[nN].realloc( nInnerLength );
-        aRet.SequenceY[nN].realloc( nInnerLength );
-        aRet.SequenceZ[nN].realloc( nInnerLength );
+        auto pSequenceX_nRealOuter = pSequenceX[nRealOuter].realloc( nInnerLength );
+        auto pSequenceY_nRealOuter = pSequenceY[nRealOuter].realloc( nInnerLength );
+        auto pSequenceZ_nRealOuter = pSequenceZ[nRealOuter].realloc( nInnerLength );
 
         bool bHasOuterFlags = nN < rBezier.Flags.getLength();
 
@@ -287,16 +287,16 @@ drawing::PolyPolygonShape3D BezierToPoly(
 
             if( !bHasInnerFlags || (rBezier.Flags[nN][nM] == drawing::PolygonFlags_NORMAL) )
             {
-                aRet.SequenceX[nRealOuter][nRealInner] = rPointSequence[nN][nM].X;
-                aRet.SequenceY[nRealOuter][nRealInner] = rPointSequence[nN][nM].Y;
-                aRet.SequenceZ[nRealOuter][nRealInner] = 0.0;
+                pSequenceX_nRealOuter[nRealInner] = rPointSequence[nN][nM].X;
+                pSequenceY_nRealOuter[nRealInner] = rPointSequence[nN][nM].Y;
+                pSequenceZ_nRealOuter[nRealInner] = 0.0;
                 nRealInner++;
             }
         }
 
-        aRet.SequenceX[nRealOuter].realloc( nRealInner );
-        aRet.SequenceY[nRealOuter].realloc( nRealInner );
-        aRet.SequenceZ[nRealOuter].realloc( nRealInner );
+        pSequenceX[nRealOuter].realloc( nRealInner );
+        pSequenceY[nRealOuter].realloc( nRealInner );
+        pSequenceZ[nRealOuter].realloc( nRealInner );
 
         if( nRealInner>0 )
             nRealOuter++;
@@ -313,16 +313,16 @@ drawing::PointSequenceSequence PolyToPointSequence(
                 const drawing::PolyPolygonShape3D& rPolyPolygon )
 {
     drawing::PointSequenceSequence aRet;
-    aRet.realloc( rPolyPolygon.SequenceX.getLength() );
+    auto pRet = aRet.realloc( rPolyPolygon.SequenceX.getLength() );
 
     for(sal_Int32 nN = 0; nN < rPolyPolygon.SequenceX.getLength(); nN++)
     {
         sal_Int32 nInnerLength = rPolyPolygon.SequenceX[nN].getLength();
-        aRet[nN].realloc( nInnerLength );
+        auto pRet_nN = pRet[nN].realloc( nInnerLength );
         for( sal_Int32 nM = 0; nM < nInnerLength; nM++)
         {
-            aRet[nN][nM].X = static_cast<sal_Int32>(rPolyPolygon.SequenceX[nN][nM]);
-            aRet[nN][nM].Y = static_cast<sal_Int32>(rPolyPolygon.SequenceY[nN][nM]);
+            pRet_nN[nM].X = static_cast<sal_Int32>(rPolyPolygon.SequenceX[nN][nM]);
+            pRet_nN[nM].Y = static_cast<sal_Int32>(rPolyPolygon.SequenceY[nN][nM]);
         }
     }
     return aRet;
@@ -336,9 +336,9 @@ void appendPointSequence( drawing::PointSequenceSequence& rTarget
         return;
     sal_Int32 nOldCount = rTarget.getLength();
 
-    rTarget.realloc(nOldCount+nAddCount);
+    auto pTarget = rTarget.realloc(nOldCount+nAddCount);
     for(sal_Int32 nS=0; nS<nAddCount; nS++ )
-        rTarget[nOldCount+nS]=rAdd[nS];
+        pTarget[nOldCount+nS]=rAdd[nS];
 }
 
 drawing::Position3D  operator+( const drawing::Position3D& rPos
@@ -426,11 +426,11 @@ uno::Sequence< double > DataSequenceToDoubleSequence(
     else
     {
         uno::Sequence< uno::Any > aValues = xDataSequence->getData();
-        aResult.realloc(aValues.getLength());
+        auto pResult = aResult.realloc(aValues.getLength());
         for(sal_Int32 nN=aValues.getLength();nN--;)
         {
-            if( !(aValues[nN] >>= aResult[nN]) )
-                aResult[nN] = std::numeric_limits<double>::quiet_NaN();
+            if( !(aValues[nN] >>= pResult[nN]) )
+                pResult[nN] = std::numeric_limits<double>::quiet_NaN();
         }
     }
 
@@ -452,10 +452,10 @@ uno::Sequence< OUString > DataSequenceToStringSequence(
     else
     {
         uno::Sequence< uno::Any > aValues = xDataSequence->getData();
-        aResult.realloc(aValues.getLength());
+        auto pResult = aResult.realloc(aValues.getLength());
 
         for(sal_Int32 nN=aValues.getLength();nN--;)
-            aValues[nN] >>= aResult[nN];
+            aValues[nN] >>= pResult[nN];
     }
 
     return aResult;

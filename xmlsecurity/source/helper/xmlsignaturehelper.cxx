@@ -507,9 +507,10 @@ void XMLSignatureHelper::ExportSignatureContentTypes(const css::uno::Reference<c
         SAL_WARN("xmlsecurity.helper", "no defaults or overrides in aContentTypeInfo");
         return;
     }
+    auto pContentTypeInfo = aContentTypeInfo.getArray();
 
     // Append rels and sigs to defaults, if it's not there already.
-    uno::Sequence<beans::StringPair>& rDefaults = aContentTypeInfo[0];
+    uno::Sequence<beans::StringPair>& rDefaults = pContentTypeInfo[0];
     auto aDefaults = comphelper::sequenceToContainer< std::vector<beans::StringPair> >(rDefaults);
     if (std::none_of(std::cbegin(rDefaults), std::cend(rDefaults), [](const beans::StringPair& rPair) { return rPair.First == "rels"; }))
         aDefaults.emplace_back("rels", "application/vnd.openxmlformats-package.relationships+xml");
@@ -519,7 +520,7 @@ void XMLSignatureHelper::ExportSignatureContentTypes(const css::uno::Reference<c
     rDefaults = comphelper::containerToSequence(aDefaults);
 
     // Remove existing signature overrides.
-    uno::Sequence<beans::StringPair>& rOverrides = aContentTypeInfo[1];
+    uno::Sequence<beans::StringPair>& rOverrides = pContentTypeInfo[1];
     auto aOverrides = comphelper::sequenceToContainer< std::vector<beans::StringPair> >(rOverrides);
     aOverrides.erase(std::remove_if(aOverrides.begin(), aOverrides.end(), [](const beans::StringPair& rPair)
     {

@@ -274,14 +274,14 @@ handleCertificateValidationRequest_(
 
     OUString certHostName = getContentPart( rRequest.Certificate->getSubjectName() );
     uno::Sequence< OUString > certHostNames(altNames.size() + 1);
-
-    certHostNames[0] = certHostName;
+    auto pcertHostNames = certHostNames.getArray();
+    pcertHostNames[0] = certHostName;
 
     for (size_t n = 0; n < altNames.size(); ++n)
     {
         if (altNames[n].Type ==  security::ExtAltNameType_DNS_NAME)
         {
-           altNames[n].Value >>= certHostNames[n+1];
+           altNames[n].Value >>= pcertHostNames[n+1];
         }
     }
 

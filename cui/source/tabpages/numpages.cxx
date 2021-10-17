@@ -50,6 +50,7 @@
 #include <com/sun/star/text/XNumberingFormatter.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <svx/svxids.hrc>
 
 #include <algorithm>
@@ -970,11 +971,10 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, weld::Button&, voi
     Graphic aScaledGraphic( aBitmap );
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
 
-    Sequence< PropertyValue > aFilterData( 2 );
-    aFilterData[ 0 ].Name = "Compression";
-    aFilterData[ 0 ].Value <<= sal_Int32(-1) ;
-    aFilterData[ 1 ].Name = "Quality";
-    aFilterData[ 1 ].Value <<= sal_Int32(1);
+    Sequence< PropertyValue > aFilterData{
+        comphelper::makePropertyValue("Compression", sal_Int32(-1)),
+        comphelper::makePropertyValue("Quality", sal_Int32(1))
+    };
 
     sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName( gURL.GetFileExtension() );
     rFilter.ExportGraphic( aScaledGraphic, gURL , nFilterFormat, &aFilterData );

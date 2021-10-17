@@ -368,8 +368,7 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, CheckNowHdl_Impl, weld::Button&, void)
         aProperty.Name  = "nodepath";
         aProperty.Value <<= OUString("org.openoffice.Office.Addons/AddonUI/OfficeHelp/UpdateCheckJob");
 
-        uno::Sequence< uno::Any > aArgumentList( 1 );
-        aArgumentList[0] <<= aProperty;
+        uno::Sequence< uno::Any > aArgumentList{ uno::Any(aProperty) };
 
         uno::Reference< container::XNameAccess > xNameAccess(
             xConfigProvider->createInstanceWithArguments(

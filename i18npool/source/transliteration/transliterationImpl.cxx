@@ -329,7 +329,7 @@ TransliterationImpl::transliterate( const OUString& inStr, sal_Int32 startPos, s
             assert(from.getLength() == nCount);
             from.swap(to);
             for (sal_Int32& ix : asNonConstRange(to))
-                ix = std::as_const(from)[ix];
+                ix = from[ix];
         }
         offset = to;
         return tmpStr;
@@ -369,20 +369,20 @@ TransliterationImpl::folding( const OUString& inStr, sal_Int32 startPos, sal_Int
         auto [begin, end] = asNonConstRange(offset);
         std::iota(begin, end, startPos);
 
-        sal_Int16 from = 0, to = 1;
-        Sequence<sal_Int32> off[2];
+        Sequence<sal_Int32> from;
+        Sequence<sal_Int32> to = offset;
 
-        off[to] = offset;
         for (sal_Int32 i = 0; i < numCascade; i++) {
-            tmpStr = bodyCascade[i]->folding(tmpStr, 0, nCount, off[from]);
+            tmpStr = bodyCascade[i]->folding(tmpStr, 0, nCount, from);
 
             nCount = tmpStr.getLength();
 
-            std::swap(from, to);
-            for (sal_Int32 j = 0; j < nCount; j++)
-                off[to][j] = off[from][off[to][j]];
+            assert(from.getLength() == nCount);
+            from.swap(to);
+            for (sal_Int32& ix : asNonConstRange(to))
+                ix = from[ix];
         }
-        offset = off[to];
+        offset = to;
         return tmpStr;
     }
 }

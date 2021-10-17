@@ -900,8 +900,7 @@ rtl::Reference<utl::AccessibleRelationSetHelper> ScChildrenShapes::GetRelationSe
                 pRelationSet = new utl::AccessibleRelationSetHelper();
 
             AccessibleRelation aRelation;
-            aRelation.TargetSet.realloc(1);
-            aRelation.TargetSet[0] = Get(pAccShapeData);
+            aRelation.TargetSet = { Get(pAccShapeData) };
             aRelation.RelationType = AccessibleRelationType::CONTROLLER_FOR;
 
             pRelationSet->AddRelation(aRelation);
@@ -1154,8 +1153,7 @@ uno::Reference<XAccessibleRelationSet> ScChildrenShapes::GetRelationSet(const Sc
             }
         }
         AccessibleRelation aRelation;
-        aRelation.TargetSet.realloc(1);
-        aRelation.TargetSet[0] = xAccessible;
+        aRelation.TargetSet = { xAccessible };
         aRelation.RelationType = AccessibleRelationType::CONTROLLED_BY;
         pRelationSet->AddRelation(aRelation);
     }

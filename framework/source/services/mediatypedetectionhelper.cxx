@@ -62,10 +62,11 @@ css::uno::Sequence< OUString > SAL_CALL MediaTypeDetectionHelper::getSupportedSe
 sal_Bool SAL_CALL MediaTypeDetectionHelper::mapStrings(uno::Sequence< OUString >& rSeq)
 {
     bool bModified = false;
+    auto rSeqRange = asNonConstRange(rSeq);
     for( sal_Int32 i = rSeq.getLength(); i--; )
     {
 
-        OUString& rUrl = rSeq[i];
+        OUString& rUrl = rSeqRange[i];
         INetContentType eType = INetContentTypes::GetContentTypeFromURL( rUrl );
 
         OUString aType( INetContentTypes::GetContentType( eType ) );

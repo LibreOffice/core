@@ -97,10 +97,8 @@ ErrCode XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
                                                       xConvPropSet )
                     : getExportInfo();
 
-            uno::Sequence< uno::Any > aArgs( 3 );
-            aArgs[0] <<= xDocHandler;
-            aArgs[1] <<= xPropSet;
-            aArgs[2] <<= GetModel();
+            uno::Sequence< uno::Any > aArgs{ uno::Any(xDocHandler), uno::Any(xPropSet),
+                                             uno::Any(GetModel()) };
 
             // get filter component
             xDocHandler.set(

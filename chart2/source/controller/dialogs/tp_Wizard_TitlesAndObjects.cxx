@@ -124,9 +124,10 @@ void TitlesAndObjectsTabPage::commitToModel()
         uno::Sequence< sal_Bool > aOldExistenceList;
         AxisHelper::getAxisOrGridExistence( aOldExistenceList, xDiagram, false );
         uno::Sequence< sal_Bool > aNewExistenceList(aOldExistenceList);
-        aNewExistenceList[0] = m_xCB_Grid_X->get_active();
-        aNewExistenceList[1] = m_xCB_Grid_Y->get_active();
-        aNewExistenceList[2] = m_xCB_Grid_Z->get_active();
+        auto pNewExistenceList = aNewExistenceList.getArray();
+        pNewExistenceList[0] = m_xCB_Grid_X->get_active();
+        pNewExistenceList[1] = m_xCB_Grid_Y->get_active();
+        pNewExistenceList[2] = m_xCB_Grid_Z->get_active();
         AxisHelper::changeVisibilityOfGrids( xDiagram
                 , aOldExistenceList, aNewExistenceList );
     }

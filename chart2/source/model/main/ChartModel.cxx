@@ -695,9 +695,8 @@ Reference< chart2::data::XDataSource > ChartModel::impl_createDefaultData()
         {
             //init internal dataprovider
             {
-                uno::Sequence< uno::Any > aArgs(1);
                 beans::NamedValue aParam( "CreateDefaultData" ,uno::Any(true) );
-                aArgs[0] <<= aParam;
+                uno::Sequence< uno::Any > aArgs{ uno::Any(aParam) };
                 xIni->initialize(aArgs);
             }
             //create data

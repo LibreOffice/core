@@ -739,27 +739,29 @@ Reference< css::datatransfer::dnd::XDragSource > Window::GetDragSource()
                 if( pEnvData )
                 {
                     Sequence< Any > aDragSourceAL( 2 ), aDropTargetAL( 2 );
+                    auto pDragSourceAL = aDragSourceAL.getArray();
+                    auto pDropTargetAL = aDropTargetAL.getArray();
                     OUString aDragSourceSN, aDropTargetSN;
 #if defined(_WIN32)
                     aDragSourceSN = "com.sun.star.datatransfer.dnd.OleDragSource";
                     aDropTargetSN = "com.sun.star.datatransfer.dnd.OleDropTarget";
-                    aDragSourceAL[ 1 ] <<= static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->hWnd) );
-                    aDropTargetAL[ 0 ] <<= static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->hWnd) );
+                    pDragSourceAL[ 1 ] <<= static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->hWnd) );
+                    pDropTargetAL[ 0 ] <<= static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->hWnd) );
 #elif defined MACOSX
             /* FIXME: macOS specific dnd interface does not exist! *
              * Using Windows based dnd as a temporary solution        */
                     aDragSourceSN = "com.sun.star.datatransfer.dnd.OleDragSource";
                     aDropTargetSN = "com.sun.star.datatransfer.dnd.OleDropTarget";
-                    aDragSourceAL[ 1 ] <<= static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->mpNSView) );
-                    aDropTargetAL[ 0 ] <<= static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->mpNSView) );
+                    pDragSourceAL[ 1 ] <<= static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->mpNSView) );
+                    pDropTargetAL[ 0 ] <<= static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->mpNSView) );
 #elif USING_X11
                     aDragSourceSN = "com.sun.star.datatransfer.dnd.X11DragSource";
                     aDropTargetSN = "com.sun.star.datatransfer.dnd.X11DropTarget";
 
-                    aDragSourceAL[ 0 ] <<= Application::GetDisplayConnection();
-                    aDragSourceAL[ 1 ] <<= pEnvData->aShellWindow;
-                    aDropTargetAL[ 0 ] <<= Application::GetDisplayConnection();
-                    aDropTargetAL[ 1 ] <<= pEnvData->aShellWindow;
+                    pDragSourceAL[ 0 ] <<= Application::GetDisplayConnection();
+                    pDragSourceAL[ 1 ] <<= pEnvData->aShellWindow;
+                    pDropTargetAL[ 0 ] <<= Application::GetDisplayConnection();
+                    pDropTargetAL[ 1 ] <<= pEnvData->aShellWindow;
 #endif
                     if( !aDragSourceSN.isEmpty() )
                         mpWindowImpl->mpFrameData->mxDragSource.set(

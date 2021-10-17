@@ -93,8 +93,7 @@ namespace svgio::svgreader
                 // that use entities to define XML namespaces.
                 uno::Reference<lang::XInitialization> const xInit(xParser,
                         uno::UNO_QUERY_THROW);
-                uno::Sequence<uno::Any> args(1);
-                args[0] <<= OUString("DoSmeplease");
+                uno::Sequence<uno::Any> args{ uno::Any(OUString("DoSmeplease")) };
                 xInit->initialize(args);
 
                 // connect parser and filter

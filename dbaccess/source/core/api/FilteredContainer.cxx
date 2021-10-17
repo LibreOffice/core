@@ -326,8 +326,7 @@ static sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::
                         return;
                     }
                 }
-                aTableTypeFilter.realloc( 1 );
-                aTableTypeFilter[0] = sInherentTableTypeRestriction;
+                aTableTypeFilter = { sInherentTableTypeRestriction };
             }
             else
             {
@@ -441,19 +440,13 @@ static sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::
             SAL_WARN("dbaccess",  "OTableContainer::getAllTableTypeFilter: unknown TableTypeFilterMode!" );
             [[fallthrough]];
         case FILTER_MODE_MIX_ALL:
-            _rFilter.realloc( 3 );
-            _rFilter[0] = sView;
-            _rFilter[1] = sTable;
-            _rFilter[2] = sAll;
+            _rFilter = { sView, sTable, sAll };
             break;
         case FILTER_MODE_FIXED:
-            _rFilter.realloc( 2 );
-            _rFilter[0] = sView;
-            _rFilter[1] = sTable;
+            _rFilter = { sView, sTable };
             break;
         case FILTER_MODE_WILDCARD:
-            _rFilter.realloc( 1 );
-            _rFilter[0] = sAll;
+            _rFilter = { sAll };
             break;
         case FILTER_MODE_STANDARD:
             _rFilter.realloc( 0 );

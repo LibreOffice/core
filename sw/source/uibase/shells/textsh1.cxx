@@ -1675,11 +1675,10 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 }
 
                 // build sequence for status value
-                uno::Sequence< OUString > aSeq( 4 );
-                aSeq[0] = aCurrentLang;
-                aSeq[1] = aScriptTypesInUse;
-                aSeq[2] = aKeyboardLang;
-                aSeq[3] = SwLangHelper::GetTextForLanguageGuessing( rSh );
+                uno::Sequence< OUString > aSeq{ aCurrentLang,
+                                                aScriptTypesInUse,
+                                                aKeyboardLang,
+                                                SwLangHelper::GetTextForLanguageGuessing( rSh ) };
 
                 // set sequence as status value
                 SfxStringListItem aItem( SID_LANGUAGE_STATUS );

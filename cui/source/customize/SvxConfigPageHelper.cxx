@@ -23,6 +23,7 @@
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
 
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/random.hxx>
 #include <svtools/imgdef.hxx>
 #include <svtools/miscopt.hxx>
@@ -361,29 +362,20 @@ bool SvxConfigPageHelper::GetToolbarItemData(
 css::uno::Sequence<css::beans::PropertyValue>
 SvxConfigPageHelper::ConvertSvxConfigEntry(const SvxConfigEntry* pEntry)
 {
-    css::uno::Sequence<css::beans::PropertyValue> aPropSeq(4);
-
-    aPropSeq[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
-    aPropSeq[0].Value <<= pEntry->GetCommand();
-
-    aPropSeq[1].Name = ITEM_DESCRIPTOR_TYPE;
-    aPropSeq[1].Value <<= css::ui::ItemType::DEFAULT;
-
     // If the name has not been changed, then the label can be stored
     // as an empty string.
     // It will be initialised again later using the command to label map.
-    aPropSeq[2].Name = ITEM_DESCRIPTOR_LABEL;
-    if (!pEntry->HasChangedName() && !pEntry->GetCommand().isEmpty())
-    {
-        aPropSeq[2].Value <<= OUString();
-    }
-    else
-    {
-        aPropSeq[2].Value <<= pEntry->GetName();
-    }
+    OUString sLabel;
+    if (pEntry->HasChangedName() || pEntry->GetCommand().isEmpty())
+        sLabel = pEntry->GetName();
 
-    aPropSeq[3].Name = ITEM_DESCRIPTOR_STYLE;
-    aPropSeq[3].Value <<= static_cast<sal_Int16>(pEntry->GetStyle());
+    css::uno::Sequence<css::beans::PropertyValue> aPropSeq{
+        comphelper::makePropertyValue(ITEM_DESCRIPTOR_COMMANDURL, pEntry->GetCommand()),
+        comphelper::makePropertyValue(ITEM_DESCRIPTOR_TYPE, css::ui::ItemType::DEFAULT),
+        comphelper::makePropertyValue(ITEM_DESCRIPTOR_LABEL, sLabel),
+        comphelper::makePropertyValue(ITEM_DESCRIPTOR_STYLE,
+                                      static_cast<sal_Int16>(pEntry->GetStyle()))
+    };
 
     return aPropSeq;
 }
@@ -391,32 +383,21 @@ SvxConfigPageHelper::ConvertSvxConfigEntry(const SvxConfigEntry* pEntry)
 css::uno::Sequence<css::beans::PropertyValue>
 SvxConfigPageHelper::ConvertToolbarEntry(const SvxConfigEntry* pEntry)
 {
-    css::uno::Sequence<css::beans::PropertyValue> aPropSeq(5);
-
-    aPropSeq[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
-    aPropSeq[0].Value <<= pEntry->GetCommand();
-
-    aPropSeq[1].Name = ITEM_DESCRIPTOR_TYPE;
-    aPropSeq[1].Value <<= css::ui::ItemType::DEFAULT;
-
     // If the name has not been changed, then the label can be stored
     // as an empty string.
     // It will be initialised again later using the command to label map.
-    aPropSeq[2].Name = ITEM_DESCRIPTOR_LABEL;
-    if (!pEntry->HasChangedName() && !pEntry->GetCommand().isEmpty())
-    {
-        aPropSeq[2].Value <<= OUString();
-    }
-    else
-    {
-        aPropSeq[2].Value <<= pEntry->GetName();
-    }
+    OUString sLabel;
+    if (pEntry->HasChangedName() || pEntry->GetCommand().isEmpty())
+        sLabel = pEntry->GetName();
 
-    aPropSeq[3].Name = ITEM_DESCRIPTOR_ISVISIBLE;
-    aPropSeq[3].Value <<= pEntry->IsVisible();
-
-    aPropSeq[4].Name = ITEM_DESCRIPTOR_STYLE;
-    aPropSeq[4].Value <<= static_cast<sal_Int16>(pEntry->GetStyle());
+    css::uno::Sequence<css::beans::PropertyValue> aPropSeq{
+        comphelper::makePropertyValue(ITEM_DESCRIPTOR_COMMANDURL, pEntry->GetCommand()),
+        comphelper::makePropertyValue(ITEM_DESCRIPTOR_TYPE, css::ui::ItemType::DEFAULT),
+        comphelper::makePropertyValue(ITEM_DESCRIPTOR_LABEL, sLabel),
+        comphelper::makePropertyValue(ITEM_DESCRIPTOR_ISVISIBLE, pEntry->IsVisible()),
+        comphelper::makePropertyValue(ITEM_DESCRIPTOR_STYLE,
+                                      static_cast<sal_Int16>(pEntry->GetStyle()))
+    };
 
     return aPropSeq;
 }

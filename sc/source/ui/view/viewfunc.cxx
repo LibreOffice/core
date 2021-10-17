@@ -1259,9 +1259,9 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
                     {
                         css::uno::Any aVal;
                         pItem->QueryValue( aVal, pEntry->nMemberId );
-                        aProperties.realloc( nCount + 1 );
-                        aProperties[ nCount ].Name = pEntry->aName;
-                        aProperties[ nCount ].Value = aVal;
+                        auto pProperties = aProperties.realloc( nCount + 1 );
+                        pProperties[ nCount ].Name = pEntry->aName;
+                        pProperties[ nCount ].Value = aVal;
                         ++nCount;
                     }
                 }

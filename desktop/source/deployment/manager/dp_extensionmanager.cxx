@@ -1125,9 +1125,10 @@ uno::Sequence< uno::Sequence<Reference<css::deployment::XPackage> > >
 
         sal_Int32 j = 0;
         uno::Sequence< uno::Sequence<Reference<css::deployment::XPackage> > > seqSeq(vecExtensions.size());
+        auto seqSeqRange = asNonConstRange(seqSeq);
         for (auto const& elem : vecExtensions)
         {
-            seqSeq[j++] = comphelper::containerToSequence(elem);
+            seqSeqRange[j++] = comphelper::containerToSequence(elem);
         }
         return seqSeq;
 

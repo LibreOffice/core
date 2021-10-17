@@ -267,9 +267,9 @@ bool SdGRFFilter::Export()
                     if ( !bFilterNameFound )
                     {
                         sal_Int32 nCount = aArgs.getLength();
-                        aArgs.realloc( nCount + 1 );
-                        aArgs[ nCount ].Name = sFilterName;
-                        aArgs[ nCount ].Value <<= sShortName;
+                        auto pArgs = aArgs.realloc( nCount + 1 );
+                        pArgs[ nCount ].Name = sFilterName;
+                        pArgs[ nCount ].Value <<= sShortName;
                     }
 
                     // take selection if needed

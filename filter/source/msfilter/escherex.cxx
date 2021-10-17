@@ -4203,8 +4203,6 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, GraphicObjec
                         "ExportGraphic to GIF failed with " << nErrCode);
                     if (nErrCode == ERRCODE_NONE)
                     {
-                        uno::Sequence<beans::PropertyValue> aFilterData( 1 );
-                        uno::Sequence<beans::PropertyValue> aAdditionalChunkSequence( 1 );
                         sal_uInt32 nGIFSreamLen = aGIFStream.Tell();
                         uno::Sequence<sal_Int8> aGIFSeq( nGIFSreamLen );
                         sal_Int8* pSeq = aGIFSeq.getArray();
@@ -4213,10 +4211,10 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, GraphicObjec
                         beans::PropertyValue aChunkProp, aFilterProp;
                         aChunkProp.Name = "msOG";
                         aChunkProp.Value <<= aGIFSeq;
-                        aAdditionalChunkSequence[ 0 ] = aChunkProp;
+                        uno::Sequence<beans::PropertyValue> aAdditionalChunkSequence{ aChunkProp };
                         aFilterProp.Name = "AdditionalChunks";
                         aFilterProp.Value <<= aAdditionalChunkSequence;
-                        aFilterData[ 0 ] = aFilterProp;
+                        uno::Sequence<beans::PropertyValue> aFilterData{ aFilterProp };
                         nErrCode = rFilter.ExportGraphic( aGraphic, OUString(), aStream,
                                                           rFilter.GetExportFormatNumberForShortName( u"PNG" ), &aFilterData );
                     }

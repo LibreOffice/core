@@ -18,6 +18,7 @@
  */
 
 #include <stdio.h>
+#include <utility>
 
 #include <cppu/unotype.hxx>
 #include <osl/diagnose.h>
@@ -631,9 +632,8 @@ void Test_Impl::setValues( sal_Bool bBool,
             eEnum, rStr, nByte2, nShort2, xTest, rAny, rSequence );
     _aStructData = rStruct;
 
-    TestElement elem = rSequence[ 0 ];
-    rSequence[ 0 ] = rSequence[ 1 ];
-    rSequence[ 1 ] = elem;
+    auto pSequence = rSequence.getArray();
+    std::swap(pSequence[ 0 ], pSequence[ 1 ]);
 
     return _aStructData;
 }
@@ -955,28 +955,26 @@ void SAL_CALL Test_Impl::setSequencesOut( Sequence< sal_Bool >& aSeqBoolean,
 void Test_Impl::testConstructorsService(
     Reference< XComponentContext > const & context)
 {
-    Sequence< sal_Bool > arg14(1); arg14[0] = true;
-    Sequence< sal_Int8 > arg15(1); arg15[0] = SAL_MIN_INT8;
-    Sequence< sal_Int16 > arg16(1); arg16[0] = SAL_MIN_INT16;
-    Sequence< sal_uInt16 > arg17(1); arg17[0] = SAL_MAX_UINT16;
-    Sequence< sal_Int32 > arg18(1); arg18[0] = SAL_MIN_INT32;
-    Sequence< sal_uInt32 > arg19(1); arg19[0] = SAL_MAX_UINT32;
-    Sequence< sal_Int64 > arg20(1); arg20[0] = SAL_MIN_INT64;
-    Sequence< sal_uInt64 > arg21(1); arg21[0] = SAL_MAX_UINT64;
-    Sequence< float > arg22(1); arg22[0] = 0.123f;
-    Sequence< double > arg23(1); arg23[0] = 0.456;
-    Sequence< sal_Unicode > arg24(1); arg24[0] = 'X';
+    Sequence< sal_Bool > arg14{ true };
+    Sequence< sal_Int8 > arg15{ SAL_MIN_INT8 };
+    Sequence< sal_Int16 > arg16{ SAL_MIN_INT16 };
+    Sequence< sal_uInt16 > arg17{ SAL_MAX_UINT16 };
+    Sequence< sal_Int32 > arg18{ SAL_MIN_INT32 };
+    Sequence< sal_uInt32 > arg19{ SAL_MAX_UINT32 };
+    Sequence< sal_Int64 > arg20{ SAL_MIN_INT64 };
+    Sequence< sal_uInt64 > arg21{ SAL_MAX_UINT64 };
+    Sequence< float > arg22{ 0.123f };
+    Sequence< double > arg23{ 0.456 };
+    Sequence< sal_Unicode > arg24{ 'X' };
     Sequence< OUString > arg25 { "test" };
-    Sequence< Type > arg26(1); arg26[0] = UnoType< Any >::get();
-    Sequence< Any > arg27(1); arg27[0] <<= true;
-    Sequence< Sequence< sal_Bool > > arg28(1);
-    arg28[0] = Sequence< sal_Bool >(1); arg28[0][0] = true;
-    Sequence< Sequence< Any > > arg29(1); arg29[0] = Sequence< Any >(1);
-    arg29[0][0] <<= true;
-    Sequence< TestEnum > arg30(1); arg30[0] = TestEnum_TWO;
-    Sequence< TestStruct > arg31(1); arg31[0].member = 10;
-    Sequence< TestPolyStruct< sal_Bool > > arg32(1); arg32[0].member = true;
-    Sequence< TestPolyStruct< Any > > arg33(1); arg33[0].member <<= true;
+    Sequence< Type > arg26{ UnoType< Any >::get() };
+    Sequence< Any > arg27{ true };
+    Sequence< Sequence< sal_Bool > > arg28{ { true } };
+    Sequence< Sequence< Any > > arg29{ { Any(true) } };
+    Sequence< TestEnum > arg30{ TestEnum_TWO };
+    Sequence< TestStruct > arg31(1); arg31.getArray()[0].member = 10;
+    Sequence< TestPolyStruct< sal_Bool > > arg32(1); arg32.getArray()[0].member = true;
+    Sequence< TestPolyStruct< Any > > arg33(1); arg33.getArray()[0].member <<= true;
     Sequence< Reference< XInterface > > arg34(1);
     Constructors::create1(context,
         true,
@@ -1019,97 +1017,92 @@ void Test_Impl::testConstructorsService(
         TestPolyStruct< sal_Bool >(true),
         TestPolyStruct< Any >(makeAny(true)),
         Reference< XInterface >(nullptr));
-    Sequence< Any > args(40);
-    args[0] <<= true;
-    args[1] <<= SAL_MIN_INT8;
-    args[2] <<= SAL_MIN_INT16;
-    args[3] <<= SAL_MAX_UINT16;
-    args[4] <<= SAL_MIN_INT32;
-    args[5] <<= SAL_MAX_UINT32;
-    args[6] <<= SAL_MIN_INT64;
-    args[7] <<= SAL_MAX_UINT64;
-    args[8] <<= 0.123f;
-    args[9] <<= 0.456;
-    args[10] <<= u'X';
-    args[11] <<= OUString("test");
-    args[12] <<= UnoType< Any >::get();
-    args[13] <<= true;
-    args[14] <<= arg14;
-    args[15] <<= arg15;
-    args[16] <<= arg16;
-    args[17] <<= arg17;
-    args[18] <<= arg18;
-    args[19] <<= arg19;
-    args[20] <<= arg20;
-    args[21] <<= arg21;
-    args[22] <<= arg22;
-    args[23] <<= arg23;
-    args[24] <<= arg24;
-    args[25] <<= arg25;
-    args[26] <<= arg26;
-    args[27] <<= arg27;
-    args[28] <<= arg28;
-    args[29] <<= arg29;
-    args[30] <<= arg30;
-    args[31] <<= arg31;
-    args[32] <<= arg32;
-    args[33] <<= arg33;
-    args[34] <<= arg34;
-    args[35] <<= TestEnum_TWO;
-    args[36] <<= TestStruct(10);
-    args[37] <<= TestPolyStruct< sal_Bool >(true);
-    args[38] <<= TestPolyStruct< Any >(makeAny(true));
-    args[39] <<= Reference< XInterface >(nullptr);
+    Sequence< Any > args{
+        Any(true),
+        Any(SAL_MIN_INT8),
+        Any(SAL_MIN_INT16),
+        Any(SAL_MAX_UINT16),
+        Any(SAL_MIN_INT32),
+        Any(SAL_MAX_UINT32),
+        Any(SAL_MIN_INT64),
+        Any(SAL_MAX_UINT64),
+        Any(0.123f),
+        Any(0.456),
+        Any(u'X'),
+        Any(OUString("test")),
+        Any(UnoType< Any >::get()),
+        Any(true),
+        Any(arg14),
+        Any(arg15),
+        Any(arg16),
+        Any(arg17),
+        Any(arg18),
+        Any(arg19),
+        Any(arg20),
+        Any(arg21),
+        Any(arg22),
+        Any(arg23),
+        Any(arg24),
+        Any(arg25),
+        Any(arg26),
+        Any(arg27),
+        Any(arg28),
+        Any(arg29),
+        Any(arg30),
+        Any(arg31),
+        Any(arg32),
+        Any(arg33),
+        Any(arg34),
+        Any(TestEnum_TWO),
+        Any(TestStruct(10)),
+        Any(TestPolyStruct< sal_Bool >(true)),
+        Any(TestPolyStruct< Any >(makeAny(true))),
+        Any(Reference< XInterface >(nullptr))
+    };
+    assert(args.getLength() == 40);
     Constructors::create2(context, args);
 
-    Sequence<Type> argSeq1(1); argSeq1[0] = cppu::UnoType<sal_Int32>::get();
+    Sequence<Type> argSeq1{ cppu::UnoType<sal_Int32>::get() };
     Sequence<Reference<XInterface> > argSeq2 { static_cast<XComponent*>(new Dummy()) };
     Sequence<Reference<XComponent> > argSeq2a { static_cast<XComponent*>(new Dummy()) };
 
-    Sequence<TestPolyStruct2<sal_Unicode, Sequence<Any> > > argSeq3(1);
-    argSeq3[0] = TestPolyStruct2<sal_Unicode, Sequence<Any> >('X', arg27);
-    Sequence<TestPolyStruct2<TestPolyStruct<sal_Unicode>, Sequence<Any> > > argSeq4(1);
-    argSeq4[0] = TestPolyStruct2<TestPolyStruct<sal_Unicode>, Sequence<Any> >(
-        TestPolyStruct<sal_Unicode>('X'), arg27);
-    Sequence<Sequence<sal_Int32> > argSeq5(1);
-    argSeq5[0] = Sequence<sal_Int32>(1); argSeq5[0][0] = SAL_MIN_INT32;
-    Sequence<TestPolyStruct<sal_Int32> > argSeq6(1);
-    argSeq6[0] = TestPolyStruct<sal_Int32>(SAL_MIN_INT32);
-    Sequence<TestPolyStruct<TestPolyStruct2<sal_Unicode, Any> > > argSeq7(1);
-    argSeq7[0] = TestPolyStruct<TestPolyStruct2<sal_Unicode, Any> >(
-        TestPolyStruct2<sal_Unicode, Any>('X', Any(true)));
-    Sequence<TestPolyStruct<TestPolyStruct2<TestPolyStruct2<sal_Unicode, Any>,OUString> > > argSeq8(1);
-    argSeq8[0] = TestPolyStruct<TestPolyStruct2<TestPolyStruct2<sal_Unicode, Any>,OUString> > (
-        TestPolyStruct2<TestPolyStruct2<sal_Unicode, Any>,OUString>(
-            TestPolyStruct2<sal_Unicode, Any>('X', Any(true)), OUString("test")));
-    Sequence<TestPolyStruct2<OUString, TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> > > > argSeq9(1);
-    argSeq9[0] = TestPolyStruct2<OUString, TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> > >(
-        OUString("test"), TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> >(
-                     'X', TestPolyStruct<Any>(Any(true))));
-    Sequence<TestPolyStruct2<TestPolyStruct2<sal_Unicode, Any>, TestPolyStruct<sal_Unicode> > > argSeq10(1);
-    argSeq10[0] = TestPolyStruct2<TestPolyStruct2<sal_Unicode, Any>, TestPolyStruct<sal_Unicode> >(
-        TestPolyStruct2<sal_Unicode, Any>('X', Any(true)), TestPolyStruct<sal_Unicode>('X'));
-    Sequence<Sequence<TestPolyStruct<sal_Unicode > > > argSeq11(1);
-    argSeq11[0] = Sequence<TestPolyStruct<sal_Unicode > >(1);
-    argSeq11[0][0] = TestPolyStruct<sal_Unicode>('X');
-    Sequence<Sequence<TestPolyStruct<TestPolyStruct2<sal_Unicode,Any> > > > argSeq12(1);
-    argSeq12[0] = Sequence<TestPolyStruct<TestPolyStruct2<sal_Unicode,Any> > >(1);
-    argSeq12[0][0] = TestPolyStruct<TestPolyStruct2<sal_Unicode,Any> >(
-        TestPolyStruct2<sal_Unicode,Any>('X', Any(true)));
-    Sequence<Sequence<TestPolyStruct<TestPolyStruct2<TestPolyStruct2<sal_Unicode,Any>,OUString> > > > argSeq13(1);
-    argSeq13[0] = Sequence<TestPolyStruct<TestPolyStruct2<TestPolyStruct2<sal_Unicode,Any>,OUString> > >(1);
-    argSeq13[0][0] = TestPolyStruct<TestPolyStruct2<TestPolyStruct2<sal_Unicode,Any>,OUString> >(
-        TestPolyStruct2<TestPolyStruct2<sal_Unicode,Any>,OUString>(
-            TestPolyStruct2<sal_Unicode,Any>('X', Any(true)), OUString("test")));
-    Sequence<Sequence<TestPolyStruct2<OUString, TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> > > > > argSeq14(1);
-    argSeq14[0] = Sequence<TestPolyStruct2<OUString, TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> > > >(1);
-    argSeq14[0][0] = TestPolyStruct2<OUString, TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> > >(
-        OUString("test"), TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> >(
-            'X', TestPolyStruct<Any>(Any(true))));
-    Sequence<Sequence<TestPolyStruct2<TestPolyStruct2<sal_Unicode,Any>, TestPolyStruct<sal_Unicode> > > > argSeq15(1);
-    argSeq15[0] = Sequence<TestPolyStruct2<TestPolyStruct2<sal_Unicode,Any>, TestPolyStruct<sal_Unicode> > >(1);
-    argSeq15[0][0] = TestPolyStruct2<TestPolyStruct2<sal_Unicode,Any>, TestPolyStruct<sal_Unicode> >(
-        TestPolyStruct2<sal_Unicode,Any>('X',Any(true)), TestPolyStruct<sal_Unicode>('X'));
+    Sequence<TestPolyStruct2<sal_Unicode, Sequence<Any> > > argSeq3
+        { TestPolyStruct2<sal_Unicode, Sequence<Any> >('X', arg27) };
+    Sequence<TestPolyStruct2<TestPolyStruct<sal_Unicode>, Sequence<Any> > > argSeq4
+        { TestPolyStruct2<TestPolyStruct<sal_Unicode>, Sequence<Any> >(
+            TestPolyStruct<sal_Unicode>('X'), arg27) };
+    Sequence<Sequence<sal_Int32> > argSeq5{ { SAL_MIN_INT32 } };
+    Sequence<TestPolyStruct<sal_Int32> > argSeq6{ TestPolyStruct<sal_Int32>(SAL_MIN_INT32) };
+    Sequence<TestPolyStruct<TestPolyStruct2<sal_Unicode, Any> > > argSeq7
+        { TestPolyStruct<TestPolyStruct2<sal_Unicode, Any> >(
+            TestPolyStruct2<sal_Unicode, Any>('X', Any(true))) };
+    Sequence<TestPolyStruct<TestPolyStruct2<TestPolyStruct2<sal_Unicode, Any>,OUString> > > argSeq8
+        { TestPolyStruct<TestPolyStruct2<TestPolyStruct2<sal_Unicode, Any>,OUString> > (
+            TestPolyStruct2<TestPolyStruct2<sal_Unicode, Any>,OUString>(
+                TestPolyStruct2<sal_Unicode, Any>('X', Any(true)), OUString("test"))) };
+    Sequence<TestPolyStruct2<OUString, TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> > > > argSeq9
+        { TestPolyStruct2<OUString, TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> > >(
+            OUString("test"), TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> >(
+                                  'X', TestPolyStruct<Any>(Any(true)))) };
+    Sequence<TestPolyStruct2<TestPolyStruct2<sal_Unicode, Any>, TestPolyStruct<sal_Unicode> > > argSeq10
+        { TestPolyStruct2<TestPolyStruct2<sal_Unicode, Any>, TestPolyStruct<sal_Unicode> >(
+            TestPolyStruct2<sal_Unicode, Any>('X', Any(true)), TestPolyStruct<sal_Unicode>('X')) };
+    Sequence<Sequence<TestPolyStruct<sal_Unicode > > > argSeq11
+        { { TestPolyStruct<sal_Unicode>('X') } };
+    Sequence<Sequence<TestPolyStruct<TestPolyStruct2<sal_Unicode,Any> > > > argSeq12
+        { { TestPolyStruct<TestPolyStruct2<sal_Unicode,Any> >(
+            TestPolyStruct2<sal_Unicode,Any>('X', Any(true))) } };
+    Sequence<Sequence<TestPolyStruct<TestPolyStruct2<TestPolyStruct2<sal_Unicode,Any>,OUString> > > > argSeq13
+        { {TestPolyStruct<TestPolyStruct2<TestPolyStruct2<sal_Unicode,Any>,OUString> >(
+            TestPolyStruct2<TestPolyStruct2<sal_Unicode,Any>,OUString>(
+                TestPolyStruct2<sal_Unicode,Any>('X', Any(true)), OUString("test")))} };
+    Sequence<Sequence<TestPolyStruct2<OUString, TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> > > > > argSeq14
+        { { TestPolyStruct2<OUString, TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> > >(
+            OUString("test"), TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> >(
+                'X', TestPolyStruct<Any>(Any(true)))) } };
+    Sequence<Sequence<TestPolyStruct2<TestPolyStruct2<sal_Unicode,Any>, TestPolyStruct<sal_Unicode> > > > argSeq15
+        { { TestPolyStruct2<TestPolyStruct2<sal_Unicode,Any>, TestPolyStruct<sal_Unicode> >(
+            TestPolyStruct2<sal_Unicode,Any>('X',Any(true)), TestPolyStruct<sal_Unicode>('X')) } };
 
     Constructors2::create1(
         context,

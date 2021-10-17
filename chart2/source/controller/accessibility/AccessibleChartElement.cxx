@@ -101,10 +101,9 @@ void AccessibleChartElement::InitTextEdit()
     try
     {
         Reference< lang::XInitialization > xInit( m_xTextHelper, uno::UNO_QUERY_THROW );
-        Sequence< uno::Any > aArgs( 3 );
-        aArgs[0] <<= GetInfo().m_aOID.getObjectCID();
-        aArgs[1] <<= Reference< XAccessible >( this );
-        aArgs[2] <<= Reference< awt::XWindow >( GetInfo().m_xWindow );
+        Sequence< uno::Any > aArgs{ uno::Any(GetInfo().m_aOID.getObjectCID()),
+                                    uno::Any(Reference< XAccessible >( this )),
+                                    uno::Any(Reference< awt::XWindow >( GetInfo().m_xWindow )) };
         xInit->initialize( aArgs );
     }
     catch( const uno::Exception & )

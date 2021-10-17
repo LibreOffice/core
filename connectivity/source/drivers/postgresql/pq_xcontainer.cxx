@@ -163,10 +163,11 @@ Any Container::getByName( const OUString& aName )
 Sequence< OUString > Container::getElementNames(  )
 {
     Sequence< OUString > ret( m_values.size() );
+    auto retRange = asNonConstRange(ret);
     for( const auto& [rName, rIndex] : m_name2index )
     {
         // give element names in index order !
-        ret[rIndex] = rName;
+        retRange[rIndex] = rName;
     }
     return ret;
 }

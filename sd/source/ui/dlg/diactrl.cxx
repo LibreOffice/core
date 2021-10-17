@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/fieldvalues.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -129,11 +132,9 @@ IMPL_LINK_NOARG(SdPagesField, ModifyHdl, weld::SpinButton&, void)
 {
     SfxUInt16Item aItem(SID_PAGES_PER_ROW, m_xWidget->get_value());
 
-    ::uno::Any a;
-    ::uno::Sequence< ::beans::PropertyValue > aArgs( 1 );
-    aArgs[0].Name   = "PagesPerRow";
+    uno::Any a;
     aItem.QueryValue( a );
-    aArgs[0].Value  = a;
+    uno::Sequence< beans::PropertyValue > aArgs{ comphelper::makePropertyValue("PagesPerRow", a) };
     SfxToolBoxControl::Dispatch( ::uno::Reference< ::frame::XDispatchProvider >( m_xFrame->getController(), ::uno::UNO_QUERY ),
                                  ".uno:PagesPerRow",
                                  aArgs );

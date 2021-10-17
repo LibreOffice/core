@@ -263,19 +263,18 @@ uno::Reference< frame::XDispatch >  BibFrameController_Impl::queryDispatch( cons
 uno::Sequence<uno::Reference< XDispatch > > BibFrameController_Impl::queryDispatches( const uno::Sequence<DispatchDescriptor>& aDescripts )
 {
     uno::Sequence< uno::Reference< XDispatch > > aDispatches( aDescripts.getLength() );
+    auto aDispatchesRange = asNonConstRange(aDispatches);
     for ( sal_Int32 i=0; i<aDescripts.getLength(); ++i )
-        aDispatches[i] = queryDispatch( aDescripts[i].FeatureURL, aDescripts[i].FrameName, aDescripts[i].SearchFlags );
+        aDispatchesRange[i] = queryDispatch( aDescripts[i].FeatureURL, aDescripts[i].FrameName, aDescripts[i].SearchFlags );
     return aDispatches;
 }
 
 uno::Sequence< ::sal_Int16 > SAL_CALL BibFrameController_Impl::getSupportedCommandGroups()
 {
-    uno::Sequence< ::sal_Int16 > aDispatchInfo( 4 );
-
-    aDispatchInfo[0] = frame::CommandGroup::EDIT;
-    aDispatchInfo[1] = frame::CommandGroup::DOCUMENT;
-    aDispatchInfo[2] = frame::CommandGroup::DATA;
-    aDispatchInfo[3] = frame::CommandGroup::VIEW;
+    uno::Sequence< ::sal_Int16 > aDispatchInfo{ frame::CommandGroup::EDIT,
+                                                frame::CommandGroup::DOCUMENT,
+                                                frame::CommandGroup::DATA,
+                                                frame::CommandGroup::VIEW };
 
     return aDispatchInfo;
 }

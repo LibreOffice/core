@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <svtools/unoevent.hxx>
 #include <svtools/unoimap.hxx>
@@ -1373,11 +1374,9 @@ public:
 
         if ( pInfo && !pInfo->GetMacro().isEmpty() )
         {
-            aProperties.realloc( 2 );
-            aProperties[ 0 ].Name = SC_EVENTACC_EVENTTYPE;
-            aProperties[ 0 ].Value <<= OUString(SC_EVENTACC_SCRIPT);
-            aProperties[ 1 ].Name = SC_EVENTACC_SCRIPT;
-            aProperties[ 1 ].Value <<= pInfo->GetMacro();
+            aProperties = { comphelper::makePropertyValue(SC_EVENTACC_EVENTTYPE,
+                                                          OUString(SC_EVENTACC_SCRIPT)),
+                            comphelper::makePropertyValue(SC_EVENTACC_SCRIPT, pInfo->GetMacro()) };
         }
 
         return uno::Any( aProperties );
@@ -1433,13 +1432,13 @@ uno::Sequence< OUString > SAL_CALL ScShapeObj::getSupportedServiceNames(  )
     if ( xSI.is() )
         aSupported = xSI->getSupportedServiceNames();
 
-    aSupported.realloc( aSupported.getLength() + 1 );
-    aSupported[ aSupported.getLength() - 1 ] = "com.sun.star.sheet.Shape";
+    auto pSupported = aSupported.realloc( aSupported.getLength() + 1 );
+    pSupported[ aSupported.getLength() - 1 ] = "com.sun.star.sheet.Shape";
 
     if( bIsNoteCaption )
     {
-        aSupported.realloc( aSupported.getLength() + 1 );
-        aSupported[ aSupported.getLength() - 1 ] = "com.sun.star.sheet.CellAnnotationShape";
+        pSupported = aSupported.realloc( aSupported.getLength() + 1 );
+        pSupported[ aSupported.getLength() - 1 ] = "com.sun.star.sheet.CellAnnotationShape";
     }
 
     return aSupported;

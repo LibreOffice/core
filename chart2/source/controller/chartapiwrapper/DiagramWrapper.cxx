@@ -1643,7 +1643,7 @@ Any WrappedAttributedDataPointsProperty::getPropertyValue( const Reference< bean
             ::chart::DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
 
         uno::Sequence< uno::Sequence< sal_Int32 > > aResult( aSeriesVector.size() );
-
+        auto aResultRange = asNonConstRange(aResult);
         sal_Int32 i = 0;
         for (auto const& series : aSeriesVector)
         {
@@ -1654,7 +1654,7 @@ Any WrappedAttributedDataPointsProperty::getPropertyValue( const Reference< bean
                     xProp->getPropertyValue("AttributedDataPoints"));
                 uno::Sequence< sal_Int32 > aSeq;
                 if( aVal >>= aSeq )
-                    aResult[ i ] = aSeq;
+                    aResultRange[ i ] = aSeq;
             }
             ++i;
         }

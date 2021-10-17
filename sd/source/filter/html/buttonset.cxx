@@ -29,6 +29,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/oslfile2streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/image.hxx>
@@ -98,9 +99,8 @@ bool ButtonsImpl::getGraphic( const Reference< XGraphicProvider >& xGraphicProvi
     Reference< XInputStream > xInputStream( getInputStream( rName ) );
     if( xInputStream.is() && xGraphicProvider.is() ) try
     {
-        Sequence< PropertyValue > aMediaProperties( 1 );
-        aMediaProperties[0].Name = "InputStream";
-        aMediaProperties[0].Value <<= xInputStream;
+        Sequence< PropertyValue > aMediaProperties{ comphelper::makePropertyValue(
+            "InputStream", xInputStream) };
         Reference< XGraphic > xGraphic( xGraphicProvider->queryGraphic( aMediaProperties  ) );
 
         if( xGraphic.is() )

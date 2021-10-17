@@ -30,6 +30,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -823,9 +824,7 @@ bool SfxDocumentTemplates::CopyFrom
     {
         uno::Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
 
-        Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = "Hidden";
-        aArgs[0].Value <<= true;
+        Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("Hidden", true) };
 
         INetURLObject   aTemplURL( rName );
         uno::Reference< XDocumentPropertiesSupplier > xDocPropsSupplier;

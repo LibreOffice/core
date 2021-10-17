@@ -26,6 +26,7 @@
 #include <sal/log.hxx>
 #include <rtl/tencinfo.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/file.hxx>
 #include <unotools/pathoptions.hxx>
@@ -933,11 +934,10 @@ bool HtmlExport::SavePresentation()
         uno::Reference< frame::XStorable > xStorable( mpDoc->getUnoModel(), uno::UNO_QUERY );
         if( xStorable.is() )
         {
-            uno::Sequence< beans::PropertyValue > aProperties( 2 );
-            aProperties[ 0 ].Name = "Overwrite";
-            aProperties[ 0 ].Value <<= true;
-            aProperties[ 1 ].Name = "FilterName";
-            aProperties[ 1 ].Value <<= OUString("impress8");
+            uno::Sequence< beans::PropertyValue > aProperties{
+                comphelper::makePropertyValue("Overwrite", true),
+                comphelper::makePropertyValue("FilterName", OUString("impress8"))
+            };
             xStorable->storeToURL( aURL, aProperties );
 
             mpDocSh->EnableSetModified( false );
@@ -964,19 +964,17 @@ bool HtmlExport::CreateImagesForPresPages( bool bThumbnail)
         Reference< drawing::XGraphicExportFilter > xGraphicExporter = drawing::GraphicExportFilter::create( xContext );
 
         Sequence< PropertyValue > aFilterData(((meFormat==FORMAT_JPG)&&(mnCompression != -1))? 3 : 2);
-        aFilterData[0].Name = "PixelWidth";
-        aFilterData[0].Value <<= static_cast<sal_Int32>(bThumbnail ? PUB_THUMBNAIL_WIDTH : mnWidthPixel );
-        aFilterData[1].Name = "PixelHeight";
-        aFilterData[1].Value <<= static_cast<sal_Int32>(bThumbnail ? PUB_THUMBNAIL_HEIGHT : mnHeightPixel);
+        auto pFilterData = aFilterData.getArray();
+        pFilterData[0].Name = "PixelWidth";
+        pFilterData[0].Value <<= static_cast<sal_Int32>(bThumbnail ? PUB_THUMBNAIL_WIDTH : mnWidthPixel );
+        pFilterData[1].Name = "PixelHeight";
+        pFilterData[1].Value <<= static_cast<sal_Int32>(bThumbnail ? PUB_THUMBNAIL_HEIGHT : mnHeightPixel);
         if((meFormat==FORMAT_JPG)&&(mnCompression != -1))
         {
-            aFilterData[2].Name = "Quality";
-            aFilterData[2].Value <<= static_cast<sal_Int32>(mnCompression);
+            pFilterData[2].Name = "Quality";
+            pFilterData[2].Value <<= static_cast<sal_Int32>(mnCompression);
         }
 
-        Sequence< PropertyValue > aDescriptor( 3 );
-        aDescriptor[0].Name = "URL";
-        aDescriptor[1].Name = "FilterName";
         OUString sFormat;
         if( meFormat == FORMAT_PNG )
             sFormat = "PNG";
@@ -985,9 +983,12 @@ bool HtmlExport::CreateImagesForPresPages( bool bThumbnail)
         else
             sFormat = "JPG";
 
-        aDescriptor[1].Value <<= sFormat;
-        aDescriptor[2].Name = "FilterData";
-        aDescriptor[2].Value <<= aFilterData;
+        Sequence< PropertyValue > aDescriptor{
+            comphelper::makePropertyValue("URL", Any()),
+            comphelper::makePropertyValue("FilterName", sFormat),
+            comphelper::makePropertyValue("FilterData", aFilterData)
+        };
+        auto pDescriptor = aDescriptor.getArray();
 
         for (sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
         {
@@ -999,7 +1000,7 @@ bool HtmlExport::CreateImagesForPresPages( bool bThumbnail)
             else
                 aFull += maImageFiles[nSdPage];
 
-            aDescriptor[0].Value <<= aFull;
+            pDescriptor[0].Value <<= aFull;
 
             Reference< XComponent > xPage( pPage->getUnoPage(), UNO_QUERY );
             xGraphicExporter->setSourceDocument( xPage );

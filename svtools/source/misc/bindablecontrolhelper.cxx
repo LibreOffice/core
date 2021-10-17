@@ -96,9 +96,7 @@ BindableControlHelper::ApplyListSourceAndBindableData( const css::uno::Reference
          aArg1.Name = "BoundCell";
          aArg1.Value <<= aAddress;
 
-         uno::Sequence< uno::Any > aArgs(1);
-         aArgs[ 0 ]  <<= aArg1;
-
+         uno::Sequence< uno::Any > aArgs{ uno::Any(aArg1) };
          uno::Reference< form::binding::XValueBinding > xBinding( xFac->createInstanceWithArguments( "com.sun.star.table.CellValueBinding", aArgs ), uno::UNO_QUERY );
          xBindable->setValueBinding( xBinding );
     }
@@ -130,9 +128,7 @@ BindableControlHelper::ApplyListSourceAndBindableData( const css::uno::Reference
          aArg1.Name = "CellRange";
          aArg1.Value <<= aAddress;
 
-         uno::Sequence< uno::Any > aArgs(1);
-         aArgs[ 0 ]  <<= aArg1;
-
+         uno::Sequence< uno::Any > aArgs{ uno::Any(aArg1) };
          uno::Reference< form::binding::XListEntrySource > xSource( xFac->createInstanceWithArguments( "com.sun.star.table.CellRangeListSource", aArgs ), uno::UNO_QUERY );
          xListEntrySink->setListEntrySource( xSource );
     }

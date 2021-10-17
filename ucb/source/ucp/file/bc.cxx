@@ -754,6 +754,7 @@ BaseContent::setPropertyValues(
     {
         Sequence< Any > ret = m_pMyShell->setv( m_aUncPath,  // Does not handle Title
                                                 Values );
+        auto retRange = asNonConstRange(ret);
 
         // Special handling Title: Setting Title is equivalent to a renaming of the underlying file
         for( sal_Int32 i = 0; i < Values.getLength(); ++i )
@@ -764,12 +765,12 @@ BaseContent::setPropertyValues(
             OUString NewTitle;
             if( !( Values[i].Value >>= NewTitle ) )
             {
-                ret[i] <<= beans::IllegalTypeException( THROW_WHERE );
+                retRange[i] <<= beans::IllegalTypeException( THROW_WHERE );
                 break;
             }
             else if( NewTitle.isEmpty() )
             {
-                ret[i] <<= lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
+                retRange[i] <<= lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
                 break;
             }
 
@@ -794,7 +795,7 @@ BaseContent::setPropertyValues(
             }
             catch(const Exception& e)
             {
-                ret[i] <<= e;
+                retRange[i] <<= e;
             }
 
             // NameChanges come back through a ContentEvent

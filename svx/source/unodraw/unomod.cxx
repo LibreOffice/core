@@ -469,34 +469,30 @@ uno::Sequence< OUString > SAL_CALL SvxUnoDrawingModel::getAvailableServiceNames(
 {
     const uno::Sequence< OUString > aSNS_ORG( SvxFmMSFactory::getAvailableServiceNames() );
 
-    uno::Sequence< OUString > aSNS( 21 );
+    uno::Sequence< OUString > aSNS{
+        "com.sun.star.drawing.DashTable",
+        "com.sun.star.drawing.GradientTable",
+        "com.sun.star.drawing.HatchTable",
+        "com.sun.star.drawing.BitmapTable",
+        "com.sun.star.drawing.TransparencyGradientTable",
+        "com.sun.star.drawing.MarkerTable",
+        "com.sun.star.text.NumberingRules",
+        "com.sun.star.image.ImageMapRectangleObject",
+        "com.sun.star.image.ImageMapCircleObject",
+        "com.sun.star.image.ImageMapPolygonObject",
 
-    sal_uInt16 i = 0;
-
-    aSNS[i++] = "com.sun.star.drawing.DashTable";
-    aSNS[i++] = "com.sun.star.drawing.GradientTable";
-    aSNS[i++] = "com.sun.star.drawing.HatchTable";
-    aSNS[i++] = "com.sun.star.drawing.BitmapTable";
-    aSNS[i++] = "com.sun.star.drawing.TransparencyGradientTable";
-    aSNS[i++] = "com.sun.star.drawing.MarkerTable";
-    aSNS[i++] = "com.sun.star.text.NumberingRules";
-    aSNS[i++] = "com.sun.star.image.ImageMapRectangleObject";
-    aSNS[i++] = "com.sun.star.image.ImageMapCircleObject";
-    aSNS[i++] = "com.sun.star.image.ImageMapPolygonObject";
-
-    aSNS[i++] = "com.sun.star.presentation.TitleTextShape";
-    aSNS[i++] = "com.sun.star.presentation.OutlinerShape";
-    aSNS[i++] = "com.sun.star.presentation.SubtitleShape";
-    aSNS[i++] = "com.sun.star.presentation.GraphicObjectShape";
-    aSNS[i++] = "com.sun.star.presentation.ChartShape";
-    aSNS[i++] = "com.sun.star.presentation.PageShape";
-    aSNS[i++] = "com.sun.star.presentation.OLE2Shape";
-    aSNS[i++] = "com.sun.star.presentation.TableShape";
-    aSNS[i++] = "com.sun.star.presentation.OrgChartShape";
-    aSNS[i++] = "com.sun.star.presentation.NotesShape";
-    aSNS[i++] = "com.sun.star.presentation.HandoutShape";
-
-    DBG_ASSERT( i == aSNS.getLength(), "Sequence overrun!" );
+        "com.sun.star.presentation.TitleTextShape",
+        "com.sun.star.presentation.OutlinerShape",
+        "com.sun.star.presentation.SubtitleShape",
+        "com.sun.star.presentation.GraphicObjectShape",
+        "com.sun.star.presentation.ChartShape",
+        "com.sun.star.presentation.PageShape",
+        "com.sun.star.presentation.OLE2Shape",
+        "com.sun.star.presentation.TableShape",
+        "com.sun.star.presentation.OrgChartShape",
+        "com.sun.star.presentation.NotesShape",
+        "com.sun.star.presentation.HandoutShape"
+    };
 
     return comphelper::concatSequences( aSNS_ORG, aSNS );
 }

@@ -2399,10 +2399,9 @@ Reference< XChartType > XclImpChType::CreateChartType( Reference< XDiagram > con
         case EXC_CHTYPECATEG_BAR:
         {
             ScfPropertySet aTypeProp( xChartType );
-            Sequence< sal_Int32 > aInt32Seq( 2 );
-            aInt32Seq[ 0 ] = aInt32Seq[ 1 ] = -maData.mnOverlap;
+            Sequence< sal_Int32 > aInt32Seq{ -maData.mnOverlap, -maData.mnOverlap };
             aTypeProp.SetProperty( EXC_CHPROP_OVERLAPSEQ, aInt32Seq );
-            aInt32Seq[ 0 ] = aInt32Seq[ 1 ] = maData.mnGap;
+            aInt32Seq = { maData.mnGap, maData.mnGap };
             aTypeProp.SetProperty( EXC_CHPROP_GAPWIDTHSEQ, aInt32Seq );
         }
         break;
@@ -3117,7 +3116,7 @@ void XclImpChValueRange::Convert( ScaleData& rScaleData, bool bMirrorOrient ) co
     // minor increment
     Sequence< SubIncrement >& rSubIncrementSeq = rIncrementData.SubIncrements;
     rSubIncrementSeq.realloc( 1 );
-    Any& rIntervalCount = rSubIncrementSeq[ 0 ].IntervalCount;
+    Any& rIntervalCount = rSubIncrementSeq.getArray()[ 0 ].IntervalCount;
     rIntervalCount.clear();
     if( bLogScale )
     {

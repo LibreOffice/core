@@ -332,6 +332,7 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
     Sequence< Any > aRet( rValues.getLength() );
+    auto aRetRange = asNonConstRange(aRet);
     Sequence< PropertyChangeEvent > aChanges( rValues.getLength() );
     sal_Int32 nChanged = 0;
 
@@ -350,7 +351,7 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
         if ( rValue.Name == "ContentType" || rValue.Name == "IsDocument" || rValue.Name == "IsFolder" )
         {
             // Read-only property!
-            aRet[ n ] <<= IllegalAccessException("Property is read-only!",
+            aRetRange[ n ] <<= IllegalAccessException("Property is read-only!",
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name == "Title" )
@@ -384,14 +385,14 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
             }
             else
             {
-                aRet[ n ] <<= IllegalTypeException("Property value has wrong type!",
+                aRetRange[ n ] <<= IllegalTypeException("Property value has wrong type!",
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
         }
 
         else
         {
-            aRet[ n ] <<= Exception("No property set for storing the value!",
+            aRetRange[ n ] <<= Exception("No property set for storing the value!",
                             static_cast< cppu::OWeakObject * >( this ) );
         }
     }
@@ -525,7 +526,7 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
                 else
                     propertyEvents = &(*it).second;
 
-                (*propertyEvents)[n] = rEvent;
+                propertyEvents->getArray()[n] = rEvent;
             }
         }
     }
@@ -566,14 +567,14 @@ void OContentHelper::impl_rename_throw(const OUString& _sNewName,bool _bNotify )
         return;
     try
     {
-        Sequence< PropertyChangeEvent > aChanges( 1 );
-
-        aChanges[0].Source          = static_cast< cppu::OWeakObject * >( this );
-        aChanges[0].Further         = false;
-        aChanges[0].PropertyName    = PROPERTY_NAME;
-        aChanges[0].PropertyHandle  = PROPERTY_ID_NAME;
-        aChanges[0].OldValue        <<= m_pImpl->m_aProps.aTitle;
-        aChanges[0].NewValue        <<= _sNewName;
+        Sequence<PropertyChangeEvent> aChanges{
+            { /* Source         */ static_cast<cppu::OWeakObject*>(this),
+              /* PropertyName   */ PROPERTY_NAME,
+              /* Further        */ false,
+              /* PropertyHandle */ PROPERTY_ID_NAME,
+              /* OldValue       */ Any(m_pImpl->m_aProps.aTitle),
+              /* NewValue       */ Any(_sNewName) }
+        };
 
         aGuard.clear();
 

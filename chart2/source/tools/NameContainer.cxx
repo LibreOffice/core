@@ -20,7 +20,9 @@
 #include <NameContainer.hxx>
 
 #include <com/sun/star/uno/Any.hxx>
- #include <cppuhelper/supportsservice.hxx>
+
+#include <comphelper/sequence.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
@@ -108,14 +110,7 @@ Any SAL_CALL NameContainer::getByName( const OUString& rName )
 
 Sequence< OUString > SAL_CALL NameContainer::getElementNames()
 {
-    sal_Int32 nCount = m_aMap.size();
-    Sequence< OUString > aSeq(nCount);
-    sal_Int32 nN = 0;
-    for (auto const& elem : m_aMap)
-    {
-        aSeq[nN++]=elem.first;
-    }
-    return aSeq;
+    return comphelper::mapKeysToSequence(m_aMap);
 }
 
 sal_Bool SAL_CALL NameContainer::hasByName( const OUString& rName )

@@ -15,6 +15,7 @@
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <map>
 
@@ -315,9 +316,8 @@ bool ScTBC::ImportToolBarControl( ScCTBWrapper& rWrapper, const css::uno::Refere
         if ( bBeginGroup )
         {
             // insert spacer
-            uno::Sequence< beans::PropertyValue > sProps( 1 );
-            sProps[ 0 ].Name = "Type";
-            sProps[ 0 ].Value <<= ui::ItemType::SEPARATOR_LINE;
+            uno::Sequence sProps{ comphelper::makePropertyValue("Type",
+                                                                ui::ItemType::SEPARATOR_LINE) };
             toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), uno::makeAny( sProps ) );
         }
         toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), uno::makeAny( comphelper::containerToSequence(props) ) );

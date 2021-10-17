@@ -177,8 +177,7 @@ void ModuleController::ProcessStartupService (const ::std::vector<Any>& rValues)
             ::comphelper::getProcessComponentContext();
 
         // Create the startup service.
-        Sequence<Any> aArguments(1);
-        aArguments[0] <<= mxController;
+        Sequence<Any> aArguments{ Any(mxController) };
         // Note that when the new object will be destroyed at the end of
         // this scope when it does not register itself anywhere.
         // Typically it will add itself as ConfigurationChangeListener
@@ -216,8 +215,7 @@ void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
         ::comphelper::getProcessComponentContext();
 
     // Create the factory service.
-    Sequence<Any> aArguments(1);
-    aArguments[0] <<= mxController;
+    Sequence<Any> aArguments{ Any(mxController) };
     try
     {
         xFactory = xContext->getServiceManager()->createInstanceWithArgumentsAndContext(

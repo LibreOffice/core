@@ -154,8 +154,7 @@ def getFastParser():
         mxFastParser = css::xml::sax::FastParser::create(mxContext);
         // the threaded parser is about 20% slower loading writer documents
         css::uno::Reference< css::lang::XInitialization > xInit( mxFastParser, css::uno::UNO_QUERY_THROW );
-        css::uno::Sequence< css::uno::Any > args(1);
-        args[0] <<= OUString("DisableThreadedParser");
+        css::uno::Sequence< css::uno::Any > args{ css::uno::Any(OUString("DisableThreadedParser")) };
         xInit->initialize(args);
 """)
     for url in sorted(ooxUrlAliases.keys()):

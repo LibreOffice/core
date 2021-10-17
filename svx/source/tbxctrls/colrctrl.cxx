@@ -162,14 +162,14 @@ bool SvxColorValueSet_docking::StartDrag()
                             ? drawing::FillStyle_NONE
                             : drawing::FillStyle_SOLID);
 
-    uno::Sequence<beans::NamedValue> props(2);
     XFillColorItem const color(sItemText, aItemColor);
-    props[0].Name = "FillColor";
-    color.QueryValue(props[0].Value, 0);
     XFillStyleItem const style(eStyle);
-    props[1].Name = "FillStyle";
-    style.QueryValue(props[1].Value, 0);
+    uno::Any c, s;
+    color.QueryValue(c, 0);
+    style.QueryValue(s, 0);
 
+    uno::Sequence<beans::NamedValue> props{ { "FillColor", std::move(c) },
+                                            { "FillStyle", std::move(s) } };
     m_xHelper->SetData(props);
 
     return false;

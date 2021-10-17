@@ -951,10 +951,11 @@ Any CustomAnimationPane::getProperty1Value( sal_Int32 nType, const CustomAnimati
 
     case nPropertyTypeCharDecoration:
         {
-            Sequence< Any > aValues(3);
-            aValues[0] = pEffect->getProperty( AnimationNodeType::SET, u"CharWeight" , EValue::To );
-            aValues[1] = pEffect->getProperty( AnimationNodeType::SET, u"CharPosture" , EValue::To );
-            aValues[2] = pEffect->getProperty( AnimationNodeType::SET, u"CharUnderline" , EValue::To );
+            Sequence< Any > aValues{
+                Any(pEffect->getProperty( AnimationNodeType::SET, u"CharWeight" , EValue::To )),
+                Any(pEffect->getProperty( AnimationNodeType::SET, u"CharPosture" , EValue::To )),
+                Any(pEffect->getProperty( AnimationNodeType::SET, u"CharUnderline" , EValue::To ))
+            };
             return makeAny( aValues );
         }
     }

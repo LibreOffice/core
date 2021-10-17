@@ -140,15 +140,16 @@ void Test::test() {
     CPPUNIT_ASSERT(
         test::getTestArgument(
             u"smoketest.doc", &doc));
-    css::uno::Sequence< css::beans::PropertyValue > args(2);
-    args[0].Name = "MacroExecutionMode";
-    args[0].Handle = -1;
-    args[0].Value <<=  css::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
-    args[0].State = css::beans::PropertyState_DIRECT_VALUE;
-    args[1].Name = "ReadOnly";
-    args[1].Handle = -1;
-    args[1].Value <<= true;
-    args[1].State = css::beans::PropertyState_DIRECT_VALUE;
+    css::uno::Sequence< css::beans::PropertyValue > args{
+        { /* Name   */ "MacroExecutionMode",
+          /* Handle */ -1,
+          /* Value  */ css::uno::Any(css::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN),
+          /* State  */ css::beans::PropertyState_DIRECT_VALUE },
+        { /* Name   */ "ReadOnly",
+          /* Handle */ -1,
+          /* Value  */ css::uno::Any(true),
+          /* State  */ css::beans::PropertyState_DIRECT_VALUE }
+    };
     css::util::URL url;
     url.Complete = "vnd.sun.star.script:Standard.Global.StartTestWithDefaultOptions?"
             "language=Basic&location=document";

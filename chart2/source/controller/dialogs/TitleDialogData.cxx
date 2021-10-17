@@ -32,16 +32,11 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 TitleDialogData::TitleDialogData( std::unique_ptr<ReferenceSizeProvider> pRefSizeProvider )
-        : aPossibilityList(7)
-        , aExistenceList(7)
+        : aPossibilityList{ true, true, true, true, true, true, true }
+        , aExistenceList{ false, false, false, false, false, false, false }
         , aTextList(7)
         , apReferenceSizeProvider( std::move(pRefSizeProvider) )
 {
-    for (sal_Int32 i = 0; i < 7; i++)
-    {
-        aPossibilityList[i] = true;
-        aExistenceList[i] = false;
-    }
 }
 
 void TitleDialogData::readFromModel( const uno::Reference< frame::XModel>& xChartModel )
@@ -51,12 +46,15 @@ void TitleDialogData::readFromModel( const uno::Reference< frame::XModel>& xChar
     //get possibilities
     uno::Sequence< sal_Bool > aAxisPossibilityList;
     AxisHelper::getAxisOrGridPossibilities( aAxisPossibilityList, xDiagram );
-    aPossibilityList[2]=aAxisPossibilityList[0];//x axis title
-    aPossibilityList[3]=aAxisPossibilityList[1];//y axis title
-    aPossibilityList[4]=aAxisPossibilityList[2];//z axis title
-    aPossibilityList[5]=aAxisPossibilityList[3];//secondary x axis title
-    aPossibilityList[6]=aAxisPossibilityList[4];//secondary y axis title
+    auto pPossibilityList = aPossibilityList.getArray();
+    pPossibilityList[2]=aAxisPossibilityList[0];//x axis title
+    pPossibilityList[3]=aAxisPossibilityList[1];//y axis title
+    pPossibilityList[4]=aAxisPossibilityList[2];//z axis title
+    pPossibilityList[5]=aAxisPossibilityList[3];//secondary x axis title
+    pPossibilityList[6]=aAxisPossibilityList[4];//secondary y axis title
 
+    auto pExistenceList = aExistenceList.getArray();
+    auto pTextList = aTextList.getArray();
     //find out which title exists and get their text
     //main title:
     for( sal_Int32 nTitleIndex = static_cast< sal_Int32 >( TitleHelper::TITLE_BEGIN);
@@ -65,8 +63,8 @@ void TitleDialogData::readFromModel( const uno::Reference< frame::XModel>& xChar
     {
         uno::Reference< XTitle > xTitle =  TitleHelper::getTitle(
             static_cast< TitleHelper::eTitleType >( nTitleIndex ), xChartModel );
-        aExistenceList[nTitleIndex] = xTitle.is();
-        aTextList[nTitleIndex]=TitleHelper::getCompleteString( xTitle );
+        pExistenceList[nTitleIndex] = xTitle.is();
+        pTextList[nTitleIndex]=TitleHelper::getCompleteString( xTitle );
     }
 }
 

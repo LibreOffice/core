@@ -23,6 +23,8 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
+
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/svapp.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sbmeth.hxx>
@@ -237,17 +239,13 @@ namespace basprov
             {
                 Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create( m_xContext ) );
 
-                Sequence < PropertyValue > aArgs(7);
-                aArgs[0].Name = "Document";
-                aArgs[0].Value <<= sDocURL;
-                aArgs[1].Name = "LibName";
-                aArgs[1].Value <<= sLibName;
-                aArgs[2].Name = "Name";
-                aArgs[2].Value <<= sModName;
-                aArgs[3].Name = "Type";
-                aArgs[3].Value <<= OUString("Module");
-                aArgs[4].Name = "Line";
-                aArgs[4].Value <<= static_cast< sal_uInt32 >( nLine1 );
+                Sequence < PropertyValue > aArgs{
+                    comphelper::makePropertyValue("Document", sDocURL),
+                    comphelper::makePropertyValue("LibName", sLibName),
+                    comphelper::makePropertyValue("Name", sModName),
+                    comphelper::makePropertyValue("Type", OUString("Module")),
+                    comphelper::makePropertyValue("Line", static_cast< sal_uInt32 >( nLine1 ))
+                };
                 xHelper->executeDispatch( xProv, ".uno:BasicIDEAppear", OUString(), 0, aArgs );
             }
         }

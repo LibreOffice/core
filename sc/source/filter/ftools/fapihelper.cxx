@@ -287,7 +287,7 @@ ScfPropSetHelper::ScfPropSetHelper( const char* const* ppcPropNames ) :
 
     // resize member sequences
     size_t nSize = aPropNameVec.size();
-    maNameSeq.realloc( static_cast< sal_Int32 >( nSize ) );
+    auto pNameSeq = maNameSeq.realloc( static_cast< sal_Int32 >( nSize ) );
     maValueSeq.realloc( static_cast< sal_Int32 >( nSize ) );
     maNameOrder.resize( nSize );
 
@@ -295,7 +295,7 @@ ScfPropSetHelper::ScfPropSetHelper( const char* const* ppcPropNames ) :
     sal_Int32 nSeqIdx = 0;
     for( auto& aPropName : aPropNameVec )
     {
-        maNameSeq[ nSeqIdx ] = aPropName.first;
+        pNameSeq[ nSeqIdx ] = aPropName.first;
         maNameOrder[ aPropName.second ] = nSeqIdx;
         ++nSeqIdx;
     }
@@ -361,7 +361,7 @@ Any* ScfPropSetHelper::GetNextAny()
     OSL_ENSURE( mnNextIdx < maNameOrder.size(), "ScfPropSetHelper::GetNextAny - sequence overflow" );
     Any* pAny = nullptr;
     if( mnNextIdx < maNameOrder.size() )
-        pAny = &maValueSeq[ maNameOrder[ mnNextIdx++ ] ];
+        pAny = &maValueSeq.getArray()[ maNameOrder[ mnNextIdx++ ] ];
     return pAny;
 }
 

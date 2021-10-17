@@ -38,6 +38,7 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <svtools/embedhlp.hxx>
@@ -88,8 +89,8 @@ static bool UseOldMSExport()
         configuration::theDefaultProvider::get(
             comphelper::getProcessComponentContext()));
     try {
-        uno::Sequence< uno::Any > aArg( 1 );
-        aArg[0] <<= OUString( "/org.openoffice.Office.Common/InternalMSExport" );
+        uno::Sequence< uno::Any > aArg{ uno::Any(
+            OUString( "/org.openoffice.Office.Common/InternalMSExport" )) };
         uno::Reference< container::XNameAccess > xNameAccess(
             xProvider->createInstanceWithArguments(
                 "com.sun.star.configuration.ConfigurationUpdateAccess",
@@ -189,13 +190,12 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef const & rObj
                 rObj->changeState( embed::EmbedStates::RUNNING );
             //TODO/LATER: is stream instead of outputstream a better choice?!
             //TODO/LATER: a "StoreTo" method at embedded object would be nice
-            uno::Sequence < beans::PropertyValue > aSeq(2);
             SvStream* pStream = new SvMemoryStream;
-            aSeq[0].Name = "OutputStream";
             ::uno::Reference < io::XOutputStream > xOut = new ::utl::OOutputStreamWrapper( *pStream );
-            aSeq[0].Value <<= xOut;
-            aSeq[1].Name = "FilterName";
-            aSeq[1].Value <<= pExpFilter->GetName();
+            uno::Sequence < beans::PropertyValue > aSeq{
+                comphelper::makePropertyValue("OutputStream", xOut),
+                comphelper::makePropertyValue("FilterName", pExpFilter->GetName())
+            };
             uno::Reference < frame::XStorable > xStor( rObj->getComponent(), uno::UNO_QUERY );
             try
             {
@@ -289,10 +289,9 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef const & rObj
                             rObj->changeState( embed::EmbedStates::RUNNING );
                         //TODO/LATER: is stream instead of outputstream a better choice?!
                         //TODO/LATER: a "StoreTo" method at embedded object would be nice
-                        uno::Sequence < beans::PropertyValue > aSeq(1);
-                        aSeq[0].Name = "OutputStream";
                         ::uno::Reference < io::XOutputStream > xOut = new ::utl::OOutputStreamWrapper( *xEmbStm );
-                        aSeq[0].Value <<= xOut;
+                        uno::Sequence < beans::PropertyValue > aSeq{ comphelper::makePropertyValue(
+                            "OutputStream", xOut) };
                         uno::Reference < frame::XStorable > xStor( rObj->getComponent(), uno::UNO_QUERY );
                         xStor->storeToURL( "private:stream", aSeq );
                     }

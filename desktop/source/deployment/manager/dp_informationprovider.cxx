@@ -274,8 +274,8 @@ PackageInformationProvider::isUpdateAvailable( const OUString& _sExtensionId )
             OUString aNewEntry[2];
             aNewEntry[0] = updateInfo.first;
             aNewEntry[1] = updateVersion;
-            aList.realloc( ++nCount );
-            aList[ nCount-1 ] = ::uno::Sequence< OUString >( aNewEntry, 2 );
+            auto pList = aList.realloc( ++nCount );
+            pList[ nCount-1 ] = ::uno::Sequence< OUString >( aNewEntry, 2 );
         }
     }
     return aList;
@@ -298,7 +298,7 @@ uno::Sequence< uno::Sequence< OUString > > SAL_CALL PackageInformationProvider::
     uno::Sequence< uno::Sequence< OUString > > retList;
 
     sal_Int32 cAllIds = allExt.getLength();
-    retList.realloc(cAllIds);
+    auto pretList = retList.realloc(cAllIds);
 
     for (sal_Int32 i = 0; i < cAllIds; i++)
     {
@@ -315,10 +315,7 @@ uno::Sequence< uno::Sequence< OUString > > SAL_CALL PackageInformationProvider::
             uno::Reference< deployment::XPackage > const & xExtension( seqExtension[j] );
             if (xExtension.is())
             {
-                OUString aNewEntry[2];
-                aNewEntry[0] = dp_misc::getIdentifier(xExtension);
-                aNewEntry[1] = xExtension->getVersion();
-                retList[i] = ::uno::Sequence< OUString >( aNewEntry, 2 );
+                pretList[i] = { dp_misc::getIdentifier(xExtension), xExtension->getVersion() };
                 break;
             }
         }

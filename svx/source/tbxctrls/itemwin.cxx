@@ -21,6 +21,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
+#include <comphelper/propertyvalue.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/module.hxx>
@@ -104,10 +105,8 @@ IMPL_LINK_NOARG(SvxMetricField, ModifyHdl, weld::MetricSpinButton&, void)
     XLineWidthItem aLineWidthItem( nTmp );
 
     Any a;
-    Sequence< PropertyValue > aArgs( 1 );
-    aArgs[0].Name = "LineWidth";
     aLineWidthItem.QueryValue( a );
-    aArgs[0].Value = a;
+    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("LineWidth", a) };
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
                                  ".uno:LineWidth",
                                  aArgs );

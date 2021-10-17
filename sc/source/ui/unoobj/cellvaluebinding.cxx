@@ -141,19 +141,21 @@ namespace calc
         Sequence< Type > aTypes( nCount );
         if ( m_xCell.is() )
         {
+            auto pTypes = aTypes.getArray();
+
             // an XCell can be used to set/get "double" values
-            aTypes[0] = ::cppu::UnoType<double>::get();
+            pTypes[0] = ::cppu::UnoType<double>::get();
             if ( m_xCellText.is() )
             {
                 // an XTextRange can be used to set/get "string" values
-                aTypes[1] = ::cppu::UnoType<OUString>::get();
+                pTypes[1] = ::cppu::UnoType<OUString>::get();
                 // and additionally, we use it to handle booleans
-                aTypes[2] = ::cppu::UnoType<sal_Bool>::get();
+                pTypes[2] = ::cppu::UnoType<sal_Bool>::get();
             }
 
             // add sal_Int32 only if constructed as ListPositionCellBinding
             if ( m_bListPos )
-                aTypes[nCount-1] = cppu::UnoType<sal_Int32>::get();
+                pTypes[nCount-1] = cppu::UnoType<sal_Int32>::get();
         }
 
         return aTypes;
@@ -429,10 +431,11 @@ namespace calc
     Sequence< OUString > SAL_CALL OCellValueBinding::getSupportedServiceNames(  )
     {
         Sequence< OUString > aServices( m_bListPos ? 3 : 2 );
-        aServices[ 0 ] = "com.sun.star.table.CellValueBinding";
-        aServices[ 1 ] = "com.sun.star.form.binding.ValueBinding";
+        auto pServices = aServices.getArray();
+        pServices[ 0 ] = "com.sun.star.table.CellValueBinding";
+        pServices[ 1 ] = "com.sun.star.form.binding.ValueBinding";
         if ( m_bListPos )
-            aServices[ 2 ] = "com.sun.star.table.ListPositionCellBinding";
+            pServices[ 2 ] = "com.sun.star.table.ListPositionCellBinding";
         return aServices;
     }
 

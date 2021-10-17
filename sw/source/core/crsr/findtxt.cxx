@@ -1143,10 +1143,8 @@ std::optional<OUString> ReplaceBackReferences(const i18nutil::SearchOptions2& rS
             {
                 OUString const aStr("\\n");
                 aResult.subRegExpressions = 1;
-                aResult.startOffset.realloc(1);
-                aResult.endOffset.realloc(1);
-                aResult.startOffset[0] = 0;
-                aResult.endOffset[0] = aStr.getLength();
+                aResult.startOffset = { 0 };
+                aResult.endOffset = { aStr.getLength() };
                 aSText.ReplaceBackReferences( aReplaceStr, aStr, aResult );
                 xRet = aReplaceStr;
             }

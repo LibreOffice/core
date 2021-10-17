@@ -1240,7 +1240,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     {
         auto it = std::find( std::cbegin(aSortedMapping), std::cend(aSortedMapping),
                              aSequenceMapping[i] );
-        aSequenceMapping[i] = std::distance(std::cbegin(aSortedMapping), it);
+        pSequenceMapping[i] = std::distance(std::cbegin(aSortedMapping), it);
 
         if (i != std::as_const(aSequenceMapping)[i])
             bNeedSequenceMapping = true;
@@ -1262,28 +1262,28 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     OSL_ENSURE( !aSortedCellRanges.isEmpty(), "CellRangeRepresentation missing" );
     const OUString aBrokenCellRangeForExport( GetBrokenCellRangeForExport( aSortedCellRanges ) );
 
-    aResult.realloc(5);
+    auto pResult = aResult.realloc(5);
     sal_Int32 nProps = 0;
-    aResult[nProps  ].Name = "FirstCellAsLabel";
-    aResult[nProps++].Value <<= bFirstCellIsLabel;
-    aResult[nProps  ].Name = "CellRangeRepresentation";
-    aResult[nProps++].Value <<= aSortedCellRanges;
+    pResult[nProps  ].Name = "FirstCellAsLabel";
+    pResult[nProps++].Value <<= bFirstCellIsLabel;
+    pResult[nProps  ].Name = "CellRangeRepresentation";
+    pResult[nProps++].Value <<= aSortedCellRanges;
     if (!aBrokenCellRangeForExport.isEmpty())
     {
-        aResult[nProps  ].Name = "BrokenCellRangeForExport";
-        aResult[nProps++].Value <<= aBrokenCellRangeForExport;
+        pResult[nProps  ].Name = "BrokenCellRangeForExport";
+        pResult[nProps++].Value <<= aBrokenCellRangeForExport;
     }
     if (nDtaSrcIsColumns == 0 || nDtaSrcIsColumns == 1)
     {
         chart::ChartDataRowSource eDataRowSource = (nDtaSrcIsColumns == 1) ?
                     chart::ChartDataRowSource_COLUMNS : chart::ChartDataRowSource_ROWS;
-        aResult[nProps  ].Name = "DataRowSource";
-        aResult[nProps++].Value <<= eDataRowSource;
+        pResult[nProps  ].Name = "DataRowSource";
+        pResult[nProps++].Value <<= eDataRowSource;
 
         if (aSequenceMapping.hasElements())
         {
-            aResult[nProps  ].Name = "SequenceMapping";
-            aResult[nProps++].Value <<= aSequenceMapping;
+            pResult[nProps  ].Name = "SequenceMapping";
+            pResult[nProps++].Value <<= aSequenceMapping;
         }
     }
     aResult.realloc( nProps );

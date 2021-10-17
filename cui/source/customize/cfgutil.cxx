@@ -486,8 +486,8 @@ void CuiConfigGroupListBox::InitModule()
 
         for (i1=0; i1<c1; ++i1)
         {
-            sal_Int16&      rGroupID   = lGroups[i1];
-            OUString sGroupID   = OUString::number(rGroupID);
+            sal_Int16      nGroupID   = lGroups[i1];
+            OUString sGroupID   = OUString::number(nGroupID);
             OUString sGroupName ;
 
             try
@@ -499,7 +499,7 @@ void CuiConfigGroupListBox::InitModule()
             catch(const css::container::NoSuchElementException&)
                 { continue; }
 
-            aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_FUNCTION, rGroupID ) );
+            aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_FUNCTION, nGroupID ) );
             m_xTreeView->append(OUString::number(reinterpret_cast<sal_Int64>(aArr.back().get())),
                                 sGroupName);
         }

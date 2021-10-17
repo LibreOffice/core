@@ -223,19 +223,20 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
         xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
 
         // set arguments
-        uno::Sequence< beans::PropertyValue > aArgs( 4 );
-        aArgs[0] = beans::PropertyValue(
-                "CellRangeRepresentation", -1,
-                uno::makeAny( sRangeStr ), beans::PropertyState_DIRECT_VALUE );
-        aArgs[1] = beans::PropertyValue(
-                "HasCategories", -1,
-                uno::makeAny( bRowHeaders ), beans::PropertyState_DIRECT_VALUE );
-        aArgs[2] = beans::PropertyValue(
-                "FirstCellAsLabel", -1,
-                uno::makeAny( bColumnHeaders ), beans::PropertyState_DIRECT_VALUE );
-        aArgs[3] = beans::PropertyValue(
-                "DataRowSource", -1,
-                uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
+        uno::Sequence< beans::PropertyValue > aArgs{
+            beans::PropertyValue(
+                    "CellRangeRepresentation", -1,
+                    uno::makeAny( sRangeStr ), beans::PropertyState_DIRECT_VALUE ),
+            beans::PropertyValue(
+                    "HasCategories", -1,
+                    uno::makeAny( bRowHeaders ), beans::PropertyState_DIRECT_VALUE ),
+            beans::PropertyValue(
+                    "FirstCellAsLabel", -1,
+                    uno::makeAny( bColumnHeaders ), beans::PropertyState_DIRECT_VALUE ),
+            beans::PropertyValue(
+                    "DataRowSource", -1,
+                    uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE )
+        };
         xReceiver->setArguments( aArgs );
     }
 

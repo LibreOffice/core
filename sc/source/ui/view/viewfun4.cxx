@@ -46,6 +46,7 @@
 #include <avmedia/mediawindow.hxx>
 #include <osl/diagnose.h>
 
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
 
 #include <viewfunc.hxx>
@@ -662,9 +663,8 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
 
         //TODO/LATER: what about "bLink"?
 
-        uno::Sequence < beans::PropertyValue > aMedium(1);
-        aMedium[0].Name = "URL";
-        aMedium[0].Value <<= aStrURL;
+        uno::Sequence < beans::PropertyValue > aMedium{ comphelper::makePropertyValue("URL",
+                                                                                      aStrURL) };
 
         comphelper::EmbeddedObjectContainer aCnt( xStorage );
         OUString aName;

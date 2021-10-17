@@ -51,13 +51,13 @@ void lcl_fillRanges(
     Color nPreferredColor,
     sal_Int32 nIndex = -1 )
 {
-    rOutRanges.realloc( aRangeStrings.getLength());
+    auto pOutRanges = rOutRanges.realloc( aRangeStrings.getLength());
     for( sal_Int32 i=0; i<aRangeStrings.getLength(); ++i )
     {
-        rOutRanges[i].RangeRepresentation = aRangeStrings[i];
-        rOutRanges[i].PreferredColor = sal_Int32(nPreferredColor);
-        rOutRanges[i].AllowMerginigWithOtherRanges = false;
-        rOutRanges[i].Index = nIndex;
+        pOutRanges[i].RangeRepresentation = aRangeStrings[i];
+        pOutRanges[i].PreferredColor = sal_Int32(nPreferredColor);
+        pOutRanges[i].AllowMerginigWithOtherRanges = false;
+        pOutRanges[i].Index = nIndex;
     }
 }
 
@@ -196,14 +196,14 @@ void RangeHighlighter::determineRanges()
 void RangeHighlighter::fillRangesForDiagram( const Reference< chart2::XDiagram > & xDiagram )
 {
     Sequence< OUString > aSelectedRanges( DataSourceHelper::getUsedDataRanges( xDiagram ));
-    m_aSelectedRanges.realloc( aSelectedRanges.getLength());
+    auto pSelectedRanges = m_aSelectedRanges.realloc( aSelectedRanges.getLength());
     // @todo: merge ranges
     for( sal_Int32 i=0; i<aSelectedRanges.getLength(); ++i )
     {
-        m_aSelectedRanges[i].RangeRepresentation = aSelectedRanges[i];
-        m_aSelectedRanges[i].Index = -1;
-        m_aSelectedRanges[i].PreferredColor = sal_Int32(defaultPreferredColor);
-        m_aSelectedRanges[i].AllowMerginigWithOtherRanges = true;
+        pSelectedRanges[i].RangeRepresentation = aSelectedRanges[i];
+        pSelectedRanges[i].Index = -1;
+        pSelectedRanges[i].PreferredColor = sal_Int32(defaultPreferredColor);
+        pSelectedRanges[i].AllowMerginigWithOtherRanges = true;
     }
 }
 

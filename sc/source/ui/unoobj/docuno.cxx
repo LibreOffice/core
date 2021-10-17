@@ -20,6 +20,8 @@
 #include <config_feature_opencl.h>
 
 #include <scitems.hxx>
+
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/editview.hxx>
@@ -297,15 +299,10 @@ ScPrintUIOptions::ScPrintUIOptions()
 
     // create a choice for the range to print
     OUString aPrintRangeName( "PrintRange" );
-    aChoices.realloc( 2 );
-    aHelpIds.realloc( 2 );
-    uno::Sequence< OUString > aWidgetIds( 2 );
-    aChoices[0] = ScResId( SCSTR_PRINTOPT_PRINTALLPAGES );
-    aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:0";
-    aWidgetIds[0] = "rbAllPages";
-    aChoices[1] = ScResId( SCSTR_PRINTOPT_PRINTPAGES );
-    aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:1";
-    aWidgetIds[1] = "rbRangePages";
+    aChoices = { ScResId( SCSTR_PRINTOPT_PRINTALLPAGES ), ScResId( SCSTR_PRINTOPT_PRINTPAGES ) };
+    aHelpIds = { ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:0",
+                 ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:1" };
+    uno::Sequence< OUString > aWidgetIds{ "rbAllPages", "rbRangePages" };
     m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
                                                     aHelpIds,
                                                     aPrintRangeName,
@@ -2585,19 +2582,15 @@ uno::Reference< container::XIndexAccess > SAL_CALL ScModelObj::getViewData(  )
             uno::Reference < container::XIndexContainer > xCont = document::IndexedPropertyValues::create( ::comphelper::getProcessComponentContext() );
             xRet.set( xCont, uno::UNO_QUERY_THROW );
 
-            uno::Sequence< beans::PropertyValue > aSeq;
-            aSeq.realloc(3);
             OUString sName;
             pDocShell->GetDocument().GetName( pDocShell->GetDocument().GetVisibleTab(), sName );
-            OUString sOUName(sName);
-            aSeq[0].Name = SC_ACTIVETABLE;
-            aSeq[0].Value <<= sOUName;
             SCCOL nPosLeft = pDocShell->GetDocument().GetPosLeft();
-            aSeq[1].Name = SC_POSITIONLEFT;
-            aSeq[1].Value <<= nPosLeft;
             SCROW nPosTop = pDocShell->GetDocument().GetPosTop();
-            aSeq[2].Name = SC_POSITIONTOP;
-            aSeq[2].Value <<= nPosTop;
+            uno::Sequence< beans::PropertyValue > aSeq{
+                comphelper::makePropertyValue(SC_ACTIVETABLE, sName),
+                comphelper::makePropertyValue(SC_POSITIONLEFT, nPosLeft),
+                comphelper::makePropertyValue(SC_POSITIONTOP, nPosTop)
+            };
             xCont->insertByIndex( 0, uno::makeAny( aSeq ) );
         }
     }
@@ -3162,7 +3155,7 @@ void ScModelObj::NotifyChanges( const OUString& rOperation, const ScRangeList& r
         aEvent.Base <<= aEvent.Source;
 
         size_t nRangeCount = rRanges.size();
-        aEvent.Changes.realloc( static_cast< sal_Int32 >( nRangeCount ) );
+        auto pChanges = aEvent.Changes.realloc( static_cast< sal_Int32 >( nRangeCount ) );
         for ( size_t nIndex = 0; nIndex < nRangeCount; ++nIndex )
         {
             uno::Reference< table::XCellRange > xRangeObj;
@@ -3177,7 +3170,7 @@ void ScModelObj::NotifyChanges( const OUString& rOperation, const ScRangeList& r
                 xRangeObj.set( new ScCellRangeObj( pDocShell, rRange ) );
             }
 
-            util::ElementChange& rChange = aEvent.Changes[ static_cast< sal_Int32 >( nIndex ) ];
+            util::ElementChange& rChange = pChanges[ static_cast< sal_Int32 >( nIndex ) ];
             rChange.Accessor <<= rOperation;
             rChange.Element <<= rProperties;
             rChange.ReplacedElement <<= xRangeObj;
@@ -3238,8 +3231,7 @@ void ScModelObj::NotifyChanges( const OUString& rOperation, const ScRangeList& r
                     else
                         xTarget.set( static_cast<cppu::OWeakObject*>( new ScCellRangesObj( pDocShell, aTabRanges ) ) );
 
-                    uno::Sequence<uno::Any> aParams(1);
-                    aParams[0] <<= xTarget;
+                    uno::Sequence<uno::Any> aParams{ uno::Any(xTarget) };
 
                     uno::Any aRet;
                     uno::Sequence<sal_Int16> aOutArgsIndex;
@@ -3282,8 +3274,7 @@ void ScModelObj::HandleCalculateEvents()
                 try
                 {
                     uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( rDoc.GetVbaEventProcessor(), uno::UNO_SET_THROW );
-                    uno::Sequence< uno::Any > aArgs( 1 );
-                    aArgs[ 0 ] <<= nTab;
+                    uno::Sequence< uno::Any > aArgs{ uno::Any(nTab) };
                     xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( ScSheetEventId::CALCULATE ), aArgs );
                 }
                 catch( uno::Exception& )
@@ -3406,18 +3397,19 @@ uno::Sequence< sheet::opencl::OpenCLPlatform > ScModelObj::getOpenCLPlatforms()
     sc::FormulaGroupInterpreter::fillOpenCLInfo(aPlatformInfo);
 
     uno::Sequence<sheet::opencl::OpenCLPlatform> aRet(aPlatformInfo.size());
+    auto aRetRange = asNonConstRange(aRet);
     for(size_t i = 0; i < aPlatformInfo.size(); ++i)
     {
-        aRet[i].Name = aPlatformInfo[i].maName;
-        aRet[i].Vendor = aPlatformInfo[i].maVendor;
+        aRetRange[i].Name = aPlatformInfo[i].maName;
+        aRetRange[i].Vendor = aPlatformInfo[i].maVendor;
 
-        aRet[i].Devices.realloc(aPlatformInfo[i].maDevices.size());
+        auto pDevices = aRetRange[i].Devices.realloc(aPlatformInfo[i].maDevices.size());
         for(size_t j = 0; j < aPlatformInfo[i].maDevices.size(); ++j)
         {
             const OpenCLDeviceInfo& rDevice = aPlatformInfo[i].maDevices[j];
-            aRet[i].Devices[j].Name = rDevice.maName;
-            aRet[i].Devices[j].Vendor = rDevice.maVendor;
-            aRet[i].Devices[j].Driver = rDevice.maDriver;
+            pDevices[j].Name = rDevice.maName;
+            pDevices[j].Vendor = rDevice.maVendor;
+            pDevices[j].Driver = rDevice.maDriver;
         }
     }
 
@@ -3847,11 +3839,11 @@ uno::Sequence < uno::Reference< table::XCellRange > > SAL_CALL ScTableSheetsObj:
     if (!nCount)
         throw lang::IllegalArgumentException();
 
-    xRet.realloc(nCount);
+    auto pRet = xRet.realloc(nCount);
     for( size_t nIndex = 0; nIndex < nCount; nIndex++ )
     {
         const ScRange & rRange = aRangeList[ nIndex ];
-        xRet[nIndex] = new ScCellRangeObj(pDocShell, rRange);
+        pRet[nIndex] = new ScCellRangeObj(pDocShell, rRange);
     }
 
     return xRet;

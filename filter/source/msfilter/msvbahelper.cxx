@@ -485,10 +485,11 @@ bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, uno::Sequ
         // convert any out params to seem like they were inputs
         if (nLen)
         {
+            auto pArgs = aArgs.getArray();
             for (sal_Int32 index = 0; index < nLen; ++index)
             {
                 sal_Int32 nOutIndex = aOutArgsIndex[index];
-                aArgs[nOutIndex] = aOutArgs[index];
+                pArgs[nOutIndex] = aOutArgs[index];
             }
         }
         bRes = ( nErr == ERRCODE_NONE );

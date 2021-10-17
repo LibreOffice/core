@@ -445,9 +445,9 @@ void DrawViewShell::WriteUserDataSequence ( css::uno::Sequence < css::beans::Pro
     ViewShell::WriteUserDataSequence( rSequence );
 
     const sal_Int32 nIndex = rSequence.getLength();
-    rSequence.realloc( nIndex + 1 );
-    rSequence[nIndex].Name = sUNO_View_ZoomOnPage ;
-    rSequence[nIndex].Value <<= mbZoomOnPage;
+    auto pSequence = rSequence.realloc( nIndex + 1 );
+    pSequence[nIndex].Name = sUNO_View_ZoomOnPage ;
+    pSequence[nIndex].Value <<= mbZoomOnPage;
 
     // Common SdrModel processing
     GetDocSh()->GetDoc()->WriteUserDataSequence(rSequence);

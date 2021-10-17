@@ -2461,11 +2461,12 @@ uno::Sequence<uno::Any> SwXStyle::getPropertyValues(const uno::Sequence<OUString
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
     SwStyleBase_Impl aBase(*m_pDoc, m_sStyleName, &m_pDoc->GetDfltTextFormatColl()->GetAttrSet()); // add pDfltTextFormatColl as parent
     uno::Sequence<uno::Any> aValues(rPropertyNames.getLength());
+    auto aValuesRange = asNonConstRange(aValues);
     // workaround for bad designed API
     try
     {
         for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); ++nProp)
-            aValues[nProp] = GetPropertyValue_Impl(pPropSet, aBase, rPropertyNames[nProp]);
+            aValuesRange[nProp] = GetPropertyValue_Impl(pPropSet, aBase, rPropertyNames[nProp]);
     }
     catch(beans::UnknownPropertyException&)
     {
@@ -2762,6 +2763,7 @@ uno::Sequence<uno::Any> SAL_CALL SwXStyle::getPropertyDefaults(const uno::Sequen
     uno::Sequence<uno::Any> aRet(nCount);
     if(!nCount)
         return aRet;
+    auto pRet = aRet.getArray();
     SfxStyleSheetBase* pBase = GetStyleSheetBase();
     if(!pBase)
         throw uno::RuntimeException();
@@ -2784,12 +2786,12 @@ uno::Sequence<uno::Any> SAL_CALL SwXStyle::getPropertyDefaults(const uno::Sequen
 
         if(pParentSet)
         {
-            aSwMapProvider.GetPropertySet(nPropSetId)->getPropertyValue(aPropertyNames[i], *pParentSet, aRet[i]);
+            aSwMapProvider.GetPropertySet(nPropSetId)->getPropertyValue(aPropertyNames[i], *pParentSet, pRet[i]);
         }
         else if(pEntry->nWID != rSet.GetPool()->GetSlotId(pEntry->nWID))
         {
             const SfxPoolItem& rItem = rSet.GetPool()->GetDefaultItem(pEntry->nWID);
-            rItem.QueryValue(aRet[i], pEntry->nMemberId);
+            rItem.QueryValue(pRet[i], pEntry->nMemberId);
         }
     }
     return aRet;
@@ -3106,6 +3108,7 @@ uno::Sequence<uno::Any> SwXPageStyle::GetPropertyValues_Impl(const uno::Sequence
 
     sal_Int32 nLength = rPropertyNames.getLength();
     uno::Sequence<uno::Any> aRet (nLength);
+    auto aRetRange = asNonConstRange(aRet);
     if(!m_pBasePool)
     {
         if(!IsDescriptor())
@@ -3115,9 +3118,9 @@ uno::Sequence<uno::Any> SwXPageStyle::GetPropertyValues_Impl(const uno::Sequence
             const uno::Any* pAny = nullptr;
             m_pPropertiesImpl->GetProperty(rPropertyNames[nProp], pAny);
             if (!pAny->hasValue())
-                SwStyleProperties_Impl::GetProperty(rPropertyNames[nProp], m_xStyleData, aRet[nProp]);
+                SwStyleProperties_Impl::GetProperty(rPropertyNames[nProp], m_xStyleData, aRetRange[nProp]);
             else
-                aRet[nProp] = *pAny;
+                aRetRange[nProp] = *pAny;
         }
         return aRet;
     }
@@ -3164,13 +3167,13 @@ uno::Sequence<uno::Any> SwXPageStyle::GetPropertyValues_Impl(const uno::Sequence
                         const SfxItemSet& rSetSet = pSetItem->GetItemSet();
                         {
                             SwStyleBase_Impl::ItemSetOverrider o(aBase, &const_cast< SfxItemSet& >(rSetSet));
-                            aRet[nProp] = GetStyleProperty_Impl(*pEntry, *pPropSet, aBase);
+                            aRetRange[nProp] = GetStyleProperty_Impl(*pEntry, *pPropSet, aBase);
                         }
                     }
                     else if(pEntry->nWID == SID_ATTR_PAGE_ON)
                     {
                         // header/footer is not available, thus off. Default is <false>, though
-                        aRet[nProp] <<= false;
+                        aRetRange[nProp] <<= false;
                     }
                 }
                 continue;
@@ -3207,7 +3210,7 @@ uno::Sequence<uno::Any> SwXPageStyle::GetPropertyValues_Impl(const uno::Sequence
                         const SfxItemSet& rSetSet = pSetItem->GetItemSet();
                         {
                             SwStyleBase_Impl::ItemSetOverrider o(aBase, &const_cast<SfxItemSet&>(rSetSet));
-                            aRet[nProp] = GetStyleProperty_Impl(*pEntry, *pPropSet, aBase);
+                            aRetRange[nProp] = GetStyleProperty_Impl(*pEntry, *pPropSet, aBase);
                         }
                     }
                 }
@@ -3270,7 +3273,7 @@ uno::Sequence<uno::Any> SwXPageStyle::GetPropertyValues_Impl(const uno::Sequence
                     pFrameFormat = &pDesc->GetMaster();
                 const uno::Reference<text::XText> xRet = lcl_makeHeaderFooter(nRes, nRes == RES_HEADER, pFrameFormat);
                 if (xRet.is())
-                    aRet[nProp] <<= xRet;
+                    aRetRange[nProp] <<= xRet;
             }
             break;
             case FN_PARAM_FTN_INFO:
@@ -3278,11 +3281,11 @@ uno::Sequence<uno::Any> SwXPageStyle::GetPropertyValues_Impl(const uno::Sequence
                 rtl::Reference<SwDocStyleSheet> xStyle(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
                 const SfxItemSet& rSet = xStyle->GetItemSet();
                 const SfxPoolItem& rItem = rSet.Get(FN_PARAM_FTN_INFO);
-                rItem.QueryValue(aRet[nProp], pEntry->nMemberId);
+                rItem.QueryValue(aRetRange[nProp], pEntry->nMemberId);
             }
             break;
             default:
-                aRet[nProp] = GetStyleProperty_Impl(*pEntry, *pPropSet, aBase);
+                aRetRange[nProp] = GetStyleProperty_Impl(*pEntry, *pPropSet, aBase);
         }
     }
     return aRet;

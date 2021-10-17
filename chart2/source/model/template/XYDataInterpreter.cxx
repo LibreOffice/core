@@ -132,9 +132,7 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::interpretDataSource(
         ++nSeriesIndex;
     }
 
-    Sequence< Sequence< Reference< XDataSeries > > > aSeries(1);
-    aSeries[0] = comphelper::containerToSequence( aSeriesVec );
-    return InterpretedData( aSeries, xCategories );
+    return InterpretedData( { comphelper::containerToSequence( aSeriesVec ) }, xCategories );
 }
 
 chart2::InterpretedData SAL_CALL XYDataInterpreter::reinterpretDataSeries(
@@ -190,14 +188,11 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::reinterpretDataSeries(
             {
                 if( xValuesX.is())
                 {
-                    aNewSequences.realloc(2);
-                    aNewSequences[0] = xValuesX;
-                    aNewSequences[1] = xValuesY;
+                    aNewSequences = { xValuesX, xValuesY };
                 }
                 else
                 {
-                    aNewSequences.realloc(1);
-                    aNewSequences[0] = xValuesY;
+                    aNewSequences = { xValuesY };
                 }
             }
 

@@ -357,6 +357,7 @@ uno::Any SAL_CALL VbaApplicationBase::Run( const OUString& MacroName, const uno:
 
     int nArg = SAL_N_ELEMENTS( aArgsPtrArray );
     uno::Sequence< uno::Any > aArgs( nArg );
+    auto pArgs = aArgs.getArray();
 
     const uno::Any** pArg = aArgsPtrArray;
     const uno::Any** pArgEnd = aArgsPtrArray + nArg;
@@ -364,7 +365,7 @@ uno::Any SAL_CALL VbaApplicationBase::Run( const OUString& MacroName, const uno:
     sal_Int32 nArgProcessed = 0;
 
     for ( ; pArg != pArgEnd; ++pArg, ++nArgProcessed )
-        aArgs[ nArgProcessed ] =  **pArg;
+        pArgs[ nArgProcessed ] =  **pArg;
 
     // resize array to position of last param with value
     aArgs.realloc( nArgProcessed + 1 );
@@ -418,8 +419,7 @@ uno::Any SAL_CALL VbaApplicationBase::getVBE()
     try // return empty object on error
     {
         // "VBE" object does not have a parent, but pass document model to be able to determine application type
-        uno::Sequence< uno::Any > aArgs( 1 );
-        aArgs[ 0 ] <<= getCurrentDocument();
+        uno::Sequence< uno::Any > aArgs{ uno::Any(getCurrentDocument()) };
         uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
         uno::Reference< uno::XInterface > xVBE = xServiceManager->createInstanceWithArgumentsAndContext(
             "ooo.vba.vbide.VBE" , aArgs, mxContext );

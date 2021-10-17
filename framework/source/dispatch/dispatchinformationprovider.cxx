@@ -117,10 +117,9 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvide
 
     css::uno::Reference< css::frame::XDispatchInformationProvider > xController   (xFrame->getController()                                      , css::uno::UNO_QUERY);
     css::uno::Reference< css::frame::XDispatchInformationProvider > xAppDispatcher = css::frame::AppDispatchProvider::create(m_xContext);
-    css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > lProvider(3);
-    lProvider[0] = xController;
-    lProvider[1] = css::uno::Reference< css::frame::XDispatchInformationProvider >(xCloser);
-    lProvider[2] = xAppDispatcher;
+    css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > lProvider{
+        xController, xCloser, xAppDispatcher
+    };
 
     return lProvider;
 }

@@ -90,8 +90,7 @@ Reference< XFormulaParser > ScParserFactoryMap::createFormulaParser(
     FactoryMap::const_iterator aIt = maFactories.find( rNamespace );
     if( aIt != maFactories.end() ) try
     {
-        Sequence< Any > aArgs( 1 );
-        aArgs[ 0 ] <<= rxComponent;
+        Sequence< Any > aArgs{ Any(rxComponent) };
         xParser.set( aIt->second->createInstanceWithArgumentsAndContext( aArgs, mxContext ), UNO_QUERY_THROW );
     }
     catch( Exception& )

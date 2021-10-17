@@ -888,7 +888,7 @@ sal_Int8 ViewShell::ExecuteDrop (
 void ViewShell::WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >& rSequence )
 {
     const sal_Int32 nIndex = rSequence.getLength();
-    rSequence.realloc( nIndex + 1 );
+    auto pSequence = rSequence.realloc( nIndex + 1 );
 
     OSL_ASSERT (GetViewShell()!=nullptr);
     // Get the view id from the view shell in the center pane.  This will
@@ -897,8 +897,8 @@ void ViewShell::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
     SfxInterfaceId nViewID (IMPRESS_FACTORY_ID);
     if (GetViewShellBase().GetMainViewShell() != nullptr)
         nViewID = GetViewShellBase().GetMainViewShell()->mpImpl->GetViewId();
-    rSequence[nIndex].Name = sUNO_View_ViewId;
-    rSequence[nIndex].Value <<= "view" + OUString::number( static_cast<sal_uInt16>(nViewID));
+    pSequence[nIndex].Name = sUNO_View_ViewId;
+    pSequence[nIndex].Value <<= "view" + OUString::number( static_cast<sal_uInt16>(nViewID));
 
     mpFrameView->WriteUserDataSequence( rSequence );
 }

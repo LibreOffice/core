@@ -36,6 +36,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/dispatchcommand.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 using namespace com::sun::star;
 
@@ -363,10 +364,10 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, weld::Button&, void)
         css::uno::Sequence< sal_Int32 > aCustomColorList(officecfg::Office::Common::UserColors::CustomColor::get());
         css::uno::Sequence< OUString > aCustomColorNameList(officecfg::Office::Common::UserColors::CustomColorName::get());
         sal_Int32 nSize = aCustomColorList.getLength();
-        aCustomColorList.realloc( nSize + 1 );
-        aCustomColorNameList.realloc( nSize + 1 );
-        aCustomColorList[nSize] = sal_Int32(aCurrentColor);
-        aCustomColorNameList[nSize] = aName;
+        auto pCustomColorList = aCustomColorList.realloc( nSize + 1 );
+        auto pCustomColorNameList = aCustomColorNameList.realloc( nSize + 1 );
+        pCustomColorList[nSize] = sal_Int32(aCurrentColor);
+        pCustomColorNameList[nSize] = aName;
         officecfg::Office::Common::UserColors::CustomColor::set(aCustomColorList, batch);
         officecfg::Office::Common::UserColors::CustomColorName::set(aCustomColorNameList, batch);
         batch->commit();
@@ -411,12 +412,14 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl, weld::Button&, void)
 
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
     css::uno::Sequence< sal_Int32 > aCustomColorList(officecfg::Office::Common::UserColors::CustomColor::get());
+    auto aCustomColorListRange = asNonConstRange(aCustomColorList);
     css::uno::Sequence< OUString > aCustomColorNameList(officecfg::Office::Common::UserColors::CustomColorName::get());
+    auto aCustomColorNameListRange = asNonConstRange(aCustomColorNameList);
     sal_Int32 nSize = aCustomColorList.getLength() - 1;
     for(sal_Int32 nIndex = static_cast<sal_Int32>(nPos);nIndex < nSize;nIndex++)
     {
-        aCustomColorList[nIndex] = aCustomColorList[nIndex+1];
-        aCustomColorNameList[nIndex] = aCustomColorNameList[nIndex+1];
+        aCustomColorListRange[nIndex] = aCustomColorList[nIndex+1];
+        aCustomColorNameListRange[nIndex] = aCustomColorNameList[nIndex+1];
     }
     aCustomColorList.realloc(nSize);
     aCustomColorNameList.realloc(nSize);
@@ -544,9 +547,8 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectColorModeHdl_Impl, weld::Toggleable&, voi
 
 IMPL_STATIC_LINK_NOARG(SvxColorTabPage, OnMoreColorsClick, weld::Button&, void)
 {
-    css::uno::Sequence<css::beans::PropertyValue> aArgs(1);
-    aArgs[0].Name = "AdditionsTag";
-    aArgs[0].Value <<= OUString("Color Palette");
+    css::uno::Sequence<css::beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
+        "AdditionsTag", OUString("Color Palette")) };
     comphelper::dispatchCommand(".uno:AdditionsDialog", aArgs);
 }
 

@@ -22,6 +22,8 @@
 #include <svx/svdlayer.hxx>
 #include <svx/svdmodel.hxx>
 
+#include <algorithm>
+
 bool SdrLayerIDSet::IsEmpty() const
 {
     for(sal_uInt8 i : aData)
@@ -351,10 +353,8 @@ void SdrLayerAdmin::QueryValue(const SdrLayerIDSet& rViewLayerSet, css::uno::Any
         }
     }
     css::uno::Sequence< sal_Int8 > aSeq( nNumBytesSet );
-    for( auto nIndex = 0; nIndex < nNumBytesSet; nIndex++ )
-    {
-        aSeq[nIndex] = static_cast<sal_Int8>(aTmp[nIndex]);
-    }
+    std::transform(aTmp, aTmp + nNumBytesSet, aSeq.getArray(),
+                   [](const sal_uInt8 b) { return static_cast<sal_Int8>(b); });
     rAny <<= aSeq;
 }
 

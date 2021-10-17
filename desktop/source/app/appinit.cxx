@@ -136,9 +136,7 @@ void Desktop::createAcceptor(const OUString& aAcceptString)
     if (pIter != rMap.end() )
         return;
 
-    Sequence< Any > aSeq( 2 );
-    aSeq[0] <<= aAcceptString;
-    aSeq[1] <<= bAccept;
+    Sequence< Any > aSeq{ Any(aAcceptString), Any(bAccept) };
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference<XInitialization> rAcceptor(
         xContext->getServiceManager()->createInstanceWithContext("com.sun.star.office.Acceptor", xContext),
@@ -169,11 +167,9 @@ namespace {
 class enable
 {
     private:
-    Sequence<Any> m_aSeq;
+    Sequence<Any> m_aSeq{ true };
     public:
-    enable() : m_aSeq(1) {
-        m_aSeq[0] <<= true;
-    }
+    enable() = default;
     void operator() (const AcceptorMap::value_type& val) {
         if (val.second.is()) {
             val.second->initialize(m_aSeq);

@@ -76,28 +76,30 @@ void VPolarGrid::createLinePointSequence_ForAngleAxis(
 
     sal_Int32 nTick = 0;
     EquidistantTickIter aIter( rAllTickInfos, rIncrement, 0 );
+    auto pPoints = rPoints.getArray();
     for( TickInfo* pTickInfo = aIter.firstInfo()
         ; pTickInfo
         ; pTickInfo = aIter.nextInfo(), nTick++ )
     {
-        if(nTick>=rPoints[0].getLength())
-            rPoints[0].realloc(rPoints[0].getLength()+30);
+        auto pPoints0 = (nTick>=rPoints[0].getLength())
+                            ? pPoints[0].realloc(rPoints[0].getLength()+30)
+                            : pPoints[0].getArray();
 
         //xxxxx pTickInfo->updateUnscaledValue( xInverseScaling );
         double fLogicAngle = pTickInfo->getUnscaledTickValue();
 
         drawing::Position3D aScenePosition3D( pPosHelper->transformAngleRadiusToScene( fLogicAngle, fLogicRadius, fLogicZ ) );
-        rPoints[0][nTick].X = static_cast<sal_Int32>(aScenePosition3D.PositionX);
-        rPoints[0][nTick].Y = static_cast<sal_Int32>(aScenePosition3D.PositionY);
+        pPoints0[nTick].X = static_cast<sal_Int32>(aScenePosition3D.PositionX);
+        pPoints0[nTick].Y = static_cast<sal_Int32>(aScenePosition3D.PositionY);
     }
     if(rPoints[0].getLength()>1)
     {
-        rPoints[0].realloc(nTick+1);
-        rPoints[0][nTick].X = rPoints[0][0].X;
-        rPoints[0][nTick].Y = rPoints[0][0].Y;
+        auto pPoints0 = pPoints[0].realloc(nTick+1);
+        pPoints0[nTick].X = rPoints[0][0].X;
+        pPoints0[nTick].Y = rPoints[0][0].Y;
     }
     else
-        rPoints[0].realloc(0);
+        pPoints[0].realloc(0);
 }
 #ifdef NOTYET
 void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicTarget

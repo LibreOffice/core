@@ -1136,10 +1136,7 @@ AccessibleShape::getGroupPosition( const uno::Any& )
     // [0] group level
     // [1] similar items counts in the group
     // [2] the position of the object in the group
-    uno::Sequence< sal_Int32 > aRet( 3 );
-    aRet[0] = 0;
-    aRet[1] = 0;
-    aRet[2] = 0;
+    uno::Sequence< sal_Int32 > aRet{ 0, 0, 0 };
 
     css::uno::Reference<XAccessible> xParent = getAccessibleParent();
     if (!xParent.is())

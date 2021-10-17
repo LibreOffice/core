@@ -749,6 +749,7 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
 
     sal_Int32 nCount(aConfigProps.getLength());
     css::uno::Sequence<css::beans::PropertyValue> aFilteredProps(nCount);
+    auto pFilteredProps = aFilteredProps.getArray();
     sal_Int32 nFilteredPropsLen = 0;
     for (sal_Int32 i = nCount - 1; i >= 0; --i)
     {
@@ -786,7 +787,7 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
         }
         if (aConfigProps[i].Name != "LinkUpdateMode")
         {
-            aFilteredProps[nFilteredPropsLen++] = aConfigProps[i];
+            pFilteredProps[nFilteredPropsLen++] = aConfigProps[i];
         }
     }
     aFilteredProps.realloc(nFilteredPropsLen);
@@ -1693,8 +1694,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODS(SvStream &rStream)
     {
         { "UserData", uno::Any(aUserData) },
     }));
-    css::uno::Sequence<uno::Any> aOuterArgs(1);
-    aOuterArgs[0] <<= aAdaptorArgs;
+    css::uno::Sequence<uno::Any> aOuterArgs{ uno::Any(aAdaptorArgs) };
 
     uno::Reference<lang::XInitialization> xInit(xInterface, uno::UNO_QUERY_THROW);
     xInit->initialize(aOuterArgs);

@@ -277,7 +277,7 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
         }
         OSL_ENSURE(nLen >= nBytesRead,"Buffer is too small!");
         OSL_ENSURE(aData.getLength() >= nBytesRead,"Buffer is too small!");
-        env->SetByteArrayRegion(buffer, 0, nBytesRead, reinterpret_cast<jbyte*>(&aData[0]));
+        env->SetByteArrayRegion(buffer, 0, nBytesRead, reinterpret_cast<const jbyte*>(&aData[0]));
 #ifdef HSQLDB_DBG
         aDataLog.write( &aData[0], nBytesRead );
 #endif

@@ -123,8 +123,9 @@ namespace dbaui
             {
                 size_t nCount(GetUndoManager().GetUndoActionCount());
                 Sequence<OUString> aSeq(nCount);
+                auto aSeqRange = asNonConstRange(aSeq);
                 for (size_t n = 0; n < nCount; ++n)
-                    aSeq[n] = GetUndoManager().GetUndoActionComment(n);
+                    aSeqRange[n] = GetUndoManager().GetUndoActionComment(n);
                 aReturn.aValue <<= aSeq;
                 aReturn.bEnabled = true;
                 break;
@@ -134,8 +135,9 @@ namespace dbaui
             {
                 size_t nCount(GetUndoManager().GetRedoActionCount());
                 Sequence<OUString> aSeq(nCount);
+                auto aSeqRange = asNonConstRange(aSeq);
                 for (size_t n = 0; n < nCount; ++n)
-                    aSeq[n] = GetUndoManager().GetRedoActionComment(n);
+                    aSeqRange[n] = GetUndoManager().GetRedoActionComment(n);
                 aReturn.aValue <<= aSeq;
                 aReturn.bEnabled = true;
                 break;

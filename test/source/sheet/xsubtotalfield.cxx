@@ -65,10 +65,8 @@ void XSubTotalField::testGetSetTotalColumns()
     uno::Sequence< sheet::SubTotalColumn > sDefaultCols = xSTF->getSubTotalColumns();
     CPPUNIT_ASSERT_MESSAGE("Unable to get SubTotalColumns", sDefaultCols.hasElements());
 
-    uno::Sequence< sheet::SubTotalColumn > sNewCols;
-    sNewCols.realloc(1);
-    sNewCols[0].Column = 5;
-    sNewCols[0].Function = sheet::GeneralFunction_AVERAGE;
+    uno::Sequence< sheet::SubTotalColumn > sNewCols{ { /* Column   */ 5,
+                                                       /* Function */ sheet::GeneralFunction_AVERAGE } };
     xSTF->setSubTotalColumns(sNewCols);
 
     CPPUNIT_ASSERT_MESSAGE("Unable to set SubTotalColumns", sDefaultCols != xSTF->getSubTotalColumns());

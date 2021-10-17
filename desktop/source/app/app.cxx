@@ -2432,9 +2432,7 @@ void Desktop::OpenSplashScreen()
     if ( rCmdLine.HasSplashPipe() )
         aSplashService = "com.sun.star.office.PipeSplashScreen";
 
-    Sequence< Any > aSeq( 2 );
-    aSeq[0] <<= true; // bVisible
-    aSeq[1] <<= aAppName;
+    Sequence< Any > aSeq{ Any(true) /* bVisible */, Any(aAppName) };
     css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     m_rSplashScreen.set(
         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aSplashService, aSeq, xContext),

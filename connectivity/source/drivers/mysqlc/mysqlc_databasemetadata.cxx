@@ -41,8 +41,6 @@ static void lcl_setRows_throw(const Reference<XResultSet>& _xResultSet, sal_Int3
                               const std::vector<std::vector<Any>>& _rRows)
 {
     Reference<XInitialization> xIni(_xResultSet, UNO_QUERY);
-    Sequence<Any> aArgs(2);
-    aArgs[0] <<= _nType;
 
     Sequence<Sequence<Any>> aRows(_rRows.size());
 
@@ -55,7 +53,7 @@ static void lcl_setRows_throw(const Reference<XResultSet>& _xResultSet, sal_Int3
         }
         ++pRowsIter;
     }
-    aArgs[1] <<= aRows;
+    Sequence<Any> aArgs{ Any(_nType), Any(aRows) };
     xIni->initialize(aArgs);
 }
 

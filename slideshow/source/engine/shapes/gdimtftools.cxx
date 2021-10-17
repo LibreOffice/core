@@ -29,6 +29,7 @@
 #include <cppuhelper/compbase.hxx>
 
 #include <comphelper/fileformat.h>
+#include <comphelper/propertyvalue.hxx>
 
 #include <vcl/canvastools.hxx>
 #include <vcl/metaact.hxx>
@@ -174,29 +175,22 @@ GDIMetaFileSharedPtr getMetaFile( const uno::Reference< lang::XComponent >&     
     uno::Reference< drawing::XGraphicExportFilter > xExporter =
         drawing::GraphicExportFilter::create(rxContext);
 
-    uno::Sequence< beans::PropertyValue > aProps(3);
-    aProps[0].Name = "FilterName";
-    aProps[0].Value <<= OUString("SVM");
+    uno::Sequence< beans::PropertyValue > aFilterData{
+        comphelper::makePropertyValue("ScrollText",
+                                      ((mtfLoadFlags & MTF_LOAD_SCROLL_TEXT_MTF) != 0)),
+        comphelper::makePropertyValue("ExportOnlyBackground",
+                                      ((mtfLoadFlags & MTF_LOAD_BACKGROUND_ONLY) != 0)),
+        comphelper::makePropertyValue("Version", static_cast<sal_Int32>( SOFFICE_FILEFORMAT_50 )),
+        comphelper::makePropertyValue(
+            "CurrentPage", uno::Reference< uno::XInterface >( xContainingPage,
+                                                              uno::UNO_QUERY_THROW ))
+    };
 
-    aProps[1].Name = "GraphicRenderer";
-    aProps[1].Value <<= uno::Reference< graphic::XGraphicRenderer >(xRenderer);
-
-    uno::Sequence< beans::PropertyValue > aFilterData(4);
-    aFilterData[0].Name = "ScrollText";
-    aFilterData[0].Value <<= ((mtfLoadFlags & MTF_LOAD_SCROLL_TEXT_MTF) != 0);
-
-    aFilterData[1].Name = "ExportOnlyBackground";
-    aFilterData[1].Value <<= ((mtfLoadFlags & MTF_LOAD_BACKGROUND_ONLY) != 0);
-
-    aFilterData[2].Name = "Version";
-    aFilterData[2].Value <<= static_cast<sal_Int32>( SOFFICE_FILEFORMAT_50 );
-
-    aFilterData[3].Name = "CurrentPage";
-    aFilterData[3].Value <<= uno::Reference< uno::XInterface >( xContainingPage,
-                                                                uno::UNO_QUERY_THROW );
-
-    aProps[2].Name = "FilterData";
-    aProps[2].Value <<= aFilterData;
+    uno::Sequence< beans::PropertyValue > aProps{
+        comphelper::makePropertyValue("FilterName", OUString("SVM")),
+        comphelper::makePropertyValue("GraphicRenderer", uno::Reference< graphic::XGraphicRenderer >(xRenderer)),
+        comphelper::makePropertyValue("FilterData", aFilterData)
+    };
 
     xExporter->setSourceDocument( xSource );
     if( !xExporter->filter( aProps ) )

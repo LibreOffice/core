@@ -361,9 +361,10 @@ uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl
     if( length != 0 ) {
         int i = 0;
         uno::Sequence< uno::Reference< XCertificate > > certSeq( length ) ;
+        auto pcertSeq = certSeq.getArray();
 
         for( const auto& rXCert : certsList ) {
-            certSeq[i] = rXCert ;
+            pcertSeq[i] = rXCert ;
             ++i;
         }
 
@@ -661,6 +662,7 @@ uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl
         pCertChain = pChainContext->rgpChain[0] ;
         if( pCertChain->cElement ) {
             uno::Sequence< uno::Reference< XCertificate > > xCertChain( pCertChain->cElement ) ;
+            auto pxCertChain = xCertChain.getArray();
 
             for( unsigned int i = 0 ; i < pCertChain->cElement ; i ++ ) {
                 if( pCertChain->rgpElement[i] )
@@ -671,7 +673,7 @@ uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl
                 if( pCertInChain != nullptr ) {
                     pCert = MswcryCertContextToXCert( pCertInChain ) ;
                     if( pCert.is() )
-                        xCertChain[i] = pCert ;
+                        pxCertChain[i] = pCert ;
                 }
             }
 
@@ -707,8 +709,9 @@ uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::createCertificat
     xmlSecSize certSize = xmlSecBase64Decode( chCert, chCert, xmlStrlen( chCert ) ) ;
 
     uno::Sequence< sal_Int8 > rawCert( certSize ) ;
+    auto rawCertRange = asNonConstRange(rawCert);
     for( xmlSecSize i = 0 ; i < certSize ; i ++ )
-        rawCert[i] = *( chCert + i ) ;
+        rawCertRange[i] = *( chCert + i ) ;
 
     xmlFree( chCert ) ;
 

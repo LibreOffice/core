@@ -140,8 +140,8 @@ uno::Sequence< sal_Int32 > VCoordinateSystem::getCoordinateSystemResolution(
 {
     uno::Sequence<sal_Int32> aResolution(
         std::max<sal_Int32>(m_xCooSysModel->getDimension(), 2));
-
-    for( auto& i : asNonConstRange(aResolution) )
+    auto aResolutionRange = asNonConstRange(aResolution);
+    for( auto& i : aResolutionRange )
         i = 1000;
 
     ::basegfx::B3DTuple aScale( BaseGFXHelper::GetScaleFromMatrix(
@@ -169,8 +169,8 @@ uno::Sequence< sal_Int32 > VCoordinateSystem::getCoordinateSystemResolution(
     //2D
     if( aResolution.getLength() == 2 )
     {
-        aResolution[0]=nXResolution;
-        aResolution[1]=nYResolution;
+        aResolutionRange[0]=nXResolution;
+        aResolutionRange[1]=nYResolution;
     }
     else
     {

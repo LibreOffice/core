@@ -81,6 +81,7 @@
 
 #include <comphelper/classids.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <officecfg/Office/Common.hxx>
 
@@ -232,13 +233,11 @@ uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement
 
                 if ( !aEngine.isEmpty() )
                 {
-                    uno::Sequence< uno::Any > aArgument( 1 );
-                    uno::Sequence< beans::PropertyValue > aPropValues( 2 );
-                    aPropValues[ 0 ].Name = "CustomShape";
-                    aPropValues[ 0 ].Value <<= xShape;
-                    aPropValues[ 1 ].Name = "ForceGroupWithText";
-                    aPropValues[ 1 ].Value <<= true;
-                    aArgument[ 0 ] <<= aPropValues;
+                    uno::Sequence< beans::PropertyValue > aPropValues{
+                        comphelper::makePropertyValue("CustomShape", xShape),
+                        comphelper::makePropertyValue("ForceGroupWithText", true)
+                    };
+                    uno::Sequence< uno::Any > aArgument = { uno::Any(aPropValues) };
                     uno::Reference< uno::XInterface > xInterface(
                         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aEngine, aArgument, xContext) );
                     if ( xInterface.is() )
@@ -4985,11 +4984,10 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
                 }
 
                 uno::Reference< graphic::XGraphicProvider > xProvider( graphic::GraphicProvider::create(xContext) );
-                uno::Sequence< beans::PropertyValue > aArgs( 2 );
-                aArgs[ 0 ].Name = "MimeType";
-                aArgs[ 0 ].Value <<= OUString( "image/x-vclgraphic" );
-                aArgs[ 1 ].Name = "OutputStream";
-                aArgs[ 1 ].Value <<= xPictureStream->getOutputStream();
+                uno::Sequence< beans::PropertyValue > aArgs{
+                    comphelper::makePropertyValue("MimeType", OUString( "image/x-vclgraphic" )),
+                    comphelper::makePropertyValue("OutputStream", xPictureStream->getOutputStream())
+                };
                 xProvider->storeGraphic( xGraphic, aArgs );
 
                 if( xPictureStorage.is() )

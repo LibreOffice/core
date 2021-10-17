@@ -59,6 +59,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/profilezone.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/threadpool.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -468,10 +469,10 @@ std::vector<beans::PropertyValue> desktop::jsonToPropertyValuesVector(const char
                 aNodeValue = rPair.second.get_child("value", aNodeNull);
                 if (aNodeValue != aNodeNull && !aNodeValue.empty())
                 {
-                    sal_Int32 itSeq = 0;
                     uno::Sequence< uno::Any > aSeq(aNodeValue.size());
-                    for (const auto& rSeqPair : aNodeValue)
-                        aSeq[itSeq++] = jsonToUnoAny(rSeqPair.second);
+                    std::transform(aNodeValue.begin(), aNodeValue.end(), aSeq.getArray(),
+                                   [](const auto& rSeqPair)
+                                   { return jsonToUnoAny(rSeqPair.second); });
                     aValue.Value <<= aSeq;
                 }
             }
@@ -2525,11 +2526,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
              Application::SetDialogCancelMode(DialogCancelMode::LOKSilent);
         }
 
-        uno::Sequence<css::beans::PropertyValue> aFilterOptions(3);
-        aFilterOptions[0] = css::beans::PropertyValue( "FilterOptions",
-                                                       0,
-                                                       uno::makeAny(aOptions),
-                                                       beans::PropertyState_DIRECT_VALUE);
+        const OUString sFilterOptions = aOptions;
 
         rtl::Reference<LOKInteractionHandler> const pInteraction(
             new LOKInteractionHandler("load", pLib));
@@ -2541,8 +2538,6 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
                 }
             });
         uno::Reference<task::XInteractionHandler2> const xInteraction(pInteraction);
-        aFilterOptions[1].Name = "InteractionHandler";
-        aFilterOptions[1].Value <<= xInteraction;
 
         int nMacroSecurityLevel = 1;
         const OUString aMacroSecurityLevel = extractParameter(aOptions, u"MacroSecurityLevel");
@@ -2563,8 +2558,12 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         sal_Int16 nMacroExecMode = aEnableMacrosExecution == "true" ? document::MacroExecMode::USE_CONFIG :
             document::MacroExecMode::NEVER_EXECUTE;
 #endif
-        aFilterOptions[2].Name = "MacroExecutionMode";
-        aFilterOptions[2].Value <<= nMacroExecMode;
+
+        uno::Sequence<css::beans::PropertyValue> aFilterOptions{
+            comphelper::makePropertyValue("FilterOptions", sFilterOptions),
+            comphelper::makePropertyValue("InteractionHandler", xInteraction),
+            comphelper::makePropertyValue("MacroExecutionMode", nMacroExecMode)
+        };
 
         /* TODO
         sal_Int16 nUpdateDoc = document::UpdateDocMode::ACCORDING_TO_CONFIG;

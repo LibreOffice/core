@@ -148,9 +148,7 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::interpretDataSource(
         aSeriesVec.push_back( xSeries );
     }
 
-    Sequence< Sequence< Reference< XDataSeries > > > aSeries(1);
-    aSeries[0] = comphelper::containerToSequence( aSeriesVec );
-    return InterpretedData( aSeries, xCategories );
+    return InterpretedData( { comphelper::containerToSequence(aSeriesVec) }, xCategories );
 }
 
 chart2::InterpretedData SAL_CALL BubbleDataInterpreter::reinterpretDataSeries(
@@ -221,22 +219,16 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::reinterpretDataSeries(
                 {
                     if( xValuesX.is() )
                     {
-                        aNewSequences.realloc(3);
-                        aNewSequences[0] = xValuesX;
-                        aNewSequences[1] = xValuesY;
-                        aNewSequences[2] = xValuesSize;
+                        aNewSequences = { xValuesX, xValuesY, xValuesSize };
                     }
                     else
                     {
-                        aNewSequences.realloc(2);
-                        aNewSequences[0] = xValuesY;
-                        aNewSequences[1] = xValuesSize;
+                        aNewSequences = { xValuesY, xValuesSize };
                     }
                 }
                 else
                 {
-                    aNewSequences.realloc(1);
-                    aNewSequences[0] = xValuesSize;
+                    aNewSequences = { xValuesSize };
                 }
             }
 

@@ -169,15 +169,15 @@ uno::Sequence< beans::PropertyValue > DataSourceHelper::createArguments(
                                             bool bUseColumns, bool bFirstCellAsLabel, bool bHasCategories )
 {
     uno::Sequence< beans::PropertyValue > aArguments( createArguments( bUseColumns, bFirstCellAsLabel, bHasCategories ));
-    aArguments.realloc( aArguments.getLength() + 1 );
-    aArguments[aArguments.getLength() - 1] =
+    auto pArguments = aArguments.realloc( aArguments.getLength() + 1 );
+    pArguments[aArguments.getLength() - 1] =
         beans::PropertyValue( "CellRangeRepresentation"
                               , -1, uno::Any( rRangeRepresentation )
                               , beans::PropertyState_DIRECT_VALUE );
     if( rSequenceMapping.hasElements() )
     {
-        aArguments.realloc( aArguments.getLength() + 1 );
-        aArguments[aArguments.getLength() - 1] =
+        pArguments = aArguments.realloc( aArguments.getLength() + 1 );
+        pArguments[aArguments.getLength() - 1] =
             beans::PropertyValue( "SequenceMapping"
                                 , -1, uno::Any( rSequenceMapping )
                                 , beans::PropertyState_DIRECT_VALUE );
@@ -465,20 +465,17 @@ Sequence< OUString > DataSourceHelper::getRangesFromLabeledDataSequence(
         {
             if( xValues.is())
             {
-                aResult.realloc( 2 );
-                aResult[0] = xLabel->getSourceRangeRepresentation();
-                aResult[1] = xValues->getSourceRangeRepresentation();
+                aResult = { xLabel->getSourceRangeRepresentation(),
+                            xValues->getSourceRangeRepresentation() };
             }
             else
             {
-                aResult.realloc( 1 );
-                aResult[0] = xLabel->getSourceRangeRepresentation();
+                aResult = { xLabel->getSourceRangeRepresentation() };
             }
         }
         else if( xValues.is())
         {
-            aResult.realloc( 1 );
-            aResult[0] = xValues->getSourceRangeRepresentation();
+            aResult = { xValues->getSourceRangeRepresentation() };
         }
     }
     return aResult;

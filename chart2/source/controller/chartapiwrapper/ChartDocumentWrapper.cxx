@@ -1252,9 +1252,8 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                 {
                     m_xChartView = xViewInit;
 
-                    Sequence< Any > aArguments(2);
-                    aArguments[0] <<= Reference<frame::XModel>(this);
-                    aArguments[1] <<= true; // bRefreshAddIn
+                    Sequence< Any > aArguments{ Any(Reference<frame::XModel>(this)),
+                                                Any(true) }; // bRefreshAddIn
                     xViewInit->initialize(aArguments);
                 }
                 catch (const uno::Exception&)

@@ -9,12 +9,14 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
 #include <atomic>
 #include <condition_variable>
 #include <memory>
 #include <mutex>
 #include "uiobject_uno.hxx"
 #include <utility>
+#include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/link.hxx>
 #include <vcl/svapp.hxx>
@@ -161,13 +163,9 @@ css::uno::Sequence<css::beans::PropertyValue> UIObjectUnoObj::getState()
     SolarMutexGuard aGuard;
     StringMap aMap = mpObj->get_state();
     css::uno::Sequence<css::beans::PropertyValue> aProps(aMap.size());
-    sal_Int32 i = 0;
-    for (auto const& elem : aMap)
-    {
-        aProps[i].Name = elem.first;
-        aProps[i].Value <<= elem.second;
-        ++i;
-    }
+    std::transform(aMap.begin(), aMap.end(), aProps.getArray(),
+                   [](auto const& elem)
+                   { return comphelper::makePropertyValue(elem.first, elem.second); });
 
     return aProps;
 }
@@ -185,12 +183,7 @@ css::uno::Sequence<OUString> UIObjectUnoObj::getChildren()
     }
 
     css::uno::Sequence<OUString> aRet(aChildren.size());
-    sal_Int32 i = 0;
-    for (auto const& child : aChildren)
-    {
-        aRet[i] = child;
-        ++i;
-    }
+    std::copy(aChildren.begin(), aChildren.end(), aRet.getArray());
 
     return aRet;
 }

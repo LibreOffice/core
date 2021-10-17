@@ -802,9 +802,10 @@ void SwView::ExecSmartTagPopup( const Point& rPt )
     m_pWrtShell->LockView( true );
     m_pWrtShell->Push();
 
-    css::uno::Sequence< css::uno::Any > aArgs( 2 );
-    aArgs[0] <<= comphelper::makePropertyValue( "Frame", GetDispatcher().GetFrame()->GetFrame().GetFrameInterface() );
-    aArgs[1] <<= comphelper::makePropertyValue( "CommandURL", OUString( ".uno:OpenSmartTagMenuOnCursor" ) );
+    css::uno::Sequence< css::uno::Any > aArgs{
+        css::uno::Any(comphelper::makePropertyValue( "Frame", GetDispatcher().GetFrame()->GetFrame().GetFrameInterface() )),
+        css::uno::Any(comphelper::makePropertyValue( "CommandURL", OUString( ".uno:OpenSmartTagMenuOnCursor" ) ))
+    };
 
     css::uno::Reference< css::uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
     css::uno::Reference< css::frame::XPopupMenuController > xPopupController(

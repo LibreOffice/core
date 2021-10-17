@@ -104,6 +104,7 @@ check(dp_misc::DescriptionInfoset const & infoset) {
     sal_Int32 n = deps->getLength();
     css::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > >
         unsatisfied(n);
+    auto unsatisfiedRange = asNonConstRange(unsatisfied);
     sal_Int32 unsat = 0;
     // check first if minimalVersionLibreOffice is specified -- in that case ignore the legacy OOo dependencies
     bool bIgnoreOoo = false;
@@ -147,7 +148,7 @@ check(dp_misc::DescriptionInfoset const & infoset) {
                     minimalVersionOpenOfficeOrg));
         }
         if (!sat) {
-            unsatisfied[unsat++] = e;
+            unsatisfiedRange[unsat++] = e;
         }
     }
     unsatisfied.realloc(unsat);

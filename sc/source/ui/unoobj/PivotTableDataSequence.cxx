@@ -74,14 +74,15 @@ uno::Sequence<uno::Any> SAL_CALL PivotTableDataSequence::getData()
         throw uno::RuntimeException();
 
     uno::Sequence<uno::Any> aSeq(m_aData.size());
+    auto pSeq = aSeq.getArray();
 
     size_t i = 0;
     for (ValueAndFormat const & rItem : m_aData)
     {
         if (rItem.m_eType == ValueType::Numeric)
-            aSeq[i] <<= double(rItem.m_fValue);
+            pSeq[i] <<= double(rItem.m_fValue);
         else if (rItem.m_eType == ValueType::String)
-            aSeq[i] <<= rItem.m_aString;
+            pSeq[i] <<= rItem.m_aString;
 
         i++;
     }
@@ -97,11 +98,12 @@ uno::Sequence<double> SAL_CALL PivotTableDataSequence::getNumericalData()
         throw uno::RuntimeException();
 
     uno::Sequence<double> aSeq(m_aData.size());
+    auto pSeq = aSeq.getArray();
 
     size_t i = 0;
     for (ValueAndFormat const & rItem : m_aData)
     {
-        aSeq[i] = rItem.m_fValue;
+        pSeq[i] = rItem.m_fValue;
         i++;
     }
     return aSeq;
@@ -116,12 +118,13 @@ uno::Sequence<OUString> SAL_CALL PivotTableDataSequence::getTextualData()
         throw uno::RuntimeException();
 
     uno::Sequence<OUString> aSeq(m_aData.size());
+    auto pSeq = aSeq.getArray();
 
     size_t i = 0;
     for (ValueAndFormat const & rItem : m_aData)
     {
         if (rItem.m_eType == ValueType::String)
-            aSeq[i] = rItem.m_aString;
+            pSeq[i] = rItem.m_aString;
         i++;
     }
     return aSeq;

@@ -274,22 +274,14 @@ SwPrintUIOptions::SwPrintUIOptions(
 
     // create a choice for the content to create
     static const OUStringLiteral aPrintRangeName( u"PrintContent" );
-    uno::Sequence< OUString > aChoices( 3 );
-    uno::Sequence< sal_Bool > aChoicesDisabled( 3 );
-    uno::Sequence< OUString > aHelpIds( 3 );
-    uno::Sequence< OUString > aWidgetIds( 3 );
-    aChoices[0] = SwResId( STR_PRINTOPTUI_PRINTALLPAGES );
-    aChoicesDisabled[0] = false;
-    aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0";
-    aWidgetIds[0] = "rbAllPages";
-    aChoices[1] = SwResId( STR_PRINTOPTUI_PRINTPAGES );
-    aChoicesDisabled[1] = false;
-    aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1";
-    aWidgetIds[1] = "rbRangePages";
-    aChoices[2] = SwResId( STR_PRINTOPTUI_PRINTSELECTION );
-    aChoicesDisabled[2] = !bHasSelection;
-    aHelpIds[2] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2";
-    aWidgetIds[2] = "rbRangeSelection";
+    uno::Sequence< OUString > aChoices{ SwResId( STR_PRINTOPTUI_PRINTALLPAGES ),
+                                        SwResId( STR_PRINTOPTUI_PRINTPAGES ),
+                                        SwResId( STR_PRINTOPTUI_PRINTSELECTION ) };
+    uno::Sequence< sal_Bool > aChoicesDisabled{ false, false, !bHasSelection };
+    uno::Sequence< OUString > aHelpIds{ ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0",
+                                        ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1",
+                                        ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2" };
+    uno::Sequence< OUString > aWidgetIds{ "rbAllPages", "rbRangePages", "rbRangeSelection" };
     m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
                                                         aHelpIds, aPrintRangeName,
                                                         aChoices,
@@ -316,15 +308,13 @@ SwPrintUIOptions::SwPrintUIOptions(
 
     // create a list box for notes content
     const SwPostItMode nPrintPostIts = rDefaultPrintData.GetPrintPostIts();
-    aChoices.realloc( 5 );
-    aChoices[0] = SwResId( STR_PRINTOPTUI_NONE);
-    aChoices[1] = SwResId( STR_PRINTOPTUI_COMMENTS_ONLY);
-    aChoices[2] = SwResId( STR_PRINTOPTUI_PLACE_END);
-    aChoices[3] = SwResId( STR_PRINTOPTUI_PLACE_PAGE);
-    aChoices[4] = SwResId( STR_PRINTOPTUI_PLACE_MARGINS);
-    aHelpIds.realloc( 2 );
-    aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintAnnotationMode:FixedText";
-    aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintAnnotationMode:ListBox";
+    aChoices = { SwResId( STR_PRINTOPTUI_NONE),
+                 SwResId( STR_PRINTOPTUI_COMMENTS_ONLY),
+                 SwResId( STR_PRINTOPTUI_PLACE_END),
+                 SwResId( STR_PRINTOPTUI_PLACE_PAGE),
+                 SwResId( STR_PRINTOPTUI_PLACE_MARGINS) };
+    aHelpIds = { ".HelpID:vcl:PrintDialog:PrintAnnotationMode:FixedText",
+                 ".HelpID:vcl:PrintDialog:PrintAnnotationMode:ListBox" };
     vcl::PrinterOptionsHelper::UIControlOptions aAnnotOpt( "PrintProspect", 0, false );
     aAnnotOpt.mbEnabled = bHasPostIts;
     m_aUIProperties[ nIdx++ ].Value = setChoiceListControlOpt("writercomments",
@@ -352,9 +342,8 @@ SwPrintUIOptions::SwPrintUIOptions(
     if (bRTL)
     {
         // create a bool option for brochure RTL dependent on brochure
-        uno::Sequence< OUString > aBRTLChoices( 2 );
-        aBRTLChoices[0] = SwResId( STR_PRINTOPTUI_LEFT_SCRIPT);
-        aBRTLChoices[1] = SwResId( STR_PRINTOPTUI_RIGHT_SCRIPT);
+        uno::Sequence< OUString > aBRTLChoices{ SwResId( STR_PRINTOPTUI_LEFT_SCRIPT),
+                                                SwResId( STR_PRINTOPTUI_RIGHT_SCRIPT) };
         vcl::PrinterOptionsHelper::UIControlOptions aBrochureRTLOpt( aBrochurePropertyName, -1, true );
         uno::Sequence<OUString> aBRTLHelpIds { ".HelpID:vcl:PrintDialog:PrintProspectRTL:ListBox" };
         aBrochureRTLOpt.maGroupHint = "LayoutPage";

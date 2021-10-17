@@ -84,13 +84,14 @@ void XSheetCellRangeContainer::testAddRemoveRangeAddresses()
 uno::Sequence<table::CellRangeAddress> XSheetCellRangeContainer::createCellRangeAddresses()
 {
     uno::Sequence<table::CellRangeAddress> aAddr(2);
+    auto pAddr = aAddr.getArray();
     for (unsigned int i = 0; i < 2; i++)
     {
-        aAddr[i].Sheet = i;
-        aAddr[i].StartColumn = i;
-        aAddr[i].StartRow = i;
-        aAddr[i].EndColumn = i + 3;
-        aAddr[i].EndRow = i + 3;
+        pAddr[i].Sheet = i;
+        pAddr[i].StartColumn = i;
+        pAddr[i].StartRow = i;
+        pAddr[i].EndColumn = i + 3;
+        pAddr[i].EndRow = i + 3;
     }
 
     return aAddr;

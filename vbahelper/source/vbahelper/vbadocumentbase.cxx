@@ -278,9 +278,8 @@ VbaDocumentBase::getVBProject()
     {
         uno::Reference< XApplicationBase > xApp( Application(), uno::UNO_QUERY_THROW );
         uno::Reference< XInterface > xVBE( xApp->getVBE(), uno::UNO_QUERY_THROW );
-        uno::Sequence< uno::Any > aArgs( 2 );
-        aArgs[ 0 ] <<= xVBE;          // the VBE
-        aArgs[ 1 ] <<= getModel();    // document model for script container access
+        uno::Sequence< uno::Any > aArgs{ uno::Any(xVBE), // the VBE
+                                         uno::Any(getModel()) }; // document model for script container access
         uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
         mxVBProject = xServiceManager->createInstanceWithArgumentsAndContext(
             "ooo.vba.vbide.VBProject", aArgs, mxContext );

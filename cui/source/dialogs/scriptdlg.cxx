@@ -811,9 +811,8 @@ void SvxScriptOrgDialog::createEntry(const weld::TreeIter& rEntry)
         // open up parent node (which ensures it's loaded)
         m_xScriptsBox->expand_row(rEntry);
 
-        Sequence< Any > args( 1 );
-        args[ 0 ] <<= aNewName;
-        Sequence< Any > outArgs( 0 );
+        Sequence< Any > args{ Any(aNewName) };
+        Sequence< Any > outArgs;
         Sequence< sal_Int16 > outIndex;
         try
         {
@@ -893,9 +892,8 @@ void SvxScriptOrgDialog::renameEntry(const weld::TreeIter& rEntry)
 
         aNewName = aNewDlg.GetObjectName();
 
-        Sequence< Any > args( 1 );
-        args[ 0 ] <<= aNewName;
-        Sequence< Any > outArgs( 0 );
+        Sequence< Any > args{ Any(aNewName) };
+        Sequence< Any > outArgs;
         Sequence< sal_Int16 > outIndex;
         try
         {

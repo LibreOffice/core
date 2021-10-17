@@ -5237,23 +5237,23 @@ void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
         return;
 
     sal_Int32 nCount(rProps.getLength());
-    rProps.realloc(nCount + nPropsToAdd);
+    auto pProps = rProps.realloc(nCount + nPropsToAdd);
     if (!aTrackedChangesKey.isEmpty())
     {
-        rProps[nCount].Name = "TrackedChangesProtectionKey";
-        rProps[nCount].Value <<= aTrackedChangesKey.makeStringAndClear();
+        pProps[nCount].Name = "TrackedChangesProtectionKey";
+        pProps[nCount].Value <<= aTrackedChangesKey.makeStringAndClear();
         ++nCount;
     }
     if( bVBACompat )
     {
-        rProps[nCount].Name = "VBACompatibilityMode";
-        rProps[nCount].Value <<= bVBACompat;
+        pProps[nCount].Name = "VBACompatibilityMode";
+        pProps[nCount].Value <<= bVBACompat;
         ++nCount;
     }
     if( xCodeNameAccess.is() )
     {
-        rProps[nCount].Name = "ScriptConfiguration";
-        rProps[nCount].Value <<= xCodeNameAccess;
+        pProps[nCount].Name = "ScriptConfiguration";
+        pProps[nCount].Value <<= xCodeNameAccess;
         ++nCount;
     }
 }

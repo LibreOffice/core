@@ -467,24 +467,16 @@ void ScTable::SetColBreak(SCCOL nCol, bool bPage, bool bManual)
 
 Sequence<TablePageBreakData> ScTable::GetRowBreakData() const
 {
-    using ::std::copy;
     using ::std::inserter;
 
     set<SCROW> aRowBreaks = maRowPageBreaks;
     copy(maRowManualBreaks.begin(), maRowManualBreaks.end(),
          inserter(aRowBreaks, aRowBreaks.begin()));
 
-    sal_Int32 i = 0;
     Sequence<TablePageBreakData> aSeq(aRowBreaks.size());
-
-    for (const SCROW nRow : aRowBreaks)
-    {
-        TablePageBreakData aData;
-        aData.Position = nRow;
-        aData.ManualBreak = HasRowManualBreak(nRow);
-        aSeq[i] = aData;
-        ++i;
-    }
+    std::transform(aRowBreaks.begin(), aRowBreaks.end(), aSeq.getArray(), [this](const SCROW nRow) {
+        return TablePageBreakData(nRow, HasRowManualBreak(nRow));
+    });
 
     return aSeq;
 }

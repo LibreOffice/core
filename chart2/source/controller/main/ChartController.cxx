@@ -1577,10 +1577,6 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
     if(!xInit.is())
         return;
 
-    uno::Sequence< uno::Any > aArguments(5);
-    aArguments[0] <<= uno::Reference<view::XSelectionSupplier>(this);
-    aArguments[1] <<= getModel();
-    aArguments[2] <<= m_xChartView;
     uno::Reference< XAccessible > xParent;
     {
         SolarMutexGuard aGuard;
@@ -1592,8 +1588,11 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
                 xParent.set( pParentWin->GetAccessible());
         }
     }
-    aArguments[3] <<= xParent;
-    aArguments[4] <<= m_xViewWindow;
+    uno::Sequence< uno::Any > aArguments{ uno::Any(uno::Reference<view::XSelectionSupplier>(this)),
+                                          uno::Any(getModel()),
+                                          uno::Any(m_xChartView),
+                                          uno::Any(xParent),
+                                          uno::Any(m_xViewWindow) };
 
     xInit->initialize(aArguments);
 }

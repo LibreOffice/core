@@ -314,12 +314,13 @@ uno::Sequence<beans::PropertyValue>
                 const uno::Sequence<beans::PropertyValue>& aConfigProps )
 {
     uno::Sequence<beans::PropertyValue> aRet( aConfigProps.getLength() );
+    auto aRetRange = asNonConstRange(aRet);
     int nRet = 0;
     for( const auto& rConfigProp : aConfigProps )
     {
         XPropertyListType t = getTypeOfName( rConfigProp.Name );
         if (t == XPropertyListType::Unknown)
-            aRet[nRet++] = rConfigProp;
+            aRetRange[nRet++] = rConfigProp;
         else
         {
             OUString aURL;
@@ -357,11 +358,12 @@ uno::Sequence<beans::PropertyValue>
         if( !xSubStorage.is() )
             return aRet;
 
+        auto aRetRange = asNonConstRange(aRet);
         // now populate it
         for( sal_Int32 i = 0; i < aConfigProps.getLength(); i++ )
         {
             XPropertyListType t = getTypeOfName( aConfigProps[i].Name );
-            aRet[i] = aConfigProps[i];
+            aRetRange[i] = aConfigProps[i];
             if (t != XPropertyListType::Unknown) {
                 const XPropertyListRef& pList = pDoc->GetPropertyList( t );
                 if( !pList.is() || !pList->IsEmbedInDocument() )
@@ -375,7 +377,7 @@ uno::Sequence<beans::PropertyValue>
                     if( pList->SaveTo( xSubStorage, aName, &aResult ) )
                     {
                         OUString aRealPath = "Settings/" + aResult;
-                        aRet[i].Value <<= aRealPath;
+                        aRetRange[i].Value <<= aRealPath;
                     }
                 }
             }

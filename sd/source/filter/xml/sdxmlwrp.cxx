@@ -987,8 +987,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODP(SvStream &rStream)
     {
         { "UserData", uno::Any(aUserData) },
     }));
-    css::uno::Sequence<uno::Any> aOuterArgs(1);
-    aOuterArgs[0] <<= aAdaptorArgs;
+    css::uno::Sequence<uno::Any> aOuterArgs{ uno::Any(aAdaptorArgs) };
 
     uno::Reference<lang::XInitialization> xInit(xInterface, uno::UNO_QUERY_THROW);
     xInit->initialize(aOuterArgs);

@@ -102,8 +102,7 @@ ErrCode XMLAutoTextEventExport::exportDoc( enum XMLTokenEnum )
         try
         {
 
-            Sequence<Any> aArgs( 1 );
-            aArgs[0] <<= GetDocHandler();
+            Sequence<Any> aArgs{ Any(GetDocHandler()) };
 
             // get filter component
             Reference< xml::sax::XDocumentHandler > xTmpDocHandler(

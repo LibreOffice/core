@@ -46,6 +46,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/extract.hxx>
@@ -283,20 +284,15 @@ IMPL_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, /*unused*/, vo
                 Sequence< OUString >        sFiles = xPicker->getSelectedFiles();
                 int                         nFiles = sFiles.getLength();
 
-                int                         nArgs=3;
-                Sequence< PropertyValue >   aArgs(3);
-
                 css::uno::Reference < css::task::XInteractionHandler2 > xInteraction(
                     task::InteractionHandler::createWithParent(::comphelper::getProcessComponentContext(), nullptr) );
 
-                aArgs[0].Name = "InteractionHandler";
-                aArgs[0].Value <<= xInteraction;
-
-                aArgs[1].Name = "MacroExecutionMode";
-                aArgs[1].Value <<= sal_Int16(css::document::MacroExecMode::USE_CONFIG);
-
-                aArgs[2].Name = "UpdateDocMode";
-                aArgs[2].Value <<= sal_Int16(css::document::UpdateDocMode::ACCORDING_TO_CONFIG);
+                int                         nArgs=3;
+                Sequence< PropertyValue >   aArgs{
+                    comphelper::makePropertyValue("InteractionHandler", xInteraction),
+                    comphelper::makePropertyValue("MacroExecutionMode", sal_Int16(css::document::MacroExecMode::USE_CONFIG)),
+                    comphelper::makePropertyValue("UpdateDocMode", sal_Int16(css::document::UpdateDocMode::ACCORDING_TO_CONFIG))
+                };
 
                 // use the filedlghelper to get the current filter name,
                 // because it removes the extensions before you get the filter name.
@@ -316,9 +312,9 @@ IMPL_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, /*unused*/, vo
 
                     if ( bReadOnly )
                     {
-                        aArgs.realloc( ++nArgs );
-                        aArgs[nArgs-1].Name  = "ReadOnly";
-                        aArgs[nArgs-1].Value <<= bReadOnly;
+                        auto pArgs = aArgs.realloc( ++nArgs );
+                        pArgs[nArgs-1].Name  = "ReadOnly";
+                        pArgs[nArgs-1].Value <<= bReadOnly;
                     }
 
                     // Get version string
@@ -331,9 +327,9 @@ IMPL_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, /*unused*/, vo
                     {
                         sal_Int16   uVersion = static_cast<sal_Int16>(iVersion);
 
-                        aArgs.realloc( ++nArgs );
-                        aArgs[nArgs-1].Name  = "Version";
-                        aArgs[nArgs-1].Value <<= uVersion;
+                        auto pArgs = aArgs.realloc( ++nArgs );
+                        pArgs[nArgs-1].Name  = "Version";
+                        pArgs[nArgs-1].Value <<= uVersion;
                     }
 
                     // Retrieve the current filter
@@ -356,9 +352,9 @@ IMPL_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, /*unused*/, vo
 
                         if ( !aFilterName.isEmpty() )
                         {
-                            aArgs.realloc( ++nArgs );
-                            aArgs[nArgs-1].Name  = "FilterName";
-                            aArgs[nArgs-1].Value <<= aFilterName;
+                            auto pArgs = aArgs.realloc( ++nArgs );
+                            pArgs[nArgs-1].Name  = "FilterName";
+                            pArgs[nArgs-1].Value <<= aFilterName;
                         }
                     }
                 }

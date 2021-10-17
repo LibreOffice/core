@@ -3725,12 +3725,15 @@ void ServiceType::dumpHppFile(
                     o << indent()
                       << "::css::uno::Sequence< ::css::uno::Any > the_arguments("
                       << cons.parameters.size() << ");\n";
+                    o << indent()
+                      << "::css::uno::Any* the_arguments_array = the_arguments.getArray();\n";
+
                     std::vector<
                     unoidl::SingleInterfaceBasedServiceEntity::Constructor::
                     Parameter >::size_type n = 0;
                     for (const unoidl::SingleInterfaceBasedServiceEntity::Constructor::Parameter& j :
                          cons.parameters) {
-                        o << indent() << "the_arguments[" << n++ << "] ";
+                        o << indent() << "the_arguments_array[" << n++ << "] ";
                         OString param(
                             codemaker::cpp::translateUnoToCppIdentifier(
                                 u2b(j.name), "param",

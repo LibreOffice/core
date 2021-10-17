@@ -279,9 +279,7 @@ static Reference< XConnection > getConnection_allowException(
         Reference<XInitialization> xIni(xDataSource, UNO_QUERY);
         if (xIni.is())
         {
-            Sequence< Any > aArgs(1);
-            NamedValue aParam( "ParentWindow", makeAny(_rxParent) );
-            aArgs[0] <<= aParam;
+            Sequence< Any > aArgs{ Any(NamedValue( "ParentWindow", makeAny(_rxParent) )) };
             xIni->initialize(aArgs);
         }
 
@@ -319,9 +317,7 @@ static Reference< XConnection > getConnection_allowException(
 
         if (xIni.is())
         {
-            Sequence< Any > aArgs(1);
-            NamedValue aParam( "ParentWindow", makeAny(Reference<XWindow>()) );
-            aArgs[0] <<= aParam;
+            Sequence< Any > aArgs{ Any(NamedValue( "ParentWindow", makeAny(Reference<XWindow>()) )) };
             xIni->initialize(aArgs);
         }
 

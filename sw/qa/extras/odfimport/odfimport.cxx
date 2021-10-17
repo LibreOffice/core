@@ -89,93 +89,91 @@ CPPUNIT_TEST_FIXTURE(Test, testOdtBorders)
 {
     load(mpTestDocumentPath, "borders_ooo33.odt");
     AllBordersMap map;
-    uno::Sequence< table::BorderLine > tempSequence(4);
 
-    tempSequence[0] = table::BorderLine(0, 2, 2, 35);   // left
-    tempSequence[1] = table::BorderLine(0, 2, 2, 35);   // right
-    tempSequence[2] = table::BorderLine(0, 2, 2, 35);   // top
-    tempSequence[3] = table::BorderLine(0, 2, 2, 35);   // bottom
-    map.insert(StringSequencePair(OUString("B2"), tempSequence));
-    tempSequence[0] = table::BorderLine(0, 0, 2, 0);
-    tempSequence[1] = table::BorderLine(0, 0, 2, 0);
-    tempSequence[2] = table::BorderLine(0, 0, 2, 0);
-    tempSequence[3] = table::BorderLine(0, 0, 2, 0);
-    map.insert(StringSequencePair(OUString("D2"), tempSequence));
-    tempSequence[0] = table::BorderLine(0, 2, 2, 88);
-    tempSequence[1] = table::BorderLine(0, 2, 2, 88);
-    tempSequence[2] = table::BorderLine(0, 2, 2, 88);
-    tempSequence[3] = table::BorderLine(0, 2, 2, 88);
-    map.insert(StringSequencePair(OUString("B4"), tempSequence));
-    tempSequence[0] = table::BorderLine(0, 0, 18, 0);
-    tempSequence[1] = table::BorderLine(0, 0, 18, 0);
-    tempSequence[2] = table::BorderLine(0, 0, 18, 0);
-    tempSequence[3] = table::BorderLine(0, 0, 18, 0);
-    map.insert(StringSequencePair(OUString("D4"), tempSequence));
-    tempSequence[0] = table::BorderLine(0, 35, 35, 35);
-    tempSequence[1] = table::BorderLine(0, 35, 35, 35);
-    tempSequence[2] = table::BorderLine(0, 35, 35, 35);
-    tempSequence[3] = table::BorderLine(0, 35, 35, 35);
-    map.insert(StringSequencePair(OUString("B6"), tempSequence));
-    tempSequence[0] = table::BorderLine(0, 0, 35, 0);
-    tempSequence[1] = table::BorderLine(0, 0, 35, 0);
-    tempSequence[2] = table::BorderLine(0, 0, 35, 0);
-    tempSequence[3] = table::BorderLine(0, 0, 35, 0);
-    map.insert(StringSequencePair(OUString("D6"), tempSequence));
-    tempSequence[0] = table::BorderLine(0, 88, 88, 88);
-    tempSequence[1] = table::BorderLine(0, 88, 88, 88);
-    tempSequence[2] = table::BorderLine(0, 88, 88, 88);
-    tempSequence[3] = table::BorderLine(0, 88, 88, 88);
-    map.insert(StringSequencePair(OUString("B8"), tempSequence));
-    tempSequence[0] = table::BorderLine(0, 0, 88, 0);
-    tempSequence[1] = table::BorderLine(0, 0, 88, 0);
-    tempSequence[2] = table::BorderLine(0, 0, 88, 0);
-    tempSequence[3] = table::BorderLine(0, 0, 88, 0);
-    map.insert(StringSequencePair(OUString("D8"), tempSequence));
-    tempSequence[0] = table::BorderLine(0, 2, 35, 88);
-    tempSequence[1] = table::BorderLine(0, 2, 35, 88);
-    tempSequence[2] = table::BorderLine(0, 2, 35, 88);
-    tempSequence[3] = table::BorderLine(0, 2, 35, 88);
-    map.insert(StringSequencePair(OUString("B10"), tempSequence));
-    tempSequence[0] = table::BorderLine(0, 0, 141, 0);
-    tempSequence[1] = table::BorderLine(0, 0, 141, 0);
-    tempSequence[2] = table::BorderLine(0, 0, 141, 0);
-    tempSequence[3] = table::BorderLine(0, 0, 141, 0);
-    map.insert(StringSequencePair(OUString("D10"), tempSequence));
-    tempSequence[0] = table::BorderLine(0, 2, 88, 88);
-    tempSequence[1] = table::BorderLine(0, 2, 88, 88);
-    tempSequence[2] = table::BorderLine(0, 2, 88, 88);
-    tempSequence[3] = table::BorderLine(0, 2, 88, 88);
-    map.insert(StringSequencePair(OUString("B12"), tempSequence));
-    tempSequence[0] = table::BorderLine(0, 0, 176, 0);
-    tempSequence[1] = table::BorderLine(0, 0, 176, 0);
-    tempSequence[2] = table::BorderLine(0, 0, 176, 0);
-    tempSequence[3] = table::BorderLine(0, 0, 176, 0);
-    map.insert(StringSequencePair(OUString("D12"), tempSequence));
-    tempSequence[0] = table::BorderLine(0, 2, 141, 88);
-    tempSequence[1] = table::BorderLine(0, 2, 141, 88);
-    tempSequence[2] = table::BorderLine(0, 2, 141, 88);
-    tempSequence[3] = table::BorderLine(0, 2, 141, 88);
-    map.insert(StringSequencePair(OUString("B14"), tempSequence));
-    tempSequence[0] = table::BorderLine(0, 35, 88, 88);
-    tempSequence[1] = table::BorderLine(0, 35, 88, 88);
-    tempSequence[2] = table::BorderLine(0, 35, 88, 88);
-    tempSequence[3] = table::BorderLine(0, 35, 88, 88);
-    map.insert(StringSequencePair(OUString("B16"), tempSequence));
-    tempSequence[0] = table::BorderLine(0, 88, 35, 35);
-    tempSequence[1] = table::BorderLine(0, 88, 35, 35);
-    tempSequence[2] = table::BorderLine(0, 88, 35, 35);
-    tempSequence[3] = table::BorderLine(0, 88, 35, 35);
-    map.insert(StringSequencePair(OUString("B18"), tempSequence));
-    tempSequence[0] = table::BorderLine(0, 88, 141, 88);
-    tempSequence[1] = table::BorderLine(0, 88, 141, 88);
-    tempSequence[2] = table::BorderLine(0, 88, 141, 88);
-    tempSequence[3] = table::BorderLine(0, 88, 141, 88);
-    map.insert(StringSequencePair(OUString("B20"), tempSequence));
-    tempSequence[0] = table::BorderLine(0, 141, 88, 88);
-    tempSequence[1] = table::BorderLine(0, 141, 88, 88);
-    tempSequence[2] = table::BorderLine(0, 141, 88, 88);
-    tempSequence[3] = table::BorderLine(0, 141, 88, 88);
-    map.insert(StringSequencePair(OUString("B22"), tempSequence));
+    map.insert(StringSequencePair(OUString("B2"), { table::BorderLine(0, 2, 2, 35),     // left
+                                                    table::BorderLine(0, 2, 2, 35),     // right
+                                                    table::BorderLine(0, 2, 2, 35),     // top
+                                                    table::BorderLine(0, 2, 2, 35) })); // bottom
+
+    map.insert(StringSequencePair(OUString("D2"), { table::BorderLine(0, 0, 2, 0),
+                                                    table::BorderLine(0, 0, 2, 0),
+                                                    table::BorderLine(0, 0, 2, 0),
+                                                    table::BorderLine(0, 0, 2, 0) }));
+
+    map.insert(StringSequencePair(OUString("B4"), { table::BorderLine(0, 2, 2, 88),
+                                                    table::BorderLine(0, 2, 2, 88),
+                                                    table::BorderLine(0, 2, 2, 88),
+                                                    table::BorderLine(0, 2, 2, 88) }));
+
+    map.insert(StringSequencePair(OUString("D4"), { table::BorderLine(0, 0, 18, 0),
+                                                    table::BorderLine(0, 0, 18, 0),
+                                                    table::BorderLine(0, 0, 18, 0),
+                                                    table::BorderLine(0, 0, 18, 0) }));
+
+    map.insert(StringSequencePair(OUString("B6"), { table::BorderLine(0, 35, 35, 35),
+                                                    table::BorderLine(0, 35, 35, 35),
+                                                    table::BorderLine(0, 35, 35, 35),
+                                                    table::BorderLine(0, 35, 35, 35) }));
+
+    map.insert(StringSequencePair(OUString("D6"), { table::BorderLine(0, 0, 35, 0),
+                                                    table::BorderLine(0, 0, 35, 0),
+                                                    table::BorderLine(0, 0, 35, 0),
+                                                    table::BorderLine(0, 0, 35, 0) }));
+
+    map.insert(StringSequencePair(OUString("B8"), { table::BorderLine(0, 88, 88, 88),
+                                                    table::BorderLine(0, 88, 88, 88),
+                                                    table::BorderLine(0, 88, 88, 88),
+                                                    table::BorderLine(0, 88, 88, 88) }));
+
+    map.insert(StringSequencePair(OUString("D8"), { table::BorderLine(0, 0, 88, 0),
+                                                    table::BorderLine(0, 0, 88, 0),
+                                                    table::BorderLine(0, 0, 88, 0),
+                                                    table::BorderLine(0, 0, 88, 0) }));
+
+    map.insert(StringSequencePair(OUString("B10"), { table::BorderLine(0, 2, 35, 88),
+                                                     table::BorderLine(0, 2, 35, 88),
+                                                     table::BorderLine(0, 2, 35, 88),
+                                                     table::BorderLine(0, 2, 35, 88) }));
+
+    map.insert(StringSequencePair(OUString("D10"), { table::BorderLine(0, 0, 141, 0),
+                                                     table::BorderLine(0, 0, 141, 0),
+                                                     table::BorderLine(0, 0, 141, 0),
+                                                     table::BorderLine(0, 0, 141, 0) }));
+
+    map.insert(StringSequencePair(OUString("B12"), { table::BorderLine(0, 2, 88, 88),
+                                                     table::BorderLine(0, 2, 88, 88),
+                                                     table::BorderLine(0, 2, 88, 88),
+                                                     table::BorderLine(0, 2, 88, 88) }));
+
+    map.insert(StringSequencePair(OUString("D12"), { table::BorderLine(0, 0, 176, 0),
+                                                     table::BorderLine(0, 0, 176, 0),
+                                                     table::BorderLine(0, 0, 176, 0),
+                                                     table::BorderLine(0, 0, 176, 0) }));
+
+    map.insert(StringSequencePair(OUString("B14"), { table::BorderLine(0, 2, 141, 88),
+                                                     table::BorderLine(0, 2, 141, 88),
+                                                     table::BorderLine(0, 2, 141, 88),
+                                                     table::BorderLine(0, 2, 141, 88) }));
+
+    map.insert(StringSequencePair(OUString("B16"), { table::BorderLine(0, 35, 88, 88),
+                                                     table::BorderLine(0, 35, 88, 88),
+                                                     table::BorderLine(0, 35, 88, 88),
+                                                     table::BorderLine(0, 35, 88, 88) }));
+
+    map.insert(StringSequencePair(OUString("B18"), { table::BorderLine(0, 88, 35, 35),
+                                                     table::BorderLine(0, 88, 35, 35),
+                                                     table::BorderLine(0, 88, 35, 35),
+                                                     table::BorderLine(0, 88, 35, 35) }));
+
+    map.insert(StringSequencePair(OUString("B20"), { table::BorderLine(0, 88, 141, 88),
+                                                     table::BorderLine(0, 88, 141, 88),
+                                                     table::BorderLine(0, 88, 141, 88),
+                                                     table::BorderLine(0, 88, 141, 88) }));
+
+    map.insert(StringSequencePair(OUString("B22"), { table::BorderLine(0, 141, 88, 88),
+                                                     table::BorderLine(0, 141, 88, 88),
+                                                     table::BorderLine(0, 141, 88, 88),
+                                                     table::BorderLine(0, 141, 88, 88) }));
 
     uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(textDocument->getText(), uno::UNO_QUERY);
