@@ -16,11 +16,12 @@
 
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-
 #include <rtl/math.hxx>
+#include <svx/svdoashp.hxx>
 
 using namespace ::com::sun::star;
 
@@ -145,6 +146,34 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testCustomshapePosition)
     // - Actual  : 0
     // i.e. the position of the shape was lost on import due to the rounded corners.
     CPPUNIT_ASSERT_EQUAL(nExpected, nY);
+}
+
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf125582_TextOnCircle)
+{
+    // The document contains a shape with a:prstTxWarp="textCircle" with two paragraphs.
+    // PowerPoint aligns the bottom of the text with the path, LO had aligned the middle of the
+    // text with the path, which resulted in smaller text.
+    load(u"tdf125582_TextOnCircle.pptx");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
+
+    // BoundRect of Fontwork shape depends on dpi.
+    if (IsDefaultDPI())
+    {
+        SdrObjCustomShape& rSdrCustomShape(
+            static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
+        // Without the fix in place width was 3639, but should be 4824 for 96dpi.
+        tools::Rectangle aBoundRect(rSdrCustomShape.GetCurrentBoundRect());
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(4824), aBoundRect.GetWidth(), 5);
+    }
+
+    drawing::TextVerticalAdjust eAdjust;
+    xPropSet->getPropertyValue("TextVerticalAdjust") >>= eAdjust;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("TextVerticalAdjust", drawing::TextVerticalAdjust_BOTTOM, eAdjust);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

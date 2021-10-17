@@ -567,7 +567,7 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
     // ToDo: The property is currently not evaluated.
     SdrObject* pShape = SdrObject::getSdrObjectFromXShape(xShape);
     assert(pShape);
-    if (rClass == "fontwork-arch-up-curve")
+    if (rClass == "fontwork-arch-up-curve" || rClass == "fontwork-circle-curve")
         pShape->SetMergedItem( SdrTextVertAdjustItem( SdrTextVertAdjust::SDRTEXTVERTADJUST_BOTTOM ) );
     else if (rClass == "fontwork-arch-down-curve")
         pShape->SetMergedItem( SdrTextVertAdjustItem( SdrTextVertAdjust::SDRTEXTVERTADJUST_TOP ) );
