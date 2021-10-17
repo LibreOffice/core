@@ -1218,8 +1218,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature12_ODF)
 
     // create new document from template
     mxComponent->dispose();
-    mxComponent = mxDesktop->loadComponentFromURL(aURL, "_default", 0,
-                                                  uno::Sequence<beans::PropertyValue>(0));
+    mxComponent = mxDesktop->loadComponentFromURL(aURL, "_default", 0, {});
     CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
                            mxComponent.is());
 
@@ -1316,8 +1315,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
 
     // create new document from template
     mxComponent->dispose();
-    mxComponent = mxDesktop->loadComponentFromURL(aURL, "_default", 0,
-                                                  uno::Sequence<beans::PropertyValue>(0));
+    mxComponent = mxDesktop->loadComponentFromURL(aURL, "_default", 0, {});
     CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
                            mxComponent.is());
 
@@ -1410,8 +1408,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature10)
 
     // create new document from template
     mxComponent->dispose();
-    mxComponent = mxDesktop->loadComponentFromURL(aURL, "_default", 0,
-                                                  uno::Sequence<beans::PropertyValue>(0));
+    mxComponent = mxDesktop->loadComponentFromURL(aURL, "_default", 0, {});
     CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
                            mxComponent.is());
 
