@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/propertyvalue.hxx>
 #include <XMLStarBasicContextFactory.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -79,15 +80,12 @@ SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
         sMacroNameVal = sMacroNameVal.copy( rDoc.getLength()+1 );
     }
 
-    Sequence<PropertyValue> aValues(3);
-
-    // EventType
-    aValues[0].Name = gsEventType;
-    aValues[0].Value <<= OUString(gsStarBasic);
-
-    // library name
-    aValues[1].Name = gsLibrary;
-    aValues[1].Value <<= sLibraryVal;
+    Sequence<PropertyValue> aValues
+    {
+        comphelper::makePropertyValue(gsEventType, OUString(gsStarBasic)),
+        comphelper::makePropertyValue(gsLibrary, sLibraryVal),
+        comphelper::makePropertyValue(gsMacroName, sMacroNameVal)
+    };
 
     // macro name
     aValues[2].Name = gsMacroName;

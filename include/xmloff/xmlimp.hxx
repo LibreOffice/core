@@ -482,9 +482,8 @@ public:
 
     void SetError(
         sal_Int32 nId,
-        const css::uno::Sequence< OUString> & rMsgParams);
+        const css::uno::Sequence< OUString> & rMsgParams = {});
 
-    void SetError( sal_Int32 nId );
     void SetError( sal_Int32 nId, const OUString& rMsg1 );
 
     virtual void DisposingModel();

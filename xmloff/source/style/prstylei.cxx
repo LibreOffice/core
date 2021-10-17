@@ -332,10 +332,12 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
                 Reference < XAutoStyle > xAutoStyle = xAutoFamily->insertStyle( aValues );
                 if( xAutoStyle.is() )
                 {
-                    Sequence< OUString > aPropNames(1);
-                    aPropNames[0] = GetFamily() == XmlStyleFamily::TEXT_PARAGRAPH ?
-                        OUStringLiteral(u"ParaAutoStyleName") :
-                        OUStringLiteral(u"CharAutoStyleName");
+                    Sequence< OUString > aPropNames
+                    {
+                        (GetFamily() == XmlStyleFamily::TEXT_PARAGRAPH)?
+                        OUString("ParaAutoStyleName"):
+                        OUString("CharAutoStyleName")
+                    };
                     Sequence< Any > aAny = xAutoStyle->getPropertyValues( aPropNames );
                     if( aAny.hasElements() )
                     {

@@ -1042,9 +1042,7 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
     }
 
     uno::Reference<lang::XInitialization> const xInit(mxParser, uno::UNO_QUERY_THROW);
-    uno::Sequence<uno::Any> args(1);
-    args[0] <<= OUString("IgnoreMissingNSDecl");
-    xInit->initialize( args );
+    xInit->initialize( { makeAny(OUString("IgnoreMissingNSDecl")) });
 }
 
 // XServiceInfo
@@ -1742,13 +1740,6 @@ void SvXMLImport::SetError(
     const Sequence<OUString>& rMsgParams)
 {
     SetError( nId, rMsgParams, "", nullptr );
-}
-
-void SvXMLImport::SetError(
-    sal_Int32 nId)
-{
-    Sequence<OUString> aSeq(0);
-    SetError( nId, aSeq );
 }
 
 void SvXMLImport::SetError(
