@@ -122,7 +122,7 @@ css::uno::Sequence< OUString > SAL_CALL OConnectionWrapper::getSupportedServiceN
     {
         sal_Int32 nLen = aSupported.getLength();
         aSupported.realloc( nLen + 1 );
-        aSupported[ nLen ] = sConnectionService;
+        aSupported.getArray()[ nLen ] = sConnectionService;
     }
 
     // outta here

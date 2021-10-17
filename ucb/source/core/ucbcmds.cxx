@@ -18,7 +18,6 @@
  */
 
 #include <memory>
-#include <optional>
 #include <osl/diagnose.h>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -67,7 +66,11 @@ using namespace com::sun::star;
 
 namespace
 {
-
+// Helper to provide defaults for type and attributes (save some typing)
+beans::Property makeProperty(OUString n, sal_Int32 h, uno::Type t = {}, sal_Int16 a = {})
+{
+    return { n, h, t, a };
+}
 
 // struct TransferCommandContext.
 
@@ -194,7 +197,7 @@ uno::Reference< io::XInputStream > SAL_CALL ActiveDataSink::getInputStream()
 class CommandProcessorInfo :
     public cppu::WeakImplHelper< ucb::XCommandInfo >
 {
-    std::optional< uno::Sequence< ucb::CommandInfo > > m_xInfo;
+    uno::Sequence< ucb::CommandInfo > m_xInfo;
 
 public:
     CommandProcessorInfo();
@@ -211,23 +214,20 @@ public:
 
 
 CommandProcessorInfo::CommandProcessorInfo()
-    : m_xInfo( 3 )
-{
-    (*m_xInfo)[ 0 ]
-        = ucb::CommandInfo(
+    : m_xInfo(
+        { ucb::CommandInfo(
             GETCOMMANDINFO_NAME, // Name
             GETCOMMANDINFO_HANDLE, // Handle
-            cppu::UnoType<void>::get() ); // ArgType
-    (*m_xInfo)[ 1 ]
-        = ucb::CommandInfo(
+            cppu::UnoType<void>::get() ), // ArgType
+          ucb::CommandInfo(
             GLOBALTRANSFER_NAME, // Name
             GLOBALTRANSFER_HANDLE, // Handle
-            cppu::UnoType<ucb::GlobalTransferCommandArgument>::get() ); // ArgType
-    (*m_xInfo)[ 2 ]
-        = ucb::CommandInfo(
+            cppu::UnoType<ucb::GlobalTransferCommandArgument>::get() ), // ArgType
+          ucb::CommandInfo(
             CHECKIN_NAME, // Name
             CHECKIN_HANDLE, // Handle
-            cppu::UnoType<ucb::CheckinArgument>::get() ); // ArgType
+            cppu::UnoType<ucb::CheckinArgument>::get() ) }) // ArgType
+{
 }
 
 
@@ -235,7 +235,7 @@ CommandProcessorInfo::CommandProcessorInfo()
 uno::Sequence< ucb::CommandInfo > SAL_CALL
 CommandProcessorInfo::getCommands()
 {
-    return *m_xInfo;
+    return m_xInfo;
 }
 
 
@@ -243,9 +243,9 @@ CommandProcessorInfo::getCommands()
 ucb::CommandInfo SAL_CALL
 CommandProcessorInfo::getCommandInfoByName( const OUString& Name )
 {
-    auto pInfo = std::find_if(std::cbegin(*m_xInfo), std::cend(*m_xInfo),
+    auto pInfo = std::find_if(std::cbegin(m_xInfo), std::cend(m_xInfo),
         [&Name](const ucb::CommandInfo& rInfo) { return rInfo.Name == Name; });
-    if (pInfo != std::cend(*m_xInfo))
+    if (pInfo != std::cend(m_xInfo))
         return *pInfo;
 
     throw ucb::UnsupportedCommandException();
@@ -256,9 +256,9 @@ CommandProcessorInfo::getCommandInfoByName( const OUString& Name )
 ucb::CommandInfo SAL_CALL
 CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
 {
-    auto pInfo = std::find_if(std::cbegin(*m_xInfo), std::cend(*m_xInfo),
+    auto pInfo = std::find_if(std::cbegin(m_xInfo), std::cend(m_xInfo),
         [&Handle](const ucb::CommandInfo& rInfo) { return rInfo.Handle == Handle; });
-    if (pInfo != std::cend(*m_xInfo))
+    if (pInfo != std::cend(m_xInfo))
         return *pInfo;
 
     throw ucb::UnsupportedCommandException();
@@ -269,7 +269,7 @@ CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
 sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName(
                                                 const OUString& Name )
 {
-    return std::any_of(std::cbegin(*m_xInfo), std::cend(*m_xInfo),
+    return std::any_of(std::cbegin(m_xInfo), std::cend(m_xInfo),
         [&Name](const ucb::CommandInfo& rInfo) { return rInfo.Name == Name; });
 }
 
@@ -277,7 +277,7 @@ sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName(
 // virtual
 sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByHandle( sal_Int32 Handle )
 {
-    return std::any_of(std::cbegin(*m_xInfo), std::cend(*m_xInfo),
+    return std::any_of(std::cbegin(m_xInfo), std::cend(m_xInfo),
         [&Handle](const ucb::CommandInfo& rInfo) { return rInfo.Handle == Handle; });
 }
 
@@ -426,10 +426,10 @@ bool setTitle(
 {
     try
     {
-        uno::Sequence< beans::PropertyValue > aPropValues( 1 );
-        aPropValues[ 0 ].Name = "Title";
-        aPropValues[ 0 ].Handle = -1;
-        aPropValues[ 0 ].Value  <<= rNewTitle;
+        uno::Sequence< beans::PropertyValue > aPropValues({ { /* Name   */ "Title",
+                                                              /* Handle */ -1,
+                                                              /* Value  */ uno::Any(rNewTitle),
+                                                              /* State  */ {} } });
 
         ucb::Command aSetPropsCommand(
             "setPropertyValues",
@@ -497,9 +497,7 @@ uno::Reference< ucb::XContent > createNew(
         // Unreachable
     }
 
-    uno::Sequence< beans::Property > aPropsToObtain( 1 );
-    aPropsToObtain[ 0 ].Name = "CreatableContentsInfo";
-    aPropsToObtain[ 0 ].Handle = -1;
+    uno::Sequence< beans::Property > aPropsToObtain({ makeProperty("CreatableContentsInfo", -1) });
 
     ucb::Command aGetPropsCommand(
             "getPropertyValues",
@@ -710,6 +708,7 @@ void transferProperties(
     // Note: Make room for additional Title and TargetURL too. -> + 2
     uno::Sequence< beans::PropertyValue > aPropValues(
                                                 aAllProps.getLength() + 2 );
+    auto pPropValues = aPropValues.getArray();
 
     bool bHasTitle = rContext.aArg.NewTitle.isEmpty();
     bool bHasTargetURL = ( rContext.aArg.Operation
@@ -719,7 +718,7 @@ void transferProperties(
     for ( sal_Int32 m = 0; m < aAllProps.getLength(); ++m )
     {
         const beans::Property & rCurrProp = aAllProps[ m ];
-        beans::PropertyValue & rCurrValue = aPropValues[ nWritePos ];
+        beans::PropertyValue & rCurrValue = pPropValues[ nWritePos ];
 
         uno::Any aValue;
 
@@ -770,9 +769,9 @@ void transferProperties(
     // Title needed, but not set yet?
     if ( !bHasTitle && !rContext.aArg.NewTitle.isEmpty() )
     {
-        aPropValues[ nWritePos ].Name = "Title";
-        aPropValues[ nWritePos ].Handle = -1;
-        aPropValues[ nWritePos ].Value <<= rContext.aArg.NewTitle;
+        pPropValues[ nWritePos ].Name = "Title";
+        pPropValues[ nWritePos ].Handle = -1;
+        pPropValues[ nWritePos ].Value <<= rContext.aArg.NewTitle;
 
         nWritePos++;
     }
@@ -781,9 +780,9 @@ void transferProperties(
     if ( !bHasTargetURL && ( rContext.aArg.Operation
                                 == ucb::TransferCommandOperation_LINK ) )
     {
-        aPropValues[ nWritePos ].Name = "TargetURL";
-        aPropValues[ nWritePos ].Handle = -1;
-        aPropValues[ nWritePos ].Value <<= rContext.aArg.SourceURL;
+        pPropValues[ nWritePos ].Name = "TargetURL";
+        pPropValues[ nWritePos ].Handle = -1;
+        pPropValues[ nWritePos ].Value <<= rContext.aArg.SourceURL;
 
         nWritePos++;
     }
@@ -887,14 +886,9 @@ uno::Reference< sdbc::XResultSet > getResultSet(
 {
     uno::Reference< sdbc::XResultSet > xResultSet;
 
-    uno::Sequence< beans::Property > aProps( 3 );
-
-    aProps[ 0 ].Name   = "IsFolder";
-    aProps[ 0 ].Handle = -1; /* unknown */
-    aProps[ 1 ].Name   = "IsDocument";
-    aProps[ 1 ].Handle = -1; /* unknown */
-    aProps[ 2 ].Name   = "TargetURL";
-    aProps[ 2 ].Handle = -1; /* unknown */
+    uno::Sequence< beans::Property > aProps({ makeProperty("IsFolder", -1 /* unknown */),
+                                              makeProperty("IsDocument", -1 /* unknown */),
+                                              makeProperty("TargetURL", -1 /* unknown */) });
 
     ucb::OpenCommandArgument2 aArg;
     aArg.Mode       = ucb::OpenMode::ALL;
@@ -938,9 +932,7 @@ void handleNameClashRename(
     sal_Int32 nTry = 0;
 
     // Obtain old title.
-    uno::Sequence< beans::Property > aProps( 1 );
-    aProps[ 0 ].Name   = "Title";
-    aProps[ 0 ].Handle = -1;
+    uno::Sequence< beans::Property > aProps({ makeProperty("Title", -1) });
 
     ucb::Command aGetPropsCommand(
             "getPropertyValues",
@@ -1785,16 +1777,10 @@ void UniversalContentBroker::globalTransfer(
 
     // Obtain interesting property values from source...
 
-    uno::Sequence< beans::Property > aProps( 4 );
-
-    aProps[ 0 ].Name   = "IsFolder";
-    aProps[ 0 ].Handle = -1; /* unknown */
-    aProps[ 1 ].Name   = "IsDocument";
-    aProps[ 1 ].Handle = -1; /* unknown */
-    aProps[ 2 ].Name   = "TargetURL";
-    aProps[ 2 ].Handle = -1; /* unknown */
-    aProps[ 3 ].Name   = "BaseURI";
-    aProps[ 3 ].Handle = -1; /* unknown */
+    uno::Sequence< beans::Property > aProps({ makeProperty("IsFolder", -1 /* unknown */),
+                                              makeProperty("IsDocument", -1 /* unknown */),
+                                              makeProperty("TargetURL", -1 /* unknown */),
+                                              makeProperty("BaseURI", -1 /* unknown */) });
 
     ucb::Command aGetPropsCommand(
                 "getPropertyValues",

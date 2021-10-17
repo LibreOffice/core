@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/stream.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include "jpeg/Exif.hxx"
 #include "jpeg/JpegTransform.hxx"
@@ -94,13 +95,10 @@ bool GraphicNativeTransform::rotateGeneric(Degree10 aRotation, std::u16string_vi
 
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
 
-    css::uno::Sequence<css::beans::PropertyValue> aFilterData(3);
-    aFilterData[0].Name = "Interlaced";
-    aFilterData[0].Value <<= sal_Int32(0);
-    aFilterData[1].Name = "Compression";
-    aFilterData[1].Value <<= sal_Int32(9);
-    aFilterData[2].Name = "Quality";
-    aFilterData[2].Value <<= sal_Int32(90);
+    css::uno::Sequence<css::beans::PropertyValue> aFilterData(
+        { comphelper::makePropertyValue("Interlaced", sal_Int32(0)),
+          comphelper::makePropertyValue("Compression", sal_Int32(9)),
+          comphelper::makePropertyValue("Quality", sal_Int32(90)) });
 
     sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName(aType);
 

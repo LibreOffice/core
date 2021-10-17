@@ -44,18 +44,13 @@ namespace canvas
         std::u16string_view rServiceName,
         const uno::Sequence< uno::Any >& rArgs )
     {
-        uno::Sequence< uno::Sequence< double > > colorSequence(2);
-        uno::Sequence< double > colorStops(2);
         double fAspectRatio=1.0;
 
         // defaults
-        uno::Sequence< rendering::RGBColor > rgbColors(1);
-        rgbColors[0] = rendering::RGBColor(0,0,0);
-        colorSequence[0] = rDevice->getDeviceColorSpace()->convertFromRGB(rgbColors);
-        rgbColors[0] = rendering::RGBColor(1,1,1);
-        colorSequence[1] = rDevice->getDeviceColorSpace()->convertFromRGB(rgbColors);
-        colorStops[0] = 0;
-        colorStops[1] = 1;
+        uno::Sequence< uno::Sequence< double > > colorSequence(
+            { rDevice->getDeviceColorSpace()->convertFromRGB({ rendering::RGBColor(0,0,0) }),
+              rDevice->getDeviceColorSpace()->convertFromRGB({ rendering::RGBColor(1,1,1) }) });
+        uno::Sequence< double > colorStops({ 0, 1 });
 
         // extract args
         for( const uno::Any& rArg : rArgs )

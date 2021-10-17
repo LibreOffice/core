@@ -3707,18 +3707,17 @@ bool Window::IsNativeWidgetEnabled() const
 
 Reference< css::rendering::XCanvas > WindowOutputDevice::ImplGetCanvas( bool bSpriteCanvas ) const
 {
-    Sequence< Any > aArg(5);
-
     // Feed any with operating system's window handle
 
     // common: first any is VCL pointer to window (for VCL canvas)
-    aArg[ 0 ] <<= reinterpret_cast<sal_Int64>(this);
-    aArg[ 1 ] <<= css::awt::Rectangle( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight );
-    aArg[ 2 ] <<= mxOwnerWindow->mpWindowImpl->mbAlwaysOnTop;
-    aArg[ 3 ] <<= Reference< css::awt::XWindow >(
+    Sequence< Any > aArg(
+        { Any(reinterpret_cast<sal_Int64>(this)),
+          Any(css::awt::Rectangle( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight )),
+          Any(mxOwnerWindow->mpWindowImpl->mbAlwaysOnTop),
+          Any(Reference< css::awt::XWindow >(
                              mxOwnerWindow->GetComponentInterface(),
-                             UNO_QUERY );
-    aArg[ 4 ] = GetSystemGfxDataAny();
+                             UNO_QUERY )),
+          GetSystemGfxDataAny() });
 
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
 

@@ -39,11 +39,12 @@ XPropertySetInfo_impl::XPropertySetInfo_impl( TaskManager* pMyShell,const OUStri
     TaskManager::PropertySet& properties = it->second.properties;
 
     m_seq.realloc( properties.size() );
+    auto seqRange = asNonConstRange(m_seq);
 
     sal_Int32 count = 0;
     for( const auto& rProp : properties )
     {
-        m_seq[ count++ ] = beans::Property( rProp.getPropertyName(),
+        seqRange[ count++ ] = beans::Property( rProp.getPropertyName(),
                                             rProp.getHandle(),
                                             rProp.getType(),
                                             rProp.getAttributes() );

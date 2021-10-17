@@ -71,9 +71,10 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Syst
 {
     sal_Int32 nCount = lDescriptor.getLength();
     css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
+    auto lDispatcherRange = asNonConstRange(lDispatcher);
     for( sal_Int32 i=0; i<nCount; ++i )
     {
-        lDispatcher[i] = queryDispatch(
+        lDispatcherRange[i] = queryDispatch(
                             lDescriptor[i].FeatureURL,
                             lDescriptor[i].FrameName,
                             lDescriptor[i].SearchFlags);

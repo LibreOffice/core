@@ -20,6 +20,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include <comphelper/propertyvalue.hxx>
 #include <cppunit/TestAssert.h>
 
 using namespace com::sun::star;
@@ -55,9 +56,8 @@ void SheetCellRange::testSheetCellRangeProperties()
     CPPUNIT_ASSERT(xSheetCellRange->getPropertyValue(propName) >>= aSizeSet);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Able to set PropertyValue Size", aSizeGet, aSizeSet);
 
-    uno::Sequence<beans::PropertyValue> aPropValue(1);
-    aPropValue[0].Name = "StyleName";
-    aPropValue[0].Value <<= OUString("Result2");
+    uno::Sequence<beans::PropertyValue> aPropValue(
+        { comphelper::makePropertyValue("StyleName", OUString("Result2")) });
 
     propName = "ConditionalFormat";
     uno::Reference<sheet::XSheetConditionalEntries> aConditionalFormatGet;

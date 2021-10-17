@@ -29,6 +29,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/seqstream.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -65,19 +66,16 @@ bool ConvertBufferToFormat( void* pBuf,
         try
         {
             uno::Reference < graphic::XGraphicProvider > xGraphicProvider( graphic::GraphicProvider::create(comphelper::getProcessComponentContext()));
-            uno::Sequence< beans::PropertyValue > aMediaProperties( 1 );
-            aMediaProperties[0].Name = "InputStream";
-            aMediaProperties[0].Value <<= xIn;
+            uno::Sequence< beans::PropertyValue > aMediaProperties(
+                { comphelper::makePropertyValue("InputStream", xIn) });
             uno::Reference< graphic::XGraphic > xGraphic( xGraphicProvider->queryGraphic( aMediaProperties  ) );
             if( xGraphic.is() )
             {
                 SvMemoryStream aNewStream( 65535, 65535 );
                 uno::Reference < io::XStream > xOut = new utl::OStreamWrapper( aNewStream );
-                uno::Sequence< beans::PropertyValue > aOutMediaProperties( 2 );
-                aOutMediaProperties[0].Name = "OutputStream";
-                aOutMediaProperties[0].Value <<= xOut;
-                aOutMediaProperties[1].Name = "MimeType";
-                aOutMediaProperties[1].Value <<= aMimeType;
+                uno::Sequence< beans::PropertyValue > aOutMediaProperties(
+                    { comphelper::makePropertyValue("OutputStream", xOut),
+                      comphelper::makePropertyValue("MimeType", aMimeType) });
 
                 xGraphicProvider->storeGraphic( xGraphic, aOutMediaProperties );
                 aResult <<= uno::Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aNewStream.GetData() ), aNewStream.TellEnd() );

@@ -133,6 +133,7 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
         nURLPropertyIndex++;
 
     Sequence< Any > aPropSeq( nSeqLength );
+    auto aPropSeqRange = asNonConstRange(aPropSeq);
     for ( sal_Int32 n = 0; n < aPropSeq.getLength(); n++ )
     {
         PropertyValue aPropValue;
@@ -149,7 +150,7 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
         else
             aPropValue = Args[n];
 
-        aPropSeq[n] <<= aPropValue;
+        aPropSeqRange[n] <<= aPropValue;
     }
 
     SolarMutexGuard aGuard;

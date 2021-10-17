@@ -56,6 +56,7 @@
 #include "currentcontextchecker.hxx"
 #include "multi.hxx"
 #include <memory>
+#include <utility>
 
 using namespace osl;
 using namespace cppu;
@@ -380,8 +381,7 @@ static bool performTest(
             Any(&xI, cppu::UnoType<XInterface>::get()));
         bRet &= check(aData.Any == xI, "### unexpected any!");
         bRet &= check(!(aData.Any != xI), "### unexpected any!");
-        aData.Sequence.realloc(2);
-        aData.Sequence[0] = *static_cast<TestElement const *>(&aData);
+        aData.Sequence = { { *static_cast<TestElement const *>(&aData) }, {} };
         // aData.Sequence[1] is empty
         // aSetData is a manually copy of aData for first setting:
         TestData aSetData;
@@ -390,8 +390,7 @@ static bool performTest(
             aData.Byte, aData.Short, aData.UShort, aData.Long, aData.ULong,
             aData.Hyper, aData.UHyper, aData.Float, aData.Double, aData.Enum,
             aData.String, aData.Byte2, aData.Short2, xI, Any(&xI, cppu::UnoType<XInterface>::get()));
-        aSetData.Sequence.realloc(2);
-        aSetData.Sequence[0] = *static_cast<TestElement const *>(&aSetData);
+        aSetData.Sequence = { { *static_cast<TestElement const *>(&aSetData) }, {} };
         // aSetData.Sequence[1] is empty
         xLBT->setValues(
             aSetData.Bool,
@@ -462,9 +461,8 @@ static bool performTest(
                     aRet2));
             // Check inout sequence order (=> inout sequence parameter was
             // switched by test objects):
-            TestElement temp(aRet.Sequence[0]);
-            aRet.Sequence[0] = aRet.Sequence[1];
-            aRet.Sequence[1] = temp;
+            auto pRetSequence = aRet.Sequence.getArray();
+            std::swap(pRetSequence[0], pRetSequence[1]);
             bRet &= check(
                 equals(aData, aSV2ret) && equals(aData, aRet2),
                 "getValues2 test");
@@ -648,9 +646,7 @@ static bool performTest(
                 TestPolyStruct< sal_Int64 > tps1(12345);
                 xLBT->transportPolyHyper(tps1);
                 bRet &= check(tps1.member == 12345, "transportPolyHyper");
-                Sequence< Any > seq(2);
-                seq[0] <<= static_cast< sal_uInt32 >(33);
-                seq[1] <<= OUString("ABC");
+                Sequence< Any > seq({ Any(static_cast< sal_uInt32 >(33)), Any(OUString("ABC")) });
                 TestPolyStruct< Sequence< Any > > tps2(seq);
                 TestPolyStruct< Sequence< Any > > tps3;
                 xLBT->transportPolySequence(tps2, tps3);

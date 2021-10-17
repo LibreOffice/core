@@ -168,11 +168,12 @@ namespace connectivity::mozab
             sal_Int32 index=static_cast<sal_Int32>(product);
             ProductStruct &rProduct = m_ProductProfileList[index];
             list.realloc(static_cast<sal_Int32>(rProduct.mProfileList.size()));
+            auto listRange = asNonConstRange(list);
             sal_Int32 i=0;
             for(const auto& rEntry : rProduct.mProfileList)
             {
                 const ProfileStruct& rProfile = rEntry.second;
-                list[i] = rProfile.getProfileName();
+                listRange[i] = rProfile.getProfileName();
                 i++;
             }
 

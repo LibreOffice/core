@@ -116,10 +116,7 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
     if (xInfo.is())
         aInfo.lURLPattern = xInfo->getInterceptedURLs();
     else
-    {
-        aInfo.lURLPattern.realloc(1);
-        aInfo.lURLPattern[0] = "*";
-    }
+        aInfo.lURLPattern = { "*" };
 
     // SAFE {
     SolarMutexClearableGuard aWriteLock;

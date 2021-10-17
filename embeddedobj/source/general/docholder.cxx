@@ -62,6 +62,7 @@
 #include <sfx2/strings.hrc>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 
 #include <docholder.hxx>
@@ -110,35 +111,36 @@ static void InsertMenu_Impl( const uno::Reference< container::XIndexContainer >&
     uno::Sequence< beans::PropertyValue > aSourceProps;
     xSourceMenu->getByIndex( nSourceIndex ) >>= aSourceProps;
     uno::Sequence< beans::PropertyValue > aTargetProps( aSourceProps.getLength() );
+    auto aTargetPropsRange = asNonConstRange(aTargetProps);
     for ( nInd = 0; nInd < aSourceProps.getLength(); nInd++ )
     {
-        aTargetProps[nInd].Name = aSourceProps[nInd].Name;
+        aTargetPropsRange[nInd].Name = aSourceProps[nInd].Name;
         if ( !aContModuleName.isEmpty() && aTargetProps[nInd].Name == aModuleIdentPropName )
         {
-            aTargetProps[nInd].Value <<= aContModuleName;
+            aTargetPropsRange[nInd].Value <<= aContModuleName;
             bModuleNameSet = true;
         }
         else if ( aTargetProps[nInd].Name == aDispProvPropName )
         {
-            aTargetProps[nInd].Value <<= xSourceDisp;
+            aTargetPropsRange[nInd].Value <<= xSourceDisp;
             bDispProvSet = true;
         }
         else
-            aTargetProps[nInd].Value = aSourceProps[nInd].Value;
+            aTargetPropsRange[nInd].Value = aSourceProps[nInd].Value;
     }
 
     if ( !bModuleNameSet && !aContModuleName.isEmpty() )
     {
         aTargetProps.realloc( ++nInd );
-        aTargetProps[nInd-1].Name = aModuleIdentPropName;
-        aTargetProps[nInd-1].Value <<= aContModuleName;
+        aTargetProps.getArray()[nInd-1]
+            = comphelper::makePropertyValue(aModuleIdentPropName, aContModuleName);
     }
 
     if ( !bDispProvSet && xSourceDisp.is() )
     {
         aTargetProps.realloc( ++nInd );
-        aTargetProps[nInd-1].Name = aDispProvPropName;
-        aTargetProps[nInd-1].Value <<= xSourceDisp;
+        aTargetProps.getArray()[nInd-1]
+            = comphelper::makePropertyValue(aDispProvPropName, xSourceDisp);
     }
 
     xTargetMenu->insertByIndex( nTargetIndex, uno::makeAny( aTargetProps ) );
@@ -156,17 +158,6 @@ DocumentHolder::DocumentHolder( const uno::Reference< uno::XComponentContext >& 
   m_nNoBorderResizeReact( 0 ),
   m_nNoResizeReact( 0 )
 {
-    m_aOutplaceFrameProps.realloc( 3 );
-    beans::NamedValue aArg;
-
-    aArg.Name = "TopWindow";
-    aArg.Value <<= true;
-    m_aOutplaceFrameProps[0] <<= aArg;
-
-    aArg.Name = "MakeVisible";
-    aArg.Value <<= false;
-    m_aOutplaceFrameProps[1] <<= aArg;
-
     uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( m_xContext );
     osl_atomic_increment(&m_refCount);
     try
@@ -178,9 +169,10 @@ DocumentHolder::DocumentHolder( const uno::Reference< uno::XComponentContext >& 
     }
     osl_atomic_decrement(&m_refCount);
 
-    aArg.Name = "ParentFrame";
-    aArg.Value <<= xDesktop; //TODO/LATER: should use parent document frame
-    m_aOutplaceFrameProps[2] <<= aArg;
+    m_aOutplaceFrameProps = { uno::Any(beans::NamedValue{ "TopWindow", uno::Any(true) }),
+                              uno::Any(beans::NamedValue{ "MakeVisible", uno::Any(false) }),
+                              //TODO/LATER: should use parent document frame
+                              uno::Any(beans::NamedValue{ "ParentFrame", uno::Any(xDesktop) }) };
 }
 
 
@@ -430,26 +422,25 @@ bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& xPar
 
         uno::Reference< awt::XWindowPeer > xNewWinPeer = xToolkit->createWindow( aOwnWinDescriptor );
         uno::Reference< awt::XWindow > xOwnWindow( xNewWinPeer, uno::UNO_QUERY_THROW );
+        uno::Reference< frame::XFrame > xContFrame( xContDisp, uno::UNO_QUERY );
 
         // create a frame based on the specified window
         uno::Reference< lang::XSingleServiceFactory > xFrameFact = frame::TaskCreator::create(m_xContext);
 
-        uno::Sequence< uno::Any > aArgs( 2 );
+        uno::Sequence< uno::Any > aArgs( xContFrame.is() ? 2 : 1 );
+        auto pArgs = aArgs.getArray();
         beans::NamedValue aArg;
 
         aArg.Name    = "ContainerWindow";
         aArg.Value <<= xOwnWindow;
-        aArgs[0] <<= aArg;
+        pArgs[0] <<= aArg;
 
-        uno::Reference< frame::XFrame > xContFrame( xContDisp, uno::UNO_QUERY );
         if ( xContFrame.is() )
         {
             aArg.Name    = "ParentFrame";
             aArg.Value <<= xContFrame;
-            aArgs[1] <<= aArg;
+            pArgs[1] <<= aArg;
         }
-        else
-            aArgs.realloc( 1 );
 
         // the call will create, initialize the frame, and register it in the parent
         m_xFrame.set( xFrameFact->createInstanceWithArguments( aArgs ), uno::UNO_QUERY_THROW );

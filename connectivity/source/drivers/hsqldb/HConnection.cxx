@@ -316,8 +316,9 @@ namespace connectivity::hsqldb
 
             // ask the provider to obtain a graphic
             Sequence< PropertyValue > aMediaProperties( 1 );
-            aMediaProperties[0].Name = "URL";
-            aMediaProperties[0].Value <<= OUString(
+            auto pMediaProperties = aMediaProperties.getArray();
+            pMediaProperties[0].Name = "URL";
+            pMediaProperties[0].Value <<= OUString(
             // load the graphic from the global graphic repository
                 "private:graphicrepository/"
             // the relative path within the images.zip

@@ -150,8 +150,9 @@ TextConversion_ko::getCharConversions(const OUString& aText, sal_Int32 nStartPos
                 const sal_Unicode *ptr = getHangul2HanjaData() + Hangul_ko[current].address;
                 sal_Int16 count = Hangul_ko[current].count;
                 output.realloc(count);
+                auto outputRange = asNonConstRange(output);
                 for (sal_Int16 i = 0; i < count; i++)
-                    output[i] = OUString(ptr + i, 1);
+                    outputRange[i] = OUString(ptr + i, 1);
                 break;
             }
         }
@@ -178,8 +179,7 @@ TextConversion_ko::getCharConversions(const OUString& aText, sal_Int32 nStartPos
         }
         if (count > 0)
         {
-            output.realloc(1);
-            output[0] = OUString(newStr.get(), count);
+            output = { OUString(newStr.get(), count) };
         }
     }
     return output;

@@ -141,12 +141,13 @@ BridgeFactory::getExistingBridges() {
     }
     n = static_cast< sal_Int32 >(n + named_.size());
     css::uno::Sequence< css::uno::Reference< css::bridge::XBridge > > s(n);
+    auto r = asNonConstRange(s);
     sal_Int32 i = 0;
     for (auto const& item : unnamed_)
-        s[i++] = item;
+        r[i++] = item;
 
     for (auto const& item : named_)
-        s[i++] = item.second;
+        r[i++] = item.second;
 
     return s;
 }

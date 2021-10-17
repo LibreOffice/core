@@ -211,27 +211,28 @@ class DemoRenderer
             int nLength = SAL_N_ELEMENTS( hilbert );
 
             uno::Sequence< geometry::RealPoint2D > aPoints( nLength );
+            auto pPoints = aPoints.getArray();
             uno::Reference< rendering::XLinePolyPolygon2D > xPoly;
 
-            aPoints[0] = geometry::RealPoint2D( anchor_x, anchor_y );
+            pPoints[0] = geometry::RealPoint2D( anchor_x, anchor_y );
             for (int i = 0; i < nLength; i++ )
             {
                 switch( hilbert[i] )
                 {
                     case 'u':
-                        aPoints[i+1] = geometry::RealPoint2D( aPoints[i].X,
+                        pPoints[i+1] = geometry::RealPoint2D( aPoints[i].X,
                                                             aPoints[i].Y - SCALE );
                         break;
                     case 'd':
-                        aPoints[i+1] = geometry::RealPoint2D( aPoints[i].X,
+                        pPoints[i+1] = geometry::RealPoint2D( aPoints[i].X,
                                                             aPoints[i].Y + SCALE );
                         break;
                     case 'l':
-                        aPoints[i+1] = geometry::RealPoint2D( aPoints[i].X - SCALE,
+                        pPoints[i+1] = geometry::RealPoint2D( aPoints[i].X - SCALE,
                                                             aPoints[i].Y );
                         break;
                     case 'r':
-                        aPoints[i+1] = geometry::RealPoint2D( aPoints[i].X + SCALE,
+                        pPoints[i+1] = geometry::RealPoint2D( aPoints[i].X + SCALE,
                                                             aPoints[i].Y );
                         break;
                 }
@@ -385,10 +386,11 @@ class DemoRenderer
 
             //hacky hack hack
             uno::Sequence< geometry::RealBezierSegment2D > aBeziers (num_curves);
+            auto pBeziers = aBeziers.getArray();
             uno::Reference< rendering::XBezierPolyPolygon2D > xPoly;
 
             for (int i= 0; i < num_curves; i++)
-                aBeziers[i]= geometry::RealBezierSegment2D( r * cos(i*2*M_PI/num_curves), //Px
+                pBeziers[i]= geometry::RealBezierSegment2D( r * cos(i*2*M_PI/num_curves), //Px
                                                             r * sin(i*2*M_PI/num_curves), //py
                                                             r * 2 * cos((i*2*M_PI + 2*M_PI)/num_curves),  //C1x
                                                             r * 2 * sin((i*2*M_PI + 2*M_PI)/num_curves),  //C1y
@@ -477,11 +479,12 @@ class DemoRenderer
         {
             //hacky hack hack
             uno::Sequence< geometry::RealPoint2D > aPoints (sides);
+            auto pPoints = aPoints.getArray();
             uno::Reference< rendering::XLinePolyPolygon2D > xPoly;
 
             for (int i= 0; i < sides; i++)
             {
-                aPoints[i]= geometry::RealPoint2D( centerx + r * cos(i*2 * M_PI/sides),
+                pPoints[i]= geometry::RealPoint2D( centerx + r * cos(i*2 * M_PI/sides),
                                                    centery + r * sin(i*2 * M_PI/sides));
             }
             uno::Sequence< uno::Sequence< geometry::RealPoint2D > > aPolys { aPoints };

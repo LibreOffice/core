@@ -29,6 +29,7 @@
 #include <com/sun/star/awt/tree/XMutableTreeNode.hpp>
 #include <controls/treecontrolpeer.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
@@ -1387,10 +1388,7 @@ bool TreeControlPeer::loadImage( const OUString& rURL, Image& rImage )
 
     try
     {
-        css::beans::PropertyValues aProps( 1 );
-        aProps[0].Name = "URL";
-        aProps[0].Value <<= rURL;
-
+        css::beans::PropertyValues aProps({ comphelper::makePropertyValue("URL", rURL) });
         Reference< XGraphic > xGraphic( mxGraphicProvider->queryGraphic( aProps ) );
 
         Graphic aGraphic( xGraphic );

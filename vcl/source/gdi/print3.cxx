@@ -20,6 +20,7 @@
 #include <sal/types.h>
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
@@ -1456,12 +1457,13 @@ css::uno::Sequence< css::beans::PropertyValue > PrinterController::getJobPropert
         aMergeSet.insert( rPropVal.Name );
 
     css::uno::Sequence< css::beans::PropertyValue > aResult( nResultLen );
-    std::copy(i_rMergeList.begin(), i_rMergeList.end(), aResult.getArray());
+    auto pResult = aResult.getArray();
+    std::copy(i_rMergeList.begin(), i_rMergeList.end(), pResult);
     int nCur = i_rMergeList.getLength();
     for(const css::beans::PropertyValue & rPropVal : mpImplData->maUIProperties)
     {
         if( aMergeSet.find( rPropVal.Name ) == aMergeSet.end() )
-            aResult[nCur++] = rPropVal;
+            pResult[nCur++] = rPropVal;
     }
     // append IsFirstPage
     if( aMergeSet.find( "IsFirstPage" ) == aMergeSet.end() )
@@ -1469,7 +1471,7 @@ css::uno::Sequence< css::beans::PropertyValue > PrinterController::getJobPropert
         css::beans::PropertyValue aVal;
         aVal.Name = "IsFirstPage";
         aVal.Value <<= mpImplData->mbFirstPage;
-        aResult[nCur++] = aVal;
+        pResult[nCur++] = aVal;
     }
     // append IsLastPage
     if( aMergeSet.find( "IsLastPage" ) == aMergeSet.end() )
@@ -1477,7 +1479,7 @@ css::uno::Sequence< css::beans::PropertyValue > PrinterController::getJobPropert
         css::beans::PropertyValue aVal;
         aVal.Name = "IsLastPage";
         aVal.Value <<= mpImplData->mbLastPage;
-        aResult[nCur++] = aVal;
+        pResult[nCur++] = aVal;
     }
     // append IsPrinter
     if( aMergeSet.find( "IsPrinter" ) == aMergeSet.end() )
@@ -1485,7 +1487,7 @@ css::uno::Sequence< css::beans::PropertyValue > PrinterController::getJobPropert
         css::beans::PropertyValue aVal;
         aVal.Name = "IsPrinter";
         aVal.Value <<= true;
-        aResult[nCur++] = aVal;
+        pResult[nCur++] = aVal;
     }
     aResult.realloc( nCur );
     return aResult;
@@ -1880,10 +1882,9 @@ void PrinterOptionsHelper::appendPrintUIOptions( css::uno::Sequence< css::beans:
     {
         sal_Int32 nIndex = io_rProps.getLength();
         io_rProps.realloc( nIndex+1 );
-        css::beans::PropertyValue aVal;
-        aVal.Name = "ExtraPrintUIOptions";
-        aVal.Value <<= comphelper::containerToSequence(m_aUIProperties);
-        io_rProps[ nIndex ] = aVal;
+        css::beans::PropertyValue aVal = comphelper::makePropertyValue(
+            "ExtraPrintUIOptions", comphelper::containerToSequence(m_aUIProperties));
+        io_rProps.getArray()[ nIndex ] = aVal;
     }
 }
 

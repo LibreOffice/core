@@ -121,9 +121,7 @@ static bool writeOasis2OOoLibraryElement(
 
     xWriter->setOutputStream( xOutput );
 
-    Sequence<Any> aArgs( 1 );
-    aArgs[0] <<= xWriter;
-
+    Sequence<Any> aArgs({ Any(xWriter) });
     Reference< xml::sax::XDocumentHandler > xHandler(
         xSMgr->createInstanceWithArgumentsAndContext(
             "com.sun.star.comp.Oasis2OOoTransformer",

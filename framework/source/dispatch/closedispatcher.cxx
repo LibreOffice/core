@@ -101,16 +101,16 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL CloseDispatcher::
         /* Attention: Don't add .uno:CloseFrame here. Because it's not really
                       a configurable feature ... and further it does not have
                       a valid UIName entry inside the GenericCommands.xcu ... */
-        css::uno::Sequence< css::frame::DispatchInformation > lViewInfos(1);
-        lViewInfos[0].Command = URL_CLOSEWIN;
-        lViewInfos[0].GroupId = css::frame::CommandGroup::VIEW;
+        css::uno::Sequence< css::frame::DispatchInformation > lViewInfos(
+            { { URL_CLOSEWIN,
+                css::frame::CommandGroup::VIEW } });
         return lViewInfos;
     }
     else if (nCommandGroup == css::frame::CommandGroup::DOCUMENT)
     {
-        css::uno::Sequence< css::frame::DispatchInformation > lDocInfos(1);
-        lDocInfos[0].Command = URL_CLOSEDOC;
-        lDocInfos[0].GroupId = css::frame::CommandGroup::DOCUMENT;
+        css::uno::Sequence< css::frame::DispatchInformation > lDocInfos(
+            { { URL_CLOSEDOC,
+                css::frame::CommandGroup::DOCUMENT } });
         return lDocInfos;
     }
 

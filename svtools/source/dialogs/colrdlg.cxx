@@ -26,6 +26,7 @@
 #include <com/sun/star/cui/ColorPicker.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <svtools/colrdlg.hxx>
 #include <svtools/dialogclosedlistener.hxx>
@@ -71,11 +72,9 @@ short SvColorDialog::Execute(weld::Window* pParent)
         Reference< XExecutableDialog > xDialog = css::cui::ColorPicker::createWithParent(xContext, xParent);
         Reference< XPropertyAccess > xPropertyAccess( xDialog, UNO_QUERY_THROW );
 
-        Sequence< PropertyValue > props( 2 );
-        props[0].Name = OUString( sColor );
-        props[0].Value <<= maColor;
-        props[1].Name = "Mode";
-        props[1].Value <<= static_cast<sal_Int16>(meMode);
+        Sequence< PropertyValue > props(
+            { comphelper::makePropertyValue(OUString( sColor ), maColor),
+              comphelper::makePropertyValue("Mode", static_cast<sal_Int16>(meMode)) });
 
         xPropertyAccess->setPropertyValues( props );
 
@@ -116,11 +115,9 @@ void SvColorDialog::ExecuteAsync(weld::Window* pParent, const std::function<void
         mxDialog = css::cui::AsynchronousColorPicker::createWithParent(xContext, xParent);
         Reference< XPropertyAccess > xPropertyAccess( mxDialog, UNO_QUERY_THROW );
 
-        Sequence< PropertyValue > props( 2 );
-        props[0].Name = OUString( sColor );
-        props[0].Value <<= maColor;
-        props[1].Name = "Mode";
-        props[1].Value <<= static_cast<sal_Int16>(meMode);
+        Sequence< PropertyValue > props(
+            { comphelper::makePropertyValue(OUString( sColor ), maColor),
+              comphelper::makePropertyValue("Mode", static_cast<sal_Int16>(meMode)) });
 
         xPropertyAccess->setPropertyValues( props );
 

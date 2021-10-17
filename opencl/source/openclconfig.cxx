@@ -55,11 +55,11 @@ namespace {
 css::uno::Sequence<OUString> SetOfImplMatcherToStringSequence(const OpenCLConfig::ImplMatcherSet& rSet)
 {
     css::uno::Sequence<OUString> result(rSet.size());
-
+    auto resultRange = asNonConstRange(result);
     size_t n(0);
     for (const auto& rItem : rSet)
     {
-        result[n++] =
+        resultRange[n++] =
             rItem.maOS.replaceAll("%", "%25").replaceAll("/", "%2F").replaceAll(";", "%3B") + "/" +
             rItem.maOSVersion.replaceAll("%", "%25").replaceAll("/", "%2F").replaceAll(";", "%3B") + "/" +
             rItem.maPlatformVendor.replaceAll("%", "%25").replaceAll("/", "%2F").replaceAll(";", "%3B") + "/" +

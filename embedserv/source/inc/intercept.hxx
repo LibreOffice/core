@@ -136,7 +136,7 @@ private:
 
     css::uno::Reference< css::frame::XDispatchProvider > m_xMasterDispatchProvider;
 
-    static css::uno::Sequence< OUString > m_aInterceptedURL;
+    static const css::uno::Sequence< OUString > m_aInterceptedURL;
 
     comphelper::OInterfaceContainerHelper2*    m_pDisposeEventListeners;
     StatusChangeListenerContainer*      m_pStatCL;

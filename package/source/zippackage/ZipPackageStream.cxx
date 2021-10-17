@@ -284,8 +284,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
         // create a package based on it
         rtl::Reference<ZipPackage> pPackage = new ZipPackage( m_xContext );
 
-        Sequence< Any > aArgs( 1 );
-        aArgs[0] <<= xTempStream;
+        Sequence< Any > aArgs({ Any(xTempStream) });
         pPackage->initialize( aArgs );
 
         // create a new package stream
@@ -471,12 +470,13 @@ bool ZipPackageStream::saveChild(
     const bool bToBeEncrypted = m_bToBeEncrypted && (rEncryptionKey.hasElements() || m_bHaveOwnKey);
     const bool bToBeCompressed = bToBeEncrypted || m_bToBeCompressed;
 
-    aPropSet[PKG_MNFST_MEDIATYPE].Name = "MediaType";
-    aPropSet[PKG_MNFST_MEDIATYPE].Value <<= GetMediaType( );
-    aPropSet[PKG_MNFST_VERSION].Name = "Version";
-    aPropSet[PKG_MNFST_VERSION].Value <<= OUString(); // no version is stored for streams currently
-    aPropSet[PKG_MNFST_FULLPATH].Name = "FullPath";
-    aPropSet[PKG_MNFST_FULLPATH].Value <<= pTempEntry->sPath;
+    auto pPropSet = aPropSet.getArray();
+    pPropSet[PKG_MNFST_MEDIATYPE].Name = "MediaType";
+    pPropSet[PKG_MNFST_MEDIATYPE].Value <<= GetMediaType( );
+    pPropSet[PKG_MNFST_VERSION].Name = "Version";
+    pPropSet[PKG_MNFST_VERSION].Value <<= OUString(); // no version is stored for streams currently
+    pPropSet[PKG_MNFST_FULLPATH].Name = "FullPath";
+    pPropSet[PKG_MNFST_FULLPATH].Value <<= pTempEntry->sPath;
 
     OSL_ENSURE( m_nStreamMode != PACKAGE_STREAM_NOTSET, "Unacceptable ZipPackageStream mode!" );
 
@@ -597,18 +597,18 @@ bool ZipPackageStream::saveChild(
             // last property is digest, which is inserted later if we didn't have
             // a magic header
             aPropSet.realloc(PKG_SIZE_ENCR_MNFST);
-
-            aPropSet[PKG_MNFST_INIVECTOR].Name = "InitialisationVector";
-            aPropSet[PKG_MNFST_INIVECTOR].Value <<= m_xBaseEncryptionData->m_aInitVector;
-            aPropSet[PKG_MNFST_SALT].Name = "Salt";
-            aPropSet[PKG_MNFST_SALT].Value <<= m_xBaseEncryptionData->m_aSalt;
-            aPropSet[PKG_MNFST_ITERATION].Name = "IterationCount";
-            aPropSet[PKG_MNFST_ITERATION].Value <<= m_xBaseEncryptionData->m_nIterationCount;
+            pPropSet = aPropSet.getArray();
+            pPropSet[PKG_MNFST_INIVECTOR].Name = "InitialisationVector";
+            pPropSet[PKG_MNFST_INIVECTOR].Value <<= m_xBaseEncryptionData->m_aInitVector;
+            pPropSet[PKG_MNFST_SALT].Name = "Salt";
+            pPropSet[PKG_MNFST_SALT].Value <<= m_xBaseEncryptionData->m_aSalt;
+            pPropSet[PKG_MNFST_ITERATION].Name = "IterationCount";
+            pPropSet[PKG_MNFST_ITERATION].Value <<= m_xBaseEncryptionData->m_nIterationCount;
 
             // Need to store the uncompressed size in the manifest
             OSL_ENSURE( m_nOwnStreamOrigSize >= 0, "The stream size was not correctly initialized!" );
-            aPropSet[PKG_MNFST_UCOMPSIZE].Name = "Size";
-            aPropSet[PKG_MNFST_UCOMPSIZE].Value <<= m_nOwnStreamOrigSize;
+            pPropSet[PKG_MNFST_UCOMPSIZE].Name = "Size";
+            pPropSet[PKG_MNFST_UCOMPSIZE].Value <<= m_nOwnStreamOrigSize;
 
             if ( m_bRawStream || bTransportOwnEncrStreamAsRaw )
             {
@@ -616,16 +616,16 @@ bool ZipPackageStream::saveChild(
                 if ( !xEncData.is() )
                     throw uno::RuntimeException();
 
-                aPropSet[PKG_MNFST_DIGEST].Name = sDigestProperty;
-                aPropSet[PKG_MNFST_DIGEST].Value <<= m_xBaseEncryptionData->m_aDigest;
-                aPropSet[PKG_MNFST_ENCALG].Name = sEncryptionAlgProperty;
-                aPropSet[PKG_MNFST_ENCALG].Value <<= xEncData->m_nEncAlg;
-                aPropSet[PKG_MNFST_STARTALG].Name = sStartKeyAlgProperty;
-                aPropSet[PKG_MNFST_STARTALG].Value <<= xEncData->m_nStartKeyGenID;
-                aPropSet[PKG_MNFST_DIGESTALG].Name = sDigestAlgProperty;
-                aPropSet[PKG_MNFST_DIGESTALG].Value <<= xEncData->m_nCheckAlg;
-                aPropSet[PKG_MNFST_DERKEYSIZE].Name = sDerivedKeySizeProperty;
-                aPropSet[PKG_MNFST_DERKEYSIZE].Value <<= xEncData->m_nDerivedKeySize;
+                pPropSet[PKG_MNFST_DIGEST].Name = sDigestProperty;
+                pPropSet[PKG_MNFST_DIGEST].Value <<= m_xBaseEncryptionData->m_aDigest;
+                pPropSet[PKG_MNFST_ENCALG].Name = sEncryptionAlgProperty;
+                pPropSet[PKG_MNFST_ENCALG].Value <<= xEncData->m_nEncAlg;
+                pPropSet[PKG_MNFST_STARTALG].Name = sStartKeyAlgProperty;
+                pPropSet[PKG_MNFST_STARTALG].Value <<= xEncData->m_nStartKeyGenID;
+                pPropSet[PKG_MNFST_DIGESTALG].Name = sDigestAlgProperty;
+                pPropSet[PKG_MNFST_DIGESTALG].Value <<= xEncData->m_nCheckAlg;
+                pPropSet[PKG_MNFST_DERKEYSIZE].Name = sDerivedKeySizeProperty;
+                pPropSet[PKG_MNFST_DERKEYSIZE].Value <<= xEncData->m_nDerivedKeySize;
             }
         }
     }
@@ -807,16 +807,16 @@ bool ZipPackageStream::saveChild(
             if ( !xEncData.is() )
                 throw uno::RuntimeException();
 
-            aPropSet[PKG_MNFST_DIGEST].Name = sDigestProperty;
-            aPropSet[PKG_MNFST_DIGEST].Value <<= m_xBaseEncryptionData->m_aDigest;
-            aPropSet[PKG_MNFST_ENCALG].Name = sEncryptionAlgProperty;
-            aPropSet[PKG_MNFST_ENCALG].Value <<= xEncData->m_nEncAlg;
-            aPropSet[PKG_MNFST_STARTALG].Name = sStartKeyAlgProperty;
-            aPropSet[PKG_MNFST_STARTALG].Value <<= xEncData->m_nStartKeyGenID;
-            aPropSet[PKG_MNFST_DIGESTALG].Name = sDigestAlgProperty;
-            aPropSet[PKG_MNFST_DIGESTALG].Value <<= xEncData->m_nCheckAlg;
-            aPropSet[PKG_MNFST_DERKEYSIZE].Name = sDerivedKeySizeProperty;
-            aPropSet[PKG_MNFST_DERKEYSIZE].Value <<= xEncData->m_nDerivedKeySize;
+            pPropSet[PKG_MNFST_DIGEST].Name = sDigestProperty;
+            pPropSet[PKG_MNFST_DIGEST].Value <<= m_xBaseEncryptionData->m_aDigest;
+            pPropSet[PKG_MNFST_ENCALG].Name = sEncryptionAlgProperty;
+            pPropSet[PKG_MNFST_ENCALG].Value <<= xEncData->m_nEncAlg;
+            pPropSet[PKG_MNFST_STARTALG].Name = sStartKeyAlgProperty;
+            pPropSet[PKG_MNFST_STARTALG].Value <<= xEncData->m_nStartKeyGenID;
+            pPropSet[PKG_MNFST_DIGESTALG].Name = sDigestAlgProperty;
+            pPropSet[PKG_MNFST_DIGESTALG].Value <<= xEncData->m_nCheckAlg;
+            pPropSet[PKG_MNFST_DERKEYSIZE].Name = sDerivedKeySizeProperty;
+            pPropSet[PKG_MNFST_DERKEYSIZE].Value <<= xEncData->m_nDerivedKeySize;
 
             SetIsEncrypted ( true );
         }

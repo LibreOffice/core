@@ -481,13 +481,15 @@ SvtFileDialog::~SvtFileDialog()
 
     const std::vector<PlacePtr> aPlaces = m_xImpl->m_xPlaces->GetPlaces();
     Sequence< OUString > placesUrlsList(m_xImpl->m_xPlaces->GetNbEditablePlaces());
+    auto placesUrlsListRange = asNonConstRange(placesUrlsList);
     Sequence< OUString > placesNamesList(m_xImpl->m_xPlaces->GetNbEditablePlaces());
+    auto placesNamesListRange = asNonConstRange(placesNamesList);
     int i(0);
     for (auto const& place : aPlaces)
     {
         if(place->IsEditable()) {
-            placesUrlsList[i] = place->GetUrl();
-            placesNamesList[i] = place->GetName();
+            placesUrlsListRange[i] = place->GetUrl();
+            placesNamesListRange[i] = place->GetName();
             ++i;
         }
     }
@@ -1388,12 +1390,12 @@ void SvtFileDialog::displayIOException( const OUString& _rURL, IOErrorCode _eCod
 
         // build an own exception which tells "access denied"
         InteractiveAugmentedIOException aException;
-        aException.Arguments.realloc( 2 );
-        aException.Arguments[ 0 ] <<= sDisplayPath;
-        aException.Arguments[ 1 ] <<= PropertyValue(
+        aException.Arguments =
+        { css::uno::Any(sDisplayPath),
+          css::uno::Any(PropertyValue(
             "Uri",
             -1, aException.Arguments[ 0 ], PropertyState_DIRECT_VALUE
-        );
+          )) };
             // (formerly, it was sufficient to put the URL first parameter. Nowadays,
             // the services expects the URL in a PropertyValue named "Uri" ...)
         aException.Code = _eCode;

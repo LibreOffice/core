@@ -39,6 +39,7 @@
 #include "platform.h"
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -201,9 +202,8 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
         if ( osl::FileBase::getFileURLFromSystemPath( aFileName, aFileURL ) != osl::FileBase::E_None )
             throw uno::RuntimeException();
 
-        uno::Sequence< beans::PropertyValue > aMediaDescr( 1 );
-        aMediaDescr[0].Name = "URL";
-        aMediaDescr[0].Value <<= aFileURL;
+        uno::Sequence< beans::PropertyValue > aMediaDescr(
+            { comphelper::makePropertyValue("URL", aFileURL) });
 
         // TODO: use config helper for type detection
         uno::Reference< embed::XEmbeddedObjectCreator > xEmbCreator;
@@ -266,11 +266,8 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
                     "Image WMF",
                     cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
 
-                aObjectInfo.Options.realloc( 2 );
-                aObjectInfo.Options[0].Name = "Icon";
-                aObjectInfo.Options[0].Value <<= aMetafile;
-                aObjectInfo.Options[1].Name = "IconFormat";
-                aObjectInfo.Options[1].Value <<= aFlavor;
+                aObjectInfo.Options = { { "Icon", css::uno::Any(aMetafile) },
+                                        { "IconFormat", css::uno::Any(aFlavor) } };
             }
 
             GlobalUnlock( io.hMetaPict );

@@ -126,11 +126,11 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Disp
     // It's not allowed to pack it!
     sal_Int32                                                          nCount     = lDescriptions.getLength();
     css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
-
+    auto lDispatcherRange = asNonConstRange(lDispatcher);
     // Step over all descriptors and try to get any dispatcher for it.
     for( sal_Int32 i=0; i<nCount; ++i )
     {
-        lDispatcher[i] = queryDispatch( lDescriptions[i].FeatureURL  ,
+        lDispatcherRange[i] = queryDispatch( lDescriptions[i].FeatureURL  ,
                                         lDescriptions[i].FrameName   ,
                                         lDescriptions[i].SearchFlags );
     }
@@ -460,8 +460,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
                     try
                     {
                         // but do it only, if all context information is OK
-                        css::uno::Sequence< css::uno::Any > lContext(1);
-                        lContext[0] <<= xOwner;
+                        css::uno::Sequence< css::uno::Any > lContext({ css::uno::Any(xOwner) });
                         xInit->initialize(lContext);
                     }
                     catch(const css::uno::Exception&) {}
