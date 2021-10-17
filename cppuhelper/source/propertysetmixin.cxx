@@ -220,7 +220,7 @@ void Data::initProperties(
                     break;
                 }
                 attrAttribs |= n;
-                css::uno::Sequence<
+                const css::uno::Sequence<
                 css::uno::Reference< css::reflection::XTypeDescription > >
                     args(
                         css::uno::Reference<
@@ -291,11 +291,12 @@ css::uno::Sequence< css::beans::Property > Info::getProperties()
     assert(m_data->properties.size() <= SAL_MAX_INT32);
     css::uno::Sequence< css::beans::Property > s(
         static_cast< sal_Int32 >(m_data->properties.size()));
+    auto r = asNonConstRange(s);
     sal_Int32 n = 0;
     for (const auto& rEntry : m_data->properties)
     {
         if (rEntry.second.present) {
-            s[n++] = rEntry.second.property;
+            r[n++] = rEntry.second.property;
         }
     }
     s.realloc(n);
@@ -1093,12 +1094,13 @@ PropertySetMixinImpl::getPropertyValues()
 {
     css::uno::Sequence< css::beans::PropertyValue > s(
         m_impl->handleMap.getLength());
+    auto r = asNonConstRange(s);
     sal_Int32 n = 0;
     for (sal_Int32 i = 0; i < m_impl->handleMap.getLength(); ++i) {
         try {
-            s[n].Value = m_impl->getProperty(
+            r[n].Value = m_impl->getProperty(
                 static_cast< css::beans::XPropertySet * >(this),
-                m_impl->handleMap[i], &s[n].State);
+                m_impl->handleMap[i], &r[n].State);
         } catch (css::beans::UnknownPropertyException &) {
             continue;
         } catch (css::lang::WrappedTargetException & e) {
@@ -1106,8 +1108,8 @@ PropertySetMixinImpl::getPropertyValues()
                 e.Message, static_cast< css::beans::XPropertySet * >(this),
                 e.TargetException);
         }
-        s[n].Name = m_impl->handleMap[i];
-        s[n].Handle = i;
+        r[n].Name = m_impl->handleMap[i];
+        r[n].Handle = i;
         ++n;
     }
     s.realloc(n);

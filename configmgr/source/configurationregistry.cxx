@@ -246,8 +246,8 @@ void Service::open(OUString const & rURL, sal_Bool bReadOnly, sal_Bool)
     if (access_.is()) {
         doClose();
     }
-    css::uno::Sequence< css::uno::Any > args(1);
-    args[0] <<= css::beans::NamedValue("nodepath", css::uno::Any(rURL));
+    css::uno::Sequence< css::uno::Any > args{ css::uno::Any(
+        css::beans::NamedValue("nodepath", css::uno::Any(rURL))) };
     try {
         access_ = provider_->createInstanceWithArguments(
             (bReadOnly

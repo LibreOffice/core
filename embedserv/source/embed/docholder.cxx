@@ -60,6 +60,7 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <rtl/process.h>
@@ -111,22 +112,22 @@ void DocumentHolder::LoadDocInFrame( bool bPluginMode )
         uno::Reference< task::XInteractionHandler2 > xHandler(
             task::InteractionHandler::createWithParent(comphelper::getComponentContext(m_xFactory), nullptr) );
 
-        sal_Int32 nLen = 3;
+        sal_Int32 nLen = bPluginMode ? 6 : 5;
         uno::Sequence<beans::PropertyValue> aSeq( nLen );
-
-        aSeq[0] = beans::PropertyValue(
+        auto pSeq = aSeq.getArray();
+        pSeq[0] = beans::PropertyValue(
             "Model",
             -1,
             uno::Any(uno::Reference<uno::XInterface>(m_xDocument, uno::UNO_QUERY)),
             beans::PropertyState_DIRECT_VALUE);
 
-        aSeq[1] = beans::PropertyValue(
+        pSeq[1] = beans::PropertyValue(
             "ReadOnly",
             -1,
             uno::Any(false),
             beans::PropertyState_DIRECT_VALUE);
 
-        aSeq[2] = beans::PropertyValue(
+        pSeq[2] = beans::PropertyValue(
             "NoAutoSave",
             -1,
             uno::Any(true),
@@ -134,22 +135,20 @@ void DocumentHolder::LoadDocInFrame( bool bPluginMode )
 
         if ( bPluginMode )
         {
-            aSeq.realloc( ++nLen );
-            aSeq[nLen-1] = beans::PropertyValue(
+            pSeq[3] = beans::PropertyValue(
                 "PluginMode",
                 -1,
                 uno::Any(sal_Int16(3)),
                 beans::PropertyState_DIRECT_VALUE);
         }
 
-        aSeq.realloc( nLen+=2 );
-        aSeq[nLen-2] = beans::PropertyValue(
+        pSeq[nLen-2] = beans::PropertyValue(
             "InteractionHandler",
             -1,
             uno::Any(xHandler),
             beans::PropertyState_DIRECT_VALUE);
 
-        aSeq[nLen-1] = beans::PropertyValue(
+        pSeq[nLen-1] = beans::PropertyValue(
             "MacroExecutionMode",
             -1,
             uno::Any(m_nMacroExecMode),
@@ -701,9 +700,8 @@ void DocumentHolder::SetDocument( const uno::Reference< frame::XModel >& xDoc, b
     if ( m_xDocument.is() && !m_bLink )
     {
         // set the document mode to embedded
-        uno::Sequence< beans::PropertyValue > aSeq(1);
-        aSeq[0].Name = "SetEmbedded";
-        aSeq[0].Value <<= true;
+        uno::Sequence< beans::PropertyValue > aSeq{ comphelper::makePropertyValue("SetEmbedded",
+                                                                                  true) };
         m_xDocument->attachResource(OUString(),aSeq);
     }
 }

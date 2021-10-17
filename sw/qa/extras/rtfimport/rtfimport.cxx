@@ -937,7 +937,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128611)
     auto aPolyPolySequence
         = getProperty<uno::Sequence<uno::Sequence<awt::Point>>>(getShape(1), "PolyPolygon");
     CPPUNIT_ASSERT(aPolyPolySequence.hasElements());
-    uno::Sequence<awt::Point>& rPolygon = aPolyPolySequence[0];
+    const uno::Sequence<awt::Point>& rPolygon = aPolyPolySequence[0];
     CPPUNIT_ASSERT_GREATER(static_cast<sal_uInt32>(1), rPolygon.size());
     sal_Int32 nY1 = rPolygon[0].Y;
     sal_Int32 nY2 = rPolygon[1].Y;
@@ -1336,7 +1336,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf90097)
     uno::Reference<beans::XPropertySet> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
     uno::Sequence<uno::Sequence<awt::Point>> aPolyPolySequence;
     xShape->getPropertyValue("PolyPolygon") >>= aPolyPolySequence;
-    uno::Sequence<awt::Point>& rPolygon = aPolyPolySequence[0];
+    const uno::Sequence<awt::Point>& rPolygon = aPolyPolySequence[0];
 
     // Vertical flip for the line shape was ignored, so Y coordinates were swapped.
     CPPUNIT_ASSERT(rPolygon[0].Y > rPolygon[1].Y);

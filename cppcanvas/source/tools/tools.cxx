@@ -27,13 +27,12 @@ namespace cppcanvas::tools
 {
         uno::Sequence< double > intSRGBAToDoubleSequence( IntSRGBA aColor  )
         {
-            uno::Sequence< double > aRes( 4 );
-
-            aRes[0] = getRed(aColor) / 255.0;
-            aRes[1] = getGreen(aColor) / 255.0;
-            aRes[2] = getBlue(aColor) / 255.0;
-            aRes[3] = getAlpha(aColor) / 255.0;
-
+            uno::Sequence< double > aRes{
+                getRed(aColor) / 255.0,
+                getGreen(aColor) / 255.0,
+                getBlue(aColor) / 255.0,
+                getAlpha(aColor) / 255.0
+            };
             return aRes;
         }
 

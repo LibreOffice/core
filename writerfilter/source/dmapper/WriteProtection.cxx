@@ -19,6 +19,8 @@
 
 #include "WriteProtection.hxx"
 #include "TagLogger.hxx"
+
+#include <comphelper/propertyvalue.hxx>
 #include <ooxml/resourceids.hxx>
 
 using namespace com::sun::star;
@@ -124,15 +126,10 @@ uno::Sequence<beans::PropertyValue> WriteProtection::toSequence() const
     if (!m_sAlgorithmName.isEmpty() && !m_sSalt.isEmpty() && !m_sHash.isEmpty()
         && m_sCryptAlgorithmClass == "hash" && m_sCryptAlgorithmType == "typeAny")
     {
-        aResult.realloc(4);
-        aResult[0].Name = "algorithm-name";
-        aResult[0].Value <<= m_sAlgorithmName;
-        aResult[1].Name = "salt";
-        aResult[1].Value <<= m_sSalt;
-        aResult[2].Name = "iteration-count";
-        aResult[2].Value <<= m_CryptSpinCount;
-        aResult[3].Name = "hash";
-        aResult[3].Value <<= m_sHash;
+        aResult = { comphelper::makePropertyValue("algorithm-name", m_sAlgorithmName),
+                    comphelper::makePropertyValue("salt", m_sSalt),
+                    comphelper::makePropertyValue("iteration-count", m_CryptSpinCount),
+                    comphelper::makePropertyValue("hash", m_sHash) };
     }
 
     return aResult;

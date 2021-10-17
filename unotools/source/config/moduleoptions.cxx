@@ -126,31 +126,32 @@ struct FactoryInfo
             // b) add names and values of changed ones only and count it
             // c) resize return list by using count
             css::uno::Sequence< css::beans::PropertyValue > lProperties   ( 4 );
+            auto plProperties = lProperties.getArray();
             sal_Int8                                        nRealyChanged = 0;
 
             if( bChangedTemplateFile )
             {
-                lProperties[nRealyChanged].Name
+                plProperties[nRealyChanged].Name
                     = OUString::Concat(sNodeBase) + PROPERTYNAME_TEMPLATEFILE;
 
                 if ( !sTemplateFile.isEmpty() )
                 {
-                    lProperties[nRealyChanged].Value
+                    plProperties[nRealyChanged].Value
                         <<= getStringSubstitution()
                             ->reSubstituteVariables( sTemplateFile );
                 }
                 else
                 {
-                    lProperties[nRealyChanged].Value <<= sTemplateFile;
+                    plProperties[nRealyChanged].Value <<= sTemplateFile;
                 }
 
                 ++nRealyChanged;
             }
             if( bChangedDefaultFilter )
             {
-                lProperties[nRealyChanged].Name
+                plProperties[nRealyChanged].Name
                     = OUString::Concat(sNodeBase) + PROPERTYNAME_DEFAULTFILTER;
-                lProperties[nRealyChanged].Value <<= sDefaultFilter;
+                plProperties[nRealyChanged].Value <<= sDefaultFilter;
                 ++nRealyChanged;
             }
 

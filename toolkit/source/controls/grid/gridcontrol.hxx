@@ -69,8 +69,8 @@ public:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         auto s(UnoControlModel::getSupportedServiceNames());
-        s.realloc(s.getLength() + 1);
-        s[s.getLength() - 1] = "com.sun.star.awt.grid.UnoControlGridModel";
+        auto ps = s.realloc(s.getLength() + 1);
+        ps[s.getLength() - 1] = "com.sun.star.awt.grid.UnoControlGridModel";
         return s;
     }
 };
@@ -120,8 +120,8 @@ public:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         auto s(UnoControlBase::getSupportedServiceNames());
-        s.realloc(s.getLength() + 1);
-        s[s.getLength() - 1] = "com.sun.star.awt.grid.UnoControlGrid";
+        auto ps = s.realloc(s.getLength() + 1);
+        ps[s.getLength() - 1] = "com.sun.star.awt.grid.UnoControlGrid";
         return s;
     }
 

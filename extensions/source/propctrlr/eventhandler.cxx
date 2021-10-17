@@ -51,6 +51,7 @@
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/evtmethodhelper.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -375,11 +376,10 @@ namespace pcr
     {
         ScriptEventDescriptor aDescriptor( impl_getDescriptor_throw( _rName ) );
 
-        Sequence< PropertyValue > aScriptDescriptor( 2 );
-        aScriptDescriptor[0].Name = "EventType";
-        aScriptDescriptor[0].Value <<= aDescriptor.ScriptType;
-        aScriptDescriptor[1].Name = "Script";
-        aScriptDescriptor[1].Value <<= aDescriptor.ScriptCode;
+        Sequence< PropertyValue > aScriptDescriptor{
+            comphelper::makePropertyValue("EventType", aDescriptor.ScriptType),
+            comphelper::makePropertyValue("Script", aDescriptor.ScriptCode)
+        };
 
         return makeAny( aScriptDescriptor );
     }

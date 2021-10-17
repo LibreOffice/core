@@ -844,13 +844,12 @@ void PivotChartTest::testPivotChartRowFieldInOutlineMode()
     }
 
     sheet::DataPilotFieldLayoutInfo aLayoutInfoValue;
-    uno::Sequence<sheet::GeneralFunction> aGeneralFunctionSequence(1);
 
     // Test case where we enable subtotals (auto) and set the outline subtotals at the bottom
     // We don't expect any change in data as every extra subtotal row should be ignored
 
     // Enable subtotals - set to auto
-    aGeneralFunctionSequence[0] = sheet::GeneralFunction_AUTO;
+    uno::Sequence<sheet::GeneralFunction> aGeneralFunctionSequence{ sheet::GeneralFunction_AUTO };
     lclModifySubtotals(xDataPilotDescriptor, u"Country", aGeneralFunctionSequence);
     // Set Subtotals layout to bottom + add empty lines
     aLayoutInfoValue.AddEmptyLines = true;
@@ -879,7 +878,7 @@ void PivotChartTest::testPivotChartRowFieldInOutlineMode()
     // We don't expect any change in data as every extra subtotal row should be ignored
 
     // Enable subtotals - set to auto
-    aGeneralFunctionSequence[0] = sheet::GeneralFunction_AUTO;
+    aGeneralFunctionSequence.getArray()[0] = sheet::GeneralFunction_AUTO;
     lclModifySubtotals(xDataPilotDescriptor, u"Country", aGeneralFunctionSequence);
     // Set Subtotals layout to top + add empty lines
     aLayoutInfoValue.AddEmptyLines = true;

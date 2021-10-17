@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <algorithm>
 #include <memory>
 #include <config_features.h>
 
@@ -62,6 +65,7 @@
 #include <comphelper/multicontainer2.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <o3tl/safeint.hxx>
@@ -379,8 +383,8 @@ SfxOwnFramesLocker::SfxOwnFramesLocker( SfxObjectShell const * pObjectShell )
                 try
                 {
                     sal_Int32 nLen = m_aLockedFrames.getLength();
-                    m_aLockedFrames.realloc( nLen + 1 );
-                    m_aLockedFrames[nLen] = xFrame;
+                    auto pLockedFrames = m_aLockedFrames.realloc( nLen + 1 );
+                    pLockedFrames[nLen] = xFrame;
                 }
                 catch( Exception& )
                 {
@@ -982,18 +986,18 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs2(const Sequence<
                 o3tl::narrowing<int>(aTmpRect.IsHeightEmpty() ? aTmpRect.Top() : aTmpRect.Bottom())
             };
 
-            seqArgsNew.realloc( ++nNewLength );
-            seqArgsNew[ nNewLength - 1 ].Name = "WinExtent";
-            seqArgsNew[ nNewLength - 1 ].Value <<= aRectSeq;
+            auto pseqArgsNew = seqArgsNew.realloc( ++nNewLength );
+            pseqArgsNew[ nNewLength - 1 ].Name = "WinExtent";
+            pseqArgsNew[ nNewLength - 1 ].Value <<= aRectSeq;
         }
 
         if (requestedArgs.empty() || requestedArgs.count(u"PreusedFilterName"))
         {
             if ( !m_pData->m_aPreusedFilterName.isEmpty() )
             {
-                seqArgsNew.realloc( ++nNewLength );
-                seqArgsNew[ nNewLength - 1 ].Name = "PreusedFilterName";
-                seqArgsNew[ nNewLength - 1 ].Value <<= m_pData->m_aPreusedFilterName;
+                auto pseqArgsNew = seqArgsNew.realloc( ++nNewLength );
+                pseqArgsNew[ nNewLength - 1 ].Name = "PreusedFilterName";
+                pseqArgsNew[ nNewLength - 1 ].Value <<= m_pData->m_aPreusedFilterName;
             }
         }
 
@@ -1012,9 +1016,9 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs2(const Sequence<
                     o3tl::narrowing<int>(aBorder.Bottom())
                 };
 
-                seqArgsNew.realloc( ++nNewLength );
-                seqArgsNew[ nNewLength - 1 ].Name = "DocumentBorder";
-                seqArgsNew[ nNewLength - 1 ].Value <<= aBorderSeq;
+                auto pseqArgsNew = seqArgsNew.realloc( ++nNewLength );
+                pseqArgsNew[ nNewLength - 1 ].Name = "DocumentBorder";
+                pseqArgsNew[ nNewLength - 1 ].Value <<= aBorderSeq;
             }
         }
 
@@ -1033,11 +1037,11 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs2(const Sequence<
                     // the entity with this name should be new for seqArgsNew
                     // since it is not supported by transformer
 
-                    seqArgsNew.realloc( ++nNewLength );
-                    seqArgsNew[ nNewLength - 1 ] = rOrg;
+                    auto pseqArgsNew = seqArgsNew.realloc( ++nNewLength );
+                    pseqArgsNew[ nNewLength - 1 ] = rOrg;
 
-                    aFinalCache.realloc( ++nFinalLength );
-                    aFinalCache[ nFinalLength - 1 ] = rOrg;
+                    auto pFinalCache = aFinalCache.realloc( ++nFinalLength );
+                    pFinalCache[ nFinalLength - 1 ] = rOrg;
                 }
             }
 
@@ -2225,57 +2229,58 @@ Sequence< datatransfer::DataFlavor > SAL_CALL SfxBaseModel::getTransferDataFlavo
 
     const sal_Int32 nSuppFlavors = GraphicHelper::supportsMetaFileHandle_Impl() ? 10 : 8;
     Sequence< datatransfer::DataFlavor > aFlavorSeq( nSuppFlavors );
+    auto pFlavorSeq = aFlavorSeq.getArray();
 
-    aFlavorSeq[0].MimeType =
+    pFlavorSeq[0].MimeType =
         "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"";
-    aFlavorSeq[0].HumanPresentableName =  "GDIMetaFile";
-    aFlavorSeq[0].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
+    pFlavorSeq[0].HumanPresentableName =  "GDIMetaFile";
+    pFlavorSeq[0].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
-    aFlavorSeq[1].MimeType =
+    pFlavorSeq[1].MimeType =
         "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"";
-    aFlavorSeq[1].HumanPresentableName = "GDIMetaFile";
-    aFlavorSeq[1].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
+    pFlavorSeq[1].HumanPresentableName = "GDIMetaFile";
+    pFlavorSeq[1].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
-    aFlavorSeq[2].MimeType =
+    pFlavorSeq[2].MimeType =
         "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" ;
-    aFlavorSeq[2].HumanPresentableName = "Enhanced Windows MetaFile";
-    aFlavorSeq[2].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
+    pFlavorSeq[2].HumanPresentableName = "Enhanced Windows MetaFile";
+    pFlavorSeq[2].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
-    aFlavorSeq[3].MimeType =
+    pFlavorSeq[3].MimeType =
         "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"";
-    aFlavorSeq[3].HumanPresentableName = "Windows MetaFile";
-    aFlavorSeq[3].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
+    pFlavorSeq[3].HumanPresentableName = "Windows MetaFile";
+    pFlavorSeq[3].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
-    aFlavorSeq[4].MimeType =
+    pFlavorSeq[4].MimeType =
         "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"";
-    aFlavorSeq[4].HumanPresentableName = "Star Object Descriptor (XML)";
-    aFlavorSeq[4].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
+    pFlavorSeq[4].HumanPresentableName = "Star Object Descriptor (XML)";
+    pFlavorSeq[4].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
-    aFlavorSeq[5].MimeType =
+    pFlavorSeq[5].MimeType =
         "application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"";
-    aFlavorSeq[5].HumanPresentableName = "Star Embed Source (XML)";
-    aFlavorSeq[5].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
+    pFlavorSeq[5].HumanPresentableName = "Star Embed Source (XML)";
+    pFlavorSeq[5].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
-    aFlavorSeq[6].MimeType =
+    pFlavorSeq[6].MimeType =
         "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"";
-    aFlavorSeq[6].HumanPresentableName = "Bitmap";
-    aFlavorSeq[6].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
+    pFlavorSeq[6].HumanPresentableName = "Bitmap";
+    pFlavorSeq[6].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
-    aFlavorSeq[7].MimeType = "image/png";
-    aFlavorSeq[7].HumanPresentableName = "PNG";
-    aFlavorSeq[7].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
+    pFlavorSeq[7].MimeType = "image/png";
+    pFlavorSeq[7].HumanPresentableName = "PNG";
+    pFlavorSeq[7].DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
     if ( nSuppFlavors == 10 )
     {
-        aFlavorSeq[8].MimeType =
+        pFlavorSeq[8].MimeType =
             "application/x-openoffice-emf;windows_formatname=\"Image EMF\"";
-        aFlavorSeq[8].HumanPresentableName = "Enhanced Windows MetaFile";
-        aFlavorSeq[8].DataType = cppu::UnoType<sal_uInt64>::get();
+        pFlavorSeq[8].HumanPresentableName = "Enhanced Windows MetaFile";
+        pFlavorSeq[8].DataType = cppu::UnoType<sal_uInt64>::get();
 
-        aFlavorSeq[9].MimeType =
+        pFlavorSeq[9].MimeType =
             "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"";
-        aFlavorSeq[9].HumanPresentableName = "Windows MetaFile";
-        aFlavorSeq[9].DataType = cppu::UnoType<sal_uInt64>::get();
+        pFlavorSeq[9].HumanPresentableName = "Windows MetaFile";
+        pFlavorSeq[9].DataType = cppu::UnoType<sal_uInt64>::get();
     }
 
     return aFlavorSeq;
@@ -2604,13 +2609,11 @@ void SAL_CALL SfxBaseModel::checkIn( sal_Bool bIsMajor, const OUString& rMessage
 
     try
     {
-        Sequence< beans::PropertyValue > aProps( 3 );
-        aProps[0].Name = "VersionMajor";
-        aProps[0].Value <<= bIsMajor;
-        aProps[1].Name = "VersionComment";
-        aProps[1].Value <<= rMessage;
-        aProps[2].Name = "CheckIn";
-        aProps[2].Value <<= true;
+        Sequence< beans::PropertyValue > aProps{
+            comphelper::makePropertyValue("VersionMajor", bIsMajor),
+            comphelper::makePropertyValue("VersionComment", rMessage),
+            comphelper::makePropertyValue("CheckIn", true)
+        };
 
         const OUString sName( pMedium->GetName( ) );
         storeSelf( aProps );
@@ -2802,8 +2805,8 @@ static void addTitle_Impl( Sequence < beans::PropertyValue >& rSeq, const OUStri
     else
     {
         sal_Int32 nCount = rSeq.getLength();
-        rSeq.realloc( nCount+1 );
-        auto& el = rSeq[nCount];
+        auto pSeq = rSeq.realloc( nCount+1 );
+        auto& el = pSeq[nCount];
         el.Name = "Title";
         el.Value <<= rTitle;
     }
@@ -3449,8 +3452,8 @@ Sequence< OUString > SAL_CALL SfxBaseModel::getDocumentSubStoragesNames()
             {
                 if ( xStorage->isStorageElement( rName ) )
                 {
-                    aResult.realloc( ++nResultSize );
-                    aResult[ nResultSize - 1 ] = rName;
+                    auto pResult = aResult.realloc( ++nResultSize );
+                    pResult[ nResultSize - 1 ] = rName;
                 }
             }
 
@@ -3559,7 +3562,7 @@ static void ConvertSlotsToCommands( SfxObjectShell const * pDoc, Reference< cont
                     aStrBuf.appendAscii( pSlot->GetUnoName() );
 
                     aCommand = aStrBuf.makeStringAndClear();
-                    aSeqPropValue[nIndex].Value <<= aCommand;
+                    aSeqPropValue.getArray()[nIndex].Value <<= aCommand;
                     rToolbarDefinition->replaceByIndex( i, Any( aSeqPropValue ));
                 }
             }
@@ -4077,10 +4080,9 @@ Reference< container::XEnumeration > SAL_CALL SfxBaseModel::getControllers()
     SfxModelGuard aGuard( *this );
 
     sal_Int32 c = m_pData->m_seqControllers.size();
-    sal_Int32 i = 0;
     Sequence< Any > lEnum(c);
-    for (i=0; i<c; ++i)
-        lEnum[i] <<= m_pData->m_seqControllers[i];
+    std::transform(m_pData->m_seqControllers.begin(), m_pData->m_seqControllers.end(),
+                   lEnum.getArray(), [](const auto& x) { return css::uno::makeAny(x); });
 
     return new ::comphelper::OAnyEnumeration(lEnum);
 }
@@ -4095,8 +4097,9 @@ Sequence< OUString > SAL_CALL SfxBaseModel::getAvailableViewControllerNames()
     const sal_Int16 nViewFactoryCount = rDocumentFactory.GetViewFactoryCount();
 
     Sequence< OUString > aViewNames( nViewFactoryCount );
+    auto aViewNamesRange = asNonConstRange(aViewNames);
     for ( sal_Int16 nViewNo = 0; nViewNo < nViewFactoryCount; ++nViewNo )
-        aViewNames[nViewNo] = rDocumentFactory.GetViewFactory( nViewNo ).GetAPIViewName();
+        aViewNamesRange[nViewNo] = rDocumentFactory.GetViewFactory( nViewNo ).GetAPIViewName();
     return aViewNames;
 }
 

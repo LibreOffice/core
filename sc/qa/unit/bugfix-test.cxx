@@ -19,6 +19,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include "helper/qahelper.hxx"
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
@@ -376,9 +377,7 @@ void ScFiltersTest::testTdf91979()
     uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
     CPPUNIT_ASSERT(xDesktop.is());
 
-    Sequence < beans::PropertyValue > args(1);
-    args[0].Name = "Hidden";
-    args[0].Value <<= true;
+    Sequence < beans::PropertyValue > args{ comphelper::makePropertyValue("Hidden", true) };
 
     uno::Reference< lang::XComponent > xComponent = xDesktop->loadComponentFromURL(
         "private:factory/scalc",
@@ -554,9 +553,7 @@ void ScFiltersTest::testTdf128951()
     CPPUNIT_ASSERT(xDesktop.is());
 
     // 1. Create spreadsheet
-    css::uno::Sequence<css::beans::PropertyValue> aHiddenArgList(1);
-    aHiddenArgList[0].Name = "Hidden";
-    aHiddenArgList[0].Value <<= true;
+    css::uno::Sequence aHiddenArgList{ comphelper::makePropertyValue("Hidden", true) };
 
     css::uno::Reference<css::lang::XComponent> xComponent
         = xDesktop->loadComponentFromURL("private:factory/scalc", "_blank", 0, aHiddenArgList);
@@ -716,9 +713,7 @@ void ScFiltersTest::testTdf130725()
     CPPUNIT_ASSERT(xDesktop.is());
 
     // 1. Create spreadsheet
-    css::uno::Sequence<css::beans::PropertyValue> aHiddenArgList(1);
-    aHiddenArgList[0].Name = "Hidden";
-    aHiddenArgList[0].Value <<= true;
+    css::uno::Sequence aHiddenArgList{ comphelper::makePropertyValue("Hidden", true) };
 
     css::uno::Reference<css::lang::XComponent> xComponent
         = xDesktop->loadComponentFromURL("private:factory/scalc", "_blank", 0, aHiddenArgList);

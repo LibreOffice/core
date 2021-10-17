@@ -48,8 +48,7 @@ namespace XSLT
         if (m_storage == nullptr || m_rootStream == nullptr)
         {
             m_rootStream = createTempFile();
-            Sequence<Any> args(1);
-            args[0] <<= m_rootStream->getInputStream();
+            Sequence<Any> args{ Any(m_rootStream->getInputStream()) };
 
             Reference<XNameContainer> cont(
                  Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW)
@@ -72,8 +71,7 @@ namespace XSLT
         xSeek->seek(0);
 
         //create a com.sun.star.embed.OLESimpleStorage from the temp stream
-        Sequence<Any> args(1);
-        args[0] <<= xSeek;
+        Sequence<Any> args{ Any(xSeek) };
         Reference<XNameContainer> cont(
              Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW)
                  ->createInstanceWithArguments("com.sun.star.embed.OLESimpleStorage", args), UNO_QUERY);
@@ -179,11 +177,12 @@ namespace XSLT
         Reference<XInputStream> xInput = subStream->getInputStream();
         Reference<XOutputStream> xOutput = subStream->getOutputStream();
         //write the length to the temp stream
-        Sequence<sal_Int8> header(4);
-        header[0] = static_cast<sal_Int8>(oledata.getLength() >> 0) & 0xFF;
-        header[1] = static_cast<sal_Int8>(oledata.getLength() >> 8) & 0xFF;
-        header[2] = static_cast<sal_Int8>(oledata.getLength() >> 16) & 0xFF;
-        header[3] = static_cast<sal_Int8>(oledata.getLength() >> 24) & 0xFF;
+        Sequence<sal_Int8> header{
+            static_cast<sal_Int8>((oledata.getLength() >> 0) & 0xFF),
+            static_cast<sal_Int8>((oledata.getLength() >> 8) & 0xFF),
+            static_cast<sal_Int8>((oledata.getLength() >> 16) & 0xFF),
+            static_cast<sal_Int8>((oledata.getLength() >> 24) & 0xFF)
+        };
         xOutput->writeBytes(header);
 
         // Compress the bytes
@@ -194,13 +193,10 @@ namespace XSLT
         int compressedDataLength = compresser->doDeflateSegment(output, oledata.getLength());
         compresser.reset();
         //realloc the data length
-        Sequence<sal_Int8> compressed(compressedDataLength);
-        for (int i = 0; i < compressedDataLength; i++) {
-            compressed[i] = output[i];
-        }
+        output.realloc(compressedDataLength);
 
         //write the compressed data to the temp stream
-        xOutput->writeBytes(compressed);
+        xOutput->writeBytes(output);
         //seek to 0
         Reference<XSeekable> xSeek(xInput, UNO_QUERY);
         xSeek->seek(0);

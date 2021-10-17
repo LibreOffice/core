@@ -277,6 +277,7 @@ void ConfigurationUpdater::CheckPureAnchors (
     Sequence<Reference<XResourceId> > aResources(
         rxConfiguration->getResources(
             nullptr, OUString(), AnchorBindingMode_INDIRECT));
+    auto aResourcesRange = asNonConstRange(aResources);
     sal_Int32 nCount (aResources.getLength());
 
     // Prepare the list of pure anchors that have to be deactivated.
@@ -324,7 +325,7 @@ void ConfigurationUpdater::CheckPureAnchors (
                     "because it has no children");
             // Erase element from current configuration.
             for (sal_Int32 nI=nIndex; nI<nCount-2; ++nI)
-                aResources[nI] = aResources[nI+1];
+                aResourcesRange[nI] = aResources[nI+1];
             nCount -= 1;
 
             rResourcesToDeactivate.push_back(xResourceId);

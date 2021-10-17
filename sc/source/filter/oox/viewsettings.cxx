@@ -626,11 +626,8 @@ void ViewSettings::finalizeImport()
     if( aRangeProp.getProperty( aPos, PROP_Position ) && aRangeProp.getProperty( aSize, PROP_Size ) )
     {
         // set the visible area as sequence of long at the media descriptor
-        Sequence< sal_Int32 > aWinExtent( 4 );
-        aWinExtent[ 0 ] = aPos.X;
-        aWinExtent[ 1 ] = aPos.Y;
-        aWinExtent[ 2 ] = aPos.X + aSize.Width;
-        aWinExtent[ 3 ] = aPos.Y + aSize.Height;
+        Sequence< sal_Int32 > aWinExtent{ aPos.X, aPos.Y,
+                                          aPos.X + aSize.Width, aPos.Y + aSize.Height };
         getBaseFilter().getMediaDescriptor()[ "WinExtent" ] <<= aWinExtent;
     }
 }

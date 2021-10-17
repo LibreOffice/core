@@ -469,9 +469,10 @@ Sequence< Reference< drawing::XCustomShapeHandle > > SAL_CALL EnhancedCustomShap
     }
 
     Sequence< Reference< drawing::XCustomShapeHandle > > aSeq( nHdlCount );
+    auto aSeqRange = asNonConstRange(aSeq);
 
     for ( i = 0; i < nHdlCount; i++ )
-        aSeq[ i ] = new EnhancedCustomShapeHandle( mxShape, i );
+        aSeqRange[ i ] = new EnhancedCustomShapeHandle( mxShape, i );
     return aSeq;
 }
 

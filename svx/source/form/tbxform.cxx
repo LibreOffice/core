@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <comphelper/propertyvalue.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
@@ -45,10 +48,8 @@ void SvxFmAbsRecWin::PositionFired(sal_Int64 nRecord)
     SfxInt32Item aPositionParam( FN_PARAM_1, static_cast<sal_Int32>(nRecord) );
 
     Any a;
-    Sequence< PropertyValue > aArgs( 1 );
-    aArgs[0].Name = "Position";
     aPositionParam.QueryValue( a );
-    aArgs[0].Value = a;
+    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("Position", a) };
     m_pController->Dispatch( ".uno:AbsoluteRecord",
                              aArgs );
     m_pController->updateStatus();

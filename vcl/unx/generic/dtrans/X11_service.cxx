@@ -55,8 +55,7 @@ css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequenc
         return SalInstance::CreateClipboard( arguments );
 
     SelectionManager& rManager = SelectionManager::get();
-    css::uno::Sequence<css::uno::Any> mgrArgs(1);
-    mgrArgs[0] <<= Application::GetDisplayConnection();
+    css::uno::Sequence<css::uno::Any> mgrArgs{ css::uno::Any(Application::GetDisplayConnection()) };
     rManager.initialize(mgrArgs);
 
     OUString sel;

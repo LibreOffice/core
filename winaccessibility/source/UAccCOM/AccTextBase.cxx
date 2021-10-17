@@ -157,7 +157,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_attributes(long offset, long
     for(int i =0; i<nCount; i++)
     {
 
-        css::beans::PropertyValue &pValue = pValues[i];
+        const css::beans::PropertyValue &pValue = pValues[i];
         if(pValue.Name == "NumberingLevel")
         {
             if (pValue.Value != Any())

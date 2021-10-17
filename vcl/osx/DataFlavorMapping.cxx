@@ -287,8 +287,8 @@ Any ByteSequenceDataProvider::getOOoData()
   {
       unsigned int flavorDataLength = [mSystemData length];
       Sequence<sal_Int8> byteSequence;
-      byteSequence.realloc(flavorDataLength);
-      memcpy(byteSequence.getArray(), [mSystemData bytes], flavorDataLength);
+      sal_Int8* p_byteSequence = byteSequence.realloc(flavorDataLength);
+      memcpy(p_byteSequence, [mSystemData bytes], flavorDataLength);
       oOOData <<= byteSequence;
   }
   else
@@ -337,8 +337,8 @@ Any HTMLFormatDataProvider::getOOoData()
       unsigned int flavorDataLength = [mSystemData length];
       Sequence<sal_Int8> unkHtmlData;
 
-      unkHtmlData.realloc(flavorDataLength);
-      memcpy(unkHtmlData.getArray(), [mSystemData bytes], flavorDataLength);
+      sal_Int8* p_unkHtmlData = unkHtmlData.realloc(flavorDataLength);
+      memcpy(p_unkHtmlData, [mSystemData bytes], flavorDataLength);
 
       Sequence<sal_Int8>* pPlainHtml = &unkHtmlData;
       Sequence<sal_Int8> plainHtml;
@@ -743,8 +743,8 @@ css::uno::Sequence<css::datatransfer::DataFlavor> DataFlavorMapper::typesArrayTo
 
       if (isValidFlavor(oOOFlavor))
       {
-          flavors.realloc(flavors.getLength() + 1);
-          flavors[flavors.getLength() - 1] = oOOFlavor;
+          DataFlavor* p_flavors = flavors.realloc(flavors.getLength() + 1);
+          p_flavors[flavors.getLength() - 1] = oOOFlavor;
       }
   }
 

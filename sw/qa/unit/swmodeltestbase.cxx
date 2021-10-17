@@ -19,6 +19,7 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sfx2/app.hxx>
@@ -41,17 +42,13 @@ void SwModelTestBase::paste(std::u16string_view aFilename,
         m_xSFactory->createInstance("com.sun.star.comp.Writer.RtfFilter"), uno::UNO_QUERY_THROW);
     uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY_THROW);
     xImporter->setTargetDocument(mxComponent);
-    uno::Sequence<beans::PropertyValue> aDescriptor(3);
-    aDescriptor[0].Name = "InputStream";
     std::unique_ptr<SvStream> pStream = utl::UcbStreamHelper::CreateStream(
         m_directories.getURLFromSrc(u"/sw/qa/extras/") + aFilename, StreamMode::STD_READ);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, pStream->GetError());
     uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
-    aDescriptor[0].Value <<= xStream;
-    aDescriptor[1].Name = "InsertMode";
-    aDescriptor[1].Value <<= true;
-    aDescriptor[2].Name = "TextInsertModeRange";
-    aDescriptor[2].Value <<= xTextRange;
+    uno::Sequence aDescriptor{ comphelper::makePropertyValue("InputStream", xStream),
+                               comphelper::makePropertyValue("InsertMode", true),
+                               comphelper::makePropertyValue("TextInsertModeRange", xTextRange) };
     CPPUNIT_ASSERT(xFilter->filter(aDescriptor));
 }
 

@@ -238,11 +238,9 @@ void TickFactory2D::addPointSequenceForTickLine( drawing::PointSequenceSequence&
     B2DVector aStart = aTickScreenPosition + aOrthoDirection*rTickmarkProperties.RelativePos;
     B2DVector aEnd = aStart - aOrthoDirection*rTickmarkProperties.Length;
 
-    rPoints[nSequenceIndex].realloc(2);
-    rPoints[nSequenceIndex][0].X = static_cast<sal_Int32>(aStart.getX());
-    rPoints[nSequenceIndex][0].Y = static_cast<sal_Int32>(aStart.getY());
-    rPoints[nSequenceIndex][1].X = static_cast<sal_Int32>(aEnd.getX());
-    rPoints[nSequenceIndex][1].Y = static_cast<sal_Int32>(aEnd.getY());
+    rPoints.getArray()[nSequenceIndex]
+        = { { static_cast<sal_Int32>(aStart.getX()), static_cast<sal_Int32>(aStart.getY()) },
+            { static_cast<sal_Int32>(aEnd.getX()), static_cast<sal_Int32>(aEnd.getY()) } };
 }
 
 B2DVector TickFactory2D::getDistanceAxisTickToText( const AxisProperties& rAxisProperties, bool bIncludeFarAwayDistanceIfSo, bool bIncludeSpaceBetweenTickAndText ) const
@@ -300,11 +298,10 @@ B2DVector TickFactory2D::getDistanceAxisTickToText( const AxisProperties& rAxisP
 
 void TickFactory2D::createPointSequenceForAxisMainLine( drawing::PointSequenceSequence& rPoints ) const
 {
-    rPoints[0].realloc(2);
-    rPoints[0][0].X = static_cast<sal_Int32>(m_aAxisStartScreenPosition2D.getX());
-    rPoints[0][0].Y = static_cast<sal_Int32>(m_aAxisStartScreenPosition2D.getY());
-    rPoints[0][1].X = static_cast<sal_Int32>(m_aAxisEndScreenPosition2D.getX());
-    rPoints[0][1].Y = static_cast<sal_Int32>(m_aAxisEndScreenPosition2D.getY());
+    rPoints.getArray()[0] = { { static_cast<sal_Int32>(m_aAxisStartScreenPosition2D.getX()),
+                                static_cast<sal_Int32>(m_aAxisStartScreenPosition2D.getY()) },
+                              { static_cast<sal_Int32>(m_aAxisEndScreenPosition2D.getX()),
+                                static_cast<sal_Int32>(m_aAxisEndScreenPosition2D.getY()) } };
 }
 
 void TickFactory2D::updateScreenValues( TickInfoArraysType& rAllTickInfos ) const

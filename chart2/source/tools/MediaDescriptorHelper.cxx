@@ -33,21 +33,23 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
                         beans::PropertyValue > & rMediaDescriptor )
     : m_aModelProperties(rMediaDescriptor.getLength())
 {
+    auto aModelPropertiesRange = asNonConstRange(m_aModelProperties);
     css::uno::Sequence< css::beans::PropertyValue >
                         aRegularProperties(rMediaDescriptor.getLength()); //these are the properties which are described in service com.sun.star.document.MediaDescriptor and not marked as deprecated
+    auto aRegularPropertiesRange = asNonConstRange(aRegularProperties);
     impl_init();
     sal_Int32 nRegularCount = 0;
     sal_Int32 nModelCount = 0;
 
-    auto addRegularProp = [&aRegularProperties, &nRegularCount](const beans::PropertyValue& rRegularProp)
+    auto addRegularProp = [&aRegularPropertiesRange, &nRegularCount](const beans::PropertyValue& rRegularProp)
     {
-        aRegularProperties[nRegularCount] = rRegularProp;
+        aRegularPropertiesRange[nRegularCount] = rRegularProp;
         ++nRegularCount;
     };
-    auto addModelProp = [this, &nModelCount, &addRegularProp](const beans::PropertyValue& rModelProp)
+    auto addModelProp = [&aModelPropertiesRange, &nModelCount, &addRegularProp](const beans::PropertyValue& rModelProp)
     {
         addRegularProp(rModelProp);
-        m_aModelProperties[nModelCount] = rModelProp;
+        aModelPropertiesRange[nModelCount] = rModelProp;
         ++nModelCount;
     };
 

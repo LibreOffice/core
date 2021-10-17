@@ -24,6 +24,7 @@
 
 #include <com/sun/star/form/runtime/FormFeature.hpp>
 
+#include <comphelper/propertyvalue.hxx>
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
 
@@ -272,9 +273,8 @@ namespace frm
         {
             if ( aInfo->second.xDispatcher.is() )
             {
-                Sequence< PropertyValue > aArgs( 1 );
-                aArgs[0].Name = OUString::createFromAscii( _pParamAsciiName );
-                aArgs[0].Value = _rParamValue;
+                Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(
+                    OUString::createFromAscii( _pParamAsciiName ), _rParamValue) };
 
                 aInfo->second.xDispatcher->dispatch( aInfo->second.aURL, aArgs );
             }

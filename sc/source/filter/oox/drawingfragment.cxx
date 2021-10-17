@@ -20,6 +20,8 @@
 #include <drawingfragment.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <comphelper/propertyvalue.hxx>
+
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -80,11 +82,8 @@ void ShapeMacroAttacher::attachMacro( const OUString& rMacroUrl )
     {
         Reference< XEventsSupplier > xSupplier( mxShape, UNO_QUERY_THROW );
         Reference< XNameReplace > xEvents( xSupplier->getEvents(), UNO_SET_THROW );
-        Sequence< PropertyValue > aEventProps( 2 );
-        aEventProps[ 0 ].Name = "EventType";
-        aEventProps[ 0 ].Value <<= OUString( "Script" );
-        aEventProps[ 1 ].Name = "Script";
-        aEventProps[ 1 ].Value <<= rMacroUrl;
+        Sequence aEventProps{ comphelper::makePropertyValue("EventType", OUString( "Script" )),
+                              comphelper::makePropertyValue("Script", rMacroUrl) };
         xEvents->replaceByName( "OnClick", Any( aEventProps ) );
     }
     catch( Exception& )

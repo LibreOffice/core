@@ -137,7 +137,7 @@ LOKTransferable::LOKTransferable(const OUString& sMimeType,
 {
     m_aContent.reserve(1);
     m_aFlavors = css::uno::Sequence<css::datatransfer::DataFlavor>(1);
-    initFlavourFromMime(m_aFlavors[0], sMimeType);
+    initFlavourFromMime(m_aFlavors.getArray()[0], sMimeType);
 
     uno::Any aContent;
     if (m_aFlavors[0].DataType == cppu::UnoType<OUString>::get())
@@ -155,7 +155,7 @@ LOKTransferable::LOKTransferable()
 {
     m_aContent.reserve(1);
     m_aFlavors = css::uno::Sequence<css::datatransfer::DataFlavor>(1);
-    initFlavourFromMime(m_aFlavors[0], "text/plain");
+    initFlavourFromMime(m_aFlavors.getArray()[0], "text/plain");
     uno::Any aContent;
     aContent <<= OUString();
     m_aContent.push_back(aContent);
@@ -183,9 +183,10 @@ LOKTransferable::LOKTransferable(const size_t nInCount, const char** pInMimeType
 {
     m_aContent.reserve(nInCount);
     m_aFlavors = css::uno::Sequence<css::datatransfer::DataFlavor>(nInCount);
+    auto p_aFlavors = m_aFlavors.getArray();
     for (size_t i = 0; i < nInCount; ++i)
     {
-        initFlavourFromMime(m_aFlavors[i], OUString::fromUtf8(pInMimeTypes[i]));
+        initFlavourFromMime(p_aFlavors[i], OUString::fromUtf8(pInMimeTypes[i]));
 
         uno::Any aContent;
         if (m_aFlavors[i].DataType == cppu::UnoType<OUString>::get())

@@ -6,6 +6,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
+#include <sal/config.h>
+
+#include <comphelper/propertyvalue.hxx>
 #include <filter/msfilter/mstoolbar.hxx>
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
@@ -54,6 +58,7 @@ void CustomToolBarImportHelper::applyIcons()
     {
         uno::Sequence<OUString> commands { concommand.sCommand };
         uno::Sequence< uno::Reference< graphic::XGraphic > > images { concommand.image };
+        auto pimages = images.getArray();
 
         uno::Reference< ui::XImageManager > xImageManager( getCfgManager()->getImageManager(), uno::UNO_QUERY_THROW );
         sal_uInt16 nColor = ui::ImageType::COLOR_NORMAL;
@@ -62,9 +67,9 @@ void CustomToolBarImportHelper::applyIcons()
         if ( topwin != nullptr && topwin->GetBackgroundColor().IsDark() )
                 nColor = css::ui::ImageType::COLOR_HIGHCONTRAST;
 
-        ScaleImage( images[ 0 ], 16 );
+        ScaleImage( pimages[ 0 ], 16 );
         xImageManager->replaceImages( ui::ImageType::SIZE_DEFAULT | nColor,  commands, images );
-        ScaleImage( images[ 0 ], 26 );
+        ScaleImage( pimages[ 0 ], 26 );
         xImageManager->replaceImages( ui::ImageType::SIZE_LARGE | nColor,  commands, images );
     }
 }
@@ -130,15 +135,12 @@ CustomToolBarImportHelper::createMenu( const OUString& rName, const uno::Referen
         xProps->setPropertyValue("UIName", uno::makeAny( rName ) );
         if ( xPopup.is() )
         {
-            uno::Sequence< beans::PropertyValue > aPopupMenu( 4 );
-            aPopupMenu[0].Name = "CommandURL";
-            aPopupMenu[0].Value <<= "vnd.openoffice.org:" + rName;
-            aPopupMenu[1].Name = "Label";
-            aPopupMenu[1].Value <<= rName;
-            aPopupMenu[2].Name = "ItemDescriptorContainer";
-            aPopupMenu[2].Value <<= xMenuDesc;
-            aPopupMenu[3].Name = "Type";
-            aPopupMenu[3].Value <<= sal_Int32( 0 );
+            uno::Sequence< beans::PropertyValue > aPopupMenu{
+                comphelper::makePropertyValue("CommandURL", "vnd.openoffice.org:" + rName),
+                comphelper::makePropertyValue("Label", rName),
+                comphelper::makePropertyValue("ItemDescriptorContainer", xMenuDesc),
+                comphelper::makePropertyValue("Type", sal_Int32( 0 ))
+            };
 
             xPopup->insertByIndex( xPopup->getCount(), uno::makeAny( aPopupMenu ) );
             xCfgManager->insertSettings( sMenuBar, xPopup );

@@ -168,12 +168,6 @@ OUString OReportEngineJFree::getNewOutputName()
     }
     m_xReport->storeToStorage(xTemp,aEmpty); // store to temp file because it may contain information which isn't in the database yet.
 
-    uno::Sequence< beans::NamedValue > aConvertedProperties(8);
-    sal_Int32 nPos = 0;
-    aConvertedProperties[nPos].Name = "InputStorage";
-    aConvertedProperties[nPos++].Value <<= xTemp;
-    aConvertedProperties[nPos].Name = "OutputStorage";
-
     OUString sFileURL;
     OUString sName = m_xReport->getCaption();
     if ( sName.isEmpty() )
@@ -198,27 +192,21 @@ OUString OReportEngineJFree::getNewOutputName()
         xStorageProp->setPropertyValue( s_sMediaType, uno::makeAny(sMimeType));
     }
 
-    aConvertedProperties[nPos++].Value <<= xOut;
-
-    aConvertedProperties[nPos].Name = PROPERTY_REPORTDEFINITION;
-    aConvertedProperties[nPos++].Value <<= m_xReport;
-
-    aConvertedProperties[nPos].Name = PROPERTY_ACTIVECONNECTION;
-    aConvertedProperties[nPos++].Value <<= m_xActiveConnection;
-
-    aConvertedProperties[nPos].Name = PROPERTY_MAXROWS;
-    aConvertedProperties[nPos++].Value <<= m_nMaxRows;
-
     // some meta data
     SvtUserOptions aUserOpts;
     OUString sAuthor = aUserOpts.GetFirstName() +
         " " +
         aUserOpts.GetLastName();
-    aConvertedProperties[nPos].Name = "Author";
-    aConvertedProperties[nPos++].Value <<= sAuthor;
 
-    aConvertedProperties[nPos].Name = "Title";
-    aConvertedProperties[nPos++].Value <<= m_xReport->getCaption();
+    uno::Sequence< beans::NamedValue > aConvertedProperties{
+        {"InputStorage", uno::Any(xTemp) },
+        {"OutputStorage", uno::Any(xOut) },
+        {PROPERTY_REPORTDEFINITION, uno::Any(m_xReport) },
+        {PROPERTY_ACTIVECONNECTION, uno::Any(m_xActiveConnection) },
+        {PROPERTY_MAXROWS, uno::Any(m_nMaxRows) },
+        {"Author", uno::Any(sAuthor) },
+        {"Title", uno::Any(m_xReport->getCaption()) }
+    };
 
     OUString sOutputName;
 
@@ -276,17 +264,18 @@ uno::Reference< frame::XModel > OReportEngineJFree::createDocumentAlive( const u
         if ( xFrameLoad.is() )
         {
             uno::Sequence < beans::PropertyValue > aArgs( _bHidden ? 3 : 2 );
+            auto pArgs = aArgs.getArray();
             sal_Int32 nLen = 0;
-            aArgs[nLen].Name = "AsTemplate";
-            aArgs[nLen++].Value <<= false;
+            pArgs[nLen].Name = "AsTemplate";
+            pArgs[nLen++].Value <<= false;
 
-            aArgs[nLen].Name = "ReadOnly";
-            aArgs[nLen++].Value <<= true;
+            pArgs[nLen].Name = "ReadOnly";
+            pArgs[nLen++].Value <<= true;
 
             if ( _bHidden )
             {
-                aArgs[nLen].Name = "Hidden";
-                aArgs[nLen++].Value <<= true;
+                pArgs[nLen].Name = "Hidden";
+                pArgs[nLen++].Value <<= true;
             }
 
             xModel.set( xFrameLoad->loadComponentFromURL(

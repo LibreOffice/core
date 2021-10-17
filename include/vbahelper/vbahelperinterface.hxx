@@ -132,12 +132,7 @@ OUString classname::getServiceImplName() \
 } \
 css::uno::Sequence< OUString > classname::getServiceNames() \
 { \
-    static css::uno::Sequence< OUString > saServiceNames; \
-    if( saServiceNames.getLength() == 0 ) \
-    { \
-        saServiceNames.realloc( 1 ); \
-        saServiceNames[ 0 ] = servicename; \
-    } \
+    static const css::uno::Sequence< OUString > saServiceNames { servicename }; \
     return saServiceNames; \
 }
 

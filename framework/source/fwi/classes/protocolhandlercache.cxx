@@ -193,13 +193,13 @@ void HandlerCFGAccess::read( HandlerHash& rHandlerHash, PatternHash& rPatternHas
     sal_Int32 nTargetCount = nSourceCount;
     // list of all full qualified path names of configuration entries
     css::uno::Sequence< OUString > lFullNames ( nTargetCount );
-
+    auto lFullNamesRange = asNonConstRange(lFullNames);
     // expand names to full path names
     sal_Int32 nSource=0;
     sal_Int32 nTarget=0;
     for( nSource=0; nSource<nSourceCount; ++nSource )
     {
-        lFullNames[nTarget] =
+        lFullNamesRange[nTarget] =
             SETNAME_HANDLER +
             CFG_PATH_SEPARATOR +
             lNames[nSource] +

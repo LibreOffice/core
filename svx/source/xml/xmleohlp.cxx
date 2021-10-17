@@ -35,6 +35,7 @@
 
 #include <svtools/embedhlp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 
@@ -626,17 +627,17 @@ Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
                             if( !mxTempStorage.is() )
                                 mxTempStorage =
                                     comphelper::OStorageHelper::GetTemporaryStorage();
-                            Sequence < beans::PropertyValue > aDummy( 0 ), aEmbDescr( 1 );
-                            aEmbDescr[0].Name = "StoreVisualReplacement";
-                            aEmbDescr[0].Value <<= !bOasisFormat;
+                            Sequence < beans::PropertyValue > aDummy,
+                                aEmbDescr{ comphelper::makePropertyValue("StoreVisualReplacement",
+                                                                         !bOasisFormat) };
                             if ( !bOasisFormat )
                             {
                                 uno::Reference< io::XInputStream > xGrInStream = ImplGetReplacementImage( xObj );
                                 if ( xGrInStream.is() )
                                 {
-                                    aEmbDescr.realloc( 2 );
-                                    aEmbDescr[1].Name = "VisualReplacement";
-                                    aEmbDescr[1].Value <<= xGrInStream;
+                                    auto pEmbDescr = aEmbDescr.realloc( 2 );
+                                    pEmbDescr[1].Name = "VisualReplacement";
+                                    pEmbDescr[1].Value <<= xGrInStream;
                                 }
                             }
 

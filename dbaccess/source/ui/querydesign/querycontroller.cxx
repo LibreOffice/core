@@ -280,18 +280,17 @@ void SAL_CALL OQueryController::getFastPropertyValue( Any& o_rValue, sal_Int32 i
 
     // one additional property:
     const sal_Int32 nLength = aProps.getLength();
-    aProps.realloc( nLength + 1 );
-    aProps[ nLength ] = Property(
+    auto pProps = aProps.realloc( nLength + 1 );
+    pProps[ nLength ] = Property(
         "CurrentQueryDesign",
         PROPERTY_ID_CURRENT_QUERY_DESIGN,
         ::cppu::UnoType< Sequence< PropertyValue > >::get(),
         PropertyAttribute::READONLY
     );
 
-    auto [begin, end] = asNonConstRange(aProps);
     std::sort(
-        begin,
-        end,
+        pProps,
+        pProps + aProps.getLength(),
         ::comphelper::PropertyCompareByName()
     );
 

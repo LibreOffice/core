@@ -90,7 +90,7 @@ RootItemContainer::RootItemContainer( const Reference< XIndexAccess >& rSourceCo
                 }
 
                 if ( xIndexAccess.is() && nContainerIndex >= 0 )
-                    aPropSeq[nContainerIndex].Value <<= deepCopyContainer( xIndexAccess );
+                    aPropSeq.getArray()[nContainerIndex].Value <<= deepCopyContainer( xIndexAccess );
 
                 m_aItemVector.push_back( aPropSeq );
             }

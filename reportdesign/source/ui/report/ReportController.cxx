@@ -33,6 +33,7 @@
 #include <comphelper/documentconstants.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/types.hxx>
 
@@ -435,8 +436,9 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
                 SfxUndoManager& rUndoManager( getUndoManager() );
                 size_t nCount(( rUndoManager.*retrieveCount )( SfxUndoManager::TopLevel ));
                 Sequence<OUString> aSeq(nCount);
+                auto aSeqRange = asNonConstRange(aSeq);
                 for (size_t n = 0; n < nCount; ++n)
-                    aSeq[n] = (rUndoManager.*retrieveComment)( n, SfxUndoManager::TopLevel );
+                    aSeqRange[n] = (rUndoManager.*retrieveComment)( n, SfxUndoManager::TopLevel );
                 aReturn.aValue <<= aSeq;
                 aReturn.bEnabled = true;
             }
@@ -1700,7 +1702,7 @@ void OReportController::impl_initialize( )
                 if ( pPage )
                 {
                     uno::Sequence< beans::PropertyValue> aArgs(1);
-                    aArgs[0].Value <<= pPage->getSection();
+                    aArgs.getArray()[0].Value <<= pPage->getSection();
                     executeUnChecked(SID_SELECT,aArgs);
                 }
             }
@@ -2788,10 +2790,7 @@ void SAL_CALL OReportController::restoreViewData(const uno::Any& i_data)
                 util::URL aCommand;
                 aCommand.Complete = ".uno:" + rCommandName;
 
-                Sequence< PropertyValue > aCommandArgs(1);
-                aCommandArgs[0].Name = "Value";
-                aCommandArgs[0].Value = rCommandValue;
-
+                Sequence aCommandArgs{ comphelper::makePropertyValue("Value", rCommandValue) };
                 executeUnChecked( aCommand, aCommandArgs );
             }
             else
@@ -3043,8 +3042,7 @@ sal_Bool SAL_CALL OReportController::select( const Any& aSelection )
             if ( xProp.is() )
             {
                 getDesignView()->showProperties(xObject);
-                aElements.realloc(1);
-                aElements[0] = xProp;
+                aElements = { xProp };
                 getDesignView()->setMarked(aElements, true);
             }
             else

@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/image.hxx>
 #include <vcl/event.hxx>
@@ -109,13 +111,11 @@ void XmlSecStatusBarControl::Command( const CommandEvent& rCEvt )
         {
             css::uno::Any a;
             SfxUInt16Item aState( GetSlotId(), 0 );
+            aState.QueryValue( a );
             INetURLObject aObj( m_aCommandURL );
 
-            css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
-            aArgs[0].Name  = aObj.GetURLPath();
-            aState.QueryValue( a );
-            aArgs[0].Value = a;
-
+            css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
+                aObj.GetURLPath(), a) };
             execute( aArgs );
         }
     }

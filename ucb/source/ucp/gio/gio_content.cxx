@@ -143,8 +143,7 @@ css::uno::Any convertToException(GError *pError, const css::uno::Reference< css:
 
     OUString sName;
 
-    css::uno::Sequence< css::uno::Any > aArgs( 1 );
-    aArgs[ 0 ] <<= sName;
+    css::uno::Sequence< css::uno::Any > aArgs{ css::uno::Any(sName) };
 
     switch (eCode)
     {
@@ -686,8 +685,10 @@ css::uno::Sequence< css::uno::Any > Content::setPropertyValues(
     sal_Int32 nChanged = 0, nTitlePos = -1;
     OUString aNewTitle;
     css::uno::Sequence< css::beans::PropertyChangeEvent > aChanges(nCount);
+    auto aChangesRange = asNonConstRange(aChanges);
 
     css::uno::Sequence< css::uno::Any > aRet( nCount );
+    auto aRetRange = asNonConstRange(aRet);
     const css::beans::PropertyValue* pValues = rValues.getConstArray();
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
@@ -700,13 +701,13 @@ css::uno::Sequence< css::uno::Any > Content::setPropertyValues(
              rValue.Name == "Size" ||
              rValue.Name == "CreatableContentsInfo" )
         {
-            aRet[ n ] <<= getReadOnlyException( static_cast< cppu::OWeakObject * >(this) );
+            aRetRange[ n ] <<= getReadOnlyException( static_cast< cppu::OWeakObject * >(this) );
         }
         else if ( rValue.Name == "Title" )
         {
             if (!( rValue.Value >>= aNewTitle ))
             {
-                aRet[ n ] <<= css::beans::IllegalTypeException
+                aRetRange[ n ] <<= css::beans::IllegalTypeException
                     ( "Property value has wrong type!",
                       static_cast< cppu::OWeakObject * >( this ) );
                 continue;
@@ -714,7 +715,7 @@ css::uno::Sequence< css::uno::Any > Content::setPropertyValues(
 
             if ( aNewTitle.isEmpty() )
             {
-                aRet[ n ] <<= css::lang::IllegalArgumentException
+                aRetRange[ n ] <<= css::lang::IllegalArgumentException
                     ( "Empty title not allowed!",
                       static_cast< cppu::OWeakObject * >( this ), -1 );
                 continue;
@@ -733,7 +734,7 @@ css::uno::Sequence< css::uno::Any > Content::setPropertyValues(
                 if (oldName)
                     aEvent.OldValue <<= OUString(oldName, strlen(oldName), RTL_TEXTENCODING_UTF8);
                 aEvent.NewValue <<= aNewTitle;
-                aChanges.getArray()[ nChanged ] = aEvent;
+                aChangesRange[ nChanged ] = aEvent;
                 nTitlePos = nChanged++;
 
                 g_file_info_set_name(pNewInfo, newName);
@@ -742,7 +743,7 @@ css::uno::Sequence< css::uno::Any > Content::setPropertyValues(
         else
         {
             SAL_WARN("ucb.ucp.gio", "Unknown property " << rValue.Name);
-            aRet[ n ] <<= getReadOnlyException( static_cast< cppu::OWeakObject * >(this) );
+            aRetRange[ n ] <<= getReadOnlyException( static_cast< cppu::OWeakObject * >(this) );
         }
     }
 
@@ -754,7 +755,7 @@ css::uno::Sequence< css::uno::Any > Content::setPropertyValues(
             if ((bOk = doSetFileInfo(pNewInfo)))
             {
                 for (sal_Int32 i = 0; i < nChanged; ++i)
-                    aRet[ i ] = getBadArgExcept();
+                    aRetRange[ i ] = getBadArgExcept();
             }
         }
 
@@ -772,7 +773,7 @@ css::uno::Sequence< css::uno::Any > Content::setPropertyValues(
 
                 if (!exchangeIdentity( xNewId ) )
                 {
-                    aRet[ nTitlePos ] <<= css::uno::Exception
+                    aRetRange[ nTitlePos ] <<= css::uno::Exception
                         ( "Exchange failed!",
                           static_cast< cppu::OWeakObject * >( this ) );
                 }
@@ -873,8 +874,8 @@ css::uno::Any Content::open(const css::ucb::OpenCommandArgument2 & rOpenCommand,
 
     if (!g_file_query_exists(getGFile(), nullptr))
     {
-        css::uno::Sequence< css::uno::Any > aArgs( 1 );
-        aArgs[ 0 ] <<= m_xIdentifier->getContentIdentifier();
+        css::uno::Sequence< css::uno::Any > aArgs{ css::uno::Any(
+            m_xIdentifier->getContentIdentifier()) };
         css::uno::Any aErr = css::uno::makeAny(
             css::ucb::InteractiveAugmentedIOException(OUString(), static_cast< cppu::OWeakObject * >( this ),
                 css::task::InteractionClassification_ERROR,

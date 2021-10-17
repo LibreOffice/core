@@ -920,7 +920,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
 
             sal_Int32 nAdd = ( aLeftRange.aEnd.Col() - aLeftRange.aStart.Col() + 1 ) *
                              ( aLeftRange.aEnd.Row() - aLeftRange.aStart.Row() + 1 );
-            aConstraints.realloc( nConstrPos + nAdd );
+            auto pConstraints = aConstraints.realloc( nConstrPos + nAdd );
 
             for (SCROW nRow = aLeftRange.aStart.Row(); nRow <= aLeftRange.aEnd.Row(); ++nRow)
                 for (SCCOL nCol = aLeftRange.aStart.Col(); nCol <= aLeftRange.aEnd.Col(); ++nCol)
@@ -931,7 +931,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
                             aRightRange.aStart.Col() + ( nCol - aLeftRange.aStart.Col() ),
                             aRightRange.aStart.Row() + ( nRow - aLeftRange.aStart.Row() ) );
 
-                    aConstraints[nConstrPos++] = aConstraint;
+                    pConstraints[nConstrPos++] = aConstraint;
                 }
         }
     }
@@ -963,8 +963,8 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             }
         }
 
-        aConstraints.realloc( nConstrPos + 1 );
-        aConstraints[nConstrPos++] = aConstraint;
+        auto pConstraints = aConstraints.realloc( nConstrPos + 1 );
+        pConstraints[nConstrPos++] = aConstraint;
     }
 
     // copy old document values

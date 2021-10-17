@@ -45,6 +45,7 @@
 #include <editeng/outliner.hxx>
 #include <editeng/flditem.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <i18nlangtag/lang.h>
 #include <svl/numformat.hxx>
@@ -2459,13 +2460,11 @@ void SVGFilter::implCreateObjectsFromBackground( const Reference< css::drawing::
     utl::TempFile aFile;
     aFile.EnableKillingFile();
 
-    Sequence< PropertyValue > aDescriptor( 3 );
-    aDescriptor[0].Name = "FilterName";
-    aDescriptor[0].Value <<= OUString( "SVM" );
-    aDescriptor[1].Name = "URL";
-    aDescriptor[1].Value <<= aFile.GetURL();
-    aDescriptor[2].Name = "ExportOnlyBackground";
-    aDescriptor[2].Value <<= true;
+    Sequence< PropertyValue > aDescriptor{
+        comphelper::makePropertyValue("FilterName", OUString( "SVM" )),
+        comphelper::makePropertyValue("URL", aFile.GetURL()),
+        comphelper::makePropertyValue("ExportOnlyBackground", true)
+    };
 
     xExporter->setSourceDocument( Reference< XComponent >( rxDrawPage, UNO_QUERY ) );
     xExporter->filter( aDescriptor );

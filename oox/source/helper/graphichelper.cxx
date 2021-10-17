@@ -30,6 +30,7 @@
 #include <com/sun/star/graphic/GraphicMapper.hpp>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/seqstream.hxx>
 #include <vcl/wmfexternal.hxx>
 #include <vcl/svapp.hxx>
@@ -237,24 +238,19 @@ Reference< XGraphic > GraphicHelper::importGraphic( const Reference< XInputStrea
     Reference< XGraphic > xGraphic;
     if( rxInStrm.is() && mxGraphicProvider.is() ) try
     {
-        Sequence< PropertyValue > aArgs( 2 );
-        aArgs[ 0 ].Name = "InputStream";
-        aArgs[ 0 ].Value <<= rxInStrm;
-        aArgs[ 1 ].Name = "LazyRead";
-        aArgs[ 1 ].Value <<= true;
+        Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("InputStream", rxInStrm),
+                                         comphelper::makePropertyValue("LazyRead", true) };
 
         if ( pExtHeader && pExtHeader->mapMode > 0 )
         {
-            aArgs.realloc( aArgs.getLength() + 1 );
-            Sequence< PropertyValue > aFilterData( 3 );
-            aFilterData[ 0 ].Name = "ExternalWidth";
-            aFilterData[ 0 ].Value <<= pExtHeader->xExt;
-            aFilterData[ 1 ].Name = "ExternalHeight";
-            aFilterData[ 1 ].Value <<= pExtHeader->yExt;
-            aFilterData[ 2 ].Name = "ExternalMapMode";
-            aFilterData[ 2 ].Value <<= pExtHeader->mapMode;
-            aArgs[ 2 ].Name = "FilterData";
-            aArgs[ 2 ].Value <<= aFilterData;
+            auto pArgs = aArgs.realloc( aArgs.getLength() + 1 );
+            Sequence< PropertyValue > aFilterData{
+                comphelper::makePropertyValue("ExternalWidth", pExtHeader->xExt),
+                comphelper::makePropertyValue("ExternalHeight", pExtHeader->yExt),
+                comphelper::makePropertyValue("ExternalMapMode", pExtHeader->mapMode)
+            };
+            pArgs[ 2 ].Name = "FilterData";
+            pArgs[ 2 ].Value <<= aFilterData;
         }
 
         xGraphic = mxGraphicProvider->queryGraphic( aArgs );

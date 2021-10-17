@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/fieldvalues.hxx>
@@ -366,12 +369,9 @@ void SvxPosSizeStatusBarControl::Command( const CommandEvent& rCEvt )
 
                 css::uno::Any a;
                 SfxUInt32Item aItem( SID_PSZ_FUNCTION, nSelect );
-
-                css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
-                aArgs[0].Name  = "StatusBarFunc";
                 aItem.QueryValue( a );
-                aArgs[0].Value = a;
-
+                css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
+                    "StatusBarFunc", a) };
                 execute( ".uno:StatusBarFunc", aArgs );
             }
         }

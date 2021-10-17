@@ -152,8 +152,7 @@ namespace pcr
 
     void ObjectInspectorModel::createDefault()
     {
-        m_aFactories.realloc( 1 );
-        m_aFactories[0] <<= OUString( "com.sun.star.inspection.GenericPropertyHandler" );
+        m_aFactories = { Any(OUString( "com.sun.star.inspection.GenericPropertyHandler" )) };
     }
 
 

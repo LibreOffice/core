@@ -22,6 +22,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/DrawViewMode.hpp>
 
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/toolbox.hxx>
 
@@ -265,9 +266,7 @@ void LayoutToolbarMenu::SelectHdl(AutoLayout eLayout)
 
     if( eLayout != AUTOLAYOUT_END )
     {
-        aArgs = Sequence< PropertyValue >(1);
-        aArgs[0].Name = "WhatLayout";
-        aArgs[0].Value <<= static_cast<sal_Int32>(eLayout);
+        aArgs = { comphelper::makePropertyValue("WhatLayout", static_cast<sal_Int32>(eLayout)) };
     }
     else if( mbInsertPage )
     {

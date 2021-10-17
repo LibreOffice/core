@@ -31,6 +31,8 @@
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
+
+#include <comphelper/propertyvalue.hxx>
 #include <sal/macros.h>
 #include <osl/time.h>
 #include <vcl/errinf.hxx>
@@ -595,14 +597,11 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                 aURL.Protocol = "vnd.com.sun.star.comp.PPPOptimizer:";
                 aURL.Path = "optimize";
 
-                Sequence< PropertyValue > lArguments( 3 );
-                lArguments[ 0 ].Name = "Settings";
-                lArguments[ 0 ].Value <<= mrOptimizerDialog.GetConfigurationSequence();
-                lArguments[ 1 ].Name = "StatusDispatcher";
-                lArguments[ 1 ].Value <<= mrOptimizerDialog.GetStatusDispatcher();
-                lArguments[ 2 ].Name = "InformationDialog";
-                lArguments[ 2 ].Value <<= mrOptimizerDialog.GetFrame();
-
+                Sequence< PropertyValue > lArguments{
+                    comphelper::makePropertyValue("Settings", mrOptimizerDialog.GetConfigurationSequence()),
+                    comphelper::makePropertyValue("StatusDispatcher", mrOptimizerDialog.GetStatusDispatcher()),
+                    comphelper::makePropertyValue("InformationDialog", mrOptimizerDialog.GetFrame())
+                };
 
                 ErrCode errorCode;
                 try
