@@ -67,15 +67,16 @@ css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecCon
 
     rtl::Reference<SignatureCreatorImpl> xSignatureCreator(new SignatureCreatorImpl);
 
-    css::uno::Sequence<css::uno::Any> args(5);
-    args[0] <<= OUString::number(nSecurityId);
-    args[1] <<= uno::Reference<xml::crypto::sax::XSecuritySAXEventKeeper>(m_xSAXEventKeeper);
-    args[2] <<= OUString::number(nIdOfSignatureElementCollector);
+    css::uno::Sequence<css::uno::Any> args
+    {
+        makeAny(OUString::number(nSecurityId)),
+        makeAny(uno::Reference<xml::crypto::sax::XSecuritySAXEventKeeper>(m_xSAXEventKeeper)),
+        makeAny(OUString::number(nIdOfSignatureElementCollector)),
 
-    //for nss, the internal module is used for signing, which needs to be improved later
-    args[3] <<= m_xSecurityContext->getSecurityEnvironment();
-
-    args[4] <<= m_xXMLSignature;
+        //for nss, the internal module is used for signing, which needs to be improved later
+        makeAny(m_xSecurityContext->getSecurityEnvironment()),
+        makeAny(m_xXMLSignature)
+    };
     xSignatureCreator->initialize(args);
 
     sal_Int32 nBlockerId = m_xSAXEventKeeper->addBlocker();

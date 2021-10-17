@@ -689,13 +689,10 @@ DocumentDigitalSignatures::chooseCertificatesImpl(std::map<OUString, OUString>& 
 
     CertificateChooser aChooser(Application::GetFrameWeld(mxParentWindow), std::move(xSecContexts), eAction);
 
-    uno::Sequence< Reference< css::security::XCertificate > > xCerts(1);
-    xCerts[0] = Reference< css::security::XCertificate >(nullptr);
-
     if (aChooser.run() != RET_OK)
-        return xCerts;
+        return { Reference< css::security::XCertificate >(nullptr) };
 
-    xCerts = aChooser.GetSelectedCertificates();
+    uno::Sequence< Reference< css::security::XCertificate > >  xCerts = aChooser.GetSelectedCertificates();
     rProperties["Description"] = aChooser.GetDescription();
     rProperties["Usage"] = aChooser.GetUsageText();
 

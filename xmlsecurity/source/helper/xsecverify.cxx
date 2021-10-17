@@ -72,12 +72,14 @@ css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecCon
 
     css::uno::Reference<css::lang::XInitialization> xInitialization(xReferenceResolvedListener, css::uno::UNO_QUERY);
 
-    css::uno::Sequence<css::uno::Any> args(5);
-    args[0] <<= OUString::number(nSecurityId);
-    args[1] <<= uno::Reference<xml::crypto::sax::XSecuritySAXEventKeeper>(m_xSAXEventKeeper);
-    args[2] <<= OUString::number(nIdOfSignatureElementCollector);
-    args[3] <<= m_xSecurityContext;
-    args[4] <<= m_xXMLSignature;
+    css::uno::Sequence<css::uno::Any> args
+    {
+        makeAny(OUString::number(nSecurityId)),
+        makeAny(uno::Reference<xml::crypto::sax::XSecuritySAXEventKeeper>(m_xSAXEventKeeper)),
+        makeAny(OUString::number(nIdOfSignatureElementCollector)),
+        makeAny(m_xSecurityContext),
+        makeAny(m_xXMLSignature)
+    };
     xInitialization->initialize(args);
 
     css::uno::Reference< css::xml::crypto::sax::XSignatureVerifyResultBroadcaster >
