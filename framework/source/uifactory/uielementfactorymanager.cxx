@@ -41,6 +41,7 @@
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -162,25 +163,26 @@ Sequence< Sequence< PropertyValue > > ConfigurationAccess_FactoryManager::getFac
         if ( !aFactory.isEmpty() )
         {
             sal_Int32                 nToken = 0;
-            Sequence< PropertyValue > aSeq( 1 );
 
             aSeqSeq.realloc( aSeqSeq.getLength() + 1 );
-            aSeq[0].Name  = m_aPropType;
-            aSeq[0].Value <<= aFactory.getToken( 0, '^', nToken );
+            Sequence< PropertyValue > aSeq(
+                { comphelper::makePropertyValue(m_aPropType, aFactory.getToken( 0, '^', nToken )) });
             if ( nToken > 0 )
             {
                 aSeq.realloc( 2 );
-                aSeq[1].Name  = m_aPropName;
-                aSeq[1].Value <<= aFactory.getToken( 0, '^', nToken );
+                aSeq.getArray()[1]
+                    = comphelper::makePropertyValue(m_aPropName,
+                                                    aFactory.getToken( 0, '^', nToken ));
                 if ( nToken > 0 )
                 {
                     aSeq.realloc( 3 );
-                    aSeq[2].Name  = m_aPropModule;
-                    aSeq[2].Value <<= aFactory.getToken( 0, '^', nToken );
+                    aSeq.getArray()[2]
+                        = comphelper::makePropertyValue(m_aPropModule,
+                                                        aFactory.getToken( 0, '^', nToken ));
                 }
             }
 
-            aSeqSeq[nIndex++] = aSeq;
+            aSeqSeq.getArray()[nIndex++] = aSeq;
         }
     }
 

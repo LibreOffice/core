@@ -28,7 +28,13 @@ using namespace ::com::sun::star;
 
 #define IUL 6
 
-uno::Sequence< OUString > Interceptor::m_aInterceptedURL(IUL);
+constexpr OUStringLiteral IU0 = u".uno:Save";
+constexpr OUStringLiteral IU1 = u".uno:SaveAll";
+constexpr OUStringLiteral IU2 = u".uno:CloseDoc";
+constexpr OUStringLiteral IU3 = u".uno:CloseWin";
+constexpr OUStringLiteral IU4 = u".uno:CloseFrame";
+constexpr OUStringLiteral IU5 = u".uno:SaveAs";
+const uno::Sequence< OUString > Interceptor::m_aInterceptedURL({ IU0, IU1, IU2, IU3, IU4, IU5 });
 
 class StatusChangeListenerContainer
     : public comphelper::OMultiTypeInterfaceContainerHelperVar2<OUString>
@@ -49,12 +55,6 @@ void Interceptor::DisconnectDocHolder()
 Interceptor::Interceptor( DocumentHolder* pDocHolder )
     : m_pDocHolder( pDocHolder )
 {
-    m_aInterceptedURL[0] = ".uno:Save";
-    m_aInterceptedURL[1] = ".uno:SaveAll";
-    m_aInterceptedURL[2] = ".uno:CloseDoc";
-    m_aInterceptedURL[3] = ".uno:CloseWin";
-    m_aInterceptedURL[4] = ".uno:CloseFrame";
-    m_aInterceptedURL[5] = ".uno:SaveAs";
 }
 
 Interceptor::~Interceptor()
@@ -94,7 +94,7 @@ Interceptor::dispatch(
         {
             if ( aNewArgs[nInd].Name == "SaveTo" )
             {
-                aNewArgs[nInd].Value <<= true;
+                aNewArgs.getArray()[nInd].Value <<= true;
                 break;
             }
             nInd++;
@@ -103,8 +103,9 @@ Interceptor::dispatch(
         if ( nInd == aNewArgs.getLength() )
         {
             aNewArgs.realloc( nInd + 1 );
-            aNewArgs[nInd].Name = "SaveTo";
-            aNewArgs[nInd].Value <<= true;
+            auto pNewArgs = aNewArgs.getArray();
+            pNewArgs[nInd].Name = "SaveTo";
+            pNewArgs[nInd].Value <<= true;
         }
 
         uno::Reference< frame::XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(
@@ -257,20 +258,20 @@ Interceptor::queryDispatches(
         aRet = m_xSlaveDispatchProvider->queryDispatches(Requests);
     else
         aRet.realloc(Requests.getLength());
-
+    auto aRetRange = asNonConstRange(aRet);
     for(sal_Int32 i = 0; i < Requests.getLength(); ++i)
         if(m_aInterceptedURL[0] == Requests[i].FeatureURL.Complete)
-            aRet[i] = static_cast<frame::XDispatch*>(this);
+            aRetRange[i] = static_cast<frame::XDispatch*>(this);
         else if(m_aInterceptedURL[1] == Requests[i].FeatureURL.Complete)
-            aRet[i] = nullptr;
+            aRetRange[i] = nullptr;
         else if(m_aInterceptedURL[2] == Requests[i].FeatureURL.Complete)
-            aRet[i] = static_cast<frame::XDispatch*>(this);
+            aRetRange[i] = static_cast<frame::XDispatch*>(this);
         else if(m_aInterceptedURL[3] == Requests[i].FeatureURL.Complete)
-            aRet[i] = static_cast<frame::XDispatch*>(this);
+            aRetRange[i] = static_cast<frame::XDispatch*>(this);
         else if(m_aInterceptedURL[4] == Requests[i].FeatureURL.Complete)
-            aRet[i] = static_cast<frame::XDispatch*>(this);
+            aRetRange[i] = static_cast<frame::XDispatch*>(this);
         else if(m_aInterceptedURL[5] == Requests[i].FeatureURL.Complete)
-            aRet[i] = static_cast<frame::XDispatch*>(this);
+            aRetRange[i] = static_cast<frame::XDispatch*>(this);
 
     return aRet;
 }

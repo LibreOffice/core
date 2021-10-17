@@ -275,7 +275,7 @@ PackageInformationProvider::isUpdateAvailable( const OUString& _sExtensionId )
             aNewEntry[0] = updateInfo.first;
             aNewEntry[1] = updateVersion;
             aList.realloc( ++nCount );
-            aList[ nCount-1 ] = ::uno::Sequence< OUString >( aNewEntry, 2 );
+            aList.getArray()[ nCount-1 ] = ::uno::Sequence< OUString >( aNewEntry, 2 );
         }
     }
     return aList;
@@ -299,7 +299,7 @@ uno::Sequence< uno::Sequence< OUString > > SAL_CALL PackageInformationProvider::
 
     sal_Int32 cAllIds = allExt.getLength();
     retList.realloc(cAllIds);
-
+    auto retListRange = asNonConstRange(retList);
     for (sal_Int32 i = 0; i < cAllIds; i++)
     {
         //The inner sequence contains extensions with the same identifier from
@@ -315,10 +315,7 @@ uno::Sequence< uno::Sequence< OUString > > SAL_CALL PackageInformationProvider::
             uno::Reference< deployment::XPackage > const & xExtension( seqExtension[j] );
             if (xExtension.is())
             {
-                OUString aNewEntry[2];
-                aNewEntry[0] = dp_misc::getIdentifier(xExtension);
-                aNewEntry[1] = xExtension->getVersion();
-                retList[i] = ::uno::Sequence< OUString >( aNewEntry, 2 );
+                retListRange[i] = { dp_misc::getIdentifier(xExtension), xExtension->getVersion() };
                 break;
             }
         }

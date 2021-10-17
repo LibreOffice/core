@@ -641,9 +641,8 @@ Reference<XPropertySetInfo > OServiceManager::getPropertySetInfo()
     check_undisposed();
     if (! m_xPropertyInfo.is())
     {
-        Sequence< beans::Property > seq( 1 );
-        seq[ 0 ] = beans::Property(
-            "DefaultContext", -1, cppu::UnoType<decltype(m_xContext)>::get(), 0 );
+        Sequence< beans::Property > seq({ beans::Property(
+            "DefaultContext", -1, cppu::UnoType<decltype(m_xContext)>::get(), 0 ) });
         Reference< beans::XPropertySetInfo > xInfo( new PropertySetInfo_Impl( seq ) );
 
         MutexGuard aGuard( m_mutex );
@@ -1422,12 +1421,12 @@ Reference<XPropertySetInfo > ORegistryServiceManager::getPropertySetInfo()
     check_undisposed();
     if (! m_xPropertyInfo.is())
     {
-        Sequence< beans::Property > seq( 2 );
-        seq[ 0 ] = beans::Property(
-            "DefaultContext", -1, cppu::UnoType<decltype(m_xContext)>::get(), 0 );
-        seq[ 1 ] = beans::Property(
-            "Registry", -1, cppu::UnoType<decltype(m_xRegistry)>::get(),
-            beans::PropertyAttribute::READONLY );
+        Sequence< beans::Property > seq({
+            beans::Property(
+                "DefaultContext", -1, cppu::UnoType<decltype(m_xContext)>::get(), 0 ),
+            beans::Property(
+                "Registry", -1, cppu::UnoType<decltype(m_xRegistry)>::get(),
+                beans::PropertyAttribute::READONLY ) });
         Reference< beans::XPropertySetInfo > xInfo( new PropertySetInfo_Impl( seq ) );
 
         MutexGuard aGuard( m_mutex );

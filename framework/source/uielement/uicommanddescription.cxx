@@ -39,6 +39,7 @@
 
 #include <vcl/mnemonic.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
 
@@ -265,24 +266,17 @@ Any ConfigurationAccess_UICommand::getSequenceFromCache( const OUString& aComman
         if ( !pIter->second.bCommandNameCreated )
             fillInfoFromResult( pIter->second, pIter->second.aLabel );
 
-        Sequence< PropertyValue > aPropSeq( 8 );
-        aPropSeq[0].Name  = "Label";
-        aPropSeq[0].Value = !pIter->second.aContextLabel.isEmpty() ?
-                makeAny( pIter->second.aContextLabel ): makeAny( pIter->second.aLabel );
-        aPropSeq[1].Name  = "Name";
-        aPropSeq[1].Value <<= pIter->second.aCommandName;
-        aPropSeq[2].Name  = "Popup";
-        aPropSeq[2].Value <<= pIter->second.bPopup;
-        aPropSeq[3].Name  = m_aPropProperties;
-        aPropSeq[3].Value <<= pIter->second.nProperties;
-        aPropSeq[4].Name  = "PopupLabel";
-        aPropSeq[4].Value <<= pIter->second.aPopupLabel;
-        aPropSeq[5].Name  = "TooltipLabel";
-        aPropSeq[5].Value <<= pIter->second.aTooltipLabel;
-        aPropSeq[6].Name  = "TargetURL";
-        aPropSeq[6].Value <<= pIter->second.aTargetURL;
-        aPropSeq[7].Name = "IsExperimental";
-        aPropSeq[7].Value <<= pIter->second.bIsExperimental;
+        Sequence< PropertyValue > aPropSeq({
+            comphelper::makePropertyValue("Label", !pIter->second.aContextLabel.isEmpty()
+                                                       ? makeAny(pIter->second.aContextLabel)
+                                                       : makeAny(pIter->second.aLabel)),
+            comphelper::makePropertyValue("Name", pIter->second.aCommandName),
+            comphelper::makePropertyValue("Popup", pIter->second.bPopup),
+            comphelper::makePropertyValue(m_aPropProperties, pIter->second.nProperties),
+            comphelper::makePropertyValue("PopupLabel", pIter->second.aPopupLabel),
+            comphelper::makePropertyValue("TooltipLabel", pIter->second.aTooltipLabel),
+            comphelper::makePropertyValue("TargetURL", pIter->second.aTargetURL),
+            comphelper::makePropertyValue("IsExperimental", pIter->second.bIsExperimental) });
         return makeAny( aPropSeq );
     }
 

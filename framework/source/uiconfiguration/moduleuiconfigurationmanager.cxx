@@ -55,6 +55,7 @@
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 #include <comphelper/multicontainer2.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <memory>
@@ -1068,17 +1069,14 @@ Sequence< Sequence< PropertyValue > > SAL_CALL ModuleUIConfigurationManager::get
     else
         impl_fillSequenceWithElementTypeInfo( aUIElementInfoCollection, ElementType );
 
-    Sequence< PropertyValue > aUIElementInfo( 2 );
-    aUIElementInfo[0].Name = "ResourceURL";
-    aUIElementInfo[1].Name = m_aPropUIName;
-
     aElementInfoSeq.resize( aUIElementInfoCollection.size() );
 
     sal_Int32 n = 0;
     for (auto const& elem : aUIElementInfoCollection)
     {
-        aUIElementInfo[0].Value <<= elem.second.aResourceURL;
-        aUIElementInfo[1].Value <<= elem.second.aUIName;
+        Sequence< PropertyValue > aUIElementInfo(
+            { comphelper::makePropertyValue("ResourceURL", elem.second.aResourceURL),
+              comphelper::makePropertyValue(m_aPropUIName, elem.second.aUIName) });
         aElementInfoSeq[n++] = aUIElementInfo;
     }
 

@@ -606,10 +606,8 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
 
     OUString sType = xDetect->queryTypeByURL(sURL);
 
-    css::uno::Sequence< css::beans::NamedValue >           lQuery(1);
     css::uno::Reference< css::frame::XLoaderFactory >      xLoaderFactory;
     css::uno::Reference< css::container::XEnumeration >    xSet;
-    css::uno::Sequence< OUString >                  lTypesReg(1);
 
     // (iii) If a FrameLoader service (or at least
     //      a Filter) can be found, which supports
@@ -626,9 +624,8 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
 
     OUString sPROP_TYPES(PROP_TYPES);
 
-    lTypesReg[0]      = sType;
-    lQuery[0].Name    = sPROP_TYPES;
-    lQuery[0].Value <<= lTypesReg;
+    css::uno::Sequence< OUString > lTypesReg = { sType };
+    css::uno::Sequence<css::beans::NamedValue> lQuery({ { sPROP_TYPES, uno::Any(lTypesReg) } });
 
     xLoaderFactory = css::frame::FrameLoaderFactory::create(xContext);
     xSet       = xLoaderFactory->createSubSetEnumerationByProperties(lQuery);
@@ -640,9 +637,8 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     //      E.g. ContentHandler.
     //      Such contents can be handled ... but not loaded.
 
-    lTypesReg[0]      = sType;
-    lQuery[0].Name    = sPROP_TYPES;
-    lQuery[0].Value <<= lTypesReg;
+    lTypesReg = { sType };
+    lQuery = { { sPROP_TYPES, uno::Any(lTypesReg) } };
 
     xLoaderFactory = css::frame::ContentHandlerFactory::create(xContext);
     xSet       = xLoaderFactory->createSubSetEnumerationByProperties(lQuery);
@@ -961,13 +957,13 @@ bool LoadEnv::impl_furtherDocsAllowed()
         if (xInteraction.is())
         {
             css::uno::Any                                                                    aInteraction;
-            css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations(2);
 
             rtl::Reference<comphelper::OInteractionAbort>   pAbort   = new comphelper::OInteractionAbort();
             rtl::Reference<comphelper::OInteractionApprove> pApprove = new comphelper::OInteractionApprove();
 
-            lContinuations[0] = pAbort;
-            lContinuations[1] = pApprove;
+            css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations(
+                { pAbort,
+                  pApprove });
 
             css::task::ErrorCodeRequest aErrorCode;
             aErrorCode.ErrCode = sal_uInt32(ERRCODE_SFX_NOMOREDOCUMENTSALLOWED);

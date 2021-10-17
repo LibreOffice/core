@@ -743,8 +743,9 @@ Sequence< Reference< XIdlClass > > InterfaceIdlClassImpl::getSuperclasses()
     if (!_xSuperClasses.hasElements()) {
         typelib_InterfaceTypeDescription * pType = getTypeDescr();
         _xSuperClasses.realloc(pType->nBaseTypes);
+        auto aSuperClassesRange = asNonConstRange(_xSuperClasses);
         for (sal_Int32 i = 0; i < pType->nBaseTypes; ++i) {
-            _xSuperClasses[i] = getReflection()->forType(
+            aSuperClassesRange[i] = getReflection()->forType(
                 &pType->ppBaseTypes[i]->aBase);
             OSL_ASSERT(_xSuperClasses[i].is());
         }

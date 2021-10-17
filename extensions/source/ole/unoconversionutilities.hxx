@@ -2331,11 +2331,12 @@ Sequence<Type> UnoConversionUtilities<T>::getImplementedInterfaces(IUnknown* pUn
             if( anyNames >>= seqAny)
             {
                 seqTypes.realloc( seqAny.getLength());
+                auto seqTypesRange = asNonConstRange(seqTypes);
                 for( sal_Int32 i=0; i < seqAny.getLength(); i++)
                 {
                     OUString typeName;
                     seqAny[i] >>= typeName;
-                    seqTypes[i]= Type( TypeClass_INTERFACE, typeName);
+                    seqTypesRange[i]= Type( TypeClass_INTERFACE, typeName);
                 }
             }
         }

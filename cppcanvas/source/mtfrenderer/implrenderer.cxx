@@ -21,6 +21,7 @@
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <cppcanvas/canvas.hxx>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
@@ -545,29 +546,18 @@ namespace cppcanvas::internal
                         vcl::unotools::colorToDoubleSequence( aVCLEndColor,
                                                                 xColorSpace ));
 
-                    uno::Sequence< uno::Sequence < double > > aColors(2);
-                    uno::Sequence< double > aStops(2);
+                    uno::Sequence< uno::Sequence < double > > aColors;
+                    uno::Sequence< double > aStops;
 
                     if( rGradient.GetStyle() == GradientStyle::Axial )
                     {
-                        aStops.realloc(3);
-                        aColors.realloc(3);
-
-                        aStops[0] = 0.0;
-                        aStops[1] = 0.5;
-                        aStops[2] = 1.0;
-
-                        aColors[0] = aEndColor;
-                        aColors[1] = aStartColor;
-                        aColors[2] = aEndColor;
+                        aStops = { 0.0, 0.5, 1.0 };
+                        aColors = { aEndColor, aStartColor, aEndColor };
                     }
                     else
                     {
-                        aStops[0] = 0.0;
-                        aStops[1] = 1.0;
-
-                        aColors[0] = aStartColor;
-                        aColors[1] = aEndColor;
+                        aStops = { 0.0, 1.0 };
+                        aColors = { aStartColor, aEndColor };
                     }
 
                     const ::basegfx::B2DRectangle aBounds(
@@ -840,9 +830,8 @@ namespace cppcanvas::internal
 
             if (rFont.GetEmphasisMark() != FontEmphasisMark::NONE)
             {
-                uno::Sequence< beans::PropertyValue > aProperties(1);
-                aProperties[0].Name = "EmphasisMark";
-                aProperties[0].Value <<= sal_uInt32(rFont.GetEmphasisMark());
+                uno::Sequence< beans::PropertyValue > aProperties({ comphelper::makePropertyValue(
+                    "EmphasisMark", sal_uInt32(rFont.GetEmphasisMark())) });
                 return rParms.mrCanvas->getUNOCanvas()->createFont(aFontRequest,
                                                                 aProperties,
                                                                 aFontMatrix);

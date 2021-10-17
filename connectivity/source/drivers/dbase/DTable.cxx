@@ -2332,10 +2332,10 @@ namespace
         {
             Content aContent(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
 
-            Sequence< PropertyValue > aProps( 1 );
-            aProps[0].Name      = "Title";
-            aProps[0].Handle    = -1; // n/a
-            aProps[0].Value     <<= sNewName;
+            Sequence< PropertyValue > aProps({ { "Title",
+                                                 -1, // n/a
+                                                 Any(sNewName),
+                                                 css::beans::PropertyState_DIRECT_VALUE } });
             Sequence< Any > aValues;
             aContent.executeCommand( "setPropertyValues",makeAny(aProps) ) >>= aValues;
             if(aValues.hasElements() && aValues[0].hasValue())

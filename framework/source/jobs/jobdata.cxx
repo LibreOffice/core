@@ -252,12 +252,14 @@ void JobData::setJobConfig( std::vector< css::beans::NamedValue >&& lArguments )
     {
         sal_Int32                             nCount = m_lArguments.size();
         css::uno::Sequence< OUString > lNames (nCount);
+        auto lNamesRange = asNonConstRange(lNames);
         css::uno::Sequence< css::uno::Any >   lValues(nCount);
+        auto lValuesRange = asNonConstRange(lValues);
 
         for (sal_Int32 i=0; i<nCount; ++i)
         {
-            lNames [i] = m_lArguments[i].Name;
-            lValues[i] = m_lArguments[i].Value;
+            lNamesRange [i] = m_lArguments[i].Name;
+            lValuesRange[i] = m_lArguments[i].Value;
         }
 
         xArgumentList->setHierarchicalPropertyValues(lNames, lValues);
@@ -341,20 +343,9 @@ css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
     css::uno::Sequence< css::beans::NamedValue > lConfig;
     if (m_eMode==E_ALIAS)
     {
-        lConfig.realloc(3);
-        sal_Int32 i = 0;
-
-        lConfig[i].Name = "Alias";
-        lConfig[i].Value <<= m_sAlias;
-        ++i;
-
-        lConfig[i].Name = "Service";
-        lConfig[i].Value <<= m_sService;
-        ++i;
-
-        lConfig[i].Name = "Context";
-        lConfig[i].Value <<= m_sContext;
-        ++i;
+        lConfig = { { "Alias", css::uno::Any(m_sAlias) },
+                    { "Service", css::uno::Any(m_sService) },
+                    { "Context", css::uno::Any(m_sContext) } };
     }
     return lConfig;
 }

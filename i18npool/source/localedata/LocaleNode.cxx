@@ -2364,9 +2364,11 @@ Attr::Attr (const Reference< XAttributeList > & attr) {
     sal_Int16 len = attr->getLength();
     name.realloc (len);
     value.realloc (len);
+    auto aNameRange = asNonConstRange(name);
+    auto aValueRange = asNonConstRange(value);
     for (sal_Int16 i =0; i< len;i++) {
-        name[i] = attr->getNameByIndex(i);
-        value[i] = attr -> getValueByIndex(i);
+        aNameRange[i] = attr->getNameByIndex(i);
+        aValueRange[i] = attr -> getValueByIndex(i);
     }
 }
 

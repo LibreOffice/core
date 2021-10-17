@@ -1092,10 +1092,8 @@ namespace canvas::tools
                     uno::Reference< beans::XPropertySet > xPropSet( xDevice,
                                                                     uno::UNO_QUERY_THROW );
 
-                    o_rxParams.realloc( 2 );
-
-                    o_rxParams[ 0 ] <<= xServiceInfo->getImplementationName();
-                    o_rxParams[ 1 ] = xPropSet->getPropertyValue( "DeviceHandle" );
+                    o_rxParams = { uno::Any(xServiceInfo->getImplementationName()),
+                                   uno::Any(xPropSet->getPropertyValue( "DeviceHandle" )) };
                 }
                 catch( const uno::Exception& )
                 {

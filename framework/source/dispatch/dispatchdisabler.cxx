@@ -52,8 +52,9 @@ uno::Sequence< uno::Reference< frame::XDispatch > > SAL_CALL
 DispatchDisabler::queryDispatches( const uno::Sequence< frame::DispatchDescriptor >& rRequests )
 {
     uno::Sequence< uno::Reference< frame::XDispatch > > aResult(rRequests.getLength());
+    auto aResultRange = asNonConstRange(aResult);
     for( sal_Int32 i = 0; i < rRequests.getLength(); ++i )
-        aResult[i] = queryDispatch(rRequests[i].FeatureURL,
+        aResultRange[i] = queryDispatch(rRequests[i].FeatureURL,
                                    rRequests[i].FrameName,
                                    rRequests[i].SearchFlags);
     return aResult;
@@ -87,9 +88,10 @@ uno::Sequence< OUString > SAL_CALL
     DispatchDisabler::getInterceptedURLs()
 {
     uno::Sequence< OUString > aDisabledURLs(maDisabledURLs.size());
+    auto aDisabledURLsRange = asNonConstRange(aDisabledURLs);
     sal_Int32 n = 0;
     for (auto const& disabledURL : maDisabledURLs)
-        aDisabledURLs[n++] = disabledURL;
+        aDisabledURLsRange[n++] = disabledURL;
     return aDisabledURLs;
 }
 

@@ -315,8 +315,7 @@ void TaskCreatorService::implts_establishWindowStateListener( const css::uno::Re
     // See used classes for further information too.
     rtl::Reference<PersistentWindowState> pPersistentStateHandler = new PersistentWindowState( m_xContext );
 
-    css::uno::Sequence< css::uno::Any > lInitData(1);
-    lInitData[0] <<= xFrame;
+    css::uno::Sequence< css::uno::Any > lInitData({ css::uno::Any(xFrame) });
     pPersistentStateHandler->initialize(lInitData);
 }
 
@@ -327,8 +326,7 @@ void TaskCreatorService::implts_establishDocModifyListener( const css::uno::Refe
     // It will tag the window as modified if the underlying model was modified ...
     rtl::Reference<TagWindowAsModified> pTag = new TagWindowAsModified();
 
-    css::uno::Sequence< css::uno::Any > lInitData(1);
-    lInitData[0] <<= xFrame;
+    css::uno::Sequence< css::uno::Any > lInitData({ css::uno::Any(xFrame) });
     pTag->initialize(lInitData);
 }
 
@@ -336,8 +334,7 @@ void TaskCreatorService::implts_establishTitleBarUpdate( const css::uno::Referen
 {
     rtl::Reference<TitleBarUpdate> pHelper = new TitleBarUpdate (m_xContext);
 
-    css::uno::Sequence< css::uno::Any > lInitData(1);
-    lInitData[0] <<= xFrame;
+    css::uno::Sequence< css::uno::Any > lInitData({ css::uno::Any(xFrame) });
     pHelper->initialize(lInitData);
 }
 

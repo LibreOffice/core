@@ -57,12 +57,13 @@ void SvCommandList::FillSequence( css::uno::Sequence < css::beans::PropertyValue
 {
     const sal_Int32 nCount = aCommandList.size();
     aCommandSequence.realloc( nCount );
+    auto aCommandSequenceRange = asNonConstRange(aCommandSequence);
     for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
     {
-        aCommandSequence[nIndex].Name = aCommandList[ nIndex ].GetCommand();
-        aCommandSequence[nIndex].Handle = -1;
-        aCommandSequence[nIndex].Value <<= aCommandList[ nIndex ].GetArgument();
-        aCommandSequence[nIndex].State = beans::PropertyState_DIRECT_VALUE;
+        aCommandSequenceRange[nIndex].Name = aCommandList[ nIndex ].GetCommand();
+        aCommandSequenceRange[nIndex].Handle = -1;
+        aCommandSequenceRange[nIndex].Value <<= aCommandList[ nIndex ].GetArgument();
+        aCommandSequenceRange[nIndex].State = beans::PropertyState_DIRECT_VALUE;
     }
 }
 

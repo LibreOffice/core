@@ -36,6 +36,7 @@
 
 #include <comphelper/attributelist.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -400,12 +401,9 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
 
             m_bToolBarSpaceStartFound = true;
 
-            Sequence< PropertyValue > aToolbarItemProp( 2 );
-            aToolbarItemProp[0].Name = m_aCommandURL;
-            aToolbarItemProp[1].Name = m_aType;
-
-            aToolbarItemProp[0].Value <<= OUString();
-            aToolbarItemProp[1].Value <<= css::ui::ItemType::SEPARATOR_SPACE;
+            Sequence< PropertyValue > aToolbarItemProp(
+                { comphelper::makePropertyValue(m_aCommandURL, OUString()),
+                  comphelper::makePropertyValue(m_aType, css::ui::ItemType::SEPARATOR_SPACE) });
 
             m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
         }
@@ -424,12 +422,9 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
 
             m_bToolBarBreakStartFound = true;
 
-            Sequence< PropertyValue > aToolbarItemProp( 2 );
-            aToolbarItemProp[0].Name = m_aCommandURL;
-            aToolbarItemProp[1].Name = m_aType;
-
-            aToolbarItemProp[0].Value <<= OUString();
-            aToolbarItemProp[1].Value <<= css::ui::ItemType::SEPARATOR_LINEBREAK;
+            Sequence< PropertyValue > aToolbarItemProp(
+                { comphelper::makePropertyValue(m_aCommandURL, OUString()),
+                  comphelper::makePropertyValue(m_aType, css::ui::ItemType::SEPARATOR_LINEBREAK) });
 
             m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
         }
@@ -448,12 +443,9 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
 
             m_bToolBarSeparatorStartFound = true;
 
-            Sequence< PropertyValue > aToolbarItemProp( 2 );
-            aToolbarItemProp[0].Name = m_aCommandURL;
-            aToolbarItemProp[1].Name = m_aType;
-
-            aToolbarItemProp[0].Value <<= OUString();
-            aToolbarItemProp[1].Value <<= css::ui::ItemType::SEPARATOR_LINE;
+            Sequence< PropertyValue > aToolbarItemProp(
+                { comphelper::makePropertyValue(m_aCommandURL, OUString()),
+                  comphelper::makePropertyValue(m_aType, css::ui::ItemType::SEPARATOR_LINE) });
 
             m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
         }

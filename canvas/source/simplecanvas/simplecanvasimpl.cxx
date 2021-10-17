@@ -45,29 +45,25 @@ namespace
     uno::Sequence< double > color2Sequence( sal_Int32 nColor )
     {
         // TODO(F3): Color management
-        uno::Sequence< double > aRes( 4 );
-
-        aRes[0] = static_cast<sal_uInt8>( (nColor&0xFF000000U) >> 24U ) / 255.0;
-        aRes[1] = static_cast<sal_uInt8>( (nColor&0x00FF0000U) >> 16U ) / 255.0;
-        aRes[2] = static_cast<sal_uInt8>( (nColor&0x0000FF00U) >>  8U ) / 255.0;
-        aRes[3] = static_cast<sal_uInt8>( (nColor&0x000000FFU) )        / 255.0;
-
+        uno::Sequence< double > aRes( {
+            static_cast<sal_uInt8>( (nColor&0xFF000000U) >> 24U ) / 255.0,
+            static_cast<sal_uInt8>( (nColor&0x00FF0000U) >> 16U ) / 255.0,
+            static_cast<sal_uInt8>( (nColor&0x0000FF00U) >>  8U ) / 255.0,
+            static_cast<sal_uInt8>( (nColor&0x000000FFU) )        / 255.0
+        } );
         return aRes;
     }
 
     uno::Reference< rendering::XPolyPolygon2D > rect2Poly( uno::Reference<rendering::XGraphicDevice> const& xDevice,
                                                                   geometry::RealRectangle2D const&                 rRect )
     {
-        uno::Sequence< geometry::RealPoint2D > rectSequence( 4 );
-        geometry::RealPoint2D* pOutput = rectSequence.getArray();
-        pOutput[0] = geometry::RealPoint2D( rRect.X1, rRect.Y1 );
-        pOutput[1] = geometry::RealPoint2D( rRect.X2, rRect.Y1 );
-        pOutput[2] = geometry::RealPoint2D( rRect.X2, rRect.Y2 );
-        pOutput[3] = geometry::RealPoint2D( rRect.X1, rRect.Y2 );
-
-        uno::Sequence< uno::Sequence< geometry::RealPoint2D > > sequenceSequence( 1 );
-        sequenceSequence[0] = rectSequence;
-
+        uno::Sequence< geometry::RealPoint2D > rectSequence( {
+            geometry::RealPoint2D( rRect.X1, rRect.Y1 ),
+            geometry::RealPoint2D( rRect.X2, rRect.Y1 ),
+            geometry::RealPoint2D( rRect.X2, rRect.Y2 ),
+            geometry::RealPoint2D( rRect.X1, rRect.Y2 )
+        } );
+        uno::Sequence< uno::Sequence< geometry::RealPoint2D > > sequenceSequence({ rectSequence });
         uno::Reference< rendering::XPolyPolygon2D > xRes =
             xDevice->createCompatibleLinePolyPolygon( sequenceSequence );
         if( xRes.is() )

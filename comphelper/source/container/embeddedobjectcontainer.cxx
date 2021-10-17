@@ -42,6 +42,7 @@
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <sal/log.hxx>
 
@@ -322,24 +323,24 @@ uno::Reference<embed::XEmbeddedObject> EmbeddedObjectContainer::Get_Impl(
         //TODO/LATER: it would be good to detect an error when an object should be created already, but isn't (not an "inside" call)
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
         uno::Sequence< beans::PropertyValue > aObjDescr(1 + (xCopy.is() ? 1 : 0) + (pBaseURL ? 1 : 0));
-        aObjDescr[0].Name = "Parent";
-        aObjDescr[0].Value <<= pImpl->m_xModel.get();
-        sal_Int32 i = 1;
+        auto itObjDescr = aObjDescr.getArray();
+        itObjDescr->Name = "Parent";
+        itObjDescr->Value <<= pImpl->m_xModel.get();
         if (pBaseURL)
         {
-            aObjDescr[i].Name = "DefaultParentBaseURL";
-            aObjDescr[i].Value <<= *pBaseURL;
-            ++i;
+            ++itObjDescr;
+            itObjDescr->Name = "DefaultParentBaseURL";
+            itObjDescr->Value <<= *pBaseURL;
         }
         if ( xCopy.is() )
         {
-            aObjDescr[i].Name = "CloneFrom";
-            aObjDescr[i].Value <<= xCopy;
+            ++itObjDescr;
+            itObjDescr->Name = "CloneFrom";
+            itObjDescr->Value <<= xCopy;
         }
 
-        uno::Sequence< beans::PropertyValue > aMediaDescr( 1 );
-        aMediaDescr[0].Name = "ReadOnly";
-        aMediaDescr[0].Value <<= bReadOnlyMode;
+        uno::Sequence< beans::PropertyValue > aMediaDescr(
+            { comphelper::makePropertyValue("ReadOnly", bReadOnlyMode) });
         xObj.set( xFactory->createInstanceInitFromEntry(
                 pImpl->mxStorage, rName,
                 aMediaDescr, aObjDescr ), uno::UNO_QUERY );
@@ -371,14 +372,15 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbedde
 
         const size_t nExtraArgs = pBaseURL ? 2 : 1;
         uno::Sequence< beans::PropertyValue > aObjDescr( rArgs.getLength() + nExtraArgs );
-        aObjDescr[0].Name = "Parent";
-        aObjDescr[0].Value <<= pImpl->m_xModel.get();
+        auto pObjDescr = aObjDescr.getArray();
+        pObjDescr[0].Name = "Parent";
+        pObjDescr[0].Value <<= pImpl->m_xModel.get();
         if (pBaseURL)
         {
-            aObjDescr[1].Name = "DefaultParentBaseURL";
-            aObjDescr[1].Value <<= *pBaseURL;
+            pObjDescr[1].Name = "DefaultParentBaseURL";
+            pObjDescr[1].Value <<= *pBaseURL;
         }
-        std::copy( rArgs.begin(), rArgs.end(), aObjDescr.getArray() + nExtraArgs );
+        std::copy( rArgs.begin(), rArgs.end(), pObjDescr + nExtraArgs );
         xObj.set( xFactory->createInstanceInitNew(
                     rClassId, OUString(), pImpl->mxStorage, rNewName,
                     aObjDescr ), uno::UNO_QUERY );
@@ -591,12 +593,13 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
     {
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
         uno::Sequence< beans::PropertyValue > aObjDescr(pBaseURL ? 2 : 1);
-        aObjDescr[0].Name = "Parent";
-        aObjDescr[0].Value <<= pImpl->m_xModel.get();
+        auto pObjDescr = aObjDescr.getArray();
+        pObjDescr[0].Name = "Parent";
+        pObjDescr[0].Value <<= pImpl->m_xModel.get();
         if (pBaseURL)
         {
-            aObjDescr[1].Name = "DefaultParentBaseURL";
-            aObjDescr[1].Value <<= *pBaseURL;
+            pObjDescr[1].Name = "DefaultParentBaseURL";
+            pObjDescr[1].Value <<= *pBaseURL;
         }
         xObj.set( xFactory->createInstanceInitFromMediaDescriptor(
                 pImpl->mxStorage, rNewName, aMedium, aObjDescr ), uno::UNO_QUERY );
@@ -627,9 +630,8 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
     try
     {
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create(::comphelper::getProcessComponentContext());
-        uno::Sequence< beans::PropertyValue > aObjDescr( 1 );
-        aObjDescr[0].Name = "Parent";
-        aObjDescr[0].Value <<= pImpl->m_xModel.get();
+        uno::Sequence< beans::PropertyValue > aObjDescr(
+            { comphelper::makePropertyValue("Parent", pImpl->m_xModel.get()) });
         xObj.set( xFactory->createInstanceLink( pImpl->mxStorage, rNewName, aMedium, aObjDescr ), uno::UNO_QUERY );
 
         uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
@@ -714,12 +716,10 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                     uno::Reference < embed::XEmbeddedObjectCreator > xCreator =
                         embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
 
-                    uno::Sequence< beans::PropertyValue > aMediaDescr( 1 );
-                    aMediaDescr[0].Name = "URL";
-                    aMediaDescr[0].Value <<= aURL;
-                    uno::Sequence< beans::PropertyValue > aObjDescr( 1 );
-                    aObjDescr[0].Name = "Parent";
-                    aObjDescr[0].Value <<= pImpl->m_xModel.get();
+                    uno::Sequence< beans::PropertyValue > aMediaDescr(
+                        { comphelper::makePropertyValue("URL", aURL) });
+                    uno::Sequence< beans::PropertyValue > aObjDescr(
+                        { comphelper::makePropertyValue("Parent", pImpl->m_xModel.get()) });
                     xResult.set(xCreator->createInstanceLink(
                                     pImpl->mxStorage,
                                     rName,
@@ -740,9 +740,8 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                     uno::Reference < embed::XEmbeddedObjectCreator > xCreator =
                         embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
 
-                    uno::Sequence< beans::PropertyValue > aObjDescr( 1 );
-                    aObjDescr[0].Name = "Parent";
-                    aObjDescr[0].Value <<= pImpl->m_xModel.get();
+                    uno::Sequence< beans::PropertyValue > aObjDescr(
+                        { comphelper::makePropertyValue("Parent", pImpl->m_xModel.get()) });
                     xResult.set(xCreator->createInstanceInitNew(
                                     xObj->getClassID(),
                                     xObj->getClassName(),
@@ -1095,13 +1094,10 @@ bool EmbeddedObjectContainer::InsertGraphicStreamDirectly( const css::uno::Refer
         uno::Reference < embed::XOptimizedStorage > xOptRepl( xReplacement, uno::UNO_QUERY_THROW );
 
         // store it into the subfolder
-        uno::Sequence< beans::PropertyValue > aProps( 3 );
-        aProps[0].Name = "MediaType";
-        aProps[0].Value <<= rMediaType;
-        aProps[1].Name = "UseCommonStoragePasswordEncryption";
-        aProps[1].Value <<= true;
-        aProps[2].Name = "Compressed";
-        aProps[2].Value <<= true;
+        uno::Sequence< beans::PropertyValue > aProps(
+            { comphelper::makePropertyValue("MediaType", rMediaType),
+              comphelper::makePropertyValue("UseCommonStoragePasswordEncryption", true),
+              comphelper::makePropertyValue("Compressed", true) });
 
         if ( xReplacement->hasByName( rObjectName ) )
             xReplacement->removeElement( rObjectName );
@@ -1226,17 +1222,18 @@ bool EmbeddedObjectContainer::StoreAsChildren(bool _bOasisFormat,bool _bCreateEm
                 if ( xPersist.is() )
                 {
                     uno::Sequence< beans::PropertyValue > aArgs( _bOasisFormat ? 2 : 3 );
-                    aArgs[0].Name = "StoreVisualReplacement";
-                    aArgs[0].Value <<= !_bOasisFormat;
+                    auto pArgs = aArgs.getArray();
+                    pArgs[0].Name = "StoreVisualReplacement";
+                    pArgs[0].Value <<= !_bOasisFormat;
 
                     // if it is an embedded object or the optimized inserting fails the normal inserting should be done
-                    aArgs[1].Name = "CanTryOptimization";
-                    aArgs[1].Value <<= !_bCreateEmbedded;
+                    pArgs[1].Name = "CanTryOptimization";
+                    pArgs[1].Value <<= !_bCreateEmbedded;
                     if ( !_bOasisFormat )
                     {
                         // if object has no cached replacement it will use this one
-                        aArgs[2].Name = "VisualReplacement";
-                        aArgs[2].Value <<= xStream;
+                        pArgs[2].Name = "VisualReplacement";
+                        pArgs[2].Value <<= xStream;
                     }
 
                     try

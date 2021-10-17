@@ -166,6 +166,7 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
 
     std::unique_ptr<sal_Unicode[]> newStr(new sal_Unicode[nLength * 2 + 1]);
     sal_Int32 currPos = 0, count = 0;
+    auto offsetRange = asNonConstRange(offset);
     while (currPos < nLength) {
         sal_Int32 len = nLength - currPos;
         bool found = false;
@@ -198,7 +199,7 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
                         if (word.getLength() != conversions[0].getLength())
                             one2one=false;
                         while (current < conversions[0].getLength()) {
-                            offset[count] = nStartPos + currPos + (current *
+                            offsetRange[count] = nStartPos + currPos + (current *
                                     word.getLength() / conversions[0].getLength());
                             newStr[count++] = conversions[0][current++];
                         }
@@ -235,7 +236,7 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
                                 one2one=false;
                             sal_Int32 convertedLength=OUString(&wordData[current]).getLength();
                             while (wordData[current]) {
-                                offset[count]=nStartPos + currPos + ((current-start) *
+                                offsetRange[count]=nStartPos + currPos + ((current-start) *
                                     word.getLength() / convertedLength);
                                 newStr[count++] = wordData[current++];
                             }
@@ -252,7 +253,7 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
         }
         if (!found) {
             if (offset.hasElements())
-                offset[count]=nStartPos+currPos;
+                offsetRange[count]=nStartPos+currPos;
             newStr[count++] =
                 getOneCharConversion(aText[nStartPos+currPos], charData, charIndex);
             currPos++;
@@ -270,8 +271,8 @@ TextConversion_zh::getConversions( const OUString& aText, sal_Int32 nStartPos, s
 {
     TextConversionResult result;
 
-    result.Candidates.realloc(1);
-    result.Candidates[0] = getConversion( aText, nStartPos, nLength, rLocale, nConversionType, nConversionOptions);
+    result.Candidates =
+        { getConversion( aText, nStartPos, nLength, rLocale, nConversionType, nConversionOptions) };
     result.Boundary.startPos = nStartPos;
     result.Boundary.endPos = nStartPos + nLength;
 

@@ -53,6 +53,7 @@
 #include <unotools/ucbhelper.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 
@@ -1865,20 +1866,19 @@ void UCBStorage_Impl::SetProps( const Sequence < Sequence < PropertyValue > >& r
 
 void UCBStorage_Impl::GetProps( sal_Int32& nProps, Sequence < Sequence < PropertyValue > >& rSequence, const OUString& rPath )
 {
-    // first my own properties
-    Sequence < PropertyValue > aProps(2);
+    auto pSequence = rSequence.getArray();
 
+    // first my own properties
     // first property is the "FullPath" name
     // it's '/' for the root storage and m_aName for each element, followed by a '/' if it's a folder
     OUString aPath( rPath );
     if ( !m_bIsRoot )
         aPath += m_aName;
     aPath += "/";
-    aProps[0].Name = "MediaType";
-    aProps[0].Value <<= m_aContentType;
-    aProps[1].Name = "FullPath";
-    aProps[1].Value <<= aPath;
-    rSequence[ nProps++ ] = aProps;
+    Sequence < PropertyValue > aProps(
+        { comphelper::makePropertyValue("MediaType", m_aContentType),
+          comphelper::makePropertyValue("FullPath", aPath) });
+    pSequence[nProps++] = aProps;
 
     if ( m_bIsRoot )
         // the "FullPath" of a child always starts without '/'
@@ -1895,11 +1895,9 @@ void UCBStorage_Impl::GetProps( sal_Int32& nProps, Sequence < Sequence < Propert
         {
             // properties of streams
             OUString aElementPath = aPath + pElement->m_aName;
-            aProps[0].Name = "MediaType";
-            aProps[0].Value <<= pElement->GetContentType();
-            aProps[1].Name = "FullPath";
-            aProps[1].Value <<= aElementPath;
-            rSequence[ nProps++ ] = aProps;
+            aProps = { comphelper::makePropertyValue("MediaType", pElement->GetContentType()),
+                       comphelper::makePropertyValue("FullPath", aElementPath) };
+            pSequence[ nProps++ ] = aProps;
         }
     }
 }

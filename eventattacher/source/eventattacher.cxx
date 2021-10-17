@@ -826,9 +826,10 @@ Sequence< Reference<XEventListener> > EventAttacherImpl::attachMultipleEventList
 {
     sal_Int32 nCount = aListeners.getLength();
     Sequence< Reference<XAllListener> > aFilterListeners(nCount);
+    auto aFilterListenersRange = asNonConstRange(aFilterListeners);
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        aFilterListeners[i]
+        aFilterListenersRange[i]
             = new FilterAllListenerImpl(this, aListeners[i].EventMethod, aListeners[i].AllListener);
     }
 

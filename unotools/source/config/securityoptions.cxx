@@ -26,6 +26,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <tools/urlobj.hxx>
 
@@ -196,16 +197,16 @@ std::vector< SvtSecurityOptions::Certificate > GetTrustedAuthors()
 
     sal_Int32               c2 = c1 * 3;                // 3 Properties inside Struct TrustedAuthor
     Sequence< OUString >    lAllAuthors( c2 );
-
+    auto plAllAuthors = lAllAuthors.getArray();
     sal_Int32               i2 = 0;
     OUString                aSep( "/" );
     for( const auto& rAuthor : lAuthors )
     {
-        lAllAuthors[ i2 ] = PROPERTYNAME_MACRO_TRUSTEDAUTHORS + aSep + rAuthor + aSep + PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME;
+        plAllAuthors[ i2 ] = PROPERTYNAME_MACRO_TRUSTEDAUTHORS + aSep + rAuthor + aSep + PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME;
         ++i2;
-        lAllAuthors[ i2 ] = PROPERTYNAME_MACRO_TRUSTEDAUTHORS + aSep + rAuthor + aSep + PROPERTYNAME_TRUSTEDAUTHOR_SERIALNUMBER;
+        plAllAuthors[ i2 ] = PROPERTYNAME_MACRO_TRUSTEDAUTHORS + aSep + rAuthor + aSep + PROPERTYNAME_TRUSTEDAUTHOR_SERIALNUMBER;
         ++i2;
-        lAllAuthors[ i2 ] = PROPERTYNAME_MACRO_TRUSTEDAUTHORS + aSep + rAuthor + aSep + PROPERTYNAME_TRUSTEDAUTHOR_RAWDATA;
+        plAllAuthors[ i2 ] = PROPERTYNAME_MACRO_TRUSTEDAUTHORS + aSep + rAuthor + aSep + PROPERTYNAME_TRUSTEDAUTHOR_RAWDATA;
         ++i2;
     }
 
@@ -249,13 +250,13 @@ void SetTrustedAuthors( const std::vector< Certificate >& rAuthors )
         OUString aPrefix(
             PROPERTYNAME_MACRO_TRUSTEDAUTHORS + "/a"
             + OUString::number(i) + "/");
-        Sequence< css::beans::PropertyValue >    lPropertyValues( 3 );
-        lPropertyValues[ 0 ].Name = aPrefix + PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME;
-        lPropertyValues[ 0 ].Value <<= rAuthors[ i ].SubjectName;
-        lPropertyValues[ 1 ].Name = aPrefix + PROPERTYNAME_TRUSTEDAUTHOR_SERIALNUMBER;
-        lPropertyValues[ 1 ].Value <<= rAuthors[ i ].SerialNumber;
-        lPropertyValues[ 2 ].Name = aPrefix + PROPERTYNAME_TRUSTEDAUTHOR_RAWDATA;
-        lPropertyValues[ 2 ].Value <<= rAuthors[ i ].RawData;
+        Sequence< css::beans::PropertyValue >    lPropertyValues(
+            { comphelper::makePropertyValue(aPrefix + PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME,
+                                            rAuthors[i].SubjectName),
+              comphelper::makePropertyValue(aPrefix + PROPERTYNAME_TRUSTEDAUTHOR_SERIALNUMBER,
+                                            rAuthors[i].SerialNumber),
+              comphelper::makePropertyValue(aPrefix + PROPERTYNAME_TRUSTEDAUTHOR_RAWDATA,
+                                            rAuthors[i].RawData) });
 
         utl::ConfigItem::SetSetProperties( xHierarchyAccess, PROPERTYNAME_MACRO_TRUSTEDAUTHORS, lPropertyValues );
     }

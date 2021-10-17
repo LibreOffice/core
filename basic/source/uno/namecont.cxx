@@ -172,10 +172,7 @@ void NameContainer::replaceByName( const OUString& aName, const Any& aElement )
         ChangesEvent aEvent;
         aEvent.Source = mpxEventSource;
         aEvent.Base <<= aEvent.Source;
-        aEvent.Changes.realloc( 1 );
-        aEvent.Changes[ 0 ].Accessor <<= aName;
-        aEvent.Changes[ 0 ].Element = aElement;
-        aEvent.Changes[ 0 ].ReplacedElement = aOldElement;
+        aEvent.Changes = { { Any(aName), aElement, aOldElement } };
         maChangesListeners.notifyEach( &XChangesListener::changesOccurred, aEvent );
     }
 }
@@ -223,9 +220,7 @@ void NameContainer::insertNoCheck(const OUString& aName, const Any& aElement)
         ChangesEvent aEvent;
         aEvent.Source = mpxEventSource;
         aEvent.Base <<= aEvent.Source;
-        aEvent.Changes.realloc( 1 );
-        aEvent.Changes[ 0 ].Accessor <<= aName;
-        aEvent.Changes[ 0 ].Element = aElement;
+        aEvent.Changes = { {Any(aName), aElement, {} } };
         maChangesListeners.notifyEach( &XChangesListener::changesOccurred, aEvent );
     }
 }
@@ -277,10 +272,9 @@ void NameContainer::removeByName( const OUString& aName )
         ChangesEvent aEvent;
         aEvent.Source = mpxEventSource;
         aEvent.Base <<= aEvent.Source;
-        aEvent.Changes.realloc( 1 );
-        aEvent.Changes[ 0 ].Accessor <<= aName;
-        // aEvent.Changes[ 0 ].Element remains empty (meaning "replaced with nothing")
-        aEvent.Changes[ 0 ].ReplacedElement = aOldElement;
+        aEvent.Changes = { { Any(aName),
+                             {}, // Element remains empty (meaning "replaced with nothing")
+                             aOldElement } };
         maChangesListeners.notifyEach( &XChangesListener::changesOccurred, aEvent );
     }
 }

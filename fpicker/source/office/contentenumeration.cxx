@@ -139,20 +139,19 @@ namespace svt
         {
 
             Reference< XResultSet > xResultSet;
-            Sequence< OUString > aProps(12);
-
-            aProps[0] = "Title";
-            aProps[1] = "Size";
-            aProps[2] = "DateModified";
-            aProps[3] = "DateCreated";
-            aProps[4] = "IsFolder";
-            aProps[5] = "TargetURL";
-            aProps[6] = "IsHidden";
-            aProps[7] = "IsVolume";
-            aProps[8] = "IsRemote";
-            aProps[9] = "IsRemoveable";
-            aProps[10] = "IsFloppy";
-            aProps[11] = "IsCompactDisc";
+            Sequence< OUString > aProps(
+                { "Title",
+                  "Size",
+                  "DateModified",
+                  "DateCreated",
+                  "IsFolder",
+                  "TargetURL",
+                  "IsHidden",
+                  "IsVolume",
+                  "IsRemote",
+                  "IsRemoveable",
+                  "IsFloppy",
+                  "IsCompactDisc" });
 
             Reference< XCommandEnvironment > xEnvironment;
             try

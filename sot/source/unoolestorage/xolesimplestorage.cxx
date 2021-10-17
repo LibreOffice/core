@@ -481,8 +481,9 @@ uno::Sequence< OUString > SAL_CALL OLESimpleStorage::getElementNames()
     }
 
     uno::Sequence< OUString > aSeq( aList.size() );
+    auto aSeqRange = asNonConstRange(aSeq);
     for ( size_t nInd = 0; nInd < aList.size(); nInd++ )
-        aSeq[nInd] = aList[nInd].GetName();
+        aSeqRange[nInd] = aList[nInd].GetName();
 
     return aSeq;
 }

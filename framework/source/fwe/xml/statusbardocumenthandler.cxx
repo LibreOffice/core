@@ -375,19 +375,20 @@ void SAL_CALL OReadStatusBarDocumentHandler::startElement(
             else
             {
                 Sequence< PropertyValue > aStatusbarItemProp( 6 );
-                aStatusbarItemProp[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
-                aStatusbarItemProp[1].Name = ITEM_DESCRIPTOR_HELPURL;
-                aStatusbarItemProp[2].Name = ITEM_DESCRIPTOR_OFFSET;
-                aStatusbarItemProp[3].Name = ITEM_DESCRIPTOR_STYLE;
-                aStatusbarItemProp[4].Name = ITEM_DESCRIPTOR_WIDTH;
-                aStatusbarItemProp[5].Name = ITEM_DESCRIPTOR_TYPE;
+                auto pStatusbarItemProp = aStatusbarItemProp.getArray();
+                pStatusbarItemProp[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
+                pStatusbarItemProp[1].Name = ITEM_DESCRIPTOR_HELPURL;
+                pStatusbarItemProp[2].Name = ITEM_DESCRIPTOR_OFFSET;
+                pStatusbarItemProp[3].Name = ITEM_DESCRIPTOR_STYLE;
+                pStatusbarItemProp[4].Name = ITEM_DESCRIPTOR_WIDTH;
+                pStatusbarItemProp[5].Name = ITEM_DESCRIPTOR_TYPE;
 
-                aStatusbarItemProp[0].Value <<= aCommandURL;
-                aStatusbarItemProp[1].Value <<= aHelpURL;
-                aStatusbarItemProp[2].Value <<= nOffset;
-                aStatusbarItemProp[3].Value <<= nItemBits;
-                aStatusbarItemProp[4].Value <<= nWidth;
-                aStatusbarItemProp[5].Value <<= css::ui::ItemType::DEFAULT;
+                pStatusbarItemProp[0].Value <<= aCommandURL;
+                pStatusbarItemProp[1].Value <<= aHelpURL;
+                pStatusbarItemProp[2].Value <<= nOffset;
+                pStatusbarItemProp[3].Value <<= nItemBits;
+                pStatusbarItemProp[4].Value <<= nWidth;
+                pStatusbarItemProp[5].Value <<= css::ui::ItemType::DEFAULT;
 
                 m_aStatusBarItems->insertByIndex( m_aStatusBarItems->getCount(), makeAny( aStatusbarItemProp ) );
            }

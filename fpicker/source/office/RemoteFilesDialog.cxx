@@ -147,13 +147,15 @@ RemoteFilesDialog::~RemoteFilesDialog()
     if( m_bIsUpdated )
     {
         Sequence< OUString > placesUrlsList( m_aServices.size() );
+        auto placesUrlsListRange = asNonConstRange(placesUrlsList);
         Sequence< OUString > placesNamesList( m_aServices.size() );
+        auto placesNamesListRange = asNonConstRange(placesNamesList);
 
         int i = 0;
         for (auto const& service : m_aServices)
         {
-            placesUrlsList[i] = service->GetUrl();
-            placesNamesList[i] = service->GetName();
+            placesUrlsListRange[i] = service->GetUrl();
+            placesNamesListRange[i] = service->GetName();
             ++i;
         }
 
