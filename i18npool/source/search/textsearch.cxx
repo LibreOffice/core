@@ -372,6 +372,8 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
         const sal_Int32 nOffsets = offset.getLength();
         if (nOffsets)
         {
+            auto sres_startOffsetRange = asNonConstRange(sres.startOffset);
+            auto sres_endOffsetRange = asNonConstRange(sres.endOffset);
             // For regex nGroups is the number of groups+1 with group 0 being
             // the entire match.
             const sal_Int32 nGroups = sres.startOffset.getLength();
@@ -381,7 +383,7 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
                 // Result offsets are negative (-1) if a group expression was
                 // not matched.
                 if (nStart >= 0)
-                    sres.startOffset[k] = (nStart < nOffsets ? offset[nStart] : (offset[nOffsets - 1] + 1));
+                    sres_startOffsetRange[k] = (nStart < nOffsets ? offset[nStart] : (offset[nOffsets - 1] + 1));
                 // JP 20.6.2001: end is ever exclusive and then don't return
                 //               the position of the next character - return the
                 //               next position behind the last found character!
@@ -390,9 +392,9 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
                 if (nStop >= 0)
                 {
                     if (nStop > 0)
-                        sres.endOffset[k] = offset[(nStop <= nOffsets ? nStop : nOffsets) - 1] + 1;
+                        sres_endOffsetRange[k] = offset[(nStop <= nOffsets ? nStop : nOffsets) - 1] + 1;
                     else
-                        sres.endOffset[k] = offset[0];
+                        sres_endOffsetRange[k] = offset[0];
                 }
             }
         }
@@ -424,13 +426,15 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
 
         bUsePrimarySrchStr = false;
         sres2 = (this->*fnForward)( in_str, startPos, endPos );
+        auto sres2_startOffsetRange = asNonConstRange(sres2.startOffset);
+        auto sres2_endOffsetRange = asNonConstRange(sres2.endOffset);
 
         for ( int k = 0; k < sres2.startOffset.getLength(); k++ )
         {
             if (sres2.startOffset[k])
-                sres2.startOffset[k] = offset[sres2.startOffset[k]-1] + 1;
+                sres2_startOffsetRange[k] = offset[sres2.startOffset[k]-1] + 1;
             if (sres2.endOffset[k])
-                sres2.endOffset[k] = offset[sres2.endOffset[k]-1] + 1;
+                sres2_endOffsetRange[k] = offset[sres2.endOffset[k]-1] + 1;
         }
 
         // pick first and long one
@@ -490,6 +494,8 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
         const sal_Int32 nOffsets = offset.getLength();
         if (nOffsets)
         {
+            auto sres_startOffsetRange = asNonConstRange(sres.startOffset);
+            auto sres_endOffsetRange = asNonConstRange(sres.endOffset);
             // For regex nGroups is the number of groups+1 with group 0 being
             // the entire match.
             const sal_Int32 nGroups = sres.startOffset.getLength();
@@ -501,9 +507,9 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
                 if (nStart >= 0)
                 {
                     if (nStart > 0)
-                        sres.startOffset[k] = offset[(nStart <= nOffsets ? nStart : nOffsets) - 1] + 1;
+                        sres_startOffsetRange[k] = offset[(nStart <= nOffsets ? nStart : nOffsets) - 1] + 1;
                     else
-                        sres.startOffset[k] = offset[0];
+                        sres_startOffsetRange[k] = offset[0];
                 }
                 // JP 20.6.2001: end is ever exclusive and then don't return
                 //               the position of the next character - return the
@@ -511,7 +517,7 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
                 //               "a b c" find "b" must return 2,3 and not 2,4!!!
                 const sal_Int32 nStop = sres.endOffset[k];
                 if (nStop >= 0)
-                    sres.endOffset[k] = (nStop < nOffsets ? offset[nStop] : (offset[nOffsets - 1] + 1));
+                    sres_endOffsetRange[k] = (nStop < nOffsets ? offset[nStop] : (offset[nOffsets - 1] + 1));
             }
         }
     }
@@ -542,13 +548,15 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
 
         bUsePrimarySrchStr = false;
         sres2 = (this->*fnBackward)( in_str, startPos, endPos );
+        auto sres2_startOffsetRange = asNonConstRange(sres2.startOffset);
+        auto sres2_endOffsetRange = asNonConstRange(sres2.endOffset);
 
         for( int k = 0; k < sres2.startOffset.getLength(); k++ )
         {
             if (sres2.startOffset[k])
-                sres2.startOffset[k] = offset[sres2.startOffset[k]-1]+1;
+                sres2_startOffsetRange[k] = offset[sres2.startOffset[k]-1]+1;
             if (sres2.endOffset[k])
-                sres2.endOffset[k] = offset[sres2.endOffset[k]-1]+1;
+                sres2_endOffsetRange[k] = offset[sres2.endOffset[k]-1]+1;
         }
 
         // pick last and long one
@@ -760,10 +768,8 @@ SearchResult TextSearch::NSrchFrwrd( const OUString& searchStr, sal_Int32 startP
                 }
 
                 aRet.subRegExpressions = 1;
-                aRet.startOffset.realloc( 1 );
-                aRet.startOffset[ 0 ] = nCmpIdx;
-                aRet.endOffset.realloc( 1 );
-                aRet.endOffset[ 0 ] = nCmpIdx + sSearchKey.getLength();
+                aRet.startOffset = { nCmpIdx };
+                aRet.endOffset = { nCmpIdx + sSearchKey.getLength() };
 
                 return aRet;
             }
@@ -829,20 +835,16 @@ SearchResult TextSearch::NSrchBkwrd( const OUString& searchStr, sal_Int32 startP
                             ( bDelimBefore && bDelimBehind ))   // 4
                     {
                         aRet.subRegExpressions = 1;
-                        aRet.startOffset.realloc( 1 );
-                        aRet.startOffset[ 0 ] = nCmpIdx;
-                        aRet.endOffset.realloc( 1 );
-                        aRet.endOffset[ 0 ] = nCmpIdx - sSearchKey.getLength();
+                        aRet.startOffset = { nCmpIdx };
+                        aRet.endOffset = { nCmpIdx - sSearchKey.getLength() };
                         return aRet;
                     }
                 }
                 else
                 {
                     aRet.subRegExpressions = 1;
-                    aRet.startOffset.realloc( 1 );
-                    aRet.startOffset[ 0 ] = nCmpIdx;
-                    aRet.endOffset.realloc( 1 );
-                    aRet.endOffset[ 0 ] = nCmpIdx - sSearchKey.getLength();
+                    aRet.startOffset = { nCmpIdx };
+                    aRet.endOffset = { nCmpIdx - sSearchKey.getLength() };
                     return aRet;
                 }
             }
@@ -986,11 +988,13 @@ SearchResult TextSearch::RESrchFrwrd( const OUString& searchStr,
     aRet.subRegExpressions = nGroupCount + 1;
     aRet.startOffset.realloc( aRet.subRegExpressions);
     aRet.endOffset.realloc( aRet.subRegExpressions);
-    aRet.startOffset[0] = pRegexMatcher->start( nIcuErr);
-    aRet.endOffset[0]   = pRegexMatcher->end( nIcuErr);
+    auto aRet_startOffsetRange = asNonConstRange(aRet.startOffset);
+    auto aRet_endOffsetRange = asNonConstRange(aRet.endOffset);
+    aRet_startOffsetRange[0] = pRegexMatcher->start( nIcuErr);
+    aRet_endOffsetRange[0]   = pRegexMatcher->end( nIcuErr);
     for( int i = 1; i <= nGroupCount; ++i) {
-        aRet.startOffset[i] = pRegexMatcher->start( i, nIcuErr);
-        aRet.endOffset[i]   = pRegexMatcher->end( i, nIcuErr);
+        aRet_startOffsetRange[i] = pRegexMatcher->start( i, nIcuErr);
+        aRet_endOffsetRange[i]   = pRegexMatcher->end( i, nIcuErr);
     }
 
     return aRet;
@@ -1056,12 +1060,14 @@ SearchResult TextSearch::RESrchBkwrd( const OUString& searchStr,
     aRet.subRegExpressions = nGroupCount + 1;
     aRet.startOffset.realloc( aRet.subRegExpressions);
     aRet.endOffset.realloc( aRet.subRegExpressions);
+    auto aRet_startOffsetRange = asNonConstRange(aRet.startOffset);
+    auto aRet_endOffsetRange = asNonConstRange(aRet.endOffset);
     // NOTE: existing users of backward search seem to expect startOfs/endOfs being inverted!
-    aRet.startOffset[0] = pRegexMatcher->end( nIcuErr);
-    aRet.endOffset[0]   = pRegexMatcher->start( nIcuErr);
+    aRet_startOffsetRange[0] = pRegexMatcher->end( nIcuErr);
+    aRet_endOffsetRange[0]   = pRegexMatcher->start( nIcuErr);
     for( int i = 1; i <= nGroupCount; ++i) {
-        aRet.startOffset[i] = pRegexMatcher->end( i, nIcuErr);
-        aRet.endOffset[i]   = pRegexMatcher->start( i, nIcuErr);
+        aRet_startOffsetRange[i] = pRegexMatcher->end( i, nIcuErr);
+        aRet_endOffsetRange[i]   = pRegexMatcher->start( i, nIcuErr);
     }
 
     return aRet;
@@ -1095,10 +1101,8 @@ SearchResult TextSearch::ApproxSrchFrwrd( const OUString& searchStr,
                 pWLD->WLD( searchStr.getStr() + nStt, nEnd - nStt ) <= nLimit )
         {
             aRet.subRegExpressions = 1;
-            aRet.startOffset.realloc( 1 );
-            aRet.startOffset[ 0 ] = nStt;
-            aRet.endOffset.realloc( 1 );
-            aRet.endOffset[ 0 ] = nEnd;
+            aRet.startOffset = { nStt };
+            aRet.endOffset = { nEnd };
             break;
         }
 
@@ -1139,10 +1143,8 @@ SearchResult TextSearch::ApproxSrchBkwrd( const OUString& searchStr,
                 pWLD->WLD( searchStr.getStr() + nStt, nEnd - nStt ) <= nLimit )
         {
             aRet.subRegExpressions = 1;
-            aRet.startOffset.realloc( 1 );
-            aRet.startOffset[ 0 ] = nEnd;
-            aRet.endOffset.realloc( 1 );
-            aRet.endOffset[ 0 ] = nStt;
+            aRet.startOffset = { nEnd };
+            aRet.endOffset = { nStt };
             break;
         }
         if( !nStt )
@@ -1159,10 +1161,8 @@ namespace {
 void setWildcardMatch( css::util::SearchResult& rRes, sal_Int32 nStartOffset, sal_Int32 nEndOffset )
 {
     rRes.subRegExpressions = 1;
-    rRes.startOffset.realloc(1);
-    rRes.endOffset.realloc(1);
-    rRes.startOffset[0] = nStartOffset;
-    rRes.endOffset[0] = nEndOffset;
+    rRes.startOffset = { nStartOffset };
+    rRes.endOffset = { nEndOffset };
 }
 }
 

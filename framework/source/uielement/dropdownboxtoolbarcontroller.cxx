@@ -21,6 +21,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <vcl/svapp.hxx>
@@ -155,14 +156,12 @@ void SAL_CALL DropdownToolbarController::dispose()
 
 Sequence<PropertyValue> DropdownToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
-    Sequence<PropertyValue> aArgs( 2 );
     OUString aSelectedText = m_pListBoxControl->get_active_text();
 
     // Add key modifier to argument list
-    aArgs[0].Name = "KeyModifier";
-    aArgs[0].Value <<= KeyModifier;
-    aArgs[1].Name = "Text";
-    aArgs[1].Value <<= aSelectedText;
+    Sequence<PropertyValue> aArgs(
+        { comphelper::makePropertyValue("KeyModifier", KeyModifier),
+          comphelper::makePropertyValue("Text", aSelectedText) });
     return aArgs;
 }
 

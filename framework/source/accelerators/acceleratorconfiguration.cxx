@@ -171,6 +171,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XMLBasedAcceleratorConfiguration::g
     css::uno::Sequence< css::uno::Any > lPreferredOnes (c); // don't pack list!
     AcceleratorCache&                   rCache         = impl_getCFG();
 
+    auto lPreferredOnesRange = asNonConstRange(lPreferredOnes);
     for (i=0; i<c; ++i)
     {
         const OUString& rCommand = lCommandList[i];
@@ -187,7 +188,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XMLBasedAcceleratorConfiguration::g
         if ( lKeys.empty() )
             continue;
 
-        css::uno::Any& rAny = lPreferredOnes[i];
+        css::uno::Any& rAny = lPreferredOnesRange[i];
         rAny <<= *(lKeys.begin());
     }
 
@@ -677,6 +678,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XCUBasedAcceleratorConfiguration::g
     css::uno::Sequence< css::uno::Any > lPreferredOnes (c); // don't pack list!
     AcceleratorCache&                   rCache         = impl_getCFG(true);
 
+    auto lPreferredOnesRange = asNonConstRange(lPreferredOnes);
     for (i=0; i<c; ++i)
     {
         const OUString& rCommand = lCommandList[i];
@@ -696,7 +698,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XCUBasedAcceleratorConfiguration::g
         AcceleratorCache::TKeyList::const_iterator pPreferredKey = lcl_getPreferredKey(lKeys);
         if (pPreferredKey != lKeys.end ())
         {
-            css::uno::Any& rAny = lPreferredOnes[i];
+            css::uno::Any& rAny = lPreferredOnesRange[i];
             rAny <<= *pPreferredKey;
         }
     }
@@ -1011,6 +1013,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( bool bPreferred, const css:
             aKeyEvent.KeyCode = KeyMapping::get().mapIdentifierToCode("KEY_" + sKeyCommand);
 
             css::uno::Sequence< OUString > sToken(4);
+            auto pToken = sToken.getArray();
             const sal_Int32 nToken = 4;
             bool bValid = true;
             sal_Int32 k;
@@ -1019,7 +1022,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( bool bPreferred, const css:
                 if (nIndex < 0)
                     break;
 
-                sToken[k] = sKey.getToken(0, '_', nIndex);
+                pToken[k] = sKey.getToken(0, '_', nIndex);
                 if (sToken[k].isEmpty())
                 {
                     bValid = false;
@@ -1225,13 +1228,14 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const OUString& sPrimarySe
     aKeyEvent.KeyCode = KeyMapping::get().mapIdentifierToCode("KEY_"+sKeyIdentifier);
 
     css::uno::Sequence< OUString > sToken(4);
+    auto pToken = sToken.getArray();
     const sal_Int32 nToken = 4;
     for (sal_Int32 i=0; i<nToken; ++i)
     {
         if ( nIndex < 0 )
             break;
 
-        sToken[i] = sKey.getToken(0, '_', nIndex);
+        pToken[i] = sKey.getToken(0, '_', nIndex);
         if ( sToken[i] == "SHIFT" )
             aKeyEvent.Modifiers |= css::awt::KeyModifier::SHIFT;
         else if ( sToken[i] == "MOD1" )

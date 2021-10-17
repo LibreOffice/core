@@ -19,6 +19,7 @@
 
 #include <svtools/DocumentToGraphicRenderer.hxx>
 
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>
@@ -131,17 +132,11 @@ Size DocumentToGraphicRenderer::getDocumentSizeIn100mm(sal_Int32 nCurrentPage,
 
     uno::Any selection( getSelection());
 
-    PropertyValues renderProperties;
-
-    renderProperties.realloc( 4 );
-    renderProperties[0].Name = "IsPrinter";
-    renderProperties[0].Value <<= true;
-    renderProperties[1].Name = "RenderDevice";
-    renderProperties[1].Value <<= xDevice;
-    renderProperties[2].Name = "View";
-    renderProperties[2].Value <<= mxController;
-    renderProperties[3].Name = "RenderToGraphic";
-    renderProperties[3].Value <<= true;
+    PropertyValues renderProperties(
+        { comphelper::makePropertyValue("IsPrinter", true),
+          comphelper::makePropertyValue("RenderDevice", xDevice),
+          comphelper::makePropertyValue("View", mxController),
+          comphelper::makePropertyValue("RenderToGraphic", true) });
 
     awt::Size aSize;
     awt::Size aCalcPageSize;
@@ -209,20 +204,13 @@ Graphic DocumentToGraphicRenderer::renderToGraphic(
     double fScaleX = aTargetSizePixel.Width()  / static_cast<double>(aDocumentSizePixel.Width());
     double fScaleY = aTargetSizePixel.Height() / static_cast<double>(aDocumentSizePixel.Height());
 
-    PropertyValues renderProps;
-    renderProps.realloc( 6 );
-    renderProps[0].Name = "IsPrinter";
-    renderProps[0].Value <<= true;
-    renderProps[1].Name = "RenderDevice";
-    renderProps[1].Value <<= xDevice;
-    renderProps[2].Name = "View";
-    renderProps[2].Value <<= mxController;
-    renderProps[3].Name = "RenderToGraphic";
-    renderProps[3].Value <<= true;
-    renderProps[4].Name = "HasPDFExtOutDevData";
-    renderProps[4].Value <<= bExtOutDevData;
-    renderProps[5].Name = "PageRange";
-    renderProps[5].Value <<= OUString::number(nCurrentPage);
+    PropertyValues renderProps(
+        { comphelper::makePropertyValue("IsPrinter", true),
+          comphelper::makePropertyValue("RenderDevice", xDevice),
+          comphelper::makePropertyValue("View", mxController),
+          comphelper::makePropertyValue("RenderToGraphic", true),
+          comphelper::makePropertyValue("HasPDFExtOutDevData", bExtOutDevData),
+          comphelper::makePropertyValue("PageRange", OUString::number(nCurrentPage)) });
 
     GDIMetaFile aMtf;
 
@@ -285,17 +273,11 @@ sal_Int32 DocumentToGraphicRenderer::getPageCount()
 
     uno::Any selection( getSelection() );
 
-    PropertyValues renderProperties;
-
-    renderProperties.realloc( 4 );
-    renderProperties[0].Name = "IsPrinter";
-    renderProperties[0].Value <<= true;
-    renderProperties[1].Name = "RenderDevice";
-    renderProperties[1].Value <<= xDevice;
-    renderProperties[2].Name = "View";
-    renderProperties[2].Value <<= mxController;
-    renderProperties[3].Name = "RenderToGraphic";
-    renderProperties[3].Value <<= true;
+    PropertyValues renderProperties(
+        { comphelper::makePropertyValue("IsPrinter", true),
+          comphelper::makePropertyValue("RenderDevice", xDevice),
+          comphelper::makePropertyValue("View", mxController),
+          comphelper::makePropertyValue("RenderToGraphic", true) });
 
     sal_Int32 nPages = mxRenderable->getRendererCount( selection, renderProperties );
 

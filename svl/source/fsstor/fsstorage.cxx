@@ -794,7 +794,7 @@ uno::Sequence< OUString > SAL_CALL FSStorage::getElementNames()
             {
                 OUString aName( xRow->getString( 1 ) );
                 aResult.realloc( ++nSize );
-                aResult[nSize-1] = aName;
+                aResult.getArray()[nSize-1] = aName;
             }
         }
     }

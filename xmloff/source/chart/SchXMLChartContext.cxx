@@ -98,7 +98,7 @@ void lcl_MoveDataToCandleStickSeries(
             // @todo: realloc only once outside this function
             uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aData( xSource->getDataSequences());
             aData.realloc( aData.getLength() + 1);
-            aData[ aData.getLength() - 1 ] = aLabeledSeq[0];
+            aData.getArray()[ aData.getLength() - 1 ] = aLabeledSeq[0];
             uno::Reference< chart2::data::XDataSink > xSink( xDestination, uno::UNO_QUERY_THROW );
             xSink->setData( aData );
         }
@@ -206,9 +206,9 @@ uno::Sequence< sal_Int32 > lcl_getNumberSequenceFromString( const OUString& rStr
     else if( bAddOneToEachOldIndex )
     {
         aSeq.realloc( nVecSize+1 );
-        aSeq[0]=0;
-
         sal_Int32* pSeqArr = aSeq.getArray();
+        pSeqArr[0]=0;
+
         for( nPos = 0; nPos < nVecSize; ++nPos )
         {
             pSeqArr[ nPos+1 ] = aVec[ nPos ]+1;
@@ -641,24 +641,24 @@ static void lcl_ApplyDataFromRectangularRangeToDiagram(
         bHasCateories = true;
     }
 
-    uno::Sequence< beans::PropertyValue > aArgs( 3 );
-    aArgs[0] = beans::PropertyValue(
-        "CellRangeRepresentation",
-        -1, uno::makeAny( rRectangularRange ),
-        beans::PropertyState_DIRECT_VALUE );
-    aArgs[1] = beans::PropertyValue(
-        "DataRowSource",
-        -1, uno::makeAny( eDataRowSource ),
-        beans::PropertyState_DIRECT_VALUE );
-    aArgs[2] = beans::PropertyValue(
-        "FirstCellAsLabel",
-        -1, uno::makeAny( bFirstCellAsLabel ),
-        beans::PropertyState_DIRECT_VALUE );
+    uno::Sequence< beans::PropertyValue > aArgs(
+        { beans::PropertyValue(
+             "CellRangeRepresentation",
+             -1, uno::makeAny( rRectangularRange ),
+             beans::PropertyState_DIRECT_VALUE ),
+          beans::PropertyValue(
+             "DataRowSource",
+             -1, uno::makeAny( eDataRowSource ),
+             beans::PropertyState_DIRECT_VALUE ),
+          beans::PropertyValue(
+             "FirstCellAsLabel",
+             -1, uno::makeAny( bFirstCellAsLabel ),
+             beans::PropertyState_DIRECT_VALUE ) });
 
     if( !sColTrans.isEmpty() || !sRowTrans.isEmpty() )
     {
         aArgs.realloc( aArgs.getLength() + 1 );
-        aArgs[ sal::static_int_cast<sal_uInt32>(aArgs.getLength()) - 1 ] = beans::PropertyValue(
+        aArgs.getArray()[ sal::static_int_cast<sal_uInt32>(aArgs.getLength()) - 1 ] = beans::PropertyValue(
             "SequenceMapping",
             -1, uno::makeAny( !sColTrans.isEmpty()
                 ? lcl_getNumberSequenceFromString( sColTrans, bHasCateories && !xNewDoc->hasInternalDataProvider() )
@@ -683,7 +683,7 @@ static void lcl_ApplyDataFromRectangularRangeToDiagram(
         if( !aChartOleObjectName.isEmpty() )
         {
             aArgs.realloc( aArgs.getLength() + 1 );
-            aArgs[ sal::static_int_cast<sal_uInt32>(aArgs.getLength()) - 1 ] = beans::PropertyValue(
+            aArgs.getArray()[ sal::static_int_cast<sal_uInt32>(aArgs.getLength()) - 1 ] = beans::PropertyValue(
                 "ChartOleObjectName",
                 -1, uno::makeAny( aChartOleObjectName ),
                 beans::PropertyState_DIRECT_VALUE );
@@ -694,11 +694,12 @@ static void lcl_ApplyDataFromRectangularRangeToDiagram(
         xDataProvider->createDataSource( aArgs ));
 
     aArgs.realloc( aArgs.getLength() + 2 );
-    aArgs[ sal::static_int_cast<sal_uInt32>(aArgs.getLength()) - 2 ] = beans::PropertyValue(
+    auto pArgs = aArgs.getArray();
+    pArgs[ sal::static_int_cast<sal_uInt32>(aArgs.getLength()) - 2 ] = beans::PropertyValue(
         "HasCategories",
         -1, uno::makeAny( bHasCateories ),
         beans::PropertyState_DIRECT_VALUE );
-    aArgs[ sal::static_int_cast<sal_uInt32>(aArgs.getLength()) - 1 ] = beans::PropertyValue(
+    pArgs[ sal::static_int_cast<sal_uInt32>(aArgs.getLength()) - 1 ] = beans::PropertyValue(
         "UseCategoriesAsX",
         -1, uno::makeAny( false ),//categories in ODF files are not to be used as x values (independent from what is offered in our ui)
         beans::PropertyState_DIRECT_VALUE );
@@ -979,6 +980,7 @@ void SchXMLChartContext::MergeSeriesForStockChart()
             sal_Int32 nCandleStickCount = nSeriesCount / nSeriesPerCandleStick;
             OSL_ASSERT( nSeriesPerCandleStick * nCandleStickCount == nSeriesCount );
             uno::Sequence< uno::Reference< chart2::XDataSeries > > aNewSeries( nCandleStickCount );
+            auto aNewSeriesRange = asNonConstRange(aNewSeries);
             for( sal_Int32 i=0; i<nCandleStickCount; ++i )
             {
                 sal_Int32 nSeriesIndex = i*nSeriesPerCandleStick;
@@ -986,7 +988,7 @@ void SchXMLChartContext::MergeSeriesForStockChart()
                 {
                     // open values
                     lcl_setRoleAtFirstSequence( aSeriesSeq[ nSeriesIndex ], "values-first");
-                    aNewSeries[i] = aSeriesSeq[ nSeriesIndex ];
+                    aNewSeriesRange[i] = aSeriesSeq[ nSeriesIndex ];
                     // low values
                     lcl_MoveDataToCandleStickSeries(
                         uno::Reference< chart2::data::XDataSource >( aSeriesSeq[ ++nSeriesIndex ], uno::UNO_QUERY_THROW ),
@@ -996,7 +998,7 @@ void SchXMLChartContext::MergeSeriesForStockChart()
                 {
                     // low values
                     lcl_setRoleAtFirstSequence( aSeriesSeq[ nSeriesIndex ], "values-min");
-                    aNewSeries[i] = aSeriesSeq[ nSeriesIndex ];
+                    aNewSeriesRange[i] = aSeriesSeq[ nSeriesIndex ];
                 }
                 // high values
                 lcl_MoveDataToCandleStickSeries(

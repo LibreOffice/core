@@ -131,9 +131,8 @@ BackendImpl::BackendImpl(
                                OUString(),
                                DpResId(RID_STR_HELP)
                                ) ),
-      m_typeInfos( 1 )
+      m_typeInfos( { m_xHelpTypeInfo } )
 {
-    m_typeInfos[ 0 ] = m_xHelpTypeInfo;
     if (transientMode())
         return;
 

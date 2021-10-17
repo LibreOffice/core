@@ -91,13 +91,14 @@ ProviderCache::getAllProviders()
     // should assert if size !>  0
     if (  !m_hProviderDetailsCache.empty() )
     {
+        auto pproviders = providers.getArray();
         sal_Int32 providerIndex = 0;
         for (auto& rDetail : m_hProviderDetailsCache)
         {
             Reference<provider::XScriptProvider> xScriptProvider = rDetail.second.provider;
             if ( xScriptProvider.is() )
             {
-                providers[ providerIndex++ ] = xScriptProvider;
+                pproviders[ providerIndex++ ] = xScriptProvider;
             }
             else
             {
@@ -105,7 +106,7 @@ ProviderCache::getAllProviders()
                 try
                 {
                     xScriptProvider = createProvider(rDetail.second);
-                    providers[ providerIndex++ ] = xScriptProvider;
+                    pproviders[ providerIndex++ ] = xScriptProvider;
                 }
                 catch ( const Exception& )
                 {

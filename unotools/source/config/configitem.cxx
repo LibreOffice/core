@@ -193,6 +193,7 @@ void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   
     //      The result list we pack into the return any. We never change size of lists!
     nSourceSize = lInNames.getLength();
     lOutValues.realloc( nSourceSize );
+    auto lOutValuesRange = asNonConstRange(lOutValues);
 
     // Algorithm:
     // Copy all names and values from in to out lists.
@@ -213,22 +214,23 @@ void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   
                 lPropertyNames  =   xSetAccess->getElementNames();
                 nPropertiesSize =   lPropertyNames.getLength();
                 lProperties.realloc( nPropertiesSize );
+                auto lPropertiesRange = asNonConstRange(lProperties);
 
                 for( nPropertyCounter=0; nPropertyCounter<nPropertiesSize; ++nPropertyCounter )
                 {
-                    lProperties[nPropertyCounter].Name  =   lPropertyNames[nPropertyCounter];
+                    lPropertiesRange[nPropertyCounter].Name  =   lPropertyNames[nPropertyCounter];
                     OUString sLocaleValue;
                     xSetAccess->getByName( lPropertyNames[nPropertyCounter] ) >>= sLocaleValue;
-                    lProperties[nPropertyCounter].Value <<= sLocaleValue;
+                    lPropertiesRange[nPropertyCounter].Value <<= sLocaleValue;
                 }
 
-                lOutValues[nDestinationCounter] <<= lProperties;
+                lOutValuesRange[nDestinationCounter] <<= lProperties;
             }
         }
         // ... or copy normal items to return lists directly.
         else
         {
-            lOutValues[nDestinationCounter] = lInValues[nSourceCounter];
+            lOutValuesRange[nDestinationCounter] = lInValues[nSourceCounter];
         }
         ++nDestinationCounter;
     }
@@ -260,6 +262,12 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
     lOutNames.realloc   ( nSourceSize );
     lOutValues.realloc  ( nSourceSize );
 
+    if (nSourceSize <= 0)
+        return;
+
+    auto lOutNamesRange = asNonConstRange(lOutNames);
+    auto lOutValuesRange = asNonConstRange(lOutValues);
+
     // Algorithm:
     // Copy all names and values from const to return lists.
     // Look for special localized entries ... You can detect it as Sequence< PropertyValue > packed into an Any.
@@ -279,13 +287,15 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
             if( (nDestinationCounter+nPropertiesSize) > lOutNames.getLength() )
             {
                 lOutNames.realloc   ( nDestinationCounter+nPropertiesSize );
+                lOutNamesRange = asNonConstRange(lOutNames);
                 lOutValues.realloc  ( nDestinationCounter+nPropertiesSize );
+                lOutValuesRange = asNonConstRange(lOutValues);
             }
 
             for( const auto& rProperty : std::as_const(lProperties) )
             {
-                lOutNames [nDestinationCounter] = sNodeName + rProperty.Name;
-                lOutValues[nDestinationCounter] = rProperty.Value;
+                lOutNamesRange [nDestinationCounter] = sNodeName + rProperty.Name;
+                lOutValuesRange[nDestinationCounter] = rProperty.Value;
                 ++nDestinationCounter;
             }
         }
@@ -295,11 +305,13 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
             if( (nDestinationCounter+1) > lOutNames.getLength() )
             {
                 lOutNames.realloc   ( nDestinationCounter+1 );
+                lOutNamesRange = asNonConstRange(lOutNames);
                 lOutValues.realloc  ( nDestinationCounter+1 );
+                lOutValuesRange = asNonConstRange(lOutValues);
             }
 
-            lOutNames [nDestinationCounter] = lInNames [nSourceCounter];
-            lOutValues[nDestinationCounter] = lInValues[nSourceCounter];
+            lOutNamesRange [nDestinationCounter] = lInNames [nSourceCounter];
+            lOutValuesRange[nDestinationCounter] = lInValues[nSourceCounter];
             ++nDestinationCounter;
         }
     }
@@ -313,10 +325,11 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const css::uno::Sequence< OUS
     // Every item must match to length of incoming name list.
     sal_Int32 nCount = rNames.getLength();
     Sequence< sal_Bool > lStates(nCount);
+    auto plStates = lStates.getArray();
 
     // We must be sure to return a valid information every time!
     // Set default to non readonly... similar to the configuration handling of this property.
-    std::fill_n(lStates.getArray(), lStates.getLength(), false);
+    std::fill_n(plStates, lStates.getLength(), false);
 
     // no access - no information...
     Reference< XHierarchicalNameAccess > xHierarchyAccess = GetTree();
@@ -374,7 +387,7 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const css::uno::Sequence< OUS
             }
 
             Property aProp = xInfo->getPropertyByName(sProperty);
-            lStates[i] = ((aProp.Attributes & PropertyAttribute::READONLY) == PropertyAttribute::READONLY);
+            plStates[i] = ((aProp.Attributes & PropertyAttribute::READONLY) == PropertyAttribute::READONLY);
         }
         catch (const Exception&)
         {

@@ -403,8 +403,9 @@ namespace toolkit
     {
         auto s(UnoControlModel::getSupportedServiceNames());
         s.realloc(s.getLength() + 2);
-        s[s.getLength() - 2] = "com.sun.star.awt.UnoControlFormattedFieldModel";
-        s[s.getLength() - 1] = "stardiv.vcl.controlmodel.FormattedField";
+        auto ps = s.getArray();
+        ps[s.getLength() - 2] = "com.sun.star.awt.UnoControlFormattedFieldModel";
+        ps[s.getLength() - 1] = "stardiv.vcl.controlmodel.FormattedField";
         return s;
     }
 
@@ -427,13 +428,11 @@ namespace toolkit
         Reference< XVclWindowPeer >  xPeer(getPeer(), UNO_QUERY);
         OSL_ENSURE(xPeer.is(), "UnoFormattedFieldControl::textChanged : what kind of peer do I have ?");
 
-        Sequence< OUString > aNames( 2 );
-        aNames[0] = GetPropertyName( BASEPROPERTY_EFFECTIVE_VALUE );
-        aNames[1] = GetPropertyName( BASEPROPERTY_TEXT );
+        Sequence< OUString > aNames({ GetPropertyName( BASEPROPERTY_EFFECTIVE_VALUE ),
+                                      GetPropertyName( BASEPROPERTY_TEXT ) });
 
-        Sequence< Any > aValues( 2 );
-        aValues[0] = xPeer->getProperty( aNames[0] );
-        aValues[1] = xPeer->getProperty( aNames[1] );
+        Sequence< Any > aValues({ xPeer->getProperty( aNames[0] ),
+                                  xPeer->getProperty( aNames[1] ) });
 
         ImplSetPropertyValues( aNames, aValues, false );
 
@@ -451,8 +450,9 @@ namespace toolkit
     {
         auto s(UnoEditControl::getSupportedServiceNames());
         s.realloc(s.getLength() + 2);
-        s[s.getLength() - 2] = "com.sun.star.awt.UnoControlFormattedField";
-        s[s.getLength() - 1] = "stardiv.vcl.control.FormattedField";
+        auto ps = s.getArray();
+        ps[s.getLength() - 2] = "com.sun.star.awt.UnoControlFormattedField";
+        ps[s.getLength() - 1] = "stardiv.vcl.control.FormattedField";
         return s;
     }
 }   // namespace toolkit

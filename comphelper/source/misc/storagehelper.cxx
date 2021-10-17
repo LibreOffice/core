@@ -52,6 +52,7 @@
 #include <comphelper/hash.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -98,10 +99,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL(
             sal_Int32 nStorageMode,
             const uno::Reference< uno::XComponentContext >& rxContext )
 {
-    uno::Sequence< uno::Any > aArgs( 2 );
-    aArgs[0] <<= aURL;
-    aArgs[1] <<= nStorageMode;
-
+    uno::Sequence< uno::Any > aArgs({ uno::Any(aURL), uno::Any(nStorageMode) });
     uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY_THROW );
     return xTempStorage;
@@ -113,9 +111,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL2(
             sal_Int32 nStorageMode,
             const uno::Reference< uno::XComponentContext >& rxContext )
 {
-    uno::Sequence< uno::Any > aArgs( 2 );
-    aArgs[0] <<= aURL;
-    aArgs[1] <<= nStorageMode;
+    uno::Sequence< uno::Any > aArgs({ uno::Any(aURL), uno::Any(nStorageMode) });
 
     uno::Reference< lang::XSingleServiceFactory > xFact;
     css::uno::Any anyEx;
@@ -151,10 +147,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromInputStream(
             const uno::Reference < io::XInputStream >& xStream,
             const uno::Reference< uno::XComponentContext >& rxContext )
 {
-    uno::Sequence< uno::Any > aArgs( 2 );
-    aArgs[0] <<= xStream;
-    aArgs[1] <<= embed::ElementModes::READ;
-
+    uno::Sequence< uno::Any > aArgs({ uno::Any(xStream), uno::Any(embed::ElementModes::READ) });
     uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY_THROW );
     return xTempStorage;
@@ -166,10 +159,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromStream(
             sal_Int32 nStorageMode,
             const uno::Reference< uno::XComponentContext >& rxContext )
 {
-    uno::Sequence< uno::Any > aArgs( 2 );
-    aArgs[0] <<= xStream;
-    aArgs[1] <<= nStorageMode;
-
+    uno::Sequence< uno::Any > aArgs({ uno::Any(xStream), uno::Any(nStorageMode) });
     uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY_THROW );
     return xTempStorage;
@@ -303,15 +293,10 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromURL(
             sal_Int32 nStorageMode,
             const uno::Reference< uno::XComponentContext >& rxContext )
 {
-    uno::Sequence< beans::PropertyValue > aProps( 1 );
-    aProps[0].Name = "StorageFormat";
-    aProps[0].Value <<= aFormat;
+    uno::Sequence< beans::PropertyValue > aProps(
+        { comphelper::makePropertyValue("StorageFormat", aFormat) });
 
-    uno::Sequence< uno::Any > aArgs( 3 );
-    aArgs[0] <<= aURL;
-    aArgs[1] <<= nStorageMode;
-    aArgs[2] <<= aProps;
-
+    uno::Sequence< uno::Any > aArgs({ uno::Any(aURL), uno::Any(nStorageMode), uno::Any(aProps) });
     uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY_THROW );
     return xTempStorage;
@@ -324,24 +309,17 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromInputStr
             const uno::Reference< uno::XComponentContext >& rxContext,
             bool bRepairStorage )
 {
-    uno::Sequence< beans::PropertyValue > aProps( 1 );
-    sal_Int32 nPos = 0;
-    aProps[nPos].Name = "StorageFormat";
-    aProps[nPos].Value <<= aFormat;
-    ++nPos;
+    uno::Sequence< beans::PropertyValue > aProps( bRepairStorage ? 2 : 1 );
+    auto pProps = aProps.getArray();
+    pProps[0].Name = "StorageFormat";
+    pProps[0].Value <<= aFormat;
     if ( bRepairStorage )
     {
-        aProps.realloc(nPos+1);
-        aProps[nPos].Name = "RepairPackage";
-        aProps[nPos].Value <<= bRepairStorage;
-        ++nPos;
+        pProps[1].Name = "RepairPackage";
+        pProps[1].Value <<= bRepairStorage;
     }
 
-    uno::Sequence< uno::Any > aArgs( 3 );
-    aArgs[0] <<= xStream;
-    aArgs[1] <<= embed::ElementModes::READ;
-    aArgs[2] <<= aProps;
-
+    uno::Sequence< uno::Any > aArgs({ uno::Any(xStream), uno::Any(embed::ElementModes::READ), uno::Any(aProps) });
     uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY_THROW );
     return xTempStorage;
@@ -355,24 +333,17 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromStream(
             const uno::Reference< uno::XComponentContext >& rxContext,
             bool bRepairStorage )
 {
-    uno::Sequence< beans::PropertyValue > aProps( 1 );
-    sal_Int32 nPos = 0;
-    aProps[nPos].Name = "StorageFormat";
-    aProps[nPos].Value <<= aFormat;
-    ++nPos;
+    uno::Sequence< beans::PropertyValue > aProps( bRepairStorage ? 2 : 1 );
+    auto pProps = aProps.getArray();
+    pProps[0].Name = "StorageFormat";
+    pProps[0].Value <<= aFormat;
     if ( bRepairStorage )
     {
-        aProps.realloc(nPos+1);
-        aProps[nPos].Name = "RepairPackage";
-        aProps[nPos].Value <<= bRepairStorage;
-        ++nPos;
+        pProps[1].Name = "RepairPackage";
+        pProps[1].Value <<= bRepairStorage;
     }
 
-    uno::Sequence< uno::Any > aArgs( 3 );
-    aArgs[0] <<= xStream;
-    aArgs[1] <<= nStorageMode;
-    aArgs[2] <<= aProps;
-
+    uno::Sequence< uno::Any > aArgs({ uno::Any(xStream), uno::Any(nStorageMode), uno::Any(aProps) });
     uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY_THROW );
     return xTempStorage;
@@ -398,9 +369,8 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
             xDigestContext->updateDigest( uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aUTF8Password.getStr() ), aUTF8Password.getLength() ) );
             uno::Sequence< sal_Int8 > aDigest = xDigestContext->finalizeDigestAndDispose();
 
-            aEncryptionData.realloc( ++nSha1Ind );
-            aEncryptionData[0].Name = PACKAGE_ENCRYPTIONDATA_SHA256UTF8;
-            aEncryptionData[0].Value <<= aDigest;
+            ++nSha1Ind;
+            aEncryptionData = { { PACKAGE_ENCRYPTIONDATA_SHA256UTF8, uno::Any(aDigest) } };
         }
         catch ( uno::Exception& )
         {
@@ -411,9 +381,10 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
         // this encoding supports only a minor subset of nonascii characters,
         // but for compatibility reasons it has to be used for old document formats
         aEncryptionData.realloc( nSha1Ind + 3 );
+        auto pEncryptionData = aEncryptionData.getArray();
         // these are StarOffice not-quite-SHA1
-        aEncryptionData[nSha1Ind].Name = PACKAGE_ENCRYPTIONDATA_SHA1UTF8;
-        aEncryptionData[nSha1Ind + 1].Name = PACKAGE_ENCRYPTIONDATA_SHA1MS1252;
+        pEncryptionData[nSha1Ind].Name = PACKAGE_ENCRYPTIONDATA_SHA1UTF8;
+        pEncryptionData[nSha1Ind + 1].Name = PACKAGE_ENCRYPTIONDATA_SHA1MS1252;
 
         rtl_TextEncoding const pEncoding[2] = { RTL_TEXTENCODING_UTF8, RTL_TEXTENCODING_MS_1252 };
 
@@ -434,16 +405,16 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
             }
 
             // coverity[overrun-buffer-arg : FALSE] - coverity has difficulty with css::uno::Sequence
-            aEncryptionData[nSha1Ind+nInd].Value <<= uno::Sequence< sal_Int8 >( reinterpret_cast<sal_Int8*>(pBuffer), RTL_DIGEST_LENGTH_SHA1 );
+            pEncryptionData[nSha1Ind+nInd].Value <<= uno::Sequence< sal_Int8 >( reinterpret_cast<sal_Int8*>(pBuffer), RTL_DIGEST_LENGTH_SHA1 );
         }
 
         // actual SHA1
-        aEncryptionData[nSha1Ind + 2].Name = PACKAGE_ENCRYPTIONDATA_SHA1CORRECT;
+        pEncryptionData[nSha1Ind + 2].Name = PACKAGE_ENCRYPTIONDATA_SHA1CORRECT;
         OString aByteStrPass = OUStringToOString(aPassword, RTL_TEXTENCODING_UTF8);
         std::vector<unsigned char> const sha1(::comphelper::Hash::calculateHash(
                 reinterpret_cast<unsigned char const*>(aByteStrPass.getStr()), aByteStrPass.getLength(),
                 ::comphelper::HashType::SHA1));
-        aEncryptionData[nSha1Ind + 2].Value <<= uno::Sequence<sal_Int8>(
+        pEncryptionData[nSha1Ind + 2].Value <<= uno::Sequence<sal_Int8>(
                 reinterpret_cast<sal_Int8 const*>(sha1.data()), sha1.size());
     }
 
@@ -464,10 +435,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
 
     rtl_random_destroyPool(aRandomPool);
 
-    uno::Sequence< beans::NamedValue > aContainer(2);
     std::vector< uno::Sequence< beans::NamedValue > > aGpgEncryptions;
-    uno::Sequence< beans::NamedValue > aGpgEncryptionEntry(3);
-    uno::Sequence< beans::NamedValue > aEncryptionData(1);
 
     uno::Reference< security::XDocumentDigitalSignatures > xSigner(
         // here none of the version-dependent methods are called
@@ -537,23 +505,20 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
 
         SAL_INFO("comphelper.crypto", "Generated gpg crypto of length: " << len);
 
-        aGpgEncryptionEntry[0].Name = "KeyId";
-        aGpgEncryptionEntry[0].Value <<= aKeyID;
-        aGpgEncryptionEntry[1].Name = "KeyPacket";
-        aGpgEncryptionEntry[1].Value <<= aKeyID;
-        aGpgEncryptionEntry[2].Name = "CipherValue";
-        aGpgEncryptionEntry[2].Value <<= aCipherValue;
+        uno::Sequence< beans::NamedValue > aGpgEncryptionEntry(
+            { { "KeyId", uno::Any(aKeyID) },
+              { "KeyPacket", uno::Any(aKeyID) },
+              { "CipherValue", uno::Any(aCipherValue) } });
 
         aGpgEncryptions.push_back(aGpgEncryptionEntry);
     }
 
-    aEncryptionData[0].Name = PACKAGE_ENCRYPTIONDATA_SHA256UTF8;
-    aEncryptionData[0].Value <<= aVector;
+    uno::Sequence<beans::NamedValue> aEncryptionData
+        = { { PACKAGE_ENCRYPTIONDATA_SHA256UTF8, uno::Any(aVector) } };
 
-    aContainer[0].Name = "GpgInfos";
-    aContainer[0].Value <<= comphelper::containerToSequence(aGpgEncryptions);
-    aContainer[1].Name = "EncryptionKey";
-    aContainer[1].Value <<= aEncryptionData;
+    uno::Sequence<beans::NamedValue> aContainer
+        = { { "GpgInfos", uno::Any(comphelper::containerToSequence(aGpgEncryptions)) },
+            { "EncryptionKey", uno::Any(aEncryptionData) } };
 
     return aContainer;
 #else

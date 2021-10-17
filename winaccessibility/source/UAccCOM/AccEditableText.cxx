@@ -232,6 +232,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::setAttributes(long startOffs
         vecAttr.push_back(ouStr.getToken(0, ';', nIndex));
 
     Sequence< PropertyValue > beanSeq(vecAttr.size());
+    auto beanSeqRange = asNonConstRange(beanSeq);
     for(std::vector<OUString>::size_type i = 0; i < vecAttr.size(); i ++)
     {
         OUString attr = vecAttr[i];
@@ -240,8 +241,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::setAttributes(long startOffs
         {
             OUString attrName = attr.copy(0, nPos);
             OUString attrValue = attr.copy(nPos + 1);
-            beanSeq[i].Name = attrName;
-            get_AnyFromOLECHAR(attrName, attrValue, beanSeq[i].Value);
+            beanSeqRange[i].Name = attrName;
+            get_AnyFromOLECHAR(attrName, attrValue, beanSeqRange[i].Value);
         }
     }
 
@@ -398,22 +399,23 @@ void CAccEditableText::get_AnyFromOLECHAR(std::u16string_view ouName, const OUSt
         // Dump into Sequence.
         int iSeqLen = (vecTabStop.size() == 0) ? 1 : vecTabStop.size();
         Sequence< css::style::TabStop > seqTabStop(iSeqLen);
+        auto pseqTabStop = seqTabStop.getArray();
 
         if(vecTabStop.size() != 0)
         {
             // Dump every element.
             for(int i = 0; i < iSeqLen; i ++)
             {
-                seqTabStop[i] = vecTabStop[i];
+                pseqTabStop[i] = vecTabStop[i];
             }
         }
         else
         {
             // Create default value.
-            seqTabStop[0].Position = 0;
-            seqTabStop[0].Alignment = css::style::TabAlign_DEFAULT;
-            seqTabStop[0].DecimalChar = '.';
-            seqTabStop[0].FillChar = ' ';
+            pseqTabStop[0].Position = 0;
+            pseqTabStop[0].Alignment = css::style::TabAlign_DEFAULT;
+            pseqTabStop[0].DecimalChar = '.';
+            pseqTabStop[0].FillChar = ' ';
         }
 
         // Assign to Any object.

@@ -32,6 +32,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -93,11 +94,8 @@ void XDocumentAuditing::testRefreshArrows()
     if (xDrawPage->hasElements())
         nDrawPageElementCount = xDrawPage->getCount();
 
-    uno::Sequence<beans::PropertyValue> aPropertyValue(1);
-    uno::Any aValue;
-    aValue <<= false;
-    aPropertyValue[0].Name = "AutoRefreshArrows";
-    aPropertyValue[0].Value = aValue;
+    uno::Sequence<beans::PropertyValue> aPropertyValue(
+        { comphelper::makePropertyValue("AutoRefreshArrows", false) });
     uno::Reference<frame::XModel> xModel(xDocumentAuditing, UNO_QUERY_THROW);
     dispatch(xModel->getCurrentController()->getFrame(), aPropertyValue);
 

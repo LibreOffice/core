@@ -85,8 +85,9 @@ void SchXMLTextListContext::endFastElement(sal_Int32 )
 {
     sal_Int32 nCount = m_aTextVector.size();
     m_rTextList.realloc(nCount);
+    auto TextListRange = asNonConstRange(m_rTextList);
     for( sal_Int32 nN=0; nN<nCount; nN++ )
-        m_rTextList[nN]=m_aTextVector[nN];
+        TextListRange[nN]=m_aTextVector[nN];
 }
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTextListContext::createFastChildContext(

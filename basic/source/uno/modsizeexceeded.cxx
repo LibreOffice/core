@@ -36,9 +36,7 @@ ModuleSizeExceeded::ModuleSizeExceeded(const std::vector<OUString>& sModules)
 
     m_xAbort = new comphelper::OInteractionAbort;
     m_xApprove = new comphelper::OInteractionApprove;
-    m_lContinuations.realloc(2);
-    m_lContinuations[0] = m_xApprove;
-    m_lContinuations[1] = m_xAbort;
+    m_lContinuations = { m_xApprove, m_xAbort };
 }
 
 bool ModuleSizeExceeded::isAbort() const

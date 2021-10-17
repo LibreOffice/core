@@ -63,7 +63,7 @@ css::uno::Sequence< OUString > SAL_CALL UnoControlTabPageModel::getSupportedServ
 {
     css::uno::Sequence< OUString > aNames = ControlModelContainerBase::getSupportedServiceNames( );
     aNames.realloc( aNames.getLength() + 1 );
-    aNames[ aNames.getLength() - 1 ] = "com.sun.star.awt.tab.UnoControlTabPageModel";
+    aNames.getArray()[ aNames.getLength() - 1 ] = "com.sun.star.awt.tab.UnoControlTabPageModel";
     return aNames;
 }
 
@@ -250,13 +250,9 @@ void SAL_CALL UnoControlTabPage::windowResized( const css::awt::WindowEvent& e )
     // Remember that changes have been done by listener. No need to
     // update the position because of property change event.
     mbSizeModified = true;
-    Sequence< OUString > aProps( 2 );
-    Sequence< Any > aValues( 2 );
     // Properties in a sequence must be sorted!
-    aProps[0] = "Height";
-    aProps[1] = "Width";
-    aValues[0] <<= aAppFontSize.Height();
-    aValues[1] <<= aAppFontSize.Width();
+    Sequence< OUString > aProps({ "Height", "Width" });
+    Sequence< Any > aValues({ Any(aAppFontSize.Height()), Any(aAppFontSize.Width()) });
 
     ImplSetPropertyValues( aProps, aValues, true );
     mbSizeModified = false;
@@ -277,12 +273,8 @@ void SAL_CALL UnoControlTabPage::windowMoved( const css::awt::WindowEvent& e )
     // Remember that changes have been done by listener. No need to
     // update the position because of property change event.
     mbPosModified = true;
-    Sequence< OUString > aProps( 2 );
-    Sequence< Any > aValues( 2 );
-    aProps[0] = "PositionX";
-    aProps[1] = "PositionY";
-    aValues[0] <<= aTmp.Width();
-    aValues[1] <<= aTmp.Height();
+    Sequence< OUString > aProps({ "PositionX", "PositionY" });
+    Sequence< Any > aValues({ Any(aTmp.Width()), Any(aTmp.Height()) });
 
     ImplSetPropertyValues( aProps, aValues, true );
     mbPosModified = false;

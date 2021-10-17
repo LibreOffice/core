@@ -2450,9 +2450,10 @@ void SbUserFormModule::triggerMethod( const OUString& aMethodToRun, Sequence< An
         SbxValues aVals;
         pMeth->Get( aVals );
 
+        auto pArguments = aArguments.getArray();
         for ( sal_Int32 i = 0; i < aArguments.getLength(); ++i )
         {
-            aArguments[i] = sbxToUnoValue(xArray->Get(static_cast<sal_uInt32>(i) + 1));
+            pArguments[i] = sbxToUnoValue(xArray->Get(static_cast<sal_uInt32>(i) + 1));
         }
         pMeth->SetParameters( nullptr );
     }
@@ -2536,10 +2537,7 @@ void SbUserFormModule::Unload()
 {
     sal_Int8 nCancel = 0;
 
-    Sequence< Any > aParams;
-    aParams.realloc(2);
-    aParams[0] <<= nCancel;
-    aParams[1] <<= sal_Int8(::ooo::vba::VbQueryClose::vbFormCode);
+    Sequence< Any > aParams = { Any(nCancel), Any(sal_Int8(::ooo::vba::VbQueryClose::vbFormCode)) };
 
     triggerMethod( "Userform_QueryClose", aParams);
 

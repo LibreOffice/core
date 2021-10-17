@@ -145,6 +145,7 @@ bool LinkSequence::createFromXML( const OString & rInData,
 {
     const sal_Int32 TOKEN_LENGTH = 7; // </link>
     bool success = true;
+    auto rOutDataRange = asNonConstRange(rOutData);
 
     // rInData may contain multiple <link>...</link> tags.
     sal_Int32 nCount = 0;
@@ -181,9 +182,12 @@ bool LinkSequence::createFromXML( const OString & rInData,
         {
             nCount++;
             if ( nCount > rOutData.getLength() )
+            {
                 rOutData.realloc( rOutData.getLength() + 1 );
+                rOutDataRange = asNonConstRange(rOutData);
+            }
 
-            rOutData[ nCount - 1 ] = *aCtx.pLink;
+            rOutDataRange[ nCount - 1 ] = *aCtx.pLink;
         }
 
         nStart = nEnd + TOKEN_LENGTH;

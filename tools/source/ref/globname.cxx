@@ -256,24 +256,23 @@ css::uno::Sequence < sal_Int8 > SvGlobalName::GetByteSequence() const
 {
     // platform independent representation of a "GlobalName"
     // maybe transported remotely
-    css::uno::Sequence< sal_Int8 > aResult( 16 );
-
-    aResult[ 0] = static_cast<sal_Int8>(pImp->szData.Data1 >> 24);
-    aResult[ 1] = static_cast<sal_Int8>((pImp->szData.Data1 << 8 ) >> 24);
-    aResult[ 2] = static_cast<sal_Int8>((pImp->szData.Data1 << 16 ) >> 24);
-    aResult[ 3] = static_cast<sal_Int8>((pImp->szData.Data1 << 24 ) >> 24);
-    aResult[ 4] = static_cast<sal_Int8>(pImp->szData.Data2 >> 8);
-    aResult[ 5] = static_cast<sal_Int8>((pImp->szData.Data2 << 8 ) >> 8);
-    aResult[ 6] = static_cast<sal_Int8>(pImp->szData.Data3 >> 8);
-    aResult[ 7] = static_cast<sal_Int8>((pImp->szData.Data3 << 8 ) >> 8);
-    aResult[ 8] = pImp->szData.Data4[ 0 ];
-    aResult[ 9] = pImp->szData.Data4[ 1 ];
-    aResult[10] = pImp->szData.Data4[ 2 ];
-    aResult[11] = pImp->szData.Data4[ 3 ];
-    aResult[12] = pImp->szData.Data4[ 4 ];
-    aResult[13] = pImp->szData.Data4[ 5 ];
-    aResult[14] = pImp->szData.Data4[ 6 ];
-    aResult[15] = pImp->szData.Data4[ 7 ];
+    css::uno::Sequence< sal_Int8 > aResult(
+        { /* [ 0] */ static_cast<sal_Int8>(pImp->szData.Data1 >> 24),
+          /* [ 1] */ static_cast<sal_Int8>((pImp->szData.Data1 << 8 ) >> 24),
+          /* [ 2] */ static_cast<sal_Int8>((pImp->szData.Data1 << 16 ) >> 24),
+          /* [ 3] */ static_cast<sal_Int8>((pImp->szData.Data1 << 24 ) >> 24),
+          /* [ 4] */ static_cast<sal_Int8>(pImp->szData.Data2 >> 8),
+          /* [ 5] */ static_cast<sal_Int8>((pImp->szData.Data2 << 8 ) >> 8),
+          /* [ 6] */ static_cast<sal_Int8>(pImp->szData.Data3 >> 8),
+          /* [ 7] */ static_cast<sal_Int8>((pImp->szData.Data3 << 8 ) >> 8),
+          /* [ 8] */ static_cast<sal_Int8>(pImp->szData.Data4[ 0 ]),
+          /* [ 9] */ static_cast<sal_Int8>(pImp->szData.Data4[ 1 ]),
+          /* [10] */ static_cast<sal_Int8>(pImp->szData.Data4[ 2 ]),
+          /* [11] */ static_cast<sal_Int8>(pImp->szData.Data4[ 3 ]),
+          /* [12] */ static_cast<sal_Int8>(pImp->szData.Data4[ 4 ]),
+          /* [13] */ static_cast<sal_Int8>(pImp->szData.Data4[ 5 ]),
+          /* [14] */ static_cast<sal_Int8>(pImp->szData.Data4[ 6 ]),
+          /* [15] */ static_cast<sal_Int8>(pImp->szData.Data4[ 7 ]) });
 
     return aResult;
 }

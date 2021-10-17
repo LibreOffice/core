@@ -57,8 +57,7 @@ void XConsolidationDescriptor::testSetSources()
     uno::Reference<sheet::XConsolidationDescriptor> xConsolidationDescriptor(init(),
                                                                              UNO_QUERY_THROW);
 
-    uno::Sequence<table::CellRangeAddress> aSources(1);
-    aSources[0] = table::CellRangeAddress(0, 1, 1, 5, 5);
+    uno::Sequence<table::CellRangeAddress> aSources({ table::CellRangeAddress(0, 1, 1, 5, 5) });
     xConsolidationDescriptor->setSources(aSources);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set sources", table::CellRangeAddress(0, 1, 1, 5, 5),
                                  xConsolidationDescriptor->getSources()[0]);

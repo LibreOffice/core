@@ -697,8 +697,7 @@ uno::Sequence<beans::PropertyValue> LineParser::readImageImpl()
     uno::Sequence<sal_Int8> aDataSequence(nImageSize);
     readBinaryData( aDataSequence );
 
-    uno::Sequence< uno::Any > aStreamCreationArgs(1);
-    aStreamCreationArgs[0] <<= aDataSequence;
+    uno::Sequence< uno::Any > aStreamCreationArgs({ uno::Any(aDataSequence) });
 
     uno::Reference< uno::XComponentContext > xContext( m_parser.m_xContext, uno::UNO_SET_THROW );
     uno::Reference< lang::XMultiComponentFactory > xFactory( xContext->getServiceManager(), uno::UNO_SET_THROW );
@@ -729,19 +728,17 @@ void LineParser::readImage()
         uno::Sequence<sal_Int8> aDataSequence(nMaskColors);
         readBinaryData( aDataSequence );
 
-        uno::Sequence<uno::Any> aMaskRanges(2);
-
         uno::Sequence<double> aMinRange(nMaskColors/2);
+        auto pMinRange = aMinRange.getArray();
         uno::Sequence<double> aMaxRange(nMaskColors/2);
+        auto pMaxRange = aMaxRange.getArray();
         for( sal_Int32 i=0; i<nMaskColors/2; ++i )
         {
-            aMinRange[i] = aDataSequence[i] / 255.0;
-            aMaxRange[i] = aDataSequence[i+nMaskColors/2] / 255.0;
+            pMinRange[i] = aDataSequence[i] / 255.0;
+            pMaxRange[i] = aDataSequence[i+nMaskColors/2] / 255.0;
         }
 
-        aMaskRanges[0] <<= aMinRange;
-        aMaskRanges[1] <<= aMaxRange;
-
+        uno::Sequence<uno::Any> aMaskRanges({ uno::Any(aMinRange), uno::Any(aMaxRange) });
         m_parser.m_pSink->drawColorMaskedImage( aImg, aMaskRanges );
     }
     else

@@ -24,6 +24,7 @@
 #include <svtools/svtresid.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/interaction.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/configitem.hxx>
 #include <vcl/stdtext.hxx>
@@ -338,8 +339,7 @@ void AssignmentPersistentData::ImplCommit()
     void AssignmentPersistentData::setStringProperty(const char* _pLocalName, const OUString& _rValue)
     {
         Sequence< OUString > aNames { OUString::createFromAscii(_pLocalName) };
-        Sequence< Any > aValues(1);
-        aValues[0] <<= _rValue;
+        Sequence< Any > aValues({ Any(_rValue) });
         PutProperties(aNames, aValues);
     }
 
@@ -362,13 +362,13 @@ void AssignmentPersistentData::ImplCommit()
         // Fields/<field>
         OUString sFieldElementNodePath = sDescriptionNodePath + "/" + _rLogicalName;
 
-        Sequence< PropertyValue > aNewFieldDescription(2);
-        // Fields/<field>/ProgrammaticFieldName
-        aNewFieldDescription[0].Name = sFieldElementNodePath + "/ProgrammaticFieldName";
-        aNewFieldDescription[0].Value <<= _rLogicalName;
-        // Fields/<field>/AssignedFieldName
-        aNewFieldDescription[1].Name = sFieldElementNodePath + "/AssignedFieldName";
-        aNewFieldDescription[1].Value <<= _rAssignment;
+        Sequence< PropertyValue > aNewFieldDescription(
+            { // Fields/<field>/ProgrammaticFieldName
+              comphelper::makePropertyValue(sFieldElementNodePath + "/ProgrammaticFieldName",
+                                            _rLogicalName),
+              // Fields/<field>/AssignedFieldName
+              comphelper::makePropertyValue(sFieldElementNodePath + "/AssignedFieldName",
+                                            _rAssignment) });
 
         // just set the new value
         bool bSuccess =

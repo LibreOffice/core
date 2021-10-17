@@ -20,6 +20,7 @@
 
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -166,8 +167,7 @@ namespace comphelper {
         css::uno::Sequence<css::beans::PropertyValue> aMedDescr = rModel->getArgs();
         sal_Int32 nNewLen = aMedDescr.getLength() + 1;
         aMedDescr.realloc(nNewLen);
-        aMedDescr[nNewLen-1].Name = "MacroEventRead";
-        aMedDescr[nNewLen-1].Value <<= true;
+        aMedDescr.getArray()[nNewLen-1] = comphelper::makePropertyValue("MacroEventRead", true);
         rModel->attachResource(rModel->getURL(), aMedDescr);
     }
 

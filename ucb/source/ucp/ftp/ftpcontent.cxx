@@ -571,13 +571,12 @@ FTPContent::queryCreatableContentsInfo(  )
 Sequence<ContentInfo >
 FTPContent::queryCreatableContentsInfo_Static(  )
 {
-    Sequence< Property > props( 1 );
-    props[0] = Property(
+    Sequence< Property > props({ Property(
         "Title",
         -1,
         cppu::UnoType<OUString>::get(),
         PropertyAttribute::MAYBEVOID
-        | PropertyAttribute::BOUND );
+        | PropertyAttribute::BOUND ) });
     return
     {
         { FTP_FILE, ContentInfoAttribute::INSERT_WITH_INPUTSTREAM | ContentInfoAttribute::KIND_DOCUMENT, props },
@@ -659,8 +658,7 @@ void FTPContent::insert(const InsertCommandArgument& aInsertCommand,
 
     if(m_bInserted && !m_bTitleSet) {
         MissingPropertiesException excep;
-        excep.Properties.realloc(1);
-        excep.Properties[0] = "Title";
+        excep.Properties = { "Title" };
         ucbhelper::cancelCommandExecution(Any(excep), Env);
     }
 
@@ -771,6 +769,7 @@ Sequence<Any> FTPContent::setPropertyValues(
     const Sequence<PropertyValue>& seqPropVal)
 {
     Sequence<Any> ret(seqPropVal.getLength());
+    auto retRange = asNonConstRange(ret);
     Sequence<PropertyChangeEvent > evt;
 
     osl::MutexGuard aGuard(m_aMutex);
@@ -778,10 +777,10 @@ Sequence<Any> FTPContent::setPropertyValues(
         if ( seqPropVal[i].Name == "Title" ) {
             OUString Title;
             if(!(seqPropVal[i].Value >>= Title)) {
-                ret[i] <<= IllegalTypeException();
+                retRange[i] <<= IllegalTypeException();
                 continue;
             } else if(Title.isEmpty()) {
-                ret[i] <<= IllegalArgumentException();
+                retRange[i] <<= IllegalArgumentException();
                 continue;
             }
 
@@ -793,30 +792,30 @@ Sequence<Any> FTPContent::setPropertyValues(
             } else
                 try {
                     OUString OldTitle = m_aFTPURL.ren(Title);
-                    evt.realloc(1);
-                    evt[0].PropertyName = "Title";
-                    evt[0].Further = false;
-                    evt[0].PropertyHandle = -1;
-                    evt[0].OldValue <<= OldTitle;
-                    evt[0].NewValue <<= Title;
+                    evt = { { /* Source         */ {},
+                              /* PropertyName   */ "Title",
+                              /* Further        */ false,
+                              /* PropertyHandle */ -1,
+                              /* OldValue       */ Any(OldTitle),
+                              /* NewValue       */ Any(Title) } };
                 } catch(const curl_exception&) {
                     InteractiveIOException excep;
                     // any better possibility here?
                     // ( the error code is always CURLE_FTP_QUOTE_ERROR )
                     excep.Code = IOErrorCode_ACCESS_DENIED;
-                    ret[i] <<= excep;
+                    retRange[i] <<= excep;
                 }
         } else {
             const Sequence<Property> props =
                 getProperties(Reference<XCommandEnvironment>(nullptr));
 
             // either unknown or read-only
-            ret[i] <<= UnknownPropertyException();
+            retRange[i] <<= UnknownPropertyException();
             const auto& rName = seqPropVal[i].Name;
             auto pProp = std::find_if(props.begin(), props.end(),
                 [&rName](const Property& rProp) { return rProp.Name == rName; });
             if (pProp != props.end()) {
-                ret[i] <<= IllegalAccessException(
+                retRange[i] <<= IllegalAccessException(
                     "Property is read-only!",
                         //props[j].Attributes & PropertyAttribute::READONLY
                         //    ? "Property is read-only!"

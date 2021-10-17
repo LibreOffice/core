@@ -25,8 +25,8 @@ void XScenarios::testAddNewByName()
 {
     uno::Reference<sheet::XScenarios> xScenarios(init(), UNO_QUERY_THROW);
 
-    uno::Sequence<table::CellRangeAddress> aCellRangeAddresses(1);
-    aCellRangeAddresses[0] = table::CellRangeAddress(0, 0, 0, 0, 0);
+    uno::Sequence<table::CellRangeAddress> aCellRangeAddresses(
+        { table::CellRangeAddress(0, 0, 0, 0, 0) });
 
     xScenarios->addNewByName("XScenarios2", aCellRangeAddresses, "new");
     CPPUNIT_ASSERT_MESSAGE("Unable to add new XScenario", xScenarios->hasByName("XScenarios2"));

@@ -58,6 +58,7 @@
 #include <unotools/cmdoptions.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/mediadescriptor.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/imgdef.hxx>
@@ -977,9 +978,8 @@ void ToolBarManager::impl_elementChanged(bool const isRemove,
                     // Special case: An image from the document image manager has been removed.
                     // It is possible that we have an image at our module image manager. Before
                     // we can remove our image we have to ask our module image manager.
-                    Sequence< OUString > aCmdURLSeq( 1 );
+                    Sequence< OUString > aCmdURLSeq({ pIter->first });
                     Sequence< Reference< XGraphic > > aGraphicSeq;
-                    aCmdURLSeq[0] = pIter->first;
                     aGraphicSeq = m_xModuleImageManager->getImages( nImageType, aCmdURLSeq );
                     aImage = Image( aGraphicSeq[0] );
                 }
@@ -2090,10 +2090,8 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu, bool )
 
                 if ( xDisp.is() )
                 {
-                    Sequence< PropertyValue > aPropSeq( 1 );
-
-                    aPropSeq[ 0 ].Name = "ResourceURL";
-                    aPropSeq[ 0 ].Value <<= m_aResourceName;
+                    Sequence< PropertyValue > aPropSeq(
+                        { comphelper::makePropertyValue("ResourceURL", m_aResourceName) });
 
                     xDisp->dispatch( aURL, aPropSeq );
                 }
@@ -2207,7 +2205,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu, bool )
                                     {
                                         // We have found the requested item, toggle the visible flag
                                         // and write back the configuration settings to the toolbar
-                                        aProp[nVisibleIndex].Value <<= !bVisible;
+                                        aProp.getArray()[nVisibleIndex].Value <<= !bVisible;
                                         try
                                         {
                                             xItemContainer->replaceByIndex( i, makeAny( aProp ));

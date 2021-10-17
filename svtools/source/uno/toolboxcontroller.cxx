@@ -31,6 +31,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/weldutils.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 const int TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE  = 1;
 constexpr OUStringLiteral TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE = u"SupportsVisible";
@@ -346,11 +347,10 @@ void SAL_CALL ToolboxController::execute( sal_Int16 KeyModifier )
     try
     {
         css::util::URL aTargetURL;
-        Sequence<PropertyValue>   aArgs( 1 );
 
         // Provide key modifier information to dispatch function
-        aArgs[0].Name   = "KeyModifier";
-        aArgs[0].Value  <<= KeyModifier;
+        Sequence<PropertyValue> aArgs(
+            { comphelper::makePropertyValue("KeyModifier", KeyModifier) });
 
         aTargetURL.Complete = aCommandURL;
         if ( m_xUrlTransformer.is() )

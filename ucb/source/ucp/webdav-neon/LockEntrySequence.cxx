@@ -194,6 +194,7 @@ bool LockEntrySequence::createFromXML( const OString & rInData,
 {
     const sal_Int32 TOKEN_LENGTH = 12; // </lockentry>
     bool success = true;
+    auto rOutDataRange = asNonConstRange(rOutData);
 
     // rInData may contain multiple <lockentry>...</lockentry> tags.
     sal_Int32 nCount = 0;
@@ -230,9 +231,12 @@ bool LockEntrySequence::createFromXML( const OString & rInData,
         {
             nCount++;
             if ( nCount > rOutData.getLength() )
+            {
                 rOutData.realloc( rOutData.getLength() + 2 );
+                rOutDataRange = asNonConstRange(rOutData);
+            }
 
-            rOutData[ nCount - 1 ] = *aCtx.pEntry;
+            rOutDataRange[ nCount - 1 ] = *aCtx.pEntry;
         }
 
         nStart = nEnd + TOKEN_LENGTH;

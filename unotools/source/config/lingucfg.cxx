@@ -1072,8 +1072,7 @@ uno::Reference< util::XChangesBatch > const & SvtLinguConfig::GetMainUpdateAcces
             beans::PropertyValue aValue;
             aValue.Name  = "nodepath";
             aValue.Value <<= OUString("org.openoffice.Office.Linguistic");
-            uno::Sequence< uno::Any > aProps(1);
-            aProps[0] <<= aValue;
+            uno::Sequence< uno::Any > aProps({ uno::Any(aValue) });
             m_xMainUpdateAccess.set(
                     xConfigurationProvider->createInstanceWithArguments(
                         "com.sun.star.configuration.ConfigurationUpdateAccess", aProps),

@@ -27,6 +27,7 @@
 
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 
@@ -228,11 +229,9 @@ void SAL_CALL ButtonToolbarController::execute( sal_Int16 KeyModifier )
 
     try
     {
-        Sequence<PropertyValue>   aArgs( 1 );
-
         // Provide key modifier information to dispatch function
-        aArgs[0].Name   = "KeyModifier";
-        aArgs[0].Value  <<= KeyModifier;
+        Sequence<PropertyValue>   aArgs(
+            { comphelper::makePropertyValue("KeyModifier", KeyModifier) });
 
         xDispatch->dispatch( aTargetURL, aArgs );
     }

@@ -118,26 +118,27 @@ namespace {
                                     (bResourceName ? 1 : 0)     +
                                     (bResourceType ? 1 : 0)     +
                                     (bRemoveProperty ? 1 : 0) );
+        auto pArguments = aArguments.getArray();
         sal_Int32 i = 0;
-        aArguments[i++]
+        pArguments[i++]
             <<= PropertyValue("Uri",
                               -1,
                               makeAny(rPhysicalUrl),
                               PropertyState_DIRECT_VALUE);
         if (bResourceName)
-            aArguments[i++]
+            pArguments[i++]
                 <<= PropertyValue("ResourceName",
                                   -1,
                                   makeAny(aResourceName),
                                   PropertyState_DIRECT_VALUE);
         if (bResourceType)
-            aArguments[i++]
+            pArguments[i++]
                 <<= PropertyValue("ResourceType",
                                   -1,
                                   makeAny(aResourceType),
                                   PropertyState_DIRECT_VALUE);
         if (bRemoveProperty)
-            aArguments[i++]
+            pArguments[i++]
                 <<= PropertyValue("Removable",
                                   -1,
                                   makeAny(bRemovable),
@@ -499,11 +500,11 @@ namespace fileaccess {
         else if( errorCode == TASKHANDLING_NONAMESET_INSERT_COMMAND ||
                  errorCode == TASKHANDLING_NOCONTENTTYPE_INSERT_COMMAND )
         {
-            Sequence< OUString > aSeq( 1 );
-            aSeq[0] =
-                ( errorCode == TASKHANDLING_NONAMESET_INSERT_COMMAND )  ?
-                std::u16string_view(u"Title")               :
-                std::u16string_view(u"ContentType");
+            static constexpr OUStringLiteral sTitle = u"Title";
+            static constexpr OUStringLiteral sContentType = u"ContentType";
+            Sequence< OUString > aSeq({ (errorCode == TASKHANDLING_NONAMESET_INSERT_COMMAND)
+                                            ? OUString(sTitle)
+                                            : OUString(sContentType) });
 
             aAny <<= MissingPropertiesException(
                 "a property is missing, necessary to create a content",

@@ -26,6 +26,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
@@ -263,9 +264,7 @@ bool StorageItem::getEncodedMasterPassword( OUString& aResult )
         return true;
     }
 
-    Sequence< OUString > aNodeNames( 2 );
-    aNodeNames[0] = "HasMaster";
-    aNodeNames[1] = "Master";
+    Sequence< OUString > aNodeNames({ "HasMaster", "Master" });
 
     Sequence< Any > aPropertyValues = ConfigItem::GetProperties( aNodeNames );
 
@@ -318,11 +317,9 @@ void StorageItem::update( const OUString& aURL, const NamePasswordRecord& aRecor
         return;
     }
 
-    Sequence< beans::PropertyValue > sendSeq(1);
-
-    sendSeq[0].Name  = "Store/Passwordstorage['" + createIndex( { aURL, aRecord.GetUserName() } ) + "']/Password";
-
-    sendSeq[0].Value <<= aRecord.GetPersistentPasswords();
+    Sequence< beans::PropertyValue > sendSeq({ comphelper::makePropertyValue(
+        "Store/Passwordstorage['" + createIndex( { aURL, aRecord.GetUserName() } ) + "']/Password",
+        aRecord.GetPersistentPasswords()) });
 
     ConfigItem::SetModified();
     ConfigItem::SetSetProperties( "Store", sendSeq );
@@ -570,12 +567,13 @@ UserRecord PasswordContainer::CopyToUserRecord( const NamePasswordRecord& aRecor
 Sequence< UserRecord > PasswordContainer::CopyToUserRecordSequence( const std::vector< NamePasswordRecord >& original, const Reference< XInteractionHandler >& aHandler )
 {
     Sequence< UserRecord >     aResult( original.size() );
+    auto aResultRange = asNonConstRange(aResult);
     sal_uInt32 nInd = 0;
     bool bTryToDecode = true;
 
     for (auto const& aNPIter : original)
     {
-        aResult[nInd] = CopyToUserRecord( aNPIter, bTryToDecode, aHandler );
+        aResultRange[nInd] = CopyToUserRecord( aNPIter, bTryToDecode, aHandler );
         ++nInd;
     }
 
@@ -969,14 +967,14 @@ Sequence< UrlRecord > SAL_CALL PasswordContainer::getAllPersistent( const Refere
             {
                 sal_Int32 oldLen = aUsers.getLength();
                 aUsers.realloc( oldLen + 1 );
-                aUsers[ oldLen ] = UserRecord( aNP.GetUserName(), comphelper::containerToSequence( DecodePasswords( aNP.GetPersistentPasswords(), GetMasterPassword( xHandler ), css::task::PasswordRequestMode_PASSWORD_ENTER ) ) );
+                aUsers.getArray()[ oldLen ] = UserRecord( aNP.GetUserName(), comphelper::containerToSequence( DecodePasswords( aNP.GetPersistentPasswords(), GetMasterPassword( xHandler ), css::task::PasswordRequestMode_PASSWORD_ENTER ) ) );
             }
 
         if( aUsers.hasElements() )
         {
             sal_Int32 oldLen = aResult.getLength();
             aResult.realloc( oldLen + 1 );
-            aResult[ oldLen ] = UrlRecord( rEntry.first, aUsers );
+            aResult.getArray()[ oldLen ] = UrlRecord( rEntry.first, aUsers );
         }
     }
 
@@ -1299,8 +1297,7 @@ MasterPasswordRequest_Impl::MasterPasswordRequest_Impl( PasswordRequestMode Mode
     setRequest( makeAny( aRequest ) );
 
     // Fill continuations...
-    Sequence< RememberAuthentication > aRememberModes( 1 );
-    aRememberModes[ 0 ] = RememberAuthentication_NO;
+    Sequence< RememberAuthentication > aRememberModes({ RememberAuthentication_NO });
 
     m_xAuthSupplier
         = new ::ucbhelper::InteractionSupplyAuthentication(
@@ -1317,10 +1314,10 @@ MasterPasswordRequest_Impl::MasterPasswordRequest_Impl( PasswordRequestMode Mode
             );
 
     Sequence<
-        Reference< XInteractionContinuation > > aContinuations( 3 );
-    aContinuations[ 0 ] = new ::ucbhelper::InteractionAbort( this );
-    aContinuations[ 1 ] = new ::ucbhelper::InteractionRetry( this );
-    aContinuations[ 2 ] = m_xAuthSupplier.get();
+        Reference< XInteractionContinuation > > aContinuations(
+            { { new ::ucbhelper::InteractionAbort( this ) },
+              { new ::ucbhelper::InteractionRetry( this ) },
+              { m_xAuthSupplier.get() } });
 
     setContinuations( aContinuations );
 }

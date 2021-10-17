@@ -151,14 +151,12 @@ void GlobalSheetSettings::testGlobalSheetSettingsProperties()
                                  aStatusBarFunction);
 
     propName = "UserLists";
-    uno::Sequence<OUString> aSeq(6);
-    aSeq[0] = "Sun,Mon,Tue,Wed,Thu,Fri,Sat";
-    aSeq[1] = "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday";
-    aSeq[2] = "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec";
-    aSeq[3]
-        = "January,February,March,April,May,June,July,August,September,October,November,December";
-    aSeq[4] = "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Shabbat";
-    aSeq[5] = "Nissan,Iyar,Sivan,Tammuz,Av,Elul,Tishri,Heshvan,Kislev,Tevet,Shevat,Adar,Adar B";
+    uno::Sequence<OUString> aSeq(
+        { "Sun,Mon,Tue,Wed,Thu,Fri,Sat", "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday",
+          "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec",
+          "January,February,March,April,May,June,July,August,September,October,November,December",
+          "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Shabbat",
+          "Nissan,Iyar,Sivan,Tammuz,Av,Elul,Tishri,Heshvan,Kislev,Tevet,Shevat,Adar,Adar B" });
 
     uno::Sequence<OUString> aUserLists;
     CPPUNIT_ASSERT(xGlobalSheetSettings->getPropertyValue(propName) >>= aUserLists);

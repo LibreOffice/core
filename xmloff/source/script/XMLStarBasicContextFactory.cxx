@@ -87,10 +87,6 @@ SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
         comphelper::makePropertyValue(gsMacroName, sMacroNameVal)
     };
 
-    // macro name
-    aValues[2].Name = gsMacroName;
-    aValues[2].Value <<= sMacroNameVal;
-
     // add values for event now
     rEvents->AddEventValues(rApiEventName, aValues);
 

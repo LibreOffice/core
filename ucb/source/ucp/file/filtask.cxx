@@ -137,7 +137,43 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
     : m_nCommandId( 0 ),
       m_pProvider( pProvider ),
       m_xContext( rxContext ),
-      m_sCommandInfo( 9 )
+      // Commands
+      m_sCommandInfo(
+          { { /* Name    */ "getCommandInfo",
+              /* Handle  */ -1,
+              /* ArgType */ cppu::UnoType<void>::get() },
+
+            { /* Name    */ "getPropertySetInfo",
+              /* Handle  */ -1,
+              /* ArgType */ cppu::UnoType<void>::get() },
+
+            { /* Name    */ "getPropertyValues",
+              /* Handle  */ -1,
+              /* ArgType */ cppu::UnoType<uno::Sequence< beans::Property >>::get() },
+
+            { /* Name    */ "setPropertyValues",
+              /* Handle  */ -1,
+              /* ArgType */ cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get() },
+
+            { /* Name    */ "open",
+              /* Handle  */ -1,
+              /* ArgType */ cppu::UnoType<OpenCommandArgument>::get() },
+
+            { /* Name    */ "transfer",
+              /* Handle  */ -1,
+              /* ArgType */ cppu::UnoType<TransferInfo>::get() },
+
+            { /* Name    */ "delete",
+              /* Handle  */ -1,
+              /* ArgType */ cppu::UnoType<sal_Bool>::get() },
+
+            { /* Name    */ "insert",
+              /* Handle  */ -1,
+              /* ArgType */ cppu::UnoType<InsertCommandArgument>::get() },
+
+            { /* Name    */ "createNewContent",
+              /* Handle  */ -1,
+              /* ArgType */ cppu::UnoType<ucb::ContentInfo>::get() } })
 {
     // Title
     m_aDefaultProperties.insert( MyProperty( true,
@@ -312,43 +348,6 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
                                              beans::PropertyAttribute::MAYBEVOID
                                              | beans::PropertyAttribute::BOUND
                                              | beans::PropertyAttribute::READONLY ) );
-
-    // Commands
-    m_sCommandInfo[0].Name = "getCommandInfo";
-    m_sCommandInfo[0].Handle = -1;
-    m_sCommandInfo[0].ArgType = cppu::UnoType<void>::get();
-
-    m_sCommandInfo[1].Name = "getPropertySetInfo";
-    m_sCommandInfo[1].Handle = -1;
-    m_sCommandInfo[1].ArgType = cppu::UnoType<void>::get();
-
-    m_sCommandInfo[2].Name = "getPropertyValues";
-    m_sCommandInfo[2].Handle = -1;
-    m_sCommandInfo[2].ArgType = cppu::UnoType<uno::Sequence< beans::Property >>::get();
-
-    m_sCommandInfo[3].Name = "setPropertyValues";
-    m_sCommandInfo[3].Handle = -1;
-    m_sCommandInfo[3].ArgType = cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get();
-
-    m_sCommandInfo[4].Name = "open";
-    m_sCommandInfo[4].Handle = -1;
-    m_sCommandInfo[4].ArgType = cppu::UnoType<OpenCommandArgument>::get();
-
-    m_sCommandInfo[5].Name = "transfer";
-    m_sCommandInfo[5].Handle = -1;
-    m_sCommandInfo[5].ArgType = cppu::UnoType<TransferInfo>::get();
-
-    m_sCommandInfo[6].Name = "delete";
-    m_sCommandInfo[6].Handle = -1;
-    m_sCommandInfo[6].ArgType = cppu::UnoType<sal_Bool>::get();
-
-    m_sCommandInfo[7].Name = "insert";
-    m_sCommandInfo[7].Handle = -1;
-    m_sCommandInfo[7].ArgType = cppu::UnoType<InsertCommandArgument>::get();
-
-    m_sCommandInfo[8].Name = "createNewContent";
-    m_sCommandInfo[8].Handle = -1;
-    m_sCommandInfo[8].ArgType = cppu::UnoType<ucb::ContentInfo>::get();
 
     if(bWithConfig)
     {
@@ -840,7 +839,9 @@ TaskManager::setv( const OUString& aUnqPath,
 
     sal_Int32 propChanged = 0;
     uno::Sequence< uno::Any > ret( values.getLength() );
+    auto retRange = asNonConstRange(ret);
     uno::Sequence< beans::PropertyChangeEvent > seqChanged( values.getLength() );
+    auto seqChangedRange = asNonConstRange(seqChanged);
 
     TaskManager::ContentMap::iterator it = m_aContent.find( aUnqPath );
     PropertySet& properties = it->second.properties;
@@ -853,7 +854,7 @@ TaskManager::setv( const OUString& aUnqPath,
         it1 = properties.find( toset );
         if( it1 == properties.end() )
         {
-            ret[i] <<= beans::UnknownPropertyException( THROW_WHERE );
+            retRange[i] <<= beans::UnknownPropertyException( THROW_WHERE );
             continue;
         }
 
@@ -863,15 +864,15 @@ TaskManager::setv( const OUString& aUnqPath,
 
         if( it1->getAttributes() & beans::PropertyAttribute::READONLY )
         {
-            ret[i] <<= lang::IllegalAccessException( THROW_WHERE );
+            retRange[i] <<= lang::IllegalAccessException( THROW_WHERE );
             continue;
         }
 
-        seqChanged[ propChanged   ].PropertyName = values[i].Name;
-        seqChanged[ propChanged   ].PropertyHandle   = -1;
-        seqChanged[ propChanged   ].Further   = false;
-        seqChanged[ propChanged   ].OldValue = aAny;
-        seqChanged[ propChanged++ ].NewValue = values[i].Value;
+        seqChangedRange[ propChanged   ].PropertyName = values[i].Name;
+        seqChangedRange[ propChanged   ].PropertyHandle   = -1;
+        seqChangedRange[ propChanged   ].Further   = false;
+        seqChangedRange[ propChanged   ].OldValue = aAny;
+        seqChangedRange[ propChanged++ ].NewValue = values[i].Value;
 
         it1->setValue( values[i].Value );  // Put the new value into the local cash
 
@@ -898,7 +899,7 @@ TaskManager::setv( const OUString& aUnqPath,
             catch (const uno::Exception&e)
             {
                 --propChanged; // unsuccessful setting
-                ret[i] <<= e;
+                retRange[i] <<= e;
             }
         }
         else
@@ -923,7 +924,7 @@ TaskManager::setv( const OUString& aUnqPath,
                         {
                             {"Uri", uno::Any(aUnqPath)}
                         }));
-                        ret[i] <<= InteractiveAugmentedIOException(
+                        retRange[i] <<= InteractiveAugmentedIOException(
                             OUString(),
                             nullptr,
                             task::InteractionClassification_ERROR,
@@ -932,7 +933,7 @@ TaskManager::setv( const OUString& aUnqPath,
                     }
                 }
                 else
-                    ret[i] <<= beans::IllegalTypeException( THROW_WHERE );
+                    retRange[i] <<= beans::IllegalTypeException( THROW_WHERE );
             }
             else if(values[i].Name == IsReadOnly ||
                     values[i].Name == IsHidden)
@@ -1030,7 +1031,7 @@ TaskManager::setv( const OUString& aUnqPath,
                             ioError = IOErrorCode_GENERAL;
                             break;
                         }
-                        ret[i] <<= InteractiveAugmentedIOException(
+                        retRange[i] <<= InteractiveAugmentedIOException(
                             OUString(),
                             nullptr,
                             task::InteractionClassification_ERROR,
@@ -1039,7 +1040,7 @@ TaskManager::setv( const OUString& aUnqPath,
                     }
                 }
                 else
-                    ret[i] <<= beans::IllegalTypeException( THROW_WHERE );
+                    retRange[i] <<= beans::IllegalTypeException( THROW_WHERE );
             }
         }
     }   // end for

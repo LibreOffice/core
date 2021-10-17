@@ -179,8 +179,9 @@ ModuleDescription::getMembers() {
         sal_Int32 n = static_cast< sal_Int32 >(names.size());
         css::uno::Sequence<
             css::uno::Reference< css::reflection::XTypeDescription > > s(n);
+        auto r = asNonConstRange(s);
         for (sal_Int32 i = 0; i != n; ++i) {
-            s[i] = manager_->resolve(makePrefix(name_) + names[i]);
+            r[i] = manager_->resolve(makePrefix(name_) + names[i]);
         }
         return s;
     } catch (unoidl::FileFormatException & e) {
@@ -228,8 +229,9 @@ css::uno::Sequence< OUString > EnumTypeDescription::getEnumNames()
     assert(entity_->getMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getMembers().size());
     css::uno::Sequence< OUString > s(n);
+    auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i] = entity_->getMembers()[i].name;
+        r[i] = entity_->getMembers()[i].name;
     }
     return s;
 }
@@ -239,8 +241,9 @@ css::uno::Sequence< sal_Int32 > EnumTypeDescription::getEnumValues()
     assert(entity_->getMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getMembers().size());
     css::uno::Sequence< sal_Int32 > s(n);
+    auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i] = entity_->getMembers()[i].value;
+        r[i] = entity_->getMembers()[i].value;
     }
     return s;
 }
@@ -305,8 +308,9 @@ PlainStructTypeDescription::getMemberTypes()
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getDirectMembers().size());
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > > s(n);
+    auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i] = manager_->resolve(entity_->getDirectMembers()[i].type);
+        r[i] = manager_->resolve(entity_->getDirectMembers()[i].type);
     }
     return s;
 }
@@ -316,8 +320,9 @@ css::uno::Sequence< OUString > PlainStructTypeDescription::getMemberNames()
     assert(entity_->getDirectMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getDirectMembers().size());
     css::uno::Sequence< OUString > s(n);
+    auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i] = entity_->getDirectMembers()[i].name;
+        r[i] = entity_->getDirectMembers()[i].name;
     }
     return s;
 }
@@ -402,8 +407,9 @@ PolymorphicStructTypeTemplateDescription::getMemberTypes()
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getMembers().size());
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > > s(n);
+    auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i] = entity_->getMembers()[i].parameterized
+        r[i] = entity_->getMembers()[i].parameterized
             ? new ParameterizedMemberTypeDescription(
                 entity_->getMembers()[i].type)
             : manager_->resolve(entity_->getMembers()[i].type);
@@ -417,8 +423,9 @@ PolymorphicStructTypeTemplateDescription::getMemberNames()
     assert(entity_->getMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getMembers().size());
     css::uno::Sequence< OUString > s(n);
+    auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i] = entity_->getMembers()[i].name;
+        r[i] = entity_->getMembers()[i].name;
     }
     return s;
 }
@@ -429,8 +436,9 @@ PolymorphicStructTypeTemplateDescription::getTypeParameters()
     assert(entity_->getTypeParameters().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getTypeParameters().size());
     css::uno::Sequence< OUString > s(n);
+    auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i] = entity_->getTypeParameters()[i];
+        r[i] = entity_->getTypeParameters()[i];
     }
     return s;
 }
@@ -493,6 +501,7 @@ InstantiatedPolymorphicStructTypeDescription::getMemberTypes()
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getMembers().size());
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > > s(n);
+    auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
         OUString type(entity_->getMembers()[i].type);
         if (entity_->getMembers()[i].parameterized) {
@@ -504,7 +513,7 @@ InstantiatedPolymorphicStructTypeDescription::getMemberTypes()
             assert(false); // this cannot happen                         //TODO!
         found:;
         }
-        s[i] = manager_->resolve(type);
+        r[i] = manager_->resolve(type);
     }
     return s;
 }
@@ -515,8 +524,9 @@ InstantiatedPolymorphicStructTypeDescription::getMemberNames()
     assert(entity_->getMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getMembers().size());
     css::uno::Sequence< OUString > s(n);
+    auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i] = entity_->getMembers()[i].name;
+        r[i] = entity_->getMembers()[i].name;
     }
     return s;
 }
@@ -527,8 +537,9 @@ InstantiatedPolymorphicStructTypeDescription::getTypeArguments()
     sal_Int32 n = static_cast< sal_Int32 >(arguments_.size());
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > > s(n);
+    auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i] = manager_->resolve(arguments_[i]);
+        r[i] = manager_->resolve(arguments_[i]);
     }
     return s;
 }
@@ -581,8 +592,9 @@ ExceptionTypeDescription::getMemberTypes() {
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getDirectMembers().size());
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > > s(n);
+    auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i] = manager_->resolve(entity_->getDirectMembers()[i].type);
+        r[i] = manager_->resolve(entity_->getDirectMembers()[i].type);
     }
     return s;
 }
@@ -592,8 +604,9 @@ css::uno::Sequence< OUString > ExceptionTypeDescription::getMemberNames()
     assert(entity_->getDirectMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getDirectMembers().size());
     css::uno::Sequence< OUString > s(n);
+    auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i] = entity_->getDirectMembers()[i].name;
+        r[i] = entity_->getDirectMembers()[i].name;
     }
     return s;
 }
@@ -660,8 +673,9 @@ AttributeDescription::getGetExceptions() {
     sal_Int32 n = static_cast< sal_Int32 >(attribute_.getExceptions.size());
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XCompoundTypeDescription > > s(n);
+    auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i].set(
+        r[i].set(
             manager_->resolve(attribute_.getExceptions[i]),
             css::uno::UNO_QUERY_THROW);
     }
@@ -675,8 +689,9 @@ AttributeDescription::getSetExceptions() {
     sal_Int32 n = static_cast< sal_Int32 >(attribute_.setExceptions.size());
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XCompoundTypeDescription > > s(n);
+    auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i].set(
+        r[i].set(
             manager_->resolve(attribute_.setExceptions[i]),
             css::uno::UNO_QUERY_THROW);
     }
@@ -786,8 +801,9 @@ MethodDescription::getParameters() {
     sal_Int32 n = static_cast< sal_Int32 >(method_.parameters.size());
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XMethodParameter > > s(n);
+    auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i] = new MethodParameter(manager_, method_.parameters[i], i);
+        r[i] = new MethodParameter(manager_, method_.parameters[i], i);
     }
     return s;
 }
@@ -798,8 +814,9 @@ MethodDescription::getExceptions() {
     sal_Int32 n = static_cast< sal_Int32 >(method_.exceptions.size());
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > > s(n);
+    auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i] = manager_->resolve(method_.exceptions[i]);
+        r[i] = manager_->resolve(method_.exceptions[i]);
     }
     return s;
 }
@@ -928,14 +945,15 @@ InterfaceTypeDescription::getMembers() {
     css::uno::Sequence<
         css::uno::Reference<
             css::reflection::XInterfaceMemberTypeDescription > > s(n1 + n2);
+    auto r = asNonConstRange(s);
     sal_Int32 off = BaseOffset(this).get();
     for (sal_Int32 i = 0; i != n1; ++i) {
-        s[i] = new AttributeDescription(
+        r[i] = new AttributeDescription(
             manager_, name_ + "::" + entity_->getDirectAttributes()[i].name,
             entity_->getDirectAttributes()[i], off + i);
     }
     for (sal_Int32 i = 0; i != n2; ++i) {
-        s[n1 + i] = new MethodDescription(
+        r[n1 + i] = new MethodDescription(
             manager_, name_ + "::" + entity_->getDirectMethods()[i].name,
             entity_->getDirectMethods()[i], off + n1 + i);
     }
@@ -949,8 +967,9 @@ InterfaceTypeDescription::getBaseTypes() {
         entity_->getDirectMandatoryBases().size());
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > > s(n);
+    auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i] = manager_->resolve(entity_->getDirectMandatoryBases()[i].name);
+        r[i] = manager_->resolve(entity_->getDirectMandatoryBases()[i].name);
     }
     return s;
 }
@@ -963,8 +982,9 @@ InterfaceTypeDescription::getOptionalBaseTypes()
         entity_->getDirectOptionalBases().size());
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > > s(n);
+    auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i] = manager_->resolve(entity_->getDirectOptionalBases()[i].name);
+        r[i] = manager_->resolve(entity_->getDirectOptionalBases()[i].name);
     }
     return s;
 }
@@ -1072,8 +1092,9 @@ ConstantGroupDescription::getConstants() {
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getMembers().size());
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XConstantTypeDescription > > s(n);
+    auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i] = new ConstantDescription(name_, entity_->getMembers()[i]);
+        r[i] = new ConstantDescription(name_, entity_->getMembers()[i]);
     }
     return s;
 }
@@ -1191,8 +1212,9 @@ ConstructorDescription::getParameters() {
     sal_Int32 n = static_cast< sal_Int32 >(constructor_.parameters.size());
     css::uno::Sequence< css::uno::Reference< css::reflection::XParameter > > s(
         n);
+    auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i] = new ConstructorParameter(
+        r[i] = new ConstructorParameter(
             manager_, constructor_.parameters[i], i);
     }
     return s;
@@ -1205,8 +1227,9 @@ ConstructorDescription::getExceptions() {
     sal_Int32 n = static_cast< sal_Int32 >(constructor_.exceptions.size());
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XCompoundTypeDescription > > s(n);
+    auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i].set(
+        r[i].set(
             manager_->resolve(constructor_.exceptions[i]),
             css::uno::UNO_QUERY_THROW);
     }
@@ -1313,8 +1336,9 @@ SingleInterfaceBasedServiceDescription::getConstructors()
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XServiceConstructorDescription > >
             s(n);
+    auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i] = new ConstructorDescription(
+        r[i] = new ConstructorDescription(
             manager_, entity_->getConstructors()[i]);
     }
     return s;
@@ -1432,8 +1456,9 @@ AccumulationBasedServiceDescription::getMandatoryServices()
         entity_->getDirectMandatoryBaseServices().size());
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XServiceTypeDescription > > s(n);
+    auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i].set(
+        r[i].set(
             manager_->resolve(
                 entity_->getDirectMandatoryBaseServices()[i].name),
             css::uno::UNO_QUERY_THROW);
@@ -1450,8 +1475,9 @@ AccumulationBasedServiceDescription::getOptionalServices()
         entity_->getDirectOptionalBaseServices().size());
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XServiceTypeDescription > > s(n);
+    auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i].set(
+        r[i].set(
             manager_->resolve(entity_->getDirectOptionalBaseServices()[i].name),
             css::uno::UNO_QUERY_THROW);
     }
@@ -1468,8 +1494,9 @@ AccumulationBasedServiceDescription::getMandatoryInterfaces()
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XInterfaceTypeDescription > > s(
             n);
+    auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i].set(
+        r[i].set(
             resolveTypedefs(
                 manager_->find(
                     entity_->getDirectMandatoryBaseInterfaces()[i].name)),
@@ -1488,8 +1515,9 @@ AccumulationBasedServiceDescription::getOptionalInterfaces()
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XInterfaceTypeDescription > > s(
             n);
+    auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i].set(
+        r[i].set(
             resolveTypedefs(
                 manager_->find(
                     entity_->getDirectOptionalBaseInterfaces()[i].name)),
@@ -1507,8 +1535,9 @@ AccumulationBasedServiceDescription::getProperties()
         entity_->getDirectProperties().size());
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XPropertyTypeDescription > > s(n);
+    auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i] = new PropertyDescription(
+        r[i] = new PropertyDescription(
             manager_, entity_->getDirectProperties()[i]);
     }
     return s;

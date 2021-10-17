@@ -143,18 +143,14 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
                 css::uno::Reference< XFrame > xParent = xOwner->getCreator();
                 if( xParent.is() )
                 {
-                    Sequence< css::uno::Reference< XFrame > > seqParent( 1 );
-                    seqParent[0] = xParent;
-                    impl_appendSequence( seqFrames, seqParent );
+                    impl_appendSequence( seqFrames, { xParent } );
                 }
             }
 
             // Add owner to list if SELF is searched.
             if( nSearchFlags & FrameSearchFlag::SELF )
             {
-                Sequence< css::uno::Reference< XFrame > > seqSelf( 1 );
-                seqSelf[0] = xOwner;
-                impl_appendSequence( seqFrames, seqSelf );
+                impl_appendSequence( seqFrames, { xOwner } );
             }
 
             // Add SIBLINGS to list.

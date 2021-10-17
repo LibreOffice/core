@@ -410,9 +410,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             }
             else if ( rProp.Name == "SearchScopes" )
             {
-                uno::Sequence< OUString > seq( 2 );
-                seq[0] = "Heading";
-                seq[1] = "FullText";
+                uno::Sequence< OUString > seq({ "Heading", "FullText" });
                 xRow->appendObject( rProp, uno::Any(seq) );
             }
             else if ( rProp.Name == "Order" )

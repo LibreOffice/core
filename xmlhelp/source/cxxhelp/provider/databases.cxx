@@ -55,6 +55,7 @@
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
 
 #include "databases.hxx"
@@ -598,13 +599,16 @@ void KeywordInfo::KeywordElement::init( Databases const *pDatabases,helpdatafile
     }
 
     listId.realloc( id.size() );
+    auto listIdRange = asNonConstRange(listId);
     listAnchor.realloc( id.size() );
+    auto listAnchorRange = asNonConstRange(listAnchor);
     listTitle.realloc( id.size() );
+    auto listTitleRange = asNonConstRange(listTitle);
 
     for( size_t i = 0; i < id.size(); ++i )
     {
-        listId[i] = id[i];
-        listAnchor[i] = anchor[i];
+        listIdRange[i] = id[i];
+        listAnchorRange[i] = anchor[i];
 
         helpdatafileproxy::HDFData aHDFData;
         const char* pData = nullptr;
@@ -621,7 +625,7 @@ void KeywordInfo::KeywordElement::init( Databases const *pDatabases,helpdatafile
 
         OUString title = converter.getTitle();
         pDatabases->replaceName( title );
-        listTitle[i] = title;
+        listTitleRange[i] = title;
     }
 }
 
@@ -631,12 +635,16 @@ KeywordInfo::KeywordInfo( const std::vector< KeywordElement >& aVec )
       listAnchor( aVec.size() ),
       listTitle( aVec.size() )
 {
+    auto listKeyRange = asNonConstRange(listKey);
+    auto listIdRange = asNonConstRange(listId);
+    auto listAnchorRange = asNonConstRange(listAnchor);
+    auto listTitleRange = asNonConstRange(listTitle);
     for( size_t i = 0; i < aVec.size(); ++i )
     {
-        listKey[i] = aVec[i].key;
-        listId[i] = aVec[i].listId;
-        listAnchor[i] = aVec[i].listAnchor;
-        listTitle[i] = aVec[i].listTitle;
+        listKeyRange[i] = aVec[i].key;
+        listIdRange[i] = aVec[i].listId;
+        listAnchorRange[i] = aVec[i].listAnchor;
+        listTitleRange[i] = aVec[i].listTitle;
     }
 }
 
@@ -802,23 +810,24 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const OUString& jar,
             }
 
             Sequence< Any > aArguments( 2 );
+            auto pArguments = aArguments.getArray();
 
             rtl::Reference<XInputStream_impl> p(new XInputStream_impl( zipFile ));
             if( p->CtorSuccess() )
             {
-                aArguments[ 0 ] <<= Reference< XInputStream >( p );
+                pArguments[ 0 ] <<= Reference< XInputStream >( p );
             }
             else
             {
                 p.clear();
-                aArguments[ 0 ] <<= zipFile;
+                pArguments[ 0 ] <<= zipFile;
             }
 
             // let ZipPackage be used ( no manifest.xml is required )
             beans::NamedValue aArg;
             aArg.Name = "StorageFormat";
             aArg.Value <<= OUString(ZIP_STORAGE_FORMAT_STRING);
-            aArguments[ 1 ] <<= aArg;
+            pArguments[ 1 ] <<= aArg;
 
             Reference< XInterface > xIfc
                 = m_xSMgr->createInstanceWithArgumentsAndContext(
@@ -1593,14 +1602,11 @@ Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
 
     try
     {
-        Sequence< Any > aArguments( 2 );
-        aArguments[ 0 ] <<= zipFile;
-
-        // let ZipPackage be used ( no manifest.xml is required )
-        beans::NamedValue aArg;
-        aArg.Name = "StorageFormat";
-        aArg.Value <<= OUString(ZIP_STORAGE_FORMAT_STRING);
-        aArguments[ 1 ] <<= aArg;
+        Sequence< Any > aArguments(
+            { Any(zipFile),
+              // let ZipPackage be used ( no manifest.xml is required )
+              Any(comphelper::makePropertyValue("StorageFormat",
+                                                OUString(ZIP_STORAGE_FORMAT_STRING))) });
 
         Reference< XMultiComponentFactory >xSMgr = m_xContext->getServiceManager();
         Reference< XInterface > xIfc

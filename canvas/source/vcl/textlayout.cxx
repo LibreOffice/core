@@ -178,10 +178,11 @@ namespace vclcanvas
             aMetricVector))
         {
             aBoundingBoxes.realloc(aMetricVector.size());
+            auto aBoundingBoxesRange = asNonConstRange(aBoundingBoxes);
             sal_Int32 nIndex (0);
             for (auto const& metric : aMetricVector)
             {
-                aBoundingBoxes[nIndex++] = geometry::RealRectangle2D(
+                aBoundingBoxesRange[nIndex++] = geometry::RealRectangle2D(
                     metric.Left(),
                     metric.Top(),
                     metric.Right(),
