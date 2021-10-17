@@ -1,0 +1,28 @@
+From 20778fe84cb3a3d0d072a5b5aa45dcf817cdf662 Mon Sep 17 00:00:00 2001
+From: Kevin Suo <suokunlong@126.com>
+Date: Sun, 17 Oct 2021 21:15:58 +0800
+Subject: [PATCH] tdf#96499: allow unquoted non-ascii characters as first char
+
+...of property value. This is a temp fix awaiting the upstream
+orcus has a long-term solution.
+---
+ include/orcus/css_parser.hpp | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/include/orcus/css_parser.hpp b/include/orcus/css_parser.hpp
+index 3e96980b..6b36dc87 100644
+--- a/include/orcus/css_parser.hpp
++++ b/include/orcus/css_parser.hpp
+@@ -506,9 +506,6 @@ void css_parser<_Handler>::value()
+         return;
+     }
+ 
+-    if (!is_alpha(c) && !is_numeric(c) && !is_in(c, ORCUS_ASCII("-+.#")))
+-        css::parse_error::throw_with("value:: illegal first character of a value '", c, "'");
+-
+     const char* p = nullptr;
+     size_t len = 0;
+     identifier(p, len, ORCUS_ASCII(".%"));
+-- 
+2.31.1
+
