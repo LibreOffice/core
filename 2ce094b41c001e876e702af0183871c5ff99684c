@@ -33,6 +33,24 @@
       "message": "I\u0027m guessing this cout statement was once used for debugging this test case but is no longer necessary and can now be removed, if you choose.",
       "revId": "2ce094b41c001e876e702af0183871c5ff99684c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39c77a9f_9bcf73cb",
+        "filename": "sdext/source/pdfimport/test/tests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-10-17T13:08:20Z",
+      "side": 1,
+      "message": "It is now commented-out as an indication that during debuging one can enable it to see the xml output in the unittest log file.",
+      "parentUuid": "d9c7e7d9_0ba9a5c1",
+      "revId": "2ce094b41c001e876e702af0183871c5ff99684c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
