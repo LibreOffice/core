@@ -143,6 +143,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "221e9d6a_b3ab53a5",
+        "filename": "svgio/source/svgreader/svgnode.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-17T12:35:52Z",
+      "side": 1,
+      "message": "Ah! I see now.\n\nIMO, this comment is redundant: in fact, every const_cast is already clear declaration of such thing - this is a great property of const_cast.",
+      "parentUuid": "4bf275b3_55938c9b",
+      "revId": "396355b0ddd19a260c964b2b035b7f09f01de574",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "11864e4b_7b1099ac",
         "filename": "svgio/source/svgreader/svgstylenode.cxx",
         "patchSetId": 3
