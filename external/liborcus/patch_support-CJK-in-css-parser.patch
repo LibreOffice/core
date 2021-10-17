@@ -1,0 +1,73 @@
+From 231def128075fb13f0b660726c8dc08a7bf473e2 Mon Sep 17 00:00:00 2001
+From: Kevin Suo <suokunlong@126.com>
+Date: Tue, 19 Oct 2021 09:48:32 +0800
+Subject: [PATCH] Support multi-bytes chars (i.e. CJK) in css parser
+
+CJK chars are multi-bytes, which means that one byte needs to be
+combined with its following bytes. CJK chars may be used as css
+property values, either quoted or un-quoted. If quoted, then
+quoted_value() will be called without any error. However, if
+un-quoted, value() is called, in which case we need to proceed
+until we found a value boundary (";" or "}" or a blank.
+---
+ include/orcus/css_parser.hpp   | 20 +++++++++++++++++---
+ test/css/complex/cjkValues.css | 14 ++++++++++++++
+ 2 files changed, 31 insertions(+), 3 deletions(-)
+ create mode 100644 test/css/complex/cjkValues.css
+
+diff --git a/include/orcus/css_parser.hpp b/include/orcus/css_parser.hpp
+index 3e96980b..1b213c68 100644
+--- a/include/orcus/css_parser.hpp
++++ b/include/orcus/css_parser.hpp
+@@ -506,11 +506,25 @@ void css_parser<_Handler>::value()
+         return;
+     }
+ 
+-    if (!is_alpha(c) && !is_numeric(c) && !is_in(c, ORCUS_ASCII("-+.#")))
+-        css::parse_error::throw_with("value:: illegal first character of a value '", c, "'");
+-
+     const char* p = nullptr;
+     size_t len = 0;
++    if (!is_alpha(c) && !is_numeric(c) && !is_in(c, ORCUS_ASCII("-+.#")))
++    {
++        if (c < 0)
++        {
++            // This may be a part of a multi-byte char (e.g. CJK), and should be treated
++            // together with its following chars. Continue until we encounter the ";", "}"
++            // or a blank.
++            skip_to_or_blank(p, len, ORCUS_ASCII(";}"));
++            skip_comments_and_blanks();
++            m_handler.value(p, len);
++            return;
++        } else
++        {
++            css::parse_error::throw_with("value:: illegal first character of a value '", c, "'");
++        }
++    }
++
+     identifier(p, len, ORCUS_ASCII(".%"));
+     if (cur_char() == '(')
+     {
+diff --git a/test/css/complex/cjkValues.css b/test/css/complex/cjkValues.css
+new file mode 100644
+index 00000000..7cbd6bb9
+--- /dev/null
++++ b/test/css/complex/cjkValues.css
+@@ -0,0 +1,14 @@
++.style21
++	{mso-pattern:auto none;
++	font-family:宋体;
++	mso-generic-font-family:auto;
++}
++.style22
++{
++	font-family:"宋体";}
++.style23
++{
++    font-family: 方正仿宋繁体}
++.style24
++{
++    font-family: "方正仿宋繁体"}
+-- 
+2.31.1
+
