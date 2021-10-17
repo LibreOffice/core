@@ -180,10 +180,11 @@ bool LinkSequence::createFromXML( const OString & rInData,
         if ( aCtx.pLink )
         {
             nCount++;
-            if ( nCount > rOutData.getLength() )
-                rOutData.realloc( rOutData.getLength() + 1 );
+            auto pOutData = ( nCount > rOutData.getLength() )
+                                ? rOutData.realloc( rOutData.getLength() + 1 )
+                                : rOutData.getArray();
 
-            rOutData[ nCount - 1 ] = *aCtx.pLink;
+            pOutData[ nCount - 1 ] = *aCtx.pLink;
         }
 
         nStart = nEnd + TOKEN_LENGTH;

@@ -195,22 +195,21 @@ EmbedDocument_Impl::~EmbedDocument_Impl()
 
 uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Impl( uno::Reference< io::XInputStream > const & xStream, DWORD /*nStreamMode*/, LPCOLESTR pFilePath )
 {
-    uno::Sequence< beans::PropertyValue > aArgs( 3 );
-
-    sal_Int32 nInd = 0; // must not be bigger than the preset size
-    aArgs[nInd].Name = "FilterName";
-    aArgs[nInd++].Value <<= getFilterNameFromGUID_Impl( &m_guid );
+    uno::Sequence< beans::PropertyValue > aArgs( xStream.is() ? 3 : 2 );
+    auto pArgs = aArgs.getArray();
+    pArgs[0].Name = "FilterName";
+    pArgs[0].Value <<= getFilterNameFromGUID_Impl( &m_guid );
 
     if ( xStream.is() )
     {
-        aArgs[nInd].Name = "InputStream";
-        aArgs[nInd++].Value <<= xStream;
-        aArgs[nInd].Name = "URL";
-        aArgs[nInd++].Value <<= OUString( "private:stream" );
+        pArgs[1].Name = "InputStream";
+        pArgs[1].Value <<= xStream;
+        pArgs[2].Name = "URL";
+        pArgs[2].Value <<= OUString( "private:stream" );
     }
     else
     {
-        aArgs[nInd].Name = "URL";
+        pArgs[1].Name = "URL";
 
         OUString sDocUrl;
         if ( pFilePath )
@@ -224,10 +223,8 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Imp
                 sDocUrl = aURL.Complete;
         }
 
-        aArgs[nInd++].Value <<= sDocUrl;
+        pArgs[1].Value <<= sDocUrl;
     }
-
-    aArgs.realloc( nInd );
 
     // aArgs[].Name = "ReadOnly";
     // aArgs[].Value <<= sal_False; //( ( nStreamMode & ( STGM_READWRITE | STGM_WRITE ) ) ? sal_True : sal_False );
@@ -238,14 +235,14 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Imp
 uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForStoring_Impl( uno::Reference< io::XOutputStream > const & xStream)
 {
     uno::Sequence< beans::PropertyValue > aArgs( xStream.is() ? 2 : 1 );
-
-    aArgs[0].Name = "FilterName";
-    aArgs[0].Value <<= getFilterNameFromGUID_Impl( &m_guid );
+    auto pArgs = aArgs.getArray();
+    pArgs[0].Name = "FilterName";
+    pArgs[0].Value <<= getFilterNameFromGUID_Impl( &m_guid );
 
     if ( xStream.is() )
     {
-        aArgs[1].Name = "OutputStream";
-        aArgs[1].Value <<= xStream;
+        pArgs[1].Name = "OutputStream";
+        pArgs[1].Value <<= xStream;
     }
 
     return aArgs;

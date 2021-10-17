@@ -1372,9 +1372,9 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 uno::Sequence<beans::PropertyValue> aGrabBag;
                 xPropSet->getPropertyValue("ParaInteropGrabBag") >>= aGrabBag;
                 sal_Int32 length = aGrabBag.getLength();
-                aGrabBag.realloc(length + 1);
-                aGrabBag[length].Name = "OutlineContentVisibleAttr";
-                aGrabBag[length].Value <<= bool(bOutlineContentVisible);
+                auto pGrabBag = aGrabBag.realloc(length + 1);
+                pGrabBag[length].Name = "OutlineContentVisibleAttr";
+                pGrabBag[length].Value <<= bool(bOutlineContentVisible);
                 xPropSet->setPropertyValue("ParaInteropGrabBag", uno::makeAny(aGrabBag));
             }
             // RFE: inserting headings into text documents (#i70748#)

@@ -265,7 +265,7 @@ void XDataPilotTable2::checkDrillDownSheetContent(uno::Reference< sheet::XSpread
     {
         for(sal_Int32 y = 0; y < aSheetData[x].getLength(); ++y)
         {
-            Any& aCell1 = aSheetData[x][y];
+            const Any& aCell1 = aSheetData[x][y];
             const Any& aCell2 = aData[x][y];
             CPPUNIT_ASSERT_EQUAL(aCell2, aCell1);
         }

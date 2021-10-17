@@ -31,6 +31,8 @@
 #include <svx/strings.hrc>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
+
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 
@@ -219,9 +221,7 @@ void SvxUndoRedoControl::Do(sal_Int16 nCount)
     if ( xDispatch.is() )
     {
         INetURLObject aObj( m_aCommandURL );
-        Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = aObj.GetURLPath();
-        aArgs[0].Value <<= nCount;
+        Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(aObj.GetURLPath(), nCount) };
         xDispatch->dispatch(aTargetURL, aArgs);
     }
 }

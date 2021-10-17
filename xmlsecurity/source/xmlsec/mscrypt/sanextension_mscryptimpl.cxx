@@ -83,10 +83,8 @@ css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL SanExtensionImpl:
                     css::beans::NamedValue otherNameProp;
                     otherNameProp.Name = OUString::createFromAscii(pOtherName->pszObjId);
 
-                    Sequence< sal_Int8 > otherName( pOtherName->Value.cbData ) ;
-                    for( unsigned int n = 0; n < static_cast<unsigned int>(pOtherName->Value.cbData) ; n ++ )
-                        otherName[n] = *( pOtherName->Value.pbData + n ) ;
-
+                    Sequence< sal_Int8 > otherName( comphelper::arrayToSequence<sal_Int8>(
+                        pOtherName->Value.pbData, pOtherName->Value.cbData) );
                     otherNameProp.Value <<= otherName;
 
                     arrCertAltNameEntry[i].Value <<= otherNameProp;
@@ -113,10 +111,8 @@ css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL SanExtensionImpl:
                 {
                     arrCertAltNameEntry[i].Type = ExtAltNameType_IP_ADDRESS;
 
-                    Sequence< sal_Int8 > ipAddress( pEntry->IPAddress.cbData ) ;
-                    for( unsigned int n = 0; n < pEntry->IPAddress.cbData ; n ++ )
-                        ipAddress[n] = *( pEntry->IPAddress.pbData + n ) ;
-
+                    Sequence< sal_Int8 > ipAddress( comphelper::arrayToSequence<sal_Int8>(
+                        pEntry->IPAddress.pbData, pEntry->IPAddress.cbData) );
                     arrCertAltNameEntry[i].Value <<= ipAddress;
                     break;
                 }

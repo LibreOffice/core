@@ -26,12 +26,13 @@ namespace {
 
 void setValues(uno::Sequence< uno::Sequence < Any > >& rColRow, double nOffset)
 {
+    auto pColRow = rColRow.getArray();
     for (sal_Int32 i = 0; i < 4; ++i)
     {
-        rColRow[i].realloc(4);
+        auto pCol = pColRow[i].realloc(4);
         for (sal_Int32 j = 0; j < 4; ++j)
         {
-            Any& aAny = rColRow[i][j];
+            Any& aAny = pCol[j];
             double nValue = i + j + nOffset;
             aAny <<= nValue;
         }
@@ -44,8 +45,7 @@ void XCellRangeData::testSetDataArray()
 {
     uno::Reference< sheet::XCellRangeData > xCellRangeData( getXCellRangeData(), UNO_QUERY_THROW);
 
-    uno::Sequence< uno::Sequence < Any > > aColRow;
-    aColRow.realloc(4);
+    uno::Sequence< uno::Sequence < Any > > aColRow(4);
     setValues(aColRow, 1);
     xCellRangeData->setDataArray(aColRow);
 
@@ -53,7 +53,7 @@ void XCellRangeData::testSetDataArray()
     {
         for ( sal_Int32 j = 0; j < aColRow[i].getLength(); ++j)
         {
-            Any& aAny = aColRow[i][j];
+            const Any& aAny = aColRow[i][j];
             double nValue = 0.0;
             CPPUNIT_ASSERT( aAny >>= nValue);
             CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<double>(i+j+1), nValue, 0.000001);

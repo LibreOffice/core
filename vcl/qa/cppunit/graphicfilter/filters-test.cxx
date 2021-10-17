@@ -15,6 +15,7 @@
 #include <test/bootstrapfixture.hxx>
 
 #include <comphelper/fileformat.h>
+#include <comphelper/propertyvalue.hxx>
 
 #include <vcl/graphicfilter.hxx>
 #include <tools/stream.hxx>
@@ -111,13 +112,11 @@ void VclFiltersTest::checkExportImport(std::u16string_view aFilterShortName)
     SvMemoryStream aStream;
     aStream.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
 
-    css::uno::Sequence< css::beans::PropertyValue > aFilterData( 3 );
-    aFilterData[ 0 ].Name = "Interlaced";
-    aFilterData[ 0 ].Value <<= sal_Int32(0);
-    aFilterData[ 1 ].Name = "Compression";
-    aFilterData[ 1 ].Value <<= sal_Int32(1);
-    aFilterData[ 2 ].Name = "Quality";
-    aFilterData[ 2 ].Value <<= sal_Int32(90);
+    css::uno::Sequence< css::beans::PropertyValue > aFilterData{
+        comphelper::makePropertyValue("Interlaced", sal_Int32(0)),
+        comphelper::makePropertyValue("Compression", sal_Int32(1)),
+        comphelper::makePropertyValue("Quality", sal_Int32(90))
+    };
 
     sal_uInt16 aFilterType = mpGraphicFilter->GetExportFormatNumberForShortName(aFilterShortName);
     mpGraphicFilter->ExportGraphic(BitmapEx(aBitmap), OUString(), aStream, aFilterType, &aFilterData );

@@ -62,14 +62,15 @@ TextToPronounce_zh::foldingImpl(const OUString & inStr, sal_Int32 startPos,
     if (startPos + nCount > inStr.getLength())
         nCount = inStr.getLength() - startPos;
 
-    if (pOffset)
-        (*pOffset)[0] = 0;
+    auto ppOffset = pOffset ? pOffset->getArray() : nullptr;
+    if (ppOffset)
+        ppOffset[0] = 0;
     for (sal_Int32 i = 0; i < nCount; i++) {
         OUString pron(getPronounce(chArr[i]));
         sb.append(pron);
 
-        if (pOffset)
-            (*pOffset)[i + 1] = (*pOffset)[i] + pron.getLength();
+        if (ppOffset)
+            ppOffset[i + 1] = (*pOffset)[i] + pron.getLength();
     }
     return sb.makeStringAndClear();
 }

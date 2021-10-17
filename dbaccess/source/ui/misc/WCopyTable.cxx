@@ -55,6 +55,8 @@
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
+#include <algorithm>
+
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -327,9 +329,8 @@ void NamedTableCopySource::impl_ensureColumnInfo_throw()
 Sequence< OUString > NamedTableCopySource::getColumnNames() const
 {
     Sequence< OUString > aNames( m_aColumnInfo.size() );
-    size_t nPos = 0;
-    for (auto const& elem : m_aColumnInfo)
-        aNames[ nPos++ ] = elem.GetName();
+    std::transform(m_aColumnInfo.begin(), m_aColumnInfo.end(), aNames.getArray(),
+                   [](const auto& elem) { return elem.GetName(); });
 
     return aNames;
 }
@@ -345,8 +346,8 @@ Sequence< OUString > NamedTableCopySource::getPrimaryKeyColumnNames() const
         while ( xPKDesc->next() )
         {
             sal_Int32 len( aPKColNames.getLength() );
-            aPKColNames.realloc( len + 1 );
-            aPKColNames[ len ] = xPKDescRow->getString( 4 );    // COLUMN_NAME
+            auto pPKColNames = aPKColNames.realloc( len + 1 );
+            pPKColNames[ len ] = xPKDescRow->getString( 4 );    // COLUMN_NAME
         }
     }
     catch( const Exception& )

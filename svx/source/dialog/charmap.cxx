@@ -290,12 +290,14 @@ void SvxShowCharSet::updateFavCharacterList(const OUString& sTitle, const OUStri
         }
 
         css::uno::Sequence< OUString > aFavCharList(maFavCharList.size());
+        auto aFavCharListRange = asNonConstRange(aFavCharList);
         css::uno::Sequence< OUString > aFavCharFontList(maFavCharFontList.size());
+        auto aFavCharFontListRange = asNonConstRange(aFavCharFontList);
 
         for (size_t i = 0; i < maFavCharList.size(); ++i)
         {
-            aFavCharList[i] = maFavCharList[i];
-            aFavCharFontList[i] = maFavCharFontList[i];
+            aFavCharListRange[i] = maFavCharList[i];
+            aFavCharFontListRange[i] = maFavCharFontList[i];
         }
 
         std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(mxContext));
@@ -325,12 +327,14 @@ void SvxShowCharSet::updateFavCharacterList(const OUString& sTitle, const OUStri
     maFavCharFontList.push_back(rFont);
 
     css::uno::Sequence< OUString > aFavCharList(maFavCharList.size());
+    auto aFavCharListRange = asNonConstRange(aFavCharList);
     css::uno::Sequence< OUString > aFavCharFontList(maFavCharFontList.size());
+    auto aFavCharFontListRange = asNonConstRange(aFavCharFontList);
 
     for (size_t i = 0; i < maFavCharList.size(); ++i)
     {
-        aFavCharList[i] = maFavCharList[i];
-        aFavCharFontList[i] = maFavCharFontList[i];
+        aFavCharListRange[i] = maFavCharList[i];
+        aFavCharFontListRange[i] = maFavCharFontList[i];
     }
 
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(mxContext));

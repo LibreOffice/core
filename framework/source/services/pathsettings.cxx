@@ -804,11 +804,10 @@ css::uno::Sequence< sal_Int32 > PathSettings::impl_mapPathName2IDList(std::u16st
     // follow these group IDs! But if such ID is not in the range of [0..IDGROUP_COUNT]
     // the outside can't determine the right group ... and can not fire the right events .-)
 
-    css::uno::Sequence< sal_Int32 > lIDs(IDGROUP_COUNT);
-    lIDs[0] = IDGROUP_OLDSTYLE;
-    lIDs[1] = IDGROUP_INTERNAL_PATHS;
-    lIDs[2] = IDGROUP_USER_PATHS;
-    lIDs[3] = IDGROUP_WRITE_PATH;
+    css::uno::Sequence<sal_Int32> lIDs{ IDGROUP_OLDSTYLE, IDGROUP_INTERNAL_PATHS,
+                                        IDGROUP_USER_PATHS, IDGROUP_WRITE_PATH };
+    assert(lIDs.getLength() == IDGROUP_COUNT);
+    auto plIDs = lIDs.getArray();
 
     sal_Int32 c = m_lPropDesc.getLength();
     sal_Int32 i = 0;
@@ -817,16 +816,16 @@ css::uno::Sequence< sal_Int32 > PathSettings::impl_mapPathName2IDList(std::u16st
         const css::beans::Property& rProp = m_lPropDesc[i];
 
         if (rProp.Name == sPath)
-            lIDs[IDGROUP_OLDSTYLE] = rProp.Handle;
+            plIDs[IDGROUP_OLDSTYLE] = rProp.Handle;
         else
         if (rProp.Name == sInternalProp)
-            lIDs[IDGROUP_INTERNAL_PATHS] = rProp.Handle;
+            plIDs[IDGROUP_INTERNAL_PATHS] = rProp.Handle;
         else
         if (rProp.Name == sUserProp)
-            lIDs[IDGROUP_USER_PATHS] = rProp.Handle;
+            plIDs[IDGROUP_USER_PATHS] = rProp.Handle;
         else
         if (rProp.Name == sWriteProp)
-            lIDs[IDGROUP_WRITE_PATH] = rProp.Handle;
+            plIDs[IDGROUP_WRITE_PATH] = rProp.Handle;
     }
 
     return lIDs;
@@ -837,8 +836,11 @@ void PathSettings::impl_notifyPropListener( std::u16string_view           sPath,
                                             const PathSettings::PathInfo* pPathNew)
 {
     css::uno::Sequence< sal_Int32 >     lHandles(1);
+    auto plHandles = lHandles.getArray();
     css::uno::Sequence< css::uno::Any > lOldVals(1);
+    auto plOldVals = lOldVals.getArray();
     css::uno::Sequence< css::uno::Any > lNewVals(1);
+    auto plNewVals = lNewVals.getArray();
 
     css::uno::Sequence< sal_Int32 > lIDs   = impl_mapPathName2IDList(sPath);
     sal_Int32                       c      = lIDs.getLength();
@@ -854,7 +856,7 @@ void PathSettings::impl_notifyPropListener( std::u16string_view           sPath,
            )
            continue;
 
-        lHandles[0] = nID;
+        plHandles[0] = nID;
         switch(impl_getPropGroup(nID))
         {
             case IDGROUP_OLDSTYLE :
@@ -862,12 +864,12 @@ void PathSettings::impl_notifyPropListener( std::u16string_view           sPath,
                     if (pPathOld)
                     {
                         OUString sVal = impl_convertPath2OldStyle(*pPathOld);
-                        lOldVals[0] <<= sVal;
+                        plOldVals[0] <<= sVal;
                     }
                     if (pPathNew)
                     {
                         OUString sVal = impl_convertPath2OldStyle(*pPathNew);
-                        lNewVals[0] <<= sVal;
+                        plNewVals[0] <<= sVal;
                     }
                  }
                  break;
@@ -875,34 +877,34 @@ void PathSettings::impl_notifyPropListener( std::u16string_view           sPath,
             case IDGROUP_INTERNAL_PATHS :
                  {
                     if (pPathOld)
-                        lOldVals[0] <<= comphelper::containerToSequence(pPathOld->lInternalPaths);
+                        plOldVals[0] <<= comphelper::containerToSequence(pPathOld->lInternalPaths);
                     if (pPathNew)
-                        lNewVals[0] <<= comphelper::containerToSequence(pPathNew->lInternalPaths);
+                        plNewVals[0] <<= comphelper::containerToSequence(pPathNew->lInternalPaths);
                  }
                  break;
 
             case IDGROUP_USER_PATHS :
                  {
                     if (pPathOld)
-                        lOldVals[0] <<= comphelper::containerToSequence(pPathOld->lUserPaths);
+                        plOldVals[0] <<= comphelper::containerToSequence(pPathOld->lUserPaths);
                     if (pPathNew)
-                        lNewVals[0] <<= comphelper::containerToSequence(pPathNew->lUserPaths);
+                        plNewVals[0] <<= comphelper::containerToSequence(pPathNew->lUserPaths);
                  }
                  break;
 
             case IDGROUP_WRITE_PATH :
                  {
                     if (pPathOld)
-                        lOldVals[0] <<= pPathOld->sWritePath;
+                        plOldVals[0] <<= pPathOld->sWritePath;
                     if (pPathNew)
-                        lNewVals[0] <<= pPathNew->sWritePath;
+                        plNewVals[0] <<= pPathNew->sWritePath;
                  }
                  break;
         }
 
-        fire(lHandles.getArray(),
-             lNewVals.getArray(),
-             lOldVals.getArray(),
+        fire(plHandles,
+             plNewVals,
+             plOldVals,
              1,
              false);
     }
@@ -1026,14 +1028,14 @@ void PathSettings::impl_rebuildPropertyDescriptor()
 
     sal_Int32 c = static_cast<sal_Int32>(m_lPaths.size());
     sal_Int32 i = 0;
-    m_lPropDesc.realloc(c*IDGROUP_COUNT);
+    auto plPropDesc = m_lPropDesc.realloc(c*IDGROUP_COUNT);
 
     for (auto const& path : m_lPaths)
     {
         const PathSettings::PathInfo& rPath = path.second;
         css::beans::Property*   pProp = nullptr;
 
-        pProp             = &(m_lPropDesc[i]);
+        pProp             = &(plPropDesc[i]);
         pProp->Name       = rPath.sPathName;
         pProp->Handle     = i;
         pProp->Type       = cppu::UnoType<OUString>::get();
@@ -1042,7 +1044,7 @@ void PathSettings::impl_rebuildPropertyDescriptor()
             pProp->Attributes |= css::beans::PropertyAttribute::READONLY;
         ++i;
 
-        pProp             = &(m_lPropDesc[i]);
+        pProp             = &(plPropDesc[i]);
         pProp->Name       = rPath.sPathName+POSTFIX_INTERNAL_PATHS;
         pProp->Handle     = i;
         pProp->Type       = cppu::UnoType<css::uno::Sequence< OUString >>::get();
@@ -1050,7 +1052,7 @@ void PathSettings::impl_rebuildPropertyDescriptor()
                             css::beans::PropertyAttribute::READONLY;
         ++i;
 
-        pProp             = &(m_lPropDesc[i]);
+        pProp             = &(plPropDesc[i]);
         pProp->Name       = rPath.sPathName+POSTFIX_USER_PATHS;
         pProp->Handle     = i;
         pProp->Type       = cppu::UnoType<css::uno::Sequence< OUString >>::get();
@@ -1059,7 +1061,7 @@ void PathSettings::impl_rebuildPropertyDescriptor()
             pProp->Attributes |= css::beans::PropertyAttribute::READONLY;
         ++i;
 
-        pProp             = &(m_lPropDesc[i]);
+        pProp             = &(plPropDesc[i]);
         pProp->Name       = rPath.sPathName+POSTFIX_WRITE_PATH;
         pProp->Handle     = i;
         pProp->Type       = cppu::UnoType<OUString>::get();

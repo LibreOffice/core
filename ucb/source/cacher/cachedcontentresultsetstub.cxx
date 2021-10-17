@@ -207,11 +207,11 @@ FetchResult CachedContentResultSetStub::impl_fetchHelper(
         if( nRowCount != 1 )
             aRet.FetchError = FetchError::EXCEPTION;
 
-        aRet.Rows.realloc( 1 );
+        auto pRows = aRet.Rows.realloc( 1 );
 
         try
         {
-            impl_loadRow( aRet.Rows[0] );
+            impl_loadRow( pRows[0] );
         }
         catch( SQLException& )
         {
@@ -221,7 +221,7 @@ FetchResult CachedContentResultSetStub::impl_fetchHelper(
         }
         return aRet;
     }
-    aRet.Rows.realloc( nRowCount );
+    auto pRows = aRet.Rows.realloc( nRowCount );
     bool bOldOriginal_AfterLast = false;
     if( !nOldOriginal_Pos )
         bOldOriginal_AfterLast = m_xResultSetOrigin->isAfterLast();
@@ -257,7 +257,7 @@ FetchResult CachedContentResultSetStub::impl_fetchHelper(
         }
         for( ; nN <= nRowCount; )
         {
-            impl_loadRow( aRet.Rows[nN-1] );
+            impl_loadRow( pRows[nN-1] );
             nN++;
             if( nN <= nRowCount )
             {
@@ -344,9 +344,10 @@ void CachedContentResultSetStub
     sal_Int32 nCount = impl_getColumnCount();
 
     Sequence< Any > aContent( nCount );
+    auto aContentRange = asNonConstRange(aContent);
     for( sal_Int32 nN = 1; nN <= nCount; nN++ )
     {
-        aContent[nN-1] = xRow->getObject( nN, nullptr );
+        aContentRange[nN-1] = xRow->getObject( nN, nullptr );
     }
 
     rRowContent <<= aContent;

@@ -614,16 +614,14 @@ namespace dbaui
             // the properties which need to be set on the new content
             Sequence< OUString > aNewDirectoryProperties { "Title" };
 
-            // the values to be set
-            Sequence< Any > aNewDirectoryAttributes(1);
-
             // loop
             for (   std::vector< OUString >::const_reverse_iterator aLocalName = aToBeCreated.rbegin();
                     aLocalName != aToBeCreated.rend();
                     ++aLocalName
                 )
             {
-                aNewDirectoryAttributes[0] <<= *aLocalName;
+                // the values to be set
+                Sequence< Any > aNewDirectoryAttributes{ Any(* aLocalName) };
                 if (!aParent.insertNewContent(sContentType, aNewDirectoryProperties, aNewDirectoryAttributes, aParent))
                     return false;
             }

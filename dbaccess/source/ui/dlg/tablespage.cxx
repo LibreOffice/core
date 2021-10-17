@@ -410,9 +410,9 @@ namespace dbaui
 
                 // need some space
                 sal_Int32 nOldLen = aTableFilter.getLength();
-                aTableFilter.realloc(nOldLen + 1);
+                auto pTableFilter = aTableFilter.realloc(nOldLen + 1);
                 // add the new name
-                aTableFilter[nOldLen] = sComposedName.makeStringAndClear();
+                pTableFilter[nOldLen] = sComposedName.makeStringAndClear();
             }
 
             if (bCatalogWildcard)
@@ -463,8 +463,7 @@ namespace dbaui
             auto xRoot = m_xTablesList->getAllObjectsEntry();
             if (xRoot && m_xTablesList->isWildcardChecked(*xRoot))
             {
-                aTableFilter.realloc(1);
-                aTableFilter[0] = "%";
+                aTableFilter = { "%" };
             }
             else
             {

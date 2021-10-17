@@ -23,6 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/charwin.hxx>
 #include <comphelper/dispatchcommand.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -98,12 +99,9 @@ void SvxCharView::InsertCharToDoc()
     if (GetText().isEmpty())
         return;
 
-    uno::Sequence<beans::PropertyValue> aArgs(2);
-    aArgs[0].Name = "Symbols";
-    aArgs[0].Value <<= GetText();
-
-    aArgs[1].Name = "FontName";
-    aArgs[1].Value <<= maFont.GetFamilyName();
+    uno::Sequence<beans::PropertyValue> aArgs{ comphelper::makePropertyValue("Symbols", GetText()),
+                                               comphelper::makePropertyValue(
+                                                   "FontName", maFont.GetFamilyName()) };
 
     comphelper::dispatchCommand(".uno:InsertSymbol", aArgs);
 }

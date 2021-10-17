@@ -153,9 +153,10 @@ void Indexes::refresh()
 
             std::vector< sal_Int32 > seq = parseIntArray( row->getString( C_COLUMNS ) );
             Sequence< OUString > columnNames(seq.size());
+            auto columnNamesRange = asNonConstRange(columnNames);
             for( size_t columns = 0 ; columns < seq.size() ; columns ++ )
             {
-                columnNames[columns] = column2NameMap[ seq[columns] ];
+                columnNamesRange[columns] = column2NameMap[ seq[columns] ];
             }
 
             pIndex->setPropertyValue_NoBroadcast_public(

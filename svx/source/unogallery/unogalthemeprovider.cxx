@@ -170,13 +170,14 @@ uno::Sequence< OUString > SAL_CALL GalleryThemeProvider::getElementNames()
     const SolarMutexGuard aGuard;
     sal_uInt32                          i = 0, nCount = ( mpGallery ? mpGallery->GetThemeCount() : 0 ), nRealCount = 0;
     uno::Sequence< OUString >    aSeq( nCount );
+    auto aSeqRange = asNonConstRange(aSeq);
 
     for( ; i < nCount; ++i )
     {
         const GalleryThemeEntry* pEntry = mpGallery->GetThemeInfo( i );
 
         if( mbHiddenThemes || !pEntry->IsHidden() )
-            aSeq[ nRealCount++ ] = pEntry->GetThemeName();
+            aSeqRange[ nRealCount++ ] = pEntry->GetThemeName();
     }
 
     aSeq.realloc( nRealCount );

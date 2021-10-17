@@ -202,12 +202,15 @@ OUString SAL_CALL FilterDetect::detect( css::uno::Sequence< css::beans::Property
 
     if (!sTypeName.isEmpty())
     {
+        css::beans::PropertyValue* pArguments;
         if (location == aArguments.getLength())
         {
-            aArguments.realloc(nLength+1);
-            aArguments[location].Name = "TypeName";
+            pArguments = aArguments.realloc(nLength+1);
+            pArguments[location].Name = "TypeName";
         }
-        aArguments[location].Value <<=sTypeName;
+        else
+            pArguments = aArguments.getArray();
+        pArguments[location].Value <<=sTypeName;
     }
 
     return sTypeName;

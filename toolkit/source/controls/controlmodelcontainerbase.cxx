@@ -866,8 +866,8 @@ void ControlModelContainerBase::implNotifyTabModelChange( const OUString& _rAcce
     ChangesEvent aEvent;
     aEvent.Source = *this;
     aEvent.Base <<= aEvent.Source;  // the "base of the changes root" is also ourself
-    aEvent.Changes.realloc( 1 );    // exactly one change
-    aEvent.Changes[ 0 ].Accessor <<= _rAccessor;
+    auto pChanges = aEvent.Changes.realloc( 1 );    // exactly one change
+    pChanges[ 0 ].Accessor <<= _rAccessor;
 
 
     std::vector< Reference< XInterface > > aChangeListeners( maChangeListeners.getElements() );

@@ -590,9 +590,9 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
     if ( rSettings.mxStatusIndicator.is() )
     {
         int i = rSettings.maFilterData.getLength();
-        rSettings.maFilterData.realloc( i + 1 );
-        rSettings.maFilterData[ i ].Name = "StatusIndicator";
-        rSettings.maFilterData[ i ].Value <<= rSettings.mxStatusIndicator;
+        auto pFilterData = rSettings.maFilterData.realloc( i + 1 );
+        pFilterData[ i ].Name = "StatusIndicator";
+        pFilterData[ i ].Value <<= rSettings.mxStatusIndicator;
     }
 }
 
@@ -1076,8 +1076,9 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     if ( aSettings.mxInteractionHandler.is() && ( nStatus != ERRCODE_NONE ) )
     {
         Any aInteraction;
-        Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations(1);
-        lContinuations[0] = new ::comphelper::OInteractionApprove();
+        Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations{
+            new ::comphelper::OInteractionApprove()
+        };
 
         GraphicFilterRequest aErrorCode;
         aErrorCode.ErrCode = sal_uInt32(nStatus);

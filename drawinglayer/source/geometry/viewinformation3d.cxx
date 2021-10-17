@@ -126,7 +126,7 @@ namespace drawinglayer::geometry
                 sal_Int32 nExtendedInsert(0);
 
                 // prepare extended information for filtering. Maximum size is nCount
-                mxExtendedInformation.realloc(nCount);
+                auto pExtendedInformation = mxExtendedInformation.realloc(nCount);
 
                 for(sal_Int32 a(0); a < nCount; a++)
                 {
@@ -200,7 +200,7 @@ namespace drawinglayer::geometry
                     else
                     {
                         // extra information; add to filtered information
-                        mxExtendedInformation[nExtendedInsert++] = rProp;
+                        pExtendedInformation[nExtendedInsert++] = rProp;
                     }
                 }
 

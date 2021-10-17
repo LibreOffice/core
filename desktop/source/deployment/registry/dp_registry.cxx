@@ -287,7 +287,8 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
         {
             Any element( xEnum->nextElement() );
             Sequence<Any> registryArgs(cachePath.isEmpty() ? 1 : 3 );
-            registryArgs[ 0 ] <<= context;
+            auto pregistryArgs = registryArgs.getArray();
+            pregistryArgs[ 0 ] <<= context;
             if (!cachePath.isEmpty())
             {
                 Reference<lang::XServiceInfo> xServiceInfo(
@@ -299,8 +300,8 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
                                  rtl_UriCharClassPchar,
                                  rtl_UriEncodeIgnoreEscapes,
                                  RTL_TEXTENCODING_UTF8 ) ) );
-                registryArgs[ 1 ] <<= registryCachePath;
-                registryArgs[ 2 ] <<= false; // readOnly;
+                pregistryArgs[ 1 ] <<= registryCachePath;
+                pregistryArgs[ 2 ] <<= false; // readOnly;
                 create_folder( nullptr, registryCachePath,
                                Reference<XCommandEnvironment>() );
             }

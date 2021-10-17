@@ -19,6 +19,7 @@
 
 #include <uielement/FixedTextToolbarController.hxx>
 
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/svapp.hxx>
@@ -89,14 +90,11 @@ void SAL_CALL FixedTextToolbarController::dispose()
 
 Sequence<PropertyValue> FixedTextToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
-    Sequence<PropertyValue> aArgs(2);
     const OUString aSelectedText = m_pFixedTextControl->get_label();
 
     // Add key modifier to argument list
-    aArgs[0].Name = "KeyModifier";
-    aArgs[0].Value <<= KeyModifier;
-    aArgs[1].Name = "Text";
-    aArgs[1].Value <<= aSelectedText;
+    Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue("KeyModifier", KeyModifier),
+                                   comphelper::makePropertyValue("Text", aSelectedText) };
     return aArgs;
 }
 

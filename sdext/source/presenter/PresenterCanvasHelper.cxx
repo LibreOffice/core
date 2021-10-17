@@ -250,10 +250,11 @@ void PresenterCanvasHelper::SetDeviceColor(
     OSL_ASSERT(rRenderState.DeviceColor.getLength() == 4);
     if (rRenderState.DeviceColor.getLength() == 4)
     {
-        rRenderState.DeviceColor[0] = ((aColor >> 16) & 0x0ff) / 255.0;
-        rRenderState.DeviceColor[1] = ((aColor >> 8) & 0x0ff) / 255.0;
-        rRenderState.DeviceColor[2] = ((aColor >> 0) & 0x0ff) / 255.0;
-        rRenderState.DeviceColor[3] = 1.0 - ((aColor >> 24) & 0x0ff) / 255.0;
+        auto pDeviceColor = rRenderState.DeviceColor.getArray();
+        pDeviceColor[0] = ((aColor >> 16) & 0x0ff) / 255.0;
+        pDeviceColor[1] = ((aColor >> 8) & 0x0ff) / 255.0;
+        pDeviceColor[2] = ((aColor >> 0) & 0x0ff) / 255.0;
+        pDeviceColor[3] = 1.0 - ((aColor >> 24) & 0x0ff) / 255.0;
     }
 }
 

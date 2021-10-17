@@ -84,10 +84,8 @@ void SysCredentialsConfigItem::setSystemCredentialsURLs(
     ::osl::MutexGuard aGuard( m_aMutex );
 
     // write config item.
-    uno::Sequence< OUString > aPropNames( 1 );
-    uno::Sequence< uno::Any > aPropValues( 1 );
-    aPropNames[ 0 ] = "AuthenticateUsingSystemCredentials";
-    aPropValues[ 0 ] <<= seqURLList;
+    uno::Sequence< OUString > aPropNames{ "AuthenticateUsingSystemCredentials" };
+    uno::Sequence< uno::Any > aPropValues{ uno::Any(seqURLList) };
 
     utl::ConfigItem::SetModified();
     utl::ConfigItem::PutProperties( aPropNames, aPropValues );
@@ -236,12 +234,12 @@ uno::Sequence< OUString > SysCredentialsConfig::list( bool bOnlyPersistent )
     sal_Int32 nCount = m_aCfgContainer.size()
                      + ( bOnlyPersistent ? 0 : m_aMemContainer.size() );
     uno::Sequence< OUString > aResult( nCount );
-
+    auto aResultRange = asNonConstRange(aResult);
     sal_Int32 n = 0;
 
     for ( const auto& rItem : m_aCfgContainer )
     {
-        aResult[ n ] = rItem;
+        aResultRange[ n ] = rItem;
         ++n;
     }
 
@@ -249,7 +247,7 @@ uno::Sequence< OUString > SysCredentialsConfig::list( bool bOnlyPersistent )
     {
         for ( const auto& rItem : m_aMemContainer )
         {
-            aResult[ n ] = rItem;
+            aResultRange[ n ] = rItem;
             ++n;
         }
     }

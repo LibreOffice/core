@@ -666,9 +666,10 @@ Sequence< OUString > ChartTest::getFormattedDateCategories( const Reference<char
     Sequence<double> aDateSeq = getDateCategories(xChartDoc);
     const sal_Int32 nNumCategories = aDateSeq.getLength();
     Sequence<OUString> aFormattedDates(nNumCategories);
+    auto aFormattedDatesRange = asNonConstRange(aFormattedDates);
 
     for (sal_Int32 nIdx = 0; nIdx < nNumCategories; ++nIdx)
-        aFormattedDates[nIdx] = xNumFormatter->convertNumberToString(nNumFmt, aDateSeq[nIdx]);
+        aFormattedDatesRange[nIdx] = xNumFormatter->convertNumberToString(nNumFmt, aDateSeq[nIdx]);
 
     return aFormattedDates;
 }

@@ -585,8 +585,7 @@ namespace ucb::ucp::ext
         bool bIsFolder = false;
         try
         {
-            Sequence< Property > aProps(1);
-            aProps[0].Name = "IsFolder";
+            Sequence< Property > aProps{ { /*Name*/ "IsFolder", {}, {}, {} } };
             Reference< XRow > xRow( getPropertyValues( aProps, nullptr ), UNO_SET_THROW );
             bIsFolder = xRow->getBoolean(1);
         }
@@ -610,8 +609,7 @@ namespace ucb::ucp::ext
 
         try
         {
-            Sequence< Property > aProps(1);
-            aProps[0].Name = "ContentType";
+            Sequence< Property > aProps{ { /*Name*/ "ContentType", {}, {}, {} } };
             Reference< XRow > xRow( getPropertyValues( aProps, nullptr ), UNO_SET_THROW );
             m_aContentType = xRow->getString(1);
         }

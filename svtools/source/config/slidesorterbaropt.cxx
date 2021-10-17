@@ -264,38 +264,39 @@ void SvtSlideSorterBarOptions_Impl::ImplCommit()
     // Get names of supported properties, create a list for values and copy current values to it.
     sal_Int32               nCount      = m_seqPropertyNames.getLength();
     Sequence< Any >         seqValues   ( nCount );
+    auto seqValuesRange = asNonConstRange(seqValues);
     for( sal_Int32 nProperty=0; nProperty<nCount; ++nProperty )
     {
         switch( nProperty )
         {
             case PROPERTYHANDLE_VISIBLE_IMPRESSVIEW:
             {
-                seqValues[nProperty] <<= m_bVisibleImpressView;
+                seqValuesRange[nProperty] <<= m_bVisibleImpressView;
                 break;
             }
             case PROPERTYHANDLE_VISIBLE_OUTLINEVIEW:
             {
-                seqValues[nProperty] <<= m_bVisibleOutlineView;
+                seqValuesRange[nProperty] <<= m_bVisibleOutlineView;
                 break;
             }
             case PROPERTYHANDLE_VISIBLE_NOTESVIEW:
             {
-                seqValues[nProperty] <<= m_bVisibleNotesView;
+                seqValuesRange[nProperty] <<= m_bVisibleNotesView;
                 break;
             }
             case PROPERTYHANDLE_VISIBLE_HANDOUTVIEW:
             {
-                seqValues[nProperty] <<= m_bVisibleHandoutView;
+                seqValuesRange[nProperty] <<= m_bVisibleHandoutView;
                 break;
             }
             case PROPERTYHANDLE_VISIBLE_SLIDESORTERVIEW:
             {
-                seqValues[nProperty] <<= m_bVisibleSlideSorterView;
+                seqValuesRange[nProperty] <<= m_bVisibleSlideSorterView;
                 break;
             }
             case PROPERTYHANDLE_VISIBLE_DRAWVIEW:
             {
-                seqValues[nProperty] <<= m_bVisibleDrawView;
+                seqValuesRange[nProperty] <<= m_bVisibleDrawView;
                 break;
             }
 

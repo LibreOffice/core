@@ -20,6 +20,8 @@
 #include <memory>
 
 #include <com/sun/star/awt/XDevice.hpp>
+
+#include <comphelper/sequence.hxx>
 #include <toolkit/awt/vclxfont.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/macros.hxx>
@@ -158,11 +160,8 @@ sal_Int32 VCLXFont::getStringWidthArray( const OUString& str, css::uno::Sequence
         pOutDev->SetFont( maFont );
         std::vector<tools::Long> aDXA;
         nRet = pOutDev->GetTextArray( str, &aDXA );
-        rDXArray = css::uno::Sequence<sal_Int32>( str.getLength() );
-        for(int i = 0; i < str.getLength(); i++)
-        {
-            rDXArray[i] = aDXA[i];
-        }
+        // I don't know if size of aDXA is guaranteed same as length of str, so use arrayToSequence
+        rDXArray = comphelper::arrayToSequence<sal_Int32>(aDXA.data(), str.getLength());
         pOutDev->SetFont( aOldFont );
     }
     return nRet;

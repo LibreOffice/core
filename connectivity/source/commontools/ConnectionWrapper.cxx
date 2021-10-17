@@ -121,8 +121,8 @@ css::uno::Sequence< OUString > SAL_CALL OConnectionWrapper::getSupportedServiceN
     if ( ::comphelper::findValue( aSupported, sConnectionService ) == -1 )
     {
         sal_Int32 nLen = aSupported.getLength();
-        aSupported.realloc( nLen + 1 );
-        aSupported[ nLen ] = sConnectionService;
+        auto pSupported = aSupported.realloc( nLen + 1 );
+        pSupported[ nLen ] = sConnectionService;
     }
 
     // outta here

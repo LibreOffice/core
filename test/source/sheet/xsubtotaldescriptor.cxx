@@ -27,10 +27,8 @@ void XSubTotalDescriptor::testAddNew()
 {
     uno::Reference<sheet::XSubTotalDescriptor> xSTD(init(), uno::UNO_QUERY_THROW);
 
-    uno::Sequence<sheet::SubTotalColumn> xCols;
-    xCols.realloc(1);
-    xCols[0].Column = 5;
-    xCols[0].Function = sheet::GeneralFunction_SUM;
+    uno::Sequence<sheet::SubTotalColumn> xCols{ { /* Column   */ 5,
+                                                  /* Function */ sheet::GeneralFunction_SUM } };
 
     CPPUNIT_ASSERT_NO_THROW_MESSAGE("Unable to add column", xSTD->addNew(xCols, 1));
 }

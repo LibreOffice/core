@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <comphelper/propertyvalue.hxx>
 #include <i18nutil/unicode.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
@@ -178,13 +181,11 @@ void SvxZoomStatusBarControl::Command( const CommandEvent& rCEvt )
                 aZoom.SetType(SvxZoomType::WHOLEPAGE);
 
             css::uno::Any a;
+            aZoom.QueryValue( a );
             INetURLObject aObj( m_aCommandURL );
 
-            css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
-            aArgs[0].Name  = aObj.GetURLPath();
-            aZoom.QueryValue( a );
-            aArgs[0].Value = a;
-
+            css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
+                aObj.GetURLPath(), a) };
             execute( aArgs );
         }
     }
@@ -215,13 +216,11 @@ bool SvxZoomPageStatusBarControl::MouseButtonDown(const MouseEvent&)
     SvxZoomItem aZoom( SvxZoomType::WHOLEPAGE, 0, GetId() );
 
     css::uno::Any a;
+    aZoom.QueryValue( a );
     INetURLObject aObj( m_aCommandURL );
 
-    css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
-    aArgs[0].Name  = aObj.GetURLPath();
-    aZoom.QueryValue( a );
-    aArgs[0].Value = a;
-
+    css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
+        aObj.GetURLPath(), a) };
     execute( aArgs );
 
     return true;

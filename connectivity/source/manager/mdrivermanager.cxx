@@ -186,8 +186,8 @@ Any SAL_CALL ODriverEnumeration::nextElement(  )
                 css::configuration::theDefaultProvider::get( _rContext ) );
 
             // one argument for creating the node access: the path to the configuration node
-            Sequence< Any > aCreationArgs(1);
-            aCreationArgs[0] <<= NamedValue( "nodepath", makeAny( OUString("org.openoffice.Office.DataAccess/DriverManager") ) );
+            Sequence< Any > aCreationArgs{ Any(NamedValue(
+                "nodepath", makeAny( OUString("org.openoffice.Office.DataAccess/DriverManager") ) )) };
 
             // create the node access
             Reference< XNameAccess > xDriverManagerNode(

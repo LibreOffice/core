@@ -331,19 +331,9 @@ namespace XSLT
             return false;
 
         // create transformer
-        Sequence<Any> args(3);
-        NamedValue nv;
-
-        nv.Name = "StylesheetURL";
-        nv.Value <<= expandUrl(udStyleSheet);
-        args[0] <<= nv;
-        nv.Name = "SourceURL";
-        nv.Value <<= aURL;
-        args[1] <<= nv;
-        nv.Name = "SourceBaseURL";
-        nv.Value <<= INetURLObject(aURL).getBase();
-        args[2] <<= nv;
-
+        Sequence<Any> args{ Any(NamedValue("StylesheetURL", Any(expandUrl(udStyleSheet)))),
+                            Any(NamedValue("SourceURL", Any(aURL))),
+                            Any(NamedValue("SourceBaseURL", Any(INetURLObject(aURL).getBase()))) };
         m_tcontrol = impl_createTransformer(msUserData[1], args);
 
         OSL_ASSERT(xHandler.is());
@@ -471,19 +461,9 @@ namespace XSLT
             return false;
 
         // create transformer
-        Sequence<Any> args(3);
-        NamedValue nv;
-
-        nv.Name = "StylesheetURL";
-        nv.Value <<= expandUrl(udStyleSheet);
-        args[0] <<= nv;
-        nv.Name = "SourceURL";
-        nv.Value <<= aURL;
-        args[1] <<= nv;
-        nv.Name = "SourceBaseURL";
-        nv.Value <<= INetURLObject(aURL).getBase();
-        args[2] <<= nv;
-
+        Sequence<Any> args{ Any(NamedValue("StylesheetURL", Any(expandUrl(udStyleSheet)))),
+                            Any(NamedValue("SourceURL", Any(aURL))),
+                            Any(NamedValue("SourceBaseURL", Any(INetURLObject(aURL).getBase()))) };
         m_tcontrol = impl_createTransformer(msUserData[1], args);
 
         assert(xFastParser.is());
@@ -601,24 +581,13 @@ namespace XSLT
         }
 
         // create transformer
-        Sequence<Any> args(4);
-        NamedValue nv;
-        nv.Name = "StylesheetURL";
-        nv.Value <<= expandUrl(udStyleSheet);
-        args[0] <<= nv;
-        nv.Name = "TargetURL";
-        nv.Value <<= sURL;
-        args[1] <<= nv;
-        nv.Name = "DoctypePublic";
-        nv.Value <<= aDoctypePublic;
-        args[2] <<= nv;
-        nv.Name = "TargetBaseURL";
         INetURLObject ineturl(sURL);
         ineturl.removeSegment();
         m_aExportBaseUrl = ineturl.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-        nv.Value <<= m_aExportBaseUrl;
-        args[3] <<= nv;
-
+        Sequence<Any> args{ Any(NamedValue("StylesheetURL", Any(expandUrl(udStyleSheet)))),
+                            Any(NamedValue("TargetURL", Any(sURL))),
+                            Any(NamedValue("DoctypePublic", Any(aDoctypePublic))),
+                            Any(NamedValue("TargetBaseURL", Any(m_aExportBaseUrl))) };
         m_tcontrol = impl_createTransformer(msUserData[1], args);
 
         OSL_ASSERT(m_rOutputStream.is());

@@ -2630,7 +2630,7 @@ void SbRtl_NPV(StarBASIC *, SbxArray & rPar, bool)
 
     // convert for calc functions
     Sequence< Sequence< double > > sValues(1);
-    aValues >>= sValues[ 0 ];
+    aValues >>= sValues.getArray()[ 0 ];
     aValues <<= sValues;
 
     Sequence< Any > aParams
@@ -2703,7 +2703,7 @@ void SbRtl_MIRR(StarBASIC *, SbxArray & rPar, bool)
 
     // convert for calc functions
     Sequence< Sequence< double > > sValues(1);
-    aValues >>= sValues[ 0 ];
+    aValues >>= sValues.getArray()[ 0 ];
     aValues <<= sValues;
 
     Sequence< Any > aParams
@@ -2731,7 +2731,7 @@ void SbRtl_IRR(StarBASIC *, SbxArray & rPar, bool)
 
     // convert for calc functions
     Sequence< Sequence< double > > sValues(1);
-    aValues >>= sValues[ 0 ];
+    aValues >>= sValues.getArray()[ 0 ];
     aValues <<= sValues;
 
     // set default values for Optional args

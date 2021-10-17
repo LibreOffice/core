@@ -742,9 +742,9 @@ Sequence< Reference< XIdlClass > > InterfaceIdlClassImpl::getSuperclasses()
     ::osl::MutexGuard aGuard(getMutexAccess());
     if (!_xSuperClasses.hasElements()) {
         typelib_InterfaceTypeDescription * pType = getTypeDescr();
-        _xSuperClasses.realloc(pType->nBaseTypes);
+        auto pSuperClasses = _xSuperClasses.realloc(pType->nBaseTypes);
         for (sal_Int32 i = 0; i < pType->nBaseTypes; ++i) {
-            _xSuperClasses[i] = getReflection()->forType(
+            pSuperClasses[i] = getReflection()->forType(
                 &pType->ppBaseTypes[i]->aBase);
             OSL_ASSERT(_xSuperClasses[i].is());
         }

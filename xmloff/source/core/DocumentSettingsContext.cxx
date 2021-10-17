@@ -313,6 +313,7 @@ void XMLDocumentSettingsContext::endFastElement(sal_Int32 )
     {
         if (!utl::ConfigManager::IsFuzzing() && !officecfg::Office::Common::Save::Document::LoadPrinter::get())
         {
+            auto aSeqConfigPropsRange = asNonConstRange(aSeqConfigProps);
             sal_Int32 i = aSeqConfigProps.getLength() - 1;
             int nFound = 0;
 
@@ -322,13 +323,13 @@ void XMLDocumentSettingsContext::endFastElement(sal_Int32 )
 
                 if ( sProp == "PrinterName" )
                 {
-                    aSeqConfigProps[i].Value <<= OUString();
+                    aSeqConfigPropsRange[i].Value <<= OUString();
                     nFound++;
                 }
                 else if ( sProp == "PrinterSetup" )
                 {
                     uno::Sequence< sal_Int8 > aEmpty;
-                    aSeqConfigProps[i].Value <<= aEmpty;
+                    aSeqConfigPropsRange[i].Value <<= aEmpty;
                     nFound++;
                 }
 

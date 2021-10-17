@@ -21,6 +21,7 @@
 
 #include <algorithm>
 
+#include <comphelper/propertyvalue.hxx>
 #include <o3tl/safeint.hxx>
 #include <tools/stream.hxx>
 #include <tools/fract.hxx>
@@ -333,9 +334,8 @@ awt::Size ExportDialog::GetOriginalSize()
         aTransformation.m11 = aViewTransformation.get(1,1);
         aTransformation.m12 = aViewTransformation.get(1,2);
 
-        uno::Sequence< beans::PropertyValue > aViewInformation( 1 );
-        aViewInformation[ 0 ].Value <<= aTransformation;
-        aViewInformation[ 0 ].Name  = "ViewTransformation";
+        uno::Sequence< beans::PropertyValue > aViewInformation{ comphelper::makePropertyValue(
+            "ViewTransformation", aTransformation) };
 
         if ( mxShape.is() )
             aShapesRange = GetShapeRangeForXShape( mxShape, xPrimitiveFactory, aViewInformation );
@@ -480,13 +480,11 @@ void ExportDialog::GetGraphicStream()
                     uno::Reference < io::XOutputStream > xOutputStream( xStream->getOutputStream() );
 
                     OUString sFormat( maExt );
-                    uno::Sequence< beans::PropertyValue > aDescriptor( 3 );
-                    aDescriptor[0].Name = "OutputStream";
-                    aDescriptor[0].Value <<= xOutputStream;
-                    aDescriptor[1].Name = "FilterName";
-                    aDescriptor[1].Value <<= sFormat;
-                    aDescriptor[2].Name = "FilterData";
-                    aDescriptor[2].Value <<= aNewFilterData;
+                    uno::Sequence< beans::PropertyValue > aDescriptor{
+                        comphelper::makePropertyValue("OutputStream", xOutputStream),
+                        comphelper::makePropertyValue("FilterName", sFormat),
+                        comphelper::makePropertyValue("FilterData", aNewFilterData)
+                    };
 
                     uno::Reference< drawing::XGraphicExportFilter > xGraphicExporter =
                         drawing::GraphicExportFilter::create( mxContext );

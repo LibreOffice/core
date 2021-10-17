@@ -15,6 +15,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
@@ -106,8 +107,6 @@ private:
     {
         if (!m_xWidget->get_value_changed_from_saved())
             return;
-        uno::Sequence< beans::PropertyValue > aArgs( 1 );
-        aArgs[0].Name  = "DBLimit.Value";
         sal_Int64 nLimit;
         OUString sActiveText = m_xWidget->get_active_text();
         if (sActiveText == DBA_RES(STR_QUERY_LIMIT_ALL))
@@ -119,8 +118,7 @@ private:
                 nLimit = -1;
         }
         set_value(nLimit);
-        aArgs[0].Value <<= nLimit;
-        m_pControl->dispatchCommand( aArgs );
+        m_pControl->dispatchCommand({ comphelper::makePropertyValue("DBLimit.Value", nLimit) });
     }
 
     ///Initialize entries

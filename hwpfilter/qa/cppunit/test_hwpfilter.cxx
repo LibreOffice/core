@@ -11,6 +11,7 @@
 #include <test/bootstrapfixture.hxx>
 #include <com/sun/star/document/XFilter.hpp>
 
+#include <comphelper/propertyvalue.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
@@ -43,10 +44,7 @@ namespace
         uno::Reference<document::XFilter> xFilter(m_xSFactory->createInstance("com.sun.comp.hwpimport.HwpImportFilter"),
                                                   uno::UNO_QUERY_THROW);
 
-        uno::Sequence< beans::PropertyValue > aDescriptor(1);
-        aDescriptor[0].Name = "URL";
-        aDescriptor[0].Value <<= rURL;
-        return xFilter->filter(aDescriptor);
+        return xFilter->filter({ comphelper::makePropertyValue("URL", rURL) });
     }
 
     void HwpFilterTest::test()

@@ -107,8 +107,8 @@ namespace pcr
     Sequence< OUString > SAL_CALL FormController::getSupportedServiceNames(  )
     {
         Sequence< OUString > aSupported( m_aSupportedServiceNames );
-        aSupported.realloc( aSupported.getLength() + 1 );
-        aSupported[ aSupported.getLength() - 1 ] = "com.sun.star.inspection.ObjectInspector";
+        auto pSupported = aSupported.realloc( aSupported.getLength() + 1 );
+        pSupported[ aSupported.getLength() - 1 ] = "com.sun.star.inspection.ObjectInspector";
         return aSupported;
     }
 
@@ -127,19 +127,20 @@ namespace pcr
 
     ::cppu::IPropertyArrayHelper* FormController::createArrayHelper( ) const
     {
-        Sequence< Property > aProps( 2 );
-        aProps[0] = Property(
-            PROPERTY_CURRENTPAGE,
-            OWN_PROPERTY_ID_CURRENTPAGE,
-            ::cppu::UnoType<OUString>::get(),
-            PropertyAttribute::TRANSIENT
-        );
-        aProps[1] = Property(
-            PROPERTY_INTROSPECTEDOBJECT,
-            OWN_PROPERTY_ID_INTROSPECTEDOBJECT,
-            cppu::UnoType<XPropertySet>::get(),
-            PropertyAttribute::TRANSIENT | PropertyAttribute::CONSTRAINED
-        );
+        Sequence< Property > aProps{
+            Property(
+                PROPERTY_CURRENTPAGE,
+                OWN_PROPERTY_ID_CURRENTPAGE,
+                ::cppu::UnoType<OUString>::get(),
+                PropertyAttribute::TRANSIENT
+            ),
+            Property(
+                PROPERTY_INTROSPECTEDOBJECT,
+                OWN_PROPERTY_ID_INTROSPECTEDOBJECT,
+                cppu::UnoType<XPropertySet>::get(),
+                PropertyAttribute::TRANSIENT | PropertyAttribute::CONSTRAINED
+            )
+        };
         return new ::cppu::OPropertyArrayHelper( aProps );
     }
 
@@ -179,8 +180,7 @@ namespace pcr
                     Sequence< Reference< XInterface > > aObjects;
                     if ( m_xCurrentInspectee.is() )
                     {
-                        aObjects.realloc( 1 );
-                        aObjects[0] = m_xCurrentInspectee;
+                        aObjects = { m_xCurrentInspectee };
                     }
 
                     Reference< XObjectInspector > xInspector( *this, UNO_QUERY_THROW );

@@ -1609,7 +1609,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
 
                 for (sal_Int32 i = 0; i < rNames.getLength(); i++)
                 {
-                    OUString &rPropName = rNames[i];
+                    const OUString &rPropName = rNames[i];
                     if (i != rNames.getLength() - 1 || rPropName != PROPNAME_FLAGS)
                         aItem[rPropName] = aValues[i];
                     else

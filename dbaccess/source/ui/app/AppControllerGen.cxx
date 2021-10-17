@@ -155,6 +155,7 @@ void OApplicationController::openDialog( const OUString& _sServiceName )
         weld::WaitObject aWO(getFrameWeld());
 
         Sequence< Any > aArgs(3);
+        auto pArgs = aArgs.getArray();
         sal_Int32 nArgPos = 0;
 
         Reference< css::awt::XWindow> xWindow = getTopMostContainerWindow();
@@ -165,7 +166,7 @@ void OApplicationController::openDialog( const OUString& _sServiceName )
                 xWindow = VCLUnoHelper::GetInterface(getView()->Window::GetParent());
         }
         // the parent window
-        aArgs[nArgPos++] <<= PropertyValue( "ParentWindow",
+        pArgs[nArgPos++] <<= PropertyValue( "ParentWindow",
                                     0,
                                     makeAny(xWindow),
                                     PropertyState_DIRECT_VALUE);
@@ -176,7 +177,7 @@ void OApplicationController::openDialog( const OUString& _sServiceName )
             sInitialSelection = getDatabaseName();
         if ( !sInitialSelection.isEmpty() )
         {
-            aArgs[ nArgPos++ ] <<= PropertyValue(
+            pArgs[ nArgPos++ ] <<= PropertyValue(
                 "InitialSelection", 0,
                 makeAny( sInitialSelection ), PropertyState_DIRECT_VALUE );
         }
@@ -184,7 +185,7 @@ void OApplicationController::openDialog( const OUString& _sServiceName )
         SharedConnection xConnection( getConnection() );
         if ( xConnection.is() )
         {
-            aArgs[ nArgPos++ ] <<= PropertyValue(
+            pArgs[ nArgPos++ ] <<= PropertyValue(
                 PROPERTY_ACTIVE_CONNECTION, 0,
                 makeAny( xConnection ), PropertyState_DIRECT_VALUE );
         }

@@ -941,10 +941,11 @@ void PresenterWindowManager::PaintBackground (const awt::Rectangle& rUpdateBox)
     else
     {
         const util::Color aBackgroundColor (mpBackgroundBitmap->maReplacementColor);
-        aRenderState.DeviceColor[0] = ((aBackgroundColor >> 16) & 0x0ff) / 255.0;
-        aRenderState.DeviceColor[1] = ((aBackgroundColor >> 8) & 0x0ff) / 255.0;
-        aRenderState.DeviceColor[2] = ((aBackgroundColor >> 0) & 0x0ff) / 255.0;
-        aRenderState.DeviceColor[3] = ((aBackgroundColor >> 24) & 0x0ff) / 255.0;
+        auto pDeviceColor = aRenderState.DeviceColor.getArray();
+        pDeviceColor[0] = ((aBackgroundColor >> 16) & 0x0ff) / 255.0;
+        pDeviceColor[1] = ((aBackgroundColor >> 8) & 0x0ff) / 255.0;
+        pDeviceColor[2] = ((aBackgroundColor >> 0) & 0x0ff) / 255.0;
+        pDeviceColor[3] = ((aBackgroundColor >> 24) & 0x0ff) / 255.0;
         mxParentCanvas->fillPolyPolygon(
             xBackgroundPolygon,
             aViewState,

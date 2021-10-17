@@ -26,6 +26,7 @@
 #include <editeng/fontitem.hxx>
 #include <osl/file.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #if USE_TLS_NSS
 #include <nss.h>
@@ -96,9 +97,7 @@ void ScPDFExportTest::setUp()
         CPPUNIT_ASSERT(xDesktop.is());
 
         // Create spreadsheet
-        uno::Sequence<beans::PropertyValue> args(1);
-        args[0].Name = "Hidden";
-        args[0].Value <<= true;
+        uno::Sequence<beans::PropertyValue> args{ comphelper::makePropertyValue("Hidden", true) };
         mxComponent = xDesktop->loadComponentFromURL("private:factory/scalc", "_blank", 0, args);
         CPPUNIT_ASSERT(mxComponent.is());
 
@@ -196,22 +195,18 @@ ScPDFExportTest::exportToPDF(const uno::Reference<frame::XModel>& xModel, const 
     }
 
     // init special pdf export params
-    css::uno::Sequence<css::beans::PropertyValue> aFilterData(3);
-    aFilterData[0].Name = "Selection";
-    aFilterData[0].Value <<= xCellRange;
-    aFilterData[1].Name = "Printing";
-    aFilterData[1].Value <<= sal_Int32(2);
-    aFilterData[2].Name = "ViewPDFAfterExport";
-    aFilterData[2].Value <<= true;
+    css::uno::Sequence<css::beans::PropertyValue> aFilterData{
+        comphelper::makePropertyValue("Selection", xCellRange),
+        comphelper::makePropertyValue("Printing", sal_Int32(2)),
+        comphelper::makePropertyValue("ViewPDFAfterExport", true)
+    };
 
     // init set of params for storeToURL() call
-    css::uno::Sequence<css::beans::PropertyValue> seqArguments(3);
-    seqArguments[0].Name = "FilterData";
-    seqArguments[0].Value <<= aFilterData;
-    seqArguments[1].Name = "FilterName";
-    seqArguments[1].Value <<= OUString("calc_pdf_Export");
-    seqArguments[2].Name = "URL";
-    seqArguments[2].Value <<= sFileURL;
+    css::uno::Sequence<css::beans::PropertyValue> seqArguments{
+        comphelper::makePropertyValue("FilterData", aFilterData),
+        comphelper::makePropertyValue("FilterName", OUString("calc_pdf_Export")),
+        comphelper::makePropertyValue("URL", sFileURL)
+    };
 
     // call storeToURL()
     uno::Reference<lang::XComponent> xComponent(mxComponent, UNO_SET_THROW);

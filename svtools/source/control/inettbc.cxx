@@ -463,10 +463,12 @@ void SvtMatchContext_Impl::doExecute()
                                 css::ucb::XUniversalContentBroker > ucb(
                                     css::ucb::UniversalContentBroker::create(
                                         ctx));
-                            css::uno::Sequence< css::beans::Property > prop(1);
-                            prop[0].Name = "IsFolder";
-                            prop[0].Handle = -1;
-                            prop[0].Type = cppu::UnoType< bool >::get();
+                            css::uno::Sequence< css::beans::Property > prop{
+                                { /* Name       */ "IsFolder",
+                                  /* Handle     */ -1,
+                                  /* Type       */ cppu::UnoType< bool >::get(),
+                                  /* Attributes */ {} }
+                            };
                             css::uno::Any res;
                             css::uno::Reference< css::ucb::XCommandProcessor >
                                 proc(

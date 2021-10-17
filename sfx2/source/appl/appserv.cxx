@@ -43,6 +43,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 
 #include <svtools/addresstemplate.hxx>
@@ -1404,9 +1405,8 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
         case SID_MORE_DICTIONARIES:
         {
-            uno::Sequence<beans::PropertyValue> aArgs(1);
-            aArgs[0].Name = "AdditionsTag";
-            aArgs[0].Value <<= OUString("Dictionary");
+            uno::Sequence<beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
+                "AdditionsTag", OUString("Dictionary")) };
             comphelper::dispatchCommand(".uno:AdditionsDialog", aArgs);
             break;
         }

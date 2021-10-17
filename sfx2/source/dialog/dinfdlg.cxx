@@ -28,6 +28,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/xmlsechelper.hxx>
 #include <unotools/useroptions.hxx>
@@ -1519,12 +1520,9 @@ Sequence< beans::PropertyValue > CustomPropertiesWindow::GetCustomProperties()
     StoreCustomProperties();
 
     Sequence< beans::PropertyValue > aPropertiesSeq(GetTotalLineCount());
-
-    for (sal_uInt32 i = 0; i < GetTotalLineCount(); ++i)
-    {
-        aPropertiesSeq[i].Name = m_aCustomProperties[i]->m_sName;
-        aPropertiesSeq[i].Value = m_aCustomProperties[i]->m_aValue;
-    }
+    std::transform(
+        m_aCustomProperties.begin(), m_aCustomProperties.end(), aPropertiesSeq.getArray(),
+        [](const auto& el) { return comphelper::makePropertyValue(el->m_sName, el->m_aValue); });
 
     return aPropertiesSeq;
 }
@@ -2150,28 +2148,30 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
 Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() const
 {
     Sequence< document::CmisProperty > aPropertiesSeq( m_aCmisPropertiesLines.size() );
+    auto aPropertiesSeqRange = asNonConstRange(aPropertiesSeq);
     sal_Int32 i = 0;
     for ( auto& rxLine : m_aCmisPropertiesLines )
     {
         CmisPropertyLine* pLine = rxLine.get();
 
-        aPropertiesSeq[i].Id = pLine->m_sId;
-        aPropertiesSeq[i].Type = pLine->m_sType;
-        aPropertiesSeq[i].Updatable = pLine->m_bUpdatable;
-        aPropertiesSeq[i].Required = pLine->m_bRequired;
-        aPropertiesSeq[i].OpenChoice = pLine->m_bOpenChoice;
-        aPropertiesSeq[i].MultiValued = pLine->m_bMultiValued;
+        aPropertiesSeqRange[i].Id = pLine->m_sId;
+        aPropertiesSeqRange[i].Type = pLine->m_sType;
+        aPropertiesSeqRange[i].Updatable = pLine->m_bUpdatable;
+        aPropertiesSeqRange[i].Required = pLine->m_bRequired;
+        aPropertiesSeqRange[i].OpenChoice = pLine->m_bOpenChoice;
+        aPropertiesSeqRange[i].MultiValued = pLine->m_bMultiValued;
 
         OUString sPropertyName = pLine->m_xName->get_label();
         if ( !sPropertyName.isEmpty() )
         {
-            aPropertiesSeq[i].Name = sPropertyName;
+            aPropertiesSeqRange[i].Name = sPropertyName;
             OUString sType = pLine->m_xType->get_label();
             if ( CMIS_TYPE_DECIMAL == sType )
             {
                 sal_uInt32 nIndex = const_cast< SvNumberFormatter& >(
                     m_aNumberFormatter ).GetFormatIndex( NF_NUMBER_SYSTEM );
                 Sequence< double > seqValue( pLine->m_aValues.size( ) );
+                auto seqValueRange = asNonConstRange(seqValue);
                 sal_Int32 k = 0;
                 for ( const auto& rxValue : pLine->m_aValues )
                 {
@@ -2180,16 +2180,17 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
                     bool bIsNum = const_cast< SvNumberFormatter& >( m_aNumberFormatter ).
                     IsNumberFormat( sValue, nIndex, dValue );
                     if ( bIsNum )
-                        seqValue[k] = dValue;
+                        seqValueRange[k] = dValue;
                     ++k;
                 }
-                aPropertiesSeq[i].Value <<= seqValue;
+                aPropertiesSeqRange[i].Value <<= seqValue;
             }
             else if ( CMIS_TYPE_INTEGER == sType )
             {
                 sal_uInt32 nIndex = const_cast< SvNumberFormatter& >(
                     m_aNumberFormatter ).GetFormatIndex( NF_NUMBER_SYSTEM );
                 Sequence< sal_Int64 > seqValue( pLine->m_aValues.size( ) );
+                auto seqValueRange = asNonConstRange(seqValue);
                 sal_Int32 k = 0;
                 for ( const auto& rxValue : pLine->m_aValues )
                 {
@@ -2198,27 +2199,29 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
                     bool bIsNum = const_cast< SvNumberFormatter& >( m_aNumberFormatter ).
                     IsNumberFormat( sValue, nIndex, dValue );
                     if ( bIsNum )
-                        seqValue[k] = static_cast<sal_Int64>(dValue);
+                        seqValueRange[k] = static_cast<sal_Int64>(dValue);
                     ++k;
                 }
-                aPropertiesSeq[i].Value <<= seqValue;
+                aPropertiesSeqRange[i].Value <<= seqValue;
             }
             else if ( CMIS_TYPE_BOOL == sType )
             {
                 Sequence<sal_Bool> seqValue( pLine->m_aYesNos.size( ) );
+                auto seqValueRange = asNonConstRange(seqValue);
                 sal_Int32 k = 0;
                 for ( const auto& rxYesNo : pLine->m_aYesNos )
                 {
                     bool bValue = rxYesNo->m_xYesButton->get_active();
-                    seqValue[k] = bValue;
+                    seqValueRange[k] = bValue;
                     ++k;
                 }
-                aPropertiesSeq[i].Value <<= seqValue;
+                aPropertiesSeqRange[i].Value <<= seqValue;
 
             }
             else if ( CMIS_TYPE_DATETIME == sType )
             {
                 Sequence< util::DateTime > seqValue( pLine->m_aDateTimes.size( ) );
+                auto seqValueRange = asNonConstRange(seqValue);
                 sal_Int32 k = 0;
                 for ( const auto& rxDateTime : pLine->m_aDateTimes )
                 {
@@ -2228,22 +2231,23 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
                                               aTmpTime.GetMin(), aTmpTime.GetHour(),
                                               aTmpDate.GetDay(), aTmpDate.GetMonth(),
                                               aTmpDate.GetYear(), true );
-                    seqValue[k] = aDateTime;
+                    seqValueRange[k] = aDateTime;
                     ++k;
                 }
-                aPropertiesSeq[i].Value <<= seqValue;
+                aPropertiesSeqRange[i].Value <<= seqValue;
             }
             else
             {
                 Sequence< OUString > seqValue( pLine->m_aValues.size( ) );
+                auto seqValueRange = asNonConstRange(seqValue);
                 sal_Int32 k = 0;
                 for ( const auto& rxValue : pLine->m_aValues )
                 {
                     OUString sValue( rxValue->m_xValueEdit->get_text() );
-                    seqValue[k] = sValue;
+                    seqValueRange[k] = sValue;
                     ++k;
                 }
-                aPropertiesSeq[i].Value <<= seqValue;
+                aPropertiesSeqRange[i].Value <<= seqValue;
             }
         }
         ++i;

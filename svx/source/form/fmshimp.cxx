@@ -3509,8 +3509,7 @@ void FmXFormShell::SetWizardUsing_Lock(bool _bUseThem)
     m_bUseWizards = _bUseThem;
 
     Sequence< OUString > aNames { "FormControlPilotsEnabled" };
-    Sequence< Any > aValues(1);
-    aValues[0] <<= m_bUseWizards;
+    Sequence< Any > aValues{ Any(m_bUseWizards) };
     PutProperties(aNames, aValues);
 }
 
