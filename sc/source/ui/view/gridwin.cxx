@@ -2394,8 +2394,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 {
                     ScAddress aCellPos( nPosX, nPosY, nTab );
                     uno::Reference< table::XCell > xCell( new ScCellObj( mrViewData.GetDocShell(), aCellPos ) );
-                    uno::Sequence< uno::Any > aArgs(1);
-                    aArgs[0] <<= xCell;
+                    uno::Sequence< uno::Any > aArgs{ uno::Any(xCell) };
                     xVbaEvents->processVbaEvent( script::vba::VBAEventId::WORKSHEET_FOLLOWHYPERLINK, aArgs );
                 }
             }

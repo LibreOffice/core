@@ -58,6 +58,7 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <unotools/resmgr.hxx>
 #include <rtl/math.hxx>
+#include <algorithm>
 #include <memory>
 #include <vector>
 
@@ -304,12 +305,11 @@ void SAL_CALL LpsolveSolver::solve()
     {
         // get solution
 
-        maSolution.realloc( nVariables );
+        auto pSolution = maSolution.realloc( nVariables );
 
         REAL* pResultVar = nullptr;
         get_ptr_variables( lp, &pResultVar );
-        for (nVar=0; nVar<nVariables; nVar++)
-            maSolution[nVar] = pResultVar[nVar];
+        std::copy_n(pResultVar, nVariables, pSolution);
 
         mfResultValue = get_objective( lp );
     }

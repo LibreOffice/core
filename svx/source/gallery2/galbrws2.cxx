@@ -39,6 +39,7 @@
 #include <svx/svxdlg.hxx>
 #include <svx/galleryitem.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -46,6 +47,8 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/style/GraphicLocation.hpp>
+
+#include <cassert>
 #include <map>
 #include <memory>
 #include <cppuhelper/implbase.hxx>
@@ -310,19 +313,14 @@ void GalleryThemePopup::BackgroundMenuSelectHdl(sal_uInt16 nPos)
     OUString aURL( mpBrowser->GetURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     OUString aFilterName( mpBrowser->GetFilterName() );
 
-    css::uno::Sequence< css::beans::PropertyValue > aArgs( 6 );
-    aArgs[0].Name = "Background.Transparent";
-    aArgs[0].Value <<= sal_Int32( 0 ); // 0 - 100
-    aArgs[1].Name = "Background.BackColor";
-    aArgs[1].Value <<= sal_Int32( - 1 );
-    aArgs[2].Name = "Background.URL";
-    aArgs[2].Value <<= aURL;
-    aArgs[3].Name = "Background.Filtername"; // FIXME should be FilterName
-    aArgs[3].Value <<= aFilterName;
-    aArgs[4].Name = "Background.Position";
-    aArgs[4].Value <<= css::style::GraphicLocation_TILED;
-    aArgs[5].Name = "Position";
-    aArgs[5].Value <<= nPos;
+    css::uno::Sequence< css::beans::PropertyValue > aArgs{
+        comphelper::makePropertyValue("Background.Transparent", sal_Int32( 0 )), // 0 - 100
+        comphelper::makePropertyValue("Background.BackColor", sal_Int32( - 1 )),
+        comphelper::makePropertyValue("Background.URL", aURL),
+        comphelper::makePropertyValue("Background.Filtername", aFilterName), // FIXME name should be FilterName
+        comphelper::makePropertyValue("Background.Position", css::style::GraphicLocation_TILED),
+        comphelper::makePropertyValue("Position", nPos)
+    };
 
     const CommandInfoMap::const_iterator it = m_aCommandInfo.find( SID_GALLERY_BG_BRUSH );
     if ( it != m_aCommandInfo.end() )
@@ -1067,22 +1065,17 @@ void GalleryBrowser2::DispatchAdd(
         xGraphic.set( aGraphic.GetXGraphic() );
     OSL_ENSURE( xGraphic.is(), "gallery item is graphic, but the reference is invalid!" );
 
-    css::uno::Sequence< css::beans::PropertyValue > aSeq( SVXGALLERYITEM_PARAMS );
+    css::uno::Sequence< css::beans::PropertyValue > aSeq{
+        comphelper::makePropertyValue(SVXGALLERYITEM_TYPE, nType),
+        comphelper::makePropertyValue(SVXGALLERYITEM_URL, OUString()),
+        comphelper::makePropertyValue(SVXGALLERYITEM_FILTER, aFilterName),
+        comphelper::makePropertyValue(SVXGALLERYITEM_DRAWING, xDrawing),
+        comphelper::makePropertyValue(SVXGALLERYITEM_GRAPHIC, xGraphic)
+    };
+    assert(aSeq.getLength() == SVXGALLERYITEM_PARAMS);
 
-    aSeq[0].Name = SVXGALLERYITEM_TYPE;
-    aSeq[0].Value <<= nType;
-    aSeq[1].Name = SVXGALLERYITEM_URL;
-    aSeq[1].Value <<= OUString();
-    aSeq[2].Name = SVXGALLERYITEM_FILTER;
-    aSeq[2].Value <<= aFilterName;
-    aSeq[3].Name = SVXGALLERYITEM_DRAWING;
-    aSeq[3].Value <<= xDrawing;
-    aSeq[4].Name = SVXGALLERYITEM_GRAPHIC;
-    aSeq[4].Value <<= xGraphic;
-
-    css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
-    aArgs[0].Name = SVXGALLERYITEM_ARGNAME;
-    aArgs[0].Value <<= aSeq;
+    css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
+        SVXGALLERYITEM_ARGNAME, aSeq) };
 
     std::unique_ptr<DispatchInfo> pInfo(new DispatchInfo);
     pInfo->TargetURL = aURL;

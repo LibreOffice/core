@@ -293,13 +293,14 @@ struct SerializerTest : public test::BootstrapFixture
         mxHandler.set( new DocumentHandler );
         mxTokHandler.set( new TokenHandler );
 
-        maRegisteredNamespaces.realloc(2);
-        maRegisteredNamespaces[0] = beans::make_Pair(
-            OUString( "urn:oasis:names:tc:opendocument:xmlns:office:1.0" ),
-            xml::sax::FastToken::NAMESPACE);
-        maRegisteredNamespaces[1] = beans::make_Pair(
-            OUString( "http://www.w3.org/1999/xlink" ),
-            2*xml::sax::FastToken::NAMESPACE);
+        maRegisteredNamespaces = {
+            beans::make_Pair(
+                OUString( "urn:oasis:names:tc:opendocument:xmlns:office:1.0" ),
+                xml::sax::FastToken::NAMESPACE),
+            beans::make_Pair(
+                OUString( "http://www.w3.org/1999/xlink" ),
+                2*xml::sax::FastToken::NAMESPACE)
+        };
     }
 
     void serializerTest ()

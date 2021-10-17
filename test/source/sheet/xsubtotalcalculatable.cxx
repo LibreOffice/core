@@ -30,10 +30,8 @@ void XSubTotalCalculatable::testCreateSubTotalDescriptor()
     uno::Reference< sheet::XSubTotalCalculatable > xSTC(init(), uno::UNO_QUERY_THROW);
     uno::Reference< sheet::XSubTotalDescriptor > xSTD = xSTC->createSubTotalDescriptor(true);
 
-    uno::Sequence< sheet::SubTotalColumn > xCols;
-    xCols.realloc(1);
-    xCols[0].Column = 5;
-    xCols[0].Function = sheet::GeneralFunction_SUM;
+    uno::Sequence< sheet::SubTotalColumn > xCols{ { /* Column   */ 5,
+                                                    /* Function */ sheet::GeneralFunction_SUM } };
 
     CPPUNIT_ASSERT_NO_THROW_MESSAGE("Unable to create XSubTotalDescriptor", xSTD->addNew(xCols, 1));
 }
@@ -44,10 +42,8 @@ void XSubTotalCalculatable::testApplyRemoveSubTotals()
     uno::Reference< sheet::XSubTotalCalculatable > xSTC(xSheet, UNO_QUERY_THROW);
 
     uno::Reference< sheet::XSubTotalDescriptor > xSTD = xSTC->createSubTotalDescriptor(true);
-    uno::Sequence< sheet::SubTotalColumn > xCols;
-    xCols.realloc(1);
-    xCols[0].Column = 0;
-    xCols[0].Function = sheet::GeneralFunction_SUM;
+    uno::Sequence< sheet::SubTotalColumn > xCols{ { /* Column   */ 0,
+                                                    /* Function */ sheet::GeneralFunction_SUM } };
     xSTD->addNew(xCols, 1);
 
     xSheet->getCellByPosition(0, 0)->setFormula("first");

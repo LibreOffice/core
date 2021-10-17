@@ -171,6 +171,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XMLBasedAcceleratorConfiguration::g
     css::uno::Sequence< css::uno::Any > lPreferredOnes (c); // don't pack list!
     AcceleratorCache&                   rCache         = impl_getCFG();
 
+    auto lPreferredOnesRange = asNonConstRange(lPreferredOnes);
     for (i=0; i<c; ++i)
     {
         const OUString& rCommand = lCommandList[i];
@@ -187,7 +188,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XMLBasedAcceleratorConfiguration::g
         if ( lKeys.empty() )
             continue;
 
-        css::uno::Any& rAny = lPreferredOnes[i];
+        css::uno::Any& rAny = lPreferredOnesRange[i];
         rAny <<= *(lKeys.begin());
     }
 
@@ -677,6 +678,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XCUBasedAcceleratorConfiguration::g
     css::uno::Sequence< css::uno::Any > lPreferredOnes (c); // don't pack list!
     AcceleratorCache&                   rCache         = impl_getCFG(true);
 
+    auto lPreferredOnesRange = asNonConstRange(lPreferredOnes);
     for (i=0; i<c; ++i)
     {
         const OUString& rCommand = lCommandList[i];
@@ -696,7 +698,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XCUBasedAcceleratorConfiguration::g
         AcceleratorCache::TKeyList::const_iterator pPreferredKey = lcl_getPreferredKey(lKeys);
         if (pPreferredKey != lKeys.end ())
         {
-            css::uno::Any& rAny = lPreferredOnes[i];
+            css::uno::Any& rAny = lPreferredOnesRange[i];
             rAny <<= *pPreferredKey;
         }
     }

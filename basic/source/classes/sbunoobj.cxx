@@ -542,6 +542,7 @@ static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int
         sal_Int32 nLen = xIdlArray->getLen( aValue );
         for ( sal_Int32 index = 0; index < nLen; ++index )
         {
+            auto pindices = indices.getArray();
             Any aElementAny = xIdlArray->get( aValue, static_cast<sal_uInt32>(index) );
             // This detects the dimension were currently processing
             if ( dimCopy == dimension )
@@ -549,16 +550,16 @@ static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int
                 ++dimCopy;
                 if ( sizes.getLength() < dimCopy )
                 {
-                    sizes.realloc( sizes.getLength() + 1 );
-                    sizes[ sizes.getLength() - 1 ] = nLen;
-                    indices.realloc( indices.getLength() + 1 );
+                    auto psizes = sizes.realloc( sizes.getLength() + 1 );
+                    psizes[ sizes.getLength() - 1 ] = nLen;
+                    pindices = indices.realloc( indices.getLength() + 1 );
                 }
             }
 
             if ( bIsZeroIndex )
-                indices[ dimCopy - 1 ] = index;
+                pindices[ dimCopy - 1 ] = index;
             else
-                indices[ dimCopy - 1] = index + 1;
+                pindices[ dimCopy - 1] = index + 1;
 
             implSequenceToMultiDimArray( pArray, indices, sizes, aElementAny, dimCopy, bIsZeroIndex, &aElementType );
         }
@@ -4385,10 +4386,7 @@ Reference< XInterface > createComListener( const Any& aControlAny, const OUStrin
 
     Reference< XInvocation > xProxy = new ModuleInvocationProxy( aPrefix, xScopeObj );
 
-    Sequence<Any> args( 3 );
-    args[0] = aControlAny;
-    args[1] <<= aVBAType;
-    args[2] <<= xProxy;
+    Sequence<Any> args{ Any(aControlAny), Any(aVBAType), Any(xProxy) };
 
     try
     {
@@ -4524,9 +4522,7 @@ bool SbModule::createCOMWrapperForIface( Any& o_rRetAny, SbClassModuleObject* pP
             }
             Reference< XInvocation > xProxy = new ModuleInvocationProxy( aPureIfaceName, pProxyClassModuleObject );
 
-            Sequence<Any> args( 2 );
-            args[0] <<= aIfaceName;
-            args[1] <<= xProxy;
+            Sequence<Any> args{ Any(aIfaceName), Any(xProxy) };
 
             Reference< XInterface > xRet;
             try

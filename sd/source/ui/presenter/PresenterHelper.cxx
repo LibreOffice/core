@@ -140,13 +140,12 @@ Reference<rendering::XCanvas> SAL_CALL PresenterHelper::createCanvas (
     if (!pWindow)
         throw RuntimeException();
 
-    Sequence<Any> aArg(4);
-
-    // common: first any is VCL pointer to window (for VCL canvas)
-    aArg[0] <<= reinterpret_cast<sal_Int64>(pWindow.get());
-    aArg[1] <<= css::awt::Rectangle();
-    aArg[2] <<= false;
-    aArg[3] <<= rxWindow;
+    Sequence<Any> aArg{ // common: first any is VCL pointer to window (for VCL canvas)
+                        Any(reinterpret_cast<sal_Int64>(pWindow.get())),
+                        Any(css::awt::Rectangle()),
+                        Any(false),
+                        Any(rxWindow)
+    };
 
     Reference<lang::XMultiServiceFactory> xFactory (
         mxComponentContext->getServiceManager(), UNO_QUERY_THROW);

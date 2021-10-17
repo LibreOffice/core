@@ -566,11 +566,8 @@ void IndexTabPage_Impl::InitializeIndex()
         css::uno::Reference< css::beans::XPropertySetInfo > xInfo = aCnt.getProperties();
         if ( xInfo->hasPropertyByName( PROPERTY_ANCHORREF ) )
         {
-            css::uno::Sequence< OUString > aPropSeq( 4 );
-            aPropSeq[0] = PROPERTY_KEYWORDLIST;
-            aPropSeq[1] = PROPERTY_KEYWORDREF;
-            aPropSeq[2] = PROPERTY_ANCHORREF;
-            aPropSeq[3] = PROPERTY_TITLEREF;
+            css::uno::Sequence< OUString > aPropSeq{ PROPERTY_KEYWORDLIST, PROPERTY_KEYWORDREF,
+                                                     PROPERTY_ANCHORREF, PROPERTY_TITLEREF };
 
             // abi: use one possibly remote call only
             css::uno::Sequence< css::uno::Any > aAnySeq =

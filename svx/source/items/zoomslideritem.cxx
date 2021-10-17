@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <comphelper/propertyvalue.hxx>
 #include <osl/diagnose.h>
 
 #include <svx/zoomslideritem.hxx>
@@ -59,15 +62,13 @@ bool SvxZoomSliderItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) c
     {
         case 0 :
             {
-                css::uno::Sequence< css::beans::PropertyValue > aSeq( ZOOMSLIDER_PARAMS );
-                aSeq[0].Name = ZOOMSLIDER_PARAM_CURRENTZOOM;
-                aSeq[0].Value <<= sal_Int32( GetValue() );
-                aSeq[1].Name = ZOOMSLIDER_PARAM_SNAPPINGPOINTS;
-                aSeq[1].Value <<= maValues;
-                aSeq[2].Name = ZOOMSLIDER_PARAM_MINZOOM;
-                aSeq[2].Value <<= mnMinZoom;
-                aSeq[3].Name = ZOOMSLIDER_PARAM_MAXZOOM;
-                aSeq[3].Value <<= mnMaxZoom;
+            css::uno::Sequence< css::beans::PropertyValue > aSeq{
+                comphelper::makePropertyValue(ZOOMSLIDER_PARAM_CURRENTZOOM, sal_Int32( GetValue() )),
+                comphelper::makePropertyValue(ZOOMSLIDER_PARAM_SNAPPINGPOINTS, maValues),
+                comphelper::makePropertyValue(ZOOMSLIDER_PARAM_MINZOOM, mnMinZoom),
+                comphelper::makePropertyValue(ZOOMSLIDER_PARAM_MAXZOOM, mnMaxZoom)
+            };
+                assert(aSeq.getLength() == ZOOMSLIDER_PARAMS);
                 rVal <<= aSeq;
             }
             break;

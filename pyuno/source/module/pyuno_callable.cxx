@@ -83,8 +83,7 @@ static PyObject* PyUNO_callable_call(
         }
         else
         {
-            aParams.realloc (1);
-            aParams [0] = any_params;
+            aParams = { any_params };
         }
 
         {

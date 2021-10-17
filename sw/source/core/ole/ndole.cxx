@@ -45,6 +45,7 @@
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <comphelper/classids.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/graph.hxx>
 #include <sot/formats.hxx>
 #include <vcl/svapp.hxx>
@@ -544,9 +545,8 @@ bool SwOLENode::UpdateLinkURL_Impl()
                         xObj->changeState( embed::EmbedStates::LOADED );
 
                     // TODO/LATER: there should be possible to get current mediadescriptor settings from the object
-                    uno::Sequence< beans::PropertyValue > aArgs( 1 );
-                    aArgs[0].Name = "URL";
-                    aArgs[0].Value <<= aNewLinkURL;
+                    uno::Sequence< beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
+                        "URL", aNewLinkURL) };
                     xPersObj->reload( aArgs, uno::Sequence< beans::PropertyValue >() );
 
                     maLinkURL = aNewLinkURL;

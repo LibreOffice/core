@@ -380,11 +380,10 @@ SwSpellPopup::SwSpellPopup(
         aCurrentLang = SvtLanguageTable::GetLanguageString( nLang );
 
     // build sequence for status value
-    uno::Sequence< OUString > aSeq( 4 );
-    aSeq[0] = aCurrentLang;
-    aSeq[1] = aScriptTypesInUse;
-    aSeq[2] = aKeyboardLang;
-    aSeq[3] = SvtLanguageTable::GetLanguageString(nGuessLangWord);
+    uno::Sequence< OUString > aSeq{ aCurrentLang,
+                                    aScriptTypesInUse,
+                                    aKeyboardLang,
+                                    SvtLanguageTable::GetLanguageString(nGuessLangWord) };
 
     pMenu = m_xPopupMenu->GetPopupMenu(m_nLangSelectionMenuId);
     fillLangPopupMenu( pMenu, MN_SET_LANGUAGE_SELECTION_START, aSeq, pWrtSh, m_aLangTable_Text );
@@ -538,11 +537,10 @@ SwSpellPopup::SwSpellPopup(
         aCurrentLang = SvtLanguageTable::GetLanguageString( nLang );
 
     // build sequence for status value
-    uno::Sequence< OUString > aSeq( 4 );
-    aSeq[0] = aCurrentLang;
-    aSeq[1] = aScriptTypesInUse;
-    aSeq[2] = aKeyboardLang;
-    aSeq[3] = SvtLanguageTable::GetLanguageString(nGuessLangWord);
+    uno::Sequence< OUString > aSeq{ aCurrentLang,
+                                    aScriptTypesInUse,
+                                    aKeyboardLang,
+                                    SvtLanguageTable::GetLanguageString(nGuessLangWord) };
 
     PopupMenu *pMenu = m_xPopupMenu->GetPopupMenu(m_nLangSelectionMenuId);
     fillLangPopupMenu( pMenu, MN_SET_LANGUAGE_SELECTION_START, aSeq, pWrtSh, m_aLangTable_Text );

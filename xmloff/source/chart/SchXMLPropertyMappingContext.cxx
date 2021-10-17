@@ -52,8 +52,8 @@ Reference< chart2::data::XLabeledDataSequence2 > createAndAddSequenceToSeries( c
     if( xSink.is())
     {
         Sequence< Reference< chart2::data::XLabeledDataSequence > > aData( xSeriesSource->getDataSequences());
-        aData.realloc( aData.getLength() + 1 );
-        aData[ aData.getLength() - 1 ] = xLabeledSeq;
+        auto pData = aData.realloc( aData.getLength() + 1 );
+        pData[ aData.getLength() - 1 ] = xLabeledSeq;
         xSink->setData( aData );
     }
 

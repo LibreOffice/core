@@ -751,9 +751,10 @@ void MigrationImpl::runServices()
 {
     // Build argument array
     uno::Sequence< uno::Any > seqArguments(3);
-    seqArguments[0] <<= NamedValue("Productname",
+    auto pseqArguments = seqArguments.getArray();
+    pseqArguments[0] <<= NamedValue("Productname",
                                    uno::makeAny(m_aInfo.productname));
-    seqArguments[1] <<= NamedValue("UserData",
+    pseqArguments[1] <<= NamedValue("UserData",
                                    uno::makeAny(m_aInfo.userdata));
 
 
@@ -773,7 +774,7 @@ void MigrationImpl::runServices()
                 if ( nSize > 0 )
                     seqExtDenyList = comphelper::arrayToSequence< OUString >(
                                           rMigration.excludeExtensions.data(), nSize );
-                seqArguments[2] <<= NamedValue("ExtensionDenyList",
+                pseqArguments[2] <<= NamedValue("ExtensionDenyList",
                                                uno::makeAny( seqExtDenyList ));
 
                 xMigrationJob.set(
@@ -1064,8 +1065,8 @@ uno::Reference< container::XIndexContainer > NewVersionUIInfo::getNewToolbarSett
 void NewVersionUIInfo::init(const std::vector< MigrationModuleInfo >& vModulesInfo)
 {
     m_lCfgManagerSeq.resize(vModulesInfo.size());
-    m_lNewVersionMenubarSettingsSeq.realloc(vModulesInfo.size());
-    m_lNewVersionToolbarSettingsSeq.realloc(vModulesInfo.size());
+    auto p_lNewVersionMenubarSettingsSeq = m_lNewVersionMenubarSettingsSeq.realloc(vModulesInfo.size());
+    auto p_lNewVersionToolbarSettingsSeq = m_lNewVersionToolbarSettingsSeq.realloc(vModulesInfo.size());
 
     static const OUStringLiteral sMenubarResourceURL(u"private:resource/menubar/menubar");
     static const OUStringLiteral sToolbarResourcePre(u"private:resource/toolbar/");
@@ -1080,23 +1081,24 @@ void NewVersionUIInfo::init(const std::vector< MigrationModuleInfo >& vModulesIn
             m_lCfgManagerSeq[i].Value <<= xCfgManager;
 
             if (vModulesInfo[i].bHasMenubar) {
-                m_lNewVersionMenubarSettingsSeq[i].Name = vModulesInfo[i].sModuleShortName;
-                m_lNewVersionMenubarSettingsSeq[i].Value <<= xCfgManager->getSettings(sMenubarResourceURL, true);
+                p_lNewVersionMenubarSettingsSeq[i].Name = vModulesInfo[i].sModuleShortName;
+                p_lNewVersionMenubarSettingsSeq[i].Value <<= xCfgManager->getSettings(sMenubarResourceURL, true);
             }
 
             sal_Int32 nToolbars = vModulesInfo[i].m_vToolbars.size();
             if (nToolbars > 0) {
                 uno::Sequence< beans::PropertyValue > lPropSeq(nToolbars);
+                auto plPropSeq = lPropSeq.getArray();
                 for (sal_Int32 j=0; j<nToolbars; ++j) {
                     OUString sToolbarName = vModulesInfo[i].m_vToolbars[j];
                     OUString sToolbarResourceURL = sToolbarResourcePre + sToolbarName;
 
-                    lPropSeq[j].Name = sToolbarName;
-                    lPropSeq[j].Value <<= xCfgManager->getSettings(sToolbarResourceURL, true);
+                    plPropSeq[j].Name = sToolbarName;
+                    plPropSeq[j].Value <<= xCfgManager->getSettings(sToolbarResourceURL, true);
                 }
 
-                m_lNewVersionToolbarSettingsSeq[i].Name = vModulesInfo[i].sModuleShortName;
-                m_lNewVersionToolbarSettingsSeq[i].Value <<= lPropSeq;
+                p_lNewVersionToolbarSettingsSeq[i].Name = vModulesInfo[i].sModuleShortName;
+                p_lNewVersionToolbarSettingsSeq[i].Value <<= lPropSeq;
             }
         }
     }

@@ -13,6 +13,9 @@
 #include <oox/token/properties.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
+#include <comphelper/propertyvalue.hxx>
+
+#include <algorithm>
 
 namespace oox::drawingml {
 
@@ -114,13 +117,9 @@ css::beans::PropertyValue Effect::getEffect()
         return aRet;
 
     css::uno::Sequence< css::beans::PropertyValue > aSeq( maAttribs.size() );
-    sal_uInt32 i = 0;
-    for (auto const& attrib : maAttribs)
-    {
-        aSeq[i].Name = attrib.first;
-        aSeq[i].Value = attrib.second;
-        i++;
-    }
+    std::transform(maAttribs.begin(), maAttribs.end(), aSeq.getArray(),
+                   [](const auto& attrib)
+                   { return comphelper::makePropertyValue(attrib.first, attrib.second); });
 
     aRet.Name = msName;
     aRet.Value <<= aSeq;

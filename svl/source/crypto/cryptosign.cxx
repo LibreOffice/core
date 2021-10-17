@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
 #include <string_view>
 
 #include <svl/cryptosign.hxx>
@@ -2184,8 +2185,8 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
     {
         // Write rInformation.ouX509Certificate.
         uno::Sequence<sal_Int8> aDerCert(pSignerCertContext->cbCertEncoded);
-        for (size_t i = 0; i < pSignerCertContext->cbCertEncoded; ++i)
-            aDerCert[i] = pSignerCertContext->pbCertEncoded[i];
+        std::copy_n(pSignerCertContext->pbCertEncoded, pSignerCertContext->cbCertEncoded,
+                    aDerCert.getArray());
         OUStringBuffer aBuffer;
         comphelper::Base64::encode(aBuffer, aDerCert);
         SignatureInformation::X509Data temp;

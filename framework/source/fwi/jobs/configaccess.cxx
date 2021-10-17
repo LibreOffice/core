@@ -107,8 +107,7 @@ void ConfigAccess::open( /*IN*/ EOpenMode eMode )
     aParam.Name    = "nodepath";
     aParam.Value <<= m_sRoot;
 
-    css::uno::Sequence< css::uno::Any > lParams(1);
-    lParams[0] <<= aParam;
+    css::uno::Sequence< css::uno::Any > lParams{ css::uno::Any(aParam) };
 
     // open it
     try

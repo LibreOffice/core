@@ -36,6 +36,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <tools/debug.hxx>
@@ -248,9 +249,7 @@ namespace pcr
         Reference< XDesktop2 > xDispProv = Desktop::create( m_xContext );
         Reference< XDispatch > xDispatch( xDispProv->queryDispatch( aURL, OUString(), 0 ), UNO_SET_THROW );
 
-        Sequence< PropertyValue > aDispatchArgs(1);
-        aDispatchArgs[0].Name   = "URL";
-        aDispatchArgs[0].Value  <<= _rURL;
+        Sequence aDispatchArgs{ comphelper::makePropertyValue("URL", _rURL) };
 
         xDispatch->dispatch( aURL, aDispatchArgs );
     }

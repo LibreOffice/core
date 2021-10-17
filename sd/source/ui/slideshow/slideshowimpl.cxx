@@ -80,6 +80,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <rtl/ref.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <svtools/colrdlg.hxx>
@@ -455,9 +456,7 @@ void AnimationSlideController::displayCurrentSlide( const Reference< XSlideShow 
     const sal_Int32 nNextSlideNumber = getNextSlideNumber();
     if( getSlideAPI( nNextSlideNumber, xSlide, xAnimNode )  )
     {
-        Sequence< Any > aValue(2);
-        aValue[0] <<= xSlide;
-        aValue[1] <<= xAnimNode;
+        Sequence< Any > aValue{ Any(xSlide), Any(xAnimNode) };
         aProperties.emplace_back( "Prefetch" ,
                 -1,
                 Any(aValue),
@@ -814,13 +813,14 @@ bool SlideshowImpl::startPreview(
             nPropertyCount++;
 
         Sequence< beans::PropertyValue > aProperties(nPropertyCount);
-        aProperties[0].Name = "AutomaticAdvancement";
-        aProperties[0].Value <<= 1.0; // one second timeout
+        auto pProperties = aProperties.getArray();
+        pProperties[0].Name = "AutomaticAdvancement";
+        pProperties[0].Value <<= 1.0; // one second timeout
 
         if( mxPreviewAnimationNode.is() )
         {
-            aProperties[1].Name = "NoSlideTransitions";
-            aProperties[1].Value <<= true;
+            pProperties[1].Name = "NoSlideTransitions";
+            pProperties[1].Value <<= true;
         }
 
         bRet = startShowImpl( aProperties );
@@ -2502,9 +2502,7 @@ void SlideshowImpl::setAutoSaveState( bool bOn)
         aURL.Complete = "vnd.sun.star.autorecovery:/setAutoSaveState";
         xParser->parseStrict(aURL);
 
-        Sequence< beans::PropertyValue > aArgs(1);
-        aArgs[0].Name = "AutoSaveState";
-        aArgs[0].Value <<= bOn;
+        Sequence< beans::PropertyValue > aArgs{ comphelper::makePropertyValue("AutoSaveState", bOn) };
 
         uno::Reference< frame::XDispatch > xAutoSave = frame::theAutoRecovery::get(xContext);
         xAutoSave->dispatch(aURL, aArgs);

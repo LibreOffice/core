@@ -25,13 +25,10 @@
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::PropertyValue;
 
-XclTracer::XclTracer(const OUString& rDocUrl)
+XclTracer::XclTracer(const OUString& /*rDocUrl*/)
     : mbEnabled(false)
     , maFirstTimes(eTraceLength, true)
 {
-    Sequence<PropertyValue> aConfigData(1);
-    aConfigData[0].Name = "DocumentURL";
-    aConfigData[0].Value <<= rDocUrl;
 }
 
 XclTracer::~XclTracer() {}

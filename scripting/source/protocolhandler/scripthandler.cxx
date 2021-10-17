@@ -176,8 +176,8 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                 "ScriptProtocolHandler::dispatchWithNotification: validate xFunc - unable to obtain XScript interface" );
 
 
-            Sequence< Any > inArgs( 0 );
-            Sequence< Any > outArgs( 0 );
+            Sequence< Any > inArgs;
+            Sequence< Any > outArgs;
             Sequence< sal_Int16 > outIndex;
 
             if ( lArgs.hasElements() )
@@ -193,8 +193,8 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                          rArg.Name != "SynchronMode") ||
                         rArg.Name.isEmpty() ) //TODO:???
                    {
-                       inArgs.realloc( ++argCount );
-                       inArgs[ argCount - 1 ] = rArg.Value;
+                       auto pinArgs = inArgs.realloc( ++argCount );
+                       pinArgs[ argCount - 1 ] = rArg.Value;
                    }
                }
             }

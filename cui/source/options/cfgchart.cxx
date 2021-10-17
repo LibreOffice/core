@@ -160,10 +160,9 @@ bool SvxChartColorTable::operator==( const SvxChartColorTable & _rOther ) const
 
 SvxChartOptions::SvxChartOptions() :
     ::utl::ConfigItem( "Office.Chart" ),
-    mbIsInitialized( false )
+    mbIsInitialized( false ),
+    maPropertyNames{ "DefaultColor/Series" }
 {
-    maPropertyNames.realloc( 1 );
-    maPropertyNames[ 0 ] = "DefaultColor/Series";
 }
 
 SvxChartOptions::~SvxChartOptions()
@@ -239,13 +238,14 @@ void SvxChartOptions::ImplCommit()
         // convert list to sequence
         const size_t nCount = maDefColors.size();
         uno::Sequence< sal_Int64 > aColors( nCount );
+        auto aColorsRange = asNonConstRange(aColors);
         for( size_t i=0; i < nCount; i++ )
         {
             Color aData = maDefColors.getColor( i );
-            aColors[ i ] = sal_uInt32(aData);
+            aColorsRange[ i ] = sal_uInt32(aData);
         }
 
-        aValues[ 0 ] <<= aColors;
+        aValues.getArray()[0] <<= aColors;
     }
 
     PutProperties( aNames, aValues );

@@ -5197,8 +5197,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
 
             // Create and insert Word vba Globals
             uno::Any aGlobs;
-            uno::Sequence< uno::Any > aArgs(1);
-            aArgs[ 0 ] <<= m_pDocShell->GetModel();
+            uno::Sequence< uno::Any > aArgs{ uno::Any(m_pDocShell->GetModel()) };
             try
             {
                 aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( "ooo.vba.word.Globals", aArgs );

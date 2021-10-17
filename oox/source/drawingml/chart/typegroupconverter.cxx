@@ -326,10 +326,9 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
         {
             case TYPECATEGORY_BAR:
             {
-                Sequence< sal_Int32 > aInt32Seq( 2 );
-                aInt32Seq[ 0 ] = aInt32Seq[ 1 ] = mrModel.mnOverlap;
+                Sequence< sal_Int32 > aInt32Seq{ mrModel.mnOverlap, mrModel.mnOverlap };
                 aTypeProp.setProperty( PROP_OverlapSequence, aInt32Seq );
-                aInt32Seq[ 0 ] = aInt32Seq[ 1 ] = mrModel.mnGapWidth;
+                aInt32Seq = { mrModel.mnGapWidth, mrModel.mnGapWidth };
                 aTypeProp.setProperty( PROP_GapwidthSequence, aInt32Seq );
             }
             break;

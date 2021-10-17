@@ -148,8 +148,8 @@ namespace xmloff
                 aProperties = m_xMasterInfo->getProperties();
 
             sal_Int32 nOldLength = aProperties.getLength();
-            aProperties.realloc( nOldLength + 1 );
-            aProperties[ nOldLength ] = getPropertyByName( getParaAlignProperty() );
+            auto pProperties = aProperties.realloc( nOldLength + 1 );
+            pProperties[ nOldLength ] = getPropertyByName( getParaAlignProperty() );
 
             return aProperties;
         }
@@ -254,8 +254,8 @@ namespace xmloff
         sal_Int32 nParaAlignPos = findStringElement( aTranslatedNames, getParaAlignProperty() );
         if ( nParaAlignPos != -1 )
         {
-            aTranslatedNames[ nParaAlignPos ] = getAlignProperty();
-            valueParaAdjustToAlign( aTranslatedValues[ nParaAlignPos ] );
+            aTranslatedNames.getArray()[ nParaAlignPos ] = getAlignProperty();
+            valueParaAdjustToAlign( aTranslatedValues.getArray()[ nParaAlignPos ] );
         }
 
         m_xGridColumn->setPropertyValues( aTranslatedNames, aTranslatedValues );
@@ -270,11 +270,11 @@ namespace xmloff
         Sequence< OUString > aTranslatedNames( aPropertyNames );
         sal_Int32 nAlignPos = findStringElement( aTranslatedNames, getParaAlignProperty() );
         if ( nAlignPos != -1 )
-            aTranslatedNames[ nAlignPos ] = getAlignProperty();
+            aTranslatedNames.getArray()[ nAlignPos ] = getAlignProperty();
 
         aValues = m_xGridColumn->getPropertyValues( aPropertyNames );
         if ( nAlignPos != -1 )
-            valueAlignToParaAdjust( aValues[ nAlignPos ] );
+            valueAlignToParaAdjust( aValues.getArray()[ nAlignPos ] );
 
         return aValues;
     }

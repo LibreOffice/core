@@ -40,6 +40,7 @@
 #include <unotools/datetime.hxx>
 #include <comphelper/base64.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/seqstream.hxx>
 
 namespace com::sun::star::graphic { class XGraphic; }
@@ -485,9 +486,7 @@ Reference<css::graphic::XGraphic> lcl_getGraphicFromString(const OUString& rImag
         graphic::GraphicProvider::create(comphelper::getProcessComponentContext()) );
     Reference< io::XInputStream > xInputStream( new ::comphelper::SequenceInputStream( seq ) );
 
-    Sequence< PropertyValue > aArgs( 1 );
-    aArgs[ 0 ].Name = "InputStream";
-    aArgs[ 0 ].Value <<= xInputStream;
+    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("InputStream", xInputStream) };
     xGraphic = xGraphicProvider->queryGraphic(aArgs);
 
     return xGraphic;

@@ -897,8 +897,7 @@ DECLARE_ODFEXPORT_TEST(testFdo58949, "fdo58949.docx")
     utl::TempFile aTempFile;
     save("writer8", aTempFile);
 
-    uno::Sequence<uno::Any> aArgs(1);
-    aArgs[0] <<= aTempFile.GetURL();
+    uno::Sequence<uno::Any> aArgs{ uno::Any(aTempFile.GetURL()) };
     uno::Reference<container::XNameAccess> xNameAccess(m_xSFactory->createInstanceWithArguments("com.sun.star.packages.zip.ZipFileAccess", aArgs), uno::UNO_QUERY);
     const css::uno::Sequence<OUString> aNames(xNameAccess->getElementNames());
     // The exported document must have three objects named ObjNNN. The names are assigned in
@@ -2309,8 +2308,7 @@ DECLARE_ODFEXPORT_TEST(testEmbeddedPdf, "embedded-pdf.odt")
 
     if (mbExported)
     {
-        uno::Sequence<uno::Any> aArgs(1);
-        aArgs[0] <<= maTempFile.GetURL();
+        uno::Sequence<uno::Any> aArgs{ uno::Any(maTempFile.GetURL()) };
         uno::Reference<container::XNameAccess> xNameAccess(m_xSFactory->createInstanceWithArguments("com.sun.star.packages.zip.ZipFileAccess", aArgs), uno::UNO_QUERY);
         bool bHasBitmap = false;
         const uno::Sequence<OUString> aNames = xNameAccess->getElementNames();

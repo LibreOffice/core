@@ -342,10 +342,11 @@ namespace frm
 
         // translate them into command URLs
         css::uno::Sequence< OUString > aCommandURLs( aFormFeatures.size() );
+        auto aCommandURLsRange = asNonConstRange(aCommandURLs);
         size_t i = 0;
         for (auto const& formFeature : aFormFeatures)
         {
-            aCommandURLs[i++] = lcl_getCommandURL(formFeature);
+            aCommandURLsRange[i++] = lcl_getCommandURL(formFeature);
         }
 
         // retrieve the images for the command URLs

@@ -112,21 +112,19 @@ void SimpleAuthenticationRequest::initialize(
     setRequest( uno::makeAny( rRequest ) );
 
     // Fill continuations...
-    unsigned int nSize = 1;
-    unsigned int nPos = 0;
+    unsigned int nSize = 2;
 
     if( bAllowSessionStoring )
         nSize++;
 
-    nSize++;
-
     uno::Sequence< ucb::RememberAuthentication > aRememberModes( nSize );
-    aRememberModes[ nPos++ ] = ucb::RememberAuthentication_NO;
+    auto it = aRememberModes.getArray();
+    *it++ = ucb::RememberAuthentication_NO;
 
     if( bAllowSessionStoring )
-        aRememberModes[ nPos++ ] = ucb::RememberAuthentication_SESSION;
+        *it++ = ucb::RememberAuthentication_SESSION;
 
-    aRememberModes[ nPos++ ] = ucb::RememberAuthentication_PERSISTENT;
+    *it = ucb::RememberAuthentication_PERSISTENT;
 
     m_xAuthSupplier
         = new InteractionSupplyAuthentication(
@@ -142,13 +140,8 @@ void SimpleAuthenticationRequest::initialize(
                 bAllowUseSystemCredentials // bCanUseSystemCredentials,
             );
 
-    uno::Sequence<
-        uno::Reference< task::XInteractionContinuation > > aContinuations( 3 );
-    aContinuations[ 0 ] = new InteractionAbort( this );
-    aContinuations[ 1 ] = new InteractionRetry( this );
-    aContinuations[ 2 ] = m_xAuthSupplier.get();
-
-    setContinuations( aContinuations );
+    setContinuations(
+        { new InteractionAbort(this), new InteractionRetry(this), m_xAuthSupplier.get() });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

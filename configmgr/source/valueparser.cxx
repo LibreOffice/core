@@ -439,8 +439,9 @@ void ValueParser::start(
 
 template< typename T > css::uno::Any ValueParser::convertItems() {
     css::uno::Sequence< T > seq(items_.size());
+    auto seqRange = asNonConstRange(seq);
     for (sal_Int32 i = 0; i < seq.getLength(); ++i) {
-        bool ok = (items_[i] >>= seq[i]);
+        bool ok = (items_[i] >>= seqRange[i]);
         assert(ok);
         (void) ok; // avoid warnings
     }

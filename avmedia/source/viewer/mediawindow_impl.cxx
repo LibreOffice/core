@@ -415,7 +415,6 @@ void MediaWindowImpl::onURLChanged()
     if (mxPlayer.is())
     {
         Resize();
-        uno::Sequence<uno::Any> aArgs( 3 );
         uno::Reference<media::XPlayerWindow> xPlayerWindow;
         const Point aPoint;
         const Size aSize(mpChildWindow->GetSizePixel());
@@ -425,9 +424,11 @@ void MediaWindowImpl::onURLChanged()
         // tdf#139609 gtk doesn't need the handle, and fetching it is undesirable
         if (!pEnvData || pEnvData->toolkit != SystemEnvData::Toolkit::Gtk)
             nParentWindowHandle = mpChildWindow->GetParentWindowHandle();
-        aArgs[0] <<= nParentWindowHandle;
-        aArgs[1] <<= awt::Rectangle(aPoint.X(), aPoint.Y(), aSize.Width(), aSize.Height());
-        aArgs[2] <<= reinterpret_cast<sal_IntPtr>(mpChildWindow.get());
+        uno::Sequence<uno::Any> aArgs{
+            uno::Any(nParentWindowHandle),
+            uno::Any(awt::Rectangle(aPoint.X(), aPoint.Y(), aSize.Width(), aSize.Height())),
+            uno::Any(reinterpret_cast<sal_IntPtr>(mpChildWindow.get()))
+        };
 
         try
         {

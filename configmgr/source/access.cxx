@@ -856,10 +856,10 @@ css::uno::Sequence< css::uno::Any > Access::getPropertyValues(
     assert(thisIs(IS_GROUP));
     osl::MutexGuard g(*lock_);
     css::uno::Sequence< css::uno::Any > vals(aPropertyNames.getLength());
-
+    auto aValsRange = asNonConstRange(vals);
     for (sal_Int32 i = 0; i < aPropertyNames.getLength(); ++i)
     {
-        if (!getByNameFast(aPropertyNames[i], vals[i]))
+        if (!getByNameFast(aPropertyNames[i], aValsRange[i]))
             throw css::uno::RuntimeException(
                 "configmgr getPropertyValues inappropriate property name",
                 static_cast< cppu::OWeakObject * >(this));
@@ -912,11 +912,12 @@ void Access::firePropertiesChangeEvent(
     assert(thisIs(IS_GROUP));
     css::uno::Sequence< css::beans::PropertyChangeEvent > events(
         aPropertyNames.getLength());
+    auto aEventsRange = asNonConstRange(events);
     for (sal_Int32 i = 0; i < events.getLength(); ++i) {
-        events[i].Source = static_cast< cppu::OWeakObject * >(this);
-        events[i].PropertyName = aPropertyNames[i];
-        events[i].Further = false;
-        events[i].PropertyHandle = -1;
+        aEventsRange[i].Source = static_cast< cppu::OWeakObject * >(this);
+        aEventsRange[i].PropertyName = aPropertyNames[i];
+        aEventsRange[i].Further = false;
+        aEventsRange[i].PropertyHandle = -1;
     }
     xListener->propertiesChange(events);
 }
@@ -1013,6 +1014,7 @@ css::uno::Sequence< css::uno::Any > Access::getHierarchicalPropertyValues(
     osl::MutexGuard g(*lock_);
     css::uno::Sequence< css::uno::Any > vals(
         aHierarchicalPropertyNames.getLength());
+    auto aValsRange = asNonConstRange(vals);
     for (sal_Int32 i = 0; i < aHierarchicalPropertyNames.getLength(); ++i) {
         rtl::Reference< ChildAccess > child(
             getSubChild(aHierarchicalPropertyNames[i]));
@@ -1022,7 +1024,7 @@ css::uno::Sequence< css::uno::Any > Access::getHierarchicalPropertyValues(
                  " hierarchical property name"),
                 static_cast< cppu::OWeakObject * >(this), -1);
         }
-        vals[i] = child->asValue();
+        aValsRange[i] = child->asValue();
     }
     return vals;
 }

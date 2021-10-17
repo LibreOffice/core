@@ -145,6 +145,7 @@ Sequence< geometry::RealPoint2D > SAL_CALL RegressionCurveCalculator::getCurveVa
     bDoXScaling = bDoXScaling && xInverseScaling.is();
 
     Sequence< geometry::RealPoint2D > aResult( nPointCount );
+    auto pResult = aResult.getArray();
 
     double fMin( min );
     double fFact = (max - min) / double(nPointCount-1);
@@ -160,8 +161,8 @@ Sequence< geometry::RealPoint2D > SAL_CALL RegressionCurveCalculator::getCurveVa
         double x = fMin + nP * fFact;
         if( bDoXScaling )
             x = xInverseScaling->doScaling( x );
-        aResult[nP].X = x;
-        aResult[nP].Y = getCurveValue( x );
+        pResult[nP].X = x;
+        pResult[nP].Y = getCurveValue( x );
     }
 
     return aResult;

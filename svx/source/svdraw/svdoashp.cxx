@@ -28,6 +28,7 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <tools/helpers.hxx>
@@ -383,11 +384,9 @@ Reference< XCustomShapeEngine > const & SdrObjCustomShape::GetCustomShapeEngine(
     Reference< XShape > aXShape = GetXShapeForSdrObject(const_cast<SdrObjCustomShape*>(this));
     if ( aXShape.is() )
     {
-        Sequence< Any > aArgument( 1 );
-        Sequence< PropertyValue > aPropValues( 1 );
-        aPropValues[ 0 ].Name = "CustomShape";
-        aPropValues[ 0 ].Value <<= aXShape;
-        aArgument[ 0 ] <<= aPropValues;
+        Sequence< PropertyValue > aPropValues{ comphelper::makePropertyValue("CustomShape",
+                                                                             aXShape) };
+        Sequence< Any > aArgument{ Any(aPropValues) };
         try
         {
             Reference<XInterface> xInterface(xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aEngine, aArgument, xContext));
@@ -690,29 +689,30 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, css::beans:
 {
     SvxMSDffHandleFlags nFlags = pData->nFlags;
     sal_Int32 n=0;
+    auto pPropValues = rPropValues.getArray();
 
     // POSITION
     {
         css::drawing::EnhancedCustomShapeParameterPair aPosition;
         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPosition.First, pData->nPositionX, true, true );
         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPosition.Second, pData->nPositionY, true, false );
-        rPropValues[ n ].Name = "Position";
-        rPropValues[ n++ ].Value <<= aPosition;
+        pPropValues[ n ].Name = "Position";
+        pPropValues[ n++ ].Value <<= aPosition;
     }
     if ( nFlags & SvxMSDffHandleFlags::MIRRORED_X )
     {
-        rPropValues[ n ].Name = "MirroredX";
-        rPropValues[ n++ ].Value <<= true;
+        pPropValues[ n ].Name = "MirroredX";
+        pPropValues[ n++ ].Value <<= true;
     }
     if ( nFlags & SvxMSDffHandleFlags::MIRRORED_Y )
     {
-        rPropValues[ n ].Name = "MirroredY";
-        rPropValues[ n++ ].Value <<= true;
+        pPropValues[ n ].Name = "MirroredY";
+        pPropValues[ n++ ].Value <<= true;
     }
     if ( nFlags & SvxMSDffHandleFlags::SWITCHED )
     {
-        rPropValues[ n ].Name = "Switched";
-        rPropValues[ n++ ].Value <<= true;
+        pPropValues[ n ].Name = "Switched";
+        pPropValues[ n++ ].Value <<= true;
     }
     if ( nFlags & SvxMSDffHandleFlags::POLAR )
     {
@@ -721,8 +721,8 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, css::beans:
                            bool( nFlags & SvxMSDffHandleFlags::CENTER_X_IS_SPECIAL ), true  );
         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aCenter.Second, pData->nCenterY,
                            bool( nFlags & SvxMSDffHandleFlags::CENTER_Y_IS_SPECIAL ), false );
-        rPropValues[ n ].Name = "Polar";
-        rPropValues[ n++ ].Value <<= aCenter;
+        pPropValues[ n ].Name = "Polar";
+        pPropValues[ n++ ].Value <<= aCenter;
         if ( nFlags & SvxMSDffHandleFlags::RADIUS_RANGE )
         {
             if ( pData->nRangeXMin != DEFAULT_MINIMUM_SIGNED_COMPARE )
@@ -730,16 +730,16 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, css::beans:
                 css::drawing::EnhancedCustomShapeParameter aRadiusRangeMinimum;
                 EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRadiusRangeMinimum, pData->nRangeXMin,
                            bool( nFlags & SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL ), true  );
-                rPropValues[ n ].Name = "RadiusRangeMinimum";
-                rPropValues[ n++ ].Value <<= aRadiusRangeMinimum;
+                pPropValues[ n ].Name = "RadiusRangeMinimum";
+                pPropValues[ n++ ].Value <<= aRadiusRangeMinimum;
             }
             if ( pData->nRangeXMax != DEFAULT_MAXIMUM_SIGNED_COMPARE )
             {
                 css::drawing::EnhancedCustomShapeParameter aRadiusRangeMaximum;
                 EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRadiusRangeMaximum, pData->nRangeXMax,
                            bool( nFlags & SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL ), false );
-                rPropValues[ n ].Name = "RadiusRangeMaximum";
-                rPropValues[ n++ ].Value <<= aRadiusRangeMaximum;
+                pPropValues[ n ].Name = "RadiusRangeMaximum";
+                pPropValues[ n++ ].Value <<= aRadiusRangeMaximum;
             }
         }
     }
@@ -750,32 +750,32 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, css::beans:
             css::drawing::EnhancedCustomShapeParameter aRangeXMinimum;
             EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeXMinimum, pData->nRangeXMin,
                            bool( nFlags & SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL ), true  );
-            rPropValues[ n ].Name = "RangeXMinimum";
-            rPropValues[ n++ ].Value <<= aRangeXMinimum;
+            pPropValues[ n ].Name = "RangeXMinimum";
+            pPropValues[ n++ ].Value <<= aRangeXMinimum;
         }
         if ( pData->nRangeXMax != DEFAULT_MAXIMUM_SIGNED_COMPARE )
         {
             css::drawing::EnhancedCustomShapeParameter aRangeXMaximum;
             EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeXMaximum, pData->nRangeXMax,
                            bool( nFlags & SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL ), false );
-            rPropValues[ n ].Name = "RangeXMaximum";
-            rPropValues[ n++ ].Value <<= aRangeXMaximum;
+            pPropValues[ n ].Name = "RangeXMaximum";
+            pPropValues[ n++ ].Value <<= aRangeXMaximum;
         }
         if ( pData->nRangeYMin != DEFAULT_MINIMUM_SIGNED_COMPARE )
         {
             css::drawing::EnhancedCustomShapeParameter aRangeYMinimum;
             EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeYMinimum, pData->nRangeYMin,
                              bool( nFlags & SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL ), true );
-            rPropValues[ n ].Name = "RangeYMinimum";
-            rPropValues[ n++ ].Value <<= aRangeYMinimum;
+            pPropValues[ n ].Name = "RangeYMinimum";
+            pPropValues[ n++ ].Value <<= aRangeYMinimum;
         }
         if ( pData->nRangeYMax != DEFAULT_MAXIMUM_SIGNED_COMPARE )
         {
             css::drawing::EnhancedCustomShapeParameter aRangeYMaximum;
             EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeYMaximum, pData->nRangeYMax,
                              bool( nFlags & SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL ), false );
-            rPropValues[ n ].Name = "RangeYMaximum";
-            rPropValues[ n++ ].Value <<= aRangeYMaximum;
+            pPropValues[ n ].Name = "RangeYMaximum";
+            pPropValues[ n++ ].Value <<= aRangeYMaximum;
         }
     }
 }
@@ -861,23 +861,26 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
         // first check if there are adjustment values are to be appended
         sal_Int32 i, nAdjustmentValues = seqAdjustmentValues.getLength();
         sal_Int32 nAdjustmentDefaults = *pDefData++;
+        css::drawing::EnhancedCustomShapeAdjustmentValue* pseqAdjustmentValues;
         if ( nAdjustmentDefaults > nAdjustmentValues )
         {
-            seqAdjustmentValues.realloc( nAdjustmentDefaults );
+            pseqAdjustmentValues = seqAdjustmentValues.realloc( nAdjustmentDefaults );
             for ( i = nAdjustmentValues; i < nAdjustmentDefaults; i++ )
             {
-                seqAdjustmentValues[ i ].Value <<= pDefData[ i ];
-                seqAdjustmentValues[ i ].State = css::beans::PropertyState_DIRECT_VALUE;
+                pseqAdjustmentValues[ i ].Value <<= pDefData[ i ];
+                pseqAdjustmentValues[ i ].State = css::beans::PropertyState_DIRECT_VALUE;
             }
         }
+        else
+            pseqAdjustmentValues = seqAdjustmentValues.getArray();
         // check if there are defaulted adjustment values that should be filled the hard coded defaults (pDefValue)
         sal_Int32 nCount = std::min(nAdjustmentValues, nAdjustmentDefaults);
         for ( i = 0; i < nCount; i++ )
         {
             if ( seqAdjustmentValues[ i ].State != css::beans::PropertyState_DIRECT_VALUE )
             {
-                seqAdjustmentValues[ i ].Value <<= pDefData[ i ];
-                seqAdjustmentValues[ i ].State = css::beans::PropertyState_DIRECT_VALUE;
+                pseqAdjustmentValues[ i ].Value <<= pDefData[ i ];
+                pseqAdjustmentValues[ i ].State = css::beans::PropertyState_DIRECT_VALUE;
             }
         }
     }
@@ -914,14 +917,13 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     pAny = aGeometryItem.GetPropertyValueByName( sPath, sCoordinates );
     if ( !pAny && pDefCustomShape && pDefCustomShape->nVertices && pDefCustomShape->pVertices )
     {
-        css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> seqCoordinates;
-
         sal_Int32 i, nCount = pDefCustomShape->nVertices;
-        seqCoordinates.realloc( nCount );
+        css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> seqCoordinates( nCount );
+        auto pseqCoordinates = seqCoordinates.getArray();
         for ( i = 0; i < nCount; i++ )
         {
-            EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( seqCoordinates[ i ].First, pDefCustomShape->pVertices[ i ].nValA );
-            EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( seqCoordinates[ i ].Second, pDefCustomShape->pVertices[ i ].nValB );
+            EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pseqCoordinates[ i ].First, pDefCustomShape->pVertices[ i ].nValA );
+            EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pseqCoordinates[ i ].Second, pDefCustomShape->pVertices[ i ].nValB );
         }
         aPropVal.Name = sCoordinates;
         aPropVal.Value <<= seqCoordinates;
@@ -933,13 +935,13 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     pAny = aGeometryItem.GetPropertyValueByName( sPath, sGluePoints );
     if ( !pAny && pDefCustomShape && pDefCustomShape->nGluePoints && pDefCustomShape->pGluePoints )
     {
-        css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> seqGluePoints;
         sal_Int32 i, nCount = pDefCustomShape->nGluePoints;
-        seqGluePoints.realloc( nCount );
+        css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> seqGluePoints( nCount );
+        auto pseqGluePoints = seqGluePoints.getArray();
         for ( i = 0; i < nCount; i++ )
         {
-            EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( seqGluePoints[ i ].First, pDefCustomShape->pGluePoints[ i ].nValA );
-            EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( seqGluePoints[ i ].Second, pDefCustomShape->pGluePoints[ i ].nValB );
+            EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pseqGluePoints[ i ].First, pDefCustomShape->pGluePoints[ i ].nValA );
+            EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pseqGluePoints[ i ].Second, pDefCustomShape->pGluePoints[ i ].nValB );
         }
         aPropVal.Name = sGluePoints;
         aPropVal.Value <<= seqGluePoints;
@@ -951,13 +953,12 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     pAny = aGeometryItem.GetPropertyValueByName( sPath, sSegments );
     if ( !pAny && pDefCustomShape && pDefCustomShape->nElements && pDefCustomShape->pElements )
     {
-        css::uno::Sequence< css::drawing::EnhancedCustomShapeSegment > seqSegments;
-
         sal_Int32 i, nCount = pDefCustomShape->nElements;
-        seqSegments.realloc( nCount );
+        css::uno::Sequence< css::drawing::EnhancedCustomShapeSegment > seqSegments( nCount );
+        auto pseqSegments = seqSegments.getArray();
         for ( i = 0; i < nCount; i++ )
         {
-            EnhancedCustomShapeSegment& rSegInfo = seqSegments[ i ];
+            EnhancedCustomShapeSegment& rSegInfo = pseqSegments[ i ];
             sal_uInt16 nSDat = pDefCustomShape->pElements[ i ];
             lcl_ShapeSegmentFromBinary( rSegInfo, nSDat );
         }
@@ -999,17 +1000,16 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     pAny = aGeometryItem.GetPropertyValueByName( sPath, sTextFrames );
     if ( !pAny && pDefCustomShape && pDefCustomShape->nTextRect && pDefCustomShape->pTextRect )
     {
-        css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > seqTextFrames;
-
         sal_Int32 i, nCount = pDefCustomShape->nTextRect;
-        seqTextFrames.realloc( nCount );
+        css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > seqTextFrames( nCount );
+        auto pseqTextFrames = seqTextFrames.getArray();
         const SvxMSDffTextRectangles* pRectangles = pDefCustomShape->pTextRect;
         for ( i = 0; i < nCount; i++, pRectangles++ )
         {
-            EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( seqTextFrames[ i ].TopLeft.First,     pRectangles->nPairA.nValA );
-            EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( seqTextFrames[ i ].TopLeft.Second,    pRectangles->nPairA.nValB );
-            EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( seqTextFrames[ i ].BottomRight.First,  pRectangles->nPairB.nValA );
-            EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( seqTextFrames[ i ].BottomRight.Second, pRectangles->nPairB.nValB );
+            EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pseqTextFrames[ i ].TopLeft.First,     pRectangles->nPairA.nValA );
+            EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pseqTextFrames[ i ].TopLeft.Second,    pRectangles->nPairA.nValB );
+            EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pseqTextFrames[ i ].BottomRight.First,  pRectangles->nPairB.nValA );
+            EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pseqTextFrames[ i ].BottomRight.Second, pRectangles->nPairB.nValB );
         }
         aPropVal.Name = sTextFrames;
         aPropVal.Value <<= seqTextFrames;
@@ -1021,13 +1021,12 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     pAny = aGeometryItem.GetPropertyValueByName( sEquations );
     if ( !pAny && pDefCustomShape && pDefCustomShape->nCalculation && pDefCustomShape->pCalculation )
     {
-        css::uno::Sequence< OUString > seqEquations;
-
         sal_Int32 i, nCount = pDefCustomShape->nCalculation;
-        seqEquations.realloc( nCount );
+        css::uno::Sequence< OUString > seqEquations( nCount );
+        auto pseqEquations = seqEquations.getArray();
         const SvxMSDffCalculationData* pData = pDefCustomShape->pCalculation;
         for ( i = 0; i < nCount; i++, pData++ )
-            seqEquations[ i ] = EnhancedCustomShape2d::GetEquation( pData->nFlags, pData->nVal[ 0 ], pData->nVal[ 1 ], pData->nVal[ 2 ] );
+            pseqEquations[ i ] = EnhancedCustomShape2d::GetEquation( pData->nFlags, pData->nVal[ 0 ], pData->nVal[ 1 ], pData->nVal[ 2 ] );
         aPropVal.Name = sEquations;
         aPropVal.Value <<= seqEquations;
         aGeometryItem.SetPropertyValue( aPropVal );
@@ -1038,15 +1037,14 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     pAny = aGeometryItem.GetPropertyValueByName( sHandles );
     if ( !pAny && pDefCustomShape && pDefCustomShape->nHandles && pDefCustomShape->pHandles )
     {
-        css::uno::Sequence< css::beans::PropertyValues > seqHandles;
-
         sal_Int32 i, nCount = pDefCustomShape->nHandles;
         const SvxMSDffHandle* pData = pDefCustomShape->pHandles;
-        seqHandles.realloc( nCount );
+        css::uno::Sequence< css::beans::PropertyValues > seqHandles( nCount );
+        auto pseqHandles = seqHandles.getArray();
         for ( i = 0; i < nCount; i++, pData++ )
         {
             sal_Int32 nPropertiesNeeded;
-            css::beans::PropertyValues& rPropValues = seqHandles[ i ];
+            css::beans::PropertyValues& rPropValues = pseqHandles[ i ];
             nPropertiesNeeded = GetNumberOfProperties( pData );
             rPropValues.realloc( nPropertiesNeeded );
             lcl_ShapePropertiesFromDFF( pData, rPropValues );
@@ -1063,6 +1061,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
         // ooxml preset shapes from their definition.
         css::uno::Sequence<css::beans::PropertyValues> seqHandles;
         *pAny >>= seqHandles;
+        auto seqHandlesRange = asNonConstRange(seqHandles);
         bool bChanged(false);
         for (sal_Int32 i = 0; i < seqHandles.getLength(); i++)
         {
@@ -1083,7 +1082,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
             {
                 bChanged |= aHandleProps.createItemIfMissing(sSecondRefType, nSecondAdjRef);
             }
-            aHandleProps >> seqHandles[i];
+            aHandleProps >> seqHandlesRange[i];
         }
         if (bChanged)
         {
@@ -1131,15 +1130,16 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
             pAny = rGeometryItem.GetPropertyValueByName( sPath, "Coordinates" );
             if ( pAny && pDefCustomShape && pDefCustomShape->nVertices && pDefCustomShape->pVertices )
             {
-                css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> seqCoordinates1, seqCoordinates2;
+                css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> seqCoordinates1;
                 if ( *pAny >>= seqCoordinates1 )
                 {
                     sal_Int32 i, nCount = pDefCustomShape->nVertices;
-                    seqCoordinates2.realloc( nCount );
+                    css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> seqCoordinates2( nCount );
+                    auto pseqCoordinates2 = seqCoordinates2.getArray();
                     for ( i = 0; i < nCount; i++ )
                     {
-                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( seqCoordinates2[ i ].First, pDefCustomShape->pVertices[ i ].nValA );
-                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( seqCoordinates2[ i ].Second, pDefCustomShape->pVertices[ i ].nValB );
+                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pseqCoordinates2[ i ].First, pDefCustomShape->pVertices[ i ].nValA );
+                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pseqCoordinates2[ i ].Second, pDefCustomShape->pVertices[ i ].nValB );
                     }
                     if ( seqCoordinates1 == seqCoordinates2 )
                         bIsDefaultGeometry = true;
@@ -1155,15 +1155,16 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
             pAny = rGeometryItem.GetPropertyValueByName( sPath, "GluePoints" );
             if ( pAny && pDefCustomShape && pDefCustomShape->nGluePoints && pDefCustomShape->pGluePoints )
             {
-                css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> seqGluePoints1, seqGluePoints2;
+                css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> seqGluePoints1;
                 if ( *pAny >>= seqGluePoints1 )
                 {
                     sal_Int32 i, nCount = pDefCustomShape->nGluePoints;
-                    seqGluePoints2.realloc( nCount );
+                    css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> seqGluePoints2( nCount );
+                    auto pseqGluePoints2 = seqGluePoints2.getArray();
                     for ( i = 0; i < nCount; i++ )
                     {
-                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( seqGluePoints2[ i ].First, pDefCustomShape->pGluePoints[ i ].nValA );
-                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( seqGluePoints2[ i ].Second, pDefCustomShape->pGluePoints[ i ].nValB );
+                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pseqGluePoints2[ i ].First, pDefCustomShape->pGluePoints[ i ].nValA );
+                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pseqGluePoints2[ i ].Second, pDefCustomShape->pGluePoints[ i ].nValB );
                     }
                     if ( seqGluePoints1 == seqGluePoints2 )
                         bIsDefaultGeometry = true;
@@ -1180,7 +1181,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
             pAny = rGeometryItem.GetPropertyValueByName( sPath, "Segments" );
             if ( pAny )
             {
-                css::uno::Sequence< css::drawing::EnhancedCustomShapeSegment > seqSegments1, seqSegments2;
+                css::uno::Sequence< css::drawing::EnhancedCustomShapeSegment > seqSegments1;
                 if ( *pAny >>= seqSegments1 )
                 {
                     if ( pDefCustomShape && pDefCustomShape->nElements && pDefCustomShape->pElements )
@@ -1188,10 +1189,11 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
                         sal_Int32 i, nCount = pDefCustomShape->nElements;
                         if ( nCount )
                         {
-                            seqSegments2.realloc( nCount );
+                            css::uno::Sequence< css::drawing::EnhancedCustomShapeSegment > seqSegments2( nCount );
+                            auto pseqSegments2 = seqSegments2.getArray();
                             for ( i = 0; i < nCount; i++ )
                             {
-                                EnhancedCustomShapeSegment& rSegInfo = seqSegments2[ i ];
+                                EnhancedCustomShapeSegment& rSegInfo = pseqSegments2[ i ];
                                 sal_uInt16 nSDat = pDefCustomShape->pElements[ i ];
                                 lcl_ShapeSegmentFromBinary( rSegInfo, nSDat );
                             }
@@ -1257,15 +1259,16 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
             pAny = rGeometryItem.GetPropertyValueByName( "Equations" );
             if ( pAny && pDefCustomShape && pDefCustomShape->nCalculation && pDefCustomShape->pCalculation )
             {
-                css::uno::Sequence< OUString > seqEquations1, seqEquations2;
+                css::uno::Sequence< OUString > seqEquations1;
                 if ( *pAny >>= seqEquations1 )
                 {
                     sal_Int32 i, nCount = pDefCustomShape->nCalculation;
-                    seqEquations2.realloc( nCount );
+                    css::uno::Sequence< OUString > seqEquations2( nCount );
+                    auto pseqEquations2 = seqEquations2.getArray();
 
                     const SvxMSDffCalculationData* pData = pDefCustomShape->pCalculation;
                     for ( i = 0; i < nCount; i++, pData++ )
-                        seqEquations2[ i ] = EnhancedCustomShape2d::GetEquation( pData->nFlags, pData->nVal[ 0 ], pData->nVal[ 1 ], pData->nVal[ 2 ] );
+                        pseqEquations2[ i ] = EnhancedCustomShape2d::GetEquation( pData->nFlags, pData->nVal[ 0 ], pData->nVal[ 1 ], pData->nVal[ 2 ] );
 
                     if ( seqEquations1 == seqEquations2 )
                         bIsDefaultGeometry = true;
@@ -1281,18 +1284,19 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
             pAny = rGeometryItem.GetPropertyValueByName( sPath, "TextFrames" );
             if ( pAny && pDefCustomShape && pDefCustomShape->nTextRect && pDefCustomShape->pTextRect )
             {
-                css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > seqTextFrames1, seqTextFrames2;
+                css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > seqTextFrames1;
                 if ( *pAny >>= seqTextFrames1 )
                 {
                     sal_Int32 i, nCount = pDefCustomShape->nTextRect;
-                    seqTextFrames2.realloc( nCount );
+                    css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > seqTextFrames2( nCount );
+                    auto pseqTextFrames2 = seqTextFrames2.getArray();
                     const SvxMSDffTextRectangles* pRectangles = pDefCustomShape->pTextRect;
                     for ( i = 0; i < nCount; i++, pRectangles++ )
                     {
-                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( seqTextFrames2[ i ].TopLeft.First,    pRectangles->nPairA.nValA );
-                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( seqTextFrames2[ i ].TopLeft.Second,   pRectangles->nPairA.nValB );
-                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( seqTextFrames2[ i ].BottomRight.First,  pRectangles->nPairB.nValA );
-                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( seqTextFrames2[ i ].BottomRight.Second, pRectangles->nPairB.nValB );
+                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pseqTextFrames2[ i ].TopLeft.First,    pRectangles->nPairA.nValA );
+                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pseqTextFrames2[ i ].TopLeft.Second,   pRectangles->nPairA.nValB );
+                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pseqTextFrames2[ i ].BottomRight.First,  pRectangles->nPairB.nValA );
+                        EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pseqTextFrames2[ i ].BottomRight.Second, pRectangles->nPairB.nValB );
                     }
                     if ( seqTextFrames1 == seqTextFrames2 )
                         bIsDefaultGeometry = true;

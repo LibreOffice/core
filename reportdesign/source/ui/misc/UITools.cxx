@@ -371,8 +371,8 @@ namespace
     void lcl_pushBack( uno::Sequence< beans::NamedValue >& _out_rProperties, const OUString& _sName, const uno::Any& _rValue )
     {
         sal_Int32 nLen( _out_rProperties.getLength() );
-        _out_rProperties.realloc( nLen + 1 );
-        _out_rProperties[ nLen ] = beans::NamedValue( _sName, _rValue );
+        auto p_out_rProperties = _out_rProperties.realloc( nLen + 1 );
+        p_out_rProperties[ nLen ] = beans::NamedValue( _sName, _rValue );
     }
 
 
@@ -957,7 +957,7 @@ uno::Sequence< OUString > getParameterNames( const uno::Reference< sdbc::XRowSet
         if ( xParams.is() )
         {
             sal_Int32 count( xParams->getCount() );
-            aNames.realloc( count );
+            auto pNames = aNames.realloc( count );
 
             uno::Reference< beans::XPropertySet > xParam;
             OUString sParamName;
@@ -965,7 +965,7 @@ uno::Sequence< OUString > getParameterNames( const uno::Reference< sdbc::XRowSet
             {
                 xParam.set( xParams->getByIndex(i), uno::UNO_QUERY_THROW );
                 OSL_VERIFY( xParam->getPropertyValue( PROPERTY_NAME ) >>= sParamName );
-                aNames[i] = sParamName;
+                pNames[i] = sParamName;
             }
         }
     }

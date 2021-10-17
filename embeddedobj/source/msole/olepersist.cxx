@@ -364,9 +364,8 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
     if ( !xTargetStream.is() || !xCachedVisualRepresentation.is() )
         throw uno::RuntimeException();
 
-    uno::Sequence< uno::Any > aArgs( 2 );
-    aArgs[0] <<= xTargetStream;
-    aArgs[1] <<= true; // do not create copy
+    uno::Sequence< uno::Any > aArgs{ uno::Any(xTargetStream),
+                                     uno::Any(true) }; // do not create copy
 
     uno::Reference< container::XNameContainer > xNameContainer(
             m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
@@ -394,7 +393,8 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
 
     // write 0xFFFFFFFF at the beginning
     uno::Sequence< sal_Int8 > aData( 4 );
-    * reinterpret_cast<sal_uInt32*>(aData.getArray()) = 0xFFFFFFFF;
+    auto pData = aData.getArray();
+    * reinterpret_cast<sal_uInt32*>(pData) = 0xFFFFFFFF;
 
     xTempOutStream->writeBytes( aData );
 
@@ -407,33 +407,33 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
     if ( aSigData[0] == 'B' && aSigData[1] == 'M' )
     {
         // it's a bitmap
-        aData[0] = 0x02; aData[1] = 0; aData[2] = 0; aData[3] = 0;
+        pData[0] = 0x02; pData[1] = 0; pData[2] = 0; pData[3] = 0;
     }
     else
     {
         // treat it as a metafile
-        aData[0] = 0x03; aData[1] = 0; aData[2] = 0; aData[3] = 0;
+        pData[0] = 0x03; pData[1] = 0; pData[2] = 0; pData[3] = 0;
     }
     xTempOutStream->writeBytes( aData );
 
     // write job related information
-    aData[0] = 0x04; aData[1] = 0; aData[2] = 0; aData[3] = 0;
+    pData[0] = 0x04; pData[1] = 0; pData[2] = 0; pData[3] = 0;
     xTempOutStream->writeBytes( aData );
 
     // write aspect
-    aData[0] = 0x01; aData[1] = 0; aData[2] = 0; aData[3] = 0;
+    pData[0] = 0x01; pData[1] = 0; pData[2] = 0; pData[3] = 0;
     xTempOutStream->writeBytes( aData );
 
     // write l-index
-    * reinterpret_cast<sal_uInt32*>(aData.getArray()) = 0xFFFFFFFF;
+    * reinterpret_cast<sal_uInt32*>(pData) = 0xFFFFFFFF;
     xTempOutStream->writeBytes( aData );
 
     // write adv. flags
-    aData[0] = 0x02; aData[1] = 0; aData[2] = 0; aData[3] = 0;
+    pData[0] = 0x02; pData[1] = 0; pData[2] = 0; pData[3] = 0;
     xTempOutStream->writeBytes( aData );
 
     // write compression
-    * reinterpret_cast<sal_uInt32*>(aData.getArray()) = 0x0;
+    * reinterpret_cast<sal_uInt32*>(pData) = 0x0;
     xTempOutStream->writeBytes( aData );
 
     // get the size
@@ -443,7 +443,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
     // write width
     for ( nIndex = 0; nIndex < 4; nIndex++ )
     {
-        aData[nIndex] = static_cast<sal_Int8>( aSize.Width % 0x100 );
+        pData[nIndex] = static_cast<sal_Int8>( aSize.Width % 0x100 );
         aSize.Width /= 0x100;
     }
     xTempOutStream->writeBytes( aData );
@@ -451,7 +451,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
     // write height
     for ( nIndex = 0; nIndex < 4; nIndex++ )
     {
-        aData[nIndex] = static_cast<sal_Int8>( aSize.Height % 0x100 );
+        pData[nIndex] = static_cast<sal_Int8>( aSize.Height % 0x100 );
         aSize.Height /= 0x100;
     }
     xTempOutStream->writeBytes( aData );
@@ -474,7 +474,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
     }
     for ( sal_Int32 nInd = 0; nInd < 4; nInd++ )
     {
-        aData[nInd] = static_cast<sal_Int8>( static_cast<sal_uInt64>(nLength) % 0x100 );
+        pData[nInd] = static_cast<sal_Int8>( static_cast<sal_uInt64>(nLength) % 0x100 );
         nLength /= 0x100;
     }
     xTempSeek->seek( 36 );
@@ -504,9 +504,8 @@ void OleEmbeddedObject::RemoveVisualCache_Impl( const uno::Reference< io::XStrea
     if ( !xTargetStream.is() )
         throw uno::RuntimeException();
 
-    uno::Sequence< uno::Any > aArgs( 2 );
-    aArgs[0] <<= xTargetStream;
-    aArgs[1] <<= true; // do not create copy
+    uno::Sequence< uno::Any > aArgs{ uno::Any(xTargetStream),
+                                     uno::Any(true) }; // do not create copy
     uno::Reference< container::XNameContainer > xNameContainer(
             m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                     "com.sun.star.embed.OLESimpleStorage",
@@ -566,9 +565,8 @@ bool OleEmbeddedObject::HasVisReplInStream()
             {
                 bool bExists = false;
 
-                uno::Sequence< uno::Any > aArgs( 2 );
-                aArgs[0] <<= xStream;
-                aArgs[1] <<= true; // do not create copy
+                uno::Sequence< uno::Any > aArgs{ uno::Any(xStream),
+                                                 uno::Any(true) }; // do not create copy
                 uno::Reference< container::XNameContainer > xNameContainer(
                         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                                 "com.sun.star.embed.OLESimpleStorage",
@@ -610,9 +608,8 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
         SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::TryToRetrieveCachedVisualRepresentation, retrieving" );
 
         uno::Reference< container::XNameContainer > xNameContainer;
-        uno::Sequence< uno::Any > aArgs( 2 );
-        aArgs[0] <<= xStream;
-        aArgs[1] <<= true; // do not create copy
+        uno::Sequence< uno::Any > aArgs{ uno::Any(xStream),
+                                         uno::Any(true) }; // do not create copy
         try
         {
             xNameContainer.set(

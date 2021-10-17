@@ -918,11 +918,12 @@ Sequence< OUString > convertMappedIntArray2StringArray(
     const Int2StringMap &map, const Sequence< sal_Int32 > &intArray )
 {
     Sequence< OUString > ret( intArray.getLength() );
+    auto retRange = asNonConstRange(ret);
     for( int i = 0; i < intArray.getLength() ; i ++ )
     {
         Int2StringMap::const_iterator ii = map.find( intArray[i] );
         if( ii != map.end() )
-            ret[i] = ii->second;
+            retRange[i] = ii->second;
     }
     return ret;
 }

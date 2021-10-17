@@ -185,13 +185,11 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
     {
         // Ugh. Looks like configuration is borked. Fake minimal
         // setup.
-        Sequence<OUString> aServices { "com.sun.star.comp.rendering.Canvas.VCL" };
         m_aAvailableImplementations.emplace_back(OUString("com.sun.star.rendering.Canvas"),
-                                                              aServices );
+            Sequence<OUString>{ "com.sun.star.comp.rendering.Canvas.VCL" } );
 
-        aServices[0] = "com.sun.star.comp.rendering.SpriteCanvas.VCL";
         m_aAvailableImplementations.emplace_back(OUString("com.sun.star.rendering.SpriteCanvas"),
-                                                              aServices );
+            Sequence<OUString>{ "com.sun.star.comp.rendering.SpriteCanvas.VCL" } );
     }
 }
 

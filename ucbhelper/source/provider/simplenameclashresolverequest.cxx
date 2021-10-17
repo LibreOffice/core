@@ -143,13 +143,8 @@ SimpleNameClashResolveRequest::SimpleNameClashResolveRequest(
     // Fill continuations...
     m_xNameSupplier = new InteractionSupplyName( this );
 
-    uno::Sequence< uno::Reference< task::XInteractionContinuation > >
-                            aContinuations( 3 );
-    aContinuations[ 0 ] = new InteractionAbort( this );
-    aContinuations[ 1 ] = m_xNameSupplier.get();
-    aContinuations[ 2 ] = new InteractionReplaceExistingData( this );
-
-    setContinuations( aContinuations );
+    setContinuations({ new InteractionAbort(this), m_xNameSupplier.get(),
+                       new InteractionReplaceExistingData(this) });
 }
 
 OUString const & SimpleNameClashResolveRequest::getNewName() const

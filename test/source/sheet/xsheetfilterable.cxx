@@ -32,16 +32,20 @@ void XSheetFilterable::testCreateFilterDescriptor()
     uno::Reference< sheet::XSheetFilterable > xFA(init(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSheetFilterDescriptor > xSFD = xFA->createFilterDescriptor(true);
 
-    uno::Sequence< sheet::TableFilterField > xTFF;
-    xTFF.realloc(2);
-    xTFF[0].IsNumeric = true;
-    xTFF[0].Field = 0;
-    xTFF[0].NumericValue = 2;
-    xTFF[0].Operator = sheet::FilterOperator_GREATER_EQUAL;
-    xTFF[1].IsNumeric = false;
-    xTFF[1].Field = 1;
-    xTFF[1].StringValue = "C";
-    xTFF[1].Operator = sheet::FilterOperator_LESS;
+    uno::Sequence< sheet::TableFilterField > xTFF{
+        { /* Connection   */ {},
+          /* Field        */ 0,
+          /* Operator     */ sheet::FilterOperator_GREATER_EQUAL,
+          /* IsNumeric    */ true,
+          /* NumericValue */ 2,
+          /* StringValue  */ {}},
+        { /* Connection   */ {},
+          /* Field        */ 1,
+          /* Operator     */ sheet::FilterOperator_LESS,
+          /* IsNumeric    */ false,
+          /* NumericValue */ {},
+          /* StringValue  */ "C" }
+    };
 
     CPPUNIT_ASSERT_NO_THROW_MESSAGE("Unable to create XSheetFilterDescriptor", xSFD->setFilterFields(xTFF));
 }
@@ -53,16 +57,20 @@ void XSheetFilterable::testFilter()
     uno::Reference< sheet::XSheetFilterable > xFA(xSheet, UNO_QUERY_THROW);
     uno::Reference< sheet::XSheetFilterDescriptor > xSFD = xFA->createFilterDescriptor(true);
 
-    uno::Sequence< sheet::TableFilterField > xTFF;
-    xTFF.realloc(2);
-    xTFF[0].IsNumeric = true;
-    xTFF[0].Field = 0;
-    xTFF[0].NumericValue = 2;
-    xTFF[0].Operator = sheet::FilterOperator_GREATER_EQUAL;
-    xTFF[1].IsNumeric = false;
-    xTFF[1].Field = 1;
-    xTFF[1].StringValue = "C";
-    xTFF[1].Operator = sheet::FilterOperator_LESS;
+    uno::Sequence< sheet::TableFilterField > xTFF{
+        { /* Connection   */ {},
+          /* Field        */ 0,
+          /* Operator     */ sheet::FilterOperator_GREATER_EQUAL,
+          /* IsNumeric    */ true,
+          /* NumericValue */ 2,
+          /* StringValue  */ {}},
+        { /* Connection   */ {},
+          /* Field        */ 1,
+          /* Operator     */ sheet::FilterOperator_LESS,
+          /* IsNumeric    */ false,
+          /* NumericValue */ {},
+          /* StringValue  */ "C" }
+    };
     xSFD->setFilterFields(xTFF);
 
     xSheet->getCellByPosition(0, 0)->setValue(1);

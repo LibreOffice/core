@@ -861,10 +861,7 @@ void SdFontStylePropertyBox::setValue( const Any& rValue, const OUString& )
 
 Any SdFontStylePropertyBox::getValue()
 {
-    Sequence<Any> aValues(3);
-    aValues[0] <<= mfFontWeight;
-    aValues[1] <<= meFontSlant;
-    aValues[2] <<= mnFontUnderline;
+    Sequence<Any> aValues{ Any(mfFontWeight), Any(meFontSlant), Any(mnFontUnderline) };
     return makeAny( aValues );
 }
 

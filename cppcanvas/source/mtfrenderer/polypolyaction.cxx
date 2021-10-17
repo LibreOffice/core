@@ -122,7 +122,7 @@ namespace cppcanvas::internal
 
                     // TODO(F1): Color management
                     // adapt fill color transparency
-                    maFillColor[3] = 1.0 - nTransparency / 100.0;
+                    maFillColor.getArray()[3] = 1.0 - nTransparency / 100.0;
                 }
 
                 if( bStroke )
@@ -134,7 +134,7 @@ namespace cppcanvas::internal
 
                     // TODO(F1): Color management
                     // adapt fill color transparency
-                    maState.DeviceColor[3] = 1.0 - nTransparency / 100.0;
+                    maState.DeviceColor.getArray()[3] = 1.0 - nTransparency / 100.0;
                 }
             }
 

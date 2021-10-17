@@ -23,6 +23,8 @@
 #include <xmlsec-wrapper.h>
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include <comphelper/sequence.hxx>
+
 using namespace ::com::sun::star::uno ;
 
 namespace xmlsecurity
@@ -63,11 +65,7 @@ Sequence< sal_Int8 > numericStringToBigInteger ( std::u16string_view numeral )
         return Sequence< sal_Int8 >();
     }
 
-    Sequence< sal_Int8 > integer( length ) ;
-    for( xmlSecSize i = 0 ; i < length ; i ++ )
-    {
-        integer[i] = *( bnInteger + i ) ;
-    }
+    Sequence< sal_Int8 > integer = comphelper::arrayToSequence<sal_Int8>(bnInteger, length);
 
     xmlSecBnFinalize( &bn ) ;
     return integer ;

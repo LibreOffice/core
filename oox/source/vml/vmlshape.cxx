@@ -431,30 +431,30 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                         sal_Int32 length;
 
                         length = aGrabBag.getLength();
-                        aGrabBag.realloc( length+1 );
-                        aGrabBag[length].Name = "VML-Z-ORDER";
-                        aGrabBag[length].Value <<= maTypeModel.maZIndex.toInt32();
+                        auto pGrabBag = aGrabBag.realloc( length+1 );
+                        pGrabBag[length].Name = "VML-Z-ORDER";
+                        pGrabBag[length].Value <<= maTypeModel.maZIndex.toInt32();
 
                         if( !s_mso_next_textbox.isEmpty() )
                         {
                             length = aGrabBag.getLength();
-                            aGrabBag.realloc( length+1 );
-                            aGrabBag[length].Name = "mso-next-textbox";
-                            aGrabBag[length].Value <<= s_mso_next_textbox;
+                            pGrabBag = aGrabBag.realloc( length+1 );
+                            pGrabBag[length].Name = "mso-next-textbox";
+                            pGrabBag[length].Value <<= s_mso_next_textbox;
                         }
 
                         if( !sLinkChainName.isEmpty() )
                         {
                             length = aGrabBag.getLength();
-                            aGrabBag.realloc( length+4 );
-                            aGrabBag[length].Name   = "TxbxHasLink";
-                            aGrabBag[length].Value   <<= true;
-                            aGrabBag[length+1].Name = "Txbx-Id";
-                            aGrabBag[length+1].Value <<= id;
-                            aGrabBag[length+2].Name = "Txbx-Seq";
-                            aGrabBag[length+2].Value <<= seq;
-                            aGrabBag[length+3].Name = "LinkChainName";
-                            aGrabBag[length+3].Value <<= sLinkChainName;
+                            pGrabBag = aGrabBag.realloc( length+4 );
+                            pGrabBag[length].Name   = "TxbxHasLink";
+                            pGrabBag[length].Value   <<= true;
+                            pGrabBag[length+1].Name = "Txbx-Id";
+                            pGrabBag[length+1].Value <<= id;
+                            pGrabBag[length+2].Name = "Txbx-Seq";
+                            pGrabBag[length+2].Value <<= seq;
+                            pGrabBag[length+3].Name = "LinkChainName";
+                            pGrabBag[length+3].Value <<= sLinkChainName;
                         }
                         propertySet->setPropertyValue( "InteropGrabBag", uno::makeAny(aGrabBag) );
                     }
@@ -1057,8 +1057,7 @@ Reference< XShape > PolyLineShape::implConvertAndInsert( const Reference< XShape
 
     if (!aAbsPoints.empty())
     {
-        PointSequenceSequence aPointSeq( 1 );
-        aPointSeq[ 0 ] = ContainerHelper::vectorToSequence( aAbsPoints );
+        PointSequenceSequence aPointSeq{ ContainerHelper::vectorToSequence( aAbsPoints ) };
         PropertySet aPropSet( xShape );
         aPropSet.setProperty( PROP_PolyPolygon, aPointSeq );
     }
@@ -1224,13 +1223,13 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
                 }
         }
 
-        aBezierCoords.Coordinates.realloc( aCoordLists.size() );
+        auto pCoordinates = aBezierCoords.Coordinates.realloc( aCoordLists.size() );
         for ( size_t i = 0; i < aCoordLists.size(); i++ )
-            aBezierCoords.Coordinates[i] = ContainerHelper::vectorToSequence( aCoordLists[i] );
+            pCoordinates[i] = ContainerHelper::vectorToSequence( aCoordLists[i] );
 
-        aBezierCoords.Flags.realloc( aFlagLists.size() );
+        auto pFlags = aBezierCoords.Flags.realloc( aFlagLists.size() );
         for ( size_t i = 0; i < aFlagLists.size(); i++ )
-            aBezierCoords.Flags[i] = ContainerHelper::vectorToSequence( aFlagLists[i] );
+            pFlags[i] = ContainerHelper::vectorToSequence( aFlagLists[i] );
 
         if( !aCoordLists.front().empty() && !aCoordLists.back().empty()
             && aCoordLists.front().front().X == aCoordLists.back().back().X
@@ -1545,12 +1544,9 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
     {
         uno::Sequence<beans::PropertyValue> aGrabBag;
         xPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
-        beans::PropertyValue aPair;
-        aPair.Name = "mso-edit-as";
-        aPair.Value <<= maTypeModel.maEditAs;
         sal_Int32 nLength = aGrabBag.getLength();
-        aGrabBag.realloc(nLength + 1);
-        aGrabBag[nLength] = aPair;
+        auto pGrabBag = aGrabBag.realloc(nLength + 1);
+        pGrabBag[nLength] = comphelper::makePropertyValue("mso-edit-as", maTypeModel.maEditAs);
         xPropertySet->setPropertyValue("InteropGrabBag", uno::makeAny(aGrabBag));
     }
     // Make sure group shapes are inline as well, unless there is an explicit different style.

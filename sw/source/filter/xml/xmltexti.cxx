@@ -20,6 +20,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <com/sun/star/embed/EmbeddedObjectCreator.hpp>
 #include <com/sun/star/embed/OOoEmbeddedObjectFactory.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -63,6 +64,7 @@
 #include <tools/globname.hxx>
 #include <tools/UnitConversion.hxx>
 
+#include <algorithm>
 #include <utility>
 
 using namespace ::com::sun::star;
@@ -543,24 +545,23 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory =
                 embed::OOoEmbeddedObjectFactory::create(::comphelper::getProcessComponentContext());
 
-        uno::Sequence< beans::PropertyValue > aMediaDescriptor( 1 );
-        aMediaDescriptor[0].Name = "URL";
-        aMediaDescriptor[0].Value <<= aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+        uno::Sequence< beans::PropertyValue > aMediaDescriptor{ comphelper::makePropertyValue(
+            "URL", aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE )) };
 
         if (SfxMedium* pMedium = pDoc->GetDocShell() ? pDoc->GetDocShell()->GetMedium() : nullptr)
         {
             uno::Reference< task::XInteractionHandler > xInteraction = pMedium->GetInteractionHandler();
             if ( xInteraction.is() )
             {
-                aMediaDescriptor.realloc( 2 );
-                aMediaDescriptor[1].Name = "InteractionHandler";
-                aMediaDescriptor[1].Value <<= xInteraction;
+                auto pMediaDescriptor = aMediaDescriptor.realloc( 2 );
+                pMediaDescriptor[1].Name = "InteractionHandler";
+                pMediaDescriptor[1].Value <<= xInteraction;
             }
 
             const auto nLen = aMediaDescriptor.getLength() + 1;
-            aMediaDescriptor.realloc(nLen);
-            aMediaDescriptor[nLen - 1].Name = "Referer";
-            aMediaDescriptor[nLen - 1].Value <<= pMedium->GetName();
+            auto pMediaDescriptor = aMediaDescriptor.realloc(nLen);
+            pMediaDescriptor[nLen - 1].Name = "Referer";
+            pMediaDescriptor[nLen - 1].Value <<= pMedium->GetName();
         }
 
         uno::Reference < embed::XEmbeddedObject > xObj(
@@ -898,15 +899,14 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
     const sal_Int32 nCount = rParamMap.size();
     uno::Sequence< beans::PropertyValue > aCommandSequence( nCount );
 
-    sal_Int32 nIndex=0;
-    for (const auto& rParam : rParamMap )
-    {
-        aCommandSequence[nIndex].Name = rParam.first;
-        aCommandSequence[nIndex].Handle = -1;
-        aCommandSequence[nIndex].Value <<= rParam.second;
-        aCommandSequence[nIndex].State = beans::PropertyState_DIRECT_VALUE;
-        ++nIndex;
-    }
+    std::transform(rParamMap.begin(), rParamMap.end(), aCommandSequence.getArray(),
+                   [](const auto& rParam)
+                   {
+                       return beans::PropertyValue(/* Name   */ rParam.first,
+                                                   /* Handle */ -1,
+                                                   /* Value  */ uno::Any(rParam.second),
+                                                   /* State  */ beans::PropertyState_DIRECT_VALUE);
+                   });
 
     // unfortunately the names of the properties are depending on the object
     OUString aParaName("AppletCommands");
