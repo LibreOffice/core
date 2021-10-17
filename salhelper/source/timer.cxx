@@ -23,14 +23,14 @@
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 
+#include <mutex>
+
 using namespace salhelper;
 
 class salhelper::TimerManager : public osl::Thread
 {
 public:
     TimerManager();
-
-    virtual ~TimerManager() override;
 
     /// register timer
     void registerTimer(salhelper::Timer* pTimer);
@@ -41,9 +41,6 @@ public:
     /// lookup timer
     bool lookupTimer(const salhelper::Timer* pTimer);
 
-    /// retrieves the "Singleton" TimerManager Instance
-    static TimerManager* getTimerManager();
-
 protected:
     /// worker-function of thread
     virtual void SAL_CALL run() override;
@@ -51,20 +48,27 @@ protected:
     /// Checking and triggering of a timer event
     void checkForTimeout();
 
-    /// cleanup Method
-    virtual void SAL_CALL onTerminated() override;
-
     /// sorted-queue data
     salhelper::Timer*       m_pHead;
     /// List Protection
-    osl::Mutex                  m_Lock;
+    std::mutex                  m_Lock;
     /// Signal the insertion of a timer
     osl::Condition              m_notEmpty;
 
     /// "Singleton Pattern"
-    static salhelper::TimerManager* m_pManager;
+    //static salhelper::TimerManager* m_pManager;
 
 };
+
+namespace
+{
+    salhelper::TimerManager& getTimerManager()
+    {
+        static salhelper::TimerManager aManager;
+        return aManager;
+    }
+}
+
 
 Timer::Timer()
     : m_aTimeOut(0),
@@ -102,29 +106,18 @@ void Timer::start()
         if (!m_aTimeOut.isEmpty())
             setRemainingTime(m_aTimeOut);
 
-        TimerManager *pManager = TimerManager::getTimerManager();
-
-        if (pManager)
-            pManager->registerTimer(this);
+        getTimerManager().registerTimer(this);
     }
 }
 
 void Timer::stop()
 {
-    TimerManager *pManager = TimerManager::getTimerManager();
-
-    if (pManager)
-        pManager->unregisterTimer(this);
+    getTimerManager().unregisterTimer(this);
 }
 
 sal_Bool Timer::isTicking() const
 {
-    TimerManager *pManager = TimerManager::getTimerManager();
-
-    if (pManager)
-        return pManager->lookupTimer(this);
-    else
-        return false;
+    return getTimerManager().lookupTimer(this);
 }
 
 sal_Bool Timer::isExpired() const
@@ -201,14 +194,6 @@ TTimeValue Timer::getRemainingTime() const
     return TTimeValue(secs, nsecs);
 }
 
-namespace
-{
-    // Synchronize access to TimerManager
-    struct theTimerManagerMutex : public rtl::Static< osl::Mutex, theTimerManagerMutex> {};
-}
-
-TimerManager* salhelper::TimerManager::m_pManager = nullptr;
-
 /** The timer manager cleanup has been removed (no thread is killed anymore),
     so the thread leaks.
 
@@ -219,41 +204,13 @@ TimerManager* salhelper::TimerManager::m_pManager = nullptr;
             when there are no timers anymore !
 **/
 
-TimerManager::TimerManager()
+TimerManager::TimerManager() :
+    m_pHead(nullptr)
 {
-    osl::MutexGuard Guard(theTimerManagerMutex::get());
-
-    assert(m_pManager == nullptr);
-
-    m_pManager = this;
-    m_pHead= nullptr;
     m_notEmpty.reset();
 
     // start thread
     create();
-}
-
-TimerManager::~TimerManager()
-{
-    osl::MutexGuard Guard(theTimerManagerMutex::get());
-
-    if (m_pManager == this)
-        m_pManager = nullptr;
-}
-
-void TimerManager::onTerminated()
-{
-    delete this; // FIXME
-}
-
-TimerManager* TimerManager::getTimerManager()
-{
-    osl::MutexGuard Guard(theTimerManagerMutex::get());
-
-    if (! m_pManager)
-        new TimerManager;
-
-    return m_pManager;
 }
 
 void TimerManager::registerTimer(Timer* pTimer)
@@ -261,7 +218,7 @@ void TimerManager::registerTimer(Timer* pTimer)
     if (!pTimer)
         return;
 
-    osl::MutexGuard Guard(m_Lock);
+    std::lock_guard Guard(m_Lock);
 
     // try to find one with equal or lower remaining time.
     Timer** ppIter = &m_pHead;
@@ -297,7 +254,7 @@ void TimerManager::unregisterTimer(Timer const * pTimer)
         return;
 
     // lock access
-    osl::MutexGuard Guard(m_Lock);
+    std::lock_guard Guard(m_Lock);
 
     Timer** ppIter = &m_pHead;
 
@@ -319,7 +276,7 @@ bool TimerManager::lookupTimer(const Timer* pTimer)
         return false;
 
     // lock access
-    osl::MutexGuard Guard(m_Lock);
+    std::lock_guard Guard(m_Lock);
 
     // check the list
     for (Timer* pIter = m_pHead; pIter != nullptr; pIter= pIter->m_pNext)
@@ -333,11 +290,10 @@ bool TimerManager::lookupTimer(const Timer* pTimer)
 
 void TimerManager::checkForTimeout()
 {
-    m_Lock.acquire();
+    std::unique_lock aLock (m_Lock);
 
     if (!m_pHead)
     {
-        m_Lock.release();
         return;
     }
 
@@ -350,7 +306,7 @@ void TimerManager::checkForTimeout()
 
         pTimer->acquire();
 
-        m_Lock.release();
+        aLock.unlock();
 
         pTimer->onShot();
 
@@ -370,10 +326,6 @@ void TimerManager::checkForTimeout()
         }
         pTimer->release();
     }
-    else
-    {
-        m_Lock.release();
-    }
 }
 
 void TimerManager::run()
@@ -387,23 +339,22 @@ void TimerManager::run()
         TTimeValue delay;
         TTimeValue* pDelay=nullptr;
 
-        m_Lock.acquire();
-
-        if (m_pHead != nullptr)
         {
-            delay = m_pHead->getRemainingTime();
-            pDelay=&delay;
+            std::lock_guard a_Guard(m_Lock);
+
+            if (m_pHead != nullptr)
+            {
+                delay = m_pHead->getRemainingTime();
+                pDelay=&delay;
+            }
+            else
+            {
+                pDelay=nullptr;
+            }
+
+
+            m_notEmpty.reset();
         }
-        else
-        {
-            pDelay=nullptr;
-        }
-
-
-        m_notEmpty.reset();
-
-        m_Lock.release();
-
 
         m_notEmpty.wait(pDelay);
 
