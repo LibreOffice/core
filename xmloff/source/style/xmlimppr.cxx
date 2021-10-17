@@ -266,12 +266,9 @@ void SvXMLImportPropertyMapper::importXMLAttribute(
                     if( !bNoWarning &&
                         ((nFlags & MID_FLAG_MULTI_PROPERTY) == 0) )
                     {
-                        Sequence<OUString> aSeq(2);
-                        aSeq[0] = rAttrName;
-                        aSeq[1] = sValue;
                         rImport.SetError( XMLERROR_FLAG_WARNING |
                                           XMLERROR_STYLE_ATTR_VALUE,
-                                          aSeq );
+                                          { rAttrName, sValue } );
                     }
                 }
             }

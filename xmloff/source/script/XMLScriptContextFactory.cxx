@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/propertyvalue.hxx>
 #include <XMLScriptContextFactory.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -52,15 +53,8 @@ SvXMLImportContext* XMLScriptContextFactory::CreateContext(
         // else: ignore
     }
 
-    Sequence<PropertyValue> aValues(2);
-
-    // EventType
-    aValues[0].Name = gsEventType;
-    aValues[0].Value <<= OUString(gsScript);
-
-    // URL
-    aValues[1].Name = gsURL;
-    aValues[1].Value <<= sURLVal;
+    Sequence<PropertyValue> aValues{ comphelper::makePropertyValue(gsEventType, OUString(gsScript)),
+                                     comphelper::makePropertyValue(gsURL, sURLVal) };
 
     // add values for event now
     rEvents->AddEventValues(rApiEventName, aValues);

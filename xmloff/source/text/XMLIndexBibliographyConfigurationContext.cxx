@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/propertyvalue.hxx>
 #include <XMLIndexBibliographyConfigurationContext.hxx>
 #include "XMLIndexBibliographyEntryContext.hxx"
 #include <xmloff/xmlictxt.hxx>
@@ -152,17 +153,11 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexBibliographyCo
         if (SvXMLUnitConverter::convertEnum(nKey, sKey,
                                             aBibliographyDataFieldMap))
         {
-            Sequence<PropertyValue> aKey(2);
-
-            PropertyValue aNameValue;
-            aNameValue.Name = gsSortKey;
-            aNameValue.Value <<= static_cast<sal_Int16>(nKey);
-            aKey[0] = aNameValue;
-
-            PropertyValue aSortValue;
-            aSortValue.Name = gsIsSortAscending;
-            aSortValue.Value <<= bSort;
-            aKey[1] = aSortValue;
+            Sequence<PropertyValue> aKey
+            {
+                comphelper::makePropertyValue(gsSortKey, static_cast<sal_Int16>(nKey)),
+                comphelper::makePropertyValue(gsIsSortAscending, bSort)
+            };
 
             aSortKeys.push_back(aKey);
         }

@@ -22,6 +22,7 @@
  *
  *  export of all text fields
  */
+#include <comphelper/propertyvalue.hxx>
 #include <txtflde.hxx>
 #include <xmloff/XMLEventExport.hxx>
 #include <xmloff/families.hxx>
@@ -2268,7 +2269,6 @@ void XMLTextFieldExport::ExportMacro(
 {
     // some strings we'll need
     OUString sEventType( "EventType" );
-    OUString sPropertyScriptURL( "ScriptURL" );
 
 
     // the description attribute
@@ -2285,30 +2285,27 @@ void XMLTextFieldExport::ExportMacro(
     // 1) build sequence of PropertyValues
     Sequence<PropertyValue> aSeq;
     OUString sName;
-    rPropSet->getPropertyValue( sPropertyScriptURL ) >>= sName;
+    rPropSet->getPropertyValue("ScriptURL") >>= sName;
 
     // if the ScriptURL property is not empty then this is a Scripting
     // Framework URL, otherwise treat it as a Basic Macro
     if (!sName.isEmpty())
     {
         OUString sScript( "Script" );
-        aSeq = Sequence<PropertyValue> (2);
-        PropertyValue* pArr = aSeq.getArray();
-        pArr[0].Name = sEventType;
-        pArr[0].Value <<= sScript;
-        pArr[1].Name = sScript;
-        pArr[1].Value = rPropSet->getPropertyValue( sPropertyScriptURL );
+        aSeq = Sequence<PropertyValue>
+        {
+            comphelper::makePropertyValue(sEventType, sScript),
+            comphelper::makePropertyValue(sScript, sName)
+        };
     }
     else
     {
-        aSeq = Sequence<PropertyValue> (3);
-        PropertyValue* pArr = aSeq.getArray();
-        pArr[0].Name = sEventType;
-        pArr[0].Value <<= OUString("StarBasic");
-        pArr[1].Name = "Library";
-        pArr[1].Value = rPropSet->getPropertyValue( "MacroLibrary" );
-        pArr[2].Name = "MacroName";
-        pArr[2].Value = rPropSet->getPropertyValue( "MacroName" );
+        aSeq = Sequence<PropertyValue>
+        {
+            comphelper::makePropertyValue(sEventType, OUString("StarBasic")),
+            comphelper::makePropertyValue("Library", rPropSet->getPropertyValue( "MacroLibrary" )),
+            comphelper::makePropertyValue("MacroName", rPropSet->getPropertyValue( "MacroName" ))
+        };
     }
 
     // 2) export the sequence
