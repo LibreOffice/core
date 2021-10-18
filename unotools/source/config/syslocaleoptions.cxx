@@ -275,7 +275,7 @@ void SvtSysLocaleOptions_Impl::MakeRealUILocale()
 {
     if (m_aUILocaleString.isEmpty())
     {
-        LanguageType nLang = MsLangId::getSystemUILanguage();
+        LanguageType nLang = MsLangId::getConfiguredSystemUILanguage();
         m_aRealUILocale.reset( nLang).makeFallback();
     }
     else

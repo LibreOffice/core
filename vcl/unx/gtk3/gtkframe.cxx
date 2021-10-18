@@ -1371,7 +1371,7 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
         //header bar with the desired 'outside' direction
         if ((eType == GDK_WINDOW_TYPE_HINT_NORMAL || eType == GDK_WINDOW_TYPE_HINT_DIALOG) && DLSYM_GDK_IS_WAYLAND_DISPLAY(GtkSalFrame::getGdkDisplay()))
         {
-            const bool bDesktopIsRTL = MsLangId::isRightToLeft(MsLangId::getSystemUILanguage());
+            const bool bDesktopIsRTL = MsLangId::isRightToLeft(MsLangId::getConfiguredSystemUILanguage());
             const bool bAppIsRTL = gtk_widget_get_default_direction() == GTK_TEXT_DIR_RTL;
             if (bDesktopIsRTL != bAppIsRTL)
             {
