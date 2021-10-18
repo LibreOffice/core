@@ -331,6 +331,9 @@ public:
         // TODO constructing a temporary to pass to a && param
         if (fn == SRCDIR "/sc/source/ui/view/viewfunc.cxx")
             return false;
+        // tdf#145203: FIREBIRD cannot create a table
+        if (fn == SRCDIR "/connectivity/source/drivers/firebird/DatabaseMetaData.cxx")
+            return false;
         return true;
     }
 
