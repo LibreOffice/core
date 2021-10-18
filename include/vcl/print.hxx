@@ -33,6 +33,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/PrinterSupport.hxx>
 #include <vcl/errcode.hxx>
+#include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/prntypes.hxx>
 #include <vcl/region.hxx>
@@ -143,11 +144,7 @@ public:
 
     bool                        IsScreenComp() const override { return false; }
 
-    void DrawBorder(tools::Rectangle aBorderRect) override
-    {
-        SetLineColor(COL_BLACK);
-        DrawRect(aBorderRect);
-    }
+    void DrawBorder(tools::Rectangle aBorderRect) override;
 
     css::awt::DeviceInfo GetDeviceInfo() const override;
 
