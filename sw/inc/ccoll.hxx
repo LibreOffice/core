@@ -39,7 +39,7 @@ OUString   GetCommandContextByIndex( sal_Int16 nIndex );
 
 class SW_DLLPUBLIC SwCondCollItem final : public SfxPoolItem
 {
-    static const CommandStruct  aCmds[COND_COMMAND_COUNT];
+    static const CommandStruct  s_aCmds[COND_COMMAND_COUNT];
 
     OUString                    m_sStyles[COND_COMMAND_COUNT];
 
@@ -55,7 +55,7 @@ public:
     virtual SwCondCollItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool                operator==( const SfxPoolItem& ) const override;
 
-    static const CommandStruct* GetCmds() { return aCmds; }
+    static const CommandStruct* GetCmds() { return s_aCmds; }
 
     OUString            GetStyle(sal_uInt16 nPos) const;
     void                SetStyle(const OUString* pStyle, sal_uInt16 nPos);

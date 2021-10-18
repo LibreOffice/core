@@ -52,18 +52,18 @@ namespace /* private */
             ::rtl::Reference<MailDispatcher> const & xMailDispatcher,
             uno::Reference<mail::XMailMessage> const & message,
             const OUString& error_message) :
-            mail_dispatcher_(xMailDispatcher),
-            message_(message),
-            error_message_(error_message)
+            m_mail_dispatcher(xMailDispatcher),
+            m_message(message),
+            m_error_message(error_message)
         {}
 
         void operator() (::rtl::Reference<IMailDispatcherListener> const & listener) const
-        { listener->mailDeliveryError(mail_dispatcher_, message_, error_message_); }
+        { listener->mailDeliveryError(m_mail_dispatcher, m_message, m_error_message); }
 
     private:
-        ::rtl::Reference<MailDispatcher> mail_dispatcher_;
-        uno::Reference<mail::XMailMessage> message_;
-        OUString error_message_;
+        ::rtl::Reference<MailDispatcher> m_mail_dispatcher;
+        uno::Reference<mail::XMailMessage> m_message;
+        OUString m_error_message;
     };
 
 } // namespace private

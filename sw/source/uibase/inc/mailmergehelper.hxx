@@ -58,7 +58,7 @@ struct SwAddressPreview_Impl;
 // and also the resulting address filled with database data
 class SW_DLLPUBLIC SwAddressPreview final : public weld::CustomWidgetController
 {
-    std::unique_ptr<SwAddressPreview_Impl> pImpl;
+    std::unique_ptr<SwAddressPreview_Impl> m_pImpl;
     std::unique_ptr<weld::ScrolledWindow> m_xVScrollBar;
     Link<LinkParamNone*,void> m_aSelectHdl;
 
@@ -123,14 +123,14 @@ struct SwMergeAddressItem
 
 class SW_DLLPUBLIC SwAddressIterator
 {
-    OUString sAddress;
+    OUString m_sAddress;
 public:
     SwAddressIterator(const OUString& rAddress) :
-        sAddress(rAddress)
+        m_sAddress(rAddress)
     {}
 
     SwMergeAddressItem  Next();
-    bool HasMore() const { return !sAddress.isEmpty(); }
+    bool HasMore() const { return !m_sAddress.isEmpty(); }
 };
 
 class SW_DLLPUBLIC SwAuthenticator final :
