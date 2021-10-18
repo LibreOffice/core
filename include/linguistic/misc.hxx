@@ -133,7 +133,6 @@ LNG_DLLPUBLIC bool        IsUpper( const OUString &rText, sal_Int32 nPos, sal_In
 inline bool        IsUpper( const OUString &rText, LanguageType nLanguage )     { return IsUpper( rText, 0, rText.getLength(), nLanguage ); }
 LNG_DLLPUBLIC CapType capitalType(const OUString&, CharClass const *);
 
-OUString      ToLower( const OUString &rText, LanguageType nLanguage );
 LNG_DLLPUBLIC bool      HasDigits( const OUString &rText );
 LNG_DLLPUBLIC bool      IsNumeric( const OUString &rText );
 
