@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4698702c_1a303a05",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-18T12:02:35Z",
+      "side": 1,
+      "message": "online.git calc/repair_document_spec.js failed, retry.",
+      "revId": "21c8e4b004880f4ea24cb183ce1e10b1db136d71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
