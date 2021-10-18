@@ -26,6 +26,7 @@
 #include <frameformats.hxx>
 #include <unotextrange.hxx>
 #include <fmtanchr.hxx>
+#include <editsh.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/layout/data/";
 
@@ -290,12 +291,42 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInNumbering)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // Assert the tracked deletion of the number of joined list item and
-    // the tracked insertion of the number after a split list item as not black elements
-    assertXPath(pXmlDoc, "/metafile/push/push/push/textcolor[not(@color='#000000')]", 6);
+    // the tracked insertion of the number after a split list item as not black
+    // (and not COL_GREEN color of the tracked text movement, see testRedlineMoving) elements
+    assertXPath(
+        pXmlDoc,
+        "/metafile/push/push/push/textcolor[not(@color='#000000') and not(@color='#008000')]", 6);
 
     // tdf#145068 numbering shows changes in the associated list item, not the next one
     // This was 1 (black numbering of the first list item previously)
     assertXPath(pXmlDoc, "/metafile/push/push/push/font[4][@color='#000000']", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMoving)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf42748.fodt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // create a 3-element list without change tracking
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    pEditShell->RejectRedline(0);
+    pEditShell->AcceptRedline(0);
+
+    // move down first list item with track changes
+    dispatchCommand(mxComponent, ".uno:GoToStartOfDoc", {});
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    dispatchCommand(mxComponent, ".uno:MoveDown", {});
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // text and numbering colors show moving of the list item
+    // These were 0 (other color, not COL_GREEN, color of the tracked text movement)
+    assertXPath(pXmlDoc, "/metafile/push/push/push/textcolor[@color='#008000']", 5);
+    assertXPath(pXmlDoc, "/metafile/push/push/push/font[@color='#008000']", 11);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf125300)

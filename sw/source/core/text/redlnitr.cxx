@@ -47,6 +47,9 @@
 #include <vcl/svapp.hxx>
 #include "redlnitr.hxx"
 #include <extinput.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/crossedoutitem.hxx>
+#include <editeng/udlnitem.hxx>
 
 using namespace ::com::sun::star;
 
@@ -703,17 +706,18 @@ short SwRedlineItr::Seek(SwFont& rFnt,
 
         m_nStart = COMPLETE_STRING;
         m_nEnd = COMPLETE_STRING;
+        const SwRedlineTable& rTable = m_rDoc.getIDocumentRedlineAccess().GetRedlineTable();
 
-        for ( ; m_nAct < m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size() ; ++m_nAct)
+        for ( ; m_nAct < rTable.size() ; ++m_nAct)
         {
-            m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ m_nAct ]->CalcStartEnd(nNode, m_nStart, m_nEnd);
+            rTable[ m_nAct ]->CalcStartEnd(nNode, m_nStart, m_nEnd);
 
             if (nNew < m_nEnd)
             {
                 if (nNew >= m_nStart) // only possible candidate
                 {
                     m_bOn = true;
-                    const SwRangeRedline *pRed = m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ m_nAct ];
+                    const SwRangeRedline *pRed = rTable[ m_nAct ];
 
                     if (m_pSet)
                         m_pSet->ClearItem();
@@ -729,6 +733,17 @@ short SwRedlineItr::Seek(SwFont& rFnt,
                     FillHints( pRed->GetAuthor(), pRed->GetType() );
 
                     SfxWhichIter aIter( *m_pSet );
+
+                    // moved text: dark green with double underline or strikethrough
+                    if ( rTable.isMoved( m_nAct ) )
+                    {
+                        m_pSet->Put(SvxColorItem( COL_GREEN, RES_CHRATR_COLOR ));
+                        if (SfxItemState::SET == m_pSet->GetItemState(RES_CHRATR_CROSSEDOUT, true))
+                            m_pSet->Put(SvxCrossedOutItem( STRIKEOUT_DOUBLE, RES_CHRATR_CROSSEDOUT ));
+                        else
+                            m_pSet->Put(SvxUnderlineItem( LINESTYLE_DOUBLE, RES_CHRATR_UNDERLINE ));
+                    }
+
                     sal_uInt16 nWhich = aIter.FirstWhich();
                     while( nWhich )
                     {

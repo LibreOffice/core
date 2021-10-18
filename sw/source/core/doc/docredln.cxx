@@ -767,6 +767,57 @@ const SwRangeRedline* SwRedlineTable::FindAtPosition( const SwPosition& rSttPos,
     return pFnd;
 }
 
+bool SwRedlineTable::isMoved( size_type rPos ) const
+{
+    auto constexpr nLookahead = 20;
+    const SwRangeRedline* pRedline = (*this)[ rPos ];
+
+    // set redline type of the searched pair
+    RedlineType nPairType = pRedline->GetType();
+    if ( RedlineType::Delete == nPairType )
+        nPairType = RedlineType::Insert;
+    else if ( RedlineType::Insert == nPairType )
+        nPairType = RedlineType::Delete;
+    else
+        // only deleted or inserted text can be moved
+        return false;
+
+    // Skip terminating white spaces of the redline, a workaround
+    // for a typical difference resulted by e.g. Writer UX:
+    // selecting a sentence or a word, and moving it with
+    // the mouse, Writer removes a space at the deletion
+    // to avoid double spaces, also inserts a space at
+    // the insertion point automatically. Because the result
+    // can be different (space before and space after the
+    // moved text), compare the redlines without terminating spaces
+    const OUString sTrimmed = pRedline->GetText().trim();
+    if ( sTrimmed.isEmpty() )
+        return false;
+
+    // search pair around the actual redline
+    size_type nEnd = rPos + nLookahead < size()
+        ? rPos + nLookahead
+        : size();
+    rPos = rPos > nLookahead ? rPos - nLookahead : 0;
+    for ( ; rPos < nEnd ; ++rPos )
+    {
+        const SwRangeRedline* pPair = (*this)[ rPos ];
+        // TODO handle also Show Changes in Margin mode
+        if ( pPair->HasMark() && pPair->IsVisible() )
+        {
+            // pair at tracked moving: same text from the same author, but with opposite type
+            if ( nPairType == pPair->GetType() &&
+                pRedline->GetAuthor() == pPair->GetAuthor() &&
+                abs(pRedline->GetText().getLength() - pPair->GetText().getLength()) <= 2 &&
+                sTrimmed == pPair->GetText().trim() )
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 void SwRedlineTable::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwRedlineTable"));
