@@ -16,6 +16,23 @@
       "message": "Caolán: thought you might have some opinion here.",
       "revId": "723a986079a79d1d596552bb436db530013c8197",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8874d942_4de5657a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-10-18T18:52:24Z",
+      "side": 1,
+      "message": "looks reasonable to me, could even drop the Sequence\u003cOUString\u003e sToken and just have OUString sToken \u003d sKey.getToken... As far as I can see the storage into a Sequence isn\u0027t needed, but no need to gild the lily here",
+      "revId": "723a986079a79d1d596552bb436db530013c8197",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
