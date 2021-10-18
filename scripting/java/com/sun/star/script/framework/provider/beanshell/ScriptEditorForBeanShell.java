@@ -19,7 +19,7 @@ package com.sun.star.script.framework.provider.beanshell;
 
 import com.sun.star.script.framework.container.ScriptMetaData;
 import com.sun.star.script.framework.provider.ClassLoaderFactory;
-import com.sun.star.script.framework.provider.ScriptEditor;
+import com.sun.star.script.framework.provider.ScriptEditorBase;
 import com.sun.star.script.framework.provider.SwingInvocation;
 import com.sun.star.script.provider.XScriptContext;
 
@@ -49,7 +49,7 @@ import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.BorderFactory;
 
-public class ScriptEditorForBeanShell extends ScriptEditor implements ActionListener {
+public class ScriptEditorForBeanShell extends ScriptEditorBase implements ActionListener {
 
     private JFrame frame;
     private String filename;

@@ -20,7 +20,7 @@ package com.sun.star.script.framework.provider.javascript;
 
 import com.sun.star.script.framework.container.ScriptMetaData;
 import com.sun.star.script.framework.log.LogUtils;
-import com.sun.star.script.framework.provider.ScriptEditor;
+import com.sun.star.script.framework.provider.ScriptEditorBase;
 import com.sun.star.script.framework.provider.SwingInvocation;
 import com.sun.star.script.provider.XScriptContext;
 
@@ -40,7 +40,7 @@ import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.tools.debugger.Main;
 import org.mozilla.javascript.tools.debugger.ScopeProvider;
 
-public class ScriptEditorForJavaScript extends ScriptEditor {
+public class ScriptEditorForJavaScript extends ScriptEditorBase {
 
     // global ScriptEditorForJavaScript instance
     private static ScriptEditorForJavaScript theScriptEditorForJavaScript;
