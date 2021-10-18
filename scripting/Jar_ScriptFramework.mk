@@ -46,6 +46,7 @@ $(eval $(call gb_Jar_add_sourcefiles,ScriptFramework,\
 	scripting/java/com/sun/star/script/framework/provider/PathUtils \
 	scripting/java/com/sun/star/script/framework/provider/ScriptContext \
 	scripting/java/com/sun/star/script/framework/provider/ScriptEditor \
+	scripting/java/com/sun/star/script/framework/provider/ScriptEditorBase \
 	scripting/java/com/sun/star/script/framework/provider/ScriptProvider \
 	scripting/java/com/sun/star/script/framework/provider/SwingInvocation \
 	scripting/java/Framework/com/sun/star/script/framework/security/SecurityDialog \
