@@ -1146,6 +1146,9 @@ bool RemoteFilesDialog::ContentIsFolder( const OUString& rURL )
     {
         Reference< XInteractionHandler > xInteractionHandler(
                         InteractionHandler::createWithParent( m_xContext, nullptr ), UNO_QUERY_THROW );
+        INetURLObject aURLObject(rURL);
+        if (aURLObject.isAnyKnownWebDAVScheme() || aURLObject.GetProtocol() == INetProtocol::Sftp)
+            xInteractionHandler.set(new comphelper::StillReadWriteInteraction(xInteractionHandler, xInteractionHandler));
         Reference< XCommandEnvironment > xEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
         ::ucbhelper::Content aContent( rURL, xEnv, m_xContext );
 
@@ -1166,7 +1169,8 @@ bool RemoteFilesDialog::ContentIsDocument( const OUString& rURL )
         Reference< XInteractionHandler > xInteractionHandler(
                         InteractionHandler::createWithParent( m_xContext, nullptr ), UNO_QUERY_THROW );
         //check if WebDAV or not
-        if ( !INetURLObject( rURL ).isAnyKnownWebDAVScheme() )
+        INetURLObject aURLObject(rURL);
+        if (!aURLObject.isAnyKnownWebDAVScheme() && aURLObject.GetProtocol() != INetProtocol::Sftp)
         {
                 // no webdav, use the interaction handler as is
                 Reference< XCommandEnvironment > xEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
