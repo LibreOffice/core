@@ -149,7 +149,7 @@ private:
 
     void OpenURL( OUString const & sURL );
 
-    void AddFileExtension();
+    OUString AddFileExtension(const OUString& rFileName);
 
     void EnableExtraMenuItems(bool bEnable);
     void EnableControls();
