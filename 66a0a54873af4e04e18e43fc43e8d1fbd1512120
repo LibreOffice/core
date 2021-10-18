@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5615bc47_55569df4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-18T19:25:44Z",
+      "side": 1,
+      "message": "The more we can simplify, the better it is (of course more for readability here than for nanoperf)",
+      "revId": "66a0a54873af4e04e18e43fc43e8d1fbd1512120",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
