@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08db3614_3ddc8466",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-18T21:32:53Z",
+      "side": 1,
+      "message": "Better refer to the C++ standard. You may find the working drafts at https://github.com/cplusplus/draft; the last one there ATM is https://github.com/cplusplus/draft/blob/main/papers/n4835.pdf.\n\nThe relevant piece there is [vector.data] (page 839 in the n4835.pdf):\n\n\u003e 22.3.11.4 Data\n\u003e Returns: A pointer such that [data(), data() + size()) is a valid range. For a non-empty vector, data() \u003d\u003d addressof(front()).",
+      "range": {
+        "startLine": 13,
+        "startChar": 4,
+        "endLine": 16,
+        "endChar": 61
+      },
+      "revId": "fb54830015b7390cc8e4180d0665e5d094fb3fc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3ebd227_cff6fccb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-18T21:32:53Z",
+      "side": 1,
+      "message": "This is a misconception. Vector allocates from heap.",
+      "range": {
+        "startLine": 22,
+        "startChar": 2,
+        "endLine": 22,
+        "endChar": 37
+      },
+      "revId": "fb54830015b7390cc8e4180d0665e5d094fb3fc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
