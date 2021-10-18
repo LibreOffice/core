@@ -68,60 +68,48 @@ void Breadcrumb::SetRootName( const OUString& rURL )
 void Breadcrumb::SetURL( const OUString& rURL )
 {
     m_aCurrentURL = rURL;
-    INetURLObject aURL( rURL );
+    INetURLObject aURL(rURL);
     aURL.setFinalSlash();
-    //prepare the Host port
-    OUString sHostPort;
 
-    if( aURL.HasPort() )
-    {
-        sHostPort += ":" + OUString::number( aURL.GetPort() );
-    }
-
-    OUString sUser = aURL.GetUser( INetURLObject::DecodeMechanism::NONE );
-    OUString sPath = aURL.GetURLPath(INetURLObject::DecodeMechanism::WithCharset);
-    OUString sRootPath = INetURLObject::GetScheme( aURL.GetProtocol() )
-                        + sUser
-                        + ( sUser.isEmpty() ? OUString() : "@" )
-                        + aURL.GetHost()
-                        + sHostPort;
+    bool bClear = m_eMode == SvtBreadcrumbMode::ONLY_CURRENT_PATH;
 
     int nSegments = aURL.getSegmentCount();
-    unsigned int nPos = 0;
 
-    bool bClear = ( m_eMode == SvtBreadcrumbMode::ONLY_CURRENT_PATH );
+    size_t nVecSizeRequired = nSegments + 1;
+
+    while (m_aSegments.size() < nVecSizeRequired)
+        appendField();
+
+    // fill the fields under root
+    for (int i = nSegments; i; --i)
+    {
+        OUString sLabel = aURL.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset);
+        OUString sLink = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+
+        if (m_eMode == SvtBreadcrumbMode::ALL_VISITED)
+        {
+            if( m_aSegments[i]->m_xLink->get_label() != sLabel )
+                bClear = true;
+        }
+
+        m_aSegments[i]->m_xLink->hide();
+        m_aSegments[i]->m_xLink->set_label(sLabel);
+        m_aSegments[i]->m_xLink->set_sensitive(true);
+        m_aSegments[i]->m_xLink->set_uri(sLink);
+        m_aUris[m_aSegments[i]->m_xLink.get()] = sLink;
+
+        m_aSegments[i]->m_xSeparator->hide();
+
+        aURL.removeSegment();
+    }
+
+    OUString sRootPath = aURL.GetMainURL(INetURLObject::DecodeMechanism::WithCharset);
 
     // root field
     m_aSegments[0]->m_xLink->set_label( m_sRootName );
     m_aSegments[0]->m_xLink->set_sensitive(true);
     m_aSegments[0]->m_xLink->set_uri(sRootPath);
     m_aUris[m_aSegments[0]->m_xLink.get()] = sRootPath;
-
-    // fill the other fields
-
-    for( unsigned int i = 1; i < static_cast<unsigned int>(nSegments) + 1; i++ )
-    {
-        if( i >= m_aSegments.size() )
-            appendField();
-
-        unsigned int nEnd = sPath.indexOf( '/', nPos + 1 );
-        OUString sLabel = sPath.copy( nPos + 1, nEnd - nPos - 1 );
-
-        if( m_eMode == SvtBreadcrumbMode::ALL_VISITED )
-        {
-            if( m_aSegments[i]->m_xLink->get_label() != sLabel )
-                bClear = true;
-        }
-
-        m_aSegments[i]->m_xLink->set_label( sLabel );
-        m_aUris[m_aSegments[i]->m_xLink.get()] = sRootPath + sPath.subView(0, nEnd);
-        m_aSegments[i]->m_xLink->hide();
-        m_aSegments[i]->m_xLink->set_sensitive(true);
-
-        m_aSegments[i]->m_xSeparator->hide();
-
-        nPos = nEnd;
-    }
 
     // clear unused fields
     for (size_t i = nSegments + 1; i < m_aSegments.size(); i++ )
