@@ -379,21 +379,18 @@ void RemoteFilesDialog::OpenURL( OUString const & sURL )
     }
 }
 
-void RemoteFilesDialog::AddFileExtension()
+OUString RemoteFilesDialog::AddFileExtension(const OUString& rFileName)
 {
     if (m_nCurrentFilter == -1)
-        return;
+        return rFileName;
 
     OUString sExt = m_aFilters[m_nCurrentFilter].second;
-    OUString sFileName = m_xName_ed->get_text();
+    sal_Int32 nDotPos = rFileName.lastIndexOf( '.' );
 
-    sal_Int32 nDotPos = sFileName.lastIndexOf( '.' );
+    if (nDotPos == -1)
+        return rFileName + sExt.subView( 1 ); // without '*'
 
-    if ( nDotPos == -1 )
-    {
-        sFileName += sExt.subView( 1 ); // without '*'
-        m_xName_ed->set_text( sFileName );
-    }
+    return rFileName;
 }
 
 void RemoteFilesDialog::EnableControls()
@@ -825,18 +822,18 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, NewFolderHdl, weld::Button&, void )
 
 IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl, weld::Button&, void )
 {
-    OUString sNameNoExt = m_xName_ed->get_text();
-    OUString sPathNoExt;
-
-    // auto extension
-    if( m_eMode == REMOTEDLG_MODE_SAVE )
-        AddFileExtension();
+    OUString sUserSelectedPath;
 
     // check if file/path exists
-
     OUString sCurrentPath = m_xFileView->GetViewURL();
     OUString sSelectedItem = m_xFileView->GetCurrentURL();
-    OUString sName = m_xName_ed->get_text();
+    OUString sUserTypedName = m_xName_ed->get_text();
+    OUString sFileName;
+    // auto extension
+    if( m_eMode == REMOTEDLG_MODE_SAVE )
+        sFileName = AddFileExtension(sUserTypedName);
+    else
+        sFileName = sUserTypedName;
 
     bool bFileDlg = ( m_eType == REMOTEDLG_TYPE_FILEDLG );
     bool bSelected = ( m_xFileView->GetSelectionCount() > 0 );
@@ -846,8 +843,8 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl, weld::Button&, void )
 
     if( !bSelected )
     {
-        m_sPath = sCurrentPath + INetURLObject::encode( sName, INetURLObject::PART_FPATH, INetURLObject::EncodeMechanism::All );
-        sPathNoExt = sCurrentPath + INetURLObject::encode( sNameNoExt, INetURLObject::PART_FPATH, INetURLObject::EncodeMechanism::All );
+        m_sPath = sCurrentPath + INetURLObject::encode(sFileName, INetURLObject::PART_FPATH, INetURLObject::EncodeMechanism::All);
+        sUserSelectedPath = sCurrentPath + INetURLObject::encode(sUserTypedName, INetURLObject::PART_FPATH, INetURLObject::EncodeMechanism::All);
     }
     else
     {
@@ -863,6 +860,7 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl, weld::Button&, void )
         aURL.SetUser( aCurrentURL.GetUser() );
 
         m_sPath = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+        sUserSelectedPath = m_sPath;
     }
 
     bool bExists = false;
@@ -877,7 +875,7 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl, weld::Button&, void )
         if( m_eMode == REMOTEDLG_MODE_SAVE )
         {
             OUString sMsg = FpsResId( STR_SVT_ALREADYEXISTOVERWRITE );
-            sMsg = sMsg.replaceFirst( "$filename$", sName );
+            sMsg = sMsg.replaceFirst("$filename$", sFileName);
             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                       VclMessageType::Question, VclButtonsType::YesNo, sMsg));
             if (xBox->run() != RET_YES)
@@ -886,10 +884,9 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl, weld::Button&, void )
     }
     else
     {
-        if( ContentIsFolder( sPathNoExt ) )
+        if (ContentIsFolder(sUserSelectedPath))
         {
-            OpenURL( sPathNoExt );
-            m_xName_ed->set_text( "" );
+            OpenURL(sUserSelectedPath);
 
             if (!bSelected)
                 m_xName_ed->grab_focus();
