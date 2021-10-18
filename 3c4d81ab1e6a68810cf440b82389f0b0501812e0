@@ -16,6 +16,23 @@
       "message": "Thanks for the previous review! Just following up on https://gerrit.libreoffice.org/c/core/+/123032 to make the branches look more similar for ease of reading. Not sure if one style is better than the other so picked the one that read more easily to me.",
       "revId": "3c4d81ab1e6a68810cf440b82389f0b0501812e0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71843697_a8d180ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-18T07:10:40Z",
+      "side": 1,
+      "message": "yeah, makes kind of sense",
+      "revId": "3c4d81ab1e6a68810cf440b82389f0b0501812e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
