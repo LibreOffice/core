@@ -43,6 +43,9 @@ void OutputDevice::DrawWallpaper( const tools::Rectangle& rRect,
     if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
         return;
 
+    GDIMetaFile* pOldMetaFile = mpMetaFile;
+    mpMetaFile = nullptr;
+
     if ( rWallpaper.GetStyle() != WallpaperStyle::NONE )
     {
         tools::Rectangle aRect = LogicToPixel( rRect );
@@ -50,27 +53,28 @@ void OutputDevice::DrawWallpaper( const tools::Rectangle& rRect,
 
         if ( !aRect.IsEmpty() )
         {
-            DrawWallpaper( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(),
-                               rWallpaper );
+            if (rWallpaper.IsBitmap())
+            {
+                DrawBitmapWallpaper(aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(),
+                                   rWallpaper);
+            }
+            else if (rWallpaper.IsGradient())
+            {
+                DrawGradientWallpaper(aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(),
+                                   rWallpaper);
+            }
+            else
+            {
+                DrawColorWallpaper(aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(),
+                                   rWallpaper);
+            }
         }
     }
 
+    mpMetaFile = pOldMetaFile;
+
     if( mpAlphaVDev )
         mpAlphaVDev->DrawWallpaper( rRect, rWallpaper );
-}
-
-void OutputDevice::DrawWallpaper( tools::Long nX, tools::Long nY,
-                                  tools::Long nWidth, tools::Long nHeight,
-                                  const Wallpaper& rWallpaper )
-{
-    assert(!is_double_buffered_window());
-
-    if( rWallpaper.IsBitmap() )
-        DrawBitmapWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
-    else if( rWallpaper.IsGradient() )
-        DrawGradientWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
-    else
-        DrawColorWallpaper(  nX, nY, nWidth, nHeight, rWallpaper );
 }
 
 void OutputDevice::DrawColorWallpaper( tools::Long nX, tools::Long nY,
@@ -103,7 +107,7 @@ void OutputDevice::Erase()
         RasterOp eRasterOp = GetRasterOp();
         if ( eRasterOp != RasterOp::OverPaint )
             SetRasterOp( RasterOp::OverPaint );
-        DrawWallpaper( 0, 0, mnOutWidth, mnOutHeight, maBackground );
+        DrawWallpaper(tools::Rectangle(Point(0, 0), Size(mnOutWidth, mnOutHeight)), maBackground);
         if ( eRasterOp != RasterOp::OverPaint )
             SetRasterOp( eRasterOp );
     }

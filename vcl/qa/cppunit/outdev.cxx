@@ -32,7 +32,7 @@
 #include <bufferdevice.hxx>
 #include <window.h>
 
-const size_t INITIAL_SETUP_ACTION_COUNT = 5;
+const size_t INITIAL_SETUP_ACTION_COUNT = 1;
 
 class VclOutdevTest : public test::BootstrapFixture
 {
@@ -1210,22 +1210,7 @@ void VclOutdevTest::testErase()
     pVDev->Erase();
 
     MetaAction* pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a line color action (start)", MetaActionType::LINECOLOR,
-                                 pAction->GetType());
-
-    pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT + 1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action (start)", MetaActionType::FILLCOLOR,
-                                 pAction->GetType());
-
-    pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT + 2);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a rect action", MetaActionType::RECT, pAction->GetType());
-
-    pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT + 3);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a line color action (end)", MetaActionType::LINECOLOR,
-                                 pAction->GetType());
-
-    pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT + 4);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action (end)", MetaActionType::FILLCOLOR,
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a wallpaper action", MetaActionType::WALLPAPER,
                                  pAction->GetType());
 }
 
