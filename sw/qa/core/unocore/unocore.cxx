@@ -31,6 +31,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/errinf.hxx>
 
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
@@ -106,6 +107,36 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, flyAtParaAnchor)
         xMSF->createInstance("com.sun.star.text.Fieldmark"), uno::UNO_QUERY_THROW);
     // this crashed because the anchor didn't have SwIndex
     xText->insertTextContent(xAnchor, xFieldmark, false);
+}
+
+/// Fails the test if an error popup would be presented.
+static void BasicDisplayErrorHandler(const OUString& /*rErr*/, const OUString& /*rAction*/)
+{
+    CPPUNIT_ASSERT(false);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testBrokenEmbeddedObject)
+{
+    // Given a document with a broken embedded object (the XML markup is not well-formed):
+    load(DATA_DIRECTORY, "broken-embedded-object.odt");
+    uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xObjects(xSupplier->getEmbeddedObjects(),
+                                                     uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xObject(xObjects->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<lang::XServiceInfo> xEmbeddedObject;
+    // Get the property first, which initializes Draw, which would overwrite our error handler.
+    xObject->getPropertyValue("EmbeddedObject") >>= xEmbeddedObject;
+    ErrorRegistry::RegisterDisplay(&BasicDisplayErrorHandler);
+
+    // When trying to load that embedded object:
+    xObject->getPropertyValue("EmbeddedObject") >>= xEmbeddedObject;
+
+    // Then make sure we get a non-empty reference and an error popup it not shown:
+    CPPUNIT_ASSERT(xEmbeddedObject.is());
+    // Without the accompanying fix in place, we got this reference, but first an error popup was
+    // shown to the user.
+    CPPUNIT_ASSERT(
+        xEmbeddedObject->supportsService("com.sun.star.comp.embed.OCommonEmbeddedObject"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

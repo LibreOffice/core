@@ -59,11 +59,18 @@ public:
 
     static void                 RegisterDisplay(BasicDisplayErrorFunc*);
     static void                 RegisterDisplay(WindowDisplayErrorFunc*);
+
+    static void SetLock(bool bLock);
+    static bool GetLock();
+
     static void                 Reset();
 
 private:
     DisplayFnPtr                pDsp;
     bool                        bIsWindowDsp;
+
+    bool m_bLock;
+
     sal_uInt16                  nNextError;
 
     std::vector<ErrorHandler*>  errorHandlers;

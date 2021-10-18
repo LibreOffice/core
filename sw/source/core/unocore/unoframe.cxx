@@ -112,6 +112,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
+#include <vcl/errinf.hxx>
 
 #include <svx/unobrushitemhelper.hxx>
 #include <svx/xbtmpit.hxx>
@@ -1958,9 +1959,28 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
         throw uno::RuntimeException();
 }
 
+namespace
+{
+/// Redirect error popups to developer warnings for the duration of the UNO API call.
+class DisplayLockGuard
+{
+    bool m_bLock;
+
+public:
+    DisplayLockGuard()
+    {
+        m_bLock = ErrorRegistry::GetLock();
+        ErrorRegistry::SetLock(true);
+    }
+
+    ~DisplayLockGuard() { ErrorRegistry::SetLock(m_bLock); }
+};
+}
+
 uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
+    DisplayLockGuard aDisplayGuard;
     uno::Any aAny;
     SwFrameFormat* pFormat = GetFrameFormat();
     const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
