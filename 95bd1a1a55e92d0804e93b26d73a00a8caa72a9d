@@ -16,6 +16,23 @@
       "message": "\u003e build likely got stuck and was aborted due to not producing any output to the log\nCould someone rerun the Jenkins builds?",
       "revId": "95bd1a1a55e92d0804e93b26d73a00a8caa72a9d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "687c77ed_a837140f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-18T06:22:11Z",
+      "side": 1,
+      "message": "\u003e Could someone rerun the Jenkins builds?\n\nDone.",
+      "revId": "95bd1a1a55e92d0804e93b26d73a00a8caa72a9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
