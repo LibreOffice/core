@@ -1923,9 +1923,9 @@ namespace emfio
                                 {
                                     if ( nLen <= ( mnEndPos - mpInputStream->Tell() ) )
                                     {
-                                        std::unique_ptr<char[]> pBuf(new char[ nLen ]);
-                                        mpInputStream->ReadBytes(pBuf.get(), nLen);
-                                        aText = OUString(pBuf.get(), nLen, GetCharSet());
+                                        std::vector<char> pBuf( nLen );
+                                        mpInputStream->ReadBytes(pBuf.data(), nLen);
+                                        aText = OUString(pBuf.data(), nLen, GetCharSet());
                                     }
                                 }
                                 else
