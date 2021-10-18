@@ -833,6 +833,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
             BitmapExContainerHandler(pMetaAction);
         }
         break;
+
+        case MetaActionType::BORDER:
+        {
+            auto* pMetaAction = static_cast<MetaBorderAction*>(pAction);
+            BorderHandler(pMetaAction);
+        }
+        break;
     }
 }
 
@@ -1777,6 +1784,36 @@ void SvmWriter::BitmapExContainerHandler(const MetaBitmapExContainerAction* pAct
             {
                 auto* pMetaAction = static_cast<MetaRasterOpAction*>(pContainerAction);
                 RasterOpHandler(pMetaAction);
+            }
+            break;
+
+            default:
+                break;
+        }
+    }
+}
+
+void SvmWriter::BorderHandler(const MetaBorderAction* pActionConst)
+{
+    MetaBorderAction* pAction = const_cast<MetaBorderAction*>(pActionConst);
+
+    for (auto* pContainerAction : *pAction)
+    {
+        MetaActionType nType = pAction->GetType();
+
+        switch (nType)
+        {
+            case MetaActionType::RECT:
+            {
+                auto* pMetaAction = static_cast<MetaRectAction*>(pContainerAction);
+                RectHandler(pMetaAction);
+            }
+            break;
+
+            case MetaActionType::LINECOLOR:
+            {
+                auto* pMetaAction = static_cast<MetaLineColorAction*>(pContainerAction);
+                LineColorHandler(pMetaAction);
             }
             break;
 
