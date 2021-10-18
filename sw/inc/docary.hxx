@@ -260,6 +260,9 @@ public:
      @param next true: redline starts at position and ends after, false: redline starts before position and ends at or after
     */
     const SwRangeRedline* FindAtPosition( const SwPosition& startPosition, size_type& tableIndex, bool next = true ) const;
+    // is there a redline with the same text content from the same author (near the redline),
+    // but with the opposite type (Insert or Delete). It's used to recognize tracked text moving.
+    bool isMoved(size_type tableIndex) const;
 
     bool                        empty() const { return maVector.empty(); }
     size_type                   size() const { return maVector.size(); }
