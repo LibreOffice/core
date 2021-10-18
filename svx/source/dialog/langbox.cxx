@@ -356,6 +356,8 @@ weld::ComboBoxEntry SvxLanguageBox::BuildEntry(const LanguageType nLangType, sal
     else if (nRealLang == LANGUAGE_USER_SYSTEM_CONFIG)
     {
         nRealLang = MsLangId::getSystemLanguage();
+        // Whatever we obtained, ensure a known supported locale.
+        nRealLang = LanguageTag(nRealLang).makeFallback().getLanguageType();
         aStrEntry += " - " + SvtLanguageTable::GetLanguageString( nRealLang );
     }
 
