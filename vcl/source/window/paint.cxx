@@ -1642,7 +1642,7 @@ void Window::Erase(vcl::RenderContext& rRenderContext)
         RasterOp eRasterOp = GetOutDev()->GetRasterOp();
         if (eRasterOp != RasterOp::OverPaint)
             GetOutDev()->SetRasterOp(RasterOp::OverPaint);
-        rRenderContext.DrawWallpaper(0, 0, GetOutDev()->mnOutWidth, GetOutDev()->mnOutHeight, GetOutDev()->maBackground);
+        rRenderContext.DrawWallpaper(tools::Rectangle(Point(0, 0), Size(GetOutDev()->mnOutWidth, GetOutDev()->mnOutHeight)), GetOutDev()->maBackground);
         if (eRasterOp != RasterOp::OverPaint)
             rRenderContext.SetRasterOp(eRasterOp);
     }
