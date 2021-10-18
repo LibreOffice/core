@@ -42,7 +42,8 @@ struct RandomNumberGenerator
     STD_RNG_ALGO global_rng;
     RandomNumberGenerator()
     {
-        bool bRepeatable = (getenv("SAL_RAND_REPEATABLE") != nullptr);
+        // make RR easier to use, breaks easily without the RNG being repeatable
+        bool bRepeatable = (getenv("SAL_RAND_REPEATABLE") != nullptr) || (getenv("RR") != nullptr);
         // valgrind on some platforms (e.g.Ubuntu16.04) does not support the new Intel RDRAND instructions,
         // which leads to "Illegal Opcode" errors, so just turn off randomness.
 #if defined HAVE_VALGRIND_HEADERS
