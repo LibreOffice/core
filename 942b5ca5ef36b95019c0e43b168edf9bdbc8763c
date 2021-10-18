@@ -16,6 +16,23 @@
       "message": "Caolán: noticing https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d5acba60cbd97f2f181037cbd3ab049e7ebff5332\nRelated: tdf#145169 use \"sftp\" because that\u0027s a known ProtocolHEADmaster\nwhile \"ssh\" isn\u0027t by INetURLObject.If we use sftp then\nBreadcrumb::SetURL would create legal breadcrumbs links in the \"save\nremote\" dialog for new \"add SSH\" from the manage services menu\n\nthought you might be interested in this one.",
       "revId": "942b5ca5ef36b95019c0e43b168edf9bdbc8763c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ad270a0_6d43616d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-10-18T09:54:55Z",
+      "side": 1,
+      "message": "sberg probably is the best person to have a look at that, but my feeling is that our use in that remote file dialog of a ssh:// url doesn\u0027t look right and we should be using sftp:// instead, something we already have a a known protocol, like my change of https://gerrit.libreoffice.org/c/core/+/123711 assumes is the right thing to do.\n\nf.e. https://tools.ietf.org/id/draft-salowey-secsh-uri-00.html has...\n\"The SSH URI does not define a usage for a non-empty path element. If a non-empty path element is included in an SSH URI then it SHOULD be ignored.\"",
+      "revId": "942b5ca5ef36b95019c0e43b168edf9bdbc8763c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
