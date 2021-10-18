@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aea3d119_25e416d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-10-18T14:15:52Z",
+      "side": 1,
+      "message": "I see there is some sort of NSS_HASH_ALG_SUPPORT environmental variable where I guess setting to \"+SHA-1\" would allow this to work too.",
+      "revId": "2d2e7efda43b547db6b7266fd145fdcf1459ad9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
