@@ -708,9 +708,9 @@ namespace emfio
                         nOriginalTextLen = nOriginalBlockLen = nRemainingSize;
                     }
 
-                    std::unique_ptr<char[]> pChar(new char[nOriginalBlockLen]);
-                    mpInputStream->ReadBytes(pChar.get(), nOriginalBlockLen);
-                    OUString aText(pChar.get(), nOriginalTextLen, GetCharSet()); // after this conversion the text may contain
+                    std::vector<char> pChar(nOriginalBlockLen);
+                    mpInputStream->ReadBytes(pChar.data(), nOriginalBlockLen);
+                    OUString aText(pChar.data(), nOriginalTextLen, GetCharSet()); // after this conversion the text may contain
                     sal_Int32 nNewTextLen = aText.getLength();                         // less character (japanese version), so the
                                                                                        // dxAry will not fit
                     if ( nNewTextLen )
