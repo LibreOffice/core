@@ -16,6 +16,24 @@
       "message": "I love security through obscurity, but not showing the username at all doesn\u0027t seem to be valuable in this particular content of remote open/save. I assume that would be true anywhere this gio mount code would be used (and I have no idea where that might be).",
       "revId": "620ed9af9d7bc5a2d8734fb7ae970f9f36a9f8d9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a94910b_fc4ca873",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-10-18T14:04:41Z",
+      "side": 1,
+      "message": "I presume this changes from username is \"Not Applicable\" to username is \"Fixed\". I suppose, looking just at the code there, that there is now a possibility of a new \"Fixed\" username case ending up with an empty username string ? Or some previous username which is not relevant to the password request ?",
+      "parentUuid": "2535a1d3_020b856b",
+      "revId": "620ed9af9d7bc5a2d8734fb7ae970f9f36a9f8d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
