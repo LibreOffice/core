@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cad86e5_80c91f60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-18T09:42:13Z",
+      "side": 1,
+      "message": "Caolán: noticing https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d5acba60cbd97f2f181037cbd3ab049e7ebff5332\nRelated: tdf#145169 use \"sftp\" because that\u0027s a known ProtocolHEADmaster\nwhile \"ssh\" isn\u0027t by INetURLObject.If we use sftp then\nBreadcrumb::SetURL would create legal breadcrumbs links in the \"save\nremote\" dialog for new \"add SSH\" from the manage services menu\n\nthought you might be interested in this one.",
+      "revId": "942b5ca5ef36b95019c0e43b168edf9bdbc8763c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
