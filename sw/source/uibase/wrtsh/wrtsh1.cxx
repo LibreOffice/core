@@ -105,6 +105,10 @@
 #include <frmtool.hxx>
 #include <viewopt.hxx>
 
+#include <IDocumentUndoRedo.hxx>
+#include <UndoInsert.hxx>
+#include <UndoCore.hxx>
+
 using namespace sw::mark;
 using namespace com::sun::star;
 namespace {
@@ -994,15 +998,121 @@ void SwWrtShell::InsertFootnote(const OUString &rStr, bool bEndNote, bool bEdit 
     m_aNavigationMgr.addEntry(aPos);
 }
 
+// tdf#141634
+static bool lcl_FoldedOutlineNodeEndOfParaSplit(SwWrtShell *pThis)
+{
+    SwTextNode* pTextNode = pThis->GetCursor()->GetNode().GetTextNode();
+    if (pTextNode && pTextNode->IsOutline())
+    {
+        bool bVisible = true;
+        pTextNode->GetAttrOutlineContentVisible(bVisible);
+        if (!bVisible)
+        {
+            const SwNodes& rNodes = pThis->GetNodes();
+            const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
+            SwOutlineNodes::size_type nPos;
+            (void) rOutlineNodes.Seek_Entry(pTextNode, &nPos);
+
+            SwNode* pSttNd = rOutlineNodes[nPos];
+
+            // determine end node of folded outline content
+            SwNode* pEndNd = &rNodes.GetEndOfContent();
+            if (rOutlineNodes.size() > nPos + 1)
+                pEndNd = rOutlineNodes[nPos + 1];
+
+            if (pThis->GetViewOptions()->IsTreatSubOutlineLevelsAsContent())
+            {
+                // get the next outline node after the folded outline content (iPos)
+                // it is the next outline node with the same level or less
+                int nLevel = pSttNd->GetTextNode()->GetAttrOutlineLevel();
+                SwOutlineNodes::size_type iPos = nPos;
+                while (++iPos < rOutlineNodes.size() &&
+                       rOutlineNodes[iPos]->GetTextNode()->GetAttrOutlineLevel() > nLevel);
+
+                // get the correct end node
+                // the outline node may be in frames, headers, footers special section of doc model
+                SwNode* pStartOfSectionNodeSttNd = pSttNd->StartOfSectionNode();
+                while (pStartOfSectionNodeSttNd->StartOfSectionNode()
+                       != pStartOfSectionNodeSttNd->StartOfSectionNode()->StartOfSectionNode())
+                {
+                    pStartOfSectionNodeSttNd = pStartOfSectionNodeSttNd->StartOfSectionNode();
+                }
+                pEndNd = pStartOfSectionNodeSttNd->EndOfSectionNode();
+
+                if (iPos < rOutlineNodes.size())
+                {
+                    SwNode* pStartOfSectionNode = rOutlineNodes[iPos]->StartOfSectionNode();
+                    while (pStartOfSectionNode->StartOfSectionNode()
+                           != pStartOfSectionNode->StartOfSectionNode()->StartOfSectionNode())
+                    {
+                        pStartOfSectionNode = pStartOfSectionNode->StartOfSectionNode();
+                    }
+                    if (pStartOfSectionNodeSttNd == pStartOfSectionNode)
+                        pEndNd = rOutlineNodes[iPos];
+                }
+            }
+
+            // table, text box, header, footer
+            if (pSttNd->GetTableBox() || pSttNd->GetIndex() < rNodes.GetEndOfExtras().GetIndex())
+            {
+                // insert before section end node
+                if (pSttNd->EndOfSectionIndex() < pEndNd->GetIndex())
+                {
+                    SwNodeIndex aIdx(*pSttNd->EndOfSectionNode());
+                    while (aIdx.GetNode().IsEndNode())
+                        --aIdx;
+                    ++aIdx;
+                    pEndNd = &aIdx.GetNode();
+                }
+            }
+            // if pSttNd isn't in table but pEndNd is then insert after table
+            else if (pEndNd->GetTableBox())
+            {
+                pEndNd = pEndNd->FindTableNode();
+                SwNodeIndex aIdx(*pEndNd, -1);
+                // account for nested tables
+                while (aIdx.GetNode().GetTableBox())
+                {
+                    pEndNd = aIdx.GetNode().FindTableNode();
+                    aIdx.Assign(*pEndNd, -1);
+                }
+                aIdx.Assign(*pEndNd->EndOfSectionNode(), +1);
+                pEndNd = &aIdx.GetNode();
+            }
+            // end node determined
+
+            // now insert the new outline node
+            SwDoc* pDoc = pThis->GetDoc();
+
+            // insert at end of tablebox doesn't work correct without
+            MakeAllOutlineContentTemporarilyVisible a(pDoc);
+
+            SwTextNode* pNd = pDoc->GetNodes().MakeTextNode(*pEndNd, pTextNode->GetTextColl(), true);
+
+            (void) rOutlineNodes.Seek_Entry(pNd, &nPos);
+            pThis->GotoOutline(nPos);
+
+            if (pDoc->GetIDocumentUndoRedo().DoesUndo())
+            {
+                pDoc->GetIDocumentUndoRedo().ClearRedo();
+                pDoc->GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoInsert>(*pNd));
+                pDoc->GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoFormatColl>
+                                                        (*pNd, pNd->GetTextColl(), true, true));
+            }
+
+            pThis->SetModified();
+            return true;
+        }
+    }
+    return false;
+}
+
 // SplitNode; also, because
 //                  - of deleting selected content;
 //                  - of reset of the Cursorstack if necessary.
 
 void SwWrtShell::SplitNode( bool bAutoFormat )
 {
-    if (!lcl_IsAllowed(this))
-        return;
-
     ResetCursorStack();
     if( !CanInsert() )
         return;
@@ -1010,16 +1120,20 @@ void SwWrtShell::SplitNode( bool bAutoFormat )
     SwActContext aActContext(this);
 
     m_rView.GetEditWin().FlushInBuffer();
-    bool bHasSel = HasSelection();
-    if( bHasSel )
-    {
-        StartUndo( SwUndoId::INSERT );
-        DelRight();
-    }
+    StartUndo(SwUndoId::SPLITNODE);
 
-    SwFEShell::SplitNode( bAutoFormat );
-    if( bHasSel )
-        EndUndo( SwUndoId::INSERT );
+    bool bHasSel = HasSelection();
+    if (bHasSel)
+        DelRight();
+
+    bool bHandled = false;
+    if (GetViewOptions()->IsShowOutlineContentVisibilityButton() && IsEndPara())
+        bHandled = lcl_FoldedOutlineNodeEndOfParaSplit(this);
+
+    if (!bHandled)
+        SwFEShell::SplitNode( bAutoFormat );
+
+    EndUndo(SwUndoId::SPLITNODE);
 }
 
 // Turn on numbering
