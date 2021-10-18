@@ -1386,25 +1386,25 @@ void SvtFileView_Impl::ResetCursor()
 {
     if (mxView->get_visible())
     {
-        // deselect
-        mxView->unselect_all();
         std::unique_ptr<weld::TreeIter> xFirst = mxView->make_iterator();
         if (mxView->get_iter_first(*xFirst))
         {
             // set cursor to the first entry
             mxView->set_cursor(*xFirst);
         }
+        // deselect
+        mxView->unselect_all();
     }
     else
     {
-        // deselect
-        mxIconView->unselect_all();
         std::unique_ptr<weld::TreeIter> xFirst = mxIconView->make_iterator();
         if (mxIconView->get_iter_first(*xFirst))
         {
             // set cursor to the first entry
             mxIconView->set_cursor(*xFirst);
         }
+        // deselect
+        mxIconView->unselect_all();
     }
 }
 
