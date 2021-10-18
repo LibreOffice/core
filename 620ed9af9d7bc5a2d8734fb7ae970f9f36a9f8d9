@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2535a1d3_020b856b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-18T13:46:51Z",
+      "side": 1,
+      "message": "I love security through obscurity, but not showing the username at all doesn\u0027t seem to be valuable in this particular content of remote open/save. I assume that would be true anywhere this gio mount code would be used (and I have no idea where that might be).",
+      "revId": "620ed9af9d7bc5a2d8734fb7ae970f9f36a9f8d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
