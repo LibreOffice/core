@@ -167,10 +167,10 @@ void CustomAnimationPane::initialize()
     mxLBAnimation->connect_changed(LINK(this, CustomAnimationPane, AnimationSelectHdl));
     mxCustomAnimationList->setController( static_cast<ICustomAnimationListController*> ( this ) );
     mxCustomAnimationList->set_size_request(mxCustomAnimationList->get_approximate_digit_width() * 15,
-                                            mxCustomAnimationList->get_height_rows(8));
+                                            mxCustomAnimationList->get_height_rows(4));
 
     mxLBAnimation->set_size_request(mxLBAnimation->get_approximate_digit_width() * 15,
-                                    mxLBAnimation->get_height_rows(8));
+                                    mxLBAnimation->get_height_rows(4));
 
     maStrProperty = mxFTProperty->get_label();
 
