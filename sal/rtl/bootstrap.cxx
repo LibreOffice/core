@@ -919,11 +919,9 @@ OUString expandMacros(
                 }
                 else if (n == 2)
                 {
-                    buf.append(
-                        lookup(
-                            static_cast< Bootstrap_Impl * >(
-                                rtl::Bootstrap(seg[0]).getHandle()),
-                            mode, false, seg[1], requestStack));
+                    rtl::Bootstrap b(seg[0]);
+                    Bootstrap_Impl * f = static_cast< Bootstrap_Impl * >(b.getHandle());
+                    buf.append(lookup(f, mode, false, seg[1], requestStack));
                 }
                 else if (n == 3 && seg[0] == ".override")
                 {
