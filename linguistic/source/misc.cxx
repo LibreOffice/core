@@ -599,12 +599,6 @@ CapType capitalType(const OUString& aTerm, CharClass const * pCC)
         return CapType::UNKNOWN;
 }
 
-OUString ToLower( const OUString &rText, LanguageType nLanguage )
-{
-    CharClass aCC(( LanguageTag( nLanguage ) ));
-    return aCC.lowercase( rText );
-}
-
 // sorted(!) array of unicode ranges for code points that are exclusively(!) used as numbers
 // and thus may NOT not be part of names or words like the Chinese/Japanese number characters
 const sal_uInt32 the_aDigitZeroes [] =
