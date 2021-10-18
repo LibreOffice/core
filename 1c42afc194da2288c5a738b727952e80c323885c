@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ea06682_938d924f",
+        "filename": "scripting/java/com/sun/star/script/framework/provider/ScriptEditor.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-18T09:36:10Z",
+      "side": 1,
+      "message": "This change from interface to abstract class is an incompatible change that breaks 3rd-party code like ScriptProviderForooRexx.oxt (as its author communicated to me in private communication).",
+      "range": {
+        "startLine": 33,
+        "startChar": 7,
+        "endLine": 33,
+        "endChar": 21
+      },
+      "revId": "1c42afc194da2288c5a738b727952e80c323885c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
