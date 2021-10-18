@@ -16,6 +16,23 @@
       "message": "Noel: thought you might be interested in this one.",
       "revId": "9f405101612d0b42dd6e64be9eb4f876e7561ad4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "416af82b_38b91c9e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002975
+      },
+      "writtenOn": "2021-10-18T19:42:16Z",
+      "side": 1,
+      "message": "Your code seems is rather complex, involving a raw loop. And you know what Sean Parent teaches us... No raw loops (https://www.youtube.com/watch?v\u003dW2tWOdzgXHA\u0026t\u003d133s) ... with C++20, you could have simplified using views::filter; and with Boost we might have used a filtered iterator; or LO might have its own hand-rolled filtered iterator.\n\nAssuming none of the above is available, and you can\u0027t be bothered to add a filtered iterator to LO\u0027s utility classes, I\u0027d write a freestanding function template at file level:\n```\ntemplate\u003c typename InputIt, typename Pred, typename UnaryFunction\u003e\nconstexpr UnaryFunction for_each_if( InputIt first, InputIt last, Predicate p, UnaryFunction f )\n{\n    return std::for_each(first, last, [](auto\u0026\u0026 x) { \n        using x_type \u003d decltype(x);\n        if ( p(std::forward\u003cx_type\u003e(x)) ) { \n            f(std::forward\u003cx_type\u003e(x)); \n        } \n    );\n}\n```\n(The forwarding may be overkill, but I\u0027m playing it safe.)\n\nand then, instead of your suggested code, write:\n```\nauto is_safe_to_ignore \u003d [](const auto\u0026 item) { \n    return item-\u003eGetSubTreeName() \u003d\u003d \"Office.Commands/Execute\";\n}\nauto warn_about_leftover_item \u003d [](const auto\u0026 item) {\n    SAL_WARN(\"unotools.config\", \"ConfigManager contains a non-trivial leftover item: \" + item-\u003eGetSubTreeName());\n}\n\nfor_each_if(items.cbegin(), items.cend(), is_safe_to_ignore, warn_about_leftover_item);\n```\nThis is simpler to read and more self-documenting; it better communicates your intent.\n\nand then maybe later someone might hoist for_each_if for more general use.\n",
+      "revId": "9f405101612d0b42dd6e64be9eb4f876e7561ad4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
