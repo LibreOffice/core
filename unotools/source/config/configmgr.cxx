@@ -150,7 +150,14 @@ utl::ConfigManager::acquireTree(std::u16string_view rSubTreeName) {
 utl::ConfigManager::ConfigManager() {}
 
 utl::ConfigManager::~ConfigManager() {
-    SAL_WARN_IF(!items_.empty(), "unotools.config", "ConfigManager not empty");
+    if (!items_.empty())
+    {
+        for (const auto& item : items_)
+        {
+            if (OUString itemName = item->GetSubTreeName(); itemName != "Office.Commands/Execute")
+                SAL_WARN("unotools.config", "ConfigManager not empty, remaining item=" + itemName);
+        }
+    }
 }
 
 css::uno::Reference< css::container::XHierarchicalNameAccess >
