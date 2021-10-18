@@ -21,6 +21,7 @@
 #include <svx/svdpage.hxx>
 #include <sfx2/docfile.hxx>
 #include <comphelper/classids.hxx>
+#include <comphelper/lok.hxx>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
 #include <vcl/graph.hxx>
@@ -765,7 +766,15 @@ bool ScViewFunc::PasteFromSystem( SotClipboardFormatId nFormatId, bool bApi )
                                 nullptr, false, !bApi );       // allow warning dialog
 
         if ( !bRet && !bApi )
+        {
             ErrorMessage(STR_PASTE_ERROR);
+        }
+        else if (comphelper::LibreOfficeKit::isActive())
+        {
+            SfxViewShell* pViewShell = rViewData.GetViewShell();
+            ScTabViewShell::notifyAllViewsSheetGeomInvalidation(pViewShell, true /* bColumns */, true /* bRows */,
+                true /* bSizes */, false /* bHidden */, false /* bFiltered */, false /* bGroups */, rViewData.GetTabNo());
+        }
     }
     return bRet;
 }
