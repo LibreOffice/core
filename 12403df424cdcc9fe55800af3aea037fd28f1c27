@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a07d75f6_f1042a44",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-18T06:28:23Z",
+      "side": 1,
+      "message": "Ah, great trick, I didn\u0027t figure out in the past how to accept the test root cert on Windows previously.",
+      "revId": "12403df424cdcc9fe55800af3aea037fd28f1c27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
