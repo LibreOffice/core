@@ -33,6 +33,12 @@ void OutputDevice::DrawBorder(tools::Rectangle aBorderRect)
 {
     sal_uInt16 nPixel = static_cast<sal_uInt16>(PixelToLogic(Size(1, 1)).Width());
 
+    if (mpMetaFile)
+        mpMetaFile->AddAction(new MetaBorderAction(aBorderRect, nPixel, false));
+
+    GDIMetaFile* pOldMetaFile = mpMetaFile;
+    mpMetaFile = nullptr;
+
     aBorderRect.AdjustLeft(nPixel);
     aBorderRect.AdjustTop(nPixel);
 
@@ -46,6 +52,8 @@ void OutputDevice::DrawBorder(tools::Rectangle aBorderRect)
     SetLineColor(COL_GRAY);
 
     DrawRect(aBorderRect);
+
+    mpMetaFile = pOldMetaFile;
 }
 
 void OutputDevice::DrawRect( const tools::Rectangle& rRect )

@@ -90,6 +90,7 @@ public:
     void testDrawChord();
     void testDrawCheckered();
     void testDrawBorder();
+    void testDrawBorder_printable();
     void testDrawWaveLine();
     void testDrawPolyLine();
     void testDrawPolygon();
@@ -154,6 +155,7 @@ public:
     CPPUNIT_TEST(testDrawChord);
     CPPUNIT_TEST(testDrawCheckered);
     CPPUNIT_TEST(testDrawBorder);
+    CPPUNIT_TEST(testDrawBorder_printable);
     CPPUNIT_TEST(testDrawWaveLine);
     CPPUNIT_TEST(testDrawPolyLine);
     CPPUNIT_TEST(testDrawPolygon);
@@ -1892,32 +1894,64 @@ void VclOutdevTest::testDrawBorder()
     aMtf.Record(pVDev.get());
 
     pVDev->SetOutputSizePixel(Size(100, 100));
+
     pVDev->DrawBorder(tools::Rectangle(Point(0, 0), Size(50, 60)));
 
     MetaAction* pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a border action", MetaActionType::BORDER, pAction->GetType());
+    MetaBorderAction* pBorderAction = dynamic_cast<MetaBorderAction*>(pAction);
+
+    pAction = pBorderAction->GetAction(0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a line color action (light gray)", MetaActionType::LINECOLOR,
                                  pAction->GetType());
     MetaLineColorAction* pLineColorAction = dynamic_cast<MetaLineColorAction*>(pAction);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not light gray", COL_LIGHTGRAY, pLineColorAction->GetColor());
 
-    pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT + 1);
+    pAction = pBorderAction->GetAction(1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a rect action (light gray border)", MetaActionType::RECT,
                                  pAction->GetType());
     MetaRectAction* pRectAction = dynamic_cast<MetaRectAction*>(pAction);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Rectangle wrong", tools::Rectangle(Point(1, 1), Size(49, 59)),
                                  pRectAction->GetRect());
 
-    pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT + 2);
+    pAction = pBorderAction->GetAction(2);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a line color action (gray)", MetaActionType::LINECOLOR,
                                  pAction->GetType());
     pLineColorAction = dynamic_cast<MetaLineColorAction*>(pAction);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not gray", COL_GRAY, pLineColorAction->GetColor());
 
-    pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT + 3);
+    pAction = pBorderAction->GetAction(3);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a rect action (gray border)", MetaActionType::RECT,
                                  pAction->GetType());
     pRectAction = dynamic_cast<MetaRectAction*>(pAction);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Rectangle wrong", tools::Rectangle(Point(0, 0), Size(49, 59)),
+                                 pRectAction->GetRect());
+}
+
+void VclOutdevTest::testDrawBorder_printable()
+{
+    ScopedVclPtrInstance<Printer> pPrinter;
+    GDIMetaFile aMtf;
+    aMtf.Record(pPrinter.get());
+
+    pPrinter->DrawBorder(tools::Rectangle(Point(0, 0), Size(50, 60)));
+
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a border container action", MetaActionType::BORDER,
+                                 pAction->GetType());
+    MetaBorderAction* pBorderAction = dynamic_cast<MetaBorderAction*>(pAction);
+
+    pAction = pBorderAction->GetAction(0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a line color action (black)", MetaActionType::LINECOLOR,
+                                 pAction->GetType());
+    MetaLineColorAction* pLineColorAction = dynamic_cast<MetaLineColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not black", COL_BLACK, pLineColorAction->GetColor());
+
+    pAction = pBorderAction->GetAction(1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a rect action (black border)", MetaActionType::RECT,
+                                 pAction->GetType());
+    MetaRectAction* pRectAction = dynamic_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rectangle wrong", tools::Rectangle(Point(0, 0), Size(50, 60)),
                                  pRectAction->GetRect());
 }
 
