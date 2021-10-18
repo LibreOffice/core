@@ -767,6 +767,48 @@ const SwRangeRedline* SwRedlineTable::FindAtPosition( const SwPosition& rSttPos,
     return pFnd;
 }
 
+bool SwRedlineTable::isMoved( size_type rPos ) const
+{
+    auto constexpr nLookahead = 50;
+    const SwRangeRedline* pRedline = (*this)[ rPos ];
+    size_type nEnd = rPos + nLookahead < size()
+        ? rPos + nLookahead
+        : size();
+    rPos = rPos > nLookahead ? rPos - nLookahead : 0;
+    // Skip terminating white spaces of the redline, a workaround
+    // for a typical difference resulted by e.g. Writer UX:
+    // selecting a sentence or a word, and moving it with
+    // the mouse, Writer removes a space at the deletion
+    // to avoid double spaces, also inserts a space at
+    // the insertion point automatically. Because the result
+    // can be different (space before and space after the
+    // moved text), compare the redlines without terminating spaces.
+    const OUString sTrimmed = pRedline->GetText().trim();
+    if ( sTrimmed.isEmpty() )
+        return false;
+
+    for( ; rPos < nEnd ; ++rPos )
+    {
+        const SwRangeRedline* pTmp = (*this)[ rPos ];
+        if( pTmp->HasMark() && pTmp->IsVisible() )
+        {
+            RedlineType nType = pRedline->GetType();
+            RedlineType nType2 = pTmp->GetType();
+            // pair at tracked moving: same text from the same author, but with opposite type
+            if ( nType != nType2 &&
+                ( RedlineType::Delete == nType || RedlineType::Insert == nType ) &&
+                ( RedlineType::Delete == nType2 || RedlineType::Insert == nType2 ) &&
+                pRedline->GetAuthor() == pTmp->GetAuthor() &&
+                (abs(pRedline->GetText().getLength() - pTmp->GetText().getLength()) <= 2) &&
+                 sTrimmed == pTmp->GetText().trim() )
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 void SwRedlineTable::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwRedlineTable"));

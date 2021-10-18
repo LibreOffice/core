@@ -535,7 +535,8 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
         pNumFnt->SetHighlightColor(aHighlight);
 }
 
-static const SwRangeRedline* lcl_GetRedlineAtNodeInsertionOrDeletion( const SwTextNode& rTextNode )
+static const SwRangeRedline* lcl_GetRedlineAtNodeInsertionOrDeletion( const SwTextNode& rTextNode,
+        bool& bIsMoved )
 {
     const SwDoc& rDoc = rTextNode.GetDoc();
     SwRedlineTable::size_type nRedlPos = rDoc.getIDocumentRedlineAccess().GetRedlinePos( rTextNode, RedlineType::Any );
@@ -543,15 +544,19 @@ static const SwRangeRedline* lcl_GetRedlineAtNodeInsertionOrDeletion( const SwTe
     if( SwRedlineTable::npos != nRedlPos )
     {
         const sal_uLong nNdIdx = rTextNode.GetIndex();
-        for( ; nRedlPos < rDoc.getIDocumentRedlineAccess().GetRedlineTable().size() ; ++nRedlPos )
+        const SwRedlineTable& rTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
+        for( ; nRedlPos < rTable.size() ; ++nRedlPos )
         {
-            const SwRangeRedline* pTmp = rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nRedlPos ];
+            const SwRangeRedline* pTmp = rTable[ nRedlPos ];
             if( RedlineType::Delete == pTmp->GetType() ||
                 RedlineType::Insert == pTmp->GetType() )
             {
                 const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();
                 if( pRStt->nNode <= nNdIdx && pREnd->nNode > nNdIdx )
+                {
+                    bIsMoved = rTable.isMoved(nRedlPos);
                     return pTmp;
+                }
             }
         }
     }
@@ -563,9 +568,21 @@ static void lcl_setRedlineAttr( SwTextFormatInfo &rInf, const SwTextNode& rTextN
     if ( rInf.GetVsh()->GetLayout()->IsHideRedlines() )
         return;
 
-    const SwRangeRedline* pRedlineNum = lcl_GetRedlineAtNodeInsertionOrDeletion( rTextNode );
+    bool bIsMoved;
+    const SwRangeRedline* pRedlineNum = lcl_GetRedlineAtNodeInsertionOrDeletion( rTextNode, bIsMoved );
     if (!pRedlineNum)
         return;
+
+    // moved text: dark green with double underline or strikethrough
+    if ( bIsMoved )
+    {
+        pNumFnt->SetColor(COL_GREEN);
+        if ( RedlineType::Delete == pRedlineNum->GetType() )
+            pNumFnt->SetStrikeout(STRIKEOUT_DOUBLE);
+        else
+            pNumFnt->SetUnderline(LINESTYLE_DOUBLE);
+        return;
+    }
 
     SwAttrPool& rPool = rInf.GetVsh()->GetDoc()->GetAttrPool();
     SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END-1> aSet(rPool);
