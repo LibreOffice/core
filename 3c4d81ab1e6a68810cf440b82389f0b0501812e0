@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f5fe785_bd3eb3eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003379
+      },
+      "writtenOn": "2021-10-18T01:35:05Z",
+      "side": 1,
+      "message": "Thanks for the previous review! Just following up on https://gerrit.libreoffice.org/c/core/+/123032 to make the branches look more similar for ease of reading. Not sure if one style is better than the other so picked the one that read more easily to me.",
+      "revId": "3c4d81ab1e6a68810cf440b82389f0b0501812e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
