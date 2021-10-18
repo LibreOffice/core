@@ -32,6 +32,7 @@ RemoteFilesDialog::RemoteFilesDialog( weld::Window* pParent, PickerFlags nBits )
     , m_xContext( comphelper::getProcessComponentContext() )
     , m_xMasterPasswd( PasswordContainer::create( m_xContext ) )
     , m_bIsInExecute( false )
+    , m_xOk_btn(m_xBuilder->weld_button("ok"))
     , m_xCancel_btn(m_xBuilder->weld_button("cancel"))
     , m_xManageServices(m_xBuilder->weld_menu_button("add_service_btn"))
     , m_xServices_lb(m_xBuilder->weld_combo_box("services_lb"))
@@ -61,13 +62,11 @@ RemoteFilesDialog::RemoteFilesDialog( weld::Window* pParent, PickerFlags nBits )
 
     if( m_eMode == REMOTEDLG_MODE_OPEN )
     {
-        m_xOk_btn = m_xBuilder->weld_button("open");
-
         m_xNewFolder->hide();
     }
     else
     {
-        m_xOk_btn = m_xBuilder->weld_button("save");
+        m_xOk_btn->set_label(FpsResId(STR_EXPLORERFILE_BUTTONSAVE));
         m_xNewFolder->connect_clicked( LINK( this, RemoteFilesDialog, NewFolderHdl ) );
     }
 
@@ -75,7 +74,6 @@ RemoteFilesDialog::RemoteFilesDialog( weld::Window* pParent, PickerFlags nBits )
     m_xIconView_btn->connect_clicked( LINK( this, RemoteFilesDialog, IconViewHdl ) );
     m_xListView_btn->connect_clicked( LINK( this, RemoteFilesDialog, ListViewHdl ) );
 
-    m_xOk_btn->show();
     m_xOk_btn->set_sensitive(false);
 
     m_xOk_btn->connect_clicked( LINK( this, RemoteFilesDialog, OkHdl ) );
