@@ -837,6 +837,62 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
                 mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
             }
         }
+
+        OUString sBookmark;
+        if (GETA(Bookmark))
+            mAny >>= sBookmark;
+
+        if (GETA(OnClick))
+        {
+            OUString sPPAction;
+            presentation::ClickAction eClickAction = presentation::ClickAction_NONE;
+            mAny >>= eClickAction;
+            if (eClickAction != presentation::ClickAction_NONE)
+            {
+                switch (eClickAction)
+                {
+                    case presentation::ClickAction_STOPPRESENTATION:
+                        sPPAction = "ppaction://hlinkshowjump?jump=endshow";
+                        break;
+                    case presentation::ClickAction_NEXTPAGE:
+                        sPPAction = "ppaction://hlinkshowjump?jump=nextslide";
+                        break;
+                    case presentation::ClickAction_LASTPAGE:
+                        sPPAction = "ppaction://hlinkshowjump?jump=lastslide";
+                        break;
+                    case presentation::ClickAction_PREVPAGE:
+                        sPPAction = "ppaction://hlinkshowjump?jump=previousslide";
+                        break;
+                    case presentation::ClickAction_FIRSTPAGE:
+                        sPPAction = "ppaction://hlinkshowjump?jump=firstslide";
+                        break;
+                    case presentation::ClickAction_BOOKMARK:
+                        sBookmark = "#" + sBookmark;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            if (!sPPAction.isEmpty())
+                pFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), "", XML_action,
+                                     sPPAction);
+        }
+        if (!sBookmark.isEmpty())
+        {
+            bool bExtURL = URLTransformer().isExternalURL(sBookmark);
+            sBookmark = bExtURL ? sBookmark : lcl_GetTarget(GetFB()->getModel(), sBookmark);
+
+            OUString sRelId
+                = mpFB->addRelation(mpFS->getOutputStream(),
+                                    bExtURL ? oox::getRelationship(Relationship::HYPERLINK)
+                                            : oox::getRelationship(Relationship::SLIDE),
+                                    sBookmark, bExtURL);
+            if (bExtURL)
+                mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
+            else
+                mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId,
+                                      XML_action, "ppaction://hlinksldjump");
+        }
         pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
         pFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr);
         WriteNonVisualProperties( xShape );
