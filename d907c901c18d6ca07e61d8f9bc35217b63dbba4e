@@ -16,6 +16,23 @@
       "message": "The next change in the chain succeeded, though.",
       "revId": "d907c901c18d6ca07e61d8f9bc35217b63dbba4e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8596e95_72ca06d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-10-18T12:59:40Z",
+      "side": 1,
+      "message": "But yeah, running make check locally for just this change, too.",
+      "revId": "d907c901c18d6ca07e61d8f9bc35217b63dbba4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
