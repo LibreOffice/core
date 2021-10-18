@@ -772,7 +772,7 @@ FontSizeNames::FontSizeNames( LanguageType eLanguage )
     if ( eLanguage == LANGUAGE_DONTKNOW )
         eLanguage = Application::GetSettings().GetUILanguageTag().getLanguageType();
     if ( eLanguage == LANGUAGE_SYSTEM )
-        eLanguage = MsLangId::getSystemUILanguage();
+        eLanguage = MsLangId::getConfiguredSystemUILanguage();
 
     if (MsLangId::isSimplifiedChinese(eLanguage))
     {
