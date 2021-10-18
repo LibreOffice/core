@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "931a539f_b0318748",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-18T07:12:59Z",
+      "side": 1,
+      "message": "(btw., you could unify your style of \"no functional change\" commit message markers, \"NoOp\" vs. \"Noop\"  :)  even better probably is a trailing \"(NFC)\" as already used by some other projects like LLVM)",
+      "revId": "191e5fc227e40d18a1fe4563ed145517117596ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
