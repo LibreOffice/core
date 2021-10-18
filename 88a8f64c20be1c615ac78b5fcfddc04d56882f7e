@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91544efd_337cb956",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002855
+      },
+      "writtenOn": "2021-10-18T07:52:43Z",
+      "side": 1,
+      "message": "Hello László! \n\nI did this fix and a test for it, which caused some annoyance when undoing the deletion of a row. Could you please test the patch? Thanks!",
+      "revId": "88a8f64c20be1c615ac78b5fcfddc04d56882f7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
