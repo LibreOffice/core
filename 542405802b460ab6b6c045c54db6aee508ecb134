@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b108c3b5_4d2b0f27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-10-18T11:12:34Z",
+      "side": 1,
+      "message": "FWIW, I cherry-picked the three changes in this chain and did \"make check\" and it succeeded.",
+      "revId": "542405802b460ab6b6c045c54db6aee508ecb134",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
