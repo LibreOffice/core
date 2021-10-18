@@ -109,13 +109,14 @@ static void ooo_mount_operation_ask_password (GMountOperation *op,
 
     OUString aDomain, aUserName, aPassword;
 
+    if (default_user)
+        aUserName = OUString(default_user, strlen(default_user), RTL_TEXTENCODING_UTF8);
+
     ucbhelper::SimpleAuthenticationRequest::EntityType eUserName =
         (flags & G_ASK_PASSWORD_NEED_USERNAME)
           ? ucbhelper::SimpleAuthenticationRequest::ENTITY_MODIFY
-          : ucbhelper::SimpleAuthenticationRequest::ENTITY_NA;
-
-    if (default_user)
-        aUserName = OUString(default_user, strlen(default_user), RTL_TEXTENCODING_UTF8);
+          : aUserName.isEmpty() ? ucbhelper::SimpleAuthenticationRequest::ENTITY_NA
+                                : ucbhelper::SimpleAuthenticationRequest::ENTITY_FIXED;
 
     ucbhelper::SimpleAuthenticationRequest::EntityType ePassword =
         (flags & G_ASK_PASSWORD_NEED_PASSWORD)
