@@ -162,7 +162,7 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     Color aOldColor = pDev->GetLineColor();
     pDev->SetLineColor(aTextColor);
     vcl::Font aFont(OutputDevice::GetDefaultFont(
-                DefaultFontType::UI_SANS, MsLangId::getSystemLanguage(), GetDefaultFontFlags::OnlyOne));
+                DefaultFontType::UI_SANS, MsLangId::getConfiguredSystemLanguage(), GetDefaultFontFlags::OnlyOne));
 
     Size aSize = aFont.GetFontSize();
 

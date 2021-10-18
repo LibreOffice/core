@@ -155,7 +155,7 @@ namespace dbtools
                 if ( !bHaveFieldFormat )
                 {
                     // fall back to a format key as indicated by the field type
-                    Locale aSystemLocale( LanguageTag( MsLangId::getSystemLanguage() ).getLocale() );
+                    Locale aSystemLocale( LanguageTag( MsLangId::getConfiguredSystemLanguage() ).getLocale() );
                     Reference< XNumberFormatTypes > xNumTypes( xNumberFormatsSupp->getNumberFormats(), UNO_QUERY_THROW );
                     _rData.m_nFormatKey = getDefaultNumberFormat( _rxColumn, xNumTypes, aSystemLocale );
                 }

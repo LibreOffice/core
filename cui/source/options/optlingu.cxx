@@ -1586,7 +1586,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(weld::Window* pParent, SvxLinguData_Impl& r
         LanguageType nLang = LanguageTag::convertToLanguageType( locale );
         m_xLanguageLB->InsertLanguage(nLang);
     }
-    LanguageType eSysLang = MsLangId::getSystemLanguage();
+    LanguageType eSysLang = MsLangId::getConfiguredSystemLanguage();
     m_xLanguageLB->set_active_id( eSysLang );
     if (m_xLanguageLB->get_active_id() != eSysLang)
         m_xLanguageLB->set_active(0);

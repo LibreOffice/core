@@ -9017,7 +9017,7 @@ static bool IsDBCS(sal_Unicode currentChar)
 {
     // for the locale of ja-JP, character U+0x005c and U+0x20ac should be ScriptType::Asian
     if( (currentChar == 0x005c || currentChar == 0x20ac) &&
-          (MsLangId::getSystemLanguage() == LANGUAGE_JAPANESE) )
+          (MsLangId::getConfiguredSystemLanguage() == LANGUAGE_JAPANESE) )
         return true;
     sal_uInt16 i;
     bool bRet = false;
