@@ -81,19 +81,9 @@ LanguageType MsLangId::getRealLanguage( LanguageType nLang )
 {
     LanguageType simplifyLang = simplifySystemLanguages( nLang);
     if (simplifyLang == LANGUAGE_SYSTEM )
-    {
-        if (nConfiguredSystemLanguage == LANGUAGE_SYSTEM)
-            nLang = getSystemLanguage();
-        else
-            nLang = nConfiguredSystemLanguage;
-    }
+        nLang = getConfiguredSystemLanguage();
     else if (simplifyLang == LANGUAGE_HID_HUMAN_INTERFACE_DEVICE)
-    {
-        if (nConfiguredSystemUILanguage == LANGUAGE_SYSTEM)
-            nLang = getSystemUILanguage();
-        else
-            nLang = nConfiguredSystemUILanguage;
-    }
+        nLang = getConfiguredSystemUILanguage();
     else
     {
         /* TODO: would this be useful here? */
@@ -103,6 +93,38 @@ LanguageType MsLangId::getRealLanguage( LanguageType nLang )
     if (nLang == LANGUAGE_DONTKNOW)
         nLang = LANGUAGE_ENGLISH_US;
     return nLang;
+}
+
+
+// static
+LanguageType MsLangId::getConfiguredSystemLanguage()
+{
+    if (nConfiguredSystemLanguage != LANGUAGE_SYSTEM)
+        return nConfiguredSystemLanguage;
+    return getSystemLanguage();
+}
+
+
+// static
+LanguageType MsLangId::getConfiguredSystemUILanguage()
+{
+    if (nConfiguredSystemUILanguage != LANGUAGE_SYSTEM)
+        return nConfiguredSystemUILanguage;
+    return getSystemUILanguage();
+}
+
+
+// static
+LanguageType MsLangId::getSystemLanguage()
+{
+    return getPlatformSystemLanguage();
+}
+
+
+// static
+LanguageType MsLangId::getSystemUILanguage()
+{
+    return getPlatformSystemUILanguage();
 }
 
 

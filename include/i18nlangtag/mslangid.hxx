@@ -57,14 +57,31 @@ public:
         return LanguageType((sal_uInt16(nLangID) & ~LANGUAGE_MASK_PRIMARY) >> 10);
     }
 
+    /** Get the configured system language/locale.
+        If not set yet then getSystemLanguage().
+
+        Prefer this over getSystemLanguage() unless you exactly know why you
+        would not. */
+    static LanguageType getConfiguredSystemLanguage();
+
+    /** Get the configured system UI language/locale.
+        If not set yet then getSystemUILanguage().
+
+        Prefer this over getSystemUILanguage() unless you exactly know why you
+        would not. */
+    static LanguageType getConfiguredSystemUILanguage();
+
+
     /** Language/locale of category LC_CTYPE (on Unix, else the system
         language).
-        Evaluation order: LC_ALL, LC_CTYPE, LANG */
+        Evaluation order: LC_ALL, LC_CTYPE, LANG
+        Note this may return an unknown unsupported locale. */
     static LanguageType getSystemLanguage();
 
     /** Language/locale of category LC_MESSAGES (on Unix, else same as
-        GetSystemLanguage()).
-        Evaluation order: LANGUAGE, LC_ALL, LC_MESSAGES, LANG */
+        getSystemLanguage()).
+        Evaluation order: LANGUAGE, LC_ALL, LC_MESSAGES, LANG
+        Note this may return an unknown unsupported locale. */
     static LanguageType getSystemUILanguage();
 
 
@@ -311,20 +328,6 @@ private:
     // LANGUAGE_PROCESS_OR_USER_DEFAULT, other values aren't touched.
     I18NLANGTAG_DLLPRIVATE static inline LanguageType simplifySystemLanguages( LanguageType nLang );
 };
-
-
-// static
-inline LanguageType MsLangId::getSystemLanguage()
-{
-    return getPlatformSystemLanguage();
-}
-
-
-// static
-inline LanguageType MsLangId::getSystemUILanguage()
-{
-    return getPlatformSystemUILanguage();
-}
 
 #endif // INCLUDED_I18NLANGTAG_MSLANGID_HXX
 
