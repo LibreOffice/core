@@ -34,6 +34,24 @@
       "parentUuid": "2535a1d3_020b856b",
       "revId": "620ed9af9d7bc5a2d8734fb7ae970f9f36a9f8d9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc60eabb_6c256922",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-18T14:31:10Z",
+      "side": 1,
+      "message": "The username string was always ending up as an empty string previously (as soon as it initialized SimpleAuthenticationRequest).\n\nSince the username is \"fixed\", nothing should change whatever is provided to it - so I don\u0027t expect any username-manipulation problems.\n\nI suppose we could check if the provided username is empty, and in that case set _NA (in case somehow a blank username is attempted to be used and that causes a failure).\n\nI don\u0027t expect to see a case where a username is supplied, but isn\u0027t relevant. That suggests an error earlier on.",
+      "parentUuid": "9a94910b_fc4ca873",
+      "revId": "620ed9af9d7bc5a2d8734fb7ae970f9f36a9f8d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
