@@ -1010,29 +1010,28 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( bool bPreferred, const css:
             OUString sKeyCommand = sKey.getToken(0, '_', nIndex);
             aKeyEvent.KeyCode = KeyMapping::get().mapIdentifierToCode("KEY_" + sKeyCommand);
 
-            css::uno::Sequence< OUString > sToken(4);
             const sal_Int32 nToken = 4;
             bool bValid = true;
-            sal_Int32 k;
-            for (k=0; k<nToken; ++k)
+            sal_Int32 k=0;
+            for (OUString sToken; k<nToken; ++k)
             {
                 if (nIndex < 0)
                     break;
 
-                sToken[k] = sKey.getToken(0, '_', nIndex);
-                if (sToken[k].isEmpty())
+                sToken = sKey.getToken(0, '_', nIndex);
+                if (sToken.isEmpty())
                 {
                     bValid = false;
                     break;
                 }
 
-                if ( sToken[k] == "SHIFT" )
+                if ( sToken == "SHIFT" )
                     aKeyEvent.Modifiers |= css::awt::KeyModifier::SHIFT;
-                else if ( sToken[k] == "MOD1" )
+                else if ( sToken == "MOD1" )
                     aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD1;
-                else if ( sToken[k] == "MOD2" )
+                else if ( sToken == "MOD2" )
                     aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD2;
-                else if ( sToken[k] == "MOD3" )
+                else if ( sToken == "MOD3" )
                     aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD3;
                 else
                 {
@@ -1224,21 +1223,21 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const OUString& sPrimarySe
     sKeyIdentifier = sKey.getToken(0, '_', nIndex);
     aKeyEvent.KeyCode = KeyMapping::get().mapIdentifierToCode("KEY_"+sKeyIdentifier);
 
-    css::uno::Sequence< OUString > sToken(4);
-    const sal_Int32 nToken = 4;
-    for (sal_Int32 i=0; i<nToken; ++i)
+    const int nToken = 4;
+    sal_Int32 i = 0;
+    for (OUString sToken; i<nToken; ++i)
     {
         if ( nIndex < 0 )
             break;
 
-        sToken[i] = sKey.getToken(0, '_', nIndex);
-        if ( sToken[i] == "SHIFT" )
+        sToken = sKey.getToken(0, '_', nIndex);
+        if ( sToken == "SHIFT" )
             aKeyEvent.Modifiers |= css::awt::KeyModifier::SHIFT;
-        else if ( sToken[i] == "MOD1" )
+        else if ( sToken == "MOD1" )
             aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD1;
-        else if ( sToken[i] == "MOD2" )
+        else if ( sToken == "MOD2" )
             aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD2;
-        else if ( sToken[i] == "MOD3" )
+        else if ( sToken == "MOD3" )
              aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD3;
     }
 
