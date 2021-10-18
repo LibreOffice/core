@@ -51,6 +51,7 @@ bool ErrorStringFactory::CreateString(const ErrorInfo* pInfo, OUString& rStr)
 ErrorRegistry::ErrorRegistry()
     : pDsp(nullptr)
     , bIsWindowDsp(false)
+    , m_bLock(false)
     , nNextError(0)
 {
     for(DynamicErrorInfo*& rp : ppDynErrInfo)
@@ -69,6 +70,18 @@ void ErrorRegistry::RegisterDisplay(WindowDisplayErrorFunc *aDsp)
     ErrorRegistry &rData = GetErrorRegistry();
     rData.bIsWindowDsp = true;
     rData.pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
+}
+
+void ErrorRegistry::SetLock(bool bLock)
+{
+    ErrorRegistry& rData = GetErrorRegistry();
+    rData.m_bLock = bLock;
+}
+
+bool ErrorRegistry::GetLock()
+{
+    ErrorRegistry& rData = GetErrorRegistry();
+    return rData.m_bLock;
 }
 
 void ErrorRegistry::Reset()
@@ -157,7 +170,7 @@ DialogMask ErrorHandler::HandleError(ErrCode nErrCodeId, weld::Window *pParent, 
     OUString aErr;
     if (ErrorStringFactory::CreateString(pInfo.get(), aErr))
     {
-        if(!rData.pDsp)
+        if (!rData.pDsp || rData.m_bLock)
         {
             SAL_WARN( "vcl", "Action: " << aAction <<  "Error: " << aErr);
         }
