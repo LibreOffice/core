@@ -52,6 +52,24 @@
       "parentUuid": "9a94910b_fc4ca873",
       "revId": "620ed9af9d7bc5a2d8734fb7ae970f9f36a9f8d9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b7d13e1_7067971e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-10-18T15:46:51Z",
+      "side": 1,
+      "message": "\"I suppose we could check if the provided username is empty, and in that case set _NA (in case somehow a blank username is attempted to be used and that causes a failure).\" is a case I was wondering about, but I\u0027ve no concrete knowledge that that\u0027s even a possibility, just wanted to note it. I\u0027m not pushing back on this change if you think it helps",
+      "parentUuid": "cc60eabb_6c256922",
+      "revId": "620ed9af9d7bc5a2d8734fb7ae970f9f36a9f8d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
