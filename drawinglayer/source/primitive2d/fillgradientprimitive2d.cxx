@@ -159,18 +159,18 @@ namespace drawinglayer::primitive2d
                     rOuterColor));
 
             // create solid fill steps
-            for(size_t a(0); a < rEntries.size(); a++)
+            for(const auto &a : rEntries)
             {
                 // create part polygon
                 basegfx::B2DPolygon aNewPoly(rUnitPolygon);
 
-                aNewPoly.transform(rEntries[a].maB2DHomMatrix);
+                aNewPoly.transform(a.maB2DHomMatrix);
 
                 // create solid fill
                 rContainer.push_back(
                     new PolyPolygonColorPrimitive2D(
                         basegfx::B2DPolyPolygon(aNewPoly),
-                        rEntries[a].maBColor));
+                        a.maBColor));
             }
         }
 
