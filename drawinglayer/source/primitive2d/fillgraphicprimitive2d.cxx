@@ -69,10 +69,10 @@ namespace drawinglayer::primitive2d
                     rGraphic,
                     basegfx::B2DHomMatrix());
 
-                for(size_t a(0); a < aMatrices.size(); a++)
+                for(const auto &a : aMatrices)
                 {
                     rContainer.push_back(new TransformPrimitive2D(
-                        getTransformation() * aMatrices[a],
+                        getTransformation() * a,
                         Primitive2DContainer(xSeq)));
                 }
             }
