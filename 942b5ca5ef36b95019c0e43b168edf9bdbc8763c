@@ -33,6 +33,23 @@
       "message": "sberg probably is the best person to have a look at that, but my feeling is that our use in that remote file dialog of a ssh:// url doesn\u0027t look right and we should be using sftp:// instead, something we already have a a known protocol, like my change of https://gerrit.libreoffice.org/c/core/+/123711 assumes is the right thing to do.\n\nf.e. https://tools.ietf.org/id/draft-salowey-secsh-uri-00.html has...\n\"The SSH URI does not define a usage for a non-empty path element. If a non-empty path element is included in an SSH URI then it SHOULD be ignored.\"",
       "revId": "942b5ca5ef36b95019c0e43b168edf9bdbc8763c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17902574_4145ab5c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-18T11:00:34Z",
+      "side": 1,
+      "message": "Caolán has fixed the bug by changing \"ssh://\" to \"sftp://\". So this patch is no longer relevant (unless Caolán\u0027s solution was not appropriate).",
+      "revId": "942b5ca5ef36b95019c0e43b168edf9bdbc8763c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
