@@ -38,6 +38,7 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <svtools/strings.hrc>
 #include <unotools/resmgr.hxx>
+#include <unotools/charclass.hxx>
 #include <sal/log.hxx>
 
 #include "dlistimp.hxx"
@@ -296,8 +297,8 @@ void DicList::SearchForDictionaries(
 
         // Record in the list of Dictionaries
         // When it already exists don't record
-        LanguageType nSystemLanguage = MsLangId::getSystemLanguage();
-        OUString aTmp1 = ToLower( aURL, nSystemLanguage );
+        SvtSysLocale aSysLocale;
+        OUString aTmp1 = aSysLocale.GetCharClass().lowercase( aURL);
         sal_Int32 nPos = aTmp1.lastIndexOf( '/' );
         if (-1 != nPos)
             aTmp1 = aTmp1.copy( nPos + 1 );
@@ -307,7 +308,7 @@ void DicList::SearchForDictionaries(
         for(j = 0;  j < nCount;  j++)
         {
             aTmp2 = rDicList[j]->getName();
-            aTmp2 = ToLower( aTmp2, nSystemLanguage );
+            aTmp2 = aSysLocale.GetCharClass().lowercase( aTmp2);
             if(aTmp1 == aTmp2)
                 break;
         }
