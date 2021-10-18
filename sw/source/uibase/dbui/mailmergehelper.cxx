@@ -277,7 +277,7 @@ OUString SwAddressPreview::FillData(
 }
 
 SwAddressPreview::SwAddressPreview(std::unique_ptr<weld::ScrolledWindow> xWindow)
-    : pImpl(new SwAddressPreview_Impl())
+    : m_pImpl(new SwAddressPreview_Impl())
     , m_xVScrollBar(std::move(xWindow))
 {
     m_xVScrollBar->connect_vadjustment_changed(LINK(this, SwAddressPreview, ScrollHdl));
@@ -294,80 +294,80 @@ IMPL_LINK_NOARG(SwAddressPreview, ScrollHdl, weld::ScrolledWindow&, void)
 
 void SwAddressPreview::AddAddress(const OUString& rAddress)
 {
-    pImpl->aAddresses.push_back(rAddress);
+    m_pImpl->aAddresses.push_back(rAddress);
     UpdateScrollBar();
 }
 
 void SwAddressPreview::SetAddress(const OUString& rAddress)
 {
-    pImpl->aAddresses.clear();
-    pImpl->aAddresses.push_back(rAddress);
+    m_pImpl->aAddresses.clear();
+    m_pImpl->aAddresses.push_back(rAddress);
     m_xVScrollBar->set_vpolicy(VclPolicyType::NEVER);
     Invalidate();
 }
 
 sal_uInt16 SwAddressPreview::GetSelectedAddress()const
 {
-    OSL_ENSURE(pImpl->nSelectedAddress < pImpl->aAddresses.size(), "selection invalid");
-    return pImpl->nSelectedAddress;
+    OSL_ENSURE(m_pImpl->nSelectedAddress < m_pImpl->aAddresses.size(), "selection invalid");
+    return m_pImpl->nSelectedAddress;
 }
 
 void SwAddressPreview::SelectAddress(sal_uInt16 nSelect)
 {
-    OSL_ENSURE(pImpl->nSelectedAddress < pImpl->aAddresses.size(), "selection invalid");
-    pImpl->nSelectedAddress = nSelect;
+    OSL_ENSURE(m_pImpl->nSelectedAddress < m_pImpl->aAddresses.size(), "selection invalid");
+    m_pImpl->nSelectedAddress = nSelect;
     // now make it visible...
-    sal_uInt16 nSelectRow = nSelect / pImpl->nColumns;
+    sal_uInt16 nSelectRow = nSelect / m_pImpl->nColumns;
     sal_uInt16 nStartRow = m_xVScrollBar->vadjustment_get_value();
-    if( (nSelectRow < nStartRow) || (nSelectRow >= (nStartRow + pImpl->nRows) ))
+    if( (nSelectRow < nStartRow) || (nSelectRow >= (nStartRow + m_pImpl->nRows) ))
         m_xVScrollBar->vadjustment_set_value(nSelectRow);
 }
 
 void SwAddressPreview::Clear()
 {
-    pImpl->aAddresses.clear();
-    pImpl->nSelectedAddress = 0;
+    m_pImpl->aAddresses.clear();
+    m_pImpl->nSelectedAddress = 0;
     UpdateScrollBar();
 }
 
 void SwAddressPreview::ReplaceSelectedAddress(const OUString& rNew)
 {
-    pImpl->aAddresses[pImpl->nSelectedAddress] = rNew;
+    m_pImpl->aAddresses[m_pImpl->nSelectedAddress] = rNew;
     Invalidate();
 }
 
 void SwAddressPreview::RemoveSelectedAddress()
 {
-    pImpl->aAddresses.erase(pImpl->aAddresses.begin() + pImpl->nSelectedAddress);
-    if(pImpl->nSelectedAddress)
-        --pImpl->nSelectedAddress;
+    m_pImpl->aAddresses.erase(m_pImpl->aAddresses.begin() + m_pImpl->nSelectedAddress);
+    if(m_pImpl->nSelectedAddress)
+        --m_pImpl->nSelectedAddress;
     UpdateScrollBar();
     Invalidate();
 }
 
 void SwAddressPreview::SetLayout(sal_uInt16 nRows, sal_uInt16 nColumns)
 {
-    pImpl->nRows = nRows;
-    pImpl->nColumns = nColumns;
+    m_pImpl->nRows = nRows;
+    m_pImpl->nColumns = nColumns;
     UpdateScrollBar();
 }
 
 void SwAddressPreview::EnableScrollBar()
 {
-    pImpl->bEnableScrollBar = true;
+    m_pImpl->bEnableScrollBar = true;
 }
 
 void SwAddressPreview::UpdateScrollBar()
 {
-    if (pImpl->nColumns)
+    if (m_pImpl->nColumns)
     {
-        sal_uInt16 nResultingRows = o3tl::narrowing<sal_uInt16>(pImpl->aAddresses.size() + pImpl->nColumns - 1) / pImpl->nColumns;
+        sal_uInt16 nResultingRows = o3tl::narrowing<sal_uInt16>(m_pImpl->aAddresses.size() + m_pImpl->nColumns - 1) / m_pImpl->nColumns;
         ++nResultingRows;
         auto nValue = m_xVScrollBar->vadjustment_get_value();
         if (nValue > nResultingRows)
             nValue = nResultingRows;
-        m_xVScrollBar->set_vpolicy(pImpl->bEnableScrollBar && nResultingRows > pImpl->nRows ? VclPolicyType::ALWAYS : VclPolicyType::NEVER);
-        m_xVScrollBar->vadjustment_configure(nValue, 0, nResultingRows, 1, 10, pImpl->nRows);
+        m_xVScrollBar->set_vpolicy(m_pImpl->bEnableScrollBar && nResultingRows > m_pImpl->nRows ? VclPolicyType::ALWAYS : VclPolicyType::NEVER);
+        m_xVScrollBar->vadjustment_configure(nValue, 0, nResultingRows, 1, 10, m_pImpl->nRows);
     }
 }
 
@@ -392,26 +392,26 @@ void SwAddressPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
         aSize.AdjustWidth(-m_xVScrollBar->get_scroll_thickness());
         nStartRow = m_xVScrollBar->vadjustment_get_value();
     }
-    Size aPartSize(aSize.Width() / pImpl->nColumns,
-                   aSize.Height() / pImpl->nRows);
+    Size aPartSize(aSize.Width() / m_pImpl->nColumns,
+                   aSize.Height() / m_pImpl->nRows);
     aPartSize.AdjustWidth( -2 );
     aPartSize.AdjustHeight( -2 );
 
-    sal_uInt16 nAddress = nStartRow * pImpl->nColumns;
-    const sal_uInt16 nNumAddresses = o3tl::narrowing<sal_uInt16>(pImpl->aAddresses.size());
-    for (sal_uInt16 nRow = 0; nRow < pImpl->nRows ; ++nRow)
+    sal_uInt16 nAddress = nStartRow * m_pImpl->nColumns;
+    const sal_uInt16 nNumAddresses = o3tl::narrowing<sal_uInt16>(m_pImpl->aAddresses.size());
+    for (sal_uInt16 nRow = 0; nRow < m_pImpl->nRows ; ++nRow)
     {
-        for (sal_uInt16 nCol = 0; nCol < pImpl->nColumns; ++nCol)
+        for (sal_uInt16 nCol = 0; nCol < m_pImpl->nColumns; ++nCol)
         {
             if (nAddress >= nNumAddresses)
                 break;
             Point aPos(nCol * aPartSize.Width(),
                        nRow * aPartSize.Height());
             aPos.Move(1, 1);
-            bool bIsSelected = nAddress == pImpl->nSelectedAddress;
-            if ((pImpl->nColumns * pImpl->nRows) == 1)
+            bool bIsSelected = nAddress == m_pImpl->nSelectedAddress;
+            if ((m_pImpl->nColumns * m_pImpl->nRows) == 1)
                 bIsSelected = false;
-            OUString adr(pImpl->aAddresses[nAddress]);
+            OUString adr(m_pImpl->aAddresses[nAddress]);
             DrawText_Impl(rRenderContext, adr, aPos, aPartSize, bIsSelected);
             ++nAddress;
         }
@@ -421,24 +421,24 @@ void SwAddressPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
 
 bool SwAddressPreview::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if (rMEvt.IsLeft() && pImpl->nRows && pImpl->nColumns)
+    if (rMEvt.IsLeft() && m_pImpl->nRows && m_pImpl->nColumns)
     {
         //determine the selected address
         const Point& rMousePos = rMEvt.GetPosPixel();
         Size aSize(GetOutputSizePixel());
-        Size aPartSize( aSize.Width()/pImpl->nColumns, aSize.Height()/pImpl->nRows );
+        Size aPartSize( aSize.Width()/m_pImpl->nColumns, aSize.Height()/m_pImpl->nRows );
         sal_uInt32 nRow = rMousePos.Y() / aPartSize.Height() ;
         if (m_xVScrollBar->get_vpolicy() != VclPolicyType::NEVER)
         {
             nRow += m_xVScrollBar->vadjustment_get_value();
         }
         sal_uInt32 nCol = rMousePos.X() / aPartSize.Width();
-        sal_uInt32 nSelect = nRow * pImpl->nColumns + nCol;
+        sal_uInt32 nSelect = nRow * m_pImpl->nColumns + nCol;
 
-        if( nSelect < pImpl->aAddresses.size() &&
-                pImpl->nSelectedAddress != o3tl::narrowing<sal_uInt16>(nSelect))
+        if( nSelect < m_pImpl->aAddresses.size() &&
+                m_pImpl->nSelectedAddress != o3tl::narrowing<sal_uInt16>(nSelect))
         {
-            pImpl->nSelectedAddress = o3tl::narrowing<sal_uInt16>(nSelect);
+            m_pImpl->nSelectedAddress = o3tl::narrowing<sal_uInt16>(nSelect);
             m_aSelectHdl.Call(nullptr);
         }
         Invalidate();
@@ -450,10 +450,10 @@ bool SwAddressPreview::KeyInput( const KeyEvent& rKEvt )
 {
     sal_uInt16 nKey = rKEvt.GetKeyCode().GetCode();
     bool bHandled = false;
-    if (pImpl->nRows && pImpl->nColumns)
+    if (m_pImpl->nRows && m_pImpl->nColumns)
     {
-        sal_uInt32 nSelectedRow = pImpl->nSelectedAddress / pImpl->nColumns;
-        sal_uInt32 nSelectedColumn = pImpl->nSelectedAddress - (nSelectedRow * pImpl->nColumns);
+        sal_uInt32 nSelectedRow = m_pImpl->nSelectedAddress / m_pImpl->nColumns;
+        sal_uInt32 nSelectedColumn = m_pImpl->nSelectedAddress - (nSelectedRow * m_pImpl->nColumns);
         switch(nKey)
         {
             case KEY_UP:
@@ -462,7 +462,7 @@ bool SwAddressPreview::KeyInput( const KeyEvent& rKEvt )
                 bHandled = true;
             break;
             case KEY_DOWN:
-                if(pImpl->aAddresses.size() > o3tl::make_unsigned(pImpl->nSelectedAddress + pImpl->nColumns))
+                if(m_pImpl->aAddresses.size() > o3tl::make_unsigned(m_pImpl->nSelectedAddress + m_pImpl->nColumns))
                     ++nSelectedRow;
                 bHandled = true;
             break;
@@ -472,17 +472,17 @@ bool SwAddressPreview::KeyInput( const KeyEvent& rKEvt )
                 bHandled = true;
             break;
             case KEY_RIGHT:
-                if(nSelectedColumn < o3tl::make_unsigned(pImpl->nColumns - 1) &&
-                       pImpl->aAddresses.size() - 1 > pImpl->nSelectedAddress )
+                if(nSelectedColumn < o3tl::make_unsigned(m_pImpl->nColumns - 1) &&
+                       m_pImpl->aAddresses.size() - 1 > m_pImpl->nSelectedAddress )
                     ++nSelectedColumn;
                 bHandled = true;
             break;
         }
-        sal_uInt32 nSelect = nSelectedRow * pImpl->nColumns + nSelectedColumn;
-        if( nSelect < pImpl->aAddresses.size() &&
-                pImpl->nSelectedAddress != o3tl::narrowing<sal_uInt16>(nSelect))
+        sal_uInt32 nSelect = nSelectedRow * m_pImpl->nColumns + nSelectedColumn;
+        if( nSelect < m_pImpl->aAddresses.size() &&
+                m_pImpl->nSelectedAddress != o3tl::narrowing<sal_uInt16>(nSelect))
         {
-            pImpl->nSelectedAddress = o3tl::narrowing<sal_uInt16>(nSelect);
+            m_pImpl->nSelectedAddress = o3tl::narrowing<sal_uInt16>(nSelect);
             m_aSelectHdl.Call(nullptr);
             Invalidate();
         }
@@ -518,48 +518,48 @@ SwMergeAddressItem   SwAddressIterator::Next()
     //currently the string may either start with a '<' then it's a column
     //otherwise it's simple text maybe containing a return
     SwMergeAddressItem   aRet;
-    if(!sAddress.isEmpty())
+    if(!m_sAddress.isEmpty())
     {
-        if(sAddress[0] == '<')
+        if(m_sAddress[0] == '<')
         {
             aRet.bIsColumn = true;
-            sal_Int32 nClose = sAddress.indexOf('>');
+            sal_Int32 nClose = m_sAddress.indexOf('>');
             OSL_ENSURE(nClose != -1, "closing '>' not found");
             if( nClose != -1 )
             {
-                aRet.sText = sAddress.copy(1, nClose - 1);
-                sAddress = sAddress.copy(nClose + 1);
+                aRet.sText = m_sAddress.copy(1, nClose - 1);
+                m_sAddress = m_sAddress.copy(nClose + 1);
             }
             else
             {
-                aRet.sText = sAddress.copy(1, 1);
-                sAddress = sAddress.copy(1);
+                aRet.sText = m_sAddress.copy(1, 1);
+                m_sAddress = m_sAddress.copy(1);
             }
         }
         else
         {
-            sal_Int32 nOpen = sAddress.indexOf('<');
-            sal_Int32 nReturn = sAddress.indexOf('\n');
+            sal_Int32 nOpen = m_sAddress.indexOf('<');
+            sal_Int32 nReturn = m_sAddress.indexOf('\n');
             if(nReturn == 0)
             {
                 aRet.bIsReturn = true;
                 aRet.sText = "\n";
-                sAddress = sAddress.copy(1);
+                m_sAddress = m_sAddress.copy(1);
             }
             else if(-1 == nOpen && -1 == nReturn)
             {
-                aRet.sText = sAddress;
-                sAddress.clear();
+                aRet.sText = m_sAddress;
+                m_sAddress.clear();
             }
             else
             {
                 if (nOpen == -1)
-                    nOpen = sAddress.getLength();
+                    nOpen = m_sAddress.getLength();
                 if (nReturn == -1)
-                    nReturn = sAddress.getLength();
+                    nReturn = m_sAddress.getLength();
                 sal_Int32 nTarget = std::min(nOpen, nReturn);
-                aRet.sText = sAddress.copy(0, nTarget);
-                sAddress = sAddress.copy(nTarget);
+                aRet.sText = m_sAddress.copy(0, nTarget);
+                m_sAddress = m_sAddress.copy(nTarget);
             }
         }
     }
