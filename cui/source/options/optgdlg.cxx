@@ -1681,7 +1681,7 @@ IMPL_LINK_NOARG(OfaLanguagesTabPage, LocaleSettingHdl, weld::ComboBox&, void)
     }
 
     const NfCurrencyEntry& rCurr = SvNumberFormatter::GetCurrencyEntry(
-            (eLang == LANGUAGE_USER_SYSTEM_CONFIG) ? MsLangId::getSystemLanguage() : eLang);
+            (eLang == LANGUAGE_USER_SYSTEM_CONFIG) ? MsLangId::getConfiguredSystemLanguage() : eLang);
     const OUString aDefaultID = "default";
     // Update the "Default ..." currency.
     m_xCurrencyLB->remove_id(aDefaultID);

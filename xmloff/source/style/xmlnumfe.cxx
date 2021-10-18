@@ -226,7 +226,7 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     }
     else
     {
-        LanguageTag aLanguageTag( MsLangId::getSystemLanguage() );
+        LanguageTag aLanguageTag( MsLangId::getConfiguredSystemLanguage() );
 
         pLocaleData.reset( new LocaleDataWrapper( rExport.getComponentContext(), aLanguageTag ) );
     }
@@ -256,7 +256,7 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     }
     else
     {
-        LanguageTag aLanguageTag( MsLangId::getSystemLanguage() );
+        LanguageTag aLanguageTag( MsLangId::getConfiguredSystemLanguage() );
 
         pLocaleData.reset( new LocaleDataWrapper( rExport.getComponentContext(), aLanguageTag ) );
     }

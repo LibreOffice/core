@@ -1926,7 +1926,7 @@ const SvxAutocorrWord* SvxAutoCorrect::SearchWordsInList(
     const SvxAutocorrWord* pRet = nullptr;
     LanguageTag aLanguageTag( rLang);
     if( aLanguageTag.isSystemLocale() )
-        aLanguageTag.reset( MsLangId::getSystemLanguage());
+        aLanguageTag.reset( MsLangId::getConfiguredSystemLanguage());
 
     /* TODO-BCP47: this is so ugly, should all maybe be a proper fallback
      * list instead? */

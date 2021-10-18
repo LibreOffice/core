@@ -262,7 +262,7 @@ void SvtSysLocaleOptions_Impl::MakeRealLocale()
 {
     if (m_aLocaleString.isEmpty())
     {
-        LanguageType nLang = MsLangId::getSystemLanguage();
+        LanguageType nLang = MsLangId::getConfiguredSystemLanguage();
         m_aRealLocale.reset( nLang).makeFallback();
     }
     else
