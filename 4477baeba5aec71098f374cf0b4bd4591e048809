@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fe74490_948605ad",
+        "filename": "xmloff/source/script/XMLStarBasicContextFactory.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-18T21:24:14Z",
+      "side": 1,
+      "message": "This is a leftover :-)\n\nI will take care.",
+      "range": {
+        "startLine": 90,
+        "startChar": 4,
+        "endLine": 93,
+        "endChar": 0
+      },
+      "revId": "4477baeba5aec71098f374cf0b4bd4591e048809",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
