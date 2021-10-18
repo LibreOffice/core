@@ -18,6 +18,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <vcl/scheduler.hxx>
 
@@ -211,6 +212,23 @@ CPPUNIT_TEST_FIXTURE(Test, testCreateDatePreserve)
     // - Actual  : 07/07/2020
     // i.e. the formatting of the create date field was lost.
     CPPUNIT_ASSERT_EQUAL(OUString("7/7/2020 10:11:00 AM"), xPortion->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testChartZOrder)
+{
+    // Given a document with a chart and a shape on it:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "chart-zorder.docx";
+
+    // When loading the document:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure the shape is on top of the chart:
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<lang::XServiceInfo> xChart(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have failed, as the chart was on top
+    // of the shape.
+    CPPUNIT_ASSERT(xChart->supportsService("com.sun.star.text.TextEmbeddedObject"));
 }
 }
 
