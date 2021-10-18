@@ -181,7 +181,6 @@ private:
     mutable SalGraphics*            mpGraphics;         ///< Graphics context to draw on
     mutable VclPtr<OutputDevice>    mpPrevGraphics;     ///< Previous output device in list
     mutable VclPtr<OutputDevice>    mpNextGraphics;     ///< Next output device in list
-    GDIMetaFile*                    mpMetaFile;
     mutable rtl::Reference<LogicalFontInstance> mpFontInstance;
     mutable std::unique_ptr<vcl::font::PhysicalFontFaceCollection>  mpFontFaceCollection;
     std::vector<vcl::State>        maOutDevStateStack;
@@ -257,6 +256,7 @@ private:
     mutable bool                    mbEnableRTL : 1;
 
 protected:
+    GDIMetaFile* mpMetaFile;
     mutable std::shared_ptr<vcl::font::PhysicalFontCollection> mxFontCollection;
     mutable std::shared_ptr<ImplFontCache> mxFontCache;
 

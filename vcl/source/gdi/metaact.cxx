@@ -2764,4 +2764,53 @@ void MetaBitmapExContainerAction::Scale(double fScaleX, double fScaleY)
     }
 }
 
+MetaBorderAction::MetaBorderAction(tools::Rectangle aBorderRect, sal_uInt16 nPixel, bool bIsPrint)
+    : MetaAction(MetaActionType::BORDER)
+{
+    if (bIsPrint)
+    {
+        maActions.push_back(new MetaLineColorAction(COL_BLACK, true));
+        maActions.push_back(new MetaRectAction(aBorderRect));
+    }
+    else
+    {
+        aBorderRect.AdjustLeft(nPixel);
+        aBorderRect.AdjustTop(nPixel);
+
+        maActions.push_back(new MetaLineColorAction(COL_LIGHTGRAY, true));
+        maActions.push_back(new MetaRectAction(aBorderRect));
+
+        aBorderRect.AdjustLeft(-nPixel);
+        aBorderRect.AdjustTop(-nPixel);
+        aBorderRect.AdjustRight(-nPixel);
+        aBorderRect.AdjustBottom(-nPixel);
+        maActions.push_back(new MetaLineColorAction(COL_GRAY, true));
+
+        maActions.push_back(new MetaRectAction(aBorderRect));
+    }
+}
+
+void MetaBorderAction::Execute(OutputDevice* pOutDev)
+{
+    for (MetaAction* pAction : maActions)
+    {
+        pAction->Execute(pOutDev);
+    }
+}
+
+void MetaBorderAction::Move(tools::Long nHorzMove, tools::Long nVertMove)
+{
+    for (MetaAction* pAction : maActions)
+    {
+        pAction->Move(nHorzMove, nVertMove);
+    }
+}
+
+void MetaBorderAction::Scale(double fScaleX, double fScaleY)
+{
+    for (MetaAction* pAction : maActions)
+    {
+        pAction->Scale(fScaleX, fScaleY);
+    }
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

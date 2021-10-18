@@ -1899,6 +1899,34 @@ public:
     bool empty() const { return maActions.empty(); }
 };
 
+class VCL_DLLPUBLIC MetaBorderAction : public MetaAction
+{
+    using ActionsType = std::vector<MetaAction*>;
+
+private:
+    ActionsType maActions;
+
+public:
+    MetaBorderAction(tools::Rectangle aBorderRect, sal_uInt16 nPixel, bool bIsPrint);
+    MetaBorderAction(MetaBorderAction const &) = default;
+    MetaBorderAction(MetaBorderAction &&) = default;
+    MetaBorderAction & operator =(MetaBorderAction const &) = delete; // due to MetaAction
+    MetaBorderAction & operator =(MetaBorderAction &&) = delete; // due to MetaAction
+
+public:
+    virtual void Execute(OutputDevice* pOut) override;
+    virtual void Move(tools::Long nHorzMove, tools::Long nVertMove) override;
+    virtual void Scale(double fScaleX, double fScaleY) override;
+
+    MetaAction* GetAction(size_t nIndex) const { return maActions[nIndex]; }
+
+    ActionsType::iterator begin() { return maActions.begin(); }
+    ActionsType::iterator end() { return maActions.end(); }
+
+    size_t size() const { return maActions.size(); }
+    bool empty() const { return maActions.empty(); }
+};
+
 #endif // INCLUDED_VCL_METAACT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
