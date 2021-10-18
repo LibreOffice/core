@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b00dcd6d_95a92859",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-18T10:27:09Z",
+      "side": 1,
+      "message": "Nice. This also fixes the inability to \"edit service\" (at least of the newly created sftp://).\n\ntdf#145190 - remote open/save cannot edit SSH service ",
+      "revId": "5acba60cbd97f2f181037cbd3ab049e7ebff5332",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
