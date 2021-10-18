@@ -68,7 +68,7 @@ public:
     virtual const OUString& GetPath() override;
     virtual std::vector<OUString> GetPathList() const override;
     virtual bool ContentIsFolder( const OUString& rURL ) override;
-    bool ContentIsDocument( const OUString& rURL );
+    static bool ContentIsDocument(const OUString& rURL);
 
     virtual OUString getCurrentFileText() const override;
     virtual void setCurrentFileText( const OUString& rText, bool bSelectAll = false ) override;
