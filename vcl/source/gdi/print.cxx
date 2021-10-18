@@ -1674,4 +1674,18 @@ void Printer::SetSystemTextColor(SystemTextColorFlags, bool)
     SetTextColor(COL_BLACK);
 }
 
+void Printer::DrawBorder(tools::Rectangle aBorderRect)
+{
+    if (mpMetaFile)
+        mpMetaFile->AddAction(new MetaBorderAction(aBorderRect, 0, true));
+
+    GDIMetaFile* pOldMetaFile = mpMetaFile;
+    mpMetaFile = nullptr;
+
+    SetLineColor(COL_BLACK);
+    DrawRect(aBorderRect);
+
+    mpMetaFile = pOldMetaFile;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

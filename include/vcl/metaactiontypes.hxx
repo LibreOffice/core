@@ -80,6 +80,7 @@ enum class MetaActionType
     GRADIENTCONTAINER       = 154,
     BITMAPCONTAINER         = 155,
     BITMAPEXCONTAINER       = 156,
+    BORDER                  = 157,
 
     COMMENT                 = 512,
     LAST                    = COMMENT
