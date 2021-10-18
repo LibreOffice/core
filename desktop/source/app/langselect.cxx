@@ -121,11 +121,18 @@ bool prepareLocale() {
     }
     MsLangId::setConfiguredSystemUILanguage(tag.getLanguageType(false));
 
+    // Note the system language/locale here may or may not be correct before we
+    // actually set it below. It is what could be figured from the system
+    // setting and may only partially match, like "en" for an unsupported
+    // English locale.
+    LanguageTag aSysLocTag( MsLangId::getSystemLanguage());
     OUString setupSysLoc(officecfg::Setup::L10N::ooSetupSystemLocale::get());
-    LanguageTag::setConfiguredSystemLanguage(
-        setupSysLoc.isEmpty()
-        ? MsLangId::getSystemLanguage()
-        : LanguageTag(setupSysLoc).getLanguageType(false));
+    if (!setupSysLoc.isEmpty())
+        aSysLocTag.reset( setupSysLoc);
+    // Ensure the system locale is set to a known supported locale.
+    aSysLocTag.makeFallback();
+    LanguageTag::setConfiguredSystemLanguage( aSysLocTag.getLanguageType(false));
+
     // #i32939# setting of default document locale
     // #i32939# this should not be based on the UI language
     // So obtain the system locale now configured just above and pass it on,
