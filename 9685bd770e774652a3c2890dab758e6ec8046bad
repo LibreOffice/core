@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98b19d11_f11732d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-18T09:48:47Z",
+      "side": 1,
+      "message": "put back Verified+1 since Jenkins was ok and I just changed the comment of the description.",
+      "revId": "9685bd770e774652a3c2890dab758e6ec8046bad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
