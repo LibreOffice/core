@@ -77,6 +77,7 @@ enum class INetProtocol
     Smb,
     Hid,
     Sftp,
+    Ssh,
     Cmis,
     LAST = Cmis
 };

@@ -400,6 +400,9 @@ INetURLObject::getSchemeInfo(INetProtocol eTheScheme)
             "sftp", "sftp://", true, true, false, true, true, true, true,
             true},
         SchemeInfo{
+            "ssh", "ssh://", true, true, false, true, true, true, false,
+            true},
+        SchemeInfo{
             "vnd.libreoffice.cmis", "vnd.libreoffice.cmis://", true, true,
             false, false, true, false, true, true} };
     return map[eTheScheme];
@@ -2115,6 +2118,7 @@ INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& 
             { "slot:", "staroffice.slot:", INetProtocol::Slot,
               PrefixInfo::Kind::Internal },
             { "smb:", nullptr, INetProtocol::Smb, PrefixInfo::Kind::Official },
+            { "ssh:", nullptr, INetProtocol::Ssh, PrefixInfo::Kind::Official },
             { "staroffice.component:", ".component:", INetProtocol::Component,
               PrefixInfo::Kind::External },
             { "staroffice.db:", "db:", INetProtocol::Db, PrefixInfo::Kind::External },
@@ -3099,6 +3103,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
 
         case INetProtocol::Generic:
         case INetProtocol::Sftp:
+        case INetProtocol::Ssh:
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
