@@ -330,6 +330,7 @@ OString convertLineStyleToString(const MetaActionType nActionType)
         case MetaActionType::GRADIENTCONTAINER:     return "gradientcontainer";
         case MetaActionType::BITMAPCONTAINER:       return "bitmapcontainer";
         case MetaActionType::BITMAPEXCONTAINER:     return "bitmapexcontainer";
+        case MetaActionType::BORDER:                return "border";
     }
     return "";
 }
