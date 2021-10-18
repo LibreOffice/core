@@ -606,9 +606,9 @@ sal_uInt8 PictReader::ReadAndDrawSameArc(PictDrawingMethod eMethod)
 
 sal_uInt64 PictReader::ReadAndDrawRgn(PictDrawingMethod eMethod)
 {
-    sal_uInt16 nSize;
-
+    sal_uInt16 nSize(0);
     pPict->ReadUInt16( nSize );
+
     // read the DATA
     //
     // a region data is a mask and is probably coded as
