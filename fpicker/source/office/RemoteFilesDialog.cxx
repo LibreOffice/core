@@ -22,6 +22,7 @@
 #include <svtools/PlaceEditDialog.hxx>
 #include <tools/debug.hxx>
 #include <ucbhelper/commandenvironment.hxx>
+#include <svl/fstathelper.hxx>
 #include <vcl/errinf.hxx>
 #include <officecfg/Office/Common.hxx>
 
@@ -1142,62 +1143,12 @@ std::vector<OUString> RemoteFilesDialog::GetPathList() const
 
 bool RemoteFilesDialog::ContentIsFolder( const OUString& rURL )
 {
-    try
-    {
-        Reference< XInteractionHandler > xInteractionHandler(
-                        InteractionHandler::createWithParent( m_xContext, nullptr ), UNO_QUERY_THROW );
-        INetURLObject aURLObject(rURL);
-        if (aURLObject.isAnyKnownWebDAVScheme() || aURLObject.GetProtocol() == INetProtocol::Sftp)
-            xInteractionHandler.set(new comphelper::StillReadWriteInteraction(xInteractionHandler, xInteractionHandler));
-        Reference< XCommandEnvironment > xEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
-        ::ucbhelper::Content aContent( rURL, xEnv, m_xContext );
-
-        return aContent.isFolder();
-    }
-    catch( const Exception& )
-    {
-        // a content doesn't exist
-    }
-
-    return false;
+    return FStatHelper::IsFolder(rURL);
 }
 
 bool RemoteFilesDialog::ContentIsDocument( const OUString& rURL )
 {
-    try
-    {
-        Reference< XInteractionHandler > xInteractionHandler(
-                        InteractionHandler::createWithParent( m_xContext, nullptr ), UNO_QUERY_THROW );
-        //check if WebDAV or not
-        INetURLObject aURLObject(rURL);
-        if (!aURLObject.isAnyKnownWebDAVScheme() && aURLObject.GetProtocol() != INetProtocol::Sftp)
-        {
-                // no webdav, use the interaction handler as is
-                Reference< XCommandEnvironment > xEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
-                ::ucbhelper::Content aContent( rURL, xEnv, m_xContext );
-
-                return aContent.isDocument();
-        }
-        else
-        {
-            // It's a webdav URL, so use the same open sequence as in normal open process.
-            // Let's use a comphelper::StillReadWriteInteraction to trap errors here without showing the user.
-            // This sequence will result in an exception if the target URL resource is not present
-            rtl::Reference<comphelper::StillReadWriteInteraction> pInteraction = new comphelper::StillReadWriteInteraction(xInteractionHandler,xInteractionHandler);
-
-            Reference< XCommandEnvironment > xEnv = new ::ucbhelper::CommandEnvironment( pInteraction, Reference< XProgressHandler >() );
-            ::ucbhelper::Content aContent( rURL, xEnv, m_xContext );
-
-            aContent.openStream();
-            return aContent.isDocument();
-        }
-    }
-    catch( const Exception& )
-    {
-        // a content doesn't exist
-    }
-
-    return false;
+    return FStatHelper::IsDocument(rURL);
 }
 
 sal_Int32 RemoteFilesDialog::getAvailableWidth()
