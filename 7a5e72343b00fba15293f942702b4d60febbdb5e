@@ -16,6 +16,23 @@
       "message": "mstahl also gave this a +2 when it was a two-in-one patch.",
       "revId": "7a5e72343b00fba15293f942702b4d60febbdb5e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40347bbd_952e25ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-19T12:51:18Z",
+      "side": 1,
+      "message": "Jenkins verified - just a commit message change.",
+      "revId": "7a5e72343b00fba15293f942702b4d60febbdb5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
