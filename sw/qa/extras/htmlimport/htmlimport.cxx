@@ -78,7 +78,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testInlinedImage)
     CPPUNIT_ASSERT(xGraphic.is());
     CPPUNIT_ASSERT(xGraphic->getType() != graphic::GraphicType::EMPTY);
 
-    for (int n = 0; ; n++)
+    for (SwNodeOffset n(0); ; n++)
     {
         SwNode* pNode = pDoc->GetNodes()[ n ];
         if (SwGrfNode *pGrfNode = pNode->GetGrfNode())

@@ -205,8 +205,8 @@ bool SwEditShell::IsTextToTableAvailable() const
             bOnlyText = true;
 
             // check if selection is in listing
-            sal_uLong nStt = rPaM.Start()->nNode.GetIndex(),
-                      nEnd = rPaM.End()->nNode.GetIndex();
+            SwNodeOffset nStt = rPaM.Start()->nNode.GetIndex(),
+                         nEnd = rPaM.End()->nNode.GetIndex();
 
             for( ; nStt <= nEnd; ++nStt )
                 if( !GetDoc()->GetNodes()[ nStt ]->IsTextNode() )
@@ -404,8 +404,8 @@ bool SwEditShell::IsTableBoxTextFormat() const
         return GetDoc()->GetNumberFormatter()->IsTextFormat( nFormat );
     }
 
-    sal_uLong nNd = pBox->IsValidNumTextNd();
-    if( ULONG_MAX == nNd )
+    SwNodeOffset nNd = pBox->IsValidNumTextNd();
+    if( NODE_OFFSET_MAX == nNd )
         return true;
 
     const OUString& rText = GetDoc()->GetNodes()[ nNd ]->GetTextNode()->GetText();
@@ -431,8 +431,8 @@ OUString SwEditShell::GetTableBoxText() const
                 pBox = static_cast<SwCellFrame*>(pFrame)->GetTabBox();
         }
 
-        sal_uLong nNd;
-        if( pBox && ULONG_MAX != ( nNd = pBox->IsValidNumTextNd() ) )
+        SwNodeOffset nNd;
+        if( pBox && NODE_OFFSET_MAX != ( nNd = pBox->IsValidNumTextNd() ) )
             sRet = GetDoc()->GetNodes()[ nNd ]->GetTextNode()->GetText();
     }
     return sRet;

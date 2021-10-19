@@ -307,9 +307,9 @@ namespace
     }
 
 // Gets "YPos" for SwRegionContent, i.e. a number used to sort sections in Navigator's list
-tools::Long getYPosForSection(const SwNodeIndex& rNodeIndex)
+sal_Int32 getYPosForSection(const SwNodeIndex& rNodeIndex)
 {
-    sal_uLong nIndex = rNodeIndex.GetIndex();
+    SwNodeOffset nIndex = rNodeIndex.GetIndex();
     if (rNodeIndex.GetNodes().GetEndOfExtras().GetIndex() >= nIndex)
     {
         // Not a node of BodyText
@@ -319,11 +319,11 @@ tools::Long getYPosForSection(const SwNodeIndex& rNodeIndex)
             // Get node index of anchor
             if (auto pSwPosition = pFlyFormat->GetAnchor().GetContentAnchor())
             {
-                nIndex = getYPosForSection(pSwPosition->nNode);
+                return getYPosForSection(pSwPosition->nNode);
             }
         }
     }
-    return static_cast<tools::Long>(nIndex);
+    return sal_Int32(nIndex);
 }
 } // end of anonymous namespace
 

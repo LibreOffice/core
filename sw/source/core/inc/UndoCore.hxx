@@ -191,14 +191,14 @@ class SwUndoSetFlyFormat final : public SwUndo, public SwClient
     const OUString m_DerivedFromFormatName;
     const OUString m_NewFormatName;
     std::optional<SfxItemSet> m_oItemSet;               // the re-/ set attributes
-    sal_uLong m_nOldNode, m_nNewNode;
+    SwNodeOffset m_nOldNode, m_nNewNode;
     sal_Int32 m_nOldContent, m_nNewContent;
     RndStdIds m_nOldAnchorType, m_nNewAnchorType;
     bool m_bAnchorChanged;
 
     void PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem );
     void SwClientNotify(const SwModify&, const SfxHint&) override;
-    void GetAnchor( SwFormatAnchor& rAnhor, sal_uLong nNode, sal_Int32 nContent );
+    void GetAnchor( SwFormatAnchor& rAnhor, SwNodeOffset nNode, sal_Int32 nContent );
 
 public:
     SwUndoSetFlyFormat( SwFrameFormat& rFlyFormat, const SwFrameFormat& rNewFrameFormat );

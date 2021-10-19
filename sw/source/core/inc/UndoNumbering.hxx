@@ -60,9 +60,9 @@ class SwUndoDelNum final : public SwUndo, private SwUndRng
 {
     struct NodeLevel
     {
-        sal_uLong index;
+        SwNodeOffset index;
         int level;
-        NodeLevel(sal_uLong idx, int lvl) : index(idx), level(lvl) {};
+        NodeLevel(SwNodeOffset idx, int lvl) : index(idx), level(lvl) {};
     };
     std::vector<NodeLevel>     m_aNodes;
     std::unique_ptr<SwHistory> m_pHistory;
@@ -82,17 +82,17 @@ public:
 
 class SwUndoMoveNum final : public SwUndo, private SwUndRng
 {
-    sal_uLong m_nNewStart;
-    tools::Long m_nOffset;
+    SwNodeOffset m_nNewStart;
+    SwNodeOffset m_nOffset;
 
 public:
-    SwUndoMoveNum( const SwPaM& rPam, tools::Long nOffset, bool bIsOutlMv );
+    SwUndoMoveNum( const SwPaM& rPam, SwNodeOffset nOffset, bool bIsOutlMv );
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 
-    void SetStartNode( sal_uLong nValue ) { m_nNewStart = nValue; }
+    void SetStartNode( SwNodeOffset nValue ) { m_nNewStart = nValue; }
 };
 
 class SwUndoNumUpDown final : public SwUndo, private SwUndRng
@@ -109,7 +109,7 @@ public:
 
 class SwUndoNumOrNoNum final : public SwUndo
 {
-    sal_uLong m_nIndex;
+    SwNodeOffset m_nIndex;
     bool mbNewNum, mbOldNum;
 
 public:
@@ -123,7 +123,7 @@ public:
 
 class SwUndoNumRuleStart final : public SwUndo
 {
-    sal_uLong m_nIndex;
+    SwNodeOffset m_nIndex;
     sal_uInt16 m_nOldStart, m_nNewStart;
     bool m_bSetStartValue : 1;
     bool m_bFlag : 1;

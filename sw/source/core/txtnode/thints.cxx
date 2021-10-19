@@ -448,7 +448,7 @@ SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )
     for (auto iter = SplitNew.begin(); iter != SplitNew.end(); ++iter)
     {
         SwPaM const temp(rNode, (*iter)->GetStart(), rNode, *(*iter)->GetEnd());
-        std::vector<std::pair<sal_uLong, sal_Int32>> Breaks;
+        std::vector<std::pair<SwNodeOffset, sal_Int32>> Breaks;
         sw::CalcBreaks(Breaks, temp, true);
         if (!Breaks.empty())
         {
@@ -1441,9 +1441,9 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                 {
                     // existing footnote: delete all layout frames of its
                     // footnote section
-                    sal_uLong nSttIdx =
+                    SwNodeOffset nSttIdx =
                         static_cast<SwTextFootnote*>(pAttr)->GetStartNode()->GetIndex();
-                    sal_uLong nEndIdx = rNodes[ nSttIdx++ ]->EndOfSectionIndex();
+                    SwNodeOffset nEndIdx = rNodes[ nSttIdx++ ]->EndOfSectionIndex();
                     for( ; nSttIdx < nEndIdx; ++nSttIdx )
                     {
                         SwContentNode* pCNd = rNodes[ nSttIdx ]->GetContentNode();

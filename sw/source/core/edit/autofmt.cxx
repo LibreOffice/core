@@ -95,7 +95,7 @@ class SwAutoFormat
     SwTextNode* m_pCurTextNd;     // the current TextNode
     SwTextFrame* m_pCurTextFrame;     // frame of the current TextNode
     bool m_bIsRightToLeft;      // text direction of the current frame
-    sal_uLong m_nEndNdIdx;      // for the percentage-display
+    SwNodeOffset m_nEndNdIdx;      // for the percentage-display
     mutable std::unique_ptr<CharClass> m_pCharClass; // Character classification
     mutable LanguageType m_eCharClassLang;
 
@@ -332,7 +332,7 @@ void SwAutoFormat::GoNextPara()
     } while( !pNewNd->IsTextNode() );
 
     if( !m_aFlags.bAFormatByInput )
-        ::SetProgressState( m_aNdIdx.GetIndex() + m_nEndNdIdx - m_aEndNdIdx.GetIndex(),
+        ::SetProgressState( sal_Int32(m_aNdIdx.GetIndex() + m_nEndNdIdx - m_aEndNdIdx.GetIndex()),
                             m_pDoc->GetDocShell() );
 
     m_pCurTextNd = static_cast<SwTextNode*>(pNewNd);
@@ -2239,7 +2239,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & 
                             SwNodeIndex const * pSttNd, SwNodeIndex const * pEndNd )
     : m_aFlags( rFlags ),
     m_aDelPam( pEdShell->GetDoc()->GetNodes().GetEndOfExtras() ),
-    m_aNdIdx( pEdShell->GetDoc()->GetNodes().GetEndOfExtras(), +1 ),
+    m_aNdIdx( pEdShell->GetDoc()->GetNodes().GetEndOfExtras(), SwNodeOffset(+1) ),
     m_aEndNdIdx( pEdShell->GetDoc()->GetNodes().GetEndOfContent() ),
     m_pEditShell( pEdShell ),
     m_pDoc( pEdShell->GetDoc() ),
@@ -2288,8 +2288,8 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & 
     if( !m_aFlags.bAFormatByInput )
     {
         m_nEndNdIdx = m_aEndNdIdx.GetIndex();
-        ::StartProgress( STR_STATSTR_AUTOFORMAT, m_aNdIdx.GetIndex(),
-                         m_nEndNdIdx,
+        ::StartProgress( STR_STATSTR_AUTOFORMAT, sal_Int32(m_aNdIdx.GetIndex()),
+                         sal_Int32(m_nEndNdIdx),
                          m_pDoc->GetDocShell() );
     }
 
@@ -2351,7 +2351,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & 
                 if (m_aFlags.bDelEmptyNode && !HasObjects(*m_pCurTextFrame))
                 {
                     bEmptyLine = true;
-                    sal_uLong nOldCnt = m_pDoc->GetNodes().Count();
+                    SwNodeOffset nOldCnt = m_pDoc->GetNodes().Count();
                     DelEmptyLine();
                     // Was there really a deletion of a node?
                     if( nOldCnt != m_pDoc->GetNodes().Count() )

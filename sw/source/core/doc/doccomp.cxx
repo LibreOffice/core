@@ -93,8 +93,8 @@ private:
 
     std::unique_ptr<SwPaM> m_pInsertRing, m_pDelRing;
 
-    static sal_uLong PrevIdx( const SwNode* pNd );
-    static sal_uLong NextIdx( const SwNode* pNd );
+    static SwNodeOffset PrevIdx( const SwNode* pNd );
+    static SwNodeOffset NextIdx( const SwNode* pNd );
 
     vector<SwCompareLine> m_aLines;
     bool m_bRecordDiff;
@@ -1218,7 +1218,7 @@ OUString SwCompareLine::GetText() const
             case SectionType::Content:
                 if( rSect.IsProtect() )
                     sRet += OUString::number(
-                            rSNd.EndOfSectionIndex() - rSNd.GetIndex() );
+                            sal_Int32(rSNd.EndOfSectionIndex() - rSNd.GetIndex()) );
                 break;
 
             case SectionType::ToxHeader:
@@ -1408,7 +1408,7 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
     return bRet;
 }
 
-sal_uLong CompareData::NextIdx( const SwNode* pNd )
+SwNodeOffset CompareData::NextIdx( const SwNode* pNd )
 {
     if( pNd->IsStartNode() )
     {
@@ -1426,7 +1426,7 @@ sal_uLong CompareData::NextIdx( const SwNode* pNd )
     return pNd->GetIndex() + 1;
 }
 
-sal_uLong CompareData::PrevIdx( const SwNode* pNd )
+SwNodeOffset CompareData::PrevIdx( const SwNode* pNd )
 {
     if( pNd->IsEndNode() )
     {
@@ -1452,11 +1452,11 @@ void CompareData::CheckRanges( CompareData& rData )
     const SwNode& rSrcEndNd = rData.GetEndOfContent();
     const SwNode& rDstEndNd = GetEndOfContent();
 
-    sal_uLong nSrcSttIdx = NextIdx( rSrcEndNd.StartOfSectionNode() );
-    sal_uLong nSrcEndIdx = rSrcEndNd.GetIndex();
+    SwNodeOffset nSrcSttIdx = NextIdx( rSrcEndNd.StartOfSectionNode() );
+    SwNodeOffset nSrcEndIdx = rSrcEndNd.GetIndex();
 
-    sal_uLong nDstSttIdx = NextIdx( rDstEndNd.StartOfSectionNode() );
-    sal_uLong nDstEndIdx = rDstEndNd.GetIndex();
+    SwNodeOffset nDstSttIdx = NextIdx( rDstEndNd.StartOfSectionNode() );
+    SwNodeOffset nDstEndIdx = rDstEndNd.GetIndex();
 
     while( nSrcSttIdx < nSrcEndIdx && nDstSttIdx < nDstEndIdx )
     {
@@ -1515,17 +1515,17 @@ void CompareData::ShowDelete(
     sal_uLong nInsPos )
 {
     SwNodeRange aRg(
-        rData.GetLine( nStt ).GetNode(), 0,
-        rData.GetLine( nEnd-1 ).GetEndNode(), 1 );
+        rData.GetLine( nStt ).GetNode(), SwNodeOffset(0),
+        rData.GetLine( nEnd-1 ).GetEndNode(), SwNodeOffset(1) );
 
-    sal_uInt16 nOffset = 0;
+    SwNodeOffset nOffset(0);
     std::optional<SwCompareLine> xLine;
     if( nInsPos >= 1 )
     {
         if( GetLineCount() == nInsPos )
         {
             xLine = GetLine( nInsPos-1 );
-            nOffset = 1;
+            nOffset = SwNodeOffset(1);
         }
         else
             xLine = GetLine( nInsPos );
@@ -1542,7 +1542,7 @@ void CompareData::ShowDelete(
     else
     {
         pLineNd = &GetEndOfContent();
-        nOffset = 0;
+        nOffset = SwNodeOffset(0);
     }
 
     SwNodeIndex aInsPos( *pLineNd, nOffset );
@@ -1557,7 +1557,7 @@ void CompareData::ShowDelete(
     // To avoid unwanted insertions of delete-redlines into these new redlines, what happens
     // especially at the end of the document, I reduce the SwPaM by one node.
     // Before the new redlines are inserted, they have to expand again.
-    SwPaM* pTmp = new SwPaM( aSavePos.GetNode(), aInsPos.GetNode(), 0, -1, m_pDelRing.get() );
+    SwPaM* pTmp = new SwPaM( aSavePos.GetNode(), aInsPos.GetNode(), SwNodeOffset(0), SwNodeOffset(-1), m_pDelRing.get() );
     if( !m_pDelRing )
         m_pDelRing.reset(pTmp);
 
@@ -2100,11 +2100,11 @@ tools::Long SwDoc::MergeDoc( const SwDoc& rDoc )
         // look for all insert redlines from the SourceDoc and determine their position in the DestDoc
         std::vector<SaveMergeRedline> vRedlines;
         const SwRedlineTable& rSrcRedlTable = rSrcDoc.getIDocumentRedlineAccess().GetRedlineTable();
-        sal_uLong nEndOfExtra = rSrcDoc.GetNodes().GetEndOfExtras().GetIndex();
-        sal_uLong nMyEndOfExtra = GetNodes().GetEndOfExtras().GetIndex();
+        SwNodeOffset nEndOfExtra = rSrcDoc.GetNodes().GetEndOfExtras().GetIndex();
+        SwNodeOffset nMyEndOfExtra = GetNodes().GetEndOfExtras().GetIndex();
         for(const SwRangeRedline* pRedl : rSrcRedlTable)
         {
-            sal_uLong nNd = pRedl->GetPoint()->nNode.GetIndex();
+            SwNodeOffset nNd = pRedl->GetPoint()->nNode.GetIndex();
             RedlineType eType = pRedl->GetType();
             if( nEndOfExtra < nNd &&
                 ( RedlineType::Insert == eType || RedlineType::Delete == eType ))

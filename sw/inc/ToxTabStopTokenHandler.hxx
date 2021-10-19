@@ -14,6 +14,7 @@
 #include <rtl/ustring.hxx>
 
 #include <editeng/tstpitem.hxx>
+#include "nodeoffset.hxx"
 
 struct SwFormToken;
 class SwPageDesc;
@@ -70,7 +71,7 @@ public:
     * @param tabstopReferencePolicy
     * How tab stops are positioned. (#i21237) The default behavior is to place tab stops relative to the page.
     */
-    DefaultToxTabStopTokenHandler(sal_uInt32 indexOfSectionNode, const SwPageDesc& defaultPageDescription,
+    DefaultToxTabStopTokenHandler(SwNodeOffset indexOfSectionNode, const SwPageDesc& defaultPageDescription,
             bool tabPositionIsRelativeToParagraphIndent,
             TabStopReferencePolicy referencePolicy);
 
@@ -100,7 +101,7 @@ private:
     tools::Long
     CalculatePageMarginFromPageDescription(const SwTextNode& targetNode) const;
 
-    sal_uInt32 mIndexOfSectionNode;
+    SwNodeOffset mIndexOfSectionNode;
     const SwPageDesc& mDefaultPageDescription;
     bool mTabPositionIsRelativeToParagraphIndent;
     TabStopReferencePolicy mTabStopReferencePolicy;

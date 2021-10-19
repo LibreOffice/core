@@ -92,10 +92,10 @@ public:
 class SwHistorySetFormat final : public SwHistoryHint
 {
     std::unique_ptr<SfxPoolItem> m_pAttr;
-    const sal_uLong m_nNodeIndex;
+    const SwNodeOffset m_nNodeIndex;
 
 public:
-    SwHistorySetFormat( const SfxPoolItem* pFormatHt, sal_uLong nNode );
+    SwHistorySetFormat( const SfxPoolItem* pFormatHt, SwNodeOffset nNode );
     virtual ~SwHistorySetFormat() override;
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
     virtual OUString GetDescription() const override;
@@ -105,11 +105,11 @@ public:
 
 class SwHistoryResetFormat final : public SwHistoryHint
 {
-    const sal_uLong m_nNodeIndex;
+    const SwNodeOffset m_nNodeIndex;
     const sal_uInt16 m_nWhich;
 
 public:
-    SwHistoryResetFormat( const SfxPoolItem* pFormatHt, sal_uLong nNodeIdx );
+    SwHistoryResetFormat( const SfxPoolItem* pFormatHt, SwNodeOffset nNodeIdx );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 
 };
@@ -117,14 +117,14 @@ public:
 class SwHistorySetText final : public SwHistoryHint
 {
     std::unique_ptr<SfxPoolItem> m_pAttr;
-    const sal_uLong m_nNodeIndex;
+    const SwNodeOffset m_nNodeIndex;
     const sal_Int32 m_nStart;
     const sal_Int32 m_nEnd;
     bool m_bFormatIgnoreStart : 1;
     bool m_bFormatIgnoreEnd   : 1;
 
 public:
-    SwHistorySetText( SwTextAttr* pTextHt, sal_uLong nNode );
+    SwHistorySetText( SwTextAttr* pTextHt, SwNodeOffset nNode );
     virtual ~SwHistorySetText() override;
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 
@@ -137,12 +137,12 @@ class SwHistorySetTextField final : public SwHistoryHint
     std::unique_ptr<SwFieldType> m_pFieldType;
     const std::unique_ptr<SwFormatField> m_pField;
 
-    sal_uLong m_nNodeIndex;
+    SwNodeOffset m_nNodeIndex;
     sal_Int32 m_nPos;
     SwFieldIds m_nFieldWhich;
 
 public:
-    SwHistorySetTextField( const SwTextField* pTextField, sal_uLong nNode );
+    SwHistorySetTextField( const SwTextField* pTextField, SwNodeOffset nNode );
     virtual ~SwHistorySetTextField() override;
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 
@@ -153,12 +153,12 @@ public:
 class SwHistorySetRefMark final : public SwHistoryHint
 {
     const OUString m_RefName;
-    const sal_uLong m_nNodeIndex;
+    const SwNodeOffset m_nNodeIndex;
     const sal_Int32 m_nStart;
     const sal_Int32 m_nEnd;
 
 public:
-    SwHistorySetRefMark( const SwTextRefMark* pTextHt, sal_uLong nNode );
+    SwHistorySetRefMark( const SwTextRefMark* pTextHt, SwNodeOffset nNode );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 
 };
@@ -168,12 +168,12 @@ class SwHistorySetTOXMark final : public SwHistoryHint
     SwTOXMark m_TOXMark;
     const OUString m_TOXName;
     const TOXTypes m_eTOXTypes;
-    const sal_uLong m_nNodeIndex;
+    const SwNodeOffset m_nNodeIndex;
     const sal_Int32 m_nStart;
     const sal_Int32 m_nEnd;
 
 public:
-    SwHistorySetTOXMark( const SwTextTOXMark* pTextHt, sal_uLong nNode );
+    SwHistorySetTOXMark( const SwTextTOXMark* pTextHt, SwNodeOffset nNode );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
     bool IsEqual( const SwTOXMark& rCmp ) const;
 
@@ -182,18 +182,18 @@ public:
 
 class SwHistoryResetText final : public SwHistoryHint
 {
-    const sal_uLong m_nNodeIndex;
+    const SwNodeOffset m_nNodeIndex;
     const sal_Int32 m_nStart;
     const sal_Int32 m_nEnd;
     const sal_uInt16 m_nAttr;
 
 public:
     SwHistoryResetText( sal_uInt16 nWhich, sal_Int32 nStt, sal_Int32 nEnd,
-                       sal_uLong nNode );
+                       SwNodeOffset nNode );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 
     sal_uInt16 GetWhich() const         { return m_nAttr; }
-    sal_uLong GetNode() const           { return m_nNodeIndex; }
+    SwNodeOffset GetNode() const     { return m_nNodeIndex; }
     sal_Int32 GetContent() const     { return m_nStart; }
 
 };
@@ -202,12 +202,12 @@ class SwHistorySetFootnote final : public SwHistoryHint
 {
     const std::unique_ptr<SwUndoSaveSection, o3tl::default_delete<SwUndoSaveSection>> m_pUndo;
     const OUString m_FootnoteNumber;
-    sal_uLong m_nNodeIndex;
+    SwNodeOffset m_nNodeIndex;
     const sal_Int32 m_nStart;
     const bool m_bEndNote;
 
 public:
-    SwHistorySetFootnote( SwTextFootnote* pTextFootnote, sal_uLong nNode );
+    SwHistorySetFootnote( SwTextFootnote* pTextFootnote, SwNodeOffset nNode );
     SwHistorySetFootnote( const SwTextFootnote& );
     virtual ~SwHistorySetFootnote() override;
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
@@ -219,11 +219,11 @@ public:
 class SwHistoryChangeFormatColl final : public SwHistoryHint
 {
     SwFormatColl * const m_pColl;
-    const sal_uLong m_nNodeIndex;
+    const SwNodeOffset m_nNodeIndex;
     const SwNodeType m_nNodeType;
 
 public:
-    SwHistoryChangeFormatColl( SwFormatColl* pColl, sal_uLong nNode, SwNodeType nNodeWhich );
+    SwHistoryChangeFormatColl( SwFormatColl* pColl, SwNodeOffset nNode, SwNodeType nNodeWhich );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 
 };
@@ -257,8 +257,8 @@ class SwHistoryBookmark final : public SwHistoryHint
         bool m_bHidden;
         OUString m_aHideCondition;
         vcl::KeyCode m_aKeycode;
-        const sal_uLong m_nNode;
-        const sal_uLong m_nOtherNode;
+        const SwNodeOffset m_nNode;
+        const SwNodeOffset m_nOtherNode;
         const sal_Int32 m_nContent;
         const sal_Int32 m_nOtherContent;
         const bool m_bSavePos;
@@ -279,7 +279,7 @@ class SwHistoryNoTextFieldmark final : public SwHistoryHint
 
     private:
         const OUString m_sType;
-        const sal_uLong m_nNode;
+        const SwNodeOffset m_nNode;
         const sal_Int32 m_nContent;
 };
 
@@ -295,11 +295,11 @@ class SwHistoryTextFieldmark final : public SwHistoryHint
     private:
         const OUString m_sName;
         const OUString m_sType;
-        const sal_uLong m_nStartNode;
+        const SwNodeOffset m_nStartNode;
         const sal_Int32 m_nStartContent;
-        const sal_uLong m_nEndNode;
+        const SwNodeOffset m_nEndNode;
         const sal_Int32 m_nEndContent;
-        /*const*/ sal_uLong m_nSepNode;
+        /*const*/ SwNodeOffset m_nSepNode;
         /*const*/ sal_Int32 m_nSepContent;
 };
 
@@ -307,10 +307,10 @@ class SwHistorySetAttrSet final : public SwHistoryHint
 {
     SfxItemSet m_OldSet;
     std::vector<sal_uInt16> m_ResetArray;
-    const sal_uLong m_nNodeIndex;
+    const SwNodeOffset m_nNodeIndex;
 
 public:
-    SwHistorySetAttrSet( const SfxItemSet& rSet, sal_uLong nNode,
+    SwHistorySetAttrSet( const SfxItemSet& rSet, SwNodeOffset nNode,
                          const o3tl::sorted_vector<sal_uInt16> &rSetArr );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 
@@ -319,7 +319,7 @@ public:
 class SwHistoryChangeFlyAnchor final : public SwHistoryHint
 {
     SwFrameFormat & m_rFormat;
-    const sal_uLong m_nOldNodeIndex;
+    const SwNodeOffset m_nOldNodeIndex;
     const sal_Int32 m_nOldContentIndex;
 
 public:
@@ -367,9 +367,9 @@ public:
     bool TmpRollback( SwDoc* pDoc, sal_uInt16 nStart, bool ToFirst = true );
 
     void Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
-              sal_uLong nNodeIdx );
-    void Add( SwTextAttr* pTextHt, sal_uLong nNodeIdx, bool bNewAttr );
-    void Add( SwFormatColl*, sal_uLong nNodeIdx, SwNodeType nWhichNd );
+              SwNodeOffset nNodeIdx );
+    void Add( SwTextAttr* pTextHt, SwNodeOffset nNodeIdx, bool bNewAttr );
+    void Add( SwFormatColl*, SwNodeOffset nNodeIdx, SwNodeType nWhichNd );
     void Add( const ::sw::mark::IMark&, bool bSavePos, bool bSaveOtherPos );
     void AddChangeFlyAnchor( SwFrameFormat& rFormat );
     void AddDeleteFly( SwFrameFormat&, sal_uInt16& rSetPos );
@@ -399,12 +399,12 @@ public:
     // used by Undo classes (Delete/Overwrite/Inserts)
     void CopyAttr(
         SwpHints const * pHts,
-        const sal_uLong nNodeIdx,
+        const SwNodeOffset nNodeIdx,
         const sal_Int32 nStart,
         const sal_Int32 nEnd,
         const bool bCopyFields );
 
-    void CopyFormatAttr( const SfxItemSet& rSet, sal_uLong nNodeIdx );
+    void CopyFormatAttr( const SfxItemSet& rSet, SwNodeOffset nNodeIdx );
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
@@ -414,7 +414,7 @@ class SwRegHistory final: public SwClient
 private:
     o3tl::sorted_vector<sal_uInt16> m_WhichIdSet;
     SwHistory * const m_pHistory;
-    sal_uLong m_nNodeIndex;
+    SwNodeOffset m_nNodeIndex;
 
     void MakeSetWhichIds();
 
@@ -433,7 +433,7 @@ public:
     void AddHint( SwTextAttr* pHt, const bool bNew );
 
     void RegisterInModify( sw::BroadcastingModify* pRegIn, const SwNode& rNd );
-    void ChangeNodeIndex( sal_uLong nNew ) { m_nNodeIndex = nNew; }
+    void ChangeNodeIndex( SwNodeOffset nNew ) { m_nNodeIndex = nNew; }
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_ROLBCK_HXX

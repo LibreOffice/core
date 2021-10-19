@@ -28,6 +28,7 @@
 #include "ndtyp.hxx"
 #include "index.hxx"
 #include "fmtcol.hxx"
+#include "nodeoffset.hxx"
 
 #include <memory>
 #include <vector>
@@ -115,7 +116,7 @@ protected:
     SwNode( const SwNodeIndex &rWhere, const SwNodeType nNodeId );
 
     /// for the initial StartNode
-    SwNode( SwNodes& rNodes, sal_uLong nPos, const SwNodeType nNodeId );
+    SwNode( SwNodes& rNodes, SwNodeOffset nPos, const SwNodeType nNodeId );
 
 public:
     /** the = 0 forces the class to be an abstract base class, but the dtor can be still called
@@ -128,11 +129,11 @@ public:
 
     sal_uInt16 GetSectionLevel() const;
 
-    inline sal_uLong StartOfSectionIndex() const;
+    inline SwNodeOffset StartOfSectionIndex() const;
     const SwStartNode* StartOfSectionNode() const { return m_pStartOfSection; }
     SwStartNode* StartOfSectionNode() { return m_pStartOfSection; }
 
-    inline sal_uLong EndOfSectionIndex() const;
+    inline SwNodeOffset EndOfSectionIndex() const;
     inline const SwEndNode* EndOfSectionNode() const;
     inline         SwEndNode* EndOfSectionNode();
 
@@ -280,7 +281,7 @@ public:
     /** Search PageDesc with which this node is formatted. If layout is existent
        search over layout, else only the hard way is left: search over the nodes
        to the front!! */
-    const SwPageDesc* FindPageDesc( size_t* pPgDescNdIdx = nullptr ) const;
+    const SwPageDesc* FindPageDesc( SwNodeOffset* pPgDescNdIdx = nullptr ) const;
 
     /// If node is in a fly return the respective format.
     SwFrameFormat* GetFlyFormat() const;
@@ -288,7 +289,7 @@ public:
     /// If node is in a table return the respective table box.
     SwTableBox* GetTableBox() const;
 
-    sal_uLong GetIndex() const { return GetPos(); }
+    SwNodeOffset GetIndex() const { return SwNodeOffset(GetPos()); }
 
     const SwTextNode* FindOutlineNodeOfLevel(sal_uInt8 nLvl, SwRootFrame const* pLayout = nullptr) const;
 
@@ -319,7 +320,7 @@ class SAL_DLLPUBLIC_RTTI SwStartNode: public SwNode
     SwStartNodeType m_eStartNodeType;
 
     /// for the initial StartNode
-    SwStartNode( SwNodes& rNodes, sal_uLong nPos );
+    SwStartNode( SwNodes& rNodes, SwNodeOffset nPos );
 
 protected:
     SwStartNode( const SwNodeIndex &rWhere,
@@ -346,7 +347,7 @@ class SwEndNode final : public SwNode
     friend class SwSectionNode;     ///< To enable creation of its EndNote.
 
     /// for the initial StartNode
-    SwEndNode( SwNodes& rNodes, sal_uLong nPos, SwStartNode& rSttNd );
+    SwEndNode( SwNodes& rNodes, SwNodeOffset nPos, SwStartNode& rSttNd );
 
     SwEndNode( const SwNodeIndex &rWhere, SwStartNode& rSttNd );
 
@@ -671,11 +672,11 @@ inline const SwSectionNode* SwNode::FindSectionNode() const
 {
     return const_cast<SwNode*>(this)->FindSectionNode();
 }
-inline sal_uLong SwNode::StartOfSectionIndex() const
+inline SwNodeOffset SwNode::StartOfSectionIndex() const
 {
     return m_pStartOfSection->GetIndex();
 }
-inline sal_uLong SwNode::EndOfSectionIndex() const
+inline SwNodeOffset SwNode::EndOfSectionIndex() const
 {
     const SwStartNode* pStNd = IsStartNode() ? static_cast<const SwStartNode*>(this) : m_pStartOfSection;
     return pStNd->m_pEndOfSection->GetIndex();
@@ -730,9 +731,9 @@ inline SwPlaceholderNode::SwPlaceholderNode(const SwNodeIndex &rWhere)
 {
 }
 
-inline SwNode* SwNodes::operator[]( sal_uLong n ) const
+inline SwNode* SwNodes::operator[]( SwNodeOffset n ) const
 {
-    return static_cast<SwNode*>(BigPtrArray::operator[] ( n ));
+    return static_cast<SwNode*>(BigPtrArray::operator[] ( sal_Int32(n) ));
 }
 
 #endif

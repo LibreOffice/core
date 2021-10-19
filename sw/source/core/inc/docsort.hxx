@@ -90,7 +90,7 @@ private:
 // sort text
 struct SwSortTextElement final : public SwSortElement
 {
-    sal_uLong   nOrg;
+    SwNodeOffset   nOrg;
     SwNodeIndex aPos;
 
     SwSortTextElement( const SwNodeIndex& rPos );

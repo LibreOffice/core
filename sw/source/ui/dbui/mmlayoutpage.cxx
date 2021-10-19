@@ -420,10 +420,10 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
         rShell.MovePara(GoCurrPara, fnParaStart);
     }
     bool bSplitNode = !rShell.IsEndPara();
-    sal_Int32 nMoves = rConfigItem.GetGreetingMoves();
-    if( !bExample && 0 != nMoves )
+    SwNodeOffset nMoves(rConfigItem.GetGreetingMoves());
+    if( !bExample && SwNodeOffset(0) != nMoves )
     {
-        if(nMoves < 0)
+        if(nMoves < SwNodeOffset(0))
         {
             rShell.MoveParagraph( nMoves );
         }
@@ -669,7 +669,7 @@ IMPL_LINK_NOARG(SwMailMergeLayoutPage, ChangeAddressHdl_Impl, weld::MetricSpinBu
 IMPL_LINK(SwMailMergeLayoutPage, GreetingsHdl_Impl, weld::Button&, rButton, void)
 {
     bool bDown = &rButton == m_xDownPB.get();
-    bool bMoved = m_pExampleWrtShell->MoveParagraph( bDown ? 1 : -1 );
+    bool bMoved = m_pExampleWrtShell->MoveParagraph( SwNodeOffset(bDown ? 1 : -1) );
     if (bMoved || bDown)
         m_pWizard->GetConfigItem().MoveGreeting(bDown ? 1 : -1 );
     if(!bMoved && bDown)

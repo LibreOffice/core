@@ -54,13 +54,13 @@ typedef std::vector<SwFlyCache> SwPageFlyCache;
 
 class SwLayCacheImpl
 {
-    std::vector<sal_uLong> mIndices;
+    std::vector<SwNodeOffset> mIndices;
     /// either a textframe character offset, or a row index inside a table
     std::deque<sal_Int32> m_aOffset;
     std::vector<sal_uInt16> m_aType;
     SwPageFlyCache m_FlyCache;
     bool m_bUseFlyCache;
-    void Insert( sal_uInt16 nType, sal_uLong nIndex, sal_Int32 nOffset );
+    void Insert( sal_uInt16 nType, SwNodeOffset nIndex, sal_Int32 nOffset );
 
 public:
     inline SwLayCacheImpl();
@@ -69,7 +69,7 @@ public:
 
     bool Read( SvStream& rStream );
 
-    sal_uLong GetBreakIndex( size_t nIdx ) const { return mIndices[ nIdx ]; }
+    SwNodeOffset GetBreakIndex( size_t nIdx ) const { return mIndices[ nIdx ]; }
     sal_Int32 GetBreakOfst( size_t nIdx ) const { return m_aOffset[ nIdx ]; }
     sal_uInt16 GetBreakType( size_t nIdx ) const { return m_aType[ nIdx ]; }
 
@@ -112,7 +112,7 @@ class SwLayHelper
     SwLayCacheImpl* mpImpl;
     sal_uLong mnMaxParaPerPage;
     sal_uLong mnParagraphCnt;
-    sal_uLong mnStartOfContent;
+    SwNodeOffset mnStartOfContent;
     size_t mnIndex;                          ///< the index in the page break array
     size_t mnFlyIdx;                         ///< the index in the fly cache array
     bool mbFirst : 1;
@@ -120,10 +120,10 @@ class SwLayHelper
 public:
     SwLayHelper( SwDoc *pD, SwFrame* &rpF, SwFrame* &rpP, SwPageFrame* &rpPg,
             SwLayoutFrame* &rpL, std::unique_ptr<SwActualSection> &rpA,
-            sal_uLong nNodeIndex, bool bCache );
+            SwNodeOffset nNodeIndex, bool bCache );
     ~SwLayHelper();
     sal_uLong CalcPageCount();
-    bool CheckInsert( sal_uLong nNodeIndex );
+    bool CheckInsert( SwNodeOffset nNodeIndex );
 
     bool CheckInsertPage();
 

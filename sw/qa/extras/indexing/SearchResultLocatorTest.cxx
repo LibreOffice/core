@@ -63,7 +63,7 @@ void SearchResultLocatorTest::testSearchResultLocator()
 
     sw::search::SearchResultLocator aLocator(pDoc);
     std::vector<sw::search::SearchIndexData> aDataVector;
-    aDataVector.emplace_back(sw::search::NodeType::WriterNode, 14);
+    aDataVector.emplace_back(sw::search::NodeType::WriterNode, SwNodeOffset(14));
 
     sw::search::LocationResult aResult = aLocator.find(aDataVector);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aResult.maRectangles.size());
@@ -146,7 +146,7 @@ void SearchResultLocatorTest::testSearchResultLocatorForSdrObjects()
 
     sw::search::SearchResultLocator aLocator(pDoc);
     std::vector<sw::search::SearchIndexData> aDataVector;
-    aDataVector.emplace_back(sw::search::NodeType::CommonNode, 1, u"Circle");
+    aDataVector.emplace_back(sw::search::NodeType::CommonNode, SwNodeOffset(1), u"Circle");
 
     sw::search::LocationResult aResult = aLocator.find(aDataVector);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aResult.maRectangles.size());

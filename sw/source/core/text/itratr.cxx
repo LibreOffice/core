@@ -869,7 +869,7 @@ public:
     tools::Long m_nRightRest; // space not already covered by frames in the right margin
     tools::Long m_nLeftDiff; // Min/Max-difference of the frame in the left margin
     tools::Long m_nRightDiff; // Min/Max-difference of the frame in the right margin
-    sal_uLong m_nIndex; // index of the node
+    SwNodeOffset m_nIndex; // index of the node
     void Minimum( tools::Long nNew ) {
         if (nNew > m_nMinWidth)
             m_nMinWidth = nNew;
@@ -901,7 +901,7 @@ static void lcl_MinMaxNode(SwFrameFormat* pNd, SwMinMaxNodeArgs& rIn)
         // Does the frame contain a table at the start or the end?
         const SwNodes& rNodes = pNd->GetDoc()->GetNodes();
         const SwFormatContent& rFlyContent = pNd->GetContent();
-        sal_uLong nStt = rFlyContent.GetContentIdx()->GetIndex();
+        SwNodeOffset nStt = rFlyContent.GetContentIdx()->GetIndex();
         SwTableNode* pTableNd = rNodes[nStt+1]->GetTableNode();
         if( !pTableNd )
         {
@@ -1003,7 +1003,7 @@ static void lcl_MinMaxNode(SwFrameFormat* pNd, SwMinMaxNodeArgs& rIn)
  * Changing this method very likely requires changing of GetScalingOfSelectedText
  * This one is called exclusively from import filters, so there is no layout.
  */
-void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMax,
+void SwTextNode::GetMinMaxSize( SwNodeOffset nIndex, sal_uLong& rMin, sal_uLong &rMax,
                                sal_uLong& rAbsMin ) const
 {
     SwViewShell const * pSh = GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell();

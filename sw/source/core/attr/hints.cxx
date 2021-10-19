@@ -179,7 +179,7 @@ void SwFindNearestNode::CheckNode( const SwNode& rNd )
 {
     if( &m_pNode->GetNodes() == &rNd.GetNodes() )
     {
-        sal_uLong nIdx = rNd.GetIndex();
+        SwNodeOffset nIdx = rNd.GetIndex();
         if( nIdx < m_pNode->GetIndex() &&
             ( !m_pFound || nIdx > m_pFound->GetIndex() ) &&
             nIdx > rNd.GetNodes().GetEndOfExtras().GetIndex() )

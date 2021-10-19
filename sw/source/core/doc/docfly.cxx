@@ -1041,8 +1041,8 @@ SwChainRet SwDoc::Chainable( const SwFrameFormat &rSource, const SwFrameFormat &
     if( !pTextNd )
         return SwChainRet::NOT_FOUND;
 
-    const sal_uLong nFlySttNd = pCntIdx->GetIndex();
-    if( 2 != ( pCntIdx->GetNode().EndOfSectionIndex() - nFlySttNd ) ||
+    const SwNodeOffset nFlySttNd = pCntIdx->GetIndex();
+    if( SwNodeOffset(2) != ( pCntIdx->GetNode().EndOfSectionIndex() - nFlySttNd ) ||
         pTextNd->GetText().getLength() )
     {
         return SwChainRet::NOT_EMPTY;
@@ -1057,8 +1057,8 @@ SwChainRet SwDoc::Chainable( const SwFrameFormat &rSource, const SwFrameFormat &
             continue;
         if ( nullptr == rAnchor.GetContentAnchor() )
             continue;
-        sal_uLong nTstSttNd = rAnchor.GetContentAnchor()->nNode.GetIndex();
-        if( nFlySttNd <= nTstSttNd && nTstSttNd < nFlySttNd + 2 )
+        SwNodeOffset nTstSttNd = rAnchor.GetContentAnchor()->nNode.GetIndex();
+        if( nFlySttNd <= nTstSttNd && nTstSttNd < nFlySttNd + SwNodeOffset(2) )
         {
             return SwChainRet::NOT_EMPTY;
         }
@@ -1072,7 +1072,7 @@ SwChainRet SwDoc::Chainable( const SwFrameFormat &rSource, const SwFrameFormat &
     // both in the same fly, header, footer or on the page?
     const SwFormatAnchor &rSrcAnchor = rSource.GetAnchor(),
                       &rDstAnchor = rDest.GetAnchor();
-    sal_uLong nEndOfExtras = GetNodes().GetEndOfExtras().GetIndex();
+    SwNodeOffset nEndOfExtras = GetNodes().GetEndOfExtras().GetIndex();
     bool bAllowed = false;
     if ( RndStdIds::FLY_AT_PAGE == rSrcAnchor.GetAnchorId() )
     {

@@ -413,7 +413,7 @@ SwFrameFormat *SwHTMLTableLayout::FindFlyFrameFormat() const
 
 static void lcl_GetMinMaxSize( sal_uLong& rMinNoAlignCnts, sal_uLong& rMaxNoAlignCnts,
                         sal_uLong& rAbsMinNoAlignCnts,
-                        SwTextNode const *pTextNd, sal_uLong nIdx, bool bNoBreak )
+                        SwTextNode const *pTextNd, SwNodeOffset nIdx, bool bNoBreak )
 {
     pTextNd->GetMinMaxSize( nIdx, rMinNoAlignCnts, rMaxNoAlignCnts,
                            rAbsMinNoAlignCnts );
@@ -486,7 +486,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                     if( pSttNd )
                     {
                         const SwDoc& rDoc = pSttNd->GetDoc();
-                        sal_uLong nIdx = pSttNd->GetIndex();
+                        SwNodeOffset nIdx = pSttNd->GetIndex();
                         while (!rDoc.GetNodes()[nIdx]->IsEndNode())
                         {
                             SwTextNode *pTextNd = (rDoc.GetNodes()[nIdx])->GetTextNode();

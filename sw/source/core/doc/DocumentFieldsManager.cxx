@@ -980,8 +980,8 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
 
     // Make sure we don't hide all content, which would lead to a crash. First, count how many visible sections we have.
     int nShownSections = 0;
-    sal_uLong nContentStart = m_rDoc.GetNodes().GetEndOfContent().StartOfSectionIndex() + 1;
-    sal_uLong nContentEnd = m_rDoc.GetNodes().GetEndOfContent().GetIndex();
+    SwNodeOffset nContentStart = m_rDoc.GetNodes().GetEndOfContent().StartOfSectionIndex() + 1;
+    SwNodeOffset nContentEnd = m_rDoc.GetNodes().GetEndOfContent().GetIndex();
     SwSectionFormats& rSectFormats = m_rDoc.GetSections();
     for( SwSectionFormats::size_type n = 0; n<rSectFormats.size(); ++n )
     {
@@ -1395,7 +1395,7 @@ SwDocUpdateField& DocumentFieldsManager::GetUpdateFields() const
     return *mpUpdateFields;
 }
 
-bool DocumentFieldsManager::SetFieldsDirty( bool b, const SwNode* pChk, sal_uLong nLen )
+bool DocumentFieldsManager::SetFieldsDirty( bool b, const SwNode* pChk, SwNodeOffset nLen )
 {
     // See if the supplied nodes actually contain fields.
     // If they don't, the flag doesn't need to be changed.
@@ -1407,7 +1407,7 @@ bool DocumentFieldsManager::SetFieldsDirty( bool b, const SwNode* pChk, sal_uLon
         b = false;
         if( !nLen )
             ++nLen;
-        sal_uLong nStt = pChk->GetIndex();
+        SwNodeOffset nStt = pChk->GetIndex();
         const SwNodes& rNds = pChk->GetNodes();
         while( nLen-- )
         {
@@ -1574,7 +1574,7 @@ void DocumentFieldsManager::FieldsToCalc(SwCalc& rCalc,
 }
 
 void DocumentFieldsManager::FieldsToCalc(SwCalc& rCalc,
-        sal_uLong const nLastNd, sal_Int32 const nLastCnt)
+        SwNodeOffset const nLastNd, sal_Int32 const nLastCnt)
 {
     // create the sorted list of all SetFields
     mpUpdateFields->MakeFieldList( m_rDoc, mbNewFieldLst, GETFLD_CALC );

@@ -21,10 +21,11 @@
 #define INCLUDED_SW_SOURCE_CORE_DOCNODE_NDSECT_HXX
 
 #include <tools/solar.h>
+#include <nodeoffset.hxx>
 
 class SwSectionNode;
 
-void sw_DeleteFootnote(SwSectionNode* pNd, sal_uLong nStt, sal_uLong nEnd);
+void sw_DeleteFootnote(SwSectionNode* pNd, SwNodeOffset nStt, SwNodeOffset nEnd);
 
 #endif
 

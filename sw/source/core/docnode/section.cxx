@@ -81,7 +81,7 @@ namespace {
             const OUString& rMimeType, const css::uno::Any & rValue ) override;
 
         virtual const SwNode* GetAnchor() const override;
-        virtual bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd ) const override;
+        virtual bool IsInRange( SwNodeOffset nSttNd, SwNodeOffset nEndNd ) const override;
 
         SwSectionNode* GetSectNode()
         {
@@ -658,7 +658,7 @@ SwSectionFormat::~SwSectionFormat()
         CallSwClientNotify( SwSectionFrameMoveAndDeleteHint( true ) );
 
         // Raise the Section up
-        SwNodeRange aRg( *pSectNd, 0, *pSectNd->EndOfSectionNode() );
+        SwNodeRange aRg( *pSectNd, SwNodeOffset(0), *pSectNd->EndOfSectionNode() );
         GetDoc()->GetNodes().SectionUp( &aRg );
     }
     LockModify();
@@ -693,8 +693,8 @@ void SwSectionFormat::DelFrames()
             pLast = aIter.Next();
         }
 
-        sal_uLong nEnd = pSectNd->EndOfSectionIndex();
-        sal_uLong nStart = pSectNd->GetIndex()+1;
+        SwNodeOffset nEnd = pSectNd->EndOfSectionIndex();
+        SwNodeOffset nStart = pSectNd->GetIndex()+1;
         sw_DeleteFootnote( pSectNd, nStart, nEnd );
     }
     if( !pIdx )
@@ -1275,7 +1275,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
                     }
                 }
                 else if( pSrcDoc != pDoc )
-                    pCpyRg.reset(new SwNodeRange( pSrcDoc->GetNodes().GetEndOfExtras(), 2,
+                    pCpyRg.reset(new SwNodeRange( pSrcDoc->GetNodes().GetEndOfExtras(), SwNodeOffset(2),
                                           pSrcDoc->GetNodes().GetEndOfContent() ));
 
                 // #i81653#
@@ -1304,7 +1304,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
 
                     // Delete last Node, only if it was copied successfully
                     // (the Section contains more than one Node)
-                    if( 2 < pSectNd->EndOfSectionIndex() - pSectNd->GetIndex() )
+                    if( SwNodeOffset(2) < pSectNd->EndOfSectionIndex() - pSectNd->GetIndex() )
                     {
                         aSave = rInsPos;
                         pPam->Move( fnMoveBackward, GoInNode );
@@ -1523,7 +1523,7 @@ void SwSection::BreakLink()
 
 const SwNode* SwIntrnlSectRefLink::GetAnchor() const { return m_rSectFormat.GetSectionNode(); }
 
-bool SwIntrnlSectRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd ) const
+bool SwIntrnlSectRefLink::IsInRange( SwNodeOffset nSttNd, SwNodeOffset nEndNd ) const
 {
     SwStartNode* pSttNd = m_rSectFormat.GetSectionNode();
     return pSttNd &&

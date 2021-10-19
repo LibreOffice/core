@@ -903,8 +903,8 @@ bool DoSearch(SwPaM & rSearchPam,
         if( (bSrchForward || pSttNd != &rNdIdx.GetNode()) &&
             rSearchPam.Move(fnMoveForward, GoInContent) &&
             (!bSrchForward || pSttNd != &rSearchPam.GetPoint()->nNode.GetNode()) &&
-            1 == std::abs(static_cast<int>(rSearchPam.GetPoint()->nNode.GetIndex() -
-                             rSearchPam.GetMark()->nNode.GetIndex())))
+            SwNodeOffset(1) == abs(rSearchPam.GetPoint()->nNode.GetIndex() -
+                                   rSearchPam.GetMark()->nNode.GetIndex()))
         {
             // if backward search, switch point and mark
             if( !bSrchForward )

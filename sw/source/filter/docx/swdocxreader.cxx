@@ -156,7 +156,7 @@ bool SwDOCXReader::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks )
     SwNodeIndex aStart( *aDocEnd.GetNode().StartOfSectionNode(), 1 );
     bool bIsAutoText = false;
 
-    if( aStart < aDocEnd && ( aDocEnd.GetIndex() - aStart.GetIndex() > 2 ) )
+    if( aStart < aDocEnd && ( aDocEnd.GetIndex() - aStart.GetIndex() > SwNodeOffset(2) ) )
     {
         SwTextFormatColl* pColl = pD->getIDocumentStylePoolAccess().GetTextCollFromPool
             (RES_POOLCOLL_STANDARD, false);

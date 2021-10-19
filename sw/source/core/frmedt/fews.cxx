@@ -433,7 +433,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
     SwRewriter aRewriter(SwUndoInsertLabel::CreateRewriter(rText));
     StartUndo(SwUndoId::INSERTLABEL, &aRewriter);
 
-    sal_uLong nIdx = 0;
+    SwNodeOffset nIdx(0);
     bool bInnerCntIsFly = false;
     SwFlyFrameFormat* pFlyFormat = nullptr;
     switch( eType )
@@ -557,7 +557,7 @@ bool SwFEShell::Sort(const SwSortOptions& rOpt)
             SwPosition* pEnd   = pPam->End();
 
             SwNodeIndex aPrevIdx( pStart->nNode, -1 );
-            sal_uLong nOffset = pEnd->nNode.GetIndex() - pStart->nNode.GetIndex();
+            SwNodeOffset nOffset = pEnd->nNode.GetIndex() - pStart->nNode.GetIndex();
             const sal_Int32 nCntStt  = pStart->nContent.GetIndex();
 
             // Sorting

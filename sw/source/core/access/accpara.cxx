@@ -2968,8 +2968,8 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getSelectedPortionCount(  )
     {
         // get SwPosition for my node
         SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
-        sal_uLong nFirstNode(pFrame->GetTextNodeFirst()->GetIndex());
-        sal_uLong nLastNode;
+        SwNodeOffset nFirstNode(pFrame->GetTextNodeFirst()->GetIndex());
+        SwNodeOffset nLastNode;
         if (sw::MergedPara const*const pMerged = pFrame->GetMergedPara())
         {
             nLastNode = pMerged->pLastNode->GetIndex();
@@ -2987,9 +2987,9 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getSelectedPortionCount(  )
             {
                 // check whether frame's node(s) are 'inside' pCursor
                 SwPosition* pStart = rTmpCursor.Start();
-                sal_uLong nStartIndex = pStart->nNode.GetIndex();
+                SwNodeOffset nStartIndex = pStart->nNode.GetIndex();
                 SwPosition* pEnd = rTmpCursor.End();
-                sal_uLong nEndIndex = pEnd->nNode.GetIndex();
+                SwNodeOffset nEndIndex = pEnd->nNode.GetIndex();
                 if ((nStartIndex <= nLastNode) && (nFirstNode <= nEndIndex))
                 {
                     nSelected++;
@@ -3042,8 +3042,8 @@ sal_Bool SAL_CALL SwAccessibleParagraph::removeSelection( sal_Int32 selectionInd
 
         // get SwPosition for my node
         SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
-        sal_uLong nFirstNode(pFrame->GetTextNodeFirst()->GetIndex());
-        sal_uLong nLastNode;
+        SwNodeOffset nFirstNode(pFrame->GetTextNodeFirst()->GetIndex());
+        SwNodeOffset nLastNode;
         if (sw::MergedPara const*const pMerged = pFrame->GetMergedPara())
         {
             nLastNode = pMerged->pLastNode->GetIndex();
@@ -3062,9 +3062,9 @@ sal_Bool SAL_CALL SwAccessibleParagraph::removeSelection( sal_Int32 selectionInd
             {
                 // check whether frame's node(s) are 'inside' pCursor
                 SwPosition* pStart = pCursor->Start();
-                sal_uLong nStartIndex = pStart->nNode.GetIndex();
+                SwNodeOffset nStartIndex = pStart->nNode.GetIndex();
                 SwPosition* pEnd = pCursor->End();
-                sal_uLong nEndIndex = pEnd->nNode.GetIndex();
+                SwNodeOffset nEndIndex = pEnd->nNode.GetIndex();
                 if ((nStartIndex <= nLastNode) && (nFirstNode <= nEndIndex))
                 {
                     if( nSelected == 0 )
@@ -3348,8 +3348,8 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
     {
         // get SwPosition for my node
         SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
-        sal_uLong nFirstNode(pFrame->GetTextNodeFirst()->GetIndex());
-        sal_uLong nLastNode;
+        SwNodeOffset nFirstNode(pFrame->GetTextNodeFirst()->GetIndex());
+        SwNodeOffset nLastNode;
         if (sw::MergedPara const*const pMerged = pFrame->GetMergedPara())
         {
             nLastNode = pMerged->pLastNode->GetIndex();
@@ -3367,9 +3367,9 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
             {
                 // check whether frame's node(s) are 'inside' pCursor
                 SwPosition* pStart = rTmpCursor.Start();
-                sal_uLong nStartIndex = pStart->nNode.GetIndex();
+                SwNodeOffset nStartIndex = pStart->nNode.GetIndex();
                 SwPosition* pEnd = rTmpCursor.End();
-                sal_uLong nEndIndex = pEnd->nNode.GetIndex();
+                SwNodeOffset nEndIndex = pEnd->nNode.GetIndex();
                 if ((nStartIndex <= nLastNode) && (nFirstNode <= nEndIndex))
                 {
                     if (!pSelection || *pSelection == 0)

@@ -85,7 +85,7 @@ struct PercentHdl
     explicit PercentHdl( const SwPaM& rPam )
         : pDSh( rPam.GetDoc().GetDocShell() )
     {
-        sal_uLong nStt, nEnd;
+        sal_Int32 nStt, nEnd;
         if( rPam.GetPoint()->nNode == rPam.GetMark()->nNode )
         {
             bNodeIdx = false;
@@ -95,8 +95,8 @@ struct PercentHdl
         else
         {
             bNodeIdx = true;
-            nStt = rPam.GetMark()->nNode.GetIndex();
-            nEnd = rPam.GetPoint()->nNode.GetIndex();
+            nStt = sal_Int32(rPam.GetMark()->nNode.GetIndex());
+            nEnd = sal_Int32(rPam.GetPoint()->nNode.GetIndex());
         }
         nActPos = nStt;
         bBack = (nStt > nEnd );
@@ -114,9 +114,9 @@ struct PercentHdl
 
     void NextPos( SwPosition const & rPos ) const
         {
-            sal_uLong nPos;
+            sal_Int32 nPos;
             if( bNodeIdx )
-                nPos = rPos.nNode.GetIndex();
+                nPos = sal_Int32(rPos.nNode.GetIndex());
             else
                 nPos = rPos.nContent.GetIndex();
             ::SetProgressState( bBack ? nActPos - nPos : nPos, pDSh );
@@ -301,11 +301,11 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
         // is there a protected section in the section?
         if( HasMark() && bSkipOverProtectSections)
         {
-            sal_uLong nSttIdx = GetMark()->nNode.GetIndex(),
+            SwNodeOffset nSttIdx = GetMark()->nNode.GetIndex(),
                 nEndIdx = GetPoint()->nNode.GetIndex();
             if( nEndIdx <= nSttIdx )
             {
-                sal_uLong nTmp = nSttIdx;
+                SwNodeOffset nTmp = nSttIdx;
                 nSttIdx = nEndIdx;
                 nEndIdx = nTmp;
             }
@@ -319,7 +319,7 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
                 {
                     const SwFormatContent& rContent = pFormat->GetContent(false);
                     OSL_ENSURE( rContent.GetContentIdx(), "No SectionNode?" );
-                    sal_uLong nIdx = rContent.GetContentIdx()->GetIndex();
+                    SwNodeOffset nIdx = rContent.GetContentIdx()->GetIndex();
                     if( nSttIdx <= nIdx && nEndIdx >= nIdx )
                     {
                         // if it is no linked section then we cannot select it
@@ -451,7 +451,7 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
 
         if ( pInputFieldTextAttrAtPoint != pInputFieldTextAttrAtMark )
         {
-            const sal_uLong nRefNodeIdx =
+            const SwNodeOffset nRefNodeIdx =
                 ( SwCursorSelOverFlags::Toggle & eFlags )
                 ? m_vSavePos.back().nNode
                 : GetMark()->nNode.GetIndex();
@@ -506,8 +506,8 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
                  ? m_vSavePos.back().nNode : GetMark()->nNode.GetIndex());
 
         do { // loop for table after table
-            sal_uLong nSEIdx = pPtNd->EndOfSectionIndex();
-            sal_uLong nSttEndTable = nSEIdx + 1;
+            SwNodeOffset nSEIdx = pPtNd->EndOfSectionIndex();
+            SwNodeOffset nSttEndTable = nSEIdx + 1;
 
             if( bSelTop )
                 nSttEndTable = rNds[ nSEIdx ]->StartOfSectionIndex() - 1;
@@ -1122,7 +1122,7 @@ void SwCursor::FillFindPos( SwDocPositions ePos, SwPosition& rPos ) const
         bIsStart = false;
         break;
     case SwDocPositions::OtherStart:
-        rPos.nNode = *rNds[ sal_uLong(0) ];
+        rPos.nNode = *rNds[ SwNodeOffset(0) ];
         pCNd = rNds.GoNext( &rPos.nNode );
         break;
     case SwDocPositions::OtherEnd:
@@ -2315,7 +2315,7 @@ bool SwCursor::MovePara(SwWhichPara fnWhichPara, SwMoveFnCollection const & fnPo
     {
         if ( pNd->IsTextNode() &&
              pNd->GetNodes()[ pNd->GetIndex() +
-                    (fnWhichPara == GoNextPara ? 1 : -1 ) ]->IsTextNode() )
+                    SwNodeOffset(fnWhichPara == GoNextPara ? 1 : -1 ) ]->IsTextNode() )
             bShortCut = true;
     }
 
@@ -2345,7 +2345,7 @@ void SwCursor::RestoreSavePos()
 {
     // This method is not supposed to be used in cases when nodes may be
     // deleted; detect such cases, but do not crash (example: fdo#40831).
-    sal_uLong uNodeCount = GetPoint()->nNode.GetNodes().Count();
+    SwNodeOffset uNodeCount(GetPoint()->nNode.GetNodes().Count());
     OSL_ENSURE(m_vSavePos.empty() || m_vSavePos.back().nNode < uNodeCount,
         "SwCursor::RestoreSavePos: invalid node: "
         "probably something was deleted; consider using SwUnoCursor instead");
@@ -2373,8 +2373,8 @@ SwTableCursor::SwTableCursor( const SwPosition &rPos )
 {
     m_bParked = false;
     m_bChanged = false;
-    m_nTablePtNd = 0;
-    m_nTableMkNd = 0;
+    m_nTablePtNd = SwNodeOffset(0);
+    m_nTableMkNd = SwNodeOffset(0);
     m_nTablePtCnt = 0;
     m_nTableMkCnt = 0;
 }
@@ -2385,7 +2385,7 @@ static bool
 lcl_SeekEntry(const SwSelBoxes& rTmp, SwStartNode const*const pSrch,
         size_t & o_rFndPos)
 {
-    sal_uLong nIdx = pSrch->GetIndex();
+    SwNodeOffset nIdx = pSrch->GetIndex();
 
     size_t nO = rTmp.size();
     if( nO > 0 )

@@ -107,7 +107,7 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(tools::Long nChars, 
     mpDocStat->nPara = 0; // default is 1!
 
     // This is the inner loop - at least while the paras are dirty.
-    for( sal_uLong i = m_rDoc.GetNodes().Count(); i > 0 && nChars > 0; )
+    for( SwNodeOffset i = m_rDoc.GetNodes().Count(); i > SwNodeOffset(0) && nChars > 0; )
     {
         SwNode* pNd = m_rDoc.GetNodes()[ --i ];
         switch( pNd->GetNodeType() )

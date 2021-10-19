@@ -1142,7 +1142,7 @@ SwXText::getPropertyValue(
             if (nRedTableCount > 0)
             {
                 SwStartNode const*const pStartNode = GetStartNode();
-                const sal_uLong nOwnIndex = pStartNode->EndOfSectionIndex();
+                const SwNodeOffset nOwnIndex = pStartNode->EndOfSectionIndex();
                 for (size_t nRed = 0; nRed < nRedTableCount; ++nRed)
                 {
                     SwRangeRedline const*const pRedline = rRedTable[nRed];
@@ -1944,9 +1944,9 @@ void SwXText::Impl::ConvertCell(
     else
     {
         // check the predecessor
-        const sal_uLong nStartCellNodeIndex =
+        const SwNodeOffset nStartCellNodeIndex =
             aStartCellPam.Start()->nNode.GetIndex();
-        const sal_uLong nLastNodeEndIndex = pLastCell->aEnd.GetIndex();
+        const SwNodeOffset nLastNodeEndIndex = pLastCell->aEnd.GetIndex();
         if (nLastNodeEndIndex == nStartCellNodeIndex)
         {
             // same node as predecessor then equal nContent?
@@ -1956,7 +1956,7 @@ void SwXText::Impl::ConvertCell(
             }
 
             m_pDoc->getIDocumentContentOperations().SplitNode(*aStartCellPam.Start(), false);
-            sal_uLong const nNewIndex(aStartCellPam.Start()->nNode.GetIndex());
+            SwNodeOffset const nNewIndex(aStartCellPam.Start()->nNode.GetIndex());
             if (nNewIndex != nStartCellNodeIndex)
             {
                 // aStartCellPam now points to the 2nd node
@@ -2279,7 +2279,7 @@ SwXText::copyText(
     {
         SwTextNode * pFirstNode;
         {
-            SwPaM temp(*pSource->GetStartNode(), *pSource->GetStartNode()->EndOfSectionNode(), +1, -1);
+            SwPaM temp(*pSource->GetStartNode(), *pSource->GetStartNode()->EndOfSectionNode(), SwNodeOffset(+1), SwNodeOffset(-1));
             pFirstNode = temp.GetMark()->nNode.GetNode().GetTextNode();
             if (pFirstNode)
             {

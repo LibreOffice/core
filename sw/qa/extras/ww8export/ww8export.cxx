@@ -1381,7 +1381,7 @@ DECLARE_WW8EXPORT_TEST(testRES_MIRROR_GRAPH_BOTH, "tdf56321_flipImage_both.doc")
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     CPPUNIT_ASSERT(pDoc);
 
-    for (int n = 0; ; n++)
+    for (SwNodeOffset n(0); ; n++)
     {
         SwNode* pNode = pDoc->GetNodes()[ n ];
         if (SwGrfNode *pGrfNode = pNode->GetGrfNode())

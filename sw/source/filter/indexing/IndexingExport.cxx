@@ -88,7 +88,7 @@ public:
 
     void handleTextNode(const SwTextNode* pTextNode)
     {
-        sal_Int64 nParentIndex = -1;
+        SwNodeOffset nParentIndex(-1);
         if (!maNodeStack.empty() && maNodeStack.back())
         {
             nParentIndex = maNodeStack.back()->GetIndex();
@@ -98,10 +98,10 @@ public:
         if (rString.isEmpty())
             return;
         m_rXmlWriter.startElement("paragraph");
-        m_rXmlWriter.attribute("index", pTextNode->GetIndex());
+        m_rXmlWriter.attribute("index", sal_Int32(pTextNode->GetIndex()));
         m_rXmlWriter.attribute("node_type", "writer");
-        if (nParentIndex >= 0)
-            m_rXmlWriter.attribute("parent_index", nParentIndex);
+        if (nParentIndex >= SwNodeOffset(0))
+            m_rXmlWriter.attribute("parent_index", sal_Int32(nParentIndex));
         m_rXmlWriter.content(rString);
         m_rXmlWriter.endElement();
     }
@@ -147,7 +147,7 @@ public:
         OUString sName = pFormat->GetName();
 
         m_rXmlWriter.startElement("object");
-        m_rXmlWriter.attribute("index", pTableNode->GetIndex());
+        m_rXmlWriter.attribute("index", sal_Int32(pTableNode->GetIndex()));
         m_rXmlWriter.attribute("name", sName);
         m_rXmlWriter.attribute("object_type", "table");
         m_rXmlWriter.endElement();
@@ -158,7 +158,7 @@ public:
     void handleSectionNode(SwSectionNode* pSectionNode)
     {
         m_rXmlWriter.startElement("object");
-        m_rXmlWriter.attribute("index", pSectionNode->GetIndex());
+        m_rXmlWriter.attribute("index", sal_Int32(pSectionNode->GetIndex()));
         m_rXmlWriter.attribute("name", pSectionNode->GetSection().GetSectionName());
         m_rXmlWriter.attribute("object_type", "section");
         m_rXmlWriter.endElement();

@@ -113,7 +113,7 @@ CPPUNIT_TEST_FIXTURE(Test, testImageLazyRead0size)
     // bitmap.
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
-    SwNode* pNode = pDoc->GetNodes()[6];
+    SwNode* pNode = pDoc->GetNodes()[SwNodeOffset(6)];
     SwGrfNode* pGrfNode = pNode->GetGrfNode();
     CPPUNIT_ASSERT(pGrfNode);
     // Without the accompanying fix in place, this test would have failed with:
@@ -198,7 +198,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf125281)
     // Load a .doc file which has an embedded .emf image.
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
-    SwNode* pNode = pDoc->GetNodes()[6];
+    SwNode* pNode = pDoc->GetNodes()[SwNodeOffset(6)];
     CPPUNIT_ASSERT(pNode->IsGrfNode());
     SwGrfNode* pGrfNode = pNode->GetGrfNode();
     const Graphic& rGraphic = pGrfNode->GetGrf();

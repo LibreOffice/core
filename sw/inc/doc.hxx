@@ -932,7 +932,7 @@ public:
                                             const SfxItemSet* pSet = nullptr,
                                             bool bExpand = false,
                                     SwRootFrame const* pLayout = nullptr );
-    void              InsertTableOf( sal_uLong nSttNd, sal_uLong nEndNd,
+    void              InsertTableOf( SwNodeOffset nSttNd, SwNodeOffset nEndNd,
                                             const SwTOXBase& rTOX,
                                             const SfxItemSet* pSet );
     static SwTOXBase* GetCurTOX( const SwPosition& rPos );
@@ -1144,8 +1144,8 @@ public:
 
     /** Move selected paragraphs (not only numberings)
      according to offsets. (if negative: go to doc start). */
-    bool MoveParagraph(SwPaM&, tools::Long nOffset, bool bIsOutlMv = false);
-    bool MoveParagraphImpl(SwPaM&, tools::Long nOffset, bool bIsOutlMv, SwRootFrame const*);
+    bool MoveParagraph(SwPaM&, SwNodeOffset nOffset, bool bIsOutlMv = false);
+    bool MoveParagraphImpl(SwPaM&, SwNodeOffset nOffset, bool bIsOutlMv, SwRootFrame const*);
 
     bool NumOrNoNum( const SwNodeIndex& rIdx, bool bDel = false);
 
@@ -1308,7 +1308,7 @@ public:
     // Insert label. If a FlyFormat is created, return it.
     SwFlyFrameFormat* InsertLabel( const SwLabelType eType, const OUString &rText, const OUString& rSeparator,
                     const OUString& rNumberingSeparator,
-                    const bool bBefore, const sal_uInt16 nId, const sal_uLong nIdx,
+                    const bool bBefore, const sal_uInt16 nId, const SwNodeOffset nIdx,
                     const OUString& rCharacterStyle,
                     const bool bCpyBrd );
     SwFlyFrameFormat* InsertDrawLabel(

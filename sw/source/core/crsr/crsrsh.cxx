@@ -2549,7 +2549,7 @@ OUString SwCursorShell::GetSelText() const
             OUStringBuffer buf;
             SwPosition const*const pStart(m_pCurrentCursor->Start());
             SwPosition const*const pEnd(m_pCurrentCursor->End());
-            for (sal_uLong i = pStart->nNode.GetIndex(); i <= pEnd->nNode.GetIndex(); ++i)
+            for (SwNodeOffset i = pStart->nNode.GetIndex(); i <= pEnd->nNode.GetIndex(); ++i)
             {
                 SwNode const& rNode(*pStart->nNode.GetNodes()[i]);
                 assert(!rNode.IsEndNode());
@@ -2849,7 +2849,7 @@ void SwCursorShell::ParkPams( SwPaM* pDelRg, SwShellCursor** ppDelRing )
             else
             {
                 pTmpDel->GetPoint()->nContent.Assign(nullptr, 0);
-                pTmpDel->GetPoint()->nNode = 0;
+                pTmpDel->GetPoint()->nNode = SwNodeOffset(0);
                 pTmpDel->DeleteMark();
             }
             pTmpDel = nullptr;
@@ -2911,7 +2911,7 @@ void SwCursorShell::ParkCursor( const SwNodeIndex &rIdx )
                 if ( pTableNd )
                 {
                     pTCursor->GetPoint()->nContent.Assign(nullptr, 0);
-                    pTCursor->GetPoint()->nNode = 0;
+                    pTCursor->GetPoint()->nNode = SwNodeOffset(0);
                     pTCursor->DeleteMark();
                     pSh->m_pCurrentCursor->GetPoint()->nNode = *pTableNd;
                 }
@@ -3056,7 +3056,7 @@ bool SwCursorShell::ShouldWait() const
         return true;
 
     SwPaM* pPam = GetCursor();
-    return pPam->Start()->nNode.GetIndex() + 10 <
+    return pPam->Start()->nNode.GetIndex() + SwNodeOffset(10) <
             pPam->End()->nNode.GetIndex();
 }
 
@@ -3124,7 +3124,7 @@ bool SwCursorShell::FindValidContentNode( bool bOnlyText )
 
     // first check for frames
     SwNodeIndex& rNdIdx = m_pCurrentCursor->GetPoint()->nNode;
-    sal_uLong nNdIdx = rNdIdx.GetIndex(); // keep backup
+    SwNodeOffset nNdIdx = rNdIdx.GetIndex(); // keep backup
     SwNodes& rNds = mxDoc->GetNodes();
     SwContentNode* pCNd = rNdIdx.GetNode().GetContentNode();
     const SwContentFrame * pFrame;

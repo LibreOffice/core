@@ -186,7 +186,7 @@ static void lcl_DelHFFormat( SwClient *pToRemove, SwFrameFormat *pFormat )
             // If there is a Cursor registered in one of the nodes, we need to call the
             // ParkCursor in an (arbitrary) shell.
             pNode = & aIdx.GetNode();
-            sal_uInt32 nEnd = pNode->EndOfSectionIndex();
+            SwNodeOffset nEnd = pNode->EndOfSectionIndex();
             while ( aIdx < nEnd )
             {
                 if ( pNode->IsContentNode() &&
@@ -620,7 +620,7 @@ void SwFormatContent::dumpAsXml(xmlTextWriterPtr pWriter) const
     {
         (void)xmlTextWriterWriteAttribute(
             pWriter, BAD_CAST("startNode"),
-            BAD_CAST(OString::number(m_pStartNode->GetNode().GetIndex()).getStr()));
+            BAD_CAST(OString::number(sal_Int32(m_pStartNode->GetNode().GetIndex())).getStr()));
         (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("startNodePtr"), "%p",
                                           &m_pStartNode->GetNode());
     }
@@ -3638,8 +3638,8 @@ void CheckAnchoredFlyConsistency(SwDoc const& rDoc)
 {
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
     SwNodes const& rNodes(rDoc.GetNodes());
-    sal_uLong const count(rNodes.Count());
-    for (sal_uLong i = 0; i != count; ++i)
+    SwNodeOffset const count(rNodes.Count());
+    for (SwNodeOffset i(0); i != count; ++i)
     {
         SwNode const*const pNode(rNodes[i]);
         std::vector<SwFrameFormat*> const & rFlys(pNode->GetAnchoredFlys());
