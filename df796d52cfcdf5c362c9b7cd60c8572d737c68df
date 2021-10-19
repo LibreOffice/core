@@ -16,6 +16,23 @@
       "message": "Heiko, Do we want to add this UNO? Dieter reminded me about it and asked if I would look at it again.",
       "revId": "df796d52cfcdf5c362c9b7cd60c8572d737c68df",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe52c9b5_5591452c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-10-19T06:22:34Z",
+      "side": 1,
+      "message": "Yes, the request seems to be accepted and welcome.",
+      "revId": "df796d52cfcdf5c362c9b7cd60c8572d737c68df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
