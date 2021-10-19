@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebc969ab_319c41d5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-19T11:11:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08db3614_3ddc8466",
+      "range": {
+        "startLine": 13,
+        "startChar": 4,
+        "endLine": 16,
+        "endChar": 61
+      },
+      "revId": "fb54830015b7390cc8e4180d0665e5d094fb3fc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d3ebd227_cff6fccb",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-10-18T21:32:53Z",
       "side": 1,
       "message": "This is a misconception. Vector allocates from heap.",
+      "range": {
+        "startLine": 22,
+        "startChar": 2,
+        "endLine": 22,
+        "endChar": 37
+      },
+      "revId": "fb54830015b7390cc8e4180d0665e5d094fb3fc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19e33eee_d2a5bd5e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-19T11:11:48Z",
+      "side": 1,
+      "message": "You\u0027re right. The vector metadata is on the stack, but the storage is allocated on the heap. Removed this part.",
+      "parentUuid": "d3ebd227_cff6fccb",
       "range": {
         "startLine": 22,
         "startChar": 2,
