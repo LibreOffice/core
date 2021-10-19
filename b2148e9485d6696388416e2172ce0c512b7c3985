@@ -51,6 +51,23 @@
       "parentUuid": "6ed4232f_4ffb0797",
       "revId": "b2148e9485d6696388416e2172ce0c512b7c3985",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5575d0c7_4ce07cba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-19T11:42:01Z",
+      "side": 1,
+      "message": "So this patch works fine for the situation it is describing, so marking as +1. (It just didn\u0027t fix the situation I was describing.)",
+      "revId": "b2148e9485d6696388416e2172ce0c512b7c3985",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
