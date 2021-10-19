@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be2173bd_f9bd3e68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-10-19T14:44:29Z",
+      "side": 1,
+      "message": "FWIW I think 7-1-7 is the last 7.1, and has branched with RC1 tagged ?",
+      "revId": "46bed44ddfbb2895ecd2eeb48d364aa7c81dcba4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
