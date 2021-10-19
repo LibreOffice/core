@@ -34,6 +34,24 @@
       "parentUuid": "ad3a168a_f3e88158",
       "revId": "171eade3af6e81eff7b045bd4f06111bfba2b80d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20524188_c88a1503",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-10-19T14:23:02Z",
+      "side": 1,
+      "message": "Then putting the content of each pane into another ScrolledWindow+ViewPort gives me something that looks reasonable to me. If you\u0027d like I could push that pair of changes here?",
+      "parentUuid": "dd8fe330_8ac58fde",
+      "revId": "171eade3af6e81eff7b045bd4f06111bfba2b80d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
