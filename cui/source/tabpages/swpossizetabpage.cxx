@@ -466,19 +466,19 @@ static SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(
             {SvxSwFramePosString::REL_FRM_TOP,    SvxSwFramePosString::REL_FRM_LEFT },
             {SvxSwFramePosString::REL_FRM_BOTTOM, SvxSwFramePosString::REL_FRM_RIGHT }
         };
-        for(size_t nIndex = 0; nIndex < SAL_N_ELEMENTS(aHoriIds); ++nIndex)
+        for(const auto &a : aHoriIds)
         {
-            if(aHoriIds[nIndex].eHori == eStringId)
+            if(a.eHori == eStringId)
             {
-                eStringId = aHoriIds[nIndex].eVert;
+                eStringId = a.eVert;
                 return eStringId;
             }
         }
-        for(size_t nIndex = 0; nIndex < SAL_N_ELEMENTS(aVertIds); ++nIndex)
+        for(const auto &a : aVertIds)
         {
-            if(aVertIds[nIndex].eHori == eStringId)
+            if(a.eHori == eStringId)
             {
-                eStringId = aVertIds[nIndex].eVert;
+                eStringId = a.eVert;
                 break;
             }
         }
