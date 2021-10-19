@@ -562,12 +562,13 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         {
             case 0:
                 of.writeRefFunction("getAllFormats0_", useLocale, "replaceTo0");
+                of.writeRefFunction("getDateAcceptancePatterns_", useLocale);
                 break;
             case 1:
                 of.writeRefFunction("getAllFormats1_", useLocale, "replaceTo1");
                 break;
         }
-        of.writeRefFunction("getDateAcceptancePatterns_", useLocale);
+        ++mnSection;
         return;
     }
 
