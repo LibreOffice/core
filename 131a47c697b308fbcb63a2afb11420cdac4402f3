@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c47fc48_09d24a12",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-19T07:24:18Z",
+      "side": 1,
+      "message": "OK - ONLY when a username is explicitly provided to this function is it passed as read-only.\n\nI really do not like being asked for a password without any indication of what it is for, so I think this is a rather beneficial fix attempt.",
+      "revId": "131a47c697b308fbcb63a2afb11420cdac4402f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
