@@ -761,7 +761,11 @@ css::uno::Sequence< css::uno::Any > Content::setPropertyValues(
         {
             if (nTitlePos > -1)
             {
-                OUString aNewURL = getParentURL() + aNewTitle;
+                OUString aNewURL = getParentURL();
+                if (!aNewURL.isEmpty() && aNewURL[aNewURL.getLength() - 1] != '/')
+                    aNewURL += "/";
+                aNewURL += aNewTitle;
+
                 css::uno::Reference< css::ucb::XContentIdentifier > xNewId
                     = new ::ucbhelper::ContentIdentifier( aNewURL );
 
