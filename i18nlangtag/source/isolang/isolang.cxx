@@ -694,6 +694,7 @@ IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_ENGLISH_DENMARK,        "en", "DK", k0    },
     { LANGUAGE_USER_SESOTHO_LESOTHO,        "st", "LS", k0    },
     { LANGUAGE_USER_KLINGON,               "tlh", ""  , k0    },
+    { LANGUAGE_USER_ENGLISH_ISRAEL,         "en", "IL", k0    },
     { LANGUAGE_MULTIPLE,                   "mul", ""  , k0    },    // multiple languages, many languages are used
     { LANGUAGE_UNDETERMINED,               "und", ""  , k0    },    // undetermined language, language cannot be identified
     { LANGUAGE_NONE,                       "zxx", ""  , k0    },    // added to ISO 639-2 on 2006-01-11: Used to declare the absence of linguistic information
