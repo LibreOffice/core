@@ -711,7 +711,7 @@ IMPL_LINK_NOARG( RemoteFilesDialog, DoubleClickHdl, SvtFileView*, bool )
     if (pData)
     {
         if (!pData->mbIsFolder)
-            m_xDialog->response(RET_OK);
+            OkHdl(*m_xOk_btn);
         else
             OpenURL(pData->maURL);
     }
