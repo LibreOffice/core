@@ -78,6 +78,7 @@
 #include <memory>
 #include <vector>
 #include <o3tl/lru_map.hxx>
+#include <o3tl/hash_combine.hxx>
 
 #include <math.h>
 
@@ -117,7 +118,19 @@ class ScDrawStringsVars
     tools::Long                nExpWidth;
 
     ScRefCellValue      maLastCell;
-    mutable o3tl::lru_map<OUString, SalLayoutGlyphs> mCachedGlyphs;
+    struct CachedGlyphsKey
+    {
+        OUString text;
+        VclPtr<OutputDevice> outputDevice;
+        size_t hashValue;
+        CachedGlyphsKey( const OUString& t, const VclPtr<OutputDevice>& dev );
+        bool operator==( const CachedGlyphsKey& other ) const;
+    };
+    struct CachedGlyphsHash
+    {
+        size_t operator()( const CachedGlyphsKey& key ) const { return key.hashValue; }
+    };
+    mutable o3tl::lru_map<CachedGlyphsKey, SalLayoutGlyphs, CachedGlyphsHash> mCachedGlyphs;
     sal_uLong           nValueFormat;
     bool                bLineBreak;
     bool                bRepeat;
@@ -773,17 +786,35 @@ tools::Long ScDrawStringsVars::GetExpWidth()
     return nExpWidth;
 }
 
+inline ScDrawStringsVars::CachedGlyphsKey::CachedGlyphsKey( const OUString& t, const VclPtr<OutputDevice>& d )
+    : text( t )
+    , outputDevice( d )
+{
+    hashValue = 0;
+    o3tl::hash_combine( hashValue, outputDevice.get());
+    SvMemoryStream stream;
+    WriteFont( stream, outputDevice->GetFont());
+    o3tl::hash_combine( hashValue, static_cast<const char*>(stream.GetData()), stream.GetSize());
+    o3tl::hash_combine( hashValue, text );
+}
+
+inline bool ScDrawStringsVars::CachedGlyphsKey::operator==( const CachedGlyphsKey& other ) const
+{
+    return hashValue == other.hashValue && outputDevice == other.outputDevice && text == other.text;
+}
+
 const SalLayoutGlyphs* ScDrawStringsVars::GetLayoutGlyphs(const OUString& rString) const
 {
-    auto it = mCachedGlyphs.find( rString );
+    const CachedGlyphsKey key( rString, pOutput->pFmtDevice );
+    auto it = mCachedGlyphs.find( key );
     if( it != mCachedGlyphs.end() && it->second.IsValid())
         return &it->second;
     std::unique_ptr<SalLayout> layout = pOutput->pFmtDevice->ImplLayout( rString, 0, rString.getLength(),
         Point( 0, 0 ), 0, nullptr, SalLayoutFlags::GlyphItemsOnly );
     if( layout )
     {
-        mCachedGlyphs.insert( std::make_pair( rString, layout->GetGlyphs()));
-        assert(mCachedGlyphs.find( rString ) == mCachedGlyphs.begin()); // newly inserted item is first
+        mCachedGlyphs.insert( std::make_pair( key, layout->GetGlyphs()));
+        assert(mCachedGlyphs.find( key ) == mCachedGlyphs.begin()); // newly inserted item is first
         return &mCachedGlyphs.begin()->second;
     }
     return nullptr;
