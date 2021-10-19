@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c2ba7e6_01793d01",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-19T15:13:40Z",
+      "side": 1,
+      "message": "I got a building error:\n/home/julien/lo/libreoffice/connectivity/source/drivers/firebird/DatabaseMetaData.cxx:1029:25: error: redundant functional cast from \u0027ODatabaseMetaDataResultSet::ORows\u0027 (aka \u0027vector\u003cvector\u003cReference\u003cconnectivity::ORowSetValueDecorator\u003e\u003e\u003e\u0027) to \u0027ODatabaseMetaDataResultSet::ORows\u0027 [loplugin:redundantfcast]\n    pResultSet-\u003esetRows(ODatabaseMetaDataResultSet::ORows(aResults));\n                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n",
+      "revId": "6a061dc8ff910154329c47d4d6675f5e68742086",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a940d1e8_0f087d78",
