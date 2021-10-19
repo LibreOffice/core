@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "623ca4ba_5aa7cdd3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-19T05:22:43Z",
+      "side": 1,
+      "message": "Thank you! :-)\nSee https://gerrit.libreoffice.org/c/core/+/123791",
+      "revId": "4477baeba5aec71098f374cf0b4bd4591e048809",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4fe74490_948605ad",
