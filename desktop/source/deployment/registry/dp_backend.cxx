@@ -657,13 +657,15 @@ void Package::processPackage_impl(
         catch (const deployment::DeploymentException &) {
             throw;
         }
-        catch (const Exception &) {
+        catch (const Exception & e) {
             Any exc( ::cppu::getCaughtException() );
             throw deployment::DeploymentException(
                 (doRegisterPackage
                  ? DpResId(RID_STR_ERROR_WHILE_REGISTERING)
                  : DpResId(RID_STR_ERROR_WHILE_REVOKING))
-                + getDisplayName(), static_cast<OWeakObject *>(this), exc );
+                + getDisplayName() + ": " + exc.getValueType().getTypeName() + " \"" + e.Message
+                + "\"",
+                static_cast<OWeakObject *>(this), exc );
         }
     }
     catch (...) {
