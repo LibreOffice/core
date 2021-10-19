@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bf9e615_a536dea3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-10-19T07:39:58Z",
+      "side": 1,
+      "message": "Patchset 4 makes the navigation forward and back UNO commands available when the cursor is positioned on indexes.",
+      "revId": "20ca0aa095a62e69ea351d14c0f2401e7d28280e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
