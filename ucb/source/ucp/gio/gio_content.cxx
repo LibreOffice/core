@@ -543,6 +543,7 @@ css::uno::Reference< css::sdbc::XRow > Content::getPropertyValues(
             SAL_WARN(
                 "ucb.ucp.gio",
                 "Looking for unsupported property " << rProp.Name);
+            xRow->appendVoid(rProp);
         }
     }
 
