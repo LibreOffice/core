@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a940d1e8_0f087d78",
+        "filename": "connectivity/source/drivers/firebird/DatabaseMetaData.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1027,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-10-19T07:26:13Z",
+      "side": 1,
+      "message": "rather call the explicit copy here, so make this line\n\n    pResultSet-\u003esetRows(ODatabaseMetaDataResultSet::ORows(aResults));",
+      "revId": "6a061dc8ff910154329c47d4d6675f5e68742086",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
