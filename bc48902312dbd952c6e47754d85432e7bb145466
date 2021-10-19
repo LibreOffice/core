@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4379e6e_8e5e3f44",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-10-19T14:01:57Z",
+      "side": 1,
+      "message": "I see no problem in using 40 instead of 30.",
+      "revId": "bc48902312dbd952c6e47754d85432e7bb145466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
