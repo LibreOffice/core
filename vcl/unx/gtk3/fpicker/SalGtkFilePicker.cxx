@@ -46,6 +46,7 @@
 #include <vcl/svapp.hxx>
 
 #include <tools/urlobj.hxx>
+#include <unotools/ucbhelper.hxx>
 
 #include <algorithm>
 #include <set>
@@ -967,11 +968,10 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute()
                     Sequence < OUString > aPathSeq = getFiles();
                     if( aPathSeq.getLength() == 1 )
                     {
-                        OString sFileName = unicodetouri( aPathSeq[0] );
-                        gchar *gFileName = g_filename_from_uri ( sFileName.getStr(), nullptr, nullptr );
-                        if( g_file_test( gFileName, G_FILE_TEST_IS_REGULAR ) )
+                        OUString sFileName = aPathSeq[0];
+                        if (::utl::UCBContentHelper::Exists(sFileName))
                         {
-                            INetURLObject aFileObj( OStringToOUString(sFileName, RTL_TEXTENCODING_UTF8) );
+                            INetURLObject aFileObj(sFileName);
 
                             OString baseName(
                               OUStringToOString(
@@ -1049,7 +1049,6 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute()
                             gtk_window_destroy(GTK_WINDOW(dlg));
 #endif
                         }
-                        g_free (gFileName);
 
                         if( btn == GTK_RESPONSE_YES )
                             retVal = ExecutableDialogResults::OK;
