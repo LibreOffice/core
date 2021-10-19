@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51c6fae9_5d246a9a",
+        "filename": "include/comphelper/propertyvalue.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-19T07:28:55Z",
+      "side": 1,
+      "message": "this should be redundant (short of dubious explicit invocations like `makePropertyValue\u003cint const \u0026\u003e(i)`) as T can never be deduced to be a reference type here, right?",
+      "range": {
+        "startLine": 36,
+        "startChar": 60,
+        "endLine": 36,
+        "endChar": 83
+      },
+      "revId": "23cded985ba0131f85ee445492c04871fbfb6351",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
