@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c250380_b7cc30e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-10-19T10:30:39Z",
+      "side": 1,
+      "message": "it fails because it needs https://gerrit.libreoffice.org/c/core/+/123645 on top. I squashed both commits in https://gerrit.libreoffice.org/c/core/+/123646",
+      "revId": "1fd0ec9176bf98931ac84dac6a68cc296e2ba2d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
