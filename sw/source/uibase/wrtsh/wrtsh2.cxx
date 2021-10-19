@@ -338,6 +338,8 @@ void SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
 
 void SwWrtShell::ClickToField(const SwField& rField, bool bExecHyperlinks)
 {
+    addCurrentPosition();
+
     // cross reference field must not be selected because it moves the cursor
     if (SwFieldIds::GetRef != rField.GetTyp()->Which())
     {
@@ -450,6 +452,8 @@ void SwWrtShell::ClickToField(const SwField& rField, bool bExecHyperlinks)
 
 void SwWrtShell::ClickToINetAttr( const SwFormatINetFormat& rItem, LoadUrlFlags nFilter )
 {
+    addCurrentPosition();
+
     if( rItem.GetValue().isEmpty() )
         return ;
 
