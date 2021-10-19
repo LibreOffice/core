@@ -195,7 +195,7 @@ bool SwFieldType::HasHiddenInformationNotes() const
     return bHasHiddenInformationNotes;
 }
 
-void SwFieldType::GatherNodeIndex(std::vector<sal_uLong>& rvNodeIndex)
+void SwFieldType::GatherNodeIndex(std::vector<SwNodeOffset>& rvNodeIndex)
 {
     CallSwClientNotify(sw::GatherNodeIndexHint(rvNodeIndex));
 }

@@ -35,7 +35,7 @@ class SwUndoOverwrite final : public SwUndo, private SwUndoSaveContent
 {
     OUString m_aDelStr, m_aInsStr;
     std::unique_ptr<SwRedlineSaveDatas> m_pRedlSaveData;
-    sal_uLong m_nStartNode;
+    SwNodeOffset m_nStartNode;
     sal_Int32 m_nStartContent;
     bool m_bInsChar : 1;  // no Overwrite, but Insert
     bool m_bGroup : 1;    // TRUE: is already grouped; evaluated in CanGrouping()

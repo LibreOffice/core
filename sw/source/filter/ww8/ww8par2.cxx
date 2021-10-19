@@ -2764,7 +2764,7 @@ void WW8TabDesc::ParkPaM()
         return;
     }
 
-    sal_uLong nSttNd = pTabBox2->GetSttIdx() + 1,
+    SwNodeOffset nSttNd = pTabBox2->GetSttIdx() + 1,
               nEndNd = pTabBox2->GetSttNd()->EndOfSectionIndex();
 
     if (m_pIo->m_pPaM->GetPoint()->nNode != nSttNd)
@@ -3003,7 +3003,7 @@ void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
     //or not so that we can collect paragraph properties over
     //all the cells, but in that case on the valid cell we do not
     //want to reset the fmt properties
-    sal_uLong nSttNd = m_pTabBox->GetSttIdx() + 1,
+    SwNodeOffset nSttNd = m_pTabBox->GetSttIdx() + 1,
               nEndNd = m_pTabBox->GetSttNd()->EndOfSectionIndex();
     if (m_pIo->m_pPaM->GetPoint()->nNode != nSttNd)
     {

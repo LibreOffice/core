@@ -243,7 +243,7 @@ OUString SwSortBoxElement::GetKey(sal_uInt16 nKey) const
         {
             // Iterate over all the Box's TextNodes
             const SwNode *pNd = nullptr, *pEndNd = pMyBox->GetSttNd()->EndOfSectionNode();
-            for( sal_uLong nIdx = pMyBox->GetSttIdx() + 1; pNd != pEndNd; ++nIdx )
+            for( SwNodeOffset nIdx = pMyBox->GetSttIdx() + 1; pNd != pEndNd; ++nIdx )
             {
                 pNd = pDoc->GetNodes()[ nIdx ];
                 if( pNd->IsTextNode() )
@@ -298,7 +298,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 
     // Check if only TextNodes are within the Selection
     {
-        sal_uLong nStart = pStart->nNode.GetIndex(),
+        SwNodeOffset nStart = pStart->nNode.GetIndex(),
                         nEnd = pEnd->nNode.GetIndex();
         while( nStart <= nEnd )
             // Iterate over a selected range
@@ -319,7 +319,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     // To-Do - add 'SwExtraRedlineTable' also ?
     if( getIDocumentRedlineAccess().IsRedlineOn() || (!getIDocumentRedlineAccess().IsIgnoreRedline() && !getIDocumentRedlineAccess().GetRedlineTable().empty() ))
     {
-        pRedlPam = new SwPaM( pStart->nNode, pEnd->nNode, -1, 1 );
+        pRedlPam = new SwPaM( pStart->nNode, pEnd->nNode, SwNodeOffset(-1), SwNodeOffset(1) );
         SwContentNode* pCNd = pRedlPam->GetContentNode( false );
         if( pCNd )
             pRedlPam->GetMark()->nContent = pCNd->Len();
@@ -348,7 +348,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
             sal_Int32 nCLen = 0;
             if( !pCNd )
             {
-                pCNd = GetNodes()[ aEndIdx.GetIndex()-1 ]->GetContentNode();
+                pCNd = GetNodes()[ aEndIdx.GetIndex()-SwNodeOffset(1) ]->GetContentNode();
                 if( pCNd )
                 {
                     nCLen = pCNd->Len();
@@ -379,7 +379,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     }
 
     // Now comes the tricky part: Move Nodes (and always keep Undo in mind)
-    sal_uLong nBeg = pStart->nNode.GetIndex();
+    SwNodeOffset nBeg = pStart->nNode.GetIndex();
     SwNodeRange aRg( aStart, aStart );
 
     if( bUndo && !pRedlUndo )
@@ -390,7 +390,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 
     GetIDocumentUndoRedo().DoUndo(false);
 
-    size_t n = 0;
+    SwNodeOffset n(0);
     for (const auto& rElem : aSortSet)
     {
         aStart      = nBeg + n;
@@ -576,7 +576,7 @@ bool SwDoc::SortTable(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     // Restore table frames:
     // #i37739# A simple 'MakeFrames' after the node sorting
     // does not work if the table is inside a frame and has no prev/next.
-    const sal_uLong nIdx = pTableNd->GetIndex();
+    const SwNodeOffset nIdx = pTableNd->GetIndex();
     aNode2Layout.RestoreUpperFrames( GetNodes(), nIdx, nIdx + 1 );
 
     // TL_CHART2: need to inform chart of probably changed cell names
@@ -691,7 +691,7 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
         pUD->Insert( pSource->GetName(), pTar->GetName() );
 
     // Set Pam source to the first ContentNode
-    SwNodeRange aRg( *pSource->GetSttNd(), 0, *pSource->GetSttNd() );
+    SwNodeRange aRg( *pSource->GetSttNd(), SwNodeOffset(0), *pSource->GetSttNd() );
     SwNode* pNd = pDoc->GetNodes().GoNext( &aRg.aStart );
 
     // If the Cell (Source) wasn't moved
@@ -706,10 +706,10 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
     // -> move and delete it
     SwNodeIndex aTar( *pTar->GetSttNd() );
     pNd = pDoc->GetNodes().GoNext( &aTar );     // next ContentNode
-    sal_uLong nCount = pNd->EndOfSectionIndex() - pNd->StartOfSectionIndex();
+    SwNodeOffset nCount = pNd->EndOfSectionIndex() - pNd->StartOfSectionIndex();
 
     bool bDelFirst = false;
-    if( nCount == 2 )
+    if( nCount == SwNodeOffset(2) )
     {
         OSL_ENSURE( pNd->GetContentNode(), "No ContentNode");
         bDelFirst = !pNd->GetContentNode()->Len() && bMovedBefore;
@@ -717,7 +717,7 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
 
     if(!bDelFirst)
     {   // We already have Content -> old Content Section Down
-        SwNodeRange aRgTar( aTar.GetNode(), 0, *pNd->EndOfSectionNode() );
+        SwNodeRange aRgTar( aTar.GetNode(), SwNodeOffset(0), *pNd->EndOfSectionNode() );
         pDoc->GetNodes().SectionDown( &aRgTar );
     }
 

@@ -52,8 +52,8 @@ using sw::IsFootnoteDeleted;
 
 bool CompareSwFootnoteIdxs::operator()(SwTextFootnote* const& lhs, SwTextFootnote* const& rhs) const
 {
-    sal_uLong nIdxLHS = SwTextFootnote_GetIndex( lhs );
-    sal_uLong nIdxRHS = SwTextFootnote_GetIndex( rhs );
+    SwNodeOffset nIdxLHS = SwTextFootnote_GetIndex( lhs );
+    SwNodeOffset nIdxRHS = SwTextFootnote_GetIndex( rhs );
     return ( nIdxLHS == nIdxRHS && lhs->GetStart() < rhs->GetStart() ) || nIdxLHS < nIdxRHS;
 }
 
@@ -90,9 +90,9 @@ void SwFootnoteIdxs::UpdateFootnote( const SwNodeIndex& rStt )
 
         const SwOutlineNodes& rOutlNds = rDoc.GetNodes().GetOutLineNds();
         const SwNode *pChapterStartHidden(&rDoc.GetNodes().GetEndOfExtras());
-        sal_uLong nChapterStart(pChapterStartHidden->GetIndex());
-        sal_uLong nChapterEnd(rDoc.GetNodes().GetEndOfContent().GetIndex());
-        sal_uLong nChapterEndHidden(nChapterEnd);
+        SwNodeOffset nChapterStart(pChapterStartHidden->GetIndex());
+        SwNodeOffset nChapterEnd(rDoc.GetNodes().GetEndOfContent().GetIndex());
+        SwNodeOffset nChapterEndHidden(nChapterEnd);
         if( !rOutlNds.empty() )
         {
             // Find the Chapter's start, which contains rStt
@@ -156,7 +156,7 @@ void SwFootnoteIdxs::UpdateFootnote( const SwNodeIndex& rStt )
         for( ; nPos < size(); ++nPos )
         {
             pTextFootnote = (*this)[ nPos ];
-            sal_uLong const nNode(pTextFootnote->GetTextNode().GetIndex());
+            SwNodeOffset const nNode(pTextFootnote->GetTextNode().GetIndex());
             if (nChapterEndHidden <= nNode)
                 break;
 
@@ -192,7 +192,7 @@ void SwFootnoteIdxs::UpdateFootnote( const SwNodeIndex& rStt )
     size_t nEndNo = 1;
     size_t nFootnoteNoHidden = 1;
     size_t nEndNoHidden = 1;
-    sal_uLong nUpdNdIdx = rStt.GetIndex();
+    SwNodeOffset nUpdNdIdx = rStt.GetIndex();
     for( nPos = 0; nPos < size(); ++nPos )
     {
         pTextFootnote = (*this)[ nPos ];
@@ -302,7 +302,7 @@ void SwFootnoteIdxs::UpdateAllFootnote()
         {
             if ( rOutlNds[ n ]->GetTextNode()->GetAttrOutlineLevel() == 1 )
             {
-                sal_uLong nCapStt = rOutlNds[ n ]->GetIndex();  // Start of a new chapter
+                SwNodeOffset nCapStt = rOutlNds[ n ]->GetIndex();  // Start of a new chapter
                 for( ; nFootnoteIdx < size(); ++nFootnoteIdx )
                 {
                     pTextFootnote = (*this)[ nFootnoteIdx ];
@@ -408,7 +408,7 @@ void SwFootnoteIdxs::UpdateAllFootnote()
 
 SwTextFootnote* SwFootnoteIdxs::SeekEntry( const SwNodeIndex& rPos, size_t* pFndPos ) const
 {
-    sal_uLong nIdx = rPos.GetIndex();
+    SwNodeOffset nIdx = rPos.GetIndex();
 
     size_t nO = size();
     size_t nU = 0;
@@ -418,7 +418,7 @@ SwTextFootnote* SwFootnoteIdxs::SeekEntry( const SwNodeIndex& rPos, size_t* pFnd
         while( nU <= nO )
         {
             const size_t nM = nU + ( nO - nU ) / 2;
-            sal_uLong nNdIdx = SwTextFootnote_GetIndex( (*this)[ nM ] );
+            SwNodeOffset nNdIdx = SwTextFootnote_GetIndex( (*this)[ nM ] );
             if( nNdIdx == nIdx )
             {
                 if( pFndPos )

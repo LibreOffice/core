@@ -576,7 +576,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136453)
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf136453.fodt");
     SwWrtShell* const pWrtShell(pDoc->GetDocShell()->GetWrtShell());
 
-    sal_uLong const nNodes(pDoc->GetNodes().Count());
+    SwNodeOffset const nNodes(pDoc->GetNodes().Count());
 
     pWrtShell->SttEndDoc(false);
     pWrtShell->SetMark();
@@ -1486,8 +1486,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf108687_tabstop)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf108687_tabstop.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    sal_Int32 nStartIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(9), nStartIndex);
+    SwNodeOffset nStartIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(9), nStartIndex);
 
     // Now pressing 'tab' should jump to the radio buttons.
     SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -4064,7 +4064,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testShapePageMove)
     CPPUNIT_ASSERT(pBodyFrame->IsLayoutFrame());
     SwFrame* pTextFrame = static_cast<SwLayoutFrame*>(pBodyFrame)->GetLower();
     CPPUNIT_ASSERT(pTextFrame->IsTextFrame());
-    sal_uLong nNodeIndex = static_cast<SwTextFrame*>(pTextFrame)->GetTextNodeFirst()->GetIndex();
+    SwNodeOffset nNodeIndex = static_cast<SwTextFrame*>(pTextFrame)->GetTextNodeFirst()->GetIndex();
 
     // Without the accompanying fix in place, this test would have failed with "Expected: 13;
     // Actual: 12", i.e. the shape was anchored to the last paragraph of the 1st page, not to a
@@ -4906,7 +4906,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf143904)
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
-    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
 
     dispatchCommand(mxComponent, ".uno:InsertRowsAfter", {});
     pWrtShell->Down(false);
@@ -4929,7 +4929,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf90069)
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
-    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
 
     dispatchCommand(mxComponent, ".uno:InsertRowsAfter", {});
     pWrtShell->Down(false);
@@ -4952,7 +4952,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109266)
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
-    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     SwTextNode* pTextNode = static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex]);
 
     CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum..."), pTextNode->GetText());

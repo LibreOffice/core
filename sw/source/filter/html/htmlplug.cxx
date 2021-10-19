@@ -1195,7 +1195,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
-    sal_uLong nStt = rFlyContent.GetContentIdx()->GetIndex()+1;
+    SwNodeOffset nStt = rFlyContent.GetContentIdx()->GetIndex()+1;
     SwOLENode *pOLENd = rHTMLWrt.m_pDoc->GetNodes()[ nStt ]->GetOLENode();
 
     OSL_ENSURE( pOLENd, "OLE-Node expected" );
@@ -1457,7 +1457,7 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
-    sal_uLong nStt = rFlyContent.GetContentIdx()->GetIndex()+1;
+    SwNodeOffset nStt = rFlyContent.GetContentIdx()->GetIndex()+1;
     SwOLENode *pOLENd = rHTMLWrt.m_pDoc->GetNodes()[ nStt ]->GetOLENode();
 
     OSL_ENSURE( pOLENd, "OLE-Node expected" );

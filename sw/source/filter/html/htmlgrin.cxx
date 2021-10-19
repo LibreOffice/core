@@ -113,8 +113,8 @@ void SwHTMLParser::ConnectImageMaps()
 {
     SwNodes& rNds = m_xDoc->GetNodes();
     // on the first node of section #1
-    sal_uLong nIdx = rNds.GetEndOfAutotext().StartOfSectionIndex() + 1;
-    sal_uLong nEndIdx = rNds.GetEndOfAutotext().GetIndex();
+    SwNodeOffset nIdx = rNds.GetEndOfAutotext().StartOfSectionIndex() + 1;
+    SwNodeOffset nEndIdx = rNds.GetEndOfAutotext().GetIndex();
 
     SwGrfNode* pGrfNd;
     while( m_nMissingImgMaps > 0 && nIdx < nEndIdx )
@@ -1357,7 +1357,7 @@ void SwHTMLParser::InsertBookmark( const OUString& rName )
 bool SwHTMLParser::HasCurrentParaBookmarks( bool bIgnoreStack ) const
 {
     bool bHasMarks = false;
-    sal_uLong nNodeIdx = m_pPam->GetPoint()->nNode.GetIndex();
+    SwNodeOffset nNodeIdx = m_pPam->GetPoint()->nNode.GetIndex();
 
     // first step: are there still bookmark in the attribute-stack?
     // bookmarks are added to the end of the stack - thus we only have
@@ -1386,7 +1386,7 @@ bool SwHTMLParser::HasCurrentParaBookmarks( bool bIgnoreStack ) const
         {
             const ::sw::mark::IMark* pBookmark = *ppMark;
 
-            const sal_uLong nBookNdIdx = pBookmark->GetMarkPos().nNode.GetIndex();
+            const SwNodeOffset nBookNdIdx = pBookmark->GetMarkPos().nNode.GetIndex();
             if( nBookNdIdx==nNodeIdx )
             {
                 bHasMarks = true;
@@ -1407,7 +1407,7 @@ void SwHTMLParser::StripTrailingPara()
     bool bSetSmallFont = false;
 
     SwContentNode* pCNd = m_pPam->GetContentNode();
-    sal_uLong nNodeIdx = m_pPam->GetPoint()->nNode.GetIndex();
+    SwNodeOffset nNodeIdx = m_pPam->GetPoint()->nNode.GetIndex();
     if( !m_pPam->GetPoint()->nContent.GetIndex() )
     {
         if( pCNd && pCNd->StartOfSectionIndex() + 2 <
@@ -1451,7 +1451,7 @@ void SwHTMLParser::StripTrailingPara()
             {
                 ::sw::mark::IMark* pMark = *ppMark;
 
-                sal_uLong nBookNdIdx = pMark->GetMarkPos().nNode.GetIndex();
+                SwNodeOffset nBookNdIdx = pMark->GetMarkPos().nNode.GetIndex();
                 if(nBookNdIdx==nNodeIdx)
                 {
                     SwNodeIndex nNewNdIdx(m_pPam->GetPoint()->nNode);

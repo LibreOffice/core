@@ -172,7 +172,7 @@ SwFlyFrameFormat* SwDoc::MakeFlySection_( const SwPosition& rAnchPos,
 
     // Create content and connect to the format.
     // Create ContentNode and put it into the autotext selection.
-    SwNodeRange aRange( GetNodes().GetEndOfAutotext(), -1,
+    SwNodeRange aRange( GetNodes().GetEndOfAutotext(), SwNodeOffset(-1),
                         GetNodes().GetEndOfAutotext() );
     GetNodes().SectionDown( &aRange, SwFlyStartNode );
 
@@ -275,7 +275,7 @@ SwFlyFrameFormat* SwDoc::MakeFlySection_( const SwPosition& rAnchPos,
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        sal_uLong nNodeIdx = rAnchPos.nNode.GetIndex();
+        SwNodeOffset nNodeIdx = rAnchPos.nNode.GetIndex();
         const sal_Int32 nCntIdx = rAnchPos.nContent.GetIndex();
         GetIDocumentUndoRedo().AppendUndo(
             std::make_unique<SwUndoInsLayFormat>( pFormat, nNodeIdx, nCntIdx ));
@@ -385,7 +385,7 @@ SwFlyFrameFormat* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rS
                 if( pSelBoxes->size() == rTable.GetTabSortBoxes().size() )
                 {
                     // move the whole table
-                    SwNodeRange aRg( *pTableNd, 0, *pTableNd->EndOfSectionNode(), 1 );
+                    SwNodeRange aRg( *pTableNd, SwNodeOffset(0), *pTableNd->EndOfSectionNode(), SwNodeOffset(1) );
 
                     // If we move the whole table and it is located within a
                     // FlyFrame, the we create a TextNode after it.
@@ -471,11 +471,11 @@ static bool lcl_TstFlyRange( const SwPaM* pPam, const SwPosition* pFlyPos,
     bool bOk = false;
     const SwPaM* pTmp = pPam;
     do {
-        const sal_uInt32 nFlyIndex = pFlyPos->nNode.GetIndex();
+        const SwNodeOffset nFlyIndex = pFlyPos->nNode.GetIndex();
         const SwPosition* pPaMStart = pTmp->Start();
         const SwPosition* pPaMEnd = pTmp->End();
-        const sal_uInt32 nPamStartIndex = pPaMStart->nNode.GetIndex();
-        const sal_uInt32 nPamEndIndex = pPaMEnd->nNode.GetIndex();
+        const SwNodeOffset nPamStartIndex = pPaMStart->nNode.GetIndex();
+        const SwNodeOffset nPamEndIndex = pPaMEnd->nNode.GetIndex();
         if (RndStdIds::FLY_AT_PARA == nAnchorId)
             bOk = (nPamStartIndex < nFlyIndex && nPamEndIndex > nFlyIndex) ||
                (((nPamStartIndex == nFlyIndex) && (pPaMStart->nContent.GetIndex() == 0)) &&
@@ -632,7 +632,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
         SwUndoInsertLabel *const pUndo,
         SwLabelType const eType, std::u16string_view rText, std::u16string_view rSeparator,
             const OUString& rNumberingSeparator,
-            const bool bBefore, const sal_uInt16 nId, const sal_uLong nNdIdx,
+            const bool bBefore, const sal_uInt16 nId, const SwNodeOffset nNdIdx,
             const OUString& rCharacterStyle,
             const bool bCpyBrd )
 {
@@ -679,7 +679,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
             {
                 SwStartNode *pSttNd = rDoc.GetNodes()[nNdIdx]->GetStartNode();
                 OSL_ENSURE( pSttNd, "No StartNode in InsertLabel." );
-                sal_uLong nNode;
+                SwNodeOffset nNode;
                 if( bBefore )
                 {
                     nNode = pSttNd->GetIndex();
@@ -962,7 +962,7 @@ SwFlyFrameFormat *
 SwDoc::InsertLabel(
         SwLabelType const eType, OUString const& rText, OUString const& rSeparator,
         OUString const& rNumberingSeparator,
-        bool const bBefore, sal_uInt16 const nId, sal_uLong const nNdIdx,
+        bool const bBefore, sal_uInt16 const nId, SwNodeOffset const nNdIdx,
         OUString const& rCharacterStyle,
         bool const bCpyBrd )
 {

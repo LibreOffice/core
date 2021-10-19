@@ -56,10 +56,10 @@ constexpr tools::Long BROWSE_HEIGHT = 56700 * 10; // 10 Meters
 #define GRFNUM_YES 1
 #define GRFNUM_REPLACE 2
 
-void AppendObjs( const SwFrameFormats *pTable, sal_uLong nIndex,
+void AppendObjs( const SwFrameFormats *pTable, SwNodeOffset nIndex,
                        SwFrame *pFrame, SwPageFrame *pPage, SwDoc* doc );
 
-void AppendObjsOfNode(SwFrameFormats const* pTable, sal_uLong nIndex,
+void AppendObjsOfNode(SwFrameFormats const* pTable, SwNodeOffset nIndex,
         SwFrame * pFrame, SwPageFrame * pPage, SwDoc * pDoc,
         std::vector<sw::Extent>::const_iterator const* pIter,
         std::vector<sw::Extent>::const_iterator const* pEnd,
@@ -140,8 +140,8 @@ SwFrame *SaveContent( SwLayoutFrame *pLay, SwFrame *pStart = nullptr );
 void RestoreContent( SwFrame *pSav, SwLayoutFrame *pParent, SwFrame *pSibling );
 
 // Get ContentNodes, create ContentFrames, and add them to LayFrame.
-void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc, sal_uLong nIndex,
-                 bool bPages = false, sal_uLong nEndIndex = 0,
+void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc, SwNodeOffset nIndex,
+                 bool bPages = false, SwNodeOffset nEndIndex = SwNodeOffset(0),
                  SwFrame *pPrv = nullptr, sw::FrameMode eMode = sw::FrameMode::New);
 
 // Creation of frames for a specific section (uses InsertCnt_)

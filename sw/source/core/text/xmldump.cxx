@@ -431,11 +431,11 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
             if (pMerged)
             {
                 (void)xmlTextWriterStartElement( writer, BAD_CAST( "merged" ) );
-                (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "paraPropsNodeIndex" ), "%" SAL_PRIuUINTPTR, pMerged->pParaPropsNode->GetIndex() );
+                (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "paraPropsNodeIndex" ), "%" SAL_PRIdINT32, sal_Int32(pMerged->pParaPropsNode->GetIndex()) );
                 for (auto const& e : pMerged->extents)
                 {
                     (void)xmlTextWriterStartElement( writer, BAD_CAST( "extent" ) );
-                    (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "txtNodeIndex" ), "%" SAL_PRIuUINTPTR, e.pNode->GetIndex() );
+                    (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "txtNodeIndex" ), "%" SAL_PRIdINT32, sal_Int32(e.pNode->GetIndex()) );
                     (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "start" ), "%" SAL_PRIdINT32, e.nStart );
                     (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "end" ), "%" SAL_PRIdINT32, e.nEnd );
                     (void)xmlTextWriterEndElement( writer );
@@ -517,10 +517,6 @@ void SwFrame::dumpInfosAsXml( xmlTextWriterPtr writer ) const
     (void)xmlTextWriterEndElement( writer );
 }
 
-// Hack: somehow conversion from "..." to va_list does
-// bomb on two string literals in the format.
-const char* const TMP_FORMAT = "%" SAL_PRIuUINTPTR;
-
 void SwFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
 {
     (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "ptr" ), "%p", this );
@@ -547,13 +543,13 @@ void SwFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
     {
         SwSectionFrame const*const pFrame(static_cast<SwSectionFrame const*>(this));
         SwSectionNode const*const pNode(pFrame->GetSection() ? pFrame->GetSection()->GetFormat()->GetSectionNode() : nullptr);
-        (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("sectionNodeIndex"), TMP_FORMAT, pNode ? pNode->GetIndex() : -1);
+        (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("sectionNodeIndex"), "%" SAL_PRIdINT32, pNode ? sal_Int32(pNode->GetIndex()) : -1);
     }
     if ( IsTextFrame(  ) )
     {
         const SwTextFrame *pTextFrame = static_cast<const SwTextFrame *>(this);
         const SwTextNode *pTextNode = pTextFrame->GetTextNodeFirst();
-        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "txtNodeIndex" ), TMP_FORMAT, pTextNode->GetIndex() );
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "txtNodeIndex" ), "%" SAL_PRIdINT32, sal_Int32(pTextNode->GetIndex()) );
 
         OString aMode = "Horizontal";
         if (IsVertLRBT())

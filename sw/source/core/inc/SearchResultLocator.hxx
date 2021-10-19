@@ -26,12 +26,13 @@ enum class NodeType
 struct SearchIndexData
 {
     NodeType meType = NodeType::Undefined;
-    sal_Int32 mnNodeIndex = 0;
+    SwNodeOffset mnNodeIndex{ 0 };
     OUString maObjectName;
 
     SearchIndexData() {}
 
-    SearchIndexData(NodeType eType, sal_Int32 nNodeIndex, OUString const& aObjectName = OUString())
+    SearchIndexData(NodeType eType, SwNodeOffset nNodeIndex,
+                    OUString const& aObjectName = OUString())
         : meType(eType)
         , mnNodeIndex(nNodeIndex)
         , maObjectName(aObjectName)

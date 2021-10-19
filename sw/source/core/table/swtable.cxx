@@ -71,7 +71,7 @@ using namespace com::sun::star;
 #define COLFUZZY 20
 
 static void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
-                    bool bChgAlign, sal_uLong nNdPos );
+                    bool bChgAlign, SwNodeOffset nNdPos );
 
 sal_Int32 SwTableBox::getRowSpan() const
 {
@@ -1380,7 +1380,7 @@ const SwTableBox* SwTable::GetTableBox( const OUString& rName,
     return pBox;
 }
 
-SwTableBox* SwTable::GetTableBox( sal_uLong nSttIdx )
+SwTableBox* SwTable::GetTableBox( SwNodeOffset nSttIdx )
 {
     // For optimizations, don't always process the entire SortArray.
     // Converting text to table, tries certain conditions
@@ -1389,7 +1389,7 @@ SwTableBox* SwTable::GetTableBox( sal_uLong nSttIdx )
         return nullptr;
     SwTableBox* pRet = nullptr;
     SwNodes& rNds = GetFrameFormat()->GetDoc()->GetNodes();
-    sal_uLong nIndex = nSttIdx + 1;
+    SwNodeOffset nIndex = nSttIdx + 1;
     SwContentNode* pCNd = nullptr;
     SwTableNode* pTableNd = nullptr;
 
@@ -1908,9 +1908,9 @@ bool SwTableBox::IsInHeadline( const SwTable* pTable ) const
     return pTable->GetTabLines()[ 0 ] == pLine;
 }
 
-sal_uLong SwTableBox::GetSttIdx() const
+SwNodeOffset SwTableBox::GetSttIdx() const
 {
-    return m_pStartNode ? m_pStartNode->GetIndex() : 0;
+    return m_pStartNode ? m_pStartNode->GetIndex() : SwNodeOffset(0);
 }
 
 bool SwTableBox::IsEmpty() const
@@ -1993,14 +1993,14 @@ void SwTable::SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout> const& r)
 static void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
                     bool bChgAlign )
 {
-    sal_uLong nNdPos = rBox.IsValidNumTextNd();
+    SwNodeOffset nNdPos = rBox.IsValidNumTextNd();
     ChgTextToNum( rBox,rText,pCol,bChgAlign,nNdPos);
 }
 void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
-                    bool bChgAlign,sal_uLong nNdPos )
+                    bool bChgAlign, SwNodeOffset nNdPos )
 {
 
-    if( ULONG_MAX == nNdPos )
+    if( NODE_OFFSET_MAX == nNdPos )
         return;
 
     SwDoc* pDoc = rBox.GetFrameFormat()->GetDoc();
@@ -2126,8 +2126,8 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
 
 static void ChgNumToText( SwTableBox& rBox, sal_uLong nFormat )
 {
-    sal_uLong nNdPos = rBox.IsValidNumTextNd( false );
-    if( ULONG_MAX == nNdPos )
+    SwNodeOffset nNdPos = rBox.IsValidNumTextNd( false );
+    if( NODE_OFFSET_MAX == nNdPos )
         return;
 
     SwDoc* pDoc = rBox.GetFrameFormat()->GetDoc();
@@ -2268,8 +2268,8 @@ void SwTableBoxFormat::BoxAttributeChanged(SwTableBox& rBox, const SwTableBoxNum
         if(!pNewValue && SfxItemState::SET != GetItemState(RES_BOXATR_VALUE, false, reinterpret_cast<const SfxPoolItem**>(&pNewValue)))
         {
             // so far, no value has been set, so try to evaluate the content
-            sal_uLong nNdPos = rBox.IsValidNumTextNd();
-            if(ULONG_MAX != nNdPos)
+            SwNodeOffset nNdPos = rBox.IsValidNumTextNd();
+            if(NODE_OFFSET_MAX != nNdPos)
             {
                 sal_uInt32 nTmpFormatIdx = nNewFormat;
                 OUString aText(GetDoc()->GetNodes()[nNdPos] ->GetTextNode()->GetRedlineText());
@@ -2407,7 +2407,7 @@ void SwTableBoxFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint
     // something changed and some BoxAttribut remained in the set!
     if( pNewFormat || pNewFormula || pNewVal )
     {
-        GetDoc()->getIDocumentFieldsAccess().SetFieldsDirty(true, nullptr, 0);
+        GetDoc()->getIDocumentFieldsAccess().SetFieldsDirty(true, nullptr, SwNodeOffset(0));
 
         if(SfxItemState::SET == GetItemState(RES_BOXATR_FORMAT, false) ||
            SfxItemState::SET == GetItemState(RES_BOXATR_VALUE, false) ||
@@ -2440,8 +2440,8 @@ bool SwTableBox::HasNumContent( double& rNum, sal_uInt32& rFormatIndex,
                             bool& rIsEmptyTextNd ) const
 {
     bool bRet = false;
-    sal_uLong nNdPos = IsValidNumTextNd();
-    if( ULONG_MAX != nNdPos )
+    SwNodeOffset nNdPos = IsValidNumTextNd();
+    if( NODE_OFFSET_MAX != nNdPos )
     {
         OUString aText( m_pStartNode->GetNodes()[ nNdPos ]->GetTextNode()->GetRedlineText() );
         // Keep Tabs
@@ -2488,8 +2488,8 @@ bool SwTableBox::IsNumberChanged() const
             reinterpret_cast<const SfxPoolItem**>(&pNumFormat) ))
             pNumFormat = nullptr;
 
-        sal_uLong nNdPos;
-        if( pNumFormat && pValue && ULONG_MAX != ( nNdPos = IsValidNumTextNd() ) )
+        SwNodeOffset nNdPos;
+        if( pNumFormat && pValue && NODE_OFFSET_MAX != ( nNdPos = IsValidNumTextNd() ) )
         {
             OUString sNewText, sOldText( m_pStartNode->GetNodes()[ nNdPos ]->
                                     GetTextNode()->GetRedlineText() );
@@ -2508,14 +2508,14 @@ bool SwTableBox::IsNumberChanged() const
     return bRet;
 }
 
-sal_uLong SwTableBox::IsValidNumTextNd( bool bCheckAttr ) const
+SwNodeOffset SwTableBox::IsValidNumTextNd( bool bCheckAttr ) const
 {
-    sal_uLong nPos = ULONG_MAX;
+    SwNodeOffset nPos = NODE_OFFSET_MAX;
     if( m_pStartNode )
     {
         SwNodeIndex aIdx( *m_pStartNode );
-        sal_uLong nIndex = aIdx.GetIndex();
-        const sal_uLong nIndexEnd = m_pStartNode->GetNodes()[ nIndex ]->EndOfSectionIndex();
+        SwNodeOffset nIndex = aIdx.GetIndex();
+        const SwNodeOffset nIndexEnd = m_pStartNode->GetNodes()[ nIndex ]->EndOfSectionIndex();
         const SwTextNode *pTextNode = nullptr;
         while( ++nIndex < nIndexEnd )
         {
@@ -2576,7 +2576,7 @@ sal_uLong SwTableBox::IsValidNumTextNd( bool bCheckAttr ) const
                             {
                                 continue;
                             }
-                            nPos = ULONG_MAX;
+                            nPos = NODE_OFFSET_MAX;
                             break;
                         }
                     }
@@ -2584,7 +2584,7 @@ sal_uLong SwTableBox::IsValidNumTextNd( bool bCheckAttr ) const
             }
         }
         else
-            nPos = ULONG_MAX;
+            nPos = NODE_OFFSET_MAX;
     }
     return nPos;
 }
@@ -2618,11 +2618,11 @@ void SwTableBox::ActualiseValueBox()
         return;
 
     const sal_uLong nFormatId = static_cast<const SwTableBoxNumFormat*>(pFormatItem)->GetValue();
-    sal_uLong nNdPos = ULONG_MAX;
+    SwNodeOffset nNdPos = NODE_OFFSET_MAX;
     SvNumberFormatter* pNumFormatr = pFormat->GetDoc()->GetNumberFormatter();
 
     if( !pNumFormatr->IsTextFormat( nFormatId ) &&
-        ULONG_MAX != (nNdPos = IsValidNumTextNd()) )
+        NODE_OFFSET_MAX != (nNdPos = IsValidNumTextNd()) )
     {
         double fVal = static_cast<const SwTableBoxValue*>(pValItem)->GetValue();
         const Color* pCol = nullptr;

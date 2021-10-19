@@ -631,7 +631,7 @@ bool SwWW8AttrIter::IsWatermarkFrame()
     return false;
 }
 
-bool SwWW8AttrIter::IsAnchorLinkedToThisNode( sal_uLong nNodePos )
+bool SwWW8AttrIter::IsAnchorLinkedToThisNode( SwNodeOffset nNodePos )
 {
     if ( maFlyIter == maFlyFrames.end() )
         return false;
@@ -991,7 +991,7 @@ bool AttributeOutputBase::AnalyzeURL( const OUString& rUrl, const OUString& /*rT
             {
                 if ( rBookmarkPair.first == sMark )
                 {
-                    sMark = "_toc" + OUString::number( rBookmarkPair.second );
+                    sMark = "_toc" + OUString::number( sal_Int32(rBookmarkPair.second) );
                     break;
                 }
             }
@@ -1936,7 +1936,7 @@ bool MSWordExportBase::GetBookmarks( const SwTextNode& rNd, sal_Int32 nStt,
                     sal_Int32 nEnd, IMarkVector& rArr )
 {
     IDocumentMarkAccess* const pMarkAccess = m_rDoc.getIDocumentMarkAccess();
-    sal_uLong nNd = rNd.GetIndex( );
+    SwNodeOffset nNd = rNd.GetIndex( );
 
     const sal_Int32 nMarks = pMarkAccess->getAllMarksCount();
     for ( sal_Int32 i = 0; i < nMarks; i++ )
@@ -1984,7 +1984,7 @@ bool MSWordExportBase::GetAnnotationMarks( const SwWW8AttrIter& rAttrs, sal_Int3
                     sal_Int32 nEnd, IMarkVector& rArr )
 {
     IDocumentMarkAccess* const pMarkAccess = m_rDoc.getIDocumentMarkAccess();
-    sal_uLong nNd = rAttrs.GetNode().GetIndex();
+    SwNodeOffset nNd = rAttrs.GetNode().GetIndex();
 
     const sal_Int32 nMarks = pMarkAccess->getAnnotationMarksCount();
     for ( sal_Int32 i = 0; i < nMarks; i++ )
@@ -2299,7 +2299,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     if ( 0 == pLine->GetBoxPos( pBox ) && pBox->GetSttNd() )
                     {
                         // check if paragraph is first in that line:
-                        if ( 1 == ( rNode.GetIndex() - pBox->GetSttNd()->GetIndex() ) )
+                        if ( SwNodeOffset(1) == ( rNode.GetIndex() - pBox->GetSttNd()->GetIndex() ) )
                             pLine->GetFrameFormat()->SetFormatAttr(SwFormatRowSplit(!bDontSplit));
                     }
                 }
@@ -2351,7 +2351,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
         if ( aAttrIter.RequiresImplicitBookmark() )
         {
-            OUString sBkmkName =  "_toc" + OUString::number( rNode.GetIndex() );
+            OUString sBkmkName =  "_toc" + OUString::number( sal_Int32(rNode.GetIndex()) );
             // Add a bookmark converted to a Word name.
             AppendBookmark( BookmarkToWord( sBkmkName ) );
         }
@@ -3094,7 +3094,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                             if ( 0 == pLine->GetBoxPos( pBox ) && pBox->GetSttNd() )
                             {
                                 // check if paragraph is first in that line:
-                                if ( 1 == ( rNode.GetIndex() - pBox->GetSttNd()->GetIndex() ) )
+                                if ( SwNodeOffset(1) == ( rNode.GetIndex() - pBox->GetSttNd()->GetIndex() ) )
                                 {
                                     bool bSetAtPara = false;
                                     if ( bKeep )
@@ -3418,8 +3418,8 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const ww8::Frame& rFormat, const P
         // Fetch from node and last node the position in the section
         const SwNodeIndex* pNodeIndex = rFrameFormat.GetContent().GetContentIdx();
 
-        sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
-        sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
+        SwNodeOffset nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : SwNodeOffset(0);
+        SwNodeOffset nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : SwNodeOffset(0);
 
         if( nStt >= nEnd )      // no range, hence no valid node
             return;

@@ -406,7 +406,7 @@ private:
     HdFtPlcDrawObj& operator=(const HdFtPlcDrawObj&) = delete;
 };
 
-typedef std::pair<OUString, sal_uLong> aBookmarkPair;
+typedef std::pair<OUString, SwNodeOffset> aBookmarkPair;
 
 class WW8_WrtRedlineAuthor : public sw::util::WrtRedlineAuthor
 {
@@ -432,7 +432,7 @@ struct MSWordSaveData
     std::unique_ptr<ww::bytes> pOOld; ///< WW8Export only
     std::shared_ptr<SwUnoCursor> pOldPam;
     SwPaM* pOldEnd;
-    sal_uLong nOldStart, nOldEnd;
+    SwNodeOffset nOldStart, nOldEnd;
     const ww8::Frame* pOldFlyFormat;
     const SwPageDesc* pOldPageDesc;
 
@@ -450,7 +450,7 @@ class MSWordExportBase
 {
 public:
     wwFontHelper m_aFontHelper;
-    std::vector<sal_uLong> m_aChapterFieldLocs;
+    std::vector<SwNodeOffset> m_aChapterFieldLocs;
     OUString m_aMainStg;
     std::vector<const SwTOXType*> m_aTOXArr;
     const SfxItemSet* m_pISet;    // for double attributes
@@ -572,7 +572,7 @@ public:
     bool m_bAddFootnoteTab;     // only one aesthetic spacing tab per footnote
 
     SwDoc& m_rDoc;
-    sal_uLong m_nCurStart, m_nCurEnd;
+    SwNodeOffset m_nCurStart, m_nCurEnd;
     std::shared_ptr<SwUnoCursor> & m_pCurPam;
     SwPaM *m_pOrigPam;
 
@@ -599,7 +599,7 @@ public:
     /// Set the pCurPam appropriately and call WriteText().
     ///
     /// Used to export paragraphs in footnotes/endnotes/etc.
-    void WriteSpecialText( sal_uLong nStart, sal_uLong nEnd, sal_uInt8 nTTyp );
+    void WriteSpecialText( SwNodeOffset nStart, SwNodeOffset nEnd, sal_uInt8 nTTyp );
 
     /// Export the pool items to attributes (through an attribute output class).
     void ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 nScript, const SvxFontItem *pFont, bool bWriteCombChars = false );
@@ -732,7 +732,7 @@ public:
     void SetCurItemSet( const SfxItemSet* pS ) { m_pISet = pS; }
 
     /// Remember some of the members so that we can recurse in WriteText().
-    virtual void SaveData( sal_uLong nStt, sal_uLong nEnd );
+    virtual void SaveData( SwNodeOffset nStt, SwNodeOffset nEnd );
 
     /// Restore what was saved in SaveData().
     virtual void RestoreData();
@@ -899,7 +899,7 @@ protected:
 
     const NfKeywordTable & GetNfKeywordTable();
 
-    void SetCurPam(sal_uLong nStt, sal_uLong nEnd);
+    void SetCurPam(SwNodeOffset nStt, SwNodeOffset nEnd);
 
     /// Get background color of the document, if there is one.
     std::unique_ptr<SvxBrushItem> getBackground();
@@ -1181,7 +1181,7 @@ public:
     SvStream& Strm() const { return m_pWriter->Strm(); }
 
     /// Remember some of the members so that we can recurse in WriteText().
-    virtual void SaveData( sal_uLong nStt, sal_uLong nEnd ) override;
+    virtual void SaveData( SwNodeOffset nStt, SwNodeOffset nEnd ) override;
 
     /// Restore what was saved in SaveData().
     virtual void RestoreData() override;
@@ -1559,7 +1559,7 @@ public:
     const SwFormatDrop& GetSwFormatDrop() const { return mrSwFormatDrop; }
 
     bool IsWatermarkFrame();
-    bool IsAnchorLinkedToThisNode( sal_uLong nNodePos );
+    bool IsAnchorLinkedToThisNode( SwNodeOffset nNodePos );
 
     void SplitRun( sal_Int32 nSplitEndPos );
 

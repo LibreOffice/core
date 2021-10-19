@@ -63,7 +63,7 @@ OUString GetExpandTextMerged(SwRootFrame const*const pLayout,
                     ExpandMode const mode(ExpandMode::HideDeletions | i_mode);
                     OUStringBuffer ret(rNode.GetExpandText(pLayout, 0, -1,
                         bWithNumber, bWithNumber, bWithSpacesForLevel, mode));
-                    for (sal_uLong i = rNode.GetIndex() + 1;
+                    for (SwNodeOffset i = rNode.GetIndex() + 1;
                          i <= pMerged->pLastNode->GetIndex(); ++i)
                     {
                         SwNode *const pTmp(rNode.GetNodes()[i]);

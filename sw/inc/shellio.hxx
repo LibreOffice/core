@@ -455,7 +455,7 @@ public:
 
     // Create new PaM at position.
     static std::shared_ptr<SwUnoCursor> NewUnoCursor(SwDoc & rDoc,
-                            sal_uLong const nStartIdx, sal_uLong const nEndIdx);
+                            SwNodeOffset const nStartIdx, SwNodeOffset const nEndIdx);
 
     // If applicable copy a local file into internet.
     bool CopyLocalFileToINet( OUString& rFileNm );

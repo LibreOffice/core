@@ -29,6 +29,7 @@
 #include <svl/listener.hxx>
 #include <tools/solar.h>
 #include "unotextmarkup.hxx"
+#include <nodeoffset.hxx>
 
 #include <set>
 
@@ -138,8 +139,8 @@ private:
     const sal_Int32 mnType;
     const bool mbAutomatic;
 
-    sal_uLong mnCurrentNode;    // used for non-automatic mode
-    sal_uLong mnEndNode;        // used for non-automatic mode
+    SwNodeOffset mnCurrentNode;    // used for non-automatic mode
+    SwNodeOffset mnEndNode;        // used for non-automatic mode
 };
 
 #endif

@@ -184,15 +184,15 @@ bool SwCursorShell::GotoFootnoteAnchor()
     return bRet;
 }
 
-static bool CmpLE( const SwTextFootnote& rFootnote, sal_uLong nNd, sal_Int32 nCnt )
+static bool CmpLE( const SwTextFootnote& rFootnote, SwNodeOffset nNd, sal_Int32 nCnt )
 {
-    const sal_uLong nTNd = rFootnote.GetTextNode().GetIndex();
+    const SwNodeOffset nTNd = rFootnote.GetTextNode().GetIndex();
     return nTNd < nNd || ( nTNd == nNd && rFootnote.GetStart() <= nCnt );
 }
 
-static bool CmpL( const SwTextFootnote& rFootnote, sal_uLong nNd, sal_Int32 nCnt )
+static bool CmpL( const SwTextFootnote& rFootnote, SwNodeOffset nNd, sal_Int32 nCnt )
 {
-    const sal_uLong nTNd = rFootnote.GetTextNode().GetIndex();
+    const SwNodeOffset nTNd = rFootnote.GetTextNode().GetIndex();
     return nTNd < nNd || ( nTNd == nNd && rFootnote.GetStart() < nCnt );
 }
 
@@ -213,7 +213,7 @@ bool SwCursor::GotoNextFootnoteAnchor()
         // there is a footnote with this index, so search also for the next one
         if( nPos < rFootnoteArr.size() )
         {
-            sal_uLong nNdPos = GetPoint()->nNode.GetIndex();
+            SwNodeOffset nNdPos = GetPoint()->nNode.GetIndex();
             const sal_Int32 nCntPos = GetPoint()->nContent.GetIndex();
 
             pTextFootnote = rFootnoteArr[ nPos ];
@@ -284,7 +284,7 @@ bool SwCursor::GotoPrevFootnoteAnchor()
     if( rFootnoteArr.SeekEntry( GetPoint()->nNode, &nPos ) )
     {
         // there is a footnote with this index, so search also for the next one
-        sal_uLong nNdPos = GetPoint()->nNode.GetIndex();
+        SwNodeOffset nNdPos = GetPoint()->nNode.GetIndex();
         const sal_Int32 nCntPos = GetPoint()->nContent.GetIndex();
 
         pTextFootnote = rFootnoteArr[ nPos ];

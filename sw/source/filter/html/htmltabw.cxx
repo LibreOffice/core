@@ -269,7 +269,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     bool bHead = false;
     if( pSttNd )
     {
-        sal_uLong nNdPos = pSttNd->GetIndex()+1;
+        SwNodeOffset nNdPos = pSttNd->GetIndex()+1;
 
         // determine the type of cell (TD/TH)
         SwNode* pNd;

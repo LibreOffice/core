@@ -129,7 +129,7 @@ SetGetExpField::SetGetExpField( const SwTableBox& rTBox )
     m_eSetGetExpFieldType = TABLEBOX;
     m_CNTNT.pTBox = &rTBox;
 
-    m_nNode = 0;
+    m_nNode = SwNodeOffset(0);
     m_nContent = 0;
     if( rTBox.GetSttNd() )
     {
@@ -845,11 +845,11 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
     {
         // In order for the frames to be created the right way, they have to be expanded
         // from top to bottom
-        std::vector<sal_uLong> aTmpArr;
-        std::vector<sal_uLong>::size_type nArrStt = 0;
+        std::vector<SwNodeOffset> aTmpArr;
+        std::vector<SwNodeOffset>::size_type nArrStt = 0;
         SwSectionFormats& rArr = rDoc.GetSections();
         SwSectionNode* pSectNd = nullptr;
-        sal_uLong nSttContent = rDoc.GetNodes().GetEndOfExtras().GetIndex();
+        SwNodeOffset nSttContent = rDoc.GetNodes().GetEndOfExtras().GetIndex();
 
         for (SwSectionFormats::size_type n = rArr.size(); n; )
         {
@@ -859,7 +859,7 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
             pSectNd = pSect->GetFormat()->GetSectionNode();
             if( pSectNd )
             {
-                sal_uLong nIdx = pSectNd->GetIndex();
+                SwNodeOffset nIdx = pSectNd->GetIndex();
                 aTmpArr.push_back( nIdx );
                 if( nIdx < nSttContent )
                     ++nArrStt;

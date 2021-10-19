@@ -476,8 +476,8 @@ bool DocumentLinksAdministrationManager::SelectServerObj( std::u16string_view rS
             }
             if( aPara.pTableNd )
             {
-                rpRange.reset(new SwNodeRange( *aPara.pTableNd, 0,
-                                *aPara.pTableNd->EndOfSectionNode(), 1 ));
+                rpRange.reset(new SwNodeRange( *aPara.pTableNd, SwNodeOffset(0),
+                                *aPara.pTableNd->EndOfSectionNode(), SwNodeOffset(1) ));
                 return true;
             }
         }
@@ -492,7 +492,7 @@ bool DocumentLinksAdministrationManager::SelectServerObj( std::u16string_view rS
                     SwNode* pNd = &pIdx->GetNode();
                     if( !pNd->IsNoTextNode() )
                     {
-                        rpRange.reset(new SwNodeRange( *pNd, 1, *pNd->EndOfSectionNode() ));
+                        rpRange.reset(new SwNodeRange( *pNd, SwNodeOffset(1), *pNd->EndOfSectionNode() ));
                         return true;
                     }
                 }
@@ -514,7 +514,7 @@ bool DocumentLinksAdministrationManager::SelectServerObj( std::u16string_view rS
                 const SwOutlineNodes& rOutlNds = m_rDoc.GetNodes().GetOutLineNds();
                 SwOutlineNodes::size_type nTmpPos;
                 (void)rOutlNds.Seek_Entry( pNd, &nTmpPos );
-                rpRange.reset(new SwNodeRange( aPos.nNode, 0, aPos.nNode ));
+                rpRange.reset(new SwNodeRange( aPos.nNode, SwNodeOffset(0), aPos.nNode ));
 
                 // look for the section's end, now
                 for( ++nTmpPos;
@@ -561,7 +561,7 @@ bool DocumentLinksAdministrationManager::SelectServerObj( std::u16string_view rS
             }
             if( aPara.pSectNd )
             {
-                rpRange.reset(new SwNodeRange( *aPara.pSectNd, 1,
+                rpRange.reset(new SwNodeRange( *aPara.pSectNd, SwNodeOffset(1),
                                         *aPara.pSectNd->EndOfSectionNode() ));
                 return true;
 

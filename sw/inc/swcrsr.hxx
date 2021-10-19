@@ -241,7 +241,7 @@ public:
 // internal, used by SwCursor::SaveState() etc.
 struct SwCursor_SavePos final
 {
-    sal_uLong nNode;
+    SwNodeOffset nNode;
     sal_Int32 nContent;
 
     SwCursor_SavePos( const SwCursor& rCursor )
@@ -254,8 +254,8 @@ class SwTableCursor : public virtual SwCursor
 {
 
 protected:
-    sal_uLong m_nTablePtNd;
-    sal_uLong m_nTableMkNd;
+    SwNodeOffset m_nTablePtNd;
+    SwNodeOffset m_nTableMkNd;
     sal_Int32 m_nTablePtCnt;
     sal_Int32 m_nTableMkCnt;
     SwSelBoxes m_SelectedBoxes;

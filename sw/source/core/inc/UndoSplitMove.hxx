@@ -26,7 +26,7 @@ class SwUndoSplitNode final : public SwUndo
 {
     std::unique_ptr<SwHistory> m_pHistory;
     std::unique_ptr<SwRedlineData> m_pRedlineData;
-    sal_uLong m_nNode;
+    SwNodeOffset m_nNode;
     sal_Int32 m_nContent;
     bool m_bTableFlag : 1;
     bool m_bCheckTableStart : 1;
@@ -49,7 +49,7 @@ class SwUndoMove final : public SwUndo, private SwUndRng, private SwUndoSaveCont
     // nDest... - destination range of move (after move!)
     // nIns...  - source Position of move (after move!)
     // nMv...   - destination position of move (before move!); for REDO
-    sal_uLong m_nDestStartNode, m_nDestEndNode, m_nInsPosNode, m_nMoveDestNode;
+    SwNodeOffset m_nDestStartNode, m_nDestEndNode, m_nInsPosNode, m_nMoveDestNode;
     sal_Int32 m_nDestStartContent, m_nDestEndContent, m_nInsPosContent, m_nMoveDestContent;
 
     sal_uInt16 m_nFootnoteStart; // StartPos of Footnotes in History
@@ -73,8 +73,8 @@ public:
                         const SwNodeIndex& rInsPos );
 
     bool IsMoveRange() const        { return m_bMoveRange; }
-    sal_uLong GetEndNode() const        { return m_nEndNode; }
-    sal_uLong GetDestSttNode() const    { return m_nDestStartNode; }
+    SwNodeOffset GetEndNode() const     { return m_nEndNode; }
+    SwNodeOffset GetDestSttNode() const    { return m_nDestStartNode; }
     sal_Int32 GetDestSttContent() const  { return m_nDestStartContent; }
 
     void SetMoveRedlines( bool b )       { m_bMoveRedlines = b; }

@@ -46,10 +46,10 @@ class SwUndoDelete final
 
     OUString m_sTableName;
 
-    sal_uLong m_nNode;
-    sal_uLong m_nNdDiff;           // difference of Nodes before/after Delete
-    sal_uLong m_nSectDiff;         // diff. of Nodes before/after Move w/ SectionNodes
-    sal_uLong m_nReplaceDummy;     // diff. to a temporary dummy object
+    SwNodeOffset m_nNode;
+    SwNodeOffset m_nNdDiff;           // difference of Nodes before/after Delete
+    SwNodeOffset m_nSectDiff;         // diff. of Nodes before/after Move w/ SectionNodes
+    SwNodeOffset m_nReplaceDummy;     // diff. to a temporary dummy object
     sal_uInt16 m_nSetPos;
 
     bool m_bGroup : 1;         // TRUE: is already Grouped; see CanGrouping()

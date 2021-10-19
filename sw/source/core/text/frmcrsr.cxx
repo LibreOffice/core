@@ -831,7 +831,7 @@ bool SwTextFrame::UnitUp_( SwPaM *pPam, const SwTwips nOffset,
 
                 // See comment in SwTextFrame::GetModelPositionForViewPoint()
 #if OSL_DEBUG_LEVEL > 0
-                const sal_uLong nOldNode = pPam->GetPoint()->nNode.GetIndex();
+                const SwNodeOffset nOldNode = pPam->GetPoint()->nNode.GetIndex();
 #endif
                 // The node should not be changed
                 TextFrameIndex nTmpOfst = aLine.GetModelPositionForViewPoint(pPam->GetPoint(),
@@ -1192,7 +1192,7 @@ bool SwTextFrame::UnitDown_(SwPaM *pPam, const SwTwips nOffset,
                 aCharBox.Width( aCharBox.SSize().Width() / 2 );
 #if OSL_DEBUG_LEVEL > 0
                 // See comment in SwTextFrame::GetModelPositionForViewPoint()
-                const sal_uLong nOldNode = pPam->GetPoint()->nNode.GetIndex();
+                const SwNodeOffset nOldNode = pPam->GetPoint()->nNode.GetIndex();
 #endif
                 if ( pNextLine && ! bFirstOfDouble )
                     aLine.NextLine();

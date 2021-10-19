@@ -214,7 +214,7 @@ static bool lcl_html_isHTMLControl( sal_Int16 nClassId )
 
 bool SwHTMLWriter::HasControls() const
 {
-    sal_uInt32 nStartIdx = m_pCurrentPam->GetPoint()->nNode.GetIndex();
+    SwNodeOffset nStartIdx = m_pCurrentPam->GetPoint()->nNode.GetIndex();
     size_t i = 0;
 
     // Skip all controls in front of the current paragraph
@@ -242,7 +242,7 @@ void SwHTMLWriter::OutForm( bool bTag_On, const SwStartNode *pStartNd )
     }
 
     uno::Reference< container::XIndexContainer > xNewFormComps;
-    sal_uInt32 nStartIdx = pStartNd ? pStartNd->GetIndex()
+    SwNodeOffset nStartIdx = pStartNd ? pStartNd->GetIndex()
                                     : m_pCurrentPam->GetPoint()->nNode.GetIndex();
 
     // skip controls before the interesting area
@@ -267,7 +267,7 @@ void SwHTMLWriter::OutForm( bool bTag_On, const SwStartNode *pStartNd )
         uno::Reference< container::XIndexContainer > xCurrentFormComps;// current form in table
         const SwStartNode *pCurrentStNd = nullptr; // and the start node of a Control
         sal_Int32 nCurrentCtrls = 0;   // and the found controls in it
-        sal_uInt32 nEndIdx =  pStartNd->EndOfSectionIndex();
+        SwNodeOffset nEndIdx =  pStartNd->EndOfSectionIndex();
         for( ; i < m_aHTMLControls.size() &&
             m_aHTMLControls[i]->nNdIdx <= nEndIdx; i++ )
         {
@@ -1282,7 +1282,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
  */
 static void AddControl( HTMLControls& rControls,
                         const SdrUnoObj& rFormObj,
-                        sal_uInt32 nNodeIdx )
+                        SwNodeOffset nNodeIdx )
 {
     const uno::Reference< awt::XControlModel >& xControlModel =
             rFormObj.GetUnoControlModel();
@@ -1358,7 +1358,7 @@ void SwHTMLWriter::GetControls()
 
 HTMLControl::HTMLControl(
         const uno::Reference< container::XIndexContainer > & rFormComps,
-        sal_uInt32 nIdx ) :
+        SwNodeOffset nIdx ) :
     xFormComps( rFormComps ), nNdIdx( nIdx ), nCount( 1 )
 {}
 
