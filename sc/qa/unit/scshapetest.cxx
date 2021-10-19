@@ -245,7 +245,7 @@ void ScShapeTest::testTdf144242_OpenBezier_noSwapWH()
     pObj = lcl_getSdrObjectWithAssert(rDoc2, 0);
     tools::Rectangle aSnapRect(pObj->GetSnapRect());
     // Without fix in place width and height were swapped
-    lcl_AssertRectEqualWithTolerance("Reload: wrong pos and size", aExpectRect, aSnapRect, 30);
+    lcl_AssertRectEqualWithTolerance("Reload: wrong pos and size", aExpectRect, aSnapRect, 40);
 
     pDocSh->DoClose();
 }
@@ -285,7 +285,7 @@ void ScShapeTest::testTdf144242_Line_noSwapWH()
     pObj = lcl_getSdrObjectWithAssert(rDoc2, 0);
     tools::Rectangle aSnapRect(pObj->GetSnapRect());
     // Without fix in place width and height were swapped
-    lcl_AssertRectEqualWithTolerance("Reload: wrong pos and size", aExpectRect, aSnapRect, 30);
+    lcl_AssertRectEqualWithTolerance("Reload: wrong pos and size", aExpectRect, aSnapRect, 40);
 
     pDocSh->DoClose();
 }
