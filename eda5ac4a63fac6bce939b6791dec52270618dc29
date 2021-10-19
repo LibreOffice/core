@@ -16,6 +16,24 @@
       "message": "The test doesn\u0027t crash without the fix in place...",
       "revId": "eda5ac4a63fac6bce939b6791dec52270618dc29",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e7883b5_959d685b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-10-19T12:02:14Z",
+      "side": 1,
+      "message": "I\u0027ve got a freezing under Linux without the fix, but I\u0027m going to check it with an up-to-date master, too. Thanks, László",
+      "parentUuid": "6561cd9e_a5ecd07d",
+      "revId": "eda5ac4a63fac6bce939b6791dec52270618dc29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
