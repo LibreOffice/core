@@ -333,7 +333,8 @@ const struct {
     { "ilo_PH", lcl_DATA_OTHERS },
     { "ha_Latn_NG",  lcl_DATA_OTHERS },
     { "min_ID", lcl_DATA_OTHERS },
-    { "sun_ID", lcl_DATA_OTHERS }
+    { "sun_ID", lcl_DATA_OTHERS },
+    { "en_IL",  lcl_DATA_OTHERS }   // needs to be in OTHERS instead of EN because inherits from he_IL
 };
 
 #else
