@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52d01dd3_2e604e0a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-10-19T06:02:57Z",
+      "side": 1,
+      "message": "Nice fix.\nHow about showing the dropdown when multiple suggestions are possible?\nThe dropdown is already there (can be triggered with with Alt-Down). Just need to make it visible automatically.\nMost users don\u0027t know the shortcut how to display the dropdown.\nSee tdf#133494 for details.",
+      "revId": "4cfa840ecaa5a094a32a60a60b295858980109df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
