@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33e5b38b_3e695ce9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-19T10:52:07Z",
+      "side": 1,
+      "message": "I like this. It hides all the junk from the home directory so it is easier to find the real folders. Plus, typing in the hidden folder in \"File name\" now works to secretly enter those folders, so that normal work-around is still valid.",
+      "revId": "2e6f70b70aa00ce5c1094f0ff67cbb8ce862f9ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
