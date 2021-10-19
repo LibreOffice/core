@@ -3446,6 +3446,11 @@ $(call gb_LinkTarget_add_libs,$(1),\
 
 endef
 
+define gb_LinkTarget__use_nssutil3
+$(call gb_LinkTarget__use_nss3,$(1))
+
+endef
+
 define gb_LinkTarget__use_plc4
 $(call gb_LinkTarget__use_nss3,$(1))
 
@@ -3510,6 +3515,27 @@ $(call gb_LinkTarget_add_libs,$(1),\
 else
 $(call gb_LinkTarget_add_libs,$(1),\
 	-L$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib -lssl3 \
+)
+endif
+
+endef
+
+define gb_LinkTarget__use_nssutil3
+$(call gb_LinkTarget_use_package,$(1),nss)
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	-I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss \
+	-I$(call gb_UnpackedTarball_get_dir,nss)/dist/out/include \
+)
+
+ifeq ($(COM),MSC)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/nssutil3.lib \
+)
+else
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib \
+	-lnssutil3 \
 )
 endif
 
