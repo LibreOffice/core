@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c53952b_8bcecfb8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-10-19T12:26:03Z",
+      "side": 1,
+      "message": "Caolán, many thanks for the bug report. We are going to check it soon.",
+      "parentUuid": "9d860839_f9e14c6d",
+      "revId": "12ee423c7549ddd2b86dfc3fc6fed2c617dcca7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7f877a94_72196209",
