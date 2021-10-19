@@ -28,9 +28,9 @@ class SwNodeIndex;
 
 struct SwPamRange
 {
-    sal_uLong nStart, nEnd;
+    SwNodeOffset nStart, nEnd;
 
-    SwPamRange( sal_uLong nS, sal_uLong nE ) : nStart( nS ), nEnd( nE ) {}
+    SwPamRange( SwNodeOffset nS, SwNodeOffset nE ) : nStart( nS ), nEnd( nE ) {}
 
     bool operator==( const SwPamRange& rRg ) const
         { return nStart == rRg.nStart; }

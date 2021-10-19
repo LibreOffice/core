@@ -234,14 +234,14 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
         RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
         rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld & ~RedlineFlags::Ignore);
 
-        SwPaM aPam( *pSectNd->EndOfSectionNode(), *pSectNd, 1 );
+        SwPaM aPam( *pSectNd->EndOfSectionNode(), *pSectNd, SwNodeOffset(1) );
         rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( *m_pRedlData, aPam ), true);
         rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     }
     else if( !( RedlineFlags::Ignore & GetRedlineFlags() ) &&
             !rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() )
     {
-        SwPaM aPam( *pSectNd->EndOfSectionNode(), *pSectNd, 1 );
+        SwPaM aPam( *pSectNd->EndOfSectionNode(), *pSectNd, SwNodeOffset(1) );
         rDoc.getIDocumentRedlineAccess().SplitRedline( aPam );
     }
 
@@ -273,7 +273,7 @@ void SwUndoInsSection::RepeatImpl(::sw::RepeatContext & rContext)
     }
 }
 
-void SwUndoInsSection::Join( SwDoc& rDoc, sal_uLong nNode )
+void SwUndoInsSection::Join( SwDoc& rDoc, SwNodeOffset nNode )
 {
     SwNodeIndex aIdx( rDoc.GetNodes(), nNode );
     SwTextNode* pTextNd = aIdx.GetNode().GetTextNode();
@@ -324,8 +324,8 @@ private:
     std::unique_ptr<SwTOXBase> const m_pTOXBase; /// set iff section is TOX
     std::optional<SfxItemSet> const m_oAttrSet;
     std::shared_ptr< ::sfx2::MetadatableUndo > const m_pMetadataUndo;
-    sal_uLong const m_nStartNode;
-    sal_uLong const m_nEndNode;
+    SwNodeOffset const m_nStartNode;
+    SwNodeOffset const m_nEndNode;
 
 public:
     SwUndoDelSection(
@@ -429,7 +429,7 @@ class SwUndoUpdateSection
 private:
     std::unique_ptr<SwSectionData> m_pSectionData;
     std::optional<SfxItemSet> m_oAttrSet;
-    sal_uLong const m_nStartNode;
+    SwNodeOffset const m_nStartNode;
     bool const m_bOnlyAttrChanged;
 
 public:

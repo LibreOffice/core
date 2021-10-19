@@ -464,7 +464,7 @@ OUString SwEditShell::GetDropText( const sal_Int32 nChars ) const
     {
         // if a multi selection exists, search for the first line
         // -> it is the cursor with the lowest index
-        sal_uLong nIndex = pCursor->GetMark()->nNode.GetIndex();
+        SwNodeOffset nIndex = pCursor->GetMark()->nNode.GetIndex();
         bool bPrev = true;
         SwPaM* pLast = pCursor;
         SwPaM* pTemp = pCursor;
@@ -475,7 +475,7 @@ OUString SwEditShell::GetDropText( const sal_Int32 nChars ) const
             if ( bPrev )
             {
                 pTemp = pPrev2;
-                sal_uLong nTemp = pPrev2->GetMark()->nNode.GetIndex();
+                SwNodeOffset nTemp = pPrev2->GetMark()->nNode.GetIndex();
                 if ( nTemp < nIndex )
                 {
                     nIndex = nTemp;
@@ -768,8 +768,8 @@ void SwEditShell::SetNumberingRestart()
         else
             MakeFindRange(SwDocPositions::OtherStart, SwDocPositions::OtherEnd, pCursor); // extra content
         SwPosition* pSttPos = pCursor->Start(), *pEndPos = pCursor->End();
-        sal_uLong nCurrNd = pSttPos->nNode.GetIndex();
-        sal_uLong nEndNd = pEndPos->nNode.GetIndex();
+        SwNodeOffset nCurrNd = pSttPos->nNode.GetIndex();
+        SwNodeOffset nEndNd = pEndPos->nNode.GetIndex();
         if( nCurrNd <= nEndNd )
         {
             SwContentFrame* pContentFrame;
@@ -851,7 +851,7 @@ sal_uInt16 SwEditShell::GetLineCount()
     SwContentNode* pCNd;
     SwContentFrame *pContentFrame = nullptr;
 
-    aStart = 0;
+    aStart = SwNodeOffset(0);
 
     while( nullptr != ( pCNd = GetDoc()->GetNodes().GoNextSection(
                 &aStart, true, false )) )

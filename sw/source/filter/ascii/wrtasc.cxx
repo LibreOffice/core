@@ -101,10 +101,10 @@ ErrCode SwASCWriter::WriteStream()
         case LINEEND_CRLF:  m_sLineEnd = "\015\012"; break;
         }
 
-    tools::Long nMaxNode = m_pDoc->GetNodes().Count();
+    SwNodeOffset nMaxNode = m_pDoc->GetNodes().Count();
 
     if( m_bShowProgress )
-        ::StartProgress( STR_STATSTR_W4WWRITE, 0, nMaxNode, m_pDoc->GetDocShell() );
+        ::StartProgress( STR_STATSTR_W4WWRITE, 0, sal_Int32(nMaxNode), m_pDoc->GetDocShell() );
 
     SwPaM* pPam = m_pOrigPam;
 
@@ -191,7 +191,7 @@ ErrCode SwASCWriter::WriteStream()
                 break;
 
             if( m_bShowProgress )
-                ::SetProgressState( m_pCurrentPam->GetPoint()->nNode.GetIndex(),
+                ::SetProgressState( sal_Int32(m_pCurrentPam->GetPoint()->nNode.GetIndex()),
                                     m_pDoc->GetDocShell() );   // How far?
 
         }

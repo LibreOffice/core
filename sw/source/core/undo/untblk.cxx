@@ -38,7 +38,7 @@
 namespace sw {
 
 std::optional<std::vector<SwFrameFormat*>>
-GetFlysAnchoredAt(SwDoc & rDoc, sal_uLong const nSttNode)
+GetFlysAnchoredAt(SwDoc & rDoc, SwNodeOffset const nSttNode)
 {
     std::optional<std::vector<SwFrameFormat*>> pFrameFormats;
     const size_t nArrLen = rDoc.GetSpzFrameFormats()->size();
@@ -112,7 +112,7 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
 //  Flys, anchored to any paragraph, but not first and last, are handled by DelContentIndex (see SwUndoInserts::UndoImpl) and are not stored in m_FlyUndos.
 
 void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
-                                    int const nDeleteTextNodes)
+                                    SwNodeOffset const nDeleteTextNodes)
 {
     const SwPosition* pTmpPos = rPam.End();
     m_nEndNode = pTmpPos->nNode.GetIndex();
@@ -128,7 +128,7 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
         m_nSttContent = pTmpPos->nContent.GetIndex();
 
         m_nDeleteTextNodes = nDeleteTextNodes;
-        if (m_nDeleteTextNodes == 0) // if a table selection is added...
+        if (m_nDeleteTextNodes == SwNodeOffset(0)) // if a table selection is added...
         {
             ++m_nSttNode;         // ... then the CopyPam is not fully correct
         }
@@ -153,7 +153,7 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
                 m_pFrameFormats->end() == ( it = std::find( m_pFrameFormats->begin(), m_pFrameFormats->end(), pFormat ) ) )
             {
                 std::shared_ptr<SwUndoInsLayFormat> const pFlyUndo =
-                    std::make_shared<SwUndoInsLayFormat>(pFormat, 0, 0);
+                    std::make_shared<SwUndoInsLayFormat>(pFormat, SwNodeOffset(0), 0);
                 m_FlyUndos.push_back(pFlyUndo);
             }
             else
@@ -172,7 +172,7 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
     that the Undo/Redo run in inverse order.
  */
 bool SwUndoInserts::IsCreateUndoForNewFly(SwFormatAnchor const& rAnchor,
-    sal_uLong const nStartNode, sal_uLong const nEndNode)
+    SwNodeOffset const nStartNode, SwNodeOffset const nEndNode)
 {
     assert(nStartNode <= nEndNode);
 
@@ -258,7 +258,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
     SwDoc& rDoc = rContext.GetDoc();
     SwPaM& rPam = AddUndoRedoPaM(rContext);
 
-    m_nNodeDiff = 0;
+    m_nNodeDiff = SwNodeOffset(0);
 
     if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
         rDoc.getIDocumentRedlineAccess().DeleteRedline(rPam, true, RedlineType::Any);
@@ -293,7 +293,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
     // indexes
     if (!m_FlyUndos.empty())
     {
-        sal_uLong nTmp = rPam.GetPoint()->nNode.GetIndex();
+        SwNodeOffset nTmp = rPam.GetPoint()->nNode.GetIndex();
         for (size_t n = m_FlyUndos.size(); 0 < n; --n)
         {
             m_FlyUndos[ n-1 ]->UndoImpl(rContext);
@@ -305,7 +305,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         // are there Footnotes or ContentFlyFrames in text?
         m_nSetPos = m_pHistory->Count();
-        sal_uLong nTmp = rPam.GetMark()->nNode.GetIndex();
+        SwNodeOffset nTmp = rPam.GetMark()->nNode.GetIndex();
         DelContentIndex(*rPam.GetMark(), *rPam.GetPoint(),
             DelContentType::AllMask|DelContentType::ExcludeFlyAtStartEnd);
         m_nNodeDiff += nTmp - rPam.GetMark()->nNode.GetIndex();
@@ -315,7 +315,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
                     new SwNodeIndex(rDoc.GetNodes().GetEndOfContent()));
             MoveToUndoNds(rPam, m_pUndoNodeIndex.get());
 
-            if (m_nDeleteTextNodes == 0)
+            if (m_nDeleteTextNodes == SwNodeOffset(0))
             {
                 rPam.Move( fnMoveBackward, GoInContent );
             }
@@ -330,14 +330,14 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
     if( !m_pTextFormatColl ) // if 0 than it's no TextNode -> delete
     {
         SwNodeIndex aDelIdx( rIdx );
-        assert(0 < m_nDeleteTextNodes && m_nDeleteTextNodes < 3);
-        for (int i = 0; i < m_nDeleteTextNodes; ++i)
+        assert(SwNodeOffset(0) < m_nDeleteTextNodes && m_nDeleteTextNodes < SwNodeOffset(3));
+        for (SwNodeOffset i(0); i < m_nDeleteTextNodes; ++i)
         {
             rPam.Move(fnMoveForward, GoInNode);
         }
         rPam.DeleteMark();
 
-        for (int i = 0; i < m_nDeleteTextNodes; ++i)
+        for (SwNodeOffset i(0); i < m_nDeleteTextNodes; ++i)
         {
             RemoveIdxRel(aDelIdx.GetIndex() + i, *rPam.GetPoint());
         }
@@ -395,10 +395,10 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
         const bool bMvBkwrd = MovePtBackward(rPam);
 
         // re-insert content again (first detach m_pUndoNodeIndex!)
-        sal_uLong const nMvNd = m_pUndoNodeIndex->GetIndex();
+        SwNodeOffset const nMvNd = m_pUndoNodeIndex->GetIndex();
         m_pUndoNodeIndex.reset();
         MoveFromUndoNds(rDoc, nMvNd, *rPam.GetMark());
-        if (m_nDeleteTextNodes != 0)
+        if (m_nDeleteTextNodes != SwNodeOffset(0))
         {
             MovePtForward(rPam, bMvBkwrd);
         }

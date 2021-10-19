@@ -39,7 +39,7 @@ class SwNode2LayImpl
     std::unique_ptr<SwIterator<SwFrame, sw::BroadcastingModify, sw::IteratorMode::UnwrapMulti>> mpIter;
     sw::BroadcastingModify* mpMod;
     std::vector<SwFrame*> mvUpperFrames; // To collect the Upper
-    sal_uLong mnIndex;        // The Index of the to-be-inserted Nodes
+    SwNodeOffset mnIndex;        // The Index of the to-be-inserted Nodes
     bool mbMaster    : 1; // true => only Master, false => only Frames without Follow
     bool mbInit      : 1; // Did we already call First() at SwClient?
 
@@ -47,12 +47,12 @@ class SwNode2LayImpl
     SwNode2LayImpl& operator=(const SwNode2LayImpl&) = delete;
 
 public:
-    SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, bool bSearch );
+    SwNode2LayImpl( const SwNode& rNode, SwNodeOffset nIdx, bool bSearch );
     SwFrame* NextFrame(); // Returns the next "useful" Frame
     SwLayoutFrame* UpperFrame( SwFrame* &rpFrame, const SwNode &rNode );
     void SaveUpperFrames(); // Saves (and locks if needed) the pUpper
     // Inserts a Frame under every pUpper of the array
-    void RestoreUpperFrames( SwNodes& rNds, sal_uLong nStt, sal_uLong nEnd );
+    void RestoreUpperFrames( SwNodes& rNds, SwNodeOffset nStt, SwNodeOffset nEnd );
 
     SwFrame* GetFrame( const Point* pDocPos ) const;
 };
@@ -84,7 +84,7 @@ static SwNode* GoNextWithFrame(const SwNodes& rNodes, SwNodeIndex *pIdx)
         ++aTmp;
     }
 
-    if( aTmp == rNodes.Count()-1 )
+    if( aTmp == rNodes.Count()-SwNodeOffset(1) )
         pNd = nullptr;
     else if( pNd )
         (*pIdx) = aTmp;
@@ -134,7 +134,7 @@ static SwNode* GoPreviousWithFrame(SwNodeIndex *pIdx)
  *                          Content or TableNode.
  *                          We insert before or after it.
  */
-SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, bool bSearch )
+SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, SwNodeOffset nIdx, bool bSearch )
     : mnIndex( nIdx ), mbInit( false )
 {
     const SwNode* pNd;
@@ -337,7 +337,7 @@ SwLayoutFrame* SwNode2LayImpl::UpperFrame( SwFrame* &rpFrame, const SwNode &rNod
     return pUpper;
 }
 
-void SwNode2LayImpl::RestoreUpperFrames( SwNodes& rNds, sal_uLong nStt, sal_uLong nEnd )
+void SwNode2LayImpl::RestoreUpperFrames( SwNodes& rNds, SwNodeOffset nStt, SwNodeOffset nEnd )
 {
     SwNode* pNd;
     SwDoc& rDoc = rNds.GetDoc();
@@ -425,7 +425,7 @@ SwFrame* SwNode2LayImpl::GetFrame( const Point* pDocPos ) const
     return mpMod ? ::GetFrameOfModify(nullptr, *mpMod, FRM_ALL, nullptr, pDocPos ? &tmp : nullptr) : nullptr;
 }
 
-SwNode2Layout::SwNode2Layout( const SwNode& rNd, sal_uLong nIdx )
+SwNode2Layout::SwNode2Layout( const SwNode& rNd, SwNodeOffset nIdx )
     : m_pImpl( new SwNode2LayImpl( rNd, nIdx, false ) )
 {
 }
@@ -437,7 +437,7 @@ SwNode2LayoutSaveUpperFrames::SwNode2LayoutSaveUpperFrames(const SwNode& rNd)
 }
 
 void SwNode2LayoutSaveUpperFrames::RestoreUpperFrames(
-        SwNodes& rNds, sal_uLong const nStt, sal_uLong const nEnd)
+        SwNodes& rNds, SwNodeOffset const nStt, SwNodeOffset const nEnd)
 {
     m_pImpl->RestoreUpperFrames( rNds, nStt, nEnd );
 }

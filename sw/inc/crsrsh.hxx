@@ -188,7 +188,7 @@ private:
     tools::Long m_nUpDownX;              /**< try to move the cursor on up/down always
                                    in the same column */
     tools::Long m_nLeftFramePos;
-    sal_uLong m_nCurrentNode;     // save CursorPos at Start-Action
+    SwNodeOffset m_nCurrentNode;     // save CursorPos at Start-Action
     sal_Int32 m_nCurrentContent;
     SwNodeType m_nCurrentNdTyp;
 

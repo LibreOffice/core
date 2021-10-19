@@ -363,7 +363,7 @@ sal_uInt8 SwFlowFrame::BwdMoveNecessary( const SwPageFrame *pPage, const SwRect 
     {
 
         const SwSortedObjs &rObjs = *pObjs;
-        sal_uLong nIndex = ULONG_MAX;
+        SwNodeOffset nIndex = NODE_OFFSET_MAX;
         for ( size_t i = 0; nRet < 3 && i < rObjs.size(); ++i )
         {
 
@@ -396,13 +396,13 @@ sal_uInt8 SwFlowFrame::BwdMoveNecessary( const SwPageFrame *pPage, const SwRect 
                     if ( rFormat.GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PARA )
                     {
                         // The index of the other one can be retrieved using the anchor attribute.
-                        sal_uLong nTmpIndex = rFormat.GetAnchor().GetContentAnchor()->nNode.GetIndex();
+                        SwNodeOffset nTmpIndex = rFormat.GetAnchor().GetContentAnchor()->nNode.GetIndex();
                         // Now we're going to check whether the current paragraph before
                         // the anchor of the displacing object sits in the text. If this
                         // is the case, we don't try to evade it.
                         // The index is being determined via SwFormatAnchor, because it's
                         // getting quite expensive otherwise.
-                        if( ULONG_MAX == nIndex )
+                        if( NODE_OFFSET_MAX == nIndex )
                         {
                             const SwNode *pNode;
                             if (m_rThis.IsTextFrame())

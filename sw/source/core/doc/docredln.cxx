@@ -1332,19 +1332,19 @@ void SwRangeRedline::ShowOriginal(sal_uInt16 nLoop, size_t nMyPos, bool /*bForce
 // trigger the Layout
 void SwRangeRedline::InvalidateRange(Invalidation const eWhy)
 {
-    sal_uLong nSttNd = GetMark()->nNode.GetIndex(),
+    SwNodeOffset nSttNd = GetMark()->nNode.GetIndex(),
             nEndNd = GetPoint()->nNode.GetIndex();
     sal_Int32 nSttCnt = GetMark()->nContent.GetIndex();
     sal_Int32 nEndCnt = GetPoint()->nContent.GetIndex();
 
     if( nSttNd > nEndNd || ( nSttNd == nEndNd && nSttCnt > nEndCnt ))
     {
-        sal_uLong nTmp = nSttNd; nSttNd = nEndNd; nEndNd = nTmp;
+        SwNodeOffset nTmp = nSttNd; nSttNd = nEndNd; nEndNd = nTmp;
         sal_Int32 nTmp2 = nSttCnt; nSttCnt = nEndCnt; nEndCnt = nTmp2;
     }
 
     SwNodes& rNds = GetDoc().GetNodes();
-    for (sal_uLong n(nSttNd); n <= nEndNd; ++n)
+    for (SwNodeOffset n(nSttNd); n <= nEndNd; ++n)
     {
         SwNode* pNode = rNds[n];
 
@@ -1381,7 +1381,7 @@ void SwRangeRedline::InvalidateRange(Invalidation const eWhy)
 
 /** Calculates the start and end position of the intersection rTmp and
     text node nNdIdx */
-void SwRangeRedline::CalcStartEnd( sal_uLong nNdIdx, sal_Int32& rStart, sal_Int32& rEnd ) const
+void SwRangeRedline::CalcStartEnd( SwNodeOffset nNdIdx, sal_Int32& rStart, sal_Int32& rEnd ) const
 {
     const SwPosition *pRStt = Start(), *pREnd = End();
     if( pRStt->nNode < nNdIdx )
@@ -1596,7 +1596,7 @@ void SwRangeRedline::CopyToSection()
         else
         {
             SwNodeIndex aInsPos( *pSttNd->EndOfSectionNode() );
-            SwNodeRange aRg( pStt->nNode, 0, pEnd->nNode, 1 );
+            SwNodeRange aRg( pStt->nNode, SwNodeOffset(0), pEnd->nNode, SwNodeOffset(1) );
             rDoc.GetDocumentContentOperationsManager().CopyWithFlyInFly(aRg, aInsPos);
         }
     }
@@ -1739,8 +1739,8 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
         const SwNode* pKeptContentSectNode( &m_pContentSect->GetNode() ); // #i95711#
         {
             SwPaM aPam( m_pContentSect->GetNode(),
-                        *m_pContentSect->GetNode().EndOfSectionNode(), 1,
-                        ( m_bDelLastPara ? -2 : -1 ) );
+                        *m_pContentSect->GetNode().EndOfSectionNode(), SwNodeOffset(1),
+                        SwNodeOffset( m_bDelLastPara ? -2 : -1 ) );
             SwContentNode* pCNd = aPam.GetContentNode();
             if( pCNd )
                 aPam.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );

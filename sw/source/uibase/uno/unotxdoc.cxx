@@ -1917,7 +1917,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
                 pDoc->SetInWriterfilterImport(bBool);
                 if (bOld && !bBool)
                 {
-                    pDoc->getIDocumentFieldsAccess().SetFieldsDirty(false, nullptr, 0);
+                    pDoc->getIDocumentFieldsAccess().SetFieldsDirty(false, nullptr, SwNodeOffset(0));
                 }
             }
         }

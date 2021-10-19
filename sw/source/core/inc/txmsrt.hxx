@@ -127,7 +127,7 @@ struct SwTOXSortTabBase
     const SwTextNode* pTOXNd;
     const SwTextTOXMark* pTextMark;
     const SwTOXInternational* pTOXIntl;
-    sal_uLong nPos;
+    SwNodeOffset nPos;
     sal_Int32 nCntPos;
     sal_uInt16 nType;
     static SwTOIOptions nOpt;

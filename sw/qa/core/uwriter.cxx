@@ -1470,7 +1470,7 @@ void SwDocTest::testMarkMove()
     // cut some text
     {
         SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
-        SwPaM aPaM(aIdx, aIdx, -1);
+        SwPaM aPaM(aIdx, aIdx, SwNodeOffset(-1));
         aPaM.GetPoint()->nContent += 5;
         aPaM.GetMark()->nContent += 6;
         m_pDoc->getIDocumentContentOperations().DeleteAndJoin(aPaM);

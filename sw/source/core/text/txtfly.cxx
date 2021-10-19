@@ -370,7 +370,7 @@ void SwTextFly::CtorInitTextFly( const SwTextFrame *pFrame )
     m_bTopRule = true;
     m_nMinBottom = 0;
     m_nNextTop = 0;
-    m_nCurrFrameNodeIndex = ULONG_MAX;
+    m_nCurrFrameNodeIndex = NODE_OFFSET_MAX;
 }
 
 SwRect SwTextFly::GetFrame_( const SwRect &rRect ) const
@@ -803,13 +803,13 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
 
                 // Compare indices:
                 // The Index of the other is retrieved from the anchor attr.
-                sal_uLong nTmpIndex = rNewA.GetContentAnchor()->nNode.GetIndex();
+                SwNodeOffset nTmpIndex = rNewA.GetContentAnchor()->nNode.GetIndex();
                 // Now check whether the current paragraph is before the anchor
                 // of the displaced object in the text, then we don't have to
                 // get out of its way.
                 // If possible determine Index via SwFormatAnchor because
                 // otherwise it's quite expensive.
-                if (ULONG_MAX == m_nCurrFrameNodeIndex)
+                if (NODE_OFFSET_MAX == m_nCurrFrameNodeIndex)
                     m_nCurrFrameNodeIndex = m_pCurrFrame->GetTextNodeFirst()->GetIndex();
 
                 if (FrameContainsNode(*m_pCurrFrame, nTmpIndex) || nTmpIndex < m_nCurrFrameNodeIndex)

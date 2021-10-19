@@ -53,9 +53,9 @@ public:
     virtual void UnlockExpFields() override;
     virtual bool IsExpFieldsLocked() const override;
     virtual SwDocUpdateField& GetUpdateFields() const override;
-    virtual bool SetFieldsDirty(bool b, const SwNode* pChk, sal_uLong nLen) override;
+    virtual bool SetFieldsDirty(bool b, const SwNode* pChk, SwNodeOffset nLen) override;
     virtual void SetFixFields(const DateTime* pNewDateTime) override;
-    virtual void FieldsToCalc(SwCalc& rCalc, sal_uLong nLastNd, sal_Int32 nLastCnt) override;
+    virtual void FieldsToCalc(SwCalc& rCalc, SwNodeOffset nLastNd, sal_Int32 nLastCnt) override;
     virtual void FieldsToCalc(SwCalc& rCalc, const SetGetExpField& rToThisField, SwRootFrame const* pLayout) override;
     virtual void FieldsToExpand(SwHashTable<HashStr>& rTable, const SetGetExpField& rToThisField, SwRootFrame const& rLayout) override;
     virtual bool IsNewFieldLst() const override;

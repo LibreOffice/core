@@ -26,6 +26,7 @@
 #include <tools/solar.h>
 #include "SwRewriter.hxx"
 #include "swundo.hxx"
+#include "nodeoffset.hxx"
 #include <o3tl/typed_flags_set.hxx>
 #include <optional>
 
@@ -61,9 +62,9 @@ protected:
     bool m_bCacheComment;
     mutable std::optional<OUString> maComment;
 
-    static void RemoveIdxFromSection( SwDoc&, sal_uLong nSttIdx, const sal_uLong* pEndIdx = nullptr );
+    static void RemoveIdxFromSection( SwDoc&, SwNodeOffset nSttIdx, const SwNodeOffset* pEndIdx = nullptr );
     static void RemoveIdxFromRange( SwPaM& rPam, bool bMoveNext );
-    static void RemoveIdxRel( sal_uLong, const SwPosition& );
+    static void RemoveIdxRel( SwNodeOffset, const SwPosition& );
 
     static bool CanRedlineGroup( SwRedlineSaveDatas& rCurr,
                                 const SwRedlineSaveDatas& rCheck,
@@ -172,10 +173,10 @@ protected:
     // MoveFrom:    moves from the UndoNodesArray into the NodesArray.
     static void MoveToUndoNds( SwPaM& rPam,
                         SwNodeIndex* pNodeIdx,
-                        sal_uLong* pEndNdIdx = nullptr );
-    static void MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
+                        SwNodeOffset* pEndNdIdx = nullptr );
+    static void MoveFromUndoNds( SwDoc& rDoc, SwNodeOffset nNodeIdx,
                           SwPosition& rInsPos,
-                          const sal_uLong* pEndNdIdx = nullptr,
+                          const SwNodeOffset* pEndNdIdx = nullptr,
                           bool bForceCreateFrames = false);
 
     // These two methods move the SPoint back/forth from PaM. With it
@@ -201,12 +202,12 @@ class SwUndoSaveSection : private SwUndoSaveContent
 {
     std::unique_ptr<SwNodeIndex> m_pMovedStart;
     std::unique_ptr<SwRedlineSaveDatas> m_pRedlineSaveData;
-    sal_uLong m_nMoveLen;           // Index into UndoNodes-Array.
-    sal_uLong m_nStartPos;
+    SwNodeOffset m_nMoveLen;           // Index into UndoNodes-Array.
+    SwNodeOffset m_nStartPos;
 
 protected:
     SwNodeIndex* GetMvSttIdx() const { return m_pMovedStart.get(); }
-    sal_uLong GetMvNodeCnt() const { return m_nMoveLen; }
+    SwNodeOffset GetMvNodeCnt() const { return m_nMoveLen; }
 
 public:
     SwUndoSaveSection();
@@ -227,7 +228,7 @@ public:
 class SwUndRng
 {
 public:
-    sal_uLong m_nSttNode, m_nEndNode;
+    SwNodeOffset m_nSttNode, m_nEndNode;
     sal_Int32 m_nSttContent, m_nEndContent;
 
     SwUndRng();
@@ -244,7 +245,7 @@ class SwUndoInsLayFormat;
 namespace sw {
 
 std::optional<std::vector<SwFrameFormat*>>
-GetFlysAnchoredAt(SwDoc & rDoc, sal_uLong nSttNode);
+GetFlysAnchoredAt(SwDoc & rDoc, SwNodeOffset nSttNode);
 
 }
 
@@ -255,10 +256,10 @@ class SwUndoInserts : public SwUndo, public SwUndRng, private SwUndoSaveContent
     std::optional<std::vector<SwFrameFormat*>> m_pFrameFormats;
     std::vector< std::shared_ptr<SwUndoInsLayFormat> > m_FlyUndos;
     std::unique_ptr<SwRedlineData> m_pRedlineData;
-    int m_nDeleteTextNodes;
+    SwNodeOffset m_nDeleteTextNodes;
 
 protected:
-    sal_uLong m_nNodeDiff;
+    SwNodeOffset m_nNodeDiff;
     /// start of Content in UndoNodes for Redo
     std::unique_ptr<SwNodeIndex> m_pUndoNodeIndex;
     sal_uInt16 m_nSetPos;                 // Start in the history list.
@@ -273,10 +274,10 @@ public:
 
     // Set destination range after reading.
     void SetInsertRange( const SwPaM&, bool bScanFlys = true,
-                         int nDeleteTextNodes = 1);
+                         SwNodeOffset nDeleteTextNodes = SwNodeOffset(1));
 
     static bool IsCreateUndoForNewFly(SwFormatAnchor const& rAnchor,
-        sal_uLong const nStartNode, sal_uLong const nEndNode);
+        SwNodeOffset const nStartNode, SwNodeOffset const nEndNode);
     std::vector<SwFrameFormat*> * GetFlysAnchoredAt() { return m_pFrameFormats ? &*m_pFrameFormats : nullptr; }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
@@ -298,7 +299,7 @@ class SwUndoFlyBase : public SwUndo, private SwUndoSaveSection
 {
 protected:
     SwFrameFormat* m_pFrameFormat;          // The saved FlyFormat.
-    sal_uLong m_nNodePagePos;
+    SwNodeOffset m_nNodePagePos;
     sal_Int32 m_nContentPos;         // Page at/in paragraph.
     RndStdIds m_nRndId;
     bool m_bDelFormat;           // Delete saved format.
@@ -309,7 +310,7 @@ protected:
     SwUndoFlyBase( SwFrameFormat* pFormat, SwUndoId nUndoId );
 
     SwNodeIndex* GetMvSttIdx() const { return SwUndoSaveSection::GetMvSttIdx(); }
-    sal_uLong GetMvNodeCnt() const { return SwUndoSaveSection::GetMvNodeCnt(); }
+    SwNodeOffset GetMvNodeCnt() const { return SwUndoSaveSection::GetMvNodeCnt(); }
 
 public:
     virtual ~SwUndoFlyBase() override;
@@ -319,10 +320,10 @@ public:
 
 class SwUndoInsLayFormat final : public SwUndoFlyBase
 {
-    sal_uLong mnCursorSaveIndexPara;           // Cursor position
+    SwNodeOffset mnCursorSaveIndexPara;        // Cursor position
     sal_Int32 mnCursorSaveIndexPos;            // for undo
 public:
-    SwUndoInsLayFormat( SwFrameFormat* pFormat, sal_uLong nNodeIdx, sal_Int32 nCntIdx );
+    SwUndoInsLayFormat( SwFrameFormat* pFormat, SwNodeOffset nNodeIdx, sal_Int32 nCntIdx );
 
     virtual ~SwUndoInsLayFormat() override;
 

@@ -5126,11 +5126,11 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
                 // The last paragraph of the section is never part of the copy.
                 // That's why the section needs to contain at least two paragraphs
 
-                if( pCapStNd->EndOfSectionIndex() - pCapStNd->GetIndex() > 2 )
+                if( pCapStNd->EndOfSectionIndex() - pCapStNd->GetIndex() > SwNodeOffset(2) )
                 {
                     // Don't copy start node and the last paragraph
-                    SwNodeRange aSrcRg( *pCapStNd, 1,
-                                    *pCapStNd->EndOfSectionNode(), -1 );
+                    SwNodeRange aSrcRg( *pCapStNd, SwNodeOffset(1),
+                                    *pCapStNd->EndOfSectionNode(), SwNodeOffset(-1) );
 
                     bool bTop = m_xTable->IsTopCaption();
                     SwStartNode *pTableStNd = pTCntxt->GetTableNode();

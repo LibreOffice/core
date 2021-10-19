@@ -461,9 +461,9 @@ namespace
             const SwPosition* const pStPos = &pMark->GetMarkStart();
             const SwPosition* const pEndPos = &pMark->GetMarkEnd();
             SAL_INFO("sw.core",
-                pStPos->nNode.GetIndex() << "," <<
+                sal_Int32(pStPos->nNode.GetIndex()) << "," <<
                 pStPos->nContent.GetIndex() << " " <<
-                pEndPos->nNode.GetIndex() << "," <<
+                sal_Int32(pEndPos->nNode.GetIndex()) << "," <<
                 pEndPos->nContent.GetIndex() << " " <<
                 typeid(*pMark).name() << " " <<
                 pMark->GetName());
@@ -555,9 +555,9 @@ namespace sw::mark
                 pPos2 = rPaM.GetMark();
             SAL_INFO("sw.core",
                 rName << " " <<
-                pPos1->nNode.GetIndex() << "," <<
+                sal_Int32(pPos1->nNode.GetIndex() )<< "," <<
                 pPos1->nContent.GetIndex() << " " <<
-                pPos2->nNode.GetIndex() << "," <<
+                sal_Int32(pPos2->nNode.GetIndex()) << "," <<
                 pPos2->nContent.GetIndex());
         }
 #endif
@@ -1834,7 +1834,7 @@ SaveBookmark::SaveBookmark(
     }
     else
     {
-        m_nNode2 = ULONG_MAX;
+        m_nNode2 = NODE_OFFSET_MAX;
         m_nContent2 = -1;
     }
 }
@@ -1848,7 +1848,7 @@ void SaveBookmark::SetInDoc(
     if(pIdx)
         aPam.GetPoint()->nContent = *pIdx;
 
-    if(ULONG_MAX != m_nNode2)
+    if(NODE_OFFSET_MAX != m_nNode2)
     {
         aPam.SetMark();
 

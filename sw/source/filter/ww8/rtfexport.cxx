@@ -1017,7 +1017,7 @@ void RtfExport::OutputTextNode(SwTextNode& rNode)
     m_nCurrentNodeIndex = rNode.GetIndex();
     if (!m_bOutOutlineOnly || rNode.IsOutline())
         MSWordExportBase::OutputTextNode(rNode);
-    m_nCurrentNodeIndex = 0;
+    m_nCurrentNodeIndex = SwNodeOffset(0);
 }
 
 void RtfExport::AppendSection(const SwPageDesc* pPageDesc, const SwSectionFormat* pFormat,

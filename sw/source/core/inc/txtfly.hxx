@@ -24,6 +24,7 @@
 #include <swtypes.hxx>
 #include <swrect.hxx>
 #include <com/sun/star/text/WrapTextMode.hpp>
+#include <nodeoffset.hxx>
 #include <memory>
 #include <vector>
 
@@ -126,7 +127,7 @@ class SwTextFly
 
     tools::Long m_nMinBottom;
     tools::Long m_nNextTop;  /// Stores the upper edge of the "next" frame
-    sal_uLong m_nCurrFrameNodeIndex;
+    SwNodeOffset m_nCurrFrameNodeIndex;
 
     bool m_bOn : 1;
     bool m_bTopRule: 1;

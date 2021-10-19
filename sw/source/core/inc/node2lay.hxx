@@ -58,7 +58,7 @@ class SwNode2Layout
 public:
     /// Use this ctor for inserting before/after rNd
     /// @param nIdx is the index of the to-be-inserted Node
-    SwNode2Layout(const SwNode& rNd, sal_uLong nIdx);
+    SwNode2Layout(const SwNode& rNd, SwNodeOffset nIdx);
     ~SwNode2Layout();
     SwFrame* NextFrame();
     SwLayoutFrame* UpperFrame(SwFrame*& rpFrame, const SwNode& rNode);
@@ -75,7 +75,7 @@ public:
     SwNode2LayoutSaveUpperFrames(const SwNode& rNd);
     ~SwNode2LayoutSaveUpperFrames();
 
-    void RestoreUpperFrames(SwNodes& rNds, sal_uLong nStt, sal_uLong nEnd);
+    void RestoreUpperFrames(SwNodes& rNds, SwNodeOffset nStt, SwNodeOffset nEnd);
 };
 
 #endif

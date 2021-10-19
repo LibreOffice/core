@@ -617,7 +617,7 @@ void SwHTMLParser::InsertComment( const OUString& rComment, const char *pTag )
     {
         bMoveFwd = true;
 
-        sal_uLong nNodeIdx = m_pPam->GetPoint()->nNode.GetIndex();
+        SwNodeOffset nNodeIdx = m_pPam->GetPoint()->nNode.GetIndex();
         const sal_Int32 nIdx = m_pPam->GetPoint()->nContent.GetIndex();
         for( auto i = m_aSetAttrTab.size(); i > 0; )
         {

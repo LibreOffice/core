@@ -198,7 +198,7 @@ void Test::testLinkedGraphicRT()
         // Find the image
         bool bImageFound = false;
         Graphic aGraphic;
-        for (sal_uLong nIndex = 0; nIndex < aNodes.Count(); ++nIndex)
+        for (SwNodeOffset nIndex(0); nIndex < aNodes.Count(); ++nIndex)
         {
             if (aNodes[nIndex]->IsGrfNode())
             {

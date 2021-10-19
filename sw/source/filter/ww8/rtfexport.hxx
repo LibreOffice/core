@@ -166,7 +166,7 @@ private:
     /// This is used by OutputFlyFrame_Impl() to control the written syntax
     bool m_bRTFFlySyntax;
     /// Index of the current SwTextNode, if any.
-    sal_uLong m_nCurrentNodeIndex;
+    SwNodeOffset m_nCurrentNodeIndex;
 
 public:
     rtl_TextEncoding GetDefaultEncoding() const { return m_eDefaultEncoding; }
@@ -177,7 +177,7 @@ public:
     rtl_TextEncoding GetCurrentEncoding() const { return m_eCurrentEncoding; }
     void SetRTFFlySyntax(bool bRTFFlySyntax) { m_bRTFFlySyntax = bRTFFlySyntax; }
     bool GetRTFFlySyntax() const { return m_bRTFFlySyntax; }
-    sal_uLong GetCurrentNodeIndex() const { return m_nCurrentNodeIndex; }
+    SwNodeOffset GetCurrentNodeIndex() const { return m_nCurrentNodeIndex; }
     SvStream& Strm();
     /// From now on, let Strm() return a memory stream, not a real one.
     void setStream();

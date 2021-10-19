@@ -465,7 +465,7 @@ namespace
         if (!pNodeIndex)
             return SwNodeType::NONE;
         const SwNode& rCSttNd = pNodeIndex->GetNode();
-        SwNodeRange aRg(rCSttNd, 1, *rCSttNd.EndOfSectionNode());
+        SwNodeRange aRg(rCSttNd, SwNodeOffset(1), *rCSttNd.EndOfSectionNode());
         return aRg.aStart.GetNode().GetNodeType();
     }
 }

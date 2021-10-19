@@ -971,7 +971,7 @@ SwTwips SwAnchoredObjectPosition::AdjustHoriRelPosForDrawAside(
     const sal_uInt32 nObjOrdNum = GetObject().GetOrdNum();
     const SwPageFrame* pObjPage = rFlyAtContentFrame.FindPageFrame();
     const SwFrame* pObjContext = ::FindContext( &rAnchorTextFrame, SwFrameType::Column );
-    sal_uLong nObjIndex = rAnchorTextFrame.GetTextNodeFirst()->GetIndex();
+    SwNodeOffset nObjIndex = rAnchorTextFrame.GetTextNodeFirst()->GetIndex();
     SwOrderIter aIter( pObjPage );
     const SwFlyFrame* pFly = static_cast<const SwVirtFlyDrawObj*>(aIter.Bottom())->GetFlyFrame();
     while ( pFly && nObjOrdNum > pFly->GetVirtDrawObj()->GetOrdNumDirect() )
@@ -1066,7 +1066,7 @@ SwTwips SwAnchoredObjectPosition::AdjustHoriRelPosForDrawAside(
 bool SwAnchoredObjectPosition::DrawAsideFly( const SwFlyFrame* _pFly,
                                               const SwRect&   _rObjRect,
                                               const SwFrame*    _pObjContext,
-                                              const sal_uLong     _nObjIndex,
+                                              const SwNodeOffset _nObjIndex,
                                               const bool      _bEvenPage,
                                               const sal_Int16 _eHoriOrient,
                                               const sal_Int16 _eRelOrient
@@ -1081,7 +1081,7 @@ bool SwAnchoredObjectPosition::DrawAsideFly( const SwFlyFrame* _pFly,
          aRectFnSet.BottomDist( _rObjRect, aRectFnSet.GetTop(_pFly->getFrameArea()) ) < 0 &&
          ::FindContext( _pFly->GetAnchorFrame(), SwFrameType::Column ) == _pObjContext )
     {
-        sal_uLong nOtherIndex =
+        SwNodeOffset nOtherIndex =
             static_cast<const SwTextFrame*>(_pFly->GetAnchorFrame())->GetTextNodeFirst()->GetIndex();
         if (sw::FrameContainsNode(static_cast<SwTextFrame const&>(*_pFly->GetAnchorFrame()), _nObjIndex)
             || nOtherIndex < _nObjIndex)

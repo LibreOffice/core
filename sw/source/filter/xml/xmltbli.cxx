@@ -1921,7 +1921,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
                     // only one text node?
                     SwNodeIndex aNodeIndex( *(pCell->GetStartNode()), 1 );
                     if( ( aNodeIndex.GetNode().EndOfSectionIndex() -
-                          aNodeIndex.GetNode().StartOfSectionIndex() ) == 2 )
+                          aNodeIndex.GetNode().StartOfSectionIndex() ) == SwNodeOffset(2) )
                     {
                         SwTextNode* pTextNode= aNodeIndex.GetNode().GetTextNode();
                         if( pTextNode != nullptr )
@@ -2712,7 +2712,7 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
         {
             pDoc = &const_cast<SwDoc&>(pEndNd->GetDoc());
         }
-        sal_uInt32 nOffset = pPrevSttNd ? 1UL : 0UL;
+        SwNodeOffset nOffset(pPrevSttNd ? 1 : 0);
         SwNodeIndex aIdx( *pEndNd, nOffset );
         SwTextFormatColl *pColl =
             pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD, false );

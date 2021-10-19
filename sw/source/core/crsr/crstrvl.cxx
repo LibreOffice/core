@@ -400,7 +400,7 @@ bool SwCursorShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
     Point aPt;
     SwPosition aFndPos( GetDoc()->GetNodes().GetEndOfContent() );
     if( !bNext )
-        aFndPos.nNode = 0;
+        aFndPos.nNode = SwNodeOffset(0);
     SetGetExpField aFndGEF( aFndPos ), aCurGEF( rPos );
 
     {
@@ -466,7 +466,7 @@ bool SwCursorShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
                 {
                     if( bNext )
                     {
-                        rPos.nNode = 0;
+                        rPos.nNode = SwNodeOffset(0);
                         rPos.nContent = 0;
                         aCurGEF = SetGetExpField( rPos );
                         SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::EndWrapped );
@@ -518,7 +518,7 @@ bool SwCursorShell::GotoNxtPrvTOXMark( bool bNext )
     Point aPt;
     SwPosition aFndPos( GetDoc()->GetNodes().GetEndOfContent() );
     if( !bNext )
-        aFndPos.nNode = 0;
+        aFndPos.nNode = SwNodeOffset(0);
     SetGetExpField aFndGEF( aFndPos ), aCurGEF( rPos );
 
     if( rPos.nNode.GetIndex() < GetDoc()->GetNodes().GetEndOfExtras().GetIndex() )
@@ -568,7 +568,7 @@ bool SwCursorShell::GotoNxtPrvTOXMark( bool bNext )
                 {
                     if ( bNext )
                     {
-                        rPos.nNode = 0;
+                        rPos.nNode = SwNodeOffset(0);
                         rPos.nContent = 0;
                         aCurGEF = SetGetExpField( rPos );
                         SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::EndWrapped );
@@ -1828,7 +1828,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                     pTextNd->SwContentNode::GetAttr( aSet );
 
                 rContentAtPos.sStr = "Pos: (";
-                rContentAtPos.sStr += OUString::number( aPos.nNode.GetIndex());
+                rContentAtPos.sStr += OUString::number( sal_Int32(aPos.nNode.GetIndex()));
                 rContentAtPos.sStr += ":";
                 rContentAtPos.sStr += OUString::number( aPos.nContent.GetIndex());
                 rContentAtPos.sStr += ")";
@@ -2463,7 +2463,7 @@ bool SwCursorShell::SelectNxtPrvHyperlink( bool bNext )
     SwNodes& rNds = GetDoc()->GetNodes();
     const SwNode* pBodyEndNd = &rNds.GetEndOfContent();
     const SwNode* pBodySttNd = pBodyEndNd->StartOfSectionNode();
-    sal_uLong nBodySttNdIdx = pBodySttNd->GetIndex();
+    SwNodeOffset nBodySttNdIdx = pBodySttNd->GetIndex();
     Point aPt;
 
     SetGetExpField aCmpPos( SwPosition( bNext ? *pBodyEndNd : *pBodySttNd ) );

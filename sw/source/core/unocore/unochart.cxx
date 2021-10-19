@@ -585,7 +585,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
         OUString aChartTableName;
 
         const SwNodes& rNodes = m_pDoc->GetNodes();
-        for( sal_uLong nN = rNodes.Count(); nN--; )
+        for( SwNodeOffset nN = rNodes.Count(); nN--; )
         {
             SwNode* pNode = rNodes[nN];
             if( !pNode )

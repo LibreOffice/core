@@ -62,8 +62,8 @@ namespace sw::mark
             OUString m_aHideCondition;
             vcl::KeyCode m_aCode;
             IDocumentMarkAccess::MarkType m_eOrigBkmType;
-            sal_uLong m_nNode1;
-            sal_uLong m_nNode2;
+            SwNodeOffset m_nNode1;
+            SwNodeOffset m_nNode2;
             sal_Int32 m_nContent1;
             sal_Int32 m_nContent2;
             std::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndo;
@@ -78,8 +78,8 @@ namespace sw::mark
 
             virtual void Clear() =0;
             virtual bool Empty() =0;
-            virtual void Save(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nContent, bool bSaveFlySplit=false) =0;
-            virtual void Restore(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false, bool bAtStart = false, RestoreMode = RestoreMode::All) =0;
+            virtual void Save(SwDoc& rDoc, SwNodeOffset nNode, sal_Int32 nContent, bool bSaveFlySplit=false) =0;
+            virtual void Restore(SwDoc& rDoc, SwNodeOffset nNode, sal_Int32 nOffset=0, bool bAuto = false, bool bAtStart = false, RestoreMode = RestoreMode::All) =0;
             virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen, RestoreMode = RestoreMode::All) =0;
             virtual ~ContentIdxStore() {};
             static std::shared_ptr<ContentIdxStore> Create();
@@ -101,11 +101,11 @@ void DelBookmarks(const SwNodeIndex& rStt,
 struct SaveFly
 {
     SwFrameFormat* pFrameFormat;      /// the fly's frame format
-    sal_uLong nNdDiff;      /// relative node difference
+    SwNodeOffset nNdDiff;      /// relative node difference
     sal_Int32 nContentIndex; ///< index in node
     bool isAtInsertNode;   ///< if true, anchor _at_ insert node index
 
-    SaveFly( sal_uLong nNodeDiff, sal_Int32 const nCntntIdx, SwFrameFormat* pFormat, bool bInsert )
+    SaveFly( SwNodeOffset nNodeDiff, sal_Int32 const nCntntIdx, SwFrameFormat* pFormat, bool bInsert )
         : pFrameFormat(pFormat)
         , nNdDiff(nNodeDiff)
         , nContentIndex(nCntntIdx)

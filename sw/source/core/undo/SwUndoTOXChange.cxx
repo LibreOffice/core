@@ -26,7 +26,7 @@
 
 namespace
 {
-    sal_uLong GetSectionNodeIndex(SwTOXBaseSection const& rTOX)
+    SwNodeOffset GetSectionNodeIndex(SwTOXBaseSection const& rTOX)
     {
         const SwSectionNode* pSectNd = rTOX.GetFormat()->GetSectionNode();
         assert(pSectNd);
@@ -48,7 +48,7 @@ SwUndoTOXChange::~SwUndoTOXChange()
 }
 
 // get the current ToXBase, which is not necessarily the same instance that existed there before
-static SwTOXBase & GetTOX(SwDoc & rDoc, sal_uLong const nNodeIndex)
+static SwTOXBase & GetTOX(SwDoc & rDoc, SwNodeOffset const nNodeIndex)
 {
     SwSectionNode *const pNode(rDoc.GetNodes()[nNodeIndex]->GetSectionNode());
     assert(pNode);
