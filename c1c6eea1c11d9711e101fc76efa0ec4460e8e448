@@ -16,6 +16,23 @@
       "message": "The more we kill use of Sequence in the code, the better. It should get replaced with normal containers everywhere except API calls...",
       "revId": "c1c6eea1c11d9711e101fc76efa0ec4460e8e448",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c13bf0e_aebdd745",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-19T15:18:55Z",
+      "side": 1,
+      "message": "Ok so I should wait for your patch been pushed to not interfere, then the main goal would be to find locations where Sequences may be replaced by native C++ containers (std::vector, perhaps sometimes std::array if no need to have a dynamic container)",
+      "revId": "c1c6eea1c11d9711e101fc76efa0ec4460e8e448",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
