@@ -478,6 +478,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf74524)
     CPPUNIT_ASSERT(!xFields->hasMoreElements());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf120469)
+{
+    load(mpTestDocumentPath, "tdf120469.odt");
+    // Check if the shape has been anchored to the correct paragraph
+    // after pressing enter before the anchor paragraph's first character.
+    // Without the accompanying fix, the shape would've been anchored to
+    // the empty paragraph above.
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    uno::Reference<text::XTextContent> xTextContent(getShape(1),uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xRange = xTextContent->getAnchor();
+    uno::Reference<text::XText> xText = xRange->getText();
+    CPPUNIT_ASSERT_EQUAL(OUString("33 33"), xText->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testPageStyleLayoutRight)
 {
     load(mpTestDocumentPath, "hello.odt");
