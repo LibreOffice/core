@@ -193,9 +193,9 @@
 +if test $1 = "arm64-apple-darwin"; then echo $1; exit; fi
 +if test $1 = "aarch64-apple-darwin"; then echo $1; exit; fi
 +
- # Separate what the user gave into CPU-COMPANY and OS or KERNEL-OS (if any).
- # Here we must recognize all the valid KERNEL-OS combinations.
- maybe_os=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\2/'`
+ # Split fields of configuration type
+ # shellcheck disable=SC2162
+ IFS="-" read field1 field2 field3 field4 <<EOF
 --- a/a/nspr/config/autoconf.mk.in
 +++ a/a/nspr/config/autoconf.mk.in
 @@ -67,7 +67,7 @@
