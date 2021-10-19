@@ -206,7 +206,7 @@ public:
     void testTdf142929_filterLessThanXLSX();
     void testInvalidNamedRange();
     void testExternalDefinedNameXLSX();
-    void testTdf143220XLSX();
+    void testHyperlinkLocationXLSX();
     void testTdf142264ManyChartsToXLSX();
     void testTdf143929MultiColumnToODS();
     void testTdf142578();
@@ -317,7 +317,7 @@ public:
     CPPUNIT_TEST(testTdf142929_filterLessThanXLSX);
     CPPUNIT_TEST(testInvalidNamedRange);
     CPPUNIT_TEST(testExternalDefinedNameXLSX);
-    CPPUNIT_TEST(testTdf143220XLSX);
+    CPPUNIT_TEST(testHyperlinkLocationXLSX);
     CPPUNIT_TEST(testTdf142264ManyChartsToXLSX);
     CPPUNIT_TEST(testTdf143929MultiColumnToODS);
     CPPUNIT_TEST(testTdf142578);
@@ -2730,7 +2730,7 @@ void ScExportTest2::testExternalDefinedNameXLSX()
     xDocSh->DoClose();
 }
 
-void ScExportTest2::testTdf143220XLSX()
+void ScExportTest2::testHyperlinkLocationXLSX()
 {
     ScDocShellRef xDocSh = loadDoc(u"tdf143220.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.is());
@@ -2738,7 +2738,13 @@ void ScExportTest2::testTdf143220XLSX()
     xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
                                                      "xl/worksheets/sheet1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
-    assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink", "location", "Sheet2!A1");
+
+    // tdf#143220 link to sheet not valid without cell reference
+    assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink[@ref='A1']", "location", "Sheet2!A1");
+
+    // tdf#145079 link with defined name target didn't work because Calc added "A1" at the end
+    assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink[@ref='A2']", "location", "name");
+    assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink[@ref='A3']", "location", "db");
 
     xDocSh->DoClose();
 }
