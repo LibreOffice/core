@@ -58,6 +58,18 @@ interface XInfobarProvider: uno::XInterface
 
         @throws com::sun::star::lang::IllegalArgumentException
             If an Infobar with the same ID already exists, or infobarType contains an invalid value.
+
+        <p> The example below adds a new infobar named MyInfoBar with type INFO and close (x) button.</p>
+        @code{.bas}
+        Sub AddInfobar
+            Dim buttons(1) as new com.sun.star.beans.StringPair
+            buttons(0).first = "Close doc"
+            buttons(0).second = ".uno:CloseDoc"
+            buttons(1).first = "Paste into doc"
+            buttons(1).second = ".uno:Paste"
+            ThisComponent.getCurrentController().appendInfobar("MyInfoBar", "Hello world", "Things happened. What now?", com.sun.star.frame.InfobarType.INFO, buttons, true)
+        End Sub
+        @endcode
      */
     void appendInfobar(
         [in] string id,
@@ -77,6 +89,13 @@ interface XInfobarProvider: uno::XInterface
             If no such Infobar exists (it might have been closed by the user already)
         @throws com::sun::star::lang::IllegalArgumentException
             If infobarType contains an invalid value.
+
+        <p>Update the infobar and change the type to WARNING</p>
+        @code{.bas}
+        Sub UpdateInfobar
+            ThisComponent.getCurrentController().updateInfobar("MyInfoBar", "WARNING","Do not read this message.", com.sun.star.frame.InfobarType.WARNING)
+        End Sub
+        @endcode
      */
     void updateInfobar(
         [in] string id,
@@ -92,7 +111,15 @@ interface XInfobarProvider: uno::XInterface
 
         @throws com::sun::star::container::NoSuchElementException
             If no such Infobar exists (it might have been closed by the user already)
+
+        <p>Remove MyInfoBar infobar</p>
+        @code{.bas}
+        Sub RemoveInfobar
+            ThisComponent.getCurrentController().removeInfobar("MyInfoBar")
+        End Sub
+        @endcode
      */
+
     void removeInfobar([in] string id) raises(com::sun::star::container::NoSuchElementException);
 
     /** Check if Infobar exists.
@@ -101,6 +128,12 @@ interface XInfobarProvider: uno::XInterface
             The ID which was used when creating this Infobar.
 
         @since LibreOffice 7.0
+
+        @code{.bas}
+        Function  HasMyInfobar as boolean
+            hasMyInfoBar = ThisComponent.getCurrentController().hasInfobar("MyInfoBar")
+        End Function
+        @endcode
      */
     boolean hasInfobar([in] string id);
 };
