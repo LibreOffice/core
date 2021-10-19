@@ -33,6 +33,24 @@
       "message": "Over lunch I compiled the latest master. Still saves without overwrite prompt.\nNotice that I am NOT talking about remote-save now, but just \"save-as\", when a remote document is already open.",
       "revId": "b2148e9485d6696388416e2172ce0c512b7c3985",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ae58f84_6b1d7613",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-10-19T11:31:42Z",
+      "side": 1,
+      "message": "This one is for the \"save remote\" dialog. I don\u0027t see the above with the internal file dialog for save, but I do see it in the gtk one where the condition at SalGtkFilePicker.cxx:972 the gFileName is null so the overwrite test is skipped. I\u0027ll have a look at that as well",
+      "parentUuid": "6ed4232f_4ffb0797",
+      "revId": "b2148e9485d6696388416e2172ce0c512b7c3985",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
