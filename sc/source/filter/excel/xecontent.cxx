@@ -438,7 +438,11 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
             }
         }
         else
-            aTextMark += "!A1";    // tdf#143220 link to sheet not valid without cell reference
+        {
+            SCTAB nTab;
+            if (rRoot.GetDoc().GetTable(aTextMark, nTab))
+                aTextMark += "!A1"; // tdf#143220 link to sheet not valid without cell reference
+        }
 
         mxTextMark.reset( new XclExpString( aTextMark, XclStrFlags::ForceUnicode, 255 ) );
     }
