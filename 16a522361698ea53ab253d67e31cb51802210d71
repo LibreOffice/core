@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "029424d2_9fefce16",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1379,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-19T13:23:28Z",
+      "side": 1,
+      "message": "This may overwrite the data set above for pRepairItem (lines 1343-1365); it this expected?",
+      "revId": "16a522361698ea53ab253d67e31cb51802210d71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
