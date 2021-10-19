@@ -16,6 +16,23 @@
       "message": "works great for me FWIW",
       "revId": "a41757d05d068ec7b51b529471822b336f747084",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "621e8a27_e9ed17c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-10-19T16:13:20Z",
+      "side": 1,
+      "message": "would it be possible to have a unittest for this fix ?",
+      "revId": "a41757d05d068ec7b51b529471822b336f747084",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
