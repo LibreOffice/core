@@ -16,6 +16,24 @@
       "message": "Caolan: the GtkPaned object works well on kf5 and gen (besides I miss a minimum height). But it refuses to resize completely with gtk3 (the cursor changes to the split icon but no resize happens). What\u0027s your advice?",
       "revId": "171eade3af6e81eff7b045bd4f06111bfba2b80d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd8fe330_8ac58fde",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-10-19T14:08:42Z",
+      "side": 1,
+      "message": "gtk won\u0027t allow the panes of the paned to shrink past their min, while vcl will allow some crushing. I\u0027d first try: sd/source/ui/animations/CustomAnimationPane.cxx has two places with get_height_rows(8) as the min height of the two treeviews, changing that to say 4 would allow some compression.",
+      "parentUuid": "ad3a168a_f3e88158",
+      "revId": "171eade3af6e81eff7b045bd4f06111bfba2b80d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
