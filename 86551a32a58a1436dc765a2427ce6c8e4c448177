@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b326c1f_c9b5a5ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-19T08:53:29Z",
+      "side": 1,
+      "message": "wrong bug number. Use 145169.\nBut the patch works for sftp and for winshare.\n",
+      "revId": "86551a32a58a1436dc765a2427ce6c8e4c448177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
