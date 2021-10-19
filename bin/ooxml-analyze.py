@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import sys, getopt, os, shutil
+from typing import Type
 import xml.etree.ElementTree as ET
 from zipfile import ZipFile
 from lxml import etree
@@ -10,24 +11,27 @@ def main(argv):
     outputdir = ''
     extracted_files_dir_by_user = ''
     extracted_files_dir = ''
+    fileformat = ''
 
     #read the arguments
     try:
-       opts, args = getopt.getopt(argv,"hi:o:e:",["idir=","odir="])
+       opts, args = getopt.getopt(argv,"hi:o:e:t:",["idir=","odir="])
     except getopt.GetoptError:
-       print ('analyze.py -i <inputdir> -o <outputdir>')
+       print ('analyze.py -i <inputdir> -o <outputdir> -t <filetype>')
        sys.exit(2)
 
     for opt, arg in opts:
-       if opt == '-h':
-          print ('analyze.py -i <inputdir> -o <outputdir>')
-          sys.exit()
-       elif opt == '-e':
-          extracted_files_dir_by_user = arg
-       elif opt in ("-i", "--idir"):
-          inputdir = arg
-       elif opt in ("-o", "--odir"):
-          outputdir = arg
+        if opt == '-h':
+            print ('analyze.py -i <inputdir> -o <outputdir> -t <filetype>')
+            sys.exit()
+        elif opt == '-e':
+            extracted_files_dir_by_user = arg
+        elif opt in ("-i", "--idir"):
+            inputdir = arg
+        elif opt in ("-o", "--odir"):
+            outputdir = arg
+        elif opt == '-t':
+            fileformat = arg
 
     if(extracted_files_dir_by_user == ''):
         # use default directory path for extracted ooxml files.
@@ -45,7 +49,14 @@ def main(argv):
         sub_texts_name = ext_dir[i+1:] + ".text"
         sub_result_list = []
         concatenated_texts_list = [] # holds concanated texts for each paragraph
-        count_elements(ext_dir, sub_result_list, concatenated_texts_list)
+
+        if fileformat == "pptx":
+            count_pptx_elements(ext_dir, sub_result_list, concatenated_texts_list)
+        elif fileformat == "xlsx":
+            count_xlsx_elements(ext_dir, sub_result_list)
+        else:
+            print("File format is not supported")
+            break
 
         sub_result_path = os.path.join(outputdir, sub_result_name)
         sub_texts_path = os.path.join(outputdir, sub_texts_name)
@@ -69,8 +80,8 @@ def main(argv):
             log_file.close()
 
     # no need to keep extracted files anymore.
-    if(os.path.exists(extracted_files_dir)):
-        shutil.rmtree(extracted_files_dir)
+    #if(os.path.exists(extracted_files_dir)):
+    #    shutil.rmtree(extracted_files_dir)
 
 # unzip all ooxml files into the given path
 def extract_files(inputdir, extracted_files_dir):
@@ -80,6 +91,7 @@ def extract_files(inputdir, extracted_files_dir):
         shutil.rmtree(extracted_files_dir)
 
     # unzip files into the extracted files directory
+
     for filetype in get_list_of_subdir(inputdir):
         for filename in os.listdir(filetype):
             if (filename.endswith(".pptx") or       \
@@ -119,13 +131,126 @@ def replace_namespace_with_alias(filename, element):
 
 # decides which files should/shouldn't be analyzed.
 def is_file_in_accepted_files(filename):
-    if(filename.endswith(".xml") and "ppt/slides/" in filename):
+    if(filename.endswith(".xml") and ("ppt/slides/" in filename or "xl/worksheets" in filename)):
        return True
 
     return False
 
+def read_shared_strings(shared_strings_list, shared_strings_path):
+    tree = ET.parse(shared_strings_path)
+    for child in tree.iter():
+        if child.tag == '{http://schemas.openxmlformats.org/spreadsheetml/2006/main}t':
+            shared_strings_list.append(child.text)
+
+def get_pivot_table_range(sheet_relation_path):
+    tree = ET.parse(sheet_relation_path)
+    for elem in tree.iter():
+        if elem.tag == "{http://schemas.openxmlformats.org/package/2006/relationships}Relationship" and\
+           elem.attrib['Type'] == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/pivotTable":
+            i = sheet_relation_path.rfind('/')
+            pivot_table_path = os.path.join(sheet_relation_path[:i], ".." ,elem.attrib['Target'])
+            p_tree = ET.parse(pivot_table_path)
+            for p_elem in p_tree.iter():
+                if p_elem.tag == "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}location" and \
+                   p_elem.attrib['ref']:
+                    return p_elem.attrib['ref']
+    return ''
+
+def is_cell_in_range(cell_id, cell_range):
+    i = cell_range.find(':')
+    start_range = cell_range[:i]
+    end_range = cell_range[i+1:]
+
+    if title_to_number(cell_id) > title_to_number(end_range) or\
+       title_to_number(cell_id) < title_to_number(start_range):
+       return False
+    return True
+
+def title_to_number(s):
+    for i, c in enumerate(s):
+        if c.isdigit():
+            col = s[:i]
+            row = s[i:]
+
+            total = 0
+            tmp = 0
+            max_row = 2**20
+
+            for j in range(len(col)-1, -1, -1):
+                total += (ord(s[j])-64) * (26**tmp)
+                tmp += 1
+
+            result = (total-1)*max_row + int(row)
+            return result
+
+def count_xlsx_elements(extracted_files_dir, result_list):
+    # make sure if extracted files directory not exist
+    if not (os.path.exists(extracted_files_dir)):
+        print("Extracted files directory is not exist")
+        return
+
+    list_of_files = get_list_of_files(extracted_files_dir)
+
+    # read sharedString.xml and create a list
+    tmp_id = -1
+    shared_strings_list = []
+    shared_strings_path = os.path.join(extracted_files_dir, 'xl/sharedStrings.xml')
+    if os.path.exists(shared_strings_path):
+        read_shared_strings(shared_strings_list, shared_strings_path)
+
+    # parse xmls and count elements
+    for xmlfile in list_of_files:
+        if not is_file_in_accepted_files(xmlfile):
+            continue
+
+        print(xmlfile)
+        sheetData_child_list = {"{http://schemas.openxmlformats.org/spreadsheetml/2006/main}sheetData",\
+                                "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}row",\
+                                "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}c",
+                                "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}v",
+                                "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}f"}
+        i = xmlfile.rfind('/')
+        rel_file_name = xmlfile[i+1:] + ".rels"
+        sheet_relation_path = os.path.join(xmlfile[:i], "_rels", rel_file_name)
+        pivot_range = ''
+        if os.path.exists(sheet_relation_path):
+            pivot_range = get_pivot_table_range(sheet_relation_path)
+            print("Pivot range is: " + pivot_range)
+
+        try:
+            # start to count
+            reset_cell = False
+            for event, child in etree.iterparse(xmlfile, events=('start', 'end')):
+                tag = child.tag #replace_namespace_with_alias(xmlfile, child.tag)
+                text = child.text
+
+                # handle sheetData
+                if tag in sheetData_child_list:
+                    if tag == '{http://schemas.openxmlformats.org/spreadsheetml/2006/main}c':
+                        cell_id = child.get('r')
+                        if pivot_range and is_cell_in_range(cell_id, pivot_range):
+                            continue
+                        cell_type = child.get('t')
+                        if event == 'start':
+                            # count tags
+                            reset_cell = False
+                            tmp_list = [{cell_id: 1},{},{},{}]
+                            result_list.append(tmp_list)
+                            tmp_id += 1
+                        elif event == 'end':
+                            reset_cell = True
+                    elif tag == '{http://schemas.openxmlformats.org/spreadsheetml/2006/main}v':
+                        if event == 'end' and reset_cell == False:
+                            if cell_type == "s" and shared_strings_list[int(text)] not in (None, ''):
+                                result_list[tmp_id][3][shared_strings_list[int(text)]] = 1
+                            else:
+                                result_list[tmp_id][3][text] = 1
+
+        except Exception as exception:
+            print("%s has %s " % (xmlfile, exception))
+
 # counts tags, attribute names and values of xmls
-def count_elements(extracted_files_dir, result_list, concanated_texts_list):
+def count_pptx_elements(extracted_files_dir, result_list, concanated_texts_list):
 
     # make sure if extracted files directory not exist
     if not (os.path.exists(extracted_files_dir)):
