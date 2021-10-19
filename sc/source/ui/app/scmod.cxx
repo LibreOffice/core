@@ -1612,6 +1612,14 @@ bool ScModule::IsModalMode(SfxObjectShell* pDocSh)
                     !( pRefDlg->IsRefInputMode() && pRefDlg->IsDocAllowed(pDocSh) );
             }
         }
+        else if ( pDocSh && comphelper::LibreOfficeKit::isActive() )
+        {
+            // m_nCurRefDlgId is not deglobalized so it can be set by other view
+            // in LOK case when no ChildWindow for this view was detected -> fallback
+            ScInputHandler* pHdl = GetInputHdl();
+            if ( pHdl )
+                bIsModal = pHdl->IsModalMode(pDocSh);
+        }
     }
     else if (pDocSh)
     {
@@ -1693,6 +1701,14 @@ bool ScModule::IsFormulaMode()
                 bIsFormula = pChildWnd->IsVisible() && pRefDlg && pRefDlg->IsRefInputMode();
             }
         }
+        else if ( comphelper::LibreOfficeKit::isActive() )
+        {
+            // m_nCurRefDlgId is not deglobalized so it can be set by other view
+            // in LOK case when no ChildWindow for this view was detected -> fallback
+            ScInputHandler* pHdl = GetInputHdl();
+            if ( pHdl )
+                bIsFormula = pHdl->IsFormulaMode();
+        }
     }
     else
     {
@@ -1753,6 +1769,14 @@ void ScModule::SetReference( const ScRange& rRef, ScDocument& rDoc,
                     pRefDlg->SetReference( aNew, rDoc );
                 }
             }
+        }
+        else if ( comphelper::LibreOfficeKit::isActive() )
+        {
+            // m_nCurRefDlgId is not deglobalized so it can be set by other view
+            // in LOK case when no ChildWindow for this view was detected -> fallback
+            ScInputHandler* pHdl = GetInputHdl();
+            if (pHdl)
+                pHdl->SetReference( aNew, rDoc );
         }
     }
     else
