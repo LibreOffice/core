@@ -174,7 +174,7 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
                 }
                 else
                 {
-                    o_rInfo.mnStartNodeIdx = 0;
+                    o_rInfo.mnStartNodeIdx = SwNodeOffset(0);
                     o_rInfo.mnStartContent = -1;
                 }
                 o_rInfo.mPageFrame = pPage->getFrameArea();

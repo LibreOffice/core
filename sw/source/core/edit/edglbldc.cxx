@@ -87,7 +87,7 @@ void SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
 
     // and finally add the dummies (other text)
     SwNode* pNd;
-    sal_uLong nSttIdx = pMyDoc->GetNodes().GetEndOfExtras().GetIndex() + 2;
+    SwNodeOffset nSttIdx = pMyDoc->GetNodes().GetEndOfExtras().GetIndex() + 2;
     for( SwGlblDocContents::size_type n = 0; n < rArr.size(); ++n )
     {
         const SwGlblDocContent& rNew = *rArr[ n ];
@@ -111,7 +111,7 @@ void SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
     // Should the end also be set?
     if( !rArr.empty() )
     {
-        sal_uLong nNdEnd = pMyDoc->GetNodes().GetEndOfContent().GetIndex();
+        SwNodeOffset nNdEnd = pMyDoc->GetNodes().GetEndOfContent().GetIndex();
         for( ; nSttIdx < nNdEnd; ++nSttIdx )
             if( ( pNd = pMyDoc->GetNodes()[ nSttIdx ])->IsContentNode()
                 || pNd->IsSectionNode() || pNd->IsTableNode() )
@@ -248,7 +248,7 @@ void SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
 
     SwDoc* pMyDoc = GetDoc();
     const SwGlblDocContent& rDelPos = *rArr[ nDelPos ];
-    sal_uLong nDelIdx = rDelPos.GetDocPos();
+    SwNodeOffset nDelIdx = rDelPos.GetDocPos();
     if( 1 == rArr.size() )
     {
         // we need at least one node!
@@ -356,7 +356,7 @@ void SwEditShell::GotoGlobalDocContent( const SwGlblDocContent& rPos )
     EndCursorMove();
 }
 
-SwGlblDocContent::SwGlblDocContent( sal_uLong nPos )
+SwGlblDocContent::SwGlblDocContent( SwNodeOffset nPos )
 {
     m_eType = GLBLDOC_UNKNOWN;
     m_PTR.pTOX = nullptr;
@@ -369,7 +369,7 @@ SwGlblDocContent::SwGlblDocContent( const SwTOXBaseSection* pTOX )
     m_PTR.pTOX = pTOX;
 
     const SwSectionNode* pSectNd = pTOX->GetFormat()->GetSectionNode();
-    m_nDocPos = pSectNd ? pSectNd->GetIndex() : 0;
+    m_nDocPos = pSectNd ? pSectNd->GetIndex() : SwNodeOffset(0);
 }
 
 SwGlblDocContent::SwGlblDocContent( const SwSection* pSect )
@@ -378,7 +378,7 @@ SwGlblDocContent::SwGlblDocContent( const SwSection* pSect )
     m_PTR.pSect = pSect;
 
     const SwSectionNode* pSectNd = pSect->GetFormat()->GetSectionNode();
-    m_nDocPos = pSectNd ? pSectNd->GetIndex() : 0;
+    m_nDocPos = pSectNd ? pSectNd->GetIndex() : SwNodeOffset(0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

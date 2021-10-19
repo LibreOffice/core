@@ -157,8 +157,8 @@ public:
                 HTMLAttr **pHd, const std::shared_ptr<HTMLAttrTable>& rAttrTab );
     inline void SetStart( const SwPosition& rPos );
 
-    sal_uInt32 GetStartParagraphIdx() const { return m_nStartPara.GetIndex(); }
-    sal_uInt32 GetEndParagraphIdx() const { return m_nEndPara.GetIndex(); }
+    SwNodeOffset GetStartParagraphIdx() const { return m_nStartPara.GetIndex(); }
+    SwNodeOffset GetEndParagraphIdx() const { return m_nEndPara.GetIndex(); }
 
     const SwNodeIndex& GetStartParagraph() const { return m_nStartPara; }
     const SwNodeIndex& GetEndParagraph() const { return m_nEndPara; }
@@ -584,7 +584,7 @@ class SwHTMLParser : public SfxHTMLParser, public SvtListener
                                           short& nIndent ) const;
     void GetULSpaceFromContext( sal_uInt16 &rUpper, sal_uInt16 &rLower ) const;
 
-    void MovePageDescAttrs( SwNode *pSrcNd, sal_uLong nDestIdx, bool bFormatBreak );
+    void MovePageDescAttrs( SwNode *pSrcNd, SwNodeOffset nDestIdx, bool bFormatBreak );
 
     // Handling of tags at paragraph level
 
@@ -868,7 +868,7 @@ private:
     // Remove empty paragraph at the PaM position
     void StripTrailingPara();
     // If removing an empty node would corrupt the document
-    bool CanRemoveNode(sal_uLong nNodeIdx) const;
+    bool CanRemoveNode(SwNodeOffset nNodeIdx) const;
 
     // Are there fly frames in the current paragraph?
     bool HasCurrentParaFlys( bool bNoSurroundOnly = false,

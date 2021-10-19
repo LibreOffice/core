@@ -2120,7 +2120,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
             40 == static_cast<const SvxFontHeightItem *>(pItem)->GetHeight() )
         {
             // ... moreover, the 2pt font is set ...
-            sal_uLong nNdPos = rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex();
+            SwNodeOffset nNdPos = rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex();
             const SwNode *pNextNd = rWrt.m_pDoc->GetNodes()[nNdPos+1];
             const SwNode *pPrevNd = rWrt.m_pDoc->GetNodes()[nNdPos-1];
             bool bStdColl = nPoolId == RES_POOLCOLL_STANDARD;

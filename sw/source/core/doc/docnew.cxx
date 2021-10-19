@@ -879,7 +879,7 @@ void SwDoc::ReplaceCompatibilityOptions(const SwDoc& rSource)
 
 #ifdef DBG_UTIL
 #define CNTNT_DOC( doc ) \
-    ((doc)->GetNodes().GetEndOfContent().GetIndex() - (doc)->GetNodes().GetEndOfExtras().GetIndex() - 2)
+    ((doc)->GetNodes().GetEndOfContent().GetIndex() - (doc)->GetNodes().GetEndOfExtras().GetIndex() - SwNodeOffset(2))
 #define CNTNT_IDX( idx ) \
     ((idx).GetNode().GetIndex() - GetNodes().GetEndOfExtras().GetIndex() - 1)
 #endif
@@ -1185,9 +1185,9 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
 
             // Update the rsid of each pasted text node
             SwNodes &rDestNodes = GetNodes();
-            sal_uLong const nEndIdx = aPaM.End()->nNode.GetIndex();
+            SwNodeOffset const nEndIdx = aPaM.End()->nNode.GetIndex();
 
-            for (sal_uLong nIdx = aPaM.Start()->nNode.GetIndex();
+            for (SwNodeOffset nIdx = aPaM.Start()->nNode.GetIndex();
                     nIdx <= nEndIdx; ++nIdx)
             {
                 SwTextNode *const pTextNode = rDestNodes[nIdx]->GetTextNode();
@@ -1197,7 +1197,7 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
         }
 
         {
-            sal_uLong iDelNodes = 0;
+            SwNodeOffset iDelNodes(0);
             SwNodeIndex aDelIdx( aFixupIdx );
 
             // we just need to set the new page description and reset numbering

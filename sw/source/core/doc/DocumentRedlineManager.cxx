@@ -160,7 +160,7 @@ void UpdateFramesForAddDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
             SAL_WARN("sw.core", "UpdateFramesForAddDeleteRedline:: known pathology (or ChangesInRedline mode)");
             return;
         }
-        for (sal_uLong j = pTableOrSectionNode->GetIndex(); j <= pTableOrSectionNode->EndOfSectionIndex(); ++j)
+        for (SwNodeOffset j = pTableOrSectionNode->GetIndex(); j <= pTableOrSectionNode->EndOfSectionIndex(); ++j)
         {
             pTableOrSectionNode->GetNodes()[j]->SetRedlineMergeFlag(SwNode::Merge::Hidden);
         }
@@ -262,7 +262,7 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
                 ? static_cast<SwStartNode*>(currentStart.nNode.GetNode().GetTableNode())
                 : static_cast<SwStartNode*>(currentStart.nNode.GetNode().GetSectionNode()));
         assert(pTableOrSectionNode); // known pathology
-        for (sal_uLong j = pTableOrSectionNode->GetIndex(); j <= pTableOrSectionNode->EndOfSectionIndex(); ++j)
+        for (SwNodeOffset j = pTableOrSectionNode->GetIndex(); j <= pTableOrSectionNode->EndOfSectionIndex(); ++j)
         {
             pTableOrSectionNode->GetNodes()[j]->SetRedlineMergeFlag(SwNode::Merge::None);
         }
@@ -2628,7 +2628,7 @@ bool DocumentRedlineManager::DeleteRedline( const SwStartNode& rNode, bool bSave
 
 SwRedlineTable::size_type DocumentRedlineManager::GetRedlinePos( const SwNode& rNd, RedlineType nType ) const
 {
-    const sal_uLong nNdIdx = rNd.GetIndex();
+    const SwNodeOffset nNdIdx = rNd.GetIndex();
     // if the table only contains good (i.e. non-overlapping) data, we can do a binary search
     if (!maRedlineTable.HasOverlappingElements())
     {
@@ -2641,7 +2641,7 @@ SwRedlineTable::size_type DocumentRedlineManager::GetRedlinePos( const SwNode& r
         for( ; it != maRedlineTable.end(); ++it)
         {
             const SwRangeRedline* pTmp = *it;
-            sal_uLong nStart = pTmp->Start()->nNode.GetIndex(),
+            SwNodeOffset nStart = pTmp->Start()->nNode.GetIndex(),
                       nEnd = pTmp->End()->nNode.GetIndex();
 
             if( ( RedlineType::Any == nType || nType == pTmp->GetType()) &&
@@ -2657,9 +2657,9 @@ SwRedlineTable::size_type DocumentRedlineManager::GetRedlinePos( const SwNode& r
         for( SwRedlineTable::size_type n = 0; n < maRedlineTable.size() ; ++n )
         {
             const SwRangeRedline* pTmp = maRedlineTable[ n ];
-            sal_uLong nPt = pTmp->GetPoint()->nNode.GetIndex(),
+            SwNodeOffset nPt = pTmp->GetPoint()->nNode.GetIndex(),
                   nMk = pTmp->GetMark()->nNode.GetIndex();
-            if( nPt < nMk ) { tools::Long nTmp = nMk; nMk = nPt; nPt = nTmp; }
+            if( nPt < nMk ) { SwNodeOffset nTmp = nMk; nMk = nPt; nPt = nTmp; }
 
             if( ( RedlineType::Any == nType || nType == pTmp->GetType()) &&
                 nMk <= nNdIdx && nNdIdx <= nPt )
@@ -2895,15 +2895,15 @@ void DocumentRedlineManager::AcceptRedlineParagraphFormatting( const SwPaM &rPam
     const SwPosition* pStt = rPam.Start(),
                     * pEnd = rPam.End();
 
-    const sal_uLong nSttIdx = pStt->nNode.GetIndex();
-    const sal_uLong nEndIdx = pEnd->nNode.GetIndex();
+    const SwNodeOffset nSttIdx = pStt->nNode.GetIndex();
+    const SwNodeOffset nEndIdx = pEnd->nNode.GetIndex();
 
     for( SwRedlineTable::size_type n = 0; n < maRedlineTable.size() ; ++n )
     {
         const SwRangeRedline* pTmp = maRedlineTable[ n ];
-        sal_uLong nPt = pTmp->GetPoint()->nNode.GetIndex(),
+        SwNodeOffset nPt = pTmp->GetPoint()->nNode.GetIndex(),
               nMk = pTmp->GetMark()->nNode.GetIndex();
-        if( nPt < nMk ) { tools::Long nTmp = nMk; nMk = nPt; nPt = nTmp; }
+        if( nPt < nMk ) { SwNodeOffset nTmp = nMk; nMk = nPt; nPt = nTmp; }
 
         if( RedlineType::ParagraphFormat == pTmp->GetType() &&
             ( (nSttIdx <= nMk && nMk <= nEndIdx) || (nSttIdx <= nPt && nPt <= nEndIdx) ) )

@@ -440,7 +440,7 @@ sal_Bool SAL_CALL SwTransferable::isComplex()
     SwNodes& aNodes = m_pWrtShell->GetDoc()->GetNodes();
     for (SwPaM& rPaM : m_pWrtShell->GetCursor()->GetRingContainer())
     {
-        for (sal_uLong nIndex = rPaM.GetMark()->nNode.GetIndex();
+        for (SwNodeOffset nIndex = rPaM.GetMark()->nNode.GetIndex();
              nIndex <= rPaM.GetPoint()->nNode.GetIndex(); ++nIndex)
         {
             SwNode& rNd = *aNodes[nIndex];
@@ -1297,7 +1297,7 @@ void SwPasteContext::remember()
 
     // Set point to the previous node, so it is not moved.
     const SwNodeIndex& rNodeIndex = pCursor->GetPoint()->nNode;
-    m_pPaM.reset(new SwPaM(rNodeIndex, rNodeIndex, 0, -1));
+    m_pPaM.reset(new SwPaM(rNodeIndex, rNodeIndex, SwNodeOffset(0), SwNodeOffset(-1)));
     m_nStartContent = pCursor->GetPoint()->nContent.GetIndex();
 }
 

@@ -548,7 +548,7 @@ bool SwPostItMgr::CalcRects()
             }
             const SwRect aOldAnchorRect( pItem->maLayoutInfo.mPosition );
             const SwPostItHelper::SwLayoutStatus eOldLayoutStatus = pItem->mLayoutStatus;
-            const sal_uLong nOldStartNodeIdx( pItem->maLayoutInfo.mnStartNodeIdx );
+            const SwNodeOffset nOldStartNodeIdx( pItem->maLayoutInfo.mnStartNodeIdx );
             const sal_Int32 nOldStartContent( pItem->maLayoutInfo.mnStartContent );
             {
                 // update layout information

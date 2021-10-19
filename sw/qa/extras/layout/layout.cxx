@@ -2735,7 +2735,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testBtlrCell)
     SwPosition aCellStart = *pWrtShell->GetCursor()->Start();
 
     // Test that pressing "up" at the start of the cell goes to the next character position.
-    sal_uLong nNodeIndex = pWrtShell->GetCursor()->Start()->nNode.GetIndex();
+    SwNodeOffset nNodeIndex = pWrtShell->GetCursor()->Start()->nNode.GetIndex();
     sal_Int32 nIndex = pWrtShell->GetCursor()->Start()->nContent.GetIndex();
     KeyEvent aKeyEvent(0, KEY_UP);
     SwEditWin& rEditWin = pShell->GetView()->GetEditWin();
@@ -3418,7 +3418,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128399)
     SwCursorMoveState aState(CursorMoveState::NONE);
     pLayout->GetModelPositionForViewPoint(&aPosition, aPoint, &aState);
     // Second row is +3: end node, start node and the first text node in the 2nd row.
-    sal_uLong nExpected = aFirstRow.nNode.GetIndex() + 3;
+    SwNodeOffset nExpected = aFirstRow.nNode.GetIndex() + 3;
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 14

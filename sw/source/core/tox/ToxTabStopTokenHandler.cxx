@@ -26,7 +26,7 @@
 
 namespace sw {
 
-DefaultToxTabStopTokenHandler::DefaultToxTabStopTokenHandler(sal_uInt32 indexOfSectionNode,
+DefaultToxTabStopTokenHandler::DefaultToxTabStopTokenHandler(SwNodeOffset indexOfSectionNode,
         const SwPageDesc& defaultPageDescription,
         bool tabPositionIsRelativeToParagraphIndent,
         TabStopReferencePolicy referencePolicy)
@@ -85,7 +85,7 @@ DefaultToxTabStopTokenHandler::HandleTabStopToken(
 tools::Long
 DefaultToxTabStopTokenHandler::CalculatePageMarginFromPageDescription(const SwTextNode& targetNode) const
 {
-    size_t nPgDescNdIdx = targetNode.GetIndex() + 1;
+    SwNodeOffset nPgDescNdIdx = targetNode.GetIndex() + 1;
     const SwPageDesc *pPageDesc = targetNode.FindPageDesc(&nPgDescNdIdx);
     if (!pPageDesc || nPgDescNdIdx < mIndexOfSectionNode) {
         // Use default page description, if none is found or the found one is given by a Node before the

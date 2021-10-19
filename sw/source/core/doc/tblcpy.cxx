@@ -501,10 +501,10 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
     // First copy the new content and then delete the old one.
     // Do not create empty Sections, otherwise they will be deleted!
     std::unique_ptr< SwNodeRange > pRg( pCpyBox ?
-        new SwNodeRange ( *pCpyBox->GetSttNd(), 1,
+        new SwNodeRange ( *pCpyBox->GetSttNd(), SwNodeOffset(1),
         *pCpyBox->GetSttNd()->EndOfSectionNode() ) : nullptr );
 
-    SwNodeIndex aInsIdx( *pDstBox->GetSttNd(), bDelContent ? 1 :
+    SwNodeIndex aInsIdx( *pDstBox->GetSttNd(), bDelContent ? SwNodeOffset(1) :
                         pDstBox->GetSttNd()->EndOfSectionIndex() -
                         pDstBox->GetSttIdx() );
 

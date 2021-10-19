@@ -318,7 +318,7 @@ static OUString lcl_dbg_out(const SwPosition & rPos)
 {
     OUString aStr =
         "( " +
-        OUString::number(rPos.nNode.GetIndex()) +
+        OUString::number(sal_Int32(rPos.nNode.GetIndex())) +
         ", " +
         OUString::number(rPos.nContent.GetIndex()) +
         ": " +
@@ -487,7 +487,7 @@ static OUString lcl_dbg_out(const SwNode & rNode)
 
     OUString aTmpStr = "<node "
         "index=\"" +
-        OUString::number(rNode.GetIndex()) +
+        OUString::number(sal_Int32(rNode.GetIndex())) +
         "\""
         " serial=\"" +
         OUString::number(rNode.GetSerial()) +
@@ -597,7 +597,7 @@ static OUString lcl_dbg_out(const SwNode & rNode)
 
         const SwStartNode * pStartNode = dynamic_cast<const SwStartNode *> (&rNode);
         if (pStartNode != nullptr)
-            aTmpStr += OUString::number(pStartNode->EndOfSectionNode()->GetIndex());
+            aTmpStr += OUString::number(sal_Int32(pStartNode->EndOfSectionNode()->GetIndex()));
 
         aTmpStr += "\"/>";
     }

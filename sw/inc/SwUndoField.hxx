@@ -29,7 +29,7 @@ class SwMsgPoolItem;
 
 class SwUndoField : public SwUndo
 {
-    sal_uLong m_nNodeIndex;
+    SwNodeOffset m_nNodeIndex;
     sal_Int32 m_nOffset;
 
 protected:

@@ -1086,7 +1086,7 @@ bool SwTable::OldSplitRow( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
         // !! If this is changed we need to adapt the Undo, too !!!
         bool bMoveNodes = true;
         {
-            sal_uLong nSttNd = pLastBox->GetSttIdx() + 1,
+            SwNodeOffset nSttNd = pLastBox->GetSttIdx() + 1,
                     nEndNd = pLastBox->GetSttNd()->EndOfSectionIndex();
             while( nSttNd < nEndNd )
                 if( !rDoc.GetNodes()[ nSttNd++ ]->IsTextNode() )
@@ -1135,10 +1135,10 @@ bool SwTable::OldSplitRow( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
                 if( bMoveNodes )
                 {
                     const SwNode* pEndNd = pLastBox->GetSttNd()->EndOfSectionNode();
-                    if( pLastBox->GetSttIdx()+2 != pEndNd->GetIndex() )
+                    if( pLastBox->GetSttIdx()+SwNodeOffset(2) != pEndNd->GetIndex() )
                     {
                         // Move TextNodes
-                        SwNodeRange aRg( *pLastBox->GetSttNd(), +2, *pEndNd );
+                        SwNodeRange aRg( *pLastBox->GetSttNd(), SwNodeOffset(+2), *pEndNd );
                         pLastBox = pNewLine->GetTabBoxes()[0];  // reset
                         SwNodeIndex aInsPos( *pLastBox->GetSttNd(), 1 );
                         rDoc.GetNodes().MoveNodes(aRg, rDoc.GetNodes(), aInsPos, false);
@@ -1922,7 +1922,7 @@ static void lcl_CopyBoxToDoc(FndBox_ const& rFndBox, CpyPara *const pCpyPara)
                     }
                 }
                 SwDoc* pFromDoc = rFndBox.GetBox()->GetFrameFormat()->GetDoc();
-                SwNodeRange aCpyRg( *rFndBox.GetBox()->GetSttNd(), 1,
+                SwNodeRange aCpyRg( *rFndBox.GetBox()->GetSttNd(), SwNodeOffset(1),
                         *rFndBox.GetBox()->GetSttNd()->EndOfSectionNode() );
                 SwNodeIndex aInsIdx( *pBox->GetSttNd(), 1 );
 

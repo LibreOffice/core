@@ -113,7 +113,7 @@ static bool lcl_IsInSameTableBox( SwNodes const & _rNds,
 
     // Find the Box's StartNode
     const SwTableSortBoxes& rSortBoxes = pTableNd->GetTable().GetTabSortBoxes();
-    sal_uLong nIdx = _rNd.GetIndex();
+    SwNodeOffset nIdx = _rNd.GetIndex();
     for (size_t n = 0; n < rSortBoxes.size(); ++n)
     {
         const SwStartNode* pNd = rSortBoxes[ n ]->GetSttNd();
@@ -328,7 +328,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
     // To-Do - add 'SwExtraRedlineTable' also ?
     if( getIDocumentRedlineAccess().IsRedlineOn() || (!getIDocumentRedlineAccess().IsIgnoreRedline() && !getIDocumentRedlineAccess().GetRedlineTable().empty() ))
     {
-        SwPaM aPam( *pNewSectNode->EndOfSectionNode(), *pNewSectNode, 1 );
+        SwPaM aPam( *pNewSectNode->EndOfSectionNode(), *pNewSectNode, SwNodeOffset(1) );
         if( getIDocumentRedlineAccess().IsRedlineOn() )
         {
             getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( RedlineType::Insert, aPam ), true);
@@ -410,7 +410,7 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
                 && pEnd->nContent.GetIndex() == pCNd->Len() )
             {
                 SwNodeIndex aIdx( pStt->nNode, -1 );
-                sal_uLong nCmp = pEnd->nNode.GetIndex();
+                SwNodeOffset nCmp = pEnd->nNode.GetIndex();
                 const SwStartNode* pPrvNd;
                 const SwEndNode* pNxtNd;
                 while( nullptr != ( pPrvNd = (pNd = &aIdx.GetNode())->GetSectionNode() ) &&
@@ -572,7 +572,7 @@ void SwDoc::DelSectionFormat( SwSectionFormat *pFormat, bool bDelNodes )
         //          as the Section DTOR tries to delete it's format itself.
         mpSectionFormatTable->erase( itFormatPos );
 //FEATURE::CONDCOLL
-        sal_uLong nCnt = 0, nSttNd = 0;
+        SwNodeOffset nCnt(0), nSttNd(0);
         if( pIdx && &GetNodes() == &pIdx->GetNodes() &&
             nullptr != (pSectNd = pIdx->GetNode().GetSectionNode() ))
         {
@@ -746,7 +746,7 @@ void SwDoc::UpdateSection( size_t const nPos, SwSectionData & rNewData,
     getIDocumentState().SetModified();
 }
 
-void sw_DeleteFootnote( SwSectionNode *pNd, sal_uLong nStt, sal_uLong nEnd )
+void sw_DeleteFootnote( SwSectionNode *pNd, SwNodeOffset nStt, SwNodeOffset nEnd )
 {
     SwFootnoteIdxs& rFootnoteArr = pNd->GetDoc().GetFootnoteIdxs();
     if( rFootnoteArr.empty() )
@@ -860,7 +860,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
         // aInsPos is at the moment the Position where my EndNode will be inserted
         const SwStartNode* pStartNode = aInsPos.GetNode().StartOfSectionNode();
         // This StartNode should be in front of me, but if not, I want to survive
-        sal_uLong nMyIndex = pSectNd->GetIndex();
+        SwNodeOffset nMyIndex = pSectNd->GetIndex();
         if( pStartNode->GetIndex() > nMyIndex ) // Suspicious!
         {
             const SwNode* pTemp;
@@ -927,18 +927,18 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
     }
 
     // Set the right StartNode for all in this Area
-    sal_uLong nEnd = pSectNd->EndOfSectionIndex();
-    sal_uLong nStart = pSectNd->GetIndex()+1;
-    sal_uLong nSkipIdx = ULONG_MAX;
-    for( sal_uLong n = nStart; n < nEnd; ++n )
+    SwNodeOffset nEnd = pSectNd->EndOfSectionIndex();
+    SwNodeOffset nStart = pSectNd->GetIndex()+1;
+    SwNodeOffset nSkipIdx = NODE_OFFSET_MAX;
+    for( SwNodeOffset n = nStart; n < nEnd; ++n )
     {
         SwNode* pNd = (*this)[n];
 
         // Attach all Sections in the NodeSection underneath the new one
-        if( ULONG_MAX == nSkipIdx )
+        if( NODE_OFFSET_MAX == nSkipIdx )
             pNd->m_pStartOfSection = pSectNd;
         else if( n >= nSkipIdx )
-            nSkipIdx = ULONG_MAX;
+            nSkipIdx = NODE_OFFSET_MAX;
 
         if( pNd->IsStartNode() )
         {
@@ -955,7 +955,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
                 if( pNd->IsTableNode() )
                     static_cast<SwTableNode*>(pNd)->DelFrames();
 
-                if( ULONG_MAX == nSkipIdx )
+                if( NODE_OFFSET_MAX == nSkipIdx )
                     nSkipIdx = pNd->EndOfSectionIndex();
             }
         }
@@ -969,7 +969,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
     {
         if( pNode2Layout )
         {
-            sal_uLong nIdx = pSectNd->GetIndex();
+            SwNodeOffset nIdx = pSectNd->GetIndex();
             pNode2Layout->RestoreUpperFrames( pSectNd->GetNodes(), nIdx, nIdx + 1 );
             delete pNode2Layout;
         }
@@ -1186,7 +1186,7 @@ void SwSectionNode::MakeOwnFrames(SwNodeIndex* pIdxBehind, SwNodeIndex* pEndIdx)
 
 void SwSectionNode::DelFrames(SwRootFrame const*const /*FIXME TODO*/, bool const bForce)
 {
-    sal_uLong nStt = GetIndex()+1, nEnd = EndOfSectionIndex();
+    SwNodeOffset nStt = GetIndex()+1, nEnd = EndOfSectionIndex();
     if( nStt >= nEnd )
     {
         return ;
@@ -1272,7 +1272,7 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc& rDoc, const SwNodeIndex& rIdx ) c
     if( !pNewSect->IsEditInReadonlyFlag() && GetSection().IsEditInReadonly() )
         pNewSect->SetEditInReadonly();
 
-    SwNodeRange aRg( *this, +1, *EndOfSectionNode() ); // Where am I?
+    SwNodeRange aRg( *this, SwNodeOffset(+1), *EndOfSectionNode() ); // Where am I?
     rNds.Copy_( aRg, aInsPos, false );
 
     // Delete all Frames from the copied Area. They are created when creating
@@ -1302,7 +1302,7 @@ bool SwSectionNode::IsContentHidden() const
     OSL_ENSURE( !m_pSection->IsHidden(),
             "That's simple: Hidden Section => Hidden Content" );
     SwNodeIndex aTmp( *this, 1 );
-    sal_uLong nEnd = EndOfSectionIndex();
+    SwNodeOffset nEnd = EndOfSectionIndex();
     while( aTmp < nEnd )
     {
         if( aTmp.GetNode().IsSectionNode() )
@@ -1347,8 +1347,8 @@ void SwSectionNode::NodesArrChgd()
                                   : pDoc->GetDfltFrameFormat() );
 
     // Set the right StartNode for all in this Area
-    sal_uLong nStart = GetIndex()+1, nEnd = EndOfSectionIndex();
-    for( sal_uLong n = nStart; n < nEnd; ++n )
+    SwNodeOffset nStart = GetIndex()+1, nEnd = EndOfSectionIndex();
+    for( SwNodeOffset n = nStart; n < nEnd; ++n )
     {
         // Make up the Format's nesting
         pSectNd = rNds[ n ]->GetSectionNode();

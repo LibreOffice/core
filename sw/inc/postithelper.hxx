@@ -25,6 +25,7 @@
 #include <vcl/vclptr.hxx>
 #include <tools/solar.h>
 #include "SidebarWindowsTypes.hxx"
+#include "nodeoffset.hxx"
 
 class SfxBroadcaster;
 class SwRootFrame;
@@ -43,7 +44,7 @@ struct SwLayoutInfo
     SwRect mPosition;
 
     // optional start of the annotation
-    sal_uLong mnStartNodeIdx;
+    SwNodeOffset mnStartNodeIdx;
     sal_Int32 mnStartContent;
 
     SwRect mPageFrame;

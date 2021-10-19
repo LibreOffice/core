@@ -106,7 +106,7 @@ SwHeadFootFrame::SwHeadFootFrame( SwFrameFormat * pFormat, SwFrame* pSib, SwFram
     // Have the objects created right now for header and footer
     bool bOld = bObjsDirect;
     bObjsDirect = true;
-    sal_uLong nIndex = rCnt.GetContentIdx()->GetIndex();
+    SwNodeOffset nIndex = rCnt.GetContentIdx()->GetIndex();
     ::InsertCnt_( this, pFormat->GetDoc(), ++nIndex );
     bObjsDirect = bOld;
 }

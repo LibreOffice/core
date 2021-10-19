@@ -51,9 +51,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testTextboxReanchor)
     SwFrameFormat* pTextFrameFormat = FindFrameFormat(pTextFrameObj);
     CPPUNIT_ASSERT_EQUAL(OUString("Frame2"), pTextFrameFormat->GetName());
     SwFrameFormat* pDrawShapeFormat = FindFrameFormat(pDrawShape);
-    sal_uLong nOldAnchor = pDrawShapeFormat->GetAnchor().GetContentAnchor()->nNode.GetIndex();
+    SwNodeOffset nOldAnchor = pDrawShapeFormat->GetAnchor().GetContentAnchor()->nNode.GetIndex();
     pShell->FindAnchorPos(pTextFrameObj->GetLastBoundRect().Center(), true);
-    sal_uLong nNewAnchor = pDrawShapeFormat->GetAnchor().GetContentAnchor()->nNode.GetIndex();
+    SwNodeOffset nNewAnchor = pDrawShapeFormat->GetAnchor().GetContentAnchor()->nNode.GetIndex();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 6
     // - Actual  : 9

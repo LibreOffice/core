@@ -37,7 +37,7 @@ void SwHTMLWriter::FillNextNumInfo()
 {
     m_pNextNumRuleInfo = nullptr;
 
-    sal_uLong nPos = m_pCurrentPam->GetPoint()->nNode.GetIndex() + 1;
+    SwNodeOffset nPos = m_pCurrentPam->GetPoint()->nNode.GetIndex() + 1;
 
     bool bTable = false;
     do
@@ -98,7 +98,7 @@ Writer& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
     {
         // If the list only consists of non-numbered text nodes, then don't start the list.
         bool bAtLeastOneNumbered = false;
-        sal_uLong nPos = rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() + 1;
+        SwNodeOffset nPos = rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() + 1;
         SwNumRule* pNumRule = nullptr;
         while (true)
         {
@@ -147,7 +147,7 @@ Writer& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
                 bStartValue = true;
                 if( rInfo.GetDepth() > 1 )
                 {
-                    sal_uLong nPos =
+                    SwNodeOffset nPos =
                         rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() + 1;
                     do
                     {
@@ -340,7 +340,7 @@ Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
     {
         // If the list only consisted of non-numbered text nodes, then don't end the list.
         bool bAtLeastOneNumbered = false;
-        sal_uLong nPos = rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() - 1;
+        SwNodeOffset nPos = rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() - 1;
         SwNumRule* pNumRule = nullptr;
         while (true)
         {

@@ -543,7 +543,7 @@ static const SwRangeRedline* lcl_GetRedlineAtNodeInsertionOrDeletion( const SwTe
 
     if( SwRedlineTable::npos != nRedlPos )
     {
-        const sal_uLong nNdIdx = rTextNode.GetIndex();
+        const SwNodeOffset nNdIdx = rTextNode.GetIndex();
         const SwRedlineTable& rTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
         for( ; nRedlPos < rTable.size() ; ++nRedlPos )
         {
