@@ -36,7 +36,9 @@ struct SwSortUndoElement
     union {
         struct {
             sal_uLong nID;
-            sal_uLong nSource, nTarget;
+            // we cannot store these as SwNodeOffset (even though they are)
+            // because SwNodeOffset has no default constructor
+            sal_Int32 nSource, nTarget;
         } TXT;
         struct {
             OUString *pSource, *pTarget;
@@ -48,10 +50,10 @@ struct SwSortUndoElement
         SORT_TXT_TBL.TBL.pSource = new OUString( aS );
         SORT_TXT_TBL.TBL.pTarget = new OUString( aT );
     }
-    SwSortUndoElement( sal_uLong nS, sal_uLong nT )
+    SwSortUndoElement( SwNodeOffset nS, SwNodeOffset nT )
     {
-        SORT_TXT_TBL.TXT.nSource = nS;
-        SORT_TXT_TBL.TXT.nTarget = nT;
+        SORT_TXT_TBL.TXT.nSource = sal_Int32(nS);
+        SORT_TXT_TBL.TXT.nTarget = sal_Int32(nT);
         SORT_TXT_TBL.TXT.nID   = 0xffffffff;
     }
     ~SwSortUndoElement();
@@ -62,11 +64,11 @@ class SwUndoSort final : public SwUndo, private SwUndRng
     std::unique_ptr<SwSortOptions>    m_pSortOptions;
     std::vector<std::unique_ptr<SwSortUndoElement>> m_SortList;
     std::unique_ptr<SwUndoAttrTable>  m_pUndoAttrTable;
-    sal_uLong         m_nTableNode;
+    SwNodeOffset         m_nTableNode;
 
 public:
     SwUndoSort( const SwPaM&, const SwSortOptions& );
-    SwUndoSort( sal_uLong nStt, sal_uLong nEnd, const SwTableNode&,
+    SwUndoSort( SwNodeOffset nStt, SwNodeOffset nEnd, const SwTableNode&,
                 const SwSortOptions&, bool bSaveTable );
 
     virtual ~SwUndoSort() override;
@@ -76,7 +78,7 @@ public:
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 
     void Insert( const OUString& rOrgPos, const OUString& rNewPos );
-    void Insert( sal_uLong nOrgPos, sal_uLong nNewPos );
+    void Insert( SwNodeOffset nOrgPos, SwNodeOffset nNewPos );
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOSORT_HXX

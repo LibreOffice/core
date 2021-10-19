@@ -456,7 +456,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
     else    // non-automatic checking
     {
         const SwNodes& rNodes = mpDoc->GetNodes();
-        const sal_uLong nMaxNodes = rNodes.Count();
+        const SwNodeOffset nMaxNodes = rNodes.Count();
 
         while ( mnCurrentNode < mnEndNode && mnCurrentNode < nMaxNodes )
         {
@@ -470,8 +470,8 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
 
             if ( mnCurrentNode == mnEndNode )
             {
-                mnCurrentNode = 0;
-                mnEndNode = 0;
+                mnCurrentNode = SwNodeOffset(0);
+                mnEndNode = SwNodeOffset(0);
             }
         }
     }
@@ -518,7 +518,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaAfter(co
     SwTextNode* pNextTextNode = nullptr;
     const SwNodes& rNodes = pCurrentNode->GetDoc().GetNodes();
 
-    for( sal_uLong nCurrentNode = pCurrentNode->GetIndex() + 1; nCurrentNode < rNodes.Count(); ++nCurrentNode )
+    for( SwNodeOffset nCurrentNode = pCurrentNode->GetIndex() + 1; nCurrentNode < rNodes.Count(); ++nCurrentNode )
     {
         SwNode* pNd = rNodes[ nCurrentNode ];
         pNextTextNode = dynamic_cast<SwTextNode*>(pNd);
@@ -564,7 +564,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaBefore(c
     SwTextNode* pPrevTextNode = nullptr;
     const SwNodes& rNodes = pCurrentNode->GetDoc().GetNodes();
 
-    for( sal_uLong nCurrentNode = pCurrentNode->GetIndex() - 1; nCurrentNode > 0; --nCurrentNode )
+    for( SwNodeOffset nCurrentNode = pCurrentNode->GetIndex() - 1; nCurrentNode > SwNodeOffset(0); --nCurrentNode )
     {
         SwNode* pNd = rNodes[ nCurrentNode ];
         pPrevTextNode = dynamic_cast<SwTextNode*>(pNd);

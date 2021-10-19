@@ -305,7 +305,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                     if( mpOutlineRule )
                         pDoc->SetOutlineNumRule( *mpOutlineRule );
 
-                    SwNodeRange aRg( *pStartNd, 0, aEndIdx.GetNode() );
+                    SwNodeRange aRg( *pStartNd, SwNodeOffset(0), aEndIdx.GetNode() );
                     SwNodeIndex aTmpIdx( pDoc->GetNodes().GetEndOfContent() );
                     GetDocumentContentOperationsManager().CopyWithFlyInFly(
                             aRg, aTmpIdx, nullptr, false, false);
@@ -348,11 +348,11 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                     {
                         // Delete all nodes in the section and, in the "start node",
                         // set the Link to the saved document.
-                        sal_uLong nNodeDiff = aEndIdx.GetIndex() -
+                        SwNodeOffset nNodeDiff = aEndIdx.GetIndex() -
                                             pStartNd->GetIndex() - 1;
                         if( nNodeDiff )
                         {
-                            SwPaM aTmp( *pStartNd, aEndIdx.GetNode(), 1, -1 );
+                            SwPaM aTmp( *pStartNd, aEndIdx.GetNode(), SwNodeOffset(1), SwNodeOffset(-1) );
                             aTmp.GetPoint()->nContent.Assign( nullptr, 0 );
                             aTmp.GetMark()->nContent.Assign( nullptr, 0 );
                             SwNodeIndex aSIdx( aTmp.GetMark()->nNode );
@@ -450,7 +450,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                             // they are fully enclosed in [pSectNd,aEndIdx].
                             if( aEndIdx < pSectNd->EndOfSectionIndex() )
                             {
-                                SwNodeRange aRg( *pSectNd, 1, aEndIdx, 1 );
+                                SwNodeRange aRg( *pSectNd, SwNodeOffset(1), aEndIdx, SwNodeOffset(1) );
                                 SwNodeIndex aIdx( *pSectNd );
                                 GetNodes().MoveNodes( aRg, GetNodes(), aIdx );
                             }

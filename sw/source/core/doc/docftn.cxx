@@ -436,9 +436,9 @@ bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
     SwRootFrame* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
 
     const SwPosition* pStt = rPam.Start(), *pEnd = rPam.End();
-    const sal_uLong nSttNd = pStt->nNode.GetIndex();
+    const SwNodeOffset nSttNd = pStt->nNode.GetIndex();
     const sal_Int32 nSttCnt = pStt->nContent.GetIndex();
-    const sal_uLong nEndNd = pEnd->nNode.GetIndex();
+    const SwNodeOffset nEndNd = pEnd->nNode.GetIndex();
     const sal_Int32 nEndCnt = pEnd->nContent.GetIndex();
 
     size_t nPos = 0;
@@ -457,7 +457,7 @@ bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
     while( nPos < rFootnoteArr.size() )
     {
         SwTextFootnote* pTextFootnote = rFootnoteArr[ nPos++ ];
-        sal_uLong nIdx = SwTextFootnote_GetIndex(pTextFootnote);
+        SwNodeOffset nIdx = SwTextFootnote_GetIndex(pTextFootnote);
         if( nIdx >= nEndNd &&
             ( nIdx != nEndNd || nEndCnt < pTextFootnote->GetStart() ) )
             continue;
@@ -491,7 +491,7 @@ bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
     while( nPos )
     {
         SwTextFootnote* pTextFootnote = rFootnoteArr[ --nPos ];
-        sal_uLong nIdx = SwTextFootnote_GetIndex(pTextFootnote);
+        SwNodeOffset nIdx = SwTextFootnote_GetIndex(pTextFootnote);
         if( nIdx <= nSttNd &&
             ( nIdx != nSttNd || nSttCnt > pTextFootnote->GetStart() ) )
             continue;

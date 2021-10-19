@@ -106,7 +106,7 @@ SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
 
     const SwDoc *pDoc=m_rShell.GetDoc();
     const SwContentNode *pNode = nullptr;
-    if ( pDoc && m_nNode < pDoc->GetNodes( ).Count( ) )
+    if ( pDoc && sal_Int32(m_nNode) < sal_Int32(pDoc->GetNodes( ).Count( )) )
     {
         pNode = pDoc->GetNodes()[m_nNode]->GetContentNode();
     }
@@ -114,7 +114,7 @@ SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
 
     sal_Int32 nCmp, nCurrentContent = pCurrentCursor->GetPoint()->nContent.GetIndex();
     SwNodeType nNdWhich = pCNd->GetNodeType();
-    sal_uLong nCurrentNode = pCurrentCursor->GetPoint()->nNode.GetIndex();
+    SwNodeOffset nCurrentNode = pCurrentCursor->GetPoint()->nNode.GetIndex();
 
     // Register the Shell as dependent at the current Node. By doing this all
     // attribute changes can be signaled over the link.

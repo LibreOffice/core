@@ -663,7 +663,7 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
         // set content node (if necessary)
         if (nullptr != pRedlineInfo->pContentIndex)
         {
-            sal_uLong nPoint = aPaM.GetPoint()->nNode.GetIndex();
+            SwNodeOffset nPoint = aPaM.GetPoint()->nNode.GetIndex();
             if( nPoint < pRedlineInfo->pContentIndex->GetIndex() ||
                 nPoint > pRedlineInfo->pContentIndex->GetNode().EndOfSectionIndex() )
                 pRedline->SetContentIdx(pRedlineInfo->pContentIndex);

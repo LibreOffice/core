@@ -621,17 +621,17 @@ SwUnoCursorHelper::GetCurTextFormatColl(SwPaM & rPaM, const bool bConditional)
     SwPaM *pTmpCursor = &rPaM;
     do
     {
-        const sal_uLong nSttNd = pTmpCursor->Start()->nNode.GetIndex();
-        const sal_uLong nEndNd = pTmpCursor->End()->nNode.GetIndex();
+        const SwNodeOffset nSttNd = pTmpCursor->Start()->nNode.GetIndex();
+        const SwNodeOffset nEndNd = pTmpCursor->End()->nNode.GetIndex();
 
-        if( nEndNd - nSttNd >= nMaxLookup )
+        if( nEndNd - nSttNd >= SwNodeOffset(nMaxLookup) )
         {
             pFormat = nullptr;
             break;
         }
 
         const SwNodes& rNds = rPaM.GetDoc().GetNodes();
-        for( sal_uLong n = nSttNd; n <= nEndNd; ++n )
+        for( SwNodeOffset n = nSttNd; n <= nEndNd; ++n )
         {
             SwTextNode const*const pNd = rNds[ n ]->GetTextNode();
             if( pNd )
@@ -2810,7 +2810,7 @@ SwXTextCursor::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor)
     SwPosition & rEnd   = *rUnoCursor.End();
 
     SwNodeIndex aPrevIdx( rStart.nNode, -1 );
-    const sal_uLong nOffset = rEnd.nNode.GetIndex() - rStart.nNode.GetIndex();
+    const SwNodeOffset nOffset = rEnd.nNode.GetIndex() - rStart.nNode.GetIndex();
     const sal_Int32 nCntStt  = rStart.nContent.GetIndex();
 
     rUnoCursor.GetDoc().SortText(rUnoCursor, aSortOpt);

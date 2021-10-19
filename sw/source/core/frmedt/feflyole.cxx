@@ -52,7 +52,7 @@ SwFlyFrame *SwFEShell::FindFlyFrame( const uno::Reference < embed::XEmbeddedObje
         // No or wrong fly selected: we have to search.
         bool bExist = false;
         SwStartNode *pStNd;
-        sal_uLong nSttIdx = GetNodes().GetEndOfAutotext().StartOfSectionIndex() + 1,
+        SwNodeOffset nSttIdx = GetNodes().GetEndOfAutotext().StartOfSectionIndex() + 1,
               nEndIdx = GetNodes().GetEndOfAutotext().GetIndex();
         while( nSttIdx < nEndIdx &&
                 nullptr != (pStNd = GetNodes()[ nSttIdx ]->GetStartNode()) )

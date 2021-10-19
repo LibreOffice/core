@@ -2113,14 +2113,13 @@ void SwUiWriterTest4::testLinesMoveBackwardsInSectionInTable()
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "lines-in-section-in-table.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page", 2);
-    sal_uInt32 nPara4Node
-        = getXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell[1]/section/txt[last()]",
-                   "txtNodeIndex")
-              .toUInt32();
+    SwNodeOffset nPara4Node(
+        getXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell[1]/section/txt[last()]", "txtNodeIndex")
+            .toUInt32());
     CPPUNIT_ASSERT_EQUAL(OUString("4"), pDoc->GetNodes()[nPara4Node]->GetTextNode()->GetText());
-    sal_uInt32 nPara5Node
-        = getXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell[1]/section/txt[1]", "txtNodeIndex")
-              .toUInt32();
+    SwNodeOffset nPara5Node(
+        getXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell[1]/section/txt[1]", "txtNodeIndex")
+            .toUInt32());
     CPPUNIT_ASSERT_EQUAL(OUString("5"), pDoc->GetNodes()[nPara5Node]->GetTextNode()->GetText());
 
     // Remove paragraph "4".
@@ -2134,10 +2133,9 @@ void SwUiWriterTest4::testLinesMoveBackwardsInSectionInTable()
     // Assert that paragraph "5" is now moved back to page 1 and is the last paragraph there.
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
-    sal_uInt32 nPage1LastNode
-        = getXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell[1]/section/txt[last()]",
-                   "txtNodeIndex")
-              .toUInt32();
+    SwNodeOffset nPage1LastNode(
+        getXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell[1]/section/txt[last()]", "txtNodeIndex")
+            .toUInt32());
     // This was "3", paragraph "4" was deleted, but "5" was not moved backwards from page 2.
     CPPUNIT_ASSERT_EQUAL(OUString("5"), pDoc->GetNodes()[nPage1LastNode]->GetTextNode()->GetText());
 #endif
@@ -2266,15 +2264,15 @@ void SwUiWriterTest4::testTdf113686()
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf113686.fodt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page", 2);
-    sal_uInt32 nPage1LastNode
-        = getXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell[1]/tab/row/cell[1]/txt[last()]",
-                   "txtNodeIndex")
-              .toUInt32();
+    SwNodeOffset nPage1LastNode(
+        getXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell[1]/tab/row/cell[1]/txt[last()]",
+                 "txtNodeIndex")
+            .toUInt32());
     CPPUNIT_ASSERT_EQUAL(OUString("Table2:A1-P10"),
                          pDoc->GetNodes()[nPage1LastNode]->GetTextNode()->GetText());
-    sal_uInt32 nPage2FirstNode
-        = getXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell[1]/section/txt[1]", "txtNodeIndex")
-              .toUInt32();
+    SwNodeOffset nPage2FirstNode(
+        getXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell[1]/section/txt[1]", "txtNodeIndex")
+            .toUInt32());
     CPPUNIT_ASSERT_EQUAL(OUString("Table1:A1"),
                          pDoc->GetNodes()[nPage2FirstNode]->GetTextNode()->GetText());
 
@@ -2379,17 +2377,16 @@ void SwUiWriterTest4::testSectionInTableInTable4()
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf113520.fodt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page", 3);
-    sal_uInt32 nPage1LastNode
-        = getXPath(pXmlDoc,
-                   "/root/page[1]/body/tab/row/cell[1]/tab/row/cell[1]/section/txt[last()]",
-                   "txtNodeIndex")
-              .toUInt32();
+    SwNodeOffset nPage1LastNode(
+        getXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell[1]/tab/row/cell[1]/section/txt[last()]",
+                 "txtNodeIndex")
+            .toUInt32());
     CPPUNIT_ASSERT_EQUAL(OUString("Section1:P10"),
                          pDoc->GetNodes()[nPage1LastNode]->GetTextNode()->GetText());
-    sal_uInt32 nPage3FirstNode
-        = getXPath(pXmlDoc, "/root/page[3]/body/tab/row/cell[1]/tab/row/cell[1]/section/txt[1]",
-                   "txtNodeIndex")
-              .toUInt32();
+    SwNodeOffset nPage3FirstNode(
+        getXPath(pXmlDoc, "/root/page[3]/body/tab/row/cell[1]/tab/row/cell[1]/section/txt[1]",
+                 "txtNodeIndex")
+            .toUInt32());
     CPPUNIT_ASSERT_EQUAL(OUString("Section1:P23"),
                          pDoc->GetNodes()[nPage3FirstNode]->GetTextNode()->GetText());
 
@@ -2425,10 +2422,10 @@ void SwUiWriterTest4::testTdf112160()
     // Assert that the A2 cell is on page 1.
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf112160.fodt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    sal_uInt32 nA2CellNode
-        = getXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/section/txt[last()]",
-                   "txtNodeIndex")
-              .toUInt32();
+    SwNodeOffset nA2CellNode(getXPath(pXmlDoc,
+                                      "/root/page[1]/body/tab/row[2]/cell[1]/section/txt[last()]",
+                                      "txtNodeIndex")
+                                 .toUInt32());
     CPPUNIT_ASSERT_EQUAL(OUString("Table1.A2"),
                          pDoc->GetNodes()[nA2CellNode]->GetTextNode()->GetText());
 
@@ -2448,7 +2445,7 @@ void SwUiWriterTest4::testTdf112160()
               .toUInt32();
     // This was Table1.C2, Table1.D2 was moved to the next page, unexpected.
     CPPUNIT_ASSERT_EQUAL(OUString("Table1.D2"),
-                         pDoc->GetNodes()[nD2CellNode]->GetTextNode()->GetText());
+                         pDoc->GetNodes()[SwNodeOffset(nD2CellNode)]->GetTextNode()->GetText());
 #endif
 }
 
@@ -2888,7 +2885,7 @@ void SwUiWriterTest4::testTdf51223()
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
-    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     pWrtShell->Insert("i");
     pWrtShell->SplitNode(true);
     CPPUNIT_ASSERT_EQUAL(OUString("I"),
@@ -3186,7 +3183,7 @@ void SwUiWriterTest4::testRedlineAutoCorrect()
 
     SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
     pWrtShell->AutoCorrect(corr, ' ');
-    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
 
     // tdf#83419 This was "Ts " removing the deletion of "t" silently by sentence capitalization
     OUString sReplaced("ts ");
@@ -3264,7 +3261,7 @@ void SwUiWriterTest4::testRedlineAutoCorrect2()
     SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
     pWrtShell->Insert("...");
     pWrtShell->AutoCorrect(corr, ' ');
-    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
 
     // This was "LoremLorem,…," (duplicating the deleted comma, but without deletion)
     // Don't replace, if a redline starts or ends within the text.
@@ -3292,7 +3289,7 @@ void SwUiWriterTest4::testEmojiAutoCorrect()
     SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
     pWrtShell->Insert(":snowman");
     pWrtShell->AutoCorrect(corr, ':');
-    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     OUString sReplaced = u"☃Lorem,";
     nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
@@ -3323,7 +3320,7 @@ void SwUiWriterTest4::testTdf108423()
     const sal_Unicode cChar = '\'';
     pWrtShell->AutoCorrect(corr, cChar);
     // The word "i" should be capitalized due to autocorrect, followed by a typographical apostrophe
-    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     OUString sIApostrophe(u"I\u2019");
     CPPUNIT_ASSERT_EQUAL(sIApostrophe,
                          static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
@@ -3342,7 +3339,7 @@ void SwUiWriterTest4::testTdf106164()
     pWrtShell->Insert(u"we\u2019re");
     const sal_Unicode cChar = ' ';
     pWrtShell->AutoCorrect(corr, cChar);
-    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(OUString(u"We\u2019re "),
                          static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
@@ -3356,7 +3353,7 @@ void SwUiWriterTest4::testTdf54409()
     pWrtShell->Insert(u"\u201Ctset");
     const sal_Unicode cChar = ' ';
     pWrtShell->AutoCorrect(corr, cChar);
-    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     OUString sReplaced(u"\u201Ctest ");
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
     // testing autocorrect of test" -> test" with typographical double quotation mark U+201D
@@ -3380,7 +3377,7 @@ void SwUiWriterTest4::testTdf38394()
     pWrtShell->Insert(u"l\u2019");
     const sal_Unicode cChar = '"';
     pWrtShell->AutoCorrect(corr, cChar);
-    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     OUString sReplaced(u"l\u2019« ");
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
     // tdf#132301 autocorrect of qu'«
@@ -3399,7 +3396,7 @@ void SwUiWriterTest4::testTdf59666()
     pWrtShell->Insert(u"\u03C0");
     const sal_Unicode cChar = ' ';
     pWrtShell->AutoCorrect(corr, cChar);
-    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(OUString(u"\u03C0 "),
                          static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
@@ -3414,7 +3411,7 @@ void SwUiWriterTest4::testTdf133524()
     // >>
     pWrtShell->Insert(u">");
     pWrtShell->AutoCorrect(corr, '>');
-    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     OUString sReplaced(u"»");
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
     // <<
@@ -3465,7 +3462,7 @@ void SwUiWriterTest4::testTdf133524_Romanian()
     // Example: „Sentence and «word».”
     // opening primary level quote
     pWrtShell->AutoCorrect(corr, '"');
-    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     OUString sReplaced(u"„");
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
     // opening second level quote
@@ -3503,7 +3500,7 @@ void SwUiWriterTest4::testTdf128860()
     SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
     pWrtShell->Insert(u"‚word");
     pWrtShell->AutoCorrect(corr, '\'');
-    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     OUString sReplaced(u"‚word‘");
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
     // Us apostrophe without preceding starting quote: word' -> word’
@@ -3526,7 +3523,7 @@ void SwUiWriterTest4::testTdf123786()
     SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
     pWrtShell->Insert(u"„слово");
     pWrtShell->AutoCorrect(corr, '\'');
-    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     OUString sReplaced(u"„слово“");
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
     // Us apostrophe without preceding starting quote: word' -> word’
@@ -3550,7 +3547,7 @@ void SwUiWriterTest4::testTdf133589()
     SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
     pWrtShell->Insert(u"székely");
     pWrtShell->AutoCorrect(corr, ' ');
-    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     OUString sReplaced(u"𐳥𐳋𐳓𐳉𐳗 ");
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
     // disambiguate consonants: asszony -> asz|szony

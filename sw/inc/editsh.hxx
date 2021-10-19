@@ -521,7 +521,7 @@ public:
 
     void NumUpDown( bool bDown = true );
 
-    bool MoveParagraph( tools::Long nOffset = 1);
+    bool MoveParagraph( SwNodeOffset nOffset = SwNodeOffset(1));
     bool MoveNumParas( bool bUpperLower, bool bUpperLeft );
 
     /// Switch on/off of numbering via Delete/Backspace.

@@ -388,4 +388,9 @@ std::ostream& operator <<(std::ostream& s, const SwIndex& index)
     return s << "SwIndex offset (" << index.GetIndex() << ")";
 }
 
+std::ostream& operator <<(std::ostream& s, const SwNodeOffset& index)
+{
+    return s << sal_Int32(index);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

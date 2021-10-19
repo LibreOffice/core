@@ -46,12 +46,12 @@ private:
     std::unique_ptr<SwHistory> m_pHistory;
     std::unique_ptr<SwRedlineData> m_pRedlData;
     std::unique_ptr<SwRedlineSaveDatas> m_pRedlineSaveData;
-    sal_uLong m_nSectionNodePos;
+    SwNodeOffset m_nSectionNodePos;
     bool m_bSplitAtStart : 1;
     bool m_bSplitAtEnd : 1;
     bool m_bUpdateFootnote : 1;
 
-    void Join( SwDoc& rDoc, sal_uLong nNode );
+    void Join( SwDoc& rDoc, SwNodeOffset nNode );
 
 public:
     SwUndoInsSection(SwPaM const&, SwSectionData const&,
@@ -64,7 +64,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 
-    void SetSectNdPos(sal_uLong const nPos)     { m_nSectionNodePos = nPos; }
+    void SetSectNdPos(SwNodeOffset const nPos)     { m_nSectionNodePos = nPos; }
     void SaveSplitNode(SwTextNode *const pTextNd, bool const bAtStart);
     void SetUpdateFootnoteFlag(bool const bFlag)   { m_bUpdateFootnote = bFlag; }
 };
@@ -83,7 +83,7 @@ private:
     std::unique_ptr<SwUndoDelSection> m_pTitleSectionUpdated;
     std::unique_ptr<SwUndoSaveSection, o3tl::default_delete<SwUndoSaveSection>> const m_pSaveSectionOriginal;
     std::unique_ptr<SwUndoSaveSection, o3tl::default_delete<SwUndoSaveSection>> const m_pSaveSectionUpdated;
-    sal_uLong const m_nStartIndex;
+    SwNodeOffset const m_nStartIndex;
 
 public:
     SwUndoUpdateIndex(SwTOXBaseSection &);

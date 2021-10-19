@@ -1229,8 +1229,8 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                     {
                         const SwTextNode* pNode = pPos->nNode.GetNode().GetTextNode();
                         SwTextFrame const*const pFrame(static_cast<SwTextFrame*>(pNode->getLayoutFrame(pVSh->GetLayout())));
-                        sal_uLong nFirstNode(pFrame->GetTextNodeFirst()->GetIndex());
-                        sal_uLong nLastNode;
+                        SwNodeOffset nFirstNode(pFrame->GetTextNodeFirst()->GetIndex());
+                        SwNodeOffset nLastNode;
                         if (sw::MergedPara const*const pMerged = pFrame->GetMergedPara())
                         {
                             nLastNode = pMerged->pLastNode->GetIndex();
@@ -1240,7 +1240,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                             nLastNode = nFirstNode;
                         }
 
-                        sal_uLong nHere = pNode->GetIndex();
+                        SwNodeOffset nHere = pNode->GetIndex();
 
                         for(SwPaM& rTmpCursor : pCursor->GetRingContainer())
                         {
@@ -1250,9 +1250,9 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                                 bMarked = true;
                                 // check whether nHere is 'inside' pCursor
                                 SwPosition* pStart = rTmpCursor.Start();
-                                sal_uLong nStartIndex = pStart->nNode.GetIndex();
+                                SwNodeOffset nStartIndex = pStart->nNode.GetIndex();
                                 SwPosition* pEnd = rTmpCursor.End();
-                                sal_uLong nEndIndex = pEnd->nNode.GetIndex();
+                                SwNodeOffset nEndIndex = pEnd->nNode.GetIndex();
                                 if ((nStartIndex <= nLastNode) && (nFirstNode <= nEndIndex))
                                 {
                                     if( rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR )

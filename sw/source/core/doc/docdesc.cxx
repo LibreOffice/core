@@ -292,7 +292,7 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFormatHeader &rHe
                 // the left or first header attribute.
                 SwNodeIndex aTmp( GetNodes().GetEndOfAutotext() );
                 SwStartNode* pSttNd = SwNodes::MakeEmptySection( aTmp, SwHeaderStartNode );
-                SwNodeRange aRange( aRCnt.GetContentIdx()->GetNode(), 0,
+                SwNodeRange aRange( aRCnt.GetContentIdx()->GetNode(), SwNodeOffset(0),
                             *aRCnt.GetContentIdx()->GetNode().EndOfSectionNode() );
                 aTmp = *pSttNd->EndOfSectionNode();
                 GetNodes().Copy_( aRange, aTmp, false );
@@ -366,7 +366,7 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFormatFooter &rFo
                 // the left footer attribute.
                 SwNodeIndex aTmp( GetNodes().GetEndOfAutotext() );
                 SwStartNode* pSttNd = SwNodes::MakeEmptySection( aTmp, SwFooterStartNode );
-                SwNodeRange aRange( aRCnt.GetContentIdx()->GetNode(), 0,
+                SwNodeRange aRange( aRCnt.GetContentIdx()->GetNode(), SwNodeOffset(0),
                             *aRCnt.GetContentIdx()->GetNode().EndOfSectionNode() );
                 aTmp = *pSttNd->EndOfSectionNode();
                 GetNodes().Copy_( aRange, aTmp, false );
@@ -463,7 +463,7 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
                     {
                         SwNodeIndex aIdx(*rCnt.GetContentIdx(), 0);
                         pNode = &aIdx.GetNode();
-                        sal_uInt32 nEnd = pNode->EndOfSectionIndex();
+                        SwNodeOffset nEnd = pNode->EndOfSectionIndex();
                         while (aIdx < nEnd)
                         {
                             if (pNode->IsContentNode() &&

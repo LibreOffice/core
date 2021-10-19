@@ -644,7 +644,7 @@ void SwAnnotationWin::SetPosAndSize()
 
     // text range overlay
     maAnnotationTextRanges.clear();
-    if ( mrSidebarItem.maLayoutInfo.mnStartNodeIdx != 0
+    if ( mrSidebarItem.maLayoutInfo.mnStartNodeIdx != SwNodeOffset(0)
          && mrSidebarItem.maLayoutInfo.mnStartContent != -1 )
     {
         const SwTextAnnotationField* pTextAnnotationField =

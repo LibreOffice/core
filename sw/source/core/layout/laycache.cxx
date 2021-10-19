@@ -77,7 +77,7 @@ void SwLayoutCache::Read( SvStream &rStream )
     }
 }
 
-void SwLayCacheImpl::Insert( sal_uInt16 nType, sal_uLong nIndex, sal_Int32 nOffset )
+void SwLayCacheImpl::Insert( sal_uInt16 nType, SwNodeOffset nIndex, sal_Int32 nOffset )
 {
     m_aType.push_back( nType );
     mIndices.push_back( nIndex );
@@ -115,7 +115,7 @@ bool SwLayCacheImpl::Read( SvStream& rStream )
             else
                 nOffset = COMPLETE_STRING;
             aIo.CloseFlagRec();
-            Insert( SW_LAYCACHE_IO_REC_PARA, nIndex, static_cast<sal_Int32>(nOffset) );
+            Insert( SW_LAYCACHE_IO_REC_PARA, SwNodeOffset(nIndex), static_cast<sal_Int32>(nOffset) );
             aIo.CloseRec();
             break;
         }
@@ -124,7 +124,7 @@ bool SwLayCacheImpl::Read( SvStream& rStream )
             aIo.OpenFlagRec();
             aIo.GetStream().ReadUInt32( nIndex )
                            .ReadUInt32( nOffset );
-            Insert( SW_LAYCACHE_IO_REC_TABLE, nIndex, static_cast<sal_Int32>(nOffset) );
+            Insert( SW_LAYCACHE_IO_REC_TABLE, SwNodeOffset(nIndex), static_cast<sal_Int32>(nOffset) );
             aIo.CloseFlagRec();
             aIo.CloseRec();
             break;
@@ -168,7 +168,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
     SwLayCacheIoImpl aIo( rStream, true );
     // We want to save the relative index, so we need the index
     // of the first content
-    sal_uLong nStartOfContent = rDoc.GetNodes().GetEndOfContent().
+    SwNodeOffset nStartOfContent = rDoc.GetNodes().GetEndOfContent().
                             StartOfSectionNode()->GetIndex();
     // The first page...
     SwPageFrame* pPage = const_cast<SwPageFrame*>(static_cast<const SwPageFrame*>(rDoc.getIDocumentLayoutAccess().GetCurrentLayout()->Lower()));
@@ -193,7 +193,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                 {
                     SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(pTmp));
                     assert(!pFrame->GetMergedPara());
-                    sal_uLong nNdIdx = pFrame->GetTextNodeFirst()->GetIndex();
+                    SwNodeOffset nNdIdx = pFrame->GetTextNodeFirst()->GetIndex();
                     if( nNdIdx > nStartOfContent )
                     {
                         /*  Open Paragraph Record */
@@ -202,7 +202,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                         aIo.OpenFlagRec( bFollow ? 0x01 : 0x00,
                                         bFollow ? 8 : 4 );
                         nNdIdx -= nStartOfContent;
-                        aIo.GetStream().WriteUInt32( nNdIdx );
+                        aIo.GetStream().WriteUInt32( sal_Int32(nNdIdx) );
                         if( bFollow )
                             aIo.GetStream().WriteUInt32( sal_Int32(static_cast<SwTextFrame*>(pTmp)->GetOffset()) );
                         aIo.CloseFlagRec();
@@ -235,7 +235,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                     }
                     while (true)
                     {
-                        sal_uLong nNdIdx =
+                        SwNodeOffset nNdIdx =
                                 pTab->GetTable()->GetTableNode()->GetIndex();
                         if( nNdIdx > nStartOfContent )
                         {
@@ -243,7 +243,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                             aIo.OpenRec( SW_LAYCACHE_IO_REC_TABLE );
                             aIo.OpenFlagRec( 0, 8 );
                             nNdIdx -= nStartOfContent;
-                            aIo.GetStream().WriteUInt32( nNdIdx )
+                            aIo.GetStream().WriteUInt32( sal_Int32(nNdIdx) )
                                            .WriteUInt32( nOfst );
                             aIo.CloseFlagRec();
                             /* Close Table Record  */
@@ -330,7 +330,7 @@ bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
     if( pRootFrame )
     {
         size_t nIndex = 0;
-        sal_uLong nStartOfContent = rDoc.GetNodes().GetEndOfContent().
+        SwNodeOffset nStartOfContent = rDoc.GetNodes().GetEndOfContent().
                                 StartOfSectionNode()->GetIndex();
         const SwPageFrame* pPage = static_cast<const SwPageFrame*>(pRootFrame->Lower());
         if( pPage )
@@ -351,7 +351,7 @@ bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
 
                     SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(pTmp));
                     assert(!pFrame->GetMergedPara());
-                    sal_uLong nNdIdx = pFrame->GetTextNodeFirst()->GetIndex();
+                    SwNodeOffset nNdIdx = pFrame->GetTextNodeFirst()->GetIndex();
                     if( nNdIdx > nStartOfContent )
                     {
                         bool bFollow = static_cast<const SwTextFrame*>(pTmp)->IsFollow();
@@ -390,7 +390,7 @@ bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
                     }
                     do
                     {
-                        sal_uLong nNdIdx =
+                        SwNodeOffset nNdIdx =
                                 pTab->GetTable()->GetTableNode()->GetIndex();
                         if( nNdIdx > nStartOfContent )
                         {
@@ -468,7 +468,7 @@ SwActualSection::SwActualSection( SwActualSection *pUp,
 namespace {
 
 bool sanityCheckLayoutCache(SwLayCacheImpl const& rCache,
-        SwNodes const& rNodes, sal_uLong nNodeIndex)
+        SwNodes const& rNodes, SwNodeOffset nNodeIndex)
 {
     auto const nStartOfContent(rNodes.GetEndOfContent().StartOfSectionNode()->GetIndex());
     nNodeIndex -= nStartOfContent;
@@ -518,7 +518,7 @@ bool sanityCheckLayoutCache(SwLayCacheImpl const& rCache,
  */
 SwLayHelper::SwLayHelper( SwDoc *pD, SwFrame* &rpF, SwFrame* &rpP, SwPageFrame* &rpPg,
                           SwLayoutFrame* &rpL, std::unique_ptr<SwActualSection> &rpA,
-                          sal_uLong nNodeIndex, bool bCache )
+                          SwNodeOffset nNodeIndex, bool bCache )
     : mrpFrame( rpF )
     , mrpPrv( rpP )
     , mrpPage( rpPg )
@@ -546,13 +546,13 @@ SwLayHelper::SwLayHelper( SwDoc *pD, SwFrame* &rpF, SwFrame* &rpP, SwPageFrame* 
             mpDoc->GetLayoutCache()->UnlockImpl();
             mpImpl = nullptr;
             mnIndex = std::numeric_limits<size_t>::max();
-            mnStartOfContent = USHRT_MAX;
+            mnStartOfContent = SwNodeOffset(USHRT_MAX);
         }
     }
     else
     {
         mnIndex = std::numeric_limits<size_t>::max();
-        mnStartOfContent = ULONG_MAX;
+        mnStartOfContent = NODE_OFFSET_MAX;
     }
 }
 
@@ -584,19 +584,19 @@ sal_uLong SwLayHelper::CalcPageCount()
         nPgCount = mpDoc->getIDocumentStatistics().GetDocStat().nPage;
         if ( nPgCount <= 10 ) // no page insertion for less than 10 pages
             nPgCount = 0;
-        sal_uLong nNdCount = mpDoc->getIDocumentStatistics().GetDocStat().nPara;
+        sal_Int32 nNdCount = mpDoc->getIDocumentStatistics().GetDocStat().nPara;
         if ( nNdCount <= 1 )
         {
             //Estimates the number of paragraphs.
-            sal_uLong nTmp = mpDoc->GetNodes().GetEndOfContent().GetIndex() -
+            SwNodeOffset nTmp = mpDoc->GetNodes().GetEndOfContent().GetIndex() -
                         mpDoc->GetNodes().GetEndOfExtras().GetIndex();
             //Tables have a little overhead...
-            nTmp -= mpDoc->GetTableFrameFormats()->size() * 25;
+            nTmp -= SwNodeOffset(mpDoc->GetTableFrameFormats()->size() * 25);
             //Fly frames, too ..
             nTmp -= (mpDoc->GetNodes().GetEndOfAutotext().GetIndex() -
-                       mpDoc->GetNodes().GetEndOfInserts().GetIndex()) / 3 * 5;
-            if ( nTmp > 0 )
-                nNdCount = nTmp;
+                       mpDoc->GetNodes().GetEndOfInserts().GetIndex()) / SwNodeOffset(3 * 5);
+            if ( nTmp > SwNodeOffset(0) )
+                nNdCount = sal_Int32(nTmp);
         }
         if ( nNdCount > 100 ) // no estimation below this value
         {
@@ -710,7 +710,7 @@ bool SwLayHelper::CheckInsertPage()
  *  A really big table or long paragraph may contains more than
  *  one page, in this case the needed count of pages will inserted.
  */
-bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
+bool SwLayHelper::CheckInsert( SwNodeOffset nNodeIndex )
 {
     bool bRet = false;
     bool bLongTab = false;

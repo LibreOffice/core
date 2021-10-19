@@ -1423,7 +1423,8 @@ void WW8Export::AppendBookmarks( const SwTextNode& rNd, sal_Int32 nCurrentPos, s
     if( !GetWriter().GetBookmarks( rNd, nCurrentPos, nCurrentEnd, aArr ))
         return;
 
-    sal_uLong nNd = rNd.GetIndex(), nSttCP = Fc2Cp( Strm().Tell() );
+    SwNodeOffset nNd = rNd.GetIndex();
+    sal_uLong nSttCP = Fc2Cp( Strm().Tell() );
     for(const ::sw::mark::IMark* p : aArr)
     {
         const ::sw::mark::IMark& rBkmk = *p;
@@ -1794,13 +1795,13 @@ void WW8Export::WriteStringAsPara( const OUString& rText )
     m_pChpPlc->AppendFkpEntry( nPos );
 }
 
-void MSWordExportBase::WriteSpecialText( sal_uLong nStart, sal_uLong nEnd, sal_uInt8 nTTyp )
+void MSWordExportBase::WriteSpecialText( SwNodeOffset nStart, SwNodeOffset nEnd, sal_uInt8 nTTyp )
 {
     sal_uInt8 nOldTyp = m_nTextTyp;
     m_nTextTyp = nTTyp;
     auto const pOldPam = m_pCurPam;       //!! Simply shifting the PaM without restoring should do the job too
-    sal_uLong nOldStart = m_nCurStart;
-    sal_uLong nOldEnd = m_nCurEnd;
+    SwNodeOffset nOldStart = m_nCurStart;
+    SwNodeOffset nOldEnd = m_nCurEnd;
     SwPaM* pOldEnd = m_pOrigPam;
     bool bOldPageDescs = m_bOutPageDescs;
     m_bOutPageDescs = false;
@@ -1872,7 +1873,7 @@ void WW8Export::WriteChar( sal_Unicode c )
     Strm().WriteUInt16( c );
 }
 
-void MSWordExportBase::SetCurPam(sal_uLong nStt, sal_uLong nEnd)
+void MSWordExportBase::SetCurPam(SwNodeOffset nStt, SwNodeOffset nEnd)
 {
     m_nCurStart = nStt;
     m_nCurEnd = nEnd;
@@ -1889,7 +1890,7 @@ void MSWordExportBase::SetCurPam(sal_uLong nStt, sal_uLong nEnd)
     m_pCurPam->Exchange();
 }
 
-void MSWordExportBase::SaveData( sal_uLong nStt, sal_uLong nEnd )
+void MSWordExportBase::SaveData( SwNodeOffset nStt, SwNodeOffset nEnd )
 {
     MSWordSaveData aData;
 
@@ -1944,7 +1945,7 @@ void MSWordExportBase::RestoreData()
     m_aSaveData.pop();
 }
 
-void WW8Export::SaveData( sal_uLong nStt, sal_uLong nEnd )
+void WW8Export::SaveData( SwNodeOffset nStt, SwNodeOffset nEnd )
 {
     MSWordExportBase::SaveData( nStt, nEnd );
 
@@ -2743,9 +2744,9 @@ class TrackContentToExport
 {
 private:
     SwPaM *m_pCurPam;
-    sal_uLong m_nStart, m_nEnd;
+    SwNodeOffset m_nStart, m_nEnd;
 public:
-    TrackContentToExport(SwPaM *pCurPam, sal_uLong nCurStart, sal_uLong nCurEnd)
+    TrackContentToExport(SwPaM *pCurPam, SwNodeOffset nCurStart, SwNodeOffset nCurEnd)
         : m_pCurPam(pCurPam)
         , m_nStart(nCurStart)
         , m_nEnd(nCurEnd)
@@ -2921,8 +2922,8 @@ void MSWordExportBase::WriteText()
         else
             ++m_pCurPam->GetPoint()->nNode;
 
-        sal_uLong nPos = m_pCurPam->GetPoint()->nNode.GetIndex();
-        ::SetProgressState( nPos, m_pCurPam->GetDoc().GetDocShell() );
+        SwNodeOffset nPos = m_pCurPam->GetPoint()->nNode.GetIndex();
+        ::SetProgressState( sal_Int32(nPos), m_pCurPam->GetDoc().GetDocShell() );
     }
 
     SAL_INFO( "sw.ww8.level2", "</WriteText>" );
@@ -3142,7 +3143,7 @@ void MSWordExportBase::AddLinkTarget(std::u16string_view rURL)
         return;
 
     sCmp = sCmp.toAsciiLowerCase();
-    sal_uLong nIdx = 0;
+    SwNodeOffset nIdx(0);
     bool noBookmark = false;
 
     if( sCmp == "outline" )
@@ -3810,8 +3811,8 @@ ErrCode SwWW8Writer::WriteStorageImpl()
     if( pViewShell != nullptr )
         pViewShell->CalcLayout();
 
-    tools::Long nMaxNode = m_pDoc->GetNodes().Count();
-    ::StartProgress( STR_STATSTR_W4WWRITE, 0, nMaxNode, m_pDoc->GetDocShell() );
+    SwNodeOffset nMaxNode = m_pDoc->GetNodes().Count();
+    ::StartProgress( STR_STATSTR_W4WWRITE, 0, sal_Int32(nMaxNode), m_pDoc->GetDocShell() );
 
     // Respect table at the beginning of the document
     {

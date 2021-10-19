@@ -128,14 +128,14 @@ namespace {
 struct CopyTable
 {
     SwDoc& m_rDoc;
-    sal_uLong m_nOldTableSttIdx;
+    SwNodeOffset m_nOldTableSttIdx;
     MapTableFrameFormats& m_rMapArr;
     SwTableLine* m_pInsLine;
     SwTableBox* m_pInsBox;
     SwTableNode *m_pTableNd;
     const SwTable *m_pOldTable;
 
-    CopyTable(SwDoc& rDc, MapTableFrameFormats& rArr, sal_uLong nOldStt,
+    CopyTable(SwDoc& rDc, MapTableFrameFormats& rArr, SwNodeOffset nOldStt,
                SwTableNode& rTableNd, const SwTable* pOldTable)
         : m_rDoc(rDc), m_nOldTableSttIdx(nOldStt), m_rMapArr(rArr),
           m_pInsLine(nullptr), m_pInsBox(nullptr), m_pTableNd(&rTableNd), m_pOldTable(pOldTable)
@@ -297,7 +297,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc& rDoc, const SwNodeIndex& rIdx ) const
     }
     // First copy the content of the tables, we will later assign the
     // boxes/lines and create the frames
-    SwNodeRange aRg( *this, +1, *EndOfSectionNode() );
+    SwNodeRange aRg( *this, SwNodeOffset(+1), *EndOfSectionNode() );
 
     // If there is a table in this table, the table format for the outer table
     // does not seem to be used, because the table does not have any contents yet

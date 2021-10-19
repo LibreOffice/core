@@ -295,7 +295,7 @@ bool SwAccessibleFrameBase::GetSelectedState( )
         if( pCursor != nullptr )
         {
             const SwTextNode* pNode = pPos->nNode.GetNode().GetTextNode();
-            sal_uLong nHere = pNode->GetIndex();
+            SwNodeOffset nHere = pNode->GetIndex();
 
             // iterate over ring
             SwPaM* pRingStart = pCursor;
@@ -306,9 +306,9 @@ bool SwAccessibleFrameBase::GetSelectedState( )
                 {
                     // check whether nHere is 'inside' pCursor
                     SwPosition* pStart = pCursor->Start();
-                    sal_uLong nStartIndex = pStart->nNode.GetIndex();
+                    SwNodeOffset nStartIndex = pStart->nNode.GetIndex();
                     SwPosition* pEnd = pCursor->End();
-                    sal_uLong nEndIndex = pEnd->nNode.GetIndex();
+                    SwNodeOffset nEndIndex = pEnd->nNode.GetIndex();
                     if( ( nHere >= nStartIndex ) && (nHere <= nEndIndex)  )
                     {
                         if( rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR )

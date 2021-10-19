@@ -151,11 +151,11 @@ bool SwEditShell::HasOtherCnt() const
     const SwNode *pNd;
 
     pNd = &rNds.GetEndOfInserts();
-    if ( 1 != (pNd->GetIndex() - pNd->StartOfSectionIndex()) )
+    if ( SwNodeOffset(1) != (pNd->GetIndex() - pNd->StartOfSectionIndex()) )
         return true;
 
     pNd = &rNds.GetEndOfAutotext();
-    return 1 != (pNd->GetIndex() - pNd->StartOfSectionIndex());
+    return SwNodeOffset(1) != (pNd->GetIndex() - pNd->StartOfSectionIndex());
 }
 
 SwActContext::SwActContext(SwEditShell *pShell)

@@ -22,6 +22,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include "cntfrm.hxx"
 #include "TextFrameIndex.hxx"
+#include <nodeoffset.hxx>
 
 #include <set>
 
@@ -104,7 +105,7 @@ enum class FrameMode { New, Existing };
 std::unique_ptr<sw::MergedPara> CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode, FrameMode eMode);
 SwTextFrame * MakeTextFrame(SwTextNode & rNode, SwFrame *, sw::FrameMode eMode);
 
-bool FrameContainsNode(SwContentFrame const& rFrame, sal_uLong nNodeIndex);
+bool FrameContainsNode(SwContentFrame const& rFrame, SwNodeOffset nNodeIndex);
 bool IsParaPropsNode(SwRootFrame const& rLayout, SwTextNode const& rNode);
 SwTextNode * GetParaPropsNode(SwRootFrame const& rLayout, SwNodeIndex const& rNode);
 SwPosition GetParaPropsPos(SwRootFrame const& rLayout, SwPosition const& rPos);
@@ -133,7 +134,7 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam);
 
 void AddRemoveFlysAnchoredToFrameStartingAtNode(
         SwTextFrame & rFrame, SwTextNode & rTextNode,
-        std::set<sal_uLong> *pSkipped);
+        std::set<SwNodeOffset> *pSkipped);
 
 OUString GetExpandTextMerged(SwRootFrame const* pLayout,
         SwTextNode const& rNode, bool bWithNumber,

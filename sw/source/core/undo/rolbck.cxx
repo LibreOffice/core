@@ -74,7 +74,7 @@ void SwHistoryHint::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-SwHistorySetFormat::SwHistorySetFormat( const SfxPoolItem* pFormatHt, sal_uLong nNd )
+SwHistorySetFormat::SwHistorySetFormat( const SfxPoolItem* pFormatHt, SwNodeOffset nNd )
     :  SwHistoryHint( HSTRY_SETFMTHNT )
     ,  m_pAttr( pFormatHt->Clone() )
     ,  m_nNodeIndex( nNd )
@@ -150,7 +150,7 @@ void SwHistorySetFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwHistorySetFormat"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nNodeIndex"),
-                                BAD_CAST(OString::number(m_nNodeIndex).getStr()));
+                                BAD_CAST(OString::number(sal_Int32(m_nNodeIndex)).getStr()));
     SwHistoryHint::dumpAsXml(pWriter);
 
     if (m_pAttr)
@@ -197,7 +197,7 @@ SwHistorySetFormat::~SwHistorySetFormat()
 {
 }
 
-SwHistoryResetFormat::SwHistoryResetFormat(const SfxPoolItem* pFormatHt, sal_uLong nNodeIdx)
+SwHistoryResetFormat::SwHistoryResetFormat(const SfxPoolItem* pFormatHt, SwNodeOffset nNodeIdx)
     : SwHistoryHint( HSTRY_RESETFMTHNT )
     , m_nNodeIndex( nNodeIdx )
     , m_nWhich( pFormatHt->Which() )
@@ -218,7 +218,7 @@ void SwHistoryResetFormat::SetInDoc( SwDoc* pDoc, bool )
     }
 }
 
-SwHistorySetText::SwHistorySetText( SwTextAttr* pTextHt, sal_uLong nNodePos )
+SwHistorySetText::SwHistorySetText( SwTextAttr* pTextHt, SwNodeOffset nNodePos )
     : SwHistoryHint( HSTRY_SETTXTHNT )
     , m_nNodeIndex( nNodePos )
     , m_nStart( pTextHt->GetStart() )
@@ -279,7 +279,7 @@ void SwHistorySetText::SetInDoc( SwDoc* pDoc, bool )
     }
 }
 
-SwHistorySetTextField::SwHistorySetTextField( const SwTextField* pTextField, sal_uLong nNodePos )
+SwHistorySetTextField::SwHistorySetTextField( const SwTextField* pTextField, SwNodeOffset nNodePos )
     : SwHistoryHint( HSTRY_SETTXTFLDHNT )
     , m_pField( new SwFormatField( *pTextField->GetFormatField().GetField() ) )
 {
@@ -337,7 +337,7 @@ void SwHistorySetTextField::SetInDoc( SwDoc* pDoc, bool )
     }
 }
 
-SwHistorySetRefMark::SwHistorySetRefMark( const SwTextRefMark* pTextHt, sal_uLong nNodePos )
+SwHistorySetRefMark::SwHistorySetRefMark( const SwTextRefMark* pTextHt, SwNodeOffset nNodePos )
     : SwHistoryHint( HSTRY_SETREFMARKHNT )
     , m_RefName( pTextHt->GetRefMark().GetRefName() )
     , m_nNodeIndex( nNodePos )
@@ -364,7 +364,7 @@ void SwHistorySetRefMark::SetInDoc( SwDoc* pDoc, bool )
     }
 }
 
-SwHistorySetTOXMark::SwHistorySetTOXMark( const SwTextTOXMark* pTextHt, sal_uLong nNodePos )
+SwHistorySetTOXMark::SwHistorySetTOXMark( const SwTextTOXMark* pTextHt, SwNodeOffset nNodePos )
     : SwHistoryHint( HSTRY_SETTOXMARKHNT )
     , m_TOXMark( pTextHt->GetTOXMark() )
     , m_TOXName( m_TOXMark.GetTOXType()->GetTypeName() )
@@ -427,7 +427,7 @@ bool SwHistorySetTOXMark::IsEqual( const SwTOXMark& rCmp ) const
 }
 
 SwHistoryResetText::SwHistoryResetText( sal_uInt16 nWhich,
-            sal_Int32 nAttrStart, sal_Int32 nAttrEnd, sal_uLong nNodePos )
+            sal_Int32 nAttrStart, sal_Int32 nAttrEnd, SwNodeOffset nNodePos )
     : SwHistoryHint( HSTRY_RESETTXTHNT )
     , m_nNodeIndex( nNodePos ), m_nStart( nAttrStart ), m_nEnd( nAttrEnd )
     , m_nAttr( nWhich )
@@ -444,7 +444,7 @@ void SwHistoryResetText::SetInDoc( SwDoc* pDoc, bool )
     }
 }
 
-SwHistorySetFootnote::SwHistorySetFootnote( SwTextFootnote* pTextFootnote, sal_uLong nNodePos )
+SwHistorySetFootnote::SwHistorySetFootnote( SwTextFootnote* pTextFootnote, SwNodeOffset nNodePos )
     : SwHistoryHint( HSTRY_SETFTNHNT )
     , m_pUndo( new SwUndoSaveSection )
     , m_FootnoteNumber( pTextFootnote->GetFootnote().GetNumStr() )
@@ -536,7 +536,7 @@ void SwHistorySetFootnote::SetInDoc( SwDoc* pDoc, bool )
     }
 }
 
-SwHistoryChangeFormatColl::SwHistoryChangeFormatColl( SwFormatColl* pFormatColl, sal_uLong nNd,
+SwHistoryChangeFormatColl::SwHistoryChangeFormatColl( SwFormatColl* pFormatColl, SwNodeOffset nNd,
                             SwNodeType nNodeWhich )
     : SwHistoryHint( HSTRY_CHGFMTCOLL )
     , m_pColl( pFormatColl )
@@ -609,9 +609,9 @@ SwHistoryBookmark::SwHistoryBookmark(
     , m_aName(rBkmk.GetName())
     , m_bHidden(false)
     , m_nNode(bSavePos ?
-        rBkmk.GetMarkPos().nNode.GetIndex() : 0)
+        rBkmk.GetMarkPos().nNode.GetIndex() : SwNodeOffset(0))
     , m_nOtherNode(bSaveOtherPos ?
-        rBkmk.GetOtherMarkPos().nNode.GetIndex() : 0)
+        rBkmk.GetOtherMarkPos().nNode.GetIndex() : SwNodeOffset(0))
     , m_nContent(bSavePos ?
         rBkmk.GetMarkPos().nContent.GetIndex() : 0)
     , m_nOtherContent(bSaveOtherPos ?
@@ -827,7 +827,7 @@ void SwHistoryTextFieldmark::ResetInDoc(SwDoc& rDoc)
 }
 
 SwHistorySetAttrSet::SwHistorySetAttrSet( const SfxItemSet& rSet,
-                        sal_uLong nNodePos, const o3tl::sorted_vector<sal_uInt16> &rSetArr )
+                        SwNodeOffset nNodePos, const o3tl::sorted_vector<sal_uInt16> &rSetArr )
     : SwHistoryHint( HSTRY_SETATTRSET )
     , m_OldSet( rSet )
     , m_ResetArray( 0, 4 )
@@ -1034,7 +1034,7 @@ SwHistory::~SwHistory()
 void SwHistory::Add(
     const SfxPoolItem* pOldValue,
     const SfxPoolItem* pNewValue,
-    sal_uLong nNodeIdx)
+    SwNodeOffset nNodeIdx)
 {
     OSL_ENSURE( !m_nEndDiff, "History was not deleted after REDO" );
     const sal_uInt16 nWhich(pNewValue->Which());
@@ -1068,7 +1068,7 @@ void SwHistory::Add(
 }
 
 // FIXME: refactor the following "Add" methods (DRY)?
-void SwHistory::Add( SwTextAttr* pHint, sal_uLong nNodeIdx, bool bNewAttr )
+void SwHistory::Add( SwTextAttr* pHint, SwNodeOffset nNodeIdx, bool bNewAttr )
 {
     OSL_ENSURE( !m_nEndDiff, "History was not deleted after REDO" );
 
@@ -1110,7 +1110,7 @@ void SwHistory::Add( SwTextAttr* pHint, sal_uLong nNodeIdx, bool bNewAttr )
     m_SwpHstry.push_back( std::move(pHt) );
 }
 
-void SwHistory::Add( SwFormatColl* pColl, sal_uLong nNodeIdx, SwNodeType nWhichNd )
+void SwHistory::Add( SwFormatColl* pColl, SwNodeOffset nNodeIdx, SwNodeType nWhichNd )
 {
     OSL_ENSURE( !m_nEndDiff, "History was not deleted after REDO" );
 
@@ -1269,7 +1269,7 @@ sal_uInt16 SwHistory::SetTmpEnd( sal_uInt16 nNewTmpEnd )
 
 void SwHistory::CopyFormatAttr(
     const SfxItemSet& rSet,
-    sal_uLong nNodeIdx)
+    SwNodeOffset nNodeIdx)
 {
     if(!rSet.Count())
         return;
@@ -1305,7 +1305,7 @@ void SwHistory::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 void SwHistory::CopyAttr(
     SwpHints const * pHts,
-    const sal_uLong nNodeIdx,
+    const SwNodeOffset nNodeIdx,
     const sal_Int32 nStart,
     const sal_Int32 nEnd,
     const bool bCopyFields )
@@ -1362,7 +1362,7 @@ void SwHistory::CopyAttr(
 SwRegHistory::SwRegHistory( SwHistory* pHst )
     : SwClient( nullptr )
     , m_pHistory( pHst )
-    , m_nNodeIndex( ULONG_MAX )
+    , m_nNodeIndex( NODE_OFFSET_MAX )
 {
     MakeSetWhichIds();
 }

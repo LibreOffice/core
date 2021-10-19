@@ -381,8 +381,8 @@ void SwTextFootnote::InvalidateNumberInLayout()
     if ( m_pStartNode )
     {
         // must iterate over all TextNodes because of footnotes on other pages
-        sal_uLong nSttIdx = m_pStartNode->GetIndex() + 1;
-        sal_uLong nEndIdx = m_pStartNode->GetNode().EndOfSectionIndex();
+        SwNodeOffset nSttIdx = m_pStartNode->GetIndex() + 1;
+        SwNodeOffset nEndIdx = m_pStartNode->GetNode().EndOfSectionIndex();
         for( ; nSttIdx < nEndIdx; ++nSttIdx )
         {
             SwNode* pNd;
@@ -409,14 +409,14 @@ void SwTextFootnote::CopyFootnote(
         SwNodes &rDstNodes = rDstDoc.GetNodes();
 
         // copy only the content of the section
-        SwNodeRange aRg( *m_pStartNode, 1,
+        SwNodeRange aRg( *m_pStartNode, SwNodeOffset(1),
                     *m_pStartNode->GetNode().EndOfSectionNode() );
 
         // insert at the end of rDest, i.e., the nodes are appended.
         // nDestLen contains number of ContentNodes in rDest _before_ copy.
         SwNodeIndex aStart( *(rDest.GetStartNode()) );
         SwNodeIndex aEnd( *aStart.GetNode().EndOfSectionNode() );
-        sal_uLong  nDestLen = aEnd.GetIndex() - aStart.GetIndex() - 1;
+        SwNodeOffset nDestLen = aEnd.GetIndex() - aStart.GetIndex() - 1;
 
         m_pTextNode->GetDoc().GetDocumentContentOperationsManager().CopyWithFlyInFly(aRg, aEnd);
 
@@ -587,14 +587,14 @@ void SwTextFootnote::dumpAsXml(xmlTextWriterPtr pWriter) const
     {
         (void)xmlTextWriterStartElement(pWriter, BAD_CAST("m_pStartNode"));
         (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"),
-                                    BAD_CAST(OString::number(m_pStartNode->GetIndex()).getStr()));
+                                    BAD_CAST(OString::number(sal_Int32(m_pStartNode->GetIndex())).getStr()));
         (void)xmlTextWriterEndElement(pWriter);
     }
     if (m_pTextNode)
     {
         (void)xmlTextWriterStartElement(pWriter, BAD_CAST("m_pTextNode"));
         (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"),
-                                    BAD_CAST(OString::number(m_pTextNode->GetIndex()).getStr()));
+                                    BAD_CAST(OString::number(sal_Int32(m_pTextNode->GetIndex())).getStr()));
         (void)xmlTextWriterEndElement(pWriter);
     }
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("m_nSeqNo"));

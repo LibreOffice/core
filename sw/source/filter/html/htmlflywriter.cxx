@@ -194,7 +194,7 @@ sal_uInt16 SwHTMLWriter::GuessFrameType( const SwFrameFormat& rFrameFormat,
         eType = HTML_FRMTYPE_TEXT;
 
         const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
-        sal_uLong nStt = rFlyContent.GetContentIdx()->GetIndex()+1;
+        SwNodeOffset nStt = rFlyContent.GetContentIdx()->GetIndex()+1;
         const SwNode* pNd = m_pDoc->GetNodes()[ nStt ];
 
         if( pNd->IsGrfNode() )
@@ -209,7 +209,7 @@ sal_uInt16 SwHTMLWriter::GuessFrameType( const SwFrameFormat& rFrameFormat,
         }
         else
         {
-            sal_uLong nEnd = m_pDoc->GetNodes()[nStt-1]->EndOfSectionIndex();
+            SwNodeOffset nEnd = m_pDoc->GetNodes()[nStt-1]->EndOfSectionIndex();
 
             const SfxPoolItem* pItem;
             const SfxItemSet& rItemSet = rFrameFormat.GetAttrSet();
@@ -223,7 +223,7 @@ sal_uInt16 SwHTMLWriter::GuessFrameType( const SwFrameFormat& rFrameFormat,
             else if( pNd->IsTableNode() )
             {
                 const SwTableNode *pTableNd = pNd->GetTableNode();
-                sal_uLong nTableEnd = pTableNd->EndOfSectionIndex();
+                SwNodeOffset nTableEnd = pTableNd->EndOfSectionIndex();
 
                 if( nTableEnd+1 == nEnd )
                 {
@@ -250,7 +250,7 @@ sal_uInt16 SwHTMLWriter::GuessFrameType( const SwFrameFormat& rFrameFormat,
                     {
                         for( auto & pHTMLPosFlyFrame : *m_pHTMLPosFlyFrames )
                         {
-                            sal_uLong nIdx = pHTMLPosFlyFrame->GetNdIndex().GetIndex();
+                            SwNodeOffset nIdx = pHTMLPosFlyFrame->GetNdIndex().GetIndex();
                             bEmpty = (nIdx != nStt) && (nIdx != nStt-1);
                             if( !bEmpty || nIdx > nStt )
                                 break;
@@ -355,7 +355,7 @@ void SwHTMLWriter::CollectFlyFrames()
     }
 }
 
-bool SwHTMLWriter::OutFlyFrame( sal_uLong nNdIdx, sal_Int32 nContentIdx, HtmlPosition nPos,
+bool SwHTMLWriter::OutFlyFrame( SwNodeOffset nNdIdx, sal_Int32 nContentIdx, HtmlPosition nPos,
                               HTMLOutContext *pContext )
 {
     bool bFlysLeft = false; // Are there still Flys left at the current node position?
@@ -1540,8 +1540,8 @@ static Writer& OutHTML_FrameFormatTableNode( Writer& rWrt, const SwFrameFormat& 
     SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
-    sal_uLong nStt = rFlyContent.GetContentIdx()->GetIndex()+1;
-    sal_uLong nEnd = rHTMLWrt.m_pDoc->GetNodes()[nStt-1]->EndOfSectionIndex();
+    SwNodeOffset nStt = rFlyContent.GetContentIdx()->GetIndex()+1;
+    SwNodeOffset nEnd = rHTMLWrt.m_pDoc->GetNodes()[nStt-1]->EndOfSectionIndex();
 
     OUString aCaption;
     bool bTopCaption = false;
@@ -1559,7 +1559,7 @@ static Writer& OutHTML_FrameFormatTableNode( Writer& rWrt, const SwFrameFormat& 
     OSL_ENSURE( pTableNd, "Frame does not contain a table" );
     if( pTableNd )
     {
-        sal_uLong nTableEnd = pTableNd->EndOfSectionIndex();
+        SwNodeOffset nTableEnd = pTableNd->EndOfSectionIndex();
         OSL_ENSURE( nTableEnd == nEnd - 1 ||
                 (nTableEnd == nEnd - 2 && !bTopCaption),
                 "Invalid frame content for a table" );
@@ -1641,7 +1641,7 @@ static Writer & OutHTML_FrameFormatAsMulticol( Writer& rWrt,
     rHTMLWrt.IncIndentLevel();  // indent the content of Multicol
 
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
-    sal_uLong nStt = rFlyContent.GetContentIdx()->GetIndex();
+    SwNodeOffset nStt = rFlyContent.GetContentIdx()->GetIndex();
     const SwStartNode* pSttNd = rWrt.m_pDoc->GetNodes()[nStt]->GetStartNode();
     OSL_ENSURE( pSttNd, "Where is the start node" );
 
@@ -1724,7 +1724,7 @@ static Writer& OutHTML_FrameFormatAsDivOrSpan( Writer& rWrt,
     rHTMLWrt.m_bLFPossible = true;
 
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
-    sal_uLong nStt = rFlyContent.GetContentIdx()->GetIndex();
+    SwNodeOffset nStt = rFlyContent.GetContentIdx()->GetIndex();
 
     // Output frame-anchored frames that are anchored to the start node
     rHTMLWrt.OutFlyFrame( nStt, 0, HtmlPosition::Any );
@@ -1899,7 +1899,7 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
         return rWrt;
 
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
-    sal_uLong nStt = rFlyContent.GetContentIdx()->GetIndex()+1;
+    SwNodeOffset nStt = rFlyContent.GetContentIdx()->GetIndex()+1;
     SwGrfNode *pGrfNd = rHTMLWrt.m_pDoc->GetNodes()[ nStt ]->GetGrfNode();
     OSL_ENSURE( pGrfNd, "Grf node expected" );
     if( !pGrfNd )
@@ -2097,7 +2097,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
     }
 
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
-    sal_uLong nStt = rFlyContent.GetContentIdx()->GetIndex();
+    SwNodeOffset nStt = rFlyContent.GetContentIdx()->GetIndex();
     const SwStartNode* pSttNd = rWrt.m_pDoc->GetNodes()[nStt]->GetStartNode();
     OSL_ENSURE( pSttNd, "Where is the start node" );
 
@@ -2199,7 +2199,7 @@ void SwHTMLWriter::AddLinkTarget( const OUString& rURL )
         SwPosition aPos( *m_pCurrentPam->GetPoint() );
         if( m_pDoc->GotoOutline( aPos, aOutline ) )
         {
-            sal_uInt32 nIdx = aPos.nNode.GetIndex();
+            SwNodeOffset nIdx = aPos.nNode.GetIndex();
 
             decltype(m_aOutlineMarkPoss)::size_type nIns=0;
             while( nIns < m_aOutlineMarkPoss.size() &&

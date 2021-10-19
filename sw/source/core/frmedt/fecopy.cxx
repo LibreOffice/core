@@ -744,17 +744,17 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
         // Creation of the list of insert positions
         std::vector< Insertion > aCopyVector;
         // The number of text portions of the rectangular selection
-        const sal_uInt32 nSelCount = aCpyPam.GetPoint()->nNode.GetIndex()
+        const SwNodeOffset nSelCount = aCpyPam.GetPoint()->nNode.GetIndex()
                        - aCpyPam.GetMark()->nNode.GetIndex();
-        sal_uInt32 nCount = nSelCount;
+        SwNodeOffset nCount = nSelCount;
         SwNodeIndex aClpIdx( aIdx );
         SwPaM* pStartCursor = GetCursor();
         SwPaM* pCurrCursor = pStartCursor;
-        sal_uInt32 nCursorCount = pStartCursor->GetRingContainer().size();
+        SwNodeOffset nCursorCount( pStartCursor->GetRingContainer().size() );
         // If the target selection is a multi-selection, often the last and first
         // cursor of the ring points to identical document positions. Then
         // we should avoid double insertion of text portions...
-        while( nCursorCount > 1 && *pCurrCursor->GetPoint() ==
+        while( nCursorCount > SwNodeOffset(1) && *pCurrCursor->GetPoint() ==
             *(pCurrCursor->GetPrev()->GetPoint()) )
         {
             --nCursorCount;
@@ -785,8 +785,8 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                     if (aCursor.UpDown(false, ++nMove, nullptr, 0, *GetLayout()))
                         aInsertPos = *aCursor.GetPoint();
                     else // if there is no paragraph we have to create it
-                        bCompletePara = nCount > 0;
-                    nCursorCount = 0;
+                        bCompletePara = nCount > SwNodeOffset(0);
+                    nCursorCount = SwNodeOffset(0);
                 }
                 else // as long as we find more insert positions in the cursor ring
                 {    // we'll take them
@@ -808,7 +808,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
             // text portion
             if( !nCount && nCursorCount )
             {
-                nCount = std::min( nSelCount, nCursorCount );
+                nCount = min( nSelCount, nCursorCount );
                 aIdx = aClpIdx; // Start of clipboard content
             }
         }
@@ -817,7 +817,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
             SwPosition& rInsPos = *item.second;
             SwPaM& rCopy = *item.first;
             const SwStartNode* pBoxNd = rInsPos.nNode.GetNode().FindTableBoxStartNode();
-            if( pBoxNd && 2 == pBoxNd->EndOfSectionIndex() - pBoxNd->GetIndex() &&
+            if( pBoxNd && SwNodeOffset(2) == pBoxNd->EndOfSectionIndex() - pBoxNd->GetIndex() &&
                 rCopy.GetPoint()->nNode != rCopy.GetMark()->nNode )
             {
                 // if more than one node will be copied into a cell
@@ -1054,7 +1054,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                 SwPosition& rInsPos = *rPaM.GetPoint();
                 const SwStartNode* pBoxNd = rInsPos.nNode.GetNode().
                                                     FindTableBoxStartNode();
-                if( pBoxNd && 2 == pBoxNd->EndOfSectionIndex() -
+                if( pBoxNd && SwNodeOffset(2) == pBoxNd->EndOfSectionIndex() -
                                 pBoxNd->GetIndex() &&
                     aCpyPam.GetPoint()->nNode != aCpyPam.GetMark()->nNode )
                 {
@@ -1082,9 +1082,9 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
 
                     // Update the rsid of each pasted text node.
                     SwNodes &rDestNodes = GetDoc()->GetNodes();
-                    sal_uLong const nEndIdx = aPaM.End()->nNode.GetIndex();
+                    SwNodeOffset const nEndIdx = aPaM.End()->nNode.GetIndex();
 
-                    for (sal_uLong nIdx = aPaM.Start()->nNode.GetIndex();
+                    for (SwNodeOffset nIdx = aPaM.Start()->nNode.GetIndex();
                         nIdx <= nEndIdx; ++nIdx)
                     {
                         SwTextNode *const pTextNode = rDestNodes[nIdx]->GetTextNode();

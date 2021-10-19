@@ -270,12 +270,12 @@ static sal_uInt16 ClearItem_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
 sal_uInt16 SwNode::GetSectionLevel() const
 {
     // EndNode of a BaseSection? They are always 0!
-    if( IsEndNode() && 0 == m_pStartOfSection->StartOfSectionIndex() )
+    if( IsEndNode() && SwNodeOffset(0) == m_pStartOfSection->StartOfSectionIndex() )
         return 0;
 
     sal_uInt16 nLevel;
     const SwNode* pNode = IsStartNode() ? this : m_pStartOfSection;
-    for( nLevel = 1; 0 != pNode->StartOfSectionIndex(); ++nLevel )
+    for( nLevel = 1; SwNodeOffset(0) != pNode->StartOfSectionIndex(); ++nLevel )
         pNode = pNode->m_pStartOfSection;
     return IsEndNode() ? nLevel-1 : nLevel;
 }
@@ -318,7 +318,7 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const SwNodeType nNdType )
  * @param nPos position within the array where the node will be inserted
  * @param nNdType the type of node to insert
  */
-SwNode::SwNode( SwNodes& rNodes, sal_uLong nPos, const SwNodeType nNdType )
+SwNode::SwNode( SwNodes& rNodes, SwNodeOffset nPos, const SwNodeType nNdType )
     : m_nNodeType( nNdType )
     , m_nAFormatNumLvl( 0 )
     , m_bIgnoreDontExpand( false)
@@ -471,7 +471,7 @@ bool SwNode::IsProtect() const
 
 /// Find the PageDesc that is used to format this node. If the Layout is available,
 /// we search through that. Else we can only do it the hard way by searching onwards through the nodes.
-const SwPageDesc* SwNode::FindPageDesc( size_t* pPgDescNdIdx ) const
+const SwPageDesc* SwNode::FindPageDesc( SwNodeOffset* pPgDescNdIdx ) const
 {
     if ( !GetNodes().IsDocNodes() )
     {
@@ -902,7 +902,7 @@ void SwNode::dumpAsXml(xmlTextWriterPtr pWriter) const
 
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"), BAD_CAST(OString::number(static_cast<sal_uInt8>(GetNodeType())).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(GetIndex()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(sal_Int32(GetIndex())).getStr()));
 
     switch (GetNodeType())
     {
@@ -960,7 +960,7 @@ SwStartNode::SwStartNode( const SwNodeIndex &rWhere, const SwNodeType nNdType,
     m_pEndOfSection = reinterpret_cast<SwEndNode*>(this);
 }
 
-SwStartNode::SwStartNode( SwNodes& rNodes, sal_uLong nPos )
+SwStartNode::SwStartNode( SwNodes& rNodes, SwNodeOffset nPos )
     : SwNode( rNodes, nPos, SwNodeType::Start ), m_eStartNodeType( SwNormalStartNode )
 {
     if( !nPos )
@@ -976,7 +976,7 @@ void SwStartNode::CheckSectionCondColl() const
 {
 //FEATURE::CONDCOLL
     SwNodeIndex aIdx( *this );
-    sal_uLong nEndIdx = EndOfSectionIndex();
+    SwNodeOffset nEndIdx = EndOfSectionIndex();
     const SwNodes& rNds = GetNodes();
     SwContentNode* pCNd;
     while( nullptr != ( pCNd = rNds.GoNext( &aIdx )) && pCNd->GetIndex() < nEndIdx )
@@ -1023,7 +1023,7 @@ void SwStartNode::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST(pName));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"), BAD_CAST(OString::number(static_cast<sal_uInt8>(GetNodeType())).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(GetIndex()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(sal_Int32(GetIndex())).getStr()));
 
     if (IsTableNode())
     {
@@ -1062,7 +1062,7 @@ SwEndNode::SwEndNode( const SwNodeIndex &rWhere, SwStartNode& rSttNd )
     m_pStartOfSection->m_pEndOfSection = this;
 }
 
-SwEndNode::SwEndNode( SwNodes& rNds, sal_uLong nPos, SwStartNode& rSttNd )
+SwEndNode::SwEndNode( SwNodes& rNds, SwNodeOffset nPos, SwStartNode& rSttNd )
     : SwNode( rNds, nPos, SwNodeType::End )
 {
     m_pStartOfSection = &rSttNd;
@@ -1437,7 +1437,7 @@ void SwContentNode::DelFrames(SwRootFrame const*const pLayout)
                         // otherwise pointer should have been updated to a different node
                         assert(this == pMerged->pLastNode);
                         assert(pMerged->extents.empty());
-                        for (sal_uLong i = pMerged->pLastNode->GetIndex() - 1;;
+                        for (SwNodeOffset i = pMerged->pLastNode->GetIndex() - 1;;
                                 --i)
                         {
                             assert(pMerged->pFirstNode->GetIndex() <= i);
@@ -1456,7 +1456,7 @@ void SwContentNode::DelFrames(SwRootFrame const*const pLayout)
                     {
                         // tdf#130680 find the previous node that is a
                         // listener of pMerged; see CheckParaRedlineMerge()
-                        for (sal_uLong i = GetIndex() - 1;
+                        for (SwNodeOffset i = GetIndex() - 1;
                              this == pMerged->pLastNode; --i)
                         {
                             SwNode *const pNode = GetNodes()[i];
@@ -1854,7 +1854,7 @@ bool SwContentNode::CanJoinPrev( SwNodeIndex* pIdx ) const
             ( pNd->IsEndNode() && pNd->StartOfSectionNode()->IsSectionNode() )))
         --aIdx;
 
-    if (0 == aIdx.GetIndex())
+    if (SwNodeOffset(0) == aIdx.GetIndex())
         return false;
     if (!lcl_CheckMaxLength(*pNd, *this))
     {

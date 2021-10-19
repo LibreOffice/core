@@ -108,7 +108,7 @@ bool SwFltStackEntry::MakeRegion(SwDoc& rDoc, SwPaM& rRegion, RegionMode const e
     // does this range actually contain something?
     // empty range is allowed if at start of empty paragraph
     // fields are special: never have range, so leave them
-    sal_uLong nMk = rMkPos.m_nNode.GetIndex() + 1;
+    SwNodeOffset nMk = rMkPos.m_nNode.GetIndex() + 1;
     const SwNodes& rMkNodes = rMkPos.m_nNode.GetNodes();
     if (nMk >= rMkNodes.Count())
         return false;
@@ -132,7 +132,7 @@ bool SwFltStackEntry::MakeRegion(SwDoc& rDoc, SwPaM& rRegion, RegionMode const e
     rRegion.SetMark();
     if (rMkPos.m_nNode != rPtPos.m_nNode)
     {
-        sal_uLong n = rPtPos.m_nNode.GetIndex() + 1;
+        SwNodeOffset n = rPtPos.m_nNode.GetIndex() + 1;
         SwNodes& rNodes = rRegion.GetPoint()->nNode.GetNodes();
         if (n >= rNodes.Count())
             return false;
@@ -183,7 +183,7 @@ SwFltControlStack::~SwFltControlStack()
 // same paragraph further out by one character.
 void SwFltControlStack::MoveAttrs(const SwPosition& rPos, MoveAttrsMode eMode)
 {
-    sal_uLong nPosNd = rPos.nNode.GetIndex();
+    SwNodeOffset nPosNd = rPos.nNode.GetIndex();
     sal_uInt16 nPosCt = rPos.nContent.GetIndex() - 1;
 
     for (size_t i = 0, nCnt = m_Entries.size(); i < nCnt; ++i)
@@ -432,7 +432,7 @@ static bool MakePoint(const SwFltStackEntry& rEntry, SwDoc& rDoc,
     // attribute's format needs to be set.
     rRegion.DeleteMark();
 
-    sal_uLong nMk = rEntry.m_aMkPos.m_nNode.GetIndex() + 1;
+    SwNodeOffset nMk = rEntry.m_aMkPos.m_nNode.GetIndex() + 1;
     const SwNodes& rMkNodes = rEntry.m_aMkPos.m_nNode.GetNodes();
     if (nMk >= rMkNodes.Count())
         return false;
