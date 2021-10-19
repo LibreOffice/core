@@ -12,6 +12,7 @@
       <object class="GtkScrolledWindow" id="scrolledwindow">
         <property name="visible">True</property>
         <property name="can-focus">True</property>
+        <property name="hexpand">True</property>
         <property name="border-width">0</property>
         <property name="hscrollbar-policy">never</property>
         <property name="vscrollbar-policy">always</property>
@@ -31,7 +32,7 @@
         </child>
       </object>
       <packing>
-        <property name="expand">True</property>
+        <property name="expand">False</property>
         <property name="fill">True</property>
         <property name="position">0</property>
       </packing>
