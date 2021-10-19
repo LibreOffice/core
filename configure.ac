@@ -2736,7 +2736,7 @@ dnl ENABLE_JAVA="TRUE" if we want there to be *run-time* (and build-time) suppor
 dnl ENABLE_JAVA="" indicate no Java support at all
 
 dnl ===================================================================
-dnl Check OS X SDK and compiler
+dnl Check macOS SDK and compiler
 dnl ===================================================================
 
 if test $_os = Darwin; then
@@ -2749,8 +2749,8 @@ if test $_os = Darwin; then
     # For developers with a current Xcode, the lowest-numbered SDK
     # higher than or equal to the minimum required should be found.
 
-    AC_MSG_CHECKING([what Mac OS X SDK to use])
-    for _macosx_sdk in ${with_macosx_sdk-11.1 10.15 10.14 10.13 10.12}; do
+    AC_MSG_CHECKING([what macOS SDK to use])
+    for _macosx_sdk in ${with_macosx_sdk-11.3 11.1 11.0 10.15 10.14 10.13}; do
         MACOSX_SDK_PATH=`xcrun --sdk macosx${_macosx_sdk} --show-sdk-path 2> /dev/null`
         if test -d "$MACOSX_SDK_PATH"; then
             with_macosx_sdk="${_macosx_sdk}"
@@ -2764,24 +2764,12 @@ if test $_os = Darwin; then
         fi
     done
     if test ! -d "$MACOSX_SDK_PATH"; then
-        AC_MSG_ERROR([Could not find an appropriate Mac OS X SDK])
+        AC_MSG_ERROR([Could not find an appropriate macOS SDK])
     fi
 
-    if test $_os = iOS; then
-        if test "$enable_ios_simulator" = "yes"; then
-            useos=iphonesimulator
-        else
-            useos=iphoneos
-        fi
-        MACOSX_SDK_PATH=`xcrun --sdk ${useos} --show-sdk-path 2> /dev/null`
-    fi
     AC_MSG_RESULT([SDK $with_macosx_sdk at $MACOSX_SDK_PATH])
 
-
     case $with_macosx_sdk in
-    10.12)
-        MACOSX_SDK_VERSION=101200
-        ;;
     10.13)
         MACOSX_SDK_VERSION=101300
         ;;
@@ -2791,16 +2779,30 @@ if test $_os = Darwin; then
     10.15)
         MACOSX_SDK_VERSION=101500
         ;;
+    11.0)
+        MACOSX_SDK_VERSION=110000
+        ;;
     11.1)
         MACOSX_SDK_VERSION=110100
         ;;
+    11.3)
+        MACOSX_SDK_VERSION=110300
+        ;;
     *)
-        AC_MSG_ERROR([with-macosx-sdk $with_macosx_sdk is not a supported value, supported values are 10.12--11.1])
+        AC_MSG_ERROR([with-macosx-sdk $with_macosx_sdk is not a supported value, supported values are 10.13--11.3])
         ;;
     esac
 
+    if test "$host_cpu" = arm64 -a $MACOSX_SDK_VERSION -lt 110000; then
+        AC_MSG_ERROR([with-macosx-sdk $with_macosx_sdk is not a supported value for Apple Silicon])
+    fi
+
     if test "$with_macosx_version_min_required" = "" ; then
-        with_macosx_version_min_required="10.9";
+        if test "$host_cpu" = x86_64; then
+            with_macosx_version_min_required="10.10";
+        else
+            with_macosx_version_min_required="11.0";
+        fi
     fi
 
     if test "$with_macosx_version_max_allowed" = "" ; then
@@ -2814,10 +2816,17 @@ if test $_os = Darwin; then
     FRAMEWORKSHOME="$MACOSX_SDK_PATH/System/Library/Frameworks"
     MACOSX_DEPLOYMENT_TARGET="$with_macosx_version_min_required"
 
+    AC_MSG_CHECKING([whether Xcode is new enough])
+    my_xcode_ver1=$(xcrun xcodebuild -version | head -n 1)
+    my_xcode_ver2=${my_xcode_ver1#Xcode }
+    my_xcode_ver3=$(printf %s "$my_xcode_ver2" | $AWK -F. '{ print $1*100+($2<100?$2:99) }')
+    if test "$my_xcode_ver3" -ge 1103; then
+        AC_MSG_RESULT([yes ($my_xcode_ver2)])
+    else
+        AC_MSG_ERROR(["$my_xcode_ver1" is too old or unrecognized, must be at least Xcode 11.3])
+    fi
+
     case "$with_macosx_version_min_required" in
-    10.9)
-        MAC_OS_X_VERSION_MIN_REQUIRED="1090"
-        ;;
     10.10)
         MAC_OS_X_VERSION_MIN_REQUIRED="101000"
         ;;
@@ -2836,35 +2845,59 @@ if test $_os = Darwin; then
     10.15)
         MAC_OS_X_VERSION_MIN_REQUIRED="101500"
         ;;
+    10.16)
+        MAC_OS_X_VERSION_MIN_REQUIRED="101600"
+        ;;
+    11.0)
+        MAC_OS_X_VERSION_MIN_REQUIRED="110000"
+        ;;
+    11.1)
+        MAC_OS_X_VERSION_MIN_REQUIRED="110100"
+        ;;
+    11.3)
+        MAC_OS_X_VERSION_MIN_REQUIRED="110300"
+        ;;
     *)
-        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported values are 10.9--15])
+        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported values are 10.10--11.3])
         ;;
     esac
-    MAC_OS_X_VERSION_MIN_REQUIRED_DOTS=$with_macosx_version_min_required
 
     LIBTOOL=/usr/bin/libtool
     INSTALL_NAME_TOOL=install_name_tool
     if test -z "$save_CC"; then
-        AC_MSG_CHECKING([what compiler to use])
         stdlib=-stdlib=libc++
-        if test "$ENABLE_LTO" = TRUE; then
-            lto=-flto
+
+        AC_MSG_CHECKING([what C compiler to use])
+        CC="`xcrun -find clang`"
+        CC_BASE=`first_arg_basename "$CC"`
+        if test "$host_cpu" = x86_64; then
+            CC+=" -target x86_64-apple-macos"
+        else
+            CC+=" -target arm64-apple-macos"
         fi
-        CC="`xcrun -find clang` -m64 $lto -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
-        CXX="`xcrun -find clang++` -m64 $lto $stdlib -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+        CC+=" -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+        AC_MSG_RESULT([$CC])
+
+        AC_MSG_CHECKING([what C++ compiler to use])
+        CXX="`xcrun -find clang++`"
+        CXX_BASE=`first_arg_basename "$CXX"`
+        if test "$host_cpu" = x86_64; then
+            CXX+=" -target x86_64-apple-macos"
+        else
+            CXX+=" -target arm64-apple-macos"
+        fi
+        CXX+=" $stdlib -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+        AC_MSG_RESULT([$CXX])
+
         INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
         AR=`xcrun -find ar`
         NM=`xcrun -find nm`
         STRIP=`xcrun -find strip`
         LIBTOOL=`xcrun -find libtool`
         RANLIB=`xcrun -find ranlib`
-        AC_MSG_RESULT([$CC and $CXX])
     fi
 
     case "$with_macosx_version_max_allowed" in
-    10.9)
-        MAC_OS_X_VERSION_MAX_ALLOWED="1090"
-        ;;
     10.10)
         MAC_OS_X_VERSION_MAX_ALLOWED="101000"
         ;;
@@ -2883,17 +2916,23 @@ if test $_os = Darwin; then
     10.15)
         MAC_OS_X_VERSION_MAX_ALLOWED="101500"
         ;;
+    11.0)
+        MAC_OS_X_VERSION_MAX_ALLOWED="110000"
+        ;;
     11.1)
         MAC_OS_X_VERSION_MAX_ALLOWED="110100"
         ;;
+    11.3)
+        MAC_OS_X_VERSION_MAX_ALLOWED="110300"
+        ;;
     *)
-        AC_MSG_ERROR([with-macosx-version-max-allowed $with_macosx_version_max_allowed is not a supported value, supported values are 10.9--11.1])
+        AC_MSG_ERROR([with-macosx-version-max-allowed $with_macosx_version_max_allowed is not a supported value, supported values are 10.10--11.3])
         ;;
     esac
 
     AC_MSG_CHECKING([that macosx-version-min-required is coherent with macosx-version-max-allowed])
     if test $MAC_OS_X_VERSION_MIN_REQUIRED -gt $MAC_OS_X_VERSION_MAX_ALLOWED; then
-        AC_MSG_ERROR([the version minimumn required, $MAC_OS_X_VERSION_MIN_REQUIRED, must be <= the version maximum allowed, $MAC_OS_X_VERSION_MAX_ALLOWED])
+        AC_MSG_ERROR([the version minimum required, $MAC_OS_X_VERSION_MIN_REQUIRED, must be <= the version maximum allowed, $MAC_OS_X_VERSION_MAX_ALLOWED])
     else
         AC_MSG_RESULT([ok])
     fi
@@ -2964,11 +3003,9 @@ if test $_os = Darwin; then
 
     AC_MSG_CHECKING([whether to sandbox the application])
 
-    if test -z "$MACOSX_CODESIGNING_IDENTITY" -a "$enable_macosx_sandbox" = yes; then
-        AC_MSG_ERROR([OS X sandboxing requires code signing])
-    elif test -n "$ENABLE_JAVA" -a "$enable_macosx_sandbox" = yes; then
-        AC_MSG_ERROR([OS X sandboxing (actually App Store rules) disallows use of Java])
-    elif test -n "$MACOSX_CODESIGNING_IDENTITY" -a "$enable_macosx_sandbox" = yes; then
+    if test -n "$ENABLE_JAVA" -a "$enable_macosx_sandbox" = yes; then
+        AC_MSG_ERROR([macOS sandboxing (actually App Store rules) disallows use of Java])
+    elif test "$enable_macosx_sandbox" = yes; then
         ENABLE_MACOSX_SANDBOX=TRUE
         AC_DEFINE(HAVE_FEATURE_MACOSX_SANDBOX)
         AC_MSG_RESULT([yes])
@@ -2976,17 +3013,16 @@ if test $_os = Darwin; then
         AC_MSG_RESULT([no])
     fi
 
-    AC_MSG_CHECKING([what OS X app bundle identifier to use])
+    AC_MSG_CHECKING([what macOS app bundle identifier to use])
     MACOSX_BUNDLE_IDENTIFIER=$with_macosx_bundle_identifier
     AC_MSG_RESULT([$MACOSX_BUNDLE_IDENTIFIER])
 fi
 AC_SUBST(MACOSX_SDK_PATH)
 AC_SUBST(MACOSX_DEPLOYMENT_TARGET)
 AC_SUBST(MAC_OS_X_VERSION_MIN_REQUIRED)
-AC_SUBST(MAC_OS_X_VERSION_MIN_REQUIRED_DOTS)
 AC_SUBST(MAC_OS_X_VERSION_MAX_ALLOWED)
 AC_SUBST(INSTALL_NAME_TOOL)
-AC_SUBST(LIBTOOL) # Note that the OS X libtool command is unrelated to GNU libtool
+AC_SUBST(LIBTOOL) # Note that the macOS libtool command is unrelated to GNU libtool
 AC_SUBST(MACOSX_CODESIGNING_IDENTITY)
 AC_SUBST(MACOSX_PACKAGE_SIGNING_IDENTITY)
 AC_SUBST(ENABLE_MACOSX_SANDBOX)
