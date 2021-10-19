@@ -51,6 +51,7 @@ SbiScanner::SbiScanner(const OUString& rBuf, StarBASIC* p)
     , bCompatible(false)
     , bVBASupportOn(false)
     , bPrevLineExtentsComment(false)
+    , bClosingUnderscore(false)
     , bInStatement(false)
 {
 }
@@ -286,19 +287,11 @@ bool SbiScanner::NextSym()
         if(nCol < aLine.getLength() && bCompatible && aSym.equalsIgnoreAsciiCase("go"))
             scanGoto();
 
-        // replace closing '_' by space when end of line is following
-        // (wrong line continuation otherwise)
+        // tdf#125637 - check for closing underscore
         if (nCol == aLine.getLength() && aLine[nCol - 1] == '_')
         {
-            // We are going to modify a potentially shared string, so force
-            // a copy, so that aSym is not modified by the following operation
-            OUString aSymCopy( aSym.getStr(), aSym.getLength() );
-            aSym = aSymCopy;
-
-            // HACK: modifying a potentially shared string here!
-            const_cast<sal_Unicode*>(aLine.getStr())[nLineIdx - 1] = ' ';
+            bClosingUnderscore = true;
         }
-
         // type recognition?
         // don't test the exclamation mark
         // if there's a symbol behind it
@@ -685,7 +678,7 @@ PrevLineCommentLbl:
 
 
 eoln:
-    if( nCol && aLine[--nLineIdx] == '_' )
+    if (nCol && aLine[--nLineIdx] == '_' && !bClosingUnderscore)
     {
         nLineIdx = -1;
         bool bRes = NextSym();
@@ -706,6 +699,7 @@ eoln:
         nCol2 = nOldCol2;
         aSym = "\n";
         nColLock = 0;
+        bClosingUnderscore = false;
         return true;
     }
 }
