@@ -37,7 +37,7 @@ $(eval $(call gb_CppunitTest_use_externals,xmlsecurity_pdfsigning,\
 ifneq ($(OS),WNT)
 ifneq (,$(ENABLE_NSS))
 $(eval $(call gb_CppunitTest_use_externals,xmlsecurity_pdfsigning,\
-    nss3 \
+    nssutil3 \
 ))
 endif
 endif
