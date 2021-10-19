@@ -833,6 +833,9 @@ bool SwCursorShell::MoveFieldType(
 
 bool SwCursorShell::GotoFootnoteAnchor(const SwTextFootnote& rTextFootnote)
 {
+    if (SwWrtShell* pWrtSh = dynamic_cast<SwWrtShell*>(this))
+        pWrtSh->addCurrentPosition();
+
     bool bRet = false;
     SwCursor* pCursor = getShellCursor(true);
 
@@ -1482,6 +1485,9 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                         bRet = true;
                         if( bSetCursor )
                         {
+                            if (SwWrtShell* pWrtSh = dynamic_cast<SwWrtShell*>(this))
+                                pWrtSh->addCurrentPosition();
+
                             SwCallLink aLk( *this ); // watch Cursor-Moves
                             SwCursorSaveState aSaveState( *m_pCurrentCursor );
                             m_pCurrentCursor->GetPoint()->nNode = *static_cast<SwTextFootnote*>(pTextAttr)->GetStartNode();
