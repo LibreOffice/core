@@ -16,6 +16,23 @@
       "message": "This doesn\u0027t fix it for me. Both double-clicking and the save button silently replace.\nSteps to reproduce:\n1.) open a remote file (I have one in my quick-start).\n2.) save-as. I see a list of files, select one of the other ones, and press save.\nResult: it just saves straight away.\n\nCaveat: I\u0027m working from last nights master - so not with today\u0027s patches.",
       "revId": "b2148e9485d6696388416e2172ce0c512b7c3985",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ed4232f_4ffb0797",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-19T10:59:02Z",
+      "side": 1,
+      "message": "Over lunch I compiled the latest master. Still saves without overwrite prompt.\nNotice that I am NOT talking about remote-save now, but just \"save-as\", when a remote document is already open.",
+      "revId": "b2148e9485d6696388416e2172ce0c512b7c3985",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
