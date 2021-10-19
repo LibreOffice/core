@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e72d0f8_66c44c05",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-10-19T10:11:55Z",
+      "side": 1,
+      "message": "as mentioned in https://gerrit.libreoffice.org/c/core/+/123551, the test doesn\u0027t fail without the fix in place...",
+      "revId": "10fd6020634704b270d3b88858077dfba862f5db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
