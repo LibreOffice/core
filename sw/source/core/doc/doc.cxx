@@ -1186,7 +1186,7 @@ void SwDoc::InvalidateAutoCompleteFlag()
     o3tl::sorted_vector<SwRootFrame*> aAllLayouts = GetAllLayouts();
     for( auto aLayout : aAllLayouts )
         aLayout->AllInvalidateAutoCompleteWords();
-    for( sal_uLong nNd = 1, nCnt = GetNodes().Count(); nNd < nCnt; ++nNd )
+    for( SwNodeOffset nNd(1), nCnt = GetNodes().Count(); nNd < nCnt; ++nNd )
     {
         SwTextNode* pTextNode = GetNodes()[ nNd ]->GetTextNode();
         if ( pTextNode ) pTextNode->SetAutoCompleteWordDirty( true );
@@ -1226,14 +1226,14 @@ void SwDoc::Summary(SwDoc& rExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bImp
     for( SwOutlineNodes::size_type i = 0; i < rOutNds.size(); ++i )
     {
         ::SetProgressState( static_cast<tools::Long>(i), GetDocShell() );
-        const sal_uLong nIndex = rOutNds[ i ]->GetIndex();
+        const SwNodeOffset nIndex = rOutNds[ i ]->GetIndex();
 
         const int nLvl = GetNodes()[ nIndex ]->GetTextNode()->GetAttrOutlineLevel()-1;
         if( nLvl > nLevel )
             continue;
-        tools::Long nEndOfs = 1;
+        SwNodeOffset nEndOfs(1);
         sal_uInt8 nWish = nPara;
-        sal_uLong nNextOutNd = i + 1 < rOutNds.size() ?
+        SwNodeOffset nNextOutNd = i + 1 < rOutNds.size() ?
             rOutNds[ i + 1 ]->GetIndex() : GetNodes().Count();
         bool bKeep = false;
         while( ( nWish || bKeep ) && nIndex + nEndOfs < nNextOutNd &&
@@ -1246,7 +1246,7 @@ void SwDoc::Summary(SwDoc& rExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bImp
             ++nEndOfs;
         }
 
-        SwNodeRange aRange( *rOutNds[ i ], 0, *rOutNds[ i ], nEndOfs );
+        SwNodeRange aRange( *rOutNds[ i ], SwNodeOffset(0), *rOutNds[ i ], nEndOfs );
         GetNodes().Copy_( aRange, aEndOfDoc );
     }
     const SwTextFormatColls *pColl = rExtDoc.GetTextFormatColls();
@@ -1275,7 +1275,7 @@ void SwDoc::Summary(SwDoc& rExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bImp
                 pNd->ChgFormatColl( pMyColl );
             }
             if( !pNd->Len() &&
-                pNd->StartOfSectionIndex()+2 < pNd->EndOfSectionIndex() )
+                pNd->StartOfSectionIndex()+SwNodeOffset(2) < pNd->EndOfSectionIndex() )
             {
                 bDelete = true;
                 rExtDoc.GetNodes().Delete( aIndx );
@@ -1298,8 +1298,8 @@ void RemoveOrDeleteContents(SwTextNode* pTextNd, IDocumentContentOperations& xOp
     // 1. removing the paragraph would result in an empty section or
     // 2. if the paragraph is the last paragraph in the section and
     //    there is no paragraph in front of the paragraph:
-    if ((2 == pTextNd->EndOfSectionIndex() - pTextNd->StartOfSectionIndex())
-        || (1 == pTextNd->EndOfSectionIndex() - pTextNd->GetIndex()
+    if ((SwNodeOffset(2) == pTextNd->EndOfSectionIndex() - pTextNd->StartOfSectionIndex())
+        || (SwNodeOffset(1) == pTextNd->EndOfSectionIndex() - pTextNd->GetIndex()
             && !pTextNd->GetNodes()[pTextNd->GetIndex() - 1]->GetTextNode()))
     {
         xOperations.DeleteRange(aPam);
@@ -1401,7 +1401,7 @@ bool SwDoc::RemoveInvisibleContent()
     }
 
     // Remove any hidden paragraph (hidden text attribute)
-    for( sal_uLong n = GetNodes().Count(); n; )
+    for( SwNodeOffset n = GetNodes().Count(); n; )
     {
         SwTextNode* pTextNd = GetNodes()[ --n ]->GetTextNode();
         if ( pTextNd )
@@ -1412,7 +1412,7 @@ bool SwDoc::RemoveInvisibleContent()
                 bRemoved = true;
                 bRet = true;
 
-                if (2 == pTextNd->EndOfSectionIndex() - pTextNd->StartOfSectionIndex())
+                if (SwNodeOffset(2) == pTextNd->EndOfSectionIndex() - pTextNd->StartOfSectionIndex())
                 {
                     SwFrameFormat *const pFormat = pTextNd->StartOfSectionNode()->GetFlyFormat();
                     if (nullptr != pFormat)
@@ -1540,7 +1540,7 @@ bool SwDoc::HasInvisibleContent() const
         return true;
 
     // Search for any hidden paragraph (hidden text attribute)
-    for( sal_uLong n = GetNodes().Count()-1; n; --n)
+    for( SwNodeOffset n = GetNodes().Count()-SwNodeOffset(1); n; --n)
     {
         SwTextNode* pTextNd = GetNodes()[ n ]->GetTextNode();
         if ( pTextNd &&
@@ -1762,7 +1762,7 @@ OUString SwDoc::GetPaMDescr(const SwPaM & rPam)
 
 bool SwDoc::ContainsHiddenChars() const
 {
-    for( sal_uLong n = GetNodes().Count(); n; )
+    for( SwNodeOffset n = GetNodes().Count(); n; )
     {
         SwNode* pNd = GetNodes()[ --n ];
         if ( pNd->IsTextNode() && pNd->GetTextNode()->HasHiddenCharAttribute( false ) )

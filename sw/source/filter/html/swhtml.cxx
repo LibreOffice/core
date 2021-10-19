@@ -610,7 +610,7 @@ SvParserState SwHTMLParser::CallParser()
     return eRet;
 }
 
-bool SwHTMLParser::CanRemoveNode(sal_uLong nNodeIdx) const
+bool SwHTMLParser::CanRemoveNode(SwNodeOffset nNodeIdx) const
 {
     const SwNode *pPrev = m_xDoc->GetNodes()[nNodeIdx - 1];
     return pPrev->IsContentNode() || (pPrev->IsEndNode() && pPrev->StartOfSectionNode()->IsSectionNode());
@@ -805,7 +805,7 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
         if( !pPos->nContent.GetIndex() && !bLFStripped )
         {
             SwTextNode* pCurrentNd;
-            sal_uLong nNodeIdx = pPos->nNode.GetIndex();
+            SwNodeOffset nNodeIdx = pPos->nNode.GetIndex();
 
             bool bHasFlysOrMarks =
                 HasCurrentParaFlys() || HasCurrentParaBookmarks( true );
@@ -2497,7 +2497,7 @@ void SwHTMLParser::AddParSpace()
 
     m_bNoParSpace = false;
 
-    sal_uLong nNdIdx = m_pPam->GetPoint()->nNode.GetIndex() - 1;
+    SwNodeOffset nNdIdx = m_pPam->GetPoint()->nNode.GetIndex() - 1;
 
     SwTextNode *pTextNode = m_xDoc->GetNodes()[nNdIdx]->GetTextNode();
     if( !pTextNode )
@@ -2758,7 +2758,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
         pAttr = m_aSetAttrTab[ --n ];
         sal_uInt16 nWhich = pAttr->m_pItem->Which();
 
-        sal_uLong nEndParaIdx = pAttr->GetEndParagraphIdx();
+        SwNodeOffset nEndParaIdx = pAttr->GetEndParagraphIdx();
         bool bSetAttr;
         if( bChkEnd )
         {
@@ -2782,7 +2782,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
         {
             // Attributes in body nodes array section shouldn't be set if we are in a
             // special nodes array section, but vice versa it's possible.
-            sal_uLong nEndOfIcons = m_xDoc->GetNodes().GetEndOfExtras().GetIndex();
+            SwNodeOffset nEndOfIcons = m_xDoc->GetNodes().GetEndOfExtras().GetIndex();
             bSetAttr = nEndParaIdx < rEndIdx.GetIndex() ||
                        rEndIdx.GetIndex() > nEndOfIcons ||
                        nEndParaIdx <= nEndOfIcons;
@@ -3014,7 +3014,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
         OSL_ENSURE( RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId(),
                 "Only At-Para flys need special handling" );
         const SwPosition *pFlyPos = rAnchor.GetContentAnchor();
-        sal_uLong nFlyParaIdx = pFlyPos->nNode.GetIndex();
+        SwNodeOffset nFlyParaIdx = pFlyPos->nNode.GetIndex();
         bool bMoveFly;
         if( bChkEnd )
         {
@@ -3024,7 +3024,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
         }
         else
         {
-            sal_uLong nEndOfIcons = m_xDoc->GetNodes().GetEndOfExtras().GetIndex();
+            SwNodeOffset nEndOfIcons = m_xDoc->GetNodes().GetEndOfExtras().GetIndex();
             bMoveFly = nFlyParaIdx < rEndIdx.GetIndex() ||
                        rEndIdx.GetIndex() > nEndOfIcons ||
                        nFlyParaIdx <= nEndOfIcons;
@@ -3366,8 +3366,8 @@ void SwHTMLParser::SplitAttrTab( std::shared_ptr<HTMLAttrTable> const & rNewAttr
 
     if( bMoveEndBack )
     {
-        sal_uLong nOldEnd = nEndIdx.GetIndex();
-        sal_uLong nTmpIdx;
+        SwNodeOffset nOldEnd = nEndIdx.GetIndex();
+        SwNodeOffset nTmpIdx;
         if( ( nTmpIdx = m_xDoc->GetNodes().GetEndOfExtras().GetIndex()) >= nOldEnd ||
             ( nTmpIdx = m_xDoc->GetNodes().GetEndOfAutotext().GetIndex()) >= nOldEnd )
         {

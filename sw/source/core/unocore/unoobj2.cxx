@@ -303,10 +303,10 @@ void SwUnoCursorHelper::GetCursorAttr(SwPaM & rPam,
     {
         SwPosition const & rStart( *rCurrent.Start() );
         SwPosition const & rEnd( *rCurrent.End() );
-        const sal_uLong nSttNd = rStart.nNode.GetIndex();
-        const sal_uLong nEndNd = rEnd  .nNode.GetIndex();
+        const SwNodeOffset nSttNd = rStart.nNode.GetIndex();
+        const SwNodeOffset nEndNd = rEnd  .nNode.GetIndex();
 
-        if (nEndNd - nSttNd >= nMaxLookup)
+        if (nEndNd - nSttNd >= SwNodeOffset(nMaxLookup))
         {
             rSet.ClearItem();
             rSet.InvalidateAllItems();
@@ -315,7 +315,7 @@ void SwUnoCursorHelper::GetCursorAttr(SwPaM & rPam,
 
         // the first node inserts the values into the get set
         // all other nodes merge their values into the get set
-        for (sal_uLong n = nSttNd; n <= nEndNd; ++n)
+        for (SwNodeOffset n = nSttNd; n <= nEndNd; ++n)
         {
             SwNode *const pNd = rPam.GetDoc().GetNodes()[ n ];
             switch (pNd->GetNodeType())
@@ -368,7 +368,7 @@ struct SwXParagraphEnumerationImpl final : public SwXParagraphEnumeration
     /// embedded tables.
     SwStartNode const*const m_pOwnStartNode;
     SwTable const*const m_pOwnTable;
-    const sal_uLong m_nEndIndex;
+    const SwNodeOffset m_nEndIndex;
     sal_Int32 m_nFirstParaStart;
     sal_Int32 m_nLastParaEnd;
     bool m_bFirstParagraph;

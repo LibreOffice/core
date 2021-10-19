@@ -327,10 +327,10 @@ struct UndoTransliterate_Data
     OUString        sText;
     std::unique_ptr<SwHistory> pHistory;
     std::unique_ptr<Sequence< sal_Int32 >> pOffsets;
-    sal_uLong           nNdIdx;
+    SwNodeOffset   nNdIdx;
     sal_Int32      nStart, nLen;
 
-    UndoTransliterate_Data( sal_uLong nNd, sal_Int32 nStt, sal_Int32 nStrLen, const OUString& rText )
+    UndoTransliterate_Data( SwNodeOffset nNd, sal_Int32 nStt, sal_Int32 nStrLen, const OUString& rText )
         : sText( rText ),
         nNdIdx( nNd ), nStart( nStt ), nLen( nStrLen )
     {}

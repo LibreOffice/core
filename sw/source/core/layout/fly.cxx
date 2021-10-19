@@ -214,7 +214,7 @@ void SwFlyFrame::InsertCnt()
 
     const SwFormatContent& rContent = GetFormat()->GetContent();
     OSL_ENSURE( rContent.GetContentIdx(), ":-( no content prepared." );
-    sal_uLong nIndex = rContent.GetContentIdx()->GetIndex();
+    SwNodeOffset nIndex = rContent.GetContentIdx()->GetIndex();
     // Lower() means SwColumnFrame; the Content then needs to be inserted into the (Column)BodyFrame
     ::InsertCnt_( Lower() ? static_cast<SwLayoutFrame*>(static_cast<SwLayoutFrame*>(Lower())->Lower()) : static_cast<SwLayoutFrame*>(this),
                   GetFormat()->GetDoc(), nIndex );
@@ -524,7 +524,7 @@ void SwFlyFrame::UnchainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow )
     // The Follow needs his own content to be served
     const SwFormatContent &rContent = pFollow->GetFormat()->GetContent();
     OSL_ENSURE( rContent.GetContentIdx(), ":-( No content prepared." );
-    sal_uLong nIndex = rContent.GetContentIdx()->GetIndex();
+    SwNodeOffset nIndex = rContent.GetContentIdx()->GetIndex();
     // Lower() means SwColumnFrame: this one contains another SwBodyFrame
     ::InsertCnt_( pFollow->Lower() ? const_cast<SwLayoutFrame*>(static_cast<const SwLayoutFrame*>(static_cast<const SwLayoutFrame*>(pFollow->Lower())->Lower()))
                                    : static_cast<SwLayoutFrame*>(pFollow),
