@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e769bd4b_0dd371a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-10-19T10:48:06Z",
+      "side": 1,
+      "message": "Hi Tomaz, this should be a nice and easy one. ",
+      "revId": "5fab58cc35dfb428df573c4100c0242122eb969d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
