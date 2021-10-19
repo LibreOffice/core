@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3764a0d2_63ca9f07",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-10-19T14:27:52Z",
+      "side": 1,
+      "message": "I abandoned because the unicode and utf-8 encoding issues are too complex for me to understand. Although by patch works, I am not sure whether it is the right approach. If someone feel it is correct then please feel free to restore this.",
+      "revId": "504d5dc0c30b7900331dfe139e98b3b1f611c0f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
