@@ -683,7 +683,7 @@ css::uno::Sequence< css::uno::Any > Content::setPropertyValues(
     aEvent.PropertyHandle = -1;
 
     sal_Int32 nChanged = 0, nTitlePos = -1;
-    const char *newName = nullptr;
+    OUString aNewTitle;
     css::uno::Sequence< css::beans::PropertyChangeEvent > aChanges(nCount);
 
     css::uno::Sequence< css::uno::Any > aRet( nCount );
@@ -703,7 +703,6 @@ css::uno::Sequence< css::uno::Any > Content::setPropertyValues(
         }
         else if ( rValue.Name == "Title" )
         {
-            OUString aNewTitle;
             if (!( rValue.Value >>= aNewTitle ))
             {
                 aRet[ n ] <<= css::beans::IllegalTypeException
@@ -722,7 +721,7 @@ css::uno::Sequence< css::uno::Any > Content::setPropertyValues(
             }
 
             OString sNewTitle = OUStringToOString(aNewTitle, RTL_TEXTENCODING_UTF8);
-            newName = sNewTitle.getStr();
+            const char *newName = sNewTitle.getStr();
             const char *oldName = g_file_info_get_name( pInfo);
 
             if (!newName || !oldName || strcmp(newName, oldName))
@@ -743,7 +742,6 @@ css::uno::Sequence< css::uno::Any > Content::setPropertyValues(
         {
             SAL_WARN("ucb.ucp.gio", "Unknown property " << rValue.Name);
             aRet[ n ] <<= getReadOnlyException( static_cast< cppu::OWeakObject * >(this) );
-            //TODO
         }
     }
 
@@ -763,8 +761,11 @@ css::uno::Sequence< css::uno::Any > Content::setPropertyValues(
         {
             if (nTitlePos > -1)
             {
-                OUString aNewURL = getParentURL() +
-                    OUString( newName, strlen(newName), RTL_TEXTENCODING_UTF8 );
+                OUString aNewURL = getParentURL();
+                if (!aNewURL.isEmpty() && aNewURL[aNewURL.getLength() - 1] != '/')
+                    aNewURL += "/";
+                aNewURL += aNewTitle;
+
                 css::uno::Reference< css::ucb::XContentIdentifier > xNewId
                     = new ::ucbhelper::ContentIdentifier( aNewURL );
 
