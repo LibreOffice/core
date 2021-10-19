@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6561cd9e_a5ecd07d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-10-19T10:10:19Z",
+      "side": 1,
+      "message": "The test doesn\u0027t crash without the fix in place...",
+      "revId": "eda5ac4a63fac6bce939b6791dec52270618dc29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
