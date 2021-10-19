@@ -223,7 +223,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
     }
     else
     {
-        sal_uLong nNd = m_nNode;
+        SwNodeOffset nNd = m_nNode;
         sal_Int32 nCnt = m_nContent;
         if( m_nLen )
         {
@@ -344,7 +344,7 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
             else
             {
                 // re-insert content again (first detach m_pUndoNodeIndex!)
-                sal_uLong const nMvNd = m_pUndoNodeIndex->GetIndex();
+                SwNodeOffset const nMvNd = m_pUndoNodeIndex->GetIndex();
                 m_pUndoNodeIndex.reset();
                 MoveFromUndoNds(*pTmpDoc, nMvNd, *pPam->GetMark());
             }
@@ -481,7 +481,7 @@ class SwUndoReplace::Impl
 {
     OUString m_sOld;
     OUString m_sIns;
-    sal_uLong m_nSttNd, m_nEndNd, m_nOffset;
+    SwNodeOffset m_nSttNd, m_nEndNd, m_nOffset;
     sal_Int32 m_nSttCnt, m_nEndCnt, m_nSetPos, m_nSelEnd;
     bool m_bSplitNext : 1;
     bool m_bRegExp : 1;
@@ -599,7 +599,7 @@ SwUndoReplace::Impl::Impl(
 
     m_nSetPos = m_pHistory->Count();
 
-    sal_uLong nNewPos = pStt->nNode.GetIndex();
+    SwNodeOffset nNewPos = pStt->nNode.GetIndex();
     m_nOffset = m_nSttNd - nNewPos;
 
     if ( pNd->GetpSwpHints() )
@@ -615,7 +615,7 @@ SwUndoReplace::Impl::Impl(
         m_pHistory->Add( pNd->GetTextColl(), nNewPos, SwNodeType::Text );
 
         SwTextNode* pNext = pEnd->nNode.GetNode().GetTextNode();
-        sal_uLong nTmp = pNext->GetIndex();
+        SwNodeOffset nTmp = pNext->GetIndex();
         m_pHistory->CopyAttr( pNext->GetpSwpHints(), nTmp, 0,
                             pNext->GetText().getLength(), true );
         if( pNext->HasSwAttrSet() )
@@ -959,7 +959,7 @@ void SwUndoInsertLabel::RepeatImpl(::sw::RepeatContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
     const SwPosition& rPos = *rContext.GetRepeatPaM().GetPoint();
 
-    sal_uLong nIdx = 0;
+    SwNodeOffset nIdx(0);
 
     SwContentNode* pCNd = rPos.nNode.GetNode().GetContentNode();
     if( pCNd )
@@ -1028,7 +1028,7 @@ void SwUndoInsertLabel::SetFlys( SwFrameFormat& rOldFly, SfxItemSet const & rChg
         {
             OBJECT.pUndoAttr = aTmp.ReleaseUndo().release();
         }
-        OBJECT.pUndoFly = new SwUndoInsLayFormat( &rNewFly,0,0 );
+        OBJECT.pUndoFly = new SwUndoInsLayFormat( &rNewFly, SwNodeOffset(0), 0 );
     }
 }
 

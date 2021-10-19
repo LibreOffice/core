@@ -1323,7 +1323,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
         case FN_NUM_BULLET_MOVEUP:
             if (!rWrtSh.IsAddMode())
-                rWrtSh.MoveParagraph(-1);
+                rWrtSh.MoveParagraph(SwNodeOffset(-1));
             rReq.Done();
             break;
         case SID_RUBY_DIALOG:

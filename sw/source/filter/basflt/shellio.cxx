@@ -170,7 +170,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
         {
             // set Pam to the previous node, so that it is not also moved
             const SwNodeIndex& rTmp = pPam->GetPoint()->nNode;
-            pUndoPam.emplace( rTmp, rTmp, 0, -1 );
+            pUndoPam.emplace( rTmp, rTmp, SwNodeOffset(0), SwNodeOffset(-1) );
         }
 
         // store for now all Fly's
@@ -267,7 +267,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
                                 // UGLY: temp. enable undo
                                 mxDoc->GetIDocumentUndoRedo().DoUndo(true);
                                 mxDoc->GetIDocumentUndoRedo().AppendUndo(
-                                    std::make_unique<SwUndoInsLayFormat>( pFrameFormat,0,0 ) );
+                                    std::make_unique<SwUndoInsLayFormat>( pFrameFormat, SwNodeOffset(0), 0 ) );
                                 mxDoc->GetIDocumentUndoRedo().DoUndo(false);
                                 mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );
                             }
@@ -375,7 +375,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
         // not insert: set the redline mode read from settings.xml
         eOld = ePostReadRedlineFlags & ~RedlineFlags::Ignore;
 
-        mxDoc->getIDocumentFieldsAccess().SetFieldsDirty(false, nullptr, 0);
+        mxDoc->getIDocumentFieldsAccess().SetFieldsDirty(false, nullptr, SwNodeOffset(0));
     }
 
     mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );

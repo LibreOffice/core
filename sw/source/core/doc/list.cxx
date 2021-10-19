@@ -32,7 +32,7 @@ SwList::SwList( const OUString& sListId,
       mnMarkedListLevel( MAXLEVEL )
 {
     // create empty list trees for the document ranges
-    const SwNode* pNode = rNodes[0];
+    const SwNode* pNode = rNodes[SwNodeOffset(0)];
     do
     {
         SwPaM aPam( *pNode, *pNode->EndOfSectionNode() );
@@ -45,7 +45,7 @@ SwList::SwList( const OUString& sListId,
         pNode = pNode->EndOfSectionNode();
         if (pNode != &rNodes.GetEndOfContent())
         {
-            sal_uLong nIndex = pNode->GetIndex();
+            SwNodeOffset nIndex = pNode->GetIndex();
             nIndex++;
             pNode = rNodes[nIndex];
         }

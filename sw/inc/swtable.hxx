@@ -27,6 +27,7 @@
 #include "swrect.hxx"
 #include "swtblfmt.hxx"
 #include "docary.hxx"
+#include "nodeoffset.hxx"
 
 #include <memory>
 #include <vector>
@@ -291,8 +292,8 @@ public:
     void CopyHeadlineIntoTable( SwTableNode& rTableNd );
 
     // Get box, whose start index is set on nBoxStt.
-          SwTableBox* GetTableBox( sal_uLong nSttIdx );
-    const SwTableBox* GetTableBox( sal_uLong nSttIdx ) const
+          SwTableBox* GetTableBox( SwNodeOffset nSttIdx );
+    const SwTableBox* GetTableBox( SwNodeOffset nSttIdx ) const
                         {   return const_cast<SwTable*>(this)->GetTableBox( nSttIdx );  }
 
     // Returns true if table contains nestings.
@@ -456,7 +457,7 @@ public:
 
     void RemoveFromTable();
     const SwStartNode *GetSttNd() const { return m_pStartNode; }
-    sal_uLong GetSttIdx() const;
+    SwNodeOffset GetSttIdx() const;
     // it doesn't contain box content
     bool IsEmpty() const;
 
@@ -479,7 +480,7 @@ public:
     // Contains box contents, that can be formatted as a number?
     bool HasNumContent( double& rNum, sal_uInt32& rFormatIndex,
                     bool& rIsEmptyTextNd ) const;
-    sal_uLong IsValidNumTextNd( bool bCheckAttr = true ) const;
+    SwNodeOffset IsValidNumTextNd( bool bCheckAttr = true ) const;
     // If a table formula is set, test if box contents is congruent with number.
     // (For Redo of change of NumFormat!).
     bool IsNumberChanged() const;

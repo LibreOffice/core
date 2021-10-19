@@ -540,7 +540,7 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, SwOutlineNodes::difference_type 
     else
         pNd = GetNodes().GetOutLineNds()[ nCurrentPos + nOffset ];
 
-    sal_uLong nNewPos = pNd->GetIndex();
+    SwNodeOffset nNewPos = pNd->GetIndex();
 
     // And now a correction of the insert position if necessary...
     SwNodeIndex aInsertPos( *pNd, -1 );
@@ -589,10 +589,10 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, SwOutlineNodes::difference_type 
     // If a Position inside the special nodes array sections was calculated,
     // set it to document start instead.
     // Sections or Tables at the document start will be pushed backwards.
-    nNewPos = std::max( nNewPos, GetNodes().GetEndOfExtras().GetIndex() + 2 );
+    nNewPos = std::max( nNewPos, GetNodes().GetEndOfExtras().GetIndex() + SwNodeOffset(2) );
 
-    tools::Long nOffs = nNewPos - ( 0 < nOffset ? aEndRg.GetIndex() : aSttRg.GetIndex());
-    SwPaM aPam( aSttRg, aEndRg, 0, -1 );
+    SwNodeOffset nOffs = nNewPos - ( 0 < nOffset ? aEndRg.GetIndex() : aSttRg.GetIndex());
+    SwPaM aPam( aSttRg, aEndRg, SwNodeOffset(0), SwNodeOffset(-1) );
     return MoveParagraph( aPam, nOffs, true );
 }
 
@@ -1239,9 +1239,9 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
 
     bool bFirst = true;
 
-    const sal_uLong nStt = rPaM.Start()->nNode.GetIndex();
-    const sal_uLong nEnd = rPaM.End()->nNode.GetIndex();
-    for (sal_uLong n = nStt; n <= nEnd; n++)
+    const SwNodeOffset nStt = rPaM.Start()->nNode.GetIndex();
+    const SwNodeOffset nEnd = rPaM.End()->nNode.GetIndex();
+    for (SwNodeOffset n = nStt; n <= nEnd; n++)
     {
         SwTextNode * pCNd = GetNodes()[n]->GetTextNode();
 
@@ -1322,8 +1322,8 @@ void SwDoc::DelNumRules(const SwPaM& rPam, SwRootFrame const*const pLayout)
 {
     SwPaM aPam(rPam, nullptr);
     ExpandPamForParaPropsNodes(aPam, pLayout);
-    sal_uLong nStt = aPam.Start()->nNode.GetIndex();
-    sal_uLong const nEnd = aPam.End()->nNode.GetIndex();
+    SwNodeOffset nStt = aPam.Start()->nNode.GetIndex();
+    SwNodeOffset const nEnd = aPam.End()->nNode.GetIndex();
 
     SwUndoDelNum* pUndo;
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -1554,7 +1554,7 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
     }
 
     while( bNext ? ( aIdx.GetIndex() < aIdx.GetNodes().Count() - 1 )
-                 : aIdx.GetIndex() != 0 )
+                 : aIdx.GetIndex() != SwNodeOffset(0) )
     {
         if( aIdx.GetNode().IsTextNode() )
         {
@@ -1707,13 +1707,13 @@ bool SwDoc::NumUpDown(const SwPaM& rPam, bool bDown, SwRootFrame const*const pLa
 {
     SwPaM aPam(rPam, nullptr);
     ExpandPamForParaPropsNodes(aPam, pLayout);
-    sal_uLong nStt = aPam.Start()->nNode.GetIndex();
-    sal_uLong const nEnd = aPam.End()->nNode.GetIndex();
+    SwNodeOffset nStt = aPam.Start()->nNode.GetIndex();
+    SwNodeOffset const nEnd = aPam.End()->nNode.GetIndex();
 
     // -> outline nodes are promoted or demoted differently
     bool bOnlyOutline = true;
     bool bOnlyNonOutline = true;
-    for (sal_uLong n = nStt; n <= nEnd; n++)
+    for (SwNodeOffset n = nStt; n <= nEnd; n++)
     {
         SwTextNode * pTextNd = GetNodes()[n]->GetTextNode();
 
@@ -1746,7 +1746,7 @@ bool SwDoc::NumUpDown(const SwPaM& rPam, bool bDown, SwRootFrame const*const pLa
         Only promote or demote if all selected paragraphs are
         promotable resp. demotable.
         */
-        for (sal_uLong nTmp = nStt; nTmp <= nEnd; ++nTmp)
+        for (SwNodeOffset nTmp = nStt; nTmp <= nEnd; ++nTmp)
         {
             SwTextNode* pTNd = GetNodes()[ nTmp ]->GetTextNode();
 
@@ -1780,7 +1780,7 @@ bool SwDoc::NumUpDown(const SwPaM& rPam, bool bDown, SwRootFrame const*const pLa
             }
 
             SwTextNode* pPrev = nullptr;
-            for(sal_uLong nTmp = nStt; nTmp <= nEnd; ++nTmp )
+            for(SwNodeOffset nTmp = nStt; nTmp <= nEnd; ++nTmp )
             {
                 SwTextNode* pTNd = GetNodes()[ nTmp ]->GetTextNode();
 
@@ -1819,7 +1819,7 @@ bool SwDoc::NumUpDown(const SwPaM& rPam, bool bDown, SwRootFrame const*const pLa
 // this function doesn't contain any numbering-related code, but it is
 // primarily called to move numbering-relevant paragraphs around, hence
 // it will expand its selection to include full SwTextFrames.
-bool SwDoc::MoveParagraph(SwPaM& rPam, tools::Long nOffset, bool const bIsOutlMv)
+bool SwDoc::MoveParagraph(SwPaM& rPam, SwNodeOffset nOffset, bool const bIsOutlMv)
 {
     MakeAllOutlineContentTemporarilyVisible a(this);
 
@@ -1840,12 +1840,12 @@ bool SwDoc::MoveParagraph(SwPaM& rPam, tools::Long nOffset, bool const bIsOutlMv
         if (nodes.first && nodes.first != &rPam.Start()->nNode.GetNode())
         {
             assert(nodes.second);
-            if (nOffset < 0)
+            if (nOffset < SwNodeOffset(0))
             {
                 nOffset += rPam.Start()->nNode.GetIndex() - nodes.first->GetIndex();
-                if (0 <= nOffset)   // hack: there are callers that know what
+                if (SwNodeOffset(0) <= nOffset)   // hack: there are callers that know what
                 {                   // node they want; those should never need
-                    nOffset = -1;   // this; other callers just pass in -1
+                    nOffset = SwNodeOffset(-1);   // this; other callers just pass in -1
                 }                   // and those should still move
             }
             if (!rPam.HasMark())
@@ -1860,12 +1860,12 @@ bool SwDoc::MoveParagraph(SwPaM& rPam, tools::Long nOffset, bool const bIsOutlMv
         if (nodes.second && nodes.second != &rPam.End()->nNode.GetNode())
         {
             assert(nodes.first);
-            if (0 < nOffset)
+            if (SwNodeOffset(0) < nOffset)
             {
                 nOffset -= nodes.second->GetIndex() - rPam.End()->nNode.GetIndex();
-                if (nOffset <= 0)   // hack: there are callers that know what
+                if (nOffset <= SwNodeOffset(0))   // hack: there are callers that know what
                 {                   // node they want; those should never need
-                    nOffset = +1;   // this; other callers just pass in +1
+                    nOffset = SwNodeOffset(+1);   // this; other callers just pass in +1
                 }                   // and those should still move
             }
             if (!rPam.HasMark())
@@ -1878,7 +1878,7 @@ bool SwDoc::MoveParagraph(SwPaM& rPam, tools::Long nOffset, bool const bIsOutlMv
             rPam.End()->nContent.Assign(nodes.second, nodes.second->GetTextNode()->Len());
         }
 
-        if (nOffset > 0)
+        if (nOffset > SwNodeOffset(0))
         {   // sw_redlinehide: avoid moving into delete redline, skip forward
             if (GetNodes().GetEndOfContent().GetIndex() <= rPam.End()->nNode.GetIndex() + nOffset)
             {
@@ -1904,7 +1904,7 @@ bool SwDoc::MoveParagraph(SwPaM& rPam, tools::Long nOffset, bool const bIsOutlMv
         }
         else
         {   // sw_redlinehide: avoid moving into delete redline, skip backward
-            if (rPam.Start()->nNode.GetIndex() + nOffset < 1)
+            if (rPam.Start()->nNode.GetIndex() + nOffset < SwNodeOffset(1))
             {
                 return false; // can't move
             }
@@ -1930,13 +1930,13 @@ bool SwDoc::MoveParagraph(SwPaM& rPam, tools::Long nOffset, bool const bIsOutlMv
     return MoveParagraphImpl(rPam, nOffset, bIsOutlMv, pLayout);
 }
 
-bool SwDoc::MoveParagraphImpl(SwPaM& rPam, tools::Long const nOffset,
+bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
         bool const bIsOutlMv, SwRootFrame const*const pLayout)
 {
     const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
 
-    sal_uLong nStIdx = pStt->nNode.GetIndex();
-    sal_uLong nEndIdx = pEnd->nNode.GetIndex();
+    SwNodeOffset nStIdx = pStt->nNode.GetIndex();
+    SwNodeOffset nEndIdx = pEnd->nNode.GetIndex();
 
     // Here are some sophisticated checks whether the wished PaM will be moved or not.
     // For moving outlines (bIsOutlMv) I've already done some checks, so here are two different
@@ -1973,9 +1973,9 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, tools::Long const nOffset,
             return false; // A start node which ends behind the moved range => no.
     }
 
-    sal_uLong nInStIdx, nInEndIdx;
-    tools::Long nOffs = nOffset;
-    if( nOffset > 0 )
+    SwNodeOffset nInStIdx, nInEndIdx;
+    SwNodeOffset nOffs = nOffset;
+    if( nOffset > SwNodeOffset(0) )
     {
         nInEndIdx = nEndIdx;
         nEndIdx += nOffset;
@@ -1984,7 +1984,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, tools::Long const nOffset,
     else
     {
         // Impossible to move to negative index
-        if( o3tl::make_unsigned(std::abs( nOffset )) > nStIdx)
+        if( abs( nOffset ) > nStIdx)
             return false;
 
         nInEndIdx = nStIdx - 1;
@@ -2082,8 +2082,8 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, tools::Long const nOffset,
         SwDataChanged aTmp( rPam );
     }
 
-    SwNodeIndex aIdx( nOffset > 0 ? pEnd->nNode : pStt->nNode, nOffs );
-    SwNodeRange aMvRg( pStt->nNode, 0, pEnd->nNode, +1 );
+    SwNodeIndex aIdx( nOffset > SwNodeOffset(0) ? pEnd->nNode : pStt->nNode, nOffs );
+    SwNodeRange aMvRg( pStt->nNode, SwNodeOffset(0), pEnd->nNode, SwNodeOffset(+1) );
 
     SwRangeRedline* pOwnRedl = nullptr;
     if( getIDocumentRedlineAccess().IsRedlineOn() )
@@ -2139,7 +2139,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, tools::Long const nOffset,
             rOrigPam.GetPoint()->nContent.Assign( rOrigPam.GetContentNode(), 0 );
 
             bool bDelLastPara = !aInsPos.nNode.GetNode().IsContentNode();
-            sal_uLong nOrigIdx = aIdx.GetIndex();
+            SwNodeOffset nOrigIdx = aIdx.GetIndex();
 
             /* When copying to a non-content node Copy will
                insert a paragraph before that node and insert before
@@ -2174,7 +2174,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, tools::Long const nOffset,
 #ifndef NDEBUG
             size_t nRedlines(getIDocumentRedlineAccess().GetRedlineTable().size());
 #endif
-            if (nOffset > 0)
+            if (nOffset > SwNodeOffset(0))
                 assert(aPam.End()->nNode.GetIndex() - aPam.Start()->nNode.GetIndex() + nOffset == aInsPos.nNode.GetIndex() - aPam.End()->nNode.GetIndex());
             else
                 assert(aPam.Start()->nNode.GetIndex() - aPam.End()->nNode.GetIndex() + nOffset == aInsPos.nNode.GetIndex() - aPam.End()->nNode.GetIndex());
@@ -2195,7 +2195,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, tools::Long const nOffset,
                     SwRangeRedline* pNewRedline;
                     {
                         SwPaM pam(*pRedline, nullptr);
-                        sal_uLong const nCurrentOffset(
+                        SwNodeOffset const nCurrentOffset(
                             nOrigIdx - aPam.Start()->nNode.GetIndex());
                         pam.GetPoint()->nNode += nCurrentOffset;
                         pam.GetPoint()->nContent.Assign(pam.GetPoint()->nNode.GetNode().GetContentNode(), pam.GetPoint()->nContent.GetIndex());
@@ -2292,7 +2292,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, tools::Long const nOffset,
         getIDocumentRedlineAccess().SplitRedline(aTemp);
     }
 
-    sal_uLong nRedlSttNd(0), nRedlEndNd(0);
+    SwNodeOffset nRedlSttNd(0), nRedlEndNd(0);
     if( pOwnRedl )
     {
         const SwPosition *pRStt = pOwnRedl->Start(), *pREnd = pOwnRedl->End();
@@ -2301,7 +2301,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, tools::Long const nOffset,
     }
 
     std::unique_ptr<SwUndoMoveNum> pUndo;
-    sal_uLong nMoved = 0;
+    SwNodeOffset nMoved(0);
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         pUndo.reset(new SwUndoMoveNum( rPam, nOffset, bIsOutlMv ));

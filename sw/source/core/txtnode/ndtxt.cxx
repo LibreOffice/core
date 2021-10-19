@@ -177,7 +177,7 @@ SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
             [[fallthrough]];
         default:
             if( rWhere == aTmp )
-                aTmp -= 2;
+                aTmp -= SwNodeOffset(2);
             else
                 return pNode;
             break;
@@ -367,7 +367,7 @@ void MoveMergedFlysAndFootnotes(std::vector<SwTextFrame*> const& rFrames,
     {
         lcl_ChangeFootnoteRef(rSecondNode);
     }
-    for (sal_uLong nIndex = rSecondNode.GetIndex() + 1; ; ++nIndex)
+    for (SwNodeOffset nIndex = rSecondNode.GetIndex() + 1; ; ++nIndex)
     {
         SwNode *const pTmp(rSecondNode.GetNodes()[nIndex]);
         if (pTmp->IsCreateFrameWhenHidingRedlines() || pTmp->IsEndNode())
@@ -843,9 +843,9 @@ void CheckResetRedlineMergeFlag(SwTextNode & rNode, Recreate const eRecreateMerg
         if (eRecreateMerged == sw::Recreate::Predecessor
             // tdf#135018 check that there is a predecessor node, i.e. rNode
             // isn't the first node after the body start node
-            && rNode.GetNodes()[rNode.GetIndex() - 1]->StartOfSectionIndex() != 0)
+            && rNode.GetNodes()[rNode.GetIndex() - 1]->StartOfSectionIndex() != SwNodeOffset(0))
         {
-            for (sal_uLong i = rNode.GetIndex() - 1; ; --i)
+            for (SwNodeOffset i = rNode.GetIndex() - 1; ; --i)
             {
                 SwNode *const pNode(rNode.GetNodes()[i]);
                 assert(!pNode->IsStartNode());
@@ -3571,7 +3571,7 @@ OUString SwTextNode::GetRedlineText() const
     if( SwRedlineTable::npos != nRedlPos )
     {
         // some redline-delete object exists for the node
-        const sal_uLong nNdIdx = GetIndex();
+        const SwNodeOffset nNdIdx = GetIndex();
         for( ; nRedlPos < rDoc.getIDocumentRedlineAccess().GetRedlineTable().size() ; ++nRedlPos )
         {
             const SwRangeRedline* pTmp = rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nRedlPos ];
@@ -5113,7 +5113,7 @@ void SwTextNode::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTextNode"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(GetIndex()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(sal_Int32(GetIndex())).getStr()));
 
     OUString sText = GetText();
     for (int i = 0; i < 32; ++i)

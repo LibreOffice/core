@@ -15,6 +15,7 @@
 #include <rtl/strbuf.hxx>
 #include <sax/fshelper.hxx>
 #include <tools/solar.h>
+#include <nodeoffset.hxx>
 
 namespace rtl
 {
@@ -39,7 +40,7 @@ class ExportDataSaveRestore
 private:
     DocxExport& m_rExport;
 public:
-    ExportDataSaveRestore(DocxExport& rExport, sal_uLong nStt, sal_uLong nEnd, ww8::Frame const* pParentFrame);
+    ExportDataSaveRestore(DocxExport& rExport, SwNodeOffset nStt, SwNodeOffset nEnd, ww8::Frame const* pParentFrame);
     ~ExportDataSaveRestore();
 };
 

@@ -1238,7 +1238,7 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
             const SwFrameFormats *pTable = GetFormat()->GetDoc()->GetSpzFrameFormats();
             if( !pTable->empty() )
             {
-                sal_uLong nIndex;
+                SwNodeOffset nIndex;
                 SwContentFrame* pFrame = pHeadline->ContainsContent();
                 while( pFrame )
                 {
@@ -4908,7 +4908,7 @@ SwCellFrame::SwCellFrame(const SwTableBox &rBox, SwFrame* pSib, bool bInsertCont
     //Rows have to be present and those are added.
     if ( rBox.GetSttIdx() )
     {
-        sal_uLong nIndex = rBox.GetSttIdx();
+        SwNodeOffset nIndex = rBox.GetSttIdx();
         ::InsertCnt_( this, rBox.GetFrameFormat()->GetDoc(), ++nIndex );
     }
     else

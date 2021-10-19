@@ -35,10 +35,10 @@ bool GotoPrevRegion( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosRegi
     SwNodeIndex aIdx( rCurrentCursor.GetPoint()->nNode );
     SwSectionNode* pNd = aIdx.GetNode().FindSectionNode();
     if( pNd )
-        aIdx.Assign( *pNd, - 1 );
+        aIdx.Assign( *pNd, -1 );
 
     SwNodeIndex aOldIdx = aIdx;
-    sal_uLong nLastNd = rCurrentCursor.GetDoc().GetNodes().Count() - 1;
+    SwNodeOffset nLastNd(rCurrentCursor.GetDoc().GetNodes().Count() - 1);
     do {
         while( aIdx.GetIndex() )
         {
@@ -113,7 +113,7 @@ bool GotoNextRegion( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosRegi
         aIdx.Assign( *pNd->EndOfSectionNode(), - 1 );
 
     SwNodeIndex aOldIdx = aIdx;
-    sal_uLong nEndCount = aIdx.GetNode().GetNodes().Count()-1;
+    SwNodeOffset nEndCount = aIdx.GetNode().GetNodes().Count() - 1;
     do {
         while( aIdx.GetIndex() < nEndCount )
         {
@@ -131,7 +131,7 @@ bool GotoNextRegion( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosRegi
         if ( aIdx.GetIndex() == nEndCount )
         {
             SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::EndWrapped );
-            aIdx = 0;
+            aIdx = SwNodeOffset(0);
             continue;
         }
 

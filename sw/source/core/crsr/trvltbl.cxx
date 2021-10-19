@@ -471,7 +471,7 @@ static bool lcl_FindPrevCell( SwNodeIndex& rIdx, bool bInReadOnly  )
                 rIdx = *pCNd;
                 return true; // ok, not protected
             }
-            aTmp.Assign( *pCNd->StartOfSectionNode(), - 1 );
+            aTmp.Assign( *pCNd->StartOfSectionNode(), -1 );
         }
     }
     rIdx = *pCNd;
@@ -497,11 +497,11 @@ bool GotoPrevTable( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosTable
             --aTmpIdx;
 
         if( pInnerTableNd == pTableNd )
-            aIdx.Assign( *pTableNd, - 1 );
+            aIdx.Assign( *pTableNd, -1 );
     }
 
     SwNodeIndex aOldIdx = aIdx;
-    sal_uLong nLastNd = rCurrentCursor.GetDoc().GetNodes().Count() - 1;
+    SwNodeOffset nLastNd(rCurrentCursor.GetDoc().GetNodes().Count() - 1);
     do {
         while( aIdx.GetIndex() &&
             nullptr == ( pTableNd = aIdx.GetNode().StartOfSectionNode()->GetTableNode()) )
@@ -570,7 +570,7 @@ bool GotoNextTable( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosTable
         aIdx.Assign( *pTableNd->EndOfSectionNode(), 1 );
 
     SwNodeIndex aOldIdx = aIdx;
-    sal_uLong nLastNd = rCurrentCursor.GetDoc().GetNodes().Count() - 1;
+    SwNodeOffset nLastNd(rCurrentCursor.GetDoc().GetNodes().Count() - 1);
     do {
         while( aIdx.GetIndex() < nLastNd &&
                 nullptr == ( pTableNd = aIdx.GetNode().GetTableNode()) )
@@ -586,7 +586,7 @@ bool GotoNextTable( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosTable
         if ( aIdx.GetIndex() == nLastNd )
         {
             SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::EndWrapped );
-            aIdx = 0;
+            aIdx = SwNodeOffset(0);
             continue;
         }
 
@@ -686,7 +686,7 @@ bool SwCursorShell::MoveTable( SwWhichTable fnWhichTable, SwMoveFnCollection con
     SwShellCursor* pCursor = m_pTableCursor ? m_pTableCursor : m_pCurrentCursor;
     bool bCheckPos;
     bool bRet;
-    sal_uLong nPtNd = 0;
+    SwNodeOffset nPtNd(0);
     sal_Int32 nPtCnt = 0;
 
     if ( !m_pTableCursor && m_pCurrentCursor->HasMark() )
@@ -829,7 +829,7 @@ bool SwCursorShell::CheckTableBoxContent( const SwPosition* pPos )
     }
 
     // box has more than one paragraph
-    if( pChkBox && pSttNd->GetIndex() + 2 != pSttNd->EndOfSectionIndex() )
+    if( pChkBox && pSttNd->GetIndex() + SwNodeOffset(2) != pSttNd->EndOfSectionIndex() )
         pChkBox = nullptr;
 
     // destroy pointer before next action starts

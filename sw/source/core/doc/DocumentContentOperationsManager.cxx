@@ -98,8 +98,8 @@ namespace
 {
     // Copy method from SwDoc
     // Prevent copying into Flys that are anchored in the range
-    bool lcl_ChkFlyFly( SwDoc& rDoc, sal_uLong nSttNd, sal_uLong nEndNd,
-                        sal_uLong nInsNd )
+    bool lcl_ChkFlyFly( SwDoc& rDoc, SwNodeOffset nSttNd, SwNodeOffset nEndNd,
+                        SwNodeOffset nInsNd )
     {
         const SwFrameFormats& rFrameFormatTable = *rDoc.GetSpzFrameFormats();
 
@@ -137,19 +137,19 @@ namespace
         return false;
     }
 
-    SwNodeIndex InitDelCount(SwPaM const& rSourcePaM, sal_uLong & rDelCount)
+    SwNodeIndex InitDelCount(SwPaM const& rSourcePaM, SwNodeOffset & rDelCount)
     {
         SwNodeIndex const& rStart(rSourcePaM.Start()->nNode);
         // Special handling for SwDoc::AppendDoc
         if (rSourcePaM.GetDoc().GetNodes().GetEndOfExtras().GetIndex() + 1
                 == rStart.GetIndex())
         {
-            rDelCount = 1;
+            rDelCount = SwNodeOffset(1);
             return SwNodeIndex(rStart, +1);
         }
         else
         {
-            rDelCount = 0;
+            rDelCount = SwNodeOffset(0);
             return rStart;
         }
     }
@@ -165,10 +165,10 @@ namespace
         of "non-copy" nodes between rPam.Start() and rLastIdx.
         nNewIdx is the new position of interest.
     */
-    void lcl_NonCopyCount( const SwPaM& rPam, SwNodeIndex& rLastIdx, const sal_uLong nNewIdx, sal_uLong& rDelCount )
+    void lcl_NonCopyCount( const SwPaM& rPam, SwNodeIndex& rLastIdx, const SwNodeOffset nNewIdx, SwNodeOffset& rDelCount )
     {
-        sal_uLong nStart = rPam.Start()->nNode.GetIndex();
-        sal_uLong nEnd = rPam.End()->nNode.GetIndex();
+        SwNodeOffset nStart = rPam.Start()->nNode.GetIndex();
+        SwNodeOffset nEnd = rPam.End()->nNode.GetIndex();
         if( rLastIdx.GetIndex() < nNewIdx ) // Moving forward?
         {
             // We never copy the StartOfContent node
@@ -204,9 +204,9 @@ namespace
                         const SwPosition& rOrigStt,
                         const SwPosition& rCpyStt,
                         SwPosition& rChgPos,
-                        sal_uLong nDelCount )
+                        SwNodeOffset nDelCount )
     {
-        sal_uLong nNdOff = rOrigPos.nNode.GetIndex();
+        SwNodeOffset nNdOff = rOrigPos.nNode.GetIndex();
         nNdOff -= rOrigStt.nNode.GetIndex();
         nNdOff -= nDelCount;
         sal_Int32 nContentPos = rOrigPos.nContent.GetIndex();
@@ -279,7 +279,7 @@ namespace sw
             }
         }
         // We have to count the "non-copied" nodes...
-        sal_uLong nDelCount;
+        SwNodeOffset nDelCount;
         SwNodeIndex aCorrIdx(InitDelCount(rPam, nDelCount));
         for(const sw::mark::IMark* const pMark : vMarksToCopy)
         {
@@ -356,7 +356,7 @@ namespace
         std::unique_ptr<SwPaM> pDelPam;
         const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
         // We have to count the "non-copied" nodes
-        sal_uLong nDelCount;
+        SwNodeOffset nDelCount;
         SwNodeIndex aCorrIdx(InitDelCount(rPam, nDelCount));
 
         SwRedlineTable::size_type n = 0;
@@ -512,17 +512,17 @@ namespace
 //local functions originally from sw/source/core/doc/docedt.cxx
 namespace sw
 {
-    void CalcBreaks(std::vector<std::pair<sal_uLong, sal_Int32>> & rBreaks,
+    void CalcBreaks(std::vector<std::pair<SwNodeOffset, sal_Int32>> & rBreaks,
             SwPaM const & rPam, bool const isOnlyFieldmarks)
     {
-        sal_uLong const nStartNode(rPam.Start()->nNode.GetIndex());
-        sal_uLong const nEndNode(rPam.End()->nNode.GetIndex());
+        SwNodeOffset const nStartNode(rPam.Start()->nNode.GetIndex());
+        SwNodeOffset const nEndNode(rPam.End()->nNode.GetIndex());
         SwNodes const& rNodes(rPam.GetPoint()->nNode.GetNodes());
         IDocumentMarkAccess const& rIDMA(*rPam.GetDoc().getIDocumentMarkAccess());
 
-        std::stack<std::tuple<sw::mark::IFieldmark const*, bool, sal_uLong, sal_Int32>> startedFields;
+        std::stack<std::tuple<sw::mark::IFieldmark const*, bool, SwNodeOffset, sal_Int32>> startedFields;
 
-        for (sal_uLong n = nStartNode; n <= nEndNode; ++n)
+        for (SwNodeOffset n = nStartNode; n <= nEndNode; ++n)
         {
             SwNode *const pNode(rNodes[n]);
             if (pNode->IsTextNode())
@@ -609,14 +609,14 @@ namespace sw
         while (!startedFields.empty())
         {
             SwPosition const& rStart(std::get<0>(startedFields.top())->GetMarkStart());
-            std::pair<sal_uLong, sal_Int32> const pos(
+            std::pair<SwNodeOffset, sal_Int32> const pos(
                     rStart.nNode.GetIndex(), rStart.nContent.GetIndex());
             auto it = std::lower_bound(rBreaks.begin(), rBreaks.end(), pos);
             assert(it == rBreaks.end() || *it != pos);
             rBreaks.insert(it, pos);
             if (std::get<1>(startedFields.top()))
             {
-                std::pair<sal_uLong, sal_Int32> const posSep(
+                std::pair<SwNodeOffset, sal_Int32> const posSep(
                     std::get<2>(startedFields.top()),
                     std::get<3>(startedFields.top()));
                 it = std::lower_bound(rBreaks.begin(), rBreaks.end(), posSep);
@@ -634,7 +634,7 @@ namespace
     bool lcl_DoWithBreaks(::sw::DocumentContentOperationsManager & rDocumentContentOperations, SwPaM & rPam,
             bool (::sw::DocumentContentOperationsManager::*pFunc)(SwPaM&, bool), const bool bForceJoinNext = false)
     {
-        std::vector<std::pair<sal_uLong, sal_Int32>> Breaks;
+        std::vector<std::pair<SwNodeOffset, sal_Int32>> Breaks;
 
         sw::CalcBreaks(Breaks, rPam);
 
@@ -653,7 +653,7 @@ namespace
         bool bRet( true );
         // iterate from end to start, to avoid invalidating the offsets!
         auto iter( Breaks.rbegin() );
-        sal_uLong nOffset(0);
+        SwNodeOffset nOffset(0);
         SwNodes const& rNodes(rPam.GetPoint()->nNode.GetNodes());
         SwPaM aPam( rSelectionEnd, rSelectionEnd ); // end node!
         SwPosition & rEnd( *aPam.End() );
@@ -701,7 +701,7 @@ namespace
     struct SaveRedline
     {
         SwRangeRedline* pRedl;
-        sal_uInt32 nStt, nEnd;
+        SwNodeOffset nStt, nEnd;
         sal_Int32 nSttCnt;
         sal_Int32 nEndCnt;
 
@@ -711,8 +711,8 @@ namespace
             , nEndCnt(0)
         {
             const SwPosition* pStt = pR->Start(),
-                * pEnd = pR->End();
-            sal_uInt32 nSttIdx = rSttIdx.GetIndex();
+                            * pEnd = pR->End();
+            SwNodeOffset nSttIdx = rSttIdx.GetIndex();
             nStt = pStt->nNode.GetIndex() - nSttIdx;
             nSttCnt = pStt->nContent.GetIndex();
             if( pR->HasMark() )
@@ -721,9 +721,9 @@ namespace
                 nEndCnt = pEnd->nContent.GetIndex();
             }
 
-            pRedl->GetPoint()->nNode = 0;
+            pRedl->GetPoint()->nNode = SwNodeOffset(0);
             pRedl->GetPoint()->nContent.Assign( nullptr, 0 );
-            pRedl->GetMark()->nNode = 0;
+            pRedl->GetMark()->nNode = SwNodeOffset(0);
             pRedl->GetMark()->nContent.Assign( nullptr, 0 );
         }
 
@@ -733,27 +733,27 @@ namespace
             , nEndCnt(0)
         {
             const SwPosition* pStt = pR->Start(),
-                * pEnd = pR->End();
-            sal_uInt32 nSttIdx = rPos.nNode.GetIndex();
+                            * pEnd = pR->End();
+            SwNodeOffset nSttIdx = rPos.nNode.GetIndex();
             nStt = pStt->nNode.GetIndex() - nSttIdx;
             nSttCnt = pStt->nContent.GetIndex();
-            if( nStt == 0 )
+            if( nStt == SwNodeOffset(0) )
                 nSttCnt = nSttCnt - rPos.nContent.GetIndex();
             if( pR->HasMark() )
             {
                 nEnd = pEnd->nNode.GetIndex() - nSttIdx;
                 nEndCnt = pEnd->nContent.GetIndex();
-                if( nEnd == 0 )
+                if( nEnd == SwNodeOffset(0) )
                     nEndCnt = nEndCnt - rPos.nContent.GetIndex();
             }
 
-            pRedl->GetPoint()->nNode = 0;
+            pRedl->GetPoint()->nNode = SwNodeOffset(0);
             pRedl->GetPoint()->nContent.Assign( nullptr, 0 );
-            pRedl->GetMark()->nNode = 0;
+            pRedl->GetMark()->nNode = SwNodeOffset(0);
             pRedl->GetMark()->nContent.Assign( nullptr, 0 );
         }
 
-        void SetPos( sal_uInt32 nInsPos )
+        void SetPos( SwNodeOffset nInsPos )
         {
             pRedl->GetPoint()->nNode = nInsPos + nStt;
             pRedl->GetPoint()->nContent.Assign( pRedl->GetContentNode(), nSttCnt );
@@ -767,11 +767,11 @@ namespace
         void SetPos( const SwPosition& aPos )
         {
             pRedl->GetPoint()->nNode = aPos.nNode.GetIndex() + nStt;
-            pRedl->GetPoint()->nContent.Assign( pRedl->GetContentNode(), nSttCnt + ( nStt == 0 ? aPos.nContent.GetIndex() : 0 ) );
+            pRedl->GetPoint()->nContent.Assign( pRedl->GetContentNode(), nSttCnt + ( nStt == SwNodeOffset(0) ? aPos.nContent.GetIndex() : 0 ) );
             if( pRedl->HasMark() )
             {
                 pRedl->GetMark()->nNode = aPos.nNode.GetIndex() + nEnd;
-                pRedl->GetMark()->nContent.Assign( pRedl->GetContentNode(false), nEndCnt  + ( nEnd == 0 ? aPos.nContent.GetIndex() : 0 ) );
+                pRedl->GetMark()->nContent.Assign( pRedl->GetContentNode(false), nEndCnt  + ( nEnd == SwNodeOffset(0) ? aPos.nContent.GetIndex() : 0 ) );
             }
         }
     };
@@ -940,7 +940,7 @@ namespace
         rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     }
 
-    void lcl_RestoreRedlines(SwDoc& rDoc, sal_uInt32 const nInsPos, SaveRedlines_t& rArr)
+    void lcl_RestoreRedlines(SwDoc& rDoc, SwNodeOffset const nInsPos, SaveRedlines_t& rArr)
     {
         RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
         rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( ( eOld & ~RedlineFlags::Ignore) | RedlineFlags::On );
@@ -1967,7 +1967,7 @@ namespace mark
 {
     bool IsFieldmarkOverlap(SwPaM const& rPaM)
     {
-        std::vector<std::pair<sal_uLong, sal_Int32>> Breaks;
+        std::vector<std::pair<SwNodeOffset, sal_Int32>> Breaks;
         sw::CalcBreaks(Breaks, rPaM);
         return !Breaks.empty();
     }
@@ -2017,7 +2017,7 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos,
     if (&rDoc == &m_rDoc && (flags & SwCopyFlags::CheckPosInFly))
     {
         // Correct the Start-/EndNode
-        sal_uLong nStt = pStt->nNode.GetIndex(),
+        SwNodeOffset nStt = pStt->nNode.GetIndex(),
                 nEnd = pEnd->nNode.GetIndex(),
                 nDiff = nEnd - nStt +1;
         SwNode* pNd = m_rDoc.GetNodes()[ nStt ];
@@ -2135,11 +2135,11 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
 {
     const SwPosition &rStt = *rPam.Start(), &rEnd = *rPam.End();
     const SwNode* pNd = &rStt.nNode.GetNode();
-    sal_uInt32 nSectDiff = pNd->StartOfSectionNode()->EndOfSectionIndex() -
+    SwNodeOffset nSectDiff = pNd->StartOfSectionNode()->EndOfSectionIndex() -
                         pNd->StartOfSectionIndex();
-    sal_uInt32 nNodeDiff = rEnd.nNode.GetIndex() - rStt.nNode.GetIndex();
+    SwNodeOffset nNodeDiff = rEnd.nNode.GetIndex() - rStt.nNode.GetIndex();
 
-    if ( nSectDiff-2 <= nNodeDiff || m_rDoc.getIDocumentRedlineAccess().IsRedlineOn() ||
+    if ( nSectDiff-SwNodeOffset(2) <= nNodeDiff || m_rDoc.getIDocumentRedlineAccess().IsRedlineOn() ||
          /* #i9185# Prevent getting the node after the end node (see below) */
         rEnd.nNode.GetIndex() + 1 == m_rDoc.GetNodes().Count() )
     {
@@ -2171,7 +2171,7 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
     bool bSavePageBreak = false, bSavePageDesc = false;
 
     /* #i9185# This would lead to a segmentation fault if not caught above. */
-    sal_uLong nNextNd = rEnd.nNode.GetIndex() + 1;
+    SwNodeOffset nNextNd = rEnd.nNode.GetIndex() + 1;
     SwTableNode *const pTableNd = m_rDoc.GetNodes()[ nNextNd ]->GetTableNode();
 
     if( pTableNd && pNd->IsContentNode() )
@@ -2391,7 +2391,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
             {
                 if (!pContentStore->Empty())
                 {
-                    pContentStore->Restore(m_rDoc, pOrigNode->GetIndex()-1, 0, true, false, eMode);
+                    pContentStore->Restore(m_rDoc, pOrigNode->GetIndex()-SwNodeOffset(1), 0, true, false, eMode);
                 }
             });
         pTNd = pTNd->SplitContentNode(rPos, &restoreFunc)->GetTextNode();
@@ -2417,7 +2417,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
         // correct the PaM!
         if( rPos.nNode == rPaM.GetMark()->nNode )
         {
-            rPaM.GetMark()->nNode = rPos.nNode.GetIndex()-1;
+            rPaM.GetMark()->nNode = rPos.nNode.GetIndex()-SwNodeOffset(1);
             rPaM.GetMark()->nContent.Assign( pTNd, nMkContent );
         }
     }
@@ -2910,7 +2910,7 @@ void DocumentContentOperationsManager::TransliterateText(
 
     const SwPosition* pStt = rPaM.Start(),
                        * pEnd = rPaM.End();
-    sal_uLong nSttNd = pStt->nNode.GetIndex(),
+    SwNodeOffset nSttNd = pStt->nNode.GetIndex(),
           nEndNd = pEnd->nNode.GetIndex();
     sal_Int32 nSttCnt = pStt->nContent.GetIndex();
     sal_Int32 nEndCnt = pEnd->nContent.GetIndex();
@@ -3219,7 +3219,7 @@ SwDrawFrameFormat* DocumentContentOperationsManager::InsertDrawObj(
 
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
-        m_rDoc.GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoInsLayFormat>(pFormat, 0, 0) );
+        m_rDoc.GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoInsLayFormat>(pFormat, SwNodeOffset(0), 0) );
     }
 
     m_rDoc.getIDocumentState().SetModified();
@@ -3264,7 +3264,7 @@ bool DocumentContentOperationsManager::SplitNode( const SwPosition &rPos, bool b
     //             then insert a paragraph before it.
     if( bChkTableStart && !rPos.nContent.GetIndex() && pNode->IsTextNode() )
     {
-        sal_uLong nPrevPos = rPos.nNode.GetIndex() - 1;
+        SwNodeOffset nPrevPos = rPos.nNode.GetIndex() - 1;
         const SwTableNode* pTableNd;
         const SwNode* pNd = m_rDoc.GetNodes()[ nPrevPos ];
         if( pNd->IsStartNode() &&
@@ -3299,7 +3299,7 @@ bool DocumentContentOperationsManager::SplitNode( const SwPosition &rPos, bool b
                                         m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT ));
                 if( pTextNd )
                 {
-                    const_cast<SwPosition&>(rPos).nNode = pTableNd->GetIndex()-1;
+                    const_cast<SwPosition&>(rPos).nNode = pTableNd->GetIndex()-SwNodeOffset(1);
                     const_cast<SwPosition&>(rPos).nContent.Assign( pTextNd, 0 );
 
                     // only add page breaks/styles to the body area
@@ -3338,7 +3338,7 @@ bool DocumentContentOperationsManager::SplitNode( const SwPosition &rPos, bool b
         {
             if (!pContentStore->Empty())
             {   // move all bookmarks, TOXMarks, FlyAtCnt
-                pContentStore->Restore(m_rDoc, rPos.nNode.GetIndex()-1, 0, true, bAtStart && (eMode & sw::mark::RestoreMode::Flys), eMode);
+                pContentStore->Restore(m_rDoc, rPos.nNode.GetIndex()-SwNodeOffset(1), 0, true, bAtStart && (eMode & sw::mark::RestoreMode::Flys), eMode);
             }
             if (eMode & sw::mark::RestoreMode::NonFlys)
             {
@@ -3412,7 +3412,7 @@ bool DocumentContentOperationsManager::ReplaceRange( SwPaM& rPam, const OUString
     // unfortunately replace works slightly differently from delete,
     // so we cannot use lcl_DoWithBreaks here...
 
-    std::vector<std::pair<sal_uLong, sal_Int32>> Breaks;
+    std::vector<std::pair<SwNodeOffset, sal_Int32>> Breaks;
 
     SwPaM aPam( *rPam.GetMark(), *rPam.GetPoint() );
     aPam.Normalize(false);
@@ -3450,7 +3450,7 @@ bool DocumentContentOperationsManager::ReplaceRange( SwPaM& rPam, const OUString
     bool bRet( true );
     // iterate from end to start, to avoid invalidating the offsets!
     auto iter( Breaks.rbegin() );
-    sal_uLong nOffset(0);
+    SwNodeOffset nOffset(0);
     SwNodes const& rNodes(rPam.GetPoint()->nNode.GetNodes());
     OSL_ENSURE(aPam.GetPoint() == aPam.End(), "wrong!");
     SwPosition & rEnd( *aPam.End() );
@@ -3612,7 +3612,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
     {
         SwPaM aRgTmp( rRg.aStart, rRg.aEnd );
         SwPosition targetPos(SwNodeIndex(aSavePos,
-                                         rRg.aStart != rRg.aEnd ? +1 : 0));
+                                         SwNodeOffset(rRg.aStart != rRg.aEnd ? +1 : 0)));
         if (pCopiedPaM && rRg.aStart != pCopiedPaM->first.Start()->nNode)
         {
             // there is 1 (partially selected, maybe) paragraph before
@@ -3679,8 +3679,8 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
             // if it was the first node in the document so that MakeFrames()
             // will find the existing (wasn't deleted) frame on it
             SwNodeIndex const end(rInsPos,
-                    (!isRecreateEndNode || isAtStartOfSection)
-                    ? 0 : +1);
+                    SwNodeOffset((!isRecreateEndNode || isAtStartOfSection)
+                    ? 0 : +1));
             ::MakeFrames(&rDest, aSavePos, end);
         }
     }
@@ -3698,7 +3698,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
             !aTmpI.GetNode().IsEndNode() )
         {
             // If the range starts with a SwStartNode, it isn't copied
-            sal_uInt16 offset = (rRg.aStart.GetNode().GetNodeType() != SwNodeType::Start) ? 1 : 0;
+            SwNodeOffset offset( (rRg.aStart.GetNode().GetNodeType() != SwNodeType::Start) ? 1 : 0 );
             OSL_ENSURE( rInsPos.GetIndex() - aSavePos.GetIndex() ==
                     rRg.aEnd.GetIndex() - rRg.aStart.GetIndex() - 1 + offset,
                     "An insufficient number of nodes were copied!" );
@@ -3754,8 +3754,8 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
         if ( !pAPos )
             continue;
         bool bAdd = false;
-        sal_uLong nSkipAfter = pAPos->nNode.GetIndex();
-        sal_uLong nStart = rRg.aStart.GetIndex();
+        SwNodeOffset nSkipAfter = pAPos->nNode.GetIndex();
+        SwNodeOffset nStart = rRg.aStart.GetIndex();
         switch ( pAnchor->GetAnchorId() )
         {
             case RndStdIds::FLY_AT_FLY:
@@ -3896,7 +3896,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
         }
         else
         {
-            tools::Long nOffset = newPos.nNode.GetIndex() - rRg.aStart.GetIndex();
+            SwNodeOffset nOffset = newPos.nNode.GetIndex() - rRg.aStart.GetIndex();
             SwNodeIndex aIdx( rStartIdx, nOffset );
             newPos.nNode = aIdx;
         }
@@ -4376,7 +4376,7 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam)
         }
 
         // if the end is not a content node, delete it as well
-        sal_uInt32 nEnd = pEnd->nNode.GetIndex();
+        SwNodeOffset nEnd = pEnd->nNode.GetIndex();
         if( pCNd == nullptr )
             nEnd++;
 
@@ -4385,7 +4385,7 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam)
             // tdf#134436 delete section nodes like SwUndoDelete::SwUndoDelete
             SwNode *pTmpNd;
             while (pEnd == rPam.GetPoint()
-                && nEnd + 2 < m_rDoc.GetNodes().Count()
+                && nEnd + SwNodeOffset(2) < m_rDoc.GetNodes().Count()
                 && (pTmpNd = m_rDoc.GetNodes()[nEnd + 1])->IsEndNode()
                 && pTmpNd->StartOfSectionNode()->IsSectionNode()
                 && aSttIdx <= pTmpNd->StartOfSectionNode()->GetIndex())
@@ -4559,7 +4559,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 SwIndex& rIdx = aDelPam.GetPoint()->nContent;
                 rIdx.Assign( nullptr, 0 );
                 aDelPam.GetMark()->nContent = rIdx;
-                rPam.GetPoint()->nNode = 0;
+                rPam.GetPoint()->nNode = SwNodeOffset(0);
                 rPam.GetPoint()->nContent = rIdx;
                 *rPam.GetMark() = *rPam.GetPoint();
                 m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags( eOld );
@@ -4747,7 +4747,7 @@ bool DocumentContentOperationsManager::CopyImpl(SwPaM& rPam, SwPosition& rPos,
         SwCopyFlags const flags,
         SwPaM *const pCopyRange) const
 {
-    std::vector<std::pair<sal_uLong, sal_Int32>> Breaks;
+    std::vector<std::pair<SwNodeOffset, sal_Int32>> Breaks;
 
     sw::CalcBreaks(Breaks, rPam, true);
 
@@ -4762,7 +4762,7 @@ bool DocumentContentOperationsManager::CopyImpl(SwPaM& rPam, SwPosition& rPos,
     bool bFirst(true);
     // iterate from end to start, ... don't think it's necessary here?
     auto iter( Breaks.rbegin() );
-    sal_uLong nOffset(0);
+    SwNodeOffset nOffset(0);
     SwNodes const& rNodes(rPam.GetPoint()->nNode.GetNodes());
     SwPaM aPam( rSelectionEnd, rSelectionEnd ); // end node!
     SwPosition & rEnd( *aPam.End() );
@@ -4861,7 +4861,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
     bool bCanMoveBack = pCopyPam->Move(fnMoveBackward, GoInContent);
     // If the position was shifted from more than one node, an end node has been skipped
     bool bAfterTable = false;
-    if ((rPos.nNode.GetIndex() - pCopyPam->GetPoint()->nNode.GetIndex()) > 1)
+    if ((rPos.nNode.GetIndex() - pCopyPam->GetPoint()->nNode.GetIndex()) > SwNodeOffset(1))
     {
         // First go back to the original place
         pCopyPam->GetPoint()->nNode = rPos.nNode;
@@ -4887,7 +4887,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                           ( !bOneNode && !rPos.nContent.GetIndex() ) );
     bool bCopyBookmarks = true;
     bool bCopyPageSource  = false;
-    int nDeleteTextNodes = 0;
+    SwNodeOffset nDeleteTextNodes(0);
 
     // #i104585# copy outline num rule to clipboard (for ASCII filter)
     if (rDoc.IsClipBoard() && m_rDoc.GetOutlineNumRule())
@@ -4958,7 +4958,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                         pCopyPam->Move( fnMoveBackward, GoInContent );
                     }
 
-                    pDestTextNd = rDoc.GetNodes()[ aInsPos.GetIndex()-1 ]->GetTextNode();
+                    pDestTextNd = rDoc.GetNodes()[ aInsPos.GetIndex()-SwNodeOffset(1) ]->GetTextNode();
                     aDestIdx.Assign(
                             pDestTextNd, pDestTextNd->GetText().getLength());
 
@@ -5056,7 +5056,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                 // The end would also be moved
                 else if( rPos == *pEnd )
                 {
-                    rPos.nNode-=2;
+                    rPos.nNode-=SwNodeOffset(2);
                     rPos.nContent.Assign( rPos.nNode.GetNode().GetContentNode(),
                                             nContentEnd );
                     rPos.nNode++;

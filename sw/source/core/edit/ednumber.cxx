@@ -160,9 +160,9 @@ bool SwEditShell::SelectionHasNumber() const
         {
             aRangeArr.SetPam( n, aPam );
             {
-                sal_uInt32 nStt = aPam.Start()->nNode.GetIndex(),
-                           nEnd = aPam.End()->nNode.GetIndex();
-                for (sal_uInt32 nPos = nStt; nPos<=nEnd; nPos++)
+                SwNodeOffset nStt = aPam.Start()->nNode.GetIndex(),
+                             nEnd = aPam.End()->nNode.GetIndex();
+                for (SwNodeOffset nPos = nStt; nPos<=nEnd; nPos++)
                 {
                     pTextNd = mxDoc->GetNodes()[nPos]->GetTextNode();
                     if (pTextNd)
@@ -205,9 +205,9 @@ bool SwEditShell::SelectionHasBullet() const
         {
             aRangeArr.SetPam( n, aPam );
             {
-                sal_uInt32 nStt = aPam.Start()->nNode.GetIndex(),
-                           nEnd = aPam.End()->nNode.GetIndex();
-                for (sal_uInt32 nPos = nStt; nPos<=nEnd; nPos++)
+                SwNodeOffset nStt = aPam.Start()->nNode.GetIndex(),
+                             nEnd = aPam.End()->nNode.GetIndex();
+                for (SwNodeOffset nPos = nStt; nPos<=nEnd; nPos++)
                 {
                     pTextNd = mxDoc->GetNodes()[nPos]->GetTextNode();
                     if (pTextNd)
@@ -386,7 +386,7 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
     EndAllAction();
 }
 
-bool SwEditShell::MoveParagraph( tools::Long nOffset )
+bool SwEditShell::MoveParagraph( SwNodeOffset nOffset )
 {
     StartAllAction();
 
@@ -440,7 +440,7 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
         if( bUpperLower )
         {
             // on top of the next numbering
-            tools::Long nOffset = 0;
+            SwNodeOffset nOffset(0);
             const SwNode* pNd;
 
             if( bUpperLeft ) // move up
@@ -451,7 +451,7 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
                             aCursor.GetMark()->nNode.GetIndex();
                 else
                 {
-                    sal_uLong nStt = aPos.nNode.GetIndex(), nIdx = nStt - 1;
+                    SwNodeOffset nStt = aPos.nNode.GetIndex(), nIdx = nStt - 1;
 
                     if (SwTextNode const*const pStt = aPos.nNode.GetNode().GetTextNode())
                     {
@@ -475,7 +475,7 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
                 if( aCursor.GetNode().IsTextNode() &&
                     pOrig == aCursor.GetNode().GetTextNode()->GetNumRule() )
                 {
-                    sal_uLong nStt = aCursor.GetPoint()->nNode.GetIndex(), nIdx = nStt+1;
+                    SwNodeOffset nStt = aCursor.GetPoint()->nNode.GetIndex(), nIdx = nStt+1;
                     if (SwTextNode const*const pStt = aCursor.GetPoint()->nNode.GetNode().GetTextNode())
                     {
                         std::pair<SwTextNode *, SwTextNode *> nodes(
@@ -516,12 +516,12 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
                     }
 
                     if( nStt == nIdx || !GetDoc()->GetNodes()[ nIdx ]->IsTextNode() )
-                        nOffset = 1;
+                        nOffset = SwNodeOffset(1);
                     else
                         nOffset = nIdx - nStt;
                 }
                 else
-                    nOffset = 1;
+                    nOffset = SwNodeOffset(1);
             }
 
             if( nOffset )

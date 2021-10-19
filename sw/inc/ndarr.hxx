@@ -30,6 +30,7 @@
 #include "ndtyp.hxx"
 #include <rtl/ustring.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include "nodeoffset.hxx"
 
 class Graphic;
 class GraphicObject;
@@ -93,10 +94,10 @@ class SW_DLLPUBLIC SwNodes final
     friend class ::sw::DocumentContentOperationsManager;
 
     SwNodeIndex* m_vIndices; ///< ring of all indices on nodes.
-    void RemoveNode( sal_uLong nDelPos, sal_uLong nLen, bool bDel );
+    void RemoveNode( SwNodeOffset nDelPos, SwNodeOffset nLen, bool bDel );
 
     void InsertNode( SwNode* pNode, const SwNodeIndex& rPos );
-    void InsertNode( SwNode* pNode, sal_uLong nPos );
+    void InsertNode( SwNode* pNode, SwNodeOffset nPos );
 
     SwDoc& m_rMyDoc;                      ///< This Doc contains the nodes-array.
 
@@ -112,9 +113,9 @@ class SW_DLLPUBLIC SwNodes final
 
     // Actions on the nodes.
     static void SectionUpDown( const SwNodeIndex & aStart, const SwNodeIndex & aEnd );
-    void DelNodes( const SwNodeIndex& rStart, sal_uLong nCnt = 1 );
+    void DelNodes( const SwNodeIndex& rStart, SwNodeOffset nCnt = SwNodeOffset(1) );
 
-    void ChgNode( SwNodeIndex const & rDelPos, sal_uLong nSize,
+    void ChgNode( SwNodeIndex const & rDelPos, SwNodeOffset nSize,
                   SwNodeIndex& rInsPos, bool bNewFrames );
 
     void UpdateOutlineIdx( const SwNode& );   ///< Update all OutlineNodes starting from Node.
@@ -134,14 +135,14 @@ public:
     typedef std::vector<SwNodeRange> NodeRanges_t;
     typedef std::vector<NodeRanges_t> TableRanges_t;
 
-    SwNode* operator[]( sal_uLong n ) const; // defined in node.hxx
+    SwNode* operator[]( SwNodeOffset n ) const; // defined in node.hxx
 
-    sal_uLong Count() const { return BigPtrArray::Count(); }
+    SwNodeOffset Count() const { return SwNodeOffset(BigPtrArray::Count()); }
     void ForEach( FnForEach_SwNodes fnForEach, void* pArgs = nullptr )
     {
-        ForEach( 0, BigPtrArray::Count(), fnForEach, pArgs );
+        ForEach( SwNodeOffset(0), Count(), fnForEach, pArgs );
     }
-    void ForEach( sal_uLong nStt, sal_uLong nEnd, FnForEach_SwNodes fnForEach, void* pArgs );
+    void ForEach( SwNodeOffset nStt, SwNodeOffset nEnd, FnForEach_SwNodes fnForEach, void* pArgs );
     void ForEach( const SwNodeIndex& rStart, const SwNodeIndex& rEnd,
                     FnForEach_SwNodes fnForEach, void* pArgs );
 
@@ -164,7 +165,7 @@ public:
     bool IsDocNodes() const;
 
     static sal_uInt16 GetSectionLevel(const SwNodeIndex &rIndex);
-    void Delete(const SwNodeIndex &rPos, sal_uLong nNodes = 1);
+    void Delete(const SwNodeIndex &rPos, SwNodeOffset nNodes = SwNodeOffset(1));
 
     bool MoveNodes( const SwNodeRange&, SwNodes& rNodes, const SwNodeIndex&,
                 bool bNewFrames = true );
@@ -264,7 +265,7 @@ public:
     bool TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
                         SwUndoTableToText* );
     /// Is in untbl.cxx and may called only by Undo-object.
-    SwTableNode* UndoTableToText( sal_uLong nStt, sal_uLong nEnd,
+    SwTableNode* UndoTableToText( SwNodeOffset nStt, SwNodeOffset nEnd,
                         const SwTableToTextSaves& rSavedData );
 
     /** Insert a new box in the line before InsPos. Its format

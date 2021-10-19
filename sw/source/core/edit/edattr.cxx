@@ -105,12 +105,12 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
             continue;
         }
 
-        sal_uLong nSttNd = rCurrentPaM.Start()->nNode.GetIndex(),
-              nEndNd = rCurrentPaM.End()->nNode.GetIndex();
+        SwNodeOffset nSttNd = rCurrentPaM.Start()->nNode.GetIndex(),
+                     nEndNd = rCurrentPaM.End()->nNode.GetIndex();
         sal_Int32 nSttCnt = rCurrentPaM.Start()->nContent.GetIndex();
         sal_Int32 nEndCnt = rCurrentPaM.End()->nContent.GetIndex();
 
-        if( nEndNd - nSttNd >= getMaxLookup() )
+        if( sal_Int32(nEndNd - nSttNd) >= getMaxLookup() )
         {
             rSet.ClearItem();
             rSet.InvalidateAllItems();
@@ -119,7 +119,7 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
 
         // at first node the node enter his values into the GetSet (Initial)
         // all additional nodes are additional merged to GetSet
-        for( sal_uLong n = nSttNd; n <= nEndNd; ++n )
+        for( SwNodeOffset n = nSttNd; n <= nEndNd; ++n )
         {
             SwNode* pNd = GetDoc()->GetNodes()[ n ];
             switch( pNd->GetNodeType() )
@@ -191,7 +191,7 @@ void SwEditShell::GetPaMParAttr( SwPaM* pPaM, SfxItemSet& rSet ) const
     { // for all the point and mark (selections)
 
         // get the start and the end node of the current selection
-        sal_uLong nSttNd = rCurrentPaM.GetMark()->nNode.GetIndex(),
+        SwNodeOffset nSttNd = rCurrentPaM.GetMark()->nNode.GetIndex(),
               nEndNd = rCurrentPaM.GetPoint()->nNode.GetIndex();
 
         // reverse start and end if there number aren't sorted correctly
@@ -201,7 +201,7 @@ void SwEditShell::GetPaMParAttr( SwPaM* pPaM, SfxItemSet& rSet ) const
         // for all the nodes in the current selection
         // get the node (paragraph) attributes
         // and merge them in rSet
-        for( sal_uLong n = nSttNd; n <= nEndNd; ++n )
+        for( SwNodeOffset n = nSttNd; n <= nEndNd; ++n )
         {
             // get the node
             SwNode* pNd = GetDoc()->GetNodes()[ n ];
@@ -249,11 +249,11 @@ SwTextFormatColl* SwEditShell::GetPaMTextFormatColl( SwPaM* pPaM ) const
     { // for all the point and mark (selections)
 
         // get the start and the end node of the current selection
-        sal_uLong nSttNd = rCurrentPaM.Start()->nNode.GetIndex(),
-                  nEndNd = rCurrentPaM.End()->nNode.GetIndex();
+        SwNodeOffset nSttNd = rCurrentPaM.Start()->nNode.GetIndex(),
+                     nEndNd = rCurrentPaM.End()->nNode.GetIndex();
 
         // for all the nodes in the current Point and Mark
-        for( sal_uLong n = nSttNd; n <= nEndNd; ++n )
+        for( SwNodeOffset n = nSttNd; n <= nEndNd; ++n )
         {
             // get the node
             SwNode* pNd = GetDoc()->GetNodes()[ n ];
@@ -289,7 +289,7 @@ std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell
     { // for all the point and mark (selections)
 
         // get the start and the end node of the current selection
-        sal_uLong nSttNd = rCurrentPaM.Start()->nNode.GetIndex(),
+        SwNodeOffset nSttNd = rCurrentPaM.Start()->nNode.GetIndex(),
               nEndNd = rCurrentPaM.End()->nNode.GetIndex();
         sal_Int32 nSttCnt = rCurrentPaM.Start()->nContent.GetIndex();
         sal_Int32 nEndCnt = rCurrentPaM.End()->nContent.GetIndex();
@@ -298,7 +298,7 @@ std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell
         const SfxPoolItem* pItem = nullptr;
 
         // for all the nodes in the current selection
-        for( sal_uLong n = nSttNd; n <= nEndNd; ++n )
+        for( SwNodeOffset n = nSttNd; n <= nEndNd; ++n )
         {
             SwNode* pNd = GetDoc()->GetNodes()[ n ];
             if( pNd->IsTextNode() )
@@ -503,11 +503,11 @@ bool SwEditShell::IsMoveLeftMargin( bool bRight, bool bModulus ) const
 
     for(SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
-        sal_uLong nSttNd = rPaM.Start()->nNode.GetIndex(),
-                  nEndNd = rPaM.End()->nNode.GetIndex();
+        SwNodeOffset nSttNd = rPaM.Start()->nNode.GetIndex(),
+                     nEndNd = rPaM.End()->nNode.GetIndex();
 
         SwContentNode* pCNd;
-        for( sal_uLong n = nSttNd; bRet && n <= nEndNd; ++n )
+        for( SwNodeOffset n = nSttNd; bRet && n <= nEndNd; ++n )
         {
             pCNd = GetDoc()->GetNodes()[ n ]->GetTextNode();
             if( nullptr != pCNd )
@@ -706,7 +706,7 @@ SvtScriptType SwEditShell::GetScriptType() const
             }
             else
             {
-                sal_uLong nEndIdx = pEnd->nNode.GetIndex();
+                SwNodeOffset nEndIdx = pEnd->nNode.GetIndex();
                 SwNodeIndex aIdx( pStt->nNode );
                 for( ; aIdx.GetIndex() <= nEndIdx; ++aIdx )
                     if( aIdx.GetNode().IsTextNode() )

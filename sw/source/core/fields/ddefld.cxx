@@ -55,7 +55,7 @@ public:
         const OUString& rMimeType, const css::uno::Any & rValue ) override;
 
     virtual const SwNode* GetAnchor() const override;
-    virtual bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd ) const override;
+    virtual bool IsInRange( SwNodeOffset nSttNd, SwNodeOffset nEndNd ) const override;
 };
 
 }
@@ -176,7 +176,7 @@ const SwNode* SwIntrnlRefLink::GetAnchor() const
     return pNd;
 }
 
-bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd ) const
+bool SwIntrnlRefLink::IsInRange( SwNodeOffset nSttNd, SwNodeOffset nEndNd ) const
 {
     bool bInRange = false;
     m_rFieldType.CallSwClientNotify(sw::InRangeSearchHint(nSttNd, nEndNd, bInRange));

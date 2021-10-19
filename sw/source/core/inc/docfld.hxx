@@ -44,7 +44,7 @@ enum class SwFieldIds : sal_uInt16;
 // Update expression fields
 class SetGetExpField
 {
-    sal_uLong m_nNode;
+    SwNodeOffset m_nNode;
     union {
         const SwTextField* pTextField;
         const SwSection* pSection;
@@ -96,7 +96,7 @@ public:
     const SwFlyFrameFormat* GetFlyFormat() const
         { return FLYFRAME == m_eSetGetExpFieldType ? m_CNTNT.pFlyFormat : nullptr; }
 
-    sal_uLong GetNode() const { return m_nNode; }
+    SwNodeOffset GetNode() const { return m_nNode; }
     sal_Int32 GetContent() const { return m_nContent; }
     const void* GetPointer() const { return m_CNTNT.pTextField; }
 
@@ -140,7 +140,7 @@ class SwDocUpdateField
     std::unique_ptr<SetGetExpFields> m_pFieldSortList; ///< current field list for calculation
     SwHashTable<SwCalcFieldType> m_FieldTypeTable;
 
-    sal_uLong m_nNodes; ///< to check if the node count changed
+    SwNodeOffset m_nNodes; ///< to check if the node count changed
     int m_nFieldListGetMode;
     SwDoc& m_rDoc;
 

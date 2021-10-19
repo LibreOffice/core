@@ -698,8 +698,8 @@ void sw_setValue( SwXCell &rCell, double nVal )
     if(!rCell.IsValid())
         return;
     // first this text (maybe) needs to be deleted
-    sal_uLong nNdPos = rCell.m_pBox->IsValidNumTextNd();
-    if(ULONG_MAX != nNdPos)
+    SwNodeOffset nNdPos = rCell.m_pBox->IsValidNumTextNd();
+    if(NODE_OFFSET_MAX != nNdPos)
         sw_setString( rCell, OUString(), true );   // true == keep number format
     SwDoc* pDoc = rCell.GetDoc();
     UnoActionContext aAction(pDoc);
@@ -853,8 +853,8 @@ void SwXCell::setFormula(const OUString& rFormula)
     if(!IsValid())
         return;
     // first this text (maybe) needs to be deleted
-    sal_uInt32 nNdPos = m_pBox->IsValidNumTextNd();
-    if(USHRT_MAX == nNdPos)
+    SwNodeOffset nNdPos = m_pBox->IsValidNumTextNd();
+    if(SwNodeOffset(USHRT_MAX) == nNdPos)
         sw_setString( *this, OUString(), true );
     OUString sFormula(comphelper::string::stripStart(rFormula, ' '));
     if( !sFormula.isEmpty() && '=' == sFormula[0] )

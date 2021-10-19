@@ -50,7 +50,7 @@ SwUndoInsNum::SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
     m_sReplaceRule( rReplaceRule ), m_nLRSavePos( 0 )
 {
     // No selection!
-    m_nEndNode = 0;
+    m_nEndNode = SwNodeOffset(0);
     m_nEndContent = COMPLETE_STRING;
     m_nSttNode = rPos.nNode.GetIndex();
     m_nSttContent = rPos.nContent.GetIndex();
@@ -155,7 +155,8 @@ void SwUndoInsNum::SaveOldNumRule( const SwNumRule& rOld )
 SwUndoDelNum::SwUndoDelNum( const SwPaM& rPam )
     : SwUndo( SwUndoId::DELNUM, &rPam.GetDoc() ), SwUndRng( rPam )
 {
-    m_aNodes.reserve( std::min<sal_uLong>(m_nEndNode - m_nSttNode, 255) );
+    if (m_nEndNode > m_nSttNode)
+        m_aNodes.reserve( std::min<sal_Int32>(sal_Int32(m_nEndNode - m_nSttNode), 255) );
     m_pHistory.reset( new SwHistory );
 }
 
@@ -202,7 +203,7 @@ void SwUndoDelNum::AddNode( const SwTextNode& rNd )
     }
 }
 
-SwUndoMoveNum::SwUndoMoveNum( const SwPaM& rPam, tools::Long nOff, bool bIsOutlMv )
+SwUndoMoveNum::SwUndoMoveNum( const SwPaM& rPam, SwNodeOffset nOff, bool bIsOutlMv )
     : SwUndo( bIsOutlMv ? SwUndoId::OUTLINE_UD : SwUndoId::MOVENUM, &rPam.GetDoc() ),
     SwUndRng( rPam ),
     m_nNewStart( 0 ), m_nOffset( nOff )
@@ -213,7 +214,7 @@ SwUndoMoveNum::SwUndoMoveNum( const SwPaM& rPam, tools::Long nOff, bool bIsOutlM
 
 void SwUndoMoveNum::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    sal_uLong nTmpStt = m_nSttNode, nTmpEnd = m_nEndNode;
+    SwNodeOffset nTmpStt = m_nSttNode, nTmpEnd = m_nEndNode;
 
     if (m_nEndNode || m_nEndContent != COMPLETE_STRING)        // section?
     {
@@ -243,7 +244,7 @@ void SwUndoMoveNum::RepeatImpl(::sw::RepeatContext & rContext)
     if( SwUndoId::OUTLINE_UD == GetId() )
     {
         rDoc.MoveOutlinePara(rContext.GetRepeatPaM(),
-                                            0 < m_nOffset ? 1 : -1 );
+                                            SwNodeOffset(0) < m_nOffset ? 1 : -1 );
     }
     else
     {

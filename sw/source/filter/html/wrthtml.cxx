@@ -350,7 +350,7 @@ ErrCode SwHTMLWriter::WriteStream()
     }
 
     if( m_bShowProgress )
-        ::StartProgress( STR_STATSTR_W4WWRITE, 0, m_pDoc->GetNodes().Count(),
+        ::StartProgress( STR_STATSTR_W4WWRITE, 0, sal_Int32(m_pDoc->GetNodes().Count()),
                          m_pDoc->GetDocShell());
 
     m_xDfltColor.reset();
@@ -588,7 +588,7 @@ static const SwFormatCol *lcl_html_GetFormatCol( const SwSection& rSection,
     return pCol;
 }
 
-static bool lcl_html_IsMultiColStart( const SwHTMLWriter& rHTMLWrt, sal_uLong nIndex )
+static bool lcl_html_IsMultiColStart( const SwHTMLWriter& rHTMLWrt, SwNodeOffset nIndex )
 {
     bool bRet = false;
     const SwSectionNode *pSectNd =
@@ -604,7 +604,7 @@ static bool lcl_html_IsMultiColStart( const SwHTMLWriter& rHTMLWrt, sal_uLong nI
     return bRet;
 }
 
-static bool lcl_html_IsMultiColEnd( const SwHTMLWriter& rHTMLWrt, sal_uLong nIndex )
+static bool lcl_html_IsMultiColEnd( const SwHTMLWriter& rHTMLWrt, SwNodeOffset nIndex )
 {
     bool bRet = false;
     const SwEndNode *pEndNd = rHTMLWrt.m_pDoc->GetNodes()[nIndex]->GetEndNode();
@@ -743,8 +743,8 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
     const SwSection *pSurrSection = nullptr;
     const SwFormatCol *pSurrCol = nullptr;
 
-    sal_uInt32 nSectSttIdx = rSectNd.GetIndex();
-    sal_uInt32 nSectEndIdx = rSectNd.EndOfSectionIndex();
+    SwNodeOffset nSectSttIdx = rSectNd.GetIndex();
+    SwNodeOffset nSectEndIdx = rSectNd.EndOfSectionIndex();
     const SwFormatCol *pCol = lcl_html_GetFormatCol( rSection, *pFormat );
     if( pCol )
     {
@@ -781,7 +781,7 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
     // The surrounding section must be closed before the current one is
     // opened, except that it start immediately before the current one or
     // another end immediately before the current one
-    if( pSurrCol && nSectSttIdx - pSurrSectNd->GetIndex() > 1 &&
+    if( pSurrCol && nSectSttIdx - pSurrSectNd->GetIndex() > SwNodeOffset(1) &&
         !lcl_html_IsMultiColEnd( rHTMLWrt, nSectSttIdx-1 ) )
         lcl_html_OutSectionEndTag( rHTMLWrt );
 
@@ -804,7 +804,7 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
     // The surrounding section must be started again, except that it ends
     // immediately behind the current one.
     if( pSurrCol &&
-        pSurrSectNd->EndOfSectionIndex() - nSectEndIdx > 1 &&
+        pSurrSectNd->EndOfSectionIndex() - nSectEndIdx > SwNodeOffset(1) &&
         !lcl_html_IsMultiColStart( rHTMLWrt, nSectEndIdx+1 ) )
         lcl_html_OutSectionStartTag( rHTMLWrt, *pSurrSection, *pSurrFormat,
                                      pSurrCol, true );
@@ -858,10 +858,10 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
                 break;
 
             ++m_pCurrentPam->GetPoint()->nNode;   // move
-            sal_uInt32 nPos = m_pCurrentPam->GetPoint()->nNode.GetIndex();
+            SwNodeOffset nPos = m_pCurrentPam->GetPoint()->nNode.GetIndex();
 
             if( m_bShowProgress )
-                ::SetProgressState( nPos, m_pDoc->GetDocShell() );   // How far ?
+                ::SetProgressState( sal_Int32(nPos), m_pDoc->GetDocShell() );   // How far ?
 
             /* If only the selected area should be saved, so only the complete
              * nodes should be saved, this means the first and n-th node
@@ -946,8 +946,8 @@ static void OutBodyColor( const char* pTag, const SwFormat *pFormat,
 
 sal_uInt16 SwHTMLWriter::OutHeaderAttrs()
 {
-    sal_uLong nIdx = m_pCurrentPam->GetPoint()->nNode.GetIndex();
-    sal_uLong nEndIdx = m_pCurrentPam->GetMark()->nNode.GetIndex();
+    SwNodeOffset nIdx = m_pCurrentPam->GetPoint()->nNode.GetIndex();
+    SwNodeOffset nEndIdx = m_pCurrentPam->GetMark()->nNode.GetIndex();
 
     SwTextNode *pTextNd = nullptr;
     while( nIdx<=nEndIdx &&
@@ -1036,7 +1036,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
     // In none HTML documents the first set template will be exported
     // and if none is set the default template
-    sal_uLong nNodeIdx = m_pCurrentPam->GetPoint()->nNode.GetIndex();
+    SwNodeOffset nNodeIdx = m_pCurrentPam->GetPoint()->nNode.GetIndex();
 
     while( nNodeIdx < m_pDoc->GetNodes().Count() )
     {
@@ -1153,7 +1153,7 @@ void SwHTMLWriter::OutBookmarks()
         pBookmark = pMarkAccess->getAllMarksBegin()[m_nBkmkTabPos];
     // Output all bookmarks in this paragraph. The content position
     // for the moment isn't considered!
-    sal_uInt32 nNode = m_pCurrentPam->GetPoint()->nNode.GetIndex();
+    SwNodeOffset nNode = m_pCurrentPam->GetPoint()->nNode.GetIndex();
     while( m_nBkmkTabPos != -1
            && pBookmark->GetMarkPos().nNode.GetIndex() == nNode )
     {
@@ -1497,8 +1497,8 @@ OString SwHTMLWriter::GetNamespace() const
 
 // Structure caches the current data of the writer to output a
 // other part of the document, like e.g. header/footer
-HTMLSaveData::HTMLSaveData(SwHTMLWriter& rWriter, sal_uLong nStt,
-                           sal_uLong nEnd, bool bSaveNum,
+HTMLSaveData::HTMLSaveData(SwHTMLWriter& rWriter, SwNodeOffset nStt,
+                           SwNodeOffset nEnd, bool bSaveNum,
                            const SwFrameFormat *pFrameFormat)
     : rWrt(rWriter)
     , pOldPam(rWrt.m_pCurrentPam)
