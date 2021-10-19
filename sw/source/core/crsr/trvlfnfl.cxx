@@ -30,9 +30,13 @@
 #include <viscrs.hxx>
 #include "callnk.hxx"
 #include <svx/srchdlg.hxx>
+#include <wrtsh.hxx>
 
 bool SwCursorShell::CallCursorShellFN( FNCursorShell fnCursor )
 {
+    if (SwWrtShell* pWrtSh = dynamic_cast<SwWrtShell*>(this))
+        pWrtSh->addCurrentPosition();
+
     SwCallLink aLk( *this ); // watch Cursor-Moves
     bool bRet = (this->*fnCursor)();
     if( bRet )
@@ -43,6 +47,9 @@ bool SwCursorShell::CallCursorShellFN( FNCursorShell fnCursor )
 
 bool SwCursorShell::CallCursorFN( FNCursor fnCursor )
 {
+    if (SwWrtShell* pWrtSh = dynamic_cast<SwWrtShell*>(this))
+        pWrtSh->addCurrentPosition();
+
     SwCallLink aLk( *this ); // watch Cursor-Moves
     SwCursor* pCursor = getShellCursor( true );
     bool bRet = (pCursor->*fnCursor)();
@@ -161,6 +168,9 @@ bool SwCursor::GotoFootnoteAnchor()
 
 bool SwCursorShell::GotoFootnoteAnchor()
 {
+    if (SwWrtShell* pWrtSh = dynamic_cast<SwWrtShell*>(this))
+        pWrtSh->addCurrentPosition();
+
     // jump from footnote to anchor
     SwCallLink aLk( *this ); // watch Cursor-Moves
     bool bRet = m_pCurrentCursor->GotoFootnoteAnchor();
