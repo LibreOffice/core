@@ -24,6 +24,7 @@
 #include <com/sun/star/document/XInteractionFilterSelect.hpp>
 #include <com/sun/star/document/XInteractionFilterOptions.hpp>
 #include <com/sun/star/document/FilterOptionsRequest.hpp>
+#include <com/sun/star/document/ReadOnlyOpenRequest.hpp>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
 
 #include <com/sun/star/document/LockedDocumentRequest.hpp>
@@ -77,6 +78,7 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
     css::task::ErrorCodeRequest          aErrorCodeRequest;
     css::document::LockedDocumentRequest aLockedDocumentRequest;
     css::document::FilterOptionsRequest  aFilterOptionsRequest;
+    css::document::ReadOnlyOpenRequest   aReadOnlyOpenRequest;
 
     if( aRequest >>= aErrorCodeRequest )
     {
@@ -106,6 +108,19 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
         {
             // let the default filter options be used
             xFOptions->select();
+        }
+    }
+    else
+    if (aRequest >>= aReadOnlyOpenRequest)
+    {
+        // allow unit tests to run on read-only SRCDIR
+        if (xApprove.is())
+        {
+            xApprove->select();
+        }
+        else if (xAbort.is())
+        {
+            xAbort->select();
         }
     }
     else
