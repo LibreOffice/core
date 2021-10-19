@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0836187f_382f783c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-10-19T09:54:25Z",
+      "side": 1,
+      "message": "Hello,\n\nIs the value 30 for the tolerance in the two calls:\n\nlcl_AssertRectEqualWithTolerance(\"Reload: wrong pos and size\", aExpectRect, aSnapRect, 30);\n\njust an arbitrary number that worked for you, or a carefully chosen value? These tests fail for me on my Mac (with a Retina (HiDPI) display), but if I change the tolerance to 40, they pass. Does that sound reasonable?",
+      "revId": "84d6d704682a4d0e037a28895356b073e4f992a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
