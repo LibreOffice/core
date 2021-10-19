@@ -22,6 +22,30 @@
       },
       "revId": "23cded985ba0131f85ee445492c04871fbfb6351",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d703e7d6_2c7bfd67",
+        "filename": "include/comphelper/propertyvalue.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-19T07:34:15Z",
+      "side": 1,
+      "message": "Yes, I think you must be right. In the first case, it was necessary; so since I wasn\u0027t quite sure if I need to make the two conditions be only different in one negation, I decided to play safe :-)",
+      "parentUuid": "51c6fae9_5d246a9a",
+      "range": {
+        "startLine": 36,
+        "startChar": 60,
+        "endLine": 36,
+        "endChar": 83
+      },
+      "revId": "23cded985ba0131f85ee445492c04871fbfb6351",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
