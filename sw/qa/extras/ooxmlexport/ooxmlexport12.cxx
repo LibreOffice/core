@@ -39,8 +39,9 @@ protected:
     }
 };
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTableCrossReference, "table_cross_reference.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTableCrossReference)
 {
+    loadAndReload("table_cross_reference.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // tdf#42346: Cross references to tables were not saved
     // MSO uses simple bookmarks for referencing table caption, so we do the same by export
@@ -343,8 +344,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTableCrossReferenceCustomFormat,
     }
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testObjectCrossReference, "object_cross_reference.odt")
+CPPUNIT_TEST_FIXTURE(Test, testObjectCrossReference)
 {
+    loadAndReload("object_cross_reference.odt");
     CPPUNIT_ASSERT_EQUAL(10, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     // tdf#42346: Cross references to objects were not saved
@@ -854,8 +856,9 @@ DECLARE_OOXMLEXPORT_TEST(testWatermarkTrim, "tdf114308.docx")
     CPPUNIT_ASSERT_MESSAGE(ss.str(), nDifference >= -4);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testVMLShapetypeId, "controlshape.fodt")
+CPPUNIT_TEST_FIXTURE(Test, testVMLShapetypeId)
 {
+    loadAndSave("controlshape.fodt");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // must be _x0000_t<NR>
     assertXPath(pXmlDoc,
@@ -870,8 +873,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testVMLShapetypeId, "controlshape.fodt")
                 "type", "#_x0000_t75");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf73547, "tdf73547-dash.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf73547)
 {
+    loadAndSave("tdf73547-dash.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     double nD = getXPath(pXmlDoc, "//a:custDash/a:ds[1]", "d").toDouble();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(105000.0, nD, 5000.0); // was 100000
@@ -898,8 +902,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119143, "tdf119143.docx")
         sParaText);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf105444, "tdf105444.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf105444)
 {
+    loadAndSave("tdf105444.docx");
     xmlDocUniquePtr pXmlComm = parseExport("word/comments.xml");
     // there is no extra paragraph on Win32, only a single one.
     assertXPath(pXmlComm, "/w:comments/w:comment/w:p", 1);
@@ -938,8 +943,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138780, "tdf138780.odt")
     CPPUNIT_ASSERT(xPara3->getPropertyValue("NumberingRules").hasValue());
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf134618, "tdf134618.doc")
+CPPUNIT_TEST_FIXTURE(Test, testTdf134618)
 {
+    loadAndSave("tdf134618.doc");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     //Without the fix it in place, it would have failed with
@@ -950,8 +956,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf134618, "tdf134618.doc")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent", 2);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf99631, "tdf99631.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf99631)
 {
+    loadAndSave("tdf99631.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc, "//w:object", 2);
@@ -964,8 +971,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf99631, "tdf99631.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:object[1]", "dyaOrig", "768");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf138899, "tdf138899.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf138899)
 {
+    loadAndSave("tdf138899.docx");
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
     // This was 6, not removed empty temporary paragraph at the end of the section
     assertXPath(pXmlDocument, "/w:document/w:body/w:p", 5);
@@ -974,8 +982,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf138899, "tdf138899.docx")
     assertXPath(pXmlDocument, "//w:p[1]/w:pPr/w:contextualSpacing", "val", "false");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf122563, "tdf122563.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf122563)
 {
+    loadAndSave("tdf122563.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:object", 1);
@@ -984,8 +993,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf122563, "tdf122563.docx")
                 "width:255.75pt;height:63.75pt;mso-wrap-distance-right:0pt");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf94628, "tdf94628.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf94628)
 {
+    loadAndReload("tdf94628.docx");
     uno::Reference<beans::XPropertySet> xPropertySet(
         getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(
@@ -1061,8 +1071,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf122594, "tdf122594.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), nCheck);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testLanguageInGroupShape, "tdf131922_LanguageInGroupShape.docx")
+CPPUNIT_TEST_FIXTURE(Test, testLanguageInGroupShape)
 {
+    loadAndSave("tdf131922_LanguageInGroupShape.docx");
     // tdf#131922: Check if good language is used in shape group texts
     xmlDocUniquePtr pXml = parseExport("word/document.xml");
     assertXPath(pXml,
@@ -1116,8 +1127,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf116883, "tdf116883.docx")
     }
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf131420, "tdf131420.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf131420)
 {
+    loadAndSave("tdf131420.docx");
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
     assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:pPr/w:pBdr[2]");
 }
