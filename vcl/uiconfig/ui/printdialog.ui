@@ -99,6 +99,9 @@
                 <property name="has-default">True</property>
                 <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
               </object>
               <packing>
                 <property name="expand">False</property>
