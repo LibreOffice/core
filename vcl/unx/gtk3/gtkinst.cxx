@@ -21633,9 +21633,18 @@ private:
                 gtk_widget_hide(pWidget);
         }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
         if (m_pStringReplace)
         {
+            // tdf#136498 %PRODUCTNAME shown in tool tips
+            const char* pTooltip = gtk_widget_get_tooltip_text(pWidget);
+            if (pTooltip && pTooltip[0])
+            {
+                OUString aTooltip(pTooltip, strlen(pTooltip), RTL_TEXTENCODING_UTF8);
+                aTooltip = (*m_pStringReplace)(aTooltip);
+                gtk_widget_set_tooltip_text(pWidget, OUStringToOString(aTooltip, RTL_TEXTENCODING_UTF8).getStr());
+            }
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
             // tdf#142704 %PRODUCTNAME shown in extended tips
             AtkObject* pAtkObject = gtk_widget_get_accessible(pWidget);
             const char* pDesc = pAtkObject ? atk_object_get_description(pAtkObject) : nullptr;
@@ -21645,8 +21654,8 @@ private:
                 aDesc = (*m_pStringReplace)(aDesc);
                 atk_object_set_description(pAtkObject, OUStringToOString(aDesc, RTL_TEXTENCODING_UTF8).getStr());
             }
-        }
 #endif
+        }
 
         // expand placeholder and collect potentially missing mnemonics
         if (GTK_IS_BUTTON(pWidget))
