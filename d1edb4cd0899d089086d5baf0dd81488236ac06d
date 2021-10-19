@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "999570a9_a992ba3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-19T12:02:53Z",
+      "side": 1,
+      "message": "Yes, that does the trick.\nI\u0027m afraid I\u0027m all out of bugs to report. I hope you don\u0027t get bored for the rest of the day...",
+      "revId": "d1edb4cd0899d089086d5baf0dd81488236ac06d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
