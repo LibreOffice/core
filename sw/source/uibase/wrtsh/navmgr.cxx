@@ -170,10 +170,6 @@ void SwNavigationMgr::goForward() {
 
 bool SwNavigationMgr::addEntry(const SwPosition& rPos) {
 
-    // For additions other than to the end, check here if the cursor position has changed
-    if (m_nCurrent < m_entries.size() && (rPos == *m_entries[m_nCurrent]->GetPoint()))
-        return false;
-
     // Flags that will be used for refreshing the buttons
     bool bBackWasDisabled = !backEnabled();
     bool bForwardWasEnabled = forwardEnabled();
