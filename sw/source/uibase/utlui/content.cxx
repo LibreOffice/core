@@ -1529,6 +1529,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
         return false;
 
+    grab_focus();
+
     if (std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
             rCEvt.IsMouseEvent() &&  m_xTreeView->get_dest_row_at_pos(
                 rCEvt.GetMousePosPixel(), xEntry.get(), false))
@@ -1848,6 +1850,22 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
 
     if (bRemoveSectionTracking)
         xPop->remove("sectiontracking");
+
+    bool bSetSensitiveCollapseAllCategories = false;
+    if (!m_bIsRoot)
+    {
+        bool bEntry = m_xTreeView->get_iter_first(*xEntry);
+        while (bEntry)
+        {
+            if (m_xTreeView->get_row_expanded(*xEntry))
+            {
+                bSetSensitiveCollapseAllCategories = true;
+                break;
+            }
+            bEntry = m_xTreeView->iter_next_sibling(*xEntry);
+        }
+    }
+    xPop->set_sensitive("collapseallcategories", bSetSensitiveCollapseAllCategories);
 
     OString sCommand = xPop->popup_at_rect(m_xTreeView.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
     if (!sCommand.isEmpty())
@@ -4216,6 +4234,17 @@ IMPL_LINK(SwContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUStrin
 
 void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
 {
+    if (rSelectedPopupEntry == "collapseallcategories")
+    {
+        std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
+        bool bEntry = m_xTreeView->get_iter_first(*xEntry);
+        while (bEntry)
+        {
+            m_xTreeView->collapse_row(*xEntry);
+            bEntry = m_xTreeView->iter_next_sibling(*xEntry);
+        }
+        return;
+    }
     if (rSelectedPopupEntry == "tabletracking")
     {
         m_bTableTracking = !m_bTableTracking;
