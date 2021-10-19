@@ -14,6 +14,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,comphelper_test, \
     comphelper/qa/container/testifcontainer \
     comphelper/qa/unit/test_hash \
     comphelper/qa/unit/base64_test \
+    comphelper/qa/unit/propertyvalue \
     comphelper/qa/unit/types_test \
     comphelper/qa/unit/test_guards \
     comphelper/qa/unit/test_traceevent \
