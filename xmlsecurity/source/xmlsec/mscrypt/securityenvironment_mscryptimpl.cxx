@@ -764,7 +764,7 @@ static bool CheckUnitTestStore(PCCERT_CHAIN_CONTEXT const pChainContext, DWORD i
             NULL,
             CERT_STORE_OPEN_EXISTING_FLAG | CERT_STORE_READONLY_FLAG,
             OString(OString::Concat(pVar) + "/test.p7b").getStr());
-    assert(hExtra != NULL);
+    assert(hExtra != nullptr);
     if (pSimpleChain->cElement < 1)
     {
         SAL_WARN("xmlsecurity.xmlsec", "unexpected empty chain");
@@ -777,13 +777,13 @@ static bool CheckUnitTestStore(PCCERT_CHAIN_CONTEXT const pChainContext, DWORD i
             0,
             CERT_FIND_SUBJECT_NAME,
             &pRoot->pCertInfo->Subject,
-            NULL);
+            nullptr);
     if (pIssuerCert)
     {
         // check that it signed itself
         DWORD flags = CERT_STORE_SIGNATURE_FLAG;
-        BOOL result = CertVerifySubjectCertificateContext(pRoot, pIssuerCert, &flags);
-        if (result == TRUE && flags == 0)
+        bool result = CertVerifySubjectCertificateContext(pRoot, pIssuerCert, &flags);
+        if (result && flags == 0)
         {
             ret = true;
         }
