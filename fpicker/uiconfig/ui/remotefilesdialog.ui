@@ -465,6 +465,8 @@
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
                             <property name="model">liststore2</property>
+                            <property name="pixbuf_column">0</property>
+                            <property name="text_column">1</property>
                           </object>
                         </child>
                       </object>
