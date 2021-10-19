@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c7c5982_4c14ae2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-10-19T15:26:48Z",
+      "side": 1,
+      "message": "Works nicely on gtk3 but kf5 (and likely gen) allows to shrink the upper scrollwindow to zero. But an improvement anyway - and since the action is done manually the user knows what s/he did.",
+      "revId": "21cd93ba9a3152ac6c3c8035de40a53ee2dfbbf6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
