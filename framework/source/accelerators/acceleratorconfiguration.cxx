@@ -1012,13 +1012,13 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( bool bPreferred, const css:
 
             const sal_Int32 nToken = 4;
             bool bValid = true;
-            sal_Int32 k=0;
-            for (OUString sToken; k<nToken; ++k)
+            sal_Int32 k;
+            for (k = 0; k < nToken; ++k)
             {
                 if (nIndex < 0)
                     break;
 
-                sToken = sKey.getToken(0, '_', nIndex);
+                OUString sToken = sKey.getToken(0, '_', nIndex);
                 if (sToken.isEmpty())
                 {
                     bValid = false;
@@ -1224,13 +1224,12 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const OUString& sPrimarySe
     aKeyEvent.KeyCode = KeyMapping::get().mapIdentifierToCode("KEY_"+sKeyIdentifier);
 
     const int nToken = 4;
-    sal_Int32 i = 0;
-    for (OUString sToken; i<nToken; ++i)
+    for (sal_Int32 i = 0; i < nToken; ++i)
     {
         if ( nIndex < 0 )
             break;
 
-        sToken = sKey.getToken(0, '_', nIndex);
+        OUString sToken = sKey.getToken(0, '_', nIndex);
         if ( sToken == "SHIFT" )
             aKeyEvent.Modifiers |= css::awt::KeyModifier::SHIFT;
         else if ( sToken == "MOD1" )
