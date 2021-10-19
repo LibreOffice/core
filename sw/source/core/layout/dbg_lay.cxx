@@ -543,7 +543,7 @@ static OUString lcl_CellText(const SwCellFrame* pFrame)
     const SwEndNode* pEndNode = pStartNode->EndOfSectionNode();
     const SwNodes& nodes = pStartNode->GetNodes();
 
-    for (sal_uLong i = pStartNode->GetIndex(); i < nodes.Count(); i++)
+    for (SwNodeOffset i = pStartNode->GetIndex(); i < nodes.Count(); i++)
     {
         SwNode* pNode = nodes[i];
 

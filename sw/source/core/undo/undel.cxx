@@ -52,7 +52,7 @@
     ( == AUTO ), if the anchor frame has be moved via MoveNodes(..) and
     DelFrames(..)
 */
-static void lcl_MakeAutoFrames( const SwFrameFormats& rSpzArr, sal_uLong nMovedIndex )
+static void lcl_MakeAutoFrames( const SwFrameFormats& rSpzArr, SwNodeOffset nMovedIndex )
 {
     for( size_t n = 0; n < rSpzArr.size(); ++n )
     {
@@ -73,7 +73,7 @@ static SwTextNode * FindFirstAndNextNode(SwDoc & rDoc, SwUndRng const& rRange,
 {
     // redlines are corrected now to exclude the deleted node
     assert(rRange.m_nEndContent == 0);
-    sal_uLong nEndOfRedline = 0;
+    SwNodeOffset nEndOfRedline(0);
     for (size_t i = 0; i < rRedlineSaveData.size(); ++i)
     {
         auto const& rRedline(rRedlineSaveData[i]);
@@ -92,7 +92,7 @@ static SwTextNode * FindFirstAndNextNode(SwDoc & rDoc, SwUndRng const& rRange,
     {
         assert(o_rpFirstMergedDeletedTextNode);
         SwTextNode * pNextNode(nullptr);
-        for (sal_uLong i = rRange.m_nEndNode; /* i <= nEndOfRedline */; ++i)
+        for (SwNodeOffset i = rRange.m_nEndNode; /* i <= nEndOfRedline */; ++i)
         {
             SwNode *const pNode(rDoc.GetNodes()[i]);
             assert(!pNode->IsEndNode()); // cannot be both leaving section here *and* overlapping redline
@@ -228,7 +228,7 @@ SwUndoDelete::SwUndoDelete(
     {
         DelContentIndex( *rPam.GetMark(), *rPam.GetPoint() );
         ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
-        if (m_nEndNode - m_nSttNode > 1) // check for fully selected nodes
+        if (m_nEndNode - m_nSttNode > SwNodeOffset(1)) // check for fully selected nodes
         {
             SwNodeIndex const start(pStt->nNode, +1);
             DelBookmarks(start, pEnd->nNode);
@@ -331,7 +331,7 @@ SwUndoDelete::SwUndoDelete(
                     // The dummy is needed because MoveNodes deletes empty
                     // sections
                     ++m_nReplaceDummy;
-                    SwNodeRange aMvRg( *pEndTextNd, 0, *pEndTextNd, 1 );
+                    SwNodeRange aMvRg( *pEndTextNd, SwNodeOffset(0), *pEndTextNd, SwNodeOffset(1) );
                     SwPosition aSplitPos( *pEndTextNd );
                     ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
                     rDoc.getIDocumentContentOperations().SplitNode( aSplitPos, false );
@@ -339,14 +339,14 @@ SwUndoDelete::SwUndoDelete(
                     --aRg.aEnd;
                 }
                 else
-                    m_nReplaceDummy = 0;
+                    m_nReplaceDummy = SwNodeOffset(0);
             }
         }
         if( m_bBackSp || bFullPara )
         {
             // See above, the selection has to be expanded if there are "nearly
             // empty" sections and a replacement dummy has to be set if needed.
-            while( 1 < aRg.aStart.GetIndex() &&
+            while( SwNodeOffset(1) < aRg.aStart.GetIndex() &&
                 ( (pTmpNd = rDocNds[ aRg.aStart.GetIndex()-1 ])->IsSectionNode() &&
                 pTmpNd->EndOfSectionIndex() < aRg.aEnd.GetIndex() ) )
                 --aRg.aStart;
@@ -355,7 +355,7 @@ SwUndoDelete::SwUndoDelete(
                 m_nReplaceDummy = m_nSttNode - m_nNdDiff - aRg.aStart.GetIndex();
                 if( m_nReplaceDummy )
                 {
-                    SwNodeRange aMvRg( *pSttTextNd, 0, *pSttTextNd, 1 );
+                    SwNodeRange aMvRg( *pSttTextNd, SwNodeOffset(0), *pSttTextNd, SwNodeOffset(1) );
                     SwPosition aSplitPos( *pSttTextNd );
                     ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
                     rDoc.getIDocumentContentOperations().SplitNode( aSplitPos, false );
@@ -396,12 +396,12 @@ SwUndoDelete::SwUndoDelete(
             {
                 if( m_bJoinNext )
                 {
-                    SwNodeRange aMvRg( *pEndTextNd, 0, *pEndTextNd, 1 );
+                    SwNodeRange aMvRg( *pEndTextNd, SwNodeOffset(0), *pEndTextNd, SwNodeOffset(1) );
                     rDocNds.MoveNodes( aMvRg, rDocNds, aRg.aStart );
                 }
                 else
                 {
-                    SwNodeRange aMvRg( *pSttTextNd, 0, *pSttTextNd, 1 );
+                    SwNodeRange aMvRg( *pSttTextNd, SwNodeOffset(0), *pSttTextNd, SwNodeOffset(1) );
                     rDocNds.MoveNodes( aMvRg, rDocNds, aRg.aEnd );
                 }
             }
@@ -411,7 +411,7 @@ SwUndoDelete::SwUndoDelete(
                 m_bJoinNext ? pEndTextNd->GetIndex() : pSttTextNd->GetIndex() );
     }
     else
-        m_nNode = 0;      // moved no node -> no difference at the end
+        m_nNode = SwNodeOffset(0);      // moved no node -> no difference at the end
 
     // Are there any Nodes that got deleted before that (FootNotes
     // have ContentNodes)?
@@ -439,7 +439,7 @@ SwUndoDelete::SwUndoDelete(
 bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
                     SwTextNode* pSttTextNd, SwTextNode* pEndTextNd )
 {
-    sal_uLong nNdIdx = pStt->nNode.GetIndex();
+    SwNodeOffset nNdIdx = pStt->nNode.GetIndex();
     // 1 - copy start in Start-String
     if( pSttTextNd )
     {
@@ -762,7 +762,7 @@ SwRewriter SwUndoDelete::GetRewriter() const
 {
     SwRewriter aResult;
 
-    if (m_nNode != 0)
+    if (m_nNode != SwNodeOffset(0))
     {
         if (!m_sTableName.isEmpty())
         {
@@ -819,7 +819,7 @@ SwRewriter SwUndoDelete::GetRewriter() const
 }
 
 // Every object, anchored "AtContent" will be reanchored at rPos
-static void lcl_ReAnchorAtContentFlyFrames( const SwFrameFormats& rSpzArr, const SwPosition &rPos, sal_uLong nOldIdx )
+static void lcl_ReAnchorAtContentFlyFrames( const SwFrameFormats& rSpzArr, const SwPosition &rPos, SwNodeOffset nOldIdx )
 {
     if( rSpzArr.empty() )
         return;
@@ -848,7 +848,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc& rDoc = rContext.GetDoc();
 
-    sal_uLong nCalcStt = m_nSttNode - m_nNdDiff;
+    SwNodeOffset nCalcStt = m_nSttNode - m_nNdDiff;
 
     if( m_nSectDiff && m_bBackSp )
         nCalcStt += m_nSectDiff;
@@ -881,7 +881,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         else
             pInsNd = nullptr;         // do not delete Node!
 
-        bool bNodeMove = 0 != m_nNode;
+        bool bNodeMove = SwNodeOffset(0) != m_nNode;
 
         if( m_aEndStr )
         {
@@ -906,7 +906,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 
             if( m_aSttStr && !m_bFromTableCopy )
             {
-                sal_uLong nOldIdx = aPos.nNode.GetIndex();
+                SwNodeOffset nOldIdx = aPos.nNode.GetIndex();
                 rDoc.getIDocumentContentOperations().SplitNode( aPos, false );
                 // After the split all objects are anchored at the first
                 // paragraph, but the pHistory of the fly frame formats relies
@@ -934,7 +934,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             {
                 if (m_nSttContent < pNd->GetText().getLength())
                 {
-                    sal_uLong nOldIdx = aPos.nNode.GetIndex();
+                    SwNodeOffset nOldIdx = aPos.nNode.GetIndex();
                     rDoc.getIDocumentContentOperations().SplitNode( aPos, false );
                     if( m_bBackSp )
                         lcl_ReAnchorAtContentFlyFrames(*rDoc.GetSpzFrameFormats(), aPos, nOldIdx);
@@ -945,8 +945,8 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         }
         if( m_nSectDiff )
         {
-            sal_uLong nMoveIndex = aPos.nNode.GetIndex();
-            int nDiff = 0;
+            SwNodeOffset nMoveIndex = aPos.nNode.GetIndex();
+            SwNodeOffset nDiff(0);
             if( m_bJoinNext )
             {
                 nMoveIndex += m_nSectDiff + 1;
@@ -958,7 +958,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 ++nDiff;
             }
             SwNodeIndex aMvIdx(rDoc.GetNodes(), nMoveIndex);
-            SwNodeRange aRg( aPos.nNode, 0 - nDiff, aPos.nNode, 1 - nDiff );
+            SwNodeRange aRg( aPos.nNode, SwNodeOffset(0) - nDiff, aPos.nNode, SwNodeOffset(1) - nDiff );
             --aPos.nNode;
             if( !m_bJoinNext )
                 pMovedNode = &aPos.nNode.GetNode();
@@ -968,7 +968,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 
         if( bNodeMove )
         {
-            SwNodeRange aRange( *m_pMvStt, 0, *m_pMvStt, m_nNode );
+            SwNodeRange aRange( *m_pMvStt, SwNodeOffset(0), *m_pMvStt, m_nNode );
             SwNodeIndex aCopyIndex( aPos.nNode, -1 );
             rDoc.GetUndoManager().GetUndoNodes().Copy_(aRange, aPos.nNode,
                     // sw_redlinehide: delay creating frames: the flags on the
@@ -978,7 +978,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 
             if( m_nReplaceDummy )
             {
-                sal_uLong nMoveIndex;
+                SwNodeOffset nMoveIndex;
                 if( m_bJoinNext )
                 {
                     nMoveIndex = m_nEndNode - m_nNdDiff;
@@ -990,7 +990,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                     nMoveIndex = aPos.nNode.GetIndex() + m_nReplaceDummy + 1;
                 }
                 SwNodeIndex aMvIdx(rDoc.GetNodes(), nMoveIndex);
-                SwNodeRange aRg( aPos.nNode, 0, aPos.nNode, 1 );
+                SwNodeRange aRg( aPos.nNode, SwNodeOffset(0), aPos.nNode, SwNodeOffset(1) );
                 pMovedNode = &aPos.nNode.GetNode();
                 // tdf#131684 without deleting frames
                 rDoc.GetNodes().MoveNodes(aRg, rDoc.GetNodes(), aMvIdx, false);
@@ -1000,7 +1000,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 
         if( m_aSttStr )
         {
-            aPos.nNode = m_nSttNode - m_nNdDiff + ( m_bJoinNext ? 0 : m_nReplaceDummy );
+            aPos.nNode = m_nSttNode - m_nNdDiff + ( m_bJoinNext ? SwNodeOffset(0) : m_nReplaceDummy );
             SwTextNode * pTextNd = aPos.nNode.GetNode().GetTextNode();
             // If more than a single Node got deleted, also all "Node"
             // attributes were saved
@@ -1069,7 +1069,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
     if( m_pRedlSaveData )
         SetSaveData(rDoc, *m_pRedlSaveData);
 
-    sal_uLong delFullParaEndNode(m_nEndNode);
+    SwNodeOffset delFullParaEndNode(m_nEndNode);
     if (m_bDelFullPara && m_pRedlSaveData)
     {
         SwTextNode * pFirstMergedDeletedTextNode(nullptr);
@@ -1107,7 +1107,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             }
         }
     }
-    else if (m_aSttStr && (!m_bFromTableCopy || 0 != m_nNode))
+    else if (m_aSttStr && (!m_bFromTableCopy || SwNodeOffset(0) != m_nNode))
     {
         // only now do we have redlines in the document again; fix up the split
         // frames
@@ -1117,10 +1117,10 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
     }
 
     // create frames after SetSaveData has recreated redlines
-    if (0 != m_nNode)
+    if (SwNodeOffset(0) != m_nNode)
     {
         // tdf#136453 only if section nodes at the start
-        if (m_bBackSp && m_nReplaceDummy != 0)
+        if (m_bBackSp && m_nReplaceDummy != SwNodeOffset(0))
         {
             // tdf#134252 *first* create outer section frames
             // note: text node m_nSttNode currently has frame with an upper;
@@ -1132,7 +1132,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         // tdf#121031 if the start node is a text node, it already has a frame;
         // if it's a table, it does not
         // tdf#109376 exception: end on non-text-node -> start node was inserted
-        assert(!m_bDelFullPara || (m_nSectDiff == 0));
+        assert(!m_bDelFullPara || (m_nSectDiff == SwNodeOffset(0)));
         SwNodeIndex const start(rDoc.GetNodes(), m_nSttNode +
             ((m_bDelFullPara || !rDoc.GetNodes()[m_nSttNode]->IsTextNode() || pInsNd)
                  ? 0 : 1));

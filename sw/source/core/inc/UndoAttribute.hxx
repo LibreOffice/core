@@ -40,7 +40,7 @@ class SwUndoAttr final : public SwUndo, private SwUndRng
     const std::unique_ptr<SwHistory> m_pHistory;      // History for Undo
     std::unique_ptr<SwRedlineData> m_pRedlineData;    // Redlining
     std::unique_ptr<SwRedlineSaveDatas> m_pRedlineSaveData;
-    sal_uLong m_nNodeIndex;                         // Offset: for Redlining
+    SwNodeOffset m_nNodeIndex;                         // Offset: for Redlining
     const SetAttrMode m_nInsertFlags;               // insert flags
     OUString m_aChrFormatName;
 
@@ -87,7 +87,7 @@ class SwUndoFormatAttr final : public SwUndo
     friend class SwUndoDefaultAttr;
     OUString m_sFormatName;
     std::optional<SfxItemSet> m_oOldSet;      // old attributes
-    sal_uLong m_nNodeIndex;
+    SwNodeOffset m_nNodeIndex;
     const sal_uInt16 m_nFormatWhich;
     const bool m_bSaveDrawPt;
 
@@ -148,7 +148,7 @@ class SwUndoFormatResetAttr final : public SwUndo
 
 class SwUndoDontExpandFormat final : public SwUndo
 {
-    const sal_uLong m_nNodeIndex;
+    const SwNodeOffset m_nNodeIndex;
     const sal_Int32 m_nContentIndex;
 
 public:

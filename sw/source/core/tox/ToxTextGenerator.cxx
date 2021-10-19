@@ -402,7 +402,7 @@ ToxTextGenerator::HandleTextToken(const SwTOXSortTabBase& source,
             {
                 // pSrc already copied above
                 assert(pSrc == pMerged->pParaPropsNode);
-                for (sal_uLong i = pSrc->GetIndex() + 1;
+                for (SwNodeOffset i = pSrc->GetIndex() + 1;
                      i <= pMerged->pLastNode->GetIndex(); ++i)
                 {
                     SwNode *const pTmp(pSrc->GetNodes()[i]);

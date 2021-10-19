@@ -140,9 +140,9 @@ namespace
     class anchoredto
     {
     private:
-        sal_uLong mnNode;
+        SwNodeOffset mnNode;
     public:
-        explicit anchoredto(sal_uLong nNode) : mnNode(nNode) {}
+        explicit anchoredto(SwNodeOffset nNode) : mnNode(nNode) {}
         bool operator()(const ww8::Frame &rFrame) const
         {
             return (mnNode == rFrame.GetPosition().nNode.GetNode().GetIndex());
@@ -756,7 +756,7 @@ namespace sw
         void MoveAttrFieldmarkInserted(SwFltPosition& rMkPos, SwFltPosition& rPtPos, const SwPosition& rPos)
         {
             sal_Int32 const nInserted = 2; // CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDSEP
-            sal_uLong nPosNd = rPos.nNode.GetIndex();
+            SwNodeOffset nPosNd = rPos.nNode.GetIndex();
             sal_Int32 nPosCt = rPos.nContent.GetIndex() - nInserted;
 
             bool const isPoint(rMkPos == rPtPos);

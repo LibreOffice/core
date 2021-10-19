@@ -276,17 +276,17 @@ SwExtTextInput* SwDoc::GetExtTextInput( const SwNode& rNd,
     SwExtTextInput* pRet = nullptr;
     if( mpExtInputRing )
     {
-        sal_uLong nNdIdx = rNd.GetIndex();
+        SwNodeOffset nNdIdx = rNd.GetIndex();
         SwExtTextInput* pTmp = mpExtInputRing;
         do {
-            sal_uLong nPt = pTmp->GetPoint()->nNode.GetIndex(),
+            SwNodeOffset nPt = pTmp->GetPoint()->nNode.GetIndex(),
                   nMk = pTmp->GetMark()->nNode.GetIndex();
             sal_Int32 nPtCnt = pTmp->GetPoint()->nContent.GetIndex();
             sal_Int32 nMkCnt = pTmp->GetMark()->nContent.GetIndex();
 
             if( nPt < nMk || ( nPt == nMk && nPtCnt < nMkCnt ))
             {
-                sal_uLong nTmp = nMk; nMk = nPt; nPt = nTmp;
+                SwNodeOffset nTmp = nMk; nMk = nPt; nPt = nTmp;
                 sal_Int32 nTmp2 = nMkCnt; nMkCnt = nPtCnt; nPtCnt = nTmp2;
             }
 

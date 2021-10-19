@@ -23,6 +23,7 @@
 #include <tools/long.hxx>
 #include <tools/solar.h>
 #include <ndtyp.hxx>
+#include <nodeoffset.hxx>
 
 class SwCursorShell;
 class SwTextNode;
@@ -32,7 +33,7 @@ class SwCallLink
 {
 public:
     SwCursorShell & m_rShell;
-    sal_uLong m_nNode;
+    SwNodeOffset m_nNode;
     tools::Long m_nLeftFramePos;
     sal_Int32 m_nContent;
     SwNodeType m_nNodeType;

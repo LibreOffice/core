@@ -128,7 +128,7 @@ void SwServerObject::SendDataChanged( const SwPosition& rPos )
     }
     if( pNd )
     {
-        sal_uLong nNd = rPos.nNode.GetIndex();
+        SwNodeOffset nNd = rPos.nNode.GetIndex();
         bCall = pNd->GetIndex() < nNd && nNd < pNd->EndOfSectionIndex();
     }
 
@@ -180,7 +180,7 @@ void SwServerObject::SendDataChanged( const SwPaM& rRange )
 
 bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
 {
-    sal_uLong nSttNd = 0, nEndNd = 0;
+    SwNodeOffset nSttNd(0), nEndNd(0);
     const SwNode* pNd = nullptr;
     const SwNodes* pNds = nullptr;
 

@@ -2101,8 +2101,8 @@ void MSWordExportBase::WriteHeaderFooterText( const SwFormat& rFormat, bool bHea
     {
         SwNodeIndex aIdx( *pSttIdx, 1 ),
         aEnd( *pSttIdx->GetNode().EndOfSectionNode() );
-        sal_uLong nStart = aIdx.GetIndex();
-        sal_uLong nEnd = aEnd.GetIndex();
+        SwNodeOffset nStart = aIdx.GetIndex();
+        SwNodeOffset nEnd = aEnd.GetIndex();
 
         // range, i.e. valid node
         if ( nStart < nEnd )

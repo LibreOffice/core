@@ -459,8 +459,8 @@ tools::Polygon lcl_CreateContourPolygon(SdrObject* pSdrObj)
 }
 } // end anonymous namespace
 
-ExportDataSaveRestore::ExportDataSaveRestore(DocxExport& rExport, sal_uLong nStt, sal_uLong nEnd,
-                                             ww8::Frame const* pParentFrame)
+ExportDataSaveRestore::ExportDataSaveRestore(DocxExport& rExport, SwNodeOffset nStt,
+                                             SwNodeOffset nEnd, ww8::Frame const* pParentFrame)
     : m_rExport(rExport)
 {
     m_rExport.SaveData(nStt, nEnd);
@@ -1701,8 +1701,8 @@ void DocxSdrExport::writeOnlyTextOfFrame(ww8::Frame const* pParentFrame)
     const SwFrameFormat& rFrameFormat = pParentFrame->GetFrameFormat();
     const SwNodeIndex* pNodeIndex = rFrameFormat.GetContent().GetContentIdx();
 
-    sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex() + 1 : 0;
-    sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
+    SwNodeOffset nStt = pNodeIndex ? pNodeIndex->GetIndex() + 1 : SwNodeOffset(0);
+    SwNodeOffset nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : SwNodeOffset(0);
 
     //Save data here and restore when out of scope
     ExportDataSaveRestore aDataGuard(m_pImpl->getExport(), nStt, nEnd, pParentFrame);
@@ -1766,8 +1766,8 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
     const SwFrameFormat& rFrameFormat = pParentFrame->GetFrameFormat();
     const SwNodeIndex* pNodeIndex = rFrameFormat.GetContent().GetContentIdx();
 
-    sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex() + 1 : 0;
-    sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
+    SwNodeOffset nStt = pNodeIndex ? pNodeIndex->GetIndex() + 1 : SwNodeOffset(0);
+    SwNodeOffset nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : SwNodeOffset(0);
 
     //Save data here and restore when out of scope
     ExportDataSaveRestore aDataGuard(m_pImpl->getExport(), nStt, nEnd, pParentFrame);
@@ -2067,8 +2067,8 @@ void DocxSdrExport::writeVMLTextFrame(ww8::Frame const* pParentFrame, bool bText
     const SwFrameFormat& rFrameFormat = pParentFrame->GetFrameFormat();
     const SwNodeIndex* pNodeIndex = rFrameFormat.GetContent().GetContentIdx();
 
-    sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex() + 1 : 0;
-    sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
+    SwNodeOffset nStt = pNodeIndex ? pNodeIndex->GetIndex() + 1 : SwNodeOffset(0);
+    SwNodeOffset nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : SwNodeOffset(0);
 
     //Save data here and restore when out of scope
     ExportDataSaveRestore aDataGuard(m_pImpl->getExport(), nStt, nEnd, pParentFrame);

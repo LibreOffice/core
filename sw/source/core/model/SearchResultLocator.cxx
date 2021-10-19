@@ -32,7 +32,7 @@ void SearchResultLocator::findOne(LocationResult& rResult, SearchIndexData const
     if (rSearchIndexData.meType == NodeType::WriterNode)
     {
         SwNodes const& rNodes = mpDocument->GetNodes();
-        if (rSearchIndexData.mnNodeIndex >= sal_Int32(rNodes.Count()))
+        if (rSearchIndexData.mnNodeIndex >= rNodes.Count())
             return;
         SwNode* pNode = rNodes[rSearchIndexData.mnNodeIndex];
 
@@ -118,10 +118,10 @@ bool SearchResultLocator::tryParseJSON(const char* pPayload,
 
         std::string sJsonObjectName = rEach.get<std::string>("object_name", "");
 
-        sal_Int32 nIndex = rEach.get<sal_Int32>("index", -1);
+        SwNodeOffset nIndex(rEach.get<sal_Int32>("index", -1));
 
         // Don't add search data elements that don't have valid data
-        if (eNodeType != sw::search::NodeType::Undefined && nIndex >= 0)
+        if (eNodeType != sw::search::NodeType::Undefined && nIndex >= SwNodeOffset(0))
         {
             OUString sObjectName;
             if (!sJsonObjectName.empty())
@@ -169,7 +169,7 @@ bool SearchResultLocator::tryParseXML(const char* pPayload,
             if (!sType.isEmpty() && !sIndex.isEmpty())
             {
                 sw::search::SearchIndexData aData;
-                aData.mnNodeIndex = sIndex.toInt32();
+                aData.mnNodeIndex = SwNodeOffset(sIndex.toInt32());
                 auto eNodeType = sw::search::NodeType::Undefined;
                 if (sType == "writer")
                     eNodeType = sw::search::NodeType::WriterNode;

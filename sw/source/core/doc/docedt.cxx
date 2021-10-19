@@ -86,7 +86,7 @@ void RestFlyInRange( SaveFlyArr & rArr, const SwPosition& rStartPos,
         {
             aPos.nNode = rStartPos.nNode.GetIndex() + rSave.nNdDiff;
             aPos.nContent.Assign(dynamic_cast<SwIndexReg*>(&aPos.nNode.GetNode()),
-                rSave.nNdDiff == 0
+                rSave.nNdDiff == SwNodeOffset(0)
                     ? rStartPos.nContent.GetIndex() + rSave.nContentIndex
                     : rSave.nContentIndex);
         }
@@ -534,8 +534,8 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                             pEndPos->nNode.GetNode().GetTextNode(), pEndPos->nContent,
                             bGrammarCheck ));
 
-    sal_uLong nCurrNd = pSttPos->nNode.GetIndex();
-    sal_uLong nEndNd = pEndPos->nNode.GetIndex();
+    SwNodeOffset nCurrNd = pSttPos->nNode.GetIndex();
+    SwNodeOffset nEndNd = pEndPos->nNode.GetIndex();
 
     uno::Any aRet;
     if( nCurrNd <= nEndNd )
@@ -703,7 +703,7 @@ class SwHyphArgs : public SwInterHyphInfo
     sal_uInt16 *m_pPageCnt;
     sal_uInt16 *m_pPageSt;
 
-    sal_uInt32 m_nNode;
+    SwNodeOffset m_nNode;
     sal_Int32 m_nPamStart;
     sal_Int32 m_nPamLen;
 
@@ -844,8 +844,8 @@ void SwDoc::CountWords( const SwPaM& rPaM, SwDocStat& rStat )
     const SwPosition* pEnd = pStt == rPaM.GetPoint() ? rPaM.GetMark()
                                                      : rPaM.GetPoint();
 
-    const sal_uLong nSttNd = pStt->nNode.GetIndex();
-    const sal_uLong nEndNd = pEnd->nNode.GetIndex();
+    const SwNodeOffset nSttNd = pStt->nNode.GetIndex();
+    const SwNodeOffset nEndNd = pEnd->nNode.GetIndex();
 
     const sal_Int32 nSttCnt = pStt->nContent.GetIndex();
     const sal_Int32 nEndCnt = pEnd->nContent.GetIndex();

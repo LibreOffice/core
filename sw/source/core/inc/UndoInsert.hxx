@@ -44,7 +44,7 @@ class SwUndoInsert final : public SwUndo, private SwUndoSaveContent
     std::optional<OUString> maText;
     std::optional<OUString> maUndoText;
     std::unique_ptr<SwRedlineData> m_pRedlData;
-    sal_uLong m_nNode;
+    SwNodeOffset m_nNode;
     sal_Int32 m_nContent, m_nLen;
     bool m_bIsWordDelim : 1;
     bool m_bIsAppend : 1;
@@ -137,7 +137,7 @@ class SwUndoReRead final : public SwUndo
     std::unique_ptr<Graphic> mpGraphic;
     std::optional<OUString> maNm;
     std::optional<OUString> maFltr;
-    sal_uLong mnPosition;
+    SwNodeOffset mnPosition;
     MirrorGraph mnMirror;
 
     void SaveGraphicData( const SwGrfNode& );
@@ -163,7 +163,7 @@ class SwUndoInsertLabel final : public SwUndo
         struct {
             // for tables or TextFrames
             SwUndoDelete* pUndoInsNd;
-            sal_uLong nNode;
+            SwNodeOffset nNode;
         } NODE;
     };
 
@@ -210,7 +210,7 @@ public:
     virtual SwRewriter GetRewriter() const override;
     static SwRewriter CreateRewriter(const OUString &rStr);
 
-    void SetNodePos( sal_uLong nNd )
+    void SetNodePos( SwNodeOffset nNd )
         { if( SwLabelType::Object != m_eType ) NODE.nNode = nNd; }
 
     void SetUndoKeep()  { m_bUndoKeep = true; }

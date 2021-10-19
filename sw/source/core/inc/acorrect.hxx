@@ -25,6 +25,7 @@
 #include <svl/itemset.hxx>
 #include <tools/solar.h>
 #include <editeng/svxacorr.hxx>
+#include <nodeoffset.hxx>
 
 class SwEditShell;
 class SwPaM;
@@ -95,7 +96,7 @@ public:
 class SwAutoCorrExceptWord
 {
     OUString m_sWord;
-    sal_uLong m_nNode;
+    SwNodeOffset m_nNode;
     ACFlags m_nFlags;
     sal_Int32 m_nContent;
     sal_Unicode m_cChar;
@@ -103,7 +104,7 @@ class SwAutoCorrExceptWord
     bool m_bDeleted;
 
 public:
-    SwAutoCorrExceptWord(ACFlags nAFlags, sal_uLong nNd, sal_Int32 nContent,
+    SwAutoCorrExceptWord(ACFlags nAFlags, SwNodeOffset nNd, sal_Int32 nContent,
                          const OUString& rWord, sal_Unicode cChr,
                          LanguageType eLang)
         : m_sWord(rWord), m_nNode(nNd), m_nFlags(nAFlags), m_nContent(nContent),

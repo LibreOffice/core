@@ -2202,7 +2202,7 @@ void SwTable::ConvertSubtableBox(sal_uInt16 const nRow, sal_uInt16 const nBox)
                     pDoc->GetNodes().MakeTextNode(
                             SwNodeIndex(*pSourceBox->GetSttNd(), +1),
                             pDoc->GetDfltTextFormatColl());
-                    SwNodeRange content(*pSourceBox->GetSttNd(), +2,
+                    SwNodeRange content(*pSourceBox->GetSttNd(), SwNodeOffset(+2),
                             *pSourceBox->GetSttNd()->EndOfSectionNode());
                     SwTableBox *const pNewBox(pNewLine->GetTabBoxes()[j+k]);
                     SwNodeIndex insPos(*pNewBox->GetSttNd(), 1);

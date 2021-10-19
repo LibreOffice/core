@@ -69,7 +69,7 @@ public:
     bool CanGrouping( const SwUndoRedlineDelete& rPrev );
 
     // SwUndoTableCpyTable needs this information:
-    tools::Long NodeDiff() const { return m_nSttNode - m_nEndNode; }
+    SwNodeOffset NodeDiff() const { return m_nSttNode - m_nEndNode; }
     sal_Int32 ContentStart() const { return m_nSttContent; }
 
     void SetRedlineText(const OUString & rText);
@@ -78,7 +78,7 @@ public:
 class SwUndoRedlineSort final : public SwUndoRedline
 {
     std::unique_ptr<SwSortOptions> m_pOpt;
-    sal_uLong m_nSaveEndNode;
+    SwNodeOffset m_nSaveEndNode;
     sal_Int32 m_nSaveEndContent;
 
     virtual void UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) override;

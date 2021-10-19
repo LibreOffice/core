@@ -658,7 +658,7 @@ SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxPoolItem& rAttr,
     : SwUndo( SwUndoId::INSATTR, &rRange.GetDoc() ), SwUndRng( rRange )
     , m_AttrSet( rRange.GetDoc().GetAttrPool(), rAttr.Which(), rAttr.Which() )
     , m_pHistory( new SwHistory )
-    , m_nNodeIndex( ULONG_MAX )
+    , m_nNodeIndex( NODE_OFFSET_MAX )
     , m_nInsertFlags( nFlags )
 {
     m_AttrSet.Put( rAttr );
@@ -678,7 +678,7 @@ SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxItemSet& rSet,
     : SwUndo( SwUndoId::INSATTR, &rRange.GetDoc() ), SwUndRng( rRange )
     , m_AttrSet( rSet )
     , m_pHistory( new SwHistory )
-    , m_nNodeIndex( ULONG_MAX )
+    , m_nNodeIndex( NODE_OFFSET_MAX )
     , m_nInsertFlags( nFlags )
 {
     // Save character style as a style name, not as a reference
@@ -723,7 +723,7 @@ void SwUndoAttr::UndoImpl(::sw::UndoRedoContext & rContext)
 
     if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ) ) {
         SwPaM aPam(pDoc->GetNodes().GetEndOfContent());
-        if ( ULONG_MAX != m_nNodeIndex ) {
+        if ( NODE_OFFSET_MAX != m_nNodeIndex ) {
             aPam.DeleteMark();
             aPam.GetPoint()->nNode = m_nNodeIndex;
             aPam.GetPoint()->nContent.Assign( aPam.GetContentNode(), m_nSttContent );
@@ -789,7 +789,7 @@ void SwUndoAttr::RedoImpl(::sw::UndoRedoContext & rContext)
         rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld & ~RedlineFlags::Ignore );
         rDoc.getIDocumentContentOperations().InsertItemSet( rPam, m_AttrSet, m_nInsertFlags );
 
-        if ( ULONG_MAX != m_nNodeIndex ) {
+        if ( NODE_OFFSET_MAX != m_nNodeIndex ) {
             rPam.SetMark();
             if ( rPam.Move( fnMoveBackward ) ) {
                 rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( *m_pRedlineData, rPam ),
@@ -814,7 +814,7 @@ void SwUndoAttr::RemoveIdx( SwDoc& rDoc )
     SwNodes& rNds = rDoc.GetNodes();
     for ( sal_uInt16 n = 0; n < m_pHistory->Count(); ++n ) {
         sal_Int32 nContent = 0;
-        sal_uLong nNode = 0;
+        SwNodeOffset nNode(0);
         SwHistoryHint* pHstHint = (*m_pHistory)[ n ];
         switch ( pHstHint->Which() ) {
         case HSTRY_RESETTXTHNT: {

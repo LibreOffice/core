@@ -1935,8 +1935,9 @@ void RtfAttributeOutput::writeTextFrame(const ww8::Frame& rFrame, bool bTextBox)
 
         const SwFrameFormat& rFrameFormat = rFrame.GetFrameFormat();
         const SwNodeIndex* pNodeIndex = rFrameFormat.GetContent().GetContentIdx();
-        sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex() + 1 : 0;
-        sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
+        SwNodeOffset nStt = pNodeIndex ? pNodeIndex->GetIndex() + 1 : SwNodeOffset(0);
+        SwNodeOffset nEnd
+            = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : SwNodeOffset(0);
         m_rExport.SaveData(nStt, nEnd);
         m_rExport.m_pParentFrame = &rFrame;
         m_rExport.WriteText();

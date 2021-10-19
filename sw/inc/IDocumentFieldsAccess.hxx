@@ -22,6 +22,7 @@
 
 #include <sal/types.h>
 #include <tools/solar.h>
+#include "nodeoffset.hxx"
 
 class SwFieldTypes;
 class SwFieldType;
@@ -114,7 +115,7 @@ namespace com::sun::star::uno { class Any; }
         SwNode (see parameter pChk) is (?) part of the private
         data structure of SwDoc and should not be exposed
     */
-    virtual bool SetFieldsDirty(bool b, const SwNode* pChk, sal_uLong nLen) = 0;
+    virtual bool SetFieldsDirty(bool b, const SwNode* pChk, SwNodeOffset nLen) = 0;
 
     virtual void SetFixFields(const DateTime* pNewDateTime) = 0;
 
@@ -122,7 +123,7 @@ namespace com::sun::star::uno { class Any; }
     // (Node [ + css::ucb::Content]).
     // A generated list of all fields may be passed along too
     // (if the address != 0 and the pointer == 0 a new list will be returned).
-    virtual void FieldsToCalc(SwCalc& rCalc, sal_uLong nLastNd, sal_Int32 nLastCnt) = 0;
+    virtual void FieldsToCalc(SwCalc& rCalc, SwNodeOffset nLastNd, sal_Int32 nLastCnt) = 0;
 
     virtual void FieldsToCalc(SwCalc& rCalc, const SetGetExpField& rToThisField, SwRootFrame const* pLayout) = 0;
 

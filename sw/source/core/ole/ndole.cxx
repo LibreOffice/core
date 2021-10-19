@@ -295,7 +295,7 @@ void SwOLENode::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwOLENode"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"),
-                                BAD_CAST(OString::number(GetIndex()).getStr()));
+                                BAD_CAST(OString::number(sal_Int32(GetIndex())).getStr()));
 
     GetOLEObj().dumpAsXml(pWriter);
 
@@ -469,7 +469,7 @@ SwContentNode* SwOLENode::MakeCopy( SwDoc& rDoc, const SwNodeIndex& rIdx, bool) 
 bool SwOLENode::IsInGlobalDocSection() const
 {
     // Find the "Body Anchor"
-    sal_uLong nEndExtraIdx = GetNodes().GetEndOfExtras().GetIndex();
+    SwNodeOffset nEndExtraIdx = GetNodes().GetEndOfExtras().GetIndex();
     const SwNode* pAnchorNd = this;
     do {
         SwFrameFormat* pFlyFormat = pAnchorNd->GetFlyFormat();

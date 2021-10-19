@@ -1045,7 +1045,7 @@ bool SwTextNode::IsCollapse() const
     if (GetDoc().GetDocumentSettingManager().get( DocumentSettingId::COLLAPSE_EMPTY_CELL_PARA )
         &&  GetText().isEmpty())
     {
-        sal_uLong nIdx=GetIndex();
+        SwNodeOffset nIdx=GetIndex();
         const SwEndNode *pNdBefore=GetNodes()[nIdx-1]->GetEndNode();
         const SwEndNode *pNdAfter=GetNodes()[nIdx+1]->GetEndNode();
 

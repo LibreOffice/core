@@ -165,7 +165,7 @@ SwFrameFormat *DocumentLayoutManager::MakeLayoutFormat( RndStdIds eRequest, cons
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
                 m_rDoc.GetIDocumentUndoRedo().AppendUndo(
-                    std::make_unique<SwUndoInsLayFormat>(pFormat, 0, 0));
+                    std::make_unique<SwUndoInsLayFormat>(pFormat, SwNodeOffset(0), 0));
             }
         }
         break;
@@ -252,7 +252,7 @@ void DocumentLayoutManager::DelLayoutFormat( SwFrameFormat *pFormat )
                 if ( pTable )
                 {
                     std::vector<SwFrameFormat*> aToDeleteFrameFormats;
-                    const sal_uLong nNodeIdxOfFlyFormat( pContentIdx->GetIndex() );
+                    const SwNodeOffset nNodeIdxOfFlyFormat( pContentIdx->GetIndex() );
 
                     for ( size_t i = 0; i < pTable->size(); ++i )
                     {
@@ -380,7 +380,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
     {
         // Duplicate the content.
         const SwNode& rCSttNd = rSource.GetContent().GetContentIdx()->GetNode();
-        SwNodeRange aRg( rCSttNd, 1, *rCSttNd.EndOfSectionNode() );
+        SwNodeRange aRg( rCSttNd, SwNodeOffset(1), *rCSttNd.EndOfSectionNode() );
 
         SwNodeIndex aIdx( m_rDoc.GetNodes().GetEndOfAutotext() );
         SwStartNode* pSttNd = SwNodes::MakeEmptySection( aIdx, SwFlyStartNode );
@@ -418,7 +418,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
 
         if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
         {
-            m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoInsLayFormat>(pDest,0,0));
+            m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoInsLayFormat>(pDest,SwNodeOffset(0),0));
         }
 
         // Make sure that FlyFrames in FlyFrames are copied
@@ -448,7 +448,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
 
         if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
         {
-            m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoInsLayFormat>(pDest,0,0));
+            m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoInsLayFormat>(pDest,SwNodeOffset(0),0));
         }
     }
 
