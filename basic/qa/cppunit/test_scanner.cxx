@@ -297,7 +297,8 @@ void ScannerTest::testAlphanum()
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_EQUAL(OUString("joxclk_"), symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
-    CPPUNIT_ASSERT_EQUAL(OUString("joxclk "), source7); // Change the trailing '_' to a ' '
+    // tdf#125637 - don't change underscore to space
+    CPPUNIT_ASSERT_EQUAL(OUString("joxclk_"), source7);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[1].type);
 
@@ -383,11 +384,13 @@ void ScannerTest::testComments()
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
 
     symbols = getSymbols("asdf _\n'100");
-    CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(3), symbols.size());
     CPPUNIT_ASSERT_EQUAL(asdf, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
-    CPPUNIT_ASSERT_EQUAL(rem, symbols[1].text);
+    CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[1].type);
+    CPPUNIT_ASSERT_EQUAL(rem, symbols[2].text);
+    CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[2].type);
 
     symbols = getSymbols("'asdf _\n100");
     CPPUNIT_ASSERT_EQUAL(size_t(3), symbols.size());
