@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31873806_2e0f61ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-19T08:29:06Z",
+      "side": 1,
+      "message": "The more we kill use of Sequence in the code, the better. It should get replaced with normal containers everywhere except API calls...",
+      "revId": "c1c6eea1c11d9711e101fc76efa0ec4460e8e448",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
