@@ -16,6 +16,24 @@
       "message": "The more we can simplify, the better it is (of course more for readability here than for nanoperf)",
       "revId": "66a0a54873af4e04e18e43fc43e8d1fbd1512120",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37c7f642_ab7a572f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-19T10:15:17Z",
+      "side": 1,
+      "message": "\u003e nanoperf\n\nFTR: a real case where Sequence shot the perf: tdf#89665\nBasically every operation on it incurs the COW overhead.\nSee ongoing https://gerrit.libreoffice.org/c/core/+/123725 for some effort that interferes with your simplification work.",
+      "parentUuid": "5615bc47_55569df4",
+      "revId": "66a0a54873af4e04e18e43fc43e8d1fbd1512120",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
