@@ -188,7 +188,7 @@ void GetTableSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
         const SwTableLines& rLines = rTable.GetTabLines();
 
         const SwNode& rMarkNode = rCursor.GetNode( false );
-        const sal_uLong nMarkSectionStart = rMarkNode.StartOfSectionIndex();
+        const SwNodeOffset nMarkSectionStart = rMarkNode.StartOfSectionIndex();
         const SwTableBox* pMarkBox = rTable.GetTableBox( nMarkSectionStart );
 
         OSL_ENSURE( pMarkBox, "Point in table, mark outside?" );
@@ -904,7 +904,7 @@ bool IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam )
     {
         // now check for paragraph bound flies
         const SwFrameFormats& rFormats = *rPam.GetDoc().GetSpzFrameFormats();
-        sal_uLong nSttIdx = rPam.GetPoint()->nNode.GetIndex(),
+        SwNodeOffset nSttIdx = rPam.GetPoint()->nNode.GetIndex(),
               nEndIdx = rBox.GetSttNd()->EndOfSectionIndex(),
               nIdx;
 
@@ -1361,7 +1361,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
         for( const auto &rPt : aPosArr )
         {
             aPam.GetPoint()->nNode.Assign( *rPt.pSelBox->GetSttNd()->
-                                            EndOfSectionNode(), -1 );
+                                            EndOfSectionNode(), SwNodeOffset(-1) );
             SwContentNode* pCNd = aPam.GetContentNode();
             aPam.GetPoint()->nContent.Assign( pCNd, pCNd ? pCNd->Len() : 0 );
 

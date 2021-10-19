@@ -67,7 +67,7 @@ void SwUndoFlyBase::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwUndoFlyBase"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nNodePagePos"),
-                                BAD_CAST(OString::number(m_nNodePagePos).getStr()));
+                                BAD_CAST(OString::number(sal_Int32(m_nNodePagePos)).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nContentPos"),
                                 BAD_CAST(OString::number(m_nContentPos).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nRndId"),
@@ -102,7 +102,7 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrame)
 
     if (RndStdIds::FLY_AT_PAGE == m_nRndId)
     {
-        aAnchor.SetPageNum( o3tl::narrowing<sal_uInt16>(m_nNodePagePos) );
+        aAnchor.SetPageNum( o3tl::narrowing<sal_uInt16>(sal_Int32(m_nNodePagePos)) );
     }
     else
     {
@@ -260,7 +260,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
     }
     else
     {
-        m_nNodePagePos = rAnchor.GetPageNum();
+        m_nNodePagePos = SwNodeOffset(rAnchor.GetPageNum());
     }
 
     m_pFrameFormat->ResetFormatAttr( RES_ANCHOR );        // delete anchor
@@ -270,7 +270,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
     rFlyFormats.erase( m_pFrameFormat );
 }
 
-SwUndoInsLayFormat::SwUndoInsLayFormat( SwFrameFormat* pFormat, sal_uLong nNodeIdx, sal_Int32 nCntIdx )
+SwUndoInsLayFormat::SwUndoInsLayFormat( SwFrameFormat* pFormat, SwNodeOffset nNodeIdx, sal_Int32 nCntIdx )
     : SwUndoFlyBase( pFormat, RES_DRAWFRMFMT == pFormat->Which() ?
                                             SwUndoId::INSDRAWFMT : SwUndoId::INSLAYFMT ),
     mnCursorSaveIndexPara( nNodeIdx ), mnCursorSaveIndexPos( nCntIdx )
@@ -296,7 +296,7 @@ void SwUndoInsLayFormat::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         assert(&rContent.GetContentIdx()->GetNodes() == &rDoc.GetNodes());
         bool bRemoveIdx = true;
-        if( mnCursorSaveIndexPara > 0 )
+        if( mnCursorSaveIndexPara > SwNodeOffset(0) )
         {
             SwTextNode *const pNode =
                 rDoc.GetNodes()[mnCursorSaveIndexPara]->GetTextNode();
@@ -441,7 +441,7 @@ SwRewriter SwUndoDelLayFormat::GetRewriter() const
     if (pDoc)
     {
         SwNodeIndex* pIdx = GetMvSttIdx();
-        if( 1 == GetMvNodeCnt() && pIdx)
+        if( SwNodeOffset(1) == GetMvNodeCnt() && pIdx)
         {
             SwNode *const pNd = & pIdx->GetNode();
 
@@ -510,7 +510,7 @@ SwUndoSetFlyFormat::~SwUndoSetFlyFormat()
 }
 
 void SwUndoSetFlyFormat::GetAnchor( SwFormatAnchor& rAnchor,
-                                sal_uLong nNode, sal_Int32 nContent )
+                                SwNodeOffset nNode, sal_Int32 nContent )
 {
     RndStdIds nAnchorTyp = rAnchor.GetAnchorId();
     if (RndStdIds::FLY_AT_PAGE != nAnchorTyp)

@@ -1405,7 +1405,7 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
                                                 ? SwHeaderStartNode
                                                 : SwFooterStartNode );
             const SwNode& rCSttNd = pContent->GetContentIdx()->GetNode();
-            SwNodeRange aRg( rCSttNd, 0, *rCSttNd.EndOfSectionNode() );
+            SwNodeRange aRg( rCSttNd, SwNodeOffset(0), *rCSttNd.EndOfSectionNode() );
             aTmpIdx = *pSttNd->EndOfSectionNode();
             rSrcNds.Copy_( aRg, aTmpIdx );
             aTmpIdx = *pSttNd;

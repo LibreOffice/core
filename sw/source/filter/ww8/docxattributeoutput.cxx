@@ -325,8 +325,8 @@ void DocxAttributeOutput::WriteFloatingTable(ww8::Frame const* pParentFrame)
     m_aFloatingTablesOfParagraph.insert(&rFrameFormat);
     const SwNodeIndex* pNodeIndex = rFrameFormat.GetContent().GetContentIdx();
 
-    sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex() + 1 : 0;
-    sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
+    SwNodeOffset nStt = pNodeIndex ? pNodeIndex->GetIndex() + 1 : SwNodeOffset(0);
+    SwNodeOffset nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : SwNodeOffset(0);
 
     //Save data here and restore when out of scope
     ExportDataSaveRestore aDataGuard(GetExport(), nStt, nEnd, pParentFrame);
@@ -371,7 +371,7 @@ static void checkAndWriteFloatingTables(DocxAttributeOutput& rDocxAttributeOutpu
             continue;
 
         // go to the end of the table
-        sal_uLong aEndIndex = aStartNode.GetNode().EndOfSectionIndex();
+        SwNodeOffset aEndIndex = aStartNode.GetNode().EndOfSectionIndex();
         // go one deeper
         aEndIndex++;
         // this has to be the end of the content

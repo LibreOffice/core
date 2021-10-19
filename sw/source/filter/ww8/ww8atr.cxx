@@ -411,11 +411,11 @@ bool MSWordExportBase::ContentContainsChapterField(const SwFormatContent &rConte
     {
         SwNodeIndex aIdx( *pSttIdx, 1 );
         SwNodeIndex aEnd( *pSttIdx->GetNode().EndOfSectionNode() );
-        sal_uLong nStart = aIdx.GetIndex();
-        sal_uLong nEnd = aEnd.GetIndex();
+        SwNodeOffset nStart = aIdx.GetIndex();
+        SwNodeOffset nEnd = aEnd.GetIndex();
         //If the header/footer contains a chapter field
         bRet = std::any_of(m_aChapterFieldLocs.cbegin(), m_aChapterFieldLocs.cend(),
-            [nStart, nEnd](sal_uLong i) { return ( nStart <= i ) && ( i <= nEnd ); });
+            [nStart, nEnd](SwNodeOffset i) { return ( nStart <= i ) && ( i <= nEnd ); });
     }
     return bRet;
 }
@@ -5703,9 +5703,9 @@ const SwRedlineData* AttributeOutputBase::GetParagraphMarkerRedline( const SwTex
         if ( pRedl->GetRedlineData().GetType() != aRedlineType )
             continue;
 
-        sal_uLong uStartNodeIndex = pRedl->Start()->nNode.GetIndex();
-        sal_uLong uEndNodeIndex   = pRedl->End()->nNode.GetIndex();
-        sal_uLong uNodeIndex = rNode.GetIndex();
+        SwNodeOffset uStartNodeIndex = pRedl->Start()->nNode.GetIndex();
+        SwNodeOffset uEndNodeIndex   = pRedl->End()->nNode.GetIndex();
+        SwNodeOffset uNodeIndex = rNode.GetIndex();
 
         if( uStartNodeIndex <= uNodeIndex && uNodeIndex < uEndNodeIndex )
             return &( pRedl->GetRedlineData() );

@@ -31,7 +31,7 @@ private:
     SwTOXBase m_Old;
     SwTOXBase m_New;
 
-    sal_uLong const m_nNodeIndex;
+    SwNodeOffset const m_nNodeIndex;
 
 public:
     SwUndoTOXChange(const SwDoc& rDoc, SwTOXBaseSection const& rTOX, const SwTOXBase& rNew);

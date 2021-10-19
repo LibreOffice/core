@@ -56,7 +56,7 @@ SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange )
         SetRedlineFlags( rDoc.getIDocumentRedlineAccess().GetRedlineFlags() );
     }
 
-    sal_uLong nEndExtra = rDoc.GetNodes().GetEndOfExtras().GetIndex();
+    SwNodeOffset nEndExtra = rDoc.GetNodes().GetEndOfExtras().GetIndex();
 
     mpRedlSaveData.reset( new SwRedlineSaveDatas );
     if( !FillSaveData( rRange, *mpRedlSaveData, false, SwUndoId::REJECT_REDLINE != mnUserId ))
@@ -99,7 +99,7 @@ void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         // Nodes of the deletion range are in the newest invisible redlines.
         // Set all redlines visible and recover the original deletion range.
-        for (sal_uInt32 nNodes = 0; nNodes <  m_nEndNode - m_nSttNode + 1; ++nNodes)
+        for (SwNodeOffset nNodes(0); nNodes <  m_nEndNode - m_nSttNode + 1; ++nNodes)
         {
             SwRedlineTable::size_type nCurRedlinePos = 0;
             SwRangeRedline * pRedline(rTable[nCurRedlinePos]);
@@ -124,7 +124,7 @@ void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
                 pRedline->Show(1, rTable.GetPos(pRedline), /*bForced=*/true);
 
                 // extend the range
-                if ( nNodes==0 )
+                if ( nNodes == SwNodeOffset(0) )
                     rPam = *pRedline;
                 else
                 {
@@ -139,7 +139,7 @@ void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
 
     if( mpRedlSaveData )
     {
-        sal_uLong nEndExtra = rDoc.GetNodes().GetEndOfExtras().GetIndex();
+        SwNodeOffset nEndExtra = rDoc.GetNodes().GetEndOfExtras().GetIndex();
         SetSaveData(rDoc, *mpRedlSaveData);
         if( mbHiddenRedlines )
         {
@@ -173,7 +173,7 @@ void SwUndoRedline::RedoImpl(::sw::UndoRedoContext & rContext)
     SwPaM & rPam( AddUndoRedoPaM(rContext) );
     if( mpRedlSaveData && mbHiddenRedlines )
     {
-        sal_uLong nEndExtra = rDoc.GetNodes().GetEndOfExtras().GetIndex();
+        SwNodeOffset nEndExtra = rDoc.GetNodes().GetEndOfExtras().GetIndex();
         FillSaveData(rPam, *mpRedlSaveData, false, SwUndoId::REJECT_REDLINE != mnUserId );
 
         nEndExtra -= rDoc.GetNodes().GetEndOfExtras().GetIndex();
@@ -307,7 +307,7 @@ void SwUndoRedlineSort::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
     SwPosition *const pEnd   = rPam.End();
 
     SwNodeIndex aPrevIdx( pStart->nNode, -1 );
-    sal_uLong nOffsetTemp = pEnd->nNode.GetIndex() - pStart->nNode.GetIndex();
+    SwNodeOffset nOffsetTemp = pEnd->nNode.GetIndex() - pStart->nNode.GetIndex();
 
     if( !( RedlineFlags::ShowDelete & rDoc.getIDocumentRedlineAccess().GetRedlineFlags()) )
     {
@@ -357,7 +357,7 @@ void SwUndoRedlineSort::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
     SwPosition* pEnd   = pPam->End();
 
     SwNodeIndex aPrevIdx( pStart->nNode, -1 );
-    sal_uLong nOffsetTemp = pEnd->nNode.GetIndex() - pStart->nNode.GetIndex();
+    SwNodeOffset nOffsetTemp = pEnd->nNode.GetIndex() - pStart->nNode.GetIndex();
     const sal_Int32 nCntStt  = pStart->nContent.GetIndex();
 
     rDoc.SortText(rPam, *m_pOpt);

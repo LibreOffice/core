@@ -25,7 +25,7 @@ void ModelTraverser::traverse()
     auto const& pNodes = m_pDoc->GetNodes();
     SwNode* pNode = nullptr;
 
-    for (sal_uLong n = 0; n < pNodes.Count(); ++n)
+    for (SwNodeOffset n(0); n < pNodes.Count(); ++n)
     {
         pNode = pNodes[n];
         if (pNode)

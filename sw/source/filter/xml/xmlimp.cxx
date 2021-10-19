@@ -717,7 +717,7 @@ void SwXMLImport::endDocument()
         if( !pPos->nContent.GetIndex() )
         {
             SwTextNode* pCurrNd;
-            sal_uLong nNodeIdx = pPos->nNode.GetIndex();
+            SwNodeOffset nNodeIdx = pPos->nNode.GetIndex();
             pDoc = &pPaM->GetDoc();
 
             OSL_ENSURE( pPos->nNode.GetNode().IsContentNode(),
@@ -876,7 +876,7 @@ void SwXMLImport::endDocument()
 
 #if 1
     if (!pDoc) { pDoc = SwImport::GetDocFromXMLImport(*this); }
-    for (sal_uLong i = 0; i < pDoc->GetNodes().Count(); ++i)
+    for (SwNodeOffset i(0); i < pDoc->GetNodes().Count(); ++i)
     {
         if (SwTableNode *const pTableNode = pDoc->GetNodes()[i]->GetTableNode())
         {
@@ -950,7 +950,7 @@ void SwXMLImport::MergeListsAtDocumentInsertPosition(SwDoc *pDoc)
     if (! IsInsertMode() || ! m_pSttNdIdx->GetIndex())
         return;
 
-    sal_uLong index = 1;
+    SwNodeOffset index(1);
 
     // the last node of the main document where we have inserted a document
     SwNode* const node1 = pDoc->GetNodes()[m_pSttNdIdx->GetIndex() + 0];

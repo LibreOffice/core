@@ -22,6 +22,7 @@
 
 #include <swtypes.hxx>
 #include "frame.hxx"
+#include <nodeoffset.hxx>
 
 class SdrObject;
 class SwFlyFrame;
@@ -403,7 +404,7 @@ namespace objectpositioning
         bool DrawAsideFly( const SwFlyFrame* _pFly,
                             const SwRect&   _rObjRect,
                             const SwFrame*    _pObjContext,
-                            const sal_uLong     _nObjIndex,
+                            const SwNodeOffset     _nObjIndex,
                             const bool      _bEvenPage,
                             const sal_Int16 _eHoriOrient,
                             const sal_Int16 _eRelOrient

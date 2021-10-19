@@ -26,15 +26,13 @@
 #include "node.hxx"
 #include "ring.hxx"
 #include "ndarr.hxx"
+#include "nodeoffset.hxx"
 
 /// Marks a node in the document model.
 class SW_DLLPUBLIC SwNodeIndex final : public sw::Ring<SwNodeIndex>
 {
     SwNode * m_pNode;
 
-    // These are not allowed!
-    SwNodeIndex( SwNodes& rNds, sal_uInt16 nIdx ) = delete;
-    SwNodeIndex( SwNodes& rNds, int nIdx ) = delete;
     void RegisterIndex( SwNodes& rNodes )
     {
         if(!rNodes.m_vIndices)
@@ -51,12 +49,15 @@ class SW_DLLPUBLIC SwNodeIndex final : public sw::Ring<SwNodeIndex>
     }
 
 public:
-    SwNodeIndex( SwNodes& rNds, sal_uLong nIdx = 0 )
+    // These are not allowed!
+    SwNodeIndex( SwNodes& rNds, sal_Int32 nIdx ) : SwNodeIndex(rNds, SwNodeOffset(nIdx)) {}
+    SwNodeIndex( SwNodes& rNds, SwNodeOffset nIdx = SwNodeOffset(0) )
         : m_pNode( rNds[ nIdx ] )
     {
         RegisterIndex( rNds );
     };
-    SwNodeIndex( const SwNodeIndex& rIdx, tools::Long nDiff = 0 )
+    SwNodeIndex( const SwNodeIndex& rIdx, sal_Int32 nDiff ) : SwNodeIndex(rIdx, SwNodeOffset(nDiff)) {}
+    SwNodeIndex( const SwNodeIndex& rIdx, SwNodeOffset nDiff = SwNodeOffset(0) )
         : sw::Ring<SwNodeIndex>()
     {
         if( nDiff )
@@ -66,7 +67,8 @@ public:
         RegisterIndex( m_pNode->GetNodes() );
     }
 
-    SwNodeIndex( const SwNode& rNd, tools::Long nDiff = 0 )
+    SwNodeIndex( const SwNode& rNd, sal_Int32 nDiff ) : SwNodeIndex(rNd, SwNodeOffset(nDiff)) {}
+    SwNodeIndex( const SwNode& rNd, SwNodeOffset nDiff = SwNodeOffset(0) )
     {
         if( nDiff )
             m_pNode = rNd.GetNodes()[ rNd.GetIndex() + nDiff ];
@@ -78,13 +80,13 @@ public:
     virtual  ~SwNodeIndex() override
         { DeRegisterIndex( m_pNode->GetNodes() ); }
 
-    inline sal_uLong operator++();
-    inline sal_uLong operator--();
-    inline sal_uLong operator++(int);
-    inline sal_uLong operator--(int);
+    inline SwNodeOffset operator++();
+    inline SwNodeOffset operator--();
+    inline SwNodeOffset operator++(int);
+    inline SwNodeOffset operator--(int);
 
-    inline sal_uLong operator+=( sal_uLong );
-    inline sal_uLong operator-=( sal_uLong );
+    inline SwNodeOffset operator+=( SwNodeOffset );
+    inline SwNodeOffset operator-=( SwNodeOffset );
 
     inline bool operator< ( const SwNodeIndex& ) const;
     inline bool operator<=( const SwNodeIndex& ) const;
@@ -93,23 +95,24 @@ public:
     inline bool operator==( const SwNodeIndex& ) const;
     inline bool operator!=( const SwNodeIndex& ) const;
 
-    inline bool operator< ( sal_uLong ) const;
-    inline bool operator<=( sal_uLong ) const;
-    inline bool operator> ( sal_uLong ) const;
-    inline bool operator>=( sal_uLong ) const;
-    inline bool operator==( sal_uLong ) const;
-    inline bool operator!=( sal_uLong ) const;
+    inline bool operator< ( SwNodeOffset ) const;
+    inline bool operator<=( SwNodeOffset ) const;
+    inline bool operator> ( SwNodeOffset ) const;
+    inline bool operator>=( SwNodeOffset ) const;
+    inline bool operator==( SwNodeOffset ) const;
+    inline bool operator!=( SwNodeOffset ) const;
 
-    inline SwNodeIndex& operator=( sal_uLong );
+    inline SwNodeIndex& operator=( SwNodeOffset );
     inline SwNodeIndex& operator=( const SwNodeIndex& );
     inline SwNodeIndex& operator=( const SwNode& );
 
-    // Return value of index as sal_uLong.
-    inline sal_uLong GetIndex() const;
+    // Return value of index as SwNodeOffset.
+    inline SwNodeOffset GetIndex() const;
 
     // Enables assignments without creation of a temporary object.
-    inline SwNodeIndex& Assign( SwNodes const & rNds, sal_uLong );
-    inline SwNodeIndex& Assign( const SwNode& rNd, tools::Long nOffset = 0 );
+    inline SwNodeIndex& Assign( SwNodes const & rNds, SwNodeOffset );
+    SwNodeIndex& Assign( const SwNode& rNd, sal_Int32 nOffset ) { return Assign(rNd, SwNodeOffset(nOffset)); }
+    inline SwNodeIndex& Assign( const SwNode& rNd, SwNodeOffset nOffset = SwNodeOffset(0) );
 
     // Gets pointer on NodesArray.
     inline const SwNodes& GetNodes() const;
@@ -121,7 +124,7 @@ public:
 
 inline std::ostream &operator <<(std::ostream& s, const SwNodeIndex& index)
 {
-    return s << "SwNodeIndex (node " << index.GetIndex() << ")";
+    return s << "SwNodeIndex (node " << sal_Int32(index.GetIndex()) << ")";
 };
 
 // SwRange
@@ -137,19 +140,19 @@ public:
     SwNodeRange( const SwNodeRange &rRange )
         : aStart( rRange.aStart ), aEnd( rRange.aEnd ) {};
 
-    SwNodeRange( SwNodes& rNds, sal_uLong nSttIdx, sal_uLong nEndIdx = 0 )
+    SwNodeRange( SwNodes& rNds, SwNodeOffset nSttIdx, SwNodeOffset nEndIdx = SwNodeOffset(0) )
         : aStart( rNds, nSttIdx ), aEnd( rNds, nEndIdx ) {};
 
-    SwNodeRange( const SwNodeIndex& rS, tools::Long nSttDiff, const SwNodeIndex& rE, tools::Long nEndDiff = 0 )
+    SwNodeRange( const SwNodeIndex& rS, SwNodeOffset nSttDiff, const SwNodeIndex& rE, SwNodeOffset nEndDiff = SwNodeOffset(0) )
         : aStart( rS, nSttDiff ), aEnd( rE, nEndDiff ) {};
-    SwNodeRange( const SwNode& rS, tools::Long nSttDiff, const SwNode& rE, tools::Long nEndDiff = 0 )
+    SwNodeRange( const SwNode& rS, SwNodeOffset nSttDiff, const SwNode& rE, SwNodeOffset nEndDiff = SwNodeOffset(0) )
         : aStart( rS, nSttDiff ), aEnd( rE, nEndDiff ) {};
 };
 
 // For inlines node.hxx is needed which in turn needs this one.
 // Therefore all inlines accessing m_pNode are implemented here.
 
-inline sal_uLong SwNodeIndex::GetIndex() const
+inline SwNodeOffset SwNodeIndex::GetIndex() const
 {
     return m_pNode->GetIndex();
 }
@@ -161,27 +164,27 @@ inline SwNodes& SwNodeIndex::GetNodes()
 {
     return m_pNode->GetNodes();
 }
-inline bool SwNodeIndex::operator< ( sal_uLong const nOther ) const
+inline bool SwNodeIndex::operator< ( SwNodeOffset const nOther ) const
 {
     return m_pNode->GetIndex() < nOther;
 }
-inline bool SwNodeIndex::operator<=( sal_uLong const nOther ) const
+inline bool SwNodeIndex::operator<=( SwNodeOffset const nOther ) const
 {
     return m_pNode->GetIndex() <= nOther;
 }
-inline bool SwNodeIndex::operator> ( sal_uLong const nOther ) const
+inline bool SwNodeIndex::operator> ( SwNodeOffset const nOther ) const
 {
     return m_pNode->GetIndex() > nOther;
 }
-inline bool SwNodeIndex::operator>=( sal_uLong const nOther ) const
+inline bool SwNodeIndex::operator>=( SwNodeOffset const nOther ) const
 {
     return m_pNode->GetIndex() >= nOther;
 }
-inline bool SwNodeIndex::operator==( sal_uLong const nOther ) const
+inline bool SwNodeIndex::operator==( SwNodeOffset const nOther ) const
 {
     return m_pNode->GetIndex() == nOther;
 }
-inline bool SwNodeIndex::operator!=( sal_uLong const nOther ) const
+inline bool SwNodeIndex::operator!=( SwNodeOffset const nOther ) const
 {
     return m_pNode->GetIndex() != nOther;
 }
@@ -210,41 +213,41 @@ inline bool SwNodeIndex::operator!=( const SwNodeIndex& rIdx ) const
     return m_pNode != rIdx.m_pNode;
 }
 
-inline sal_uLong SwNodeIndex::operator++()
+inline SwNodeOffset SwNodeIndex::operator++()
 {
-    m_pNode = GetNodes()[ m_pNode->GetIndex()+1 ];
+    m_pNode = GetNodes()[ m_pNode->GetIndex() + 1 ];
     return m_pNode->GetIndex();
 }
-inline sal_uLong SwNodeIndex::operator--()
+inline SwNodeOffset SwNodeIndex::operator--()
 {
-    m_pNode = GetNodes()[ m_pNode->GetIndex()-1 ];
+    m_pNode = GetNodes()[ m_pNode->GetIndex() - 1 ];
     return m_pNode->GetIndex();
 }
-inline sal_uLong SwNodeIndex::operator++(int)
+inline SwNodeOffset SwNodeIndex::operator++(int)
 {
-    sal_uLong nOldIndex = m_pNode->GetIndex();
+    SwNodeOffset nOldIndex = m_pNode->GetIndex();
     m_pNode = GetNodes()[ nOldIndex + 1 ];
     return nOldIndex;
 }
-inline sal_uLong SwNodeIndex::operator--(int)
+inline SwNodeOffset SwNodeIndex::operator--(int)
 {
-    sal_uLong nOldIndex = m_pNode->GetIndex();
+    SwNodeOffset nOldIndex = m_pNode->GetIndex();
     m_pNode = GetNodes()[ nOldIndex - 1 ];
     return nOldIndex;
 }
 
-inline sal_uLong SwNodeIndex::operator+=( sal_uLong const nOffset )
+inline SwNodeOffset SwNodeIndex::operator+=( SwNodeOffset const nOffset )
 {
     m_pNode = GetNodes()[ m_pNode->GetIndex() + nOffset ];
     return m_pNode->GetIndex();
 }
-inline sal_uLong SwNodeIndex::operator-=( sal_uLong const nOffset )
+inline SwNodeOffset SwNodeIndex::operator-=( SwNodeOffset const nOffset )
 {
     m_pNode = GetNodes()[ m_pNode->GetIndex() - nOffset ];
     return m_pNode->GetIndex();
 }
 
-inline SwNodeIndex& SwNodeIndex::operator=( sal_uLong const nNew )
+inline SwNodeIndex& SwNodeIndex::operator=( SwNodeOffset const nNew )
 {
     m_pNode = GetNodes()[ nNew ];
     return *this;
@@ -269,13 +272,13 @@ SwNodeIndex& SwNodeIndex::operator=( const SwNode& rNd )
     return *this;
 }
 
-SwNodeIndex& SwNodeIndex::Assign( SwNodes const & rNds, sal_uLong nIdx )
+SwNodeIndex& SwNodeIndex::Assign( SwNodes const & rNds, SwNodeOffset nIdx )
 {
     *this = *rNds[ nIdx ];
     return *this;
 }
 
-SwNodeIndex& SwNodeIndex::Assign( const SwNode& rNd, tools::Long nOffset )
+SwNodeIndex& SwNodeIndex::Assign( const SwNode& rNd, SwNodeOffset nOffset )
 {
     *this = rNd;
 

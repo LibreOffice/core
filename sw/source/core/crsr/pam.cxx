@@ -186,7 +186,7 @@ SwDoc& SwPosition::GetDoc() const
 void SwPosition::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwPosition"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nNode"), BAD_CAST(OString::number(nNode.GetIndex()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nNode"), BAD_CAST(OString::number(sal_Int32(nNode.GetIndex())).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nContent"), BAD_CAST(OString::number(nContent.GetIndex()).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 }
@@ -202,9 +202,9 @@ enum CHKSECTION { Chk_Both, Chk_One, Chk_None };
 
 }
 
-static CHKSECTION lcl_TstIdx( sal_uLong nSttIdx, sal_uLong nEndIdx, const SwNode& rEndNd )
+static CHKSECTION lcl_TstIdx( SwNodeOffset nSttIdx, SwNodeOffset nEndIdx, const SwNode& rEndNd )
 {
-    sal_uLong nStt = rEndNd.StartOfSectionIndex(), nEnd = rEndNd.GetIndex();
+    SwNodeOffset nStt = rEndNd.StartOfSectionIndex(), nEnd = rEndNd.GetIndex();
     CHKSECTION eSec = nStt < nSttIdx && nEnd >= nSttIdx ? Chk_One : Chk_None;
     if( nStt < nEndIdx && nEnd >= nEndIdx )
         return( eSec == Chk_One ? Chk_Both : Chk_One );
@@ -212,7 +212,7 @@ static CHKSECTION lcl_TstIdx( sal_uLong nSttIdx, sal_uLong nEndIdx, const SwNode
 }
 
 static bool lcl_ChkOneRange( CHKSECTION eSec, bool bChkSections,
-                    const SwNode& rBaseEnd, sal_uLong nStt, sal_uLong nEnd )
+                    const SwNode& rBaseEnd, SwNodeOffset nStt, SwNodeOffset nEnd )
 {
     if( eSec != Chk_Both )
         return false;
@@ -241,7 +241,7 @@ static bool lcl_ChkOneRange( CHKSECTION eSec, bool bChkSections,
         pNd = pTmp;
     }
 
-    sal_uLong nSttIdx = pNd->GetIndex(), nEndIdx = pNd->EndOfSectionIndex();
+    SwNodeOffset nSttIdx = pNd->GetIndex(), nEndIdx = pNd->EndOfSectionIndex();
     return nSttIdx <= nStt && nStt <= nEndIdx &&
            nSttIdx <= nEnd && nEnd <= nEndIdx;
 }
@@ -260,7 +260,7 @@ bool CheckNodesRange( const SwNodeIndex& rStt,
                       const SwNodeIndex& rEnd, bool bChkSection )
 {
     const SwNodes& rNds = rStt.GetNodes();
-    sal_uLong nStt = rStt.GetIndex(), nEnd = rEnd.GetIndex();
+    SwNodeOffset nStt = rStt.GetIndex(), nEnd = rEnd.GetIndex();
     CHKSECTION eSec = lcl_TstIdx( nStt, nEnd, rNds.GetEndOfContent() );
     if( Chk_None != eSec )
         return eSec == Chk_Both;
@@ -308,7 +308,7 @@ SwContentNode* GoNextNds( SwNodeIndex* pIdx, bool bChk )
     SwContentNode* pNd = aIdx.GetNodes().GoNext( &aIdx );
     if( pNd )
     {
-        if( bChk && 1 != aIdx.GetIndex() - pIdx->GetIndex() &&
+        if( bChk && SwNodeOffset(1) != aIdx.GetIndex() - pIdx->GetIndex() &&
             !CheckNodesRange( *pIdx, aIdx, true ) )
                 pNd = nullptr;
         else
@@ -323,7 +323,7 @@ SwContentNode* GoPreviousNds( SwNodeIndex * pIdx, bool bChk )
     SwContentNode* pNd = SwNodes::GoPrevious( &aIdx );
     if( pNd )
     {
-        if( bChk && 1 != pIdx->GetIndex() - aIdx.GetIndex() &&
+        if( bChk && SwNodeOffset(1) != pIdx->GetIndex() - aIdx.GetIndex() &&
             !CheckNodesRange( *pIdx, aIdx, true ) )
                 pNd = nullptr;
         else
@@ -353,7 +353,7 @@ SwPaM::SwPaM( const SwPosition& rMark, const SwPosition& rPoint, SwPaM* pRing )
 }
 
 SwPaM::SwPaM( const SwNodeIndex& rMark, const SwNodeIndex& rPoint,
-              tools::Long nMarkOffset, tools::Long nPointOffset, SwPaM* pRing )
+              SwNodeOffset nMarkOffset, SwNodeOffset nPointOffset, SwPaM* pRing )
     : Ring( pRing )
     , m_Bound1( rMark )
     , m_Bound2( rPoint )
@@ -374,7 +374,7 @@ SwPaM::SwPaM( const SwNodeIndex& rMark, const SwNodeIndex& rPoint,
 }
 
 SwPaM::SwPaM( const SwNode& rMark, const SwNode& rPoint,
-              tools::Long nMarkOffset, tools::Long nPointOffset, SwPaM* pRing )
+              SwNodeOffset nMarkOffset, SwNodeOffset nPointOffset, SwPaM* pRing )
     : Ring( pRing )
     , m_Bound1( rMark )
     , m_Bound2( rPoint )
@@ -687,11 +687,11 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
         // check for protected section inside the selection
         if( !bRet )
         {
-            sal_uLong nSttIdx = GetMark()->nNode.GetIndex(),
+            SwNodeOffset nSttIdx = GetMark()->nNode.GetIndex(),
                     nEndIdx = GetPoint()->nNode.GetIndex();
             if( nEndIdx <= nSttIdx )
             {
-                sal_uLong nTmp = nSttIdx;
+                SwNodeOffset nTmp = nSttIdx;
                 nSttIdx = nEndIdx;
                 nEndIdx = nTmp;
             }
@@ -699,7 +699,7 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
             // If a protected section should be between nodes, then the
             // selection needs to contain already x nodes.
             // (TextNd, SectNd, TextNd, EndNd, TextNd )
-            if( nSttIdx + 3 < nEndIdx )
+            if( nSttIdx + SwNodeOffset(3) < nEndIdx )
             {
                 const SwSectionFormats& rFormats = GetDoc().GetSections();
                 for( SwSectionFormats::size_type n = rFormats.size(); n;  )
@@ -709,7 +709,7 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
                     {
                         const SwFormatContent& rContent = pFormat->GetContent(false);
                         OSL_ENSURE( rContent.GetContentIdx(), "where is the SectionNode?" );
-                        sal_uLong nIdx = rContent.GetContentIdx()->GetIndex();
+                        SwNodeOffset nIdx = rContent.GetContentIdx()->GetIndex();
                         if( nSttIdx <= nIdx && nEndIdx >= nIdx &&
                             rContent.GetContentIdx()->GetNode().GetNodes().IsDocNodes() )
                         {

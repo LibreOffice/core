@@ -241,7 +241,7 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
                 pNode->SetRedlineMergeFlag(SwNode::Merge::First);
             } // else: was already set before
             int nLevel(0);
-            for (sal_uLong j = pNode->GetIndex() + 1; j < pEnd->nNode.GetIndex(); ++j)
+            for (SwNodeOffset j = pNode->GetIndex() + 1; j < pEnd->nNode.GetIndex(); ++j)
             {
                 SwNode *const pTmp(pNode->GetNodes()[j]);
                 if (nLevel == 0)
@@ -311,7 +311,7 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
     // * the first SwTextNode inside each start node of the previous point
     // Other (non-first) SwTextNodes in nested sections shouldn't be reset!
     int nLevel(0);
-    for (sal_uLong j = pNode->GetIndex() + 1; j < pNode->GetNodes().Count(); ++j)
+    for (SwNodeOffset j = pNode->GetIndex() + 1; j < pNode->GetNodes().Count(); ++j)
     {
         SwNode *const pTmp(pNode->GetNodes()[j]);
         if (!pTmp->IsCreateFrameWhenHidingRedlines())
@@ -673,7 +673,7 @@ SwRedlineItr::~SwRedlineItr() COVERITY_NOEXCEPT_FALSE
 // The return value of SwRedlineItr::Seek tells you if the current font
 // has been manipulated by leaving (-1) or accessing (+1) of a section
 short SwRedlineItr::Seek(SwFont& rFnt,
-        sal_uLong const nNode, sal_Int32 const nNew, sal_Int32 const nOld)
+        SwNodeOffset const nNode, sal_Int32 const nNew, sal_Int32 const nOld)
 {
     short nRet = 0;
     if( ExtOn() )
@@ -954,8 +954,8 @@ bool SwRedlineItr::ChkSpecialUnderline_() const
 }
 
 bool SwRedlineItr::CheckLine(
-        sal_uLong const nStartNode, sal_Int32 const nChkStart,
-        sal_uLong const nEndNode, sal_Int32 nChkEnd, OUString& rRedlineText,
+        SwNodeOffset const nStartNode, sal_Int32 const nChkStart,
+        SwNodeOffset const nEndNode, sal_Int32 nChkEnd, OUString& rRedlineText,
         bool& bRedlineEnd, RedlineType& eRedlineEnd, size_t* pAuthorAtPos)
 {
     // note: previously this would return true in the (!m_bShow && m_pExt)
@@ -1069,7 +1069,7 @@ void SwExtend::ActualizeFont( SwFont &rFnt, ExtTextInputAttr nAttr )
         rFnt.SetGreyWave( true );
 }
 
-short SwExtend::Enter(SwFont& rFnt, sal_uLong const nNode, sal_Int32 const nNew)
+short SwExtend::Enter(SwFont& rFnt, SwNodeOffset const nNode, sal_Int32 const nNew)
 {
     OSL_ENSURE( !m_pFont, "SwExtend: Enter with Font" );
     if (nNode != m_nNode)
@@ -1085,7 +1085,7 @@ short SwExtend::Enter(SwFont& rFnt, sal_uLong const nNode, sal_Int32 const nNew)
     return 0;
 }
 
-bool SwExtend::Leave_(SwFont& rFnt, sal_uLong const nNode, sal_Int32 const nNew)
+bool SwExtend::Leave_(SwFont& rFnt, SwNodeOffset const nNode, sal_Int32 const nNew)
 {
     OSL_ENSURE(nNode == m_nNode && Inside(), "SwExtend: Leave without Enter");
     if (nNode != m_nNode)
@@ -1110,7 +1110,7 @@ bool SwExtend::Leave_(SwFont& rFnt, sal_uLong const nNode, sal_Int32 const nNew)
     return false;
 }
 
-sal_Int32 SwExtend::Next(sal_uLong const nNode, sal_Int32 nNext)
+sal_Int32 SwExtend::Next(SwNodeOffset const nNode, sal_Int32 nNext)
 {
     if (nNode != m_nNode)
         return nNext;

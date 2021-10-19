@@ -620,12 +620,12 @@ void SwTiledRenderingTest::testSearch()
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(this);
-    std::size_t nNode = pWrtShell->getShellCursor(false)->Start()->nNode.GetNode().GetIndex();
+    SwNodeOffset nNode = pWrtShell->getShellCursor(false)->Start()->nNode.GetNode().GetIndex();
 
     // First hit, in the second paragraph, before the shape.
     lcl_search(false);
     CPPUNIT_ASSERT(!pWrtShell->GetDrawView()->GetTextEditObject());
-    std::size_t nActual = pWrtShell->getShellCursor(false)->Start()->nNode.GetNode().GetIndex();
+    SwNodeOffset nActual = pWrtShell->getShellCursor(false)->Start()->nNode.GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(nNode + 1, nActual);
     /// Make sure we get search result selection for normal find as well, not only find all.
     CPPUNIT_ASSERT(!m_aSearchResultSelection.empty());

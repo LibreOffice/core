@@ -427,7 +427,7 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
                     pNextBox = pNextBox->FindPreviousBox( pTableNd->GetTable(), pNextBox );
             }
 
-            sal_uLong nIdx;
+            SwNodeOffset nIdx;
             if( pNextBox )      // put cursor here
                 nIdx = pNextBox->GetSttIdx() + 1;
             else                // otherwise below the table

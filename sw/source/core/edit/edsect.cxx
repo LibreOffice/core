@@ -406,7 +406,7 @@ void SwEditShell::DoSpecialInsert()
     // adjust insert position to insert before start nodes and after end
     // nodes
     SwNodeIndex aInsertIndex( *pInsertNode,
-                              pInsertNode->IsStartNode() ? -1 : 0 );
+                              SwNodeOffset(pInsertNode->IsStartNode() ? -1 : 0) );
     SwPosition aInsertPos( aInsertIndex );
 
     // insert a new text node, and set the cursor

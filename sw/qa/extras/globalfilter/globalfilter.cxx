@@ -198,7 +198,7 @@ void Test::testLinkedGraphicRT()
         // Find the image
         bool bImageFound = false;
         Graphic aGraphic;
-        for (sal_uLong nIndex = 0; nIndex < aNodes.Count(); ++nIndex)
+        for (SwNodeOffset nIndex(0); nIndex < aNodes.Count(); ++nIndex)
         {
             if (aNodes[nIndex]->IsGrfNode())
             {
@@ -1692,7 +1692,7 @@ void Test::testDateFormField()
                 sal_Unicode vEnSpaces[ODF_FORMFIELD_DEFAULT_LENGTH] = {8194, 8194, 8194, 8194, 8194};
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(vEnSpaces, 5), sCurrentDate);
 
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_uLong(9), pFieldmark->GetMarkStart().nNode.GetIndex());
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), SwNodeOffset(9), pFieldmark->GetMarkStart().nNode.GetIndex());
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(5), pFieldmark->GetMarkStart().nContent.GetIndex());
             }
             else if (nIndex == 1) // The second has the default format
@@ -1701,7 +1701,7 @@ void Test::testDateFormField()
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("en-US"), sLang);
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("06/12/19"), sCurrentDate);
 
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_uLong(9), pFieldmark->GetMarkStart().nNode.GetIndex());
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), SwNodeOffset(9), pFieldmark->GetMarkStart().nNode.GetIndex());
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(20), pFieldmark->GetMarkStart().nContent.GetIndex());
             }
             else if (nIndex == 2) // The third one has special format
@@ -1710,7 +1710,7 @@ void Test::testDateFormField()
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("hu-HU"), sLang);
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("2019. febr. 12."), sCurrentDate);
 
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_uLong(9), pFieldmark->GetMarkStart().nNode.GetIndex());
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), SwNodeOffset(9), pFieldmark->GetMarkStart().nNode.GetIndex());
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(40), pFieldmark->GetMarkStart().nContent.GetIndex());
 
             }
@@ -1720,7 +1720,7 @@ void Test::testDateFormField()
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("bm-ML"), sLang);
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("[select date]"), sCurrentDate);
 
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_uLong(9), pFieldmark->GetMarkStart().nNode.GetIndex());
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), SwNodeOffset(9), pFieldmark->GetMarkStart().nNode.GetIndex());
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(62), pFieldmark->GetMarkStart().nContent.GetIndex());
 
             }
@@ -1730,7 +1730,7 @@ void Test::testDateFormField()
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("en-US"), sLang);
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(""), sCurrentDate);
 
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_uLong(9), pFieldmark->GetMarkStart().nNode.GetIndex());
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), SwNodeOffset(9), pFieldmark->GetMarkStart().nNode.GetIndex());
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(82), pFieldmark->GetMarkStart().nContent.GetIndex());
 
             }

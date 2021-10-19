@@ -285,15 +285,15 @@ namespace sw {
         }
     }
 
-    bool FrameContainsNode(SwContentFrame const& rFrame, sal_uLong const nNodeIndex)
+    bool FrameContainsNode(SwContentFrame const& rFrame, SwNodeOffset const nNodeIndex)
     {
         if (rFrame.IsTextFrame())
         {
             SwTextFrame const& rTextFrame(static_cast<SwTextFrame const&>(rFrame));
             if (sw::MergedPara const*const pMerged = rTextFrame.GetMergedPara())
             {
-                sal_uLong const nFirst(pMerged->pFirstNode->GetIndex());
-                sal_uLong const nLast(pMerged->pLastNode->GetIndex());
+                SwNodeOffset const nFirst(pMerged->pFirstNode->GetIndex());
+                SwNodeOffset const nLast(pMerged->pLastNode->GetIndex());
                 return (nFirst <= nNodeIndex && nNodeIndex <= nLast);
             }
             else
@@ -812,7 +812,7 @@ void RemoveFootnotesForNode(
     }
     const SwFootnoteIdxs &rFootnoteIdxs = rTextNode.GetDoc().GetFootnoteIdxs();
     size_t nPos = 0;
-    sal_uLong const nIndex = rTextNode.GetIndex();
+    SwNodeOffset const nIndex = rTextNode.GetIndex();
     rFootnoteIdxs.SeekEntry( rTextNode, &nPos );
     if (nPos < rFootnoteIdxs.size())
     {
@@ -2116,7 +2116,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             && m_pMergedPara->pFirstNode->GetIndex() <= pMoveText->pDestNode->GetIndex()
             && pMoveText->pDestNode->GetIndex() <= m_pMergedPara->pLastNode->GetIndex())
         {   // if it's not 2 nodes in merged frame, assume the target node doesn't have frames at all
-            assert(std::abs(static_cast<tools::Long>(rNode.GetIndex()) - static_cast<tools::Long>(pMoveText->pDestNode->GetIndex())) == 1);
+            assert(abs(rNode.GetIndex() - pMoveText->pDestNode->GetIndex()) == SwNodeOffset(1));
             UpdateMergedParaForMove(*m_pMergedPara,
                     *this,
                     bRecalcFootnoteFlag,
@@ -2608,7 +2608,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
     } // switch
 
     if( bSetFieldsDirty )
-        GetDoc().getIDocumentFieldsAccess().SetFieldsDirty( true, &rNode, 1 );
+        GetDoc().getIDocumentFieldsAccess().SetFieldsDirty( true, &rNode, SwNodeOffset(1) );
 
     if ( bRecalcFootnoteFlag )
         CalcFootnoteFlag();

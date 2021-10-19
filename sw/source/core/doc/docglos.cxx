@@ -164,7 +164,7 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
             aCpyPam.SetMark();
 
             // till the nodes array's end
-            aCpyPam.GetPoint()->nNode = pGDoc->GetNodes().GetEndOfContent().GetIndex()-1;
+            aCpyPam.GetPoint()->nNode = pGDoc->GetNodes().GetEndOfContent().GetIndex()-SwNodeOffset(1);
             pContentNd = aCpyPam.GetContentNode();
             aCpyPam.GetPoint()->nContent.Assign(
                     pContentNd, pContentNd ? pContentNd->Len() : 0 );
@@ -177,7 +177,7 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
                 SwStartNode* pBoxSttNd = const_cast<SwStartNode*>(rInsPos.nNode.GetNode().
                                             FindTableBoxStartNode());
 
-                if( pBoxSttNd && 2 == pBoxSttNd->EndOfSectionIndex() -
+                if( pBoxSttNd && SwNodeOffset(2) == pBoxSttNd->EndOfSectionIndex() -
                                       pBoxSttNd->GetIndex() &&
                     aCpyPam.GetPoint()->nNode != aCpyPam.GetMark()->nNode )
                 {

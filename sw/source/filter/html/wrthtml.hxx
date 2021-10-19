@@ -191,10 +191,10 @@ struct HTMLControl
 {
     // the form to which the control belongs
     css::uno::Reference<css::container::XIndexContainer> xFormComps;
-    sal_uLong nNdIdx;              // the node in which it's anchored
+    SwNodeOffset nNdIdx;           // the node in which it's anchored
     sal_Int32 nCount;              // how many controls are on the node
 
-    HTMLControl( const css::uno::Reference<css::container::XIndexContainer>& rForm, sal_uInt32 nIdx );
+    HTMLControl( const css::uno::Reference<css::container::XIndexContainer>& rForm, SwNodeOffset nIdx );
     ~HTMLControl();
 
     // operators for the sort array
@@ -284,7 +284,7 @@ public:
     std::set<OUString> m_aScriptParaStyles; // script dependent para styles
     std::set<OUString> m_aScriptTextStyles; // script dependent text styles
     std::vector<OUString> m_aOutlineMarks;
-    std::vector<sal_uInt32> m_aOutlineMarkPoss;
+    std::vector<SwNodeOffset> m_aOutlineMarkPoss;
     HTMLControls m_aHTMLControls;     // the forms to be written
     SwHTMLFormatInfos m_CharFormatInfos;
     SwHTMLFormatInfos m_TextCollInfos;
@@ -433,7 +433,7 @@ public:
     void OutHyperlinkHRefValue( const OUString& rURL );
 
     // output the FlyFrame anchored at current position
-    bool OutFlyFrame( sal_uLong nNdIdx, sal_Int32 nContentIdx,
+    bool OutFlyFrame( SwNodeOffset nNdIdx, sal_Int32 nContentIdx,
                       HtmlPosition nPos, HTMLOutContext *pContext = nullptr );
     void OutFrameFormat( AllHtmlFlags nType, const SwFrameFormat& rFormat,
                          const SdrObject *pSdrObj );
@@ -646,7 +646,7 @@ struct HTMLSaveData
     bool bOldOutFooter : 1;
     bool bOldOutFlyFrame : 1;
 
-    HTMLSaveData( SwHTMLWriter&, sal_uLong nStt, sal_uLong nEnd,
+    HTMLSaveData( SwHTMLWriter&, SwNodeOffset nStt, SwNodeOffset nEnd,
                   bool bSaveNum=true,
                   const SwFrameFormat *pFrameFormat=nullptr  );
     ~HTMLSaveData();

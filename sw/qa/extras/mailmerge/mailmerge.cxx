@@ -554,12 +554,12 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf92623, "tdf92623.odt", "10-testing-addresses
     // and it's a TEXT_FIELDMARK
     CPPUNIT_ASSERT_EQUAL( sal_Int32(IDocumentMarkAccess::MarkType::TEXT_FIELDMARK),
                             sal_Int32(IDocumentMarkAccess::GetType( **mark )) );
-    sal_uLong src_pos = (*mark)->GetMarkPos().nNode.GetIndex();
+    SwNodeOffset src_pos = (*mark)->GetMarkPos().nNode.GetIndex();
 
     // Get the size of the document in nodes
     SwDoc *doc = pTextDoc->GetDocShell()->GetDoc();
-    sal_uLong size = doc->GetNodes().GetEndOfContent().GetIndex() - doc->GetNodes().GetEndOfExtras().GetIndex();
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(13), size );
+    SwNodeOffset size = doc->GetNodes().GetEndOfContent().GetIndex() - doc->GetNodes().GetEndOfExtras().GetIndex();
+    CPPUNIT_ASSERT_EQUAL( SwNodeOffset(13), size );
     size -= 2; // For common start and end nodes
 
     // Iterate over all field marks in the target document and check that they
@@ -571,14 +571,14 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf92623, "tdf92623.odt", "10-testing-addresses
     // as the helping uno bookmark from the mail merge is left in the doc
     // TODO should be fixed!
     CPPUNIT_ASSERT_EQUAL(sal_Int32(20), pIDMA->getAllMarksCount());
-    std::set<sal_uLong> pages;
+    std::set<SwNodeOffset> pages;
     sal_Int32 countFieldMarks = 0;
     for( mark = pIDMA->getAllMarksBegin(); mark != pIDMA->getAllMarksEnd(); ++mark )
     {
         IDocumentMarkAccess::MarkType markType = IDocumentMarkAccess::GetType( **mark );
         if( markType == IDocumentMarkAccess::MarkType::TEXT_FIELDMARK )
         {
-            sal_uLong pos = (*mark)->GetMarkPos().nNode.GetIndex() - src_pos;
+            SwNodeOffset pos = (*mark)->GetMarkPos().nNode.GetIndex() - src_pos;
             CPPUNIT_ASSERT_EQUAL(sal_uLong(0), pos % size);
             CPPUNIT_ASSERT(pages.insert(pos).second);
             countFieldMarks++;
@@ -974,7 +974,7 @@ DECLARE_SHELL_MAILMERGE_TEST(tdf125522_shell, "tdf125522.odt", "10-testing-addre
     CPPUNIT_ASSERT(pTextDoc);
 
     const auto & rNodes = pTextDoc->GetDocShell()->GetDoc()->GetNodes();
-    for (sal_uLong nodeIndex = 0; nodeIndex<rNodes.Count(); nodeIndex++)
+    for (SwNodeOffset nodeIndex(0); nodeIndex<rNodes.Count(); nodeIndex++)
     {
         SwNode* aNode = rNodes[nodeIndex];
         if (aNode->StartOfSectionNode())
@@ -1110,9 +1110,9 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf121168, "section_ps.odt", "4_v01.ods", "Tabe
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(7), pTextDoc->GetDocShell()->GetWrtShell()->GetPhyPageNum());
 
     SwDoc* pDocMM = pTextDoc->GetDocShell()->GetDoc();
-    sal_uLong nSizeMM = pDocMM->GetNodes().GetEndOfContent().GetIndex()
+    SwNodeOffset nSizeMM = pDocMM->GetNodes().GetEndOfContent().GetIndex()
                         - pDocMM->GetNodes().GetEndOfExtras().GetIndex() - 2;
-    CPPUNIT_ASSERT_EQUAL(sal_uLong(16), nSizeMM);
+    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(16), nSizeMM);
 
     // All even pages should be empty, all sub-documents have one page
     const SwRootFrame* pLayout = pDocMM->getIDocumentLayoutAccess().GetCurrentLayout();

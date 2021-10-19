@@ -208,7 +208,7 @@ uno::Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
         SwNodeIndex* pNodeIdx = m_rRedline.GetContentIdx();
         if(pNodeIdx )
         {
-            if ( 1 < ( pNodeIdx->GetNode().EndOfSectionIndex() - pNodeIdx->GetNode().GetIndex() ) )
+            if ( SwNodeOffset(1) < ( pNodeIdx->GetNode().EndOfSectionIndex() - pNodeIdx->GetNode().GetIndex() ) )
             {
                 SwUnoCursor& rUnoCursor = GetCursor();
                 uno::Reference<text::XText> xRet = new SwXRedlineText(&rUnoCursor.GetDoc(), *pNodeIdx);
@@ -320,7 +320,7 @@ uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties
     SwNodeIndex* pNodeIdx = rRedline.GetContentIdx();
     if(pNodeIdx )
     {
-        if ( 1 < ( pNodeIdx->GetNode().EndOfSectionIndex() - pNodeIdx->GetNode().GetIndex() ) )
+        if ( SwNodeOffset(1) < ( pNodeIdx->GetNode().EndOfSectionIndex() - pNodeIdx->GetNode().GetIndex() ) )
         {
             uno::Reference<text::XText> xRet = new SwXRedlineText(&rRedline.GetDoc(), *pNodeIdx);
             pRet[nPropIdx].Name = UNO_NAME_REDLINE_TEXT;
@@ -451,7 +451,7 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
         SwNodeIndex* pNodeIdx = m_pRedline->GetContentIdx();
         if( pNodeIdx )
         {
-            if ( 1 < ( pNodeIdx->GetNode().EndOfSectionIndex() - pNodeIdx->GetNode().GetIndex() ) )
+            if ( SwNodeOffset(1) < ( pNodeIdx->GetNode().EndOfSectionIndex() - pNodeIdx->GetNode().GetIndex() ) )
             {
                 uno::Reference<text::XText> xRet = new SwXRedlineText(m_pDoc, *pNodeIdx);
                 aRet <<= xRet;

@@ -27,6 +27,7 @@
 #include "swdllapi.h"
 #include "calbck.hxx"
 #include "reffld.hxx"
+#include "nodeoffset.hxx"
 
 class SwField;
 class SwTextField;
@@ -58,8 +59,8 @@ namespace sw {
         HasHiddenInformationNotesHint(bool& rbHasHiddenInformationNotes) : m_rbHasHiddenInformationNotes(rbHasHiddenInformationNotes) {};
     };
     struct GatherNodeIndexHint final : SfxHint {
-        std::vector<sal_uLong>& m_rvNodeIndex;
-        GatherNodeIndexHint(std::vector<sal_uLong>& rvNodeIndex) : m_rvNodeIndex(rvNodeIndex) {};
+        std::vector<SwNodeOffset>& m_rvNodeIndex;
+        GatherNodeIndexHint(std::vector<SwNodeOffset>& rvNodeIndex) : m_rvNodeIndex(rvNodeIndex) {};
     };
     struct GatherRefFieldsHint final : SfxHint {
         std::vector<SwGetRefField*>& m_rvRFields;

@@ -586,7 +586,7 @@ void SwAutoCorrDoc::SaveCpltSttWord( ACFlags nFlag, sal_Int32 nPos,
                                             const OUString& rExceptWord,
                                             sal_Unicode cChar )
 {
-    sal_uLong nNode = m_pIndex ? m_pIndex->GetIndex() : m_rCursor.GetPoint()->nNode.GetIndex();
+    SwNodeOffset nNode = m_pIndex ? m_pIndex->GetIndex() : m_rCursor.GetPoint()->nNode.GetIndex();
     LanguageType eLang = GetLanguage(nPos);
     m_rEditSh.GetDoc()->SetAutoCorrExceptWord( std::make_unique<SwAutoCorrExceptWord>( nFlag,
                                         nNode, nPos, rExceptWord, cChar, eLang ));

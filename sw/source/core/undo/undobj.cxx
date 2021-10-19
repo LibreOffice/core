@@ -71,7 +71,7 @@ void SwUndRng::SetValues( const SwPaM& rPam )
     else
     {
         // no selection !!
-        m_nEndNode = 0;
+        m_nEndNode = SwNodeOffset(0);
         m_nEndContent = COMPLETE_STRING;
     }
 
@@ -115,8 +115,8 @@ SwPaM & SwUndRng::AddUndoRedoPaM(
     return rPaM;
 }
 
-void SwUndo::RemoveIdxFromSection( SwDoc& rDoc, sal_uLong nSttIdx,
-                                    const sal_uLong* pEndIdx )
+void SwUndo::RemoveIdxFromSection( SwDoc& rDoc, SwNodeOffset nSttIdx,
+                                    const SwNodeOffset* pEndIdx )
 {
     SwNodeIndex aIdx( rDoc.GetNodes(), nSttIdx );
     SwNodeIndex aEndIdx( rDoc.GetNodes(), pEndIdx ? *pEndIdx
@@ -152,7 +152,7 @@ void SwUndo::RemoveIdxFromRange( SwPaM& rPam, bool bMoveNext )
         SwDoc::CorrAbs( rPam, *pEnd, true );
 }
 
-void SwUndo::RemoveIdxRel( sal_uLong nIdx, const SwPosition& rPos )
+void SwUndo::RemoveIdxRel( SwNodeOffset nIdx, const SwPosition& rPos )
 {
     // Move only the Cursor. Bookmarks/TOXMarks/etc. are done by the corresponding
     // JoinNext/JoinPrev
@@ -731,7 +731,7 @@ void SwUndoSaveContent::dumpAsXml(xmlTextWriterPtr pWriter) const
 // If pEndNdIdx is given, Undo/Redo calls -Ins/DelFly. In that case the whole
 // section should be moved.
 void SwUndoSaveContent::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
-                    sal_uLong* pEndNdIdx )
+                    SwNodeOffset* pEndNdIdx )
 {
     SwDoc& rDoc = rPaM.GetDoc();
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
@@ -745,11 +745,11 @@ void SwUndoSaveContent::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
 
     const SwPosition* pStt = rPaM.Start(), *pEnd = rPaM.End();
 
-    sal_uLong nTmpMvNode = aPos.nNode.GetIndex();
+    SwNodeOffset nTmpMvNode = aPos.nNode.GetIndex();
 
     if( pCpyNd || pEndNdIdx )
     {
-        SwNodeRange aRg( pStt->nNode, 0, pEnd->nNode, 1 );
+        SwNodeRange aRg( pStt->nNode, SwNodeOffset(0), pEnd->nNode, SwNodeOffset(1) );
         rDoc.GetNodes().MoveNodes( aRg, rNds, aPos.nNode, true );
         aPos.nContent = 0;
         --aPos.nNode;
@@ -767,9 +767,9 @@ void SwUndoSaveContent::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
         *pNodeIdx = aPos.nNode;
 }
 
-void SwUndoSaveContent::MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
+void SwUndoSaveContent::MoveFromUndoNds( SwDoc& rDoc, SwNodeOffset nNodeIdx,
                             SwPosition& rInsPos,
-            const sal_uLong* pEndNdIdx, bool const bForceCreateFrames)
+            const SwNodeOffset* pEndNdIdx, bool const bForceCreateFrames)
 {
     // here comes the recovery
     SwNodes & rNds = rDoc.GetUndoManager().GetUndoNodes();
@@ -981,7 +981,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                         SwTextAttr* const pFlyHint = pTextNd->GetTextAttrForCharAt(
                             pAPos->nContent.GetIndex());
                         assert(pFlyHint);
-                        m_pHistory->Add( pFlyHint, 0, false );
+                        m_pHistory->Add( pFlyHint, SwNodeOffset(0), false );
                         // reset n so that no Format is skipped
                         n = n >= rSpzArr.size() ? rSpzArr.size() : n+1;
                     }
@@ -1203,7 +1203,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
 
 // save a complete section into UndoNodes array
 SwUndoSaveSection::SwUndoSaveSection()
-    : m_nMoveLen( 0 ), m_nStartPos( ULONG_MAX )
+    : m_nMoveLen( 0 ), m_nStartPos( NODE_OFFSET_MAX )
 {
 }
 
@@ -1268,7 +1268,7 @@ void SwUndoSaveSection::SaveSection(
         aPam.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
 
     // Keep positions as SwIndex so that this section can be deleted in DTOR
-    sal_uLong nEnd;
+    SwNodeOffset nEnd;
     m_pMovedStart.reset(new SwNodeIndex(rRange.aStart));
     MoveToUndoNds(aPam, m_pMovedStart.get(), &nEnd);
     m_nMoveLen = nEnd - m_pMovedStart->GetIndex() + 1;
@@ -1277,7 +1277,7 @@ void SwUndoSaveSection::SaveSection(
 void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx,
                                         sal_uInt16 nSectType )
 {
-    if( ULONG_MAX == m_nStartPos )        // was there any content?
+    if( NODE_OFFSET_MAX == m_nStartPos )        // was there any content?
         return;
 
     // check if the content is at the old position
@@ -1296,16 +1296,16 @@ void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx,
 void SwUndoSaveSection::RestoreSection(
         SwDoc *const pDoc, const SwNodeIndex& rInsPos, bool bForceCreateFrames)
 {
-    if( ULONG_MAX == m_nStartPos )        // was there any content?
+    if( NODE_OFFSET_MAX == m_nStartPos )        // was there any content?
         return;
 
     SwPosition aInsPos( rInsPos );
-    sal_uLong nEnd = m_pMovedStart->GetIndex() + m_nMoveLen - 1;
+    SwNodeOffset nEnd = m_pMovedStart->GetIndex() + m_nMoveLen - 1;
     MoveFromUndoNds(*pDoc, m_pMovedStart->GetIndex(), aInsPos, &nEnd, bForceCreateFrames);
 
     // destroy indices again, content was deleted from UndoNodes array
     m_pMovedStart.reset();
-    m_nMoveLen = 0;
+    m_nMoveLen = SwNodeOffset(0);
 
     if( m_pRedlineSaveData )
     {

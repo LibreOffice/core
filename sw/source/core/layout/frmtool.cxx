@@ -1073,7 +1073,7 @@ void AppendObj(SwFrame *const pFrame, SwPageFrame *const pPage, SwFrameFormat *c
             }
 }
 
-static bool IsShown(sal_uLong const nIndex,
+static bool IsShown(SwNodeOffset const nIndex,
     const SwFormatAnchor & rAnch,
     std::vector<sw::Extent>::const_iterator const*const pIter,
     std::vector<sw::Extent>::const_iterator const*const pEnd,
@@ -1202,7 +1202,7 @@ void RemoveHiddenObjsOfNode(SwTextNode const& rNode,
     }
 }
 
-void AppendObjsOfNode(SwFrameFormats const*const pTable, sal_uLong const nIndex,
+void AppendObjsOfNode(SwFrameFormats const*const pTable, SwNodeOffset const nIndex,
     SwFrame *const pFrame, SwPageFrame *const pPage, SwDoc *const pDoc,
     std::vector<sw::Extent>::const_iterator const*const pIter,
     std::vector<sw::Extent>::const_iterator const*const pEnd,
@@ -1249,7 +1249,7 @@ void AppendObjsOfNode(SwFrameFormats const*const pTable, sal_uLong const nIndex,
 }
 
 
-void AppendObjs(const SwFrameFormats *const pTable, sal_uLong const nIndex,
+void AppendObjs(const SwFrameFormats *const pTable, SwNodeOffset const nIndex,
         SwFrame *const pFrame, SwPageFrame *const pPage, SwDoc *const pDoc)
 {
     if (pFrame->IsTextFrame())
@@ -1267,10 +1267,10 @@ void AppendObjs(const SwFrameFormats *const pTable, sal_uLong const nIndex,
                 {
                     AppendObjsOfNode(pTable, pNode->GetIndex(), pFrame, pPage, pDoc,
                         &iterFirst, &iter, pMerged->pFirstNode, pMerged->pLastNode);
-                    sal_uLong const until = iter == pMerged->extents.end()
+                    SwNodeOffset const until = iter == pMerged->extents.end()
                         ? pMerged->pLastNode->GetIndex() + 1
                         : iter->pNode->GetIndex();
-                    for (sal_uLong i = pNode->GetIndex() + 1; i < until; ++i)
+                    for (SwNodeOffset i = pNode->GetIndex() + 1; i < until; ++i)
                     {
                         // let's show at-para flys on nodes that contain start/end of
                         // redline too, even if there's no text there
@@ -1462,7 +1462,7 @@ static void lcl_SetPos( SwFrame&             _rNewFrame,
 }
 
 void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
-                             sal_uLong nIndex, bool bPages, sal_uLong nEndIndex,
+                             SwNodeOffset nIndex, bool bPages, SwNodeOffset nEndIndex,
                              SwFrame *pPrv, sw::FrameMode const eMode )
 {
     pDoc->getIDocumentTimerAccess().BlockIdling();
@@ -1501,7 +1501,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
         // Attention: the SwLayHelper class uses references to the content-,
         // page-, layout-frame etc. and may change them!
         pPageMaker.reset(new SwLayHelper( pDoc, pFrame, pPrv, pPage, pLay,
-                pActualSection, nIndex, 0 == nEndIndex ));
+                pActualSection, nIndex, SwNodeOffset(0) == nEndIndex ));
         if( bStartPercent )
         {
             const sal_uLong nPageCount = pPageMaker->CalcPageCount();
@@ -1558,7 +1558,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
 
     // Do not consider the end node. The caller (Section/MakeFrames()) has to
     // ensure that the end of this range is positioned before EndIndex!
-    for ( ; nEndIndex == 0 || nIndex < nEndIndex; ++nIndex)
+    for ( ; nEndIndex == SwNodeOffset(0) || nIndex < nEndIndex; ++nIndex)
     {
         SwNode *pNd = pDoc->GetNodes()[nIndex];
         if ( pNd->IsContentNode() )
@@ -1987,7 +1987,7 @@ void MakeFrames( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
     bObjsDirect = false;
 
     SwNodeIndex aTmp( rSttIdx );
-    sal_uLong nEndIdx = rEndIdx.GetIndex();
+    SwNodeOffset nEndIdx = rEndIdx.GetIndex();
     SwNode* pNd = pDoc->GetNodes().FindPrvNxtFrameNode( aTmp,
                                             pDoc->GetNodes()[ nEndIdx-1 ]);
     if ( pNd )
@@ -2025,7 +2025,7 @@ void MakeFrames( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
             // If pFrame cannot be moved, it is not possible to move it to the next page. This applies
             // also for frames (in the first column of a frame pFrame is moveable) and column
             // sections of tables (also here pFrame is moveable).
-            bool bMoveNext = nEndIdx - rSttIdx.GetIndex() > 120;
+            bool bMoveNext = nEndIdx - rSttIdx.GetIndex() > SwNodeOffset(120);
             bool bAllowMove = !pFrame->IsInFly() && pFrame->IsMoveable() &&
                  (!pFrame->IsInTab() || pFrame->IsTabFrame() );
             if ( bMoveNext && bAllowMove )

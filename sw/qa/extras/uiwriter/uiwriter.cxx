@@ -801,7 +801,7 @@ void SwUiWriterTest::testImportRTF()
     CPPUNIT_ASSERT(pRTFReader != nullptr);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, aReader.Read(*pRTFReader));
 
-    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(OUString("fooHello world!"), pDoc->GetNodes()[nIndex - 1]->GetTextNode()->GetText());
     CPPUNIT_ASSERT_EQUAL(OUString("bar"), pDoc->GetNodes()[nIndex]->GetTextNode()->GetText());
 }
@@ -1150,13 +1150,13 @@ void SwUiWriterTest::testCp1000071()
 
     const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
     CPPUNIT_ASSERT_EQUAL( SwRedlineTable::size_type( 2 ), rTable.size());
-    sal_uLong redlineStart0NodeIndex = rTable[ 0 ]->Start()->nNode.GetIndex();
+    SwNodeOffset redlineStart0NodeIndex = rTable[ 0 ]->Start()->nNode.GetIndex();
     sal_Int32 redlineStart0Index = rTable[ 0 ]->Start()->nContent.GetIndex();
-    sal_uLong redlineEnd0NodeIndex = rTable[ 0 ]->End()->nNode.GetIndex();
+    SwNodeOffset redlineEnd0NodeIndex = rTable[ 0 ]->End()->nNode.GetIndex();
     sal_Int32 redlineEnd0Index = rTable[ 0 ]->End()->nContent.GetIndex();
-    sal_uLong redlineStart1NodeIndex = rTable[ 1 ]->Start()->nNode.GetIndex();
+    SwNodeOffset redlineStart1NodeIndex = rTable[ 1 ]->Start()->nNode.GetIndex();
     sal_Int32 redlineStart1Index = rTable[ 1 ]->Start()->nContent.GetIndex();
-    sal_uLong redlineEnd1NodeIndex = rTable[ 1 ]->End()->nNode.GetIndex();
+    SwNodeOffset redlineEnd1NodeIndex = rTable[ 1 ]->End()->nNode.GetIndex();
     sal_Int32 redlineEnd1Index = rTable[ 1 ]->End()->nContent.GetIndex();
 
     // Change the document layout to be 2 columns, and then undo.
@@ -1397,7 +1397,7 @@ void SwUiWriterTest::testAutoCorr()
     //Normal AutoCorrect
     pWrtShell->Insert("tset");
     pWrtShell->AutoCorrect(corr, cIns);
-    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(OUString("Test "), static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 
     //AutoCorrect with change style to bolt
@@ -1442,7 +1442,7 @@ void SwUiWriterTest::testTdf83260()
         rUndoManager.Undo();
     }
     // check that every text node has a layout frame
-    for (sal_uLong i = 0; i < pDoc->GetNodes().Count(); ++i)
+    for (SwNodeOffset i(0); i < pDoc->GetNodes().Count(); ++i)
     {
         if (SwTextNode const*const pNode = pDoc->GetNodes()[i]->GetTextNode())
         {
@@ -1453,7 +1453,7 @@ void SwUiWriterTest::testTdf83260()
     {
         rUndoManager.Redo();
     }
-    for (sal_uLong i = 0; i < pDoc->GetNodes().Count(); ++i)
+    for (SwNodeOffset i(0); i < pDoc->GetNodes().Count(); ++i)
     {
         if (SwTextNode const*const pNode = pDoc->GetNodes()[i]->GetTextNode())
         {
@@ -1464,7 +1464,7 @@ void SwUiWriterTest::testTdf83260()
     {
         rUndoManager.Undo();
     }
-    for (sal_uLong i = 0; i < pDoc->GetNodes().Count(); ++i)
+    for (SwNodeOffset i(0); i < pDoc->GetNodes().Count(); ++i)
     {
         if (SwTextNode const*const pNode = pDoc->GetNodes()[i]->GetTextNode())
         {
@@ -3213,7 +3213,7 @@ void SwUiWriterTest::testTdf74363()
     const sal_Unicode cChar = ' ';
     pWrtShell->AutoCorrect(corr, cChar);
     //The word should be capitalized due to autocorrect
-    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(OUString("Testing "), static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 
@@ -3470,13 +3470,13 @@ void SwUiWriterTest::testTdf75137()
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(true);
     pWrtShell->InsertFootnote("This is first footnote");
-    sal_uLong firstIndex = pShellCursor->GetNode().GetIndex();
+    SwNodeOffset firstIndex = pShellCursor->GetNode().GetIndex();
     pShellCursor->GotoFootnoteAnchor();
     pWrtShell->InsertFootnote("This is second footnote");
     pWrtShell->Up(false);
-    sal_uLong secondIndex = pShellCursor->GetNode().GetIndex();
+    SwNodeOffset secondIndex = pShellCursor->GetNode().GetIndex();
     pWrtShell->Down(false);
-    sal_uLong thirdIndex = pShellCursor->GetNode().GetIndex();
+    SwNodeOffset thirdIndex = pShellCursor->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(firstIndex, thirdIndex);
     CPPUNIT_ASSERT(firstIndex != secondIndex);
 }

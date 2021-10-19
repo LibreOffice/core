@@ -59,7 +59,7 @@ namespace
     }
 }
 
-typedef std::multimap<sal_uLong, const ::sw::mark::IMark*> SwBookmarkNodeTable;
+typedef std::multimap<SwNodeOffset, const ::sw::mark::IMark*> SwBookmarkNodeTable;
 
 struct Writer_Impl
 {
@@ -90,7 +90,7 @@ void Writer_Impl::RemoveFontList( SwDoc& rDoc )
 
 void Writer_Impl::InsertBkmk(const ::sw::mark::IMark& rBkmk)
 {
-    sal_uLong nNd = rBkmk.GetMarkPos().nNode.GetIndex();
+    SwNodeOffset nNd = rBkmk.GetMarkPos().nNode.GetIndex();
 
     aBkmkNodePos.emplace( nNd, &rBkmk );
 
@@ -188,7 +188,7 @@ sal_Int32 Writer::FindPos_Bkmk(const SwPosition& rPos) const
 }
 
 std::shared_ptr<SwUnoCursor>
-Writer::NewUnoCursor(SwDoc & rDoc, sal_uLong const nStartIdx, sal_uLong const nEndIdx)
+Writer::NewUnoCursor(SwDoc & rDoc, SwNodeOffset const nStartIdx, SwNodeOffset const nEndIdx)
 {
     SwNodes *const pNds = &rDoc.GetNodes();
 
@@ -447,7 +447,7 @@ bool Writer::GetBookmarks(const SwContentNode& rNd, sal_Int32 nStt,
 {
     OSL_ENSURE( rArr.empty(), "there are still entries available" );
 
-    sal_uLong nNd = rNd.GetIndex();
+    SwNodeOffset nNd = rNd.GetIndex();
     std::pair<SwBookmarkNodeTable::const_iterator, SwBookmarkNodeTable::const_iterator> aIterPair
         = m_pImpl->aBkmkNodePos.equal_range( nNd );
     if( aIterPair.first != aIterPair.second )

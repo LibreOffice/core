@@ -199,10 +199,10 @@ namespace {
 /// Travel between table of content Marks
 class CompareNodeContent
 {
-    sal_uLong m_nNode;
+    SwNodeOffset m_nNode;
     sal_Int32 m_nContent;
 public:
-    CompareNodeContent( sal_uLong nNd, sal_Int32 nCnt )
+    CompareNodeContent( SwNodeOffset nNd, sal_Int32 nCnt )
         : m_nNode( nNd ), m_nContent( nCnt ) {}
 
     bool operator==( const CompareNodeContent& rCmp ) const
@@ -230,11 +230,11 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
 {
     const SwTextTOXMark* pMark = rCurTOXMark.GetTextTOXMark();
 
-    CompareNodeContent aAbsIdx(pMark ? pMark->GetpTextNd()->GetIndex() : 0, pMark ? pMark->GetStart() : 0);
-    CompareNodeContent aPrevPos( 0, 0 );
-    CompareNodeContent aNextPos( ULONG_MAX, SAL_MAX_INT32 );
-    CompareNodeContent aMax( 0, 0 );
-    CompareNodeContent aMin( ULONG_MAX, SAL_MAX_INT32 );
+    CompareNodeContent aAbsIdx(pMark ? pMark->GetpTextNd()->GetIndex() : SwNodeOffset(0), pMark ? pMark->GetStart() : 0);
+    CompareNodeContent aPrevPos( SwNodeOffset(0), 0 );
+    CompareNodeContent aNextPos( NODE_OFFSET_MAX, SAL_MAX_INT32 );
+    CompareNodeContent aMax( SwNodeOffset(0), 0 );
+    CompareNodeContent aMin( NODE_OFFSET_MAX, SAL_MAX_INT32 );
 
     const SwTOXMark*    pNew    = nullptr;
     const SwTOXMark*    pMax    = &rCurTOXMark;
@@ -405,7 +405,7 @@ SwTOXBaseSection* SwDoc::InsertTableOf( const SwPaM& aPam,
     return pNewSection;
 }
 
-void SwDoc::InsertTableOf( sal_uLong nSttNd, sal_uLong nEndNd,
+void SwDoc::InsertTableOf( SwNodeOffset nSttNd, SwNodeOffset nEndNd,
                                                 const SwTOXBase& rTOX,
                                                 const SfxItemSet* pSet )
 {
@@ -799,8 +799,8 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         if ( !_bNewTOX && !pDefaultPageDesc )
         {
             // determine page description of table-of-content
-            size_t nPgDescNdIdx = pSectNd->GetIndex() + 1;
-            size_t* pPgDescNdIdx = &nPgDescNdIdx;
+            SwNodeOffset nPgDescNdIdx = pSectNd->GetIndex() + 1;
+            SwNodeOffset* pPgDescNdIdx = &nPgDescNdIdx;
             pDefaultPageDesc = pSectNd->FindPageDesc( pPgDescNdIdx );
             if ( nPgDescNdIdx < pSectNd->GetIndex() )
             {
@@ -1059,9 +1059,9 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
     }
 
     // now create the new Frames
-    sal_uLong nIdx = pSectNd->GetIndex();
+    SwNodeOffset nIdx = pSectNd->GetIndex();
     // don't delete if index is empty
-    if(nIdx + 2 < pSectNd->EndOfSectionIndex())
+    if(nIdx + SwNodeOffset(2) < pSectNd->EndOfSectionIndex())
         rDoc.GetNodes().Delete( aInsPos );
 
     aN2L.RestoreUpperFrames( rDoc.GetNodes(), nIdx, nIdx + 1 );
@@ -1431,7 +1431,7 @@ void SwTOXBaseSection::UpdateContent( SwTOXElement eMyType,
     SwDoc* pDoc = GetFormat()->GetDoc();
     SwNodes& rNds = pDoc->GetNodes();
     // on the 1st Node of the 1st Section
-    sal_uLong nIdx = rNds.GetEndOfAutotext().StartOfSectionIndex() + 2,
+    SwNodeOffset nIdx = rNds.GetEndOfAutotext().StartOfSectionIndex() + SwNodeOffset(2),
          nEndIdx = rNds.GetEndOfAutotext().GetIndex();
 
     while( nIdx < nEndIdx )
@@ -1525,7 +1525,7 @@ void SwTOXBaseSection::UpdateContent( SwTOXElement eMyType,
             }
         }
 
-        nIdx = pNd->StartOfSectionNode()->EndOfSectionIndex() + 2;  // 2 == End/Start Node
+        nIdx = pNd->StartOfSectionNode()->EndOfSectionIndex() + SwNodeOffset(2);  // 2 == End/Start Node
     }
 }
 
