@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad3a168a_f3e88158",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-10-19T08:02:17Z",
+      "side": 1,
+      "message": "Caolan: the GtkPaned object works well on kf5 and gen (besides I miss a minimum height). But it refuses to resize completely with gtk3 (the cursor changes to the split icon but no resize happens). What\u0027s your advice?",
+      "revId": "171eade3af6e81eff7b045bd4f06111bfba2b80d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
