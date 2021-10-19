@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a346921_71c14c80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-19T07:57:54Z",
+      "side": 1,
+      "message": "Interesting, is this because of some PCH inclusion, with some \"using namespace css::uno\" in it? (which would be bad)",
+      "revId": "af2d15a494b42faf4367096af07c7a2b2d22642e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
