@@ -14,6 +14,8 @@
 #include <vcl/bitmapex.hxx>
 #include <bitmap/BitmapWriteAccess.hxx>
 
+#include <vector>
+
 const Color Benchmark::constBackgroundColor(COL_LIGHTGRAY);
 const Color Benchmark::constLineColor(COL_LIGHTBLUE);
 const Color Benchmark::constFillColor(COL_BLUE);
@@ -127,6 +129,9 @@ Bitmap Benchmark::setupBitmap()
 }
 
 Bitmap Benchmark::setupBitmapWithAlpha()
+{
+    initialSetup(4096, 4096, constBackgroundColor);
+
     Size aBitmapSize(4095, 4095);
     Bitmap aBitmap(aBitmapSize, vcl::PixelFormat::N24_BPP);
 
@@ -139,7 +144,7 @@ Bitmap Benchmark::setupBitmapWithAlpha()
     rWriteAccess->Erase(COL_WHITE);
     rWriteAccess->SetLineColor(Color(0x44, 0x44, 0x44));
 
-    for (int i = 1; i < 4095; i += 4)
+    for (int i = 1; i + 4 <= 4095; i += 4)
     {
         aWriteAccess->DrawRect(tools::Rectangle(i, i, 4095 - i, 4095 - i));
         aWriteAccess->DrawRect(tools::Rectangle(i + 1, i + 1, 4095 - i - 1, 4095 - i - 1));
@@ -155,7 +160,6 @@ Bitmap Benchmark::setupBitmapWithAlpha()
 
     mpVirtualDevice->DrawBitmapEx(tools::Rectangle(aPoint, aRect.GetSize()).TopLeft(),
                                   BitmapEx(aBitmap, aAlpha));
-
     Bitmap rBitmap = mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 
     m_xEnd = std::chrono::steady_clock::now();
@@ -249,6 +253,37 @@ Bitmap Benchmark::setupRotatedBitmap()
 
     m_xEnd = std::chrono::steady_clock::now();
     return rBitmap;
+}
+
+Bitmap Benchmark::setupGradient()
+{
+    initialSetup(4096, 4096, constBackgroundColor);
+
+    std::vector<std::pair<Color, Color>> aGradients
+        = { { Color(0x0, 0x9F, 0xFF), Color(0xEC, 0x2F, 0x4B) },
+            { Color(0x12, 0xC2, 0xE9), Color(0xC4, 0x71, 0xED) },
+            { Color(0xFF, 0x0, 0x99), Color(0x49, 0x32, 0x40) },
+            { Color(0xF1, 0x27, 0x11), Color(0xF5, 0xAF, 0x19) },
+            { Color(0x83, 0x60, 0xC3), Color(0x2E, 0xBF, 0x91) },
+            { Color(0x0, 0x9F, 0xFF), Color(0xEC, 0x2F, 0x4B) },
+            { Color(0x65, 0x4E, 0xA3), Color(0xEA, 0xAF, 0xC8) },
+            { Color(0xFF, 0x41, 0x6C), Color(0xFF, 0x4B, 0x2B) } };
+
+    m_xStart = std::chrono::steady_clock::now();
+    for (int i = 0, nLeftOffset = 0, nRightOffset = 3840; i < 16;
+         i++, nLeftOffset += 256, nRightOffset -= 256)
+    {
+        Gradient aGradient(GradientStyle::Linear, aGradients[i % 8].first, aGradients[i % 8].second);
+        aGradient.SetAngle(900_deg10);
+        aGradient.SetBorder(50);
+        tools::Rectangle aDrawRect(maVDRectangle.Left() + nLeftOffset, maVDRectangle.Top() + 1,
+                                   maVDRectangle.Right() - nRightOffset,
+                                   maVDRectangle.Bottom() - 1);
+        mpVirtualDevice->DrawGradient(aDrawRect, aGradient);
+    }
+    Bitmap aBitmap = mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+    m_xEnd = std::chrono::steady_clock::now();
+    return aBitmap;
 }
 
 Bitmap Benchmark::setupMultiplePolygonsWithPolyPolygon()
