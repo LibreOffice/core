@@ -16,6 +16,23 @@
       "message": "Thanks Jim, this will be useful.",
       "revId": "d0bfb719de95c5cba2e340c9c1d1eba5ba3cbfaf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6076678_a82f1490",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-10-20T00:42:43Z",
+      "side": 1,
+      "message": "Most likely more to do to make recency behave as expected after various actions that change the position of the cursor.",
+      "revId": "d0bfb719de95c5cba2e340c9c1d1eba5ba3cbfaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
