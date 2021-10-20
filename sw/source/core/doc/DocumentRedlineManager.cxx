@@ -918,8 +918,7 @@ namespace
         int nCount = 0;
 
         const SwPosition* pStt = rPam.Start(),
-                        * pEnd = pStt == rPam.GetPoint() ? rPam.GetMark()
-                                                         : rPam.GetPoint();
+                        * pEnd = rPam.End();
         const SwRangeRedline* pFnd = rArr.FindAtPosition( *pStt, n );
         if( pFnd &&     // Is new a part of it?
             ( *pFnd->Start() != *pStt || *pFnd->End() > *pEnd ))
@@ -975,8 +974,7 @@ namespace
         // to Non-ContentNodes before or after that, then the Selections
         // expand to them.
         SwPosition* pStt = rPam.Start(),
-                  * pEnd = pStt == rPam.GetPoint() ? rPam.GetMark()
-                                                   : rPam.GetPoint();
+                  * pEnd = rPam.End();
         SwDoc& rDoc = rPam.GetDoc();
         if( !pStt->nContent.GetIndex() &&
             !rDoc.GetNodes()[ pStt->nNode.GetIndex() - 1 ]->IsContentNode() )
@@ -1246,8 +1244,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
     }
 
     SwPosition* pStt = pNewRedl->Start(),
-              * pEnd = pStt == pNewRedl->GetPoint() ? pNewRedl->GetMark()
-                                                    : pNewRedl->GetPoint();
+              * pEnd = pNewRedl->End();
     {
         SwTextNode* pTextNode = pStt->nNode.GetNode().GetTextNode();
         if( pTextNode == nullptr )
@@ -1303,8 +1300,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
 
         SwRangeRedline* pRedl = maRedlineTable[ n ];
         SwPosition* pRStt = pRedl->Start(),
-                  * pREnd = pRStt == pRedl->GetPoint() ? pRedl->GetMark()
-                                                       : pRedl->GetPoint();
+                  * pREnd = pRedl->End();
 
         // #i8518# remove empty redlines while we're at it
         if( ( *pRStt == *pREnd ) &&
@@ -2408,11 +2404,9 @@ void DocumentRedlineManager::CompressRedlines()
         SwRangeRedline* pPrev = maRedlineTable[ n-1 ],
                     * pCur = maRedlineTable[ n ];
         const SwPosition* pPrevStt = pPrev->Start(),
-                        * pPrevEnd = pPrevStt == pPrev->GetPoint()
-                            ? pPrev->GetMark() : pPrev->GetPoint();
+                        * pPrevEnd = pPrev->End();
         const SwPosition* pCurStt = pCur->Start(),
-                        * pCurEnd = pCurStt == pCur->GetPoint()
-                            ? pCur->GetMark() : pCur->GetPoint();
+                        * pCurEnd = pCur->End();
         if( *pPrevEnd == *pCurStt && pPrev->CanCombine( *pCur ) &&
             pPrevStt->nNode.GetNode().StartOfSectionNode() ==
             pCurEnd->nNode.GetNode().StartOfSectionNode() &&
@@ -2515,8 +2509,7 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
     }
 
     const SwPosition* pStt = rRange.Start(),
-                    * pEnd = pStt == rRange.GetPoint() ? rRange.GetMark()
-                                                       : rRange.GetPoint();
+                    * pEnd = rRange.End();
     SwRedlineTable::size_type n = 0;
     GetRedline( *pStt, &n );
     for( ; n < maRedlineTable.size() ; ++n )
@@ -2526,8 +2519,7 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
             continue;
 
         SwPosition* pRStt = pRedl->Start(),
-                  * pREnd = pRStt == pRedl->GetPoint() ? pRedl->GetMark()
-                                                       : pRedl->GetPoint();
+                  * pREnd = pRedl->End();
         switch( ComparePosition( *pStt, *pEnd, *pRStt, *pREnd ) )
         {
         case SwComparePosition::Equal:
@@ -2723,9 +2715,7 @@ const SwRangeRedline* DocumentRedlineManager::GetRedline( const SwPosition& rPos
             nM = nU + ( nO - nU ) / 2;
             const SwRangeRedline* pRedl = maRedlineTable[ nM ];
             const SwPosition* pStt = pRedl->Start();
-            const SwPosition* pEnd = pStt == pRedl->GetPoint()
-                                        ? pRedl->GetMark()
-                                        : pRedl->GetPoint();
+            const SwPosition* pEnd = pRedl->End();
             if( pEnd == pStt
                     ? *pStt == rPos
                     : ( *pStt <= rPos && rPos < *pEnd ) )
@@ -2903,8 +2893,7 @@ bool DocumentRedlineManager::AcceptRedline( const SwPaM& rPam, bool bCallDelete 
 void DocumentRedlineManager::AcceptRedlineParagraphFormatting( const SwPaM &rPam )
 {
     const SwPosition* pStt = rPam.Start(),
-                    * pEnd = pStt == rPam.GetPoint() ? rPam.GetMark()
-                                                     : rPam.GetPoint();
+                    * pEnd = rPam.End();
 
     const sal_uLong nSttIdx = pStt->nNode.GetIndex();
     const sal_uLong nEndIdx = pEnd->nNode.GetIndex();
@@ -3336,8 +3325,7 @@ bool DocumentRedlineManager::SetRedlineComment( const SwPaM& rPaM, const OUStrin
 {
     bool bRet = false;
     const SwPosition* pStt = rPaM.Start(),
-                    * pEnd = pStt == rPaM.GetPoint() ? rPaM.GetMark()
-                                                     : rPaM.GetPoint();
+                    * pEnd = rPaM.End();
     SwRedlineTable::size_type n = 0;
     if( GetRedlineTable().FindAtPosition( *pStt, n ) )
     {

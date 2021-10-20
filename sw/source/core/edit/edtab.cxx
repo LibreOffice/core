@@ -205,9 +205,8 @@ bool SwEditShell::IsTextToTableAvailable() const
             bOnlyText = true;
 
             // check if selection is in listing
-            sal_uLong nStt = rPaM.GetMark()->nNode.GetIndex(),
-                  nEnd = rPaM.GetPoint()->nNode.GetIndex();
-            if( nStt > nEnd )   { sal_uLong n = nStt; nStt = nEnd; nEnd = n; }
+            sal_uLong nStt = rPaM.Start()->nNode.GetIndex(),
+                      nEnd = rPaM.End()->nNode.GetIndex();
 
             for( ; nStt <= nEnd; ++nStt )
                 if( !GetDoc()->GetNodes()[ nStt ]->IsTextNode() )

@@ -1928,9 +1928,7 @@ SaveMergeRedline::SaveMergeRedline( const SwNode& rDstNd,
         return;
 
     // mark the area as deleted
-    const SwPosition* pEnd = pStt == rSrcRedl.GetPoint()
-                                        ? rSrcRedl.GetMark()
-                                        : rSrcRedl.GetPoint();
+    const SwPosition* pEnd = rSrcRedl.End();
 
     pDestRedl->SetMark();
     pDestRedl->GetPoint()->nNode += pEnd->nNode.GetIndex() -
@@ -1987,8 +1985,7 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
         {
             SwRangeRedline* pRedl = rRedlineTable[ n ];
             SwPosition* pRStt = pRedl->Start(),
-                      * pREnd = pRStt == pRedl->GetPoint() ? pRedl->GetMark()
-                                                           : pRedl->GetPoint();
+                      * pREnd = pRedl->End();
             if( RedlineType::Delete == pRedl->GetType() ||
                 RedlineType::Insert == pRedl->GetType() )
             {

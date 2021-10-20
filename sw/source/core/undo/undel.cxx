@@ -210,9 +210,7 @@ SwUndoDelete::SwUndoDelete(
 
     // delete all footnotes for now
     const SwPosition *pStt = rPam.Start(),
-                    *pEnd = rPam.GetPoint() == pStt
-                        ? rPam.GetMark()
-                        : rPam.GetPoint();
+                     *pEnd = rPam.End();
 
     // Step 1. deletion/record of content indices
     if( m_bDelFullPara )
@@ -526,9 +524,7 @@ bool SwUndoDelete::CanGrouping( SwDoc& rDoc, const SwPaM& rDelPam )
         return false;
 
     const SwPosition *pStt = rDelPam.Start(),
-                    *pEnd = rDelPam.GetPoint() == pStt
-                        ? rDelPam.GetMark()
-                        : rDelPam.GetPoint();
+                     *pEnd = rDelPam.End();
 
     if( pStt->nNode != pEnd->nNode ||
         pStt->nContent.GetIndex()+1 != pEnd->nContent.GetIndex() ||

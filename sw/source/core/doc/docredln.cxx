@@ -330,7 +330,7 @@ void lcl_LOKInvalidateStartEndFrames(SwShellCursor& rCursor)
 
 
     SwPosition *pStartPos = rCursor.Start(),
-               *pEndPos   = rCursor.GetPoint() == pStartPos ? rCursor.GetMark() : rCursor.GetPoint();
+               *pEndPos   = rCursor.End();
 
 
     lcl_LOKInvalidateFrames(*(pStartPos->nNode.GetNode().GetContentNode()),
@@ -489,7 +489,7 @@ std::vector<SwRangeRedline*> GetAllValidRanges(std::unique_ptr<SwRangeRedline> p
     std::vector<SwRangeRedline*> ret;
     // Create valid "sub-ranges" from the Selection
     SwPosition* pStt = p->Start(),
-              * pEnd = pStt == p->GetPoint() ? p->GetMark() : p->GetPoint();
+              * pEnd = p->End();
     SwPosition aNewStt( *pStt );
     SwNodes& rNds = aNewStt.nNode.GetNodes();
     SwContentNode* pC;
@@ -750,8 +750,7 @@ const SwRangeRedline* SwRedlineTable::FindAtPosition( const SwPosition& rSttPos,
         if( pTmp->HasMark() && pTmp->IsVisible() )
         {
             const SwPosition* pRStt = pTmp->Start(),
-                      * pREnd = pRStt == pTmp->GetPoint() ? pTmp->GetMark()
-                                                          : pTmp->GetPoint();
+                      * pREnd = pTmp->End();
             if( bNext ? *pRStt <= rSttPos : *pRStt < rSttPos )
             {
                 if( bNext ? *pREnd > rSttPos : *pREnd >= rSttPos )
@@ -875,9 +874,7 @@ void SwRedlineExtraData_FormatColl::Reject( SwPaM& rPam ) const
 
     SwPaM aPam( *rPam.GetMark(), *rPam.GetPoint() );
 
-    const SwPosition* pStt = rPam.Start(),
-                    * pEnd = pStt == rPam.GetPoint() ? rPam.GetMark()
-                                                     : rPam.GetPoint();
+    const SwPosition* pEnd = rPam.End();
 
     if ( !m_bFormatAll || pEnd->nContent == 0 )
     {
@@ -1332,16 +1329,10 @@ void SwRangeRedline::ShowOriginal(sal_uInt16 nLoop, size_t nMyPos, bool /*bForce
 // trigger the Layout
 void SwRangeRedline::InvalidateRange(Invalidation const eWhy)
 {
-    sal_uLong nSttNd = GetMark()->nNode.GetIndex(),
-            nEndNd = GetPoint()->nNode.GetIndex();
-    sal_Int32 nSttCnt = GetMark()->nContent.GetIndex();
-    sal_Int32 nEndCnt = GetPoint()->nContent.GetIndex();
-
-    if( nSttNd > nEndNd || ( nSttNd == nEndNd && nSttCnt > nEndCnt ))
-    {
-        sal_uLong nTmp = nSttNd; nSttNd = nEndNd; nEndNd = nTmp;
-        sal_Int32 nTmp2 = nSttCnt; nSttCnt = nEndCnt; nEndCnt = nTmp2;
-    }
+    sal_uLong nSttNd = Start()->nNode.GetIndex(),
+            nEndNd = End()->nNode.GetIndex();
+    sal_Int32 nSttCnt = Start()->nContent.GetIndex();
+    sal_Int32 nEndCnt = End()->nContent.GetIndex();
 
     SwNodes& rNds = GetDoc().GetNodes();
     for (sal_uLong n(nSttNd); n <= nEndNd; ++n)
@@ -1458,7 +1449,7 @@ void SwRangeRedline::MoveToSection()
     if( !m_pContentSect )
     {
         const SwPosition* pStt = Start(),
-                        * pEnd = pStt == GetPoint() ? GetMark() : GetPoint();
+                        * pEnd = End();
 
         SwDoc& rDoc = GetDoc();
         SwPaM aPam( *pStt, *pEnd );
@@ -1534,7 +1525,7 @@ void SwRangeRedline::CopyToSection()
         return;
 
     const SwPosition* pStt = Start(),
-                    * pEnd = pStt == GetPoint() ? GetMark() : GetPoint();
+                    * pEnd = End();
 
     SwContentNode* pCSttNd = pStt->nNode.GetNode().GetContentNode();
     SwContentNode* pCEndNd = pEnd->nNode.GetNode().GetContentNode();
@@ -1612,7 +1603,7 @@ void SwRangeRedline::DelCopyOfSection(size_t nMyPos)
         return;
 
     const SwPosition* pStt = Start(),
-                    * pEnd = pStt == GetPoint() ? GetMark() : GetPoint();
+                    * pEnd = End();
 
     SwDoc& rDoc = GetDoc();
     SwPaM aPam( *pStt, *pEnd );
