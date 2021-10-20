@@ -1419,6 +1419,31 @@
      <table:table-cell table:style-name="ce9"/>
      <table:table-cell table:number-columns-repeated="5"/>
     </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce19" table:formula="of:=COM.MICROSOFT.TEXTJOIN(&quot;-&quot;;1;I13:K13)" office:value-type="string" office:string-value="A-C" calcext:value-type="string">
+      <text:p>A-C</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>A-C</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce32" table:formula="of:=[.A13]=[.B13]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A13])" office:value-type="string" office:string-value="=TEXTJOIN(&quot;-&quot;,1,I13:K13)" calcext:value-type="string">
+      <text:p>=TEXTJOIN(&quot;-&quot;,1,I13:K13)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce9" office:value-type="string" calcext:value-type="string">
+      <text:p>A</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=[.F13]" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce9" office:value-type="string" calcext:value-type="string">
+      <text:p>C</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+    </table:table-row>
     <table:table-row table:style-name="ro7">
      <table:table-cell/>
      <table:table-cell table:style-name="ce17"/>
