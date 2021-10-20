@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -544,7 +544,11 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFUnsignedTimestamp)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(18183742), infos[0].SignatureTime);
 }
 
-CPPUNIT_TEST_FIXTURE(SigningTest, testODFX509CertificateChain)
+// FIXME: For some unknown reason, this test fails on tml's Mac unless it is the only or the first
+// test that is run in this CppunitTest program. The CPPUNIT_TEST_FIXTUREs are run in dictionary
+// order so use a name for this that makes it the first one to run.
+
+CPPUNIT_TEST_FIXTURE(SigningTest, aaa_testODFX509CertificateChain)
 {
     createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY)
               + "signed_with_x509certificate_chain.odt");
