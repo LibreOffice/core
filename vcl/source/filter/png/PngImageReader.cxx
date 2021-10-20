@@ -398,7 +398,7 @@ std::unique_ptr<sal_uInt8[]> getMsGifChunk(SvStream& rStream, sal_Int32* chunkSi
     bool ignoreCrc = utl::ConfigManager::IsFuzzing();
     for (;;)
     {
-        sal_uInt32 length, type, crc;
+        sal_uInt32 length(0), type(0), crc(0);
         rStream.ReadUInt32(length);
         rStream.ReadUInt32(type);
         if (!rStream.good())
