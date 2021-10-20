@@ -86,7 +86,7 @@ using namespace util;
 static void CheckRange( SwCursor* pCurrentCursor )
 {
     const SwPosition *pStt = pCurrentCursor->Start(),
-        *pEnd = pCurrentCursor->GetPoint() == pStt ? pCurrentCursor->GetMark() : pCurrentCursor->GetPoint();
+        *pEnd = pCurrentCursor->End();
 
     SwPaM *pTmpDel = nullptr,
           *pTmp = pCurrentCursor->GetNext();
@@ -95,8 +95,7 @@ static void CheckRange( SwCursor* pCurrentCursor )
     while( pTmp != pCurrentCursor )
     {
         const SwPosition *pTmpStt = pTmp->Start(),
-                        *pTmpEnd = pTmp->GetPoint() == pTmpStt ?
-                                        pTmp->GetMark() : pTmp->GetPoint();
+                        *pTmpEnd = pTmp->End();
         if( *pStt <= *pTmpStt )
         {
             if( *pEnd > *pTmpStt ||
@@ -2797,7 +2796,7 @@ bool SwCursorShell::ParkTableCursor()
 void SwCursorShell::ParkPams( SwPaM* pDelRg, SwShellCursor** ppDelRing )
 {
     const SwPosition *pStt = pDelRg->Start(),
-        *pEnd = pDelRg->GetPoint() == pStt ? pDelRg->GetMark() : pDelRg->GetPoint();
+        *pEnd = pDelRg->End();
 
     SwPaM *pTmpDel = nullptr, *pTmp = *ppDelRing;
 
@@ -2809,8 +2808,7 @@ void SwCursorShell::ParkPams( SwPaM* pDelRg, SwShellCursor** ppDelRing )
             break;
 
         const SwPosition *pTmpStt = pTmp->Start(),
-                        *pTmpEnd = pTmp->GetPoint() == pTmpStt ?
-                                        pTmp->GetMark() : pTmp->GetPoint();
+                        *pTmpEnd = pTmp->End();
         // If a SPoint or GetMark are in a cursor area then cancel the old area.
         // During comparison keep in mind that End() is outside the area.
         if( *pStt <= *pTmpStt )

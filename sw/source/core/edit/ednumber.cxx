@@ -160,12 +160,8 @@ bool SwEditShell::SelectionHasNumber() const
         {
             aRangeArr.SetPam( n, aPam );
             {
-                sal_uInt32 nStt = aPam.GetPoint()->nNode.GetIndex(),
-                      nEnd = aPam.GetMark()->nNode.GetIndex();
-                if( nStt > nEnd )
-                {
-                    sal_uInt32 nTmp = nStt; nStt = nEnd; nEnd = nTmp;
-                }
+                sal_uInt32 nStt = aPam.Start()->nNode.GetIndex(),
+                           nEnd = aPam.End()->nNode.GetIndex();
                 for (sal_uInt32 nPos = nStt; nPos<=nEnd; nPos++)
                 {
                     pTextNd = mxDoc->GetNodes()[nPos]->GetTextNode();
@@ -209,12 +205,8 @@ bool SwEditShell::SelectionHasBullet() const
         {
             aRangeArr.SetPam( n, aPam );
             {
-                sal_uInt32 nStt = aPam.GetPoint()->nNode.GetIndex(),
-                      nEnd = aPam.GetMark()->nNode.GetIndex();
-                if( nStt > nEnd )
-                {
-                    sal_uInt32 nTmp = nStt; nStt = nEnd; nEnd = nTmp;
-                }
+                sal_uInt32 nStt = aPam.Start()->nNode.GetIndex(),
+                           nEnd = aPam.End()->nNode.GetIndex();
                 for (sal_uInt32 nPos = nStt; nPos<=nEnd; nPos++)
                 {
                     pTextNd = mxDoc->GetNodes()[nPos]->GetTextNode();

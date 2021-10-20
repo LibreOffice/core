@@ -451,8 +451,7 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, SwOutlineNodes::difference_type 
 {
     // Do not move to special sections in the nodes array
     const SwPosition& rStt = *rPam.Start(),
-                    & rEnd = &rStt == rPam.GetPoint() ? *rPam.GetMark()
-                                                      : *rPam.GetPoint();
+                    & rEnd = *rPam.End();
     if( GetNodes().GetOutLineNds().empty() || !nOffset ||
         (rStt.nNode.GetIndex() < GetNodes().GetEndOfExtras().GetIndex()) ||
         (rEnd.nNode.GetIndex() < GetNodes().GetEndOfExtras().GetIndex()))

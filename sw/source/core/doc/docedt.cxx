@@ -841,8 +841,7 @@ void SwDoc::CountWords( const SwPaM& rPaM, SwDocStat& rStat )
 {
     // This is a modified version of SwDoc::TransliterateText
     const SwPosition* pStt = rPaM.Start();
-    const SwPosition* pEnd = pStt == rPaM.GetPoint() ? rPaM.GetMark()
-                                                     : rPaM.GetPoint();
+    const SwPosition* pEnd = rPaM.End();
 
     const sal_uLong nSttNd = pStt->nNode.GetIndex();
     const sal_uLong nEndNd = pEnd->nNode.GetIndex();

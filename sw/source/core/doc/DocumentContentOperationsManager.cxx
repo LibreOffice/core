@@ -711,7 +711,7 @@ namespace
             , nEndCnt(0)
         {
             const SwPosition* pStt = pR->Start(),
-                * pEnd = pR->GetMark() == pStt ? pR->GetPoint() : pR->GetMark();
+                * pEnd = pR->End();
             sal_uInt32 nSttIdx = rSttIdx.GetIndex();
             nStt = pStt->nNode.GetIndex() - nSttIdx;
             nSttCnt = pStt->nContent.GetIndex();
@@ -733,7 +733,7 @@ namespace
             , nEndCnt(0)
         {
             const SwPosition* pStt = pR->Start(),
-                * pEnd = pR->GetMark() == pStt ? pR->GetPoint() : pR->GetMark();
+                * pEnd = pR->End();
             sal_uInt32 nSttIdx = rPos.nNode.GetIndex();
             nStt = pStt->nNode.GetIndex() - nSttIdx;
             nSttCnt = pStt->nContent.GetIndex();
@@ -877,8 +877,7 @@ namespace
             SwRangeRedline* pTmp = rRedlTable[ nRedlPos ];
 
             const SwPosition* pRStt = pTmp->Start(),
-                            * pREnd = pTmp->GetMark() == pRStt
-                                ? pTmp->GetPoint() : pTmp->GetMark();
+                            * pREnd = pTmp->End();
 
             if( pRStt->nNode < rRg.aStart )
             {
