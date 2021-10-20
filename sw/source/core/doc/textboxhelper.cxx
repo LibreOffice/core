@@ -1411,7 +1411,7 @@ void SwTextBoxNode::AddTextBox(SdrObject* pDrawObject, SwFrameFormat* pNewTextBo
     aElem.m_bIsActive = true;
     aElem.m_pDrawObject = pDrawObject;
     aElem.m_pTextBoxFormat = pNewTextBox;
-    SwFlyDrawObj* pSwFlyDraw = dynamic_cast<SwFlyDrawObj*>(pDrawObject);
+    auto pSwFlyDraw = dynamic_cast<SwFlyDrawObj*>(pDrawObject);
     if (pSwFlyDraw)
     {
         pSwFlyDraw->SetTextBox(true);
@@ -1433,8 +1433,7 @@ void SwTextBoxNode::DelTextBox(const SdrObject* pDrawObject)
                 it = m_pTextBoxes.erase(it);
                 break;
             }
-            else
-                ++it;
+            ++it;
         }
     }
 }
