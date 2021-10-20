@@ -16,6 +16,24 @@
       "message": "Looks good to me; do you have a specific concern?",
       "revId": "bda12c9b5c39174c67dfc6debc8ff035215b4463",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17394a04_c1faf840",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-10-20T18:27:54Z",
+      "side": 1,
+      "message": "Not at all, but sometimes I miss some obvious details (variables definitions inside or outside an if/while/for, const variables, calling expensive functions, etc.) and I may not see the forest for the trees. So, I thought it would be better that someone looks at it without any bias. Thank you!",
+      "parentUuid": "a48dc0e8_59e03704",
+      "revId": "bda12c9b5c39174c67dfc6debc8ff035215b4463",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
