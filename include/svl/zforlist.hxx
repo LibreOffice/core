@@ -601,6 +601,8 @@ public:
                                      sal_uInt16& nPrecision, sal_uInt16& nLeadingCnt,
                                      LanguageType eLnge = LANGUAGE_DONTKNOW );
 
+    bool IsUserDefinedAndNotOverloaded(sal_uInt32 F_Index) const;
+
     /// Check if format code string may be deleted by user
     bool IsUserDefined( const OUString& sStr, LanguageType eLnge = LANGUAGE_DONTKNOW );
 
