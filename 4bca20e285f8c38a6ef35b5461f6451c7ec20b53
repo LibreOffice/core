@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84e35bab_55729949",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-10-20T09:06:16Z",
+      "side": 1,
+      "message": "@Michael, Xisco: thanks for your review and merging!",
+      "revId": "4bca20e285f8c38a6ef35b5461f6451c7ec20b53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
