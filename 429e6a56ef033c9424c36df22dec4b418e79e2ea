@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2279f3ee_00288238",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-10-20T10:14:33Z",
+      "side": 1,
+      "message": "seeing you did some work on layout caching in SW, I tried this again - still fails - I debugged it partially, and it seems like the SalLayoutGlyphs object is having it\u0027s internal data get out of sync somehow.",
+      "revId": "429e6a56ef033c9424c36df22dec4b418e79e2ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
