@@ -26,7 +26,7 @@ curl --no-progress-meter -S \
     -C - -O https://dev-www.libreoffice.org/src/libexttextcat-3.4.5.tar.xz \
     -C - -O https://dev-www.libreoffice.org/src/cppunit-1.15.1.tar.gz \
     -C - -O https://dev-www.libreoffice.org/src/cairo-1.17.4.tar.xz \
-    -C - -O https://dev-www.libreoffice.org/src/curl-7.78.0.tar.xz \
+    -C - -O https://dev-www.libreoffice.org/src/curl-7.79.1.tar.xz \
     -C - -O https://dev-www.libreoffice.org/src/xmlsec1-1.2.32.tar.gz \
     -C - -O https://dev-www.libreoffice.org/src/liblangtag-0.6.2.tar.bz2 \
     -C - -O https://dev-www.libreoffice.org/src/libabw-0.1.3.tar.xz \
