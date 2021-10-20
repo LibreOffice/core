@@ -2262,16 +2262,16 @@ static void ImplHandleSurroundingTextRequest( vcl::Window *pWindow,
 
     if ( !pChild )
     {
-    rText.clear();
-    rSelRange.setMin( 0 );
-    rSelRange.setMax( 0 );
+        rText.clear();
+        rSelRange.setMin( 0 );
+        rSelRange.setMax( 0 );
     }
     else
     {
-    rText = pChild->GetSurroundingText();
-    Selection aSel = pChild->GetSurroundingTextSelection();
-    rSelRange.setMin( aSel.Min() );
-    rSelRange.setMax( aSel.Max() );
+        rText = pChild->GetSurroundingText();
+        Selection aSel = pChild->GetSurroundingTextSelection();
+        rSelRange.setMin( aSel.Min() );
+        rSelRange.setMax( aSel.Max() );
     }
 }
 

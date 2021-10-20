@@ -62,9 +62,9 @@ void OEvoabTable::refreshColumns()
 
         if (xResult.is())
         {
-        Reference< XRow > xRow(xResult, UNO_QUERY);
-        while (xResult->next())
-                aVector.push_back(xRow->getString(4));
+            Reference< XRow > xRow(xResult, UNO_QUERY);
+            while (xResult->next())
+                    aVector.push_back(xRow->getString(4));
         }
     }
     if (m_xColumns)

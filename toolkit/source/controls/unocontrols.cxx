@@ -245,12 +245,12 @@ void UnoEditControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolk
     uno::Reference< awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
     if ( xText.is() )
     {
-    xText->addTextListener( this );
+        xText->addTextListener( this );
 
-    if ( mbSetMaxTextLenInPeer )
-        xText->setMaxTextLen( mnMaxTextLen );
-    if ( mbSetTextInPeer )
-        xText->setText( maText );
+        if ( mbSetMaxTextLenInPeer )
+            xText->setMaxTextLen( mnMaxTextLen );
+        if ( mbSetTextInPeer )
+            xText->setText( maText );
     }
 }
 

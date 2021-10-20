@@ -2342,12 +2342,12 @@ tools::Long SwBorderAttrs::CalcLeft( const SwFrame *pCaller ) const
 
     if (!pCaller->IsTextFrame() || !static_cast<const SwTextFrame*>(pCaller)->GetDoc().GetDocumentSettingManager().get(DocumentSettingId::INVERT_BORDER_SPACING))
     {
-    // OD 23.01.2003 #106895# - for cell frame in R2L text direction the left
-    // and right border are painted on the right respectively left.
-    if ( pCaller->IsCellFrame() && pCaller->IsRightToLeft() )
-        nLeft = CalcRightLine();
-    else
-        nLeft = CalcLeftLine();
+        // OD 23.01.2003 #106895# - for cell frame in R2L text direction the left
+        // and right border are painted on the right respectively left.
+        if ( pCaller->IsCellFrame() && pCaller->IsRightToLeft() )
+            nLeft = CalcRightLine();
+        else
+            nLeft = CalcLeftLine();
     }
 
     // for paragraphs, "left" is "before text" and "right" is "after text"

@@ -101,4 +101,14 @@ void attr_bad() {
 }
 #endif
 
+void xxx();
+void test5(bool x)
+{
+    if (x)
+    {
+    xxx(); // expected-error {{body inside brace not indented [loplugin:indentation]}}
+    }
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -6246,36 +6246,36 @@ void DomainMapper_Impl::CloseFieldCommand()
                             "com.sun.star.text.FieldMaster.SetExpression."
                             + sFirstParam))
                     {
-                    xFieldProperties->setPropertyValue(
-                        getPropertyName(PROP_REFERENCE_FIELD_SOURCE),
-                        uno::makeAny( sal_Int16(text::ReferenceFieldSource::BOOKMARK)) );
-                    xFieldProperties->setPropertyValue(
-                        getPropertyName(PROP_SOURCE_NAME),
-                        uno::makeAny(sFirstParam) );
-                    sal_Int16 nFieldPart = (bPageRef ? text::ReferenceFieldPart::PAGE : text::ReferenceFieldPart::TEXT);
-                    OUString sValue;
-                    if( lcl_FindInCommand( pContext->GetCommand(), 'p', sValue ))
-                    {
-                        //above-below
-                        nFieldPart = text::ReferenceFieldPart::UP_DOWN;
-                    }
-                    else if( lcl_FindInCommand( pContext->GetCommand(), 'r', sValue ))
-                    {
-                        //number
-                        nFieldPart = text::ReferenceFieldPart::NUMBER;
-                    }
-                    else if( lcl_FindInCommand( pContext->GetCommand(), 'n', sValue ))
-                    {
-                        //number-no-context
-                        nFieldPart = text::ReferenceFieldPart::NUMBER_NO_CONTEXT;
-                    }
-                    else if( lcl_FindInCommand( pContext->GetCommand(), 'w', sValue ))
-                    {
-                        //number-full-context
-                        nFieldPart = text::ReferenceFieldPart::NUMBER_FULL_CONTEXT;
-                    }
-                    xFieldProperties->setPropertyValue(
-                            getPropertyName( PROP_REFERENCE_FIELD_PART ), uno::makeAny( nFieldPart ));
+                        xFieldProperties->setPropertyValue(
+                            getPropertyName(PROP_REFERENCE_FIELD_SOURCE),
+                            uno::makeAny( sal_Int16(text::ReferenceFieldSource::BOOKMARK)) );
+                        xFieldProperties->setPropertyValue(
+                            getPropertyName(PROP_SOURCE_NAME),
+                            uno::makeAny(sFirstParam) );
+                        sal_Int16 nFieldPart = (bPageRef ? text::ReferenceFieldPart::PAGE : text::ReferenceFieldPart::TEXT);
+                        OUString sValue;
+                        if( lcl_FindInCommand( pContext->GetCommand(), 'p', sValue ))
+                        {
+                            //above-below
+                            nFieldPart = text::ReferenceFieldPart::UP_DOWN;
+                        }
+                        else if( lcl_FindInCommand( pContext->GetCommand(), 'r', sValue ))
+                        {
+                            //number
+                            nFieldPart = text::ReferenceFieldPart::NUMBER;
+                        }
+                        else if( lcl_FindInCommand( pContext->GetCommand(), 'n', sValue ))
+                        {
+                            //number-no-context
+                            nFieldPart = text::ReferenceFieldPart::NUMBER_NO_CONTEXT;
+                        }
+                        else if( lcl_FindInCommand( pContext->GetCommand(), 'w', sValue ))
+                        {
+                            //number-full-context
+                            nFieldPart = text::ReferenceFieldPart::NUMBER_FULL_CONTEXT;
+                        }
+                        xFieldProperties->setPropertyValue(
+                                getPropertyName( PROP_REFERENCE_FIELD_PART ), uno::makeAny( nFieldPart ));
                     }
                     else if( m_xTextFactory.is() )
                     {

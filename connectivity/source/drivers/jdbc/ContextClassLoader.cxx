@@ -43,33 +43,33 @@ namespace connectivity::jdbc
         do  // artificial loop for easier flow control
         {
 
-        LocalRef< jclass > threadClass( m_environment );
-        threadClass.set( m_environment.FindClass( "java/lang/Thread" ) );
-        if ( !threadClass.is() )
-            break;
+            LocalRef< jclass > threadClass( m_environment );
+            threadClass.set( m_environment.FindClass( "java/lang/Thread" ) );
+            if ( !threadClass.is() )
+                break;
 
-        jmethodID currentThreadMethod( m_environment.GetStaticMethodID(
-            threadClass.get(), "currentThread", "()Ljava/lang/Thread;" ) );
-        if ( currentThreadMethod == nullptr )
-            break;
+            jmethodID currentThreadMethod( m_environment.GetStaticMethodID(
+                threadClass.get(), "currentThread", "()Ljava/lang/Thread;" ) );
+            if ( currentThreadMethod == nullptr )
+                break;
 
-        m_currentThread.set( m_environment.CallStaticObjectMethod( threadClass.get(), currentThreadMethod ) );
-        if ( !m_currentThread.is() )
-            break;
+            m_currentThread.set( m_environment.CallStaticObjectMethod( threadClass.get(), currentThreadMethod ) );
+            if ( !m_currentThread.is() )
+                break;
 
-        jmethodID getContextClassLoaderMethod( m_environment.GetMethodID(
-            threadClass.get(), "getContextClassLoader", "()Ljava/lang/ClassLoader;" ) );
-        if ( getContextClassLoaderMethod == nullptr )
-            break;
-        m_oldContextClassLoader.set( m_environment.CallObjectMethod( m_currentThread.get(), getContextClassLoaderMethod ) );
-        LocalRef< jthrowable > throwable( m_environment, m_environment.ExceptionOccurred() );
-        if ( throwable.is() )
-            break;
+            jmethodID getContextClassLoaderMethod( m_environment.GetMethodID(
+                threadClass.get(), "getContextClassLoader", "()Ljava/lang/ClassLoader;" ) );
+            if ( getContextClassLoaderMethod == nullptr )
+                break;
+            m_oldContextClassLoader.set( m_environment.CallObjectMethod( m_currentThread.get(), getContextClassLoaderMethod ) );
+            LocalRef< jthrowable > throwable( m_environment, m_environment.ExceptionOccurred() );
+            if ( throwable.is() )
+                break;
 
-        m_setContextClassLoaderMethod = m_environment.GetMethodID(
-            threadClass.get(), "setContextClassLoader", "(Ljava/lang/ClassLoader;)V" );
-        if ( m_setContextClassLoaderMethod == nullptr )
-            break;
+            m_setContextClassLoaderMethod = m_environment.GetMethodID(
+                threadClass.get(), "setContextClassLoader", "(Ljava/lang/ClassLoader;)V" );
+            if ( m_setContextClassLoaderMethod == nullptr )
+                break;
 
         }
         while ( false );

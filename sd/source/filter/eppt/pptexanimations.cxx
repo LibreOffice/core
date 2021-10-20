@@ -887,13 +887,13 @@ sal_uInt32 AnimationExporter::GetPresetID( const OUString& rPreset, sal_uInt32 n
 
     if ( rPreset.match("ppt_", 0) )
     {
-    sal_Int32 nLast = rPreset.lastIndexOf( '_' );
-    if ( ( nLast != -1 ) && ( ( nLast + 1 ) < rPreset.getLength() ) )
-    {
-        OUString aNumber( rPreset.copy( nLast + 1 ) );
-        nPresetId = aNumber.toUInt32();
-        bPresetId = true;
-    }
+        sal_Int32 nLast = rPreset.lastIndexOf( '_' );
+        if ( ( nLast != -1 ) && ( ( nLast + 1 ) < rPreset.getLength() ) )
+        {
+            OUString aNumber( rPreset.copy( nLast + 1 ) );
+            nPresetId = aNumber.toUInt32();
+            bPresetId = true;
+        }
     }
     else
     {
@@ -1690,45 +1690,45 @@ Reference< XShape > AnimationExporter::getTargetElementShape( const Any& rAny, s
 
     rParagraphTarget = false;
 
-    if( !xShape.is() )
-    {
+    if( xShape.is() )
+        return xShape;
+
     ParagraphTarget aParaTarget;
     if( rAny >>= aParaTarget )
         xShape = aParaTarget.Shape;
-    if ( xShape.is() )
+    if ( !xShape.is() )
+        return xShape;
+
+    // now calculating the character range for the paragraph
+    sal_Int16 nParagraph = aParaTarget.Paragraph;
+    Reference< XSimpleText > xText( xShape, UNO_QUERY );
+    if ( !xText.is() )
+        return xShape;
+
+    rParagraphTarget = true;
+    Reference< XEnumerationAccess > xTextParagraphEnumerationAccess( xText, UNO_QUERY );
+    if ( !xTextParagraphEnumerationAccess.is() )
+        return xShape;
+
+    Reference< XEnumeration > xTextParagraphEnumeration( xTextParagraphEnumerationAccess->createEnumeration() );
+    if ( !xTextParagraphEnumeration.is() )
+        return xShape;
+
+    sal_Int16 nCurrentParagraph;
+    rBegin = rEnd = nCurrentParagraph = 0;
+    while ( xTextParagraphEnumeration->hasMoreElements() )
     {
-        // now calculating the character range for the paragraph
-        sal_Int16 nParagraph = aParaTarget.Paragraph;
-        Reference< XSimpleText > xText( xShape, UNO_QUERY );
-        if ( xText.is() )
+        Reference< XTextRange > xTextRange( xTextParagraphEnumeration->nextElement(), UNO_QUERY );
+        if ( xTextRange.is() )
         {
-        rParagraphTarget = true;
-        Reference< XEnumerationAccess > xTextParagraphEnumerationAccess( xText, UNO_QUERY );
-        if ( xTextParagraphEnumerationAccess.is() )
-        {
-            Reference< XEnumeration > xTextParagraphEnumeration( xTextParagraphEnumerationAccess->createEnumeration() );
-            if ( xTextParagraphEnumeration.is() )
-            {
-            sal_Int16 nCurrentParagraph;
-            rBegin = rEnd = nCurrentParagraph = 0;
-            while ( xTextParagraphEnumeration->hasMoreElements() )
-            {
-                Reference< XTextRange > xTextRange( xTextParagraphEnumeration->nextElement(), UNO_QUERY );
-                if ( xTextRange.is() )
-                {
-                OUString aParaText( xTextRange->getString() );
-                sal_Int32 nLength = aParaText.getLength() + 1;
-                rEnd += nLength;
-                if ( nCurrentParagraph == nParagraph )
-                    break;
-                nCurrentParagraph++;
-                rBegin += nLength;
-                }
-            }
-            }
+            OUString aParaText( xTextRange->getString() );
+            sal_Int32 nLength = aParaText.getLength() + 1;
+            rEnd += nLength;
+            if ( nCurrentParagraph == nParagraph )
+                break;
+            nCurrentParagraph++;
+            rBegin += nLength;
         }
-        }
-    }
     }
 
     return xShape;

@@ -917,11 +917,11 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleCel
     IsObjectValid();
     if (!IsFormulaMode())
     {
-    if (nRow > (maRange.aEnd.Row() - maRange.aStart.Row()) ||
-        nRow < 0 ||
-        nColumn > (maRange.aEnd.Col() - maRange.aStart.Col()) ||
-        nColumn < 0)
-        throw lang::IndexOutOfBoundsException();
+        if (nRow > (maRange.aEnd.Row() - maRange.aStart.Row()) ||
+            nRow < 0 ||
+            nColumn > (maRange.aEnd.Col() - maRange.aStart.Col()) ||
+            nColumn < 0)
+            throw lang::IndexOutOfBoundsException();
     }
     rtl::Reference<ScAccessibleCell> pAccessibleCell = GetAccessibleCellAt(nRow, nColumn);
     return pAccessibleCell;

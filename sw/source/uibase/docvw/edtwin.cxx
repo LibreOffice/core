@@ -5640,26 +5640,26 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
 
                 if( nPosNodeIdx < nMarkNodeIdx )
                 {
-                rSh.GetCursor()->GetPoint()->nNode = nPosNodeIdx;
-                rSh.GetCursor()->GetPoint()->nContent = nPosIdx;
-                rSh.GetCursor()->GetMark()->nNode = nPosNodeIdx;
-                rSh.GetCursor()->GetMark()->nContent =
-                    rSh.GetCursor()->GetContentNode()->Len();
+                    rSh.GetCursor()->GetPoint()->nNode = nPosNodeIdx;
+                    rSh.GetCursor()->GetPoint()->nContent = nPosIdx;
+                    rSh.GetCursor()->GetMark()->nNode = nPosNodeIdx;
+                    rSh.GetCursor()->GetMark()->nContent =
+                        rSh.GetCursor()->GetContentNode()->Len();
                 }
                 else if( nPosNodeIdx == nMarkNodeIdx )
                 {
-                rSh.GetCursor()->GetPoint()->nNode = nPosNodeIdx;
-                rSh.GetCursor()->GetPoint()->nContent = nPosIdx;
-                rSh.GetCursor()->GetMark()->nNode = nMarkNodeIdx;
-                rSh.GetCursor()->GetMark()->nContent = nMarkIdx;
+                    rSh.GetCursor()->GetPoint()->nNode = nPosNodeIdx;
+                    rSh.GetCursor()->GetPoint()->nContent = nPosIdx;
+                    rSh.GetCursor()->GetMark()->nNode = nMarkNodeIdx;
+                    rSh.GetCursor()->GetMark()->nContent = nMarkIdx;
                 }
                 else
                 {
-                rSh.GetCursor()->GetMark()->nNode = nMarkNodeIdx;
-                rSh.GetCursor()->GetMark()->nContent = nMarkIdx;
-                rSh.GetCursor()->GetPoint()->nNode = nMarkNodeIdx;
-                rSh.GetCursor()->GetPoint()->nContent =
-                    rSh.GetCursor()->GetContentNode( false )->Len();
+                    rSh.GetCursor()->GetMark()->nNode = nMarkNodeIdx;
+                    rSh.GetCursor()->GetMark()->nContent = nMarkIdx;
+                    rSh.GetCursor()->GetPoint()->nNode = nMarkNodeIdx;
+                    rSh.GetCursor()->GetPoint()->nContent =
+                        rSh.GetCursor()->GetContentNode( false )->Len();
                 }
 
                 rSh.EndCursorMove( true );

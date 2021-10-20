@@ -315,17 +315,17 @@ void included_by(struct inclist *ip, struct inclist *newfile)
                       newfile->i_file[i-1] == 'c' &&
                       newfile->i_file[i-2] == '.'))
                 {
-                /* only complain if ip has */
-                /* no #include SYMBOL lines  */
-                /* and is not a .c file */
-                if (warn_multiple)
-                {
-                    warning("%s includes %s more than once!\n",
-                        ip->i_file, newfile->i_file);
-                    warning1("Already have\n");
-                    for (i=0; i<ip->i_listlen; i++)
-                        warning1("\t%s\n", ip->i_list[i]->i_file);
-                }
+                    /* only complain if ip has */
+                    /* no #include SYMBOL lines  */
+                    /* and is not a .c file */
+                    if (warn_multiple)
+                    {
+                        warning("%s includes %s more than once!\n",
+                            ip->i_file, newfile->i_file);
+                        warning1("Already have\n");
+                        for (i=0; i<ip->i_listlen; i++)
+                            warning1("\t%s\n", ip->i_list[i]->i_file);
+                    }
                 }
                 return;
             }

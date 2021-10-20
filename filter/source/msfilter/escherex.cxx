@@ -2547,8 +2547,8 @@ void EscherPropertyContainer::LookForPolarHandles( const MSO_SPT eShapeType, sal
     {
         if ( pData->nFlags & SvxMSDffHandleFlags::POLAR )
         {
-        if ( ( pData->nPositionY >= 0x256 ) || ( pData->nPositionY <= 0x107 ) )
-            nAdjustmentsWhichNeedsToBeConverted |= ( 1 << k );
+            if ( ( pData->nPositionY >= 0x256 ) || ( pData->nPositionY <= 0x107 ) )
+                nAdjustmentsWhichNeedsToBeConverted |= ( 1 << k );
         }
     }
 }

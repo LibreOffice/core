@@ -1281,12 +1281,12 @@ void SbModule::RemoveVars()
 {
     for ( const auto& rModuleVariableName: mModuleVariableNames )
     {
-    // We don't want a Find being called in a derived class ( e.g.
-    // SbUserform because it could trigger say an initialise event
-    // which would cause basic to be re-run in the middle of the init ( and remember RemoveVars is called from compile and we don't want code to run as part of the compile )
-    SbxVariableRef p = SbModule::Find( rModuleVariableName, SbxClassType::Property );
-    if( p.is() )
-        Remove( p.get() );
+        // We don't want a Find being called in a derived class ( e.g.
+        // SbUserform because it could trigger say an initialise event
+        // which would cause basic to be re-run in the middle of the init ( and remember RemoveVars is called from compile and we don't want code to run as part of the compile )
+        SbxVariableRef p = SbModule::Find( rModuleVariableName, SbxClassType::Property );
+        if( p.is() )
+            Remove( p.get() );
     }
 }
 

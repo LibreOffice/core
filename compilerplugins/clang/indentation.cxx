@@ -345,8 +345,8 @@ void Indentation::checkCompoundStmtBraces(const Stmt* parentStmt, const Compound
     if (invalid1)
         return;
 
-    auto startBraceLoc = compat::getBeginLoc(compoundStmt);
-    auto endBraceLoc = compat::getEndLoc(compoundStmt);
+    auto startBraceLoc = compoundStmt->getLBracLoc();
+    auto endBraceLoc = compoundStmt->getRBracLoc();
     unsigned beginColumn = SM.getPresumedColumnNumber(startBraceLoc, &invalid1);
     unsigned beginLine = SM.getPresumedLineNumber(startBraceLoc, &invalid2);
     if (invalid1 || invalid2)
@@ -384,21 +384,38 @@ void Indentation::checkCompoundStmtBraces(const Stmt* parentStmt, const Compound
                    endBraceLoc);
             report(DiagnosticsEngine::Note, "statement beginning here", parentBeginLoc);
         }
+        return;
     }
-    else
+
+    if (parentColumn != beginColumn)
     {
-        if (parentColumn != beginColumn)
-        {
-            report(DiagnosticsEngine::Warning,
-                   "start brace not aligned with beginning of parent statement", startBraceLoc);
-            report(DiagnosticsEngine::Note, "statement beginning here", parentBeginLoc);
-        }
-        else if (beginColumn != endColumn)
-        {
-            report(DiagnosticsEngine::Warning, "start and end brace not aligned", endBraceLoc);
-            report(DiagnosticsEngine::Note, "start brace here", startBraceLoc);
-        }
+        report(DiagnosticsEngine::Warning,
+               "start brace not aligned with beginning of parent statement", startBraceLoc);
+        report(DiagnosticsEngine::Note, "statement beginning here", parentBeginLoc);
     }
+    else if (beginColumn != endColumn)
+    {
+        report(DiagnosticsEngine::Warning, "start and end brace not aligned", endBraceLoc);
+        report(DiagnosticsEngine::Note, "start brace here", startBraceLoc);
+    }
+
+    /** now check that lines inside the compoundstmt are indented */
+    if (!compoundStmt->size())
+        return;
+    auto firstStmt = compoundStmt->body_front();
+    if (isa<LabelStmt>(firstStmt))
+        return;
+    auto firstStmtLoc = compat::getBeginLoc(firstStmt);
+    unsigned firstStmtBeginColumn = SM.getPresumedColumnNumber(firstStmtLoc, &invalid1);
+    if (invalid1)
+        return;
+    if (firstStmtBeginColumn > beginColumn)
+        return;
+    StringRef fn = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(firstStmtLoc));
+    // this is doing code generation, so the weird layout is deliberate
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/core/opencl/"))
+        return;
+    report(DiagnosticsEngine::Warning, "body inside brace not indented", firstStmtLoc);
 }
 
 bool Indentation::VisitSwitchStmt(SwitchStmt const* switchStmt)
