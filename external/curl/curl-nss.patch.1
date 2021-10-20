@@ -1,9 +1,9 @@
 diff -ur curl.org/configure curl/configure
 --- curl.org/configure	2016-03-13 15:14:07.177000076 +0100
 +++ curl/configure	2016-03-13 15:16:44.132000076 +0100
-@@ -24009,7 +24009,7 @@
-       { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Using hard-wired libraries and compilation flags for NSS." >&5
- $as_echo "$as_me: WARNING: Using hard-wired libraries and compilation flags for NSS." >&2;}
+@@ -28216,7 +28216,7 @@
+       { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: Using hard-wired libraries and compilation flags for NSS." >&5
+ printf "%s\n" "$as_me: WARNING: Using hard-wired libraries and compilation flags for NSS." >&2;}
        addld="-L$OPT_NSS/lib"
 -      addlib="-lssl3 -lsmime3 -lnss3 -lplds4 -lplc4 -lnspr4"
 +      addlib="-lssl3 -lsmime3 -lnss3 -lplds4 -lplc4 -lnspr4 -lnssutil3"
