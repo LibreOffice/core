@@ -1,0 +1,14 @@
+--- src/dispatch_common.c	2021-10-20 10:51:59.808554323 +0100
++++ src/dispatch_common.c	2021-10-20 10:52:41.319645618 +0100
+@@ -687,7 +687,11 @@
+ #endif
+ 
+     if (!api.gl_handle) {
++#if defined(OPENGL_LIB)
+         fprintf(stderr, "Couldn't open %s or %s\n", GLX_LIB, OPENGL_LIB);
++#else
++        fprintf(stderr, "Couldn't open %s\n", GLX_LIB);
++#endif
+         abort();
+     }
+ 
