@@ -34,6 +34,24 @@
       "parentUuid": "59e27443_eeb1110f",
       "revId": "bac768289cad25600568c0af2f7943b1ea851a45",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fcb5dff_aa473e78",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-10-20T08:56:03Z",
+      "side": 1,
+      "message": "i guess you need a paragraph with 2 delete redlines that would be merged (so consecutive).\n\nbut i wonder if the MERGED case can happen at all because in this case the redlines would be merged already in a previous editing operation?\n\nso i\u0027m not sure if it\u0027s really possible.\n\nanyway let\u0027s not hold up this bugfix for it.",
+      "parentUuid": "f7f581ed_3c0aa7e2",
+      "revId": "bac768289cad25600568c0af2f7943b1ea851a45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
