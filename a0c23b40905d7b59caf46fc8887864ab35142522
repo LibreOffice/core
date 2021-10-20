@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3f28828_94fd0fd7",
+        "filename": "sw/source/core/txtnode/fntcache.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-10-20T10:37:16Z",
+      "side": 0,
+      "message": "Small performance note: Keeping the index and length checks before string comparison should be faster.",
+      "revId": "a0c23b40905d7b59caf46fc8887864ab35142522",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
