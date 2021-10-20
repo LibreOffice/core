@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb98c7dd_a336b758",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-10-20T16:05:46Z",
+      "side": 1,
+      "message": "Is this the appropriate way to perform gradient benchmarking?\nAnyway the image: https://i.imgur.com/EynB7i5.png",
+      "revId": "2d3c9f465a6cf934e38f1f7146f21861f3642dcf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
