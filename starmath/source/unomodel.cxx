@@ -609,8 +609,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                     SID_PRINTZOOM,       SID_PRINTZOOM,
                     SID_NO_RIGHT_SPACES, SID_NO_RIGHT_SPACES,
                     SID_SAVE_ONLY_USED_SYMBOLS, SID_SAVE_ONLY_USED_SYMBOLS,
-                    SID_AUTO_CLOSE_BRACKETS,    SID_AUTO_CLOSE_BRACKETS,
-                    SID_SMEDITWINDOWZOOM,       SID_SMEDITWINDOWZOOM>> ( SmDocShell::GetPool() );
+                    SID_AUTO_CLOSE_BRACKETS,    SID_SMEDITWINDOWZOOM>> ( SmDocShell::GetPool() );
                 SmModule *pp = SM_MOD();
                 pp->GetConfig()->ConfigToItemSet(*pItemSet);
                 VclPtr<SfxPrinter> pPrinter = SfxPrinter::Create ( aStream, std::move(pItemSet) );
