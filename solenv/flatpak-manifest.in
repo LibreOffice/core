@@ -255,10 +255,11 @@
                     "dest-filename": "external/tarballs/language-subtag-registry-2019-09-16.tar.bz2"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/liblangtag-0.6.2.tar.bz2",
-                    "sha256": "d6242790324f1432fb0a6fae71b6851f520b2c5a87675497cf8ea14c2924d52e",
+                    "url": "https://dev-www.libreoffice.org/src/liblangtag-0.6.3.tar.bz2",
+                    "sha256": "1f12a20a02ec3a8d22e54dedb8b683a43c9c160bda1ba337bf1060607ae733bd",
                     "type": "file",
-                    "dest-filename": "external/tarballs/liblangtag-0.6.2.tar.bz2"
+                    "dest": "external/tarballs",
+                    "dest-filename": "liblangtag-0.6.3.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/libmspub-0.1.4.tar.xz",
