@@ -27,8 +27,10 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/virdev.hxx>
 #include <sal/log.hxx>
+#include <osl/file.hxx>
+#include <osl/process.h>
 
-#include <cstdlib>
+#include <iostream>
 
 using namespace css;
 
@@ -36,22 +38,13 @@ namespace {
 
 class DemoMtfWin : public WorkWindow
 {
-    GDIMetaFile maMtf;
+    OUString maFileName;
 
 public:
     explicit DemoMtfWin(const OUString& rFileName)
         : WorkWindow(nullptr, WB_APP | WB_STDWORK)
     {
-        SvFileStream aFileStream(rFileName, StreamMode::READ);
-
-        if (aFileStream.IsOpen())
-        {
-            ReadWindowMetafile(aFileStream, maMtf);
-        }
-        else
-        {
-            Application::Abort("Can't read metafile");
-        }
+        maFileName = rFileName;
     }
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)  override;
@@ -61,7 +54,21 @@ public:
 
 void DemoMtfWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-    maMtf.Play(*GetOutDev(), maMtf.GetActionSize());
+    GDIMetaFile aMtf;
+    SvFileStream aFileStream(maFileName, StreamMode::READ);
+
+    if (aFileStream.IsOpen())
+    {
+        ReadWindowMetafile(aFileStream, aMtf);
+    }
+    else
+    {
+        Application::Abort("Can't read metafile");
+    }
+
+    aMtf.Play(*GetOutDev(), aMtf.GetActionSize());
+    aMtf.Stop();
+    aFileStream.Close();
 
     WorkWindow::Paint(rRenderContext, rRect);
 }
@@ -75,8 +82,9 @@ class DemoMtfApp : public Application
 
     static void showHelp()
     {
-        fprintf(stderr, "Usage: mtfdemo --help | FILE\n");
-        fprintf(stderr, "A VCL test app that displays Windows metafiles\n");
+        std::cerr << "Usage: mtfdemo --help | FILE | -d FILE" << std::endl;
+        std::cerr << "A VCL test app that displays Windows metafiles or dumps metaactions." << std::endl;
+        std::cerr << "If you want to dump as metadump.xml, use -d before FILE." << std::endl;
         std::exit(0);
     }
 
@@ -118,18 +126,36 @@ private:
         try
         {
             const sal_uInt16 nCmdParams = GetCommandLineParamCount();
+            OUString aArg, aFilename;
+            bool bDumpXML = false;
 
             if (nCmdParams == 0)
+            {
                 showHelp();
+                std::exit(1);
+            }
             else
             {
-                OUString aArg = GetCommandLineParam(0);
+                aArg = GetCommandLineParam(0);
 
                 if (aArg == "--help" || aArg == "-h")
+                {
                     showHelp();
+                    std::exit(0);
+                }
+                else if (nCmdParams > 1 && (aArg == "--dump" || aArg == "-d"))
+                {
+                    aFilename = GetCommandLineParam(1);
+                    bDumpXML = true;
+                }
                 else
-                    maFileName = aArg;
+                    aFilename = aArg;
             }
+
+            OUString sWorkingDir, sFileUrl;
+            osl_getProcessWorkingDir(&sWorkingDir.pData);
+            osl::FileBase::getFileURLFromSystemPath(aFilename, sFileUrl);
+            osl::FileBase::getAbsoluteFileURL(sWorkingDir, sFileUrl, maFileName);
 
             uno::Reference<uno::XComponentContext> xComponentContext
                 = ::cppu::defaultBootstrap_InitialComponentContext();
@@ -138,6 +164,21 @@ private:
                 Application::Abort("Bootstrap failure - no service manager");
 
             ::comphelper::setProcessServiceFactory(xMSF);
+
+            if(bDumpXML)
+            {
+                GDIMetaFile aMtf;
+                SvFileStream aFileStream(maFileName, StreamMode::READ);
+                ReadWindowMetafile(aFileStream, aMtf);
+                OUString sAbsoluteDumpUrl, sDumpUrl;
+                osl::FileBase::getFileURLFromSystemPath("metadump.xml", sDumpUrl);
+                osl::FileBase::getAbsoluteFileURL(sWorkingDir, sDumpUrl, sAbsoluteDumpUrl);
+
+                aMtf.dumpAsXml(rtl::OUStringToOString(sAbsoluteDumpUrl, RTL_TEXTENCODING_UTF8).getStr());
+                std::cout << "Dumped metaactions as metadump.xml" << std::endl;
+                std::exit(0);
+            }
+
         }
         catch (const uno::Exception &e)
         {
