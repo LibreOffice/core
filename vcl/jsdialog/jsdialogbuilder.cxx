@@ -1065,6 +1065,18 @@ std::unique_ptr<weld::Widget> JSInstanceBuilder::weld_widget(const OString& id)
     return pWeldWidget;
 }
 
+std::unique_ptr<weld::Image> JSInstanceBuilder::weld_image(const OString& id)
+{
+    FixedImage* pImage = m_xBuilder->get<FixedImage>(id);
+
+    auto pWeldWidget = pImage ? std::make_unique<JSImage>(this, pImage, this, false) : nullptr;
+
+    if (pWeldWidget)
+        RememberWidget(id, pWeldWidget.get());
+
+    return pWeldWidget;
+}
+
 weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParent,
                                                             VclMessageType eMessageType,
                                                             VclButtonsType eButtonType,
@@ -1687,6 +1699,12 @@ JSPopover::JSPopover(JSDialogSender* pSender, DockingWindow* pDockingWindow,
 JSBox::JSBox(JSDialogSender* pSender, VclBox* pBox, SalInstanceBuilder* pBuilder,
              bool bTakeOwnership)
     : JSWidget<SalInstanceBox, VclBox>(pSender, pBox, pBuilder, bTakeOwnership)
+{
+}
+
+JSImage::JSImage(JSDialogSender* pSender, FixedImage* pImage, SalInstanceBuilder* pBuilder,
+                 bool bTakeOwnership)
+    : JSWidget<SalInstanceImage, FixedImage>(pSender, pImage, pBuilder, bTakeOwnership)
 {
 }
 
