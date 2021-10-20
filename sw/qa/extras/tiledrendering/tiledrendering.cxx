@@ -444,7 +444,7 @@ void SwTiledRenderingTest::testRegisterCallback()
     pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&m_callbackWrapper);
     // Insert a character at the beginning of the document.
     pWrtShell->Insert("x");
-    pWrtShell->GetSfxViewShell()->flushPendingLOKInvalidateTiles();
+    Scheduler::ProcessEventsToIdle();
 
     // Check that the top left 256x256px tile would be invalidated.
     CPPUNIT_ASSERT(!m_aInvalidation.IsEmpty());
@@ -863,11 +863,6 @@ namespace {
             mpViewShell->setLibreOfficeKitViewCallback(nullptr);
         }
 
-        void flushPendingLOKInvalidateTiles()
-        {
-            mpViewShell->flushPendingLOKInvalidateTiles();
-        }
-
         static void callback(int nType, const char* pPayload, void* pData)
         {
             static_cast<ViewCallback*>(pData)->callbackImpl(nType, pPayload);
@@ -1044,13 +1039,12 @@ void SwTiledRenderingTest::testMissingInvalidation()
     pWrtShell->SelWrd();
 
     // Now delete the selected word and make sure both views are invalidated.
+    Scheduler::ProcessEventsToIdle();
     aView1.m_bTilesInvalidated = false;
     aView2.m_bTilesInvalidated = false;
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DELETE);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DELETE);
     Scheduler::ProcessEventsToIdle();
-    aView1.flushPendingLOKInvalidateTiles();
-    aView2.flushPendingLOKInvalidateTiles();
     CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
     CPPUNIT_ASSERT(aView2.m_bTilesInvalidated);
 }
@@ -1262,6 +1256,7 @@ void SwTiledRenderingTest::testUndoInvalidations()
     CPPUNIT_ASSERT_EQUAL(OUString("Aaa bbb.c"), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
 
     // Undo and assert that both views are invalidated.
+    Scheduler::ProcessEventsToIdle();
     aView1.m_bTilesInvalidated = false;
     aView2.m_bTilesInvalidated = false;
     comphelper::dispatchCommand(".uno:Undo", {});
@@ -1739,7 +1734,6 @@ void SwTiledRenderingTest::testCommentEndTextEdit()
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
-    aView1.flushPendingLOKInvalidateTiles();
     CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
 }
 
