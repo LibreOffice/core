@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5570ef18_08a7ada6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-10-20T10:30:04Z",
+      "side": 1,
+      "message": "@Tibi: very nice fix!\n\nNote: the test document is not perfect, i.e. it contains only a single hyperlink instead of hyperlinks on all grouped shapes, so I\u0027ve tested that, too, and extended the commit description about it.",
+      "revId": "9032967e033c7eea02d540a86f0d8ae74af4857c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
