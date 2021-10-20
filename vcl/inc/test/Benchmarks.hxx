@@ -36,5 +36,6 @@ public:
     Bitmap setupScaledBitmap();
     Bitmap setupReducedBitmap();
     Bitmap setupRotatedBitmap();
+    Bitmap setupGradient();
     Bitmap setupMultiplePolygonsWithPolyPolygon();
 };

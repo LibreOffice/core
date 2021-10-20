@@ -52,6 +52,22 @@ Bitmap Benchmark::setupWavelines()
     return aBitmap;
 }
 
+Bitmap Benchmark::setupGradient()
+{
+    initialSetup(4096, 4096, constBackgroundColor);
+
+    Gradient aGradient(GradientStyle::Linear, Color(0x0, 0x9F, 0xFF), Color(0xEC, 0x2F, 0x4B));
+    aGradient.SetAngle(900_deg10);
+    aGradient.SetBorder(50);
+    tools::Rectangle aDrawRect(maVDRectangle.Left() + 1, maVDRectangle.Top() + 1,
+                               maVDRectangle.Right() - 1, maVDRectangle.Bottom() - 1);
+    m_xStart = std::chrono::steady_clock::now();
+    mpVirtualDevice->DrawGradient(aDrawRect, aGradient);
+    Bitmap aBitmap = mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+    m_xEnd = std::chrono::steady_clock::now();
+    return aBitmap;
+}
+
 Bitmap Benchmark::setupGrid()
 {
     initialSetup(4096, 4096, constBackgroundColor);

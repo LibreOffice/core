@@ -71,7 +71,7 @@ namespace
 class BenchMarkWindow : public WorkWindow
 {
 private:
-    static constexpr unsigned char gnNumberOfTests = 8;
+    static constexpr unsigned char gnNumberOfTests = 9;
     unsigned char mnTest;
     ScopedVclPtr<VirtualDevice> mpVDev;
 
@@ -233,6 +233,19 @@ public:
         updateResults(rRenderContext, aOutDevTest.getElapsedTime());
     }
 
+    static void drawGradient(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
+    {
+        tools::Rectangle aRectangle;
+        size_t index = 0;
+
+        std::vector<tools::Rectangle> aRegions = setupRegions(1, 1, nWidth, nHeight);
+        aRectangle = aRegions[index++];
+        Benchmark aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupGradient();
+        drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        updateResults(rRenderContext, aOutDevTest.getElapsedTime());
+    }
+
     virtual void Paint(vcl::RenderContext& rRenderContext,
                        const tools::Rectangle& /*rRect*/) override
     {
@@ -274,6 +287,10 @@ public:
         else if (mnTest % gnNumberOfTests == 7)
         {
             drawRotatedBitmap(rRenderContext, nWidth, nHeight);
+        }
+        else if (mnTest % gnNumberOfTests == 8)
+        {
+            drawGradient(rRenderContext, nWidth, nHeight);
         }
     }
 };
