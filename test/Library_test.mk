@@ -33,6 +33,7 @@ $(eval $(call gb_Library_use_libraries,test,\
     cppuhelper \
 	i18nlangtag \
     sal \
+    sfx \
     svt \
     test-setupvcl \
 	tl \
