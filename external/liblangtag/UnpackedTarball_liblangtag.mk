@@ -27,14 +27,9 @@ $(eval $(call gb_UnpackedTarball_add_patches,liblangtag,\
 endif
 endif
 
-# * external/liblangtag/Wformat-overflow.patch is effectively covered by upstream
-#   <https://bitbucket.org/tagoh/liblangtag/commits/49135ef561f309078f0bfd6e1f15052769cf75b4> "Fix
-#   possible null argument for %s directive":
 $(eval $(call gb_UnpackedTarball_add_patches,liblangtag, \
 	$(if $(SYSTEM_LIBXML),,external/liblangtag/langtag-libtool-rpath.patch.0) \
     external/liblangtag/clang-cl.patch.0 \
-    external/liblangtag/langtag-valencia.patch.0 \
-    external/liblangtag/Wformat-overflow.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
