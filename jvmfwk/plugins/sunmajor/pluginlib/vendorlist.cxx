@@ -19,7 +19,6 @@
 
 
 #include "vendorlist.hxx"
-#include "gnujre.hxx"
 #include "sunjre.hxx"
 #include "otherjre.hxx"
 
@@ -45,7 +44,6 @@ VendorSupportMapEntry const gVendorMap[] ={
     VENDOR_MAP_ENTRY<OtherInfo>("IBM Corporation"),
     VENDOR_MAP_ENTRY<OtherInfo>("Blackdown Java-Linux Team"),
     VENDOR_MAP_ENTRY<OtherInfo>("BEA Systems, Inc."),
-    VENDOR_MAP_ENTRY<GnuInfo>("Free Software Foundation, Inc."),
     VENDOR_MAP_ENTRY<OtherInfo>("The FreeBSD Foundation"),
 #endif
     {nullptr, nullptr, nullptr} };

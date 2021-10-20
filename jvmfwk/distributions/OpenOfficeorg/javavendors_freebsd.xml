@@ -28,9 +28,6 @@
     <vendor name="The FreeBSD Foundation">
       <minVersion>1.8.0</minVersion>
     </vendor>
-    <vendor name="Free Software Foundation, Inc.">
-      <minVersion>1.8.0</minVersion>
-    </vendor>
     <vendor name="AdoptOpenJdk">
       <minVersion>1.8.0</minVersion>
     </vendor>
