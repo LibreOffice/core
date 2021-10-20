@@ -402,6 +402,10 @@ endif # SYSTEM_ZLIB
 ifneq ($(SYSTEM_LIBJPEG),)
 
 define gb_LinkTarget__use_libjpeg
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(LIBJPEG_CFLAGS) \
+)
 $(call gb_LinkTarget_add_libs,$(1),$(LIBJPEG_LIBS))
 $(call gb_LinkTarget_set_ldflags,$(1),\
 	$$(filter-out -L/usr/lib/jvm%,$$(T_LDFLAGS)) \
@@ -414,12 +418,12 @@ gb_ExternalProject__use_libjpeg :=
 else
 
 define gb_LinkTarget__use_libjpeg
+$(call gb_LinkTarget_use_external_project,$(1),libjpeg-turbo,full)
 $(call gb_LinkTarget_set_include,$(1),\
-	$(LIBJPEG_CFLAGS) \
+	-I$(call gb_UnpackedTarball_get_dir,libjpeg-turbo) \
 	$$(INCLUDE) \
 )
-$(call gb_LinkTarget_add_libs,$(1),$(LIBJPEG_LIBS))
-$(call gb_LinkTarget_use_external_project,$(1),libjpeg-turbo,full)
+$(call gb_LinkTarget_use_static_libraries,$(1),libjpeg-turbo)
 
 endef
 
