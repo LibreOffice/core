@@ -274,6 +274,7 @@ public:
     virtual std::unique_ptr<weld::Popover> weld_popover(const OString& id) override;
     virtual std::unique_ptr<weld::Box> weld_box(const OString& id) override;
     virtual std::unique_ptr<weld::Widget> weld_widget(const OString& id) override;
+    virtual std::unique_ptr<weld::Image> weld_image(const OString& id) override;
 
     static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent,
                                                     VclMessageType eMessageType,
@@ -692,6 +693,13 @@ public:
         : JSWidget<SalInstanceWidget, vcl::Window>(pSender, pObject, pBuilder, bTakeOwnership)
     {
     }
+};
+
+class JSImage : public JSWidget<SalInstanceImage, FixedImage>
+{
+public:
+    JSImage(JSDialogSender* pSender, FixedImage* pImage, SalInstanceBuilder* pBuilder,
+            bool bTakeOwnership);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
