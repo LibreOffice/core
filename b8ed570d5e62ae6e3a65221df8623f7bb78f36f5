@@ -33,6 +33,24 @@
       "message": "Can you help out here Hossein?",
       "revId": "b8ed570d5e62ae6e3a65221df8623f7bb78f36f5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f1ce062_f240afb5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-20T17:32:06Z",
+      "side": 1,
+      "message": "I\u0027ve looked at your submission, and I think you should separate the tests for the bugs that you have not provided a fix from the other tests. If you submit the commented tests in another patch, we can keep them there until your fix arrives.",
+      "parentUuid": "a7813abb_142f25ea",
+      "revId": "b8ed570d5e62ae6e3a65221df8623f7bb78f36f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
