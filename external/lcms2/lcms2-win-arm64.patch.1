@@ -1110,18 +1110,18 @@ diff -urbaN lcms2-2.11.orig/Projects/VC2019/tiffdiff/tiffdiff.vcxproj lcms2-2.11
      <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
      <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
 +    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" />
-     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\jpeg-8d;c:\tiff-4.0.2\libtiff;$(IncludePath)</IncludePath>
-     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\jpeg-8d;c:\tiff-4.0.2\libtiff;$(IncludePath)</IncludePath>
-+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">C:\jpeg-8d;c:\tiff-4.0.2\libtiff;$(IncludePath)</IncludePath>
-     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\jpeg-8d;C:\tiff-4.0.2\libtiff;$(LibraryPath)</LibraryPath>
-     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\jpeg-8d;C:\tiff-4.0.2\libtiff;$(LibraryPath)</LibraryPath>
-+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">C:\jpeg-8d;C:\tiff-4.0.2\libtiff;$(LibraryPath)</LibraryPath>
-     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\jpeg-8d;c:\tiff-4.0.2\libtiff;$(IncludePath)</IncludePath>
-     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\jpeg-8d;c:\tiff-4.0.2\libtiff;$(IncludePath)</IncludePath>
-+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">C:\jpeg-8d;c:\tiff-4.0.2\libtiff;$(IncludePath)</IncludePath>
-     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\jpeg-8d;C:\tiff-4.0.2\libtiff;$(LibraryPath)</LibraryPath>
-     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\jpeg-8d;C:\tiff-4.0.2\libtiff;$(LibraryPath)</LibraryPath>
-+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">C:\jpeg-8d;C:\tiff-4.0.2\libtiff;$(LibraryPath)</LibraryPath>
+     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\jpeg-8d;$(IncludePath);E:\liteCommons\3rdparty\tiff-4.1.0\libtiff</IncludePath>
+     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\jpeg-8d;$(IncludePath);E:\liteCommons\3rdparty\tiff-4.1.0\libtiff</IncludePath>
++    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">C:\jpeg-8d;$(IncludePath);E:\liteCommons\3rdparty\tiff-4.1.0\libtiff</IncludePath>
+     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\jpeg-8d;$(LibraryPath);E:\liteCommons\3rdparty\tiff-4.1.0\libtiff</LibraryPath>
+     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\jpeg-8d;$(LibraryPath);E:\liteCommons\3rdparty\tiff-4.1.0\libtiff</LibraryPath>
++    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">C:\jpeg-8d;$(LibraryPath);E:\liteCommons\3rdparty\tiff-4.1.0\libtiff</LibraryPath>
+     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\jpeg-8d;$(IncludePath);E:\liteCommons\3rdparty\tiff-4.1.0\libtiff</IncludePath>
+     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\jpeg-8d;$(IncludePath);E:\liteCommons\3rdparty\tiff-4.1.0\libtiff</IncludePath>
++    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">C:\jpeg-8d;$(IncludePath);E:\liteCommons\3rdparty\tiff-4.1.0\libtiff</IncludePath>
+     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\jpeg-8d;$(LibraryPath);E:\liteCommons\3rdparty\tiff-4.1.0\libtiff</LibraryPath>
+     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\jpeg-8d;$(LibraryPath);E:\liteCommons\3rdparty\tiff-4.1.0\libtiff</LibraryPath>
++    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">C:\jpeg-8d;$(LibraryPath);E:\liteCommons\3rdparty\tiff-4.1.0\libtiff</LibraryPath>
    </PropertyGroup>
    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
      <ClCompile>
@@ -1183,6 +1183,13 @@ diff -urbaN lcms2-2.11.orig/Projects/VC2019/tiffdiff/tiffdiff.vcxproj lcms2-2.11
    <ItemGroup>
      <ClCompile Include="..\..\..\utils\common\vprf.c" />
      <ClCompile Include="..\..\..\utils\common\xgetopt.c" />
+@@ -207,4 +290,4 @@
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+   <ImportGroup Label="ExtensionTargets">
+   </ImportGroup>
+-</Project>
+\ No newline at end of file
++</Project>
 diff -urbaN lcms2-2.11.orig/Projects/VC2019/tifficc/tifficc.vcxproj lcms2-2.11/Projects/VC2019/tifficc/tifficc.vcxproj
 --- lcms2-2.11.orig/Projects/VC2019/tifficc/tifficc.vcxproj	2020-06-16 19:10:37.000000000 +0200
 +++ lcms2-2.11/Projects/VC2019/tifficc/tifficc.vcxproj	2020-07-09 18:28:38.821720648 +0200
@@ -1286,18 +1293,18 @@ diff -urbaN lcms2-2.11.orig/Projects/VC2019/tifficc/tifficc.vcxproj lcms2-2.11/P
      <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
      <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
 +    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" />
-     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IncludePath);C:\tiff-4.0.2\libtiff</IncludePath>
-     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IncludePath);C:\tiff-4.0.2\libtiff</IncludePath>
-+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">$(IncludePath);C:\tiff-4.0.2\libtiff</IncludePath>
-     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(LibraryPath);C:\tiff-4.0.2\libtiff</LibraryPath>
-     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(LibraryPath);C:\tiff-4.0.2\libtiff</LibraryPath>
-+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">$(LibraryPath);C:\tiff-4.0.2\libtiff</LibraryPath>
-     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IncludePath);C:\tiff-4.0.2\libtiff</IncludePath>
-     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IncludePath);C:\tiff-4.0.2\libtiff</IncludePath>
-+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">$(IncludePath);C:\tiff-4.0.2\libtiff</IncludePath>
-     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(LibraryPath);C:\tiff-4.0.2\libtiff</LibraryPath>
-     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(LibraryPath);C:\tiff-4.0.2\libtiff</LibraryPath>
-+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">$(LibraryPath);C:\tiff-4.0.2\libtiff</LibraryPath>
+     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IncludePath);E:\liteCommons\3rdparty\tiff-4.1.0\libtiff</IncludePath>
+     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IncludePath);E:\liteCommons\3rdparty\tiff-4.1.0\libtiff</IncludePath>
++    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">$(IncludePath);E:\liteCommons\3rdparty\tiff-4.1.0\libtiff</IncludePath>
+     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(LibraryPath);E:\liteCommons\3rdparty\tiff-4.1.0\libtiff</LibraryPath>
+     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(LibraryPath);E:\liteCommons\3rdparty\tiff-4.1.0\libtiff</LibraryPath>
++    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">$(LibraryPath);E:\liteCommons\3rdparty\tiff-4.1.0\libtiff</LibraryPath>
+     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IncludePath);E:\liteCommons\3rdparty\tiff-4.1.0\libtiff</IncludePath>
+     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IncludePath);E:\liteCommons\3rdparty\tiff-4.1.0\libtiff</IncludePath>
++    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">$(IncludePath);E:\liteCommons\3rdparty\tiff-4.1.0\libtiff</IncludePath>
+     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(LibraryPath);E:\liteCommons\3rdparty\tiff-4.1.0\libtiff</LibraryPath>
+     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(LibraryPath);E:\liteCommons\3rdparty\tiff-4.1.0\libtiff</LibraryPath>
++    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">$(LibraryPath);E:\liteCommons\3rdparty\tiff-4.1.0\libtiff</LibraryPath>
    </PropertyGroup>
    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
      <ClCompile>
@@ -1358,6 +1365,13 @@ diff -urbaN lcms2-2.11.orig/Projects/VC2019/tifficc/tifficc.vcxproj lcms2-2.11/P
    <ItemGroup>
      <ClCompile Include="..\..\..\utils\common\vprf.c" />
      <ClCompile Include="..\..\..\utils\common\xgetopt.c" />
+@@ -208,4 +290,4 @@
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+   <ImportGroup Label="ExtensionTargets">
+   </ImportGroup>
+-</Project>
+\ No newline at end of file
++</Project>
 diff -urbaN lcms2-2.11.orig/Projects/VC2019/transicc/transicc.vcxproj lcms2-2.11/Projects/VC2019/transicc/transicc.vcxproj
 --- lcms2-2.11.orig/Projects/VC2019/transicc/transicc.vcxproj	2020-06-16 19:10:37.000000000 +0200
 +++ lcms2-2.11/Projects/VC2019/transicc/transicc.vcxproj	2020-07-09 18:28:38.945719719 +0200
