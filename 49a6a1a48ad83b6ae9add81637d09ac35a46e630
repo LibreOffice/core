@@ -16,6 +16,24 @@
       "message": "Surround the code blocks in this file with ```",
       "revId": "49a6a1a48ad83b6ae9add81637d09ac35a46e630",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35259660_6d68e74e",
+        "filename": "vcl/README.lifecycle",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-20T08:47:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b7a8a37e_7c5dadab",
+      "revId": "49a6a1a48ad83b6ae9add81637d09ac35a46e630",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
