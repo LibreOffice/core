@@ -9068,12 +9068,6 @@ else
     SYSTEM_LIBJPEG=
     AC_MSG_RESULT([internal, libjpeg-turbo])
     BUILD_TYPE="$BUILD_TYPE LIBJPEG_TURBO"
-    LIBJPEG_CFLAGS="-I${WORKDIR}/UnpackedTarball/libjpeg-turbo"
-    if test "$COM" = "MSC"; then
-        LIBJPEG_LIBS="${WORKDIR}/UnpackedTarball/libjpeg-turbo/.libs/libjpeg.lib"
-    else
-        LIBJPEG_LIBS="-L${WORKDIR}/UnpackedTarball/libjpeg-turbo/.libs -ljpeg"
-    fi
 
     case "$host_cpu" in
     x86_64 | amd64 | i*86 | x86 | ia32)
