@@ -112,6 +112,7 @@ public:
     void    SetSignatureStream( const css::uno::Reference < css::io::XStream >& rxStream );
 
     // Execute the dialog...
+    void    beforeRun();
     short   run() override;
 
                 // Did signatures change?
