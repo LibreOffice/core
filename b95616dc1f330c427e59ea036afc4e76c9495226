@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ab89975_faa97c52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-10-20T16:50:12Z",
+      "side": 1,
+      "message": "Damn Jenkins still not moving a Verified to the next patch set if only the commit message was updated..",
+      "revId": "b95616dc1f330c427e59ea036afc4e76c9495226",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
