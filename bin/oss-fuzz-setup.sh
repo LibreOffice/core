@@ -63,7 +63,7 @@ curl --no-progress-meter -S \
     -C - -O https://dev-www.libreoffice.org/src/hunspell-1.7.0.tar.gz \
     -C - -O https://dev-www.libreoffice.org/src/freetype-2.9.1.tar.bz2 \
     -C - -O https://dev-www.libreoffice.org/src/fontconfig-2.13.91.tar.gz \
-    -C - -O https://dev-www.libreoffice.org/src/libepoxy-1.5.3.tar.xz \
+    -C - -O https://dev-www.libreoffice.org/src/libepoxy-1.5.9.tar.xz \
     -C - -O https://dev-www.libreoffice.org/src/libepubgen-0.1.1.tar.xz \
     -C - -O https://dev-www.libreoffice.org/src/libnumbertext-1.0.7.tar.xz \
     -C - -O https://dev-www.libreoffice.org/src/libqxp-0.0.2.tar.xz
