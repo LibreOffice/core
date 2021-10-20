@@ -1086,6 +1086,11 @@ static int process(struct hash* dep_hash, char* fn)
                     created_line = generate_phony_line(src_relative, "o");
                     rc = generate_phony_file(fn, created_line);
                 }
+                else if(strncmp(src_relative, "GenNasmObject/", 14) == 0)
+                {
+                    created_line = generate_phony_line(src_relative, "o");
+                    rc = generate_phony_file(fn, created_line);
+                }
                 else if(strncmp(src_relative, "CxxClrObject/", 13) == 0)
                 {
                     created_line = generate_phony_line(src_relative, "o");

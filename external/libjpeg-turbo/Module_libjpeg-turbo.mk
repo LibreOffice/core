@@ -10,8 +10,8 @@
 $(eval $(call gb_Module_Module,libjpeg-turbo))
 
 $(eval $(call gb_Module_add_targets,libjpeg-turbo,\
-	ExternalProject_libjpeg-turbo \
 	UnpackedTarball_libjpeg-turbo \
+	StaticLibrary_libjpeg-turbo \
 ))
 
 # vim: set noet sw=4 ts=4:
