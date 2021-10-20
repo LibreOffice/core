@@ -2327,6 +2327,7 @@ void SwTableBoxFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
                         // format contents with the new value assigned and write to paragraph
                         Color* pCol = nullptr;
                         OUString sNewText;
+                        bool bChangeFormat = true;
                         if( DBL_MAX == fVal )
                         {
                             sNewText = SwViewShell::GetShellRes()->aCalc_Error;
@@ -2351,6 +2352,14 @@ void SwTableBoxFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
 #else
                                 sNewText = aOrigText;
 #endif
+                                // Remove the newly assigned numbering format as well if text actually exists.
+                                // Exception: assume user-defined formats are always intentional.
+                                if (bChgText && pNumFormatr->IsTextFormat(nOldFormat)
+                                    && !pNumFormatr->IsUserDefinedAndNotOverloaded(nNewFormat))
+                                {
+                                    pBox->GetFrameFormat()->ResetFormatAttr(RES_BOXATR_FORMAT);
+                                    bChangeFormat = false;
+                                }
                             }
 
                             if( !bChgText )
@@ -2360,9 +2369,11 @@ void SwTableBoxFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
                         }
 
                         // across all boxes
-                        ChgTextToNum( *pBox, sNewText, pCol,
+                        if (bChangeFormat)
+                        {
+                            ChgTextToNum( *pBox, sNewText, pCol,
                                         GetDoc()->IsInsTableAlignNum() );
-
+                        }
                     }
                     else if( bNewIsTextFormat && nOldFormat != nNewFormat )
                     {
