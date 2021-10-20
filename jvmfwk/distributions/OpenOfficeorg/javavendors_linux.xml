@@ -31,9 +31,6 @@
     <vendor name="Blackdown Java-Linux Team">
       <minVersion>1.8.0</minVersion>
     </vendor>
-    <vendor name="Free Software Foundation, Inc.">
-      <minVersion>1.8.0</minVersion>
-    </vendor>
     <vendor name="BEA Systems, Inc.">
       <minVersion>1.8.0</minVersion>
     </vendor>

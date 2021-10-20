@@ -68,7 +68,6 @@ $(eval $(call gb_Library_add_libs,jvmfwk,\
 endif
 
 $(eval $(call gb_Library_add_exception_objects,jvmfwk,\
-    jvmfwk/plugins/sunmajor/pluginlib/gnujre \
     jvmfwk/plugins/sunmajor/pluginlib/otherjre \
     jvmfwk/plugins/sunmajor/pluginlib/sunjavaplugin \
     jvmfwk/plugins/sunmajor/pluginlib/sunjre \

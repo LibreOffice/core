@@ -6638,7 +6638,6 @@ jvmaccess/workbench/javainfo/javainfotest.cxx
 jvmfwk/inc/fwkutil.hxx
 jvmfwk/inc/vendorplugin.hxx
 jvmfwk/plugins/sunmajor/javaenvsetup/javaldx.cxx
-jvmfwk/plugins/sunmajor/pluginlib/gnujre.cxx
 jvmfwk/plugins/sunmajor/pluginlib/otherjre.cxx
 jvmfwk/plugins/sunmajor/pluginlib/sunjavaplugin.cxx
 jvmfwk/plugins/sunmajor/pluginlib/sunjre.cxx
