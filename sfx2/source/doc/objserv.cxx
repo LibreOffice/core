@@ -572,6 +572,17 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             }
             else
             {
+                // tdf#119206: avoid async dialog crash if document is in the process of closing.
+                // This can happen if "Options - Save - Edit document properties before saving"
+                // is enabled, and an un-named document is now being closed and saved.
+                if (IsInPrepareClose())
+                {
+                    // TODO: run DOCINFO dialog synchronously instead of just ignoring this request
+                    SAL_WARN("sfx.doc", "SID_DOCINFO: skipping 'Edit document props' while closing");
+                    rReq.Ignore();
+                    return;
+                }
+
                 // no argument containing DocInfo; check optional arguments
                 bool bReadOnly = IsReadOnly();
                 const SfxBoolItem* pROItem = rReq.GetArg<SfxBoolItem>(SID_DOC_READONLY);
