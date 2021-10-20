@@ -1540,4 +1540,19 @@ public:
     virtual ~SalInstanceRadioButton() override;
 };
 
+class SalInstanceImage : public SalInstanceWidget, public virtual weld::Image
+{
+private:
+    VclPtr<FixedImage> m_xImage;
+
+public:
+    SalInstanceImage(FixedImage* pImage, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+
+    virtual void set_from_icon_name(const OUString& rIconName) override;
+
+    virtual void set_image(VirtualDevice* pDevice) override;
+
+    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override;
+};
+
 #endif
