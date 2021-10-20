@@ -111,7 +111,6 @@ echo $INSTDIR/$LIBO_LIB_FOLDER/lib*.a \
      $WORKDIR/LinkTarget/StaticLibrary/lib*.a \
      $oslibs \
      $WORKDIR/UnpackedTarball/icu/source/lib/*.a \
-     $WORKDIR/UnpackedTarball/libjpeg-turbo/.libs/*.a \
      $WORKDIR/UnpackedTarball/liblangtag/liblangtag/.libs/*.a \
      $WORKDIR/UnpackedTarball/lcms2/src/.libs/*.a \
      $WORKDIR/UnpackedTarball/libabw/src/lib/.libs/*.a \
