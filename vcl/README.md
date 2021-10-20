@@ -82,7 +82,7 @@ The way COM is used in LO generally:
 - oslWorkerWrapperFunction() puts every thread spawned via `oslCreateThread()`
   into MTA (free-threaded)
 
-# GDIMetafile
+## GDIMetafile
 
 GDIMetafile is a vector drawing representation that corresponds directly
 to the SVM (StarView Metafile) format; it is extremely important as
@@ -243,3 +243,9 @@ a mutex (`SolarMutex` or other) locked" fundamental rule:
 
 In short, never hold any mutex unless necessary, especially not when calling
 out.
+
+## Read More
+* [Environment variables in VCL](README.vars)
+* [GDIMetaFile class](README.GDIMetaFile)
+* [Understanding transitional VCL lifecycle](README.lifecycle)
+* [VCL scheduler](README.scheduler)
