@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82b7dec0_0b348dfc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-10-20T15:12:18Z",
+      "side": 1,
+      "message": "@Tünde: very nice fix! It\u0027s possible to save/reload files in Python unit tests (e.g for Writer: sw/qa/uitest/writer_tests7/tdf90401.py), so I suggest to add an unit test to avoid of the future regressions.",
+      "revId": "f31c34b96eaa6b1dc10fc94e53e85d6ff489a11d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
