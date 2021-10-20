@@ -259,6 +259,8 @@ public:
                                                            bool bTakeOwnership = false) override;
     virtual std::unique_ptr<weld::RadioButton>
     weld_radio_button(const OString& id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Image> weld_image(const OString& id,
+                                                    bool bTakeOwnership = false) override;
 
     static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent,
                                                     VclMessageType eMessageType,
@@ -595,6 +597,13 @@ public:
                   SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 
     virtual void set_active(bool active) override;
+};
+
+class JSImage : public JSWidget<SalInstanceImage, FixedImage>
+{
+public:
+    JSImage(JSDialogSender* pSender, FixedImage* pImage, SalInstanceBuilder* pBuilder,
+            bool bTakeOwnership);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

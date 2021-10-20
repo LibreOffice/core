@@ -520,7 +520,8 @@ void JSInstanceBuilder::RememberWidget(const OString& id, weld::Widget* pWidget)
     }
 }
 
-void JSInstanceBuilder::AddChildWidget(sal_uInt64 nWindowId, const OString& id, weld::Widget* pWidget)
+void JSInstanceBuilder::AddChildWidget(sal_uInt64 nWindowId, const OString& id,
+                                       weld::Widget* pWidget)
 {
     auto it = GetLOKWeldWidgetsMap().find(nWindowId);
     if (it != GetLOKWeldWidgetsMap().end())
@@ -807,6 +808,19 @@ std::unique_ptr<weld::RadioButton> JSInstanceBuilder::weld_radio_button(const OS
     return pWeldWidget;
 }
 
+std::unique_ptr<weld::Image> JSInstanceBuilder::weld_image(const OString& id, bool bTakeOwnership)
+{
+    FixedImage* pImage = m_xBuilder->get<FixedImage>(id);
+
+    auto pWeldWidget
+        = pImage ? std::make_unique<JSImage>(this, pImage, this, bTakeOwnership) : nullptr;
+
+    if (pWeldWidget)
+        RememberWidget(id, pWeldWidget.get());
+
+    return pWeldWidget;
+}
+
 weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParent,
                                                             VclMessageType eMessageType,
                                                             VclButtonsType eButtonType,
@@ -1023,21 +1037,21 @@ JSMessageDialog::JSMessageDialog(::MessageDialog* pDialog, SalInstanceBuilder* p
 
     if (!pBuilder)
     {
-        if(::OKButton* pOKBtn = dynamic_cast<::OKButton*>(m_xMessageDialog->get_widget_for_response(RET_OK)))
+        if (::OKButton* pOKBtn
+            = dynamic_cast<::OKButton*>(m_xMessageDialog->get_widget_for_response(RET_OK)))
         {
             m_pOK.reset(new JSButton(m_pSender, pOKBtn, nullptr, false));
             JSInstanceBuilder::AddChildWidget(m_xMessageDialog->GetLOKWindowId(),
-                                              pOKBtn->get_id().toUtf8(),
-                                              m_pOK.get());
+                                              pOKBtn->get_id().toUtf8(), m_pOK.get());
             m_pOK->connect_clicked(LINK(this, JSMessageDialog, OKHdl));
         }
 
-        if(::CancelButton* pCancelBtn = dynamic_cast<::CancelButton*>(m_xMessageDialog->get_widget_for_response(RET_CANCEL)))
+        if (::CancelButton* pCancelBtn
+            = dynamic_cast<::CancelButton*>(m_xMessageDialog->get_widget_for_response(RET_CANCEL)))
         {
             m_pCancel.reset(new JSButton(m_pSender, pCancelBtn, nullptr, false));
             JSInstanceBuilder::AddChildWidget(m_xMessageDialog->GetLOKWindowId(),
-                                              pCancelBtn->get_id().toUtf8(),
-                                              m_pCancel.get());
+                                              pCancelBtn->get_id().toUtf8(), m_pCancel.get());
             m_pCancel->connect_clicked(LINK(this, JSMessageDialog, CancelHdl));
         }
     }
@@ -1049,15 +1063,9 @@ JSMessageDialog::~JSMessageDialog()
         JSInstanceBuilder::RemoveWindowWidget(m_xMessageDialog->GetLOKWindowId());
 }
 
-IMPL_LINK_NOARG(JSMessageDialog, OKHdl, weld::Button&, void)
-{
-    response(RET_OK);
-}
+IMPL_LINK_NOARG(JSMessageDialog, OKHdl, weld::Button&, void) { response(RET_OK); }
 
-IMPL_LINK_NOARG(JSMessageDialog, CancelHdl, weld::Button&, void)
-{
-    response(RET_CANCEL);
-}
+IMPL_LINK_NOARG(JSMessageDialog, CancelHdl, weld::Button&, void) { response(RET_CANCEL); }
 
 void JSMessageDialog::set_primary_text(const OUString& rText)
 {
@@ -1332,6 +1340,12 @@ void JSRadioButton::set_active(bool active)
 {
     SalInstanceRadioButton::set_active(active);
     sendUpdate();
+}
+
+JSImage::JSImage(JSDialogSender* pSender, FixedImage* pImage, SalInstanceBuilder* pBuilder,
+                 bool bTakeOwnership)
+    : JSWidget<SalInstanceImage, FixedImage>(pSender, pImage, pBuilder, bTakeOwnership)
+{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
