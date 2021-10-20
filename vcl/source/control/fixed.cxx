@@ -978,6 +978,7 @@ bool FixedImage::set_property(const OString &rKey, const OUString &rValue)
 
 void FixedImage::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
+    Control::DumpAsPropertyTree(rJsonWriter);
     rJsonWriter.put("id", get_id());
     rJsonWriter.put("type", "image");
     if (!!maImage)
