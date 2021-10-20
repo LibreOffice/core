@@ -55,7 +55,7 @@ curl --no-progress-meter -S \
     -C - -O https://dev-www.libreoffice.org/src/language-subtag-registry-2021-08-06.tar.bz2 \
     -C - -O https://dev-www.libreoffice.org/src/graphite2-minimal-1.3.14.tgz \
     -C - -O https://dev-www.libreoffice.org/src/harfbuzz-2.8.2.tar.xz \
-    -C - -O https://dev-www.libreoffice.org/src/glm-0.9.9.7.zip \
+    -C - -O https://dev-www.libreoffice.org/src/glm-0.9.9.8.zip \
     -C - -O https://dev-www.libreoffice.org/src/icu4c-69_1-src.tgz \
     -C - -O https://dev-www.libreoffice.org/src/icu4c-69_1-data.zip \
     -C - -O https://dev-www.libreoffice.org/src/libxml2-2.9.12.tar.gz \
