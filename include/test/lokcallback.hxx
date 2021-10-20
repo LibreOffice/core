@@ -13,6 +13,7 @@
 #include <test/testdllapi.hxx>
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 #include <sfx2/lokcallback.hxx>
+#include <vcl/idle.hxx>
 
 /**
 A helper to convert SfxLokCallbackInterface to a LIbreOfficeKitCallback for tests.
@@ -21,7 +22,7 @@ It reimplements the specialized callbacks and converts them to the generic type/
 callback.
 */
 
-class OOO_DLLPUBLIC_TEST TestLokCallbackWrapper : public SfxLokCallbackInterface
+class OOO_DLLPUBLIC_TEST TestLokCallbackWrapper final : public SfxLokCallbackInterface, public Idle
 {
 public:
     TestLokCallbackWrapper(LibreOfficeKitCallback callback, void* data);
@@ -30,6 +31,7 @@ public:
                                                       int nViewId) override;
     virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect,
                                                            int nPart) override;
+    virtual void Invoke() override;
 
 private:
     void callCallback(int nType, const char* pPayload);
