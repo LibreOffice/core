@@ -1742,17 +1742,14 @@ void ScInterpreter::ScTextJoin_MS()
                         aAdr.SetRow( nRow );
                         aAdr.SetCol( nCol );
                         ScRefCellValue aCell( mrDoc, aAdr );
-                        if ( !aCell.isEmpty() )
-                        {
-                            if ( !aCell.hasEmptyValue() )
-                            {
-                                svl::SharedString aSS;
-                                GetCellString( aSS, aCell);
-                                aStr = aSS.getString();
-                            }
-                        }
-                        else
+                        if (aCell.hasEmptyValue())
                             aStr.clear();
+                        else
+                        {
+                            svl::SharedString aSS;
+                            GetCellString( aSS, aCell);
+                            aStr = aSS.getString();
+                        }
                         if ( !aStr.isEmpty() || !bSkipEmpty )
                         {
                             if ( !bFirst )
