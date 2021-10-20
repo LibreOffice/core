@@ -6823,12 +6823,14 @@ if test "$_os" != "WINNT"; then
     AC_CHECK_SIZEOF(long long)
     AC_CHECK_SIZEOF(double)
     AC_CHECK_SIZEOF(void*)
+    AC_CHECK_SIZEOF(size_t)
 
     SAL_TYPES_SIZEOFSHORT=$ac_cv_sizeof_short
     SAL_TYPES_SIZEOFINT=$ac_cv_sizeof_int
     SAL_TYPES_SIZEOFLONG=$ac_cv_sizeof_long
     SAL_TYPES_SIZEOFLONGLONG=$ac_cv_sizeof_long_long
     SAL_TYPES_SIZEOFPOINTER=$ac_cv_sizeof_voidp
+    SIZEOF_SIZE_T=$ac_cv_sizeof_size_t
 
     dnl Allow build without AC_CHECK_ALIGNOF, grrr
     m4_pattern_allow([AC_CHECK_ALIGNOF])
@@ -6890,8 +6892,10 @@ else
     SAL_TYPES_SIZEOFLONGLONG=8
     if test $WIN_HOST_BITS -eq 32; then
         SAL_TYPES_SIZEOFPOINTER=4
+        SIZEOF_SIZE_T=4
     else
         SAL_TYPES_SIZEOFPOINTER=8
+        SIZEOF_SIZE_T=8
     fi
     SAL_TYPES_ALIGNMENT2=2
     SAL_TYPES_ALIGNMENT4=4
@@ -6899,6 +6903,7 @@ else
     LFS_CFLAGS=''
 fi
 AC_SUBST(LFS_CFLAGS)
+AC_SUBST(SIZEOF_SIZE_T)
 
 AC_DEFINE_UNQUOTED(SAL_TYPES_SIZEOFSHORT,$SAL_TYPES_SIZEOFSHORT)
 AC_DEFINE_UNQUOTED(SAL_TYPES_SIZEOFINT,$SAL_TYPES_SIZEOFINT)
@@ -9068,12 +9073,6 @@ else
     SYSTEM_LIBJPEG=
     AC_MSG_RESULT([internal, libjpeg-turbo])
     BUILD_TYPE="$BUILD_TYPE LIBJPEG_TURBO"
-    LIBJPEG_CFLAGS="-I${WORKDIR}/UnpackedTarball/libjpeg-turbo"
-    if test "$COM" = "MSC"; then
-        LIBJPEG_LIBS="${WORKDIR}/UnpackedTarball/libjpeg-turbo/.libs/libjpeg.lib"
-    else
-        LIBJPEG_LIBS="-L${WORKDIR}/UnpackedTarball/libjpeg-turbo/.libs -ljpeg"
-    fi
 
     case "$host_cpu" in
     x86_64 | amd64 | i*86 | x86 | ia32)
