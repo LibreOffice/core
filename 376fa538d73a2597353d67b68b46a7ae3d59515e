@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c6d2395_2f6080e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-20T07:56:18Z",
+      "side": 1,
+      "message": "Unfortunately, in 3 years no (other) Collabora person has even responded to this crashing regression. It isn\u0027t a great solution, but at least it is a stop-gap measure.\n\nA proper solution is well beyond my capabilities and comfort level.",
+      "revId": "376fa538d73a2597353d67b68b46a7ae3d59515e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
