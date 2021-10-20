@@ -11,14 +11,13 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,libjpeg-turbo))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,libjpeg-turbo,$(LIBJPEG_TURBO_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_update_autoconf_configs,libjpeg-turbo))
-
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libjpeg-turbo,0))
 
-$(eval $(call gb_UnpackedTarball_add_patches,libjpeg-turbo,\
-	external/libjpeg-turbo/jpeg-turbo.build.patch.1 \
-	$(if $(filter WNT,$(OS)),external/libjpeg-turbo/jpeg-turbo.win_build.patch.1) \
-	external/libjpeg-turbo/ubsan.patch \
-))
+# jconfigint.h and jconfig.h generated via
+# cmake -DENABLE_STATIC:BOOL=ON -DENABLE_SHARED:BOOL=NO -DWITH_JAVA:BOOL=OFF -DWITH_TURBOJPEG:BOOL=OFF -DWITH_SIMD:BOOL=ON
+# and then tweaking
+
+$(eval $(call gb_UnpackedTarball_add_file,libjpeg-turbo,jconfigint.h,external/libjpeg-turbo/jconfigint.h))
+$(eval $(call gb_UnpackedTarball_add_file,libjpeg-turbo,jconfig.h,external/libjpeg-turbo/jconfig.h))
 
 # vim: set noet sw=4 ts=4:
