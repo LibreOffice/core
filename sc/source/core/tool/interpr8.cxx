@@ -1407,16 +1407,13 @@ void ScInterpreter::ScConcat_MS()
                 if ( nGlobalError != FormulaError::NONE )
                     break;
                 ScRefCellValue aCell( mrDoc, aAdr );
-                if ( !aCell.isEmpty() )
+                if (!aCell.hasEmptyValue())
                 {
-                    if ( !aCell.hasEmptyValue() )
-                    {
-                        svl::SharedString aSS;
-                        GetCellString( aSS, aCell);
-                        const OUString& rStr = aSS.getString();
-                        if (CheckStringResultLen( aResBuf, rStr))
-                            aResBuf.append( rStr);
-                    }
+                    svl::SharedString aSS;
+                    GetCellString( aSS, aCell);
+                    const OUString& rStr = aSS.getString();
+                    if (CheckStringResultLen( aResBuf, rStr))
+                        aResBuf.append( rStr);
                 }
             }
             break;
@@ -1450,16 +1447,13 @@ void ScInterpreter::ScConcat_MS()
                         aAdr.SetRow( nRow );
                         aAdr.SetCol( nCol );
                         ScRefCellValue aCell( mrDoc, aAdr );
-                        if ( !aCell.isEmpty() )
+                        if (!aCell.hasEmptyValue() )
                         {
-                            if ( !aCell.hasEmptyValue() )
-                            {
-                                svl::SharedString aSS;
-                                GetCellString( aSS, aCell);
-                                const OUString& rStr = aSS.getString();
-                                if (CheckStringResultLen( aResBuf, rStr))
-                                    aResBuf.append( rStr);
-                            }
+                            svl::SharedString aSS;
+                            GetCellString( aSS, aCell);
+                            const OUString& rStr = aSS.getString();
+                            if (CheckStringResultLen( aResBuf, rStr))
+                                aResBuf.append( rStr);
                         }
                     }
                 }
