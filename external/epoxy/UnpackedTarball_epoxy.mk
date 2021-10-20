@@ -25,12 +25,14 @@ $(eval $(call gb_UnpackedTarball_set_pre_action,epoxy,\
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,epoxy,0))
 
+# * external/external/epoxy/epoxy.android.patch upstream at
+#   <https://github.com/anholt/libepoxy/pull/263> "fix error: use of undeclared identifier 'OPENGL_LIB'":
 $(eval $(call gb_UnpackedTarball_add_patches,epoxy, \
     external/epoxy/epoxy.visibility.patch \
     external/epoxy/epoxy.windows.api.patch \
     external/epoxy/epoxy.noegl.by.default.patch \
     external/epoxy/clang-cl.patch \
-    external/epoxy/epoxy.pyresource-leak.patch \
+    external/epoxy/epoxy.android.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
