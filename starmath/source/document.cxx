@@ -495,7 +495,8 @@ Printer* SmDocShell::GetPrt()
             svl::Items<
                 SID_PRINTTITLE, SID_PRINTZOOM,
                 SID_NO_RIGHT_SPACES, SID_SAVE_ONLY_USED_SYMBOLS,
-                SID_AUTO_CLOSE_BRACKETS, SID_AUTO_CLOSE_BRACKETS>{});
+                SID_AUTO_CLOSE_BRACKETS, SID_AUTO_CLOSE_BRACKETS,
+                SID_SMEDITWINDOWZOOM, SID_SMEDITWINDOWZOOM>{});
         SmModule *pp = SM_MOD();
         pp->GetConfig()->ConfigToItemSet(*pOptions);
         mpPrinter = VclPtr<SfxPrinter>::Create(std::move(pOptions));
