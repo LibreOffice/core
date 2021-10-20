@@ -16,6 +16,24 @@
       "message": "Small performance note: Keeping the index and length checks before string comparison should be faster.",
       "revId": "a0c23b40905d7b59caf46fc8887864ab35142522",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3666c32_435718cb",
+        "filename": "sw/source/core/txtnode/fntcache.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-10-20T10:40:07Z",
+      "side": 0,
+      "message": "Oh, I guess that is meant to be the point of this change. But I\u0027m not sure if treating different parts of the text the same is safe even if the parts are the same characters.",
+      "parentUuid": "f3f28828_94fd0fd7",
+      "revId": "a0c23b40905d7b59caf46fc8887864ab35142522",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
