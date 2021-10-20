@@ -40,6 +40,7 @@ VendorSupportMapEntry const gVendorMap[] ={
     VENDOR_MAP_ENTRY<SunInfo>("Oracle Corporation"),
     VENDOR_MAP_ENTRY<SunInfo>("AdoptOpenJdk"),
     VENDOR_MAP_ENTRY<SunInfo>("Amazon.com Inc."),
+    VENDOR_MAP_ENTRY<SunInfo>("Azul Systems, Inc."),
 #ifndef MACOSX
     VENDOR_MAP_ENTRY<OtherInfo>("IBM Corporation"),
     VENDOR_MAP_ENTRY<OtherInfo>("Blackdown Java-Linux Team"),
@@ -47,7 +48,6 @@ VendorSupportMapEntry const gVendorMap[] ={
     VENDOR_MAP_ENTRY<GnuInfo>("Free Software Foundation, Inc."),
     VENDOR_MAP_ENTRY<OtherInfo>("The FreeBSD Foundation"),
 #endif
-    VENDOR_MAP_ENTRY<OtherInfo>("Azul Systems, Inc."),
     {nullptr, nullptr, nullptr} };
 
 }
