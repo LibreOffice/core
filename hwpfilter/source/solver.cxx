@@ -119,11 +119,11 @@ bool mgcLinearSystemD::Solve (int n, std::unique_ptr<std::unique_ptr<double[]>[]
     {
       if ( j != icol )
       {
-    save = a[j][icol];
-    a[j][icol] = 0;
-    for (k = 0; k < n; k++)
-      a[j][k] -= a[icol][k]*save;
-    b[j] -= b[icol]*save;
+        save = a[j][icol];
+        a[j][icol] = 0;
+        for (k = 0; k < n; k++)
+            a[j][k] -= a[icol][k]*save;
+        b[j] -= b[icol]*save;
       }
     }
   }

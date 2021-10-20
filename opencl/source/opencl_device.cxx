@@ -37,7 +37,7 @@ namespace {
 void DS_CHECK_STATUS(cl_int status, char const * name) {
     if (CL_SUCCESS != status)
     {
-    SAL_INFO("opencl.device", "Error code is " << status << " at " << name);
+        SAL_INFO("opencl.device", "Error code is " << status << " at " << name);
     }
 }
 

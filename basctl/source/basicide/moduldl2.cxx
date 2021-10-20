@@ -92,9 +92,9 @@ public:
     {
         if ( m_xHandler.is() )
         {
-        script::ModuleSizeExceededRequest aModSizeException;
-        if ( rRequest->getRequest() >>= aModSizeException )
-            m_xHandler->handle( rRequest );
+            script::ModuleSizeExceededRequest aModSizeException;
+            if ( rRequest->getRequest() >>= aModSizeException )
+                m_xHandler->handle( rRequest );
         }
     }
 };

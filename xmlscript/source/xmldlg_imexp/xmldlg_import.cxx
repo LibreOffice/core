@@ -1577,14 +1577,14 @@ void ImportContext::importDefaults(
     sal_Bool bVisible = true;
     if (getBoolAttr( &bVisible, "visible", xAttributes, _pImport->XMLNS_DIALOGS_UID ) && !bVisible)
     {
-    try
-    {
-            _xControlModel->setPropertyValue( "EnableVisible", makeAny( false ) );
-    }
-    catch( Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION("xmlscript.xmldlg");
-    }
+        try
+        {
+                _xControlModel->setPropertyValue( "EnableVisible", makeAny( false ) );
+        }
+        catch( Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION("xmlscript.xmldlg");
+        }
     }
 
     if (!importLongProperty( nBaseX, "PositionX", "left", xAttributes ) ||

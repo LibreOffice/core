@@ -799,79 +799,79 @@ SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference<
 
     do
     {
-    Reference< XPropertySetInfo > xPSI( _rxDataSourceDescriptor->getPropertySetInfo(), UNO_SET_THROW );
+        Reference< XPropertySetInfo > xPSI( _rxDataSourceDescriptor->getPropertySetInfo(), UNO_SET_THROW );
 
-    // if there's an ActiveConnection, use it
-    if ( xPSI->hasPropertyByName( PROPERTY_ACTIVE_CONNECTION ) )
-    {
-        Reference< XConnection > xPure;
-        OSL_VERIFY( _rxDataSourceDescriptor->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xPure );
-        xConnection.reset( xPure, SharedConnection::NoTakeOwnership );
-    }
-    if ( xConnection.is() )
-    {
-        xInteractionHandler = lcl_getInteractionHandler_throw( xConnection.getTyped(), m_xInteractionHandler );
-        SAL_WARN_IF( !xInteractionHandler.is(), "dbaccess.ui", "CopyTableWizard::impl_extractConnection_throw: lcl_getInteractionHandler_throw returned nonsense!" );
-        break;
-    }
-
-    // there could be a DataSourceName or a DatabaseLocation, describing the css.sdb.DataSource
-    OUString sDataSource, sDatabaseLocation;
-    if ( xPSI->hasPropertyByName( PROPERTY_DATASOURCENAME ) )
-        OSL_VERIFY( _rxDataSourceDescriptor->getPropertyValue( PROPERTY_DATASOURCENAME ) >>= sDataSource );
-    if ( xPSI->hasPropertyByName( PROPERTY_DATABASE_LOCATION ) )
-        OSL_VERIFY( _rxDataSourceDescriptor->getPropertyValue( PROPERTY_DATABASE_LOCATION ) >>= sDatabaseLocation );
-
-    // need a DatabaseContext for loading the data source
-    Reference< XDatabaseContext > xDatabaseContext = DatabaseContext::create( m_xContext );
-    Reference< XDataSource > xDataSource;
-    if ( !sDataSource.isEmpty() )
-        xDataSource.set( xDatabaseContext->getByName( sDataSource ), UNO_QUERY_THROW );
-    if ( !xDataSource.is() && !sDatabaseLocation.isEmpty() )
-        xDataSource.set( xDatabaseContext->getByName( sDatabaseLocation ), UNO_QUERY_THROW );
-
-    if ( xDataSource.is() )
-    {
-        // first, try connecting with completion
-        xInteractionHandler = lcl_getInteractionHandler_throw( xDataSource, m_xInteractionHandler );
-        SAL_WARN_IF( !xInteractionHandler.is(), "dbaccess.ui", "CopyTableWizard::impl_extractConnection_throw: lcl_getInteractionHandler_throw returned nonsense!" );
-        if ( xInteractionHandler.is() )
+        // if there's an ActiveConnection, use it
+        if ( xPSI->hasPropertyByName( PROPERTY_ACTIVE_CONNECTION ) )
         {
-            Reference< XCompletedConnection > xInteractiveConnection( xDataSource, UNO_QUERY );
-            if ( xInteractiveConnection.is() )
-                xConnection.reset( xInteractiveConnection->connectWithCompletion( xInteractionHandler ), SharedConnection::TakeOwnership );
+            Reference< XConnection > xPure;
+            OSL_VERIFY( _rxDataSourceDescriptor->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xPure );
+            xConnection.reset( xPure, SharedConnection::NoTakeOwnership );
+        }
+        if ( xConnection.is() )
+        {
+            xInteractionHandler = lcl_getInteractionHandler_throw( xConnection.getTyped(), m_xInteractionHandler );
+            SAL_WARN_IF( !xInteractionHandler.is(), "dbaccess.ui", "CopyTableWizard::impl_extractConnection_throw: lcl_getInteractionHandler_throw returned nonsense!" );
+            break;
         }
 
-        // interactively connecting was not successful or possible -> connect without interaction
-        if ( !xConnection.is() )
+        // there could be a DataSourceName or a DatabaseLocation, describing the css.sdb.DataSource
+        OUString sDataSource, sDatabaseLocation;
+        if ( xPSI->hasPropertyByName( PROPERTY_DATASOURCENAME ) )
+            OSL_VERIFY( _rxDataSourceDescriptor->getPropertyValue( PROPERTY_DATASOURCENAME ) >>= sDataSource );
+        if ( xPSI->hasPropertyByName( PROPERTY_DATABASE_LOCATION ) )
+            OSL_VERIFY( _rxDataSourceDescriptor->getPropertyValue( PROPERTY_DATABASE_LOCATION ) >>= sDatabaseLocation );
+
+        // need a DatabaseContext for loading the data source
+        Reference< XDatabaseContext > xDatabaseContext = DatabaseContext::create( m_xContext );
+        Reference< XDataSource > xDataSource;
+        if ( !sDataSource.isEmpty() )
+            xDataSource.set( xDatabaseContext->getByName( sDataSource ), UNO_QUERY_THROW );
+        if ( !xDataSource.is() && !sDatabaseLocation.isEmpty() )
+            xDataSource.set( xDatabaseContext->getByName( sDatabaseLocation ), UNO_QUERY_THROW );
+
+        if ( xDataSource.is() )
         {
-            xConnection.reset( xDataSource->getConnection( OUString(), OUString() ), SharedConnection::TakeOwnership );
+            // first, try connecting with completion
+            xInteractionHandler = lcl_getInteractionHandler_throw( xDataSource, m_xInteractionHandler );
+            SAL_WARN_IF( !xInteractionHandler.is(), "dbaccess.ui", "CopyTableWizard::impl_extractConnection_throw: lcl_getInteractionHandler_throw returned nonsense!" );
+            if ( xInteractionHandler.is() )
+            {
+                Reference< XCompletedConnection > xInteractiveConnection( xDataSource, UNO_QUERY );
+                if ( xInteractiveConnection.is() )
+                    xConnection.reset( xInteractiveConnection->connectWithCompletion( xInteractionHandler ), SharedConnection::TakeOwnership );
+            }
+
+            // interactively connecting was not successful or possible -> connect without interaction
+            if ( !xConnection.is() )
+            {
+                xConnection.reset( xDataSource->getConnection( OUString(), OUString() ), SharedConnection::TakeOwnership );
+            }
         }
-    }
 
-    if ( xConnection.is() )
-        break;
+        if ( xConnection.is() )
+            break;
 
-    // finally, there could be a ConnectionResource/ConnectionInfo
-    OUString sConnectionResource;
-    Sequence< PropertyValue > aConnectionInfo;
-    if ( xPSI->hasPropertyByName( PROPERTY_CONNECTION_RESOURCE ) )
-        OSL_VERIFY( _rxDataSourceDescriptor->getPropertyValue( PROPERTY_CONNECTION_RESOURCE ) >>= sConnectionResource );
-    if ( xPSI->hasPropertyByName( PROPERTY_CONNECTION_INFO ) )
-        OSL_VERIFY( _rxDataSourceDescriptor->getPropertyValue( PROPERTY_CONNECTION_INFO ) >>= aConnectionInfo );
+        // finally, there could be a ConnectionResource/ConnectionInfo
+        OUString sConnectionResource;
+        Sequence< PropertyValue > aConnectionInfo;
+        if ( xPSI->hasPropertyByName( PROPERTY_CONNECTION_RESOURCE ) )
+            OSL_VERIFY( _rxDataSourceDescriptor->getPropertyValue( PROPERTY_CONNECTION_RESOURCE ) >>= sConnectionResource );
+        if ( xPSI->hasPropertyByName( PROPERTY_CONNECTION_INFO ) )
+            OSL_VERIFY( _rxDataSourceDescriptor->getPropertyValue( PROPERTY_CONNECTION_INFO ) >>= aConnectionInfo );
 
-    Reference< XDriverManager > xDriverManager;
-    try {
-        xDriverManager.set( ConnectionPool::create( m_xContext ), UNO_QUERY_THROW );
-    } catch( const Exception& ) {  }
-    if ( !xDriverManager.is() )
-        // no connection pool installed
-        xDriverManager.set( DriverManager::create( m_xContext ), UNO_QUERY_THROW );
+        Reference< XDriverManager > xDriverManager;
+        try {
+            xDriverManager.set( ConnectionPool::create( m_xContext ), UNO_QUERY_THROW );
+        } catch( const Exception& ) {  }
+        if ( !xDriverManager.is() )
+            // no connection pool installed
+            xDriverManager.set( DriverManager::create( m_xContext ), UNO_QUERY_THROW );
 
-    if ( aConnectionInfo.hasElements() )
-        xConnection.set( xDriverManager->getConnectionWithInfo( sConnectionResource, aConnectionInfo ), UNO_SET_THROW );
-    else
-        xConnection.set( xDriverManager->getConnection( sConnectionResource ), UNO_SET_THROW );
+        if ( aConnectionInfo.hasElements() )
+            xConnection.set( xDriverManager->getConnectionWithInfo( sConnectionResource, aConnectionInfo ), UNO_SET_THROW );
+        else
+            xConnection.set( xDriverManager->getConnection( sConnectionResource ), UNO_SET_THROW );
     }
     while ( false );
 

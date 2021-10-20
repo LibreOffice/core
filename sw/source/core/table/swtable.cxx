@@ -147,9 +147,9 @@ void InsTableBox( SwDoc& rDoc, SwTableNode* pTableNd,
             SwAttrSet aAttrSet( *pCNd->GetpSwAttrSet() );
             if(pCNd->GetSwAttrSet().HasItem(RES_PARATR_LIST_AUTOFMT))
             {
-            SwFormatAutoFormat format = aAttrSet.Get(RES_PARATR_LIST_AUTOFMT);
-            const std::shared_ptr<SfxItemSet>& handle = format.GetStyleHandle();
-            aAttrSet.Put(*handle);
+                SwFormatAutoFormat format = aAttrSet.Get(RES_PARATR_LIST_AUTOFMT);
+                const std::shared_ptr<SfxItemSet>& handle = format.GetStyleHandle();
+                aAttrSet.Put(*handle);
             }
             if( pBox->GetSaveNumFormatColor() )
             {

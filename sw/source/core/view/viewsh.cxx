@@ -537,9 +537,9 @@ bool SwViewShell::AddPaintRect( const SwRect & rRect )
     {
         if( rSh.Imp() )
         {
-        if ( rSh.IsPreview() && rSh.GetWin() )
-            ::RepaintPagePreview( &rSh, rRect );
-        else
+            if ( rSh.IsPreview() && rSh.GetWin() )
+                ::RepaintPagePreview( &rSh, rRect );
+            else
                 bRet |= rSh.Imp()->AddPaintRect( rRect );
         }
     }

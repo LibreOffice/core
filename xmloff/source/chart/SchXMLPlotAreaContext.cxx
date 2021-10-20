@@ -334,48 +334,48 @@ void SchXMLPlotAreaContext::startFastElement (sal_Int32 /*nElement*/,
     //remember default values for dataseries
     if(xProp.is())
     {
-    try
-    {
-        mrSeriesDefaultsAndStyles.maSymbolTypeDefault = xProp->getPropertyValue("SymbolType");
-        mrSeriesDefaultsAndStyles.maDataCaptionDefault = xProp->getPropertyValue("DataCaption");
-
-        mrSeriesDefaultsAndStyles.maMeanValueDefault = xProp->getPropertyValue("MeanValue");
-        mrSeriesDefaultsAndStyles.maRegressionCurvesDefault = xProp->getPropertyValue("RegressionCurves");
-
-        bool bStacked = false;
-        mrSeriesDefaultsAndStyles.maStackedDefault = xProp->getPropertyValue("Stacked");
-        mrSeriesDefaultsAndStyles.maStackedDefault >>= bStacked;
-        mrSeriesDefaultsAndStyles.maPercentDefault = xProp->getPropertyValue("Percent");
-        mrSeriesDefaultsAndStyles.maPercentDefault >>= mbPercentStacked;
-        mrSeriesDefaultsAndStyles.maStackedBarsConnectedDefault = xProp->getPropertyValue("StackedBarsConnected");
-
-        // deep
-        uno::Any aDeepProperty( xProp->getPropertyValue("Deep"));
-        // #124488# old versions store a 3d area and 3D line deep chart with Deep==false => workaround for this
-        if( ! (bStacked || mbPercentStacked ))
+        try
         {
-            if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan2_3( GetImport().GetModel() ) )
+            mrSeriesDefaultsAndStyles.maSymbolTypeDefault = xProp->getPropertyValue("SymbolType");
+            mrSeriesDefaultsAndStyles.maDataCaptionDefault = xProp->getPropertyValue("DataCaption");
+
+            mrSeriesDefaultsAndStyles.maMeanValueDefault = xProp->getPropertyValue("MeanValue");
+            mrSeriesDefaultsAndStyles.maRegressionCurvesDefault = xProp->getPropertyValue("RegressionCurves");
+
+            bool bStacked = false;
+            mrSeriesDefaultsAndStyles.maStackedDefault = xProp->getPropertyValue("Stacked");
+            mrSeriesDefaultsAndStyles.maStackedDefault >>= bStacked;
+            mrSeriesDefaultsAndStyles.maPercentDefault = xProp->getPropertyValue("Percent");
+            mrSeriesDefaultsAndStyles.maPercentDefault >>= mbPercentStacked;
+            mrSeriesDefaultsAndStyles.maStackedBarsConnectedDefault = xProp->getPropertyValue("StackedBarsConnected");
+
+            // deep
+            uno::Any aDeepProperty( xProp->getPropertyValue("Deep"));
+            // #124488# old versions store a 3d area and 3D line deep chart with Deep==false => workaround for this
+            if( ! (bStacked || mbPercentStacked ))
             {
-                bool bIs3d = false;
-                if( ( xProp->getPropertyValue("Dim3D") >>= bIs3d ) &&
-                    bIs3d )
+                if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan2_3( GetImport().GetModel() ) )
                 {
-                    if( maChartTypeServiceName == "com.sun.star.chart2.AreaChartType" || maChartTypeServiceName == "com.sun.star.chart2.LineChartType" )
+                    bool bIs3d = false;
+                    if( ( xProp->getPropertyValue("Dim3D") >>= bIs3d ) &&
+                        bIs3d )
                     {
-                        aDeepProperty <<= true;
+                        if( maChartTypeServiceName == "com.sun.star.chart2.AreaChartType" || maChartTypeServiceName == "com.sun.star.chart2.LineChartType" )
+                        {
+                            aDeepProperty <<= true;
+                        }
                     }
                 }
             }
-        }
-        mrSeriesDefaultsAndStyles.maDeepDefault = aDeepProperty;
+            mrSeriesDefaultsAndStyles.maDeepDefault = aDeepProperty;
 
-        xProp->getPropertyValue("NumberOfLines") >>= mnNumOfLinesProp;
-        xProp->getPropertyValue("Volume") >>= mbStockHasVolume;
-    }
-    catch( const uno::Exception & )
-    {
-        TOOLS_INFO_EXCEPTION("xmloff.chart", "PlotAreaContext:EndElement(): Exception caught");
-    }
+            xProp->getPropertyValue("NumberOfLines") >>= mnNumOfLinesProp;
+            xProp->getPropertyValue("Volume") >>= mbStockHasVolume;
+        }
+        catch( const uno::Exception & )
+        {
+            TOOLS_INFO_EXCEPTION("xmloff.chart", "PlotAreaContext:EndElement(): Exception caught");
+        }
     } // if
 
     bool bCreateInternalDataProvider = false;

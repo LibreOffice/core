@@ -1841,9 +1841,10 @@ bool TransferableDataHelper::GetINetBookmark( SotClipboardFormatId nFormat, INet
 
 bool TransferableDataHelper::GetINetBookmark( const css::datatransfer::DataFlavor& rFlavor, INetBookmark& rBmk ) const
 {
+    if( !HasFormat( rFlavor ))
+        return false;
+
     bool bRet = false;
-    if( HasFormat( rFlavor ))
-    {
     const SotClipboardFormatId nFormat = SotExchange::GetFormat( rFlavor );
     switch( nFormat )
     {
@@ -1968,7 +1969,6 @@ bool TransferableDataHelper::GetINetBookmark( const css::datatransfer::DataFlavo
         break;
 #endif
         default: break;
-    }
     }
     return bRet;
 }

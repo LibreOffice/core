@@ -212,9 +212,9 @@ double BesselI( double x, sal_Int32 n )
                                =  -------- TERM(n,k-1)
                                    k(n+k)
             */
-        fTerm = fTerm * fXHalf / static_cast<double>(nK) * fXHalf / static_cast<double>(nK+n);
-        fResult += fTerm;
-        nK++;
+            fTerm = fTerm * fXHalf / static_cast<double>(nK) * fXHalf / static_cast<double>(nK+n);
+            fResult += fTerm;
+            nK++;
         }
         while( (fabs( fTerm ) > fabs(fResult) * fEpsilon) && (nK < nMaxIteration) );
 

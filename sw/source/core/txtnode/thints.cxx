@@ -420,9 +420,9 @@ SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )
             {
                 if (!bNewSelfNestable && (nNewWhich == nOtherWhich))
                 {
-                // ruby and hyperlink: if there is nesting, _overwrite_
-                OverwrittenExisting.push_back(
-                    static_txtattr_cast<SwTextAttrNesting*>(pOther));
+                    // ruby and hyperlink: if there is nesting, _overwrite_
+                    OverwrittenExisting.push_back(
+                        static_txtattr_cast<SwTextAttrNesting*>(pOther));
                 }
                 else if ((nNewStart == nOtherStart) && pOther->HasDummyChar())
                 {
