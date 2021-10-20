@@ -2318,6 +2318,7 @@ void SwTableBoxFormat::BoxAttributeChanged(SwTableBox& rBox, const SwTableBoxNum
         // format contents with the new value assigned and write to paragraph
         const Color* pCol = nullptr;
         OUString sNewText;
+        bool bChangeFormat = true;
         if(DBL_MAX == fVal)
         {
             sNewText = SwViewShell::GetShellRes()->aCalc_Error;
@@ -2340,6 +2341,13 @@ void SwTableBoxFormat::BoxAttributeChanged(SwTableBox& rBox, const SwTableBoxNum
                 // don't do this (yet?).
                 pNumFormatr->GetOutputString(aOrigText, nNewFormat, sNewText, &pCol);
 #else
+                if (bChgText && pNumFormatr->IsTextFormat(nOldFormat)
+                    && !pNumFormatr->IsUserDefined(nNewFormat))
+                {
+                    // remove the newly assign numbering format as well, so the text value is used.
+                    rBox.GetFrameFormat()->ResetFormatAttr(RES_BOXATR_FORMAT);
+                    bChangeFormat = false;
+                }
                 sNewText = aOrigText;
 #endif
             }
@@ -2349,7 +2357,8 @@ void SwTableBoxFormat::BoxAttributeChanged(SwTableBox& rBox, const SwTableBoxNum
         }
 
         // across all boxes
-        ChgTextToNum(rBox, sNewText, pCol, GetDoc()->IsInsTableAlignNum());
+        if (bChangeFormat)
+            ChgTextToNum(rBox, sNewText, pCol, GetDoc()->IsInsTableAlignNum());
 
     }
     else if(bNewIsTextFormat && nOldFormat != nNewFormat)
