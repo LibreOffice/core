@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9687bb69_1f1cc70f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-20T18:00:24Z",
+      "side": 1,
+      "message": "Jenkins verified - just updated a very poorly worded commit message.\n\nI\u0027m interested in knowing what is wrong with this patch.",
+      "revId": "845d3edb49b668683c27ea43dc5c566c1f4847a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
