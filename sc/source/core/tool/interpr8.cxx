@@ -1538,14 +1538,13 @@ void ScInterpreter::ScTextJoin_MS()
             if ( nGlobalError != FormulaError::NONE )
                 break;
             ScRefCellValue aCell( mrDoc, aAdr );
-            if ( !aCell.isEmpty() )
+            if (aCell.hasEmptyValue())
+                aDelimiters.emplace_back("");
+            else
             {
-                if ( !aCell.hasEmptyValue() )
-                {
-                    svl::SharedString aSS;
-                    GetCellString( aSS, aCell);
-                    aDelimiters.push_back( aSS.getString());
-                }
+                svl::SharedString aSS;
+                GetCellString( aSS, aCell);
+                aDelimiters.push_back( aSS.getString());
             }
         }
         break;
@@ -1579,17 +1578,14 @@ void ScInterpreter::ScTextJoin_MS()
                     aAdr.SetRow( nRow );
                     aAdr.SetCol( nCol );
                     ScRefCellValue aCell( mrDoc, aAdr );
-                    if ( !aCell.isEmpty() )
-                    {
-                        if ( !aCell.hasEmptyValue() )
-                        {
-                            svl::SharedString aSS;
-                            GetCellString( aSS, aCell);
-                            aDelimiters.push_back( aSS.getString());
-                        }
-                    }
+                    if (aCell.hasEmptyValue())
+                        aDelimiters.emplace_back("");
                     else
-                        aDelimiters.emplace_back("" );
+                    {
+                        svl::SharedString aSS;
+                        GetCellString( aSS, aCell);
+                        aDelimiters.push_back( aSS.getString());
+                    }
                 }
             }
         }
@@ -1611,18 +1607,17 @@ void ScInterpreter::ScTextJoin_MS()
                     {
                         for (SCSIZE j = 0; j < nC; ++j)
                         {
-                            if ( !pMat->IsEmpty( j, k ) )
-                            {
-                                if ( pMat->IsStringOrEmpty( j, k ) )
-                                    aDelimiters.push_back( pMat->GetString( j, k ).getString() );
-                                else
-                                {
-                                    if ( pMat->IsValue( j, k ) )
-                                        aDelimiters.push_back( pMat->GetString( *pFormatter, j, k ).getString() );
-                                }
-                            }
+                            if (pMat->IsEmpty( j, k ))
+                                aDelimiters.emplace_back("");
+                            else if (pMat->IsStringOrEmpty( j, k ))
+                                aDelimiters.push_back( pMat->GetString( j, k ).getString() );
+                            else if (pMat->IsValue( j, k ))
+                                aDelimiters.push_back( pMat->GetString( *pFormatter, j, k ).getString() );
                             else
-                                aDelimiters.emplace_back("" );
+                            {
+                                assert(!"should this really happen?");
+                                aDelimiters.emplace_back("");
+                            }
                         }
                     }
                 }
@@ -1682,17 +1677,12 @@ void ScInterpreter::ScTextJoin_MS()
                     break;
                 ScRefCellValue aCell( mrDoc, aAdr );
                 OUString aStr;
-                if ( !aCell.isEmpty() )
+                if (!aCell.hasEmptyValue())
                 {
-                    if ( !aCell.hasEmptyValue() )
-                    {
-                        svl::SharedString aSS;
-                        GetCellString( aSS, aCell);
-                        aStr = aSS.getString();
-                    }
+                    svl::SharedString aSS;
+                    GetCellString( aSS, aCell);
+                    aStr = aSS.getString();
                 }
-                else
-                    aStr.clear();
                 if ( !aStr.isEmpty() || !bSkipEmpty )
                 {
                     if ( !bFirst )
@@ -1788,18 +1778,17 @@ void ScInterpreter::ScTextJoin_MS()
                         {
                             for (SCSIZE j = 0; j < nC; ++j)
                             {
-                                if ( !pMat->IsEmpty( j, k ) )
-                                {
-                                    if ( pMat->IsStringOrEmpty( j, k ) )
-                                        aStr = pMat->GetString( j, k ).getString();
-                                    else
-                                    {
-                                        if ( pMat->IsValue( j, k ) )
-                                            aStr = pMat->GetString( *pFormatter, j, k ).getString();
-                                    }
-                                }
-                                else
+                                if (pMat->IsEmpty( j, k ) )
                                     aStr.clear();
+                                else if (pMat->IsStringOrEmpty( j, k ))
+                                    aStr = pMat->GetString( j, k ).getString();
+                                else if (pMat->IsValue( j, k ))
+                                    aStr = pMat->GetString( *pFormatter, j, k ).getString();
+                                else
+                                {
+                                    assert(!"should this really happen?");
+                                    aStr.clear();
+                                }
                                 if ( !aStr.isEmpty() || !bSkipEmpty )
                                 {
                                     if ( !bFirst )
