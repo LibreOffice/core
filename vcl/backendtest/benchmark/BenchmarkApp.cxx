@@ -71,7 +71,7 @@ namespace
 class BenchMarkWindow : public WorkWindow
 {
 private:
-    static constexpr unsigned char gnNumberOfTests = 9;
+    static constexpr unsigned char gnNumberOfTests = 12;
     unsigned char mnTest;
     ScopedVclPtr<VirtualDevice> mpVDev;
 
@@ -131,11 +131,10 @@ public:
                                                     int nHeight)
     {
         tools::Rectangle aRectangle;
-        size_t index = 0;
 
         std::vector<tools::Rectangle> aRegions = setupRegions(1, 1, nWidth, nHeight);
 
-        aRectangle = aRegions[index++];
+        aRectangle = aRegions[0];
         Benchmark aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupMultiplePolygonsWithPolyPolygon();
         drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
@@ -145,10 +144,9 @@ public:
     static void drawWavelines(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
     {
         tools::Rectangle aRectangle;
-        size_t index = 0;
 
         std::vector<tools::Rectangle> aRegions = setupRegions(1, 1, nWidth, nHeight);
-        aRectangle = aRegions[index++];
+        aRectangle = aRegions[0];
         Benchmark aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupWavelines();
         drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
@@ -158,10 +156,9 @@ public:
     static void drawGrid(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
     {
         tools::Rectangle aRectangle;
-        size_t index = 0;
 
         std::vector<tools::Rectangle> aRegions = setupRegions(1, 1, nWidth, nHeight);
-        aRectangle = aRegions[index++];
+        aRectangle = aRegions[0];
         Benchmark aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupGrid();
         drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
@@ -171,10 +168,9 @@ public:
     static void drawGridWithDottedLines(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
     {
         tools::Rectangle aRectangle;
-        size_t index = 0;
 
         std::vector<tools::Rectangle> aRegions = setupRegions(1, 1, nWidth, nHeight);
-        aRectangle = aRegions[index++];
+        aRectangle = aRegions[0];
         Benchmark aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupGridWithDottedLine();
         drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
@@ -183,10 +179,9 @@ public:
     static void drawBitmap(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
     {
         tools::Rectangle aRectangle;
-        size_t index = 0;
 
         std::vector<tools::Rectangle> aRegions = setupRegions(1, 1, nWidth, nHeight);
-        aRectangle = aRegions[index++];
+        aRectangle = aRegions[0];
         Benchmark aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupBitmap();
         drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
@@ -196,10 +191,9 @@ public:
     static void drawBitmapWithAlpha(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
     {
         tools::Rectangle aRectangle;
-        size_t index = 0;
 
         std::vector<tools::Rectangle> aRegions = setupRegions(1, 1, nWidth, nHeight);
-        aRectangle = aRegions[index++];
+        aRectangle = aRegions[0];
         Benchmark aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupBitmapWithAlpha();
         drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
@@ -209,10 +203,9 @@ public:
     static void drawScaledBitmap(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
     {
         tools::Rectangle aRectangle;
-        size_t index = 0;
 
         std::vector<tools::Rectangle> aRegions = setupRegions(1, 1, nWidth, nHeight);
-        aRectangle = aRegions[index++];
+        aRectangle = aRegions[0];
         Benchmark aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupScaledBitmap();
         drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
@@ -222,10 +215,9 @@ public:
     static void drawReducedBitmap(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
     {
         tools::Rectangle aRectangle;
-        size_t index = 0;
 
         std::vector<tools::Rectangle> aRegions = setupRegions(1, 1, nWidth, nHeight);
-        aRectangle = aRegions[index++];
+        aRectangle = aRegions[0];
         Benchmark aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupReducedBitmap();
         drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
@@ -235,12 +227,47 @@ public:
     static void drawRotatedBitmap(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
     {
         tools::Rectangle aRectangle;
-        size_t index = 0;
 
         std::vector<tools::Rectangle> aRegions = setupRegions(1, 1, nWidth, nHeight);
-        aRectangle = aRegions[index++];
+        aRectangle = aRegions[0];
         Benchmark aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRotatedBitmap();
+        drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        updateResults(rRenderContext, aOutDevTest.getElapsedTime());
+    }
+
+    static void drawLinearGradient(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
+    {
+        tools::Rectangle aRectangle;
+
+        std::vector<tools::Rectangle> aRegions = setupRegions(1, 1, nWidth, nHeight);
+        aRectangle = aRegions[0];
+        Benchmark aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupLinearGradient();
+        drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        updateResults(rRenderContext, aOutDevTest.getElapsedTime());
+    }
+
+    static void drawAxialGradient(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
+    {
+        tools::Rectangle aRectangle;
+
+        std::vector<tools::Rectangle> aRegions = setupRegions(1, 1, nWidth, nHeight);
+        aRectangle = aRegions[0];
+        Benchmark aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupAxialGradient();
+        drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        updateResults(rRenderContext, aOutDevTest.getElapsedTime());
+    }
+
+    static void drawRadialGradient(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
+    {
+        tools::Rectangle aRectangle;
+
+        std::vector<tools::Rectangle> aRegions = setupRegions(1, 1, nWidth, nHeight);
+        aRectangle = aRegions[0];
+        Benchmark aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupRadialGradient();
         drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
         updateResults(rRenderContext, aOutDevTest.getElapsedTime());
     }
@@ -269,27 +296,39 @@ public:
         }
         else if (mnTest % gnNumberOfTests == 3)
         {
-            drawBitmap(rRenderContext, nWidth, nHeight);
+            drawGridWithDottedLines(rRenderContext, nWidth, nHeight);
         }
         else if (mnTest % gnNumberOfTests == 4)
         {
-            drawBitmapWithAlpha(rRenderContext, nWidth, nHeight);
+            drawBitmap(rRenderContext, nWidth, nHeight);
         }
         else if (mnTest % gnNumberOfTests == 5)
         {
-            drawScaledBitmap(rRenderContext, nWidth, nHeight);
+            drawBitmapWithAlpha(rRenderContext, nWidth, nHeight);
         }
         else if (mnTest % gnNumberOfTests == 6)
         {
-            drawReducedBitmap(rRenderContext, nWidth, nHeight);
+            drawScaledBitmap(rRenderContext, nWidth, nHeight);
         }
         else if (mnTest % gnNumberOfTests == 7)
         {
-            drawRotatedBitmap(rRenderContext, nWidth, nHeight);
+            drawReducedBitmap(rRenderContext, nWidth, nHeight);
         }
         else if (mnTest % gnNumberOfTests == 8)
         {
-            drawGridWithDottedLines(rRenderContext, nWidth, nHeight);
+            drawRotatedBitmap(rRenderContext, nWidth, nHeight);
+        }
+        else if (mnTest % gnNumberOfTests == 9)
+        {
+            drawLinearGradient(rRenderContext, nWidth, nHeight);
+        }
+        else if (mnTest % gnNumberOfTests == 10)
+        {
+            drawAxialGradient(rRenderContext, nWidth, nHeight);
+        }
+        else if (mnTest % gnNumberOfTests == 11)
+        {
+            drawRadialGradient(rRenderContext, nWidth, nHeight);
         }
     }
 };
