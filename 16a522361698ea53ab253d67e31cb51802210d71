@@ -16,6 +16,24 @@
       "message": "This may overwrite the data set above for pRepairItem (lines 1343-1365); it this expected?",
       "revId": "16a522361698ea53ab253d67e31cb51802210d71",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c725056e_5b2327e6",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1379,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-20T06:15:07Z",
+      "side": 1,
+      "message": "Probably not, would be better to switch to an std::vector instead of sequence and just use push_back() and only convert to sequence when it\u0027s needed.\n\nAlthough in practice the \"repair\" and the \"no sync\" scenarios are probably independent: repair is only interesting during open and no sync is only interesting during save.",
+      "parentUuid": "029424d2_9fefce16",
+      "revId": "16a522361698ea53ab253d67e31cb51802210d71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
