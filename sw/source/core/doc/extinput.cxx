@@ -148,12 +148,8 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
     if( !pTNd )
         return;
 
-    sal_Int32 nSttCnt = GetPoint()->nContent.GetIndex();
-    sal_Int32 nEndCnt = GetMark()->nContent.GetIndex();
-    if( nEndCnt < nSttCnt )
-    {
-        std::swap(nSttCnt, nEndCnt);
-    }
+    sal_Int32 nSttCnt = Start()->nContent.GetIndex();
+    sal_Int32 nEndCnt = End()->nContent.GetIndex();
 
     SwIndex aIdx( pTNd, nSttCnt );
     const OUString& rNewStr = rData.GetText();
@@ -279,20 +275,14 @@ SwExtTextInput* SwDoc::GetExtTextInput( const SwNode& rNd,
         sal_uLong nNdIdx = rNd.GetIndex();
         SwExtTextInput* pTmp = mpExtInputRing;
         do {
-            sal_uLong nPt = pTmp->GetPoint()->nNode.GetIndex(),
-                  nMk = pTmp->GetMark()->nNode.GetIndex();
-            sal_Int32 nPtCnt = pTmp->GetPoint()->nContent.GetIndex();
-            sal_Int32 nMkCnt = pTmp->GetMark()->nContent.GetIndex();
+            sal_uLong nStartNode = pTmp->Start()->nNode.GetIndex(),
+                  nEndNode = pTmp->End()->nNode.GetIndex();
+            sal_Int32 nStartCnt = pTmp->Start()->nContent.GetIndex();
+            sal_Int32 nEndCnt = pTmp->End()->nContent.GetIndex();
 
-            if( nPt < nMk || ( nPt == nMk && nPtCnt < nMkCnt ))
-            {
-                sal_uLong nTmp = nMk; nMk = nPt; nPt = nTmp;
-                sal_Int32 nTmp2 = nMkCnt; nMkCnt = nPtCnt; nPtCnt = nTmp2;
-            }
-
-            if( nMk <= nNdIdx && nNdIdx <= nPt &&
+            if( nStartNode <= nNdIdx && nNdIdx <= nEndNode &&
                 ( nContentPos<0 ||
-                    ( nMkCnt <= nContentPos && nContentPos <= nPtCnt )))
+                    ( nStartCnt <= nContentPos && nContentPos <= nEndCnt )))
             {
                 pRet = pTmp;
                 break;

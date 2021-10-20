@@ -752,12 +752,8 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
             if (&rPam.GetNode() == &rPam.GetNode(false)
                 && pTextNode && pTextNode->GetpSwpHints())
             {
-                sal_Int32 nPaMStart = rPam.GetPoint()->nContent.GetIndex();
-                sal_Int32 nPaMEnd = rPam.GetMark() ? rPam.GetMark()->nContent.GetIndex() : nPaMStart;
-                if(nPaMStart > nPaMEnd)
-                {
-                    std::swap(nPaMStart, nPaMEnd);
-                }
+                sal_Int32 nPaMStart = rPam.Start()->nContent.GetIndex();
+                sal_Int32 nPaMEnd = rPam.End()->nContent.GetIndex();
                 Sequence< OUString> aCharStyles;
                 SwpHints* pHints = pTextNode->GetpSwpHints();
                 for( size_t nAttr = 0; nAttr < pHints->Count(); ++nAttr )

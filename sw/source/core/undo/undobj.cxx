@@ -62,9 +62,7 @@ void SwUndRng::SetValues( const SwPaM& rPam )
     const SwPosition *pStt = rPam.Start();
     if( rPam.HasMark() )
     {
-        const SwPosition *pEnd = rPam.GetPoint() == pStt
-                        ? rPam.GetMark()
-                        : rPam.GetPoint();
+        const SwPosition *pEnd = rPam.End();
         m_nEndNode = pEnd->nNode.GetIndex();
         m_nEndContent = pEnd->nContent.GetIndex();
     }
