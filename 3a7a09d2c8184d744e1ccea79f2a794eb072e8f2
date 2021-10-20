@@ -16,6 +16,23 @@
       "message": "I suppose solenv/flatpak-manifest.in should be updated?",
       "revId": "3a7a09d2c8184d744e1ccea79f2a794eb072e8f2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "143c9c0b_d0b81470",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-10-20T12:11:15Z",
+      "side": 1,
+      "message": "yeah, that\u0027s probably true",
+      "revId": "3a7a09d2c8184d744e1ccea79f2a794eb072e8f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
