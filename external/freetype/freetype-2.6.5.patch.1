@@ -1,7 +1,7 @@
 diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
 --- freetype/builds/unix/configure.dt	2017-02-01 22:14:45.206257952 +0100
 +++ freetype/builds/unix/configure	2017-02-01 22:16:31.076183707 +0100
-@@ -8858,7 +8858,7 @@
+@@ -8887,7 +8887,7 @@
        case $host_cpu in
        powerpc)
              # see comment about AmigaOS4 .so support
@@ -10,7 +10,7 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
              archive_expsym_cmds=''
          ;;
        m68k)
-@@ -8874,7 +8874,7 @@
+@@ -8903,7 +8903,7 @@
  	allow_undefined_flag=unsupported
  	# Joseph Beckenbach <jrb3@best.com> says some releases of gcc
  	# support --undefined.  This deserves some investigation.  FIXME
@@ -19,7 +19,7 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
        else
  	ld_shlibs=no
        fi
-@@ -8908,7 +8908,7 @@
+@@ -8937,7 +8937,7 @@
        ;;
  
      haiku*)
@@ -28,7 +28,7 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
        link_all_deplibs=yes
        ;;
  
-@@ -9003,13 +9003,13 @@
+@@ -9032,13 +9032,13 @@
  	*Sun\ F*)			# Sun Fortran 8.3
  	  tmp_sharedflag='-G' ;;
  	esac
@@ -44,7 +44,7 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
          fi
  
  	case $cc_basename in
-@@ -9039,8 +9039,8 @@
+@@ -9068,8 +9068,8 @@
  	archive_cmds='$LD -Bshareable $libobjs $deplibs $linker_flags -o $lib'
  	wlarc=
        else
@@ -55,7 +55,7 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
        fi
        ;;
  
-@@ -9058,8 +9058,8 @@
+@@ -9087,8 +9087,8 @@
  
  _LT_EOF
        elif $LD --help 2>&1 | $GREP ': supported targets:.* elf' > /dev/null; then
@@ -66,7 +66,7 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
        else
  	ld_shlibs=no
        fi
-@@ -9087,8 +9087,8 @@
+@@ -9116,8 +9116,8 @@
  	  # requires that you compile everything twice, which is a pain.
  	  if $LD --help 2>&1 | $GREP ': supported targets:.* elf' > /dev/null; then
  	    hardcode_libdir_flag_spec='$wl-rpath $wl$libdir'
@@ -77,7 +77,7 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
  	  else
  	    ld_shlibs=no
  	  fi
-@@ -9105,8 +9105,8 @@
+@@ -9134,8 +9134,8 @@
  
      *)
        if $LD --help 2>&1 | $GREP ': supported targets:.* elf' > /dev/null; then
@@ -88,7 +88,7 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
        else
  	ld_shlibs=no
        fi
-@@ -9405,7 +9405,7 @@
+@@ -9434,7 +9434,7 @@
        case $host_cpu in
        powerpc)
              # see comment about AmigaOS4 .so support
@@ -97,7 +97,7 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
              archive_expsym_cmds=''
          ;;
        m68k)
-@@ -9674,7 +9674,7 @@
+@@ -9703,7 +9703,7 @@
  
      irix5* | irix6* | nonstopux*)
        if test yes = "$GCC"; then
@@ -106,7 +106,7 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
  	# Try to use the -exported_symbol ld option, if it does not
  	# work, assume that -exports_file does not work either and
  	# implicitly export all symbols.
-@@ -9702,7 +9702,7 @@
+@@ -9731,7 +9731,7 @@
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $lt_cv_irix_exported_symbol" >&5
  $as_echo "$lt_cv_irix_exported_symbol" >&6; }
  	if test yes = "$lt_cv_irix_exported_symbol"; then
@@ -115,7 +115,7 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
  	fi
        else
  	archive_cmds='$CC -shared $libobjs $deplibs $compiler_flags -soname $soname `test -n "$verstring" && func_echo_all "-set_version $verstring"` -update_registry $output_objdir/so_locations -o $lib'
-@@ -9797,7 +9797,7 @@
+@@ -9826,7 +9826,7 @@
      osf3*)
        if test yes = "$GCC"; then
  	allow_undefined_flag=' $wl-expect_unresolved $wl\*'
@@ -124,7 +124,7 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
        else
  	allow_undefined_flag=' -expect_unresolved \*'
  	archive_cmds='$CC -shared$allow_undefined_flag $libobjs $deplibs $compiler_flags -soname $soname `test -n "$verstring" && func_echo_all "-set_version $verstring"` -update_registry $output_objdir/so_locations -o $lib'
-@@ -9810,7 +9810,7 @@
+@@ -9839,7 +9839,7 @@
      osf4* | osf5*)	# as osf3* with the addition of -msym flag
        if test yes = "$GCC"; then
  	allow_undefined_flag=' $wl-expect_unresolved $wl\*'
@@ -133,7 +133,7 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
  	hardcode_libdir_flag_spec='$wl-rpath $wl$libdir'
        else
  	allow_undefined_flag=' -expect_unresolved \*'
-@@ -13143,10 +13143,10 @@
+@@ -13254,10 +13254,10 @@
    XX_CFLAGS="-Wall"
    case "$host" in
    *-*-mingw*)
@@ -145,8 +145,8 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
 +    XX_ANSIFLAGS=""
      ;;
    *)
-     GCC_VERSION=`$CC -dumpversion`
-@@ -13195,7 +13195,7 @@
+     XX_ANSIFLAGS=""
+@@ -13294,7 +13294,7 @@
  if ac_fn_c_try_compile "$LINENO"; then :
    { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok, adding to XX_ANSIFLAGS" >&5
  $as_echo "ok, adding to XX_ANSIFLAGS" >&6; }
