@@ -22,7 +22,7 @@ curl --no-progress-meter -S \
     -C - -O https://dev-www.libreoffice.org/src/expat-2.4.1.tar.bz2 \
     -C - -O https://dev-www.libreoffice.org/src/libcuckoo-93217f8d391718380c508a722ab9acd5e9081233.tar.gz \
     -C - -O https://dev-www.libreoffice.org/src/libjpeg-turbo-1.5.3.tar.gz \
-    -C - -O https://dev-www.libreoffice.org/src/lcms2-2.11.tar.gz \
+    -C - -O https://dev-www.libreoffice.org/src/lcms2-2.12.tar.gz \
     -C - -O https://dev-www.libreoffice.org/src/libexttextcat-3.4.5.tar.xz \
     -C - -O https://dev-www.libreoffice.org/src/cppunit-1.15.1.tar.gz \
     -C - -O https://dev-www.libreoffice.org/src/cairo-1.17.4.tar.xz \
