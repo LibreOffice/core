@@ -256,6 +256,8 @@ public:
     /// Get return string for Calc CELL() function, "G", "D1", ...
     OUString GetCalcCellReturn(sal_uInt32 nFormat) const;
 
+    bool IsUserDefined(sal_uInt32 F_Index) const;
+
     /// Check if format code string may be deleted by user
     bool IsUserDefined(std::u16string_view sStr, LanguageType eLnge = LANGUAGE_DONTKNOW);
 
