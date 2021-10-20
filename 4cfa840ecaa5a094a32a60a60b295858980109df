@@ -34,6 +34,23 @@
       "parentUuid": "52d01dd3_2e604e0a",
       "revId": "4cfa840ecaa5a094a32a60a60b295858980109df",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fdd62bc_7f2d6756",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2021-10-20T15:19:41Z",
+      "side": 1,
+      "message": "The alt-down popup is launched from ScGridWindow::LaunchDataSelectMenu(). It seems to me that we need new custom methods for this case in ScGridWindow to reuse the underlying widget in mpFilterBox (ScFilterListBox) and possibly some existing code and make them accessible from ScInputHandler to show/hide when necessary. So I\u0027m not sure if this would qualify as an easy-hack 😊\n",
+      "revId": "4cfa840ecaa5a094a32a60a60b295858980109df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
