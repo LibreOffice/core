@@ -29,6 +29,7 @@ class VCL_DLLPUBLIC Benchmark
 
 public:
     sal_Int64 getElapsedTime();
+    Bitmap setupMultiplePolygonsWithPolyPolygon();
     Bitmap setupWavelines();
     Bitmap setupGrid();
     Bitmap setupGridWithDottedLine();
@@ -37,5 +38,7 @@ public:
     Bitmap setupScaledBitmap();
     Bitmap setupReducedBitmap();
     Bitmap setupRotatedBitmap();
-    Bitmap setupMultiplePolygonsWithPolyPolygon();
+    Bitmap setupLinearGradient();
+    Bitmap setupAxialGradient();
+    Bitmap setupRadialGradient();
 };
