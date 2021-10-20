@@ -16,6 +16,23 @@
       "message": "Jenkins verified - just updated a very poorly worded commit message.\n\nI\u0027m interested in knowing what is wrong with this patch.",
       "revId": "845d3edb49b668683c27ea43dc5c566c1f4847a5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b620cc68_853cbe75",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-20T18:04:44Z",
+      "side": 1,
+      "message": "The numbering format comes from ndtbl.cxx\u0027s lcl_SetAFormatBox\n    pSetPara-\u003erTableFormat.UpdateToSet(nPos, bSingleRowTable, bSingleColTable, aBoxSet, SwTableAutoFormatUpdateFlags::Box, pDoc-\u003eGetNumberFormatter());\n\nand then applied with\n    pSetBox-\u003eClaimFrameFormat()-\u003eSetFormatAttr(aBoxSet);\n",
+      "revId": "845d3edb49b668683c27ea43dc5c566c1f4847a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
