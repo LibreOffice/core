@@ -1890,4 +1890,19 @@ public:
     virtual void sort_native_button_order() override;
 };
 
+class SalInstanceImage : public SalInstanceWidget, public virtual weld::Image
+{
+private:
+    VclPtr<FixedImage> m_xImage;
+
+public:
+    SalInstanceImage(FixedImage* pImage, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+
+    virtual void set_from_icon_name(const OUString& rIconName) override;
+
+    virtual void set_image(VirtualDevice* pDevice) override;
+
+    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -3034,37 +3034,6 @@ public:
     virtual void set_text(const OUString& rText) override { m_xProgressBar->SetText(rText); }
 };
 
-class SalInstanceImage : public SalInstanceWidget, public virtual weld::Image
-{
-private:
-    VclPtr<FixedImage> m_xImage;
-
-public:
-    SalInstanceImage(FixedImage* pImage, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : SalInstanceWidget(pImage, pBuilder, bTakeOwnership)
-        , m_xImage(pImage)
-    {
-    }
-
-    virtual void set_from_icon_name(const OUString& rIconName) override
-    {
-        m_xImage->SetImage(::Image(StockImage::Yes, rIconName));
-    }
-
-    virtual void set_image(VirtualDevice* pDevice) override
-    {
-        if (pDevice)
-            m_xImage->SetImage(createImage(*pDevice));
-        else
-            m_xImage->SetImage(::Image());
-    }
-
-    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
-    {
-        m_xImage->SetImage(::Image(rImage));
-    }
-};
-
 class SalInstanceCalendar : public SalInstanceWidget, public virtual weld::Calendar
 {
 private:
@@ -3106,6 +3075,31 @@ IMPL_LINK_NOARG(SalInstanceCalendar, ActivateHdl, ::Calendar*, void)
     if (notify_events_disabled())
         return;
     signal_activated();
+}
+
+SalInstanceImage::SalInstanceImage(FixedImage* pImage, SalInstanceBuilder* pBuilder,
+                                   bool bTakeOwnership)
+    : SalInstanceWidget(pImage, pBuilder, bTakeOwnership)
+    , m_xImage(pImage)
+{
+}
+
+void SalInstanceImage::set_from_icon_name(const OUString& rIconName)
+{
+    m_xImage->SetImage(::Image(StockImage::Yes, rIconName));
+}
+
+void SalInstanceImage::set_image(VirtualDevice* pDevice)
+{
+    if (pDevice)
+        m_xImage->SetImage(createImage(*pDevice));
+    else
+        m_xImage->SetImage(::Image());
+}
+
+void SalInstanceImage::set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage)
+{
+    m_xImage->SetImage(::Image(rImage));
 }
 
 WeldTextFilter::WeldTextFilter(Link<OUString&, bool>& rInsertTextHdl)
