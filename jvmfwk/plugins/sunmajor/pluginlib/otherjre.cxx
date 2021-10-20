@@ -52,12 +52,10 @@ char const* const* OtherInfo::getRuntimePaths(int * size)
         "/bin/client/jvm.dll",
         "/bin/hotspot/jvm.dll",
         "/bin/classic/jvm.dll",
-        "/bin/jrockit/jvm.dll",
-        "/bin/server/jvm.dll" // needed by Azul
+        "/bin/jrockit/jvm.dll"
 #elif defined UNX
 #ifdef MACOSX
-        "/../../../../../Frameworks/JavaVM.framework/JavaVM", //as of  1.6.0_22
-        "/lib/server/libjvm.dylib" // needed by Azul
+        "/../../../../../Frameworks/JavaVM.framework/JavaVM" //as of  1.6.0_22
 #else
         "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so", // for Blackdown PPC
         "/lib/" JFW_PLUGIN_ARCH "/server/libjvm.so", // for Blackdown AMD64
