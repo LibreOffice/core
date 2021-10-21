@@ -33,6 +33,24 @@
       "message": "Is this comment misplaced? This is definitely not a deleted ctor.",
       "revId": "c6563b3bd45bc37cc5f3cad466ecf0578291ce61",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65810ff5_be5827fc",
+        "filename": "sw/inc/ndindex.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-10-21T07:11:48Z",
+      "side": 1,
+      "message": "ha, yes, thanks, that is a leftover",
+      "parentUuid": "aa0adc37_ef935b81",
+      "revId": "c6563b3bd45bc37cc5f3cad466ecf0578291ce61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
