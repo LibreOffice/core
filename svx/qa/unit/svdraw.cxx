@@ -323,6 +323,34 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObject)
     SdrObject* pObject(pRectangle);
     SdrObject::Free(pObject);
 }
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testAutoHeightMultiColShape)
+{
+    // Given a document containing a shape that has:
+    // 1) automatic height (resize shape to fix text)
+    // 2) multiple columns (2)
+    OUString aURL
+        = m_directories.getURLFromSrc(u"svx/qa/unit/data/auto-height-multi-col-shape.pptx");
+
+    // When loading that document:
+    getComponent().set(loadFromDesktop(aURL, "com.sun.star.presentation.PresentationDocument"));
+
+    // Make sure the in-file shape height is kept, even if nominally the the shape height is
+    // automatic:
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 6882
+    // - Actual  : 3452
+    // i.e. the shape height was smaller than expected, leading to a 2 columns layout instead of
+    // laying out all the text in the first column.
+    // 2477601 is from slide1.xml, <a:ext cx="4229467" cy="2477601"/>.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        static_cast<sal_Int32>(o3tl::convert(2477601, o3tl::Length::emu, o3tl::Length::mm100)),
+        xShape->getSize().Height, 1);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

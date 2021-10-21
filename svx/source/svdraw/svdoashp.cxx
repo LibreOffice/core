@@ -2329,7 +2329,18 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool
                             nHgt=aSiz2.Height()+1; // a little more tolerance
                     }
                     else
+                    {
                         nHgt = rOutliner.GetTextHeight()+1; // a little more tolerance
+
+                        sal_Int16 nColumns = GetMergedItem(SDRATTR_TEXTCOLUMNS_NUMBER).GetValue();
+                        if (bHgtGrow && nColumns > 1)
+                        {
+                            // Both 'resize shape to fix text' and multiple columns are enabled. The
+                            // first means a dynamic height, the second expects a fixed height.
+                            // Resolve this conflict by going with the original height.
+                            nHgt = rR.getHeight();
+                        }
+                    }
                     rOutliner.Clear();
                 }
             }
