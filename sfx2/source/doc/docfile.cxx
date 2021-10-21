@@ -4734,10 +4734,11 @@ void CheckReadOnlyTask::doWork()
         // must have timed-out
         termLock.unlock();
         std::unique_lock<std::mutex> globalLock(g_chkReadOnlyGlobalMutex);
-        for (const auto& [pMed, roEntry] : g_newReadOnlyDocs)
+        for (auto it = g_newReadOnlyDocs.begin(); it != g_newReadOnlyDocs.end(); )
         {
+            auto [pMed, roEntry] = *it;
             g_existingReadOnlyDocs[pMed] = roEntry;
-            g_newReadOnlyDocs.erase(pMed);
+            it = g_newReadOnlyDocs.erase(it);
         }
         if (g_existingReadOnlyDocs.size() == 0)
         {
@@ -4746,47 +4747,40 @@ void CheckReadOnlyTask::doWork()
         }
         globalLock.unlock();
 
-        bool bErase = false;
-        for (const auto& [pMed, roEntry] : g_existingReadOnlyDocs)
+        auto checkForErase = [](SfxMedium* pMed, const std::shared_ptr<ReadOnlyMediumEntry>& roEntry) -> bool
         {
-            bErase = false;
-            comphelper::ScopeGuard g([&bErase, pMed = pMed]() {
-                if (bErase)
-                    g_existingReadOnlyDocs.erase(pMed);
-            });
-
             if (pMed == nullptr || roEntry == nullptr || roEntry->_pMutex == nullptr
                 || roEntry->_pIsDestructed == nullptr)
-            {
-                bErase = true;
-                continue;
-            }
+                return true;
 
             std::unique_lock<std::recursive_mutex> medLock(*(roEntry->_pMutex));
             if (*(roEntry->_pIsDestructed) || pMed->GetWorkerReloadEvent() != nullptr)
-            {
-                bErase = true;
-            }
+                return true;
+
+            osl::File aFile(
+                pMed->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::WithCharset));
+            if (aFile.open(osl_File_OpenFlag_Write) != osl::FileBase::E_None)
+                return false;
+
+            if (!pMed->CheckCanGetLockfile())
+                return false;
+
+            if (aFile.close() != osl::FileBase::E_None)
+                return true;
+
+            // we can load, ask user
+            ImplSVEvent* pEvent = Application::PostUserEvent(
+                LINK(nullptr, SfxMedium, ShowReloadEditableDialog), pMed);
+            pMed->SetWorkerReloadEvent(pEvent);
+            return true;
+        };
+
+        for (auto it = g_existingReadOnlyDocs.begin(); it != g_existingReadOnlyDocs.end(); )
+        {
+            if (checkForErase(it->first, it->second))
+                it = g_existingReadOnlyDocs.erase(it);
             else
-            {
-                osl::File aFile(
-                    pMed->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::WithCharset));
-                if (aFile.open(osl_File_OpenFlag_Write) != osl::FileBase::E_None)
-                    continue;
-
-                if (!pMed->CheckCanGetLockfile())
-                    continue;
-
-                bErase = true;
-
-                if (aFile.close() != osl::FileBase::E_None)
-                    continue;
-
-                // we can load, ask user
-                ImplSVEvent* pEvent = Application::PostUserEvent(
-                    LINK(nullptr, SfxMedium, ShowReloadEditableDialog), pMed);
-                pMed->SetWorkerReloadEvent(pEvent);
-            }
+                ++it;
         }
     }
 }
