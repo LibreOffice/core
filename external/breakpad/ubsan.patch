@@ -9,13 +9,13 @@
  };
  
  }  // namespace google_breakpad
---- src/common/memory.h
-+++ src/common/memory.h
+--- src/common/memory_allocator.h
++++ src/common/memory_allocator.h
 @@ -75,6 +75,7 @@
      if (!bytes)
        return NULL;
  
 +    bytes = (bytes + (__BIGGEST_ALIGNMENT__ - 1)) & ~(__BIGGEST_ALIGNMENT__ - 1);
      if (current_page_ && page_size_ - page_offset_ >= bytes) {
-       uint8_t *const ret = current_page_ + page_offset_;
+       uint8_t* const ret = current_page_ + page_offset_;
        page_offset_ += bytes;
