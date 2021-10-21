@@ -35,6 +35,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <functional>
+#include <string_view>
 
 namespace rptui
 {
@@ -284,7 +285,7 @@ void OGroupSectionUndo::implReInsert( )
 {
     uno::Sequence< beans::PropertyValue > aArgs(2);
 
-    aArgs[0].Name = SID_GROUPHEADER_WITHOUT_UNDO == m_nSlot? OUStringLiteral(u"" PROPERTY_HEADERON) : OUStringLiteral(u"" PROPERTY_FOOTERON);
+    aArgs[0].Name = SID_GROUPHEADER_WITHOUT_UNDO == m_nSlot? std::u16string_view(u"" PROPERTY_HEADERON) : std::u16string_view(u"" PROPERTY_FOOTERON);
     aArgs[0].Value <<= true;
     aArgs[1].Name = PROPERTY_GROUP;
     aArgs[1].Value <<= m_aGroupHelper.getGroup();
@@ -303,7 +304,7 @@ void OGroupSectionUndo::implReRemove( )
 
     uno::Sequence< beans::PropertyValue > aArgs(2);
 
-    aArgs[0].Name = SID_GROUPHEADER_WITHOUT_UNDO == m_nSlot? OUStringLiteral(u"" PROPERTY_HEADERON) : OUStringLiteral(u"" PROPERTY_FOOTERON);
+    aArgs[0].Name = SID_GROUPHEADER_WITHOUT_UNDO == m_nSlot? std::u16string_view(u"" PROPERTY_HEADERON) : std::u16string_view(u"" PROPERTY_FOOTERON);
     aArgs[0].Value <<= false;
     aArgs[1].Name = PROPERTY_GROUP;
     aArgs[1].Value <<= m_aGroupHelper.getGroup();

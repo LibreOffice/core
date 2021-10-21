@@ -918,8 +918,10 @@ bool OSelectionBrowseBox::SaveModified()
             case BROW_VIS_ROW:
                 {
                     bool bOldValue = m_pVisibleCell->GetBox().get_saved_state() != TRISTATE_FALSE;
-                    strOldCellContents = bOldValue ? OUStringLiteral(u"1") : OUStringLiteral(u"0");
-                    sNewValue          = !bOldValue ? OUStringLiteral(u"1") : OUStringLiteral(u"0");
+                    strOldCellContents
+                        = bOldValue ? std::u16string_view(u"1") : std::u16string_view(u"0");
+                    sNewValue
+                        = !bOldValue ? std::u16string_view(u"1") : std::u16string_view(u"0");
                 }
                 if((m_bOrderByUnRelated || pEntry->GetOrderDir() == ORDER_NONE) &&
                    (m_bGroupByUnRelated || !pEntry->IsGroupBy()))

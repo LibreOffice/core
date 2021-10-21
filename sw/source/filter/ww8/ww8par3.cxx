@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <string_view>
 #include <svl/itemiter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
@@ -2194,7 +2195,7 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
         {
             if ( iRes != 25 )
                 mnChecked = iRes;
-            msDefault = ( wDef == 0 ) ? OUStringLiteral( u"0" ) :  OUStringLiteral( u"1" );
+            msDefault = ( wDef == 0 ) ? std::u16string_view( u"0" ) :  std::u16string_view( u"1" );
         }
     }
     // xstzTextFormat

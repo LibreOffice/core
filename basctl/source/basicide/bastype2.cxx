@@ -245,7 +245,7 @@ void SbTreeListBox::ImpCreateLibEntries(const weld::TreeIter& rIter, const Scrip
             if ( ( nMode & BrowseMode::Dialogs ) && !( nMode & BrowseMode::Modules ) )
                 sId = bLoaded ? std::u16string_view(u"" RID_BMP_DLGLIB) : std::u16string_view(u"" RID_BMP_DLGLIBNOTLOADED);
             else
-                sId = bLoaded ? OUStringLiteral(u"" RID_BMP_MODLIB) : OUStringLiteral(u"" RID_BMP_MODLIBNOTLOADED);
+                sId = bLoaded ? std::u16string_view(u"" RID_BMP_MODLIB) : std::u16string_view(u"" RID_BMP_MODLIBNOTLOADED);
             std::unique_ptr<weld::TreeIter> xLibRootEntry(m_xControl->make_iterator(&rIter));
             bool bLibRootEntry = FindEntry(aLibName, OBJ_TYPE_LIBRARY, *xLibRootEntry);
             if (bLibRootEntry)

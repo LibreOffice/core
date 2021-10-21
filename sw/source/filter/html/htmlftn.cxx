@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <osl/diagnose.h>
 #include <svtools/htmlout.hxx>
 #include <svtools/htmlkywd.hxx>
@@ -529,7 +533,7 @@ void SwHTMLWriter::OutFootEndNoteInfo()
         int nParts = lcl_html_fillEndNoteInfo( rInfo, aParts, false );
         if( rInfo.m_eNum != FTNNUM_DOC )
         {
-            aParts[4] = rInfo.m_eNum == FTNNUM_CHAPTER ? OUStringLiteral( u"C" ) : OUStringLiteral( u"P" );
+            aParts[4] = rInfo.m_eNum == FTNNUM_CHAPTER ? std::u16string_view( u"C" ) : std::u16string_view( u"P" );
             nParts = 5;
         }
         if( rInfo.m_ePos != FTNPOS_PAGE)

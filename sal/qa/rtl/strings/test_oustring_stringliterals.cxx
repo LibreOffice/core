@@ -188,7 +188,8 @@ void test::oustring::StringLiterals::checkOUStringLiteral()
     static constexpr rtlunittest::OUStringLiteral s1lit(u"abc");
     rtl::OUString s1(s1lit);
     CPPUNIT_ASSERT_EQUAL(rtl::OUString("abc"), s1);
-    s1 = rtlunittest::OUStringLiteral(u"de");
+    static constexpr rtlunittest::OUStringLiteral de(u"de");
+    s1 = de;
     CPPUNIT_ASSERT_EQUAL(rtl::OUString("de"), s1);
     s1 += rtlunittest::OUStringLiteral(u"fde");
     CPPUNIT_ASSERT_EQUAL(rtl::OUString("defde"), s1);
