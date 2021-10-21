@@ -33,6 +33,24 @@
       "message": "this should be sal_uInt64 to match the return type from remainingSize()",
       "revId": "bf8338c531aa3f77dd9f458afa5b30c0695fbfef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4be97242_9a0b5b66",
+        "filename": "filter/source/svg/svgfilter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-21T17:18:04Z",
+      "side": 1,
+      "message": "But since mnFirstBytesSize is sal_Int32, what should we do in line 672\n\n    670         mnFirstRead \u003d aStream-\u003eReadBytes(\n    671             \u0026mnFirstBytes[0],\n    672             std::min(nStreamLen, mnFirstBytesSize));\n\nstd::min(nStreamLen, static_cast\u003csal_uInt64\u003emnFirstBytesSize)? Other?",
+      "parentUuid": "897caf2e_a94b1d93",
+      "revId": "bf8338c531aa3f77dd9f458afa5b30c0695fbfef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
