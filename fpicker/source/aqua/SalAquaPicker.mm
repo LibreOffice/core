@@ -163,10 +163,7 @@ int SalAquaPicker::run()
             break;
     }
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        //TODO: 10.13 NSFileHandlingPanelOKButton
-    if (retVal == NSFileHandlingPanelOKButton) {
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    if (retVal == NSModalResponseOK) {
         NSURL* pDir = [m_pDialog directoryURL];
         if (pDir) {
             implsetDisplayDirectory([pDir OUString]);
