@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7aa8c733_f1fbd8b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-10-21T21:37:12Z",
+      "side": 1,
+      "message": "Thank you Xisco for restarting Jenkins.",
+      "revId": "5ab21caf603ba0a1c95bbc94a29eebe3483d1599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
