@@ -4733,10 +4733,11 @@ void CheckReadOnlyTask::doWork()
         // must have timed-out
         termLock.unlock();
         std::unique_lock<std::mutex> globalLock(g_chkReadOnlyGlobalMutex);
-        for (const auto& [pMed, roEntry] : g_newReadOnlyDocs)
+        for (auto it = g_newReadOnlyDocs.begin(); it != g_newReadOnlyDocs.end(); )
         {
+            auto [pMed, roEntry] = *it;
             g_existingReadOnlyDocs[pMed] = roEntry;
-            g_newReadOnlyDocs.erase(pMed);
+            it = g_newReadOnlyDocs.erase(it);
         }
         if (g_existingReadOnlyDocs.size() == 0)
         {
