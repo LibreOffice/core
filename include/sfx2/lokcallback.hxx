@@ -30,7 +30,8 @@ public:
     // LibreOfficeKitCallback equivalent.
     virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) = 0;
     // Callback that explicitly provides view id (which is also included in the payload).
-    virtual void libreOfficeKitViewCallback(int nType, const char* pPayload, int nViewId) = 0;
+    virtual void libreOfficeKitViewCallbackWithViewId(int nType, const char* pPayload, int nViewId)
+        = 0;
     // LOK_CALLBACK_INVALIDATE_TILES
     // nPart is either part, -1 for all-parts, or INT_MIN if
     // comphelper::LibreOfficeKit::isPartInInvalidation() is not set
