@@ -2496,7 +2496,7 @@ void SwContentTree::Display( bool bActive )
         }
     }
 
-    if (!m_bIgnoreViewChange && GetEntryCount() == nOldEntryCount)
+    if (!m_bIgnoreDocChange && GetEntryCount() == nOldEntryCount)
     {
         m_xTreeView->vadjustment_set_value(nOldScrollPos);
     }
@@ -3025,9 +3025,9 @@ void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
             break;
         }
         case SfxHintId::DocChanged:
-            if (!m_bIgnoreViewChange)
+            if (!m_bIgnoreDocChange)
             {
-                m_bViewHasChanged = true;
+                m_bDocHasChanged = true;
                 TimerUpdate(&m_aUpdTimer);
             }
             break;
@@ -3072,7 +3072,7 @@ void SwContentTree::ExecCommand(std::string_view rCmd, bool bOutlineWithChildren
         return;
     }
 
-    m_bIgnoreViewChange = true;
+    m_bIgnoreDocChange = true;
 
     SwWrtShell *const pShell = GetWrtShell();
     sal_Int8 nActOutlineLevel = m_nOutlineLevel;
@@ -3361,7 +3361,7 @@ void SwContentTree::ExecCommand(std::string_view rCmd, bool bOutlineWithChildren
             }
         }
     }
-    m_bIgnoreViewChange = false;
+    m_bIgnoreDocChange = false;
 }
 
 void SwContentTree::ShowTree()
@@ -3526,37 +3526,43 @@ static void lcl_SelectDrawObjectByName(weld::TreeView& rContentTree, std::u16str
 /** No idle with focus or while dragging */
 IMPL_LINK_NOARG(SwContentTree, TimerUpdate, Timer *, void)
 {
+    // No need to update if content tree is not visible
+    if (!m_xTreeView->is_visible())
+        return;
+
     // No update while focus is not in document.
     // No update while drag and drop.
     // Query view because the Navigator is cleared too late.
     SwView* pView = GetParentWindow()->GetCreateView();
     if(pView && pView->GetWrtShellPtr() && pView->GetWrtShellPtr()->GetWin() &&
-        (pView->GetWrtShellPtr()->GetWin()->HasFocus() || m_bViewHasChanged) &&
+        (pView->GetWrtShellPtr()->GetWin()->HasFocus() || m_bDocHasChanged || m_bViewHasChanged) &&
         !IsInDrag() && !pView->GetWrtShellPtr()->ActionPend())
     {
-        m_bViewHasChanged = false;
-        m_bIsIdleClear = false;
-        SwWrtShell* pActShell = pView->GetWrtShellPtr();
-        if (State::CONSTANT == m_eState && !lcl_FindShell(m_pActiveShell))
+        if (m_bDocHasChanged || m_bViewHasChanged)
         {
-            SetActiveShell(pActShell);
-            GetParentWindow()->UpdateListBox();
+            SwWrtShell* pActShell = pView->GetWrtShellPtr();
+            if (State::CONSTANT == m_eState && !lcl_FindShell(m_pActiveShell))
+            {
+                SetActiveShell(pActShell);
+                GetParentWindow()->UpdateListBox();
+            }
+            if (State::ACTIVE == m_eState && pActShell != GetWrtShell())
+            {
+                SetActiveShell(pActShell);
+            }
+            else if ((State::ACTIVE == m_eState || (State::CONSTANT == m_eState && pActShell == GetWrtShell())) &&
+                        HasContentChanged())
+            {
+                FindActiveTypeAndRemoveUserData();
+                Display(true);
+            }
         }
-
-        if (State::ACTIVE == m_eState && pActShell != GetWrtShell())
-        {
-            SetActiveShell(pActShell);
-        }
-        else if ((State::ACTIVE == m_eState || (State::CONSTANT == m_eState && pActShell == GetWrtShell())) &&
-                    HasContentChanged())
-        {
-            FindActiveTypeAndRemoveUserData();
-            Display(true);
-        }
-
         UpdateTracking();
+        m_bIsIdleClear = false;
+        m_bDocHasChanged = false;
+        m_bViewHasChanged = false;
     }
-    else if (!pView && State::ACTIVE == m_eState && !m_bIsIdleClear)
+    else if (!pView && State::ACTIVE == m_eState && !m_bIsIdleClear) // this block seems never to be entered
     {
         if(m_pActiveShell)
         {
@@ -3572,10 +3578,10 @@ void SwContentTree::UpdateTracking()
     if (State::HIDDEN == m_eState || !m_pActiveShell)
         return;
 
-    // m_bIgnoreViewChange is set on delete
-    if (m_bIgnoreViewChange)
+    // m_bIgnoreDocChange is set on delete and outline visibility toggle
+    if (m_bIgnoreDocChange)
     {
-        m_bIgnoreViewChange = false;
+        m_bIgnoreDocChange = false;
         return;
     }
 
@@ -4279,7 +4285,7 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
         case SHOW_OUTLINE_CONTENT_VISIBILITY:
         {
             m_pActiveShell->EnterStdMode();
-            m_bIgnoreViewChange = true;
+            m_bIgnoreDocChange = true;
             SwOutlineContent* pCntFirst = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xFirst).toInt64());
 
             // toggle the outline node outline content visible attribute
@@ -4316,7 +4322,7 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
             else
                 m_pActiveShell->GotoOutline(pCntFirst->GetOutlinePos());
             grab_focus();
-            m_bIgnoreViewChange = false;
+            m_bIgnoreDocChange = false;
         }
         break;
         case 11:
@@ -4626,7 +4632,7 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
     sal_uInt16 nSlot = 0;
 
     if(EditEntryMode::DELETE == nMode)
-        m_bIgnoreViewChange = true;
+        m_bIgnoreDocChange = true;
 
     uno::Reference< container::XNameAccess >  xNameAccess, xSecond, xThird;
     switch(nType)
