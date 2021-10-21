@@ -119,7 +119,7 @@ VendorSettings::VendorSettings()
                 "[Java framework] Error in constructor VendorSettings::VendorSettings() (fwkbase.cxx)");
 }
 
-std::optional<VersionInfo> VendorSettings::getVersionInformation(std::u16string_view sVendor) const
+VersionInfo VendorSettings::getVersionInformation(std::u16string_view sVendor) const
 {
     OSL_ASSERT(!sVendor.empty());
     OString osVendor = OUStringToOString(sVendor, RTL_TEXTENCODING_UTF8);
@@ -131,7 +131,7 @@ std::optional<VersionInfo> VendorSettings::getVersionInformation(std::u16string_
         m_xmlPathContextVendorSettings);
     if (xmlXPathNodeSetIsEmpty(pathObject->nodesetval))
     {
-        return {};
+        return {{}, "1.8.0", ""};
     }
 
     VersionInfo aVersionInfo;
