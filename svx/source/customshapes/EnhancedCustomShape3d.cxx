@@ -304,7 +304,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
 
         double fExtrusionBackward, fExtrusionForward;
         GetExtrusionDepth( rGeometryItem, pMap, fExtrusionBackward, fExtrusionForward );
-        double fDepth = fExtrusionBackward - fExtrusionForward;
+        double fDepth = fExtrusionBackward + fExtrusionForward;
         if ( fDepth < 1.0 )
             fDepth = 1.0;
 
@@ -768,7 +768,7 @@ tools::Rectangle EnhancedCustomShape3d::CalculateNewSnapRect(
 
     for ( i = 0; i < 4; i++ )
     {
-        aBoundVolume.append(basegfx::B3DPoint(aPolygon[ static_cast<sal_uInt16>(i) ].X() - aCenter.X(), aPolygon[ static_cast<sal_uInt16>(i) ].Y() - aCenter.Y(), fExtrusionForward));
+        aBoundVolume.append(basegfx::B3DPoint(aPolygon[ static_cast<sal_uInt16>(i) ].X() - aCenter.X(), aPolygon[ static_cast<sal_uInt16>(i) ].Y() - aCenter.Y(), -fExtrusionForward));
     }
 
     for ( i = 0; i < 4; i++ )
