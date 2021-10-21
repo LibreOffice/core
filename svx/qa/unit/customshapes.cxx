@@ -127,6 +127,49 @@ void lcl_AssertRectEqualWithTolerance(std::string_view sInfo, const tools::Recta
                            std::abs(rExpected.GetHeight() - rActual.GetHeight()) <= nTolerance);
 }
 
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145245_ExtrusionPosition)
+{
+    // The second parameter of the extrusion-depth property specifies how much of the extrusion
+    // lies before the shape. The file contains three shapes which have the values 0, 0.5 and 1.
+    // They are rotated around the x-axis so that the extrusion becomes visible. The extrusion
+    // depth itself is 5cm. Y-coordinate of shape is 6cm.
+
+    // Load document
+    OUString aURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf145245_ExtrusionPosition.odp";
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.comp.presentation.PresentationDocument");
+
+    // The tolerance 40 is estimated and can be adjusted if required for HiDPI.
+    {
+        // First shape has extrusion behind the shape.
+        uno::Reference<drawing::XShape> xShape0(getShape(0));
+        SdrObjCustomShape& rSdrCustomShape(
+            static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape0)));
+        tools::Rectangle aBoundRect(rSdrCustomShape.GetCurrentBoundRect());
+        tools::Rectangle aExpected(Point(1000, 1000), Size(6002, 5001));
+        lcl_AssertRectEqualWithTolerance("Pos 0.0 extrusion", aExpected, aBoundRect, 40);
+    }
+    {
+        // Second shape has half of extrusion behind the shape.
+        uno::Reference<drawing::XShape> xShape(getShape(1));
+        SdrObjCustomShape& rSdrCustomShape(
+            static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
+        // Without the fix the height was 1 instead of 5001.
+        tools::Rectangle aBoundRect(rSdrCustomShape.GetCurrentBoundRect());
+        tools::Rectangle aExpected(Point(9000, 3500), Size(6002, 5001));
+        lcl_AssertRectEqualWithTolerance("Pos 0.5 extrusion", aExpected, aBoundRect, 40);
+    }
+    {
+        // Third shape has extrusion before the shape.
+        uno::Reference<drawing::XShape> xShape(getShape(2));
+        SdrObjCustomShape& rSdrCustomShape(
+            static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
+        // Without the fix the y-coordinate was 1000 instead of 6000.
+        tools::Rectangle aBoundRect(rSdrCustomShape.GetCurrentBoundRect());
+        tools::Rectangle aExpected(Point(18000, 6000), Size(6002, 5001));
+        lcl_AssertRectEqualWithTolerance("Pos 1.0 extrusion", aExpected, aBoundRect, 40);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145111_Fontwork_rendering_font_size)
 {
     // The tested position and height depend on dpi.
