@@ -2484,7 +2484,7 @@ class FilterEntriesHandler
         // store the formatted/rounded value for filtering
 
         if ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0 && !bDate)
-            mrFilterEntries.push_back(ScTypedStrData(aStr, fVal, rColumn.GetDoc().RoundValueAsShown(fVal, nFormat), ScTypedStrData::Value, bDate));
+            mrFilterEntries.push_back(ScTypedStrData(aStr, fVal, mrColumn.GetDoc().RoundValueAsShown(fVal, nFormat), ScTypedStrData::Value, bDate));
         else
             mrFilterEntries.push_back(ScTypedStrData(aStr, fVal, fVal, ScTypedStrData::Value, bDate));
     }

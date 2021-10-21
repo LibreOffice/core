@@ -39,7 +39,6 @@ struct SC_DLLPUBLIC ScQueryEntry
         QueryType         meType;
         double            mfVal;
         svl::SharedString maString;
-        Color             maColor;
         bool              mbMatchEmpty;
         bool              mbRoundForFilter;
 
