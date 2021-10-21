@@ -1263,36 +1263,36 @@ namespace //local functions originally from docfmt.cxx
         SwRangeRedline * pRedline = new SwRangeRedline( RedlineType::Format, rRg );
         auto const result(rDoc.getIDocumentRedlineAccess().AppendRedline( pRedline, true));
         // store original text attributes to reject formatting change
-        if (IDocumentRedlineAccess::AppendResult::IGNORED != result)
+        if (IDocumentRedlineAccess::AppendResult::IGNORED == result)
+            return;
+
+        // no existing format redline in the range
+        if (!xExtra)
         {
-            // no existing format redline in the range
-            if (!xExtra)
-            {
-                // Apply the first character's attributes to the ReplaceText
-                SfxItemSetFixed<RES_CHRATR_BEGIN,     RES_TXTATR_WITHEND_END - 1,
-                            RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1>  aSet( rDoc.GetAttrPool() );
-                SwTextNode * pNode = rRg.Start()->nNode.GetNode().GetTextNode();
-                pNode->GetParaAttr( aSet, rRg.Start()->nContent.GetIndex() + 1, rRg.End()->nContent.GetIndex() );
+            // Apply the first character's attributes to the ReplaceText
+            SfxItemSetFixed<RES_CHRATR_BEGIN,     RES_TXTATR_WITHEND_END - 1,
+                        RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1>  aSet( rDoc.GetAttrPool() );
+            SwTextNode * pNode = rRg.Start()->nNode.GetNode().GetTextNode();
+            pNode->GetParaAttr( aSet, rRg.Start()->nContent.GetIndex() + 1, rRg.End()->nContent.GetIndex() );
 
-                aSet.ClearItem( RES_TXTATR_REFMARK );
-                aSet.ClearItem( RES_TXTATR_TOXMARK );
-                aSet.ClearItem( RES_TXTATR_CJK_RUBY );
-                aSet.ClearItem( RES_TXTATR_INETFMT );
-                aSet.ClearItem( RES_TXTATR_META );
-                aSet.ClearItem( RES_TXTATR_METAFIELD );
+            aSet.ClearItem( RES_TXTATR_REFMARK );
+            aSet.ClearItem( RES_TXTATR_TOXMARK );
+            aSet.ClearItem( RES_TXTATR_CJK_RUBY );
+            aSet.ClearItem( RES_TXTATR_INETFMT );
+            aSet.ClearItem( RES_TXTATR_META );
+            aSet.ClearItem( RES_TXTATR_METAFIELD );
 
-                // After GetParaAttr aSet can contain INVALID_POOL_ITEM items, e.g. RES_TXTATR_CHARFMT
-                // and (a copy of) this SfxItemSet can be passed to MSWordExportBase::OutputItemSet
-                // which doesn't handle INVALID_POOL_ITEM items so clear InvalidItems here
-                aSet.ClearInvalidItems();
+            // After GetParaAttr aSet can contain INVALID_POOL_ITEM items, e.g. RES_TXTATR_CHARFMT
+            // and (a copy of) this SfxItemSet can be passed to MSWordExportBase::OutputItemSet
+            // which doesn't handle INVALID_POOL_ITEM items so clear InvalidItems here
+            aSet.ClearInvalidItems();
 
-                xExtra.reset(new SwRedlineExtraData_FormatColl("", USHRT_MAX, &aSet));
-            }
+            xExtra.reset(new SwRedlineExtraData_FormatColl("", USHRT_MAX, &aSet));
+        }
 
-            if (xExtra)
-            {
-                pRedline->SetExtraData(xExtra.get() );
-            }
+        if (xExtra)
+        {
+            pRedline->SetExtraData(xExtra.get() );
         }
     }
 
@@ -2672,20 +2672,20 @@ void DocumentContentOperationsManager::MoveAndJoin( SwPaM& rPaM, SwPosition& rPo
     aIdx--;             // in front of the move area!
 
     bool bRet = MoveRange( rPaM, rPos, SwMoveFlags::DEFAULT );
-    if( bRet && !bOneNode )
+    if( !bRet || bOneNode )
+        return;
+
+    if( bJoinText )
+        ++aIdx;
+    SwTextNode * pTextNd = aIdx.GetNode().GetTextNode();
+    SwNodeIndex aNxtIdx( aIdx );
+    if( pTextNd && pTextNd->CanJoinNext( &aNxtIdx ) )
     {
-        if( bJoinText )
-            ++aIdx;
-        SwTextNode * pTextNd = aIdx.GetNode().GetTextNode();
-        SwNodeIndex aNxtIdx( aIdx );
-        if( pTextNd && pTextNd->CanJoinNext( &aNxtIdx ) )
-        {
-            {   // Block so SwIndex into node is deleted before Join
-                m_rDoc.CorrRel( aNxtIdx, SwPosition( aIdx, SwIndex(pTextNd,
-                            pTextNd->GetText().getLength()) ), 0, true );
-            }
-            pTextNd->JoinNext();
+        {   // Block so SwIndex into node is deleted before Join
+            m_rDoc.CorrRel( aNxtIdx, SwPosition( aIdx, SwIndex(pTextNd,
+                        pTextNd->GetText().getLength()) ), 0, true );
         }
+        pTextNd->JoinNext();
     }
 }
 

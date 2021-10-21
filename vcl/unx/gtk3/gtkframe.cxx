@@ -528,61 +528,61 @@ static void attach_menu_model(GtkSalFrame* pSalFrame)
     GtkWidget* pWidget = pSalFrame->getWindow();
     GdkSurface* gdkWindow = widget_get_surface(pWidget);
 
-    if ( gdkWindow != nullptr && g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-menubar" ) == nullptr )
-    {
-        // Create menu model and action group attached to this frame.
-        GMenuModel* pMenuModel = G_MENU_MODEL( g_lo_menu_new() );
-        GActionGroup* pActionGroup = reinterpret_cast<GActionGroup*>(g_lo_action_group_new());
+    if ( gdkWindow == nullptr || g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-menubar" ) != nullptr )
+        return;
 
-        // Set window properties.
-        g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-menubar", pMenuModel, ObjectDestroyedNotify );
-        g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-action-group", pActionGroup, ObjectDestroyedNotify );
+    // Create menu model and action group attached to this frame.
+    GMenuModel* pMenuModel = G_MENU_MODEL( g_lo_menu_new() );
+    GActionGroup* pActionGroup = reinterpret_cast<GActionGroup*>(g_lo_action_group_new());
+
+    // Set window properties.
+    g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-menubar", pMenuModel, ObjectDestroyedNotify );
+    g_object_set_data_full( G_OBJECT( gdkWindow ), "g-lo-action-group", pActionGroup, ObjectDestroyedNotify );
 
 #if !GTK_CHECK_VERSION(4,0,0)
-        // Get a DBus session connection.
-        if (!pSessionBus)
-            pSessionBus = g_bus_get_sync (G_BUS_TYPE_SESSION, nullptr, nullptr);
-        if (!pSessionBus)
-            return;
+    // Get a DBus session connection.
+    if (!pSessionBus)
+        pSessionBus = g_bus_get_sync (G_BUS_TYPE_SESSION, nullptr, nullptr);
+    if (!pSessionBus)
+        return;
 
-        // Generate menu paths.
-        sal_uIntPtr windowId = GtkSalFrame::GetNativeWindowHandle(pWidget);
-        gchar* aDBusWindowPath = g_strdup_printf( "/org/libreoffice/window/%lu", windowId );
-        gchar* aDBusMenubarPath = g_strdup_printf( "/org/libreoffice/window/%lu/menus/menubar", windowId );
+    // Generate menu paths.
+    sal_uIntPtr windowId = GtkSalFrame::GetNativeWindowHandle(pWidget);
+    gchar* aDBusWindowPath = g_strdup_printf( "/org/libreoffice/window/%lu", windowId );
+    gchar* aDBusMenubarPath = g_strdup_printf( "/org/libreoffice/window/%lu/menus/menubar", windowId );
 
-        GdkDisplay *pDisplay = GtkSalFrame::getGdkDisplay();
+    GdkDisplay *pDisplay = GtkSalFrame::getGdkDisplay();
 #if defined(GDK_WINDOWING_X11)
-        if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay))
-        {
-            gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_APPLICATION_ID", "org.libreoffice" );
-            gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_MENUBAR_OBJECT_PATH", aDBusMenubarPath );
-            gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_WINDOW_OBJECT_PATH", aDBusWindowPath );
-            gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_APPLICATION_OBJECT_PATH", "/org/libreoffice" );
-            gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_UNIQUE_BUS_NAME", g_dbus_connection_get_unique_name( pSessionBus ) );
-        }
+    if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay))
+    {
+        gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_APPLICATION_ID", "org.libreoffice" );
+        gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_MENUBAR_OBJECT_PATH", aDBusMenubarPath );
+        gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_WINDOW_OBJECT_PATH", aDBusWindowPath );
+        gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_APPLICATION_OBJECT_PATH", "/org/libreoffice" );
+        gdk_x11_window_set_utf8_property( gdkWindow, "_GTK_UNIQUE_BUS_NAME", g_dbus_connection_get_unique_name( pSessionBus ) );
+    }
 #endif
 #if defined(GDK_WINDOWING_WAYLAND)
-        if (DLSYM_GDK_IS_WAYLAND_DISPLAY(pDisplay))
-        {
-            gdk_wayland_window_set_dbus_properties_libgtk_only(gdkWindow, "org.libreoffice",
-                                                               nullptr,
-                                                               aDBusMenubarPath,
-                                                               aDBusWindowPath,
-                                                               "/org/libreoffice",
-                                                               g_dbus_connection_get_unique_name( pSessionBus ));
-        }
-#endif
-        // Publish the menu model and the action group.
-        SAL_INFO("vcl.unity", "exporting menu model at " << pMenuModel << " for window " << windowId);
-        pSalFrame->m_nMenuExportId = g_dbus_connection_export_menu_model (pSessionBus, aDBusMenubarPath, pMenuModel, nullptr);
-        SAL_INFO("vcl.unity", "exporting action group at " << pActionGroup << " for window " << windowId);
-        pSalFrame->m_nActionGroupExportId = g_dbus_connection_export_action_group( pSessionBus, aDBusWindowPath, pActionGroup, nullptr);
-        pSalFrame->m_nHudAwarenessId = hud_awareness_register( pSessionBus, aDBusMenubarPath, hud_activated, pSalFrame, nullptr, nullptr );
-
-        g_free( aDBusWindowPath );
-        g_free( aDBusMenubarPath );
-#endif
+    if (DLSYM_GDK_IS_WAYLAND_DISPLAY(pDisplay))
+    {
+        gdk_wayland_window_set_dbus_properties_libgtk_only(gdkWindow, "org.libreoffice",
+                                                           nullptr,
+                                                           aDBusMenubarPath,
+                                                           aDBusWindowPath,
+                                                           "/org/libreoffice",
+                                                           g_dbus_connection_get_unique_name( pSessionBus ));
     }
+#endif
+    // Publish the menu model and the action group.
+    SAL_INFO("vcl.unity", "exporting menu model at " << pMenuModel << " for window " << windowId);
+    pSalFrame->m_nMenuExportId = g_dbus_connection_export_menu_model (pSessionBus, aDBusMenubarPath, pMenuModel, nullptr);
+    SAL_INFO("vcl.unity", "exporting action group at " << pActionGroup << " for window " << windowId);
+    pSalFrame->m_nActionGroupExportId = g_dbus_connection_export_action_group( pSessionBus, aDBusWindowPath, pActionGroup, nullptr);
+    pSalFrame->m_nHudAwarenessId = hud_awareness_register( pSessionBus, aDBusMenubarPath, hud_activated, pSalFrame, nullptr, nullptr );
+
+    g_free( aDBusWindowPath );
+    g_free( aDBusMenubarPath );
+#endif
 }
 
 void on_registrar_available( GDBusConnection * /*connection*/,
@@ -1496,24 +1496,24 @@ void GtkSalFrame::SetIcon(const char* appicon)
     gtk_window_set_icon_name(GTK_WINDOW(m_pWindow), appicon);
 
 #if defined(GDK_WINDOWING_WAYLAND)
-    if (DLSYM_GDK_IS_WAYLAND_DISPLAY(getGdkDisplay()))
-    {
+    if (!DLSYM_GDK_IS_WAYLAND_DISPLAY(getGdkDisplay()))
+        return;
+
 #if GTK_CHECK_VERSION(4,0,0)
-        GdkSurface* gdkWindow = gtk_native_get_surface(gtk_widget_get_native(m_pWindow));
-        gdk_wayland_toplevel_set_application_id((GDK_TOPLEVEL(gdkWindow)), appicon);
+    GdkSurface* gdkWindow = gtk_native_get_surface(gtk_widget_get_native(m_pWindow));
+    gdk_wayland_toplevel_set_application_id((GDK_TOPLEVEL(gdkWindow)), appicon);
 #else
-        static auto set_application_id = reinterpret_cast<void (*) (GdkWindow*, const char*)>(
-                                             dlsym(nullptr, "gdk_wayland_window_set_application_id"));
-        if (set_application_id)
-        {
-            GdkSurface* gdkWindow = widget_get_surface(m_pWindow);
-            set_application_id(gdkWindow, appicon);
-        }
-#endif
-        // gdk_wayland_window_set_application_id doesn't seem to work before
-        // the window is mapped, so set this for real when/if we are mapped
-        m_bIconSetWhileUnmapped = !gtk_widget_get_mapped(m_pWindow);
+    static auto set_application_id = reinterpret_cast<void (*) (GdkWindow*, const char*)>(
+                                         dlsym(nullptr, "gdk_wayland_window_set_application_id"));
+    if (set_application_id)
+    {
+        GdkSurface* gdkWindow = widget_get_surface(m_pWindow);
+        set_application_id(gdkWindow, appicon);
     }
+#endif
+    // gdk_wayland_window_set_application_id doesn't seem to work before
+    // the window is mapped, so set this for real when/if we are mapped
+    m_bIconSetWhileUnmapped = !gtk_widget_get_mapped(m_pWindow);
 #endif
 }
 
@@ -5079,19 +5079,19 @@ void GtkSalFrame::IMHandler::createIMContext()
 
 void GtkSalFrame::IMHandler::deleteIMContext()
 {
-    if( m_pIMContext )
-    {
-        // first give IC a chance to deinitialize
-        GetGenericUnixSalData()->ErrorTrapPush();
+    if( !m_pIMContext )
+        return;
+
+    // first give IC a chance to deinitialize
+    GetGenericUnixSalData()->ErrorTrapPush();
 #if GTK_CHECK_VERSION(4, 0, 0)
-        gtk_event_controller_key_set_im_context(m_pFrame->m_pKeyController, nullptr);
+    gtk_event_controller_key_set_im_context(m_pFrame->m_pKeyController, nullptr);
 #endif
-        im_context_set_client_widget(m_pIMContext, nullptr);
-        GetGenericUnixSalData()->ErrorTrapPop();
-        // destroy old IC
-        g_object_unref( m_pIMContext );
-        m_pIMContext = nullptr;
-    }
+    im_context_set_client_widget(m_pIMContext, nullptr);
+    GetGenericUnixSalData()->ErrorTrapPop();
+    // destroy old IC
+    g_object_unref( m_pIMContext );
+    m_pIMContext = nullptr;
 }
 
 void GtkSalFrame::IMHandler::doCallEndExtTextInput()

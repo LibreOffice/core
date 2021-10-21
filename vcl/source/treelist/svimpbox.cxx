@@ -2035,20 +2035,20 @@ void SvImpLBox::MouseMove( const MouseEvent& rMEvt)
 {
     Point aPos = rMEvt.GetPosPixel();
     SvTreeListEntry* pEntry = GetClickedEntry(aPos);
-    if ( !MouseMoveCheckCtrl( rMEvt, pEntry ) && ( m_aSelEng.GetSelectionMode() != SelectionMode::NONE ) )
+    if ( MouseMoveCheckCtrl( rMEvt, pEntry ) || ( m_aSelEng.GetSelectionMode() == SelectionMode::NONE ) )
+        return;
+
+    m_aSelEng.SelMouseMove(rMEvt);
+    if (m_pView->mbHoverSelection)
     {
-        m_aSelEng.SelMouseMove(rMEvt);
-        if (m_pView->mbHoverSelection)
-        {
-            if (aPos.X() < 0 || aPos.Y() < 0 || aPos.X() > m_aOutputSize.Width() || aPos.Y() > m_aOutputSize.Height())
-                pEntry = nullptr;
-            else
-                pEntry = GetEntry(aPos);
-            if (!pEntry)
-                m_pView->SelectAll(false);
-            else if (!m_pView->IsSelected(pEntry) && IsSelectable(pEntry))
-                m_pView->Select(pEntry);
-        }
+        if (aPos.X() < 0 || aPos.Y() < 0 || aPos.X() > m_aOutputSize.Width() || aPos.Y() > m_aOutputSize.Height())
+            pEntry = nullptr;
+        else
+            pEntry = GetEntry(aPos);
+        if (!pEntry)
+            m_pView->SelectAll(false);
+        else if (!m_pView->IsSelected(pEntry) && IsSelectable(pEntry))
+            m_pView->Select(pEntry);
     }
 }
 
@@ -2983,32 +2983,32 @@ void SvImpLBox::SetMostRight( SvTreeListEntry* pEntry )
 
     sal_uInt16 nLastTab = m_pView->aTabs.size() - 1;
     sal_uInt16 nLastItem = pEntry->ItemCount() - 1;
-    if( !m_pView->aTabs.empty() && nLastItem != USHRT_MAX )
+    if( m_pView->aTabs.empty() || nLastItem == USHRT_MAX )
+        return;
+
+    if( nLastItem < nLastTab )
+        nLastTab = nLastItem;
+
+    SvLBoxTab* pTab = m_pView->aTabs[ nLastTab ].get();
+    SvLBoxItem& rItem = pEntry->GetItem( nLastTab );
+
+    tools::Long nTabPos = m_pView->GetTabPos( pEntry, pTab );
+
+    tools::Long nMaxRight = GetOutputSize().Width();
+    Point aPos( m_pView->GetMapMode().GetOrigin() );
+    aPos.setX( aPos.X() * -1 ); // conversion document coordinates
+    nMaxRight = nMaxRight + aPos.X() - 1;
+
+    tools::Long nNextTab = nTabPos < nMaxRight ? nMaxRight : nMaxRight + 50;
+    tools::Long nTabWidth = nNextTab - nTabPos + 1;
+    auto nItemSize = rItem.GetWidth(m_pView,pEntry);
+    tools::Long nOffset = pTab->CalcOffset( nItemSize, nTabWidth );
+
+    tools::Long nRight = nTabPos + nOffset + nItemSize;
+    if( nRight > m_nMostRight )
     {
-        if( nLastItem < nLastTab )
-            nLastTab = nLastItem;
-
-        SvLBoxTab* pTab = m_pView->aTabs[ nLastTab ].get();
-        SvLBoxItem& rItem = pEntry->GetItem( nLastTab );
-
-        tools::Long nTabPos = m_pView->GetTabPos( pEntry, pTab );
-
-        tools::Long nMaxRight = GetOutputSize().Width();
-        Point aPos( m_pView->GetMapMode().GetOrigin() );
-        aPos.setX( aPos.X() * -1 ); // conversion document coordinates
-        nMaxRight = nMaxRight + aPos.X() - 1;
-
-        tools::Long nNextTab = nTabPos < nMaxRight ? nMaxRight : nMaxRight + 50;
-        tools::Long nTabWidth = nNextTab - nTabPos + 1;
-        auto nItemSize = rItem.GetWidth(m_pView,pEntry);
-        tools::Long nOffset = pTab->CalcOffset( nItemSize, nTabWidth );
-
-        tools::Long nRight = nTabPos + nOffset + nItemSize;
-        if( nRight > m_nMostRight )
-        {
-            m_nMostRight = nRight;
-            m_pMostRightEntry = pEntry;
-        }
+        m_nMostRight = nRight;
+        m_pMostRightEntry = pEntry;
     }
 }
 

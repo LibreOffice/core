@@ -110,20 +110,20 @@ namespace sdr::properties
         {
             const sal_uInt16 nWhichID(rItem.Which());
 
-            if(AllowItemChange(nWhichID, &rItem))
-            {
-                ItemChange(nWhichID, &rItem);
-                PostItemChange(nWhichID);
+            if(!AllowItemChange(nWhichID, &rItem))
+                return;
 
-                if (WantItemSetInItemSetChanged())
-                {
-                    SfxItemSet aSet(GetSdrObject().GetObjectItemPool(), nWhichID, nWhichID);
-                    aSet.Put(rItem);
-                    ItemSetChanged(&aSet);
-                }
-                else
-                    ItemSetChanged(nullptr);
+            ItemChange(nWhichID, &rItem);
+            PostItemChange(nWhichID);
+
+            if (WantItemSetInItemSetChanged())
+            {
+                SfxItemSet aSet(GetSdrObject().GetObjectItemPool(), nWhichID, nWhichID);
+                aSet.Put(rItem);
+                ItemSetChanged(&aSet);
             }
+            else
+                ItemSetChanged(nullptr);
         }
 
         void DefaultProperties::SetObjectItemDirect(const SfxPoolItem& rItem)
@@ -138,21 +138,21 @@ namespace sdr::properties
 
         void DefaultProperties::ClearObjectItem(const sal_uInt16 nWhich)
         {
-            if(AllowItemChange(nWhich))
-            {
-                ItemChange(nWhich);
-                PostItemChange(nWhich);
+            if(!AllowItemChange(nWhich))
+                return;
 
-                if(nWhich)
+            ItemChange(nWhich);
+            PostItemChange(nWhich);
+
+            if(nWhich)
+            {
+                if (WantItemSetInItemSetChanged())
                 {
-                    if (WantItemSetInItemSetChanged())
-                    {
-                        SfxItemSet aSet(GetSdrObject().GetObjectItemPool(), nWhich, nWhich);
-                        ItemSetChanged(&aSet);
-                    }
-                    else
-                        ItemSetChanged(nullptr);
+                    SfxItemSet aSet(GetSdrObject().GetObjectItemPool(), nWhich, nWhich);
+                    ItemSetChanged(&aSet);
                 }
+                else
+                    ItemSetChanged(nullptr);
             }
         }
 

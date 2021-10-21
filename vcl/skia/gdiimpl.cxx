@@ -455,22 +455,23 @@ void SkiaSalGraphicsImpl::postDraw()
     }
     SkiaZone::leave(); // matched in preDraw()
     // If there's a problem with the GPU context, abort.
-    if (GrDirectContext* context = GrAsDirectContext(mSurface->getCanvas()->recordingContext()))
+    GrDirectContext* context = GrAsDirectContext(mSurface->getCanvas()->recordingContext());
+    if (!context)
+        return;
+
+    // Running out of memory on the GPU technically could be possibly recoverable,
+    // but we don't know the exact status of the surface (and what has or has not been drawn to it),
+    // so in practice this is unrecoverable without possible data loss.
+    if (context->oomed())
     {
-        // Running out of memory on the GPU technically could be possibly recoverable,
-        // but we don't know the exact status of the surface (and what has or has not been drawn to it),
-        // so in practice this is unrecoverable without possible data loss.
-        if (context->oomed())
-        {
-            SAL_WARN("vcl.skia", "GPU context has run out of memory, aborting.");
-            abort();
-        }
-        // Unrecoverable problem.
-        if (context->abandoned())
-        {
-            SAL_WARN("vcl.skia", "GPU context has been abandoned, aborting.");
-            abort();
-        }
+        SAL_WARN("vcl.skia", "GPU context has run out of memory, aborting.");
+        abort();
+    }
+    // Unrecoverable problem.
+    if (context->abandoned())
+    {
+        SAL_WARN("vcl.skia", "GPU context has been abandoned, aborting.");
+        abort();
     }
 }
 
@@ -1058,21 +1059,22 @@ static void roundPolygonPoints(basegfx::B2DPolyPolygon& polyPolygon)
 
 void SkiaSalGraphicsImpl::checkPendingDrawing()
 {
-    if (mLastPolyPolygonInfo.polygons.size() != 0)
-    { // Flush any pending polygon drawing.
-        basegfx::B2DPolyPolygonVector polygons;
-        std::swap(polygons, mLastPolyPolygonInfo.polygons);
-        double transparency = mLastPolyPolygonInfo.transparency;
-        mLastPolyPolygonInfo.bounds.reset();
-        if (polygons.size() == 1)
-            performDrawPolyPolygon(polygons.front(), transparency, true);
-        else
-        {
-            for (basegfx::B2DPolyPolygon& p : polygons)
-                roundPolygonPoints(p);
-            performDrawPolyPolygon(basegfx::utils::mergeToSinglePolyPolygon(std::move(polygons)),
-                                   transparency, true);
-        }
+    if (mLastPolyPolygonInfo.polygons.size() == 0)
+        return;
+
+    // Flush any pending polygon drawing.
+    basegfx::B2DPolyPolygonVector polygons;
+    std::swap(polygons, mLastPolyPolygonInfo.polygons);
+    double transparency = mLastPolyPolygonInfo.transparency;
+    mLastPolyPolygonInfo.bounds.reset();
+    if (polygons.size() == 1)
+        performDrawPolyPolygon(polygons.front(), transparency, true);
+    else
+    {
+        for (basegfx::B2DPolyPolygon& p : polygons)
+            roundPolygonPoints(p);
+        performDrawPolyPolygon(basegfx::utils::mergeToSinglePolyPolygon(std::move(polygons)),
+                               transparency, true);
     }
 }
 

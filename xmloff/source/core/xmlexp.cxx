@@ -399,33 +399,33 @@ void SvXMLExport::DetermineModelType_()
 {
     meModelType = SvtModuleOptions::EFactory::UNKNOWN_FACTORY;
 
-    if ( mxModel.is() )
-    {
-        meModelType = SvtModuleOptions::ClassifyFactoryByModel( mxModel );
+    if ( !mxModel.is() )
+        return;
 
-        // note: MATH documents will throw NotInitializedException; maybe unit test problem
-        if (meModelType == SvtModuleOptions::EFactory::WRITER)
+    meModelType = SvtModuleOptions::ClassifyFactoryByModel( mxModel );
+
+    // note: MATH documents will throw NotInitializedException; maybe unit test problem
+    if (meModelType == SvtModuleOptions::EFactory::WRITER)
+    {
+        uno::Reference<frame::XModule> const xModule(mxModel, uno::UNO_QUERY);
+        bool const isBaseForm(xModule.is() &&
+            xModule->getIdentifier() == "com.sun.star.sdb.FormDesign");
+        if (isBaseForm)
         {
-            uno::Reference<frame::XModule> const xModule(mxModel, uno::UNO_QUERY);
-            bool const isBaseForm(xModule.is() &&
-                xModule->getIdentifier() == "com.sun.star.sdb.FormDesign");
-            if (isBaseForm)
+            switch (GetODFSaneDefaultVersion())
             {
-                switch (GetODFSaneDefaultVersion())
-                {
-                    case SvtSaveOptions::ODFSVER_013_EXTENDED:
-                        SAL_INFO("xmloff.core", "tdf#138209 force form export to ODF 1.2");
-                        mpImpl->m_oOverrideODFVersion = SvtSaveOptions::ODFSVER_012_EXTENDED;
-                        maUnitConv.overrideSaneDefaultVersion(SvtSaveOptions::ODFSVER_012_EXTENDED);
-                        break;
-                    case SvtSaveOptions::ODFSVER_013:
-                        SAL_INFO("xmloff.core", "tdf#138209 force form export to ODF 1.2");
-                        mpImpl->m_oOverrideODFVersion = SvtSaveOptions::ODFSVER_012;
-                        maUnitConv.overrideSaneDefaultVersion(SvtSaveOptions::ODFSVER_012);
-                        break;
-                    default:
-                        break;
-                }
+                case SvtSaveOptions::ODFSVER_013_EXTENDED:
+                    SAL_INFO("xmloff.core", "tdf#138209 force form export to ODF 1.2");
+                    mpImpl->m_oOverrideODFVersion = SvtSaveOptions::ODFSVER_012_EXTENDED;
+                    maUnitConv.overrideSaneDefaultVersion(SvtSaveOptions::ODFSVER_012_EXTENDED);
+                    break;
+                case SvtSaveOptions::ODFSVER_013:
+                    SAL_INFO("xmloff.core", "tdf#138209 force form export to ODF 1.2");
+                    mpImpl->m_oOverrideODFVersion = SvtSaveOptions::ODFSVER_012;
+                    maUnitConv.overrideSaneDefaultVersion(SvtSaveOptions::ODFSVER_012);
+                    break;
+                default:
+                    break;
             }
         }
     }

@@ -2313,22 +2313,22 @@ PDFElement* PDFDictionaryElement::LookupElement(const OString& rDictionaryKey)
 
 void PDFObjectElement::parseIfNecessary()
 {
-    if (!m_bParsed)
+    if (m_bParsed)
+        return;
+
+    if (!m_aElements.empty())
     {
-        if (!m_aElements.empty())
-        {
-            // This is a stored object in an object stream.
-            PDFObjectParser aParser(m_aElements);
-            aParser.parse(this);
-        }
-        else
-        {
-            // Normal object: elements are stored as members of the document itself.
-            PDFObjectParser aParser(m_rDoc.GetElements());
-            aParser.parse(this);
-        }
-        m_bParsed = true;
+        // This is a stored object in an object stream.
+        PDFObjectParser aParser(m_aElements);
+        aParser.parse(this);
     }
+    else
+    {
+        // Normal object: elements are stored as members of the document itself.
+        PDFObjectParser aParser(m_rDoc.GetElements());
+        aParser.parse(this);
+    }
+    m_bParsed = true;
 }
 
 PDFElement* PDFObjectElement::Lookup(const OString& rDictionaryKey)

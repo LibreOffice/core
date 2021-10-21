@@ -1662,20 +1662,21 @@ IMPL_LINK(SfxViewFrame, HiddenTrackChangesHandler, weld::Button&, rButton, void)
 {
     // enable Track Changes toolbar, if it is disabled.
     // Otherwise disable the toolbar, and close the infobar
-    if (auto xLayoutManager = getLayoutManager(GetFrame()))
+    auto xLayoutManager = getLayoutManager(GetFrame());
+    if (!xLayoutManager)
+        return;
+
+    if (!xLayoutManager->getElement(CHANGES_STR).is())
     {
-        if (!xLayoutManager->getElement(CHANGES_STR).is())
-        {
-            xLayoutManager->createElement(CHANGES_STR);
-            xLayoutManager->showElement(CHANGES_STR);
-            rButton.set_label(SfxResId(STR_TRACK_CHANGES_BUTTON_HIDE));
-        }
-        else
-        {
-            xLayoutManager->hideElement(CHANGES_STR);
-            xLayoutManager->destroyElement(CHANGES_STR);
-            RemoveInfoBar(u"hiddentrackchanges");
-        }
+        xLayoutManager->createElement(CHANGES_STR);
+        xLayoutManager->showElement(CHANGES_STR);
+        rButton.set_label(SfxResId(STR_TRACK_CHANGES_BUTTON_HIDE));
+    }
+    else
+    {
+        xLayoutManager->hideElement(CHANGES_STR);
+        xLayoutManager->destroyElement(CHANGES_STR);
+        RemoveInfoBar(u"hiddentrackchanges");
     }
 }
 

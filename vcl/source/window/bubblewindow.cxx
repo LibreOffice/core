@@ -535,23 +535,23 @@ void MenuBarUpdateIconManager::RemoveBubbleWindow( bool bRemoveIcon )
         mpBubbleWin.disposeAndClear();
     }
 
-    if ( bRemoveIcon )
-    {
-        try {
-            if ( mpIconMBar && ( mnIconID != 0 ) )
-            {
-                mpIconMBar->RemoveMenuBarButton( mnIconID );
-                mpIconMBar = nullptr;
-                mnIconID = 0;
-            }
-        }
-        catch ( ... ) {
+    if ( !bRemoveIcon )
+        return;
+
+    try {
+        if ( mpIconMBar && ( mnIconID != 0 ) )
+        {
+            mpIconMBar->RemoveMenuBarButton( mnIconID );
             mpIconMBar = nullptr;
             mnIconID = 0;
         }
-
-        mpIconSysWin = nullptr;
     }
+    catch ( ... ) {
+        mpIconMBar = nullptr;
+        mnIconID = 0;
+    }
+
+    mpIconSysWin = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

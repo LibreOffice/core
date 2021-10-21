@@ -299,33 +299,33 @@ void TimerManager::checkForTimeout()
 
     Timer* pTimer = m_pHead;
 
-    if (pTimer->isExpired())
+    if (!pTimer->isExpired())
+        return;
+
+    // remove expired timer
+    m_pHead = pTimer->m_pNext;
+
+    pTimer->acquire();
+
+    aLock.unlock();
+
+    pTimer->onShot();
+
+    // restart timer if specified
+    if (!pTimer->m_aRepeatDelta.isEmpty())
     {
-        // remove expired timer
-        m_pHead = pTimer->m_pNext;
+        TTimeValue Now;
 
-        pTimer->acquire();
+        osl_getSystemTime(&Now);
 
-        aLock.unlock();
+        Now.Seconds += pTimer->m_aRepeatDelta.Seconds;
+        Now.Nanosec += pTimer->m_aRepeatDelta.Nanosec;
 
-        pTimer->onShot();
+        pTimer->m_aExpired = Now;
 
-        // restart timer if specified
-        if (!pTimer->m_aRepeatDelta.isEmpty())
-        {
-            TTimeValue Now;
-
-            osl_getSystemTime(&Now);
-
-            Now.Seconds += pTimer->m_aRepeatDelta.Seconds;
-            Now.Nanosec += pTimer->m_aRepeatDelta.Nanosec;
-
-            pTimer->m_aExpired = Now;
-
-            registerTimer(pTimer);
-        }
-        pTimer->release();
+        registerTimer(pTimer);
     }
+    pTimer->release();
 }
 
 void TimerManager::run()

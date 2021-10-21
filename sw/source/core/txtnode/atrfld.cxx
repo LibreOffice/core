@@ -376,35 +376,35 @@ void SwFormatField::UpdateTextNode(const SfxPoolItem* pOld, const SfxPoolItem* p
     }
     if(bTriggerNode)
         pTextNd->TriggerNodeUpdate(sw::LegacyModifyHint(pNodeOld, pNodeNew));
-    if(bExpand)
+    if(!bExpand)
+        return;
+
+    bool bForceNotify = pOld == nullptr && pNew == nullptr;
+    if (bForceNotify)
     {
-        bool bForceNotify = pOld == nullptr && pNew == nullptr;
-        if (bForceNotify)
+        // Force notify was added for conditional text fields, at least the below fields need
+        // no forced notify.
+        const SwField* pField = mpTextField->GetFormatField().GetField();
+        const SwFieldIds nWhich = pField->GetTyp()->Which();
+        if (nWhich == SwFieldIds::DocInfo)
         {
-            // Force notify was added for conditional text fields, at least the below fields need
-            // no forced notify.
-            const SwField* pField = mpTextField->GetFormatField().GetField();
-            const SwFieldIds nWhich = pField->GetTyp()->Which();
-            if (nWhich == SwFieldIds::DocInfo)
+            auto pDocInfoField = static_cast<const SwDocInfoField*>(pField);
+            sal_uInt16 nSubType = pDocInfoField->GetSubType();
+            // Do not consider extended SubTypes.
+            nSubType &= 0xff;
+            switch (nSubType)
             {
-                auto pDocInfoField = static_cast<const SwDocInfoField*>(pField);
-                sal_uInt16 nSubType = pDocInfoField->GetSubType();
-                // Do not consider extended SubTypes.
-                nSubType &= 0xff;
-                switch (nSubType)
-                {
-                    case nsSwDocInfoSubType::DI_TITLE:
-                    case nsSwDocInfoSubType::DI_SUBJECT:
-                    case nsSwDocInfoSubType::DI_CHANGE:
-                    case nsSwDocInfoSubType::DI_CUSTOM:
-                        bForceNotify = false;
-                        break;
-                }
+                case nsSwDocInfoSubType::DI_TITLE:
+                case nsSwDocInfoSubType::DI_SUBJECT:
+                case nsSwDocInfoSubType::DI_CHANGE:
+                case nsSwDocInfoSubType::DI_CUSTOM:
+                    bForceNotify = false;
+                    break;
             }
         }
-
-        mpTextField->ExpandTextField(bForceNotify);
     }
+
+    mpTextField->ExpandTextField(bForceNotify);
 }
 
 bool SwFormatField::GetInfo( SfxPoolItem& rInfo ) const

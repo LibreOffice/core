@@ -781,18 +781,18 @@ SvtModuleOptions::SvtModuleOptions()
 {
     // no need to take the mutex yet, shared_ptr/weak_ptr are thread-safe
     m_pImpl = g_pModuleOptions.lock();
+    if( m_pImpl )
+        return;
+
+    // take the mutex, so we don't accidentally create more than one
+    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+
+    m_pImpl = g_pModuleOptions.lock();
     if( !m_pImpl )
     {
-        // take the mutex, so we don't accidentally create more than one
-        ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-
-        m_pImpl = g_pModuleOptions.lock();
-        if( !m_pImpl )
-        {
-            m_pImpl = std::make_shared<SvtModuleOptions_Impl>();
-            g_pModuleOptions = m_pImpl;
-            ItemHolder1::holdConfigItem(EItem::ModuleOptions);
-        }
+        m_pImpl = std::make_shared<SvtModuleOptions_Impl>();
+        g_pModuleOptions = m_pImpl;
+        ItemHolder1::holdConfigItem(EItem::ModuleOptions);
     }
 }
 

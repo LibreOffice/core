@@ -158,21 +158,22 @@ void insertEntityDependency(
     OUString const & name, bool weakInterfaceDependency = false)
 {
     assert(manager.is());
-    if (name != iterator->first) {
-        bool ifc = false;
-        if (weakInterfaceDependency) {
-            rtl::Reference<unoidl::Entity> ent(manager->findEntity(name));
-            if (!ent.is()) {
-                std::cerr << "Unknown entity " << name << std::endl;
-                std::exit(EXIT_FAILURE);
-            }
-            ifc = ent->getSort() == unoidl::Entity::SORT_INTERFACE_TYPE;
+    if (name == iterator->first)
+        return;
+
+    bool ifc = false;
+    if (weakInterfaceDependency) {
+        rtl::Reference<unoidl::Entity> ent(manager->findEntity(name));
+        if (!ent.is()) {
+            std::cerr << "Unknown entity " << name << std::endl;
+            std::exit(EXIT_FAILURE);
         }
-        (ifc
-         ? iterator->second.interfaceDependencies
-         : iterator->second.dependencies)
-            .insert(name);
+        ifc = ent->getSort() == unoidl::Entity::SORT_INTERFACE_TYPE;
     }
+    (ifc
+     ? iterator->second.interfaceDependencies
+     : iterator->second.dependencies)
+        .insert(name);
 }
 
 void insertEntityDependencies(
@@ -550,201 +551,331 @@ void writeEntity(
     OUString const & name)
 {
     std::map<OUString, Entity>::iterator i(entities.find(name));
-    if (i != entities.end() && i->second.relevant) {
-        assert(i->second.written != Entity::Written::DEFINITION);
-        i->second.written = Entity::Written::DEFINITION;
-        for (auto & j: i->second.interfaceDependencies) {
-            std::map<OUString, Entity>::iterator k(entities.find(j));
-            if (k != entities.end() && k->second.written == Entity::Written::NO) {
-                k->second.written = Entity::Written::DECLARATION;
-                OUString id(openModulesFor(modules, j));
-                if (k->second.entity->getSort()
-                    != unoidl::Entity::SORT_INTERFACE_TYPE)
-                {
-                    std::cerr
-                        << "Entity " << j << " should be an interface type"
-                        << std::endl;
-                    std::exit(EXIT_FAILURE);
-                }
-                writePublished(
-                    static_cast<unoidl::PublishableEntity *>(
-                        k->second.entity.get()));
-                std::cout << "interface " << id << ";\n";
+    if (i == entities.end() || !i->second.relevant)
+        return;
+
+    assert(i->second.written != Entity::Written::DEFINITION);
+    i->second.written = Entity::Written::DEFINITION;
+    for (auto & j: i->second.interfaceDependencies) {
+        std::map<OUString, Entity>::iterator k(entities.find(j));
+        if (k != entities.end() && k->second.written == Entity::Written::NO) {
+            k->second.written = Entity::Written::DECLARATION;
+            OUString id(openModulesFor(modules, j));
+            if (k->second.entity->getSort()
+                != unoidl::Entity::SORT_INTERFACE_TYPE)
+            {
+                std::cerr
+                    << "Entity " << j << " should be an interface type"
+                    << std::endl;
+                std::exit(EXIT_FAILURE);
             }
+            writePublished(
+                static_cast<unoidl::PublishableEntity *>(
+                    k->second.entity.get()));
+            std::cout << "interface " << id << ";\n";
         }
-        OUString id(openModulesFor(modules, name));
-        rtl::Reference<unoidl::PublishableEntity> ent(
-            static_cast<unoidl::PublishableEntity *>(i->second.entity.get()));
-        switch (ent->getSort()) {
-        case unoidl::Entity::SORT_ENUM_TYPE:
+    }
+    OUString id(openModulesFor(modules, name));
+    rtl::Reference<unoidl::PublishableEntity> ent(
+        static_cast<unoidl::PublishableEntity *>(i->second.entity.get()));
+    switch (ent->getSort()) {
+    case unoidl::Entity::SORT_ENUM_TYPE:
+        {
+            rtl::Reference<unoidl::EnumTypeEntity> ent2(
+                static_cast<unoidl::EnumTypeEntity *>(ent.get()));
+            writeAnnotationsPublished(ent);
+            std::cout << "enum " << id << " {\n";
+            for (auto j(ent2->getMembers().begin());
+                 j != ent2->getMembers().end(); ++j)
             {
-                rtl::Reference<unoidl::EnumTypeEntity> ent2(
-                    static_cast<unoidl::EnumTypeEntity *>(ent.get()));
-                writeAnnotationsPublished(ent);
-                std::cout << "enum " << id << " {\n";
-                for (auto j(ent2->getMembers().begin());
-                     j != ent2->getMembers().end(); ++j)
-                {
-                    indent(modules, 1);
-                    writeAnnotations(j->annotations);
-                    std::cout << j->name << " = " << j->value;
-                    if (j + 1 != ent2->getMembers().end()) {
-                        std::cout << ',';
-                    }
-                    std::cout << '\n';
+                indent(modules, 1);
+                writeAnnotations(j->annotations);
+                std::cout << j->name << " = " << j->value;
+                if (j + 1 != ent2->getMembers().end()) {
+                    std::cout << ',';
                 }
-                indent(modules);
-                std::cout << "};\n";
-                break;
+                std::cout << '\n';
             }
-        case unoidl::Entity::SORT_PLAIN_STRUCT_TYPE:
+            indent(modules);
+            std::cout << "};\n";
+            break;
+        }
+    case unoidl::Entity::SORT_PLAIN_STRUCT_TYPE:
+        {
+            rtl::Reference<unoidl::PlainStructTypeEntity> ent2(
+                static_cast<unoidl::PlainStructTypeEntity *>(ent.get()));
+            writeAnnotationsPublished(ent);
+            std::cout << "struct " << id;
+            if (!ent2->getDirectBase().isEmpty()) {
+                std::cout << ": ";
+                writeName(ent2->getDirectBase());
+            }
+            std::cout << " {\n";
+            for (auto & j: ent2->getDirectMembers()) {
+                indent(modules, 1);
+                writeAnnotations(j.annotations);
+                writeType(j.type);
+                std::cout << ' ' << j.name << ";\n";
+            }
+            indent(modules);
+            std::cout << "};\n";
+            break;
+        }
+    case unoidl::Entity::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
+        {
+            rtl::Reference<unoidl::PolymorphicStructTypeTemplateEntity>
+                ent2(
+                    static_cast<unoidl::PolymorphicStructTypeTemplateEntity *>(
+                        ent.get()));
+            writeAnnotationsPublished(ent);
+            std::cout << "struct " << id << '<';
+            for (auto j(ent2->getTypeParameters().begin());
+                 j != ent2->getTypeParameters().end(); ++j)
             {
-                rtl::Reference<unoidl::PlainStructTypeEntity> ent2(
-                    static_cast<unoidl::PlainStructTypeEntity *>(ent.get()));
-                writeAnnotationsPublished(ent);
-                std::cout << "struct " << id;
-                if (!ent2->getDirectBase().isEmpty()) {
-                    std::cout << ": ";
-                    writeName(ent2->getDirectBase());
+                if (j != ent2->getTypeParameters().begin()) {
+                    std::cout << ", ";
                 }
-                std::cout << " {\n";
-                for (auto & j: ent2->getDirectMembers()) {
-                    indent(modules, 1);
-                    writeAnnotations(j.annotations);
+                std::cout << *j;
+            }
+            std::cout << ">  {\n";
+            for (auto & j: ent2->getMembers()) {
+                indent(modules, 1);
+                writeAnnotations(j.annotations);
+                if (j.parameterized) {
+                    std::cout << j.type;
+                } else {
                     writeType(j.type);
-                    std::cout << ' ' << j.name << ";\n";
                 }
-                indent(modules);
-                std::cout << "};\n";
-                break;
+                std::cout << ' ' << j.name << ";\n";
             }
-        case unoidl::Entity::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
-            {
-                rtl::Reference<unoidl::PolymorphicStructTypeTemplateEntity>
-                    ent2(
-                        static_cast<unoidl::PolymorphicStructTypeTemplateEntity *>(
-                            ent.get()));
-                writeAnnotationsPublished(ent);
-                std::cout << "struct " << id << '<';
-                for (auto j(ent2->getTypeParameters().begin());
-                     j != ent2->getTypeParameters().end(); ++j)
+            indent(modules);
+            std::cout << "};\n";
+            break;
+        }
+    case unoidl::Entity::SORT_EXCEPTION_TYPE:
+        {
+            rtl::Reference<unoidl::ExceptionTypeEntity> ent2(
+                static_cast<unoidl::ExceptionTypeEntity *>(ent.get()));
+            writeAnnotationsPublished(ent);
+            std::cout << "exception " << id;
+            if (!ent2->getDirectBase().isEmpty()) {
+                std::cout << ": ";
+                writeName(ent2->getDirectBase());
+            }
+            std::cout << " {\n";
+            for (auto & j: ent2->getDirectMembers()) {
+                indent(modules, 1);
+                writeAnnotations(j.annotations);
+                writeType(j.type);
+                std::cout << ' ' << j.name << ";\n";
+            }
+            indent(modules);
+            std::cout << "};\n";
+            break;
+        }
+    case unoidl::Entity::SORT_INTERFACE_TYPE:
+        {
+            rtl::Reference<unoidl::InterfaceTypeEntity> ent2(
+                static_cast<unoidl::InterfaceTypeEntity *>(
+                    ent.get()));
+            writeAnnotationsPublished(ent);
+            std::cout << "interface " << id << " {\n";
+            for (auto & j: ent2->getDirectMandatoryBases()) {
+                indent(modules, 1);
+                writeAnnotations(j.annotations);
+                std::cout << "interface ";
+                writeName(j.name);
+                std::cout << ";\n";
+            }
+            for (auto & j: ent2->getDirectOptionalBases()) {
+                indent(modules, 1);
+                writeAnnotations(j.annotations);
+                std::cout << "[optional] interface ";
+                writeName(j.name);
+                std::cout << ";\n";
+            }
+            for (auto & j: ent2->getDirectAttributes()) {
+                indent(modules, 1);
+                writeAnnotations(j.annotations);
+                std::cout << "[attribute";
+                if (j.bound) {
+                    std::cout << ", bound";
+                }
+                if (j.readOnly) {
+                    std::cout << ", readonly";
+                }
+                std::cout << "] ";
+                writeType(j.type);
+                std::cout << ' ' << j.name;
+                if (!(j.getExceptions.empty() && j.setExceptions.empty())) {
+                    std::cout << " {\n";
+                    if (!j.getExceptions.empty()) {
+                        indent(modules, 2);
+                        std::cout << "get";
+                        writeExceptionSpecification(j.getExceptions);
+                        std::cout << ";\n";
+                    }
+                    if (!j.setExceptions.empty()) {
+                        indent(modules, 2);
+                        std::cout << "set";
+                        writeExceptionSpecification(j.setExceptions);
+                        std::cout << ";\n";
+                    }
+                    std::cout << " }";
+                }
+                std::cout << ";\n";
+            }
+            for (auto & j: ent2->getDirectMethods()) {
+                indent(modules, 1);
+                writeAnnotations(j.annotations);
+                writeType(j.returnType);
+                std::cout << ' ' << j.name << '(';
+                for (auto k(j.parameters.begin()); k != j.parameters.end();
+                     ++k)
                 {
-                    if (j != ent2->getTypeParameters().begin()) {
+                    if (k != j.parameters.begin()) {
                         std::cout << ", ";
                     }
-                    std::cout << *j;
-                }
-                std::cout << ">  {\n";
-                for (auto & j: ent2->getMembers()) {
-                    indent(modules, 1);
-                    writeAnnotations(j.annotations);
-                    if (j.parameterized) {
-                        std::cout << j.type;
-                    } else {
-                        writeType(j.type);
+                    switch (k->direction) {
+                    case unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN:
+                        std::cout << "[in] ";
+                        break;
+                    case unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_OUT:
+                        std::cout << "[out] ";
+                        break;
+                    case unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN_OUT:
+                        std::cout << "[inout] ";
+                        break;
                     }
-                    std::cout << ' ' << j.name << ";\n";
+                    writeType(k->type);
+                    std::cout << ' ' << k->name;
                 }
-                indent(modules);
-                std::cout << "};\n";
-                break;
+                std::cout << ')';
+                writeExceptionSpecification(j.exceptions);
+                std::cout << ";\n";
             }
-        case unoidl::Entity::SORT_EXCEPTION_TYPE:
-            {
-                rtl::Reference<unoidl::ExceptionTypeEntity> ent2(
-                    static_cast<unoidl::ExceptionTypeEntity *>(ent.get()));
-                writeAnnotationsPublished(ent);
-                std::cout << "exception " << id;
-                if (!ent2->getDirectBase().isEmpty()) {
-                    std::cout << ": ";
-                    writeName(ent2->getDirectBase());
+            indent(modules);
+            std::cout << "};\n";
+            break;
+        }
+    case unoidl::Entity::SORT_TYPEDEF:
+        {
+            rtl::Reference<unoidl::TypedefEntity> ent2(
+                static_cast<unoidl::TypedefEntity *>(ent.get()));
+            writeAnnotationsPublished(ent);
+            std::cout << "typedef ";
+            writeType(ent2->getType());
+            std::cout << ' ' << id << ";\n";
+            break;
+        }
+    case unoidl::Entity::SORT_CONSTANT_GROUP:
+        {
+            rtl::Reference<unoidl::ConstantGroupEntity> ent2(
+                static_cast<unoidl::ConstantGroupEntity *>(ent.get()));
+            writeAnnotationsPublished(ent);
+            std::cout << "constants " << id << " {\n";
+            for (auto & j: ent2->getMembers()) {
+                indent(modules, 1);
+                writeAnnotations(j.annotations);
+                std::cout << "const ";
+                switch (j.value.type) {
+                case unoidl::ConstantValue::TYPE_BOOLEAN:
+                    std::cout << "boolean";
+                    break;
+                case unoidl::ConstantValue::TYPE_BYTE:
+                    std::cout << "byte";
+                    break;
+                case unoidl::ConstantValue::TYPE_SHORT:
+                    std::cout << "short";
+                    break;
+                case unoidl::ConstantValue::TYPE_UNSIGNED_SHORT:
+                    std::cout << "unsigned short";
+                    break;
+                case unoidl::ConstantValue::TYPE_LONG:
+                    std::cout << "long";
+                    break;
+                case unoidl::ConstantValue::TYPE_UNSIGNED_LONG:
+                    std::cout << "unsigned long";
+                    break;
+                case unoidl::ConstantValue::TYPE_HYPER:
+                    std::cout << "hyper";
+                    break;
+                case unoidl::ConstantValue::TYPE_UNSIGNED_HYPER:
+                    std::cout << "unsigned hyper";
+                    break;
+                case unoidl::ConstantValue::TYPE_FLOAT:
+                    std::cout << "float";
+                    break;
+                case unoidl::ConstantValue::TYPE_DOUBLE:
+                    std::cout << "double";
+                    break;
                 }
+                std::cout << ' ' << j.name << " = ";
+                switch (j.value.type) {
+                case unoidl::ConstantValue::TYPE_BOOLEAN:
+                    std::cout << (j.value.booleanValue ? "TRUE" : "FALSE");
+                    break;
+                case unoidl::ConstantValue::TYPE_BYTE:
+                    std::cout << int(j.value.byteValue);
+                    break;
+                case unoidl::ConstantValue::TYPE_SHORT:
+                    std::cout << j.value.shortValue;
+                    break;
+                case unoidl::ConstantValue::TYPE_UNSIGNED_SHORT:
+                    std::cout << j.value.unsignedShortValue;
+                    break;
+                case unoidl::ConstantValue::TYPE_LONG:
+                    std::cout << j.value.longValue;
+                    break;
+                case unoidl::ConstantValue::TYPE_UNSIGNED_LONG:
+                    std::cout << j.value.unsignedLongValue;
+                    break;
+                case unoidl::ConstantValue::TYPE_HYPER:
+                    std::cout << j.value.hyperValue;
+                    break;
+                case unoidl::ConstantValue::TYPE_UNSIGNED_HYPER:
+                    std::cout << j.value.unsignedHyperValue;
+                    break;
+                case unoidl::ConstantValue::TYPE_FLOAT:
+                    std::cout << j.value.floatValue;
+                    break;
+                case unoidl::ConstantValue::TYPE_DOUBLE:
+                    std::cout << j.value.doubleValue;
+                    break;
+                }
+                std::cout << ";\n";
+            }
+            indent(modules);
+            std::cout << "};\n";
+            break;
+        }
+    case unoidl::Entity::SORT_SINGLE_INTERFACE_BASED_SERVICE:
+        {
+            rtl::Reference<unoidl::SingleInterfaceBasedServiceEntity> ent2(
+                static_cast<unoidl::SingleInterfaceBasedServiceEntity *>(
+                    ent.get()));
+            writeAnnotationsPublished(ent);
+            std::cout << "service " << id << ": ";
+            writeName(ent2->getBase());
+            if (ent2->getConstructors().size() != 1
+                || !ent2->getConstructors().front().defaultConstructor)
+            {
                 std::cout << " {\n";
-                for (auto & j: ent2->getDirectMembers()) {
+                for (auto & j: ent2->getConstructors()) {
                     indent(modules, 1);
                     writeAnnotations(j.annotations);
-                    writeType(j.type);
-                    std::cout << ' ' << j.name << ";\n";
-                }
-                indent(modules);
-                std::cout << "};\n";
-                break;
-            }
-        case unoidl::Entity::SORT_INTERFACE_TYPE:
-            {
-                rtl::Reference<unoidl::InterfaceTypeEntity> ent2(
-                    static_cast<unoidl::InterfaceTypeEntity *>(
-                        ent.get()));
-                writeAnnotationsPublished(ent);
-                std::cout << "interface " << id << " {\n";
-                for (auto & j: ent2->getDirectMandatoryBases()) {
-                    indent(modules, 1);
-                    writeAnnotations(j.annotations);
-                    std::cout << "interface ";
-                    writeName(j.name);
-                    std::cout << ";\n";
-                }
-                for (auto & j: ent2->getDirectOptionalBases()) {
-                    indent(modules, 1);
-                    writeAnnotations(j.annotations);
-                    std::cout << "[optional] interface ";
-                    writeName(j.name);
-                    std::cout << ";\n";
-                }
-                for (auto & j: ent2->getDirectAttributes()) {
-                    indent(modules, 1);
-                    writeAnnotations(j.annotations);
-                    std::cout << "[attribute";
-                    if (j.bound) {
-                        std::cout << ", bound";
-                    }
-                    if (j.readOnly) {
-                        std::cout << ", readonly";
-                    }
-                    std::cout << "] ";
-                    writeType(j.type);
-                    std::cout << ' ' << j.name;
-                    if (!(j.getExceptions.empty() && j.setExceptions.empty())) {
-                        std::cout << " {\n";
-                        if (!j.getExceptions.empty()) {
-                            indent(modules, 2);
-                            std::cout << "get";
-                            writeExceptionSpecification(j.getExceptions);
-                            std::cout << ";\n";
-                        }
-                        if (!j.setExceptions.empty()) {
-                            indent(modules, 2);
-                            std::cout << "set";
-                            writeExceptionSpecification(j.setExceptions);
-                            std::cout << ";\n";
-                        }
-                        std::cout << " }";
-                    }
-                    std::cout << ";\n";
-                }
-                for (auto & j: ent2->getDirectMethods()) {
-                    indent(modules, 1);
-                    writeAnnotations(j.annotations);
-                    writeType(j.returnType);
-                    std::cout << ' ' << j.name << '(';
-                    for (auto k(j.parameters.begin()); k != j.parameters.end();
-                         ++k)
+                    std::cout << j.name << '(';
+                    for (auto k(j.parameters.begin());
+                         k != j.parameters.end(); ++k)
                     {
                         if (k != j.parameters.begin()) {
                             std::cout << ", ";
                         }
-                        switch (k->direction) {
-                        case unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN:
-                            std::cout << "[in] ";
-                            break;
-                        case unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_OUT:
-                            std::cout << "[out] ";
-                            break;
-                        case unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN_OUT:
-                            std::cout << "[inout] ";
-                            break;
-                        }
+                        std::cout << "[in] ";
                         writeType(k->type);
+                        if (k->rest) {
+                            std::cout << "...";
+                        }
                         std::cout << ' ' << k->name;
                     }
                     std::cout << ')';
@@ -752,265 +883,136 @@ void writeEntity(
                     std::cout << ";\n";
                 }
                 indent(modules);
-                std::cout << "};\n";
-                break;
+                std::cout << '}';
             }
-        case unoidl::Entity::SORT_TYPEDEF:
-            {
-                rtl::Reference<unoidl::TypedefEntity> ent2(
-                    static_cast<unoidl::TypedefEntity *>(ent.get()));
-                writeAnnotationsPublished(ent);
-                std::cout << "typedef ";
-                writeType(ent2->getType());
-                std::cout << ' ' << id << ";\n";
-                break;
-            }
-        case unoidl::Entity::SORT_CONSTANT_GROUP:
-            {
-                rtl::Reference<unoidl::ConstantGroupEntity> ent2(
-                    static_cast<unoidl::ConstantGroupEntity *>(ent.get()));
-                writeAnnotationsPublished(ent);
-                std::cout << "constants " << id << " {\n";
-                for (auto & j: ent2->getMembers()) {
-                    indent(modules, 1);
-                    writeAnnotations(j.annotations);
-                    std::cout << "const ";
-                    switch (j.value.type) {
-                    case unoidl::ConstantValue::TYPE_BOOLEAN:
-                        std::cout << "boolean";
-                        break;
-                    case unoidl::ConstantValue::TYPE_BYTE:
-                        std::cout << "byte";
-                        break;
-                    case unoidl::ConstantValue::TYPE_SHORT:
-                        std::cout << "short";
-                        break;
-                    case unoidl::ConstantValue::TYPE_UNSIGNED_SHORT:
-                        std::cout << "unsigned short";
-                        break;
-                    case unoidl::ConstantValue::TYPE_LONG:
-                        std::cout << "long";
-                        break;
-                    case unoidl::ConstantValue::TYPE_UNSIGNED_LONG:
-                        std::cout << "unsigned long";
-                        break;
-                    case unoidl::ConstantValue::TYPE_HYPER:
-                        std::cout << "hyper";
-                        break;
-                    case unoidl::ConstantValue::TYPE_UNSIGNED_HYPER:
-                        std::cout << "unsigned hyper";
-                        break;
-                    case unoidl::ConstantValue::TYPE_FLOAT:
-                        std::cout << "float";
-                        break;
-                    case unoidl::ConstantValue::TYPE_DOUBLE:
-                        std::cout << "double";
-                        break;
-                    }
-                    std::cout << ' ' << j.name << " = ";
-                    switch (j.value.type) {
-                    case unoidl::ConstantValue::TYPE_BOOLEAN:
-                        std::cout << (j.value.booleanValue ? "TRUE" : "FALSE");
-                        break;
-                    case unoidl::ConstantValue::TYPE_BYTE:
-                        std::cout << int(j.value.byteValue);
-                        break;
-                    case unoidl::ConstantValue::TYPE_SHORT:
-                        std::cout << j.value.shortValue;
-                        break;
-                    case unoidl::ConstantValue::TYPE_UNSIGNED_SHORT:
-                        std::cout << j.value.unsignedShortValue;
-                        break;
-                    case unoidl::ConstantValue::TYPE_LONG:
-                        std::cout << j.value.longValue;
-                        break;
-                    case unoidl::ConstantValue::TYPE_UNSIGNED_LONG:
-                        std::cout << j.value.unsignedLongValue;
-                        break;
-                    case unoidl::ConstantValue::TYPE_HYPER:
-                        std::cout << j.value.hyperValue;
-                        break;
-                    case unoidl::ConstantValue::TYPE_UNSIGNED_HYPER:
-                        std::cout << j.value.unsignedHyperValue;
-                        break;
-                    case unoidl::ConstantValue::TYPE_FLOAT:
-                        std::cout << j.value.floatValue;
-                        break;
-                    case unoidl::ConstantValue::TYPE_DOUBLE:
-                        std::cout << j.value.doubleValue;
-                        break;
-                    }
-                    std::cout << ";\n";
-                }
-                indent(modules);
-                std::cout << "};\n";
-                break;
-            }
-        case unoidl::Entity::SORT_SINGLE_INTERFACE_BASED_SERVICE:
-            {
-                rtl::Reference<unoidl::SingleInterfaceBasedServiceEntity> ent2(
-                    static_cast<unoidl::SingleInterfaceBasedServiceEntity *>(
-                        ent.get()));
-                writeAnnotationsPublished(ent);
-                std::cout << "service " << id << ": ";
-                writeName(ent2->getBase());
-                if (ent2->getConstructors().size() != 1
-                    || !ent2->getConstructors().front().defaultConstructor)
-                {
-                    std::cout << " {\n";
-                    for (auto & j: ent2->getConstructors()) {
-                        indent(modules, 1);
-                        writeAnnotations(j.annotations);
-                        std::cout << j.name << '(';
-                        for (auto k(j.parameters.begin());
-                             k != j.parameters.end(); ++k)
-                        {
-                            if (k != j.parameters.begin()) {
-                                std::cout << ", ";
-                            }
-                            std::cout << "[in] ";
-                            writeType(k->type);
-                            if (k->rest) {
-                                std::cout << "...";
-                            }
-                            std::cout << ' ' << k->name;
-                        }
-                        std::cout << ')';
-                        writeExceptionSpecification(j.exceptions);
-                        std::cout << ";\n";
-                    }
-                    indent(modules);
-                    std::cout << '}';
-                }
-                std::cout << ";\n";
-                break;
-            }
-        case unoidl::Entity::SORT_ACCUMULATION_BASED_SERVICE:
-            {
-                rtl::Reference<unoidl::AccumulationBasedServiceEntity> ent2(
-                    static_cast<unoidl::AccumulationBasedServiceEntity *>(
-                        ent.get()));
-                writeAnnotationsPublished(ent);
-                std::cout << "service " << id << " {\n";
-                for (auto & j: ent2->getDirectMandatoryBaseServices()) {
-                    indent(modules, 1);
-                    writeAnnotations(j.annotations);
-                    std::cout << "service ";
-                    writeName(j.name);
-                    std::cout << ";\n";
-                }
-                for (auto & j: ent2->getDirectOptionalBaseServices()) {
-                    indent(modules, 1);
-                    writeAnnotations(j.annotations);
-                    std::cout << "[optional] service ";
-                    writeName(j.name);
-                    std::cout << ";\n";
-                }
-                for (auto & j: ent2->getDirectMandatoryBaseInterfaces()) {
-                    indent(modules, 1);
-                    writeAnnotations(j.annotations);
-                    std::cout << "interface ";
-                    writeName(j.name);
-                    std::cout << ";\n";
-                }
-                for (auto & j: ent2->getDirectOptionalBaseInterfaces()) {
-                    indent(modules, 1);
-                    writeAnnotations(j.annotations);
-                    std::cout << "[optional] interface ";
-                    writeName(j.name);
-                    std::cout << ";\n";
-                }
-                for (auto & j: ent2->getDirectProperties()) {
-                    indent(modules, 1);
-                    writeAnnotations(j.annotations);
-                    std::cout << "[property";
-                    if ((j.attributes
-                         & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_BOUND)
-                        != 0)
-                    {
-                        std::cout << ", bound";
-                    }
-                    if ((j.attributes
-                         & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_CONSTRAINED)
-                        != 0)
-                    {
-                        std::cout << ", constrained";
-                    }
-                    if ((j.attributes
-                         & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_MAYBE_AMBIGUOUS)
-                        != 0)
-                    {
-                        std::cout << ", maybeambiguous";
-                    }
-                    if ((j.attributes
-                         & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_MAYBE_DEFAULT)
-                        != 0)
-                    {
-                        std::cout << ", maybedefault";
-                    }
-                    if ((j.attributes
-                         & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_MAYBE_VOID)
-                        != 0)
-                    {
-                        std::cout << ", maybevoid";
-                    }
-                    if ((j.attributes
-                         & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_OPTIONAL)
-                        != 0)
-                    {
-                        std::cout << ", optional";
-                    }
-                    if ((j.attributes
-                         & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_READ_ONLY)
-                        != 0)
-                    {
-                        std::cout << ", readonly";
-                    }
-                    if ((j.attributes
-                         & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_REMOVABLE)
-                        != 0)
-                    {
-                        std::cout << ", removable";
-                    }
-                    if ((j.attributes
-                         & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_TRANSIENT)
-                        != 0)
-                    {
-                        std::cout << ", transient";
-                    }
-                    std::cout << "] ";
-                    writeType(j.type);
-                    std::cout << ' ' << j.name << ";\n";
-                }
-                indent(modules);
-                std::cout << "};\n";
-                break;
-            }
-        case unoidl::Entity::SORT_INTERFACE_BASED_SINGLETON:
-            {
-                rtl::Reference<unoidl::InterfaceBasedSingletonEntity> ent2(
-                    static_cast<unoidl::InterfaceBasedSingletonEntity *>(
-                        ent.get()));
-                writeAnnotationsPublished(ent);
-                std::cout << "singleton " << id << ": ";
-                writeName(ent2->getBase());
-                std::cout << ";\n";
-                break;
-            }
-        case unoidl::Entity::SORT_SERVICE_BASED_SINGLETON:
-            {
-                rtl::Reference<unoidl::ServiceBasedSingletonEntity> ent2(
-                    static_cast<unoidl::ServiceBasedSingletonEntity *>(
-                        ent.get()));
-                writeAnnotationsPublished(ent);
-                std::cout << "singleton " << id << " { service ";
-                writeName(ent2->getBase());
-                std::cout << "; };";
-                break;
-            }
-        case unoidl::Entity::SORT_MODULE:
-            assert(false && "this cannot happen");
+            std::cout << ";\n";
+            break;
         }
+    case unoidl::Entity::SORT_ACCUMULATION_BASED_SERVICE:
+        {
+            rtl::Reference<unoidl::AccumulationBasedServiceEntity> ent2(
+                static_cast<unoidl::AccumulationBasedServiceEntity *>(
+                    ent.get()));
+            writeAnnotationsPublished(ent);
+            std::cout << "service " << id << " {\n";
+            for (auto & j: ent2->getDirectMandatoryBaseServices()) {
+                indent(modules, 1);
+                writeAnnotations(j.annotations);
+                std::cout << "service ";
+                writeName(j.name);
+                std::cout << ";\n";
+            }
+            for (auto & j: ent2->getDirectOptionalBaseServices()) {
+                indent(modules, 1);
+                writeAnnotations(j.annotations);
+                std::cout << "[optional] service ";
+                writeName(j.name);
+                std::cout << ";\n";
+            }
+            for (auto & j: ent2->getDirectMandatoryBaseInterfaces()) {
+                indent(modules, 1);
+                writeAnnotations(j.annotations);
+                std::cout << "interface ";
+                writeName(j.name);
+                std::cout << ";\n";
+            }
+            for (auto & j: ent2->getDirectOptionalBaseInterfaces()) {
+                indent(modules, 1);
+                writeAnnotations(j.annotations);
+                std::cout << "[optional] interface ";
+                writeName(j.name);
+                std::cout << ";\n";
+            }
+            for (auto & j: ent2->getDirectProperties()) {
+                indent(modules, 1);
+                writeAnnotations(j.annotations);
+                std::cout << "[property";
+                if ((j.attributes
+                     & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_BOUND)
+                    != 0)
+                {
+                    std::cout << ", bound";
+                }
+                if ((j.attributes
+                     & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_CONSTRAINED)
+                    != 0)
+                {
+                    std::cout << ", constrained";
+                }
+                if ((j.attributes
+                     & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_MAYBE_AMBIGUOUS)
+                    != 0)
+                {
+                    std::cout << ", maybeambiguous";
+                }
+                if ((j.attributes
+                     & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_MAYBE_DEFAULT)
+                    != 0)
+                {
+                    std::cout << ", maybedefault";
+                }
+                if ((j.attributes
+                     & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_MAYBE_VOID)
+                    != 0)
+                {
+                    std::cout << ", maybevoid";
+                }
+                if ((j.attributes
+                     & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_OPTIONAL)
+                    != 0)
+                {
+                    std::cout << ", optional";
+                }
+                if ((j.attributes
+                     & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_READ_ONLY)
+                    != 0)
+                {
+                    std::cout << ", readonly";
+                }
+                if ((j.attributes
+                     & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_REMOVABLE)
+                    != 0)
+                {
+                    std::cout << ", removable";
+                }
+                if ((j.attributes
+                     & unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_TRANSIENT)
+                    != 0)
+                {
+                    std::cout << ", transient";
+                }
+                std::cout << "] ";
+                writeType(j.type);
+                std::cout << ' ' << j.name << ";\n";
+            }
+            indent(modules);
+            std::cout << "};\n";
+            break;
+        }
+    case unoidl::Entity::SORT_INTERFACE_BASED_SINGLETON:
+        {
+            rtl::Reference<unoidl::InterfaceBasedSingletonEntity> ent2(
+                static_cast<unoidl::InterfaceBasedSingletonEntity *>(
+                    ent.get()));
+            writeAnnotationsPublished(ent);
+            std::cout << "singleton " << id << ": ";
+            writeName(ent2->getBase());
+            std::cout << ";\n";
+            break;
+        }
+    case unoidl::Entity::SORT_SERVICE_BASED_SINGLETON:
+        {
+            rtl::Reference<unoidl::ServiceBasedSingletonEntity> ent2(
+                static_cast<unoidl::ServiceBasedSingletonEntity *>(
+                    ent.get()));
+            writeAnnotationsPublished(ent);
+            std::cout << "singleton " << id << " { service ";
+            writeName(ent2->getBase());
+            std::cout << "; };";
+            break;
+        }
+    case unoidl::Entity::SORT_MODULE:
+        assert(false && "this cannot happen");
     }
 }
 

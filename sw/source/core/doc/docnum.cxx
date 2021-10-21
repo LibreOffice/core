@@ -1180,39 +1180,39 @@ void SwDoc::ReplaceNumRule( const SwPosition& rPos,
 {
     SwNumRule *pOldRule = FindNumRulePtr( rOldRule ),
               *pNewRule = FindNumRulePtr( rNewRule );
-    if( pOldRule && pNewRule && pOldRule != pNewRule )
+    if( !pOldRule || !pNewRule || pOldRule == pNewRule )
+        return;
+
+    SwUndoInsNum* pUndo = nullptr;
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        SwUndoInsNum* pUndo = nullptr;
-        if (GetIDocumentUndoRedo().DoesUndo())
-        {
-            // Start/End for attributes!
-            GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
-            pUndo = new SwUndoInsNum( rPos, *pNewRule, rOldRule );
-            GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndo>(pUndo));
-        }
+        // Start/End for attributes!
+        GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
+        pUndo = new SwUndoInsNum( rPos, *pNewRule, rOldRule );
+        GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndo>(pUndo));
+    }
 
-        SwNumRule::tTextNodeList aTextNodeList;
-        pOldRule->GetTextNodeList( aTextNodeList );
-        if ( !aTextNodeList.empty() )
-        {
-            SwRegHistory aRegH( pUndo ? pUndo->GetHistory() : nullptr );
+    SwNumRule::tTextNodeList aTextNodeList;
+    pOldRule->GetTextNodeList( aTextNodeList );
+    if ( !aTextNodeList.empty() )
+    {
+        SwRegHistory aRegH( pUndo ? pUndo->GetHistory() : nullptr );
 
-            const SwTextNode* pGivenTextNode = rPos.nNode.GetNode().GetTextNode();
-            SwNumRuleItem aRule( rNewRule );
-            for ( SwTextNode* pTextNd : aTextNodeList )
+        const SwTextNode* pGivenTextNode = rPos.nNode.GetNode().GetTextNode();
+        SwNumRuleItem aRule( rNewRule );
+        for ( SwTextNode* pTextNd : aTextNodeList )
+        {
+            if ( pGivenTextNode &&
+                 pGivenTextNode->GetListId() == pTextNd->GetListId() )
             {
-                if ( pGivenTextNode &&
-                     pGivenTextNode->GetListId() == pTextNd->GetListId() )
-                {
-                    aRegH.RegisterInModify( pTextNd, *pTextNd );
+                aRegH.RegisterInModify( pTextNd, *pTextNd );
 
-                    pTextNd->SetAttr( aRule );
-                    pTextNd->NumRuleChgd();
-                }
+                pTextNd->SetAttr( aRule );
+                pTextNd->NumRuleChgd();
             }
-            GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
-            getIDocumentState().SetModified();
         }
+        GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
+        getIDocumentState().SetModified();
     }
 }
 

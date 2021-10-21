@@ -120,24 +120,24 @@ public:
         m_rXmlWriter.endElement();
 
         SdrTextObj* pTextObject = dynamic_cast<SdrTextObj*>(pObject);
-        if (pTextObject)
-        {
-            OutlinerParaObject* pOutlinerParagraphObject = pTextObject->GetOutlinerParaObject();
-            if (pOutlinerParagraphObject)
-            {
-                const EditTextObject& aEdit = pOutlinerParagraphObject->GetTextObject();
-                for (sal_Int32 nParagraph = 0; nParagraph < aEdit.GetParagraphCount(); ++nParagraph)
-                {
-                    OUString sText = aEdit.GetText(nParagraph);
+        if (!pTextObject)
+            return;
 
-                    m_rXmlWriter.startElement("paragraph");
-                    m_rXmlWriter.attribute("index", nParagraph);
-                    m_rXmlWriter.attribute("node_type", "common");
-                    m_rXmlWriter.attribute("object_name", pObject->GetName());
-                    m_rXmlWriter.content(sText);
-                    m_rXmlWriter.endElement();
-                }
-            }
+        OutlinerParaObject* pOutlinerParagraphObject = pTextObject->GetOutlinerParaObject();
+        if (!pOutlinerParagraphObject)
+            return;
+
+        const EditTextObject& aEdit = pOutlinerParagraphObject->GetTextObject();
+        for (sal_Int32 nParagraph = 0; nParagraph < aEdit.GetParagraphCount(); ++nParagraph)
+        {
+            OUString sText = aEdit.GetText(nParagraph);
+
+            m_rXmlWriter.startElement("paragraph");
+            m_rXmlWriter.attribute("index", nParagraph);
+            m_rXmlWriter.attribute("node_type", "common");
+            m_rXmlWriter.attribute("object_name", pObject->GetName());
+            m_rXmlWriter.content(sText);
+            m_rXmlWriter.endElement();
         }
     }
 

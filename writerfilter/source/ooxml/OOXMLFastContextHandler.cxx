@@ -416,24 +416,23 @@ void OOXMLFastContextHandler::startParagraphGroup()
     if (! mpParserState->isInSectionGroup())
         startSectionGroup();
 
-    if (! mpParserState->isInParagraphGroup())
+    if ( mpParserState->isInParagraphGroup())
+        return;
+
+    mpStream->startParagraphGroup();
+    mpParserState->setInParagraphGroup(true);
+
+    if (const auto& pPropSet = getPropertySet())
     {
-        mpStream->startParagraphGroup();
-        mpParserState->setInParagraphGroup(true);
-
-        if (const auto& pPropSet = getPropertySet())
+        OOXMLPropertySetEntryToString aHandler(NS_ooxml::LN_AG_Parids_paraId);
+        pPropSet->resolve(aHandler);
+        if (const OUString& sText = aHandler.getString(); !sText.isEmpty())
         {
-            OOXMLPropertySetEntryToString aHandler(NS_ooxml::LN_AG_Parids_paraId);
-            pPropSet->resolve(aHandler);
-            if (const OUString& sText = aHandler.getString(); !sText.isEmpty())
-            {
-                OOXMLStringValue::Pointer_t pVal = new OOXMLStringValue(sText);
-                OOXMLPropertySet::Pointer_t pPropertySet(new OOXMLPropertySet);
-                pPropertySet->add(NS_ooxml::LN_AG_Parids_paraId, pVal, OOXMLProperty::ATTRIBUTE);
-                mpStream->props(pPropertySet.get());
-            }
+            OOXMLStringValue::Pointer_t pVal = new OOXMLStringValue(sText);
+            OOXMLPropertySet::Pointer_t pPropertySet(new OOXMLPropertySet);
+            pPropertySet->add(NS_ooxml::LN_AG_Parids_paraId, pVal, OOXMLProperty::ATTRIBUTE);
+            mpStream->props(pPropertySet.get());
         }
-
     }
 }
 

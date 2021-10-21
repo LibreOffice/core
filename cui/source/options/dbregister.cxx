@@ -168,20 +168,20 @@ void DbRegistrationOptionsPage::Reset( const SfxItemSet* rSet )
     }
 
     OUString aUserData = GetUserData();
-    if ( !aUserData.isEmpty() )
+    if ( aUserData.isEmpty() )
+        return;
+
+    sal_Int32 nIdx {0};
+    // restore column width
+    std::vector<int> aWidths
     {
-        sal_Int32 nIdx {0};
-        // restore column width
-        std::vector<int> aWidths
-        {
-            aUserData.getToken(0, ';', nIdx).toInt32()
-        };
-        m_xPathBox->set_column_fixed_widths(aWidths);
-        // restore sort direction
-        bool bUp = aUserData.getToken(0, ';', nIdx).toInt32() != 0;
-        m_xPathBox->set_sort_order(bUp);
-        m_xPathBox->set_sort_indicator(bUp ? TRISTATE_TRUE : TRISTATE_FALSE, COL_TYPE);
-    }
+        aUserData.getToken(0, ';', nIdx).toInt32()
+    };
+    m_xPathBox->set_column_fixed_widths(aWidths);
+    // restore sort direction
+    bool bUp = aUserData.getToken(0, ';', nIdx).toInt32() != 0;
+    m_xPathBox->set_sort_order(bUp);
+    m_xPathBox->set_sort_indicator(bUp ? TRISTATE_TRUE : TRISTATE_FALSE, COL_TYPE);
 }
 
 void DbRegistrationOptionsPage::FillUserData()

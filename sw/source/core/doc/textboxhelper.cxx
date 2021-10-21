@@ -1422,19 +1422,19 @@ void SwTextBoxNode::AddTextBox(SdrObject* pDrawObject, SwFrameFormat* pNewTextBo
 void SwTextBoxNode::DelTextBox(const SdrObject* pDrawObject)
 {
     assert(pDrawObject);
-    if (!m_pTextBoxes.empty())
+    if (m_pTextBoxes.empty())
+        return;
+
+    for (auto it = m_pTextBoxes.begin(); it != m_pTextBoxes.end();)
     {
-        for (auto it = m_pTextBoxes.begin(); it != m_pTextBoxes.end();)
+        if (it->m_pDrawObject == pDrawObject)
         {
-            if (it->m_pDrawObject == pDrawObject)
-            {
-                m_pOwnerShapeFormat->GetDoc()->getIDocumentLayoutAccess().DelLayoutFormat(
-                    it->m_pTextBoxFormat);
-                it = m_pTextBoxes.erase(it);
-                break;
-            }
-            ++it;
+            m_pOwnerShapeFormat->GetDoc()->getIDocumentLayoutAccess().DelLayoutFormat(
+                it->m_pTextBoxFormat);
+            it = m_pTextBoxes.erase(it);
+            break;
         }
+        ++it;
     }
 }
 

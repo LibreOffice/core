@@ -248,28 +248,28 @@ void XMLIndexTOCContext::endFastElement(sal_Int32 )
 {
     // complete import of index by removing the markers (if the index
     // was actually inserted, that is)
-    if( bValid )
+    if( !bValid )
+        return;
+
+    // preliminaries
+    rtl::Reference<XMLTextImportHelper> rHelper= GetImport().GetTextImport();
+
+    // get rid of last paragraph (unless it's the only paragraph)
+    rHelper->GetCursor()->goRight(1, false);
+    if( xBodyContextRef.is() && xBodyContextRef->HasContent() )
     {
-        // preliminaries
-        rtl::Reference<XMLTextImportHelper> rHelper= GetImport().GetTextImport();
-
-        // get rid of last paragraph (unless it's the only paragraph)
-        rHelper->GetCursor()->goRight(1, false);
-        if( xBodyContextRef.is() && xBodyContextRef->HasContent() )
-        {
-            rHelper->GetCursor()->goLeft(1, true);
-            rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
-                                             "", true);
-        }
-
-        // and delete second marker
-        rHelper->GetCursor()->goRight(1, true);
+        rHelper->GetCursor()->goLeft(1, true);
         rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
                                          "", true);
-
-        // check for Redlines on our end node
-        GetImport().GetTextImport()->RedlineAdjustStartNodeCursor();
     }
+
+    // and delete second marker
+    rHelper->GetCursor()->goRight(1, true);
+    rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
+                                     "", true);
+
+    // check for Redlines on our end node
+    GetImport().GetTextImport()->RedlineAdjustStartNodeCursor();
 }
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexTOCContext::createFastChildContext(

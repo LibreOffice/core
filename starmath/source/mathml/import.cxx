@@ -790,23 +790,23 @@ void SmMLImportContext::inheritStyleEnd()
     }
 
     // Mi: 1 char -> italic
-    if (m_pElement->getMlElementType() == SmMlElementType::MlMi)
+    if (m_pElement->getMlElementType() != SmMlElementType::MlMi)
+        return;
+
+    // Inherit mathvariant
+    if (!m_pStyle->isAttributeSet(SmMlAttributeValueType::MlMathvariant))
     {
-        // Inherit mathvariant
-        if (!m_pStyle->isAttributeSet(SmMlAttributeValueType::MlMathvariant))
+        sal_Int32 nIndexUtf16 = 0;
+        // Check if there is only one code point
+        m_pElement->getText().iterateCodePoints(&nIndexUtf16, 1);
+        // Mathml says that 1 code point -> italic
+        if (nIndexUtf16 == m_pElement->getText().getLength())
         {
-            sal_Int32 nIndexUtf16 = 0;
-            // Check if there is only one code point
-            m_pElement->getText().iterateCodePoints(&nIndexUtf16, 1);
-            // Mathml says that 1 code point -> italic
-            if (nIndexUtf16 == m_pElement->getText().getLength())
-            {
-                SmMlAttribute aAttribute(SmMlAttributeValueType::MlMathvariant);
-                SmMlMathvariant aMathvariant = { SmMlAttributeValueMathvariant::italic };
-                aAttribute.setMlMathvariant(&aMathvariant);
-                aAttribute.setSet(false);
-                m_pElement->setAttribute(aAttribute);
-            }
+            SmMlAttribute aAttribute(SmMlAttributeValueType::MlMathvariant);
+            SmMlMathvariant aMathvariant = { SmMlAttributeValueMathvariant::italic };
+            aAttribute.setMlMathvariant(&aMathvariant);
+            aAttribute.setSet(false);
+            m_pElement->setAttribute(aAttribute);
         }
     }
 }

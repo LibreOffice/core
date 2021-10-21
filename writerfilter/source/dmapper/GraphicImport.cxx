@@ -557,20 +557,20 @@ void GraphicImport::lcl_correctWord2007EffectExtent(const sal_Int32 nMSOAngle)
     // Word versions older than 14 do not swap width and height (see lcl_doMSOWidthHeightSwap)
     // and therefore generate different effectExtent. We correct them here.
     sal_Int16 nAngleDeg = (nMSOAngle / 60000) % 180;
-    if (nAngleDeg >= 45 && nAngleDeg < 135)
-    {
-        sal_Int32 nDiff = o3tl::convert(
-            (double(m_pImpl->getXSize()) - double(m_pImpl->getYSize())) / 2.0,
-            o3tl::Length::mm100, o3tl::Length::emu);
-        if (m_pImpl->m_oEffectExtentLeft)
-            *m_pImpl->m_oEffectExtentLeft += nDiff;
-        if (m_pImpl->m_oEffectExtentRight)
-            *m_pImpl->m_oEffectExtentRight += nDiff;
-        if (m_pImpl->m_oEffectExtentTop)
-            *m_pImpl->m_oEffectExtentTop -= nDiff;
-        if (m_pImpl->m_oEffectExtentBottom)
-            *m_pImpl->m_oEffectExtentBottom -= nDiff;
-    }
+    if (nAngleDeg < 45 || nAngleDeg >= 135)
+        return;
+
+    sal_Int32 nDiff = o3tl::convert(
+        (double(m_pImpl->getXSize()) - double(m_pImpl->getYSize())) / 2.0,
+        o3tl::Length::mm100, o3tl::Length::emu);
+    if (m_pImpl->m_oEffectExtentLeft)
+        *m_pImpl->m_oEffectExtentLeft += nDiff;
+    if (m_pImpl->m_oEffectExtentRight)
+        *m_pImpl->m_oEffectExtentRight += nDiff;
+    if (m_pImpl->m_oEffectExtentTop)
+        *m_pImpl->m_oEffectExtentTop -= nDiff;
+    if (m_pImpl->m_oEffectExtentBottom)
+        *m_pImpl->m_oEffectExtentBottom -= nDiff;
 }
 
 static void lcl_doMSOWidthHeightSwap(awt::Point& rLeftTop, awt::Size& rSize,

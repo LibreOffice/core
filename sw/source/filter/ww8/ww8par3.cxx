@@ -1766,28 +1766,28 @@ void SwWW8ImplReader::RegisterNumFormatOnStyle(sal_uInt16 nStyle)
     rStyleInf.maWordLR.reset(ItemGet<SvxLRSpaceItem>(*rStyleInf.m_pFormat, RES_LR_SPACE).Clone());
 
     // Phase 2: refresh StyleDef after reading all Lists
-    if (rStyleInf.m_nLFOIndex < USHRT_MAX && rStyleInf.m_nListLevel < WW8ListManager::nMaxLevel)
+    if (rStyleInf.m_nLFOIndex >= USHRT_MAX || rStyleInf.m_nListLevel >= WW8ListManager::nMaxLevel)
+        return;
+
+    std::vector<sal_uInt8> aParaSprms;
+    SwNumRule* pNmRule = m_xLstManager->GetNumRuleForActivation(
+        rStyleInf.m_nLFOIndex, rStyleInf.m_nListLevel, aParaSprms);
+
+    if (pNmRule != nullptr)
     {
-        std::vector<sal_uInt8> aParaSprms;
-        SwNumRule* pNmRule = m_xLstManager->GetNumRuleForActivation(
-            rStyleInf.m_nLFOIndex, rStyleInf.m_nListLevel, aParaSprms);
-
-        if (pNmRule != nullptr)
+        if (rStyleInf.IsWW8BuiltInHeadingStyle()
+            && rStyleInf.HasWW8OutlineLevel())
         {
-            if (rStyleInf.IsWW8BuiltInHeadingStyle()
-                && rStyleInf.HasWW8OutlineLevel())
-            {
-                rStyleInf.m_pOutlineNumrule = pNmRule;
-            }
-            else
-            {
-                rStyleInf.m_pFormat->SetFormatAttr(
-                    SwNumRuleItem(pNmRule->GetName()));
-                rStyleInf.m_bHasStyNumRule = true;
-            }
-
-            SetStyleIndent(rStyleInf, pNmRule->Get(rStyleInf.m_nListLevel));
+            rStyleInf.m_pOutlineNumrule = pNmRule;
         }
+        else
+        {
+            rStyleInf.m_pFormat->SetFormatAttr(
+                SwNumRuleItem(pNmRule->GetName()));
+            rStyleInf.m_bHasStyNumRule = true;
+        }
+
+        SetStyleIndent(rStyleInf, pNmRule->Get(rStyleInf.m_nListLevel));
     }
 }
 

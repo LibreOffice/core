@@ -446,65 +446,65 @@ void PageMasterImportPropertyMapper::finished(std::vector< XMLPropertyState >& r
         xFooterDynamic.reset();
     }
 
-    if (pMarginGutter)
-    {
-        sal_Int32 nGutterMargin{};
-        pMarginGutter->maValue >>= nGutterMargin;
+    if (!pMarginGutter)
+        return;
 
-        bool bGutterAtTop{};
-        uno::Reference<lang::XServiceInfo> xSI(GetImport().GetModel(), uno::UNO_QUERY);
-        if (xSI.is() && xSI->supportsService("com.sun.star.text.TextDocument"))
+    sal_Int32 nGutterMargin{};
+    pMarginGutter->maValue >>= nGutterMargin;
+
+    bool bGutterAtTop{};
+    uno::Reference<lang::XServiceInfo> xSI(GetImport().GetModel(), uno::UNO_QUERY);
+    if (xSI.is() && xSI->supportsService("com.sun.star.text.TextDocument"))
+    {
+        uno::Reference<lang::XMultiServiceFactory> xFac(GetImport().GetModel(), uno::UNO_QUERY);
+        if (xFac.is())
         {
-            uno::Reference<lang::XMultiServiceFactory> xFac(GetImport().GetModel(), uno::UNO_QUERY);
-            if (xFac.is())
+            uno::Reference<beans::XPropertySet> xProps(
+                xFac->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+            if (xProps.is())
             {
-                uno::Reference<beans::XPropertySet> xProps(
-                    xFac->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
-                if (xProps.is())
-                {
-                    xProps->getPropertyValue("GutterAtTop") >>= bGutterAtTop;
-                }
+                xProps->getPropertyValue("GutterAtTop") >>= bGutterAtTop;
             }
         }
-        if (bGutterAtTop)
+    }
+    if (bGutterAtTop)
+    {
+        if (nGutterMargin && pMargins[XML_LINE_TOP])
         {
-            if (nGutterMargin && pMargins[XML_LINE_TOP])
+            // Decrease top margin to not include gutter.
+            sal_Int32 nTopMargin{};
+            pMargins[XML_LINE_TOP]->maValue >>= nTopMargin;
+            nTopMargin -= nGutterMargin;
+            pMargins[XML_LINE_TOP]->maValue <<= nTopMargin;
+        }
+    }
+    else
+    {
+        bool bRtlGutter{};
+        if (nGutterMargin && pRtlGutter)
+        {
+            pRtlGutter->maValue >>= bRtlGutter;
+        }
+        if (bRtlGutter)
+        {
+            if (nGutterMargin && pMargins[XML_LINE_RIGHT])
             {
-                // Decrease top margin to not include gutter.
-                sal_Int32 nTopMargin{};
-                pMargins[XML_LINE_TOP]->maValue >>= nTopMargin;
-                nTopMargin -= nGutterMargin;
-                pMargins[XML_LINE_TOP]->maValue <<= nTopMargin;
+                // Decrease right margin to not include gutter.
+                sal_Int32 nRightMargin{};
+                pMargins[XML_LINE_RIGHT]->maValue >>= nRightMargin;
+                nRightMargin -= nGutterMargin;
+                pMargins[XML_LINE_RIGHT]->maValue <<= nRightMargin;
             }
         }
         else
         {
-            bool bRtlGutter{};
-            if (nGutterMargin && pRtlGutter)
+            if (nGutterMargin && pMargins[XML_LINE_LEFT])
             {
-                pRtlGutter->maValue >>= bRtlGutter;
-            }
-            if (bRtlGutter)
-            {
-                if (nGutterMargin && pMargins[XML_LINE_RIGHT])
-                {
-                    // Decrease right margin to not include gutter.
-                    sal_Int32 nRightMargin{};
-                    pMargins[XML_LINE_RIGHT]->maValue >>= nRightMargin;
-                    nRightMargin -= nGutterMargin;
-                    pMargins[XML_LINE_RIGHT]->maValue <<= nRightMargin;
-                }
-            }
-            else
-            {
-                if (nGutterMargin && pMargins[XML_LINE_LEFT])
-                {
-                    // Decrease left margin to not include gutter.
-                    sal_Int32 nLeftMargin{};
-                    pMargins[XML_LINE_LEFT]->maValue >>= nLeftMargin;
-                    nLeftMargin -= nGutterMargin;
-                    pMargins[XML_LINE_LEFT]->maValue <<= nLeftMargin;
-                }
+                // Decrease left margin to not include gutter.
+                sal_Int32 nLeftMargin{};
+                pMargins[XML_LINE_LEFT]->maValue >>= nLeftMargin;
+                nLeftMargin -= nGutterMargin;
+                pMargins[XML_LINE_LEFT]->maValue <<= nLeftMargin;
             }
         }
     }

@@ -715,33 +715,33 @@ void XMLTextImportHelper::InsertString( const OUString& rChars,
 {
     assert(m_xImpl->m_xText.is());
     assert(m_xImpl->m_xCursorAsRange.is());
-    if (m_xImpl->m_xText.is())
-    {
-        sal_Int32 nLen = rChars.getLength();
-        OUStringBuffer sChars( nLen );
+    if (!m_xImpl->m_xText.is())
+        return;
 
-        for( sal_Int32 i=0; i < nLen; i++ )
+    sal_Int32 nLen = rChars.getLength();
+    OUStringBuffer sChars( nLen );
+
+    for( sal_Int32 i=0; i < nLen; i++ )
+    {
+        sal_Unicode c = rChars[i];
+        switch( c )
         {
-            sal_Unicode c = rChars[i];
-            switch( c )
-            {
-                case 0x20:
-                case 0x09:
-                case 0x0a:
-                case 0x0d:
-                    if( !rIgnoreLeadingSpace )
-                        sChars.append( u' ' );
-                    rIgnoreLeadingSpace = true;
-                    break;
-                default:
-                    rIgnoreLeadingSpace = false;
-                    sChars.append( c );
-                    break;
-            }
+            case 0x20:
+            case 0x09:
+            case 0x0a:
+            case 0x0d:
+                if( !rIgnoreLeadingSpace )
+                    sChars.append( u' ' );
+                rIgnoreLeadingSpace = true;
+                break;
+            default:
+                rIgnoreLeadingSpace = false;
+                sChars.append( c );
+                break;
         }
-        m_xImpl->m_xText->insertString(m_xImpl->m_xCursorAsRange,
-                                       sChars.makeStringAndClear(), false);
     }
+    m_xImpl->m_xText->insertString(m_xImpl->m_xCursorAsRange,
+                                   sChars.makeStringAndClear(), false);
 }
 
 void XMLTextImportHelper::InsertControlCharacter( sal_Int16 nControl )
@@ -1458,46 +1458,46 @@ void XMLTextImportHelper::FindOutlineStyleName( OUString& rStyleName,
                                                 sal_Int8 nOutlineLevel )
 {
     // style name empty?
-    if( rStyleName.isEmpty() )
+    if( !rStyleName.isEmpty() )
+        return;
+
+    // Empty? Then we need o do stuff. Let's do error checking first.
+    if (m_xImpl->m_xChapterNumbering.is() &&
+        ( nOutlineLevel > 0 ) &&
+        (nOutlineLevel <= m_xImpl->m_xChapterNumbering->getCount()))
     {
-        // Empty? Then we need o do stuff. Let's do error checking first.
-        if (m_xImpl->m_xChapterNumbering.is() &&
-            ( nOutlineLevel > 0 ) &&
-            (nOutlineLevel <= m_xImpl->m_xChapterNumbering->getCount()))
+        nOutlineLevel--;   // for the remainder, the level's are 0-based
+
+        // empty style name: look-up previously used name
+
+        // if we don't have a previously used name, we'll use the default
+        m_xImpl->InitOutlineStylesCandidates();
+        if (m_xImpl->m_xOutlineStylesCandidates[nOutlineLevel].empty())
         {
-            nOutlineLevel--;   // for the remainder, the level's are 0-based
+            // no other name used previously? Then use default
 
-            // empty style name: look-up previously used name
-
-            // if we don't have a previously used name, we'll use the default
-            m_xImpl->InitOutlineStylesCandidates();
-            if (m_xImpl->m_xOutlineStylesCandidates[nOutlineLevel].empty())
+            // iterate over property value sequence to find the style name
+            Sequence<PropertyValue> aProperties;
+            m_xImpl->m_xChapterNumbering->getByIndex( nOutlineLevel )
+                >>= aProperties;
+            auto pProp = std::find_if(std::cbegin(aProperties), std::cend(aProperties),
+                [](const PropertyValue& rProp) { return rProp.Name == "HeadingStyleName"; });
+            if (pProp != std::cend(aProperties))
             {
-                // no other name used previously? Then use default
-
-                // iterate over property value sequence to find the style name
-                Sequence<PropertyValue> aProperties;
-                m_xImpl->m_xChapterNumbering->getByIndex( nOutlineLevel )
-                    >>= aProperties;
-                auto pProp = std::find_if(std::cbegin(aProperties), std::cend(aProperties),
-                    [](const PropertyValue& rProp) { return rProp.Name == "HeadingStyleName"; });
-                if (pProp != std::cend(aProperties))
-                {
-                    OUString aOutlineStyle;
-                    pProp->Value >>= aOutlineStyle;
-                    m_xImpl->m_xOutlineStylesCandidates[nOutlineLevel]
-                        .push_back( aOutlineStyle );
-                }
+                OUString aOutlineStyle;
+                pProp->Value >>= aOutlineStyle;
+                m_xImpl->m_xOutlineStylesCandidates[nOutlineLevel]
+                    .push_back( aOutlineStyle );
             }
-
-            // finally, we'll use the previously used style name for this
-            // format (or the default we've just put into that style)
-            // take last added one (#i71249#)
-            rStyleName =
-                m_xImpl->m_xOutlineStylesCandidates[nOutlineLevel].back();
         }
-        // else: nothing we can do, so we'll leave it empty
+
+        // finally, we'll use the previously used style name for this
+        // format (or the default we've just put into that style)
+        // take last added one (#i71249#)
+        rStyleName =
+            m_xImpl->m_xOutlineStylesCandidates[nOutlineLevel].back();
     }
+    // else: nothing we can do, so we'll leave it empty
     // else: we already had a style name, so we let it pass.
 }
 
@@ -1666,29 +1666,29 @@ void XMLTextImportHelper::SetHyperlink(
         }
     }
 
-    if (m_xImpl->m_xTextStyles.is())
-    {
-        OUString sDisplayName(
-            rImport.GetStyleDisplayName(
-                            XmlStyleFamily::TEXT_TEXT, rStyleName ) );
-        if( !sDisplayName.isEmpty() &&
-            xPropSetInfo->hasPropertyByName(s_UnvisitedCharStyleName) &&
-            m_xImpl->m_xTextStyles->hasByName(sDisplayName))
-        {
-            xPropSet->setPropertyValue(s_UnvisitedCharStyleName,
-                makeAny(sDisplayName));
-        }
+    if (!m_xImpl->m_xTextStyles.is())
+        return;
 
-        sDisplayName =
-            rImport.GetStyleDisplayName(
-                            XmlStyleFamily::TEXT_TEXT, rVisitedStyleName );
-        if( !sDisplayName.isEmpty() &&
-            xPropSetInfo->hasPropertyByName(s_VisitedCharStyleName) &&
-            m_xImpl->m_xTextStyles->hasByName(sDisplayName))
-        {
-            xPropSet->setPropertyValue(s_VisitedCharStyleName,
-                makeAny(sDisplayName));
-        }
+    OUString sDisplayName(
+        rImport.GetStyleDisplayName(
+                        XmlStyleFamily::TEXT_TEXT, rStyleName ) );
+    if( !sDisplayName.isEmpty() &&
+        xPropSetInfo->hasPropertyByName(s_UnvisitedCharStyleName) &&
+        m_xImpl->m_xTextStyles->hasByName(sDisplayName))
+    {
+        xPropSet->setPropertyValue(s_UnvisitedCharStyleName,
+            makeAny(sDisplayName));
+    }
+
+    sDisplayName =
+        rImport.GetStyleDisplayName(
+                        XmlStyleFamily::TEXT_TEXT, rVisitedStyleName );
+    if( !sDisplayName.isEmpty() &&
+        xPropSetInfo->hasPropertyByName(s_VisitedCharStyleName) &&
+        m_xImpl->m_xTextStyles->hasByName(sDisplayName))
+    {
+        xPropSet->setPropertyValue(s_VisitedCharStyleName,
+            makeAny(sDisplayName));
     }
 }
 
@@ -1704,35 +1704,35 @@ void XMLTextImportHelper::SetRuby(
     OUString sRubyText("RubyText");
 
     // if we have one Ruby property, we assume all of them are present
-    if (xPropSet.is() &&
-        xPropSet->getPropertySetInfo()->hasPropertyByName( sRubyText ))
+    if (!xPropSet.is() ||
+        !xPropSet->getPropertySetInfo()->hasPropertyByName( sRubyText ))
+        return;
+
+    // the ruby text
+    xPropSet->setPropertyValue(sRubyText, makeAny(rText));
+
+    // the ruby style (ruby-adjust)
+    if (!rStyleName.isEmpty() && m_xImpl->m_xAutoStyles.is())
     {
-        // the ruby text
-        xPropSet->setPropertyValue(sRubyText, makeAny(rText));
+        const SvXMLStyleContext* pTempStyle =
+            m_xImpl->m_xAutoStyles->FindStyleChildContext( XmlStyleFamily::TEXT_RUBY,
+                                   rStyleName, true );
+        XMLPropStyleContext *pStyle = const_cast<XMLPropStyleContext*>(dynamic_cast< const XMLPropStyleContext* >(pTempStyle));
 
-        // the ruby style (ruby-adjust)
-        if (!rStyleName.isEmpty() && m_xImpl->m_xAutoStyles.is())
+        if (nullptr != pStyle)
+            pStyle->FillPropertySet( xPropSet );
+    }
+
+    // the ruby text character style
+    if (m_xImpl->m_xTextStyles.is())
+    {
+        OUString sDisplayName(
+            rImport.GetStyleDisplayName(
+                        XmlStyleFamily::TEXT_TEXT, rTextStyleName ) );
+        if( (!sDisplayName.isEmpty()) &&
+            m_xImpl->m_xTextStyles->hasByName( sDisplayName ))
         {
-            const SvXMLStyleContext* pTempStyle =
-                m_xImpl->m_xAutoStyles->FindStyleChildContext( XmlStyleFamily::TEXT_RUBY,
-                                       rStyleName, true );
-            XMLPropStyleContext *pStyle = const_cast<XMLPropStyleContext*>(dynamic_cast< const XMLPropStyleContext* >(pTempStyle));
-
-            if (nullptr != pStyle)
-                pStyle->FillPropertySet( xPropSet );
-        }
-
-        // the ruby text character style
-        if (m_xImpl->m_xTextStyles.is())
-        {
-            OUString sDisplayName(
-                rImport.GetStyleDisplayName(
-                            XmlStyleFamily::TEXT_TEXT, rTextStyleName ) );
-            if( (!sDisplayName.isEmpty()) &&
-                m_xImpl->m_xTextStyles->hasByName( sDisplayName ))
-            {
-                xPropSet->setPropertyValue("RubyCharStyleName", makeAny(sDisplayName));
-            }
+            xPropSet->setPropertyValue("RubyCharStyleName", makeAny(sDisplayName));
         }
     }
 }
@@ -2191,22 +2191,22 @@ void XMLTextImportHelper::ConnectFrameChains(
             m_xImpl->m_xNextFrmNames->push_back(sNextFrmName);
         }
     }
-    if (m_xImpl->m_xPrevFrmNames && !m_xImpl->m_xPrevFrmNames->empty())
+    if (!m_xImpl->m_xPrevFrmNames || m_xImpl->m_xPrevFrmNames->empty())
+        return;
+
+    for(std::vector<OUString>::iterator i = m_xImpl->m_xPrevFrmNames->begin(), j = m_xImpl->m_xNextFrmNames->begin(); i != m_xImpl->m_xPrevFrmNames->end() && j != m_xImpl->m_xNextFrmNames->end(); ++i, ++j)
     {
-        for(std::vector<OUString>::iterator i = m_xImpl->m_xPrevFrmNames->begin(), j = m_xImpl->m_xNextFrmNames->begin(); i != m_xImpl->m_xPrevFrmNames->end() && j != m_xImpl->m_xNextFrmNames->end(); ++i, ++j)
+        if((*j) == rFrmName)
         {
-            if((*j) == rFrmName)
-            {
-                // The previous frame must exist, because it existing than
-                // inserting the entry
-                rFrmPropSet->setPropertyValue("ChainPrevName", makeAny(*i));
+            // The previous frame must exist, because it existing than
+            // inserting the entry
+            rFrmPropSet->setPropertyValue("ChainPrevName", makeAny(*i));
 
-                i = m_xImpl->m_xPrevFrmNames->erase(i);
-                j = m_xImpl->m_xNextFrmNames->erase(j);
+            i = m_xImpl->m_xPrevFrmNames->erase(i);
+            j = m_xImpl->m_xNextFrmNames->erase(j);
 
-                // There cannot be more than one previous frames
-                break;
-            }
+            // There cannot be more than one previous frames
+            break;
         }
     }
 }

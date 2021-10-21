@@ -2069,68 +2069,68 @@ void SvXMLNumFormatContext::AddColor( Color const nColor )
 
 void SvXMLNumFormatContext::UpdateCalendar( const OUString& rNewCalendar )
 {
-    if ( rNewCalendar != sCalendar )
-    {
-        if (rNewCalendar.isEmpty() || rNewCalendar == aImplicitCalendar[0])
-        {
-            eImplicitCalendar = (eImplicitCalendar == ImplicitCalendar::OTHER ?
-                    ImplicitCalendar::DEFAULT_FROM_OTHER : ImplicitCalendar::DEFAULT);
-        }
-        else if (aImplicitCalendar[0].isEmpty() && rNewCalendar == GetLocaleData().getDefaultCalendar()->Name)
-        {
-            eImplicitCalendar = (eImplicitCalendar == ImplicitCalendar::OTHER ?
-                    ImplicitCalendar::DEFAULT_FROM_OTHER : ImplicitCalendar::DEFAULT);
-            aImplicitCalendar[0] = rNewCalendar;
-        }
-        else if (rNewCalendar == aImplicitCalendar[1])
-        {
-            eImplicitCalendar = (eImplicitCalendar == ImplicitCalendar::OTHER ?
-                    ImplicitCalendar::SECONDARY_FROM_OTHER : ImplicitCalendar::SECONDARY);
-        }
-        else if (aImplicitCalendar[1].isEmpty() && GetLocaleData().doesSecondaryCalendarUseEC( rNewCalendar))
-        {
-            eImplicitCalendar = (eImplicitCalendar == ImplicitCalendar::OTHER ?
-                    ImplicitCalendar::SECONDARY_FROM_OTHER : ImplicitCalendar::SECONDARY);
-            aImplicitCalendar[1] = rNewCalendar;
-        }
-        else
-        {
-            eImplicitCalendar = ImplicitCalendar::OTHER;
-        }
+    if ( rNewCalendar == sCalendar )
+        return;
 
-        if (eImplicitCalendar != ImplicitCalendar::DEFAULT && eImplicitCalendar != ImplicitCalendar::SECONDARY)
-        {
-            // A switch from empty default calendar to named default calendar or
-            // vice versa is not a switch.
-            bool bSameDefault = false;
-            if (sCalendar.isEmpty() || rNewCalendar.isEmpty())
-            {
-                // As both are not equal, only one can be empty here, the other
-                // can not.
-                const OUString& rDefaultCalendar = GetLocaleData().getDefaultCalendar()->Name;
-                // So if one is the named default calendar the other is the
-                // empty default calendar.
-                bSameDefault = (rNewCalendar == rDefaultCalendar || sCalendar == rDefaultCalendar);
-            }
-            if (!bSameDefault)
-            {
-                aFormatCode.append( "[~" );   // intro for calendar code
-                if (rNewCalendar.isEmpty())
-                {
-                    // Empty calendar name here means switching to default calendar
-                    // from a different calendar. Needs to be explicitly stated in
-                    // format code.
-                    aFormatCode.append( GetLocaleData().getDefaultCalendar()->Name );
-                }
-                else
-                {
-                    aFormatCode.append( rNewCalendar );
-                }
-                aFormatCode.append( ']' );    // end of calendar code
-            }
-        }
-        sCalendar = rNewCalendar;
+    if (rNewCalendar.isEmpty() || rNewCalendar == aImplicitCalendar[0])
+    {
+        eImplicitCalendar = (eImplicitCalendar == ImplicitCalendar::OTHER ?
+                ImplicitCalendar::DEFAULT_FROM_OTHER : ImplicitCalendar::DEFAULT);
     }
+    else if (aImplicitCalendar[0].isEmpty() && rNewCalendar == GetLocaleData().getDefaultCalendar()->Name)
+    {
+        eImplicitCalendar = (eImplicitCalendar == ImplicitCalendar::OTHER ?
+                ImplicitCalendar::DEFAULT_FROM_OTHER : ImplicitCalendar::DEFAULT);
+        aImplicitCalendar[0] = rNewCalendar;
+    }
+    else if (rNewCalendar == aImplicitCalendar[1])
+    {
+        eImplicitCalendar = (eImplicitCalendar == ImplicitCalendar::OTHER ?
+                ImplicitCalendar::SECONDARY_FROM_OTHER : ImplicitCalendar::SECONDARY);
+    }
+    else if (aImplicitCalendar[1].isEmpty() && GetLocaleData().doesSecondaryCalendarUseEC( rNewCalendar))
+    {
+        eImplicitCalendar = (eImplicitCalendar == ImplicitCalendar::OTHER ?
+                ImplicitCalendar::SECONDARY_FROM_OTHER : ImplicitCalendar::SECONDARY);
+        aImplicitCalendar[1] = rNewCalendar;
+    }
+    else
+    {
+        eImplicitCalendar = ImplicitCalendar::OTHER;
+    }
+
+    if (eImplicitCalendar != ImplicitCalendar::DEFAULT && eImplicitCalendar != ImplicitCalendar::SECONDARY)
+    {
+        // A switch from empty default calendar to named default calendar or
+        // vice versa is not a switch.
+        bool bSameDefault = false;
+        if (sCalendar.isEmpty() || rNewCalendar.isEmpty())
+        {
+            // As both are not equal, only one can be empty here, the other
+            // can not.
+            const OUString& rDefaultCalendar = GetLocaleData().getDefaultCalendar()->Name;
+            // So if one is the named default calendar the other is the
+            // empty default calendar.
+            bSameDefault = (rNewCalendar == rDefaultCalendar || sCalendar == rDefaultCalendar);
+        }
+        if (!bSameDefault)
+        {
+            aFormatCode.append( "[~" );   // intro for calendar code
+            if (rNewCalendar.isEmpty())
+            {
+                // Empty calendar name here means switching to default calendar
+                // from a different calendar. Needs to be explicitly stated in
+                // format code.
+                aFormatCode.append( GetLocaleData().getDefaultCalendar()->Name );
+            }
+            else
+            {
+                aFormatCode.append( rNewCalendar );
+            }
+            aFormatCode.append( ']' );    // end of calendar code
+        }
+    }
+    sCalendar = rNewCalendar;
 }
 
 bool SvXMLNumFormatContext::IsSystemLanguage() const

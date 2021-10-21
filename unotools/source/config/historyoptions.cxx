@@ -396,21 +396,21 @@ static void TruncateList(
     xList->getByName(s_sItemList)  >>= xItemList;
 
     const sal_uInt32 nLength = xOrderList->getElementNames().getLength();
-    if (nSize < nLength)
-    {
-        for (sal_uInt32 i=nLength-1; i>=nSize; --i)
-        {
-            uno::Reference<beans::XPropertySet>       xSet;
-            OUString sTmp;
-            const OUString sRemove = OUString::number(i);
-            xOrderList->getByName(sRemove) >>= xSet;
-            xSet->getPropertyValue(s_sHistoryItemRef) >>= sTmp;
-            xItemList->removeByName(sTmp);
-            xOrderList->removeByName(sRemove);
-        }
+    if (nSize >= nLength)
+        return;
 
-        ::comphelper::ConfigurationHelper::flush(xCfg);
+    for (sal_uInt32 i=nLength-1; i>=nSize; --i)
+    {
+        uno::Reference<beans::XPropertySet>       xSet;
+        OUString sTmp;
+        const OUString sRemove = OUString::number(i);
+        xOrderList->getByName(sRemove) >>= xSet;
+        xSet->getPropertyValue(s_sHistoryItemRef) >>= sTmp;
+        xItemList->removeByName(sTmp);
+        xOrderList->removeByName(sRemove);
     }
+
+    ::comphelper::ConfigurationHelper::flush(xCfg);
 }
 
 

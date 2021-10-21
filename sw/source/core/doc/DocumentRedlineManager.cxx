@@ -437,36 +437,38 @@ namespace
     // delete the empty tracked table row (i.e. if it's last tracked deletion was accepted)
     void lcl_DeleteTrackedTableRow ( const SwPosition* pPos )
     {
-        if ( const SwTableBox* pBox = pPos->nNode.GetNode().GetTableBox() )
+        const SwTableBox* pBox = pPos->nNode.GetNode().GetTableBox();
+        if ( !pBox )
+            return;
+
+        const SwTableLine* pLine = pBox->GetUpper();
+        const SvxPrintItem *pHasTextChangesOnlyProp =
+                pLine->GetFrameFormat()->GetAttrSet().GetItem<SvxPrintItem>(RES_PRINT);
+        // empty table row with property "HasTextChangesOnly" = false
+        if ( pHasTextChangesOnlyProp && !pHasTextChangesOnlyProp->GetValue() &&
+             pLine->IsEmpty() )
         {
-            const SwTableLine* pLine = pBox->GetUpper();
-            const SvxPrintItem *pHasTextChangesOnlyProp =
-                    pLine->GetFrameFormat()->GetAttrSet().GetItem<SvxPrintItem>(RES_PRINT);
-            // empty table row with property "HasTextChangesOnly" = false
-            if ( pHasTextChangesOnlyProp && !pHasTextChangesOnlyProp->GetValue() &&
-                 pLine->IsEmpty() )
-            {
-                SwCursor aCursor( *pPos, nullptr );
-                pPos->GetDoc().DeleteRow( aCursor );
-            }
+            SwCursor aCursor( *pPos, nullptr );
+            pPos->GetDoc().DeleteRow( aCursor );
         }
     }
 
     // at rejection of a deletion in a table, remove the tracking of the table row
     void lcl_RemoveTrackingOfTableRow( const SwPosition* pPos )
     {
-        if ( const SwTableBox* pBox = pPos->nNode.GetNode().GetTableBox() )
+        const SwTableBox* pBox = pPos->nNode.GetNode().GetTableBox();
+        if ( !pBox )
+            return;
+
+        const SwTableLine* pLine = pBox->GetUpper();
+        const SvxPrintItem *pHasTextChangesOnlyProp =
+                pLine->GetFrameFormat()->GetAttrSet().GetItem<SvxPrintItem>(RES_PRINT);
+        // table row property "HasTextChangesOnly" is set and its value is false
+        if ( pHasTextChangesOnlyProp && !pHasTextChangesOnlyProp->GetValue() )
         {
-            const SwTableLine* pLine = pBox->GetUpper();
-            const SvxPrintItem *pHasTextChangesOnlyProp =
-                    pLine->GetFrameFormat()->GetAttrSet().GetItem<SvxPrintItem>(RES_PRINT);
-            // table row property "HasTextChangesOnly" is set and its value is false
-            if ( pHasTextChangesOnlyProp && !pHasTextChangesOnlyProp->GetValue() )
-            {
-                SvxPrintItem aUnsetTracking(RES_PRINT, true);
-                SwCursor aCursor( *pPos, nullptr );
-                pPos->GetDoc().SetRowNotTracked( aCursor, aUnsetTracking );
-            }
+            SvxPrintItem aUnsetTracking(RES_PRINT, true);
+            SwCursor aCursor( *pPos, nullptr );
+            pPos->GetDoc().SetRowNotTracked( aCursor, aUnsetTracking );
         }
     }
 

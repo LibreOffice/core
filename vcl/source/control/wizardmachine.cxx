@@ -473,28 +473,28 @@ namespace vcl
 
     void RoadmapWizard::GetOrCreatePage( const WizardTypes::WizardState i_nState )
     {
-        if ( nullptr == GetPage( i_nState ) )
+        if ( nullptr != GetPage( i_nState ) )
+            return;
+
+        VclPtr<TabPage> pNewPage = createPage( i_nState );
+        DBG_ASSERT( pNewPage, "RoadmapWizard::GetOrCreatePage: invalid new page (NULL)!" );
+
+        // fill up the page sequence of our base class (with dummies)
+        while ( m_xWizardImpl->nFirstUnknownPage < i_nState )
         {
-            VclPtr<TabPage> pNewPage = createPage( i_nState );
-            DBG_ASSERT( pNewPage, "RoadmapWizard::GetOrCreatePage: invalid new page (NULL)!" );
-
-            // fill up the page sequence of our base class (with dummies)
-            while ( m_xWizardImpl->nFirstUnknownPage < i_nState )
-            {
-                AddPage( nullptr );
-                ++m_xWizardImpl->nFirstUnknownPage;
-            }
-
-            if ( m_xWizardImpl->nFirstUnknownPage == i_nState )
-            {
-                // encountered this page number the first time
-                AddPage( pNewPage );
-                ++m_xWizardImpl->nFirstUnknownPage;
-            }
-            else
-                // already had this page - just change it
-                SetPage( i_nState, pNewPage );
+            AddPage( nullptr );
+            ++m_xWizardImpl->nFirstUnknownPage;
         }
+
+        if ( m_xWizardImpl->nFirstUnknownPage == i_nState )
+        {
+            // encountered this page number the first time
+            AddPage( pNewPage );
+            ++m_xWizardImpl->nFirstUnknownPage;
+        }
+        else
+            // already had this page - just change it
+            SetPage( i_nState, pNewPage );
     }
 
     void RoadmapWizard::ActivatePage()

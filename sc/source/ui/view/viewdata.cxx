@@ -3205,24 +3205,24 @@ void ScViewData::CalcPPT()
         }
     }
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    SCTAB nTabCount = maTabData.size();
+    bool bResetWidths = (nPPTX != nOldPPTX);
+    bool bResetHeights = (nPPTY != nOldPPTY);
+    for (SCTAB nTabIdx = 0; nTabIdx < nTabCount; ++nTabIdx)
     {
-        SCTAB nTabCount = maTabData.size();
-        bool bResetWidths = (nPPTX != nOldPPTX);
-        bool bResetHeights = (nPPTY != nOldPPTY);
-        for (SCTAB nTabIdx = 0; nTabIdx < nTabCount; ++nTabIdx)
-        {
-            if (!maTabData[nTabIdx])
-                continue;
+        if (!maTabData[nTabIdx])
+            continue;
 
-            if (bResetWidths)
-                if (auto* pWHelper = GetLOKWidthHelper(nTabIdx))
-                    pWHelper->invalidateByPosition(0L);
+        if (bResetWidths)
+            if (auto* pWHelper = GetLOKWidthHelper(nTabIdx))
+                pWHelper->invalidateByPosition(0L);
 
-            if (bResetHeights)
-                if (auto* pHHelper = GetLOKHeightHelper(nTabIdx))
-                    pHHelper->invalidateByPosition(0L);
-        }
+        if (bResetHeights)
+            if (auto* pHHelper = GetLOKHeightHelper(nTabIdx))
+                pHHelper->invalidateByPosition(0L);
     }
 }
 

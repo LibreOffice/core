@@ -2398,44 +2398,44 @@ void ScGridWindow::initiatePageBreaks()
 
 IMPL_LINK(ScGridWindow, InitiatePageBreaksTimer, Timer*, pTimer, void)
 {
-    if (pTimer == &maShowPageBreaksTimer)
+    if (pTimer != &maShowPageBreaksTimer)
+        return;
+
+    const ScViewOptions& rOpts = mrViewData.GetOptions();
+    const bool bPage = rOpts.GetOption(VOPT_PAGEBREAKS);
+    // tdf#124983, if option LibreOfficeDev Calc/View/Visual Aids/Page
+    // breaks is enabled, breaks should be visible. If the document is
+    // opened the first time or a tab is activated the first time, the
+    // breaks are not calculated yet, so this initialization is done here.
+    if (bPage)
     {
-        const ScViewOptions& rOpts = mrViewData.GetOptions();
-        const bool bPage = rOpts.GetOption(VOPT_PAGEBREAKS);
-        // tdf#124983, if option LibreOfficeDev Calc/View/Visual Aids/Page
-        // breaks is enabled, breaks should be visible. If the document is
-        // opened the first time or a tab is activated the first time, the
-        // breaks are not calculated yet, so this initialization is done here.
-        if (bPage)
+        const SCTAB nCurrentTab = mrViewData.GetTabNo();
+        ScDocument& rDoc = mrViewData.GetDocument();
+        const Size aPageSize = rDoc.GetPageSize(nCurrentTab);
+        // Do not attempt to calculate a page size here if it is empty if
+        // that involves counting pages.
+        // An earlier implementation did
+        //   ScPrintFunc(pDocSh, pDocSh->GetPrinter(), nCurrentTab);
+        //   rDoc.SetPageSize(nCurrentTab, rDoc.GetPageSize(nCurrentTab));
+        // which resulted in tremendous waiting times after having loaded
+        // larger documents i.e. imported from CSV, in which UI is entirely
+        // blocked. All time is spent under ScPrintFunc::CountPages() in
+        // ScTable::ExtendPrintArea() in the loop that calls
+        // MaybeAddExtraColumn() to do stuff for each text string content
+        // cell (each row in each column). Maybe that can be optimized, or
+        // obtaining page size without that overhead would be possible, but
+        // as is calling that from here is a no-no so this is a quick
+        // disable things.
+        if (!aPageSize.IsEmpty())
         {
-            const SCTAB nCurrentTab = mrViewData.GetTabNo();
-            ScDocument& rDoc = mrViewData.GetDocument();
-            const Size aPageSize = rDoc.GetPageSize(nCurrentTab);
-            // Do not attempt to calculate a page size here if it is empty if
-            // that involves counting pages.
-            // An earlier implementation did
-            //   ScPrintFunc(pDocSh, pDocSh->GetPrinter(), nCurrentTab);
-            //   rDoc.SetPageSize(nCurrentTab, rDoc.GetPageSize(nCurrentTab));
-            // which resulted in tremendous waiting times after having loaded
-            // larger documents i.e. imported from CSV, in which UI is entirely
-            // blocked. All time is spent under ScPrintFunc::CountPages() in
-            // ScTable::ExtendPrintArea() in the loop that calls
-            // MaybeAddExtraColumn() to do stuff for each text string content
-            // cell (each row in each column). Maybe that can be optimized, or
-            // obtaining page size without that overhead would be possible, but
-            // as is calling that from here is a no-no so this is a quick
-            // disable things.
-            if (!aPageSize.IsEmpty())
-            {
-                ScDocShell* pDocSh = mrViewData.GetDocShell();
-                const bool bModified = pDocSh->IsModified();
-                // Even setting the same size sets page size valid, so
-                // UpdatePageBreaks() actually does something.
-                rDoc.SetPageSize( nCurrentTab, aPageSize);
-                rDoc.UpdatePageBreaks(nCurrentTab);
-                pDocSh->PostPaint(0, 0, nCurrentTab, rDoc.MaxCol(), rDoc.MaxRow(), nCurrentTab, PaintPartFlags::Grid);
-                pDocSh->SetModified(bModified);
-            }
+            ScDocShell* pDocSh = mrViewData.GetDocShell();
+            const bool bModified = pDocSh->IsModified();
+            // Even setting the same size sets page size valid, so
+            // UpdatePageBreaks() actually does something.
+            rDoc.SetPageSize( nCurrentTab, aPageSize);
+            rDoc.UpdatePageBreaks(nCurrentTab);
+            pDocSh->PostPaint(0, 0, nCurrentTab, rDoc.MaxCol(), rDoc.MaxRow(), nCurrentTab, PaintPartFlags::Grid);
+            pDocSh->SetModified(bModified);
         }
     }
 }

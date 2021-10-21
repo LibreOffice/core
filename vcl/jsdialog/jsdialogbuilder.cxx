@@ -1279,25 +1279,25 @@ JSMessageDialog::JSMessageDialog(::MessageDialog* pDialog, SalInstanceBuilder* p
 {
     m_pSender = m_pOwnedSender.get();
 
-    if (!pBuilder)
-    {
-        if (::OKButton* pOKBtn
-            = dynamic_cast<::OKButton*>(m_xMessageDialog->get_widget_for_response(RET_OK)))
-        {
-            m_pOK.reset(new JSButton(m_pSender, pOKBtn, nullptr, false));
-            JSInstanceBuilder::AddChildWidget(m_xMessageDialog->GetLOKWindowId(),
-                                              pOKBtn->get_id().toUtf8(), m_pOK.get());
-            m_pOK->connect_clicked(LINK(this, JSMessageDialog, OKHdl));
-        }
+    if (pBuilder)
+        return;
 
-        if (::CancelButton* pCancelBtn
-            = dynamic_cast<::CancelButton*>(m_xMessageDialog->get_widget_for_response(RET_CANCEL)))
-        {
-            m_pCancel.reset(new JSButton(m_pSender, pCancelBtn, nullptr, false));
-            JSInstanceBuilder::AddChildWidget(m_xMessageDialog->GetLOKWindowId(),
-                                              pCancelBtn->get_id().toUtf8(), m_pCancel.get());
-            m_pCancel->connect_clicked(LINK(this, JSMessageDialog, CancelHdl));
-        }
+    if (::OKButton* pOKBtn
+        = dynamic_cast<::OKButton*>(m_xMessageDialog->get_widget_for_response(RET_OK)))
+    {
+        m_pOK.reset(new JSButton(m_pSender, pOKBtn, nullptr, false));
+        JSInstanceBuilder::AddChildWidget(m_xMessageDialog->GetLOKWindowId(),
+                                          pOKBtn->get_id().toUtf8(), m_pOK.get());
+        m_pOK->connect_clicked(LINK(this, JSMessageDialog, OKHdl));
+    }
+
+    if (::CancelButton* pCancelBtn
+        = dynamic_cast<::CancelButton*>(m_xMessageDialog->get_widget_for_response(RET_CANCEL)))
+    {
+        m_pCancel.reset(new JSButton(m_pSender, pCancelBtn, nullptr, false));
+        JSInstanceBuilder::AddChildWidget(m_xMessageDialog->GetLOKWindowId(),
+                                          pCancelBtn->get_id().toUtf8(), m_pCancel.get());
+        m_pCancel->connect_clicked(LINK(this, JSMessageDialog, CancelHdl));
     }
 }
 
@@ -1383,22 +1383,22 @@ void JSToolbar::set_menu_item_active(const OString& rIdent, bool bActive)
     ToolBoxItemId nItemId = m_xToolBox->GetItemId(OUString::fromUtf8(rIdent));
     VclPtr<vcl::Window> pFloat = m_aFloats[nItemId];
 
-    if (pFloat)
-    {
-        // See WeldToolbarPopup : include/svtools/toolbarmenu.hxx
-        // TopLevel (Popover) -> Container -> main container of the popup
-        vcl::Window* pPopupRoot = pFloat->GetChild(0);
-        if (pPopupRoot)
-            pPopupRoot = pPopupRoot->GetChild(0);
+    if (!pFloat)
+        return;
 
-        if (pPopupRoot)
-        {
-            if (bActive)
-                sendPopup(pPopupRoot, m_xToolBox->get_id(),
-                          OStringToOUString(rIdent, RTL_TEXTENCODING_ASCII_US));
-            else if (bWasActive)
-                sendClosePopup(pPopupRoot->GetLOKWindowId());
-        }
+    // See WeldToolbarPopup : include/svtools/toolbarmenu.hxx
+    // TopLevel (Popover) -> Container -> main container of the popup
+    vcl::Window* pPopupRoot = pFloat->GetChild(0);
+    if (pPopupRoot)
+        pPopupRoot = pPopupRoot->GetChild(0);
+
+    if (pPopupRoot)
+    {
+        if (bActive)
+            sendPopup(pPopupRoot, m_xToolBox->get_id(),
+                      OStringToOUString(rIdent, RTL_TEXTENCODING_ASCII_US));
+        else if (bWasActive)
+            sendClosePopup(pPopupRoot->GetLOKWindowId());
     }
 }
 

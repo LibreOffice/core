@@ -120,34 +120,34 @@ void SwBreakPortion::Paint( const SwTextPaintInfo &rInf ) const
     rInf.DrawLineBreak( *this );
 
     // paint redlining
-    if (m_eRedline != RedlineType::None)
+    if (m_eRedline == RedlineType::None)
+        return;
+
+    sal_Int16 nNoBreakWidth = rInf.GetTextSize(S_NOBREAK_FOR_REDLINE).Width();
+    if ( nNoBreakWidth > 0 )
     {
-        sal_Int16 nNoBreakWidth = rInf.GetTextSize(S_NOBREAK_FOR_REDLINE).Width();
-        if ( nNoBreakWidth > 0 )
-        {
-            // approximate portion size with multiple no-break spaces
-            // and draw these spaces (at least a single one) by DrawText
-            // painting the requested redline underline/strikeout
-            sal_Int16 nSpaces = (LINE_BREAK_WIDTH + nNoBreakWidth/2) / nNoBreakWidth;
-            OUStringBuffer aBuf(S_NOBREAK_FOR_REDLINE);
-            for (sal_Int16 i = 1; i < nSpaces; ++i)
-                aBuf.append(S_NOBREAK_FOR_REDLINE);
+        // approximate portion size with multiple no-break spaces
+        // and draw these spaces (at least a single one) by DrawText
+        // painting the requested redline underline/strikeout
+        sal_Int16 nSpaces = (LINE_BREAK_WIDTH + nNoBreakWidth/2) / nNoBreakWidth;
+        OUStringBuffer aBuf(S_NOBREAK_FOR_REDLINE);
+        for (sal_Int16 i = 1; i < nSpaces; ++i)
+            aBuf.append(S_NOBREAK_FOR_REDLINE);
 
-            const SwFont* pOldFnt = rInf.GetFont();
+        const SwFont* pOldFnt = rInf.GetFont();
 
-            SwFont aFont(*pOldFnt);
+        SwFont aFont(*pOldFnt);
 
-            if (m_eRedline == RedlineType::Delete)
-                aFont.SetUnderline( LINESTYLE_NONE );
-            else
-                aFont.SetStrikeout( STRIKEOUT_NONE );
+        if (m_eRedline == RedlineType::Delete)
+            aFont.SetUnderline( LINESTYLE_NONE );
+        else
+            aFont.SetStrikeout( STRIKEOUT_NONE );
 
-            const_cast<SwTextPaintInfo&>(rInf).SetFont(&aFont);
+        const_cast<SwTextPaintInfo&>(rInf).SetFont(&aFont);
 
-            rInf.DrawText(aBuf.makeStringAndClear(), *this);
+        rInf.DrawText(aBuf.makeStringAndClear(), *this);
 
-            const_cast<SwTextPaintInfo&>(rInf).SetFont(const_cast<SwFont*>(pOldFnt));
-        }
+        const_cast<SwTextPaintInfo&>(rInf).SetFont(const_cast<SwFont*>(pOldFnt));
     }
 }
 
