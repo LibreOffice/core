@@ -241,9 +241,9 @@ class SVGTextWriter final
             SVGActionWriter& mrActionWriter);
     ~SVGTextWriter();
 
-    sal_Int32 setTextPosition(const GDIMetaFile& rMtf, sal_uLong& nCurAction,
+    sal_Int32 setTextPosition(const GDIMetaFile& rMtf, size_t& nCurAction,
                               sal_uInt32 nWriteFlags);
-    void setTextProperties( const GDIMetaFile& rMtf, sal_uLong nCurAction );
+    void setTextProperties( const GDIMetaFile& rMtf, size_t nCurAction );
     void addFontAttributes( bool bIsTextContainer );
 
     void createParagraphEnumeration();

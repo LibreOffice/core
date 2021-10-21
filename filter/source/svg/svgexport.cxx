@@ -2404,8 +2404,8 @@ bool SVGFilter::implCreateObjectsFromShape( const Reference< css::drawing::XDraw
                                     MetaAction*   pAction;
                                     bool bIsTextShapeStarted = false;
                                     const GDIMetaFile& rMtf = aGraphic.GetGDIMetaFile();
-                                    sal_uLong nCount = rMtf.GetActionSize();
-                                    for( sal_uLong nCurAction = 0; nCurAction < nCount; ++nCurAction )
+                                    size_t nCount = rMtf.GetActionSize();
+                                    for( size_t nCurAction = 0; nCurAction < nCount; ++nCurAction )
                                     {
                                         pAction = rMtf.GetAction( nCurAction );
                                         const MetaActionType nType = pAction->GetType();
@@ -2510,8 +2510,8 @@ void SVGFilter::implCreateObjectsFromBackground( const Reference< css::drawing::
     GDIMetaFile aTiledMtf;
     bool bBitmapFound = false;
     MetaAction* pAction;
-    sal_uLong nCount = aMtf.GetActionSize();
-    for( sal_uLong nCurAction = 0; nCurAction < nCount; ++nCurAction )
+    size_t nCount = aMtf.GetActionSize();
+    for( size_t nCurAction = 0; nCurAction < nCount; ++nCurAction )
     {
         pAction = aMtf.GetAction( nCurAction );
         const MetaActionType nType = pAction->GetType();
