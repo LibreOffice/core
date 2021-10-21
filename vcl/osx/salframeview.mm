@@ -41,20 +41,14 @@
 static sal_uInt16 ImplGetModifierMask( unsigned int nMask )
 {
     sal_uInt16 nRet = 0;
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        // 'NSAlternateKeyMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSCommandKeyMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSControlKeyMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSShiftKeyMask' is deprecated: first deprecated in macOS 10.12
-    if( (nMask & NSShiftKeyMask) != 0 )
+    if( (nMask & NSEventModifierFlagShift) != 0 )
         nRet |= KEY_SHIFT;
-    if( (nMask & NSControlKeyMask) != 0 )
+    if( (nMask & NSEventModifierFlagControl) != 0 )
         nRet |= KEY_MOD3;
-    if( (nMask & NSAlternateKeyMask) != 0 )
+    if( (nMask & NSEventModifierFlagOption) != 0 )
         nRet |= KEY_MOD2;
-    if( (nMask & NSCommandKeyMask) != 0 )
+    if( (nMask & NSEventModifierFlagCommand) != 0 )
         nRet |= KEY_MOD1;
-SAL_WNODEPRECATED_DECLARATIONS_POP
     return nRet;
 }
 
