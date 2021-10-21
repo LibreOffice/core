@@ -553,6 +553,12 @@ void SwViewShell::InvalidateWindows( const SwRect &rRect )
 
     if(comphelper::LibreOfficeKit::isActive())
     {
+        // If we are inside tiled painting, invalidations are ignored.
+        // Ignore them right now to save work, but also to avoid the problem
+        // that this state could be reset before FlushPendingLOKInvalidateTiles()
+        // gets called.
+        if(comphelper::LibreOfficeKit::isTiledPainting())
+            return;
         // First collect all invalidations and perform them only later,
         // otherwise the number of Invalidate() calls would be at least
         // O(n^2) if not worse. The problem is that if any change in a document
