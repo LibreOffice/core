@@ -16,6 +16,23 @@
       "message": "https://i.imgur.com/6PUHVh9.png",
       "revId": "062350202ed1d2d05d5d3a12a77755b61deeead4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11a1b765_0c0c71e6",
+        "filename": "vcl/backendtest/benchmark/outputdevice/Benchmarks.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-10-21T13:33:03Z",
+      "side": 1,
+      "message": "Height is a bit small - would be better with something like 6px so you also see it\u0027s a wavey line. Maybe also limit the line width (horizontal length) to 512 so it needs to draw more of them (also more realistic as we draw them that way too).",
+      "revId": "062350202ed1d2d05d5d3a12a77755b61deeead4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
