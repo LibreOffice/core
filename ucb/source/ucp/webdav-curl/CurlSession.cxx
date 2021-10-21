@@ -116,13 +116,11 @@ public:
         , m_oGuard(::std::move(rFunc))
     {
     }
-#if 0
     void unlock()
     {
         m_oGuard.reset();
         m_Lock.unlock();
     }
-#endif
 };
 
 } // namespace
@@ -569,7 +567,7 @@ auto CurlSession::abort() -> void
 /// this is just a bunch of static member functions called from CurlSession
 struct CurlProcessor
 {
-    static auto ProcessRequest(
+    static auto ProcessRequestImpl(
         CurlSession& rSession, ::std::u16string_view rURIReference,
         DAVRequestEnvironment const* pEnv,
         ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist_free_all>> pRequestHeaderList,
@@ -577,14 +575,22 @@ struct CurlProcessor
         uno::Reference<io::XInputStream> const* pxInStream,
         ::std::pair<::std::vector<OUString> const&, DAVResource&> const* pRequestedHeaders) -> void;
 
+    static auto ProcessRequest(
+        Guard& rGuard, CurlSession& rSession, OUString const& rURIReference,
+        DAVRequestEnvironment const* pEnv,
+        ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist_free_all>> pRequestHeaderList,
+        uno::Reference<io::XOutputStream> const* pxOutStream,
+        uno::Reference<io::XInputStream> const* pxInStream,
+        ::std::pair<::std::vector<OUString> const&, DAVResource&> const* pRequestedHeaders) -> void;
+
     static auto
-    PropFind(CurlSession& rSession, ::std::u16string_view rURIReference, Depth depth,
+    PropFind(CurlSession& rSession, OUString const& rURIReference, Depth depth,
              ::std::tuple<::std::vector<OUString> const&, ::std::vector<DAVResource>* const,
                           ::std::vector<ucb::Lock>* const> const* o_pRequestedProperties,
              ::std::vector<DAVResourceInfo>* const o_pResourceInfos,
              DAVRequestEnvironment const& rEnv) -> void;
 
-    static auto MoveOrCopy(CurlSession& rSession, ::std::u16string_view rSourceURIReference,
+    static auto MoveOrCopy(CurlSession& rSession, OUString const& rSourceURIReference,
                            ::std::u16string_view rDestinationURI, DAVRequestEnvironment const& rEnv,
                            bool isOverwrite, char const* pMethod) -> void;
 
@@ -599,7 +605,7 @@ struct CurlProcessor
 };
 
 /// main function to initiate libcurl requests
-auto CurlProcessor::ProcessRequest(
+auto CurlProcessor::ProcessRequestImpl(
     CurlSession& rSession, ::std::u16string_view const rURIReference,
     DAVRequestEnvironment const* const pEnv,
     ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist_free_all>> pRequestHeaderList,
@@ -976,8 +982,108 @@ auto CurlProcessor::ProcessRequest(
     }
 }
 
+static auto TryRemoveExpiredLockToken(CurlSession& rSession, OUString const& rURIReference,
+                                      DAVRequestEnvironment const* const pEnv) -> bool
+{
+    if (!pEnv)
+    {
+        // caller was a NonInteractive_*LOCK function anyway, its caller is LockStore
+        return false;
+    }
+    OUString const* const pToken(g_Init.LockStore.getLockTokenForURI(rURIReference, nullptr));
+    if (!pToken)
+    {
+        return false;
+    }
+    try
+    {
+        // determine validity of existing lock via lockdiscovery request
+        ::std::vector<OUString> const propertyNames{ DAVProperties::LOCKDISCOVERY };
+        ::std::vector<ucb::Lock> locks;
+        ::std::tuple<::std::vector<OUString> const&, ::std::vector<DAVResource>* const,
+                     ::std::vector<ucb::Lock>* const> const args(propertyNames, nullptr, &locks);
+
+        CurlProcessor::PropFind(rSession, rURIReference, DAVZERO, &args, nullptr, *pEnv);
+
+        // https://datatracker.ietf.org/doc/html/rfc4918#section-15.8
+        // The response MAY not contain tokens, but hopefully it
+        // will if client is properly authenticated.
+        if (::std::any_of(locks.begin(), locks.end(), [pToken](ucb::Lock const& rLock) {
+                return ::std::any_of(
+                    rLock.LockTokens.begin(), rLock.LockTokens.end(),
+                    [pToken](OUString const& rToken) { return *pToken == rToken; });
+            }))
+        {
+            return false; // still have the lock
+        }
+
+        SAL_INFO("ucb.ucp.webdav.curl",
+                 "lock token expired, removing: " << rURIReference << " " << *pToken);
+        g_Init.LockStore.removeLock(rURIReference);
+        return true;
+    }
+    catch (DAVException const&)
+    {
+        return false; // ignore, the caller already has a better exception
+    }
+}
+
+auto CurlProcessor::ProcessRequest(
+    Guard& rGuard, CurlSession& rSession, OUString const& rURIReference,
+    DAVRequestEnvironment const* const pEnv,
+    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist_free_all>> pRequestHeaderList,
+    uno::Reference<io::XOutputStream> const* const pxOutStream,
+    uno::Reference<io::XInputStream> const* const pxInStream,
+    ::std::pair<::std::vector<OUString> const&, DAVResource&> const* const pRequestedHeaders)
+    -> void
+{
+    try
+    {
+        ProcessRequestImpl(rSession, rURIReference, pEnv, ::std::move(pRequestHeaderList),
+                           pxOutStream, pxInStream, pRequestedHeaders);
+    }
+    catch (DAVException const& rException)
+    {
+        // error handling part 3: special HTTP status codes
+        if (rException.getError() == DAVException::DAV_HTTP_ERROR)
+        {
+            switch (rException.getStatus())
+            {
+                case SC_LOCKED:
+                {
+                    rGuard.unlock(); // release m_Mutex before accessing LockStore
+                    if (g_Init.LockStore.getLockTokenForURI(rURIReference, nullptr))
+                    {
+                        throw DAVException(DAVException::DAV_LOCKED_SELF);
+                    }
+                    else // locked by third party
+                    {
+                        throw DAVException(DAVException::DAV_LOCKED);
+                    }
+                    break;
+                }
+                case SC_PRECONDITION_FAILED:
+                case SC_BAD_REQUEST:
+                {
+                    rGuard.unlock(); // release m_Mutex before accessing LockStore
+                    // Not obvious but apparently these codes may indicate
+                    // the expiration of a lock.
+                    // Initiate a new request *outside* ProcessRequestImpl
+                    // *after* rGuard.unlock() to avoid messing up m_pCurl state.
+                    if (TryRemoveExpiredLockToken(rSession, rURIReference, pEnv))
+                    {
+                        throw DAVException(DAVException::DAV_LOCK_EXPIRED);
+                    }
+                    break;
+                }
+            }
+        }
+        throw; // everything else: re-throw
+    }
+}
+
 auto CurlProcessor::PropFind(
-    CurlSession& rSession, ::std::u16string_view const rURIReference, Depth const nDepth,
+    CurlSession& rSession, OUString const& rURIReference, Depth const nDepth,
     ::std::tuple<::std::vector<OUString> const&, ::std::vector<DAVResource>* const,
                  ::std::vector<ucb::Lock>* const> const* const o_pRequestedProperties,
     ::std::vector<DAVResourceInfo>* const o_pResourceInfos, DAVRequestEnvironment const& rEnv)
@@ -1083,7 +1189,7 @@ auto CurlProcessor::PropFind(
     assert(xResponseInStream.is());
     assert(xResponseOutStream.is());
 
-    CurlProcessor::ProcessRequest(rSession, rURIReference, &rEnv, ::std::move(pList),
+    CurlProcessor::ProcessRequest(g, rSession, rURIReference, &rEnv, ::std::move(pList),
                                   &xResponseOutStream, &xRequestInStream, nullptr);
 
     if (o_pResourceInfos)
@@ -1205,7 +1311,7 @@ auto CurlSession::PROPPATCH(OUString const& rURIReference,
     xWriter->endDocument();
     xRequestOutStream->closeOutput();
 
-    CurlProcessor::ProcessRequest(*this, rURIReference, &rEnv, ::std::move(pList), nullptr,
+    CurlProcessor::ProcessRequest(g, *this, rURIReference, &rEnv, ::std::move(pList), nullptr,
                                   &xRequestInStream, nullptr);
 }
 
@@ -1226,7 +1332,8 @@ auto CurlSession::HEAD(OUString const& rURIReference, ::std::vector<OUString> co
     ::std::pair<::std::vector<OUString> const&, DAVResource&> const headers(rHeaderNames,
                                                                             io_rResource);
 
-    CurlProcessor::ProcessRequest(*this, rURIReference, &rEnv, nullptr, nullptr, nullptr, &headers);
+    CurlProcessor::ProcessRequest(g, *this, rURIReference, &rEnv, nullptr, nullptr, nullptr,
+                                  &headers);
 }
 
 auto CurlSession::GET(OUString const& rURIReference, DAVRequestEnvironment const& rEnv)
@@ -1253,7 +1360,7 @@ auto CurlSession::GET(OUString const& rURIReference, DAVRequestEnvironment const
     assert(rc == CURLE_OK);
     (void)rc;
 
-    CurlProcessor::ProcessRequest(*this, rURIReference, &rEnv, nullptr, &xResponseOutStream,
+    CurlProcessor::ProcessRequest(g, *this, rURIReference, &rEnv, nullptr, &xResponseOutStream,
                                   nullptr, nullptr);
 
     uno::Reference<io::XInputStream> const xResponseInStream(
@@ -1278,7 +1385,7 @@ auto CurlSession::GET(OUString const& rURIReference, uno::Reference<io::XOutputS
     assert(rc == CURLE_OK);
     (void)rc;
 
-    CurlProcessor::ProcessRequest(*this, rURIReference, &rEnv, nullptr, &rxOutStream, nullptr,
+    CurlProcessor::ProcessRequest(g, *this, rURIReference, &rEnv, nullptr, &rxOutStream, nullptr,
                                   nullptr);
 }
 
@@ -1305,7 +1412,7 @@ auto CurlSession::GET(OUString const& rURIReference, ::std::vector<OUString> con
     ::std::pair<::std::vector<OUString> const&, DAVResource&> const headers(rHeaderNames,
                                                                             io_rResource);
 
-    CurlProcessor::ProcessRequest(*this, rURIReference, &rEnv, nullptr, &xResponseOutStream,
+    CurlProcessor::ProcessRequest(g, *this, rURIReference, &rEnv, nullptr, &xResponseOutStream,
                                   nullptr, &headers);
 
     uno::Reference<io::XInputStream> const xResponseInStream(
@@ -1334,7 +1441,7 @@ auto CurlSession::GET(OUString const& rURIReference, uno::Reference<io::XOutputS
     ::std::pair<::std::vector<OUString> const&, DAVResource&> const headers(rHeaderNames,
                                                                             io_rResource);
 
-    CurlProcessor::ProcessRequest(*this, rURIReference, &rEnv, nullptr, &rxOutStream, nullptr,
+    CurlProcessor::ProcessRequest(g, *this, rURIReference, &rEnv, nullptr, &rxOutStream, nullptr,
                                   &headers);
 }
 
@@ -1367,7 +1474,7 @@ auto CurlSession::PUT(OUString const& rURIReference,
     // lock m_Mutex after accessing global LockStore to avoid deadlock
     Guard g(m_Mutex);
 
-    CurlProcessor::ProcessRequest(*this, rURIReference, &rEnv, ::std::move(pList), nullptr,
+    CurlProcessor::ProcessRequest(g, *this, rURIReference, &rEnv, ::std::move(pList), nullptr,
                                   &rxInStream, nullptr);
 }
 
@@ -1413,7 +1520,7 @@ auto CurlSession::POST(OUString const& rURIReference, OUString const& rContentTy
     uno::Reference<io::XOutputStream> const xResponseOutStream(xSeqOutStream);
     assert(xResponseOutStream.is());
 
-    CurlProcessor::ProcessRequest(*this, rURIReference, &rEnv, ::std::move(pList),
+    CurlProcessor::ProcessRequest(g, *this, rURIReference, &rEnv, ::std::move(pList),
                                   &xResponseOutStream, &rxInStream, nullptr);
 
     uno::Reference<io::XInputStream> const xResponseInStream(
@@ -1462,7 +1569,7 @@ auto CurlSession::POST(OUString const& rURIReference, OUString const& rContentTy
     assert(rc == CURLE_OK);
     (void)rc;
 
-    CurlProcessor::ProcessRequest(*this, rURIReference, &rEnv, ::std::move(pList), &rxOutStream,
+    CurlProcessor::ProcessRequest(g, *this, rURIReference, &rEnv, ::std::move(pList), &rxOutStream,
                                   &rxInStream, nullptr);
 }
 
@@ -1483,11 +1590,11 @@ auto CurlSession::MKCOL(OUString const& rURIReference, DAVRequestEnvironment con
                            ConnectionEndPointString(m_URI.GetHost(), m_URI.GetPort()));
     }
 
-    CurlProcessor::ProcessRequest(*this, rURIReference, &rEnv, nullptr, nullptr, nullptr, nullptr);
+    CurlProcessor::ProcessRequest(g, *this, rURIReference, &rEnv, nullptr, nullptr, nullptr,
+                                  nullptr);
 }
 
-auto CurlProcessor::MoveOrCopy(CurlSession& rSession,
-                               ::std::u16string_view const rSourceURIReference,
+auto CurlProcessor::MoveOrCopy(CurlSession& rSession, OUString const& rSourceURIReference,
                                ::std::u16string_view const rDestinationURI,
                                DAVRequestEnvironment const& rEnv, bool const isOverwrite,
                                char const* const pMethod) -> void
@@ -1517,8 +1624,8 @@ auto CurlProcessor::MoveOrCopy(CurlSession& rSession,
     assert(rc == CURLE_OK);
     (void)rc;
 
-    CurlProcessor::ProcessRequest(rSession, rSourceURIReference, &rEnv, ::std::move(pList), nullptr,
-                                  nullptr, nullptr);
+    CurlProcessor::ProcessRequest(g, rSession, rSourceURIReference, &rEnv, ::std::move(pList),
+                                  nullptr, nullptr, nullptr);
 }
 
 auto CurlSession::COPY(OUString const& rSourceURIReference, OUString const& rDestinationURI,
@@ -1556,7 +1663,8 @@ auto CurlSession::DESTROY(OUString const& rURIReference, DAVRequestEnvironment c
                            ConnectionEndPointString(m_URI.GetHost(), m_URI.GetPort()));
     }
 
-    CurlProcessor::ProcessRequest(*this, rURIReference, &rEnv, nullptr, nullptr, nullptr, nullptr);
+    CurlProcessor::ProcessRequest(g, *this, rURIReference, &rEnv, nullptr, nullptr, nullptr,
+                                  nullptr);
 }
 
 auto CurlProcessor::Lock(
@@ -1588,7 +1696,7 @@ auto CurlProcessor::Lock(
     TimeValue startTime;
     osl_getSystemTime(&startTime);
 
-    CurlProcessor::ProcessRequest(rSession, rURIReference, pEnv, ::std::move(pRequestHeaderList),
+    CurlProcessor::ProcessRequest(g, rSession, rURIReference, pEnv, ::std::move(pRequestHeaderList),
                                   &xResponseOutStream, pxRequestInStream, nullptr);
 
     ::std::vector<ucb::Lock> const acquiredLocks(parseWebDAVLockResponse(xResponseInStream));
@@ -1632,7 +1740,7 @@ auto CurlSession::LOCK(OUString const& rURIReference, ucb::Lock /*const*/& rLock
     SAL_INFO("ucb.ucp.webdav.curl", "LOCK: " << rURIReference);
 
     // FIXME: why is a *global* LockStore keyed by *path*?
-    if (g_Init.LockStore.getLockTokenForURI(rURIReference, rLock))
+    if (g_Init.LockStore.getLockTokenForURI(rURIReference, &rLock))
     {
         // already have a lock that covers the requirement
         // TODO: maybe use DAV:lockdiscovery to ensure it's valid
@@ -1779,7 +1887,7 @@ auto CurlProcessor::Unlock(CurlSession& rSession, OUString const& rURIReference,
             ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
     }
 
-    CurlProcessor::ProcessRequest(rSession, rURIReference, pEnv, ::std::move(pList), nullptr,
+    CurlProcessor::ProcessRequest(g, rSession, rURIReference, pEnv, ::std::move(pList), nullptr,
                                   nullptr, nullptr);
 }
 
