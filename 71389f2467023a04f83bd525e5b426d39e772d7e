@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c082d407_8b33ef26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-21T06:15:14Z",
+      "side": 1,
+      "message": "Looks good, added some inline comments on further possible improvements. But I don\u0027t think any of that is actively misleading, so let\u0027s get this in.",
+      "revId": "71389f2467023a04f83bd525e5b426d39e772d7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9496bab6_0a249d8f",
+        "filename": "emfio/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-21T06:15:14Z",
+      "side": 1,
+      "message": "typo: come",
+      "range": {
+        "startLine": 16,
+        "startChar": 39,
+        "endLine": 16,
+        "endChar": 44
+      },
+      "revId": "71389f2467023a04f83bd525e5b426d39e772d7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d36fb4f3_bbded7ac",
+        "filename": "emfio/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-21T06:15:14Z",
+      "side": 1,
+      "message": "Related: it might be useful to put the useful parts of that README.GDIMetaFile as a comment above the GDIMetaFile class and otherwise remove that readme, these readmes are meant to provide overview documentation for the module, and do not replace doxygen comments on classes.",
+      "revId": "71389f2467023a04f83bd525e5b426d39e772d7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5326f12d_435c4bc3",
+        "filename": "emfio/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-21T06:15:14Z",
+      "side": 1,
+      "message": "Might make sense to find a wmf testcase which is already in the repo and produces a visible result? So people can copy\u0026paste the command and see the result as-is.",
+      "revId": "71389f2467023a04f83bd525e5b426d39e772d7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ea42151_c4df3c9b",
+        "filename": "emfio/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-21T06:15:14Z",
+      "side": 1,
+      "message": "Might be useful to rather describe that the emfio module takes a byte array and turns it into a drawinglayer primitive container?\n\nAlso, if you find out why emfio depends on sax, that would be useful, It\u0027s surprising to me. :-)",
+      "revId": "71389f2467023a04f83bd525e5b426d39e772d7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
