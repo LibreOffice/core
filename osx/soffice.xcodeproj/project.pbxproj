@@ -632,6 +632,30 @@
 		BE82C42418C86E010050EB79 /* spinfld.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = spinfld.cxx; path = ../vcl/source/control/spinfld.cxx; sourceTree = "<group>"; };
 		BE82C42518C86E010050EB79 /* tabctrl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabctrl.cxx; path = ../vcl/source/control/tabctrl.cxx; sourceTree = "<group>"; };
 		BE82C42618C86E010050EB79 /* throbber.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = throbber.cxx; path = ../vcl/source/control/throbber.cxx; sourceTree = "<group>"; };
+		BE96F5D627214BBD00134D66 /* SalAquaPicker.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = SalAquaPicker.mm; path = ../fpicker/source/aqua/SalAquaPicker.mm; sourceTree = "<group>"; };
+		BE96F5D727214BBD00134D66 /* SalAquaPicker.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SalAquaPicker.hxx; path = ../fpicker/source/aqua/SalAquaPicker.hxx; sourceTree = "<group>"; };
+		BE96F5D827214BBE00134D66 /* AquaFilePickerDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = AquaFilePickerDelegate.mm; path = ../fpicker/source/aqua/AquaFilePickerDelegate.mm; sourceTree = "<group>"; };
+		BE96F5D927214BBE00134D66 /* fps_aqua.component */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = fps_aqua.component; path = ../fpicker/source/aqua/fps_aqua.component; sourceTree = "<group>"; };
+		BE96F5DA27214BBE00134D66 /* FilterHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = FilterHelper.mm; path = ../fpicker/source/aqua/FilterHelper.mm; sourceTree = "<group>"; };
+		BE96F5DB27214BBE00134D66 /* CFStringUtilities.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = CFStringUtilities.mm; path = ../fpicker/source/aqua/CFStringUtilities.mm; sourceTree = "<group>"; };
+		BE96F5DC27214BBE00134D66 /* SalAquaFolderPicker.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = SalAquaFolderPicker.mm; path = ../fpicker/source/aqua/SalAquaFolderPicker.mm; sourceTree = "<group>"; };
+		BE96F5DD27214BBE00134D66 /* FilterHelper.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FilterHelper.hxx; path = ../fpicker/source/aqua/FilterHelper.hxx; sourceTree = "<group>"; };
+		BE96F5DE27214BBE00134D66 /* resourceprovider.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = resourceprovider.mm; path = ../fpicker/source/aqua/resourceprovider.mm; sourceTree = "<group>"; };
+		BE96F5DF27214BBE00134D66 /* CFStringUtilities.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CFStringUtilities.hxx; path = ../fpicker/source/aqua/CFStringUtilities.hxx; sourceTree = "<group>"; };
+		BE96F5E027214BBE00134D66 /* SalAquaFolderPicker.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SalAquaFolderPicker.hxx; path = ../fpicker/source/aqua/SalAquaFolderPicker.hxx; sourceTree = "<group>"; };
+		BE96F5E127214BBE00134D66 /* AquaFilePickerDelegate.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = AquaFilePickerDelegate.hxx; path = ../fpicker/source/aqua/AquaFilePickerDelegate.hxx; sourceTree = "<group>"; };
+		BE96F5E227214BBE00134D66 /* NSURL_OOoAdditions.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = NSURL_OOoAdditions.hxx; path = ../fpicker/source/aqua/NSURL_OOoAdditions.hxx; sourceTree = "<group>"; };
+		BE96F5E327214BBF00134D66 /* SalAquaFilePicker.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = SalAquaFilePicker.mm; path = ../fpicker/source/aqua/SalAquaFilePicker.mm; sourceTree = "<group>"; };
+		BE96F5E427214BBF00134D66 /* FPentry.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = FPentry.mm; path = ../fpicker/source/aqua/FPentry.mm; sourceTree = "<group>"; };
+		BE96F5E527214BBF00134D66 /* FPServiceInfo.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FPServiceInfo.hxx; path = ../fpicker/source/aqua/FPServiceInfo.hxx; sourceTree = "<group>"; };
+		BE96F5E627214BBF00134D66 /* ControlHelper.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ControlHelper.hxx; path = ../fpicker/source/aqua/ControlHelper.hxx; sourceTree = "<group>"; };
+		BE96F5E727214BBF00134D66 /* SalAquaConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SalAquaConstants.h; path = ../fpicker/source/aqua/SalAquaConstants.h; sourceTree = "<group>"; };
+		BE96F5E827214BBF00134D66 /* ControlHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ControlHelper.mm; path = ../fpicker/source/aqua/ControlHelper.mm; sourceTree = "<group>"; };
+		BE96F5E927214BBF00134D66 /* NSString_OOoAdditions.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = NSString_OOoAdditions.hxx; path = ../fpicker/source/aqua/NSString_OOoAdditions.hxx; sourceTree = "<group>"; };
+		BE96F5EA27214BBF00134D66 /* NSURL_OOoAdditions.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = NSURL_OOoAdditions.mm; path = ../fpicker/source/aqua/NSURL_OOoAdditions.mm; sourceTree = "<group>"; };
+		BE96F5EB27214BBF00134D66 /* resourceprovider.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = resourceprovider.hxx; path = ../fpicker/source/aqua/resourceprovider.hxx; sourceTree = "<group>"; };
+		BE96F5EC27214BBF00134D66 /* SalAquaFilePicker.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SalAquaFilePicker.hxx; path = ../fpicker/source/aqua/SalAquaFilePicker.hxx; sourceTree = "<group>"; };
+		BE96F5ED27214BBF00134D66 /* NSString_OOoAdditions.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = NSString_OOoAdditions.mm; path = ../fpicker/source/aqua/NSString_OOoAdditions.mm; sourceTree = "<group>"; };
 		BEACEEC7257FC852001BAABA /* itemwin.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = itemwin.cxx; path = ../svx/source/tbxctrls/itemwin.cxx; sourceTree = "<group>"; };
 		BEACEEC8257FC852001BAABA /* tbxdrctl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tbxdrctl.cxx; path = ../svx/source/tbxctrls/tbxdrctl.cxx; sourceTree = "<group>"; };
 		BEACEEC9257FC852001BAABA /* SvxColorValueSet.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SvxColorValueSet.cxx; path = ../svx/source/tbxctrls/SvxColorValueSet.cxx; sourceTree = "<group>"; };
@@ -1749,6 +1773,45 @@
 			name = control;
 			sourceTree = "<group>";
 		};
+		BE96F5D427214B8E00134D66 /* fpicker */ = {
+			isa = PBXGroup;
+			children = (
+				BE96F5D527214B9D00134D66 /* aqua */,
+			);
+			name = fpicker;
+			sourceTree = "<group>";
+		};
+		BE96F5D527214B9D00134D66 /* aqua */ = {
+			isa = PBXGroup;
+			children = (
+				BE96F5E127214BBE00134D66 /* AquaFilePickerDelegate.hxx */,
+				BE96F5D827214BBE00134D66 /* AquaFilePickerDelegate.mm */,
+				BE96F5DF27214BBE00134D66 /* CFStringUtilities.hxx */,
+				BE96F5DB27214BBE00134D66 /* CFStringUtilities.mm */,
+				BE96F5E627214BBF00134D66 /* ControlHelper.hxx */,
+				BE96F5E827214BBF00134D66 /* ControlHelper.mm */,
+				BE96F5DD27214BBE00134D66 /* FilterHelper.hxx */,
+				BE96F5DA27214BBE00134D66 /* FilterHelper.mm */,
+				BE96F5E427214BBF00134D66 /* FPentry.mm */,
+				BE96F5D927214BBE00134D66 /* fps_aqua.component */,
+				BE96F5E527214BBF00134D66 /* FPServiceInfo.hxx */,
+				BE96F5E927214BBF00134D66 /* NSString_OOoAdditions.hxx */,
+				BE96F5ED27214BBF00134D66 /* NSString_OOoAdditions.mm */,
+				BE96F5E227214BBE00134D66 /* NSURL_OOoAdditions.hxx */,
+				BE96F5EA27214BBF00134D66 /* NSURL_OOoAdditions.mm */,
+				BE96F5EB27214BBF00134D66 /* resourceprovider.hxx */,
+				BE96F5DE27214BBE00134D66 /* resourceprovider.mm */,
+				BE96F5E727214BBF00134D66 /* SalAquaConstants.h */,
+				BE96F5EC27214BBF00134D66 /* SalAquaFilePicker.hxx */,
+				BE96F5E327214BBF00134D66 /* SalAquaFilePicker.mm */,
+				BE96F5E027214BBE00134D66 /* SalAquaFolderPicker.hxx */,
+				BE96F5DC27214BBE00134D66 /* SalAquaFolderPicker.mm */,
+				BE96F5D727214BBD00134D66 /* SalAquaPicker.hxx */,
+				BE96F5D627214BBD00134D66 /* SalAquaPicker.mm */,
+			);
+			name = aqua;
+			sourceTree = "<group>";
+		};
 		BEACEEC5257FC7F5001BAABA /* svx */ = {
 			isa = PBXGroup;
 			children = (
@@ -2099,6 +2162,7 @@
 				BE28694D257D0668000E863E /* dbaccess */,
 				BEBF3E7E246ACF8900415E87 /* desktop */,
 				BE2DAD2B183148BE00A4D2F7 /* formula */,
+				BE96F5D427214B8E00134D66 /* fpicker */,
 				BE82BE5918298DFB00A447B5 /* java */,
 				BEBF3E2A2465886A00415E87 /* sal */,
 				BE82BE5818298DEB00A447B5 /* sc */,
