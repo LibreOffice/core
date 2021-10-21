@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fdba34e6_1aab7868",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-10-21T14:39:04Z",
+      "side": 1,
+      "message": "Tested in 7.2 branch  No crash anymore, both in read-only waiting and back-to-write situation, Fedora 34.",
+      "revId": "1d0a1881e5f162f0aec05da41a064e4fe0cfdbbf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
