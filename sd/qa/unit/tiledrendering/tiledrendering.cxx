@@ -2849,7 +2849,7 @@ void SdTiledRenderingTest::testShapeEditInMultipleViews()
         CPPUNIT_ASSERT_EQUAL(6501L, aRectangle.GetWidth());
         CPPUNIT_ASSERT_EQUAL(4501L, aRectangle.GetHeight());
 
-        // On View2 - Move handle 0 on the shape to a new mosition - resize
+        // On View2 - Move handle 0 on the shape to a new position - resize
         Point aNewPosition = aRectangle.TopLeft() + Point(-1250, -1000);
         pView2->MoveShapeHandle(0, aNewPosition, -1);
         Scheduler::ProcessEventsToIdle();
@@ -2922,7 +2922,7 @@ void SdTiledRenderingTest::testShapeEditInMultipleViews()
         CPPUNIT_ASSERT_EQUAL(4501L, aRectangle.GetWidth());
         CPPUNIT_ASSERT_EQUAL(2001L, aRectangle.GetHeight());
 
-        // On View2 - Move handle 0 on the shape to a new mosition - resize
+        // On View2 - Move handle 0 on the shape to a new position - resize
         Point aNewPosition = aRectangle.TopLeft() + Point(-1250, -1000);
         pView2->MoveShapeHandle(0, aNewPosition, -1);
         Scheduler::ProcessEventsToIdle();

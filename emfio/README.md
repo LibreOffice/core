@@ -73,7 +73,7 @@ Due to the difference on the fonts available on various platforms, the outcome
 of text rendering can be different on Linux, Windows, macOS and elsewhere.
 
 ## Known Bugs
-Known remaing bugs for this module is gathered here:
+Known remaining bugs for this module is gathered here:
 
 * [Bug 103859 \[META\] EMF/WMF (Enhanced/Windows Metafile) bugs and
 enhancements](https://bugs.documentfoundation.org/show_bug.cgi?id=103859)
