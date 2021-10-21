@@ -373,7 +373,7 @@ void SfxLokHelper::notifyOtherView(const SfxViewShell* pThisView, SfxViewShell c
 
     const OString aPayload = lcl_generateJSON(pThisView, rKey, rPayload);
     const int viewId = SfxLokHelper::getView(pThisView);
-    pOtherView->libreOfficeKitViewCallback(nType, aPayload.getStr(), viewId);
+    pOtherView->libreOfficeKitViewCallbackWithViewId(nType, aPayload.getStr(), viewId);
 }
 
 void SfxLokHelper::notifyOtherView(const SfxViewShell* pThisView, SfxViewShell const* pOtherView,
@@ -384,7 +384,7 @@ void SfxLokHelper::notifyOtherView(const SfxViewShell* pThisView, SfxViewShell c
         return;
 
     const int viewId = SfxLokHelper::getView(pThisView);
-    pOtherView->libreOfficeKitViewCallback(nType, lcl_generateJSON(pThisView, rTree).getStr(), viewId);
+    pOtherView->libreOfficeKitViewCallbackWithViewId(nType, lcl_generateJSON(pThisView, rTree).getStr(), viewId);
 }
 
 void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType, const OString& rKey,
@@ -411,7 +411,7 @@ void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType, co
                 viewId = SfxLokHelper::getView(pThisView);
             }
 
-            pViewShell->libreOfficeKitViewCallback(nType, aPayload.getStr(), viewId);
+            pViewShell->libreOfficeKitViewCallbackWithViewId(nType, aPayload.getStr(), viewId);
         }
 
         pViewShell = SfxViewShell::GetNext(*pViewShell);
@@ -442,7 +442,7 @@ void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType,
                 viewId = SfxLokHelper::getView(pThisView);
             }
 
-            pViewShell->libreOfficeKitViewCallback(nType, aPayload.getStr(), viewId);
+            pViewShell->libreOfficeKitViewCallbackWithViewId(nType, aPayload.getStr(), viewId);
         }
 
         pViewShell = SfxViewShell::GetNext(*pViewShell);
@@ -576,7 +576,7 @@ void SfxLokHelper::notifyVisCursorInvalidation(OutlinerViewShell const* pThisVie
             "\", \"mispelledWord\": \"" +  OString::number(bMispelledWord ? 1 : 0) +
             "\", \"hyperlink\": " + sHyperlink + " }";
         const int viewId = SfxLokHelper::getView();
-        pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sPayload.getStr(), viewId);
+        pThisView->libreOfficeKitViewCallbackWithViewId(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sPayload.getStr(), viewId);
     }
     else
     {
