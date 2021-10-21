@@ -3509,41 +3509,43 @@ IMPL_LINK_NOARG(SwContentTree, TimerUpdate, Timer *, void)
     // Query view because the Navigator is cleared too late.
     SwView* pView = GetParentWindow()->GetCreateView();
     if(pView && pView->GetWrtShellPtr() && pView->GetWrtShellPtr()->GetWin() &&
-        (pView->GetWrtShellPtr()->GetWin()->HasFocus() || m_bViewHasChanged) &&
-        !IsInDrag() && !pView->GetWrtShellPtr()->ActionPend())
+            pView->GetWrtShellPtr()->GetWin()->HasFocus())
     {
-        m_bViewHasChanged = false;
-        m_bIsIdleClear = false;
-        SwWrtShell* pActShell = pView->GetWrtShellPtr();
-        if (State::CONSTANT == m_eState && !lcl_FindShell(m_pActiveShell))
+        if(m_bViewHasChanged && !IsInDrag() && !pView->GetWrtShellPtr()->ActionPend())
         {
-            SetActiveShell(pActShell);
-            GetParentWindow()->UpdateListBox();
-        }
+            m_bViewHasChanged = false;
+            m_bIsIdleClear = false;
+            SwWrtShell* pActShell = pView->GetWrtShellPtr();
+            if (State::CONSTANT == m_eState && !lcl_FindShell(m_pActiveShell))
+            {
+                SetActiveShell(pActShell);
+                GetParentWindow()->UpdateListBox();
+            }
 
-        if (State::ACTIVE == m_eState && pActShell != GetWrtShell())
-        {
-            SetActiveShell(pActShell);
+            if (State::ACTIVE == m_eState && pActShell != GetWrtShell())
+            {
+                SetActiveShell(pActShell);
+            }
+            else if ((State::ACTIVE == m_eState || (State::CONSTANT == m_eState && pActShell == GetWrtShell())) &&
+                     HasContentChanged())
+            {
+                FindActiveTypeAndRemoveUserData();
+                Display(true);
+            }
         }
-        else if ((State::ACTIVE == m_eState || (State::CONSTANT == m_eState && pActShell == GetWrtShell())) &&
-                    HasContentChanged())
+        else if (!pView && State::ACTIVE == m_eState && !m_bIsIdleClear)
         {
-            FindActiveTypeAndRemoveUserData();
-            Display(true);
+            if(m_pActiveShell)
+            {
+                SetActiveShell(nullptr);
+            }
+            clear();
+            m_bIsIdleClear = true;
         }
-
         UpdateTracking();
     }
-    else if (!pView && State::ACTIVE == m_eState && !m_bIsIdleClear)
-    {
-        if(m_pActiveShell)
-        {
-            SetActiveShell(nullptr);
-        }
-        clear();
-        m_bIsIdleClear = true;
-    }
 }
+
 
 void SwContentTree::UpdateTracking()
 {
