@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "daad04e8_7e570823",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-21T07:09:54Z",
+      "side": 1,
+      "message": "calc/autofilter_spec.js failed, resume.",
+      "revId": "0ffb5c500b1ac23d529ec42ad429519a3c7fbf67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
