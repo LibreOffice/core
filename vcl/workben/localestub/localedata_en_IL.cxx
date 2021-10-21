@@ -18,14 +18,14 @@ SAL_DLLPUBLIC_EXPORT sal_Unicode** SAL_CALL getLCInfo_en_IL(sal_Int16& count)
     count = SAL_N_ELEMENTS(LCInfoArray);
     return (sal_Unicode**)LCInfoArray;
 }
-extern sal_Unicode** SAL_CALL getLocaleItem_he_IL(sal_Int16& count);
+extern sal_Unicode** SAL_CALL getLocaleItem_en_US(sal_Int16& count);
 SAL_DLLPUBLIC_EXPORT sal_Unicode** SAL_CALL getLocaleItem_en_IL(sal_Int16& count)
 {
-    return getLocaleItem_he_IL(count);
+    return getLocaleItem_en_US(count);
 }
 static const sal_Unicode replaceTo0[]
     = { 0x5b, 0x24, 0x200e, 0x20aa, 0x2d, 0x42, 0x34, 0x30, 0x39, 0x5d, 0x0 };
-extern sal_Unicode const* const* SAL_CALL getAllFormats0_he_IL(sal_Int16& count,
+extern sal_Unicode const* const* SAL_CALL getAllFormats0_en_US(sal_Int16& count,
                                                                const sal_Unicode*& from,
                                                                const sal_Unicode*& to);
 SAL_DLLPUBLIC_EXPORT sal_Unicode const* const* SAL_CALL
@@ -33,12 +33,12 @@ getAllFormats0_en_IL(sal_Int16& count, const sal_Unicode*& from, const sal_Unico
 {
     to = replaceTo0;
     const sal_Unicode* tmp;
-    return getAllFormats0_he_IL(count, from, tmp);
+    return getAllFormats0_en_US(count, from, tmp);
 }
-extern sal_Unicode** SAL_CALL getDateAcceptancePatterns_he_IL(sal_Int16& count);
+extern sal_Unicode** SAL_CALL getDateAcceptancePatterns_en_US(sal_Int16& count);
 SAL_DLLPUBLIC_EXPORT sal_Unicode** SAL_CALL getDateAcceptancePatterns_en_IL(sal_Int16& count)
 {
-    return getDateAcceptancePatterns_he_IL(count);
+    return getDateAcceptancePatterns_en_US(count);
 }
 static const sal_Unicode replaceTo1[] = { 0x0 };
 extern sal_Unicode const* const* SAL_CALL getAllFormats1_en_US(sal_Int16& count,
@@ -86,10 +86,10 @@ SAL_DLLPUBLIC_EXPORT sal_Unicode** SAL_CALL getAllCalendars_en_IL(sal_Int16& cou
 {
     return getAllCalendars_en_US(count);
 }
-extern sal_Unicode** SAL_CALL getAllCurrencies_he_IL(sal_Int16& count);
+extern sal_Unicode** SAL_CALL getAllCurrencies_en_US(sal_Int16& count);
 SAL_DLLPUBLIC_EXPORT sal_Unicode** SAL_CALL getAllCurrencies_en_IL(sal_Int16& count)
 {
-    return getAllCurrencies_he_IL(count);
+    return getAllCurrencies_en_US(count);
 }
 extern sal_Unicode** SAL_CALL getTransliterations_en_US(sal_Int16& count);
 SAL_DLLPUBLIC_EXPORT sal_Unicode** SAL_CALL getTransliterations_en_IL(sal_Int16& count)
