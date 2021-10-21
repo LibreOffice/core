@@ -348,16 +348,14 @@ javaPluginError jfw_plugin_getAllJavaInfos(
 
     for (auto const& vecInfo : vecInfos)
     {
-        if (auto const versionInfo = vendorSettings.getVersionInformation(vecInfo->getVendor()))
-        {
-            javaPluginError err = checkJavaVersionRequirements(
-                vecInfo, versionInfo->sMinVersion, versionInfo->sMaxVersion, versionInfo->vecExcludeVersions);
+        auto const versionInfo = vendorSettings.getVersionInformation(vecInfo->getVendor());
+        javaPluginError err = checkJavaVersionRequirements(
+            vecInfo, versionInfo.sMinVersion, versionInfo.sMaxVersion, versionInfo.vecExcludeVersions);
 
-            if (err == javaPluginError::FailedVersion || err == javaPluginError::WrongArch)
-                continue;
-            else if (err == javaPluginError::WrongVersionFormat)
-                return err;
-        }
+        if (err == javaPluginError::FailedVersion || err == javaPluginError::WrongArch)
+            continue;
+        else if (err == javaPluginError::WrongVersionFormat)
+            return err;
 
         vecVerifiedInfos.push_back(vecInfo);
     }
@@ -388,11 +386,9 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
 
     //Check if the detected JRE matches the version requirements
     javaPluginError errorcode = javaPluginError::NONE;
-    if (auto const versionInfo = vendorSettings.getVersionInformation(aVendorInfo->getVendor()))
-    {
-        errorcode = checkJavaVersionRequirements(
-            aVendorInfo, versionInfo->sMinVersion, versionInfo->sMaxVersion, versionInfo->vecExcludeVersions);
-    }
+    auto const versionInfo = vendorSettings.getVersionInformation(aVendorInfo->getVendor());
+    errorcode = checkJavaVersionRequirements(
+        aVendorInfo, versionInfo.sMinVersion, versionInfo.sMaxVersion, versionInfo.vecExcludeVersions);
 
     if (errorcode == javaPluginError::NONE)
         *ppInfo = createJavaInfo(aVendorInfo);
@@ -416,13 +412,12 @@ javaPluginError jfw_plugin_getJavaInfoFromJavaHome(
 
     //Check if the detected JRE matches the version requirements
     auto const versionInfo = vendorSettings.getVersionInformation(infoJavaHome[0]->getVendor());
-    if (!versionInfo
-        || (checkJavaVersionRequirements(
+    if (checkJavaVersionRequirements(
                 infoJavaHome[0],
-                versionInfo->sMinVersion,
-                versionInfo->sMaxVersion,
-                versionInfo->vecExcludeVersions)
-            == javaPluginError::NONE))
+                versionInfo.sMinVersion,
+                versionInfo.sMaxVersion,
+                versionInfo.vecExcludeVersions)
+            == javaPluginError::NONE)
     {
         *ppInfo = createJavaInfo(infoJavaHome[0]);
         return javaPluginError::NONE;
@@ -446,13 +441,12 @@ javaPluginError jfw_plugin_getJavaInfosFromPath(
     for (auto const& infosFromPath : vecInfosFromPath)
     {
         auto const versionInfo = vendorSettings.getVersionInformation(infosFromPath->getVendor());
-        if (!versionInfo
-            || (checkJavaVersionRequirements(
+        if (checkJavaVersionRequirements(
                     infosFromPath,
-                    versionInfo->sMinVersion,
-                    versionInfo->sMaxVersion,
-                    versionInfo->vecExcludeVersions)
-                == javaPluginError::NONE))
+                    versionInfo.sMinVersion,
+                    versionInfo.sMaxVersion,
+                    versionInfo.vecExcludeVersions)
+                == javaPluginError::NONE)
         {
             vecVerifiedInfos.push_back(createJavaInfo(infosFromPath));
         }
