@@ -30,8 +30,8 @@ void TestLokCallbackWrapper::libreOfficeKitViewCallback(int nType, const char* p
     callCallback(nType, pPayload);
 }
 
-void TestLokCallbackWrapper::libreOfficeKitViewCallback(int nType, const char* pPayload,
-                                                        int /*nViewId*/)
+void TestLokCallbackWrapper::libreOfficeKitViewCallbackWithViewId(int nType, const char* pPayload,
+                                                                  int /*nViewId*/)
 {
     callCallback(nType, pPayload); // the view id is also included in payload
 }
