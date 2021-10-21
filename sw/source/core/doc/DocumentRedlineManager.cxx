@@ -2223,21 +2223,23 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                                     bCompress = true;
 
                                     // split redline to store ExtraData per paragraphs
-                                    SwRangeRedline* pPar = new SwRangeRedline( *pNewRedl );
-                                    pPar->SetStart( aPos );
-                                    pNewRedl->SetEnd( aPos );
+                                    SwRangeRedline* pPar = new SwRangeRedline(*pNewRedl);
+                                    pPar->SetStart(aPos);
+                                    pNewRedl->SetEnd(aPos);
 
                                     // get extradata for reset formatting of the modified paragraph
-                                    SwRedlineExtraData_FormatColl* pExtraData = lcl_CopyStyle(aPos, *pStt, false);
+                                    SwRedlineExtraData_FormatColl* pExtraData
+                                        = lcl_CopyStyle(aPos, *pStt, false);
                                     if (pExtraData)
                                     {
-                                        std::unique_ptr<SwRedlineExtraData_FormatColl> xRedlineExtraData;
+                                        std::unique_ptr<SwRedlineExtraData_FormatColl>
+                                            xRedlineExtraData;
                                         if (!bFirst)
                                             pExtraData->SetFormatAll(false);
                                         xRedlineExtraData.reset(pExtraData);
-                                        pPar->SetExtraData( xRedlineExtraData.get() );
+                                        pPar->SetExtraData(xRedlineExtraData.get());
                                     }
-
+                                }
                                 // skip empty redlines without ExtraData
                                 // FIXME: maybe checking pExtraData is redundant here
                                 if ( pExtraData || *pPar->Start() != *pPar->End() )
