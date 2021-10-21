@@ -14,7 +14,11 @@ $(eval $(call gb_Package_add_file,jvmfwk_javavendors,$(LIBO_URE_MISC_FOLDER)/jav
 else ifeq ($(OS),FREEBSD)
 $(eval $(call gb_Package_add_file,jvmfwk_javavendors,$(LIBO_URE_MISC_FOLDER)/javavendors.xml,distributions/OpenOfficeorg/javavendors_freebsd.xml))
 else ifeq ($(OS),MACOSX)
+ifeq ($(CPUNAME),AARCH64)
+$(eval $(call gb_Package_add_file,jvmfwk_javavendors,$(LIBO_URE_MISC_FOLDER)/javavendors.xml,distributions/OpenOfficeorg/javavendors_macosx_aarch64.xml))
+else
 $(eval $(call gb_Package_add_file,jvmfwk_javavendors,$(LIBO_URE_MISC_FOLDER)/javavendors.xml,distributions/OpenOfficeorg/javavendors_macosx.xml))
+endif
 else ifeq ($(OS),LINUX)
 $(eval $(call gb_Package_add_file,jvmfwk_javavendors,$(LIBO_URE_MISC_FOLDER)/javavendors.xml,distributions/OpenOfficeorg/javavendors_linux.xml))
 else ifeq ($(OS),AIX)
