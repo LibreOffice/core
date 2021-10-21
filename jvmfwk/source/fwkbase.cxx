@@ -131,7 +131,14 @@ VersionInfo VendorSettings::getVersionInformation(std::u16string_view sVendor) c
         m_xmlPathContextVendorSettings);
     if (xmlXPathNodeSetIsEmpty(pathObject->nodesetval))
     {
-        return {{}, "1.8.0", ""};
+        return {
+            {},
+#if defined MACOSX && defined __aarch64__
+            "17",
+#else
+            "1.8.0",
+#endif
+            ""};
     }
 
     VersionInfo aVersionInfo;
