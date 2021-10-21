@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "525bd050_dfa47f4d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-21T19:21:26Z",
+      "side": 1,
+      "message": "Thank you for your feedback both of you.\nSo let\u0027s wait for Jenkins with this new version.",
+      "revId": "efadd3b238b3dcf95b8ebecba1ebe0390cce3d88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
