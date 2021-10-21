@@ -339,8 +339,62 @@ bool XMLCharRfcLanguageTagHdl::importXML( const OUString& rStrImpValue, uno::Any
 
     if( !IsXMLToken( rStrImpValue, XML_NONE ) )
     {
-        aLocale.Variant = rStrImpValue;
-        aLocale.Language = I18NLANGTAG_QLT;
+        // Stored may be a *:rfc-language-tag in violation of ODF v1.3
+        // 19.516 style:rfc-language-tag "It shall only be used if its value
+        // cannot be expressed as a valid combination of the fo:language
+        // 19.871, fo:script 19.242 and fo:country 19.234 attributes".
+        // That could override a more detailed fo:* and we also don't want an
+        // unjustified I18NLANGTAG_QLT extended locale tag, but fetch the
+        // values in case fo:* doesn't follow.
+        // Rule out the obvious.
+        if (rStrImpValue.getLength() < 7)
+        {
+            SAL_WARN("xmloff.style","rfc-language-tag too short: {" << rStrImpValue << "} Set: "
+                    << aLocale.Language <<","<< aLocale.Country <<","<< aLocale.Variant);
+            // Ignore empty and keep Ssss or any earlier qlt already set.
+            if (!rStrImpValue.isEmpty() && aLocale.Language != I18NLANGTAG_QLT)
+            {
+                // Shorter than ll-Ssss, so try ll-CC or lll-CC or ll or lll
+                sal_Int32 h = rStrImpValue.indexOf('-');
+                OUString aLang;
+                if (2 <= h && h <= 3)
+                    aLang = rStrImpValue.copy(0, h);
+                else if (h < 0 && 2 <= rStrImpValue.getLength() && rStrImpValue.getLength() <= 3)
+                    aLang = rStrImpValue;
+                OUString aCoun;
+                if (!aLang.isEmpty() && aLang.getLength() + 3 == rStrImpValue.getLength())
+                    aCoun = rStrImpValue.copy( aLang.getLength() + 1);
+                // Ignore identical value or less information.
+                if ((!aLang.isEmpty() && aLang != aLocale.Language) ||
+                    (!aCoun.isEmpty() && aCoun != aLocale.Country))
+                {
+                    // Do not override existing values.
+                    if (aLocale.Language.isEmpty())
+                        aLocale.Language = aLang;
+                    if (aLocale.Country.isEmpty())
+                        aLocale.Country = aCoun;
+                    if (aLang != aLocale.Language || aCoun != aLocale.Country)
+                    {
+                        // No match, so we still need the qlt anyway. Whatever..
+                        aLocale.Variant = rStrImpValue;
+                        aLocale.Language = I18NLANGTAG_QLT;
+                    }
+                }
+                else if (aLang.isEmpty() && aCoun.isEmpty())
+                {
+                    // Both empty, some other tag.
+                    aLocale.Variant = rStrImpValue;
+                    aLocale.Language = I18NLANGTAG_QLT;
+                }
+            }
+            SAL_WARN("xmloff.style","rfc-language-tag too short: now set: "
+                    << aLocale.Language <<","<< aLocale.Country <<","<< aLocale.Variant);
+        }
+        else
+        {
+            aLocale.Variant = rStrImpValue;
+            aLocale.Language = I18NLANGTAG_QLT;
+        }
     }
 
     rValue <<= aLocale;
