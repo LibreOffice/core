@@ -584,13 +584,11 @@ public:
 
     /** @overload @since LibreOffice 5.4 */
     template<std::size_t N> OUString & operator =(OUStringLiteral<N> const & literal) {
-        if (literal.getLength() == 0) {
-            rtl_uString_new(&pData);
-        } else {
-            rtl_uString_newFromStr_WithLength(&pData, literal.getStr(), literal.getLength());
-        }
+        rtl_uString_release(pData);
+        pData = const_cast<rtl_uString *>(&literal.str);
         return *this;
     }
+    template<std::size_t N> OUString & operator =(OUStringLiteral<N> &&) = delete;
 
     template<typename T>
     OUString & operator =(OUStringNumber<T> && n) {

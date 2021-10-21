@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "BorderHandler.hxx"
 #include "CellColorHandler.hxx"
 #include "CellMarginHandler.hxx"
@@ -369,7 +373,7 @@ namespace writerfilter::dmapper {
                     if (m_pCurrentInteropGrabBag)
                     {
                         beans::PropertyValue aValue;
-                        aValue.Name = (nSprmId == NS_ooxml::LN_CT_TblPrBase_tblStyleRowBandSize ? OUStringLiteral(u"tblStyleRowBandSize") : OUStringLiteral(u"tblStyleColBandSize"));
+                        aValue.Name = (nSprmId == NS_ooxml::LN_CT_TblPrBase_tblStyleRowBandSize ? std::u16string_view(u"tblStyleRowBandSize") : std::u16string_view(u"tblStyleColBandSize"));
                         aValue.Value <<= nIntValue;
                         m_pCurrentInteropGrabBag->push_back(aValue);
                     }

@@ -128,7 +128,7 @@ void WriterXmlEmitter::fillFrameProps( DrawElement&       rElem,
         if (pParaElt)
         {
             rProps[ "text:anchor-type" ] = rElem.isCharacter
-                ? OUStringLiteral(u"character") : OUStringLiteral(u"paragraph");
+                ? std::u16string_view(u"character") : std::u16string_view(u"paragraph");
         }
         else
         {

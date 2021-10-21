@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "rtfdocumentimpl.hxx"
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -1045,8 +1049,8 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         {
             beans::PropertyValue aPropertyValue;
             aPropertyValue.Name
-                = (nKeyword == RTFKeyword::DOBXMARGIN ? OUStringLiteral(u"HoriOrientRelation")
-                                                      : OUStringLiteral(u"VertOrientRelation"));
+                = (nKeyword == RTFKeyword::DOBXMARGIN ? std::u16string_view(u"HoriOrientRelation")
+                                                      : std::u16string_view(u"VertOrientRelation"));
             aPropertyValue.Value <<= text::RelOrientation::PAGE_PRINT_AREA;
             m_aStates.top().getDrawingObject().getPendingProperties().push_back(aPropertyValue);
         }
@@ -1056,8 +1060,8 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         {
             beans::PropertyValue aPropertyValue;
             aPropertyValue.Name
-                = (nKeyword == RTFKeyword::DOBXPAGE ? OUStringLiteral(u"HoriOrientRelation")
-                                                    : OUStringLiteral(u"VertOrientRelation"));
+                = (nKeyword == RTFKeyword::DOBXPAGE ? std::u16string_view(u"HoriOrientRelation")
+                                                    : std::u16string_view(u"VertOrientRelation"));
             aPropertyValue.Value <<= text::RelOrientation::PAGE_FRAME;
             m_aStates.top().getDrawingObject().getPendingProperties().push_back(aPropertyValue);
         }
