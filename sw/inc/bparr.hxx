@@ -57,10 +57,10 @@ public:
 struct BlockInfo final
 {
     BigPtrArray* pBigArr;              ///< in this array the block is located
-    std::array<BigPtrEntry*, MAXENTRY>
-                 mvData;               ///< data block
     sal_Int32    nStart, nEnd;         ///< start- and end index
     sal_uInt16   nElem;                ///< number of elements
+    std::array<BigPtrEntry*, MAXENTRY>
+                 mvData;               ///< data block
 };
 
 class SW_DLLPUBLIC BigPtrArray
