@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95017155_79cc9aac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-10-21T08:24:54Z",
+      "side": 1,
+      "message": "Hossein, done - I have removed the commented out facts into a new patch: https://gerrit.libreoffice.org/c/core/+/123957/\n\nBug fix 1: https://gerrit.libreoffice.org/c/core/+/123309\nBug fix 2: https://gerrit.libreoffice.org/c/core/+/122836\nBug fix 3: https://gerrit.libreoffice.org/c/core/+/123310\nBug fix 4: https://gerrit.libreoffice.org/c/core/+/123311\nFinal bug fix: https://gerrit.libreoffice.org/c/core/+/123312",
+      "revId": "83535bc862db7c54d70ae74408b2e0b49f002ef0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
