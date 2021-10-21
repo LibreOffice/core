@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7973741c_03c4dca3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-10-21T17:10:55Z",
+      "side": 1,
+      "message": "jenkins fails on WNT but with the following patch it succeeds",
+      "revId": "381e87d2e212c1a5ab328e2e4a5c4236451f3c32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
