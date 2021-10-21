@@ -28,11 +28,11 @@ const sal_uInt16 nBlockGrowSize = 20;
 
 #if OSL_DEBUG_LEVEL > 2
 #define CHECKIDX( p, n, i, c ) CheckIdx( p, n, i, c );
-void CheckIdx( BlockInfo** ppInf, sal_uInt16 nBlock, sal_uLong nSize, sal_uInt16 nCur )
+void CheckIdx( BlockInfo** ppInf, sal_uInt16 nBlock, sal_Int32 nSize, sal_uInt16 nCur )
 {
     assert( !nSize || nCur < nBlock ); // BigPtrArray: CurIndex invalid
 
-    sal_uLong nIdx = 0;
+    sal_Int32 nIdx = 0;
     for( sal_uInt16 nCnt = 0; nCnt < nBlock; ++nCnt, ++ppInf )
     {
         nIdx += (*ppInf)->nElem;
@@ -67,7 +67,7 @@ BigPtrArray::~BigPtrArray()
 
 // Also moving is done simply here. Optimization is useless because of the
 // division of this field into multiple parts.
-void BigPtrArray::Move( sal_uLong from, sal_uLong to )
+void BigPtrArray::Move( sal_Int32 from, sal_Int32 to )
 {
     if (from != to)
     {
@@ -79,7 +79,7 @@ void BigPtrArray::Move( sal_uLong from, sal_uLong to )
     }
 }
 
-BigPtrEntry* BigPtrArray::operator[]( sal_uLong idx ) const
+BigPtrEntry* BigPtrArray::operator[]( sal_Int32 idx ) const
 {
     assert(idx < m_nSize); // operator[]: Index out of bounds
     m_nCur = Index2Block( idx );
@@ -88,7 +88,7 @@ BigPtrEntry* BigPtrArray::operator[]( sal_uLong idx ) const
 }
 
 /** Search a block at a given position */
-sal_uInt16 BigPtrArray::Index2Block( sal_uLong pos ) const
+sal_uInt16 BigPtrArray::Index2Block( sal_Int32 pos ) const
 {
     // last used block?
     BlockInfo* p = m_ppInf[ m_nCur ];
@@ -138,7 +138,7 @@ sal_uInt16 BigPtrArray::Index2Block( sal_uLong pos ) const
 void BigPtrArray::UpdIndex( sal_uInt16 pos )
 {
     BlockInfo** pp = m_ppInf.get() + pos;
-    sal_uLong idx = (*pp)->nEnd + 1;
+    sal_Int32 idx = (*pp)->nEnd + 1;
     while( ++pos < m_nBlock )
     {
         BlockInfo* p = *++pp;
@@ -198,7 +198,7 @@ void BigPtrArray::BlockDel( sal_uInt16 nDel )
     }
 }
 
-void BigPtrArray::Insert( BigPtrEntry* pElem, sal_uLong pos )
+void BigPtrArray::Insert( BigPtrEntry* pElem, sal_Int32 pos )
 {
     CHECKIDX( m_ppInf.get(), m_nBlock, m_nSize, m_nCur );
 
@@ -303,7 +303,7 @@ void BigPtrArray::Insert( BigPtrEntry* pElem, sal_uLong pos )
     CHECKIDX( m_ppInf.get(), m_nBlock, m_nSize, m_nCur );
 }
 
-void BigPtrArray::Remove( sal_uLong pos, sal_uLong n )
+void BigPtrArray::Remove( sal_Int32 pos, sal_Int32 n )
 {
     CHECKIDX( m_ppInf.get(), m_nBlock, m_nSize, m_nCur );
 
@@ -314,14 +314,14 @@ void BigPtrArray::Remove( sal_uLong pos, sal_uLong n )
     BlockInfo* p = m_ppInf[ cur ];
     pos -= p->nStart;
 
-    sal_uLong nElem = n;
+    sal_Int32 nElem = n;
     while( nElem )
     {
         sal_uInt16 nel = p->nElem - sal_uInt16(pos);
-        if( sal_uLong(nel) > nElem )
+        if( sal_Int32(nel) > nElem )
             nel = sal_uInt16(nElem);
         // move elements if needed
-        if( ( pos + nel ) < sal_uLong(p->nElem) )
+        if( ( pos + nel ) < sal_Int32(p->nElem) )
         {
             auto pTo = p->mvData.begin() + pos;
             auto pFrom = pTo + nel;
@@ -387,7 +387,7 @@ void BigPtrArray::Remove( sal_uLong pos, sal_uLong n )
     CHECKIDX( m_ppInf.get(), m_nBlock, m_nSize, m_nCur );
 }
 
-void BigPtrArray::Replace( sal_uLong idx, BigPtrEntry* pElem)
+void BigPtrArray::Replace( sal_Int32 idx, BigPtrEntry* pElem)
 {
     assert(idx < m_nSize); // Index out of bounds
     m_nCur = Index2Block( idx );

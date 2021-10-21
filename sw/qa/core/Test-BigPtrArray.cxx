@@ -27,38 +27,38 @@
 
 namespace /* private */
 {
-    const sal_uLong NUM_ENTRIES = 10;
+    const sal_Int32 NUM_ENTRIES = 10;
 
     class BigPtrEntryMock : public BigPtrEntry
     {
     public:
-        explicit BigPtrEntryMock(sal_uLong count) : count_(count)
+        explicit BigPtrEntryMock(sal_Int32 count) : count_(count)
         {
         }
 
-        sal_uLong getCount() const
+        sal_Int32 getCount() const
         {
             return count_;
         }
 
-        sal_uLong Position() const
+        sal_Int32 Position() const
         {
             return GetPos();
         }
 
     private:
-        sal_uLong count_;
+        sal_Int32 count_;
     };
 
-    void fillBigPtrArray(BigPtrArray& bparr, sal_uLong numEntries)
+    void fillBigPtrArray(BigPtrArray& bparr, sal_Int32 numEntries)
     {
-        for (sal_uLong i = 0; i < numEntries; i++)
+        for (sal_Int32 i = 0; i < numEntries; i++)
             bparr.Insert(new BigPtrEntryMock(i), bparr.Count());
     }
 
     bool checkElementPositions(const BigPtrArray& bparr)
     {
-        for (sal_uLong i = 0; i < bparr.Count(); i++)
+        for (sal_Int32 i = 0; i < bparr.Count(); i++)
         {
             if (static_cast<BigPtrEntryMock*>(bparr[i])->Position() != i)
                 return false;
@@ -68,7 +68,7 @@ namespace /* private */
 
     void releaseBigPtrArrayContent(BigPtrArray const & bparr)
     {
-        for (sal_uLong i = 0; i < bparr.Count(); i++)
+        for (sal_Int32 i = 0; i < bparr.Count(); i++)
             delete bparr[i];
     }
 }
@@ -93,7 +93,7 @@ public:
         CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "BigPtrArray ctor failed",
-            static_cast<sal_uLong>(0), bparr.Count()
+            static_cast<sal_Int32>(0), bparr.Count()
         );
     }
 
@@ -101,9 +101,9 @@ public:
     {
         BigPtrArray bparr;
 
-        for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
+        for (sal_Int32 i = 0; i < NUM_ENTRIES; i++)
         {
-            sal_uLong oldCount = bparr.Count();
+            sal_Int32 oldCount = bparr.Count();
             bparr.Insert(new BigPtrEntryMock(i), 0);
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
@@ -112,7 +112,7 @@ public:
             );
         }
 
-        for (sal_uLong i = 0, j = NUM_ENTRIES - 1; i < NUM_ENTRIES; i++, j--)
+        for (sal_Int32 i = 0, j = NUM_ENTRIES - 1; i < NUM_ENTRIES; i++, j--)
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
@@ -136,7 +136,7 @@ public:
 
         fillBigPtrArray(bparr, NUM_ENTRIES);
 
-        sal_uLong oldCount = bparr.Count();
+        sal_Int32 oldCount = bparr.Count();
 
         bparr.Insert(new BigPtrEntryMock(NUM_ENTRIES), bparr.Count() / 2);
 
@@ -166,10 +166,10 @@ public:
 
         fillBigPtrArray(bparr, NUM_ENTRIES);
 
-        const sal_uLong oldCount = bparr.Count();
+        const sal_Int32 oldCount = bparr.Count();
 
         // insert 5 elements
-        for (sal_uLong i = 0, j = 30; i < 5; i++, j++)
+        for (sal_Int32 i = 0, j = 30; i < 5; i++, j++)
             bparr.Insert(new BigPtrEntryMock(j), i);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -180,7 +180,7 @@ public:
 
         // now, first 5 elements have counts: 30,31,..34
         // next 10 elements have counts: 0,1,..9
-        for (sal_uLong i = 0, j = 30; i < bparr.Count(); i++, j++)
+        for (sal_Int32 i = 0, j = 30; i < bparr.Count(); i++, j++)
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
@@ -204,7 +204,7 @@ public:
 
         fillBigPtrArray(bparr, NUM_ENTRIES);
 
-        sal_uLong oldCount = bparr.Count();
+        sal_Int32 oldCount = bparr.Count();
         bparr.Insert(new BigPtrEntryMock(NUM_ENTRIES), bparr.Count());
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -233,9 +233,9 @@ public:
 
         fillBigPtrArray(bparr, NUM_ENTRIES);
 
-        for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
+        for (sal_Int32 i = 0; i < NUM_ENTRIES; i++)
         {
-            sal_uLong oldCount = bparr.Count();
+            sal_Int32 oldCount = bparr.Count();
 
             delete bparr[0]; // release content
             bparr.Remove(0); // remove item from container
@@ -246,7 +246,7 @@ public:
                 oldCount - 1, bparr.Count()
             );
 
-            for (sal_uLong j = 0, k = i + 1; j < bparr.Count(); j++, k++)
+            for (sal_Int32 j = 0, k = i + 1; j < bparr.Count(); j++, k++)
             {
                 CPPUNIT_ASSERT_EQUAL_MESSAGE
                 (
@@ -271,7 +271,7 @@ public:
 
         for (int i = NUM_ENTRIES - 1; i >= 0; i--)
         {
-            sal_uLong oldCount = bparr.Count();
+            sal_Int32 oldCount = bparr.Count();
             delete bparr[i];
             bparr.Remove(i);
 
@@ -281,7 +281,7 @@ public:
                 (oldCount - 1), bparr.Count()
             );
 
-            for (sal_uLong j = 0; j < bparr.Count(); j++)
+            for (sal_Int32 j = 0; j < bparr.Count(); j++)
             {
                 CPPUNIT_ASSERT_EQUAL_MESSAGE
                 (
@@ -306,8 +306,8 @@ public:
 
         while (bparr.Count())
         {
-            sal_uLong oldCount = bparr.Count();
-            sal_uLong oldElement = static_cast<BigPtrEntryMock*>(bparr[bparr.Count() / 2])->getCount();
+            sal_Int32 oldCount = bparr.Count();
+            sal_Int32 oldElement = static_cast<BigPtrEntryMock*>(bparr[bparr.Count() / 2])->getCount();
 
             delete bparr[bparr.Count() / 2];
             bparr.Remove(bparr.Count() / 2);
@@ -318,7 +318,7 @@ public:
                 oldCount - 1, bparr.Count()
             );
 
-            for (sal_uLong i = 0; i < bparr.Count(); i++)
+            for (sal_Int32 i = 0; i < bparr.Count(); i++)
             {
                 CPPUNIT_ASSERT_MESSAGE
                 (
@@ -343,10 +343,10 @@ public:
 
         while(bparr.Count())
         {
-            sal_uLong nRemove = std::min<sal_uLong>(bparr.Count(), 3);
-            sal_uLong oldCount = bparr.Count();
+            sal_Int32 nRemove = std::min<sal_Int32>(bparr.Count(), 3);
+            sal_Int32 oldCount = bparr.Count();
 
-            for (sal_uLong i = 0; i < nRemove; i++)
+            for (sal_Int32 i = 0; i < nRemove; i++)
                 delete bparr[i];
 
             bparr.Remove(0, nRemove);
@@ -377,7 +377,7 @@ public:
         CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "test_remove_all_elements_at_once failed",
-            static_cast<sal_uLong>(0), bparr.Count()
+            static_cast<sal_Int32>(0), bparr.Count()
         );
     }
 
@@ -387,12 +387,12 @@ public:
 
         fillBigPtrArray(bparr, NUM_ENTRIES);
 
-        for (sal_uLong i = 0; i < NUM_ENTRIES - 1; i++)
+        for (sal_Int32 i = 0; i < NUM_ENTRIES - 1; i++)
         {
             bparr.Move(i, i + 2);
         }
 
-        for (sal_uLong i = 0; i < (NUM_ENTRIES - 1); i++)
+        for (sal_Int32 i = 0; i < (NUM_ENTRIES - 1); i++)
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
@@ -404,7 +404,7 @@ public:
         CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "test_move_elements_from_lower_to_higher_pos failed",
-            static_cast<sal_uLong>(0), static_cast<BigPtrEntryMock*>(bparr[NUM_ENTRIES -1])->getCount()
+            static_cast<sal_Int32>(0), static_cast<BigPtrEntryMock*>(bparr[NUM_ENTRIES -1])->getCount()
         );
 
         CPPUNIT_ASSERT_MESSAGE
@@ -433,7 +433,7 @@ public:
             (NUM_ENTRIES - 1), static_cast<BigPtrEntryMock*>(bparr[0])->getCount()
         );
 
-        for (sal_uLong i = 1; i < NUM_ENTRIES; i++)
+        for (sal_Int32 i = 1; i < NUM_ENTRIES; i++)
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
@@ -457,12 +457,12 @@ public:
 
         fillBigPtrArray(bparr, NUM_ENTRIES);
 
-        for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
+        for (sal_Int32 i = 0; i < NUM_ENTRIES; i++)
         {
             bparr.Move(i, i);
         }
 
-        for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
+        for (sal_Int32 i = 0; i < NUM_ENTRIES; i++)
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
@@ -486,13 +486,13 @@ public:
 
         fillBigPtrArray(bparr, NUM_ENTRIES);
 
-        for (sal_uLong i = 0, j = NUM_ENTRIES - 1; i < NUM_ENTRIES; i++, j--)
+        for (sal_Int32 i = 0, j = NUM_ENTRIES - 1; i < NUM_ENTRIES; i++, j--)
         {
             delete bparr[i];
             bparr.Replace(i, new BigPtrEntryMock(j));
         }
 
-        for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
+        for (sal_Int32 i = 0; i < NUM_ENTRIES; i++)
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
