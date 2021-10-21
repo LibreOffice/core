@@ -12,9 +12,9 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/lokcallback.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/scheduler.hxx>
+#include <test/lokcallback.hxx>
 
 #include <IDocumentStatistics.hxx>
 #include <fmtanchr.hxx>
@@ -92,17 +92,30 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTextBoxNodeSplit)
 
 namespace
 {
-struct ViewCallback : public SfxLokCallbackInterface
+struct ViewCallback
 {
     int m_nInvalidations = 0;
 
-    virtual void libreOfficeKitViewCallback(int, const char*) override {}
-    virtual void libreOfficeKitViewCallback(int, const char*, int) override {}
-    virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle*, int) override
-    {
-        ++m_nInvalidations;
-    }
+    static void callback(int nType, const char* pPayload, void* pData);
+    void callbackImpl(int nType, const char* pPayload);
 };
+
+void ViewCallback::callback(int nType, const char* pPayload, void* pData)
+{
+    static_cast<ViewCallback*>(pData)->callbackImpl(nType, pPayload);
+}
+
+void ViewCallback::callbackImpl(int nType, const char* /*pPayload*/)
+{
+    switch (nType)
+    {
+        case LOK_CALLBACK_INVALIDATE_TILES:
+        {
+            ++m_nInvalidations;
+        }
+        break;
+    }
+}
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTitleFieldInvalidate)
@@ -119,7 +132,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTitleFieldInvalidate)
     SwWrtShell* pWrtShell = pShell->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/false);
     ViewCallback aCallback;
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&aCallback);
+    TestLokCallbackWrapper aCallbackWrapper(&ViewCallback::callback, &aCallback);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&aCallbackWrapper);
     Scheduler::ProcessEventsToIdle();
     aCallback.m_nInvalidations = 0;
 
