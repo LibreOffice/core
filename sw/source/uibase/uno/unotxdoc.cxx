@@ -3556,6 +3556,11 @@ void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int 
     SolarMutexGuard aGuard;
 
     SwViewShell* pWrtViewShell = pDocShell->GetWrtShell();
+    if (!pWrtViewShell)
+    {
+        return;
+    }
+
     SwViewOption aOption(*(pWrtViewShell->GetViewOptions()));
     double fScale = aOption.GetZoom() / (TWIPS_PER_PIXEL * 100.0);
 
