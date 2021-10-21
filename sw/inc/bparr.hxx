@@ -41,7 +41,7 @@ public:
     virtual ~BigPtrEntry() = default;
     BigPtrEntry & operator =(BigPtrEntry const &) = default;
 
-    inline sal_uLong GetPos() const;
+    inline sal_Int32 GetPos() const;
     inline BigPtrArray& GetArray() const;
 };
 
@@ -59,7 +59,7 @@ struct BlockInfo final
     BigPtrArray* pBigArr;              ///< in this array the block is located
     std::array<BigPtrEntry*, MAXENTRY>
                  mvData;               ///< data block
-    sal_uLong    nStart, nEnd;         ///< start- and end index
+    sal_Int32    nStart, nEnd;         ///< start- and end index
     sal_uInt16   nElem;                ///< number of elements
 };
 
@@ -68,13 +68,13 @@ class SW_DLLPUBLIC BigPtrArray
 protected:
     std::unique_ptr<BlockInfo*[]>
                     m_ppInf;              ///< block info
-    sal_uLong       m_nSize;              ///< number of elements
+    sal_Int32       m_nSize;              ///< number of elements
     sal_uInt16      m_nMaxBlock;          ///< current max. number of blocks
     sal_uInt16      m_nBlock;             ///< number of blocks
     mutable
         sal_uInt16  m_nCur;               ///< last used block
 
-    sal_uInt16  Index2Block( sal_uLong ) const; ///< block search
+    sal_uInt16  Index2Block( sal_Int32 ) const; ///< block search
     BlockInfo*  InsBlock( sal_uInt16 );         ///< insert block
     void        BlockDel( sal_uInt16 );         ///< some blocks were deleted
     void        UpdIndex( sal_uInt16 );         ///< recalculate indices
@@ -86,17 +86,17 @@ public:
     BigPtrArray();
     ~BigPtrArray();
 
-    sal_uLong Count() const { return m_nSize; }
+    sal_Int32 Count() const { return m_nSize; }
 
-    void Insert( BigPtrEntry* p, sal_uLong pos );
-    void Remove( sal_uLong pos, sal_uLong n = 1 );
-    void Move( sal_uLong from, sal_uLong to );
-    void Replace( sal_uLong pos, BigPtrEntry* p);
+    void Insert( BigPtrEntry* p, sal_Int32 pos );
+    void Remove( sal_Int32 pos, sal_Int32 n = 1 );
+    void Move( sal_Int32 from, sal_Int32 to );
+    void Replace( sal_Int32 pos, BigPtrEntry* p);
 
-    BigPtrEntry* operator[]( sal_uLong ) const;
+    BigPtrEntry* operator[]( sal_Int32 ) const;
 };
 
-inline sal_uLong BigPtrEntry::GetPos() const
+inline sal_Int32 BigPtrEntry::GetPos() const
 {
     assert(this == m_pBlock->mvData[ m_nOffset ]); // element not in the block
     return m_pBlock->nStart + m_nOffset;
