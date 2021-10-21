@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa22df66_8a0cad2a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-21T15:22:42Z",
+      "side": 1,
+      "message": "Typos were just in comments, let\u0027s push this one directly.",
+      "revId": "2c54fd51d81ee4dd8997895dadacc131c0da5211",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
