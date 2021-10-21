@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db53691f_6ca45438",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2951,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-10-21T15:42:29Z",
+      "side": 1,
+      "message": "Hi Mark,\nI just tested locally on a Linux machine and it also works. Do we really need this ?",
+      "revId": "a4244c0f05b95ded277a3a7ed217bf0451daa996",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
