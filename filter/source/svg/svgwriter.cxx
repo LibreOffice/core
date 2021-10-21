@@ -586,18 +586,18 @@ bool SVGTextWriter::implGetTextPositionFromBitmap( const MetaAction* pAction, Po
  *     0 if no text found and end of text shape is reached
  *     1 if text found!
  */
-sal_Int32 SVGTextWriter::setTextPosition(const GDIMetaFile& rMtf, sal_uLong& nCurAction,
+sal_Int32 SVGTextWriter::setTextPosition(const GDIMetaFile& rMtf, size_t& nCurAction,
                                          sal_uInt32 nWriteFlags)
 {
     Point aPos;
-    sal_uLong nCount = rMtf.GetActionSize();
+    size_t nCount = rMtf.GetActionSize();
     bool bEOL = false;
     bool bEOP = false;
     bool bETS = false;
     bool bConfigured = false;
     bool bEmpty = true;
 
-    sal_uLong nActionIndex = nCurAction + 1;
+    size_t nActionIndex = nCurAction + 1;
     for( ; nActionIndex < nCount; ++nActionIndex )
     {
         const MetaAction*    pAction = rMtf.GetAction( nActionIndex );
@@ -628,7 +628,7 @@ sal_Int32 SVGTextWriter::setTextPosition(const GDIMetaFile& rMtf, sal_uLong& nCu
                 const MetaFloatTransparentAction* pA
                     = static_cast<const MetaFloatTransparentAction*>(pAction);
                 GDIMetaFile aTmpMtf(pA->GetGDIMetaFile());
-                sal_uLong nTmpAction = 0;
+                size_t nTmpAction = 0;
                 if (setTextPosition(aTmpMtf, nTmpAction, nWriteFlags) == 1)
                 {
                     // Text is found in the inner metafile.
@@ -726,12 +726,12 @@ sal_Int32 SVGTextWriter::setTextPosition(const GDIMetaFile& rMtf, sal_uLong& nCu
 }
 
 
-void SVGTextWriter::setTextProperties( const GDIMetaFile& rMtf, sal_uLong nCurAction )
+void SVGTextWriter::setTextProperties( const GDIMetaFile& rMtf, size_t nCurAction )
 {
-    sal_uLong nCount = rMtf.GetActionSize();
+    size_t nCount = rMtf.GetActionSize();
     bool bEOP = false;
     bool bConfigured = false;
-    for( sal_uLong nActionIndex = nCurAction + 1; nActionIndex < nCount; ++nActionIndex )
+    for( size_t nActionIndex = nCurAction + 1; nActionIndex < nCount; ++nActionIndex )
     {
         const MetaAction*    pAction = rMtf.GetAction( nActionIndex );
         const MetaActionType nType = pAction->GetType();
@@ -1483,8 +1483,8 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
     BitmapChecksum nId, nChecksum = 0;
     Point aPt;
     Size  aSz;
-    sal_uLong nCount = rMtf.GetActionSize();
-    for( sal_uLong nCurAction = 0; nCurAction < nCount; nCurAction++ )
+    size_t nCount = rMtf.GetActionSize();
+    for( size_t nCurAction = 0; nCurAction < nCount; nCurAction++ )
     {
 
         const MetaAction*    pAction = rMtf.GetAction( nCurAction );
@@ -2973,7 +2973,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
         pElementId = nullptr;
     }
 
-    for( sal_uLong nCurAction = 0, nCount = rMtf.GetActionSize(); nCurAction < nCount; nCurAction++ )
+    for( size_t nCurAction = 0, nCount = rMtf.GetActionSize(); nCurAction < nCount; nCurAction++ )
     {
         const MetaAction*    pAction = rMtf.GetAction( nCurAction );
         const MetaActionType nType = pAction->GetType();
