@@ -660,7 +660,7 @@ private:
             return;
         }
 
-        const sal_uLong nStreamLen(aStream->remainingSize());
+        const sal_uInt64 nStreamLen(aStream->remainingSize());
 
         if(aStream->GetError())
         {
@@ -669,7 +669,7 @@ private:
 
         mnFirstRead = aStream->ReadBytes(
             &mnFirstBytes[0],
-            std::min(nStreamLen, sal_uLong(mnFirstBytesSize)));
+            std::min(nStreamLen, static_cast<sal_uInt64>(mnFirstBytesSize)));
 
         if(aStream->GetError())
         {
