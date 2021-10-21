@@ -33,6 +33,23 @@
       "message": "The numbering format comes from ndtbl.cxx\u0027s lcl_SetAFormatBox\n    pSetPara-\u003erTableFormat.UpdateToSet(nPos, bSingleRowTable, bSingleColTable, aBoxSet, SwTableAutoFormatUpdateFlags::Box, pDoc-\u003eGetNumberFormatter());\n\nand then applied with\n    pSetBox-\u003eClaimFrameFormat()-\u003eSetFormatAttr(aBoxSet);\n",
       "revId": "845d3edb49b668683c27ea43dc5c566c1f4847a5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c349e28b_f50015c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-21T09:02:44Z",
+      "side": 1,
+      "message": "one problem: this is NOT at all targeted to the specific case the bug report is describing. This is any time a table cell is modified. So the scope is HUGE. But I\u0027m not sure that changes anything. If the user has non-number content and forces a number format on it, that generally ought to be ignored. \n\nTyping text into an explicitly number format cell also removes that formatting with ClearBoxNumAttrs().\n\nThere are a number of places in ndtbl (since original import) with\n        // Just resetting Attributes is not enough\n        // Make sure that the Text is formatted accordingly\nI\u0027m pretty sure that is because ModifyWatcher calls this BoxAttributeChanged function - and thus ChgNumToText() is called. Following that, RES_BOXATR_FORMAT is reset. Since the old format was already textFormat, it is sufficient to just reset it here.\n        ",
+      "revId": "845d3edb49b668683c27ea43dc5c566c1f4847a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
