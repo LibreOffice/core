@@ -3512,7 +3512,11 @@ static void lcl_SelectDrawObjectByName(weld::TreeView& rContentTree, std::u16str
         {
             if (rName == rContentTree.get_text(*xIter))
             {
-                rContentTree.select(*xIter);
+                if (!rContentTree.is_selected(*xIter))
+                {
+                    rContentTree.select(*xIter);
+                    rContentTree.scroll_to_row(*xIter);
+                }
                 break;
             }
         }
@@ -3673,7 +3677,12 @@ void SwContentTree::UpdateTracking()
                                                SelectionType::DbForm)) &&
             !(m_bIsRoot && m_nRootType != ContentTypeId::DRAWOBJECT))
     {
-        m_xTreeView->unselect_all();
+        // Multiple selection is possible when in root content navigation view so unselect all
+        // selected entries before reselecting. This causes a bit of an annoyance when the treeview
+        // scroll bar is used and focus is in the document by causing the last selected entry to
+        // scroll back into view.
+        if (m_bIsRoot)
+            m_xTreeView->unselect_all();
         SdrView* pSdrView = m_pActiveShell->GetDrawView();
         if (pSdrView)
         {
