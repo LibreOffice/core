@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23e96cdc_6ac7cd1a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-21T07:04:55Z",
+      "side": 1,
+      "message": "I like the idea in general, see the inline comment for a nitpick.",
+      "revId": "c6563b3bd45bc37cc5f3cad466ecf0578291ce61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa0adc37_ef935b81",
+        "filename": "sw/inc/ndindex.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-21T07:04:55Z",
+      "side": 1,
+      "message": "Is this comment misplaced? This is definitely not a deleted ctor.",
+      "revId": "c6563b3bd45bc37cc5f3cad466ecf0578291ce61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
