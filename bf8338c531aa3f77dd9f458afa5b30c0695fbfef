@@ -16,6 +16,23 @@
       "message": "I\u0027m not an expert in types management.\nI just can tell that it builds + make filter.check was ok locally.",
       "revId": "bf8338c531aa3f77dd9f458afa5b30c0695fbfef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "897caf2e_a94b1d93",
+        "filename": "filter/source/svg/svgfilter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-10-21T17:07:22Z",
+      "side": 1,
+      "message": "this should be sal_uInt64 to match the return type from remainingSize()",
+      "revId": "bf8338c531aa3f77dd9f458afa5b30c0695fbfef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
