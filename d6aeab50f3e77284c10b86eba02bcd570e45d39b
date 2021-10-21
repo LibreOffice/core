@@ -16,6 +16,23 @@
       "message": "https://i.imgur.com/2XPtTPM.png",
       "revId": "d6aeab50f3e77284c10b86eba02bcd570e45d39b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8adaf510_23a5daab",
+        "filename": "vcl/backendtest/benchmark/outputdevice/Benchmarks.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-10-21T13:33:22Z",
+      "side": 1,
+      "message": "It would be a bigger performance killer if you would draw dashed or dotted lines. Maybe add another benchmark for that?",
+      "revId": "d6aeab50f3e77284c10b86eba02bcd570e45d39b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
