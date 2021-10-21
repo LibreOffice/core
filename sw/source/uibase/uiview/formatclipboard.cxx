@@ -484,7 +484,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
             // if there is a named paragraph format recorded and the user wants to apply it
             if(!m_aParaStyle.isEmpty() && !bNoParagraphFormats )
             {
-                // look for the named pragraph format in the pool
+                // look for the named paragraph format in the pool
                 SwDocStyleSheet* pStyle = static_cast<SwDocStyleSheet*>(pPool->Find(m_aParaStyle, SfxStyleFamily::Para));
                 if( pStyle )
                 {

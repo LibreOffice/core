@@ -788,7 +788,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo43093, "fdo43093.docx")
     // The problem was that the alignment are not exchange when the paragraph are RTL.
     uno::Reference<uno::XInterface> xParaRtlLeft(getParagraph( 1, "RTL Left"));
     sal_Int32 nRtlLeft = getProperty< sal_Int32 >( xParaRtlLeft, "ParaAdjust" );
-    // test the text Direction value for the pragraph
+    // test the text Direction value for the paragraph
     sal_Int16 nRLDir  = getProperty< sal_Int32 >( xParaRtlLeft, "WritingMode" );
 
     uno::Reference<uno::XInterface> xParaRtlRight(getParagraph( 3, "RTL Right"));
