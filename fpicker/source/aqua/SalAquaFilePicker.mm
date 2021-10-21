@@ -39,7 +39,6 @@
 #include "resourceprovider.hxx"
 
 #include <osl/file.hxx>
-#include "CFStringUtilities.hxx"
 #include "NSString_OOoAdditions.hxx"
 #include "NSURL_OOoAdditions.hxx"
 
@@ -278,7 +277,7 @@ uno::Sequence<OUString> SAL_CALL SalAquaFilePicker::getSelectedFiles()
         }
 #endif
 
-        OUString sFileOrDirURL = [url OUStringForInfo:FULLPATH];
+        OUString sFileOrDirURL = [url OUString];
 
         aSelectedFiles[nIndex] = sFileOrDirURL;
     }

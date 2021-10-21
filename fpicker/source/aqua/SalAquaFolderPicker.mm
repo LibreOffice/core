@@ -36,7 +36,6 @@
 #include "resourceprovider.hxx"
 
 #include <osl/file.hxx>
-#include "CFStringUtilities.hxx"
 #include "NSString_OOoAdditions.hxx"
 #include "NSURL_OOoAdditions.hxx"
 
@@ -125,7 +124,7 @@ OUString SAL_CALL SalAquaFolderPicker::getDirectory()
 
     NSURL *url = [files objectAtIndex:0];
 
-    aDirectory = [url OUStringForInfo:FULLPATH];
+    aDirectory = [url OUString];
 
     implsetDisplayDirectory(aDirectory);
 

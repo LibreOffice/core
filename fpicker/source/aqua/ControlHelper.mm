@@ -23,7 +23,6 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include "CFStringUtilities.hxx"
 #include "resourceprovider.hxx"
 #include "NSString_OOoAdditions.hxx"
 #include <sal/log.hxx>

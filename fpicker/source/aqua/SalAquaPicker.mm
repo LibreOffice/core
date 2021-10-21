@@ -28,7 +28,6 @@
 #include <vcl/svapp.hxx>
 #include "SalAquaPicker.hxx"
 #include <osl/file.hxx>
-#include "CFStringUtilities.hxx"
 #include "NSString_OOoAdditions.hxx"
 
 #include "NSURL_OOoAdditions.hxx"
@@ -170,7 +169,7 @@ int SalAquaPicker::run()
     SAL_WNODEPRECATED_DECLARATIONS_POP
         NSURL* pDir = [m_pDialog directoryURL];
         if (pDir) {
-            implsetDisplayDirectory([pDir OUStringForInfo:FULLPATH]);
+            implsetDisplayDirectory([pDir OUString]);
         }
     }
 
