@@ -80,6 +80,7 @@ namespace
         WebDAVName_supportedlock,
         WebDAVName_lockentry,
         WebDAVName_lockscope,
+        WebDAVName_depth,
         WebDAVName_locktoken,
         WebDAVName_exclusive,
         WebDAVName_locktype,
@@ -115,6 +116,7 @@ namespace
             aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("supportedlock"), WebDAVName_supportedlock));
             aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("lockentry"), WebDAVName_lockentry));
             aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("lockscope"), WebDAVName_lockscope));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("depth"), WebDAVName_depth));
             aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("locktoken"), WebDAVName_locktoken));
             aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("exclusive"), WebDAVName_exclusive));
             aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("locktype"), WebDAVName_locktype));
@@ -705,13 +707,30 @@ namespace
                                 }
                                 break;
                             }
+                            case WebDAVName_depth:
+                            {
+                                OUString const chars(mpContext->getWhiteSpace());
+                                if (chars == "0")
+                                {
+                                    maLock.Depth = ucb::LockDepth_ZERO;
+                                }
+                                else if (chars == "1")
+                                {
+                                    maLock.Depth = ucb::LockDepth_ONE;
+                                }
+                                else if (chars == "infinity")
+                                {
+                                    maLock.Depth = ucb::LockDepth_INFINITY;
+                                }
+                                break;
+                            }
                             case WebDAVName_activelock:
                             {
                                 maLock.Type = maLockType;
                                 maLock.Scope = maLockScope;
                                 maResult_Lock.push_back(maLock);
+                                break;
                             }
-                            [[fallthrough]]; // I hope intentional?
                             case WebDAVName_propstat:
                             {
                                 // propstat end, check status
