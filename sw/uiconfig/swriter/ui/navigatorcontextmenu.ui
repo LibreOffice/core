@@ -14,17 +14,17 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator3">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkMenuItem" id="700">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="navigatorcontextmenu|STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY">Send Outline to Clipboard</property>
         <property name="use-underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separator1">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
       </object>
     </child>
     <child>
@@ -34,12 +34,6 @@
         <property name="label" translatable="yes" context="navigatorcontextmenu|STR_GOTO">Go to</property>
         <property name="use-underline">True</property>
         <accelerator key="Return" signal="activate"/>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="separator2">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
       </object>
     </child>
     <child>
@@ -177,7 +171,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator1">
+      <object class="GtkSeparatorMenuItem" id="separator2">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
       </object>
@@ -197,9 +191,23 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator1511">
+      <object class="GtkSeparatorMenuItem" id="separator3">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="1">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_OUTLINE_LEVEL">Outline Level</property>
+        <property name="use-underline">True</property>
+        <child type="submenu">
+          <object class="GtkMenu" id="outlinelevel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
@@ -233,23 +241,97 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem">
+      <object class="GtkCheckMenuItem" id="frametracking">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_FRAME_TRACKING">Frame Tracking</property>
+        <property name="use-underline">True</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="1">
+      <object class="GtkCheckMenuItem" id="imagetracking">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_OUTLINE_LEVEL">Outline Level</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_IMAGE_TRACKING">Image Tracking</property>
         <property name="use-underline">True</property>
-        <child type="submenu">
-          <object class="GtkMenu" id="outlinelevel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-          </object>
-        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkCheckMenuItem" id="oleobjecttracking">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_OLE_OBJECT_TRACKING">OLE Object Tracking</property>
+        <property name="use-underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkCheckMenuItem" id="bookmarktracking">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_BOOKMARK_TRACKING">Bookmark Tracking</property>
+        <property name="use-underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkCheckMenuItem" id="hyperlinktracking">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_HYPERLINK_TRACKING">Hyperlink Tracking</property>
+        <property name="use-underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkCheckMenuItem" id="referencetracking">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_REFERENCE_TRACKING">Reference Tracking</property>
+        <property name="use-underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkCheckMenuItem" id="indextracking">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_INDEX_TRACKING">Index Tracking</property>
+        <property name="use-underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkCheckMenuItem" id="commenttracking">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_COMMENT_TRACKING">Comment Tracking</property>
+        <property name="use-underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkCheckMenuItem" id="drawingobjecttracking">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DRAWING_OBJECT_TRACKING">Drawing Object Tracking</property>
+        <property name="use-underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkCheckMenuItem" id="fieldtracking">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_FIELD_TRACKING">Field Tracking</property>
+        <property name="use-underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkCheckMenuItem" id="footnotetracking">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_FOOTNOTE_TRACKING">Footnote Tracking</property>
+        <property name="use-underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
       </object>
     </child>
     <child>

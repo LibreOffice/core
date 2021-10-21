@@ -40,7 +40,18 @@ Sequence<OUString> SwNavigationConfig::GetPropertyNames()
         OUString("GlobalDocMode"),
         OUString("OutlineTracking"),
         OUString("TableTracking"),
-        OUString("SectionTracking")};
+        OUString("SectionTracking"),
+        OUString("FrameTracking"),
+        OUString("ImageTracking"),
+        OUString("OLEobjectTracking"),
+        OUString("BookmarkTracking"),
+        OUString("HyperlinkTracking"),
+        OUString("ReferenceTracking"),
+        OUString("IndexTracking"),
+        OUString("CommentTracking"),
+        OUString("DrawingObjectTracking"),
+        OUString("FieldTracking"),
+        OUString("FootnoteTracking")};
 }
 
 SwNavigationConfig::SwNavigationConfig() :
@@ -54,7 +65,18 @@ SwNavigationConfig::SwNavigationConfig() :
     m_bIsGlobalActive(true),
     m_nOutlineTracking(1),
     m_bIsTableTracking(true),
-    m_bIsSectionTracking(true)
+    m_bIsSectionTracking(true),
+    m_bIsFrameTracking(true),
+    m_bIsImageTracking(true),
+    m_bIsOLEobjectTracking(true),
+    m_bIsBookmarkTracking(true),
+    m_bIsHyperlinkTracking(true),
+    m_bIsReferenceTracking(true),
+    m_bIsIndexTracking(true),
+    m_bIsCommentTracking(true),
+    m_bIsDrawingObjectTracking(true),
+    m_bIsFieldTracking(true),
+    m_bIsFootnoteTracking(true)
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
@@ -101,6 +123,17 @@ SwNavigationConfig::SwNavigationConfig() :
                 case 7: pValues[nProp] >>= m_nOutlineTracking; break;
                 case 8: m_bIsTableTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
                 case 9: m_bIsSectionTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 10: m_bIsFrameTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 11: m_bIsImageTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 12: m_bIsOLEobjectTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 13: m_bIsBookmarkTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 14: m_bIsHyperlinkTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 15: m_bIsReferenceTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 16: m_bIsIndexTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 17: m_bIsCommentTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 18: m_bIsDrawingObjectTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 19: m_bIsFieldTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 20: m_bIsFootnoteTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
             }
         }
     }
@@ -130,6 +163,17 @@ void SwNavigationConfig::ImplCommit()
             case 7: pValues[nProp] <<= m_nOutlineTracking; break;
             case 8: pValues[nProp] <<= m_bIsTableTracking; break;
             case 9: pValues[nProp] <<= m_bIsSectionTracking; break;
+            case 10: pValues[nProp] <<= m_bIsFrameTracking; break;
+            case 11: pValues[nProp] <<= m_bIsImageTracking; break;
+            case 12: pValues[nProp] <<= m_bIsOLEobjectTracking; break;
+            case 13: pValues[nProp] <<= m_bIsBookmarkTracking; break;
+            case 14: pValues[nProp] <<= m_bIsHyperlinkTracking; break;
+            case 15: pValues[nProp] <<= m_bIsReferenceTracking; break;
+            case 16: pValues[nProp] <<= m_bIsIndexTracking; break;
+            case 17: pValues[nProp] <<= m_bIsCommentTracking; break;
+            case 18: pValues[nProp] <<= m_bIsDrawingObjectTracking; break;
+            case 19: pValues[nProp] <<= m_bIsFieldTracking; break;
+            case 20: pValues[nProp] <<= m_bIsFootnoteTracking; break;
         }
     }
     PutProperties(aNames, aValues);
