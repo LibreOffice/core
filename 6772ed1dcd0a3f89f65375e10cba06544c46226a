@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a269372_78c08aff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-10-21T11:22:22Z",
+      "side": 1,
+      "message": "Would you also cherry-pick to 7.2 branch.",
+      "revId": "6772ed1dcd0a3f89f65375e10cba06544c46226a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
