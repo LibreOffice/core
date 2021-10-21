@@ -717,7 +717,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo71646, "fdo71646.docx")
     // The problem was after save file created by MS the direction changed to RTL.
     uno::Reference<uno::XInterface> xParaLTRLeft(getParagraph( 1, "LTR LEFT"));
     sal_Int32 nLTRLeft = getProperty< sal_Int32 >( xParaLTRLeft, "ParaAdjust" );
-    // test the text Direction value for the pragraph
+    // test the text Direction value for the paragraph
     sal_Int16 nLRDir  = getProperty< sal_Int32 >( xParaLTRLeft, "WritingMode" );
 
     // this will test the both the text direction and alignment for paragraph
