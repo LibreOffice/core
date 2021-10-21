@@ -26,7 +26,8 @@ class OOO_DLLPUBLIC_TEST TestLokCallbackWrapper : public SfxLokCallbackInterface
 public:
     TestLokCallbackWrapper(LibreOfficeKitCallback callback, void* data);
     virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) override;
-    virtual void libreOfficeKitViewCallback(int nType, const char* pPayload, int nViewId) override;
+    virtual void libreOfficeKitViewCallbackWithViewId(int nType, const char* pPayload,
+                                                      int nViewId) override;
     virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect,
                                                            int nPart) override;
 
