@@ -15,7 +15,6 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/lokhelper.hxx>
-#include <sfx2/lokcallback.hxx>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
@@ -40,6 +39,7 @@
 #include <svx/svdoutl.hxx>
 #include <unotools/datetime.hxx>
 #include <tools/UnitConversion.hxx>
+#include <test/lokcallback.hxx>
 
 #include <DrawDocShell.hxx>
 #include <ViewShellBase.hxx>
@@ -72,7 +72,7 @@ static std::ostream& operator<<(std::ostream& os, ViewShellId id)
     return os;
 }
 
-class SdTiledRenderingTest : public SdModelTestBase, public XmlTestTools, public SfxLokCallbackInterface
+class SdTiledRenderingTest : public SdModelTestBase, public XmlTestTools
 {
 public:
     SdTiledRenderingTest();
@@ -194,13 +194,10 @@ public:
 
     CPPUNIT_TEST_SUITE_END();
 
-    virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) override;
-    virtual void libreOfficeKitViewCallback(int nType, const char* pPayload, int nViewId) override;
-    virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect,
-                                                           int nPart) override;
-
 private:
     SdXImpressDocument* createDoc(const char* pName, const uno::Sequence<beans::PropertyValue>& rArguments = uno::Sequence<beans::PropertyValue>());
+    static void callback(int nType, const char* pPayload, void* pData);
+    void callbackImpl(int nType, const char* pPayload);
     xmlDocUniquePtr parseXmlDump();
 
     uno::Reference<lang::XComponent> mxComponent;
@@ -216,6 +213,7 @@ private:
     /// For document size changed callback.
     osl::Condition m_aDocumentSizeCondition;
     xmlBufferPtr m_pXmlBuffer;
+    TestLokCallbackWrapper m_callbackWrapper;
 };
 
 SdTiledRenderingTest::SdTiledRenderingTest()
@@ -223,7 +221,8 @@ SdTiledRenderingTest::SdTiledRenderingTest()
       m_nPart(0),
       m_nSelectionBeforeSearchResult(0),
       m_nSelectionAfterSearchResult(0),
-      m_pXmlBuffer(nullptr)
+      m_pXmlBuffer(nullptr),
+      m_callbackWrapper(&callback, this)
 {
 }
 
@@ -262,6 +261,11 @@ SdXImpressDocument* SdTiledRenderingTest::createDoc(const char* pName, const uno
     return pImpressDocument;
 }
 
+void SdTiledRenderingTest::callback(int nType, const char* pPayload, void* pData)
+{
+    static_cast<SdTiledRenderingTest*>(pData)->callbackImpl(nType, pPayload);
+}
+
 namespace
 {
 
@@ -294,17 +298,17 @@ void lcl_convertRectangle(const OUString& rString, ::tools::Rectangle& rRectangl
 
 } // end anonymous namespace
 
-void SdTiledRenderingTest::libreOfficeKitViewCallback(int nType, const char* pPayload, int /*nViewId*/)
-{
-    libreOfficeKitViewCallback(nType, pPayload); // the view id is also included in payload
-}
-
-void SdTiledRenderingTest::libreOfficeKitViewCallback(int nType, const char* pPayload)
+void SdTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
 {
     switch (nType)
     {
     case LOK_CALLBACK_INVALIDATE_TILES:
-        abort();
+    {
+        OUString aPayload = OUString::createFromAscii(pPayload);
+        if (aPayload != "EMPTY" && m_aInvalidation.IsEmpty())
+            lcl_convertRectangle(aPayload, m_aInvalidation);
+    }
+    break;
     case LOK_CALLBACK_TEXT_SELECTION:
     {
         OUString aPayload = OUString::createFromAscii(pPayload);
@@ -354,13 +358,6 @@ void SdTiledRenderingTest::libreOfficeKitViewCallback(int nType, const char* pPa
     }
 }
 
-void SdTiledRenderingTest::libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect,
-                                                           int /*nPart*/)
-{
-    if (pRect != nullptr && m_aInvalidation.IsEmpty())
-        m_aInvalidation = *pRect;
-}
-
 xmlDocUniquePtr SdTiledRenderingTest::parseXmlDump()
 {
     if (m_pXmlBuffer)
@@ -400,7 +397,7 @@ void SdTiledRenderingTest::testRegisterCallback()
 {
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    pViewShell->GetViewShellBase().setLibreOfficeKitViewCallback(this);
+    pViewShell->GetViewShellBase().setLibreOfficeKitViewCallback(&m_callbackWrapper);
 
     // Start text edit of the empty title shape.
     SdPage* pActualPage = pViewShell->GetActualPage();
@@ -630,7 +627,7 @@ void SdTiledRenderingTest::testInsertDeletePage()
 {
     SdXImpressDocument* pXImpressDocument = createDoc("insert-delete.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    pViewShell->GetViewShellBase().setLibreOfficeKitViewCallback(this);
+    pViewShell->GetViewShellBase().setLibreOfficeKitViewCallback(&m_callbackWrapper);
 
     SdDrawDocument* pDoc = pXImpressDocument->GetDocShell()->GetDoc();
     CPPUNIT_ASSERT(pDoc);
@@ -882,7 +879,7 @@ void SdTiledRenderingTest::testResizeTableColumn()
 namespace {
 
 /// A view callback tracks callbacks invoked on one specific view.
-class ViewCallback final : public SfxLokCallbackInterface
+class ViewCallback final
 {
     SfxViewShell* mpViewShell;
     int mnView;
@@ -901,6 +898,7 @@ public:
     bool m_bViewSelectionSet;
     boost::property_tree::ptree m_aCommentCallbackResult;
     OString m_ShapeSelection;
+    TestLokCallbackWrapper m_callbackWrapper;
 
     ViewCallback()
         : m_bGraphicSelectionInvalidated(false),
@@ -910,10 +908,11 @@ public:
           m_bCursorVisible(false),
           m_bViewLock(false),
           m_bTilesInvalidated(false),
-          m_bViewSelectionSet(false)
+          m_bViewSelectionSet(false),
+          m_callbackWrapper(&callback, this)
     {
         mpViewShell = SfxViewShell::Current();
-        mpViewShell->setLibreOfficeKitViewCallback(this);
+        mpViewShell->setLibreOfficeKitViewCallback(&m_callbackWrapper);
         mnView = SfxLokHelper::getView();
     }
 
@@ -923,17 +922,32 @@ public:
         mpViewShell->setLibreOfficeKitViewCallback(nullptr);
     }
 
-    virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) override
+    static void callback(int nType, const char* pPayload, void* pData)
     {
-        libreOfficeKitViewCallback(nType, pPayload, -1);
+        static_cast<ViewCallback*>(pData)->callbackImpl(nType, pPayload);
     }
 
-    virtual void libreOfficeKitViewCallback(int nType, const char* pPayload, int nViewId) override
+    void callbackImpl(int nType, const char* pPayload)
     {
         switch (nType)
         {
         case LOK_CALLBACK_INVALIDATE_TILES:
-            abort();
+        {
+            m_bTilesInvalidated = true;
+            OString text(pPayload);
+            if (!text.startsWith("EMPTY"))
+            {
+                uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
+                CPPUNIT_ASSERT(aSeq.getLength() == 4 || aSeq.getLength() == 5);
+                tools::Rectangle aInvalidationRect;
+                aInvalidationRect.setX(aSeq[0].toInt32());
+                aInvalidationRect.setY(aSeq[1].toInt32());
+                aInvalidationRect.setWidth(aSeq[2].toInt32());
+                aInvalidationRect.setHeight(aSeq[3].toInt32());
+                m_aInvalidations.push_back(aInvalidationRect);
+            }
+        }
+        break;
         case LOK_CALLBACK_GRAPHIC_SELECTION:
         {
             m_bGraphicSelectionInvalidated = true;
@@ -969,7 +983,7 @@ public:
             std::stringstream aStream(pPayload);
             boost::property_tree::ptree aTree;
             boost::property_tree::read_json(aStream, aTree);
-            nViewId = aTree.get_child("viewId").get_value<int>();
+            int nViewId = aTree.get_child("viewId").get_value<int>();
             m_aViewCursorInvalidations[nViewId] = true;
         }
         break;
@@ -978,7 +992,7 @@ public:
             std::stringstream aStream(pPayload);
             boost::property_tree::ptree aTree;
             boost::property_tree::read_json(aStream, aTree);
-            nViewId = aTree.get_child("viewId").get_value<int>();
+            const int nViewId = aTree.get_child("viewId").get_value<int>();
             m_aViewCursorVisibilities[nViewId] = OString("true") == pPayload;
         }
         break;
@@ -996,13 +1010,6 @@ public:
         }
         break;
         }
-    }
-    virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect,
-                                                           int /*nPart*/) override
-    {
-        m_bTilesInvalidated = true;
-        if (pRect != nullptr)
-            m_aInvalidations.push_back(*pRect);
     }
 };
 
@@ -2453,7 +2460,7 @@ void SdTiledRenderingTest::testCutSelectionChange()
     CPPUNIT_ASSERT(pXImpressDocument);
 
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    pViewShell->GetViewShellBase().setLibreOfficeKitViewCallback(this);
+    pViewShell->GetViewShellBase().setLibreOfficeKitViewCallback(&m_callbackWrapper);
     Scheduler::ProcessEventsToIdle();
 
     // Select first text object

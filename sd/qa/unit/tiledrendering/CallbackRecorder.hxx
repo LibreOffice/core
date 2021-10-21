@@ -14,7 +14,7 @@
 #include <comphelper/string.hxx>
 #include <osl/conditn.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/lokcallback.hxx>
+#include <test/lokcallback.hxx>
 
 namespace
 {
@@ -45,7 +45,7 @@ void lcl_convertRectangle(const OUString& rString, tools::Rectangle& rRectangle)
 }
 }
 
-struct CallbackRecorder : public SfxLokCallbackInterface
+struct CallbackRecorder
 {
     CallbackRecorder()
         : m_bFound(true)
@@ -53,6 +53,7 @@ struct CallbackRecorder : public SfxLokCallbackInterface
         , m_nSelectionBeforeSearchResult(0)
         , m_nSelectionAfterSearchResult(0)
         , m_nSearchResultCount(0)
+        , m_callbackWrapper(&callback, this)
     {
     }
 
@@ -67,17 +68,24 @@ struct CallbackRecorder : public SfxLokCallbackInterface
     int m_nSearchResultCount;
     /// For document size changed callback.
     osl::Condition m_aDocumentSizeCondition;
+    TestLokCallbackWrapper m_callbackWrapper;
 
-    void libreOfficeKitViewCallback(int nType, const char* pPayload) override
+    static void callback(int nType, const char* pPayload, void* pData)
     {
-        libreOfficeKitViewCallback(nType, pPayload, -1);
+        static_cast<CallbackRecorder*>(pData)->processCallback(nType, pPayload);
     }
-    void libreOfficeKitViewCallback(int nType, const char* pPayload, int /*nViewId*/) override
+
+    void processCallback(int nType, const char* pPayload)
     {
         switch (nType)
         {
             case LOK_CALLBACK_INVALIDATE_TILES:
-                abort();
+            {
+                OUString aPayload = OUString::createFromAscii(pPayload);
+                if (aPayload != "EMPTY" && m_aInvalidation.IsEmpty())
+                    lcl_convertRectangle(aPayload, m_aInvalidation);
+            }
+            break;
             case LOK_CALLBACK_TEXT_SELECTION:
             {
                 OUString aPayload = OUString::createFromAscii(pPayload);
@@ -131,16 +139,9 @@ struct CallbackRecorder : public SfxLokCallbackInterface
         }
     }
 
-    virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect,
-                                                           int /*nPart*/) override
-    {
-        if (pRect != nullptr && m_aInvalidation.IsEmpty())
-            m_aInvalidation = *pRect;
-    }
-
     void registerCallbacksFor(SfxViewShell& rViewShell)
     {
-        rViewShell.setLibreOfficeKitViewCallback(this);
+        rViewShell.setLibreOfficeKitViewCallback(&m_callbackWrapper);
     }
 };
 
