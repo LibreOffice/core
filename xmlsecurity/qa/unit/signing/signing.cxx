@@ -545,8 +545,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFUnsignedTimestamp)
 }
 
 // FIXME: For some unknown reason, this test fails on tml's Mac unless it is the only or the first
-// test that is run in this CppunitTest program. The CPPUNIT_TEST_FIXTUREs are run in dictionary
-// order so use a name for this that makes it the first one to run.
+// test that is run in this CppunitTest program. When using our patched bundled cppunit library (as
+// we obviously always do on macOS), the CPPUNIT_TEST_FIXTUREs are run in lexicographical order so
+// use a name for this test that makes it the first one to run.
 
 CPPUNIT_TEST_FIXTURE(SigningTest, aaa_testODFX509CertificateChain)
 {
