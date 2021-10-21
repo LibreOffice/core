@@ -5728,10 +5728,87 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="FrameTracking" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if Frame tracking is active.</desc>
+          <label>Frame tracking on/off</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="ImageTracking" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if Image tracking is active.</desc>
+          <label>Image tracking on/off</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="OLEobjectTracking" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if OLE object tracking is active.</desc>
+          <label>OLE object tracking on/off</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="BookmarkTracking" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if Bookmark tracking is active.</desc>
+          <label>Bookmark tracking on/off</label>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="SectionTracking" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Specifies if Section tracking is active.</desc>
           <label>Section tracking on/off</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="HyperlinkTracking" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if Hyperlink tracking is active.</desc>
+          <label>Hyperlink tracking on/off</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="ReferenceTracking" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if Reference tracking is active.</desc>
+          <label>Reference tracking on/off</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="IndexTracking" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if Index tracking is active.</desc>
+          <label>Index tracking on/off</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="CommentTracking" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if Comment tracking is active.</desc>
+          <label>Comment tracking on/off</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="DrawingObjectTracking" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if Drawing Object tracking is active.</desc>
+          <label>Drawing Object tracking on/off</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="FieldTracking" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if Field tracking is active.</desc>
+          <label>Field tracking on/off</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="FootnoteTracking" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if Footnote tracking is active.</desc>
+          <label>Footnote tracking on/off</label>
         </info>
         <value>true</value>
       </prop>
