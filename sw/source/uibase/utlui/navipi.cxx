@@ -572,6 +572,18 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     m_xContentTree->SetOutlineTracking(static_cast<sal_uInt8>(m_pConfig->GetOutlineTracking()));
     m_xContentTree->SetTableTracking(m_pConfig->IsTableTracking());
     m_xContentTree->SetSectionTracking(m_pConfig->IsSectionTracking());
+    m_xContentTree->SetFrameTracking(m_pConfig->IsFrameTracking());
+    m_xContentTree->SetImageTracking(m_pConfig->IsImageTracking());
+    m_xContentTree->SetOLEobjectTracking(m_pConfig->IsOLEobjectTracking());
+    m_xContentTree->SetBookmarkTracking(m_pConfig->IsBookmarkTracking());
+    m_xContentTree->SetHyperlinkTracking(m_pConfig->IsHyperlinkTracking());
+    m_xContentTree->SetReferenceTracking(m_pConfig->IsReferenceTracking());
+    m_xContentTree->SetIndexTracking(m_pConfig->IsIndexTracking());
+    m_xContentTree->SetCommentTracking(m_pConfig->IsCommentTracking());
+    m_xContentTree->SetDrawingObjectTracking(m_pConfig->IsDrawingObjectTracking());
+    m_xContentTree->SetFieldTracking(m_pConfig->IsFieldTracking());
+    m_xContentTree->SetFootnoteTracking(m_pConfig->IsFootnoteTracking());
+
     m_xContentTree->set_selection_mode(SelectionMode::Single);
     m_xContentTree->ShowTree();
     m_xContent6ToolBox->set_item_active("listbox", true);
