@@ -82,8 +82,6 @@
 #include <DrawController.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 
-#include <undo/undomanager.hxx>
-
 #include <memory>
 #include <numeric>
 
