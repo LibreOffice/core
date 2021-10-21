@@ -339,7 +339,7 @@ public:
     void setLibreOfficeKitViewCallback(SfxLokCallbackInterface* pCallback);
     /// Invokes the registered callback, if there are any.
     virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) const override;
-    virtual void libreOfficeKitViewCallback(int nType, const char* pPayload, int nViewId) const override;
+    virtual void libreOfficeKitViewCallbackWithViewId(int nType, const char* pPayload, int nViewId) const override;
     virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart) const override;
     // Performs any pending calls to libreOfficeKitViewInvalidateTilesCallback() as necessary.
     virtual void flushPendingLOKInvalidateTiles();

@@ -1475,7 +1475,7 @@ void CallbackFlushHandler::libreOfficeKitViewCallback(int nType, const char* pPa
     queue(nType, callbackData);
 }
 
-void CallbackFlushHandler::libreOfficeKitViewCallback(int nType, const char* pPayload, int nViewId)
+void CallbackFlushHandler::libreOfficeKitViewCallbackWithViewId(int nType, const char* pPayload, int nViewId)
 {
     CallbackData callbackData(pPayload, nViewId);
     queue(nType, callbackData);
