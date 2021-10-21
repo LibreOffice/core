@@ -3495,6 +3495,7 @@ static void lcl_SelectDrawObjectByName(weld::TreeView& rContentTree, std::u16str
             if (rName == rContentTree.get_text(*xIter))
             {
                 rContentTree.select(*xIter);
+                rContentTree.scroll_to_row(*xIter);
                 break;
             }
         }
