@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4098667a_8cd8de74",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4750,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-10-21T07:50:52Z",
+      "side": 1,
+      "message": "This line is triggered when the previously read-only is back to read-write mode. There is also a crash here.\nSteps to Reproduce:\n1. Open a read-only document with patchset 2.\n2. Chmod the document to read-write mode.\n3. Wait. --\u003e crash.",
+      "range": {
+        "startLine": 4750,
+        "startChar": 8,
+        "endLine": 4750,
+        "endChar": 66
+      },
+      "revId": "9e6dc1c3a1e8cb8865aaa44abf2e0d4e5e71f0b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
