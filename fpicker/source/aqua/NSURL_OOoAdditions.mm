@@ -22,49 +22,15 @@
 #include <sal/log.hxx>
 
 @implementation NSURL (OOoAdditions)
-- (OUString) OUStringForInfo:(InfoType)info
+- (OUString) OUString
 {
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 
     NSString *sURLString = nil;
 
-    switch(info) {
-        case FULLPATH:
-            SAL_INFO("fpicker.aqua","Extracting the full path of an item");
-            sURLString = [self absoluteString];
-            [sURLString retain];
-            break;
-        case FILENAME:
-            {
-                SAL_INFO("fpicker.aqua","Extracting the file name of an item");
-                NSString *path = [self path];
-                if (path == nil) {
-                    sURLString = @"";
-                }
-                else {
-                    sURLString = [path lastPathComponent];
-                }
-                [sURLString retain];
-            }
-            break;
-        case PATHWITHOUTLASTCOMPONENT:
-            {
-                SAL_INFO("fpicker.aqua","Extracting the last but one component of an item's path");
-                NSString *path = [self absoluteString];
-                if (path == nil) {
-                    sURLString = @"";
-                }
-                else {
-                    NSString* lastComponent = [path lastPathComponent];
-                    unsigned int lastLength = [lastComponent length];
-                    sURLString = [path substringToIndex:([path length] - lastLength)];
-                }
-                [sURLString retain];
-            }
-            break;
-        default:
-            break;
-    }
+    SAL_INFO("fpicker.aqua","Extracting the full path of an item");
+    sURLString = [self absoluteString];
+    [sURLString retain];
 
     OUString sResult = [sURLString OUString];
     [sURLString release];

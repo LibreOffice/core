@@ -22,11 +22,10 @@
 #include <premac.h>
 #include <CoreFoundation/CoreFoundation.h>
 #include <postmac.h>
-#include "CFStringUtilities.hxx"
 #include <rtl/ustring.hxx>
 
 @interface NSURL (OOoAdditions)
-- (OUString)OUStringForInfo:(InfoType)info;
+- (OUString)OUString;
 @end
 
 /*

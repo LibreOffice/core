@@ -24,7 +24,6 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-#include "CFStringUtilities.hxx"
 #include "NSString_OOoAdditions.hxx"
 #include "NSURL_OOoAdditions.hxx"
 
