@@ -1604,8 +1604,9 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (!m_xTreeView->get_selected(xEntry.get()))
         xEntry.reset();
 
+    bool bRemoveGotoEntry = false;
     if (State::HIDDEN == m_eState || !xEntry || !lcl_IsContent(*xEntry, *m_xTreeView))
-        xPop->remove(OString::number(900)); // go to
+        bRemoveGotoEntry = true;
 
     bool bRemovePostItEntries = true;
     bool bRemoveIndexEntries = true;
@@ -1617,113 +1618,22 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     bool bRemoveToggleExpandEntry = true;
     bool bRemoveChapterEntries = true;
     bool bRemoveSendOutlineEntry = true;
+
     bool bRemoveTableTracking = true;
     bool bRemoveSectionTracking = true;
+    bool bRemoveFrameTracking = true;
+    bool bRemoveImageTracking = true;
+    bool bRemoveOLEobjectTracking = true;
+    bool bRemoveBookmarkTracking = true;
+    bool bRemoveHyperlinkTracking = true;
+    bool bRemoveReferenceTracking = true;
+    bool bRemoveIndexTracking = true;
+    bool bRemoveCommentTracking = true;
+    bool bRemoveDrawingObjectTracking = true;
+    bool bRemoveFieldTracking = true;
+    bool bRemoveFootnoteTracking = true;
 
-    // Edit only if the shown content is coming from the current view.
-    if (State::HIDDEN != m_eState &&
-            (State::ACTIVE == m_eState || m_pActiveShell == pActiveView->GetWrtShellPtr())
-            && xEntry && lcl_IsContent(*xEntry, *m_xTreeView))
-    {
-        assert(dynamic_cast<SwContent*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xEntry).toInt64())));
-        const SwContentType* pContType = reinterpret_cast<SwContent*>(m_xTreeView->get_id(*xEntry).toInt64())->GetParent();
-        const ContentTypeId nContentType = pContType->GetType();
-        const bool bReadonly = m_pActiveShell->GetView().GetDocShell()->IsReadOnly();
-        const bool bVisible = !reinterpret_cast<SwContent*>(m_xTreeView->get_id(*xEntry).toInt64())->IsInvisible();
-        const bool bProtected = reinterpret_cast<SwContent*>(m_xTreeView->get_id(*xEntry).toInt64())->IsProtect();
-        const bool bProtectBM = (ContentTypeId::BOOKMARK == nContentType)
-            && m_pActiveShell->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS);
-        const bool bEditable = pContType->IsEditable() &&
-            ((bVisible && !bProtected && !bProtectBM) || ContentTypeId::REGION == nContentType);
-        const bool bDeletable = pContType->IsDeletable() &&
-            ((bVisible && !bProtected && !bProtectBM) || ContentTypeId::REGION == nContentType);
-        const bool bRenamable = bEditable && !bReadonly &&
-            (ContentTypeId::TABLE == nContentType ||
-                ContentTypeId::FRAME == nContentType ||
-                ContentTypeId::GRAPHIC == nContentType ||
-                ContentTypeId::OLE == nContentType ||
-                (ContentTypeId::BOOKMARK == nContentType && !bProtectBM) ||
-                ContentTypeId::REGION == nContentType ||
-                ContentTypeId::INDEX == nContentType ||
-                ContentTypeId::DRAWOBJECT == nContentType);
-
-        if (ContentTypeId::FOOTNOTE == nContentType)
-        {
-            void* pUserData = reinterpret_cast<void*>(m_xTreeView->get_id(*xEntry).toInt64());
-            const SwTextFootnote* pFootnote =
-                    static_cast<const SwTextFootnoteContent*>(pUserData)->GetTextFootnote();
-            if (!pFootnote)
-                xPop->remove(OString::number(900)); // go to
-        }
-        if(ContentTypeId::OUTLINE == nContentType)
-        {
-            bOutline = true;
-            lcl_SetOutlineContentEntriesSensitivities(this, *m_xTreeView, *xEntry, *xSubPopOutlineContent);
-            bRemoveToggleExpandEntry = lcl_InsertExpandCollapseAllItem(*m_xTreeView, *xEntry, *xPop);
-            if (!bReadonly)
-            {
-                bRemoveSelectEntry = false;
-                bRemoveChapterEntries = false;
-            }
-        }
-        else if (!bReadonly && (bEditable || bDeletable))
-        {
-            if(ContentTypeId::INDEX == nContentType)
-            {
-                bRemoveIndexEntries = false;
-
-                const SwTOXBase* pBase = reinterpret_cast<SwTOXBaseContent*>(m_xTreeView->get_id(*xEntry).toInt64())->GetTOXBase();
-                if (!pBase->IsTOXBaseInReadonly())
-                    bRemoveEditEntry = false;
-
-                xPop->set_active(OString::number(405), SwEditShell::IsTOXBaseReadonly(*pBase));
-                bRemoveDeleteEntry = false;
-            }
-            else if(ContentTypeId::TABLE == nContentType)
-            {
-                bRemoveSelectEntry = false;
-                bRemoveEditEntry = false;
-                bRemoveUnprotectEntry = false;
-                bool bFull = false;
-                OUString sTableName = reinterpret_cast<SwContent*>(m_xTreeView->get_id(*xEntry).toInt64())->GetName();
-                bool bProt = m_pActiveShell->HasTableAnyProtection( &sTableName, &bFull );
-                xPop->set_sensitive(OString::number(403), !bFull);
-                xPop->set_sensitive(OString::number(404), bProt);
-                xPop->set_active("tabletracking", m_bTableTracking);
-                bRemoveTableTracking = false;
-                bRemoveDeleteEntry = false;
-            }
-            else if(ContentTypeId::DRAWOBJECT == nContentType)
-            {
-                bRemoveDeleteEntry = false;
-            }
-            else if(ContentTypeId::REGION == nContentType)
-            {
-                xPop->set_active("sectiontracking", m_bSectionTracking);
-                bRemoveSelectEntry = false;
-                bRemoveEditEntry = false;
-                bRemoveSectionTracking = false;
-            }
-            else
-            {
-                if (bEditable && bDeletable)
-                {
-                    bRemoveEditEntry = false;
-                    bRemoveDeleteEntry = false;
-                }
-                else if (bEditable)
-                    bRemoveEditEntry = false;
-                else if (bDeletable)
-                {
-                    bRemoveDeleteEntry = false;
-                }
-            }
-            //Rename object
-            if (bRenamable)
-                bRemoveRenameEntry = false;
-        }
-    }
-    else if (xEntry)
+    if (xEntry)
     {
         const SwContentType* pType;
         if (lcl_IsContentType(*xEntry, *m_xTreeView))
@@ -1731,51 +1641,200 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         else
             pType = reinterpret_cast<SwContent*>(
                         m_xTreeView->get_id(*xEntry).toInt64())->GetParent();
-        if (pType)
+        const ContentTypeId nContentType = pType->GetType();
+        switch (nContentType)
         {
-            const ContentTypeId nContentType = pType->GetType();
-            if (ContentTypeId::OUTLINE == nContentType)
-            {
-                bOutline = true;
-                if (State::HIDDEN != m_eState)
-                {
-                    lcl_SetOutlineContentEntriesSensitivities(this, *m_xTreeView, *xEntry,
-                                                              *xSubPopOutlineContent);
-                    bRemoveSendOutlineEntry = false;
-                }
-                bRemoveToggleExpandEntry = lcl_InsertExpandCollapseAllItem(*m_xTreeView, *xEntry,
-                                                                           *xPop);
-            }
-            else if (State::HIDDEN != m_eState &&
-                    nContentType == ContentTypeId::POSTIT &&
-                    !m_pActiveShell->GetView().GetDocShell()->IsReadOnly() &&
-                    pType->GetMemberCount() > 0)
-                bRemovePostItEntries = false;
-            else if (ContentTypeId::TABLE == nContentType)
-            {
+            case ContentTypeId::TABLE:
                 xPop->set_active("tabletracking", m_bTableTracking);
                 bRemoveTableTracking = false;
-            }
-            else if (ContentTypeId::REGION == nContentType)
-            {
+            break;
+            case ContentTypeId::REGION:
                 xPop->set_active("sectiontracking", m_bSectionTracking);
                 bRemoveSectionTracking = false;
+            break;
+            case ContentTypeId::FRAME:
+                xPop->set_active("frametracking", m_bFrameTracking);
+                bRemoveFrameTracking = false;
+            break;
+            case ContentTypeId::GRAPHIC:
+                xPop->set_active("imagetracking", m_bImageTracking);
+                bRemoveImageTracking = false;
+            break;
+            case ContentTypeId::OLE:
+                xPop->set_active("oleobjecttracking", m_bOLEobjectTracking);
+                bRemoveOLEobjectTracking = false;
+            break;
+            case ContentTypeId::BOOKMARK:
+                xPop->set_active("bookmarktracking", m_bBookmarkTracking);
+                bRemoveBookmarkTracking = false;
+            break;
+            case ContentTypeId::URLFIELD:
+                xPop->set_active("hyperlinktracking", m_bHyperlinkTracking);
+                bRemoveHyperlinkTracking = false;
+            break;
+            case ContentTypeId::REFERENCE:
+                xPop->set_active("referencetracking", m_bReferenceTracking);
+                bRemoveReferenceTracking = false;
+            break;
+            case ContentTypeId::INDEX:
+                xPop->set_active("indextracking", m_bIndexTracking);
+                bRemoveIndexTracking = false;
+            break;
+            case ContentTypeId::POSTIT:
+                xPop->set_active("commenttracking", m_bCommentTracking);
+                bRemoveCommentTracking = false;
+            break;
+            case ContentTypeId::DRAWOBJECT:
+                xPop->set_active("drawingobjecttracking", m_bDrawingObjectTracking);
+                bRemoveDrawingObjectTracking = false;
+            break;
+            case ContentTypeId::TEXTFIELD:
+                xPop->set_active("fieldtracking", m_bFieldTracking);
+                bRemoveFieldTracking = false;
+            break;
+            case ContentTypeId::FOOTNOTE:
+                xPop->set_active("footnotetracking", m_bFootnoteTracking);
+                bRemoveFootnoteTracking = false;
+            break;
+            default: break;
+        }
+        // Edit only if the shown content is coming from the current view.
+        if (State::HIDDEN != m_eState &&
+                (State::ACTIVE == m_eState || m_pActiveShell == pActiveView->GetWrtShellPtr())
+                && lcl_IsContent(*xEntry, *m_xTreeView))
+        {
+            const bool bReadonly = m_pActiveShell->GetView().GetDocShell()->IsReadOnly();
+            const bool bVisible = !reinterpret_cast<SwContent*>(m_xTreeView->get_id(*xEntry).toInt64())->IsInvisible();
+            const bool bProtected = reinterpret_cast<SwContent*>(m_xTreeView->get_id(*xEntry).toInt64())->IsProtect();
+            const bool bProtectBM = (ContentTypeId::BOOKMARK == nContentType)
+                    && m_pActiveShell->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS);
+            const bool bEditable = pType->IsEditable() &&
+                    ((bVisible && !bProtected && !bProtectBM) || ContentTypeId::REGION == nContentType);
+            const bool bDeletable = pType->IsDeletable() &&
+                    ((bVisible && !bProtected && !bProtectBM) || ContentTypeId::REGION == nContentType);
+            const bool bRenamable = bEditable && !bReadonly &&
+                    (ContentTypeId::TABLE == nContentType ||
+                     ContentTypeId::FRAME == nContentType ||
+                     ContentTypeId::GRAPHIC == nContentType ||
+                     ContentTypeId::OLE == nContentType ||
+                     (ContentTypeId::BOOKMARK == nContentType && !bProtectBM) ||
+                     ContentTypeId::REGION == nContentType ||
+                     ContentTypeId::INDEX == nContentType ||
+                     ContentTypeId::DRAWOBJECT == nContentType);
+
+            if (ContentTypeId::FOOTNOTE == nContentType)
+            {
+                void* pUserData = reinterpret_cast<void*>(m_xTreeView->get_id(*xEntry).toInt64());
+                const SwTextFootnote* pFootnote =
+                        static_cast<const SwTextFootnoteContent*>(pUserData)->GetTextFootnote();
+                if (!pFootnote)
+                    bRemoveGotoEntry = true;
+            }
+            else if(ContentTypeId::OUTLINE == nContentType)
+            {
+                bOutline = true;
+                lcl_SetOutlineContentEntriesSensitivities(this, *m_xTreeView, *xEntry, *xSubPopOutlineContent);
+                bRemoveToggleExpandEntry = lcl_InsertExpandCollapseAllItem(*m_xTreeView, *xEntry, *xPop);
+                if (!bReadonly)
+                {
+                    bRemoveSelectEntry = false;
+                    bRemoveChapterEntries = false;
+                }
+            }
+            else if (!bReadonly && (bEditable || bDeletable))
+            {
+                if(ContentTypeId::INDEX == nContentType)
+                {
+                    bRemoveIndexEntries = false;
+
+                    const SwTOXBase* pBase = reinterpret_cast<SwTOXBaseContent*>(m_xTreeView->get_id(*xEntry).toInt64())->GetTOXBase();
+                    if (!pBase->IsTOXBaseInReadonly())
+                        bRemoveEditEntry = false;
+
+                    xPop->set_active(OString::number(405), SwEditShell::IsTOXBaseReadonly(*pBase));
+                    bRemoveDeleteEntry = false;
+                }
+                else if(ContentTypeId::TABLE == nContentType)
+                {
+                    bRemoveSelectEntry = false;
+                    bRemoveEditEntry = false;
+                    bRemoveUnprotectEntry = false;
+                    bool bFull = false;
+                    OUString sTableName = reinterpret_cast<SwContent*>(m_xTreeView->get_id(*xEntry).toInt64())->GetName();
+                    bool bProt = m_pActiveShell->HasTableAnyProtection( &sTableName, &bFull );
+                    xPop->set_sensitive(OString::number(403), !bFull);
+                    xPop->set_sensitive(OString::number(404), bProt);
+                    bRemoveDeleteEntry = false;
+                }
+                else if(ContentTypeId::DRAWOBJECT == nContentType)
+                {
+                    bRemoveDeleteEntry = false;
+                }
+                else if(ContentTypeId::REGION == nContentType)
+                {
+                    bRemoveSelectEntry = false;
+                    bRemoveEditEntry = false;
+                }
+                else
+                {
+                    if (bEditable && bDeletable)
+                    {
+                        bRemoveEditEntry = false;
+                        bRemoveDeleteEntry = false;
+                    }
+                    else if (bEditable)
+                        bRemoveEditEntry = false;
+                    else if (bDeletable)
+                    {
+                        bRemoveDeleteEntry = false;
+                    }
+                }
+                //Rename object
+                if (bRenamable)
+                    bRemoveRenameEntry = false;
+            }
+        }
+        else
+        {
+            if (lcl_IsContentType(*xEntry, *m_xTreeView))
+                pType = reinterpret_cast<SwContentType*>(m_xTreeView->get_id(*xEntry).toInt64());
+            else
+                pType = reinterpret_cast<SwContent*>(
+                            m_xTreeView->get_id(*xEntry).toInt64())->GetParent();
+            if (pType)
+            {
+                if (ContentTypeId::OUTLINE == nContentType)
+                {
+                    bOutline = true;
+                    if (State::HIDDEN != m_eState)
+                    {
+                        lcl_SetOutlineContentEntriesSensitivities(this, *m_xTreeView, *xEntry,
+                                                                  *xSubPopOutlineContent);
+                        bRemoveSendOutlineEntry = false;
+                    }
+                    bRemoveToggleExpandEntry = lcl_InsertExpandCollapseAllItem(*m_xTreeView, *xEntry,
+                                                                               *xPop);
+                }
+                else if (State::HIDDEN != m_eState &&
+                         nContentType == ContentTypeId::POSTIT &&
+                         !m_pActiveShell->GetView().GetDocShell()->IsReadOnly() &&
+                         pType->GetMemberCount() > 0)
+                    bRemovePostItEntries = false;
             }
         }
     }
 
     if (bRemoveToggleExpandEntry)
-    {
-        xPop->remove("separator3");
         xPop->remove(OString::number(800));
-    }
+
+    if (bRemoveGotoEntry)
+        xPop->remove(OString::number(900));
 
     if (bRemoveSelectEntry)
         xPop->remove(OString::number(805));
 
     if (bRemoveChapterEntries)
     {
-        xPop->remove("separator2");
         xPop->remove(OString::number(806));
         xPop->remove(OString::number(801));
         xPop->remove(OString::number(802));
@@ -1813,18 +1872,19 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         xPop->remove(OString::number(403));
 
     if (bRemoveToggleExpandEntry &&
-        bRemoveSelectEntry &&
-        bRemoveChapterEntries &&
-        bRemoveSendOutlineEntry &&
-        bRemovePostItEntries &&
-        bRemoveDeleteEntry &&
-        bRemoveRenameEntry &&
-        bRemoveIndexEntries &&
-        bRemoveUnprotectEntry &&
-        bRemoveEditEntry)
-    {
+            bRemoveSendOutlineEntry)
         xPop->remove("separator1");
-    }
+
+    if (bRemoveGotoEntry &&
+            bRemoveSelectEntry &&
+            bRemoveDeleteEntry &&
+            bRemoveChapterEntries &&
+            bRemovePostItEntries &&
+            bRemoveRenameEntry &&
+            bRemoveIndexEntries &&
+            bRemoveUnprotectEntry &&
+            bRemoveEditEntry)
+        xPop->remove("separator2");
 
     if (!bOutline)
     {
@@ -1841,15 +1901,36 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             m_pActiveShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount() == 0)
     {
         xSubPopOutlineContent.reset();
-        xPop->remove(OString::number(5)); // outline content menu
-        xPop->remove("separator1511");
+        xPop->remove(OString::number(5)); // outline folding menu
+        xPop->remove("separator3");
     }
 
     if (bRemoveTableTracking)
         xPop->remove("tabletracking");
-
     if (bRemoveSectionTracking)
         xPop->remove("sectiontracking");
+    if (bRemoveFrameTracking)
+        xPop->remove("frametracking");
+    if (bRemoveImageTracking)
+        xPop->remove("imagetracking");
+    if (bRemoveOLEobjectTracking)
+        xPop->remove("oleobjecttracking");
+    if (bRemoveBookmarkTracking)
+        xPop->remove("bookmarktracking");
+    if (bRemoveHyperlinkTracking)
+        xPop->remove("hyperlinktracking");
+    if (bRemoveReferenceTracking)
+        xPop->remove("referencetracking");
+    if (bRemoveIndexTracking)
+        xPop->remove("indextracking");
+    if (bRemoveCommentTracking)
+        xPop->remove("commenttracking");
+    if (bRemoveDrawingObjectTracking)
+        xPop->remove("drawingobjecttracking");
+    if (bRemoveFieldTracking)
+        xPop->remove("fieldtracking");
+    if (bRemoveFootnoteTracking)
+        xPop->remove("footnotetracking");
 
     bool bSetSensitiveCollapseAllCategories = false;
     if (!m_bIsRoot)
@@ -3575,168 +3656,174 @@ void SwContentTree::UpdateTracking()
         return;
     }
 
-    bool bTrackTablesAndSections = true;
+    // bTrack is used to disallow tracking after jumping to an outline until the outline position
+    // that was jumped to is no longer the current outline position.
+    bool bTrack = true;
     if (m_nLastGotoContentWasOutlinePos != SwOutlineNodes::npos)
     {
         if (m_pActiveShell->GetOutlinePos() == m_nLastGotoContentWasOutlinePos)
-            bTrackTablesAndSections = false;
+            bTrack = false;
         else
             m_nLastGotoContentWasOutlinePos = SwOutlineNodes::npos;
     }
 
-    // footnotes and endnotes
-    if (SwContentAtPos aContentAtPos(IsAttrAtPos::Ftn);
-            m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
-            !(m_bIsRoot && m_nRootType != ContentTypeId::FOOTNOTE))
+    if (bTrack)
     {
-        lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, ContentTypeId::FOOTNOTE,
-                                          aContentAtPos.pFndTextAttr);
-        return;
-    }
-    // bookmarks - track first bookmark at cursor
-    if (m_pActiveShell->GetSelectionType() & SelectionType::Text)
-    {
-        SwDoc* pDoc = m_pActiveShell->GetDoc();
-        uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(pDoc->GetDocShell()->GetBaseModel(),
-                                                                    uno::UNO_QUERY);
-        uno::Reference<container::XIndexAccess> xBookmarks(xBookmarksSupplier->getBookmarks(),
-                                                           uno::UNO_QUERY);
-        sal_Int32 nBookmarkCount = xBookmarks->getCount();
-        if (nBookmarkCount && !(m_bIsRoot && m_nRootType != ContentTypeId::BOOKMARK))
+        // footnotes and endnotes
+        if (SwContentAtPos aContentAtPos(IsAttrAtPos::Ftn); m_bFootnoteTracking &&
+                m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
+                !(m_bIsRoot && m_nRootType != ContentTypeId::FOOTNOTE))
         {
-            SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
-            uno::Reference<text::XTextRange> xRange(
-                        SwXTextRange::CreateXTextRange(*pDoc, *pCursor->GetPoint(), nullptr));
-            for (sal_Int32 i = 0; i < nBookmarkCount; ++i)
+            lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, ContentTypeId::FOOTNOTE,
+                                              aContentAtPos.pFndTextAttr);
+            return;
+        }
+        // bookmarks - track first bookmark at cursor
+        if (m_bBookmarkTracking && m_pActiveShell->GetSelectionType() & SelectionType::Text)
+        {
+            SwDoc* pDoc = m_pActiveShell->GetDoc();
+            uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(pDoc->GetDocShell()->GetBaseModel(),
+                                                                        uno::UNO_QUERY);
+            uno::Reference<container::XIndexAccess> xBookmarks(xBookmarksSupplier->getBookmarks(),
+                                                               uno::UNO_QUERY);
+            sal_Int32 nBookmarkCount = xBookmarks->getCount();
+            if (nBookmarkCount && !(m_bIsRoot && m_nRootType != ContentTypeId::BOOKMARK))
             {
-                uno::Reference<text::XTextContent> bookmark;
-                xBookmarks->getByIndex(i) >>= bookmark;
-                try
+                SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
+                uno::Reference<text::XTextRange> xRange(
+                            SwXTextRange::CreateXTextRange(*pDoc, *pCursor->GetPoint(), nullptr));
+                for (sal_Int32 i = 0; i < nBookmarkCount; ++i)
                 {
-                    uno::Reference<text::XTextRange> bookmarkRange = bookmark->getAnchor();
-                    uno::Reference<text::XTextRangeCompare> xTextRangeCompare(xRange->getText(),
-                                                                              uno::UNO_QUERY);
-                    if (xTextRangeCompare.is()
-                            && xTextRangeCompare->compareRegionStarts(bookmarkRange, xRange) != -1
-                            && xTextRangeCompare->compareRegionEnds(xRange, bookmarkRange) != -1)
+                    uno::Reference<text::XTextContent> bookmark;
+                    xBookmarks->getByIndex(i) >>= bookmark;
+                    try
                     {
-                        uno::Reference<container::XNamed> xBookmark(bookmark, uno::UNO_QUERY);
-                        lcl_SelectByContentTypeAndName(this, *m_xTreeView,
-                                                       SwResId(STR_CONTENT_TYPE_BOOKMARK),
-                                                       xBookmark->getName());
-                        return;
+                        uno::Reference<text::XTextRange> bookmarkRange = bookmark->getAnchor();
+                        uno::Reference<text::XTextRangeCompare> xTextRangeCompare(xRange->getText(),
+                                                                                  uno::UNO_QUERY);
+                        if (xTextRangeCompare.is()
+                                && xTextRangeCompare->compareRegionStarts(bookmarkRange, xRange) != -1
+                                && xTextRangeCompare->compareRegionEnds(xRange, bookmarkRange) != -1)
+                        {
+                            uno::Reference<container::XNamed> xBookmark(bookmark, uno::UNO_QUERY);
+                            lcl_SelectByContentTypeAndName(this, *m_xTreeView,
+                                                           SwResId(STR_CONTENT_TYPE_BOOKMARK),
+                                                           xBookmark->getName());
+                            return;
+                        }
+                    }
+                    catch (const lang::IllegalArgumentException&)
+                    {
                     }
                 }
-                catch (const lang::IllegalArgumentException&)
+            }
+        }
+        // references
+        if (SwContentAtPos aContentAtPos(IsAttrAtPos::RefMark); m_bReferenceTracking &&
+                m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
+                aContentAtPos.pFndTextAttr &&
+                !(m_bIsRoot && m_nRootType != ContentTypeId::REFERENCE))
+        {
+            const SwFormatRefMark& rRefMark = aContentAtPos.pFndTextAttr->GetRefMark();
+            lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_REFERENCE),
+                                           rRefMark.GetRefName());
+            return;
+        }
+        // hyperlinks
+        if (SwContentAtPos aContentAtPos(IsAttrAtPos::InetAttr); m_bHyperlinkTracking &&
+                m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
+                !(m_bIsRoot && m_nRootType != ContentTypeId::URLFIELD))
+        {
+            // Because hyperlink item names do not need to be unique, finding the corresponding item
+            // in the tree by name may result in incorrect selection. Find the item in the tree by
+            // comparing the SwTextINetFormat pointer at the document cursor position to that stored
+            // in the item SwURLFieldContent.
+            lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, ContentTypeId::URLFIELD,
+                                              aContentAtPos.pFndTextAttr);
+            return;
+        }
+        // fields
+        if (SwField* pField = m_pActiveShell->GetCurField(); m_bFieldTracking && pField &&
+                !(m_bIsRoot && m_nRootType != ContentTypeId::TEXTFIELD))
+        {
+            ContentTypeId nContentTypeId =
+                    pField->GetTypeId() == SwFieldTypesEnum::Postit ? ContentTypeId::POSTIT :
+                                                                      ContentTypeId::TEXTFIELD;
+            lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, nContentTypeId, pField);
+            return;
+        }
+        // drawing
+        if (m_bDrawingObjectTracking && (m_pActiveShell->GetSelectionType() &
+                                         (SelectionType::DrawObject |
+                                          SelectionType::DrawObjectEditMode |
+                                          SelectionType::DbForm)) &&
+                !(m_bIsRoot && m_nRootType != ContentTypeId::DRAWOBJECT))
+        {
+            m_xTreeView->unselect_all();
+            SdrView* pSdrView = m_pActiveShell->GetDrawView();
+            if (pSdrView)
+            {
+                for (size_t nIdx(0); nIdx < pSdrView->GetMarkedObjectCount(); nIdx++)
                 {
+                    SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(nIdx);
+                    OUString aName(pSelected->GetName());
+                    if (!aName.isEmpty())
+                        lcl_SelectDrawObjectByName(*m_xTreeView, aName);
                 }
             }
-        }
-    }
-    // references
-    if (SwContentAtPos aContentAtPos(IsAttrAtPos::RefMark);
-            m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
-            aContentAtPos.pFndTextAttr &&
-            !(m_bIsRoot && m_nRootType != ContentTypeId::REFERENCE))
-    {
-        const SwFormatRefMark& rRefMark = aContentAtPos.pFndTextAttr->GetRefMark();
-        lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_REFERENCE),
-                                       rRefMark.GetRefName());
-        return;
-    }
-    // hyperlinks
-    if (SwContentAtPos aContentAtPos(IsAttrAtPos::InetAttr);
-            m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
-            !(m_bIsRoot && m_nRootType != ContentTypeId::URLFIELD))
-    {
-        // Because hyperlink item names do not need to be unique, finding the corresponding item
-        // in the tree by name may result in incorrect selection. Find the item in the tree by
-        // comparing the SwTextINetFormat pointer at the document cursor position to that stored
-        // in the item SwURLFieldContent.
-        lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, ContentTypeId::URLFIELD,
-                                          aContentAtPos.pFndTextAttr);
-        return;
-    }
-    // fields
-    if (SwField* pField = m_pActiveShell->GetCurField(); pField &&
-            !(m_bIsRoot && m_nRootType != ContentTypeId::TEXTFIELD))
-    {
-        ContentTypeId nContentTypeId =
-                pField->GetTypeId() == SwFieldTypesEnum::Postit ? ContentTypeId::POSTIT :
-                                                                  ContentTypeId::TEXTFIELD;
-        lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, nContentTypeId, pField);
-        return;
-    }
-    // drawing
-    if ((m_pActiveShell->GetSelectionType() & (SelectionType::DrawObject |
-                                               SelectionType::DrawObjectEditMode |
-                                               SelectionType::DbForm)) &&
-            !(m_bIsRoot && m_nRootType != ContentTypeId::DRAWOBJECT))
-    {
-        m_xTreeView->unselect_all();
-        SdrView* pSdrView = m_pActiveShell->GetDrawView();
-        if (pSdrView)
-        {
-            for (size_t nIdx(0); nIdx < pSdrView->GetMarkedObjectCount(); nIdx++)
+            else
             {
-                SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(nIdx);
-                OUString aName(pSelected->GetName());
-                if (!aName.isEmpty())
-                    lcl_SelectDrawObjectByName(*m_xTreeView, aName);
+                // clear treeview selections
+                m_xTreeView->unselect_all();
             }
+            Select();
+            return;
         }
-        else
+        // graphic, frame, and ole
+        OUString aContentTypeName;
+        if (m_bImageTracking && m_pActiveShell->GetSelectionType() == SelectionType::Graphic &&
+                !(m_bIsRoot && m_nRootType != ContentTypeId::GRAPHIC))
+            aContentTypeName = SwResId(STR_CONTENT_TYPE_GRAPHIC);
+        else if (m_bFrameTracking && m_pActiveShell->GetSelectionType() == SelectionType::Frame &&
+                 !(m_bIsRoot && m_nRootType != ContentTypeId::FRAME))
+            aContentTypeName = SwResId(STR_CONTENT_TYPE_FRAME);
+        else if (m_bOLEobjectTracking && m_pActiveShell->GetSelectionType() == SelectionType::Ole &&
+                 !(m_bIsRoot && m_nRootType != ContentTypeId::OLE))
+            aContentTypeName = SwResId(STR_CONTENT_TYPE_OLE);
+        if (!aContentTypeName.isEmpty())
         {
-            // clear treeview selections
-            m_xTreeView->unselect_all();
+            OUString aName(m_pActiveShell->GetFlyName());
+            lcl_SelectByContentTypeAndName(this, *m_xTreeView, aContentTypeName, aName);
+            return;
         }
-        Select();
-        return;
-    }
-    // graphic, frame, and ole
-    OUString aContentTypeName;
-    if (m_pActiveShell->GetSelectionType() == SelectionType::Graphic &&
-            !(m_bIsRoot && m_nRootType != ContentTypeId::GRAPHIC))
-        aContentTypeName = SwResId(STR_CONTENT_TYPE_GRAPHIC);
-    else if (m_pActiveShell->GetSelectionType() == SelectionType::Frame &&
-             !(m_bIsRoot && m_nRootType != ContentTypeId::FRAME))
-        aContentTypeName = SwResId(STR_CONTENT_TYPE_FRAME);
-    else if (m_pActiveShell->GetSelectionType() == SelectionType::Ole &&
-             !(m_bIsRoot && m_nRootType != ContentTypeId::OLE))
-        aContentTypeName = SwResId(STR_CONTENT_TYPE_OLE);
-    if (!aContentTypeName.isEmpty())
-    {
-        OUString aName(m_pActiveShell->GetFlyName());
-        lcl_SelectByContentTypeAndName(this, *m_xTreeView, aContentTypeName, aName);
-        return;
-    }
-    // table
-    if (bTrackTablesAndSections && m_bTableTracking && m_pActiveShell->IsCursorInTable() &&
-            !(m_bIsRoot && m_nRootType != ContentTypeId::TABLE))
-    {
-        if(m_pActiveShell->GetTableFormat())
+        // table
+        if (m_bTableTracking && m_pActiveShell->IsCursorInTable() &&
+                !(m_bIsRoot && m_nRootType != ContentTypeId::TABLE))
         {
-            OUString aName = m_pActiveShell->GetTableFormat()->GetName();
-            lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_TABLE),
-                                           aName);
+            if(m_pActiveShell->GetTableFormat())
+            {
+                OUString aName = m_pActiveShell->GetTableFormat()->GetName();
+                lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_TABLE),
+                                               aName);
+            }
+            return;
         }
-        return;
-    }
-    // indexes
-    if (const SwTOXBase* pTOX = m_pActiveShell->GetCurTOX(); pTOX &&
-            !(m_bIsRoot && m_nRootType != ContentTypeId::INDEX))
-    {
-        lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_INDEX),
-                                       pTOX->GetTOXName());
-        return;
-    }
-    // section
-    if (const SwSection* pSection = m_pActiveShell->GetCurrSection(); bTrackTablesAndSections &&
-            m_bSectionTracking && pSection && !(m_bIsRoot && m_nRootType != ContentTypeId::REGION))
-    {
-        lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_REGION),
-                                       pSection->GetSectionName());
-        return;
+        // indexes
+        if (const SwTOXBase* pTOX = m_pActiveShell->GetCurTOX(); m_bIndexTracking && pTOX &&
+                !(m_bIsRoot && m_nRootType != ContentTypeId::INDEX))
+        {
+            lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_INDEX),
+                                           pTOX->GetTOXName());
+            return;
+        }
+        // section
+        if (const SwSection* pSection = m_pActiveShell->GetCurrSection(); m_bSectionTracking &&
+                pSection && !(m_bIsRoot && m_nRootType != ContentTypeId::REGION))
+        {
+            lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_REGION),
+                                           pSection->GetSectionName());
+            return;
+        }
     }
     // outline
     // find out where the cursor is
@@ -3754,7 +3841,7 @@ void SwContentTree::UpdateTracking()
             bool bRet = false;
             if (lcl_IsContent(rEntry, *m_xTreeView) && reinterpret_cast<SwContent*>(
                         m_xTreeView->get_id(rEntry).toInt64())->GetParent()->GetType() ==
-                        ContentTypeId::OUTLINE)
+                    ContentTypeId::OUTLINE)
             {
                 if (reinterpret_cast<SwOutlineContent*>(
                             m_xTreeView->get_id(rEntry).toInt64())->GetOutlinePos() == nActPos)
@@ -4257,6 +4344,72 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
         SetSectionTracking(m_bSectionTracking);
         return;
     }
+    if (rSelectedPopupEntry == "frametracking")
+    {
+        m_bFrameTracking = !m_bFrameTracking;
+        SetFrameTracking(m_bFrameTracking);
+        return;
+    }
+    if (rSelectedPopupEntry == "imagetracking")
+    {
+        m_bImageTracking = !m_bImageTracking;
+        SetImageTracking(m_bImageTracking);
+        return;
+    }
+    if (rSelectedPopupEntry == "oleobjecttracking")
+    {
+        m_bOLEobjectTracking = !m_bOLEobjectTracking;
+        SetOLEobjectTracking(m_bOLEobjectTracking);
+        return;
+    }
+    if (rSelectedPopupEntry == "bookmarktracking")
+    {
+        m_bBookmarkTracking = !m_bBookmarkTracking;
+        SetBookmarkTracking(m_bBookmarkTracking);
+        return;
+    }
+    if (rSelectedPopupEntry == "hyperlinktracking")
+    {
+        m_bHyperlinkTracking = !m_bHyperlinkTracking;
+        SetHyperlinkTracking(m_bHyperlinkTracking);
+        return;
+    }
+    if (rSelectedPopupEntry == "referencetracking")
+    {
+        m_bReferenceTracking = !m_bReferenceTracking;
+        SetReferenceTracking(m_bReferenceTracking);
+        return;
+    }
+    if (rSelectedPopupEntry == "indextracking")
+    {
+        m_bIndexTracking = !m_bIndexTracking;
+        SetIndexTracking(m_bIndexTracking);
+        return;
+    }
+    if (rSelectedPopupEntry == "commenttracking")
+    {
+        m_bCommentTracking = !m_bCommentTracking;
+        SetCommentTracking(m_bCommentTracking);
+        return;
+    }
+    if (rSelectedPopupEntry == "drawingobjecttracking")
+    {
+        m_bDrawingObjectTracking = !m_bDrawingObjectTracking;
+        SetDrawingObjectTracking(m_bDrawingObjectTracking);
+        return;
+    }
+    if (rSelectedPopupEntry == "fieldtracking")
+    {
+        m_bFieldTracking = !m_bFieldTracking;
+        SetFieldTracking(m_bFieldTracking);
+        return;
+    }
+    if (rSelectedPopupEntry == "footnotetracking")
+    {
+        m_bFootnoteTracking = !m_bFootnoteTracking;
+        SetFootnoteTracking(m_bFootnoteTracking);
+        return;
+    }
 
     std::unique_ptr<weld::TreeIter> xFirst(m_xTreeView->make_iterator());
     if (!m_xTreeView->get_selected(xFirst.get()))
@@ -4530,6 +4683,72 @@ void SwContentTree::SetSectionTracking(bool bSet)
 {
     m_bSectionTracking = bSet;
     m_pConfig->SetSectionTracking(m_bSectionTracking);
+}
+
+void SwContentTree::SetFrameTracking(bool bSet)
+{
+    m_bFrameTracking = bSet;
+    m_pConfig->SetFrameTracking(m_bFrameTracking);
+}
+
+void SwContentTree::SetImageTracking(bool bSet)
+{
+    m_bImageTracking = bSet;
+    m_pConfig->SetImageTracking(m_bImageTracking);
+}
+
+void SwContentTree::SetOLEobjectTracking(bool bSet)
+{
+    m_bOLEobjectTracking = bSet;
+    m_pConfig->SetOLEobjectTracking(m_bOLEobjectTracking);
+}
+
+void SwContentTree::SetBookmarkTracking(bool bSet)
+{
+    m_bBookmarkTracking = bSet;
+    m_pConfig->SetBookmarkTracking(m_bBookmarkTracking);
+}
+
+void SwContentTree::SetHyperlinkTracking(bool bSet)
+{
+    m_bHyperlinkTracking = bSet;
+    m_pConfig->SetHyperlinkTracking(m_bHyperlinkTracking);
+}
+
+void SwContentTree::SetReferenceTracking(bool bSet)
+{
+    m_bReferenceTracking = bSet;
+    m_pConfig->SetReferenceTracking(m_bReferenceTracking);
+}
+
+void SwContentTree::SetIndexTracking(bool bSet)
+{
+    m_bIndexTracking = bSet;
+    m_pConfig->SetIndexTracking(m_bIndexTracking);
+}
+
+void SwContentTree::SetCommentTracking(bool bSet)
+{
+    m_bCommentTracking = bSet;
+    m_pConfig->SetCommentTracking(m_bCommentTracking);
+}
+
+void SwContentTree::SetDrawingObjectTracking(bool bSet)
+{
+    m_bDrawingObjectTracking = bSet;
+    m_pConfig->SetDrawingObjectTracking(m_bDrawingObjectTracking);
+}
+
+void SwContentTree::SetFieldTracking(bool bSet)
+{
+    m_bFieldTracking = bSet;
+    m_pConfig->SetFieldTracking(m_bFieldTracking);
+}
+
+void SwContentTree::SetFootnoteTracking(bool bSet)
+{
+    m_bFootnoteTracking = bSet;
+    m_pConfig->SetFootnoteTracking(m_bFootnoteTracking);
 }
 
 // Mode Change: Show dropped Doc
