@@ -50,6 +50,7 @@ $(eval $(call gb_Library_add_exception_objects,test,\
     test/source/htmltesttools \
     test/source/screenshot_test \
     test/source/unoapi_property_testers \
+    test/source/lokcallback \
 	test/source/helper/form \
 	test/source/helper/shape \
 	test/source/helper/transferable \

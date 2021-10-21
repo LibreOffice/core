@@ -41,7 +41,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/lokhelper.hxx>
-#include <sfx2/lokcallback.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/BitmapReadAccess.hxx>
@@ -50,6 +49,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <test/lokcallback.hxx>
 
 #include <drawdoc.hxx>
 #include <ndtxt.hxx>
@@ -76,7 +76,7 @@ static std::ostream& operator<<(std::ostream& os, ViewShellId id)
 }
 
 /// Testsuite for the SwXTextDocument methods implementing the vcl::ITiledRenderable interface.
-class SwTiledRenderingTest : public SwModelTestBase, public SfxLokCallbackInterface
+class SwTiledRenderingTest : public SwModelTestBase
 {
 public:
     SwTiledRenderingTest();
@@ -244,13 +244,10 @@ public:
     CPPUNIT_TEST(testMoveShapeHandle);
     CPPUNIT_TEST_SUITE_END();
 
-    virtual void libreOfficeKitViewCallback(int nType, const char* pPayload, int nViewId) override;
-    virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) override;
-    virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect,
-                                                               int nPart) override;
-
 private:
     SwXTextDocument* createDoc(const char* pName = nullptr);
+    static void callback(int nType, const char* pPayload, void* pData);
+    void callbackImpl(int nType, const char* pPayload);
     // First invalidation.
     tools::Rectangle m_aInvalidation;
     /// Union of all invalidations.
@@ -270,6 +267,7 @@ private:
     OString m_sHyperlinkLink;
     OString m_aFormFieldButton;
     OString m_ShapeSelection;
+    TestLokCallbackWrapper m_callbackWrapper;
 };
 
 SwTiledRenderingTest::SwTiledRenderingTest()
@@ -279,7 +277,8 @@ SwTiledRenderingTest::SwTiledRenderingTest()
     m_nInvalidations(0),
     m_nRedlineTableSizeChanged(0),
     m_nRedlineTableEntryModified(0),
-    m_nTrackedChangeIndex(-1)
+    m_nTrackedChangeIndex(-1),
+    m_callbackWrapper(&callback, this)
 {
 }
 
@@ -324,18 +323,35 @@ SwXTextDocument* SwTiledRenderingTest::createDoc(const char* pName)
     return pTextDocument;
 }
 
-void SwTiledRenderingTest::libreOfficeKitViewCallback(int nType, const char* pPayload, int /*nViewId*/)
+void SwTiledRenderingTest::callback(int nType, const char* pPayload, void* pData)
 {
-    libreOfficeKitViewCallback(nType, pPayload); // the view id is also included in payload
+    static_cast<SwTiledRenderingTest*>(pData)->callbackImpl(nType, pPayload);
 }
 
-void SwTiledRenderingTest::libreOfficeKitViewCallback(int nType, const char* pPayload)
+void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
 {
     OString aPayload(pPayload);
     switch (nType)
     {
         case LOK_CALLBACK_INVALIDATE_TILES:
-            abort();
+            {
+                tools::Rectangle aInvalidation;
+                uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
+                if (std::string_view("EMPTY") == pPayload)
+                    return;
+                CPPUNIT_ASSERT(aSeq.getLength() == 4 || aSeq.getLength() == 5);
+                aInvalidation.SetLeft(aSeq[0].toInt32());
+                aInvalidation.SetTop(aSeq[1].toInt32());
+                aInvalidation.setWidth(aSeq[2].toInt32());
+                aInvalidation.setHeight(aSeq[3].toInt32());
+                if (m_aInvalidation.IsEmpty())
+                {
+                    m_aInvalidation = aInvalidation;
+                }
+                m_aInvalidations.Union(aInvalidation);
+                ++m_nInvalidations;
+            }
+            break;
         case LOK_CALLBACK_DOCUMENT_SIZE_CHANGED:
             {
                 uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
@@ -418,24 +434,14 @@ void SwTiledRenderingTest::libreOfficeKitViewCallback(int nType, const char* pPa
             }
             break;
     }
-}
 
-void SwTiledRenderingTest::libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect,
-                                                                     int /*nPart*/)
-{
-    if(pRect == nullptr)
-        return;
-    if (m_aInvalidation.IsEmpty())
-        m_aInvalidation = *pRect;
-    m_aInvalidations.Union(*pRect);
-    ++m_nInvalidations;
 }
 
 void SwTiledRenderingTest::testRegisterCallback()
 {
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(this);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&m_callbackWrapper);
     // Insert a character at the beginning of the document.
     pWrtShell->Insert("x");
     pWrtShell->GetSfxViewShell()->flushPendingLOKInvalidateTiles();
@@ -619,7 +625,7 @@ void SwTiledRenderingTest::testSearch()
 {
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(this);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&m_callbackWrapper);
     SwNodeOffset nNode = pWrtShell->getShellCursor(false)->Start()->nNode.GetNode().GetIndex();
 
     // First hit, in the second paragraph, before the shape.
@@ -684,7 +690,7 @@ void SwTiledRenderingTest::testSearchTextFrame()
 {
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(this);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&m_callbackWrapper);
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
                 {"SearchItem.SearchString", uno::makeAny(OUString("TextFrame"))},
@@ -699,7 +705,7 @@ void SwTiledRenderingTest::testSearchTextFrameWrapAround()
 {
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(this);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&m_callbackWrapper);
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
                 {"SearchItem.SearchString", uno::makeAny(OUString("TextFrame"))},
@@ -717,7 +723,7 @@ void SwTiledRenderingTest::testDocumentSizeChanged()
     // Get the current document size.
     SwXTextDocument* pXTextDocument = createDoc("2-pages.odt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(this);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&m_callbackWrapper);
     Size aSize = pXTextDocument->getDocumentSize();
 
     // Delete the second page and see how the size changes.
@@ -733,7 +739,7 @@ void SwTiledRenderingTest::testSearchAll()
 {
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(this);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&m_callbackWrapper);
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
                 {"SearchItem.SearchString", uno::makeAny(OUString("shape"))},
@@ -751,7 +757,7 @@ void SwTiledRenderingTest::testSearchAllNotifications()
 {
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(this);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&m_callbackWrapper);
     // Reset notification counter before search.
     m_nSelectionBeforeSearchResult = 0;
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
@@ -778,7 +784,7 @@ void SwTiledRenderingTest::testPageDownInvalidation()
                 }));
     pXTextDocument->initializeForTiledRendering(aPropertyValues);
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(this);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&m_callbackWrapper);
     comphelper::dispatchCommand(".uno:PageDown", uno::Sequence<beans::PropertyValue>());
 
     // This was 2.
@@ -798,7 +804,7 @@ void SwTiledRenderingTest::testPartHash()
 namespace {
 
     /// A view callback tracks callbacks invoked on one specific view.
-    class ViewCallback final : public SfxLokCallbackInterface
+    class ViewCallback final
     {
         SfxViewShell* mpViewShell;
         int mnView;
@@ -825,6 +831,7 @@ namespace {
         boost::property_tree::ptree m_aRedlineTableModified;
         /// Post-it / annotation payload.
         boost::property_tree::ptree m_aComment;
+        TestLokCallbackWrapper m_callbackWrapper;
 
         ViewCallback(SfxViewShell* pViewShell = nullptr, std::function<void(ViewCallback&)> const & rBeforeInstallFunc = {})
             : m_bOwnCursorInvalidated(false),
@@ -838,14 +845,15 @@ namespace {
             m_bGraphicViewSelection(false),
             m_bGraphicSelection(false),
             m_bViewLock(false),
-            m_bCalled(false)
+            m_bCalled(false),
+            m_callbackWrapper(&callback, this)
             {
                 // Because one call-site wants to set the bool fields up before the callback is installed
                 if (rBeforeInstallFunc)
                     rBeforeInstallFunc(*this);
 
                 mpViewShell = pViewShell ? pViewShell : SfxViewShell::Current();
-                mpViewShell->setLibreOfficeKitViewCallback(this);
+                mpViewShell->setLibreOfficeKitViewCallback(&m_callbackWrapper);
                 mnView = SfxLokHelper::getView();
             }
 
@@ -860,19 +868,22 @@ namespace {
             mpViewShell->flushPendingLOKInvalidateTiles();
         }
 
-        virtual void libreOfficeKitViewCallback(int nType, const char* pPayload, int /*nViewId*/) override
+        static void callback(int nType, const char* pPayload, void* pData)
         {
-            libreOfficeKitViewCallback(nType, pPayload); // the view id is also included in payload
+            static_cast<ViewCallback*>(pData)->callbackImpl(nType, pPayload);
         }
 
-        virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) override
+        void callbackImpl(int nType, const char* pPayload)
         {
             OString aPayload(pPayload);
             m_bCalled = true;
             switch (nType)
             {
                 case LOK_CALLBACK_INVALIDATE_TILES:
-                    abort();
+                    {
+                        m_bTilesInvalidated = true;
+                    }
+                    break;
                 case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
                     {
                         m_bOwnCursorInvalidated = true;
@@ -983,11 +994,6 @@ namespace {
                     }
                     break;
             }
-        }
-        virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle*,
-                                                               int) override
-        {
-            m_bTilesInvalidated = true;
         }
     };
 
@@ -1534,7 +1540,7 @@ void SwTiledRenderingTest::testTrackChangesCallback()
     // Load a document.
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(this);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&m_callbackWrapper);
 
     // Turn on track changes and type "x".
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
@@ -1561,7 +1567,7 @@ void SwTiledRenderingTest::testRedlineUpdateCallback()
     // Load a document.
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(this);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&m_callbackWrapper);
 
     // Turn on track changes, type "xx" and delete the second one.
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
@@ -2351,7 +2357,7 @@ void SwTiledRenderingTest::testSplitNodeRedlineCallback()
     // Load a document.
     SwXTextDocument* pXTextDocument = createDoc("splitnode_redline_callback.fodt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(this);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&m_callbackWrapper);
 
     // 1. test case
     // Move cursor between the two tracked changes
@@ -2409,7 +2415,7 @@ void SwTiledRenderingTest::testDeleteNodeRedlineCallback()
     // Load a document.
     SwXTextDocument* pXTextDocument = createDoc("removenode_redline_callback.fodt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(this);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&m_callbackWrapper);
 
     // 1. test case
     // Move cursor between the two tracked changes
@@ -2786,7 +2792,7 @@ void SwTiledRenderingTest::testRedlineNotificationDuringSave()
     // It's an empty document, just settings.xml and content.xml are custom.
     SwXTextDocument* pXTextDocument = createDoc("redline-notification-during-save.odt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(this);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&m_callbackWrapper);
 
     // Save the document.
     utl::MediaDescriptor aMediaDescriptor;
@@ -2802,7 +2808,7 @@ void SwTiledRenderingTest::testHyperlink()
     comphelper::LibreOfficeKit::setViewIdForVisCursorInvalidation(true);
     SwXTextDocument* pXTextDocument = createDoc("hyperlink.odt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(this);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&m_callbackWrapper);
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
 
     Point aStart = pShellCursor->GetSttPos();
@@ -2829,7 +2835,7 @@ void SwTiledRenderingTest::testDropDownFormFieldButton()
     pXTextDocument->setClientVisibleArea(tools::Rectangle(0, 0, 10000, 4000));
 
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(this);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&m_callbackWrapper);
 
     // Move the cursor to trigger displaying of the field button.
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
@@ -2902,7 +2908,7 @@ void SwTiledRenderingTest::testDropDownFormFieldButtonEditing()
     pXTextDocument->setClientVisibleArea(tools::Rectangle(0, 0, 10000, 4000));
 
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(this);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&m_callbackWrapper);
 
     // Move the cursor to trigger displaying of the field button.
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
@@ -2959,7 +2965,7 @@ void SwTiledRenderingTest::testDropDownFormFieldButtonNoSelection()
     pXTextDocument->setClientVisibleArea(tools::Rectangle(0, 0, 10000, 4000));
 
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(this);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&m_callbackWrapper);
 
     // Move the cursor to trigger displaying of the field button.
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
@@ -3012,7 +3018,7 @@ void SwTiledRenderingTest::testMoveShapeHandle()
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
 
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(this);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&m_callbackWrapper);
     SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
     pWrtShell->SelectObj(Point(), 0, pObject);
@@ -3045,7 +3051,7 @@ void SwTiledRenderingTest::testDropDownFormFieldButtonNoItem()
     pXTextDocument->setClientVisibleArea(tools::Rectangle(0, 0, 10000, 4000));
 
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(this);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&m_callbackWrapper);
 
     // Move the cursor to trigger displaying of the field button.
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
@@ -3082,7 +3088,7 @@ void SwTiledRenderingTest::testTablePaintInvalidate()
     // Load a document with a table in it.
     SwXTextDocument* pXTextDocument = createDoc("table-paint-invalidate.odt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(this);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&m_callbackWrapper);
     // Enter the table.
     pWrtShell->Down(/*bSelect=*/false);
     Scheduler::ProcessEventsToIdle();
@@ -3180,7 +3186,7 @@ void SwTiledRenderingTest::testBulletDeleteInvalidation()
     pWrtShell->GetLayout()->PaintSwFrame(*pWrtShell->GetOut(),
                                          pWrtShell->GetLayout()->getFrameArea());
     Scheduler::ProcessEventsToIdle();
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(this);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&m_callbackWrapper);
     m_aInvalidations = tools::Rectangle();
 
     // When pressing backspace in the last paragraph.
@@ -3210,7 +3216,7 @@ void SwTiledRenderingTest::testBulletNoNumInvalidation()
     pWrtShell->GetLayout()->PaintSwFrame(*pWrtShell->GetOut(),
                                          pWrtShell->GetLayout()->getFrameArea());
     Scheduler::ProcessEventsToIdle();
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(this);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&m_callbackWrapper);
     m_aInvalidations = tools::Rectangle();
 
     // When pressing backspace in the last paragraph to turn bullets off.
@@ -3247,7 +3253,7 @@ void SwTiledRenderingTest::testBulletMultiDeleteInvalidation()
     pWrtShell->GetLayout()->PaintSwFrame(*pWrtShell->GetOut(),
                                          pWrtShell->GetLayout()->getFrameArea());
     Scheduler::ProcessEventsToIdle();
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(this);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&m_callbackWrapper);
     m_aInvalidations = tools::Rectangle();
 
     // When selecting and deleting several bullets: select till the end of the 2nd para and delete.
