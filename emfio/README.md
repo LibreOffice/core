@@ -13,7 +13,7 @@ such a file into the document. It is possible to export the Windows Metafile
 by using right click and choose "save".
 
 Most of the records of WMF/EMF formats come from the Windows Graphics Device
-Interface (GDI) API, and for EMF+ they comes from the newer Windows GDI+.
+Interface (GDI) API, and for EMF+ they come from the newer Windows GDI+.
 
 More information about rendering Windows Metafiles can be found in the
 [Visual Class Library (VCL)](../vcl) and also in the
@@ -21,19 +21,22 @@ More information about rendering Windows Metafiles can be found in the
 
 An example demo that renders a metafile using `vcl` be seen by invoking:
 
-    ./bin/run mtfdemo example.wmf
+    ./bin/run mtfdemo odk/examples/basic/forms_and_controls/burger.wmf
 
-assuming that example.wmf is available in the current directory.
+This opens the burger.wmf file from the ODK examples.
 The demo code structure is described in [GDIMetaFile](../vcl/README.GDIMetaFile)
 documentation.
 
-[1] [Windows Meta File](https://en.wikipedia.org/wiki/Windows_Metafile),
+[1] [Windows Meta File](https://en.wikipedia.org/wiki/Windows\_Metafile),
 Wikipedia
 
 ## EMF+ Specifics
 Handling EMF+ is to some extent different from handling WMF/EMF. More
 information can be found in the [VCL](../vcl)
 documentation.
+
+## How does it work?
+`emfio` module takes a byte array and turns it into a `drawinglayer` primitive container. The rendering is done via `drawinglayer` primitives. For more information, you should refer to [VCL](../vcl) documentation.
 
 ## Limitations
 Not all the WMF/EMF/EMF+ records are supported by this module. Unsupported
@@ -42,8 +45,9 @@ if they are actually read within a file. You can file a bug report for
 implementing these records.
 
 Currently, these records are not implemented (specified in
-wmfreader.cxx):
+`wmfreader.cxx`):
 
+```
 W_META_SETRELABS W_META_SETPOLYFILLMODE W_META_SETSTRETCHBLTMODE
 W_META_SETTEXTCHAREXTRA W_META_SETTEXTJUSTIFICATION W_META_FLOODFILL
 W_META_FILLREGION W_META_FRAMEREGION W_META_INVERTREGION
@@ -52,9 +56,11 @@ W_META_SETDIBTODEV W_META_REALIZEPALETTE W_META_ANIMATEPALETTE
 W_META_SETPALENTRIES W_META_RESIZEPALETTE W_META_EXTFLOODFILL
 W_META_RESETDC W_META_STARTDOC W_META_STARTPAGE W_META_ENDPAGE
 W_META_ABORTDOC W_META_ENDDOC
+```
 
-And these records are not implemented (specified in emfreader.cxx):
+And these records are not implemented (specified in `emfreader.cxx`):
 
+```
 EMR_MASKBLT EMR_PLGBLT EMR_SETDIBITSTODEVICE EMR_FRAMERGN
 EMR_INVERTRGN EMR_FLATTENPATH EMR_WIDENPATH EMR_POLYDRAW
 EMR_SETARCDIRECTION EMR_SETPALETTEENTRIES EMR_RESIZEPALETTE
@@ -68,6 +74,7 @@ EMR_GRADIENTFILL EMR_SETLINKEDUFIS EMR_SETMAPPERFLAGS EMR_SETICMMODE
 EMR_CREATEMONOBRUSH EMR_SETBRUSHORGEX EMR_SETMETARGN EMR_SETMITERLIMIT
 EMR_EXCLUDECLIPRECT EMR_REALIZEPALETTE EMR_SELECTPALETTE
 EMR_CREATEPALETTE EMR_ALPHADIBBLEND EMR_SETTEXTJUSTIFICATION
+```
 
 Due to the difference on the fonts available on various platforms, the outcome
 of text rendering can be different on Linux, Windows, macOS and elsewhere.
@@ -76,7 +83,7 @@ of text rendering can be different on Linux, Windows, macOS and elsewhere.
 Known remaing bugs for this module is gathered here:
 
 * [Bug 103859 \[META\] EMF/WMF (Enhanced/Windows Metafile) bugs and
-enhancements](https://bugs.documentfoundation.org/show_bug.cgi?id=103859)
+enhancements](https://bugs.documentfoundation.org/show\_bug.cgi?id=103859)
 
 ## Dependencies
 Direct dependencies for **emfio** are [**drawinglayer**](../drawinglayer) and
@@ -101,6 +108,6 @@ other companies.
 ## References
 Documentation for WMF/EMF/EMF+ formats are available on Microsoft website:
 
-* [\[MS-WMF\]: Windows Metafile Format](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-wmf/4813e7fd-52d0-4f42-965f-228c8b7488d2)
-* [\[MS-EMF\]: Enhanced Metafile Format](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-emf/91c257d7-c39d-4a36-9b1f-63e3f73d30ca)
-* [\[MS-EMFPLUS\]: Enhanced Metafile Format Plus Extensions](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-emfplus/5f92c789-64f2-46b5-9ed4-15a9bb0946c6)
+* [\[MS-WMF\]: Windows Metafile Format](https://docs.microsoft.com/en-us/openspecs/windows\_protocols/ms-wmf/4813e7fd-52d0-4f42-965f-228c8b7488d2)
+* [\[MS-EMF\]: Enhanced Metafile Format](https://docs.microsoft.com/en-us/openspecs/windows\_protocols/ms-emf/91c257d7-c39d-4a36-9b1f-63e3f73d30ca)
+* [\[MS-EMFPLUS\]: Enhanced Metafile Format Plus Extensions](https://docs.microsoft.com/en-us/openspecs/windows\_protocols/ms-emfplus/5f92c789-64f2-46b5-9ed4-15a9bb0946c6)
