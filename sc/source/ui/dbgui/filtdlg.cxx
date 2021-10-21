@@ -1224,19 +1224,19 @@ IMPL_LINK( ScFilterDlg, CheckBoxHdl, weld::Toggleable&, rBox, void )
         UpdateHdrInValueList( 4 );
     }
 
-    if ( &rBox == m_xBtnCase.get() )            // Complete value list
-    {
-        m_EntryLists.clear();
-        UpdateValueList( 1 );       // current text is recorded
-        UpdateValueList( 2 );
-        UpdateValueList( 3 );
-        UpdateValueList( 4 );
+    if ( &rBox != m_xBtnCase.get() )            // Complete value list
+        return;
 
-        UpdateColorList( 1 );
-        UpdateColorList( 2 );
-        UpdateColorList( 3 );
-        UpdateColorList( 4 );
-    }
+    m_EntryLists.clear();
+    UpdateValueList( 1 );       // current text is recorded
+    UpdateValueList( 2 );
+    UpdateValueList( 3 );
+    UpdateValueList( 4 );
+
+    UpdateColorList( 1 );
+    UpdateColorList( 2 );
+    UpdateColorList( 3 );
+    UpdateColorList( 4 );
 }
 
 IMPL_LINK( ScFilterDlg, ValModifyHdl, weld::ComboBox&, rEd, void )

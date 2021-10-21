@@ -1735,36 +1735,36 @@ void ScInputHandler::LOKPasteFunctionData(const OUString& rFunctionName)
 
     EditView* pEditView = pTopView ? pTopView : pTableView;
 
-    if (pActiveViewSh && pEditView)
+    if (!pActiveViewSh || !pEditView)
+        return;
+
+    bool bEdit = false;
+    OUString aFormula;
+    const EditEngine* pEditEngine = pEditView->GetEditEngine();
+    if (pEditEngine)
     {
-        bool bEdit = false;
-        OUString aFormula;
-        const EditEngine* pEditEngine = pEditView->GetEditEngine();
-        if (pEditEngine)
+        aFormula = pEditEngine->GetText(0);
+        bEdit = aFormula.getLength() > 1 && (aFormula[0] == '=' || aFormula[0] == '+' || aFormula[0] == '-');
+    }
+
+    if ( !bEdit )
+    {
+        OUString aNewFormula('=');
+        if ( aFormula.startsWith("=") )
+            aNewFormula = aFormula;
+
+        InputReplaceSelection( aNewFormula );
+    }
+
+    if (pFormulaData)
+    {
+        OUString aNew;
+        ScTypedCaseStrSet::const_iterator aPos = findText(*pFormulaData, pFormulaData->begin(), rFunctionName, aNew, /* backward = */false);
+
+        if (aPos != pFormulaData->end())
         {
-            aFormula = pEditEngine->GetText(0);
-            bEdit = aFormula.getLength() > 1 && (aFormula[0] == '=' || aFormula[0] == '+' || aFormula[0] == '-');
-        }
-
-        if ( !bEdit )
-        {
-            OUString aNewFormula('=');
-            if ( aFormula.startsWith("=") )
-                aNewFormula = aFormula;
-
-            InputReplaceSelection( aNewFormula );
-        }
-
-        if (pFormulaData)
-        {
-            OUString aNew;
-            ScTypedCaseStrSet::const_iterator aPos = findText(*pFormulaData, pFormulaData->begin(), rFunctionName, aNew, /* backward = */false);
-
-            if (aPos != pFormulaData->end())
-            {
-                miAutoPosFormula = aPos;
-                PasteFunctionData();
-            }
+            miAutoPosFormula = aPos;
+            PasteFunctionData();
         }
     }
 }

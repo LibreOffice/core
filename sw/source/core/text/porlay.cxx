@@ -627,70 +627,70 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
     SetRedline( bHasRedline );
 
     // redlining: set crossing out for deleted anchored objects
-    if ( bHasFlyPortion )
+    if ( !bHasFlyPortion )
+        return;
+
+    SwLinePortion *pPos = mpNextPortion;
+    TextFrameIndex nLineLength;
+    while ( pPos )
     {
-        SwLinePortion *pPos = mpNextPortion;
-        TextFrameIndex nLineLength;
-        while ( pPos )
+        TextFrameIndex const nPorSttIdx = rInf.GetLineStart() + nLineLength;
+        nLineLength += pPos->GetLen();
+        // anchored as characters
+        if( pPos->IsFlyCntPortion() )
         {
-            TextFrameIndex const nPorSttIdx = rInf.GetLineStart() + nLineLength;
-            nLineLength += pPos->GetLen();
-            // anchored as characters
-            if( pPos->IsFlyCntPortion() )
+            bool bDeleted = false;
+            size_t nAuthor = std::string::npos;
+            if ( bHasRedline )
             {
-                bool bDeleted = false;
-                size_t nAuthor = std::string::npos;
-                if ( bHasRedline )
-                {
-                    OUString sRedlineText;
-                    bool bHasRedlineEnd;
-                    enum RedlineType eRedlineEnd;
-                    std::pair<SwTextNode const*, sal_Int32> const flyStart(
-                        rInf.GetTextFrame()->MapViewToModel(nPorSttIdx));
-                    bool bHasFlyRedline = rLine.GetRedln()->CheckLine(flyStart.first->GetIndex(),
-                        flyStart.second, flyStart.first->GetIndex(), flyStart.second, sRedlineText,
-                        bHasRedlineEnd, eRedlineEnd, /*pAuthorAtPos=*/&nAuthor);
-                    bDeleted = bHasFlyRedline && eRedlineEnd == RedlineType::Delete;
-                }
-                static_cast<SwFlyCntPortion*>(pPos)->SetDeleted(bDeleted);
-                static_cast<SwFlyCntPortion*>(pPos)->SetAuthor(nAuthor);
+                OUString sRedlineText;
+                bool bHasRedlineEnd;
+                enum RedlineType eRedlineEnd;
+                std::pair<SwTextNode const*, sal_Int32> const flyStart(
+                    rInf.GetTextFrame()->MapViewToModel(nPorSttIdx));
+                bool bHasFlyRedline = rLine.GetRedln()->CheckLine(flyStart.first->GetIndex(),
+                    flyStart.second, flyStart.first->GetIndex(), flyStart.second, sRedlineText,
+                    bHasRedlineEnd, eRedlineEnd, /*pAuthorAtPos=*/&nAuthor);
+                bDeleted = bHasFlyRedline && eRedlineEnd == RedlineType::Delete;
             }
-            // anchored to characters
-            else if ( pPos->IsFlyPortion() )
+            static_cast<SwFlyCntPortion*>(pPos)->SetDeleted(bDeleted);
+            static_cast<SwFlyCntPortion*>(pPos)->SetAuthor(nAuthor);
+        }
+        // anchored to characters
+        else if ( pPos->IsFlyPortion() )
+        {
+            const IDocumentRedlineAccess& rIDRA =
+                    rInf.GetTextFrame()->GetDoc().getIDocumentRedlineAccess();
+            SwSortedObjs *pObjs = rInf.GetTextFrame()->GetDrawObjs();
+            if ( pObjs && IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineFlags() ) )
             {
-                const IDocumentRedlineAccess& rIDRA =
-                        rInf.GetTextFrame()->GetDoc().getIDocumentRedlineAccess();
-                SwSortedObjs *pObjs = rInf.GetTextFrame()->GetDrawObjs();
-                if ( pObjs && IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineFlags() ) )
+                for ( size_t i = 0; rInf.GetTextFrame()->GetDrawObjs() && i < pObjs->size(); ++i )
                 {
-                    for ( size_t i = 0; rInf.GetTextFrame()->GetDrawObjs() && i < pObjs->size(); ++i )
+                    SwAnchoredObject* pAnchoredObj = (*rInf.GetTextFrame()->GetDrawObjs())[i];
+                    if ( auto pFly = pAnchoredObj->DynCastFlyFrame() )
                     {
-                        SwAnchoredObject* pAnchoredObj = (*rInf.GetTextFrame()->GetDrawObjs())[i];
-                        if ( auto pFly = pAnchoredObj->DynCastFlyFrame() )
+                        bool bDeleted = false;
+                        size_t nAuthor = std::string::npos;
+                        const SwFormatAnchor& rAnchor = pAnchoredObj->GetFrameFormat().GetAnchor();
+                        if ( rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR )
                         {
-                            bool bDeleted = false;
-                            size_t nAuthor = std::string::npos;
-                            const SwFormatAnchor& rAnchor = pAnchoredObj->GetFrameFormat().GetAnchor();
-                            if ( rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR )
+                            SwPosition aAnchor = *rAnchor.GetContentAnchor();
+                            SwRedlineTable::size_type n = 0;
+                            const SwRangeRedline* pFnd =
+                                    rIDRA.GetRedlineTable().FindAtPosition( aAnchor, n );
+                            if ( pFnd && RedlineType::Delete == pFnd->GetType() )
                             {
-                                SwPosition aAnchor = *rAnchor.GetContentAnchor();
-                                SwRedlineTable::size_type n = 0;
-                                const SwRangeRedline* pFnd =
-                                        rIDRA.GetRedlineTable().FindAtPosition( aAnchor, n );
-                                if ( pFnd && RedlineType::Delete == pFnd->GetType() )
-                                {
-                                    bDeleted = true;
-                                    nAuthor = pFnd->GetAuthor();
-                                }
+                                bDeleted = true;
+                                nAuthor = pFnd->GetAuthor();
                             }
-                            pFly->SetDeleted(bDeleted);
-                            pFly->SetAuthor(nAuthor);
                         }
+                        pFly->SetDeleted(bDeleted);
+                        pFly->SetAuthor(nAuthor);
                     }
                 }
             }
-            pPos = pPos->GetNextPortion();
         }
+        pPos = pPos->GetNextPortion();
     }
 }
 

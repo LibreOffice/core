@@ -510,59 +510,59 @@ bool PowerPointExport::exportDocument()
 void PowerPointExport::WriteCustomSlideShow()
 {
     Reference<XCustomPresentationSupplier> aXCPSup(mXModel, css::uno::UNO_QUERY);
-    if (aXCPSup.is() && aXCPSup->getCustomPresentations()->hasElements())
+    if (!aXCPSup.is() || !aXCPSup->getCustomPresentations()->hasElements())
+        return;
+
+    mPresentationFS->startElementNS(XML_p, XML_custShowLst);
+
+    Reference<XDrawPagesSupplier> xDPS(getModel(), uno::UNO_QUERY_THROW);
+    Reference<XDrawPages> xDrawPages(xDPS->getDrawPages(), uno::UNO_SET_THROW);
+    Reference<XNameContainer> aXNameCont(aXCPSup->getCustomPresentations());
+    const Sequence<OUString> aNameSeq(aXNameCont->getElementNames());
+
+    OUString sRelId;
+    sal_uInt32 nCustomShowIndex = 0;
+    sal_Int32 nSlideCount = xDrawPages->getCount();
+
+    for (OUString const& customShowName : aNameSeq)
     {
-        mPresentationFS->startElementNS(XML_p, XML_custShowLst);
+        mPresentationFS->startElementNS(XML_p, XML_custShow, XML_name, customShowName, XML_id,
+                                        OUString::number(nCustomShowIndex++));
 
-        Reference<XDrawPagesSupplier> xDPS(getModel(), uno::UNO_QUERY_THROW);
-        Reference<XDrawPages> xDrawPages(xDPS->getDrawPages(), uno::UNO_SET_THROW);
-        Reference<XNameContainer> aXNameCont(aXCPSup->getCustomPresentations());
-        const Sequence<OUString> aNameSeq(aXNameCont->getElementNames());
-
-        OUString sRelId;
-        sal_uInt32 nCustomShowIndex = 0;
-        sal_Int32 nSlideCount = xDrawPages->getCount();
-
-        for (OUString const& customShowName : aNameSeq)
+        mAny = aXNameCont->getByName(customShowName);
+        Reference<XIndexContainer> aXIContainer;
+        if (mAny >>= aXIContainer)
         {
-            mPresentationFS->startElementNS(XML_p, XML_custShow, XML_name, customShowName, XML_id,
-                                            OUString::number(nCustomShowIndex++));
+            mPresentationFS->startElementNS(XML_p, XML_sldLst);
 
-            mAny = aXNameCont->getByName(customShowName);
-            Reference<XIndexContainer> aXIContainer;
-            if (mAny >>= aXIContainer)
+            sal_Int32 nCustomShowSlideCount = aXIContainer->getCount();
+            for (sal_Int32 i = 0; i < nCustomShowSlideCount; ++i)
             {
-                mPresentationFS->startElementNS(XML_p, XML_sldLst);
+                Reference<XDrawPage> aXCustomShowDrawPage;
+                aXIContainer->getByIndex(i) >>= aXCustomShowDrawPage;
+                Reference<XNamed> aXName(aXCustomShowDrawPage, UNO_QUERY_THROW);
+                OUString sCustomShowSlideName = aXName->getName();
 
-                sal_Int32 nCustomShowSlideCount = aXIContainer->getCount();
-                for (sal_Int32 i = 0; i < nCustomShowSlideCount; ++i)
+                for (sal_Int32 j = 0; j < nSlideCount; ++j)
                 {
-                    Reference<XDrawPage> aXCustomShowDrawPage;
-                    aXIContainer->getByIndex(i) >>= aXCustomShowDrawPage;
-                    Reference<XNamed> aXName(aXCustomShowDrawPage, UNO_QUERY_THROW);
-                    OUString sCustomShowSlideName = aXName->getName();
+                    Reference<XDrawPage> xDrawPage;
+                    xDrawPages->getByIndex(j) >>= xDrawPage;
+                    Reference<XNamed> xNamed(xDrawPage, UNO_QUERY_THROW);
+                    OUString sSlideName = xNamed->getName();
 
-                    for (sal_Int32 j = 0; j < nSlideCount; ++j)
+                    if (sCustomShowSlideName == sSlideName)
                     {
-                        Reference<XDrawPage> xDrawPage;
-                        xDrawPages->getByIndex(j) >>= xDrawPage;
-                        Reference<XNamed> xNamed(xDrawPage, UNO_QUERY_THROW);
-                        OUString sSlideName = xNamed->getName();
-
-                        if (sCustomShowSlideName == sSlideName)
-                        {
-                            sRelId = maRelId[j];
-                            break;
-                        }
+                        sRelId = maRelId[j];
+                        break;
                     }
-                    mPresentationFS->singleElementNS(XML_p, XML_sld, FSNS(XML_r, XML_id), sRelId);
                 }
-                mPresentationFS->endElementNS(XML_p, XML_sldLst);
+                mPresentationFS->singleElementNS(XML_p, XML_sld, FSNS(XML_r, XML_id), sRelId);
             }
-            mPresentationFS->endElementNS(XML_p, XML_custShow);
+            mPresentationFS->endElementNS(XML_p, XML_sldLst);
         }
-        mPresentationFS->endElementNS(XML_p, XML_custShowLst);
+        mPresentationFS->endElementNS(XML_p, XML_custShow);
     }
+    mPresentationFS->endElementNS(XML_p, XML_custShowLst);
 }
 
 void PowerPointExport::ImplWriteBackground(const FSHelperPtr& pFS, const Reference< XPropertySet >& rXPropSet)
@@ -1098,75 +1098,75 @@ sal_Int32 PowerPointExport::GetAuthorIdAndLastIndex(const OUString& sAuthor, sal
 void PowerPointExport::WritePresentationProps()
 {
     Reference<XPresentationSupplier> xPresentationSupplier(mXModel, uno::UNO_QUERY);
-    if (xPresentationSupplier.is())
+    if (!xPresentationSupplier.is())
+        return;
+
+    Reference<beans::XPropertySet> xPresentationProps(xPresentationSupplier->getPresentation(),
+                                                      uno::UNO_QUERY);
+    bool bEndlessVal = xPresentationProps->getPropertyValue("IsEndless").get<bool>();
+    bool bChangeManually = xPresentationProps->getPropertyValue("IsAutomatic").get<bool>();
+    OUString sFirstPage = xPresentationProps->getPropertyValue("FirstPage").get<OUString>();
+    OUString sCustomShow = xPresentationProps->getPropertyValue("CustomShow").get<OUString>();
+
+    FSHelperPtr pFS = openFragmentStreamWithSerializer(
+        "ppt/presProps.xml",
+        "application/vnd.openxmlformats-officedocument.presentationml.presProps+xml");
+
+    addRelation(mPresentationFS->getOutputStream(),
+                oox::getRelationship(Relationship::PRESPROPS), u"presProps.xml");
+
+    pFS->startElementNS(XML_p, XML_presentationPr, PPRNMSS);
+
+    pFS->startElementNS(XML_p, XML_showPr, XML_loop, sax_fastparser::UseIf("1", bEndlessVal),
+                        XML_useTimings, sax_fastparser::UseIf("0", bChangeManually),
+                        XML_showNarration, "1");
+
+    Reference<drawing::XDrawPagesSupplier> xDPS(mXModel, uno::UNO_QUERY_THROW);
+    Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages(), uno::UNO_SET_THROW);
+    if (!sFirstPage.isEmpty())
     {
-        Reference<beans::XPropertySet> xPresentationProps(xPresentationSupplier->getPresentation(),
-                                                          uno::UNO_QUERY);
-        bool bEndlessVal = xPresentationProps->getPropertyValue("IsEndless").get<bool>();
-        bool bChangeManually = xPresentationProps->getPropertyValue("IsAutomatic").get<bool>();
-        OUString sFirstPage = xPresentationProps->getPropertyValue("FirstPage").get<OUString>();
-        OUString sCustomShow = xPresentationProps->getPropertyValue("CustomShow").get<OUString>();
-
-        FSHelperPtr pFS = openFragmentStreamWithSerializer(
-            "ppt/presProps.xml",
-            "application/vnd.openxmlformats-officedocument.presentationml.presProps+xml");
-
-        addRelation(mPresentationFS->getOutputStream(),
-                    oox::getRelationship(Relationship::PRESPROPS), u"presProps.xml");
-
-        pFS->startElementNS(XML_p, XML_presentationPr, PPRNMSS);
-
-        pFS->startElementNS(XML_p, XML_showPr, XML_loop, sax_fastparser::UseIf("1", bEndlessVal),
-                            XML_useTimings, sax_fastparser::UseIf("0", bChangeManually),
-                            XML_showNarration, "1");
-
-        Reference<drawing::XDrawPagesSupplier> xDPS(mXModel, uno::UNO_QUERY_THROW);
-        Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages(), uno::UNO_SET_THROW);
-        if (!sFirstPage.isEmpty())
+        sal_Int32 nStartSlide = 1;
+        sal_Int32 nEndSlide = xDrawPages->getCount();
+        for (sal_Int32 i = 0; i < nEndSlide; i++)
         {
-            sal_Int32 nStartSlide = 1;
-            sal_Int32 nEndSlide = xDrawPages->getCount();
-            for (sal_Int32 i = 0; i < nEndSlide; i++)
+            Reference<drawing::XDrawPage> xDrawPage;
+            xDrawPages->getByIndex(i) >>= xDrawPage;
+            Reference<container::XNamed> xNamed(xDrawPage, uno::UNO_QUERY_THROW);
+            if (xNamed->getName() == sFirstPage)
             {
-                Reference<drawing::XDrawPage> xDrawPage;
-                xDrawPages->getByIndex(i) >>= xDrawPage;
-                Reference<container::XNamed> xNamed(xDrawPage, uno::UNO_QUERY_THROW);
-                if (xNamed->getName() == sFirstPage)
-                {
-                    nStartSlide = i + 1;
-                    break;
-                }
+                nStartSlide = i + 1;
+                break;
             }
-
-            pFS->singleElementNS(XML_p, XML_sldRg, XML_st, OUString::number(nStartSlide), XML_end,
-                                 OUString::number(nEndSlide));
         }
 
-        if (!sCustomShow.isEmpty())
-        {
-            css::uno::Reference<css::presentation::XCustomPresentationSupplier>
-                XCustPresentationSupplier(mXModel, css::uno::UNO_QUERY_THROW);
-            css::uno::Reference<css::container::XNameContainer> mxCustShows;
-            mxCustShows = XCustPresentationSupplier->getCustomPresentations();
-            const css::uno::Sequence<OUString> aNameSeq(mxCustShows->getElementNames());
-
-            sal_Int32 nCustShowIndex = 0;
-            for (sal_Int32 i = 0; i < aNameSeq.getLength(); i++)
-            {
-                if (aNameSeq[i] == sCustomShow)
-                {
-                    nCustShowIndex = i;
-                    break;
-                }
-            }
-
-            pFS->singleElementNS(XML_p, XML_custShow, XML_id, OUString::number(nCustShowIndex));
-        }
-
-        pFS->endElementNS(XML_p, XML_showPr);
-
-        pFS->endElementNS(XML_p, XML_presentationPr);
+        pFS->singleElementNS(XML_p, XML_sldRg, XML_st, OUString::number(nStartSlide), XML_end,
+                             OUString::number(nEndSlide));
     }
+
+    if (!sCustomShow.isEmpty())
+    {
+        css::uno::Reference<css::presentation::XCustomPresentationSupplier>
+            XCustPresentationSupplier(mXModel, css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::container::XNameContainer> mxCustShows;
+        mxCustShows = XCustPresentationSupplier->getCustomPresentations();
+        const css::uno::Sequence<OUString> aNameSeq(mxCustShows->getElementNames());
+
+        sal_Int32 nCustShowIndex = 0;
+        for (sal_Int32 i = 0; i < aNameSeq.getLength(); i++)
+        {
+            if (aNameSeq[i] == sCustomShow)
+            {
+                nCustShowIndex = i;
+                break;
+            }
+        }
+
+        pFS->singleElementNS(XML_p, XML_custShow, XML_id, OUString::number(nCustShowIndex));
+    }
+
+    pFS->endElementNS(XML_p, XML_showPr);
+
+    pFS->endElementNS(XML_p, XML_presentationPr);
 }
 
 bool PowerPointExport::WriteComments(sal_uInt32 nPageNum)

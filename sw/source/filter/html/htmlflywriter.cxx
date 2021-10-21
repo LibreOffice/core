@@ -1757,32 +1757,32 @@ static Writer& OutHTML_FrameFormatAsDivOrSpan( Writer& rWrt,
 static void OutHTML_ImageOLEStart(SwHTMLWriter& rHTMLWrt, const Graphic& rGraphic,
                                   const SwFrameFormat& rFrameFormat)
 {
-    if (rHTMLWrt.mbReqIF && rHTMLWrt.m_bExportImagesAsOLE)
-    {
-        // Write the original image as an RTF fragment.
-        OUString aFileName;
-        if (rHTMLWrt.GetOrigFileName())
-            aFileName = *rHTMLWrt.GetOrigFileName();
-        INetURLObject aURL(aFileName);
-        OUString aName = aURL.getBase() + "_" + aURL.getExtension() + "_"
-                         + OUString::number(rGraphic.GetChecksum(), 16);
-        aURL.setBase(aName);
-        aURL.setExtension(u"ole");
-        aFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+    if (!rHTMLWrt.mbReqIF || !rHTMLWrt.m_bExportImagesAsOLE)
+        return;
 
-        SvFileStream aOutStream(aFileName, StreamMode::WRITE);
-        if (!SwReqIfReader::WrapGraphicInRtf(rGraphic, rFrameFormat, aOutStream))
-            SAL_WARN("sw.html", "SwReqIfReader::WrapGraphicInRtf() failed");
+    // Write the original image as an RTF fragment.
+    OUString aFileName;
+    if (rHTMLWrt.GetOrigFileName())
+        aFileName = *rHTMLWrt.GetOrigFileName();
+    INetURLObject aURL(aFileName);
+    OUString aName = aURL.getBase() + "_" + aURL.getExtension() + "_"
+                     + OUString::number(rGraphic.GetChecksum(), 16);
+    aURL.setBase(aName);
+    aURL.setExtension(u"ole");
+    aFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 
-        // Refer to this data.
-        aFileName = URIHelper::simpleNormalizedMakeRelative(rHTMLWrt.GetBaseURL(), aFileName);
-        rHTMLWrt.Strm().WriteOString(
-            OStringConcatenation("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object));
-        rHTMLWrt.Strm().WriteOString(OStringConcatenation(" data=\"" + aFileName.toUtf8() + "\""));
-        rHTMLWrt.Strm().WriteOString(" type=\"text/rtf\"");
-        rHTMLWrt.Strm().WriteOString(">");
-        rHTMLWrt.OutNewLine();
-    }
+    SvFileStream aOutStream(aFileName, StreamMode::WRITE);
+    if (!SwReqIfReader::WrapGraphicInRtf(rGraphic, rFrameFormat, aOutStream))
+        SAL_WARN("sw.html", "SwReqIfReader::WrapGraphicInRtf() failed");
+
+    // Refer to this data.
+    aFileName = URIHelper::simpleNormalizedMakeRelative(rHTMLWrt.GetBaseURL(), aFileName);
+    rHTMLWrt.Strm().WriteOString(
+        OStringConcatenation("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object));
+    rHTMLWrt.Strm().WriteOString(OStringConcatenation(" data=\"" + aFileName.toUtf8() + "\""));
+    rHTMLWrt.Strm().WriteOString(" type=\"text/rtf\"");
+    rHTMLWrt.Strm().WriteOString(">");
+    rHTMLWrt.OutNewLine();
 }
 
 /// Ends the OLE version of an image in the ReqIF + OLE case.

@@ -351,23 +351,23 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
     }
 
     tools::Rectangle aBmpRect(Point(), rBmp.GetSizePixel());
-    if (!aBmpRect.Intersection(tools::Rectangle(rSrcPtPixel, rSrcSizePixel)).IsEmpty())
-    {
-        Point     auxOutPt(LogicToPixel(rDestPt));
-        Size      auxOutSz(LogicToPixel(rDestSize));
+    if (aBmpRect.Intersection(tools::Rectangle(rSrcPtPixel, rSrcSizePixel)).IsEmpty())
+        return;
 
-        // HACK: The function is broken with alpha vdev and mirroring, mirror here.
-        Bitmap bitmap(rBmp);
-        AlphaMask alpha(rAlpha);
-        if(mpAlphaVDev && (bHMirr || bVMirr))
-        {
-            bitmap.Mirror(mirrorFlags);
-            alpha.Mirror(mirrorFlags);
-            auxOutPt = aOutPt;
-            auxOutSz = aOutSz;
-        }
-        DrawDeviceAlphaBitmapSlowPath(bitmap, alpha, aDstRect, aBmpRect, auxOutSz, auxOutPt);
+    Point     auxOutPt(LogicToPixel(rDestPt));
+    Size      auxOutSz(LogicToPixel(rDestSize));
+
+    // HACK: The function is broken with alpha vdev and mirroring, mirror here.
+    Bitmap bitmap(rBmp);
+    AlphaMask alpha(rAlpha);
+    if(mpAlphaVDev && (bHMirr || bVMirr))
+    {
+        bitmap.Mirror(mirrorFlags);
+        alpha.Mirror(mirrorFlags);
+        auxOutPt = aOutPt;
+        auxOutSz = aOutSz;
     }
+    DrawDeviceAlphaBitmapSlowPath(bitmap, alpha, aDstRect, aBmpRect, auxOutSz, auxOutPt);
 }
 
 namespace

@@ -385,20 +385,20 @@ TempFile::TempFile(TempFile && other) noexcept :
 
 TempFile::~TempFile()
 {
-    if ( bKillingFileEnabled )
+    if ( !bKillingFileEnabled )
+        return;
+
+    // if we're going to delete this file, no point in flushing it when closing
+    if (pStream && !aName.isEmpty())
+        static_cast<SvFileStream*>(pStream.get())->SetDontFlushOnClose(true);
+    pStream.reset();
+    if ( bIsDirectory )
     {
-        // if we're going to delete this file, no point in flushing it when closing
-        if (pStream && !aName.isEmpty())
-            static_cast<SvFileStream*>(pStream.get())->SetDontFlushOnClose(true);
-        pStream.reset();
-        if ( bIsDirectory )
-        {
-            comphelper::DirectoryHelper::deleteDirRecursively(aName);
-        }
-        else
-        {
-            File::remove( aName );
-        }
+        comphelper::DirectoryHelper::deleteDirRecursively(aName);
+    }
+    else
+    {
+        File::remove( aName );
     }
 }
 

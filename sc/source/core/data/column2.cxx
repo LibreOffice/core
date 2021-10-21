@@ -661,21 +661,21 @@ class MaxStrLenFinder
         ScCellFormat::GetString(
             rCell, mnFormat, aValStr, &pColor, *mrDoc.GetFormatTable(), mrDoc);
 
-        if (aValStr.getLength() > mnMaxLen)
+        if (aValStr.getLength() <= mnMaxLen)
+            return;
+
+        switch (rCell.meType)
         {
-            switch (rCell.meType)
-            {
-                case CELLTYPE_NONE:
-                case CELLTYPE_VALUE:
-                    mnMaxLen = aValStr.getLength();
-                    maMaxLenStr = aValStr;
-                    break;
-                case CELLTYPE_EDIT:
-                case CELLTYPE_STRING:
-                case CELLTYPE_FORMULA:
-                default:
-                    checkLineBreak(aValStr);
-            }
+            case CELLTYPE_NONE:
+            case CELLTYPE_VALUE:
+                mnMaxLen = aValStr.getLength();
+                maMaxLenStr = aValStr;
+                break;
+            case CELLTYPE_EDIT:
+            case CELLTYPE_STRING:
+            case CELLTYPE_FORMULA:
+            default:
+                checkLineBreak(aValStr);
         }
     }
 

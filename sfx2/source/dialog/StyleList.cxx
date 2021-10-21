@@ -530,28 +530,28 @@ IMPL_LINK(StyleList, ExecuteDrop, const ExecuteDropEvent&, rEvt, sal_Int8)
 
 IMPL_LINK_NOARG(StyleList, NewMenuExecuteAction, void*, void)
 {
-    if (m_pStyleSheetPool && m_nActFamily != 0xffff)
-    {
-        const SfxStyleFamily eFam = GetFamilyItem()->GetFamily();
-        const SfxStyleFamilyItem* pItem = GetFamilyItem();
-        SfxStyleSearchBits nFilter(SfxStyleSearchBits::Auto);
-        if (pItem && m_nActFilter != 0xffff)
-            nFilter = pItem->GetFilterList()[m_nActFilter].nFlags;
-        if (nFilter == SfxStyleSearchBits::Auto) // automatic
-            nFilter = m_nAppFilter;
+    if (!m_pStyleSheetPool || m_nActFamily == 0xffff)
+        return;
 
-        // why? : FloatingWindow must not be parent of a modal dialog
-        SfxNewStyleDlg aDlg(m_pContainer, *m_pStyleSheetPool, eFam);
-        auto nResult = aDlg.run();
-        if (nResult == RET_OK)
-        {
-            const OUString aTemplName(aDlg.GetName());
-            m_pParentDialog->Execute_Impl(SID_STYLE_NEW_BY_EXAMPLE, aTemplName, "",
-                                          static_cast<sal_uInt16>(GetFamilyItem()->GetFamily()),
-                                          *this, nFilter);
-            UpdateFamily();
-            m_aUpdateFamily.Call(*this);
-        }
+    const SfxStyleFamily eFam = GetFamilyItem()->GetFamily();
+    const SfxStyleFamilyItem* pItem = GetFamilyItem();
+    SfxStyleSearchBits nFilter(SfxStyleSearchBits::Auto);
+    if (pItem && m_nActFilter != 0xffff)
+        nFilter = pItem->GetFilterList()[m_nActFilter].nFlags;
+    if (nFilter == SfxStyleSearchBits::Auto) // automatic
+        nFilter = m_nAppFilter;
+
+    // why? : FloatingWindow must not be parent of a modal dialog
+    SfxNewStyleDlg aDlg(m_pContainer, *m_pStyleSheetPool, eFam);
+    auto nResult = aDlg.run();
+    if (nResult == RET_OK)
+    {
+        const OUString aTemplName(aDlg.GetName());
+        m_pParentDialog->Execute_Impl(SID_STYLE_NEW_BY_EXAMPLE, aTemplName, "",
+                                      static_cast<sal_uInt16>(GetFamilyItem()->GetFamily()), *this,
+                                      nFilter);
+        UpdateFamily();
+        m_aUpdateFamily.Call(*this);
     }
 }
 
@@ -838,66 +838,66 @@ void StyleList::SelectStyle(const OUString& rStr, bool bIsCallback)
         m_pParentDialog->EnableShow(false, this);
     }
 
-    if (!bIsCallback)
+    if (bIsCallback)
+        return;
+
+    if (m_xTreeBox->get_visible())
     {
-        if (m_xTreeBox->get_visible())
+        if (!rStr.isEmpty())
         {
-            if (!rStr.isEmpty())
+            std::unique_ptr<weld::TreeIter> xEntry = m_xTreeBox->make_iterator();
+            bool bEntry = m_xTreeBox->get_iter_first(*xEntry);
+            while (bEntry)
             {
-                std::unique_ptr<weld::TreeIter> xEntry = m_xTreeBox->make_iterator();
-                bool bEntry = m_xTreeBox->get_iter_first(*xEntry);
-                while (bEntry)
-                {
-                    if (m_xTreeBox->get_text(*xEntry) == rStr)
-                    {
-                        m_xTreeBox->scroll_to_row(*xEntry);
-                        m_xTreeBox->select(*xEntry);
-                        break;
-                    }
-                    bEntry = m_xTreeBox->iter_next(*xEntry);
-                }
-            }
-            else if (eFam == SfxStyleFamily::Pseudo)
-            {
-                std::unique_ptr<weld::TreeIter> xEntry = m_xTreeBox->make_iterator();
-                if (m_xTreeBox->get_iter_first(*xEntry))
+                if (m_xTreeBox->get_text(*xEntry) == rStr)
                 {
                     m_xTreeBox->scroll_to_row(*xEntry);
                     m_xTreeBox->select(*xEntry);
+                    break;
                 }
+                bEntry = m_xTreeBox->iter_next(*xEntry);
             }
-            else
-                m_xTreeBox->unselect_all();
+        }
+        else if (eFam == SfxStyleFamily::Pseudo)
+        {
+            std::unique_ptr<weld::TreeIter> xEntry = m_xTreeBox->make_iterator();
+            if (m_xTreeBox->get_iter_first(*xEntry))
+            {
+                m_xTreeBox->scroll_to_row(*xEntry);
+                m_xTreeBox->select(*xEntry);
+            }
         }
         else
+            m_xTreeBox->unselect_all();
+    }
+    else
+    {
+        bool bSelect = !rStr.isEmpty();
+        if (bSelect)
         {
-            bool bSelect = !rStr.isEmpty();
-            if (bSelect)
+            std::unique_ptr<weld::TreeIter> xEntry = m_xFmtLb->make_iterator();
+            bool bEntry = m_xFmtLb->get_iter_first(*xEntry);
+            while (bEntry && m_xFmtLb->get_text(*xEntry) != rStr)
+                bEntry = m_xFmtLb->iter_next(*xEntry);
+            if (!bEntry)
+                bSelect = false;
+            else
             {
-                std::unique_ptr<weld::TreeIter> xEntry = m_xFmtLb->make_iterator();
-                bool bEntry = m_xFmtLb->get_iter_first(*xEntry);
-                while (bEntry && m_xFmtLb->get_text(*xEntry) != rStr)
-                    bEntry = m_xFmtLb->iter_next(*xEntry);
-                if (!bEntry)
-                    bSelect = false;
-                else
+                if (!m_xFmtLb->is_selected(*xEntry))
                 {
-                    if (!m_xFmtLb->is_selected(*xEntry))
-                    {
-                        m_xFmtLb->unselect_all();
-                        m_xFmtLb->scroll_to_row(*xEntry);
-                        m_xFmtLb->select(*xEntry);
-                    }
+                    m_xFmtLb->unselect_all();
+                    m_xFmtLb->scroll_to_row(*xEntry);
+                    m_xFmtLb->select(*xEntry);
                 }
             }
+        }
 
-            if (!bSelect)
-            {
-                m_xFmtLb->unselect_all();
-                m_pParentDialog->EnableEdit(false, this);
-                m_pParentDialog->EnableHide(false, this);
-                m_pParentDialog->EnableShow(false, this);
-            }
+        if (!bSelect)
+        {
+            m_xFmtLb->unselect_all();
+            m_pParentDialog->EnableEdit(false, this);
+            m_pParentDialog->EnableHide(false, this);
+            m_pParentDialog->EnableShow(false, this);
         }
     }
 }

@@ -1758,26 +1758,26 @@ void ToolBarManager::HandleClick(ClickAction eClickAction)
 
     ToolBoxItemId nId( m_pImpl->GetCurItemId() );
     ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
-    if ( pIter != m_aControllerMap.end() )
+    if ( pIter == m_aControllerMap.end() )
+        return;
+
+    Reference< XToolbarController > xController( pIter->second, UNO_QUERY );
+
+    if ( xController.is() )
     {
-        Reference< XToolbarController > xController( pIter->second, UNO_QUERY );
-
-        if ( xController.is() )
+        switch (eClickAction)
         {
-            switch (eClickAction)
-            {
-                case ClickAction::Click:
-                    xController->click();
-                    break;
+            case ClickAction::Click:
+                xController->click();
+                break;
 
-                case ClickAction::DblClick:
-                    xController->doubleClick();
-                    break;
+            case ClickAction::DblClick:
+                xController->doubleClick();
+                break;
 
-                case ClickAction::Execute:
-                    xController->execute(0);
-                    break;
-            }
+            case ClickAction::Execute:
+                xController->execute(0);
+                break;
         }
     }
 }
@@ -1804,22 +1804,22 @@ void ToolBarManager::OnDropdownClick(bool bCreatePopupWindow)
 
     ToolBoxItemId nId( m_pImpl->GetCurItemId() );
     ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
-    if ( pIter != m_aControllerMap.end() )
-    {
-        Reference< XToolbarController > xController( pIter->second, UNO_QUERY );
+    if ( pIter == m_aControllerMap.end() )
+        return;
 
-        if ( xController.is() )
+    Reference< XToolbarController > xController( pIter->second, UNO_QUERY );
+
+    if ( xController.is() )
+    {
+        if (bCreatePopupWindow)
         {
-            if (bCreatePopupWindow)
-            {
-                Reference< XWindow > xWin = xController->createPopupWindow();
-                if ( xWin.is() )
-                    xWin->setFocus();
-            }
-            else
-            {
-                xController->click();
-            }
+            Reference< XWindow > xWin = xController->createPopupWindow();
+            if ( xWin.is() )
+                xWin->setFocus();
+        }
+        else
+        {
+            xController->click();
         }
     }
 }

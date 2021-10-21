@@ -2771,22 +2771,22 @@ protected:
         }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-        if (m_pMouseEventBox && m_pMouseEventBox != m_pWidget)
-        {
-            // put things back they way we found them
-            GtkWidget* pParent = gtk_widget_get_parent(m_pMouseEventBox);
+        if (!(m_pMouseEventBox && m_pMouseEventBox != m_pWidget))
+            return;
 
-            g_object_ref(m_pWidget);
-            gtk_container_remove(GTK_CONTAINER(m_pMouseEventBox), m_pWidget);
+        // put things back they way we found them
+        GtkWidget* pParent = gtk_widget_get_parent(m_pMouseEventBox);
 
-            gtk_widget_destroy(m_pMouseEventBox);
+        g_object_ref(m_pWidget);
+        gtk_container_remove(GTK_CONTAINER(m_pMouseEventBox), m_pWidget);
 
-            gtk_container_add(GTK_CONTAINER(pParent), m_pWidget);
-            // coverity[freed_arg : FALSE] - this does not free m_pWidget, it is reffed by pParent
-            g_object_unref(m_pWidget);
+        gtk_widget_destroy(m_pMouseEventBox);
 
-            m_pMouseEventBox = m_pWidget;
-        }
+        gtk_container_add(GTK_CONTAINER(pParent), m_pWidget);
+        // coverity[freed_arg : FALSE] - this does not free m_pWidget, it is reffed by pParent
+        g_object_unref(m_pWidget);
+
+        m_pMouseEventBox = m_pWidget;
 #endif
     }
 
@@ -8891,22 +8891,22 @@ public:
         GtkWidget* pOverFlowWidget = GTK_WIDGET(m_pOverFlowNotebook);
         g_clear_pointer(&pOverFlowWidget, gtk_widget_unparent);
 #endif
-        if (m_pOverFlowBox)
-        {
-            // put it back to how we found it initially
-            GtkWidget* pParent = gtk_widget_get_parent(GTK_WIDGET(m_pOverFlowBox));
-            g_object_ref(m_pNotebook);
-            container_remove(GTK_WIDGET(m_pOverFlowBox), GTK_WIDGET(m_pNotebook));
-            container_add(GTK_WIDGET(pParent), GTK_WIDGET(m_pNotebook));
-            g_object_unref(m_pNotebook);
+        if (!m_pOverFlowBox)
+            return;
+
+        // put it back to how we found it initially
+        GtkWidget* pParent = gtk_widget_get_parent(GTK_WIDGET(m_pOverFlowBox));
+        g_object_ref(m_pNotebook);
+        container_remove(GTK_WIDGET(m_pOverFlowBox), GTK_WIDGET(m_pNotebook));
+        container_add(GTK_WIDGET(pParent), GTK_WIDGET(m_pNotebook));
+        g_object_unref(m_pNotebook);
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-            gtk_widget_destroy(GTK_WIDGET(m_pOverFlowBox));
+        gtk_widget_destroy(GTK_WIDGET(m_pOverFlowBox));
 #else
-            GtkWidget* pOverFlowBox = GTK_WIDGET(m_pOverFlowBox);
-            g_clear_pointer(&pOverFlowBox, gtk_widget_unparent);
+        GtkWidget* pOverFlowBox = GTK_WIDGET(m_pOverFlowBox);
+        g_clear_pointer(&pOverFlowBox, gtk_widget_unparent);
 #endif
-        }
     }
 };
 
@@ -9848,21 +9848,21 @@ private:
 
     void ensure_image_widget()
     {
-        if (!m_pImage)
-        {
+        if (m_pImage)
+            return;
+
 #if !GTK_CHECK_VERSION(4, 0, 0)
-            m_pImage = GTK_IMAGE(gtk_image_new());
-            gtk_box_pack_start(m_pBox, GTK_WIDGET(m_pImage), false, false, 0);
-            gtk_box_reorder_child(m_pBox, GTK_WIDGET(m_pImage), 0);
+        m_pImage = GTK_IMAGE(gtk_image_new());
+        gtk_box_pack_start(m_pBox, GTK_WIDGET(m_pImage), false, false, 0);
+        gtk_box_reorder_child(m_pBox, GTK_WIDGET(m_pImage), 0);
 #else
-            m_pImage = GTK_PICTURE(gtk_picture_new());
-            gtk_widget_set_halign(GTK_WIDGET(m_pImage), GTK_ALIGN_CENTER);
-            gtk_widget_set_valign(GTK_WIDGET(m_pImage), GTK_ALIGN_CENTER);
-            gtk_box_prepend(m_pBox, GTK_WIDGET(m_pImage));
-            gtk_widget_set_halign(m_pLabel, GTK_ALIGN_START);
+        m_pImage = GTK_PICTURE(gtk_picture_new());
+        gtk_widget_set_halign(GTK_WIDGET(m_pImage), GTK_ALIGN_CENTER);
+        gtk_widget_set_valign(GTK_WIDGET(m_pImage), GTK_ALIGN_CENTER);
+        gtk_box_prepend(m_pBox, GTK_WIDGET(m_pImage));
+        gtk_widget_set_halign(m_pLabel, GTK_ALIGN_START);
 #endif
-            gtk_widget_show(GTK_WIDGET(m_pImage));
-        }
+        gtk_widget_show(GTK_WIDGET(m_pImage));
     }
 
 #if GTK_CHECK_VERSION(4, 0, 0)
@@ -19692,18 +19692,18 @@ private:
         menu_toggled();
 
         bool bIsShown = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_pToggleButton));
-        if (m_bPopupActive != bIsShown)
+        if (m_bPopupActive == bIsShown)
+            return;
+
+        m_bPopupActive = bIsShown;
+        ComboBox::signal_popup_toggled();
+        if (!m_bPopupActive && m_pEntry)
         {
-            m_bPopupActive = bIsShown;
-            ComboBox::signal_popup_toggled();
-            if (!m_bPopupActive && m_pEntry)
-            {
-                disable_notify_events();
-                //restore focus to the GtkEntry when the popup is gone, which
-                //is what the vcl case does, to ease the transition a little
-                gtk_widget_grab_focus(m_pEntry);
-                enable_notify_events();
-            }
+            disable_notify_events();
+            //restore focus to the GtkEntry when the popup is gone, which
+            //is what the vcl case does, to ease the transition a little
+            gtk_widget_grab_focus(m_pEntry);
+            enable_notify_events();
         }
     }
 

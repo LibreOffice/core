@@ -206,11 +206,13 @@ void SvxXTextColumns::setPropertyValue(const OUString& rPropertyName, const css:
     switch (pEntry->nWID)
     {
         case WID_TXTCOL_LINE_WIDTH:
-            if (sal_Int32 nTmp; !(aValue >>= nTmp) || nTmp < 0)
+        {
+            sal_Int32 nTmp;
+            if (!(aValue >>= nTmp) || nTmp < 0)
                 throw css::lang::IllegalArgumentException();
-            else
-                m_nSepLineWidth = o3tl::toTwips(nTmp, o3tl::Length::mm100);
+            m_nSepLineWidth = o3tl::toTwips(nTmp, o3tl::Length::mm100);
             break;
+        }
         case WID_TXTCOL_LINE_COLOR:
             if (!(aValue >>= m_nSepLineColor))
                 throw css::lang::IllegalArgumentException();
@@ -220,11 +222,13 @@ void SvxXTextColumns::setPropertyValue(const OUString& rPropertyName, const css:
                 throw css::lang::IllegalArgumentException();
             break;
         case WID_TXTCOL_LINE_REL_HGT:
-            if (sal_Int32 nTmp; !(aValue >>= nTmp) || nTmp < 0)
+        {
+            sal_Int32 nTmp;
+            if (!(aValue >>= nTmp) || nTmp < 0)
                 throw css::lang::IllegalArgumentException();
-            else
-                m_nSepLineHeightRelative = nTmp;
+            m_nSepLineHeightRelative = nTmp;
             break;
+        }
         case WID_TXTCOL_LINE_ALIGN:
             if (css::style::VerticalAlignment eAlign; aValue >>= eAlign)
                 m_nSepLineVertAlign = eAlign;
@@ -238,21 +242,21 @@ void SvxXTextColumns::setPropertyValue(const OUString& rPropertyName, const css:
                 throw css::lang::IllegalArgumentException();
             break;
         case WID_TXTCOL_AUTO_DISTANCE:
-            if (sal_Int32 nTmp; !(aValue >>= nTmp) || nTmp < 0 || nTmp >= m_nReference)
+        {
+            sal_Int32 nTmp;
+            if (!(aValue >>= nTmp) || nTmp < 0 || nTmp >= m_nReference)
                 throw css::lang::IllegalArgumentException();
-            else
+            m_nAutoDistance = nTmp;
+            sal_Int32 nColumns = m_aTextColumns.getLength();
+            css::text::TextColumn* pCols = m_aTextColumns.getArray();
+            sal_Int32 nDist = m_nAutoDistance / 2;
+            for (sal_Int32 i = 0; i < nColumns; i++)
             {
-                m_nAutoDistance = nTmp;
-                sal_Int32 nColumns = m_aTextColumns.getLength();
-                css::text::TextColumn* pCols = m_aTextColumns.getArray();
-                sal_Int32 nDist = m_nAutoDistance / 2;
-                for (sal_Int32 i = 0; i < nColumns; i++)
-                {
-                    pCols[i].LeftMargin = i == 0 ? 0 : nDist;
-                    pCols[i].RightMargin = i == nColumns - 1 ? 0 : nDist;
-                }
+                pCols[i].LeftMargin = i == 0 ? 0 : nDist;
+                pCols[i].RightMargin = i == nColumns - 1 ? 0 : nDist;
             }
             break;
+        }
     }
 }
 

@@ -578,30 +578,30 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, MoveTemplateHdl, void*, void)
 
     size_t nItemId = 0;
 
-    if (aDlg.run() == RET_OK)
+    if (aDlg.run() != RET_OK)
+        return;
+
+    const OUString& sCategory = aDlg.GetSelectedCategory();
+    bool bIsNewCategory = aDlg.IsNewCategoryCreated();
+    if(bIsNewCategory)
     {
-        const OUString& sCategory = aDlg.GetSelectedCategory();
-        bool bIsNewCategory = aDlg.IsNewCategoryCreated();
-        if(bIsNewCategory)
+        if (!sCategory.isEmpty())
         {
-            if (!sCategory.isEmpty())
-            {
-                nItemId = mxLocalView->createRegion(sCategory);
-                if(nItemId)
-                    mxCBFolder->append_text(sCategory);
-            }
+            nItemId = mxLocalView->createRegion(sCategory);
+            if(nItemId)
+                mxCBFolder->append_text(sCategory);
         }
-        else
-            nItemId = mxLocalView->getRegionId(sCategory);
-
-        if(nItemId)
-        {
-            localMoveTo(nItemId);
-        }
-
-        mxLocalView->reload();
-        SearchUpdate();
     }
+    else
+        nItemId = mxLocalView->getRegionId(sCategory);
+
+    if(nItemId)
+    {
+        localMoveTo(nItemId);
+    }
+
+    mxLocalView->reload();
+    SearchUpdate();
 }
 IMPL_LINK_NOARG(SfxTemplateManagerDlg, ExportTemplateHdl, void*, void)
 {
@@ -689,21 +689,21 @@ IMPL_LINK(SfxTemplateManagerDlg, CreateContextMenuHdl, ThumbnailViewItem*, pItem
         }
     }
 
-    if (pViewItem)
-    {
-        bool bIsSingleSel = maSelTemplates.size() == 1;
-        OUString aDefaultImg;
-        INetURLObject aUrl(pViewItem->getPath());
-        if (ViewFilter_Application::isFilteredExtension(FILTER_APPLICATION::WRITER, aUrl.getExtension()))
-            aDefaultImg = BMP_ACTION_DEFAULT_WRITER;
-        else if (ViewFilter_Application::isFilteredExtension(FILTER_APPLICATION::CALC, aUrl.getExtension()))
-            aDefaultImg = BMP_ACTION_DEFAULT_CALC;
-        else if (ViewFilter_Application::isFilteredExtension(FILTER_APPLICATION::IMPRESS, aUrl.getExtension()))
-            aDefaultImg = BMP_ACTION_DEFAULT_IMPRESS;
-        else if (ViewFilter_Application::isFilteredExtension(FILTER_APPLICATION::DRAW, aUrl.getExtension()))
-            aDefaultImg = BMP_ACTION_DEFAULT_DRAW;
-        mxLocalView->createContextMenu(bIsDefault, bIsInternal, bIsSingleSel, aDefaultImg);
-    }
+    if (!pViewItem)
+        return;
+
+    bool bIsSingleSel = maSelTemplates.size() == 1;
+    OUString aDefaultImg;
+    INetURLObject aUrl(pViewItem->getPath());
+    if (ViewFilter_Application::isFilteredExtension(FILTER_APPLICATION::WRITER, aUrl.getExtension()))
+        aDefaultImg = BMP_ACTION_DEFAULT_WRITER;
+    else if (ViewFilter_Application::isFilteredExtension(FILTER_APPLICATION::CALC, aUrl.getExtension()))
+        aDefaultImg = BMP_ACTION_DEFAULT_CALC;
+    else if (ViewFilter_Application::isFilteredExtension(FILTER_APPLICATION::IMPRESS, aUrl.getExtension()))
+        aDefaultImg = BMP_ACTION_DEFAULT_IMPRESS;
+    else if (ViewFilter_Application::isFilteredExtension(FILTER_APPLICATION::DRAW, aUrl.getExtension()))
+        aDefaultImg = BMP_ACTION_DEFAULT_DRAW;
+    mxLocalView->createContextMenu(bIsDefault, bIsInternal, bIsSingleSel, aDefaultImg);
 }
 
 IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)

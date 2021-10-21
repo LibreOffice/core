@@ -1314,25 +1314,25 @@ void ScTextWnd::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangl
     else
         WeldEditView::Paint(rRenderContext, rRect);
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    bool bIsFocused = false;
+    if (HasFocus())
     {
-        bool bIsFocused = false;
-        if (HasFocus())
-        {
-            vcl::Cursor* pCursor = m_xEditView->GetCursor();
-            if (pCursor)
-                bIsFocused = true;
-        }
-
-        VclPtr<vcl::Window> pParent = mrGroupBar.GetVclParent().GetParentWithLOKNotifier();
-        if (!pParent)
-            return;
-
-        const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
-        std::vector<vcl::LOKPayloadItem> aItems;
-        aItems.emplace_back("visible", bIsFocused ? "true" : "false");
-        pNotifier->notifyWindow(pParent->GetLOKWindowId(), "cursor_visible", aItems);
+        vcl::Cursor* pCursor = m_xEditView->GetCursor();
+        if (pCursor)
+            bIsFocused = true;
     }
+
+    VclPtr<vcl::Window> pParent = mrGroupBar.GetVclParent().GetParentWithLOKNotifier();
+    if (!pParent)
+        return;
+
+    const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
+    std::vector<vcl::LOKPayloadItem> aItems;
+    aItems.emplace_back("visible", bIsFocused ? "true" : "false");
+    pNotifier->notifyWindow(pParent->GetLOKWindowId(), "cursor_visible", aItems);
 }
 
 EditView* ScTextWnd::GetEditView() const

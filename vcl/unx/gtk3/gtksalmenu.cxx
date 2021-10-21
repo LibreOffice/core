@@ -856,19 +856,19 @@ void GtkSalMenu::RemoveMenuBarButton( sal_uInt16 nId )
 {
     const auto it = std::find_if(maExtraButtons.begin(), maExtraButtons.end(), [&nId](const auto &item) {
         return item.first == nId; });
-    if (it != maExtraButtons.end())
-    {
-        gint nAttach(0);
+    if (it == maExtraButtons.end())
+        return;
+
+    gint nAttach(0);
 #if !GTK_CHECK_VERSION(4, 0, 0)
-        gtk_container_child_get(GTK_CONTAINER(mpMenuBarContainerWidget), it->second, "left-attach", &nAttach, nullptr);
-        gtk_widget_destroy(it->second);
+    gtk_container_child_get(GTK_CONTAINER(mpMenuBarContainerWidget), it->second, "left-attach", &nAttach, nullptr);
+    gtk_widget_destroy(it->second);
 #else
-        gtk_grid_query_child(GTK_GRID(mpMenuBarContainerWidget), it->second, &nAttach, nullptr, nullptr, nullptr);
-        g_clear_pointer(&(it->second), gtk_widget_unparent);
+    gtk_grid_query_child(GTK_GRID(mpMenuBarContainerWidget), it->second, &nAttach, nullptr, nullptr, nullptr);
+    g_clear_pointer(&(it->second), gtk_widget_unparent);
 #endif
-        gtk_grid_remove_column(GTK_GRID(mpMenuBarContainerWidget), nAttach);
-        maExtraButtons.erase(it);
-    }
+    gtk_grid_remove_column(GTK_GRID(mpMenuBarContainerWidget), nAttach);
+    maExtraButtons.erase(it);
 }
 
 tools::Rectangle GtkSalMenu::GetMenuBarButtonRectPixel(sal_uInt16 nId, SalFrame* pReferenceFrame)
@@ -1103,20 +1103,20 @@ void GtkSalMenu::ApplyPersona()
 
 void GtkSalMenu::DestroyMenuBarWidget()
 {
-    if (mpMenuBarContainerWidget)
-    {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        // tdf#140225 call cancel before destroying it in case there are some
-        // active menus popped open
-        gtk_menu_shell_cancel(GTK_MENU_SHELL(mpMenuBarWidget));
+    if (!mpMenuBarContainerWidget)
+        return;
 
-        gtk_widget_destroy(mpMenuBarContainerWidget);
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    // tdf#140225 call cancel before destroying it in case there are some
+    // active menus popped open
+    gtk_menu_shell_cancel(GTK_MENU_SHELL(mpMenuBarWidget));
+
+    gtk_widget_destroy(mpMenuBarContainerWidget);
 #else
-        g_clear_pointer(&mpMenuBarContainerWidget, gtk_widget_unparent);
+    g_clear_pointer(&mpMenuBarContainerWidget, gtk_widget_unparent);
 #endif
-        mpMenuBarContainerWidget = nullptr;
-        mpCloseButton = nullptr;
-    }
+    mpMenuBarContainerWidget = nullptr;
+    mpCloseButton = nullptr;
 }
 
 void GtkSalMenu::SetFrame(const SalFrame* pFrame)
@@ -1438,21 +1438,21 @@ void GtkSalMenu::ActivateAllSubmenus(Menu* pMenuBar)
     // We can re-enter this method via the new event loop that gets created
     // in GtkClipboardTransferable::getTransferDataFlavorsAsVector, so use the InActivateCallback
     // flag to detect that and skip some startup work.
-    if (!mbInActivateCallback)
+    if (mbInActivateCallback)
+        return;
+
+    mbInActivateCallback = true;
+    pMenuBar->HandleMenuActivateEvent(GetMenu());
+    mbInActivateCallback = false;
+    for (GtkSalMenuItem* pSalItem : maItems)
     {
-        mbInActivateCallback = true;
-        pMenuBar->HandleMenuActivateEvent(GetMenu());
-        mbInActivateCallback = false;
-        for (GtkSalMenuItem* pSalItem : maItems)
+        if ( pSalItem->mpSubMenu != nullptr )
         {
-            if ( pSalItem->mpSubMenu != nullptr )
-            {
-                pSalItem->mpSubMenu->ActivateAllSubmenus(pMenuBar);
-            }
+            pSalItem->mpSubMenu->ActivateAllSubmenus(pMenuBar);
         }
-        Update();
-        pMenuBar->HandleMenuDeActivateEvent(GetMenu());
     }
+    Update();
+    pMenuBar->HandleMenuDeActivateEvent(GetMenu());
 }
 
 void GtkSalMenu::ClearActionGroupAndMenuModel()

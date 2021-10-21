@@ -780,84 +780,84 @@ void ImplLimitPolyPoly( tools::PolyPolygon& rPolyPoly )
 
 void ImplExpand( std::optional<ImplVectMap>& oMap, const BitmapReadAccess* pRAcc, const Color& rColor )
 {
-    if( pRAcc && pRAcc->Width() && pRAcc->Height() )
+    if( !pRAcc || !pRAcc->Width() || !pRAcc->Height() )
+        return;
+
+    const tools::Long          nOldWidth = pRAcc->Width();
+    const tools::Long          nOldHeight = pRAcc->Height();
+    const tools::Long          nNewWidth = ( nOldWidth << 2 ) + 4;
+    const tools::Long          nNewHeight = ( nOldHeight << 2 ) + 4;
+    const BitmapColor   aTest( pRAcc->GetBestMatchingColor( rColor ) );
+    std::unique_ptr<tools::Long[]> pMapIn(new tools::Long[ std::max( nOldWidth, nOldHeight ) ]);
+    std::unique_ptr<tools::Long[]> pMapOut(new tools::Long[ std::max( nOldWidth, nOldHeight ) ]);
+    tools::Long                nX, nY, nTmpX, nTmpY;
+
+    oMap.emplace( nNewWidth, nNewHeight );
+
+    for( nX = 0; nX < nOldWidth; nX++ )
+        VECT_MAP( pMapIn, pMapOut, nX );
+
+    for( nY = 0, nTmpY = 5; nY < nOldHeight; nY++, nTmpY += 4 )
     {
-        const tools::Long          nOldWidth = pRAcc->Width();
-        const tools::Long          nOldHeight = pRAcc->Height();
-        const tools::Long          nNewWidth = ( nOldWidth << 2 ) + 4;
-        const tools::Long          nNewHeight = ( nOldHeight << 2 ) + 4;
-        const BitmapColor   aTest( pRAcc->GetBestMatchingColor( rColor ) );
-        std::unique_ptr<tools::Long[]> pMapIn(new tools::Long[ std::max( nOldWidth, nOldHeight ) ]);
-        std::unique_ptr<tools::Long[]> pMapOut(new tools::Long[ std::max( nOldWidth, nOldHeight ) ]);
-        tools::Long                nX, nY, nTmpX, nTmpY;
-
-        oMap.emplace( nNewWidth, nNewHeight );
-
-        for( nX = 0; nX < nOldWidth; nX++ )
-            VECT_MAP( pMapIn, pMapOut, nX );
-
-        for( nY = 0, nTmpY = 5; nY < nOldHeight; nY++, nTmpY += 4 )
+        Scanline pScanlineRead = pRAcc->GetScanline( nY );
+        for( nX = 0; nX < nOldWidth; )
         {
-            Scanline pScanlineRead = pRAcc->GetScanline( nY );
-            for( nX = 0; nX < nOldWidth; )
+            if( pRAcc->GetPixelFromData( pScanlineRead, nX ) == aTest )
             {
-                if( pRAcc->GetPixelFromData( pScanlineRead, nX ) == aTest )
-                {
-                    nTmpX = pMapIn[ nX++ ];
-                    nTmpY -= 3;
+                nTmpX = pMapIn[ nX++ ];
+                nTmpY -= 3;
 
-                    oMap->Set( nTmpY++, nTmpX, VECT_CONT_INDEX );
-                    oMap->Set( nTmpY++, nTmpX, VECT_CONT_INDEX );
-                    oMap->Set( nTmpY++, nTmpX, VECT_CONT_INDEX );
-                    oMap->Set( nTmpY, nTmpX, VECT_CONT_INDEX );
+                oMap->Set( nTmpY++, nTmpX, VECT_CONT_INDEX );
+                oMap->Set( nTmpY++, nTmpX, VECT_CONT_INDEX );
+                oMap->Set( nTmpY++, nTmpX, VECT_CONT_INDEX );
+                oMap->Set( nTmpY, nTmpX, VECT_CONT_INDEX );
 
-                    while( nX < nOldWidth && pRAcc->GetPixelFromData( pScanlineRead, nX ) == aTest )
-                         nX++;
+                while( nX < nOldWidth && pRAcc->GetPixelFromData( pScanlineRead, nX ) == aTest )
+                     nX++;
 
-                    nTmpX = pMapOut[ nX - 1 ];
-                    nTmpY -= 3;
+                nTmpX = pMapOut[ nX - 1 ];
+                nTmpY -= 3;
 
-                    oMap->Set( nTmpY++, nTmpX, VECT_CONT_INDEX );
-                    oMap->Set( nTmpY++, nTmpX, VECT_CONT_INDEX );
-                    oMap->Set( nTmpY++, nTmpX, VECT_CONT_INDEX );
-                    oMap->Set( nTmpY, nTmpX, VECT_CONT_INDEX );
-                }
-                else
-                    nX++;
+                oMap->Set( nTmpY++, nTmpX, VECT_CONT_INDEX );
+                oMap->Set( nTmpY++, nTmpX, VECT_CONT_INDEX );
+                oMap->Set( nTmpY++, nTmpX, VECT_CONT_INDEX );
+                oMap->Set( nTmpY, nTmpX, VECT_CONT_INDEX );
             }
+            else
+                nX++;
         }
+    }
 
-        for( nY = 0; nY < nOldHeight; nY++ )
-            VECT_MAP( pMapIn, pMapOut, nY );
+    for( nY = 0; nY < nOldHeight; nY++ )
+        VECT_MAP( pMapIn, pMapOut, nY );
 
-        for( nX = 0, nTmpX = 5; nX < nOldWidth; nX++, nTmpX += 4 )
+    for( nX = 0, nTmpX = 5; nX < nOldWidth; nX++, nTmpX += 4 )
+    {
+        for( nY = 0; nY < nOldHeight; )
         {
-            for( nY = 0; nY < nOldHeight; )
+            if( pRAcc->GetPixel( nY, nX ) == aTest )
             {
-                if( pRAcc->GetPixel( nY, nX ) == aTest )
-                {
-                    nTmpX -= 3;
-                    nTmpY = pMapIn[ nY++ ];
+                nTmpX -= 3;
+                nTmpY = pMapIn[ nY++ ];
 
-                    oMap->Set( nTmpY, nTmpX++, VECT_CONT_INDEX );
-                    oMap->Set( nTmpY, nTmpX++, VECT_CONT_INDEX );
-                    oMap->Set( nTmpY, nTmpX++, VECT_CONT_INDEX );
-                    oMap->Set( nTmpY, nTmpX, VECT_CONT_INDEX );
+                oMap->Set( nTmpY, nTmpX++, VECT_CONT_INDEX );
+                oMap->Set( nTmpY, nTmpX++, VECT_CONT_INDEX );
+                oMap->Set( nTmpY, nTmpX++, VECT_CONT_INDEX );
+                oMap->Set( nTmpY, nTmpX, VECT_CONT_INDEX );
 
-                    while( nY < nOldHeight && pRAcc->GetPixel( nY, nX ) == aTest )
-                        nY++;
-
-                    nTmpX -= 3;
-                    nTmpY = pMapOut[ nY - 1 ];
-
-                    oMap->Set( nTmpY, nTmpX++, VECT_CONT_INDEX );
-                    oMap->Set( nTmpY, nTmpX++, VECT_CONT_INDEX );
-                    oMap->Set( nTmpY, nTmpX++, VECT_CONT_INDEX );
-                    oMap->Set( nTmpY, nTmpX, VECT_CONT_INDEX );
-                }
-                else
+                while( nY < nOldHeight && pRAcc->GetPixel( nY, nX ) == aTest )
                     nY++;
+
+                nTmpX -= 3;
+                nTmpY = pMapOut[ nY - 1 ];
+
+                oMap->Set( nTmpY, nTmpX++, VECT_CONT_INDEX );
+                oMap->Set( nTmpY, nTmpX++, VECT_CONT_INDEX );
+                oMap->Set( nTmpY, nTmpX++, VECT_CONT_INDEX );
+                oMap->Set( nTmpY, nTmpX, VECT_CONT_INDEX );
             }
+            else
+                nY++;
         }
     }
 }

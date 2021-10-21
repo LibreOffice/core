@@ -1736,45 +1736,45 @@ void ToolBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
     DockingWindow::DumpAsPropertyTree(rJsonWriter);
 
-    if (!GetChildCount())
+    if (GetChildCount())
+        return;
+
+    auto childrenNode = rJsonWriter.startArray("children");
+    for (ToolBox::ImplToolItems::size_type i = 0; i < GetItemCount(); ++i)
     {
-        auto childrenNode = rJsonWriter.startArray("children");
-        for (ToolBox::ImplToolItems::size_type i = 0; i < GetItemCount(); ++i)
+        auto childNode = rJsonWriter.startStruct();
+        ToolBoxItemId nId = GetItemId(i);
+
+        vcl::Window* pWindow = GetItemWindow(nId);
+        if (pWindow)
         {
-            auto childNode = rJsonWriter.startStruct();
-            ToolBoxItemId nId = GetItemId(i);
+            pWindow->DumpAsPropertyTree(rJsonWriter);
+        }
+        else
+        {
+            OUString sCommand = GetItemCommand(nId);
+            rJsonWriter.put("type", "toolitem");
+            rJsonWriter.put("text", GetItemText(nId));
+            rJsonWriter.put("command", sCommand);
+            if (IsItemChecked(nId))
+                rJsonWriter.put("selected", true);
+            if (!IsItemVisible(nId))
+                rJsonWriter.put("visible", false);
+            if (GetItemBits(nId) & ToolBoxItemBits::DROPDOWN)
+                rJsonWriter.put("dropdown", true);
+            if (!IsItemEnabled(nId))
+                rJsonWriter.put("enabled", false);
 
-            vcl::Window* pWindow = GetItemWindow(nId);
-            if (pWindow)
+            Image aImage = GetItemImage(nId);
+            if (!sCommand.startsWith(".uno:") && !!aImage)
             {
-                pWindow->DumpAsPropertyTree(rJsonWriter);
-            }
-            else
-            {
-                OUString sCommand = GetItemCommand(nId);
-                rJsonWriter.put("type", "toolitem");
-                rJsonWriter.put("text", GetItemText(nId));
-                rJsonWriter.put("command", sCommand);
-                if (IsItemChecked(nId))
-                    rJsonWriter.put("selected", true);
-                if (!IsItemVisible(nId))
-                    rJsonWriter.put("visible", false);
-                if (GetItemBits(nId) & ToolBoxItemBits::DROPDOWN)
-                    rJsonWriter.put("dropdown", true);
-                if (!IsItemEnabled(nId))
-                    rJsonWriter.put("enabled", false);
-
-                Image aImage = GetItemImage(nId);
-                if (!sCommand.startsWith(".uno:") && !!aImage)
+                SvMemoryStream aOStm(6535, 6535);
+                if(GraphicConverter::Export(aOStm, aImage.GetBitmapEx(), ConvertDataFormat::PNG) == ERRCODE_NONE)
                 {
-                    SvMemoryStream aOStm(6535, 6535);
-                    if(GraphicConverter::Export(aOStm, aImage.GetBitmapEx(), ConvertDataFormat::PNG) == ERRCODE_NONE)
-                    {
-                        css::uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell());
-                        OUStringBuffer aBuffer("data:image/png;base64,");
-                        ::comphelper::Base64::encode(aBuffer, aSeq);
-                        rJsonWriter.put("image", aBuffer.makeStringAndClear());
-                    }
+                    css::uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell());
+                    OUStringBuffer aBuffer("data:image/png;base64,");
+                    ::comphelper::Base64::encode(aBuffer, aSeq);
+                    rJsonWriter.put("image", aBuffer.makeStringAndClear());
                 }
             }
         }

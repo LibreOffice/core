@@ -226,24 +226,24 @@ XMLPageExport::XMLPageExport(SvXMLExport & rExp)
         }
     }
 
-    if (GetExport().GetModelType() == SvtModuleOptions::EFactory::WRITER)
+    if (GetExport().GetModelType() != SvtModuleOptions::EFactory::WRITER)
+        return;
+
+    uno::Reference<lang::XMultiServiceFactory> xFac(GetExport().GetModel(), uno::UNO_QUERY);
+    if (!xFac.is())
+        return;
+
+    uno::Reference<beans::XPropertySet> xProps(
+        xFac->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+    if (!xProps.is())
+        return;
+
+    bool bGutterAtTop{};
+    xProps->getPropertyValue("GutterAtTop") >>= bGutterAtTop;
+    if (bGutterAtTop)
     {
-        uno::Reference<lang::XMultiServiceFactory> xFac(GetExport().GetModel(), uno::UNO_QUERY);
-        if (xFac.is())
-        {
-            uno::Reference<beans::XPropertySet> xProps(
-                xFac->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
-            if (xProps.is())
-            {
-                bool bGutterAtTop{};
-                xProps->getPropertyValue("GutterAtTop") >>= bGutterAtTop;
-                if (bGutterAtTop)
-                {
-                    static_cast<XMLPageMasterExportPropMapper*>(xPageMasterExportPropMapper.get())
-                        ->SetGutterAtTop(true);
-                }
-            }
-        }
+        static_cast<XMLPageMasterExportPropMapper*>(xPageMasterExportPropMapper.get())
+                    ->SetGutterAtTop(true);
     }
 }
 

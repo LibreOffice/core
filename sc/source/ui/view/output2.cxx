@@ -3226,34 +3226,34 @@ void ScOutputData::ShowClipMarks( DrawEditParam& rParam, tools::Long nEngineWidt
     //  with the default right position of the text.
     //  Only with automatic line breaks, to avoid having to find
     //  the cells with the horizontal end of the text again.
-    if (nEngineWidth - aCellSize.Width() > 100 && rParam.mbBreak && bMarkClipped
-        && (rParam.mpEngine->GetParagraphCount() > 1 || rParam.mpEngine->GetLineCount(0) > 1))
-    {
-        CellInfo* pClipMarkCell = nullptr;
-        if (bMerged)
-        {
-            //  anywhere in the merged area...
-            SCCOL nClipX = (rParam.mnX < nX1) ? nX1 : rParam.mnX;
-            pClipMarkCell = &pRowInfo[(rParam.mnArrY != 0) ? rParam.mnArrY : 1].pCellInfo[nClipX + 1];
-        }
-        else
-            pClipMarkCell = &rParam.mpThisRowInfo->pCellInfo[rParam.mnX + 1];
+    if (nEngineWidth - aCellSize.Width() <= 100 || !rParam.mbBreak || !bMarkClipped
+        || (rParam.mpEngine->GetParagraphCount() <= 1 && rParam.mpEngine->GetLineCount(0) <= 1))
+        return;
 
-        bAnyClipped = true;
-        bVertical = true;
-        const tools::Long nMarkPixel = static_cast<tools::Long>(SC_CLIPMARK_SIZE * mnPPTX);
-        if (bTop)
-        {
-            pClipMarkCell->nClipMark |= ScClipMark::Top;
-            if (aAreaParam.maClipRect.Top() - nMarkPixel < aAreaParam.maClipRect.Bottom())
-                aAreaParam.maClipRect.AdjustTop(+nMarkPixel);
-        }
-        else
-        {
-            pClipMarkCell->nClipMark |= ScClipMark::Bottom;
-            if (aAreaParam.maClipRect.Top() - nMarkPixel < aAreaParam.maClipRect.Bottom())
-                aAreaParam.maClipRect.AdjustBottom(-nMarkPixel);
-        }
+    CellInfo* pClipMarkCell = nullptr;
+    if (bMerged)
+    {
+        //  anywhere in the merged area...
+        SCCOL nClipX = (rParam.mnX < nX1) ? nX1 : rParam.mnX;
+        pClipMarkCell = &pRowInfo[(rParam.mnArrY != 0) ? rParam.mnArrY : 1].pCellInfo[nClipX + 1];
+    }
+    else
+        pClipMarkCell = &rParam.mpThisRowInfo->pCellInfo[rParam.mnX + 1];
+
+    bAnyClipped = true;
+    bVertical = true;
+    const tools::Long nMarkPixel = static_cast<tools::Long>(SC_CLIPMARK_SIZE * mnPPTX);
+    if (bTop)
+    {
+        pClipMarkCell->nClipMark |= ScClipMark::Top;
+        if (aAreaParam.maClipRect.Top() - nMarkPixel < aAreaParam.maClipRect.Bottom())
+            aAreaParam.maClipRect.AdjustTop(+nMarkPixel);
+    }
+    else
+    {
+        pClipMarkCell->nClipMark |= ScClipMark::Bottom;
+        if (aAreaParam.maClipRect.Top() - nMarkPixel < aAreaParam.maClipRect.Bottom())
+            aAreaParam.maClipRect.AdjustBottom(-nMarkPixel);
     }
 }
 

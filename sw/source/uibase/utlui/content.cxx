@@ -3378,64 +3378,64 @@ static void lcl_SelectByContentTypeAndAddress(SwContentTree* pThis, weld::TreeVi
         bFoundEntry = rContentTree.iter_next_sibling(*xIter);
     }
 
-    if (bFoundEntry)
-    {
-        // assure content type entry is expanded
-        rContentTree.expand_row(*xIter);
+    if (!bFoundEntry)
+        return;
 
-        // find content type content entry and select it
-        const void* p = nullptr;
-        while (rContentTree.iter_next(*xIter) && lcl_IsContent(*xIter, rContentTree))
+    // assure content type entry is expanded
+    rContentTree.expand_row(*xIter);
+
+    // find content type content entry and select it
+    const void* p = nullptr;
+    while (rContentTree.iter_next(*xIter) && lcl_IsContent(*xIter, rContentTree))
+    {
+        void* pUserData = reinterpret_cast<void*>(rContentTree.get_id(*xIter).toInt64());
+        switch( nType )
         {
-            void* pUserData = reinterpret_cast<void*>(rContentTree.get_id(*xIter).toInt64());
-            switch( nType )
+            case ContentTypeId::FOOTNOTE:
             {
-                case ContentTypeId::FOOTNOTE:
-                {
-                    assert(dynamic_cast<SwTextFootnoteContent*>(static_cast<SwTypeNumber*>(pUserData)));
-                    SwTextFootnoteContent* pCnt = static_cast<SwTextFootnoteContent*>(pUserData);
-                    p = pCnt->GetTextFootnote();
-                    break;
-                }
-                case ContentTypeId::URLFIELD:
-                {
-                    assert(dynamic_cast<SwURLFieldContent*>(static_cast<SwTypeNumber*>(pUserData)));
-                    SwURLFieldContent* pCnt = static_cast<SwURLFieldContent*>(pUserData);
-                    p = static_cast<const SwTextAttr*>(pCnt->GetINetAttr());
-                    break;
-                }
-                case ContentTypeId::TEXTFIELD:
-                {
-                    assert(dynamic_cast<SwTextFieldContent*>(static_cast<SwTypeNumber*>(pUserData)));
-                    SwTextFieldContent* pCnt = static_cast/*reinterpret_cast*/<SwTextFieldContent*>(pUserData);
-                    p = pCnt->GetFormatField()->GetField();
-                    break;
-                }
-                case ContentTypeId::POSTIT:
-                {
-                    assert(dynamic_cast<SwPostItContent*>(static_cast<SwTypeNumber*>(pUserData)));
-                    SwPostItContent* pCnt = static_cast<SwPostItContent*>(pUserData);
-                    p = pCnt->GetPostIt()->GetField();
-                    break;
-                }
-                default:
-                    break;
+                assert(dynamic_cast<SwTextFootnoteContent*>(static_cast<SwTypeNumber*>(pUserData)));
+                SwTextFootnoteContent* pCnt = static_cast<SwTextFootnoteContent*>(pUserData);
+                p = pCnt->GetTextFootnote();
+                break;
             }
-            if (ptr == p)
+            case ContentTypeId::URLFIELD:
             {
-                // get first selected for comparison
-                std::unique_ptr<weld::TreeIter> xFirstSelected(rContentTree.make_iterator());
-                if (!rContentTree.get_selected(xFirstSelected.get()))
-                    xFirstSelected.reset();
-                if (rContentTree.count_selected_rows() != 1 ||
-                        rContentTree.iter_compare(*xIter, *xFirstSelected) != 0)
-                {
-                    // unselect all entries and make passed entry visible and selected
-                    rContentTree.set_cursor(*xIter);
-                    pThis->Select();
-                }
-                return;
+                assert(dynamic_cast<SwURLFieldContent*>(static_cast<SwTypeNumber*>(pUserData)));
+                SwURLFieldContent* pCnt = static_cast<SwURLFieldContent*>(pUserData);
+                p = static_cast<const SwTextAttr*>(pCnt->GetINetAttr());
+                break;
             }
+            case ContentTypeId::TEXTFIELD:
+            {
+                assert(dynamic_cast<SwTextFieldContent*>(static_cast<SwTypeNumber*>(pUserData)));
+                SwTextFieldContent* pCnt = static_cast/*reinterpret_cast*/<SwTextFieldContent*>(pUserData);
+                p = pCnt->GetFormatField()->GetField();
+                break;
+            }
+            case ContentTypeId::POSTIT:
+            {
+                assert(dynamic_cast<SwPostItContent*>(static_cast<SwTypeNumber*>(pUserData)));
+                SwPostItContent* pCnt = static_cast<SwPostItContent*>(pUserData);
+                p = pCnt->GetPostIt()->GetField();
+                break;
+            }
+            default:
+                break;
+        }
+        if (ptr == p)
+        {
+            // get first selected for comparison
+            std::unique_ptr<weld::TreeIter> xFirstSelected(rContentTree.make_iterator());
+            if (!rContentTree.get_selected(xFirstSelected.get()))
+                xFirstSelected.reset();
+            if (rContentTree.count_selected_rows() != 1 ||
+                    rContentTree.iter_compare(*xIter, *xFirstSelected) != 0)
+            {
+                // unselect all entries and make passed entry visible and selected
+                rContentTree.set_cursor(*xIter);
+                pThis->Select();
+            }
+            return;
         }
     }
 }
@@ -3452,26 +3452,26 @@ static void lcl_SelectByContentTypeAndName(SwContentTree* pThis, weld::TreeView&
     while (bFoundEntry && rContentTypeName != rContentTree.get_text(*xIter))
         bFoundEntry = rContentTree.iter_next_sibling(*xIter);
     // find content type content entry and select it
-    if (bFoundEntry)
+    if (!bFoundEntry)
+        return;
+
+    rContentTree.expand_row(*xIter); // assure content type entry is expanded
+    while (rContentTree.iter_next(*xIter) && lcl_IsContent(*xIter, rContentTree))
     {
-        rContentTree.expand_row(*xIter); // assure content type entry is expanded
-        while (rContentTree.iter_next(*xIter) && lcl_IsContent(*xIter, rContentTree))
+        if (rName == rContentTree.get_text(*xIter))
         {
-            if (rName == rContentTree.get_text(*xIter))
+            // get first selected for comparison
+            std::unique_ptr<weld::TreeIter> xFirstSelected(rContentTree.make_iterator());
+            if (!rContentTree.get_selected(xFirstSelected.get()))
+                xFirstSelected.reset();
+            if (rContentTree.count_selected_rows() != 1 ||
+                    rContentTree.iter_compare(*xIter, *xFirstSelected) != 0)
             {
-                // get first selected for comparison
-                std::unique_ptr<weld::TreeIter> xFirstSelected(rContentTree.make_iterator());
-                if (!rContentTree.get_selected(xFirstSelected.get()))
-                    xFirstSelected.reset();
-                if (rContentTree.count_selected_rows() != 1 ||
-                        rContentTree.iter_compare(*xIter, *xFirstSelected) != 0)
-                {
-                    // unselect all entries and make passed entry visible and selected
-                    rContentTree.set_cursor(*xIter);
-                    pThis->Select();
-                }
-                break;
+                // unselect all entries and make passed entry visible and selected
+                rContentTree.set_cursor(*xIter);
+                pThis->Select();
             }
+            break;
         }
     }
 }

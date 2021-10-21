@@ -744,30 +744,30 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                      aTrackRect.GetWidth(), aTrackRect.GetHeight() );
 
     // ----------------- THUMB
-    if ( has_slider )
-    {
-        stateFlags = NWConvertVCLStateToGTKState(rScrollbarVal.mnThumbState);
-        if ( rScrollbarVal.mnThumbState & ControlState::PRESSED )
-            stateFlags = static_cast<GtkStateFlags>(stateFlags | GTK_STATE_FLAG_PRELIGHT);
+    if ( !has_slider )
+        return;
 
-        GtkStyleContext* pScrollbarSliderStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
-                                                  mpVScrollbarSliderStyle : mpHScrollbarSliderStyle;
+    stateFlags = NWConvertVCLStateToGTKState(rScrollbarVal.mnThumbState);
+    if ( rScrollbarVal.mnThumbState & ControlState::PRESSED )
+        stateFlags = static_cast<GtkStateFlags>(stateFlags | GTK_STATE_FLAG_PRELIGHT);
 
-        gtk_style_context_set_state(pScrollbarSliderStyle, stateFlags);
+    GtkStyleContext* pScrollbarSliderStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
+                                              mpVScrollbarSliderStyle : mpHScrollbarSliderStyle;
 
-        GtkBorder margin;
-        style_context_get_margin(pScrollbarSliderStyle, &margin);
+    gtk_style_context_set_state(pScrollbarSliderStyle, stateFlags);
 
-        gtk_render_background(pScrollbarSliderStyle, cr,
-                          thumbRect.Left() + margin.left, thumbRect.Top() + margin.top,
-                          thumbRect.GetWidth() - margin.left - margin.right,
-                          thumbRect.GetHeight() - margin.top - margin.bottom);
+    GtkBorder margin;
+    style_context_get_margin(pScrollbarSliderStyle, &margin);
 
-        gtk_render_frame(pScrollbarSliderStyle, cr,
-                          thumbRect.Left() + margin.left, thumbRect.Top() + margin.top,
-                          thumbRect.GetWidth() - margin.left - margin.right,
-                          thumbRect.GetHeight() - margin.top - margin.bottom);
-    }
+    gtk_render_background(pScrollbarSliderStyle, cr,
+                      thumbRect.Left() + margin.left, thumbRect.Top() + margin.top,
+                      thumbRect.GetWidth() - margin.left - margin.right,
+                      thumbRect.GetHeight() - margin.top - margin.bottom);
+
+    gtk_render_frame(pScrollbarSliderStyle, cr,
+                      thumbRect.Left() + margin.left, thumbRect.Top() + margin.top,
+                      thumbRect.GetWidth() - margin.left - margin.right,
+                      thumbRect.GetHeight() - margin.top - margin.bottom);
 }
 
 void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,

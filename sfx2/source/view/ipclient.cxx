@@ -333,21 +333,21 @@ void SAL_CALL SfxInPlaceClient_Impl::activatingInplace()
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw uno::RuntimeException();
 
-    if ( comphelper::LibreOfficeKit::isActive() )
+    if ( !comphelper::LibreOfficeKit::isActive() )
+        return;
+
+    if ( SfxViewShell* pViewShell = m_pClient->GetViewShell() )
     {
-        if ( SfxViewShell* pViewShell = m_pClient->GetViewShell() )
+        tools::Rectangle aRect(m_pClient->GetObjArea());
+
+        if (m_pClient->GetEditWin())
         {
-            tools::Rectangle aRect(m_pClient->GetObjArea());
-
-            if (m_pClient->GetEditWin())
-            {
-                if (m_pClient->GetEditWin()->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
-                    aRect = o3tl::convert(aRect, o3tl::Length::mm100, o3tl::Length::twip);
-            }
-
-            OString str = aRect.toString() + ", \"INPLACE\"";
-            pViewShell->libreOfficeKitViewCallback( LOK_CALLBACK_GRAPHIC_SELECTION, str.getStr() );
+            if (m_pClient->GetEditWin()->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
+                aRect = o3tl::convert(aRect, o3tl::Length::mm100, o3tl::Length::twip);
         }
+
+        OString str = aRect.toString() + ", \"INPLACE\"";
+        pViewShell->libreOfficeKitViewCallback( LOK_CALLBACK_GRAPHIC_SELECTION, str.getStr() );
     }
 
 }

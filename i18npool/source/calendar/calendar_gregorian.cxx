@@ -452,18 +452,19 @@ void Calendar_gregorian::mapFromGregorian()
 // By using eraArray, it can take care Japanese and Taiwan ROC calendar.
 void Calendar_gregorian::mapToGregorian()
 {
-    if (eraArray && (fieldSet & FIELDS)) {
-        sal_Int16 e = fieldValue[CalendarFieldIndex::ERA];
-        sal_Int32 y;
-        if (e == 0)
-            y = eraArray[0].year - cast16To32(fieldValue[CalendarFieldIndex::YEAR]);
-        else
-            y = eraArray[e-1].year + cast16To32(fieldValue[CalendarFieldIndex::YEAR] - 1);
+    if (!eraArray || !(fieldSet & FIELDS))
+        return;
 
-        fieldSetValue[CalendarFieldIndex::ERA] = y <= 0 ? 0 : 1;
-        fieldSetValue[CalendarFieldIndex::YEAR] = cast32To16(y <= 0 ? 1 - y : y);
-        fieldSet |= FIELDS;
-    }
+    sal_Int16 e = fieldValue[CalendarFieldIndex::ERA];
+    sal_Int32 y;
+    if (e == 0)
+        y = eraArray[0].year - cast16To32(fieldValue[CalendarFieldIndex::YEAR]);
+    else
+        y = eraArray[e-1].year + cast16To32(fieldValue[CalendarFieldIndex::YEAR] - 1);
+
+    fieldSetValue[CalendarFieldIndex::ERA] = y <= 0 ? 0 : 1;
+    fieldSetValue[CalendarFieldIndex::YEAR] = cast32To16(y <= 0 ? 1 - y : y);
+    fieldSet |= FIELDS;
 }
 
 /// @throws RuntimeException

@@ -820,30 +820,30 @@ void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRa
     }
 
     // set sort parameter if we have detected it
-    if (aParam.bUserDef)
+    if (!aParam.bUserDef)
+        return;
+
+    SCCOLROW nStartPos = aParam.bByRow ? maRange.aStart.Col() : maRange.aStart.Row();
+    if (rSorConditionLoaded.mbDescending)
     {
-        SCCOLROW nStartPos = aParam.bByRow ? maRange.aStart.Col() : maRange.aStart.Row();
-        if (rSorConditionLoaded.mbDescending)
-        {
-            // descending sort - need to enable 1st SortParam slot
-            assert(aParam.GetSortKeyCount() == DEFSORT);
+        // descending sort - need to enable 1st SortParam slot
+        assert(aParam.GetSortKeyCount() == DEFSORT);
 
-            aParam.maKeyState[0].bDoSort = true;
-            aParam.maKeyState[0].bAscending = false;
-            aParam.maKeyState[0].nField += nStartPos;
-        }
-
-        ScDocument& rDoc = getScDocument();
-        ScDBData* pDBData = rDoc.GetDBAtArea(
-            nSheet,
-            maRange.aStart.Col(), maRange.aStart.Row(),
-            maRange.aEnd.Col(), maRange.aEnd.Row());
-
-        if (pDBData)
-            pDBData->SetSortParam(aParam);
-        else
-            OSL_FAIL("AutoFilter::finalizeImport(): cannot find matching DBData");
+        aParam.maKeyState[0].bDoSort = true;
+        aParam.maKeyState[0].bAscending = false;
+        aParam.maKeyState[0].nField += nStartPos;
     }
+
+    ScDocument& rDoc = getScDocument();
+    ScDBData* pDBData = rDoc.GetDBAtArea(
+        nSheet,
+        maRange.aStart.Col(), maRange.aStart.Row(),
+        maRange.aEnd.Col(), maRange.aEnd.Row());
+
+    if (pDBData)
+        pDBData->SetSortParam(aParam);
+    else
+        OSL_FAIL("AutoFilter::finalizeImport(): cannot find matching DBData");
 }
 
 AutoFilterBuffer::AutoFilterBuffer( const WorkbookHelper& rHelper ) :

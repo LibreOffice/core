@@ -330,18 +330,18 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
         }
     }
     //check if the saved documents still exist
-    if(m_aSavedDocuments.hasElements())
+    if(!m_aSavedDocuments.hasElements())
+        return;
+
+    uno::Sequence< OUString > aTempDocuments(m_aSavedDocuments.getLength());
+    auto begin = aTempDocuments.getArray();
+    OUString* pTempDocuments = std::copy_if(std::cbegin(m_aSavedDocuments), std::cend(m_aSavedDocuments), begin,
+        [](const OUString& rDoc) { return SWUnoHelper::UCB_IsFile( rDoc ); });
+    sal_Int32 nIndex = static_cast<sal_Int32>(std::distance(begin, pTempDocuments));
+    if(nIndex < m_aSavedDocuments.getLength())
     {
-        uno::Sequence< OUString > aTempDocuments(m_aSavedDocuments.getLength());
-        auto begin = aTempDocuments.getArray();
-        OUString* pTempDocuments = std::copy_if(std::cbegin(m_aSavedDocuments), std::cend(m_aSavedDocuments), begin,
-            [](const OUString& rDoc) { return SWUnoHelper::UCB_IsFile( rDoc ); });
-        sal_Int32 nIndex = static_cast<sal_Int32>(std::distance(begin, pTempDocuments));
-        if(nIndex < m_aSavedDocuments.getLength())
-        {
-            m_aSavedDocuments.swap(aTempDocuments);
-            m_aSavedDocuments.realloc(nIndex);
-        }
+        m_aSavedDocuments.swap(aTempDocuments);
+        m_aSavedDocuments.realloc(nIndex);
     }
 }
 

@@ -110,22 +110,22 @@ GtkSalObjectBase::~GtkSalObjectBase()
 
 GtkSalObject::~GtkSalObject()
 {
-    if( m_pSocket )
-    {
+    if( !m_pSocket )
+        return;
+
 #if GTK_CHECK_VERSION(4, 0, 0)
-        gtk_widget_unparent(m_pSocket);
+    gtk_widget_unparent(m_pSocket);
 #else
-        // remove socket from parent frame's fixed container
-        gtk_container_remove( GTK_CONTAINER(gtk_widget_get_parent(m_pSocket)),
-                              m_pSocket );
-        // get rid of the socket
-        // actually the gtk_container_remove should let the ref count
-        // of the socket sink to 0 and destroy it (see signalDestroy)
-        // this is just a sanity check
-        if( m_pSocket )
-            gtk_widget_destroy( m_pSocket );
+    // remove socket from parent frame's fixed container
+    gtk_container_remove( GTK_CONTAINER(gtk_widget_get_parent(m_pSocket)),
+                          m_pSocket );
+    // get rid of the socket
+    // actually the gtk_container_remove should let the ref count
+    // of the socket sink to 0 and destroy it (see signalDestroy)
+    // this is just a sanity check
+    if( m_pSocket )
+        gtk_widget_destroy( m_pSocket );
 #endif
-    }
 }
 
 void GtkSalObject::ResetClipRegion()
@@ -357,24 +357,24 @@ GtkSalObjectWidgetClip::GtkSalObjectWidgetClip(GtkSalFrame* pParent, bool bShow)
 
 GtkSalObjectWidgetClip::~GtkSalObjectWidgetClip()
 {
-    if( m_pSocket )
-    {
-        // remove socket from parent frame's fixed container
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        gtk_container_remove( GTK_CONTAINER(gtk_widget_get_parent(m_pScrolledWindow)),
-                              m_pScrolledWindow );
+    if( !m_pSocket )
+        return;
 
-        // get rid of the socket
-        // actually the gtk_container_remove should let the ref count
-        // of the socket sink to 0 and destroy it (see signalDestroy)
-        // this is just a sanity check
-        if( m_pScrolledWindow )
-            gtk_widget_destroy( m_pScrolledWindow );
+    // remove socket from parent frame's fixed container
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    gtk_container_remove( GTK_CONTAINER(gtk_widget_get_parent(m_pScrolledWindow)),
+                          m_pScrolledWindow );
+
+    // get rid of the socket
+    // actually the gtk_container_remove should let the ref count
+    // of the socket sink to 0 and destroy it (see signalDestroy)
+    // this is just a sanity check
+    if( m_pScrolledWindow )
+        gtk_widget_destroy( m_pScrolledWindow );
 #else
-        gtk_fixed_remove(GTK_FIXED(gtk_widget_get_parent(m_pScrolledWindow)),
-                         m_pScrolledWindow);
+    gtk_fixed_remove(GTK_FIXED(gtk_widget_get_parent(m_pScrolledWindow)),
+                     m_pScrolledWindow);
 #endif
-    }
 }
 
 void GtkSalObjectWidgetClip::ResetClipRegion()

@@ -49,19 +49,19 @@ SwGotoPageDlg::SwGotoPageDlg(weld::Window* pParent, SfxBindings* _pBindings)
 
 IMPL_LINK_NOARG(SwGotoPageDlg, PageModifiedHdl, weld::Entry&, void)
 {
-    if (!mxMtrPageCtrl->get_text().isEmpty())
-    {
-        int page_value = mxMtrPageCtrl->get_text().toInt32();
+    if (mxMtrPageCtrl->get_text().isEmpty())
+        return;
 
-        if (page_value <= 0)
-            mxMtrPageCtrl->set_value(1);
-        else if (page_value > mnMaxPageCnt)
-            mxMtrPageCtrl->set_value(mnMaxPageCnt);
-        else
-            mxMtrPageCtrl->set_value(page_value);
+    int page_value = mxMtrPageCtrl->get_text().toInt32();
 
-        mxMtrPageCtrl->set_position(-1);
-    }
+    if (page_value <= 0)
+        mxMtrPageCtrl->set_value(1);
+    else if (page_value > mnMaxPageCnt)
+        mxMtrPageCtrl->set_value(mnMaxPageCnt);
+    else
+        mxMtrPageCtrl->set_value(page_value);
+
+    mxMtrPageCtrl->set_position(-1);
 }
 
 SwView* SwGotoPageDlg::GetCreateView() const

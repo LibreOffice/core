@@ -1630,43 +1630,43 @@ void SwCursor::ExpandToSentenceBorders(SwRootFrame const*const pLayout)
 {
     SwTextNode* pStartNd = Start()->nNode.GetNode().GetTextNode();
     SwTextNode* pEndNd   = End()->nNode.GetNode().GetTextNode();
-    if (pStartNd && pEndNd)
+    if (!pStartNd || !pEndNd)
+        return;
+
+    if (!HasMark())
+        SetMark();
+
+    OUString sStartText( lcl_MaskDeletedRedlines( pStartNd ) );
+    OUString sEndText( pStartNd == pEndNd? sStartText : lcl_MaskDeletedRedlines( pEndNd ) );
+
+    SwCursorSaveState aSave( *this );
+    sal_Int32 nStartPos = Start()->nContent.GetIndex();
+    sal_Int32 nEndPos   = End()->nContent.GetIndex();
+
     {
-        if (!HasMark())
-            SetMark();
+        HideWrapper w(pLayout, pStartNd, nStartPos, &sStartText);
 
-        OUString sStartText( lcl_MaskDeletedRedlines( pStartNd ) );
-        OUString sEndText( pStartNd == pEndNd? sStartText : lcl_MaskDeletedRedlines( pEndNd ) );
+        w.m_nPtIndex = g_pBreakIt->GetBreakIter()->beginOfSentence(
+                            *w.m_pText, w.m_nPtIndex,
+                            g_pBreakIt->GetLocale( pStartNd->GetLang( nStartPos ) ) );
+    }
+    {
+        HideWrapper w(pLayout, pEndNd, nEndPos, &sEndText);
 
-        SwCursorSaveState aSave( *this );
-        sal_Int32 nStartPos = Start()->nContent.GetIndex();
-        sal_Int32 nEndPos   = End()->nContent.GetIndex();
+        w.m_nPtIndex = g_pBreakIt->GetBreakIter()->endOfSentence(
+                            *w.m_pText, w.m_nPtIndex,
+                            g_pBreakIt->GetLocale( pEndNd->GetLang( nEndPos ) ) );
+    }
 
-        {
-            HideWrapper w(pLayout, pStartNd, nStartPos, &sStartText);
-
-            w.m_nPtIndex = g_pBreakIt->GetBreakIter()->beginOfSentence(
-                                *w.m_pText, w.m_nPtIndex,
-                                g_pBreakIt->GetLocale( pStartNd->GetLang( nStartPos ) ) );
-        }
-        {
-            HideWrapper w(pLayout, pEndNd, nEndPos, &sEndText);
-
-            w.m_nPtIndex = g_pBreakIt->GetBreakIter()->endOfSentence(
-                                *w.m_pText, w.m_nPtIndex,
-                                g_pBreakIt->GetLocale( pEndNd->GetLang( nEndPos ) ) );
-        }
-
-        // it is allowed to place the PaM just behind the last
-        // character in the text thus <= ...Len
-        if (nStartPos <= pStartNd->GetText().getLength() && nStartPos >= 0)
-        {
-            *GetMark() = SwPosition(*pStartNd, nStartPos);
-        }
-        if (nEndPos <= pEndNd->GetText().getLength() && nEndPos >= 0)
-        {
-            *GetPoint() = SwPosition(*pEndNd, nEndPos);
-        }
+    // it is allowed to place the PaM just behind the last
+    // character in the text thus <= ...Len
+    if (nStartPos <= pStartNd->GetText().getLength() && nStartPos >= 0)
+    {
+        *GetMark() = SwPosition(*pStartNd, nStartPos);
+    }
+    if (nEndPos <= pEndNd->GetText().getLength() && nEndPos >= 0)
+    {
+        *GetPoint() = SwPosition(*pEndNd, nEndPos);
     }
 }
 

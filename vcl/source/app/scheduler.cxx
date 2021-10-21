@@ -436,94 +436,94 @@ void Scheduler::CallbackTaskScheduling()
                  "Calculated minimum timeout as " << nMinPeriod << " of " << nTasks << " tasks");
     UpdateSystemTimer(rSchedCtx, nMinPeriod, true, nTime);
 
-    if ( pMostUrgent )
+    if ( !pMostUrgent )
+        return;
+
+    SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
+              << pMostUrgent << "  invoke-in  " << *pMostUrgent->mpTask );
+
+    Task *pTask = pMostUrgent->mpTask;
+
+    comphelper::ProfileZone aZone( pTask->GetDebugName() );
+
+    // prepare Scheduler object for deletion after handling
+    pTask->SetDeletionFlags();
+
+    assert(!pMostUrgent->mbInScheduler);
+    pMostUrgent->mbInScheduler = true;
+
+    // always push the stack, as we don't traverse the whole list to push later
+    DropSchedulerData(rSchedCtx, pPrevMostUrgent, pMostUrgent, nMostUrgentPriority);
+    pMostUrgent->mpNext = rSchedCtx.mpSchedulerStack;
+    rSchedCtx.mpSchedulerStack = pMostUrgent;
+    rSchedCtx.mpSchedulerStackTop = pMostUrgent;
+
+    // invoke the task
+    Unlock();
+    /*
+    * Current policy is that scheduler tasks aren't allowed to throw an exception.
+    * Because otherwise the exception is caught somewhere totally unrelated.
+    * TODO Ideally we could capture a proper backtrace and feed this into breakpad,
+    *   which is do-able, but requires writing some assembly.
+    * See also SalUserEventList::DispatchUserEvents
+    */
+    try
     {
-        SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
-                  << pMostUrgent << "  invoke-in  " << *pMostUrgent->mpTask );
+        pTask->Invoke();
+    }
+    catch (css::uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("vcl.schedule", "Uncaught");
+        std::abort();
+    }
+    catch (std::exception& e)
+    {
+        SAL_WARN("vcl.schedule", "Uncaught " << typeid(e).name() << " " << e.what());
+        std::abort();
+    }
+    catch (...)
+    {
+        SAL_WARN("vcl.schedule", "Uncaught exception during Task::Invoke()!");
+        std::abort();
+    }
+    Lock();
 
-        Task *pTask = pMostUrgent->mpTask;
+    assert(pMostUrgent->mbInScheduler);
+    pMostUrgent->mbInScheduler = false;
 
-        comphelper::ProfileZone aZone( pTask->GetDebugName() );
+    SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
+              << pMostUrgent << "  invoke-out" );
 
-        // prepare Scheduler object for deletion after handling
-        pTask->SetDeletionFlags();
+    // pop the scheduler stack
+    pSchedulerData = rSchedCtx.mpSchedulerStack;
+    assert(pSchedulerData == pMostUrgent);
+    rSchedCtx.mpSchedulerStack = pSchedulerData->mpNext;
 
-        assert(!pMostUrgent->mbInScheduler);
-        pMostUrgent->mbInScheduler = true;
+    // coverity[check_after_deref : FALSE] - pMostUrgent->mpTask is initially pMostUrgent->mpTask, but Task::Invoke can clear it
+    const bool bTaskAlive = pMostUrgent->mpTask && pMostUrgent->mpTask->IsActive();
+    if (!bTaskAlive)
+    {
+        if (pMostUrgent->mpTask)
+            pMostUrgent->mpTask->mpSchedulerData = nullptr;
+        delete pMostUrgent;
+    }
+    else
+        AppendSchedulerData(rSchedCtx, pMostUrgent);
 
-        // always push the stack, as we don't traverse the whole list to push later
-        DropSchedulerData(rSchedCtx, pPrevMostUrgent, pMostUrgent, nMostUrgentPriority);
-        pMostUrgent->mpNext = rSchedCtx.mpSchedulerStack;
-        rSchedCtx.mpSchedulerStack = pMostUrgent;
-        rSchedCtx.mpSchedulerStackTop = pMostUrgent;
-
-        // invoke the task
-        Unlock();
-        /*
-        * Current policy is that scheduler tasks aren't allowed to throw an exception.
-        * Because otherwise the exception is caught somewhere totally unrelated.
-        * TODO Ideally we could capture a proper backtrace and feed this into breakpad,
-        *   which is do-able, but requires writing some assembly.
-        * See also SalUserEventList::DispatchUserEvents
-        */
-        try
-        {
-            pTask->Invoke();
-        }
-        catch (css::uno::Exception&)
-        {
-            TOOLS_WARN_EXCEPTION("vcl.schedule", "Uncaught");
-            std::abort();
-        }
-        catch (std::exception& e)
-        {
-            SAL_WARN("vcl.schedule", "Uncaught " << typeid(e).name() << " " << e.what());
-            std::abort();
-        }
-        catch (...)
-        {
-            SAL_WARN("vcl.schedule", "Uncaught exception during Task::Invoke()!");
-            std::abort();
-        }
-        Lock();
-
-        assert(pMostUrgent->mbInScheduler);
-        pMostUrgent->mbInScheduler = false;
-
-        SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
-                  << pMostUrgent << "  invoke-out" );
-
-        // pop the scheduler stack
-        pSchedulerData = rSchedCtx.mpSchedulerStack;
-        assert(pSchedulerData == pMostUrgent);
-        rSchedCtx.mpSchedulerStack = pSchedulerData->mpNext;
-
-        // coverity[check_after_deref : FALSE] - pMostUrgent->mpTask is initially pMostUrgent->mpTask, but Task::Invoke can clear it
-        const bool bTaskAlive = pMostUrgent->mpTask && pMostUrgent->mpTask->IsActive();
-        if (!bTaskAlive)
-        {
-            if (pMostUrgent->mpTask)
-                pMostUrgent->mpTask->mpSchedulerData = nullptr;
-            delete pMostUrgent;
-        }
-        else
-            AppendSchedulerData(rSchedCtx, pMostUrgent);
-
-        // this just happens for nested calls, which renders all accounting
-        // invalid, so we just enforce a rescheduling!
-        if (rSchedCtx.mpSchedulerStackTop != pSchedulerData)
-        {
-            UpdateSystemTimer( rSchedCtx, ImmediateTimeoutMs, true,
-                               tools::Time::GetSystemTicks() );
-        }
-        else if (bTaskAlive)
-        {
-            pMostUrgent->mnUpdateTime = nTime;
-            nReadyPeriod = pMostUrgent->mpTask->UpdateMinPeriod( nTime );
-            if ( nMinPeriod > nReadyPeriod )
-                nMinPeriod = nReadyPeriod;
-            UpdateSystemTimer( rSchedCtx, nMinPeriod, false, nTime );
-        }
+    // this just happens for nested calls, which renders all accounting
+    // invalid, so we just enforce a rescheduling!
+    if (rSchedCtx.mpSchedulerStackTop != pSchedulerData)
+    {
+        UpdateSystemTimer( rSchedCtx, ImmediateTimeoutMs, true,
+                           tools::Time::GetSystemTicks() );
+    }
+    else if (bTaskAlive)
+    {
+        pMostUrgent->mnUpdateTime = nTime;
+        nReadyPeriod = pMostUrgent->mpTask->UpdateMinPeriod( nTime );
+        if ( nMinPeriod > nReadyPeriod )
+            nMinPeriod = nReadyPeriod;
+        UpdateSystemTimer( rSchedCtx, nMinPeriod, false, nTime );
     }
 }
 

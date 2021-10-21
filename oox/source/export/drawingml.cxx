@@ -2965,27 +2965,27 @@ void DrawingML::WriteLstStyles(const css::uno::Reference<css::text::XTextContent
 
     Reference<XTextRange> rRun;
 
-    if (xEnumeration->hasMoreElements())
+    if (!xEnumeration->hasMoreElements())
+        return;
+
+    Any aAny(xEnumeration->nextElement());
+    if (aAny >>= rRun)
     {
-        Any aAny(xEnumeration->nextElement());
-        if (aAny >>= rRun)
-        {
-            float fFirstCharHeight = rnCharHeight / 1000.;
-            Reference<XPropertySet> xFirstRunPropSet(rRun, UNO_QUERY);
-            Reference<XPropertySetInfo> xFirstRunPropSetInfo
-                = xFirstRunPropSet->getPropertySetInfo();
+        float fFirstCharHeight = rnCharHeight / 1000.;
+        Reference<XPropertySet> xFirstRunPropSet(rRun, UNO_QUERY);
+        Reference<XPropertySetInfo> xFirstRunPropSetInfo
+            = xFirstRunPropSet->getPropertySetInfo();
 
-            if (xFirstRunPropSetInfo->hasPropertyByName("CharHeight"))
-                fFirstCharHeight = xFirstRunPropSet->getPropertyValue("CharHeight").get<float>();
+        if (xFirstRunPropSetInfo->hasPropertyByName("CharHeight"))
+            fFirstCharHeight = xFirstRunPropSet->getPropertyValue("CharHeight").get<float>();
 
-            mpFS->startElementNS(XML_a, XML_lstStyle);
-            if( !WriteParagraphProperties(rParagraph, fFirstCharHeight, XML_lvl1pPr) )
-                mpFS->startElementNS(XML_a, XML_lvl1pPr);
-            WriteRunProperties(xFirstRunPropSet, false, XML_defRPr, true, rbOverridingCharHeight,
-                               rnCharHeight, GetScriptType(rRun->getString()), rXShapePropSet);
-            mpFS->endElementNS(XML_a, XML_lvl1pPr);
-            mpFS->endElementNS(XML_a, XML_lstStyle);
-        }
+        mpFS->startElementNS(XML_a, XML_lstStyle);
+        if( !WriteParagraphProperties(rParagraph, fFirstCharHeight, XML_lvl1pPr) )
+            mpFS->startElementNS(XML_a, XML_lvl1pPr);
+        WriteRunProperties(xFirstRunPropSet, false, XML_defRPr, true, rbOverridingCharHeight,
+                           rnCharHeight, GetScriptType(rRun->getString()), rXShapePropSet);
+        mpFS->endElementNS(XML_a, XML_lvl1pPr);
+        mpFS->endElementNS(XML_a, XML_lstStyle);
     }
 }
 

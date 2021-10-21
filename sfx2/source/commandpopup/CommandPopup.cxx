@@ -152,31 +152,29 @@ void MenuContentHandler::addCommandIfPossible(
     util::URL aCommandURL;
     aCommandURL.Complete = sCommandURL;
 
-    if (m_xURLTransformer->parseStrict(aCommandURL))
-    {
-        auto* pViewFrame = SfxViewFrame::Current();
+    if (!m_xURLTransformer->parseStrict(aCommandURL))
+        return;
 
-        SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool(pViewFrame);
-        const SfxSlot* pSlot = rSlotPool.GetUnoSlot(aCommandURL.Path);
-        if (pSlot)
-        {
-            std::unique_ptr<SfxPoolItem> pState;
-            SfxItemState eState = pViewFrame->GetBindings().QueryState(pSlot->GetSlotId(), pState);
+    auto* pViewFrame = SfxViewFrame::Current();
 
-            if (eState != SfxItemState::DISABLED)
-            {
-                auto xGraphic
-                    = vcl::CommandInfoProvider::GetXGraphicForCommand(sCommandURL, m_xFrame);
-                rCommandList.emplace_back(sCommandURL, rMenuContent.m_aTooltip);
+    SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool(pViewFrame);
+    const SfxSlot* pSlot = rSlotPool.GetUnoSlot(aCommandURL.Path);
+    if (!pSlot)
+        return;
 
-                auto pIter = rpCommandTreeView->make_iterator();
-                rpCommandTreeView->insert(nullptr, -1, &rMenuContent.m_aFullLabelWithPath, nullptr,
-                                          nullptr, nullptr, false, pIter.get());
-                rpCommandTreeView->set_image(*pIter, xGraphic);
-                m_aAdded.insert(rMenuContent.m_aFullLabelWithPath);
-            }
-        }
-    }
+    std::unique_ptr<SfxPoolItem> pState;
+    SfxItemState eState = pViewFrame->GetBindings().QueryState(pSlot->GetSlotId(), pState);
+    if (eState == SfxItemState::DISABLED)
+        return;
+
+    auto xGraphic = vcl::CommandInfoProvider::GetXGraphicForCommand(sCommandURL, m_xFrame);
+    rCommandList.emplace_back(sCommandURL, rMenuContent.m_aTooltip);
+
+    auto pIter = rpCommandTreeView->make_iterator();
+    rpCommandTreeView->insert(nullptr, -1, &rMenuContent.m_aFullLabelWithPath, nullptr, nullptr,
+                              nullptr, false, pIter.get());
+    rpCommandTreeView->set_image(*pIter, xGraphic);
+    m_aAdded.insert(rMenuContent.m_aFullLabelWithPath);
 }
 
 OUString MenuContentHandler::toLower(OUString const& rString)

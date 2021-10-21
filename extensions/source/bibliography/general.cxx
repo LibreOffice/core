@@ -431,20 +431,19 @@ void BibGeneralPage::SaveChanges()
 
     Any aModified = xProps->getPropertyValue( "IsModified" );
     bool bFlag = false;
-    if ( ( aModified >>= bFlag ) && bFlag )
-    {
+    if ( !( aModified >>= bFlag ) || !bFlag )
+        return;
 
-        try
-        {
-            Any aNew = xProps->getPropertyValue( "IsNew" );
-            aNew >>= bFlag;
-            if ( bFlag )
-                xResUpd->insertRow();
-            else
-                xResUpd->updateRow();
-        }
-        catch( const uno::Exception&) {}
+    try
+    {
+        Any aNew = xProps->getPropertyValue( "IsNew" );
+        aNew >>= bFlag;
+        if ( bFlag )
+            xResUpd->insertRow();
+        else
+            xResUpd->updateRow();
     }
+    catch( const uno::Exception&) {}
 }
 
 IMPL_LINK(BibGeneralPage, LastElementKeyInputHdl, const KeyEvent&, rKeyEvent, bool)

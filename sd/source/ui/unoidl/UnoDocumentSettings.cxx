@@ -951,8 +951,9 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
                 if ( !pDocSh->SetModifyPasswordInfo( aInfo ) )
                     throw beans::PropertyVetoException(
                         "The hash is not allowed to be changed now!" );
-                else
-                    bOk = true;
+
+                bOk = true
+;
 
             }
             break;

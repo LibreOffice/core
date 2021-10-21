@@ -387,30 +387,29 @@ static void MetadataToTreeNode(const css::uno::Reference<css::uno::XInterface>& 
 {
     uno::Reference<rdf::XMetadatable> xMeta(rSource, uno::UNO_QUERY_THROW);
     // don't add tree node "Metadata Reference", if there is no xml:id
-    if (xMeta.is() && !xMeta->getMetadataReference().Second.isEmpty())
-    {
-        svx::sidebar::TreeNode aCurNode;
-        aCurNode.sNodeName = PropertyNametoRID("MetadataReference");
-        aCurNode.NodeType = svx::sidebar::TreeNode::ComplexProperty;
+    if (!xMeta.is() || xMeta->getMetadataReference().Second.isEmpty())
+        return;
 
-        aCurNode.children.push_back(
-            SimplePropToTreeNode("xml:id", uno::makeAny(xMeta->getMetadataReference().Second)));
+    svx::sidebar::TreeNode aCurNode;
+    aCurNode.sNodeName = PropertyNametoRID("MetadataReference");
+    aCurNode.NodeType = svx::sidebar::TreeNode::ComplexProperty;
 
-        // list associated (predicate, object) pairs of the actual subject
-        // under the tree node "Metadata Reference"
-        SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
-        uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(pDocSh->GetBaseModel(),
-                                                                             uno::UNO_QUERY);
-        const uno::Reference<rdf::XRepository>& xRepo = xDocumentMetadataAccess->getRDFRepository();
-        const css::uno::Reference<css::rdf::XResource> xSubject(rSource, uno::UNO_QUERY);
-        std::map<OUString, OUString> xStatements
-            = SwRDFHelper::getStatements(pDocSh->GetBaseModel(), xRepo->getGraphNames(), xSubject);
-        for (const auto& pair : xStatements)
-            aCurNode.children.push_back(
-                SimplePropToTreeNode(pair.first, uno::makeAny(pair.second)));
+    aCurNode.children.push_back(
+        SimplePropToTreeNode("xml:id", uno::makeAny(xMeta->getMetadataReference().Second)));
 
-        rNode.children.push_back(aCurNode);
-    }
+    // list associated (predicate, object) pairs of the actual subject
+    // under the tree node "Metadata Reference"
+    SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
+    uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(pDocSh->GetBaseModel(),
+                                                                         uno::UNO_QUERY);
+    const uno::Reference<rdf::XRepository>& xRepo = xDocumentMetadataAccess->getRDFRepository();
+    const css::uno::Reference<css::rdf::XResource> xSubject(rSource, uno::UNO_QUERY);
+    std::map<OUString, OUString> xStatements
+        = SwRDFHelper::getStatements(pDocSh->GetBaseModel(), xRepo->getGraphNames(), xSubject);
+    for (const auto& pair : xStatements)
+        aCurNode.children.push_back(SimplePropToTreeNode(pair.first, uno::makeAny(pair.second)));
+
+    rNode.children.push_back(aCurNode);
 }
 
 static svx::sidebar::TreeNode

@@ -373,21 +373,21 @@ class OOXMLSecParser::DsDigestMethodContext
             OUString ouAlgorithm = xAttrs->getValueByName("Algorithm");
 
             SAL_WARN_IF( ouAlgorithm.isEmpty(), "xmlsecurity.helper", "no Algorithm in Reference" );
-            if (!ouAlgorithm.isEmpty())
-            {
-                SAL_WARN_IF( ouAlgorithm != ALGO_XMLDSIGSHA1
-                             && ouAlgorithm != ALGO_XMLDSIGSHA256
-                             && ouAlgorithm != ALGO_XMLDSIGSHA512,
-                             "xmlsecurity.helper", "Algorithm neither SHA1, SHA256 nor SHA512");
-                if (ouAlgorithm == ALGO_XMLDSIGSHA1)
-                    m_rReferenceDigestID = css::xml::crypto::DigestID::SHA1;
-                else if (ouAlgorithm == ALGO_XMLDSIGSHA256)
-                    m_rReferenceDigestID = css::xml::crypto::DigestID::SHA256;
-                else if (ouAlgorithm == ALGO_XMLDSIGSHA512)
-                    m_rReferenceDigestID = css::xml::crypto::DigestID::SHA512;
-                else
-                    m_rReferenceDigestID = 0;
-            }
+            if (ouAlgorithm.isEmpty())
+                return;
+
+            SAL_WARN_IF( ouAlgorithm != ALGO_XMLDSIGSHA1
+                         && ouAlgorithm != ALGO_XMLDSIGSHA256
+                         && ouAlgorithm != ALGO_XMLDSIGSHA512,
+                         "xmlsecurity.helper", "Algorithm neither SHA1, SHA256 nor SHA512");
+            if (ouAlgorithm == ALGO_XMLDSIGSHA1)
+                m_rReferenceDigestID = css::xml::crypto::DigestID::SHA1;
+            else if (ouAlgorithm == ALGO_XMLDSIGSHA256)
+                m_rReferenceDigestID = css::xml::crypto::DigestID::SHA256;
+            else if (ouAlgorithm == ALGO_XMLDSIGSHA512)
+                m_rReferenceDigestID = css::xml::crypto::DigestID::SHA512;
+            else
+                m_rReferenceDigestID = 0;
         }
 };
 
@@ -1272,17 +1272,15 @@ void SAL_CALL OOXMLSecParser::startElement(const OUString& rName, const uno::Ref
 
     if (m_ContextStack.empty())
     {
-        if (nPrefix == XML_NAMESPACE_DS
-            && localName == "Signature")
-        {
-            pContext.reset(new DsSignatureContext(*this, std::move(pRewindMap)));
-        }
-        else
+        if (nPrefix != XML_NAMESPACE_DS || localName != "Signature")
         {
             throw css::xml::sax::SAXException(
                 "xmlsecurity: unexpected root element", nullptr,
                 css::uno::Any());
         }
+
+        pContext.reset(new DsSignatureContext(*this, std::move(pRewindMap)));
+
     }
     else
     {
