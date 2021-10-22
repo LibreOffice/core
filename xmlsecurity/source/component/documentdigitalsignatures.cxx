@@ -433,19 +433,26 @@ bool DocumentDigitalSignatures::ImplViewSignatures(
     DocumentSignatureMode eMode, bool bReadOnly )
 {
     bool bChanges = false;
-    DigitalSignaturesDialog aSignaturesDialog(
+    auto xSignaturesDialog = std::make_shared<DigitalSignaturesDialog>(
         Application::GetFrameWeld(mxParentWindow), mxCtx, eMode, bReadOnly, m_sODFVersion,
         m_bHasDocumentSignature);
-    bool bInit = aSignaturesDialog.Init();
+    bool bInit = xSignaturesDialog->Init();
     SAL_WARN_IF( !bInit, "xmlsecurity.comp", "Error initializing security context!" );
     if ( bInit )
     {
-        aSignaturesDialog.SetStorage(rxStorage);
+        xSignaturesDialog->SetStorage(rxStorage);
 
-        aSignaturesDialog.SetSignatureStream( xSignStream );
-        if (aSignaturesDialog.run() == RET_OK)
+        xSignaturesDialog->SetSignatureStream( xSignStream );
+
+        if (bReadOnly)
         {
-            if (aSignaturesDialog.SignaturesChanged())
+            xSignaturesDialog->beforeRun();
+            weld::DialogController::runAsync(xSignaturesDialog, [] (sal_Int32) {});
+            return false;
+        }
+        else if (xSignaturesDialog->run() == RET_OK)
+        {
+            if (xSignaturesDialog->SignaturesChanged())
             {
                 bChanges = true;
                 // If we have a storage and no stream, we are responsible for commit
