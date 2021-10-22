@@ -64,7 +64,7 @@ public:
     /// Get viewIds of views of the current DocId.
     static bool getViewIds(int nDocId, int* pArray, size_t nSize);
     /// Set View Blocked for some uno commands
-    static void setBlockedCommandList(int nViewId, const char* bolckedCommandList);
+    static void setBlockedCommandList(int nViewId, const char* blockedCommandList);
     /// Get the document id for a view
     static int getDocumentIdOfView(int nViewId);
     /// Get the default language that should be used for views
