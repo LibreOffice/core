@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dd0dcf23_9236f2b2",
+        "filename": "svl/source/numbers/zforlist.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3356,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-22T09:36:34Z",
+      "side": 1,
+      "message": "I would still think that having a simple impl function is better - just to name this action, and use the same code everywhere we need (I don\u0027t like to change similar code in many places when there\u0027s some logic change) - but indeed it\u0027s up to you!",
+      "parentUuid": "11a80a8e_dbfdacb4",
+      "revId": "d5b25fc9162e5cfa243934690f1df55a1fcca8b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "69127979_aa899533",
         "filename": "sw/source/core/table/swtable.cxx",
         "patchSetId": 3
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "It relies on BOTH previous format and current content. The bIsNumFormat clause just above this code change has already evaluated the content to see if it can be classified as a number. So the only time we even reach this block is when a new format specifies a number format, and the content doesn\u0027t fit that classification.\n\nWhat I have here should be correct.  I am checking if there is content (bChgText), that the format was previously text format, and the new number format (which by definition is number at this point in the code) is not a user-defined function - which could be intending to do anything as suggested by Eike\u0027s comments in the code block above.\n\nSo what this will do is prevent ANY attempt to set a built-in number format on existing content THAT IS NOT CONSIDERED TO BE A NUMBER. (Yes, that is rather heavy handed.)\n\nBecause every user-defined format is considered a number, I thought I had better make an exception for brain-powered, exotic formatting attempts.",
       "parentUuid": "69127979_aa899533",
+      "revId": "d5b25fc9162e5cfa243934690f1df55a1fcca8b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "337bd078_6a6157f8",
+        "filename": "sw/source/core/table/swtable.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2345,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-22T09:36:34Z",
+      "side": 1,
+      "message": "Thank you for explaining!\n\n\u003e I thought I had better make an exception for brain-powered, exotic formatting attempts\n\nI agree. This needs to be explained in the release notes, too :-)",
+      "parentUuid": "66817fc9_06869cad",
       "revId": "d5b25fc9162e5cfa243934690f1df55a1fcca8b3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
