@@ -16,6 +16,23 @@
       "message": "If you do more changes like this, please make sure it doesn\u0027t change what the code does.\n",
       "revId": "e0c5c2703e7b149308443e25e2d5fb039a93e87f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "260ed730_558f9af8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-22T09:03:31Z",
+      "side": 1,
+      "message": "Indeed, sorry for this :-(.",
+      "revId": "e0c5c2703e7b149308443e25e2d5fb039a93e87f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
