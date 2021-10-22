@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb537b70_cc97dfec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-22T12:49:15Z",
+      "side": 1,
+      "message": "Just for the record, on pc Debian x86-64 with master sources updated today (with enable-dbgutil) + the patch  + clang instead of gcc, I don\u0027t have any pb with \"make check\"",
+      "revId": "1da15d8173a6516bb8089564583a85908c21c39a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
