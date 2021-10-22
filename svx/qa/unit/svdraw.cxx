@@ -335,7 +335,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testAutoHeightMultiColShape)
     // When loading that document:
     getComponent().set(loadFromDesktop(aURL, "com.sun.star.presentation.PresentationDocument"));
 
-    // Make sure the in-file shape height is kept, even if nominally the the shape height is
+    // Make sure the in-file shape height is kept, even if nominally the shape height is
     // automatic:
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
