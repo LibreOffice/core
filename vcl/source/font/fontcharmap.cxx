@@ -176,8 +176,9 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
     sal_UCS4* pCodePairs = nullptr;
     int* pStartGlyphs = nullptr;
 
-    std::vector<sal_uInt16> aGlyphIdArray { 0 };
+    std::vector<sal_uInt16> aGlyphIdArray;
     aGlyphIdArray.reserve( 0x1000 );
+    aGlyphIdArray.push_back( 0 );
 
     // format 4, the most common 16bit char mapping table
     if( (nFormat == 4) && ((nOffset+16) < nLength) )
