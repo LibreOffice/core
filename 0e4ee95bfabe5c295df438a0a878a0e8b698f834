@@ -16,6 +16,24 @@
       "message": "Is this what we\u0027re looking for? https://i.imgur.com/Vq2X6Q0.png",
       "revId": "0e4ee95bfabe5c295df438a0a878a0e8b698f834",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4026c51a_ed836bfa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-10-22T07:47:40Z",
+      "side": 1,
+      "message": "Yeah, but why does it look so ugly? maybe you need to enable Anti-Aliasing",
+      "parentUuid": "4bd0dc0b_054be32e",
+      "revId": "0e4ee95bfabe5c295df438a0a878a0e8b698f834",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
