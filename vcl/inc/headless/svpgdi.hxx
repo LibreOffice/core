@@ -35,6 +35,7 @@
 #include <sallayout.hxx>
 #include "svpcairotextrender.hxx"
 #include <impfontmetricdata.hxx>
+#include "SvpGraphicsBackend.hxx"
 
 #include <cairo.h>
 
@@ -87,7 +88,7 @@ struct VCL_DLLPUBLIC DamageHandler
     damageHandler damaged;
 };
 
-class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphics
+class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphicsAutoDelegateToImpl
 {
     cairo_surface_t*               m_pSurface;
     basegfx::B2IVector             m_aFrameSize;
@@ -132,6 +133,7 @@ private:
 protected:
     vcl::Region                         m_aClipRegion;
     SvpCairoTextRender                  m_aTextRenderImpl;
+    std::unique_ptr<SvpGraphicsBackend> m_pBackend;
 
 protected:
     virtual bool blendBitmap( const SalTwoRect&, const SalBitmap& rBitmap ) override;
@@ -156,7 +158,8 @@ public:
     SvpSalGraphics();
     virtual ~SvpSalGraphics() override;
 
-    virtual SalGraphicsImpl* GetImpl() const override { return nullptr; };
+    virtual SalGraphicsImpl* GetImpl() const override { return m_pBackend.get(); }
+
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;
     virtual sal_uInt16      GetBitCount() const override;
     virtual tools::Long            GetGraphicsWidth() const override;

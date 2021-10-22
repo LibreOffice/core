@@ -919,6 +919,7 @@ SvpSalGraphics::SvpSalGraphics()
     , m_aFillColor(Color(0xFF, 0xFF, 0XFF))
     , m_ePaintMode(PaintMode::Over)
     , m_aTextRenderImpl(*this)
+    , m_pBackend(new SvpGraphicsBackend())
 {
     bool bLOKActive = comphelper::LibreOfficeKit::isActive();
     initWidgetDrawBackends(bLOKActive);
