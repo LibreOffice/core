@@ -1928,7 +1928,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
             {
                 const SwTableBoxNumFormat* pNumFormat =
                     static_cast<const SwTableBoxNumFormat*>( pItem );
-                if( ( pNumFormat != nullptr ) && ( pNumFormat->GetValue() == 0 ) )
+                if (pNumFormat && (pNumFormat->GetValue() % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
                 {
                     // only one text node?
                     SwNodeIndex aNodeIndex( *(pCell->GetStartNode()), 1 );
