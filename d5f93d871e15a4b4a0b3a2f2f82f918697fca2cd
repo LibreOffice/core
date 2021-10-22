@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e10dbe3_5b16cdb9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-10-22T12:41:43Z",
+      "side": 1,
+      "message": "Wouldn\u0027t a \"step increment\" be for how much the value changes (increments) between each step?",
+      "revId": "d5f93d871e15a4b4a0b3a2f2f82f918697fca2cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
