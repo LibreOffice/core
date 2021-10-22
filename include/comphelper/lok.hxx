@@ -109,7 +109,7 @@ COMPHELPER_DLLPUBLIC void statusIndicatorStart(const OUString& sText);
 COMPHELPER_DLLPUBLIC void statusIndicatorSetValue(int percent);
 COMPHELPER_DLLPUBLIC void statusIndicatorFinish();
 
-COMPHELPER_DLLPUBLIC void setBlockedCommandList(const char* bolckedCommandList);
+COMPHELPER_DLLPUBLIC void setBlockedCommandList(const char* blockedCommandList);
 }
 
 #endif // INCLUDED_COMPHELPER_LOK_HXX

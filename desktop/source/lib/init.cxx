@@ -1072,7 +1072,7 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis,
                              int nKeyCode);
 static void doc_setBlockedCommandList(LibreOfficeKitDocument* pThis,
                                 int nViewId,
-                                const char* bolckedCommandList);
+                                const char* blockedCommandList);
 
 static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis,
                                             unsigned nWindowId,
@@ -3643,10 +3643,10 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nChar
     }
 }
 
-static void doc_setBlockedCommandList(LibreOfficeKitDocument* /*pThis*/, int nViewId, const char* bolckedCommandList)
+static void doc_setBlockedCommandList(LibreOfficeKitDocument* /*pThis*/, int nViewId, const char* blockedCommandList)
 {
     SolarMutexGuard aGuard;
-    SfxLokHelper::setBlockedCommandList(nViewId, bolckedCommandList);
+    SfxLokHelper::setBlockedCommandList(nViewId, blockedCommandList);
 }
 
 static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis, unsigned nWindowId, int nType, const char* pText)
