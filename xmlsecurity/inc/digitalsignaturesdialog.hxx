@@ -37,6 +37,7 @@ namespace com::sun::star {
 
 
 class HeaderBar;
+class CertificateViewer;
 
 class DigitalSignaturesDialog final : public weld::GenericDialogController
 {
@@ -71,6 +72,8 @@ private:
     std::unique_ptr<weld::Button>      m_xRemoveBtn;
     std::unique_ptr<weld::Button>      m_xStartCertMgrBtn;
     std::unique_ptr<weld::Button>      m_xCloseBtn;
+
+    std::shared_ptr<CertificateViewer> m_xViewer;
 
     DECL_LINK(AdESCompliantCheckBoxHdl, weld::ToggleButton&, void);
     DECL_LINK(ViewButtonHdl, weld::Button&, void);
