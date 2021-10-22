@@ -2076,17 +2076,17 @@ weld::Window* SfxViewShell::GetFrameWeld() const
     return pWindow ? pWindow->GetFrameWeld() : nullptr;
 }
 
-void SfxViewShell::setBlockedCommandList(const char* bolckedCommandList)
+void SfxViewShell::setBlockedCommandList(const char* blockedCommandList)
 {
     if(!mvLOKBlockedCommandList.empty())
         return;
 
-    OUString BolckedListString(bolckedCommandList, strlen(bolckedCommandList), RTL_TEXTENCODING_UTF8);
-    OUString command = BolckedListString.getToken(0, ' ');
+    OUString BlockedListString(blockedCommandList, strlen(blockedCommandList), RTL_TEXTENCODING_UTF8);
+    OUString command = BlockedListString.getToken(0, ' ');
     for (size_t i = 1; !command.isEmpty(); i++)
     {
         mvLOKBlockedCommandList.emplace(command);
-        command = BolckedListString.getToken(i, ' ');
+        command = BlockedListString.getToken(i, ' ');
     }
 }
 

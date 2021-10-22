@@ -787,9 +787,9 @@ public:
         mpDoc->pClass->sendFormFieldEvent(mpDoc, pArguments);
     }
 
-    void setBlockedCommandList(int nViewId, const char* bolckedCommandList)
+    void setBlockedCommandList(int nViewId, const char* blockedCommandList)
     {
-        mpDoc->pClass->setBlockedCommandList(mpDoc, nViewId, bolckedCommandList);
+        mpDoc->pClass->setBlockedCommandList(mpDoc, nViewId, blockedCommandList);
     }
     /**
      * Render input search result to a bitmap buffer.

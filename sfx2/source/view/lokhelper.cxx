@@ -739,13 +739,13 @@ void SfxLokHelper::postKeyEventAsync(const VclPtr<vcl::Window> &xWindow,
     postEventAsync(pLOKEv);
 }
 
-void SfxLokHelper::setBlockedCommandList(int nViewId, const char* bolckedCommandList)
+void SfxLokHelper::setBlockedCommandList(int nViewId, const char* blockedCommandList)
 {
     SfxViewShell* pViewShell = SfxLokHelper::getViewOfId(nViewId);
 
     if(pViewShell)
     {
-        pViewShell->setBlockedCommandList(bolckedCommandList);
+        pViewShell->setBlockedCommandList(blockedCommandList);
     }
 }
 

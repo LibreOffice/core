@@ -395,7 +395,7 @@ public:
     virtual tools::Rectangle getLOKVisibleArea() const { return tools::Rectangle(); }
 
     // Blocked Command view settings
-    void setBlockedCommandList(const char* bolckedCommandList);
+    void setBlockedCommandList(const char* blockedCommandList);
     bool isBlockedCommand(OUString command);
 };
 
