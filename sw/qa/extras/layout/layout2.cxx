@@ -21,6 +21,7 @@
 #include <unotxdoc.hxx>
 #include <rootfrm.hxx>
 #include <docsh.hxx>
+#include <wrtsh.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <textboxhelper.hxx>
 #include <frameformats.hxx>
@@ -327,6 +328,41 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMoving)
     // These were 0 (other color, not COL_GREEN, color of the tracked text movement)
     assertXPath(pXmlDoc, "/metafile/push/push/push/textcolor[@color='#008000']", 5);
     assertXPath(pXmlDoc, "/metafile/push/push/push/font[@color='#008000']", 11);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf145225_RedlineMovingWithBadInsertion)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf42748.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // create a 3-element list without change tracking
+    // (because the fixed problem depends on the own changes)
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    pEditShell->RejectRedline(0);
+    pEditShell->AcceptRedline(0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(0), pEditShell->GetRedlineCount());
+
+    // Show Changes
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwRootFrame* pLayout(pWrtShell->GetLayout());
+    CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
+
+    // insert a tracked paragraph break in middle of the second list item, i.e. split it
+    dispatchCommand(mxComponent, ".uno:GoToStartOfDoc", {});
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    pWrtShell->Down(false, 1);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->SplitNode(false);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pEditShell->GetRedlineCount());
+
+    // move up the last list item over the paragraph split
+    dispatchCommand(mxComponent, ".uno:GoToEndOfDoc", {});
+    dispatchCommand(mxComponent, ".uno:MoveUp", {});
+    dispatchCommand(mxComponent, ".uno:MoveUp", {});
+    // This was 2 (the tracked paragraph break joined with the moved list item,
+    // setting the not changed text of the second list item to tracked insertion)
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(3), pEditShell->GetRedlineCount());
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf125300)
