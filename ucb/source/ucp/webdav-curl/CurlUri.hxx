@@ -44,8 +44,8 @@ private:
     OUString m_Password;
     OUString m_Host;
     sal_uInt16 m_nPort = 0;
-    /// FIXME very misleading
     OUString m_Path;
+    OUString m_QueryAndFragment;
 
     void Init();
 
@@ -67,6 +67,7 @@ public:
     OUString const& GetHost() const { return m_Host; }
     sal_uInt16 GetPort() const { return m_nPort; }
     OUString const& GetPath() const { return m_Path; }
+    OUString GetRelativeReference() const { return m_Path + m_QueryAndFragment; }
 
     OUString GetPathBaseName() const;
 
