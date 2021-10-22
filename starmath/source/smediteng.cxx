@@ -143,14 +143,14 @@ void SmEditEngine::setSmItemPool(SfxItemPool* mpItemPool, const SvtLinguOptions&
     }
 
     // Set font heights
-    SvxFontHeightItem aFontHeigt(
+    SvxFontHeightItem aFontHeight(
         aDefaultDevice->LogicToPixel(Size(0, 11), MapMode(MapUnit::MapPoint)).Height(), 100,
         EE_CHAR_FONTHEIGHT);
-    mpItemPool->SetPoolDefaultItem(aFontHeigt);
-    aFontHeigt.SetWhich(EE_CHAR_FONTHEIGHT_CJK);
-    mpItemPool->SetPoolDefaultItem(aFontHeigt);
-    aFontHeigt.SetWhich(EE_CHAR_FONTHEIGHT_CTL);
-    mpItemPool->SetPoolDefaultItem(aFontHeigt);
+    mpItemPool->SetPoolDefaultItem(aFontHeight);
+    aFontHeight.SetWhich(EE_CHAR_FONTHEIGHT_CJK);
+    mpItemPool->SetPoolDefaultItem(aFontHeight);
+    aFontHeight.SetWhich(EE_CHAR_FONTHEIGHT_CTL);
+    mpItemPool->SetPoolDefaultItem(aFontHeight);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
