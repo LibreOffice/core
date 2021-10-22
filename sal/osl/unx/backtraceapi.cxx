@@ -74,8 +74,17 @@ FrameCache frameCache( 256 );
 
 void process_file_addr2line( const char* file, std::vector<FrameData>& frameData )
 {
+    if(access( file, R_OK ) != 0)
+        return; // cannot read info from the binary file anyway
     OUString binary("addr2line");
     OUString dummy;
+#if defined __clang__
+    // llvm-addr2line is faster than addr2line
+    if(osl::detail::find_in_PATH("llvm-addr2line", dummy))
+        binary = "llvm-addr2line";
+#endif
+    if(!osl::detail::find_in_PATH(binary, dummy))
+        return; // Will not work, avoid warnings from osl process code.
     OUString arg1("-Cfe");
     OUString arg2 = OUString::fromUtf8(file);
     std::vector<OUString> addrs;
@@ -93,8 +102,6 @@ void process_file_addr2line( const char* file, std::vector<FrameData>& frameData
         }
     }
 
-    if(!osl::detail::find_in_PATH(binary, dummy) || access( file, R_OK ) != 0)
-        return; // Will not work, avoid warnings from osl process code.
     oslProcess aProcess;
     oslFileHandle pOut = nullptr;
     oslFileHandle pErr = nullptr;
@@ -105,7 +112,10 @@ void process_file_addr2line( const char* file, std::vector<FrameData>& frameData
     osl_freeSecurityHandle(pSecurity);
 
     if (eErr != osl_Process_E_None)
+    {
+        SAL_WARN("sal.osl", binary << " call to resolve " << file << " symbols failed");
         return;
+    }
 
     OStringBuffer outputBuffer;
     if (pOut)
@@ -148,7 +158,10 @@ void process_file_addr2line( const char* file, std::vector<FrameData>& frameData
         outputPos = end2 + 1;
     }
     if(lines.size() != addrs.size() * 2)
+    {
+        SAL_WARN("sal.osl", "failed to parse " << binary << " call output to resolve " << file << " symbols ");
         return; // addr2line problem?
+    }
     size_t linesPos = 0;
     for( FrameData& frame : frameData )
     {
