@@ -2061,21 +2061,19 @@ Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes()
         bool bPresPage = IsImpressDocument() && ePageKind != PageKind::Handout;
 
         // Collect the types of this class.
-        ::std::vector<uno::Type> aTypes
-        {
-            cppu::UnoType<drawing::XDrawPage>::get(),
-            cppu::UnoType<beans::XPropertySet>::get(),
-            cppu::UnoType<container::XNamed>::get(),
-            cppu::UnoType<drawing::XMasterPageTarget>::get(),
-            cppu::UnoType<lang::XServiceInfo>::get(),
-            cppu::UnoType<util::XReplaceable>::get(),
-            cppu::UnoType<document::XLinkTargetSupplier>::get(),
-            cppu::UnoType<drawing::XShapeCombiner>::get(),
-            cppu::UnoType<drawing::XShapeBinder>::get(),
-            cppu::UnoType<office::XAnnotationAccess>::get(),
-            cppu::UnoType<beans::XMultiPropertySet>::get()
-        };
+        ::std::vector<uno::Type> aTypes;
         aTypes.reserve(13);
+        aTypes.push_back(cppu::UnoType<drawing::XDrawPage>::get());
+        aTypes.push_back(cppu::UnoType<beans::XPropertySet>::get());
+        aTypes.push_back(cppu::UnoType<container::XNamed>::get());
+        aTypes.push_back(cppu::UnoType<drawing::XMasterPageTarget>::get());
+        aTypes.push_back(cppu::UnoType<lang::XServiceInfo>::get());
+        aTypes.push_back(cppu::UnoType<util::XReplaceable>::get());
+        aTypes.push_back(cppu::UnoType<document::XLinkTargetSupplier>::get());
+        aTypes.push_back(cppu::UnoType<drawing::XShapeCombiner>::get());
+        aTypes.push_back(cppu::UnoType<drawing::XShapeBinder>::get());
+        aTypes.push_back(cppu::UnoType<office::XAnnotationAccess>::get());
+        aTypes.push_back(cppu::UnoType<beans::XMultiPropertySet>::get());
         if( bPresPage )
             aTypes.push_back(cppu::UnoType<presentation::XPresentationPage>::get());
         if( bPresPage && ePageKind == PageKind::Standard )
@@ -2666,20 +2664,18 @@ Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes()
         bool bPresPage = IsImpressDocument() && SvxFmDrawPage::mpPage && ePageKind != PageKind::Handout;
 
         // Collect the types of this class.
-        ::std::vector<uno::Type> aTypes
-        {
-            cppu::UnoType<drawing::XDrawPage>::get(),
-            cppu::UnoType<beans::XPropertySet>::get(),
-            cppu::UnoType<container::XNamed>::get(),
-            cppu::UnoType<lang::XServiceInfo>::get(),
-            cppu::UnoType<util::XReplaceable>::get(),
-            cppu::UnoType<document::XLinkTargetSupplier>::get(),
-            cppu::UnoType<drawing::XShapeCombiner>::get(),
-            cppu::UnoType<drawing::XShapeBinder>::get(),
-            cppu::UnoType<office::XAnnotationAccess>::get(),
-            cppu::UnoType<beans::XMultiPropertySet>::get()
-        };
+        ::std::vector<uno::Type> aTypes;
         aTypes.reserve(12);
+        aTypes.push_back(cppu::UnoType<drawing::XDrawPage>::get());
+        aTypes.push_back(cppu::UnoType<beans::XPropertySet>::get());
+        aTypes.push_back(cppu::UnoType<container::XNamed>::get());
+        aTypes.push_back(cppu::UnoType<lang::XServiceInfo>::get());
+        aTypes.push_back(cppu::UnoType<util::XReplaceable>::get());
+        aTypes.push_back(cppu::UnoType<document::XLinkTargetSupplier>::get());
+        aTypes.push_back(cppu::UnoType<drawing::XShapeCombiner>::get());
+        aTypes.push_back(cppu::UnoType<drawing::XShapeBinder>::get());
+        aTypes.push_back(cppu::UnoType<office::XAnnotationAccess>::get());
+        aTypes.push_back(cppu::UnoType<beans::XMultiPropertySet>::get());
         if( bPresPage )
             aTypes.push_back(cppu::UnoType<presentation::XPresentationPage>::get());
         if( bPresPage && ePageKind == PageKind::Standard )
