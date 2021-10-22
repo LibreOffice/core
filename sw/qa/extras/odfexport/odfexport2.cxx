@@ -8,7 +8,9 @@
  */
 
 #include <swmodeltestbase.hxx>
+#include <unotxdoc.hxx>
 
+#include <com/sun/star/text/XTextTable.hpp>
 
 class Test : public SwModelTestBase
 {
@@ -49,6 +51,34 @@ DECLARE_ODFEXPORT_TEST(testTdf104254_noHeaderWrapping, "tdf104254_noHeaderWrappi
     CPPUNIT_ASSERT_MESSAGE("Paragraph should fit on a single line", nParaHeight < 600);
 }
 
+<<<<<<< HEAD   (e2e226 tdf#125637 - Correctly hand names ending with an underscore)
+=======
+DECLARE_ODFEXPORT_TEST(testTdf131025_noZerosInTable, "tdf131025_noZerosInTable.odt")
+{
+    uno::Reference<text::XTextTablesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xTables = xSupplier->getTextTables();
+    uno::Reference<text::XTextTable> xTable(xTables->getByName("Table1"), uno::UNO_QUERY);
+
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("C3"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("5 gp"), xCell->getString());
+}
+
+DECLARE_ODFEXPORT_TEST(testTdf143793_noBodyWrapping, "tdf143793_noBodyWrapping.odt")
+{
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+    // Preserve old document wrapping. Compat "Use OOo 1.1 text wrapping around objects"
+    // Originally, the body text did not wrap around spill-over header images
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Fits on one page", 1, getPages() );
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    sal_Int32 nParaHeight = getXPath(pXmlDoc, "//page[1]/header/txt[1]/infos/bounds", "height").toInt32();
+    // The header text should wrap around the header image in OOo 1.1 and prior,
+    // thus taking up two lines instead of one. One line is 276. It should be 552.
+    CPPUNIT_ASSERT_MESSAGE("Header text should fill two lines", nParaHeight > 400);
+}
+
+>>>>>>> CHANGE (3e1d31 tdf#131025 ODF import: recognize SV_COUNTRY_LANGUAGE_OFFSET)
 DECLARE_ODFEXPORT_TEST(testTdf137199, "tdf137199.docx")
 {
     CPPUNIT_ASSERT_EQUAL(OUString(">1<"), getProperty<OUString>(getParagraph(1), "ListLabelString"));
