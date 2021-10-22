@@ -2373,7 +2373,7 @@ void WatchWindow::UpdateWatches(bool bBasicStopped)
                 eEnableChildren = TRISTATE_TRUE;
             }
 
-            if (SbxVariable const* pVar = IsSbxVariable(pSBX))
+            if (SbxVariable const* pVar = dynamic_cast<SbxMethod*>(pSBX))
             {
                 // extra treatment of arrays
                 SbxDataType eType = pVar->GetType();
