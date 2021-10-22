@@ -108,7 +108,7 @@ void SfxBroadcaster::RemoveListener(SfxListener& rListener)
     int positionOfRemovedElement = -1;
     if (!m_RemovedPositions.empty())
     {
-        auto i = m_RemovedPositions.back();
+        size_t i = m_RemovedPositions.back();
         if (i < m_Listeners.size() - 2 && m_Listeners[i + 1] == &rListener)
         {
             positionOfRemovedElement = i + 1;

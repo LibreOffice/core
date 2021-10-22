@@ -40,7 +40,7 @@ JsonWriter::~JsonWriter()
 
 ScopedJsonWriterNode JsonWriter::startNode(const char* pNodeName)
 {
-    auto len = strlen(pNodeName);
+    int len = strlen(pNodeName);
     ensureSpace(len + 6);
 
     addCommaBeforeField();
@@ -68,7 +68,7 @@ void JsonWriter::endNode()
 
 ScopedJsonWriterArray JsonWriter::startArray(const char* pNodeName)
 {
-    auto len = strlen(pNodeName);
+    int len = strlen(pNodeName);
     ensureSpace(len + 6);
 
     addCommaBeforeField();
@@ -215,10 +215,10 @@ void JsonWriter::writeEscapedOUString(const OUString& rPropVal)
 
 void JsonWriter::put(const char* pPropName, const OUString& rPropVal)
 {
-    auto nPropNameLength = strlen(pPropName);
+    int nPropNameLength = strlen(pPropName);
     // But values can be any UTF-8,
     // if the string only contains of 0x2028, it will be expanded 6 times (see writeEscapedSequence)
-    auto nWorstCasePropValLength = rPropVal.getLength() * 6;
+    int nWorstCasePropValLength = rPropVal.getLength() * 6;
     ensureSpace(nPropNameLength + nWorstCasePropValLength + 8);
 
     addCommaBeforeField();
@@ -239,9 +239,9 @@ void JsonWriter::put(const char* pPropName, const OUString& rPropVal)
 void JsonWriter::put(const char* pPropName, std::string_view rPropVal)
 {
     // we assume property names are ascii
-    auto nPropNameLength = strlen(pPropName);
+    int nPropNameLength = strlen(pPropName);
     // escaping can double the length
-    auto nWorstCasePropValLength = rPropVal.size() * 2;
+    int nWorstCasePropValLength = rPropVal.size() * 2;
     ensureSpace(nPropNameLength + nWorstCasePropValLength + 8);
 
     addCommaBeforeField();
@@ -291,8 +291,8 @@ void JsonWriter::put(const char* pPropName, std::string_view rPropVal)
 
 void JsonWriter::put(const char* pPropName, sal_Int64 nPropVal)
 {
-    auto nPropNameLength = strlen(pPropName);
-    auto nWorstCasePropValLength = 32;
+    int nPropNameLength = strlen(pPropName);
+    int nWorstCasePropValLength = 32;
     ensureSpace(nPropNameLength + nWorstCasePropValLength + 8);
 
     addCommaBeforeField();
@@ -310,7 +310,7 @@ void JsonWriter::put(const char* pPropName, sal_Int64 nPropVal)
 void JsonWriter::put(const char* pPropName, double fPropVal)
 {
     OString sPropVal = rtl::math::doubleToString(fPropVal, rtl_math_StringFormat_F, 12, '.');
-    auto nPropNameLength = strlen(pPropName);
+    int nPropNameLength = strlen(pPropName);
     ensureSpace(nPropNameLength + sPropVal.getLength() + 8);
 
     addCommaBeforeField();
@@ -328,7 +328,7 @@ void JsonWriter::put(const char* pPropName, double fPropVal)
 
 void JsonWriter::put(const char* pPropName, bool nPropVal)
 {
-    auto nPropNameLength = strlen(pPropName);
+    int nPropNameLength = strlen(pPropName);
     ensureSpace(nPropNameLength + 5 + 8);
 
     addCommaBeforeField();
@@ -351,7 +351,7 @@ void JsonWriter::put(const char* pPropName, bool nPropVal)
 
 void JsonWriter::putSimpleValue(const OUString& rPropVal)
 {
-    auto nWorstCasePropValLength = rPropVal.getLength() * 3;
+    int nWorstCasePropValLength = rPropVal.getLength() * 3;
     ensureSpace(nWorstCasePropValLength + 4);
 
     addCommaBeforeField();
@@ -394,7 +394,7 @@ void JsonWriter::ensureSpace(int noMoreBytesRequired)
     int currentUsed = mPos - mpBuffer;
     if (currentUsed + noMoreBytesRequired >= mSpaceAllocated)
     {
-        auto newSize = (currentUsed + noMoreBytesRequired) * 2;
+        int newSize = (currentUsed + noMoreBytesRequired) * 2;
         mpBuffer = static_cast<char*>(realloc(mpBuffer, newSize));
         mPos = mpBuffer + currentUsed;
         mSpaceAllocated = newSize;

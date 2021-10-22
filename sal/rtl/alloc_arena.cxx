@@ -188,7 +188,7 @@ void rtl_arena_freelist_insert (
 )
 {
     rtl_arena_segment_type * head;
-    const auto bit = highbit(segment->m_size);
+    const unsigned int bit = highbit(segment->m_size);
     assert(bit > 0);
     head = &(arena->m_freelist_head[bit - 1]);
     QUEUE_INSERT_TAIL_NAMED(head, segment, f);

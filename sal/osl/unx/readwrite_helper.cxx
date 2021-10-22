@@ -28,11 +28,11 @@ std::size_t cap_ssize_t(std::size_t value) {
 
 bool safeWrite(int fd, void* data, std::size_t dataSize)
 {
-    auto nToWrite = dataSize;
+    std::size_t nToWrite = dataSize;
     unsigned char* dataToWrite = static_cast<unsigned char *>(data);
 
     while ( nToWrite ) {
-        auto nWritten = write(fd, dataToWrite, cap_ssize_t(nToWrite));
+        ssize_t nWritten = write(fd, dataToWrite, cap_ssize_t(nToWrite));
         if ( nWritten < 0 ) {
             if ( errno == EINTR )
                 continue;
@@ -51,11 +51,11 @@ bool safeWrite(int fd, void* data, std::size_t dataSize)
 
 bool safeRead( int fd, void* buffer, std::size_t count )
 {
-    auto nToRead = count;
+    std::size_t nToRead = count;
     unsigned char* bufferForReading = static_cast<unsigned char *>(buffer);
 
     while ( nToRead ) {
-        auto nRead = read(fd, bufferForReading, cap_ssize_t(nToRead));
+        ssize_t nRead = read(fd, bufferForReading, cap_ssize_t(nToRead));
         if ( nRead < 0 ) {
             // We were interrupted before reading, retry.
             if (errno == EINTR)

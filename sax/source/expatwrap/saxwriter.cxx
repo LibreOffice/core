@@ -629,7 +629,7 @@ void CheckValidName(OUString const& rName)
     bool hasColon(false);
     for (sal_Int32 i = 0; i < rName.getLength(); ++i)
     {
-        auto const c(rName[i]);
+        sal_Unicode const c(rName[i]);
         if (c == ':')
         {
             // see https://www.w3.org/TR/REC-xml-names/#ns-qualnames

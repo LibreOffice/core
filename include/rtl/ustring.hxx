@@ -1379,7 +1379,7 @@ public:
     */
 #if defined LIBO_INTERNAL_ONLY
     bool startsWith(std::u16string_view sv, OUString * rest = nullptr) const {
-        auto const b = match(sv);
+        bool const b = match(sv);
         if (b && rest != nullptr) {
             *rest = copy(sv.size());
         }
@@ -1443,7 +1443,7 @@ public:
     */
 #if defined LIBO_INTERNAL_ONLY
     bool startsWithIgnoreAsciiCase(std::u16string_view sv, OUString * rest = nullptr) const {
-        auto const b = matchIgnoreAsciiCase(sv);
+        bool const b = matchIgnoreAsciiCase(sv);
         if (b && rest != nullptr) {
             *rest = copy(sv.size());
         }
@@ -1503,7 +1503,7 @@ public:
     */
 #if defined LIBO_INTERNAL_ONLY
     bool endsWith(std::u16string_view sv, OUString * rest = nullptr) const {
-        auto const b = sv.size() <= sal_uInt32(pData->length)
+        bool const b = sv.size() <= sal_uInt32(pData->length)
             && match(sv, pData->length - sv.size());
         if (b && rest != nullptr) {
             *rest = copy(0, (pData->length - sv.size()));
@@ -1592,7 +1592,7 @@ public:
     */
 #if defined LIBO_INTERNAL_ONLY
     bool endsWithIgnoreAsciiCase(std::u16string_view sv, OUString * rest = nullptr) const {
-        auto const b = sv.size() <= sal_uInt32(pData->length)
+        bool const b = sv.size() <= sal_uInt32(pData->length)
             && matchIgnoreAsciiCase(sv, pData->length - sv.size());
         if (b && rest != nullptr) {
             *rest = copy(0, pData->length - sv.size());
@@ -2031,7 +2031,7 @@ public:
     */
 #if defined LIBO_INTERNAL_ONLY
     sal_Int32 indexOf(std::u16string_view sv, sal_Int32 fromIndex = 0) const {
-        auto const n = rtl_ustr_indexOfStr_WithLength(
+        sal_Int32 const n = rtl_ustr_indexOfStr_WithLength(
             pData->buffer + fromIndex, pData->length - fromIndex, sv.data(), sv.size());
         return n < 0 ? n : n + fromIndex;
     }

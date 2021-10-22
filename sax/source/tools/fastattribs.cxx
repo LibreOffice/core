@@ -222,7 +222,7 @@ bool FastAttributeList::getAsDouble( sal_Int32 nToken, double &rDouble) const
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
         if (maAttributeTokens[i] == nToken)
         {
-            auto const p = getFastAttributeValue(i);
+            const char * const p = getFastAttributeValue(i);
             rDouble = rtl_math_stringToDouble( p,  p + AttributeValueLength(i), '.', 0, nullptr, nullptr );
             return true;
         }
@@ -274,7 +274,7 @@ OUString FastAttributeList::getOptionalValue( ::sal_Int32 Token )
 }
 Sequence< Attribute > FastAttributeList::getUnknownAttributes(  )
 {
-    auto nSize = maUnknownAttributes.size();
+    size_t nSize = maUnknownAttributes.size();
     if (nSize == 0)
         return {};
     Sequence< Attribute > aSeq( nSize );

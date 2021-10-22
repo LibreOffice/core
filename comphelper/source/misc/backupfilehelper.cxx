@@ -142,7 +142,7 @@ namespace
         if (osl::File::E_None != rFile->getSize(nSize))
             return false;
 
-        const auto nRemainingSize = nSize - nPos;
+        const sal_Int64 nRemainingSize = nSize - nPos;
         if (nLength > nRemainingSize)
             return false;
 

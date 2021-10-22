@@ -116,7 +116,7 @@ public:
     }
     void erase(o3tl::sorted_vector<SfxPoolItem*>::const_iterator it)
     {
-        auto pNeedle = *it;
+        SfxPoolItem* pNeedle = *it;
         if ((*it)->IsSortable())
         {
             // bail early if someone modified one of these things underneath me

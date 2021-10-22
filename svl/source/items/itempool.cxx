@@ -482,7 +482,7 @@ void SfxItemPool::Delete()
     }
     pImpl->maPoolItemArrays.clear();
     // default items
-    for (auto rItemPtr : pImpl->maPoolDefaults)
+    for (SfxPoolItem* rItemPtr : pImpl->maPoolDefaults)
     {
         if (rItemPtr)
         {

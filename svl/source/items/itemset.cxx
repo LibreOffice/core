@@ -109,7 +109,7 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
         return;
     }
 
-    auto nCnt = svl::detail::CountRanges(m_pWhichRanges);
+    sal_uInt16 nCnt = svl::detail::CountRanges(m_pWhichRanges);
     m_ppItems = new const SfxPoolItem* [nCnt] {};
 
     // Copy attributes
@@ -386,7 +386,7 @@ const SfxPoolItem* SfxItemSet::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nWh
                 // Will 'dontcare' or 'disabled' be overwritten with some real value?
                 if ( rItem.Which() && ( IsInvalidItem(*ppFnd) || !(*ppFnd)->Which() ) )
                 {
-                    auto const old = *ppFnd;
+                    const SfxPoolItem* const old = *ppFnd;
                     *ppFnd = &m_pPool->PutImpl( rItem, nWhich, bPassingOwnership );
                     if (!IsInvalidItem(old)) {
                         assert(old->Which() == 0);
@@ -577,7 +577,7 @@ void SfxItemSet::MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo )
             eItemState == SfxItemState::DEFAULT || eItemState == SfxItemState::SET)
             return;
 
-    auto pNewRanges = m_pWhichRanges.MergeRange(nFrom, nTo);
+    WhichRangesContainer pNewRanges = m_pWhichRanges.MergeRange(nFrom, nTo);
     RecreateRanges_Impl(pNewRanges);
     m_pWhichRanges = std::move(pNewRanges);
 }
@@ -609,7 +609,7 @@ void SfxItemSet::SetRanges( WhichRangesContainer&& pNewRanges )
 void SfxItemSet::RecreateRanges_Impl(const WhichRangesContainer& pNewRanges)
 {
     // create new item-array (by iterating through all new ranges)
-    const auto nSize = svl::detail::CountRanges(pNewRanges);
+    const sal_uInt16 nSize = svl::detail::CountRanges(pNewRanges);
     SfxPoolItem const** aNewItems = new const SfxPoolItem* [ nSize ];
     sal_uInt16 nNewCount = 0;
     if (m_nCount == 0)

@@ -90,14 +90,14 @@ void handleCommand(
     OStringBuffer buf;
     if (rExecutable == "uiex" || rExecutable == "hrcex")
     {
-        auto const env = getenv("SRC_ROOT");
+        char* const env = getenv("SRC_ROOT");
         assert(env != nullptr);
         buf.append(env);
         buf.append("/solenv/bin/");
     }
     else
     {
-        auto const env = getenv("WORKDIR_FOR_BUILD");
+        char* const env = getenv("WORKDIR_FOR_BUILD");
         assert(env != nullptr);
         buf.append(env);
         buf.append("/LinkTarget/Executable/");

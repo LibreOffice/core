@@ -2141,7 +2141,7 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat( const css::i18n::NumberForma
             return nullptr;
         }
     }
-    auto pFormat2 = pFormat.get();
+    SvNumberformat* pFormat2 = pFormat.get();
     if ( !aFTable.emplace( nPos, std::move(pFormat) ).second )
     {
         if (LocaleDataWrapper::areChecksEnabled())

@@ -228,15 +228,15 @@ ImplPolygon::ImplPolygon( const Point& rCenter, tools::Long nRadX, tools::Long n
 ImplPolygon::ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, const Point& rEnd,
     PolyStyle eStyle )
 {
-    const auto nWidth = rBound.GetWidth();
-    const auto nHeight = rBound.GetHeight();
+    const tools::Long nWidth = rBound.GetWidth();
+    const tools::Long nHeight = rBound.GetHeight();
 
     if( ( nWidth != 0 ) && ( nHeight != 0 ) )
     {
         const Point aCenter( rBound.Center() );
         // tdf#142268 Get Top Left corner of rectangle (the rectangle is not always correctly created)
-        const auto aBoundLeft = rBound.Left() < aCenter.X() ? rBound.Left() : rBound.Right();
-        const auto aBoundTop = rBound.Top() < aCenter.Y() ? rBound.Top() : rBound.Bottom();
+        const tools::Long aBoundLeft = rBound.Left() < aCenter.X() ? rBound.Left() : rBound.Right();
+        const tools::Long aBoundTop = rBound.Top() < aCenter.Y() ? rBound.Top() : rBound.Bottom();
         const auto nRadX = o3tl::saturating_sub(aCenter.X(), aBoundLeft);
         const auto nRadY = o3tl::saturating_sub(aCenter.Y(), aBoundTop);
         sal_uInt16  nPoints;

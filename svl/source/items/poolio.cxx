@@ -83,7 +83,7 @@ bool SfxItemPool::CheckItemInPool(const SfxPoolItem *pItem) const
 
     SfxPoolItemArray_Impl& rItemArr = pImpl->maPoolItemArrays[GetIndex_Impl(pItem->Which())];
 
-    for ( auto p : rItemArr )
+    for ( SfxPoolItem* p : rItemArr )
     {
         if ( p == pItem )
             return true;

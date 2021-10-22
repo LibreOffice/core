@@ -50,7 +50,7 @@ oslFileError SAL_CALL osl_getTempDirURL( rtl_uString** pustrTempDir )
     if ( !pValue )
         pValue = "/tmp";
 
-    auto nLen = strlen(pValue);
+    std::size_t nLen = strlen(pValue);
     while (nLen > 1 && pValue[nLen - 1] == '/') // Allow path consisting of single "/"
         --nLen;
     rtl_string2UString( &ustrTempPath, pValue, nLen, osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );

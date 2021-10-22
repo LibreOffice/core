@@ -135,7 +135,7 @@ void SfxUndoAction::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 std::unique_ptr<SfxUndoAction> SfxUndoArray::Remove(int idx)
 {
-    auto ret = std::move(maUndoActions[idx].pAction);
+    std::unique_ptr<SfxUndoAction> ret = std::move(maUndoActions[idx].pAction);
     maUndoActions.erase(maUndoActions.begin() + idx);
     return ret;
 }
@@ -581,7 +581,7 @@ void SfxUndoManager::AddUndoAction( std::unique_ptr<SfxUndoAction> pAction, bool
     UndoManagerGuard aGuard( *m_xData );
 
     // add
-    auto pActionTmp = pAction.get();
+    SfxUndoAction* pActionTmp = pAction.get();
     if ( ImplAddUndoAction_NoNotify( std::move(pAction), bTryMerge, true, aGuard ) )
     {
         // notify listeners

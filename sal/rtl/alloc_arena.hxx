@@ -63,10 +63,10 @@ struct rtl_arena_segment_type
 /** rtl_arena_type
  *  @internal
  */
-constexpr auto RTL_ARENA_FREELIST_SIZE = sizeof(void*) * 8;
-constexpr auto RTL_ARENA_HASH_SIZE = 64;
+constexpr int RTL_ARENA_FREELIST_SIZE = sizeof(void*) * 8;
+constexpr int RTL_ARENA_HASH_SIZE = 64;
 
-constexpr auto RTL_ARENA_FLAG_RESCALE = 1; /* within hash rescale operation */
+constexpr int RTL_ARENA_FLAG_RESCALE = 1; /* within hash rescale operation */
 
 struct rtl_arena_st
 {

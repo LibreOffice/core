@@ -231,8 +231,8 @@ namespace comphelper
 
     bool anyLess( css::uno::Any const & lhs, css::uno::Any const & rhs)
     {
-        auto lhsTypeClass = lhs.getValueType().getTypeClass();
-        auto rhsTypeClass = rhs.getValueType().getTypeClass();
+        css::uno::TypeClass lhsTypeClass = lhs.getValueType().getTypeClass();
+        css::uno::TypeClass rhsTypeClass = rhs.getValueType().getTypeClass();
         if (lhsTypeClass != rhsTypeClass)
             return lhsTypeClass < rhsTypeClass;
 

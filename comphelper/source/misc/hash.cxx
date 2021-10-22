@@ -76,7 +76,7 @@ struct HashImpl
     {
 
 #if USE_TLS_NSS
-        auto const e = NSS_NoDB_Init(nullptr);
+        SECStatus const e = NSS_NoDB_Init(nullptr);
         if (e != SECSuccess) {
             throw css::uno::RuntimeException("NSS_NoDB_Init failed with " + OUString::number(e));
         }

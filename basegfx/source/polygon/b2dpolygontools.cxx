@@ -1784,25 +1784,25 @@ namespace basegfx::utils
             {
                 case 1 :
                     {
-                        static auto const singleton = impCreateUnitCircle(1);
+                        static B2DPolygon const singleton = impCreateUnitCircle(1);
                         return singleton;
                     }
 
                 case 2 :
                     {
-                        static auto const singleton = impCreateUnitCircle(2);
+                        static B2DPolygon const singleton = impCreateUnitCircle(2);
                         return singleton;
                     }
 
                 case 3 :
                     {
-                        static auto const singleton = impCreateUnitCircle(3);
+                        static B2DPolygon const singleton = impCreateUnitCircle(3);
                         return singleton;
                     }
 
                 default : // case 0 :
                     {
-                        static auto const singleton = impCreateUnitCircle(0);
+                        static B2DPolygon const singleton = impCreateUnitCircle(0);
                         return singleton;
                     }
             }

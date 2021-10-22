@@ -398,7 +398,7 @@ int main()
 {
     try
     {
-        auto const env = getenv("ALL_LANGS");
+        char* const env = getenv("ALL_LANGS");
         assert(env != nullptr);
         OString aLanguages(env);
         if( aLanguages.isEmpty() )

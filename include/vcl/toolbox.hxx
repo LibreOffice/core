@@ -91,10 +91,10 @@ public:
 
     void SetCurItemId( ToolBoxItemId CurID )   { mnCurItemId=CurID; }
 
-    static constexpr auto APPEND
+    static constexpr ImplToolItems::size_type APPEND
         = std::numeric_limits<ImplToolItems::size_type>::max();
 
-    static constexpr auto ITEM_NOTFOUND
+    static constexpr ImplToolItems::size_type ITEM_NOTFOUND
         = std::numeric_limits<ImplToolItems::size_type>::max();
 
 private:

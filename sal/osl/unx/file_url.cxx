@@ -141,12 +141,12 @@ namespace {
 bool convert(OUStringBuffer const & in, OStringBuffer * append) {
     assert(append != nullptr);
     for (sal_Size nConvert = in.getLength();;) {
-        auto const oldLen = append->getLength();
-        auto n = std::min(
+        sal_Int32 const oldLen = append->getLength();
+        sal_Size n = std::min(
             std::max(nConvert, sal_Size(PATH_MAX)),
             sal_Size(std::numeric_limits<sal_Int32>::max() - oldLen));
             // approximation of required converted size
-        auto s = append->appendUninitialized(n);
+        char* s = append->appendUninitialized(n);
         sal_uInt32 info;
         sal_Size converted;
         //TODO: context, for reliable treatment of DESTBUFFERTOSMALL:
@@ -171,8 +171,8 @@ bool convert(OUStringBuffer const & in, OStringBuffer * append) {
 
 bool decodeFromUtf8(std::u16string_view text, OString * result) {
     assert(result != nullptr);
-    auto p = text.data();
-    auto const end = p + text.size();
+    const char16_t* p = text.data();
+    const char16_t* const end = p + text.size();
     OUStringBuffer ubuf(static_cast<int>(text.size()));
     OStringBuffer bbuf(PATH_MAX);
     while (p < end) {
@@ -224,7 +224,7 @@ template<typename T> oslFileError getSystemPathFromFileUrl(
     sal_Int32 i = 0;
     if (rtl::isAsciiAlpha(url[0])) {
         for (sal_Int32 j = 1; j != url.getLength(); ++j) {
-            auto c = url[j];
+            sal_Unicode c = url[j];
             if (c == ':') {
                 if (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
                         url.pData->buffer, j,
@@ -943,9 +943,9 @@ oslFileError osl::detail::convertPathnameToUrl(OString const & pathname, OUStrin
             // component
     }
     for (sal_Size convert = pathname.getLength();;) {
-        auto n = std::max(convert, sal_Size(PATH_MAX)); // approximation of required converted size
+        sal_Size n = std::max(convert, sal_Size(PATH_MAX)); // approximation of required converted size
         OUStringBuffer ubuf(static_cast<int>(n));
-        auto s = ubuf.appendUninitialized(n);
+        sal_Unicode* s = ubuf.appendUninitialized(n);
         sal_uInt32 info;
         sal_Size converted;
         //TODO: context, for reliable treatment of DESTBUFFERTOSMALL:

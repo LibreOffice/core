@@ -1180,7 +1180,7 @@ namespace
             return;
 
         OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(rFrame));
-        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aCommand, aModuleName);
+        uno::Sequence<css::beans::PropertyValue> aProperties = vcl::CommandInfoProvider::GetCommandProperties(aCommand, aModuleName);
         OUString aLabel(vcl::CommandInfoProvider::GetLabelForCommand(aProperties));
         if (!aLabel.isEmpty())
             pButton->SetText(aLabel);

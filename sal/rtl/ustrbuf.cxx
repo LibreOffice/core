@@ -108,7 +108,7 @@ void SAL_CALL rtl_uStringbuffer_ensureCapacity
 
     rtl_uString * pTmp = *This;
     rtl_uString * pNew = nullptr;
-    auto nLength = (*This)->length;
+    sal_Int32 nLength = (*This)->length;
     *capacity = (nLength + 1) * 2;
     if (minimumCapacity > *capacity)
         /* still lower, set to the minimum capacity */

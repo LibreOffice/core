@@ -48,7 +48,7 @@ inline bool validRanges2(const WhichRangesContainer& pRanges)
 {
     for (sal_Int32 i = 0; i < pRanges.size(); ++i)
     {
-        auto p = pRanges[i];
+        std::pair<sal_uInt16, sal_uInt16> p = pRanges[i];
         if (!validRange(p.first, p.second))
             return false;
         // ranges must be sorted

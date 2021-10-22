@@ -262,7 +262,7 @@ bool x86_64::return_in_hidden_param( typelib_TypeDescriptionReference *pTypeRef 
 x86_64::ReturnKind x86_64::getReturnKind(typelib_TypeDescriptionReference * type) noexcept {
     x86_64_reg_class classes[MAX_CLASSES];
     // coverity[uninit_use_in_call : FALSE]
-    auto const n = classify_argument(type, classes, 0);
+    int const n = classify_argument(type, classes, 0);
     if (n == 0) {
         return ReturnKind::Memory;
     }

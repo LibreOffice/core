@@ -516,7 +516,7 @@ public:
         if (sv.size() > sal_uInt32(std::numeric_limits<sal_Int32>::max() - pData->length)) {
             throw std::bad_alloc();
         }
-        auto const l = pData->length + sv.size();
+        sal_Int32 const l = pData->length + sv.size();
         rtl_string_ensureCapacity(&pData, l);
         *addDataHelper(pData->buffer + pData->length, sv.data(), sv.size()) = '\0';
         pData->length = l;

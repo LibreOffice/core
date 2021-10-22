@@ -559,7 +559,7 @@ inline void Bitmap::SetPrefSize( const Size& rSize )
 
 inline sal_Int64 Bitmap::GetSizeBytes() const
 {
-    const auto aSizePixel = GetSizePixel();
+    Size aSizePixel = GetSizePixel();
     const sal_Int64 aBitCount = vcl::pixelFormatBitCount(getPixelFormat());
     sal_Int64 aSizeInBytes = (aSizePixel.Width() * aSizePixel.Height() * aBitCount) / 8;
     return aSizeInBytes;

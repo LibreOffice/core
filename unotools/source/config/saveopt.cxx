@@ -43,7 +43,7 @@ void SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersion eVersion, const std
 
 void SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersion eVersion )
 {
-    auto xChanges = comphelper::ConfigurationChanges::create();
+    std::shared_ptr<comphelper::ConfigurationChanges> xChanges = comphelper::ConfigurationChanges::create();
     SetODFDefaultVersion(eVersion, xChanges);
     xChanges->commit();
 }

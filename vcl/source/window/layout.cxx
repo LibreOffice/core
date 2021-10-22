@@ -202,7 +202,7 @@ void VclContainer::Command(const CommandEvent& rCEvt)
 {
     if (CommandEventId::ContextMenu == rCEvt.GetCommand())
     {
-        auto pParent = GetParent();
+        vcl::Window* pParent = GetParent();
         if (pParent)
         {
             CommandEvent aCEvt(rCEvt.GetMousePosPixel() + GetPosPixel(), rCEvt.GetCommand(), rCEvt.IsMouseEvent(), rCEvt.GetEventData());
@@ -1843,7 +1843,7 @@ int VclScrolledWindow::CalcBorderWidth() const
     DecorationView aDecoView(const_cast<OutputDevice*>(GetOutDev()));
     // don't actually draw anything, just measure what size it would be and the diff is the desired border size to reserve
     const tools::Rectangle aContentRect = aDecoView.DrawFrame(aRect, m_eDrawFrameStyle, m_eDrawFrameFlags | DrawFrameFlags::NoDraw);
-    const auto nBorderWidth = (aRect.GetWidth() - aContentRect.GetWidth()) / 2;
+    const tools::Long nBorderWidth = (aRect.GetWidth() - aContentRect.GetWidth()) / 2;
     return std::max<int>(nBorderWidth, 1);
 }
 
@@ -2115,7 +2115,7 @@ void VclScrolledWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
     const tools::Rectangle aRect(tools::Rectangle(Point(0,0), GetSizePixel()));
     DecorationView aDecoView(&rRenderContext);
     const tools::Rectangle aContentRect = aDecoView.DrawFrame(aRect, m_eDrawFrameStyle, m_eDrawFrameFlags);
-    const auto nBorderWidth = (aRect.GetWidth() - aContentRect.GetWidth()) / 2;
+    const tools::Long nBorderWidth = (aRect.GetWidth() - aContentRect.GetWidth()) / 2;
     SAL_WARN_IF(nBorderWidth > m_nBorderWidth, "vcl.layout", "desired border at paint " <<
                 nBorderWidth << " is larger than expected " << m_nBorderWidth);
 }

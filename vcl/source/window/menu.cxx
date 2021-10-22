@@ -476,7 +476,7 @@ void Menu::InsertItem(const OUString& rCommand, const css::uno::Reference<css::f
     if (rFrame.is())
     {
         OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(rFrame));
-        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(rCommand, aModuleName);
+        css::uno::Sequence<css::beans::PropertyValue> aProperties = vcl::CommandInfoProvider::GetCommandProperties(rCommand, aModuleName);
         OUString aLabel(CommandInfoProvider::GetPopupLabelForCommand(aProperties));
         OUString aTooltip(CommandInfoProvider::GetTooltipForCommand(rCommand, aProperties, rFrame));
         Image aImage(CommandInfoProvider::GetImageForCommand(rCommand, rFrame));
@@ -746,7 +746,7 @@ void Menu::SetPopupMenu( sal_uInt16 nItemId, PopupMenu* pMenu )
         return;
 
     // remove old menu
-    auto oldSubMenu = pData->pSubMenu;
+    VclPtr<Menu> oldSubMenu = pData->pSubMenu;
 
     // data exchange
     pData->pSubMenu = pMenu;
@@ -1025,7 +1025,7 @@ OUString Menu::GetItemText( sal_uInt16 nItemId ) const
 void Menu::SetItemColor(sal_uInt16 nItemId, const Color& rColor)
 {
     StyleSettings aSettings = Application::GetSettings().GetStyleSettings();
-    auto iconSize = aSettings.GetToolbarIconSizePixel();
+    Size iconSize = aSettings.GetToolbarIconSizePixel();
     Bitmap aBmp(iconSize, vcl::PixelFormat::N24_BPP);
     BitmapWriteAccess aBmpAccess(aBmp);
     aBmpAccess.SetFillColor(rColor);

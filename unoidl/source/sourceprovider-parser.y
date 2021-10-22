@@ -205,7 +205,7 @@ bool coerce(
             break;
         case unoidl::detail::SourceProviderExpr::TYPE_FLOAT:
             {
-                auto tmp = lhs->ival;
+                sal_Int64 tmp = lhs->ival;
                 lhs->fval = tmp;
                 ok = true;
             }
@@ -233,7 +233,7 @@ bool coerce(
             break;
         case unoidl::detail::SourceProviderExpr::TYPE_FLOAT:
             {
-                auto nTmp = lhs->uval;
+                sal_uInt64 nTmp = lhs->uval;
                 lhs->fval = nTmp;
                 ok = true;
             }
@@ -247,14 +247,14 @@ bool coerce(
             break;
         case unoidl::detail::SourceProviderExpr::TYPE_INT:
             {
-                auto tmp = rhs->ival;
+                sal_Int64 tmp = rhs->ival;
                 rhs->fval = tmp;
                 ok = true;
             }
             break;
         case unoidl::detail::SourceProviderExpr::TYPE_UINT:
             {
-                auto tmp = rhs->uval;
+                sal_uInt64 tmp = rhs->uval;
                 rhs->fval = tmp;
                 ok = true;
             }
@@ -1347,7 +1347,7 @@ structMember:
           }
           if (p1->baseEntity.is()) {
               OUString baseName(p1->baseName);
-              for (auto baseEnt(p1->baseEntity);;) {
+              for (rtl::Reference<unoidl::PlainStructTypeEntity> baseEnt(p1->baseEntity);;) {
                   if (nameHasSameIdentifierAs(baseName, id)) {
                       error(
                           @3, yyscanner,
@@ -1433,7 +1433,7 @@ structMember:
               }
               if (p3->baseEntity.is()) {
                   OUString baseName(p3->baseName);
-                  for (auto baseEnt(p3->baseEntity);;) {
+                  for (rtl::Reference<unoidl::ExceptionTypeEntity> baseEnt(p3->baseEntity);;) {
                       if (nameHasSameIdentifierAs(baseName, id)) {
                           error(
                               @3, yyscanner,

@@ -292,15 +292,15 @@ namespace sax_fastparser {
     void FastSaxSerializer::writeId( ::sal_Int32 nElement )
     {
         if( HAS_NAMESPACE( nElement ) ) {
-            auto const Namespace(mxFastTokenHandler->getUTF8Identifier(NAMESPACE(nElement)));
+            Sequence<sal_Int8> const Namespace(mxFastTokenHandler->getUTF8Identifier(NAMESPACE(nElement)));
             assert(Namespace.hasElements());
             writeBytes(Namespace);
             writeBytes(sColon.getStr(), sColon.getLength());
-            auto const Element(mxFastTokenHandler->getUTF8Identifier(TOKEN(nElement)));
+            Sequence<sal_Int8> const Element(mxFastTokenHandler->getUTF8Identifier(TOKEN(nElement)));
             assert(Element.hasElements());
             writeBytes(Element);
         } else {
-            auto const Element(mxFastTokenHandler->getUTF8Identifier(nElement));
+            Sequence<sal_Int8> const Element(mxFastTokenHandler->getUTF8Identifier(nElement));
             assert(Element.hasElements());
             writeBytes(Element);
         }
@@ -783,7 +783,7 @@ namespace sax_fastparser {
 
         // Sort it all
         std::map< sal_Int32, Int8Sequence >::iterator iter;
-        for ( const auto nIndex : std::as_const(maOrder) )
+        for ( const sal_Int32 nIndex : std::as_const(maOrder) )
         {
             iter = maData.find( nIndex );
             if ( iter != maData.end() )

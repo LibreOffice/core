@@ -875,7 +875,7 @@ void FloatingWindow::ImplEndPopupMode( FloatWinPopupEndFlags nFlags, const VclPt
         // stop the PopupMode also for all PopupMode windows created after us
         std::vector<VclPtr<FloatingWindow>> aCancelFloats;
         // stop the PopupMode also for all following PopupMode windows
-        for (auto pFloat = pSVData->mpWinData->mpFirstFloat;
+        for (VclPtr<FloatingWindow> pFloat = pSVData->mpWinData->mpFirstFloat;
              pFloat != nullptr && pFloat != this;
              pFloat = pFloat->mpNextFloat)
             aCancelFloats.push_back(pFloat);
@@ -956,7 +956,7 @@ void FloatingWindow::AddPopupModeWindow(vcl::Window* pWindow)
 
 bool SystemWindow::UpdatePositionData()
 {
-    auto pWin = ImplGetParent();
+    vcl::Window* pWin = ImplGetParent();
     if (pWin)
     {
         // Simulate Move, so the relative position of the floating window will be recalculated

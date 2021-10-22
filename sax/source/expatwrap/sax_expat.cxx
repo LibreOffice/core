@@ -469,7 +469,7 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
 
 
     m_pImpl->exception = SAXParseException();
-    auto const xmlParser = entity.pParser;
+    XML_ParserStruct* const xmlParser = entity.pParser;
     m_pImpl->pushEntity( std::move(entity) );
 
     ParserCleanup aEnsureFree(*m_pImpl, xmlParser);
@@ -846,7 +846,7 @@ bool SaxExpatParser_Impl::callbackExternalEntityRef(
         }
 
         entity.converter.setInputStream( entity.structSource.aInputStream );
-        auto const xmlParser = entity.pParser;
+        XML_ParserStruct* const xmlParser = entity.pParser;
         pImpl->pushEntity( std::move(entity) );
         try
         {

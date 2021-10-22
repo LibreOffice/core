@@ -135,7 +135,7 @@ void OInputStreamWrapper::checkError() const
 {
     checkConnected();
 
-    auto const e = m_pSvStream->SvStream::GetError();
+    ErrCode const e = m_pSvStream->SvStream::GetError();
     if (e != ERRCODE_NONE)
         // TODO: really evaluate the error
         throw css::io::NotConnectedException("utl::OInputStreamWrapper error " + e.toHexString(), const_cast<css::uno::XWeak*>(static_cast<const css::uno::XWeak*>(this)));

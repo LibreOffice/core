@@ -37,7 +37,7 @@ std::unique_ptr<sal::BacktraceState> sal::backtrace_get(sal_uInt32 maxDepth)
     if (maxDepth > maxInt) {
         maxDepth = static_cast<sal_uInt32>(maxInt);
     }
-    auto b1 = new void *[maxDepth];
+    void** b1 = new void *[maxDepth];
     int n = backtrace(b1, static_cast<int>(maxDepth));
     return std::unique_ptr<BacktraceState>(new BacktraceState{ b1, n });
 }

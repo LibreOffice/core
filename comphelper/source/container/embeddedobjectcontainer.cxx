@@ -483,7 +483,7 @@ bool EmbeddedObjectContainer::StoreEmbeddedObject(
             uno::Sequence < beans::PropertyValue > aSeq;
             if ( bCopy )
             {
-                auto aObjArgs(::comphelper::InitPropertySequence({
+                uno::Sequence<beans::PropertyValue> aObjArgs(::comphelper::InitPropertySequence({
                     { "SourceShellID", uno::Any(rSrcShellID) },
                     { "DestinationShellID", uno::Any(rDestShellID) }
                 }));

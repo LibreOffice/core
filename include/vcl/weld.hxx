@@ -1050,7 +1050,7 @@ public:
         std::vector<int> aRows(get_selected_rows());
         std::vector<OUString> aRet;
         aRet.reserve(aRows.size());
-        for (auto a : aRows)
+        for (int a : aRows)
             aRet.push_back(get_text(a));
         return aRet;
     }

@@ -45,7 +45,7 @@ void WindowOutputDevice::SetSettings( const AllSettings& rSettings )
 void WindowOutputDevice::SetSettings( const AllSettings& rSettings, bool bChild )
 {
 
-    if ( auto pBorderWindow = mxOwnerWindow->mpWindowImpl->mpBorderWindow.get() )
+    if ( vcl::Window* pBorderWindow = mxOwnerWindow->mpWindowImpl->mpBorderWindow.get() )
     {
         static_cast<vcl::WindowOutputDevice*>(pBorderWindow->GetOutDev())->SetSettings( rSettings, false );
         if ( (pBorderWindow->GetType() == WindowType::BORDERWINDOW) &&

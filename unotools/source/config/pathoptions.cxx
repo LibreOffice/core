@@ -237,7 +237,7 @@ const OUString& SvtPathOptions_Impl::GetPath( SvtPathOptions::Paths ePath )
         else if (ePath == SvtPathOptions::Paths::Palette ||
                  ePath == SvtPathOptions::Paths::IconSet)
         {
-            auto ctx = comphelper::getProcessComponentContext();
+            Reference<XComponentContext> ctx = comphelper::getProcessComponentContext();
             OUStringBuffer buf(aPathValue.getLength()*2);
             for (sal_Int32 i = 0;;)
             {

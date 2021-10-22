@@ -288,7 +288,7 @@ sal_uInt64 SvFileStream::SeekPos(sal_uInt64 const nPos)
 
 void SvFileStream::FlushData()
 {
-    auto rc = osl_syncFile(pInstanceData->rHandle);
+    oslFileError rc = osl_syncFile(pInstanceData->rHandle);
     if (rc != osl_File_E_None)
         SetError( ::GetSvError( rc ));
  }

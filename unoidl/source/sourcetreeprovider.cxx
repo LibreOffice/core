@@ -95,7 +95,7 @@ bool exists(OUString const & uri, bool directory) {
 class Cursor: public MapCursor {
 public:
     Cursor(Manager& manager, OUString const & uri): manager_(manager), directory_(uri) {
-        auto const rc = directory_.open();
+        osl::FileBase::RC const rc = directory_.open();
         SAL_WARN_IF(
             rc != osl::FileBase::E_None, "unoidl", "open(" << uri << ") failed with " << +rc);
     }
@@ -134,7 +134,7 @@ bool isValidFileName(OUString const & name, bool directory) {
             }
             return directory;
         }
-        auto const c = name[i];
+        sal_Unicode const c = name[i];
         if (c == '.') {
             if (i == 0 || name[i - 1] == '_') {
                 return false;
@@ -161,7 +161,7 @@ rtl::Reference<Entity> Cursor::getNext(OUString * name) {
     assert(name != nullptr);
     for (;;) {
         osl::DirectoryItem i;
-        auto rc = directory_.getNextItem(i);
+        osl::FileBase::RC rc = directory_.getNextItem(i);
         switch (rc) {
         case osl::FileBase::E_None:
             {
@@ -175,7 +175,7 @@ rtl::Reference<Entity> Cursor::getNext(OUString * name) {
                         "getFileSatus in <" << directory_.getURL() << "> failed with " << +rc);
                     continue;
                 }
-                auto const dir = stat.getFileType() == osl::FileStatus::Directory;
+                bool const dir = stat.getFileType() == osl::FileStatus::Directory;
                 if (!isValidFileName(stat.getFileName(), dir)) {
                     continue;
                 }

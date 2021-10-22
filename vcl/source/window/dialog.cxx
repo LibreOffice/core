@@ -1677,10 +1677,10 @@ void Dialog::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     rJsonWriter.put("dialogid", sDialogId.copy(nStartPos));
 
     {
-        auto aResponses = rJsonWriter.startArray("responses");
+        tools::ScopedJsonWriterArray aResponses = rJsonWriter.startArray("responses");
         for (const auto& rResponse : mpDialogImpl->maResponses)
         {
-            auto aResponse = rJsonWriter.startStruct();
+            tools::ScopedJsonWriterStruct aResponse = rJsonWriter.startStruct();
             rJsonWriter.put("id", rResponse.first->get_id());
             rJsonWriter.put("response", rResponse.second);
         }

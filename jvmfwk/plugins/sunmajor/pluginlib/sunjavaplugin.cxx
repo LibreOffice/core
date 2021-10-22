@@ -348,7 +348,7 @@ javaPluginError jfw_plugin_getAllJavaInfos(
 
     for (auto const& vecInfo : vecInfos)
     {
-        auto const versionInfo = vendorSettings.getVersionInformation(vecInfo->getVendor());
+        jfw::VersionInfo const versionInfo = vendorSettings.getVersionInformation(vecInfo->getVendor());
         javaPluginError err = checkJavaVersionRequirements(
             vecInfo, versionInfo.sMinVersion, versionInfo.sMaxVersion, versionInfo.vecExcludeVersions);
 
@@ -386,7 +386,7 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
 
     //Check if the detected JRE matches the version requirements
     javaPluginError errorcode = javaPluginError::NONE;
-    auto const versionInfo = vendorSettings.getVersionInformation(aVendorInfo->getVendor());
+    jfw::VersionInfo const versionInfo = vendorSettings.getVersionInformation(aVendorInfo->getVendor());
     errorcode = checkJavaVersionRequirements(
         aVendorInfo, versionInfo.sMinVersion, versionInfo.sMaxVersion, versionInfo.vecExcludeVersions);
 
@@ -411,7 +411,7 @@ javaPluginError jfw_plugin_getJavaInfoFromJavaHome(
     assert(infoJavaHome.size() == 1);
 
     //Check if the detected JRE matches the version requirements
-    auto const versionInfo = vendorSettings.getVersionInformation(infoJavaHome[0]->getVendor());
+    jfw::VersionInfo const versionInfo = vendorSettings.getVersionInformation(infoJavaHome[0]->getVendor());
     if (checkJavaVersionRequirements(
                 infoJavaHome[0],
                 versionInfo.sMinVersion,
@@ -440,7 +440,7 @@ javaPluginError jfw_plugin_getJavaInfosFromPath(
     // copy infos of JREs that meet version requirements to vecVerifiedInfos
     for (auto const& infosFromPath : vecInfosFromPath)
     {
-        auto const versionInfo = vendorSettings.getVersionInformation(infosFromPath->getVendor());
+        jfw::VersionInfo const versionInfo = vendorSettings.getVersionInformation(infosFromPath->getVendor());
         if (checkJavaVersionRequirements(
                     infosFromPath,
                     versionInfo.sMinVersion,

@@ -1096,7 +1096,7 @@ oslSocketResult SAL_CALL osl_getDottedInetAddrOfSocketAddr(oslSocketAddr Addr, r
     }
 
     char buf[INET_ADDRSTRLEN];
-    auto const text = inet_ntop(AF_INET, &pSystemInetAddr->sin_addr, buf, INET_ADDRSTRLEN);
+    const char* text = inet_ntop(AF_INET, &pSystemInetAddr->sin_addr, buf, INET_ADDRSTRLEN);
     assert(text != nullptr);
     rtl_uString_newFromAscii(ustrDottedInetAddr,text);
 

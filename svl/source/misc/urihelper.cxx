@@ -738,7 +738,7 @@ OUString URIHelper::resolveIdnaHost(OUString const & url) {
     if (!(uri.is() && uri->hasAuthority())) {
         return url;
     }
-    auto auth(uri->getAuthority());
+    OUString auth(uri->getAuthority());
     if (auth.isEmpty())
         return url;
     sal_Int32 hostStart = auth.indexOf('@') + 1;
@@ -751,8 +751,8 @@ OUString URIHelper::resolveIdnaHost(OUString const & url) {
     } else {
         hostEnd = auth.getLength();
     }
-    auto asciiOnly = true;
-    for (auto i = hostStart; i != hostEnd; ++i) {
+    bool asciiOnly = true;
+    for (sal_Int32 i = hostStart; i != hostEnd; ++i) {
         if (!rtl::isAscii(auth[i])) {
             asciiOnly = false;
             break;

@@ -2081,7 +2081,7 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
     PORT_Free(pActualResultBuffer);
     HASH_Destroy(pHASHContext);
     NSS_CMSSignerInfo_Destroy(pCMSSignerInfo);
-    for (auto pDocumentCertificate : aDocumentCertificates)
+    for (CERTCertificateStr* pDocumentCertificate : aDocumentCertificates)
         CERT_DestroyCertificate(pDocumentCertificate);
 
     return true;

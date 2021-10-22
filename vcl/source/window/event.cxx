@@ -343,7 +343,7 @@ ImplSVEvent * Window::PostUserEvent( const Link<void*,void>& rLink, void* pCalle
         pSVEvent->mpInstanceRef = static_cast<vcl::Window *>(rLink.GetInstance());
     }
 
-    auto pTmpEvent = pSVEvent.get();
+    ImplSVEvent* pTmpEvent = pSVEvent.get();
     if (!mpWindowImpl->mpFrame->PostEvent( std::move(pSVEvent) ))
         return nullptr;
     return pTmpEvent;

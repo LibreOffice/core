@@ -706,7 +706,7 @@ XmlReader::Result XmlReader::handleEndTag() {
 
 void XmlReader::handleElementEnd() {
     assert(!elements_.empty());
-    auto end = elements_.top().inheritedNamespaces;
+    size_t end = elements_.top().inheritedNamespaces;
     namespaces_.resize(end);
     elements_.pop();
     state_ = elements_.empty() ? State::Done : State::Content;

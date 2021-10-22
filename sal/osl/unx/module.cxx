@@ -306,7 +306,7 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
 
         SAL_WARN_IF(
             *ppLibraryUrl == nullptr, "sal.osl", "rtl_string2UString failed");
-        auto const e = osl_getFileURLFromSystemPath(*ppLibraryUrl, ppLibraryUrl);
+        oslFileError const e = osl_getFileURLFromSystemPath(*ppLibraryUrl, ppLibraryUrl);
         if (e == osl_File_E_None)
         {
             SAL_INFO("sal.osl", "osl_getModuleURLFromAddress(" << addr << ") => " << OUString(*ppLibraryUrl));

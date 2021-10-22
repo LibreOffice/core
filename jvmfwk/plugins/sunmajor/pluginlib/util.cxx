@@ -972,7 +972,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
         }
     }
 
-    auto knownVendor = false;
+    bool knownVendor = false;
     if (!sVendorName.isEmpty())
     {
         //find the creator func for the respective vendor name

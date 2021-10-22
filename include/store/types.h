@@ -42,7 +42,7 @@ constexpr sal_uInt16 STORE_MAXIMUM_PAGESIZE = 0x8000;
     @see any param pName
     @see store_E_NameTooLong
  */
-constexpr auto STORE_MAXIMUM_NAMESIZE = 256;
+constexpr sal_Int32 STORE_MAXIMUM_NAMESIZE = 256;
 
 
 /** Attributes (predefined).

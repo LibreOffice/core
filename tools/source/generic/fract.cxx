@@ -257,7 +257,7 @@ void Fraction::ReduceInaccurate( unsigned nSignificantBits )
     if ( !mnNumerator )
         return;
 
-    auto a = toRational(mnNumerator, mnDenominator);
+    boost::rational<sal_Int32> a = toRational(mnNumerator, mnDenominator);
     rational_ReduceInaccurate(a, nSignificantBits);
     mnNumerator = a.numerator();
     mnDenominator = a.denominator();

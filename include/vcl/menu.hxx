@@ -105,7 +105,7 @@ namespace o3tl
 }
 
 /// Invalid menu item id
-constexpr auto ITEMPOS_INVALID = 0xFFFF;
+constexpr sal_uInt16 ITEMPOS_INVALID = 0xFFFF;
 
 struct ImplMenuDelData
 {

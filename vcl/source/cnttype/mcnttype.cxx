@@ -58,7 +58,7 @@ sal_Bool SAL_CALL CMimeContentType::hasParameter( const OUString& aName )
 
 OUString SAL_CALL CMimeContentType::getParameterValue( const OUString& aName )
 {
-    auto const lower = aName.toAsciiLowerCase();
+    OUString const lower = aName.toAsciiLowerCase();
 
     if ( !hasParameter( lower ) )
         throw css::container::NoSuchElementException( );

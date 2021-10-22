@@ -122,7 +122,7 @@ void SvtBroadcaster::Add( SvtListener* p )
         return;
     // Avoid normalizing if the item appended keeps the container sorted.
     auto nRealSize = static_cast<sal_Int32>(maListeners.size() - mnEmptySlots);
-    auto bSorted = mnListenersFirstUnsorted == nRealSize;
+    bool bSorted = mnListenersFirstUnsorted == nRealSize;
     if (maListeners.empty() || (bSorted && maListeners.back() <= p))
     {
         ++mnListenersFirstUnsorted;

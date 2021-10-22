@@ -34,7 +34,7 @@ inline bool equalsIgnoreAsciiCase(std::u16string_view s1, std::u16string_view s2
 inline std::string_view getToken(std::string_view sv, char delimiter, std::size_t& position)
 {
     assert(position <= sv.size());
-    auto const n = sv.find(delimiter, position);
+    size_t const n = sv.find(delimiter, position);
     std::string_view t;
     if (n == std::string_view::npos)
     {

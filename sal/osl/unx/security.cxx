@@ -235,7 +235,7 @@ sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **ustrName)
 
     if (pSecImpl != nullptr && pSecImpl->m_pPasswd.pw_name != nullptr) {
         pszName = pSecImpl->m_pPasswd.pw_name;
-        auto const n = std::strlen(pszName);
+        size_t const n = std::strlen(pszName);
         if (n <= o3tl::make_unsigned(std::numeric_limits<sal_Int32>::max())) {
             len = n;
             bRet = true;
@@ -353,7 +353,7 @@ static bool osl_psz_getHomeDir(oslSecurity Security, OString* pszDirectory)
 
         if (pStr != nullptr && pStr[0] != '\0' && access(pStr, 0) == 0)
         {
-            auto const len = std::strlen(pStr);
+            size_t const len = std::strlen(pStr);
             if (len > o3tl::make_unsigned(std::numeric_limits<sal_Int32>::max())) {
                 return false;
             }
@@ -363,7 +363,7 @@ static bool osl_psz_getHomeDir(oslSecurity Security, OString* pszDirectory)
     }
     if (pSecImpl->m_pPasswd.pw_dir != nullptr)
     {
-        auto const len = std::strlen(pSecImpl->m_pPasswd.pw_dir);
+        size_t const len = std::strlen(pSecImpl->m_pPasswd.pw_dir);
         if (len > o3tl::make_unsigned(std::numeric_limits<sal_Int32>::max())) {
             return false;
         }
@@ -426,7 +426,7 @@ static bool osl_psz_getConfigDir(oslSecurity Security, OString* pszDirectory)
         OString home;
         if (!osl_psz_getHomeDir(Security, &home))
             return false;
-        auto const config = OString(home + "/.config");
+        OString const config(home + "/.config");
 
         // try to create dir if not present
         bool dirOK = true;
@@ -472,7 +472,7 @@ static bool osl_psz_getConfigDir(oslSecurity Security, OString* pszDirectory)
     }
     else
     {
-        auto const len = std::strlen(pStr);
+        size_t const len = std::strlen(pStr);
         if (len > o3tl::make_unsigned(std::numeric_limits<sal_Int32>::max())) {
             return false;
         }

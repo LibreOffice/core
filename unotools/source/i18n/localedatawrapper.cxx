@@ -141,7 +141,7 @@ void LocaleDataWrapper::loadData()
             if (pCal != xCals.end())
                 xSecondaryCalendar = std::make_shared<Calendar2>( *pCal);
         }
-        auto pCal = xCals.begin();
+        const Calendar2* pCal = xCals.begin();
         if (xCals.getLength() > 1)
         {
             pCal = std::find_if(xCals.begin(), xCals.end(),
@@ -1570,7 +1570,7 @@ void LocaleDataWrapper::loadDateAcceptancePatterns(
         // Copy existing full date pattern and append the sequence passed.
         /* TODO: could check for duplicates and shrink target sequence */
         Sequence< OUString > aTmp( rPatterns.size() + 1 );
-        auto it = aTmp.getArray();
+        OUString* it = aTmp.getArray();
         *it = std::as_const(aDateAcceptancePatterns)[0];
         std::copy(rPatterns.begin(), rPatterns.end(), std::next(it));
         aDateAcceptancePatterns = aTmp;

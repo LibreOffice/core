@@ -633,7 +633,7 @@ sal_Unicode const * scanParameters(sal_Unicode const * pBegin,
                 OStringBuffer aSink;
                 while (p != pEnd)
                 {
-                    auto q = p;
+                    const char16_t* q = p;
                     sal_uInt32 nChar = INetMIME::getUTF32Character(q, pEnd);
                     if (rtl::isAscii(nChar) && !isTokenChar(nChar))
                         break;

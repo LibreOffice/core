@@ -334,7 +334,7 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory pDirectory,
 
     strFileName = OString(filename, strlen(filename));
 
-    auto const strFilePath = osl::systemPathMakeAbsolutePath(pDirImpl->strPath, strFileName);
+    OString const strFilePath = osl::systemPathMakeAbsolutePath(pDirImpl->strPath, strFileName);
 
     DirectoryItem_Impl* pImpl = static_cast< DirectoryItem_Impl* >(*pItem);
     if (pImpl)

@@ -76,7 +76,7 @@ void SAL_CALL OInstanceLocker::dispose()
     aGuard.lock();
     if ( m_xLockListener.is() )
     {
-        auto tmp = std::move(m_xLockListener);
+        rtl::Reference<OLockListener> tmp = std::move(m_xLockListener);
         aGuard.unlock();
         tmp->Dispose();
         aGuard.lock();

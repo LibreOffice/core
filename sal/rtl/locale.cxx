@@ -90,7 +90,7 @@ rtl_Locale * SAL_CALL rtl_locale_register(const sal_Unicode * language, const sa
     newLocale->Variant = sVariant;
     newLocale->HashCode = hashCode;
 
-    auto ret = newLocale.get();
+    rtl_Locale* ret = newLocale.get();
     g_aLocaleTable.insert(it, std::pair<sal_Int32, locale_unique_ptr>( hashCode, std::move(newLocale) ) );
     return ret;
 }

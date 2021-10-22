@@ -919,7 +919,7 @@ sal_Int32 StgDataStrm::Read( void* pBuf, sal_Int32 n )
     if ( n < 0 )
         return 0;
 
-    const auto nAvailable = m_nSize - GetPos();
+    const sal_Int32 nAvailable = m_nSize - GetPos();
     if (n > nAvailable)
         n = nAvailable;
     sal_Int32 nDone = 0;

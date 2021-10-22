@@ -61,7 +61,7 @@ inline bool WeakReference< reference_type >::is() const
 template< class reference_type >
 inline reference_type * WeakReference< reference_type >::get() const
 {
-    auto pWeakBase = mpWeakConnection->mpReference;
+    tools::WeakBase* pWeakBase = mpWeakConnection->mpReference;
     if (!pWeakBase)
         return nullptr;
     assert(dynamic_cast<reference_type *>(pWeakBase));

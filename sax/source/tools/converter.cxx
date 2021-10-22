@@ -897,27 +897,27 @@ void Converter::convertDuration(OUStringBuffer& rBuffer,
 }
 
 static std::u16string_view trim(std::u16string_view in) {
-  auto left = in.begin();
+  const char16_t* left = in.begin();
   for (;; ++left) {
     if (left == in.end())
       return std::u16string_view();
     if (!isspace(*left))
       break;
   }
-  auto right = in.end() - 1;
+  const char16_t* right = in.end() - 1;
   for (; right > left && isspace(*right); --right);
   return std::u16string_view(&*left, std::distance(left, right) + 1);
 }
 
 static std::string_view trim(std::string_view in) {
-  auto left = in.begin();
+  const char* left = in.begin();
   for (;; ++left) {
     if (left == in.end())
       return std::string_view();
     if (!isspace(*left))
       break;
   }
-  auto right = in.end() - 1;
+  const char* right = in.end() - 1;
   for (; right > left && isspace(*right); --right);
   return std::string_view(&*left, std::distance(left, right) + 1);
 }
@@ -2112,7 +2112,7 @@ double Converter::GetConversionFactor(OUStringBuffer& rUnit, sal_Int16 nSourceUn
         const o3tl::Length eTo = Measure2O3tlUnit(nTargetUnit);
         fRetval = o3tl::convert(1.0, eFrom, eTo);
 
-        if (const auto sUnit = Measure2UnitString(nTargetUnit); sUnit.size() > 0)
+        if (std::string_view sUnit = Measure2UnitString(nTargetUnit); sUnit.size() > 0)
             rUnit.appendAscii(sUnit.data(), sUnit.size());
     }
 

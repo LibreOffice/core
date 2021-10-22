@@ -1184,7 +1184,7 @@ std::unique_ptr<AstExprValue> AstExpression::eval_symbol()
      */
     pConst = static_cast<AstConstant*>(pDecl);
     pConst->getConstValue()->evaluate();
-    auto const val = pConst->getConstValue()->getExprValue();
+    AstExprValue* const val = pConst->getConstValue()->getExprValue();
     return val == nullptr ? nullptr : std::make_unique<AstExprValue>(*val);
 }
 

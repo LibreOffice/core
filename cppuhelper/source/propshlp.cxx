@@ -758,7 +758,7 @@ void OPropertySetHelper::fire
     if( bVetoable )
         return;
 
-    auto pCont = rBHelper.aLC.getContainer(getPropertiesTypeIdentifier());
+    cppu::OInterfaceContainerHelper* pCont = rBHelper.aLC.getContainer(getPropertiesTypeIdentifier());
     if (!pCont)
         return;
 

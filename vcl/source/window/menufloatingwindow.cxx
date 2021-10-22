@@ -639,7 +639,7 @@ void MenuFloatingWindow::ImplScroll( bool bUp )
         SAL_WARN_IF( nFirstEntry == ITEMPOS_INVALID, "vcl", "Scroll?!" );
 
         // avoid crash if somehow menu got disposed, and MenuItemList is empty (workaround for tdf#104686)
-        const auto pItemData = pMenu->GetItemList()->GetDataFromPos( nFirstEntry );
+        const MenuItemData* pItemData = pMenu->GetItemList()->GetDataFromPos( nFirstEntry );
         if ( pItemData )
         {
             tools::Long nScrollEntryHeight = pItemData->aSz.Height();
@@ -662,7 +662,7 @@ void MenuFloatingWindow::ImplScroll( bool bUp )
     else if ( bScrollDown && !bUp )
     {
         // avoid crash if somehow menu got disposed, and MenuItemList is empty (workaround for tdf#104686)
-        const auto pItemData = pMenu->GetItemList()->GetDataFromPos( nFirstEntry );
+        const MenuItemData* pItemData = pMenu->GetItemList()->GetDataFromPos( nFirstEntry );
         if ( pItemData )
         {
             tools::Long nScrollEntryHeight = pItemData->aSz.Height();

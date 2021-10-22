@@ -145,7 +145,7 @@ OUString ServiceDecl::getImplementationName() const
 void* component_getFactoryHelper( const char* pImplName,
                                   std::initializer_list<ServiceDecl const *> args )
 {
-    for (auto const i: args) {
+    for (ServiceDecl const * i: args) {
         assert(i != nullptr);
         void * fac = i->getFactory(pImplName);
         if (fac != nullptr) {

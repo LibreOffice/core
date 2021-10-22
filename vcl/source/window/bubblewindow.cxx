@@ -243,7 +243,7 @@ VclPtr<BubbleWindow> MenuBarUpdateIconManager::GetBubbleWindow()
     if( aIconRect.IsEmpty() )
         return nullptr;
 
-    auto pBubbleWin = mpBubbleWin;
+    VclPtr<BubbleWindow> pBubbleWin = mpBubbleWin;
 
     if ( !pBubbleWin ) {
         pBubbleWin = VclPtr<BubbleWindow>::Create( mpIconSysWin, maBubbleTitle,

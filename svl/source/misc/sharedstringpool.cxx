@@ -64,6 +64,9 @@ struct EqualsFunction
 };
 }
 
+typedef libcuckoo::cuckoohash_map<rtl_uString*, Mapped, HashFunction, EqualsFunction>
+    SharedStringMap;
+
 struct SharedStringPool::Impl
 {
     // We use this map for two purposes - to store lower->upper case mappings
@@ -72,7 +75,7 @@ struct SharedStringPool::Impl
     // share the same rtl_uString object between different keys which map to the same uppercase string to save memory.
     //
     // Docs for this concurrent hashtable here: http://efficient.github.io/libcuckoo/classlibcuckoo_1_1cuckoohash__map.html
-    libcuckoo::cuckoohash_map<rtl_uString*, Mapped, HashFunction, EqualsFunction> maStrMap;
+    SharedStringMap maStrMap;
     const CharClass& mrCharClass;
 
     explicit Impl(const CharClass& rCharClass)
@@ -133,7 +136,7 @@ SharedString SharedStringPool::intern(const OUString& rStr)
 
 void SharedStringPool::purge()
 {
-    auto locked_table = mpImpl->maStrMap.lock_table();
+    SharedStringMap::locked_table locked_table = mpImpl->maStrMap.lock_table();
 
     // Because we can have an uppercase entry mapped to itself,
     // and then a bunch of lowercase entries mapped to that same
@@ -188,7 +191,7 @@ size_t SharedStringPool::getCountIgnoreCase() const
 {
     // this is only called from unit tests, so no need to be efficient
     std::unordered_set<OUString> aUpperSet;
-    auto locked_table = mpImpl->maStrMap.lock_table();
+    SharedStringMap::locked_table locked_table = mpImpl->maStrMap.lock_table();
     for (auto const& pair : locked_table)
         aUpperSet.insert(pair.second.second);
     return aUpperSet.size();

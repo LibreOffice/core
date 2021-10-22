@@ -112,7 +112,7 @@ MergeDataFile::MergeDataFile(
     const OString &rFileName, const OString &rFile,
     bool bCaseSensitive, bool bWithQtz )
 {
-    auto const env = getenv("ENABLE_RELEASE_BUILD");
+    char* const env = getenv("ENABLE_RELEASE_BUILD");
     OString sEnableReleaseBuild(env == nullptr ? "" : env);
 
     std::ifstream aInputStream( rFileName.getStr() );
