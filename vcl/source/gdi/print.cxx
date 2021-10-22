@@ -547,7 +547,7 @@ bool Printer::AcquireGraphics() const
         mpGraphics->setAntiAlias(bool(mnAntialiasing & AntialiasingFlags::Enable));
     }
 
-    return mpGraphics != nullptr;
+    return mpGraphics;
 }
 
 void Printer::ImplReleaseFonts()

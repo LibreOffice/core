@@ -1109,8 +1109,9 @@ emscripten)
     test_qt5=yes
     test_system_freetype=no
     enable_compiler_plugins=no
-    enable_split_debug=yes
     enable_qt5=yes
+    enable_services_rdb_from_build=yes
+    enable_split_debug=yes
     enable_wasm_strip=yes
     with_system_zlib=no
     with_theme="breeze"
@@ -5557,6 +5558,9 @@ if test "$cross_compiling" = "yes"; then
     test "$enable_extensions" = yes || sub_conf_opts="$sub_conf_opts --disable-extensions"
     test "$enable_wasm_strip" = "yes" && sub_conf_opts="$sub_conf_opts --enable-wasm-strip"
     test "${with_system_lockfile+set}" = set && sub_conf_opts="$sub_conf_opts --with-system-lockfile=${with_system_lockfile}"
+    if test "$_os" = "Emscripten"; then
+        sub_conf_opts="$sub_conf_opts --without-system-libxml --without-system-fontconfig --without-system-freetype --without-system-zlib"
+    fi
 
     # Don't bother having configure look for stuff not needed for the build platform anyway
     sub_conf_defaults=" \
@@ -5886,21 +5890,8 @@ AC_SUBST(ENABLE_CUPS)
 
 # fontconfig checks
 if test "$using_freetype_fontconfig" = yes; then
-    AC_MSG_CHECKING([which fontconfig to use])
+    libo_CHECK_SYSTEM_MODULE([fontconfig],[FONTCONFIG],[fontconfig >= 2.4.1])
 fi
-if test "$using_freetype_fontconfig" = yes -a "$test_system_fontconfig" != no; then
-    AC_MSG_RESULT([external])
-    PKG_CHECK_MODULES([FONTCONFIG], [fontconfig >= 2.4.1])
-    SYSTEM_FONTCONFIG=TRUE
-    FilterLibs "${FONTCONFIG_LIBS}"
-    FONTCONFIG_LIBS="${filteredlibs}"
-elif test "$using_freetype_fontconfig" = yes; then
-    AC_MSG_RESULT([internal])
-    BUILD_TYPE="$BUILD_TYPE FONTCONFIG"
-fi
-AC_SUBST(FONTCONFIG_CFLAGS)
-AC_SUBST(FONTCONFIG_LIBS)
-AC_SUBST([SYSTEM_FONTCONFIG])
 
 dnl whether to find & fetch external tarballs?
 dnl ===================================================================
@@ -9470,10 +9461,6 @@ dnl ===================================================================
 dnl Check whether freetype is available
 dnl ===================================================================
 if test "$using_freetype_fontconfig" = yes; then
-    AC_MSG_CHECKING([which freetype to use])
-fi
-if test "$using_freetype_fontconfig" = yes -a "$test_system_freetype" != no; then
-    AC_MSG_RESULT([external])
     # FreeType has 3 different kinds of versions
     # * release, like 2.4.10
     # * libtool, like 13.0.7 (this what pkg-config returns)
@@ -9482,24 +9469,14 @@ if test "$using_freetype_fontconfig" = yes -a "$test_system_freetype" != no; the
     #
     # 9.9.3 is 2.2.0
     # When the minimal version is at least 2.8.1, remove Skia's check down below.
-    PKG_CHECK_MODULES(FREETYPE, freetype2 >= 9.9.3)
-    FREETYPE_CFLAGS=$(printf '%s' "$FREETYPE_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-    FilterLibs "${FREETYPE_LIBS}"
-    FREETYPE_LIBS="${filteredlibs}"
-    SYSTEM_FREETYPE=TRUE
-elif test "$using_freetype_fontconfig" = yes; then
-    AC_MSG_RESULT([internal])
-    FREETYPE_CFLAGS="${ISYSTEM}${WORKDIR}/UnpackedTarball/freetype/include"
     if test "x$ac_config_site_64bit_host" = xYES; then
         FREETYPE_LIBS="-L${WORKDIR}/UnpackedTarball/freetype/instdir/lib64 -lfreetype"
     else
         FREETYPE_LIBS="-L${WORKDIR}/UnpackedTarball/freetype/instdir/lib -lfreetype"
     fi
-    BUILD_TYPE="$BUILD_TYPE FREETYPE"
+    libo_CHECK_SYSTEM_MODULE([freetype],[FREETYPE],[freetype2 >= 9.9.3],
+        ["${ISYSTEM}${WORKDIR}/UnpackedTarball/freetype/include"],["$FREETYPE_LIBS"])
 fi
-AC_SUBST(FREETYPE_CFLAGS)
-AC_SUBST(FREETYPE_LIBS)
-AC_SUBST([SYSTEM_FREETYPE])
 
 # ===================================================================
 # Check for system libxslt

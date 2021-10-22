@@ -48,6 +48,7 @@ $(BUILDDIR)/config_host.mk : $(wildcard \
 		$(SRCDIR)/configure.ac \
 		$(SRCDIR)/config_host/*.h.in \
 		$(SRCDIR)/download.lst \
+		$(SRCDIR)/m4/*.m4 \
 		$(BUILDDIR)/autogen.input \
 		$(BUILDDIR)/autogen.lastrun \
 		$(BUILDDIR)/autogen.sh \

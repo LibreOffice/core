@@ -94,6 +94,10 @@ css::uno::Reference<css::datatransfer::XTransferable> QtClipboard::getContents()
 
     // check if we can still use the shared QtClipboardTransferable
     const QMimeData* pMimeData = QApplication::clipboard()->mimeData(m_aClipboardMode);
+#if defined(EMSCRIPTEN)
+    if (!pMimeData)
+        pMimeData = &aMimeData;
+#endif
     if (m_aContents.is())
     {
         const auto* pTrans = dynamic_cast<QtClipboardTransferable*>(m_aContents.get());
@@ -102,10 +106,6 @@ css::uno::Reference<css::datatransfer::XTransferable> QtClipboard::getContents()
             return m_aContents;
     }
 
-#if defined(EMSCRIPTEN)
-    if (!pMimeData)
-        pMimeData = &aMimeData;
-#endif
     m_aContents = new QtClipboardTransferable(m_aClipboardMode, pMimeData);
     return m_aContents;
 }

@@ -14,7 +14,7 @@ AC_ARG_WITH(system-$1,
 AC_MSG_CHECKING([which $1 to use])
 if test "$test_$1" != "no"; then
     ENABLE_$2=TRUE
-    if test "$with_system_$1" = "yes"; then
+    if test "$test_system_$1" != no -a "$with_system_$1" = yes; then
         AC_MSG_RESULT([external])
         SYSTEM_$2=TRUE
         PKG_CHECK_MODULES([$2], [$3])
