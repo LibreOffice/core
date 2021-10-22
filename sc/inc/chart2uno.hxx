@@ -44,6 +44,7 @@
 #include <svl/itemprop.hxx>
 
 #include <memory>
+#include <optional>
 #include <unordered_set>
 #include <vector>
 
@@ -366,12 +367,11 @@ private:
     bool                        m_bIncludeHiddenCells;
 
     // internals
-    typedef std::unique_ptr<std::vector<sal_uInt32> >  RangeIndexMapPtr;
-
     sal_Int64                   m_nObjectId;
     ScDocument*                 m_pDocument;
     std::vector<ScTokenRef>     m_aTokens;
-    RangeIndexMapPtr            m_pRangeIndices;
+    std::optional<std::vector<sal_uInt32>>
+                                m_oRangeIndices;
     std::unique_ptr<ExternalRefListener>
                                 m_pExtRefListener;
     SfxItemPropertySet          m_aPropSet;
