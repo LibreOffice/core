@@ -2116,7 +2116,10 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
                 }
 
                 if( pOwnRedl &&
-                    ( pRStt->nNode > aIdx || aIdx > pREnd->nNode ))
+                    ( pRStt->nNode > aIdx || aIdx > pREnd->nNode ||
+                    // pOwnRedl doesn't start at the beginning of a node, so it's not
+                    // possible to resize it to contain the line moved before it
+                    ( pRStt->nNode == aIdx && pRStt->nContent.GetIndex() > 0 ) ) )
                 {
                     // it's not in itself, so don't move it
                     pOwnRedl = nullptr;
