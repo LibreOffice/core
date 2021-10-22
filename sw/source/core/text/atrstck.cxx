@@ -331,7 +331,7 @@ void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAS,
 void SwAttrHandler::Reset( )
 {
     for (auto& i : m_aAttrStack)
-        i = nullptr;
+        i.clear();
 }
 
 void SwAttrHandler::PushAndChg( const SwTextAttr& rAttr, SwFont& rFnt )
@@ -380,7 +380,7 @@ void SwAttrHandler::PushAndChg( const SwTextAttr& rAttr, SwFont& rFnt )
 
 const SwTextAttr* SwAttrHandler::GetTop(sal_uInt16 nStack)
 {
-    return m_aAttrStack[nStack];
+    return m_aAttrStack[nStack].empty() ? nullptr : m_aAttrStack[nStack].back();
 }
 
 bool SwAttrHandler::Push( const SwTextAttr& rAttr, const SfxPoolItem& rItem )
@@ -402,18 +402,21 @@ bool SwAttrHandler::Push( const SwTextAttr& rAttr, const SfxPoolItem& rItem )
          || ( !pTopAttr->IsPriorityAttr()
               && !lcl_ChgHyperLinkColor(*pTopAttr, rItem, m_pShell, nullptr)))
     {
-        m_aAttrStack[nStack] = &rAttr;
+        m_aAttrStack[nStack].push_back(&rAttr);
         return true;
     }
 
+    const auto it = m_aAttrStack[nStack].end() - 1;
+    m_aAttrStack[nStack].insert(it, &rAttr);
     return false;
 }
 
 void SwAttrHandler::RemoveFromStack(sal_uInt16 nWhich, const SwTextAttr& rAttr)
 {
     auto& rStack = m_aAttrStack[StackPos[nWhich]];
-    if (rStack == &rAttr)
-        rStack = nullptr;
+    const auto it = std::find(rStack.begin(), rStack.end(), &rAttr);
+    if (it != rStack.end())
+        rStack.erase(it);
 }
 
 void SwAttrHandler::PopAndChg( const SwTextAttr& rAttr, SwFont& rFnt )
@@ -733,7 +736,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
             // 2. top of two line stack ( or default attribute )is an
             //    deactivated two line attribute
             const bool bRuby =
-                nullptr != m_aAttrStack[ StackPos[ RES_TXTATR_CJK_RUBY ] ];
+                0 != m_aAttrStack[ StackPos[ RES_TXTATR_CJK_RUBY ] ].size();
 
             if ( bRuby )
                 break;
@@ -757,7 +760,8 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
         }
         case RES_CHRATR_TWO_LINES :
         {
-            bool bRuby = nullptr != m_aAttrStack[ StackPos[ RES_TXTATR_CJK_RUBY ] ];
+            bool bRuby = 0 !=
+                    m_aAttrStack[ StackPos[ RES_TXTATR_CJK_RUBY ] ].size();
 
             // two line is activated, if
             // 1. no ruby attribute is set and

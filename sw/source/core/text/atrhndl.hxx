@@ -38,7 +38,7 @@ extern const sal_uInt8 StackPos[];
 class SwAttrHandler
 {
 private:
-    const SwTextAttr* m_aAttrStack[NUM_ATTRIBUTE_STACKS] {}; // stack collection
+    std::vector<const SwTextAttr*> m_aAttrStack[NUM_ATTRIBUTE_STACKS]; // stack collection
     const SfxPoolItem* m_pDefaultArray[ NUM_DEFAULT_VALUES ];
     const IDocumentSettingAccess* m_pIDocumentSettingAccess;
     const SwViewShell* m_pShell;
