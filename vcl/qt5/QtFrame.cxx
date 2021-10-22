@@ -205,7 +205,7 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     //m_aSystemData.pSalFrame = this;
     m_aSystemData.pWidget = m_pQWidget;
     //m_aSystemData.nScreen = m_nXScreen.getXScreen();
-    m_aSystemData.toolkit = SystemEnvData::Toolkit::Qt5;
+    m_aSystemData.toolkit = SystemEnvData::Toolkit::Qt;
     if (!bWayland)
         m_aSystemData.platform = SystemEnvData::Platform::Xcb;
     else
