@@ -2682,7 +2682,7 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
 
 void ScChart2DataSequence::UpdateTokensFromRanges(const ScRangeList& rRanges)
 {
-    if (!m_pRangeIndices)
+    if (!m_oRangeIndices)
         return;
 
     for ( size_t i = 0, nCount = rRanges.size(); i < nCount; ++i )
@@ -2691,7 +2691,7 @@ void ScChart2DataSequence::UpdateTokensFromRanges(const ScRangeList& rRanges)
         const ScRange & rRange = rRanges[i];
 
         ScRefTokenHelper::getTokenFromRange(m_pDocument, pToken, rRange);
-        sal_uInt32 nOrigPos = (*m_pRangeIndices)[i];
+        sal_uInt32 nOrigPos = (*m_oRangeIndices)[i];
         m_aTokens[nOrigPos] = pToken;
     }
 
@@ -2737,8 +2737,8 @@ void ScChart2DataSequence::CopyData(const ScChart2DataSequence& r)
     m_aHiddenValues = r.m_aHiddenValues;
     m_aRole = r.m_aRole;
 
-    if (r.m_pRangeIndices)
-        m_pRangeIndices.reset(new vector<sal_uInt32>(*r.m_pRangeIndices));
+    if (r.m_oRangeIndices)
+        m_oRangeIndices = *r.m_oRangeIndices;
 
     if (!r.m_pExtRefListener)
         return;
@@ -2764,7 +2764,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
         // updated, and bring the change back to the token list.
 
         ScRangeList aRanges;
-        m_pRangeIndices.reset(new vector<sal_uInt32>);
+        m_oRangeIndices.emplace();
         vector<ScTokenRef>::const_iterator itrBeg = m_aTokens.begin(), itrEnd = m_aTokens.end();
         for (vector<ScTokenRef>::const_iterator itr = itrBeg ;itr != itrEnd; ++itr)
         {
@@ -2774,11 +2774,11 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
                 ScRefTokenHelper::getRangeFromToken(m_pDocument, aRange, *itr, ScAddress());
                 aRanges.push_back(aRange);
                 sal_uInt32 nPos = distance(itrBeg, itr);
-                m_pRangeIndices->push_back(nPos);
+                m_oRangeIndices->push_back(nPos);
             }
         }
 
-        assert(m_pRangeIndices->size() == aRanges.size() &&
+        assert(m_oRangeIndices->size() == aRanges.size() &&
                    "range list and range index list have different sizes.");
 
         unique_ptr<ScRangeList> pUndoRanges;
@@ -2791,7 +2791,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 
         if (bChanged)
         {
-            assert(m_pRangeIndices->size() == aRanges.size() &&
+            assert(m_oRangeIndices->size() == aRanges.size() &&
                        "range list and range index list have different sizes after the reference update.");
 
             // Bring the change back from the range list to the token list.
@@ -2811,7 +2811,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
             // The hint object provides the old ranges.  Restore the old state
             // from these ranges.
 
-            if (!m_pRangeIndices || m_pRangeIndices->empty())
+            if (!m_oRangeIndices || m_oRangeIndices->empty())
             {
                 assert(false && " faulty range indices");
                 break;
@@ -2820,7 +2820,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
             const ScRangeList& rRanges = pUndoHint->GetRanges();
 
             size_t nCount = rRanges.size();
-            if (nCount != m_pRangeIndices->size())
+            if (nCount != m_oRangeIndices->size())
             {
                 assert(false && "range count and range index count differ.");
                 break;
