@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce0980bf_67b3d885",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-10-22T07:58:57Z",
+      "side": 1,
+      "message": "we dont even implement FTPS so these CVEs arent important",
+      "revId": "d08445e16caa3513ea0bc24b713f662ce6f73870",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
