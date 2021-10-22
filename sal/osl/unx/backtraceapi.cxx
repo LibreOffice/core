@@ -74,15 +74,28 @@ FrameCache frameCache( 256 );
 
 void process_file_addr2line( const char* file, std::vector<FrameData>& frameData )
 {
+    if(access( file, R_OK ) != 0)
+        return; // cannot read info from the binary file anyway
     OUString binary("addr2line");
     OUString dummy;
+    if(!osl::detail::find_in_PATH(binary, dummy))
+        return; // Will not work, avoid warnings from osl process code.
     OUString arg1("-Cfe");
     OUString arg2 = OUString::fromUtf8(file);
     std::vector<OUString> addrs;
     std::vector<rtl_uString*> args;
-    args.reserve(frameData.size() + 2);
+    args.reserve(frameData.size() + 3);
     args.push_back( arg1.pData );
     args.push_back( arg2.pData );
+#if defined __clang__
+    // llvm-symbolizer is faster than addr2line and compatible with a flag
+    OUString arg3("--output-style=GNU");
+    if(osl::detail::find_in_PATH("llvm-symbolizer", dummy))
+    {
+        binary = "llvm-symbolizer";
+        args.push_back( arg3.pData );
+    }
+#endif
     for( FrameData& frame : frameData )
     {
         if( frame.file != nullptr && strcmp( file, frame.file ) == 0 )
@@ -93,8 +106,6 @@ void process_file_addr2line( const char* file, std::vector<FrameData>& frameData
         }
     }
 
-    if(!osl::detail::find_in_PATH(binary, dummy) || access( file, R_OK ) != 0)
-        return; // Will not work, avoid warnings from osl process code.
     oslProcess aProcess;
     oslFileHandle pOut = nullptr;
     oslFileHandle pErr = nullptr;
@@ -105,7 +116,10 @@ void process_file_addr2line( const char* file, std::vector<FrameData>& frameData
     osl_freeSecurityHandle(pSecurity);
 
     if (eErr != osl_Process_E_None)
+    {
+        SAL_WARN("sal.osl", binary << " call to resolve " << file << " symbols failed");
         return;
+    }
 
     OStringBuffer outputBuffer;
     if (pOut)
@@ -148,7 +162,10 @@ void process_file_addr2line( const char* file, std::vector<FrameData>& frameData
         outputPos = end2 + 1;
     }
     if(lines.size() != addrs.size() * 2)
+    {
+        SAL_WARN("sal.osl", "failed to parse " << binary << " call output to resolve " << file << " symbols ");
         return; // addr2line problem?
+    }
     size_t linesPos = 0;
     for( FrameData& frame : frameData )
     {
