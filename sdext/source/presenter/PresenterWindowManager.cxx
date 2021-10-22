@@ -989,11 +989,9 @@ Reference<rendering::XPolyPolygon2D> PresenterWindowManager::CreateClipPolyPolyg
     // Create a clip polygon that includes the whole update area but has the
     // content windows as holes.
     const sal_Int32 nPaneCount (mpPaneContainer->maPanes.size());
-    ::std::vector<awt::Rectangle> aRectangles
-    {
-        mxParentWindow->getPosSize()
-    };
+    ::std::vector<awt::Rectangle> aRectangles;
     aRectangles.reserve(1+nPaneCount);
+    aRectangles.push_back(mxParentWindow->getPosSize());
     for (const auto& pDescriptor : mpPaneContainer->maPanes)
     {
         if ( ! pDescriptor->mbIsActive)
