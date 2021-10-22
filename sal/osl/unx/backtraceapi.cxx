@@ -205,7 +205,7 @@ OUString sal::backtrace_to_string(BacktraceState* backtraceState)
         void* addr = backtraceState->buffer[i];
         std::unique_lock guard(frameCacheMutex);
         auto it = frameCache.find(addr);
-        guard.release();
+        guard.unlock();
         if( it != frameCache.end())
         {
             frameData[ i ].info = it->second;
