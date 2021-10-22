@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34029768_823288fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-10-22T10:47:57Z",
+      "side": 1,
+      "message": "for changes like this it would be nice to have the reason why that\u0027s necessary stated in the commit message.",
+      "revId": "ca978896282017a05de6c0f85d2dbd0abb5bae89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
