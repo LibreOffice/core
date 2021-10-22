@@ -35,6 +35,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8051b4db_c0e6697d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-22T19:48:59Z",
+      "side": 1,
+      "message": "Although these two could co-exist, I vote for dropping this patch in favour of https://gerrit.libreoffice.org/c/core/+/124080",
+      "revId": "d5b25fc9162e5cfa243934690f1df55a1fcca8b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d126c1f8_39f47e80",
