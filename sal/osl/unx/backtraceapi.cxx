@@ -79,12 +79,10 @@ void process_file_addr2line( const char* file, std::vector<FrameData>& frameData
     OUString arg1("-Cfe");
     OUString arg2 = OUString::fromUtf8(file);
     std::vector<OUString> addrs;
-    std::vector<rtl_uString*> args
-    {
-        arg1.pData,
-        arg2.pData
-    };
+    std::vector<rtl_uString*> args;
     args.reserve(frameData.size() + 2);
+    args.push_back( arg1.pData );
+    args.push_back( arg2.pData );
     for( FrameData& frame : frameData )
     {
         if( frame.file != nullptr && strcmp( file, frame.file ) == 0 )
