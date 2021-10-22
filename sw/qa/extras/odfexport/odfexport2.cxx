@@ -8,7 +8,9 @@
  */
 
 #include <swmodeltestbase.hxx>
+#include <unotxdoc.hxx>
 
+#include <com/sun/star/text/XTextTable.hpp>
 
 class Test : public SwModelTestBase
 {
@@ -50,6 +52,16 @@ DECLARE_ODFEXPORT_TEST(testTdf104254_noHeaderWrapping, "tdf104254_noHeaderWrappi
     // The wrapping on header images is supposed to be ignored (since OOo for MS compat reasons),
     // thus making the text run underneath the image. Before, height was 1104. Now it is 552.
     CPPUNIT_ASSERT_MESSAGE("Paragraph should fit on a single line", nParaHeight < 600);
+}
+
+DECLARE_ODFEXPORT_TEST(testTdf131025_noZerosInTable, "tdf131025_noZerosInTable.odt")
+{
+    uno::Reference<text::XTextTablesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xTables = xSupplier->getTextTables();
+    uno::Reference<text::XTextTable> xTable(xTables->getByName("Table1"), uno::UNO_QUERY);
+
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("C3"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("5 gp"), xCell->getString());
 }
 
 DECLARE_ODFEXPORT_TEST(testTdf143793_noBodyWrapping, "tdf143793_noBodyWrapping.odt")
