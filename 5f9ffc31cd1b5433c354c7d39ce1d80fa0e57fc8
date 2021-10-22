@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d90735a_8e4a5964",
+        "filename": "sw/inc/nodeoffset.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-10-22T07:17:31Z",
+      "side": 1,
+      "message": "Is there any reason why these two are not inline, or is that a mistake?",
+      "revId": "5f9ffc31cd1b5433c354c7d39ce1d80fa0e57fc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "419f18ce_a8584572",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-10-22T07:17:31Z",
+      "side": 1,
+      "message": "o3tl::string_int has get(), which IMO is better than explicit casting to a \"random\" type. In fact, since the cast operator in strong_int is explicit, I think it doesn\u0027t actually serve any purpose other than being a less clear alternative to get(), and should be IMO removed from the class.",
+      "revId": "5f9ffc31cd1b5433c354c7d39ce1d80fa0e57fc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
