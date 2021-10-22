@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc1c855a_cadfd00d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2021-10-22T13:53:20Z",
+      "side": 1,
+      "message": "Oups sorry for the wrong patch !",
+      "revId": "962b67d2a83500a3cfb860dc157d09f0f1f79707",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
