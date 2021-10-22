@@ -45,7 +45,7 @@ QtObject::QtObject(QtFrame* pParent, bool bShow)
     //m_aSystemData.pSalFrame = this;
     m_aSystemData.pWidget = m_pQWidget;
     //m_aSystemData.nScreen = m_nXScreen.getXScreen();
-    m_aSystemData.toolkit = SystemEnvData::Toolkit::Qt5;
+    m_aSystemData.toolkit = SystemEnvData::Toolkit::Qt;
     m_aSystemData.platform = SystemEnvData::Platform::Xcb;
     const bool bWayland = QGuiApplication::platformName() == "wayland";
     if (!bWayland)
