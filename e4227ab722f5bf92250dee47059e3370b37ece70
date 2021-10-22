@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "913709b0_ae1c0c1e",
+        "filename": "sal/osl/unx/backtraceapi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-10-22T09:47:40Z",
+      "side": 1,
+      "message": "std::lock_guard",
+      "revId": "e4227ab722f5bf92250dee47059e3370b37ece70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
