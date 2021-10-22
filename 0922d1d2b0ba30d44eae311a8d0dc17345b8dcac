@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d51930c9_d76c2305",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-22T16:52:56Z",
+      "side": 1,
+      "message": "Just wonder if we may do this to simplify a bit (and perhaps nano optim :-)):\ndiff --git a/sw/source/core/txtnode/thints.cxx b/sw/source/core/txtnode/thints.cxx\nindex 1d3791b119a9..293fd8c19142 100644\n--- a/sw/source/core/txtnode/thints.cxx\n+++ b/sw/source/core/txtnode/thints.cxx\n@@ -2637,8 +2637,7 @@ bool SwpHints::MergePortions( SwTextNode\u0026 rNode )\n     bool bRet \u003d false;\n     PortionMap aPortionMap;\n     aPortionMap.reserve(Count() + 1);\n-    std::vector\u003cbool\u003e RsidOnlyAutoFormatFlagMap;\n-    RsidOnlyAutoFormatFlagMap.resize(Count() + 1);\n+    std::vector\u003cbool\u003e RsidOnlyAutoFormatFlagMap(Count() + 1);\n     sal_Int32 nLastPorStart \u003d COMPLETE_STRING;\n     sal_Int32 nKey \u003d 0;\n",
+      "revId": "0922d1d2b0ba30d44eae311a8d0dc17345b8dcac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
