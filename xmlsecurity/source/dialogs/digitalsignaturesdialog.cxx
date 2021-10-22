@@ -57,6 +57,7 @@
 #include <bitmaps.hlst>
 #include <strings.hrc>
 #include <resourcemanager.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/xmlsechelper.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -193,6 +194,13 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
             m_xHintPackageFT->show();
             break;
     }
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        m_xAddBtn->hide();
+        m_xRemoveBtn->hide();
+        m_xStartCertMgrBtn->hide();
+    }
 }
 
 DigitalSignaturesDialog::~DigitalSignaturesDialog()
@@ -313,7 +321,7 @@ bool DigitalSignaturesDialog::canRemove()
     return (bRet && canAddRemove());
 }
 
-short DigitalSignaturesDialog::run()
+void DigitalSignaturesDialog::beforeRun()
 {
     // Verify Signatures and add certificates to ListBox...
     mbVerifySignatures = true;
@@ -338,7 +346,11 @@ short DigitalSignaturesDialog::run()
     // Only verify once, content will not change.
     // But for refreshing signature information, StartVerifySignatureHdl will be called after each add/remove
     mbVerifySignatures = false;
+}
 
+short DigitalSignaturesDialog::run()
+{
+    beforeRun();
     return GenericDialogController::run();
 }
 

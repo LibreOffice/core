@@ -350,7 +350,7 @@ public:
 
     /** Returns to if preparing was successful, else false. */
     bool PrepareForSigning(weld::Window* pDialogParent);
-    bool CheckIsReadonly(bool bSignScriptingContent);
+    bool CheckIsReadonly(bool bSignScriptingContent, weld::Window* pDialogParent = nullptr);
     void RecheckSignature(bool bAlsoRecheckScriptingSignature);
     void AfterSigning(bool bSignSuccess, bool bSignScriptingContent);
     bool HasValidSignatures() const;

@@ -1877,9 +1877,10 @@ void SfxObjectShell::AfterSigning(bool bSignSuccess, bool bSignScriptingContent)
         EnableSetModified();
 }
 
-bool SfxObjectShell::CheckIsReadonly(bool bSignScriptingContent)
+bool SfxObjectShell::CheckIsReadonly(bool bSignScriptingContent, weld::Window* pDialogParent)
 {
-    if (GetMedium()->IsOriginallyReadOnly())
+    // in LOK case we support only viewer / readonly mode so far
+    if (GetMedium()->IsOriginallyReadOnly() || comphelper::LibreOfficeKit::isActive())
     {
         // If the file is physically read-only, we just show the existing signatures
         try
@@ -1889,6 +1890,10 @@ bool SfxObjectShell::CheckIsReadonly(bool bSignScriptingContent)
             uno::Reference<security::XDocumentDigitalSignatures> xSigner(
                 security::DocumentDigitalSignatures::createWithVersionAndValidSignature(
                     comphelper::getProcessComponentContext(), aODFVersion, HasValidSignatures()));
+
+            if (pDialogParent)
+                xSigner->setParentWindow(pDialogParent->GetXWindow());
+
             if (bSignScriptingContent)
                 xSigner->showScriptingContentSignatures(GetMedium()->GetZipStorageToSign_Impl(),
                                                         uno::Reference<io::XInputStream>());
@@ -1902,6 +1907,18 @@ bool SfxObjectShell::CheckIsReadonly(bool bSignScriptingContent)
                 {
                     std::unique_ptr<SvStream> pStream(
                         utl::UcbStreamHelper::CreateStream(GetName(), StreamMode::READ));
+
+                    if (!pStream)
+                    {
+                        pStream = utl::UcbStreamHelper::CreateStream(GetMedium()->GetName(), StreamMode::READ);
+
+                        if (!pStream)
+                        {
+                            SAL_WARN( "sfx.doc", "Couldn't use signing functionality!" );
+                            return true;
+                        }
+                    }
+
                     uno::Reference<io::XInputStream> xStream(new utl::OStreamWrapper(*pStream));
                     xSigner->showDocumentContentSignatures(uno::Reference<embed::XStorage>(),
                                                            xStream);
@@ -1934,7 +1951,7 @@ void SfxObjectShell::SignDocumentContent(weld::Window* pDialogParent)
     if (!PrepareForSigning(pDialogParent))
         return;
 
-    if (CheckIsReadonly(false))
+    if (CheckIsReadonly(false, pDialogParent))
         return;
 
     bool bSignSuccess = GetMedium()->SignContents_Impl(pDialogParent, false, HasValidSignatures());
@@ -2031,7 +2048,7 @@ void SfxObjectShell::SignSignatureLine(weld::Window* pDialogParent,
     if (!PrepareForSigning(pDialogParent))
         return;
 
-    if (CheckIsReadonly(false))
+    if (CheckIsReadonly(false, pDialogParent))
         return;
 
     bool bSignSuccess = GetMedium()->SignContents_Impl(pDialogParent,
@@ -2056,7 +2073,7 @@ void SfxObjectShell::SignScriptingContent(weld::Window* pDialogParent)
     if (!PrepareForSigning(pDialogParent))
         return;
 
-    if (CheckIsReadonly(true))
+    if (CheckIsReadonly(true, pDialogParent))
         return;
 
     bool bSignSuccess = GetMedium()->SignContents_Impl(pDialogParent, true, HasValidSignatures());
