@@ -37,267 +37,6 @@ constexpr OUStringLiteral aTypeFloat = u"float";
 constexpr OUStringLiteral aTypeDouble = u"double";
 
 // static
-constexpr OUStringLiteral aXMLPre = u"<ucbprop><type>";
-constexpr OUStringLiteral aXMLMid = u"</type><value>";
-constexpr OUStringLiteral aXMLEnd = u"</value></ucbprop>";
-
-/*
-
-#define STATE_TOP (1)
-
-#define STATE_UCBPROP   (STATE_TOP)
-#define STATE_TYPE      (STATE_TOP + 1)
-#define STATE_VALUE     (STATE_TOP + 2)
-
-extern "C" int UCBDeadPropertyValue_startelement_callback(
-    void *,
-    int parent,
-    const char * nspace,
-    const char *name,
-    const char ** )
-{
-    if ( name != 0 )
-    {
-        switch ( parent )
-        {
-            case NE_XML_STATEROOT:
-                if ( strcmp( name, "ucbprop" ) == 0 )
-                    return STATE_UCBPROP;
-                break;
-
-            case STATE_UCBPROP:
-                if ( strcmp( name, "type" ) == 0 )
-                    return STATE_TYPE;
-                else if ( strcmp( name, "value" ) == 0 )
-                    return STATE_VALUE;
-                break;
-        }
-    }
-    return NE_XML_DECLINE;
-}
-
-
-extern "C" int UCBDeadPropertyValue_chardata_callback(
-    void *userdata,
-    int state,
-    const char *buf,
-    size_t len )
-{
-    UCBDeadPropertyValueParseContext * pCtx
-            = static_cast< UCBDeadPropertyValueParseContext * >( userdata );
-
-    switch ( state )
-    {
-        case STATE_TYPE:
-            SAL_WARN_IF( pCtx->pType, "ucb.ucp.webdav",
-                        "UCBDeadPropertyValue_endelement_callback - "
-                        "Type already set!" );
-            pCtx->pType
-                = new OUString( buf, len, RTL_TEXTENCODING_ASCII_US );
-            break;
-
-        case STATE_VALUE:
-            SAL_WARN_IF( pCtx->pValue, "ucb.ucp.webdav",
-                        "UCBDeadPropertyValue_endelement_callback - "
-                        "Value already set!" );
-            pCtx->pValue
-                = new OUString( buf, len, RTL_TEXTENCODING_ASCII_US );
-            break;
-    }
-    return 0; // zero to continue, non-zero to abort parsing
-}
-
-
-extern "C" int UCBDeadPropertyValue_endelement_callback(
-    void *userdata,
-    int state,
-    const char *,
-    const char * )
-{
-    UCBDeadPropertyValueParseContext * pCtx
-            = static_cast< UCBDeadPropertyValueParseContext * >( userdata );
-
-    switch ( state )
-    {
-        case STATE_TYPE:
-            if ( !pCtx->pType )
-                return 1; // abort
-            break;
-
-        case STATE_VALUE:
-            if ( !pCtx->pValue )
-                return 1; // abort
-            break;
-
-        case STATE_UCBPROP:
-            if ( !pCtx->pType || ! pCtx->pValue )
-                return 1; // abort
-            break;
-    }
-    return 0; // zero to continue, non-zero to abort parsing
-}
-*/
-
-
-static OUString encodeValue( const OUString & rValue )
-{
-    // Note: I do not use the usual &amp; + &lt; + &gt; encoding, because
-    //       I want to prevent any XML parser from trying to 'understand'
-    //       the value. This caused problems:
-
-    //       Example:
-    //       - Unencoded property value: x<z
-    //       PROPPATCH:
-    //       - Encoded property value: x&lt;z
-    //       - UCBDeadPropertyValue::toXML result:
-    //              <ucbprop><type>string</type><value>x&lt;z</value></ucbprop>
-    //       PROPFIND:
-    //       - parser replaces &lt; by > ==> error (not well formed)
-
-    //FIXME this violates https://www.w3.org/TR/REC-xml/#indtd
-    OUStringBuffer aResult;
-    const sal_Unicode * pValue = rValue.getStr();
-
-    sal_Int32 nCount = rValue.getLength();
-    for ( sal_Int32 n = 0; n < nCount; ++n )
-    {
-        const sal_Unicode c = pValue[ n ];
-
-        if ( '%' == c )
-            aResult.append( "%per;" );
-        else if ( '<' == c )
-            aResult.append( "%lt;" );
-        else if ( '>' == c )
-            aResult.append( "%gt;" );
-        else
-            aResult.append( c );
-    }
-    return aResult.makeStringAndClear();
-}
-
-/*
-
-static OUString decodeValue( const OUString & rValue )
-{
-    OUStringBuffer aResult;
-    const sal_Unicode * pValue = rValue.getStr();
-
-    sal_Int32 nPos = 0;
-    sal_Int32 nEnd = rValue.getLength();
-
-    while ( nPos < nEnd )
-    {
-        sal_Unicode c = pValue[ nPos ];
-
-        if ( '%' == c )
-        {
-            nPos++;
-
-            if ( nPos == nEnd )
-            {
-                SAL_WARN( "ucb.ucp.webdav",
-                    "UCBDeadPropertyValue::decodeValue - syntax error!" );
-                return OUString();
-            }
-
-            c = pValue[ nPos ];
-
-            if ( 'p' == c )
-            {
-                // %per;
-
-                if ( nPos > nEnd - 4 )
-                {
-                    SAL_WARN( "ucb.ucp.webdav",
-                        "UCBDeadPropertyValue::decodeValue - syntax error!" );
-                    return OUString();
-                }
-
-                if ( ( 'e' == pValue[ nPos + 1 ] )
-                     &&
-                     ( 'r' == pValue[ nPos + 2 ] )
-                     &&
-                     ( ';' == pValue[ nPos + 3 ] ) )
-                {
-                    aResult.append( '%' );
-                    nPos += 3;
-                }
-                else
-                {
-                    SAL_WARN( "ucb.ucp.webdav",
-                        "UCBDeadPropertyValue::decodeValue - syntax error!" );
-                    return OUString();
-                }
-            }
-            else if ( 'l' == c )
-            {
-                // %lt;
-
-                if ( nPos > nEnd - 3 )
-                {
-                    SAL_WARN( "ucb.ucp.webdav",
-                        "UCBDeadPropertyValue::decodeValue - syntax error!" );
-                    return OUString();
-                }
-
-                if ( ( 't' == pValue[ nPos + 1 ] )
-                     &&
-                     ( ';' == pValue[ nPos + 2 ] ) )
-                {
-                    aResult.append( '<' );
-                    nPos += 2;
-                }
-                else
-                {
-                    SAL_WARN( "ucb.ucp.webdav",
-                        "UCBDeadPropertyValue::decodeValue - syntax error!" );
-                    return OUString();
-                }
-            }
-            else if ( 'g' == c )
-            {
-                // %gt;
-
-                if ( nPos > nEnd - 3 )
-                {
-                    SAL_WARN( "ucb.ucp.webdav",
-                        "UCBDeadPropertyValue::decodeValue - syntax error!" );
-                    return OUString();
-                }
-
-                if ( ( 't' == pValue[ nPos + 1 ] )
-                     &&
-                     ( ';' == pValue[ nPos + 2 ] ) )
-                {
-                    aResult.append( '>' );
-                    nPos += 2;
-                }
-                else
-                {
-                    SAL_WARN( "ucb.ucp.webdav",
-                        "UCBDeadPropertyValue::decodeValue - syntax error!" );
-                    return OUString();
-                }
-            }
-            else
-            {
-                SAL_WARN( "ucb.ucp.webdav",
-                    "UCBDeadPropertyValue::decodeValue - syntax error!" );
-                return OUString();
-            }
-        }
-        else
-            aResult.append( c );
-
-        nPos++;
-    }
-
-    return OUString( aResult );
-}
-*/
-
-
-// static
 bool UCBDeadPropertyValue::supportsType( const uno::Type & rType )
 {
     if ( ( rType != cppu::UnoType<OUString>::get() )
@@ -326,94 +65,68 @@ bool UCBDeadPropertyValue::supportsType( const uno::Type & rType )
 
 
 // static
-bool UCBDeadPropertyValue::createFromXML( std::u16string_view /*rInData*/,
-                                          uno::Any & /*rOutData*/ )
+bool UCBDeadPropertyValue::createFromXML(OUString const& rType,
+                                         OUString const& rValue,
+                                         uno::Any & rOutData)
 {
     bool success = false;
 
-    /*
-    ne_xml_parser * parser = ne_xml_create();
-    if ( parser )
+    if (rType.equalsIgnoreAsciiCase(aTypeString))
     {
-        UCBDeadPropertyValueParseContext aCtx;
-        ne_xml_push_handler( parser,
-                             UCBDeadPropertyValue_startelement_callback,
-                             UCBDeadPropertyValue_chardata_callback,
-                             UCBDeadPropertyValue_endelement_callback,
-                             &aCtx );
-
-        ne_xml_parse( parser, rInData.getStr(), rInData.getLength() );
-
-        success = !ne_xml_failed( parser );
-
-        ne_xml_destroy( parser );
-
-        if ( success )
+        rOutData <<= rValue;
+    }
+    else if (rType.equalsIgnoreAsciiCase(aTypeLong))
+    {
+        rOutData <<= rValue.toInt32();
+    }
+    else if (rType.equalsIgnoreAsciiCase(aTypeShort))
+    {
+        rOutData <<= sal_Int16( rValue.toInt32() );
+    }
+    else if (rType.equalsIgnoreAsciiCase(aTypeBoolean))
+    {
+        if (rValue.equalsIgnoreAsciiCase(u"true"))
         {
-            if ( aCtx.pType && aCtx.pValue )
-            {
-                // Decode aCtx.pValue! It may contain XML reserved chars.
-                OUString aStringValue = decodeValue( *aCtx.pValue );
-                if ( aCtx.pType->equalsIgnoreAsciiCase( aTypeString ) )
-                {
-                    rOutData <<= aStringValue;
-                }
-                else if ( aCtx.pType->equalsIgnoreAsciiCase( aTypeLong ) )
-                {
-                    rOutData <<= aStringValue.toInt32();
-                }
-                else if ( aCtx.pType->equalsIgnoreAsciiCase( aTypeShort ) )
-                {
-                    rOutData <<= sal_Int16( aStringValue.toInt32() );
-                }
-                else if ( aCtx.pType->equalsIgnoreAsciiCase( aTypeBoolean ) )
-                {
-                    if ( aStringValue.equalsIgnoreAsciiCase(
-                            OUString( "true" ) ) )
-                        rOutData <<= sal_Bool( sal_True );
-                    else
-                        rOutData <<= sal_Bool( sal_False );
-                }
-                else if ( aCtx.pType->equalsIgnoreAsciiCase( aTypeChar ) )
-                {
-                    rOutData <<= aStringValue.toChar();
-                }
-                else if ( aCtx.pType->equalsIgnoreAsciiCase( aTypeByte ) )
-                {
-                    rOutData <<= sal_Int8( aStringValue.toChar() );
-                }
-                else if ( aCtx.pType->equalsIgnoreAsciiCase( aTypeHyper ) )
-                {
-                    rOutData <<= aStringValue.toInt64();
-                }
-                else if ( aCtx.pType->equalsIgnoreAsciiCase( aTypeFloat ) )
-                {
-                    rOutData <<= aStringValue.toFloat();
-                }
-                else if ( aCtx.pType->equalsIgnoreAsciiCase( aTypeDouble ) )
-                {
-                    rOutData <<= aStringValue.toDouble();
-                }
-                else
-                {
-                    SAL_WARN( "ucb.ucp.webdav",
-                                "UCBDeadPropertyValue::createFromXML - "
-                                "Unsupported property type!" );
-                    success = false;
-                }
-            }
-            else
-                success = false;
+            rOutData <<= true;
+        }
+        else
+        {
+            rOutData <<= false;
         }
     }
-    */
+    else if (rType.equalsIgnoreAsciiCase(aTypeChar))
+    {
+        rOutData <<= rValue.toChar();
+    }
+    else if (rType.equalsIgnoreAsciiCase(aTypeByte))
+    {
+        rOutData <<= sal_Int8( rValue.toChar() );
+    }
+    else if (rType.equalsIgnoreAsciiCase(aTypeHyper))
+    {
+        rOutData <<= rValue.toInt64();
+    }
+    else if (rType.equalsIgnoreAsciiCase(aTypeFloat))
+    {
+        rOutData <<= rValue.toFloat();
+    }
+    else if (rType.equalsIgnoreAsciiCase(aTypeDouble))
+    {
+        rOutData <<= rValue.toDouble();
+    }
+    else
+    {
+        SAL_WARN( "ucb.ucp.webdav",
+                    "UCBDeadPropertyValue::createFromXML - "
+                    "Unsupported property type!" );
+        success = false;
+    }
     return success;
 }
 
-
 // static
-bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
-                                  OUString & rOutData )
+::std::optional<::std::pair<OUString, OUString>>
+UCBDeadPropertyValue::toXML(const uno::Any & rInData)
 {
     // <ucbprop><type>the_type</type><value>the_value</value></ucbprop>
 
@@ -498,18 +211,10 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
         SAL_WARN( "ucb.ucp.webdav",
                     "UCBDeadPropertyValue::toXML - "
                     "Unsupported property type!" );
-        return false;
+        return {};
     }
 
-    // Encode value! It must not contain XML reserved chars!
-    aStringValue = encodeValue( aStringValue );
-
-    rOutData =  aXMLPre;
-    rOutData += aStringType;
-    rOutData += aXMLMid;
-    rOutData += aStringValue;
-    rOutData += aXMLEnd;
-    return true;
+    return { { aStringType, aStringValue } };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

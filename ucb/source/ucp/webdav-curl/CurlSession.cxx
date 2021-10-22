@@ -11,6 +11,7 @@
 
 #include "SerfLockStore.hxx"
 #include "DAVProperties.hxx"
+#include "UCBDeadPropertyValue.hxx"
 #include "webdavresponseparser.hxx"
 
 #include <comphelper/attributelist.hxx>
@@ -1347,9 +1348,6 @@ auto CurlSession::PROPPATCH(OUString const& rURIReference,
 
     CurlUri const uri(CurlProcessor::URIReferenceToURI(*this, rURIReference));
 
-    //FIXME why does toXML encode stuff which parser ignores
-    //isUCBDeadProperty case not handled
-
     // TODO: either set CURLOPT_INFILESIZE_LARGE or chunked?
     ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist_free_all>> pList(
         curl_slist_append(nullptr, "Transfer-Encoding: chunked"));
@@ -1404,7 +1402,19 @@ auto CurlSession::PROPPATCH(OUString const& rURIReference,
         {
             if (DAVProperties::isUCBDeadProperty(name))
             {
-                // TODO don't use UCBDeadPropertyValue::toXml, it's crazy
+                ::std::optional<::std::pair<OUString, OUString>> const oProp(
+                    UCBDeadPropertyValue::toXML(rPropValue.value));
+                if (oProp)
+                {
+                    xWriter->startElement("ucbprop", nullptr);
+                    xWriter->startElement("type", nullptr);
+                    xWriter->characters(oProp->first);
+                    xWriter->endElement("type");
+                    xWriter->startElement("value", nullptr);
+                    xWriter->characters(oProp->second);
+                    xWriter->endElement("value");
+                    xWriter->endElement("ucbprop");
+                }
             }
             else
             {

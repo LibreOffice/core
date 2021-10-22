@@ -18,6 +18,10 @@
  */
 
 #include "webdavresponseparser.hxx"
+
+#include "DAVProperties.hxx"
+#include "UCBDeadPropertyValue.hxx"
+
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/xml/sax/Parser.hpp>
@@ -33,6 +37,7 @@
 #include <sal/log.hxx>
 
 using namespace com::sun::star;
+using namespace http_dav_ucp;
 
 
 // WebDAVNamespace enum and StringToEnum converter
@@ -92,6 +97,9 @@ namespace
         WebDAVName_getlastmodified,
         WebDAVName_creationdate,
         WebDAVName_getcontentlength,
+        WebDAVName_type,
+        WebDAVName_value,
+        WebDAVName_ucbprop,
 
         WebDAVName_last
     };
@@ -128,6 +136,9 @@ namespace
             aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("getlastmodified"), WebDAVName_getlastmodified));
             aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("creationdate"), WebDAVName_creationdate));
             aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("getcontentlength"), WebDAVName_getcontentlength));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("type"), WebDAVName_type));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("value"), WebDAVName_value));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("ucbprop"), WebDAVName_ucbprop));
         }
 
         const WebDAVNameMapper::const_iterator aResult(aWebDAVNameMapperList.find(rStr));
@@ -294,6 +305,8 @@ namespace
         WebDAVContext*                              mpContext;
         OUString                             maHref;
         OUString                             maStatus;
+        OUString m_UCBType;
+        OUString m_UCBValue;
         std::vector< http_dav_ucp::DAVPropertyValue > maResponseProperties;
         std::vector< http_dav_ucp::DAVPropertyValue > maPropStatProperties;
         std::vector< OUString >              maResponseNames;
@@ -794,6 +807,42 @@ namespace
                     }
                     case WebDAVNamespace_ucb_openoffice_org_dav_props:
                     {
+                        switch(mpContext->getWebDAVName())
+                        {
+                            case WebDAVName_type:
+                            {
+                                m_UCBType = mpContext->getWhiteSpace();
+                                break;
+                            }
+                            case WebDAVName_value:
+                            {
+                                m_UCBValue = mpContext->getWhiteSpace();
+                                break;
+                            }
+                            case WebDAVName_ucbprop:
+                            {
+                                if (!m_UCBType.isEmpty())
+                                {
+                                    http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
+                                    OString const name(OUStringToOString(mpContext->getParent()->getName(), RTL_TEXTENCODING_UTF8));
+                                    OString const nameSpace(OUStringToOString(mpContext->getParent()->getNamespace(), RTL_TEXTENCODING_UTF8));
+                                    DAVProperties::createUCBPropName(nameSpace.getStr(), name.getStr(), aDAVPropertyValue.Name);
+                                    if (UCBDeadPropertyValue::createFromXML(m_UCBType, m_UCBValue, aDAVPropertyValue.Value))
+                                    {
+                                        maPropStatProperties.push_back(aDAVPropertyValue);
+                                    }
+                                    else
+                                    {
+                                        SAL_INFO("ucb.ucp.webdav.curl", "cannot parse property value");
+                                    }
+                                }
+                                m_UCBType.clear();
+                                m_UCBValue.clear();
+                                break;
+                            }
+                            default:
+                            break;
+                        }
                         break;
                     }
                 }
