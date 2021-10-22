@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88102ee7_db578565",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-22T14:52:54Z",
+      "side": 1,
+      "message": "Here\u0027s a new one I noticed.\nI\u0027m gonna check every similar patch I did in the last weeks and try to find those which contain \"reserve\".\nThank you again for having spotted this pb.",
+      "revId": "ab7da7f8a8ce1e7ed632b09d49797a35c038fc89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
