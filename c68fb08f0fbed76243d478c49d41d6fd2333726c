@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e14e19ef_20a52ecf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-10-22T12:50:34Z",
+      "side": 1,
+      "message": "This plugin is a little too aggressive, but not sure where to draw the line",
+      "revId": "c68fb08f0fbed76243d478c49d41d6fd2333726c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
