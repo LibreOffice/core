@@ -75,7 +75,7 @@ bool QtOpenGLContext::ImplInit()
 {
     if (!m_pWindow)
     {
-        SAL_WARN("vcl.opengl.qt5", "failed to create window");
+        SAL_WARN("vcl.opengl.qt", "failed to create window");
         return false;
     }
 
@@ -85,7 +85,7 @@ bool QtOpenGLContext::ImplInit()
     m_pContext = new QOpenGLContext(m_pWindow);
     if (!m_pContext->create())
     {
-        SAL_WARN("vcl.opengl.qt5", "failed to create context");
+        SAL_WARN("vcl.opengl.qt", "failed to create context");
         return false;
     }
 
@@ -132,7 +132,7 @@ void QtOpenGLContext::destroyCurrentContext()
 
     if (glGetError() != GL_NO_ERROR)
     {
-        SAL_WARN("vcl.opengl.qt5", "glError: " << glGetError());
+        SAL_WARN("vcl.opengl.qt", "glError: " << glGetError());
     }
 }
 

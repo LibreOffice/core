@@ -86,14 +86,14 @@ Reference<XAccessibleContext> QtAccessibleWidget::getAccessibleContextImpl() con
         }
         catch (css::lang::DisposedException /*ex*/)
         {
-            SAL_WARN("vcl.qt5", "Accessible context disposed already");
+            SAL_WARN("vcl.qt", "Accessible context disposed already");
         }
         // sometimes getAccessibleContext throws also RuntimeException if context is no longer alive
         catch (css::uno::RuntimeException /*ex*/)
         {
             // so let's catch it here, cuz otherwise soffice falls flat on its face
             // with FatalError and nothing else
-            SAL_WARN("vcl.qt5", "Accessible context no longer alive");
+            SAL_WARN("vcl.qt", "Accessible context no longer alive");
         }
     }
 
@@ -156,7 +156,7 @@ sal_Int16 lcl_matchQtTextBoundaryType(QAccessible::TextBoundaryType boundaryType
             break;
     }
 
-    SAL_WARN("vcl.qt5", "Unmatched text boundary type: " << boundaryType);
+    SAL_WARN("vcl.qt", "Unmatched text boundary type: " << boundaryType);
     return -1;
 }
 
@@ -180,7 +180,7 @@ QAccessible::Relation lcl_matchUnoRelation(short relationType)
         case AccessibleRelationType::NODE_CHILD_OF:
         case AccessibleRelationType::DESCRIBED_BY:
         default:
-            SAL_WARN("vcl.qt5", "Unmatched relation: " << relationType);
+            SAL_WARN("vcl.qt", "Unmatched relation: " << relationType);
             return {};
     }
 }
@@ -198,7 +198,7 @@ short lcl_matchQtRelation(QAccessible::Relation relationType)
         case QAccessible::Labelled:
             return AccessibleRelationType::LABELED_BY;
         default:
-            SAL_WARN("vcl.qt5", "Unmatched relation: " << relationType);
+            SAL_WARN("vcl.qt", "Unmatched relation: " << relationType);
     }
     return 0;
 }
@@ -573,7 +573,7 @@ QAccessible::Role QtAccessibleWidget::role() const
         }
     }
 
-    SAL_WARN("vcl.qt5", "Unmapped role: " << getAccessibleContextImpl()->getAccessibleRole());
+    SAL_WARN("vcl.qt", "Unmapped role: " << getAccessibleContextImpl()->getAccessibleRole());
     return QAccessible::NoRole;
 }
 
@@ -683,7 +683,7 @@ void lcl_addState(QAccessible::State* state, sal_Int16 nState)
             state->multiSelectable = true;
             break;
         default:
-            SAL_WARN("vcl.qt5", "Unmapped state: " << nState);
+            SAL_WARN("vcl.qt", "Unmapped state: " << nState);
             break;
     }
 }
@@ -848,7 +848,7 @@ QStringList QtAccessibleWidget::keyBindingsForAction(const QString& actionName) 
 // QAccessibleTextInterface
 void QtAccessibleWidget::addSelection(int /* startOffset */, int /* endOffset */)
 {
-    SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::addSelection");
+    SAL_INFO("vcl.qt", "Unsupported QAccessibleTextInterface::addSelection");
 }
 
 namespace
@@ -941,7 +941,7 @@ int QtAccessibleWidget::characterCount() const
 }
 QRect QtAccessibleWidget::characterRect(int /* offset */) const
 {
-    SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::characterRect");
+    SAL_INFO("vcl.qt", "Unsupported QAccessibleTextInterface::characterRect");
     return QRect();
 }
 
@@ -955,12 +955,12 @@ int QtAccessibleWidget::cursorPosition() const
 
 int QtAccessibleWidget::offsetAtPoint(const QPoint& /* point */) const
 {
-    SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::offsetAtPoint");
+    SAL_INFO("vcl.qt", "Unsupported QAccessibleTextInterface::offsetAtPoint");
     return 0;
 }
 void QtAccessibleWidget::removeSelection(int /* selectionIndex */)
 {
-    SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::removeSelection");
+    SAL_INFO("vcl.qt", "Unsupported QAccessibleTextInterface::removeSelection");
 }
 void QtAccessibleWidget::scrollToSubstring(int startIndex, int endIndex)
 {
@@ -1014,7 +1014,7 @@ QString QtAccessibleWidget::textAfterOffset(int /* offset */,
                                             QAccessible::TextBoundaryType /* boundaryType */,
                                             int* /* startOffset */, int* /* endOffset */) const
 {
-    SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::textAfterOffset");
+    SAL_INFO("vcl.qt", "Unsupported QAccessibleTextInterface::textAfterOffset");
     return QString();
 }
 
@@ -1049,7 +1049,7 @@ QString QtAccessibleWidget::textBeforeOffset(int /* offset */,
                                              QAccessible::TextBoundaryType /* boundaryType */,
                                              int* /* startOffset */, int* /* endOffset */) const
 {
-    SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::textBeforeOffset");
+    SAL_INFO("vcl.qt", "Unsupported QAccessibleTextInterface::textBeforeOffset");
     return QString();
 }
 
@@ -1288,13 +1288,13 @@ bool QtAccessibleWidget::selectRow(int row)
 
 int QtAccessibleWidget::selectedCellCount() const
 {
-    SAL_INFO("vcl.qt5", "Unsupported QAccessibleTableInterface::selectedCellCount");
+    SAL_INFO("vcl.qt", "Unsupported QAccessibleTableInterface::selectedCellCount");
     return 0;
 }
 
 QList<QAccessibleInterface*> QtAccessibleWidget::selectedCells() const
 {
-    SAL_INFO("vcl.qt5", "Unsupported QAccessibleTableInterface::selectedCells");
+    SAL_INFO("vcl.qt", "Unsupported QAccessibleTableInterface::selectedCells");
     return QList<QAccessibleInterface*>();
 }
 
@@ -1384,7 +1384,7 @@ bool QtAccessibleWidget::unselectRow(int row)
 
 QList<QAccessibleInterface*> QtAccessibleWidget::columnHeaderCells() const
 {
-    SAL_WARN("vcl.qt5", "Unsupported QAccessibleTableCellInterface::columnHeaderCells");
+    SAL_WARN("vcl.qt", "Unsupported QAccessibleTableCellInterface::columnHeaderCells");
     return QList<QAccessibleInterface*>();
 }
 
@@ -1434,7 +1434,7 @@ int QtAccessibleWidget::columnExtent() const
 
 QList<QAccessibleInterface*> QtAccessibleWidget::rowHeaderCells() const
 {
-    SAL_WARN("vcl.qt5", "Unsupported QAccessibleTableCellInterface::rowHeaderCells");
+    SAL_WARN("vcl.qt", "Unsupported QAccessibleTableCellInterface::rowHeaderCells");
     return QList<QAccessibleInterface*>();
 }
 
@@ -1469,7 +1469,7 @@ int QtAccessibleWidget::rowIndex() const
 
 QAccessibleInterface* QtAccessibleWidget::table() const
 {
-    SAL_WARN("vcl.qt5", "Unsupported QAccessibleTableCellInterface::table");
+    SAL_WARN("vcl.qt", "Unsupported QAccessibleTableCellInterface::table");
     return nullptr;
 }
 

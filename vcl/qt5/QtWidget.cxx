@@ -693,8 +693,8 @@ void QtWidget::inputMethodEvent(QInputMethodEvent* pEvent)
                     break;
                 }
                 default:
-                    SAL_WARN("vcl.qt5", "Unhandled QInputMethodEvent attribute: "
-                                            << static_cast<int>(rAttr.type));
+                    SAL_WARN("vcl.qt", "Unhandled QInputMethodEvent attribute: "
+                                           << static_cast<int>(rAttr.type));
                     break;
             }
         }
@@ -731,7 +731,7 @@ static bool lcl_retrieveSurrounding(sal_Int32& rPosition, sal_Int32& rAnchor, QS
     }
     catch (const uno::Exception&)
     {
-        TOOLS_WARN_EXCEPTION("vcl.qt5", "Exception in getting input method surrounding text");
+        TOOLS_WARN_EXCEPTION("vcl.qt", "Exception in getting input method surrounding text");
     }
 
     if (xText.is())

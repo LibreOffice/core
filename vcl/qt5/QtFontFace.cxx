@@ -172,12 +172,12 @@ QFont QtFontFace::CreateFont() const
             if (3 == aStrList.size())
                 aFont = aFDB.font(aStrList[0], aStrList[1], aStrList[2].toInt());
             else
-                SAL_WARN("vcl.qt5", "Invalid QFontDatabase font ID " << m_aFontId);
+                SAL_WARN("vcl.qt", "Invalid QFontDatabase font ID " << m_aFontId);
             break;
         }
         case Font:
             bool bRet = aFont.fromString(m_aFontId);
-            SAL_WARN_IF(!bRet, "vcl.qt5", "Failed to create QFont from ID: " << m_aFontId);
+            SAL_WARN_IF(!bRet, "vcl.qt", "Failed to create QFont from ID: " << m_aFontId);
             Q_UNUSED(bRet);
             break;
     }
