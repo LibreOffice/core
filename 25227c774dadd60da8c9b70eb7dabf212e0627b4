@@ -16,6 +16,23 @@
       "message": "calc/repair_document_spec.js failed, resume.",
       "revId": "25227c774dadd60da8c9b70eb7dabf212e0627b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8782e052_1ffaa164",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-22T13:09:51Z",
+      "side": 1,
+      "message": "impress/repair_document_spec.js failed, resume.",
+      "revId": "25227c774dadd60da8c9b70eb7dabf212e0627b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
