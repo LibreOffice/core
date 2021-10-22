@@ -30,4 +30,4 @@
 # OpenOffice	pro		de			\\<server>\<path>\msi\OOO300_m6_native_packed-1_de.9352\openofficeorg30.msi
 # OpenOfficeLanguagePack	pro	es	\\<server>\<path>\msi\OOO300_m6_native_packed-1_es.9352\openofficeorg30.msi
 # URE			pro		en-US		\\<server>\<path>\msi\OOO300_m6_native_packed-1_en-US.9352\ure14.msi
-CollaboraOffice		pro		en-US,ar,as,ast,bg,bn-IN,br,ca,ca-valencia,cy,cs,da,de,el,en-GB,es,et,eu,fi,fr,ga,gd,gl,gu,he,hi,hr,hu,id,is,it,ja,km,kn,ko,lt,lv,ml,mr,nb,nl,nn,oc,or,pa-IN,pl,pt,pt-BR,ro,ru,sk,sl,sr,sr-Latn,sv,ta,te,tr,uk,vi,zh-CN,zh-TW		c:\lo\src\co-21.06.3-@WIN_BUILD_ARCH@\Collabora_Office_21.06.3.1_Win_@WIN_BUILD_ARCH@.msi
+CollaboraOffice		pro		en-US,ar,as,ast,bg,bn-IN,br,ca,ca-valencia,cy,cs,da,de,el,en-GB,es,et,eu,fi,fr,ga,gd,gl,gu,he,hi,hr,hu,id,is,it,ja,km,kn,ko,lt,lv,ml,mr,nb,nl,nn,oc,or,pa-IN,pl,pt,pt-BR,ro,ru,sk,sl,sr,sr-Latn,sv,ta,te,tr,uk,vi,zh-CN,zh-TW		c:\lo\src\co-21.06.3-@WIN_HOST_ARCH@\Collabora_Office_21.06.3.1_Win_@WIN_HOST_ARCH@.msi

@@ -291,6 +291,8 @@ sub create_directory_structure
     $fullpathhash{"SystemFolder_x86_VC.194841A2_D0F2_3B96_9F71_05BA91BEA0FA"} = $targetdir . $installer::globals::separator . "System";
     $fullpathhash{"SystemFolder_x86_VC.E281B893_10D7_34CE_BB0E_B69D88E154A5"} = $targetdir . $installer::globals::separator . "System";
     $fullpathhash{"System64Folder_amd64_VC.AF4EABEE_4589_3789_BA0A_C83A71662E1D"} = $targetdir . $installer::globals::separator . "System64";
+    # FIXME DefaultDir in MSI was '.', why is this a problem now?
+    $fullpathhash{"Colla_progr_shlxt_a8b47146a"} = $targetdir . $installer::globals::separator . "program" . $installer::globals::separator . "shlxthdl";
 
     return \%fullpathhash;
 }

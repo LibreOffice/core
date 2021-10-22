@@ -3660,7 +3660,7 @@ cygwin*|wsl*)
     esac
 
     SCPDEFS="$SCPDEFS -D_MSC_VER"
-    AC_SUBST(WIN_BUILD_ARCH)
+    AC_SUBST(WIN_HOST_ARCH)
     ;;
 esac
 
