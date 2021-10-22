@@ -16,6 +16,57 @@
       "message": "This plugin is a little too aggressive, but not sure where to draw the line",
       "revId": "c68fb08f0fbed76243d478c49d41d6fd2333726c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39921557_cc886491",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-22T13:08:04Z",
+      "side": 1,
+      "message": "If you ask my input, there it is :-)",
+      "revId": "c68fb08f0fbed76243d478c49d41d6fd2333726c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0d2bc58_e47f1916",
+        "filename": "compilerplugins/clang/harmfulauto.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-22T13:08:04Z",
+      "side": 1,
+      "message": "If I remember correctly, there was nothing special about duration, it was just I could not figure out how to suggest the type in that case, due to my limited clang AST knowledge.",
+      "revId": "c68fb08f0fbed76243d478c49d41d6fd2333726c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9a2b1de_1003b0b1",
+        "filename": "svl/source/items/poolio.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-22T13:08:04Z",
+      "side": 1,
+      "message": "This is certainly subjective, but I do write \"auto\" a lot when iterating over a container, so not allowing that seems to be going too far.",
+      "revId": "c68fb08f0fbed76243d478c49d41d6fd2333726c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
