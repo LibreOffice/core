@@ -723,8 +723,10 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
             const sal_Int32 nOtherStart = pOther->GetStart();
             const sal_Int32 nOtherEnd = *pOther->End();
 
-            aBounds.insert( nOtherStart );
-            aBounds.insert( nOtherEnd );
+            if (nThisStart <= nOtherStart && nOtherStart <= nThisEnd)
+                aBounds.insert( nOtherStart );
+            if (nThisStart <= nOtherEnd && nOtherEnd <= nThisEnd)
+                aBounds.insert( nOtherEnd );
         }
     }
 
