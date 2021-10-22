@@ -205,6 +205,8 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
 
 DigitalSignaturesDialog::~DigitalSignaturesDialog()
 {
+    if (m_xViewer)
+        m_xViewer->response(RET_OK);
 }
 
 bool DigitalSignaturesDialog::Init()
@@ -773,9 +775,12 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
 
     if ( xCert.is() )
     {
+        if (m_xViewer)
+            m_xViewer->response(RET_OK);
+
         uno::Reference<xml::crypto::XSecurityEnvironment> xSecEnv = getSecurityEnvironmentForCertificate(xCert);
-        CertificateViewer aViewer(m_xDialog.get(), xSecEnv, xCert, false, nullptr);
-        aViewer.run();
+        m_xViewer = std::make_shared<CertificateViewer>(m_xDialog.get(), xSecEnv, xCert, false, nullptr);
+        weld::DialogController::runAsync(m_xViewer, [this] (sal_Int32) { m_xViewer = nullptr; });
     }
     else
     {
