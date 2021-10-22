@@ -2947,8 +2947,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageRotate180)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf144222)
 {
-// Assume Windows has the font for U+4E2D
-#ifdef _WIN32
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf144222.ods";
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("calc_pdf_Export");
@@ -2984,7 +2982,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf144222)
     CPPUNIT_ASSERT(!aRect1.isEmpty());
     CPPUNIT_ASSERT(!aRect2.isEmpty());
     CPPUNIT_ASSERT(!aRect1.overlaps(aRect2));
-#endif
 }
 
 } // end anonymous namespace
