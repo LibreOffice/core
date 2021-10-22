@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f49ec933_ec7e1876",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-22T13:19:56Z",
+      "side": 1,
+      "message": "Just to be sure, capacity, size and content of the vector will be the same in both cases but the pb with my change here is that it requires 2 allocations instead of 1 (1 at the initialization, 1 at the \"reserve\" method call).\nSince I suppose an allocation is expected longer than 2 push_back (which don\u0027t need extra allocation in the original version thanks to the call to \"reserve\"), it justifies the revert.\n\nAre you ok with this or did I miss anything?",
+      "revId": "560032132132d033b67a12cf882ebc81bdaf0ef6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
