@@ -461,7 +461,7 @@ sub create_package
         my $megabytes = 1500;
         $megabytes = 2000 if $ENV{'ENABLE_DEBUG'};
         $systemcall = "cd $localtempdir && hdiutil create -megabytes $megabytes -srcfolder $folder $archive -ov -fs HFS+ -volname \"$volume_name\" -format UDBZ";
-        if (( $ref ne "" ) && ( $$ref ne "" )) {
+        if (( $ref ne "" ) && ( $$ref ne "" ) && system("hdiutil 2>&1 | grep unflatten") == 0) {
             $systemcall .= " && hdiutil unflatten $archive && Rez -a $$ref -o $archive && hdiutil flatten $archive";
         }
     }
