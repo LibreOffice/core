@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f561d108_b829c8b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2021-10-22T05:05:32Z",
+      "side": 1,
+      "message": "@Caolán: Is that the right way to address this? (From how I understand it, an alternative would probably be to bundle Brotli as well. I don\u0027t know why Android Jenkins builds don\u0027t run into this...)",
+      "revId": "0fcfaa92f8a8e4a5abe019b5147b2a41df525920",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
