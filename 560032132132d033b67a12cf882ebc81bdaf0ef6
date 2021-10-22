@@ -16,6 +16,24 @@
       "message": "Just to be sure, capacity, size and content of the vector will be the same in both cases but the pb with my change here is that it requires 2 allocations instead of 1 (1 at the initialization, 1 at the \"reserve\" method call).\nSince I suppose an allocation is expected longer than 2 push_back (which don\u0027t need extra allocation in the original version thanks to the call to \"reserve\"), it justifies the revert.\n\nAre you ok with this or did I miss anything?",
       "revId": "560032132132d033b67a12cf882ebc81bdaf0ef6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc5e2e39_cdd95cd9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-10-22T14:04:49Z",
+      "side": 1,
+      "message": "No, you didn\u0027t miss anything. I CC-ed you primarily so that you know, in case you\u0027ve done similar changes in other parts of LO that I\u0027m not aware of.",
+      "parentUuid": "f49ec933_ec7e1876",
+      "revId": "560032132132d033b67a12cf882ebc81bdaf0ef6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
