@@ -161,7 +161,13 @@ void process_file_addr2line( const char* file, std::vector<FrameData>& frameData
             OString function = lines[linesPos];
             OString source = lines[linesPos+1];
             linesPos += 2;
-            if(!function.isEmpty() && !function.startsWith("??"))
+            if(function.isEmpty() || function.startsWith("??"))
+            {
+                // Cache that the address cannot be resolved.
+                std::lock_guard guard(frameCacheMutex);
+                frameCache.insert( { frame.addr, "" } );
+            }
+            else
             {
                 if( source.startsWith("??"))
                     frame.info = function + " in " + file;
