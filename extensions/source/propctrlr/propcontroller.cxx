@@ -340,14 +340,14 @@ namespace pcr
 
         if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(xContainerWindow.get()))
         {
-            xBuilder.reset(Application::CreateBuilder(pTunnel->getWidget(), sUIFile));
+            xBuilder = Application::CreateBuilder(pTunnel->getWidget(), sUIFile);
         }
         else
         {
             VclPtr<vcl::Window> pParentWin = VCLUnoHelper::GetWindow(xContainerWindow);
             if (!pParentWin)
                 throw RuntimeException("The frame is invalid. Unable to extract the container window.",*this);
-            xBuilder.reset(Application::CreateInterimBuilder(pParentWin, sUIFile, true));
+            xBuilder = Application::CreateInterimBuilder(pParentWin, sUIFile, true);
         }
 
         Construct(xContainerWindow, std::move(xBuilder));

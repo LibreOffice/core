@@ -1342,7 +1342,7 @@ void PrintDialog::setupOptionalUI()
         {
             OUString sOptionsUIFile;
             rOption.Value >>= sOptionsUIFile;
-            mxCustomOptionsUIBuilder.reset(Application::CreateBuilder(mxCustom.get(), sOptionsUIFile));
+            mxCustomOptionsUIBuilder = Application::CreateBuilder(mxCustom.get(), sOptionsUIFile);
             std::unique_ptr<weld::Container> xWindow = mxCustomOptionsUIBuilder->weld_container("box");
             xWindow->show();
             continue;

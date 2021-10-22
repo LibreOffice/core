@@ -1321,9 +1321,9 @@ public:
     // For vclbootstrapprotector:
     static void setDeInitHook(Link<LinkParamNone*,void> const & hook);
 
-    static weld::Builder* CreateBuilder(weld::Widget* pParent, const OUString &rUIFile, bool bMobile = false, sal_uInt64 nLOKWindowId = 0);
+    static std::unique_ptr<weld::Builder> CreateBuilder(weld::Widget* pParent, const OUString &rUIFile, bool bMobile = false, sal_uInt64 nLOKWindowId = 0);
     // For the duration of vcl parent windows
-    static weld::Builder* CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile, bool bAllowCycleFocusOut, sal_uInt64 nLOKWindowId = 0);
+    static std::unique_ptr<weld::Builder> CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile, bool bAllowCycleFocusOut, sal_uInt64 nLOKWindowId = 0);
 
     static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
                                                     VclButtonsType eButtonType, const OUString& rPrimaryMessage,

@@ -602,40 +602,40 @@ JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRo
     sendFullUpdate();
 }
 
-JSInstanceBuilder* JSInstanceBuilder::CreateDialogBuilder(weld::Widget* pParent,
-                                                          const OUString& rUIRoot,
-                                                          const OUString& rUIFile)
+std::unique_ptr<JSInstanceBuilder> JSInstanceBuilder::CreateDialogBuilder(weld::Widget* pParent,
+                                                                          const OUString& rUIRoot,
+                                                                          const OUString& rUIFile)
 {
-    return new JSInstanceBuilder(pParent, rUIRoot, rUIFile);
+    return std::make_unique<JSInstanceBuilder>(pParent, rUIRoot, rUIFile);
 }
 
-JSInstanceBuilder* JSInstanceBuilder::CreateNotebookbarBuilder(
+std::unique_ptr<JSInstanceBuilder> JSInstanceBuilder::CreateNotebookbarBuilder(
     vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
     const css::uno::Reference<css::frame::XFrame>& rFrame, sal_uInt64 nWindowId)
 {
-    return new JSInstanceBuilder(pParent, rUIRoot, rUIFile, rFrame, nWindowId);
+    return std::make_unique<JSInstanceBuilder>(pParent, rUIRoot, rUIFile, rFrame, nWindowId);
 }
 
-JSInstanceBuilder* JSInstanceBuilder::CreateAutofilterWindowBuilder(vcl::Window* pParent,
-                                                                    const OUString& rUIRoot,
-                                                                    const OUString& rUIFile)
+std::unique_ptr<JSInstanceBuilder>
+JSInstanceBuilder::CreateAutofilterWindowBuilder(vcl::Window* pParent, const OUString& rUIRoot,
+                                                 const OUString& rUIFile)
 {
-    return new JSInstanceBuilder(pParent, rUIRoot, rUIFile);
+    return std::make_unique<JSInstanceBuilder>(pParent, rUIRoot, rUIFile);
 }
 
-JSInstanceBuilder* JSInstanceBuilder::CreateSidebarBuilder(weld::Widget* pParent,
-                                                           const OUString& rUIRoot,
-                                                           const OUString& rUIFile,
-                                                           sal_uInt64 nLOKWindowId)
+std::unique_ptr<JSInstanceBuilder> JSInstanceBuilder::CreateSidebarBuilder(weld::Widget* pParent,
+                                                                           const OUString& rUIRoot,
+                                                                           const OUString& rUIFile,
+                                                                           sal_uInt64 nLOKWindowId)
 {
-    return new JSInstanceBuilder(pParent, rUIRoot, rUIFile, nLOKWindowId);
+    return std::make_unique<JSInstanceBuilder>(pParent, rUIRoot, rUIFile, nLOKWindowId);
 }
 
-JSInstanceBuilder* JSInstanceBuilder::CreatePopupBuilder(weld::Widget* pParent,
-                                                         const OUString& rUIRoot,
-                                                         const OUString& rUIFile)
+std::unique_ptr<JSInstanceBuilder> JSInstanceBuilder::CreatePopupBuilder(weld::Widget* pParent,
+                                                                         const OUString& rUIRoot,
+                                                                         const OUString& rUIFile)
 {
-    return new JSInstanceBuilder(pParent, rUIRoot, rUIFile, true);
+    return std::make_unique<JSInstanceBuilder>(pParent, rUIRoot, rUIFile, true);
 }
 
 JSInstanceBuilder::~JSInstanceBuilder()

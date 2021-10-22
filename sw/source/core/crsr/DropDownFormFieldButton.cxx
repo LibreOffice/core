@@ -98,8 +98,8 @@ DropDownFormFieldButton::~DropDownFormFieldButton() { disposeOnce(); }
 
 void DropDownFormFieldButton::LaunchPopup()
 {
-    m_xFieldPopupBuilder.reset(
-        Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/formdropdown.ui"));
+    m_xFieldPopupBuilder
+        = Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/formdropdown.ui");
     m_xFieldPopup = m_xFieldPopupBuilder->weld_popover("FormDropDown");
     m_xTreeView = m_xFieldPopupBuilder->weld_tree_view("list");
     InitDropdown();

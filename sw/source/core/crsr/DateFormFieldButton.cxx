@@ -38,8 +38,8 @@ DateFormFieldButton::~DateFormFieldButton() { disposeOnce(); }
 
 void DateFormFieldButton::LaunchPopup()
 {
-    m_xFieldPopupBuilder.reset(
-        Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/calendar.ui"));
+    m_xFieldPopupBuilder
+        = Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/calendar.ui");
     m_xFieldPopup = m_xFieldPopupBuilder->weld_popover("Calendar");
     m_xCalendar = m_xFieldPopupBuilder->weld_calendar("date");
     if (m_pDateFieldmark)

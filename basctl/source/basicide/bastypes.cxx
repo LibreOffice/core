@@ -261,10 +261,10 @@ WinBits const DockingWindow::StyleBits =
 
 DockingWindow::DockingWindow(vcl::Window* pParent, const OUString& rUIXMLDescription, const OString& rID)
     : ResizableDockingWindow(pParent)
+    , m_xBuilder(Application::CreateInterimBuilder(m_xBox.get(), rUIXMLDescription, true))
     , pLayout(nullptr)
     , nShowCount(0)
 {
-    m_xBuilder.reset(Application::CreateInterimBuilder(m_xBox.get(), rUIXMLDescription, true));
     m_xContainer = m_xBuilder->weld_container(rID);
 }
 

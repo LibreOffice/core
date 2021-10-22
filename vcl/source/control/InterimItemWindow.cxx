@@ -22,8 +22,8 @@ InterimItemWindow::InterimItemWindow(vcl::Window* pParent, const OUString& rUIXM
 
     m_xVclContentArea = VclPtr<VclVBox>::Create(this);
     m_xVclContentArea->Show();
-    m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, rUIXMLDescription,
-                                                       bAllowCycleFocusOut, nLOKWindowId));
+    m_xBuilder = Application::CreateInterimBuilder(m_xVclContentArea, rUIXMLDescription,
+                                                   bAllowCycleFocusOut, nLOKWindowId);
     m_xContainer = m_xBuilder->weld_container(rID);
 
     SetBackground();

@@ -2424,7 +2424,7 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
 
     SetHelpId( HID_HELP_WINDOW );
 
-    m_xBuilder.reset(Application::CreateInterimBuilder(m_xBox.get(), "sfx/ui/helpwindow.ui", false));
+    m_xBuilder = Application::CreateInterimBuilder(m_xBox.get(), "sfx/ui/helpwindow.ui", false);
     m_xContainer = m_xBuilder->weld_paned("HelpWindow");
     m_xContainer->connect_size_allocate(LINK(this, SfxHelpWindow_Impl, ResizeHdl));
     m_xHelpPaneWindow = m_xBuilder->weld_container("helppanewindow");

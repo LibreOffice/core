@@ -292,7 +292,7 @@ namespace pcr
     {
         Reference<XWindow> xWindow(rContext->getValueByName("BuilderParent"), UNO_QUERY_THROW);
         weld::TransportAsXWindow& rTunnel = dynamic_cast<weld::TransportAsXWindow&>(*xWindow);
-        return std::unique_ptr<weld::Builder>(Application::CreateBuilder(rTunnel.getWidget(), rUIFile));
+        return Application::CreateBuilder(rTunnel.getWidget(), rUIFile);
     }
 
     void PropertyHandlerHelper::setBuilderParent(const css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Widget* pParent)
