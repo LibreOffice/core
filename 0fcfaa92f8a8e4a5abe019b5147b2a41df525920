@@ -16,6 +16,23 @@
       "message": "@Caolán: Is that the right way to address this? (From how I understand it, an alternative would probably be to bundle Brotli as well. I don\u0027t know why Android Jenkins builds don\u0027t run into this...)",
       "revId": "0fcfaa92f8a8e4a5abe019b5147b2a41df525920",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5298ad71_d7c250a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-10-22T07:53:31Z",
+      "side": 1,
+      "message": "Maybe jenkins builder found a header in the system header locations or something like that. This looks good to me.",
+      "revId": "0fcfaa92f8a8e4a5abe019b5147b2a41df525920",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
