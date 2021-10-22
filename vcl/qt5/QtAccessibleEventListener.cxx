@@ -163,7 +163,7 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
         case AccessibleEventId::LISTBOX_ENTRY_COLLAPSED:
         case AccessibleEventId::ACTIVE_DESCENDANT_CHANGED_NOFOCUS:
         default:
-            SAL_WARN("vcl.qt5", "Unmapped AccessibleEventId: " << aEvent.EventId);
+            SAL_WARN("vcl.qt", "Unmapped AccessibleEventId: " << aEvent.EventId);
             return;
     }
 }

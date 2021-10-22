@@ -311,8 +311,7 @@ QCursor& QtData::getCursor(PointerStyle ePointerStyle)
         if (!pCursor)
         {
             pCursor = new QCursor(Qt::ArrowCursor);
-            SAL_WARN("vcl.qt5",
-                     "pointer " << static_cast<int>(ePointerStyle) << " not implemented");
+            SAL_WARN("vcl.qt", "pointer " << static_cast<int>(ePointerStyle) << " not implemented");
         }
 
         m_aCursors[ePointerStyle].reset(pCursor);

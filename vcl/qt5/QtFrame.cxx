@@ -1177,7 +1177,7 @@ KeyIndicatorState QtFrame::GetIndicatorState() { return KeyIndicatorState(); }
 
 void QtFrame::SimulateKeyPress(sal_uInt16 nKeyCode)
 {
-    SAL_WARN("vcl.qt5", "missing simulate keypress " << nKeyCode);
+    SAL_WARN("vcl.qt", "missing simulate keypress " << nKeyCode);
 }
 
 void QtFrame::SetParent(SalFrame* pNewParent) { m_pParent = static_cast<QtFrame*>(pNewParent); }
