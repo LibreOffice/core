@@ -167,8 +167,7 @@ QtClipboardTransferable::QtClipboardTransferable(const QClipboard::Mode aMode,
 bool QtClipboardTransferable::hasInFlightChanged() const
 {
     const bool bChanged(mimeData() != QApplication::clipboard()->mimeData(m_aMode));
-    SAL_WARN_IF(bChanged, "vcl.qt5",
-                "In flight clipboard change detected - broken clipboard read!");
+    SAL_WARN_IF(bChanged, "vcl.qt", "In flight clipboard change detected - broken clipboard read!");
     return bChanged;
 }
 

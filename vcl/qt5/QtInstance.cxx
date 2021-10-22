@@ -588,9 +588,9 @@ void* QtInstance::CreateGStreamerSink(const SystemChildWindow* pWindow)
     }
     else
     {
-        SAL_WARN("vcl.qt5", "Couldn't initialize qwidget5videosink."
-                            " Video playback might not work as expected."
-                            " Please install Qt5 packages for QtGStreamer.");
+        SAL_WARN("vcl.qt", "Couldn't initialize qwidget5videosink."
+                           " Video playback might not work as expected."
+                           " Please install Qt5 packages for QtGStreamer.");
         // with no videosink explicitly set, GStreamer will open its own (misplaced) window(s) to display video
     }
 
@@ -606,7 +606,7 @@ void QtInstance::AllocFakeCmdlineArgs(std::unique_ptr<char* []>& rFakeArgv,
                                       std::vector<FreeableCStr>& rFakeArgvFreeable)
 {
     OString aVersion(qVersion());
-    SAL_INFO("vcl.qt5", "qt version string is " << aVersion);
+    SAL_INFO("vcl.qt", "qt version string is " << aVersion);
 
     const sal_uInt32 nParams = osl_getCommandArgCount();
     sal_uInt32 nDisplayValueIdx = 0;

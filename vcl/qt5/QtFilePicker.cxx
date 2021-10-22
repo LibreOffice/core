@@ -280,7 +280,7 @@ uno::Sequence<OUString> SAL_CALL QtFilePicker::getSelectedFiles()
         if (intUrl.isEmpty())
         {
             // If translation failed, fall back to original URL:
-            SAL_WARN("vcl.qt5", "cannot convert <" << extUrl << "> from locale encoding to UTF-8");
+            SAL_WARN("vcl.qt", "cannot convert <" << extUrl << "> from locale encoding to UTF-8");
             intUrl = extUrl;
         }
         seq[i++] = intUrl;
@@ -397,7 +397,7 @@ uno::Any QtFilePicker::handleGetListValue(const QComboBox* pWidget, sal_Int16 nC
             break;
         }
         default:
-            SAL_WARN("vcl.qt5",
+            SAL_WARN("vcl.qt",
                      "undocumented/unimplemented ControlAction for a list " << nControlAction);
             break;
     }
@@ -444,7 +444,7 @@ void QtFilePicker::handleSetListValue(QComboBox* pWidget, sal_Int16 nControlActi
             break;
         }
         default:
-            SAL_WARN("vcl.qt5",
+            SAL_WARN("vcl.qt",
                      "undocumented/unimplemented ControlAction for a list " << nControlAction);
             break;
     }
@@ -480,7 +480,7 @@ void SAL_CALL QtFilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlActi
         }
     }
     else
-        SAL_WARN("vcl.qt5", "set value on unknown control " << controlId);
+        SAL_WARN("vcl.qt", "set value on unknown control " << controlId);
 }
 
 uno::Any SAL_CALL QtFilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction)
@@ -512,7 +512,7 @@ uno::Any SAL_CALL QtFilePicker::getValue(sal_Int16 controlId, sal_Int16 nControl
         }
     }
     else
-        SAL_WARN("vcl.qt5", "get value on unknown control " << controlId);
+        SAL_WARN("vcl.qt", "get value on unknown control " << controlId);
 
     return res;
 }
@@ -526,7 +526,7 @@ void SAL_CALL QtFilePicker::enableControl(sal_Int16 controlId, sal_Bool enable)
         if (m_aCustomWidgetsMap.contains(controlId))
             m_aCustomWidgetsMap.value(controlId)->setEnabled(enable);
         else
-            SAL_WARN("vcl.qt5", "enable unknown control " << controlId);
+            SAL_WARN("vcl.qt", "enable unknown control " << controlId);
     });
 }
 
@@ -548,7 +548,7 @@ void SAL_CALL QtFilePicker::setLabel(sal_Int16 controlId, const OUString& label)
             cb->setText(toQString(label));
     }
     else
-        SAL_WARN("vcl.qt5", "set label on unknown control " << controlId);
+        SAL_WARN("vcl.qt", "set label on unknown control " << controlId);
 }
 
 OUString SAL_CALL QtFilePicker::getLabel(sal_Int16 controlId)
@@ -571,7 +571,7 @@ OUString SAL_CALL QtFilePicker::getLabel(sal_Int16 controlId)
             label = cb->text();
     }
     else
-        SAL_WARN("vcl.qt5", "get label on unknown control " << controlId);
+        SAL_WARN("vcl.qt", "get label on unknown control " << controlId);
 
     return toOUString(label);
 }
@@ -905,7 +905,7 @@ void QtFilePicker::updateAutomaticFileExtension()
         {
             // fall back to setting none otherwise
             SAL_INFO(
-                "vcl.qt5",
+                "vcl.qt",
                 "Unable to retrieve unambiguous file extension. Will not add any automatically.");
             bSetAutoExtension = false;
         }
@@ -919,7 +919,7 @@ void QtFilePicker::filterSelected(const QString&)
 {
     FilePickerEvent aEvent;
     aEvent.ElementId = LISTBOX_FILTER;
-    SAL_INFO("vcl.qt5", "filter changed");
+    SAL_INFO("vcl.qt", "filter changed");
     if (m_xListener.is())
         m_xListener->controlStateChanged(aEvent);
 }
@@ -927,7 +927,7 @@ void QtFilePicker::filterSelected(const QString&)
 void QtFilePicker::currentChanged(const QString&)
 {
     FilePickerEvent aEvent;
-    SAL_INFO("vcl.qt5", "file selection changed");
+    SAL_INFO("vcl.qt", "file selection changed");
     if (m_xListener.is())
         m_xListener->fileSelectionChanged(aEvent);
 }
