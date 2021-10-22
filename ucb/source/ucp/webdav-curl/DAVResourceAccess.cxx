@@ -1022,7 +1022,7 @@ void DAVResourceAccess::initialize()
     if ( m_aPath.isEmpty() )
     {
         CurlUri const aURI( m_aURL );
-        OUString aPath( aURI.GetPath() );
+        OUString aPath( aURI.GetRelativeReference() );
 
         /* #134089# - Check URI */
         if ( aPath.isEmpty() )

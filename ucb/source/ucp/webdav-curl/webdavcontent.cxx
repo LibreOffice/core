@@ -2061,7 +2061,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             aStaticDAVOptionsCache.removeDAVOptions( sourceURI.GetURI() );
             aStaticDAVOptionsCache.removeDAVOptions( targetURI.GetURI() );
             xResAccess->MOVE(
-                sourceURI.GetPath(), targetURI.GetURI(), false, xEnv );
+                sourceURI.GetRelativeReference(), targetURI.GetURI(), false, xEnv );
 
             // @@@ Should check for resources that could not be moved
             //     (due to source access or target overwrite) and send
@@ -2861,7 +2861,7 @@ void Content::transfer(
 
             aStaticDAVOptionsCache.removeDAVOptions( sourceURI.GetURI() );
             aStaticDAVOptionsCache.removeDAVOptions( targetURI.GetURI() );
-            aSourceAccess.MOVE( sourceURI.GetPath(),
+            aSourceAccess.MOVE( sourceURI.GetRelativeReference(),
                                 targetURI.GetURI(),
                                 rArgs.NameClash
                                     == ucb::NameClash::OVERWRITE,
@@ -2890,7 +2890,7 @@ void Content::transfer(
 
             aStaticDAVOptionsCache.removeDAVOptions( sourceURI.GetURI() );
             aStaticDAVOptionsCache.removeDAVOptions( targetURI.GetURI() );
-            aSourceAccess.COPY( sourceURI.GetPath(),
+            aSourceAccess.COPY( sourceURI.GetRelativeReference(),
                                 targetURI.GetURI(),
                                 rArgs.NameClash
                                     == ucb::NameClash::OVERWRITE,
