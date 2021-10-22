@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "741a40e1_35c0cd5c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-10-22T09:27:36Z",
+      "side": 1,
+      "message": "CppunitTest_sc_ucalc_sharedformula failed, but it passes for me locally, resume.",
+      "revId": "116eb51f16e0bf9155fe1683840bfdaa06cfa495",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
