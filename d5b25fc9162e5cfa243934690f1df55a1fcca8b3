@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d126c1f8_39f47e80",
+        "filename": "svl/source/numbers/zforlist.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3356,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-22T06:26:21Z",
+      "side": 1,
+      "message": "I am not sure if my concern is justified, but please consider creating some \"impl\" without the locking (for use in properly locked IsUserDefined variants). I suggest this because I\u0027m afraid that this code might be used in busy loops, so if nested locking has measurable overhead, we better avoid it - so SvNumberFormatter::IsUserDefined(std::u16string_view, LanguageType) does not execute locking twice.",
+      "revId": "d5b25fc9162e5cfa243934690f1df55a1fcca8b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69127979_aa899533",
+        "filename": "sw/source/core/table/swtable.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2345,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-22T06:26:21Z",
+      "side": 1,
+      "message": "Do I understand it correctly, that this check relies on the previous *format*, not on *content*? (I might misread, please excuse if I do.)\n\nIf I\u0027m correct, then I\u0027m afraid this is not quite OK: this would disallow to change text to any numeric format other than user-defined format. I suppose that we should decide on by-cell *value* basis, considering if the value could be parsed as number (taking the new format into consideration), and reject the application of the new format *cell-by-cell* based on that test. So that one could change text \"123\" to number, but not \"abc\" to number.\n\nWhat do you think?",
+      "revId": "d5b25fc9162e5cfa243934690f1df55a1fcca8b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
