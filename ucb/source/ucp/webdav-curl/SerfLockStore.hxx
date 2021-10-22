@@ -68,7 +68,7 @@ public:
     ~SerfLockStore();
 
     bool finishing() const;
-    OUString getLockToken( const OUString& rLock );
+    OUString getLockToken(const OUString& rURI);
 
     OUString const* getLockTokenForURI(OUString const& rURI, css::ucb::Lock const* pLock);
 
@@ -80,10 +80,10 @@ public:
                   // -1: infinite lock, no refresh
                   sal_Int32 nLastChanceToSendRefreshRequest );
 
-    void updateLock( const OUString& rLock,
+    void updateLock( const OUString& rURI,
                      sal_Int32 nLastChanceToSendRefreshRequest );
 
-    void removeLock( const OUString& rLock );
+    void removeLock(const OUString& rURI);
 
     void refreshLocks();
 

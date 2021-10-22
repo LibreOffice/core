@@ -139,11 +139,13 @@ void SerfLockStore::stopTicker(osl::ClearableMutexGuard & rGuard)
         pTickerThread->join(); // without m_aMutex locked (to prevent deadlock)
 }
 
-OUString SerfLockStore::getLockToken( const OUString& rLock )
+OUString SerfLockStore::getLockToken(const OUString& rURI)
 {
+    assert(rURI.startsWith("http://") || rURI.startsWith("https://"));
+
     osl::MutexGuard aGuard( m_aMutex );
 
-    LockInfoMap::const_iterator it( m_aLockInfoMap.find( rLock ) );
+    LockInfoMap::const_iterator const it( m_aLockInfoMap.find(rURI) );
     if ( it != m_aLockInfoMap.end() )
         return (*it).second.m_sToken;
 
@@ -154,6 +156,8 @@ OUString SerfLockStore::getLockToken( const OUString& rLock )
 OUString const*
 SerfLockStore::getLockTokenForURI(OUString const& rURI, css::ucb::Lock const*const pLock)
 {
+    assert(rURI.startsWith("http://") || rURI.startsWith("https://"));
+
     osl::MutexGuard aGuard( m_aMutex );
 
     auto const it(m_aLockInfoMap.find(rURI));
@@ -187,6 +191,8 @@ void SerfLockStore::addLock( const OUString& rURI,
                              rtl::Reference<CurlSession> const & xSession,
                              sal_Int32 nLastChanceToSendRefreshRequest )
 {
+    assert(rURI.startsWith("http://") || rURI.startsWith("https://"));
+
     osl::MutexGuard aGuard( m_aMutex );
 
     m_aLockInfoMap[ rURI ]
@@ -196,12 +202,14 @@ void SerfLockStore::addLock( const OUString& rURI,
 }
 
 
-void SerfLockStore::updateLock( const OUString& rLock,
+void SerfLockStore::updateLock( const OUString& rURI,
                                 sal_Int32 nLastChanceToSendRefreshRequest )
 {
+    assert(rURI.startsWith("http://") || rURI.startsWith("https://"));
+
     osl::MutexGuard aGuard( m_aMutex );
 
-    LockInfoMap::iterator it( m_aLockInfoMap.find( rLock ) );
+    LockInfoMap::iterator const it(m_aLockInfoMap.find(rURI));
     SAL_WARN_IF( it == m_aLockInfoMap.end(), "ucb.ucp.webdav",
                 "SerfLockStore::updateLock: lock not found!" );
 
@@ -213,11 +221,13 @@ void SerfLockStore::updateLock( const OUString& rLock,
 }
 
 
-void SerfLockStore::removeLock( const OUString& rLock )
+void SerfLockStore::removeLock(const OUString& rURI)
 {
+    assert(rURI.startsWith("http://") || rURI.startsWith("https://"));
+
     osl::ClearableMutexGuard aGuard( m_aMutex );
 
-    m_aLockInfoMap.erase( rLock );
+    m_aLockInfoMap.erase(rURI);
 
     if ( m_aLockInfoMap.empty() )
         stopTicker(aGuard);

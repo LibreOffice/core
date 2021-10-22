@@ -245,6 +245,47 @@ void CurlUri::AppendPath(::std::u16string_view const rPath)
     m_Path = *oPath;
 }
 
+CurlUri CurlUri::CloneWithRelativeRefPathAbsolute(OUString const& rRelativeRef) const
+{
+    ::std::unique_ptr<CURLU, deleter_from_fn<curl_url_cleanup>> pUrl(curl_url_dup(m_pUrl.get()));
+    sal_Int32 indexEnd(rRelativeRef.getLength());
+    auto const indexQuery(rRelativeRef.indexOf('?'));
+    auto const indexFragment(rRelativeRef.indexOf('#'));
+    if (indexFragment != -1)
+    {
+        OUString const fragment(rRelativeRef.copy(indexFragment));
+        indexEnd = indexFragment;
+        OString const utf8Fragment(OUStringToOString(fragment, RTL_TEXTENCODING_UTF8));
+        auto const uc = curl_url_set(pUrl.get(), CURLUPART_QUERY, utf8Fragment.getStr(), 0);
+        if (uc != CURLUE_OK)
+        {
+            SAL_WARN("ucb.ucp.webdav.curl", "curl_url_set failed: " << uc);
+            throw DAVException(DAVException::DAV_INVALID_ARG);
+        }
+    }
+    if (indexQuery != -1 && (indexFragment == -1 || indexQuery < indexFragment))
+    {
+        OUString const query(rRelativeRef.copy(indexQuery, indexEnd - indexQuery));
+        indexEnd = indexQuery;
+        OString const utf8Query(OUStringToOString(query, RTL_TEXTENCODING_UTF8));
+        auto const uc = curl_url_set(pUrl.get(), CURLUPART_QUERY, utf8Query.getStr(), 0);
+        if (uc != CURLUE_OK)
+        {
+            SAL_WARN("ucb.ucp.webdav.curl", "curl_url_set failed: " << uc);
+            throw DAVException(DAVException::DAV_INVALID_ARG);
+        }
+    }
+    OUString const path(rRelativeRef.copy(0, indexEnd));
+    OString const utf8Path(OUStringToOString(path, RTL_TEXTENCODING_UTF8));
+    auto const uc = curl_url_set(pUrl.get(), CURLUPART_PATH, utf8Path.getStr(), 0);
+    if (uc != CURLUE_OK)
+    {
+        SAL_WARN("ucb.ucp.webdav.curl", "curl_url_set failed: " << uc);
+        throw DAVException(DAVException::DAV_INVALID_ARG);
+    }
+    return CurlUri(*pUrl.release());
+}
+
 OUString EncodeSegment(OUString const& rSegment)
 {
     return rtl::Uri::encode(rSegment, rtl_UriCharClassPchar, rtl_UriEncodeIgnoreEscapes,

@@ -127,9 +127,9 @@ public:
 
     virtual auto abort() -> void override;
 
-    auto NonInteractive_LOCK(OUString const& rURIReference,
-                             sal_Int32& o_rLastChanceToSendRefreshRequest) -> bool;
-    auto NonInteractive_UNLOCK(OUString const& rURIReference) -> void;
+    auto NonInteractive_LOCK(OUString const& rURI, sal_Int32& o_rLastChanceToSendRefreshRequest)
+        -> bool;
+    auto NonInteractive_UNLOCK(OUString const& rURI) -> void;
 };
 
 } // namespace http_dav_ucp
