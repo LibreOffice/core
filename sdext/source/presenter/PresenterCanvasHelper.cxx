@@ -71,11 +71,10 @@ void PresenterCanvasHelper::PaintRectangle (
         return;
 
     // Create a clip polypolygon that has the content box as hole.
-    ::std::vector<awt::Rectangle> aRectangles
-    {
-        PresenterGeometryHelper::Intersection(rRepaintBox, rOuterBoundingBox)
-    };
+    ::std::vector<awt::Rectangle> aRectangles;
     aRectangles.reserve(2);
+    aRectangles.push_back(
+        PresenterGeometryHelper::Intersection(rRepaintBox, rOuterBoundingBox));
     if (rContentBoundingBox.Width > 0 && rContentBoundingBox.Height > 0)
         aRectangles.push_back(
             PresenterGeometryHelper::Intersection(rRepaintBox, rContentBoundingBox));
