@@ -59,7 +59,7 @@ public:
 
     bool operator==(CurlUri const& rOther) const;
 
-    CURLU* CloneCURLU() const { return curl_url_dup(m_pUrl.get()); }
+    CURLU const* GetCURLU() const { return m_pUrl.get(); }
     OUString const& GetURI() const { return m_URI; }
     OUString const& GetScheme() const { return m_Scheme; }
     OUString const& GetUser() const { return m_User; }
@@ -76,6 +76,9 @@ public:
     void SetScheme(::std::u16string_view rScheme);
     /// @throws DAVException
     void AppendPath(::std::u16string_view rPath);
+    /// @param matches: relative-ref = path-absolute [ "?" query ] [ "#" fragment ]
+    /// @throws DAVException
+    CurlUri CloneWithRelativeRefPathAbsolute(OUString const& rRelativeRef) const;
 };
 
 OUString EncodeSegment(OUString const& rSegment);
