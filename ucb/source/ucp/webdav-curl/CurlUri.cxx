@@ -89,16 +89,16 @@ void CurlUri::Init()
     assert(oPath);
     m_Path = *oPath;
 
-    // TODO: why put this in *path* ? because before 2007, ne_uri path contained query/fragment as well :-/
+    // note: this used to be added to m_Path because before 2007, ne_uri path contained query/fragment as well :-/
     auto const oQuery(GetURLComponent(*m_pUrl, CURLUPART_QUERY, CURLUE_NO_QUERY));
     if (oQuery)
     {
-        m_Path += *oQuery;
+        m_QueryAndFragment += *oQuery;
     }
     auto const oFragment(GetURLComponent(*m_pUrl, CURLUPART_FRAGMENT, CURLUE_NO_FRAGMENT));
     if (oFragment)
     {
-        m_Path += *oFragment;
+        m_QueryAndFragment += *oFragment;
     }
 }
 
@@ -146,6 +146,7 @@ CurlUri::CurlUri(CurlUri const& rOther)
     , m_Host(rOther.m_Host)
     , m_nPort(rOther.m_nPort)
     , m_Path(rOther.m_Path)
+    , m_QueryAndFragment(rOther.m_QueryAndFragment)
 {
     assert(rOther.m_pUrl);
     if (!m_pUrl)
@@ -169,6 +170,7 @@ void CurlUri::operator=(CurlUri const& rOther)
     m_Host = rOther.m_Host;
     m_nPort = rOther.m_nPort;
     m_Path = rOther.m_Path;
+    m_QueryAndFragment = rOther.m_QueryAndFragment;
 }
 
 bool CurlUri::operator==(CurlUri const& rOther) const { return m_URI == rOther.m_URI; }
@@ -187,17 +189,7 @@ OUString CurlUri::GetPathBaseName() const
     {
         return "/";
     }
-    OUString aTemp(m_Path.copy(nPos + 1, m_Path.getLength() - nPos - 1 - nTrail));
-
-    // query, fragment present?
-    nPos = aTemp.indexOf('?');
-    if (nPos == -1)
-        nPos = aTemp.indexOf('#');
-
-    if (nPos != -1)
-        aTemp = aTemp.copy(0, nPos);
-
-    return aTemp;
+    return m_Path.copy(nPos + 1, m_Path.getLength() - nPos - 1 - nTrail);
 }
 
 OUString CurlUri::GetPathBaseNameUnescaped() const { return DecodeURI(GetPathBaseName()); }
@@ -224,7 +216,6 @@ void CurlUri::SetScheme(::std::u16string_view const rScheme)
 void CurlUri::AppendPath(::std::u16string_view const rPath)
 {
     OUStringBuffer path(m_Path);
-    // FIXME: it is utter nonsense that m_Path contains query/fragment
     if (path.lastIndexOf('/') != path.getLength() - 1)
     {
         path.append("/");

@@ -68,7 +68,7 @@ auto DumpResources(std::vector<DAVResource> const& rResources) -> OUString
         try {
             CurlUri const uri(rResource.uri);
             buf.append("> parsed URL: <");
-            buf.append(DecodeURI(uri.GetPath()));
+            buf.append(DecodeURI(uri.GetRelativeReference()));
             buf.append("> ");
         } catch (...) {
             // parsing uri could fail
