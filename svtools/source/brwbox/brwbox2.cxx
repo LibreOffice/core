@@ -781,19 +781,19 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
     Size aOverallAreaSize = _bForeignDevice ? _rRect.GetSize() : pDataWin->GetOutputSizePixel();
     Point aOverallAreaBRPos = _bForeignDevice ? _rRect.BottomRight() : Point( aOverallAreaSize.Width(), aOverallAreaSize.Height() );
 
-    tools::Long nDataRowHeigt = GetDataRowHeight();
+    tools::Long nDataRowHeight = GetDataRowHeight();
 
     // compute relative rows to redraw
     sal_uLong nRelTopRow = 0;
     sal_uLong nRelBottomRow = aOverallAreaSize.Height();
-    if (!_bForeignDevice && nDataRowHeigt)
+    if (!_bForeignDevice && nDataRowHeight)
     {
-        nRelTopRow = (static_cast<sal_uLong>(_rRect.Top()) / nDataRowHeigt);
-        nRelBottomRow = static_cast<sal_uLong>(_rRect.Bottom()) / nDataRowHeigt;
+        nRelTopRow = (static_cast<sal_uLong>(_rRect.Top()) / nDataRowHeight);
+        nRelBottomRow = static_cast<sal_uLong>(_rRect.Bottom()) / nDataRowHeight;
     }
 
     // cache frequently used values
-    Point aPos( aOverallAreaPos.X(), nRelTopRow * nDataRowHeigt + aOverallAreaPos.Y() );
+    Point aPos( aOverallAreaPos.X(), nRelTopRow * nDataRowHeight + aOverallAreaPos.Y() );
     _rOut.SetLineColor( COL_WHITE );
     const AllSettings& rAllSets = _rOut.GetSettings();
     const StyleSettings &rSettings = rAllSets.GetStyleSettings();
@@ -810,7 +810,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
     // redraw the invalid fields
     for ( sal_uLong nRelRow = nRelTopRow;
           nRelRow <= nRelBottomRow && static_cast<sal_uLong>(nTopRow)+nRelRow < o3tl::make_unsigned(nRowCount);
-          ++nRelRow, aPos.AdjustY(nDataRowHeigt ) )
+          ++nRelRow, aPos.AdjustY(nDataRowHeight ) )
     {
         // get row
         // check valid area, to be on the safe side:
@@ -830,7 +830,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
         // #73325# don't paint the row outside the painting rectangle (DG)
         // prepare auto-highlight
         tools::Rectangle aRowRect( Point( _rRect.Left(), aPos.Y() ),
-                Size( _rRect.GetSize().Width(), nDataRowHeigt ) );
+                Size( _rRect.GetSize().Width(), nDataRowHeight ) );
 
         bool bRowSelected   =   !bHideSelect
                             &&  IsRowSelected( nRow );
@@ -877,7 +877,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
                 _rOut.SetFillColor( rHighlightFillColor );
                 _rOut.SetLineColor();
                 tools::Rectangle aFieldRect( aPos,
-                        Size( pCol->Width(), nDataRowHeigt ) );
+                        Size( pCol->Width(), nDataRowHeight ) );
                 _rOut.DrawRect( aFieldRect );
             }
 
@@ -891,7 +891,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
                 // clip the column's output to the field area
                 if (_bForeignDevice)
                 {   // (not necessary if painting onto the data window)
-                    Size aFieldSize(pCol->Width(), nDataRowHeigt);
+                    Size aFieldSize(pCol->Width(), nDataRowHeight);
 
                     if (aPos.X() + aFieldSize.Width() > aOverallAreaBRPos.X())
                         aFieldSize.setWidth( aOverallAreaBRPos.X() - aPos.X() );
@@ -938,7 +938,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
             _rOut.SetClipRegion();
             _rOut.Push( vcl::PushFlags::LINECOLOR );
             _rOut.SetLineColor( aDelimiterLineColor );
-            tools::Long nY = aPos.Y() + nDataRowHeigt - 1;
+            tools::Long nY = aPos.Y() + nDataRowHeight - 1;
             if (nY <= aOverallAreaBRPos.Y())
                 _rOut.DrawLine( Point( nHLineX, nY ),
                                 Point( bVLines
