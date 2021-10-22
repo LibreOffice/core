@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07c4250e_dc138fd8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-10-22T20:01:38Z",
+      "side": 1,
+      "message": "Need to apply this first and fix the COOL tests in the next step.",
+      "revId": "c7c5e695de9f3031a369397ef405989818c4a6ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
