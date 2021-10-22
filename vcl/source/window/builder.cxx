@@ -178,7 +178,7 @@ namespace
 
 }
 
-weld::Builder* Application::CreateBuilder(weld::Widget* pParent, const OUString &rUIFile, bool bMobile, sal_uInt64 nLOKWindowId)
+std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent, const OUString &rUIFile, bool bMobile, sal_uInt64 nLOKWindowId)
 {
     if (comphelper::LibreOfficeKit::isActive())
     {
@@ -193,7 +193,7 @@ weld::Builder* Application::CreateBuilder(weld::Widget* pParent, const OUString 
     return ImplGetSVData()->mpDefInst->CreateBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
 }
 
-weld::Builder* Application::CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile, bool bAllowCycleFocusOut, sal_uInt64 nLOKWindowId)
+std::unique_ptr<weld::Builder> Application::CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile, bool bAllowCycleFocusOut, sal_uInt64 nLOKWindowId)
 {
     // Notebookbar sub controls
     if (comphelper::LibreOfficeKit::isActive() && jsdialog::isInterimBuilderEnabledForNotebookbar(rUIFile))

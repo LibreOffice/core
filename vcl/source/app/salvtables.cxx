@@ -7094,18 +7094,20 @@ SalInstanceBuilder::~SalInstanceBuilder()
     m_aOwnedToplevel.disposeAndClear();
 }
 
-weld::Builder* SalInstance::CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot,
-                                          const OUString& rUIFile)
+std::unique_ptr<weld::Builder>
+SalInstance::CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile)
 {
     SalInstanceWidget* pParentInstance = dynamic_cast<SalInstanceWidget*>(pParent);
     vcl::Window* pParentWidget = pParentInstance ? pParentInstance->getWidget() : nullptr;
-    return new SalInstanceBuilder(pParentWidget, rUIRoot, rUIFile);
+    return std::make_unique<SalInstanceBuilder>(pParentWidget, rUIRoot, rUIFile);
 }
 
-weld::Builder* SalInstance::CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot,
-                                                 const OUString& rUIFile, bool, sal_uInt64)
+std::unique_ptr<weld::Builder> SalInstance::CreateInterimBuilder(vcl::Window* pParent,
+                                                                 const OUString& rUIRoot,
+                                                                 const OUString& rUIFile, bool,
+                                                                 sal_uInt64)
 {
-    return new SalInstanceBuilder(pParent, rUIRoot, rUIFile);
+    return std::make_unique<SalInstanceBuilder>(pParent, rUIRoot, rUIFile);
 }
 
 void SalInstanceWindow::help()

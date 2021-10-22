@@ -135,7 +135,7 @@ void StyleList::CreateContextMenu()
         m_bBindingUpdate = false;
     }
     mxMenu.reset();
-    mxMenuBuilder.reset(Application::CreateBuilder(nullptr, "sfx/ui/stylecontextmenu.ui"));
+    mxMenuBuilder = Application::CreateBuilder(nullptr, "sfx/ui/stylecontextmenu.ui");
     mxMenu = mxMenuBuilder->weld_menu("menu");
     mxMenu->set_sensitive("edit", m_bCanEdit);
     mxMenu->set_sensitive("delete", m_bCanDel);

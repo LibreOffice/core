@@ -221,6 +221,7 @@ class JSInstanceBuilder final : public SalInstanceBuilder, public JSDialogSender
     void RememberWidget(const OString& id, weld::Widget* pWidget);
     static weld::Widget* FindWeldWidgetsMap(sal_uInt64 nWindowId, const OString& rWidget);
 
+public:
     /// used for dialogs or popups
     JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile,
                       bool bPopup = false);
@@ -234,21 +235,21 @@ class JSInstanceBuilder final : public SalInstanceBuilder, public JSDialogSender
     /// for autofilter dropdown
     JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile);
 
-public:
-    static JSInstanceBuilder* CreateDialogBuilder(weld::Widget* pParent, const OUString& rUIRoot,
-                                                  const OUString& rUIFile);
-    static JSInstanceBuilder*
+    static std::unique_ptr<JSInstanceBuilder>
+    CreateDialogBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile);
+    static std::unique_ptr<JSInstanceBuilder>
     CreateNotebookbarBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
                              const css::uno::Reference<css::frame::XFrame>& rFrame,
                              sal_uInt64 nWindowId = 0);
-    static JSInstanceBuilder* CreateAutofilterWindowBuilder(vcl::Window* pParent,
-                                                            const OUString& rUIRoot,
-                                                            const OUString& rUIFile);
-    static JSInstanceBuilder* CreateSidebarBuilder(weld::Widget* pParent, const OUString& rUIRoot,
-                                                   const OUString& rUIFile,
-                                                   sal_uInt64 nLOKWindowId = 0);
-    static JSInstanceBuilder* CreatePopupBuilder(weld::Widget* pParent, const OUString& rUIRoot,
-                                                 const OUString& rUIFile);
+    static std::unique_ptr<JSInstanceBuilder>
+    CreateAutofilterWindowBuilder(vcl::Window* pParent, const OUString& rUIRoot,
+                                  const OUString& rUIFile);
+    static std::unique_ptr<JSInstanceBuilder> CreateSidebarBuilder(weld::Widget* pParent,
+                                                                   const OUString& rUIRoot,
+                                                                   const OUString& rUIFile,
+                                                                   sal_uInt64 nLOKWindowId = 0);
+    static std::unique_ptr<JSInstanceBuilder>
+    CreatePopupBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile);
 
     virtual ~JSInstanceBuilder() override;
     virtual std::unique_ptr<weld::MessageDialog> weld_message_dialog(const OString& id) override;

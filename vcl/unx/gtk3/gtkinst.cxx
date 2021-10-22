@@ -22876,11 +22876,11 @@ void GtkInstanceWidget::help_hierarchy_foreach(const std::function<bool(const OS
     }
 }
 
-weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile)
+std::unique_ptr<weld::Builder> GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile)
 {
     GtkInstanceWidget* pParentWidget = dynamic_cast<GtkInstanceWidget*>(pParent);
     GtkWidget* pBuilderParent = pParentWidget ? pParentWidget->getWidget() : nullptr;
-    return new GtkInstanceBuilder(pBuilderParent, rUIRoot, rUIFile, nullptr, true);
+    return std::make_unique<GtkInstanceBuilder>(pBuilderParent, rUIRoot, rUIFile, nullptr, true);
 }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -22938,7 +22938,7 @@ gboolean GtkSalFrame::NativeWidgetHelpPressed(GtkAccelGroup*, GObject*, guint, G
 }
 #endif
 
-weld::Builder* GtkInstance::CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
+std::unique_ptr<weld::Builder> GtkInstance::CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
                                                  bool bAllowCycleFocusOut, sal_uInt64)
 {
     // Create a foreign window which we know is a GtkGrid and make the native widgets a child of that, so we can
@@ -22961,7 +22961,7 @@ weld::Builder* GtkInstance::CreateInterimBuilder(vcl::Window* pParent, const OUS
 #endif
 
     // build the widget tree as a child of the GtkEventBox GtkGrid parent
-    return new GtkInstanceBuilder(pWindow, rUIRoot, rUIFile, xEmbedWindow.get(), bAllowCycleFocusOut);
+    return std::make_unique<GtkInstanceBuilder>(pWindow, rUIRoot, rUIFile, xEmbedWindow.get(), bAllowCycleFocusOut);
 }
 
 weld::MessageDialog* GtkInstance::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType, VclButtonsType eButtonsType, const OUString &rPrimaryMessage)
