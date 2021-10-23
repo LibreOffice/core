@@ -124,7 +124,7 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
     uno::Reference<beans::XPropertySet> xPropertySet(xGroup->getByIndex(2), uno::UNO_QUERY);
     sal_Int32 nValue(0);
     xPropertySet->getPropertyValue("FillColor") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4f81bd), nValue); // If fill color is right, theme import is OK
+    CPPUNIT_ASSERT_EQUAL(Color(0x4f81bd), Color(ColorTransparency, nValue)); // If fill color is right, theme import is OK
 
     uno::Reference<text::XTextRange> xTextRange(xGroup->getByIndex(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Sample"), xTextRange->getString()); // Shape has text
@@ -250,7 +250,7 @@ DECLARE_OOXMLEXPORT_TEST(testMceNested, "mce-nested.docx")
     // positionV's posOffset from the bugdoc, was 0.
     CPPUNIT_ASSERT(6879 <= getProperty<sal_Int32>(xShape, "VertOrientPosition"));
     // This was -1 (default), make sure the background color is set.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4f81bd), getProperty<sal_Int32>(xShape, "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x4f81bd), Color(ColorTransparency, getProperty<sal_Int32>(xShape, "FillColor")));
 
     uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor = getShape(2);
     // This was a com.sun.star.drawing.CustomShape, due to incorrect handling of wpg elements after a wps textbox.
@@ -261,7 +261,7 @@ DECLARE_OOXMLEXPORT_TEST(testMceNested, "mce-nested.docx")
     uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xGroup->getByIndex(1), uno::UNO_QUERY_THROW)->getText();
     uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xText, "[Year]");
     CPPUNIT_ASSERT_EQUAL(48.f, getProperty<float>(getRun(xParagraph, 1), "CharHeight"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), getProperty<sal_Int32>(getRun(xParagraph, 1), "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(ColorTransparency, getProperty<sal_Int32>(getRun(xParagraph, 1), "CharColor")));
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(getRun(xParagraph, 1), "CharWeight"));
     CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_BOTTOM, getProperty<drawing::TextVerticalAdjust>(xGroup->getByIndex(1), "TextVerticalAdjust"));
 }

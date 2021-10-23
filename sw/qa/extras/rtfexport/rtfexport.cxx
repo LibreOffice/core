@@ -599,16 +599,16 @@ DECLARE_RTFEXPORT_TEST(testTextFrameBorders, "textframe-borders.rtf")
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
                                                          uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xD99594), getProperty<sal_Int32>(xFrame, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xD99594), Color(ColorTransparency, getProperty<sal_Int32>(xFrame, "BackColor")));
 
     table::BorderLine2 aBorder = getProperty<table::BorderLine2>(xFrame, "TopBorder");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xC0504D), aBorder.Color);
+    CPPUNIT_ASSERT_EQUAL(Color(0xC0504D), Color(ColorTransparency, aBorder.Color));
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(35), aBorder.LineWidth);
 
     table::ShadowFormat aShadowFormat = getProperty<table::ShadowFormat>(xFrame, "ShadowFormat");
     CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadowFormat.Location);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(48), aShadowFormat.ShadowWidth);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x622423), aShadowFormat.Color);
+    CPPUNIT_ASSERT_EQUAL(Color(0x622423), Color(ColorTransparency, aShadowFormat.Color));
 }
 
 DECLARE_RTFEXPORT_TEST(testTextframeGradient, "textframe-gradient.rtf")
@@ -622,16 +622,16 @@ DECLARE_RTFEXPORT_TEST(testTextframeGradient, "textframe-gradient.rtf")
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
                          getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
     awt::Gradient aGradient = getProperty<awt::Gradient>(xFrame, "FillGradient");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xC0504D), aGradient.StartColor);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xD99594), aGradient.EndColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0xC0504D), Color(ColorTransparency, aGradient.StartColor));
+    CPPUNIT_ASSERT_EQUAL(Color(0xD99594), Color(ColorTransparency, aGradient.EndColor));
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);
 
     xFrame.set(xIndexAccess->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
                          getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
     aGradient = getProperty<awt::Gradient>(xFrame, "FillGradient");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x000000), aGradient.StartColor);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x666666), aGradient.EndColor);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(ColorTransparency, aGradient.StartColor));
+    CPPUNIT_ASSERT_EQUAL(Color(0x666666), Color(ColorTransparency, aGradient.EndColor));
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);
 }
 
@@ -734,7 +734,7 @@ DECLARE_RTFEXPORT_TEST(testFdo66743, "fdo66743.rtf")
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
     uno::Reference<table::XCell> xCell = xTable->getCellByName("A1");
     // This was too dark, 0x7f7f7f.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xd8d8d8), getProperty<sal_Int32>(xCell, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xd8d8d8), Color(ColorTransparency, getProperty<sal_Int32>(xCell, "BackColor")));
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo68787, "fdo68787.rtf")
@@ -1083,7 +1083,7 @@ DECLARE_RTFEXPORT_TEST(testPageBackground, "page-background.rtf")
     // The problem was that \background was ignored.
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
                                                    uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x92D050), getProperty<sal_Int32>(xPageStyle, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x92D050), Color(ColorTransparency, getProperty<sal_Int32>(xPageStyle, "BackColor")));
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf96175, "tdf96175.rtf")

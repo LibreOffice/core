@@ -82,8 +82,8 @@ DECLARE_RTFEXPORT_TEST(testTdf108949_footnote, "tdf108949_footnote.rtf")
     uno::Reference<text::XFootnote> xFootnote;
     xFootnotes->getByIndex(0) >>= xFootnote;
     // The color of the footnote anchor was black (0x000000)
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footnote Character color", sal_Int32(0xFF0000),
-                                 getProperty<sal_Int32>(xFootnote->getAnchor(), "CharColor"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footnote Character color", Color(0xFF0000),
+                                 Color(ColorTransparency, getProperty<sal_Int32>(xFootnote->getAnchor(), "CharColor")));
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf130817, "tdf130817.rtf")
@@ -123,12 +123,12 @@ DECLARE_RTFEXPORT_TEST(testTdf116436_tableBackground, "tdf116436_tableBackground
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XCell> xCell = xTable->getCellByName("A1");
     if (mbExported)
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0xF8DF7C), getProperty<sal_Int32>(xCell, "BackColor"));
+        CPPUNIT_ASSERT_EQUAL(Color(0xF8DF7C), Color(ColorTransparency, getProperty<sal_Int32>(xCell, "BackColor")));
     xCell.set(xTable->getCellByName("A6"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x81D41A), getProperty<sal_Int32>(xCell, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x81D41A), Color(ColorTransparency, getProperty<sal_Int32>(xCell, "BackColor")));
     xCell.set(xTable->getCellByName("B6"));
     if (mbExported)
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFFFBCC), getProperty<sal_Int32>(xCell, "BackColor"));
+        CPPUNIT_ASSERT_EQUAL(Color(0xFFFBCC), Color(ColorTransparency, getProperty<sal_Int32>(xCell, "BackColor")));
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf122589_firstSection, "tdf122589_firstSection.odt")

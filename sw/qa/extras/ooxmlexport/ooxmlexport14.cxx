@@ -215,7 +215,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Tdf133065, "tdf133065.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf130814model, "tdf130814.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x1F497D), getProperty<sal_Int32>(getRun(getParagraph(2), 1), "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x1F497D), Color(ColorTransparency, getProperty<sal_Int32>(getRun(getParagraph(2), 1), "CharColor")));
     CPPUNIT_ASSERT_EQUAL(double(16), getProperty<double>(getRun(getParagraph(2), 1), "CharHeight"));
     CPPUNIT_ASSERT_EQUAL(awt::FontUnderline::SINGLE, getProperty<sal_Int16>(getRun(getParagraph(2), 1), "CharUnderline"));
     CPPUNIT_ASSERT_EQUAL(OUString("Candara"), getProperty<OUString>(getRun(getParagraph(2), 1), "CharFontName"));

@@ -99,11 +99,11 @@ DECLARE_WW8EXPORT_TEST(testTdf116436_tableBackground, "tdf116436_tableBackground
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XCell> xCell = xTable->getCellByName("A1");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xF8DF7C), getProperty<sal_Int32>(xCell, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xF8DF7C), Color(ColorTransparency, getProperty<sal_Int32>(xCell, "BackColor")));
     xCell.set(xTable->getCellByName("A6"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x81D41A), getProperty<sal_Int32>(xCell, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x81D41A), Color(ColorTransparency, getProperty<sal_Int32>(xCell, "BackColor")));
     xCell.set(xTable->getCellByName("B6"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFFFBCC), getProperty<sal_Int32>(xCell, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xFFFBCC), Color(ColorTransparency, getProperty<sal_Int32>(xCell, "BackColor")));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf37153, "tdf37153_considerWrapOnObjPos.doc")
@@ -131,9 +131,9 @@ DECLARE_WW8EXPORT_TEST(testTdf49102_mergedCellNumbering, "tdf49102_mergedCellNum
 DECLARE_WW8EXPORT_TEST(testTdf55427_footnote2endnote, "tdf55427_footnote2endnote.odt")
 {
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("ParagraphStyles")->getByName("Footnote"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote style is rose color", sal_Int32(0xFF007F), getProperty< sal_Int32 >(xPageStyle, "CharColor") );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote style is rose color", Color(0xFF007F), Color(ColorTransparency, getProperty< sal_Int32 >(xPageStyle, "CharColor")) );
     xPageStyle.set(getStyles("ParagraphStyles")->getByName("Endnote"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Endnote style is cyan3 color", sal_Int32(0x2BD0D2), getProperty< sal_Int32 >(xPageStyle, "CharColor") );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Endnote style is cyan3 color", Color(0x2BD0D2), Color(ColorTransparency, getProperty< sal_Int32 >(xPageStyle, "CharColor")) );
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);

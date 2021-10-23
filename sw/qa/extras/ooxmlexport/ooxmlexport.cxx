@@ -515,7 +515,7 @@ DECLARE_OOXMLEXPORT_TEST(testWpsCharColor, "wps-char-color.docx")
 {
     uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
     // This was -1, i.e. the character color was default (-1), not white.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), getProperty<sal_Int32>(xShape->getStart(), "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(ColorTransparency, getProperty<sal_Int32>(xShape->getStart(), "CharColor")));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTableStyleCellBackColor, "table-style-cell-back-color.docx")
@@ -526,7 +526,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableStyleCellBackColor, "table-style-cell-back-col
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XCell> xCell = xTable->getCellByName("A1");
     // This was 0xffffff.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00ff00), getProperty<sal_Int32>(xCell, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x00ff00), Color(ColorTransparency, getProperty<sal_Int32>(xCell, "BackColor")));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTableStyleBorder, "table-style-border.docx")
@@ -551,7 +551,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableStyleBorderExport, "table-style-border-export.
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XCell> xCell = xTable->getCellByName("A3");
     // Bottom border was white, so this was 0xffffff.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x8064A2), getProperty<table::BorderLine2>(xCell, "BottomBorder").Color);
+    CPPUNIT_ASSERT_EQUAL(Color(0x8064A2), Color(ColorTransparency, getProperty<table::BorderLine2>(xCell, "BottomBorder").Color));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testAnchorPosition, "anchor-position.docx")
@@ -872,7 +872,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf97090, "tdf97090.docx")
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x95B3D7), getProperty<sal_Int32>(xTable->getCellByName("A1"), "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x95B3D7), Color(ColorTransparency, getProperty<sal_Int32>(xTable->getCellByName("A1"), "BackColor")));
 
     uno::Reference<container::XEnumerationAccess> paraEnumAccess(xTable->getCellByName("A1"), uno::UNO_QUERY);
     assert( paraEnumAccess.is() );
