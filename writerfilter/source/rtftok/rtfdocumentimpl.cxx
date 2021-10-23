@@ -3556,7 +3556,7 @@ RTFError RTFDocumentImpl::handleEmbeddedObject()
     OString aStr
         = OUStringToOString(m_aStates.top().getCurrentDestinationText()->makeStringAndClear(),
                             RTL_TEXTENCODING_ASCII_US);
-    std::unique_ptr<SvStream> pStream(new SvMemoryStream());
+    std::unique_ptr<SvStream> pStream = std::make_unique<SvMemoryStream>();
     if (!msfilter::rtfutil::ExtractOLE2FromObjdata(aStr, *pStream))
         return RTFError::HEX_INVALID;
 
