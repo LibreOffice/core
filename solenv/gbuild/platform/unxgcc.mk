@@ -86,6 +86,11 @@ ifneq ($(HAVE_LD_BSYMBOLIC_FUNCTIONS),)
 gb_LinkTarget_LDFLAGS += -Wl,-Bsymbolic-functions
 endif
 
+ifneq ($(HAVE_FNO_SEMANTIC_INTERPOSITION),)
+gb_CFLAGS += -fno-semantic-interposition
+gb_CXXFLAGS += -fno-semantic-interposition
+endif
+
 gb_LINKEROPTFLAGS := -Wl,-O1
 gb_LINKERSTRIPDEBUGFLAGS := -Wl,-S
 

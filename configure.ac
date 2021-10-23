@@ -7007,6 +7007,7 @@ dnl ===================================================================
 dnl GCC features
 dnl ===================================================================
 HAVE_GCC_STACK_CLASH_PROTECTION=
+HAVE_FNO_SEMANTIC_INTERPOSITION=
 if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
     AC_MSG_CHECKING([whether $CC_BASE supports -fstack-clash-protection])
     save_CFLAGS=$CFLAGS
@@ -7045,6 +7046,20 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         AC_DEFINE(HAVE_GCC_BUILTIN_ATOMIC)
     else
         AC_MSG_RESULT([no])
+    fi
+
+    AC_MSG_CHECKING([whether $CC_BASE supports -fno-semantic-interposition])
+    if test "$COM_IS_CLANG" = TRUE -a ${CLANGVER:-0} -lt 130000; then
+        # https://reviews.llvm.org/D102453
+        AC_MSG_RESULT([no (Clang older than 13.0)])
+    else
+        save_CFLAGS=$CFLAGS
+        CFLAGS="$CFLAGS -Werror -fno-semantic-interposition"
+        AC_LINK_IFELSE(
+            [AC_LANG_PROGRAM(, [[return 0;]])],
+            [AC_MSG_RESULT([yes]); HAVE_FNO_SEMANTIC_INTERPOSITION=TRUE],
+            [AC_MSG_RESULT([no])])
+        CFLAGS=$save_CFLAGS
     fi
 
     AC_MSG_CHECKING([whether $CXX_BASE defines __base_class_type_info in cxxabi.h])
@@ -7167,6 +7182,7 @@ fi
 AC_SUBST(HAVE_GCC_AVX)
 AC_SUBST(HAVE_GCC_BUILTIN_ATOMIC)
 AC_SUBST(HAVE_GCC_STACK_CLASH_PROTECTION)
+AC_SUBST(HAVE_FNO_SEMANTIC_INTERPOSITION)
 
 dnl ===================================================================
 dnl Identify the C++ library
