@@ -33,6 +33,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/UnitConversion.hxx>
+#include <tools/datetime.hxx>
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -58,9 +59,15 @@
 #include "pptx-animations.hxx"
 #include "../ppt/pptanimations.hxx"
 
+#include <i18nlangtag/languagetag.hxx>
+#include <svl/languageoptions.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/unoapi.hxx>
+#include <sdmod.hxx>
 #include <sdpage.hxx>
+
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
@@ -1188,7 +1195,7 @@ bool PowerPointExport::WriteComments(sal_uInt32 nPageNum)
             do
             {
                 Reference< XAnnotation > xAnnotation(xAnnotationEnumeration->nextElement());
-                DateTime aDateTime(xAnnotation->getDateTime());
+                util::DateTime aDateTime(xAnnotation->getDateTime());
                 RealPoint2D aRealPoint2D(xAnnotation->getPosition());
                 Reference< XText > xText(xAnnotation->getTextRange());
                 sal_Int32 nLastIndex;
@@ -1756,9 +1763,8 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderReferenceTextBody(
             bool bIsDateTimeFixed = false;
             xPagePropSet->getPropertyValue("IsDateTimeFixed") >>= bIsDateTimeFixed;
 
-            // Ideally "Date" should be replaced with the formatted date text
-            // but since variable datetime overrides the text, this seems fine for now.
             OUString aDateTimeText = "Date";
+            const LanguageTag& rLanguageTag = Application::GetSettings().GetLanguageTag();
 
             if(ePageType != LAYOUT && !bIsDateTimeFixed)
             {
@@ -1773,6 +1779,13 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderReferenceTextBody(
 
                 if (aDateTimeType == "datetime")
                     aDateTimeType = "datetime1";
+
+                ::DateTime aDateTime( ::DateTime::SYSTEM );
+
+                aDateTimeText = SvxDateTimeField::GetFormatted(
+                    aDateTime, aDateTime, eDate,
+                    eTime, *(SD_MOD()->GetNumberFormatter()),
+                    rLanguageTag.getLanguageType());
             }
 
             if(!bIsDateTimeFixed)
@@ -1785,6 +1798,9 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderReferenceTextBody(
                 xPagePropSet->getPropertyValue("DateTimeText") >>= aDateTimeText;
                 mpFS->startElementNS(XML_a, XML_r);
             }
+
+            mpFS->startElementNS(XML_a, XML_rPr, XML_lang, rLanguageTag.getBcp47MS());
+            mpFS->endElementNS(XML_a, XML_rPr);
 
             mpFS->startElementNS(XML_a, XML_t);
             mpFS->writeEscaped(aDateTimeText);
