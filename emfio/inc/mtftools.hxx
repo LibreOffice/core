@@ -31,84 +31,101 @@
 
 #include "emfiodllapi.h"
 
-#define ERROR                   0
-#define NULLREGION              1
-#define COMPLEXREGION           3
+typedef enum {
+    ERROR         = 0,
+    NULLREGION    = 1,
+    COMPLEXREGION = 3
+} RegionType;
 
-#define RGN_AND                 1
-#define RGN_OR                  2
-#define RGN_XOR                 3
-#define RGN_DIFF                4
-#define RGN_COPY                5
+typedef enum {
+    RGN_AND  = 0x01,
+    RGN_OR   = 0x02,
+    RGN_XOR  = 0x03,
+    RGN_DIFF = 0x04,
+    RGN_COPY = 0x05
+} RegionMode;
 
 namespace emfio
 {
     enum class BkMode
     {
-        NONE = 0,
+        NONE        = 0,
         Transparent = 1,
-        OPAQUE = 2,
+        OPAQUE      = 2
     };
 }
 
 /* xform stuff */
-#define MWT_IDENTITY            1
-#define MWT_LEFTMULTIPLY        2
-#define MWT_RIGHTMULTIPLY       3
-#define MWT_SET                 4
+typedef enum {
+    MWT_IDENTITY      = 0x01,
+    MWT_LEFTMULTIPLY  = 0x02,
+    MWT_RIGHTMULTIPLY = 0x03,
+    MWT_SET           = 0x04
+} ModifyWorldTransformMode;
 
-#define ENHMETA_STOCK_OBJECT    0x80000000
+constexpr uint32_t ENHMETA_STOCK_OBJECT = 0x80000000;
 
 /* Stock Logical Objects */
-#define WHITE_BRUSH             0
-#define LTGRAY_BRUSH            1
-#define GRAY_BRUSH              2
-#define DKGRAY_BRUSH            3
-#define BLACK_BRUSH             4
-#define NULL_BRUSH              5
-#define WHITE_PEN               6
-#define BLACK_PEN               7
-#define NULL_PEN                8
-#define ANSI_FIXED_FONT         11
-#define ANSI_VAR_FONT           12
-#define SYSTEM_FIXED_FONT       16
+typedef enum {
+    WHITE_BRUSH       = 0,
+    LTGRAY_BRUSH      = 1,
+    GRAY_BRUSH        = 2,
+    DKGRAY_BRUSH      = 3,
+    BLACK_BRUSH       = 4,
+    NULL_BRUSH        = 5,
+    WHITE_PEN         = 6,
+    BLACK_PEN         = 7,
+    NULL_PEN          = 8,
+    ANSI_FIXED_FONT   = 11,
+    ANSI_VAR_FONT     = 12,
+    SYSTEM_FIXED_FONT = 16
+} StockObjectType;
 
 namespace emfio
 {
     enum class WMFRasterOp {
-        NONE = 0,
-        Black = 1,
-        Not = 6,
-        XorPen = 7,
-        Nop = 11,
+        NONE    = 0,
+        Black   = 1,
+        Not     = 6,
+        XorPen  = 7,
+        Nop     = 11,
         CopyPen = 13
     };
 }
 
 /* Mapping modes */
-#define MM_TEXT                 1
-#define MM_LOMETRIC             2
-#define MM_HIMETRIC             3
-#define MM_LOENGLISH            4
-#define MM_HIENGLISH            5
-#define MM_TWIPS                6
-#define MM_ISOTROPIC            7
-#define MM_ANISOTROPIC          8
+typedef enum
+{
+    MM_TEXT        = 0x01,
+    MM_LOMETRIC    = 0x02,
+    MM_HIMETRIC    = 0x03,
+    MM_LOENGLISH   = 0x04,
+    MM_HIENGLISH   = 0x05,
+    MM_TWIPS       = 0x06,
+    MM_ISOTROPIC   = 0x07,
+    MM_ANISOTROPIC = 0x08
+} MappingMode;
 
 /* Graphics modes */
-#define GM_COMPATIBLE           1
-#define GM_ADVANCED             2
+typedef enum
+{
+    GM_COMPATIBLE = 0x00000001,
+    GM_ADVANCED   = 0x00000002
+} GraphicsMode;
+
 
 /* StretchBlt() modes */
-#define BLACKONWHITE            1
-#define WHITEONBLACK            2
-#define COLORONCOLOR            3
-#define HALFTONE                4
-#define STRETCH_ANDSCANS        BLACKONWHITE
-#define STRETCH_ORSCANS         WHITEONBLACK
-#define STRETCH_DELETESCANS     COLORONCOLOR
+typedef enum {
+    BLACKONWHITE        = 1,
+    WHITEONBLACK        = 2,
+    COLORONCOLOR        = 3,
+    HALFTONE            = 4,
+    STRETCH_ANDSCANS    = BLACKONWHITE,
+    STRETCH_ORSCANS     = WHITEONBLACK,
+    STRETCH_DELETESCANS = COLORONCOLOR
+} StretchBltMode;
 
-#define LF_FACESIZE             32
+constexpr sal_Int32 LF_FACESIZE = 32;
 
 namespace emfio
 {
@@ -147,120 +164,146 @@ namespace emfio
     };
 }
 
-#define TA_NOUPDATECP           0x0000
-#define TA_UPDATECP             0x0001
-#define TA_LEFT                 0x0000
-#define TA_RIGHT                0x0002
-#define TA_CENTER               0x0006
-#define TA_RIGHT_CENTER  (TA_RIGHT | TA_CENTER)
-#define TA_TOP                  0x0000
-#define TA_BOTTOM               0x0008
-#define TA_BASELINE             0x0018
+typedef enum {
+    TA_NOUPDATECP   = 0x0000,
+    TA_UPDATECP     = 0x0001,
+    TA_LEFT         = 0x0000,
+    TA_RIGHT        = 0x0002,
+    TA_CENTER       = 0x0006,
+    TA_RIGHT_CENTER = (TA_RIGHT | TA_CENTER),
+    TA_TOP          = 0x0000,
+    TA_BOTTOM       = 0x0008,
+    TA_BASELINE     = 0x0018
+} TextAlignmentMode;
 
-#define SRCCOPY                 0x00CC0020L
-#define SRCPAINT                0x00EE0086L
-#define SRCAND                  0x008800C6L
-#define SRCINVERT               0x00660046L
-#define SRCERASE                0x00440328L
-#define PATCOPY                 0x00F00021L
-#define PATINVERT               0x005A0049L
-#define BLACKNESS               0x00000042L
-#define WHITENESS               0x00FF0062L
+/* Ternary raster operations */
+typedef enum {
+    SRCCOPY   = 0x00CC0020L,
+    SRCPAINT  = 0x00EE0086L,
+    SRCAND    = 0x008800C6L,
+    SRCINVERT = 0x00660046L,
+    SRCERASE  = 0x00440328L,
+    PATCOPY   = 0x00F00021L,
+    PATINVERT = 0x005A0049L,
+    BLACKNESS = 0x00000042L,
+    WHITENESS = 0x00FF0062L
+} RasterOperations;
 
-#define PS_SOLID                0
-#define PS_DASH                 1
-#define PS_DOT                  2
-#define PS_DASHDOT              3
-#define PS_DASHDOTDOT           4
-#define PS_NULL                 5
-#define PS_INSIDEFRAME          6
-#define PS_STYLE_MASK           15
+typedef enum
+{
+    PS_COSMETIC          = 0x00000000,
+    PS_ENDCAP_ROUND      = 0x00000000,
+    PS_JOIN_ROUND        = 0x00000000,
+    PS_SOLID             = 0x00000000,
+    PS_DASH              = 0x00000001,
+    PS_DOT               = 0x00000002,
+    PS_DASHDOT           = 0x00000003,
+    PS_DASHDOTDOT        = 0x00000004,
+    PS_NULL              = 0x00000005,
+    PS_INSIDEFRAME       = 0x00000006,
+    PS_USERSTYLE         = 0x00000007,
+    PS_ALTERNATE         = 0x00000008,
+    PS_STYLE_MASK        = 0x0000000F,
+    PS_ENDCAP_SQUARE     = 0x00000100,
+    PS_ENDCAP_FLAT       = 0x00000200,
+    PS_ENDCAP_STYLE_MASK = 0x00000F00,
+    PS_JOIN_BEVEL        = 0x00001000,
+    PS_JOIN_MITER        = 0x00002000,
+    PS_JOIN_STYLE_MASK   = 0x0000F000,
+    PS_GEOMETRIC         = 0x00010000
+} PenStyle;
 
-#define PS_ENDCAP_ROUND      0x000
-#define PS_ENDCAP_SQUARE     0x100
-#define PS_ENDCAP_FLAT       0x200
-#define PS_ENDCAP_STYLE_MASK 0xF00
+/* Character Sets */
+typedef enum
+{
+    ANSI_CHARSET        = 0x00000000,
+    DEFAULT_CHARSET     = 0x00000001,
+    SYMBOL_CHARSET      = 0x00000002,
+    SHIFTJIS_CHARSET    = 0x00000080,
+    HANGUL_CHARSET      = 0x00000081,
+    GB2312_CHARSET      = 0x00000086,
+    CHINESEBIG5_CHARSET = 0x00000088,
+    OEM_CHARSET         = 0x000000FF,
+    /* WINVER >= 0x0400 */
+    MAC_CHARSET         = 0x0000004D,
+    JOHAB_CHARSET       = 0x00000082,
+    GREEK_CHARSET       = 0x000000A1,
+    TURKISH_CHARSET     = 0x000000A2,
+    VIETNAMESE_CHARSET  = 0x000000A3,
+    HEBREW_CHARSET      = 0x000000B1,
+    ARABIC_CHARSET      = 0x000000B2,
+    BALTIC_CHARSET      = 0x000000BA,
+    RUSSIAN_CHARSET     = 0x000000CC,
+    THAI_CHARSET        = 0x000000DE,
+    EASTEUROPE_CHARSET  = 0x000000EE
+} CharacterSet;
 
-#define PS_JOIN_ROUND       0x0000
-#define PS_JOIN_BEVEL       0x1000
-#define PS_JOIN_MITER       0x2000
-#define PS_JOIN_STYLE_MASK  0xF000
+typedef enum {
+    ETO_OPAQUE      = 0x0002,
+    ETO_CLIPPED     = 0x0004,
+    /* WINVER >= 0x0400 */
+    ETO_GLYPH_INDEX = 0x0010,
+    ETO_RTLREADING  = 0x0080,
+    /* _WIN32_WINNT >= 0x0500 */
+    ETO_NO_RECT     = 0x0100,
+    ETO_PDY         = 0x2000
+} ExtTextOutOptions;
 
-#define ANSI_CHARSET            0
-#define DEFAULT_CHARSET         1
-#define SYMBOL_CHARSET          2
-#define SHIFTJIS_CHARSET        128
-#define HANGEUL_CHARSET         129
-#define GB2312_CHARSET          134
-#define CHINESEBIG5_CHARSET     136
-#define OEM_CHARSET             255
-/*WINVER >= 0x0400*/
-#define JOHAB_CHARSET           130
-#define HEBREW_CHARSET          177
-#define ARABIC_CHARSET          178
-#define GREEK_CHARSET           161
-#define TURKISH_CHARSET         162
-#define VIETNAMESE_CHARSET      163
-#define THAI_CHARSET            222
-#define EASTEUROPE_CHARSET      238
-#define RUSSIAN_CHARSET         204
-#define MAC_CHARSET             77
-#define BALTIC_CHARSET          186
+typedef enum
+{
+    DEFAULT_PITCH  = 0,
+    FIXED_PITCH    = 1,
+    VARIABLE_PITCH = 2
+} PitchFont;
 
-#define ETO_OPAQUE              0x0002
-#define ETO_CLIPPED             0x0004
-/*WINVER >= 0x0400*/
-#define ETO_GLYPH_INDEX         0x0010
-#define ETO_RTLREADING          0x0080
-/*_WIN32_WINNT >= 0x0500*/
-#define ETO_NO_RECT             0x0100
-#define ETO_PDY                 0x2000
+typedef enum
+{
+    FF_DONTCARE   = 0x00,
+    FF_ROMAN      = 0x01,
+    FF_SWISS      = 0x02,
+    FF_MODERN     = 0x03,
+    FF_SCRIPT     = 0x04,
+    FF_DECORATIVE = 0x05
+} FamilyFont;
 
-#define DEFAULT_PITCH           0x00
-#define FIXED_PITCH             0x01
-#define VARIABLE_PITCH          0x02
+typedef enum
+{
+    FW_THIN       = 100,
+    FW_EXTRALIGHT = 200,
+    FW_LIGHT      = 300,
+    FW_NORMAL     = 400,
+    FW_MEDIUM     = 500,
+    FW_SEMIBOLD   = 600,
+    FW_BOLD       = 700,
+    FW_EXTRABOLD  = 800,
+    FW_ULTRALIGHT = 200,
+    FW_ULTRABOLD  = 800,
+    FW_BLACK      = 900
+} WeightFont;
 
-/* Font Families */
-#define FF_DONTCARE             0x00
-#define FF_ROMAN                0x10
-#define FF_SWISS                0x20
-#define FF_MODERN               0x30
-#define FF_SCRIPT               0x40
-#define FF_DECORATIVE           0x50
+typedef enum {
+    BS_SOLID         = 0,
+    BS_NULL          = 1,
+    BS_HOLLOW        = 1,
+    BS_HATCHED       = 2,
+    BS_PATTERN       = 3,
+    BS_INDEXED       = 4,
+    BS_DIBPATTERN    = 5,
+    BS_DIBPATTERNPT  = 6,
+    BS_PATTERN8X8    = 7,
+    BS_DIBPATTERN8X8 = 8,
+    BS_MONOPATTERN   = 9
+} BrushStyle;
 
-#define FW_THIN                 100
-#define FW_EXTRALIGHT           200
-#define FW_LIGHT                300
-#define FW_NORMAL               400
-#define FW_MEDIUM               500
-#define FW_SEMIBOLD             600
-#define FW_BOLD                 700
-#define FW_EXTRABOLD            800
-#define FW_ULTRALIGHT           200
-#define FW_ULTRABOLD            800
-#define FW_BLACK                900
-
-#define BS_SOLID                0
-#define BS_NULL                 1
-#define BS_HOLLOW               1
-#define BS_HATCHED              2
-#define BS_PATTERN              3
-#define BS_INDEXED              4
-#define BS_DIBPATTERN           5
-#define BS_DIBPATTERNPT         6
-#define BS_PATTERN8X8           7
-#define BS_DIBPATTERN8X8        8
-#define BS_MONOPATTERN          9
-
-#define RDH_RECTANGLES          1
-#define W_MFCOMMENT             15
-#define PRIVATE_ESCAPE_UNICODE  2
+constexpr sal_Int32 RDH_RECTANGLES = 1;
+constexpr sal_Int32 W_MFCOMMENT = 15;
+constexpr sal_Int32 PRIVATE_ESCAPE_UNICODE = 2;
 
 //Scalar constants
-#define UNDOCUMENTED_WIN_RCL_RELATION 32
-#define MS_FIXPOINT_BITCOUNT_28_4 4
-#define HUNDREDTH_MILLIMETERS_PER_MILLIINCH 2.54
-#define MILLIINCH_PER_TWIPS   1.44
+constexpr sal_Int32 UNDOCUMENTED_WIN_RCL_RELATION = 32;
+constexpr sal_Int32 MS_FIXPOINT_BITCOUNT_28_4 = 4;
+constexpr double HUNDREDTH_MILLIMETERS_PER_MILLIINCH = 2.54;
+constexpr double MILLIINCH_PER_TWIPS = 1.44;
 
 class MetaFontAction;
 
