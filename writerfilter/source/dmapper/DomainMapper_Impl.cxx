@@ -2910,7 +2910,6 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
                     ? uno::Reference<text::XTextCursor>()
                     : xText->createTextCursorByRange(xText->getStart())),
                 bHeader));
-            m_bDiscardHeaderFooter = false; // set only on success!
         }
         // If we have *hidden* header footer
         else
@@ -2931,11 +2930,10 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
                 TextAppendContext(uno::Reference<text::XTextAppend>(xText, uno::UNO_QUERY_THROW),
                                   m_bIsNewDoc ? uno::Reference<text::XTextCursor>()
                                               : xText->createTextCursorByRange(xText->getStart())));
-            m_bDiscardHeaderFooter = false; // set only on success!
             // Restore the original state of the shared prop after we stored the necessary values.
             xPageStyle->setPropertyValue(getPropertyName(ePropShared), uno::makeAny(bIsShared));
         }
-
+        m_bDiscardHeaderFooter = false; // set only on success!
     }
     catch( const uno::Exception& )
     {
