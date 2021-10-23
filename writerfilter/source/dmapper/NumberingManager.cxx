@@ -576,8 +576,6 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                 aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_CHAR_STYLE_NAME), sStyle));
             }
 
-            // Get the prefix / suffix / Parent numbering
-            // and add them to the level properties
             OUString sText = pAbsLevel
                            ? pAbsLevel->GetBulletChar()
                            : OUString();
@@ -585,14 +583,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
             if (pLevel && pLevel->HasBulletChar())
                 sText = pLevel->GetBulletChar( );
 
-            aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_PREFIX), OUString("")));
-            aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SUFFIX), OUString("")));
             aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_LIST_FORMAT), sText));
-
-            // Total count of replacement holders is determining amount of required parent numbering to include
-            // TODO: not sure how "%" symbol is escaped. This is not supported yet
-            sal_Int16 nParentNum = comphelper::string::getTokenCount(sText, '%');
-            aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_PARENT_NUMBERING), nParentNum));
 
             aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_POSITION_AND_SPACE_MODE), sal_Int16(text::PositionAndSpaceMode::LABEL_ALIGNMENT)));
 
