@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3657558c_ed75baef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-23T10:10:15Z",
+      "side": 1,
+      "message": "Rationale here:\nhttps://stackoverflow.com/questions/37514509/advantages-of-using-stdmake-unique-over-new-operator\n\nOf course, I read this:\n\"When not to use make_unique\n    Don\u0027t use make_unique if you need a custom deleter or are adopting a raw pointer from elsewhere.\n\"\n\nNow before doing this on other subfolders, I\u0027d like your opinion, is it useless/noisy, is it dangerous, or is it ok?\n",
+      "revId": "3ee0d0dd5920850abed4496e549fc541bc858f60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
