@@ -1794,13 +1794,14 @@ namespace emfio
                                 aTmp.Seek( 0 );
                                 ReadDIB(aBitmap, aTmp, true);
 
+                                const tools::Long nWidthDiff = aBitmap.GetSizePixel().Width() - cxSrc;
+                                const tools::Long nHeightDiff = aBitmap.GetSizePixel().Height() - cySrc;
+
                                 // test if it is sensible to crop
                                 if ( (cxSrc > 0) && (cySrc > 0) &&
                                      (xSrc >= 0) && (ySrc >= 0) &&
-                                     (aBitmap.GetSizePixel().Width() >= cxSrc) &&
-                                     (xSrc <= aBitmap.GetSizePixel().Width() - cxSrc) &&
-                                     (aBitmap.GetSizePixel().Height() >= cySrc) &&
-                                     (ySrc <= aBitmap.GetSizePixel().Height() - cySrc) )
+                                     (nWidthDiff >= 0) && (xSrc <= nWidthDiff) &&
+                                     (nHeightDiff >= 0) && (ySrc <= nHeightDiff) )
                                 {
                                     tools::Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
                                     aBitmap.Crop( aCropRect );
