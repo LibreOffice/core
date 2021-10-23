@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ded1bcc3_515d3a6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-23T08:19:08Z",
+      "side": 1,
+      "message": "Once this patch will be pushed, I\u0027ll restore your patch about the typo in \"height\" and rebase it.",
+      "revId": "b3a70ae9705e12ae21d59e3d187b04b12c432321",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
