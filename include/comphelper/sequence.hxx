@@ -181,8 +181,8 @@ namespace comphelper
     template < typename DstElementType, typename SrcType >
     inline css::uno::Sequence< DstElementType > containerToSequence( const SrcType& i_Container )
     {
-        css::uno::Sequence< DstElementType > result( i_Container.size() );
-        ::std::copy( i_Container.begin(), i_Container.end(), result.getArray() );
+        css::uno::Sequence< DstElementType > result( ::std::size(i_Container) );
+        ::std::copy( ::std::begin(i_Container), ::std::end(i_Container), result.getArray() );
         return result;
     }
 
@@ -190,9 +190,7 @@ namespace comphelper
     template < typename SrcType >
     inline css::uno::Sequence< typename SrcType::value_type > containerToSequence( const SrcType& i_Container )
     {
-        css::uno::Sequence< typename SrcType::value_type > result( i_Container.size() );
-        ::std::copy( i_Container.begin(), i_Container.end(), result.getArray() );
-        return result;
+        return containerToSequence<typename SrcType::value_type, SrcType>(i_Container);
     }
 
     // handle arrays
