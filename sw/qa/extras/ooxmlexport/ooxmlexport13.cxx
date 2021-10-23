@@ -465,7 +465,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle, "tdf118947_tableStyle.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table style sets 0 right margin", sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaRightMargin"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("TextBody has 1.07 line-spacing", sal_Int16(107), getProperty<style::LineSpacing>(xPara, "ParaLineSpacing").Height, 1);
     // table-style based paragraph background color
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Missing paragraph background color in cell A1", sal_Int32(0xCCFFCC), getProperty<sal_Int32>(xPara, "ParaBackColor"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Missing paragraph background color in cell A1", Color(0xCCFFCC), Color(ColorTransparency, getProperty<sal_Int32>(xPara, "ParaBackColor")));
 
     // This cell is affected by compatSetting overrideTableStyleFontSizeAndJustification=0 (the default value)
     xCell.set(xTable->getCellByName("A2"), uno::UNO_QUERY);

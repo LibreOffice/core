@@ -1276,7 +1276,7 @@ DECLARE_WW8EXPORT_TEST(testCellBgColor, "cell-bg-color.odt")
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xCC0000), getProperty<sal_Int32>(xTable->getCellByName("A1"), "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xCC0000), Color(ColorTransparency, getProperty<sal_Int32>(xTable->getCellByName("A1"), "BackColor")));
 }
 
 DECLARE_WW8EXPORT_TEST(testBnc636128, "bnc636128.doc")
