@@ -50,6 +50,40 @@
       "message": "Eike: what are your thoughts about these two patches?\n\nFor the swtable patch: I do kindof like the ability to specify a number format on a whole row and have that format stick even if there currently is text in the cells. At least that way when the user does enter a number, it will end up being formatted correctly right from the start. So I am less enthusiastic about that patch. (However, I also note that if a formatted number is replaced by text, then the formatting is removed also, so it isn\u0027t inconsistent to NOT apply in the first place.)",
       "revId": "0993ca27f8ba994854e1051905e2bffdb5e00dd0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54132679_23cc8310",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-10-23T12:50:34Z",
+      "side": 1,
+      "message": "Great find!",
+      "revId": "0993ca27f8ba994854e1051905e2bffdb5e00dd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24501b13_bd75b7ec",
+        "filename": "sw/source/filter/xml/xmltbli.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1919,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-10-23T12:50:34Z",
+      "side": 1,
+      "message": "This is correct at least from the number formatter\u0027s view, however Writer may be abusing that..",
+      "revId": "0993ca27f8ba994854e1051905e2bffdb5e00dd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
