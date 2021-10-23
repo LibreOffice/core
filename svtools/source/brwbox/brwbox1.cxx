@@ -72,7 +72,7 @@ void BrowseBox::ConstructImpl( BrowserMode nMode )
     InitSettings_Impl( pDataWin );
 
     bBootstrapped = false;
-    nDataRowHeight = 0;
+    m_nDataRowHeight = 0;
     nTitleLines = 1;
     nFirstCol = 0;
     nTopRow = 0;
@@ -848,16 +848,16 @@ sal_uInt16 BrowseBox::ColCount() const
 tools::Long BrowseBox::ImpGetDataRowHeight() const
 {
     BrowseBox *pThis = const_cast<BrowseBox*>(this);
-    pThis->nDataRowHeight = pThis->CalcReverseZoom(pDataWin->GetTextHeight() + 4);
+    pThis->m_nDataRowHeight = pThis->CalcReverseZoom(pDataWin->GetTextHeight() + 4);
     pThis->Resize();
     pDataWin->Invalidate();
-    return nDataRowHeight;
+    return m_nDataRowHeight;
 }
 
 void BrowseBox::SetDataRowHeight( tools::Long nPixel )
 {
 
-    nDataRowHeight = CalcReverseZoom(nPixel);
+    m_nDataRowHeight = CalcReverseZoom(nPixel);
     Resize();
     pDataWin->Invalidate();
 }
@@ -2283,7 +2283,7 @@ bool BrowseBox::IsCursorMoveAllowed( sal_Int32, sal_uInt16 ) const
 
 tools::Long BrowseBox::GetDataRowHeight() const
 {
-    return CalcZoom(nDataRowHeight ? nDataRowHeight : ImpGetDataRowHeight());
+    return CalcZoom(m_nDataRowHeight ? m_nDataRowHeight : ImpGetDataRowHeight());
 }
 
 

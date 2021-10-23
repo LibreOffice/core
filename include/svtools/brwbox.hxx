@@ -276,7 +276,7 @@ private:
     VclPtr<ScrollBar>      aHScroll;       // horizontal scrollbar
     VclPtr<MeasureStatusBar> aStatusBarHeight; // statusbar, just to measure its height
 
-    tools::Long            nDataRowHeight; // height of a single data-row
+    tools::Long     m_nDataRowHeight; // height of a single data-row
     sal_uInt16      nTitleLines;    // number of lines in title row
     sal_uLong       nControlAreaWidth; // width of fixed area beneath hscroll
     bool            bColumnCursor;  // single columns and fields selectable

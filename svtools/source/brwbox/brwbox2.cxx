@@ -669,13 +669,13 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlag
 
     // we're drawing onto a foreign device, so we have to fake the DataRowHeight for the subsequent ImplPaintData
     // (as it is based on the settings of our data window, not the foreign device)
-    if (!nDataRowHeight)
+    if (!m_nDataRowHeight)
         ImpGetDataRowHeight();
-    tools::Long nHeightLogic = PixelToLogic(Size(0, nDataRowHeight), MapMode(MapUnit::Map10thMM)).Height();
+    tools::Long nHeightLogic = PixelToLogic(Size(0, m_nDataRowHeight), MapMode(MapUnit::Map10thMM)).Height();
     tools::Long nForeignHeightPixel = pDev->LogicToPixel(Size(0, nHeightLogic), MapMode(MapUnit::Map10thMM)).Height();
 
-    tools::Long nOriginalHeight = nDataRowHeight;
-    nDataRowHeight = nForeignHeightPixel;
+    tools::Long nOriginalHeight = m_nDataRowHeight;
+    m_nDataRowHeight = nForeignHeightPixel;
 
     // this counts for the column widths, too
     size_t nPos;
@@ -759,7 +759,7 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlag
     ImplPaintData( *pDev, tools::Rectangle( aRealPos, aRealSize ), true );
 
     // restore the column widths/data row height
-    nDataRowHeight = nOriginalHeight;
+    m_nDataRowHeight = nOriginalHeight;
     for ( nPos = 0; nPos < mvCols.size(); ++nPos )
     {
         BrowserColumn* pCurrent = mvCols[ nPos ].get();
