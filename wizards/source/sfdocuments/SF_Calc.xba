@@ -265,6 +265,77 @@ End Property	&apos;	SFDocuments.SF_Calc.XSpreadsheet
 REM ===================================================================== METHODS
 
 REM -----------------------------------------------------------------------------
+Public Function A1Style(Optional ByVal Row1 As Variant _
+								, Optional ByVal Column1 As Variant _
+								, Optional ByVal Row2 As Variant _
+								, Optional ByVal Column2 As Variant _
+								, Optional ByVal SheetName As Variant _
+								) As String
+&apos;&apos;&apos;	Returns a range expressed in A1-style as defined by its coordinates
+&apos;&apos;&apos;	If only one pair of coordinates is given, the range will embrace only a single cell
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Row1 : the row number of the first coordinate
+&apos;&apos;&apos;		Column1 : the column number of the first coordinates
+&apos;&apos;&apos;		Row2 : the row number of the second coordinate
+&apos;&apos;&apos;		Column2 : the column number of the second coordinates
+&apos;&apos;&apos;		SheetName: Default = the current sheet. If present, the sheet must exist.
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A range as a string
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		range = oDoc.A1Style(5, 2, 10, 4, &quot;SheetX&quot;)		&apos;	&quot;&apos;$SheetX&apos;.E2:J4&quot;
+
+Dim sA1Style As String				&apos;	Return value
+Dim vSheetName As Variant			&apos;	Alias of SheetName - necessary see [Bug 145279]
+Dim lTemp As Long					&apos;	To switch 2 values
+Const cstThisSub = &quot;SFDocuments.Calc.A1Style&quot;
+Const cstSubArgs = &quot;Row1, Column1, [Row2], [Column2], [SheetName]=&quot;&quot;&quot;&quot;&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	sA1Style = &quot;&quot;
+
+Check:
+	If IsMissing(Row2) Or IsEmpty(Row2) Then Row2 = 0
+	If IsMissing(Column2) Or IsEmpty(Column2) Then Column2 = 0
+	If IsMissing(SheetName) Or IsEmpty(SheetName) Then SheetName = &quot;~&quot;
+	vSheetName = SheetName
+
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Row1, &quot;Row1&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Column1, &quot;Column1&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Row2, &quot;Row2&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Column2, &quot;Column2&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+		If Not _ValidateSheet(vSheetName, &quot;SheetName&quot;, , True, True, , , True) Then GoTo Finally
+	End If
+
+	If Row1 &gt; MAXROWS Then Row1 = MAXROWS
+	If Row2 &gt; MAXROWS Then Row2 = MAXROWS
+	If Column1 &gt; MAXCOLS Then Column1 = MAXCOLS
+	If Column2 &gt; MAXCOLS Then Column2 = MAXCOLS
+
+	If Row2 &gt; 0 And Row2 &lt; Row1 Then
+		lTemp = Row2	:	Row2 = Row1	:	Row1 = lTemp
+	End If
+	If Column2 &gt; 0 And Column2 &lt; Column1 Then
+		lTemp = Column2	:	Column2 = Column1	:	Column1 = lTemp
+	End If
+
+Try:
+	&apos;	Define the new range string
+	sA1Style = &quot;&apos;$&quot; &amp; vSheetName &amp; &quot;&apos;.&quot; _
+					&amp; &quot;$&quot; &amp; _GetColumnName(Column1) &amp; &quot;$&quot; &amp; CLng(Row1) _
+					&amp; Iif(Row2 &gt; 0 And Column2 &gt; 0, &quot;:$&quot; &amp; _GetColumnName(Column2) &amp; &quot;$&quot; &amp; CLng(Row2), &quot;&quot;)
+
+Finally:
+	A1Style = sA1Style
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SF_Documents.SF_Calc.A1Style
+
+REM -----------------------------------------------------------------------------
 Public Function Activate(Optional ByVal SheetName As Variant) As Boolean
 &apos;&apos;&apos; Make the current document or the given sheet active
 &apos;&apos;&apos;	Args:
@@ -667,7 +738,7 @@ Try:
 	If Not FSO.FileExists(FileName) Then GoTo CatchNotExists
 	sFileName = FSO._ConvertToUrl(FileName)
 
-	&apos;	Insert a blank new sheet and import sheet from file va link setting and deletion
+	&apos;	Insert a blank new sheet and import sheet from file via link setting and deletion
 	If Not InsertSheet(Newname, BeforeSheet) Then GoTo Finally
 	Set oSheet = _Component.getSheets.getByName(NewName)
 	With oSheet
@@ -3166,6 +3237,7 @@ Private Function _ValidateSheet(Optional ByRef pvSheetName As Variant _
 									, Optional ByVal pvOptional as Variant _
 									, Optional ByVal pvNumeric As Variant _
 									, Optional ByVal pvReference As Variant _
+									, Optional ByVal pvResetSheet As Variant _
 									) As Boolean
 &apos;&apos;&apos;	Sheet designation validation function similar to the SF_Utils._ValidateXXX functions
 &apos;&apos;&apos;	Args:
@@ -3177,12 +3249,14 @@ Private Function _ValidateSheet(Optional ByRef pvSheetName As Variant _
 &apos;&apos;&apos;		pvNumeric: if True, the sheet position is accepted (default = False)
 &apos;&apos;&apos;		pvReference: if True, a sheet reference is acceptable (default = False)
 &apos;&apos;&apos;			pvNumeric and pvReference must not both be = True
+&apos;&apos;&apos;		pvResetSheet: if True, return in pvSheetName the correct (case-sensitive) sheet name (default = False)
 &apos;&apos;&apos;	Returns
 &apos;&apos;&apos;		True if valid. SheetName is reset to current value if = &quot;~&quot;
 &apos;&apos;&apos;	Exceptions
 &apos;&apos;&apos;		DUPLICATESHEETERROR		A sheet with the given name exists already
 
 Dim vSheets As Variant				&apos;	List of sheets
+Dim lSheet As Long					&apos;	Index in list of sheets
 Dim vTypes As Variant				&apos;	Array of accepted variable types
 Dim bValid As Boolean				&apos;	Return value
 
@@ -3192,6 +3266,7 @@ Check:
 	If IsMissing(pvOptional) Or IsEmpty(pvOptional) Then pvOptional = False
 	If IsMissing(pvNumeric) Or IsEmpty(pvNumeric) Then pvNumeric = False
 	If IsMissing(pvReference) Or IsEmpty(pvReference) Then pvReference = False
+	If IsMissing(pvResetSheet) Or IsEmpty(pvResetSheet) Then pvResetSheet = False
 
 	&apos;	Define the acceptable variable types
 	If pvNumeric Then
@@ -3215,6 +3290,10 @@ Try:
 				If ScriptForge.SF_Array.Contains(vSheets, pvSheetName) Then GoTo CatchDuplicate
 			Else
 				If Not ScriptForge.SF_Utils._Validate(pvSheetName, psArgName, V_STRING, vSheets) Then GoTo Finally
+				If pvResetSheet Then
+					lSheet = ScriptForge.SF_Array.IndexOf(vSheets, pvSheetName, CaseSensitive := False)
+					pvSheetName = vSheets(lSheet)
+				End If
 			End If
 		End If
 	End If

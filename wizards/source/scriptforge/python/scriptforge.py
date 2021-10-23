@@ -1904,6 +1904,9 @@ class SFDocuments:
             return self.ExecMethod(self.vbGet + self.flgUno, 'XSpreadsheet', sheetname)
 
         # Usual methods
+        def A1Style(self, row1, column1, row2 = 0, column2 = 0, sheetname = '~'):
+            return self.ExecMethod(self.vbMethod, 'A1Style', row1, column1, row2, column2, sheetname)
+
         def Activate(self, sheetname = ''):
             return self.ExecMethod(self.vbMethod, 'Activate', sheetname)
 
