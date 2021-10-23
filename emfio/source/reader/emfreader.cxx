@@ -1907,6 +1907,7 @@ namespace emfio
                             else if ( nOptions & ETO_OPAQUE )
                                 DrawRectWithBGColor( aRect );
 
+                            // ETO_RTLREADING indicates that the characters are laid from right to left
                             vcl::text::ComplexTextLayoutFlags nTextLayoutMode = vcl::text::ComplexTextLayoutFlags::Default;
                             if ( nOptions & ETO_RTLREADING )
                                 nTextLayoutMode = vcl::text::ComplexTextLayoutFlags::BiDiRtl | vcl::text::ComplexTextLayoutFlags::TextOriginLeft;
@@ -1942,7 +1943,20 @@ namespace emfio
                                 std::unique_ptr<tools::Long[]> pDXAry, pDYAry;
 
                                 sal_Int32 nDxSize;
-                                bool bOverflow = o3tl::checked_multiply<sal_Int32>(nLen, (nOptions & ETO_PDY) ? 8 : 4, nDxSize);
+                                sal_Int32 nBytesEach;
+
+                                // Reading OutputDx
+                                // ETO_PDY flag indicates that we should read twice values
+                                // compared to the number of characters in the output string.
+                                // Values are stored in an array of 32-bit unsigned integers
+                                // named OutputDx, so there will be either 8 bytes or 4 bytes
+                                // each depending on ETO_PDY is set or not.
+                                if(nOptions & ETO_PDY)
+                                    nBytesEach = 8;
+                                else
+                                    nBytesEach = 4;
+
+                                bool bOverflow = o3tl::checked_multiply<sal_Int32>(nLen, nBytesEach, nDxSize);
                                 if (!bOverflow && offDx && ((nCurPos + offDx + nDxSize) <= nNextPos ) && nNextPos <= mnEndPos)
                                 {
                                     mpInputStream->Seek( nCurPos + offDx );
