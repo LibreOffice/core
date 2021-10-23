@@ -16,6 +16,23 @@
       "message": "Rationale here:\nhttps://stackoverflow.com/questions/37514509/advantages-of-using-stdmake-unique-over-new-operator\n\nOf course, I read this:\n\"When not to use make_unique\n    Don\u0027t use make_unique if you need a custom deleter or are adopting a raw pointer from elsewhere.\n\"\n\nNow before doing this on other subfolders, I\u0027d like your opinion, is it useless/noisy, is it dangerous, or is it ok?\n",
       "revId": "3ee0d0dd5920850abed4496e549fc541bc858f60",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9827d42d_f84da362",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-10-23T17:37:38Z",
+      "side": 1,
+      "message": "I\u0027m personally ambivalent on std::make_unique. It has the advantage of exception safety, but if it\u0027s existing code then that doesn\u0027t matter. Similarly \u0027no new\u0027 seems a weak argument in a codebase where we have so many of them, and I find the new syntax slightly more readable, and I\u0027m not a fan of \u0027auto\u0027.\n\nBut specifically in these two cases, the correct solution should be not using a pointer at all. If the object is created and then destroyed in the same block, it can be created directly on the stack.\n",
+      "revId": "3ee0d0dd5920850abed4496e549fc541bc858f60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
