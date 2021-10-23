@@ -2885,7 +2885,7 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
     {
         bool bLeft = eType == SectionPropertyMap::PAGE_LEFT;
         bool bFirst = eType == SectionPropertyMap::PAGE_FIRST;
-        if ((!bLeft && !GetSettingsTable()->GetEvenAndOddHeaders()) || (GetSettingsTable()->GetEvenAndOddHeaders()))
+        if (!bLeft || GetSettingsTable()->GetEvenAndOddHeaders())
         {
             //switch on header/footer use
             xPageStyle->setPropertyValue(
@@ -2913,7 +2913,7 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
             m_bDiscardHeaderFooter = false; // set only on success!
         }
         // If we have *hidden* header footer
-        else if (bLeft && !GetSettingsTable()->GetEvenAndOddHeaders())
+        else
         {
             bool bIsShared = false;
             // Turn on the headers
