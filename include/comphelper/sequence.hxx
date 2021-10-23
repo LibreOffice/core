@@ -291,9 +291,8 @@ namespace comphelper
     inline css::uno::Sequence< typename M::key_type > mapKeysToSequence( M const& map )
     {
         css::uno::Sequence< typename M::key_type > ret( static_cast<sal_Int32>(map.size()) );
-        typename M::key_type* pArray = ret.getArray();
-        for (const auto& i : map)
-            *pArray++ = i.first;
+        std::transform(map.begin(), map.end(), ret.getArray(),
+                       [](const auto& i) { return i.first; });
         return ret;
     }
 
@@ -301,9 +300,8 @@ namespace comphelper
     inline css::uno::Sequence< typename M::mapped_type > mapValuesToSequence( M const& map )
     {
         css::uno::Sequence< typename M::mapped_type > ret( static_cast<sal_Int32>(map.size()) );
-        typename M::mapped_type* pArray = ret.getArray();
-        for (const auto& i : map)
-            *pArray++ = i.second;
+        std::transform(map.begin(), map.end(), ret.getArray(),
+                       [](const auto& i) { return i.second; });
         return ret;
     }
 
