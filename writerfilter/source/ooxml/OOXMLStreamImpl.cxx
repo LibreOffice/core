@@ -425,8 +425,8 @@ OOXMLDocumentFactory::createStream
         // VBADATA is not a relation of the document, but of the VBAPROJECT stream.
         if (OOXMLStreamImpl* pImpl = dynamic_cast<OOXMLStreamImpl *>(pStream.get()))
         {
-            std::unique_ptr<OOXMLStreamImpl> pProject(new OOXMLStreamImpl(*pImpl, OOXMLStream::VBAPROJECT));
-            pRet = new OOXMLStreamImpl(*pProject, OOXMLStream::VBADATA);
+            OOXMLStreamImpl aProject(*pImpl, OOXMLStream::VBAPROJECT);
+            pRet = new OOXMLStreamImpl(aProject, OOXMLStream::VBADATA);
         }
     }
 
