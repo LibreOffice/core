@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "805b00aa_0994cecb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-23T09:36:14Z",
+      "side": 1,
+      "message": "https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d4739593c39158fffd745ca6af43d41017c9cbe39\nhas been pushed",
+      "revId": "a0ccc5a61ec13829db1edef328d77f4a9ccb18db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
