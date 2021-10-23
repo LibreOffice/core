@@ -3616,7 +3616,7 @@ void SwUiWriterTest::testTableBackgroundColor()
     //Checking cells for background color only A1 should be modified
     uno::Reference<table::XCell> xCell;
     xCell = xTable->getCellByName("A1");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF00FF), getProperty<sal_Int32>(xCell, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xFF00FF), Color(ColorTransparency, getProperty<sal_Int32>(xCell, "BackColor")));
     xCell = xTable->getCellByName("A2");
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xCell, "BackColor"));
     xCell = xTable->getCellByName("A3");
