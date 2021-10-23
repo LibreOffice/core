@@ -325,11 +325,11 @@ DECLARE_OOXMLEXPORT_TEST(testCalendar3, "calendar3.docx")
     // TableStyle:firstRow (for header rows 1 and 2) color and size overrides document rPrDefault
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A2"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x5B9BD5), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xCell->getText()), 1), "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x5B9BD5), Color(ColorTransparency, getProperty<sal_Int32>(getRun(getParagraphOfText(1, xCell->getText()), 1), "CharColor")));
     CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(getRun(getParagraphOfText(1, xCell->getText()),1), "CharHeight"));
     // direct formatting in A1
     uno::Reference<text::XTextRange> xCell2(xTable->getCellByName("A1"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x2E74B5), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xCell2->getText()), 1), "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x2E74B5), Color(ColorTransparency, getProperty<sal_Int32>(getRun(getParagraphOfText(1, xCell2->getText()), 1), "CharColor")));
     CPPUNIT_ASSERT_EQUAL(20.f, getProperty<float>(getRun(getParagraphOfText(1, xCell2->getText()),1), "CharHeight"));
 
     // tdf#132149 Despite specifying portrait, the page size's specified width is greater than its height.
@@ -354,10 +354,10 @@ DECLARE_OOXMLEXPORT_TEST(testCalendar5, "calendar5.docx")
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
     // text portions with direct formatting
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x2E74B5), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xCell->getText()), 1), "CharColor"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF0000), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xCell->getText()), 2), "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x2E74B5), Color(ColorTransparency, getProperty<sal_Int32>(getRun(getParagraphOfText(1, xCell->getText()), 1), "CharColor")));
+    CPPUNIT_ASSERT_EQUAL(Color(0xFF0000), Color(ColorTransparency, getProperty<sal_Int32>(getRun(getParagraphOfText(1, xCell->getText()), 2), "CharColor")));
     // default paragraph text color
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x5B9BD5), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xCell->getText()), 3), "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x5B9BD5), Color(ColorTransparency, getProperty<sal_Int32>(getRun(getParagraphOfText(1, xCell->getText()), 3), "CharColor")));
     // text portions with direct formatting
     CPPUNIT_ASSERT_EQUAL(20.f, getProperty<float>(getRun(getParagraphOfText(1, xCell->getText()),1), "CharHeight"));
     CPPUNIT_ASSERT_EQUAL(10.f, getProperty<float>(getRun(getParagraphOfText(1, xCell->getText()),2), "CharHeight"));
@@ -841,7 +841,7 @@ DECLARE_OOXMLEXPORT_TEST(testOoxmlTriangle, "ooxml-triangle.docx")
 DECLARE_OOXMLEXPORT_TEST(testMce, "mce.docx")
 {
     // The shape is red in Word2007, green in Word2010. Check that our import follows the later.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x9bbb59), getProperty<sal_Int32>(getShape(1), "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x9bbb59), Color(ColorTransparency, getProperty<sal_Int32>(getShape(1), "FillColor")));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testThemePreservation)
