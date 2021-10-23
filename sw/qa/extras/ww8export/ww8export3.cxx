@@ -601,9 +601,9 @@ DECLARE_WW8EXPORT_TEST(testTdf117217_largeTableBackgrounds, "tdf117217_largeTabl
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     // Cell 22: light-red == 16711680
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName("V1"), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("light red", sal_Int32(0xE0C2CD), getProperty<sal_Int32>(xCell, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("light red", Color(0xE0C2CD), Color(ColorTransparency, getProperty<sal_Int32>(xCell, "BackColor")));
     xCell.set(xTable->getCellByName("Z1"), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("light red", sal_Int32(0xE0C2CD), getProperty<sal_Int32>(xCell, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("light red", Color(0xE0C2CD), Color(ColorTransparency, getProperty<sal_Int32>(xCell, "BackColor")));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf94009_zeroPgMargin, "tdf94009_zeroPgMargin.odt")

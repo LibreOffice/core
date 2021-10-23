@@ -160,18 +160,18 @@ DECLARE_OOXMLEXPORT_TEST(testDMLTextFrameNoFill, "frame.fodt")
 //    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xShape1, "FillStyle"));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xShape1, "FillStyle"));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xShape1, "FillTransparence"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), getProperty<sal_Int32>(xShape1, "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(ColorTransparency, getProperty<sal_Int32>(xShape1, "FillColor")));
 
     uno::Reference<beans::XPropertySet> xShape2(getShape(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xShape2, "FillStyle"));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xShape2, "FillTransparence"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xE8F2A1), getProperty<sal_Int32>(xShape2, "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xE8F2A1), Color(ColorTransparency, getProperty<sal_Int32>(xShape2, "FillColor")));
 
     uno::Reference<beans::XPropertySet> xShape3(getShape(3), uno::UNO_QUERY);
 // it is re-imported as solid
 //    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xShape3, "FillStyle"));
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xShape3, "FillStyle"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), getProperty<sal_Int32>(xShape3, "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(ColorTransparency, getProperty<sal_Int32>(xShape3, "FillColor")));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xShape3, "FillTransparence"));
 }
 
@@ -290,7 +290,7 @@ DECLARE_OOXMLEXPORT_TEST(testDMLShapeFillPattern, "dml-shape-fillpattern.docx")
     drawing::Hatch aHatch = getProperty<drawing::Hatch>(getShape(1), "FillHatch");
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aHatch.Angle);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(50), aHatch.Distance);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x99FF66), aHatch.Color);
+    CPPUNIT_ASSERT_EQUAL(Color(0x99FF66), Color(ColorTransparency, aHatch.Color));
     CPPUNIT_ASSERT_EQUAL(drawing::HatchStyle_SINGLE, aHatch.Style);
 
     // 2nd shape: horizontal pattern (horz)
@@ -834,11 +834,11 @@ CPPUNIT_TEST_FIXTURE(Test, testShapeThemePreservation)
     OUString sFillColor = getXPath(pXmlDocument,
             "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:solidFill/a:srgbClr",
             "val");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00b050), sFillColor.toInt32(16));
+    CPPUNIT_ASSERT_EQUAL(Color(0x00b050), Color(ColorTransparency, sFillColor.toInt32(16)));
     sal_Int32 nLineColor = getXPath(pXmlDocument,
             "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill/a:srgbClr",
             "val").toInt32(16);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xff0000), nLineColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0xff0000), Color(ColorTransparency, nLineColor));
 
     // check direct line type assignments have been preserved
     sal_Int32 nLineWidth = getXPath(pXmlDocument,
@@ -857,12 +857,12 @@ CPPUNIT_TEST_FIXTURE(Test, testShapeThemePreservation)
     uno::Reference<drawing::XShape> xShape3 = getShape(3);
 
     // check colors are properly applied to shapes on import
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4f81bd), getProperty<sal_Int32>(xShape1, "FillColor"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xfcd5b5), getProperty<sal_Int32>(xShape2, "FillColor"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00b050), getProperty<sal_Int32>(xShape3, "FillColor"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x3a5f8b), getProperty<sal_Int32>(xShape1, "LineColor"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4f6228), getProperty<sal_Int32>(xShape2, "LineColor"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xff0000), getProperty<sal_Int32>(xShape3, "LineColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x4f81bd), Color(ColorTransparency, getProperty<sal_Int32>(xShape1, "FillColor")));
+    CPPUNIT_ASSERT_EQUAL(Color(0xfcd5b5), Color(ColorTransparency, getProperty<sal_Int32>(xShape2, "FillColor")));
+    CPPUNIT_ASSERT_EQUAL(Color(0x00b050), Color(ColorTransparency, getProperty<sal_Int32>(xShape3, "FillColor")));
+    CPPUNIT_ASSERT_EQUAL(Color(0x3a5f8b), Color(ColorTransparency, getProperty<sal_Int32>(xShape1, "LineColor")));
+    CPPUNIT_ASSERT_EQUAL(Color(0x4f6228), Color(ColorTransparency, getProperty<sal_Int32>(xShape2, "LineColor")));
+    CPPUNIT_ASSERT_EQUAL(Color(0xff0000), Color(ColorTransparency, getProperty<sal_Int32>(xShape3, "LineColor")));
 
     // check line properties are properly applied to shapes on import
     CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_SOLID, getProperty<drawing::LineStyle>(xShape1, "LineStyle"));
