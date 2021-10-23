@@ -923,11 +923,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82173_footnoteStyle, "tdf82173_footnoteStyle.doc
 
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("CharacterStyles")->getByName("Footnote Characters"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL( sal_Int32(58),       getProperty< sal_Int32 >(xPageStyle, "CharEscapementHeight") );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(0x00FF00), getProperty< sal_Int32 >(xPageStyle, "CharColor") );
+    CPPUNIT_ASSERT_EQUAL( Color(0x00FF00), Color(ColorTransparency, getProperty< sal_Int32 >(xPageStyle, "CharColor")) );
 
     xPageStyle.set(getStyles("CharacterStyles")->getByName("Footnote anchor"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL( sal_Int32(58),       getProperty< sal_Int32 >(xPageStyle, "CharEscapementHeight") );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(0x00FF00), getProperty< sal_Int32 >(xPageStyle, "CharColor") );
+    CPPUNIT_ASSERT_EQUAL( Color(0x00FF00), Color(ColorTransparency, getProperty< sal_Int32 >(xPageStyle, "CharColor")) );
 
     //tdf#118361 - in RTL locales, the footnote separator should still be left aligned.
     uno::Any aPageStyle = getStyles("PageStyles")->getByName("Standard");
@@ -942,30 +942,30 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82173_endnoteStyle, "tdf82173_endnoteStyle.docx"
     xEndnotes->getByIndex(0) >>= xEndnote;
     // character properties were previously not assigned to the footnote/endnote in-text anchor.
     CPPUNIT_ASSERT_EQUAL( 24.0f, getProperty< float >(xEndnote->getAnchor(), "CharHeight") );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(0xFF0000), getProperty< sal_Int32 >(xEndnote->getAnchor(), "CharColor") );
+    CPPUNIT_ASSERT_EQUAL( Color(0xFF0000), Color(ColorTransparency, getProperty< sal_Int32 >(xEndnote->getAnchor(), "CharColor")) );
 
     uno::Reference<text::XText> xEndnoteText;
     xEndnotes->getByIndex(0) >>= xEndnoteText;
     // This was Endnote Symbol
     CPPUNIT_ASSERT_EQUAL(OUString("Endnote"), getProperty<OUString>(getParagraphOfText(1, xEndnoteText), "ParaStyleName"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x993300), getProperty<sal_Int32>(getParagraphOfText(1, xEndnoteText), "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x993300), Color(ColorTransparency, getProperty<sal_Int32>(getParagraphOfText(1, xEndnoteText), "CharColor")));
 
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("CharacterStyles")->getByName("Endnote Characters"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL( sal_Int32(58),       getProperty< sal_Int32 >(xPageStyle, "CharEscapementHeight") );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(0xFF00FF), getProperty< sal_Int32 >(xPageStyle, "CharColor") );
+    CPPUNIT_ASSERT_EQUAL( Color(0xFF00FF), Color(ColorTransparency, getProperty< sal_Int32 >(xPageStyle, "CharColor")) );
 
     xPageStyle.set(getStyles("CharacterStyles")->getByName("Endnote anchor"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL( sal_Int32(58),       getProperty< sal_Int32 >(xPageStyle, "CharEscapementHeight") );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(0xFF00FF), getProperty< sal_Int32 >(xPageStyle, "CharColor") );
+    CPPUNIT_ASSERT_EQUAL( Color(0xFF00FF), Color(ColorTransparency, getProperty< sal_Int32 >(xPageStyle, "CharColor")) );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf55427_footnote2endnote, "tdf55427_footnote2endnote.odt")
 {
     CPPUNIT_ASSERT_EQUAL(4, getPages());
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("ParagraphStyles")->getByName("Footnote"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote style is rose color", sal_Int32(0xFF007F), getProperty< sal_Int32 >(xPageStyle, "CharColor") );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote style is rose color", Color(0xFF007F), Color(ColorTransparency, getProperty< sal_Int32 >(xPageStyle, "CharColor")) );
     xPageStyle.set(getStyles("ParagraphStyles")->getByName("Endnote"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Endnote style is cyan3 color", sal_Int32(0x2BD0D2), getProperty< sal_Int32 >(xPageStyle, "CharColor") );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Endnote style is cyan3 color", Color(0x2BD0D2), Color(ColorTransparency, getProperty< sal_Int32 >(xPageStyle, "CharColor")) );
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -1278,7 +1278,7 @@ DECLARE_OOXMLEXPORT_TEST( testActiveXCheckbox, "activex_checkbox.docx" )
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 0x316AC5 ), getProperty<sal_Int32>(xPropertySet, "BackgroundColor") );
 
     // Check Text color (active border system color)
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xD4D0C8), getProperty<sal_Int32>(xPropertySet, "TextColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xD4D0C8), Color(ColorTransparency, getProperty<sal_Int32>(xPropertySet, "TextColor")));
 
     // Check state of the checkbox
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getProperty<sal_Int16>(xPropertySet, "State"));

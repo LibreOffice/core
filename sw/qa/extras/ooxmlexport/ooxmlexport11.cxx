@@ -101,7 +101,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf116436_rowFill, "tdf116436_rowFill.odt")
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XCell> xCell = xTable->getCellByName("A1");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xF8DF7C), getProperty<sal_Int32>(xCell, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xF8DF7C), Color(ColorTransparency, getProperty<sal_Int32>(xCell, "BackColor")));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf121665_back2backColumnBreaks, "tdf121665_back2backColumnBreaks.docx")
@@ -794,7 +794,7 @@ DECLARE_OOXMLEXPORT_TEST(testNoDefault, "noDefault.docx")
     uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
 
     // Row 1: color directly applied to the paragraph, overrides table and style colors
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x2E74B5), getProperty<sal_Int32>(getRun(xPara,1), "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x2E74B5), Color(ColorTransparency, getProperty<sal_Int32>(getRun(xPara,1), "CharColor")));
 
     // Row2: (still part of firstRow table-style) ought to use the Normal style color, not the table-style color(5B9BD5)
     //xCell.set(xTable->getCellByName("A2"), uno::UNO_QUERY);
