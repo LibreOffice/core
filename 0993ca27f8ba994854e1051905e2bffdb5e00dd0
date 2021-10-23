@@ -33,6 +33,23 @@
       "message": "I don\u0027t mind if you merge this one (looking hackish to me, but able to workaround already broken documents); but I definitely like https://gerrit.libreoffice.org/c/core/+/123904/ as the proper solution, taking care of not creating broken data :-)",
       "revId": "0993ca27f8ba994854e1051905e2bffdb5e00dd0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b679a84_fe9510a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-23T06:20:08Z",
+      "side": 1,
+      "message": "Eike: what are your thoughts about these two patches?\n\nFor the swtable patch: I do kindof like the ability to specify a number format on a whole row and have that format stick even if there currently is text in the cells. At least that way when the user does enter a number, it will end up being formatted correctly right from the start. So I am less enthusiastic about that patch. (However, I also note that if a formatted number is replaced by text, then the formatting is removed also, so it isn\u0027t inconsistent to NOT apply in the first place.)",
+      "revId": "0993ca27f8ba994854e1051905e2bffdb5e00dd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
