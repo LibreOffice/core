@@ -16,6 +16,23 @@
       "message": "This seems like an easy win, and hard to disagree with. Mike, I know you liked the fact that the existing import \"fit the specs\" but this pragmatic departure has been true since\ncommit 70de0c38fd177b3c95837118c5fb35e380c87e90\nAuthor: Jens-Heiner Rechtien \u003chr@openoffice.org\u003e\nDate:   Thu Mar 27 14:45:43 2003 +0000\n    MWS_SRX644: migrate branch mws_srx644 -\u003e HEAD\n\nSo lets make it consistent irregardless of language definition.",
       "revId": "0993ca27f8ba994854e1051905e2bffdb5e00dd0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf5b4750_2fc42789",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-23T05:47:40Z",
+      "side": 1,
+      "message": "I don\u0027t mind if you merge this one (looking hackish to me, but able to workaround already broken documents); but I definitely like https://gerrit.libreoffice.org/c/core/+/123904/ as the proper solution, taking care of not creating broken data :-)",
+      "revId": "0993ca27f8ba994854e1051905e2bffdb5e00dd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
