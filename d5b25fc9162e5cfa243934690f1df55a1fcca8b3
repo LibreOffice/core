@@ -107,6 +107,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "054516f9_0599a53c",
+        "filename": "svl/source/numbers/zforlist.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3356,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-10-23T13:07:14Z",
+      "side": 1,
+      "message": "What I usually do is implement the fix without refactoring, minimizing changes, so it can be more easily applied as backport if needed. Then in a separate change do the refactoring only on master. Also helps against accidentally introduced regressions ;)",
+      "parentUuid": "dd0dcf23_9236f2b2",
+      "revId": "d5b25fc9162e5cfa243934690f1df55a1fcca8b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "69127979_aa899533",
         "filename": "sw/source/core/table/swtable.cxx",
         "patchSetId": 3
@@ -154,6 +172,23 @@
       "side": 1,
       "message": "Thank you for explaining!\n\n\u003e I thought I had better make an exception for brain-powered, exotic formatting attempts\n\nI agree. This needs to be explained in the release notes, too :-)",
       "parentUuid": "66817fc9_06869cad",
+      "revId": "d5b25fc9162e5cfa243934690f1df55a1fcca8b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17d154d6_bd2aa4c3",
+        "filename": "sw/source/core/table/swtable.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2350,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-10-23T13:07:14Z",
+      "side": 1,
+      "message": "The entire new code should be moved before the #if 0 block to keep that original intention.",
       "revId": "d5b25fc9162e5cfa243934690f1df55a1fcca8b3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
