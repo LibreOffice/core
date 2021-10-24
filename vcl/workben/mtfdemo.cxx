@@ -171,8 +171,8 @@ private:
                 SvFileStream aFileStream(maFileName, StreamMode::READ);
                 ReadWindowMetafile(aFileStream, aMtf);
                 OUString sAbsoluteDumpUrl, sDumpUrl;
-                osl::FileBase::getFileURLFromSystemPath("metadump.xml", sDumpUrl);
-                osl::FileBase::getAbsoluteFileURL(sWorkingDir, sDumpUrl, sAbsoluteDumpUrl);
+                (void)osl::FileBase::getFileURLFromSystemPath("metadump.xml", sDumpUrl);
+                (void)osl::FileBase::getAbsoluteFileURL(sWorkingDir, sDumpUrl, sAbsoluteDumpUrl);
 
                 aMtf.dumpAsXml(rtl::OUStringToOString(sAbsoluteDumpUrl, RTL_TEXTENCODING_UTF8).getStr());
                 std::cout << "Dumped metaactions as metadump.xml" << std::endl;
