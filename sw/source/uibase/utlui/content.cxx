@@ -2766,7 +2766,11 @@ bool SwContentTree::HasContentChanged()
                         std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator(xRootEntry.get()));
                         for (size_t j = 0; j < nChildCount; ++j)
                         {
-                            m_xTreeView->iter_next(*xEntry);
+                            if (!m_xTreeView->iter_next(*xEntry))
+                            {
+                                SAL_WARN("sw.ui", "unexpected missing entry");
+                                break;
+                            }
                             const SwContent* pCnt = pArrType->GetMember(j);
                             OUString sSubId(OUString::number(reinterpret_cast<sal_Int64>(pCnt)));
                             m_xTreeView->set_id(*xEntry, sSubId);
