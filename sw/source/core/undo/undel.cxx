@@ -78,6 +78,7 @@ static SwTextNode * FindFirstAndNextNode(SwDoc & rDoc, SwUndRng const& rRange,
     {
         auto const& rRedline(rRedlineSaveData[i]);
         if (rRedline.m_nSttNode <= rRange.m_nSttNode
+            // coverity[copy_paste_error : FALSE] : m_nEndNode is intentional here
             && rRedline.m_nSttNode < rRange.m_nEndNode
             && rRange.m_nEndNode <= rRedline.m_nEndNode
             && rRedline.GetType() == RedlineType::Delete)
