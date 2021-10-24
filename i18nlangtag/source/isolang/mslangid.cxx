@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 
@@ -101,6 +102,7 @@ LanguageType MsLangId::getConfiguredSystemLanguage()
 {
     if (nConfiguredSystemLanguage != LANGUAGE_SYSTEM)
         return nConfiguredSystemLanguage;
+    SAL_WARN("i18nlangtag", "MsLangId::getConfiguredSystemLanguage() - not configured yet");
     return getSystemLanguage();
 }
 
@@ -110,6 +112,7 @@ LanguageType MsLangId::getConfiguredSystemUILanguage()
 {
     if (nConfiguredSystemUILanguage != LANGUAGE_SYSTEM)
         return nConfiguredSystemUILanguage;
+    SAL_WARN("i18nlangtag", "MsLangId::getConfiguredSystemUILanguage() - not configured yet");
     return getSystemUILanguage();
 }
 

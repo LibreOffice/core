@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/log.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 
@@ -138,42 +139,19 @@ struct IsoLangOtherEntry
 // The default entry for a LangID <-> ISO mapping has to be first. For
 // conversion of legacy mappings one LangID can map to multiple ISO codes
 // except if the LangID is primary-only, and one ISO code combination can map
-// to multiple LangIDs. For compatibility with already existing calls it can
-// also be a sequence as follows:
+// to multiple LangIDs.
 
-// LANGUAGE_ENGLISH,    "en", ""
-// LANGUAGE_ENGLISH_US, "en", "US"
-
-// Here, in a convertIsoNamesToLanguage() call "en-US" is converted to
-// LANGUAGE_ENGLISH_US and "en" is converted to LANGUAGE_ENGLISH. A call with
-// "en-ZZ" (not in table) would result in LANGUAGE_ENGLISH because the first
-// entry matching the language and not having a country is returned, regardless
-// of whether being sorted before or after other entries of the same language
-// with some country. To obtain a _locale_ (not language only) in the order
-// given, lookupFallbackLocale() must be called.
-
-// If the sequence instead was
-
-// LANGUAGE_ENGLISH_US, "en", "US"
-// LANGUAGE_ENGLISH,    "en", ""
-
-// in a convertIsoNamesToLanguage() call "en-US" would still be converted to
-// LANGUAGE_ENGLISH_US, but "en" would _also_ be converted to
-// LANGUAGE_ENGLISH_US because no country was passed and it is the first entry
-// to match the language, see code. A call with "en-ZZ" (not in table) would
-// still result in LANGUAGE_ENGLISH.
-
-/* Currently (2013-08-29) only these primary LangID are still used literally in
- * code:
+/* Currently (2013-08-29 and 2021-10-24) only these primary LangID are still
+ * used literally in code:
  * LANGUAGE_ENGLISH  LANGUAGE_ARABIC_PRIMARY_ONLY
  */
 
 IsoLanguageCountryEntry const aImplIsoLangEntries[] =
 {
     // MS-LANGID codes,             ISO639-1/2/3, ISO3166, override
-    { LANGUAGE_ENGLISH,                     "en", ""  , k0    },
     { LANGUAGE_ENGLISH_US,                  "en", "US", k0    },
     { LANGUAGE_ENGLISH_UK,                  "en", "GB", k0    },
+    { LANGUAGE_ENGLISH,                     "en", ""  , k0    },
     { LANGUAGE_ENGLISH_AUS,                 "en", "AU", k0    },
     { LANGUAGE_ENGLISH_CAN,                 "en", "CA", k0    },
     { LANGUAGE_FRENCH,                      "fr", "FR", k0    },
@@ -377,7 +355,6 @@ IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_FRENCH_ZAIRE,                "fr", "CD", k0    },    // Democratic Republic Of Congo
     { LANGUAGE_FRENCH_MOROCCO,              "fr", "MA", k0    },
     { LANGUAGE_FRENCH_REUNION,              "fr", "RE", k0    },
-    { LANGUAGE_FRENCH,                      "fr", ""  , k0    },    // needed as a catcher before other "fr" entries!
     { LANGUAGE_FRISIAN_NETHERLANDS,         "fy", "NL", k0    },
     { LANGUAGE_GAELIC_IRELAND,              "ga", "IE", k0    },
     { LANGUAGE_GAELIC_SCOTLAND,             "gd", "GB", k0    },
@@ -1336,8 +1313,6 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OUString& rL
     // country is upper case in table
     OUString aUpperCountry = rCountry.toAsciiUpperCase();
 
-    const IsoLanguageCountryEntry* pFirstLang = nullptr;
-
     if (!bSkipIsoTable)
     {
         //  first look for exact match
@@ -1349,10 +1324,6 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OUString& rL
                 if ( aUpperCountry.isEmpty() ||
                         aUpperCountry.equalsAscii( pEntry->maCountry ) )
                     return pEntry->mnLang;
-                if ( !pFirstLang )
-                    pFirstLang = pEntry;
-                else if ( !*pEntry->maCountry )
-                    pFirstLang = pEntry;
             }
         }
 
@@ -1392,10 +1363,6 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OUString& rL
 
     if (!bSkipIsoTable)
     {
-        // If the language is correct, then we return the default language
-        if ( pFirstLang )
-            return pFirstLang->mnLang;
-
         //  if only the country is set, look for any entry matching the country
         //  (to allow reading country and language in separate steps, in any order)
         if ( !rCountry.isEmpty() && rLang.isEmpty() )
@@ -1434,7 +1401,22 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( std::string_view r
 {
     OUString aLang = OStringToOUString( rLang, RTL_TEXTENCODING_ASCII_US);
     OUString aCountry = OStringToOUString( rCountry, RTL_TEXTENCODING_ASCII_US);
-    return convertIsoNamesToLanguage( aLang, aCountry, false);
+    LanguageType nLang = convertIsoNamesToLanguage( aLang, aCountry, false);
+
+    // XXX: called *only* by static convertUnxByteStringToLanguage() so we can
+    // actually call into LanguageTag to create an on-the-fly mapping.
+    if (nLang == LANGUAGE_DONTKNOW)
+    {
+        nLang = LanguageTag( aLang + "-" + aCountry).getLanguageType(false);
+        SAL_WARN("i18nlangtag", "convertIsoNamesToLanguage(string_view): on-the-fly for {"
+                << aLang << "-" << aCountry << "} " << nLang);
+        if (nLang == LANGUAGE_DONTKNOW)
+        {
+            SAL_WARN("i18nlangtag", "convertIsoNamesToLanguage(string_view): on-the-fly bad, using {en-US}");
+            nLang = LANGUAGE_ENGLISH_US;
+        }
+    }
+    return nLang;
 }
 
 namespace {
