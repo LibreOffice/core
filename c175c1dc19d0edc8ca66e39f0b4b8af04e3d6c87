@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56d1124f_3d1d7276",
+        "filename": "svx/source/svdraw/svdedxv.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 1476,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-10-24T15:46:28Z",
+      "side": 1,
+      "message": "There is a new coverity warning cid#1493241 Wrapper object use after free where the concern is that line 1668 dereferences pUndoEditUndoManager and at 1451 pUndoEditUndoManager was set to pSdrUndoManager which itself was set to mpLocalTextEditUndoManager at 1442 and this line releases mpLocalTextEditUndoManager\n\nIs that something that could happen in reality ?",
+      "revId": "c175c1dc19d0edc8ca66e39f0b4b8af04e3d6c87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
