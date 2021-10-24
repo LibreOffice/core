@@ -130,7 +130,7 @@ public:
     static OString makePayloadJSON(const SfxViewShell* pThisView, int nViewId, std::string_view rKey, const OString& rPayload);
     /// Makes a LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR payload, but tweaks it according to setOptionalFeatures() if needed.
     static OString makeVisCursorInvalidation(int nViewId, const OString& rRectangle,
-                                             bool bMispelledWord = false, const OString& rHyperlink = "");
+                                             bool bMisspelledWord = false, const OString& rHyperlink = "");
 
     /// Helper for posting async key event
     static void postKeyEventAsync(const VclPtr<vcl::Window> &xWindow,

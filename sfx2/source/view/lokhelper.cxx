@@ -577,14 +577,14 @@ void SfxLokHelper::notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc
 }
 
 OString SfxLokHelper::makeVisCursorInvalidation(int nViewId, const OString& rRectangle,
-    bool bMispelledWord, const OString& rHyperlink)
+    bool bMisspelledWord, const OString& rHyperlink)
 {
     if (comphelper::LibreOfficeKit::isViewIdForVisCursorInvalidation())
     {
         OString sHyperlink = rHyperlink.isEmpty() ? "{}" : rHyperlink;
         return OString::Concat("{ \"viewId\": \"") + OString::number(nViewId) +
             "\", \"rectangle\": \"" + rRectangle +
-            "\", \"mispelledWord\": \"" +  OString::number(bMispelledWord ? 1 : 0) +
+            "\", \"misspelledWord\": \"" +  OString::number(bMisspelledWord ? 1 : 0) +
             "\", \"hyperlink\": " + sHyperlink + " }";
     }
     else
