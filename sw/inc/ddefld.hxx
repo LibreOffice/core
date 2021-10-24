@@ -99,6 +99,7 @@ public:
     void DecRefCnt() {  if( !--m_nRefCount && m_pDoc ) RefCntChgd(); }
 
     void SetCRLFDelFlag( bool bFlag )    { m_bCRLFFlag = bFlag; }
+    void UpdateDDE(const bool bNotifyShells = true);
 };
 
 // DDE-field
