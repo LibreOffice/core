@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c6db0d3_fc3a4ce3",
+        "filename": "odk/examples/cpp/Convertor/Convertor.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-24T11:44:48Z",
+      "side": 1,
+      "message": "Why use SAL_IMPLEMENT_MAIN_WITH_ARGS, when you don\u0027t use the arguments? I\u0027d suggest to use SAL_IMPLEMENT_MAIN, to avoid distraction. (Unless it\u0027s your intention to show reader how can them obtain the arguments if needed?)",
+      "revId": "62fe9f91d0a9a9f5f0c2530332e46302c6aac4ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b61a0543_358f0e53",
+        "filename": "odk/examples/cpp/Convertor/Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-24T11:44:48Z",
+      "side": 1,
+      "message": "This file is full of trailing whitespace ;)",
+      "revId": "62fe9f91d0a9a9f5f0c2530332e46302c6aac4ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "075870c4_64a11f7b",
+        "filename": "odk/examples/cpp/Convertor/Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-24T11:44:48Z",
+      "side": 1,
+      "message": "here",
+      "revId": "62fe9f91d0a9a9f5f0c2530332e46302c6aac4ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e231312_c7a18728",
+        "filename": "odk/examples/cpp/Convertor/Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-24T11:44:48Z",
+      "side": 1,
+      "message": "here",
+      "revId": "62fe9f91d0a9a9f5f0c2530332e46302c6aac4ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f14066f1_76177012",
+        "filename": "odk/examples/cpp/Convertor/Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-24T11:44:48Z",
+      "side": 1,
+      "message": "here",
+      "revId": "62fe9f91d0a9a9f5f0c2530332e46302c6aac4ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
