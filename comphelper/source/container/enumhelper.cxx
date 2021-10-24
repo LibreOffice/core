@@ -48,13 +48,15 @@ OEnumerationByName::OEnumerationByName(const css::uno::Reference<css::container:
 
 OEnumerationByName::~OEnumerationByName()
 {
+    std::lock_guard aLock(m_aLock);
+
     impl_stopDisposeListening();
 }
 
 
 sal_Bool SAL_CALL OEnumerationByName::hasMoreElements(  )
 {
-    osl::MutexGuard aLock(m_aLock);
+    std::lock_guard aLock(m_aLock);
 
     if (m_xAccess.is() && m_aNames.getLength() > m_nPos)
         return true;
@@ -71,7 +73,7 @@ sal_Bool SAL_CALL OEnumerationByName::hasMoreElements(  )
 
 css::uno::Any SAL_CALL OEnumerationByName::nextElement(  )
 {
-    osl::MutexGuard aLock(m_aLock);
+    std::lock_guard aLock(m_aLock);
 
     css::uno::Any aRes;
     if (m_xAccess.is() && m_nPos < m_aNames.getLength())
@@ -92,7 +94,7 @@ css::uno::Any SAL_CALL OEnumerationByName::nextElement(  )
 
 void SAL_CALL OEnumerationByName::disposing(const css::lang::EventObject& aEvent)
 {
-    osl::MutexGuard aLock(m_aLock);
+    std::lock_guard aLock(m_aLock);
 
     if (aEvent.Source == m_xAccess)
         m_xAccess.clear();
@@ -101,8 +103,6 @@ void SAL_CALL OEnumerationByName::disposing(const css::lang::EventObject& aEvent
 
 void OEnumerationByName::impl_startDisposeListening()
 {
-    osl::MutexGuard aLock(m_aLock);
-
     if (m_bListening)
         return;
 
@@ -119,8 +119,6 @@ void OEnumerationByName::impl_startDisposeListening()
 
 void OEnumerationByName::impl_stopDisposeListening()
 {
-    osl::MutexGuard aLock(m_aLock);
-
     if (!m_bListening)
         return;
 
@@ -145,13 +143,15 @@ OEnumerationByIndex::OEnumerationByIndex(const css::uno::Reference< css::contain
 
 OEnumerationByIndex::~OEnumerationByIndex()
 {
+    std::lock_guard aLock(m_aLock);
+
     impl_stopDisposeListening();
 }
 
 
 sal_Bool SAL_CALL OEnumerationByIndex::hasMoreElements(  )
 {
-    osl::MutexGuard aLock(m_aLock);
+    std::lock_guard aLock(m_aLock);
 
     if (m_xAccess.is() && m_xAccess->getCount() > m_nPos)
         return true;
@@ -168,7 +168,7 @@ sal_Bool SAL_CALL OEnumerationByIndex::hasMoreElements(  )
 
 css::uno::Any SAL_CALL OEnumerationByIndex::nextElement(  )
 {
-    osl::MutexGuard aLock(m_aLock);
+    std::lock_guard aLock(m_aLock);
 
     css::uno::Any aRes;
     if (m_xAccess.is() && m_nPos < m_xAccess->getCount())
@@ -188,7 +188,7 @@ css::uno::Any SAL_CALL OEnumerationByIndex::nextElement(  )
 
 void SAL_CALL OEnumerationByIndex::disposing(const css::lang::EventObject& aEvent)
 {
-    osl::MutexGuard aLock(m_aLock);
+    std::lock_guard aLock(m_aLock);
 
     if (aEvent.Source == m_xAccess)
         m_xAccess.clear();
@@ -197,8 +197,6 @@ void SAL_CALL OEnumerationByIndex::disposing(const css::lang::EventObject& aEven
 
 void OEnumerationByIndex::impl_startDisposeListening()
 {
-    osl::MutexGuard aLock(m_aLock);
-
     if (m_bListening)
         return;
 
@@ -215,8 +213,6 @@ void OEnumerationByIndex::impl_startDisposeListening()
 
 void OEnumerationByIndex::impl_stopDisposeListening()
 {
-    osl::MutexGuard aLock(m_aLock);
-
     if (!m_bListening)
         return;
 
@@ -244,7 +240,7 @@ OAnyEnumeration::~OAnyEnumeration()
 
 sal_Bool SAL_CALL OAnyEnumeration::hasMoreElements(  )
 {
-    osl::MutexGuard aLock(m_aLock);
+    std::lock_guard aLock(m_aLock);
 
     return (m_lItems.getLength() > m_nPos);
 }
@@ -255,7 +251,7 @@ css::uno::Any SAL_CALL OAnyEnumeration::nextElement(  )
     if ( ! hasMoreElements())
         throw css::container::NoSuchElementException();
 
-    osl::MutexGuard aLock(m_aLock);
+    std::lock_guard aLock(m_aLock);
     sal_Int32 nPos = m_nPos;
     ++m_nPos;
     return m_lItems[nPos];
