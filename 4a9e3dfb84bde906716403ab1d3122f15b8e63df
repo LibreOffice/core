@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bee6cc31_339d1a16",
+        "filename": "comphelper/source/misc/numberedcollection.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-10-24T18:06:11Z",
+      "side": 1,
+      "message": "going to deadlock here because impl_searchFreeNumber also locks",
+      "revId": "4a9e3dfb84bde906716403ab1d3122f15b8e63df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
