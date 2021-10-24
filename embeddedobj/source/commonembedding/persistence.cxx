@@ -587,13 +587,13 @@ uno::Reference< io::XInputStream > OCommonEmbeddedObject::StoreDocumentToTempStr
     }
 
     if( !xStorable.is() )
-        throw uno::RuntimeException(); // TODO:
+        throw uno::RuntimeException("No storage is provided for storing!"); // TODO:
 
     OUString aFilterName = GetFilterName( nStorageFormat );
 
     SAL_WARN_IF( aFilterName.isEmpty(), "embeddedobj.common", "Wrong document service name!" );
     if ( aFilterName.isEmpty() )
-        throw io::IOException(); // TODO:
+        throw io::IOException("No filter name provided / Wrong document service name"); // TODO:
 
     uno::Sequence< beans::PropertyValue > aArgs( 4 );
     aArgs[0].Name = "FilterName";
