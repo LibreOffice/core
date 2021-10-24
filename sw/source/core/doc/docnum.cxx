@@ -1953,7 +1953,8 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
         // the moved section, too.
         pTmp1 = GetNodes()[ nStIdx ];
         if( pTmp1->IsStartNode() )
-        {   // First is a start node
+        {
+            // coverity[copy_paste_error : FALSE] - First is a start node
             pTmp2 = pTmp1->EndOfSectionNode();
             if( pTmp2->GetIndex() > nEndIdx )
                 return false; // Its end node is behind the moved range

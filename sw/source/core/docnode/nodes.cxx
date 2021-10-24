@@ -2272,7 +2272,7 @@ void SwNodes::RemoveNode( SwNodeOffset nDelPos, SwNodeOffset nSz, bool bDel )
         while( nCnt-- )
         {
             delete pDel;
-            // coverity[use_after_free] - pPrev will be reassigned if there will be another iteration to the loop
+            // coverity[use_after_free : FALSE] - pPrev will be reassigned if there will be another iteration to the loop
             pDel = pPrev;
             sal_uLong nPrevNdIdx = pPrev->GetPos();
             BigPtrEntry* pTempEntry = &aTempEntries[sal_Int32(nCnt)];
