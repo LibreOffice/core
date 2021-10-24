@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dad6296b_2c5a8181",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-24T17:06:21Z",
+      "side": 1,
+      "message": "Thank you Luboš for your feedback.\nI could convert one to use stack but the other failed when running \"make check\" so gave up the other one.",
+      "revId": "0d76b9e677e640ba9474db68e2c086d780b1ad2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
