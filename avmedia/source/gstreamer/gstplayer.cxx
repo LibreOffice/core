@@ -25,6 +25,7 @@
 #include <cstddef>
 #include <cstring>
 #include <map>
+#include <mutex>
 #include <set>
 #include <vector>
 #include <math.h>
@@ -94,7 +95,7 @@ private:
 
     DECL_STATIC_LINK(MissingPluginInstaller, launchUi, void*, void);
 
-    osl::Mutex mutex_;
+    std::mutex mutex_;
     std::set<OString> reported_;
     std::map<OString, std::set<rtl::Reference<Player>>> queued_;
     rtl::Reference<MissingPluginInstallerThread> currentThread_;
@@ -106,7 +107,7 @@ private:
 
 
 MissingPluginInstaller::~MissingPluginInstaller() {
-    osl::MutexGuard g(mutex_);
+    std::unique_lock g(mutex_);
     SAL_WARN_IF(currentThread_.is(), "avmedia.gstreamer", "unjoined thread");
     inCleanUp_ = true;
 }
@@ -134,7 +135,7 @@ void MissingPluginInstaller::report(
     rtl::Reference<MissingPluginInstallerThread> join;
     rtl::Reference<MissingPluginInstallerThread> launch;
     {
-        osl::MutexGuard g(mutex_);
+        std::unique_lock g(mutex_);
         if (reported_.find(detStr) != reported_.end()) {
             return;
         }
@@ -179,7 +180,7 @@ void eraseSource(std::set<rtl::Reference<Player>> & set, Player const * source)
 void MissingPluginInstaller::detach(Player const * source) {
     rtl::Reference<MissingPluginInstallerThread> join;
     {
-        osl::MutexGuard g(mutex_);
+        std::unique_lock g(mutex_);
         if (inCleanUp_) {
             // Guard against ~MissingPluginInstaller with erroneously un-joined
             // currentThread_ (thus non-empty currentSources_) calling
@@ -251,7 +252,7 @@ void MissingPluginInstallerThread::execute() {
     for (;;) {
         std::vector<OString> details;
         {
-            osl::MutexGuard g(inst.mutex_);
+            std::unique_lock g(inst.mutex_);
             assert(!inst.currentDetails_.empty());
             details.swap(inst.currentDetails_);
         }
@@ -264,7 +265,7 @@ void MissingPluginInstallerThread::execute() {
         args.push_back(nullptr);
         gst_install_plugins_sync(args.data(), nullptr);
         {
-            osl::MutexGuard g(inst.mutex_);
+            std::unique_lock g(inst.mutex_);
             if (inst.queued_.empty() || inst.launchNewThread_) {
                 inst.launchNewThread_ = true;
                 break;
