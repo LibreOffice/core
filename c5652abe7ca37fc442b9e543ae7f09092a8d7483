@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1069a261_64b5871f",
+        "filename": "comphelper/source/container/enumhelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-10-24T18:07:54Z",
+      "side": 1,
+      "message": "will deadlock here",
+      "revId": "c5652abe7ca37fc442b9e543ae7f09092a8d7483",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
