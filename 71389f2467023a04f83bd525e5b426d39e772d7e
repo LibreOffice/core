@@ -41,6 +41,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "62c14cae_0d1a5669",
+        "filename": "emfio/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-24T23:23:00Z",
+      "side": 1,
+      "message": "Fixed.",
+      "parentUuid": "9496bab6_0a249d8f",
+      "range": {
+        "startLine": 16,
+        "startChar": 39,
+        "endLine": 16,
+        "endChar": 44
+      },
+      "revId": "71389f2467023a04f83bd525e5b426d39e772d7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d36fb4f3_bbded7ac",
@@ -54,6 +78,24 @@
       "writtenOn": "2021-10-21T06:15:14Z",
       "side": 1,
       "message": "Related: it might be useful to put the useful parts of that README.GDIMetaFile as a comment above the GDIMetaFile class and otherwise remove that readme, these readmes are meant to provide overview documentation for the module, and do not replace doxygen comments on classes.",
+      "revId": "71389f2467023a04f83bd525e5b426d39e772d7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7c7823b_b4d0a3d3",
+        "filename": "emfio/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-24T23:23:00Z",
+      "side": 1,
+      "message": "The README.GDIMetaFile is lengthy (~200 lines), but I will use some parts of it later in another patch.",
+      "parentUuid": "d36fb4f3_bbded7ac",
       "revId": "71389f2467023a04f83bd525e5b426d39e772d7e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -75,6 +117,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffaeea0e_8fe1d263",
+        "filename": "emfio/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-24T23:23:00Z",
+      "side": 1,
+      "message": "Done.\nReplaced with:\n    ./bin/run mtfdemo odk/examples/basic/forms_and_controls/burger.wmf",
+      "parentUuid": "5326f12d_435c4bc3",
+      "revId": "71389f2467023a04f83bd525e5b426d39e772d7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2ea42151_c4df3c9b",
@@ -88,6 +148,24 @@
       "writtenOn": "2021-10-21T06:15:14Z",
       "side": 1,
       "message": "Might be useful to rather describe that the emfio module takes a byte array and turns it into a drawinglayer primitive container?\n\nAlso, if you find out why emfio depends on sax, that would be useful, It\u0027s surprising to me. :-)",
+      "revId": "71389f2467023a04f83bd525e5b426d39e772d7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "764986c8_6433f46f",
+        "filename": "emfio/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-24T23:23:00Z",
+      "side": 1,
+      "message": "Added some description and will extend it later.\nhttps://gerrit.libreoffice.org/c/core/+/123987\nsax was not actually needed, ant it is removed from dependencies:\nhttps://gerrit.libreoffice.org/c/core/+/123988",
+      "parentUuid": "2ea42151_c4df3c9b",
       "revId": "71389f2467023a04f83bd525e5b426d39e772d7e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
