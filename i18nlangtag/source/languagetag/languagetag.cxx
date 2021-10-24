@@ -2881,7 +2881,7 @@ LanguageTag makeLanguageTagFromAppleLanguageId(AppleLanguageId nLanguage)
     switch (nLanguage)
     {
         case AppleLanguageId::ENGLISH:
-            nLang = LANGUAGE_ENGLISH;
+            nLang = LANGUAGE_ENGLISH_US;
             break;
         case AppleLanguageId::FRENCH:
             nLang = LANGUAGE_FRENCH;
