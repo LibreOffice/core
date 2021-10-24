@@ -20,6 +20,7 @@ my_example_dirs = \
     DevelopersGuide/ProfUNO/SimpleBootstrap_cpp \
     OLE/activex \
     cpp/Draw \
+    cpp/Convertor \
     cpp/DocumentLoader \
     cpp/complextoolbarcontrols \
     cpp/counter \
