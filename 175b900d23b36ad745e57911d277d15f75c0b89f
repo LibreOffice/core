@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd7c2949_aa820759",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-10-24T14:45:10Z",
+      "side": 1,
+      "message": "Looks good, the error messages come from the similar situations in this file.",
+      "revId": "175b900d23b36ad745e57911d277d15f75c0b89f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
