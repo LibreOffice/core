@@ -97,10 +97,10 @@ public:
         return SUCCESS;
     }
 
-    OSL_ENSURE(m_rFieldType.GetDoc(), "no pDoc");
 
     // no dependencies left?
-    if (!m_rFieldType.IsModifyLocked() && !ChkNoDataFlag())
+    if(!ChkNoDataFlag())
+        m_rFieldType.UpdateDDE();
     {
         SwViewShell* pSh = m_rFieldType.GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
         SwEditShell* pESh = m_rFieldType.GetDoc()->GetEditShell();
@@ -330,6 +330,56 @@ void SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
             ? sToken + OUStringChar(sfx2::cTokenSeparator) : sToken);
     }
     SetCmd( sNewCmd.makeStringAndClear() );
+}
+
+void SwDDEFieldType::UpdateDDE(const bool bNotifyShells)
+{
+    auto pDoc = GetDoc();
+    assert(pDoc);
+    if(IsModifyLocked())
+        return;
+    SwViewShell* pSh = bNotifyShells ? pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() : nullptr;
+    SwEditShell* pESh = bNotifyShells ? pDoc->GetEditShell() : nullptr;
+
+    // Search for fields. If no valid found, disconnect.
+    LockModify();
+
+    std::vector<SwFormatField*> vFields;
+    std::vector<SwDDETable*> vTables;
+    GatherFields(vFields, false);
+    GatherDdeTables(vTables);
+    const bool bDoAction = vFields.size() || vTables.size();
+    if(bDoAction)
+    {
+        if(pESh)
+            pESh->StartAllAction();
+        else if(pSh)
+            pSh->StartAction();
+    }
+
+    // DDE fields attribute in the text
+    SwMsgPoolItem aUpdateDDE(RES_UPDATEDDETBL);
+    for(auto pFormatField: vFields)
+    {
+        if(pFormatField->GetTextField())
+            pFormatField->UpdateTextNode( nullptr, &aUpdateDDE );
+    }
+    // a DDE tables in the text
+    for(auto pTable: vTables)
+        pTable->ChangeContent();
+
+    UnlockModify();
+
+    if(bDoAction)
+    {
+        if(pESh)
+            pESh->EndAllAction();
+        else if(pSh)
+            pSh->EndAction();
+
+        if(pSh)
+            pSh->GetDoc()->getIDocumentState().SetModified();
+    }
 }
 
 SwDDEField::SwDDEField( SwDDEFieldType* pInitType )
