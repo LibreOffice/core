@@ -62,7 +62,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     OUString sConnectionString("uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager");
 
-    sal_Int32 nCount = (sal_Int32)rtl_getAppCommandArgCount();
+    sal_Int32 nCount = rtl_getAppCommandArgCount();
 
     if (nCount < 1)
     {

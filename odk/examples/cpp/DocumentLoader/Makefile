@@ -2,7 +2,7 @@
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
-#  
+#
 #  Copyright 2000, 2010 Oracle and/or its affiliates.
 #  All rights reserved.
 #
@@ -29,7 +29,7 @@
 #  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 #  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
 #  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#     
+#
 #**************************************************************************
 
 # Builds the C++ DocumentLoader example of the SDK.
@@ -81,7 +81,7 @@ endif
 CppDocumentLoaderExample : $(OUT_BIN)/DocumentLoader$(EXE_EXT)
 	@echo --------------------------------------------------------------------------------
 	@echo The example loads the "$(QM)test.odt$(QM)" document in the DocumentLoader example directory.
-	@echo If you want to load your own document, please use: 
+	@echo If you want to load your own document, please use:
 	@echo $(SQM)  $(SQM)DocumentLoader -env:URE_MORE_TYPES="$(QM)<fileurl_office_types_rdb>$(QM)" "$(QM)filename$(QM)" [connection_url]
 	@echo -
 	@echo Use the following command to execute the example!
@@ -89,8 +89,8 @@ CppDocumentLoaderExample : $(OUT_BIN)/DocumentLoader$(EXE_EXT)
 	@echo $(MAKE) DocumentLoader.run
 	@echo -
 	@echo NOTE: This example does not use the new UNO bootstrap mechanism, it uses still a socket
-	@echo $(SQM)      $(SQM)connection. The example use the defaultBootstrap_InitialComponentContext method and provides 
-	@echo $(SQM)      $(SQM)the additional office types via the UNO environment variable -env:URE_MORE_TYPES=... 
+	@echo $(SQM)      $(SQM)connection. The example use the defaultBootstrap_InitialComponentContext method and provides
+	@echo $(SQM)      $(SQM)the additional office types via the UNO environment variable -env:URE_MORE_TYPES=...
 	@echo $(SQM)      $(SQM)Before you can run this example you have to start your office in listening mode.
 	@echo -
 	@echo $(SQM)  $(SQM)soffice "$(QM)--accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager$(QM)"
