@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a56106c_51c77760",
+        "filename": "emfio/source/reader/emfreader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1803,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-24T11:58:46Z",
+      "side": 1,
+      "message": "Thanks for your change, it\u0027s now obvious that (nWidthDiff \u003e\u003d 0) check is redundant, since the line above checks that (xSrc \u003e\u003d 0), and the nect check on this line checks that (xSrc \u003c\u003d nWidthDiff). The latter can\u0027t be true when xSrc \u003e\u003d 0, and nWidthDiff \u003c 0.\n\nSame for line below.",
+      "range": {
+        "startLine": 1803,
+        "startChar": 37,
+        "endLine": 1803,
+        "endChar": 54
+      },
+      "revId": "13ef320d8f0d1a5586f8953efb1d83dae9c03f91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
