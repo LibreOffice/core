@@ -27,6 +27,8 @@
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <vcl/vclptr.hxx>
 
+#include <mutex>
+
 namespace avmedia::priv
     {
 
@@ -68,7 +70,7 @@ namespace avmedia::priv
         private:
 
             VclPtr<vcl::Window>     mpNotifyWindow;
-            mutable ::osl::Mutex    maMutex;
+            mutable std::mutex      maMutex;
         };
 
 }
