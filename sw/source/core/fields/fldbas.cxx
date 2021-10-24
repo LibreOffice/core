@@ -210,6 +210,11 @@ void SwFieldType::GatherFields(std::vector<SwFormatField*>& rvFields, bool bColl
     CallSwClientNotify(sw::GatherFieldsHint(rvFields, bCollectOnlyInDocNodes));
 }
 
+void SwFieldType::GatherDdeTables(std::vector<SwDDETable*>& rvTables) const
+{
+    CallSwClientNotify(sw::GatherDdeTablesHint(rvTables));
+}
+
 void SwFieldTypes::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwFieldTypes"));

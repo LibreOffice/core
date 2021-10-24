@@ -25,6 +25,7 @@
 #include <ndtxt.hxx>
 #include <swtable.hxx>
 #include <swddetbl.hxx>
+#include <fmtfld.hxx>
 #include <ddefld.hxx>
 #include <ndindex.hxx>
 #include <fldupde.hxx>
@@ -119,6 +120,9 @@ void SwDDETable::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
                 pInRangeHint->m_nSttNd < pTableNd->EndOfSectionIndex() &&
                 pInRangeHint->m_nEndNd > pTableNd->GetIndex() )
             pInRangeHint->m_rIsInRange = true;
+    } else if (const auto pGatherDdeTablesHint = dynamic_cast<const sw::GatherDdeTablesHint*>(&rHint))
+    {
+        pGatherDdeTablesHint->m_rvTables.push_back(this);
     }
     else if (auto pModifyChangedHint = dynamic_cast<const sw::ModifyChangedHint*>(&rHint))
     {
