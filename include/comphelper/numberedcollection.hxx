@@ -25,11 +25,11 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <unordered_map>
+#include <mutex>
 #include <vector>
 
 namespace com::sun::star::uno { class XInterface; }
@@ -44,8 +44,8 @@ namespace comphelper{
 
     @threadsafe
  */
-class COMPHELPER_DLLPUBLIC NumberedCollection final : private ::cppu::BaseMutex
-                                              , public  ::cppu::WeakImplHelper< css::frame::XUntitledNumbers >
+class COMPHELPER_DLLPUBLIC NumberedCollection final :
+                                              public  ::cppu::WeakImplHelper< css::frame::XUntitledNumbers >
 {
 
     // types, const
@@ -157,6 +157,8 @@ class COMPHELPER_DLLPUBLIC NumberedCollection final : private ::cppu::BaseMutex
 
         /// used as source of broadcasted messages or exceptions (can be null !)
         css::uno::WeakReference< css::uno::XInterface > m_xOwner;
+
+        std::mutex m_aMutex;
 };
 
 } // namespace comphelper
