@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5666d5ff_e7ec4341",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-24T11:48:35Z",
+      "side": 1,
+      "message": "This doesn\u0027t make sense. Please do it in one pass.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 38
+      },
+      "revId": "2bc249b4a1eaf9d554a827de158e9d5fd6da410e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fd85c0f_feacc1ce",
+        "filename": "emfio/inc/mtftools.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-24T11:48:35Z",
+      "side": 1,
+      "message": "This whitespace formatting is:\n\n1. Unrelated to the changes here;\n2. Inconsistent with our formatting guidelines.\n\nPlease avoid prettifying such things, which would quickly become obsolete with addition of another value with longer name, which would require to edit more lines to keep the pretty look, and introduce noise.",
+      "revId": "2bc249b4a1eaf9d554a827de158e9d5fd6da410e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
