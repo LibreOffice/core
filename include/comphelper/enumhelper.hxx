@@ -23,7 +23,7 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <comphelper/comphelperdllapi.h>
 
 namespace com::sun::star::container { class XIndexAccess; }
@@ -32,23 +32,18 @@ namespace com::sun::star::container { class XNameAccess; }
 namespace comphelper
 {
 
-struct OEnumerationLock
-{
-    public:
-        ::osl::Mutex m_aLock;
-};
-
 /** provides a com.sun.star.container::XEnumeration access based
     on an object implementing the com.sun.star.container::XNameAccess interface
 */
-class COMPHELPER_DLLPUBLIC OEnumerationByName final : private OEnumerationLock
-                         , public ::cppu::WeakImplHelper< css::container::XEnumeration ,
+class COMPHELPER_DLLPUBLIC OEnumerationByName final :
+                         public ::cppu::WeakImplHelper< css::container::XEnumeration ,
                                                           css::lang::XEventListener    >
 {
     css::uno::Sequence< OUString > const                m_aNames;
     css::uno::Reference< css::container::XNameAccess >  m_xAccess;
     sal_Int32                                           m_nPos;
     bool                                                m_bListening;
+    std::mutex m_aLock;
 
 public:
     OEnumerationByName(const css::uno::Reference< css::container::XNameAccess >& _rxAccess);
@@ -69,13 +64,14 @@ private:
 /** provides a com.sun.star.container::XEnumeration access based
     on an object implementing the com.sun.star.container::XNameAccess interface
 */
-class COMPHELPER_DLLPUBLIC OEnumerationByIndex final : private OEnumerationLock
-                          , public ::cppu::WeakImplHelper< css::container::XEnumeration ,
+class COMPHELPER_DLLPUBLIC OEnumerationByIndex final :
+                          public ::cppu::WeakImplHelper< css::container::XEnumeration ,
                                                            css::lang::XEventListener    >
 {
     css::uno::Reference< css::container::XIndexAccess > m_xAccess;
     sal_Int32                                         m_nPos;
     bool                                          m_bListening;
+    std::mutex m_aLock;
 
 public:
     OEnumerationByIndex(const css::uno::Reference< css::container::XIndexAccess >& _rxAccess);
@@ -99,11 +95,12 @@ class SAL_DLLPUBLIC_TEMPLATE OAnyEnumeration_BASE
     for an outside set vector of Any's.
 
 */
-class COMPHELPER_DLLPUBLIC OAnyEnumeration final : private OEnumerationLock
-                                           , public OAnyEnumeration_BASE
+class COMPHELPER_DLLPUBLIC OAnyEnumeration final :
+                                           public OAnyEnumeration_BASE
 {
     sal_Int32                         m_nPos;
     css::uno::Sequence< css::uno::Any > m_lItems;
+    std::mutex m_aLock;
 
 public:
     OAnyEnumeration(const css::uno::Sequence< css::uno::Any >& lItems);
