@@ -32,6 +32,7 @@ class SwField;
 class SwTextField;
 class SwView;
 class SwFieldType;
+class SwDDETable;
 class SwFormatField;
 class IDocumentRedlineAccess;
 namespace com::sun::star::text { class XTextField; }
@@ -70,6 +71,10 @@ namespace sw {
         const bool m_bCollectOnlyInDocNodes;
         std::vector<SwFormatField*>& m_rvFields;
         GatherFieldsHint(std::vector<SwFormatField*>& rvFields, bool bCollectOnlyInDocNodes = true) : m_bCollectOnlyInDocNodes(bCollectOnlyInDocNodes), m_rvFields(rvFields) {};
+    };
+    struct GatherDdeTablesHint final : SfxHint {
+        std::vector<SwDDETable*>& m_rvTables;
+        GatherDdeTablesHint(std::vector<SwDDETable*>& rvTables) : m_rvTables(rvTables) {};
     };
 }
 

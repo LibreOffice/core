@@ -32,6 +32,7 @@
 #include <editsh.hxx>
 #include <fmtfld.hxx>
 #include <ddefld.hxx>
+#include <swddetbl.hxx>
 #include <swbaslnk.hxx>
 #include <unofldmid.h>
 #include <hints.hxx>
@@ -99,7 +100,7 @@ public:
     OSL_ENSURE(m_rFieldType.GetDoc(), "no pDoc");
 
     // no dependencies left?
-    if (m_rFieldType.HasWriterListeners() && !m_rFieldType.IsModifyLocked() && !ChkNoDataFlag())
+    if (!m_rFieldType.IsModifyLocked() && !ChkNoDataFlag())
     {
         SwViewShell* pSh = m_rFieldType.GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
         SwEditShell* pESh = m_rFieldType.GetDoc()->GetEditShell();
@@ -109,8 +110,11 @@ public:
         m_rFieldType.LockModify();
 
         std::vector<SwFormatField*> vFields;
+        std::vector<SwDDETable*> vTables;
         m_rFieldType.GatherFields(vFields, false);
-        if(vFields.size())
+        m_rFieldType.GatherDdeTables(vTables);
+        const bool bDoAction = vFields.size() || vTables.size();
+        if(bDoAction)
         {
             if(pESh)
                 pESh->StartAllAction();
@@ -118,16 +122,19 @@ public:
                 pSh->StartAction();
         }
 
+        // DDE fields attribute in the text
         for(auto pFormatField: vFields)
         {
-            // a DDE table or a DDE field attribute in the text
             if(pFormatField->GetTextField())
                 pFormatField->UpdateTextNode( nullptr, &aUpdateDDE );
         }
+        // a DDE tables in the text
+        for(auto pTable: vTables)
+            pTable->ChangeContent();
 
         m_rFieldType.UnlockModify();
 
-        if(vFields.size())
+        if(bDoAction)
         {
             if(pESh)
                 pESh->EndAllAction();
