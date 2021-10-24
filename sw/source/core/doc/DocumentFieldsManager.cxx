@@ -49,6 +49,7 @@
 #include <fldbas.hxx>
 #include <expfld.hxx>
 #include <ddefld.hxx>
+#include <swddetbl.hxx>
 #include <authfld.hxx>
 #include <usrfld.hxx>
 #include <ndindex.hxx>
@@ -405,8 +406,9 @@ void DocumentFieldsManager::UpdateFields( bool bCloseDB )
 
         case SwFieldIds::Dde:
         {
-            SwMsgPoolItem aUpdateDDE( RES_UPDATEDDETBL );
-            pFieldType->CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aUpdateDDE));
+            assert(dynamic_cast<SwDDEFieldType*>(pFieldType.get()));
+            auto pDDEFieldType = static_cast<SwDDEFieldType*>(pFieldType.get());
+            pDDEFieldType->UpdateDDE(false);
             break;
         }
         case SwFieldIds::GetExp:
