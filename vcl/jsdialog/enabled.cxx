@@ -52,7 +52,8 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"cui/ui/macroselectordialog.ui" || rUIFile == u"uui/ui/macrowarnmedium.ui"
         || rUIFile == u"modules/scalc/ui/textimportcsv.ui"
         || rUIFile == u"xmlsec/ui/digitalsignaturesdialog.ui"
-        || rUIFile == u"xmlsec/ui/viewcertdialog.ui")
+        || rUIFile == u"xmlsec/ui/viewcertdialog.ui" || rUIFile == u"xmlsec/ui/certgeneral.ui"
+        || rUIFile == u"xmlsec/ui/certpage.ui")
     {
         return true;
     }
