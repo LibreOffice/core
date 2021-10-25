@@ -1946,14 +1946,6 @@ sc/inc/tokenarray.hxx:261
     void ScTokenArray::WrapReference(const class ScAddress &,short,int)
     int nMaxRow
     65535
-sc/inc/tokenarray.hxx:262
-    _Bool ScTokenArray::NeedsWrapReference(const class ScAddress &,short,int) const
-    short nMaxCol
-    255
-sc/inc/tokenarray.hxx:262
-    _Bool ScTokenArray::NeedsWrapReference(const class ScAddress &,short,int) const
-    int nMaxRow
-    65535
 sc/inc/zforauto.hxx:38
     void ScNumFormatAbbrev::Save(class SvStream &,unsigned short) const
     unsigned short eByteStrSet
