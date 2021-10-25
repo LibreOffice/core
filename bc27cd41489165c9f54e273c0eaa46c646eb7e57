@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65195c11_86cb07b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-10-25T15:52:32Z",
+      "side": 1,
+      "message": "It really is taking a lot of time to render: https://i.imgur.com/oSz9pdY.png .",
+      "revId": "bc27cd41489165c9f54e273c0eaa46c646eb7e57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
