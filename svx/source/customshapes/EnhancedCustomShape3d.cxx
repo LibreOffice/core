@@ -228,11 +228,11 @@ Point EnhancedCustomShape3d::Transformation2D::Transform2D( const basegfx::B3DPo
         aPoint2D.setX( static_cast<sal_Int32>(rPoint3D.getX()) );
         aPoint2D.setY( static_cast<sal_Int32>(rPoint3D.getY()) );
     }
-    else
+    else if (double fDiv = rPoint3D.getZ() - fViewPoint.getZ(); fDiv != 0.0)
     {
         double fX = rPoint3D.getX() - fOriginX;
         double fY = rPoint3D.getY() - fOriginY;
-        double f = ( - fViewPoint.getZ() ) / ( rPoint3D.getZ() - fViewPoint.getZ() );
+        double f = ( - fViewPoint.getZ() ) / fDiv;
         aPoint2D.setX( static_cast<sal_Int32>(( fX - fViewPoint.getX() ) * f + fViewPoint.getX() + fOriginX ) );
         aPoint2D.setY( static_cast<sal_Int32>(( fY - fViewPoint.getY() ) * f + fViewPoint.getY() + fOriginY ) );
     }
