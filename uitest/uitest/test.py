@@ -74,8 +74,8 @@ class UITest(object):
         raise Exception("Property not updated: " + childName)
 
     @contextmanager
-    def wait_until_component_loaded(self, eventName="OnLoad"):
-        with EventListener(self._xContext, eventName) as event:
+    def wait_until_component_loaded(self):
+        with EventListener(self._xContext, "OnLoad") as event:
             yield
             time_ = 0
             while time_ < MAX_WAIT:
@@ -90,12 +90,26 @@ class UITest(object):
 
         raise Exception("Component not loaded")
 
+    def load_component_from_url(self, url, eventName="OnLoad"):
+        with EventListener(self._xContext, eventName) as event:
+            component =  self.get_desktop().loadComponentFromURL(url, "_default", 0, tuple())
+            time_ = 0
+            while time_ < MAX_WAIT:
+                if event.executed:
+                    frames = self.get_frames()
+                    #activate the newest frame
+                    self.get_desktop().setActiveFrame(frames[-1])
+                    return component
+                time_ += DEFAULT_SLEEP
+                time.sleep(DEFAULT_SLEEP)
+
+        raise Exception("Document not loaded")
+
     # Calls UITest.close_doc at exit
     @contextmanager
     def load_file(self, url):
         try:
-            with self.wait_until_component_loaded():
-                yield self.get_desktop().loadComponentFromURL(url, "_default", 0, tuple())
+            yield self.load_component_from_url(url)
         finally:
             self.close_doc()
 
@@ -103,10 +117,10 @@ class UITest(object):
     @contextmanager
     def load_empty_file(self, app):
         try:
-            with self.wait_until_component_loaded("OnNew"):
-                yield self.get_desktop().loadComponentFromURL("private:factory/s" + app, "_blank", 0, tuple())
+            yield self.load_component_from_url("private:factory/s" + app, "OnNew")
         finally:
             self.close_doc()
+
 
     # Calls UITest.close_dialog_through_button at exit
     @contextmanager
