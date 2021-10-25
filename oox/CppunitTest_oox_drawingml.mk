@@ -46,4 +46,6 @@ $(eval $(call gb_CppunitTest_add_arguments,oox_drawingml, \
     -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
 ))
 
+$(call gb_CppunitTest_get_target,oox_drawingml): $(call gb_Package_get_target,oox_customshapes)
+
 # vim: set noet sw=4 ts=4:
