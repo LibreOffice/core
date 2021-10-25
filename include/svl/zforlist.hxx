@@ -312,7 +312,6 @@ class UNLESS_MERGELIBS(SVL_DLLPUBLIC) NfCurrencyEntry
     sal_uInt16      nDigits;            /// count of decimal digits
     sal_Unicode     cZeroChar;          /// which character is used for zeros as last decimal digits
 
-                        NfCurrencyEntry( const NfCurrencyEntry& ) = delete;
     NfCurrencyEntry&    operator=( const NfCurrencyEntry& ) = delete;
 
 private:
@@ -328,6 +327,7 @@ public:
     NfCurrencyEntry( const css::i18n::Currency & rCurr,
                      const LocaleDataWrapper& rLocaleData,
                      LanguageType eLang );
+    NfCurrencyEntry( const NfCurrencyEntry& ) = default;
 
                         /// Symbols and language identical
     bool                operator==( const NfCurrencyEntry& r ) const;
@@ -338,6 +338,9 @@ public:
     sal_uInt16          GetPositiveFormat() const   { return nPositiveFormat; }
     sal_uInt16          GetNegativeFormat() const   { return nNegativeFormat; }
     sal_uInt16          GetDigits() const           { return nDigits; }
+
+                        /** Only to resolve system locale for currency list. */
+    void                SetLanguage( LanguageType nLang ) { eLanguage = nLang; }
 
                         /** [$DM-407] (bBank==false) or [$DEM] (bBank==true)
                             is returned. If bBank==false and
