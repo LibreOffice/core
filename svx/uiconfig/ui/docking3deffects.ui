@@ -1,351 +1,351 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.38.2 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">100</property>
-    <property name="step_increment">5</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">5</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment10">
     <property name="upper">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment2">
     <property name="upper">10000</property>
-    <property name="step_increment">5</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">5</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment3">
     <property name="upper">3600</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment4">
     <property name="upper">10000</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment5">
     <property name="lower">2</property>
     <property name="upper">256</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment6">
     <property name="upper">90</property>
-    <property name="step_increment">5</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">5</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment7">
     <property name="upper">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment8">
     <property name="upper">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment9">
     <property name="lower">1</property>
     <property name="upper">256</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/3dgeo.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/3dgeo.png</property>
   </object>
   <object class="GtkImage" id="image10">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/normsphe.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/normsphe.png</property>
   </object>
   <object class="GtkImage" id="image11">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/invert3d.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/invert3d.png</property>
   </object>
   <object class="GtkImage" id="image12">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/lght2sid.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/lght2sid.png</property>
   </object>
   <object class="GtkImage" id="image13">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/doublesi.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/doublesi.png</property>
   </object>
   <object class="GtkImage" id="image14">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/convrt3d.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/convrt3d.png</property>
   </object>
   <object class="GtkImage" id="image15">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/rotate3d.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/rotate3d.png</property>
   </object>
   <object class="GtkImage" id="image16">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/persp3d.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/persp3d.png</property>
   </object>
   <object class="GtkImage" id="image17">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/shadow3d.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/shadow3d.png</property>
   </object>
   <object class="GtkImage" id="image18">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/colordlg.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/colordlg.png</property>
   </object>
   <object class="GtkImage" id="image19">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/colordlg.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/colordlg.png</property>
   </object>
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/3drepres.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/3drepres.png</property>
   </object>
   <object class="GtkImage" id="image20">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/light.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/light.png</property>
   </object>
   <object class="GtkImage" id="image21">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/light.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/light.png</property>
   </object>
   <object class="GtkImage" id="image22">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/light.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/light.png</property>
   </object>
   <object class="GtkImage" id="image23">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/light.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/light.png</property>
   </object>
   <object class="GtkImage" id="image24">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/light.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/light.png</property>
   </object>
   <object class="GtkImage" id="image25">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/light.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/light.png</property>
   </object>
   <object class="GtkImage" id="image26">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/light.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/light.png</property>
   </object>
   <object class="GtkImage" id="image27">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/light.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/light.png</property>
   </object>
   <object class="GtkImage" id="image28">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/luminanc.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/luminanc.png</property>
   </object>
   <object class="GtkImage" id="image29">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/color.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/color.png</property>
   </object>
   <object class="GtkImage" id="image3">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/3dlight.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/3dlight.png</property>
   </object>
   <object class="GtkImage" id="image30">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/replac3d.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/replac3d.png</property>
   </object>
   <object class="GtkImage" id="image31">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/modula3d.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/modula3d.png</property>
   </object>
   <object class="GtkImage" id="image32">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/objspc3d.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/objspc3d.png</property>
   </object>
   <object class="GtkImage" id="image33">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/parallel.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/parallel.png</property>
   </object>
   <object class="GtkImage" id="image34">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/sphere3d.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/sphere3d.png</property>
   </object>
   <object class="GtkImage" id="image35">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/objspc3d.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/objspc3d.png</property>
   </object>
   <object class="GtkImage" id="image36">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/parallel.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/parallel.png</property>
   </object>
   <object class="GtkImage" id="image37">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/sphere3d.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/sphere3d.png</property>
   </object>
   <object class="GtkImage" id="image38">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/filter3d.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/filter3d.png</property>
   </object>
   <object class="GtkImage" id="image39">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/colordlg.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/colordlg.png</property>
   </object>
   <object class="GtkImage" id="image4">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/3dtextur.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/3dtextur.png</property>
   </object>
   <object class="GtkImage" id="image40">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/colordlg.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/colordlg.png</property>
   </object>
   <object class="GtkImage" id="image41">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/colordlg.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/colordlg.png</property>
   </object>
   <object class="GtkImage" id="image5">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/material.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/material.png</property>
   </object>
   <object class="GtkImage" id="image6">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">res/sc10350.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">res/sc10350.png</property>
   </object>
   <object class="GtkImage" id="image7">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/apply.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/apply.png</property>
   </object>
   <object class="GtkImage" id="image8">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/normobjs.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/normobjs.png</property>
   </object>
   <object class="GtkImage" id="image9">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/normflat.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/normflat.png</property>
   </object>
   <object class="GtkBox" id="Docking3DEffects">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <property name="orientation">vertical</property>
     <child>
-      <!-- n-columns=1 n-rows=1 -->
+      <!-- n-columns=1 n-rows=11 -->
       <object class="GtkGrid">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="row_spacing">24</property>
+        <property name="can-focus">False</property>
+        <property name="row-spacing">24</property>
         <child>
           <object class="GtkFrame" id="geoframe">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label_xalign">0</property>
-            <property name="shadow_type">none</property>
+            <property name="can-focus">False</property>
+            <property name="label-xalign">0</property>
+            <property name="shadow-type">none</property>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
+              <!-- n-columns=2 n-rows=4 -->
               <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
+                <property name="can-focus">False</property>
                 <property name="margin-start">12</property>
                 <property name="margin-top">6</property>
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="diagonalft">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="docking3deffects|diagonalft">R_ounded edges</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">diagonal</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">diagonal</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="scaleddepthft">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="docking3deffects|scaleddepthft">_Scaled depth</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">scaleddepth</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">scaleddepth</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="angleft">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="docking3deffects|angleft">_Rotation angle</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">angle</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">angle</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="depthft">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="docking3deffects|depthft">_Depth</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">depth</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">depth</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">3</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">3</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="diagonal">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="adjustment">adjustment1</property>
+                    <property name="can-focus">True</property>
                     <property name="truncate-multiline">True</property>
+                    <property name="adjustment">adjustment1</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="diagonal-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|diagonal">Enter the amount by which you want to round the corners of the selected 3D object.</property>
@@ -353,17 +353,17 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="scaleddepth">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
                     <property name="text">0</property>
-                    <property name="adjustment">adjustment2</property>
                     <property name="truncate-multiline">True</property>
+                    <property name="adjustment">adjustment2</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="scaleddepth-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|scaleddepth">Enter the amount by which to increase or decrease the area of the front side of the selected 3D object.</property>
@@ -371,18 +371,18 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="angle">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
                     <property name="text">0</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment3</property>
                     <property name="digits">1</property>
-                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="angle-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|angle">Enter the angle in degrees to rotate the selected 3D rotation object.</property>
@@ -390,18 +390,18 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">2</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="depth">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
                     <property name="text">0</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment4</property>
                     <property name="digits">2</property>
-                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="depth-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|depth">Enter the extrusion depth for the selected 3D object. This option is not valid for 3D rotation objects.</property>
@@ -409,8 +409,8 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">3</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">3</property>
                   </packing>
                 </child>
               </object>
@@ -418,7 +418,7 @@
             <child type="label">
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="docking3deffects|label1">Geometry</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
@@ -427,60 +427,60 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkFrame" id="segmentsframe">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label_xalign">0</property>
-            <property name="shadow_type">none</property>
+            <property name="can-focus">False</property>
+            <property name="label-xalign">0</property>
+            <property name="shadow-type">none</property>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
+              <!-- n-columns=2 n-rows=2 -->
               <object class="GtkGrid" id="grid3">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
+                <property name="can-focus">False</property>
                 <property name="margin-start">12</property>
                 <property name="margin-top">6</property>
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="label6">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="docking3deffects|label6">_Horizontal</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">hori</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">hori</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="label7">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="docking3deffects|label7">_Vertical</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">veri</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">veri</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="veri">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
                     <property name="text">0</property>
-                    <property name="adjustment">adjustment9</property>
                     <property name="truncate-multiline">True</property>
+                    <property name="adjustment">adjustment9</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="veri-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|veri">Enter the number of vertical segments to use in the selected 3D rotation object</property>
@@ -488,17 +488,17 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="hori">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
                     <property name="text">0</property>
-                    <property name="adjustment">adjustment5</property>
                     <property name="truncate-multiline">True</property>
+                    <property name="adjustment">adjustment5</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="hori-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|hori">Enter the number of horizontal segments to use in the selected 3D rotation object.</property>
@@ -506,8 +506,8 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
               </object>
@@ -515,7 +515,7 @@
             <child type="label">
               <object class="GtkLabel" id="label10">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="docking3deffects|label10">Segments</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
@@ -524,50 +524,50 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">2</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
-          <!-- n-columns=1 n-rows=1 -->
+          <!-- n-columns=2 n-rows=1 -->
           <object class="GtkGrid" id="grid6">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="margin-end">12</property>
-            <property name="margin_bottom">12</property>
+            <property name="margin-bottom">12</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <property name="column_spacing">12</property>
+            <property name="column-spacing">12</property>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
+              <!-- n-columns=1 n-rows=2 -->
               <object class="GtkGrid" id="grid7">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="row_spacing">12</property>
+                <property name="can-focus">False</property>
+                <property name="row-spacing">12</property>
                 <child>
                   <object class="GtkFrame" id="normals">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label_xalign">0</property>
-                    <property name="shadow_type">none</property>
+                    <property name="can-focus">False</property>
+                    <property name="label-xalign">0</property>
+                    <property name="shadow-type">none</property>
                     <child>
-                      <!-- n-columns=1 n-rows=1 -->
+                      <!-- n-columns=3 n-rows=3 -->
                       <object class="GtkGrid" id="grid8">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="valign">start</property>
-                        <property name="row_spacing">6</property>
-                        <property name="column_spacing">6</property>
-                        <property name="row_homogeneous">True</property>
-                        <property name="column_homogeneous">True</property>
                         <property name="margin-start">12</property>
                         <property name="margin-top">6</property>
+                        <property name="row-spacing">6</property>
+                        <property name="column-spacing">6</property>
+                        <property name="row-homogeneous">True</property>
+                        <property name="column-homogeneous">True</property>
                         <child>
                           <object class="GtkToggleButton" id="objspecific">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes" context="docking3deffects|objspecific|tooltip_text">Object-Specific</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="tooltip-text" translatable="yes" context="docking3deffects|objspecific|tooltip_text">Object-Specific</property>
                             <property name="valign">center</property>
                             <property name="image">image8</property>
                             <child internal-child="accessible">
@@ -577,16 +577,16 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkToggleButton" id="flat">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes" context="docking3deffects|flat|tooltip_text">Flat</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="tooltip-text" translatable="yes" context="docking3deffects|flat|tooltip_text">Flat</property>
                             <property name="valign">center</property>
                             <property name="image">image9</property>
                             <child internal-child="accessible">
@@ -596,16 +596,16 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkToggleButton" id="spherical">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes" context="docking3deffects|spherical|tooltip_text">Spherical</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="tooltip-text" translatable="yes" context="docking3deffects|spherical|tooltip_text">Spherical</property>
                             <property name="valign">center</property>
                             <property name="image">image10</property>
                             <child internal-child="accessible">
@@ -615,16 +615,16 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="left_attach">2</property>
-                            <property name="top_attach">0</property>
+                            <property name="left-attach">2</property>
+                            <property name="top-attach">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkToggleButton" id="invertnormals">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes" context="docking3deffects|invertnormals|tooltip_text">Invert Normals</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="tooltip-text" translatable="yes" context="docking3deffects|invertnormals|tooltip_text">Invert Normals</property>
                             <property name="valign">center</property>
                             <property name="image">image11</property>
                             <child internal-child="accessible">
@@ -634,16 +634,16 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">1</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkToggleButton" id="doublesidedillum">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes" context="docking3deffects|doublesidedillum|tooltip_text">Double-Sided Illumination</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="tooltip-text" translatable="yes" context="docking3deffects|doublesidedillum|tooltip_text">Double-Sided Illumination</property>
                             <property name="valign">center</property>
                             <property name="image">image12</property>
                             <child internal-child="accessible">
@@ -653,16 +653,16 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="left_attach">2</property>
-                            <property name="top_attach">1</property>
+                            <property name="left-attach">2</property>
+                            <property name="top-attach">1</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkToggleButton" id="doublesided">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes" context="docking3deffects|doublesided|tooltip_text">Double-Sided</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="tooltip-text" translatable="yes" context="docking3deffects|doublesided|tooltip_text">Double-Sided</property>
                             <property name="valign">center</property>
                             <property name="image">image13</property>
                             <child internal-child="accessible">
@@ -672,8 +672,8 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">2</property>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">2</property>
                           </packing>
                         </child>
                         <child>
@@ -690,7 +690,7 @@
                     <child type="label">
                       <object class="GtkLabel" id="label11">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="docking3deffects|label11">Normals</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
@@ -699,28 +699,28 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
-                  <!-- n-columns=1 n-rows=1 -->
+                  <!-- n-columns=3 n-rows=1 -->
                   <object class="GtkGrid" id="grid10">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="vexpand">True</property>
+                    <property name="can-focus">False</property>
                     <property name="valign">end</property>
-                    <property name="row_spacing">6</property>
-                    <property name="column_spacing">6</property>
-                    <property name="row_homogeneous">True</property>
-                    <property name="column_homogeneous">True</property>
                     <property name="margin-start">12</property>
+                    <property name="vexpand">True</property>
+                    <property name="row-spacing">6</property>
+                    <property name="column-spacing">6</property>
+                    <property name="row-homogeneous">True</property>
+                    <property name="column-homogeneous">True</property>
                     <child>
                       <object class="GtkButton" id="to3d">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes" context="docking3deffects|to3d|tooltip_text">Convert to 3D</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="tooltip-text" translatable="yes" context="docking3deffects|to3d|tooltip_text">Convert to 3D</property>
                         <property name="image">image14</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="to3d-atkobject">
@@ -729,16 +729,16 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkButton" id="tolathe">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes" context="docking3deffects|tolathe|tooltip_text">Convert to Rotation Object</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="tooltip-text" translatable="yes" context="docking3deffects|tolathe|tooltip_text">Convert to Rotation Object</property>
                         <property name="image">image15</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="tolathe-atkobject">
@@ -747,46 +747,46 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkToggleButton" id="perspective">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes" context="docking3deffects|perspective|tooltip_text">Perspective On/Off</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="tooltip-text" translatable="yes" context="docking3deffects|perspective|tooltip_text">Perspective On/Off</property>
                         <property name="image">image16</property>
                       </object>
                       <packing>
-                        <property name="left_attach">2</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">2</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkBox" id="box2">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkDrawingArea" id="preview">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
                     <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                     <property name="halign">end</property>
                     <property name="valign">end</property>
@@ -807,27 +807,27 @@
                 <child>
                   <object class="GtkScrolledWindow" id="lightpreviewgrid">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
                     <property name="halign">end</property>
                     <property name="valign">end</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="shadow_type">in</property>
+                    <property name="shadow-type">in</property>
                     <child>
                       <object class="GtkViewport">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <child>
-                          <!-- n-columns=1 n-rows=1 -->
+                          <!-- n-columns=2 n-rows=2 -->
                           <object class="GtkGrid">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <child>
                               <object class="GtkDrawingArea" id="lightpreview">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
+                                <property name="can-focus">True</property>
                                 <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-                                <property name="tooltip_text" translatable="yes" context="tp_3D_SceneIllumination|CTL_LIGHT_PREVIEW|tooltip_text">Light Preview</property>
+                                <property name="tooltip-text" translatable="yes" context="tp_3D_SceneIllumination|CTL_LIGHT_PREVIEW|tooltip_text">Light Preview</property>
                                 <property name="hexpand">True</property>
                                 <property name="vexpand">True</property>
                                 <child internal-child="accessible">
@@ -837,44 +837,44 @@
                                 </child>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">0</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkButton" id="corner">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">True</property>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">1</property>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">1</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkScale" id="horiscale">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="round_digits">1</property>
-                                <property name="draw_value">False</property>
+                                <property name="can-focus">True</property>
+                                <property name="round-digits">1</property>
+                                <property name="draw-value">False</property>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">1</property>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">1</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkScale" id="vertscale">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
+                                <property name="can-focus">True</property>
                                 <property name="orientation">vertical</property>
-                                <property name="round_digits">1</property>
-                                <property name="draw_value">False</property>
+                                <property name="round-digits">1</property>
+                                <property name="draw-value">False</property>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">0</property>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">0</property>
                               </packing>
                             </child>
                           </object>
@@ -890,49 +890,49 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">10</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">10</property>
           </packing>
         </child>
         <child>
           <object class="GtkFrame" id="shadingframe">
-            <property name="can_focus">False</property>
-            <property name="no_show_all">True</property>
-            <property name="label_xalign">0</property>
-            <property name="shadow_type">none</property>
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
+            <property name="label-xalign">0</property>
+            <property name="shadow-type">none</property>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
+              <!-- n-columns=2 n-rows=1 -->
               <object class="GtkGrid" id="grid11">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
+                <property name="can-focus">False</property>
                 <property name="margin-start">12</property>
                 <property name="margin-top">6</property>
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="label8">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="docking3deffects|label8">_Mode</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">mode</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">mode</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkComboBoxText" id="mode">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <items>
                       <item translatable="yes" context="docking3deffects|mode">Flat</item>
                       <item translatable="yes" context="docking3deffects|mode">Phong</item>
@@ -945,8 +945,8 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
               </object>
@@ -954,7 +954,7 @@
             <child type="label">
               <object class="GtkLabel" id="label12">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="docking3deffects|label12">Shading</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
@@ -963,32 +963,32 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">3</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">3</property>
           </packing>
         </child>
         <child>
           <object class="GtkFrame" id="shadowframe">
-            <property name="can_focus">False</property>
-            <property name="no_show_all">True</property>
-            <property name="label_xalign">0</property>
-            <property name="shadow_type">none</property>
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
+            <property name="label-xalign">0</property>
+            <property name="shadow-type">none</property>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
+              <!-- n-columns=2 n-rows=1 -->
               <object class="GtkGrid" id="grid9">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
+                <property name="can-focus">False</property>
                 <property name="margin-start">12</property>
                 <property name="margin-top">6</property>
+                <property name="hexpand">True</property>
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">12</property>
                 <child>
                   <object class="GtkSpinButton" id="slant">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="adjustment">adjustment6</property>
+                    <property name="can-focus">True</property>
                     <property name="truncate-multiline">True</property>
+                    <property name="adjustment">adjustment6</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="slant-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|slant">Enter an angle from 0 to 90 degrees for casting the shadow.</property>
@@ -996,21 +996,21 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkBox" id="box3">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkToggleButton" id="shadow">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes" context="docking3deffects|shadow|tooltip_text">3D Shadowing On/Off</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="tooltip-text" translatable="yes" context="docking3deffects|shadow|tooltip_text">3D Shadowing On/Off</property>
                         <property name="image">image17</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="shadow-atkobject">
@@ -1027,11 +1027,11 @@
                     <child>
                       <object class="GtkLabel" id="slantft">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="halign">end</property>
                         <property name="label" translatable="yes" context="docking3deffects|slantft">S_urface angle</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">slant</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">slant</property>
                         <property name="xalign">1</property>
                       </object>
                       <packing>
@@ -1042,8 +1042,8 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
               </object>
@@ -1051,7 +1051,7 @@
             <child type="label">
               <object class="GtkLabel" id="label13">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="docking3deffects|label13">Shadow</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
@@ -1060,33 +1060,33 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">4</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">4</property>
           </packing>
         </child>
         <child>
           <object class="GtkFrame" id="cameraframe">
-            <property name="can_focus">False</property>
-            <property name="no_show_all">True</property>
-            <property name="label_xalign">0</property>
-            <property name="shadow_type">none</property>
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
+            <property name="label-xalign">0</property>
+            <property name="shadow-type">none</property>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
+              <!-- n-columns=2 n-rows=2 -->
               <object class="GtkGrid" id="grid12">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
+                <property name="can-focus">False</property>
                 <property name="margin-start">12</property>
                 <property name="margin-top">6</property>
+                <property name="hexpand">True</property>
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">12</property>
                 <child>
                   <object class="GtkSpinButton" id="focal">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment10</property>
                     <property name="digits">2</property>
-                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="focal-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|focal">Enter the focal length of the camera, where a small value corresponds to a "fisheye" lens, and a large value to a telephoto lens.</property>
@@ -1094,17 +1094,17 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="distance">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment7</property>
                     <property name="digits">2</property>
-                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="distance-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|distance">Enter the distance to leave between the camera and the center of the selected object.</property>
@@ -1112,36 +1112,36 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="label15">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="docking3deffects|label15">_Focal length</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">focal</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">focal</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="label14">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="docking3deffects|label14">_Distance</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">distance</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">distance</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
               </object>
@@ -1149,7 +1149,7 @@
             <child type="label">
               <object class="GtkLabel" id="label16">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="docking3deffects|label16">Camera</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
@@ -1158,32 +1158,32 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">5</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">5</property>
           </packing>
         </child>
         <child>
           <object class="GtkFrame" id="illumframe">
-            <property name="can_focus">False</property>
-            <property name="no_show_all">True</property>
-            <property name="label_xalign">0</property>
-            <property name="shadow_type">none</property>
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
+            <property name="label-xalign">0</property>
+            <property name="shadow-type">none</property>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
+              <!-- n-columns=3 n-rows=3 -->
               <object class="GtkGrid" id="grid13">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
+                <property name="can-focus">False</property>
                 <property name="margin-start">12</property>
                 <property name="margin-top">6</property>
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="label17">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="valign">start</property>
                     <property name="label" translatable="yes" context="docking3deffects|label17">_Light source</property>
-                    <property name="use_underline">True</property>
+                    <property name="use-underline">True</property>
                     <property name="xalign">0</property>
                     <accessibility>
                       <relation type="label-for" target="light1"/>
@@ -1197,16 +1197,16 @@
                     </accessibility>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkButton" id="colorbutton1">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes" context="docking3deffects|colorbutton1|tooltip_text">Colors Dialog</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes" context="docking3deffects|colorbutton1|tooltip_text">Colors Dialog</property>
                     <property name="valign">start</property>
                     <property name="image">image19</property>
                     <child internal-child="accessible">
@@ -1216,18 +1216,18 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkMenuButton" id="ambientcolor">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
                     <property name="valign">center</property>
                     <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="draw-indicator">True</property>
                     <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
@@ -1239,51 +1239,51 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">2</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkButton" id="colorbutton2">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes" context="docking3deffects|colorbutton2|tooltip_text">Colors Dialog</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes" context="docking3deffects|colorbutton2|tooltip_text">Colors Dialog</property>
                     <property name="valign">center</property>
                     <property name="image">image18</property>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">2</property>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="label18">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="docking3deffects|label18">_Ambient light</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">ambientcolor</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">ambientcolor</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
                 <child>
-                  <!-- n-columns=1 n-rows=1 -->
+                  <!-- n-columns=4 n-rows=2 -->
                   <object class="GtkGrid" id="grid14">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="row_spacing">6</property>
-                    <property name="column_spacing">6</property>
+                    <property name="can-focus">False</property>
+                    <property name="row-spacing">6</property>
+                    <property name="column-spacing">6</property>
                     <child>
                       <object class="GtkToggleButton" id="light1">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes" context="docking3deffects|light1|tooltip_text">Light Source 1</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="tooltip-text" translatable="yes" context="docking3deffects|light1|tooltip_text">Light Source 1</property>
                         <property name="image">image20</property>
                         <accessibility>
                           <relation type="labelled-by" target="label17"/>
@@ -1295,16 +1295,16 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkToggleButton" id="light2">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes" context="docking3deffects|light2|tooltip_text">Light Source 2</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="tooltip-text" translatable="yes" context="docking3deffects|light2|tooltip_text">Light Source 2</property>
                         <property name="image">image21</property>
                         <accessibility>
                           <relation type="labelled-by" target="label17"/>
@@ -1316,16 +1316,16 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkToggleButton" id="light3">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes" context="docking3deffects|light3|tooltip_text">Light Source 3</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="tooltip-text" translatable="yes" context="docking3deffects|light3|tooltip_text">Light Source 3</property>
                         <property name="image">image22</property>
                         <accessibility>
                           <relation type="labelled-by" target="label17"/>
@@ -1337,16 +1337,16 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">2</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">2</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkToggleButton" id="light4">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes" context="docking3deffects|light4|tooltip_text">Light Source 4</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="tooltip-text" translatable="yes" context="docking3deffects|light4|tooltip_text">Light Source 4</property>
                         <property name="image">image23</property>
                         <accessibility>
                           <relation type="labelled-by" target="label17"/>
@@ -1358,16 +1358,16 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">3</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">3</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkToggleButton" id="light5">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes" context="docking3deffects|light5|tooltip_text">Light Source 5</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="tooltip-text" translatable="yes" context="docking3deffects|light5|tooltip_text">Light Source 5</property>
                         <property name="image">image24</property>
                         <accessibility>
                           <relation type="labelled-by" target="label17"/>
@@ -1379,16 +1379,16 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkToggleButton" id="light6">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes" context="docking3deffects|light6|tooltip_text">Light Source 6</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="tooltip-text" translatable="yes" context="docking3deffects|light6|tooltip_text">Light Source 6</property>
                         <property name="image">image25</property>
                         <accessibility>
                           <relation type="labelled-by" target="label17"/>
@@ -1400,16 +1400,16 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">1</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkToggleButton" id="light7">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes" context="docking3deffects|light7|tooltip_text">Light Source 7</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="tooltip-text" translatable="yes" context="docking3deffects|light7|tooltip_text">Light Source 7</property>
                         <property name="image">image26</property>
                         <accessibility>
                           <relation type="labelled-by" target="label17"/>
@@ -1421,16 +1421,16 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">2</property>
-                        <property name="top_attach">1</property>
+                        <property name="left-attach">2</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkToggleButton" id="light8">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes" context="docking3deffects|light8|tooltip_text">Light Source 8</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="tooltip-text" translatable="yes" context="docking3deffects|light8|tooltip_text">Light Source 8</property>
                         <property name="image">image27</property>
                         <accessibility>
                           <relation type="labelled-by" target="label17"/>
@@ -1442,30 +1442,30 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">3</property>
-                        <property name="top_attach">1</property>
+                        <property name="left-attach">3</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkBox" id="box1">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkMenuButton" id="lightcolor1">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor1|tooltip_text">Light 1 color</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="tooltip-text" translatable="yes" context="docking3deffects|lightcolor1|tooltip_text">Light 1 color</property>
                         <property name="valign">start</property>
                         <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="draw-indicator">True</property>
                         <property name="label" translatable="no"></property>
                         <child>
                           <placeholder/>
@@ -1484,12 +1484,12 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="lightcolor2">
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor2|tooltip_text">Light 2 color</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="tooltip-text" translatable="yes" context="docking3deffects|lightcolor2|tooltip_text">Light 2 color</property>
                         <property name="valign">start</property>
                         <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="draw-indicator">True</property>
                         <property name="label" translatable="no"></property>
                         <child>
                           <placeholder/>
@@ -1503,12 +1503,12 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="lightcolor3">
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor3|tooltip_text">Light 3 color</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="tooltip-text" translatable="yes" context="docking3deffects|lightcolor3|tooltip_text">Light 3 color</property>
                         <property name="valign">start</property>
                         <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="draw-indicator">True</property>
                         <property name="label" translatable="no"></property>
                         <child>
                           <placeholder/>
@@ -1522,12 +1522,12 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="lightcolor4">
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor4|tooltip_text">Light 4 color</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="tooltip-text" translatable="yes" context="docking3deffects|lightcolor4|tooltip_text">Light 4 color</property>
                         <property name="valign">start</property>
                         <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="draw-indicator">True</property>
                         <property name="label" translatable="no"></property>
                         <child>
                           <placeholder/>
@@ -1541,12 +1541,12 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="lightcolor5">
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor5|tooltip_text">Light 5 color</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="tooltip-text" translatable="yes" context="docking3deffects|lightcolor5|tooltip_text">Light 5 color</property>
                         <property name="valign">start</property>
                         <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="draw-indicator">True</property>
                         <property name="label" translatable="no"></property>
                         <child>
                           <placeholder/>
@@ -1560,12 +1560,12 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="lightcolor6">
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor6|tooltip_text">Light 6 color</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="tooltip-text" translatable="yes" context="docking3deffects|lightcolor6|tooltip_text">Light 6 color</property>
                         <property name="valign">start</property>
                         <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="draw-indicator">True</property>
                         <property name="label" translatable="no"></property>
                         <child>
                           <placeholder/>
@@ -1579,12 +1579,12 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="lightcolor7">
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor7|tooltip_text">Light 7 color</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="tooltip-text" translatable="yes" context="docking3deffects|lightcolor7|tooltip_text">Light 7 color</property>
                         <property name="valign">start</property>
                         <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="draw-indicator">True</property>
                         <property name="label" translatable="no"></property>
                         <child>
                           <placeholder/>
@@ -1598,12 +1598,12 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="lightcolor8">
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor8|tooltip_text">Light 8 color</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="tooltip-text" translatable="yes" context="docking3deffects|lightcolor8|tooltip_text">Light 8 color</property>
                         <property name="valign">start</property>
                         <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="draw-indicator">True</property>
                         <property name="label" translatable="no"></property>
                         <child>
                           <placeholder/>
@@ -1617,8 +1617,8 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
@@ -1632,7 +1632,7 @@
             <child type="label">
               <object class="GtkLabel" id="label19">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="docking3deffects|label19">Illumination</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
@@ -1641,31 +1641,31 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">6</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">6</property>
           </packing>
         </child>
         <child>
           <object class="GtkFrame" id="textureframe">
-            <property name="can_focus">False</property>
-            <property name="no_show_all">True</property>
-            <property name="label_xalign">0</property>
-            <property name="shadow_type">none</property>
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
+            <property name="label-xalign">0</property>
+            <property name="shadow-type">none</property>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
+              <!-- n-columns=4 n-rows=5 -->
               <object class="GtkGrid" id="grid15">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
+                <property name="can-focus">False</property>
                 <property name="margin-start">12</property>
                 <property name="margin-top">6</property>
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="label20">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="docking3deffects|label20">_Type</property>
-                    <property name="use_underline">True</property>
+                    <property name="use-underline">True</property>
                     <property name="xalign">0</property>
                     <accessibility>
                       <relation type="label-for" target="textype"/>
@@ -1673,16 +1673,16 @@
                     </accessibility>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="label22">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="docking3deffects|label22">_Mode</property>
-                    <property name="use_underline">True</property>
+                    <property name="use-underline">True</property>
                     <property name="xalign">0</property>
                     <accessibility>
                       <relation type="label-for" target="texreplace"/>
@@ -1690,16 +1690,16 @@
                     </accessibility>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="label23">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="docking3deffects|label23">_Projection X</property>
-                    <property name="use_underline">True</property>
+                    <property name="use-underline">True</property>
                     <property name="xalign">0</property>
                     <accessibility>
                       <relation type="label-for" target="texobjx"/>
@@ -1708,16 +1708,16 @@
                     </accessibility>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="label24">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="docking3deffects|label24">P_rojection Y</property>
-                    <property name="use_underline">True</property>
+                    <property name="use-underline">True</property>
                     <property name="xalign">0</property>
                     <accessibility>
                       <relation type="label-for" target="texobjy"/>
@@ -1726,32 +1726,32 @@
                     </accessibility>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">3</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">3</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="label25">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="docking3deffects|label25">_Filtering</property>
-                    <property name="use_underline">True</property>
+                    <property name="use-underline">True</property>
                     <property name="xalign">0</property>
                     <accessibility>
                       <relation type="label-for" target="texfilter"/>
                     </accessibility>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">4</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">4</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkToggleButton" id="textype">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes" context="docking3deffects|textype|tooltip_text">Black &amp; White</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes" context="docking3deffects|textype|tooltip_text">Black &amp; White</property>
                     <property name="halign">center</property>
                     <property name="image">image28</property>
                     <accessibility>
@@ -1764,16 +1764,16 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkToggleButton" id="texcolor">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes" context="docking3deffects|texcolor|tooltip_text">Color</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes" context="docking3deffects|texcolor|tooltip_text">Color</property>
                     <property name="halign">center</property>
                     <property name="image">image29</property>
                     <accessibility>
@@ -1786,16 +1786,16 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkToggleButton" id="texreplace">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes" context="docking3deffects|texreplace|tooltip_text">Only Texture</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes" context="docking3deffects|texreplace|tooltip_text">Only Texture</property>
                     <property name="halign">center</property>
                     <property name="image">image30</property>
                     <accessibility>
@@ -1808,16 +1808,16 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkToggleButton" id="texmodulate">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes" context="docking3deffects|texmodulate|tooltip_text">Texture and Shading</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes" context="docking3deffects|texmodulate|tooltip_text">Texture and Shading</property>
                     <property name="halign">center</property>
                     <property name="image">image31</property>
                     <accessibility>
@@ -1830,16 +1830,16 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkToggleButton" id="texobjx">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes" context="docking3deffects|texobjx|tooltip_text">Object-Specific</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes" context="docking3deffects|texobjx|tooltip_text">Object-Specific</property>
                     <property name="halign">center</property>
                     <property name="image">image32</property>
                     <accessibility>
@@ -1852,16 +1852,16 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">2</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkToggleButton" id="texparallelx">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes" context="docking3deffects|texparallelx|tooltip_text">Parallel</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes" context="docking3deffects|texparallelx|tooltip_text">Parallel</property>
                     <property name="halign">center</property>
                     <property name="image">image33</property>
                     <accessibility>
@@ -1874,16 +1874,16 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">2</property>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkToggleButton" id="texcirclex">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes" context="docking3deffects|texcirclex|tooltip_text">Circular</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes" context="docking3deffects|texcirclex|tooltip_text">Circular</property>
                     <property name="halign">start</property>
                     <property name="hexpand">True</property>
                     <property name="image">image34</property>
@@ -1897,16 +1897,16 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">3</property>
-                    <property name="top_attach">2</property>
+                    <property name="left-attach">3</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkToggleButton" id="texobjy">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes" context="docking3deffects|texobjy|tooltip_text">Object-Specific</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes" context="docking3deffects|texobjy|tooltip_text">Object-Specific</property>
                     <property name="halign">center</property>
                     <property name="image">image35</property>
                     <accessibility>
@@ -1919,16 +1919,16 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">3</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">3</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkToggleButton" id="texparallely">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes" context="docking3deffects|texparallely|tooltip_text">Parallel</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes" context="docking3deffects|texparallely|tooltip_text">Parallel</property>
                     <property name="halign">center</property>
                     <property name="image">image36</property>
                     <accessibility>
@@ -1941,16 +1941,16 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">3</property>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">3</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkToggleButton" id="texcircley">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes" context="docking3deffects|texcircley|tooltip_text">Circular</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes" context="docking3deffects|texcircley|tooltip_text">Circular</property>
                     <property name="halign">start</property>
                     <property name="image">image37</property>
                     <accessibility>
@@ -1963,16 +1963,16 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">3</property>
-                    <property name="top_attach">3</property>
+                    <property name="left-attach">3</property>
+                    <property name="top-attach">3</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkToggleButton" id="texfilter">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes" context="docking3deffects|texfilter|tooltip_text">Filtering On/Off</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes" context="docking3deffects|texfilter|tooltip_text">Filtering On/Off</property>
                     <property name="halign">center</property>
                     <property name="image">image38</property>
                     <accessibility>
@@ -1985,9 +1985,12 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">4</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">4</property>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
                 <child>
                   <placeholder/>
@@ -2003,7 +2006,7 @@
             <child type="label">
               <object class="GtkLabel" id="label21">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="docking3deffects|label21">Textures</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
@@ -2012,78 +2015,78 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">7</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">7</property>
           </packing>
         </child>
         <child>
           <object class="GtkFrame" id="materialframe">
-            <property name="can_focus">False</property>
-            <property name="no_show_all">True</property>
-            <property name="label_xalign">0</property>
-            <property name="shadow_type">none</property>
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
+            <property name="label-xalign">0</property>
+            <property name="shadow-type">none</property>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
+              <!-- n-columns=3 n-rows=3 -->
               <object class="GtkGrid" id="grid16">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
+                <property name="can-focus">False</property>
                 <property name="margin-start">12</property>
                 <property name="margin-top">6</property>
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="label26">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="docking3deffects|label26">_Favorites</property>
-                    <property name="use_underline">True</property>
+                    <property name="use-underline">True</property>
                     <property name="xalign">0</property>
                     <accessibility>
                       <relation type="label-for" target="favorites"/>
                     </accessibility>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="label27">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="docking3deffects|label27">_Object color</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">objcolor</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">objcolor</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="label29">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="docking3deffects|label29">_Illumination color</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">illumcolor</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">illumcolor</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkMenuButton" id="objcolor">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="draw-indicator">True</property>
                     <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
@@ -2095,19 +2098,19 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkMenuButton" id="illumcolor">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="draw-indicator">True</property>
                     <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
@@ -2119,14 +2122,14 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">2</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkComboBoxText" id="favorites">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <items>
                       <item translatable="yes" context="docking3deffects|favorites">User-defined</item>
                       <item translatable="yes" context="docking3deffects|favorites">Metal</item>
@@ -2145,17 +2148,17 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkButton" id="colorbutton3">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes" context="docking3deffects|colorbutton3|tooltip_text">Colors Dialog</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes" context="docking3deffects|colorbutton3|tooltip_text">Colors Dialog</property>
                     <property name="image">image39</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="colorbutton3-atkobject">
@@ -2164,21 +2167,21 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkButton" id="colorbutton4">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes" context="docking3deffects|colorbutton4|tooltip_text">Colors Dialog</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes" context="docking3deffects|colorbutton4|tooltip_text">Colors Dialog</property>
                     <property name="image">image40</property>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">2</property>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
               </object>
@@ -2186,7 +2189,7 @@
             <child type="label">
               <object class="GtkLabel" id="label28">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="docking3deffects|label28">Material</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
@@ -2195,62 +2198,62 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">8</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">8</property>
           </packing>
         </child>
         <child>
           <object class="GtkFrame" id="specframe">
-            <property name="can_focus">False</property>
-            <property name="no_show_all">True</property>
-            <property name="label_xalign">0</property>
-            <property name="shadow_type">none</property>
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
+            <property name="label-xalign">0</property>
+            <property name="shadow-type">none</property>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
+              <!-- n-columns=3 n-rows=2 -->
               <object class="GtkGrid" id="grid17">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
+                <property name="can-focus">False</property>
                 <property name="margin-start">12</property>
                 <property name="margin-top">6</property>
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="label30">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="docking3deffects|label30">_Color</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">speccolor</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">speccolor</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="label31">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="docking3deffects|label31">I_ntensity</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">intensity</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">intensity</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkMenuButton" id="speccolor">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="draw-indicator">True</property>
                     <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
@@ -2262,16 +2265,16 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkButton" id="colorbutton5">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes" context="docking3deffects|colorbutton5|tooltip_text">Colors Dialog</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes" context="docking3deffects|colorbutton5|tooltip_text">Colors Dialog</property>
                     <property name="image">image41</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="colorbutton5-atkobject">
@@ -2280,16 +2283,16 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="intensity">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="adjustment">adjustment8</property>
+                    <property name="can-focus">True</property>
                     <property name="truncate-multiline">True</property>
+                    <property name="adjustment">adjustment8</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="intensity-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|intensity">Enter the intensity of the specular effect.</property>
@@ -2297,8 +2300,8 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
@@ -2307,7 +2310,7 @@
             <child type="label">
               <object class="GtkLabel" id="label32">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="docking3deffects|label32">Specular</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
@@ -2316,50 +2319,50 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">9</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">9</property>
           </packing>
         </child>
         <child>
-          <!-- n-columns=1 n-rows=1 -->
+          <!-- n-columns=7 n-rows=1 -->
           <object class="GtkGrid" id="grid18">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="column_spacing">6</property>
+            <property name="can-focus">False</property>
+            <property name="column-spacing">6</property>
             <child>
               <object class="GtkButton" id="assign">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes" context="docking3deffects|assign|tooltip_text">Assign</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="docking3deffects|assign|tooltip_text">Assign</property>
                 <property name="image">image7</property>
               </object>
               <packing>
-                <property name="left_attach">6</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">6</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkToggleButton" id="update">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes" context="docking3deffects|update|tooltip_text">Update</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="docking3deffects|update|tooltip_text">Update</property>
                 <property name="halign">end</property>
                 <property name="hexpand">True</property>
                 <property name="image">image6</property>
               </object>
               <packing>
-                <property name="left_attach">5</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">5</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkToggleButton" id="material">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes" context="docking3deffects|material|tooltip_text">Material</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="docking3deffects|material|tooltip_text">Material</property>
                 <property name="image">image5</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="material-atkobject">
@@ -2368,16 +2371,16 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">4</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">4</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkToggleButton" id="texture">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes" context="docking3deffects|texture|tooltip_text">Textures</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="docking3deffects|texture|tooltip_text">Textures</property>
                 <property name="image">image4</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="texture-atkobject">
@@ -2386,16 +2389,16 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">3</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">3</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkToggleButton" id="light">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes" context="docking3deffects|light|tooltip_text">Illumination</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="docking3deffects|light|tooltip_text">Illumination</property>
                 <property name="image">image3</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="light-atkobject">
@@ -2404,16 +2407,16 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">2</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">2</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkToggleButton" id="representation">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes" context="docking3deffects|representation|tooltip_text">Shading</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="docking3deffects|representation|tooltip_text">Shading</property>
                 <property name="image">image2</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="representation-atkobject">
@@ -2422,16 +2425,16 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkToggleButton" id="geometry">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes" context="docking3deffects|geometry|tooltip_text">Geometry</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="docking3deffects|geometry|tooltip_text">Geometry</property>
                 <property name="image">image1</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="geometry-atkobject">
@@ -2440,18 +2443,18 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
         <child internal-child="accessible">
-          <object class="AtkObject" id="Docking3DEffects-atkobject">
+          <object class="AtkObject">
             <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|Docking3DEffects">Specifies the properties of 3D object(s) in the current document or converts a 2D object to 3D.</property>
           </object>
         </child>
