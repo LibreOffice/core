@@ -268,6 +268,12 @@ CertificateViewerCertPathTP::CertificateViewerCertPathTP(weld::Container* pParen
     mxViewCertPB->connect_clicked( LINK( this, CertificateViewerCertPathTP, ViewCertHdl ) );
 }
 
+CertificateViewerCertPathTP::~CertificateViewerCertPathTP()
+{
+    if (mxCertificateViewer)
+        mxCertificateViewer->response(RET_OK);
+}
+
 void CertificateViewerCertPathTP::ActivatePage()
 {
     if ( !mbFirstActivateDone )
@@ -319,10 +325,13 @@ IMPL_LINK_NOARG(CertificateViewerCertPathTP, ViewCertHdl, weld::Button&, void)
     std::unique_ptr<weld::TreeIter> xIter = mxCertPathLB->make_iterator();
     if (mxCertPathLB->get_selected(xIter.get()))
     {
+        if (mxCertificateViewer)
+            mxCertificateViewer->response(RET_OK);
+
         CertPath_UserData* pData = reinterpret_cast<CertPath_UserData*>(mxCertPathLB->get_id(*xIter).toInt64());
-        CertificateViewer aViewer(mpDlg->getDialog(), mpDlg->mxSecurityEnvironment,
+        mxCertificateViewer = std::make_shared<CertificateViewer>(mpDlg->getDialog(), mpDlg->mxSecurityEnvironment,
                 pData->mxCert, false, nullptr);
-        aViewer.run();
+        weld::DialogController::runAsync(mxCertificateViewer, [this] (sal_Int32) { mxCertificateViewer = nullptr; });
     }
 }
 
