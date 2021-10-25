@@ -396,8 +396,8 @@ void testIntermediaryStaticCast() {
 };
 
 void testArrayDecay() {
-    (void) static_cast<char const *>(""); // expected-error {{redundant static_cast from 'const char [1]' to 'const char *' [loplugin:redundantcast]}}
-    (void) reinterpret_cast<char const *>(""); // expected-error {{redundant reinterpret_cast from 'const char [1]' to 'const char *' [loplugin:redundantcast]}}
+    (void) static_cast<char const *>(""); // expected-error-re {{redundant static_cast from 'const char{{ ?}}[1]' to 'const char *' [loplugin:redundantcast]}}
+    (void) reinterpret_cast<char const *>(""); // expected-error-re {{redundant reinterpret_cast from 'const char{{ ?}}[1]' to 'const char *' [loplugin:redundantcast]}}
     (void) reinterpret_cast<char const *>(u8"");
 }
 

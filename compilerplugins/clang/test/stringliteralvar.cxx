@@ -14,7 +14,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/macros.h>
 
-// expected-error@+1 {{change type of variable 'literal1' from constant character array ('const char [4]') to OStringLiteral [loplugin:stringliteralvar]}}
+// expected-error-re@+1 {{change type of variable 'literal1' from constant character array ('const char{{ ?}}[4]') to OStringLiteral [loplugin:stringliteralvar]}}
 char const literal1[] = "foo";
 OString f1()
 {
@@ -25,7 +25,7 @@ OString f1()
 void f(OUString const&);
 void f2()
 {
-    // expected-error@+1 {{change type of variable 'literal' from constant character array ('const char [4]') to OUStringLiteral, and make it static [loplugin:stringliteralvar]}}
+    // expected-error-re@+1 {{change type of variable 'literal' from constant character array ('const char{{ ?}}[4]') to OUStringLiteral, and make it static [loplugin:stringliteralvar]}}
     char const literal[] = "foo";
     // expected-note@+1 {{first passed into a 'rtl::OUString' constructor here [loplugin:stringliteralvar]}}
     f(literal);
@@ -33,7 +33,7 @@ void f2()
 
 struct S3
 {
-    // expected-error@+1 {{change type of variable 'literal' from constant character array ('const char16_t [4]') to OUStringLiteral [loplugin:stringliteralvar]}}
+    // expected-error-re@+1 {{change type of variable 'literal' from constant character array ('const char16_t{{ ?}}[4]') to OUStringLiteral [loplugin:stringliteralvar]}}
     static constexpr char16_t literal[] = u"foo";
 };
 void f3()
@@ -44,7 +44,7 @@ void f3()
 
 std::vector<OUString> f4()
 {
-    // expected-error@+1 {{change type of variable 'literal' from constant character array ('const char16_t [4]') to OUStringLiteral [loplugin:stringliteralvar]}}
+    // expected-error-re@+1 {{change type of variable 'literal' from constant character array ('const char16_t{{ ?}}[4]') to OUStringLiteral [loplugin:stringliteralvar]}}
     static constexpr char16_t literal[] = u"foo";
     // expected-note@+1 {{first passed into a 'rtl::OUString' constructor here [loplugin:stringliteralvar]}}
     return { literal };
@@ -81,7 +81,7 @@ void f8()
 
 void f9()
 {
-    // expected-error@+1 {{change type of variable 'literal' from constant character array ('const sal_Unicode [3]') to OUStringLiteral [loplugin:stringliteralvar]}}
+    // expected-error-re@+1 {{change type of variable 'literal' from constant character array ('const sal_Unicode{{ ?}}[3]') to OUStringLiteral [loplugin:stringliteralvar]}}
     static sal_Unicode const literal[] = { 'f', 'o', 'o' };
     // expected-note@+1 {{first passed into a 'rtl::OUString' constructor here [loplugin:stringliteralvar]}}
     f(OUString(literal, SAL_N_ELEMENTS(literal)));
@@ -89,7 +89,7 @@ void f9()
 
 void f10()
 {
-    // expected-error@+1 {{change type of variable 'literal' from constant character array ('const sal_Unicode [3]') to OUStringLiteral [loplugin:stringliteralvar]}}
+    // expected-error-re@+1 {{change type of variable 'literal' from constant character array ('const sal_Unicode{{ ?}}[3]') to OUStringLiteral [loplugin:stringliteralvar]}}
     static sal_Unicode const literal[] = { 'f', 'o', 'o' };
     // expected-note@+1 {{first passed into a 'rtl::OUString' constructor here [loplugin:stringliteralvar]}}
     f(OUString(literal, 3));
@@ -97,7 +97,7 @@ void f10()
 
 void f11(int nStreamType)
 {
-    // expected-error@+1 {{change type of variable 'sDocumentType' from constant character array ('const char [4]') to OUStringLiteral, and make it static [loplugin:stringliteralvar]}}
+    // expected-error-re@+1 {{change type of variable 'sDocumentType' from constant character array ('const char{{ ?}}[4]') to OUStringLiteral, and make it static [loplugin:stringliteralvar]}}
     const char sDocumentType[] = "foo";
     OUString sStreamType;
     switch (nStreamType)
