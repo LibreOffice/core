@@ -283,6 +283,7 @@ public:
     void GatherRefFields(std::vector<SwGetRefField*>& rvRFields, const sal_uInt16 nTyp);
     void GatherFields(std::vector<SwFormatField*>& rvFormatFields, bool bCollectOnlyInDocNodes=true) const;
     void GatherDdeTables(std::vector<SwDDETable*>& rvTables) const;
+    virtual void UpdateFields();
 };
 
 /** Base class of all fields.
