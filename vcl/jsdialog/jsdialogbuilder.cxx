@@ -983,6 +983,8 @@ void JSNotebook::set_current_page(int nPage)
 
     SalInstanceNotebook::set_current_page(nPage);
     sendFullUpdate(bForce);
+
+    m_aEnterPageHdl.Call(get_current_page_ident());
 }
 
 void JSNotebook::set_current_page(const OString& rIdent)
@@ -994,6 +996,8 @@ void JSNotebook::set_current_page(const OString& rIdent)
 
     SalInstanceNotebook::set_current_page(rIdent);
     sendFullUpdate(bForce);
+
+    m_aEnterPageHdl.Call(get_current_page_ident());
 }
 
 void JSNotebook::remove_page(const OString& rIdent)
