@@ -70,6 +70,7 @@
 #include <frameformats.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/svdundo.hxx>
+#include <viewimp.hxx>
 
 using namespace ::com::sun::star;
 
@@ -708,6 +709,123 @@ namespace {
     }
 }
 
+namespace {
+    bool lcl_PasteFlyOrDrawFormat(SwPaM& rPaM, SwFrameFormat* pCpyFormat, SwFEShell& rSh)
+    {
+        auto& rImp = *rSh.Imp();
+        auto& rDoc = *rSh.GetDoc();
+        auto& rDrawView = *rImp.GetDrawView();
+        if(rDrawView.IsGroupEntered() &&
+           RES_DRAWFRMFMT == pCpyFormat->Which() &&
+           (RndStdIds::FLY_AS_CHAR != pCpyFormat->GetAnchor().GetAnchorId()))
+        {
+            const SdrObject* pSdrObj = pCpyFormat->FindSdrObject();
+            if(pSdrObj)
+            {
+                SdrObject* pNew = rDoc.CloneSdrObj(*pSdrObj, false, false);
+                // Insert object sets any anchor position to 0.
+                // Therefore we calculate the absolute position here
+                // and after the insert the anchor of the object
+                // is set to the anchor of the group object.
+                tools::Rectangle aSnapRect = pNew->GetSnapRect();
+                if(pNew->GetAnchorPos().X() || pNew->GetAnchorPos().Y())
+                {
+                    const Point aPoint(0, 0);
+                    // OD 2004-04-05 #i26791# - direct drawing object
+                    // positioning for group members
+                    pNew->NbcSetAnchorPos(aPoint);
+                    pNew->NbcSetSnapRect(aSnapRect);
+                }
+
+                rDrawView.InsertObjectAtView(pNew, *rImp.GetPageView());
+
+                Point aGrpAnchor(0, 0);
+                SdrObjList* pList = pNew->getParentSdrObjListFromSdrObject();
+                if(pList)
+                {
+                    SdrObjGroup* pOwner(dynamic_cast<SdrObjGroup*>(pList->getSdrObjectFromSdrObjList()));
+
+                    if(nullptr != pOwner)
+                        aGrpAnchor = pOwner->GetAnchorPos();
+                }
+
+                // OD 2004-04-05 #i26791# - direct drawing object
+                // positioning for group members
+                pNew->NbcSetAnchorPos(aGrpAnchor);
+                pNew->SetSnapRect(aSnapRect);
+                return true;
+            }
+        }
+        SwFormatAnchor aAnchor(pCpyFormat->GetAnchor());
+        if ((RndStdIds::FLY_AT_PARA == aAnchor.GetAnchorId()) ||
+            (RndStdIds::FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
+            (RndStdIds::FLY_AS_CHAR == aAnchor.GetAnchorId()))
+        {
+            SwPosition* pPos = rPaM.GetPoint();
+            // allow shapes (no controls) in header/footer
+            if(RES_DRAWFRMFMT == pCpyFormat->Which() && rDoc.IsInHeaderFooter(pPos->nNode))
+            {
+                const SdrObject *pCpyObj = pCpyFormat->FindSdrObject();
+                if(pCpyObj && CheckControlLayer(pCpyObj))
+                    return true;
+            }
+            else if(pCpyFormat->Which() == RES_FLYFRMFMT && IsInTextBox(pCpyFormat))
+            {
+                // This is a fly frame which is anchored in a TextBox, ignore it as
+                // it's already copied as part of copying the content of the
+                // TextBox.
+                return true;
+            }
+            // Ignore TextBoxes, they are already handled in sw::DocumentLayoutManager::CopyLayoutFormat().
+            if(SwTextBoxHelper::isTextBox(pCpyFormat, RES_FLYFRMFMT))
+                return true;
+            aAnchor.SetAnchor(pPos);
+        }
+        else if(RndStdIds::FLY_AT_PAGE == aAnchor.GetAnchorId())
+        {
+            aAnchor.SetPageNum(rSh.GetPhyPageNum());
+        }
+        else if(RndStdIds::FLY_AT_FLY == aAnchor.GetAnchorId())
+        {
+            Point aPt;
+            (void)lcl_SetAnchor(*rPaM.GetPoint(), rPaM.GetNode(), nullptr, aPt, rSh, aAnchor, aPt, false);
+        }
+
+        SwFrameFormat* pNew = rDoc.getIDocumentLayoutAccess().CopyLayoutFormat(*pCpyFormat, aAnchor, true, true);
+
+        if(!pNew)
+            return true;
+        switch(pNew->Which())
+        {
+            case RES_FLYFRMFMT:
+            {
+                assert(dynamic_cast<SwFlyFrameFormat*>(pNew));
+                const Point aPt(rSh.GetCursorDocPos());
+                SwFlyFrame* pFlyFrame = static_cast<SwFlyFrameFormat*>(pNew)->GetFrame(&aPt);
+                if(pFlyFrame)
+                    rSh.SelectFlyFrame(*pFlyFrame);
+                return false;
+            }
+            case RES_DRAWFRMFMT:
+            {
+                assert(dynamic_cast<SwDrawFrameFormat*>(pNew));
+                SwDrawFrameFormat* pDrawFormat = static_cast<SwDrawFrameFormat*>(pNew);
+                // #i52780# - drawing object has to be made visible on paste.
+                pDrawFormat->CallSwClientNotify(sw::DrawFrameFormatHint(sw::DrawFrameFormatHintId::PREPPASTING));
+                SdrObject* pObj = pDrawFormat->FindSdrObject();
+                rDrawView.MarkObj(pObj, rDrawView.GetSdrPageView());
+                // #i47455# - notify draw frame format
+                // that position attributes are already set.
+                pDrawFormat->PosAttrSet();
+                break;
+            }
+            default:
+                SAL_WARN("sw.core", "unknown fly type");
+        }
+        return true;
+    }
+}
+
 bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
 {
     CurrShell aCurr( this );
@@ -912,136 +1030,18 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
 
                 break;      // exit the "while-loop"
             }
-            else if( *aCpyPam.GetPoint() == *aCpyPam.GetMark() &&
-                 !rClpDoc.GetSpzFrameFormats()->empty() )
+            else if(*aCpyPam.GetPoint() == *aCpyPam.GetMark() && !rClpDoc.GetSpzFrameFormats()->empty())
             {
                 // we need a DrawView
-                if( !Imp()->GetDrawView() )
+                if(!Imp()->GetDrawView())
                     MakeDrawView();
-
-                for ( auto pCpyFormat : *rClpDoc.GetSpzFrameFormats() )
-                {
-                    bool bInsWithFormat = true;
-
-                    if( Imp()->GetDrawView()->IsGroupEntered() &&
-                        RES_DRAWFRMFMT == pCpyFormat->Which() &&
-                        (RndStdIds::FLY_AS_CHAR != pCpyFormat->GetAnchor().GetAnchorId()) )
-                    {
-                        const SdrObject* pSdrObj = pCpyFormat->FindSdrObject();
-                        if( pSdrObj )
-                        {
-                            SdrObject* pNew = GetDoc()->CloneSdrObj( *pSdrObj,
-                                                            false, false );
-
-                            // Insert object sets any anchor position to 0.
-                            // Therefore we calculate the absolute position here
-                            // and after the insert the anchor of the object
-                            // is set to the anchor of the group object.
-                            tools::Rectangle aSnapRect = pNew->GetSnapRect();
-                            if( pNew->GetAnchorPos().X() || pNew->GetAnchorPos().Y() )
-                            {
-                                const Point aPoint( 0, 0 );
-                                // OD 2004-04-05 #i26791# - direct drawing object
-                                // positioning for group members
-                                pNew->NbcSetAnchorPos( aPoint );
-                                pNew->NbcSetSnapRect( aSnapRect );
-                            }
-
-                            Imp()->GetDrawView()->InsertObjectAtView( pNew, *Imp()->GetPageView() );
-
-                            Point aGrpAnchor( 0, 0 );
-                            SdrObjList* pList = pNew->getParentSdrObjListFromSdrObject();
-                            if ( pList )
-                            {
-                                SdrObjGroup* pOwner(dynamic_cast< SdrObjGroup* >(pList->getSdrObjectFromSdrObjList()));
-
-                                if(nullptr != pOwner)
-                                {
-                                    aGrpAnchor = pOwner->GetAnchorPos();
-                                }
-                            }
-
-                            // OD 2004-04-05 #i26791# - direct drawing object
-                            // positioning for group members
-                            pNew->NbcSetAnchorPos( aGrpAnchor );
-                            pNew->SetSnapRect( aSnapRect );
-
-                            bInsWithFormat = false;
-                        }
-                    }
-
-                    if( bInsWithFormat  )
-                    {
-                        SwFormatAnchor aAnchor( pCpyFormat->GetAnchor() );
-                        if ((RndStdIds::FLY_AT_PARA == aAnchor.GetAnchorId()) ||
-                            (RndStdIds::FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
-                            (RndStdIds::FLY_AS_CHAR == aAnchor.GetAnchorId()))
-                        {
-                            SwPosition* pPos = rPaM.GetPoint();
-                            // allow shapes (no controls) in header/footer
-                            if( RES_DRAWFRMFMT == pCpyFormat->Which() &&
-                                GetDoc()->IsInHeaderFooter( pPos->nNode ) )
-                            {
-                                const SdrObject *pCpyObj = pCpyFormat->FindSdrObject();
-                                if (pCpyObj && CheckControlLayer(pCpyObj))
-                                    continue;
-                            }
-                            else if (pCpyFormat->Which() == RES_FLYFRMFMT && IsInTextBox(pCpyFormat))
-                            {
-                                // This is a fly frame which is anchored in a TextBox, ignore it as
-                                // it's already copied as part of copying the content of the
-                                // TextBox.
-                                continue;
-                            }
-
-                            // Ignore TextBoxes, they are already handled in sw::DocumentLayoutManager::CopyLayoutFormat().
-                            if (SwTextBoxHelper::isTextBox(pCpyFormat, RES_FLYFRMFMT))
-                                continue;
-
-                            aAnchor.SetAnchor( pPos );
-                        }
-                        else if ( RndStdIds::FLY_AT_PAGE == aAnchor.GetAnchorId() )
-                        {
-                            aAnchor.SetPageNum( GetPhyPageNum() );
-                        }
-                        else if( RndStdIds::FLY_AT_FLY == aAnchor.GetAnchorId() )
-                        {
-                            Point aPt;
-                            (void)lcl_SetAnchor( *rPaM.GetPoint(), rPaM.GetNode(),
-                                        nullptr, aPt, *this, aAnchor, aPt, false );
-                        }
-
-                        SwFrameFormat * pNew = GetDoc()->getIDocumentLayoutAccess().CopyLayoutFormat( *pCpyFormat, aAnchor, true, true );
-
-                        if( pNew )
-                        {
-                            if( RES_FLYFRMFMT == pNew->Which() )
-                            {
-                                const Point aPt( GetCursorDocPos() );
-                                SwFlyFrame* pFlyFrame = static_cast<SwFlyFrameFormat*>(pNew)->
-                                                        GetFrame( &aPt );
-                                if( pFlyFrame )
-                                    SelectFlyFrame( *pFlyFrame );
-                                // always pick the first FlyFrame only; the others
-                                // were copied to the clipboard via Fly in Fly
-                                break;
-                            }
-                            else
-                            {
-                                OSL_ENSURE( RES_DRAWFRMFMT == pNew->Which(), "New format.");
-                                // #i52780# - drawing object has to be made visible on paste.
-                                pNew->CallSwClientNotify(sw::DrawFrameFormatHint(sw::DrawFrameFormatHintId::PREPPASTING));
-                                SdrObject *pObj = pNew->FindSdrObject();
-                                SwDrawView  *pDV = Imp()->GetDrawView();
-                                pDV->MarkObj( pObj, pDV->GetSdrPageView() );
-                                // #i47455# - notify draw frame format
-                                // that position attributes are already set.
-                                if (SwDrawFrameFormat *pDrawFormat = dynamic_cast<SwDrawFrameFormat*>(pNew))
-                                    pDrawFormat->PosAttrSet();
-                            }
-                        }
-                    }
-                }
+                for(auto pCpyFormat: *rClpDoc.GetSpzFrameFormats())
+                    if(pCpyFormat->Which() != RES_FLYFRMFMT)
+                        lcl_PasteFlyOrDrawFormat(rPaM, pCpyFormat, *this);
+                for(auto pCpyFormat: *rClpDoc.GetSpzFrameFormats())
+                    if(pCpyFormat->Which() == RES_FLYFRMFMT)
+                        if(!lcl_PasteFlyOrDrawFormat(rPaM, pCpyFormat, *this))
+                            break;
             }
             else
             {
