@@ -592,7 +592,27 @@ void PPTShape::addShape(
                         if (!sURL.startsWith("#"))
                             meClickAction = ClickAction_DOCUMENT;
                         else
+                        {
                             sURL = sURL.copy(1);
+                            sal_Int32 nPageNumber = 0;
+                            static const OUStringLiteral sSlide = u"Slide ";
+                            if (sURL.match(sSlide))
+                                nPageNumber = sURL.copy(sSlide.getLength()).toInt32();
+                            if (nPageNumber)
+                            {
+                                Reference<drawing::XDrawPagesSupplier> xDPS(rFilterBase.getModel(),
+                                                                            uno::UNO_QUERY);
+                                Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages(),
+                                                                          uno::UNO_QUERY);
+                                if (nPageNumber <= xDrawPages->getCount())
+                                {
+                                    Reference<XDrawPage> xDrawPage;
+                                    xDrawPages->getByIndex(nPageNumber - 1) >>= xDrawPage;
+                                    Reference<container::XNamed> xNamed(xDrawPage, UNO_QUERY);
+                                    sURL = xNamed->getName();
+                                }
+                            }
+                        }
                         nPropertyCount += 1;
                     }
 
