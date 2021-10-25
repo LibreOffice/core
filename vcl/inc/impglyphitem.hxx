@@ -114,21 +114,20 @@ void GlyphItem::dropGlyph()
 
 class SalLayoutGlyphsImpl : public std::vector<GlyphItem>
 {
-    friend class GenericSalLayout;
-
 public:
-    SalLayoutGlyphsImpl* clone() const;
-    const rtl::Reference<LogicalFontInstance>& GetFont() const { return m_rFontInstance; }
-    bool IsValid() const;
-
-private:
-    rtl::Reference<LogicalFontInstance> m_rFontInstance;
-    SalLayoutFlags mnFlags = SalLayoutFlags::NONE;
-
     SalLayoutGlyphsImpl(LogicalFontInstance& rFontInstance)
         : m_rFontInstance(&rFontInstance)
     {
     }
+    SalLayoutGlyphsImpl* clone() const;
+    const rtl::Reference<LogicalFontInstance>& GetFont() const { return m_rFontInstance; }
+    bool IsValid() const;
+    void SetFlags(SalLayoutFlags flags) { mnFlags = flags; }
+    SalLayoutFlags GetFlags() const { return mnFlags; }
+
+private:
+    rtl::Reference<LogicalFontInstance> m_rFontInstance;
+    SalLayoutFlags mnFlags = SalLayoutFlags::NONE;
 };
 
 #endif // INCLUDED_VCL_IMPGLYPHITEM_HXX

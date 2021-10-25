@@ -268,7 +268,7 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
             if(!item.glyphId())
                 SetNeedFallback(rArgs, item.charPos(), item.IsRTLGlyph());
         // Some flags are set as a side effect of text layout, restore them here.
-        rArgs.mnFlags |= pGlyphs->mnFlags;
+        rArgs.mnFlags |= pGlyphs->GetFlags();
         return true;
     }
 
@@ -598,7 +598,7 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
 
     // Some flags are set as a side effect of text layout, save them here.
     if (rArgs.mnFlags & SalLayoutFlags::GlyphItemsOnly)
-        m_GlyphItems.mnFlags = rArgs.mnFlags;
+        m_GlyphItems.SetFlags(rArgs.mnFlags);
 
     return true;
 }
