@@ -507,6 +507,16 @@ public:
      */
     static css::lang::Locale convertToLocaleWithFallback( const OUString& rBcp47 );
 
+    /** Convert Locale to MS-LangID with fallback.
+
+        @param bResolveSystem
+               If TRUE, resolve an empty language tag denoting the system
+               locale to the real locale used and fallback.
+               If FALSE, return LANGUAGE_SYSTEM for such a tag and do not fallback.
+     */
+    static LanguageType convertToLanguageTypeWithFallback( const css::lang::Locale& rLocale,
+                                                           bool bResolveSystem = true );
+
     /** If rString represents a valid BCP 47 language tag.
 
         Never resolves an empty tag to the system locale, in fact an empty
