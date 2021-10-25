@@ -388,7 +388,7 @@ inline bool _assignData(
             return false;
         // self assignment:
         if (*static_cast<uno_Sequence **>(pSource) == *static_cast<uno_Sequence **>(pDest))
-            return true;
+            return _type_equals(pDestType, pSourceType); // E.g. static empty sequence may be shared
         if (_type_equals( pDestType, pSourceType ))
         {
             osl_atomic_increment( &(*static_cast<uno_Sequence **>(pSource))->nRefCount );
