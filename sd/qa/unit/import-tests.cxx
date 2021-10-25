@@ -122,6 +122,7 @@ public:
     virtual void setUp() override;
 
     void testDocumentLayout();
+    void testTdf144918();
     void testTdf144917();
     void testHyperlinkOnImage();
     void testTdf142645();
@@ -249,6 +250,7 @@ public:
     CPPUNIT_TEST_SUITE(SdImportTest);
 
     CPPUNIT_TEST(testDocumentLayout);
+    CPPUNIT_TEST(testTdf144918);
     CPPUNIT_TEST(testTdf144917);
     CPPUNIT_TEST(testHyperlinkOnImage);
     CPPUNIT_TEST(testTdf142645);
@@ -450,6 +452,32 @@ void SdImportTest::testDocumentLayout()
                 OUStringConcatenation(m_directories.getPathFromSrc( u"/sd/qa/unit/data/" ) + aFilesToCompare[i].sDump),
                 i == nUpdateMe );
     }
+}
+
+void SdImportTest::testTdf144918()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf144918.pptx"), PPTX);
+
+    uno::Reference< beans::XPropertySet > xShape1(getShapeFromPage(0, 1, xDocShRef));
+    uno::Reference<document::XEventsSupplier> xEventsSupplier1(xShape1, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xEvents1(xEventsSupplier1->getEvents());
+    uno::Sequence<beans::PropertyValue> props1;
+    xEvents1->getByName("OnClick") >>= props1;
+    comphelper::SequenceAsHashMap map1(props1);
+    auto iter1(map1.find("Bookmark"));
+    CPPUNIT_ASSERT_EQUAL(OUString("First slide"), iter1->second.get<OUString>());
+
+    uno::Reference< beans::XPropertySet > xShape2(getShapeFromPage(1, 1, xDocShRef));
+    uno::Reference<document::XEventsSupplier> xEventsSupplier2(xShape2, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xEvents2(xEventsSupplier2->getEvents());
+    uno::Sequence<beans::PropertyValue> props2;
+    xEvents2->getByName("OnClick") >>= props2;
+    comphelper::SequenceAsHashMap map2(props2);
+    auto iter2(map2.find("Bookmark"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Third slide"), iter2->second.get<OUString>());
+
+    xDocShRef->DoClose();
 }
 
 void SdImportTest::testTdf144917()
