@@ -1848,9 +1848,10 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
     SwShellCursor* pShellCursor = getShellCursor( true );
 
     do {
-        bool bAgainst;
-        do {
-            bAgainst = false;
+        bool bFinished = false;
+        while(!bFinished)
+        {
+            bFinished = true;
             std::pair<Point, bool> const tmp1(pShellCursor->GetPtPos(), false);
             pFrame = pShellCursor->GetContentNode()->getLayoutFrame(GetLayout(),
                         pShellCursor->GetPoint(), &tmp1);
@@ -1907,12 +1908,12 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
                     {
                         GetDoc()->GetDocShell()->SetReadOnlyUI( false );
                         CallChgLnk();       // notify UI!
+                        bFinished = false; // look for the right Frame again
                     }
-                    m_bAllProtect = false;
-                    bAgainst = true; // look for the right Frame again
+                    m_bAllProtect = bWasAllProtect;
                 }
             }
-        } while( bAgainst );
+        }
 
         SwCursorMoveState aTmpState( m_eMvState );
         aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();

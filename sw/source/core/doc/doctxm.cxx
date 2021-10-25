@@ -1186,7 +1186,12 @@ void SwTOXBaseSection::SwClientNotify(const SwModify& rModify, const SfxHint& rH
             return;
         if(pCNd->EndOfSectionIndex() >= pSectNd->EndOfSectionIndex())
             return;
-        pFindHint->m_rpContentFrame = pCNd->getLayoutFrame(&pFindHint->m_rLayout);
+        auto pContentFrame = pCNd->getLayoutFrame(&pFindHint->m_rLayout);
+        if(!pContentFrame)
+            return;
+        if(!pFindHint->m_isReadOnlyAvailable && pContentFrame->IsProtected())
+            return;
+        pFindHint->m_rpContentFrame = pContentFrame;
     } else
         SwTOXBase::SwClientNotify(rModify, rHint);
 }
