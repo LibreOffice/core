@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "552f3d10_794fbe45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-25T09:16:19Z",
+      "side": 1,
+      "message": "This does not fix the problem for me.\nI opened toctest3.odt from the bug report. When I right click on \"under stuff\" for example, then LO freezes still.",
+      "revId": "a40a98cd7814b28dead5e3543021cf3b80974fd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
