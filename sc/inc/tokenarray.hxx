@@ -262,7 +262,6 @@ public:
     OUString CreateString( sc::TokenStringContext& rCxt, const ScAddress& rPos ) const;
 
     void WrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nMaxRow );
-    bool NeedsWrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nMaxRow ) const;
 
     sal_Int32 GetWeight() const;
 

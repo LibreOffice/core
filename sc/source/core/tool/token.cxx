@@ -5321,41 +5321,6 @@ void ScTokenArray::WrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nM
     }
 }
 
-bool ScTokenArray::NeedsWrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nMaxRow ) const
-{
-    FormulaToken** p = pCode.get();
-    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
-    for (; p != pEnd; ++p)
-    {
-        switch ((*p)->GetType())
-        {
-            case svSingleRef:
-            {
-                formula::FormulaToken* pToken = *p;
-                ScSingleRefData& rRef = *pToken->GetSingleRef();
-                ScAddress aAbs = rRef.toAbs(*mxSheetLimits, rPos);
-                if (aAbs.Col() > nMaxCol || aAbs.Row() > nMaxRow)
-                   return true;
-            }
-            break;
-            case svDoubleRef:
-            {
-                formula::FormulaToken* pToken = *p;
-                ScComplexRefData& rRef = *pToken->GetDoubleRef();
-                ScRange aAbs = rRef.toAbs(*mxSheetLimits, rPos);
-                // Entire columns/rows are sticky.
-                if (    (!rRef.IsEntireCol() && (aAbs.aStart.Row() > nMaxRow || aAbs.aEnd.Row() > nMaxRow)) ||
-                        (!rRef.IsEntireRow() && (aAbs.aStart.Col() > nMaxCol || aAbs.aEnd.Col() > nMaxCol)))
-                    return true;
-            }
-            break;
-            default:
-                ;
-        }
-    }
-    return false;
-}
-
 sal_Int32 ScTokenArray::GetWeight() const
 {
     sal_Int32 nResult = 0;
