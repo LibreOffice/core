@@ -154,8 +154,8 @@ private:
 
             OUString sWorkingDir, sFileUrl;
             osl_getProcessWorkingDir(&sWorkingDir.pData);
-            osl::FileBase::getFileURLFromSystemPath(aFilename, sFileUrl);
-            osl::FileBase::getAbsoluteFileURL(sWorkingDir, sFileUrl, maFileName);
+            (void)osl::FileBase::getFileURLFromSystemPath(aFilename, sFileUrl);
+            (void)osl::FileBase::getAbsoluteFileURL(sWorkingDir, sFileUrl, maFileName);
 
             uno::Reference<uno::XComponentContext> xComponentContext
                 = ::cppu::defaultBootstrap_InitialComponentContext();
