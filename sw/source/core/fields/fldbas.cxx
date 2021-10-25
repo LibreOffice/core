@@ -215,6 +215,11 @@ void SwFieldType::GatherDdeTables(std::vector<SwDDETable*>& rvTables) const
     CallSwClientNotify(sw::GatherDdeTablesHint(rvTables));
 }
 
+void SwFieldType::UpdateFields()
+{
+    CallSwClientNotify(sw::LegacyModifyHint(nullptr, nullptr));
+};
+
 void SwFieldTypes::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwFieldTypes"));

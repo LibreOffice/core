@@ -386,51 +386,21 @@ void DocumentFieldsManager::RemoveFieldType(size_t nField)
 }
 
 // All have to be re-evaluated.
-void DocumentFieldsManager::UpdateFields( bool bCloseDB )
+void DocumentFieldsManager::UpdateFields(bool bCloseDB)
 {
-    // Call Modify() for every field type,
-    // dependent SwTextField get notified ...
+    // Tell all types to update their fields
+    for(auto const& pFieldType: *mpFieldTypes)
+        pFieldType->UpdateFields();
 
-    for( auto const & pFieldType : *mpFieldTypes )
-    {
-        switch( pFieldType->Which() )
-        {
-            // Update table fields second to last
-            // Update references last
-        case SwFieldIds::GetRef:
-        case SwFieldIds::Table:
-        case SwFieldIds::Database:
-        case SwFieldIds::JumpEdit:
-        case SwFieldIds::RefPageSet:     // are never expanded!
-            break;
-
-        case SwFieldIds::Dde:
-        {
-            assert(dynamic_cast<SwDDEFieldType*>(pFieldType.get()));
-            auto pDDEFieldType = static_cast<SwDDEFieldType*>(pFieldType.get());
-            pDDEFieldType->UpdateDDE(false);
-            break;
-        }
-        case SwFieldIds::GetExp:
-        case SwFieldIds::SetExp:
-        case SwFieldIds::HiddenText:
-        case SwFieldIds::HiddenPara:
-            // Expression fields are treated separately
-            break;
-        default:
-            pFieldType->CallSwClientNotify(sw::LegacyModifyHint(nullptr, nullptr));
-        }
-    }
-
-    if( !IsExpFieldsLocked() )
-        UpdateExpFields( nullptr, false );      // update expression fields
+    if(!IsExpFieldsLocked())
+        UpdateExpFields(nullptr, false); // update expression fields
 
     // Tables
     UpdateTableFields(nullptr);
 
     // References
     UpdateRefFields();
-    if( bCloseDB )
+    if(bCloseDB)
     {
 #if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         m_rDoc.GetDBManager()->CloseAll();

@@ -72,6 +72,7 @@ class SAL_DLLPUBLIC_RTTI SwGetExpFieldType final : public SwValueFieldType
 public:
     SwGetExpFieldType(SwDoc* pDoc);
     virtual std::unique_ptr<SwFieldType> Copy() const override;
+    virtual void UpdateFields() override {};
 
     /** Overlay, because get-field cannot be changed and therefore
      does not need to be updated. Update at changing of set-values! */
@@ -180,8 +181,9 @@ public:
     void SetOutlineLvl( sal_uInt8 n )           { m_nLevel = n; }
     void SetChapter(SwSetExpField& rField, const SwNode& rNd, SwRootFrame const* pLayout);
 
-    virtual void        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual void        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual void QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual void PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual void UpdateFields() override {};
 };
 
 inline void SwSetExpFieldType::SetType( sal_uInt16 nTyp )
@@ -368,6 +370,7 @@ class SwTableFieldType final : public SwValueFieldType
 public:
     SwTableFieldType(SwDoc* pDocPtr);
     virtual std::unique_ptr<SwFieldType> Copy() const override;
+    virtual void UpdateFields() override {};
 };
 
 class SwTableField final : public SwValueField, public SwTableFormula

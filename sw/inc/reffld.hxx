@@ -71,6 +71,7 @@ class SAL_DLLPUBLIC_RTTI SwGetRefFieldType final : public SwFieldType
 public:
     SwGetRefFieldType(SwDoc& rDoc );
     virtual std::unique_ptr<SwFieldType> Copy() const override;
+    virtual void UpdateFields() override {};
 
     SwDoc&                  GetDoc() const { return m_rDoc; }
 
