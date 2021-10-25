@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55979599_a9318eda",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-25T07:15:45Z",
+      "side": 1,
+      "message": "Use of `-dumpversion` was introduced with \u003chttps://git.libreoffice.org/core/+/aeddfb61372b22cff733c795d4a0259abf8f0096%5E!/\u003e \"Merge changes from OO642C (1.44 -\u003e 1.44.2.5)\" in 2002.  Maybe there wasn\u0027t even a `-dumpfullversion` yet back then.",
+      "revId": "09f88a7e54ea9fb86df7dd41f16e523fc946a02f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
