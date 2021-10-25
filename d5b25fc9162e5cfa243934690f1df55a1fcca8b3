@@ -123,6 +123,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "27af551f_4700369d",
+        "filename": "svl/source/numbers/zforlist.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3356,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-25T04:43:22Z",
+      "side": 1,
+      "message": "Yes, minimizing change is one of my primary reasons for un-touching.",
+      "parentUuid": "054516f9_0599a53c",
+      "revId": "d5b25fc9162e5cfa243934690f1df55a1fcca8b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69127979_aa899533",
@@ -189,6 +207,24 @@
       "writtenOn": "2021-10-23T13:07:14Z",
       "side": 1,
       "message": "The entire new code should be moved before the #if 0 block to keep that original intention.",
+      "revId": "d5b25fc9162e5cfa243934690f1df55a1fcca8b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02731e6e_2ff90d23",
+        "filename": "sw/source/core/table/swtable.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2350,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-25T04:43:22Z",
+      "side": 1,
+      "message": "Based on my added comments, below the block seemed better.",
+      "parentUuid": "17d154d6_bd2aa4c3",
       "revId": "d5b25fc9162e5cfa243934690f1df55a1fcca8b3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }

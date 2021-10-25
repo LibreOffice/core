@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "409bc0e2_67c07547",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-25T04:43:22Z",
+      "side": 1,
+      "message": "Doing this is going to break the work-flow of someone in this kind of a situation.\n-current content is text, but want to put in currency.\n-first formats the column as currency so their input looks nice.\n-starts replacing text with numbers\n\nPreviously, this would have worked very nicely (as long as they replaced everything before closing. Now they will have to enter all of the numbers before changing to currency format. So data entry will seem poorer. Of course, the easy workaround would be to delete the selected text before setting formatting.",
+      "revId": "fcc5de9c1f8296bfb8fedb9e8a3fffa9f92166a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
