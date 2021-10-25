@@ -71,8 +71,8 @@ void MacabTable::refreshColumns()
 
         if (xResult.is())
         {
-        Reference< XRow > xRow(xResult, UNO_QUERY);
-        while (xResult->next())
+            Reference< XRow > xRow(xResult, UNO_QUERY);
+            while (xResult->next())
                 aVector.push_back(xRow->getString(4));
         }
     }
