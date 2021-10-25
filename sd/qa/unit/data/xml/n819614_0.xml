@@ -34,9 +34,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -97,12 +95,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -156,12 +150,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -215,12 +205,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -274,12 +260,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -337,12 +319,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -396,12 +374,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -455,12 +429,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -514,12 +484,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -573,12 +539,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -632,12 +594,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -691,12 +649,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -754,12 +708,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -813,12 +763,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -872,12 +818,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -931,12 +873,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -994,12 +932,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -1053,12 +987,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -1112,12 +1042,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -1171,12 +1097,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -1230,12 +1152,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -1289,12 +1207,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -1348,12 +1262,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -1407,12 +1317,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -1466,12 +1372,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -1525,12 +1427,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -1584,12 +1482,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -1647,12 +1541,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -1706,12 +1596,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -1765,12 +1651,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -1824,12 +1706,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -1883,12 +1761,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -1942,12 +1816,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -2001,12 +1871,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -2064,12 +1930,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -2123,12 +1985,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -2182,12 +2040,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -2241,12 +2095,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -2300,12 +2150,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -2359,12 +2205,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -2418,12 +2260,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -2477,12 +2315,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -2536,12 +2370,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -2595,12 +2425,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -2654,12 +2480,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -2717,12 +2539,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -2776,12 +2594,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -2835,12 +2649,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -2894,12 +2704,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -2953,12 +2759,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -3012,12 +2814,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -3071,12 +2869,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -3130,12 +2924,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -3189,12 +2979,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -3248,12 +3034,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -3307,12 +3089,8 @@
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
      </PropertyValue>
-     <PropertyValue name="Equations">
-      <Equations/>
-     </PropertyValue>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -3371,9 +3149,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -3435,9 +3211,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -3499,9 +3273,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -3563,9 +3335,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -3627,9 +3397,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -3691,9 +3459,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -3755,9 +3521,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -3819,9 +3583,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -3883,9 +3645,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -3947,9 +3707,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4011,9 +3769,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4075,9 +3831,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4139,9 +3893,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4203,9 +3955,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4267,9 +4017,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4331,9 +4079,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4395,9 +4141,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4459,9 +4203,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4523,9 +4265,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4587,9 +4327,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4651,9 +4389,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4715,9 +4451,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4779,9 +4513,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4843,9 +4575,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4907,9 +4637,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4971,9 +4699,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5035,9 +4761,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5099,9 +4823,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5163,9 +4885,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5227,9 +4947,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5291,9 +5009,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5355,9 +5071,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5419,9 +5133,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5483,9 +5195,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5547,9 +5257,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5611,9 +5319,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5675,9 +5381,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5739,9 +5443,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5803,9 +5505,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5867,9 +5567,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5931,9 +5629,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5995,9 +5691,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -6059,9 +5753,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -6123,9 +5815,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -6187,9 +5877,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -6251,9 +5939,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -6315,9 +6001,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -6379,9 +6063,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -6443,9 +6125,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -6507,9 +6187,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -6571,9 +6249,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -6635,9 +6311,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -6699,9 +6373,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -6763,9 +6435,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -6827,9 +6497,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -6891,9 +6559,7 @@
       <AdjustmentValues/>
      </PropertyValue>
      <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Handles">
-      <Handles/>
-     </PropertyValue>
+     <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
