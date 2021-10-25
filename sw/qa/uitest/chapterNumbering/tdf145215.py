@@ -25,10 +25,10 @@ class Tdf145215(UITestCase):
                 xSubLevels = xDialog.getChild("sublevelsnf")
                 self.assertEqual(get_state_as_dict(xSubLevels)["Text"], "1")
 
-                # Check field value (there is only one field)
-                textfields = writer_doc.getTextFields()
-                for textfield in textfields:
-                    self.assertTrue(textfield.supportsService("com.sun.star.text.TextField.GetReference"))
-                    self.assertEqual(textfield.CurrentPresentation, "1.2.1(i)")
+            # Check field value (there is only one field)
+            textfields = writer_doc.getTextFields()
+            for textfield in textfields:
+                self.assertTrue(textfield.supportsService("com.sun.star.text.TextField.GetReference"))
+                self.assertEqual(textfield.CurrentPresentation, "1.2.1(i)")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
