@@ -35,43 +35,12 @@
 #include <sallayout.hxx>
 #include "svpcairotextrender.hxx"
 #include <impfontmetricdata.hxx>
-#include "SvpGraphicsBackend.hxx"
 
-#include <cairo.h>
-
-//Using formats that match cairo's formats. For android we patch cairo,
-//which is internal in that case, to swap the rgb components so that
-//cairo then matches the OpenGL GL_RGBA format so we can use it there
-//where we don't have GL_BGRA support.
-// SVP_24BIT_FORMAT is used to store 24-bit images in 3-byte pixels to conserve memory.
-#if defined(ANDROID) && !HAVE_FEATURE_ANDROID_LOK
-#   define SVP_24BIT_FORMAT (ScanlineFormat::N24BitTcRgb | ScanlineFormat::TopDown)
-#   define SVP_CAIRO_FORMAT (ScanlineFormat::N32BitTcRgba | ScanlineFormat::TopDown)
-#   define SVP_CAIRO_BLUE 1
-#   define SVP_CAIRO_GREEN 2
-#   define SVP_CAIRO_RED 0
-#   define SVP_CAIRO_ALPHA 3
-#elif defined OSL_BIGENDIAN
-#   define SVP_24BIT_FORMAT (ScanlineFormat::N24BitTcRgb | ScanlineFormat::TopDown)
-#   define SVP_CAIRO_FORMAT (ScanlineFormat::N32BitTcArgb | ScanlineFormat::TopDown)
-#   define SVP_CAIRO_BLUE 3
-#   define SVP_CAIRO_GREEN 2
-#   define SVP_CAIRO_RED 1
-#   define SVP_CAIRO_ALPHA 0
-#else
-#   define SVP_24BIT_FORMAT (ScanlineFormat::N24BitTcBgr | ScanlineFormat::TopDown)
-#   define SVP_CAIRO_FORMAT (ScanlineFormat::N32BitTcBgra | ScanlineFormat::TopDown)
-#   define SVP_CAIRO_BLUE 0
-#   define SVP_CAIRO_GREEN 1
-#   define SVP_CAIRO_RED 2
-#   define SVP_CAIRO_ALPHA 3
-#endif
+#include <headless/SvpGraphicsBackend.hxx>
+#include <headless/CairoCommon.hxx>
 
 struct BitmapBuffer;
 class FreetypeFont;
-typedef struct _cairo cairo_t;
-typedef struct _cairo_surface cairo_surface_t;
-typedef struct _cairo_user_data_key cairo_user_data_key_t;
 
 VCL_DLLPUBLIC void dl_cairo_surface_set_device_scale(cairo_surface_t *surface, double x_scale, double y_scale);
 VCL_DLLPUBLIC void dl_cairo_surface_get_device_scale(cairo_surface_t *surface, double *x_scale, double *y_scale);
@@ -90,7 +59,7 @@ struct VCL_DLLPUBLIC DamageHandler
 
 class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphicsAutoDelegateToImpl
 {
-    cairo_surface_t*               m_pSurface;
+    CairoCommon m_aCairoCommon;
     basegfx::B2IVector             m_aFrameSize;
     double                         m_fScale;
     Color                          m_aLineColor;
@@ -99,7 +68,7 @@ class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphicsAutoDelegateToImpl
 
 public:
     void setSurface(cairo_surface_t* pSurface, const basegfx::B2IVector& rSize);
-    cairo_surface_t* getSurface() const { return m_pSurface; }
+    cairo_surface_t* getSurface() const { return m_aCairoCommon.m_pSurface; }
     static cairo_user_data_key_t* getDamageKey();
 
     static void clipRegion(cairo_t* cr, const vcl::Region& rClipRegion);
