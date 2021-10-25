@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55a9b6e2_6bb1ca91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-10-25T11:15:03Z",
+      "side": 1,
+      "message": "backporting this because it just failed in a different 7.1 jenkins build:\nhttps://ci.libreoffice.org/job/gerrit_mac/104304/console",
+      "revId": "82d71201aa89c5bad36c7ea7d5bada85ba9ad41a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
