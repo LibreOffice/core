@@ -87,7 +87,9 @@ void SwFlyAtContentFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rH
 {
     auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
     if(!pLegacy)
+        SwFlyFrame::SwClientNotify(rMod, rHint);
         return;
+
     const SwFormatAnchor* pAnch = pLegacy->m_pNew ? GetAnchorFromPoolItem(*pLegacy->m_pNew) : nullptr;
     if(!pAnch)
     {
