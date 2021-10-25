@@ -2,6 +2,42 @@
 <!-- Generated with glade 3.38.2 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.20"/>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/symphony/spacing_very_tight.png</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/symphony/spacing_tight.png</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image3">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/symphony/spacing_normal.png</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/symphony/spacing_loose.png</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image5">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/symphony/spacing_very_loose.png</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image6">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/symphony/last_custom_common.png</property>
+    <property name="icon_size">1</property>
+  </object>
   <object class="GtkPopover" id="FontworkCharacterSpacingControl">
     <property name="can-focus">False</property>
     <property name="no-show-all">True</property>
@@ -20,7 +56,9 @@
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
+            <property name="image">image1</property>
             <property name="use-underline">True</property>
+            <property name="always-show-image">True</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -33,7 +71,9 @@
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
+            <property name="image">image2</property>
             <property name="use-underline">True</property>
+            <property name="always-show-image">True</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -46,7 +86,9 @@
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
+            <property name="image">image3</property>
             <property name="use-underline">True</property>
+            <property name="always-show-image">True</property>
             <property name="active">True</property>
           </object>
           <packing>
@@ -60,7 +102,9 @@
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
+            <property name="image">image4</property>
             <property name="use-underline">True</property>
+            <property name="always-show-image">True</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -73,7 +117,9 @@
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
+            <property name="image">image5</property>
             <property name="use-underline">True</property>
+            <property name="always-show-image">True</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -86,7 +132,9 @@
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
+            <property name="image">image6</property>
             <property name="use-underline">True</property>
+            <property name="always-show-image">True</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
