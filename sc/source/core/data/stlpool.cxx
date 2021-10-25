@@ -181,15 +181,13 @@ void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
 
 //                      Standard templates
 
-#define SCSTR(id)   ScResId(id)
-
 void ScStyleSheetPool::CopyStdStylesFrom( ScStyleSheetPool* pSrcPool )
 {
     //  Copy Default styles
 
-    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_STANDARD),     SfxStyleFamily::Para );
-    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_STANDARD),     SfxStyleFamily::Page );
-    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_REPORT),       SfxStyleFamily::Page );
+    CopyStyleFrom( pSrcPool, ScResId(STR_STYLENAME_STANDARD),     SfxStyleFamily::Para );
+    CopyStyleFrom( pSrcPool, ScResId(STR_STYLENAME_STANDARD),     SfxStyleFamily::Page );
+    CopyStyleFrom( pSrcPool, ScResId(STR_STYLENAME_REPORT),       SfxStyleFamily::Page );
 }
 
 static void lcl_CheckFont( SfxItemSet& rSet, LanguageType eLang, DefaultFontType nFontType, sal_uInt16 nItemId )
@@ -295,7 +293,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     // Footer:
     // [empty][Page \STR_PAGE\][empty]
 
-    aStr = SCSTR( STR_PAGE ) + " ";
+    aStr = ScResId( STR_PAGE ) + " ";
     aEdEngine.SetTextCurrentDefaults( aStr );
     nStrLen = aStr.getLength();
     aEdEngine.QuickInsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(0,nStrLen,0,nStrLen) );
@@ -307,7 +305,7 @@ void ScStyleSheetPool::CreateStandardStyles()
 
     // 2. Report
 
-    pSheet = static_cast<ScStyleSheet*>( &Make( SCSTR( STR_STYLENAME_REPORT ),
+    pSheet = static_cast<ScStyleSheet*>( &Make( ScResId( STR_STYLENAME_REPORT ),
                                     SfxStyleFamily::Page,
                                     SfxStyleSearchBits::ScStandard ) );
     pSet = &pSheet->GetItemSet();
@@ -360,7 +358,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     // Footer:
     // [empty][Page: \PAGE\ / \PAGE\][empty]
 
-    aStr = SCSTR( STR_PAGE ) + " ";
+    aStr = ScResId( STR_PAGE ) + " ";
     nStrLen = aStr.getLength();
     aStr += " / ";
     sal_Int32 nStrLen2 = aStr.getLength();
