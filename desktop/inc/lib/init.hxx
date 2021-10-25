@@ -197,7 +197,7 @@ namespace desktop {
         std::vector<bool> m_updatedTypes; // index is type, value is if set
         struct PerViewIdData
         {
-            bool set; // value is if set
+            bool set = false; // value is if set
             int sourceViewId;
         };
         // Flat_map is used in preference to unordered_map because the map is accessed very often.
