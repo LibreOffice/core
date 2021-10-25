@@ -477,13 +477,17 @@ private:
     std::unique_ptr<weld::RadioButton> mxVeryLoose;
     std::unique_ptr<weld::RadioButton> mxCustom;
     std::unique_ptr<weld::CheckButton> mxKernPairs;
+    sal_Int32 mnCharacterSpacing;
     bool mbSettingValue;
+    bool mbCommandDispatched;
 
     DECL_LINK( KernSelectHdl, weld::Toggleable&, void );
     DECL_LINK( SelectHdl, weld::Toggleable&, void );
+    DECL_LINK( MouseReleaseHdl, const MouseEvent&, bool );
 
     void    implSetCharacterSpacing( sal_Int32 nCharacterSpacing, bool bEnabled );
     void    implSetKernCharacterPairs(bool bKernOnOff, bool bEnabled);
+    void    DispatchSpacingDialog();
 };
 
 }
@@ -501,7 +505,9 @@ FontworkCharacterSpacingWindow::FontworkCharacterSpacingWindow(svt::PopupWindowC
     , mxVeryLoose(m_xBuilder->weld_radio_button("veryloose"))
     , mxCustom(m_xBuilder->weld_radio_button("custom"))
     , mxKernPairs(m_xBuilder->weld_check_button("kernpairs"))
+    , mnCharacterSpacing(0)
     , mbSettingValue(false)
+    , mbCommandDispatched(false)
 {
     mxVeryTight->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
     mxTight->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
@@ -509,6 +515,7 @@ FontworkCharacterSpacingWindow::FontworkCharacterSpacingWindow(svt::PopupWindowC
     mxLoose->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
     mxVeryLoose->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
     mxCustom->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
+    mxCustom->connect_mouse_release(LINK(this, FontworkCharacterSpacingWindow, MouseReleaseHdl));
 
     mxKernPairs->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, KernSelectHdl));
 
@@ -563,6 +570,8 @@ void FontworkCharacterSpacingWindow::implSetCharacterSpacing( sal_Int32 nCharact
             break;
     }
 
+    mnCharacterSpacing = nCharacterSpacing;
+
     mbSettingValue = bSettingValue;
 }
 
@@ -613,10 +622,23 @@ IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, KernSelectHdl, weld::Toggleable&
     aArgs[0].Value <<= bKernOnOff;
 
     mxControl->dispatchCommand( gsFontworkKernCharacterPairs, aArgs );
+    mbCommandDispatched = true;
 
     implSetKernCharacterPairs(bKernOnOff, true);
 
     mxControl->EndPopupMode();
+}
+
+void FontworkCharacterSpacingWindow::DispatchSpacingDialog()
+{
+    Sequence< PropertyValue > aArgs( 1 );
+    aArgs[0].Name = OUString(gsFontworkCharacterSpacing).copy(5);
+    aArgs[0].Value <<= mnCharacterSpacing;
+
+    rtl::Reference<svt::PopupWindowController> xControl(mxControl);
+    xControl->EndPopupMode();
+    xControl->dispatchCommand(".uno:FontworkCharacterSpacingDialog", aArgs);
+    mbCommandDispatched = true;
 }
 
 IMPL_LINK(FontworkCharacterSpacingWindow, SelectHdl, weld::Toggleable&, rButton, void)
@@ -627,16 +649,14 @@ IMPL_LINK(FontworkCharacterSpacingWindow, SelectHdl, weld::Toggleable&, rButton,
     if (mbSettingValue)
         return;
 
-    if (mxCustom->get_active())
-    {
-        Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = OUString(gsFontworkCharacterSpacing).copy(5);
-        aArgs[0].Value <<= sal_Int32(100);
+    // see MouseReleaseHdl for mbCommandDispatched check, there's no guarantee
+    // this toggle will happen before that mouse release though it does in
+    // practice for vcl and gtk
+    if (mbCommandDispatched)
+        return;
 
-        rtl::Reference<svt::PopupWindowController> xControl(mxControl);
-        xControl->EndPopupMode();
-        xControl->dispatchCommand(".uno:FontworkCharacterSpacingDialog", aArgs);
-    }
+    if (mxCustom->get_active())
+        DispatchSpacingDialog();
     else
     {
         sal_Int32 nCharacterSpacing;
@@ -656,11 +676,30 @@ IMPL_LINK(FontworkCharacterSpacingWindow, SelectHdl, weld::Toggleable&, rButton,
         aArgs[0].Value <<= nCharacterSpacing;
 
         mxControl->dispatchCommand( gsFontworkCharacterSpacing,  aArgs );
+        mbCommandDispatched = true;
 
         implSetCharacterSpacing( nCharacterSpacing, true );
     }
 
     mxControl->EndPopupMode();
+}
+
+IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, MouseReleaseHdl, const MouseEvent&, bool)
+{
+    /*
+     tdf#145296 if the "custom" radiobutton was presented preselected as
+     toggled on and the user clicked on it then there's no toggled signal sent
+     because the item was already toggled on and didn't change state.
+
+     So if that happens launch the custom spacing dialog explicitly here on
+     mouse release.
+    */
+    if (mxCustom->get_active() && !mbCommandDispatched)
+    {
+        DispatchSpacingDialog();
+        return true;
+    }
+    return false;
 }
 
 namespace {
