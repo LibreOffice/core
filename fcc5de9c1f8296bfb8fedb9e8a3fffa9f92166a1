@@ -16,6 +16,23 @@
       "message": "Doing this is going to break the work-flow of someone in this kind of a situation.\n-current content is text, but want to put in currency.\n-first formats the column as currency so their input looks nice.\n-starts replacing text with numbers\n\nPreviously, this would have worked very nicely (as long as they replaced everything before closing. Now they will have to enter all of the numbers before changing to currency format. So data entry will seem poorer. Of course, the easy workaround would be to delete the selected text before setting formatting.",
       "revId": "fcc5de9c1f8296bfb8fedb9e8a3fffa9f92166a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b163faa_c5402714",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-25T06:20:55Z",
+      "side": 1,
+      "message": "Yes this would break that workflow.\nHowever, I feel that this is OK. Not creating inconsistency *when applying formats* is IMO much more important than keeping this workflow. Keeping the current behavior is having such inconsistency - you have format different from data, and have to workaround that on filter level.\n\nBut in any case, please only consider my opinion as just a personal opinion, not something blocking you in any way :-) It\u0027s great how you deal with this!",
+      "revId": "fcc5de9c1f8296bfb8fedb9e8a3fffa9f92166a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
