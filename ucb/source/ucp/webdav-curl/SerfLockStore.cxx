@@ -135,8 +135,10 @@ void SerfLockStore::stopTicker(osl::ClearableMutexGuard & rGuard)
 
     rGuard.clear();
 
-    if (pTickerThread.is())
+    if (pTickerThread.is() && pTickerThread->getIdentifier() != osl::Thread::getCurrentIdentifier())
+    {
         pTickerThread->join(); // without m_aMutex locked (to prevent deadlock)
+    }
 }
 
 OUString SerfLockStore::getLockToken( const OUString& rLock )
@@ -228,6 +230,8 @@ void SerfLockStore::refreshLocks()
 {
     osl::MutexGuard aGuard( m_aMutex );
 
+    ::std::vector<OUString> authFailedLocks;
+
     for ( auto& rLockInfo : m_aLockInfoMap )
     {
         LockInfo & rInfo = rLockInfo.second;
@@ -241,19 +245,30 @@ void SerfLockStore::refreshLocks()
             {
                 // refresh the lock.
                 sal_Int32 nlastChanceToSendRefreshRequest = -1;
+                bool isAuthFailed(false);
                 if (rInfo.m_xSession->NonInteractive_LOCK(
-                         rLockInfo.first, nlastChanceToSendRefreshRequest))
+                         rLockInfo.first, nlastChanceToSendRefreshRequest,
+                         isAuthFailed))
                 {
                     rInfo.m_nLastChanceToSendRefreshRequest
                         = nlastChanceToSendRefreshRequest;
                 }
                 else
                 {
+                    if (isAuthFailed)
+                    {
+                        authFailedLocks.push_back(rLockInfo.first);
+                    }
                     // refresh failed. stop auto-refresh.
                     rInfo.m_nLastChanceToSendRefreshRequest = -1;
                 }
             }
         }
+    }
+
+    for (auto const& rLock : authFailedLocks)
+    {
+        removeLock(rLock);
     }
 }
 
