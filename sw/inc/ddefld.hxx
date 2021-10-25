@@ -99,6 +99,8 @@ public:
     void DecRefCnt() {  if( !--m_nRefCount && m_pDoc ) RefCntChgd(); }
 
     void SetCRLFDelFlag( bool bFlag )    { m_bCRLFFlag = bFlag; }
+    virtual void UpdateFields() override
+            { UpdateDDE(false); };
     void UpdateDDE(const bool bNotifyShells = true);
 };
 
@@ -115,11 +117,11 @@ public:
 
     /** Get parameter via types.
      Name cannot be changed. */
-    virtual OUString  GetPar1() const override;
+    virtual OUString GetPar1() const override;
 
     // Command
-    virtual OUString  GetPar2() const override;
-    virtual void    SetPar2(const OUString& rStr) override;
+    virtual OUString GetPar2() const override;
+    virtual void SetPar2(const OUString& rStr) override;
 };
 
 #endif // INCLUDED_SW_INC_DDEFLD_HXX

@@ -47,8 +47,9 @@ public:
     const OUString&     GetColumnName() const {return m_sColumn;}
     const SwDBData& GetDBData() const {return m_aDBData;}
 
-    virtual void        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual void        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual void QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual void PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual void UpdateFields() override {};
 };
 
 // Classes derived from SwFields. They overlay the expand-function.

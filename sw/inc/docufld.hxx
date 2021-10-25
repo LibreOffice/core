@@ -288,9 +288,10 @@ public:
     SwHiddenTextFieldType(bool bSetHidden = true);
 
     virtual std::unique_ptr<SwFieldType> Copy() const override;
+    virtual void UpdateFields() override {};
 
-    void                    SetHiddenFlag( bool bSetHidden );
-    bool             GetHiddenFlag() const { return m_bHidden; }
+    void SetHiddenFlag( bool bSetHidden );
+    bool GetHiddenFlag() const { return m_bHidden; }
 };
 
 class SW_DLLPUBLIC SwHiddenTextField final : public SwField
@@ -357,6 +358,7 @@ public:
     SwHiddenParaFieldType();
 
     virtual std::unique_ptr<SwFieldType> Copy() const override;
+    virtual void UpdateFields() override {};
 };
 
 class SwHiddenParaField final : public SwField
@@ -577,6 +579,7 @@ public:
     SwRefPageSetFieldType();
 
     virtual std::unique_ptr<SwFieldType> Copy() const override;
+    virtual void UpdateFields() override {};
 
 private:
     /// noop, there is nothing to update!
@@ -652,6 +655,7 @@ class SwJumpEditFieldType final : public SwFieldType
 public:
     SwJumpEditFieldType( SwDoc& rDoc );
     virtual std::unique_ptr<SwFieldType> Copy() const override;
+    virtual void UpdateFields() override {};
 
     SwCharFormat* GetCharFormat();
 };
