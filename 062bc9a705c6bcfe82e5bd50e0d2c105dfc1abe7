@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ebe13ea_c7b6a135",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-25T09:17:26Z",
+      "side": 1,
+      "message": "FTR: of course this would be split to several commits, starting with a commit adding stuff to asNonConstRange, modifying files by module, and finally removing the non-const operator. This huge single change is just to see the global scope.",
+      "revId": "062bc9a705c6bcfe82e5bd50e0d2c105dfc1abe7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
