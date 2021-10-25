@@ -543,12 +543,10 @@ void Test::testTdf103060()
     sExpected = "H"; // Heisei era
     checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
     sCode = "GG";
-    constexpr OUStringLiteral EXPECTED_G2 = u"\u5E73";
-    sExpected = EXPECTED_G2;
+    sExpected = u"\u5E73";
     checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
     sCode = "GGG";
-    constexpr OUStringLiteral EXPECTED_G3 = u"\u5E73\u6210";
-    sExpected = EXPECTED_G3;
+    sExpected = u"\u5E73\u6210";
     checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
 }
 
