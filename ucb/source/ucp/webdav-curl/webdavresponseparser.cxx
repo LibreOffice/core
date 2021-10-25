@@ -34,6 +34,7 @@
 #include <map>
 #include <unordered_map>
 #include <rtl/ref.hxx>
+#include <rtl/uri.hxx>
 #include <sal/log.hxx>
 
 using namespace com::sun::star;
@@ -551,7 +552,13 @@ namespace
                                 // href end, save it if we have whitespace
                                 if(whitespaceIsAvailable())
                                 {
-                                    maHref = mpContext->getWhiteSpace();
+                                    // Sharepoint 2016 workaround: apparently
+                                    // the result is an IRI (RFC 3987 possibly?)
+                                    // so try to encode the non-ASCII chars
+                                    // without changing anything else
+                                    maHref = ::rtl::Uri::encode(mpContext->getWhiteSpace(),
+                                            rtl_UriCharClassUric, rtl_UriEncodeKeepEscapes,
+                                            RTL_TEXTENCODING_UTF8);
                                 }
                                 break;
                             }
