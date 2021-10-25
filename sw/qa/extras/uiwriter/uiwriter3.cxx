@@ -257,8 +257,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132911)
     dispatchCommand(mxComponent, ".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
-    //FIXME: tdf#143815: Number of images should be 4 and not 8
-    CPPUNIT_ASSERT_EQUAL(8, getShapes());
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf61154)
