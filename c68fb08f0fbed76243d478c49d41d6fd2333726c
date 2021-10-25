@@ -71,6 +71,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "634dbd1e_0ed1e071",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2021-10-25T15:51:27Z",
+      "side": 1,
+      "message": "Stephan: I am not sure if you mean a particular case, or the whole idea in general...\n\nIf the latter - I think \"harmful\" is a bit of an exaggeration ;-)  The idea was that even though technically, the compiler knows the return value, and thus the \"auto\" is perfectly fine, the human does not, and while debugging, I often ended up searching each and every such a case in the header files.\n\nThat means - for me, it would be enough to warn / rewrite only those cases when auto is used for a return value of a function; but not for iteration or constructing.\n\nHaving said that, these days I feel I should probably rather switch to an IDE that can show me such info with just pointing the mouse; I\u0027ve switched for a couple of other languages, and never look back, hopefully VS CODE (or something) can do this for C++ \u0026 survives the LibreOffice size?",
+      "revId": "c68fb08f0fbed76243d478c49d41d6fd2333726c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c0d2bc58_e47f1916",
         "filename": "compilerplugins/clang/harmfulauto.cxx",
         "patchSetId": 1
