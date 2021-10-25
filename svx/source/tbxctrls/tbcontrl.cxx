@@ -3642,11 +3642,23 @@ namespace
                     if (rItem.getLength() > sLongestString.getLength())
                         sLongestString = rItem;
 
-                    const NfCurrencyEntry& aCurrencyEntry = rCurrencyTable[ rCurrencyIndex ];
-
                     bIsSymbol = nPos >= nLen;
 
-                    sal_uInt16 nDefaultFormat = aFormatter.GetCurrencyFormatStrings( aStringsDtor, aCurrencyEntry, bIsSymbol );
+                    sal_uInt16 nDefaultFormat;
+                    const NfCurrencyEntry& rCurrencyEntry = rCurrencyTable[ rCurrencyIndex ];
+                    if (rCurrencyIndex == 0)
+                    {
+                        // Stored with system locale, but we want the resolved
+                        // full LCID format string. For example
+                        // "[$$-409]#,##0.00" instead of "[$$]#,##0.00".
+                        NfCurrencyEntry aCurrencyEntry( rCurrencyEntry);
+                        aCurrencyEntry.SetLanguage( LanguageTag( aCurrencyEntry.GetLanguage()).getLanguageType());
+                        nDefaultFormat = aFormatter.GetCurrencyFormatStrings( aStringsDtor, aCurrencyEntry, bIsSymbol);
+                    }
+                    else
+                    {
+                        nDefaultFormat = aFormatter.GetCurrencyFormatStrings( aStringsDtor, rCurrencyEntry, bIsSymbol);
+                    }
                     const OUString& rFormatStr = aStringsDtor[ nDefaultFormat ];
                     m_aFormatEntries.push_back( rFormatStr );
                     if( rFormatStr == m_rSelectedFormat )
