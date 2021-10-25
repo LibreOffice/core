@@ -134,6 +134,7 @@ private:
     bool                mbFirstActivateDone;
 
     std::vector<std::unique_ptr<CertPath_UserData>> maUserData;
+    std::shared_ptr<CertificateViewer> mxCertificateViewer;
 
     std::unique_ptr<weld::TreeView> mxCertPathLB;
     std::unique_ptr<weld::TreeIter> mxScratchIter;
@@ -150,6 +151,7 @@ private:
 
 public:
     CertificateViewerCertPathTP(weld::Container* pParent, CertificateViewer* pDlg);
+    ~CertificateViewerCertPathTP();
     void ActivatePage();
 };
 
