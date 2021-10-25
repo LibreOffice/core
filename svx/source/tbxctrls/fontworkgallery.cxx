@@ -470,17 +470,17 @@ public:
     virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 private:
     rtl::Reference<svt::PopupWindowController> mxControl;
-    std::unique_ptr<weld::RadioButton> mxVeryTight;
-    std::unique_ptr<weld::RadioButton> mxTight;
-    std::unique_ptr<weld::RadioButton> mxNormal;
-    std::unique_ptr<weld::RadioButton> mxLoose;
-    std::unique_ptr<weld::RadioButton> mxVeryLoose;
-    std::unique_ptr<weld::RadioButton> mxCustom;
+    std::unique_ptr<weld::ToggleButton> mxVeryTight;
+    std::unique_ptr<weld::ToggleButton> mxTight;
+    std::unique_ptr<weld::ToggleButton> mxNormal;
+    std::unique_ptr<weld::ToggleButton> mxLoose;
+    std::unique_ptr<weld::ToggleButton> mxVeryLoose;
+    std::unique_ptr<weld::ToggleButton> mxCustom;
     std::unique_ptr<weld::CheckButton> mxKernPairs;
     bool mbSettingValue;
 
     DECL_LINK( KernSelectHdl, weld::Toggleable&, void );
-    DECL_LINK( SelectHdl, weld::Toggleable&, void );
+    DECL_LINK( SelectHdl, weld::Button&, void );
 
     void    implSetCharacterSpacing( sal_Int32 nCharacterSpacing, bool bEnabled );
     void    implSetKernCharacterPairs(bool bKernOnOff, bool bEnabled);
@@ -494,21 +494,21 @@ constexpr OUStringLiteral gsFontworkKernCharacterPairs(u".uno:FontworkKernCharac
 FontworkCharacterSpacingWindow::FontworkCharacterSpacingWindow(svt::PopupWindowController* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/fontworkcharacterspacingcontrol.ui", "FontworkCharacterSpacingControl")
     , mxControl(pControl)
-    , mxVeryTight(m_xBuilder->weld_radio_button("verytight"))
-    , mxTight(m_xBuilder->weld_radio_button("tight"))
-    , mxNormal(m_xBuilder->weld_radio_button("normal"))
-    , mxLoose(m_xBuilder->weld_radio_button("loose"))
-    , mxVeryLoose(m_xBuilder->weld_radio_button("veryloose"))
-    , mxCustom(m_xBuilder->weld_radio_button("custom"))
+    , mxVeryTight(m_xBuilder->weld_toggle_button("verytight"))
+    , mxTight(m_xBuilder->weld_toggle_button("tight"))
+    , mxNormal(m_xBuilder->weld_toggle_button("normal"))
+    , mxLoose(m_xBuilder->weld_toggle_button("loose"))
+    , mxVeryLoose(m_xBuilder->weld_toggle_button("veryloose"))
+    , mxCustom(m_xBuilder->weld_toggle_button("custom"))
     , mxKernPairs(m_xBuilder->weld_check_button("kernpairs"))
     , mbSettingValue(false)
 {
-    mxVeryTight->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
-    mxTight->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
-    mxNormal->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
-    mxLoose->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
-    mxVeryLoose->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
-    mxCustom->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
+    mxVeryTight->connect_clicked(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
+    mxTight->connect_clicked(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
+    mxNormal->connect_clicked(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
+    mxLoose->connect_clicked(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
+    mxVeryLoose->connect_clicked(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
+    mxCustom->connect_clicked(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
 
     mxKernPairs->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, KernSelectHdl));
 
@@ -542,7 +542,6 @@ void FontworkCharacterSpacingWindow::implSetCharacterSpacing( sal_Int32 nCharact
     mxNormal->set_active(false);
     mxLoose->set_active(false);
     mxVeryLoose->set_active(false);
-    mxCustom->set_active(true);
 
     switch(nCharacterSpacing)
     {
@@ -562,6 +561,12 @@ void FontworkCharacterSpacingWindow::implSetCharacterSpacing( sal_Int32 nCharact
             mxVeryLoose->set_active(true);
             break;
     }
+
+    mxCustom->set_active(!mxVeryTight->get_active() &&
+                         !mxTight->get_active() &&
+                         !mxNormal->get_active() &&
+                         !mxLoose->get_active() &&
+                         !mxVeryLoose->get_active());
 
     mbSettingValue = bSettingValue;
 }
@@ -619,10 +624,14 @@ IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, KernSelectHdl, weld::Toggleable&
     mxControl->EndPopupMode();
 }
 
-IMPL_LINK(FontworkCharacterSpacingWindow, SelectHdl, weld::Toggleable&, rButton, void)
+IMPL_LINK(FontworkCharacterSpacingWindow, SelectHdl, weld::Button&, rButton, void)
 {
-    if (!rButton.get_active())
-        return;
+    mxVeryTight->set_active(&rButton == mxVeryTight.get());
+    mxTight->set_active(&rButton == mxTight.get());
+    mxNormal->set_active(&rButton == mxNormal.get());
+    mxLoose->set_active(&rButton == mxLoose.get());
+    mxVeryLoose->set_active(&rButton == mxVeryLoose.get());
+    mxCustom->set_active(&rButton == mxCustom.get());
 
     if (mbSettingValue)
         return;
