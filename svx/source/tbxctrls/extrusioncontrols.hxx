@@ -104,11 +104,15 @@ private:
     FieldUnit   meUnit;
     double      mfDepth;
     bool        mbSettingValue;
+    bool        mbCommandDispatched;
 
     DECL_LINK( SelectHdl, weld::Toggleable&, void );
+    DECL_LINK( MouseReleaseHdl, const MouseEvent&, bool );
 
     void    implFillStrings( FieldUnit eUnit );
     void    implSetDepth( double fDepth );
+
+    void    DispatchDepthDialog();
 
 public:
     ExtrusionDepthWindow(svt::PopupWindowController* pControl, weld::Widget* pParentWindow);

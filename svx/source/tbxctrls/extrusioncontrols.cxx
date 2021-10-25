@@ -341,6 +341,7 @@ ExtrusionDepthWindow::ExtrusionDepthWindow(svt::PopupWindowController* pControl,
     , meUnit(FieldUnit::NONE)
     , mfDepth( -1.0 )
     , mbSettingValue(false)
+    , mbCommandDispatched(false)
 {
     mxDepth0->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
     mxDepth1->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
@@ -349,6 +350,7 @@ ExtrusionDepthWindow::ExtrusionDepthWindow(svt::PopupWindowController* pControl,
     mxDepth4->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
     mxInfinity->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
     mxCustom->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
+    mxCustom->connect_mouse_release(LINK(this, ExtrusionDepthWindow, MouseReleaseHdl));
 
     AddStatusListener( gsExtrusionDepth );
     AddStatusListener( gsMetricUnit );
@@ -443,23 +445,33 @@ void ExtrusionDepthWindow::statusChanged(
     }
 }
 
+void ExtrusionDepthWindow::DispatchDepthDialog()
+{
+    Sequence< PropertyValue > aArgs( 2 );
+    aArgs[0].Name = "Depth";
+    aArgs[0].Value <<= mfDepth;
+    aArgs[1].Name = "Metric";
+    aArgs[1].Value <<= static_cast<sal_Int32>( meUnit );
+
+    rtl::Reference<svt::PopupWindowController> xControl(mxControl);
+    xControl->EndPopupMode();
+    xControl->dispatchCommand(".uno:ExtrusionDepthDialog", aArgs);
+    mbCommandDispatched = true;
+}
+
 IMPL_LINK(ExtrusionDepthWindow, SelectHdl, weld::Toggleable&, rButton, void)
 {
     if (mbSettingValue || !rButton.get_active())
         return;
 
-    if (mxCustom->get_active())
-    {
-        Sequence< PropertyValue > aArgs( 2 );
-        aArgs[0].Name = "Depth";
-        aArgs[0].Value <<= mfDepth;
-        aArgs[1].Name = "Metric";
-        aArgs[1].Value <<= static_cast<sal_Int32>( meUnit );
+    // see MouseReleaseHdl for mbCommandDispatched check, there's no guarantee
+    // this toggle will happen before that mouse release though it does in
+    // practice for vcl and gtk
+    if (mbCommandDispatched)
+        return;
 
-        rtl::Reference<svt::PopupWindowController> xControl(mxControl);
-        xControl->EndPopupMode();
-        xControl->dispatchCommand(".uno:ExtrusionDepthDialog", aArgs);
-    }
+    if (mxCustom->get_active())
+        DispatchDepthDialog();
     else
     {
         double fDepth;
@@ -490,10 +502,29 @@ IMPL_LINK(ExtrusionDepthWindow, SelectHdl, weld::Toggleable&, rButton, void)
         aArgs[0].Value <<= fDepth;
 
         mxControl->dispatchCommand( gsExtrusionDepth,  aArgs );
+        mbCommandDispatched = true;
         implSetDepth( fDepth );
 
         mxControl->EndPopupMode();
     }
+}
+
+IMPL_LINK_NOARG(ExtrusionDepthWindow, MouseReleaseHdl, const MouseEvent&, bool)
+{
+    /*
+     tdf#145296 if the "custom" radiobutton was presented preselected as
+     toggled on and the user clicked on it then there's no toggled signal sent
+     because the item was already toggled on and didn't change state.
+
+     So if that happens launch the custom spacing dialog explicitly here on
+     mouse release.
+    */
+    if (mxCustom->get_active() && !mbCommandDispatched)
+    {
+        DispatchDepthDialog();
+        return true;
+    }
+    return false;
 }
 
 // ExtrusionDirectionControl
