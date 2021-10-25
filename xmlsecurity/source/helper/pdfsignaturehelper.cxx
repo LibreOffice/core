@@ -275,6 +275,11 @@ void AnalyizeSignatureStream(SvMemoryStream& rStream, std::vector<PageChecksum>&
         for (int i = 0; i < pPdfPage->getAnnotationCount(); ++i)
         {
             std::unique_ptr<vcl::pdf::PDFiumAnnotation> pPdfAnnotation = pPdfPage->getAnnotation(i);
+            if (!pPdfAnnotation)
+            {
+                SAL_WARN("xmlsecurity.helper", "Cannot get PDFiumAnnotation");
+                continue;
+            }
             vcl::pdf::PDFAnnotationSubType eType = pPdfAnnotation->getSubType();
             switch (eType)
             {
