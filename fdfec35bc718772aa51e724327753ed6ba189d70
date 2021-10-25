@@ -16,6 +16,24 @@
       "message": "\u003e Patch Set 2: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/98959/ : FAILURE\n\u003e \n\u003e Killed by the kill-wrapper, typically due to no stdout/-err activity during a specified timeout interval. ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/99517/ )\n\nI am not able to replicate this, it works fine for me locally.",
       "revId": "fdfec35bc718772aa51e724327753ed6ba189d70",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ce43b83_d6757925",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-10-25T08:56:50Z",
+      "side": 1,
+      "message": "The kill-wrapper script terminates the build when not done within a reasonable time. Just rebase in this case. But the patch seems to have merge conflicts right now.",
+      "parentUuid": "ed722b2d_035bf3aa",
+      "revId": "fdfec35bc718772aa51e724327753ed6ba189d70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
