@@ -127,8 +127,8 @@ public:
 
     virtual auto abort() -> void override;
 
-    auto NonInteractive_LOCK(OUString const& rURI, sal_Int32& o_rLastChanceToSendRefreshRequest)
-        -> bool;
+    auto NonInteractive_LOCK(OUString const& rURI, sal_Int32& o_rLastChanceToSendRefreshRequest,
+                             bool& o_rIsAuthFailed) -> bool;
     auto NonInteractive_UNLOCK(OUString const& rURI) -> void;
 };
 

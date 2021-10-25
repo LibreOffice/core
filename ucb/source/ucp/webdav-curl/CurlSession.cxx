@@ -2064,7 +2064,8 @@ auto CurlSession::UNLOCK(OUString const& rURIReference, DAVRequestEnvironment co
 }
 
 auto CurlSession::NonInteractive_LOCK(OUString const& rURI,
-                                      sal_Int32& o_rLastChanceToSendRefreshRequest) -> bool
+                                      sal_Int32& o_rLastChanceToSendRefreshRequest,
+                                      bool& o_rIsAuthFailed) -> bool
 {
     SAL_INFO("ucb.ucp.webdav.curl", "NonInteractive_LOCK: " << rURI);
 
@@ -2096,6 +2097,20 @@ auto CurlSession::NonInteractive_LOCK(OUString const& rURI,
         }
         SAL_INFO("ucb.ucp.webdav.curl", "NonInteractive_LOCK succeeded on " << rURI);
         return true;
+    }
+    catch (DAVException const& rException)
+    {
+        SAL_INFO("ucb.ucp.webdav.curl", "NonInteractive_LOCK failed on " << rURI);
+        switch (rException.getError())
+        {
+            case DAVException::DAV_HTTP_AUTH:
+            case DAVException::DAV_HTTP_NOAUTH:
+                o_rIsAuthFailed = true;
+                break;
+            default:
+                break;
+        }
+        return false;
     }
     catch (...)
     {
