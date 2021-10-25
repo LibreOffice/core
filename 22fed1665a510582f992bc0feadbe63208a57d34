@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bfb86f6_10bc3f32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-25T05:42:45Z",
+      "side": 1,
+      "message": "Andras - you might be interested in this for backporting. I think this applies to a lot of European languages (probably any language that uses a comma for the fractional part of the number), and I think it is inherited from OOo.\n\nThis bug was listed on the ESC minutes as a high priority bug for about a year.\n\nI don\u0027t intend to backport beyond 7.2.",
+      "revId": "22fed1665a510582f992bc0feadbe63208a57d34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
