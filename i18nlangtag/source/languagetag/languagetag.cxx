@@ -2813,6 +2813,16 @@ css::lang::Locale LanguageTag::convertToLocaleWithFallback( const OUString& rBcp
 
 
 // static
+LanguageType LanguageTag::convertToLanguageTypeWithFallback( const css::lang::Locale& rLocale, bool bResolveSystem )
+{
+    if (rLocale.Language.isEmpty() && !bResolveSystem)
+        return LANGUAGE_SYSTEM;
+
+    return LanguageTag( rLocale).makeFallback().getLanguageType();
+}
+
+
+// static
 bool LanguageTag::isValidBcp47( const OUString& rString, OUString* o_pCanonicalized, bool bDisallowPrivate )
 {
     bool bValid = false;
