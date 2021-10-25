@@ -2138,7 +2138,7 @@ void CallbackFlushHandler::enqueueUpdatedTypes()
     // First move data to local structures, so that callbacks don't possibly modify it.
     std::vector<bool> updatedTypes;
     std::swap(updatedTypes, m_updatedTypes);
-    std::unordered_map<int, std::vector<PerViewIdData>> updatedTypesPerViewId;
+    boost::container::flat_map<int, std::vector<PerViewIdData>> updatedTypesPerViewId;
     std::swap(updatedTypesPerViewId, m_updatedTypesPerViewId);
 
     // Some types must always precede other types, for example

@@ -17,6 +17,7 @@
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/variant.hpp>
+#include <boost/container/flat_map.hpp>
 
 #include <osl/thread.h>
 #include <rtl/ref.hxx>
@@ -199,7 +200,8 @@ namespace desktop {
             bool set; // value is if set
             int sourceViewId;
         };
-        std::unordered_map<int, std::vector<PerViewIdData>> m_updatedTypesPerViewId; // key is view, index is type
+        // Flat_map is used in preference to unordered_map because the map is accessed very often.
+        boost::container::flat_map<int, std::vector<PerViewIdData>> m_updatedTypesPerViewId; // key is view, index is type
 
         LibreOfficeKitDocument* m_pDocument;
         int m_viewId = -1; // view id of the associated SfxViewShell
