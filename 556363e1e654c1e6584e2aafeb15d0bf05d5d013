@@ -16,6 +16,24 @@
       "message": "Building on Thumbleweed with gcc11, I get this:\n\n\u003e cc1plus: error: unrecognized argument to \u0027-flto\u003d\u0027 option: \u0027thin\u0027\n\u003e cc1plus: note: \u0027-gsplit-dwarf\u0027 is not supported with LTO, disabling\n\nDo you have an idea how to fix?",
       "revId": "556363e1e654c1e6584e2aafeb15d0bf05d5d013",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89e57044_08949d7e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-10-25T08:44:55Z",
+      "side": 1,
+      "message": "Where exactly do you get it? The -flto\u003dthin option should be used only for Clang, and AFAICT is properly guarded by if.",
+      "parentUuid": "63aa70fe_fc420a8f",
+      "revId": "556363e1e654c1e6584e2aafeb15d0bf05d5d013",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
