@@ -1505,7 +1505,7 @@ void CallbackFlushHandler::setUpdatedTypePerViewId( int nType, int nViewId, int 
     assert(isUpdatedTypePerViewId(nType));
     std::vector<PerViewIdData>& types = m_updatedTypesPerViewId[ nViewId ];
     if( types.size() <= o3tl::make_unsigned( nType ))
-        types.resize( nType + 1 ); // new are default-constructed, i.e. false
+        types.resize( nType + 1 ); // new are default-constructed, i.e. 'set' is false
     types[ nType ] = PerViewIdData{ value, nSourceViewId };
 }
 
