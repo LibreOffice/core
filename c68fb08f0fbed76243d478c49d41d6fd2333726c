@@ -88,6 +88,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7d76e436_6fcecb12",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-10-25T16:17:31Z",
+      "side": 1,
+      "message": "\u003e while debugging, I often ended up searching each and every such a case in the header files.\n\nwhy not just use the \"ptype\" command in gdb?",
+      "parentUuid": "634dbd1e_0ed1e071",
+      "revId": "c68fb08f0fbed76243d478c49d41d6fd2333726c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c0d2bc58_e47f1916",
         "filename": "compilerplugins/clang/harmfulauto.cxx",
         "patchSetId": 1
