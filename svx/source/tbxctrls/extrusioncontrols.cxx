@@ -331,24 +331,23 @@ constexpr OUStringLiteral gsMetricUnit(     u".uno:MetricUnit"     );
 ExtrusionDepthWindow::ExtrusionDepthWindow(svt::PopupWindowController* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/depthwindow.ui", "DepthWindow")
     , mxControl(pControl)
-    , mxDepth0(m_xBuilder->weld_radio_button("depth0"))
-    , mxDepth1(m_xBuilder->weld_radio_button("depth1"))
-    , mxDepth2(m_xBuilder->weld_radio_button("depth2"))
-    , mxDepth3(m_xBuilder->weld_radio_button("depth3"))
-    , mxDepth4(m_xBuilder->weld_radio_button("depth4"))
-    , mxInfinity(m_xBuilder->weld_radio_button("infinity"))
-    , mxCustom(m_xBuilder->weld_radio_button("custom"))
+    , mxDepth0(m_xBuilder->weld_toggle_button("depth0"))
+    , mxDepth1(m_xBuilder->weld_toggle_button("depth1"))
+    , mxDepth2(m_xBuilder->weld_toggle_button("depth2"))
+    , mxDepth3(m_xBuilder->weld_toggle_button("depth3"))
+    , mxDepth4(m_xBuilder->weld_toggle_button("depth4"))
+    , mxInfinity(m_xBuilder->weld_toggle_button("infinity"))
+    , mxCustom(m_xBuilder->weld_toggle_button("custom"))
     , meUnit(FieldUnit::NONE)
     , mfDepth( -1.0 )
-    , mbSettingValue(false)
 {
-    mxDepth0->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
-    mxDepth1->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
-    mxDepth2->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
-    mxDepth3->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
-    mxDepth4->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
-    mxInfinity->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
-    mxCustom->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
+    mxDepth0->connect_clicked(LINK(this, ExtrusionDepthWindow, SelectHdl));
+    mxDepth1->connect_clicked(LINK(this, ExtrusionDepthWindow, SelectHdl));
+    mxDepth2->connect_clicked(LINK(this, ExtrusionDepthWindow, SelectHdl));
+    mxDepth3->connect_clicked(LINK(this, ExtrusionDepthWindow, SelectHdl));
+    mxDepth4->connect_clicked(LINK(this, ExtrusionDepthWindow, SelectHdl));
+    mxInfinity->connect_clicked(LINK(this, ExtrusionDepthWindow, SelectHdl));
+    mxCustom->connect_clicked(LINK(this, ExtrusionDepthWindow, SelectHdl));
 
     AddStatusListener( gsExtrusionDepth );
     AddStatusListener( gsMetricUnit );
@@ -363,10 +362,6 @@ void ExtrusionDepthWindow::implSetDepth( double fDepth )
 {
     mfDepth = fDepth;
 
-    bool bSettingValue = mbSettingValue;
-    mbSettingValue = true;
-
-    mxCustom->set_active(true);
     bool bIsMetric = IsMetric(meUnit);
     mxDepth0->set_active(fDepth == (bIsMetric ? aDepthListMM[0] : aDepthListInch[0]));
     mxDepth1->set_active(fDepth == (bIsMetric ? aDepthListMM[1] : aDepthListInch[1]));
@@ -374,8 +369,12 @@ void ExtrusionDepthWindow::implSetDepth( double fDepth )
     mxDepth3->set_active(fDepth == (bIsMetric ? aDepthListMM[3] : aDepthListInch[3]));
     mxDepth4->set_active(fDepth == (bIsMetric ? aDepthListMM[4] : aDepthListInch[4]));
     mxInfinity->set_active(fDepth >= 338666);
-
-    mbSettingValue = bSettingValue;
+    mxCustom->set_active(!mxDepth0->get_active() &&
+                         !mxDepth1->get_active() &&
+                         !mxDepth2->get_active() &&
+                         !mxDepth3->get_active() &&
+                         !mxDepth4->get_active() &&
+                         !mxInfinity->get_active());
 }
 
 void ExtrusionDepthWindow::implFillStrings( FieldUnit eUnit )
@@ -443,10 +442,15 @@ void ExtrusionDepthWindow::statusChanged(
     }
 }
 
-IMPL_LINK(ExtrusionDepthWindow, SelectHdl, weld::Toggleable&, rButton, void)
+IMPL_LINK(ExtrusionDepthWindow, SelectHdl, weld::Button&, rButton, void)
 {
-    if (mbSettingValue || !rButton.get_active())
-        return;
+    mxDepth0->set_active(&rButton == mxDepth0.get());
+    mxDepth1->set_active(&rButton == mxDepth1.get());
+    mxDepth2->set_active(&rButton == mxDepth2.get());
+    mxDepth3->set_active(&rButton == mxDepth3.get());
+    mxDepth4->set_active(&rButton == mxDepth4.get());
+    mxInfinity->set_active(&rButton == mxInfinity.get());
+    mxCustom->set_active(&rButton == mxCustom.get());
 
     if (mxCustom->get_active())
     {
