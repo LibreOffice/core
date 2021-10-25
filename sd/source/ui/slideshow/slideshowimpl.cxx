@@ -1872,9 +1872,9 @@ IMPL_LINK( SlideshowImpl, EventListenerHdl, VclSimpleEvent&, rSimpleEvent, void 
     case MediaCommand::Menu:
         if( !mnContextMenuEvent )
         {
-        if( mpShowWindow )
-            maPopupMousePos = mpShowWindow->GetPointerState().maPos;
-        mnContextMenuEvent = Application::PostUserEvent( LINK( this, SlideshowImpl, ContextMenuHdl ) );
+            if( mpShowWindow )
+                maPopupMousePos = mpShowWindow->GetPointerState().maPos;
+            mnContextMenuEvent = Application::PostUserEvent( LINK( this, SlideshowImpl, ContextMenuHdl ) );
         }
         break;
     case MediaCommand::VolumeDown:

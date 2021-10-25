@@ -530,34 +530,34 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
              */
             if(_propertyValue != nullptr)
             {
-            sal_Int32 i;
+                sal_Int32 i;
 
-            sal_Int32 multiLength = ABMultiValueCount(static_cast<ABMutableMultiValueRef>(const_cast<void *>(_propertyValue)));
-            CFStringRef multiLabel, localizedMultiLabel;
-            OUString multiLabelString;
-            OUString multiPropertyString;
-            OUString headerNameString;
-            ABPropertyType multiType = static_cast<ABPropertyType>(ABMultiValuePropertyType(static_cast<ABMutableMultiValueRef>(const_cast<void *>(_propertyValue))) - 0x100);
+                sal_Int32 multiLength = ABMultiValueCount(static_cast<ABMutableMultiValueRef>(const_cast<void *>(_propertyValue)));
+                CFStringRef multiLabel, localizedMultiLabel;
+                OUString multiLabelString;
+                OUString multiPropertyString;
+                OUString headerNameString;
+                ABPropertyType multiType = static_cast<ABPropertyType>(ABMultiValuePropertyType(static_cast<ABMutableMultiValueRef>(const_cast<void *>(_propertyValue))) - 0x100);
 
-            length = multiLength;
-            headerNames = new macabfield *[multiLength];
-            multiPropertyString = CFStringToOUString(_propertyName);
+                length = multiLength;
+                headerNames = new macabfield *[multiLength];
+                multiPropertyString = CFStringToOUString(_propertyName);
 
-            /* Go through each element, and - since each element is a scalar -
-             * just create a new macabfield for it.
-             */
-            for(i = 0; i < multiLength; i++)
-            {
-                multiLabel = ABMultiValueCopyLabelAtIndex(static_cast<ABMutableMultiValueRef>(const_cast<void *>(_propertyValue)), i);
-                localizedMultiLabel = ABCopyLocalizedPropertyOrLabel(multiLabel);
-                multiLabelString = CFStringToOUString(localizedMultiLabel);
-                CFRelease(multiLabel);
-                CFRelease(localizedMultiLabel);
-                headerNameString = multiPropertyString + ": " + fixLabel(multiLabelString);
-                headerNames[i] = new macabfield;
-                headerNames[i]->value = OUStringToCFString(headerNameString);
-                headerNames[i]->type = multiType;
-            }
+                /* Go through each element, and - since each element is a scalar -
+                 * just create a new macabfield for it.
+                 */
+                for(i = 0; i < multiLength; i++)
+                {
+                    multiLabel = ABMultiValueCopyLabelAtIndex(static_cast<ABMutableMultiValueRef>(const_cast<void *>(_propertyValue)), i);
+                    localizedMultiLabel = ABCopyLocalizedPropertyOrLabel(multiLabel);
+                    multiLabelString = CFStringToOUString(localizedMultiLabel);
+                    CFRelease(multiLabel);
+                    CFRelease(localizedMultiLabel);
+                    headerNameString = multiPropertyString + ": " + fixLabel(multiLabelString);
+                    headerNames[i] = new macabfield;
+                    headerNames[i]->value = OUStringToCFString(headerNameString);
+                    headerNames[i]->type = multiType;
+                }
             }
             break;
 
@@ -653,77 +653,77 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
              */
             if(_propertyValue != nullptr)
             {
-            /* Assume all keys are strings */
-            sal_Int32 numRecords = static_cast<sal_Int32>(CFDictionaryGetCount(static_cast<CFDictionaryRef>(_propertyValue)));
+                /* Assume all keys are strings */
+                sal_Int32 numRecords = static_cast<sal_Int32>(CFDictionaryGetCount(static_cast<CFDictionaryRef>(_propertyValue)));
 
-            /* The only method for getting info out of a CFDictionary, of both
-             * keys and values, is to all of them all at once, so these
-             * variables will hold them.
-             */
-            CFStringRef *dictKeys;
-            CFTypeRef *dictValues;
+                /* The only method for getting info out of a CFDictionary, of both
+                 * keys and values, is to all of them all at once, so these
+                 * variables will hold them.
+                 */
+                CFStringRef *dictKeys;
+                CFTypeRef *dictValues;
 
-            sal_Int32 i,j,k;
-            OUString dictKeyString, propertyNameString;
-            ABPropertyType dictType;
-            MacabHeader **dictHeaders = new MacabHeader *[numRecords];
-            OUString dictLabelString;
-            CFStringRef dictLabel, localizedDictKey;
+                sal_Int32 i,j,k;
+                OUString dictKeyString, propertyNameString;
+                ABPropertyType dictType;
+                MacabHeader **dictHeaders = new MacabHeader *[numRecords];
+                OUString dictLabelString;
+                CFStringRef dictLabel, localizedDictKey;
 
-            /* Get the keys and values */
-            dictKeys = static_cast<CFStringRef *>(malloc(sizeof(CFStringRef)*numRecords));
-            dictValues = static_cast<CFTypeRef *>(malloc(sizeof(CFTypeRef)*numRecords));
-            CFDictionaryGetKeysAndValues(static_cast<CFDictionaryRef>(_propertyValue), reinterpret_cast<const void **>(dictKeys), dictValues);
+                /* Get the keys and values */
+                dictKeys = static_cast<CFStringRef *>(malloc(sizeof(CFStringRef)*numRecords));
+                dictValues = static_cast<CFTypeRef *>(malloc(sizeof(CFTypeRef)*numRecords));
+                CFDictionaryGetKeysAndValues(static_cast<CFDictionaryRef>(_propertyValue), reinterpret_cast<const void **>(dictKeys), dictValues);
 
-            propertyNameString = CFStringToOUString(_propertyName);
+                propertyNameString = CFStringToOUString(_propertyName);
 
-            length = 0;
-            /* Go through each element - assuming that the key is a string but
-             * that the value could be anything. Since the value could be
-             * anything, we can't assume that it is scalar (it could even be
-             * another dictionary), so we attempt to get its type using
-             * the method getABTypeFromCFType and then run this method
-             * recursively on that element, storing the MacabHeader that
-             * results. Then, we just combine all of the MacabHeaders into
-             * one.
-             */
-            for(i = 0; i < numRecords; i++)
-            {
-                dictType = getABTypeFromCFType( CFGetTypeID(dictValues[i]) );
-                localizedDictKey = ABCopyLocalizedPropertyOrLabel(dictKeys[i]);
-                dictKeyString = CFStringToOUString(localizedDictKey);
-                dictLabelString = propertyNameString + ": " + fixLabel(dictKeyString);
-                dictLabel = OUStringToCFString(dictLabelString);
-                dictHeaders[i] = createHeaderForProperty(dictType, dictValues[i], dictLabel);
-                if (!dictHeaders[i])
-                    dictHeaders[i] = new MacabHeader();
-                length += dictHeaders[i]->getSize();
-                CFRelease(dictLabel);
-                CFRelease(localizedDictKey);
-            }
-
-            /* Combine all of the macabfields in each MacabHeader into the
-             * headerNames array, which (at the end of this method) is used
-             * to create the MacabHeader that is returned.
-             */
-            headerNames = new macabfield *[length];
-            for(i = 0, j = 0, k = 0; i < length; i++,k++)
-            {
-                while(dictHeaders[j]->getSize() == k)
+                length = 0;
+                /* Go through each element - assuming that the key is a string but
+                 * that the value could be anything. Since the value could be
+                 * anything, we can't assume that it is scalar (it could even be
+                 * another dictionary), so we attempt to get its type using
+                 * the method getABTypeFromCFType and then run this method
+                 * recursively on that element, storing the MacabHeader that
+                 * results. Then, we just combine all of the MacabHeaders into
+                 * one.
+                 */
+                for(i = 0; i < numRecords; i++)
                 {
-                    j++;
-                    k = 0;
+                    dictType = getABTypeFromCFType( CFGetTypeID(dictValues[i]) );
+                    localizedDictKey = ABCopyLocalizedPropertyOrLabel(dictKeys[i]);
+                    dictKeyString = CFStringToOUString(localizedDictKey);
+                    dictLabelString = propertyNameString + ": " + fixLabel(dictKeyString);
+                    dictLabel = OUStringToCFString(dictLabelString);
+                    dictHeaders[i] = createHeaderForProperty(dictType, dictValues[i], dictLabel);
+                    if (!dictHeaders[i])
+                        dictHeaders[i] = new MacabHeader();
+                    length += dictHeaders[i]->getSize();
+                    CFRelease(dictLabel);
+                    CFRelease(localizedDictKey);
                 }
 
-                headerNames[i] = dictHeaders[j]->copy(k);
-            }
+                /* Combine all of the macabfields in each MacabHeader into the
+                 * headerNames array, which (at the end of this method) is used
+                 * to create the MacabHeader that is returned.
+                 */
+                headerNames = new macabfield *[length];
+                for(i = 0, j = 0, k = 0; i < length; i++,k++)
+                {
+                    while(dictHeaders[j]->getSize() == k)
+                    {
+                        j++;
+                        k = 0;
+                    }
 
-            for(i = 0; i < numRecords; i++)
-                delete dictHeaders[i];
+                    headerNames[i] = dictHeaders[j]->copy(k);
+                }
 
-            delete [] dictHeaders;
-            free(dictKeys);
-            free(dictValues);
+                for(i = 0; i < numRecords; i++)
+                    delete dictHeaders[i];
+
+                delete [] dictHeaders;
+                free(dictKeys);
+                free(dictValues);
             }
             break;
 
