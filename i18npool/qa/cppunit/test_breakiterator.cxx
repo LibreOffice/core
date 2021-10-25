@@ -96,7 +96,7 @@ void TestBreakIterator::testLineBreaking()
 
     //See https://bugs.libreoffice.org/show_bug.cgi?id=49849
     {
-        constexpr OUStringLiteral aWord = u"\u05DE\u05D9\u05DC\u05D9\u05DD";
+        static constexpr OUStringLiteral aWord = u"\u05DE\u05D9\u05DC\u05D9\u05DD";
         OUString aTest(aWord + " " + aWord);
 
         aLocale.Language = "he";
