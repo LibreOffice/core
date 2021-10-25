@@ -1689,8 +1689,15 @@ auto CurlSession::PUT(OUString const& rURIReference,
     OUString const token(g_Init.LockStore.getLockToken(uri.GetURI()));
     if (!token.isEmpty())
     {
-        OString const utf8If("If: <" + OUStringToOString(rURIReference, RTL_TEXTENCODING_ASCII_US)
-                             + "> (<" + OUStringToOString(token, RTL_TEXTENCODING_ASCII_US) + ">)");
+        OString const utf8If("If: "
+        // disabled as Sharepoint 2013 workaround, it accepts only
+        // "No-Tag-List", see fed2984281a85a5a2f308841ec810f218c75f2ab
+#if 0
+                "<" + OUStringToOString(rURIReference, RTL_TEXTENCODING_ASCII_US)
+                             + "> "
+#endif
+                             "(<"
+                             + OUStringToOString(token, RTL_TEXTENCODING_ASCII_US) + ">)");
         pList.reset(curl_slist_append(pList.release(), utf8If.getStr()));
         if (!pList)
         {
