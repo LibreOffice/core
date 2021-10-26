@@ -26,6 +26,7 @@ class Tdf138531(UITestCase):
 
             self.xUITest.executeCommand(".uno:Copy")
 
+            # Work with both documents at the same time
             with self.ui_test.load_empty_file("writer") as writer_doc:
 
                 # Paste as DDE

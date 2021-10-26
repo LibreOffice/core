@@ -14,26 +14,26 @@ class tdf136011(UITestCase):
 
    def test_tdf136011(self):
 
-    xObjectNames = ['Object 1', 'Object 2']
-    xCategories = ['Test 1', 'Test 2', 'Test 3']
-    xSubCategories = [['A', 'B', 'C'], ['1', '2', '3']]
-    xColumnNames = ['A', 'B', 'C']
+        xObjectNames = ['Object 1', 'Object 2']
+        xCategories = ['Test 1', 'Test 2', 'Test 3']
+        xSubCategories = [['A', 'B', 'C'], ['1', '2', '3']]
+        xColumnNames = ['A', 'B', 'C']
 
-    # Test both charts
-    for i, name in enumerate(xObjectNames):
+        # Test both charts
+        for i, name in enumerate(xObjectNames):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf136011.ods")) as calc_doc:
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
+            with self.ui_test.load_file(get_url_for_data_file("tdf136011.ods")) as calc_doc:
+                xCalcDoc = self.xUITest.getTopFocusWindow()
+                gridwin = xCalcDoc.getChild("grid_window")
 
-            xExpectedResults = []
-            for category in xCategories:
-                for subCategory in xSubCategories[i]:
-                    xExpectedResults.append(category + ' ' + subCategory)
+                xExpectedResults = []
+                for category in xCategories:
+                    for subCategory in xSubCategories[i]:
+                        xExpectedResults.append(category + ' ' + subCategory)
 
-            gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": name}))
+                gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": name}))
 
-            self.xUITest.executeCommand(".uno:Copy")
+                self.xUITest.executeCommand(".uno:Copy")
 
             with self.ui_test.load_empty_file("calc") as calc_document:
                 xCalcDoc = self.xUITest.getTopFocusWindow()

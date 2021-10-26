@@ -32,23 +32,23 @@ class tdf62057(UITestCase):
 
         self.xUITest.executeCommand(".uno:Copy")
 
-        with self.ui_test.load_empty_file("calc") as calc_document:
+    with self.ui_test.load_empty_file("calc") as calc_document:
 
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = xCalcDoc.getChild("grid_window")
 
-            self.xUITest.executeCommand(".uno:Paste")
+        self.xUITest.executeCommand(".uno:Paste")
 
-            xData = calc_document.Sheets[0].Charts[0].getEmbeddedObject().Data
+        xData = calc_document.Sheets[0].Charts[0].getEmbeddedObject().Data
 
-            xNewDataMatrix = []
-            xNewDataMatrix.append([round(item[0], 5) for item in xData.Data])
-            xNewDataMatrix.append([round(item[1], 5) for item in xData.Data])
+        xNewDataMatrix = []
+        xNewDataMatrix.append([round(item[0], 5) for item in xData.Data])
+        xNewDataMatrix.append([round(item[1], 5) for item in xData.Data])
 
-            # Without the fix in place, this test would have failed with
-            # AssertionError: Lists differ: ['10m', '11v', '12m', '13m', '14m', '15v'] != ['55.3796', '35.0989']
-            self.assertEqual(xRowDescriptions, list(xData.RowDescriptions))
+        # Without the fix in place, this test would have failed with
+        # AssertionError: Lists differ: ['10m', '11v', '12m', '13m', '14m', '15v'] != ['55.3796', '35.0989']
+        self.assertEqual(xRowDescriptions, list(xData.RowDescriptions))
 
-            self.assertEqual(xDataMatrix, xNewDataMatrix)
+        self.assertEqual(xDataMatrix, xNewDataMatrix)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

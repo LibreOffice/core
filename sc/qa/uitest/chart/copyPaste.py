@@ -36,35 +36,35 @@ class CopyPaste(UITestCase):
 
         self.xUITest.executeCommand(".uno:Copy")
 
-        with self.ui_test.load_empty_file("calc") as calc_document:
+    with self.ui_test.load_empty_file("calc") as calc_document:
 
-            # Rename the sheet to match the same name as the first document
-            with self.ui_test.execute_dialog_through_command(".uno:RenameTable") as xDialog:
-                xname_entry = xDialog.getChild("name_entry")
+        # Rename the sheet to match the same name as the first document
+        with self.ui_test.execute_dialog_through_command(".uno:RenameTable") as xDialog:
+            xname_entry = xDialog.getChild("name_entry")
 
-                xname_entry.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-                xname_entry.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-                xname_entry.executeAction("TYPE", mkPropertyValues({"TEXT":"Sheet.1"}))
+            xname_entry.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+            xname_entry.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+            xname_entry.executeAction("TYPE", mkPropertyValues({"TEXT":"Sheet.1"}))
 
-            self.xUITest.executeCommand(".uno:Paste")
+        self.xUITest.executeCommand(".uno:Paste")
 
-            xChart = calc_document.Sheets[0].Charts[0]
-            xDataSeries = xChart.getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
+        xChart = calc_document.Sheets[0].Charts[0]
+        xDataSeries = xChart.getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
 
-            self.assertEqual(4, len(xDataSeries))
+        self.assertEqual(4, len(xDataSeries))
 
-            xNewSheetRanges = []
-            for i in range(4):
-                xRow = []
-                xDS = xDataSeries[i].DataSequences
+        xNewSheetRanges = []
+        for i in range(4):
+            xRow = []
+            xDS = xDataSeries[i].DataSequences
 
-                self.assertEqual(1, len(xDS))
-                xRow.append(xDS[0].Values.SourceRangeRepresentation)
-                xNewSheetRanges.append(xRow)
+            self.assertEqual(1, len(xDS))
+            xRow.append(xDS[0].Values.SourceRangeRepresentation)
+            xNewSheetRanges.append(xRow)
 
-            # Without the fix in place, this test would have failed with
-            # ["$'Sheet.1'.$B$12:$B$18"]
-            # ["'file:///home/<user>/Documents/Sheet.1'#$Sheet1.$B$12:$B$18"]
-            self.assertEqual(xOldSheetRanges, xNewSheetRanges)
+        # Without the fix in place, this test would have failed with
+        # ["$'Sheet.1'.$B$12:$B$18"]
+        # ["'file:///home/<user>/Documents/Sheet.1'#$Sheet1.$B$12:$B$18"]
+        self.assertEqual(xOldSheetRanges, xNewSheetRanges)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
