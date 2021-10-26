@@ -77,13 +77,13 @@ void URITools::openURI(const OUString& sURI, bool bHandleSystemShellExecuteExcep
 
 IMPL_LINK_NOARG(URITools, onOpenURI, Timer*, void)
 {
+    std::unique_ptr<URITools> guard(this);
     css::uno::Reference< css::system::XSystemShellExecute > exec(
         css::system::SystemShellExecute::create(comphelper::getProcessComponentContext()));
     try {
         exec->execute(
             msURI, OUString(),
             css::system::SystemShellExecuteFlags::URIS_ONLY);
-        return;
     } catch (css::lang::IllegalArgumentException & e) {
         if (e.ArgumentPosition != 0) {
             throw css::uno::RuntimeException(
@@ -112,7 +112,6 @@ IMPL_LINK_NOARG(URITools, onOpenURI, Timer*, void)
             //TODO: avoid subsequent replaceFirst acting on previous replacement
         eb->run();
     }
-    delete this;
 }
 
 void sfx2::openUriExternally(const OUString& sURI, bool bHandleSystemShellExecuteException)
