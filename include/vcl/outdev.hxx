@@ -130,6 +130,12 @@ namespace com::sun::star::rendering {
     class XCanvas;
     class XSpriteCanvas;
 }
+namespace com::sun::star::linguistic2 {
+    class XHyphenator;
+}
+namespace com::sun::star::i18n {
+    class XBreakIterator;
+}
 
 #if defined UNX
 #define GLYPH_FONT_HEIGHT   128
@@ -1076,7 +1082,16 @@ protected:
     SAL_DLLPRIVATE void         ImplInitTextLineSize();
     SAL_DLLPRIVATE void         ImplInitAboveTextLineSize();
     static
-    SAL_DLLPRIVATE tools::Long         ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, tools::Long nWidth, const OUString& rStr, DrawTextFlags nStyle, const vcl::ITextLayout& _rLayout );
+    SAL_DLLPRIVATE tools::Long  ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, tools::Long nWidth, const OUString& rStr, DrawTextFlags nStyle, const vcl::ITextLayout& _rLayout );
+    static
+    SAL_DLLPRIVATE sal_Int32    ImplBreakLinesWithIterator(const tools::Long nWidth, const OUString& rStr, const vcl::ITextLayout& _rLayout,
+                                    const css::uno::Reference<css::linguistic2::XHyphenator>& xHyph,
+                                    const css::uno::Reference<css::i18n::XBreakIterator>& xBI,
+                                    const bool bHyphenate,
+                                    const sal_Int32 nPos, sal_Int32 nBreakPos);
+    static
+    SAL_DLLPRIVATE sal_Int32    ImplBreakLinesSimple( const tools::Long nWidth, const OUString& rStr,
+                                    const vcl::ITextLayout& _rLayout, const sal_Int32 nPos, sal_Int32 nBreakPos, tools::Long& nLineWidth );
     SAL_DLLPRIVATE float        approximate_char_width() const;
 
     virtual bool shouldDrawWavePixelAsRect(tools::Long nLineWidth) const;
