@@ -12,22 +12,22 @@ from uitest.uihelper.common import get_url_for_data_file
 
 class tdf120348(UITestCase):
 
-   def test_tdf120348(self):
+    def test_tdf120348(self):
 
-    with self.ui_test.load_file(get_url_for_data_file("tdf120348.ods")) as calc_doc:
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
+        with self.ui_test.load_file(get_url_for_data_file("tdf120348.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
 
-        xFirstMatrix = []
-        for row in range(1, 159):
-            xRow = []
-            for column in range(5, 9):
-                xRow.append(round(get_cell_by_position(calc_doc, 0, column, row).getValue(), 5))
-            xFirstMatrix.append(xRow)
+            xFirstMatrix = []
+            for row in range(1, 159):
+                xRow = []
+                for column in range(5, 9):
+                    xRow.append(round(get_cell_by_position(calc_doc, 0, column, row).getValue(), 5))
+                xFirstMatrix.append(xRow)
 
-        gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 2"}))
+            gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 2"}))
 
-        self.xUITest.executeCommand(".uno:Copy")
+            self.xUITest.executeCommand(".uno:Copy")
 
         with self.ui_test.load_empty_file("calc") as calc_document:
 

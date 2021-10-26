@@ -30,30 +30,30 @@ class tdf107097(UITestCase):
 
         self.xUITest.executeCommand(".uno:Copy")
 
-        with self.ui_test.load_empty_file("calc") as calc_document:
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
+    with self.ui_test.load_empty_file("calc") as calc_document:
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = xCalcDoc.getChild("grid_window")
 
-            self.xUITest.executeCommand(".uno:Paste")
+        self.xUITest.executeCommand(".uno:Paste")
 
-            xData = calc_document.Sheets[0].Charts[0].getEmbeddedObject().Data
+        xData = calc_document.Sheets[0].Charts[0].getEmbeddedObject().Data
 
-            xSecondMatrix = []
-            for row in xData.Data:
-                xRow = []
-                for value in row:
-                    xRow.append(value)
-                xSecondMatrix.append(xRow)
+        xSecondMatrix = []
+        for row in xData.Data:
+            xRow = []
+            for value in row:
+                xRow.append(value)
+            xSecondMatrix.append(xRow)
 
-            self.assertEqual(xFirstMatrix, xSecondMatrix)
+        self.assertEqual(xFirstMatrix, xSecondMatrix)
 
-            aExpectedColumnDescriptions = ('Sum - Sales T1', 'Sum - Sales T2',
-                    'Sum - Sales T3', 'Sum - Sales T4')
-            aExpectedRowDescriptions = ('DE Berlin A', 'DE Berlin B', 'DE Munich A',
-                    'DE Munich B', 'EN Glasgow A', 'EN Liverpool B', 'EN London A',
-                    'EN London B', 'FR Nantes A', 'FR Nantes B', 'FR Paris A', 'FR Paris B')
+        aExpectedColumnDescriptions = ('Sum - Sales T1', 'Sum - Sales T2',
+                'Sum - Sales T3', 'Sum - Sales T4')
+        aExpectedRowDescriptions = ('DE Berlin A', 'DE Berlin B', 'DE Munich A',
+                'DE Munich B', 'EN Glasgow A', 'EN Liverpool B', 'EN London A',
+                'EN London B', 'FR Nantes A', 'FR Nantes B', 'FR Paris A', 'FR Paris B')
 
-            self.assertEqual(aExpectedColumnDescriptions, xData.ColumnDescriptions)
-            self.assertEqual(aExpectedRowDescriptions, xData.RowDescriptions)
+        self.assertEqual(aExpectedColumnDescriptions, xData.ColumnDescriptions)
+        self.assertEqual(aExpectedRowDescriptions, xData.RowDescriptions)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

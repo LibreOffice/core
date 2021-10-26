@@ -28,13 +28,13 @@ class Tdf95554(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A6:A6", "EXTEND":"1"}))
             self.xUITest.executeCommand(".uno:Copy")
 
-            with self.ui_test.load_empty_file("writer") as writer_document:
+        with self.ui_test.load_empty_file("writer") as writer_document:
 
-                self.xUITest.getTopFocusWindow()
-                self.xUITest.executeCommand(".uno:PasteUnformatted")
+            self.xUITest.getTopFocusWindow()
+            self.xUITest.executeCommand(".uno:PasteUnformatted")
 
-                # Without the fix, the test breaks here with:
-                #AssertionError: 'A\n\nC\n\nE\nF' != 'A'
+            # Without the fix, the test breaks here with:
+            #AssertionError: 'A\n\nC\n\nE\nF' != 'A'
 
-                self.assertEqual('A\n\nC\n\nE\nF',
-                        writer_document.Text.String)
+            self.assertEqual('A\n\nC\n\nE\nF',
+                    writer_document.Text.String)
