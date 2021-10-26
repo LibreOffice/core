@@ -1229,27 +1229,6 @@ sal_uInt16 ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt
 
     Color aDoubleColor(rStyleSettings.GetHighlightColor());
     Color aSingleColor(rStyleSettings.GetHighlightTextColor());
-    if (!mbDoubleSel)
-    {
-        /*
-        *  #99777# contrast enhancement for thin mode
-        */
-        const Wallpaper& rWall = maVirDev->GetBackground();
-        if (!rWall.IsBitmap() && ! rWall.IsGradient())
-        {
-            const Color& rBack = rWall.GetColor();
-            if (rBack.IsDark() && ! aDoubleColor.IsBright())
-            {
-                aDoubleColor = COL_WHITE;
-                aSingleColor = COL_BLACK;
-            }
-            else if (rBack.IsBright() && !aDoubleColor.IsDark())
-            {
-                aDoubleColor = COL_BLACK;
-                aSingleColor = COL_WHITE;
-            }
-        }
-    }
 
     // specify selection output
     WinBits nStyle = GetStyle();
