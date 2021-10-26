@@ -34,6 +34,24 @@
       "parentUuid": "2d0687e8_62500f65",
       "revId": "d9e7d917ab5f18ec4db5e80f585b7d8d1c561b55",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35345ba4_39d06be5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-26T08:53:16Z",
+      "side": 1,
+      "message": "Hi! I\u0027m sorry if I misunderstood; what is your plan on this: should I merge this as is, or are you going to change other places in this same change? Both are fine with me, just checking what should be done.",
+      "parentUuid": "30391289_f7e2a360",
+      "revId": "d9e7d917ab5f18ec4db5e80f585b7d8d1c561b55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
