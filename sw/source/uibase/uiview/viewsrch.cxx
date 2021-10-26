@@ -94,7 +94,6 @@ static void lcl_emitSearchResultCallbacks(SvxSearchItem const * pSearchItem, SwW
         return;
 
     std::vector<OString> aMatches;
-    OString textSelection;
     for (SwPaM& rPaM : pPaM->GetRingContainer())
     {
         if (SwShellCursor* pShellCursor = dynamic_cast<SwShellCursor*>(&rPaM))
@@ -110,7 +109,6 @@ static void lcl_emitSearchResultCallbacks(SvxSearchItem const * pSearchItem, SwW
             }
             OString sRect = comphelper::string::join("; ", aRect);
             aMatches.push_back(sRect);
-            textSelection = sRect;
         }
     }
     boost::property_tree::ptree aTree;
