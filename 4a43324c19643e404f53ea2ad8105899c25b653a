@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "821171f3_71f80906",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-10-26T16:24:56Z",
+      "side": 1,
+      "message": "Why not basegfx::rad2deg and basegfx::deg2rad, respectively? They are better understandable than the new define RADIAN_1 and widely used.",
+      "revId": "4a43324c19643e404f53ea2ad8105899c25b653a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
