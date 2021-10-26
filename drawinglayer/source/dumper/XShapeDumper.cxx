@@ -1131,53 +1131,48 @@ void dumpPropertyValueAsElement(const beans::PropertyValue& rPropertyValue, xmlT
             OUStringToOString(rPropertyValue.Name, RTL_TEXTENCODING_UTF8).getStr());
 
     uno::Any aAny = rPropertyValue.Value;
-    OUString sValue;
-    float fValue;
-    sal_Int32 nValue;
-    bool bValue;
-    awt::Rectangle aRectangleValue;
-    uno::Sequence< drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues;
-    uno::Sequence< drawing::EnhancedCustomShapeParameterPair > aCoordinates;
-    uno::Sequence< drawing::EnhancedCustomShapeSegment > aSegments;
-    uno::Sequence< beans::PropertyValue > aPropSeq;
-    if(aAny >>= sValue)
+    if(OUString sValue; aAny >>= sValue)
     {
         (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
                 OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
     }
-    else if(aAny >>= nValue)
+    else if(sal_Int32 nValue; aAny >>= nValue)
     {
         (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%" SAL_PRIdINT32, nValue);
     }
-    else if(aAny >>= fValue)
+    else if(float fValue; aAny >>= fValue)
     {
         (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%f", fValue);
     }
-    else if(aAny >>= bValue)
+    else if(bool bValue; aAny >>= bValue)
     {
         (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s", (bValue? "true": "false"));
     }
-    else if(rPropertyValue.Name == "ViewBox" && (aAny >>= aRectangleValue))
+    else if(awt::Rectangle aRectangleValue;
+            rPropertyValue.Name == "ViewBox" && (aAny >>= aRectangleValue))
     {
         EnhancedShapeDumper enhancedDumper(xmlWriter);
         enhancedDumper.dumpViewBoxAsElement(aRectangleValue);
     }
-    else if(rPropertyValue.Name == "AdjustmentValues" && (aAny >>= aAdjustmentValues))
+    else if(uno::Sequence< drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues;
+            rPropertyValue.Name == "AdjustmentValues" && (aAny >>= aAdjustmentValues))
     {
         EnhancedShapeDumper enhancedDumper(xmlWriter);
         enhancedDumper.dumpAdjustmentValuesAsElement(aAdjustmentValues);
     }
-    else if(rPropertyValue.Name == "Coordinates" && (aAny >>= aCoordinates))
+    else if(uno::Sequence< drawing::EnhancedCustomShapeParameterPair > aCoordinates;
+            rPropertyValue.Name == "Coordinates" && (aAny >>= aCoordinates))
     {
         EnhancedShapeDumper enhancedDumper(xmlWriter);
         enhancedDumper.dumpCoordinatesAsElement(aCoordinates);
     }
-    else if(rPropertyValue.Name == "Segments" && (aAny >>= aSegments))
+    else if(uno::Sequence< drawing::EnhancedCustomShapeSegment > aSegments;
+            rPropertyValue.Name == "Segments" && (aAny >>= aSegments))
     {
         EnhancedShapeDumper enhancedDumper(xmlWriter);
         enhancedDumper.dumpSegmentsAsElement(aSegments);
     }
-    else if(aAny >>= aPropSeq)
+    else if(uno::Sequence< beans::PropertyValue > aPropSeq; aAny >>= aPropSeq)
     {
         (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( OUStringToOString(rPropertyValue.Name, RTL_TEXTENCODING_UTF8).getStr() ));
 
