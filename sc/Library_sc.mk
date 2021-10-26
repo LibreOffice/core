@@ -99,18 +99,6 @@ $(eval $(call gb_Library_use_libraries,sc,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sc,\
-    sc/source/core/tool/arraysumAVX512, $(CXXFLAGS_INTRINSICS_AVX512F) \
-))
-
-$(eval $(call gb_Library_add_exception_objects,sc,\
-    sc/source/core/tool/arraysumAVX, $(CXXFLAGS_INTRINSICS_AVX) \
-))
-
-$(eval $(call gb_Library_add_exception_objects,sc,\
-    sc/source/core/tool/arraysumSSE2, $(CXXFLAGS_INTRINSICS_SSE2) \
-))
-
-$(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/data/attarray \
     sc/source/core/data/attrib \
     sc/source/core/data/autonamecache \
@@ -690,6 +678,18 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/view/viewutil \
     sc/source/ui/view/waitoff \
     sc/source/ui/xmlsource/xmlsourcedlg \
+))
+
+$(eval $(call gb_Library_add_exception_objects,sc,\
+    sc/source/core/tool/arraysumAVX512, $(CXXFLAGS_INTRINSICS_AVX512F) \
+))
+
+$(eval $(call gb_Library_add_exception_objects,sc,\
+    sc/source/core/tool/arraysumAVX, $(CXXFLAGS_INTRINSICS_AVX) \
+))
+
+$(eval $(call gb_Library_add_exception_objects,sc,\
+    sc/source/core/tool/arraysumSSE2, $(CXXFLAGS_INTRINSICS_SSE2) \
 ))
 
 ifeq ($(ENABLE_FORMULA_LOGGER),TRUE)
