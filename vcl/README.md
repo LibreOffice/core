@@ -245,7 +245,7 @@ In short, never hold any mutex unless necessary, especially not when calling
 out.
 
 ## Read More
-* [Environment variables in VCL](README.vars)
-* [GDIMetaFile class](README.GDIMetaFile)
-* [Understanding transitional VCL lifecycle](README.lifecycle)
-* [VCL scheduler](README.scheduler)
+* [Environment variables in VCL](README.vars.md)
+* [GDIMetaFile class](README.GDIMetaFile.md)
+* [Understanding transitional VCL lifecycle](README.lifecycle.md)
+* [VCL scheduler](README.scheduler.md)
