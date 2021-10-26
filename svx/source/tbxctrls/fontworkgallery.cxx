@@ -477,6 +477,7 @@ private:
     std::unique_ptr<weld::ToggleButton> mxVeryLoose;
     std::unique_ptr<weld::ToggleButton> mxCustom;
     std::unique_ptr<weld::CheckButton> mxKernPairs;
+    sal_Int32 mnCharacterSpacing;
     bool mbSettingValue;
 
     DECL_LINK( KernSelectHdl, weld::Toggleable&, void );
@@ -501,6 +502,7 @@ FontworkCharacterSpacingWindow::FontworkCharacterSpacingWindow(svt::PopupWindowC
     , mxVeryLoose(m_xBuilder->weld_toggle_button("veryloose"))
     , mxCustom(m_xBuilder->weld_toggle_button("custom"))
     , mxKernPairs(m_xBuilder->weld_check_button("kernpairs"))
+    , mnCharacterSpacing(0)
     , mbSettingValue(false)
 {
     mxVeryTight->connect_clicked(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
@@ -567,6 +569,8 @@ void FontworkCharacterSpacingWindow::implSetCharacterSpacing( sal_Int32 nCharact
                          !mxNormal->get_active() &&
                          !mxLoose->get_active() &&
                          !mxVeryLoose->get_active());
+
+    mnCharacterSpacing = nCharacterSpacing;
 
     mbSettingValue = bSettingValue;
 }
@@ -640,7 +644,7 @@ IMPL_LINK(FontworkCharacterSpacingWindow, SelectHdl, weld::Button&, rButton, voi
     {
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = OUString(gsFontworkCharacterSpacing).copy(5);
-        aArgs[0].Value <<= sal_Int32(100);
+        aArgs[0].Value <<= mnCharacterSpacing;
 
         rtl::Reference<svt::PopupWindowController> xControl(mxControl);
         xControl->EndPopupMode();
