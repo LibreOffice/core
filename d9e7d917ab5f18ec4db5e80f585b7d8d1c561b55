@@ -52,6 +52,24 @@
       "parentUuid": "30391289_f7e2a360",
       "revId": "d9e7d917ab5f18ec4db5e80f585b7d8d1c561b55",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5356182c_01f354d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2021-10-26T09:04:54Z",
+      "side": 1,
+      "message": "\u003eshould I merge this as is.\n\nI\u0027d like to go with this option.\n(in patchset 2 -\u003e patchset 3, I intended to have followed your advice.)",
+      "parentUuid": "35345ba4_39d06be5",
+      "revId": "d9e7d917ab5f18ec4db5e80f585b7d8d1c561b55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
