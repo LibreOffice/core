@@ -486,15 +486,9 @@ bool ValueSet::MouseButtonDown( const MouseEvent& rMouseEvent )
         if (rMouseEvent.GetClicks() == 1)
         {
             if (pItem)
-            {
                 SelectItem(pItem->mnId);
-                bConsumed = true;
-            }
-            if (!(GetStyle() & WB_NOPOINTERFOCUS))
-            {
-                GrabFocus();
-                bConsumed = true;
-            }
+            GrabFocus();
+            bConsumed = true;
         }
         else if (pItem && rMouseEvent.GetClicks() == 2)
         {
