@@ -479,10 +479,10 @@ void ValueSet::ImplTracking(const Point& rPos)
 
 bool ValueSet::MouseButtonDown( const MouseEvent& rMouseEvent )
 {
-    if ( rMouseEvent.IsLeft() )
+    if (rMouseEvent.IsLeft() && !rMouseEvent.IsMod2())
     {
         ValueSetItem* pItem = ImplGetItem( ImplGetItem( rMouseEvent.GetPosPixel() ) );
-        if (pItem && !rMouseEvent.IsMod2())
+        if (pItem)
         {
             if (rMouseEvent.GetClicks() == 1)
             {
