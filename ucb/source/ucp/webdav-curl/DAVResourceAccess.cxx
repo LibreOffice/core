@@ -570,10 +570,16 @@ void DAVResourceAccess::GET(
 
 void DAVResourceAccess::abort()
 {
-    // 17.11.09 (tkr): abort currently disabled caused by issue i106766
-    // initialize();
-    // m_xSession->abort();
-    SAL_INFO("ucb.ucp.webdav",  "Not implemented. -> #i106766#" );
+    // seems pointless to call initialize() here, but prepare for nullptr
+    decltype(m_xSession) xSession;
+    {
+        osl::Guard<osl::Mutex> const g(m_aMutex);
+        xSession = m_xSession;
+    }
+    if (xSession.is())
+    {
+        xSession->abort();
+    }
 }
 
 
