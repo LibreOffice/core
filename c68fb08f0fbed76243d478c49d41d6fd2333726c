@@ -104,6 +104,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe391e14_5a8dafc2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2021-10-26T08:03:18Z",
+      "side": 1,
+      "message": "Because not all the debugging happens in gdb - sometimes I just code read the relevant parts, or even just the diffs that go into gerrit etc. :-)\n\nI appreciate this suggestion makes the code writing a bit harder, because then the author of the code has to do the work that otherwise has to be done by the code readers (instead of just using \u0027auto\u0027); but I argue the code is in general more often read than written, so in the sum using the explicit type where it is not obvious saves time...\n\nBut just to repeat, I have nothing against the obvious stuff like \"auto x \u003d std::make_shared\u003cBlah\u003e(5);\" etc.",
+      "revId": "c68fb08f0fbed76243d478c49d41d6fd2333726c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c0d2bc58_e47f1916",
