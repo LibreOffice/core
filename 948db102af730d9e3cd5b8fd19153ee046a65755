@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40b90334_4e81c3d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-10-26T09:59:06Z",
+      "side": 1,
+      "message": "@Tünde: very nice fix! MSO 2016 doesn\u0027t handle the extra password, but Office 365 shows a warning message, and it doesn\u0027t allow editing, so it seems to work, as intended. :)",
+      "revId": "948db102af730d9e3cd5b8fd19153ee046a65755",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
