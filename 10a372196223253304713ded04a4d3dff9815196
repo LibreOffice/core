@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf26a593_8963ac36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-10-26T10:20:32Z",
+      "side": 1,
+      "message": "Balázs: very nice and useful fix! You can follow on fixing the Redo. That worsened with this fix, losing the boldness with Undo + Redo, but it was never perfect, i.e. cell background color was never updated.",
+      "revId": "10a372196223253304713ded04a4d3dff9815196",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
