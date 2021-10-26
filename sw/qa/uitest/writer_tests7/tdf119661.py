@@ -14,68 +14,64 @@ import os.path
 class tdf119661(UITestCase):
 
     def test_tdf119661(self):
+        with TemporaryDirectory() as tempdir:
+            xFilePath = os.path.join(tempdir, "tdf119661-tmp.odt")
 
-        with self.ui_test.create_doc_in_start_center("writer"):
+            with self.ui_test.create_doc_in_start_center("writer"):
 
-            with self.ui_test.execute_dialog_through_command(".uno:InsertGraphic", close_button="") as xOpenDialog:
-                xFileName = xOpenDialog.getChild("file_name")
-                xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": get_url_for_data_file("LibreOffice.jpg")}))
+                with self.ui_test.execute_dialog_through_command(".uno:InsertGraphic", close_button="") as xOpenDialog:
+                    xFileName = xOpenDialog.getChild("file_name")
+                    xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": get_url_for_data_file("LibreOffice.jpg")}))
 
-                xLink = xOpenDialog.getChild("link")
-                self.assertEqual("false", get_state_as_dict(xLink)['Selected'])
+                    xLink = xOpenDialog.getChild("link")
+                    self.assertEqual("false", get_state_as_dict(xLink)['Selected'])
 
-                xLink.executeAction("CLICK", tuple())
+                    xLink.executeAction("CLICK", tuple())
 
-                xOpenBtn = xOpenDialog.getChild("open")
+                    xOpenBtn = xOpenDialog.getChild("open")
 
-                #Confirmation dialog is displayed
-                with self.ui_test.execute_dialog_through_action(xOpenBtn, 'CLICK'):
-                    pass
+                    #Confirmation dialog is displayed
+                    with self.ui_test.execute_dialog_through_action(xOpenBtn, 'CLICK'):
+                        pass
 
-            with self.ui_test.execute_dialog_through_command(".uno:LinkDialog", close_button="close") as xDialog:
-
-
-                sLinks = "TB_LINKS"
-                xLinks = xDialog.getChild(sLinks)
-                self.assertEqual(1, len(xLinks.getChildren()))
-
-                sFileName = "FULL_FILE_NAME"
-                xFileName = xDialog.getChild(sFileName)
-                self.assertTrue(get_state_as_dict(xFileName)["Text"].endswith("/LibreOffice.jpg"))
-
-                sBreakLink = "BREAK_LINK"
-                xBreakLink = xDialog.getChild(sBreakLink)
-
-                with self.ui_test.execute_blocking_action(xBreakLink.executeAction,
-                        args=("CLICK", tuple()), close_button="yes"):
-                    pass
+                with self.ui_test.execute_dialog_through_command(".uno:LinkDialog", close_button="close") as xDialog:
 
 
-            with TemporaryDirectory() as tempdir:
-                xFilePath = os.path.join(tempdir, "tdf119661-tmp.odt")
+                    sLinks = "TB_LINKS"
+                    xLinks = xDialog.getChild(sLinks)
+                    self.assertEqual(1, len(xLinks.getChildren()))
 
-                # Save Copy as
-                with self.ui_test.execute_dialog_through_command(".uno:SaveAs", close_button="open") as xDialog:
+                    sFileName = "FULL_FILE_NAME"
+                    xFileName = xDialog.getChild(sFileName)
+                    self.assertTrue(get_state_as_dict(xFileName)["Text"].endswith("/LibreOffice.jpg"))
 
-                    xFileName = xDialog.getChild("file_name")
-                    xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-                    xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-                    xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": xFilePath}))
+                    sBreakLink = "BREAK_LINK"
+                    xBreakLink = xDialog.getChild(sBreakLink)
+
+                    with self.ui_test.execute_blocking_action(xBreakLink.executeAction,
+                            args=("CLICK", tuple()), close_button="yes"):
+                        pass
 
 
-                # Close the Writer document
-                self.ui_test.close_doc()
 
-                with self.ui_test.load_file(systemPathToFileUrl(xFilePath)):
+                    # Save Copy as
+                    with self.ui_test.execute_dialog_through_command(".uno:SaveAs", close_button="open") as xDialog:
 
-                    self.xUITest.executeCommand(".uno:LinkDialog")
+                        xFileName = xDialog.getChild("file_name")
+                        xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                        xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                        xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": xFilePath}))
 
-                    # Since the image is no longer linked, the link dialog is not open.
-                    # Without the fix in place, this dialog would have been opened
-                    xMainWin = self.xUITest.getTopFocusWindow()
-                    self.assertTrue(sLinks not in xMainWin.getChildren())
-                    self.assertTrue(sFileName not in xMainWin.getChildren())
-                    self.assertTrue(sBreakLink not in xMainWin.getChildren())
-                    self.assertTrue("writer_edit" in xMainWin.getChildren())
+            with self.ui_test.load_file(systemPathToFileUrl(xFilePath)):
+
+                self.xUITest.executeCommand(".uno:LinkDialog")
+
+                # Since the image is no longer linked, the link dialog is not open.
+                # Without the fix in place, this dialog would have been opened
+                xMainWin = self.xUITest.getTopFocusWindow()
+                self.assertTrue(sLinks not in xMainWin.getChildren())
+                self.assertTrue(sFileName not in xMainWin.getChildren())
+                self.assertTrue(sBreakLink not in xMainWin.getChildren())
+                self.assertTrue("writer_edit" in xMainWin.getChildren())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
