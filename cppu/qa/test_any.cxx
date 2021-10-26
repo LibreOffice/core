@@ -1881,6 +1881,13 @@ void Test::testSequence() {
         CPPUNIT_ASSERT_MESSAGE("Interface1", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Interface1", i, b);
     }
+    {
+        // The two default-constructed sequences both refer to the same static cppu::g_emptySeq
+        css::uno::Sequence<sal_Int32> aEmptyIntSequence;
+        css::uno::Sequence<OUString> aEmptyStringSequence;
+        a <<= aEmptyStringSequence;
+        CPPUNIT_ASSERT(!(a >>= aEmptyIntSequence));
+    }
 }
 
 void Test::testEnum() {
