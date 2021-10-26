@@ -1891,6 +1891,9 @@ class SFDocuments:
         def Range(self, rangename):
             return self.GetProperty('Range', rangename)
 
+        def Region(self, rangename):
+            return self.GetProperty('Region', rangename)
+
         def Sheet(self, sheetname):
             return self.GetProperty('Sheet', sheetname)
 
