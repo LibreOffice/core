@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50ef93fb_fca199de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-26T13:58:21Z",
+      "side": 1,
+      "message": "This change is broken:  On macOS (which does not get hit by the issue described in the comment at \u003chttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d32427#c10\u003e \"LibreOffice freezes when starting Firefox\"), in Writer clicking a \u003cunknown:test.doc\u003e hyperlink causes a crash, because the SystemShellExecuteException thrown at the end of ShellExec::execute (shell/source/unix/exec/shellexec.cxx) no longer synchronously propagates through sfx2::openUriExternally to the call site\n                        try\n                        {\n                            sfx2::openUriExternally(\n                                aURL.Complete, pFilter \u003d\u003d nullptr);\n                        }\n                        catch ( css::system::SystemShellExecuteException\u0026 )\n                        {\n                            rReq.RemoveItem( SID_TARGETNAME );\n                            rReq.AppendItem( SfxStringItem( SID_TARGETNAME, \"_default\" ) );\n                            bLoadInternal \u003d true;\n                        }\nin SfxApplication::OpenDocExec_Impl (sfx2/source/appl/appopen.cxx).",
+      "revId": "5d5da77e82b6498dd73123ec0dc36d2315e279a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
