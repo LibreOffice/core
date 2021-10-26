@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "099a9d85_b5696dc3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-10-26T09:54:30Z",
+      "side": 1,
+      "message": "This sounds like crashes were due to the change, but I\u0027d assume this is not the case? Or is it?",
+      "range": {
+        "startLine": 26,
+        "startChar": 1,
+        "endLine": 26,
+        "endChar": 59
+      },
+      "revId": "fcc5de9c1f8296bfb8fedb9e8a3fffa9f92166a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "409bc0e2_67c07547",
@@ -49,6 +72,23 @@
       "side": 1,
       "message": "ACK. Given the options, this is the lesser evil.",
       "parentUuid": "1b163faa_c5402714",
+      "revId": "fcc5de9c1f8296bfb8fedb9e8a3fffa9f92166a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8912a1c_a86c7496",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-10-26T09:54:30Z",
+      "side": 1,
+      "message": "I think this is ok. At least it prevents most of the cases that Writer can\u0027t cope with due to its odd logic of numeric vs text (non-)handling.",
       "revId": "fcc5de9c1f8296bfb8fedb9e8a3fffa9f92166a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
