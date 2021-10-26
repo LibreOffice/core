@@ -80,7 +80,7 @@ function proc_text
     # Headings: == bleh ==
     # Paragraphs: \n\n
     sed -re ' s/\[\[([-_a-zA-Z0-9]+)\]\]/<a href="\1.html">\1<\/a>/g' - \
-        | sed -re ' s/\[git:([^]]+)\]/<a href="https:\/\/cgit.freedesktop.org\/libreoffice\/core\/tree\/\1">\1<\/a>/g' \
+        | sed -re ' s/\[git:([^]]+)\]/<a href="https:\/\/git.freedesktop.org\/core\/+\/refs\/heads\/master\/\1">\1<\/a>/g' \
         | sed -re ' s/\[([^]]+)\]/<a href="\1">\1<\/a>/g' \
         | sed -re ' s/====([^=]+)====/<h4>\1<\/h4>/g' \
         | sed -re ' s/===([^=]+)===/<h3>\1<\/h3>/g' \
@@ -90,7 +90,7 @@ function proc_text
 }
 
 function proc_text_markdown {
-  sed -re ' s/\[git:([^]]+)\]/<a href="https:\/\/cgit.freedesktop.org\/libreoffice\/core\/tree\/\1">\1<\/a>/g'
+  sed -re ' s/\[git:([^]]+)\]/<a href="https:\/\/git.freedesktop.org\/core\/+\/refs\/heads\/master\/\1">\1<\/a>/g'
 }
 
 # generate entry page
@@ -117,7 +117,7 @@ for module_name in *; do
             # write detailed module content
             header "$module_name" "<a href=\"index.html\">LibreOffice</a> &raquo; ${module_name}" "$BASE_OUTPUT/${module_name}.html"
             text="<p><b>View module in:</b>"
-            text="${text} &nbsp; <a href=\"https://cgit.freedesktop.org/libreoffice/core/tree/${module_name}\">cgit</a>"
+            text="${text} &nbsp; <a href=\"https://git.libreoffice.org/core/+/refs/heads/master/${module_name}\">git</a>"
             if $(echo $INPUT_PROJECTS | grep -q $module_name); then
                 text="${text} &nbsp; <a href=\"${module_name}/html/classes.html\">Doxygen</a>"
             fi
@@ -145,7 +145,7 @@ if [ ${#empty_modules[*]} -gt 10 ]; then
         then
             continue
         fi
-        echo -e "<li><a href=\"https://cgit.freedesktop.org/libreoffice/core/tree/${module_name}\">${module_name}</a></li>\n" >> "$BASE_OUTPUT/index.html"
+        echo -e "<li><a href=\"https://git.libreoffice.org/core/+/refs/heads/master/${module_name}\">${module_name}</a></li>\n" >> "$BASE_OUTPUT/index.html"
     done
     echo -e "</ul>\n" >> "$BASE_OUTPUT/index.html"
 fi
