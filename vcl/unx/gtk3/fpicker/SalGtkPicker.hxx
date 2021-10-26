@@ -56,7 +56,7 @@ class SalGtkPicker
     protected:
         osl::Mutex m_rbHelperMtx;
         GtkWidget  *m_pParentWidget;
-        GtkWidget  *m_pDialog;
+        GtkFileChooserNative  *m_pDialog;
     protected:
         /// @throws css::uno::RuntimeException
         void implsetTitle( std::u16string_view aTitle );
@@ -90,7 +90,7 @@ class RunDialog :
 {
 private:
     osl::Mutex maLock;
-    GtkWidget *mpDialog;
+    GtkNativeDialog *mpDialog;
     bool mbTerminateDesktop;
     css::uno::Reference<css::awt::XExtendedToolkit> mxToolkit;
     css::uno::Reference<css::frame::XDesktop> mxDesktop;
@@ -112,7 +112,7 @@ public:
     virtual void SAL_CALL queryTermination( const css::lang::EventObject& aEvent ) override;
     virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent ) override;
 public:
-    RunDialog(GtkWidget *pDialog,
+    RunDialog(GtkNativeDialog *pDialog,
         const css::uno::Reference<css::awt::XExtendedToolkit>& rToolkit,
         const css::uno::Reference<css::frame::XDesktop>& rDesktop);
     virtual ~RunDialog() override;
