@@ -233,6 +233,13 @@ Property Get Range(Optional ByVal RangeName As Variant) As Variant
 End Property	&apos;	SFDocuments.SF_Calc.Range
 
 REM -----------------------------------------------------------------------------
+Property Get Region(Optional ByVal RangeName As Variant) As String
+&apos;&apos;&apos;	Returns the smallest area as a range string that contains the given range
+&apos;&apos;&apos;	and which is compeletely surrounded with empty cells
+	Region = _PropertyGet(&quot;Region&quot;, RangeName)
+End Property	&apos;	SFDocuments.SF_Calc.Region
+
+REM -----------------------------------------------------------------------------
 Property Get Sheet(Optional ByVal SheetName As Variant) As Variant
 &apos;&apos;&apos;	Returns a (internal) sheet object
 	Sheet = _PropertyGet(&quot;Sheet&quot;, SheetName)
@@ -1582,7 +1589,8 @@ Public Function Methods() As Variant
 &apos;&apos;&apos;	Return the list of public methods of the Calc service as an array
 
 	Methods = Array( _
-					&quot;Activate&quot; _
+					&quot;A1Style&quot; _
+					, &quot;Activate&quot; _
 					, &quot;ClearAll&quot; _
 					, &quot;ClearFormats&quot; _
 					, &quot;ClearValues&quot; _
@@ -1880,6 +1888,7 @@ Public Function Properties() As Variant
 					, &quot;LastRow&quot; _
 					, &quot;Range&quot; _
 					, &quot;Readonly&quot; _
+					, &quot;Region&quot; _
 					, &quot;Sheet&quot; _
 					, &quot;Sheets&quot; _
 					, &quot;Subject&quot; _
@@ -3083,6 +3092,8 @@ Dim oProperties As Object			&apos;	Document or Custom properties
 Dim vLastCell As Variant			&apos;	Coordinates of last used cell in a sheet
 Dim oSelect As Object				&apos;	Current selection
 Dim vRanges As Variant				&apos;	List of selected ranges
+Dim oAddress As Object				&apos;	_Address type for range description
+Dim oCursor As Object				&apos;	com.sun.star.sheet.XSheetCellCursor
 Dim i As Long
 Dim cstThisSub As String
 Const cstSubArgs = &quot;&quot;
@@ -3093,8 +3104,8 @@ Const cstSubArgs = &quot;&quot;
 	ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
 	If Not _IsStillAlive() Then GoTo Finally
 
-	Select Case psProperty
-		Case &quot;CurrentSelection&quot;
+	Select Case UCase(psProperty)
+		Case UCase(&quot;CurrentSelection&quot;)
 			Set oSelect = _Component.CurrentController.getSelection()
 			If IsNull(oSelect) Then
 				_PropertyGet = Array()
@@ -3107,14 +3118,14 @@ Const cstSubArgs = &quot;&quot;
 			Else
 				_PropertyGet = oSelect.AbsoluteName
 			End If
-		Case &quot;Height&quot;
+		Case UCase(&quot;Height&quot;)
 			If IsMissing(pvArg) Or IsEmpty(pvArg) Then
 				_PropertyGet = 0
 			Else
 				If Not ScriptForge.SF_Utils._Validate(pvArg, &quot;Range&quot;, V_STRING) Then GoTo Finally
 				_PropertyGet = _ParseAddress(pvArg).Height
 			End If
-		Case &quot;LastCell&quot;, &quot;LastColumn&quot;, &quot;LastRow&quot;
+		Case UCase(&quot;LastCell&quot;), UCase(&quot;LastColumn&quot;), UCase(&quot;LastRow&quot;)
 			If IsMissing(pvArg) Or IsEmpty(pvArg) Then	&apos;	Avoid errors when instance is watched in Basic IDE
 				_PropertyGet = -1
 			Else
@@ -3128,37 +3139,49 @@ Const cstSubArgs = &quot;&quot;
 					_PropertyGet = GetColumnName(vLastCell(0)) &amp; CStr(vLastCell(1))
 				End If
 			End If
-		Case &quot;Range&quot;
+		Case UCase(&quot;Range&quot;)
 			If IsMissing(pvArg) Or IsEmpty(pvArg) Then
 				Set _PropertyGet = Nothing
 			Else
 				If Not ScriptForge.SF_Utils._Validate(pvArg, &quot;Range&quot;, V_STRING) Then GoTo Finally
 				Set _PropertyGet = _ParseAddress(pvArg)
 			End If
-		Case &quot;Sheet&quot;
+		Case UCase(&quot;Region&quot;)
+			If IsMissing(pvArg) Or IsEmpty(pvArg) Then
+				_PropertyGet = &quot;&quot;
+			Else
+				If Not ScriptForge.SF_Utils._Validate(pvArg, &quot;Range&quot;, V_STRING) Then GoTo Finally
+				Set oAddress = _ParseAddress(pvArg)
+				With oAddress
+					Set oCursor = .XSpreadsheet.createCursorByRange(.XCellRange)
+					oCursor.collapseToCurrentRegion()
+					_PropertyGet = oCursor.AbsoluteName
+				End With
+			End If
+		Case UCase(&quot;Sheet&quot;)
 			If IsMissing(pvArg) Or IsEmpty(pvArg) Then
 				Set _PropertyGet = Nothing
 			Else
 				If Not _ValidateSheet(pvArg, &quot;SheetName&quot;, , True) Then GoTo Finally
 				Set _PropertyGet = _ParseAddress(pvArg)
 			End If
-		Case &quot;Sheets&quot;
+		Case UCase(&quot;Sheets&quot;)
 			_PropertyGet = _Component.getSheets.getElementNames()
-		Case &quot;Width&quot;
+		Case UCase(&quot;Width&quot;)
 			If IsMissing(pvArg) Or IsEmpty(pvArg) Then
 				_PropertyGet = 0
 			Else
 				If Not ScriptForge.SF_Utils._Validate(pvArg, &quot;Range&quot;, V_STRING) Then GoTo Finally
 				_PropertyGet = _ParseAddress(pvArg).Width
 			End If
-		Case &quot;XCellRange&quot;
+		Case UCase(&quot;XCellRange&quot;)
 			If IsMissing(pvArg) Or IsEmpty(pvArg) Then
 				Set _PropertyGet = Nothing
 			Else
 				If Not ScriptForge.SF_Utils._Validate(pvArg, &quot;Range&quot;, V_STRING) Then GoTo Finally
 				Set _PropertyGet = _ParseAddress(pvArg).XCellRange
 			End If
-		Case &quot;XSpreadsheet&quot;
+		Case UCase(&quot;XSpreadsheet&quot;)
 			If IsMissing(pvArg) Or IsEmpty(pvArg) Then
 				Set _PropertyGet = Nothing
 			Else
