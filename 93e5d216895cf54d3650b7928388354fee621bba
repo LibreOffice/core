@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc9c5c48_535c28b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-10-26T08:59:16Z",
+      "side": 1,
+      "message": "Unittest added in https://gerrit.libreoffice.org/c/core/+/124175",
+      "revId": "93e5d216895cf54d3650b7928388354fee621bba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
