@@ -13,8 +13,6 @@
 
 namespace sc::op
 {
-SC_DLLPUBLIC extern const bool hasAVX512F;
-
 // Plain old data structure, to be used by code compiled with CPU intrinsics without generating any
 // code for it (so that code requiring intrinsics doesn't get accidentally selected as the one copy
 // when merging duplicates).
