@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e246788f_962e2832",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-26T20:18:56Z",
+      "side": 1,
+      "message": "I was just taking a look at https://bugs.documentfoundation.org/show_bug.cgi?id\u003d145323 and noticed that a lot of \"macro coding\" could hinder the investigation sometimes.",
+      "revId": "c7384b76d7e13985db3c94e7a0a94e0a2d2113d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
