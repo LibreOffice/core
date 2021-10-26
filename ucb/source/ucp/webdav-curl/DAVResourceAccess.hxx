@@ -194,7 +194,7 @@ public:
 
     /// @throws DAVException
     void
-    static abort();
+    abort();
 
     // helper
     static void
