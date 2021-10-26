@@ -218,7 +218,6 @@ private:
     bool            mbHighlight : 1;
     bool            mbNoSelection : 1;
     bool            mbDrawSelection : 1;
-    bool            mbBlackSel : 1;
     bool            mbDoubleSel : 1;
     bool            mbScroll : 1;
     bool            mbFullMode : 1;

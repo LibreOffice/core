@@ -98,7 +98,6 @@ ValueSet::ValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
     mnFrameStyle        = DrawFrameStyle::NONE;
     mbNoSelection       = true;
     mbDrawSelection     = true;
-    mbBlackSel          = false;
     mbDoubleSel         = false;
     mbScroll            = false;
     mbFullMode          = true;
@@ -1044,22 +1043,6 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
         else
             mnFrameStyle = DrawFrameStyle::In;
 
-        // determine selected color and width
-        // if necessary change the colors, to make the selection
-        // better detectable
-        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-        Color aHighColor(rStyleSettings.GetHighlightColor());
-        if (((aHighColor.GetRed() > 0x80) || (aHighColor.GetGreen() > 0x80) ||
-             (aHighColor.GetBlue() > 0x80)) ||
-            ((aHighColor.GetRed() == 0x80) && (aHighColor.GetGreen() == 0x80) &&
-             (aHighColor.GetBlue() == 0x80)))
-        {
-            mbBlackSel = true;
-        }
-        else
-        {
-            mbBlackSel = false;
-        }
         // draw the selection with double width if the items are bigger
         if ((nStyle & WB_DOUBLEBORDER) &&
             ((mnItemWidth >= 25) && (mnItemHeight >= 20)))
@@ -1276,7 +1259,7 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nIt
             InvertFocusRect(rRenderContext, aRect);
         if (bDrawSel)
         {
-            rRenderContext.SetLineColor(mbBlackSel ? COL_BLACK : aDoubleColor);
+            rRenderContext.SetLineColor(aDoubleColor);
             rRenderContext.DrawRect(aRect);
         }
     }
@@ -1284,7 +1267,7 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nIt
     {
         if (bDrawSel)
         {
-            rRenderContext.SetLineColor(mbBlackSel ? COL_BLACK : aDoubleColor);
+            rRenderContext.SetLineColor(aDoubleColor);
             rRenderContext.DrawRect(aRect);
         }
         if (mbDoubleSel)
@@ -1319,7 +1302,7 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nIt
 
         if (bDrawSel)
         {
-            rRenderContext.SetLineColor(mbBlackSel ? COL_WHITE : aSingleColor);
+            rRenderContext.SetLineColor(aSingleColor);
         }
         else
         {
