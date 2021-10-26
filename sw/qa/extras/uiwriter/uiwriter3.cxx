@@ -11,6 +11,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/scheduler.hxx>
 #include <vcl/TypeSerializer.hxx>
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <IDocumentDrawModelAccess.hxx>
 #include <com/sun/star/table/TableBorder2.hpp>
@@ -2638,6 +2639,96 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf137964)
     // Without the fix in place, the shape would have stayed where it was
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2579), xShape->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3090), xShape->getPosition().Y);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf136715)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf136715.odt");
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTextTable->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTextTable->getColumns()->getCount());
+
+    uno::Reference<text::XTextRange> xCell(xTextTable->getCellByName("A1"), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCell->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xPara, "CharWeight"));
+
+    xCell.set(xTextTable->getCellByName("A2"), uno::UNO_QUERY);
+    xParaEnumAccess.set(xCell->getText(), uno::UNO_QUERY);
+    xParaEnum.set(xParaEnumAccess->createEnumeration());
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xPara, "CharWeight"));
+
+    xCell.set(xTextTable->getCellByName("A3"), uno::UNO_QUERY);
+    xParaEnumAccess.set(xCell->getText(), uno::UNO_QUERY);
+    xParaEnum.set(xParaEnumAccess->createEnumeration());
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xPara, "CharWeight"));
+
+    xCell.set(xTextTable->getCellByName("A4"), uno::UNO_QUERY);
+    xParaEnumAccess.set(xCell->getText(), uno::UNO_QUERY);
+    xParaEnum.set(xParaEnumAccess->createEnumeration());
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xPara, "CharWeight"));
+
+    dispatchCommand(mxComponent, ".uno:GoDown", {});
+    dispatchCommand(mxComponent, ".uno:GoDown", {});
+    dispatchCommand(mxComponent, ".uno:LineDownSel", {});
+    dispatchCommand(mxComponent, ".uno:DeleteRows", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTextTable->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTextTable->getColumns()->getCount());
+
+    xCell.set(xTextTable->getCellByName("A1"), uno::UNO_QUERY);
+    xParaEnumAccess.set(xCell->getText(), uno::UNO_QUERY);
+    xParaEnum.set(xParaEnumAccess->createEnumeration());
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xPara, "CharWeight"));
+
+    xCell.set(xTextTable->getCellByName("A2"), uno::UNO_QUERY);
+    xParaEnumAccess.set(xCell->getText(), uno::UNO_QUERY);
+    xParaEnum.set(xParaEnumAccess->createEnumeration());
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xPara, "CharWeight"));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTextTable->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTextTable->getColumns()->getCount());
+
+    xCell.set(xTextTable->getCellByName("A1"), uno::UNO_QUERY);
+    xParaEnumAccess.set(xCell->getText(), uno::UNO_QUERY);
+    xParaEnum.set(xParaEnumAccess->createEnumeration());
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xPara, "CharWeight"));
+
+    xCell.set(xTextTable->getCellByName("A2"), uno::UNO_QUERY);
+    xParaEnumAccess.set(xCell->getText(), uno::UNO_QUERY);
+    xParaEnum.set(xParaEnumAccess->createEnumeration());
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 100
+    // - Actual  : 150
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xPara, "CharWeight"));
+
+    xCell.set(xTextTable->getCellByName("A3"), uno::UNO_QUERY);
+    xParaEnumAccess.set(xCell->getText(), uno::UNO_QUERY);
+    xParaEnum.set(xParaEnumAccess->createEnumeration());
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xPara, "CharWeight"));
+
+    xCell.set(xTextTable->getCellByName("A4"), uno::UNO_QUERY);
+    xParaEnumAccess.set(xCell->getText(), uno::UNO_QUERY);
+    xParaEnum.set(xParaEnumAccess->createEnumeration());
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xPara, "CharWeight"));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf138897)
