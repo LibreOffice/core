@@ -323,7 +323,6 @@ public:
     NfCurrencyEntry( const css::i18n::Currency & rCurr,
                      const LocaleDataWrapper& rLocaleData,
                      LanguageType eLang );
-    NfCurrencyEntry( const NfCurrencyEntry& ) = default;
 
                         /// Symbols and language identical
     bool                operator==( const NfCurrencyEntry& r ) const;
