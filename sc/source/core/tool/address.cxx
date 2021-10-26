@@ -1237,7 +1237,7 @@ static ScRefFlags lcl_ScAddress_Parse_OOo( const sal_Unicode* p, const ScDocumen
                 if (n > 0)
                 {
                     // Extension found.  Strip it.
-                    aTab = aTab.replaceAt(n, 1, "");
+                    aTab = aTab.copy(0, n);
                     bExtDoc = true;
                 }
                 else
