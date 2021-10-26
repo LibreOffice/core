@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <comphelper/sequence.hxx>
 #include <drawingml/lineproperties.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
@@ -369,11 +372,11 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
             {
                 PolyPolygonBezierCoords aMarkerCoords;
                 aMarkerCoords.Coordinates.realloc( 1 );
-                aMarkerCoords.Coordinates[ 0 ] = ContainerHelper::vectorToSequence( aPoints );
+                aMarkerCoords.Coordinates[ 0 ] = comphelper::containerToSequence( aPoints );
 
                 ::std::vector< PolygonFlags > aFlags( aPoints.size(), PolygonFlags_NORMAL );
                 aMarkerCoords.Flags.realloc( 1 );
-                aMarkerCoords.Flags[ 0 ] = ContainerHelper::vectorToSequence( aFlags );
+                aMarkerCoords.Flags[ 0 ] = comphelper::containerToSequence( aFlags );
 
                 aNamedMarker.Name = aMarkerName;
                 aNamedMarker.Value <<= aMarkerCoords;

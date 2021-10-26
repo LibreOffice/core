@@ -33,6 +33,8 @@
 #include <com/sun/star/sheet/FormulaMapGroupSpecialOffset.hpp>
 #include <com/sun/star/sheet/XFormulaOpCodeMapper.hpp>
 #include <com/sun/star/sheet/XFormulaParser.hpp>
+
+#include <comphelper/sequence.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
@@ -138,7 +140,7 @@ Any& ApiTokenVector::append( sal_Int32 nOpCode )
 
 ApiTokenSequence ApiTokenVector::toSequence() const
 {
-    return ContainerHelper::vectorToSequence( mvTokens );
+    return comphelper::containerToSequence( mvTokens );
 }
 
 // token sequence iterator ====================================================
@@ -1427,7 +1429,7 @@ const FunctionInfo* OpCodeProvider::getFuncInfoFromApiToken( const ApiToken& rTo
 
 Sequence< FormulaOpCodeMapEntry > OpCodeProvider::getOoxParserMap() const
 {
-    return ContainerHelper::vectorToSequence( mxOpCodeImpl->maParserMap );
+    return comphelper::containerToSequence( mxOpCodeImpl->maParserMap );
 }
 
 // API formula parser wrapper =================================================
@@ -1703,7 +1705,7 @@ void FormulaProcessorBase::convertStringToStringList(
             aNewTokens.emplace_back( OPCODE_SEP, Any() );
         aNewTokens.emplace_back( OPCODE_PUSH, Any( aEntry ) );
     }
-    orTokens = ContainerHelper::vectorToSequence( aNewTokens );
+    orTokens = comphelper::containerToSequence( aNewTokens );
 }
 
 } // namespace oox

@@ -34,6 +34,8 @@
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+
+#include <comphelper/sequence.hxx>
 #include <osl/diagnose.h>
 #include <drawingml/lineproperties.hxx>
 #include <drawingml/chart/seriesconverter.hxx>
@@ -395,7 +397,7 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
                 }
 
                 // attach labeled data sequences to series and insert series into chart type
-                xDataSink->setData( ContainerHelper::vectorToSequence( aLabeledSeqVec ) );
+                xDataSink->setData( comphelper::containerToSequence( aLabeledSeqVec ) );
 
                 // formatting of high/low lines
                 aTypeProp.setProperty( PROP_ShowHighLow, true );

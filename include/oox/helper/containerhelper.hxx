@@ -228,19 +228,6 @@ public:
     static const typename MapType::mapped_type&
                         getMapElement( const MapType& rMap, const typename MapType::key_type& rKey, const typename MapType::mapped_type& rDefault );
 
-    // vector/map/matrix to UNO sequence --------------------------------------
-
-    /** Creates a UNO sequence from a std::vector with copies of all elements.
-
-        @param rVector  The vector to be converted to a sequence.
-
-        @return  A com.sun.star.uno.Sequence object with copies of all objects
-            contained in the passed vector.
-     */
-    template< typename VectorType >
-    static css::uno::Sequence< typename VectorType::value_type >
-                            vectorToSequence( const VectorType& rVector );
-
     /** Creates a UNO sequence of sequences from a matrix with copies of all elements.
 
         @param rMatrix  The matrix to be converted to a sequence of sequences.
@@ -285,15 +272,6 @@ template< typename MapType >
 {
     typename MapType::const_iterator aIt = rMap.find( rKey );
     return (aIt == rMap.end()) ? rDefault : aIt->second;
-}
-
-template< typename VectorType >
-/*static*/ css::uno::Sequence< typename VectorType::value_type > ContainerHelper::vectorToSequence( const VectorType& rVector )
-{
-    typedef typename VectorType::value_type ValueType;
-    if( rVector.empty() )
-        return css::uno::Sequence< ValueType >();
-    return css::uno::Sequence<ValueType>(rVector.data(), static_cast<sal_Int32>(rVector.size()));
 }
 
 template< typename MatrixType >

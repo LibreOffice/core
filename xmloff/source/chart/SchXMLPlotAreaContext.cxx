@@ -24,6 +24,7 @@
 #include "SchXMLTools.hxx"
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <xmloff/xmlnamespace.hxx>
@@ -762,7 +763,7 @@ void SchXMLDataPointContext::startFastElement (sal_Int32 /*Element*/,
                         deletedLegendEntries.push_back(deletedLegendEntry);
                     }
                     deletedLegendEntries.push_back(mDataPoint.m_nPointIndex);
-                    xSeriesProp->setPropertyValue("DeletedLegendEntries", uno::makeAny(::oox::ContainerHelper::vectorToSequence(deletedLegendEntries)));
+                    xSeriesProp->setPropertyValue("DeletedLegendEntries", uno::makeAny(comphelper::containerToSequence(deletedLegendEntries)));
                 }
                 break;
             }

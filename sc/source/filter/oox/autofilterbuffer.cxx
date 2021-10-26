@@ -28,6 +28,8 @@
 #include <com/sun/star/sheet/XSheetFilterDescriptor3.hpp>
 #include <com/sun/star/table/TableOrientation.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
+
+#include <comphelper/sequence.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/brushitem.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -779,7 +781,7 @@ void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRa
 
     // insert all filter fields to the filter descriptor
     if( !aFilterFields.empty() )
-        xFilterDesc->setFilterFields3( ContainerHelper::vectorToSequence( aFilterFields ) );
+        xFilterDesc->setFilterFields3( comphelper::containerToSequence( aFilterFields ) );
 
     // regular expressions
     bool bUseRegExp = obNeedsRegExp.get( false );

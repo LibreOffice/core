@@ -29,6 +29,8 @@
 #include <com/sun/star/sheet/XDDELinkResults.hpp>
 #include <com/sun/star/sheet/XExternalDocLinks.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+
+#include <comphelper/sequence.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
@@ -425,7 +427,7 @@ ExternalLinkInfo ExternalLink::getLinkInfo() const
             for( const auto& rxExtName : maExtNames )
                 if( rxExtName->getDdeItemInfo( aItemInfo ) )
                     aItemInfos.push_back( aItemInfo );
-            aDdeLinkInfo.Items = ContainerHelper::vectorToSequence( aItemInfos );
+            aDdeLinkInfo.Items = comphelper::containerToSequence( aItemInfos );
             aLinkInfo.Data <<= aDdeLinkInfo;
         }
         break;
@@ -647,7 +649,7 @@ Sequence< ExternalLinkInfo > ExternalLinkBuffer::getLinkInfos() const
     aLinkInfos.push_back( mxSelfRef->getLinkInfo() );
     for( const auto& rxExtLink : maExtLinks )
         aLinkInfos.push_back( rxExtLink->getLinkInfo() );
-    return ContainerHelper::vectorToSequence( aLinkInfos );
+    return comphelper::containerToSequence( aLinkInfos );
 }
 
 ExternalLinkRef ExternalLinkBuffer::getExternalLink( sal_Int32 nRefId, bool bUseRefSheets ) const
