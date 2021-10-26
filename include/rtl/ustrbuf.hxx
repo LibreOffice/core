@@ -188,13 +188,6 @@ public:
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
             libreoffice_internal::ConstCharArrayDetector<T>::length);
     }
-
-    /** @overload @since LibreOffice 5.4 */
-    template<std::size_t N> OUStringBuffer(OUStringLiteral<N> const & literal):
-        pData(nullptr), nCapacity(literal.getLength() + 16) //TODO: check for overflow
-    {
-        rtl_uStringbuffer_newFromStr_WithLength(&pData, literal.getStr(), literal.getLength());
-    }
 #endif
 
 #if defined LIBO_INTERNAL_ONLY && defined RTL_STRING_UNITTEST
@@ -343,19 +336,6 @@ public:
         std::memcpy(
             pData->buffer,
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
-            (n + 1) * sizeof (sal_Unicode)); //TODO: check for overflow
-        pData->length = n;
-        return *this;
-    }
-
-    /** @overload @since LibreOffice 5.4 */
-    template<std::size_t N> OUStringBuffer & operator =(OUStringLiteral<N> const & literal) {
-        sal_Int32 const n = literal.getLength();
-        if (n >= nCapacity) {
-            ensureCapacity(n + 16); //TODO: check for overflow
-        }
-        std::memcpy(
-            pData->buffer, literal.getStr(),
             (n + 1) * sizeof (sal_Unicode)); //TODO: check for overflow
         pData->length = n;
         return *this;
@@ -692,11 +672,6 @@ public:
         return append(
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
             libreoffice_internal::ConstCharArrayDetector<T>::length);
-    }
-
-    /** @overload @since LibreOffice 5.4 */
-    template<std::size_t N> OUStringBuffer & append(OUStringLiteral<N> const & literal) {
-        return append(literal.getStr(), literal.getLength());
     }
 #endif
 
@@ -1077,12 +1052,6 @@ public:
             offset,
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
             libreoffice_internal::ConstCharArrayDetector<T>::length);
-    }
-
-    /** @overload @since LibreOffice 5.4 */
-    template<std::size_t N>
-    OUStringBuffer & insert(sal_Int32 offset, OUStringLiteral<N> const & literal) {
-        return insert(offset, literal.getStr(), literal.getLength());
     }
 #endif
 
@@ -1498,17 +1467,6 @@ public:
             libreoffice_internal::ConstCharArrayDetector<T>::length);
         return n < 0 ? n : n + fromIndex;
     }
-
-    /** @overload @since LibreOffice 5.4 */
-    template<std::size_t N>
-    sal_Int32 indexOf(OUStringLiteral<N> const & literal, sal_Int32 fromIndex = 0)
-        const
-    {
-        sal_Int32 n = rtl_ustr_indexOfStr_WithLength(
-            pData->buffer + fromIndex, pData->length - fromIndex, literal.getStr(),
-            literal.getLength());
-        return n < 0 ? n : n + fromIndex;
-    }
 #endif
 
     /**
@@ -1603,12 +1561,6 @@ public:
             pData->buffer, pData->length,
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
             libreoffice_internal::ConstCharArrayDetector<T>::length);
-    }
-
-    /** @overload @since LibreOffice 5.4 */
-    template<std::size_t N> sal_Int32 lastIndexOf(OUStringLiteral<N> const & literal) const {
-        return rtl_ustr_lastIndexOfStr_WithLength(
-            pData->buffer, pData->length, literal.getStr(), literal.getLength());
     }
 #endif
 
