@@ -295,8 +295,9 @@ static void custom_cell_renderer_snapshot(GtkCellRenderer* cell, GtkSnapshot* sn
                                           GtkWidget* widget, const GdkRectangle* background_area,
                                           const GdkRectangle* cell_area, GtkCellRendererState flags)
 {
-    graphene_rect_t rect = GRAPHENE_RECT_INIT(0.0f, 0.0f, static_cast<float>(cell_area->width),
-                                              static_cast<float>(cell_area->height));
+    graphene_rect_t rect = GRAPHENE_RECT_INIT(
+        static_cast<float>(cell_area->x), static_cast<float>(cell_area->y),
+        static_cast<float>(cell_area->width), static_cast<float>(cell_area->height));
     cairo_t* cr = gtk_snapshot_append_cairo(GTK_SNAPSHOT(snapshot), &rect);
     custom_cell_renderer_render(cell, cr, widget, background_area, cell_area, flags);
     cairo_destroy(cr);
