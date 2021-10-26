@@ -3968,7 +3968,7 @@
             <info>
               <desc>Experimental: force all fields in RTF/DOCX to be imported as dumb generic enhanced fields.</desc>
             </info>
-            <value>false</value>
+            <value>true</value>
           </prop>
           <prop oor:name="CreateMSOLockFiles" oor:type="xs:boolean" oor:nillable="false">
             <info>
