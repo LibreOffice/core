@@ -6571,7 +6571,7 @@ void PDFWriterImpl::drawText( const tools::Rectangle& rRect, const OUString& rOr
         {
             vcl::DefaultTextLayout aLayout( *this );
             OUString               aLastLine;
-            OutputDevice::ImplGetTextLines( aMultiLineInfo, nWidth, aStr, nStyle, aLayout );
+            OutputDevice::ImplGetTextLines( rRect, nTextHeight, aMultiLineInfo, nWidth, aStr, nStyle, aLayout );
             sal_Int32              nLines = nHeight/nTextHeight;
             nFormatLines = aMultiLineInfo.Count();
             if ( !nLines )

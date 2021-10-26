@@ -1082,7 +1082,7 @@ protected:
     SAL_DLLPRIVATE void         ImplInitTextLineSize();
     SAL_DLLPRIVATE void         ImplInitAboveTextLineSize();
     static
-    SAL_DLLPRIVATE tools::Long  ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, tools::Long nWidth, const OUString& rStr, DrawTextFlags nStyle, const vcl::ITextLayout& _rLayout );
+    SAL_DLLPRIVATE tools::Long  ImplGetTextLines( const tools::Rectangle& rRect, tools::Long nTextHeight, ImplMultiTextLineInfo& rLineInfo, tools::Long nWidth, const OUString& rStr, DrawTextFlags nStyle, const vcl::ITextLayout& _rLayout );
     static
     SAL_DLLPRIVATE sal_Int32    ImplBreakLinesWithIterator(const tools::Long nWidth, const OUString& rStr, const vcl::ITextLayout& _rLayout,
                                     const css::uno::Reference<css::linguistic2::XHyphenator>& xHyph,
