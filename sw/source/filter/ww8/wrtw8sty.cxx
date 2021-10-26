@@ -1736,9 +1736,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         // it as title page.
         // With Left/Right changes it's different - we have to detect where
         // the change of pages is, but here it's too late for that!
-        // tdf#101814 if there is already an explicit first-page, no point
-        // in checking heuristics here.
-        if ( !titlePage && pPd->GetFollow() && pPd != pPd->GetFollow() &&
+        if ( pPd->GetFollow() && pPd != pPd->GetFollow() &&
              pPd->GetFollow()->GetFollow() == pPd->GetFollow() &&
              pPd->IsHeaderShared() && pPd->IsFooterShared() &&
              ( !rSepInfo.pPDNd || pPd->IsFollowNextPageOfNode( *rSepInfo.pPDNd ) ) )
@@ -1747,7 +1745,11 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
             const SwFrameFormat& rFollowFormat = pFollow->GetMaster();
             if (sw::util::IsPlausableSingleWordSection(*pPdFirstPgFormat, rFollowFormat))
             {
-                if (rSepInfo.pPDNd)
+                if (titlePage)
+                {
+                    // Do nothing. First format is already set.
+                }
+                else if (rSepInfo.pPDNd)
                     pPdFirstPgFormat = pPd->GetPageFormatOfNode( *rSepInfo.pPDNd );
                 else
                     pPdFirstPgFormat = &pPd->GetMaster();
