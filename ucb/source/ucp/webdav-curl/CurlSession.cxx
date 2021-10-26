@@ -589,11 +589,16 @@ auto CurlSession::UsesProxy() -> bool
 
 auto CurlSession::abort() -> void
 {
-    // this is using synchronous libcurl apis - no way to abort?
-    // might be possible with more complexity and CURLOPT_CONNECT_ONLY
-    // or curl_multi API, but is it worth the complexity?
-    // ... it looks like CURLOPT_CONNECT_ONLY would disable all HTTP handling.
-    // abort() was a no-op since OOo 3.2 and before that it crashed.
+    // note: abort() was a no-op since OOo 3.2 and before that it crashed.
+    bool expected(false);
+    // it would be pointless to lock m_Mutex here as the other thread holds it
+    if (m_AbortFlag.compare_exchange_strong(expected, true))
+    {
+        // This function looks safe to call without m_Mutex as long as the
+        // m_pCurlMulti handle is not destroyed, and the caller must own a ref
+        // to this object which keeps it alive; it should cause poll to return.
+        curl_multi_wakeup(m_pCurlMulti.get());
+    }
 }
 
 /// this is just a bunch of static member functions called from CurlSession
@@ -663,6 +668,10 @@ auto CurlProcessor::ProcessRequestImpl(
     ::std::pair<::std::vector<OUString> const&, DAVResource&> const* const pRequestedHeaders)
     -> void
 {
+    // Clear flag before transfer starts; only a transfer started before
+    // calling abort() will be aborted, not one started later.
+    rSession.m_AbortFlag.store(false);
+
     if (pEnv)
     { // add custom request headers passed by caller
         for (auto const& rHeader : pEnv->m_aRequestHeaders)
@@ -887,7 +896,7 @@ auto CurlProcessor::ProcessRequestImpl(
                 break;
             }
             int nFDs;
-            mc = curl_multi_wait(rSession.m_pCurlMulti.get(), nullptr, 0, rSession.m_nReadTimeout,
+            mc = curl_multi_poll(rSession.m_pCurlMulti.get(), nullptr, 0, rSession.m_nReadTimeout,
                                  &nFDs);
             if (mc != CURLM_OK)
             {
@@ -896,6 +905,10 @@ auto CurlProcessor::ProcessRequestImpl(
                 throw DAVException(
                     DAVException::DAV_HTTP_CONNECT,
                     ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
+            }
+            if (rSession.m_AbortFlag.load())
+            { // flag was set by abort() -> not sure what exception to throw?
+                throw DAVException(DAVException::DAV_HTTP_ERROR, "abort() was called", 0);
             }
         } while (nRunning != 0);
         // there should be exactly 1 CURLMsg now, but the interface is

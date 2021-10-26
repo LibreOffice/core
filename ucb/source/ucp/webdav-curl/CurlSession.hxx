@@ -14,6 +14,7 @@
 
 #include <curl/curl.h>
 
+#include <atomic>
 #include <mutex>
 
 namespace http_dav_ucp
@@ -37,6 +38,8 @@ private:
     bool m_isAuthenticatedProxy = false;
     /// read timeout in milliseconds (connection timeout is stored in m_pCurl)
     int m_nReadTimeout = 0;
+    /// flag to signal abort to transferring thread
+    ::std::atomic<bool> m_AbortFlag;
 
     /// libcurl multi handle
     ::std::unique_ptr<CURLM, deleter_from_fn<curl_multi_cleanup>> m_pCurlMulti;
