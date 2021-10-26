@@ -19,8 +19,9 @@
 namespace sc::op
 {
 /* Checkout available optimization options */
-const bool hasAVX = cpuid::hasAVX();
-const bool hasSSE2 = cpuid::hasSSE2();
+const bool hasAVX512F = hasAVX512FCode() && cpuid::hasAVX512F();
+const bool hasAVX = hasAVXCode() && cpuid::hasAVX();
+const bool hasSSE2 = hasSSE2Code() && cpuid::hasSSE2();
 
 /**
   * If no boosts available, Unrolled KahanSum.

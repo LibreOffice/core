@@ -20,7 +20,9 @@
 
 namespace sc::op
 {
-#ifdef LO_SSE2_AVAILABLE // Old processors
+#ifdef LO_SSE2_AVAILABLE
+
+bool hasSSE2Code() { return true; }
 
 using namespace SSE2;
 
@@ -47,13 +49,10 @@ static inline void sumSSE2(__m128d& sum, __m128d& err, const __m128d& value)
     sum = t;
 }
 
-#endif
-
 /** Execute Kahan sum with SSE2.
   */
 KahanSumSimple executeSSE2(size_t& i, size_t nSize, const double* pCurrent)
 {
-#ifdef LO_SSE2_AVAILABLE
     // Make sure we don't fall out of bounds.
     // This works by sums of 8 terms.
     // So the 8'th term is i+7
@@ -120,13 +119,15 @@ KahanSumSimple executeSSE2(size_t& i, size_t nSize, const double* pCurrent)
         return { sums[0], errs[0] };
     }
     return { 0.0, 0.0 };
-#else
-    (void)i;
-    (void)nSize;
-    (void)pCurrent;
-    abort();
-#endif
 }
+
+#else // LO_SSE2_AVAILABLE
+
+bool hasSSE2Code() { return false; }
+
+KahanSumSimple executeSSE2(size_t&, size_t, const double*) { abort(); }
+
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

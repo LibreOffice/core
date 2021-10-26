@@ -18,25 +18,11 @@
 
 #include <stdlib.h>
 
-/* TODO Remove this once GCC updated and AVX512 can work. */
-#ifdef __GNUC__
-#if __GNUC__ < 9
-#ifdef LO_AVX512F_AVAILABLE
-#define HAS_LO_AVX512F_AVAILABLE
-#undef LO_AVX512F_AVAILABLE
-#endif
-#endif
-#endif
-
 namespace sc::op
 {
 #ifdef LO_AVX512F_AVAILABLE
-const bool hasAVX512F = cpuid::hasAVX512F();
-#else
-const bool hasAVX512F = false;
-#endif
 
-#ifdef LO_AVX512F_AVAILABLE // New processors
+bool hasAVX512FCode() { return true; }
 
 using namespace AVX512;
 
@@ -62,13 +48,10 @@ static inline void sumAVX512(__m512d& sum, __m512d& err, const __m512d& value)
     sum = t;
 }
 
-#endif
-
 /** Execute Kahan sum with AVX512.
   */
 KahanSumSimple executeAVX512F(size_t& i, size_t nSize, const double* pCurrent)
 {
-#ifdef LO_AVX512F_AVAILABLE // New processors
     // Make sure we don't fall out of bounds.
     // This works by sums of 8 terms.
     // So the 8'th term is i+7
@@ -122,24 +105,16 @@ KahanSumSimple executeAVX512F(size_t& i, size_t nSize, const double* pCurrent)
         return { sums[0], errs[0] };
     }
     return { 0.0, 0.0 };
-#else
-    (void)i;
-    (void)nSize;
-    (void)pCurrent;
-    abort();
-#endif
 }
 
-} // end namespace sc::op
+#else // LO_AVX512F_AVAILABLE
 
-/* TODO Remove this once GCC updated and AVX512 can work. */
-#ifdef __GNUC__
-#if __GNUC__ < 9
-#ifdef HAS_LO_AVX512F_AVAILABLE
-#define LO_AVX512F_AVAILABLE
-#undef HAS_LO_AVX512F_AVAILABLE
+bool hasAVX512FCode() { return false; }
+
+KahanSumSimple executeAVX512F(size_t&, size_t, const double*) { abort(); }
+
 #endif
-#endif
-#endif
+
+} // end namespace sc::op
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

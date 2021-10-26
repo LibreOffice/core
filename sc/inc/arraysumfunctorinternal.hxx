@@ -13,8 +13,6 @@
 
 namespace sc::op
 {
-SC_DLLPUBLIC extern const bool hasAVX512F;
-
 // Plain old data structure, to be used by code compiled with CPU intrinsics without generating any
 // code for it (so that code requiring intrinsics doesn't get accidentally selected as the one copy
 // when merging duplicates).
@@ -28,6 +26,10 @@ struct KahanSumSimple
 SC_DLLPUBLIC KahanSumSimple executeAVX512F(size_t& i, size_t nSize, const double* pCurrent);
 SC_DLLPUBLIC KahanSumSimple executeAVX(size_t& i, size_t nSize, const double* pCurrent);
 SC_DLLPUBLIC KahanSumSimple executeSSE2(size_t& i, size_t nSize, const double* pCurrent);
+
+SC_DLLPUBLIC bool hasAVX512FCode();
+SC_DLLPUBLIC bool hasAVXCode();
+SC_DLLPUBLIC bool hasSSE2Code();
 
 } // namespace
 
