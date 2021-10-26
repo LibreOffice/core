@@ -137,6 +137,11 @@ static auto GetErrorString(CURLcode const rc, char const* const pErrorBuffer = n
     return OString::Concat("(") + OString::number(sal_Int32(rc)) + ") " + pMessage;
 }
 
+static auto GetErrorStringMulti(CURLMcode const mc) -> OString
+{
+    return OString::Concat("(") + OString::number(sal_Int32(mc)) + ") " + curl_multi_strerror(mc);
+}
+
     // libcurl callbacks:
 
 #if OSL_DEBUG_LEVEL > 0
@@ -445,6 +450,13 @@ CurlSession::CurlSession(uno::Reference<uno::XComponentContext> const& xContext,
     , m_Proxy(rProxyDecider.getProxy(m_URI.GetScheme(), m_URI.GetHost(), m_URI.GetPort()))
 {
     assert(m_URI.GetScheme() == "http" || m_URI.GetScheme() == "https");
+    m_pCurlMulti.reset(curl_multi_init());
+    if (!m_pCurlMulti)
+    {
+        SAL_WARN("ucb.ucp.webdav.curl", "curl_multi_init failed");
+        throw DAVException(DAVException::DAV_SESSION_CREATE,
+                           ConnectionEndPointString(m_URI.GetHost(), m_URI.GetPort()));
+    }
     m_pCurl.reset(curl_easy_init());
     if (!m_pCurl)
     {
@@ -504,10 +516,8 @@ CurlSession::CurlSession(uno::Reference<uno::XComponentContext> const& xContext,
         throw DAVException(DAVException::DAV_SESSION_CREATE,
                            ConnectionEndPointString(m_URI.GetHost(), m_URI.GetPort()));
     }
-#if 0
     auto const readTimeout(officecfg::Inet::Settings::ReadTimeout::get(m_xContext));
-    // TODO: read timeout??? does not map to this value?
-#endif
+    m_nReadTimeout = ::std::max<int>(20, ::std::min<long>(readTimeout, 180)) * 1000;
     // default is infinite
     rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_TIMEOUT, 300L);
     if (rc != CURLE_OK)
@@ -837,8 +847,74 @@ auto CurlProcessor::ProcessRequestImpl(
             assert(rc == CURLE_OK);
         }
         rSession.m_ErrorBuffer[0] = '\0';
+
+        // note: easy handle must be added for *every* transfer!
+        // otherwise it gets stuck in MSTATE_MSGSENT forever after 1st transfer
+        auto mc = curl_multi_add_handle(rSession.m_pCurlMulti.get(), rSession.m_pCurl.get());
+        if (mc != CURLM_OK)
+        {
+            SAL_WARN("ucb.ucp.webdav.curl",
+                     "curl_multi_add_handle failed: " << GetErrorStringMulti(mc));
+            throw DAVException(
+                DAVException::DAV_SESSION_CREATE,
+                ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
+        }
+        ::comphelper::ScopeGuard const gg([&]() {
+            mc = curl_multi_remove_handle(rSession.m_pCurlMulti.get(), rSession.m_pCurl.get());
+            if (mc != CURLM_OK)
+            {
+                SAL_WARN("ucb.ucp.webdav.curl",
+                         "curl_multi_remove_handle failed: " << GetErrorStringMulti(mc));
+            }
+        });
+
         // this is where libcurl actually does something
-        rc = curl_easy_perform(rSession.m_pCurl.get());
+        rc = CURL_LAST; // clear current value
+        int nRunning;
+        do
+        {
+            mc = curl_multi_perform(rSession.m_pCurlMulti.get(), &nRunning);
+            if (mc != CURLM_OK)
+            {
+                SAL_WARN("ucb.ucp.webdav.curl",
+                         "curl_multi_perform failed: " << GetErrorStringMulti(mc));
+                throw DAVException(
+                    DAVException::DAV_HTTP_CONNECT,
+                    ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
+            }
+            if (nRunning == 0)
+            { // short request like HEAD on loopback could be done in first call
+                break;
+            }
+            int nFDs;
+            mc = curl_multi_wait(rSession.m_pCurlMulti.get(), nullptr, 0, rSession.m_nReadTimeout,
+                                 &nFDs);
+            if (mc != CURLM_OK)
+            {
+                SAL_WARN("ucb.ucp.webdav.curl",
+                         "curl_multi_poll failed: " << GetErrorStringMulti(mc));
+                throw DAVException(
+                    DAVException::DAV_HTTP_CONNECT,
+                    ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
+            }
+        } while (nRunning != 0);
+        // there should be exactly 1 CURLMsg now, but the interface is
+        // extensible so future libcurl versions could yield additional things
+        do
+        {
+            CURLMsg const* const pMsg
+                = curl_multi_info_read(rSession.m_pCurlMulti.get(), &nRunning);
+            if (pMsg && pMsg->msg == CURLMSG_DONE)
+            {
+                assert(pMsg->easy_handle == rSession.m_pCurl.get());
+                rc = pMsg->data.result;
+            }
+            else
+            {
+                SAL_WARN("ucb.ucp.webdav.curl", "curl_multi_info_read unexpected result");
+            }
+        } while (nRunning != 0);
+
         // error handling part 1: libcurl errors
         if (rc != CURLE_OK)
         {
