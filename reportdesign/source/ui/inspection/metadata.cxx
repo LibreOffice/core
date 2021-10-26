@@ -78,16 +78,6 @@ namespace rptui
 
     //= OPropertyInfoService
 
-#define DEF_INFO( ident, uinameres, helpid, flags )   \
-    OPropertyInfoImpl( PROPERTY_##ident, PROPERTY_ID_##ident, \
-                       RptResId( RID_STR_##uinameres ), HID_RPT_PROP_##helpid, flags )
-
-#define DEF_INFO_1( ident, uinameres, helpid, flag1 ) \
-    DEF_INFO( ident, uinameres, helpid, PropUIFlags::flag1 )
-
-#define DEF_INFO_2( ident, uinameres, helpid, flag1, flag2 ) \
-    DEF_INFO( ident, uinameres, helpid, PropUIFlags::flag1 | PropUIFlags::flag2 )
-
     sal_uInt16              OPropertyInfoService::s_nCount = 0;
     OPropertyInfoImpl*      OPropertyInfoService::s_pPropertyInfos = nullptr;
 
@@ -98,52 +88,50 @@ namespace rptui
 
         static OPropertyInfoImpl aPropertyInfos[] =
         {
-        /*
-        DEF_INFO_?( propname and id,   resource id,         help id,           flags ),
-        */
-             DEF_INFO_1( FORCENEWPAGE,                  FORCENEWPAGE,               FORCENEWPAGE,               Composeable )
-            ,DEF_INFO_1( NEWROWORCOL,                   NEWROWORCOL,                NEWROWORCOL,                Composeable )
-            ,DEF_INFO_1( KEEPTOGETHER,                  KEEPTOGETHER,               KEEPTOGETHER,               Composeable )
-            ,DEF_INFO_1( CANGROW,                       CANGROW,                    CANGROW,                    Composeable )
-            ,DEF_INFO_1( CANSHRINK,                     CANSHRINK,                  CANSHRINK,                  Composeable )
-            ,DEF_INFO_1( REPEATSECTION,                 REPEATSECTION,              REPEATSECTION,              Composeable )
-            ,DEF_INFO_1( PRINTREPEATEDVALUES,           PRINTREPEATEDVALUES,        PRINTREPEATEDVALUES,        Composeable )
-            ,DEF_INFO_1( CONDITIONALPRINTEXPRESSION,    CONDITIONALPRINTEXPRESSION, CONDITIONALPRINTEXPRESSION, Composeable )
-            ,DEF_INFO_1( STARTNEWCOLUMN,                STARTNEWCOLUMN,             STARTNEWCOLUMN,             Composeable )
-            ,DEF_INFO_1( RESETPAGENUMBER,               RESETPAGENUMBER,            RESETPAGENUMBER,            Composeable )
-            ,DEF_INFO_1( PRINTWHENGROUPCHANGE,          PRINTWHENGROUPCHANGE,       PRINTWHENGROUPCHANGE,       Composeable )
-            ,DEF_INFO_1( VISIBLE,                       VISIBLE,                    VISIBLE,                    Composeable )
-            ,DEF_INFO_1( GROUPKEEPTOGETHER,             GROUPKEEPTOGETHER,          GROUPKEEPTOGETHER,          Composeable )
-            ,DEF_INFO_1( PAGEHEADEROPTION,              PAGEHEADEROPTION,           PAGEHEADEROPTION,           Composeable )
-            ,DEF_INFO_1( PAGEFOOTEROPTION,              PAGEFOOTEROPTION,           PAGEFOOTEROPTION,           Composeable )
-            ,DEF_INFO_1( POSITIONX,                     POSITIONX,                  RPT_POSITIONX,              Composeable )
-            ,DEF_INFO_1( POSITIONY,                     POSITIONY,                  RPT_POSITIONY,              Composeable )
-            ,DEF_INFO_1( WIDTH,                         WIDTH,                      RPT_WIDTH,                  Composeable )
-            ,DEF_INFO_1( HEIGHT,                        HEIGHT,                     RPT_HEIGHT,                 Composeable )
-            ,DEF_INFO_1( AUTOGROW,                      AUTOGROW,                   RPT_AUTOGROW,               Composeable )
-            ,DEF_INFO_1( FONT,                          FONT,                       RPT_FONT,                   Composeable )
-            ,DEF_INFO_1( PREEVALUATED,                  PREEVALUATED,               PREEVALUATED,               Composeable )
-            ,DEF_INFO_1( DEEPTRAVERSING,                DEEPTRAVERSING,             DEEPTRAVERSING,             Composeable )
-            ,DEF_INFO_1( FORMULA,                       FORMULA,                    FORMULA,                    Composeable )
-            ,DEF_INFO_1( INITIALFORMULA,                INITIALFORMULA,             INITIALFORMULA,             Composeable )
-            ,DEF_INFO_2( TYPE,                          TYPE,                       TYPE,                       Composeable,DataProperty )
-            ,DEF_INFO_2( DATAFIELD,                     DATAFIELD,                  DATAFIELD,                  Composeable,DataProperty )
-            ,DEF_INFO_2( FORMULALIST,                   FORMULALIST,                FORMULALIST,                Composeable,DataProperty )
-            ,DEF_INFO_2( SCOPE,                         SCOPE,                      SCOPE,                      Composeable,DataProperty )
-            ,DEF_INFO_1( PRESERVEIRI,                   PRESERVEIRI,                PRESERVEIRI,                Composeable )
-            ,DEF_INFO_1( BACKCOLOR,                     BACKCOLOR,                  BACKCOLOR,                  Composeable )
-            ,DEF_INFO_1( CONTROLBACKGROUND,             BACKCOLOR,                  BACKCOLOR,                  Composeable )
-            ,DEF_INFO_1( BACKTRANSPARENT,               BACKTRANSPARENT,            BACKTRANSPARENT,            Composeable )
-            ,DEF_INFO_1( CONTROLBACKGROUNDTRANSPARENT,  CONTROLBACKGROUNDTRANSPARENT,
-                                                                                    CONTROLBACKGROUNDTRANSPARENT, Composeable )
-            ,DEF_INFO_1( CHARTTYPE,                     CHARTTYPE,                  CHARTTYPE,                  Composeable )
-            ,DEF_INFO_1( PREVIEW_COUNT,                 PREVIEW_COUNT,              PREVIEW_COUNT,              Composeable )
-            ,DEF_INFO_2( MASTERFIELDS,                  MASTERFIELDS,               MASTERFIELDS,               Composeable,DataProperty )
-            ,DEF_INFO_2( DETAILFIELDS,                  DETAILFIELDS,               DETAILFIELDS,               Composeable,DataProperty)
-            ,DEF_INFO_1( AREA,                          AREA,                       AREA,                       Composeable )
-            ,DEF_INFO_2( MIMETYPE,                      MIMETYPE,                   MIMETYPE,                   Composeable,DataProperty )
-            ,DEF_INFO_1( PARAADJUST,                    PARAADJUST,                 PARAADJUST,                 Composeable )
-            ,DEF_INFO_1( VERTICALALIGN,                 VERTICALALIGN,              VERTICALALIGN,              Composeable )
+            OPropertyInfoImpl(PROPERTY_FORCENEWPAGE, PROPERTY_ID_FORCENEWPAGE, RptResId(RID_STR_FORCENEWPAGE), HID_RPT_PROP_FORCENEWPAGE, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_NEWROWORCOL, PROPERTY_ID_NEWROWORCOL, RptResId(RID_STR_NEWROWORCOL), HID_RPT_PROP_NEWROWORCOL, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_KEEPTOGETHER, PROPERTY_ID_KEEPTOGETHER, RptResId(RID_STR_KEEPTOGETHER), HID_RPT_PROP_KEEPTOGETHER, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_CANGROW, PROPERTY_ID_CANGROW, RptResId(RID_STR_CANGROW), HID_RPT_PROP_CANGROW, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_CANSHRINK, PROPERTY_ID_CANSHRINK, RptResId(RID_STR_CANSHRINK), HID_RPT_PROP_CANSHRINK, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_REPEATSECTION, PROPERTY_ID_REPEATSECTION, RptResId(RID_STR_REPEATSECTION), HID_RPT_PROP_REPEATSECTION, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_PRINTREPEATEDVALUES, PROPERTY_ID_PRINTREPEATEDVALUES, RptResId(RID_STR_PRINTREPEATEDVALUES), HID_RPT_PROP_PRINTREPEATEDVALUES, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_CONDITIONALPRINTEXPRESSION, PROPERTY_ID_CONDITIONALPRINTEXPRESSION, RptResId(RID_STR_CONDITIONALPRINTEXPRESSION), HID_RPT_PROP_CONDITIONALPRINTEXPRESSION,
+                              PropUIFlags::Composeable ),
+            OPropertyInfoImpl(PROPERTY_STARTNEWCOLUMN, PROPERTY_ID_STARTNEWCOLUMN, RptResId(RID_STR_STARTNEWCOLUMN), HID_RPT_PROP_STARTNEWCOLUMN, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_RESETPAGENUMBER, PROPERTY_ID_RESETPAGENUMBER, RptResId(RID_STR_RESETPAGENUMBER), HID_RPT_PROP_RESETPAGENUMBER, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_PRINTWHENGROUPCHANGE, PROPERTY_ID_PRINTWHENGROUPCHANGE, RptResId(RID_STR_PRINTWHENGROUPCHANGE), HID_RPT_PROP_PRINTWHENGROUPCHANGE, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_VISIBLE, PROPERTY_ID_VISIBLE, RptResId(RID_STR_VISIBLE), HID_RPT_PROP_VISIBLE, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_GROUPKEEPTOGETHER, PROPERTY_ID_GROUPKEEPTOGETHER, RptResId(RID_STR_GROUPKEEPTOGETHER), HID_RPT_PROP_GROUPKEEPTOGETHER, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_PAGEHEADEROPTION, PROPERTY_ID_PAGEHEADEROPTION, RptResId(RID_STR_PAGEHEADEROPTION), HID_RPT_PROP_PAGEHEADEROPTION, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_PAGEFOOTEROPTION, PROPERTY_ID_PAGEFOOTEROPTION, RptResId(RID_STR_PAGEFOOTEROPTION), HID_RPT_PROP_PAGEFOOTEROPTION, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_POSITIONX, PROPERTY_ID_POSITIONX, RptResId(RID_STR_POSITIONX), HID_RPT_PROP_RPT_POSITIONX, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_POSITIONY, PROPERTY_ID_POSITIONY, RptResId(RID_STR_POSITIONY), HID_RPT_PROP_RPT_POSITIONY, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_WIDTH, PROPERTY_ID_WIDTH, RptResId(RID_STR_WIDTH), HID_RPT_PROP_RPT_WIDTH, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_HEIGHT, PROPERTY_ID_HEIGHT, RptResId(RID_STR_HEIGHT), HID_RPT_PROP_RPT_HEIGHT, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_AUTOGROW, PROPERTY_ID_AUTOGROW, RptResId(RID_STR_AUTOGROW), HID_RPT_PROP_RPT_AUTOGROW, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_FONT, PROPERTY_ID_FONT, RptResId(RID_STR_FONT), HID_RPT_PROP_RPT_FONT, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_PREEVALUATED, PROPERTY_ID_PREEVALUATED, RptResId(RID_STR_PREEVALUATED), HID_RPT_PROP_PREEVALUATED, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_DEEPTRAVERSING, PROPERTY_ID_DEEPTRAVERSING, RptResId(RID_STR_DEEPTRAVERSING), HID_RPT_PROP_DEEPTRAVERSING, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_FORMULA, PROPERTY_ID_FORMULA, RptResId(RID_STR_FORMULA), HID_RPT_PROP_FORMULA, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_INITIALFORMULA, PROPERTY_ID_INITIALFORMULA, RptResId(RID_STR_INITIALFORMULA), HID_RPT_PROP_INITIALFORMULA, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_TYPE, PROPERTY_ID_TYPE, RptResId(RID_STR_TYPE), HID_RPT_PROP_TYPE, PropUIFlags::Composeable | PropUIFlags::DataProperty),
+            OPropertyInfoImpl(PROPERTY_DATAFIELD,PROPERTY_ID_DATAFIELD, RptResId(RID_STR_DATAFIELD), HID_RPT_PROP_DATAFIELD, PropUIFlags::Composeable | PropUIFlags::DataProperty),
+            OPropertyInfoImpl(PROPERTY_FORMULALIST, PROPERTY_ID_FORMULALIST, RptResId(RID_STR_FORMULALIST), HID_RPT_PROP_FORMULALIST, PropUIFlags::Composeable | PropUIFlags::DataProperty),
+            OPropertyInfoImpl(PROPERTY_SCOPE, PROPERTY_ID_SCOPE, RptResId(RID_STR_SCOPE), HID_RPT_PROP_SCOPE, PropUIFlags::Composeable | PropUIFlags::DataProperty),
+            OPropertyInfoImpl(PROPERTY_PRESERVEIRI, PROPERTY_ID_PRESERVEIRI, RptResId(RID_STR_PRESERVEIRI), HID_RPT_PROP_PRESERVEIRI, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_BACKCOLOR, PROPERTY_ID_BACKCOLOR, RptResId(RID_STR_BACKCOLOR), HID_RPT_PROP_BACKCOLOR, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_CONTROLBACKGROUND, PROPERTY_ID_CONTROLBACKGROUND, RptResId(RID_STR_BACKCOLOR), HID_RPT_PROP_BACKCOLOR, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_BACKTRANSPARENT, PROPERTY_ID_BACKTRANSPARENT, RptResId(RID_STR_BACKTRANSPARENT), HID_RPT_PROP_BACKTRANSPARENT, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_CONTROLBACKGROUNDTRANSPARENT, PROPERTY_ID_CONTROLBACKGROUNDTRANSPARENT, RptResId(RID_STR_CONTROLBACKGROUNDTRANSPARENT), HID_RPT_PROP_CONTROLBACKGROUNDTRANSPARENT,
+                              PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_CHARTTYPE, PROPERTY_ID_CHARTTYPE, RptResId(RID_STR_CHARTTYPE), HID_RPT_PROP_CHARTTYPE, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_PREVIEW_COUNT, PROPERTY_ID_PREVIEW_COUNT, RptResId(RID_STR_PREVIEW_COUNT), HID_RPT_PROP_PREVIEW_COUNT, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_MASTERFIELDS, PROPERTY_ID_MASTERFIELDS, RptResId(RID_STR_MASTERFIELDS), HID_RPT_PROP_MASTERFIELDS, PropUIFlags::Composeable | PropUIFlags::DataProperty),
+            OPropertyInfoImpl(PROPERTY_DETAILFIELDS, PROPERTY_ID_DETAILFIELDS, RptResId(RID_STR_DETAILFIELDS), HID_RPT_PROP_DETAILFIELDS, PropUIFlags::Composeable | PropUIFlags::DataProperty),
+            OPropertyInfoImpl(PROPERTY_AREA, PROPERTY_ID_AREA, RptResId(RID_STR_AREA), HID_RPT_PROP_AREA, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_MIMETYPE, PROPERTY_ID_MIMETYPE, RptResId(RID_STR_MIMETYPE), HID_RPT_PROP_MIMETYPE, PropUIFlags::Composeable | PropUIFlags::DataProperty),
+            OPropertyInfoImpl(PROPERTY_PARAADJUST, PROPERTY_ID_PARAADJUST, RptResId(RID_STR_PARAADJUST), HID_RPT_PROP_PARAADJUST, PropUIFlags::Composeable),
+            OPropertyInfoImpl(PROPERTY_VERTICALALIGN, PROPERTY_ID_VERTICALALIGN, RptResId(RID_STR_VERTICALALIGN), HID_RPT_PROP_VERTICALALIGN, PropUIFlags::Composeable)
         };
 
         s_pPropertyInfos = aPropertyInfos;
