@@ -332,6 +332,7 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
     GetFont().GetScale(&nXScale, &nYScale);
 
     Point aCurrPos(0, 0);
+    bool bHitMaxTextLengthLimit = false;
     while (true)
     {
         int nBidiMinRunPos, nBidiEndRunPos;
@@ -433,8 +434,16 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
             hb_buffer_clear_contents(pHbBuffer);
 
             const int nMinRunPos = aSubRun.mnMin;
-            const int nEndRunPos = aSubRun.mnEnd;
-            const int nRunLen = nEndRunPos - nMinRunPos;
+            int nEndRunPos = aSubRun.mnEnd;
+            int nRunLen = nEndRunPos - nMinRunPos;
+            // This is a hack, it assumes that a glyph is a minimum of 1 pixel wide.
+            // What we really need is some API in harfbuzz that tells the shaper to stop doing work
+            // when it exceeds mnMaxTextWidth.
+            if (rArgs.mnMaxTextWidth != -1 && nRunLen >= rArgs.mnMaxTextWidth)
+            {
+                nEndRunPos = aSubRun.mnMin + rArgs.mnMaxTextWidth;
+                nRunLen = nEndRunPos - nMinRunPos;
+            }
 
             OString sLanguage = msLanguage;
             if (sLanguage.isEmpty())
@@ -590,8 +599,18 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                 m_GlyphItems.push_back(aGI);
 
                 aCurrPos.AdjustX(nAdvance );
+
+                if (rArgs.mnMaxTextWidth != -1 && nXOffset >= rArgs.mnMaxTextWidth)
+                {
+                    bHitMaxTextLengthLimit = true;
+                    break;
+                }
             }
+            if (bHitMaxTextLengthLimit)
+                break;
         }
+        if (bHitMaxTextLengthLimit)
+            break;
     }
 
     hb_buffer_destroy(pHbBuffer);

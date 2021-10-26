@@ -28,13 +28,15 @@
 namespace vcl::text
 {
 ImplLayoutArgs::ImplLayoutArgs(const OUString& rStr, int nMinCharPos, int nEndCharPos,
-                               SalLayoutFlags nFlags, const LanguageTag& rLanguageTag,
+                               sal_Int32 nMaxTextWidth, SalLayoutFlags nFlags,
+                               const LanguageTag& rLanguageTag,
                                vcl::text::TextLayoutCache const* const pLayoutCache)
     : maLanguageTag(rLanguageTag)
     , mnFlags(nFlags)
     , mrStr(rStr)
     , mnMinCharPos(nMinCharPos)
     , mnEndCharPos(nEndCharPos)
+    , mnMaxTextWidth(nMaxTextWidth)
     , m_pTextLayoutCache(pLayoutCache)
     , mpDXArray(nullptr)
     , mnLayoutWidth(0)

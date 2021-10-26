@@ -40,9 +40,9 @@ namespace vcl
     {
     }
 
-    tools::Long DefaultTextLayout::GetTextWidth( const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const
+    tools::Long DefaultTextLayout::GetTextWidth( const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength, sal_Int32 nMaxTextWidth ) const
     {
-        return m_rTargetDevice.GetTextWidth( _rText, _nStartIndex, _nLength );
+        return m_rTargetDevice.GetTextWidth2( _rText, _nStartIndex, _nLength, nMaxTextWidth );
     }
 
     void DefaultTextLayout::DrawText( const Point& _rStartPoint, const OUString& _rText, sal_Int32 _nStartIndex,
@@ -74,7 +74,7 @@ namespace vcl
         virtual ~ReferenceDeviceTextLayout();
 
         // ITextLayout
-        virtual tools::Long        GetTextWidth( const OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen ) const override;
+        virtual tools::Long        GetTextWidth( const OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen, sal_Int32 nMaxTextWidth ) const override;
         virtual void        DrawText( const Point& _rStartPoint, const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength, std::vector< tools::Rectangle >* _pVector, OUString* _pDisplayText ) override;
         virtual void        GetCaretPositions( const OUString& _rText, tools::Long* _pCaretXArray, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const override;
         virtual sal_Int32   GetTextBreak(const OUString& _rText, tools::Long _nMaxTextWidth, sal_Int32 _nStartIndex, sal_Int32 _nLength) const override;
@@ -188,7 +188,7 @@ namespace vcl
         return nTextWidth;
     }
 
-    tools::Long ReferenceDeviceTextLayout::GetTextWidth( const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const
+    tools::Long ReferenceDeviceTextLayout::GetTextWidth( const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength, sal_Int32 /*nMaxTextWidth*/ ) const
     {
         return GetTextArray( _rText, nullptr, _nStartIndex, _nLength );
     }

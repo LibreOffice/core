@@ -1038,7 +1038,10 @@ public:
 
         See also GetTextBoundRect() for more explanation + code examples.
     */
-    tools::Long                        GetTextWidth( const OUString& rStr, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
+    tools::Long                 GetTextWidth( const OUString& rStr, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
+                                  vcl::text::TextLayoutCache const* = nullptr,
+                                  SalLayoutGlyphs const*const pLayoutCache = nullptr) const;
+    tools::Long                 GetTextWidth2( const OUString& rStr, sal_Int32 nIndex = 0, sal_Int32 nLen = -1, sal_Int32 nMaxTextWidth = -1,
                                   vcl::text::TextLayoutCache const* = nullptr,
                                   SalLayoutGlyphs const*const pLayoutCache = nullptr) const;
 
@@ -1055,8 +1058,12 @@ public:
                                                sal_Int32 nLen = -1,
                                                SalLayoutFlags flags = SalLayoutFlags::NONE,
                                                const SalLayoutGlyphs* pLayoutCache = nullptr);
-    tools::Long                        GetTextArray( const OUString& rStr, std::vector<tools::Long>* pDXAry,
+    tools::Long                 GetTextArray( const OUString& rStr, std::vector<tools::Long>* pDXAry,
                                               sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
+                                              vcl::text::TextLayoutCache const* = nullptr,
+                                              SalLayoutGlyphs const*const pLayoutCache = nullptr) const;
+    tools::Long                 GetTextArray2( const OUString& rStr, std::vector<tools::Long>* pDXAry,
+                                              sal_Int32 nIndex = 0, sal_Int32 nLen = -1, sal_Int32 nMaxTextWidth = -1,
                                               vcl::text::TextLayoutCache const* = nullptr,
                                               SalLayoutGlyphs const*const pLayoutCache = nullptr) const;
 
@@ -1239,7 +1246,17 @@ public:
                                             const tools::Long* pLogicDXArray=nullptr, SalLayoutFlags flags = SalLayoutFlags::NONE,
                                             vcl::text::TextLayoutCache const* = nullptr,
                                             const SalLayoutGlyphs* pGlyphs = nullptr) const;
+    std::unique_ptr<SalLayout>
+                                ImplLayout2( const OUString&, sal_Int32 nIndex, sal_Int32 nLen, sal_Int32 nMaxTextWidth=-1,
+                                            const Point& rLogicPos = Point(0,0), tools::Long nLogicWidth=0,
+                                            const tools::Long* pLogicDXArray=nullptr, SalLayoutFlags flags = SalLayoutFlags::NONE,
+                                            vcl::text::TextLayoutCache const* = nullptr,
+                                            const SalLayoutGlyphs* pGlyphs = nullptr) const;
     SAL_DLLPRIVATE vcl::text::ImplLayoutArgs ImplPrepareLayoutArgs( OUString&, const sal_Int32 nIndex, const sal_Int32 nLen,
+                                                         DeviceCoordinate nPixelWidth, const DeviceCoordinate* pPixelDXArray,
+                                                         SalLayoutFlags flags = SalLayoutFlags::NONE,
+                                                         vcl::text::TextLayoutCache const* = nullptr) const;
+    SAL_DLLPRIVATE vcl::text::ImplLayoutArgs ImplPrepareLayoutArgs2( OUString&, const sal_Int32 nIndex, const sal_Int32 nLen, sal_Int32 nMaxTextWidth,
                                                          DeviceCoordinate nPixelWidth, const DeviceCoordinate* pPixelDXArray,
                                                          SalLayoutFlags flags = SalLayoutFlags::NONE,
                                                          vcl::text::TextLayoutCache const* = nullptr) const;

@@ -479,13 +479,13 @@ void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
 }
 
 tools::Long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
-                                     tools::Long nWidth, const OUString& rStr,
+                                     tools::Long nMaxTextWidth, const OUString& rStr,
                                      DrawTextFlags nStyle, const vcl::ITextLayout& _rLayout )
 {
-    SAL_WARN_IF( nWidth <= 0, "vcl", "ImplGetTextLines: nWidth <= 0!" );
+    SAL_WARN_IF( nMaxTextWidth <= 0, "vcl", "ImplGetTextLines: nMaxTextWidth <= 0!" );
 
-    if ( nWidth <= 0 )
-        nWidth = 1;
+    if ( nMaxTextWidth <= 0 )
+        nMaxTextWidth = 1;
 
     rLineInfo.Clear();
     if (rStr.isEmpty())
@@ -512,8 +512,8 @@ tools::Long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
         while ( ( nBreakPos < nLen ) && ( rStr[ nBreakPos ] != '\r' ) && ( rStr[ nBreakPos ] != '\n' ) )
             nBreakPos++;
 
-        tools::Long nLineWidth = _rLayout.GetTextWidth( rStr, nPos, nBreakPos-nPos );
-        if ( ( nLineWidth > nWidth ) && ( nStyle & DrawTextFlags::WordBreak ) )
+        tools::Long nLineWidth = _rLayout.GetTextWidth( rStr, nPos, nBreakPos-nPos, nMaxTextWidth );
+        if ( ( nLineWidth > nMaxTextWidth ) && ( nStyle & DrawTextFlags::WordBreak ) )
         {
             if ( !xBI.is() )
                 xBI = vcl::unohelper::CreateBreakIterator();
@@ -878,9 +878,16 @@ tools::Long OutputDevice::GetTextWidth( const OUString& rStr, sal_Int32 nIndex, 
      vcl::text::TextLayoutCache const*const pLayoutCache,
      SalLayoutGlyphs const*const pSalLayoutCache) const
 {
+    return GetTextWidth2(rStr, nIndex, nLen, /*nMaxTextWidth*/-1, pLayoutCache, pSalLayoutCache);
+}
 
-    tools::Long nWidth = GetTextArray( rStr, nullptr, nIndex,
-            nLen, pLayoutCache, pSalLayoutCache );
+tools::Long OutputDevice::GetTextWidth2( const OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen, sal_Int32 nMaxTextWidth,
+     vcl::text::TextLayoutCache const*const pLayoutCache,
+     SalLayoutGlyphs const*const pSalLayoutCache) const
+{
+
+    tools::Long nWidth = GetTextArray2( rStr, nullptr, nIndex,
+            nLen, nMaxTextWidth, pLayoutCache, pSalLayoutCache );
 
     return nWidth;
 }
@@ -950,6 +957,14 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<tools:
                                  vcl::text::TextLayoutCache const*const pLayoutCache,
                                  SalLayoutGlyphs const*const pSalLayoutCache) const
 {
+    return GetTextArray2(rStr, pDXAry, nIndex, nLen, /*nMaxTextWidth*/-1, pLayoutCache, pSalLayoutCache);
+}
+
+tools::Long OutputDevice::GetTextArray2( const OUString& rStr, std::vector<tools::Long>* pDXAry,
+                                 sal_Int32 nIndex, sal_Int32 nLen, sal_Int32 nMaxTextWidth,
+                                 vcl::text::TextLayoutCache const*const pLayoutCache,
+                                 SalLayoutGlyphs const*const pSalLayoutCache) const
+{
     if( nIndex >= rStr.getLength() )
         return 0; // TODO: this looks like a buggy caller?
 
@@ -959,7 +974,7 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<tools:
     }
 
     // do layout
-    std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen,
+    std::unique_ptr<SalLayout> pSalLayout = ImplLayout2(rStr, nIndex, nLen, nMaxTextWidth,
             Point(0,0), 0, nullptr, eDefaultLayout, pLayoutCache, pSalLayoutCache);
     if( !pSalLayout )
     {
@@ -1140,6 +1155,14 @@ vcl::text::ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
                                                     SalLayoutFlags nLayoutFlags,
          vcl::text::TextLayoutCache const*const pLayoutCache) const
 {
+    return ImplPrepareLayoutArgs2(rStr, nMinIndex, nLen, -1, nPixelWidth, pDXArray, nLayoutFlags, pLayoutCache);
+}
+vcl::text::ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs2( OUString& rStr,
+                                                    const sal_Int32 nMinIndex, const sal_Int32 nLen, sal_Int32 nMaxTextWidth,
+                                                    DeviceCoordinate nPixelWidth, const DeviceCoordinate* pDXArray,
+                                                    SalLayoutFlags nLayoutFlags,
+         vcl::text::TextLayoutCache const*const pLayoutCache) const
+{
     assert(nMinIndex >= 0);
     assert(nLen >= 0);
 
@@ -1223,7 +1246,7 @@ vcl::text::ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
         nLayoutFlags |= SalLayoutFlags::RightAlign;
 
     // set layout options
-    vcl::text::ImplLayoutArgs aLayoutArgs(rStr, nMinIndex, nEndIndex, nLayoutFlags, maFont.GetLanguageTag(), pLayoutCache);
+    vcl::text::ImplLayoutArgs aLayoutArgs(rStr, nMinIndex, nEndIndex, nMaxTextWidth, nLayoutFlags, maFont.GetLanguageTag(), pLayoutCache);
 
     Degree10 nOrientation = mpFontInstance ? mpFontInstance->mnOrientation : 0_deg10;
     aLayoutArgs.SetOrientation( nOrientation );
@@ -1236,6 +1259,17 @@ vcl::text::ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
 
 std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
                                     sal_Int32 nMinIndex, sal_Int32 nLen,
+                                    const Point& rLogicalPos, tools::Long nLogicalWidth,
+                                    const tools::Long* pDXArray, SalLayoutFlags flags,
+         vcl::text::TextLayoutCache const* pLayoutCache,
+         const SalLayoutGlyphs* pGlyphs) const
+{
+    return ImplLayout2(rOrigStr, nMinIndex, nLen, /*nMaxTextWidth*/ -1,
+                      rLogicalPos, nLogicalWidth, pDXArray, flags, pLayoutCache, pGlyphs);
+}
+
+std::unique_ptr<SalLayout> OutputDevice::ImplLayout2(const OUString& rOrigStr,
+                                    sal_Int32 nMinIndex, sal_Int32 nLen, sal_Int32 nMaxTextWidth,
                                     const Point& rLogicalPos, tools::Long nLogicalWidth,
                                     const tools::Long* pDXArray, SalLayoutFlags flags,
          vcl::text::TextLayoutCache const* pLayoutCache,
@@ -1306,7 +1340,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
         }
     }
 
-    vcl::text::ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStr, nMinIndex, nLen,
+    vcl::text::ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs2( aStr, nMinIndex, nLen, nMaxTextWidth,
             nPixelWidth, pDXPixelArray, flags, pLayoutCache);
 
     // get matching layout object for base font
@@ -1373,7 +1407,7 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, tools::Long nTextWid
          vcl::text::TextLayoutCache const*const pLayoutCache,
          const SalLayoutGlyphs* pGlyphs) const
 {
-    std::unique_ptr<SalLayout> pSalLayout = ImplLayout( rStr, nIndex, nLen,
+    std::unique_ptr<SalLayout> pSalLayout = ImplLayout2( rStr, nIndex, nLen, nTextWidth,
             Point(0,0), 0, nullptr, eDefaultLayout, pLayoutCache, pGlyphs);
     sal_Int32 nRetVal = -1;
     if( pSalLayout )
