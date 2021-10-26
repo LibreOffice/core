@@ -19,11 +19,11 @@ namespace sfx2
 /** Open a URI via com.sun.star.system.SystemShellExecute
 
     Handles XSystemShellExecute.execute's IllegalArgumentException (throwing a
-    RuntimeException if it is unexpected, i.e., not caused by the given uri not
+    RuntimeException if it is unexpected, i.e., not caused by the given sURI not
     being an absolute URI reference).
 
     Handles XSystemShellExecute.execute's SystemShellExecuteException unless the
-    given handleSystemShellExecuteException is false (in which case the
+    given bHandleSystemShellExecuteException is false (in which case the
     exception is re-thrown).
 */
 void openUriExternally(const OUString& sURI, bool bHandleSystemShellExecuteException);
