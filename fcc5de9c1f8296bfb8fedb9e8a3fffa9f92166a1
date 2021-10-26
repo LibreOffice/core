@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "f215c497_351ee8d0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-26T10:04:48Z",
+      "side": 1,
+      "message": "Based on the crash stack, I could not directly link them to the change. It wasn\u0027t consistent because if I did the same set of actions again, I didn\u0027t get the crash. So if anything it might just be exposing some existing issue.",
+      "parentUuid": "099a9d85_b5696dc3",
+      "range": {
+        "startLine": 26,
+        "startChar": 1,
+        "endLine": 26,
+        "endChar": 59
+      },
+      "revId": "fcc5de9c1f8296bfb8fedb9e8a3fffa9f92166a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "409bc0e2_67c07547",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 4
@@ -89,6 +113,23 @@
       "writtenOn": "2021-10-26T09:54:30Z",
       "side": 1,
       "message": "I think this is ok. At least it prevents most of the cases that Writer can\u0027t cope with due to its odd logic of numeric vs text (non-)handling.",
+      "revId": "fcc5de9c1f8296bfb8fedb9e8a3fffa9f92166a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c70d67d_e41c11a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-26T10:04:48Z",
+      "side": 1,
+      "message": "OK. I\u0027ve gotten three reviewers that are hinting that the change is worthwhile. So I\u0027ll give my developer +1 to it.",
       "revId": "fcc5de9c1f8296bfb8fedb9e8a3fffa9f92166a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
