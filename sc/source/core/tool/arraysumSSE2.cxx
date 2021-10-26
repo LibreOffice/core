@@ -16,7 +16,7 @@
 #include <tools/simd.hxx>
 #include <tools/simdsupport.hxx>
 
-#include <cstdlib>
+#include <stdlib.h>
 
 namespace sc::op
 {

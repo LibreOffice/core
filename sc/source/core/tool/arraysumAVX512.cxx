@@ -16,7 +16,7 @@
 #include <tools/simd.hxx>
 #include <tools/simdsupport.hxx>
 
-#include <cstdlib>
+#include <stdlib.h>
 
 /* TODO Remove this once GCC updated and AVX512 can work. */
 #ifdef __GNUC__

@@ -123,10 +123,6 @@ $(eval $(call gb_Library_add_exception_objects,skia,\
     external/skia/source/skia_opts \
 ))
 
-$(eval $(call gb_Library_add_exception_objects,skia,\
-    external/skia/source/skia_opts_ssse3, $(CXXFLAGS_INTRINSICS_SSSE3) $(LO_CLANG_CXXFLAGS_INTRINSICS_SSSE3) \
-))
-
 $(eval $(call gb_Library_set_generated_cxx_suffix,skia,cpp))
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
@@ -833,6 +829,10 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/ports/SkGlobalInitialization_default \
     UnpackedTarball/skia/src/ports/SkImageGenerator_none \
     UnpackedTarball/skia/src/ports/SkOSFile_stdio \
+))
+
+$(eval $(call gb_Library_add_exception_objects,skia,\
+    external/skia/source/skia_opts_ssse3, $(CXXFLAGS_INTRINSICS_SSSE3) $(LO_CLANG_CXXFLAGS_INTRINSICS_SSSE3) \
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\

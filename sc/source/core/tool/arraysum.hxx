@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include <cmath>
+#include <math.h>
 
 namespace sc::op
 {
@@ -37,7 +37,7 @@ namespace LO_ARRAYSUM_SPACE
 INLINE void sumNeumanierNormal(double& sum, double& err, const double& value)
 {
     double t = sum + value;
-    if (std::abs(sum) >= std::abs(value))
+    if (fabs(sum) >= fabs(value))
         err += (sum - t) + value;
     else
         err += (value - t) + sum;
