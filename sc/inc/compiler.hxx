@@ -153,7 +153,7 @@ public:
     // Use these methods only on tokens that are not part of a token array,
     // since the reference count is cleared!
     void SetOpCode( OpCode eCode );
-    void SetString( rtl_uString* pData, rtl_uString* pDataIgoreCase );
+    void SetString( rtl_uString* pData, rtl_uString* pDataIgnoreCase );
     void SetSingleReference( const ScSingleRefData& rRef );
     void SetDoubleReference( const ScComplexRefData& rRef );
     void SetDouble( double fVal );

@@ -247,13 +247,13 @@ void ScRawToken::SetOpCode( OpCode e )
     }
 }
 
-void ScRawToken::SetString( rtl_uString* pData, rtl_uString* pDataIgoreCase )
+void ScRawToken::SetString( rtl_uString* pData, rtl_uString* pDataIgnoreCase )
 {
     eOp   = ocPush;
     eType = svString;
 
     sharedstring.mpData = pData;
-    sharedstring.mpDataIgnoreCase = pDataIgoreCase;
+    sharedstring.mpDataIgnoreCase = pDataIgnoreCase;
 }
 
 void ScRawToken::SetSingleReference( const ScSingleRefData& rRef )
