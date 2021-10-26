@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63c97690_3dfd1c95",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-10-26T13:43:51Z",
+      "side": 1,
+      "message": "My bad, I got mislead into thinking that if there was a user-defined ctor it\u0027d need a copy-ctor as well, or some such..",
+      "revId": "abddae0487153febdd86f9f2e4963b3f6b38d2e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
