@@ -18,24 +18,8 @@
 
 #include <cstdlib>
 
-/* TODO Remove this once GCC updated and AVX512 can work. */
-#ifdef __GNUC__
-#if __GNUC__ < 9
-#ifdef LO_AVX512F_AVAILABLE
-#define HAS_LO_AVX512F_AVAILABLE
-#undef LO_AVX512F_AVAILABLE
-#endif
-#endif
-#endif
-
 namespace sc::op
 {
-#ifdef LO_AVX512F_AVAILABLE
-const bool hasAVX512F = cpuid::hasAVX512F();
-#else
-const bool hasAVX512F = false;
-#endif
-
 #ifdef LO_AVX512F_AVAILABLE // New processors
 
 using namespace AVX512;
@@ -131,15 +115,5 @@ KahanSumSimple executeAVX512F(size_t& i, size_t nSize, const double* pCurrent)
 }
 
 } // end namespace sc::op
-
-/* TODO Remove this once GCC updated and AVX512 can work. */
-#ifdef __GNUC__
-#if __GNUC__ < 9
-#ifdef HAS_LO_AVX512F_AVAILABLE
-#define LO_AVX512F_AVAILABLE
-#undef HAS_LO_AVX512F_AVAILABLE
-#endif
-#endif
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
