@@ -561,7 +561,7 @@ double SAL_CALL AnalysisAddIn::getMround( double fNum, double fMult )
 
 double SAL_CALL AnalysisAddIn::getSqrtpi( double fNum )
 {
-    double fRet = sqrt( fNum * PI );
+    double fRet = sqrt( fNum * M_PI );
     RETURN_FINITE( fRet );
 }
 

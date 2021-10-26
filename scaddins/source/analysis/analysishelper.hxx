@@ -35,10 +35,6 @@ namespace sca::analysis {
 
 class ScaAnyConverter;
 
-
-#define PI          3.1415926535897932
-
-
 inline bool     IsLeapYear( sal_uInt16 nYear );
 
 #ifdef DISABLE_DYNLOADING

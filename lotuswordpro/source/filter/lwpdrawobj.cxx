@@ -796,7 +796,7 @@ XFFrame* LwpDrawRectangle::CreateStandardDrawObj(const  OUString& rStyleName)
 
         if (aSdwRect.IsRectRotated())
         {
-            pRect->SetRotate( fRotAngle / PI * 180);// aXFCenter);
+            pRect->SetRotate( fRotAngle / M_PI * 180);// aXFCenter);
         }
 
         pRect->SetStyleName(rStyleName);
