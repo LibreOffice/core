@@ -1234,7 +1234,8 @@ static ScRefFlags lcl_ScAddress_Parse_OOo( const sal_Unicode* p, const ScDocumen
                 // Specified table name is not found in this document.  Assume this is an external document.
                 aDocName = aTab;
                 sal_Int32 n = aDocName.lastIndexOf('.');
-                if (n > 0)
+                // Assume that common filename extensions are not more than 4 characters.
+                if (n > 0 && aTab.getLength() - n <= 4)
                 {
                     // Extension found.  Strip it.
                     aTab = aTab.copy(0, n);
