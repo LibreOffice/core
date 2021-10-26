@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d4b1575_f27e5f2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-10-26T20:34:53Z",
+      "side": 1,
+      "message": "Hi Balazs,\nWhen possible, use Cppunittests, they are faster and executed in more platforms -\u003e https://gerrit.libreoffice.org/c/core/+/124243",
+      "revId": "bc92028fdf7f52f555702386a6862631e08a3919",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
