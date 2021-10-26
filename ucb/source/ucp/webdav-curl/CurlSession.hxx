@@ -35,7 +35,11 @@ private:
     /// once authentication was successful, rely on m_pCurl's data
     bool m_isAuthenticated = false;
     bool m_isAuthenticatedProxy = false;
+    /// read timeout in milliseconds (connection timeout is stored in m_pCurl)
+    int m_nReadTimeout = 0;
 
+    /// libcurl multi handle
+    ::std::unique_ptr<CURLM, deleter_from_fn<curl_multi_cleanup>> m_pCurlMulti;
     /// libcurl easy handle
     ::std::unique_ptr<CURL, deleter_from_fn<curl_easy_cleanup>> m_pCurl;
 
