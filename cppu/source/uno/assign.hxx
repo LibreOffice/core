@@ -384,20 +384,17 @@ inline bool _assignData(
         }
         return false;
     case typelib_TypeClass_SEQUENCE:
-        if (typelib_TypeClass_SEQUENCE != pSourceType->eTypeClass)
+        if (!_type_equals( pDestType, pSourceType ))
             return false;
-        // self assignment:
-        if (*static_cast<uno_Sequence **>(pSource) == *static_cast<uno_Sequence **>(pDest))
-            return _type_equals(pDestType, pSourceType); // E.g. static empty sequence may be shared
-        if (_type_equals( pDestType, pSourceType ))
+        // check self assignment (only after _type_equals, to account for shared static empty):
+        if (*static_cast<uno_Sequence **>(pSource) != *static_cast<uno_Sequence **>(pDest))
         {
             osl_atomic_increment( &(*static_cast<uno_Sequence **>(pSource))->nRefCount );
             idestructSequence(
                 *static_cast<uno_Sequence **>(pDest), pDestType, pDestTypeDescr, release );
             *static_cast<uno_Sequence **>(pDest) = *static_cast<uno_Sequence **>(pSource);
-            return true;
         }
-        return false;
+        return true;
     case typelib_TypeClass_INTERFACE:
         if (typelib_TypeClass_INTERFACE != pSourceType->eTypeClass)
             return false;
