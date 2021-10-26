@@ -104,7 +104,7 @@ GtkWindow* RunDialog::GetTransientFor()
     return GTK_WINDOW(widget_get_toplevel(pFrame->getWindow()));
 }
 
-RunDialog::RunDialog(GtkWidget *pDialog, const uno::Reference<awt::XExtendedToolkit>& rToolkit,
+RunDialog::RunDialog(GtkNativeDialog *pDialog, const uno::Reference<awt::XExtendedToolkit>& rToolkit,
                                          const uno::Reference<frame::XDesktop>& rDesktop)
     : cppu::WeakComponentImplHelper<awt::XTopWindowListener, frame::XTerminateListener>(maLock)
     , mpDialog(pDialog)
@@ -157,8 +157,7 @@ void SAL_CALL RunDialog::notifyTermination( const css::lang::EventObject& )
 
 void RunDialog::cancel()
 {
-    gtk_dialog_response( GTK_DIALOG( mpDialog ), GTK_RESPONSE_CANCEL );
-    gtk_widget_hide( mpDialog );
+    gtk_native_dialog_hide( mpDialog );
 }
 
 namespace
@@ -187,7 +186,7 @@ gint RunDialog::run()
     mxDesktop->addTerminateListener(this);
 
     // [Inc/Dec]ModalCount on parent frame so it knows it is in modal mode
-    GtkWindow* pParent = gtk_window_get_transient_for(GTK_WINDOW(mpDialog));
+    GtkWindow* pParent = gtk_native_dialog_get_transient_for(mpDialog);
     GtkSalFrame* pFrame = pParent ? GtkSalFrame::getFromWindow(GTK_WIDGET(pParent)) : nullptr;
     VclPtr<vcl::Window> xFrameWindow = pFrame ? pFrame->GetWindow() : nullptr;
     if (xFrameWindow)
@@ -196,7 +195,7 @@ gint RunDialog::run()
         xFrameWindow->ImplGetFrame()->NotifyModalHierarchy(true);
     }
 
-    gint nStatus = gtk_dialog_run(GTK_DIALOG(mpDialog));
+    gint nStatus = gtk_native_dialog_run(GTK_NATIVE_DIALOG(mpDialog));
 
     if (xFrameWindow)
     {
@@ -238,11 +237,7 @@ SalGtkPicker::~SalGtkPicker()
 
     if (m_pDialog)
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        gtk_widget_destroy(m_pDialog);
-#else
-        gtk_window_destroy(GTK_WINDOW(m_pDialog));
-#endif
+        g_object_unref(m_pDialog);
     }
 }
 
@@ -294,7 +289,7 @@ void SalGtkPicker::implsetTitle( std::u16string_view aTitle )
 
     OString aWindowTitle = OUStringToOString( aTitle, RTL_TEXTENCODING_UTF8 );
 
-    gtk_window_set_title( GTK_WINDOW( m_pDialog ), aWindowTitle.getStr() );
+    gtk_native_dialog_set_title( GTK_NATIVE_DIALOG( m_pDialog ), aWindowTitle.getStr() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
