@@ -2641,6 +2641,108 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf137964)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3090), xShape->getPosition().Y);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf143244)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf143244.odt");
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xTextTable->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTextTable->getColumns()->getCount());
+
+    uno::Reference<text::XTextRange> xCell(xTextTable->getCellByName("A1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(Color(0x009353), getProperty<Color>(xCell, "BackColor"));
+
+    xCell.set(xTextTable->getCellByName("A2"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xCell, "BackColor"));
+
+    xCell.set(xTextTable->getCellByName("A3"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(Color(0xdddddd), getProperty<Color>(xCell, "BackColor"));
+
+    xCell.set(xTextTable->getCellByName("A4"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xCell, "BackColor"));
+
+    xCell.set(xTextTable->getCellByName("A5"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(Color(0xdddddd), getProperty<Color>(xCell, "BackColor"));
+
+    xCell.set(xTextTable->getCellByName("A6"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(Color(0xbee3d3), getProperty<Color>(xCell, "BackColor"));
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    xTextTable.set(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xTextTable->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTextTable->getColumns()->getCount());
+
+    dispatchCommand(mxComponent, ".uno:GoUp", {});
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    for (sal_Int32 i = 0; i < 6; ++i)
+    {
+        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    for (sal_Int32 i = 0; i < 5; ++i)
+    {
+        dispatchCommand(mxComponent, ".uno:Undo", {});
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    xTextTable.set(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xTextTable->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTextTable->getColumns()->getCount());
+
+    for (sal_Int32 i = 0; i < 5; ++i)
+    {
+        dispatchCommand(mxComponent, ".uno:Redo", {});
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    xTextTable.set(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(9), xTextTable->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTextTable->getColumns()->getCount());
+
+    xCell.set(xTextTable->getCellByName("A1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(Color(0x009353), getProperty<Color>(xCell, "BackColor"));
+
+    xCell.set(xTextTable->getCellByName("A2"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xCell, "BackColor"));
+
+    xCell.set(xTextTable->getCellByName("A3"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(Color(0xdddddd), getProperty<Color>(xCell, "BackColor"));
+
+    xCell.set(xTextTable->getCellByName("A4"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xCell, "BackColor"));
+
+    xCell.set(xTextTable->getCellByName("A5"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(Color(0xdddddd), getProperty<Color>(xCell, "BackColor"));
+
+    xCell.set(xTextTable->getCellByName("A6"), uno::UNO_QUERY);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Color: R:255 G:255 B:255 A:255
+    // - Actual  : Color: R:190 G:227 B:211 A:0
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xCell, "BackColor"));
+
+    xCell.set(xTextTable->getCellByName("A7"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(Color(0xdddddd), getProperty<Color>(xCell, "BackColor"));
+
+    xCell.set(xTextTable->getCellByName("A8"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xCell, "BackColor"));
+
+    xCell.set(xTextTable->getCellByName("A9"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(Color(0xbee3d3), getProperty<Color>(xCell, "BackColor"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf136715)
 {
     createSwDoc(DATA_DIRECTORY, "tdf136715.odt");
