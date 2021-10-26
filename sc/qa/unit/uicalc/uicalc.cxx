@@ -1103,6 +1103,36 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124815)
     CPPUNIT_ASSERT_EQUAL(OUString("Rakennukset"), pDoc->GetString(ScAddress(2, 0, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf142010)
+{
+    ScModelObj* pModelObj = createDoc("tdf142010.xls");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    goToCell("A1");
+
+    OUString aFormula;
+    pDoc->GetFormula(5, 71, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=MOD(F$71+$C72,9)"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(5.0, pDoc->GetValue(ScAddress(5, 71, 0)));
+
+    dispatchCommand(mxComponent, ".uno:InsertColumnsBefore", {});
+
+    pDoc->GetFormula(6, 71, 0, aFormula);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: =MOD(G$71+$D72,9)
+    // - Actual  : =MOD(G$71+$K72,9)
+    CPPUNIT_ASSERT_EQUAL(OUString("=MOD(G$71+$D72,9)"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(5.0, pDoc->GetValue(ScAddress(6, 71, 0)));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    pDoc->GetFormula(5, 71, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=MOD(F$71+$C72,9)"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(5.0, pDoc->GetValue(ScAddress(5, 71, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf132431)
 {
     ScModelObj* pModelObj = createDoc("tdf132431.ods");
