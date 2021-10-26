@@ -1323,24 +1323,20 @@ SfxViewShell* SfxViewShell::GetFirst
 {
     // search for a SfxViewShell of the specified type
     std::vector<SfxViewShell*> &rShells = SfxGetpApp()->GetViewShells_Impl();
-    auto &rFrames = SfxGetpApp()->GetViewFrames_Impl();
     for (SfxViewShell* pShell : rShells)
     {
         if ( pShell )
         {
+            // This code used to check that the frame exists in the other list,
+            // because of https://bz.apache.org/ooo/show_bug.cgi?id=62084, with the explanation:
             // sometimes dangling SfxViewShells exist that point to a dead SfxViewFrame
             // these ViewShells shouldn't be accessible anymore
             // a destroyed ViewFrame is not in the ViewFrame array anymore, so checking this array helps
-            for (SfxViewFrame* pFrame : rFrames)
-            {
-                if ( pFrame == pShell->GetViewFrame() )
-                {
-                    // only ViewShells with a valid ViewFrame will be returned
-                    if ( ( !bOnlyVisible || pFrame->IsVisible() ) && (!isViewShell || isViewShell(pShell)))
-                        return pShell;
-                    break;
-                }
-            }
+            // That doesn't seem to be needed anymore, but keep an assert, just in case.
+            assert(std::find(SfxGetpApp()->GetViewFrames_Impl().begin(), SfxGetpApp()->GetViewFrames_Impl().end(),
+                pShell->GetViewFrame()) != SfxGetpApp()->GetViewFrames_Impl().end());
+            if ( ( !bOnlyVisible || pShell->GetViewFrame()->IsVisible() ) && (!isViewShell || isViewShell(pShell)))
+                return pShell;
         }
     }
 
@@ -1358,7 +1354,6 @@ SfxViewShell* SfxViewShell::GetNext
 )
 {
     std::vector<SfxViewShell*> &rShells = SfxGetpApp()->GetViewShells_Impl();
-    auto &rFrames = SfxGetpApp()->GetViewFrames_Impl();
     size_t nPos;
     for ( nPos = 0; nPos < rShells.size(); ++nPos )
         if ( rShells[nPos] == &rPrev )
@@ -1369,19 +1364,10 @@ SfxViewShell* SfxViewShell::GetNext
         SfxViewShell *pShell = rShells[nPos];
         if ( pShell )
         {
-            // sometimes dangling SfxViewShells exist that point to a dead SfxViewFrame
-            // these ViewShells shouldn't be accessible anymore
-            // a destroyed ViewFrame is not in the ViewFrame array anymore, so checking this array helps
-            for (SfxViewFrame* pFrame : rFrames)
-            {
-                if ( pFrame == pShell->GetViewFrame() )
-                {
-                    // only ViewShells with a valid ViewFrame will be returned
-                    if ( ( !bOnlyVisible || pFrame->IsVisible() ) && (!isViewShell || isViewShell(pShell)) )
-                        return pShell;
-                    break;
-                }
-            }
+            assert(std::find(SfxGetpApp()->GetViewFrames_Impl().begin(), SfxGetpApp()->GetViewFrames_Impl().end(),
+                pShell->GetViewFrame()) != SfxGetpApp()->GetViewFrames_Impl().end());
+            if ( ( !bOnlyVisible || pShell->GetViewFrame()->IsVisible() ) && (!isViewShell || isViewShell(pShell)) )
+                return pShell;
         }
     }
 
