@@ -1189,14 +1189,14 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext)
         return;
     }
 
-    ImplDrawSelect(rRenderContext, mnSelItemId, bFocus, bDrawSel);
-    if (mbHighlight)
+    sal_uInt16 nItemDrawnSelected = ImplDrawSelect(rRenderContext, mnSelItemId, bFocus, bDrawSel);
+    if (mbHighlight && mnHighItemId != nItemDrawnSelected)
     {
-        ImplDrawSelect(rRenderContext, mnHighItemId, bFocus, bDrawSel);
+        ImplDrawSelect(rRenderContext, mnHighItemId, false, bDrawSel);
     }
 }
 
-void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel )
+sal_uInt16 ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel )
 {
     ValueSetItem* pItem;
     tools::Rectangle aRect;
@@ -1217,11 +1217,11 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nIt
     }
     else
     {
-        return;
+        return 0;
     }
 
     if (!pItem->mbVisible)
-        return;
+        return 0;
 
     // draw selection
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
@@ -1314,6 +1314,8 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nIt
     }
 
     ImplDrawItemText(rRenderContext, pItem->maText);
+
+    return pItem->mnId;
 }
 
 void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSetItem* pItem, tools::Rectangle aRect)
