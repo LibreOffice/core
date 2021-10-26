@@ -24,6 +24,17 @@ An example demo that renders a metafile using `vcl` be seen by invoking:
     ./bin/run mtfdemo odk/examples/basic/forms_and_controls/burger.wmf
 
 This opens the burger.wmf file from the ODK examples.
+
+It is also possible to dump metaactions created as the intermediary format
+before rendering the metafile using:
+
+    ./bin/run mtfdemo -d odk/examples/basic/forms_and_controls/burger.wmf
+
+If the command is successful, this message will be shown, and metadump.xml will
+be put in the current folder:
+
+"Dumped metaactions as metadump.xml"
+
 The demo code structure is described in [GDIMetaFile](../vcl/README.GDIMetaFile)
 documentation.
 
@@ -86,8 +97,11 @@ Known remaining bugs for this module is gathered here:
 enhancements](https://bugs.documentfoundation.org/show\_bug.cgi?id=103859)
 
 ## Dependencies
-Direct dependencies for **emfio** are [**drawinglayer**](../drawinglayer) and
-[**sax**](../sax).
+The direct dependency for **emfio** is [**drawinglayer**](../drawinglayer). The
+complete list of dependencies including the indirect dependencies is as below:
+```
+basegfx drawinglayer cppu cppuhelper sal comphelper tl salhelper vcl svt utl
+```
 
 ## Tools
 Several tools are available for inspecting WMF/EMF/EMF+ files, which are binary
