@@ -43,13 +43,12 @@ using namespace ::com::sun::star::uno;
 SalGtkFolderPicker::SalGtkFolderPicker( const uno::Reference< uno::XComponentContext >& xContext ) :
     SalGtkPicker( xContext )
 {
-    m_pDialog = gtk_file_chooser_dialog_new(
+    m_pDialog = gtk_file_chooser_native_new(
         OUStringToOString( getResString( FOLDERPICKER_TITLE ), RTL_TEXTENCODING_UTF8 ).getStr(),
-        nullptr, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, getCancelText().getStr(), GTK_RESPONSE_CANCEL,
-        getOKText().getStr(), GTK_RESPONSE_ACCEPT, nullptr );
-    gtk_window_set_modal(GTK_WINDOW(m_pDialog), true);
+        nullptr, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, getOKText().getStr(), getCancelText().getStr());
 
-    gtk_dialog_set_default_response( GTK_DIALOG (m_pDialog), GTK_RESPONSE_ACCEPT );
+    gtk_native_dialog_set_modal(GTK_NATIVE_DIALOG(m_pDialog), true);
+
 #if !GTK_CHECK_VERSION(4, 0, 0)
 #if ENABLE_GIO
     gtk_file_chooser_set_local_only( GTK_FILE_CHOOSER( m_pDialog ), false );
@@ -140,7 +139,7 @@ void SAL_CALL SalGtkFolderPicker::setTitle( const OUString& aTitle )
 
     OString aWindowTitle = OUStringToOString( aTitle, RTL_TEXTENCODING_UTF8 );
 
-    gtk_window_set_title( GTK_WINDOW( m_pDialog ), aWindowTitle.getStr() );
+    gtk_native_dialog_set_title( GTK_NATIVE_DIALOG( m_pDialog ), aWindowTitle.getStr() );
 }
 
 sal_Int16 SAL_CALL SalGtkFolderPicker::execute()
@@ -163,8 +162,8 @@ sal_Int16 SAL_CALL SalGtkFolderPicker::execute()
         pParent = RunDialog::GetTransientFor();
     }
     if (pParent)
-        gtk_window_set_transient_for(GTK_WINDOW(m_pDialog), pParent);
-    rtl::Reference<RunDialog> pRunDialog = new RunDialog(m_pDialog, xToolkit, xDesktop);
+        gtk_native_dialog_set_transient_for(GTK_NATIVE_DIALOG(m_pDialog), pParent);
+    rtl::Reference<RunDialog> pRunDialog = new RunDialog(GTK_NATIVE_DIALOG(m_pDialog), xToolkit, xDesktop);
     gint nStatus = pRunDialog->run();
     switch( nStatus )
     {
@@ -178,7 +177,7 @@ sal_Int16 SAL_CALL SalGtkFolderPicker::execute()
             retVal = 0;
             break;
     }
-    gtk_widget_hide(m_pDialog);
+    gtk_native_dialog_hide(GTK_NATIVE_DIALOG(m_pDialog));
 
     return retVal;
 }
