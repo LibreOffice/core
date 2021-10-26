@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "281ee4a5_576ee3de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-10-26T07:44:42Z",
+      "side": 1,
+      "message": "(Working on an expanded version of this that removes all the deprecated flag names from this file.)",
+      "revId": "caed30502e3b0ee1478bfa07b0e688a2abf494d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
