@@ -2373,7 +2373,7 @@ void WatchWindow::UpdateWatches(bool bBasicStopped)
                 eEnableChildren = TRISTATE_TRUE;
             }
 
-            if (SbxVariable const* pVar = IsSbxVariable(pSBX))
+            if (SbxVariable* pVar = dynamic_cast<SbxVariable*>(pSBX))
             {
                 // extra treatment of arrays
                 SbxDataType eType = pVar->GetType();
@@ -2486,7 +2486,11 @@ void WatchWindow::UpdateWatches(bool bBasicStopped)
                     {
                         aWatchStr += aStrStr;
                     }
+                    // tdf#57308 - avoid a second call to retrieve the data
+                    const SbxFlagBits nFlags = pVar->GetFlags();
+                    pVar->SetFlag(SbxFlagBits::NoBroadcast);
                     aWatchStr += pVar->GetOUString();
+                    pVar->SetFlags(nFlags);
                     if( bString )
                     {
                         aWatchStr += aStrStr;
