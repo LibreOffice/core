@@ -558,7 +558,7 @@ void IndexTabPage_Impl::InitializeIndex()
 
     try
     {
-        OUStringBuffer aURL = HELP_URL;
+        OUStringBuffer aURL(HELP_URL);
         aURL.append(sFactory);
         AppendConfigToken(aURL, true);
 
