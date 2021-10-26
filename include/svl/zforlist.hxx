@@ -324,6 +324,7 @@ public:
                      const LocaleDataWrapper& rLocaleData,
                      LanguageType eLang );
     NfCurrencyEntry( const NfCurrencyEntry& ) = default;
+    NfCurrencyEntry& operator=( const NfCurrencyEntry& ) = default;
 
                         /// Symbols and language identical
     bool                operator==( const NfCurrencyEntry& r ) const;
