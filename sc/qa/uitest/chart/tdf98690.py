@@ -19,22 +19,22 @@ class tdf98690(UITestCase):
 
         self.xUITest.executeCommand(".uno:Copy")
 
-        with self.ui_test.load_empty_file("calc") as calc_document:
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
+    with self.ui_test.load_empty_file("calc") as calc_document:
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = xCalcDoc.getChild("grid_window")
 
-            self.xUITest.executeCommand(".uno:Paste")
+        self.xUITest.executeCommand(".uno:Paste")
 
-            xData = calc_document.Sheets[0].Charts[0].getEmbeddedObject().Data
+        xData = calc_document.Sheets[0].Charts[0].getEmbeddedObject().Data
 
-            aExpectedRowDescriptions = tuple(str(i) for i in range(1, 14))
-            aExpectedColumnDescriptions = ('Column D Column D', 'cc_girder2', 'Column S Column S',
-                    'Column S Column S', 'Column D Column D', 'clexrfdon', 'Column S Column S',
-                    'Column S Column S', 'Column D', 'clexrfdoff', 'Column S Column S', 'Column S Column S')
+        aExpectedRowDescriptions = tuple(str(i) for i in range(1, 14))
+        aExpectedColumnDescriptions = ('Column D Column D', 'cc_girder2', 'Column S Column S',
+                'Column S Column S', 'Column D Column D', 'clexrfdon', 'Column S Column S',
+                'Column S Column S', 'Column D', 'clexrfdoff', 'Column S Column S', 'Column S Column S')
 
-            # Without the fix in place, this test would have failed here,
-            # since the pasted chart wouldn't have had any data
-            self.assertEqual(aExpectedRowDescriptions, xData.RowDescriptions)
-            self.assertEqual(aExpectedColumnDescriptions, xData.ColumnDescriptions)
+        # Without the fix in place, this test would have failed here,
+        # since the pasted chart wouldn't have had any data
+        self.assertEqual(aExpectedRowDescriptions, xData.RowDescriptions)
+        self.assertEqual(aExpectedColumnDescriptions, xData.ColumnDescriptions)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

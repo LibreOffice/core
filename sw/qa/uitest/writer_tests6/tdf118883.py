@@ -20,12 +20,12 @@ class Tdf118883(UITestCase):
 
             self.xUITest.executeCommand(".uno:Copy")
 
-            with self.ui_test.load_empty_file("calc") as calc_document:
+        with self.ui_test.load_empty_file("calc") as calc_document:
 
-                self.xUITest.executeCommand(".uno:Paste")
+            self.xUITest.executeCommand(".uno:Paste")
 
-                # Without the fix in place, this test would have failed with
-                # AssertionError: 1 != 0
-                self.assertEqual(1, calc_document.DrawPages[0].getCount())
+            # Without the fix in place, this test would have failed with
+            # AssertionError: 1 != 0
+            self.assertEqual(1, calc_document.DrawPages[0].getCount())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

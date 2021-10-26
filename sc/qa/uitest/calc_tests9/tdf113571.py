@@ -20,15 +20,15 @@ class Tdf113571(UITestCase):
 
             self.xUITest.executeCommand(".uno:Copy")
 
-            with self.ui_test.load_empty_file("writer") as writer_document:
+        with self.ui_test.load_empty_file("writer") as writer_document:
 
-                self.xUITest.getTopFocusWindow()
+            self.xUITest.getTopFocusWindow()
 
-                self.xUITest.executeCommand(".uno:PasteUnformatted")
+            self.xUITest.executeCommand(".uno:PasteUnformatted")
 
-                # Without the fix in place, this test would have failed with
-                # AssertionError: '<?xml version="1.0" encoding="UTF-8"?>\n<[34 chars]est>' !=
-                #                 '"<?xml version=""1.0"" encoding=""UTF-8""[40 chars]st>"'
-                self.assertEqual('<?xml version="1.0" encoding="UTF-8"?>\n<test>\n  <hello>world</hello>\n</test>',
-                        writer_document.Text.String)
+            # Without the fix in place, this test would have failed with
+            # AssertionError: '<?xml version="1.0" encoding="UTF-8"?>\n<[34 chars]est>' !=
+            #                 '"<?xml version=""1.0"" encoding=""UTF-8""[40 chars]st>"'
+            self.assertEqual('<?xml version="1.0" encoding="UTF-8"?>\n<test>\n  <hello>world</hello>\n</test>',
+                    writer_document.Text.String)
 

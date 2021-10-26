@@ -18,26 +18,26 @@ class tdf114710(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:O7"}))
             self.xUITest.executeCommand(".uno:Copy")
 
-            with self.ui_test.load_empty_file("writer") as writer_document:
+        with self.ui_test.load_empty_file("writer") as writer_document:
 
-                self.xUITest.getTopFocusWindow()
+            self.xUITest.getTopFocusWindow()
 
-                with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xDialog:
 
-                    xList = xDialog.getChild('list')
+                xList = xDialog.getChild('list')
 
-                    for childName in xList.getChildren():
-                        xChild = xList.getChild(childName)
-                        if get_state_as_dict(xChild)['Text'] == "Graphics Device Interface metafile (GDI)":
-                            break
+                for childName in xList.getChildren():
+                    xChild = xList.getChild(childName)
+                    if get_state_as_dict(xChild)['Text'] == "Graphics Device Interface metafile (GDI)":
+                        break
 
-                    xChild.executeAction("SELECT", tuple())
-                    self.assertEqual(
-                            get_state_as_dict(xList)['SelectEntryText'], "Graphics Device Interface metafile (GDI)")
+                xChild.executeAction("SELECT", tuple())
+                self.assertEqual(
+                        get_state_as_dict(xList)['SelectEntryText'], "Graphics Device Interface metafile (GDI)")
 
 
-                # Without the fix in place, this test would have crashed here
-                self.assertEqual(1, writer_document.GraphicObjects.getCount())
+            # Without the fix in place, this test would have crashed here
+            self.assertEqual(1, writer_document.GraphicObjects.getCount())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
 
