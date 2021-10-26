@@ -1196,9 +1196,9 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext)
     }
 
     ImplDrawSelect(rRenderContext, mnSelItemId, bFocus, bDrawSel);
-    if (mbHighlight)
+    if (mbHighlight && mnHighItemId != mnSelItemId)
     {
-        ImplDrawSelect(rRenderContext, mnHighItemId, bFocus, bDrawSel);
+        ImplDrawSelect(rRenderContext, mnHighItemId, false, bDrawSel);
     }
 }
 
