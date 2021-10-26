@@ -141,7 +141,13 @@ selection_remove_selection( AtkSelection *selection,
             = getSelection( selection );
         if( pSelection.is() )
         {
-            pSelection->deselectAccessibleChild( i );
+            css::uno::Reference<css::accessibility::XAccessible> xAcc = pSelection->getSelectedAccessibleChild(i);
+            if (!xAcc.is())
+                return false;
+
+            css::uno::Reference<css::accessibility::XAccessibleContext> xAccContext = xAcc->getAccessibleContext();
+            const sal_Int32 nChildIndex = xAccContext->getAccessibleIndexInParent();
+            pSelection->deselectAccessibleChild(nChildIndex);
             return true;
         }
     }
