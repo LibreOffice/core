@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92556370_6a859588",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-10-26T09:32:30Z",
+      "side": 1,
+      "message": "No need to initialize nColor to COL_TRANSPARENT",
+      "revId": "4578520d20d77226dda4f47c25c5e09d1710287d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
