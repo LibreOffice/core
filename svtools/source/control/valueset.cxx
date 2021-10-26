@@ -481,20 +481,27 @@ bool ValueSet::MouseButtonDown( const MouseEvent& rMouseEvent )
 {
     if (rMouseEvent.IsLeft() && !rMouseEvent.IsMod2())
     {
+        bool bConsumed = false;
         ValueSetItem* pItem = ImplGetItem( ImplGetItem( rMouseEvent.GetPosPixel() ) );
-        if (pItem)
+        if (rMouseEvent.GetClicks() == 1)
         {
-            if (rMouseEvent.GetClicks() == 1)
+            if (pItem)
             {
-                SelectItem( pItem->mnId );
-                if (!(GetStyle() & WB_NOPOINTERFOCUS))
-                    GrabFocus();
+                SelectItem(pItem->mnId);
+                bConsumed = true;
             }
-            else if ( rMouseEvent.GetClicks() == 2 )
-                maDoubleClickHdl.Call( this );
-
-            return true;
+            if (!(GetStyle() & WB_NOPOINTERFOCUS))
+            {
+                GrabFocus();
+                bConsumed = true;
+            }
         }
+        else if (pItem && rMouseEvent.GetClicks() == 2)
+        {
+            maDoubleClickHdl.Call(this);
+            bConsumed = true;
+        }
+        return bConsumed;
     }
 
     return CustomWidgetController::MouseButtonDown( rMouseEvent );
