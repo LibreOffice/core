@@ -16,6 +16,24 @@
       "message": "No need to initialize nColor to COL_TRANSPARENT",
       "revId": "4578520d20d77226dda4f47c25c5e09d1710287d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f8028a3_2952ef6b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003332
+      },
+      "writtenOn": "2021-10-26T11:37:00Z",
+      "side": 1,
+      "message": "Noted, thank you",
+      "parentUuid": "92556370_6a859588",
+      "revId": "4578520d20d77226dda4f47c25c5e09d1710287d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
