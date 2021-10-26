@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09c6d5d4_a2e18d41",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-10-26T15:51:57Z",
+      "side": 1,
+      "message": "Would this be fine: https://i.imgur.com/LZ7dEnM.png ? \u0026 Should every gradient type that is to be implemented follow this approach?",
+      "revId": "81112a444f5fbd2156c19a597a92d39aea2330bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
