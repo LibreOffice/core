@@ -28,6 +28,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,breakpad,\
 	external/breakpad/breakpad-dump_syms.patch.1 \
 	external/breakpad/breakpad-no-env.patch.1 \
 	external/breakpad/SIGSTKSZ.patch \
+	external/breakpad/sanitizer.patch \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_files,breakpad,src/tools/windows/dump_syms,\
