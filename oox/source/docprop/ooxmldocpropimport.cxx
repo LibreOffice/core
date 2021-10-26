@@ -32,6 +32,7 @@
 #include <oox/helper/containerhelper.hxx>
 #include "docprophandler.hxx"
 
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
@@ -82,7 +83,7 @@ Sequence< InputSource > lclGetRelatedStreams( const Reference< XStorage >& rxSto
         }
     }
 
-    return ContainerHelper::vectorToSequence( aResult );
+    return comphelper::containerToSequence( aResult );
 }
 
 } // namespace

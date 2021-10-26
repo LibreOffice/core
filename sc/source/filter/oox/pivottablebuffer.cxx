@@ -38,6 +38,8 @@
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
 #include <com/sun/star/sheet/XSheetOperation.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
+
+#include <comphelper/sequence.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
@@ -701,7 +703,7 @@ Reference< XDataPilotField > PivotTableField::convertRowColPageField( sal_Int32 
             // if no function is set manually, check the 'defaultSubtotal' flag
             if( aSubtotals.empty() && maModel.mbDefaultSubtotal )
                 aSubtotals.push_back( GeneralFunction_AUTO );
-            aPropSet.setProperty( PROP_Subtotals, ContainerHelper::vectorToSequence( aSubtotals ) );
+            aPropSet.setProperty( PROP_Subtotals, comphelper::containerToSequence( aSubtotals ) );
 
             // layout settings
             DataPilotFieldLayoutInfo aLayoutInfo;

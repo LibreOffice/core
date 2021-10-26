@@ -38,6 +38,8 @@
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+
+#include <comphelper/sequence.hxx>
 #include <svx/xflclit.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
@@ -580,7 +582,7 @@ bool DataPointItemConverter::ApplySpecialItem(
                 }
                 if (bHideLegendEntry)
                     deletedLegendEntries.push_back(m_nPointIndex);
-                xSeriesProp->setPropertyValue("DeletedLegendEntries", uno::makeAny(oox::ContainerHelper::vectorToSequence(deletedLegendEntries)));
+                xSeriesProp->setPropertyValue("DeletedLegendEntries", uno::makeAny(comphelper::containerToSequence(deletedLegendEntries)));
             }
         }
         break;

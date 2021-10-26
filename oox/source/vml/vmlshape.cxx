@@ -1058,7 +1058,7 @@ Reference< XShape > PolyLineShape::implConvertAndInsert( const Reference< XShape
     if (!aAbsPoints.empty())
     {
         PointSequenceSequence aPointSeq( 1 );
-        aPointSeq[ 0 ] = ContainerHelper::vectorToSequence( aAbsPoints );
+        aPointSeq[ 0 ] = comphelper::containerToSequence( aAbsPoints );
         PropertySet aPropSet( xShape );
         aPropSet.setProperty( PROP_PolyPolygon, aPointSeq );
     }
@@ -1226,11 +1226,11 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
 
         aBezierCoords.Coordinates.realloc( aCoordLists.size() );
         for ( size_t i = 0; i < aCoordLists.size(); i++ )
-            aBezierCoords.Coordinates[i] = ContainerHelper::vectorToSequence( aCoordLists[i] );
+            aBezierCoords.Coordinates[i] = comphelper::containerToSequence( aCoordLists[i] );
 
         aBezierCoords.Flags.realloc( aFlagLists.size() );
         for ( size_t i = 0; i < aFlagLists.size(); i++ )
-            aBezierCoords.Flags[i] = ContainerHelper::vectorToSequence( aFlagLists[i] );
+            aBezierCoords.Flags[i] = comphelper::containerToSequence( aFlagLists[i] );
 
         if( !aCoordLists.front().empty() && !aCoordLists.back().empty()
             && aCoordLists.front().front().X == aCoordLists.back().back().X

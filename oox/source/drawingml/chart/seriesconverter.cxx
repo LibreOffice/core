@@ -35,6 +35,8 @@
 #include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+
+#include <comphelper/sequence.hxx>
 #include <osl/diagnose.h>
 #include <drawingml/chart/datasourceconverter.hxx>
 #include <drawingml/chart/seriesmodel.hxx>
@@ -530,7 +532,7 @@ void ErrorBarConverter::convertFromModel( const Reference< XDataSeries >& rxData
                     if( aLabeledSeqVec.empty() )
                         xErrorBar.clear();
                     else
-                        xDataSink->setData( ContainerHelper::vectorToSequence( aLabeledSeqVec ) );
+                        xDataSink->setData( comphelper::containerToSequence( aLabeledSeqVec ) );
                 }
             }
             break;
@@ -810,7 +812,7 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
         }
         // attach labeled data sequences to series
         if( !aLabeledSeqVec.empty() )
-            xDataSink->setData( ContainerHelper::vectorToSequence( aLabeledSeqVec ) );
+            xDataSink->setData( comphelper::containerToSequence( aLabeledSeqVec ) );
     }
 
     // error bars

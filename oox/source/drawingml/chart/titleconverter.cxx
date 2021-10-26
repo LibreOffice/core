@@ -29,6 +29,8 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+
+#include <comphelper/sequence.hxx>
 #include <osl/diagnose.h>
 #include <drawingml/textbody.hxx>
 #include <drawingml/textparagraph.hxx>
@@ -114,7 +116,7 @@ Sequence< Reference< XFormattedString > > TextConverter::createStringSequence(
         }
     }
 
-    return ContainerHelper::vectorToSequence( aStringVec );
+    return comphelper::containerToSequence( aStringVec );
 }
 
 Reference< XFormattedString > TextConverter::appendFormattedString(
@@ -336,7 +338,7 @@ void LegendConverter::legendEntriesFormatting(const Reference<XDiagram>& rxDiagr
                         j += nDataSeqSize;
                     }
                     if (deletedLegendEntries.size() > 0)
-                        aSeriesProp.setProperty(PROP_DeletedLegendEntries, ContainerHelper::vectorToSequence(deletedLegendEntries));
+                        aSeriesProp.setProperty(PROP_DeletedLegendEntries, comphelper::containerToSequence(deletedLegendEntries));
                 }
                 else
                 {

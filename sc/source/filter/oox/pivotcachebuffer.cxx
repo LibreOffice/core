@@ -26,6 +26,8 @@
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupInfo.hpp>
 #include <com/sun/star/sheet/XDataPilotFieldGrouping.hpp>
+
+#include <comphelper/sequence.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
@@ -700,7 +702,7 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
             if( !aMembers.empty() ) try
             {
                 // only the first call of createNameGroup() returns the new field
-                Reference< XDataPilotField > xDPNewField = xDPGrouping->createNameGroup( ContainerHelper::vectorToSequence( aMembers ) );
+                Reference< XDataPilotField > xDPNewField = xDPGrouping->createNameGroup( comphelper::containerToSequence( aMembers ) );
                 SAL_WARN_IF( xDPGroupField.is() == xDPNewField.is(), "sc", "PivotCacheField::createParentGroupField - missing group field" );
                 if( !xDPGroupField.is() )
                     xDPGroupField = xDPNewField;
