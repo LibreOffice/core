@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b828dfd8_6c3b5344",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-10-26T13:56:12Z",
+      "side": 1,
+      "message": "Why not basegfx::rad2deg?",
+      "revId": "3a87aa1bb14fd5d7a3e62deb6c722dd12e7671f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
