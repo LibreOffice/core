@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f165da2_23411487",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-26T13:34:38Z",
+      "side": 1,
+      "message": "why bother making those defaulted functions user-declared in the first place? \u003chttps://gerrit.libreoffice.org/c/core/+/124227\u003e \"Silence -Werror,-Wdeprecated-copy\"",
+      "revId": "f97fc37eb21c5ce3988f546a9a357319fa49df22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
