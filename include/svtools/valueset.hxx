@@ -86,8 +86,6 @@ WB_VSCROLL          A scrollbar will be always shown. The visible number of
                     lines have to be specified with SetLineCount() if this
                     flag is set.
 WB_BORDER           A border will be drawn around the window.
-WB_NOPOINTERFOCUS   The focus won't be gathered, if the control was pressed by
-                    the mouse.
 WB_TABSTOP          It is possible to jump into the ValueSet with the tab key.
 WB_NOTABSTOP        It is not possible to jump into the ValueSet with the
                     tab key.
