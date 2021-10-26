@@ -2211,7 +2211,6 @@ static vcl::Font getFont(GtkStyleContext* pStyle, const css::lang::Locale& rLoca
 vcl::Font pango_to_vcl(const PangoFontDescription* font, const css::lang::Locale& rLocale)
 {
     OString    aFamily        = pango_font_description_get_family( font );
-    int nPangoHeight    = pango_font_description_get_size( font );
     PangoStyle    eStyle    = pango_font_description_get_style( font );
     PangoWeight    eWeight    = pango_font_description_get_weight( font );
     PangoStretch eStretch = pango_font_description_get_stretch( font );
@@ -2267,9 +2266,17 @@ vcl::Font pango_to_vcl(const PangoFontDescription* font, const css::lang::Locale
             << "\".");
 #endif
 
-    int nPointHeight = nPangoHeight/PANGO_SCALE;
+    int nPangoHeight = pango_font_description_get_size(font) / PANGO_SCALE;
 
-    vcl::Font aFont( aInfo.m_aFamilyName, Size( 0, nPointHeight ) );
+    if (pango_font_description_get_size_is_absolute(font))
+    {
+        const sal_Int32 nDPIY = 96;
+        nPangoHeight = nPangoHeight * 72;
+        nPangoHeight = nPangoHeight + nDPIY / 2;
+        nPangoHeight = nPangoHeight / nDPIY;
+    }
+
+    vcl::Font aFont(aInfo.m_aFamilyName, Size(0, nPangoHeight));
     if( aInfo.m_eWeight != WEIGHT_DONTKNOW )
         aFont.SetWeight( aInfo.m_eWeight );
     if( aInfo.m_eWidth != WIDTH_DONTKNOW )
