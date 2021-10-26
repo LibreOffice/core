@@ -478,7 +478,8 @@ void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
         ImplDrawTextDirect( rSalLayout, mbTextLines );
 }
 
-tools::Long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
+tools::Long OutputDevice::ImplGetTextLines( const tools::Rectangle& rRect, const tools::Long nTextHeight,
+                                     ImplMultiTextLineInfo& rLineInfo,
                                      tools::Long nWidth, const OUString& rStr,
                                      DrawTextFlags nStyle, const vcl::ITextLayout& _rLayout )
 {
@@ -490,6 +491,8 @@ tools::Long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
     rLineInfo.Clear();
     if (rStr.isEmpty())
         return 0;
+
+    const bool bClipping = (nStyle & DrawTextFlags::Clip) && !(nStyle & DrawTextFlags::EndEllipsis);
 
     tools::Long nMaxLineWidth  = 0;
     const bool bHyphenate = (nStyle & DrawTextFlags::WordBreakHyphenation) == DrawTextFlags::WordBreakHyphenation;
@@ -505,6 +508,7 @@ tools::Long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
     css::uno::Reference<css::i18n::XBreakIterator> xBI;
     sal_Int32 nPos = 0;
     sal_Int32 nLen = rStr.getLength();
+    sal_Int32 nCurrentTextY = 0;
     while ( nPos < nLen )
     {
         sal_Int32 nBreakPos = nPos;
@@ -541,6 +545,9 @@ tools::Long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
             if ( ( nPos < nLen ) && ( rStr[ nPos ] == '\n' ) && ( rStr[ nPos-1 ] == '\r' ) )
                 nPos++;
         }
+        nCurrentTextY += nTextHeight;
+        if (bClipping && nCurrentTextY > rRect.GetHeight())
+            break;
     }
 
 #ifdef DBG_UTIL
@@ -1528,7 +1535,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
 
         if ( nTextHeight )
         {
-            tools::Long nMaxTextWidth = ImplGetTextLines( aMultiLineInfo, nWidth, aStr, nStyle, _rLayout );
+            tools::Long nMaxTextWidth = ImplGetTextLines( rRect, nTextHeight, aMultiLineInfo, nWidth, aStr, nStyle, _rLayout );
             sal_Int32 nLines = static_cast<sal_Int32>(nHeight/nTextHeight);
             OUString aLastLine;
             nFormatLines = aMultiLineInfo.Count();
@@ -1814,7 +1821,7 @@ tools::Rectangle OutputDevice::GetTextRect( const tools::Rectangle& rRect,
 
         nMaxWidth = 0;
         vcl::DefaultTextLayout aDefaultLayout( *const_cast< OutputDevice* >( this ) );
-        ImplGetTextLines( aMultiLineInfo, nWidth, aStr, nStyle, _pTextLayout ? *_pTextLayout : aDefaultLayout );
+        ImplGetTextLines( rRect, nTextHeight, aMultiLineInfo, nWidth, aStr, nStyle, _pTextLayout ? *_pTextLayout : aDefaultLayout );
         nFormatLines = aMultiLineInfo.Count();
         if ( !nTextHeight )
             nTextHeight = 1;
