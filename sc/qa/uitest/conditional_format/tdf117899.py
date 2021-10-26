@@ -25,40 +25,39 @@ class Tdf117899(UITestCase):
 
 
   def test_tdf117899(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf117899.ods")):
+    with TemporaryDirectory() as tempdir:
+        xFilePath = os.path.join(tempdir, "tdf117899-temp.ods")
 
-        self.execute_conditional_format_manager_dialog()
+        with self.ui_test.load_file(get_url_for_data_file("tdf117899.ods")):
 
-        self.xUITest.executeCommand(".uno:SelectAll")
+            self.execute_conditional_format_manager_dialog()
 
-        self.xUITest.executeCommand(".uno:Copy")
+            self.xUITest.executeCommand(".uno:SelectAll")
 
-        with TemporaryDirectory() as tempdir:
-            xFilePath = os.path.join(tempdir, "tdf117899-temp.ods")
+            self.xUITest.executeCommand(".uno:Copy")
 
-            with self.ui_test.load_empty_file("writer"):
+        with self.ui_test.load_empty_file("writer"):
 
-                self.xUITest.getTopFocusWindow()
+            self.xUITest.getTopFocusWindow()
 
-                # Paste as an OLE spreadsheet
-                formatProperty = mkPropertyValues({"SelectedFormat": 85})
-                self.xUITest.executeCommandWithParameters(".uno:ClipboardFormatItems", formatProperty)
+            # Paste as an OLE spreadsheet
+            formatProperty = mkPropertyValues({"SelectedFormat": 85})
+            self.xUITest.executeCommandWithParameters(".uno:ClipboardFormatItems", formatProperty)
 
-                # Save Copy as
-                with self.ui_test.execute_dialog_through_command(".uno:ObjectMenue?VerbID:short=-8", close_button="open") as xDialog:
+            # Save Copy as
+            with self.ui_test.execute_dialog_through_command(".uno:ObjectMenue?VerbID:short=-8", close_button="open") as xDialog:
 
-                    xFileName = xDialog.getChild("file_name")
-                    xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-                    xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-                    xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": xFilePath}))
+                xFileName = xDialog.getChild("file_name")
+                xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": xFilePath}))
 
+        with self.ui_test.load_file(systemPathToFileUrl(xFilePath)):
 
-            with self.ui_test.load_file(systemPathToFileUrl(xFilePath)):
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
 
-                xCalcDoc = self.xUITest.getTopFocusWindow()
-                gridwin = xCalcDoc.getChild("grid_window")
-
-                # Without the fix in place, this test would have failed here
-                self.execute_conditional_format_manager_dialog()
+            # Without the fix in place, this test would have failed here
+            self.execute_conditional_format_manager_dialog()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

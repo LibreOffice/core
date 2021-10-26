@@ -16,10 +16,10 @@ import os.path
 class tdf144374(UITestCase):
 
    def test_tdf144374_DOCX(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-            with TemporaryDirectory() as tempdir:
-                xFilePath = os.path.join(tempdir, "tdf144374-tmp.docx")
+        with TemporaryDirectory() as tempdir:
+            xFilePath = os.path.join(tempdir, "tdf144374-tmp.docx")
 
+            with self.ui_test.create_doc_in_start_center("writer"):
                 # Save the document
                 with self.ui_test.execute_dialog_through_command(".uno:Save", close_button="") as xSaveDialog:
                     xFileName = xSaveDialog.getChild("file_name")
@@ -45,19 +45,17 @@ class tdf144374(UITestCase):
                 xSave = xWarnDialog.getChild("save")
                 self.ui_test.close_dialog_through_button(xSave)
 
-                self.ui_test.close_doc()
+            with self.ui_test.load_file(systemPathToFileUrl(xFilePath)):
+                xWriterEdit = self.xUITest.getTopFocusWindow().getChild("writer_edit")
+                document = self.ui_test.get_component()
 
-                with self.ui_test.load_file(systemPathToFileUrl(xFilePath)):
-                    xWriterEdit = self.xUITest.getTopFocusWindow().getChild("writer_edit")
-                    document = self.ui_test.get_component()
+                self.assertTrue(document.isReadonly())
 
-                    self.assertTrue(document.isReadonly())
+                #Without the fix in place, this dialog wouldn't have been displayed
+                with self.ui_test.execute_dialog_through_action(xWriterEdit, "TYPE", mkPropertyValues({"KEYCODE": "CTRL+SHIFT+M"})) as xDialog:
+                    xPassword = xDialog.getChild("newpassEntry")
+                    xPassword.executeAction("TYPE", mkPropertyValues({"TEXT": "password"}))
 
-                    #Without the fix in place, this dialog wouldn't have been displayed
-                    with self.ui_test.execute_dialog_through_action(xWriterEdit, "TYPE", mkPropertyValues({"KEYCODE": "CTRL+SHIFT+M"})) as xDialog:
-                        xPassword = xDialog.getChild("newpassEntry")
-                        xPassword.executeAction("TYPE", mkPropertyValues({"TEXT": "password"}))
-
-                    self.assertFalse(document.isReadonly())
+                self.assertFalse(document.isReadonly())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
