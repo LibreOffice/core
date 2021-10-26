@@ -20,7 +20,9 @@
 
 namespace sc::op
 {
-#ifdef LO_AVX_AVAILABLE // Old processors
+#ifdef LO_AVX_AVAILABLE
+
+bool hasAVXCode() { return true; }
 
 using namespace AVX;
 
@@ -48,13 +50,10 @@ static inline void sumAVX(__m256d& sum, __m256d& err, const __m256d& value)
     sum = t;
 }
 
-#endif
-
 /** Execute Kahan sum with AVX.
   */
 KahanSumSimple executeAVX(size_t& i, size_t nSize, const double* pCurrent)
 {
-#ifdef LO_AVX_AVAILABLE
     // Make sure we don't fall out of bounds.
     // This works by sums of 8 terms.
     // So the 8'th term is i+7
@@ -107,13 +106,15 @@ KahanSumSimple executeAVX(size_t& i, size_t nSize, const double* pCurrent)
         return { sums[0], errs[0] };
     }
     return { 0.0, 0.0 };
-#else
-    (void)i;
-    (void)nSize;
-    (void)pCurrent;
-    abort();
-#endif
 }
+
+#else // LO_AVX_AVAILABLE
+
+bool hasAVXCode() { return false; }
+
+KahanSumSimple executeAVX(size_t&, size_t, const double*) { abort(); }
+
+#endif
 
 } // end namespace sc::op
 

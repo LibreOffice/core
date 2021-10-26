@@ -7808,6 +7808,9 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([
     #include <immintrin.h>
     int main () {
         __m512i a = _mm512_loadu_si512(0);
+        __m512d v1 = _mm512_load_pd(0);
+        // https://gcc.gnu.org/git/?p=gcc.git;a=commit;f=gcc/config/i386/avx512fintrin.h;h=23bce99cbe7016a04e14c2163ed3fe6a5a64f4e2
+        __m512d v2 = _mm512_abs_pd(v1);
         return 0;
     }
     ])],
@@ -12281,6 +12284,9 @@ if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE; then
             #include <immintrin.h>
             int main () {
                 __m512i a = _mm512_loadu_si512(0);
+                __m512d v1 = _mm512_load_pd(0);
+                // https://gcc.gnu.org/git/?p=gcc.git;a=commit;f=gcc/config/i386/avx512fintrin.h;h=23bce99cbe7016a04e14c2163ed3fe6a5a64f4e2
+                __m512d v2 = _mm512_abs_pd(v1);
                 return 0;
             }
             ])],
