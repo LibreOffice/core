@@ -3741,7 +3741,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testImageComment)
     // Load a document with an as-char image in it.
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "image-comment.odt");
     SwView* pView = pDoc->GetDocShell()->GetView();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     // Test document has "before<image>after", remove the content before the image.
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -3777,6 +3776,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testImageComment)
     pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
 
 #if !defined(MACOSX)
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     // Calc the left edge of the as-char frame.
     SwRootFrame* pLayout = pWrtShell->GetLayout();
     SwFrame* pPage = pLayout->GetLower();
