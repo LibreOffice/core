@@ -981,13 +981,13 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testXAdESNotype)
     // attribute", i.e. the signature without such an attribute was not preserved correctly.
     assertXPathNoAttribute(pXmlDoc,
                            "/odfds:document-signatures/dsig:Signature[1]/dsig:SignedInfo/"
-                           "dsig:Reference[@URI='#idSignedProperties']",
+                           "dsig:Reference[starts-with(@URI, '#idSignedProperties')]",
                            "Type");
 
     // New signature always has the Type attribute.
     assertXPath(pXmlDoc,
                 "/odfds:document-signatures/dsig:Signature[2]/dsig:SignedInfo/"
-                "dsig:Reference[@URI='#idSignedProperties']",
+                "dsig:Reference[starts-with(@URI, '#idSignedProperties')]",
                 "Type", "http://uri.etsi.org/01903#SignedProperties");
 }
 
@@ -1046,12 +1046,132 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testXAdES)
     // Assert that the digest of the signing certificate is included.
     assertXPath(pXmlDoc, "//xd:CertDigest", 1);
 
-    // Assert that the Type attribute on the idSignedProperties reference is
-    // not missing.
-    assertXPath(pXmlDoc,
-                "/odfds:document-signatures/dsig:Signature/dsig:SignedInfo/"
-                "dsig:Reference[@URI='#idSignedProperties']",
-                "Type", "http://uri.etsi.org/01903#SignedProperties");
+    // Assert that the Type attribute is set on all URI's that start with #idSignedProperties
+    assertXPath(pXmlDoc, "//dsig:Reference[starts-with(@URI, '#idSignedProperties')]", "Type",
+                "http://uri.etsi.org/01903#SignedProperties");
+}
+
+CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_ODT)
+{
+    createDoc("");
+
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer8");
+    xStorable->storeAsURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
+    CPPUNIT_ASSERT(aManager.init());
+    uno::Reference<embed::XStorage> xStorage
+        = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
+            ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
+    CPPUNIT_ASSERT(xStorage.is());
+    aManager.setStore(xStorage);
+    aManager.getSignatureHelper().SetStorage(xStorage, "1.2");
+
+    // Create a signature.
+    uno::Reference<security::XCertificate> xCertificate
+        = getCertificate(aManager, svl::crypto::SignatureMethodAlgorithm::RSA);
+    if (!xCertificate.is())
+        return;
+    sal_Int32 nSecurityId;
+    aManager.add(xCertificate, mxSecurityContext, /*rDescription=*/OUString(), nSecurityId,
+                 /*bAdESCompliant=*/true);
+
+    // Read back the signature and make sure that it's valid.
+    aManager.read(/*bUseTempStream=*/true);
+    {
+        std::vector<SignatureInformation>& rInformations
+            = aManager.getCurrentSignatureInformations();
+        CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
+        CPPUNIT_ASSERT_EQUAL(css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED,
+                             rInformations[0].nStatus);
+    }
+
+    aManager.add(xCertificate, mxSecurityContext, /*rDescription=*/OUString(), nSecurityId,
+                 /*bAdESCompliant=*/true);
+    aManager.read(/*bUseTempStream=*/true);
+    {
+        std::vector<SignatureInformation>& rInformations
+            = aManager.getCurrentSignatureInformations();
+        CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), rInformations.size());
+        CPPUNIT_ASSERT_EQUAL(css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED,
+                             rInformations[1].nStatus);
+    }
+
+    aManager.add(xCertificate, mxSecurityContext, /*rDescription=*/OUString(), nSecurityId,
+                 /*bAdESCompliant=*/true);
+    aManager.read(/*bUseTempStream=*/true);
+    {
+        std::vector<SignatureInformation>& rInformations
+            = aManager.getCurrentSignatureInformations();
+        CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(3), rInformations.size());
+        CPPUNIT_ASSERT_EQUAL(css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED,
+                             rInformations[2].nStatus);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_OOXML)
+{
+    createDoc("");
+
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("MS Word 2007 XML");
+    xStorable->storeAsURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
+    CPPUNIT_ASSERT(aManager.init());
+    uno::Reference<embed::XStorage> xStorage
+        = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
+            ZIP_STORAGE_FORMAT_STRING, aTempFile.GetURL(), embed::ElementModes::READWRITE);
+    CPPUNIT_ASSERT(xStorage.is());
+    aManager.setStore(xStorage);
+    aManager.getSignatureHelper().SetStorage(xStorage, "1.2");
+
+    // Create a signature.
+    uno::Reference<security::XCertificate> xCertificate
+        = getCertificate(aManager, svl::crypto::SignatureMethodAlgorithm::ECDSA);
+    if (!xCertificate.is())
+        return;
+
+    sal_Int32 nSecurityId;
+    aManager.add(xCertificate, mxSecurityContext, "", nSecurityId, /*bAdESCompliant=*/false);
+    aManager.read(/*bUseTempStream=*/true);
+    {
+        std::vector<SignatureInformation>& rInformations
+            = aManager.getCurrentSignatureInformations();
+        CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
+        CPPUNIT_ASSERT_EQUAL(css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED,
+                             rInformations[0].nStatus);
+    }
+
+    aManager.add(xCertificate, mxSecurityContext, "", nSecurityId, /*bAdESCompliant=*/false);
+    aManager.read(/*bUseTempStream=*/true);
+    {
+        std::vector<SignatureInformation>& rInformations
+            = aManager.getCurrentSignatureInformations();
+        CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), rInformations.size());
+        CPPUNIT_ASSERT_EQUAL(css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED,
+                             rInformations[1].nStatus);
+    }
+
+    aManager.add(xCertificate, mxSecurityContext, "", nSecurityId, /*bAdESCompliant=*/false);
+    aManager.read(/*bUseTempStream=*/true);
+    {
+        std::vector<SignatureInformation>& rInformations
+            = aManager.getCurrentSignatureInformations();
+        CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(3), rInformations.size());
+        CPPUNIT_ASSERT_EQUAL(css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED,
+                             rInformations[2].nStatus);
+    }
+    aManager.write(/*bXAdESCompliantIfODF=*/true);
+    uno::Reference<embed::XTransactedObject> xTransactedObject(xStorage, uno::UNO_QUERY);
+    xTransactedObject->commit();
 }
 
 /// Works with an existing good XAdES signature.

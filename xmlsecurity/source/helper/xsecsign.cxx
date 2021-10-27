@@ -135,8 +135,9 @@ css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecCon
 
         if (bXAdESCompliantIfODF)
         {
+            OUString aId = "idSignedProperties_" +  internalSignatureInfor.signatureInfor.ouSignatureId;
             // We write a new reference, so it's possible to use the correct type URI.
-            internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, "idSignedProperties", -1, "http://uri.etsi.org/01903#SignedProperties");
+            internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, aId, -1, "http://uri.etsi.org/01903#SignedProperties");
             size++;
         }
 
@@ -148,13 +149,16 @@ css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecCon
             size++;
         }
     }
-    else
+    else // OOXML
     {
+        internalSignatureInfor.signatureInfor.ouSignatureId = "idPackageSignature";
+
         internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, "idPackageObject", -1, OUString());
         size++;
         internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, "idOfficeObject", -1, OUString());
         size++;
-        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, "idSignedProperties", -1, OUString());
+        OUString aId = "idSignedProperties_" +  internalSignatureInfor.signatureInfor.ouSignatureId;
+        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, aId, -1, OUString());
         size++;
     }
 
