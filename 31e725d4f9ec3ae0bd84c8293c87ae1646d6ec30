@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "feed1542_6adad278",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-27T14:18:45Z",
+      "side": 1,
+      "message": "Stephan: I\u0027m going to start splitting this. Can you suggest what to do with the return value from Sequence::realloc (that should go into the first set of changes)? Thanks.",
+      "revId": "31e725d4f9ec3ae0bd84c8293c87ae1646d6ec30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3264c16_4acc1097",
+        "filename": "include/com/sun/star/uno/Sequence.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-27T14:18:45Z",
+      "side": 1,
+      "message": "Stephan: what would you suggest: should I keep this return value conditional, or is this safe and compatible to make inline function to return pointer?",
+      "range": {
+        "startLine": 267,
+        "startChar": 0,
+        "endLine": 272,
+        "endChar": 44
+      },
+      "revId": "31e725d4f9ec3ae0bd84c8293c87ae1646d6ec30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
