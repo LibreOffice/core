@@ -20,8 +20,11 @@
 #include <sal/config.h>
 
 #include <o3tl/safeint.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/base64.hxx>
+#include <vcl/canvastools.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
@@ -1272,68 +1275,93 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext,
     }
     else
     {
-        if (bDrawSel)
-        {
-            rRenderContext.SetLineColor(aDoubleColor);
-            tools::PolyPolygon aPolyPoly(1);
-            aPolyPoly.Insert(aRect);
-            rRenderContext.DrawTransparent(aPolyPoly, nTransparencePercent);
-        }
-        if (mbDoubleSel)
-        {
-            aRect.AdjustLeft( 1 );
-            aRect.AdjustTop( 1 );
-            aRect.AdjustRight( -1 );
-            aRect.AdjustBottom( -1 );
-            if (bDrawSel)
-            {
-                tools::PolyPolygon aPolyPoly(1);
-                aPolyPoly.Insert(aRect);
-                rRenderContext.DrawTransparent(aPolyPoly, nTransparencePercent);
-            }
-        }
-        aRect.AdjustLeft( 1 );
-        aRect.AdjustTop( 1 );
-        aRect.AdjustRight( -1 );
-        aRect.AdjustBottom( -1 );
-        tools::Rectangle aRect2 = aRect;
-        aRect.AdjustLeft( 1 );
-        aRect.AdjustTop( 1 );
-        aRect.AdjustRight( -1 );
-        aRect.AdjustBottom( -1 );
-        if (bDrawSel)
-        {
-            tools::PolyPolygon aPolyPoly(1);
-            aPolyPoly.Insert(aRect);
-            rRenderContext.DrawTransparent(aPolyPoly, nTransparencePercent);
-        }
-        if (mbDoubleSel)
-        {
-            aRect.AdjustLeft( 1 );
-            aRect.AdjustTop( 1 );
-            aRect.AdjustRight( -1 );
-            aRect.AdjustBottom( -1 );
-            if (bDrawSel)
-            {
-                tools::PolyPolygon aPolyPoly(1);
-                aPolyPoly.Insert(aRect);
-                rRenderContext.DrawTransparent(aPolyPoly, nTransparencePercent);
-            }
-        }
+        rRenderContext.SetLineColor(aDoubleColor);
+        tools::Rectangle aFocusRect;
 
-        if (bDrawSel)
+        if (!mbDoubleSel)
         {
-            rRenderContext.SetLineColor(aSingleColor);
+            // an outer rectangle surrounding a "focus" rectangle, surrounding
+            // an inner rectangle. Focus rectangle is always drawn, but rendered
+            // empty when there is no focus. e.g. as seen in color valuesets
+            if (bDrawSel)
+            {
+                tools::PolyPolygon aPolyPoly(1);
+                aPolyPoly.Insert(aRect);
+                rRenderContext.DrawTransparent(aPolyPoly, nTransparencePercent);
+            }
+
+            aRect.AdjustLeft( 1 );
+            aRect.AdjustTop( 1 );
+            aRect.AdjustRight( -1 );
+            aRect.AdjustBottom( -1 );
+
+            aFocusRect = aRect;
+
+            aRect.AdjustLeft( 1 );
+            aRect.AdjustTop( 1 );
+            aRect.AdjustRight( -1 );
+            aRect.AdjustBottom( -1 );
+
+            if (bDrawSel)
+            {
+                tools::PolyPolygon aPolyPoly(1);
+                aPolyPoly.Insert(aRect);
+                rRenderContext.DrawTransparent(aPolyPoly, nTransparencePercent);
+            }
+
+            if (bDrawSel)
+                rRenderContext.SetLineColor(aSingleColor);
+            else
+                rRenderContext.SetLineColor(COL_LIGHTGRAY);
+
+            rRenderContext.DrawRect(aFocusRect);
         }
         else
         {
-            rRenderContext.SetLineColor(COL_LIGHTGRAY);
+            // a thick bordered rectangle surrounding an optional "focus"
+            // rectangle which is only drawn when focused, as seen in format,
+            // bullets and numbering in writer
+            const int nAdjust = 2;
+
+            aRect.AdjustLeft(nAdjust);
+            aRect.AdjustTop(nAdjust);
+            aRect.AdjustRight(-nAdjust);
+            aRect.AdjustBottom(-nAdjust);
+
+            aFocusRect = aRect;
+
+            if (bDrawSel)
+            {
+                const basegfx::B2DPolygon aRectPoly(
+                    basegfx::utils::createPolygonFromRect(
+                            vcl::unotools::b2DRectangleFromRectangle(aRect)));
+
+                const int nThickness = nAdjust * 2;
+
+                if (!rRenderContext.DrawPolyLineDirect(basegfx::B2DHomMatrix(),
+                                                       aRectPoly,
+                                                       nThickness,
+                                                       nTransparencePercent / 100.0,
+                                                       nullptr,
+                                                       basegfx::B2DLineJoin::Miter))
+                {
+                    SAL_WARN("svtools", "presumably impossible in practice, but fallback to see something");
+                    rRenderContext.DrawPolyLine(aRectPoly, nThickness, basegfx::B2DLineJoin::Miter);
+                }
+            }
+
+            if (bFocus)
+            {
+                if (bDrawSel)
+                    rRenderContext.SetLineColor(aSingleColor);
+                else
+                    rRenderContext.SetLineColor(COL_LIGHTGRAY);
+                rRenderContext.DrawRect(aFocusRect);
+            }
         }
-        tools::PolyPolygon aPolyPoly(1);
-        aPolyPoly.Insert(aRect2);
-        rRenderContext.DrawTransparent(aPolyPoly, nTransparencePercent);
+
         if (bFocus)
-            InvertFocusRect(rRenderContext, aRect2);
+            InvertFocusRect(rRenderContext, aFocusRect);
     }
 
     ImplDrawItemText(rRenderContext, pItem->maText);
