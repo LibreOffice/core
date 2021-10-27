@@ -721,7 +721,7 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
                 }
 
                 if( !bByVal && t != SbxVARIANT &&
-                    (!v->IsFixed() || static_cast<SbxDataType>(v->GetType() & 0x0FFF ) != t) )
+                    static_cast<SbxDataType>(v->GetType() & 0x0FFF ) != t )
                 {
                     bByVal = true;
                 }
