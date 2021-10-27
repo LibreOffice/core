@@ -244,7 +244,7 @@ private:
     SVT_DLLPRIVATE tools::Rectangle    ImplGetItemRect( size_t nPos ) const;
     SVT_DLLPRIVATE void         ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
     SVT_DLLPRIVATE bool         ImplHasAccessibleListeners() const;
-    SVT_DLLPRIVATE void         ImplTracking(const Point& rPos);
+    SVT_DLLPRIVATE void         ImplTracking(bool bLeaveWindow, const Point& rPos);
     SVT_DLLPRIVATE void         QueueReformat();
     SVT_DLLPRIVATE void         SetFirstLine(sal_uInt16 nNewFirstLine); // set mnFirstLine and update scrollbar to match
     SVT_DLLPRIVATE void         RecalcScrollBar();
