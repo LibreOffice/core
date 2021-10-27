@@ -162,7 +162,7 @@ void OOXMLSecExporter::Impl::writeSignedInfoReferences()
         {
             {
                 rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
-                if (rReference.ouURI != "idSignedProperties")
+                if (!rReference.ouURI.startsWith("idSignedProperties"))
                     pAttributeList->AddAttribute("Type",
                                                  "http://www.w3.org/2000/09/xmldsig#Object");
                 else
@@ -172,7 +172,7 @@ void OOXMLSecExporter::Impl::writeSignedInfoReferences()
                 m_xDocumentHandler->startElement(
                     "Reference", uno::Reference<xml::sax::XAttributeList>(pAttributeList));
             }
-            if (rReference.ouURI == "idSignedProperties")
+            if (rReference.ouURI.startsWith("idSignedProperties"))
             {
                 m_xDocumentHandler->startElement(
                     "Transforms",
