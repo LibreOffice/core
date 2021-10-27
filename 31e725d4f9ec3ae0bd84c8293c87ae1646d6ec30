@@ -80,6 +80,24 @@
       "message": "I think these lines point at the undesirable consequence that realloc loses its original simple responsibility (make sure the sequence is of size nSize) and instead takes on two different responsibilities now (make sure the sequence is of size nSize; and make sure the sequence is unique).  Maybe that indicates that it would be better to have an additional (LIBO_INTERNAL_ONLY) function that clearly reflects (already in its name) that it has those two responsibilities?",
       "revId": "31e725d4f9ec3ae0bd84c8293c87ae1646d6ec30",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8608262_8b936883",
+        "filename": "include/com/sun/star/uno/Sequence.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-27T14:37:24Z",
+      "side": 1,
+      "message": "...or (IMO even better) keep those two things separate in two different functions, realloc and getArray (which would then need to be called in sequence---no pun intended---at the various call sites)",
+      "parentUuid": "1f688a9b_39060963",
+      "revId": "31e725d4f9ec3ae0bd84c8293c87ae1646d6ec30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
