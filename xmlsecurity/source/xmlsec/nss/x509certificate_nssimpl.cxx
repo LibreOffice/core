@@ -29,6 +29,8 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include "x509certificate_nssimpl.hxx"
 
 #include <biginteger.hxx>
@@ -529,22 +531,103 @@ Sequence<OUString> SAL_CALL X509Certificate_NssImpl::getSupportedServiceNames() 
 
 namespace xmlsecurity {
 
-bool EqualDistinguishedNames(
-        std::u16string_view const rName1, std::u16string_view const rName2)
+// based on some guesswork and:
+// https://datatracker.ietf.org/doc/html/rfc1485
+// https://docs.microsoft.com/en-us/windows/win32/api/wincrypt/nf-wincrypt-certnametostra#CERT_X500_NAME_STR
+// the main problem appears to be that in values " is escaped as "" vs. \"
+static OUString CompatDNCryptoAPI(OUString const& rDN)
 {
+    OUStringBuffer buf(rDN.getLength());
+    enum { DEFAULT, INVALUE, INQUOTE } state(DEFAULT);
+    for (sal_Int32 i = 0; i < rDN.getLength(); ++i)
+    {
+        if (state == DEFAULT)
+        {
+            buf.append(rDN[i]);
+            if (rDN[i] == '=')
+            {
+                if (rDN.getLength() == i+1)
+                {
+                    break; // invalid?
+                }
+                else if (rDN[i+1] == '"')
+                {
+                    buf.append(rDN[i+1]);
+                    ++i;
+                    state = INQUOTE;
+                }
+                else
+                {
+                    state = INVALUE;
+                }
+            }
+        }
+        else if (state == INVALUE)
+        {
+            if (rDN[i] == '+' || rDN[i] == ',' || rDN[i] == ';')
+            {
+                state = DEFAULT;
+            }
+            buf.append(rDN[i]);
+        }
+        else
+        {
+            assert(state == INQUOTE);
+            if (rDN[i] == '"')
+            {
+                if (rDN.getLength() != i+1 && rDN[i+1] == '"')
+                {
+                    buf.append('\\');
+                    buf.append(rDN[i+1]);
+                    ++i;
+                }
+                else
+                {
+                    buf.append(rDN[i]);
+                    state = DEFAULT;
+                }
+            }
+            else
+            {
+                buf.append(rDN[i]);
+            }
+        }
+    }
+    return buf.makeStringAndClear();
+}
+
+bool EqualDistinguishedNames(
+        std::u16string_view const rName1, std::u16string_view const rName2,
+        EqualMode const eMode)
+{
+    if (eMode == COMPAT_BOTH && !rName1.empty() && rName1 == rName2)
+    {   // handle case where both need to be converted
+        return true;
+    }
     CERTName *const pName1(CERT_AsciiToName(OUStringToOString(rName1, RTL_TEXTENCODING_UTF8).getStr()));
     if (pName1 == nullptr)
     {
         return false;
     }
     CERTName *const pName2(CERT_AsciiToName(OUStringToOString(rName2, RTL_TEXTENCODING_UTF8).getStr()));
-    if (pName2 == nullptr)
+    bool ret(false);
+    if (pName2)
     {
-        CERT_DestroyName(pName1);
-        return false;
+        ret = (CERT_CompareName(pName1, pName2) == SECEqual);
+        CERT_DestroyName(pName2);
     }
-    bool const ret(CERT_CompareName(pName1, pName2) == SECEqual);
-    CERT_DestroyName(pName2);
+    if (!ret && eMode == COMPAT_2ND)
+    {
+        CERTName *const pName2Compat(CERT_AsciiToName(OUStringToOString(
+            CompatDNCryptoAPI(OUString(rName2)), RTL_TEXTENCODING_UTF8).getStr()));
+        if (pName2Compat == nullptr)
+        {
+            CERT_DestroyName(pName1);
+            return false;
+        }
+        ret = CERT_CompareName(pName1, pName2Compat) == SECEqual;
+        CERT_DestroyName(pName2Compat);
+    }
     CERT_DestroyName(pName1);
     return ret;
 }

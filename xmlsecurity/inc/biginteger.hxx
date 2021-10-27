@@ -35,8 +35,17 @@ XSECXMLSEC_DLLPUBLIC OUString bigIntegerToNumericString(const css::uno::Sequence
 XSECXMLSEC_DLLPUBLIC css::uno::Sequence<sal_Int8>
 numericStringToBigInteger(std::u16string_view serialNumber);
 
+// DNs read as strings from XML files may need to be mangled for compatibility
+// as NSS and MS CryptoAPI have different string serialisations; if the DN is
+// from an XCertificate it's "native" already and doesn't need to be mangled.
+enum EqualMode
+{
+    NOCOMPAT,
+    COMPAT_2ND,
+    COMPAT_BOTH
+};
 XSECXMLSEC_DLLPUBLIC bool EqualDistinguishedNames(std::u16string_view rName1,
-                                                  std::u16string_view rName2);
+                                                  std::u16string_view rName2, EqualMode eMode);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
