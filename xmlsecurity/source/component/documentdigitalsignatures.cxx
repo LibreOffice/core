@@ -667,7 +667,7 @@ sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
 
     return std::any_of(aTrustedAuthors.begin(), aTrustedAuthors.end(),
         [&xAuthor, &sSerialNum](const SvtSecurityOptions::Certificate& rAuthor) {
-            return xmlsecurity::EqualDistinguishedNames(rAuthor.SubjectName, xAuthor->getIssuerName())
+            return xmlsecurity::EqualDistinguishedNames(rAuthor.SubjectName, xAuthor->getIssuerName(), xmlsecurity::NOCOMPAT)
                 && ( rAuthor.SerialNumber == sSerialNum );
         });
 }

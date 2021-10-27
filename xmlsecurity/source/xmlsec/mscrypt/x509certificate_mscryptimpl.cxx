@@ -33,6 +33,7 @@
 
 #include <rtl/locale.h>
 #include <rtl/ref.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <osl/nlsupport.h>
 #include <osl/process.h>
 #include <o3tl/char16_t2wchar_t.hxx>
@@ -654,6 +655,67 @@ Sequence<OUString> SAL_CALL X509Certificate_MSCryptImpl::getSupportedServiceName
 
 namespace xmlsecurity {
 
+// based on some guesswork and:
+// https://datatracker.ietf.org/doc/html/rfc1485
+// https://docs.microsoft.com/en-us/windows/win32/api/wincrypt/nf-wincrypt-certnametostra#CERT_X500_NAME_STR
+// the main problem appears to be that in values NSS uses \ escapes but CryptoAPI requires " quotes around value
+static OUString CompatDNNSS(OUString const& rDN)
+{
+    OUStringBuffer buf(rDN.getLength());
+    enum { DEFAULT, INVALUE, INQUOTE } state(DEFAULT);
+    for (sal_Int32 i = 0; i < rDN.getLength(); ++i)
+    {
+        if (state == DEFAULT)
+        {
+            buf.append(rDN[i]);
+            if (rDN[i] == '=')
+            {
+                if (rDN.getLength() == i+1)
+                {
+                    break; // invalid?
+                }
+                else
+                {
+                    buf.append('"');
+                    state = INVALUE;
+                }
+            }
+        }
+        else if (state == INVALUE)
+        {
+            if (rDN[i] == '+' || rDN[i] == ',' || rDN[i] == ';')
+            {
+                buf.append('"');
+                buf.append(rDN[i]);
+                state = DEFAULT;
+            }
+            else if (rDN[i] == '\\')
+            {
+                if (rDN.getLength() == i+1)
+                {
+                    break; // invalid?
+                }
+                if (rDN[i+1] == '"')
+                {
+                    buf.append('"');
+                }
+                buf.append(rDN[i+1]);
+                ++i;
+            }
+            else
+            {
+                buf.append(rDN[i]);
+            }
+            if (i+1 == rDN.getLength())
+            {
+                buf.append('"');
+                state = DEFAULT;
+            }
+        }
+    }
+    return buf.makeStringAndClear();
+}
+
 static bool EncodeDistinguishedName(std::u16string_view const rName, CERT_NAME_BLOB & rBlob)
 {
     LPCWSTR pszError;
@@ -676,22 +738,38 @@ static bool EncodeDistinguishedName(std::u16string_view const rName, CERT_NAME_B
 }
 
 bool EqualDistinguishedNames(
-        std::u16string_view const rName1, std::u16string_view const rName2)
+        std::u16string_view const rName1, std::u16string_view const rName2,
+        EqualMode const eMode)
 {
+    if (eMode == COMPAT_BOTH && !rName1.empty() && rName1 == rName2)
+    {   // handle case where both need to be converted
+        return true;
+    }
     CERT_NAME_BLOB blob1;
     if (!EncodeDistinguishedName(rName1, blob1))
     {
         return false;
     }
     CERT_NAME_BLOB blob2;
-    if (!EncodeDistinguishedName(rName2, blob2))
+    bool ret(false);
+    if (!!EncodeDistinguishedName(rName2, blob2))
     {
-        delete[] blob1.pbData;
-        return false;
+        ret = CertCompareCertificateName(X509_ASN_ENCODING,
+            &blob1, &blob2) == TRUE;
+        delete[] blob2.pbData;
     }
-    bool const ret(CertCompareCertificateName(X509_ASN_ENCODING,
-            &blob1, &blob2) == TRUE);
-    delete[] blob2.pbData;
+    if (!ret && eMode == COMPAT_2ND)
+    {
+        CERT_NAME_BLOB blob2compat;
+        if (!EncodeDistinguishedName(CompatDNNSS(OUString(rName2)), blob2compat))
+        {
+            delete[] blob1.pbData;
+            return false;
+        }
+        ret = CertCompareCertificateName(X509_ASN_ENCODING,
+            &blob1, &blob2compat) == TRUE;
+        delete[] blob2compat.pbData;
+    }
     delete[] blob1.pbData;
     return ret;
 }
