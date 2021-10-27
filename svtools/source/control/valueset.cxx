@@ -457,9 +457,9 @@ bool ValueSet::KeyInput( const KeyEvent& rKeyEvent )
     return true;
 }
 
-void ValueSet::ImplTracking(const Point& rPos)
+void ValueSet::ImplTracking(bool bLeaveWindow, const Point& rPos)
 {
-    ValueSetItem* pItem = ImplGetItem( ImplGetItem( rPos ) );
+    ValueSetItem* pItem = bLeaveWindow ? nullptr : ImplGetItem(ImplGetItem(rPos));
     if ( pItem )
     {
         if( GetStyle() & WB_MENUSTYLEVALUESET || GetStyle() & WB_FLATVALUESET )
@@ -517,7 +517,7 @@ bool ValueSet::MouseMove(const MouseEvent& rMouseEvent)
 {
     // because of SelectionMode
     if ((GetStyle() & WB_MENUSTYLEVALUESET) || (GetStyle() & WB_FLATVALUESET))
-        ImplTracking(rMouseEvent.GetPosPixel());
+        ImplTracking(rMouseEvent.IsLeaveWindow(), rMouseEvent.GetPosPixel());
     return CustomWidgetController::MouseMove(rMouseEvent);
 }
 
