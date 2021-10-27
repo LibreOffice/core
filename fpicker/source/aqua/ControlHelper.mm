@@ -112,9 +112,7 @@ NSTextField* createLabelWithString(NSString* labelString)
     [textField setSelectable:NO];
     [textField setDrawsBackground:NO];
     [textField setBordered:NO];
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.9 setTitle
     [[textField cell] setTitle:labelString];
-    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     return textField;
 }
@@ -276,9 +274,7 @@ OUString ControlHelper::getLabel( sal_Int16 nControlId )
             retVal = [temp OUString];
     }
     else {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.9 title
         NSString* sLabel = [[pControl cell] title];
-        SAL_WNODEPRECATED_DECLARATIONS_POP
         retVal = [sLabel OUString];
     }
 
@@ -302,9 +298,7 @@ void ControlHelper::setLabel( sal_Int16 nControlId, NSString* aLabel )
 
             m_aMapListLabels[pControl] = [aLabel retain];
         } else if ([pControl class] == [NSButton class]) {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.9 setTitle
             [[pControl cell] setTitle:aLabel];
-            SAL_WNODEPRECATED_DECLARATIONS_POP
         }
     } else {
         SAL_INFO("fpicker.aqua","Control not found to set label for");
