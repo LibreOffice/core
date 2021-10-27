@@ -264,6 +264,14 @@ Property Get XCellRange(Optional ByVal RangeName As Variant) As Variant
 End Property	&apos;	SFDocuments.SF_Calc.XCellRange
 
 REM -----------------------------------------------------------------------------
+Property Get XSheetCellCursor(Optional ByVal RangeName As Variant) As Variant
+&apos;&apos;&apos;	Returns a UNO object of type com.sun.star.sheet.XSheetCellCursor
+&apos;&apos;	After having moved the cursor (gotoNext(), ...) the resulting range can be got
+&apos;&apos;&apos;	back as a string with the cursor.AbsoluteName UNO property.
+	XSheetCellCursor = _PropertyGet(&quot;XSheetCellCursor&quot;, RangeName)
+End Property	&apos;	SFDocuments.SF_Calc.XSheetCellCursor
+
+REM -----------------------------------------------------------------------------
 Property Get XSpreadsheet(Optional ByVal SheetName As Variant) As Variant
 &apos;&apos;&apos;	Returns a UNO object of type com.sun.star.sheet.XSpreadsheet
 	XSpreadsheet = _PropertyGet(&quot;XSpreadsheet&quot;, SheetName)
@@ -1896,6 +1904,7 @@ Public Function Properties() As Variant
 					, &quot;Width&quot; _
 					, &quot;XCellRange&quot; _
 					, &quot;XComponent&quot; _
+					, &quot;XSheetCellCursor&quot; _
 					, &quot;XSpreadsheet&quot; _
 					)
 
@@ -3180,6 +3189,14 @@ Const cstSubArgs = &quot;&quot;
 			Else
 				If Not ScriptForge.SF_Utils._Validate(pvArg, &quot;Range&quot;, V_STRING) Then GoTo Finally
 				Set _PropertyGet = _ParseAddress(pvArg).XCellRange
+			End If
+		Case UCase(&quot;XSheetCellCursor&quot;)
+			If IsMissing(pvArg) Or IsEmpty(pvArg) Then
+				Set _PropertyGet = Nothing
+			Else
+				If Not ScriptForge.SF_Utils._Validate(pvArg, &quot;Range&quot;, V_STRING) Then GoTo Finally
+				Set oAddress = _ParseAddress(pvArg)
+				Set _PropertyGet = oAddress.XSpreadsheet.createCursorByRange(oAddress.XCellRange)
 			End If
 		Case UCase(&quot;XSpreadsheet&quot;)
 			If IsMissing(pvArg) Or IsEmpty(pvArg) Then
