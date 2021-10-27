@@ -50,6 +50,7 @@
 #include <documentsignaturehelper.hxx>
 #include <xmlsignaturehelper.hxx>
 #include <documentsignaturemanager.hxx>
+#include <biginteger.hxx>
 #include <certificate.hxx>
 #include <xsecctl.hxx>
 #include <sfx2/docfile.hxx>
@@ -704,6 +705,21 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFDoubleX509Certificate)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), infos.getLength());
     CPPUNIT_ASSERT_EQUAL(security::CertificateValidity::INVALID, infos[0].CertificateStatus);
     CPPUNIT_ASSERT(!infos[0].Signer.is());
+}
+
+CPPUNIT_TEST_FIXTURE(SigningTest, testDNCompatibility)
+{
+    OUString const msDN("CN=\"\"\"ABC\"\".\", O=\"Enterprise \"\"ABC\"\"\"");
+    OUString const nssDN("CN=\\\"ABC\\\".,O=Enterprise \\\"ABC\\\"");
+    // this is just the status quo, possibly either NSS or CryptoAPI might change
+    CPPUNIT_ASSERT(!xmlsecurity::EqualDistinguishedNames(msDN, nssDN, xmlsecurity::NOCOMPAT));
+    CPPUNIT_ASSERT(!xmlsecurity::EqualDistinguishedNames(nssDN, msDN, xmlsecurity::NOCOMPAT));
+    // with compat flag it should work, with the string one 2nd and the native one 1st
+#ifdef _WIN32
+    CPPUNIT_ASSERT(xmlsecurity::EqualDistinguishedNames(msDN, nssDN, xmlsecurity::COMPAT_2ND));
+#else
+    CPPUNIT_ASSERT(xmlsecurity::EqualDistinguishedNames(nssDN, msDN, xmlsecurity::COMPAT_2ND));
+#endif
 }
 
 /// Test a typical OOXML where a number of (but not all) streams are signed.
