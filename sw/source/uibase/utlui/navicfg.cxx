@@ -112,7 +112,7 @@ SwNavigationConfig::SwNavigationConfig() :
                 case 2: pValues[nProp] >>= m_nOutlineLevel;  break;
                 case 3:
                 {
-                        sal_uInt16 nTmp;
+                        sal_Int32 nTmp;
                         if (pValues[nProp] >>= nTmp)
                             m_nRegionMode = static_cast<RegionMode>(nTmp);
                         break;
