@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f9ab559_299c3389",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-10-27T13:28:38Z",
+      "side": 1,
+      "message": "Thanks for the fixup!\nI guess this should be cherry-picked to 7-2, could it?\n",
+      "revId": "ef42ce579f0e4e4c436f70615f3adeb9f0f68217",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
