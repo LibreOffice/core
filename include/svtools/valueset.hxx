@@ -230,9 +230,13 @@ private:
     SVT_DLLPRIVATE void         ImplDeleteItems();
     SVT_DLLPRIVATE void         ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSetItem* pItem, tools::Rectangle aRect);
     SVT_DLLPRIVATE void         ImplDrawItemText(vcl::RenderContext& rRenderContext, const OUString& rStr);
-    // nItemId is the item to draw selected, but if nothing is selected something else may be drawn as selected instead, the item drawn
+    // nItemId is the item to draw selected, but if nothing is selected something else may be drawn as selected instead, the item to draw
     // selected is returned
-    SVT_DLLPRIVATE sal_uInt16   ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel);
+    SVT_DLLPRIVATE ValueSetItem* ImplGetDrawSelectItem(sal_uInt16 nItemId, const bool bFocus, tools::Rectangle& rRect);
+    SVT_DLLPRIVATE void         ImplDrawSelect(vcl::RenderContext& rRenderContext,
+                                               const tools::Rectangle& rRect, ValueSetItem* pItem,
+                                               const bool bFocus, const bool bDrawSel,
+                                               const bool bSelected, const bool bHover);
     SVT_DLLPRIVATE void         ImplDrawSelect(vcl::RenderContext& rRenderContext);
     SVT_DLLPRIVATE void         ImplHighlightItem(sal_uInt16 nItemId, bool bIsSelection = true);
     SVT_DLLPRIVATE void         ImplDraw(vcl::RenderContext& rRenderContext);
