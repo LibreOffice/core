@@ -1189,46 +1189,72 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext)
         return;
     }
 
-    sal_uInt16 nItemDrawnSelected = ImplDrawSelect(rRenderContext, mnSelItemId, bFocus, bDrawSel);
-    if (mbHighlight && mnHighItemId != nItemDrawnSelected)
+    tools::Rectangle aSelectedRect, aHoverRect;
+    ValueSetItem* pSelectedItem = ImplGetDrawSelectItem(mnSelItemId, bFocus, aSelectedRect);
+    ValueSetItem* pHighlightItem = mnHighItemId ? ImplGetDrawSelectItem(mnHighItemId, false, aHoverRect) : nullptr;
+
+    if (pSelectedItem)
     {
-        ImplDrawSelect(rRenderContext, mnHighItemId, false, bDrawSel);
+        const bool bHover = mnHighItemId && pSelectedItem == pHighlightItem;
+        ImplDrawSelect(rRenderContext, aSelectedRect, pSelectedItem, bFocus, bDrawSel, true, bHover);
+    }
+    if (mnHighItemId && pHighlightItem && pSelectedItem != pHighlightItem)
+    {
+        ImplDrawSelect(rRenderContext, aHoverRect, pHighlightItem, false, bDrawSel, false, true);
     }
 }
 
-sal_uInt16 ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel )
+ValueSetItem* ValueSet::ImplGetDrawSelectItem(sal_uInt16 nItemId, const bool bFocus, tools::Rectangle& rRect)
 {
-    ValueSetItem* pItem;
-    tools::Rectangle aRect;
+    ValueSetItem* pItem = nullptr;
     if (nItemId)
     {
         const size_t nPos = GetItemPos( nItemId );
         pItem = mItemList[ nPos ].get();
-        aRect = ImplGetItemRect( nPos );
+        rRect = ImplGetItemRect( nPos );
     }
     else if (mpNoneItem)
     {
         pItem = mpNoneItem.get();
-        aRect = maNoneItemRect;
+        rRect = maNoneItemRect;
     }
     else if (bFocus && (pItem = ImplGetFirstItem()))
     {
-        aRect = ImplGetItemRect(0);
+        rRect = ImplGetItemRect(0);
     }
-    else
-    {
-        return 0;
-    }
+    return pItem;
+}
 
-    if (!pItem->mbVisible)
-        return 0;
+void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext,
+                              const tools::Rectangle& rRect, ValueSetItem* pItem,
+                              const bool bFocus, const bool bDrawSel,
+                              const bool bSelected, const bool bHover)
+{
+    tools::Rectangle aRect(rRect);
 
     // draw selection
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     rRenderContext.SetFillColor();
 
-    Color aDoubleColor(rStyleSettings.GetHighlightColor());
-    Color aSingleColor(rStyleSettings.GetHighlightTextColor());
+    Color aDoubleColor;
+    Color aSingleColor;
+
+    sal_uInt16 nTransparencePercent = 0;
+
+    if (bSelected && bHover)
+    {
+        aDoubleColor = rStyleSettings.GetActiveColor();
+        aSingleColor = rStyleSettings.GetActiveTextColor();
+    }
+    else if (bSelected || bHover)
+    {
+        aDoubleColor = rStyleSettings.GetHighlightColor();
+        aSingleColor = rStyleSettings.GetHighlightTextColor();
+        if (bHover)
+        {
+            nTransparencePercent = 55;
+        }
+    }
 
     // specify selection output
     WinBits nStyle = GetStyle();
@@ -1239,7 +1265,9 @@ sal_uInt16 ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt
         if (bDrawSel)
         {
             rRenderContext.SetLineColor(aDoubleColor);
-            rRenderContext.DrawRect(aRect);
+            tools::PolyPolygon aPolyPoly(1);
+            aPolyPoly.Insert(aRect);
+            rRenderContext.DrawTransparent(aPolyPoly, nTransparencePercent);
         }
     }
     else
@@ -1247,7 +1275,9 @@ sal_uInt16 ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt
         if (bDrawSel)
         {
             rRenderContext.SetLineColor(aDoubleColor);
-            rRenderContext.DrawRect(aRect);
+            tools::PolyPolygon aPolyPoly(1);
+            aPolyPoly.Insert(aRect);
+            rRenderContext.DrawTransparent(aPolyPoly, nTransparencePercent);
         }
         if (mbDoubleSel)
         {
@@ -1256,7 +1286,11 @@ sal_uInt16 ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt
             aRect.AdjustRight( -1 );
             aRect.AdjustBottom( -1 );
             if (bDrawSel)
-                rRenderContext.DrawRect(aRect);
+            {
+                tools::PolyPolygon aPolyPoly(1);
+                aPolyPoly.Insert(aRect);
+                rRenderContext.DrawTransparent(aPolyPoly, nTransparencePercent);
+            }
         }
         aRect.AdjustLeft( 1 );
         aRect.AdjustTop( 1 );
@@ -1268,7 +1302,11 @@ sal_uInt16 ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt
         aRect.AdjustRight( -1 );
         aRect.AdjustBottom( -1 );
         if (bDrawSel)
-            rRenderContext.DrawRect(aRect);
+        {
+            tools::PolyPolygon aPolyPoly(1);
+            aPolyPoly.Insert(aRect);
+            rRenderContext.DrawTransparent(aPolyPoly, nTransparencePercent);
+        }
         if (mbDoubleSel)
         {
             aRect.AdjustLeft( 1 );
@@ -1276,7 +1314,11 @@ sal_uInt16 ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt
             aRect.AdjustRight( -1 );
             aRect.AdjustBottom( -1 );
             if (bDrawSel)
-                rRenderContext.DrawRect(aRect);
+            {
+                tools::PolyPolygon aPolyPoly(1);
+                aPolyPoly.Insert(aRect);
+                rRenderContext.DrawTransparent(aPolyPoly, nTransparencePercent);
+            }
         }
 
         if (bDrawSel)
@@ -1287,14 +1329,14 @@ sal_uInt16 ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt
         {
             rRenderContext.SetLineColor(COL_LIGHTGRAY);
         }
-        rRenderContext.DrawRect(aRect2);
+        tools::PolyPolygon aPolyPoly(1);
+        aPolyPoly.Insert(aRect2);
+        rRenderContext.DrawTransparent(aPolyPoly, nTransparencePercent);
         if (bFocus)
             InvertFocusRect(rRenderContext, aRect2);
     }
 
     ImplDrawItemText(rRenderContext, pItem->maText);
-
-    return pItem->mnId;
 }
 
 void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSetItem* pItem, tools::Rectangle aRect)
