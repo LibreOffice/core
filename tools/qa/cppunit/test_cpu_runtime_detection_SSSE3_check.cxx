@@ -10,17 +10,16 @@
 #include <sal/types.h>
 #include <tools/simdsupport.hxx>
 
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
+#include <stdlib.h>
 
 #include "test_cpu_runtime_detection_x86_checks.hxx"
 
 /* WARNING: This file is compiled with SSSE3 support, don't call
  * any function without checking cpuid to check the CPU can actually
- * handle it.
+ * handle it, and don't include any headers that contain templates
+ * or inline functions, which includes cppunit.
  */
+#define CPPUNIT_ASSERT_EQUAL(a, b) ((a) == (b) ? (void)0 : abort())
 void CpuRuntimeDetectionX86Checks::checkSSSE3()
 {
 #ifdef LO_SSSE3_AVAILABLE
