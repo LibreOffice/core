@@ -43,7 +43,7 @@
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
-          <object class="GtkToggleButton" id="depth0">
+          <object class="GtkRadioButton" id="depth0">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
@@ -51,6 +51,7 @@
             <property name="use-underline">True</property>
             <property name="always-show-image">True</property>
             <property name="active">True</property>
+            <property name="draw-indicator">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -59,13 +60,15 @@
           </packing>
         </child>
         <child>
-          <object class="GtkToggleButton" id="depth1">
+          <object class="GtkRadioButton" id="depth1">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
             <property name="image">image2</property>
             <property name="use-underline">True</property>
             <property name="always-show-image">True</property>
+            <property name="draw-indicator">True</property>
+            <property name="group">depth0</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -74,13 +77,15 @@
           </packing>
         </child>
         <child>
-          <object class="GtkToggleButton" id="depth2">
+          <object class="GtkRadioButton" id="depth2">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
             <property name="image">image1</property>
             <property name="use-underline">True</property>
             <property name="always-show-image">True</property>
+            <property name="draw-indicator">True</property>
+            <property name="group">depth0</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -89,13 +94,15 @@
           </packing>
         </child>
         <child>
-          <object class="GtkToggleButton" id="depth3">
+          <object class="GtkRadioButton" id="depth3">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
             <property name="image">image3</property>
             <property name="use-underline">True</property>
             <property name="always-show-image">True</property>
+            <property name="draw-indicator">True</property>
+            <property name="group">depth0</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -104,13 +111,15 @@
           </packing>
         </child>
         <child>
-          <object class="GtkToggleButton" id="depth4">
+          <object class="GtkRadioButton" id="depth4">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
             <property name="image">image5</property>
             <property name="use-underline">True</property>
             <property name="always-show-image">True</property>
+            <property name="draw-indicator">True</property>
+            <property name="group">depth0</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -119,7 +128,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkToggleButton" id="infinity">
+          <object class="GtkRadioButton" id="infinity">
             <property name="label" translatable="yes" context="depthwindow|RID_SVXSTR_INFINITY">_Infinity</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
@@ -127,6 +136,8 @@
             <property name="image">image6</property>
             <property name="use-underline">True</property>
             <property name="always-show-image">True</property>
+            <property name="draw-indicator">True</property>
+            <property name="group">depth0</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -135,12 +146,14 @@
           </packing>
         </child>
         <child>
-          <object class="GtkToggleButton" id="custom">
+          <object class="GtkRadioButton" id="custom">
             <property name="label" translatable="yes" context="depthwindow|RID_SVXSTR_CUSTOM">_Custom...</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
             <property name="use-underline">True</property>
+            <property name="draw-indicator">True</property>
+            <property name="group">depth0</property>
           </object>
           <packing>
             <property name="expand">False</property>

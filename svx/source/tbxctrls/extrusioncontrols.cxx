@@ -331,23 +331,26 @@ constexpr OUStringLiteral gsMetricUnit(     u".uno:MetricUnit"     );
 ExtrusionDepthWindow::ExtrusionDepthWindow(svt::PopupWindowController* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/depthwindow.ui", "DepthWindow")
     , mxControl(pControl)
-    , mxDepth0(m_xBuilder->weld_toggle_button("depth0"))
-    , mxDepth1(m_xBuilder->weld_toggle_button("depth1"))
-    , mxDepth2(m_xBuilder->weld_toggle_button("depth2"))
-    , mxDepth3(m_xBuilder->weld_toggle_button("depth3"))
-    , mxDepth4(m_xBuilder->weld_toggle_button("depth4"))
-    , mxInfinity(m_xBuilder->weld_toggle_button("infinity"))
-    , mxCustom(m_xBuilder->weld_toggle_button("custom"))
+    , mxDepth0(m_xBuilder->weld_radio_button("depth0"))
+    , mxDepth1(m_xBuilder->weld_radio_button("depth1"))
+    , mxDepth2(m_xBuilder->weld_radio_button("depth2"))
+    , mxDepth3(m_xBuilder->weld_radio_button("depth3"))
+    , mxDepth4(m_xBuilder->weld_radio_button("depth4"))
+    , mxInfinity(m_xBuilder->weld_radio_button("infinity"))
+    , mxCustom(m_xBuilder->weld_radio_button("custom"))
     , meUnit(FieldUnit::NONE)
     , mfDepth( -1.0 )
+    , mbSettingValue(false)
+    , mbCommandDispatched(false)
 {
-    mxDepth0->connect_clicked(LINK(this, ExtrusionDepthWindow, SelectHdl));
-    mxDepth1->connect_clicked(LINK(this, ExtrusionDepthWindow, SelectHdl));
-    mxDepth2->connect_clicked(LINK(this, ExtrusionDepthWindow, SelectHdl));
-    mxDepth3->connect_clicked(LINK(this, ExtrusionDepthWindow, SelectHdl));
-    mxDepth4->connect_clicked(LINK(this, ExtrusionDepthWindow, SelectHdl));
-    mxInfinity->connect_clicked(LINK(this, ExtrusionDepthWindow, SelectHdl));
-    mxCustom->connect_clicked(LINK(this, ExtrusionDepthWindow, SelectHdl));
+    mxDepth0->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
+    mxDepth1->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
+    mxDepth2->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
+    mxDepth3->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
+    mxDepth4->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
+    mxInfinity->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
+    mxCustom->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
+    mxCustom->connect_mouse_release(LINK(this, ExtrusionDepthWindow, MouseReleaseHdl));
 
     AddStatusListener( gsExtrusionDepth );
     AddStatusListener( gsMetricUnit );
@@ -362,6 +365,10 @@ void ExtrusionDepthWindow::implSetDepth( double fDepth )
 {
     mfDepth = fDepth;
 
+    bool bSettingValue = mbSettingValue;
+    mbSettingValue = true;
+
+    mxCustom->set_active(true);
     bool bIsMetric = IsMetric(meUnit);
     mxDepth0->set_active(fDepth == (bIsMetric ? aDepthListMM[0] : aDepthListInch[0]));
     mxDepth1->set_active(fDepth == (bIsMetric ? aDepthListMM[1] : aDepthListInch[1]));
@@ -369,12 +376,8 @@ void ExtrusionDepthWindow::implSetDepth( double fDepth )
     mxDepth3->set_active(fDepth == (bIsMetric ? aDepthListMM[3] : aDepthListInch[3]));
     mxDepth4->set_active(fDepth == (bIsMetric ? aDepthListMM[4] : aDepthListInch[4]));
     mxInfinity->set_active(fDepth >= 338666);
-    mxCustom->set_active(!mxDepth0->get_active() &&
-                         !mxDepth1->get_active() &&
-                         !mxDepth2->get_active() &&
-                         !mxDepth3->get_active() &&
-                         !mxDepth4->get_active() &&
-                         !mxInfinity->get_active());
+
+    mbSettingValue = bSettingValue;
 }
 
 void ExtrusionDepthWindow::implFillStrings( FieldUnit eUnit )
@@ -442,28 +445,33 @@ void ExtrusionDepthWindow::statusChanged(
     }
 }
 
-IMPL_LINK(ExtrusionDepthWindow, SelectHdl, weld::Button&, rButton, void)
+void ExtrusionDepthWindow::DispatchDepthDialog()
 {
-    mxDepth0->set_active(&rButton == mxDepth0.get());
-    mxDepth1->set_active(&rButton == mxDepth1.get());
-    mxDepth2->set_active(&rButton == mxDepth2.get());
-    mxDepth3->set_active(&rButton == mxDepth3.get());
-    mxDepth4->set_active(&rButton == mxDepth4.get());
-    mxInfinity->set_active(&rButton == mxInfinity.get());
-    mxCustom->set_active(&rButton == mxCustom.get());
+    Sequence< PropertyValue > aArgs( 2 );
+    aArgs[0].Name = "Depth";
+    aArgs[0].Value <<= mfDepth;
+    aArgs[1].Name = "Metric";
+    aArgs[1].Value <<= static_cast<sal_Int32>( meUnit );
+
+    rtl::Reference<svt::PopupWindowController> xControl(mxControl);
+    xControl->EndPopupMode();
+    xControl->dispatchCommand(".uno:ExtrusionDepthDialog", aArgs);
+    mbCommandDispatched = true;
+}
+
+IMPL_LINK(ExtrusionDepthWindow, SelectHdl, weld::Toggleable&, rButton, void)
+{
+    if (mbSettingValue || !rButton.get_active())
+        return;
+
+    // see MouseReleaseHdl for mbCommandDispatched check, there's no guarantee
+    // this toggle will happen before that mouse release though it does in
+    // practice for vcl and gtk
+    if (mbCommandDispatched)
+        return;
 
     if (mxCustom->get_active())
-    {
-        Sequence< PropertyValue > aArgs( 2 );
-        aArgs[0].Name = "Depth";
-        aArgs[0].Value <<= mfDepth;
-        aArgs[1].Name = "Metric";
-        aArgs[1].Value <<= static_cast<sal_Int32>( meUnit );
-
-        rtl::Reference<svt::PopupWindowController> xControl(mxControl);
-        xControl->EndPopupMode();
-        xControl->dispatchCommand(".uno:ExtrusionDepthDialog", aArgs);
-    }
+        DispatchDepthDialog();
     else
     {
         double fDepth;
@@ -494,10 +502,29 @@ IMPL_LINK(ExtrusionDepthWindow, SelectHdl, weld::Button&, rButton, void)
         aArgs[0].Value <<= fDepth;
 
         mxControl->dispatchCommand( gsExtrusionDepth,  aArgs );
+        mbCommandDispatched = true;
         implSetDepth( fDepth );
 
         mxControl->EndPopupMode();
     }
+}
+
+IMPL_LINK_NOARG(ExtrusionDepthWindow, MouseReleaseHdl, const MouseEvent&, bool)
+{
+    /*
+     tdf#145296 if the "custom" radiobutton was presented preselected as
+     toggled on and the user clicked on it then there's no toggled signal sent
+     because the item was already toggled on and didn't change state.
+
+     So if that happens launch the custom spacing dialog explicitly here on
+     mouse release.
+    */
+    if (mxCustom->get_active() && !mbCommandDispatched)
+    {
+        DispatchDepthDialog();
+        return true;
+    }
+    return false;
 }
 
 // ExtrusionDirectionControl
