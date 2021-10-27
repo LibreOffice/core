@@ -9,7 +9,6 @@
 #
 #*************************************************************************
 
-# empty second argument (i.e. no 1)
-$(eval $(call sd_import_test,))
+$(eval $(call sd_import_test,-smartart))
 
 # vim: set noet sw=4 ts=4:
