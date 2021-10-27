@@ -539,7 +539,9 @@ void SalAquaFilePicker::updateSaveFileNameExtension()
     SolarMutexGuard aGuard;
 
     if (!m_pControlHelper->isAutoExtensionEnabled()) {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // setAllowedFileTypes (12.0)
         [m_pDialog setAllowedFileTypes:nil];
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         [m_pDialog setAllowsOtherFileTypes:YES];
     } else {
         ensureFilterHelper();
@@ -551,7 +553,9 @@ void SalAquaFilePicker::updateSaveFileNameExtension()
         OUString suffix = (*(aStringList.begin())).copy(1);
         NSString *requiredFileType = [NSString stringWithOUString:suffix];
 
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // setAllowedFileTypes (12.0)
         [m_pDialog setAllowedFileTypes:[NSArray arrayWithObjects:requiredFileType, nil]];
+        SAL_WNODEPRECATED_DECLARATIONS_POP
 
         [m_pDialog setAllowsOtherFileTypes:NO];
     }

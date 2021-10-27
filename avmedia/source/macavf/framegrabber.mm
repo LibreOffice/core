@@ -67,7 +67,9 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
 
     // convert the image to a TIFF-formatted byte-array
     CFMutableDataRef pCFData = CFDataCreateMutable( kCFAllocatorDefault, 0 );
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // kUTTypeTIFF (12.0)
     CGImageDestination* pCGImgDest = CGImageDestinationCreateWithData( pCFData, kUTTypeTIFF, 1, nullptr );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     CGImageDestinationAddImage( pCGImgDest, pCGImage, nullptr );
     CGImageDestinationFinalize( pCGImgDest );
     CFRelease( pCGImgDest );
