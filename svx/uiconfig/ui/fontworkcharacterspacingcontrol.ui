@@ -2,42 +2,6 @@
 <!-- Generated with glade 3.38.2 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.20"/>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="icon-name">svx/res/symphony/spacing_very_tight.png</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image2">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="icon-name">svx/res/symphony/spacing_tight.png</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image3">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="icon-name">svx/res/symphony/spacing_normal.png</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="icon-name">svx/res/symphony/spacing_loose.png</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image5">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="icon-name">svx/res/symphony/spacing_very_loose.png</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image6">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="icon-name">svx/res/symphony/last_custom_common.png</property>
-    <property name="icon_size">1</property>
-  </object>
   <object class="GtkPopover" id="FontworkCharacterSpacingControl">
     <property name="can-focus">False</property>
     <property name="no-show-all">True</property>
@@ -51,14 +15,14 @@
         <property name="vexpand">True</property>
         <property name="row-spacing">6</property>
         <child>
-          <object class="GtkToggleButton" id="verytight">
+          <object class="GtkRadioButton" id="verytight">
             <property name="label" translatable="yes" context="fontworkcharacterspacingcontrol|RID_SVXSTR_CHARS_SPACING_VERY_TIGHT">_Very Tight</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
-            <property name="image">image1</property>
             <property name="use-underline">True</property>
-            <property name="always-show-image">True</property>
+            <property name="draw-indicator">True</property>
+            <property name="group">normal</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -66,14 +30,14 @@
           </packing>
         </child>
         <child>
-          <object class="GtkToggleButton" id="tight">
+          <object class="GtkRadioButton" id="tight">
             <property name="label" translatable="yes" context="fontworkcharacterspacingcontrol|RID_SVXSTR_CHARS_SPACING_TIGHT">_Tight</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
-            <property name="image">image2</property>
             <property name="use-underline">True</property>
-            <property name="always-show-image">True</property>
+            <property name="draw-indicator">True</property>
+            <property name="group">normal</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -81,15 +45,14 @@
           </packing>
         </child>
         <child>
-          <object class="GtkToggleButton" id="normal">
+          <object class="GtkRadioButton" id="normal">
             <property name="label" translatable="yes" context="fontworkcharacterspacingcontrol|RID_SVXSTR_CHARS_SPACING_NORMAL">_Normal</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
-            <property name="image">image3</property>
             <property name="use-underline">True</property>
-            <property name="always-show-image">True</property>
             <property name="active">True</property>
+            <property name="draw-indicator">True</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -97,14 +60,14 @@
           </packing>
         </child>
         <child>
-          <object class="GtkToggleButton" id="loose">
+          <object class="GtkRadioButton" id="loose">
             <property name="label" translatable="yes" context="fontworkcharacterspacingcontrol|RID_SVXSTR_CHARS_SPACING_LOOSE">_Loose</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
-            <property name="image">image4</property>
             <property name="use-underline">True</property>
-            <property name="always-show-image">True</property>
+            <property name="draw-indicator">True</property>
+            <property name="group">normal</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -112,14 +75,14 @@
           </packing>
         </child>
         <child>
-          <object class="GtkToggleButton" id="veryloose">
+          <object class="GtkRadioButton" id="veryloose">
             <property name="label" translatable="yes" context="fontworkcharacterspacingcontrol|RID_SVXSTR_CHARS_SPACING_VERY_LOOSE">Very _Loose</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
-            <property name="image">image5</property>
             <property name="use-underline">True</property>
-            <property name="always-show-image">True</property>
+            <property name="draw-indicator">True</property>
+            <property name="group">normal</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -127,14 +90,14 @@
           </packing>
         </child>
         <child>
-          <object class="GtkToggleButton" id="custom">
+          <object class="GtkRadioButton" id="custom">
             <property name="label" translatable="yes" context="fontworkcharacterspacingcontrol|RID_SVXSTR_CHARS_SPACING_CUSTOM">_Custom...</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
-            <property name="image">image6</property>
             <property name="use-underline">True</property>
-            <property name="always-show-image">True</property>
+            <property name="draw-indicator">True</property>
+            <property name="group">normal</property>
           </object>
           <packing>
             <property name="left-attach">0</property>

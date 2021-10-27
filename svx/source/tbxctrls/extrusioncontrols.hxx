@@ -93,21 +93,26 @@ class ExtrusionDepthWindow final : public WeldToolbarPopup
 {
 private:
     rtl::Reference<svt::PopupWindowController> mxControl;
-    std::unique_ptr<weld::ToggleButton> mxDepth0;
-    std::unique_ptr<weld::ToggleButton> mxDepth1;
-    std::unique_ptr<weld::ToggleButton> mxDepth2;
-    std::unique_ptr<weld::ToggleButton> mxDepth3;
-    std::unique_ptr<weld::ToggleButton> mxDepth4;
-    std::unique_ptr<weld::ToggleButton> mxInfinity;
-    std::unique_ptr<weld::ToggleButton> mxCustom;
+    std::unique_ptr<weld::RadioButton> mxDepth0;
+    std::unique_ptr<weld::RadioButton> mxDepth1;
+    std::unique_ptr<weld::RadioButton> mxDepth2;
+    std::unique_ptr<weld::RadioButton> mxDepth3;
+    std::unique_ptr<weld::RadioButton> mxDepth4;
+    std::unique_ptr<weld::RadioButton> mxInfinity;
+    std::unique_ptr<weld::RadioButton> mxCustom;
 
     FieldUnit   meUnit;
     double      mfDepth;
+    bool        mbSettingValue;
+    bool        mbCommandDispatched;
 
-    DECL_LINK( SelectHdl, weld::Button&, void );
+    DECL_LINK( SelectHdl, weld::Toggleable&, void );
+    DECL_LINK( MouseReleaseHdl, const MouseEvent&, bool );
 
     void    implFillStrings( FieldUnit eUnit );
     void    implSetDepth( double fDepth );
+
+    void    DispatchDepthDialog();
 
 public:
     ExtrusionDepthWindow(svt::PopupWindowController* pControl, weld::Widget* pParentWindow);
