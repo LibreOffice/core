@@ -532,7 +532,7 @@ void writeUnsignedProperties(
 {
     {
         rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
-        pAttributeList->AddAttribute("Id", "idUnsignedProperties");
+        pAttributeList->AddAttribute("Id", "idUnsignedProperties_" + signatureInfo.ouSignatureId);
         xDocumentHandler->startElement("xd:UnsignedProperties", uno::Reference<xml::sax::XAttributeList>(pAttributeList));
     }
 
@@ -649,16 +649,21 @@ void XSecController::exportSignature(
                  * same-document reference
                  */
                 {
-                    pAttributeList->AddAttribute(
+                    if (refInfor.ouURI.startsWith("idSignedProperties"))
+                    {
+                        pAttributeList->AddAttribute("URI", "#idSignedProperties_" + signatureInfo.ouSignatureId);
+                        if (bXAdESCompliantIfODF && !refInfor.ouType.isEmpty())
+                        {
+                            // The reference which points to the SignedProperties
+                            // shall have this specific type.
+                            pAttributeList->AddAttribute("Type", refInfor.ouType);
+                        }
+                    }
+                    else
+                    {
+                        pAttributeList->AddAttribute(
                         "URI",
                         "#" + refInfor.ouURI);
-
-                    if (bXAdESCompliantIfODF && refInfor.ouURI == "idSignedProperties" && !refInfor.ouType.isEmpty())
-                    {
-                        // The reference which points to the SignedProperties
-                        // shall have this specific type.
-                        pAttributeList->AddAttribute("Type",
-                                                     refInfor.ouType);
                     }
                 }
 
