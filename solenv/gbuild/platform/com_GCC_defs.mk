@@ -185,7 +185,8 @@ ifeq (,$(index,iOS MACOSX,$(OS)))
 gb_LTOPLUGINFLAGS := --plugin $(if $(LD_PLUGIN),$(LD_PLUGIN),LLVMgold.so)
 endif
 else
-gb_LTOFLAGS := -flto=$(if $(filter-out 0,$(PARALLELISM)),$(PARALLELISM),auto) -fuse-linker-plugin -O2
+# use first element of the PARALLELISM, to allow values like "12 -l 14" to specify load limits
+gb_LTOFLAGS := -flto=$(if $(filter-out 0,$(PARALLELISM)),$(firstword $(PARALLELISM)),auto) -fuse-linker-plugin -O2
 # clang does not support -flto=<number>
 gb_CLANG_LTOFLAGS := -flto=thin
 endif
