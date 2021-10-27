@@ -569,6 +569,8 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
 
     bool bFloatingNavigator = ParentIsFloatingWindow(m_xNavigatorDlg);
 
+    m_xContentTree->SetOutlineLevel(static_cast<sal_uInt8>(m_pConfig->GetOutlineLevel()));
+
     m_xContentTree->SetOutlineTracking(static_cast<sal_uInt8>(m_pConfig->GetOutlineTracking()));
     m_xContentTree->SetTableTracking(m_pConfig->IsTableTracking());
     m_xContentTree->SetSectionTracking(m_pConfig->IsSectionTracking());
@@ -1142,7 +1144,7 @@ SwNavigatorWin::SwNavigatorWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr,
             m_xNavi->m_xContentTree->set_selection_mode(SelectionMode::Multiple);
         }
     }
-    m_xNavi->m_xContentTree->SetOutlineLevel( static_cast< sal_uInt8 >( pNaviConfig->GetOutlineLevel() ) );
+
     m_xNavi->SetRegionDropMode( pNaviConfig->GetRegionMode() );
 
     SetMinOutputSizePixel(GetOptimalSize());
