@@ -528,7 +528,7 @@ void DocumentSignatureHelper::writeSignedProperties(
 {
     {
         rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
-        pAttributeList->AddAttribute("Id", "idSignedProperties");
+        pAttributeList->AddAttribute("Id", "idSignedProperties_" + signatureInfo.ouSignatureId);
         xDocumentHandler->startElement("xd:SignedProperties", uno::Reference<xml::sax::XAttributeList>(pAttributeList));
     }
 
