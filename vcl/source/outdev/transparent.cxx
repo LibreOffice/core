@@ -191,21 +191,6 @@ void OutputDevice::DrawTransparent(
         static_cast<sal_uInt16>(fTransparency * 100.0));
 }
 
-void OutputDevice::DrawInvisiblePolygon( const tools::PolyPolygon& rPolyPoly )
-{
-    assert(!is_double_buffered_window());
-
-    // short circuit if the polygon border is invisible too
-    if( !mbLineColor )
-        return;
-
-    // we assume that the border is NOT to be drawn transparently???
-    Push( vcl::PushFlags::FILLCOLOR );
-    SetFillColor();
-    DrawPolyPolygon( rPolyPoly );
-    Pop();
-}
-
 bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly,
                                              sal_uInt16 nTransparencePercent )
 {
@@ -538,11 +523,8 @@ void OutputDevice::DrawTransparent( const tools::PolyPolygon& rPolyPoly,
     }
 
     // short circuit for drawing an invisible polygon
-    if( !mbFillColor || (nTransparencePercent >= 100) )
-    {
-        DrawInvisiblePolygon( rPolyPoly );
+    if( (!mbFillColor && !mbLineColor) || (nTransparencePercent >= 100) )
         return; // tdf#84294: do not record it in metafile
-    }
 
     // handle metafile recording
     if( mpMetaFile )
