@@ -33,6 +33,23 @@
       "message": "Hi Sarper,\nit works like a charm!!",
       "revId": "1e72cc25bb78ef04a454feae0a48b4319e50227c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "793c0fd1_6ccf3f0b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002376
+      },
+      "writtenOn": "2021-10-27T17:34:30Z",
+      "side": 1,
+      "message": "Miklos, I\u0027d appreciate it if you could review this :) - This is a fix for a regression that previous PPTX footer export-import work caused.",
+      "revId": "1e72cc25bb78ef04a454feae0a48b4319e50227c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
