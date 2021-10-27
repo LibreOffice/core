@@ -243,6 +243,7 @@ $(eval $(call gb_Module_add_uicheck_targets,sc,\
 	UITest_range_name \
 	UITest_hide_cols \
 	UITest_autofilter \
+	UITest_autofilter2 \
 	UITest_search_replace \
 	UITest_calc_tests \
 	UITest_calc_tests2 \
