@@ -16,6 +16,24 @@
       "message": "Thanks for the fixup!\nI guess this should be cherry-picked to 7-2, could it?\n",
       "revId": "ef42ce579f0e4e4c436f70615f3adeb9f0f68217",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1933ed5_b16cb868",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-10-27T14:28:34Z",
+      "side": 1,
+      "message": "I\u0027m not sure actually. I don\u0027t know how much the AVX512 variants gains over AVX, and given how easy it is to get this CPU-specific stuff wrong, I\u0027d like to at least wait a bit before backporting.",
+      "parentUuid": "6f9ab559_299c3389",
+      "revId": "ef42ce579f0e4e4c436f70615f3adeb9f0f68217",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
