@@ -180,9 +180,9 @@ weld::Builder* Application::CreateInterimBuilder(vcl::Window* pParent, const OUS
 
 weld::MessageDialog* Application::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
                                                       VclButtonsType eButtonType, const OUString& rPrimaryMessage,
-                                                      bool bMobile)
+                                                      bool /*bMobile*/)
 {
-    if (bMobile)
+    if (comphelper::LibreOfficeKit::isActive())
         return JSInstanceBuilder::CreateMessageDialog(pParent, eMessageType, eButtonType, rPrimaryMessage);
     else
         return ImplGetSVData()->mpDefInst->CreateMessageDialog(pParent, eMessageType, eButtonType, rPrimaryMessage);
