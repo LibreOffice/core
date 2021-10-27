@@ -161,14 +161,14 @@ void OOXMLSecExporter::Impl::writeSignedInfoReferences()
         {
             {
                 rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
-                if (rReference.ouURI != "idSignedProperties")
+                if (!rReference.ouURI.startsWith("idSignedProperties"))
                     pAttributeList->AddAttribute("Type", "http://www.w3.org/2000/09/xmldsig#Object");
                 else
                     pAttributeList->AddAttribute("Type", "http://uri.etsi.org/01903#SignedProperties");
                 pAttributeList->AddAttribute("URI", "#" + rReference.ouURI);
                 m_xDocumentHandler->startElement("Reference", uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
             }
-            if (rReference.ouURI == "idSignedProperties")
+            if (rReference.ouURI.startsWith("idSignedProperties"))
             {
                 m_xDocumentHandler->startElement("Transforms", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
                 writeCanonicalizationTransform();
