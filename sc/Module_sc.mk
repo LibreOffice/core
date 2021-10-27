@@ -265,6 +265,7 @@ $(eval $(call gb_Module_add_uicheck_targets,sc,\
 	UITest_calc_tests7 \
 	UITest_sort \
 	UITest_chart \
+	UITest_chart2 \
 	UITest_pageFormat \
 	UITest_pasteSpecial \
 	UITest_calc_tests8 \
