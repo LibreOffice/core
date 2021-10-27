@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25e014ef_b9680ab3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000521
+      },
+      "writtenOn": "2021-10-27T15:57:03Z",
+      "side": 1,
+      "message": "Build failure not related to the current commit",
+      "revId": "0c444fc4bdd0fa426fe1399ec2bb6d8dff4e800c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
