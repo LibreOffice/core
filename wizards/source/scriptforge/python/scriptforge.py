@@ -1903,6 +1903,9 @@ class SFDocuments:
         def XCellRange(self, rangename):
             return self.ExecMethod(self.vbGet + self.flgUno, 'XCellRange', rangename)
 
+        def XSheetCellCursor(self, rangename):
+            return self.ExecMethod(self.vbGet + self.flgUno, 'XSheetCellCursor', rangename)
+
         def XSpreadsheet(self, sheetname):
             return self.ExecMethod(self.vbGet + self.flgUno, 'XSpreadsheet', sheetname)
 
