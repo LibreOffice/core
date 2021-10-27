@@ -44,6 +44,7 @@
 #include <comphelper/ofopxmlhelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
+#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
 #include <optional>
@@ -607,7 +608,7 @@ static auto CheckX509Data(
                 start = i; // issuer isn't in the list
                 break;
             }
-            if (xmlsecurity::EqualDistinguishedNames(certs[i]->getIssuerName(), certs[j]->getSubjectName()))
+            if (xmlsecurity::EqualDistinguishedNames(certs[i]->getIssuerName(), certs[j]->getSubjectName(), xmlsecurity::NOCOMPAT))
             {
                 if (i == j) // self signed
                 {
@@ -640,7 +641,7 @@ static auto CheckX509Data(
             if (chain[i] != j)
             {
                 if (xmlsecurity::EqualDistinguishedNames(
-                        certs[chain[i]]->getSubjectName(), certs[j]->getIssuerName()))
+                        certs[chain[i]]->getSubjectName(), certs[j]->getIssuerName(), xmlsecurity::NOCOMPAT))
                 {
                     if (chain.size() != i + 1) // already found issue?
                     {

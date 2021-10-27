@@ -676,7 +676,8 @@ static bool EncodeDistinguishedName(std::u16string_view const rName, CERT_NAME_B
 }
 
 bool EqualDistinguishedNames(
-        std::u16string_view const rName1, std::u16string_view const rName2)
+        std::u16string_view const rName1, std::u16string_view const rName2,
+        EqualMode const /*TODO: can this parse NSS DNs*/)
 {
     CERT_NAME_BLOB blob1;
     if (!EncodeDistinguishedName(rName1, blob1))
