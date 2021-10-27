@@ -15,6 +15,16 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <rtl/ustring.hxx>
 
+/*
+
+Do NOT include this header in source files compiled with CPU-specific code.
+TODO: For the header to be safe that way, it should be free of any templates
+or inline functions, otherwise their possibly emitted copies compiled
+with the CPU-specific instructions might be chosen by the linker as the copy
+to keep.
+
+*/
+
 namespace cpuid {
 
 enum class InstructionSetFlags
