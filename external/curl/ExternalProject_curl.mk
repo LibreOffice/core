@@ -85,6 +85,7 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			ENABLE_IPV6=yes \
 			ENABLE_SSPI=yes \
 			ENABLE_WINSSL=yes \
+			WITH_ZLIB=static \
 	,winbuild)
 
 endif
