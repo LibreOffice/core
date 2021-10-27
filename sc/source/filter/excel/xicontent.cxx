@@ -31,6 +31,7 @@
 #include <editeng/flditem.hxx>
 #include <editeng/editobj.hxx>
 #include <unotools/charclass.hxx>
+#include <unotools/configmgr.hxx>
 #include <stringutil.hxx>
 #include <cellform.hxx>
 #include <cellvalue.hxx>
@@ -420,6 +421,17 @@ void XclImpHyperlink::InsertUrl( XclImpRoot& rRoot, const XclRange& rXclRange, c
         SCCOL nScCol1, nScCol2;
         SCROW nScRow1, nScRow2;
         aScRange.GetVars( nScCol1, nScRow1, nScTab, nScCol2, nScRow2, nScTab );
+
+        if (utl::ConfigManager::IsFuzzing())
+        {
+            SCROW nRows = nScRow2 - nScRow1;
+            if (nRows > 1024)
+            {
+                SAL_WARN("sc.filter", "for fuzzing performance, clamped hyperlink apply range end row from " << nScRow2 << " to " << nScRow1 + 1024);
+                nScRow2 = nScRow1 + 1024;
+            }
+        }
+
         for( SCCOL nScCol = nScCol1; nScCol <= nScCol2; ++nScCol )
             for( SCROW nScRow = nScRow1; nScRow <= nScRow2; ++nScRow )
                 lclInsertUrl( rRoot, aUrl, nScCol, nScRow, nScTab );
