@@ -472,7 +472,7 @@ void ValueSet::ImplTracking(const Point& rPos)
         if( GetStyle() & WB_MENUSTYLEVALUESET || GetStyle() & WB_FLATVALUESET )
             mbHighlight = true;
 
-        ImplHighlightItem( mnSelItemId, false );
+        ImplHighlightItem( 0, false );
     }
 }
 
