@@ -1831,6 +1831,49 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133358)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1251), getProperty<sal_Int32>(xParagraph, "ParaLeftMargin"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf131771)
+{
+    createSwDoc();
+
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        { { "Rows", uno::makeAny(sal_Int32(2)) }, { "Columns", uno::makeAny(sal_Int32(2)) } }));
+
+    dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    uno::Reference<text::XTextTable> xTextTable(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xTextTable, "TableTemplateName"));
+    uno::Reference<beans::XPropertySet> xTableProps(xTextTable, uno::UNO_QUERY_THROW);
+    xTableProps->setPropertyValue("TableTemplateName", uno::makeAny(OUString("Default Style")));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Default Style"),
+                         getProperty<OUString>(xTextTable, "TableTemplateName"));
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, ".uno:GoDown", {});
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Default Style"),
+                         getProperty<OUString>(xTextTable, "TableTemplateName"));
+
+    uno::Reference<text::XTextTable> xTextTable2(xIndexAccess->getByIndex(1), uno::UNO_QUERY);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Default Style
+    // - Actual  :
+    CPPUNIT_ASSERT_EQUAL(OUString("Default Style"),
+                         getProperty<OUString>(xTextTable2, "TableTemplateName"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf80663)
 {
     createSwDoc();
