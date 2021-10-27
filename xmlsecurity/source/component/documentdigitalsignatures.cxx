@@ -616,7 +616,7 @@ sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
     for ( ; pAuthors != pAuthorsEnd; ++pAuthors )
     {
         SvtSecurityOptions::Certificate aAuthor = *pAuthors;
-        if (xmlsecurity::EqualDistinguishedNames(aAuthor[0], xAuthor->getIssuerName())
+        if (xmlsecurity::EqualDistinguishedNames(aAuthor[0], xAuthor->getIssuerName(), xmlsecurity::NOCOMPAT)
             && (aAuthor[1] == sSerialNum))
         {
             bFound = true;
