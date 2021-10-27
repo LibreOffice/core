@@ -81,7 +81,9 @@
     }
 
     // Now search I/O Registry for matching devices.
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // kIOMasterPortDefault (12.0)
     ioReturnValue = IOServiceGetMatchingServices(kIOMasterPortDefault, hidMatchDictionary, &hidObjectIterator);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     if ((ioReturnValue == kIOReturnSuccess) && (hidObjectIterator != 0)) {
         hidDevice = IOIteratorNext(hidObjectIterator);
