@@ -202,6 +202,9 @@ DigitalSignaturesDialog::~DigitalSignaturesDialog()
 {
     if (m_xViewer)
         m_xViewer->response(RET_OK);
+
+    if (m_xInfoBox)
+        m_xInfoBox->response(RET_OK);
 }
 
 bool DigitalSignaturesDialog::Init()
@@ -778,10 +781,10 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
         }
         else
         {
-            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
+            m_xInfoBox = std::shared_ptr<weld::MessageDialog>(Application::CreateMessageDialog(m_xDialog.get(),
                                                           VclMessageType::Info, VclButtonsType::Ok,
                                                           XsResId(STR_XMLSECDLG_NO_CERT_FOUND)));
-            xInfoBox->run();
+            m_xInfoBox->runAsync(m_xInfoBox, [this] (sal_Int32) { m_xInfoBox = nullptr; });
         }
     }
 }
