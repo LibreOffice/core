@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8999632b_653e4af7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-10-27T11:15:58Z",
+      "side": 1,
+      "message": "I can\u0027t be bothered to wait for the Windows build for a change that touches a macOS-only file.",
+      "revId": "4f2014e7e64d24ec2e8a24ee869f0ef4c9e9661e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
