@@ -262,13 +262,6 @@ static AquaSalFrame* getMouseContainerFrame()
         {
             AquaSalMenu::setDefaultMenu();
         }
-        #if 0
-        // FIXME: we should disable menus while in modal mode
-        // however from down here there is currently no reliable way to
-        // find out when to do this
-        if( (mpFrame->mpParent && mpFrame->mpParent->GetWindow()->IsInModalMode()) )
-            AquaSalMenu::enableMainMenu( false );
-        #endif
         mpFrame->CallCallback( SalEvent::GetFocus, nullptr );
         mpFrame->SendPaintEvent(); // repaint controls as active
     }
