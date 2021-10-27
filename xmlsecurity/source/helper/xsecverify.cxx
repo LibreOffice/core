@@ -272,7 +272,7 @@ void XSecController::setX509Data(
             auto iter = rX509IssuerSerials.begin();
             while (iter != rX509IssuerSerials.end())
             {
-                if (xmlsecurity::EqualDistinguishedNames(issuerName, iter->first)
+                if (xmlsecurity::EqualDistinguishedNames(issuerName, iter->first, xmlsecurity::COMPAT_2ND)
                         && serialNumber == iter->second)
                 {
                     data.back().X509IssuerName = iter->first;
@@ -420,7 +420,7 @@ void XSecController::setX509CertDigest(
     {
         for (auto & it : rData)
         {
-            if (xmlsecurity::EqualDistinguishedNames(it.X509IssuerName, rX509IssuerName)
+            if (xmlsecurity::EqualDistinguishedNames(it.X509IssuerName, rX509IssuerName, xmlsecurity::COMPAT_BOTH)
                 && it.X509SerialNumber == rX509SerialNumber)
             {
                 it.CertDigest = rCertDigest;
@@ -443,7 +443,7 @@ void XSecController::setX509CertDigest(
                     {
                         SAL_INFO("xmlsecurity.helper", "cannot parse X509Certificate");
                     }
-                    else if (xmlsecurity::EqualDistinguishedNames(xCert->getIssuerName(),rX509IssuerName)
+                    else if (xmlsecurity::EqualDistinguishedNames(xCert->getIssuerName(), rX509IssuerName, xmlsecurity::COMPAT_2ND)
                         && xmlsecurity::bigIntegerToNumericString(xCert->getSerialNumber()) == rX509SerialNumber)
                     {
                         it.CertDigest = rCertDigest;

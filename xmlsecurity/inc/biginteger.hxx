@@ -32,8 +32,17 @@ namespace xmlsecurity
 XSECXMLSEC_DLLPUBLIC OUString bigIntegerToNumericString( const css::uno::Sequence< sal_Int8 >& serial );
 XSECXMLSEC_DLLPUBLIC css::uno::Sequence< sal_Int8 > numericStringToBigInteger ( const OUString& serialNumber );
 
+// DNs read as strings from XML files may need to be mangled for compatibility
+// as NSS and MS CryptoAPI have different string serialisations; if the DN is
+// from an XCertificate it's "native" already and doesn't need to be mangled.
+enum EqualMode
+{
+    NOCOMPAT,
+    COMPAT_2ND,
+    COMPAT_BOTH
+};
 XSECXMLSEC_DLLPUBLIC bool EqualDistinguishedNames(OUString const& rName1,
-                                                  OUString const& rName2);
+                                                  OUString const& rName2, EqualMode eMode);
 }
 
 #endif
