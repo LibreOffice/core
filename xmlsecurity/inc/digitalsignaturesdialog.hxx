@@ -81,6 +81,7 @@ private:
     std::unique_ptr<weld::Button>      m_xCloseBtn;
 
     std::shared_ptr<CertificateViewer> m_xViewer;
+    std::shared_ptr<weld::MessageDialog> m_xInfoBox;
 
     DECL_LINK(AdESCompliantCheckBoxHdl, weld::ToggleButton&, void);
     DECL_LINK(ViewButtonHdl, weld::Button&, void);
