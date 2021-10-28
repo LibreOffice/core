@@ -188,12 +188,11 @@ sal_Int32 VtableFactory::BaseOffset::calculate(
     typelib_InterfaceTypeDescription * type, sal_Int32 offset)
 {
     OUString name(type->aBase.pTypeName);
-    auto it = m_map.find(name);
-    if (it == m_map.end()) {
+    if (m_map.find(name) == m_map.end()) {
         for (sal_Int32 i = 0; i < type->nBaseTypes; ++i) {
             offset = calculate(type->ppBaseTypes[i], offset);
         }
-        m_map.insert(it, {name, offset});
+        m_map.insert({name, offset});
         typelib_typedescription_complete(
             reinterpret_cast< typelib_TypeDescription ** >(&type));
         offset += bridges::cpp_uno::shared::getLocalFunctions(type);
