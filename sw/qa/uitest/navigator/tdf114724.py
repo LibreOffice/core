@@ -45,6 +45,11 @@ class tdf114724(UITestCase):
             self.assertEqual(get_state_as_dict(xContentTree)["SelectEntryText"], "HEADING 1")
             self.assertEqual(get_state_as_dict(xContentTree)["SelectionCount"], "1")
 
+            # tdf#124456 makes the sidebar navigator consistent with the floating navigator's use
+            # of the stored root mode setting. This requires the root mode button to be clicked
+            # here to change the content navigation view back to all categories view for subsequent
+            # tests that expect the navigator tree to not be in root mode.
+            xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "0"})) # 'root' button
             self.xUITest.executeCommand(".uno:Sidebar")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
