@@ -295,8 +295,9 @@ template <class E> inline auto asNonConstRange(css::uno::Sequence<E>& s)
         // These allow to pass it as range-expression to range-based for loops
         E* begin() { return std::pair<E*, E*>::first; }
         E* end() { return std::pair<E*, E*>::second; }
+        E& operator[](sal_Int32 i) { assert(i >= 0 && i < end() - begin()); return begin()[i]; }
     };
-    return SequenceRange(s.getArray(), s.getLength());
+    return SequenceRange(s.getLength() ? s.getArray() : nullptr, s.getLength());
 };
 
 /// @endcond
