@@ -92,7 +92,6 @@
         </child>
         <child>
           <object class="GtkRadioButton" id="word">
-            <property name="label" translatable="yes" context="fontworkalignmentcontrol|RID_SVXSTR_ALIGN_WORD">_Word Justify</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
