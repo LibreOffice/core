@@ -5507,10 +5507,9 @@ if test "$cross_compiling" = "yes"; then
     test -n "$with_help" -a "$with_help" != "no" && sub_conf_opts="$sub_conf_opts --with-help=$with_help"
     test "$enable_extensions" = yes || sub_conf_opts="$sub_conf_opts --disable-extensions"
     test "$enable_wasm_strip" = "yes" && sub_conf_opts="$sub_conf_opts --enable-wasm-strip"
-    sub_conf_opts="$sub_conf_opts $with_build_platform_configure_options"
 
     # Don't bother having configure look for stuff not needed for the build platform anyway
-    ./configure \
+    sub_conf_defaults=" \
         --build="$build_alias" \
         --disable-cairo-canvas \
         --disable-cups \
@@ -5532,7 +5531,12 @@ if test "$cross_compiling" = "yes"; then
         --with-parallelism="$with_parallelism" \
         --with-theme="$with_theme" \
         --with-tls=openssl \
+"
+    echo "    Running CONF-FOR-BUILD/configure" $sub_conf_defaults $sub_conf_opts $with_build_platform_configure_options --srcdir=$srcdir
+    ./configure \
+        $sub_conf_defaults \
         $sub_conf_opts \
+        $with_build_platform_configure_options \
         --srcdir=$srcdir \
         2>&1 | sed -e 's/^/    /'
     if test [${PIPESTATUS[0]}] -ne 0; then
