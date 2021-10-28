@@ -79,7 +79,7 @@ namespace
             maLocale(rInfo.mpLocale ? *rInfo.mpLocale : css::lang::Locale()),
             mbRTL(!rInfo.mrFont.IsVertical() && rInfo.IsRTL())
         {
-            if(mnTextLength && rInfo.mpDXArray)
+            if(mnTextLength && !rInfo.mpDXArray.empty())
             {
                 maDblDXArray.reserve(mnTextLength);
 

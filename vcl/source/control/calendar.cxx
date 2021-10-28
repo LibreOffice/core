@@ -704,7 +704,10 @@ void Calendar::ImplDraw(vcl::RenderContext& rRenderContext)
             rRenderContext.SetLineColor(rStyleSettings.GetWindowTextColor());
             Point aStartPos(nDayX, nDeltaY);
             rRenderContext.DrawLine(aStartPos, Point(nDayX + (7 * mnDayWidth), nDeltaY));
-            rRenderContext.DrawTextArray(Point(nDayX + mnDayOfWeekAry[0], nDayY), maDayOfWeekText, &(mnDayOfWeekAry[1]));
+            std::vector<tools::Long> aTmp;
+            for (int k=0; k<6; ++k)
+                aTmp.push_back(mnDayOfWeekAry[k+1]);
+            rRenderContext.DrawTextArray(Point(nDayX + mnDayOfWeekAry[0], nDayY), maDayOfWeekText, {aTmp.data(), aTmp.size()});
 
             // display days
             sal_uInt16 nDaysInMonth = aDate.GetDaysInMonth();

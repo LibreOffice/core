@@ -683,7 +683,7 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(const ImplMetaReadData* p
 {
     rtl::Reference<MetaTextArrayAction> pAction(new MetaTextArrayAction);
 
-    std::unique_ptr<tools::Long[]> aArray;
+    std::vector<tools::Long> aArray;
 
     VersionCompatRead aCompat(mrStream);
     TypeSerializer aSerializer(mrStream);
@@ -720,9 +720,9 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(const ImplMetaReadData* p
         // #i9762#, #106172# Ensure that DX array is at least mnLen entries long
         if (nTmpLen >= nAryLen)
         {
-            aArray.reset(new (std::nothrow) tools::Long[nTmpLen]);
-            if (aArray)
+            try
             {
+                aArray.resize(nTmpLen);
                 sal_Int32 i;
                 sal_Int32 val(0);
                 for (i = 0; i < nAryLen; i++)
@@ -733,6 +733,9 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(const ImplMetaReadData* p
                 // #106172# setup remainder
                 for (; i < nTmpLen; i++)
                     aArray[i] = 0;
+            }
+            catch (std::bad_alloc&)
+            {
             }
         }
         else
@@ -751,11 +754,12 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(const ImplMetaReadData* p
             SAL_WARN("vcl.gdi", "inconsistent offset and len");
             pAction->SetIndex(0);
             pAction->SetLen(aStr.getLength());
-            aArray.reset();
+            aArray.clear();
         }
     }
 
-    pAction->SetDXArray(std::move(aArray));
+    if (!aArray.empty())
+        pAction->SetDXArray(std::move(aArray));
     return pAction;
 }
 

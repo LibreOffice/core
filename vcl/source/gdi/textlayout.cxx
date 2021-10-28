@@ -209,7 +209,7 @@ namespace vcl
 
         std::vector<tools::Long> aCharWidths;
         tools::Long nTextWidth = GetTextArray( _rText, &aCharWidths, _nStartIndex, _nLength );
-        m_rTargetDevice.DrawTextArray( _rStartPoint, _rText, aCharWidths.data(), _nStartIndex, _nLength );
+        m_rTargetDevice.DrawTextArray( _rStartPoint, _rText, { aCharWidths.data(), aCharWidths.size() }, _nStartIndex, _nLength );
 
         m_aCompleteTextRect.Union( tools::Rectangle( _rStartPoint, Size( nTextWidth, m_rTargetDevice.GetTextHeight() ) ) );
     }

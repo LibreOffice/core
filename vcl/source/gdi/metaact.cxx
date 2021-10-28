@@ -598,34 +598,38 @@ MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
     MetaAction  ( MetaActionType::TEXTARRAY ),
     maStartPt   ( rAction.maStartPt ),
     maStr       ( rAction.maStr ),
+    maDXAry     ( rAction.maDXAry ),
     mnIndex     ( rAction.mnIndex ),
     mnLen       ( rAction.mnLen )
 {
-    if( rAction.mpDXAry )
-    {
-        mpDXAry.reset( new tools::Long[ mnLen ] );
-        memcpy( mpDXAry.get(), rAction.mpDXAry.get(), mnLen * sizeof( tools::Long ) );
-    }
 }
 
 MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
                                           const OUString& rStr,
-                                          const tools::Long* pDXAry,
+                                          const std::vector<tools::Long>& rDXAry,
                                           sal_Int32 nIndex,
                                           sal_Int32 nLen ) :
     MetaAction  ( MetaActionType::TEXTARRAY ),
     maStartPt   ( rStartPt ),
     maStr       ( rStr ),
+    maDXAry     ( rDXAry ),
     mnIndex     ( nIndex ),
     mnLen       ( nLen )
 {
-    const sal_Int32 nAryLen = pDXAry ? mnLen : 0;
+}
 
-    if (nAryLen > 0)
-    {
-        mpDXAry.reset( new tools::Long[ nAryLen ] );
-        memcpy( mpDXAry.get(), pDXAry, nAryLen * sizeof(tools::Long) );
-    }
+MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
+                                          const OUString& rStr,
+                                          o3tl::span<const tools::Long> pDXAry,
+                                          sal_Int32 nIndex,
+                                          sal_Int32 nLen ) :
+    MetaAction  ( MetaActionType::TEXTARRAY ),
+    maStartPt   ( rStartPt ),
+    maStr       ( rStr ),
+    maDXAry     ( pDXAry.begin(), pDXAry.end() ),
+    mnIndex     ( nIndex ),
+    mnLen       ( nLen )
+{
 }
 
 MetaTextArrayAction::~MetaTextArrayAction()
@@ -634,7 +638,7 @@ MetaTextArrayAction::~MetaTextArrayAction()
 
 void MetaTextArrayAction::Execute( OutputDevice* pOut )
 {
-    pOut->DrawTextArray( maStartPt, maStr, mpDXAry.get(), mnIndex, mnLen );
+    pOut->DrawTextArray( maStartPt, maStr, { maDXAry.data(), maDXAry.size() }, mnIndex, mnLen );
 }
 
 rtl::Reference<MetaAction> MetaTextArrayAction::Clone() const
@@ -651,16 +655,16 @@ void MetaTextArrayAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScalePoint( maStartPt, fScaleX, fScaleY );
 
-    if ( mpDXAry && mnLen )
+    if ( !maDXAry.empty() && mnLen )
     {
         for ( sal_uInt16 i = 0, nCount = mnLen; i < nCount; i++ )
-            mpDXAry[ i ] = FRound( mpDXAry[ i ] * fabs(fScaleX) );
+            maDXAry[ i ] = FRound( maDXAry[ i ] * fabs(fScaleX) );
     }
 }
 
-void MetaTextArrayAction::SetDXArray(std::unique_ptr<tools::Long[]> aArray)
+void MetaTextArrayAction::SetDXArray(std::vector<tools::Long> aArray)
 {
-    mpDXAry = std::move(aArray);
+    maDXAry = std::move(aArray);
 }
 
 MetaStretchTextAction::MetaStretchTextAction() :

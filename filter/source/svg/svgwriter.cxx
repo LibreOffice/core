@@ -2536,7 +2536,7 @@ void SVGActionWriter::ImplWriteMask(GDIMetaFile& rMtf, const Point& rDestPt, con
 
 
 void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
-                                     const tools::Long* pDXArray, tools::Long nWidth )
+                                     o3tl::span<const tools::Long> pDXArray, tools::Long nWidth )
 {
     const FontMetric aMetric( mpVDev->GetFontMetric() );
 
@@ -2627,7 +2627,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
 
 
 void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
-                                     const tools::Long* pDXArray, tools::Long nWidth,
+                                     o3tl::span<const tools::Long> pDXArray, tools::Long nWidth,
                                      Color aTextColor )
 {
     sal_Int32                               nLen = rText.getLength();
@@ -2646,10 +2646,10 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
 
     std::vector<tools::Long> aTmpArray(nLen);
     // get text sizes
-    if( pDXArray )
+    if( !pDXArray.empty() )
     {
         aNormSize = Size( mpVDev->GetTextWidth( rText ), 0 );
-        memcpy(aTmpArray.data(), pDXArray, nLen * sizeof(tools::Long));
+        memcpy(aTmpArray.data(), pDXArray.data(), nLen * sizeof(tools::Long));
     }
     else
     {
@@ -3764,7 +3764,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         {
                             vcl::Font aFont = ImplSetCorrectFontHeight();
                             maAttributeWriter.SetFontAttr( aFont );
-                            ImplWriteText( pA->GetPoint(), aText, nullptr, 0 );
+                            ImplWriteText( pA->GetPoint(), aText, {}, 0 );
                         }
                         else
                         {
@@ -3787,7 +3787,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         {
                             vcl::Font aFont = ImplSetCorrectFontHeight();
                             maAttributeWriter.SetFontAttr( aFont );
-                            ImplWriteText( pA->GetRect().TopLeft(), pA->GetText(), nullptr, 0 );
+                            ImplWriteText( pA->GetRect().TopLeft(), pA->GetText(), {}, 0 );
                         }
                         maTextWriter.writeTextPortion( pA->GetRect().TopLeft(), pA->GetText() );
                     }
@@ -3809,7 +3809,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         {
                             vcl::Font aFont = ImplSetCorrectFontHeight();
                             maAttributeWriter.SetFontAttr( aFont );
-                            ImplWriteText( pA->GetPoint(), aText, pA->GetDXArray(), 0 );
+                            ImplWriteText( pA->GetPoint(), aText, { pA->GetDXArray().data(), pA->GetDXArray().size() }, 0 );
                         }
                         else
                         {
@@ -3834,7 +3834,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         {
                             vcl::Font aFont = ImplSetCorrectFontHeight();
                             maAttributeWriter.SetFontAttr( aFont );
-                            ImplWriteText( pA->GetPoint(), aText, nullptr, pA->GetWidth() );
+                            ImplWriteText( pA->GetPoint(), aText, {}, pA->GetWidth() );
                         }
                         else
                         {

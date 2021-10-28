@@ -984,9 +984,9 @@ void SvmWriter::TextArrayHandler(const MetaTextArrayAction* pAction, const ImplM
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
 
-    tools::Long* aArray = pAction->GetDXArray();
+    const std::vector<tools::Long>& rDXArray = pAction->GetDXArray();
 
-    const sal_Int32 nAryLen = aArray ? pAction->GetLen() : 0;
+    const sal_Int32 nAryLen = !rDXArray.empty() ? pAction->GetLen() : 0;
 
     VersionCompatWrite aCompat(mrStream, 2);
     TypeSerializer aSerializer(mrStream);
@@ -997,7 +997,7 @@ void SvmWriter::TextArrayHandler(const MetaTextArrayAction* pAction, const ImplM
     mrStream.WriteInt32(nAryLen);
 
     for (sal_Int32 i = 0; i < nAryLen; ++i)
-        mrStream.WriteInt32(aArray[i]);
+        mrStream.WriteInt32(rDXArray[i]);
 
     write_uInt16_lenPrefixed_uInt16s_FromOUString(mrStream, pAction->GetText()); // version 2
 }
