@@ -137,7 +137,7 @@ End Property	&apos;	SFDocuments.SF_Chart.Dim3D (let)
 
 REM -----------------------------------------------------------------------------
 Property Get Exploded() As Variant
-&apos;&apos;&apos;	the offset by which pie segments in a PieDiagram are dragged outside from the center.
+&apos;&apos;&apos;	the offset by which pie segments in a PieDiagram (pie or donut) are dragged outside from the center.
 &apos;&apos;&apos;	This value is given in percent of the radius.
 	Exploded = _PropertyGet(&quot;Exploded&quot;)
 End Property	&apos;	SFDocuments.SF_Chart.Exploded (get)_ChartObject
@@ -417,7 +417,7 @@ Public Function Resize(Optional ByVal XPos As Variant _
 								, Optional ByVal YPos As Variant _
 								, Optional ByVal Width As Variant _
 								, Optional ByVal Height As Variant _
-								) As String
+								) As Boolean
 &apos;&apos;&apos;	Move the topleft corner of a chart to new coordinates and/or modify its dimensions
 &apos;&apos;&apos;	All distances are expressed in 1/100th mm
 &apos;&apos;&apos;	Args:

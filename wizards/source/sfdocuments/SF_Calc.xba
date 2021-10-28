@@ -1017,7 +1017,7 @@ Try:
 	&apos;	Create the chart and get ihe corresponding chart instance
 	oSheet.getCharts.addNewByName(ChartName, oRectangle, Array(oRange.XCellRange.RangeAddress), ColumnHeader, RowHeader)
 	Set oChart = Charts(SheetName, ChartName)
-	oChart._Shape.Name = ChartName		&apos;	Both used-defined and internal names match ChartName
+	oChart._Shape.Name = ChartName		&apos;	Both user-defined and internal names match ChartName
 	oChart._Diagram.Wall.FillColor = RGB(255, 255, 255)		&apos;	Align on background color set by the user interface by default
 	
 Finally:
