@@ -16,6 +16,23 @@
       "message": "Could you review this ? ",
       "revId": "91d2717ffa0340844a261a385eda71646de6f28a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20dcc1b9_8a12b3f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-10-28T14:15:38Z",
+      "side": 1,
+      "message": "Do you have built and tested it locally?\n\nLook at the \u0027name\u0027 attribute of a property to get an idea about the purpose of that property. ",
+      "revId": "91d2717ffa0340844a261a385eda71646de6f28a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
