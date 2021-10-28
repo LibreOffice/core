@@ -423,19 +423,21 @@ void BarChart::adaptOverlapAndGapwidthForGroupBarsPerAxis()
     sal_Int32 nUseThisIndex = nAxisIndex;
     if( nUseThisIndex < 0 || nUseThisIndex >= m_aOverlapSequence.getLength() )
         nUseThisIndex = 0;
+    auto aOverlapSequenceRange = asNonConstRange(m_aOverlapSequence);
     for( nN = 0; nN < m_aOverlapSequence.getLength(); nN++ )
     {
         if(nN!=nUseThisIndex)
-            m_aOverlapSequence[nN] = m_aOverlapSequence[nUseThisIndex];
+            aOverlapSequenceRange[nN] = m_aOverlapSequence[nUseThisIndex];
     }
 
     nUseThisIndex = nAxisIndex;
     if( nUseThisIndex < 0 || nUseThisIndex >= m_aGapwidthSequence.getLength() )
         nUseThisIndex = 0;
+    auto aGapwidthSequenceRange = asNonConstRange(m_aGapwidthSequence);
     for( nN = 0; nN < m_aGapwidthSequence.getLength(); nN++ )
     {
         if(nN!=nUseThisIndex)
-            m_aGapwidthSequence[nN] = m_aGapwidthSequence[nUseThisIndex];
+            aGapwidthSequenceRange[nN] = m_aGapwidthSequence[nUseThisIndex];
     }
 }
 

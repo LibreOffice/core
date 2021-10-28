@@ -251,8 +251,9 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
             // initialize with 1, 2, ...
             //first category (index 0) matches with real number 1.0
             aXValues.realloc( aYValues.getLength() );
+            auto pXValues = aXValues.getArray();
             for( i=0; i<aXValues.getLength(); ++i )
-                aXValues[i] = i+1;
+                pXValues[i] = i+1;
             bXValuesFound = true;
         }
 
