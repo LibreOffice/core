@@ -97,9 +97,8 @@ interface XAccessibleSelection : ::com::sun::star::uno::XInterface
         selected.
 
         <p>This number specifies the valid interval of indices that can be
-        used as arguments for the methods
-        XAccessibleSelection::getSelectedChild() and
-        XAccessibleSelection::deselectSelectedChild().</p>
+        used as arguments for the method
+        XAccessibleSelection::getSelectedAccessibleChild().</p>
 
         @return
             Returns the number of selected children of this object or 0 if
