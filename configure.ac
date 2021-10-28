@@ -1769,7 +1769,7 @@ AC_ARG_ENABLE(ccache,
 libo_FUZZ_ARG_ENABLE(online-update,
     AS_HELP_STRING([--enable-online-update],
         [Enable the online update service that will check for new versions of
-         LibreOffice. By default, it is enabled on Windows and Mac, disabled on Linux.
+         LibreOffice. Disabled by default. Requires --with-privacy-policy-url to be set.
          If the value is "mar", the experimental Mozilla-like update will be
          enabled instead of the traditional update mechanism.]),
 ,)
@@ -13228,12 +13228,7 @@ ENABLE_ONLINE_UPDATE=
 ENABLE_ONLINE_UPDATE_MAR=
 UPDATE_CONFIG=
 if test "$enable_online_update" = ""; then
-    if test "$_os" = "WINNT" -o "$_os" = "Darwin"; then
-        AC_MSG_RESULT([yes])
-        ENABLE_ONLINE_UPDATE="TRUE"
-    else
-        AC_MSG_RESULT([no])
-    fi
+    AC_MSG_RESULT([no])
 else
     if test "$enable_online_update" = "mar"; then
         AC_MSG_RESULT([yes - MAR-based online update])
