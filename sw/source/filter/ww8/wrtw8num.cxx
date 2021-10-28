@@ -412,13 +412,6 @@ void MSWordExportBase::AbstractNumberingDefinitions()
 void MSWordExportBase::NumberingLevel(
         SwNumRule const& rRule, sal_uInt8 const nLvl)
 {
-    // prepare the NodeNum to generate the NumString
-    static const SwNumberTree::tNumberVector aNumVector = [] {
-        SwNumberTree::tNumberVector vec(WW8ListManager::nMaxLevel);
-        std::iota(vec.begin(), vec.end(), 0);
-        return vec;
-    }();
-
     // write the static data of the SwNumFormat of this level
     sal_uInt8 aNumLvlPos[WW8ListManager::nMaxLevel] = { 0,0,0,0,0,0,0,0,0 };
 
@@ -480,34 +473,23 @@ void MSWordExportBase::NumberingLevel(
     else
     {
         // Create level string
-        // For docx it is not the best way: we can just take it from rRule.Get(nLvl).GetListFormat()
-        // But for compatibility with doc we follow same routine
         if (SVX_NUM_NUMBER_NONE != rFormat.GetNumberingType())
         {
             sal_uInt8* pLvlPos = aNumLvlPos;
-            // the numbering string has to be restrict
-            // to the level currently working on.
-            sNumStr = rRule.MakeNumString(aNumVector, true, true, nLvl);
+            sNumStr = rFormat.GetListFormat();
 
             // now search the nums in the string
             for (sal_uInt8 i = 0; i <= nLvl; ++i)
             {
-                OUString sSrch(OUString::number(i));
+                OUString sSrch("%" + OUString::number(i+1) + "%");
                 sal_Int32 nFnd = sNumStr.indexOf(sSrch);
                 if (-1 != nFnd)
                 {
                     *pLvlPos = static_cast<sal_uInt8>(nFnd + 1);
                     ++pLvlPos;
-                    sNumStr = sNumStr.replaceAt(nFnd, 1, OUString(static_cast<char>(i)));
+                    sNumStr = sNumStr.replaceAt(nFnd, sSrch.getLength(), OUString(static_cast<char>(i)));
                 }
             }
-        }
-
-        if (!rRule.Get(nLvl).HasListFormat())
-        {
-            if (!rFormat.GetPrefix().isEmpty())
-                sNumStr = rFormat.GetPrefix() + sNumStr;
-            sNumStr += rFormat.GetSuffix();
         }
     }
 
