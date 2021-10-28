@@ -133,18 +133,16 @@ bool MediaItem::GetPresentation( SfxItemPresentation,
 
 bool MediaItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
 {
-    uno::Sequence< uno::Any > aSeq( 10 );
-
-    aSeq[ 0 ] <<= m_pImpl->m_URL;
-    aSeq[ 1 ] <<= static_cast<sal_uInt32>(m_pImpl->m_nMaskSet);
-    aSeq[ 2 ] <<= static_cast< sal_Int32 >( m_pImpl->m_eState );
-    aSeq[ 3 ] <<= m_pImpl->m_fTime;
-    aSeq[ 4 ] <<= m_pImpl->m_fDuration;
-    aSeq[ 5 ] <<= m_pImpl->m_nVolumeDB;
-    aSeq[ 6 ] <<= m_pImpl->m_bLoop;
-    aSeq[ 7 ] <<= m_pImpl->m_bMute;
-    aSeq[ 8 ] <<= m_pImpl->m_eZoom;
-    aSeq[ 9 ] <<= m_pImpl->m_sMimeType;
+    uno::Sequence< uno::Any > aSeq{ uno::Any(m_pImpl->m_URL),
+                                    uno::Any(static_cast<sal_uInt32>(m_pImpl->m_nMaskSet)),
+                                    uno::Any(static_cast< sal_Int32 >( m_pImpl->m_eState )),
+                                    uno::Any(m_pImpl->m_fTime),
+                                    uno::Any(m_pImpl->m_fDuration),
+                                    uno::Any(m_pImpl->m_nVolumeDB),
+                                    uno::Any(m_pImpl->m_bLoop),
+                                    uno::Any(m_pImpl->m_bMute),
+                                    uno::Any(m_pImpl->m_eZoom),
+                                    uno::Any(m_pImpl->m_sMimeType) };
 
     rVal <<= aSeq;
 
