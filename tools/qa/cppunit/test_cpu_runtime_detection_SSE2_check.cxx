@@ -19,7 +19,9 @@
  * handle it, and don't include any headers that contain templates
  * or inline functions, which includes cppunit.
  */
+#ifdef LO_SSE2_AVAILABLE
 #define CPPUNIT_ASSERT_EQUAL(a, b) ((a) == (b) ? (void)0 : abort())
+#endif
 void CpuRuntimeDetectionX86Checks::checkSSE2()
 {
 #ifdef LO_SSE2_AVAILABLE
