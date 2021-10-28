@@ -752,7 +752,7 @@ bool EqualDistinguishedNames(
     }
     CERT_NAME_BLOB blob2;
     bool ret(false);
-    if (!!EncodeDistinguishedName(rName2, blob2))
+    if (EncodeDistinguishedName(rName2, blob2))
     {
         ret = CertCompareCertificateName(X509_ASN_ENCODING,
             &blob1, &blob2) == TRUE;
