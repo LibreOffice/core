@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2c44ce3_a565f36b",
+        "filename": "xmlsecurity/source/xmlsec/mscrypt/x509certificate_mscryptimpl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-28T07:47:21Z",
+      "side": 1,
+      "message": "is this a typo? (clang-cl reports loplugin:simplifybool)",
+      "range": {
+        "startLine": 755,
+        "startChar": 8,
+        "endLine": 755,
+        "endChar": 10
+      },
+      "revId": "e63611fabd38c757809b510fbb71c077880b1081",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
