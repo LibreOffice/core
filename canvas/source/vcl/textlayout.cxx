@@ -117,8 +117,8 @@ namespace vclcanvas
             uno::Sequence<double>(4),
             rendering::CompositeOperation::SOURCE);
 
-        std::unique_ptr< ::tools::Long []> aOffsets(new ::tools::Long[maLogicalAdvancements.getLength()]);
-        setupTextOffsets(aOffsets.get(), maLogicalAdvancements, aViewState, aRenderState);
+        std::vector<::tools::Long> aOffsets(maLogicalAdvancements.getLength());
+        setupTextOffsets(aOffsets.data(), maLogicalAdvancements, aViewState, aRenderState);
 
         std::vector< uno::Reference< rendering::XPolyPolygon2D> > aOutlineSequence;
         ::basegfx::B2DPolyPolygonVector aOutlines;
@@ -129,7 +129,7 @@ namespace vclcanvas
             maText.StartPosition,
             maText.Length,
             0,
-            aOffsets.get()))
+            {aOffsets.data(), aOffsets.size()}))
         {
             aOutlineSequence.reserve(aOutlines.size());
             sal_Int32 nIndex (0);
@@ -335,15 +335,15 @@ namespace vclcanvas
         if( maLogicalAdvancements.hasElements() )
         {
             // TODO(P2): cache that
-            std::unique_ptr< ::tools::Long []> aOffsets(new ::tools::Long[maLogicalAdvancements.getLength()]);
-            setupTextOffsets( aOffsets.get(), maLogicalAdvancements, viewState, renderState );
+            std::vector<::tools::Long> aOffsets(maLogicalAdvancements.getLength());
+            setupTextOffsets( aOffsets.data(), maLogicalAdvancements, viewState, renderState );
 
             // TODO(F3): ensure correct length and termination for DX
             // array (last entry _must_ contain the overall width)
 
             rOutDev.DrawTextArray( rOutpos,
                                    maText.Text,
-                                   aOffsets.get(),
+                                   { aOffsets.data(), aOffsets.size() },
                                    ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
                                    ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) );
         }

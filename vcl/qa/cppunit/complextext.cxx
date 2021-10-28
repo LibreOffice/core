@@ -126,7 +126,7 @@ void VclComplexTextTest::testKashida()
     auto aText
         = OUString(u"عنصر الفوسفور عنصر فلزي صلب. تتكون الدورة الرابعة من 15 عنصرا.");
     std::unique_ptr<SalLayout> pLayout = pOutputDevice->ImplLayout(
-        aText, 0, aText.getLength(), Point(0, 0), 0, nullptr, SalLayoutFlags::GlyphItemsOnly);
+        aText, 0, aText.getLength(), Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly);
     SalLayoutGlyphs aGlyphs = pLayout->GetGlyphs();
     CPPUNIT_ASSERT(aGlyphs.IsValid());
     CPPUNIT_ASSERT(aGlyphs.Impl(0) != nullptr);
@@ -156,7 +156,7 @@ void VclComplexTextTest::testTdf95650()
 
     OutputDevice *pOutDev = pWin->GetOutDev();
     // Check that the following executes without failing assertion
-    pOutDev->ImplLayout(aTxt, 9, 1, Point(), 0, nullptr, SalLayoutFlags::BiDiRtl);
+    pOutDev->ImplLayout(aTxt, 9, 1, Point(), 0, {}, SalLayoutFlags::BiDiRtl);
 }
 
 static void testCachedGlyphs( const OUString& aText, const OUString& aFontName = OUString())
@@ -170,13 +170,13 @@ static void testCachedGlyphs( const OUString& aText, const OUString& aFontName =
     }
     // Get the glyphs for the text.
     std::unique_ptr<SalLayout> pLayout1 = pOutputDevice->ImplLayout(
-        aText, 0, aText.getLength(), Point(0, 0), 0, nullptr, SalLayoutFlags::GlyphItemsOnly);
+        aText, 0, aText.getLength(), Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly);
     SalLayoutGlyphs aGlyphs1 = pLayout1->GetGlyphs();
     CPPUNIT_ASSERT_MESSAGE(message, aGlyphs1.IsValid());
     CPPUNIT_ASSERT_MESSAGE(message, aGlyphs1.Impl(0) != nullptr);
     // Reuse the cached glyphs to get glyphs again.
     std::unique_ptr<SalLayout> pLayout2 = pOutputDevice->ImplLayout(
-        aText, 0, aText.getLength(), Point(0, 0), 0, nullptr, SalLayoutFlags::GlyphItemsOnly, nullptr, &aGlyphs1);
+        aText, 0, aText.getLength(), Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly, nullptr, &aGlyphs1);
     SalLayoutGlyphs aGlyphs2 = pLayout2->GetGlyphs();
     CPPUNIT_ASSERT_MESSAGE(message, aGlyphs2.IsValid());
     // And check it's the same.

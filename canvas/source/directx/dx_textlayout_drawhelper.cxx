@@ -213,7 +213,7 @@ namespace dxcanvas
                 // draw the String
                 xVirtualDevice->DrawTextArray( aEmptyPoint,
                                               aText,
-                                              pDXArray.get(),
+                                              o3tl::span<const ::tools::Long>( pDXArray.get(), nLen ),
                                               rText.StartPosition,
                                               rText.Length,
                                               bIsRTL ? SalLayoutFlags::BiDiRtl : SalLayoutFlags::NONE);
