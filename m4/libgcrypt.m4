@@ -22,7 +22,7 @@ dnl with a changed API.
 dnl
 AC_DEFUN([AM_PATH_LIBGCRYPT],
 [ AC_ARG_WITH(libgcrypt-prefix,
-            AC_HELP_STRING([--with-libgcrypt-prefix=PFX],
+            AS_HELP_STRING([--with-libgcrypt-prefix=PFX],
                            [prefix where LIBGCRYPT is installed (optional)]),
      libgcrypt_config_prefix="$withval", libgcrypt_config_prefix="")
   if test x$libgcrypt_config_prefix != x ; then
