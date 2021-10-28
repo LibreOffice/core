@@ -1150,6 +1150,51 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115117_2a)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf145274)
+{
+    // Import the bugdoc and export as PDF.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf145274.docx";
+    mxComponent = loadFromDesktop(aURL);
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result with pdfium.
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
+    CPPUNIT_ASSERT(pPdfDocument);
+
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    auto pPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT(pPage);
+
+    int nPageObjectCount = pPage->getObjectCount();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 6
+    // - Actual  : 4
+    CPPUNIT_ASSERT_EQUAL(6, nPageObjectCount);
+
+    auto pTextPage = pPage->getTextPage();
+
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPage->getObject(i);
+        if (pPageObject->getType() != vcl::pdf::PDFPageObjectType::Text)
+            continue;
+
+        CPPUNIT_ASSERT_EQUAL(11.0, pPageObject->getFontSize());
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFTextRenderMode::Fill, pPageObject->getTextRenderMode());
+        CPPUNIT_ASSERT_EQUAL(COL_RED, pPageObject->getFillColor());
+    }
+}
+
 /// Test writing ToUnicode CMAP for doubly encoded glyphs.
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf66597_1)
 {
