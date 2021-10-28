@@ -209,9 +209,8 @@ void SAL_CALL ChartTypeTemplate::changeDiagram( const uno::Reference< XDiagram >
             Sequence< beans::PropertyValue > aParam;
             if( aData.Categories.is())
             {
-                aParam.realloc( 1 );
-                aParam[0] = beans::PropertyValue( "HasCategories", -1, uno::Any( true ),
-                                                  beans::PropertyState_DIRECT_VALUE );
+                aParam = { beans::PropertyValue( "HasCategories", -1, uno::Any( true ),
+                                                 beans::PropertyState_DIRECT_VALUE ) };
             }
             aData = xInterpreter->interpretDataSource( xSource, aParam, aFlatSeriesSeq );
         }
@@ -581,8 +580,7 @@ void ChartTypeTemplate::createCoordinateSystems(
     }
 
     // set new coordinate systems
-    aCoordinateSystems.realloc( 1 );
-    aCoordinateSystems[0] = xCooSys;
+    aCoordinateSystems = { xCooSys };
 
     xOutCooSysCnt->setCoordinateSystems( aCoordinateSystems );
 }
@@ -796,10 +794,7 @@ void ChartTypeTemplate::createChartTypes(
             // we need a new chart type
             xCT.set( getChartTypeForNewSeries( aOldChartTypesSeq ));
             Reference< XChartTypeContainer > xCTCnt( rCoordSys[nCooSysIdx], uno::UNO_QUERY_THROW );
-            Sequence< Reference< XChartType > > aCTSeq( xCTCnt->getChartTypes());
-            aCTSeq.realloc( 1 );
-            aCTSeq[0] = xCT;
-            xCTCnt->setChartTypes( aCTSeq );
+            xCTCnt->setChartTypes({ xCT });
         }
         else
         {
@@ -813,7 +808,7 @@ void ChartTypeTemplate::createChartTypes(
                     Sequence< Reference< XChartType > > aCTSeq( xCTCnt->getChartTypes());
                     if( aCTSeq.hasElements())
                     {
-                        aCTSeq[0] = xCT;
+                        aCTSeq.getArray()[0] = xCT;
                         xCTCnt->setChartTypes( aCTSeq );
                     }
                     else

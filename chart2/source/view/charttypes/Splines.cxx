@@ -543,6 +543,10 @@ void SplineCalculater::CalculateCubicSplines(
     rResult.SequenceY.realloc(nOuterCount);
     rResult.SequenceZ.realloc(nOuterCount);
 
+    auto pSequenceX = rResult.SequenceX.getArray();
+    auto pSequenceY = rResult.SequenceY.getArray();
+    auto pSequenceZ = rResult.SequenceZ.getArray();
+
     if( !nOuterCount )
         return;
 
@@ -606,13 +610,13 @@ void SplineCalculater::CalculateCubicSplines(
         }
 
         // fill result polygon with calculated values
-        rResult.SequenceX[nOuter].realloc( nMaxIndexPoints*nGranularity + 1);
-        rResult.SequenceY[nOuter].realloc( nMaxIndexPoints*nGranularity + 1);
-        rResult.SequenceZ[nOuter].realloc( nMaxIndexPoints*nGranularity + 1);
+        pSequenceX[nOuter].realloc( nMaxIndexPoints*nGranularity + 1);
+        pSequenceY[nOuter].realloc( nMaxIndexPoints*nGranularity + 1);
+        pSequenceZ[nOuter].realloc( nMaxIndexPoints*nGranularity + 1);
 
-        double* pNewX = rResult.SequenceX[nOuter].getArray();
-        double* pNewY = rResult.SequenceY[nOuter].getArray();
-        double* pNewZ = rResult.SequenceZ[nOuter].getArray();
+        double* pNewX = pSequenceX[nOuter].getArray();
+        double* pNewY = pSequenceY[nOuter].getArray();
+        double* pNewZ = pSequenceZ[nOuter].getArray();
 
         sal_uInt32 nNewPointIndex = 0; // Index in result points
 
@@ -673,6 +677,10 @@ void SplineCalculater::CalculateBSplines(
     rResult.SequenceX.realloc(nOuterCount);
     rResult.SequenceY.realloc(nOuterCount);
     rResult.SequenceZ.realloc(nOuterCount);
+
+    auto pSequenceX = rResult.SequenceX.getArray();
+    auto pSequenceY = rResult.SequenceY.getArray();
+    auto pSequenceZ = rResult.SequenceZ.getArray();
 
     if( !nOuterCount )
         return; // no input
@@ -852,12 +860,12 @@ void SplineCalculater::CalculateBSplines(
             // calculate the intermediate points according given resolution
             // using deBoor-Cox algorithm
             lcl_tSizeType nNewSize = nResolution * n + 1;
-            rResult.SequenceX[nOuter].realloc(nNewSize);
-            rResult.SequenceY[nOuter].realloc(nNewSize);
-            rResult.SequenceZ[nOuter].realloc(nNewSize);
-            double* pNewX = rResult.SequenceX[nOuter].getArray();
-            double* pNewY = rResult.SequenceY[nOuter].getArray();
-            double* pNewZ = rResult.SequenceZ[nOuter].getArray();
+            pSequenceX[nOuter].realloc(nNewSize);
+            pSequenceY[nOuter].realloc(nNewSize);
+            pSequenceZ[nOuter].realloc(nNewSize);
+            double* pNewX = pSequenceX[nOuter].getArray();
+            double* pNewY = pSequenceY[nOuter].getArray();
+            double* pNewZ = pSequenceZ[nOuter].getArray();
             pNewX[0] = aPointsIn[0].first;
             pNewY[0] = aPointsIn[0].second;
             pNewZ[0] = fZCoordinate; // Precondition: z-coordinates of all points of a series are equal

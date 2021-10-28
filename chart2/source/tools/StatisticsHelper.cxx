@@ -133,7 +133,8 @@ void lcl_addSequenceToDataSource(
     Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences(
         xDataSource->getDataSequences());
     aSequences.realloc( aSequences.getLength() + 1 );
-    aSequences[ aSequences.getLength() - 1 ] = xLSeq;
+    auto pSequences = aSequences.getArray();
+    pSequences[ aSequences.getLength() - 1 ] = xLSeq;
     xSink->setData( aSequences );
 }
 

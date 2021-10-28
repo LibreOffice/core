@@ -274,12 +274,14 @@ void VDataSeries::doSortByXValues()
 
     //fill the sorted points back to the members
     m_aValues_X.Doubles.realloc( m_nPointCount );
+    auto pDoublesX = m_aValues_X.Doubles.getArray();
     m_aValues_Y.Doubles.realloc( m_nPointCount );
+    auto pDoublesY = m_aValues_Y.Doubles.getArray();
 
     for( nPointIndex=0; nPointIndex < m_nPointCount; nPointIndex++ )
     {
-        m_aValues_X.Doubles[nPointIndex]=aTmp[nPointIndex][0];
-        m_aValues_Y.Doubles[nPointIndex]=aTmp[nPointIndex][1];
+        pDoublesX[nPointIndex]=aTmp[nPointIndex][0];
+        pDoublesY[nPointIndex]=aTmp[nPointIndex][1];
     }
 }
 
@@ -724,8 +726,9 @@ uno::Sequence< double > const & VDataSeries::getAllX() const
         //init x values from category indexes
         //first category (index 0) matches with real number 1.0
         m_aValues_X.Doubles.realloc( m_nPointCount );
+        auto pDoubles = m_aValues_X.Doubles.getArray();
         for(sal_Int32 nN=m_aValues_X.getLength();nN--;)
-            m_aValues_X.Doubles[nN] = nN+1;
+            pDoubles[nN] = nN+1;
     }
     return m_aValues_X.Doubles;
 }
@@ -737,8 +740,9 @@ uno::Sequence< double > const & VDataSeries::getAllY() const
         //init y values from indexes
         //first y-value (index 0) matches with real number 1.0
         m_aValues_Y.Doubles.realloc( m_nPointCount );
+        auto pDoubles = m_aValues_Y.Doubles.getArray();
         for(sal_Int32 nN=m_aValues_Y.getLength();nN--;)
-            m_aValues_Y.Doubles[nN] = nN+1;
+            pDoubles[nN] = nN+1;
     }
     return m_aValues_Y.Doubles;
 }
