@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7c4beaf_8d7a3f7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-28T19:01:56Z",
+      "side": 1,
+      "message": "Stephan, Noel: could you please take a look at https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/99832/consoleFull#-4848102962a810015-1db5-427c-9ce2-83b5f06a5284 - is there a way to resolve this plugin warning?",
+      "revId": "d99b253400a02cc239ea5d5cc0db9f1272efe5ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
