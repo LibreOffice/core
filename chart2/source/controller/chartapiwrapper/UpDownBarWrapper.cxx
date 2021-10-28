@@ -244,10 +244,11 @@ uno::Sequence< uno::Any > SAL_CALL UpDownBarWrapper::getPropertyValues( const un
     if( rNameSeq.hasElements() )
     {
         aRetSeq.realloc( rNameSeq.getLength() );
+        auto pRetSeq = aRetSeq.getArray();
         for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
         {
             OUString aPropertyName( rNameSeq[nN] );
-            aRetSeq[nN] = getPropertyValue( aPropertyName );
+            pRetSeq[nN] = getPropertyValue( aPropertyName );
         }
     }
     return aRetSeq;
@@ -282,10 +283,11 @@ uno::Sequence< beans::PropertyState > SAL_CALL UpDownBarWrapper::getPropertyStat
     if( rNameSeq.hasElements() )
     {
         aRetSeq.realloc( rNameSeq.getLength() );
+        auto pRetSeq = aRetSeq.getArray();
         for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
         {
             OUString aPropertyName( rNameSeq[nN] );
-            aRetSeq[nN] = getPropertyState( aPropertyName );
+            pRetSeq[nN] = getPropertyState( aPropertyName );
         }
     }
     return aRetSeq;
@@ -327,10 +329,11 @@ uno::Sequence< uno::Any > SAL_CALL UpDownBarWrapper::getPropertyDefaults( const 
     if( rNameSeq.hasElements() )
     {
         aRetSeq.realloc( rNameSeq.getLength() );
+        auto pRetSeq = aRetSeq.getArray();
         for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
         {
             OUString aPropertyName( rNameSeq[nN] );
-            aRetSeq[nN] = getPropertyDefault( aPropertyName );
+            pRetSeq[nN] = getPropertyDefault( aPropertyName );
         }
     }
     return aRetSeq;

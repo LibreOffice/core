@@ -74,10 +74,10 @@ void lcl_addProperty(uno::Sequence<OUString> & rPropertyNames, uno::Sequence<uno
                  OUString const & rName, uno::Any const & rAny)
 {
     rPropertyNames.realloc(rPropertyNames.getLength() + 1);
-    rPropertyNames[rPropertyNames.getLength() - 1] = rName;
+    rPropertyNames.getArray()[rPropertyNames.getLength() - 1] = rName;
 
     rPropertyValues.realloc(rPropertyValues.getLength() + 1);
-    rPropertyValues[rPropertyValues.getLength() - 1] = rAny;
+    rPropertyValues.getArray()[rPropertyValues.getLength() - 1] = rAny;
 }
 
 } // end anonymous namespace
@@ -712,19 +712,23 @@ static void appendAndCloseBezierCoords( drawing::PolyPolygonBezierCoords& rRetur
 
     sal_Int32 nOldCount = rReturn.Coordinates[0].getLength();
 
-    rReturn.Coordinates[0].realloc(nOldCount+nAddCount+1);
-    rReturn.Flags[0].realloc(nOldCount+nAddCount+1);
+    auto pCoordinates = rReturn.Coordinates.getArray();
+    pCoordinates[0].realloc(nOldCount + nAddCount + 1);
+    auto pCoordinates0 = pCoordinates[0].getArray();
+    auto pFlags = rReturn.Flags.getArray();
+    pFlags[0].realloc(nOldCount+nAddCount+1);
+    auto pFlags0 = pFlags[0].getArray();
 
     for(sal_Int32 nN=0;nN<nAddCount; nN++ )
     {
         sal_Int32 nAdd = bAppendInverse ? (nAddCount-1-nN) : nN;
-        rReturn.Coordinates[0][nOldCount+nN] = rAdd.Coordinates[0][nAdd];
-        rReturn.Flags[0][nOldCount+nN] = rAdd.Flags[0][nAdd];
+        pCoordinates0[nOldCount+nN] = rAdd.Coordinates[0][nAdd];
+        pFlags0[nOldCount+nN] = rAdd.Flags[0][nAdd];
     }
 
     //close
-    rReturn.Coordinates[0][nOldCount+nAddCount] = rReturn.Coordinates[0][0];
-    rReturn.Flags[0][nOldCount+nAddCount] = rReturn.Flags[0][0];
+    pCoordinates0[nOldCount+nAddCount] = rReturn.Coordinates[0][0];
+    pFlags0[nOldCount+nAddCount] = rReturn.Flags[0][0];
 }
 
 static drawing::PolyPolygonBezierCoords getCircularArcBezierCoords(
@@ -768,11 +772,10 @@ static drawing::PolyPolygonBezierCoords getCircularArcBezierCoords(
 
     sal_Int32 nPointCount     = 1 + 3*nSegmentCount; //first point of next segment equals last point of former segment
 
-    aReturn.Coordinates = drawing::PointSequenceSequence(1);
-    aReturn.Flags       = drawing::FlagSequenceSequence(1);
-
     drawing::PointSequence aPoints(nPointCount);
+    auto pPoints = aPoints.getArray();
     drawing::FlagSequence  aFlags(nPointCount);
+    auto pFlags = aFlags.getArray();
 
     //!! applying matrix to vector does ignore translation, so it is important to use a B2DPoint here instead of B2DVector
     ::basegfx::B2DPoint P0,P1,P2,P3;
@@ -812,28 +815,28 @@ static drawing::PolyPolygonBezierCoords getCircularArcBezierCoords(
         P2 = rTransformationFromUnitCircle*(aStart*P2);
         P3 = rTransformationFromUnitCircle*(aStart*P3);
 
-        aPoints[nPoint].X = static_cast< sal_Int32 >( P0.getX());
-        aPoints[nPoint].Y = static_cast< sal_Int32 >( P0.getY());
-        aFlags [nPoint++] = drawing::PolygonFlags_NORMAL;
+        pPoints[nPoint].X = static_cast< sal_Int32 >( P0.getX());
+        pPoints[nPoint].Y = static_cast< sal_Int32 >( P0.getY());
+        pFlags [nPoint++] = drawing::PolygonFlags_NORMAL;
 
-        aPoints[nPoint].X = static_cast< sal_Int32 >( P1.getX());
-        aPoints[nPoint].Y = static_cast< sal_Int32 >( P1.getY());
-        aFlags[nPoint++] = drawing::PolygonFlags_CONTROL;
+        pPoints[nPoint].X = static_cast< sal_Int32 >( P1.getX());
+        pPoints[nPoint].Y = static_cast< sal_Int32 >( P1.getY());
+        pFlags[nPoint++] = drawing::PolygonFlags_CONTROL;
 
-        aPoints[nPoint].X = static_cast< sal_Int32 >( P2.getX());
-        aPoints[nPoint].Y = static_cast< sal_Int32 >( P2.getY());
-        aFlags [nPoint++] = drawing::PolygonFlags_CONTROL;
+        pPoints[nPoint].X = static_cast< sal_Int32 >( P2.getX());
+        pPoints[nPoint].Y = static_cast< sal_Int32 >( P2.getY());
+        pFlags [nPoint++] = drawing::PolygonFlags_CONTROL;
 
         if(nSegment==(nSegmentCount-1))
         {
-            aPoints[nPoint].X = static_cast< sal_Int32 >( P3.getX());
-            aPoints[nPoint].Y = static_cast< sal_Int32 >( P3.getY());
-            aFlags [nPoint++] = drawing::PolygonFlags_NORMAL;
+            pPoints[nPoint].X = static_cast< sal_Int32 >( P3.getX());
+            pPoints[nPoint].Y = static_cast< sal_Int32 >( P3.getY());
+            pFlags [nPoint++] = drawing::PolygonFlags_NORMAL;
         }
     }
 
-    aReturn.Coordinates[0] = aPoints;
-    aReturn.Flags[0] = aFlags;
+    aReturn.Coordinates = { aPoints };
+    aReturn.Flags = { aFlags };
 
     return aReturn;
 }
@@ -847,13 +850,10 @@ static drawing::PolyPolygonBezierCoords getRingBezierCoords(
 {
     drawing::PolyPolygonBezierCoords aReturn;
 
-    aReturn.Coordinates = drawing::PointSequenceSequence(1);
-    aReturn.Flags       = drawing::FlagSequenceSequence(1);
-
     drawing::PolyPolygonBezierCoords aOuterArc = getCircularArcBezierCoords(
         fStartAngleRadian, fWidthAngleRadian, fUnitCircleOuterRadius, aTransformationFromUnitCircle, fAngleSubdivisionRadian );
-    aReturn.Coordinates[0] = aOuterArc.Coordinates[0];
-    aReturn.Flags[0] = aOuterArc.Flags[0];
+    aReturn.Coordinates = { aOuterArc.Coordinates[0] };
+    aReturn.Flags = { aOuterArc.Flags[0] };
 
     drawing::PolyPolygonBezierCoords aInnerArc = getCircularArcBezierCoords(
         fStartAngleRadian, fWidthAngleRadian, fUnitCircleInnerRadius, aTransformationFromUnitCircle, fAngleSubdivisionRadian );

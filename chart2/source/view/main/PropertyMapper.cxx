@@ -80,12 +80,14 @@ void PropertyMapper::getValueMap(
     if((false) && xMultiPropSet.is())
     {
         uno::Sequence< OUString > aPropSourceNames(rNameMap.size());
+        auto aPropSourceNamesRange = asNonConstRange(aPropSourceNames);
         uno::Sequence< OUString > aPropTargetNames(rNameMap.size());
+        auto aPropTargetNamesRange = asNonConstRange(aPropTargetNames);
         sal_Int32 i = 0;
         for (auto const& elem : rNameMap)
         {
-            aPropTargetNames[i] = elem.first;
-            aPropSourceNames[i] = elem.second;
+            aPropTargetNamesRange[i] = elem.first;
+            aPropSourceNamesRange[i] = elem.second;
             ++i;
         }
 
@@ -137,7 +139,9 @@ void PropertyMapper::getMultiPropertyListsFromValueMap(
 {
     sal_Int32 nPropertyCount = rValueMap.size();
     rNames.realloc(nPropertyCount);
+    auto pNames = rNames.getArray();
     rValues.realloc(nPropertyCount);
+    auto pValues = rValues.getArray();
 
     //fill sequences
     sal_Int32 nN=0;
@@ -147,8 +151,8 @@ void PropertyMapper::getMultiPropertyListsFromValueMap(
         if( rAny.hasValue() )
         {
             //do not set empty anys because of performance (otherwise SdrAttrObj::ItemChange will take much longer)
-            rNames[nN]  = elem.first;
-            rValues[nN] = rAny;
+            pNames[nN]  = elem.first;
+            pValues[nN] = rAny;
             ++nN;
         }
     }
@@ -165,7 +169,7 @@ uno::Any* PropertyMapper::getValuePointer( tAnySequence& rPropValues
     for( sal_Int32 nN = 0; nN < nCount; nN++ )
     {
         if(rPropNames[nN] == rPropName)
-            return &rPropValues[nN];
+            return &rPropValues.getArray()[nN];
     }
     return nullptr;
 }

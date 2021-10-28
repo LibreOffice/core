@@ -223,7 +223,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                                     pos = rBarPosition;
                             }
                             else if( nAxisIndex >= 0 && nAxisIndex < aBarPositionSequence.getLength() )
-                                aBarPositionSequence[nAxisIndex] = rBarPosition;
+                                aBarPositionSequence.getArray()[nAxisIndex] = rBarPosition;
 
                             xChartTypeProps->setPropertyValue( aPropName, uno::Any(aBarPositionSequence) );
                             bChanged = true;

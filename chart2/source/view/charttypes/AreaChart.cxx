@@ -243,6 +243,10 @@ bool AreaChart::create_stepped_line( drawing::PolyPolygonShape3D aStartPoly, cha
     aSteppedPoly.SequenceY.realloc(nOuterCount);
     aSteppedPoly.SequenceZ.realloc(nOuterCount);
 
+    auto pSequenceX = aSteppedPoly.SequenceX.getArray();
+    auto pSequenceY = aSteppedPoly.SequenceY.getArray();
+    auto pSequenceZ = aSteppedPoly.SequenceZ.getArray();
+
     for( sal_uInt32 nOuter = 0; nOuter < nOuterCount; ++nOuter )
     {
         if( aStartPoly.SequenceX[nOuter].getLength() <= 1 )
@@ -259,13 +263,13 @@ bool AreaChart::create_stepped_line( drawing::PolyPolygonShape3D aStartPoly, cha
         const double* pOldY = aStartPoly.SequenceY[nOuter].getConstArray();
         const double* pOldZ = aStartPoly.SequenceZ[nOuter].getConstArray();
 
-        aSteppedPoly.SequenceX[nOuter].realloc( nNewIndexPoints );
-        aSteppedPoly.SequenceY[nOuter].realloc( nNewIndexPoints );
-        aSteppedPoly.SequenceZ[nOuter].realloc( nNewIndexPoints );
+        pSequenceX[nOuter].realloc( nNewIndexPoints );
+        pSequenceY[nOuter].realloc( nNewIndexPoints );
+        pSequenceZ[nOuter].realloc( nNewIndexPoints );
 
-        double* pNewX = aSteppedPoly.SequenceX[nOuter].getArray();
-        double* pNewY = aSteppedPoly.SequenceY[nOuter].getArray();
-        double* pNewZ = aSteppedPoly.SequenceZ[nOuter].getArray();
+        double* pNewX = pSequenceX[nOuter].getArray();
+        double* pNewY = pSequenceY[nOuter].getArray();
+        double* pNewZ = pSequenceZ[nOuter].getArray();
 
         pNewX[0] = pOldX[0];
         pNewY[0] = pOldY[0];
