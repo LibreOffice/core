@@ -68,7 +68,6 @@ public:
     ~SerfLockStore();
 
     bool finishing() const;
-    OUString getLockToken(const OUString& rURI);
 
     OUString const* getLockTokenForURI(OUString const& rURI, css::ucb::Lock const* pLock);
 

@@ -1799,8 +1799,8 @@ auto CurlSession::PUT(OUString const& rURIReference,
     {
         throw uno::RuntimeException("curl_slist_append failed");
     }
-    OUString const token(g_Init.LockStore.getLockToken(uri.GetURI()));
-    if (!token.isEmpty())
+    OUString const* const pToken(g_Init.LockStore.getLockTokenForURI(uri.GetURI(), nullptr));
+    if (pToken)
     {
         OString const utf8If("If: "
         // disabled as Sharepoint 2013 workaround, it accepts only
@@ -1810,7 +1810,7 @@ auto CurlSession::PUT(OUString const& rURIReference,
                              + "> "
 #endif
                              "(<"
-                             + OUStringToOString(token, RTL_TEXTENCODING_ASCII_US) + ">)");
+                             + OUStringToOString(*pToken, RTL_TEXTENCODING_ASCII_US) + ">)");
         pList.reset(curl_slist_append(pList.release(), utf8If.getStr()));
         if (!pList)
         {
@@ -2162,14 +2162,14 @@ auto CurlSession::LOCK(OUString const& rURIReference, ucb::Lock /*const*/& rLock
 auto CurlProcessor::Unlock(CurlSession& rSession, CurlUri const& rURI,
                            DAVRequestEnvironment const* const pEnv) -> void
 {
-    OUString const token(g_Init.LockStore.getLockToken(rURI.GetURI()));
-    if (token.isEmpty())
+    OUString const* const pToken(g_Init.LockStore.getLockTokenForURI(rURI.GetURI(), nullptr));
+    if (!pToken)
     {
         SAL_WARN("ucb.ucp.webdav.curl", "attempt to unlock but not locked");
         throw DAVException(DAVException::DAV_NOT_LOCKED);
     }
     OString const utf8LockToken("Lock-Token: <"
-                                + OUStringToOString(token, RTL_TEXTENCODING_ASCII_US) + ">");
+                                + OUStringToOString(*pToken, RTL_TEXTENCODING_ASCII_US) + ">");
     ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist_free_all>> pList(
         curl_slist_append(nullptr, utf8LockToken.getStr()));
     if (!pList)
@@ -2197,7 +2197,7 @@ auto CurlSession::UNLOCK(OUString const& rURIReference, DAVRequestEnvironment co
     g_Init.LockStore.removeLock(uri.GetURI());
 }
 
-auto CurlSession::NonInteractive_LOCK(OUString const& rURI,
+auto CurlSession::NonInteractive_LOCK(OUString const& rURI, ::std::u16string_view const rLockToken,
                                       sal_Int32& o_rLastChanceToSendRefreshRequest,
                                       bool& o_rIsAuthFailed) -> bool
 {
@@ -2211,9 +2211,9 @@ auto CurlSession::NonInteractive_LOCK(OUString const& rURI,
         ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist_free_all>> pList(
             curl_slist_append(nullptr, "Timeout: Second-180"));
 
-        OUString const token(g_Init.LockStore.getLockToken(rURI));
-        assert(!token.isEmpty()); // LockStore is the caller
-        OString const utf8If("If: (<" + OUStringToOString(token, RTL_TEXTENCODING_ASCII_US) + ">)");
+        assert(!rLockToken.empty()); // LockStore is the caller
+        OString const utf8If("If: (<" + OUStringToOString(rLockToken, RTL_TEXTENCODING_ASCII_US)
+                             + ">)");
         pList.reset(curl_slist_append(pList.release(), utf8If.getStr()));
         if (!pList)
         {
