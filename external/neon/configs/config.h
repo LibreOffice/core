@@ -1,5 +1,7 @@
 /* Contents kept in sync with config.h.in from neon 0.31.2 */
 
+#include <osl/endian.h>
+
 /* Define if building universal (internal helper macro) */
 /* #undef AC_APPLE_UNIVERSAL_BUILD */
 
@@ -521,7 +523,7 @@
 
 /* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
    significant byte first (like Motorola and SPARC, unlike Intel). */
-#if defined(__sun) && defined(SPARC)
+#if defined OSL_BIGENDIAN
 #define WORDS_BIGENDIAN 1
 #endif
 
