@@ -16,6 +16,24 @@
       "message": "I restored it as you proposed.",
       "revId": "ca512616a09a9f614f746d9ae4dfdc05c58a049b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f80d607_3fcf061f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-10-28T12:15:14Z",
+      "side": 1,
+      "message": "Thank you. I have added the unit test and will submit it soon.",
+      "parentUuid": "8bc9853e_b8042746",
+      "revId": "ca512616a09a9f614f746d9ae4dfdc05c58a049b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
