@@ -4737,6 +4737,12 @@ namespace
         return gtk_image_new_from_paintable(GDK_PAINTABLE(paintable));
     }
 
+    GtkWidget* picture_new_from_virtual_device(const VirtualDevice& rImageSurface)
+    {
+        SurfacePaintable* paintable = paintable_new_from_virtual_device(rImageSurface);
+        return gtk_picture_new_for_paintable(GDK_PAINTABLE(paintable));
+    }
+
 #else
     GtkWidget* image_new_from_virtual_device(const VirtualDevice& rImageSurface)
     {
@@ -11188,7 +11194,11 @@ private:
 
         if (pDevice)
         {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            pImage = picture_new_from_virtual_device(*pDevice);
+#else
             pImage = image_new_from_virtual_device(*pDevice);
+#endif
             gtk_widget_show(pImage);
         }
 
