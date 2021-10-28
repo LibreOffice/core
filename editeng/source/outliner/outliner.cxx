@@ -977,7 +977,7 @@ void Outliner::PaintBullet(sal_Int32 nPara, const Point& rStartPos, const Point&
                     aTextPos.AdjustY( -(aMetric.GetDescent()) );
                 }
 
-                DrawingText(aTextPos, pPara->GetText(), 0, pPara->GetText().getLength(), aBuf.data(),
+                DrawingText(aTextPos, pPara->GetText(), 0, pPara->GetText().getLength(), o3tl::span(aBuf.data(), aBuf.size()),
                     aSvxFont, nPara, bRightToLeftPara ? 1 : 0, nullptr, nullptr, false, false, true, nullptr, Color(), Color());
             }
             else
@@ -1653,7 +1653,7 @@ void Outliner::StripPortions()
 }
 
 void Outliner::DrawingText( const Point& rStartPos, const OUString& rText, sal_Int32 nTextStart,
-                            sal_Int32 nTextLen, const tools::Long* pDXArray,const SvxFont& rFont,
+                            sal_Int32 nTextLen, o3tl::span<const tools::Long> pDXArray,const SvxFont& rFont,
                             sal_Int32 nPara, sal_uInt8 nRightToLeft,
                             const EEngineData::WrongSpellVector* pWrongSpellVector,
                             const SvxFieldData* pFieldData,
@@ -1679,7 +1679,7 @@ void Outliner::DrawingTab( const Point& rStartPos, tools::Long nWidth, const OUS
 {
     if(aDrawPortionHdl.IsSet())
     {
-        DrawPortionInfo aInfo( rStartPos, rChar, 0, rChar.getLength(), rFont, nPara, nullptr, nullptr,
+        DrawPortionInfo aInfo( rStartPos, rChar, 0, rChar.getLength(), rFont, nPara, {}, nullptr,
             nullptr, nullptr, rOverlineColor, rTextLineColor, nRightToLeft, true, nWidth, bEndOfLine, bEndOfParagraph, false);
 
         aDrawPortionHdl.Call( &aInfo );

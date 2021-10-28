@@ -286,9 +286,6 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
             sal_Int32 nPos = rTextCandidate.getTextPosition();
             sal_Int32 nLen = rTextCandidate.getTextLength();
 
-            std::vector<tools::Long>* pDXArray
-                = !aTransformedDXArray.empty() ? &aTransformedDXArray : nullptr;
-
             if (rTextCandidate.isFilled())
             {
                 basegfx::B2DVector aOldFontScaling, aOldTranslate;
@@ -299,8 +296,8 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                 tools::Long nWidthToFill = static_cast<tools::Long>(
                     rTextCandidate.getWidthToFill() * aFontScaling.getX() / aOldFontScaling.getX());
 
-                tools::Long nWidth
-                    = mpOutputDevice->GetTextArray(rTextCandidate.getText(), pDXArray, 0, 1);
+                tools::Long nWidth = mpOutputDevice->GetTextArray(rTextCandidate.getText(),
+                                                                  &aTransformedDXArray, 0, 1);
                 tools::Long nChars = 2;
                 if (nWidth)
                     nChars = nWidthToFill / nWidth;
@@ -314,8 +311,9 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
 
             if (!aTransformedDXArray.empty())
             {
-                mpOutputDevice->DrawTextArray(aStartPoint, aText,
-                                              pDXArray ? pDXArray->data() : nullptr, nPos, nLen);
+                mpOutputDevice->DrawTextArray(
+                    aStartPoint, aText, { aTransformedDXArray.data(), aTransformedDXArray.size() },
+                    nPos, nLen);
             }
             else
             {

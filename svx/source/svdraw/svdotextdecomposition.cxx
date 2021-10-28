@@ -223,7 +223,7 @@ namespace
         // the text transformation), scale it to unit coordinates
         ::std::vector< double > aDXArray;
 
-        if(rInfo.mpDXArray && rInfo.mnTextLen)
+        if(!rInfo.mpDXArray.empty() && rInfo.mnTextLen)
         {
             aDXArray.reserve(rInfo.mnTextLen);
 

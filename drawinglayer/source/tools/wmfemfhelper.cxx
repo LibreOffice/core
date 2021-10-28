@@ -1828,15 +1828,15 @@ namespace wmfemfhelper
                     {
                         // prepare DXArray (if used)
                         std::vector< double > aDXArray;
-                        tools::Long* pDXArray = pA->GetDXArray();
+                        const std::vector<tools::Long> & rDXArray = pA->GetDXArray();
 
-                        if(pDXArray)
+                        if(!rDXArray.empty())
                         {
                             aDXArray.reserve(nTextLength);
 
                             for(sal_uInt32 a(0); a < nTextLength; a++)
                             {
-                                aDXArray.push_back(static_cast<double>(*(pDXArray + a)));
+                                aDXArray.push_back(static_cast<double>(rDXArray[a]));
                             }
                         }
 

@@ -811,7 +811,7 @@ const SalLayoutGlyphs* ScDrawStringsVars::GetLayoutGlyphs(const OUString& rStrin
     if( it != mCachedGlyphs.end() && it->second.IsValid())
         return &it->second;
     std::unique_ptr<SalLayout> layout = pOutput->pFmtDevice->ImplLayout( rString, 0, rString.getLength(),
-        Point( 0, 0 ), 0, nullptr, SalLayoutFlags::GlyphItemsOnly );
+        Point( 0, 0 ), 0, {}, SalLayoutFlags::GlyphItemsOnly );
     if( layout )
     {
         mCachedGlyphs.insert( std::make_pair( key, layout->GetGlyphs()));
@@ -2146,7 +2146,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                                 }
 
                                 if (bPaint)
-                                    mpDev->DrawTextArray(aDrawTextPos, aShort, aDX.data());
+                                    mpDev->DrawTextArray(aDrawTextPos, aShort, {aDX.data(), aDX.size()});
                             }
                             else
                             {
