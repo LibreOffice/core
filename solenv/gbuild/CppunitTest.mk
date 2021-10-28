@@ -32,14 +32,10 @@ gb_PythonTest_GDBTRACE := $(subst gdb,\
 	PYTHONWARNINGS=default gdb -return-child-result -ex "add-auto-load-safe-path $(INSTDIR)" -ex "set environment $(subst =, ,$(gb_PythonTest_PRECOMMAND))" $(if $(PYTHONWARNINGS),-ex 'set environment PYTHONWARNINGS $(PYTHONWARNINGS)') $(gb_CppunitTest_malloc_check) $(gb_CppunitTest_DEBUGCPPUNIT),\
 	$(CPPUNITTRACE))
 else ifneq ($(filter lldb,$(CPPUNITTRACE)),)
-gb_CppunitTest_PREGDBTRACE := lo_dyldpathfile=$(call var2file,$(shell $(gb_MKTEMP)),500,settings set target.env-vars $(gb_CppunitTest_CPPTESTPRECOMMAND))
 gb_CppunitTest_GDBTRACE := $(subst lldb,\
-	lldb -s $$lo_dyldpathfile $(gb_CppunitTest_malloc_check),\
+	lldb -o "env $(gb_CppunitTest_CPPTESTPRECOMMAND)" $(gb_CppunitTest_malloc_check),\
 	$(CPPUNITTRACE))
-gb_CppunitTest_POSTGDBTRACE := rm $$lo_dyldpathfile
-gb_PythonTest_PREGDBTRACE := lo_dyldpathfile=$(call var2file,$(shell $(gb_MKTEMP)),500,settings set target.env-vars $(gb_PythonTest_PRECOMMAND))
 gb_PythonTest_GDBTRACE := $(gb_CppunitTest_GDBTRACE)
-gb_PythonTest_POSTGDBTRACE := $(gb_CppunitTest_POSTGDBTRACE)
 else
 gb_CppunitTest_GDBTRACE := $(CPPUNITTRACE)
 gb_PythonTest_GDBTRACE := $(gb_CppunitTest_GDBTRACE)
@@ -133,7 +129,6 @@ else
 		( \
 		$(if $(gb_CppunitTest_localized),for l in $(WITH_LANG_LIST) ; do \
 			printf 'LO_TEST_LOCALE=%s\n' "$$l" && LO_TEST_LOCALE="$$l" ) \
-		$(if $(gb_CppunitTest_PREGDBTRACE),$(gb_CppunitTest_PREGDBTRACE) &&) \
 		$(if $(gb_CppunitTest__vcl_no_svp), \
 			$(filter-out SAL_USE_VCLPLUGIN=svp,$(gb_TEST_ENV_VARS)),$(gb_TEST_ENV_VARS)) \
 		$(EXTRA_ENV_VARS) \
@@ -146,8 +141,6 @@ else
 			$(gb_CppunitTest_CPPTESTCOMMAND) \
 		$(call gb_LinkTarget_get_target,$(call gb_CppunitTest_get_linktarget,$*)) \
 		$(call gb_CppunitTest__make_args) "-env:CPPUNITTESTTARGET=$@" \
-		$(if $(gb_CppunitTest_POSTGDBTRACE), \
-			; RET=$$? && $(gb_CppunitTest_POSTGDBTRACE) && (exit $$RET)) \
 		$(if $(gb_CppunitTest_localized),|| exit $$?; done) \
 		) \
 		$(if $(gb_CppunitTest__interactive),, \
