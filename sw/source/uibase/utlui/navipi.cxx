@@ -517,6 +517,19 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
 {
     m_xContainer->connect_container_focus_changed(LINK(this, SwNavigationPI, SetFocusChildHdl));
 
+    if (const ContentTypeId nRootType = m_pConfig->GetRootType();
+            nRootType != ContentTypeId::UNKNOWN)
+    {
+        m_xContentTree->SetRootType(nRootType);
+        m_xContent5ToolBox->set_item_active("root", true);
+        if (nRootType == ContentTypeId::OUTLINE || nRootType == ContentTypeId::DRAWOBJECT)
+            m_xContentTree->set_selection_mode(SelectionMode::Multiple);
+        else
+            m_xContentTree->set_selection_mode(SelectionMode::Single);
+    }
+    else
+        m_xContentTree->set_selection_mode(SelectionMode::Single);
+
     UpdateInitShow();
 
     GetCreateView();
@@ -588,7 +601,6 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     m_xContentTree->SetFieldTracking(m_pConfig->IsFieldTracking());
     m_xContentTree->SetFootnoteTracking(m_pConfig->IsFootnoteTracking());
 
-    m_xContentTree->set_selection_mode(SelectionMode::Single);
     m_xContentTree->ShowTree();
     m_xContent6ToolBox->set_item_active("listbox", true);
     m_xContent6ToolBox->set_item_sensitive("listbox", bFloatingNavigator);
@@ -1135,17 +1147,6 @@ SwNavigatorWin::SwNavigatorWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr,
     _pBindings->Invalidate(SID_NAVIGATOR);
 
     SwNavigationConfig* pNaviConfig = SW_MOD()->GetNavigationConfig();
-
-    const ContentTypeId nRootType = pNaviConfig->GetRootType();
-    if( nRootType != ContentTypeId::UNKNOWN )
-    {
-        m_xNavi->m_xContentTree->SetRootType(nRootType);
-        m_xNavi->m_xContent5ToolBox->set_item_active("root", true);
-        if (nRootType == ContentTypeId::OUTLINE || nRootType == ContentTypeId::DRAWOBJECT)
-        {
-            m_xNavi->m_xContentTree->set_selection_mode(SelectionMode::Multiple);
-        }
-    }
 
     SetMinOutputSizePixel(GetOptimalSize());
     if (pNaviConfig->IsSmall())
