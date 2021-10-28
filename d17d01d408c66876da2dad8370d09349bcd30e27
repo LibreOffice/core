@@ -16,6 +16,24 @@
       "message": "(just a general note that it is easier to understand patches if you refrain from adding in random reformatting---which you do here in four places)",
       "revId": "d17d01d408c66876da2dad8370d09349bcd30e27",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e71d2a1f_9fa4ac2f",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-10-28T15:49:58Z",
+      "side": 1,
+      "message": "Ah ok, I thought that if I change a line I should format it (CTRL+K, CTRL+F)",
+      "parentUuid": "23599f95_126579a5",
+      "revId": "d17d01d408c66876da2dad8370d09349bcd30e27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
