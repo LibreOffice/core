@@ -729,9 +729,9 @@ namespace oglcanvas
                 {
                     // create the DXArray
                     const sal_Int32 nLen( aLogicalAdvancements.getLength() );
-                    std::unique_ptr<tools::Long[]> pDXArray( new tools::Long[nLen] );
+                    std::vector<tools::Long> aDXArray(nLen);
                     for( sal_Int32 i=0; i<nLen; ++i )
-                        pDXArray[i] = basegfx::fround( aLogicalAdvancements[i] );
+                        aDXArray[i] = basegfx::fround( aLogicalAdvancements[i] );
 
                     // get the glyphs
                     pVDev->GetTextOutlines(rAct.maPolyPolys,
@@ -740,7 +740,7 @@ namespace oglcanvas
                                           rTxt.StartPosition,
                                           rTxt.Length,
                                           0,
-                                          pDXArray.get() );
+                                          { aDXArray.data(), aDXArray.size() } );
                 }
                 else
                 {

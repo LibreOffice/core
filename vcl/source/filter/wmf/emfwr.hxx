@@ -75,7 +75,7 @@ private:
     void                ImplWritePolygonRecord( const tools::Polygon& rPoly, bool bClose );
     void                ImplWritePolyPolygonRecord( const tools::PolyPolygon& rPolyPoly );
     void                ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt, const Size& rSz, sal_uInt32 nROP );
-    void                ImplWriteTextRecord( const Point& rPos, const OUString& rText, const tools::Long* pDXArray, sal_uInt32 nWidth );
+    void                ImplWriteTextRecord( const Point& rPos, const OUString& rText, o3tl::span<const tools::Long> pDXArray, sal_uInt32 nWidth );
 
     void                Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon);
     void                ImplWrite( const GDIMetaFile& rMtf );

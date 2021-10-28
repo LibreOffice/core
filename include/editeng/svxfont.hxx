@@ -95,7 +95,7 @@ public:
                      const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32) const;
 
     void QuickDrawText( OutputDevice *pOut, const Point &rPos, const OUString &rTxt,
-                        const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32, const tools::Long* pDXArray = nullptr ) const;
+                        const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32, o3tl::span<const tools::Long> pDXArray = {} ) const;
 
     Size QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
                          const sal_Int32 nIdx, const sal_Int32 nLen, std::vector<tools::Long>* pDXArray = nullptr ) const;

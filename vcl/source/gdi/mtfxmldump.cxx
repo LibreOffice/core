@@ -811,7 +811,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 rWriter.attribute("index", aIndex);
                 rWriter.attribute("length", aLength);
 
-                if (pMetaTextArrayAction->GetDXArray())
+                if (!pMetaTextArrayAction->GetDXArray().empty())
                 {
                     rWriter.startElement("dxarray");
                     OUStringBuffer sDxLengthString;
