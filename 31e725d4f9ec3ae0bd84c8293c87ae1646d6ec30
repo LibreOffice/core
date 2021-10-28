@@ -98,6 +98,24 @@
       "parentUuid": "1f688a9b_39060963",
       "revId": "31e725d4f9ec3ae0bd84c8293c87ae1646d6ec30",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19cfeee6_1c29b08e",
+        "filename": "include/com/sun/star/uno/Sequence.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-28T11:31:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8608262_8b936883",
+      "revId": "31e725d4f9ec3ae0bd84c8293c87ae1646d6ec30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
