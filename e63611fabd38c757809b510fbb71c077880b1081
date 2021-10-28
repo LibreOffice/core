@@ -22,6 +22,30 @@
       },
       "revId": "e63611fabd38c757809b510fbb71c077880b1081",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d62ac8b_b1098eac",
+        "filename": "xmlsecurity/source/xmlsec/mscrypt/x509certificate_mscryptimpl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-10-28T08:58:18Z",
+      "side": 1,
+      "message": "no, i was too lazy to look up which integer would be returned by the function and hoped this would convert it to bool anyway",
+      "parentUuid": "c2c44ce3_a565f36b",
+      "range": {
+        "startLine": 755,
+        "startChar": 8,
+        "endLine": 755,
+        "endChar": 10
+      },
+      "revId": "e63611fabd38c757809b510fbb71c077880b1081",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
