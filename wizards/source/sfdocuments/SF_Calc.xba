@@ -235,7 +235,7 @@ End Property	&apos;	SFDocuments.SF_Calc.Range
 REM -----------------------------------------------------------------------------
 Property Get Region(Optional ByVal RangeName As Variant) As String
 &apos;&apos;&apos;	Returns the smallest area as a range string that contains the given range
-&apos;&apos;&apos;	and which is compeletely surrounded with empty cells
+&apos;&apos;&apos;	and which is completely surrounded with empty cells
 	Region = _PropertyGet(&quot;Region&quot;, RangeName)
 End Property	&apos;	SFDocuments.SF_Calc.Region
 
