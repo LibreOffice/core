@@ -145,7 +145,7 @@ public:
     void startedPrintJob() { mnActivePrintJobs++; }
     void endedPrintJob() { mnActivePrintJobs--; }
 
-    // event subtypes for NSApplicationDefined events
+    // event subtypes for NSEventTypeApplicationDefined events
     static const short AppExecuteSVMain   = 1;
     static const short AppStartTimerEvent = 10;
     static const short YieldWakeupEvent   = 20;
