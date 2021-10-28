@@ -141,20 +141,6 @@ void SerfLockStore::stopTicker(osl::ClearableMutexGuard & rGuard)
     }
 }
 
-OUString SerfLockStore::getLockToken(const OUString& rURI)
-{
-    assert(rURI.startsWith("http://") || rURI.startsWith("https://"));
-
-    osl::MutexGuard aGuard( m_aMutex );
-
-    LockInfoMap::const_iterator const it( m_aLockInfoMap.find(rURI) );
-    if ( it != m_aLockInfoMap.end() )
-        return (*it).second.m_sToken;
-
-    SAL_WARN("ucb.ucp.webdav", "SerfLockStore::getLockToken: lock not found!" );
-    return OUString();
-}
-
 OUString const*
 SerfLockStore::getLockTokenForURI(OUString const& rURI, css::ucb::Lock const*const pLock)
 {
@@ -257,7 +243,8 @@ void SerfLockStore::refreshLocks()
                 sal_Int32 nlastChanceToSendRefreshRequest = -1;
                 bool isAuthFailed(false);
                 if (rInfo.m_xSession->NonInteractive_LOCK(
-                         rLockInfo.first, nlastChanceToSendRefreshRequest,
+                         rLockInfo.first, rLockInfo.second.m_sToken,
+                         nlastChanceToSendRefreshRequest,
                          isAuthFailed))
                 {
                     rInfo.m_nLastChanceToSendRefreshRequest
