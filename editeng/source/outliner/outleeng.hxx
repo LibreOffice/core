@@ -44,7 +44,7 @@ public:
     virtual void        ParagraphConnected( sal_Int32 nLeftParagraph, sal_Int32 nRightParagraph ) override;
 
     virtual void DrawingText( const Point& rStartPos, const OUString& rText, sal_Int32 nTextStart,
-                              sal_Int32 nTextLen, const tools::Long* pDXArray, const SvxFont& rFont,
+                              sal_Int32 nTextLen, o3tl::span<const tools::Long> pDXArray, const SvxFont& rFont,
                               sal_Int32 nPara, sal_uInt8 nRightToLeft,
                               const EEngineData::WrongSpellVector* pWrongSpellVector,
                               const SvxFieldData* pFieldData,

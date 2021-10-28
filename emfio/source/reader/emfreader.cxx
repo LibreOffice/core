@@ -1939,14 +1939,15 @@ namespace emfio
                                 SAL_INFO("emfio", "\t\tText: " << aText);
                                 SAL_INFO("emfio", "\t\tDxBuffer:");
 
-                                std::unique_ptr<tools::Long[]> pDXAry, pDYAry;
+                                std::vector<tools::Long> aDXAry;
+                                std::unique_ptr<tools::Long[]> pDYAry;
 
                                 sal_Int32 nDxSize;
                                 bool bOverflow = o3tl::checked_multiply<sal_Int32>(nLen, (nOptions & ETO_PDY) ? 8 : 4, nDxSize);
                                 if (!bOverflow && offDx && ((nCurPos + offDx + nDxSize) <= nNextPos ) && nNextPos <= mnEndPos)
                                 {
                                     mpInputStream->Seek( nCurPos + offDx );
-                                    pDXAry.reset( new tools::Long[aText.getLength()] );
+                                    aDXAry.resize(aText.getLength());
                                     if (nOptions & ETO_PDY)
                                     {
                                         pDYAry.reset( new tools::Long[aText.getLength()] );
@@ -1965,7 +1966,7 @@ namespace emfio
                                             }
                                         }
 
-                                        pDXAry[i] = 0;
+                                        aDXAry[i] = 0;
                                         if (nOptions & ETO_PDY)
                                         {
                                             pDYAry[i] = 0;
@@ -1975,7 +1976,7 @@ namespace emfio
                                         {
                                             sal_Int32 nDxTmp = 0;
                                             mpInputStream->ReadInt32(nDxTmp);
-                                            pDXAry[i] += nDxTmp;
+                                            aDXAry[i] += nDxTmp;
                                             if (nOptions & ETO_PDY)
                                             {
                                                 sal_Int32 nDyTmp = 0;
@@ -1984,7 +1985,7 @@ namespace emfio
                                             }
                                         }
 
-                                        SAL_INFO("emfio", "\t\t\tSpacing " << i << ": " << pDXAry[i]);
+                                        SAL_INFO("emfio", "\t\t\tSpacing " << i << ": " << aDXAry[i]);
                                     }
                                 }
                                 if ( nOptions & ETO_CLIPPED )
@@ -1992,7 +1993,7 @@ namespace emfio
                                     Push(); // Save the current clip. It will be restored after text drawing
                                     IntersectClipRect( aRect );
                                 }
-                                DrawText(aPos, aText, pDXAry.get(), pDYAry.get(), mbRecordPath, nGfxMode);
+                                DrawText(aPos, aText, aDXAry.empty() ? nullptr : &aDXAry, pDYAry.get(), mbRecordPath, nGfxMode);
                                 if ( nOptions & ETO_CLIPPED )
                                     Pop();
                             }

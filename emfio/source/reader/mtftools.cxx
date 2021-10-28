@@ -1677,7 +1677,7 @@ namespace emfio
         }
     }
 
-    void MtfTools::DrawText( Point& rPosition, OUString const & rText, tools::Long* pDXArry, tools::Long* pDYArry, bool bRecordPath, sal_Int32 nGfxMode )
+    void MtfTools::DrawText( Point& rPosition, OUString const & rText, std::vector<tools::Long>* pDXArry, tools::Long* pDYArry, bool bRecordPath, sal_Int32 nGfxMode )
     {
         UpdateClipRegion();
         rPosition = ImplMap( rPosition );
@@ -1689,13 +1689,13 @@ namespace emfio
             sal_Int32 nSumX = 0, nSumY = 0;
             for (sal_Int32 i = 0; i < rText.getLength(); i++ )
             {
-                nSumX += pDXArry[i];
+                nSumX += (*pDXArry)[i];
 
                 // #i121382# Map DXArray using WorldTransform
                 const Size aSizeX(ImplMap(Size(nSumX, 0)));
                 const basegfx::B2DVector aVectorX(aSizeX.Width(), aSizeX.Height());
-                pDXArry[i] = basegfx::fround(aVectorX.getLength());
-                pDXArry[i] *= (nSumX >= 0 ? 1 : -1);
+                (*pDXArry)[i] = basegfx::fround(aVectorX.getLength());
+                (*pDXArry)[i] *= (nSumX >= 0 ? 1 : -1);
 
                 if (pDYArry)
                 {
@@ -1796,9 +1796,9 @@ namespace emfio
             {
                 nTextWidth = pVDev->GetTextWidth( OUString(rText[ nLen - 1 ]) );
                 if( nLen > 1 )
-                    nTextWidth += pDXArry[ nLen - 2 ];
+                    nTextWidth += (*pDXArry)[ nLen - 2 ];
                 // tdf#39894: We should consider the distance to next character cell origin
-                aActPosDelta.setX( pDXArry[ nLen - 1 ] );
+                aActPosDelta.setX( (*pDXArry)[ nLen - 1 ] );
                 if ( pDYArry )
                 {
                     aActPosDelta.setY( pDYArry[ nLen - 1 ] );
@@ -1859,25 +1859,26 @@ namespace emfio
             {
                 for (sal_Int32 i = 0; i < rText.getLength(); ++i)
                 {
-                    Point aCharDisplacement( i ? pDXArry[i-1] : 0, i ? pDYArry[i-1] : 0 );
+                    Point aCharDisplacement( i ? (*pDXArry)[i-1] : 0, i ? pDYArry[i-1] : 0 );
                     Point().RotateAround(aCharDisplacement, maFont.GetOrientation());
-                    mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition + aCharDisplacement, OUString( rText[i] ), nullptr, 0, 1 ) );
+                    mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition + aCharDisplacement, OUString( rText[i] ), o3tl::span<const tools::Long>{}, 0, 1 ) );
                 }
             }
             else
             {
                 /* because text without dx array is badly scaled, we
                    will create such an array if necessary */
-                tools::Long* pDX = pDXArry;
+                o3tl::span<const tools::Long> pDX;
                 std::vector<tools::Long> aMyDXArray;
                 if (pDXArry)
                 {
+                    pDX = { pDXArry->data(), pDXArry->size() };
                     // only useful when we have an imported DXArray
                     if(!rText.isEmpty())
                     {
                         maScaledFontHelper.evaluateAlternativeFontScale(
                             rText,
-                            pDXArry[rText.getLength() - 1] // extract imported TextLength
+                            (*pDXArry)[rText.getLength() - 1] // extract imported TextLength
                         );
                     }
                 }
@@ -1889,7 +1890,7 @@ namespace emfio
                     pVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
                     pVDev->SetFont( maLatestFont );
                     pVDev->GetTextArray( rText, &aMyDXArray, 0, rText.getLength());
-                    pDX = aMyDXArray.data();
+                    pDX = { aMyDXArray.data(), aMyDXArray.size() };
                 }
                 mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition, rText, pDX, 0, rText.getLength() ) );
             }

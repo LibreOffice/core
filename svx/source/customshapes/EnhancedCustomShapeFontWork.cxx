@@ -326,7 +326,7 @@ static void GetTextAreaOutline(
                 {
                     FWCharacterData aCharacterData;
                     OUString aCharText( rText[ i ] );
-                    if ( pVirDev->GetTextOutlines( aCharacterData.vOutlines, aCharText, 0, 0, -1, nWidth, nullptr ) )
+                    if ( pVirDev->GetTextOutlines( aCharacterData.vOutlines, aCharText, 0, 0, -1, nWidth, {} ) )
                     {
                         sal_Int32 nTextWidth = pVirDev->GetTextWidth( aCharText);
                         if ( aCharacterData.vOutlines.empty() )
@@ -372,7 +372,7 @@ static void GetTextAreaOutline(
                     pVirDev->SetFont( aFont );
                 }
                 FWCharacterData aCharacterData;
-                if ( pVirDev->GetTextOutlines( aCharacterData.vOutlines, rText, 0, 0, -1, nWidth, aDXArry.empty() ? nullptr : aDXArry.data() ) )
+                if ( pVirDev->GetTextOutlines( aCharacterData.vOutlines, rText, 0, 0, -1, nWidth, { aDXArry.data(), aDXArry.size() } ) )
                 {
                     rParagraph.vCharacters.push_back( aCharacterData );
                 }
