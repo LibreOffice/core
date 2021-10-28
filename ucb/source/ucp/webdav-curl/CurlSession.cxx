@@ -1312,6 +1312,22 @@ auto CurlProcessor::PropFind(
         {
             *::std::get<1>(*o_pRequestedProperties)
                 = parseWebDAVPropFindResponse(xResponseInStream);
+            for (DAVResource& it : *::std::get<1>(*o_pRequestedProperties))
+            {
+                // caller will give these uris to CurlUri so can't be relative
+                if (it.uri.startsWith("/"))
+                {
+                    try
+                    {
+                        it.uri = rSession.m_URI.CloneWithRelativeRefPathAbsolute(it.uri).GetURI();
+                    }
+                    catch (DAVException const&)
+                    {
+                        SAL_INFO("ucb.ucp.webdav.curl",
+                                 "PROPFIND: exception parsing uri " << it.uri);
+                    }
+                }
+            }
         }
         else
         {
