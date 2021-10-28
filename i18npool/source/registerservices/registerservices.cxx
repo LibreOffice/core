@@ -157,11 +157,14 @@ IMPL_CREATEINSTANCE( Transliteration_l2u )
 IMPL_CREATEINSTANCE( Transliteration_sentencecase )
 IMPL_CREATEINSTANCE( Transliteration_titlecase )
 IMPL_CREATEINSTANCE( Transliteration_togglecase )
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
 IMPL_CREATEINSTANCE( hiraganaToKatakana )
 IMPL_CREATEINSTANCE( katakanaToHiragana )
 IMPL_CREATEINSTANCE( fullwidthToHalfwidth )
 IMPL_CREATEINSTANCE( halfwidthToFullwidth )
+#endif
 
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
 IMPL_CREATEINSTANCE( smallToLarge_ja_JP)
 IMPL_CREATEINSTANCE( largeToSmall_ja_JP)
 IMPL_CREATEINSTANCE( ignoreTraditionalKanji_ja_JP)
@@ -180,27 +183,40 @@ IMPL_CREATEINSTANCE( ignoreSize_ja_JP)
 IMPL_CREATEINSTANCE( ignoreProlongedSoundMark_ja_JP)
 IMPL_CREATEINSTANCE( ignoreMiddleDot_ja_JP)
 IMPL_CREATEINSTANCE( ignoreSpace_ja_JP)
+#endif
 IMPL_CREATEINSTANCE( ignoreDiacritics_CTL)
 IMPL_CREATEINSTANCE( ignoreKashida_CTL)
 
+#if WITH_LOCALE_ALL || WITH_LOCALE_zh
 IMPL_CREATEINSTANCE( TextToChuyin_zh_TW )
 IMPL_CREATEINSTANCE( TextToPinyin_zh_CN )
+#endif
 
+#if WITH_LOCALE_ALL || WITH_LOCALE_zh
 IMPL_CREATEINSTANCE( NumToCharLower_zh_CN )
 IMPL_CREATEINSTANCE( NumToCharUpper_zh_CN )
 IMPL_CREATEINSTANCE( NumToCharLower_zh_TW )
 IMPL_CREATEINSTANCE( NumToCharUpper_zh_TW )
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
 IMPL_CREATEINSTANCE( NumToCharHalfwidth )
 IMPL_CREATEINSTANCE( NumToCharFullwidth )
 IMPL_CREATEINSTANCE( NumToCharKanjiShort_ja_JP )
 IMPL_CREATEINSTANCE( NumToCharKanjiTraditional_ja_JP )
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_ko
 IMPL_CREATEINSTANCE( NumToCharHangul_ko )
 IMPL_CREATEINSTANCE( NumToCharLower_ko )
 IMPL_CREATEINSTANCE( NumToCharUpper_ko )
+#endif
 IMPL_CREATEINSTANCE( NumToCharIndic_ar )
 IMPL_UNO_CONSTRUCTOR( NumToCharEastIndic_ar )
+#if WITH_LOCALE_ALL || WITH_LOCALE_hi
 IMPL_CREATEINSTANCE( NumToCharIndic_hi )
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_th
 IMPL_CREATEINSTANCE( NumToChar_th )
+#endif
 
 #if WITH_LOCALE_ALL || WITH_LOCALE_zh
 IMPL_UNO_CONSTRUCTOR (CharToNumUpper_zh_CN)
@@ -235,12 +251,18 @@ IMPL_UNO_CONSTRUCTOR( NumToTextUpper_zh_TW )
 IMPL_UNO_CONSTRUCTOR( NumToTextFullwidth_zh_CN )
 IMPL_UNO_CONSTRUCTOR( NumToTextFullwidth_zh_TW )
 #endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
 IMPL_CREATEINSTANCE( NumToTextFullwidth_ja_JP )
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_ko
 IMPL_CREATEINSTANCE( NumToTextFullwidth_ko )
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
 IMPL_CREATEINSTANCE( NumToTextKanjiLongModern_ja_JP )
 IMPL_CREATEINSTANCE( NumToTextKanjiLongTraditional_ja_JP )
 IMPL_CREATEINSTANCE( NumToTextKanjiShortModern_ja_JP )
 IMPL_CREATEINSTANCE( NumToTextKanjiShortTraditional_ja_JP )
+#endif
 #if WITH_LOCALE_ALL || WITH_LOCALE_ko
 IMPL_UNO_CONSTRUCTOR (NumToTextInformalHangul_ko)
 IMPL_UNO_CONSTRUCTOR (NumToTextInformalLower_ko)
@@ -250,20 +272,28 @@ IMPL_UNO_CONSTRUCTOR (NumToTextFormalLower_ko)
 IMPL_UNO_CONSTRUCTOR (NumToTextFormalUpper_ko)
 #endif
 
+#if WITH_LOCALE_ALL || WITH_LOCALE_zh
 IMPL_CREATEINSTANCE( TextToNumLower_zh_CN )
 IMPL_CREATEINSTANCE( TextToNumUpper_zh_CN )
 IMPL_CREATEINSTANCE( TextToNumLower_zh_TW )
 IMPL_CREATEINSTANCE( TextToNumUpper_zh_TW )
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja
 IMPL_CREATEINSTANCE( TextToNumKanjiLongModern_ja_JP )
 IMPL_CREATEINSTANCE( TextToNumKanjiLongTraditional_ja_JP )
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_ko
 IMPL_CREATEINSTANCE( TextToNumFormalHangul_ko )
 IMPL_CREATEINSTANCE( TextToNumFormalLower_ko )
 IMPL_CREATEINSTANCE( TextToNumFormalUpper_ko )
 IMPL_CREATEINSTANCE( TextToNumInformalHangul_ko )
 IMPL_CREATEINSTANCE( TextToNumInformalUpper_ko )
 IMPL_CREATEINSTANCE( TextToNumInformalLower_ko )
+#endif
 
+#if WITH_LOCALE_ALL || WITH_LOCALE_zh
 IMPL_CREATEINSTANCE( NumToTextDate_zh )
+#endif
 #if WITH_LOCALE_ALL || WITH_LOCALE_ja
 IMPL_UNO_CONSTRUCTOR (NumToTextAIUFullWidth_ja_JP)
 IMPL_UNO_CONSTRUCTOR (NumToTextAIUHalfWidth_ja_JP)
@@ -277,8 +307,10 @@ IMPL_UNO_CONSTRUCTOR (NumToTextHangulSyllable_ko)
 IMPL_UNO_CONSTRUCTOR (NumToTextHangulCircledJamo_ko)
 IMPL_UNO_CONSTRUCTOR (NumToTextHangulCircledSyllable_ko)
 #endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_zh
 IMPL_CREATEINSTANCE( NumToTextTianGan_zh )
 IMPL_CREATEINSTANCE( NumToTextDiZi_zh )
+#endif
 
 #if WITH_LOCALE_ALL || WITH_LOCALE_ja
 IMPL_UNO_CONSTRUCTOR (FULLWIDTHKATAKANA_HALFWIDTHKATAKANA)
