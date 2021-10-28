@@ -24,6 +24,7 @@
 
 #include <config_options.h>
 
+#include <o3tl/span.hxx>
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <tools/poly.hxx>
@@ -505,8 +506,7 @@ private:
 
     Point       maStartPt;
     OUString    maStr;
-    std::unique_ptr<tools::Long[]>
-                mpDXAry;
+    std::vector<::tools::Long> maDXAry;
     sal_Int32   mnIndex;
     sal_Int32   mnLen;
 
@@ -516,7 +516,10 @@ public:
                         MetaTextArrayAction();
                         MetaTextArrayAction( const MetaTextArrayAction& rAction );
     MetaTextArrayAction( const Point& rStartPt, const OUString& rStr,
-                         const tools::Long* pDXAry, sal_Int32 nIndex,
+                         const std::vector<tools::Long>& rDXAry, sal_Int32 nIndex,
+                         sal_Int32 nLen );
+    MetaTextArrayAction( const Point& rStartPt, const OUString& rStr,
+                         o3tl::span<const tools::Long> pDXAry, sal_Int32 nIndex,
                          sal_Int32 nLen );
 
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -530,12 +533,12 @@ public:
     const OUString& GetText() const { return maStr; }
     sal_Int32       GetIndex() const { return mnIndex; }
     sal_Int32       GetLen() const { return mnLen; }
-    tools::Long*    GetDXArray() const { return mpDXAry.get(); }
+    const std::vector<tools::Long> & GetDXArray() const { return maDXAry; }
     void            SetPoint(const Point& rPt) { maStartPt = rPt; }
     void            SetText(const OUString& rStr) { maStr = rStr; }
     void            SetIndex(sal_Int32 rIndex) { mnIndex = rIndex; }
     void            SetLen(sal_Int32 rLen) { mnLen = rLen; }
-    void            SetDXArray(std::unique_ptr<tools::Long[]> aArray);
+    void            SetDXArray(std::vector<tools::Long> aArray);
 };
 
 class SAL_DLLPUBLIC_RTTI MetaStretchTextAction final : public MetaAction

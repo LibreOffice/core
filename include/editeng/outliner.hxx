@@ -395,7 +395,7 @@ public:
     sal_Int32           mnTextLen;
     sal_Int32           mnPara;
     const SvxFont&      mrFont;
-    const tools::Long*         mpDXArray;
+    o3tl::span<const tools::Long> mpDXArray;
 
     const EEngineData::WrongSpellVector*  mpWrongSpellVector;
     const SvxFieldData* mpFieldData;
@@ -421,7 +421,7 @@ public:
         sal_Int32 nTxtLen,
         const SvxFont& rFnt,
         sal_Int32 nPar,
-        const tools::Long* pDXArr,
+        o3tl::span<const tools::Long> pDXArr,
         const EEngineData::WrongSpellVector* pWrongSpellVector,
         const SvxFieldData* pFieldData,
         const css::lang::Locale* pLocale,
@@ -813,7 +813,7 @@ public:
 
     void DrawingText( const Point& rStartPos, const OUString& rText,
                               sal_Int32 nTextStart, sal_Int32 nTextLen,
-                              const tools::Long* pDXArray, const SvxFont& rFont,
+                              o3tl::span<const tools::Long> pDXArray, const SvxFont& rFont,
                               sal_Int32 nPara, sal_uInt8 nRightToLeft,
                               const EEngineData::WrongSpellVector* pWrongSpellVector,
                               const SvxFieldData* pFieldData,

@@ -157,7 +157,7 @@ namespace cppcanvas::internal
                 rLayoutWidth = *(std::max_element(rOffsets.begin(), rOffsets.end()));
             }
 
-            uno::Sequence< double > setupDXArray( const ::tools::Long*   pCharWidths,
+            uno::Sequence< double > setupDXArray( o3tl::span<const ::tools::Long> rCharWidths,
                                                   sal_Int32          nLen,
                                                   const OutDevState& rState )
             {
@@ -169,6 +169,7 @@ namespace cppcanvas::internal
                 // array, by circumventing integer-based
                 // OutDev-mapping
                 const double nScale( rState.mapModeTransform.get(0,0) );
+                ::tools::Long const * pCharWidths = rCharWidths.data();
                 for( int i = 0; i < nLen; ++i )
                 {
                     // TODO(F2): use correct scale direction
@@ -190,7 +191,7 @@ namespace cppcanvas::internal
 
                 rVDev.GetTextArray( rText, &aCharWidths, nStartPos, nLen );
 
-                return setupDXArray( aCharWidths.data(), nLen, rState );
+                return setupDXArray( { aCharWidths.data(), aCharWidths.size() }, nLen, rState );
             }
 
             ::basegfx::B2DPoint adaptStartPoint( const ::basegfx::B2DPoint&     rStartPoint,
@@ -1965,7 +1966,7 @@ namespace cppcanvas::internal
                                            const OUString&                  rText,
                                            sal_Int32                        nStartPos,
                                            sal_Int32                        nLen,
-                                           const ::tools::Long*                      pDXArray,
+                                           o3tl::span<const ::tools::Long>  pDXArray,
                                            VirtualDevice&                   rVDev,
                                            const CanvasSharedPtr&           rCanvas,
                                            const OutDevState&               rState,
@@ -2038,7 +2039,7 @@ namespace cppcanvas::internal
                 }
 
                 const uno::Sequence< double > aCharWidthSeq(
-                    pDXArray ?
+                    !pDXArray.empty() ?
                     setupDXArray( pDXArray, nLen, rState ) :
                     setupDXArray( rText,
                                   nStartPos,
@@ -2095,7 +2096,7 @@ namespace cppcanvas::internal
                                                              const OUString&                rText,
                                                              sal_Int32                      nStartPos,
                                                              sal_Int32                      nLen,
-                                                             const ::tools::Long*                    pDXArray,
+                                                             o3tl::span<const ::tools::Long> pDXArray,
                                                              VirtualDevice&                 rVDev,
                                                              const CanvasSharedPtr&         rCanvas,
                                                              const OutDevState&             rState,
@@ -2137,7 +2138,7 @@ namespace cppcanvas::internal
             // convert DX array to device coordinate system (and
             // create it in the first place, if pDXArray is NULL)
             const uno::Sequence< double > aCharWidths(
-                pDXArray ?
+                !pDXArray.empty() ?
                 setupDXArray( pDXArray, nLen, rState ) :
                 setupDXArray( rText,
                               nStartPos,
@@ -2154,7 +2155,7 @@ namespace cppcanvas::internal
 
             // no DX array, and no need to subset - no need to store
             // DX array, then.
-            if( !pDXArray && !bSubsettable )
+            if( pDXArray.empty() && !bSubsettable )
             {
                 // effects, or not?
                 if( !rState.textOverlineStyle &&

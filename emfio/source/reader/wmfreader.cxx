@@ -721,7 +721,8 @@ namespace emfio
                             IntersectClipRect( aRect );
                         }
                         SAL_INFO( "emfio", "\t\t\t Text : " << aText );
-                        std::unique_ptr<tools::Long[]> pDXAry, pDYAry;
+                        std::vector<tools::Long> aDXAry;
+                        std::unique_ptr<tools::Long[]> pDYAry;
                         auto nDxArySize =  nMaxStreamPos - mpInputStream->Tell();
                         auto nDxAryEntries = nDxArySize >> 1;
                         bool        bUseDXAry = false;
@@ -729,7 +730,7 @@ namespace emfio
                         if ( ( ( nDxAryEntries % nOriginalTextLen ) == 0 ) && ( nNewTextLen <= nOriginalTextLen ) )
                         {
                             sal_Int32 i; // needed just outside the for
-                            pDXAry.reset(new tools::Long[ nNewTextLen ]);
+                            aDXAry.resize( nNewTextLen );
                             if ( nOptions & ETO_PDY )
                             {
                                 pDYAry.reset(new tools::Long[ nNewTextLen ]);
@@ -767,7 +768,7 @@ namespace emfio
                                     }
                                 }
 
-                                pDXAry[ i ] = nDx;
+                                aDXAry[ i ] = nDx;
                                 if ( nOptions & ETO_PDY )
                                 {
                                     pDYAry[i] = nDy;
@@ -776,8 +777,8 @@ namespace emfio
                             if ( i == nNewTextLen )
                                 bUseDXAry = true;
                         }
-                        if ( pDXAry && bUseDXAry )
-                            DrawText( aPosition, aText, pDXAry.get(), pDYAry.get() );
+                        if ( bUseDXAry )
+                            DrawText( aPosition, aText, &aDXAry, pDYAry.get() );
                         else
                             DrawText( aPosition, aText );
                         if ( nOptions & ETO_CLIPPED )
@@ -1256,7 +1257,7 @@ namespace emfio
                                                 {
                                                     Point  aPt;
                                                     sal_uInt32  nStringLen, nDXCount;
-                                                    std::unique_ptr<tools::Long[]> pDXAry;
+                                                    std::vector<tools::Long> aDXAry;
                                                     SvMemoryStream aMemoryStream( nEscLen );
                                                     aMemoryStream.WriteBytes(pData.get(), nEscLen);
                                                     aMemoryStream.Seek( STREAM_SEEK_TO_BEGIN );
@@ -1274,15 +1275,15 @@ namespace emfio
                                                         if ( ( static_cast< sal_uInt64 >( nDXCount ) * sizeof( sal_Int32 ) ) >= ( nEscLen - aMemoryStream.Tell() ) )
                                                             nDXCount = 0;
                                                         if ( nDXCount )
-                                                            pDXAry.reset(new tools::Long[ nDXCount ]);
+                                                            aDXAry.resize(nDXCount);
                                                         for  (sal_uInt32 i = 0; i < nDXCount; i++ )
                                                         {
                                                             sal_Int32 val;
                                                             aMemoryStream.ReadInt32( val);
-                                                            pDXAry[ i ] = val;
+                                                            aDXAry[ i ] = val;
                                                         }
                                                         aMemoryStream.ReadUInt32(mnSkipActions);
-                                                        DrawText( aPt, aString, pDXAry.get() );
+                                                        DrawText( aPt, aString, aDXAry.empty() ? nullptr : &aDXAry );
                                                     }
                                                 }
                                             }

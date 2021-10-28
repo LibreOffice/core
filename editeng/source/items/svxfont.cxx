@@ -500,7 +500,7 @@ Size SvxFont::GetTextSize(const OutputDevice& rOut, const OUString &rTxt,
 
 void SvxFont::QuickDrawText( OutputDevice *pOut,
     const Point &rPos, const OUString &rTxt,
-    const sal_Int32 nIdx, const sal_Int32 nLen, const tools::Long* pDXArray ) const
+    const sal_Int32 nIdx, const sal_Int32 nLen, o3tl::span<const tools::Long> pDXArray ) const
 {
 
     // Font has to be selected in OutputDevice...
@@ -526,12 +526,12 @@ void SvxFont::QuickDrawText( OutputDevice *pOut,
 
     if( IsCapital() )
     {
-        DBG_ASSERT( !pDXArray, "DrawCapital not for TextArray!" );
+        DBG_ASSERT( pDXArray.empty(), "DrawCapital not for TextArray!" );
         DrawCapital( pOut, aPos, rTxt, nIdx, nLen );
     }
     else
     {
-        if ( IsKern() && !pDXArray )
+        if ( IsKern() && pDXArray.empty() )
         {
             Size aSize = GetPhysTxtSize( pOut, rTxt, nIdx, nLen );
 

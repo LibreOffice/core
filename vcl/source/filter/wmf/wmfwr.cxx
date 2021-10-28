@@ -442,7 +442,7 @@ void WMFWriter::WMFRecord_Escape( sal_uInt32 nEsc, sal_uInt32 nLen, const sal_In
 /* if return value is true, then a complete unicode string and also a polygon replacement has been written,
     so there is no more action necessary
 */
-bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& rUniStr, const tools::Long* pDXAry )
+bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& rUniStr, o3tl::span<const tools::Long> pDXAry )
 {
     bool bEscapeUsed = false;
 
@@ -509,7 +509,7 @@ bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& r
                 std::vector<tools::PolyPolygon> aPolyPolyVec;
                 if ( pVirDev->GetTextOutlines( aPolyPolyVec, rUniStr ) )
                 {
-                    sal_uInt32 nDXCount = pDXAry ? nStringLen : 0;
+                    sal_uInt32 nDXCount = !pDXAry.empty() ? nStringLen : 0;
                     sal_uInt32 nSkipActions = aPolyPolyVec.size();
                     sal_Int32 nStrmLen = 8 +
                                            + sizeof( nStringLen ) + ( nStringLen * 2 )
@@ -547,11 +547,11 @@ bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& r
 
 void WMFWriter::WMFRecord_ExtTextOut( const Point& rPoint,
                                       const OUString& rString,
-                                      const tools::Long* pDXAry )
+                                      o3tl::span<const tools::Long> pDXAry )
 {
     sal_Int32 nOriginalTextLen = rString.getLength();
 
-    if ( (nOriginalTextLen <= 1) || (pDXAry == nullptr) )
+    if ( (nOriginalTextLen <= 1) || pDXAry.empty() )
     {
         WMFRecord_TextOut(rPoint, rString);
         return;
@@ -562,7 +562,7 @@ void WMFWriter::WMFRecord_ExtTextOut( const Point& rPoint,
 }
 
 void WMFWriter::TrueExtTextOut( const Point& rPoint, const OUString& rString,
-                                const OString& rByteString, const tools::Long* pDXAry )
+                                const OString& rByteString, o3tl::span<const tools::Long> pDXAry )
 {
     WriteRecordHeader( 0, W_META_EXTTEXTOUT );
     WritePointYX( rPoint );
@@ -1162,7 +1162,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 SetAllAttr();
 
                 Point aPos( pA->GetRect().TopLeft() );
-                if ( !WMFRecord_Escape_Unicode( aPos, aTemp, nullptr ) )
+                if ( !WMFRecord_Escape_Unicode( aPos, aTemp, {} ) )
                     WMFRecord_TextOut( aPos, aTemp );
             }
             break;
@@ -1173,7 +1173,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 OUString aTemp = pA->GetText().copy( pA->GetIndex(), std::min<sal_Int32>(pA->GetText().getLength() - pA->GetIndex(), pA->GetLen()) );
                 aSrcLineInfo = LineInfo();
                 SetAllAttr();
-                if ( !WMFRecord_Escape_Unicode( pA->GetPoint(), aTemp, nullptr ) )
+                if ( !WMFRecord_Escape_Unicode( pA->GetPoint(), aTemp, {} ) )
                     WMFRecord_TextOut( pA->GetPoint(), aTemp );
             }
             break;
@@ -1185,8 +1185,8 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 OUString aTemp = pA->GetText().copy( pA->GetIndex(), std::min<sal_Int32>(pA->GetText().getLength() - pA->GetIndex(), pA->GetLen()) );
                 aSrcLineInfo = LineInfo();
                 SetAllAttr();
-                if ( !WMFRecord_Escape_Unicode( pA->GetPoint(), aTemp, pA->GetDXArray() ) )
-                    WMFRecord_ExtTextOut( pA->GetPoint(), aTemp, pA->GetDXArray() );
+                if ( !WMFRecord_Escape_Unicode( pA->GetPoint(), aTemp, { pA->GetDXArray().data(), pA->GetDXArray().size() } ) )
+                    WMFRecord_ExtTextOut( pA->GetPoint(), aTemp, { pA->GetDXArray().data(), pA->GetDXArray().size() } );
             }
             break;
 
@@ -1211,8 +1211,8 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                         aDXAry.clear();
                     aSrcLineInfo = LineInfo();
                     SetAllAttr();
-                    if ( !WMFRecord_Escape_Unicode( pA->GetPoint(), aTemp, aDXAry.empty() ? nullptr : aDXAry.data() ) )
-                        WMFRecord_ExtTextOut( pA->GetPoint(), aTemp, aDXAry.empty() ? nullptr : aDXAry.data() );
+                    if ( !WMFRecord_Escape_Unicode( pA->GetPoint(), aTemp, { aDXAry.data(), aDXAry.size() } ) )
+                        WMFRecord_ExtTextOut( pA->GetPoint(), aTemp, { aDXAry.data(), aDXAry.size() } );
                 }
             }
             break;
