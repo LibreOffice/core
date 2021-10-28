@@ -620,7 +620,7 @@ static void SetBaseAnlv(SwNumFormat &rNum, WW8_ANLV const &rAV, sal_uInt8 nSwLev
     }
 }
 
-void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, WW8_ANLV const &rAV,
+void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, int nLevel, WW8_ANLV const &rAV,
     const sal_uInt8* pText, size_t nStart, size_t nElements, bool bOutline)
 {
     if (nStart > nElements)
@@ -718,16 +718,20 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, WW8_ANLV const &rAV,
     if( !bInsert )
         return;
 
+    OUString sPrefix;
+    OUString sSuffix;
     if (rAV.cbTextBefore)
     {
-        OUString sP( sText.copy( 0, rAV.cbTextBefore ).makeStringAndClear() );
-        rNum.SetPrefix( sP );
+        sPrefix = sText.copy( 0, rAV.cbTextBefore ).makeStringAndClear();
     }
     if( rAV.cbTextAfter )
     {
-        OUString sP( rNum.GetSuffix() );
-        sP += sText.copy( rAV.cbTextBefore, rAV.cbTextAfter).makeStringAndClear();
-        rNum.SetSuffix( sP );
+        sSuffix = rNum.GetSuffix();
+        sSuffix += sText.copy( rAV.cbTextBefore, rAV.cbTextAfter).makeStringAndClear();
+    }
+    if (rAV.cbTextBefore || rAV.cbTextAfter)
+    {
+        rNum.SetListFormat(sPrefix, sSuffix, nLevel);
     }
 // The characters before and after multiple digits do not apply because
 // those are handled differently by the writer and the result is in most
@@ -746,7 +750,7 @@ void SwWW8ImplReader::SetAnld(SwNumRule* pNumR, WW8_ANLD const * pAD, sal_uInt8 
         m_bCurrentAND_fNumberAcross = 0 != pAD->fNumberAcross;
         WW8_ANLV const &rAV = pAD->eAnlv;
         SetBaseAnlv(aNF, rAV, nSwLevel);                    // set the base format
-        SetAnlvStrings(aNF, rAV, pAD->rgchAnld, 0, SAL_N_ELEMENTS(pAD->rgchAnld), bOutLine); // set the rest
+        SetAnlvStrings(aNF, nSwLevel, rAV, pAD->rgchAnld, 0, SAL_N_ELEMENTS(pAD->rgchAnld), bOutLine); // set the rest
     }
     pNumR->Set(nSwLevel, aNF);
 }
@@ -884,7 +888,7 @@ void SwWW8ImplReader::SetNumOlst(SwNumRule* pNumR, WW8_OLST* pO, sal_uInt8 nSwLe
 
     if (!m_bVer67)
         nTextOfs *= 2;
-    SetAnlvStrings(aNF, rAV, pO->rgch, nTextOfs, SAL_N_ELEMENTS(pO->rgch), true); // and apply
+    SetAnlvStrings(aNF, nSwLevel, rAV, pO->rgch, nTextOfs, SAL_N_ELEMENTS(pO->rgch), true); // and apply
     pNumR->Set(nSwLevel, aNF);
 }
 
