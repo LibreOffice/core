@@ -465,12 +465,12 @@ void VCLXGraphics::drawTextArray( sal_Int32 x, sal_Int32 y, const OUString& rTex
     if( mpOutputDevice )
     {
         InitOutputDevice( InitOutDevFlags::COLORS|InitOutDevFlags::FONT );
-        std::unique_ptr<tools::Long []> pDXA(new tools::Long[rText.getLength()]);
+        std::vector<tools::Long> aDXA(rText.getLength());
         for(int i = 0; i < rText.getLength(); i++)
         {
-            pDXA[i] = rLongs[i];
+            aDXA[i] = rLongs[i];
         }
-        mpOutputDevice->DrawTextArray( Point( x, y ), rText, pDXA.get() );
+        mpOutputDevice->DrawTextArray( Point( x, y ), rText, o3tl::span(aDXA.data(), aDXA.size()) );
     }
 }
 

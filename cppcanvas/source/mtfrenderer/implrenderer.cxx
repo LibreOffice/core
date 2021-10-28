@@ -858,7 +858,7 @@ namespace cppcanvas::internal
                                              const OUString&                rString,
                                              int                            nIndex,
                                              int                            nLength,
-                                             const ::tools::Long*                    pCharWidths,
+                                             o3tl::span<const ::tools::Long> pCharWidths,
                                              const ActionFactoryParameters& rParms,
                                              bool                           bSubsettableActions )
         {
@@ -996,16 +996,16 @@ namespace cppcanvas::internal
                 {
                     ::tools::Long nInterval = ( nWidth - nStrikeoutWidth * nLen ) / nLen;
                     nStrikeoutWidth += nInterval;
-                    ::tools::Long* pStrikeoutCharWidths = new ::tools::Long[nLen];
+                    std::vector<::tools::Long> aStrikeoutCharWidths(nLen);
 
                     for ( int i = 0;i<nLen; i++)
                     {
-                        pStrikeoutCharWidths[i] = nStrikeoutWidth;
+                        aStrikeoutCharWidths[i] = nStrikeoutWidth;
                     }
 
                     for ( int i = 1;i< nLen; i++ )
                     {
-                        pStrikeoutCharWidths[ i ] += pStrikeoutCharWidths[ i-1 ];
+                        aStrikeoutCharWidths[ i ] += aStrikeoutCharWidths[ i-1 ];
                     }
 
                     pStrikeoutTextAction =
@@ -1019,7 +1019,7 @@ namespace cppcanvas::internal
                             aStrikeoutText.makeStringAndClear(),
                             0/*nStartPos*/,
                             nLen,
-                            pStrikeoutCharWidths,
+                            { aStrikeoutCharWidths.data(), aStrikeoutCharWidths.size() },
                             rParms.mrVDev,
                             rParms.mrCanvas,
                             rState,
@@ -2464,7 +2464,7 @@ namespace cppcanvas::internal
                             sText,
                             pAct->GetIndex(),
                             nLen,
-                            nullptr,
+                            {},
                             rFactoryParms,
                             bSubsettableActions );
                     }
@@ -2485,7 +2485,7 @@ namespace cppcanvas::internal
                             sText,
                             pAct->GetIndex(),
                             nLen,
-                            pAct->GetDXArray(),
+                            { pAct->GetDXArray().data(), pAct->GetDXArray().size() },
                             rFactoryParms,
                             bSubsettableActions );
                     }
@@ -2593,7 +2593,7 @@ namespace cppcanvas::internal
                             sText,
                             pAct->GetIndex(),
                             nLen,
-                            aDXArray.data(),
+                            { aDXArray.data(), aDXArray.size() },
                             rFactoryParms,
                             bSubsettableActions );
                     }

@@ -675,7 +675,7 @@ namespace emfio
         );
         void                DrawText(Point& rPosition,
             OUString const & rString,
-            tools::Long* pDXArry = nullptr,
+            std::vector<tools::Long>* pDXArry = nullptr,
             tools::Long* pDYArry = nullptr,
             bool bRecordPath = false,
             sal_Int32 nGraphicsMode = GM_COMPATIBLE);

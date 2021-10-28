@@ -142,11 +142,11 @@ private:
     void WMFRecord_DeleteObject(sal_uInt16 nObjectHandle);
     void WMFRecord_Ellipse(const tools::Rectangle& rRect);
     void WMFRecord_Escape( sal_uInt32 nEsc, sal_uInt32 nLen, const sal_Int8* pData );
-    bool WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& rStr, const tools::Long* pDXAry );
-    void WMFRecord_ExtTextOut(const Point& rPoint, const OUString& rString, const tools::Long* pDXAry);
+    bool WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& rStr, o3tl::span<const tools::Long> pDXAry );
+    void WMFRecord_ExtTextOut(const Point& rPoint, const OUString& rString, o3tl::span<const tools::Long> pDXAry);
 
     void TrueExtTextOut(const Point& rPoint, const OUString& rString,
-                        const OString& rByteString, const tools::Long* pDXAry);
+                        const OString& rByteString, o3tl::span<const tools::Long> pDXAry);
     void TrueTextOut(const Point& rPoint, const OString& rString);
     void WMFRecord_LineTo(const Point & rPoint);
     void WMFRecord_MoveTo(const Point & rPoint);

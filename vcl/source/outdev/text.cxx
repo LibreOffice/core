@@ -871,7 +871,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
         if(mpFontInstance->mpConversion)
             pLayoutCache = nullptr;
 
-    std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, nullptr, eDefaultLayout, nullptr, pLayoutCache);
+    std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, {}, eDefaultLayout, nullptr, pLayoutCache);
     if(pSalLayout)
     {
         ImplDrawText( *pSalLayout );
@@ -919,7 +919,7 @@ float OutputDevice::approximate_digit_width() const
 }
 
 void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
-                                  const tools::Long* pDXAry,
+                                  o3tl::span<const tools::Long> pDXAry,
                                   sal_Int32 nIndex, sal_Int32 nLen, SalLayoutFlags flags,
                                   const SalLayoutGlyphs* pSalLayoutCache )
 {
@@ -967,7 +967,7 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<tools:
 
     // do layout
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen,
-            Point(0,0), 0, nullptr, eDefaultLayout, pLayoutCache, pSalLayoutCache);
+            Point(0,0), 0, {}, eDefaultLayout, pLayoutCache, pSalLayoutCache);
     if( !pSalLayout )
     {
         // The caller expects this to init the elements of pDXAry.
@@ -1022,9 +1022,10 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<tools:
     }
     if(pDXAry)
     {
+        pDXAry->resize(nLen);
         for( int i = 0; i < nLen; ++i )
         {
-            pDXAry[i] = basegfx::fround(pDXPixelArray[i]);
+            (*pDXAry)[i] = basegfx::fround(pDXPixelArray[i]);
         }
     }
     return basegfx::fround(nWidth);
@@ -1070,7 +1071,7 @@ void OutputDevice::GetCaretPositions( const OUString& rStr, tools::Long* pCaretX
         nLen = rStr.getLength() - nIndex;
 
     // layout complex text
-    std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, Point(0, 0), 0, nullptr,
+    std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, Point(0, 0), 0, {},
                                                        eDefaultLayout, nullptr, pGlyphs);
     if( !pSalLayout )
         return;
@@ -1244,7 +1245,7 @@ vcl::text::ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
 std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
                                     sal_Int32 nMinIndex, sal_Int32 nLen,
                                     const Point& rLogicalPos, tools::Long nLogicalWidth,
-                                    const tools::Long* pDXArray, SalLayoutFlags flags,
+                                    o3tl::span<const tools::Long> pDXArray, SalLayoutFlags flags,
          vcl::text::TextLayoutCache const* pLayoutCache,
          const SalLayoutGlyphs* pGlyphs) const
 {
@@ -1284,7 +1285,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
 
     std::unique_ptr<DeviceCoordinate[]> xDXPixelArray;
     DeviceCoordinate* pDXPixelArray(nullptr);
-    if( pDXArray)
+    if( !pDXArray.empty() )
     {
         if(mbMap)
         {
@@ -1305,10 +1306,10 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
             pDXPixelArray = xDXPixelArray.get();
             for( int i = 0; i < nLen; ++i )
             {
-                pDXPixelArray[i] = pDXArray[i];
+                pDXPixelArray[i] = (*pDXArray)[i];
             }
 #else /* !VCL_FLOAT_DEVICE_PIXEL */
-            pDXPixelArray = const_cast<DeviceCoordinate*>(pDXArray);
+            pDXPixelArray = const_cast<DeviceCoordinate*>(pDXArray.data());
 #endif /* !VCL_FLOAT_DEVICE_PIXEL */
         }
     }
@@ -1381,7 +1382,7 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, tools::Long nTextWid
          const SalLayoutGlyphs* pGlyphs) const
 {
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout( rStr, nIndex, nLen,
-            Point(0,0), 0, nullptr, eDefaultLayout, pLayoutCache, pGlyphs);
+            Point(0,0), 0, {}, eDefaultLayout, pLayoutCache, pGlyphs);
     sal_Int32 nRetVal = -1;
     if( pSalLayout )
     {
@@ -1414,7 +1415,7 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, tools::Long nTextWid
     rHyphenPos = -1;
 
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout( rStr, nIndex, nLen,
-            Point(0,0), 0, nullptr, eDefaultLayout, pLayoutCache);
+            Point(0,0), 0, {}, eDefaultLayout, pLayoutCache);
     sal_Int32 nRetVal = -1;
     if( pSalLayout )
     {
@@ -2256,7 +2257,7 @@ OUString OutputDevice::GetNonMnemonicString( const OUString& rStr, sal_Int32& rM
 bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
                                          const OUString& rStr, sal_Int32 nBase,
                                          sal_Int32 nIndex, sal_Int32 nLen,
-                                         sal_uLong nLayoutWidth, const tools::Long* pDXAry,
+                                         sal_uLong nLayoutWidth, o3tl::span<const tools::Long> pDXAry,
                                          const SalLayoutGlyphs* pGlyphs ) const
 {
     bool bRet = false;
@@ -2320,7 +2321,7 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
 bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
                                         const OUString& rStr, sal_Int32 nBase,
                                         sal_Int32 nIndex, sal_Int32 nLen,
-                                        sal_uLong nLayoutWidth, const tools::Long* pDXArray ) const
+                                        sal_uLong nLayoutWidth, o3tl::span<const tools::Long> pDXArray ) const
 {
     if (!InitFont())
         return false;
@@ -2407,7 +2408,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
 bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
                                         const OUString& rStr, sal_Int32 nBase,
                                         sal_Int32 nIndex, sal_Int32 nLen,
-                                        sal_uLong nLayoutWidth, const tools::Long* pDXArray ) const
+                                        sal_uLong nLayoutWidth, o3tl::span<const tools::Long> pDXArray ) const
 {
     rResultVector.clear();
 
@@ -2432,7 +2433,7 @@ bool OutputDevice::GetTextOutline( tools::PolyPolygon& rPolyPoly, const OUString
     // get the basegfx polypolygon vector
     basegfx::B2DPolyPolygonVector aB2DPolyPolyVector;
     if( !GetTextOutlines( aB2DPolyPolyVector, rStr, 0/*nBase*/, 0/*nIndex*/, /*nLen*/-1,
-                         /*nLayoutWidth*/0, /*pDXArray*/nullptr ) )
+                         /*nLayoutWidth*/0, /*pDXArray*/{} ) )
         return false;
 
     // convert and merge into a tool polypolygon
