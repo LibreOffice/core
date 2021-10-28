@@ -29,6 +29,7 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 
+#include <o3tl/span.hxx>
 #include <svl/typedwhich.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editstat.hxx>
@@ -497,7 +498,7 @@ public:
 
     virtual void DrawingText( const Point& rStartPos, const OUString& rText,
                               sal_Int32 nTextStart, sal_Int32 nTextLen,
-                              const tools::Long* pDXArray, const SvxFont& rFont,
+                              o3tl::span<const tools::Long> pDXArray, const SvxFont& rFont,
                               sal_Int32 nPara, sal_uInt8 nRightToLeft,
                               const EEngineData::WrongSpellVector* pWrongSpellVector,
                               const SvxFieldData* pFieldData,

@@ -57,6 +57,10 @@ public:
         assert(a != nullptr || len == 0);
     }
 
+    /** for assigning from span<T> to span<const T> */
+    constexpr span (span<typename std::remove_const<T>::type> other) noexcept
+        : data_(other.data()), size_(other.size()) {}
+
     constexpr bool empty() const noexcept { return size_ == 0; }
 
     constexpr iterator begin() const noexcept { return data_; }

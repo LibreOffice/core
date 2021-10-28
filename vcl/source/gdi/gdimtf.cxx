@@ -1463,7 +1463,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
             tools::Rectangle aRect;
             // hdu said base = index
             aMapVDev->GetTextBoundRect( aRect, pAct->GetText(), pAct->GetIndex(), pAct->GetIndex(), pAct->GetLen(),
-                                       0, pAct->GetDXArray() );
+                                       0, { pAct->GetDXArray().data(), pAct->GetDXArray().size() } );
             Point aPt( pAct->GetPoint() );
             aRect.Move( aPt.X(), aPt.Y() );
             ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, nullptr );
@@ -2257,7 +2257,7 @@ sal_uLong GDIMetaFile::GetSizeBytes() const
 
                 nSizeBytes += ( pTextArrayAction->GetText().getLength() * sizeof( sal_Unicode ) );
 
-                if( pTextArrayAction->GetDXArray() )
+                if( !pTextArrayAction->GetDXArray().empty() )
                     nSizeBytes += ( pTextArrayAction->GetLen() << 2 );
             }
             break;

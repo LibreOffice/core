@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 
+#include <o3tl/span.hxx>
 #include <tools/gen.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
@@ -969,7 +970,7 @@ public:
     */
     bool                        GetTextBoundRect( tools::Rectangle& rRect,
                                                   const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                                  sal_uLong nLayoutWidth = 0, const tools::Long* pDXArray = nullptr,
+                                                  sal_uLong nLayoutWidth = 0, o3tl::span<const tools::Long> pDXArray = {},
                                                   const SalLayoutGlyphs* pGlyphs = nullptr ) const;
 
     tools::Rectangle            ImplGetTextBoundRect( const SalLayout& ) const;
@@ -980,12 +981,12 @@ public:
     bool                        GetTextOutlines( PolyPolyVector&,
                                                  const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
                                                  sal_Int32 nLen = -1,
-                                                 sal_uLong nLayoutWidth = 0, const tools::Long* pDXArray = nullptr ) const;
+                                                 sal_uLong nLayoutWidth = 0, o3tl::span<const tools::Long> pDXArray = {} ) const;
 
     bool                        GetTextOutlines( basegfx::B2DPolyPolygonVector &rVector,
                                                  const OUString& rStr, sal_Int32 nBase, sal_Int32 nIndex = 0,
                                                  sal_Int32 nLen = -1,
-                                                 sal_uLong nLayoutWidth = 0, const tools::Long* pDXArray = nullptr ) const;
+                                                 sal_uLong nLayoutWidth = 0, o3tl::span<const tools::Long> pDXArray = {} ) const;
 
 
     OUString                    GetEllipsisString( const OUString& rStr, tools::Long nMaxWidth,
@@ -1050,7 +1051,7 @@ public:
     float                       approximate_digit_width() const;
 
     void                        DrawTextArray( const Point& rStartPt, const OUString& rStr,
-                                               const tools::Long* pDXAry,
+                                               o3tl::span<const tools::Long> pDXAry,
                                                sal_Int32 nIndex = 0,
                                                sal_Int32 nLen = -1,
                                                SalLayoutFlags flags = SalLayoutFlags::NONE,
@@ -1236,7 +1237,7 @@ public:
     std::unique_ptr<SalLayout>
                                 ImplLayout( const OUString&, sal_Int32 nIndex, sal_Int32 nLen,
                                             const Point& rLogicPos = Point(0,0), tools::Long nLogicWidth=0,
-                                            const tools::Long* pLogicDXArray=nullptr, SalLayoutFlags flags = SalLayoutFlags::NONE,
+                                            o3tl::span<const tools::Long> pLogicDXArray={}, SalLayoutFlags flags = SalLayoutFlags::NONE,
                                             vcl::text::TextLayoutCache const* = nullptr,
                                             const SalLayoutGlyphs* pGlyphs = nullptr) const;
     SAL_DLLPRIVATE vcl::text::ImplLayoutArgs ImplPrepareLayoutArgs( OUString&, const sal_Int32 nIndex, const sal_Int32 nLen,

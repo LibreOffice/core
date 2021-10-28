@@ -1193,7 +1193,7 @@ tools::Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
                 // #105987# ImplLayout takes everything in logical coordinates
                 std::unique_ptr<SalLayout> pSalLayout = rOut.ImplLayout( rTextAct.GetText(), rTextAct.GetIndex(),
                                                          rTextAct.GetLen(), rTextAct.GetPoint(),
-                                                         0, rTextAct.GetDXArray() );
+                                                         0, { rTextAct.GetDXArray().data(), rTextAct.GetDXArray().size() } );
                 if( pSalLayout )
                 {
                     tools::Rectangle aBoundRect( rOut.ImplGetTextBoundRect( *pSalLayout ) );

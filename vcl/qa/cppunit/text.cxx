@@ -692,7 +692,7 @@ void VclTextTest::testImplLayoutArgs_PrepareFallback_precalculatedglyphs()
 
     const OUString sTestString = "The quick\n jumped over";
     std::unique_ptr<SalLayout> pLayout
-        = pVirDev->ImplLayout(sTestString, 0, sTestString.getLength(), Point(0, 0), 0, nullptr,
+        = pVirDev->ImplLayout(sTestString, 0, sTestString.getLength(), Point(0, 0), 0, {},
                               SalLayoutFlags::GlyphItemsOnly);
     SalLayoutGlyphs aGlyphs = pLayout->GetGlyphs();
     SalLayoutGlyphsImpl* pGlyphsImpl = aGlyphs.Impl(1);

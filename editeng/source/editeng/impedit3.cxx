@@ -156,7 +156,7 @@ static void lcl_DrawRedLines( OutputDevice& rOutDev,
                               const Point& rPoint,
                               size_t nIndex,
                               size_t nMaxEnd,
-                              const tools::Long* pDXArray,
+                              o3tl::span<const tools::Long> pDXArray,
                               WrongList const * pWrongs,
                               Degree10 nOrientation,
                               const Point& rOrigin,
@@ -3258,7 +3258,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                 OUString aText;
                                 sal_Int32 nTextStart = 0;
                                 sal_Int32 nTextLen = 0;
-                                const tools::Long* pDXArray = nullptr;
+                                o3tl::span<const tools::Long> pDXArray;
                                 std::vector<tools::Long> aTmpDXArray;
 
                                 if ( rTextPortion.GetKind() == PortionKind::TEXT )
@@ -3266,7 +3266,8 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     aText = rPortion.GetNode()->GetString();
                                     nTextStart = nIndex;
                                     nTextLen = rTextPortion.GetLen();
-                                    pDXArray = pLine->GetCharPosArray().data() + (nIndex - pLine->GetStart());
+                                    pDXArray = o3tl::span(pLine->GetCharPosArray().data() + (nIndex - pLine->GetStart()),
+                                                    pLine->GetCharPosArray().size() - (nIndex - pLine->GetStart()));
 
                                     // Paint control characters (#i55716#)
                                     /* XXX: Given that there's special handling
@@ -3391,7 +3392,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
 
                                     aTmpFont.SetPhysFont(*GetRefDevice());
                                     aTmpFont.QuickGetTextSize( GetRefDevice(), aText, nTextStart, nTextLen, &aTmpDXArray );
-                                    pDXArray = aTmpDXArray.data();
+                                    pDXArray = o3tl::span(aTmpDXArray.data(), aTmpDXArray.size());
 
                                     // add a meta file comment if we record to a metafile
                                     if( bMetafileValid )
@@ -3417,7 +3418,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     // crash when accessing 0 pointer in pDXArray
                                     aTmpFont.SetPhysFont(*GetRefDevice());
                                     aTmpFont.QuickGetTextSize( GetRefDevice(), aText, 0, aText.getLength(), &aTmpDXArray );
-                                    pDXArray = aTmpDXArray.data();
+                                    pDXArray = o3tl::span(aTmpDXArray.data(), aTmpDXArray.size());
                                 }
 
                                 tools::Long nTxtWidth = rTextPortion.GetSize().Width();
@@ -3753,7 +3754,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     const Color aTextLineColor(rOutDev.GetTextLineColor());
 
                                     GetEditEnginePtr()->DrawingText(
-                                        aTmpPos, OUString(), 0, 0, nullptr,
+                                        aTmpPos, OUString(), 0, 0, {},
                                         aTmpFont, n, 0,
                                         nullptr,
                                         nullptr,
@@ -3802,7 +3803,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                 const Color aTextLineColor(rOutDev.GetTextLineColor());
 
                 GetEditEnginePtr()->DrawingText(
-                    aTmpPos, OUString(), 0, 0, nullptr,
+                    aTmpPos, OUString(), 0, 0, {},
                     aTmpFont, n, 0,
                     nullptr,
                     nullptr,

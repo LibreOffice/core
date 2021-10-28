@@ -200,10 +200,10 @@ private:
 
     void                ImplSetClipRegion( vcl::Region const & rRegion );
     void                ImplBmp( Bitmap const *, Bitmap const *, const Point &, double nWidth, double nHeight );
-    void                ImplText( const OUString& rUniString, const Point& rPos, const tools::Long* pDXArry, sal_Int32 nWidth, VirtualDevice const & rVDev );
+    void                ImplText( const OUString& rUniString, const Point& rPos, o3tl::span<const tools::Long> pDXArry, sal_Int32 nWidth, VirtualDevice const & rVDev );
     void                ImplSetAttrForText( const Point & rPoint );
     void                ImplWriteCharacter( char );
-    void                ImplWriteString( const OString&, VirtualDevice const & rVDev, const tools::Long* pDXArry, bool bStretch );
+    void                ImplWriteString( const OString&, VirtualDevice const & rVDev, o3tl::span<const tools::Long> pDXArry, bool bStretch );
     void                ImplDefineFont( const char*, const char* );
 
     void                ImplClosePathDraw();
@@ -742,7 +742,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 OUString  aUniStr = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
                 Point     aPoint( pA->GetPoint() );
 
-                ImplText( aUniStr, aPoint, nullptr, 0, rVDev );
+                ImplText( aUniStr, aPoint, {}, 0, rVDev );
             }
             break;
 
@@ -758,7 +758,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 OUString  aUniStr = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
                 Point     aPoint( pA->GetPoint() );
 
-                ImplText( aUniStr, aPoint, nullptr, pA->GetWidth(), rVDev );
+                ImplText( aUniStr, aPoint, {}, pA->GetWidth(), rVDev );
             }
             break;
 
@@ -768,7 +768,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 OUString  aUniStr = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
                 Point     aPoint( pA->GetPoint() );
 
-                ImplText( aUniStr, aPoint, pA->GetDXArray(), 0, rVDev );
+                ImplText( aUniStr, aPoint, { pA->GetDXArray().data(), pA->GetDXArray().size() }, 0, rVDev );
             }
             break;
 
@@ -1951,13 +1951,13 @@ void PSWriter::ImplWriteCharacter( char nChar )
     ImplWriteByte( static_cast<sal_uInt8>(nChar), PS_NONE );
 }
 
-void PSWriter::ImplWriteString( const OString& rString, VirtualDevice const & rVDev, const tools::Long* pDXArry, bool bStretch )
+void PSWriter::ImplWriteString( const OString& rString, VirtualDevice const & rVDev, o3tl::span<const tools::Long> pDXArry, bool bStretch )
 {
     sal_Int32 nLen = rString.getLength();
     if ( !nLen )
         return;
 
-    if ( pDXArry )
+    if ( !pDXArry.empty() )
     {
         double nx = 0;
 
@@ -1981,7 +1981,7 @@ void PSWriter::ImplWriteString( const OString& rString, VirtualDevice const & rV
     }
 }
 
-void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const tools::Long* pDXArry, sal_Int32 nWidth, VirtualDevice const & rVDev )
+void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, o3tl::span<const tools::Long> pDXArry, sal_Int32 nWidth, VirtualDevice const & rVDev )
 {
     if ( rUniString.isEmpty() )
         return;
@@ -2029,7 +2029,7 @@ void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const to
     else if ( ( mnTextMode == 1 ) || ( mnTextMode == 2 ) )  // normal text output
     {
         if ( mnTextMode == 2 )  // forcing output one complete text packet, by
-            pDXArry = nullptr;     // ignoring the kerning array
+            pDXArry = {};     // ignoring the kerning array
         ImplSetAttrForText( rPos );
         OString aStr(OUStringToOString(rUniString,
             maFont.GetCharSet()));
