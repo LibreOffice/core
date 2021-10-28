@@ -63,9 +63,7 @@
 {
     (void)pNotification;
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        // 'NSApplicationDefined' is deprecated: first deprecated in macOS 10.12
-    NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
+    NSEvent* pEvent = [NSEvent otherEventWithType: NSEventTypeApplicationDefined
                                location: NSZeroPoint
                                modifierFlags: 0
                                timestamp: [[NSProcessInfo processInfo] systemUptime]
@@ -74,7 +72,6 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
                                subtype: AquaSalInstance::AppExecuteSVMain
                                data1: 0
                                data2: 0 ];
-SAL_WNODEPRECATED_DECLARATIONS_POP
     assert( pEvent );
     [NSApp postEvent: pEvent atStart: NO];
 
@@ -87,38 +84,29 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 -(void)sendEvent:(NSEvent*)pEvent
 {
     NSEventType eType = [pEvent type];
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        // 'NSAlternateKeyMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSApplicationDefined' is deprecated: first deprecated in macOS 10.12
-        // 'NSClosableWindowMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSCommandKeyMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSControlKeyMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSKeyDown' is deprecated: first deprecated in macOS 10.12
-        // 'NSMiniaturizableWindowMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSShiftKeyMask' is deprecated: first deprecated in macOS 10.12
-    if( eType == NSApplicationDefined )
+    if( eType == NSEventTypeApplicationDefined )
     {
         AquaSalInstance::handleAppDefinedEvent( pEvent );
     }
-    else if( eType == NSKeyDown && ([pEvent modifierFlags] & NSCommandKeyMask) != 0 )
+    else if( eType == NSEventTypeKeyDown && ([pEvent modifierFlags] & NSEventModifierFlagCommand) != 0 )
     {
         NSWindow* pKeyWin = [NSApp keyWindow];
         if( pKeyWin && [pKeyWin isKindOfClass: [SalFrameWindow class]] )
         {
             AquaSalFrame* pFrame = [static_cast<SalFrameWindow*>(pKeyWin) getSalFrame];
-            unsigned int nModMask = ([pEvent modifierFlags] & (NSShiftKeyMask|NSControlKeyMask|NSAlternateKeyMask|NSCommandKeyMask));
+            unsigned int nModMask = ([pEvent modifierFlags] & (NSEventModifierFlagShift|NSEventModifierFlagControl|NSEventModifierFlagOption|NSEventModifierFlagCommand));
             /*
              * #i98949# - Cmd-M miniaturize window, Cmd-Option-M miniaturize all windows
              */
             if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"m"] )
             {
-                if ( nModMask == NSCommandKeyMask && ([pFrame->getNSWindow() styleMask] & NSMiniaturizableWindowMask) )
+                if ( nModMask == NSEventModifierFlagCommand && ([pFrame->getNSWindow() styleMask] & NSWindowStyleMaskMiniaturizable) )
                 {
                     [pFrame->getNSWindow() performMiniaturize: nil];
                     return;
                 }
 
-                if ( nModMask == ( NSCommandKeyMask | NSAlternateKeyMask ) )
+                if ( nModMask == ( NSEventModifierFlagCommand | NSEventModifierFlagOption ) )
                 {
                     [NSApp miniaturizeAll: nil];
                     return;
@@ -168,8 +156,8 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
             // precondition: this ONLY works because CMD-V (paste), CMD-C (copy) and CMD-X (cut) are
             // NOT localized, that is the same in all locales. Should this be
             // different in any locale, this hack will fail.
-            unsigned int nModMask = ([pEvent modifierFlags] & (NSShiftKeyMask|NSControlKeyMask|NSAlternateKeyMask|NSCommandKeyMask));
-            if( nModMask == NSCommandKeyMask )
+            unsigned int nModMask = ([pEvent modifierFlags] & (NSEventModifierFlagShift|NSEventModifierFlagControl|NSEventModifierFlagOption|NSEventModifierFlagCommand));
+            if( nModMask == NSEventModifierFlagCommand )
             {
 
                 if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"v"] )
@@ -198,7 +186,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
                         return;
                 }
             }
-            else if( nModMask == (NSCommandKeyMask|NSShiftKeyMask) )
+            else if( nModMask == (NSEventModifierFlagCommand|NSEventModifierFlagShift) )
             {
                 if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"Z"] )
                 {
@@ -208,7 +196,6 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
             }
         }
     }
-SAL_WNODEPRECATED_DECLARATIONS_POP
     [super sendEvent: pEvent];
 }
 

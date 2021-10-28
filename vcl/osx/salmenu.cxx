@@ -150,10 +150,7 @@ static void initAppMenu()
         action: @selector(showPreferences:)
         keyEquivalent: @","];
     [pString release];
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    // 'NSCommandKeyMask' is deprecated: first deprecated in macOS 10.12
-    [pNewItem setKeyEquivalentModifierMask: NSCommandKeyMask];
-SAL_WNODEPRECATED_DECLARATIONS_POP
+    [pNewItem setKeyEquivalentModifierMask: NSEventModifierFlagCommand];
     [pNewItem setTarget: pMainMenuSelector];
 
     [pAppMenu addItem:[NSMenuItem separatorItem]];
@@ -182,10 +179,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         action:@selector(hideOtherApplications:)
         keyEquivalent:@"h"];
     [pString release];
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    // 'NSCommandKeyMask' is deprecated: first deprecated in macOS 10.12
-    [pNewItem setKeyEquivalentModifierMask: NSCommandKeyMask | NSAlternateKeyMask];
-SAL_WNODEPRECATED_DECLARATIONS_POP
+    [pNewItem setKeyEquivalentModifierMask: NSEventModifierFlagCommand | NSEventModifierFlagOption];
 
     // Show All
     pString = CreateNSString(VclResId(SV_MENU_MAC_SHOWALL));
@@ -711,27 +705,21 @@ void AquaSalMenu::SetAccelerator( unsigned /*nPos*/, SalMenuItem* pSalMenuItem, 
     // should always use the command key
     int nItemModifier = 0;
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        // 'NSAlternateKeyMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSCommandKeyMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSControlKeyMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSShiftKeyMask' is deprecated: first deprecated in macOS 10.12
     if (nModifier & KEY_SHIFT)
     {
-        nItemModifier |= NSShiftKeyMask;   // actually useful only for function keys
+        nItemModifier |= NSEventModifierFlagShift;   // actually useful only for function keys
         if( nKeyCode >= KEY_A && nKeyCode <= KEY_Z )
             nCommandKey = nKeyCode - KEY_A + 'A';
     }
 
     if (nModifier & KEY_MOD1)
-        nItemModifier |= NSCommandKeyMask;
+        nItemModifier |= NSEventModifierFlagCommand;
 
     if(nModifier & KEY_MOD2)
-        nItemModifier |= NSAlternateKeyMask;
+        nItemModifier |= NSEventModifierFlagOption;
 
     if(nModifier & KEY_MOD3)
-        nItemModifier |= NSControlKeyMask;
-SAL_WNODEPRECATED_DECLARATIONS_POP
+        nItemModifier |= NSEventModifierFlagControl;
 
     AquaSalMenuItem *pAquaSalMenuItem = static_cast<AquaSalMenuItem *>(pSalMenuItem);
     NSString* pString = CreateNSString( OUString( &nCommandKey, 1 ) );

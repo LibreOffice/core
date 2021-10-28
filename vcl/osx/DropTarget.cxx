@@ -370,12 +370,7 @@ void SAL_CALL DropTarget::initialize(const Sequence< Any >& aArguments)
 
     id wnd = [mView window];
     NSWindow* parentWnd = [wnd parentWindow];
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        // 'NSClosableWindowMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSResizableWindowMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSTitleWindowMask' is deprecated: first deprecated in macOS 10.12
-    unsigned int topWndStyle = (NSTitledWindowMask | NSClosableWindowMask | NSResizableWindowMask);
-SAL_WNODEPRECATED_DECLARATIONS_POP
+    unsigned int topWndStyle = (NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskResizable);
     unsigned int wndStyles = [wnd styleMask] & topWndStyle;
 
     if (parentWnd == nil && (wndStyles == topWndStyle))

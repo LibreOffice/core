@@ -32,10 +32,7 @@
 void ImplNSAppPostEvent( short nEventId, BOOL bAtStart, int nUserData )
 {
     ReleasePoolHolder aPool;
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-// 'NSApplicationDefined' is deprecated: first deprecated in macOS 10.12
-    NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
-SAL_WNODEPRECATED_DECLARATIONS_POP
+    NSEvent* pEvent = [NSEvent otherEventWithType: NSEventTypeApplicationDefined
                                location: NSZeroPoint
                                modifierFlags: 0
                                timestamp: [[NSProcessInfo processInfo] systemUptime]

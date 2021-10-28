@@ -493,7 +493,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
         break;
 
     default:
-        OSL_FAIL( "unhandled NSApplicationDefined event" );
+        OSL_FAIL( "unhandled NSEventTypeApplicationDefined event" );
         break;
     }
 }
@@ -508,10 +508,8 @@ bool AquaSalInstance::RunInMainYield( bool bHandleAllCurrentEvents )
 
 static bool isWakeupEvent( NSEvent *pEvent )
 {
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    return NSApplicationDefined == [pEvent type]
+    return NSEventTypeApplicationDefined == [pEvent type]
         && AquaSalInstance::YieldWakeupEvent == static_cast<int>([pEvent subtype]);
-SAL_WNODEPRECATED_DECLARATIONS_POP
 }
 
 bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
@@ -659,36 +657,18 @@ bool AquaSalInstance::AnyInput( VclInputFlags nType )
     }
 
     unsigned/*NSUInteger*/ nEventMask = 0;
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        // 'NSFlagsChangedMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSKeyDownMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSKeyUpMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSLeftMouseDownMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSLeftMouseDraggedMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSLeftMouseUpMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSMouseEnteredMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSMouseExitedMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSOtherMouseDownMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSOtherMouseDraggedMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSOtherMouseUpMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSRightMouseDownMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSRightMouseDraggedMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSRightMouseUpMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSScrollWheelMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSTabletPoint' is deprecated: first deprecated in macOS 10.12
     if( nType & VclInputFlags::MOUSE)
         nEventMask |=
-            NSLeftMouseDownMask    | NSRightMouseDownMask    | NSOtherMouseDownMask |
-            NSLeftMouseUpMask      | NSRightMouseUpMask      | NSOtherMouseUpMask |
-            NSLeftMouseDraggedMask | NSRightMouseDraggedMask | NSOtherMouseDraggedMask |
-            NSScrollWheelMask |
-            // NSMouseMovedMask |
-            NSMouseEnteredMask | NSMouseExitedMask;
+            NSEventMaskLeftMouseDown    | NSEventMaskRightMouseDown    | NSEventMaskOtherMouseDown    |
+            NSEventMaskLeftMouseUp      | NSEventMaskRightMouseUp      | NSEventMaskOtherMouseUp      |
+            NSEventMaskLeftMouseDragged | NSEventMaskRightMouseDragged | NSEventMaskOtherMouseDragged |
+            NSEventMaskScrollWheel      |
+            // NSEventMaskMouseMoved    |
+            NSEventMaskMouseEntered     | NSEventMaskMouseExited;
     if( nType & VclInputFlags::KEYBOARD)
-        nEventMask |= NSKeyDownMask | NSKeyUpMask | NSFlagsChangedMask;
+        nEventMask |= NSEventMaskKeyDown | NSEventMaskKeyUp | NSEventMaskFlagsChanged;
     if( nType & VclInputFlags::OTHER)
-        nEventMask |= NSTabletPoint | NSApplicationDefinedMask;
-SAL_WNODEPRECATED_DECLARATIONS_POP
+        nEventMask |= NSEventMaskTabletPoint | NSEventMaskApplicationDefined;
     // TODO: VclInputFlags::PAINT / more VclInputFlags::OTHER
     if( !bool(nType) )
         return false;
