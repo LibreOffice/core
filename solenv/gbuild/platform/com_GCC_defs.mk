@@ -220,9 +220,9 @@ gb_DEBUGINFO_FLAGS=-g2
 endif
 gb_LINKER_DEBUGINFO_FLAGS=
 
-# GCC 11 defaults to -gdwarf-5, which GDB 10 doesn't support in split debug info
 ifeq ($(HAVE_GCC_SPLIT_DWARF),TRUE)
 gb_DEBUGINFO_FLAGS+=-gsplit-dwarf
+# GCC 11 defaults to -gdwarf-5, which GDB 10 doesn't support in split debug info
 ifeq ($(COM_IS_CLANG),)
 gb_DEBUGINFO_FLAGS+=-gdwarf-4
 endif
