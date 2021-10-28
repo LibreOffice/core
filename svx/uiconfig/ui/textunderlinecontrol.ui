@@ -77,7 +77,6 @@
             <property name="receives-default">True</property>
             <property name="relief">none</property>
             <property name="use-underline">True</property>
-            <property name="xalign">0</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -93,7 +92,6 @@
             <property name="tooltip-text" translatable="yes" context="textunderlinecontrol|single|tooltip_text">Single</property>
             <property name="image">image_spacing_1</property>
             <property name="relief">none</property>
-            <property name="xalign">0</property>
             <property name="always-show-image">True</property>
           </object>
           <packing>
@@ -110,7 +108,6 @@
             <property name="tooltip-text" translatable="yes" context="textunderlinecontrol|double|tooltip_text">Double</property>
             <property name="image">image_spacing_2</property>
             <property name="relief">none</property>
-            <property name="xalign">0</property>
             <property name="always-show-image">True</property>
           </object>
           <packing>
@@ -127,7 +124,6 @@
             <property name="tooltip-text" translatable="yes" context="textunderlinecontrol|bold|tooltip_text">Bold</property>
             <property name="image">image_spacing_3</property>
             <property name="relief">none</property>
-            <property name="xalign">0</property>
             <property name="always-show-image">True</property>
           </object>
           <packing>
@@ -144,7 +140,6 @@
             <property name="tooltip-text" translatable="yes" context="textunderlinecontrol|dot|tooltip_text">Dotted</property>
             <property name="image">image_spacing_4</property>
             <property name="relief">none</property>
-            <property name="xalign">0</property>
             <property name="always-show-image">True</property>
           </object>
           <packing>
@@ -161,7 +156,6 @@
             <property name="tooltip-text" translatable="yes" context="textunderlinecontrol|dotbold|tooltip_text">Dotted (Bold)</property>
             <property name="image">image_spacing_5</property>
             <property name="relief">none</property>
-            <property name="xalign">0</property>
             <property name="always-show-image">True</property>
           </object>
           <packing>
@@ -178,7 +172,6 @@
             <property name="tooltip-text" translatable="yes" context="textunderlinecontrol|dash|tooltip_text">Dash</property>
             <property name="image">image_spacing_6</property>
             <property name="relief">none</property>
-            <property name="xalign">0</property>
             <property name="always-show-image">True</property>
           </object>
           <packing>
@@ -195,7 +188,6 @@
             <property name="tooltip-text" translatable="yes" context="textunderlinecontrol|dashlong|tooltip_text">Long Dash</property>
             <property name="image">image_spacing_7</property>
             <property name="relief">none</property>
-            <property name="xalign">0</property>
             <property name="always-show-image">True</property>
           </object>
           <packing>
@@ -212,7 +204,6 @@
             <property name="tooltip-text" translatable="yes" context="textunderlinecontrol|dashdot|tooltip_text">Dot Dash</property>
             <property name="image">image_spacing_8</property>
             <property name="relief">none</property>
-            <property name="xalign">0</property>
             <property name="always-show-image">True</property>
           </object>
           <packing>
@@ -229,7 +220,6 @@
             <property name="tooltip-text" translatable="yes" context="textunderlinecontrol|dashdotdot|tooltip_text">Dot Dot Dash</property>
             <property name="image">image_spacing_9</property>
             <property name="relief">none</property>
-            <property name="xalign">0</property>
             <property name="always-show-image">True</property>
           </object>
           <packing>
@@ -246,7 +236,6 @@
             <property name="tooltip-text" translatable="yes" context="textunderlinecontrol|wave|tooltip_text">Wave</property>
             <property name="image">image_spacing_10</property>
             <property name="relief">none</property>
-            <property name="xalign">0</property>
             <property name="always-show-image">True</property>
           </object>
           <packing>
