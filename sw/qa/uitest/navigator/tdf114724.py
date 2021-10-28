@@ -45,6 +45,7 @@ class tdf114724(UITestCase):
             self.assertEqual(get_state_as_dict(xContentTree)["SelectEntryText"], "HEADING 1")
             self.assertEqual(get_state_as_dict(xContentTree)["SelectionCount"], "1")
 
+            xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "0"})) # 'root' button
             self.xUITest.executeCommand(".uno:Sidebar")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
