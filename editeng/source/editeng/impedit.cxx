@@ -2036,7 +2036,7 @@ void ImpEditView::DeselectAll()
     SetEditSelection(aNewSelection);
     // const_cast<EditPaM&>(GetEditSelection().Min()) = GetEditSelection().Max();
 
-    if (comphelper::LibreOfficeKit::isActive() && mpViewShell)
+    if (comphelper::LibreOfficeKit::isActive() && mpViewShell && pOutWin)
     {
         VclPtr<vcl::Window> pParent = pOutWin->GetParentWithLOKNotifier();
         if (pParent && pParent->GetLOKWindowId())
