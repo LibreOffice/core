@@ -104,219 +104,154 @@ i18npool_##ImplName##_get_implementation( \
 // -Wl,--gc_sections. It's mainly for iOS and Android that the
 // --with-locales option is intended anyway.
 
-IMPL_UNO_CONSTRUCTOR_CTX( IndexEntrySupplier )
-IMPL_UNO_CONSTRUCTOR_CTX( IndexEntrySupplier_asian )
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja
-IMPL_UNO_CONSTRUCTOR_CTX( IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_syllable )
-IMPL_UNO_CONSTRUCTOR_CTX( IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_consonant )
-IMPL_UNO_CONSTRUCTOR_CTX( IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_syllable )
-IMPL_UNO_CONSTRUCTOR_CTX( IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_consonant )
-#endif
-IMPL_UNO_CONSTRUCTOR_CTX( IndexEntrySupplier_Unicode )
-IMPL_UNO_CONSTRUCTOR_CTX( CalendarImpl )
-IMPL_UNO_CONSTRUCTOR( Calendar_gregorian )
-IMPL_UNO_CONSTRUCTOR( Calendar_hanja )
-IMPL_UNO_CONSTRUCTOR( Calendar_hanja_yoil )
-IMPL_UNO_CONSTRUCTOR( Calendar_gengou )
-IMPL_UNO_CONSTRUCTOR( Calendar_ROC )
-IMPL_UNO_CONSTRUCTOR( Calendar_dangi )
-IMPL_UNO_CONSTRUCTOR( Calendar_hijri )
-IMPL_UNO_CONSTRUCTOR( Calendar_jewish )
-IMPL_UNO_CONSTRUCTOR( Calendar_buddhist )
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja
-    IMPL_UNO_CONSTRUCTOR( BreakIterator_ja )
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_zh
-IMPL_UNO_CONSTRUCTOR( BreakIterator_zh )
-IMPL_UNO_CONSTRUCTOR( BreakIterator_zh_TW )
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ko
-IMPL_UNO_CONSTRUCTOR( BreakIterator_ko )
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_th
-IMPL_UNO_CONSTRUCTOR( BreakIterator_th )
-#endif
-IMPL_UNO_CONSTRUCTOR_CTX( ChapterCollator )
-IMPL_UNO_CONSTRUCTOR( Collator_Unicode )
-
-#if WITH_LOCALE_ALL || WITH_LOCALE_th
-IMPL_UNO_CONSTRUCTOR( InputSequenceChecker_th )
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_hi
-IMPL_UNO_CONSTRUCTOR( InputSequenceChecker_hi )
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ko
-IMPL_UNO_CONSTRUCTOR_CTX( TextConversion_ko )
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_zh
-IMPL_UNO_CONSTRUCTOR_CTX( TextConversion_zh )
-#endif
-
-IMPL_CREATEINSTANCE( Transliteration_u2l )
+IMPL_CREATEINSTANCE( ignoreDiacritics_CTL )
+IMPL_CREATEINSTANCE( ignoreKashida_CTL )
+IMPL_CREATEINSTANCE( NumToCharIndic_ar )
+IMPL_CREATEINSTANCE( NumToTextCircledNumber )
 IMPL_CREATEINSTANCE( Transliteration_l2u )
 IMPL_CREATEINSTANCE( Transliteration_sentencecase )
 IMPL_CREATEINSTANCE( Transliteration_titlecase )
 IMPL_CREATEINSTANCE( Transliteration_togglecase )
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja
-IMPL_CREATEINSTANCE( hiraganaToKatakana )
-IMPL_CREATEINSTANCE( katakanaToHiragana )
-IMPL_CREATEINSTANCE( fullwidthToHalfwidth )
-IMPL_CREATEINSTANCE( halfwidthToFullwidth )
-#endif
-
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja
-IMPL_CREATEINSTANCE( smallToLarge_ja_JP)
-IMPL_CREATEINSTANCE( largeToSmall_ja_JP)
-IMPL_CREATEINSTANCE( ignoreTraditionalKanji_ja_JP)
-IMPL_CREATEINSTANCE( ignoreTraditionalKana_ja_JP)
-IMPL_CREATEINSTANCE( ignoreMinusSign_ja_JP)
-IMPL_CREATEINSTANCE( ignoreIterationMark_ja_JP)
-IMPL_CREATEINSTANCE( ignoreSeparator_ja_JP)
-IMPL_CREATEINSTANCE( ignoreZiZu_ja_JP)
-IMPL_CREATEINSTANCE( ignoreBaFa_ja_JP)
-IMPL_CREATEINSTANCE( ignoreTiJi_ja_JP)
-IMPL_CREATEINSTANCE( ignoreHyuByu_ja_JP)
-IMPL_CREATEINSTANCE( ignoreSeZe_ja_JP)
-IMPL_CREATEINSTANCE( ignoreIandEfollowedByYa_ja_JP)
-IMPL_CREATEINSTANCE( ignoreKiKuFollowedBySa_ja_JP)
-IMPL_CREATEINSTANCE( ignoreSize_ja_JP)
-IMPL_CREATEINSTANCE( ignoreProlongedSoundMark_ja_JP)
-IMPL_CREATEINSTANCE( ignoreMiddleDot_ja_JP)
-IMPL_CREATEINSTANCE( ignoreSpace_ja_JP)
-#endif
-IMPL_CREATEINSTANCE( ignoreDiacritics_CTL)
-IMPL_CREATEINSTANCE( ignoreKashida_CTL)
-
-#if WITH_LOCALE_ALL || WITH_LOCALE_zh
-IMPL_CREATEINSTANCE( TextToChuyin_zh_TW )
-IMPL_CREATEINSTANCE( TextToPinyin_zh_CN )
-#endif
-
-#if WITH_LOCALE_ALL || WITH_LOCALE_zh
-IMPL_CREATEINSTANCE( NumToCharLower_zh_CN )
-IMPL_CREATEINSTANCE( NumToCharUpper_zh_CN )
-IMPL_CREATEINSTANCE( NumToCharLower_zh_TW )
-IMPL_CREATEINSTANCE( NumToCharUpper_zh_TW )
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja
-IMPL_CREATEINSTANCE( NumToCharHalfwidth )
-IMPL_CREATEINSTANCE( NumToCharFullwidth )
-IMPL_CREATEINSTANCE( NumToCharKanjiShort_ja_JP )
-IMPL_CREATEINSTANCE( NumToCharKanjiTraditional_ja_JP )
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ko
-IMPL_CREATEINSTANCE( NumToCharHangul_ko )
-IMPL_CREATEINSTANCE( NumToCharLower_ko )
-IMPL_CREATEINSTANCE( NumToCharUpper_ko )
-#endif
-IMPL_CREATEINSTANCE( NumToCharIndic_ar )
+IMPL_CREATEINSTANCE( Transliteration_u2l )
+IMPL_UNO_CONSTRUCTOR( Calendar_buddhist )
+IMPL_UNO_CONSTRUCTOR( Calendar_dangi )
+IMPL_UNO_CONSTRUCTOR( Calendar_gengou )
+IMPL_UNO_CONSTRUCTOR( Calendar_gregorian )
+IMPL_UNO_CONSTRUCTOR( Calendar_hanja )
+IMPL_UNO_CONSTRUCTOR( Calendar_hanja_yoil )
+IMPL_UNO_CONSTRUCTOR( Calendar_hijri )
+IMPL_UNO_CONSTRUCTOR( Calendar_jewish )
+IMPL_UNO_CONSTRUCTOR( Calendar_ROC )
+IMPL_UNO_CONSTRUCTOR( CharToNumEastIndic_ar )
+IMPL_UNO_CONSTRUCTOR( CharToNumIndic_ar )
+IMPL_UNO_CONSTRUCTOR( Collator_Unicode )
+IMPL_UNO_CONSTRUCTOR_CTX( CalendarImpl )
+IMPL_UNO_CONSTRUCTOR_CTX( ChapterCollator )
+IMPL_UNO_CONSTRUCTOR_CTX( IndexEntrySupplier )
+IMPL_UNO_CONSTRUCTOR_CTX( IndexEntrySupplier_asian )
+IMPL_UNO_CONSTRUCTOR_CTX( IndexEntrySupplier_Unicode )
 IMPL_UNO_CONSTRUCTOR( NumToCharEastIndic_ar )
+
 #if WITH_LOCALE_ALL || WITH_LOCALE_hi
 IMPL_CREATEINSTANCE( NumToCharIndic_hi )
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_th
-IMPL_CREATEINSTANCE( NumToChar_th )
-#endif
-
-#if WITH_LOCALE_ALL || WITH_LOCALE_zh
-IMPL_UNO_CONSTRUCTOR (CharToNumUpper_zh_CN)
-IMPL_UNO_CONSTRUCTOR (CharToNumLower_zh_CN)
-IMPL_UNO_CONSTRUCTOR (CharToNumUpper_zh_TW)
-IMPL_UNO_CONSTRUCTOR (CharToNumLower_zh_TW)
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja
-IMPL_UNO_CONSTRUCTOR( CharToNumFullwidth )
-IMPL_UNO_CONSTRUCTOR( CharToNumKanjiShort_ja_JP )
-IMPL_UNO_CONSTRUCTOR( CharToNumKanjiTraditional_ja_JP )
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ko
-IMPL_UNO_CONSTRUCTOR( CharToNumHangul_ko )
-IMPL_UNO_CONSTRUCTOR( CharToNumLower_ko )
-IMPL_UNO_CONSTRUCTOR( CharToNumUpper_ko )
-#endif
-IMPL_UNO_CONSTRUCTOR( CharToNumIndic_ar )
-IMPL_UNO_CONSTRUCTOR( CharToNumEastIndic_ar )
-#if WITH_LOCALE_ALL || WITH_LOCALE_hi
 IMPL_UNO_CONSTRUCTOR( CharToNumIndic_hi )
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_th
-IMPL_UNO_CONSTRUCTOR( CharToNum_th )
+IMPL_UNO_CONSTRUCTOR( InputSequenceChecker_hi )
 #endif
 
-#if WITH_LOCALE_ALL || WITH_LOCALE_zh
-IMPL_UNO_CONSTRUCTOR( NumToTextLower_zh_CN )
-IMPL_UNO_CONSTRUCTOR( NumToTextUpper_zh_CN )
-IMPL_UNO_CONSTRUCTOR( NumToTextLower_zh_TW )
-IMPL_UNO_CONSTRUCTOR( NumToTextUpper_zh_TW )
-IMPL_UNO_CONSTRUCTOR( NumToTextFullwidth_zh_CN )
-IMPL_UNO_CONSTRUCTOR( NumToTextFullwidth_zh_TW )
-#endif
 #if WITH_LOCALE_ALL || WITH_LOCALE_ja
+IMPL_CREATEINSTANCE( fullwidthToHalfwidth )
+IMPL_CREATEINSTANCE( halfwidthToFullwidth )
+IMPL_CREATEINSTANCE( hiraganaToKatakana )
+IMPL_CREATEINSTANCE( ignoreBaFa_ja_JP )
+IMPL_CREATEINSTANCE( ignoreHyuByu_ja_JP )
+IMPL_CREATEINSTANCE( ignoreIandEfollowedByYa_ja_JP )
+IMPL_CREATEINSTANCE( ignoreIterationMark_ja_JP )
+IMPL_CREATEINSTANCE( ignoreKiKuFollowedBySa_ja_JP )
+IMPL_CREATEINSTANCE( ignoreMiddleDot_ja_JP )
+IMPL_CREATEINSTANCE( ignoreMinusSign_ja_JP )
+IMPL_CREATEINSTANCE( ignoreProlongedSoundMark_ja_JP )
+IMPL_CREATEINSTANCE( ignoreSeparator_ja_JP )
+IMPL_CREATEINSTANCE( ignoreSeZe_ja_JP )
+IMPL_CREATEINSTANCE( ignoreSize_ja_JP )
+IMPL_CREATEINSTANCE( ignoreSpace_ja_JP )
+IMPL_CREATEINSTANCE( ignoreTiJi_ja_JP )
+IMPL_CREATEINSTANCE( ignoreTraditionalKana_ja_JP )
+IMPL_CREATEINSTANCE( ignoreTraditionalKanji_ja_JP )
+IMPL_CREATEINSTANCE( ignoreZiZu_ja_JP )
+IMPL_CREATEINSTANCE( katakanaToHiragana )
+IMPL_CREATEINSTANCE( largeToSmall_ja_JP )
+IMPL_CREATEINSTANCE( NumToCharFullwidth )
+IMPL_CREATEINSTANCE( NumToCharHalfwidth )
+IMPL_CREATEINSTANCE( NumToCharKanjiShort_ja_JP )
+IMPL_CREATEINSTANCE( NumToCharKanjiTraditional_ja_JP )
 IMPL_CREATEINSTANCE( NumToTextFullwidth_ja_JP )
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ko
-IMPL_CREATEINSTANCE( NumToTextFullwidth_ko )
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja
 IMPL_CREATEINSTANCE( NumToTextKanjiLongModern_ja_JP )
 IMPL_CREATEINSTANCE( NumToTextKanjiLongTraditional_ja_JP )
 IMPL_CREATEINSTANCE( NumToTextKanjiShortModern_ja_JP )
 IMPL_CREATEINSTANCE( NumToTextKanjiShortTraditional_ja_JP )
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ko
-IMPL_UNO_CONSTRUCTOR (NumToTextInformalHangul_ko)
-IMPL_UNO_CONSTRUCTOR (NumToTextInformalLower_ko)
-IMPL_UNO_CONSTRUCTOR (NumToTextInformalUpper_ko)
-IMPL_UNO_CONSTRUCTOR (NumToTextFormalHangul_ko)
-IMPL_UNO_CONSTRUCTOR (NumToTextFormalLower_ko)
-IMPL_UNO_CONSTRUCTOR (NumToTextFormalUpper_ko)
-#endif
-
-#if WITH_LOCALE_ALL || WITH_LOCALE_zh
-IMPL_CREATEINSTANCE( TextToNumLower_zh_CN )
-IMPL_CREATEINSTANCE( TextToNumUpper_zh_CN )
-IMPL_CREATEINSTANCE( TextToNumLower_zh_TW )
-IMPL_CREATEINSTANCE( TextToNumUpper_zh_TW )
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja
+IMPL_CREATEINSTANCE( smallToLarge_ja_JP )
 IMPL_CREATEINSTANCE( TextToNumKanjiLongModern_ja_JP )
 IMPL_CREATEINSTANCE( TextToNumKanjiLongTraditional_ja_JP )
+IMPL_UNO_CONSTRUCTOR( BreakIterator_ja )
+IMPL_UNO_CONSTRUCTOR( CharToNumFullwidth )
+IMPL_UNO_CONSTRUCTOR( CharToNumKanjiShort_ja_JP )
+IMPL_UNO_CONSTRUCTOR( CharToNumKanjiTraditional_ja_JP )
+IMPL_UNO_CONSTRUCTOR_CTX( IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_consonant )
+IMPL_UNO_CONSTRUCTOR_CTX( IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_syllable )
+IMPL_UNO_CONSTRUCTOR_CTX( IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_consonant )
+IMPL_UNO_CONSTRUCTOR_CTX( IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_syllable )
+IMPL_UNO_CONSTRUCTOR( FULLWIDTH_HALFWIDTH_LIKE_ASC )
+IMPL_UNO_CONSTRUCTOR( FULLWIDTHKATAKANA_HALFWIDTHKATAKANA )
+IMPL_UNO_CONSTRUCTOR( HALFWIDTH_FULLWIDTH_LIKE_JIS )
+IMPL_UNO_CONSTRUCTOR( HALFWIDTHKATAKANA_FULLWIDTHKATAKANA )
+IMPL_UNO_CONSTRUCTOR( NumToTextAIUFullWidth_ja_JP )
+IMPL_UNO_CONSTRUCTOR( NumToTextAIUHalfWidth_ja_JP )
+IMPL_UNO_CONSTRUCTOR( NumToTextIROHAFullWidth_ja_JP )
+IMPL_UNO_CONSTRUCTOR( NumToTextIROHAHalfWidth_ja_JP )
 #endif
+
 #if WITH_LOCALE_ALL || WITH_LOCALE_ko
+IMPL_CREATEINSTANCE( NumToCharHangul_ko )
+IMPL_CREATEINSTANCE( NumToCharLower_ko )
+IMPL_CREATEINSTANCE( NumToCharUpper_ko )
+IMPL_CREATEINSTANCE( NumToTextFullwidth_ko )
 IMPL_CREATEINSTANCE( TextToNumFormalHangul_ko )
 IMPL_CREATEINSTANCE( TextToNumFormalLower_ko )
 IMPL_CREATEINSTANCE( TextToNumFormalUpper_ko )
 IMPL_CREATEINSTANCE( TextToNumInformalHangul_ko )
-IMPL_CREATEINSTANCE( TextToNumInformalUpper_ko )
 IMPL_CREATEINSTANCE( TextToNumInformalLower_ko )
+IMPL_CREATEINSTANCE( TextToNumInformalUpper_ko )
+IMPL_UNO_CONSTRUCTOR( BreakIterator_ko )
+IMPL_UNO_CONSTRUCTOR( CharToNumHangul_ko )
+IMPL_UNO_CONSTRUCTOR( CharToNumLower_ko )
+IMPL_UNO_CONSTRUCTOR( CharToNumUpper_ko )
+IMPL_UNO_CONSTRUCTOR_CTX( TextConversion_ko )
+IMPL_UNO_CONSTRUCTOR( NumToTextFormalHangul_ko )
+IMPL_UNO_CONSTRUCTOR( NumToTextFormalLower_ko )
+IMPL_UNO_CONSTRUCTOR( NumToTextFormalUpper_ko )
+IMPL_UNO_CONSTRUCTOR( NumToTextHangulCircledJamo_ko )
+IMPL_UNO_CONSTRUCTOR( NumToTextHangulCircledSyllable_ko )
+IMPL_UNO_CONSTRUCTOR( NumToTextHangulJamo_ko )
+IMPL_UNO_CONSTRUCTOR( NumToTextHangulSyllable_ko )
+IMPL_UNO_CONSTRUCTOR( NumToTextInformalHangul_ko )
+IMPL_UNO_CONSTRUCTOR( NumToTextInformalLower_ko )
+IMPL_UNO_CONSTRUCTOR( NumToTextInformalUpper_ko )
+#endif
+
+#if WITH_LOCALE_ALL || WITH_LOCALE_th
+IMPL_CREATEINSTANCE( NumToChar_th )
+IMPL_UNO_CONSTRUCTOR( BreakIterator_th )
+IMPL_UNO_CONSTRUCTOR( CharToNum_th )
+IMPL_UNO_CONSTRUCTOR( InputSequenceChecker_th )
 #endif
 
 #if WITH_LOCALE_ALL || WITH_LOCALE_zh
+IMPL_CREATEINSTANCE( NumToCharLower_zh_CN )
+IMPL_CREATEINSTANCE( NumToCharLower_zh_TW )
+IMPL_CREATEINSTANCE( NumToCharUpper_zh_CN )
+IMPL_CREATEINSTANCE( NumToCharUpper_zh_TW )
 IMPL_CREATEINSTANCE( NumToTextDate_zh )
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja
-IMPL_UNO_CONSTRUCTOR (NumToTextAIUFullWidth_ja_JP)
-IMPL_UNO_CONSTRUCTOR (NumToTextAIUHalfWidth_ja_JP)
-IMPL_UNO_CONSTRUCTOR (NumToTextIROHAFullWidth_ja_JP)
-IMPL_UNO_CONSTRUCTOR (NumToTextIROHAHalfWidth_ja_JP)
-#endif
-IMPL_CREATEINSTANCE( NumToTextCircledNumber )
-#if WITH_LOCALE_ALL || WITH_LOCALE_ko
-IMPL_UNO_CONSTRUCTOR (NumToTextHangulJamo_ko)
-IMPL_UNO_CONSTRUCTOR (NumToTextHangulSyllable_ko)
-IMPL_UNO_CONSTRUCTOR (NumToTextHangulCircledJamo_ko)
-IMPL_UNO_CONSTRUCTOR (NumToTextHangulCircledSyllable_ko)
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_zh
-IMPL_CREATEINSTANCE( NumToTextTianGan_zh )
 IMPL_CREATEINSTANCE( NumToTextDiZi_zh )
-#endif
-
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja
-IMPL_UNO_CONSTRUCTOR (FULLWIDTHKATAKANA_HALFWIDTHKATAKANA)
-IMPL_UNO_CONSTRUCTOR (HALFWIDTHKATAKANA_FULLWIDTHKATAKANA)
-IMPL_UNO_CONSTRUCTOR (FULLWIDTH_HALFWIDTH_LIKE_ASC)
-IMPL_UNO_CONSTRUCTOR (HALFWIDTH_FULLWIDTH_LIKE_JIS)
+IMPL_CREATEINSTANCE( NumToTextTianGan_zh )
+IMPL_CREATEINSTANCE( TextToChuyin_zh_TW )
+IMPL_CREATEINSTANCE( TextToNumLower_zh_CN )
+IMPL_CREATEINSTANCE( TextToNumLower_zh_TW )
+IMPL_CREATEINSTANCE( TextToNumUpper_zh_CN )
+IMPL_CREATEINSTANCE( TextToNumUpper_zh_TW )
+IMPL_CREATEINSTANCE( TextToPinyin_zh_CN )
+IMPL_UNO_CONSTRUCTOR( BreakIterator_zh )
+IMPL_UNO_CONSTRUCTOR( BreakIterator_zh_TW )
+IMPL_UNO_CONSTRUCTOR( CharToNumLower_zh_CN )
+IMPL_UNO_CONSTRUCTOR( CharToNumLower_zh_TW )
+IMPL_UNO_CONSTRUCTOR( CharToNumUpper_zh_CN )
+IMPL_UNO_CONSTRUCTOR( CharToNumUpper_zh_TW )
+IMPL_UNO_CONSTRUCTOR_CTX( TextConversion_zh )
+IMPL_UNO_CONSTRUCTOR( NumToTextFullwidth_zh_CN )
+IMPL_UNO_CONSTRUCTOR( NumToTextFullwidth_zh_TW )
+IMPL_UNO_CONSTRUCTOR( NumToTextLower_zh_CN )
+IMPL_UNO_CONSTRUCTOR( NumToTextLower_zh_TW )
+IMPL_UNO_CONSTRUCTOR( NumToTextUpper_zh_CN )
+IMPL_UNO_CONSTRUCTOR( NumToTextUpper_zh_TW )
 #endif
 
 namespace {
@@ -348,6 +283,16 @@ const InstancesArray aInstances[] = {
     {   TRLT_SERVICELNAME_L10N,
         TRLT_IMPLNAME_PREFIX  "TOGGLE_CASE",
         &Transliteration_togglecase_CreateInstance },
+
+    IMPL_TRANSLITERATION_ITEM( NumToCharIndic_ar ),
+    IMPL_TRANSLITERATION_ITEM( ignoreDiacritics_CTL ),
+    IMPL_TRANSLITERATION_ITEM( ignoreKashida_CTL ),
+    IMPL_TRANSLITERATION_ITEM( NumToTextCircledNumber ),
+
+#if WITH_LOCALE_ALL || WITH_LOCALE_hi
+    IMPL_TRANSLITERATION_ITEM( NumToCharIndic_hi ),
+#endif
+
 #if WITH_LOCALE_ALL || WITH_LOCALE_ja
     {   TRLT_SERVICELNAME_L10N,
         TRLT_IMPLNAME_PREFIX  "HIRAGANA_KATAKANA",
@@ -361,101 +306,71 @@ const InstancesArray aInstances[] = {
     {   TRLT_SERVICELNAME_L10N,
         TRLT_IMPLNAME_PREFIX  "HALFWIDTH_FULLWIDTH",
         &halfwidthToFullwidth_CreateInstance },
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja
-    IMPL_TRANSLITERATION_ITEM (smallToLarge_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (largeToSmall_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (ignoreTraditionalKanji_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (ignoreTraditionalKana_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (ignoreMinusSign_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (ignoreIterationMark_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (ignoreSeparator_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (ignoreZiZu_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (ignoreBaFa_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (ignoreTiJi_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (ignoreHyuByu_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (ignoreSeZe_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (ignoreIandEfollowedByYa_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (ignoreKiKuFollowedBySa_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (ignoreSize_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (ignoreProlongedSoundMark_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (ignoreMiddleDot_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (ignoreSpace_ja_JP),
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_zh
-    IMPL_TRANSLITERATION_ITEM (TextToPinyin_zh_CN),
-    IMPL_TRANSLITERATION_ITEM (TextToChuyin_zh_TW),
-#endif
-    IMPL_TRANSLITERATION_ITEM( ignoreDiacritics_CTL),
-    IMPL_TRANSLITERATION_ITEM (ignoreKashida_CTL),
 
-#if WITH_LOCALE_ALL || WITH_LOCALE_zh
-    IMPL_TRANSLITERATION_ITEM (NumToCharUpper_zh_CN),
-    IMPL_TRANSLITERATION_ITEM (NumToCharLower_zh_CN),
-    IMPL_TRANSLITERATION_ITEM (NumToCharUpper_zh_TW),
-    IMPL_TRANSLITERATION_ITEM (NumToCharLower_zh_TW),
+    IMPL_TRANSLITERATION_ITEM( ignoreBaFa_ja_JP ),
+    IMPL_TRANSLITERATION_ITEM( ignoreHyuByu_ja_JP ),
+    IMPL_TRANSLITERATION_ITEM( ignoreIandEfollowedByYa_ja_JP ),
+    IMPL_TRANSLITERATION_ITEM( ignoreIterationMark_ja_JP ),
+    IMPL_TRANSLITERATION_ITEM( ignoreKiKuFollowedBySa_ja_JP ),
+    IMPL_TRANSLITERATION_ITEM( ignoreMiddleDot_ja_JP ),
+    IMPL_TRANSLITERATION_ITEM( ignoreMinusSign_ja_JP ),
+    IMPL_TRANSLITERATION_ITEM( ignoreProlongedSoundMark_ja_JP ),
+    IMPL_TRANSLITERATION_ITEM( ignoreSeparator_ja_JP ),
+    IMPL_TRANSLITERATION_ITEM( ignoreSeZe_ja_JP ),
+    IMPL_TRANSLITERATION_ITEM( ignoreSize_ja_JP ),
+    IMPL_TRANSLITERATION_ITEM( ignoreSpace_ja_JP ),
+    IMPL_TRANSLITERATION_ITEM( ignoreTiJi_ja_JP ),
+    IMPL_TRANSLITERATION_ITEM( ignoreTraditionalKana_ja_JP ),
+    IMPL_TRANSLITERATION_ITEM( ignoreTraditionalKanji_ja_JP ),
+    IMPL_TRANSLITERATION_ITEM( ignoreZiZu_ja_JP ),
+    IMPL_TRANSLITERATION_ITEM( largeToSmall_ja_JP ),
+    IMPL_TRANSLITERATION_ITEM( NumToCharFullwidth ),
+    IMPL_TRANSLITERATION_ITEM( NumToCharHalfwidth ),
+    IMPL_TRANSLITERATION_ITEM( NumToCharKanjiShort_ja_JP ),
+    IMPL_TRANSLITERATION_ITEM( NumToCharKanjiTraditional_ja_JP ),
+    IMPL_TRANSLITERATION_ITEM( NumToTextFullwidth_ja_JP ),
+    IMPL_TRANSLITERATION_ITEM( NumToTextKanjiLongModern_ja_JP ),
+    IMPL_TRANSLITERATION_ITEM( NumToTextKanjiLongTraditional_ja_JP ),
+    IMPL_TRANSLITERATION_ITEM( NumToTextKanjiShortModern_ja_JP ),
+    IMPL_TRANSLITERATION_ITEM( NumToTextKanjiShortTraditional_ja_JP ),
+    IMPL_TRANSLITERATION_ITEM( smallToLarge_ja_JP ),
+    IMPL_TRANSLITERATION_ITEM( TextToNumKanjiLongModern_ja_JP ),
+    IMPL_TRANSLITERATION_ITEM( TextToNumKanjiLongTraditional_ja_JP ),
 #endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja
-    IMPL_TRANSLITERATION_ITEM (NumToCharHalfwidth),
-    IMPL_TRANSLITERATION_ITEM (NumToCharFullwidth),
-    IMPL_TRANSLITERATION_ITEM (NumToCharKanjiShort_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (NumToCharKanjiTraditional_ja_JP),
-#endif
+
 #if WITH_LOCALE_ALL || WITH_LOCALE_ko
-    IMPL_TRANSLITERATION_ITEM (NumToCharLower_ko),
-    IMPL_TRANSLITERATION_ITEM (NumToCharUpper_ko),
-    IMPL_TRANSLITERATION_ITEM (NumToCharHangul_ko),
+    IMPL_TRANSLITERATION_ITEM( NumToCharHangul_ko ),
+    IMPL_TRANSLITERATION_ITEM( NumToCharLower_ko ),
+    IMPL_TRANSLITERATION_ITEM( NumToCharUpper_ko ),
+    IMPL_TRANSLITERATION_ITEM( NumToTextFullwidth_ko ),
+    IMPL_TRANSLITERATION_ITEM( TextToNumFormalHangul_ko ),
+    IMPL_TRANSLITERATION_ITEM( TextToNumFormalLower_ko ),
+    IMPL_TRANSLITERATION_ITEM( TextToNumFormalUpper_ko ),
+    IMPL_TRANSLITERATION_ITEM( TextToNumInformalHangul_ko ),
+    IMPL_TRANSLITERATION_ITEM( TextToNumInformalLower_ko ),
+    IMPL_TRANSLITERATION_ITEM( TextToNumInformalUpper_ko ),
 #endif
-    IMPL_TRANSLITERATION_ITEM (NumToCharIndic_ar),
-#if WITH_LOCALE_ALL || WITH_LOCALE_hi
-    IMPL_TRANSLITERATION_ITEM (NumToCharIndic_hi),
-#endif
+
 #if WITH_LOCALE_ALL || WITH_LOCALE_th
-    IMPL_TRANSLITERATION_ITEM (NumToChar_th),
-#endif
-
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja
-    IMPL_TRANSLITERATION_ITEM (NumToTextFullwidth_ja_JP),
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ko
-    IMPL_TRANSLITERATION_ITEM (NumToTextFullwidth_ko),
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja
-    IMPL_TRANSLITERATION_ITEM (NumToTextKanjiLongModern_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (NumToTextKanjiLongTraditional_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (NumToTextKanjiShortModern_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (NumToTextKanjiShortTraditional_ja_JP),
+    IMPL_TRANSLITERATION_ITEM( NumToChar_th ),
 #endif
 
 #if WITH_LOCALE_ALL || WITH_LOCALE_zh
-    IMPL_TRANSLITERATION_ITEM (TextToNumUpper_zh_CN),
-    IMPL_TRANSLITERATION_ITEM (TextToNumLower_zh_CN),
-    IMPL_TRANSLITERATION_ITEM (TextToNumUpper_zh_TW),
-    IMPL_TRANSLITERATION_ITEM (TextToNumLower_zh_TW),
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja
-    IMPL_TRANSLITERATION_ITEM (TextToNumKanjiLongModern_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (TextToNumKanjiLongTraditional_ja_JP),
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ko
-    IMPL_TRANSLITERATION_ITEM (TextToNumInformalHangul_ko),
-    IMPL_TRANSLITERATION_ITEM (TextToNumInformalLower_ko),
-    IMPL_TRANSLITERATION_ITEM (TextToNumInformalUpper_ko),
-    IMPL_TRANSLITERATION_ITEM (TextToNumFormalHangul_ko),
-    IMPL_TRANSLITERATION_ITEM (TextToNumFormalLower_ko),
-    IMPL_TRANSLITERATION_ITEM (TextToNumFormalUpper_ko),
+    IMPL_TRANSLITERATION_ITEM( NumToCharLower_zh_CN ),
+    IMPL_TRANSLITERATION_ITEM( NumToCharLower_zh_TW ),
+    IMPL_TRANSLITERATION_ITEM( NumToCharUpper_zh_CN ),
+    IMPL_TRANSLITERATION_ITEM( NumToCharUpper_zh_TW ),
+    IMPL_TRANSLITERATION_ITEM( NumToTextDate_zh ),
+    IMPL_TRANSLITERATION_ITEM( NumToTextDiZi_zh ),
+    IMPL_TRANSLITERATION_ITEM( NumToTextTianGan_zh ),
+    IMPL_TRANSLITERATION_ITEM( TextToChuyin_zh_TW ),
+    IMPL_TRANSLITERATION_ITEM( TextToNumLower_zh_CN ),
+    IMPL_TRANSLITERATION_ITEM( TextToNumLower_zh_TW ),
+    IMPL_TRANSLITERATION_ITEM( TextToNumUpper_zh_CN ),
+    IMPL_TRANSLITERATION_ITEM( TextToNumUpper_zh_TW ),
+    IMPL_TRANSLITERATION_ITEM( TextToPinyin_zh_CN ),
 #endif
 
-#if WITH_LOCALE_ALL || WITH_LOCALE_zh
-    IMPL_TRANSLITERATION_ITEM (NumToTextDate_zh),
-#endif
-    IMPL_TRANSLITERATION_ITEM (NumToTextCircledNumber),
-#if WITH_LOCALE_ALL || WITH_LOCALE_zh
-    IMPL_TRANSLITERATION_ITEM (NumToTextTianGan_zh),
-    IMPL_TRANSLITERATION_ITEM (NumToTextDiZi_zh),
-#endif
-
-// add here new services !!
     { nullptr, nullptr, nullptr }
 };
 
