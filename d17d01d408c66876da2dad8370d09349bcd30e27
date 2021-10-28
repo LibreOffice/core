@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23599f95_126579a5",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-28T15:29:17Z",
+      "side": 1,
+      "message": "(just a general note that it is easier to understand patches if you refrain from adding in random reformatting---which you do here in four places)",
+      "revId": "d17d01d408c66876da2dad8370d09349bcd30e27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
