@@ -170,19 +170,20 @@ KeynoteImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& Descr
 
     if (nNewLength > nLength)
         Descriptor.realloc(nNewLength);
+    auto pDescriptor = Descriptor.getArray();
 
     if (nTypeNameLocation == -1)
     {
         assert(nLength < nNewLength);
         nTypeNameLocation = nLength++;
-        Descriptor[nTypeNameLocation].Name = "TypeName";
+        pDescriptor[nTypeNameLocation].Name = "TypeName";
     }
 
     if (bIsPackage && (nComponentDataLocation == -1))
     {
         assert(nLength < nNewLength);
         nComponentDataLocation = nLength++;
-        Descriptor[nComponentDataLocation].Name = "ComponentData";
+        pDescriptor[nComponentDataLocation].Name = "ComponentData";
     }
 
     if (bIsPackage)
@@ -194,8 +195,8 @@ KeynoteImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& Descr
             beans::NamedValue aValue;
             aValue.Name = "IsPackage";
             aValue.Value <<= true;
-            lComponentDataNV[nCDSize] = aValue;
-            Descriptor[nComponentDataLocation].Value <<= lComponentDataNV;
+            lComponentDataNV.getArray()[nCDSize] = aValue;
+            pDescriptor[nComponentDataLocation].Value <<= lComponentDataNV;
         }
         else
         {
@@ -206,16 +207,16 @@ KeynoteImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& Descr
             aProp.Value <<= true;
             aProp.Handle = -1;
             aProp.State = beans::PropertyState_DIRECT_VALUE;
-            lComponentDataPV[nCDSize] = aProp;
-            Descriptor[nComponentDataLocation].Value <<= lComponentDataPV;
+            lComponentDataPV.getArray()[nCDSize] = aProp;
+            pDescriptor[nComponentDataLocation].Value <<= lComponentDataPV;
         }
     }
 
     if (bUCBContentChanged)
-        Descriptor[nUCBContentLocation].Value <<= xContent;
+        pDescriptor[nUCBContentLocation].Value <<= xContent;
 
     const OUString sTypeName("impress_AppleKeynote");
-    Descriptor[nTypeNameLocation].Value <<= sTypeName;
+    pDescriptor[nTypeNameLocation].Value <<= sTypeName;
 
     return sTypeName;
 }
