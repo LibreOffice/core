@@ -38,6 +38,7 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 
 #include <comphelper/oslfile2streamwrap.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <osl/file.hxx>
@@ -388,9 +389,8 @@ void XMLFilterTestDialog::onExportBrowse()
 
             Reference< XDesktop2 > xLoader = Desktop::create( mxContext );
             Reference< XInteractionHandler2 > xInter = InteractionHandler::createWithParent(mxContext, nullptr);
-            Sequence< PropertyValue > aArguments(1);
-            aArguments[0].Name = "InteractionHandler";
-            aArguments[0].Value <<= xInter;
+            Sequence< PropertyValue > aArguments{ comphelper::makePropertyValue("InteractionHandler",
+                                                                                xInter) };
             Reference< XComponent > xComp( xLoader->loadComponentFromURL( m_sExportRecentFile, "_default", 0, aArguments ) );
             if( xComp.is() )
             {
@@ -432,19 +432,20 @@ void XMLFilterTestDialog::doExport( const Reference< XComponent >& xComp )
                 Reference< XOutputStream > xIS( new comphelper::OSLOutputStreamWrapper( aOutputFile ) );
                 int bUseDocType = m_xFilterInfo->maDocType.isEmpty()  ? 0 : 1;
                 Sequence< PropertyValue > aSourceData( 2 + bUseDocType );
+                auto pSourceData = aSourceData.getArray();
                 int i = 0;
 
 
-                aSourceData[i  ].Name = "OutputStream";
-                aSourceData[i++].Value <<= xIS;
+                pSourceData[i  ].Name = "OutputStream";
+                pSourceData[i++].Value <<= xIS;
 
-                aSourceData[i].Name = "Indent";
-                aSourceData[i++].Value <<= true;
+                pSourceData[i].Name = "Indent";
+                pSourceData[i++].Value <<= true;
 
                 if( bUseDocType )
                 {
-                    aSourceData[i  ].Name = "DocType_Public";
-                    aSourceData[i++].Value <<= m_xFilterInfo->maDocType;
+                    pSourceData[i  ].Name = "DocType_Public";
+                    pSourceData[i++].Value <<= m_xFilterInfo->maDocType;
                 }
 
                 Reference< XExportFilter > xExporter( mxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.documentconversion.XSLTFilter", mxContext ), UNO_QUERY );
@@ -490,9 +491,8 @@ void XMLFilterTestDialog::doExport( const Reference< XComponent >& xComp )
                         {
                             xExporter2->setSourceDocument( xComp );
 
-                            Sequence< PropertyValue > aDescriptor( 1 );
-                            aDescriptor[0].Name = "FileName";
-                            aDescriptor[0].Value <<= aTempFileURL;
+                            Sequence< PropertyValue > aDescriptor{comphelper::makePropertyValue(
+                                "FileName", aTempFileURL) };
 
                             if( xFilter->filter( aDescriptor ) )
                                 displayXMLFile( aTempFileURL );
@@ -569,11 +569,10 @@ void XMLFilterTestDialog::import( const OUString& rURL )
         Reference< XDesktop2 > xLoader = Desktop::create( mxContext );
         Reference< XInteractionHandler2 > xInter = InteractionHandler::createWithParent(mxContext, nullptr);
 
-        Sequence< PropertyValue > aArguments(2);
-        aArguments[0].Name = "FilterName";
-        aArguments[0].Value <<= m_xFilterInfo->maFilterName;
-        aArguments[1].Name = "InteractionHandler";
-        aArguments[1].Value <<= xInter;
+        Sequence< PropertyValue > aArguments{
+            comphelper::makePropertyValue("FilterName", m_xFilterInfo->maFilterName),
+            comphelper::makePropertyValue("InteractionHandler", xInter)
+        };
 
         xLoader->loadComponentFromURL( rURL, "_default", 0, aArguments );
 
@@ -591,17 +590,11 @@ void XMLFilterTestDialog::import( const OUString& rURL )
 
                 Reference< XInputStream > xIS( new comphelper::OSLInputStreamWrapper( aInputFile ) );
 
-                Sequence< PropertyValue > aSourceData( 3 );
-                int i = 0;
-
-                aSourceData[i  ].Name = "InputStream";
-                aSourceData[i++].Value <<= xIS;
-
-                aSourceData[i  ].Name = "FileName";
-                aSourceData[i++].Value <<= rURL;
-
-                aSourceData[i  ].Name = "Indent";
-                aSourceData[i++].Value <<= true;
+                Sequence< PropertyValue > aSourceData{
+                    comphelper::makePropertyValue("InputStream", xIS),
+                    comphelper::makePropertyValue("FileName", rURL),
+                    comphelper::makePropertyValue("Indent", true)
+                };
 
                 Reference< XWriter > xWriter = Writer::create( mxContext );
 

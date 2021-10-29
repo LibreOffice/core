@@ -668,7 +668,7 @@ private:
         }
 
         mnFirstRead = aStream->ReadBytes(
-            &mnFirstBytes[0],
+            &mnFirstBytes.getArray()[0],
             std::min(nStreamLen, static_cast<sal_uInt64>(mnFirstBytesSize)));
 
         if(aStream->GetError())
