@@ -91,10 +91,6 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
 
     gtk_file_chooser_set_select_multiple( GTK_FILE_CHOOSER( m_pDialog ), false );
 
-    OUString aLabel;
-
-    aLabel = getResString( FILE_PICKER_FILE_TYPE );
-
     m_pFilterStore = gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_STRING,
         G_TYPE_STRING, G_TYPE_STRING);
 
@@ -1017,11 +1013,11 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
 #else
                 sal_Int32 nLength = aToken.getLength();
 
-                OUStringBuffer aFilterBuffer = OUStringBuffer("*.");
+                OUStringBuffer aFilterBuffer("*.");
 
                 for (sal_Int32 i = 0; i < nLength; i++) {
                     sal_Unicode tokenChar = aToken[i];
-                    OUString tokenCharString = OUString(tokenChar);
+                    OUString tokenCharString(tokenChar);
 
                     aFilterBuffer.append("[");
                     aFilterBuffer.append(tokenCharString.toAsciiLowerCase());
