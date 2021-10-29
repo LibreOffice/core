@@ -22,6 +22,7 @@
 
 #include <comphelper/base64.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <osl/file.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
@@ -117,27 +118,17 @@ uno::Sequence<sal_Int8> ImagePreparer::preparePreview(
 
     xFilter->setSourceDocument( xSourceDoc );
 
-    uno::Sequence< beans::PropertyValue > aFilterData(3);
+    uno::Sequence< beans::PropertyValue > aFilterData{
+        comphelper::makePropertyValue("PixelWidth", aWidth),
+        comphelper::makePropertyValue("PixelHeight", aHeight),
+        comphelper::makePropertyValue("ColorMode", sal_Int32(0)) // 0: Color, 1: B&W
+    };
 
-    aFilterData[0].Name = "PixelWidth";
-    aFilterData[0].Value <<= aWidth;
-
-    aFilterData[1].Name = "PixelHeight";
-    aFilterData[1].Value <<= aHeight;
-
-    aFilterData[2].Name = "ColorMode";
-    aFilterData[2].Value <<= sal_Int32(0); // 0: Color, 1: B&W
-
-    uno::Sequence< beans::PropertyValue > aProps(3);
-
-    aProps[0].Name = "MediaType";
-    aProps[0].Value <<= OUString( "image/png" );
-
-    aProps[1].Name = "URL";
-    aProps[1].Value <<= aFileURL;
-
-    aProps[2].Name = "FilterData";
-    aProps[2].Value <<= aFilterData;
+    uno::Sequence< beans::PropertyValue > aProps{
+        comphelper::makePropertyValue("MediaType", OUString( "image/png" )),
+        comphelper::makePropertyValue("URL", aFileURL),
+        comphelper::makePropertyValue("FilterData", aFilterData)
+    };
 
     xFilter->filter( aProps );
 

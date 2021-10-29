@@ -131,7 +131,7 @@ Sequence< PropertyValue > SdHtmlOptionsDialog::getPropertyValues()
         maMediaDescriptor.realloc( ++nCount );
 
     // the "FilterData" Property is an Any that will contain our PropertySequence of Values
-    auto& el = maMediaDescriptor[ i ];
+    auto& el = maMediaDescriptor.getArray()[ i ];
     el.Name = "FilterData";
     el.Value <<= maFilterDataSequence;
     return maMediaDescriptor;

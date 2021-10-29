@@ -29,6 +29,7 @@
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/outlobj.hxx>
 #include <vcl/svapp.hxx>
@@ -1668,14 +1669,8 @@ namespace slideshowhelp
         {
             //Start at page 0, this would blow away any custom
             //show settings if any were set
-            Sequence< PropertyValue > aArguments(1);
-            PropertyValue aPage;
-
-            aPage.Name = "FirstPage";
-            aPage.Value <<= OUString("0");
-
-            aArguments[0] = aPage;
-
+            Sequence< PropertyValue > aArguments{ comphelper::makePropertyValue("FirstPage",
+                                                                                OUString("0")) };
             xPresentation->startWithArguments( aArguments );
         }
         sfx2::SfxNotebookBar::UnlockNotebookBar();
