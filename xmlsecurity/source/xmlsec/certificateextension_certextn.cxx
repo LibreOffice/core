@@ -19,6 +19,8 @@
 
 #include "certificateextension_certextn.hxx"
 
+#include <comphelper/sequence.hxx>
+
 CertificateExtension_CertExtn::CertificateExtension_CertExtn()
     : m_critical(false)
 {
@@ -27,23 +29,14 @@ CertificateExtension_CertExtn::CertificateExtension_CertExtn()
 void CertificateExtension_CertExtn::setCertExtn(const unsigned char* value, unsigned int vlen,
                                                 const unsigned char* id, unsigned int idlen, bool critical)
 {
-    unsigned int i ;
     if( value != nullptr && vlen != 0 ) {
-        css::uno::Sequence< sal_Int8 > extnv( vlen ) ;
-        for( i = 0; i < vlen ; i ++ )
-            extnv[i] = *( value + i ) ;
-
-        m_xExtnValue = extnv ;
+        m_xExtnValue = comphelper::arrayToSequence<sal_Int8>(value, vlen);
     } else {
         m_xExtnValue = css::uno::Sequence<sal_Int8>();
     }
 
     if( id != nullptr && idlen != 0 ) {
-        css::uno::Sequence< sal_Int8 > extnId( idlen ) ;
-        for( i = 0; i < idlen ; i ++ )
-            extnId[i] = *( id + i ) ;
-
-        m_xExtnId = extnId ;
+        m_xExtnId = comphelper::arrayToSequence<sal_Int8>(id, idlen);
     } else {
         m_xExtnId = css::uno::Sequence<sal_Int8>();
     }

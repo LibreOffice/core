@@ -84,8 +84,9 @@ css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL SanExtensionImpl:
                     otherNameProp.Name = OUString::createFromAscii(CERT_GetOidString(&current->name.OthName.oid));
 
                     Sequence< sal_Int8 > otherName( current->name.OthName.name.len ) ;
+                    auto otherNameRange = asNonConstRange(otherName);
                     for( unsigned int r = 0; r < current->name.OthName.name.len ; r ++ )
-                        otherName[r] = *( current->name.OthName.name.data + r ) ;
+                        otherNameRange[r] = *( current->name.OthName.name.data + r ) ;
 
                     otherNameProp.Value <<= otherName;
 
@@ -123,8 +124,9 @@ css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL SanExtensionImpl:
                     m_Entries[i].Type = ExtAltNameType_IP_ADDRESS;
 
                     Sequence< sal_Int8 > ipAddress( current->name.other.len ) ;
+                    auto ipAddressRange = asNonConstRange(ipAddress);
                     for( unsigned int r = 0; r < current->name.other.len ; r ++ )
-                        ipAddress[r] = *( current->name.other.data + r ) ;
+                        ipAddressRange[r] = *( current->name.other.data + r ) ;
 
                     m_Entries[i].Value <<= ipAddress;
                     break;

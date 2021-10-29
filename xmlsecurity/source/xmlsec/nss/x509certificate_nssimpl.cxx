@@ -26,6 +26,7 @@
 #include <pk11pub.h>
 
 #include <sal/config.h>
+#include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
@@ -72,11 +73,8 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl::getVersion() {
 
 css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_NssImpl::getSerialNumber() {
     if( m_pCert != nullptr && m_pCert->serialNumber.len > 0 ) {
-        Sequence< sal_Int8 > serial( m_pCert->serialNumber.len ) ;
-        for( unsigned int i = 0 ; i < m_pCert->serialNumber.len ; i ++ )
-            serial[i] = *( m_pCert->serialNumber.data + i ) ;
-
-        return serial ;
+        return comphelper::arrayToSequence<sal_Int8>(m_pCert->serialNumber.data,
+                                                     m_pCert->serialNumber.len) ;
     } else {
         return css::uno::Sequence< sal_Int8 >();
     }
@@ -158,11 +156,7 @@ css::util::DateTime SAL_CALL X509Certificate_NssImpl::getNotValidAfter() {
 
 css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_NssImpl::getIssuerUniqueID() {
     if( m_pCert != nullptr && m_pCert->issuerID.len > 0 ) {
-        Sequence< sal_Int8 > issuerUid( m_pCert->issuerID.len ) ;
-        for( unsigned int i = 0 ; i < m_pCert->issuerID.len ; i ++ )
-            issuerUid[i] = *( m_pCert->issuerID.data + i ) ;
-
-        return issuerUid ;
+        return comphelper::arrayToSequence<sal_Int8>(m_pCert->issuerID.data, m_pCert->issuerID.len) ;
     } else {
         return css::uno::Sequence< sal_Int8 >();
     }
@@ -170,11 +164,8 @@ css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_NssImpl::getIssuerUnique
 
 css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_NssImpl::getSubjectUniqueID() {
     if( m_pCert != nullptr && m_pCert->subjectID.len > 0 ) {
-        Sequence< sal_Int8 > subjectUid( m_pCert->subjectID.len ) ;
-        for( unsigned int i = 0 ; i < m_pCert->subjectID.len ; i ++ )
-            subjectUid[i] = *( m_pCert->subjectID.data + i ) ;
-
-        return subjectUid ;
+        return comphelper::arrayToSequence<sal_Int8>(m_pCert->subjectID.data,
+                                                     m_pCert->subjectID.len) ;
     } else {
         return css::uno::Sequence< sal_Int8 >();
     }
@@ -187,6 +178,7 @@ css::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > 
 
         for( len = 0, extns = m_pCert->extensions; *extns != nullptr; len ++, extns ++ ) ;
         Sequence< Reference< XCertificateExtension > > xExtns( len ) ;
+        auto xExtnsRange = asNonConstRange(xExtns);
 
         for( extns = m_pCert->extensions, len = 0; *extns != nullptr; extns ++, len ++ ) {
             const SECItem id = (*extns)->id;
@@ -215,13 +207,13 @@ css::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > 
             {
                 rtl::Reference<SanExtensionImpl> pExtn = new SanExtensionImpl;
                 pExtn->setCertExtn(value, vlen, objid, objidlen, crit);
-                xExtns[len] = pExtn ;
+                xExtnsRange[len] = pExtn ;
             }
             else
             {
                 rtl::Reference<CertificateExtension_XmlSecImpl> pExtn = new CertificateExtension_XmlSecImpl;
                 pExtn->setCertExtn(value, vlen, objid, objidlen, crit);
-                xExtns[len] = pExtn;
+                xExtnsRange[len] = pExtn;
             }
         }
 
@@ -283,12 +275,7 @@ css::uno::Reference< css::security::XCertificateExtension > SAL_CALL X509Certifi
 
 css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_NssImpl::getEncoded() {
     if( m_pCert != nullptr && m_pCert->derCert.len > 0 ) {
-        Sequence< sal_Int8 > rawCert( m_pCert->derCert.len ) ;
-
-        for( unsigned int i = 0 ; i < m_pCert->derCert.len ; i ++ )
-            rawCert[i] = *( m_pCert->derCert.data + i ) ;
-
-        return rawCert ;
+        return comphelper::arrayToSequence<sal_Int8>(m_pCert->derCert.data, m_pCert->derCert.len) ;
     } else {
         return css::uno::Sequence< sal_Int8 >();
     }
@@ -392,11 +379,7 @@ static css::uno::Sequence< sal_Int8 > getThumbprint(CERTCertificate const *pCert
         rv = PK11_HashBuf(id, fingerprint, pCert->derCert.data, pCert->derCert.len);
         if(rv == SECSuccess)
         {
-            Sequence< sal_Int8 > thumbprint( length ) ;
-            for( int i = 0 ; i < length ; i ++ )
-                thumbprint[i] = fingerprint[i];
-
-            return thumbprint;
+            return comphelper::arrayToSequence<sal_Int8>(fingerprint, length);
         }
     }
     return css::uno::Sequence< sal_Int8 >();
@@ -423,13 +406,7 @@ css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_NssImpl::getSubjectPubli
 
         if ( spk.len>0)
         {
-            Sequence< sal_Int8 > key( spk.len ) ;
-            for( unsigned int i = 0 ; i < spk.len ; i ++ )
-            {
-                key[i] = *( spk.data + i ) ;
-            }
-
-            return key ;
+            return comphelper::arrayToSequence<sal_Int8>(spk.data, spk.len) ;
         }
     }
 

@@ -198,8 +198,9 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl::getVersion() {
 css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getSerialNumber() {
     if( m_pCertContext != nullptr && m_pCertContext->pCertInfo != nullptr ) {
         Sequence< sal_Int8 > serial( m_pCertContext->pCertInfo->SerialNumber.cbData ) ;
+        auto serialRange = asNonConstRange(serial);
         for( unsigned int i = 0 ; i < m_pCertContext->pCertInfo->SerialNumber.cbData ; i ++ )
-            serial[i] = *( m_pCertContext->pCertInfo->SerialNumber.pbData + m_pCertContext->pCertInfo->SerialNumber.cbData - i - 1 ) ;
+            serialRange[i] = *( m_pCertContext->pCertInfo->SerialNumber.pbData + m_pCertContext->pCertInfo->SerialNumber.cbData - i - 1 ) ;
 
         return serial ;
     } else {
@@ -338,8 +339,9 @@ css::util::DateTime SAL_CALL X509Certificate_MSCryptImpl::getNotValidAfter() {
 css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getIssuerUniqueID() {
     if( m_pCertContext != nullptr && m_pCertContext->pCertInfo != nullptr ) {
         Sequence< sal_Int8 > issuerUid( m_pCertContext->pCertInfo->IssuerUniqueId.cbData ) ;
+        auto issuerUidRange = asNonConstRange(issuerUid);
         for( unsigned int i = 0 ; i < m_pCertContext->pCertInfo->IssuerUniqueId.cbData; i ++ )
-            issuerUid[i] = *( m_pCertContext->pCertInfo->IssuerUniqueId.pbData + i ) ;
+            issuerUidRange[i] = *( m_pCertContext->pCertInfo->IssuerUniqueId.pbData + i ) ;
 
         return issuerUid ;
     } else {
@@ -350,8 +352,9 @@ css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getIssuerUn
 css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getSubjectUniqueID() {
     if( m_pCertContext != nullptr && m_pCertContext->pCertInfo != nullptr ) {
         Sequence< sal_Int8 > subjectUid( m_pCertContext->pCertInfo->SubjectUniqueId.cbData ) ;
+        auto subjectUidRange = asNonConstRange(subjectUid);
         for( unsigned int i = 0 ; i < m_pCertContext->pCertInfo->SubjectUniqueId.cbData; i ++ )
-            subjectUid[i] = *( m_pCertContext->pCertInfo->SubjectUniqueId.pbData + i ) ;
+            subjectUidRange[i] = *( m_pCertContext->pCertInfo->SubjectUniqueId.pbData + i ) ;
 
         return subjectUid ;
     } else {
@@ -363,6 +366,7 @@ css::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > 
     if( m_pCertContext != nullptr && m_pCertContext->pCertInfo != nullptr && m_pCertContext->pCertInfo->cExtension != 0 ) {
         rtl::Reference<CertificateExtension_XmlSecImpl> xExtn ;
         Sequence< Reference< XCertificateExtension > > xExtns( m_pCertContext->pCertInfo->cExtension ) ;
+        auto pExtns = xExtns.getArray();
 
         for( unsigned int i = 0; i < m_pCertContext->pCertInfo->cExtension; i++ ) {
             CERT_EXTENSION* pExtn = &(m_pCertContext->pCertInfo->rgExtension[i]) ;
@@ -377,7 +381,7 @@ css::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > 
 
             xExtn->setCertExtn( pExtn->Value.pbData, pExtn->Value.cbData, reinterpret_cast<unsigned char*>(pExtn->pszObjId), strlen( pExtn->pszObjId ), pExtn->fCritical ) ;
 
-            xExtns[i] = xExtn ;
+            pExtns[i] = xExtn ;
         }
 
         return xExtns ;
@@ -410,9 +414,10 @@ css::uno::Reference< css::security::XCertificateExtension > SAL_CALL X509Certifi
 css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getEncoded() {
     if( m_pCertContext != nullptr && m_pCertContext->cbCertEncoded > 0 ) {
         Sequence< sal_Int8 > rawCert( m_pCertContext->cbCertEncoded ) ;
+        auto prawCert = rawCert.getArray();
 
         for( unsigned int i = 0 ; i < m_pCertContext->cbCertEncoded ; i ++ )
-            rawCert[i] = *( m_pCertContext->pbCertEncoded + i ) ;
+            prawCert[i] = *( m_pCertContext->pbCertEncoded + i ) ;
 
         return rawCert ;
     } else {
@@ -478,9 +483,10 @@ static css::uno::Sequence< sal_Int8 > getThumbprint(const CERT_CONTEXT* pCertCon
         if (CertGetCertificateContextProperty(pCertContext, dwPropId, fingerprint, &cbData))
         {
             Sequence< sal_Int8 > thumbprint( cbData ) ;
+            auto pthumbprint = thumbprint.getArray();
             for( unsigned int i = 0 ; i < cbData ; i ++ )
             {
-                thumbprint[i] = fingerprint[i];
+                pthumbprint[i] = fingerprint[i];
             }
 
             return thumbprint;
@@ -515,9 +521,10 @@ css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getSubjectP
         CRYPT_BIT_BLOB publicKey = m_pCertContext->pCertInfo->SubjectPublicKeyInfo.PublicKey;
 
         Sequence< sal_Int8 > key( publicKey.cbData ) ;
+        auto keyRange = asNonConstRange(key);
         for( unsigned int i = 0 ; i < publicKey.cbData ; i++ )
         {
-            key[i] = *(publicKey.pbData + i) ;
+            keyRange[i] = *(publicKey.pbData + i) ;
         }
 
         return key;
