@@ -99,6 +99,72 @@ struct UploadSource
     }
 };
 
+auto GetErrorString(CURLcode const rc, char const* const pErrorBuffer = nullptr) -> OString
+{
+    char const* const pMessage( // static fallback
+        (pErrorBuffer && pErrorBuffer[0] != '\0') ? pErrorBuffer : curl_easy_strerror(rc));
+    return OString::Concat("(") + OString::number(sal_Int32(rc)) + ") " + pMessage;
+}
+
+auto GetErrorStringMulti(CURLMcode const mc) -> OString
+{
+    return OString::Concat("(") + OString::number(sal_Int32(mc)) + ") " + curl_multi_strerror(mc);
+}
+
+/// represent an option to be passed to curl_easy_setopt()
+struct CurlOption
+{
+    CURLoption const Option;
+    enum class Type
+    {
+        Pointer,
+        Long,
+        CurlOffT
+    };
+    Type const Tag;
+    union {
+        void const* const pValue;
+        decltype(0L) const lValue;
+        curl_off_t const cValue;
+    };
+#if 0
+    ::std::variant<void const*, long
+#if SAL_TYPES_SIZEOFLONG == 4
+                   ,
+                   curl_off_t
+#endif
+                   > const Value;
+#endif
+    char const* const pExceptionString;
+
+    CurlOption(CURLoption const i_Option, void const* const i_Value,
+               char const* const i_pExceptionString)
+        : Option(i_Option)
+        , Tag(Type::Pointer)
+        , pValue(i_Value)
+        , pExceptionString(i_pExceptionString)
+    {
+    }
+    CurlOption(CURLoption const i_Option, decltype(0L) const i_Value,
+               char const* const i_pExceptionString)
+        : Option(i_Option)
+        , Tag(Type::Long)
+        , lValue(i_Value)
+        , pExceptionString(i_pExceptionString)
+    {
+    }
+#if SAL_TYPES_SIZEOFLONG == 4
+    CurlOption(CURLoption const i_Option, curl_off_t const i_Value,
+               char const* const i_pExceptionString)
+        : Option(i_Option)
+        , Tag(Type::CurlOffT)
+        , cValue(i_Value)
+        , pExceptionString(i_pExceptionString)
+    {
+    }
+#endif
+};
+
 /// combined guard class to ensure things are released in correct order,
 /// particularly in ProcessRequest() error handling
 class Guard
@@ -106,22 +172,130 @@ class Guard
 private:
     /// mutex *first* because m_oGuard requires it
     ::std::unique_lock<::std::mutex> m_Lock;
-    ::std::optional<::comphelper::ScopeGuard<::std::function<void()>>> m_oGuard;
+    ::std::vector<CurlOption> const m_Options;
+    ::http_dav_ucp::CurlUri const& m_rURI;
+    CURL* const m_pCurl;
 
 public:
-    explicit Guard(::std::mutex& rMutex)
-        : m_Lock(rMutex)
+    explicit Guard(::std::mutex& rMutex, ::std::vector<CurlOption> const& rOptions,
+                   ::http_dav_ucp::CurlUri const& rURI, CURL* const pCurl)
+        : m_Lock(rMutex, ::std::defer_lock)
+        , m_Options(rOptions)
+        , m_rURI(rURI)
+        , m_pCurl(pCurl)
     {
+        Acquire();
     }
-    template <class Func>
-    explicit Guard(::std::mutex& rMutex, Func&& rFunc)
-        : m_Lock(rMutex)
-        , m_oGuard(::std::move(rFunc))
+    ~Guard()
     {
+        if (m_Lock.owns_lock())
+        {
+            Release();
+        }
     }
-    void unlock()
+
+    void Acquire()
     {
-        m_oGuard.reset();
+        assert(!m_Lock.owns_lock());
+        m_Lock.lock();
+        for (auto const& it : m_Options)
+        {
+            CURLcode rc(CURL_LAST); // warning C4701
+#if 0
+            if (void const* const* const pp = ::std::get_if<void const*>(&it.Value))
+            {
+                rc = curl_easy_setopt(m_pCurl, it.Option, *pp);
+            }
+            else if (decltype(0L) const * const pLong = ::std::get_if<long>(&it.Value))
+            {
+                rc = curl_easy_setopt(m_pCurl, it.Option, *pLong);
+            }
+#if SAL_TYPES_SIZEOFLONG == 4
+            else if (curl_off_t const* const pOfft = ::std::get_if<curl_off_t>(&it.Value))
+            {
+                rc = curl_easy_setopt(m_pCurl, it.Option, *pOfft);
+            }
+#endif
+#endif
+            if (it.Tag == CurlOption::Type::Pointer)
+            {
+                rc = curl_easy_setopt(m_pCurl, it.Option, it.pValue);
+            }
+            else if (it.Tag == CurlOption::Type::Long)
+            {
+                rc = curl_easy_setopt(m_pCurl, it.Option, it.lValue);
+            }
+#if SAL_TYPES_SIZEOFLONG == 4
+            else if (it.Tag == CurlOption::Type::CurlOffT)
+            {
+                rc = curl_easy_setopt(m_pCurl, it.Option, it.cValue);
+            }
+#endif
+            else
+            {
+                assert(false);
+            }
+            if (it.pExceptionString != nullptr)
+            {
+                if (rc != CURLE_OK)
+                {
+                    SAL_WARN("ucb.ucp.webdav.curl",
+                             "set " << it.pExceptionString << " failed: " << GetErrorString(rc));
+                    throw ::http_dav_ucp::DAVException(
+                        ::http_dav_ucp::DAVException::DAV_SESSION_CREATE,
+                        ::http_dav_ucp::ConnectionEndPointString(m_rURI.GetHost(),
+                                                                 m_rURI.GetPort()));
+                }
+            }
+            else // many of the options cannot fail
+            {
+                assert(rc == CURLE_OK);
+            }
+        }
+    }
+    void Release()
+    {
+        assert(m_Lock.owns_lock());
+        for (auto const& it : m_Options)
+        {
+            CURLcode rc(CURL_LAST); // warning C4701
+#if 0
+            if (void const* const* const pp = ::std::get_if<void const*>(&it.Value))
+            {
+                rc = curl_easy_setopt(m_pCurl, it.Option, nullptr);
+            }
+            else if (decltype(0L) const * const pLong = ::std::get_if<long>(&it.Value))
+            {
+                rc = curl_easy_setopt(m_pCurl, it.Option, 0L);
+            }
+#if SAL_TYPES_SIZEOFLONG == 4
+            else if (curl_off_t const* const pOfft = ::std::get_if<curl_off_t>(&it.Value))
+            {
+                rc = curl_easy_setopt(m_pCurl, it.Option, curl_off_t(0));
+            }
+#endif
+#endif
+            if (it.Tag == CurlOption::Type::Pointer)
+            {
+                rc = curl_easy_setopt(m_pCurl, it.Option, nullptr);
+            }
+            else if (it.Tag == CurlOption::Type::Long)
+            {
+                rc = curl_easy_setopt(m_pCurl, it.Option, 0L);
+            }
+#if SAL_TYPES_SIZEOFLONG == 4
+            else if (it.Tag == CurlOption::Type::CurlOffT)
+            {
+                rc = curl_easy_setopt(m_pCurl, it.Option, curl_off_t(0));
+            }
+#endif
+            else
+            {
+                assert(false);
+            }
+            assert(rc == CURLE_OK);
+            (void)rc;
+        }
         m_Lock.unlock();
     }
 };
@@ -130,19 +304,7 @@ public:
 
 namespace http_dav_ucp
 {
-static auto GetErrorString(CURLcode const rc, char const* const pErrorBuffer = nullptr) -> OString
-{
-    char const* const pMessage( // static fallback
-        (pErrorBuffer && pErrorBuffer[0] != '\0') ? pErrorBuffer : curl_easy_strerror(rc));
-    return OString::Concat("(") + OString::number(sal_Int32(rc)) + ") " + pMessage;
-}
-
-static auto GetErrorStringMulti(CURLMcode const mc) -> OString
-{
-    return OString::Concat("(") + OString::number(sal_Int32(mc)) + ") " + curl_multi_strerror(mc);
-}
-
-    // libcurl callbacks:
+// libcurl callbacks:
 
 #if OSL_DEBUG_LEVEL > 0
 static int debug_callback(CURL* handle, curl_infotype type, char* data, size_t size,
@@ -607,14 +769,14 @@ struct CurlProcessor
     static auto URIReferenceToURI(CurlSession& rSession, OUString const& rURIReference) -> CurlUri;
 
     static auto ProcessRequestImpl(
-        CurlSession& rSession, CurlUri const& rURI, DAVRequestEnvironment const* pEnv,
-        ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist_free_all>> pRequestHeaderList,
+        CurlSession& rSession, CurlUri const& rURI, curl_slist* pRequestHeaderList,
         uno::Reference<io::XOutputStream> const* pxOutStream,
         uno::Reference<io::XInputStream> const* pxInStream,
-        ::std::pair<::std::vector<OUString> const&, DAVResource&> const* pRequestedHeaders) -> void;
+        ::std::pair<::std::vector<OUString> const&, DAVResource&> const* pRequestedHeaders,
+        ResponseHeaders& rHeaders) -> void;
 
     static auto ProcessRequest(
-        Guard& rGuard, CurlSession& rSession, CurlUri const& rURI,
+        CurlSession& rSession, CurlUri const& rURI, ::std::vector<CurlOption> const& rOptions,
         DAVRequestEnvironment const* pEnv,
         ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist_free_all>> pRequestHeaderList,
         uno::Reference<io::XOutputStream> const* pxOutStream,
@@ -661,32 +823,12 @@ auto CurlProcessor::URIReferenceToURI(CurlSession& rSession, OUString const& rUR
 
 /// main function to initiate libcurl requests
 auto CurlProcessor::ProcessRequestImpl(
-    CurlSession& rSession, CurlUri const& rURI, DAVRequestEnvironment const* const pEnv,
-    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist_free_all>> pRequestHeaderList,
+    CurlSession& rSession, CurlUri const& rURI, curl_slist* const pRequestHeaderList,
     uno::Reference<io::XOutputStream> const* const pxOutStream,
     uno::Reference<io::XInputStream> const* const pxInStream,
-    ::std::pair<::std::vector<OUString> const&, DAVResource&> const* const pRequestedHeaders)
-    -> void
+    ::std::pair<::std::vector<OUString> const&, DAVResource&> const* const pRequestedHeaders,
+    ResponseHeaders& rHeaders) -> void
 {
-    // Clear flag before transfer starts; only a transfer started before
-    // calling abort() will be aborted, not one started later.
-    rSession.m_AbortFlag.store(false);
-
-    if (pEnv)
-    { // add custom request headers passed by caller
-        for (auto const& rHeader : pEnv->m_aRequestHeaders)
-        {
-            OString const utf8Header(
-                OUStringToOString(rHeader.first, RTL_TEXTENCODING_ASCII_US) + ": "
-                + OUStringToOString(rHeader.second, RTL_TEXTENCODING_ASCII_US));
-            pRequestHeaderList.reset(
-                curl_slist_append(pRequestHeaderList.release(), utf8Header.getStr()));
-            if (!pRequestHeaderList)
-            {
-                throw uno::RuntimeException("curl_slist_append failed");
-            }
-        }
-    }
     ::comphelper::ScopeGuard const g([&]() {
         auto rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_HEADERDATA, nullptr);
         assert(rc == CURLE_OK);
@@ -712,8 +854,7 @@ auto CurlProcessor::ProcessRequestImpl(
 
     if (pRequestHeaderList)
     {
-        auto rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_HTTPHEADER,
-                                   pRequestHeaderList.get());
+        auto rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_HTTPHEADER, pRequestHeaderList);
         assert(rc == CURLE_OK);
         (void)rc;
     }
@@ -721,8 +862,285 @@ auto CurlProcessor::ProcessRequestImpl(
     auto rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_CURLU, rURI.GetCURLU());
     assert(rc == CURLE_OK); // can't fail since 7.63.0
 
+    rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_HEADERDATA, &rHeaders);
+    assert(rc == CURLE_OK);
+    ::std::optional<DownloadTarget> oDownloadTarget;
+    if (pxOutStream)
+    {
+        oDownloadTarget.emplace(*pxOutStream, rHeaders);
+        rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_WRITEDATA, &*oDownloadTarget);
+        assert(rc == CURLE_OK);
+    }
+    ::std::optional<UploadSource> oUploadSource;
+    if (pxInStream)
+    {
+        oUploadSource.emplace(*pxInStream, rHeaders);
+        rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_READDATA, &*oUploadSource);
+        assert(rc == CURLE_OK);
+        // libcurl won't upload without setting this
+        rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_UPLOAD, 1L);
+        assert(rc == CURLE_OK);
+    }
+    rSession.m_ErrorBuffer[0] = '\0';
+
+    // note: easy handle must be added for *every* transfer!
+    // otherwise it gets stuck in MSTATE_MSGSENT forever after 1st transfer
+    auto mc = curl_multi_add_handle(rSession.m_pCurlMulti.get(), rSession.m_pCurl.get());
+    if (mc != CURLM_OK)
+    {
+        SAL_WARN("ucb.ucp.webdav.curl",
+                 "curl_multi_add_handle failed: " << GetErrorStringMulti(mc));
+        throw DAVException(
+            DAVException::DAV_SESSION_CREATE,
+            ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
+    }
+    ::comphelper::ScopeGuard const gg([&]() {
+        mc = curl_multi_remove_handle(rSession.m_pCurlMulti.get(), rSession.m_pCurl.get());
+        if (mc != CURLM_OK)
+        {
+            SAL_WARN("ucb.ucp.webdav.curl",
+                     "curl_multi_remove_handle failed: " << GetErrorStringMulti(mc));
+        }
+    });
+
+    // this is where libcurl actually does something
+    rc = CURL_LAST; // clear current value
+    int nRunning;
+    do
+    {
+        mc = curl_multi_perform(rSession.m_pCurlMulti.get(), &nRunning);
+        if (mc != CURLM_OK)
+        {
+            SAL_WARN("ucb.ucp.webdav.curl",
+                     "curl_multi_perform failed: " << GetErrorStringMulti(mc));
+            throw DAVException(
+                DAVException::DAV_HTTP_CONNECT,
+                ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
+        }
+        if (nRunning == 0)
+        { // short request like HEAD on loopback could be done in first call
+            break;
+        }
+        int nFDs;
+        mc = curl_multi_poll(rSession.m_pCurlMulti.get(), nullptr, 0, rSession.m_nReadTimeout,
+                             &nFDs);
+        if (mc != CURLM_OK)
+        {
+            SAL_WARN("ucb.ucp.webdav.curl", "curl_multi_poll failed: " << GetErrorStringMulti(mc));
+            throw DAVException(
+                DAVException::DAV_HTTP_CONNECT,
+                ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
+        }
+        if (rSession.m_AbortFlag.load())
+        { // flag was set by abort() -> not sure what exception to throw?
+            throw DAVException(DAVException::DAV_HTTP_ERROR, "abort() was called", 0);
+        }
+    } while (nRunning != 0);
+    // there should be exactly 1 CURLMsg now, but the interface is
+    // extensible so future libcurl versions could yield additional things
+    do
+    {
+        CURLMsg const* const pMsg = curl_multi_info_read(rSession.m_pCurlMulti.get(), &nRunning);
+        if (pMsg && pMsg->msg == CURLMSG_DONE)
+        {
+            assert(pMsg->easy_handle == rSession.m_pCurl.get());
+            rc = pMsg->data.result;
+        }
+        else
+        {
+            SAL_WARN("ucb.ucp.webdav.curl", "curl_multi_info_read unexpected result");
+        }
+    } while (nRunning != 0);
+
+    // error handling part 1: libcurl errors
+    if (rc != CURLE_OK)
+    {
+        // TODO: is there any value in extracting CURLINFO_OS_ERRNO
+        SAL_WARN("ucb.ucp.webdav.curl",
+                 "curl_easy_perform failed: " << GetErrorString(rc, rSession.m_ErrorBuffer));
+        switch (rc)
+        {
+            case CURLE_COULDNT_RESOLVE_PROXY:
+                throw DAVException(
+                    DAVException::DAV_HTTP_LOOKUP,
+                    ConnectionEndPointString(rSession.m_Proxy.aName, rSession.m_Proxy.nPort));
+            case CURLE_COULDNT_RESOLVE_HOST:
+                throw DAVException(
+                    DAVException::DAV_HTTP_LOOKUP,
+                    ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
+            case CURLE_COULDNT_CONNECT:
+            case CURLE_SSL_CONNECT_ERROR:
+            case CURLE_SSL_CERTPROBLEM:
+            case CURLE_SSL_CIPHER:
+            case CURLE_PEER_FAILED_VERIFICATION:
+            case CURLE_SSL_ISSUER_ERROR:
+            case CURLE_SSL_PINNEDPUBKEYNOTMATCH:
+            case CURLE_SSL_INVALIDCERTSTATUS:
+            case CURLE_QUIC_CONNECT_ERROR:
+                throw DAVException(
+                    DAVException::DAV_HTTP_CONNECT,
+                    ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
+            case CURLE_REMOTE_ACCESS_DENIED:
+            case CURLE_LOGIN_DENIED:
+            case CURLE_AUTH_ERROR:
+                throw DAVException(
+                    DAVException::DAV_HTTP_AUTH, // probably?
+                    ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
+            case CURLE_WRITE_ERROR:
+            case CURLE_READ_ERROR: // error returned from our callbacks
+            case CURLE_OUT_OF_MEMORY:
+            case CURLE_ABORTED_BY_CALLBACK:
+            case CURLE_BAD_FUNCTION_ARGUMENT:
+            case CURLE_SEND_ERROR:
+            case CURLE_RECV_ERROR:
+            case CURLE_SSL_CACERT_BADFILE:
+            case CURLE_SSL_CRL_BADFILE:
+            case CURLE_RECURSIVE_API_CALL:
+                throw DAVException(
+                    DAVException::DAV_HTTP_FAILED,
+                    ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
+            case CURLE_OPERATION_TIMEDOUT:
+                throw DAVException(
+                    DAVException::DAV_HTTP_TIMEOUT,
+                    ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
+            default: // lots of generic errors
+                throw DAVException(DAVException::DAV_HTTP_ERROR, "", 0);
+        }
+    }
+    // error handling part 2: HTTP status codes
+    long statusCode(SC_NONE);
+    rc = curl_easy_getinfo(rSession.m_pCurl.get(), CURLINFO_RESPONSE_CODE, &statusCode);
+    assert(rc == CURLE_OK);
+    assert(statusCode != SC_NONE); // ??? should be error returned from perform?
+    SAL_INFO("ucb.ucp.webdav.curl", "HTTP status code: " << statusCode);
+    if (statusCode < 300)
+    {
+        // neon did this regardless of status or even error, which seems odd
+        ExtractRequestedHeaders(rHeaders, pRequestedHeaders);
+    }
+    else
+    {
+        switch (statusCode)
+        {
+            case SC_NONE:
+                assert(false); // ??? should be error returned from perform?
+                break;
+            case SC_REQUEST_TIMEOUT:
+            {
+                throw DAVException(
+                    DAVException::DAV_HTTP_TIMEOUT,
+                    ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
+                break;
+            }
+            case SC_MOVED_PERMANENTLY:
+            case SC_MOVED_TEMPORARILY:
+            case SC_SEE_OTHER:
+            case SC_TEMPORARY_REDIRECT:
+            {
+                // could also use CURLOPT_FOLLOWLOCATION but apparently the
+                // upper layer wants to know about redirects?
+                char* pRedirectURL(nullptr);
+                rc = curl_easy_getinfo(rSession.m_pCurl.get(), CURLINFO_REDIRECT_URL,
+                                       &pRedirectURL);
+                assert(rc == CURLE_OK);
+                if (pRedirectURL)
+                {
+                    throw DAVException(DAVException::DAV_HTTP_REDIRECT,
+                                       pRedirectURL ? OUString(pRedirectURL, strlen(pRedirectURL),
+                                                               RTL_TEXTENCODING_UTF8)
+                                                    : OUString());
+                }
+                [[fallthrough]];
+            }
+            default:
+                throw DAVException(DAVException::DAV_HTTP_ERROR, "", statusCode);
+        }
+    }
+
+    if (pxOutStream)
+    {
+        (*pxOutStream)->closeOutput(); // signal EOF
+    }
+}
+
+static auto TryRemoveExpiredLockToken(CurlSession& rSession, CurlUri const& rURI,
+                                      DAVRequestEnvironment const* const pEnv) -> bool
+{
+    if (!pEnv)
+    {
+        // caller was a NonInteractive_*LOCK function anyway, its caller is LockStore
+        return false;
+    }
+    OUString const* const pToken(g_Init.LockStore.getLockTokenForURI(rURI.GetURI(), nullptr));
+    if (!pToken)
+    {
+        return false;
+    }
+    try
+    {
+        // determine validity of existing lock via lockdiscovery request
+        ::std::vector<OUString> const propertyNames{ DAVProperties::LOCKDISCOVERY };
+        ::std::vector<ucb::Lock> locks;
+        ::std::tuple<::std::vector<OUString> const&, ::std::vector<DAVResource>* const,
+                     ::std::vector<ucb::Lock>* const> const args(propertyNames, nullptr, &locks);
+
+        CurlProcessor::PropFind(rSession, rURI, DAVZERO, &args, nullptr, *pEnv);
+
+        // https://datatracker.ietf.org/doc/html/rfc4918#section-15.8
+        // The response MAY not contain tokens, but hopefully it
+        // will if client is properly authenticated.
+        if (::std::any_of(locks.begin(), locks.end(), [pToken](ucb::Lock const& rLock) {
+                return ::std::any_of(
+                    rLock.LockTokens.begin(), rLock.LockTokens.end(),
+                    [pToken](OUString const& rToken) { return *pToken == rToken; });
+            }))
+        {
+            return false; // still have the lock
+        }
+
+        SAL_INFO("ucb.ucp.webdav.curl",
+                 "lock token expired, removing: " << rURI.GetURI() << " " << *pToken);
+        g_Init.LockStore.removeLock(rURI.GetURI());
+        return true;
+    }
+    catch (DAVException const&)
+    {
+        return false; // ignore, the caller already has a better exception
+    }
+}
+
+auto CurlProcessor::ProcessRequest(
+    CurlSession& rSession, CurlUri const& rURI, ::std::vector<CurlOption> const& rOptions,
+    DAVRequestEnvironment const* const pEnv,
+    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist_free_all>> pRequestHeaderList,
+    uno::Reference<io::XOutputStream> const* const pxOutStream,
+    uno::Reference<io::XInputStream> const* const pxInStream,
+    ::std::pair<::std::vector<OUString> const&, DAVResource&> const* const pRequestedHeaders)
+    -> void
+{
+    if (pEnv)
+    { // add custom request headers passed by caller
+        for (auto const& rHeader : pEnv->m_aRequestHeaders)
+        {
+            OString const utf8Header(
+                OUStringToOString(rHeader.first, RTL_TEXTENCODING_ASCII_US) + ": "
+                + OUStringToOString(rHeader.second, RTL_TEXTENCODING_ASCII_US));
+            pRequestHeaderList.reset(
+                curl_slist_append(pRequestHeaderList.release(), utf8Header.getStr()));
+            if (!pRequestHeaderList)
+            {
+                throw uno::RuntimeException("curl_slist_append failed");
+            }
+        }
+    }
+
+    // Clear flag before transfer starts; only a transfer started before
+    // calling abort() will be aborted, not one started later.
+    rSession.m_AbortFlag.store(false);
+
+    Guard guard(rSession.m_Mutex, rOptions, rURI, rSession.m_pCurl.get());
+
     // authentication data may be in the URI, or requested via XInteractionHandler
-    // also
     struct Auth
     {
         OUString UserName;
@@ -783,11 +1201,13 @@ auto CurlProcessor::ProcessRequestImpl(
     {
         isRetry = false;
 
-        if (oAuth)
+        // re-check m_isAuthenticated flags every time, could have been set
+        // by re-entrant call
+        if (oAuth && !rSession.m_isAuthenticated)
         {
-            assert(!rSession.m_isAuthenticated);
             OString const utf8UserName(OUStringToOString(oAuth->UserName, RTL_TEXTENCODING_UTF8));
-            rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_USERNAME, utf8UserName.getStr());
+            auto rc
+                = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_USERNAME, utf8UserName.getStr());
             if (rc != CURLE_OK)
             {
                 SAL_WARN("ucb.ucp.webdav.curl", "CURLOPT_USERNAME failed: " << GetErrorString(rc));
@@ -806,13 +1226,12 @@ auto CurlProcessor::ProcessRequestImpl(
                 == CURLE_OK); // it shouldn't be possible to reduce auth to 0 via the authSystem masks
         }
 
-        if (oAuthProxy)
+        if (oAuthProxy && !rSession.m_isAuthenticatedProxy)
         {
-            assert(!rSession.m_isAuthenticatedProxy);
             OString const utf8UserName(
                 OUStringToOString(oAuthProxy->UserName, RTL_TEXTENCODING_UTF8));
-            rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_PROXYUSERNAME,
-                                  utf8UserName.getStr());
+            auto rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_PROXYUSERNAME,
+                                       utf8UserName.getStr());
             if (rc != CURLE_OK)
             {
                 SAL_WARN("ucb.ucp.webdav.curl",
@@ -836,249 +1255,109 @@ auto CurlProcessor::ProcessRequestImpl(
         }
 
         ResponseHeaders headers(rSession.m_pCurl.get());
-        rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_HEADERDATA, &headers);
-        assert(rc == CURLE_OK);
-        ::std::optional<DownloadTarget> oDownloadTarget;
-        if (pxOutStream)
-        {
-            oDownloadTarget.emplace(*pxOutStream, headers);
-            rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_WRITEDATA, &*oDownloadTarget);
-            assert(rc == CURLE_OK);
-        }
-        ::std::optional<UploadSource> oUploadSource;
-        if (pxInStream)
-        {
-            oUploadSource.emplace(*pxInStream, headers);
-            rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_READDATA, &*oUploadSource);
-            assert(rc == CURLE_OK);
-            // libcurl won't upload without setting this
-            rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_UPLOAD, 1L);
-            assert(rc == CURLE_OK);
-        }
-        rSession.m_ErrorBuffer[0] = '\0';
 
-        // note: easy handle must be added for *every* transfer!
-        // otherwise it gets stuck in MSTATE_MSGSENT forever after 1st transfer
-        auto mc = curl_multi_add_handle(rSession.m_pCurlMulti.get(), rSession.m_pCurl.get());
-        if (mc != CURLM_OK)
+        try
         {
-            SAL_WARN("ucb.ucp.webdav.curl",
-                     "curl_multi_add_handle failed: " << GetErrorStringMulti(mc));
-            throw DAVException(
-                DAVException::DAV_SESSION_CREATE,
-                ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
+            ProcessRequestImpl(rSession, rURI, pRequestHeaderList.get(), pxOutStream, pxInStream,
+                               pRequestedHeaders, headers);
         }
-        ::comphelper::ScopeGuard const gg([&]() {
-            mc = curl_multi_remove_handle(rSession.m_pCurlMulti.get(), rSession.m_pCurl.get());
-            if (mc != CURLM_OK)
-            {
-                SAL_WARN("ucb.ucp.webdav.curl",
-                         "curl_multi_remove_handle failed: " << GetErrorStringMulti(mc));
-            }
-        });
-
-        // this is where libcurl actually does something
-        rc = CURL_LAST; // clear current value
-        int nRunning;
-        do
+        catch (DAVException const& rException)
         {
-            mc = curl_multi_perform(rSession.m_pCurlMulti.get(), &nRunning);
-            if (mc != CURLM_OK)
+            // error handling part 3: special HTTP status codes
+            // that require unlocking m_Mutex to handle
+            if (rException.getError() == DAVException::DAV_HTTP_ERROR)
             {
-                SAL_WARN("ucb.ucp.webdav.curl",
-                         "curl_multi_perform failed: " << GetErrorStringMulti(mc));
-                throw DAVException(
-                    DAVException::DAV_HTTP_CONNECT,
-                    ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
-            }
-            if (nRunning == 0)
-            { // short request like HEAD on loopback could be done in first call
-                break;
-            }
-            int nFDs;
-            mc = curl_multi_poll(rSession.m_pCurlMulti.get(), nullptr, 0, rSession.m_nReadTimeout,
-                                 &nFDs);
-            if (mc != CURLM_OK)
-            {
-                SAL_WARN("ucb.ucp.webdav.curl",
-                         "curl_multi_poll failed: " << GetErrorStringMulti(mc));
-                throw DAVException(
-                    DAVException::DAV_HTTP_CONNECT,
-                    ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
-            }
-            if (rSession.m_AbortFlag.load())
-            { // flag was set by abort() -> not sure what exception to throw?
-                throw DAVException(DAVException::DAV_HTTP_ERROR, "abort() was called", 0);
-            }
-        } while (nRunning != 0);
-        // there should be exactly 1 CURLMsg now, but the interface is
-        // extensible so future libcurl versions could yield additional things
-        do
-        {
-            CURLMsg const* const pMsg
-                = curl_multi_info_read(rSession.m_pCurlMulti.get(), &nRunning);
-            if (pMsg && pMsg->msg == CURLMSG_DONE)
-            {
-                assert(pMsg->easy_handle == rSession.m_pCurl.get());
-                rc = pMsg->data.result;
-            }
-            else
-            {
-                SAL_WARN("ucb.ucp.webdav.curl", "curl_multi_info_read unexpected result");
-            }
-        } while (nRunning != 0);
-
-        // error handling part 1: libcurl errors
-        if (rc != CURLE_OK)
-        {
-            // TODO: is there any value in extracting CURLINFO_OS_ERRNO
-            SAL_WARN("ucb.ucp.webdav.curl",
-                     "curl_easy_perform failed: " << GetErrorString(rc, rSession.m_ErrorBuffer));
-            switch (rc)
-            {
-                case CURLE_COULDNT_RESOLVE_PROXY:
-                    throw DAVException(
-                        DAVException::DAV_HTTP_LOOKUP,
-                        ConnectionEndPointString(rSession.m_Proxy.aName, rSession.m_Proxy.nPort));
-                case CURLE_COULDNT_RESOLVE_HOST:
-                    throw DAVException(DAVException::DAV_HTTP_LOOKUP,
-                                       ConnectionEndPointString(rSession.m_URI.GetHost(),
-                                                                rSession.m_URI.GetPort()));
-                case CURLE_COULDNT_CONNECT:
-                case CURLE_SSL_CONNECT_ERROR:
-                case CURLE_SSL_CERTPROBLEM:
-                case CURLE_SSL_CIPHER:
-                case CURLE_PEER_FAILED_VERIFICATION:
-                case CURLE_SSL_ISSUER_ERROR:
-                case CURLE_SSL_PINNEDPUBKEYNOTMATCH:
-                case CURLE_SSL_INVALIDCERTSTATUS:
-                case CURLE_QUIC_CONNECT_ERROR:
-                    throw DAVException(DAVException::DAV_HTTP_CONNECT,
-                                       ConnectionEndPointString(rSession.m_URI.GetHost(),
-                                                                rSession.m_URI.GetPort()));
-                case CURLE_REMOTE_ACCESS_DENIED:
-                case CURLE_LOGIN_DENIED:
-                case CURLE_AUTH_ERROR:
-                    throw DAVException(DAVException::DAV_HTTP_AUTH, // probably?
-                                       ConnectionEndPointString(rSession.m_URI.GetHost(),
-                                                                rSession.m_URI.GetPort()));
-                case CURLE_WRITE_ERROR:
-                case CURLE_READ_ERROR: // error returned from our callbacks
-                case CURLE_OUT_OF_MEMORY:
-                case CURLE_ABORTED_BY_CALLBACK:
-                case CURLE_BAD_FUNCTION_ARGUMENT:
-                case CURLE_SEND_ERROR:
-                case CURLE_RECV_ERROR:
-                case CURLE_SSL_CACERT_BADFILE:
-                case CURLE_SSL_CRL_BADFILE:
-                case CURLE_RECURSIVE_API_CALL:
-                    throw DAVException(DAVException::DAV_HTTP_FAILED,
-                                       ConnectionEndPointString(rSession.m_URI.GetHost(),
-                                                                rSession.m_URI.GetPort()));
-                case CURLE_OPERATION_TIMEDOUT:
-                    throw DAVException(DAVException::DAV_HTTP_TIMEOUT,
-                                       ConnectionEndPointString(rSession.m_URI.GetHost(),
-                                                                rSession.m_URI.GetPort()));
-                default: // lots of generic errors
-                    throw DAVException(DAVException::DAV_HTTP_ERROR, "", 0);
-            }
-        }
-        // error handling part 2: HTTP status codes
-        long statusCode(SC_NONE);
-        rc = curl_easy_getinfo(rSession.m_pCurl.get(), CURLINFO_RESPONSE_CODE, &statusCode);
-        assert(rc == CURLE_OK);
-        assert(statusCode != SC_NONE); // ??? should be error returned from perform?
-        SAL_INFO("ucb.ucp.webdav.curl", "HTTP status code: " << statusCode);
-        if (statusCode < 300)
-        {
-            // neon did this regardless of status or even error, which seems odd
-            ExtractRequestedHeaders(headers, pRequestedHeaders);
-        }
-        else
-        {
-            switch (statusCode)
-            {
-                case SC_NONE:
-                    assert(false); // ??? should be error returned from perform?
-                    break;
-                case SC_UNAUTHORIZED:
-                case SC_PROXY_AUTHENTICATION_REQUIRED:
+                auto const statusCode(rException.getStatus());
+                switch (statusCode)
                 {
-                    if (pEnv && pEnv->m_xAuthListener)
+                    case SC_LOCKED:
                     {
-                        ::std::optional<OUString> const oRealm(ExtractRealm(
-                            headers, statusCode == SC_UNAUTHORIZED ? "WWW-Authenticate"
-                                                                   : "Proxy-Authenticate"));
-
-                        ::std::optional<Auth>& roAuth(statusCode == SC_UNAUTHORIZED ? oAuth
-                                                                                    : oAuthProxy);
-                        OUString userName(roAuth ? roAuth->UserName : OUString());
-                        OUString passWord(roAuth ? roAuth->PassWord : OUString());
-                        long authAvail(0);
-                        rc = curl_easy_getinfo(rSession.m_pCurl.get(),
-                                               statusCode == SC_UNAUTHORIZED
-                                                   ? CURLINFO_HTTPAUTH_AVAIL
-                                                   : CURLINFO_PROXYAUTH_AVAIL,
-                                               &authAvail);
-                        assert(rc == CURLE_OK);
-                        bool const isSystemCredSupported((authAvail & authSystem) != 0);
-
-                        // ask user via XInteractionHandler
-                        auto ret = pEnv->m_xAuthListener->authenticate(
-                            oRealm ? *oRealm : "",
-                            //statusCode == SC_UNAUTHORIZED ? uri.GetHost() : rSession.m_Proxy.aName,
-                            statusCode == SC_UNAUTHORIZED ? rSession.m_URI.GetHost()
-                                                          : rSession.m_Proxy.aName,
-                            userName, passWord, isSystemCredSupported);
-
-                        if (ret == 0)
+                        guard.Release(); // release m_Mutex before accessing LockStore
+                        if (g_Init.LockStore.getLockTokenForURI(rURI.GetURI(), nullptr))
                         {
-                            roAuth.emplace(userName, passWord,
-                                           authAvail
-                                               & ((userName.isEmpty() && passWord.isEmpty())
-                                                      ? authSystem
-                                                      : ~authSystem));
-                            isRetry = true;
-                            break; // break out of switch
+                            throw DAVException(DAVException::DAV_LOCKED_SELF);
                         }
-                        // else: throw
+                        else // locked by third party
+                        {
+                            throw DAVException(DAVException::DAV_LOCKED);
+                        }
+                        break;
                     }
-                    SAL_INFO("ucb.ucp.webdav.curl", "no auth credentials provided");
-                    throw DAVException(DAVException::DAV_HTTP_NOAUTH,
-                                       ConnectionEndPointString(rSession.m_URI.GetHost(),
-                                                                rSession.m_URI.GetPort()));
-                    break;
-                }
-                case SC_REQUEST_TIMEOUT:
-                {
-                    throw DAVException(DAVException::DAV_HTTP_TIMEOUT,
-                                       ConnectionEndPointString(rSession.m_URI.GetHost(),
-                                                                rSession.m_URI.GetPort()));
-                    break;
-                }
-                case SC_MOVED_PERMANENTLY:
-                case SC_MOVED_TEMPORARILY:
-                case SC_SEE_OTHER:
-                case SC_TEMPORARY_REDIRECT:
-                {
-                    // could also use CURLOPT_FOLLOWLOCATION but apparently the
-                    // upper layer wants to know about redirects?
-                    char* pRedirectURL(nullptr);
-                    rc = curl_easy_getinfo(rSession.m_pCurl.get(), CURLINFO_REDIRECT_URL,
-                                           &pRedirectURL);
-                    assert(rc == CURLE_OK);
-                    if (pRedirectURL)
+                    case SC_PRECONDITION_FAILED:
+                    case SC_BAD_REQUEST:
                     {
-                        throw DAVException(DAVException::DAV_HTTP_REDIRECT,
-                                           pRedirectURL
-                                               ? OUString(pRedirectURL, strlen(pRedirectURL),
-                                                          RTL_TEXTENCODING_UTF8)
-                                               : OUString());
+                        guard.Release(); // release m_Mutex before accessing LockStore
+                        // Not obvious but apparently these codes may indicate
+                        // the expiration of a lock.
+                        // Initiate a new request *outside* ProcessRequestImpl
+                        // *after* rGuard.unlock() to avoid messing up m_pCurl state.
+                        if (TryRemoveExpiredLockToken(rSession, rURI, pEnv))
+                        {
+                            throw DAVException(DAVException::DAV_LOCK_EXPIRED);
+                        }
+                        break;
                     }
-                    [[fallthrough]];
+                    case SC_UNAUTHORIZED:
+                    case SC_PROXY_AUTHENTICATION_REQUIRED:
+                    {
+                        if (pEnv && pEnv->m_xAuthListener)
+                        {
+                            ::std::optional<OUString> const oRealm(ExtractRealm(
+                                headers, statusCode == SC_UNAUTHORIZED ? "WWW-Authenticate"
+                                                                       : "Proxy-Authenticate"));
+
+                            ::std::optional<Auth>& roAuth(
+                                statusCode == SC_UNAUTHORIZED ? oAuth : oAuthProxy);
+                            OUString userName(roAuth ? roAuth->UserName : OUString());
+                            OUString passWord(roAuth ? roAuth->PassWord : OUString());
+                            long authAvail(0);
+                            auto const rc = curl_easy_getinfo(rSession.m_pCurl.get(),
+                                                              statusCode == SC_UNAUTHORIZED
+                                                                  ? CURLINFO_HTTPAUTH_AVAIL
+                                                                  : CURLINFO_PROXYAUTH_AVAIL,
+                                                              &authAvail);
+                            assert(rc == CURLE_OK);
+                            (void)rc;
+                            bool const isSystemCredSupported((authAvail & authSystem) != 0);
+
+                            // Ask user via XInteractionHandler.
+                            // Warning: This likely runs an event loop which may
+                            // end up calling back into this instance, so all
+                            // changes to m_pCurl must be undone now and
+                            // restored after return.
+                            guard.Release();
+
+                            auto const ret = pEnv->m_xAuthListener->authenticate(
+                                oRealm ? *oRealm : "",
+                                statusCode == SC_UNAUTHORIZED ? rSession.m_URI.GetHost()
+                                                              : rSession.m_Proxy.aName,
+                                userName, passWord, isSystemCredSupported);
+
+                            if (ret == 0)
+                            {
+                                roAuth.emplace(userName, passWord,
+                                               authAvail
+                                                   & ((userName.isEmpty() && passWord.isEmpty())
+                                                          ? authSystem
+                                                          : ~authSystem));
+                                isRetry = true;
+                                // Acquire is only necessary in case of success.
+                                guard.Acquire();
+                                break; // break out of switch
+                            }
+                            // else: throw
+                        }
+                        SAL_INFO("ucb.ucp.webdav.curl", "no auth credentials provided");
+                        throw DAVException(DAVException::DAV_HTTP_NOAUTH,
+                                           ConnectionEndPointString(rSession.m_URI.GetHost(),
+                                                                    rSession.m_URI.GetPort()));
+                        break;
+                    }
                 }
-                default:
-                    throw DAVException(DAVException::DAV_HTTP_ERROR, "", statusCode);
+            }
+            if (!isRetry)
+            {
+                throw; // everything else: re-throw
             }
         }
     } while (isRetry);
@@ -1092,111 +1371,6 @@ auto CurlProcessor::ProcessRequestImpl(
     {
         // assume this worked, leave auth data as stored in m_pCurl
         rSession.m_isAuthenticatedProxy = true;
-    }
-
-    if (pxOutStream)
-    {
-        (*pxOutStream)->closeOutput(); // signal EOF
-    }
-}
-
-static auto TryRemoveExpiredLockToken(CurlSession& rSession, CurlUri const& rURI,
-                                      DAVRequestEnvironment const* const pEnv) -> bool
-{
-    if (!pEnv)
-    {
-        // caller was a NonInteractive_*LOCK function anyway, its caller is LockStore
-        return false;
-    }
-    OUString const* const pToken(g_Init.LockStore.getLockTokenForURI(rURI.GetURI(), nullptr));
-    if (!pToken)
-    {
-        return false;
-    }
-    try
-    {
-        // determine validity of existing lock via lockdiscovery request
-        ::std::vector<OUString> const propertyNames{ DAVProperties::LOCKDISCOVERY };
-        ::std::vector<ucb::Lock> locks;
-        ::std::tuple<::std::vector<OUString> const&, ::std::vector<DAVResource>* const,
-                     ::std::vector<ucb::Lock>* const> const args(propertyNames, nullptr, &locks);
-
-        CurlProcessor::PropFind(rSession, rURI, DAVZERO, &args, nullptr, *pEnv);
-
-        // https://datatracker.ietf.org/doc/html/rfc4918#section-15.8
-        // The response MAY not contain tokens, but hopefully it
-        // will if client is properly authenticated.
-        if (::std::any_of(locks.begin(), locks.end(), [pToken](ucb::Lock const& rLock) {
-                return ::std::any_of(
-                    rLock.LockTokens.begin(), rLock.LockTokens.end(),
-                    [pToken](OUString const& rToken) { return *pToken == rToken; });
-            }))
-        {
-            return false; // still have the lock
-        }
-
-        SAL_INFO("ucb.ucp.webdav.curl",
-                 "lock token expired, removing: " << rURI.GetURI() << " " << *pToken);
-        g_Init.LockStore.removeLock(rURI.GetURI());
-        return true;
-    }
-    catch (DAVException const&)
-    {
-        return false; // ignore, the caller already has a better exception
-    }
-}
-
-auto CurlProcessor::ProcessRequest(
-    Guard& rGuard, CurlSession& rSession, CurlUri const& rURI,
-    DAVRequestEnvironment const* const pEnv,
-    ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist_free_all>> pRequestHeaderList,
-    uno::Reference<io::XOutputStream> const* const pxOutStream,
-    uno::Reference<io::XInputStream> const* const pxInStream,
-    ::std::pair<::std::vector<OUString> const&, DAVResource&> const* const pRequestedHeaders)
-    -> void
-{
-    try
-    {
-        ProcessRequestImpl(rSession, rURI, pEnv, ::std::move(pRequestHeaderList), pxOutStream,
-                           pxInStream, pRequestedHeaders);
-    }
-    catch (DAVException const& rException)
-    {
-        // error handling part 3: special HTTP status codes
-        if (rException.getError() == DAVException::DAV_HTTP_ERROR)
-        {
-            switch (rException.getStatus())
-            {
-                case SC_LOCKED:
-                {
-                    rGuard.unlock(); // release m_Mutex before accessing LockStore
-                    if (g_Init.LockStore.getLockTokenForURI(rURI.GetURI(), nullptr))
-                    {
-                        throw DAVException(DAVException::DAV_LOCKED_SELF);
-                    }
-                    else // locked by third party
-                    {
-                        throw DAVException(DAVException::DAV_LOCKED);
-                    }
-                    break;
-                }
-                case SC_PRECONDITION_FAILED:
-                case SC_BAD_REQUEST:
-                {
-                    rGuard.unlock(); // release m_Mutex before accessing LockStore
-                    // Not obvious but apparently these codes may indicate
-                    // the expiration of a lock.
-                    // Initiate a new request *outside* ProcessRequestImpl
-                    // *after* rGuard.unlock() to avoid messing up m_pCurl state.
-                    if (TryRemoveExpiredLockToken(rSession, rURI, pEnv))
-                    {
-                        throw DAVException(DAVException::DAV_LOCK_EXPIRED);
-                    }
-                    break;
-                }
-            }
-        }
-        throw; // everything else: re-throw
     }
 }
 
@@ -1214,29 +1388,11 @@ auto CurlSession::OPTIONS(OUString const& rURIReference,
     DAVResource result;
     ::std::pair<::std::vector<OUString> const&, DAVResource&> const headers(headerNames, result);
 
-    {
-        // scope to release m_Mutex before accessing LockStore
-        Guard g(m_Mutex, [&]() {
-            auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_NOBODY, 0L);
-            assert(rc == CURLE_OK);
-            (void)rc;
-            rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_CUSTOMREQUEST, nullptr);
-            assert(rc == CURLE_OK);
-        });
+    ::std::vector<CurlOption> const options{ { CURLOPT_NOBODY, 1L, nullptr },
+                                             { CURLOPT_CUSTOMREQUEST, "OPTIONS",
+                                               "CURLOPT_CUSTOMREQUEST" } };
 
-        // need this to prevent calling write_callback
-        auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_NOBODY, 1L);
-        assert(rc == CURLE_OK);
-        rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_CUSTOMREQUEST, "OPTIONS");
-        if (rc != CURLE_OK)
-        {
-            SAL_WARN("ucb.ucp.webdav.curl", "CURLOPT_CUSTOMREQUEST failed: " << GetErrorString(rc));
-            throw DAVException(DAVException::DAV_SESSION_CREATE,
-                               ConnectionEndPointString(m_URI.GetHost(), m_URI.GetPort()));
-        }
-
-        CurlProcessor::ProcessRequest(g, *this, uri, &rEnv, nullptr, nullptr, nullptr, &headers);
-    }
+    CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, nullptr, nullptr, nullptr, &headers);
 
     for (auto const& it : result.properties)
     {
@@ -1326,20 +1482,8 @@ auto CurlProcessor::PropFind(
         throw uno::RuntimeException("curl_slist_append failed");
     }
 
-    Guard g(rSession.m_Mutex, [&]() {
-        auto rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_CUSTOMREQUEST, nullptr);
-        assert(rc == CURLE_OK);
-        (void)rc;
-    });
-
-    auto rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_CUSTOMREQUEST, "PROPFIND");
-    if (rc != CURLE_OK)
-    {
-        SAL_WARN("ucb.ucp.webdav.curl", "CURLOPT_CUSTOMREQUEST failed: " << GetErrorString(rc));
-        throw DAVException(
-            DAVException::DAV_SESSION_CREATE,
-            ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
-    }
+    ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, "PROPFIND",
+                                               "CURLOPT_CUSTOMREQUEST" } };
 
     uno::Reference<io::XInputStream> const xRequestInStream(io::Pipe::create(rSession.m_xContext));
     uno::Reference<io::XOutputStream> const xRequestOutStream(xRequestInStream, uno::UNO_QUERY);
@@ -1388,8 +1532,8 @@ auto CurlProcessor::PropFind(
     assert(xResponseInStream.is());
     assert(xResponseOutStream.is());
 
-    CurlProcessor::ProcessRequest(g, rSession, rURI, &rEnv, ::std::move(pList), &xResponseOutStream,
-                                  &xRequestInStream, nullptr);
+    CurlProcessor::ProcessRequest(rSession, rURI, options, &rEnv, ::std::move(pList),
+                                  &xResponseOutStream, &xRequestInStream, nullptr);
 
     if (o_pResourceInfos)
     {
@@ -1473,19 +1617,8 @@ auto CurlSession::PROPPATCH(OUString const& rURIReference,
         throw uno::RuntimeException("curl_slist_append failed");
     }
 
-    Guard g(m_Mutex, [&]() {
-        auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_CUSTOMREQUEST, nullptr);
-        assert(rc == CURLE_OK);
-        (void)rc;
-    });
-
-    auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_CUSTOMREQUEST, "PROPPATCH");
-    if (rc != CURLE_OK)
-    {
-        SAL_WARN("ucb.ucp.webdav.curl", "CURLOPT_CUSTOMREQUEST failed: " << GetErrorString(rc));
-        throw DAVException(DAVException::DAV_SESSION_CREATE,
-                           ConnectionEndPointString(m_URI.GetHost(), m_URI.GetPort()));
-    }
+    ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, "PROPPATCH",
+                                               "CURLOPT_CUSTOMREQUEST" } };
 
     // generate XML document for PROPPATCH
     uno::Reference<io::XInputStream> const xRequestInStream(io::Pipe::create(m_xContext));
@@ -1543,7 +1676,7 @@ auto CurlSession::PROPPATCH(OUString const& rURIReference,
     xWriter->endDocument();
     xRequestOutStream->closeOutput();
 
-    CurlProcessor::ProcessRequest(g, *this, uri, &rEnv, ::std::move(pList), nullptr,
+    CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, ::std::move(pList), nullptr,
                                   &xRequestInStream, nullptr);
 }
 
@@ -1554,19 +1687,12 @@ auto CurlSession::HEAD(OUString const& rURIReference, ::std::vector<OUString> co
 
     CurlUri const uri(CurlProcessor::URIReferenceToURI(*this, rURIReference));
 
-    Guard g(m_Mutex, [&]() {
-        auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_NOBODY, 0L);
-        assert(rc == CURLE_OK);
-        (void)rc;
-    });
-    auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_NOBODY, 1L);
-    assert(rc == CURLE_OK);
-    (void)rc;
+    ::std::vector<CurlOption> const options{ { CURLOPT_NOBODY, 1L, nullptr } };
 
     ::std::pair<::std::vector<OUString> const&, DAVResource&> const headers(rHeaderNames,
                                                                             io_rResource);
 
-    CurlProcessor::ProcessRequest(g, *this, uri, &rEnv, nullptr, nullptr, nullptr, &headers);
+    CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, nullptr, nullptr, nullptr, &headers);
 }
 
 auto CurlSession::GET(OUString const& rURIReference, DAVRequestEnvironment const& rEnv)
@@ -1586,16 +1712,9 @@ auto CurlSession::GET(OUString const& rURIReference, DAVRequestEnvironment const
     uno::Reference<io::XOutputStream> const xResponseOutStream(xSeqOutStream);
     assert(xResponseOutStream.is());
 
-    Guard g(m_Mutex, [&]() {
-        auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_HTTPGET, 0L);
-        assert(rc == CURLE_OK);
-        (void)rc;
-    });
-    auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_HTTPGET, 1L);
-    assert(rc == CURLE_OK);
-    (void)rc;
+    ::std::vector<CurlOption> const options{ { CURLOPT_HTTPGET, 1L, nullptr } };
 
-    CurlProcessor::ProcessRequest(g, *this, uri, &rEnv, nullptr, &xResponseOutStream, nullptr,
+    CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, nullptr, &xResponseOutStream, nullptr,
                                   nullptr);
 
     uno::Reference<io::XInputStream> const xResponseInStream(
@@ -1613,16 +1732,10 @@ auto CurlSession::GET(OUString const& rURIReference, uno::Reference<io::XOutputS
 
     CurlUri const uri(CurlProcessor::URIReferenceToURI(*this, rURIReference));
 
-    Guard g(m_Mutex, [&]() {
-        auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_HTTPGET, 0L);
-        assert(rc == CURLE_OK);
-        (void)rc;
-    });
-    auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_HTTPGET, 1L);
-    assert(rc == CURLE_OK);
-    (void)rc;
+    ::std::vector<CurlOption> const options{ { CURLOPT_HTTPGET, 1L, nullptr } };
 
-    CurlProcessor::ProcessRequest(g, *this, uri, &rEnv, nullptr, &rxOutStream, nullptr, nullptr);
+    CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, nullptr, &rxOutStream, nullptr,
+                                  nullptr);
 }
 
 auto CurlSession::GET(OUString const& rURIReference, ::std::vector<OUString> const& rHeaderNames,
@@ -1633,14 +1746,7 @@ auto CurlSession::GET(OUString const& rURIReference, ::std::vector<OUString> con
 
     CurlUri const uri(CurlProcessor::URIReferenceToURI(*this, rURIReference));
 
-    Guard g(m_Mutex, [&]() {
-        auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_HTTPGET, 0L);
-        assert(rc == CURLE_OK);
-        (void)rc;
-    });
-    auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_HTTPGET, 1L);
-    assert(rc == CURLE_OK);
-    (void)rc;
+    ::std::vector<CurlOption> const options{ { CURLOPT_HTTPGET, 1L, nullptr } };
 
     uno::Reference<io::XSequenceOutputStream> const xSeqOutStream(
         io::SequenceOutputStream::create(m_xContext));
@@ -1650,7 +1756,7 @@ auto CurlSession::GET(OUString const& rURIReference, ::std::vector<OUString> con
     ::std::pair<::std::vector<OUString> const&, DAVResource&> const headers(rHeaderNames,
                                                                             io_rResource);
 
-    CurlProcessor::ProcessRequest(g, *this, uri, &rEnv, nullptr, &xResponseOutStream, nullptr,
+    CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, nullptr, &xResponseOutStream, nullptr,
                                   &headers);
 
     uno::Reference<io::XInputStream> const xResponseInStream(
@@ -1669,19 +1775,13 @@ auto CurlSession::GET(OUString const& rURIReference, uno::Reference<io::XOutputS
 
     CurlUri const uri(CurlProcessor::URIReferenceToURI(*this, rURIReference));
 
-    Guard g(m_Mutex, [&]() {
-        auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_HTTPGET, 0L);
-        assert(rc == CURLE_OK);
-        (void)rc;
-    });
-    auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_HTTPGET, 1L);
-    assert(rc == CURLE_OK);
-    (void)rc;
+    ::std::vector<CurlOption> const options{ { CURLOPT_HTTPGET, 1L, nullptr } };
 
     ::std::pair<::std::vector<OUString> const&, DAVResource&> const headers(rHeaderNames,
                                                                             io_rResource);
 
-    CurlProcessor::ProcessRequest(g, *this, uri, &rEnv, nullptr, &rxOutStream, nullptr, &headers);
+    CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, nullptr, &rxOutStream, nullptr,
+                                  &headers);
 }
 
 auto CurlSession::PUT(OUString const& rURIReference,
@@ -1719,10 +1819,11 @@ auto CurlSession::PUT(OUString const& rURIReference,
     }
 
     // lock m_Mutex after accessing global LockStore to avoid deadlock
-    Guard g(m_Mutex);
 
-    CurlProcessor::ProcessRequest(g, *this, uri, &rEnv, ::std::move(pList), nullptr, &rxInStream,
-                                  nullptr);
+    ::std::vector<CurlOption> const options{};
+
+    CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, ::std::move(pList), nullptr,
+                                  &rxInStream, nullptr);
 }
 
 auto CurlSession::POST(OUString const& rURIReference, OUString const& rContentType,
@@ -1754,23 +1855,15 @@ auto CurlSession::POST(OUString const& rURIReference, OUString const& rContentTy
         throw uno::RuntimeException("curl_slist_append failed");
     }
 
-    Guard g(m_Mutex, [&]() {
-        auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_POST, 0L);
-        assert(rc == CURLE_OK);
-        (void)rc;
-    });
-
-    auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_POST, 1L);
-    assert(rc == CURLE_OK);
-    (void)rc;
+    ::std::vector<CurlOption> const options{ { CURLOPT_POST, 1L, nullptr } };
 
     uno::Reference<io::XSequenceOutputStream> const xSeqOutStream(
         io::SequenceOutputStream::create(m_xContext));
     uno::Reference<io::XOutputStream> const xResponseOutStream(xSeqOutStream);
     assert(xResponseOutStream.is());
 
-    CurlProcessor::ProcessRequest(g, *this, uri, &rEnv, ::std::move(pList), &xResponseOutStream,
-                                  &rxInStream, nullptr);
+    CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, ::std::move(pList),
+                                  &xResponseOutStream, &rxInStream, nullptr);
 
     uno::Reference<io::XInputStream> const xResponseInStream(
         io::SequenceInputStream::createStreamFromSequence(m_xContext,
@@ -1810,17 +1903,9 @@ auto CurlSession::POST(OUString const& rURIReference, OUString const& rContentTy
         throw uno::RuntimeException("curl_slist_append failed");
     }
 
-    Guard g(m_Mutex, [&]() {
-        auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_POST, 0L);
-        assert(rc == CURLE_OK);
-        (void)rc;
-    });
+    ::std::vector<CurlOption> const options{ { CURLOPT_POST, 1L, nullptr } };
 
-    auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_POST, 1L);
-    assert(rc == CURLE_OK);
-    (void)rc;
-
-    CurlProcessor::ProcessRequest(g, *this, uri, &rEnv, ::std::move(pList), &rxOutStream,
+    CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, ::std::move(pList), &rxOutStream,
                                   &rxInStream, nullptr);
 }
 
@@ -1830,20 +1915,10 @@ auto CurlSession::MKCOL(OUString const& rURIReference, DAVRequestEnvironment con
 
     CurlUri const uri(CurlProcessor::URIReferenceToURI(*this, rURIReference));
 
-    Guard g(m_Mutex, [&]() {
-        auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_CUSTOMREQUEST, nullptr);
-        assert(rc == CURLE_OK);
-        (void)rc;
-    });
-    auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_CUSTOMREQUEST, "MKCOL");
-    if (rc != CURLE_OK)
-    {
-        SAL_WARN("ucb.ucp.webdav.curl", "CURLOPT_CUSTOMREQUEST failed: " << GetErrorString(rc));
-        throw DAVException(DAVException::DAV_SESSION_CREATE,
-                           ConnectionEndPointString(m_URI.GetHost(), m_URI.GetPort()));
-    }
+    ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, "MKCOL",
+                                               "CURLOPT_CUSTOMREQUEST" } };
 
-    CurlProcessor::ProcessRequest(g, *this, uri, &rEnv, nullptr, nullptr, nullptr, nullptr);
+    CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, nullptr, nullptr, nullptr, nullptr);
 }
 
 auto CurlProcessor::MoveOrCopy(CurlSession& rSession, OUString const& rSourceURIReference,
@@ -1868,17 +1943,10 @@ auto CurlProcessor::MoveOrCopy(CurlSession& rSession, OUString const& rSourceURI
         throw uno::RuntimeException("curl_slist_append failed");
     }
 
-    Guard g(rSession.m_Mutex, [&]() {
-        auto rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_CUSTOMREQUEST, nullptr);
-        assert(rc == CURLE_OK);
-        (void)rc;
-    });
+    ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, pMethod,
+                                               "CURLOPT_CUSTOMREQUEST" } };
 
-    auto rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_CUSTOMREQUEST, pMethod);
-    assert(rc == CURLE_OK);
-    (void)rc;
-
-    CurlProcessor::ProcessRequest(g, rSession, uriSource, &rEnv, ::std::move(pList), nullptr,
+    CurlProcessor::ProcessRequest(rSession, uriSource, options, &rEnv, ::std::move(pList), nullptr,
                                   nullptr, nullptr);
 }
 
@@ -1906,20 +1974,10 @@ auto CurlSession::DESTROY(OUString const& rURIReference, DAVRequestEnvironment c
 
     CurlUri const uri(CurlProcessor::URIReferenceToURI(*this, rURIReference));
 
-    Guard g(m_Mutex, [&]() {
-        auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_CUSTOMREQUEST, nullptr);
-        assert(rc == CURLE_OK);
-        (void)rc;
-    });
-    auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_CUSTOMREQUEST, "DELETE");
-    if (rc != CURLE_OK)
-    {
-        SAL_WARN("ucb.ucp.webdav.curl", "CURLOPT_CUSTOMREQUEST failed: " << GetErrorString(rc));
-        throw DAVException(DAVException::DAV_SESSION_CREATE,
-                           ConnectionEndPointString(m_URI.GetHost(), m_URI.GetPort()));
-    }
+    ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, "DELETE",
+                                               "CURLOPT_CUSTOMREQUEST" } };
 
-    CurlProcessor::ProcessRequest(g, *this, uri, &rEnv, nullptr, nullptr, nullptr, nullptr);
+    CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, nullptr, nullptr, nullptr, nullptr);
 }
 
 auto CurlProcessor::Lock(
@@ -1928,19 +1986,8 @@ auto CurlProcessor::Lock(
     uno::Reference<io::XInputStream> const* const pxRequestInStream)
     -> ::std::vector<::std::pair<ucb::Lock, sal_Int32>>
 {
-    Guard g(rSession.m_Mutex, [&]() {
-        auto rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_CUSTOMREQUEST, nullptr);
-        assert(rc == CURLE_OK);
-        (void)rc;
-    });
-    auto rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_CUSTOMREQUEST, "LOCK");
-    if (rc != CURLE_OK)
-    {
-        SAL_WARN("ucb.ucp.webdav.curl", "CURLOPT_CUSTOMREQUEST failed: " << GetErrorString(rc));
-        throw DAVException(
-            DAVException::DAV_SESSION_CREATE,
-            ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
-    }
+    ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, "LOCK",
+                                               "CURLOPT_CUSTOMREQUEST" } };
 
     // stream for response
     uno::Reference<io::XInputStream> const xResponseInStream(io::Pipe::create(rSession.m_xContext));
@@ -1951,7 +1998,7 @@ auto CurlProcessor::Lock(
     TimeValue startTime;
     osl_getSystemTime(&startTime);
 
-    CurlProcessor::ProcessRequest(g, rSession, rURI, pEnv, ::std::move(pRequestHeaderList),
+    CurlProcessor::ProcessRequest(rSession, rURI, options, pEnv, ::std::move(pRequestHeaderList),
                                   &xResponseOutStream, pxRequestInStream, nullptr);
 
     ::std::vector<ucb::Lock> const acquiredLocks(parseWebDAVLockResponse(xResponseInStream));
@@ -2127,23 +2174,11 @@ auto CurlProcessor::Unlock(CurlSession& rSession, CurlUri const& rURI,
         throw uno::RuntimeException("curl_slist_append failed");
     }
 
-    // lock m_Mutex after accessing global LockStore to avoid deadlock
-    Guard g(rSession.m_Mutex, [&]() {
-        auto rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_CUSTOMREQUEST, nullptr);
-        assert(rc == CURLE_OK);
-        (void)rc;
-    });
-    auto rc = curl_easy_setopt(rSession.m_pCurl.get(), CURLOPT_CUSTOMREQUEST, "UNLOCK");
-    if (rc != CURLE_OK)
-    {
-        SAL_WARN("ucb.ucp.webdav.curl", "CURLOPT_CUSTOMREQUEST failed: " << GetErrorString(rc));
-        throw DAVException(
-            DAVException::DAV_SESSION_CREATE,
-            ConnectionEndPointString(rSession.m_URI.GetHost(), rSession.m_URI.GetPort()));
-    }
+    ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, "UNLOCK",
+                                               "CURLOPT_CUSTOMREQUEST" } };
 
-    CurlProcessor::ProcessRequest(g, rSession, rURI, pEnv, ::std::move(pList), nullptr, nullptr,
-                                  nullptr);
+    CurlProcessor::ProcessRequest(rSession, rURI, options, pEnv, ::std::move(pList), nullptr,
+                                  nullptr, nullptr);
 }
 
 auto CurlSession::UNLOCK(OUString const& rURIReference, DAVRequestEnvironment const& rEnv) -> void
