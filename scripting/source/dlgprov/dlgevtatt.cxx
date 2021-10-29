@@ -113,7 +113,7 @@ namespace dlgprov
         Sequence< Any > args(1);
         if ( xSMgr.is() )
         {
-            args[0] <<= xModel;
+            args.getArray()[0] <<= xModel;
             mxListener.set( xSMgr->createInstanceWithArgumentsAndContext( "ooo.vba.EventListener", args, m_xContext ), UNO_QUERY );
         }
         if ( !rxControl.is() )
