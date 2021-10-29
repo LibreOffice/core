@@ -585,7 +585,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, 
     if ( !fSameAsLoad && pStgSave != m_pMasterStorage )
     {
         OSL_ENSURE( m_pMasterStorage, "How could the document be initialized without storage!??" );
-        HRESULT hr = m_pMasterStorage->CopyTo( NULL, nullptr, nullptr, pStgSave );
+        HRESULT hr = m_pMasterStorage->CopyTo( 0, nullptr, nullptr, pStgSave );
         if ( FAILED( hr ) ) return E_FAIL;
 
         STATSTG aStat;

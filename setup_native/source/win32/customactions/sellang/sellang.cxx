@@ -251,7 +251,7 @@ extern "C" __declspec(dllexport) UINT __stdcall SelectLanguage( MSIHANDLE handle
         return ERROR_SUCCESS;
     }
 
-    if (MsiViewExecute(view, NULL) != ERROR_SUCCESS) {
+    if (MsiViewExecute(view, 0) != ERROR_SUCCESS) {
         MsiCloseHandle(view);
         MsiCloseHandle(database);
         return ERROR_SUCCESS;
@@ -287,7 +287,7 @@ extern "C" __declspec(dllexport) UINT __stdcall SelectLanguage( MSIHANDLE handle
             &view)
         == ERROR_SUCCESS)
     {
-        if (MsiViewExecute(view, NULL) == ERROR_SUCCESS) {
+        if (MsiViewExecute(view, 0) == ERROR_SUCCESS) {
             while (ndicts < MAX_LANGUAGES &&
                    MsiViewFetch(view, &record) == ERROR_SUCCESS)
             {

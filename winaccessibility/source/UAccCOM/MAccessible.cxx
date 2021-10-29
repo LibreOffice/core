@@ -2337,7 +2337,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::accSelect(long flagsSelect, VARI
             pSelectAcc->GetUNOInterface(&nHyper);
 
             if( pTempUNO == nullptr )
-                return NULL;
+                return 0;
 
             Reference<XAccessibleContext> pRContext = pTempUNO->getAccessibleContext();
             Reference< XAccessibleComponent > pRComponent(pRContext,UNO_QUERY);

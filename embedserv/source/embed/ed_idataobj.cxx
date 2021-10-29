@@ -34,7 +34,7 @@ using namespace ::com::sun::star;
 
 sal_uInt64 EmbedDocument_Impl::getMetaFileHandle_Impl( bool isEnhMeta )
 {
-    sal_uInt64 pResult = NULL;
+    sal_uInt64 pResult = 0;
 
     uno::Reference< datatransfer::XTransferable > xTransferable( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
     if ( xTransferable.is() )

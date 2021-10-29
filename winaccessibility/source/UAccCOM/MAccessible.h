@@ -66,7 +66,7 @@ public:
     COM_INTERFACE_ENTRY(IDispatch)
     COM_INTERFACE_ENTRY(IAccessibleApplication)
     COM_INTERFACE_ENTRY(IServiceProvider)
-    COM_INTERFACE_ENTRY_FUNC_BLIND(NULL,SmartQI_)
+    COM_INTERFACE_ENTRY_FUNC_BLIND(0,SmartQI_)
 #if defined __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Winconsistent-missing-override"
