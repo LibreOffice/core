@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2db53af3_8987f42b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-29T11:38:44Z",
+      "side": 1,
+      "message": "What is a misuse? Of course, where a bool is expected, it\u0027s a misuse; but e.g. CertOpenStore is documented [1] to take \u0027NULL\u0027 in its third argument. Do we simply generally discourage any NULL use? (Asking because of curiosity, no problem in this)\n\n[1] https://docs.microsoft.com/en-us/windows/win32/api/wincrypt/nf-wincrypt-certopenstore",
+      "revId": "a5cea74034a8e029bfdf0f2b82ea8800bf5bd206",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
