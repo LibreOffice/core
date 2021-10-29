@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fad9c840_5594937b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-10-29T09:47:18Z",
+      "side": 1,
+      "message": "wondering if this approach would obsolete the \"gtk3_kde5\" vclplug.\n\nalso wondering if the custom checkboxes etc we put on the file dialog still work.",
+      "revId": "ebd19ebffc36feb875709265898239a96705c527",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
