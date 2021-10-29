@@ -27,6 +27,7 @@
 #include <layctrl.hxx>
 #include <svx/dialmgr.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
@@ -337,11 +338,8 @@ void TableWidget::InsertTable()
 {
     if (nCol && nLine)
     {
-        Sequence< PropertyValue > aArgs( 2 );
-        aArgs[0].Name = "Columns";
-        aArgs[0].Value <<= sal_Int16( nCol );
-        aArgs[1].Name = "Rows";
-        aArgs[1].Value <<= sal_Int16( nLine );
+        Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("Columns", sal_Int16( nCol )),
+                                         comphelper::makePropertyValue("Rows", sal_Int16( nLine )) };
 
         mxControl->TableDialog( aArgs );
     }
@@ -675,11 +673,10 @@ void ColumnsWidget::InsertColumns()
 {
     if (nCol)
     {
-        Sequence< PropertyValue > aArgs( 2 );
-        aArgs[0].Name = "Columns";
-        aArgs[0].Value <<= sal_Int16( nCol );
-        aArgs[1].Name = "Modifier";
-        aArgs[1].Value <<= sal_Int16( m_bMod1 ? KEY_MOD1 : 0 );
+        Sequence< PropertyValue > aArgs{
+            comphelper::makePropertyValue("Columns", sal_Int16( nCol )),
+            comphelper::makePropertyValue("Modifier", sal_Int16( m_bMod1 ? KEY_MOD1 : 0 ))
+        };
         mxControl->InsertColumns(aArgs);
     }
 }

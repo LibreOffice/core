@@ -21,7 +21,10 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
+#include <comphelper/propertyvalue.hxx>
 #include <osl/diagnose.h>
+
+#include <cassert>
 
 
 SfxPoolItem* SvxViewLayoutItem::CreateDefault() { return new SvxViewLayoutItem; }
@@ -76,11 +79,11 @@ bool SvxViewLayoutItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) c
     {
         case 0 :
         {
-            css::uno::Sequence< css::beans::PropertyValue > aSeq( VIEWLAYOUT_PARAMS );
-            aSeq[0].Name = VIEWLAYOUT_PARAM_COLUMNS;
-            aSeq[0].Value <<= sal_Int32( GetValue() );
-            aSeq[1].Name = VIEWLAYOUT_PARAM_BOOKMODE;
-            aSeq[1].Value <<= mbBookMode;
+            css::uno::Sequence< css::beans::PropertyValue > aSeq{
+                comphelper::makePropertyValue(VIEWLAYOUT_PARAM_COLUMNS, sal_Int32( GetValue() )),
+                comphelper::makePropertyValue(VIEWLAYOUT_PARAM_BOOKMODE, mbBookMode)
+            };
+            assert(aSeq.getLength() == VIEWLAYOUT_PARAMS);
             rVal <<= aSeq;
         }
         break;

@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/idle.hxx>
 #include <svl/intitem.hxx>
@@ -121,9 +124,7 @@ IMPL_LINK_NOARG(ImplGrafControl, ImplModifyHdl, Timer*, void)
 
     INetURLObject aObj( maCommand );
 
-    Sequence< PropertyValue > aArgs( 1 );
-    aArgs[0].Name = aObj.GetURLPath();
-    aArgs[0].Value = a;
+    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(aObj.GetURLPath(), a) };
 
     SfxToolBoxControl::Dispatch(
         Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
@@ -322,9 +323,8 @@ ImplGrafModeControl::~ImplGrafModeControl()
 
 IMPL_LINK(ImplGrafModeControl, SelectHdl, weld::ComboBox&, rBox, void)
 {
-    Sequence< PropertyValue > aArgs( 1 );
-    aArgs[0].Name = "GrafMode";
-    aArgs[0].Value <<= sal_Int16(rBox.get_active());
+    Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("GrafMode",
+                                                                   sal_Int16(rBox.get_active())) };
 
     /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
         This instance may be deleted in the meantime (i.e. when a dialog is opened

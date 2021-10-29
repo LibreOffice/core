@@ -19,6 +19,8 @@
 
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+
+#include <comphelper/propertyvalue.hxx>
 #include <tools/debug.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapex.hxx>
@@ -209,12 +211,10 @@ bool XFillBitmapItem::QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId) const
     {
         // member-id 0 => complete item (e.g. for toolbars)
         DBG_ASSERT( nMemberId == 0, "invalid member-id" );
-        uno::Sequence< beans::PropertyValue > aPropSeq( 2 );
-
-        aPropSeq[0].Name  = "Name";
-        aPropSeq[0].Value <<= aInternalName;
-        aPropSeq[1].Name  = "Bitmap";
-        aPropSeq[1].Value <<= xBmp;
+        uno::Sequence< beans::PropertyValue > aPropSeq{
+            comphelper::makePropertyValue("Name", aInternalName),
+            comphelper::makePropertyValue("Bitmap", xBmp)
+        };
 
         rVal <<= aPropSeq;
     }
