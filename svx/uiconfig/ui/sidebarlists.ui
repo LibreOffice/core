@@ -27,7 +27,6 @@
             <child>
               <object class="GtkMenuToolButton" id=".uno:DefaultBullet">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -38,7 +37,6 @@
             <child>
               <object class="GtkMenuToolButton" id=".uno:DefaultNumbering">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -67,7 +65,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:OutlineRight">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -78,7 +75,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:OutlineLeft">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -89,7 +85,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:OutlineDown">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -100,7 +95,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:OutlineUp">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>

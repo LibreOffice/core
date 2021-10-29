@@ -85,7 +85,6 @@
                     <child>
                       <object class="GtkToolButton" id="ID_INDEX_NEW">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="valign">start</property>
                         <property name="label" translatable="yes" context="indexdesigndialog|ID_INDEX_NEW">New Index</property>
                         <property name="use_underline">True</property>
@@ -99,7 +98,6 @@
                     <child>
                       <object class="GtkToolButton" id="ID_INDEX_DROP">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="valign">start</property>
                         <property name="label" translatable="yes" context="indexdesigndialog|ID_INDEX_DROP">Delete Current Index</property>
                         <property name="use_underline">True</property>
@@ -113,7 +111,6 @@
                     <child>
                       <object class="GtkToolButton" id="ID_INDEX_RENAME">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="valign">start</property>
                         <property name="label" translatable="yes" context="indexdesigndialog|ID_INDEX_RENAME">Rename Current Index</property>
                         <property name="use_underline">True</property>
@@ -127,7 +124,6 @@
                     <child>
                       <object class="GtkToolButton" id="ID_INDEX_SAVE">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="valign">start</property>
                         <property name="label" translatable="yes" context="indexdesigndialog|ID_INDEX_SAVE">Save Current Index</property>
                         <property name="use_underline">True</property>
@@ -141,7 +137,6 @@
                     <child>
                       <object class="GtkToolButton" id="ID_INDEX_RESET">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="valign">start</property>
                         <property name="label" translatable="yes" context="indexdesigndialog|ID_INDEX_RESET">Reset Current Index</property>
                         <property name="use_underline">True</property>

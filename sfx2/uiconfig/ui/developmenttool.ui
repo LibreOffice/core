@@ -113,7 +113,6 @@
                     <child>
                       <object class="GtkToggleToolButton" id="dom_current_selection_toggle">
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
                         <property name="tooltip-text" translatable="yes" context="developmenttool|dom_current_selection_toggle-tooltip">Current Selection In Document</property>
                         <property name="label" translatable="yes" context="developmenttool|dom_current_selection_toggle">Current Selection</property>
                         <property name="use-underline">True</property>
@@ -126,7 +125,6 @@
                     <child>
                       <object class="GtkToolButton" id="dom_refresh_button">
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
                         <property name="tooltip-text" translatable="yes" context="developmenttool|dom_refresh_button-tooltip">Refresh Document Model Tree View</property>
                         <property name="label" translatable="yes" context="developmenttool|dom_refresh_button">Refresh</property>
                         <property name="use-underline">True</property>
@@ -222,7 +220,6 @@
                     <child>
                       <object class="GtkToolButton" id="back">
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
                         <property name="tooltip-text" translatable="yes" context="developmenttool|tooltip-back">Back</property>
                         <property name="label" translatable="yes" context="developmenttool|back">Back</property>
                         <property name="use-underline">True</property>
@@ -236,7 +233,6 @@
                     <child>
                       <object class="GtkToolButton" id="inspect">
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
                         <property name="tooltip-text" translatable="yes" context="developmenttool|tooltip-inspect">Inspect</property>
                         <property name="label" translatable="yes" context="developmenttool|inspect">Inspect</property>
                         <property name="use-underline">True</property>
@@ -250,7 +246,6 @@
                     <child>
                       <object class="GtkToolButton" id="refresh">
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
                         <property name="tooltip-text" translatable="yes" context="developmenttool|tooltip-refresh">Refresh</property>
                         <property name="label" translatable="yes" context="developmenttool|refresh">Refresh</property>
                         <property name="use-underline">True</property>

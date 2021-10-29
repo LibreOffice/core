@@ -291,6 +291,22 @@ def remove_track_visited_links(current):
   if track_visited_links != None:
     current.remove(track_visited_links)
 
+def remove_toolbutton_focus(current):
+  can_focus = None
+  classname = current.get('class');
+  istoolbutton = classname and classname.endswith("ToolButton");
+  for child in current:
+    remove_toolbutton_focus(child)
+    if not istoolbutton:
+        continue
+    if child.tag == "property":
+      attributes = child.attrib
+      if attributes.get("name") == "can_focus" or attributes.get("name") == "can-focus":
+        can_focus = child
+
+  if can_focus != None:
+    current.remove(can_focus)
+
 def remove_double_buffered(current):
   double_buffered = None
   for child in current:
@@ -479,7 +495,7 @@ enforce_active_in_group_consistency(root)
 enforce_entry_text_column_id_column_for_gtkcombobox(root)
 remove_double_buffered(root)
 remove_skip_pager_hint(root)
-
+remove_toolbutton_focus(root)
 
 with open(sys.argv[1], 'wb') as o:
   # without encoding='unicode' (and the matching encode("utf8")) we get &#XXXX replacements for non-ascii characters

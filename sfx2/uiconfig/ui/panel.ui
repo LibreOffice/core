@@ -62,7 +62,7 @@
         </child>
         <child>
           <object class="GtkToolbar" id="toolbar">
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
             <property name="no-show-all">True</property>
             <property name="toolbar-style">icons</property>
             <property name="show-arrow">False</property>
@@ -70,7 +70,6 @@
             <child>
               <object class="GtkToolButton" id="button">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
                 <property name="tooltip-text" translatable="yes" context="panel|SFX_STR_SIDEBAR_MORE_OPTIONS">More Options</property>
                 <property name="use-underline">True</property>
                 <property name="icon-name">sfx2/res/symphony/morebutton.png</property>
