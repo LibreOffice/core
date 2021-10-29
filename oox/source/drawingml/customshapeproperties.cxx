@@ -182,8 +182,11 @@ void CustomShapeProperties::pushToPropSet(
             static const OUStringLiteral sType = u"Type";
             if ( aGeoPropSet >>= aGeoPropSeq )
             {
-                for ( auto& rGeoProp : asNonConstRange(aGeoPropSeq) )
+                // aGeoPropSeq gets modified in the loop, and gets copied elsewhere;
+                // don't use range-based for here
+                for ( sal_Int32 i = 0; i < aGeoPropSeq.getLength(); ++i )
                 {
+                    const auto& rGeoProp = aGeoPropSeq[i];
                     if ( rGeoProp.Name == sAdjustmentValues )
                     {
                         uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
@@ -216,16 +219,20 @@ void CustomShapeProperties::pushToPropSet(
                                     }
                                 }
                             }
-                            rGeoProp.Value <<= aAdjustmentSeq;
+                            // getArray ensures COW here - there may be copies of aGeoPropSeq from
+                            // prior calls to xPropSet->setPropertyValue, so getArray can't be
+                            // moved out of the loop:
+                            aGeoPropSeq.getArray()[i].Value <<= aAdjustmentSeq;
                             xPropSet->setPropertyValue( sCustomShapeGeometry, Any( aGeoPropSeq ) );
                         }
                     }
                     else if ( rGeoProp.Name == sType )
                     {
+                        // getArray ensures COW here - there may be copies of aGeoPropSeq:
                         if ( sConnectorShapeType.getLength() > 0 )
-                            rGeoProp.Value <<= sConnectorShapeType;
+                            aGeoPropSeq.getArray()[i].Value <<= sConnectorShapeType;
                         else
-                            rGeoProp.Value <<= OUString( "ooxml-CustomShape" );
+                            aGeoPropSeq.getArray()[i].Value <<= OUString( "ooxml-CustomShape" );
                     }
                 }
             }
