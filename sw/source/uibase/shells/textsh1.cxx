@@ -87,6 +87,7 @@
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
 #include <editeng/unolingu.hxx>
 #include <doc.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <drawdoc.hxx>
 #include <view.hxx>
 #include <pam.hxx>
@@ -1651,13 +1652,13 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 // get keyboard language
                 OUString aKeyboardLang;
                 SwEditWin& rEditWin = GetView().GetEditWin();
-                LanguageType nLang = rEditWin.GetInputLanguage();
+                LanguageType nLang = MsLangId::getRealLanguage( rEditWin.GetInputLanguage() );
                 if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
                     aKeyboardLang = SvtLanguageTable::GetLanguageString( nLang );
 
                 // get the language that is in use
                 OUString aCurrentLang = "*";
-                nLang = SwLangHelper::GetCurrentLanguage( rSh );
+                nLang = MsLangId::getRealLanguage( SwLangHelper::GetCurrentLanguage( rSh ) );
                 if (nLang != LANGUAGE_DONTKNOW)
                 {
                     aCurrentLang = SvtLanguageTable::GetLanguageString( nLang );
