@@ -186,6 +186,7 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
     // Token 12: evaluate formulas.
     if (nPos >= 0)
     {
+        // If present, defaults to "false".
         bEvaluateFormulas = rString.getToken(0, ',', nPos) == "true";
     }
     else
