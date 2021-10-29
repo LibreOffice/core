@@ -109,8 +109,9 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLScriptContext::crea
             uno::Sequence< beans::PropertyValue > aMedDescr = m_xModel->getArgs();
             sal_Int32 nNewLen = aMedDescr.getLength() + 1;
             aMedDescr.realloc( nNewLen );
-            aMedDescr[nNewLen-1].Name = "BreakMacroSignature";
-            aMedDescr[nNewLen-1].Value <<= true;
+            auto pMedDescr = aMedDescr.getArray();
+            pMedDescr[nNewLen-1].Name = "BreakMacroSignature";
+            pMedDescr[nNewLen-1].Value <<= true;
             m_xModel->attachResource( m_xModel->getURL(), aMedDescr );
 
             return new XMLScriptChildContext( GetImport(), m_xModel, aLanguage );
