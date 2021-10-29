@@ -1,4 +1,4 @@
-﻿/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -38,6 +38,7 @@
 #include <unotools/syslocaleoptions.hxx>
 #include <sfx2/objsh.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <svtools/langtab.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/langitem.hxx>
@@ -594,9 +595,8 @@ IMPL_LINK_NOARG(OfaViewTabPage, OnRunGPTestClick, weld::Button&, void)
 
 IMPL_STATIC_LINK_NOARG(OfaViewTabPage, OnMoreIconsClick, weld::Button&, void)
 {
-    css::uno::Sequence<css::beans::PropertyValue> aArgs(1);
-    aArgs[0].Name = "AdditionsTag";
-    aArgs[0].Value <<= OUString("Icons");
+    css::uno::Sequence<css::beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
+        "AdditionsTag", OUString("Icons")) };
     comphelper::dispatchCommand(".uno:AdditionsDialog", aArgs);
 }
 
@@ -1070,12 +1070,9 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(weld::Container* pPage, weld::DialogCon
         Reference< XMultiServiceFactory > theConfigProvider(
             css::configuration::theDefaultProvider::get(
                 comphelper::getProcessComponentContext()));
-        Sequence< Any > theArgs(1);
-        Reference< XNameAccess > theNameAccess;
-
         // find out which locales are currently installed and add them to the listbox
-        theArgs[0] <<= NamedValue("nodepath", Any(OUString(sInstalledLocalesPath)));
-        theNameAccess.set(
+        Sequence< Any > theArgs{ Any(NamedValue("nodepath", Any(OUString(sInstalledLocalesPath)))) };
+        Reference< XNameAccess > theNameAccess(
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs ), UNO_QUERY_THROW );
         seqInstalledLanguages = theNameAccess->getElementNames();
         LanguageType aLang = LANGUAGE_DONTKNOW;
@@ -1106,8 +1103,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(weld::Container* pPage, weld::DialogCon
         m_xUserInterfaceLB->set_active(0);
 
         // find out whether the user has a specific locale specified
-        Sequence< Any > theArgs2(1);
-        theArgs2[0] <<= NamedValue("nodepath", Any(OUString(sUserLocalePath)));
+        Sequence< Any > theArgs2{ Any(NamedValue("nodepath", Any(OUString(sUserLocalePath)))) };
         theNameAccess.set(
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs2 ), UNO_QUERY_THROW );
         if (theNameAccess->hasByName(sUserLocaleKey))
@@ -1276,8 +1272,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
         Reference< XMultiServiceFactory > theConfigProvider(
             css::configuration::theDefaultProvider::get(
                 comphelper::getProcessComponentContext()));
-        Sequence< Any > theArgs(1);
-        theArgs[0] <<= NamedValue("nodepath", Any(OUString(sUserLocalePath)));
+        Sequence< Any > theArgs{ Any(NamedValue("nodepath", Any(OUString(sUserLocalePath)))) };
         Reference< XPropertySet >xProp(
             theConfigProvider->createInstanceWithArguments(sAccessUpdSrvc, theArgs ), UNO_QUERY_THROW );
         if ( m_sUserLocaleValue != aLangString)
