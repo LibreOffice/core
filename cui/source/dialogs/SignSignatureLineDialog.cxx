@@ -17,6 +17,7 @@
 
 #include <comphelper/graphicmimetype.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/xoutbmp.hxx>
@@ -134,9 +135,8 @@ IMPL_LINK_NOARG(SignSignatureLineDialog, loadImage, weld::Button&, void)
         return;
 
     Reference<XGraphicProvider> xProvider = GraphicProvider::create(xContext);
-    Sequence<PropertyValue> aMediaProperties(1);
-    aMediaProperties[0].Name = "URL";
-    aMediaProperties[0].Value <<= aSelectedFiles[0];
+    Sequence<PropertyValue> aMediaProperties{ comphelper::makePropertyValue("URL",
+                                                                            aSelectedFiles[0]) };
     m_xSignatureImage = xProvider->queryGraphic(aMediaProperties);
     m_sOriginalImageBtnLabel = m_xBtnLoadImage->get_label();
 
