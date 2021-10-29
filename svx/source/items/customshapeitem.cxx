@@ -37,6 +37,8 @@ SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem( const uno::Sequence< bea
 {
     sal_Int32 i, j;
     aPropSeq = rVal;
+    // HACK!!!
+    (void)aPropSeq.getArray();
 
     for ( i = 0; i < aPropSeq.getLength(); i++ )
     {
