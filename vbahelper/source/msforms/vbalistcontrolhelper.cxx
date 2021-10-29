@@ -75,10 +75,11 @@ uno::Any ListPropListener::getValueEvent()
     else // List() ( e.g. no args )
     {
         uno::Sequence< uno::Sequence< OUString > > sReturnArray( nLength );
+        auto pReturnArray = sReturnArray.getArray();
         for ( sal_Int32 i = 0; i < nLength; ++i )
         {
-            sReturnArray[ i ].realloc( 10 );
-            sReturnArray[ i ][ 0 ] = sList[ i ];
+            pReturnArray[ i ].realloc( 10 );
+            pReturnArray[ i ].getArray()[ 0 ] = sList[ i ];
         }
         aRet <<= sReturnArray;
     }
@@ -107,7 +108,7 @@ ListControlHelper::AddItem( const uno::Any& pvargItem, const uno::Any& pvargInde
     {
         sal_Int32 nOldSize = sList.getLength();
         sList.realloc( nOldSize + 1 );
-        sList[ nOldSize ] = sString;
+        sList.getArray()[ nOldSize ] = sString;
     }
     else
     {
