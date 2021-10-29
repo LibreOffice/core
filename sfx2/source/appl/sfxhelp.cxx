@@ -712,7 +712,7 @@ bool SfxHelp::Start(const OUString& rURL, weld::Widget* pWidget)
 }
 
 /// Redirect the vnd.sun.star.help:// urls to http://help.libreoffice.org
-static bool impl_showOnlineHelp( const OUString& rURL )
+static bool impl_showOnlineHelp(const OUString& rURL, weld::Widget* pDialogParent)
 {
     static constexpr OUStringLiteral aInternal(u"vnd.sun.star.help://");
     if ( rURL.getLength() <= aInternal.getLength() || !rURL.startsWith(aInternal) )
@@ -751,7 +751,7 @@ static bool impl_showOnlineHelp( const OUString& rURL )
                            nullptr),
             nullptr);
 #else
-        sfx2::openUriExternally(aHelpLink, false);
+        sfx2::openUriExternally(aHelpLink, false, pDialogParent);
 #endif
         return true;
     }
@@ -939,7 +939,7 @@ constexpr OUStringLiteral SHTML4 = u"'\"><script type=\"text/javascript\"> windo
 constexpr OUStringLiteral SHTML5 = u"\";</script><title>Help Page Redirection</title></head><body></body></html>";
 
 // use a tempfile since e.g. xdg-open doesn't support URL-parameters with file:// URLs
-static bool impl_showOfflineHelp( const OUString& rURL )
+static bool impl_showOfflineHelp(const OUString& rURL, weld::Widget* pDialogParent)
 {
     OUString aBaseInstallPath = getHelpRootURL();
     // For the flatpak case, find the pathname outside the flatpak sandbox that corresponds to
@@ -982,8 +982,9 @@ static bool impl_showOfflineHelp( const OUString& rURL )
                                kCFStringEncodingUTF8),
                            nullptr),
             nullptr);
+        (void)pDialogParent;
 #else
-        sfx2::openUriExternally(aTempFile.GetURL(), false);
+        sfx2::openUriExternally(aTempFile.GetURL(), false, pDialogParent);
 #endif
         return true;
     }
@@ -1102,9 +1103,12 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow)
         }
     }
 
+    pWindow = GetBestParent(pWindow);
+    weld::Window* pWeldWindow = pWindow ? pWindow->GetFrameWeld() : nullptr;
+
     if ( comphelper::LibreOfficeKit::isActive() )
     {
-        impl_showOnlineHelp( aHelpURL );
+        impl_showOnlineHelp(aHelpURL, pWeldWindow);
         return true;
     }
 #ifdef MACOSX
@@ -1130,7 +1134,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow)
     // display" code below:
     if (SfxContentHelper::IsHelpErrorDocument(aHelpURL))
     {
-        if ( impl_hasHTMLHelpInstalled() && impl_showOfflineHelp(aHelpURL) )
+        if ( impl_hasHTMLHelpInstalled() && impl_showOfflineHelp(aHelpURL, pWeldWindow) )
         {
             return true;
         }
@@ -1139,13 +1143,10 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow)
         {
             bool bShowOfflineHelpPopUp = officecfg::Office::Common::Help::BuiltInHelpNotInstalledPopUp::get();
 
-            pWindow = GetBestParent(pWindow);
-
             TopLevelWindowLocker aBusy;
 
             if(bShowOfflineHelpPopUp)
             {
-                weld::Window* pWeldWindow = pWindow ? pWindow->GetFrameWeld() : nullptr;
                 aBusy.incBusy(pWeldWindow);
                 HelpManualMessage aQueryBox(pWeldWindow);
                 short OnlineHelpBox = aQueryBox.run();
@@ -1157,11 +1158,10 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow)
             }
             if(!bShowOfflineHelpPopUp)
             {
-                if ( impl_showOnlineHelp( aHelpURL ) )
+                if ( impl_showOnlineHelp(aHelpURL, pWeldWindow) )
                     return true;
                 else
                 {
-                    weld::Window* pWeldWindow = pWindow ? pWindow->GetFrameWeld() : nullptr;
                     aBusy.incBusy(pWeldWindow);
                     NoHelpErrorBox aErrBox(pWeldWindow);
                     aErrBox.run();
@@ -1277,7 +1277,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
 
     if ( comphelper::LibreOfficeKit::isActive() )
     {
-        impl_showOnlineHelp( aHelpURL );
+        impl_showOnlineHelp( aHelpURL, pWidget );
         return true;
     }
 
@@ -1287,7 +1287,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
     // display" code below:
     if (SfxContentHelper::IsHelpErrorDocument(aHelpURL))
     {
-        if ( impl_hasHTMLHelpInstalled() && impl_showOfflineHelp(aHelpURL) )
+        if ( impl_hasHTMLHelpInstalled() && impl_showOfflineHelp(aHelpURL, pWidget) )
         {
             return true;
         }
@@ -1311,7 +1311,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
             }
             if(!bShowOfflineHelpPopUp)
             {
-                if ( impl_showOnlineHelp( aHelpURL ) )
+                if ( impl_showOnlineHelp(aHelpURL, pWidget) )
                     return true;
                 else
                 {
