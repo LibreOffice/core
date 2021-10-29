@@ -191,8 +191,7 @@ namespace logging
                 bool bSuccess = false;
                 if ( aSettings.hasElements() )
                 {
-                    Sequence< Any > aConstructionArgs(1);
-                    aConstructionArgs[0] <<= aSettings;
+                    Sequence< Any > aConstructionArgs{ Any(aSettings) };
                     xInstance = _rContext->getServiceManager()->createInstanceWithArgumentsAndContext(sServiceName, aConstructionArgs, _rContext);
                     bSuccess = xInstance.is();
                 }
@@ -222,11 +221,8 @@ namespace logging
                 css::configuration::theDefaultProvider::get(_rContext));
 
             // write access to the "Settings" node (which includes settings for all loggers)
-            Sequence< Any > aArguments(1);
-            aArguments[0] <<= NamedValue(
-                "nodepath",
-                makeAny( OUString( "/org.openoffice.Office.Logging/Settings" ) )
-            );
+            Sequence<Any> aArguments{ Any(NamedValue(
+                "nodepath", makeAny(OUString("/org.openoffice.Office.Logging/Settings")))) };
             Reference< XNameContainer > xAllSettings( xConfigProvider->createInstanceWithArguments(
                 "com.sun.star.configuration.ConfigurationUpdateAccess",
                 aArguments

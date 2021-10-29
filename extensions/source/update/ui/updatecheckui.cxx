@@ -29,6 +29,7 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/task/XJob.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/image.hxx>
 #include <vcl/menubarupdateicon.hxx>
@@ -140,10 +141,8 @@ Image UpdateCheckUI::GetBubbleImage( OUString const &rURL )
         try
         {
             uno::Reference< graphic::XGraphicProvider > xGraphProvider(graphic::GraphicProvider::create(xContext));
-            uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-            aMediaProps[0].Name = "URL";
-            aMediaProps[0].Value <<= rURL;
-
+            uno::Sequence< beans::PropertyValue > aMediaProps{ comphelper::makePropertyValue("URL",
+                                                                                             rURL) };
             uno::Reference< graphic::XGraphic > xGraphic = xGraphProvider->queryGraphic( aMediaProps );
             if ( xGraphic.is() )
             {

@@ -105,8 +105,8 @@ namespace abp
     {
         Reference<awt::XWindow> xParentWindow;
         if (aArguments.getLength() == 1 && (aArguments[0] >>= xParentWindow) ) {
-            Sequence< Any > aNewArgs(1);
-            aNewArgs[0] <<= PropertyValue( "ParentWindow", 0, makeAny(xParentWindow), PropertyState_DIRECT_VALUE );
+            Sequence< Any > aNewArgs{ Any(PropertyValue(
+                "ParentWindow", 0, makeAny(xParentWindow), PropertyState_DIRECT_VALUE )) };
             OGenericUnoDialog::initialize(aNewArgs);
         } else {
             OGenericUnoDialog::initialize(aArguments);

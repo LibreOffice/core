@@ -37,6 +37,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 
+#include <comphelper/propertyvalue.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 
@@ -221,19 +222,14 @@ namespace pcr
             // thus, we create a blank frame at the desktop, remove it from the desktop's frame list
             // immediately, and then load the component into this blank (and now parent-less) frame
             Reference< XComponentLoader > xLoader( impl_createEmptyParentlessTask_nothrow(), UNO_QUERY_THROW );
-            Sequence< PropertyValue > aArgs( 5 );
-            aArgs[0].Name = PROPERTY_ACTIVE_CONNECTION;
-            aArgs[0].Value <<= m_xConnection.getTyped();
-
-            aArgs[1].Name  = PROPERTY_COMMAND;
-            aArgs[1].Value <<= m_xObjectAdapter->getSQLCommand();
-            aArgs[2].Name  = PROPERTY_COMMANDTYPE;
-            aArgs[2].Value <<= sal_Int32(CommandType::COMMAND);
-            aArgs[3].Name  = PROPERTY_ESCAPE_PROCESSING;
-            aArgs[3].Value <<= m_xObjectAdapter->getEscapeProcessing();
-
-            aArgs[4].Name  = "GraphicalDesign";
-            aArgs[4].Value <<= m_xObjectAdapter->getEscapeProcessing();
+            const bool bEscapeProcessing = m_xObjectAdapter->getEscapeProcessing();
+            Sequence< PropertyValue > aArgs{
+                comphelper::makePropertyValue(PROPERTY_ACTIVE_CONNECTION, m_xConnection.getTyped()),
+                comphelper::makePropertyValue(PROPERTY_COMMAND, m_xObjectAdapter->getSQLCommand()),
+                comphelper::makePropertyValue(PROPERTY_COMMANDTYPE, CommandType::COMMAND),
+                comphelper::makePropertyValue(PROPERTY_ESCAPE_PROCESSING, bEscapeProcessing),
+                comphelper::makePropertyValue("GraphicalDesign", bEscapeProcessing)
+            };
 
             Reference< XComponent > xQueryDesign = xLoader->loadComponentFromURL(
                 ".component:DB/QueryDesign",
