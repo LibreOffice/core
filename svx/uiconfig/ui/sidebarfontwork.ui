@@ -21,7 +21,6 @@
             <child>
               <object class="GtkMenuToolButton" id=".uno:FontworkShapeType">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -32,7 +31,6 @@
             <child>
               <object class="GtkToolButton" id=".uno:FontworkSameLetterHeights">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -43,7 +41,6 @@
             <child>
               <object class="GtkMenuToolButton" id=".uno:FontworkAlignmentFloater">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -54,7 +51,6 @@
             <child>
               <object class="GtkMenuToolButton" id=".uno:FontworkCharacterSpacingFloater">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -65,7 +61,6 @@
             <child>
               <object class="GtkToolButton" id=".uno:ExtrusionToggle">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>

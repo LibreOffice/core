@@ -16,7 +16,6 @@
         <child>
           <object class="GtkMenuToolButton" id=".uno:TableCellBackgroundColor">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="use_underline">True</property>
           </object>
           <packing>
@@ -27,7 +26,6 @@
         <child>
           <object class="GtkMenuToolButton" id=".uno:SetBorderStyle">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="use_underline">True</property>
           </object>
           <packing>
@@ -38,7 +36,6 @@
         <child>
           <object class="GtkToolButton" id=".uno:InsertFormula">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="use_underline">True</property>
           </object>
           <packing>
@@ -63,7 +60,6 @@
         <child>
           <object class="GtkToolButton" id=".uno:InsertRowsBefore">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="use_underline">True</property>
           </object>
           <packing>
@@ -74,7 +70,6 @@
         <child>
           <object class="GtkToolButton" id=".uno:InsertRowsAfter">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="use_underline">True</property>
           </object>
           <packing>
@@ -85,7 +80,6 @@
         <child>
           <object class="GtkToolButton" id=".uno:InsertColumnsBefore">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="use_underline">True</property>
           </object>
           <packing>
@@ -96,7 +90,6 @@
         <child>
           <object class="GtkToolButton" id=".uno:InsertColumnsAfter">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="use_underline">True</property>
           </object>
           <packing>

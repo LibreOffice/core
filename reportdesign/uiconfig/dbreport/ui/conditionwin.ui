@@ -210,7 +210,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id="bold">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="conditionwin|ToolBoxItem1">Bold</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">cmd/sc_bold.png</property>
@@ -223,7 +222,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id="italic">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="conditionwin|ToolBoxItem2">Italic</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">cmd/sc_italic.png</property>
@@ -236,7 +234,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id="underline">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="conditionwin|ToolBoxItem3">Underline</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">cmd/sc_underline.png</property>
@@ -259,7 +256,6 @@
                 <child>
                   <object class="GtkMenuToolButton" id="background">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="conditionwin|ToolBoxItem4">Background Color</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">cmd/sc_backgroundcolor.png</property>
@@ -272,7 +268,6 @@
                 <child>
                   <object class="GtkMenuToolButton" id="foreground">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="conditionwin|ToolBoxItem5">Font Color</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">cmd/sc_fontcolor.png</property>
@@ -285,7 +280,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id="fontdialog">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="conditionwin|ToolBoxItem6">Character Formatting</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">cmd/sc_fontdialog.png</property>

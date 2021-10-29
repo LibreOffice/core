@@ -57,7 +57,6 @@
                     <property name="show_arrow">False</property>
                     <child>
                       <object class="GtkMenuToolButton" id="Files-New">
-                        <property name="can_focus">False</property>
                         <property name="action_name">.uno:AddDirect</property>
                       </object>
                       <packing>
@@ -67,7 +66,6 @@
                     </child>
                     <child>
                       <object class="GtkMenuToolButton" id="Files-Open">
-                        <property name="can_focus">False</property>
                         <property name="action_name">.uno:Open</property>
                       </object>
                       <packing>
@@ -77,7 +75,6 @@
                     </child>
                     <child>
                       <object class="GtkMenuToolButton" id="Files-Save">
-                        <property name="can_focus">False</property>
                         <property name="action_name">.uno:Save</property>
                       </object>
                       <packing>
@@ -87,7 +84,6 @@
                     </child>
                     <child>
                       <object class="GtkToolButton" id="Files-ExportTo">
-                        <property name="can_focus">False</property>
                         <property name="action_name">.uno:ExportTo</property>
                       </object>
                       <packing>
@@ -97,7 +93,6 @@
                     </child>
                     <child>
                       <object class="GtkToolButton" id="Files-PrintPreview">
-                        <property name="can_focus">False</property>
                         <property name="action_name">.uno:PrintPreview</property>
                       </object>
                       <packing>
@@ -107,7 +102,6 @@
                     </child>
                     <child>
                       <object class="GtkToolButton" id="Files-Print">
-                        <property name="can_focus">False</property>
                         <property name="action_name">.uno:Print</property>
                       </object>
                       <packing>
@@ -118,7 +112,6 @@
                     <child>
                       <object class="GtkToolButton" id="Edit-Undo">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="is_important">True</property>
                         <property name="action_name">.uno:Undo</property>
                       </object>
@@ -129,7 +122,6 @@
                     </child>
                     <child>
                       <object class="GtkToolButton" id="Edit-Redo">
-                        <property name="can_focus">False</property>
                         <property name="is_important">True</property>
                         <property name="action_name">.uno:Redo</property>
                       </object>
@@ -140,7 +132,6 @@
                     </child>
                     <child>
                       <object class="GtkToolButton" id="Edit-Cut">
-                        <property name="can_focus">False</property>
                         <property name="action_name">.uno:Cut</property>
                       </object>
                       <packing>
@@ -150,7 +141,6 @@
                     </child>
                     <child>
                       <object class="GtkToolButton" id="Edit-Copy">
-                        <property name="can_focus">False</property>
                         <property name="action_name">.uno:Copy</property>
                       </object>
                       <packing>
@@ -161,7 +151,6 @@
                     <child>
                       <object class="GtkMenuToolButton" id="Edit-Paste">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="is_important">True</property>
                         <property name="action_name">.uno:Paste</property>
                       </object>
@@ -223,7 +212,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-FormatPaintbrush">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:FormatPaintbrush</property>
                               </object>
                               <packing>
@@ -234,7 +222,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-ResetAttributes">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ResetAttributes</property>
                               </object>
                               <packing>
@@ -269,7 +256,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-StyleApply">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:StyleApply</property>
                               </object>
                               <packing>
@@ -279,7 +265,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-StyleUpdateByExample">
-                                <property name="can_focus">False</property>
                                 <property name="halign">center</property>
                                 <property name="hexpand">True</property>
                                 <property name="action_name">.uno:StyleUpdateByExample</property>
@@ -291,7 +276,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-EditStyle">
-                                <property name="can_focus">False</property>
                                 <property name="halign">center</property>
                                 <property name="hexpand">True</property>
                                 <property name="action_name">.uno:EditStyle</property>
@@ -315,7 +299,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Default-StandardStyle">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:StyleApply?Style:string=Standard&amp;FamilyName:string=ParagraphStyles</property>
                                 <property name="icon_name">cmd/sc_defaultcharstyle.png</property>
                               </object>
@@ -326,7 +309,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-EmphasisCharStyle">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:StyleApply?Style:string=Emphasis&amp;FamilyName:string=CharacterStyles</property>
                                 <property name="icon_name">cmd/sc_emphasischarstyle.png</property>
                               </object>
@@ -337,7 +319,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-StrongEmphasisCharStyle">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:StyleApply?Style:string=Strong Emphasis&amp;FamilyName:string=CharacterStyles</property>
                                 <property name="icon_name">cmd/sc_strongemphasischarstyle.png</property>
                               </object>
@@ -348,7 +329,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-TitleStyle">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:StyleApply?Style:string=Title&amp;FamilyName:string=ParagraphStyles</property>
                                 <property name="icon_name">cmd/sc_titleparastyle.png</property>
                               </object>
@@ -359,7 +339,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-SubTitleStyle">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:StyleApply?Style:string=Subtitle&amp;FamilyName:string=ParagraphStyles</property>
                                 <property name="icon_name">cmd/sc_subtitleparastyle.png</property>
                               </object>
@@ -370,7 +349,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-H1Style">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:StyleApply?Style:string=Heading 1&amp;FamilyName:string=ParagraphStyles</property>
                                 <property name="icon_name">cmd/sc_heading1parastyle.png</property>
                               </object>
@@ -381,7 +359,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-H2Style">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:StyleApply?Style:string=Heading 2&amp;FamilyName:string=ParagraphStyles</property>
                                 <property name="icon_name">cmd/sc_heading2parastyle.png</property>
                               </object>
@@ -392,7 +369,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-H3Style">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:StyleApply?Style:string=Heading 3&amp;FamilyName:string=ParagraphStyles</property>
                                 <property name="icon_name">cmd/sc_heading3parastyle.png</property>
                               </object>
@@ -403,7 +379,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-H4Style">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:StyleApply?Style:string=Heading 4&amp;FamilyName:string=ParagraphStyles</property>
                                 <property name="icon_name">cmd/sc_heading4parastyle.png</property>
                               </object>
@@ -457,7 +432,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-CharFontName">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:CharFontName</property>
                               </object>
                               <packing>
@@ -496,7 +470,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-FontHeight">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:FontHeight</property>
                               </object>
                               <packing>
@@ -535,7 +508,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-Grow">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:Grow</property>
                               </object>
                               <packing>
@@ -546,7 +518,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-Shrink">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:Shrink</property>
                               </object>
@@ -600,7 +571,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-Bold">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="is_important">True</property>
                                 <property name="action_name">.uno:Bold</property>
                               </object>
@@ -612,7 +582,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-Italic">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="is_important">True</property>
                                 <property name="action_name">.uno:Italic</property>
                               </object>
@@ -624,7 +593,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-Underline">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="is_important">True</property>
                                 <property name="action_name">.uno:Underline</property>
                               </object>
@@ -635,7 +603,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-UnderlineDouble">
-                                <property name="can_focus">False</property>
                                 <property name="is_important">True</property>
                                 <property name="action_name">.uno:UnderlineDouble</property>
                               </object>
@@ -646,7 +613,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-Overline">
-                                <property name="can_focus">False</property>
                                 <property name="is_important">True</property>
                                 <property name="action_name">.uno:Overline</property>
                               </object>
@@ -658,7 +624,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-Strikeout">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="is_important">True</property>
                                 <property name="action_name">.uno:Strikeout</property>
                               </object>
@@ -669,7 +634,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-Shadowed">
-                                <property name="can_focus">False</property>
                                 <property name="is_important">True</property>
                                 <property name="action_name">.uno:Shadowed</property>
                               </object>
@@ -680,7 +644,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-OutlineFont">
-                                <property name="can_focus">False</property>
                                 <property name="is_important">True</property>
                                 <property name="action_name">.uno:OutlineFont</property>
                               </object>
@@ -716,7 +679,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Default-SubScript">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:SubScript</property>
                               </object>
                               <packing>
@@ -726,7 +688,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-SuperScript">
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:SuperScript</property>
                               </object>
@@ -781,7 +742,6 @@
                             <child>
                               <object class="GtkMenuToolButton" id="Default-Color">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:Color</property>
                               </object>
                               <packing>
@@ -792,7 +752,6 @@
                             <child>
                               <object class="GtkMenuToolButton" id="Default-BackColor">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:BackColor</property>
                               </object>
                               <packing>
@@ -827,7 +786,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-FontDialog">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:FontDialog</property>
                                 <property name="icon_name">sfx2/res/symphony/open_more.png</property>
@@ -879,7 +837,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-DefaultBullet">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:DefaultBullet</property>
                               </object>
                               <packing>
@@ -890,7 +847,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-DefaultNumbering">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:DefaultNumbering</property>
                               </object>
                               <packing>
@@ -900,7 +856,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-SetOutline">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:SetOutline</property>
                               </object>
                               <packing>
@@ -938,7 +893,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-IncrementIndent">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:IncrementIndent</property>
                               </object>
                               <packing>
@@ -949,7 +903,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-DecrementIndent">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:DecrementIndent</property>
                               </object>
                               <packing>
@@ -959,7 +912,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-IncrementSubLevels">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:IncrementSubLevels</property>
                               </object>
                               <packing>
@@ -969,7 +921,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-DecrementSubLevels">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:DecrementSubLevels</property>
                               </object>
                               <packing>
@@ -1022,7 +973,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-LeftPara">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:LeftPara</property>
                               </object>
                               <packing>
@@ -1033,7 +983,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-CenterPara">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:CenterPara</property>
                               </object>
                               <packing>
@@ -1044,7 +993,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-RightPara">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:RightPara</property>
                               </object>
                               <packing>
@@ -1055,7 +1003,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-JustifyPara">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:JustifyPara</property>
                               </object>
                               <packing>
@@ -1109,7 +1056,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Default-CommonAlignTop">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:CommonAlignTop</property>
                               </object>
                               <packing>
@@ -1119,7 +1065,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-CommonAlignVerticalCenter">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:CommonAlignVerticalCenter</property>
                               </object>
                               <packing>
@@ -1129,7 +1074,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-CommonAlignBottom">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:CommonAlignBottom</property>
                               </object>
                               <packing>
@@ -1168,7 +1112,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-ParaLeftToRight">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ParaLeftToRight</property>
                               </object>
                               <packing>
@@ -1179,7 +1122,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-ParaRightToLeft">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ParaRightToLeft</property>
                               </object>
                               <packing>
@@ -1216,7 +1158,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Home-ParaspaceIncrease">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ParaspaceIncrease</property>
                               </object>
                               <packing>
@@ -1226,7 +1167,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Home-ParaspaceDecrease">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ParaspaceDecrease</property>
                               </object>
                               <packing>
@@ -1265,7 +1205,6 @@
                             <child>
                               <object class="GtkMenuToolButton" id="Home-LineSpacing">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:LineSpacing</property>
                               </object>
                               <packing>
@@ -1276,7 +1215,6 @@
                             <child>
                               <object class="GtkToolButton" id="Home-BackgroundColor">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:BackgroundColor</property>
                               </object>
                               <packing>
@@ -1314,7 +1252,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-ParagraphDialog">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:ParagraphDialog</property>
                                 <property name="icon_name">sfx2/res/symphony/open_more.png</property>
@@ -1369,7 +1306,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-InsertGraphic">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:InsertGraphic</property>
                               </object>
                               <packing>
@@ -1380,7 +1316,6 @@
                             <child>
                               <object class="GtkMenuToolButton" id="Default-InsertTable">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:InsertTable</property>
                               </object>
                               <packing>
@@ -1390,7 +1325,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-InsertObjectChart">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:InsertObjectChart</property>
                               </object>
                               <packing>
@@ -1401,7 +1335,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-CharmapControl">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:CharmapControl</property>
                               </object>
                               <packing>
@@ -1411,7 +1344,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-InsertObject">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:InsertObject</property>
                               </object>
                               <packing>
@@ -1422,7 +1354,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-InsertDraw">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:InsertDraw</property>
                               </object>
                               <packing>
@@ -1432,7 +1363,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-DrawText">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:DrawText</property>
                               </object>
                               <packing>
@@ -1442,7 +1372,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Default-FontworkGalleryFloater">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:FontworkGalleryFloater</property>
                               </object>
                               <packing>
@@ -1495,7 +1424,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-HyperlinkDialog">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:HyperlinkDialog</property>
                               </object>
                               <packing>
@@ -1506,7 +1434,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-InsertFootnote">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:InsertFootnote</property>
                               </object>
                               <packing>
@@ -1517,7 +1444,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-InsertBookmark">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:InsertBookmark</property>
                               </object>
                               <packing>
@@ -1528,7 +1454,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-InsertReferenceField">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:InsertReferenceField</property>
                               </object>
                               <packing>
@@ -1580,7 +1505,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Default-SpellingAndGrammarDialog">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:SpellingAndGrammarDialog</property>
                               </object>
                               <packing>
@@ -1591,7 +1515,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-InsertAnnotation">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:InsertAnnotation</property>
                               </object>
                               <packing>
@@ -1602,7 +1525,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-TrackChanges">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:TrackChanges</property>
                               </object>
                               <packing>
@@ -1655,7 +1577,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-ControlCodes">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ControlCodes</property>
                               </object>
                               <packing>
@@ -1666,7 +1587,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-PrintPreview">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:PrintPreview</property>
                               </object>
                               <packing>
@@ -1677,7 +1597,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-Zoom">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:Zoom</property>
                               </object>
                               <packing>
@@ -1748,7 +1667,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-FormatPaintbrush1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:FormatPaintbrush</property>
                               </object>
                               <packing>
@@ -1759,7 +1677,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-ResetAttributes1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ResetAttributes</property>
                               </object>
                               <packing>
@@ -1794,7 +1711,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-StyleApply1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:StyleApply</property>
                               </object>
                               <packing>
@@ -1847,7 +1763,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-CharFontName">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:CharFontName</property>
                               </object>
                               <packing>
@@ -1886,7 +1801,6 @@
                             <child>
                               <object class="GtkToolButton" id="Default-FontHeight1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:FontHeight</property>
                               </object>
                               <packing>
@@ -1924,7 +1838,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Table-Grow1">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:Grow</property>
                               </object>
                               <packing>
@@ -1934,7 +1847,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Table-Shrink1">
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:Shrink</property>
                               </object>
@@ -1973,7 +1885,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-Bold1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:Bold</property>
                               </object>
                               <packing>
@@ -1984,7 +1895,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-Italic1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:Italic</property>
                               </object>
                               <packing>
@@ -1995,7 +1905,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-Underline1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:Underline</property>
                               </object>
                               <packing>
@@ -2006,7 +1915,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-Strikeout1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:Strikeout</property>
                               </object>
                               <packing>
@@ -2041,7 +1949,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Table-SubScript">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:SubScript</property>
                               </object>
                               <packing>
@@ -2051,7 +1958,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Table-SuperScript">
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:SuperScript</property>
                               </object>
@@ -2106,7 +2012,6 @@
                             <child>
                               <object class="GtkMenuToolButton" id="Table-Color1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:Color</property>
                               </object>
                               <packing>
@@ -2117,7 +2022,6 @@
                             <child>
                               <object class="GtkMenuToolButton" id="Table-BackColor1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:BackColor</property>
                               </object>
                               <packing>
@@ -2155,7 +2059,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-FontDialog1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:FontDialog</property>
                                 <property name="icon_name">sfx2/res/symphony/open_more.png</property>
@@ -2210,7 +2113,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-DefaultBullet">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:DefaultBullet</property>
                               </object>
                               <packing>
@@ -2221,7 +2123,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-DefaultNumbering">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:DefaultNumbering</property>
                               </object>
                               <packing>
@@ -2231,7 +2132,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Table-SetOutline">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:SetOutline</property>
                               </object>
                               <packing>
@@ -2269,7 +2169,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-IncrementIndent1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:IncrementIndent</property>
                               </object>
                               <packing>
@@ -2280,7 +2179,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-DecrementIndent1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:DecrementIndent</property>
                               </object>
                               <packing>
@@ -2333,7 +2231,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-LeftPara1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:LeftPara</property>
                               </object>
                               <packing>
@@ -2344,7 +2241,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-CenterPara1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:CenterPara</property>
                               </object>
                               <packing>
@@ -2355,7 +2251,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-RightPara1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:RightPara</property>
                               </object>
                               <packing>
@@ -2366,7 +2261,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-JustifyPara1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:JustifyPara</property>
                               </object>
                               <packing>
@@ -2421,7 +2315,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-CommonAlignTop">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="halign">center</property>
                                 <property name="hexpand">True</property>
                                 <property name="action_name">.uno:CommonAlignTop</property>
@@ -2434,7 +2327,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-CommonAlignVerticalCenter">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:CommonAlignVerticalCenter</property>
                               </object>
                               <packing>
@@ -2445,7 +2337,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-CommonAlignBottom">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="halign">center</property>
                                 <property name="hexpand">True</property>
                                 <property name="action_name">.uno:CommonAlignBottom</property>
@@ -2486,7 +2377,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-ParaLeftToRight">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ParaLeftToRight</property>
                               </object>
                               <packing>
@@ -2497,7 +2387,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-ParaRightToLeft">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ParaRightToLeft</property>
                               </object>
                               <packing>
@@ -2535,7 +2424,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Table-ParaspaceIncrease">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ParaspaceIncrease</property>
                               </object>
                               <packing>
@@ -2545,7 +2433,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Table-ParaspaceDecrease">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ParaspaceDecrease</property>
                               </object>
                               <packing>
@@ -2583,7 +2470,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkMenuToolButton" id="Table-LineSpacing">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:LineSpacing</property>
                               </object>
                               <packing>
@@ -2594,7 +2480,6 @@
                             <child>
                               <object class="GtkMenuToolButton" id="Table-BackgroundColor">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:TableCellBackgroundColor</property>
                               </object>
                               <packing>
@@ -2629,7 +2514,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-ParagraphDialog1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:ParagraphDialog</property>
                                 <property name="icon_name">sfx2/res/symphony/open_more.png</property>
@@ -2684,7 +2568,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-AutoFormat2">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AutoFormat</property>
                               </object>
                               <packing>
@@ -2695,7 +2578,6 @@
                             <child>
                               <object class="GtkMenuToolButton" id="Table-SetBorderStyle2">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:SetBorderStyle</property>
                               </object>
                               <packing>
@@ -2706,7 +2588,6 @@
                             <child>
                               <object class="GtkMenuToolButton" id="Table-LineStyle2">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:LineStyle</property>
                               </object>
                               <packing>
@@ -2717,7 +2598,6 @@
                             <child>
                               <object class="GtkMenuToolButton" id="Table-FrameLineColor2">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:FrameLineColor</property>
                               </object>
                               <packing>
@@ -2755,7 +2635,6 @@
                             <child>
                               <object class="GtkToolButton" id="TableBorderDialog">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:BorderDialog</property>
                                 <property name="icon_name">sfx2/res/symphony/open_more.png</property>
@@ -2810,7 +2689,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-MergeCells1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:MergeCells</property>
                               </object>
                               <packing>
@@ -2821,7 +2699,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-SplitCell1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:SplitCell</property>
                               </object>
                               <packing>
@@ -2832,7 +2709,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-SplitTable">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:SplitTable</property>
                               </object>
                               <packing>
@@ -2870,7 +2746,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-AutoFormat">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:AutoFormat</property>
                                 <property name="icon_name">sfx2/res/symphony/open_more.png</property>
@@ -2925,7 +2800,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-EntireColumn1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:EntireColumn</property>
                                 <property name="use_underline">True</property>
                               </object>
@@ -2937,7 +2811,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-InsertColumnsBefore1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:InsertColumnsBefore</property>
                               </object>
                               <packing>
@@ -2948,7 +2821,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-InsertColumnsAfter1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:InsertColumnsAfter</property>
                               </object>
                               <packing>
@@ -2959,7 +2831,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-DeleteColumns1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:DeleteColumns</property>
                               </object>
                               <packing>
@@ -2994,7 +2865,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-EntireRow1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:EntireRow</property>
                                 <property name="use_underline">True</property>
                               </object>
@@ -3006,7 +2876,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-InsertRowsBefore1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:InsertRowsBefore</property>
                               </object>
                               <packing>
@@ -3017,7 +2886,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-InsertRowsAfter1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:InsertRowsAfter</property>
                               </object>
                               <packing>
@@ -3028,7 +2896,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-DeleteRows1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:DeleteRows</property>
                               </object>
                               <packing>
@@ -3063,7 +2930,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-TableDialog">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:TableDialog</property>
                                 <property name="icon_name">sfx2/res/symphony/open_more.png</property>
@@ -3115,7 +2981,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-InsertGraphic1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:InsertGraphic</property>
                               </object>
                               <packing>
@@ -3126,7 +2991,6 @@
                             <child>
                               <object class="GtkMenuToolButton" id="Table-InsertTable1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:InsertTable</property>
                               </object>
                               <packing>
@@ -3137,7 +3001,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-CharmapControl1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:CharmapControl</property>
                               </object>
                               <packing>
@@ -3148,7 +3011,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-InsertDraw">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:InsertDraw</property>
                               </object>
                               <packing>
@@ -3201,7 +3063,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-HyperlinkDialog1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:HyperlinkDialog</property>
                               </object>
                               <packing>
@@ -3212,7 +3073,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-InsertFootnote1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:InsertFootnote</property>
                               </object>
                               <packing>
@@ -3223,7 +3083,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-InsertBookmark1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:InsertBookmark</property>
                               </object>
                               <packing>
@@ -3234,7 +3093,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-InsertReferenceField1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:InsertReferenceField</property>
                               </object>
                               <packing>
@@ -3286,7 +3144,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Table-SpellingAndGrammarDialog1">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:SpellingAndGrammarDialog</property>
                               </object>
                               <packing>
@@ -3297,7 +3154,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-InsertAnnotation1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:InsertAnnotation</property>
                               </object>
                               <packing>
@@ -3308,7 +3164,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-TrackChanges1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:TrackChanges</property>
                               </object>
                               <packing>
@@ -3361,7 +3216,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-ControlCodes1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ControlCodes</property>
                               </object>
                               <packing>
@@ -3372,7 +3226,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-PrintPreview1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:PrintPreview</property>
                               </object>
                               <packing>
@@ -3383,7 +3236,6 @@
                             <child>
                               <object class="GtkToolButton" id="Table-Zoom1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:Zoom</property>
                               </object>
                               <packing>
@@ -3452,7 +3304,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-InsertCaptionDialog1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:InsertCaptionDialog</property>
                               </object>
                               <packing>
@@ -3463,7 +3314,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-NameGroup1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:NameGroup</property>
                               </object>
                               <packing>
@@ -3497,7 +3347,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Graphic-StyleApply">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:StyleApply</property>
                               </object>
                               <packing>
@@ -3550,7 +3399,6 @@
                             <child>
                               <object class="GtkMenuToolButton" id="Graphic-AnchorMenu1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AnchorMenu</property>
                               </object>
                               <packing>
@@ -3588,7 +3436,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-WrapOff">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapOff</property>
                               </object>
                               <packing>
@@ -3599,7 +3446,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-WrapOn">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapOn</property>
                               </object>
                               <packing>
@@ -3610,7 +3456,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-WrapIdeal">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapIdeal</property>
                               </object>
                               <packing>
@@ -3649,7 +3494,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-WrapLeft">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapLeft</property>
                               </object>
                               <packing>
@@ -3660,7 +3504,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-WrapThrough">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapThrough</property>
                               </object>
                               <packing>
@@ -3671,7 +3514,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-WrapRight">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapRight</property>
                               </object>
                               <packing>
@@ -3709,7 +3551,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-TextWrap1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:TextWrap</property>
                                 <property name="icon_name">sfx2/res/symphony/open_more.png</property>
@@ -3766,7 +3607,6 @@
                             <child>
                               <object class="GtkMenuToolButton" id="MultiObject-ObjectAlign">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ObjectAlign</property>
                               </object>
                               <packing>
@@ -3801,7 +3641,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-AlignCenter">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AlignCenter</property>
                               </object>
                               <packing>
@@ -3812,7 +3651,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-ObjectAlignRight">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ObjectAlignRight</property>
                               </object>
                               <packing>
@@ -3850,7 +3688,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-AlignUp">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AlignUp</property>
                               </object>
                               <packing>
@@ -3861,7 +3698,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-AlignMiddle">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AlignMiddle</property>
                               </object>
                               <packing>
@@ -3872,7 +3708,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-AlignDown">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AlignDown</property>
                               </object>
                               <packing>
@@ -3924,7 +3759,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Graphic-BringToFront">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:BringToFront</property>
                               </object>
                               <packing>
@@ -3935,7 +3769,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-ObjectForwardOne">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ObjectForwardOne</property>
                               </object>
                               <packing>
@@ -3973,7 +3806,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-ObjectBackOne">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ObjectBackOne</property>
                               </object>
                               <packing>
@@ -3983,7 +3815,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Graphic-SendToBack1">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:SendToBack</property>
                               </object>
                               <packing>
@@ -4036,7 +3867,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-ToggleObjectRotateMode">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ToggleObjectRotateMode</property>
                               </object>
                               <packing>
@@ -4047,7 +3877,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-RotateRight">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:RotateRight</property>
                               </object>
                               <packing>
@@ -4082,7 +3911,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-FlipVertical">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:FlipVertical</property>
                               </object>
                               <packing>
@@ -4093,7 +3921,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-FlipHorizontal">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:FlipHorizontal</property>
                               </object>
                               <packing>
@@ -4128,7 +3955,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-GraphicDialog1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:GraphicDialog</property>
                                 <property name="icon_name">sfx2/res/symphony/open_more.png</property>
@@ -4181,7 +4007,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-Crop">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:Crop</property>
                               </object>
                               <packing>
@@ -4216,7 +4041,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-ChangePicture">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ChangePicture</property>
                               </object>
                               <packing>
@@ -4227,7 +4051,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-CompressGraphic">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:CompressGraphic</property>
                               </object>
                               <packing>
@@ -4238,7 +4061,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-SaveGraphic">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:SaveGraphic</property>
                               </object>
                               <packing>
@@ -4273,7 +4095,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-GraphicDialog">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:GraphicDialog</property>
                                 <property name="icon_name">sfx2/res/symphony/open_more.png</property>
@@ -4326,7 +4147,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-GraphicFilterToolbox">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:GraphicFilterToolbox</property>
                               </object>
                               <packing>
@@ -4365,7 +4185,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-ColorSettings">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ColorSettings</property>
                               </object>
                               <packing>
@@ -4403,7 +4222,6 @@
                             <child>
                               <object class="GtkToolButton" id="Graphic-GrafMode">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:GrafMode</property>
                               </object>
                               <packing>
@@ -4441,7 +4259,6 @@
                             <child>
                               <object class="GtkMenuToolButton" id="Graphic-GrafTransparence">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:GrafTransparence</property>
                               </object>
                               <packing>
@@ -4510,7 +4327,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-InsertCaptionDialog2">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:InsertCaptionDialog</property>
                               </object>
                               <packing>
@@ -4521,7 +4337,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-NameGroup2">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:NameGroup</property>
                               </object>
                               <packing>
@@ -4555,7 +4370,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Draw-StyleApply">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:StyleApply</property>
                               </object>
                               <packing>
@@ -4608,7 +4422,6 @@
                             <child>
                               <object class="GtkMenuToolButton" id="Object-AnchorMenu2">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AnchorMenu</property>
                               </object>
                               <packing>
@@ -4646,7 +4459,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-WrapOff">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapOff</property>
                               </object>
                               <packing>
@@ -4657,7 +4469,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-WrapOn">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapOn</property>
                               </object>
                               <packing>
@@ -4668,7 +4479,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-WrapIdeal">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapIdeal</property>
                               </object>
                               <packing>
@@ -4707,7 +4517,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-WrapLeft">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapLeft</property>
                               </object>
                               <packing>
@@ -4718,7 +4527,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-WrapThrough">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapThrough</property>
                               </object>
                               <packing>
@@ -4729,7 +4537,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-WrapRight">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapRight</property>
                               </object>
                               <packing>
@@ -4767,7 +4574,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-TextWrap2">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:TextWrap</property>
                                 <property name="icon_name">sfx2/res/symphony/open_more.png</property>
@@ -4824,7 +4630,6 @@
                             <child>
                               <object class="GtkMenuToolButton" id="Draw-ObjectAlign">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ObjectAlign</property>
                               </object>
                               <packing>
@@ -4859,7 +4664,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-AlignCenter2">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AlignCenter</property>
                               </object>
                               <packing>
@@ -4870,7 +4674,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-ObjectAlignRight2">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ObjectAlignRight</property>
                               </object>
                               <packing>
@@ -4908,7 +4711,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-AlignUp2">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AlignUp</property>
                               </object>
                               <packing>
@@ -4919,7 +4721,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-AlignMiddle2">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AlignMiddle</property>
                               </object>
                               <packing>
@@ -4930,7 +4731,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-AlignDown2">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AlignDown</property>
                               </object>
                               <packing>
@@ -4982,7 +4782,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Draw-BringToFront2">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:BringToFront</property>
                               </object>
                               <packing>
@@ -4993,7 +4792,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-ObjectForwardOne2">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ObjectForwardOne</property>
                               </object>
                               <packing>
@@ -5031,7 +4829,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-ObjectBackOne2">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ObjectBackOne</property>
                               </object>
                               <packing>
@@ -5041,7 +4838,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Draw-SendToBack2">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:SendToBack</property>
                               </object>
                               <packing>
@@ -5094,7 +4890,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-ToggleObjectRotateMode1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ToggleObjectRotateMode</property>
                               </object>
                               <packing>
@@ -5105,7 +4900,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-ToggleObjectBezierMode">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ToggleObjectBezierMode</property>
                               </object>
                               <packing>
@@ -5140,7 +4934,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-FlipVertical1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:FlipVertical</property>
                               </object>
                               <packing>
@@ -5151,7 +4944,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-FlipHorizontal1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:FlipHorizontal</property>
                               </object>
                               <packing>
@@ -5186,7 +4978,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-TransformDialog">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:TransformDialog</property>
                                 <property name="icon_name">sfx2/res/symphony/open_more.png</property>
@@ -5239,7 +5030,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-FormatArea">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:FormatArea</property>
                               </object>
                               <packing>
@@ -5275,7 +5065,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-FillStyle">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:FillStyle</property>
                               </object>
                               <packing>
@@ -5313,7 +5102,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-FormatArea2">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:FormatArea</property>
                                 <property name="icon_name">sfx2/res/symphony/open_more.png</property>
@@ -5351,7 +5139,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-FormatLine">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:FormatLine</property>
                               </object>
                               <packing>
@@ -5386,7 +5173,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-XLineColor">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:XLineColor</property>
                               </object>
                               <packing>
@@ -5421,7 +5207,6 @@
                             <child>
                               <object class="GtkMenuToolButton" id="Draw-XLineStyle1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:XLineStyle</property>
                               </object>
                               <packing>
@@ -5460,7 +5245,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-LineWidth1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:LineWidth</property>
                               </object>
                               <packing>
@@ -5498,7 +5282,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-LineEndStyle2">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:LineEndStyle</property>
                               </object>
                               <packing>
@@ -5536,7 +5319,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-FormatLine1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:FormatLine</property>
                                 <property name="icon_name">sfx2/res/symphony/open_more.png</property>
@@ -5588,7 +5370,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-ExtrusionToggle">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ExtrusionToggle</property>
                               </object>
                               <packing>
@@ -5599,7 +5380,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-ExtrusionDepthFloater">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ExtrusionDepthFloater</property>
                               </object>
                               <packing>
@@ -5610,7 +5390,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-ExtrusionDirectionFloater">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ExtrusionDirectionFloater</property>
                               </object>
                               <packing>
@@ -5621,7 +5400,6 @@
                             <child>
                               <object class="GtkMenuToolButton" id="Draw-Extrusion3DColor">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:Extrusion3DColor</property>
                               </object>
                               <packing>
@@ -5632,7 +5410,6 @@
                             <child>
                               <object class="GtkMenuToolButton" id="Draw-ExtrusionSurfaceFloater">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ExtrusionSurfaceFloater</property>
                               </object>
                               <packing>
@@ -5685,7 +5462,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-FontworkGalleryFloater">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:FontworkGalleryFloater</property>
                               </object>
                               <packing>
@@ -5696,7 +5472,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-FontworkShapeType">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:FontworkShapeType</property>
                               </object>
                               <packing>
@@ -5707,7 +5482,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-FontworkSameLetterHeights">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:FontworkSameLetterHeights</property>
                               </object>
                               <packing>
@@ -5718,7 +5492,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-FontworkAlignmentFloater">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:FontworkAlignmentFloater</property>
                               </object>
                               <packing>
@@ -5729,7 +5502,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-FontworkCharacterSpacingFloater">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:FontworkCharacterSpacingFloater</property>
                               </object>
                               <packing>
@@ -5798,7 +5570,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-InsertCaptionDialog">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:InsertCaptionDialog</property>
                               </object>
                               <packing>
@@ -5809,7 +5580,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-NameGroup">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:NameGroup</property>
                               </object>
                               <packing>
@@ -5843,7 +5613,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Media-StyleApply">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:StyleApply</property>
                               </object>
                               <packing>
@@ -5896,7 +5665,6 @@
                             <child>
                               <object class="GtkMenuToolButton" id="Object-AnchorMenu">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AnchorMenu</property>
                               </object>
                               <packing>
@@ -5934,7 +5702,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-WrapOff">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapOff</property>
                               </object>
                               <packing>
@@ -5945,7 +5712,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-WrapOn">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapOn</property>
                               </object>
                               <packing>
@@ -5956,7 +5722,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-WrapIdeal">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapIdeal</property>
                               </object>
                               <packing>
@@ -5995,7 +5760,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-WrapLeft">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapLeft</property>
                               </object>
                               <packing>
@@ -6006,7 +5770,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-WrapThrough">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapThrough</property>
                               </object>
                               <packing>
@@ -6017,7 +5780,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-WrapRight">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapRight</property>
                               </object>
                               <packing>
@@ -6055,7 +5817,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-TextWrap">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:TextWrap</property>
                                 <property name="icon_name">sfx2/res/symphony/open_more.png</property>
@@ -6112,7 +5873,6 @@
                             <child>
                               <object class="GtkMenuToolButton" id="Media-ObjectAlign">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ObjectAlign</property>
                               </object>
                               <packing>
@@ -6147,7 +5907,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-AlignCenter">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AlignCenter</property>
                               </object>
                               <packing>
@@ -6158,7 +5917,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-ObjectAlignRight">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ObjectAlignRight</property>
                               </object>
                               <packing>
@@ -6196,7 +5954,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-AlignUp">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AlignUp</property>
                               </object>
                               <packing>
@@ -6207,7 +5964,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-AlignMiddle">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AlignMiddle</property>
                               </object>
                               <packing>
@@ -6218,7 +5974,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-AlignDown">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AlignDown</property>
                               </object>
                               <packing>
@@ -6270,7 +6025,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Media-BringToFront">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:BringToFront</property>
                               </object>
                               <packing>
@@ -6281,7 +6035,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-ObjectForwardOne">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ObjectForwardOne</property>
                               </object>
                               <packing>
@@ -6319,7 +6072,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-ObjectBackOne">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ObjectBackOne</property>
                               </object>
                               <packing>
@@ -6329,7 +6081,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Media-SendToBack">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:SendToBack</property>
                               </object>
                               <packing>
@@ -6383,7 +6134,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-AVMediaPlayer">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AVMediaPlayer</property>
                               </object>
                               <packing>
@@ -6418,7 +6168,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-TransformDialog">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:TransformDialog</property>
                                 <property name="icon_name">sfx2/res/symphony/open_more.png</property>
@@ -6471,7 +6220,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-AVMediaToolBox">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AVMediaToolBox</property>
                               </object>
                               <packing>
@@ -6537,7 +6285,6 @@
                             <child>
                               <object class="GtkToolButton" id="Object-InsertCaptionDialog3">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:InsertCaptionDialog</property>
                               </object>
                               <packing>
@@ -6548,7 +6295,6 @@
                             <child>
                               <object class="GtkToolButton" id="Object-NameGroup3">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:NameGroup</property>
                               </object>
                               <packing>
@@ -6582,7 +6328,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Object-StyleApply">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:StyleApply</property>
                               </object>
                               <packing>
@@ -6635,7 +6380,6 @@
                             <child>
                               <object class="GtkMenuToolButton" id="Object-AnchorMenu3">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AnchorMenu</property>
                               </object>
                               <packing>
@@ -6673,7 +6417,6 @@
                             <child>
                               <object class="GtkToolButton" id="Object-WrapOff">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapOff</property>
                               </object>
                               <packing>
@@ -6684,7 +6427,6 @@
                             <child>
                               <object class="GtkToolButton" id="Object-WrapOn">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapOn</property>
                               </object>
                               <packing>
@@ -6695,7 +6437,6 @@
                             <child>
                               <object class="GtkToolButton" id="Object-WrapIdeal">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapIdeal</property>
                               </object>
                               <packing>
@@ -6734,7 +6475,6 @@
                             <child>
                               <object class="GtkToolButton" id="Object-WrapLeft">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapLeft</property>
                               </object>
                               <packing>
@@ -6745,7 +6485,6 @@
                             <child>
                               <object class="GtkToolButton" id="Object-WrapThrough">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapThrough</property>
                               </object>
                               <packing>
@@ -6756,7 +6495,6 @@
                             <child>
                               <object class="GtkToolButton" id="Object-WrapRight">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapRight</property>
                               </object>
                               <packing>
@@ -6794,7 +6532,6 @@
                             <child>
                               <object class="GtkToolButton" id="Object-TextWrap3">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:TextWrap</property>
                                 <property name="icon_name">sfx2/res/symphony/open_more.png</property>
@@ -6851,7 +6588,6 @@
                             <child>
                               <object class="GtkMenuToolButton" id="Object-ObjectAlign">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ObjectAlign</property>
                               </object>
                               <packing>
@@ -6886,7 +6622,6 @@
                             <child>
                               <object class="GtkToolButton" id="Object-AlignCenter3">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AlignCenter</property>
                               </object>
                               <packing>
@@ -6897,7 +6632,6 @@
                             <child>
                               <object class="GtkToolButton" id="Object-ObjectAlignRight3">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ObjectAlignRight</property>
                               </object>
                               <packing>
@@ -6935,7 +6669,6 @@
                             <child>
                               <object class="GtkToolButton" id="Object-AlignUp3">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AlignUp</property>
                               </object>
                               <packing>
@@ -6946,7 +6679,6 @@
                             <child>
                               <object class="GtkToolButton" id="Object-AlignMiddle3">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AlignMiddle</property>
                               </object>
                               <packing>
@@ -6957,7 +6689,6 @@
                             <child>
                               <object class="GtkToolButton" id="Object-AlignDown3">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AlignDown</property>
                               </object>
                               <packing>
@@ -7009,7 +6740,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Object-BringToFront3">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:BringToFront</property>
                               </object>
                               <packing>
@@ -7020,7 +6750,6 @@
                             <child>
                               <object class="GtkToolButton" id="Object-ObjectForwardOne3">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ObjectForwardOne</property>
                               </object>
                               <packing>
@@ -7058,7 +6787,6 @@
                             <child>
                               <object class="GtkToolButton" id="Object-ObjectBackOne3">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ObjectBackOne</property>
                               </object>
                               <packing>
@@ -7068,7 +6796,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Object-SendToBack3">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:SendToBack</property>
                               </object>
                               <packing>
@@ -7122,7 +6849,6 @@
                             <child>
                               <object class="GtkToolButton" id="Object-ChainFrames">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ChainFrames</property>
                               </object>
                               <packing>
@@ -7145,7 +6871,6 @@
                             <child>
                               <object class="GtkToolButton" id="Object-UnhainFrames1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:UnhainFrames</property>
                               </object>
                               <packing>
@@ -7180,7 +6905,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-FrameDialog">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:FrameDialog</property>
                                 <property name="icon_name">sfx2/res/symphony/open_more.png</property>
@@ -7233,7 +6957,6 @@
                             <child>
                               <object class="GtkToolButton" id="Dra-FormatArea1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:FormatArea</property>
                               </object>
                               <packing>
@@ -7272,7 +6995,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-FillStyle1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:FillStyle</property>
                               </object>
                               <packing>
@@ -7310,7 +7032,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-FormatArea1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:FormatArea</property>
                                 <property name="icon_name">sfx2/res/symphony/open_more.png</property>
@@ -7351,7 +7072,6 @@
                             <child>
                               <object class="GtkToolButton" id="Draw-BorderDialog">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:BorderDialog</property>
                               </object>
                               <packing>
@@ -7389,7 +7109,6 @@
                             <child>
                               <object class="GtkToolButton" id="Object-FrameLineColor">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:FrameLineColor</property>
                               </object>
                               <packing>
@@ -7400,7 +7119,6 @@
                             <child>
                               <object class="GtkToolButton" id="Object-LineStyle">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="margin-start">5</property>
                                 <property name="action_name">.uno:LineStyle</property>
                               </object>
@@ -7439,7 +7157,6 @@
                             <child>
                               <object class="GtkMenuToolButton" id="Object-SetBorderStyle">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:SetBorderStyle</property>
                               </object>
                               <packing>
@@ -7477,7 +7194,6 @@
                             <child>
                               <object class="GtkToolButton" id="ObjectBorderDialog">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:BorderDialog</property>
                                 <property name="icon_name">sfx2/res/symphony/open_more.png</property>
@@ -7549,7 +7265,6 @@
                             <child>
                               <object class="GtkToolButton" id="For-SwitchControlDesignMode">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:SwitchControlDesignMode</property>
                               </object>
                               <packing>
@@ -7560,7 +7275,6 @@
                             <child>
                               <object class="GtkToolButton" id="Form-UseWizards">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:UseWizards</property>
                               </object>
                               <packing>
@@ -7594,7 +7308,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Object-StyleApply1">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:StyleApply</property>
                               </object>
                               <packing>
@@ -7647,7 +7360,6 @@
                             <child>
                               <object class="GtkMenuToolButton" id="Form-AnchorMenu">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AnchorMenu</property>
                               </object>
                               <packing>
@@ -7685,7 +7397,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-WrapOff5">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapOff</property>
                               </object>
                               <packing>
@@ -7696,7 +7407,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-WrapOn5">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapOn</property>
                               </object>
                               <packing>
@@ -7707,7 +7417,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-WrapIdeal5">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapIdeal</property>
                               </object>
                               <packing>
@@ -7746,7 +7455,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-WrapLeft4">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapLeft</property>
                               </object>
                               <packing>
@@ -7757,7 +7465,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-WrapThrough4">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapThrough</property>
                               </object>
                               <packing>
@@ -7768,7 +7475,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-WrapRight4">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WrapRight</property>
                               </object>
                               <packing>
@@ -7806,7 +7512,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-TextWrap4">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:TextWrap</property>
                                 <property name="icon_name">sfx2/res/symphony/open_more.png</property>
@@ -7863,7 +7568,6 @@
                             <child>
                               <object class="GtkMenuToolButton" id="MultiObject-ObjectAlign1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ObjectAlign</property>
                               </object>
                               <packing>
@@ -7898,7 +7602,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-AlignCenter4">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AlignCenter</property>
                               </object>
                               <packing>
@@ -7909,7 +7612,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-ObjectAlignRight4">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ObjectAlignRight</property>
                               </object>
                               <packing>
@@ -7947,7 +7649,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-AlignUp4">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AlignUp</property>
                               </object>
                               <packing>
@@ -7958,7 +7659,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-AlignMiddle4">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AlignMiddle</property>
                               </object>
                               <packing>
@@ -7969,7 +7669,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-AlignDown4">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AlignDown</property>
                               </object>
                               <packing>
@@ -8021,7 +7720,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Media-BringToFront4">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:BringToFront</property>
                               </object>
                               <packing>
@@ -8032,7 +7730,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-ObjectForwardOne4">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ObjectForwardOne</property>
                               </object>
                               <packing>
@@ -8070,7 +7767,6 @@
                             <child>
                               <object class="GtkToolButton" id="Media-ObjectBackOne4">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ObjectBackOne</property>
                               </object>
                               <packing>
@@ -8080,7 +7776,6 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Media-SendToBack4">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:SendToBack</property>
                               </object>
                               <packing>
@@ -8133,7 +7828,6 @@
                             <child>
                               <object class="GtkToolButton" id="Form-Label">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:Label</property>
                               </object>
                               <packing>
@@ -8144,7 +7838,6 @@
                             <child>
                               <object class="GtkToolButton" id="Form-Edit">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:Edit</property>
                               </object>
                               <packing>
@@ -8155,7 +7848,6 @@
                             <child>
                               <object class="GtkToolButton" id="Form-CheckBox">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:CheckBox</property>
                               </object>
                               <packing>
@@ -8193,7 +7885,6 @@
                             <child>
                               <object class="GtkToolButton" id="Form-RadioButton">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:RadioButton</property>
                               </object>
                               <packing>
@@ -8204,7 +7895,6 @@
                             <child>
                               <object class="GtkToolButton" id="Form-ListBox">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ListBox</property>
                               </object>
                               <packing>
@@ -8215,7 +7905,6 @@
                             <child>
                               <object class="GtkToolButton" id="Form-ComboBox">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ComboBox</property>
                               </object>
                               <packing>
@@ -8269,7 +7958,6 @@
                             <child>
                               <object class="GtkToolButton" id="Form-ControlProperties">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ControlProperties</property>
                               </object>
                               <packing>
@@ -8305,7 +7993,6 @@
                             <child>
                               <object class="GtkToolButton" id="Form-FormProperties">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:FormProperties</property>
                               </object>
                               <packing>
@@ -8341,7 +8028,6 @@
                             <child>
                               <object class="GtkToolButton" id="Form-ShowFmExplorer">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ShowFmExplorer</property>
                               </object>
                               <packing>
@@ -8380,7 +8066,6 @@
                             <child>
                               <object class="GtkToolButton" id="Form-TabDialog">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:TabDialog</property>
                               </object>
                               <packing>
@@ -8433,7 +8118,6 @@
                             <child>
                               <object class="GtkToolButton" id="Form-OpenReadOnly">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:OpenReadOnly</property>
                               </object>
                               <packing>
@@ -8444,7 +8128,6 @@
                             <child>
                               <object class="GtkToolButton" id="Form-AutoControlFocus">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AutoControlFocus</property>
                               </object>
                               <packing>
@@ -8515,7 +8198,6 @@
                             <child>
                               <object class="GtkToolButton" id="Print-ShowSinglePage">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ShowSinglePage</property>
                               </object>
                               <packing>
@@ -8554,7 +8236,6 @@
                             <child>
                               <object class="GtkToolButton" id="Print-ShowTwoPages">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ShowTwoPages</property>
                               </object>
                               <packing>
@@ -8593,7 +8274,6 @@
                             <child>
                               <object class="GtkToolButton" id="Print-ShowBookview">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ShowBookview</property>
                               </object>
                               <packing>
@@ -8632,7 +8312,6 @@
                             <child>
                               <object class="GtkToolButton" id="Print-ShowMultiplePages1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ShowMultiplePages</property>
                               </object>
                               <packing>
@@ -8682,7 +8361,6 @@
                             <child>
                               <object class="GtkToolButton" id="Print-GoToStartOfDoc">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:GoToStartOfDoc</property>
                               </object>
                               <packing>
@@ -8693,7 +8371,6 @@
                             <child>
                               <object class="GtkToolButton" id="Print-PageUp">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:PageUp</property>
                               </object>
                               <packing>
@@ -8731,7 +8408,6 @@
                             <child>
                               <object class="GtkToolButton" id="Print-JumpToSpecificPage">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:JumpToSpecificPage</property>
                               </object>
                               <packing>
@@ -8769,7 +8445,6 @@
                             <child>
                               <object class="GtkToolButton" id="Print-PageDown">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:PageDown</property>
                               </object>
                               <packing>
@@ -8780,7 +8455,6 @@
                             <child>
                               <object class="GtkToolButton" id="Print-GoToEndOfDoc">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:GoToEndOfDoc</property>
                               </object>
                               <packing>
@@ -8833,7 +8507,6 @@
                             <child>
                               <object class="GtkToolButton" id="Print-ZoomMinus">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ZoomMinus</property>
                               </object>
                               <packing>
@@ -8844,7 +8517,6 @@
                             <child>
                               <object class="GtkToolButton" id="Print-PreviewZoom">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:PreviewZoom</property>
                               </object>
                               <packing>
@@ -8855,7 +8527,6 @@
                             <child>
                               <object class="GtkToolButton" id="Print-ZoomPlus">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ZoomPlus</property>
                               </object>
                               <packing>
@@ -8893,7 +8564,6 @@
                             <child>
                               <object class="GtkToolButton" id="Print-FullScreen">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:FullScreen</property>
                               </object>
                               <packing>
@@ -8931,7 +8601,6 @@
                             <child>
                               <object class="GtkToolButton" id="Print-ZoomDialog">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:Zoom</property>
                                 <property name="icon_name">sfx2/res/symphony/open_more.png</property>
@@ -8987,7 +8656,6 @@
                             <child>
                               <object class="GtkToolButton" id="Print-Print">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:Print</property>
                               </object>
                               <packing>
@@ -9023,7 +8691,6 @@
                             <child>
                               <object class="GtkToolButton" id="Print-ClosePreview">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ClosePreview</property>
                               </object>
                               <packing>
@@ -9058,7 +8725,6 @@
                             <child>
                               <object class="GtkToolButton" id="Print-PageDialog">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:PageDialog</property>
                                 <property name="icon_name">sfx2/res/symphony/open_more.png</property>
@@ -9130,7 +8796,6 @@
                             <child>
                               <object class="GtkToolButton" id="Review-SpellingAndGrammarDialog2">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:SpellingAndGrammarDialog</property>
                               </object>
                               <packing>
@@ -9166,7 +8831,6 @@
                             <child>
                               <object class="GtkToolButton" id="Review-SpellOnline">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:SpellOnline</property>
                               </object>
                               <packing>
@@ -9204,7 +8868,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Review-ThesaurusDialog">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ThesaurusDialog</property>
                               </object>
                               <packing>
@@ -9242,7 +8905,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Review-WordCountDialog">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:WordCountDialog</property>
                               </object>
                               <packing>
@@ -9296,7 +8958,6 @@
                             <child>
                               <object class="GtkToolButton" id="Review-TrackChanges1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:TrackChanges</property>
                               </object>
                               <packing>
@@ -9332,7 +8993,6 @@
                             <child>
                               <object class="GtkToolButton" id="Review-PreviousTrackedChange2">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:PreviousTrackedChange</property>
                               </object>
                               <packing>
@@ -9343,7 +9003,6 @@
                             <child>
                               <object class="GtkToolButton" id="Review-NextTrackedChange2">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:NextTrackedChange</property>
                               </object>
                               <packing>
@@ -9382,7 +9041,6 @@
                             <child>
                               <object class="GtkToolButton" id="Review-RejectTrackedChange1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:RejectTrackedChange</property>
                               </object>
                               <packing>
@@ -9393,7 +9051,6 @@
                             <child>
                               <object class="GtkToolButton" id="Review-AcceptTrackedChange1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AcceptTrackedChange</property>
                               </object>
                               <packing>
@@ -9431,7 +9088,6 @@
                             <child>
                               <object class="GtkToolButton" id="Review-RejectTrackedChangeToNext">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:RejectTrackedChangeToNext</property>
                               </object>
                               <packing>
@@ -9442,7 +9098,6 @@
                             <child>
                               <object class="GtkToolButton" id="Review-AcceptTrackedChangeToNext">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AcceptTrackedChangeToNext</property>
                               </object>
                               <packing>
@@ -9453,7 +9108,6 @@
                             <child>
                               <object class="GtkToolButton" id="Review-AcceptAllTrackedChanges">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:AcceptAllTrackedChanges</property>
                               </object>
                               <packing>
@@ -9491,7 +9145,6 @@
                             <child>
                               <object class="GtkToolButton" id="Review-AcceptTrackedChanges1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:AcceptTrackedChanges</property>
                                 <property name="icon_name">sfx2/res/symphony/open_more.png</property>
@@ -9544,7 +9197,6 @@
                             <child>
                               <object class="GtkToolButton" id="Review-InsertAnnotation1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:InsertAnnotation</property>
                               </object>
                               <packing>
@@ -9580,7 +9232,6 @@
                             <child>
                               <object class="GtkToolButton" id="Review-ReplyComment3">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ReplyComment</property>
                               </object>
                               <packing>
@@ -9619,7 +9270,6 @@
                             <child>
                               <object class="GtkToolButton" id="Review-DeleteComment3">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:DeleteComment</property>
                               </object>
                               <packing>
@@ -9657,7 +9307,6 @@
                             <child>
                               <object class="GtkToolButton" id="Review-DeleteAllNotes">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:DeleteAllNotes</property>
                               </object>
                               <packing>
@@ -9710,7 +9359,6 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Review-ProtectTraceChangeMode">
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ProtectTraceChangeMode</property>
                               </object>
                               <packing>
@@ -9749,7 +9397,6 @@
                             <child>
                               <object class="GtkToolButton" id="Review-CompareDocuments1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:CompareDocuments</property>
                               </object>
                               <packing>
@@ -9760,7 +9407,6 @@
                             <child>
                               <object class="GtkToolButton" id="Review-MergeDocuments1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="action_name">.uno:MergeDocuments</property>
                               </object>
                               <packing>

@@ -165,7 +165,6 @@
                                 <child>
                                   <object class="GtkMenuToolButton" id="up_btn">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
                                     <property name="use_underline">True</property>
                                     <property name="icon_name">res/fp010.png</property>
                                   </object>

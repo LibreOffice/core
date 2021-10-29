@@ -13,7 +13,6 @@
     <child>
       <object class="GtkToggleToolButton" id="toggle">
         <property name="visible">True</property>
-        <property name="can-focus">False</property>
         <property name="use-underline">True</property>
       </object>
       <packing>

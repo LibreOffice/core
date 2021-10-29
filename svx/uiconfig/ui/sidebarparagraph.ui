@@ -57,7 +57,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:LeftPara">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -68,7 +67,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:CenterPara">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -79,7 +77,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:RightPara">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -90,7 +87,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:JustifyPara">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -117,7 +113,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:ParaLeftToRight">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -128,7 +123,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:ParaRightToLeft">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -154,7 +148,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:CellVertTop">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -165,7 +158,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:CellVertCenter">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -176,7 +168,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:CellVertBottom">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -232,7 +223,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:ParaspaceIncrease">
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -243,7 +233,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:ParaspaceDecrease">
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -367,7 +356,6 @@
                 <child>
                   <object class="GtkMenuToolButton" id=".uno:LineSpacing">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes" context="sidebarparagraph|setlinespacing|tooltip_text">Line Spacing</property>
                     <property name="use-underline">True</property>
                   </object>
@@ -422,7 +410,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:IncrementIndent">
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
                     <property name="tooltip-text" translatable="yes" context="sidebarparagraph|increaseindent|tooltip_text">Increase Indent</property>
                     <property name="use-underline">True</property>
                   </object>
@@ -434,7 +421,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:DecrementIndent">
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
                     <property name="tooltip-text" translatable="yes" context="sidebarparagraph|decreaseindent|tooltip_text">Decrease Indent</property>
                     <property name="use-underline">True</property>
                   </object>
@@ -446,7 +432,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:HangingIndent">
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
                     <property name="tooltip-text" translatable="yes" context="sidebarparagraph|hangingindent|tooltip_text">Switch to Hanging Indent</property>
                     <property name="use-underline">True</property>
                   </object>
@@ -644,7 +629,6 @@
                 <child>
                   <object class="GtkMenuToolButton" id=".uno:DefaultBullet">
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -655,7 +639,6 @@
                 <child>
                   <object class="GtkMenuToolButton" id=".uno:DefaultNumbering">
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -666,7 +649,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:RemoveBullets">
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>
@@ -694,7 +676,6 @@
                 <child>
                   <object class="GtkMenuToolButton" id=".uno:BackgroundColor">
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
                     <property name="use-underline">True</property>
                   </object>
                   <packing>

@@ -69,7 +69,6 @@
                 <child>
                   <object class="GtkToolButton" id="InsertRow">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="chartdatadialog|InsertRow">Insert Row</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon01.png</property>
@@ -87,7 +86,6 @@
                 <child>
                   <object class="GtkToolButton" id="InsertColumn">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="chartdatadialog|InsertColumn">Insert Series</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon02.png</property>
@@ -105,7 +103,6 @@
                 <child>
                   <object class="GtkToolButton" id="InsertTextColumn">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="chartdatadialog|InsertTextColumn">Insert Text Column</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon07.png</property>
@@ -123,7 +120,6 @@
                 <child>
                   <object class="GtkToolButton" id="RemoveRow">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="chartdatadialog|RemoveRow">Delete Row</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon03.png</property>
@@ -141,7 +137,6 @@
                 <child>
                   <object class="GtkToolButton" id="RemoveColumn">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="chartdatadialog|RemoveColumn">Delete Series</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon04.png</property>
@@ -169,7 +164,6 @@
                 <child>
                   <object class="GtkToolButton" id="MoveLeftColumn">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="chartdatadialog|MoveLeftColumn">Move Series Left</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon08.png</property>
@@ -187,7 +181,6 @@
                 <child>
                   <object class="GtkToolButton" id="MoveRightColumn">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="chartdatadialog|MoveRightColumn">Move Series Right</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon05.png</property>
@@ -205,7 +198,6 @@
                 <child>
                   <object class="GtkToolButton" id="MoveUpRow">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="chartdatadialog|MoveUpRow">Move Row Up</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon09.png</property>
@@ -223,7 +215,6 @@
                 <child>
                   <object class="GtkToolButton" id="MoveDownRow">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="chartdatadialog|MoveDownRow">Move Row Down</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon06.png</property>
