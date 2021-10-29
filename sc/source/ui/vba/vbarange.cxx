@@ -253,8 +253,7 @@ void ScVbaRange::fireChangeEvent()
     const uno::Reference< script::vba::XVBAEventProcessor >& xVBAEvents = rDoc.GetVbaEventProcessor();
     if( xVBAEvents.is() ) try
     {
-        uno::Sequence< uno::Any > aArgs( 1 );
-        aArgs[ 0 ] <<= uno::Reference< excel::XRange >( this );
+        uno::Sequence< uno::Any > aArgs{ uno::Any(uno::Reference< excel::XRange >( this )) };
         xVBAEvents->processVbaEvent( script::vba::VBAEventId::WORKSHEET_CHANGE, aArgs );
     }
     catch( uno::Exception& )
@@ -944,7 +943,7 @@ protected:
     void processValue( sal_Int32 x, sal_Int32 y, const uno::Any& aValue )
     {
         uno::Sequence< uno::Sequence< uno::Any > >& aMatrix = const_cast<css::uno::Sequence<css::uno::Sequence<css::uno::Any>> &>(*o3tl::doAccess<uno::Sequence<uno::Sequence<uno::Any>>>(maValue));
-        aMatrix[x][y] = aValue;
+        aMatrix.getArray()[x].getArray()[y] = aValue;
     }
 
 public:
@@ -952,8 +951,9 @@ public:
     {
         uno::Sequence< uno::Sequence< uno::Any > > aMatrix;
         aMatrix.realloc( nRowCount );
+        auto pMatrix = aMatrix.getArray();
         for ( sal_Int32 index = 0; index < nRowCount; ++index )
-            aMatrix[index].realloc( nColCount );
+            pMatrix[index].realloc( nColCount );
         maValue <<= aMatrix;
     }
     void visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference< table::XCell >& xCell ) override
@@ -3520,29 +3520,30 @@ ScVbaRange::Sort( const uno::Any& Key1, const uno::Any& Order1, const uno::Any& 
 
     uno::Reference< util::XSortable > xSort( mxRange, uno::UNO_QUERY_THROW );
     uno::Sequence< beans::PropertyValue > sortDescriptor = xSort->createSortDescriptor();
+    auto psortDescriptor = sortDescriptor.getArray();
     sal_Int32 nTableSortFieldIndex = findSortPropertyIndex( sortDescriptor, "SortFields" );
 
     uno::Sequence< table::TableSortField > sTableFields(1);
     sal_Int32 nTableIndex = 0;
-    updateTableSortField(  mxRange, xKey1, nOrder1, sTableFields[ nTableIndex++ ], bIsSortColumns, bMatchCase );
+    updateTableSortField(  mxRange, xKey1, nOrder1, sTableFields.getArray()[ nTableIndex++ ], bIsSortColumns, bMatchCase );
 
     if ( xKey2.is() )
     {
         sTableFields.realloc( sTableFields.getLength() + 1 );
-        updateTableSortField(  mxRange, xKey2, nOrder2, sTableFields[ nTableIndex++ ], bIsSortColumns, bMatchCase );
+        updateTableSortField(  mxRange, xKey2, nOrder2, sTableFields.getArray()[ nTableIndex++ ], bIsSortColumns, bMatchCase );
     }
     if ( xKey3.is()  )
     {
         sTableFields.realloc( sTableFields.getLength() + 1 );
-        updateTableSortField(  mxRange, xKey3, nOrder3, sTableFields[ nTableIndex++ ], bIsSortColumns, bMatchCase );
+        updateTableSortField(  mxRange, xKey3, nOrder3, sTableFields.getArray()[ nTableIndex++ ], bIsSortColumns, bMatchCase );
     }
-    sortDescriptor[ nTableSortFieldIndex ].Value <<= sTableFields;
+    psortDescriptor[ nTableSortFieldIndex ].Value <<= sTableFields;
 
     sal_Int32 nIndex =  findSortPropertyIndex( sortDescriptor,  "IsSortColumns" );
-    sortDescriptor[ nIndex ].Value <<= bIsSortColumns;
+    psortDescriptor[ nIndex ].Value <<= bIsSortColumns;
 
     nIndex =    findSortPropertyIndex( sortDescriptor, "ContainsHeader" );
-    sortDescriptor[ nIndex ].Value <<= bContainsHeader;
+    psortDescriptor[ nIndex ].Value <<= bContainsHeader;
 
     rDoc.SetSortParam( aSortParam, nTab );
     xSort->sort( sortDescriptor );
@@ -4517,11 +4518,13 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
             bool bAcceptCriteria2 = true;
             bool bAll = false;
             uno::Sequence< sheet::TableFilterField2 > sTabFilts;
+            sheet::TableFilterField2* pTabFilts = nullptr;
             uno::Reference< beans::XPropertySet > xDescProps( xDesc, uno::UNO_QUERY_THROW );
             if ( Criteria1.hasValue() )
             {
                 sTabFilts.realloc( 1 );
-                sTabFilts[0].Operator = sheet::FilterOperator2::EQUAL;// sensible default
+                pTabFilts = sTabFilts.getArray();
+                pTabFilts[0].Operator = sheet::FilterOperator2::EQUAL;// sensible default
                 if ( !bCritHasNumericValue )
                 {
                     Criteria1 >>= sCriteria1;
@@ -4535,12 +4538,14 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
                             // When sequence is provided for Criteria1 don't care about Criteria2
                             bAcceptCriteria2 = false;
 
+                            auto pCriteria1 = aCriteria1.getArray();
                             sTabFilts.realloc( nLength );
+                            pTabFilts = sTabFilts.getArray();
                             for ( sal_uInt16 i = 0; i < nLength; ++i )
                             {
-                                lcl_setTableFieldsFromCriteria( aCriteria1[i], xDescProps, sTabFilts[i] );
-                                sTabFilts[i].Connection = sheet::FilterConnection_OR;
-                                sTabFilts[i].Field = (nField - 1);
+                                lcl_setTableFieldsFromCriteria( pCriteria1[i], xDescProps, pTabFilts[i] );
+                                pTabFilts[i].Connection = sheet::FilterConnection_OR;
+                                pTabFilts[i].Field = (nField - 1);
                             }
                         }
                         else
@@ -4548,17 +4553,17 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
                     }
                     else
                     {
-                        sTabFilts[0].IsNumeric = bCritHasNumericValue;
+                        pTabFilts[0].IsNumeric = bCritHasNumericValue;
                         if ( bHasCritValue && !sCriteria1.isEmpty() )
-                            lcl_setTableFieldsFromCriteria( sCriteria1, xDescProps, sTabFilts[0]  );
+                            lcl_setTableFieldsFromCriteria( sCriteria1, xDescProps, pTabFilts[0]  );
                         else
                             bAll = true;
                     }
                 }
                 else // numeric
                 {
-                    sTabFilts[0].IsNumeric = true;
-                    sTabFilts[0].NumericValue = nCriteria1;
+                    pTabFilts[0].IsNumeric = true;
+                    pTabFilts[0].NumericValue = nCriteria1;
                 }
             }
             else // no value specified
@@ -4571,23 +4576,23 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
                 // is no value specified for criteria1 set it to 10
                 if ( !bCritHasNumericValue && sCriteria1.isEmpty() && ( nOperator != excel::XlAutoFilterOperator::xlOr ) && ( nOperator != excel::XlAutoFilterOperator::xlAnd ) )
                 {
-                    sTabFilts[0].IsNumeric = true;
-                    sTabFilts[0].NumericValue = 10;
+                    pTabFilts[0].IsNumeric = true;
+                    pTabFilts[0].NumericValue = 10;
                     bAll = false;
                 }
                 switch ( nOperator )
                 {
                     case excel::XlAutoFilterOperator::xlBottom10Items:
-                        sTabFilts[0].Operator = sheet::FilterOperator2::BOTTOM_VALUES;
+                        pTabFilts[0].Operator = sheet::FilterOperator2::BOTTOM_VALUES;
                         break;
                     case excel::XlAutoFilterOperator::xlBottom10Percent:
-                        sTabFilts[0].Operator = sheet::FilterOperator2::BOTTOM_PERCENT;
+                        pTabFilts[0].Operator = sheet::FilterOperator2::BOTTOM_PERCENT;
                         break;
                     case excel::XlAutoFilterOperator::xlTop10Items:
-                        sTabFilts[0].Operator = sheet::FilterOperator2::TOP_VALUES;
+                        pTabFilts[0].Operator = sheet::FilterOperator2::TOP_VALUES;
                         break;
                     case excel::XlAutoFilterOperator::xlTop10Percent:
-                        sTabFilts[0].Operator = sheet::FilterOperator2::TOP_PERCENT;
+                        pTabFilts[0].Operator = sheet::FilterOperator2::TOP_PERCENT;
                         break;
                     case excel::XlAutoFilterOperator::xlOr:
                         nConn = sheet::FilterConnection_OR;
@@ -4603,15 +4608,16 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
             }
             if ( !bAll && bAcceptCriteria2 )
             {
-                sTabFilts[0].Connection = sheet::FilterConnection_AND;
-                sTabFilts[0].Field = (nField - 1);
+                pTabFilts[0].Connection = sheet::FilterConnection_AND;
+                pTabFilts[0].Field = (nField - 1);
 
                 uno::Sequence< OUString > aCriteria2;
                 if ( Criteria2.hasValue() ) // there is a Criteria2
                 {
                     sTabFilts.realloc(2);
-                    sTabFilts[1].Field = sTabFilts[0].Field;
-                    sTabFilts[1].Connection = nConn;
+                    pTabFilts = sTabFilts.getArray();
+                    pTabFilts[1].Field = sTabFilts[0].Field;
+                    pTabFilts[1].Connection = nConn;
 
                     OUString sCriteria2;
                     if ( Criteria2 >>= sCriteria2 )
@@ -4619,8 +4625,8 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
                         if ( !sCriteria2.isEmpty() )
                         {
                             uno::Reference< beans::XPropertySet > xProps;
-                            lcl_setTableFieldsFromCriteria( sCriteria2, xProps,  sTabFilts[1] );
-                            sTabFilts[1].IsNumeric = false;
+                            lcl_setTableFieldsFromCriteria( sCriteria2, xProps,  pTabFilts[1] );
+                            pTabFilts[1].IsNumeric = false;
                         }
                     }
                     else if ( Criteria2 >>= aCriteria2 )
@@ -4629,14 +4635,14 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
                         if ( nLength )
                         {
                             // For compatibility use only the last value from the sequence
-                            lcl_setTableFieldsFromCriteria( aCriteria2[nLength - 1], xDescProps, sTabFilts[1] );
+                            lcl_setTableFieldsFromCriteria( aCriteria2.getArray()[nLength - 1], xDescProps, pTabFilts[1] );
                         }
                     }
                     else // numeric
                     {
-                        Criteria2 >>= sTabFilts[1].NumericValue;
-                        sTabFilts[1].IsNumeric = true;
-                        sTabFilts[1].Operator = sheet::FilterOperator2::EQUAL;
+                        Criteria2 >>= pTabFilts[1].NumericValue;
+                        pTabFilts[1].IsNumeric = true;
+                        pTabFilts[1].Operator = sheet::FilterOperator2::EQUAL;
                     }
                 }
             }
@@ -4994,6 +5000,7 @@ ScVbaRange::PrintOut( const uno::Any& From, const uno::Any& To, const uno::Any& 
 
     sal_Int32 nItems = m_Areas->getCount();
     uno::Sequence<  table::CellRangeAddress > printAreas( nItems );
+    auto printAreasRange = asNonConstRange(printAreas);
     uno::Reference< sheet::XPrintAreas > xPrintAreas;
     for ( sal_Int32 index=1; index <= nItems; ++index )
     {
@@ -5008,7 +5015,7 @@ ScVbaRange::PrintOut( const uno::Any& From, const uno::Any& To, const uno::Any& 
             pShell = getDocShellFromRange( pRange->mxRange );
             xPrintAreas.set( thisRange.getSpreadSheet(), uno::UNO_QUERY_THROW );
         }
-        printAreas[ index - 1 ] = rangeAddress;
+        printAreasRange[ index - 1 ] = rangeAddress;
     }
     if ( pShell && xPrintAreas.is() )
     {
@@ -5573,46 +5580,47 @@ ScVbaRange::Subtotal( ::sal_Int32 _nGroupBy, ::sal_Int32 _nFunction, const uno::
         xSubDescPropertySet->setPropertyValue("InsertPageBreaks", uno::makeAny( bAddPageBreaks));
         sal_Int32 nLen = _nTotalList.getLength();
         uno::Sequence< sheet::SubTotalColumn > aColumns( nLen );
+        auto aColumnsRange = asNonConstRange(aColumns);
         for (int i = 0; i < nLen; i++)
         {
-            aColumns[i].Column = _nTotalList[i] - 1;
+            aColumnsRange[i].Column = _nTotalList[i] - 1;
             switch (_nFunction)
             {
                 case excel::XlConsolidationFunction::xlAverage:
-                    aColumns[i].Function = sheet::GeneralFunction_AVERAGE;
+                    aColumnsRange[i].Function = sheet::GeneralFunction_AVERAGE;
                     break;
                 case excel::XlConsolidationFunction::xlCount:
-                    aColumns[i].Function = sheet::GeneralFunction_COUNT;
+                    aColumnsRange[i].Function = sheet::GeneralFunction_COUNT;
                     break;
                 case excel::XlConsolidationFunction::xlCountNums:
-                    aColumns[i].Function = sheet::GeneralFunction_COUNTNUMS;
+                    aColumnsRange[i].Function = sheet::GeneralFunction_COUNTNUMS;
                     break;
                 case excel::XlConsolidationFunction::xlMax:
-                    aColumns[i].Function = sheet::GeneralFunction_MAX;
+                    aColumnsRange[i].Function = sheet::GeneralFunction_MAX;
                     break;
                 case excel::XlConsolidationFunction::xlMin:
-                    aColumns[i].Function = sheet::GeneralFunction_MIN;
+                    aColumnsRange[i].Function = sheet::GeneralFunction_MIN;
                     break;
                 case excel::XlConsolidationFunction::xlProduct:
-                    aColumns[i].Function = sheet::GeneralFunction_PRODUCT;
+                    aColumnsRange[i].Function = sheet::GeneralFunction_PRODUCT;
                     break;
                 case excel::XlConsolidationFunction::xlStDev:
-                    aColumns[i].Function = sheet::GeneralFunction_STDEV;
+                    aColumnsRange[i].Function = sheet::GeneralFunction_STDEV;
                     break;
                 case excel::XlConsolidationFunction::xlStDevP:
-                    aColumns[i].Function = sheet::GeneralFunction_STDEVP;
+                    aColumnsRange[i].Function = sheet::GeneralFunction_STDEVP;
                     break;
                 case excel::XlConsolidationFunction::xlSum:
-                    aColumns[i].Function = sheet::GeneralFunction_SUM;
+                    aColumnsRange[i].Function = sheet::GeneralFunction_SUM;
                     break;
                 case excel::XlConsolidationFunction::xlUnknown:
-                    aColumns[i].Function = sheet::GeneralFunction_NONE;
+                    aColumnsRange[i].Function = sheet::GeneralFunction_NONE;
                     break;
                 case excel::XlConsolidationFunction::xlVar:
-                    aColumns[i].Function = sheet::GeneralFunction_VAR;
+                    aColumnsRange[i].Function = sheet::GeneralFunction_VAR;
                     break;
                 case excel::XlConsolidationFunction::xlVarP:
-                    aColumns[i].Function = sheet::GeneralFunction_VARP;
+                    aColumnsRange[i].Function = sheet::GeneralFunction_VARP;
                     break;
                 default:
                     DebugHelper::basicexception(ERRCODE_BASIC_BAD_PARAMETER, {}) ;
@@ -5647,9 +5655,8 @@ ScVbaRange::hasError()
     uno::Reference< excel::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
     uno::Reference< script::XInvocation > xInvoc( xApplication->WorksheetFunction(), uno::UNO_QUERY_THROW );
 
-    uno::Sequence< uno::Any > Params(1);
     uno::Reference< excel::XRange > aRange( this );
-    Params[0] <<= aRange;
+    uno::Sequence< uno::Any > Params{ uno::Any(aRange) };
     uno::Sequence< sal_Int16 > OutParamIndex;
     uno::Sequence< uno::Any > OutParam;
     xInvoc->invoke( "IsError", Params, OutParamIndex, OutParam ) >>= dResult;

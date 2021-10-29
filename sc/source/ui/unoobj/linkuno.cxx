@@ -1454,8 +1454,9 @@ Sequence< sal_Int32 > SAL_CALL ScExternalSheetCacheObj::getAllRows()
     mpTable->getAllRows(aRows);
     size_t nSize = aRows.size();
     Sequence<sal_Int32> aRowsSeq(nSize);
+    auto aRowsSeqRange = asNonConstRange(aRowsSeq);
     for (size_t i = 0; i < nSize; ++i)
-        aRowsSeq[i] = aRows[i];
+        aRowsSeqRange[i] = aRows[i];
 
     return aRowsSeq;
 }
@@ -1470,8 +1471,9 @@ Sequence< sal_Int32 > SAL_CALL ScExternalSheetCacheObj::getAllColumns(sal_Int32 
     mpTable->getAllCols(static_cast<SCROW>(nRow), aCols);
     size_t nSize = aCols.size();
     Sequence<sal_Int32> aColsSeq(nSize);
+    auto aColsSeqRange = asNonConstRange(aColsSeq);
     for (size_t i = 0; i < nSize; ++i)
-        aColsSeq[i] = aCols[i];
+        aColsSeqRange[i] = aCols[i];
 
     return aColsSeq;
 }
@@ -1634,10 +1636,11 @@ Sequence< OUString > SAL_CALL ScExternalDocLinksObj::getElementNames()
     SolarMutexGuard aGuard;
     sal_uInt16 n = mpRefMgr->getExternalFileCount();
     Sequence<OUString> aSeq(n);
+    auto aSeqRange = asNonConstRange(aSeq);
     for (sal_uInt16 i = 0; i < n; ++i)
     {
         const OUString* pName = mpRefMgr->getExternalFileName(i);
-        aSeq[i] = pName ? *pName : OUString();
+        aSeqRange[i] = pName ? *pName : OUString();
     }
 
     return aSeq;

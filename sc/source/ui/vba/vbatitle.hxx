@@ -133,12 +133,7 @@ public:
     }
     css::uno::Sequence< OUString > getServiceNames() override
     {
-        static css::uno::Sequence< OUString > aServiceNames;
-        if ( !aServiceNames.hasElements() )
-        {
-            aServiceNames.realloc( 1 );
-            aServiceNames[ 0 ] = "ooo.vba.excel.XTitle";
-        }
+        static const css::uno::Sequence< OUString > aServiceNames{ "ooo.vba.excel.XTitle" };
         return aServiceNames;
     }
 };

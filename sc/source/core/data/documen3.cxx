@@ -680,8 +680,7 @@ bool ScDocument::HasSheetEventScript( SCTAB nTab, ScSheetEventId nEvent, bool bW
         // check if VBA event handlers exist
         if (bWithVbaEvents && mxVbaEvents.is()) try
         {
-            uno::Sequence< uno::Any > aArgs( 1 );
-            aArgs[ 0 ] <<= nTab;
+            uno::Sequence< uno::Any > aArgs{ uno::Any(nTab) };
             if (mxVbaEvents->hasVbaEventHandler( ScSheetEvents::GetVbaSheetEventId( nEvent ), aArgs ) ||
                 mxVbaEvents->hasVbaEventHandler( ScSheetEvents::GetVbaDocumentEventId( nEvent ), uno::Sequence< uno::Any >() ))
                 return true;

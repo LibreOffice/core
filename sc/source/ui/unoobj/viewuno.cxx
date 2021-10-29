@@ -522,8 +522,7 @@ static void lcl_CallActivate( ScDocShell* pDocSh, SCTAB nTab, ScSheetEventId nEv
     {
         uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( rDoc.GetVbaEventProcessor(), uno::UNO_SET_THROW );
         // the parameter is the clicked object, as in the mousePressed call above
-        uno::Sequence< uno::Any > aArgs( 1 );
-        aArgs[ 0 ] <<= nTab;
+        uno::Sequence< uno::Any > aArgs{ uno::Any(nTab) };
         xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( nEvent ), aArgs );
     }
     catch( uno::Exception& )
@@ -1184,8 +1183,7 @@ bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
             if (pScript)
             {
                 // the macro parameter is the clicked object, as in the mousePressed call above
-                uno::Sequence<uno::Any> aParams(1);
-                aParams[0] <<= xTarget;
+                uno::Sequence<uno::Any> aParams{ uno::Any(xTarget) };
 
                 uno::Any aRet;
                 uno::Sequence<sal_Int16> aOutArgsIndex;
@@ -1205,8 +1203,7 @@ bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
         {
             uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( rDoc.GetVbaEventProcessor(), uno::UNO_SET_THROW );
             // the parameter is the clicked object, as in the mousePressed call above
-            uno::Sequence< uno::Any > aArgs( 1 );
-            aArgs[ 0 ] <<= xTarget;
+            uno::Sequence< uno::Any > aArgs{ uno::Any(xTarget) };
             xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( nEvent ), aArgs );
         }
         catch( util::VetoException& )
@@ -1232,8 +1229,7 @@ bool ScTabViewObj::MouseReleased( const awt::MouseEvent& e )
             ScDocShell* pDocSh = rViewData.GetDocShell();
             ScDocument& rDoc = pDocSh->GetDocument();
             uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( rDoc.GetVbaEventProcessor(), uno::UNO_SET_THROW );
-            uno::Sequence< uno::Any > aArgs( 1 );
-            aArgs[ 0 ] = getSelection();
+            uno::Sequence< uno::Any > aArgs{ getSelection() };
             xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( ScSheetEventId::SELECT ), aArgs );
         }
         catch( uno::Exception& )
@@ -1666,8 +1662,7 @@ void ScTabViewObj::SelectionChanged()
         if (pScript)
         {
             // the macro parameter is the selection as returned by getSelection
-            uno::Sequence<uno::Any> aParams(1);
-            aParams[0] = getSelection();
+            uno::Sequence<uno::Any> aParams{ getSelection() };
             uno::Any aRet;
             uno::Sequence<sal_Int16> aOutArgsIndex;
             uno::Sequence<uno::Any> aOutArgs;
@@ -1683,8 +1678,7 @@ void ScTabViewObj::SelectionChanged()
     try
     {
         uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( rDoc.GetVbaEventProcessor(), uno::UNO_SET_THROW );
-        uno::Sequence< uno::Any > aArgs( 1 );
-        aArgs[ 0 ] = getSelection();
+        uno::Sequence< uno::Any > aArgs{ getSelection() };
         xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( ScSheetEventId::SELECT ), aArgs );
     }
     catch( uno::Exception& )
@@ -2109,10 +2103,11 @@ namespace {
 uno::Sequence<sal_Int32> toSequence(const ScMarkData::MarkedTabsType& rSelected)
 {
     uno::Sequence<sal_Int32> aRet(rSelected.size());
+    auto aRetRange = asNonConstRange(aRet);
     size_t i = 0;
     for (const auto& rTab : rSelected)
     {
-        aRet[i] = static_cast<sal_Int32>(rTab);
+        aRetRange[i] = static_cast<sal_Int32>(rTab);
         ++i;
     }
 

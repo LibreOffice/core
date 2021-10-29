@@ -97,31 +97,31 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::
                     if ( aType.equals( cppu::UnoType<uno::Sequence<sal_Int16>>::get() ) )
                     {
                         uno::Sequence< uno::Sequence< sal_Int16 > >  aTmp(1);
-                        rArray >>= aTmp[ 0 ];
+                        rArray >>= aTmp.getArray()[ 0 ];
                         rArray <<= aTmp;
                     }
                     else if ( aType.equals( cppu::UnoType<uno::Sequence<sal_Int32>>::get() ) )
                     {
                         uno::Sequence< uno::Sequence< sal_Int32 > > aTmp(1);
-                        rArray >>= aTmp[ 0 ];
+                        rArray >>= aTmp.getArray()[ 0 ];
                         rArray <<= aTmp;
                     }
                     else if ( aType.equals( cppu::UnoType<uno::Sequence<double>>::get() ) )
                     {
                         uno::Sequence< uno::Sequence< double > > aTmp(1);
-                        rArray >>= aTmp[ 0 ];
+                        rArray >>= aTmp.getArray()[ 0 ];
                         rArray <<= aTmp;
                     }
                     else if ( aType.equals( cppu::UnoType<uno::Sequence<OUString>>::get() ) )
                     {
                         uno::Sequence< uno::Sequence< OUString > > aTmp(1);
-                        rArray >>= aTmp[ 0 ];
+                        rArray >>= aTmp.getArray()[ 0 ];
                         rArray <<= aTmp;
                     }
                     else if ( aType.equals( cppu::UnoType<uno::Sequence<uno::Any>>::get() ) )
                     {
                         uno::Sequence< uno::Sequence<uno::Any > > aTmp(1);
-                        rArray >>= aTmp[ 0 ];
+                        rArray >>= aTmp.getArray()[ 0 ];
                         rArray <<= aTmp;
                     }
                 }

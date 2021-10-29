@@ -81,9 +81,9 @@ void ScSolverUtil::GetImplementations( uno::Sequence<OUString>& rImplNames,
                         sDescription = sName;          // use implementation name if no description available
 
                     rImplNames.realloc( nCount+1 );
-                    rImplNames[nCount] = sName;
+                    rImplNames.getArray()[nCount] = sName;
                     rDescriptions.realloc( nCount+1 );
-                    rDescriptions[nCount] = sDescription;
+                    rDescriptions.getArray()[nCount] = sDescription;
                     ++nCount;
                 }
                 catch (const css::uno::Exception&)
@@ -155,6 +155,7 @@ uno::Sequence<beans::PropertyValue> ScSolverUtil::GetDefaults( std::u16string_vi
     const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
     const sal_Int32 nSize = aPropSeq.getLength();
     aDefaults.realloc(nSize);
+    auto pDefaults = aDefaults.getArray();
     sal_Int32 nValid = 0;
     for (const beans::Property& rProp : aPropSeq)
     {
@@ -162,7 +163,7 @@ uno::Sequence<beans::PropertyValue> ScSolverUtil::GetDefaults( std::u16string_vi
         uno::TypeClass eClass = aValue.getValueTypeClass();
         // only use properties of supported types
         if ( eClass == uno::TypeClass_BOOLEAN || eClass == uno::TypeClass_LONG || eClass == uno::TypeClass_DOUBLE )
-            aDefaults[nValid++] = beans::PropertyValue( rProp.Name, -1, aValue, beans::PropertyState_DIRECT_VALUE );
+            pDefaults[nValid++] = beans::PropertyValue( rProp.Name, -1, aValue, beans::PropertyState_DIRECT_VALUE );
     }
     aDefaults.realloc(nValid);
 
