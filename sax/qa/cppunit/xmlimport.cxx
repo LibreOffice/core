@@ -358,17 +358,16 @@ void XMLImportTest::setUp()
     xTokenHandler.set( new DummyTokenHandler );
     uno::Reference<lang::XInitialization> const xInit(m_xLegacyFastParser,
                             uno::UNO_QUERY_THROW);
-    uno::Sequence<uno::Any> args(1);
-    args[0] <<= xTokenHandler;
-    xInit->initialize( args );
+    xInit->initialize({ uno::Any(xTokenHandler) });
 
     sal_Int32 nNamespaceCount = SAL_N_ELEMENTS(DummyTokenHandler::namespaceURIs);
     uno::Sequence<uno::Any> namespaceArgs( nNamespaceCount + 1 );
-    namespaceArgs[0] <<= OUString( "registerNamespaces" );
+    auto p_namespaceArgs = namespaceArgs.getArray();
+    p_namespaceArgs[0] <<= OUString( "registerNamespaces" );
     for (sal_Int32 i = 1; i <= nNamespaceCount; i++ )
     {
         css::beans::Pair<OUString, sal_Int32> rPair( OUString(DummyTokenHandler::namespaceURIs[i - 1]), i << 16 );
-        namespaceArgs[i] <<= rPair;
+        p_namespaceArgs[i] <<= rPair;
     }
     xInit->initialize( namespaceArgs );
 
@@ -406,9 +405,7 @@ void XMLImportTest::testMissingNamespaceDeclaration()
 
     uno::Reference<lang::XInitialization> const xInit(m_xLegacyFastParser,
                             uno::UNO_QUERY_THROW);
-    uno::Sequence<uno::Any> args(1);
-    args[0] <<= OUString("IgnoreMissingNSDecl");
-    xInit->initialize( args );
+    xInit->initialize({ uno::Any(OUString("IgnoreMissingNSDecl")) });
 
     for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS( fileNames ); i++)
     {
