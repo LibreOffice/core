@@ -232,7 +232,7 @@ public:
     void AddSubTotalColumn(const css::sheet::SubTotalColumn& rSubTotalColumn)
     {
         aSubTotalRule.aSubTotalColumns.realloc(aSubTotalRule.aSubTotalColumns.getLength() + 1);
-        aSubTotalRule.aSubTotalColumns[aSubTotalRule.aSubTotalColumns.getLength() - 1] = rSubTotalColumn;
+        aSubTotalRule.aSubTotalColumns.getArray()[aSubTotalRule.aSubTotalColumns.getLength() - 1] = rSubTotalColumn;
     }
 };
 

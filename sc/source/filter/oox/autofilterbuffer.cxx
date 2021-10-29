@@ -170,8 +170,9 @@ void ApiFilterSettings::appendField( bool bAnd, sal_Int32 nOperator, double fVal
     rFilterField.Connection = bAnd ? FilterConnection_AND : FilterConnection_OR;
     rFilterField.Operator = nOperator;
     rFilterField.Values.realloc(1);
-    rFilterField.Values[0].FilterType = FilterFieldType::NUMERIC;
-    rFilterField.Values[0].NumericValue = fValue;
+    auto pValues = rFilterField.Values.getArray();
+    pValues[0].FilterType = FilterFieldType::NUMERIC;
+    pValues[0].NumericValue = fValue;
 }
 
 void ApiFilterSettings::appendField( bool bAnd, sal_Int32 nOperator, const OUString& rValue )
@@ -181,8 +182,9 @@ void ApiFilterSettings::appendField( bool bAnd, sal_Int32 nOperator, const OUStr
     rFilterField.Connection = bAnd ? FilterConnection_AND : FilterConnection_OR;
     rFilterField.Operator = nOperator;
     rFilterField.Values.realloc(1);
-    rFilterField.Values[0].FilterType = FilterFieldType::STRING;
-    rFilterField.Values[0].StringValue = rValue;
+    auto pValues = rFilterField.Values.getArray();
+    pValues[0].FilterType = FilterFieldType::STRING;
+    pValues[0].StringValue = rValue;
 }
 
 void ApiFilterSettings::appendField(bool bAnd, util::Color aColor, bool bIsBackgroundColor)
@@ -192,9 +194,10 @@ void ApiFilterSettings::appendField(bool bAnd, util::Color aColor, bool bIsBackg
     rFilterField.Connection = bAnd ? FilterConnection_AND : FilterConnection_OR;
     rFilterField.Operator = FilterOperator2::EQUAL;
     rFilterField.Values.realloc(1);
-    rFilterField.Values[0].FilterType
+    auto pValues = rFilterField.Values.getArray();
+    pValues[0].FilterType
         = bIsBackgroundColor ? FilterFieldType::BACKGROUND_COLOR : FilterFieldType::TEXT_COLOR;
-    rFilterField.Values[0].ColorValue = aColor;
+    pValues[0].ColorValue = aColor;
 }
 
 void ApiFilterSettings::appendField( bool bAnd, const std::vector<std::pair<OUString, bool>>& rValues )
@@ -204,12 +207,13 @@ void ApiFilterSettings::appendField( bool bAnd, const std::vector<std::pair<OUSt
     rFilterField.Connection = bAnd ? FilterConnection_AND : FilterConnection_OR;
     rFilterField.Operator = FilterOperator2::EQUAL;
     rFilterField.Values.realloc(rValues.size());
+    auto pValues = rFilterField.Values.getArray();
     size_t i = 0;
 
     for( auto const& it : rValues )
     {
-        rFilterField.Values[i].StringValue = it.first;
-        rFilterField.Values[i++].FilterType
+        pValues[i].StringValue = it.first;
+        pValues[i++].FilterType
             = it.second ? FilterFieldType::DATE : FilterFieldType::STRING;
     }
 }

@@ -18,6 +18,8 @@
  */
 
 #include <scitems.hxx>
+
+#include <comphelper/sequence.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/wghtitem.hxx>
@@ -1302,13 +1304,9 @@ void ScDPOutput::GetPositionData(const ScAddress& rPos, DataPilotTablePositionDa
         {
             vector<DataPilotFieldFilter> aFilters;
             GetDataResultPositionData(aFilters, rPos);
-            sal_Int32 nSize = aFilters.size();
 
             DataPilotTableResultData aResData;
-            aResData.FieldFilters.realloc(nSize);
-            for (sal_Int32 i = 0; i < nSize; ++i)
-                aResData.FieldFilters[i] = aFilters[i];
-
+            aResData.FieldFilters = comphelper::containerToSequence(aFilters);
             aResData.DataFieldIndex = 0;
             Reference<beans::XPropertySet> xPropSet(xSource, UNO_QUERY);
             if (xPropSet.is())

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <tbzoomsliderctrl.hxx>
+
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/event.hxx>
 #include <vcl/image.hxx>
@@ -261,9 +263,7 @@ bool ScZoomSlider::MouseButtonDown( const MouseEvent& rMEvt )
     css::uno::Any  a;
     aZoomSliderItem.QueryValue( a );
 
-    css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
-    aArgs[0].Name = "ScalingFactor";
-    aArgs[0].Value = a;
+    css::uno::Sequence aArgs{ comphelper::makePropertyValue("ScalingFactor", a) };
 
     SfxToolBoxControl::Dispatch( m_xDispatchProvider, ".uno:ScalingFactor", aArgs );
 
@@ -298,9 +298,7 @@ bool ScZoomSlider::MouseMove( const MouseEvent& rMEvt )
             css::uno::Any a;
             aZoomSliderItem.QueryValue( a );
 
-            css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
-            aArgs[0].Name = "ScalingFactor";
-            aArgs[0].Value = a;
+            css::uno::Sequence aArgs{ comphelper::makePropertyValue("ScalingFactor", a) };
 
             SfxToolBoxControl::Dispatch( m_xDispatchProvider, ".uno:ScalingFactor", aArgs );
 

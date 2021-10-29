@@ -387,10 +387,11 @@ void ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
     if ( pTokens )
     {
         rSequence.realloc(nLen);
+        auto pSequence = rSequence.getArray();
         for (sal_Int32 nPos=0; nPos<nLen; nPos++)
         {
             const formula::FormulaToken& rToken = *pTokens[nPos];
-            sheet::FormulaToken& rAPI = rSequence[nPos];
+            sheet::FormulaToken& rAPI = pSequence[nPos];
 
             OpCode eOpCode = rToken.GetOpCode();
             // eOpCode may be changed in the following switch/case

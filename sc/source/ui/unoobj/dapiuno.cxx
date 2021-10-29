@@ -2043,8 +2043,9 @@ Sequence< sal_Int16 > ScDataPilotFieldObj::getSubtotals() const
             if ( nCount > 0 )
             {
                 aRet.realloc( nCount );
+                auto pRet = aRet.getArray();
                 for( sal_Int32 nIdx = 0; nIdx < nCount; ++nIdx )
-                    aRet[ nIdx ] = static_cast<sal_Int16>(pDim->GetSubTotalFunc( nIdx ));
+                    pRet[ nIdx ] = static_cast<sal_Int16>(pDim->GetSubTotalFunc( nIdx ));
             }
         }
     }
