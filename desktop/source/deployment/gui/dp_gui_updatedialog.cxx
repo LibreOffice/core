@@ -60,6 +60,7 @@
 #include <vcl/svapp.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <dp_dependencies.hxx>
 #include <dp_descriptioninfoset.hxx>
@@ -376,8 +377,9 @@ void UpdateDialog::Thread::prepareUpdateData(
 
     out_du.aUpdateInfo = updateInfo;
     out_du.unsatisfiedDependencies.realloc(ds.getLength());
+    auto p_unsatisfiedDependencies = out_du.unsatisfiedDependencies.getArray();
     for (sal_Int32 i = 0; i < ds.getLength(); ++i) {
-        out_du.unsatisfiedDependencies[i] = dp_misc::Dependencies::getErrorText(ds[i]);
+        p_unsatisfiedDependencies[i] = dp_misc::Dependencies::getErrorText(ds[i]);
     }
 
     const ::std::optional< OUString> updateWebsiteURL(infoset.getLocalizedUpdateWebsiteURL());
@@ -606,12 +608,9 @@ void UpdateDialog::createNotifyJob( bool bPrepareOnly,
             configuration::theDefaultProvider::get(
                 comphelper::getProcessComponentContext()));
 
-        beans::PropertyValue aProperty;
-        aProperty.Name  = "nodepath";
-        aProperty.Value <<= OUString("org.openoffice.Office.Addons/AddonUI/OfficeHelp/UpdateCheckJob");
-
-        uno::Sequence< uno::Any > aArgumentList( 1 );
-        aArgumentList[0] <<= aProperty;
+        uno::Sequence< uno::Any > aArgumentList{ uno::Any(comphelper::makePropertyValue(
+            "nodepath",
+            OUString("org.openoffice.Office.Addons/AddonUI/OfficeHelp/UpdateCheckJob"))) };
 
         uno::Reference< container::XNameAccess > xNameAccess(
             xConfigProvider->createInstanceWithArguments(
@@ -633,13 +632,8 @@ void UpdateDialog::createNotifyJob( bool bPrepareOnly,
 
         if( xDispatch.is() )
         {
-            uno::Sequence< beans::PropertyValue > aPropList(2);
-            aProperty.Name  = "updateList";
-            aProperty.Value <<= rItemList;
-            aPropList[0] = aProperty;
-            aProperty.Name  = "prepareOnly";
-            aProperty.Value <<= bPrepareOnly;
-            aPropList[1] = aProperty;
+            uno::Sequence aPropList{ comphelper::makePropertyValue("updateList", rItemList),
+                                     comphelper::makePropertyValue("prepareOnly", bPrepareOnly) };
 
             xDispatch->dispatch(aURL, aPropList );
         }
@@ -678,7 +672,7 @@ void UpdateDialog::notifyMenubar( bool bPrepareOnly, bool bRecheckOnly )
                     aInfoset.getVersion()
                 };
                 aItemList.realloc( nCount + 1 );
-                aItemList[ nCount ] = aItem;
+                aItemList.getArray()[ nCount ] = aItem;
                 nCount += 1;
             }
             else
@@ -768,8 +762,7 @@ void UpdateDialog::getIgnoredUpdates()
     uno::Reference< lang::XMultiServiceFactory > xConfig(
         configuration::theDefaultProvider::get(m_context));
     beans::NamedValue aValue( "nodepath", uno::Any( OUString(IGNORED_UPDATES) ) );
-    uno::Sequence< uno::Any > args(1);
-    args[0] <<= aValue;
+    uno::Sequence< uno::Any > args{ uno::Any(aValue) };
 
     uno::Reference< container::XNameAccess > xNameAccess( xConfig->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess", args), uno::UNO_QUERY_THROW );
     const uno::Sequence< OUString > aElementNames = xNameAccess->getElementNames();
