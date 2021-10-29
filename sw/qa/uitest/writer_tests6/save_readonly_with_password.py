@@ -11,11 +11,11 @@ from uitest.uihelper.common import select_by_text
 from tempfile import TemporaryDirectory
 import os.path
 
-#Bug 144374 - Writer: FILESAVE to DOCX as read-only with additional password protection for editing not working
 
-class tdf144374(UITestCase):
+class save_readonly_with_password(UITestCase):
 
-   def test_tdf144374_DOCX(self):
+    #Bug 144374 - Writer: FILESAVE to DOCX as read-only with additional password protection for editing not working
+   def test_save_to_docx(self):
         with TemporaryDirectory() as tempdir:
             xFilePath = os.path.join(tempdir, "tdf144374-tmp.docx")
 
@@ -45,14 +45,48 @@ class tdf144374(UITestCase):
                 xSave = xWarnDialog.getChild("save")
                 self.ui_test.close_dialog_through_button(xSave)
 
-            with self.ui_test.load_file(systemPathToFileUrl(xFilePath)):
-                xWriterEdit = self.xUITest.getTopFocusWindow().getChild("writer_edit")
-                document = self.ui_test.get_component()
+            with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as document:
 
                 self.assertTrue(document.isReadonly())
 
                 #Without the fix in place, this dialog wouldn't have been displayed
-                with self.ui_test.execute_dialog_through_action(xWriterEdit, "TYPE", mkPropertyValues({"KEYCODE": "CTRL+SHIFT+M"})) as xDialog:
+                with self.ui_test.execute_dialog_through_command(".uno:EditDoc") as xDialog:
+                    xPassword = xDialog.getChild("newpassEntry")
+                    xPassword.executeAction("TYPE", mkPropertyValues({"TEXT": "password"}))
+
+                self.assertFalse(document.isReadonly())
+
+   def test_save_to_odt(self):
+
+        with TemporaryDirectory() as tempdir:
+            xFilePath = os.path.join(tempdir, "readonly_with_password_tmp.odt")
+
+            with self.ui_test.create_doc_in_start_center("writer"):
+                # Save the document
+                with self.ui_test.execute_dialog_through_command(".uno:Save", close_button="") as xSaveDialog:
+                    xFileName = xSaveDialog.getChild("file_name")
+                    xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                    xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                    xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": xFilePath}))
+                    xPasswordCheckButton = xSaveDialog.getChild("password")
+                    xPasswordCheckButton.executeAction("CLICK", tuple())
+                    xOpen = xSaveDialog.getChild("open")
+
+                    with self.ui_test.execute_dialog_through_action(xOpen, "CLICK") as xPasswordDialog:
+                        xReadonly = xPasswordDialog.getChild("readonly")
+                        xReadonly.executeAction("CLICK", tuple())
+                        xNewPassword = xPasswordDialog.getChild("newpassroEntry")
+                        xNewPassword.executeAction("TYPE", mkPropertyValues({"TEXT": "password"}))
+                        xConfirmPassword = xPasswordDialog.getChild("confirmropassEntry")
+                        xConfirmPassword.executeAction("TYPE", mkPropertyValues({"TEXT": "password"}))
+
+            with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as document:
+
+                xWriterEdit = self.xUITest.getTopFocusWindow().getChild("writer_edit")
+
+                self.assertTrue(document.isReadonly())
+
+                with self.ui_test.execute_dialog_through_command(".uno:EditDoc") as xDialog:
                     xPassword = xDialog.getChild("newpassEntry")
                     xPassword.executeAction("TYPE", mkPropertyValues({"TEXT": "password"}))
 
