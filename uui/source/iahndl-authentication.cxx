@@ -344,9 +344,10 @@ handleAuthenticationRequest_(
           {
               uno::Sequence< OUString >
                   aPassList(aInfo.GetAccount().isEmpty() ? 1 : 2);
-              aPassList[0] = aInfo.GetPassword();
+              auto pPassList = aPassList.getArray();
+              pPassList[0] = aInfo.GetPassword();
               if (!aInfo.GetAccount().isEmpty())
-                  aPassList[1] = aInfo.GetAccount();
+                  pPassList[1] = aInfo.GetAccount();
 
               if (aInfo.GetIsRememberPassword())
               {
