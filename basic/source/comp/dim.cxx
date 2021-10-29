@@ -431,10 +431,13 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
                 }
                 else
                 {
-                    // tdf#136755 - delete the variable beforehand REDIM
-                    SbiExpression aExpr(this, *pDef, nullptr);
-                    aExpr.Gen();
-                    aGen.Gen(bVBASupportOn ? SbiOpcode::ERASE_CLEAR_ : SbiOpcode::ERASE_);
+                    // tdf#145371, tdf#136755 - only delete the variable beforehand REDIM
+                    if (eOp == SbiOpcode::REDIM_)
+                    {
+                        SbiExpression aExpr(this, *pDef, nullptr);
+                        aExpr.Gen();
+                        aGen.Gen(bVBASupportOn ? SbiOpcode::ERASE_CLEAR_ : SbiOpcode::ERASE_);
+                    }
 
                     pDef->SetDims( pDim->GetDims() );
                     SbiExpression aExpr2( this, *pDef, std::move(pDim) );
