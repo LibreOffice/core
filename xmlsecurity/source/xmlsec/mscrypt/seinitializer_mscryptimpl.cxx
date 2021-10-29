@@ -59,7 +59,7 @@ uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     {
         sCertDir = OString(sCertDB.getStr(), sCertDB.getLength(), RTL_TEXTENCODING_ASCII_US);
         n_pCertStore = sCertDir.getStr();
-        n_hStoreHandle = CertOpenSystemStoreW( NULL, o3tl::toW(sCertDB.getStr())) ;
+        n_hStoreHandle = CertOpenSystemStoreW( 0, o3tl::toW(sCertDB.getStr())) ;
         if( n_hStoreHandle == nullptr )
         {
             return nullptr;
