@@ -129,9 +129,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
         }
         if( xSubStream.is() )
         {
-            uno::Sequence< uno::Any > aArgs( 2 );
-            aArgs[0] <<= m_xModel;
-            aArgs[1] <<= xSubStream;
+            uno::Sequence< uno::Any > aArgs{ uno::Any(m_xModel), uno::Any(xSubStream) };
 
             SAL_INFO("sdext.pdfimport", "try to instantiate subfilter" );
             uno::Reference< document::XFilter > xSubFilter;
@@ -158,9 +156,9 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
                     {
                         nPwPos = aFilterData.getLength();
                         aFilterData.realloc( nPwPos+1 );
-                        aFilterData[nPwPos].Name = "Password";
+                        aFilterData.getArray()[nPwPos].Name = "Password";
                     }
-                    aFilterData[nPwPos].Value <<= aPwd;
+                    aFilterData.getArray()[nPwPos].Value <<= aPwd;
                     bRet = xSubFilter->filter( aFilterData );
                 }
                 else
