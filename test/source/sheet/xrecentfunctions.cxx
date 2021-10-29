@@ -50,13 +50,14 @@ void XRecentFunctions::testSetRecentFunctionIds()
 
     // max. size list
     aIds.realloc(nMaxNumber);
+    auto pIds = aIds.getArray();
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> distr(1, nMaxNumber + 1);
 
     int nStartIdx = distr(gen);
     for (int i = nStartIdx; i < nStartIdx + nMaxNumber; i++)
-        aIds[i - nStartIdx] = 1;
+        pIds[i - nStartIdx] = 1;
 
     xRecentFunctions->setRecentFunctionIds(aIds);
 
