@@ -16,6 +16,24 @@
       "message": "What is a misuse? Of course, where a bool is expected, it\u0027s a misuse; but e.g. CertOpenStore is documented [1] to take \u0027NULL\u0027 in its third argument. Do we simply generally discourage any NULL use? (Asking because of curiosity, no problem in this)\n\n[1] https://docs.microsoft.com/en-us/windows/win32/api/wincrypt/nf-wincrypt-certopenstore",
       "revId": "a5cea74034a8e029bfdf0f2b82ea8800bf5bd206",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4cb3bde_9be9ec02",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-10-29T12:02:22Z",
+      "side": 1,
+      "message": "The C++ standard mandates that NULL be defined as a null pointer constant, so documentation that suggests to pass NULL to a parameter of integral type (HCRYPTPROV_LEGACY being documented as a typedef of ULONG_PTR, in turn being documented as a typedef of either unsigned __int64 or unsigned long) is doing so in violation of the standard, living in the self-contained world of the standards-violating Windows API.\n\nWhen I prepared this change rather mechanically, I did not bother to check whether any of the existing misuses (per the standard) of NULL were actually sanctioned by that standards-violating Windows API.",
+      "parentUuid": "2db53af3_8987f42b",
+      "revId": "a5cea74034a8e029bfdf0f2b82ea8800bf5bd206",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
