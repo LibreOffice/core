@@ -345,7 +345,7 @@ namespace
         do
         {
             _out_SplitUp.realloc( _out_SplitUp.getLength() + 1 );
-            _out_SplitUp[ _out_SplitUp.getLength() - 1 ] = static_cast<ElementType>(_rTransformer( _rComposed.getToken( 0, '\n', tokenPos ) ));
+            _out_SplitUp.getArray()[ _out_SplitUp.getLength() - 1 ] = static_cast<ElementType>(_rTransformer( _rComposed.getToken( 0, '\n', tokenPos ) ));
         }
         while ( tokenPos != -1 );
     }

@@ -37,8 +37,7 @@ public:
             m_xProvider = deployment::UpdateInformationProvider::create( m_xContext );
 
         // repositories that we will be checking
-        m_aRepositoryList.realloc( 1 );
-        m_aRepositoryList[0] = m_directories.getURLFromSrc( u"/extensions/qa/update/simple.xml" );
+        m_aRepositoryList = { m_directories.getURLFromSrc( u"/extensions/qa/update/simple.xml" ) };
     }
 
     virtual void tearDown() override
