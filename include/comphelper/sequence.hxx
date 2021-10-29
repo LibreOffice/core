@@ -121,9 +121,14 @@ namespace comphelper
     template < typename DstType, typename SrcType >
     inline css::uno::Sequence< DstType > arrayToSequence( const SrcType* i_pArray, sal_Int32 nNum )
     {
-        css::uno::Sequence< DstType > result( nNum );
-        ::std::copy( i_pArray, i_pArray+nNum, result.getArray() );
-        return result;
+        if constexpr (std::is_same_v< DstType, SrcType >)
+            return css::uno::Sequence< DstType >( i_pArray, nNum );
+        else
+        {
+            css::uno::Sequence< DstType > result( nNum );
+            ::std::copy( i_pArray, i_pArray+nNum, result.getArray() );
+            return result;
+        }
     }
 
 
