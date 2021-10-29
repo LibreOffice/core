@@ -80,37 +80,50 @@ IMPL_LINK_NOARG(URITools, onOpenURI, Timer*, void)
     std::unique_ptr<URITools> guard(this);
     css::uno::Reference< css::system::XSystemShellExecute > exec(
         css::system::SystemShellExecute::create(comphelper::getProcessComponentContext()));
-    try {
-        exec->execute(
-            msURI, OUString(),
-            css::system::SystemShellExecuteFlags::URIS_ONLY);
-    } catch (css::lang::IllegalArgumentException & e) {
-        if (e.ArgumentPosition != 0) {
-            throw css::uno::RuntimeException(
-                "unexpected IllegalArgumentException: " + e.Message);
+    for (sal_Int32 flags = css::system::SystemShellExecuteFlags::URIS_ONLY;;) {
+        try {
+            exec->execute(msURI, OUString(), flags);
+        } catch (css::lang::IllegalArgumentException & e) {
+            if (e.ArgumentPosition != 0) {
+                throw css::uno::RuntimeException(
+                    "unexpected IllegalArgumentException: " + e.Message);
+            }
+            SolarMutexGuard g;
+            weld::Window *pWindow = SfxGetpApp()->GetTopWindow();
+            if (flags == css::system::SystemShellExecuteFlags::URIS_ONLY) {
+                std::unique_ptr<weld::MessageDialog> eb(
+                    Application::CreateMessageDialog(
+                        pWindow, VclMessageType::Warning, VclButtonsType::OkCancel,
+                        SfxResId(STR_DANGEROUS_TO_OPEN)));
+                eb->set_primary_text(eb->get_primary_text().replaceFirst("$(ARG1)", msURI));
+                if (eb->run() == RET_OK) {
+                    flags = 0;
+                    continue;
+                }
+            } else {
+                std::unique_ptr<weld::MessageDialog> eb(Application::CreateMessageDialog(pWindow,
+                                                                         VclMessageType::Warning, VclButtonsType::Ok,
+                                                                         SfxResId(STR_NO_ABS_URI_REF)));
+                eb->set_primary_text(eb->get_primary_text().replaceFirst("$(ARG1)", msURI));
+                eb->run();
+            }
+        } catch (css::system::SystemShellExecuteException & e) {
+            if (!mbHandleSystemShellExecuteException) {
+                throw;
+            }
+            SolarMutexGuard g;
+            weld::Window *pWindow = SfxGetpApp()->GetTopWindow();
+            std::unique_ptr<weld::MessageDialog> eb(Application::CreateMessageDialog(pWindow,
+                                                                     VclMessageType::Warning, VclButtonsType::Ok,
+                                                                     SfxResId(STR_NO_WEBBROWSER_FOUND)));
+            eb->set_primary_text(
+                eb->get_primary_text().replaceFirst("$(ARG1)", msURI)
+                .replaceFirst("$(ARG2)", OUString::number(e.PosixError))
+                .replaceFirst("$(ARG3)", e.Message));
+                //TODO: avoid subsequent replaceFirst acting on previous replacement
+            eb->run();
         }
-        SolarMutexGuard g;
-        weld::Window *pWindow = SfxGetpApp()->GetTopWindow();
-        std::unique_ptr<weld::MessageDialog> eb(Application::CreateMessageDialog(pWindow,
-                                                                 VclMessageType::Warning, VclButtonsType::Ok,
-                                                                 SfxResId(STR_NO_ABS_URI_REF)));
-        eb->set_primary_text(eb->get_primary_text().replaceFirst("$(ARG1)", msURI));
-        eb->run();
-    } catch (css::system::SystemShellExecuteException & e) {
-        if (!mbHandleSystemShellExecuteException) {
-            throw;
-        }
-        SolarMutexGuard g;
-        weld::Window *pWindow = SfxGetpApp()->GetTopWindow();
-        std::unique_ptr<weld::MessageDialog> eb(Application::CreateMessageDialog(pWindow,
-                                                                 VclMessageType::Warning, VclButtonsType::Ok,
-                                                                 SfxResId(STR_NO_WEBBROWSER_FOUND)));
-        eb->set_primary_text(
-            eb->get_primary_text().replaceFirst("$(ARG1)", msURI)
-            .replaceFirst("$(ARG2)", OUString::number(e.PosixError))
-            .replaceFirst("$(ARG3)", e.Message));
-            //TODO: avoid subsequent replaceFirst acting on previous replacement
-        eb->run();
+        break;
     }
 }
 
