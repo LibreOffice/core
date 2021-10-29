@@ -1030,8 +1030,6 @@ double Polygon::CalcDistance( sal_uInt16 nP1, sal_uInt16 nP2 ) const
 
 void Polygon::Optimize( PolyOptimizeFlags nOptimizeFlags )
 {
-    DBG_ASSERT( !mpImplPolygon->mxFlagAry, "Optimizing could fail with beziers!" );
-
     sal_uInt16 nSize = mpImplPolygon->mnPoints;
 
     if( !(bool(nOptimizeFlags) && nSize) )
