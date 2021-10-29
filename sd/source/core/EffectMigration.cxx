@@ -1299,11 +1299,10 @@ static void createVisibilityOnOffNode(Reference< XTimeContainer > const & rxPare
     xOuterSeqTimeContainer->setFill(AnimationFill::HOLD);
 
     // set named values
-    Sequence< NamedValue > aUserDataSequence;
-    aUserDataSequence.realloc(1);
-
-    aUserDataSequence[0].Name = "node-type";
-    aUserDataSequence[0].Value <<= bOnClick ? EffectNodeType::ON_CLICK : EffectNodeType::AFTER_PREVIOUS;
+    Sequence< NamedValue > aUserDataSequence{
+        { /* Name  */ "node-type",
+          /* Value */ Any(bOnClick ? EffectNodeType::ON_CLICK : EffectNodeType::AFTER_PREVIOUS) }
+    };
 
     xOuterSeqTimeContainer->setUserData(aUserDataSequence);
 
