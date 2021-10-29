@@ -1082,7 +1082,10 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
     }
 
     if (xEntry)
+    {
         m_xScriptsBox->set_cursor(*xEntry);
+        ScriptSelectHdl(*m_xScriptsBox);
+    }
 }
 
 namespace {
