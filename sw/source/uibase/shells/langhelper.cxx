@@ -76,6 +76,7 @@ namespace SwLangHelper
         vcl::Window* pWin = rEditView.GetWindow();
         if(pWin)
             nLang = pWin->GetInputLanguage();
+        // FIXME: MsLangId::getRealLanguage() here too ? or ... - weird.
         if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
             aKeyboardLang = SvtLanguageTable::GetLanguageString( nLang );
 
