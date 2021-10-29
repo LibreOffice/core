@@ -61,6 +61,17 @@
  #pragma deprecated(CERTDB_VALID_PEER)
  #endif
  #define CERTDB_VALID_PEER CERTDB_TERMINAL_RECORD
+--- nss/lib/freebl/blapit.h
++++ nss/lib/freebl/blapit.h
+@@ -53,7 +53,7 @@
+  * Mark the old defines as deprecated. This will warn code that expected
+  * DSA1 only that they need to change if the are to support DSA2.
+  */
+-#if defined(__GNUC__) && (__GNUC__ > 3)
++#if defined(__GNUC__) && (__GNUC__ > 3) || defined __clang__
+ /* make GCC warn when we use these #defines */
+ typedef int __BLAPI_DEPRECATED __attribute__((deprecated));
+ #define DSA_SUBPRIME_LEN ((__BLAPI_DEPRECATED)DSA1_SUBPRIME_LEN)
 --- nss/lib/util/pkcs11n.h
 +++ nss/lib/util/pkcs11n.h
 @@ -426,7 +426,7 @@
