@@ -444,14 +444,14 @@ void FilePolicy::refresh()
                 Sequence< Any > perms( userPermissions[ userId ] );
                 sal_Int32 len = perms.getLength();
                 perms.realloc( len +1 );
-                perms[ len ] = perm;
+                perms.getArray()[ len ] = perm;
                 userPermissions[ userId ] = perms;
             }
             else
             {
                 sal_Int32 len = defaultPermissions.getLength();
                 defaultPermissions.realloc( len +1 );
-                defaultPermissions[ len ] = perm;
+                defaultPermissions.getArray()[ len ] = perm;
             }
 
             token = reader.assureToken(); // next permissions token
