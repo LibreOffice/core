@@ -59,6 +59,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -4605,10 +4606,9 @@ namespace
 
         SvMemoryStream aMemStm;
 
-        css::uno::Sequence<css::beans::PropertyValue> aFilterData(1);
-        aFilterData[0].Name = "Compression";
         // We "know" that this gets passed to zlib's deflateInit2_(). 1 means best speed.
-        aFilterData[0].Value <<= sal_Int32(1);
+        css::uno::Sequence<css::beans::PropertyValue> aFilterData{ comphelper::makePropertyValue(
+            "Compression", sal_Int32(1)) };
 
         vcl::PNGWriter aWriter(aImage.GetBitmapEx(), &aFilterData);
         aWriter.Write(aMemStm);

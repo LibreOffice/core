@@ -749,6 +749,7 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles()
         GTK_FILE_CHOOSER( m_pDialog ));
 
     uno::Sequence< OUString > aSelectedFiles(nCount);
+    auto aSelectedFilesRange = asNonConstRange(aSelectedFiles);
 
     // Convert to OOo
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -761,7 +762,7 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles()
         gchar *pURI = g_file_get_uri(static_cast<GFile*>(pElem));
 #endif
 
-        aSelectedFiles[ nIndex ] = uritounicode(pURI);
+        aSelectedFilesRange[ nIndex ] = uritounicode(pURI);
 
         if( GTK_FILE_CHOOSER_ACTION_SAVE == eAction )
         {
@@ -861,7 +862,7 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles()
                 {
                     //if the filename does not already have the auto extension, stick it on
                     OUString sExtension = "." + sToken;
-                    OUString &rBase = aSelectedFiles[nIndex];
+                    OUString &rBase = aSelectedFilesRange[nIndex];
                     sal_Int32 nExtensionIdx = rBase.getLength() - sExtension.getLength();
                     SAL_INFO(
                         "vcl.gtk",
@@ -1248,12 +1249,13 @@ uno::Any SalGtkFilePicker::HandleGetListValue(GtkComboBox *pWidget, sal_Int16 nC
                         pTree, nullptr);
 
                     aItemList.realloc(nSize);
+                    auto pItemList = aItemList.getArray();
                     for (sal_Int32 i=0; i < nSize; ++i)
                     {
                         gchar *item;
                         gtk_tree_model_get(gtk_combo_box_get_model(pWidget),
                             &iter, 0, &item, -1);
-                        aItemList[i] = OUString(item, strlen(item), RTL_TEXTENCODING_UTF8);
+                        pItemList[i] = OUString(item, strlen(item), RTL_TEXTENCODING_UTF8);
                         g_free(item);
                         (void)gtk_tree_model_iter_next(pTree, &iter);
                     }

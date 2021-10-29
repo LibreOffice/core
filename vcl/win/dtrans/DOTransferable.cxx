@@ -367,7 +367,7 @@ void CDOTransferable::addSupportedFlavor( const DataFlavor& aFlavor )
         OSL_ASSERT( isValidFlavor( aFlavor ) );
 
         m_FlavorList.realloc( m_FlavorList.getLength( ) + 1 );
-        m_FlavorList[m_FlavorList.getLength( ) - 1] = aFlavor;
+        m_FlavorList.getArray()[m_FlavorList.getLength( ) - 1] = aFlavor;
     }
 }
 

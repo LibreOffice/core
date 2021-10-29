@@ -744,7 +744,7 @@ css::uno::Sequence<css::datatransfer::DataFlavor> DataFlavorMapper::typesArrayTo
       if (isValidFlavor(oOOFlavor))
       {
           flavors.realloc(flavors.getLength() + 1);
-          flavors[flavors.getLength() - 1] = oOOFlavor;
+          flavors.getArray()[flavors.getLength() - 1] = oOOFlavor;
       }
   }
 
