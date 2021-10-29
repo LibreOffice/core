@@ -183,7 +183,7 @@ bool LinkSequence::createFromXML( const OString & rInData,
             if ( nCount > rOutData.getLength() )
                 rOutData.realloc( rOutData.getLength() + 1 );
 
-            rOutData[ nCount - 1 ] = *aCtx.pLink;
+            rOutData.getArray()[ nCount - 1 ] = *aCtx.pLink;
         }
 
         nStart = nEnd + TOKEN_LENGTH;
