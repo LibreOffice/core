@@ -1247,7 +1247,7 @@ namespace accessibility
             // NumberingPrefix
             sal_Int32 nRes = aRes.getLength();
             aRes.realloc( nRes + 1 );
-            beans::PropertyValue &rRes = aRes[nRes];
+            beans::PropertyValue &rRes = aRes.getArray()[nRes];
             rRes.Name = "NumberingPrefix";
             OUString numStr;
             if (aBulletInfo.nType != SVX_NUM_CHAR_SPECIAL && aBulletInfo.nType != SVX_NUM_BITMAP)
@@ -1261,7 +1261,7 @@ namespace accessibility
             {
                 nRes = aRes.getLength();
                 aRes.realloc( nRes + 1 );
-                beans::PropertyValue &rResField = aRes[nRes];
+                beans::PropertyValue &rResField = aRes.getArray()[nRes];
                 rResField.Name = "FieldType";
                 rResField.Value <<= strFieldType.toAsciiLowerCase();
                 rResField.Handle = -1;
