@@ -145,27 +145,28 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
 
     sal_Int32 nItems = 0;
     Sequence< OUString > aRet( 7 );
+    auto pRet = aRet.getArray();
 
     if( !m_aBody.isEmpty() )
-        aRet[nItems++] = "body";
+        pRet[nItems++] = "body";
 
     if( !m_aOriginator.isEmpty() )
-        aRet[nItems++] = "from";
+        pRet[nItems++] = "from";
 
     if( !m_aRecipient.isEmpty() )
-        aRet[nItems++] = "to";
+        pRet[nItems++] = "to";
 
     if( m_CcRecipients.hasElements() )
-        aRet[nItems++] = "cc";
+        pRet[nItems++] = "cc";
 
     if( m_BccRecipients.hasElements() )
-        aRet[nItems++] = "bcc";
+        pRet[nItems++] = "bcc";
 
     if( !m_aSubject.isEmpty() )
-        aRet[nItems++] = "subject";
+        pRet[nItems++] = "subject";
 
     if( m_Attachments.hasElements() )
-        aRet[nItems++] = "attachment";
+        pRet[nItems++] = "attachment";
 
     aRet.realloc( nItems );
     return aRet;

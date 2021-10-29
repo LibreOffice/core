@@ -147,8 +147,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
         aProperty.Name = "nodepath";
         aProperty.Value <<= OUString("org.openoffice.Office.Common/ExternalMailer");
 
-        Sequence< Any > aArgumentList( 1 );
-        aArgumentList[0] <<= aProperty;
+        Sequence< Any > aArgumentList{ Any(aProperty) };
 
         Reference< XNameAccess > xNameAccess(
                 m_xConfigurationProvider->createInstanceWithArguments(
