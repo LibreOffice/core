@@ -36,6 +36,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <ucbhelper/content.hxx>
 #include <svl/inettype.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -274,11 +275,8 @@ BackendImpl::BackendImpl(
                                    "*.zip",
                                    m_xBundleTypeInfo->getShortDescription()
                                    ) ),
-    m_typeInfos(2)
+    m_typeInfos{ m_xBundleTypeInfo, m_xLegacyBundleTypeInfo }
 {
-    m_typeInfos[ 0 ] = m_xBundleTypeInfo;
-    m_typeInfos[ 1 ] = m_xLegacyBundleTypeInfo;
-
     if (!transientMode())
     {
         OUString dbFile = makeURL(getCachePath(), getImplementationName());
@@ -770,10 +768,8 @@ uno::Reference< graphic::XGraphic > BackendImpl::PackageImpl::getIcon( sal_Bool 
         uno::Reference< XComponentContext > xContext( getMyBackend()->getComponentContext() );
         uno::Reference< graphic::XGraphicProvider > xGraphProvider( graphic::GraphicProvider::create(xContext) );
 
-        uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-        aMediaProps[0].Name = "URL";
-        aMediaProps[0].Value <<= aFullIconURL;
-
+        uno::Sequence< beans::PropertyValue > aMediaProps{ comphelper::makePropertyValue(
+            "URL", aFullIconURL) };
         xGraphic = xGraphProvider->queryGraphic( aMediaProps );
     }
 
@@ -1581,10 +1577,11 @@ Reference<deployment::XPackageRegistry> create(
     Reference<XComponentContext> const & xComponentContext )
 {
     Sequence<Any> args(cachePath.isEmpty() ? 1 : 3 );
-    args[ 0 ] <<= context;
+    auto pArgs = args.getArray();
+    pArgs[ 0 ] <<= context;
     if (!cachePath.isEmpty()) {
-        args[ 1 ] <<= cachePath;
-        args[ 2 ] <<= false; // readOnly
+        pArgs[ 1 ] <<= cachePath;
+        pArgs[ 2 ] <<= false; // readOnly
     }
     return new BackendImpl( args, xComponentContext, xRootRegistry );
 }

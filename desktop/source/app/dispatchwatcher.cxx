@@ -53,6 +53,7 @@
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
@@ -215,7 +216,7 @@ void scriptCat(const Reference< XModel >& xDoc )
             std::cout << aObjectNames.getLength() << "\n\n";
             for ( sal_Int32 j = 0 ; j < aObjectNames.getLength() ; ++j )
             {
-                OUString &rObjectName = aObjectNames[j];
+                const OUString &rObjectName = aObjectNames[j];
 
                 try
                 {
@@ -270,20 +271,16 @@ void batchPrint( const OUString &rPrinterName, const Reference< XPrintable > &xD
     std::cout << std::endl;
 
     // create the custom printer, if given
-    Sequence < PropertyValue > aPrinterArgs( 1 );
+    Sequence < PropertyValue > aPrinterArgs;
     if( !aPrinterName.isEmpty() )
     {
-        aPrinterArgs[0].Name = "Name";
-        aPrinterArgs[0].Value <<= aPrinterName;
+        aPrinterArgs = { comphelper::makePropertyValue("Name", aPrinterName) };
         xDoc->setPrinter( aPrinterArgs );
     }
 
     // print ( also without user interaction )
-    aPrinterArgs.realloc(2);
-    aPrinterArgs[0].Name = "FileName";
-    aPrinterArgs[0].Value <<= aOutFile;
-    aPrinterArgs[1].Name = "Wait";
-    aPrinterArgs[1].Value <<= true;
+    aPrinterArgs = { comphelper::makePropertyValue("FileName", aOutFile),
+                     comphelper::makePropertyValue("Wait", true) };
     xDoc->print( aPrinterArgs );
 }
 
@@ -433,9 +430,8 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                     // We have to be listener to catch errors during dispatching URLs.
                     // Otherwise it would be possible to have an office running without an open
                     // window!!
-                    Sequence < PropertyValue > aArgs2(1);
-                    aArgs2[0].Name    = "SynchronMode";
-                    aArgs2[0].Value <<= true;
+                    Sequence < PropertyValue > aArgs2{ comphelper::makePropertyValue("SynchronMode",
+                                                                                     true) };
                     Reference < XNotifyingDispatch > xDisp( xDispatcher, UNO_QUERY );
                     if ( xDisp.is() )
                         xDisp->dispatchWithNotification( aURL, aArgs2, this );
@@ -613,12 +609,13 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                                 if ( !aImgOut.isEmpty() )
                                     nProps +=1;
                                 Sequence<PropertyValue> conversionProperties( nProps );
-                                conversionProperties[0].Name = "ConversionRequestOrigin";
-                                conversionProperties[0].Value <<= OUString("CommandLine");
-                                conversionProperties[1].Name = "Overwrite";
-                                conversionProperties[1].Value <<= true;
+                                auto pconversionProperties = conversionProperties.getArray();
+                                pconversionProperties[0].Name = "ConversionRequestOrigin";
+                                pconversionProperties[0].Value <<= OUString("CommandLine");
+                                pconversionProperties[1].Name = "Overwrite";
+                                pconversionProperties[1].Value <<= true;
 
-                                conversionProperties[2].Name = "FilterName";
+                                pconversionProperties[2].Name = "FilterName";
                                 if( 0 < nFilterOptionsIndex )
                                 {
                                     OUString sFilterName = aFilter.copy(0, nFilterOptionsIndex);
@@ -643,21 +640,21 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                                         bMultiFileTarget = (!aTok.isEmpty() && aTok.toInt32() != 0);
                                     }
 
-                                    conversionProperties[2].Value <<= sFilterName;
+                                    pconversionProperties[2].Value <<= sFilterName;
 
-                                    conversionProperties[3].Name = "FilterOptions";
-                                    conversionProperties[3].Value <<= sFilterOptions;
+                                    pconversionProperties[3].Name = "FilterOptions";
+                                    pconversionProperties[3].Value <<= sFilterOptions;
                                 }
                                 else
                                 {
-                                    conversionProperties[2].Value <<= aFilter;
+                                    pconversionProperties[2].Value <<= aFilter;
                                 }
 
                                 if ( !aImgOut.isEmpty() )
                                 {
                                     assert(conversionProperties[nProps-1].Name.isEmpty());
-                                    conversionProperties[nProps-1].Name = "ImageFilter";
-                                    conversionProperties[nProps-1].Value <<= aImgOut;
+                                    pconversionProperties[nProps-1].Name = "ImageFilter";
+                                    pconversionProperties[nProps-1].Value <<= aImgOut;
                                 }
 
                                 OUString aTempName;
@@ -718,16 +715,14 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                         if ( aDispatchRequest.aRequestType == REQUEST_PRINTTO )
                         {
                             // create the printer
-                            Sequence < PropertyValue > aPrinterArgs( 1 );
-                            aPrinterArgs[0].Name = "Name";
-                            aPrinterArgs[0].Value <<= aDispatchRequest.aPrinterName;
+                            Sequence < PropertyValue > aPrinterArgs{ comphelper::makePropertyValue(
+                                "Name", aDispatchRequest.aPrinterName) };
                             xDoc->setPrinter( aPrinterArgs );
                         }
 
                         // print ( also without user interaction )
-                        Sequence < PropertyValue > aPrinterArgs( 1 );
-                        aPrinterArgs[0].Name = "Wait";
-                        aPrinterArgs[0].Value <<= true;
+                        Sequence < PropertyValue > aPrinterArgs{ comphelper::makePropertyValue("Wait",
+                                                                                               true) };
                         xDoc->print( aPrinterArgs );
                     }
                 }
@@ -762,11 +757,10 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
     if ( !aDispatches.empty() )
     {
         // Execute all asynchronous dispatches now after we placed them into our request container!
-        Sequence < PropertyValue > aArgs( 2 );
-        aArgs[0].Name = "Referer";
-        aArgs[0].Value <<= OUString("private:OpenEvent");
-        aArgs[1].Name = "SynchronMode";
-        aArgs[1].Value <<= true;
+        Sequence < PropertyValue > aArgs{
+            comphelper::makePropertyValue("Referer", OUString("private:OpenEvent")),
+            comphelper::makePropertyValue("SynchronMode", true)
+        };
 
         for (const DispatchHolder & aDispatche : aDispatches)
         {
