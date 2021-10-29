@@ -5328,41 +5328,41 @@ static LRESULT ImplHandleIMEReconvertString( HWND hWnd, LPARAM lParam )
     UINT nImeProps = ImmGetProperty( GetKeyboardLayout( 0 ), IGP_SETCOMPSTR );
     if( (nImeProps & SCS_CAP_SETRECONVERTSTRING) == 0 )
     {
-    // This IME does not support reconversion.
-    return 0;
+        // This IME does not support reconversion.
+        return 0;
     }
 
     if( !pReconvertString )
     {
-    // The first call for reconversion.
-    pFrame->CallCallback( SalEvent::StartReconversion, nullptr );
+        // The first call for reconversion.
+        pFrame->CallCallback( SalEvent::StartReconversion, nullptr );
 
-    // Retrieve the surrounding text from the focused control.
-    pFrame->CallCallback( SalEvent::SurroundingTextRequest, &aEvt );
+        // Retrieve the surrounding text from the focused control.
+        pFrame->CallCallback( SalEvent::SurroundingTextRequest, &aEvt );
 
-    if( aEvt.maText.isEmpty())
-    {
-        return 0;
-    }
+        if( aEvt.maText.isEmpty())
+        {
+            return 0;
+        }
 
-    nRet = sizeof(RECONVERTSTRING) + (aEvt.maText.getLength() + 1) * sizeof(WCHAR);
+        nRet = sizeof(RECONVERTSTRING) + (aEvt.maText.getLength() + 1) * sizeof(WCHAR);
     }
     else
     {
-    // The second call for reconversion.
+        // The second call for reconversion.
 
-    // Retrieve the surrounding text from the focused control.
-    pFrame->CallCallback( SalEvent::SurroundingTextRequest, &aEvt );
-    nRet = sizeof(RECONVERTSTRING) + (aEvt.maText.getLength() + 1) * sizeof(WCHAR);
+        // Retrieve the surrounding text from the focused control.
+        pFrame->CallCallback( SalEvent::SurroundingTextRequest, &aEvt );
+        nRet = sizeof(RECONVERTSTRING) + (aEvt.maText.getLength() + 1) * sizeof(WCHAR);
 
-    pReconvertString->dwStrOffset = sizeof(RECONVERTSTRING);
-    pReconvertString->dwStrLen = aEvt.maText.getLength();
-    pReconvertString->dwCompStrOffset = aEvt.mnStart * sizeof(WCHAR);
-    pReconvertString->dwCompStrLen = aEvt.mnEnd - aEvt.mnStart;
-    pReconvertString->dwTargetStrOffset = pReconvertString->dwCompStrOffset;
-    pReconvertString->dwTargetStrLen = pReconvertString->dwCompStrLen;
+        pReconvertString->dwStrOffset = sizeof(RECONVERTSTRING);
+        pReconvertString->dwStrLen = aEvt.maText.getLength();
+        pReconvertString->dwCompStrOffset = aEvt.mnStart * sizeof(WCHAR);
+        pReconvertString->dwCompStrLen = aEvt.mnEnd - aEvt.mnStart;
+        pReconvertString->dwTargetStrOffset = pReconvertString->dwCompStrOffset;
+        pReconvertString->dwTargetStrLen = pReconvertString->dwCompStrLen;
 
-    memcpy( pReconvertString + 1, aEvt.maText.getStr(), (aEvt.maText.getLength() + 1) * sizeof(WCHAR) );
+        memcpy( pReconvertString + 1, aEvt.maText.getStr(), (aEvt.maText.getLength() + 1) * sizeof(WCHAR) );
     }
 
     // just return the required size of buffer to reconvert.
