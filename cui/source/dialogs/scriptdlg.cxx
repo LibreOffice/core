@@ -372,6 +372,7 @@ CuiInputDialog::CuiInputDialog(weld::Window * pParent, InputDialogMode nMode)
 
 SvxScriptOrgDialog::SvxScriptOrgDialog(weld::Window* pParent, const OUString& language)
     : SfxDialogController(pParent, "cui/ui/scriptorganizer.ui", "ScriptOrganizerDialog")
+    , m_pParent(pParent)
     , m_sLanguage(language)
     , m_delErrStr(CuiResId(RID_SVXSTR_DELFAILED))
     , m_delErrTitleStr(CuiResId(RID_SVXSTR_DELFAILED_TITLE))
@@ -622,19 +623,19 @@ IMPL_LINK(SvxScriptOrgDialog, ButtonHdl, weld::Button&, rButton, void)
             }
             catch ( reflection::InvocationTargetException& ite )
             {
-                SvxScriptErrorDialog::ShowAsyncErrorDialog(getDialog(), css::uno::Any(ite));
+                SvxScriptErrorDialog::ShowAsyncErrorDialog(m_pParent, css::uno::Any(ite));
             }
             catch ( provider::ScriptFrameworkErrorException& ite )
             {
-                SvxScriptErrorDialog::ShowAsyncErrorDialog(getDialog(), css::uno::Any(ite));
+                SvxScriptErrorDialog::ShowAsyncErrorDialog(m_pParent, css::uno::Any(ite));
             }
             catch ( RuntimeException& re )
             {
-                SvxScriptErrorDialog::ShowAsyncErrorDialog(getDialog(), css::uno::Any(re));
+                SvxScriptErrorDialog::ShowAsyncErrorDialog(m_pParent, css::uno::Any(re));
             }
             catch ( Exception& e )
             {
-                SvxScriptErrorDialog::ShowAsyncErrorDialog(getDialog(), css::uno::Any(e));
+                SvxScriptErrorDialog::ShowAsyncErrorDialog(m_pParent, css::uno::Any(e));
             }
         }
         StoreCurrentSelection();
