@@ -161,10 +161,11 @@ void OKeySet::findTableColumnsMatching_throw(   const Any& i_aTable,
     Reference<XIndexAccess> xQueryParameters = xParaSup->getParameters();
     const sal_Int32 nParaCount = xQueryParameters->getCount();
     Sequence< OUString> aParameterColumns(nParaCount);
+    auto aParameterColumnsRange = asNonConstRange(aParameterColumns);
     for(sal_Int32 i = 0; i< nParaCount;++i)
     {
         Reference<XPropertySet> xPara(xQueryParameters->getByIndex(i),UNO_QUERY_THROW);
-        xPara->getPropertyValue(PROPERTY_REALNAME) >>= aParameterColumns[i];
+        xPara->getPropertyValue(PROPERTY_REALNAME) >>= aParameterColumnsRange[i];
     }
 
     OUString sUpdateTableName( i_rUpdateTableName );

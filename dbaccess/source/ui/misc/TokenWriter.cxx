@@ -695,8 +695,9 @@ void OHTMLImportExport::WriteTables()
         {
             sal_Int32 nCount = m_xResultSetMetaData->getColumnCount();
             aNames.realloc(nCount);
+            auto aNamesRange = asNonConstRange(aNames);
             for (sal_Int32 i= 0; i < nCount; ++i)
-                aNames[i] = m_xResultSetMetaData->getColumnName(i+1);
+                aNamesRange[i] = m_xResultSetMetaData->getColumnName(i+1);
             bUseResultMetaData = true;
         }
     }

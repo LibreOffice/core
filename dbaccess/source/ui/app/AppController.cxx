@@ -2729,7 +2729,7 @@ sal_Bool SAL_CALL OApplicationController::select( const Any& _aSelection )
     if ( !( _aSelection >>= aSelectedObjects ) )
     {
         aSelectedObjects.realloc( 1 );
-        if ( !( _aSelection >>= aSelectedObjects[0] ) )
+        if ( !( _aSelection >>= aSelectedObjects.getArray()[0] ) )
             throw IllegalArgumentException();
     }
 
@@ -2816,13 +2816,14 @@ Any SAL_CALL OApplicationController::getSelection(  )
         {   // if no objects are selected, add an entry to the sequence which describes the overall category
             // which is selected currently
             aCurrentSelection.realloc(1);
-            aCurrentSelection[0].Name = getDatabaseName();
+            auto pCurrentSelection = aCurrentSelection.getArray();
+            pCurrentSelection[0].Name = getDatabaseName();
             switch ( eType )
             {
-            case E_TABLE:   aCurrentSelection[0].Type = DatabaseObjectContainer::TABLES;   break;
-            case E_QUERY:   aCurrentSelection[0].Type = DatabaseObjectContainer::QUERIES;  break;
-            case E_FORM:    aCurrentSelection[0].Type = DatabaseObjectContainer::FORMS;    break;
-            case E_REPORT:  aCurrentSelection[0].Type = DatabaseObjectContainer::REPORTS;  break;
+            case E_TABLE:   pCurrentSelection[0].Type = DatabaseObjectContainer::TABLES;   break;
+            case E_QUERY:   pCurrentSelection[0].Type = DatabaseObjectContainer::QUERIES;  break;
+            case E_FORM:    pCurrentSelection[0].Type = DatabaseObjectContainer::FORMS;    break;
+            case E_REPORT:  pCurrentSelection[0].Type = DatabaseObjectContainer::REPORTS;  break;
             default:
                 OSL_FAIL( "OApplicationController::getSelection: unexpected current element type!" );
                 break;

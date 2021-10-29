@@ -675,22 +675,18 @@ IMPL_LINK_NOARG(DlgFilterCrit, ListSelectCompHdl, weld::ComboBox&, void)
 
 void DlgFilterCrit::BuildWherePart()
 {
-    Sequence<Sequence<PropertyValue> > aFilter,aHaving;
-    aFilter.realloc(1);
-    aHaving.realloc(1);
+    Sequence<Sequence<PropertyValue> > aFilter(1),aHaving(1);
 
     if( LbPos(*m_xLB_WHEREFIELD1) != 0 )
     {
         PropertyValue aValue;
         if ( getCondition(*m_xLB_WHEREFIELD1,*m_xLB_WHERECOMP1,*m_xET_WHEREVALUE1,aValue) )
         {
-            aHaving[0].realloc(1);
-            aHaving[0][0] = aValue;
+            aHaving = { { aValue } };
         }
         else
         {
-            aFilter[0].realloc(1);
-            aFilter[0][0] = aValue;
+            aFilter = { { aValue} };
         }
     }
 
@@ -700,22 +696,13 @@ void DlgFilterCrit::BuildWherePart()
         Sequence<Sequence<PropertyValue> >& _rValues = aFilter;
         if ( getCondition(*m_xLB_WHEREFIELD2,*m_xLB_WHERECOMP2,*m_xET_WHEREVALUE2,aValue) )
             _rValues = aHaving;
-        PropertyValue* pPos = nullptr;
         if ( m_xLB_WHERECOND2->get_active() )
-        {
-            sal_Int32 nPos = _rValues.getLength();
-            _rValues.realloc( nPos + 1);
-            _rValues[nPos].realloc( 1);
-            pPos = &_rValues[nPos][0];
-        }
-        else
-        {
-            sal_Int32 nPos = _rValues.getLength() - 1;
-            sal_Int32 nAndPos = _rValues[nPos].getLength();
-            _rValues[nPos].realloc( _rValues[nPos].getLength() + 1);
-            pPos = &_rValues[nPos][nAndPos];
-        }
-        *pPos = aValue;
+            _rValues.realloc( _rValues.getLength() + 1);
+        sal_Int32 nPos = _rValues.getLength() - 1;
+        sal_Int32 nAndPos = _rValues[nPos].getLength();
+        auto pValues = _rValues.getArray();
+        pValues[nPos].realloc( _rValues[nPos].getLength() + 1);
+        pValues[nPos].getArray()[nAndPos] = aValue;
     }
 
     if( LbPos(*m_xLB_WHEREFIELD3) != 0 )
@@ -724,22 +711,13 @@ void DlgFilterCrit::BuildWherePart()
         Sequence<Sequence<PropertyValue> >& _rValues = aFilter;
         if ( getCondition(*m_xLB_WHEREFIELD3,*m_xLB_WHERECOMP3,*m_xET_WHEREVALUE3,aValue) )
             _rValues = aHaving;
-        PropertyValue* pPos = nullptr;
         if (m_xLB_WHERECOND3->get_active())
-        {
-            sal_Int32 nPos = _rValues.getLength();
-            _rValues.realloc( nPos + 1);
-            _rValues[nPos].realloc( 1);
-            pPos = &_rValues[nPos][0];
-        }
-        else
-        {
-            sal_Int32 nPos = _rValues.getLength() - 1;
-            sal_Int32 nAndPos = _rValues[nPos].getLength();
-            _rValues[nPos].realloc( _rValues[nPos].getLength() + 1);
-            pPos = &_rValues[nPos][nAndPos];
-        }
-        *pPos = aValue;
+            _rValues.realloc( _rValues.getLength() + 1);
+        sal_Int32 nPos = _rValues.getLength() - 1;
+        sal_Int32 nAndPos = _rValues[nPos].getLength();
+        auto pValues = _rValues.getArray();
+        pValues[nPos].realloc( _rValues[nPos].getLength() + 1);
+        pValues[nPos].getArray()[nAndPos] = aValue;
     }
     try
     {
