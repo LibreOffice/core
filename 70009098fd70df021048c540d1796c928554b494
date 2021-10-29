@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e703d6c_e7f9e640",
+        "filename": "sfx2/source/appl/openuriexternally.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-29T11:31:56Z",
+      "side": 1,
+      "message": "Interesting - is this to create an API to pass a series of \"from, to\" pairs and be safe that way that previous replacement didn\u0027t introduce an unexpected stuff mistakenly handled by following replacement?",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 123,
+        "endChar": 84
+      },
+      "revId": "70009098fd70df021048c540d1796c928554b494",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
