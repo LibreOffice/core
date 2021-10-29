@@ -212,7 +212,7 @@ Any& CachedContentResultSet::CCRS_Cache
     if( nDiff < 0 )
         nDiff *= -1;
 
-    return (m_pResult->Rows)[nDiff];
+    return m_pResult->Rows.getArray()[nDiff];
 }
 
 void CachedContentResultSet::CCRS_Cache
@@ -226,7 +226,10 @@ void CachedContentResultSet::CCRS_Cache
         nDiff *= -1;
     Sequence< sal_Bool >& rMappedReminder = getMappedReminder();
     if( nDiff < rMappedReminder.getLength() )
-        rMappedReminder[nDiff] = true;
+    {
+        sal_Bool* pMappedReminder = rMappedReminder.getArray();
+        pMappedReminder[nDiff] = true;
+    }
 }
 
 bool CachedContentResultSet::CCRS_Cache
@@ -449,15 +452,16 @@ CCRS_PropertySetInfo::CCRS_PropertySetInfo(
     sal_Int32 nOrigProps = aOrigProps.getLength();
 
     m_xProperties->realloc( nOrigProps + 2 - nDeleted );//note that nDeleted is <= 2
+    auto pProperties = m_xProperties->getArray();
     for( sal_Int32 n = 0, m = 0; n < nOrigProps; n++, m++ )
     {
         if( n == nFetchSize || n == nFetchDirection )
             m--;
         else
-            (*m_xProperties)[ m ] = aOrigProps[ n ];
+            pProperties[ m ] = aOrigProps[ n ];
     }
     {
-        Property& rMyProp = (*m_xProperties)[ nOrigProps - nDeleted ];
+        Property& rMyProp = pProperties[ nOrigProps - nDeleted ];
         rMyProp.Name = g_sPropertyNameForFetchSize;
         rMyProp.Type = cppu::UnoType<sal_Int32>::get();
         rMyProp.Attributes = PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT;
@@ -471,7 +475,7 @@ CCRS_PropertySetInfo::CCRS_PropertySetInfo(
 
     }
     {
-        Property& rMyProp = (*m_xProperties)[ nOrigProps - nDeleted + 1 ];
+        Property& rMyProp = pProperties[ nOrigProps - nDeleted + 1 ];
         rMyProp.Name = g_sPropertyNameForFetchDirection;
         rMyProp.Type = cppu::UnoType<sal_Bool>::get();
         rMyProp.Attributes = PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT;
