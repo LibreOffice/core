@@ -226,8 +226,7 @@ namespace {
 
         if ( !aMultiplePaths.hasElements() )
         {
-            aMultiplePaths.realloc(1);
-            aMultiplePaths[0] = aSinglePath;
+            aMultiplePaths = { aSinglePath };
         }
         lcl_checkPaths( aMultiplePaths, *this );
         // if we survived this, the paths are valid, and we're done here ...
