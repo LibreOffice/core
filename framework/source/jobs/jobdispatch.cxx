@@ -226,9 +226,9 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL JobD
     // don't pack resulting list!
     sal_Int32 nCount = lDescriptor.getLength();
     css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatches(nCount);
-
+    auto lDispatchesRange = asNonConstRange(lDispatches);
     for (sal_Int32 i=0; i<nCount; ++i)
-        lDispatches[i] = queryDispatch( lDescriptor[i].FeatureURL  ,
+        lDispatchesRange[i] = queryDispatch( lDescriptor[i].FeatureURL  ,
                                         lDescriptor[i].FrameName   ,
                                         lDescriptor[i].SearchFlags );
     return lDispatches;

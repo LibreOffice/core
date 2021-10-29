@@ -76,7 +76,7 @@ ItemContainer::ItemContainer( const Reference< XIndexAccess >& rSourceContainer,
                 }
 
                 if ( xIndexAccess.is() && nContainerIndex >= 0 )
-                    aPropSeq[nContainerIndex].Value <<= deepCopyContainer( xIndexAccess, rMutex );
+                    aPropSeq.getArray()[nContainerIndex].Value <<= deepCopyContainer( xIndexAccess, rMutex );
 
                 m_aItemVector.push_back( aPropSeq );
             }
@@ -111,7 +111,7 @@ void ItemContainer::copyItemContainer( const std::vector< Sequence< PropertyValu
         }
 
         if ( xIndexAccess.is() && nContainerIndex >= 0 )
-            aPropSeq[nContainerIndex].Value <<= deepCopyContainer( xIndexAccess, rMutex );
+            aPropSeq.getArray()[nContainerIndex].Value <<= deepCopyContainer( xIndexAccess, rMutex );
 
         m_aItemVector.push_back( aPropSeq );
     }
