@@ -581,12 +581,13 @@ static Sequence< Type > invokeGetTypes( const Runtime & r , PyObject * o )
 
             // add the XUnoTunnel interface  for uno object identity concept (hack)
             ret.realloc( size + 1 );
+            auto pret = ret.getArray();
             for( int i = 0 ; i < size ; i ++ )
             {
                 Any a = r.pyObject2Any(PyTuple_GetItem(types.get(),i));
-                a >>= ret[i];
+                a >>= pret[i];
             }
-            ret[size] = cppu::UnoType<css::lang::XUnoTunnel>::get();
+            pret[size] = cppu::UnoType<css::lang::XUnoTunnel>::get();
         }
     }
     return ret;
@@ -699,9 +700,10 @@ Any Runtime::pyObject2Any(const PyRef & source, enum ConversionMode mode) const
     else if (PyTuple_Check (o))
     {
         Sequence<Any> s (PyTuple_Size (o));
+        auto sRange = asNonConstRange(s);
         for (Py_ssize_t i = 0; i < PyTuple_Size (o); i++)
         {
-            s[i] = pyObject2Any (PyTuple_GetItem (o, i), mode );
+            sRange[i] = pyObject2Any (PyTuple_GetItem (o, i), mode );
         }
         a <<= s;
     }
@@ -709,9 +711,10 @@ Any Runtime::pyObject2Any(const PyRef & source, enum ConversionMode mode) const
     {
         Py_ssize_t l = PyList_Size (o);
         Sequence<Any> s (l);
+        auto sRange = asNonConstRange(s);
         for (Py_ssize_t i = 0; i < l; i++)
         {
-            s[i] = pyObject2Any (PyList_GetItem (o, i), mode );
+            sRange[i] = pyObject2Any (PyList_GetItem (o, i), mode );
         }
         a <<= s;
     }
