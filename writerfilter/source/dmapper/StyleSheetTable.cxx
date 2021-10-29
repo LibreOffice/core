@@ -42,6 +42,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
@@ -1066,9 +1067,10 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                                 uno::Reference<container::XIndexAccess> xIndexAccess(xNumberingRules, uno::UNO_QUERY_THROW);
                                 for (sal_Int32 i = 0; i < xIndexAccess->getCount(); ++i)
                                 {
-                                    uno::Sequence< beans::PropertyValue > aLvlProps(1);
-                                    aLvlProps[0].Name = "NumberingType";
-                                    aLvlProps[0].Value <<= style::NumberingType::NUMBER_NONE;
+                                    uno::Sequence< beans::PropertyValue > aLvlProps{
+                                        comphelper::makePropertyValue(
+                                            "NumberingType", style::NumberingType::NUMBER_NONE)
+                                    };
                                     xNumberingRules->replaceByIndex(i, uno::makeAny(aLvlProps));
                                     xPropertySet->setPropertyValue("NumberingRules", uno::makeAny(xNumberingRules));
                                 }
