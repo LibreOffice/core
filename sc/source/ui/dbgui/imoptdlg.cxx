@@ -45,7 +45,7 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
     bSaveFormulas = false;
     bRemoveSpace = false;
     nSheetToExport = 0;
-    bEvaluateFormulas = true;
+    bEvaluateFormulas = true;   // true if not present at all, for compatibility
     sal_Int32 nTokenCount = comphelper::string::getTokenCount(rStr, ',');
     if ( nTokenCount < 3 )
         return;
@@ -91,6 +91,7 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
                 nSheetToExport = -23;   // invalid, force error
         }
         if ( nTokenCount >= 13 )
+            // If present, defaults to "false".
             bEvaluateFormulas = rStr.getToken(0, ',', nIdx) == "true";
     }
 }
