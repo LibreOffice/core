@@ -336,30 +336,36 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
 
     // Create list of environment variables. This list must be part of the
     // returned structure every time... but some of its members are optional!
-    css::uno::Sequence< css::beans::NamedValue > lEnvArgs(1);
-    lEnvArgs[0].Name = "EnvType";
-    lEnvArgs[0].Value <<= m_aJobCfg.getEnvironmentDescriptor();
+    sal_Int32 nLen = 1;
+    if (m_xFrame.is())
+        ++nLen;
+    if (m_xModel.is())
+        ++nLen;
+    if (eMode==JobData::E_EVENT)
+        ++nLen;
+    css::uno::Sequence< css::beans::NamedValue > lEnvArgs(nLen);
+    auto plEnvArgs = lEnvArgs.getArray();
+    plEnvArgs[0].Name = "EnvType";
+    plEnvArgs[0].Value <<= m_aJobCfg.getEnvironmentDescriptor();
 
+    sal_Int32 i = 0;
     if (m_xFrame.is())
     {
-        sal_Int32 c = lEnvArgs.getLength();
-        lEnvArgs.realloc(c+1);
-        lEnvArgs[c].Name = "Frame";
-        lEnvArgs[c].Value <<= m_xFrame;
+        ++i;
+        plEnvArgs[i].Name = "Frame";
+        plEnvArgs[i].Value <<= m_xFrame;
     }
     if (m_xModel.is())
     {
-        sal_Int32 c = lEnvArgs.getLength();
-        lEnvArgs.realloc(c+1);
-        lEnvArgs[c].Name = "Model";
-        lEnvArgs[c].Value <<= m_xModel;
+        ++i;
+        plEnvArgs[i].Name = "Model";
+        plEnvArgs[i].Value <<= m_xModel;
     }
     if (eMode==JobData::E_EVENT)
     {
-        sal_Int32 c = lEnvArgs.getLength();
-        lEnvArgs.realloc(c+1);
-        lEnvArgs[c].Name = "EventName";
-        lEnvArgs[c].Value <<= m_aJobCfg.getEvent();
+        ++i;
+        plEnvArgs[i].Name = "EventName";
+        plEnvArgs[i].Value <<= m_aJobCfg.getEvent();
     }
 
     // get the configuration data from the job data container ... if possible
@@ -381,29 +387,33 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
     {
         sal_Int32 nLength = lAllArgs.getLength();
         lAllArgs.realloc(nLength+1);
-        lAllArgs[nLength].Name = "Config";
-        lAllArgs[nLength].Value <<= lConfigArgs;
+        auto plAllArgs = lAllArgs.getArray();
+        plAllArgs[nLength].Name = "Config";
+        plAllArgs[nLength].Value <<= lConfigArgs;
     }
     if (!lJobConfigArgs.empty())
     {
         sal_Int32 nLength = lAllArgs.getLength();
         lAllArgs.realloc(nLength+1);
-        lAllArgs[nLength].Name = "JobConfig";
-        lAllArgs[nLength].Value <<= comphelper::containerToSequence(lJobConfigArgs);
+        auto plAllArgs = lAllArgs.getArray();
+        plAllArgs[nLength].Name = "JobConfig";
+        plAllArgs[nLength].Value <<= comphelper::containerToSequence(lJobConfigArgs);
     }
     if (lEnvArgs.hasElements())
     {
         sal_Int32 nLength = lAllArgs.getLength();
         lAllArgs.realloc(nLength+1);
-        lAllArgs[nLength].Name = "Environment";
-        lAllArgs[nLength].Value <<= lEnvArgs;
+        auto plAllArgs = lAllArgs.getArray();
+        plAllArgs[nLength].Name = "Environment";
+        plAllArgs[nLength].Value <<= lEnvArgs;
     }
     if (lDynamicArgs.hasElements())
     {
         sal_Int32 nLength = lAllArgs.getLength();
         lAllArgs.realloc(nLength+1);
-        lAllArgs[nLength].Name = "DynamicData";
-        lAllArgs[nLength].Value <<= lDynamicArgs;
+        auto plAllArgs = lAllArgs.getArray();
+        plAllArgs[nLength].Name = "DynamicData";
+        plAllArgs[nLength].Value <<= lDynamicArgs;
     }
 
     return lAllArgs;

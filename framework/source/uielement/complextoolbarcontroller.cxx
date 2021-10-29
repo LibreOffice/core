@@ -28,6 +28,7 @@
 #include <com/sun/star/frame/XControlNotificationListener.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
+#include <comphelper/propertyvalue.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
@@ -77,11 +78,8 @@ void SAL_CALL ComplexToolbarController::dispose()
 
 Sequence<PropertyValue> ComplexToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
-    Sequence<PropertyValue> aArgs( 1 );
-
     // Add key modifier to argument list
-    aArgs[0].Name = "KeyModifier";
-    aArgs[0].Value <<= KeyModifier;
+    Sequence<PropertyValue> aArgs{ comphelper::makePropertyValue("KeyModifier", KeyModifier) };
     return aArgs;
 }
 
@@ -264,8 +262,9 @@ void ComplexToolbarController::addNotifyInfo(
     sal_Int32 nCount = rInfo.getLength();
     uno::Sequence< beans::NamedValue > aInfoSeq( rInfo );
     aInfoSeq.realloc( nCount+1 );
-    aInfoSeq[nCount].Name  = "Source";
-    aInfoSeq[nCount].Value <<= getFrameInterface();
+    auto pInfoSeq = aInfoSeq.getArray();
+    pInfoSeq[nCount].Name  = "Source";
+    pInfoSeq[nCount].Value <<= getFrameInterface();
     pNotifyInfo->aInfoSeq  = aInfoSeq;
 
     Application::PostUserEvent( LINK(nullptr, ComplexToolbarController, Notify_Impl), pNotifyInfo );

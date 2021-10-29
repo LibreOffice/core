@@ -201,9 +201,10 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     // based of a system directory. This must be used so, till the storage implementation
     // can work on directories too.
     */
-    css::uno::Sequence< css::uno::Any > lArgs(2);
-    lArgs[0] <<= sShareLayer;
-    lArgs[1] <<= css::embed::ElementModes::READ | css::embed::ElementModes::NOCREATE;
+    css::uno::Sequence< css::uno::Any > lArgs{
+        css::uno::Any(sShareLayer),
+        css::uno::Any(css::embed::ElementModes::READ | css::embed::ElementModes::NOCREATE)
+    };
 
     css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory = css::embed::FileSystemStorageFactory::create( xContext );
     css::uno::Reference< css::embed::XStorage >             xStorage;
@@ -249,9 +250,8 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
 
     sUserLayer  += "soffice.cfg"; // storage file
 
-    css::uno::Sequence< css::uno::Any > lArgs(2);
-    lArgs[0] <<= sUserLayer;
-    lArgs[1] <<= css::embed::ElementModes::READWRITE;
+    css::uno::Sequence< css::uno::Any > lArgs{ css::uno::Any(sUserLayer),
+                                               css::uno::Any(css::embed::ElementModes::READWRITE) };
 
     css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory = css::embed::FileSystemStorageFactory::create( xContext );
     css::uno::Reference< css::embed::XStorage >             xStorage;
