@@ -752,8 +752,9 @@ void setOrAppendPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, con
     // append the property
     sal_Int32 nLength = aProp.getLength();
     aProp.realloc( nLength + 1 );
-    aProp[ nLength ].Name = aName;
-    aProp[ nLength ].Value = aValue;
+    auto pProp = aProp.getArray();
+    pProp[ nLength ].Name = aName;
+    pProp[ nLength ].Value = aValue;
 }
 
 // ====UserFormGeomentryHelper====
