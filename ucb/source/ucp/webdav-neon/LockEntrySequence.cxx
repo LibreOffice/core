@@ -232,7 +232,7 @@ bool LockEntrySequence::createFromXML( const OString & rInData,
             if ( nCount > rOutData.getLength() )
                 rOutData.realloc( rOutData.getLength() + 2 );
 
-            rOutData[ nCount - 1 ] = *aCtx.pEntry;
+            rOutData.getArray()[ nCount - 1 ] = *aCtx.pEntry;
         }
 
         nStart = nEnd + TOKEN_LENGTH;

@@ -219,8 +219,7 @@ ContentProvider::createPackage( const PackageUri & rURI )
         m_pPackages.reset( new Packages );
 
     // Create new package...
-    uno::Sequence< uno::Any > aArguments( 1 );
-    aArguments[ 0 ] <<= rURL;
+    uno::Sequence< uno::Any > aArguments{ uno::Any(rURL) };
     uno::Reference< container::XHierarchicalNameAccess > xNameAccess;
     try
     {
