@@ -19,6 +19,8 @@
 
 #include <vcl/svapp.hxx>
 
+#include <algorithm>
+
 using namespace css;
 using namespace ::sfx2::sidebar;
 
@@ -72,14 +74,8 @@ uno::Sequence< OUString > SAL_CALL SfxUnoPanels::getElementNames()
                                                       xFrame->getController());
 
         panelList.realloc(aPanels.size());
-
-        tools::Long n = 0;
-
-        for (const auto& rPanel : aPanels)
-        {
-            panelList[n] = rPanel.msId;
-            n++;
-        }
+        std::transform(aPanels.begin(), aPanels.end(), panelList.getArray(),
+                       [](const auto& rPanel) { return rPanel.msId; });
     }
 
     return panelList;

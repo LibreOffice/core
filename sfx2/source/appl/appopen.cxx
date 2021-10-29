@@ -395,8 +395,9 @@ ErrCode SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUString &
         TransformItems( SID_OPENDOC, *pNew, aArgs );
         sal_Int32 nLength = aArgs.getLength();
         aArgs.realloc( nLength + 1 );
-        aArgs[nLength].Name = "Title";
-        aArgs[nLength].Value <<= xDoc->GetTitle( SFX_TITLE_DETECT );
+        auto pArgs = aArgs.getArray();
+        pArgs[nLength].Name = "Title";
+        pArgs[nLength].Value <<= xDoc->GetTitle( SFX_TITLE_DETECT );
         xModel->attachResource( OUString(), aArgs );
     }
 

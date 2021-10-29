@@ -38,6 +38,7 @@
 #include <tools/stream.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <o3tl/string_view.hxx>
 
@@ -210,18 +211,16 @@ bool GraphicHelper::getThumbnailReplacement_Impl(std::u16string_view rResID, con
             uno::Reference< graphic::XGraphicProvider > xGraphProvider(graphic::GraphicProvider::create(xContext));
             const OUString aURL{OUString::Concat("private:graphicrepository/") + rResID};
 
-            uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-            aMediaProps[0].Name = "URL";
-            aMediaProps[0].Value <<= aURL;
+            uno::Sequence< beans::PropertyValue > aMediaProps{ comphelper::makePropertyValue("URL",
+                                                                                             aURL) };
 
             uno::Reference< graphic::XGraphic > xGraphic = xGraphProvider->queryGraphic( aMediaProps );
             if ( xGraphic.is() )
             {
-                uno::Sequence< beans::PropertyValue > aStoreProps( 2 );
-                aStoreProps[0].Name = "OutputStream";
-                aStoreProps[0].Value <<= xStream;
-                aStoreProps[1].Name = "MimeType";
-                aStoreProps[1].Value <<= OUString("image/png");
+                uno::Sequence< beans::PropertyValue > aStoreProps{
+                    comphelper::makePropertyValue("OutputStream", xStream),
+                    comphelper::makePropertyValue("MimeType", OUString("image/png"))
+                };
 
                 xGraphProvider->storeGraphic( xGraphic, aStoreProps );
                 bResult = true;
