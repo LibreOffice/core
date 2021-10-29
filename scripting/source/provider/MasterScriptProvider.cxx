@@ -97,13 +97,14 @@ void SAL_CALL MasterScriptProvider::initialize( const Sequence < Any >& args )
 
     if ( len != 0 )
     {
+        auto pinvokeArgs = invokeArgs.getArray();
         // check if first parameter is a string
         // if it is, this implies that this is a MSP created
         // with a user or share ctx ( used for browse functionality )
 
         if ( args[ 0 ] >>= m_sCtxString )
         {
-            invokeArgs[ 0  ] = args[ 0 ];
+            pinvokeArgs[ 0  ] = args[ 0 ];
             if ( m_sCtxString.startsWith( "vnd.sun.star.tdoc" ) )
             {
                 m_xModel =  MiscUtils::tDocUrlToModel( m_sCtxString );
@@ -152,9 +153,9 @@ void SAL_CALL MasterScriptProvider::initialize( const Sequence < Any >& args )
             }
 
             if ( m_xInvocationContext.is() && m_xInvocationContext != m_xModel )
-                invokeArgs[ 0 ] <<= m_xInvocationContext;
+                pinvokeArgs[ 0 ] <<= m_xInvocationContext;
             else
-                invokeArgs[ 0 ] <<= m_sCtxString;
+                pinvokeArgs[ 0 ] <<= m_sCtxString;
         }
 
         OUString pkgSpec = "uno_packages";
@@ -395,15 +396,16 @@ MasterScriptProvider::getChildNodes()
         size++;
     }
     Sequence<  Reference< browse::XBrowseNode > > children( size );
+    auto childrenRange = asNonConstRange(children);
     sal_Int32 provIndex = 0;
     for ( ; provIndex < providers.getLength(); provIndex++ )
     {
-        children[ provIndex ].set( providers[ provIndex ], UNO_QUERY );
+        childrenRange[ provIndex ].set( providers[ provIndex ], UNO_QUERY );
     }
 
     if ( hasPkgs  )
     {
-        children[ provIndex ].set( m_xMSPPkg, UNO_QUERY );
+        childrenRange[ provIndex ].set( m_xMSPPkg, UNO_QUERY );
 
     }
 
