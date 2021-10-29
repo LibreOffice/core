@@ -103,8 +103,9 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     xPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
                     sal_Int32 length = aGrabBag.getLength();
                     aGrabBag.realloc(length + 1);
-                    aGrabBag[length].Name = "Upright";
-                    aGrabBag[length].Value <<= bUpright;
+                    auto pGrabBag = aGrabBag.getArray();
+                    pGrabBag[length].Name = "Upright";
+                    pGrabBag[length].Value <<= bUpright;
                     xPropertySet->setPropertyValue("InteropGrabBag", uno::makeAny(aGrabBag));
                 }
 

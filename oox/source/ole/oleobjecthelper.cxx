@@ -31,6 +31,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <osl/diagnose.h>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <oox/helper/propertymap.hxx>
 #include <oox/token/properties.hxx>
@@ -101,9 +102,8 @@ void SaveInteropProperties(uno::Reference<frame::XModel> const& xModel,
     if (aGrabBag.find(sEmbeddingsPropName) != aGrabBag.end())
         objectsList << aGrabBag[sEmbeddingsPropName];
 
-    uno::Sequence< beans::PropertyValue > aGrabBagAttribute(1);
-    aGrabBagAttribute[0].Name = "ProgID";
-    aGrabBagAttribute[0].Value <<= rProgId;
+    uno::Sequence< beans::PropertyValue > aGrabBagAttribute{ comphelper::makePropertyValue("ProgID",
+                                                                                           rProgId) };
 
     // If we got an "old name", erase that first.
     if (pOldObjectName)

@@ -939,7 +939,7 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
         {
             sal_Int32 nSize = aGeomPropSeq.getLength();
             aGeomPropSeq.realloc(nSize+1);
-            aGeomPropSeq[nSize] = lcl_createTextpathProps();
+            aGeomPropSeq.getArray()[nSize] = lcl_createTextpathProps();
         }
         rPropMap.setAnyProperty(PROP_CustomShapeGeometry, uno::makeAny(aGeomPropSeq));
     }

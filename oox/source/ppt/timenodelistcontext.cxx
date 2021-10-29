@@ -109,16 +109,12 @@ namespace oox::ppt {
         Any get() const
             {
                 sal_Int32 nColor;
-                Sequence< double > aHSL( 3 );
                 Any aColor;
 
                 switch( colorSpace )
                 {
                 case AnimationColorSpace::HSL:
-                    aHSL[ 0 ] = double(one) / 100000;
-                    aHSL[ 1 ] = double(two) / 100000;
-                    aHSL[ 2 ] = double(three) / 100000;
-                    aColor <<= aHSL;
+                    aColor <<= Sequence< double >{ one / 100000.0, two / 100000.0, three / 100000.0 };
                     break;
                 case AnimationColorSpace::RGB:
                     nColor = ( ( ( one * 128 ) / 1000 ) & 0xff ) << 16
@@ -597,16 +593,18 @@ namespace oox::ppt {
 
                 int i=0;
                 Sequence< double > aKeyTimes( nKeyTimes );
+                auto pKeyTimes = aKeyTimes.getArray();
                 Sequence< Any > aValues( nKeyTimes );
+                auto pValues = aValues.getArray();
 
                 NodePropertyMap & aProps( mpNode->getNodeProperties() );
                 for (auto const& tav : maTavList)
                 {
                     // TODO what to do if it is Timing_INFINITE ?
                     Any aTime = GetTimeAnimateValueTime( tav.msTime );
-                    aTime >>= aKeyTimes[i];
-                    aValues[i] = tav.maValue;
-                    convertAnimationValueWithTimeNode(mpNode, aValues[i]);
+                    aTime >>= pKeyTimes[i];
+                    pValues[i] = tav.maValue;
+                    convertAnimationValueWithTimeNode(mpNode, pValues[i]);
 
                     // Examine pptx documents and find that only the first tav
                     // has the formula set. The formula can be used for the whole.
