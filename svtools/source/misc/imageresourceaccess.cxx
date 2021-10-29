@@ -25,6 +25,8 @@
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/io/XStream.hpp>
+
+#include <comphelper/propertyvalue.hxx>
 #include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <tools/stream.hxx>
@@ -125,9 +127,8 @@ std::unique_ptr<SvStream> getImageStream(uno::Reference<uno::XComponentContext> 
         uno::Reference<graphic::XGraphicProvider> xProvider = css::graphic::GraphicProvider::create(rxContext);
 
         // let it create a graphic from the given URL
-        uno::Sequence<beans::PropertyValue> aMediaProperties(1);
-        aMediaProperties[0].Name = "URL";
-        aMediaProperties[0].Value <<= rImageResourceURL;
+        uno::Sequence<beans::PropertyValue> aMediaProperties{ comphelper::makePropertyValue(
+            "URL", rImageResourceURL) };
         uno::Reference<graphic::XGraphic> xGraphic(xProvider->queryGraphic(aMediaProperties));
 
         OSL_ENSURE(xGraphic.is(), "GraphicAccess::getImageStream: the provider did not give us a graphic object!");
@@ -140,11 +141,8 @@ std::unique_ptr<SvStream> getImageStream(uno::Reference<uno::XComponentContext> 
             new OSeekableInputStreamWrapper(*pMemBuffer),
             new OSeekableOutputStreamWrapper(*pMemBuffer));
 
-        aMediaProperties.realloc(2);
-        aMediaProperties[0].Name = "OutputStream";
-        aMediaProperties[0].Value <<= xBufferAccess;
-        aMediaProperties[1].Name = "MimeType";
-        aMediaProperties[1].Value <<= OUString("image/png");
+        aMediaProperties = { comphelper::makePropertyValue("OutputStream", xBufferAccess),
+                             comphelper::makePropertyValue("MimeType", OUString("image/png")) };
         xProvider->storeGraphic(xGraphic, aMediaProperties);
 
         pMemBuffer->Seek(0);

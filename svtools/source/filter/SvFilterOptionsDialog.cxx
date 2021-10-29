@@ -156,7 +156,7 @@ uno::Sequence< beans::PropertyValue > SvFilterOptionsDialog::getPropertyValues()
         maMediaDescriptor.realloc( ++nCount );
 
     // the "FilterData" Property is an Any that will contain our PropertySequence of Values
-    auto& item = maMediaDescriptor[ i ];
+    auto& item = maMediaDescriptor.getArray()[ i ];
     item.Name = "FilterData";
     item.Value <<= maFilterDataSequence;
     return maMediaDescriptor;
