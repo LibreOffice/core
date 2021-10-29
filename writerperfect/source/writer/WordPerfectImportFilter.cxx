@@ -197,10 +197,10 @@ WordPerfectImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& D
         if (location == nLength)
         {
             Descriptor.realloc(nLength + 1);
-            Descriptor[location].Name = "TypeName";
+            Descriptor.getArray()[location].Name = "TypeName";
         }
 
-        Descriptor[location].Value <<= sTypeName;
+        Descriptor.getArray()[location].Value <<= sTypeName;
     }
 
     return sTypeName;
