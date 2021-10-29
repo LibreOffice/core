@@ -1194,22 +1194,24 @@ void ODBExport::GetViewSettings(Sequence<PropertyValue>& aProps)
     {
         sal_Int32 nLength = aProps.getLength();
         aProps.realloc(nLength + 1);
-        aProps[nLength].Name = "Queries";
+        auto pProps = aProps.getArray();
+        pProps[nLength].Name = "Queries";
         Sequence< OUString> aSeq = xCollection->getElementNames();
         const OUString* pIter = aSeq.getConstArray();
         const OUString* pEnd   = pIter + aSeq.getLength();
 
         Sequence<PropertyValue> aQueries(aSeq.getLength());
+        auto aQueriesRange = asNonConstRange(aQueries);
         for(sal_Int32 i = 0;pIter != pEnd;++pIter,++i)
         {
             Reference<XPropertySet> xProp(xCollection->getByName(*pIter),UNO_QUERY);
             if ( xProp.is() )
             {
-                aQueries[i].Name = *pIter;
-                aQueries[i].Value = xProp->getPropertyValue(PROPERTY_LAYOUTINFORMATION);
+                aQueriesRange[i].Name = *pIter;
+                aQueriesRange[i].Value = xProp->getPropertyValue(PROPERTY_LAYOUTINFORMATION);
             }
         }
-        aProps[nLength].Value <<= aQueries;
+        pProps[nLength].Value <<= aQueries;
     }
     catch(const Exception&)
     {
@@ -1233,8 +1235,9 @@ void ODBExport::GetConfigurationSettings(Sequence<PropertyValue>& aProps)
         if ( aPropValues.hasElements() )
         {
             aProps.realloc(nLength + 1);
-            aProps[nLength].Name = "layout-settings";
-            aProps[nLength].Value = aValue;
+            auto pProps = aProps.getArray();
+            pProps[nLength].Name = "layout-settings";
+            pProps[nLength].Value = aValue;
         }
     }
     catch(const Exception&)

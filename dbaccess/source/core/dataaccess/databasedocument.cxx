@@ -278,7 +278,7 @@ namespace
 
         sal_Int32 nLength = _rCallArgs.getLength();
         _rCallArgs.realloc( nLength + 1 );
-        _rCallArgs[ nLength ] <<= xStatusIndicator;
+        _rCallArgs.getArray()[ nLength ] <<= xStatusIndicator;
     }
 
     void lcl_extractAndStartStatusIndicator( const ::comphelper::NamedValueCollection& _rArguments, Reference< XStatusIndicator >& _rxStatusIndicator,
@@ -294,7 +294,7 @@ namespace
 
             sal_Int32 nLength = _rCallArgs.getLength();
             _rCallArgs.realloc( nLength + 1 );
-            _rCallArgs[ nLength ] <<= _rxStatusIndicator;
+            _rCallArgs.getArray()[ nLength ] <<= _rxStatusIndicator;
         }
         catch( const Exception& )
         {
@@ -455,7 +455,7 @@ void ODatabaseDocument::impl_import_nolck_throw( const Reference< XComponentCont
 
     const sal_Int32 nCount = aFilterCreationArgs.getLength();
     aFilterCreationArgs.realloc(nCount + 1);
-    aFilterCreationArgs[nCount] <<= xInfoSet;
+    aFilterCreationArgs.getArray()[nCount] <<= xInfoSet;
 
     Reference< XImporter > xImporter(
         _rContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.comp.sdb.DBFilter", aFilterCreationArgs, _rContext),
@@ -1121,9 +1121,7 @@ Reference< XStorage > ODatabaseDocument::impl_createStorageFor_throw( const OUSt
     {
         xTruncate->truncate();
     }
-    Sequence<Any> aParam(2);
-    aParam[0] <<= xStream;
-    aParam[1] <<= ElementModes::READWRITE | ElementModes::TRUNCATE;
+    Sequence<Any> aParam{ Any(xStream), Any(ElementModes::READWRITE | ElementModes::TRUNCATE) };
 
     Reference< XSingleServiceFactory > xStorageFactory( m_pImpl->createStorageFactory(), UNO_SET_THROW );
     return Reference< XStorage >( xStorageFactory->createInstanceWithArguments( aParam ), UNO_QUERY_THROW );
@@ -1422,8 +1420,7 @@ Reference< XNameAccess > ODatabaseDocument::impl_getDocumentContainer_throw( ODa
             aValue >>= sSupportService;
             if ( !sSupportService.isEmpty() )
             {
-                Sequence<Any> aArgs(1);
-                aArgs[0] <<= NamedValue("DatabaseDocument",makeAny(xMy));
+                Sequence<Any> aArgs{ Any(NamedValue("DatabaseDocument",makeAny(xMy))) };
                 xContainer.set(
                        m_pImpl->m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext(sSupportService, aArgs, m_pImpl->m_aContext),
                        UNO_QUERY);
@@ -1597,9 +1594,10 @@ void ODatabaseDocument::WriteThroughComponent( const Reference< XOutputStream >&
 
     // prepare arguments (prepend doc handler to given arguments)
     Sequence<Any> aArgs( 1 + _rArguments.getLength() );
-    aArgs[0] <<= xSaxWriter;
+    auto pArgs = aArgs.getArray();
+    pArgs[0] <<= xSaxWriter;
     for ( sal_Int32 i = 0; i < _rArguments.getLength(); ++i )
-        aArgs[ i+1 ] = _rArguments[i];
+        pArgs[ i+1 ] = _rArguments[i];
 
     // get filter component
     Reference< XExporter > xExporter( m_pImpl->m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext(OUString::createFromAscii(pServiceName), aArgs, m_pImpl->m_aContext), UNO_QUERY_THROW );
@@ -1648,7 +1646,7 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
 
     sal_Int32 nArgsLen = aDelegatorArguments.getLength();
     aDelegatorArguments.realloc(nArgsLen+1);
-    aDelegatorArguments[nArgsLen++] <<= xInfoSet;
+    aDelegatorArguments.getArray()[nArgsLen++] <<= xInfoSet;
 
     Reference< XPropertySet > xProp( _rxTargetStorage, UNO_QUERY_THROW );
     xProp->setPropertyValue( INFO_MEDIATYPE, makeAny( OUString(MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII) ) );
@@ -1917,8 +1915,7 @@ void SAL_CALL ODatabaseDocument::loadFromStorage(const Reference<XStorage>& xSto
     xInfoSet->setPropertyValue("StreamName", uno::makeAny(OUString("content.xml")));
     xInfoSet->setPropertyValue("SourceStorage", uno::makeAny(xStorage));
 
-    uno::Sequence<uno::Any> aFilterCreationArgs(1);
-    aFilterCreationArgs[0] <<= xInfoSet;
+    uno::Sequence<uno::Any> aFilterCreationArgs{ Any(xInfoSet) };
 
     uno::Reference<document::XImporter> xImporter(m_pImpl->m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.comp.sdb.DBFilter", aFilterCreationArgs, m_pImpl->m_aContext), uno::UNO_QUERY_THROW);
 
