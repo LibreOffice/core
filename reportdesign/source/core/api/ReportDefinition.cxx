@@ -208,7 +208,7 @@ static void lcl_extractAndStartStatusIndicator( const utl::MediaDescriptor& _rDe
 
             sal_Int32 nLength = _rCallArgs.getLength();
             _rCallArgs.realloc( nLength + 1 );
-            _rCallArgs[ nLength ] <<= _rxStatusIndicator;
+            _rCallArgs.getArray()[ nLength ] <<= _rxStatusIndicator;
         }
     }
     catch (const uno::Exception&)
@@ -706,7 +706,7 @@ uno::Sequence< OUString > SAL_CALL OReportDefinition::getSupportedServiceNames( 
     {
         sal_Int32 nLen = aSupported.getLength();
         aSupported.realloc( nLen + 1 );
-        aSupported[ nLen ] = SERVICE_REPORTDEFINITION;
+        aSupported.getArray()[ nLen ] = SERVICE_REPORTDEFINITION;
     }
 
     // outta here
@@ -1246,7 +1246,7 @@ void OReportDefinition::impl_loadFromStorage_nolck_throw( const uno::Reference< 
     beans::PropertyValue aPropVal;
     aPropVal.Name = "Storage";
     aPropVal.Value <<= _xStorageToLoadFrom;
-    aDelegatorArguments[nPos] <<= aPropVal;
+    aDelegatorArguments.getArray()[nPos] <<= aPropVal;
 
     rptui::OXUndoEnvironment& rEnv = m_pImpl->m_pReportModel->GetUndoEnv();
     rptui::OXUndoEnvironment::OUndoEnvLock aLock(rEnv);
@@ -1328,8 +1328,9 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
 
 
     sal_Int32 nArgsLen = aDelegatorArguments.getLength();
-    aDelegatorArguments.realloc(nArgsLen+1);
-    aDelegatorArguments[nArgsLen++] <<= xInfoSet;
+    aDelegatorArguments.realloc(nArgsLen+3);
+    auto pDelegatorArguments = aDelegatorArguments.getArray();
+    pDelegatorArguments[nArgsLen++] <<= xInfoSet;
 
     uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
     uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler;
@@ -1338,9 +1339,8 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     xGraphicHelper.clear();
     xObjectResolver = SvXMLEmbeddedObjectHelper::Create( _xStorageToSaveTo,*this, SvXMLEmbeddedObjectHelperMode::Write ).get();
 
-    aDelegatorArguments.realloc(nArgsLen+2);
-    aDelegatorArguments[nArgsLen++] <<= xGraphicStorageHandler;
-    aDelegatorArguments[nArgsLen++] <<= xObjectResolver;
+    pDelegatorArguments[nArgsLen++] <<= xGraphicStorageHandler;
+    pDelegatorArguments[nArgsLen++] <<= xObjectResolver;
 
     uno::Reference<XComponent> xCom(static_cast<OWeakObject*>(this),uno::UNO_QUERY);
     // Try to write to settings.xml, meta.xml, and styles.xml; only really care about success of
@@ -1607,9 +1607,7 @@ void SAL_CALL OReportDefinition::load( const uno::Sequence< beans::PropertyValue
     const size_t nLastOpenMode = SAL_N_ELEMENTS( nOpenModes ) - 1;
     for ( size_t i=nFirstOpenMode; i <= nLastOpenMode; ++i )
     {
-        uno::Sequence< uno::Any > aStorageCreationArgs(2);
-        aStorageCreationArgs[0] = aStorageSource;
-        aStorageCreationArgs[1] <<= nOpenModes[i];
+        uno::Sequence< uno::Any > aStorageCreationArgs{ aStorageSource, uno::Any(nOpenModes[i]) };
 
         try
         {

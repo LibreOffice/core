@@ -96,20 +96,21 @@ short ODateTimeDialog::run()
         {
             sal_Int32 nLength = 0;
             uno::Sequence<beans::PropertyValue> aValues( 6 );
-            aValues[nLength].Name = PROPERTY_SECTION;
-            aValues[nLength++].Value <<= m_xHoldAlive;
+            auto pValues = aValues.getArray();
+            pValues[nLength].Name = PROPERTY_SECTION;
+            pValues[nLength++].Value <<= m_xHoldAlive;
 
-            aValues[nLength].Name = PROPERTY_TIME_STATE;
-            aValues[nLength++].Value <<= m_xTime->get_active();
+            pValues[nLength].Name = PROPERTY_TIME_STATE;
+            pValues[nLength++].Value <<= m_xTime->get_active();
 
-            aValues[nLength].Name = PROPERTY_DATE_STATE;
-            aValues[nLength++].Value <<= m_xDate->get_active();
+            pValues[nLength].Name = PROPERTY_DATE_STATE;
+            pValues[nLength++].Value <<= m_xDate->get_active();
 
-            aValues[nLength].Name = PROPERTY_FORMATKEYDATE;
-            aValues[nLength++].Value <<= getFormatKey(true);
+            pValues[nLength].Name = PROPERTY_FORMATKEYDATE;
+            pValues[nLength++].Value <<= getFormatKey(true);
 
-            aValues[nLength].Name = PROPERTY_FORMATKEYTIME;
-            aValues[nLength++].Value <<= getFormatKey(false);
+            pValues[nLength].Name = PROPERTY_FORMATKEYTIME;
+            pValues[nLength++].Value <<= getFormatKey(false);
 
             OutputDevice* pDefDev = Application::GetDefaultDevice();
             sal_Int32 nWidth = 0;
@@ -128,8 +129,8 @@ short ODateTimeDialog::run()
 
             if ( nWidth > 4000 )
             {
-                aValues[nLength].Name = PROPERTY_WIDTH;
-                aValues[nLength++].Value <<= nWidth;
+                pValues[nLength].Name = PROPERTY_WIDTH;
+                pValues[nLength++].Value <<= nWidth;
             }
 
             m_pController->executeChecked(SID_DATETIME,aValues);
