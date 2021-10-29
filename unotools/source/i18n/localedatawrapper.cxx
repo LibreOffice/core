@@ -886,26 +886,18 @@ void LocaleDataWrapper::loadDigitGrouping()
      * sequence. Needed additional API and a locale data element.
      */
 
-    if (!aGrouping.hasElements())
-    {
-        aGrouping.realloc(3);   // room for {3,2,0}
-        aGrouping[0] = 0;       // invalidate
-    }
-    if (aGrouping[0])
+    if (aGrouping.hasElements() && aGrouping[0])
         return;
 
     i18n::LanguageCountryInfo aLCInfo( getLanguageCountryInfo());
     if (aLCInfo.Country.equalsIgnoreAsciiCase("IN") || // India
         aLCInfo.Country.equalsIgnoreAsciiCase("BT") )  // Bhutan
     {
-        aGrouping[0] = 3;
-        aGrouping[1] = 2;
-        aGrouping[2] = 0;
+        aGrouping = { 3, 2, 0 };
     }
     else
     {
-        aGrouping[0] = 3;
-        aGrouping[1] = 0;
+        aGrouping = { 3, 0, 0 };
     }
 }
 
