@@ -617,8 +617,9 @@ void lcl_getLabelStringSequence( Sequence< OUString >& rOutLabels, const Referen
     {
         Sequence< uno::Any > aAnies( xLabelSeq->getData());
         rOutLabels.realloc( aAnies.getLength());
+        auto pOutLabels = rOutLabels.getArray();
         for( sal_Int32 i=0; i<aAnies.getLength(); ++i )
-            aAnies[i] >>= rOutLabels[i];
+            aAnies[i] >>= pOutLabels[i];
     }
 }
 
@@ -654,9 +655,10 @@ uno::Sequence< OUString > lcl_DataSequenceToStringSequence(
     {
         uno::Sequence< uno::Any > aValues = xDataSequence->getData();
         aResult.realloc(aValues.getLength());
+        auto pResult = aResult.getArray();
 
         for(sal_Int32 nN=aValues.getLength();nN--;)
-            aValues[nN] >>= aResult[nN];
+            aValues[nN] >>= pResult[nN];
     }
 
     return aResult;
@@ -677,8 +679,9 @@ uno::Sequence< OUString > lcl_DataSequenceToStringSequence(
     {
         Sequence< uno::Any > aAnies( xSeq->getData() );
         aValuesSequence.realloc( aAnies.getLength() );
+        auto pValuesSequence = aValuesSequence.getArray();
         for( sal_Int32 i=0; i<aAnies.getLength(); ++i )
-            aAnies[i] >>= aValuesSequence[i];
+            aAnies[i] >>= pValuesSequence[i];
     }
 
     //special handling for x-values (if x-values do point to categories, indices are used instead )
@@ -871,10 +874,11 @@ lcl_TableData lcl_getDataForLocalTable(
         // iterate over all sequences
         size_t nSeqIdx = 0;
         Sequence< Sequence< OUString > > aComplexLabels(nNumSequences);
+        auto aComplexLabelsRange = asNonConstRange(aComplexLabels);
         for( const auto& rDataSequence : aSequencesToExport )
         {
             OUString aRange;
-            Sequence< OUString >& rCurrentComplexLabel = aComplexLabels[nSeqIdx];
+            Sequence< OUString >& rCurrentComplexLabel = aComplexLabelsRange[nSeqIdx];
             if( rDataSequence.first.is())
             {
                 lcl_getLabelStringSequence( rCurrentComplexLabel, rDataSequence.first );
@@ -886,7 +890,7 @@ lcl_TableData lcl_getDataForLocalTable(
             else if( rDataSequence.second.is())
             {
                 rCurrentComplexLabel.realloc(1);
-                rLabels[nSeqIdx] = rCurrentComplexLabel[0] = lcl_flattenStringSequence(
+                rLabels[nSeqIdx] = rCurrentComplexLabel.getArray()[0] = lcl_flattenStringSequence(
                     rDataSequence.second->generateLabel( chart2::data::LabelOrigin_SHORT_SIDE ));
             }
             if( bSeriesFromColumns )
@@ -920,13 +924,15 @@ lcl_TableData lcl_getDataForLocalTable(
         }
         Sequence< Sequence< Any > >& rComplexAnyLabels = bSeriesFromColumns ? aResult.aComplexColumnDescriptions : aResult.aComplexRowDescriptions;//#i116544#
         rComplexAnyLabels.realloc(aComplexLabels.getLength());
+        auto pComplexAnyLabels = rComplexAnyLabels.getArray();
         for( sal_Int32 nN=0; nN<aComplexLabels.getLength();nN++ )
         {
-            Sequence< OUString >& rSource = aComplexLabels[nN];
-            Sequence< Any >& rTarget = rComplexAnyLabels[nN];
+            Sequence< OUString >& rSource = aComplexLabelsRange[nN];
+            Sequence< Any >& rTarget = pComplexAnyLabels[nN];
             rTarget.realloc( rSource.getLength() );
+            auto pTarget = rTarget.getArray();
             for( sal_Int32 i=0; i<rSource.getLength(); i++ )
-                rTarget[i] <<= rSource[i];
+                pTarget[i] <<= rSource[i];
         }
     }
     catch( const uno::Exception & )
