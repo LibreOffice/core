@@ -482,9 +482,10 @@ void BrowseBox::GetAllSelectedRows( css::uno::Sequence< sal_Int32 >& _rRows ) co
     if( nCount )
     {
         _rRows.realloc( nCount );
-        _rRows[ 0 ] = const_cast< BrowseBox* >( this )->FirstSelectedRow();
+        auto pRows = _rRows.getArray();
+        pRows[ 0 ] = const_cast< BrowseBox* >( this )->FirstSelectedRow();
         for( sal_Int32 nIndex = 1; nIndex < nCount; ++nIndex )
-            _rRows[ nIndex ] = const_cast< BrowseBox* >( this )->NextSelectedRow();
+            pRows[ nIndex ] = const_cast< BrowseBox* >( this )->NextSelectedRow();
         DBG_ASSERT( const_cast< BrowseBox* >( this )->NextSelectedRow() == BROWSER_ENDOFSELECTION,
                     "BrowseBox::GetAllSelectedRows - too many selected rows found" );
     }
@@ -498,6 +499,7 @@ void BrowseBox::GetAllSelectedColumns( css::uno::Sequence< sal_Int32 >& _rColumn
         return;
 
     _rColumns.realloc( nCount );
+    auto pColumns = _rColumns.getArray();
 
     sal_Int32 nIndex = 0;
     const size_t nRangeCount = pColumnSel->GetRangeCount();
@@ -509,7 +511,7 @@ void BrowseBox::GetAllSelectedColumns( css::uno::Sequence< sal_Int32 >& _rColumn
         {
             DBG_ASSERT( nIndex < nCount,
                 "GetAllSelectedColumns - range overflow" );
-            _rColumns[ nIndex ] = nCol;
+            pColumns[ nIndex ] = nCol;
             ++nIndex;
         }
     }
