@@ -388,8 +388,9 @@ static Sequence< OUString > lcl_getLabelSequence( const Reference< chart2::data:
     {
         const Sequence< uno::Any > aAnies( xLabelSeq->getData());
         aLabels.realloc( aAnies.getLength());
+        auto pLabels = aLabels.getArray();
         for( sal_Int32 i=0; i<aAnies.getLength(); ++i )
-            aAnies[i] >>= aLabels[i];
+            aAnies[i] >>= pLabels[i];
     }
 
     return aLabels;
@@ -563,19 +564,13 @@ uno::Sequence< beans::PropertyValue > createArguments(
     if (bUseColumns)
         eRowSource = css::chart::ChartDataRowSource_COLUMNS;
 
-    uno::Sequence< beans::PropertyValue > aArguments(4);
-    aArguments[0] = beans::PropertyValue("DataRowSource"
-        , -1, uno::Any(eRowSource)
-        , beans::PropertyState_DIRECT_VALUE);
-    aArguments[1] = beans::PropertyValue("FirstCellAsLabel"
-        , -1, uno::Any(false)
-        , beans::PropertyState_DIRECT_VALUE);
-    aArguments[2] = beans::PropertyValue("HasCategories"
-        , -1, uno::Any(false)
-        , beans::PropertyState_DIRECT_VALUE);
-    aArguments[3] = beans::PropertyValue("CellRangeRepresentation"
-        , -1, uno::Any(rRangeRepresentation)
-        , beans::PropertyState_DIRECT_VALUE);
+    uno::Sequence<beans::PropertyValue> aArguments{
+        { "DataRowSource", -1, uno::Any(eRowSource), beans::PropertyState_DIRECT_VALUE },
+        { "FirstCellAsLabel", -1, uno::Any(false), beans::PropertyState_DIRECT_VALUE },
+        { "HasCategories", -1, uno::Any(false), beans::PropertyState_DIRECT_VALUE },
+        { "CellRangeRepresentation", -1, uno::Any(rRangeRepresentation),
+          beans::PropertyState_DIRECT_VALUE }
+    };
 
     return aArguments;
 }
@@ -664,16 +659,18 @@ Sequence< Sequence< OUString > > ChartExport::getSplitCategoriesList( const OUSt
                         //we have complex categories
                         //sort the categories name
                         Sequence<Sequence<OUString>>aFinalSplitSource(nLevelCount);
+                        auto pFinalSplitSource = aFinalSplitSource.getArray();
                         for (sal_Int32 i = 0; i < nLevelCount; i++)
                         {
                             sal_Int32 nElemLabel = 0;
-                            aFinalSplitSource[nLevelCount - i - 1].realloc(aAnyCategories.getLength());
+                            pFinalSplitSource[nLevelCount - i - 1].realloc(aAnyCategories.getLength());
+                            auto pSeq = pFinalSplitSource[nLevelCount - i - 1].getArray();
                             for (auto const& elemLabel : aAnyCategories)
                             {
                                 // make sure elemLabel[i] exists!
                                 if (elemLabel.getLength() > i)
                                 {
-                                    aFinalSplitSource[nLevelCount - i - 1][nElemLabel] = elemLabel[i].get<OUString>();
+                                    pSeq[nElemLabel] = elemLabel[i].get<OUString>();
                                     nElemLabel++;
                                 }
                             }
@@ -1599,7 +1596,7 @@ namespace {
                 uno::Sequence<Reference<chart2::XDataSeries> >& rAxisSeriesSeq = aSplitSeries[nVectorPos];
                 sal_Int32 nLength = rAxisSeriesSeq.getLength();
                 rAxisSeriesSeq.realloc(nLength + 1);
-                rAxisSeriesSeq[nLength] = xSeries;
+                rAxisSeriesSeq.getArray()[nLength] = xSeries;
             }
             // if the first series attached to secondary axis, then export those series first, which are attached to primary axis
             // also the MS Office export every time in this order
