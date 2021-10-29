@@ -159,7 +159,7 @@ const short ROLE_TABLE[][2] =
    */
 AccObject::AccObject(XAccessible* pAcc, AccObjectManagerAgent* pAgent,
                      AccEventListener* pListener) :
-        m_resID     (NULL),
+        m_resID     (0),
         m_pParantID (nullptr),
         m_pIMAcc    (nullptr),
         m_pParentObj(nullptr),

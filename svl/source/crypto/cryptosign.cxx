@@ -1426,7 +1426,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
         HCRYPTMSG hDecodedMsg = CryptMsgOpenToDecode(PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
                                                      CMSG_DETACHED_FLAG,
                                                      CMSG_SIGNED,
-                                                     NULL,
+                                                     0,
                                                      nullptr,
                                                      nullptr);
         if (!hDecodedMsg)
@@ -2092,7 +2092,7 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
     HCRYPTMSG hMsg = CryptMsgOpenToDecode(PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
                                           CMSG_DETACHED_FLAG,
                                           0,
-                                          NULL,
+                                          0,
                                           nullptr,
                                           nullptr);
     if (!hMsg)
@@ -2162,7 +2162,7 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
     // initializes it with the certificates from the message.
     HCERTSTORE hStoreHandle = CertOpenStore(CERT_STORE_PROV_MSG,
                                             PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
-                                            NULL,
+                                            0,
                                             0,
                                             hMsg);
     if (!hStoreHandle)

@@ -376,7 +376,7 @@ bool AccObjectManagerAgent::IsTopWinAcc(XAccessible* pXAcc)
     {
         return pWinManager->IsTopWinAcc( pXAcc );
     }
-    return NULL;
+    return false;
 }
 
 bool AccObjectManagerAgent::IsStateManageDescendant(XAccessible* pXAcc)

@@ -45,7 +45,7 @@ public:
     BEGIN_COM_MAP(CAccValue)
     COM_INTERFACE_ENTRY(IAccessibleValue)
     COM_INTERFACE_ENTRY(IUNOXWrapper)
-    COM_INTERFACE_ENTRY_FUNC_BLIND(NULL,SmartQI_)
+    COM_INTERFACE_ENTRY_FUNC_BLIND(0,SmartQI_)
 #if defined __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Winconsistent-missing-override"
