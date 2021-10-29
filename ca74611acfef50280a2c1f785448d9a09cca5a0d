@@ -22,6 +22,30 @@
       },
       "revId": "ca74611acfef50280a2c1f785448d9a09cca5a0d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bf6726a_30b6d1ef",
+        "filename": "sw/source/core/frmedt/fecopy.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-10-29T09:37:25Z",
+      "side": 0,
+      "message": "i have an alternative idea: what happens if you delete the entire \"if (point \u003d\u003d mark)\" special case and let CopyRange be called with this pam?\n\nthe IsEmptyRange function should avoid an immediate return if there are flys anchored there.\n\nalthough i\u0027m not sure if it will copy some paragraph formatting from the clipboard nodes, maybe that\u0027s not desirable.",
+      "parentUuid": "ed1f28d7_0ce38a19",
+      "range": {
+        "startLine": 1025,
+        "startChar": 0,
+        "endLine": 1026,
+        "endChar": 78
+      },
+      "revId": "ca74611acfef50280a2c1f785448d9a09cca5a0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
