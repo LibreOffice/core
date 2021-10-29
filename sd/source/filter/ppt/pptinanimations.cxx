@@ -681,8 +681,9 @@ void AnimationImporter::fillNode( Reference< XAnimationNode > const & xNode, con
 
             sal_Int32 nSize = aUserData.getLength();
             aUserData.realloc(nSize+1);
-            aUserData[nSize].Name = "node-type";
-            aUserData[nSize].Value <<= nNodeType;
+            auto pUserData = aUserData.getArray();
+            pUserData[nSize].Name = "node-type";
+            pUserData[nSize].Value <<= nNodeType;
         }
     }
 
@@ -693,8 +694,9 @@ void AnimationImporter::fillNode( Reference< XAnimationNode > const & xNode, con
         {
             sal_Int32 nSize = aUserData.getLength();
             aUserData.realloc(nSize+1);
-            aUserData[nSize].Name = "group-id";
-            aUserData[nSize].Value <<= nGroupId;
+            auto pUserData = aUserData.getArray();
+            pUserData[nSize].Name = "group-id";
+            pUserData[nSize].Value <<= nGroupId;
         }
     }
 
@@ -717,8 +719,9 @@ void AnimationImporter::fillNode( Reference< XAnimationNode > const & xNode, con
             }
             sal_Int32 nSize = aUserData.getLength();
             aUserData.realloc(nSize+1);
-            aUserData[nSize].Name = "preset-class";
-            aUserData[nSize].Value <<= nEffectPresetClass;
+            auto pUserData = aUserData.getArray();
+            pUserData[nSize].Name = "preset-class";
+            pUserData[nSize].Value <<= nEffectPresetClass;
         }
     }
 
@@ -728,7 +731,8 @@ void AnimationImporter::fillNode( Reference< XAnimationNode > const & xNode, con
         {
             sal_Int32 nSize = aUserData.getLength();
             aUserData.realloc(nSize+1);
-            aUserData[nSize].Name = "preset-id";
+            auto pUserData = aUserData.getArray();
+            pUserData[nSize].Name = "preset-id";
 
             const oox::ppt::preset_mapping* p = oox::ppt::preset_mapping::getList();
             while( p->mpStrPresetId && ((p->mnPresetClass != nEffectPresetClass) || (p->mnPresetId != nPresetId )) )
@@ -736,7 +740,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode > const & xNode, con
 
             if( p->mpStrPresetId )
             {
-                aUserData[nSize].Value <<= OUString::createFromAscii( p->mpStrPresetId );
+                pUserData[nSize].Value <<= OUString::createFromAscii( p->mpStrPresetId );
             }
             else
             {
@@ -753,7 +757,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode > const & xNode, con
                 }
                 sBuffer.append( nPresetId );
 
-                aUserData[nSize].Value <<= sBuffer.makeStringAndClear();
+                pUserData[nSize].Value <<= sBuffer.makeStringAndClear();
             }
         }
     }
@@ -767,8 +771,9 @@ void AnimationImporter::fillNode( Reference< XAnimationNode > const & xNode, con
             {
                 sal_Int32 nSize = aUserData.getLength();
                 aUserData.realloc(nSize+1);
-                aUserData[nSize].Name = "preset-sub-type";
-                aUserData[nSize].Value <<= oox::ppt::getConvertedSubType( nEffectPresetClass, nPresetId, nPresetSubType );
+                auto pUserData = aUserData.getArray();
+                pUserData[nSize].Name = "preset-sub-type";
+                pUserData[nSize].Value <<= oox::ppt::getConvertedSubType( nEffectPresetClass, nPresetId, nPresetSubType );
             }
         }
     }
@@ -779,8 +784,9 @@ void AnimationImporter::fillNode( Reference< XAnimationNode > const & xNode, con
         {
             sal_Int32 nSize = aUserData.getLength();
             aUserData.realloc(nSize+1);
-            aUserData[nSize].Name = "after-effect";
-            aUserData[nSize].Value <<= bAfterEffect;
+            auto pUserData = aUserData.getArray();
+            pUserData[nSize].Name = "after-effect";
+            pUserData[nSize].Value <<= bAfterEffect;
         }
     }
 
@@ -791,8 +797,9 @@ void AnimationImporter::fillNode( Reference< XAnimationNode > const & xNode, con
         {
             sal_Int32 nSize = aUserData.getLength();
             aUserData.realloc(nSize+1);
-            aUserData[nSize].Name = "master-rel";
-            aUserData[nSize].Value <<= nMasterRel;
+            auto pUserData = aUserData.getArray();
+            pUserData[nSize].Name = "master-rel";
+            pUserData[nSize].Value <<= nMasterRel;
         }
     }
 
@@ -1315,10 +1322,9 @@ Any AnimationImporter::implGetColorAny( sal_Int32 nMode, sal_Int32  nA, sal_Int3
             dump( "hsl(%ld", nA );
             dump( ",%ld", nB );
             dump( ",%ld)", nC );
-            Sequence< double > aHSL( 3 );
-            aHSL[0] = nA * 360.0/255.0;
-            aHSL[1] = nB / 255.0;
-            aHSL[2] = nC / 255.0;
+            Sequence< double > aHSL{ nA * 360.0/255.0,
+                                     nB / 255.0,
+                                     nC / 255.0 };
             return makeAny( aHSL );
         }
 
@@ -2125,7 +2131,9 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
         nKeyTimes++;
 
     Sequence< double > aKeyTimes( nKeyTimes );
+    auto aKeyTimesRange = asNonConstRange(aKeyTimes);
     Sequence< Any > aValues( nKeyTimes );
+    auto aValuesRange = asNonConstRange(aValues);
     OUString aFormula;
 
     pIter = pAtom->findFirstChildAtom(DFF_msofbtAnimKeyTime);
@@ -2137,7 +2145,7 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
             sal_Int32 nTemp(0);
             mrStCtrl.ReadInt32(nTemp);
             double fTemp = static_cast<double>(nTemp) / 1000.0;
-            aKeyTimes[nKeyTime] = fTemp;
+            aKeyTimesRange[nKeyTime] = fTemp;
             if( fTemp == -1 )
                 bToNormalize = true;
 
@@ -2154,7 +2162,7 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
                         if (importAttributeValue(pValue, aValue2) && aFormula.isEmpty())
                             aValue2 >>= aFormula;
                     }
-                    aValues[nKeyTime] = aValue1;
+                    aValuesRange[nKeyTime] = aValue1;
                 }
             }
         }
@@ -2218,7 +2226,7 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
         // if TimeAnimationValueList contains time -1000, key points must be evenly distributed between 0 and 1 ([MS-PPT] 2.8.31)
         for( int nKeyTime = 0; nKeyTime < nKeyTimes; ++nKeyTime )
         {
-            aKeyTimes[nKeyTime] = static_cast<double>(nKeyTime) / static_cast<double>(nKeyTimes - 1);
+            aKeyTimesRange[nKeyTime] = static_cast<double>(nKeyTime) / static_cast<double>(nKeyTimes - 1);
         }
     }
 

@@ -20,6 +20,8 @@
 #include <config_features.h>
 
 #include <View.hxx>
+
+#include <comphelper/propertyvalue.hxx>
 #include <osl/file.hxx>
 #include <editeng/outlobj.hxx>
 #include <sfx2/bindings.hxx>
@@ -509,9 +511,8 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
                     {
                         //TODO/MBA: testing
                         OUString aName;
-                        uno::Sequence < beans::PropertyValue > aMedium(1);
-                        aMedium[0].Name = "URL" ;
-                        aMedium[0].Value <<= aCurrentDropFile ;
+                        uno::Sequence < beans::PropertyValue > aMedium{ comphelper::makePropertyValue(
+                            "URL", aCurrentDropFile) };
 
                         uno::Reference < embed::XEmbeddedObject > xObj = mpDocSh->GetEmbeddedObjectContainer().
                                 InsertEmbeddedObject( aMedium, aName );

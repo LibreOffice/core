@@ -440,7 +440,7 @@ void CustomAnimationEffect::setPresetClassAndId( sal_Int16 nPresetClass, const O
     if( !bFoundPresetClass )
     {
         aUserData.realloc( nLength + 1);
-        auto& el = aUserData[nLength];
+        auto& el = aUserData.getArray()[nLength];
         el.Name = "preset-class";
         el.Value <<= mnPresetClass;
         ++nLength;
@@ -449,7 +449,7 @@ void CustomAnimationEffect::setPresetClassAndId( sal_Int16 nPresetClass, const O
     if( !bFoundPresetId && maPresetId.getLength() > 0 )
     {
         aUserData.realloc( nLength + 1);
-        auto& el = aUserData[nLength];
+        auto& el = aUserData.getArray()[nLength];
         el.Name = "preset-id";
         el.Value <<= maPresetId;
     }
@@ -487,7 +487,7 @@ void CustomAnimationEffect::setNodeType( sal_Int16 nNodeType )
     if( !bFound )
     {
         aUserData.realloc( nLength + 1);
-        auto& el = aUserData[nLength];
+        auto& el = aUserData.getArray()[nLength];
         el.Name = "node-type";
         el.Value <<= mnNodeType;
     }
@@ -522,7 +522,7 @@ void CustomAnimationEffect::setGroupId( sal_Int32 nGroupId )
     if( !bFound )
     {
         aUserData.realloc( nLength + 1);
-        auto& el = aUserData[nLength];
+        auto& el = aUserData.getArray()[nLength];
         el.Name = "group-id";
         el.Value <<= mnGroupId;
     }
@@ -1333,7 +1333,7 @@ void CustomAnimationEffect::setColor( sal_Int32 nIndex, const Any& rColor )
                         {
                             if( aValues.getLength() > nIndex )
                             {
-                                aValues[nIndex] = rColor;
+                                aValues.getArray()[nIndex] = rColor;
                                 xAnimate->setValues( aValues );
                             }
                         }
@@ -2000,8 +2000,9 @@ void stl_process_after_effect_node_func(AfterEffectNode const & rNode)
             Sequence< NamedValue > aUserData( rNode.mxNode->getUserData() );
             sal_Int32 nSize = aUserData.getLength();
             aUserData.realloc(nSize+1);
-            aUserData[nSize].Name = "master-element";
-            aUserData[nSize].Value <<= xMasterNode;
+            auto pUserData = aUserData.getArray();
+            pUserData[nSize].Name = "master-element";
+            pUserData[nSize].Value <<= xMasterNode;
             rNode.mxNode->setUserData( aUserData );
 
             // insert after effect node into timeline
