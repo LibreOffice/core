@@ -82,7 +82,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:FormatPaintbrush">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -92,7 +91,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:StyleUpdateByExample">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -102,7 +100,6 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:StyleNewByExample">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>

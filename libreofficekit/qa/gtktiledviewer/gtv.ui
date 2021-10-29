@@ -111,7 +111,6 @@
         <child>
           <object class="GtkToolButton" id="findbar_close">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes">__glade_unnamed_1</property>
             <property name="use_underline">True</property>
             <property name="icon_name">window-close-symbolic</property>
@@ -143,7 +142,6 @@
         <child>
           <object class="GtkToolButton" id="findbar_next">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes">__glade_unnamed_3</property>
             <property name="use_underline">True</property>
             <property name="icon_name">go-down-symbolic</property>
@@ -157,7 +155,6 @@
         <child>
           <object class="GtkToolButton" id="findbar_prev">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes">toolbutton</property>
             <property name="use_underline">True</property>
             <property name="icon_name">go-up-symbolic</property>
@@ -171,7 +168,6 @@
         <child>
           <object class="GtkToggleToolButton" id="findbar_findall">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes">Highlight all</property>
             <property name="use_underline">True</property>
             <signal name="clicked" handler="toggleFindAll" swapped="no"/>
@@ -213,7 +209,6 @@
     <child>
       <object class="GtkToolButton" id="btn_save">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">.uno:Save</property>
         <property name="icon_name">document-save-symbolic</property>
         <signal name="clicked" handler="btn_clicked" swapped="no"/>
@@ -236,7 +231,6 @@
     <child>
       <object class="GtkToolButton" id="btn_copy">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">Copy</property>
         <property name="use_underline">True</property>
         <property name="icon_name">edit-copy-symbolic</property>
@@ -250,7 +244,6 @@
     <child>
       <object class="GtkToolButton" id="btn_paste">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">Paste</property>
         <property name="use_underline">True</property>
         <property name="icon_name">edit-paste-symbolic</property>
@@ -274,7 +267,6 @@
     <child>
       <object class="GtkToolButton" id="btn_undo">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">.uno:Undo</property>
         <property name="use_underline">True</property>
         <property name="icon_name">edit-undo-symbolic</property>
@@ -288,7 +280,6 @@
     <child>
       <object class="GtkToolButton" id="btn_redo">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">.uno:Redo</property>
         <property name="use_underline">True</property>
         <property name="icon_name">edit-redo-symbolic</property>
@@ -302,7 +293,6 @@
     <child>
       <object class="GtkToolButton" id="btn_docrepair">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">Document Repair</property>
         <property name="use_underline">True</property>
         <property name="icon_name">document-properties</property>
@@ -316,7 +306,6 @@
     <child>
       <object class="GtkToolButton" id="btn_docredlines">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">Document redlines</property>
         <property name="use_underline">True</property>
         <property name="icon_name">system-run</property>
@@ -340,7 +329,6 @@
     <child>
       <object class="GtkToggleToolButton" id="btn_find">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">Find</property>
         <property name="use_underline">True</property>
         <property name="icon_name">edit-find-symbolic</property>
@@ -364,7 +352,6 @@
     <child>
       <object class="GtkToolButton" id="btn_zoomin">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">Zoom In</property>
         <property name="use_underline">True</property>
         <property name="icon_name">zoom-in-symbolic</property>
@@ -378,7 +365,6 @@
     <child>
       <object class="GtkToolButton" id="btn_zoomoriginal">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">Zoom Original</property>
         <property name="use_underline">True</property>
         <property name="icon_name">zoom-original-symbolic</property>
@@ -392,7 +378,6 @@
     <child>
       <object class="GtkToolButton" id="btn_zoomout">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">Zoom out</property>
         <property name="use_underline">True</property>
         <property name="icon_name">zoom-out-symbolic</property>
@@ -445,7 +430,6 @@
     <child>
       <object class="GtkToggleToolButton" id="btn_editmode">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">Turn on/off edit mode</property>
         <property name="use_underline">True</property>
         <property name="icon_name">insert-text-symbolic</property>
@@ -490,7 +474,6 @@
     <child>
       <object class="GtkToolButton" id="btn_unodebugger">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">Uno Command Debugger</property>
         <property name="use_underline">True</property>
         <property name="icon_name">dialog-question-symbolic</property>
@@ -514,7 +497,6 @@
     <child>
       <object class="GtkToolButton" id="btn_createview">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">Create new view</property>
         <property name="use_underline">True</property>
         <property name="icon_name">view-continuous-symbolic</property>
@@ -528,7 +510,6 @@
     <child>
       <object class="GtkToolButton" id="btn_rulerstate">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">.uno:UpdateRuler</property>
         <property name="use_underline">True</property>
         <property name="icon_name">text-x-generic</property>
@@ -547,7 +528,6 @@
     <child>
       <object class="GtkToggleToolButton" id="btn_bold">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">.uno:Bold</property>
         <property name="use_underline">True</property>
         <property name="icon_name">format-text-bold-symbolic</property>
@@ -561,7 +541,6 @@
     <child>
       <object class="GtkToggleToolButton" id="btn_italic">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">.uno:Italic</property>
         <property name="use_underline">True</property>
         <property name="icon_name">format-text-italic-symbolic</property>
@@ -575,7 +554,6 @@
     <child>
       <object class="GtkToggleToolButton" id="btn_underline">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">.uno:Underline</property>
         <property name="use_underline">True</property>
         <property name="icon_name">format-text-underline-symbolic</property>
@@ -589,7 +567,6 @@
     <child>
       <object class="GtkToggleToolButton" id="btn_strikethrough">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">.uno:Strikeout</property>
         <property name="use_underline">True</property>
         <property name="icon_name">format-text-strikethrough-symbolic</property>
@@ -613,7 +590,6 @@
     <child>
       <object class="GtkToggleToolButton" id="btn_superscript">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">.uno:SuperScript</property>
         <property name="use_underline">True</property>
         <property name="icon_name">go-up-symbolic</property>
@@ -627,7 +603,6 @@
     <child>
       <object class="GtkToggleToolButton" id="btn_subscript">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">.uno:SubScript</property>
         <property name="use_underline">True</property>
         <property name="icon_name">go-down-symbolic</property>
@@ -651,7 +626,6 @@
     <child>
       <object class="GtkToggleToolButton" id="btn_justifyleft">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">.uno:LeftPara</property>
         <property name="use_underline">True</property>
         <property name="icon_name">format-justify-left-symbolic</property>
@@ -665,7 +639,6 @@
     <child>
       <object class="GtkToggleToolButton" id="btn_justifycenter">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">.uno:CenterPara</property>
         <property name="use_underline">True</property>
         <property name="icon_name">format-justify-center-symbolic</property>
@@ -679,7 +652,6 @@
     <child>
       <object class="GtkToggleToolButton" id="btn_justifyright">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">.uno:RightPara</property>
         <property name="use_underline">True</property>
         <property name="icon_name">format-justify-right-symbolic</property>
@@ -693,7 +665,6 @@
     <child>
       <object class="GtkToggleToolButton" id="btn_justifyfill">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">.uno:JustifyPara</property>
         <property name="use_underline">True</property>
         <property name="icon_name">format-justify-fill-symbolic</property>
@@ -717,7 +688,6 @@
     <child>
       <object class="GtkToolButton" id="btn_insertannotation">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">.uno:InsertAnnotation</property>
         <property name="use_underline">True</property>
         <property name="icon_name">changes-allow-symbolic</property>
@@ -731,7 +701,6 @@
     <child>
       <object class="GtkToolButton" id="btn_removeannotation">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">.uno:DeleteComment</property>
         <property name="use_underline">True</property>
         <property name="icon_name">changes-prevent-symbolic</property>
@@ -745,7 +714,6 @@
     <child>
       <object class="GtkToggleToolButton" id="btn_trackchanges">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="label" translatable="yes">.uno:TrackChanges</property>
         <property name="use_underline">True</property>
         <property name="icon_name">media-record-symbolic</property>

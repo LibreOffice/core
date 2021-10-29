@@ -186,7 +186,6 @@
                 <child>
                   <object class="GtkMenuToolButton" id=".uno:FillColor">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes" context="sidebararea|color|tooltip_text">Select the color to apply.</property>
                     <property name="use_underline">True</property>
                   </object>
@@ -346,7 +345,6 @@
             <child>
               <object class="GtkMenuToolButton" id="sidebargradient">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes" context="sidebararea|gradient|tooltip_text">Specify the variation of gradient transparency.</property>
                 <property name="use_underline">True</property>
               </object>

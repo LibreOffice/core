@@ -154,7 +154,6 @@
                     <child>
                       <object class="GtkToolButton" id="TBI_APPLY">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="valign">start</property>
                         <property name="label" translatable="yes" context="floatingcontour|TBI_APPLY">Apply</property>
                         <property name="icon_name">svx/res/cd01.png</property>
@@ -182,7 +181,6 @@
                     <child>
                       <object class="GtkToggleToolButton" id="TBI_WORKPLACE">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="valign">start</property>
                         <property name="label" translatable="yes" context="floatingcontour|TBI_WORKPLACE">Workspace</property>
                         <property name="icon_name">svx/res/cd02.png</property>
@@ -210,7 +208,6 @@
                     <child>
                       <object class="GtkToggleToolButton" id="TBI_SELECT">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="valign">start</property>
                         <property name="label" translatable="yes" context="floatingcontour|TBI_SELECT">Select</property>
                         <property name="icon_name">svx/res/cd05.png</property>
@@ -228,7 +225,6 @@
                     <child>
                       <object class="GtkToggleToolButton" id="TBI_RECT">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="valign">start</property>
                         <property name="label" translatable="yes" context="floatingcontour|TBI_RECT">Rectangle</property>
                         <property name="icon_name">svx/res/cd06.png</property>
@@ -246,7 +242,6 @@
                     <child>
                       <object class="GtkToggleToolButton" id="TBI_CIRCLE">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="valign">start</property>
                         <property name="label" translatable="yes" context="floatingcontour|TBI_CIRCLE">Ellipse</property>
                         <property name="icon_name">svx/res/cd07.png</property>
@@ -264,7 +259,6 @@
                     <child>
                       <object class="GtkToggleToolButton" id="TBI_POLY">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="valign">start</property>
                         <property name="label" translatable="yes" context="floatingcontour|TBI_POLY">Polygon</property>
                         <property name="icon_name">svx/res/cd08.png</property>
@@ -292,7 +286,6 @@
                     <child>
                       <object class="GtkToggleToolButton" id="TBI_POLYEDIT">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="valign">start</property>
                         <property name="label" translatable="yes" context="floatingcontour|TBI_POLYEDIT">Edit Points</property>
                         <property name="icon_name">svx/res/cd015.png</property>
@@ -310,7 +303,6 @@
                     <child>
                       <object class="GtkToggleToolButton" id="TBI_POLYMOVE">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="valign">start</property>
                         <property name="label" translatable="yes" context="floatingcontour|TBI_POLYMOVE">Move Points</property>
                         <property name="icon_name">svx/res/cd016.png</property>
@@ -328,7 +320,6 @@
                     <child>
                       <object class="GtkToggleToolButton" id="TBI_POLYINSERT">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="valign">start</property>
                         <property name="label" translatable="yes" context="floatingcontour|TBI_POLYINSERT">Insert Points</property>
                         <property name="icon_name">svx/res/cd017.png</property>
@@ -346,7 +337,6 @@
                     <child>
                       <object class="GtkToolButton" id="TBI_POLYDELETE">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="valign">start</property>
                         <property name="label" translatable="yes" context="floatingcontour|TBI_POLYDELETE">Delete Points</property>
                         <property name="icon_name">svx/res/cd018.png</property>
@@ -374,7 +364,6 @@
                     <child>
                       <object class="GtkToolButton" id="TBI_AUTOCONTOUR">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="floatingcontour|TBI_AUTOCONTOUR">AutoContour</property>
                         <property name="use_underline">True</property>
                         <property name="icon_name">svx/res/cd025.png</property>
@@ -402,7 +391,6 @@
                     <child>
                       <object class="GtkToolButton" id="TBI_UNDO">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="valign">start</property>
                         <property name="label" translatable="yes" context="floatingcontour|TBI_UNDO">Undo </property>
                         <property name="icon_name">svx/res/cd020.png</property>
@@ -420,7 +408,6 @@
                     <child>
                       <object class="GtkToolButton" id="TBI_REDO">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="valign">start</property>
                         <property name="label" translatable="yes" context="floatingcontour|TBI_REDO">Redo</property>
                         <property name="icon_name">svx/res/cd021.png</property>
@@ -438,7 +425,6 @@
                     <child>
                       <object class="GtkToggleToolButton" id="TBI_PIPETTE">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="valign">start</property>
                         <property name="label" translatable="yes" context="floatingcontour|TBI_PIPETTE">Pipette</property>
                         <property name="icon_name">svx/res/cd026.png</property>

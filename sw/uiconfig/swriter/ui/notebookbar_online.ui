@@ -20,7 +20,6 @@
             <child>
               <object class="GtkToolButton" id="Home-CharFontName">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="action_name">.uno:CharFontName</property>
               </object>
@@ -44,7 +43,6 @@
             <child>
               <object class="GtkToolButton" id="Home-FontHeight">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="action_name">.uno:FontHeight</property>
               </object>
               <packing>
@@ -68,7 +66,6 @@
             <child>
               <object class="GtkToolButton" id="Home-StylesPreview">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="halign">center</property>
                 <property name="hexpand">True</property>
                 <property name="action_name">.uno:StylesPreview</property>

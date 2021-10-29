@@ -71,7 +71,6 @@
                 <child>
                   <object class="GtkRadioToolButton" id=".uno:WrapOff">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarwrap|wrapoff|tooltip_text">None</property>
                     <property name="use_underline">True</property>
                     <property name="active">True</property>
@@ -84,7 +83,6 @@
                 <child>
                   <object class="GtkRadioToolButton" id=".uno:WrapOn">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarwrap|wrapon|tooltip_text">Parallel</property>
                     <property name="use_underline">True</property>
                     <property name="group">.uno:WrapOff</property>
@@ -97,7 +95,6 @@
                 <child>
                   <object class="GtkRadioToolButton" id=".uno:WrapIdeal">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarwrap|wrapideal|tooltip_text">Optimal</property>
                     <property name="use_underline">True</property>
                     <property name="group">.uno:WrapOff</property>
@@ -110,7 +107,6 @@
                 <child>
                   <object class="GtkRadioToolButton" id=".uno:WrapLeft">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarwrap|wrapbefore|tooltip_text">Before</property>
                     <property name="use_underline">True</property>
                     <property name="group">.uno:WrapOff</property>
@@ -123,7 +119,6 @@
                 <child>
                   <object class="GtkRadioToolButton" id=".uno:WrapRight">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarwrap|wrapafter|tooltip_text">After</property>
                     <property name="use_underline">True</property>
                     <property name="group">.uno:WrapOff</property>
@@ -136,7 +131,6 @@
                 <child>
                   <object class="GtkRadioToolButton" id=".uno:WrapThrough">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarwrap|wrapthrough|tooltip_text">Through</property>
                     <property name="use_underline">True</property>
                     <property name="group">.uno:WrapOff</property>
