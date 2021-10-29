@@ -62,7 +62,7 @@ struct VCL_DLLPUBLIC SystemEnvData
 #elif defined( IOS )
     // Nothing
 #elif defined( UNX )
-    enum class Platform { Wayland, Xcb };
+    enum class Platform { Wayland, Xcb, WASM };
 
     void*               pDisplay;       // the relevant display connection
     SalFrame*           pSalFrame;      // contains a salframe, if object has one

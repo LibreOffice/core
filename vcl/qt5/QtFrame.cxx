@@ -183,13 +183,21 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
             pChildWindow->setTransientParent(pParentWindow);
     }
 
+    if (QGuiApplication::platformName() == "wayland")
+        m_aSystemData.platform = SystemEnvData::Platform::Wayland;
+    else if (QGuiApplication::platformName() == "xcb")
+        m_aSystemData.platform = SystemEnvData::Platform::Xcb;
+    else if (QGuiApplication::platformName() == "wasm")
+        m_aSystemData.platform = SystemEnvData::Platform::WASM;
+    else
+        std::abort();
+
     // Calling 'QWidget::winId()' implicitly enables native windows to be used
     // rather than "alien widgets" that are unknown to the windowing system,
     // s. https://doc.qt.io/qt-5/qwidget.html#native-widgets-vs-alien-widgets
     // Avoid this on Wayland due to problems with missing 'mouseMoveEvent's,
     // s. tdf#122293/QTBUG-75766
-    const bool bWayland = QGuiApplication::platformName() == "wayland";
-    if (!bWayland)
+    if (m_aSystemData.platform == SystemEnvData::Platform::Xcb)
         m_aSystemData.SetWindowHandle(m_pQWidget->winId());
     else
     {
@@ -206,10 +214,6 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     m_aSystemData.pWidget = m_pQWidget;
     //m_aSystemData.nScreen = m_nXScreen.getXScreen();
     m_aSystemData.toolkit = SystemEnvData::Toolkit::Qt;
-    if (!bWayland)
-        m_aSystemData.platform = SystemEnvData::Platform::Xcb;
-    else
-        m_aSystemData.platform = SystemEnvData::Platform::Wayland;
 
     SetIcon(SV_ICON_ID_OFFICE);
 
@@ -226,7 +230,7 @@ void QtFrame::fixICCCMwindowGroup()
         return;
     g_bNeedsWmHintsWindowGroup = false;
 
-    if (QGuiApplication::platformName() != "xcb")
+    if (m_aSystemData.platform != SystemEnvData::Platform::Xcb)
         return;
     if (QVersionNumber::fromString(qVersion()) >= QVersionNumber(5, 12))
         return;
@@ -1327,7 +1331,7 @@ void QtFrame::SetScreenNumber(unsigned int nScreen)
 void QtFrame::SetApplicationID(const OUString& rWMClass)
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) && QT5_USING_X11
-    if (QGuiApplication::platformName() != "xcb" || !m_pTopLevel)
+    if (m_aSystemData.platform != SystemEnvData::Platform::Xcb || !m_pTopLevel)
         return;
 
     OString aResClass = OUStringToOString(rWMClass, RTL_TEXTENCODING_ASCII_US);
