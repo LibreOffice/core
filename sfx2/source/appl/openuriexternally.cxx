@@ -17,7 +17,6 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustring.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -35,12 +34,14 @@ class URITools
 private:
     Timer aOpenURITimer { "sfx2::openUriExternallyTimer" };
     OUString msURI;
+    weld::Widget* mpDialogParent;
     bool mbHandleSystemShellExecuteException;
     DECL_LINK(onOpenURI, Timer*, void);
 
 public:
-    URITools()
-        : mbHandleSystemShellExecuteException(false)
+    URITools(weld::Widget* pDialogParent)
+        : mpDialogParent(pDialogParent)
+        , mbHandleSystemShellExecuteException(false)
     {
     }
     void openURI(const OUString& sURI, bool bHandleSystemShellExecuteException);
@@ -89,11 +90,10 @@ IMPL_LINK_NOARG(URITools, onOpenURI, Timer*, void)
                     "unexpected IllegalArgumentException: " + e.Message);
             }
             SolarMutexGuard g;
-            weld::Window *pWindow = SfxGetpApp()->GetTopWindow();
             if (flags == css::system::SystemShellExecuteFlags::URIS_ONLY) {
                 std::unique_ptr<weld::MessageDialog> eb(
                     Application::CreateMessageDialog(
-                        pWindow, VclMessageType::Warning, VclButtonsType::OkCancel,
+                        mpDialogParent, VclMessageType::Warning, VclButtonsType::OkCancel,
                         SfxResId(STR_DANGEROUS_TO_OPEN)));
                 eb->set_primary_text(eb->get_primary_text().replaceFirst("$(ARG1)", msURI));
                 if (eb->run() == RET_OK) {
@@ -101,7 +101,7 @@ IMPL_LINK_NOARG(URITools, onOpenURI, Timer*, void)
                     continue;
                 }
             } else {
-                std::unique_ptr<weld::MessageDialog> eb(Application::CreateMessageDialog(pWindow,
+                std::unique_ptr<weld::MessageDialog> eb(Application::CreateMessageDialog(mpDialogParent,
                                                                          VclMessageType::Warning, VclButtonsType::Ok,
                                                                          SfxResId(STR_NO_ABS_URI_REF)));
                 eb->set_primary_text(eb->get_primary_text().replaceFirst("$(ARG1)", msURI));
@@ -112,8 +112,7 @@ IMPL_LINK_NOARG(URITools, onOpenURI, Timer*, void)
                 throw;
             }
             SolarMutexGuard g;
-            weld::Window *pWindow = SfxGetpApp()->GetTopWindow();
-            std::unique_ptr<weld::MessageDialog> eb(Application::CreateMessageDialog(pWindow,
+            std::unique_ptr<weld::MessageDialog> eb(Application::CreateMessageDialog(mpDialogParent,
                                                                      VclMessageType::Warning, VclButtonsType::Ok,
                                                                      SfxResId(STR_NO_WEBBROWSER_FOUND)));
             eb->set_primary_text(
@@ -127,9 +126,9 @@ IMPL_LINK_NOARG(URITools, onOpenURI, Timer*, void)
     }
 }
 
-void sfx2::openUriExternally(const OUString& sURI, bool bHandleSystemShellExecuteException)
+void sfx2::openUriExternally(const OUString& sURI, bool bHandleSystemShellExecuteException, weld::Widget* pDialogParent)
 {
-    URITools* uriTools = new URITools;
+    URITools* uriTools = new URITools(pDialogParent);
     uriTools->openURI(sURI, bHandleSystemShellExecuteException);
 }
 

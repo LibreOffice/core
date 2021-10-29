@@ -14,6 +14,11 @@
 
 #include <rtl/ustring.hxx>
 
+namespace weld
+{
+class Widget;
+}
+
 namespace sfx2
 {
 /** Open a URI via com.sun.star.system.SystemShellExecute
@@ -26,7 +31,8 @@ namespace sfx2
     given bHandleSystemShellExecuteException is false (in which case the
     exception is re-thrown).
 */
-void openUriExternally(const OUString& sURI, bool bHandleSystemShellExecuteException);
+void openUriExternally(const OUString& sURI, bool bHandleSystemShellExecuteException,
+                       weld::Widget* pDialogParent);
 };
 
 #endif
