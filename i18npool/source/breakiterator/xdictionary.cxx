@@ -151,7 +151,7 @@ void xdictionary::initDictionaryData(const char *pLang)
     osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
     for(const datacache & i : aLoadedCache)
     {
-        if( i.maLang != pLang )
+        if( i.maLang == pLang )
         {
             data = i.maData;
             return;
