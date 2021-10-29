@@ -217,6 +217,7 @@ public:
     */
     inline E const * end() const;
 
+#if !defined LIBO_INTERNAL_ONLY
     /** Non-const index operator: Obtains a reference to element indexed at
         given position.
         The implementation does not check for array bounds!
@@ -228,6 +229,7 @@ public:
         @return non-const C++ reference to element
     */
     inline E & SAL_CALL operator [] ( sal_Int32 nIndex );
+#endif
 
     /** Const index operator: Obtains a reference to element indexed at
         given position.  The implementation does not check for array bounds!
