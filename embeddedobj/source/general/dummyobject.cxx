@@ -114,10 +114,7 @@ uno::Sequence< sal_Int32 > SAL_CALL ODummyEmbeddedObject::getReachableStates()
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
 
-    uno::Sequence< sal_Int32 > aResult( 1 );
-    aResult[0] = embed::EmbedStates::LOADED;
-
-    return aResult;
+    return { embed::EmbedStates::LOADED };
 }
 
 
