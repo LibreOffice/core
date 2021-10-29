@@ -4588,7 +4588,7 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                             // tdf#141301: no specific skew values provided
                             if (!bSkewValuesProvided)
                             {
-                                // so we need to export default values explicitely
+                                // so we need to export default values explicitly
                                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_SKEW, "50 -135");
                             }
                         }
