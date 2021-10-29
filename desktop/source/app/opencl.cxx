@@ -24,6 +24,7 @@
 #include <officecfg/Office/Calc.hxx>
 #include <officecfg/Office/Common.hxx>
 
+#include <comphelper/propertyvalue.hxx>
 #include <svl/documentlockfile.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -125,9 +126,8 @@ static bool testOpenCLCompute(const Reference< XDesktop2 > &xDesktop, const OUSt
     try {
         css::uno::Reference< css::frame::XComponentLoader > xLoader(xDesktop, css::uno::UNO_QUERY_THROW);
 
-        css::uno::Sequence< css::beans::PropertyValue > aArgs(1);
-        aArgs[0].Name = "Hidden";
-        aArgs[0].Value <<= true;
+        css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue("Hidden",
+                                                                                             true) };
 
         xComponent.set(xLoader->loadComponentFromURL(rURL, "_blank", 0, aArgs));
 

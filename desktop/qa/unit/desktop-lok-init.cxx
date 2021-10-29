@@ -11,6 +11,7 @@
 #include <cppunit/plugin/TestPlugIn.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <comphelper/anytostring.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 
 #include <tools/color.hxx>
@@ -61,9 +62,7 @@ void LOKInitTest::testJsonToPropertyValues()
                              "\"value\":\"something.odt\""
                              "}}";
 
-    uno::Sequence<beans::PropertyValue> aArgs(1);
-    aArgs[0].Name = "FileName";
-    aArgs[0].Value <<= OUString("something.odt");
+    uno::Sequence aArgs{ comphelper::makePropertyValue("FileName", OUString("something.odt")) };
 
     assertSequencesEqual(
         aArgs, comphelper::containerToSequence(desktop::jsonToPropertyValuesVector(arguments)));
@@ -129,31 +128,26 @@ void LOKInitTest::testJsonToPropertyValuesBorder()
           "}}";
 
     // see SvxBoxItem::QueryValue for details
-    uno::Sequence<uno::Any> aOuterSeq(9);
     table::BorderLine2 aLine(sal_Int32(COL_BLACK), 0, 1, 0, table::BorderLineStyle::SOLID, 1);
-    aOuterSeq[0] <<= aLine; // left
-    aOuterSeq[1] <<= aLine; // right
-    aOuterSeq[2] <<= aLine; // bottom
-    aOuterSeq[3] <<= aLine; // top
-    aOuterSeq[4] <<= static_cast<sal_Int32>(0);
-    aOuterSeq[5] <<= static_cast<sal_Int32>(0);
-    aOuterSeq[6] <<= static_cast<sal_Int32>(0);
-    aOuterSeq[7] <<= static_cast<sal_Int32>(0);
-    aOuterSeq[8] <<= static_cast<sal_Int32>(0);
+    uno::Sequence<uno::Any> aOuterSeq{ uno::Any(aLine), // left
+                                       uno::Any(aLine), // right
+                                       uno::Any(aLine), // bottom
+                                       uno::Any(aLine), // top
+                                       uno::Any(static_cast<sal_Int32>(0)),
+                                       uno::Any(static_cast<sal_Int32>(0)),
+                                       uno::Any(static_cast<sal_Int32>(0)),
+                                       uno::Any(static_cast<sal_Int32>(0)),
+                                       uno::Any(static_cast<sal_Int32>(0)) };
 
     // see SvxBoxInfoItem::QueryValue() for details
-    uno::Sequence<uno::Any> aInnerSeq(5);
-    aInnerSeq[0] <<= aLine; // horizontal
-    aInnerSeq[1] <<= aLine; // vertical
-    aInnerSeq[2] <<= static_cast<sal_Int16>(0);
-    aInnerSeq[3] <<= static_cast<sal_Int16>(0x7F);
-    aInnerSeq[4] <<= static_cast<sal_Int32>(0);
+    uno::Sequence<uno::Any> aInnerSeq{ uno::Any(aLine), // horizontal
+                                       uno::Any(aLine), // vertical
+                                       uno::Any(static_cast<sal_Int16>(0)),
+                                       uno::Any(static_cast<sal_Int16>(0x7F)),
+                                       uno::Any(static_cast<sal_Int32>(0)) };
 
-    uno::Sequence<beans::PropertyValue> aArgs(2);
-    aArgs[0].Name = "OuterBorder";
-    aArgs[0].Value <<= aOuterSeq;
-    aArgs[1].Name = "InnerBorder";
-    aArgs[1].Value <<= aInnerSeq;
+    uno::Sequence aArgs{ comphelper::makePropertyValue("OuterBorder", aOuterSeq),
+                         comphelper::makePropertyValue("InnerBorder", aInnerSeq) };
 
     assertSequencesEqual(
         aArgs, comphelper::containerToSequence(desktop::jsonToPropertyValuesVector(arguments)));
