@@ -16,6 +16,24 @@
       "message": "wondering if this approach would obsolete the \"gtk3_kde5\" vclplug.\n\nalso wondering if the custom checkboxes etc we put on the file dialog still work.",
       "revId": "ebd19ebffc36feb875709265898239a96705c527",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "050e8277_fa1d8268",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-10-29T11:16:46Z",
+      "side": 1,
+      "message": "No this removes those extra widgets, so it would not be possible in file open to select \"read only\", and save crashes with this patch, and with those crashes fixed then the \"save with password\" or \"encrypt with gpg key\" options wouldn\u0027t exist.\n\nThe warning on overwriting an existing file I think is also removed here.",
+      "parentUuid": "fad9c840_5594937b",
+      "revId": "ebd19ebffc36feb875709265898239a96705c527",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
