@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed1f28d7_0ce38a19",
+        "filename": "sw/source/core/frmedt/fecopy.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-10-29T09:23:54Z",
+      "side": 0,
+      "message": "oh, i hadn\u0027t noticed this before; this is based on an assumption that no longer holds ...\nthe whole block is in a condition that checks that point\u003d\u003dmark so no text is pasted; previously this clipboard document could have been created only by selecting a fly and coyping it, but since Ctrl+A in a section copies all flys even if it\u0027s empty this is now wrong.\n\nthe previous assumption was that the 1st fly-format is the one that was explicitly copied and 2..N fly-formats must be anchored directly or indirectly in the 1st one.\n\nnow any fly-format may be either anchored in the body of the clipboard document so should be copied, or may be anchored in another fly so should not be copied because it\u0027s copied implicitly by copying the top-level fly.\n\n...and the same is true for draw formats.\n\nso with a little tweaking you could get it correct :)",
+      "range": {
+        "startLine": 1025,
+        "startChar": 0,
+        "endLine": 1026,
+        "endChar": 78
+      },
+      "revId": "ca74611acfef50280a2c1f785448d9a09cca5a0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
