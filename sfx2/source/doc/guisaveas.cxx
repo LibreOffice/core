@@ -59,6 +59,7 @@
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/lok.hxx>
@@ -1124,10 +1125,10 @@ bool ModelData_Impl::ShowDocumentInfoDialog(const std::function< void () >& aFun
                                                                                 0 );
                     if ( xDispatch.is() )
                     {
-                        uno::Sequence< beans::PropertyValue > aProperties(1);
                         uno::Reference< lang::XUnoTunnel > aAsyncFunc(new AsyncFunc(aFunc));
-                        aProperties[0].Name = "AsyncFunc";
-                        aProperties[0].Value <<= aAsyncFunc;
+                        uno::Sequence< beans::PropertyValue > aProperties{
+                            comphelper::makePropertyValue("AsyncFunc", aAsyncFunc)
+                        };
                         xDispatch->dispatch( aURL, aProperties );
                         bDialogUsed = true;
                     }
