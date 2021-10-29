@@ -245,9 +245,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(const Reference<io::XOutputStream
         xSaxWriter->setCustomEntityNames(starmathdatabase::icustomMathmlHtmlEntitiesExport);
 
     // prepare arguments (prepend doc handler to given arguments)
-    Sequence<Any> aArgs(2);
-    aArgs[0] <<= xSaxWriter;
-    aArgs[1] <<= rPropSet;
+    Sequence<Any> aArgs{ Any(xSaxWriter), Any(rPropSet) };
 
     // get filter component
     Reference<document::XExporter> xExporter(
