@@ -20,6 +20,8 @@
 #include <viewlayoutctrl.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/event.hxx>
 #include <vcl/status.hxx>
 #include <vcl/image.hxx>
@@ -157,10 +159,8 @@ bool SwViewLayoutControl::MouseButtonDown( const MouseEvent & rEvt )
     css::uno::Any a;
     aViewLayout.QueryValue( a );
 
-    css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
-    aArgs[0].Name = "ViewLayout";
-    aArgs[0].Value = a;
-
+    css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue("ViewLayout",
+                                                                                         a) };
     execute( aArgs );
 
     return true;
