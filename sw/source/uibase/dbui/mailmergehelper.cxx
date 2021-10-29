@@ -675,18 +675,18 @@ uno::Any SwMailTransferable::getTransferData( const datatransfer::DataFlavor& /*
 
 uno::Sequence< datatransfer::DataFlavor > SwMailTransferable::getTransferDataFlavors(  )
 {
-    uno::Sequence< datatransfer::DataFlavor > aRet(1);
-    aRet[0].MimeType = m_aMimeType;
+    datatransfer::DataFlavor aRet;
+    aRet.MimeType = m_aMimeType;
     if( m_bIsBody )
     {
-        aRet[0].DataType = cppu::UnoType<OUString>::get();
+        aRet.DataType = cppu::UnoType<OUString>::get();
     }
     else
     {
-        aRet[0].HumanPresentableName = m_aName;
-        aRet[0].DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
+        aRet.HumanPresentableName = m_aName;
+        aRet.DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
     }
-    return aRet;
+    return { aRet };
 }
 
 sal_Bool SwMailTransferable::isDataFlavorSupported(
@@ -788,20 +788,20 @@ void SwMailMessage::setBody(
 void  SwMailMessage::addRecipient( const OUString& rRecipientAddress )
 {
     m_aRecipients.realloc(m_aRecipients.getLength() + 1);
-    m_aRecipients[m_aRecipients.getLength() - 1] = rRecipientAddress;
+    m_aRecipients.getArray()[m_aRecipients.getLength() - 1] = rRecipientAddress;
 }
 
 void  SwMailMessage::addCcRecipient( const OUString& rRecipientAddress )
 {
     m_aCcRecipients.realloc(m_aCcRecipients.getLength() + 1);
-    m_aCcRecipients[m_aCcRecipients.getLength() - 1] = rRecipientAddress;
+    m_aCcRecipients.getArray()[m_aCcRecipients.getLength() - 1] = rRecipientAddress;
 
 }
 
 void  SwMailMessage::addBccRecipient( const OUString& rRecipientAddress )
 {
     m_aBccRecipients.realloc(m_aBccRecipients.getLength() + 1);
-    m_aBccRecipients[m_aBccRecipients.getLength() - 1] = rRecipientAddress;
+    m_aBccRecipients.getArray()[m_aBccRecipients.getLength() - 1] = rRecipientAddress;
 }
 
 uno::Sequence< OUString > SwMailMessage::getRecipients(  )
@@ -822,7 +822,7 @@ uno::Sequence< OUString > SwMailMessage::getBccRecipients(  )
 void SwMailMessage::addAttachment( const mail::MailAttachment& rMailAttachment )
 {
     m_aAttachments.realloc(m_aAttachments.getLength() + 1);
-    m_aAttachments[m_aAttachments.getLength() - 1] = rMailAttachment;
+    m_aAttachments.getArray()[m_aAttachments.getLength() - 1] = rMailAttachment;
 }
 
 uno::Sequence< mail::MailAttachment > SwMailMessage::getAttachments(  )

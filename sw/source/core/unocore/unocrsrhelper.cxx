@@ -1057,9 +1057,8 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
     uno::Reference < embed::XStorage > xReadStorage;
     if( xInputStream.is() )
     {
-        uno::Sequence< uno::Any > aArgs( 2 );
-        aArgs[0] <<= xInputStream;
-        aArgs[1] <<= embed::ElementModes::READ;
+        uno::Sequence< uno::Any > aArgs{ uno::Any(xInputStream),
+                                         uno::Any(embed::ElementModes::READ) };
         try
         {
             xReadStorage.set( ::comphelper::OStorageHelper::GetStorageFactory()->createInstanceWithArguments( aArgs ),
