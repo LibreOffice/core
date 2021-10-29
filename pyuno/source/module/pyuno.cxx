@@ -593,8 +593,7 @@ static PyObject* lcl_getitem_XCellRange( PyUNO const * me, PyObject* pKey )
     // Single string key is sugar for getCellRangeByName()
     if ( PyUnicode_Check( pKey ) ) {
 
-        aParams.realloc (1);
-        aParams[0] <<= pyString2ustring( pKey );
+        aParams = { Any(pyString2ustring( pKey )) };
         {
             PyThreadDetach antiguard;
             aRet = me->members->xInvocation->invoke (
@@ -632,9 +631,7 @@ static PyObject* lcl_getitem_XCellRange( PyUNO const * me, PyObject* pKey )
         if ( ((nKey0_s == -1) || (nKey1_s == -1)) && PyErr_Occurred() )
             return nullptr;
 
-        aParams.realloc( 2 );
-        aParams[0] <<= nKey1_s;
-        aParams[1] <<= nKey0_s;
+        aParams = { Any(nKey1_s), Any(nKey0_s) };
         {
             PyThreadDetach antiguard;
             aRet = me->members->xInvocation->invoke (
@@ -680,11 +677,7 @@ static PyObject* lcl_getitem_XCellRange( PyUNO const * me, PyObject* pKey )
 
         if ( nStep0 == 1 && nStep1 == 1 )
         {
-            aParams.realloc (4);
-            aParams[0] <<= nStart1;
-            aParams[1] <<= nStart0;
-            aParams[2] <<= nStop1 - 1;
-            aParams[3] <<= nStop0 - 1;
+            aParams = { Any(nStart1), Any(nStart0), Any(nStop1 - 1), Any(nStop0 - 1) };
             {
                 PyThreadDetach antiguard;
                 aRet = me->members->xInvocation->invoke (
