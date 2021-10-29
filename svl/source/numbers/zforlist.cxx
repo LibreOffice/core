@@ -2389,9 +2389,8 @@ sal_Int32 SvNumberFormatter::ImpGetFormatCodeIndex(
     }
     else
     {   // we need at least _some_ format
-        rSeq.realloc(1);
-        rSeq[0] = css::i18n::NumberFormatCode();
-        rSeq[0].Code = "0" + GetNumDecimalSep() + "############";
+        rSeq = { css::i18n::NumberFormatCode() };
+        rSeq.getArray()[0].Code = "0" + GetNumDecimalSep() + "############";
     }
     return 0;
 }
@@ -2567,7 +2566,6 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     css::lang::Locale aLocale = GetLanguageTag().getLocale();
     css::uno::Reference< css::i18n::XNumberFormatCode > xNFC = i18n::NumberFormatMapper::create( m_xContext );
     sal_Int32 nIdx;
-    bool bDefault;
 
     // Number
     uno::Sequence< i18n::NumberFormatCode > aFormatSeq = xNFC->getAllFormatCode( i18n::KNumberFormatUsage::FIXED_NUMBER, aLocale );
@@ -2678,51 +2676,46 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
 
     // #,##0
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000INT );
-    bDefault = aFormatSeq[nIdx].Default;
-    aFormatSeq[nIdx].Default = false;
-    ImpInsertFormat( aFormatSeq[nIdx],
+     // Just copy the format, to avoid COW on sequence after each possible reallocation
+    auto aFormat = aFormatSeq[nIdx];
+    aFormat.Default = false;
+    ImpInsertFormat( aFormat,
                      CLOffset + ZF_STANDARD_CURRENCY /* NF_CURRENCY_1000INT */ );
-    aFormatSeq[nIdx].Default = bDefault;
 
     // #,##0.00
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2 );
-    bDefault = aFormatSeq[nIdx].Default;
-    aFormatSeq[nIdx].Default = false;
-    ImpInsertFormat( aFormatSeq[nIdx],
+    aFormat = aFormatSeq[nIdx];
+    aFormat.Default = false;
+    ImpInsertFormat( aFormat,
                      CLOffset + ZF_STANDARD_CURRENCY+1 /* NF_CURRENCY_1000DEC2 */ );
-    aFormatSeq[nIdx].Default = bDefault;
 
     // #,##0 negative red
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000INT_RED );
-    bDefault = aFormatSeq[nIdx].Default;
-    aFormatSeq[nIdx].Default = false;
-    ImpInsertFormat( aFormatSeq[nIdx],
+    aFormat = aFormatSeq[nIdx];
+    aFormat.Default = false;
+    ImpInsertFormat(aFormat,
                      CLOffset + ZF_STANDARD_CURRENCY+2 /* NF_CURRENCY_1000INT_RED */ );
-    aFormatSeq[nIdx].Default = bDefault;
 
     // #,##0.00 negative red
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2_RED );
-    bDefault = aFormatSeq[nIdx].Default;
-    aFormatSeq[nIdx].Default = false;
-    ImpInsertFormat( aFormatSeq[nIdx],
+    aFormat = aFormatSeq[nIdx];
+    aFormat.Default = false;
+    ImpInsertFormat(aFormat,
                      CLOffset + ZF_STANDARD_CURRENCY+3 /* NF_CURRENCY_1000DEC2_RED */ );
-    aFormatSeq[nIdx].Default = bDefault;
 
     // #,##0.00 USD
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2_CCC );
-    bDefault = aFormatSeq[nIdx].Default;
-    aFormatSeq[nIdx].Default = false;
-    ImpInsertFormat( aFormatSeq[nIdx],
+    aFormat = aFormatSeq[nIdx];
+    aFormat.Default = false;
+    ImpInsertFormat( aFormat,
                      CLOffset + ZF_STANDARD_CURRENCY+4 /* NF_CURRENCY_1000DEC2_CCC */ );
-    aFormatSeq[nIdx].Default = bDefault;
 
     // #.##0,--
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2_DASHED );
-    bDefault = aFormatSeq[nIdx].Default;
-    aFormatSeq[nIdx].Default = false;
-    ImpInsertFormat( aFormatSeq[nIdx],
+    aFormat = aFormatSeq[nIdx];
+    aFormat.Default = false;
+    ImpInsertFormat(aFormat,
                      CLOffset + ZF_STANDARD_CURRENCY+5 /* NF_CURRENCY_1000DEC2_DASHED */ );
-    aFormatSeq[nIdx].Default = bDefault;
 
 
     // Date
