@@ -343,11 +343,7 @@ void ControlConverter::bindToSources( const Reference< XControlModel >& rxCtrlMo
         }
 
         // create argument sequence
-        NamedValue aValue;
-        aValue.Name = "BoundCell";
-        aValue.Value <<= aAddress;
-        Sequence< Any > aArgs( 1 );
-        aArgs[ 0 ] <<= aValue;
+        Sequence< Any > aArgs{ Any(NamedValue("BoundCell", Any(aAddress))) };
 
         // create the CellValueBinding instance and set at the control model
         Reference< XMultiServiceFactory > xModelFactory( mxDocModel, UNO_QUERY_THROW );
@@ -378,11 +374,7 @@ void ControlConverter::bindToSources( const Reference< XControlModel >& rxCtrlMo
         }
 
         // create argument sequence
-        NamedValue aValue;
-        aValue.Name = "CellRange";
-        aValue.Value <<= aRangeAddr;
-        Sequence< Any > aArgs( 1 );
-        aArgs[ 0 ] <<= aValue;
+        Sequence< Any > aArgs{ Any(NamedValue("CellRange", Any(aRangeAddr))) };
 
         // create the EntrySource instance and set at the control model
         Reference< XMultiServiceFactory > xModelFactory( mxDocModel, UNO_QUERY_THROW );
@@ -2618,16 +2610,18 @@ HtmlSelectModel::importBinaryModel( BinaryInputStream& rInStrm )
     if ( !listValues.empty() )
     {
         msListData.realloc( listValues.size() );
+        auto psListData = msListData.getArray();
         sal_Int32 index = 0;
         for (auto const& listValue : listValues)
-             msListData[ index++ ] = listValue;
+             psListData[ index++ ] = listValue;
     }
     if ( !selectedIndices.empty() )
     {
         msIndices.realloc( selectedIndices.size() );
+        auto psIndices = msIndices.getArray();
         sal_Int32 index = 0;
         for (auto const& selectedIndice : selectedIndices)
-             msIndices[ index++ ] = selectedIndice;
+             psIndices[ index++ ] = selectedIndice;
     }
     return true;
 }
