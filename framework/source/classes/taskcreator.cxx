@@ -71,33 +71,34 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
         xCreator = css::frame::TaskCreator::create(m_xContext);
 
     css::uno::Sequence< css::uno::Any > lArgs(6);
+    auto plArgs = lArgs.getArray();
     css::beans::NamedValue              aArg;
 
     aArg.Name    = ARGUMENT_PARENTFRAME;
     aArg.Value <<= css::uno::Reference< css::frame::XFrame >( css::frame::Desktop::create( m_xContext ), css::uno::UNO_QUERY_THROW);
-    lArgs[0]   <<= aArg;
+    plArgs[0]   <<= aArg;
 
     aArg.Name    = ARGUMENT_CREATETOPWINDOW;
     aArg.Value <<= true;
-    lArgs[1]   <<= aArg;
+    plArgs[1]   <<= aArg;
 
     aArg.Name    = ARGUMENT_MAKEVISIBLE;
     aArg.Value <<= false;
-    lArgs[2]   <<= aArg;
+    plArgs[2]   <<= aArg;
 
     aArg.Name    = ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE;
     aArg.Value <<= true;
-    lArgs[3]   <<= aArg;
+    plArgs[3]   <<= aArg;
 
     aArg.Name    = ARGUMENT_FRAMENAME;
     aArg.Value <<= sName;
-    lArgs[4]   <<= aArg;
+    plArgs[4]   <<= aArg;
 
     bool bHidden
         = rDescriptor.getUnpackedValueOrDefault("HiddenForConversion", false);
     aArg.Name = "HiddenForConversion";
     aArg.Value <<= bHidden;
-    lArgs[5] <<= aArg;
+    plArgs[5] <<= aArg;
 
     css::uno::Reference< css::frame::XFrame > xTask(xCreator->createInstanceWithArguments(lArgs), css::uno::UNO_QUERY_THROW);
     return xTask;

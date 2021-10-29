@@ -110,11 +110,12 @@ uno::Sequence<uno::Reference<frame::XDispatch>>
 MyInterceptor::queryDispatches(const uno::Sequence<frame::DispatchDescriptor>& rRequests)
 {
     uno::Sequence<uno::Reference<frame::XDispatch>> aResult(rRequests.getLength());
+    auto aResultRange = asNonConstRange(aResult);
 
     for (sal_Int32 i = 0; i < rRequests.getLength(); ++i)
     {
-        aResult[i] = queryDispatch(rRequests[i].FeatureURL, rRequests[i].FrameName,
-                                   rRequests[i].SearchFlags);
+        aResultRange[i] = queryDispatch(rRequests[i].FeatureURL, rRequests[i].FrameName,
+                                        rRequests[i].SearchFlags);
     }
 
     return aResult;

@@ -31,6 +31,7 @@
 #include <vcl/status.hxx>
 
 #include <comphelper/attributelist.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -374,20 +375,14 @@ void SAL_CALL OReadStatusBarDocumentHandler::startElement(
             }
             else
             {
-                Sequence< PropertyValue > aStatusbarItemProp( 6 );
-                aStatusbarItemProp[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
-                aStatusbarItemProp[1].Name = ITEM_DESCRIPTOR_HELPURL;
-                aStatusbarItemProp[2].Name = ITEM_DESCRIPTOR_OFFSET;
-                aStatusbarItemProp[3].Name = ITEM_DESCRIPTOR_STYLE;
-                aStatusbarItemProp[4].Name = ITEM_DESCRIPTOR_WIDTH;
-                aStatusbarItemProp[5].Name = ITEM_DESCRIPTOR_TYPE;
-
-                aStatusbarItemProp[0].Value <<= aCommandURL;
-                aStatusbarItemProp[1].Value <<= aHelpURL;
-                aStatusbarItemProp[2].Value <<= nOffset;
-                aStatusbarItemProp[3].Value <<= nItemBits;
-                aStatusbarItemProp[4].Value <<= nWidth;
-                aStatusbarItemProp[5].Value <<= css::ui::ItemType::DEFAULT;
+                Sequence< PropertyValue > aStatusbarItemProp{
+                    comphelper::makePropertyValue(ITEM_DESCRIPTOR_COMMANDURL, aCommandURL),
+                    comphelper::makePropertyValue(ITEM_DESCRIPTOR_HELPURL, aHelpURL),
+                    comphelper::makePropertyValue(ITEM_DESCRIPTOR_OFFSET, nOffset),
+                    comphelper::makePropertyValue(ITEM_DESCRIPTOR_STYLE, nItemBits),
+                    comphelper::makePropertyValue(ITEM_DESCRIPTOR_WIDTH, nWidth),
+                    comphelper::makePropertyValue(ITEM_DESCRIPTOR_TYPE, css::ui::ItemType::DEFAULT)
+                };
 
                 m_aStatusBarItems->insertByIndex( m_aStatusBarItems->getCount(), makeAny( aStatusbarItemProp ) );
            }

@@ -179,8 +179,8 @@ void SessionListener::StoreSession( bool bAsync )
         if ( bAsync )
             xDispatch->addStatusListener(this, aURL);
 
-        Sequence< PropertyValue > args(1);
-        args[0] = PropertyValue("DispatchAsynchron",-1,makeAny(bAsync),PropertyState_DIRECT_VALUE);
+        Sequence< PropertyValue > args{ PropertyValue("DispatchAsynchron",-1,makeAny(bAsync),
+                                                      PropertyState_DIRECT_VALUE) };
         xDispatch->dispatch(aURL, args);
     } catch (const css::uno::Exception&) {
         TOOLS_WARN_EXCEPTION("fwk.session", "");
@@ -207,8 +207,8 @@ void SessionListener::QuitSessionQuietly()
         aURL.Complete = "vnd.sun.star.autorecovery:/doSessionQuietQuit";
         xURLTransformer->parseStrict(aURL);
 
-        Sequence< PropertyValue > args(1);
-        args[0] = PropertyValue("DispatchAsynchron",-1,makeAny(false),PropertyState_DIRECT_VALUE);
+        Sequence< PropertyValue > args{ PropertyValue("DispatchAsynchron",-1,makeAny(false),
+                                                      PropertyState_DIRECT_VALUE) };
         xDispatch->dispatch(aURL, args);
     } catch (const css::uno::Exception&) {
         TOOLS_WARN_EXCEPTION("fwk.session", "");
