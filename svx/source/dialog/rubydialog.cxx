@@ -378,16 +378,17 @@ void SvxRubyDialog::SetRubyText(sal_Int32 nPos, weld::Entry& rLeft, weld::Entry&
 void SvxRubyDialog::GetRubyText()
 {
     tools::Long nTempLastPos = GetLastPos();
+    Sequence<PropertyValues>& aRubyValues = m_pImpl->GetRubyValues();
+    auto aRubyValuesRange = asNonConstRange(aRubyValues);
     for (int i = 0; i < 8; i += 2)
     {
         if (aEditArr[i]->get_sensitive()
             && (aEditArr[i]->get_value_changed_from_saved()
                 || aEditArr[i + 1]->get_value_changed_from_saved()))
         {
-            Sequence<PropertyValues>& aRubyValues = m_pImpl->GetRubyValues();
             DBG_ASSERT(aRubyValues.getLength() > (i / 2 + nTempLastPos), "wrong index");
             SetModified(true);
-            for (PropertyValue& propVal : asNonConstRange(aRubyValues[i / 2 + nTempLastPos]))
+            for (PropertyValue& propVal : asNonConstRange(aRubyValuesRange[i / 2 + nTempLastPos]))
             {
                 if (propVal.Name == cRubyBaseText)
                     propVal.Value <<= aEditArr[i]->get_text();
