@@ -36,6 +36,7 @@
 #include <editeng/langitem.hxx>
 
 #include <svl/languageoptions.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <svtools/langtab.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/stritem.hxx>
@@ -66,14 +67,14 @@ namespace SwLangHelper
 
         // get keyboard language
         OUString aKeyboardLang;
-        LanguageType nLang = rEditView.GetInputLanguage();
+        LanguageType nLang = MsLangId::getRealLanguage( rEditView.GetInputLanguage() );
         if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
             aKeyboardLang = SvtLanguageTable::GetLanguageString( nLang );
 
         // get the language that is in use
         OUString aCurrentLang("*");
         SfxItemSet aSet(pOLV->GetAttribs());
-        nLang = SwLangHelper::GetCurrentLanguage( aSet,nScriptType );
+        nLang = MsLangId::getRealLanguage( SwLangHelper::GetCurrentLanguage( aSet,nScriptType ) );
         if (nLang != LANGUAGE_DONTKNOW)
             aCurrentLang = SvtLanguageTable::GetLanguageString( nLang );
 
