@@ -250,6 +250,7 @@ uno::Sequence<OUString> SAL_CALL SalAquaFilePicker::getSelectedFiles()
     SAL_INFO("fpicker.aqua", "# of items: " << nFiles);
 
     uno::Sequence< OUString > aSelectedFiles(nFiles);
+    OUString* pSelectedFiles = aSelectedFiles.getArray();
 
     for(NSUInteger nIndex = 0; nIndex < nFiles; nIndex += 1)
     {
@@ -279,7 +280,7 @@ uno::Sequence<OUString> SAL_CALL SalAquaFilePicker::getSelectedFiles()
 
         OUString sFileOrDirURL = [url OUString];
 
-        aSelectedFiles[nIndex] = sFileOrDirURL;
+        pSelectedFiles[nIndex] = sFileOrDirURL;
     }
 
     return aSelectedFiles;
