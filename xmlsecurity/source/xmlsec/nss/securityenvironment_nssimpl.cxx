@@ -263,7 +263,6 @@ void SecurityEnvironment_NssImpl::updateSlots()
 Sequence< Reference < XCertificate > >
 SecurityEnvironment_NssImpl::getPersonalCertificates()
 {
-    sal_Int32 length ;
     std::vector< rtl::Reference<X509Certificate_NssImpl> > certsList ;
 
     updateSlots();
@@ -299,17 +298,8 @@ SecurityEnvironment_NssImpl::getPersonalCertificates()
 
     }
 
-    length = certsList.size() ;
-    if( length != 0 ) {
-        int i = 0;
-        Sequence< Reference< XCertificate > > certSeq( length ) ;
-
-        for( const auto& rXCert : certsList ) {
-            certSeq[i] = rXCert ;
-            ++i;
-        }
-
-        return certSeq ;
+    if( certsList.size() != 0 ) {
+        return comphelper::containerToSequence<Reference< XCertificate >>(certsList) ;
     }
 
     return Sequence< Reference < XCertificate > > ();
@@ -488,9 +478,7 @@ Reference< XCertificate > SecurityEnvironment_NssImpl::createCertificateFromAsci
     if (certSize == 0)
         return nullptr;
 
-    Sequence< sal_Int8 > rawCert(certSize) ;
-    for (int i = 0 ; i < certSize; ++i)
-        rawCert[i] = *( chCert + i ) ;
+    Sequence< sal_Int8 > rawCert(comphelper::arrayToSequence<sal_Int8>(chCert, certSize)) ;
 
     xmlFree( chCert ) ;
 
