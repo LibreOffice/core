@@ -2364,10 +2364,12 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
 Attr::Attr (const Reference< XAttributeList > & attr) {
     sal_Int16 len = attr->getLength();
     name.realloc (len);
+    auto pName = name.getArray();
     value.realloc (len);
+    auto pValue = value.getArray();
     for (sal_Int16 i =0; i< len;i++) {
-        name[i] = attr->getNameByIndex(i);
-        value[i] = attr -> getValueByIndex(i);
+        pName[i] = attr->getNameByIndex(i);
+        pValue[i] = attr -> getValueByIndex(i);
     }
 }
 
