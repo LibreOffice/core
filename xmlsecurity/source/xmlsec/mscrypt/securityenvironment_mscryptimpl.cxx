@@ -110,16 +110,16 @@ static void traceTrustStatus(DWORD err)
     }
 }
 
-SecurityEnvironment_MSCryptImpl::SecurityEnvironment_MSCryptImpl( const uno::Reference< uno::XComponentContext >& xContext ) : m_hProv( NULL ) , m_pszContainer( nullptr ) , m_hKeyStore( nullptr ), m_hCertStore( nullptr ), m_hMySystemStore(nullptr), m_hRootSystemStore(nullptr), m_hTrustSystemStore(nullptr), m_hCaSystemStore(nullptr), m_bEnableDefault( false ){
+SecurityEnvironment_MSCryptImpl::SecurityEnvironment_MSCryptImpl( const uno::Reference< uno::XComponentContext >& xContext ) : m_hProv( 0 ) , m_pszContainer( nullptr ) , m_hKeyStore( nullptr ), m_hCertStore( nullptr ), m_hMySystemStore(nullptr), m_hRootSystemStore(nullptr), m_hTrustSystemStore(nullptr), m_hCaSystemStore(nullptr), m_bEnableDefault( false ){
 
     m_xServiceManager.set(xContext, uno::UNO_QUERY);
 }
 
 SecurityEnvironment_MSCryptImpl::~SecurityEnvironment_MSCryptImpl() {
 
-    if( m_hProv != NULL ) {
+    if( m_hProv != 0 ) {
         CryptReleaseContext( m_hProv, 0 ) ;
-        m_hProv = NULL ;
+        m_hProv = 0 ;
     }
 
     if( m_pszContainer != nullptr ) {
@@ -181,12 +181,12 @@ HCRYPTPROV SecurityEnvironment_MSCryptImpl::getCryptoProvider() {
 }
 
 void SecurityEnvironment_MSCryptImpl::setCryptoProvider( HCRYPTPROV aProv ) {
-    if( m_hProv != NULL ) {
+    if( m_hProv != 0 ) {
         CryptReleaseContext( m_hProv, 0 ) ;
-        m_hProv = NULL ;
+        m_hProv = 0 ;
     }
 
-    if( aProv != NULL ) {
+    if( aProv != 0 ) {
         m_hProv = aProv ;
     }
 }
@@ -607,7 +607,7 @@ uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl
             hCollectionStore = CertOpenStore(
                 CERT_STORE_PROV_COLLECTION ,
                 0 ,
-                NULL ,
+                0 ,
                 0 ,
                 nullptr
                 ) ;
@@ -722,7 +722,7 @@ uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::createCertificat
 static HCERTSTORE getCertStoreForIntermediatCerts(
     const uno::Sequence< uno::Reference< css::security::XCertificate > >& seqCerts)
 {
-    HCERTSTORE store = CertOpenStore(CERT_STORE_PROV_MEMORY, 0, NULL, 0, nullptr);
+    HCERTSTORE store = CertOpenStore(CERT_STORE_PROV_MEMORY, 0, 0, 0, nullptr);
     if (store == nullptr)
         return nullptr;
 
@@ -764,7 +764,7 @@ static bool CheckUnitTestStore(PCCERT_CHAIN_CONTEXT const pChainContext, DWORD i
     static HCERTSTORE const hExtra = CertOpenStore(
             CERT_STORE_PROV_FILENAME_A,
             PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
-            NULL,
+            0,
             CERT_STORE_OPEN_EXISTING_FLAG | CERT_STORE_READONLY_FLAG,
             OString(OString::Concat(pVar) + "/test.p7b").getStr());
     assert(hExtra != nullptr);
@@ -844,7 +844,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl::verifyCertificate(
         hCollectionStore = CertOpenStore(
             CERT_STORE_PROV_COLLECTION ,
             0 ,
-            NULL ,
+            0 ,
             0 ,
             nullptr
             ) ;
