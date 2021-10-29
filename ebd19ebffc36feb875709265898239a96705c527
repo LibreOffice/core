@@ -34,6 +34,24 @@
       "parentUuid": "fad9c840_5594937b",
       "revId": "ebd19ebffc36feb875709265898239a96705c527",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a194449_9c32f6ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2021-10-29T12:05:14Z",
+      "side": 1,
+      "message": "I had also once wondered whether using GtkFileChooserNative would make sense, but didn\u0027t investigate further, since my expectation back then (without actually checking) was that it wouldn\u0027t be possible to replace the use of all custom widgets adequately (without reworking how LO works beyond just changes to the gtk3 VCL plugin).\nIt\u0027s possible to provide simple custom options using \u0027gtk_file_chooser_add_choice\u0027 [1] (s. e.g. my sample program from [2]). This way, adding checkboxes or comboboxes is possible in general, but I\u0027d *guess* that LO probably currently does more complicated/advanced things.\n\n[1] https://docs.gtk.org/gtk4/method.FileChooser.add_choice.html\n[2] https://invent.kde.org/plasma/xdg-desktop-portal-kde/-/merge_requests/3",
+      "parentUuid": "050e8277_fa1d8268",
+      "revId": "ebd19ebffc36feb875709265898239a96705c527",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
