@@ -1427,11 +1427,7 @@ Reference< frame::XTitle > SfxBaseController::impl_getTitleHelper ()
         Reference< frame::XUntitledNumbers > xUntitledProvider(xModel                                       , uno::UNO_QUERY      );
         Reference< frame::XController >      xThis            (static_cast< frame::XController* >(this), uno::UNO_QUERY_THROW);
 
-        rtl::Reference<::framework::TitleHelper> pHelper = new ::framework::TitleHelper(::comphelper::getProcessComponentContext());
-        m_pData->m_xTitleHelper = pHelper;
-
-        pHelper->setOwner                   (xThis            );
-        pHelper->connectWithUntitledNumbers (xUntitledProvider);
+        m_pData->m_xTitleHelper = new ::framework::TitleHelper(::comphelper::getProcessComponentContext(), xThis, xUntitledProvider);
     }
 
     return m_pData->m_xTitleHelper;

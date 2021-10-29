@@ -48,26 +48,21 @@ using namespace css::frame;
 
 namespace framework{
 
-TitleHelper::TitleHelper(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
+TitleHelper::TitleHelper(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                        const css::uno::Reference< css::uno::XInterface >& xOwner,
+                        const css::uno::Reference< css::frame::XUntitledNumbers >& xNumbers)
     : ::cppu::BaseMutex ()
     , m_xContext        (rxContext)
     , m_bExternalTitle  (false)
     , m_nLeasedNumber   (css::frame::UntitledNumbersConst::INVALID_NUMBER)
     , m_aListener       (m_aMutex)
 {
-}
-
-TitleHelper::~TitleHelper()
-{
-}
-
-void TitleHelper::setOwner(const css::uno::Reference< css::uno::XInterface >& xOwner)
-{
     // SYNCHRONIZED ->
     {
         osl::MutexGuard aLock(m_aMutex);
 
         m_xOwner = xOwner;
+        m_xUntitledNumbers = xNumbers;
     }
     // <- SYNCHRONIZED
 
@@ -93,6 +88,10 @@ void TitleHelper::setOwner(const css::uno::Reference< css::uno::XInterface >& xO
     }
 }
 
+TitleHelper::~TitleHelper()
+{
+}
+
 OUString SAL_CALL TitleHelper::getTitle()
 {
     // SYNCHRONIZED ->
@@ -112,15 +111,6 @@ OUString SAL_CALL TitleHelper::getTitle()
     impl_updateTitle (true);
 
     return m_sTitle;
-    // <- SYNCHRONIZED
-}
-
-void TitleHelper::connectWithUntitledNumbers (const css::uno::Reference< css::frame::XUntitledNumbers >& xNumbers)
-{
-    // SYNCHRONIZED ->
-    osl::MutexGuard aLock(m_aMutex);
-
-    m_xUntitledNumbers = xNumbers;
     // <- SYNCHRONIZED
 }
 

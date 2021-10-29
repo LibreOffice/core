@@ -2094,10 +2094,7 @@ Reference< XTitle > const & ODatabaseDocument::impl_getTitleHelper_throw()
         Reference< XUntitledNumbers >  xDesktop(Desktop::create(m_pImpl->m_aContext), uno::UNO_QUERY_THROW);
         Reference< frame::XModel >     xThis   (getThis(), uno::UNO_QUERY_THROW);
 
-        rtl::Reference<::framework::TitleHelper> pHelper = new ::framework::TitleHelper(m_pImpl->m_aContext);
-        m_xTitleHelper = pHelper;
-        pHelper->setOwner                   (xThis   );
-        pHelper->connectWithUntitledNumbers (xDesktop);
+        m_xTitleHelper = new ::framework::TitleHelper(m_pImpl->m_aContext, xThis, xDesktop);
     }
 
     return m_xTitleHelper;

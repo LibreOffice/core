@@ -3922,10 +3922,7 @@ Reference< frame::XTitle > SfxBaseModel::impl_getTitleHelper ()
         Reference< frame::XUntitledNumbers >    xDesktop( frame::Desktop::create(xContext), UNO_QUERY_THROW);
         Reference< frame::XModel >              xThis   (static_cast< frame::XModel* >(this), UNO_QUERY_THROW);
 
-        rtl::Reference<::framework::TitleHelper> pHelper = new ::framework::TitleHelper(xContext);
-        m_pData->m_xTitleHelper = pHelper;
-        pHelper->setOwner                   (xThis   );
-        pHelper->connectWithUntitledNumbers (xDesktop);
+        m_pData->m_xTitleHelper = new ::framework::TitleHelper(xContext, xThis, xDesktop);
     }
 
     return m_pData->m_xTitleHelper;
