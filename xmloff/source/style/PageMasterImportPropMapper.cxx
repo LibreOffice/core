@@ -89,6 +89,7 @@ bool PageMasterImportPropertyMapper::handleSpecialItem(
 void PageMasterImportPropertyMapper::finished(std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
 {
     SvXMLImportPropertyMapper::finished(rProperties, nStartIndex, nEndIndex);
+
     XMLPropertyState* pAllPaddingProperty = nullptr;
     XMLPropertyState* pPadding[4] = { nullptr, nullptr, nullptr, nullptr };
     XMLPropertyState* pNewPadding[4] = { nullptr, nullptr, nullptr, nullptr };
@@ -128,12 +129,14 @@ void PageMasterImportPropertyMapper::finished(std::vector< XMLPropertyState >& r
     XMLPropertyState* pAllFooterMarginProperty = nullptr;
     XMLPropertyState* pFooterMargins[4] = { nullptr, nullptr, nullptr, nullptr };
     std::unique_ptr<XMLPropertyState> pNewFooterMargins[4];
-    XMLPropertyState* pMarginGutter = nullptr;
-    XMLPropertyState* pRtlGutter = nullptr;
 
-    for (auto& rProp : rProperties)
+    // Note that a copy is needed
+    std::optional<XMLPropertyState> aMarginGutterProperty;
+    std::optional<XMLPropertyState> aRtlGutterProperty;
+
+    for (auto& rProperty : rProperties)
     {
-        XMLPropertyState *property = &rProp;
+        XMLPropertyState *property = &rProperty;
         sal_Int16 nContextID = getPropertySetMapper()->GetEntryContextId(property->mnIndex);
         if (property->mnIndex >= nStartIndex && property->mnIndex < nEndIndex)
         {
@@ -199,10 +202,10 @@ void PageMasterImportPropertyMapper::finished(std::vector< XMLPropertyState >& r
                 case CTF_PM_MARGINRIGHT :
                       pMargins[XML_LINE_RIGHT] = property; break;
                 case CTF_PM_MARGINGUTTER:
-                    pMarginGutter = property;
+                    aMarginGutterProperty = std::optional<XMLPropertyState>(rProperty);
                     break;
                 case CTF_PM_RTLGUTTER:
-                    pRtlGutter = property;
+                    aRtlGutterProperty = std::optional<XMLPropertyState>(rProperty);
                     break;
                 case CTF_PM_HEADERMARGINALL   :
                       pAllHeaderMarginProperty = property; break;
@@ -446,11 +449,13 @@ void PageMasterImportPropertyMapper::finished(std::vector< XMLPropertyState >& r
         xFooterDynamic.reset();
     }
 
-    if (!pMarginGutter)
+    if (!aMarginGutterProperty)
         return;
 
     sal_Int32 nGutterMargin{};
-    pMarginGutter->maValue >>= nGutterMargin;
+    aMarginGutterProperty->maValue >>= nGutterMargin;
+
+    printf ("nGutterMargin : %d\n", nGutterMargin);
 
     bool bGutterAtTop{};
     uno::Reference<lang::XServiceInfo> xSI(GetImport().GetModel(), uno::UNO_QUERY);
@@ -481,9 +486,9 @@ void PageMasterImportPropertyMapper::finished(std::vector< XMLPropertyState >& r
     else
     {
         bool bRtlGutter{};
-        if (nGutterMargin && pRtlGutter)
+        if (nGutterMargin && aRtlGutterProperty)
         {
-            pRtlGutter->maValue >>= bRtlGutter;
+            aRtlGutterProperty->maValue >>= bRtlGutter;
         }
         if (bRtlGutter)
         {
