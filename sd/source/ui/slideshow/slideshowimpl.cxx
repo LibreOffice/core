@@ -1501,9 +1501,10 @@ void SlideshowImpl::click( const Reference< XShape >& xShape )
             SfxViewFrame* pViewFrm = SfxViewFrame::Current();
             if (pViewFrm)
             {
+                SfxUnoFrameItem aDocFrame(SID_FILLFRAME, pViewFrm->GetFrame().GetFrameInterface());
                 pViewFrm->GetDispatcher()->ExecuteList( SID_OPENDOC,
                     SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
-                    { &aUrl, &aBrowsing });
+                    { &aUrl, &aBrowsing }, { &aDocFrame } );
             }
         }
     }
