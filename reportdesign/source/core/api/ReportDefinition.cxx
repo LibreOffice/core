@@ -2490,10 +2490,8 @@ uno::Reference< frame::XTitle > OReportDefinition::impl_getTitleHelper_throw()
         uno::Reference< frame::XDesktop2 >    xDesktop = frame::Desktop::create(m_aProps->m_xContext);
         uno::Reference< frame::XModel >       xThis(static_cast< frame::XModel* >(this), uno::UNO_QUERY_THROW);
 
-        rtl::Reference<::framework::TitleHelper> pHelper = new ::framework::TitleHelper( m_aProps->m_xContext );
-        m_pImpl->m_xTitleHelper = pHelper;
-        pHelper->setOwner                   (xThis   );
-        pHelper->connectWithUntitledNumbers (uno::Reference<frame::XUntitledNumbers>(xDesktop, uno::UNO_QUERY_THROW));
+        m_pImpl->m_xTitleHelper = new ::framework::TitleHelper( m_aProps->m_xContext, xThis,
+                                    uno::Reference<frame::XUntitledNumbers>(xDesktop, uno::UNO_QUERY_THROW) );
     }
 
     return m_pImpl->m_xTitleHelper;

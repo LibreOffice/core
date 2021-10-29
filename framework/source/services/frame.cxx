@@ -817,9 +817,7 @@ void SAL_CALL XFrameImpl::initialize( const css::uno::Reference< css::awt::XWind
     m_pWindowCommandDispatch.reset(new WindowCommandDispatch(m_xContext, this));
 
     // Initialize title functionality
-    rtl::Reference<TitleHelper> pTitleHelper = new TitleHelper( m_xContext );
-    m_xTitleHelper = pTitleHelper;
-    pTitleHelper->setOwner(xThis);
+    m_xTitleHelper = new TitleHelper( m_xContext, xThis, nullptr );
 }
 
 /*-****************************************************************************************************

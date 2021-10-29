@@ -1057,11 +1057,7 @@ Reference< XTitle > OGenericUnoController::impl_getTitleHelper_throw()
         Reference< XUntitledNumbers > xUntitledProvider(getPrivateModel(), UNO_QUERY      );
         Reference< XController >      xThis(static_cast< XController* >(this), UNO_QUERY_THROW);
 
-        rtl::Reference<::framework::TitleHelper> pHelper = new ::framework::TitleHelper( m_xContext );
-        m_xTitleHelper = pHelper;
-
-        pHelper->setOwner                   (xThis            );
-        pHelper->connectWithUntitledNumbers (xUntitledProvider);
+        m_xTitleHelper = new ::framework::TitleHelper( m_xContext, xThis, xUntitledProvider );
     }
 
     return m_xTitleHelper;

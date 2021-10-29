@@ -62,16 +62,6 @@ class FWK_DLLPUBLIC TitleHelper final : private ::cppu::BaseMutex
     public:
 
 
-        /** @short  lightweight constructor.
-         */
-        TitleHelper(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
-
-
-        /** @short  free all internally used resources.
-         */
-        virtual ~TitleHelper() override;
-
-
         /** set an outside component which uses this container and must be set
             as source of all broadcasted messages, exceptions.
 
@@ -82,22 +72,16 @@ class FWK_DLLPUBLIC TitleHelper final : private ::cppu::BaseMutex
 
             @param  xOwner
                     the new owner of this collection.
-         */
-        void setOwner (const css::uno::Reference< css::uno::XInterface >& xOwner);
-
-
-        /** set an outside component which provides the right string and number for
-            an untitled component.
-
-            It's holded weak only so we do not need any complex dispose sessions.
-
-            Note: Passing NULL as parameter will be allowed. It will reset the internal
-            member reference only.
-
             @param  xNumbers
-                    the right numbered collection for this helper.
+                    provides the right string and number for  an untitled component.
          */
-        void connectWithUntitledNumbers (const css::uno::Reference< css::frame::XUntitledNumbers >& xNumbers);
+        TitleHelper(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< css::uno::XInterface >& xOwner,
+            const css::uno::Reference< css::frame::XUntitledNumbers >& xNumbers);
+
+        /** @short  free all internally used resources.
+         */
+        virtual ~TitleHelper() override;
 
 
         /** @see XTitle */
