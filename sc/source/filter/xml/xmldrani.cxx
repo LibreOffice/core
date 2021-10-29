@@ -302,7 +302,7 @@ std::unique_ptr<ScDBData> ScXMLDatabaseRangeContext::ConvertToDBData(const OUStr
         table::TableOrientation eOrient = mpQueryParam->bByRow ?
             table::TableOrientation_ROWS : table::TableOrientation_COLUMNS;
         aProperty.Value <<= eOrient;
-        aSortSequence[nOldSize] = aProperty;
+        aSortSequence.getArray()[nOldSize] = aProperty;
         ScSortParam aParam;
         ScSortDescriptor::FillSortParam(aParam, aSortSequence);
 

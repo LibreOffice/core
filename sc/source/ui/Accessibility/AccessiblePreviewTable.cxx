@@ -536,7 +536,7 @@ uno::Sequence<OUString> SAL_CALL ScAccessiblePreviewTable::getSupportedServiceNa
     sal_Int32 nOldSize(aSequence.getLength());
     aSequence.realloc(nOldSize + 1);
 
-    aSequence[nOldSize] = "com.sun.star.table.AccessibleTableView";
+    aSequence.getArray()[nOldSize] = "com.sun.star.table.AccessibleTableView";
 
     return aSequence;
 }

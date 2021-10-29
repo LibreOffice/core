@@ -1002,8 +1002,9 @@ bool ScDPObject::GetMemberNames( sal_Int32 nDim, Sequence<OUString>& rNames )
 
     size_t n = aMembers.size();
     rNames.realloc(n);
+    auto pNames = rNames.getArray();
     for (size_t i = 0; i < n; ++i)
-        rNames[i] = aMembers[i].maName;
+        pNames[i] = aMembers[i].maName;
 
     return true;
 }
@@ -1148,8 +1149,9 @@ bool ScDPObject::GetDataFieldPositionData(
 
     sal_Int32 n = static_cast<sal_Int32>(aFilters.size());
     rFilters.realloc(n);
+    auto pFilters = rFilters.getArray();
     for (sal_Int32 i = 0; i < n; ++i)
-        rFilters[i] = aFilters[i];
+        pFilters[i] = aFilters[i];
 
     return true;
 }
@@ -1385,8 +1387,9 @@ double ScDPObject::GetPivotData(const OUString& rDataFieldName, std::vector<shee
 
     size_t n = rFilters.size();
     uno::Sequence<sheet::DataPilotFieldFilter> aFilters(n);
+    auto aFiltersRange = asNonConstRange(aFilters);
     for (size_t i = 0; i < n; ++i)
-        aFilters[i] = rFilters[i];
+        aFiltersRange[i] = rFilters[i];
 
     uno::Sequence<double> aRes = xDPResults->getFilteredResults(aFilters);
     if (static_cast<sal_Int32>(nDataIndex) >= aRes.getLength())

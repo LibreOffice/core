@@ -193,29 +193,21 @@ bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
 
     bool bScriptReturnedFalse = false;  // default: do not abort
 
-    // Set up parameters
-    css::uno::Sequence< css::uno::Any > aParams(2);
-
     //  1) entered or calculated value
-    OUString aValStr = rInput;
-    double nValue;
-    bool bIsValue = false;
+    css::uno::Any aParam0(rInput);
     if ( pCell )                // if cell exists, call interpret
     {
-        bIsValue = pCell->IsValue();
-        if ( bIsValue )
-            nValue  = pCell->GetValue();
+        if ( pCell->IsValue() )
+            aParam0 <<= pCell->GetValue();
         else
-            aValStr = pCell->GetString().getString();
+            aParam0 <<= pCell->GetString().getString();
     }
-    if ( bIsValue )
-        aParams[0] <<= nValue;
-    else
-        aParams[0] <<= aValStr;
 
     //  2) Position of the cell
     OUString aPosStr(rPos.Format(ScRefFlags::VALID | ScRefFlags::TAB_3D, pDocument, pDocument->GetAddressConvention()));
-    aParams[1] <<= aPosStr;
+
+    // Set up parameters
+    css::uno::Sequence< css::uno::Any > aParams{ aParam0, css::uno::Any(aPosStr) };
 
     //  use link-update flag to prevent closing the document
     //  while the macro is running

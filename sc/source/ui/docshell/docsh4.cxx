@@ -60,6 +60,7 @@ using namespace ::com::sun::star;
 
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <docuno.hxx>
 
 #include <docsh.hxx>
@@ -2724,9 +2725,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
     {
         SC_MOD()->SetInSharedDocLoading( true );
         uno::Reference< frame::XDesktop2 > xLoader = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
-        uno::Sequence < beans::PropertyValue > aArgs( 1 );
-        aArgs[0].Name = "Hidden";
-        aArgs[0].Value <<= true;
+        uno::Sequence aArgs{ comphelper::makePropertyValue("Hidden", true) };
 
         if ( GetMedium() )
         {
@@ -2734,15 +2733,17 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
             if ( pPasswordItem && !pPasswordItem->GetValue().isEmpty() )
             {
                 aArgs.realloc( 2 );
-                aArgs[1].Name = "Password";
-                aArgs[1].Value <<= pPasswordItem->GetValue();
+                auto pArgs = aArgs.getArray();
+                pArgs[1].Name = "Password";
+                pArgs[1].Value <<= pPasswordItem->GetValue();
             }
             const SfxUnoAnyItem* pEncryptionItem = SfxItemSet::GetItem<SfxUnoAnyItem>(GetMedium()->GetItemSet(), SID_ENCRYPTIONDATA, false);
             if (pEncryptionItem)
             {
                 aArgs.realloc(aArgs.getLength() + 1);
-                aArgs[aArgs.getLength() - 1].Name = "EncryptionData";
-                aArgs[aArgs.getLength() - 1].Value = pEncryptionItem->GetValue();
+                auto pArgs = aArgs.getArray();
+                pArgs[aArgs.getLength() - 1].Name = "EncryptionData";
+                pArgs[aArgs.getLength() - 1].Value = pEncryptionItem->GetValue();
             }
         }
 
