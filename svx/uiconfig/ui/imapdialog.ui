@@ -140,7 +140,6 @@
                 <child>
                   <object class="GtkToolButton" id="TBI_APPLY">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="label" translatable="yes" context="imapdialog|TBI_APPLY">Apply</property>
                     <property name="icon_name">svx/res/id01.png</property>
@@ -158,7 +157,6 @@
                 <child>
                   <object class="GtkToolButton" id="TBI_OPEN">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="label" translatable="yes" context="imapdialog|TBI_OPEN">Open...</property>
                     <property name="icon_name">svx/res/id02.png</property>
@@ -176,7 +174,6 @@
                 <child>
                   <object class="GtkToolButton" id="TBI_SAVEAS">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="label" translatable="yes" context="imapdialog|TBI_SAVEAS">Save...</property>
                     <property name="icon_name">svx/res/id03.png</property>
@@ -194,7 +191,6 @@
                 <child>
                   <object class="GtkToolButton" id="TBI_CLOSE">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="label" translatable="yes" context="imapdialog|TBI_CLOSE">Close</property>
                   </object>
@@ -206,7 +202,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id="TBI_SELECT">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="label" translatable="yes" context="imapdialog|TBI_SELECT">Select</property>
                     <property name="icon_name">svx/res/id04.png</property>
@@ -224,7 +219,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id="TBI_RECT">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="label" translatable="yes" context="imapdialog|TBI_RECT">Rectangle</property>
                     <property name="icon_name">svx/res/id05.png</property>
@@ -242,7 +236,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id="TBI_CIRCLE">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="label" translatable="yes" context="imapdialog|TBI_CIRCLE">Ellipse</property>
                     <property name="icon_name">svx/res/id06.png</property>
@@ -260,7 +253,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id="TBI_POLY">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="label" translatable="yes" context="imapdialog|TBI_POLY">Polygon</property>
                     <property name="icon_name">svx/res/id07.png</property>
@@ -278,7 +270,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id="TBI_FREEPOLY">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="label" translatable="yes" context="imapdialog|TBI_FREEPOLY">Freeform Polygon</property>
                     <property name="icon_name">svx/res/id08.png</property>
@@ -296,7 +287,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id="TBI_POLYEDIT">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="label" translatable="yes" context="imapdialog|TBI_POLYEDIT">Edit Points</property>
                     <property name="icon_name">svx/res/id030.png</property>
@@ -314,7 +304,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id="TBI_POLYMOVE">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="label" translatable="yes" context="imapdialog|TBI_POLYMOVE">Move Points</property>
                     <property name="icon_name">svx/res/id031.png</property>
@@ -332,7 +321,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id="TBI_POLYINSERT">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="label" translatable="yes" context="imapdialog|TBI_POLYINSERT">Insert Points</property>
                     <property name="icon_name">svx/res/id032.png</property>
@@ -350,7 +338,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id="TBI_POLYDELETE">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="label" translatable="yes" context="imapdialog|TBI_POLYDELETE">Delete Points</property>
                     <property name="icon_name">svx/res/id033.png</property>
@@ -368,7 +355,6 @@
                 <child>
                   <object class="GtkToolButton" id="TBI_UNDO">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="label" translatable="yes" context="imapdialog|TBI_UNDO">Undo </property>
                     <property name="icon_name">svx/res/id040.png</property>
@@ -381,7 +367,6 @@
                 <child>
                   <object class="GtkToolButton" id="TBI_REDO">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="label" translatable="yes" context="imapdialog|TBI_REDO">Redo</property>
                     <property name="icon_name">svx/res/id041.png</property>
@@ -394,7 +379,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id="TBI_ACTIVE">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="label" translatable="yes" context="imapdialog|TBI_ACTIVE">Active</property>
                     <property name="icon_name">svx/res/id016.png</property>
@@ -412,7 +396,6 @@
                 <child>
                   <object class="GtkToolButton" id="TBI_MACRO">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="label" translatable="yes" context="imapdialog|TBI_MACRO">Macro...</property>
                     <property name="icon_name">svx/res/id018.png</property>
@@ -430,7 +413,6 @@
                 <child>
                   <object class="GtkToolButton" id="TBI_PROPERTY">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="label" translatable="yes" context="imapdialog|TBI_PROPERTY">Properties...</property>
                     <property name="icon_name">svx/res/id019.png</property>

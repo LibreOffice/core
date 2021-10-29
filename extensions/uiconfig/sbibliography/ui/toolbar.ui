@@ -9,7 +9,6 @@
     <child>
       <object class="GtkToolButton" id="TBC_SOURCE">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="action_name">.uno:Bib/source</property>
         <property name="use_underline">True</property>
       </object>
@@ -21,7 +20,6 @@
     <child>
       <object class="GtkToolButton" id="TBC_BT_CHANGESOURCE">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="action_name">.uno:Bib/sdbsource</property>
         <property name="label" translatable="yes" context="toolbar|TBC_BT_CHANGESOURCE">Data Source</property>
         <property name="use_underline">True</property>
@@ -44,7 +42,6 @@
     <child>
       <object class="GtkToolButton" id="TBC_QUERY">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="action_name">.uno:Bib/query</property>
         <property name="use_underline">True</property>
       </object>
@@ -66,7 +63,6 @@
     <child>
       <object class="GtkMenuToolButton" id="TBC_BT_AUTOFILTER">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="action_name">.uno:Bib/autoFilter</property>
         <property name="label" translatable="yes" context="toolbar|TBC_BT_AUTOFILTER">AutoFilter</property>
         <property name="use_underline">True</property>
@@ -79,7 +75,6 @@
     <child>
       <object class="GtkToolButton" id="TBC_BT_FILTERCRIT">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="action_name">.uno:Bib/standardFilter</property>
         <property name="label" translatable="yes" context="toolbar|TBC_BT_FILTERCRIT">Standard Filter</property>
         <property name="use_underline">True</property>
@@ -92,7 +87,6 @@
     <child>
       <object class="GtkToolButton" id="TBC_BT_REMOVEFILTER">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="action_name">.uno:Bib/removeFilter</property>
         <property name="label" translatable="yes" context="toolbar|TBC_BT_REMOVEFILTER">Reset Filter</property>
         <property name="use_underline">True</property>
@@ -105,7 +99,6 @@
     <child>
       <object class="GtkToolButton" id="TBC_BT_COL_ASSIGN">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="action_name">.uno:Bib/Mapping</property>
         <property name="label" translatable="yes" context="toolbar|TBC_BT_COL_ASSIGN">Column Arrangement</property>
         <property name="use_underline">True</property>

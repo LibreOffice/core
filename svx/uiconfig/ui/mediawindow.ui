@@ -92,7 +92,6 @@
                 <child>
                   <object class="GtkToolButton" id="open">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="label" translatable="no">Open</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">avmedia/res/av02048.png</property>
@@ -105,7 +104,6 @@
                 <child>
                   <object class="GtkToolButton" id="apply">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="label" translatable="no">Apply</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">avmedia/res/av02053.png</property>
@@ -128,7 +126,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id="play">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="label" translatable="no">Play</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">avmedia/res/av02049.png</property>
@@ -141,7 +138,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id="pause">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="label" translatable="no">Pause</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">avmedia/res/av02050.png</property>
@@ -154,7 +150,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id="stop">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="label" translatable="no">Stop</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">avmedia/res/av02051.png</property>
@@ -177,7 +172,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id="loop">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="label" translatable="no">Repeat</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">avmedia/res/av02052.png</property>
@@ -207,7 +201,6 @@
                     <child>
                       <object class="GtkToggleToolButton" id="mute">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="label" translatable="no">Mute</property>
                         <property name="use_underline">True</property>
                         <property name="icon_name">avmedia/res/av02054.png</property>
