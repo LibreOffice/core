@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab646f4d_fee4435d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-10-29T06:58:06Z",
+      "side": 1,
+      "message": "Hi Mike! Imho this should fix the problem. It is clear, that a variable should only be deleted, if we have a REDIM and not a DIM, because DIM is correctly handled at runtime. What do you think?",
+      "revId": "f275e12eed171fe708efbbe840fc8b798f4c99ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
