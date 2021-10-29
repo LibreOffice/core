@@ -93,7 +93,6 @@
                             <child>
                               <object class="GtkToolButton" id="up">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="label" translatable="yes" context="floatingsort|up">Move up</property>
                                 <property name="use_underline">True</property>
                                 <property name="icon_name">cmd/sc_moveup.png</property>
@@ -106,7 +105,6 @@
                             <child>
                               <object class="GtkToolButton" id="down">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="label" translatable="yes" context="floatingsort|down">Move down</property>
                                 <property name="use_underline">True</property>
                                 <property name="icon_name">cmd/sc_movedown.png</property>
@@ -119,7 +117,6 @@
                             <child>
                               <object class="GtkToolButton" id="delete">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="label" translatable="yes" context="floatingsort|delete">Delete</property>
                                 <property name="use_underline">True</property>
                                 <property name="icon_name">cmd/sc_deleterows.png</property>

@@ -100,7 +100,6 @@
                         <child>
                           <object class="GtkToolButton" id="left">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
                             <property name="tooltip_text" translatable="yes" context="floatingareastyle|left|tooltip_text">Rotate counterclockwise by 45 degrees.</property>
                             <property name="icon_name">svx/res/symphony/rotate_left.png</property>
                           </object>
@@ -125,7 +124,6 @@
                         <child>
                           <object class="GtkToolButton" id="right">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
                             <property name="tooltip_text" translatable="yes" context="floatingareastyle|right|tooltip_text">Rotate clockwise by 45 degrees.</property>
                             <property name="icon_name">svx/res/symphony/rotate_right.png</property>
                           </object>

@@ -90,7 +90,7 @@
         </child>
         <child>
           <object class="GtkToolbar" id="toolbar">
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
             <property name="no-show-all">True</property>
             <property name="toolbar-style">icons</property>
             <property name="show-arrow">False</property>
@@ -98,7 +98,6 @@
             <child>
               <object class="GtkToolButton" id="button">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="deck|SFX_STR_SIDEBAR_CLOSE_DECK">Close Sidebar Deck</property>
                 <property name="use-underline">True</property>
                 <property name="icon-name">window-close-symbolic</property>

@@ -139,7 +139,6 @@
             <child>
               <object class="GtkToolButton" id="first">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes" context="navigatorpanel|first|tooltip_text">First Slide</property>
                 <property name="icon_name">sd/res/nv03.png</property>
                 <child internal-child="accessible">
@@ -156,7 +155,6 @@
             <child>
               <object class="GtkToolButton" id="previous">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes" context="navigatorpanel|previous|tooltip_text">Previous Slide</property>
                 <property name="icon_name">sd/res/nv04.png</property>
                 <child internal-child="accessible">
@@ -173,7 +171,6 @@
             <child>
               <object class="GtkToolButton" id="next">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes" context="navigatorpanel|next|tooltip_text">Next Slide</property>
                 <property name="icon_name">sd/res/nv05.png</property>
                 <child internal-child="accessible">
@@ -190,7 +187,6 @@
             <child>
               <object class="GtkToolButton" id="last">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes" context="navigatorpanel|last|tooltip_text">Last Slide</property>
                 <property name="icon_name">sd/res/nv06.png</property>
                 <child internal-child="accessible">
@@ -219,7 +215,6 @@
             <child>
               <object class="GtkMenuToolButton" id="dragmode">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes" context="navigatorpanel|dragmode|tooltip_text">Drag Mode</property>
                 <property name="icon_name">sd/res/nv09.png</property>
                 <child internal-child="accessible">
@@ -236,7 +231,6 @@
             <child>
               <object class="GtkMenuToolButton" id="shapes">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes" context="navigatorpanel|shapes|tooltip_text">Show Shapes</property>
                 <property name="icon_name">sd/res/graphic.png</property>
                 <child internal-child="accessible">

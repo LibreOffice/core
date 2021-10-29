@@ -500,7 +500,6 @@
                 <child>
                   <object class="GtkToggleToolButton" id="pipette">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="dockingcolorreplace|pipette">Pipette</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">res/sc10350.png</property>
