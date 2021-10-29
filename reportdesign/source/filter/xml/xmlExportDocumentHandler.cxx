@@ -309,7 +309,7 @@ void SAL_CALL ExportDocumentHandler::initialize( const uno::Sequence< uno::Any >
         {
             sal_Int32 nCount = m_aColumns.getLength();
             m_aColumns.realloc(nCount+1);
-            m_aColumns[nCount] = rColumnName;
+            m_aColumns.getArray()[nCount] = rColumnName;
         }
     }
 }

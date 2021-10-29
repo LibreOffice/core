@@ -372,7 +372,7 @@ namespace
     {
         sal_Int32 nLen( _out_rProperties.getLength() );
         _out_rProperties.realloc( nLen + 1 );
-        _out_rProperties[ nLen ] = beans::NamedValue( _sName, _rValue );
+        _out_rProperties.getArray()[ nLen ] = beans::NamedValue( _sName, _rValue );
     }
 
 
@@ -958,6 +958,7 @@ uno::Sequence< OUString > getParameterNames( const uno::Reference< sdbc::XRowSet
         {
             sal_Int32 count( xParams->getCount() );
             aNames.realloc( count );
+            auto pNames = aNames.getArray();
 
             uno::Reference< beans::XPropertySet > xParam;
             OUString sParamName;
@@ -965,7 +966,7 @@ uno::Sequence< OUString > getParameterNames( const uno::Reference< sdbc::XRowSet
             {
                 xParam.set( xParams->getByIndex(i), uno::UNO_QUERY_THROW );
                 OSL_VERIFY( xParam->getPropertyValue( PROPERTY_NAME ) >>= sParamName );
-                aNames[i] = sParamName;
+                pNames[i] = sParamName;
             }
         }
     }

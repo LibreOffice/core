@@ -37,6 +37,8 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
+#include <algorithm>
+
 namespace rptui
 {
 using namespace ::dbaui;
@@ -632,12 +634,10 @@ uno::Any ODesignView::getCurrentlyShownProperty() const
         if ( !aSelection.empty() )
         {
             uno::Sequence< uno::Reference< report::XReportComponent > > aSeq(aSelection.size());
-            sal_Int32 i = 0;
-            for(const auto& rxInterface : aSelection)
-            {
-                aSeq[i].set(rxInterface,uno::UNO_QUERY);
-                ++i;
-            }
+            std::transform(
+                aSelection.begin(), aSelection.end(), aSeq.getArray(),
+                [](const auto& rxInterface)
+                { return uno::Reference<report::XReportComponent>(rxInterface, uno::UNO_QUERY); });
             aRet <<= aSeq;
         }
     }

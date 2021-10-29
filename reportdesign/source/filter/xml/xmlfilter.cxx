@@ -213,14 +213,15 @@ static ErrCode ReadThroughComponent(
             nArgs++;
 
         uno::Sequence< uno::Any > aFilterCompArgs( nArgs );
+        auto aFilterCompArgsRange = asNonConstRange(aFilterCompArgs);
 
         nArgs = 0;
         if (rxGraphicStorageHandler.is())
-            aFilterCompArgs[nArgs++] <<= rxGraphicStorageHandler;
+            aFilterCompArgsRange[nArgs++] <<= rxGraphicStorageHandler;
         if( _xEmbeddedObjectResolver.is())
-            aFilterCompArgs[ nArgs++ ] <<= _xEmbeddedObjectResolver;
+            aFilterCompArgsRange[ nArgs++ ] <<= _xEmbeddedObjectResolver;
         if ( _xProp.is() )
-            aFilterCompArgs[ nArgs++ ] <<= _xProp;
+            aFilterCompArgsRange[ nArgs++ ] <<= _xProp;
 
         // the underlying SvXMLImport implements XFastParser, XImporter, XFastDocumentHandler
         Reference< XFastParser > xFastParser(
@@ -407,14 +408,13 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         uno::Reference<document::XEmbeddedObjectResolver> xEmbeddedObjectResolver;
         uno::Reference< uno::XComponentContext > xContext = GetComponentContext();
 
-        uno::Sequence<uno::Any> aArgs(1);
-        aArgs[0] <<= xStorage;
+        uno::Sequence<uno::Any> aArgs{ uno::Any(xStorage) };
         xGraphicStorageHandler.set(
                 xContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.comp.Svx.GraphicImportHelper", aArgs, xContext),
                 uno::UNO_QUERY);
 
         uno::Reference< lang::XMultiServiceFactory > xReportServiceFactory( m_xReportDefinition, uno::UNO_QUERY);
-        aArgs[0] <<= beans::NamedValue("Storage",uno::makeAny(xStorage));
+        aArgs.getArray()[0] <<= beans::NamedValue("Storage", uno::makeAny(xStorage));
         xEmbeddedObjectResolver.set( xReportServiceFactory->createInstanceWithArguments("com.sun.star.document.ImportEmbeddedObjectResolver",aArgs) , uno::UNO_QUERY);
 
         static constexpr OUStringLiteral s_sOld = u"OldFormat";
