@@ -579,10 +579,11 @@ public:
 
         sal_Int32 nReadSize = std::min<sal_Int32>(nBytesToRead, remainingSize());
         rData.realloc(nReadSize);
+        auto pData = rData.getArray();
         std::vector<sal_Int8>::const_iterator it = maBytes.cbegin();
         std::advance(it, mnPos);
         for (sal_Int32 i = 0; i < nReadSize; ++i, ++it)
-            rData[i] = *it;
+            pData[i] = *it;
 
         mnPos += nReadSize;
 
