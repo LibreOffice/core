@@ -131,7 +131,7 @@ void SwEditShell::FieldToText( SwFieldType const * pType )
     Push();
     SwPaM* pPaM = GetCursor();
     const SwFieldHint aHint(pPaM, GetLayout());
-    CallSwClientNotify(aHint);
+    pType->CallSwClientNotify(aHint);
 
     Pop(PopMode::DeleteCurrent);
     EndAllAction();
