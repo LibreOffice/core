@@ -33,6 +33,24 @@
       "message": "The simplest workaround to avoid false loplugin:implicitboolconversion here would be to change the declaration of pPossibilityList above from `auto` to `sal_Bool *`.  (Unfortunately, information about typedefs occasionally gets lost at some places in Clang, but that plugin depends on seeing the sal_Bool typedef here.)",
       "revId": "d99b253400a02cc239ea5d5cc0db9f1272efe5ac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71f43bd8_581f40a2",
+        "filename": "chart2/source/tools/AxisHelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 896,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-29T11:42:24Z",
+      "side": 1,
+      "message": "Thanks - that worked in https://gerrit.libreoffice.org/c/core/+/124428",
+      "parentUuid": "6c8678b5_7e451250",
+      "revId": "d99b253400a02cc239ea5d5cc0db9f1272efe5ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
