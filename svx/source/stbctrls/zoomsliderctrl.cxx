@@ -18,6 +18,8 @@
  */
 
 #include <svx/zoomsliderctrl.hxx>
+
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/status.hxx>
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
@@ -382,10 +384,8 @@ void SvxZoomSliderControl::repaintAndExecute()
     css::uno::Any any;
     aZoomSliderItem.QueryValue(any);
 
-    css::uno::Sequence<css::beans::PropertyValue> aArgs(1);
-    aArgs[0].Name = "ZoomSlider";
-    aArgs[0].Value = any;
-
+    css::uno::Sequence<css::beans::PropertyValue> aArgs{ comphelper::makePropertyValue("ZoomSlider",
+                                                                                       any) };
     execute(aArgs);
 }
 

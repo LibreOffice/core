@@ -238,11 +238,8 @@ bool CreateDir( const INetURLObject& rURL )
             INetURLObject                           aParentURL( rURL );
             aParentURL.removeSegment();
             ::ucbhelper::Content                    aParent( aParentURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aCmdEnv, comphelper::getProcessComponentContext() );
-            uno::Sequence< OUString >               aProps( 1 );
-            uno::Sequence< uno::Any >               aValues( 1 );
-
-            aProps[0] = "Title";
-            aValues[0] <<= rURL.GetLastName();
+            uno::Sequence< OUString >               aProps{ "Title" };
+            uno::Sequence< uno::Any >               aValues{ uno::Any(rURL.GetLastName()) };
 
             ::ucbhelper::Content aContent( rURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aCmdEnv, comphelper::getProcessComponentContext() );
             bRet = aParent.insertNewContent( "application/vnd.sun.staroffice.fsys-folder", aProps, aValues, aContent );

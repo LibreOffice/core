@@ -22,6 +22,7 @@
 #include <bitmaps.hlst>
 #include <docrecovery.hxx>
 
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/string.hxx>
 #include <o3tl/safeint.hxx>
@@ -101,11 +102,12 @@ void RecoveryCore::saveBrokenTempEntries(const OUString& rPath)
     // prepare all needed parameters for the following dispatch() request.
     css::util::URL aCopyURL = impl_getParsedURL(RECOVERY_CMD_DO_ENTRY_BACKUP);
     css::uno::Sequence< css::beans::PropertyValue > lCopyArgs(3);
-    lCopyArgs[0].Name    = PROP_DISPATCHASYNCHRON;
-    lCopyArgs[0].Value <<= false;
-    lCopyArgs[1].Name    = PROP_SAVEPATH;
-    lCopyArgs[1].Value <<= rPath;
-    lCopyArgs[2].Name    = PROP_ENTRYID;
+    auto plCopyArgs = lCopyArgs.getArray();
+    plCopyArgs[0].Name    = PROP_DISPATCHASYNCHRON;
+    plCopyArgs[0].Value <<= false;
+    plCopyArgs[1].Name    = PROP_SAVEPATH;
+    plCopyArgs[1].Value <<= rPath;
+    plCopyArgs[2].Name    = PROP_ENTRYID;
     // lCopyArgs[2].Value will be changed during next loop...
 
     // work on a copied list only...
@@ -118,7 +120,7 @@ void RecoveryCore::saveBrokenTempEntries(const OUString& rPath)
         if (!RecoveryCore::isBrokenTempEntry(rInfo))
             continue;
 
-        lCopyArgs[2].Value <<= rInfo.ID;
+        plCopyArgs[2].Value <<= rInfo.ID;
         m_xRealCore->dispatch(aCopyURL, lCopyArgs);
     }
 }
@@ -135,11 +137,12 @@ void RecoveryCore::saveAllTempEntries(const OUString& rPath)
     // prepare all needed parameters for the following dispatch() request.
     css::util::URL aCopyURL = impl_getParsedURL(RECOVERY_CMD_DO_ENTRY_BACKUP);
     css::uno::Sequence< css::beans::PropertyValue > lCopyArgs(3);
-    lCopyArgs[0].Name    = PROP_DISPATCHASYNCHRON;
-    lCopyArgs[0].Value <<= false;
-    lCopyArgs[1].Name    = PROP_SAVEPATH;
-    lCopyArgs[1].Value <<= rPath;
-    lCopyArgs[2].Name    = PROP_ENTRYID;
+    auto plCopyArgs = lCopyArgs.getArray();
+    plCopyArgs[0].Name    = PROP_DISPATCHASYNCHRON;
+    plCopyArgs[0].Value <<= false;
+    plCopyArgs[1].Name    = PROP_SAVEPATH;
+    plCopyArgs[1].Value <<= rPath;
+    plCopyArgs[2].Name    = PROP_ENTRYID;
     // lCopyArgs[2].Value will be changed during next loop ...
 
     // work on a copied list only ...
@@ -152,7 +155,7 @@ void RecoveryCore::saveAllTempEntries(const OUString& rPath)
         if (rInfo.TempURL.isEmpty())
             continue;
 
-        lCopyArgs[2].Value <<= rInfo.ID;
+        plCopyArgs[2].Value <<= rInfo.ID;
         m_xRealCore->dispatch(aCopyURL, lCopyArgs);
     }
 }
@@ -165,9 +168,10 @@ void RecoveryCore::forgetBrokenTempEntries()
 
     css::util::URL aRemoveURL = impl_getParsedURL(RECOVERY_CMD_DO_ENTRY_CLEANUP);
     css::uno::Sequence< css::beans::PropertyValue > lRemoveArgs(2);
-    lRemoveArgs[0].Name    = PROP_DISPATCHASYNCHRON;
-    lRemoveArgs[0].Value <<= false;
-    lRemoveArgs[1].Name    = PROP_ENTRYID;
+    auto plRemoveArgs = lRemoveArgs.getArray();
+    plRemoveArgs[0].Name    = PROP_DISPATCHASYNCHRON;
+    plRemoveArgs[0].Value <<= false;
+    plRemoveArgs[1].Name    = PROP_ENTRYID;
     // lRemoveArgs[1].Value will be changed during next loop ...
 
     // work on a copied list only ...
@@ -180,7 +184,7 @@ void RecoveryCore::forgetBrokenTempEntries()
         if (!RecoveryCore::isBrokenTempEntry(rInfo))
             continue;
 
-        lRemoveArgs[1].Value <<= rInfo.ID;
+        plRemoveArgs[1].Value <<= rInfo.ID;
         m_xRealCore->dispatch(aRemoveURL, lRemoveArgs);
     }
 }
@@ -193,9 +197,10 @@ void RecoveryCore::forgetAllRecoveryEntries()
 
     css::util::URL aRemoveURL = impl_getParsedURL(RECOVERY_CMD_DO_ENTRY_CLEANUP);
     css::uno::Sequence< css::beans::PropertyValue > lRemoveArgs(2);
-    lRemoveArgs[0].Name    = PROP_DISPATCHASYNCHRON;
-    lRemoveArgs[0].Value <<= false;
-    lRemoveArgs[1].Name    = PROP_ENTRYID;
+    auto plRemoveArgs = lRemoveArgs.getArray();
+    plRemoveArgs[0].Name    = PROP_DISPATCHASYNCHRON;
+    plRemoveArgs[0].Value <<= false;
+    plRemoveArgs[1].Name    = PROP_ENTRYID;
     // lRemoveArgs[1].Value will be changed during next loop ...
 
     // work on a copied list only ...
@@ -205,7 +210,7 @@ void RecoveryCore::forgetAllRecoveryEntries()
     TURLList lURLs = m_lURLs;
     for (const TURLInfo& rInfo : lURLs)
     {
-        lRemoveArgs[1].Value <<= rInfo.ID;
+        plRemoveArgs[1].Value <<= rInfo.ID;
         m_xRealCore->dispatch(aRemoveURL, lRemoveArgs);
     }
 }
@@ -218,9 +223,10 @@ void RecoveryCore::forgetBrokenRecoveryEntries()
 
     css::util::URL aRemoveURL = impl_getParsedURL(RECOVERY_CMD_DO_ENTRY_CLEANUP);
     css::uno::Sequence< css::beans::PropertyValue > lRemoveArgs(2);
-    lRemoveArgs[0].Name    = PROP_DISPATCHASYNCHRON;
-    lRemoveArgs[0].Value <<= false;
-    lRemoveArgs[1].Name    = PROP_ENTRYID;
+    auto plRemoveArgs = lRemoveArgs.getArray();
+    plRemoveArgs[0].Name    = PROP_DISPATCHASYNCHRON;
+    plRemoveArgs[0].Value <<= false;
+    plRemoveArgs[1].Name    = PROP_ENTRYID;
     // lRemoveArgs[1].Value will be changed during next loop ...
 
     // work on a copied list only ...
@@ -233,7 +239,7 @@ void RecoveryCore::forgetBrokenRecoveryEntries()
         if (!RecoveryCore::isBrokenTempEntry(rInfo))
             continue;
 
-        lRemoveArgs[1].Value <<= rInfo.ID;
+        plRemoveArgs[1].Value <<= rInfo.ID;
         m_xRealCore->dispatch(aRemoveURL, lRemoveArgs);
     }
 }
@@ -258,9 +264,8 @@ void RecoveryCore::doEmergencySavePrepare()
 
     css::util::URL aURL = impl_getParsedURL(RECOVERY_CMD_DO_PREPARE_EMERGENCY_SAVE);
 
-    css::uno::Sequence< css::beans::PropertyValue > lArgs(1);
-    lArgs[0].Name    = PROP_DISPATCHASYNCHRON;
-    lArgs[0].Value <<= false;
+    css::uno::Sequence< css::beans::PropertyValue > lArgs{ comphelper::makePropertyValue(
+        PROP_DISPATCHASYNCHRON, false) };
 
     m_xRealCore->dispatch(aURL, lArgs);
 }
@@ -273,11 +278,10 @@ void RecoveryCore::doEmergencySave()
 
     css::util::URL aURL = impl_getParsedURL(RECOVERY_CMD_DO_EMERGENCY_SAVE);
 
-    css::uno::Sequence< css::beans::PropertyValue > lArgs(2);
-    lArgs[0].Name    = PROP_STATUSINDICATOR;
-    lArgs[0].Value <<= m_xProgress;
-    lArgs[1].Name    = PROP_DISPATCHASYNCHRON;
-    lArgs[1].Value <<= true;
+    css::uno::Sequence< css::beans::PropertyValue > lArgs{
+        comphelper::makePropertyValue(PROP_STATUSINDICATOR, m_xProgress),
+        comphelper::makePropertyValue(PROP_DISPATCHASYNCHRON, true)
+    };
 
     m_xRealCore->dispatch(aURL, lArgs);
 }
@@ -290,11 +294,10 @@ void RecoveryCore::doRecovery()
 
     css::util::URL aURL = impl_getParsedURL(RECOVERY_CMD_DO_RECOVERY);
 
-    css::uno::Sequence< css::beans::PropertyValue > lArgs(2);
-    lArgs[0].Name    = PROP_STATUSINDICATOR;
-    lArgs[0].Value <<= m_xProgress;
-    lArgs[1].Name    = PROP_DISPATCHASYNCHRON;
-    lArgs[1].Value <<= true;
+    css::uno::Sequence< css::beans::PropertyValue > lArgs{
+        comphelper::makePropertyValue(PROP_STATUSINDICATOR, m_xProgress),
+        comphelper::makePropertyValue(PROP_DISPATCHASYNCHRON, true)
+    };
 
     m_xRealCore->dispatch(aURL, lArgs);
 }
