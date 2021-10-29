@@ -67,6 +67,7 @@ css::uno::Sequence<OUString> BuildContextList (const ContextList& rContextList)
     const ::std::vector<ContextList::Entry>& entries = rContextList.GetEntries();
 
     css::uno::Sequence<OUString> result(entries.size());
+    auto resultRange = asNonConstRange(result);
     tools::Long i = 0;
 
     for (auto const& entry : entries)
@@ -86,7 +87,7 @@ css::uno::Sequence<OUString> BuildContextList (const ContextList& rContextList)
         if (!menuCommand.isEmpty())
             element += ", "+menuCommand;
 
-        result[i] = element;
+        resultRange[i] = element;
 
         ++i;
     }

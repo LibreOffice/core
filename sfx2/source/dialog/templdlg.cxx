@@ -32,6 +32,7 @@
 #include <svl/stritem.hxx>
 #include <svl/style.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
@@ -633,9 +634,8 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, LoadFactoryStyleFilter_Hdl, SfxObjectShe
 void SfxCommonTemplateDialog_Impl::SaveFactoryStyleFilter( SfxObjectShell const * i_pObjSh, sal_Int32 i_nFilter )
 {
     OSL_ENSURE( i_pObjSh, "SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter(): no ObjectShell" );
-    Sequence< PropertyValue > lProps(1);
-    lProps[0].Name = "ooSetupFactoryStyleFilter";
-    lProps[0].Value <<= i_nFilter | (m_bWantHierarchical ? 0x1000 : 0);
+    Sequence< PropertyValue > lProps{ comphelper::makePropertyValue(
+        "ooSetupFactoryStyleFilter", i_nFilter | (m_bWantHierarchical ? 0x1000 : 0)) };
     xModuleManager->replaceByName( getModuleIdentifier( xModuleManager, i_pObjSh ), makeAny( lProps ) );
 }
 

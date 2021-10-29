@@ -9,6 +9,8 @@
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
+
+#include <comphelper/propertyvalue.hxx>
 #include <drawinglayer/primitive2d/discretebitmapprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <i18nutil/paper.hxx>
@@ -189,13 +191,9 @@ void RecentDocsViewItem::OpenDocument()
     Reference<util::XURLTransformer> xTrans(util::URLTransformer::create(::comphelper::getProcessComponentContext()));
     xTrans->parseStrict(aTargetURL);
 
-    aArgsList.realloc(2);
-    aArgsList[0].Name = "Referer";
-    aArgsList[0].Value <<= OUString("private:user");
-
-    // documents will never be opened as templates
-    aArgsList[1].Name = "AsTemplate";
-    aArgsList[1].Value <<= false;
+    aArgsList = { comphelper::makePropertyValue("Referer", OUString("private:user")),
+                  // documents will never be opened as templates
+                  comphelper::makePropertyValue("AsTemplate", false) };
 
     xDispatch = xDesktop->queryDispatch(aTargetURL, "_default", 0);
 

@@ -611,7 +611,7 @@ void FileDialogHelper_Impl::updateVersions()
                 const uno::Sequence < util::RevisionTag > xVersions = SfxMedium::GetVersionList( xStorage );
 
                 aEntries.realloc( xVersions.getLength() + 1 );
-                aEntries[0] = SfxResId( STR_SFX_FILEDLG_ACTUALVERSION );
+                aEntries.getArray()[0] = SfxResId( STR_SFX_FILEDLG_ACTUALVERSION );
 
                 std::transform(xVersions.begin(), xVersions.end(), std::next(aEntries.getArray()),
                     [](const util::RevisionTag& rVersion) -> OUString { return rVersion.Identifier; });
@@ -1036,6 +1036,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
         auto xWindow = GetFrameInterface();
 
         Sequence < Any > aInitArguments(!xWindow.is() ? 3 : 4);
+        auto pInitArguments = aInitArguments.getArray();
 
         // This is a hack. We currently know that the internal file picker implementation
         // supports the extended arguments as specified below.
@@ -1044,30 +1045,30 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
         // b) adjust the implementation of the system file picker to that it recognizes it
         if ( mbSystemPicker )
         {
-            aInitArguments[0] <<= nTemplateDescription;
+            pInitArguments[0] <<= nTemplateDescription;
             if (xWindow.is())
-                aInitArguments[1] <<= xWindow;
+                pInitArguments[1] <<= xWindow;
         }
         else
         {
-            aInitArguments[0] <<= NamedValue(
+            pInitArguments[0] <<= NamedValue(
                                     "TemplateDescription",
                                     makeAny( nTemplateDescription )
                                 );
 
-            aInitArguments[1] <<= NamedValue(
+            pInitArguments[1] <<= NamedValue(
                                     "StandardDir",
                                     makeAny( sStandardDir )
                                 );
 
-            aInitArguments[2] <<= NamedValue(
+            pInitArguments[2] <<= NamedValue(
                                     "DenyList",
                                     makeAny( rDenyList )
                                 );
 
 
             if (xWindow.is())
-                aInitArguments[3] <<= NamedValue("ParentWindow", makeAny(xWindow));
+                pInitArguments[3] <<= NamedValue("ParentWindow", makeAny(xWindow));
         }
 
         try
@@ -1149,10 +1150,7 @@ css::uno::Reference<css::ui::dialogs::XFolderPicker2> createFolderPicker(const c
         uno::Reference< XInitialization > xInit(xRet, UNO_QUERY);
         if (xInit.is())
         {
-            Sequence<Any> aInitArguments(2);
-
-            aInitArguments[0] <<= sal_Int32(0);
-            aInitArguments[1] <<= pPreferredParent->GetXWindow();
+            Sequence<Any> aInitArguments{ Any(sal_Int32(0)), Any(pPreferredParent->GetXWindow()) };
 
             try
             {
@@ -2672,6 +2670,7 @@ Sequence< OUString > FileDialogHelper::GetSelectedFiles() const
         if ( nFiles > 1 )
         {
             aResultSeq = Sequence< OUString >( nFiles-1 );
+            auto pResultSeq = aResultSeq.getArray();
 
             INetURLObject aPath( lFiles[0] );
             aPath.setFinalSlash();
@@ -2683,7 +2682,7 @@ Sequence< OUString > FileDialogHelper::GetSelectedFiles() const
                 else
                     aPath.setName( lFiles[i] );
 
-                aResultSeq[i-1] = aPath.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+                pResultSeq[i-1] = aPath.GetMainURL( INetURLObject::DecodeMechanism::NONE );
             }
         }
         else

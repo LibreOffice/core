@@ -33,6 +33,7 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
+#include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -184,11 +185,10 @@ sal_Bool SAL_CALL IFrameObject::load(
         uno::Reference < util::XURLTransformer > xTrans( util::URLTransformer::create( mxContext ) );
         xTrans->parseStrict( aTargetURL );
 
-        uno::Sequence < beans::PropertyValue > aProps(2);
-        aProps[0].Name = "PluginMode";
-        aProps[0].Value <<= sal_Int16(2);
-        aProps[1].Name = "ReadOnly";
-        aProps[1].Value <<= true;
+        uno::Sequence < beans::PropertyValue > aProps{
+            comphelper::makePropertyValue("PluginMode", sal_Int16(2)),
+            comphelper::makePropertyValue("ReadOnly", true)
+        };
         uno::Reference < frame::XDispatch > xDisp = mxFrame->queryDispatch( aTargetURL, "_self", 0 );
         if ( xDisp.is() )
             xDisp->dispatch( aTargetURL, aProps );
