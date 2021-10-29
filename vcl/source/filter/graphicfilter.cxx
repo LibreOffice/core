@@ -21,6 +21,7 @@
 
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/threadpool.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <tools/fract.hxx>
@@ -1805,8 +1806,8 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
 
                         css::uno::Reference< css::xml::sax::XDocumentHandler > xSaxWriter(
                             css::xml::sax::Writer::create( xContext ), css::uno::UNO_QUERY_THROW);
-                        css::uno::Sequence< css::uno::Any > aArguments( 1 );
-                        aArguments[ 0 ] <<= aConfigItem.GetFilterData();
+                        css::uno::Sequence< css::uno::Any > aArguments{ css::uno::Any(
+                            aConfigItem.GetFilterData()) };
                         css::uno::Reference< css::svg::XSVGWriter > xSVGWriter(
                             xContext->getServiceManager()->createInstanceWithArgumentsAndContext( "com.sun.star.svg.SVGWriter", aArguments, xContext),
                                 css::uno::UNO_QUERY );
@@ -1898,9 +1899,10 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
         if (aShortName == PNG_SHORTNAME)
         {
             aFilterData.realloc(aFilterData.getLength() + 1);
-            aFilterData[aFilterData.getLength() - 1].Name = "Compression";
+            auto pFilterData = aFilterData.getArray();
+            pFilterData[aFilterData.getLength() - 1].Name = "Compression";
             // We "know" that this gets passed to zlib's deflateInit2_(). 1 means best speed.
-            aFilterData[aFilterData.getLength() - 1].Value <<= static_cast<sal_Int32>(1);
+            pFilterData[aFilterData.getLength() - 1].Value <<= static_cast<sal_Int32>(1);
         }
 #endif
         nFormat = GetExportFormatNumberForShortName( aShortName );
@@ -1981,9 +1983,8 @@ ErrCode GraphicFilter::LoadGraphic( const OUString &rPath, const OUString &rFilt
 
 ErrCode GraphicFilter::compressAsPNG(const Graphic& rGraphic, SvStream& rOutputStream)
 {
-    css::uno::Sequence< css::beans::PropertyValue > aFilterData(1);
-    aFilterData[0].Name = "Compression";
-    aFilterData[0].Value <<= sal_uInt32(9);
+    css::uno::Sequence< css::beans::PropertyValue > aFilterData{ comphelper::makePropertyValue(
+        "Compression", sal_uInt32(9)) };
 
     sal_uInt16 nFilterFormat = GetExportFormatNumberForShortName(u"PNG");
     return ExportGraphic(rGraphic, OUString(), rOutputStream, nFilterFormat, &aFilterData);

@@ -606,11 +606,8 @@ public:
     {
         if( bPalette )
         {
-            maComponentTags.realloc(1);
-            maComponentTags[0] = rendering::ColorComponentTag::INDEX;
-
-            maComponentBitCounts.realloc(1);
-            maComponentBitCounts[0] = 8;
+            maComponentTags = { rendering::ColorComponentTag::INDEX };
+            maComponentBitCounts = { 8 };
         }
         else
         {
