@@ -241,17 +241,17 @@ bool CopyFormatEtc( LPFORMATETC petcDest, LPFORMATETC petcSrc )
         if ( petcDest != petcSrc )
         {
 
-        petcDest->cfFormat = petcSrc->cfFormat;
+            petcDest->cfFormat = petcSrc->cfFormat;
 
-        petcDest->ptd      = nullptr;
-        if ( nullptr != petcSrc->ptd )
-            petcDest->ptd  = CopyTargetDevice(petcSrc->ptd);
+            petcDest->ptd      = nullptr;
+            if ( nullptr != petcSrc->ptd )
+                petcDest->ptd  = CopyTargetDevice(petcSrc->ptd);
 
-        petcDest->dwAspect = petcSrc->dwAspect;
-        petcDest->lindex   = petcSrc->lindex;
-        petcDest->tymed    = petcSrc->tymed;
+            petcDest->dwAspect = petcSrc->dwAspect;
+            petcDest->lindex   = petcSrc->lindex;
+            petcDest->tymed    = petcSrc->tymed;
 
-        bRet = true;
+            bRet = true;
         }
     }
     __except( EXCEPTION_EXECUTE_HANDLER )
