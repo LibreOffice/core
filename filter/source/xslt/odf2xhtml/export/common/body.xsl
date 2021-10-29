@@ -106,7 +106,7 @@
         <xsl:if test="$listIndent">
             <xsl:element namespace="{$namespace}" name="span">
                 <!-- some locales use , instead of . so replace it -->
-                <xsl:attribute name="style">margin-left:<xsl:value-of select="replace($listIndent, ',', '.')"/>cm</xsl:attribute>
+                <xsl:attribute name="style">margin-left:<xsl:value-of select="translate($listIndent, ',', '.')"/>cm</xsl:attribute>
             </xsl:element>
         </xsl:if>
     </xsl:template>
