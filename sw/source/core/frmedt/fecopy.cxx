@@ -70,7 +70,6 @@
 #include <frameformats.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/svdundo.hxx>
-#include <viewimp.hxx>
 
 using namespace ::com::sun::star;
 

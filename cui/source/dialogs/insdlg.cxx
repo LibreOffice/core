@@ -46,7 +46,6 @@
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/classids.hxx>
-#include <comphelper/propertyvalue.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/viewsh.hxx>
