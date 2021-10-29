@@ -28,7 +28,7 @@
 
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
-#include <com/sun/star/frame/XModel2.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
@@ -130,7 +130,7 @@ private:
 };
 
 // ODatabaseDocument
-typedef cppu::PartialWeakComponentImplHelper<   css::frame::XModel2
+typedef cppu::PartialWeakComponentImplHelper<   css::frame::XModel3
                                                 ,   css::util::XModifiable
                                                 ,   css::frame::XStorable
                                                 ,   css::document::XEventBroadcaster
@@ -329,6 +329,9 @@ public:
     virtual css::uno::Reference< css::frame::XController2 > SAL_CALL createDefaultViewController( const css::uno::Reference< css::frame::XFrame >& Frame ) override ;
     virtual css::uno::Reference< css::frame::XController2 > SAL_CALL createViewController( const OUString& ViewName, const css::uno::Sequence< css::beans::PropertyValue >& Arguments, const css::uno::Reference< css::frame::XFrame >& Frame ) override ;
     virtual void SAL_CALL setArgs(const css::uno::Sequence<css::beans::PropertyValue>& aArgs) override;
+
+    // XModel3
+    virtual ::css::uno::Sequence< ::css::beans::PropertyValue > SAL_CALL getArgs2( const ::css::uno::Sequence< ::rtl::OUString >& requestedArgs ) override;
 
     // XStorable
     virtual sal_Bool SAL_CALL hasLocation(  ) override ;

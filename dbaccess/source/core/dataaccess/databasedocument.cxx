@@ -796,6 +796,15 @@ Sequence< PropertyValue > SAL_CALL ODatabaseDocument::getArgs(  )
     return m_pImpl->getMediaDescriptor().getPropertyValues();
 }
 
+Sequence< PropertyValue > SAL_CALL ODatabaseDocument::getArgs2( const ::css::uno::Sequence< ::rtl::OUString >& requestedArgs )
+{
+    DocumentGuard aGuard( *this, DocumentGuard::MethodWithoutInit );
+    std::vector<PropertyValue> aRet;
+    for (const auto & rArgName : requestedArgs)
+        aRet.push_back(PropertyValue(rArgName, 0, m_pImpl->getMediaDescriptor().get(rArgName), PropertyState_DIRECT_VALUE));
+    return comphelper::containerToSequence(aRet);
+}
+
 void SAL_CALL ODatabaseDocument::setArgs(const Sequence<beans::PropertyValue>& /* aArgs */)
 {
     throw NoSupportException();
