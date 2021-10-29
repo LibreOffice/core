@@ -957,6 +957,7 @@ void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Imp
     SectionPropertyMap* pLastContext = rDM_Impl.GetLastSectionContext();
     if ( pLastContext )
     {
+        const bool bEvenAllowed = rDM_Impl.GetSettingsTable()->GetEvenAndOddHeaders();
         uno::Reference< beans::XPropertySet > xPrevStyle = pLastContext->GetPageStyle( rDM_Impl,
             bFirstPage );
         uno::Reference< beans::XPropertySet > xStyle = GetPageStyle( rDM_Impl,
@@ -972,9 +973,9 @@ void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Imp
         {
             CopyHeaderFooter( xPrevStyle, xStyle,
                 !m_bDefaultHeaderLinkToPrevious,
-                !m_bEvenPageHeaderLinkToPrevious,
+                !(m_bEvenPageHeaderLinkToPrevious && bEvenAllowed),
                 !m_bDefaultFooterLinkToPrevious,
-                !m_bEvenPageFooterLinkToPrevious );
+                !(m_bEvenPageFooterLinkToPrevious && bEvenAllowed) );
         }
     }
     SAL_INFO( "writerfilter", "END>>> SectionPropertyMap::CopyLastHeaderFooter()" );
