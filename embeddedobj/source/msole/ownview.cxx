@@ -104,23 +104,24 @@ bool OwnView_Impl::CreateModelFromURL( const OUString& aFileURL )
             uno::Reference < frame::XDesktop2 > xDocumentLoader = frame::Desktop::create(m_xContext);
 
             uno::Sequence< beans::PropertyValue > aArgs( m_aFilterName.isEmpty() ? 4 : 5 );
+            auto pArgs = aArgs.getArray();
 
-            aArgs[0].Name = "URL";
-            aArgs[0].Value <<= aFileURL;
+            pArgs[0].Name = "URL";
+            pArgs[0].Value <<= aFileURL;
 
-            aArgs[1].Name = "ReadOnly";
-            aArgs[1].Value <<= true;
+            pArgs[1].Name = "ReadOnly";
+            pArgs[1].Value <<= true;
 
-            aArgs[2].Name = "InteractionHandler";
-            aArgs[2].Value <<= uno::Reference< task::XInteractionHandler >( new DummyHandler_Impl() );
+            pArgs[2].Name = "InteractionHandler";
+            pArgs[2].Value <<= uno::Reference< task::XInteractionHandler >( new DummyHandler_Impl() );
 
-            aArgs[3].Name = "DontEdit";
-            aArgs[3].Value <<= true;
+            pArgs[3].Name = "DontEdit";
+            pArgs[3].Value <<= true;
 
             if ( !m_aFilterName.isEmpty() )
             {
-                aArgs[4].Name = "FilterName";
-                aArgs[4].Value <<= m_aFilterName;
+                pArgs[4].Name = "FilterName";
+                pArgs[4].Value <<= m_aFilterName;
             }
 
             uno::Reference< frame::XModel > xModel( xDocumentLoader->loadComponentFromURL(
@@ -193,14 +194,15 @@ OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
     }
 
     uno::Sequence< beans::PropertyValue > aArgs( aTypeName.isEmpty() ? 2 : 3 );
-    aArgs[0].Name = "URL";
-    aArgs[0].Value <<= OUString( "private:stream" );
-    aArgs[1].Name = "InputStream";
-    aArgs[1].Value <<= xInputStream;
+    auto pArgs = aArgs.getArray();
+    pArgs[0].Name = "URL";
+    pArgs[0].Value <<= OUString( "private:stream" );
+    pArgs[1].Name = "InputStream";
+    pArgs[1].Value <<= xInputStream;
     if ( !aTypeName.isEmpty() )
     {
-        aArgs[2].Name = "TypeName";
-        aArgs[2].Value <<= aTypeName;
+        pArgs[2].Name = "TypeName";
+        pArgs[2].Value <<= aTypeName;
     }
 
     aTypeName = xTypeDetection->queryTypeByDescriptor( aArgs, true );
@@ -395,8 +397,7 @@ void OwnView_Impl::CreateNative()
         if ( !xInStream.is() )
             throw uno::RuntimeException();
 
-        uno::Sequence< uno::Any > aArgs( 1 );
-        aArgs[0] <<= xInStream;
+        uno::Sequence< uno::Any > aArgs{ uno::Any(xInStream) };
         uno::Reference< container::XNameAccess > xNameAccess(
                 m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                         "com.sun.star.embed.OLESimpleStorage",
