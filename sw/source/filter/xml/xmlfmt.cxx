@@ -309,6 +309,7 @@ SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
         Reference< XPropertySet > xPropSet( GetStyle(), UNO_QUERY );
 
         uno::Sequence< beans::NamedValue > aSeq( m_pConditions->size() );
+        auto aSeqRange = asNonConstRange(aSeq);
 
         for (std::vector<rtl::Reference<SwXMLConditionContext_Impl>>::size_type i = 0;
             i < m_pConditions->size(); ++i)
@@ -322,8 +323,8 @@ SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
                 if (pCommands[j].nCnd == nCond &&
                     pCommands[j].nSubCond == nSubCond)
                 {
-                    aSeq[i].Name = GetCommandContextByIndex( j );
-                    aSeq[i].Value <<= GetImport().GetStyleDisplayName(
+                    aSeqRange[i].Name = GetCommandContextByIndex( j );
+                    aSeqRange[i].Value <<= GetImport().GetStyleDisplayName(
                             GetFamily(), (*m_pConditions)[i]->getApplyStyle() );
                     break;
                 }

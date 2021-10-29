@@ -42,6 +42,7 @@
 #include <ooo/vba/word/XApplicationOutgoing.hpp>
 #include <ooo/vba/word/XBookmarks.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <swdll.hxx>
 #include <swmodule.hxx>
@@ -628,13 +629,10 @@ SwWordBasic::FileSaveAs( const css::uno::Any& Name,
     sal_Int32 nFileFormat = word::WdSaveFormat::wdFormatDocument;
     Format >>= nFileFormat;
 
-    uno::Sequence<  beans::PropertyValue > aProps(2);
-    aProps[0].Name = "FilterName";
+    uno::Sequence aProps{ comphelper::makePropertyValue("FilterName", css::uno::Any()),
+                          comphelper::makePropertyValue("FileName", sURL) };
 
     setFilterPropsFromFormat( nFileFormat, aProps );
-
-    aProps[1].Name = "FileName";
-    aProps[1].Value <<= sURL;
 
     dispatchRequests(xModel,".uno:SaveAs",aProps);
 }

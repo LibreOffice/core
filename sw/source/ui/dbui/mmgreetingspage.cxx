@@ -282,7 +282,7 @@ bool SwMailMergeGreetingsPage::commitPage( ::vcl::WizardTypes::CommitPageReason 
         Sequence< OUString> aAssignment = m_rConfigItem.GetColumnAssignment( rDBData );
         if(aAssignment.getLength() <= MM_PART_GENDER)
             aAssignment.realloc(MM_PART_GENDER + 1);
-        aAssignment[MM_PART_GENDER] = m_xFemaleColumnLB->get_active_text();
+        aAssignment.getArray()[MM_PART_GENDER] = m_xFemaleColumnLB->get_active_text();
         m_rConfigItem.SetColumnAssignment( rDBData, aAssignment );
     }
     if (m_xFemaleFieldCB->get_value_changed_from_saved())
@@ -408,9 +408,9 @@ IMPL_LINK_NOARG(SwMailBodyDialog, OKHdl, weld::Button&, void)
         if(aAssignment.getLength() < MM_PART_GENDER)
             aAssignment.realloc(MM_PART_GENDER);
         if( nPos > 0 )
-            aAssignment[MM_PART_GENDER] = m_xFemaleColumnLB->get_active_text();
+            aAssignment.getArray()[MM_PART_GENDER] = m_xFemaleColumnLB->get_active_text();
         else
-            aAssignment[MM_PART_GENDER].clear();
+            aAssignment.getArray()[MM_PART_GENDER].clear();
         m_rConfigItem.SetColumnAssignment( rDBData, aAssignment );
     }
     if (m_xFemaleFieldCB->get_value_changed_from_saved())
