@@ -631,7 +631,10 @@ QtWidget::QtWidget(QtFrame& rFrame, Qt::WindowFlags f)
 {
     create();
     setMouseTracking(true);
-    setFocusPolicy(Qt::StrongFocus);
+    if (!rFrame.isPopup())
+        setFocusPolicy(Qt::StrongFocus);
+    else
+        setFocusPolicy(Qt::ClickFocus);
 }
 
 static ExtTextInputAttr lcl_MapUndrelineStyle(QTextCharFormat::UnderlineStyle us)
