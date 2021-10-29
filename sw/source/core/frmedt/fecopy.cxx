@@ -710,16 +710,16 @@ namespace {
 }
 
 namespace {
-    bool lcl_PasteFlyOrDrawFormat(SwPaM& rPaM, SwFrameFormat* pCpyFormat, SwFEShell& rSh)
+    void lcl_PasteFlyOrDrawFormat(SwPaM& rPaM, SwFrameFormat& rFormat, SwFEShell& rSh)
     {
         auto& rImp = *rSh.Imp();
         auto& rDoc = *rSh.GetDoc();
         auto& rDrawView = *rImp.GetDrawView();
         if(rDrawView.IsGroupEntered() &&
-           RES_DRAWFRMFMT == pCpyFormat->Which() &&
-           (RndStdIds::FLY_AS_CHAR != pCpyFormat->GetAnchor().GetAnchorId()))
+           RES_DRAWFRMFMT == rFormat.Which() &&
+           (RndStdIds::FLY_AS_CHAR != rFormat.GetAnchor().GetAnchorId()))
         {
-            const SdrObject* pSdrObj = pCpyFormat->FindSdrObject();
+            const SdrObject* pSdrObj = rFormat.FindSdrObject();
             if(pSdrObj)
             {
                 SdrObject* pNew = rDoc.CloneSdrObj(*pSdrObj, false, false);
@@ -753,32 +753,32 @@ namespace {
                 // positioning for group members
                 pNew->NbcSetAnchorPos(aGrpAnchor);
                 pNew->SetSnapRect(aSnapRect);
-                return true;
+                return;
             }
         }
-        SwFormatAnchor aAnchor(pCpyFormat->GetAnchor());
+        SwFormatAnchor aAnchor(rFormat.GetAnchor());
         if ((RndStdIds::FLY_AT_PARA == aAnchor.GetAnchorId()) ||
             (RndStdIds::FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
             (RndStdIds::FLY_AS_CHAR == aAnchor.GetAnchorId()))
         {
             SwPosition* pPos = rPaM.GetPoint();
             // allow shapes (no controls) in header/footer
-            if(RES_DRAWFRMFMT == pCpyFormat->Which() && rDoc.IsInHeaderFooter(pPos->nNode))
+            if(RES_DRAWFRMFMT == rFormat.Which() && rDoc.IsInHeaderFooter(pPos->nNode))
             {
-                const SdrObject *pCpyObj = pCpyFormat->FindSdrObject();
+                const SdrObject *pCpyObj = rFormat.FindSdrObject();
                 if(pCpyObj && CheckControlLayer(pCpyObj))
-                    return true;
+                    return;
             }
-            else if(pCpyFormat->Which() == RES_FLYFRMFMT && IsInTextBox(pCpyFormat))
+            else if(rFormat.Which() == RES_FLYFRMFMT && IsInTextBox(&rFormat))
             {
                 // This is a fly frame which is anchored in a TextBox, ignore it as
                 // it's already copied as part of copying the content of the
                 // TextBox.
-                return true;
+                return;
             }
             // Ignore TextBoxes, they are already handled in sw::DocumentLayoutManager::CopyLayoutFormat().
-            if(SwTextBoxHelper::isTextBox(pCpyFormat, RES_FLYFRMFMT))
-                return true;
+            if(SwTextBoxHelper::isTextBox(&rFormat, RES_FLYFRMFMT))
+                return;
             aAnchor.SetAnchor(pPos);
         }
         else if(RndStdIds::FLY_AT_PAGE == aAnchor.GetAnchorId())
@@ -791,10 +791,10 @@ namespace {
             (void)lcl_SetAnchor(*rPaM.GetPoint(), rPaM.GetNode(), nullptr, aPt, rSh, aAnchor, aPt, false);
         }
 
-        SwFrameFormat* pNew = rDoc.getIDocumentLayoutAccess().CopyLayoutFormat(*pCpyFormat, aAnchor, true, true);
+        SwFrameFormat* pNew = rDoc.getIDocumentLayoutAccess().CopyLayoutFormat(rFormat, aAnchor, true, true);
 
         if(!pNew)
-            return true;
+            return;
         switch(pNew->Which())
         {
             case RES_FLYFRMFMT:
@@ -804,7 +804,7 @@ namespace {
                 SwFlyFrame* pFlyFrame = static_cast<SwFlyFrameFormat*>(pNew)->GetFrame(&aPt);
                 if(pFlyFrame)
                     rSh.SelectFlyFrame(*pFlyFrame);
-                return false;
+                break;
             }
             case RES_DRAWFRMFMT:
             {
@@ -822,7 +822,6 @@ namespace {
             default:
                 SAL_WARN("sw.core", "unknown fly type");
         }
-        return true;
     }
 }
 
@@ -1035,13 +1034,15 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                 // we need a DrawView
                 if(!Imp()->GetDrawView())
                     MakeDrawView();
-                for(auto pCpyFormat: *rClpDoc.GetSpzFrameFormats())
+                auto& rSpzFormats = *rClpDoc.GetSpzFrameFormats();
+                // first paste all non-flys
+                for(auto pCpyFormat: rSpzFormats)
                     if(pCpyFormat->Which() != RES_FLYFRMFMT)
-                        lcl_PasteFlyOrDrawFormat(rPaM, pCpyFormat, *this);
-                for(auto pCpyFormat: *rClpDoc.GetSpzFrameFormats())
-                    if(pCpyFormat->Which() == RES_FLYFRMFMT)
-                        if(!lcl_PasteFlyOrDrawFormat(rPaM, pCpyFormat, *this))
-                            break;
+                        lcl_PasteFlyOrDrawFormat(rPaM, *pCpyFormat, *this);
+                // then copy only the first fly (because the other flys will already be copied by sideeffects in that)
+                auto ppFlyFrameFormat = find_if(rSpzFormats.begin(), rSpzFormats.end(), [](SwFrameFormat* pF) { return pF->Which() == RES_FLYFRMFMT; });
+                if(ppFlyFrameFormat != rSpzFormats.end())
+                    lcl_PasteFlyOrDrawFormat(rPaM, **ppFlyFrameFormat, *this);
             }
             else
             {
