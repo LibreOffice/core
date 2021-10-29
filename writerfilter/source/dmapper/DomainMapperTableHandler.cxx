@@ -363,37 +363,18 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         {
             TablePositionHandler *pTablePositions = m_rDMapper_Impl.getTableManager().getCurrentTableRealPosition();
 
-            uno::Sequence< beans::PropertyValue  > aGrabBagTS( 10 );
-
-            aGrabBagTS[0].Name = "bottomFromText";
-            aGrabBagTS[0].Value <<= pTablePositions->getBottomFromText();
-
-            aGrabBagTS[1].Name = "horzAnchor";
-            aGrabBagTS[1].Value <<= pTablePositions->getHorzAnchor();
-
-            aGrabBagTS[2].Name = "leftFromText";
-            aGrabBagTS[2].Value <<= pTablePositions->getLeftFromText();
-
-            aGrabBagTS[3].Name = "rightFromText";
-            aGrabBagTS[3].Value <<= pTablePositions->getRightFromText();
-
-            aGrabBagTS[4].Name = "tblpX";
-            aGrabBagTS[4].Value <<= pTablePositions->getX();
-
-            aGrabBagTS[5].Name = "tblpXSpec";
-            aGrabBagTS[5].Value <<= pTablePositions->getXSpec();
-
-            aGrabBagTS[6].Name = "tblpY";
-            aGrabBagTS[6].Value <<= pTablePositions->getY();
-
-            aGrabBagTS[7].Name = "tblpYSpec";
-            aGrabBagTS[7].Value <<= pTablePositions->getYSpec();
-
-            aGrabBagTS[8].Name = "topFromText";
-            aGrabBagTS[8].Value <<= pTablePositions->getTopFromText();
-
-            aGrabBagTS[9].Name = "vertAnchor";
-            aGrabBagTS[9].Value <<= pTablePositions->getVertAnchor();
+            uno::Sequence< beans::PropertyValue  > aGrabBagTS{
+                comphelper::makePropertyValue("bottomFromText", pTablePositions->getBottomFromText()),
+                comphelper::makePropertyValue("horzAnchor", pTablePositions->getHorzAnchor()),
+                comphelper::makePropertyValue("leftFromText", pTablePositions->getLeftFromText()),
+                comphelper::makePropertyValue("rightFromText", pTablePositions->getRightFromText()),
+                comphelper::makePropertyValue("tblpX", pTablePositions->getX()),
+                comphelper::makePropertyValue("tblpXSpec", pTablePositions->getXSpec()),
+                comphelper::makePropertyValue("tblpY", pTablePositions->getY()),
+                comphelper::makePropertyValue("tblpYSpec", pTablePositions->getYSpec()),
+                comphelper::makePropertyValue("topFromText", pTablePositions->getTopFromText()),
+                comphelper::makePropertyValue("vertAnchor", pTablePositions->getVertAnchor())
+            };
 
             aGrabBag["TablePosition"] <<= aGrabBagTS;
         }
@@ -1066,6 +1047,7 @@ css::uno::Sequence<css::beans::PropertyValues> DomainMapperTableHandler::endTabl
 #endif
 
     css::uno::Sequence<css::beans::PropertyValues> aRowProperties( m_aRowProperties.size() );
+    auto aRowPropertiesRange = asNonConstRange(aRowProperties);
     sal_Int32 nRow = 0;
     for( const auto& rRow : m_aRowProperties )
     {
@@ -1086,7 +1068,7 @@ css::uno::Sequence<css::beans::PropertyValues> DomainMapperTableHandler::endTabl
                 rRow->Insert(PROP_SIZE_TYPE, uno::makeAny(text::SizeType::FIX));
             }
 
-            aRowProperties[nRow] = rRow->GetPropertyValues();
+            aRowPropertiesRange[nRow] = rRow->GetPropertyValues();
 #ifdef DBG_UTIL
             rRow->dumpXml();
             lcl_DumpPropertyValues(aRowProperties[nRow]);
@@ -1477,7 +1459,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
             uno::Sequence< uno::Sequence< uno::Reference<text::XTextRange> > >& rLastRow = m_aTableRanges[m_aTableRanges.size() - 1];
             if (rLastRow.hasElements())
             {
-                uno::Sequence< uno::Reference<text::XTextRange> >& rLastCell = rLastRow[rLastRow.getLength() - 1];
+                const uno::Sequence< uno::Reference<text::XTextRange> >& rLastCell = rLastRow[rLastRow.getLength() - 1];
                 xEnd = rLastCell[1];
             }
         }
