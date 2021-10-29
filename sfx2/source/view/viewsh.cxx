@@ -639,7 +639,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                     return;
                 }
 
-                sfx2::openUriExternally(aFileURL, true);
+                sfx2::openUriExternally(aFileURL, true, rReq.GetFrameWeld());
                 rReq.Done(true);
                 break;
             }

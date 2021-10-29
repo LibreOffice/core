@@ -482,7 +482,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 "?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
                 "&LOlocale=" + utl::ConfigManager::getUILocale() +
                 "&LOmodule=" + module.subView(module.lastIndexOf('.') + 1 )  );
-            sfx2::openUriExternally(sURL, false);
+            sfx2::openUriExternally(sURL, false, rReq.GetFrameWeld());
             break;
         }
 
@@ -493,7 +493,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
             OUString sURL(officecfg::Office::Common::Menus::QA_URL::get() + //https://hub.libreoffice.org/forum/
                 "?LOlocale=" + utl::ConfigManager::getUILocale());
-            sfx2::openUriExternally(sURL, false);
+            sfx2::openUriExternally(sURL, false, rReq.GetFrameWeld());
             break;
         }
         case SID_DOCUMENTATION:
@@ -501,7 +501,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             // Open documentation page based on locales
             OUString sURL(officecfg::Office::Common::Menus::DocumentationURL::get() + //https://hub.libreoffice.org/documentation/
                 "?LOlocale=" + utl::ConfigManager::getUILocale());
-            sfx2::openUriExternally(sURL, false);
+            sfx2::openUriExternally(sURL, false, rReq.GetFrameWeld());
             break;
         }
         case SID_GETINVOLVED:
@@ -509,7 +509,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             // Open get involved/join us page based on locales
             OUString sURL(officecfg::Office::Common::Menus::GetInvolvedURL::get() + //https://hub.libreoffice.org/joinus/
                 "?LOlocale=" + utl::ConfigManager::getUILocale());
-            sfx2::openUriExternally(sURL, false);
+            sfx2::openUriExternally(sURL, false, rReq.GetFrameWeld());
             break;
         }
         case SID_DONATION:
@@ -519,7 +519,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             OUString aBcp47 = LanguageTag(utl::ConfigManager::getUILocale()).getBcp47();
             OUString sURL(officecfg::Office::Common::Menus::DonationURL::get() + //https://hub.libreoffice.org/donation/
                 "?BCP47=" + aBcp47 + "&LOlang=" + aLang );
-            sfx2::openUriExternally(sURL, false);
+            sfx2::openUriExternally(sURL, false, rReq.GetFrameWeld());
             break;
         }
         case SID_WHATSNEW:
@@ -528,7 +528,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             OUString sURL(officecfg::Office::Common::Menus::ReleaseNotesURL::get() + //https://hub.libreoffice.org/ReleaseNotes/
                 "?LOvers=" + utl::ConfigManager::getProductVersion() +
                 "&LOlocale=" + LanguageTag(utl::ConfigManager::getUILocale()).getBcp47() );
-            sfx2::openUriExternally(sURL, false);
+            sfx2::openUriExternally(sURL, false, rReq.GetFrameWeld());
             break;
         }
         case SID_HYPHENATIONMISSING:
@@ -536,7 +536,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             // Open wiki page about hyphenation
             OUString sURL(officecfg::Office::Common::Menus::HyphenationMissingURL::get() + //https://hub.libreoffice.org/HyphenationMissing/
                 "?LOlocale=" + utl::ConfigManager::getUILocale());
-            sfx2::openUriExternally(sURL, false);
+            sfx2::openUriExternally(sURL, false, rReq.GetFrameWeld());
             break;
         }
         case SID_SHOW_LICENSE:
