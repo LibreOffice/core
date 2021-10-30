@@ -114,7 +114,7 @@
                 <child>
                   <object class="GtkToolbar" id="measure">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="can-focus">True</property>
                     <property name="halign">center</property>
                     <property name="orientation">vertical</property>
                     <property name="toolbar-style">icons</property>

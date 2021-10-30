@@ -106,7 +106,7 @@
     </child>
     <child>
       <object class="GtkToolbar" id="findtoolbar">
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
         <property name="toolbar_style">both-horiz</property>
         <child>
           <object class="GtkToolButton" id="findbar_close">
@@ -204,7 +204,7 @@
   </object>
   <object class="GtkToolbar" id="toolbar1">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can_focus">True</property>
     <property name="toolbar_style">icons</property>
     <child>
       <object class="GtkToolButton" id="btn_save">
@@ -523,7 +523,7 @@
   </object>
   <object class="GtkToolbar" id="toolbar2">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can_focus">True</property>
     <property name="toolbar_style">icons</property>
     <child>
       <object class="GtkToggleToolButton" id="btn_bold">

@@ -9,7 +9,7 @@
     <child>
       <object class="GtkToolbar" id="managedtoolbar">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
       </object>
       <packing>
         <property name="expand">True</property>

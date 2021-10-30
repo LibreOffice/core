@@ -202,7 +202,7 @@
             <child>
               <object class="GtkToolbar" id="formatToolbox">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="halign">start</property>
                 <property name="valign">start</property>
                 <property name="toolbar_style">icons</property>

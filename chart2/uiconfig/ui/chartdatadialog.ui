@@ -65,7 +65,7 @@
             <child>
               <object class="GtkToolbar" id="toolbar">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <child>
                   <object class="GtkToolButton" id="InsertRow">
                     <property name="visible">True</property>

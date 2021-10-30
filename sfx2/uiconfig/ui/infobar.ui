@@ -53,7 +53,7 @@
                     </child>
                     <child>
                       <object class="GtkToolbar" id="closebar">
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
                         <property name="valign">center</property>
                         <property name="toolbar_style">icons</property>

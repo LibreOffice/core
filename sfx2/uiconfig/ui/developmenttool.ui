@@ -107,7 +107,7 @@
                 <child>
                   <object class="GtkToolbar" id="dom_toolbar">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="can-focus">True</property>
                     <property name="toolbar-style">both-horiz</property>
                     <property name="show-arrow">False</property>
                     <child>
@@ -214,7 +214,7 @@
                 <child>
                   <object class="GtkToolbar" id="object_inspector_toolbar">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="can-focus">True</property>
                     <property name="toolbar-style">icons</property>
                     <property name="show-arrow">False</property>
                     <child>
