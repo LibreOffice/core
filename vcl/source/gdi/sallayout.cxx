@@ -442,7 +442,7 @@ void GenericSalLayout::ApplyAsianKerning(const OUString& rStr)
     }
 }
 
-void GenericSalLayout::GetCaretPositions( int nMaxIndex, tools::Long* pCaretXArray ) const
+void GenericSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray ) const
 {
     // initialize result array
     for (int i = 0; i < nMaxIndex; ++i)
@@ -1080,7 +1080,7 @@ DeviceCoordinate MultiSalLayout::FillDXArray( std::vector<DeviceCoordinate>* pCh
     return nMaxWidth;
 }
 
-void MultiSalLayout::GetCaretPositions( int nMaxIndex, tools::Long* pCaretXArray ) const
+void MultiSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray ) const
 {
     SalLayout& rLayout = *mpLayouts[ 0 ];
     rLayout.GetCaretPositions( nMaxIndex, pCaretXArray );
@@ -1088,7 +1088,7 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, tools::Long* pCaretXArray
     if( mnLevel <= 1 )
         return;
 
-    std::unique_ptr<tools::Long[]> const pTempPos(new tools::Long[nMaxIndex]);
+    std::unique_ptr<sal_Int32[]> const pTempPos(new sal_Int32[nMaxIndex]);
     for( int n = 1; n < mnLevel; ++n )
     {
         mpLayouts[ n ]->GetCaretPositions( nMaxIndex, pTempPos.get() );
@@ -1097,8 +1097,8 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, tools::Long* pCaretXArray
         for( int i = 0; i < nMaxIndex; ++i )
             if( pTempPos[i] >= 0 )
             {
-                tools::Long w = pTempPos[i];
-                w = static_cast<tools::Long>(w*fUnitMul + 0.5);
+                sal_Int32 w = pTempPos[i];
+                w = static_cast<sal_Int32>(w*fUnitMul + 0.5);
                 pCaretXArray[i] = w;
             }
     }
