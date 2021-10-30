@@ -150,6 +150,8 @@ void SwNavigationPI::FillBox()
         else
             m_xContentTree->Display( true );
         m_pActContView = pView;
+        if (m_pActContView)
+            m_xContentTree->UpdateTracking();
     }
 }
 
@@ -750,11 +752,8 @@ void SwNavigationPI::UpdateInitShow()
     // show content if docked
     if (!bParentIsFloatingWindow && IsZoomedIn())
         ZoomOut();
-    if (m_xContentTree)
-    {
-        m_xContentTree->SetActiveShell(GetActiveWrtShell());
-        m_xContentTree->UpdateTracking();
-    }
+    if (!IsZoomedIn())
+        FillBox();
 }
 
 IMPL_LINK_NOARG(SwNavigationPI, SetFocusChildHdl, weld::Container&, void)
@@ -1150,8 +1149,6 @@ SwNavigatorWin::SwNavigatorWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr,
     SetMinOutputSizePixel(GetOptimalSize());
     if (pNaviConfig->IsSmall())
         m_xNavi->ZoomIn();
-
-    m_xNavi->m_xContentTree->UpdateTracking();
 }
 
 void SwNavigatorWin::StateChanged(StateChangedType nStateChange)
