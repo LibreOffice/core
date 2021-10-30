@@ -288,12 +288,12 @@ struct CalcLinePosData
     const bool bSwitchH2VLRBT;
     const bool bSwitchL2R;
     tools::Long nHalfSpace;
-    tools::Long* pKernArray;
+    sal_Int32* pKernArray;
     const bool bBidiPor;
 
     CalcLinePosData( SwDrawTextInfo& _rInf, vcl::Font& _rFont,
           TextFrameIndex const _nCnt, const bool _bSwitchH2V, const bool _bSwitchH2VLRBT, const bool _bSwitchL2R,
-                      tools::Long _nHalfSpace, tools::Long* _pKernArray, const bool _bBidiPor) :
+                      tools::Long _nHalfSpace, sal_Int32* _pKernArray, const bool _bBidiPor) :
         rInf( _rInf ),
         rFont( _rFont ),
         nCnt( _nCnt ),
@@ -1025,7 +1025,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
 
             // kerning array - gives the absolute position of end of each character
-            std::vector<tools::Long> aKernArray;
+            std::vector<sal_Int32> aKernArray;
 
             if ( m_pPrinter )
                 m_pPrinter->GetTextArray( rInf.GetText(), &aKernArray,
@@ -1132,7 +1132,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         {
             const tools::Long nGridWidthAdd = EvalGridWidthAdd( pGrid, rInf );
 
-            std::vector<tools::Long> aKernArray;
+            std::vector<sal_Int32> aKernArray;
 
             if ( m_pPrinter )
                 m_pPrinter->GetTextArray( rInf.GetText(), &aKernArray,
@@ -1274,7 +1274,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         // Simple kerning is handled by DrawStretchText
         if( rInf.GetSpace() || rInf.GetKanaComp() )
         {
-            std::vector<tools::Long> aKernArray;
+            std::vector<sal_Int32> aKernArray;
             rInf.GetOut().GetTextArray( rInf.GetText(), &aKernArray,
                            sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
 
@@ -1482,12 +1482,12 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         bool bBullet = rInf.GetBullet();
         if( m_bSymbol )
             bBullet = false;
-        std::vector<tools::Long> aKernArray;
+        std::vector<sal_Int32> aKernArray;
         CreateScrFont( *rInf.GetShell(), rInf.GetOut() );
         tools::Long nScrPos;
 
         // get screen array
-        std::vector<tools::Long> aScrArray;
+        std::vector<sal_Int32> aScrArray;
         SwTextGlyphsKey aGlyphsKey{ &rInf.GetOut(), rInf.GetText(), sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()) };
         SalLayoutGlyphs* pGlyphs = GetCachedSalLayoutGlyphs(aGlyphsKey);
         rInf.GetOut().GetTextArray( rInf.GetText(), &aScrArray,
@@ -1997,7 +1997,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         aTextSize.setWidth( m_pPrinter->GetTextWidth( rInf.GetText(),
                                sal_Int32(rInf.GetIdx()), sal_Int32(nLn)));
         aTextSize.setHeight( m_pPrinter->GetTextHeight() );
-        std::vector<tools::Long> aKernArray;
+        std::vector<sal_Int32> aKernArray;
         CreateScrFont( *rInf.GetShell(), rInf.GetOut() );
         if( !GetScrFont()->IsSameInstance( rInf.GetOut().GetFont() ) )
             rInf.GetOut().SetFont( *m_pScrFont );
@@ -2016,7 +2016,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             nScrPos = aKernArray[ sal_Int32(nLn) - 1 ];
         else
         {
-            std::vector<tools::Long> aScrArray;
+            std::vector<sal_Int32> aScrArray;
             rInf.GetOut().GetTextArray( rInf.GetText(), &aScrArray,
                         sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
             nScrPos = aScrArray[ 0 ];
@@ -2063,7 +2063,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             rInf.GetOut().SetFont( *m_pPrtFont );
         if( bCompress )
         {
-            std::vector<tools::Long> aKernArray;
+            std::vector<sal_Int32> aKernArray;
             rInf.GetOut().GetTextArray( rInf.GetText(), &aKernArray,
                                 sal_Int32(rInf.GetIdx()), sal_Int32(nLn));
             rInf.SetKanaDiff( rInf.GetScriptInfo()->Compress( aKernArray.data(),
@@ -2100,7 +2100,7 @@ TextFrameIndex SwFntObj::GetModelPositionForViewPoint(SwDrawTextInfo &rInf)
     if( 0 != nSperren )
         nKern -= nSperren;
 
-    std::vector<tools::Long> aKernArray;
+    std::vector<sal_Int32> aKernArray;
 
     // be sure to have the correct layout mode at the printer
     if ( m_pPrinter )
@@ -2417,7 +2417,7 @@ TextFrameIndex SwFont::GetTextBreak(SwDrawTextInfo const & rInf, tools::Long nTe
             const SwDoc* pDoc = rInf.GetShell()->GetDoc();
             const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
 
-            std::vector<tools::Long> aKernArray;
+            std::vector<sal_Int32> aKernArray;
             rInf.GetOut().GetTextArray( rInf.GetText(), &aKernArray,
                     sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
 
@@ -2448,7 +2448,7 @@ TextFrameIndex SwFont::GetTextBreak(SwDrawTextInfo const & rInf, tools::Long nTe
         {
             const tools::Long nGridWidthAdd = EvalGridWidthAdd( pGrid, rInf );
 
-            std::vector<tools::Long> aKernArray;
+            std::vector<sal_Int32> aKernArray;
             rInf.GetOut().GetTextArray( rInf.GetText(), &aKernArray,
                         sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
             tools::Long nCurrPos = aKernArray[sal_Int32(nTextBreak)] + nGridWidthAdd;
@@ -2563,7 +2563,7 @@ TextFrameIndex SwFont::GetTextBreak(SwDrawTextInfo const & rInf, tools::Long nTe
             nLn = TextFrameIndex(1);
         else if (nLn > nTextBreak2 + nTextBreak2)
             nLn = nTextBreak2 + nTextBreak2;
-        std::vector<tools::Long> aKernArray;
+        std::vector<sal_Int32> aKernArray;
         rInf.GetOut().GetTextArray( rInf.GetText(), &aKernArray,
                                     sal_Int32(rInf.GetIdx()), sal_Int32(nLn));
         if( rInf.GetScriptInfo()->Compress( aKernArray.data(), rInf.GetIdx(), nLn,

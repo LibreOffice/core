@@ -345,8 +345,8 @@ private:
     static Color            ImplGetColorWithIntensity( const Color& rColor, sal_uInt16 nIntensity );
     static Color            ImplGetGradientColor( const Color& rStartColor, const Color& rEndColor, double fOffset );
     void                    ImplWriteMask( GDIMetaFile& rMtf, const Point& rDestPt, const Size& rDestSize, const Gradient& rGradient, sal_uInt32 nWriteFlags );
-    void                    ImplWriteText( const Point& rPos, const OUString& rText, o3tl::span<const tools::Long> pDXArray, tools::Long nWidth );
-    void                    ImplWriteText( const Point& rPos, const OUString& rText, o3tl::span<const tools::Long> pDXArray, tools::Long nWidth, Color aTextColor );
+    void                    ImplWriteText( const Point& rPos, const OUString& rText, o3tl::span<const sal_Int32> pDXArray, tools::Long nWidth );
+    void                    ImplWriteText( const Point& rPos, const OUString& rText, o3tl::span<const sal_Int32> pDXArray, tools::Long nWidth, Color aTextColor );
     void                    ImplWriteBmp( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz, const css::uno::Reference<css::drawing::XShape>* pShape);
 
     void                    ImplWriteActions( const GDIMetaFile& rMtf,
