@@ -362,14 +362,14 @@ struct ExtraPortionInfo
     bool    bFirstCharIsRightPunktuation;
     bool    bCompressed;
 
-    std::unique_ptr<tools::Long[]> pOrgDXArray;
+    std::unique_ptr<sal_Int32[]> pOrgDXArray;
     std::vector< sal_Int32 > lineBreaksList;
 
 
             ExtraPortionInfo();
             ~ExtraPortionInfo();
 
-    void    SaveOrgDXArray( const tools::Long* pDXArray, sal_Int32 nLen );
+    void    SaveOrgDXArray( const sal_Int32* pDXArray, sal_Int32 nLen );
 };
 
 
@@ -460,12 +460,12 @@ class ParaPortion;
 class EditLine
 {
 public:
-    typedef std::vector<tools::Long> CharPosArrayType;
+    typedef std::vector<sal_Int32> CharPosArrayType;
 
 private:
     CharPosArrayType aPositions;
-    tools::Long            nTxtWidth;
-    tools::Long            nStartPosX;
+    sal_Int32          nTxtWidth;
+    sal_Int32          nStartPosX;
     sal_Int32          nStart;     // could be replaced by nStartPortion
     sal_Int32          nEnd;       // could be replaced by nEndPortion
     sal_Int32          nStartPortion;
@@ -505,8 +505,8 @@ public:
     sal_uInt16      GetHeight() const               { return nHeight; }
     sal_uInt16      GetTxtHeight() const            { return nTxtHeight; }
 
-    void            SetTextWidth( tools::Long n )          { nTxtWidth = n; }
-    tools::Long            GetTextWidth() const            { return nTxtWidth; }
+    void            SetTextWidth( sal_Int32 n )          { nTxtWidth = n; }
+    sal_Int32       GetTextWidth() const            { return nTxtWidth; }
 
     void            SetMaxAscent( sal_uInt16 n )        { nMaxAscent = n; }
     sal_uInt16      GetMaxAscent() const            { return nMaxAscent; }
@@ -516,8 +516,8 @@ public:
 
     sal_Int32       GetLen() const                  { return nEnd - nStart; }
 
-    tools::Long            GetStartPosX() const            { return nStartPosX; }
-    void            SetStartPosX( tools::Long start );
+    sal_Int32       GetStartPosX() const            { return nStartPosX; }
+    void            SetStartPosX( sal_Int32 start );
     Size            CalcTextSize( ParaPortion& rParaPortion );
 
     bool            IsInvalid() const               { return bInvalid; }

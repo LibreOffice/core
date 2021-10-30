@@ -270,7 +270,7 @@ public:
     // HIDDEN TEXT STUFF END
 
     // modifies the kerning array according to a given compress value
-    tools::Long Compress( tools::Long* pKernArray, TextFrameIndex nIdx, TextFrameIndex nLen,
+    tools::Long Compress( sal_Int32* pKernArray, TextFrameIndex nIdx, TextFrameIndex nLen,
                    const sal_uInt16 nCompress, const sal_uInt16 nFontHeight,
                    const bool bCentered,
                    Point* pPoint = nullptr ) const;
@@ -291,7 +291,7 @@ public:
                 The value which has to be added to a kashida opportunity.
     @return The number of kashida opportunities in the given range
 */
-    sal_Int32 KashidaJustify( tools::Long* pKernArray, tools::Long* pScrArray,
+    sal_Int32 KashidaJustify( sal_Int32* pKernArray, sal_Int32* pScrArray,
           TextFrameIndex nStt, TextFrameIndex nLen, tools::Long nSpaceAdd = 0) const;
 
 /** Clears array of kashidas marked as invalid
@@ -364,8 +364,8 @@ public:
                 The value which has to be added to the cells.
     @return The number of extra spaces in the given range
 */
-    static TextFrameIndex ThaiJustify( const OUString& rText, tools::Long* pKernArray,
-                                  tools::Long* pScrArray, TextFrameIndex nIdx,
+    static TextFrameIndex ThaiJustify( const OUString& rText, sal_Int32* pKernArray,
+                                  sal_Int32* pScrArray, TextFrameIndex nIdx,
                                   TextFrameIndex nLen,
                                   TextFrameIndex nNumberOfBlanks = TextFrameIndex(0),
                                   tools::Long nSpaceAdd = 0 );
@@ -373,8 +373,8 @@ public:
     static TextFrameIndex CountCJKCharacters(const OUString &rText,
             TextFrameIndex nPos, TextFrameIndex nEnd, LanguageType aLang);
 
-    static void CJKJustify( const OUString& rText, tools::Long* pKernArray,
-                                  tools::Long* pScrArray, TextFrameIndex nStt,
+    static void CJKJustify( const OUString& rText, sal_Int32* pKernArray,
+                                  sal_Int32* pScrArray, TextFrameIndex nStt,
                                   TextFrameIndex nLen, LanguageType aLang,
                                   tools::Long nSpaceAdd, bool bIsSpaceStop );
 

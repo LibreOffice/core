@@ -630,7 +630,7 @@ public:
                 }
 
                 // DX array rendering
-                std::vector<tools::Long> aItems;
+                std::vector<sal_Int32> aItems;
                 rDev.GetTextArray(aText, &aItems);
                 for (tools::Long j = 0; j < aText.getLength(); ++j)
                 {

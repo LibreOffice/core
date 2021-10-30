@@ -363,7 +363,7 @@ static void GetTextAreaOutline(
             }
             else
             {
-                std::vector<tools::Long> aDXArry;
+                std::vector<sal_Int32> aDXArry;
                 if ( ( nCharScaleWidth != 100 ) && nCharScaleWidth )
                 {   // applying character spacing
                     pVirDev->GetTextArray( rText, &aDXArry);

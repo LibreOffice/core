@@ -200,10 +200,10 @@ private:
 
     void                ImplSetClipRegion( vcl::Region const & rRegion );
     void                ImplBmp( Bitmap const *, Bitmap const *, const Point &, double nWidth, double nHeight );
-    void                ImplText( const OUString& rUniString, const Point& rPos, o3tl::span<const tools::Long> pDXArry, sal_Int32 nWidth, VirtualDevice const & rVDev );
+    void                ImplText( const OUString& rUniString, const Point& rPos, o3tl::span<const sal_Int32> pDXArry, sal_Int32 nWidth, VirtualDevice const & rVDev );
     void                ImplSetAttrForText( const Point & rPoint );
     void                ImplWriteCharacter( char );
-    void                ImplWriteString( const OString&, VirtualDevice const & rVDev, o3tl::span<const tools::Long> pDXArry, bool bStretch );
+    void                ImplWriteString( const OString&, VirtualDevice const & rVDev, o3tl::span<const sal_Int32> pDXArry, bool bStretch );
     void                ImplDefineFont( const char*, const char* );
 
     void                ImplClosePathDraw();
@@ -1951,7 +1951,7 @@ void PSWriter::ImplWriteCharacter( char nChar )
     ImplWriteByte( static_cast<sal_uInt8>(nChar), PS_NONE );
 }
 
-void PSWriter::ImplWriteString( const OString& rString, VirtualDevice const & rVDev, o3tl::span<const tools::Long> pDXArry, bool bStretch )
+void PSWriter::ImplWriteString( const OString& rString, VirtualDevice const & rVDev, o3tl::span<const sal_Int32> pDXArry, bool bStretch )
 {
     sal_Int32 nLen = rString.getLength();
     if ( !nLen )
@@ -1981,7 +1981,7 @@ void PSWriter::ImplWriteString( const OString& rString, VirtualDevice const & rV
     }
 }
 
-void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, o3tl::span<const tools::Long> pDXArry, sal_Int32 nWidth, VirtualDevice const & rVDev )
+void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, o3tl::span<const sal_Int32> pDXArry, sal_Int32 nWidth, VirtualDevice const & rVDev )
 {
     if ( rUniString.isEmpty() )
         return;
