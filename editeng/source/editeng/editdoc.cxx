@@ -490,12 +490,12 @@ ExtraPortionInfo::~ExtraPortionInfo()
 {
 }
 
-void ExtraPortionInfo::SaveOrgDXArray( const tools::Long* pDXArray, sal_Int32 nLen )
+void ExtraPortionInfo::SaveOrgDXArray( const sal_Int32* pDXArray, sal_Int32 nLen )
 {
     if (pDXArray)
     {
-        pOrgDXArray.reset(new tools::Long[nLen]);
-        memcpy( pOrgDXArray.get(), pDXArray, nLen * sizeof(tools::Long) );
+        pOrgDXArray.reset(new sal_Int32[nLen]);
+        memcpy( pOrgDXArray.get(), pDXArray, nLen * sizeof(sal_Int32) );
     }
     else
         pOrgDXArray.reset();
@@ -979,7 +979,7 @@ void EditLine::SetHeight( sal_uInt16 nH, sal_uInt16 nTxtH )
     nTxtHeight = ( nTxtH ? nTxtH : nH );
 }
 
-void EditLine::SetStartPosX( tools::Long start )
+void EditLine::SetStartPosX( sal_Int32 start )
 {
     if (start > 0)
         nStartPosX = start;

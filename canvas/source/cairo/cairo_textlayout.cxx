@@ -263,7 +263,7 @@ namespace cairocanvas
         ::osl::MutexGuard aGuard( m_aMutex );
         setupLayoutMode( rOutDev, mnTextDirection );
 
-        std::vector<tools::Long> aOffsets(maLogicalAdvancements.getLength());
+        std::vector<sal_Int32> aOffsets(maLogicalAdvancements.getLength());
 
         if( maLogicalAdvancements.hasElements() )
             setupTextOffsets( aOffsets.data(), maLogicalAdvancements, viewState, renderState );
@@ -314,7 +314,7 @@ namespace cairocanvas
         };
     }
 
-    void TextLayout::setupTextOffsets( tools::Long*                       outputOffsets,
+    void TextLayout::setupTextOffsets( sal_Int32*                       outputOffsets,
                                        const uno::Sequence< double >&   inputOffsets,
                                        const rendering::ViewState&      viewState,
                                        const rendering::RenderState&    renderState     ) const

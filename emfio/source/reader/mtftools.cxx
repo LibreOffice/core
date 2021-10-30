@@ -1677,7 +1677,7 @@ namespace emfio
         }
     }
 
-    void MtfTools::DrawText( Point& rPosition, OUString const & rText, std::vector<tools::Long>* pDXArry, tools::Long* pDYArry, bool bRecordPath, sal_Int32 nGfxMode )
+    void MtfTools::DrawText( Point& rPosition, OUString const & rText, std::vector<sal_Int32>* pDXArry, tools::Long* pDYArry, bool bRecordPath, sal_Int32 nGfxMode )
     {
         UpdateClipRegion();
         rPosition = ImplMap( rPosition );
@@ -1861,15 +1861,15 @@ namespace emfio
                 {
                     Point aCharDisplacement( i ? (*pDXArry)[i-1] : 0, i ? pDYArry[i-1] : 0 );
                     Point().RotateAround(aCharDisplacement, maFont.GetOrientation());
-                    mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition + aCharDisplacement, OUString( rText[i] ), o3tl::span<const tools::Long>{}, 0, 1 ) );
+                    mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition + aCharDisplacement, OUString( rText[i] ), o3tl::span<const sal_Int32>{}, 0, 1 ) );
                 }
             }
             else
             {
                 /* because text without dx array is badly scaled, we
                    will create such an array if necessary */
-                o3tl::span<const tools::Long> pDX;
-                std::vector<tools::Long> aMyDXArray;
+                o3tl::span<const sal_Int32> pDX;
+                std::vector<sal_Int32> aMyDXArray;
                 if (pDXArry)
                 {
                     pDX = { pDXArry->data(), pDXArry->size() };
