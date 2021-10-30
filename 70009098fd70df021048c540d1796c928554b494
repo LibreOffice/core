@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f14221b_69d0c468",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-10-30T07:08:54Z",
+      "side": 1,
+      "message": "Can we improve the \"It might be dangerous...\" text? Something like \"Opening documents from relative addresses may have a security risk\" - still room for improvement but a bit more actionable.\n\nAnd I wonder in what cases the message comes up. In case you open a document that contains relative URLs it would be an infobar, for Insert From actions a message dialog?",
+      "revId": "70009098fd70df021048c540d1796c928554b494",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2e703d6c_e7f9e640",
