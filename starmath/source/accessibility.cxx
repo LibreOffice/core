@@ -487,7 +487,7 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
             weld::DrawingArea* pDrawingArea = pWin->GetDrawingArea();
             OutputDevice& rDevice = pDrawingArea->get_ref_device();
 
-            std::vector<tools::Long> aXAry;
+            std::vector<sal_Int32> aXAry;
             rDevice.SetFont( pNode->GetFont() );
             rDevice.GetTextArray( aNodeText, &aXAry, 0, aNodeText.getLength() );
             aTLPos.AdjustX(nNodeIndex > 0 ? aXAry[nNodeIndex - 1] : 0 );
@@ -559,7 +559,7 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
 
                 tools::Long nNodeX = pNode->GetLeft();
 
-                std::vector<tools::Long> aXAry;
+                std::vector<sal_Int32> aXAry;
                 rDevice.SetFont( pNode->GetFont() );
                 rDevice.GetTextArray( aTxt, &aXAry, 0, aTxt.getLength() );
                 for (sal_Int32 i = 0;  i < aTxt.getLength()  &&  nRes == -1;  ++i)

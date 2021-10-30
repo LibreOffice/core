@@ -721,7 +721,7 @@ namespace emfio
                             IntersectClipRect( aRect );
                         }
                         SAL_INFO( "emfio", "\t\t\t Text : " << aText );
-                        std::vector<tools::Long> aDXAry;
+                        std::vector<sal_Int32> aDXAry;
                         std::unique_ptr<tools::Long[]> pDYAry;
                         auto nDxArySize =  nMaxStreamPos - mpInputStream->Tell();
                         auto nDxAryEntries = nDxArySize >> 1;
@@ -1257,7 +1257,7 @@ namespace emfio
                                                 {
                                                     Point  aPt;
                                                     sal_uInt32  nStringLen, nDXCount;
-                                                    std::vector<tools::Long> aDXAry;
+                                                    std::vector<sal_Int32> aDXAry;
                                                     SvMemoryStream aMemoryStream( nEscLen );
                                                     aMemoryStream.WriteBytes(pData.get(), nEscLen);
                                                     aMemoryStream.Seek( STREAM_SEEK_TO_BEGIN );

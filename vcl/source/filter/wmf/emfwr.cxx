@@ -861,7 +861,7 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
 
 }
 
-void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, o3tl::span<const tools::Long> pDXArray, sal_uInt32 nWidth )
+void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, o3tl::span<const sal_Int32> pDXArray, sal_uInt32 nWidth )
 {
     sal_Int32 nLen = rText.getLength(), i;
 
@@ -869,8 +869,8 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, o
         return;
 
     sal_uInt32  nNormWidth;
-    std::vector<tools::Long> aOwnArray;
-    o3tl::span<const tools::Long> pDX;
+    std::vector<sal_Int32> aOwnArray;
+    o3tl::span<const sal_Int32> pDX;
 
     // get text sizes
     if( !pDXArray.empty() )

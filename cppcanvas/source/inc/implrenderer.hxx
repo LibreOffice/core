@@ -192,7 +192,7 @@ namespace cppcanvas::internal
                                    const OUString&                rString,
                                    int                            nIndex,
                                    int                            nLength,
-                                   o3tl::span<const tools::Long>  pCharWidths,
+                                   o3tl::span<const sal_Int32>    pCharWidths,
                                    const ActionFactoryParameters& rParms,
                                    bool                           bSubsettable );
 

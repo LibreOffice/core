@@ -2037,7 +2037,7 @@ size_t SwScriptInfo::HasKana(TextFrameIndex const nStart, TextFrameIndex const n
     return SAL_MAX_SIZE;
 }
 
-tools::Long SwScriptInfo::Compress(tools::Long* pKernArray, TextFrameIndex nIdx, TextFrameIndex nLen,
+tools::Long SwScriptInfo::Compress(sal_Int32* pKernArray, TextFrameIndex nIdx, TextFrameIndex nLen,
                              const sal_uInt16 nCompress, const sal_uInt16 nFontHeight,
                              bool bCenter,
                              Point* pPoint ) const
@@ -2154,8 +2154,8 @@ tools::Long SwScriptInfo::Compress(tools::Long* pKernArray, TextFrameIndex nIdx,
 // total number of kashida positions, or the number of kashida positions after some positions
 // have been dropped, depending on the state of the m_KashidaInvalid set.
 
-sal_Int32 SwScriptInfo::KashidaJustify( tools::Long* pKernArray,
-                                        tools::Long* pScrArray,
+sal_Int32 SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
+                                        sal_Int32* pScrArray,
                                         TextFrameIndex const nStt,
                                         TextFrameIndex const nLen,
                                         tools::Long nSpaceAdd ) const
@@ -2413,8 +2413,8 @@ void SwScriptInfo::MarkKashidasInvalid(sal_Int32 const nCnt,
     }
 }
 
-TextFrameIndex SwScriptInfo::ThaiJustify( const OUString& rText, tools::Long* pKernArray,
-                                     tools::Long* pScrArray, TextFrameIndex const nStt,
+TextFrameIndex SwScriptInfo::ThaiJustify( const OUString& rText, sal_Int32* pKernArray,
+                                     sal_Int32* pScrArray, TextFrameIndex const nStt,
                                      TextFrameIndex const nLen,
                                      TextFrameIndex nNumberOfBlanks,
                                      tools::Long nSpaceAdd )
@@ -2746,8 +2746,8 @@ TextFrameIndex SwScriptInfo::CountCJKCharacters(const OUString &rText,
     return nCount;
 }
 
-void SwScriptInfo::CJKJustify( const OUString& rText, tools::Long* pKernArray,
-                                     tools::Long* pScrArray, TextFrameIndex const nStt,
+void SwScriptInfo::CJKJustify( const OUString& rText, sal_Int32* pKernArray,
+                                     sal_Int32* pScrArray, TextFrameIndex const nStt,
                                      TextFrameIndex const nLen, LanguageType aLang,
                                      tools::Long nSpaceAdd, bool bIsSpaceStop )
 {

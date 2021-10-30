@@ -1939,7 +1939,7 @@ namespace emfio
                                 SAL_INFO("emfio", "\t\tText: " << aText);
                                 SAL_INFO("emfio", "\t\tDxBuffer:");
 
-                                std::vector<tools::Long> aDXAry;
+                                std::vector<sal_Int32> aDXAry;
                                 std::unique_ptr<tools::Long[]> pDYAry;
 
                                 sal_Int32 nDxSize;
