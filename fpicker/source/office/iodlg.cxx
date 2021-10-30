@@ -2007,11 +2007,11 @@ weld::Widget* SvtFileDialog::getControl( sal_Int16 nControlId, bool bLabelContro
             pReturn = m_xImpl->m_xBtnHelp.get();
             break;
 
-        case TOOLBOXBUTOON_LEVEL_UP:
+        case TOOLBOXBUTTON_LEVEL_UP:
             pReturn = m_xImpl->m_xBtnUp->getWidget();
             break;
 
-        case TOOLBOXBUTOON_NEW_FOLDER:
+        case TOOLBOXBUTTON_NEW_FOLDER:
             pReturn = m_xImpl->m_xBtnNewFolder.get();
             break;
 
