@@ -1436,8 +1436,8 @@ private:
                                     const Size&         aOutSz,
                                     const bool          bHMirr,
                                     const bool          bVMirr,
-                                    const tools::Long*         pMapX,
-                                    const tools::Long*         pMapY );
+                                    const sal_Int32*         pMapX,
+                                    const sal_Int32*         pMapY );
 
     SAL_DLLPRIVATE Bitmap       BlendBitmapWithAlpha(
                                     Bitmap&             aBmp,
@@ -1448,8 +1448,8 @@ private:
                                     const sal_Int32     nDstHeight,
                                     const sal_Int32     nOffX,
                                     const sal_Int32     nDstWidth,
-                                    const tools::Long*         pMapX,
-                                    const tools::Long*         pMapY );
+                                    const sal_Int32*         pMapX,
+                                    const sal_Int32*         pMapY );
 
     ///@}
 
