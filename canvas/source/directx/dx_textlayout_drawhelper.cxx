@@ -206,14 +206,14 @@ namespace dxcanvas
             {
                 // create the DXArray
                 const sal_Int32 nLen( rLogicalAdvancements.getLength() );
-                std::unique_ptr<::tools::Long[]> pDXArray( new ::tools::Long[nLen] );
+                std::unique_ptr<sal_Int32[]> pDXArray( std::make_unique<sal_Int32[]>(nLen) );
                 for( sal_Int32 i=0; i<nLen; ++i )
                     pDXArray[i] = basegfx::fround( rLogicalAdvancements[i] );
 
                 // draw the String
                 xVirtualDevice->DrawTextArray( aEmptyPoint,
                                               aText,
-                                              o3tl::span<const ::tools::Long>( pDXArray.get(), nLen ),
+                                              o3tl::span( pDXArray.get(), nLen ),
                                               rText.StartPosition,
                                               rText.Length,
                                               bIsRTL ? SalLayoutFlags::BiDiRtl : SalLayoutFlags::NONE);
