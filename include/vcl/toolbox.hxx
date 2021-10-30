@@ -185,7 +185,7 @@ private:
     SAL_DLLPRIVATE void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE ImplToolItem*   ImplGetItem( ToolBoxItemId nId ) const;
     SAL_DLLPRIVATE bool            ImplCalcItem();
-    SAL_DLLPRIVATE ImplToolItems::size_type ImplCalcBreaks( tools::Long nWidth, tools::Long* pMaxLineWidth, bool bCalcHorz ) const;
+    SAL_DLLPRIVATE ImplToolItems::size_type ImplCalcBreaks( tools::Long nWidth, sal_Int32* pMaxLineWidth, bool bCalcHorz ) const;
     SAL_DLLPRIVATE void            ImplFormat( bool bResize = false );
     SAL_DLLPRIVATE void            ImplDrawSpin(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE void            ImplDrawSeparator(vcl::RenderContext& rRenderContext, ImplToolItems::size_type nPos, const tools::Rectangle& rRect);

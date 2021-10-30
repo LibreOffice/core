@@ -638,7 +638,7 @@ const ImplToolItem *ToolBox::ImplGetFirstClippedItem() const
 
 Size ToolBox::ImplCalcSize( ImplToolItems::size_type nCalcLines, sal_uInt16 nCalcMode )
 {
-    tools::Long            nMax;
+    sal_Int32            nMax;
     tools::Long            nLeft = 0;
     tools::Long            nTop = 0;
     tools::Long            nRight = 0;
@@ -784,7 +784,7 @@ void ToolBox::ImplCalcFloatSizes()
     ImplToolItems::size_type nLines;
     ImplToolItems::size_type nCalcLines;
     ImplToolItems::size_type nTempLines;
-    tools::Long    nMaxLineWidth;
+    sal_Int32    nMaxLineWidth;
     nCalcLines = ImplCalcBreaks( nCalcSize, &nMaxLineWidth, true );
 
     maFloatSizes.reserve( nCalcLines );
@@ -1658,7 +1658,7 @@ bool ToolBox::ImplCalcItem()
         return false;
 }
 
-ToolBox::ImplToolItems::size_type ToolBox::ImplCalcBreaks( tools::Long nWidth, tools::Long* pMaxLineWidth, bool bCalcHorz ) const
+ToolBox::ImplToolItems::size_type ToolBox::ImplCalcBreaks( tools::Long nWidth, sal_Int32* pMaxLineWidth, bool bCalcHorz ) const
 {
     sal_uLong           nLineStart = 0;
     sal_uLong           nGroupStart = 0;
@@ -1831,7 +1831,7 @@ Size ToolBox::ImplGetOptimalFloatingSize()
     int nBorderX = 2*TB_BORDER_OFFSET1 + mnLeftBorder + mnRightBorder;
     int nBorderY = 2*TB_BORDER_OFFSET2 + mnTopBorder + mnBottomBorder;
     Size aSz( aCurrentSize );
-    tools::Long maxX;
+    sal_Int32 maxX;
     ImplToolItems::size_type nLines = ImplCalcBreaks( aSz.Width()-nBorderX, &maxX, mbHorz );
 
     ImplToolItems::size_type manyLines = 1000;
