@@ -1000,5 +1000,33 @@ DECLARE_ODFIMPORT_TEST(testTdf133459, "tdf133459.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("QQ YYYY"), getProperty<OUString>(xFormat, "FormatString"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testPageAnchorZIndexFirstPage)
+{
+    load(mpTestDocumentPath, "PageAnchorZIndexFirstPage.fodt");
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Image1 index not 0",
+        sal_Int32(0), getProperty<sal_Int32>(getShapeByName(u"Image1"), "ZOrder"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Image2 index not 1",
+        sal_Int32(1), getProperty<sal_Int32>(getShapeByName(u"Image2"), "ZOrder"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape1 index not 2",
+        sal_Int32(2), getProperty<sal_Int32>(getShapeByName(u"Shape1"), "ZOrder"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape2 index not 3",
+        sal_Int32(3), getProperty<sal_Int32>(getShapeByName(u"Shape2"), "ZOrder"));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPageAnchorZIndexSecondPage)
+{
+    load(mpTestDocumentPath, "PageAnchorZIndexSecondPage.fodt");
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Image1 index not 0",
+        sal_Int32(0), getProperty<sal_Int32>(getShapeByName(u"Image1"), "ZOrder"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Image2 index not 1",
+        sal_Int32(1), getProperty<sal_Int32>(getShapeByName(u"Image2"), "ZOrder"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape1 index not 2",
+        sal_Int32(2), getProperty<sal_Int32>(getShapeByName(u"Shape1"), "ZOrder"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape2 index not 3",
+        sal_Int32(3), getProperty<sal_Int32>(getShapeByName(u"Shape2"), "ZOrder"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
