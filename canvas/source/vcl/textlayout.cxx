@@ -117,7 +117,7 @@ namespace vclcanvas
             uno::Sequence<double>(4),
             rendering::CompositeOperation::SOURCE);
 
-        std::vector<::tools::Long> aOffsets(maLogicalAdvancements.getLength());
+        std::vector<sal_Int32> aOffsets(maLogicalAdvancements.getLength());
         setupTextOffsets(aOffsets.data(), maLogicalAdvancements, aViewState, aRenderState);
 
         std::vector< uno::Reference< rendering::XPolyPolygon2D> > aOutlineSequence;
@@ -165,7 +165,7 @@ namespace vclcanvas
             uno::Sequence<double>(4),
             rendering::CompositeOperation::SOURCE);
 
-        std::unique_ptr< ::tools::Long []> aOffsets(new ::tools::Long[maLogicalAdvancements.getLength()]);
+        std::unique_ptr< sal_Int32 []> aOffsets(new sal_Int32[maLogicalAdvancements.getLength()]);
         setupTextOffsets(aOffsets.get(), maLogicalAdvancements, aViewState, aRenderState);
 
         std::vector< ::tools::Rectangle > aMetricVector;
@@ -335,7 +335,7 @@ namespace vclcanvas
         if( maLogicalAdvancements.hasElements() )
         {
             // TODO(P2): cache that
-            std::vector<::tools::Long> aOffsets(maLogicalAdvancements.getLength());
+            std::vector<sal_Int32> aOffsets(maLogicalAdvancements.getLength());
             setupTextOffsets( aOffsets.data(), maLogicalAdvancements, viewState, renderState );
 
             // TODO(F3): ensure correct length and termination for DX
@@ -388,7 +388,7 @@ namespace vclcanvas
         };
     }
 
-    void TextLayout::setupTextOffsets( ::tools::Long*                       outputOffsets,
+    void TextLayout::setupTextOffsets( sal_Int32*                       outputOffsets,
                                        const uno::Sequence< double >&   inputOffsets,
                                        const rendering::ViewState&      viewState,
                                        const rendering::RenderState&    renderState     ) const

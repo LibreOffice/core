@@ -442,7 +442,7 @@ void WMFWriter::WMFRecord_Escape( sal_uInt32 nEsc, sal_uInt32 nLen, const sal_In
 /* if return value is true, then a complete unicode string and also a polygon replacement has been written,
     so there is no more action necessary
 */
-bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& rUniStr, o3tl::span<const tools::Long> pDXAry )
+bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& rUniStr, o3tl::span<const sal_Int32> pDXAry )
 {
     bool bEscapeUsed = false;
 
@@ -547,7 +547,7 @@ bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& r
 
 void WMFWriter::WMFRecord_ExtTextOut( const Point& rPoint,
                                       const OUString& rString,
-                                      o3tl::span<const tools::Long> pDXAry )
+                                      o3tl::span<const sal_Int32> pDXAry )
 {
     sal_Int32 nOriginalTextLen = rString.getLength();
 
@@ -562,7 +562,7 @@ void WMFWriter::WMFRecord_ExtTextOut( const Point& rPoint,
 }
 
 void WMFWriter::TrueExtTextOut( const Point& rPoint, const OUString& rString,
-                                const OString& rByteString, o3tl::span<const tools::Long> pDXAry )
+                                const OString& rByteString, o3tl::span<const sal_Int32> pDXAry )
 {
     WriteRecordHeader( 0, W_META_EXTTEXTOUT );
     WritePointYX( rPoint );
@@ -1197,7 +1197,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 pVirDev->SetFont( aSrcFont );
                 const sal_Int32 nLen = aTemp.getLength();
-                std::vector<tools::Long> aDXAry;
+                std::vector<sal_Int32> aDXAry;
                 const sal_Int32 nNormSize = pVirDev->GetTextArray( aTemp, nLen ? &aDXAry : nullptr );
                 if (nLen && nNormSize == 0)
                 {

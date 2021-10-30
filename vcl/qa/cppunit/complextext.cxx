@@ -15,7 +15,7 @@
 
 #if HAVE_MORE_FONTS
 // must be declared before inclusion of test/bootstrapfixture.hxx
-static std::ostream& operator<<(std::ostream& rStream, const std::vector<tools::Long>& rVec);
+static std::ostream& operator<<(std::ostream& rStream, const std::vector<sal_Int32>& rVec);
 #endif
 #include <test/bootstrapfixture.hxx>
 
@@ -29,7 +29,7 @@ static std::ostream& operator<<(std::ostream& rStream, const std::vector<tools::
 #include <ImplLayoutArgs.hxx>
 
 #if HAVE_MORE_FONTS
-static std::ostream& operator<<(std::ostream& rStream, const std::vector<tools::Long>& rVec)
+static std::ostream& operator<<(std::ostream& rStream, const std::vector<sal_Int32>& rVec)
 {
     rStream << "{ ";
     for (size_t i = 0; i < rVec.size() - 1; i++)
@@ -72,15 +72,15 @@ void VclComplexTextTest::testArabic()
     pOutDev->SetFont( aFont );
 
     // absolute character widths AKA text array.
-    std::vector<tools::Long> aRefCharWidths {6,  9,  16, 16, 22, 22, 26, 29, 32, 32,
+    std::vector<sal_Int32> aRefCharWidths {6,  9,  16, 16, 22, 22, 26, 29, 32, 32,
                                       36, 40, 49, 53, 56, 63, 63, 66, 72, 72};
-    std::vector<tools::Long> aCharWidths(aOneTwoThree.getLength(), 0);
+    std::vector<sal_Int32> aCharWidths(aOneTwoThree.getLength(), 0);
     tools::Long nTextWidth = pOutDev->GetTextArray(aOneTwoThree, &aCharWidths);
 
     CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths);
     // this sporadically returns 75 or 74 on some of the windows tinderboxes eg. tb73
     CPPUNIT_ASSERT_EQUAL(tools::Long(72), nTextWidth);
-    CPPUNIT_ASSERT_EQUAL(nTextWidth, aCharWidths.back());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(nTextWidth), aCharWidths.back());
 
     // text advance width and line height
     CPPUNIT_ASSERT_EQUAL(tools::Long(72), pOutDev->GetTextWidth(aOneTwoThree));
