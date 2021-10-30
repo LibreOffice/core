@@ -141,7 +141,7 @@ OUString OutlinerEditEng::GetUndoComment( sal_uInt16 nUndoId ) const
 }
 
 void OutlinerEditEng::DrawingText( const Point& rStartPos, const OUString& rText, sal_Int32 nTextStart, sal_Int32 nTextLen,
-                                   o3tl::span<const tools::Long> pDXArray, const SvxFont& rFont, sal_Int32 nPara, sal_uInt8 nRightToLeft,
+                                   o3tl::span<const sal_Int32> pDXArray, const SvxFont& rFont, sal_Int32 nPara, sal_uInt8 nRightToLeft,
                                    const EEngineData::WrongSpellVector* pWrongSpellVector,
                                    const SvxFieldData* pFieldData,
                                    bool bEndOfLine,

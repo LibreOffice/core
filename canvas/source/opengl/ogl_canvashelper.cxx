@@ -729,7 +729,7 @@ namespace oglcanvas
                 {
                     // create the DXArray
                     const sal_Int32 nLen( aLogicalAdvancements.getLength() );
-                    std::vector<tools::Long> aDXArray(nLen);
+                    std::vector<sal_Int32> aDXArray(nLen);
                     for( sal_Int32 i=0; i<nLen; ++i )
                         aDXArray[i] = basegfx::fround( aLogicalAdvancements[i] );
 
