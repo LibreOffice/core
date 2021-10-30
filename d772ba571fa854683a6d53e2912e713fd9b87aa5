@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3cd5690_9d9d6a9e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-10-30T04:47:04Z",
+      "side": 1,
+      "message": "The crash doesn\u0027t happen any more, but now the TOC can be manually edited.  Well, at least you can insert some characters at the beginning of each line. So \"Protected against manual changes\" is broken.",
+      "revId": "d772ba571fa854683a6d53e2912e713fd9b87aa5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
