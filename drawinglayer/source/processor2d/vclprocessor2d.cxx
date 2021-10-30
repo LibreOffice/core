@@ -248,7 +248,7 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
             }
 
             // create transformed integer DXArray in view coordinate system
-            std::vector<tools::Long> aTransformedDXArray;
+            std::vector<sal_Int32> aTransformedDXArray;
 
             if (!rTextCandidate.getDXArray().empty())
             {

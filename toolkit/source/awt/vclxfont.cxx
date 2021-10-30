@@ -156,7 +156,7 @@ sal_Int32 VCLXFont::getStringWidthArray( const OUString& str, css::uno::Sequence
     {
         vcl::Font aOldFont = pOutDev->GetFont();
         pOutDev->SetFont( maFont );
-        std::vector<tools::Long> aDXA;
+        std::vector<sal_Int32> aDXA;
         nRet = pOutDev->GetTextArray( str, &aDXA );
         rDXArray = css::uno::Sequence<sal_Int32>( str.getLength() );
         for(int i = 0; i < str.getLength(); i++)

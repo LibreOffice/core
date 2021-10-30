@@ -919,7 +919,7 @@ float OutputDevice::approximate_digit_width() const
 }
 
 void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
-                                  o3tl::span<const tools::Long> pDXAry,
+                                  o3tl::span<const sal_Int32> pDXAry,
                                   sal_Int32 nIndex, sal_Int32 nLen, SalLayoutFlags flags,
                                   const SalLayoutGlyphs* pSalLayoutCache )
 {
@@ -952,7 +952,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
         mpAlphaVDev->DrawTextArray( rStartPt, rStr, pDXAry, nIndex, nLen, flags );
 }
 
-tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<tools::Long>* pDXAry,
+tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_Int32>* pDXAry,
                                  sal_Int32 nIndex, sal_Int32 nLen,
                                  vcl::text::TextLayoutCache const*const pLayoutCache,
                                  SalLayoutGlyphs const*const pSalLayoutCache) const
@@ -1245,7 +1245,7 @@ vcl::text::ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
 std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
                                     sal_Int32 nMinIndex, sal_Int32 nLen,
                                     const Point& rLogicalPos, tools::Long nLogicalWidth,
-                                    o3tl::span<const tools::Long> pDXArray, SalLayoutFlags flags,
+                                    o3tl::span<const sal_Int32> pDXArray, SalLayoutFlags flags,
          vcl::text::TextLayoutCache const* pLayoutCache,
          const SalLayoutGlyphs* pGlyphs) const
 {
@@ -2257,7 +2257,7 @@ OUString OutputDevice::GetNonMnemonicString( const OUString& rStr, sal_Int32& rM
 bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
                                          const OUString& rStr, sal_Int32 nBase,
                                          sal_Int32 nIndex, sal_Int32 nLen,
-                                         sal_uLong nLayoutWidth, o3tl::span<const tools::Long> pDXAry,
+                                         sal_uLong nLayoutWidth, o3tl::span<const sal_Int32> pDXAry,
                                          const SalLayoutGlyphs* pGlyphs ) const
 {
     bool bRet = false;
@@ -2321,7 +2321,7 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
 bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
                                         const OUString& rStr, sal_Int32 nBase,
                                         sal_Int32 nIndex, sal_Int32 nLen,
-                                        sal_uLong nLayoutWidth, o3tl::span<const tools::Long> pDXArray ) const
+                                        sal_uLong nLayoutWidth, o3tl::span<const sal_Int32> pDXArray ) const
 {
     if (!InitFont())
         return false;
@@ -2408,7 +2408,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
 bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
                                         const OUString& rStr, sal_Int32 nBase,
                                         sal_Int32 nIndex, sal_Int32 nLen,
-                                        sal_uLong nLayoutWidth, o3tl::span<const tools::Long> pDXArray ) const
+                                        sal_uLong nLayoutWidth, o3tl::span<const sal_Int32> pDXArray ) const
 {
     rResultVector.clear();
 

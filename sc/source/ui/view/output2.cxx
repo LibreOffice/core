@@ -1556,7 +1556,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
     // before processing the cell value.
     std::vector<std::unique_ptr<ScPatternAttr> > aAltPatterns;
 
-    std::vector<tools::Long> aDX;
+    std::vector<sal_Int32> aDX;
     tools::Long nPosY = nScrY;
     for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
     {

@@ -847,7 +847,7 @@ namespace cppcanvas::internal
                                              const OUString&                rString,
                                              int                            nIndex,
                                              int                            nLength,
-                                             o3tl::span<const ::tools::Long> pCharWidths,
+                                             o3tl::span<const sal_Int32>    pCharWidths,
                                              const ActionFactoryParameters& rParms,
                                              bool                           bSubsettableActions )
         {
@@ -985,7 +985,7 @@ namespace cppcanvas::internal
                 {
                     ::tools::Long nInterval = ( nWidth - nStrikeoutWidth * nLen ) / nLen;
                     nStrikeoutWidth += nInterval;
-                    std::vector<::tools::Long> aStrikeoutCharWidths(nLen);
+                    std::vector<sal_Int32> aStrikeoutCharWidths(nLen);
 
                     for ( int i = 0;i<nLen; i++)
                     {
@@ -2557,7 +2557,7 @@ namespace cppcanvas::internal
                         // generating a DX array, and uniformly
                         // distributing the excess/insufficient width
                         // to every logical character.
-                        std::vector<::tools::Long> aDXArray;
+                        std::vector<sal_Int32> aDXArray;
 
                         rVDev.GetTextArray( pAct->GetText(), &aDXArray,
                                             pAct->GetIndex(), pAct->GetLen() );
@@ -2565,7 +2565,7 @@ namespace cppcanvas::internal
                         const sal_Int32 nWidthDifference( pAct->GetWidth() - aDXArray[ nLen-1 ] );
 
                         // Last entry of pDXArray contains total width of the text
-                        ::tools::Long* p = aDXArray.data();
+                        sal_Int32* p = aDXArray.data();
                         for (sal_Int32 i = 1; i <= nLen; ++i)
                         {
                             // calc ratio for every array entry, to
@@ -2574,7 +2574,7 @@ namespace cppcanvas::internal
                             // entry represents the 'end' position of
                             // the corresponding character, thus, we
                             // let i run from 1 to nLen.
-                            *p++ += static_cast<::tools::Long>(i)*nWidthDifference/nLen;
+                            *p++ += i * nWidthDifference / nLen;
                         }
 
                         createTextAction(
