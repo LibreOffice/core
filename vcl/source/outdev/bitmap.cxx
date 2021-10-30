@@ -375,19 +375,19 @@ namespace
 
 struct LinearScaleContext
 {
-    std::unique_ptr<tools::Long[]> mpMapX;
-    std::unique_ptr<tools::Long[]> mpMapY;
+    std::unique_ptr<sal_Int32[]> mpMapX;
+    std::unique_ptr<sal_Int32[]> mpMapY;
 
-    std::unique_ptr<tools::Long[]> mpMapXOffset;
-    std::unique_ptr<tools::Long[]> mpMapYOffset;
+    std::unique_ptr<sal_Int32[]> mpMapXOffset;
+    std::unique_ptr<sal_Int32[]> mpMapYOffset;
 
     LinearScaleContext(tools::Rectangle const & aDstRect, tools::Rectangle const & aBitmapRect,
                  Size const & aOutSize, tools::Long nOffX, tools::Long nOffY)
 
-        : mpMapX(new tools::Long[aDstRect.GetWidth()])
-        , mpMapY(new tools::Long[aDstRect.GetHeight()])
-        , mpMapXOffset(new tools::Long[aDstRect.GetWidth()])
-        , mpMapYOffset(new tools::Long[aDstRect.GetHeight()])
+        : mpMapX(new sal_Int32[aDstRect.GetWidth()])
+        , mpMapY(new sal_Int32[aDstRect.GetHeight()])
+        , mpMapXOffset(new sal_Int32[aDstRect.GetWidth()])
+        , mpMapYOffset(new sal_Int32[aDstRect.GetHeight()])
     {
         const tools::Long nSrcWidth = aBitmapRect.GetWidth();
         const tools::Long nSrcHeight = aBitmapRect.GetHeight();
@@ -404,7 +404,7 @@ struct LinearScaleContext
 private:
 
     static void generateSimpleMap(tools::Long nSrcDimension, tools::Long nDstDimension, tools::Long nDstLocation,
-                                  tools::Long nOutDimension, tools::Long nOffset, tools::Long* pMap, tools::Long* pMapOffset)
+                                  tools::Long nOutDimension, tools::Long nOffset, sal_Int32* pMap, sal_Int32* pMapOffset)
     {
 
         const double fReverseScale = (std::abs(nOutDimension) > 1) ? (nSrcDimension - 1) / double(std::abs(nOutDimension) - 1) : 0.0;
@@ -542,14 +542,14 @@ public:
 
 struct TradScaleContext
 {
-    std::unique_ptr<tools::Long[]> mpMapX;
-    std::unique_ptr<tools::Long[]> mpMapY;
+    std::unique_ptr<sal_Int32[]> mpMapX;
+    std::unique_ptr<sal_Int32[]> mpMapY;
 
     TradScaleContext(tools::Rectangle const & aDstRect, tools::Rectangle const & aBitmapRect,
                  Size const & aOutSize, tools::Long nOffX, tools::Long nOffY)
 
-        : mpMapX(new tools::Long[aDstRect.GetWidth()])
-        , mpMapY(new tools::Long[aDstRect.GetHeight()])
+        : mpMapX(new sal_Int32[aDstRect.GetWidth()])
+        , mpMapY(new sal_Int32[aDstRect.GetHeight()])
     {
         const tools::Long nSrcWidth = aBitmapRect.GetWidth();
         const tools::Long nSrcHeight = aBitmapRect.GetHeight();
@@ -569,7 +569,7 @@ struct TradScaleContext
 private:
 
     static void generateSimpleMap(tools::Long nSrcDimension, tools::Long nDstDimension, tools::Long nDstLocation,
-                                  tools::Long nOutDimension, tools::Long nOffset, bool bMirror, tools::Long* pMap)
+                                  tools::Long nOutDimension, tools::Long nOffset, bool bMirror, sal_Int32* pMap)
     {
         tools::Long nMirrorOffset = 0;
 
@@ -786,8 +786,8 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
             const sal_Int32     nDstHeight,
             const sal_Int32     nOffX,
             const sal_Int32     nDstWidth,
-            const tools::Long*         pMapX,
-            const tools::Long*         pMapY )
+            const sal_Int32*    pMapX,
+            const sal_Int32*    pMapY )
 
 {
     BitmapColor aDstCol;
@@ -889,8 +889,8 @@ Bitmap OutputDevice::BlendBitmap(
             const Size&         aOutSz,
             const bool          bHMirr,
             const bool          bVMirr,
-            const tools::Long*         pMapX,
-            const tools::Long*         pMapY )
+            const sal_Int32*    pMapX,
+            const sal_Int32*    pMapY )
 {
     BitmapColor aDstCol;
     Bitmap      res;
