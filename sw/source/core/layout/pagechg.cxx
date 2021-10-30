@@ -389,12 +389,16 @@ static void lcl_FormatLay( SwLayoutFrame *pLay )
 /// Create Flys or register draw objects
 static void lcl_MakeObjs( const SwFrameFormats &rTable, SwPageFrame *pPage )
 {
+    printf ("lcl_MakeObjs\n");
+
     // formats are in the special table of the document
 
     for ( size_t i = 0; i < rTable.size(); ++i )
     {
         SwFrameFormat *pFormat = rTable[i];
         const SwFormatAnchor &rAnch = pFormat->GetAnchor();
+        printf ("Anchor: %d Page: %d\n", rAnch.GetPageNum(), pPage->GetPhyPageNum());
+
         if ( rAnch.GetPageNum() == pPage->GetPhyPageNum() )
         {
             if( rAnch.GetContentAnchor() )

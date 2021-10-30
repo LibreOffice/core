@@ -333,6 +333,8 @@ void SdrObjList::InsertObjectThenMakeNameUnique(SdrObject* pObj, std::unordered_
 
 void SdrObjList::InsertObject(SdrObject* pObj, size_t nPos)
 {
+    printf ("SdrObjList::InsertObject %s - %d %ld\n", pObj->GetName().toUtf8().getStr(), nPos, size_t(this));
+
     DBG_ASSERT(pObj!=nullptr,"SdrObjList::InsertObject(NULL)");
 
     if(!pObj)
@@ -416,6 +418,8 @@ SdrObject* SdrObjList::RemoveObject(size_t nObjNum)
         OSL_ASSERT(nObjNum<maList.size());
         return nullptr;
     }
+
+    printf ("SdrObjList::RemoveObject %d %ld\n", nObjNum, size_t(this));
 
     const size_t nCount = GetObjCount();
     SdrObject* pObj=maList[nObjNum];
