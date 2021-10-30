@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9e92446_f77ca8bd",
+        "filename": "canvas/source/directx/dx_textlayout_drawhelper.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-30T18:11:42Z",
+      "side": 1,
+      "message": "This is likely missed in bc413e15fae3672f580894a3cd7b077d533d8e6c - fails on Win64",
+      "revId": "894b4911ffb96ff667fdeb3aec7922316ab7230a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
