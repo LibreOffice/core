@@ -39,7 +39,7 @@
         <child>
           <object class="GtkToolbar" id="style">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
             <property name="show-arrow">False</property>
             <child>
               <object class="GtkRadioToolButton" id="off">
@@ -150,7 +150,7 @@
         <child>
           <object class="GtkToolbar" id="adjust">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
             <property name="show-arrow">False</property>
             <child>
               <object class="GtkToggleToolButton" id="orientation">
@@ -349,7 +349,7 @@
         <child>
           <object class="GtkToolbar" id="shadow">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
             <property name="show-arrow">False</property>
             <child>
               <object class="GtkToggleToolButton" id="contour">
