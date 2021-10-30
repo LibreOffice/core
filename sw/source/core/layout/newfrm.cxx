@@ -501,8 +501,10 @@ void SwRootFrame::Init( SwFrameFormat* pFormat )
 
     SwNodeIndex aTmp( *pDoc->GetNodes().GetEndOfContent().StartOfSectionNode(), 1 );
     ::InsertCnt_( pLay, pDoc, aTmp.GetIndex(), true );
+
     //Remove masters that haven't been replaced yet from the list.
-    RemoveMasterObjs( mpDrawPage );
+    //RemoveMasterObjs( mpDrawPage );
+
     if( rSettingAccess.get(DocumentSettingId::GLOBAL_DOCUMENT) )
         rFieldsAccess.UpdateRefFields();
     //b6433357: Update page fields after loading
@@ -566,12 +568,17 @@ SwRootFrame::~SwRootFrame()
 
 void SwRootFrame::RemoveMasterObjs( SdrPage *pPg )
 {
+    printf ("SwRootFrame::RemoveMasterObjs\n");
     // Remove all master objects from the Page. But don't delete!
     for( size_t i = pPg ? pPg->GetObjCount() : 0; i; )
     {
         SdrObject* pObj = pPg->GetObj( --i );
-        if( dynamic_cast< const SwFlyDrawObj *>( pObj ) !=  nullptr )
+        const auto* pFlyDrawObject = dynamic_cast<const SwFlyDrawObj*>(pObj);
+        if (pFlyDrawObject)
+        {
+            printf ("Removing from page object: '%s' index: %d\n", pObj->GetName().toUtf8().getStr(), i);
             pPg->RemoveObject( i );
+        }
     }
 }
 

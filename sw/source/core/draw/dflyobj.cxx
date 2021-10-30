@@ -127,6 +127,7 @@ SwFlyDrawObj::SwFlyDrawObj(SdrModel& rSdrModel)
 :   SdrObject(rSdrModel),
     mbIsTextBox(false)
 {
+    printf ("SwFlyDrawObj::SwFlyDrawObj\n");
 }
 
 SwFlyDrawObj::~SwFlyDrawObj()
@@ -425,6 +426,7 @@ SwVirtFlyDrawObj::SwVirtFlyDrawObj(
 :   SdrVirtObj(rSdrModel, rNew),
     m_pFlyFrame(pFly)
 {
+    printf ("SwVirtFlyDrawObj::SwVirtFlyDrawObj\n");
     const SvxProtectItem &rP = m_pFlyFrame->GetFormat()->GetProtect();
     m_bMovProt = rP.IsPosProtected();
     m_bSizProt = rP.IsSizeProtected();
