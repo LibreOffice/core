@@ -3,6 +3,29 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "a115b398_719c0aa1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-10-30T10:54:16Z",
+      "side": 1,
+      "message": "Lol, a generated (not predefined language mapping) UI language string gets \" {languagetag}\" appended to mark it as such and distinguish from a possibly identical predefined UI string of another language tag.\n\nSee svtools/source/misc/langtab.cxx lcl_getDescription()",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 32
+      },
+      "revId": "129c2529e185b1e1826fb60df9e3e947497a1299",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "bfe14f2f_fa5cdcc2",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -14,6 +37,63 @@
       "writtenOn": "2021-10-29T19:34:58Z",
       "side": 1,
       "message": "Missing your wisdom on the board increasingly \u003d) but that aside - any thoughts on this ? it\u0027s odd to see LANGUAGE_PROCESS_OR_USER_DEFAULT turning up and causing grief.\nThanks !",
+      "revId": "129c2529e185b1e1826fb60df9e3e947497a1299",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d0ebc42_6ed806b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-10-30T10:54:16Z",
+      "side": 1,
+      "message": "I can take a further look at this over the weekend..",
+      "revId": "129c2529e185b1e1826fb60df9e3e947497a1299",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ced96bd0_24d40932",
+        "filename": "sw/source/uibase/shells/langhelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-10-30T10:54:16Z",
+      "side": 1,
+      "message": "getRealLanguage() is wrong here (and all other places in this change), if at all it should be MsLangId::simplifySystemLanguages() to preserve a LANGUAGE_SYSTEM, but I think that would be just curing a symptom at a wrong place.\n\nAnyway, rEditView.GetInputLanguage() does not return LANGUAGE_PROCESS_OR_USER_DEFAULT, or does it on Windows?",
+      "revId": "129c2529e185b1e1826fb60df9e3e947497a1299",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8b7fb0b_76bc0665",
+        "filename": "sw/source/uibase/shells/langhelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-10-30T10:54:16Z",
+      "side": 1,
+      "message": "Implementation of SwLangHelper::GetCurrentLanguage() already looks odd in this context, its\n\n  OSL_ENSURE( nCurrentLang !\u003d LANGUAGE_SYSTEM, \"failed to get the language?\" );\n\nat the end suggests it does not expect to return some system language value, which LANGUAGE_PROCESS_OR_USER_DEFAULT also is, but always some resolved value.",
+      "range": {
+        "startLine": 77,
+        "startChar": 43,
+        "endLine": 77,
+        "endChar": 75
+      },
       "revId": "129c2529e185b1e1826fb60df9e3e947497a1299",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
