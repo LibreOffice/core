@@ -1485,11 +1485,11 @@ void Bitmap::AdaptBitCount(Bitmap& rNew) const
     }
 }
 
-static tools::Long* shiftColor(tools::Long* pColorArray, BitmapColor const& rColor)
+static sal_Int32* shiftColor(sal_Int32* pColorArray, BitmapColor const& rColor)
 {
-    *pColorArray++ = static_cast<tools::Long>(rColor.GetBlue()) << 12;
-    *pColorArray++ = static_cast<tools::Long>(rColor.GetGreen()) << 12;
-    *pColorArray++ = static_cast<tools::Long>(rColor.GetRed()) << 12;
+    *pColorArray++ = static_cast<sal_Int32>(rColor.GetBlue()) << 12;
+    *pColorArray++ = static_cast<sal_Int32>(rColor.GetGreen()) << 12;
+    *pColorArray++ = static_cast<sal_Int32>(rColor.GetRed()) << 12;
     return pColorArray;
 }
 static BitmapColor getColor(const BitmapReadAccess *pReadAcc, tools::Long nZ)
@@ -1519,12 +1519,11 @@ bool Bitmap::Dither()
             tools::Long nHeight = pReadAcc->Height();
             tools::Long nW = nWidth * 3;
             tools::Long nW2 = nW - 3;
-            std::unique_ptr<tools::Long[]> p1(new tools::Long[ nW ]);
-            std::unique_ptr<tools::Long[]> p2(new tools::Long[ nW ]);
-            tools::Long* p1T = p1.get();
-            tools::Long* p2T = p2.get();
-            tools::Long* pTmp;
-            pTmp = p2T;
+            std::unique_ptr<sal_Int32[]> p1(new sal_Int32[ nW ]);
+            std::unique_ptr<sal_Int32[]> p2(new sal_Int32[ nW ]);
+            sal_Int32* p1T = p1.get();
+            sal_Int32* p2T = p2.get();
+            sal_Int32* pTmp = p2T;
             for (tools::Long nZ = 0; nZ < nWidth; nZ++)
             {
                 pTmp = shiftColor(pTmp, getColor(pReadAcc.get(), nZ));
