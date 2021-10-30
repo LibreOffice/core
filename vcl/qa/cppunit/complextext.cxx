@@ -72,9 +72,9 @@ void VclComplexTextTest::testArabic()
     pOutDev->SetFont( aFont );
 
     // absolute character widths AKA text array.
-    std::vector<tools::Long> aRefCharWidths {6,  9,  16, 16, 22, 22, 26, 29, 32, 32,
+    std::vector<sal_Int32> aRefCharWidths {6,  9,  16, 16, 22, 22, 26, 29, 32, 32,
                                       36, 40, 49, 53, 56, 63, 63, 66, 72, 72};
-    std::vector<tools::Long> aCharWidths(aOneTwoThree.getLength(), 0);
+    std::vector<sal_Int32> aCharWidths(aOneTwoThree.getLength(), 0);
     tools::Long nTextWidth = pOutDev->GetTextArray(aOneTwoThree, &aCharWidths);
 
     CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths);

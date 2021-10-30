@@ -715,7 +715,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                     OUString aStr(OStringToOUString(aByteStr, eActualCharSet));
 
-                    std::vector<tools::Long> aDXAry;
+                    std::vector<sal_Int32> aDXAry;
                     if (nAryLen > 0)
                     {
                         const size_t nMinRecordSize = sizeof(sal_Int32);
@@ -755,7 +755,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                             {
                                 if (nAryLen+1 == nStrLen && nIndex >= 0)
                                 {
-                                    std::vector<tools::Long> aTmpAry;
+                                    std::vector<sal_Int32> aTmpAry;
 
                                     aFontVDev->GetTextArray( aStr, &aTmpAry, nIndex, nLen );
 

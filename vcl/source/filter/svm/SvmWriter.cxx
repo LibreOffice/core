@@ -984,7 +984,7 @@ void SvmWriter::TextArrayHandler(const MetaTextArrayAction* pAction, const ImplM
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
 
-    const std::vector<tools::Long>& rDXArray = pAction->GetDXArray();
+    const std::vector<sal_Int32>& rDXArray = pAction->GetDXArray();
 
     const sal_Int32 nAryLen = !rDXArray.empty() ? pAction->GetLen() : 0;
 
