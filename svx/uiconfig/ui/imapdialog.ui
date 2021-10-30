@@ -131,7 +131,7 @@
             <child>
               <object class="GtkToolbar" id="toolbar">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="no_show_all">True</property>
                 <property name="hexpand">True</property>
                 <property name="toolbar_style">icons</property>

@@ -424,6 +424,30 @@ def enforce_active_in_group_consistency(current):
       active.text = "True"
       current.insert(insertpos, active)
 
+def enforce_toolbar_can_focus(current):
+  can_focus = None
+  istoolbar = current.get('class') == "GtkToolbar"
+  insertpos = 0
+  for child in current:
+    enforce_toolbar_can_focus(child)
+    if not istoolbar:
+        continue
+    if child.tag == "property":
+      insertpos = insertpos + 1;
+      attributes = child.attrib
+      if attributes.get("name") == "can-focus" or attributes.get("name") == "can_focus":
+        can_focus = child
+
+  if istoolbar:
+    if can_focus == None:
+      can_focus = etree.Element("property")
+      attributes = can_focus.attrib
+      attributes["name"] = "can-focus"
+      can_focus.text = "True"
+      current.insert(insertpos, can_focus)
+    else:
+      can_focus.text = "True"
+
 def enforce_entry_text_column_id_column_for_gtkcombobox(current):
   entrytextcolumn = None
   idcolumn = None
@@ -496,6 +520,7 @@ enforce_entry_text_column_id_column_for_gtkcombobox(root)
 remove_double_buffered(root)
 remove_skip_pager_hint(root)
 remove_toolbutton_focus(root)
+enforce_toolbar_can_focus(root)
 
 with open(sys.argv[1], 'wb') as o:
   # without encoding='unicode' (and the matching encode("utf8")) we get &#XXXX replacements for non-ascii characters
