@@ -501,8 +501,7 @@ void SwRootFrame::Init( SwFrameFormat* pFormat )
 
     SwNodeIndex aTmp( *pDoc->GetNodes().GetEndOfContent().StartOfSectionNode(), 1 );
     ::InsertCnt_( pLay, pDoc, aTmp.GetIndex(), true );
-    //Remove masters that haven't been replaced yet from the list.
-    RemoveMasterObjs( mpDrawPage );
+
     if( rSettingAccess.get(DocumentSettingId::GLOBAL_DOCUMENT) )
         rFieldsAccess.UpdateRefFields();
     //b6433357: Update page fields after loading

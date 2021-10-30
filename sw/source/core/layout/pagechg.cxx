@@ -1660,6 +1660,9 @@ void SwRootFrame::AssertFlyPages()
         AssertPageFlys(pFirstRevivedEmptyPage);
     }
 
+    //Remove masters that haven't been replaced yet from the list.
+    RemoveMasterObjs( mpDrawPage );
+
 #if OSL_DEBUG_LEVEL > 0
     pPage = static_cast<SwPageFrame*>(Lower());
     while ( pPage && pPage->GetNext() &&
