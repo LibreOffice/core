@@ -52,7 +52,7 @@ static tools::Long ImplIndexFromColor( const BitmapColor& rCol )
 
 static void ImplPALToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer,
                           FncGetPixel pFncGetPixel, FncSetPixel pFncSetPixel,
-                          Scanline* pSrcScanMap, Scanline* pDstScanMap, tools::Long const * pMapX, const tools::Long* pMapY )
+                          Scanline* pSrcScanMap, Scanline* pDstScanMap, sal_Int32 const * pMapX, const sal_Int32* pMapY )
 {
     const tools::Long          nHeight1 = rDstBuffer.mnHeight - 1;
     const ColorMask&    rSrcMask = rSrcBuffer.maColorMask;
@@ -85,7 +85,7 @@ static void ImplPALToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuff
 
 static void ImplPALToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer const & rDstBuffer,
                          FncGetPixel pFncGetPixel, FncSetPixel pFncSetPixel,
-                         Scanline* pSrcScanMap, Scanline* pDstScanMap, tools::Long const * pMapX, const tools::Long* pMapY )
+                         Scanline* pSrcScanMap, Scanline* pDstScanMap, sal_Int32 const * pMapX, const sal_Int32* pMapY )
 {
     const tools::Long          nHeight1 = rDstBuffer.mnHeight - 1;
     const ColorMask&    rSrcMask = rSrcBuffer.maColorMask;
@@ -144,7 +144,7 @@ static void ImplPALToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer const & rD
 
 static void ImplTCToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer const & rDstBuffer,
                         FncGetPixel pFncGetPixel, FncSetPixel pFncSetPixel,
-                        Scanline* pSrcScanMap, Scanline* pDstScanMap, tools::Long const * pMapX, const tools::Long* pMapY )
+                        Scanline* pSrcScanMap, Scanline* pDstScanMap, sal_Int32 const * pMapX, const sal_Int32* pMapY )
 {
     const tools::Long          nHeight1 = rDstBuffer.mnHeight - 1;
     const ColorMask&    rSrcMask = rSrcBuffer.maColorMask;
@@ -189,7 +189,7 @@ static void ImplTCToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer const & rDs
 
 static void ImplTCToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer const & rDstBuffer,
                          FncGetPixel pFncGetPixel, FncSetPixel pFncSetPixel,
-                         Scanline* pSrcScanMap, Scanline* pDstScanMap, tools::Long const * pMapX, const tools::Long* pMapY )
+                         Scanline* pSrcScanMap, Scanline* pDstScanMap, sal_Int32 const * pMapX, const sal_Int32* pMapY )
 {
     const tools::Long          nHeight1 = rDstBuffer.mnHeight- 1;
     const ColorMask&    rSrcMask = rSrcBuffer.maColorMask;
@@ -329,15 +329,15 @@ std::unique_ptr<BitmapBuffer> StretchAndConvert(
 
     std::unique_ptr<Scanline[]> pSrcScan;
     std::unique_ptr<Scanline[]> pDstScan;
-    std::unique_ptr<tools::Long[]>     pMapX;
-    std::unique_ptr<tools::Long[]>     pMapY;
+    std::unique_ptr<sal_Int32[]> pMapX;
+    std::unique_ptr<sal_Int32[]> pMapY;
 
     try
     {
         pSrcScan.reset(new Scanline[rSrcBuffer.mnHeight]);
         pDstScan.reset(new Scanline[pDstBuffer->mnHeight]);
-        pMapX.reset(new tools::Long[pDstBuffer->mnWidth]);
-        pMapY.reset(new tools::Long[pDstBuffer->mnHeight]);
+        pMapX.reset(new sal_Int32[pDstBuffer->mnWidth]);
+        pMapY.reset(new sal_Int32[pDstBuffer->mnHeight]);
     }
     catch( const std::bad_alloc& )
     {
