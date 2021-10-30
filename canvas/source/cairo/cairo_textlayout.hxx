@@ -85,7 +85,7 @@ namespace cairocanvas
                    const css::rendering::ViewState&   viewState,
                    const css::rendering::RenderState& renderState ) const;
 
-        void setupTextOffsets( tools::Long*                                       outputOffsets,
+        void setupTextOffsets( sal_Int32*                          outputOffsets,
                                const css::uno::Sequence< double >& inputOffsets,
                                const css::rendering::ViewState&    viewState,
                                const css::rendering::RenderState&  renderState     ) const;

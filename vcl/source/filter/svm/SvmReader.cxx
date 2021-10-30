@@ -683,7 +683,7 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(const ImplMetaReadData* p
 {
     rtl::Reference<MetaTextArrayAction> pAction(new MetaTextArrayAction);
 
-    std::vector<tools::Long> aArray;
+    std::vector<sal_Int32> aArray;
 
     VersionCompatRead aCompat(mrStream);
     TypeSerializer aSerializer(mrStream);

@@ -606,7 +606,7 @@ MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
 
 MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
                                           const OUString& rStr,
-                                          const std::vector<tools::Long>& rDXAry,
+                                          const std::vector<sal_Int32>& rDXAry,
                                           sal_Int32 nIndex,
                                           sal_Int32 nLen ) :
     MetaAction  ( MetaActionType::TEXTARRAY ),
@@ -620,7 +620,7 @@ MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
 
 MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
                                           const OUString& rStr,
-                                          o3tl::span<const tools::Long> pDXAry,
+                                          o3tl::span<const sal_Int32> pDXAry,
                                           sal_Int32 nIndex,
                                           sal_Int32 nLen ) :
     MetaAction  ( MetaActionType::TEXTARRAY ),
@@ -662,7 +662,7 @@ void MetaTextArrayAction::Scale( double fScaleX, double fScaleY )
     }
 }
 
-void MetaTextArrayAction::SetDXArray(std::vector<tools::Long> aArray)
+void MetaTextArrayAction::SetDXArray(std::vector<sal_Int32> aArray)
 {
     maDXAry = std::move(aArray);
 }

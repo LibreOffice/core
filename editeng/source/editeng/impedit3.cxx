@@ -156,7 +156,7 @@ static void lcl_DrawRedLines( OutputDevice& rOutDev,
                               const Point& rPoint,
                               size_t nIndex,
                               size_t nMaxEnd,
-                              o3tl::span<const tools::Long> pDXArray,
+                              o3tl::span<const sal_Int32> pDXArray,
                               WrongList const * pWrongs,
                               Degree10 nOrientation,
                               const Point& rOrigin,
@@ -753,7 +753,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
     ImplInitLayoutMode(*GetRefDevice(), nPara, nIndex);
 
-    std::vector<tools::Long> aBuf( pNode->Len() );
+    std::vector<sal_Int32> aBuf( pNode->Len() );
 
     bool bSameLineAgain = false;    // For TextRanger, if the height changes.
     TabInfo aCurrentTab;
@@ -1040,7 +1040,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
                         OUString aFieldValue = static_cast<const EditCharAttribField*>(pNextFeature)->GetFieldValue();
                         // get size, but also DXArray to allow length information in line breaking below
-                        std::vector<tools::Long> aTmpDXArray;
+                        std::vector<sal_Int32> aTmpDXArray;
                         pPortion->GetSize() = aTmpFont.QuickGetTextSize(GetRefDevice(), aFieldValue, 0, aFieldValue.getLength(), &aTmpDXArray);
 
                         // So no scrolling for oversized fields
@@ -1171,7 +1171,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 // And now check for Compression:
                 if ( !bContinueLastPortion && nPortionLen && GetAsianCompressionMode() != CharCompressType::NONE )
                 {
-                    tools::Long* pDXArray = rArray.data() + nTmpPos - pLine->GetStart();
+                    sal_Int32* pDXArray = rArray.data() + nTmpPos - pLine->GetStart();
                     bCompressedChars |= ImplCalcAsianCompression(
                         pNode, pPortion, nTmpPos, pDXArray, 10000, false);
                 }
@@ -1344,7 +1344,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             if ( bCompressedChars && pPortion && ( pPortion->GetLen() > 1 ) && pPortion->GetExtraInfos() && pPortion->GetExtraInfos()->bCompressed )
             {
                 // I need the manipulated DXArray for determining the break position...
-                tools::Long* pDXArray = pLine->GetCharPosArray().data() + (nPortionStart - pLine->GetStart());
+                sal_Int32* pDXArray = pLine->GetCharPosArray().data() + (nPortionStart - pLine->GetStart());
                 ImplCalcAsianCompression(
                     pNode, pPortion, nPortionStart, pDXArray, 10000, true);
             }
@@ -3258,8 +3258,8 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                 OUString aText;
                                 sal_Int32 nTextStart = 0;
                                 sal_Int32 nTextLen = 0;
-                                o3tl::span<const tools::Long> pDXArray;
-                                std::vector<tools::Long> aTmpDXArray;
+                                o3tl::span<const sal_Int32> pDXArray;
+                                std::vector<sal_Int32> aTmpDXArray;
 
                                 if ( rTextPortion.GetKind() == PortionKind::TEXT )
                                 {
@@ -4419,7 +4419,7 @@ Color ImpEditEngine::GetAutoColor() const
 
 bool ImpEditEngine::ImplCalcAsianCompression(ContentNode* pNode,
                                              TextPortion* pTextPortion, sal_Int32 nStartPos,
-                                             tools::Long* pDXArray, sal_uInt16 n100thPercentFromMax,
+                                             sal_Int32* pDXArray, sal_uInt16 n100thPercentFromMax,
                                              bool bManipulateDXArray)
 {
     DBG_ASSERT( GetAsianCompressionMode() != CharCompressType::NONE, "ImplCalcAsianCompression - Why?" );
@@ -4587,7 +4587,7 @@ void ImpEditEngine::ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* 
             sal_Int32 nTxtPortion = pParaPortion->GetTextPortions().GetPos( pTP );
             sal_Int32 nTxtPortionStart = pParaPortion->GetTextPortions().GetStartPos( nTxtPortion );
             DBG_ASSERT( nTxtPortionStart >= pLine->GetStart(), "Portion doesn't belong to the line!!!" );
-            tools::Long* pDXArray = pLine->GetCharPosArray().data() + (nTxtPortionStart - pLine->GetStart());
+            sal_Int32* pDXArray = pLine->GetCharPosArray().data() + (nTxtPortionStart - pLine->GetStart());
             if ( pTP->GetExtraInfos()->pOrgDXArray )
                 memcpy( pDXArray, pTP->GetExtraInfos()->pOrgDXArray.get(), (pTP->GetLen()-1)*sizeof(sal_Int32) );
             ImplCalcAsianCompression( pParaPortion->GetNode(), pTP, nTxtPortionStart, pDXArray, static_cast<sal_uInt16>(nCompressPercent), true );
