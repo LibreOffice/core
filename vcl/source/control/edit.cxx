@@ -471,15 +471,15 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
     const OUString aText = ImplGetText();
     const sal_Int32 nLen = aText.getLength();
 
-    tools::Long nDXBuffer[256];
-    std::unique_ptr<tools::Long[]> pDXBuffer;
-    tools::Long* pDX = nDXBuffer;
+    sal_Int32 nDXBuffer[256];
+    std::unique_ptr<sal_Int32[]> pDXBuffer;
+    sal_Int32* pDX = nDXBuffer;
 
     if (nLen)
     {
         if (o3tl::make_unsigned(2 * nLen) > SAL_N_ELEMENTS(nDXBuffer))
         {
-            pDXBuffer.reset(new tools::Long[2 * (nLen + 1)]);
+            pDXBuffer.reset(new sal_Int32[2 * (nLen + 1)]);
             pDX = pDXBuffer.get();
         }
 
@@ -1067,15 +1067,15 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
 
     tools::Long nTextPos = 0;
 
-    tools::Long   nDXBuffer[256];
-    std::unique_ptr<tools::Long[]> pDXBuffer;
-    tools::Long*  pDX = nDXBuffer;
+    sal_Int32   nDXBuffer[256];
+    std::unique_ptr<sal_Int32[]> pDXBuffer;
+    sal_Int32*  pDX = nDXBuffer;
 
     if( !aText.isEmpty() )
     {
         if( o3tl::make_unsigned(2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
         {
-            pDXBuffer.reset(new tools::Long[2*(aText.getLength()+1)]);
+            pDXBuffer.reset(new sal_Int32[2*(aText.getLength()+1)]);
             pDX = pDXBuffer.get();
         }
 
@@ -1191,12 +1191,12 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
     sal_Int32 nIndex = EDIT_NOLIMIT;
     OUString aText = ImplGetText();
 
-    tools::Long   nDXBuffer[256];
-    std::unique_ptr<tools::Long[]> pDXBuffer;
-    tools::Long*  pDX = nDXBuffer;
+    sal_Int32   nDXBuffer[256];
+    std::unique_ptr<sal_Int32[]> pDXBuffer;
+    sal_Int32*  pDX = nDXBuffer;
     if( o3tl::make_unsigned(2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
     {
-        pDXBuffer.reset(new tools::Long[2*(aText.getLength()+1)]);
+        pDXBuffer.reset(new sal_Int32[2*(aText.getLength()+1)]);
         pDX = pDXBuffer.get();
     }
 
@@ -2128,7 +2128,7 @@ void Edit::Command( const CommandEvent& rCEvt )
         if (mpIMEInfos && mpIMEInfos->nLen > 0)
         {
             OUString aText = ImplGetText();
-            std::vector<tools::Long> aDX(2*(aText.getLength()+1));
+            std::vector<sal_Int32> aDX(2*(aText.getLength()+1));
 
             GetOutDev()->GetCaretPositions( aText, aDX.data(), 0, aText.getLength() );
 

@@ -32,7 +32,7 @@ namespace vcl
         virtual tools::Long        GetTextWidth( const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const = 0;
         virtual void        DrawText( const Point& _rStartPoint, const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength,
                                 std::vector< tools::Rectangle >* _pVector, OUString* _pDisplayText ) = 0;
-        virtual void        GetCaretPositions( const OUString& _rText, tools::Long* _pCaretXArray, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const = 0;
+        virtual void        GetCaretPositions( const OUString& _rText, sal_Int32* _pCaretXArray, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const = 0;
         virtual sal_Int32   GetTextBreak( const OUString& _rText, tools::Long _nMaxTextWidth, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const = 0;
         virtual bool        DecomposeTextRectAction() const = 0;
 
@@ -65,7 +65,7 @@ namespace vcl
                                       OUString* _pDisplayText ) override;
 
         virtual void        GetCaretPositions( const OUString& _rText,
-                                               tools::Long* _pCaretXArray,
+                                               sal_Int32* _pCaretXArray,
                                                sal_Int32 _nStartIndex,
                                                sal_Int32 _nLength ) const override;
 

@@ -1060,7 +1060,7 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
 #endif /* VCL_FLOAT_DEVICE_PIXEL */
 }
 
-void OutputDevice::GetCaretPositions( const OUString& rStr, tools::Long* pCaretXArray,
+void OutputDevice::GetCaretPositions( const OUString& rStr, sal_Int32* pCaretXArray,
                                       sal_Int32 nIndex, sal_Int32 nLen,
                                       const SalLayoutGlyphs* pGlyphs ) const
 {
@@ -1613,11 +1613,11 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
                         tools::Long        nMnemonicY;
                         DeviceCoordinate nMnemonicWidth;
 
-                        std::unique_ptr<tools::Long[]> const pCaretXArray(new tools::Long[2 * nLineLen]);
+                        std::unique_ptr<sal_Int32[]> const pCaretXArray(new sal_Int32[2 * nLineLen]);
                         /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray.get(),
                                                 nIndex, nLineLen );
-                        tools::Long lc_x1 = pCaretXArray[2*(nMnemonicPos - nIndex)];
-                        tools::Long lc_x2 = pCaretXArray[2*(nMnemonicPos - nIndex)+1];
+                        sal_Int32 lc_x1 = pCaretXArray[2*(nMnemonicPos - nIndex)];
+                        sal_Int32 lc_x2 = pCaretXArray[2*(nMnemonicPos - nIndex)+1];
                         nMnemonicWidth = rTargetDevice.LogicWidthToDeviceCoordinate( std::abs(lc_x1 - lc_x2) );
 
                         Point       aTempPos = rTargetDevice.LogicToPixel( aPos );
@@ -1682,10 +1682,10 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
         DeviceCoordinate nMnemonicWidth = 0;
         if ( nMnemonicPos != -1 )
         {
-            std::unique_ptr<tools::Long[]> const pCaretXArray(new tools::Long[2 * aStr.getLength()]);
+            std::unique_ptr<sal_Int32[]> const pCaretXArray(new sal_Int32[2 * aStr.getLength()]);
             /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray.get(), 0, aStr.getLength() );
-            tools::Long lc_x1 = pCaretXArray[2*nMnemonicPos];
-            tools::Long lc_x2 = pCaretXArray[2*nMnemonicPos+1];
+            sal_Int32 lc_x1 = pCaretXArray[2*nMnemonicPos];
+            sal_Int32 lc_x2 = pCaretXArray[2*nMnemonicPos+1];
             nMnemonicWidth = rTargetDevice.LogicWidthToDeviceCoordinate( std::abs(lc_x1 - lc_x2) );
 
             Point aTempPos = rTargetDevice.LogicToPixel( aPos );
@@ -2122,10 +2122,10 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
                 nMnemonicPos = nLen-1;
             }
 
-            std::unique_ptr<tools::Long[]> const pCaretXArray(new tools::Long[2 * nLen]);
+            std::unique_ptr<sal_Int32[]> const pCaretXArray(new sal_Int32[2 * nLen]);
             /*sal_Bool bRet =*/ GetCaretPositions( aStr, pCaretXArray.get(), nIndex, nLen, pGlyphs );
-            tools::Long lc_x1 = pCaretXArray[ 2*(nMnemonicPos - nIndex) ];
-            tools::Long lc_x2 = pCaretXArray[ 2*(nMnemonicPos - nIndex)+1 ];
+            sal_Int32 lc_x1 = pCaretXArray[ 2*(nMnemonicPos - nIndex) ];
+            sal_Int32 lc_x2 = pCaretXArray[ 2*(nMnemonicPos - nIndex)+1 ];
             nMnemonicWidth = ::abs(static_cast<int>(lc_x1 - lc_x2));
 
             Point aTempPos( std::min(lc_x1,lc_x2), GetFontMetric().GetAscent() );

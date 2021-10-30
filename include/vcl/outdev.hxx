@@ -1061,7 +1061,7 @@ public:
                                               vcl::text::TextLayoutCache const* = nullptr,
                                               SalLayoutGlyphs const*const pLayoutCache = nullptr) const;
 
-    void                        GetCaretPositions( const OUString&, tools::Long* pCaretXArray,
+    void                        GetCaretPositions( const OUString&, sal_Int32* pCaretXArray,
                                               sal_Int32 nIndex, sal_Int32 nLen,
                                               const SalLayoutGlyphs* pGlyphs = nullptr ) const;
     void                        DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
