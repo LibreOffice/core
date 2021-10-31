@@ -1512,6 +1512,13 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
 
 IMPL_LINK_NOARG(SfxObjectShell, SignDocumentHandler, weld::Button&, void)
 {
+    SfxViewFrame *pFrame = SfxViewFrame::GetFirst(this);
+    if (!pFrame)
+    {
+        SAL_WARN("sfx.appl", "There should be some SfxViewFrame associated here");
+        return;
+    }
+    pFrame->MakeActive_Impl(false);
     GetDispatcher()->Execute(SID_SIGNATURE);
 }
 
