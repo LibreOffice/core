@@ -95,7 +95,7 @@ ResultSetMetaData::ResultSetMetaData(
   m_xContext( rxContext ),
   m_aProps( rProps )
 {
-    OSL_ENSURE( rColumnData.size() == sal_uInt32( rProps.getLength() ),
+    OSL_ENSURE( m_pImpl->m_aColumnData.size() == sal_uInt32( rProps.getLength() ),
                 "ResultSetMetaData ctor - different array sizes!" );
 }
 
