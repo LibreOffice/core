@@ -2092,7 +2092,7 @@ void SvmTest::testFloatTransparent()
 
     Gradient aGradient(GradientStyle::Linear, COL_WHITE, COL_BLACK);
 
-    pVirtualDev->DrawTransparent(aGDIMetaFile1, Point(1, 2), Size(3, 4), aGradient);
+    pVirtualDev->DrawTransparentMetaFile(aGDIMetaFile1, Point(1, 2), Size(3, 4), aGradient);
 
     checkFloatTransparent(writeAndReadStream(aGDIMetaFile));
     checkFloatTransparent(readFile(u"floattransparent.svm"));
