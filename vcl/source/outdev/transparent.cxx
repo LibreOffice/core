@@ -559,7 +559,7 @@ void OutputDevice::DrawTransparent( const tools::PolyPolygon& rPolyPoly,
     }
 }
 
-void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
+void OutputDevice::DrawTransparentMetaFile( const GDIMetaFile& rMtf, const Point& rPos,
                                     const Size& rSize, const Gradient& rTransparenceGradient )
 {
     assert(!is_double_buffered_window());
