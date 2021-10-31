@@ -1599,6 +1599,7 @@ Public Function Methods() As Variant
 	Methods = Array( _
 					&quot;A1Style&quot; _
 					, &quot;Activate&quot; _
+					, &quot;Charts&quot; _
 					, &quot;ClearAll&quot; _
 					, &quot;ClearFormats&quot; _
 					, &quot;ClearValues&quot; _
@@ -1607,6 +1608,7 @@ Public Function Methods() As Variant
 					, &quot;CopySheetFromFile&quot; _
 					, &quot;CopyToCell&quot; _
 					, &quot;CopyToRange&quot; _
+					, &quot;CreateChart&quot; _
 					, &quot;DAvg&quot; _
 					, &quot;DCount&quot; _
 					, &quot;DMax&quot; _
@@ -1634,6 +1636,10 @@ Public Function Methods() As Variant
 					, &quot;SetFormula&quot; _
 					, &quot;SetPrinter&quot; _
 					, &quot;SetValue&quot; _
+					, &quot;ShiftDown&quot; _
+					, &quot;ShiftLeft&quot; _
+					, &quot;ShiftRight&quot; _
+					, &quot;ShiftUp&quot; _
 					, &quot;SortRange&quot; _
 					)
 
@@ -2269,6 +2275,330 @@ Finally:
 Catch:
 	GoTo Finally
 End Function	&apos;	SF_Documents.SF_Calc.SetValue
+
+REM -----------------------------------------------------------------------------
+Public Function ShiftDown(Optional ByVal Range As Variant _
+								, Optional ByVal WholeRow As Variant _
+								, Optional ByVal Rows As Variant _
+								) As String
+&apos;&apos;&apos;	Move a specified range and all cells below in the same columns downwards by inserting empty cells
+&apos;&apos;&apos;	The inserted cells can span whole rows or be limited to the width of the range
+&apos;&apos;&apos;	The height of the inserted area is provided by the Rows argument
+&apos;&apos;&apos;	Nothing happens if the range shift crosses one of the edges of the worksheet
+&apos;&apos;&apos;	The execution of the method has no effect on the current selection
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Range: the range above which cells have to be inserted, as a string
+&apos;&apos;&apos;		WholeRow: when True (default = False), insert whole rows
+&apos;&apos;&apos;		Rows: the height of the area to insert. Default = the height of the Range argument
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A string representing the new location of the initial range
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		newrange = oDoc.ShiftDown(&quot;SheetX.A1:F10&quot;)						&apos;	&quot;$SheetX.$A$11:$F$20&quot;
+&apos;&apos;&apos;		newrange = oDoc.ShiftDown(&quot;SheetX.A1:F10&quot;, Rows := 3)			&apos;	&quot;$SheetX.$A$4:$F$13&quot;
+
+Dim sShift As String			&apos;	Return value
+Dim oSourceAddress As Object	&apos;	Alias of Range as _Address
+Dim lHeight As Long				&apos;	Range height
+Dim oShiftAddress As Object		&apos;	com.sun.star.table.CellRangeAddress - Range adjusted to the right width
+Dim lShiftMode As Long			&apos;	One of the com.sun.star.sheet.CellInsertMode enum values
+
+Const cstThisSub = &quot;SFDocuments.Calc.ShiftDown&quot;
+Const cstSubArgs = &quot;Range, [WholeRow=False], [Rows]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	sShift = &quot;&quot;
+
+Check:
+	If IsMissing(WholeRow) Or IsEmpty(WholeRow) Then WholeRow = False
+	If IsMissing(Rows) Or IsEmpty(Rows) Then Rows = 0
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive(True) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Range, &quot;Range&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(WholeRow, &quot;WholeRow&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Rows, &quot;Rows&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	End If
+
+Try:
+	Set oSourceAddress = _ParseAddress(Range)
+
+	With oSourceAddress
+
+		&apos;	Manage the height of the area to shift
+		&apos;	The insertCells() method inserts a number of rows equal to the height of the cell range to shift
+		lHeight = .Height
+		If Rows = 0 Then Rows = lHeight
+		If _LastCell(.XSpreadsheet)(1) + Rows &gt; MAXROWS Then GoTo Catch
+		If Rows &lt;&gt; lHeight Then
+			Set oShiftAddress = _Offset(oSourceAddress, 0, 0, Rows, 0).XCellRange.RangeAddress
+		Else
+			Set oShiftAddress = .XCellRange.RangeAddress
+		End If
+
+		&apos;	Determine the shift mode
+		With com.sun.star.sheet.CellInsertMode
+			If WholeRow Then lShiftMode = .ROWS Else lShiftMode = .DOWN
+		End With
+
+		&apos;	Move the cells as requested. This modifies .XCellRange
+		.XSpreadsheet.insertCells(oShiftAddress, lShiftMode)
+
+		&apos;	Determine the receiving area
+		sShift = .XCellRange.AbsoluteName
+
+	End With
+
+Finally:
+	ShiftDown = sShift
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	&apos;	When error, return the original range
+	If Not IsNull(oSourceAddress) Then sShift = oSourceAddress.RangeName
+	GoTo Finally
+End Function    &apos;   SFDocuments.SF_Calc.ShiftDown
+
+REM -----------------------------------------------------------------------------
+Public Function ShiftLeft(Optional ByVal Range As Variant _
+								, Optional ByVal WholeColumn As Variant _
+								, Optional ByVal Columns As Variant _
+								) As String
+&apos;&apos;&apos;	Delete the leftmost columns of a specified range and move all cells at their right leftwards
+&apos;&apos;&apos;	The deleted cells can span whole columns or be limited to the height of the range
+&apos;&apos;&apos;	The width of the deleted area is provided by the Columns argument
+&apos;&apos;&apos;	The execution of the method has no effect on the current selection
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Range: the range in which cells have to be erased, as a string
+&apos;&apos;&apos;		WholeColumn: when True (default = False), erase whole columns
+&apos;&apos;&apos;		Columns: the width of the area to delete.
+&apos;&apos;&apos;			Default = the width of the Range argument, it is also its maximum value
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A string representing the location of the remaining part of the initial range,
+&apos;&apos;&apos;		or the zero-length string if the whole range has been deleted
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		newrange = oDoc.ShiftLeft(&quot;SheetX.G1:L10&quot;)						&apos;	&quot;&quot;&quot;
+&apos;&apos;&apos;		newrange = oDoc.ShiftLeft(&quot;SheetX.G1:L10&quot;, Columns := 3)		&apos;	&quot;$SheetX.$G$1:$I$10&quot;
+
+Dim sShift As String			&apos;	Return value
+Dim oSourceAddress As Object	&apos;	Alias of Range as _Address
+Dim lWidth As Long				&apos;	Range width
+Dim oShiftAddress As Object		&apos;	com.sun.star.table.CellRangeAddress - Range adjusted to the right width
+Dim lShiftMode As Long			&apos;	One of the com.sun.star.sheet.CellDeleteMode enum values
+
+Const cstThisSub = &quot;SFDocuments.Calc.ShiftLeft&quot;
+Const cstSubArgs = &quot;Range, [WholeColumn=False], [Columns]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	sShift = &quot;&quot;
+
+Check:
+	If IsMissing(WholeColumn) Or IsEmpty(WholeColumn) Then WholeColumn = False
+	If IsMissing(Columns) Or IsEmpty(Columns) Then Columns = 0
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive(True) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Range, &quot;Range&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(WholeColumn, &quot;WholeColumn&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Columns, &quot;Columns&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	End If
+
+Try:
+	Set oSourceAddress = _ParseAddress(Range)
+
+	With oSourceAddress
+
+		&apos;	Manage the width of the area to delete
+		&apos;	The removeRange() method erases a number of columns equal to the width of the cell range to delete
+		lWidth = .Width
+		If Columns = 0 Then Columns = lWidth
+		If Columns &lt; lWidth Then
+			Set oShiftAddress = _Offset(oSourceAddress, 0, 0, 0, Columns).XCellRange.RangeAddress
+		Else						&apos;	Columns is capped at the range width
+			Set oShiftAddress = .XCellRange.RangeAddress
+		End If
+
+		&apos;	Determine the Delete mode
+		With com.sun.star.sheet.CellDeleteMode
+			If WholeColumn Then lShiftMode = .COLUMNS Else lShiftMode = .LEFT
+		End With
+
+		&apos;	Move the cells as requested. This modifies .XCellRange
+		.XSpreadsheet.removeRange(oShiftAddress, lShiftMode)
+
+		&apos;	Determine the remaining area
+		If Columns &lt; lWidth Then sShift = .XCellRange.AbsoluteName
+
+	End With
+
+Finally:
+	ShiftLeft = sShift
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	&apos;	When error, return the original range
+	If Not IsNull(oSourceAddress) Then sShift = oSourceAddress.RangeName
+	GoTo Finally
+End Function    &apos;   SFDocuments.SF_Calc.ShiftLeft
+
+REM -----------------------------------------------------------------------------
+Public Function ShiftRight(Optional ByVal Range As Variant _
+								, Optional ByVal WholeColumn As Variant _
+								, Optional ByVal Columns As Variant _
+								) As String
+&apos;&apos;&apos;	Move a specified range and all next cells in the same rows to the right by inserting empty cells
+&apos;&apos;&apos;	The inserted cells can span whole columns or be limited to the height of the range
+&apos;&apos;&apos;	The width of the inserted area is provided by the Columns argument
+&apos;&apos;&apos;	Nothing happens if the range shift crosses one of the edges of the worksheet
+&apos;&apos;&apos;	The execution of the method has no effect on the current selection
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Range: the range before which cells have to be inserted, as a string
+&apos;&apos;&apos;		WholeColumn: when True (default = False), insert whole columns
+&apos;&apos;&apos;		Columns: the width of the area to insert. Default = the width of the Range argument
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A string representing the new location of the initial range
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		newrange = oDoc.ShiftRight(&quot;SheetX.A1:F10&quot;)						&apos;	&quot;$SheetX.$G$1:$L$10&quot;
+&apos;&apos;&apos;		newrange = oDoc.ShiftRight(&quot;SheetX.A1:F10&quot;, Columns := 3)		&apos;	&quot;$SheetX.$D$1:$I$10&quot;
+
+Dim sShift As String			&apos;	Return value
+Dim oSourceAddress As Object	&apos;	Alias of Range as _Address
+Dim lWidth As Long				&apos;	Range width
+Dim oShiftAddress As Object		&apos;	com.sun.star.table.CellRangeAddress - Range adjusted to the right width
+Dim lShiftMode As Long			&apos;	One of the com.sun.star.sheet.CellInsertMode enum values
+
+Const cstThisSub = &quot;SFDocuments.Calc.ShiftRight&quot;
+Const cstSubArgs = &quot;Range, [WholeColumn=False], [Columns]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	sShift = &quot;&quot;
+
+Check:
+	If IsMissing(WholeColumn) Or IsEmpty(WholeColumn) Then WholeColumn = False
+	If IsMissing(Columns) Or IsEmpty(Columns) Then Columns = 0
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive(True) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Range, &quot;Range&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(WholeColumn, &quot;WholeColumn&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Columns, &quot;Columns&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	End If
+
+Try:
+	Set oSourceAddress = _ParseAddress(Range)
+
+	With oSourceAddress
+
+		&apos;	Manage the width of the area to Shift
+		&apos;	The insertCells() method inserts a number of columns equal to the width of the cell range to Shift
+		lWidth = .Width
+		If Columns = 0 Then Columns = lWidth
+		If _LastCell(.XSpreadsheet)(0) + Columns &gt; MAXCOLS Then GoTo Catch
+		If Columns &lt;&gt; lWidth Then
+			Set oShiftAddress = _Offset(oSourceAddress, 0, 0, 0, Columns).XCellRange.RangeAddress
+		Else
+			Set oShiftAddress = .XCellRange.RangeAddress
+		End If
+
+		&apos;	Determine the Shift mode
+		With com.sun.star.sheet.CellInsertMode
+			If WholeColumn Then lShiftMode = .COLUMNS Else lShiftMode = .RIGHT
+		End With
+
+		&apos;	Move the cells as requested. This modifies .XCellRange
+		.XSpreadsheet.insertCells(oShiftAddress, lShiftMode)
+
+		&apos;	Determine the receiving area
+		sShift = .XCellRange.AbsoluteName
+
+	End With
+
+Finally:
+	ShiftRight = sShift
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	&apos;	When error, return the original range
+	If Not IsNull(oSourceAddress) Then sShift = oSourceAddress.RangeName
+	GoTo Finally
+End Function    &apos;   SFDocuments.SF_Calc.ShiftRight
+
+REM -----------------------------------------------------------------------------
+Public Function ShiftUp(Optional ByVal Range As Variant _
+								, Optional ByVal WholeRow As Variant _
+								, Optional ByVal Rows As Variant _
+								) As String
+&apos;&apos;&apos;	Delete the topmost rows of a specified range and move all cells below upwards
+&apos;&apos;&apos;	The deleted cells can span whole rows or be limited to the width of the range
+&apos;&apos;&apos;	The height of the deleted area is provided by the Rows argument
+&apos;&apos;&apos;	The execution of the method has no effect on the current selection
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Range: the range in which cells have to be erased, as a string
+&apos;&apos;&apos;		WholeRow: when True (default = False), erase whole rows
+&apos;&apos;&apos;		Rows: the height of the area to delete.
+&apos;&apos;&apos;			Default = the height of the Range argument, it is also its maximum value
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A string representing the location of the remaining part of the initial range,
+&apos;&apos;&apos;		or the zero-length string if the whole range has been deleted
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		newrange = oDoc.ShiftUp(&quot;SheetX.G1:L10&quot;)				&apos;	&quot;&quot;
+&apos;&apos;&apos;		newrange = oDoc.ShiftUp(&quot;SheetX.G1:L10&quot;, Rows := 3)		&apos;	&quot;$SheetX.$G$1:$I$10&quot;
+
+Dim sShift As String			&apos;	Return value
+Dim oSourceAddress As Object	&apos;	Alias of Range as _Address
+Dim lHeight As Long				&apos;	Range height
+Dim oShiftAddress As Object		&apos;	com.sun.star.table.CellRangeAddress - Range adjusted to the right height
+Dim lShiftMode As Long			&apos;	One of the com.sun.star.sheet.CellDeleteMode enum values
+
+Const cstThisSub = &quot;SFDocuments.Calc.ShiftUp&quot;
+Const cstSubArgs = &quot;Range, [WholeRow=False], [Rows]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	sShift = &quot;&quot;
+
+Check:
+	If IsMissing(WholeRow) Or IsEmpty(WholeRow) Then WholeRow = False
+	If IsMissing(Rows) Or IsEmpty(Rows) Then Rows = 0
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive(True) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Range, &quot;Range&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(WholeRow, &quot;WholeRow&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Rows, &quot;Rows&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	End If
+
+Try:
+	Set oSourceAddress = _ParseAddress(Range)
+
+	With oSourceAddress
+
+		&apos;	Manage the height of the area to delete
+		&apos;	The removeRange() method erases a number of rows equal to the height of the cell range to delete
+		lHeight = .Height
+		If Rows = 0 Then Rows = lHeight
+		If Rows &lt; lHeight Then
+			Set oShiftAddress = _Offset(oSourceAddress, 0, 0, Rows, 0).XCellRange.RangeAddress
+		Else						&apos;	Rows is capped at the range height
+			Set oShiftAddress = .XCellRange.RangeAddress
+		End If
+
+		&apos;	Determine the Delete mode
+		With com.sun.star.sheet.CellDeleteMode
+			If WholeRow Then lShiftMode = .ROWS Else lShiftMode = .UP
+		End With
+
+		&apos;	Move the cells as requested. This modifies .XCellRange
+		.XSpreadsheet.removeRange(oShiftAddress, lShiftMode)
+
+		&apos;	Determine the remaining area
+		If Rows &lt; lHeight Then sShift = .XCellRange.AbsoluteName
+
+	End With
+
+Finally:
+	ShiftUp = sShift
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	&apos;	When error, return the original range
+	If Not IsNull(oSourceAddress) Then sShift = oSourceAddress.RangeName
+	GoTo Finally
+End Function    &apos;   SFDocuments.SF_Calc.ShiftUp
 
 REM -----------------------------------------------------------------------------
 Public Function SortRange(Optional ByVal Range As Variant _
@@ -3069,7 +3399,7 @@ Dim oSelect As Object				&apos;	Current selection
 		If IsNull(.XCellRange) Then GoTo CatchAddress
 
 		Set oRangeAddress = .XCellRange.RangeAddress
-		.RangeName = _RangeToString(oRangeAddress)
+		.RangeName = .XCellRange.AbsoluteName
 		.Height = oRangeAddress.EndRow - oRangeAddress.StartRow + 1
 		.Width = oRangeAddress.EndColumn - oRangeAddress.StartColumn + 1
 
@@ -3213,17 +3543,6 @@ Finally:
 	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
 	Exit Function
 End Function	&apos;	SFDocuments.SF_Calc._PropertyGet
-
-REM -----------------------------------------------------------------------------
-Private Function _RangeToString(ByRef poAddress As Object) As String
-&apos;&apos;&apos;	Converts a range address to its A1 notation)
-
-	With poAddress
-		_RangeToString = _GetColumnName(.StartColumn + 1) &amp; CStr(.StartRow + 1) &amp; &quot;:&quot; _
-									&amp; _GetColumnName(.EndColumn + 1) &amp; CStr(.EndRow + 1)
-	End With
-
-End Function	&apos;	SFDocuments.SF_Calc._RangeToString
 
 REM -----------------------------------------------------------------------------
 Private Function _Repr() As String

@@ -2019,6 +2019,18 @@ class SFDocuments:
         def SetValue(self, targetrange, value):
             return self.ExecMethod(self.vbMethod + self.flgArrayArg, 'SetValue', targetrange, value)
 
+        def ShiftDown(self, range, wholerow = False, rows = 0):
+            return self.ExecMethod(self.vbMethod, 'ShiftDown', range, wholerow, rows)
+
+        def ShiftLeft(self, range, wholecolumn = False, columns = 0):
+            return self.ExecMethod(self.vbMethod, 'ShiftLeft', range, wholecolumn, columns)
+
+        def ShiftRight(self, range, wholecolumn = False, columns = 0):
+            return self.ExecMethod(self.vbMethod, 'ShiftRight', range, wholecolumn, columns)
+
+        def ShiftUp(self, range, wholerow = False, rows = 0):
+            return self.ExecMethod(self.vbMethod, 'ShiftUp', range, wholerow, rows)
+
         def SortRange(self, range, sortkeys, sortorder = 'ASC', destinationcell = ScriptForge.cstSymEmpty,
                       containsheader = False, casesensitive = False, sortcolumns = False):
             return self.ExecMethod(self.vbMethod, 'SortRange', range, sortkeys, sortorder, destinationcell,
