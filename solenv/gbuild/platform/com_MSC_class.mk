@@ -60,12 +60,12 @@ gb_Helper_remove_overridden_flags = \
     $(lastword $(filter -Zc:inline -Zc:inline-,$(1))) \
     $(lastword $(filter -Zc:dllexportInlines -Zc:dllexportInlines-,$(1)))
 
-# $(call gb_CObject__command_pattern,object,flags,source,dep-file,compiler-plugins,symbols,compiler)
+# $(call gb_CObject__command_pattern,object,flags,source,dep-file,compiler-plugins,compiler)
 define gb_CObject__command_pattern
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	unset INCLUDE && \
-	$(call gb_CObject__compiler,$(2),$(3),$(7)) \
+	$(call gb_CObject__compiler,$(2),$(3),$(6)) \
 		$(call gb_Helper_remove_overridden_flags, \
 			$(DEFS) \
 			$(if $(filter YES,$(LIBRARY_X64)), ,$(gb_LTOFLAGS)) \

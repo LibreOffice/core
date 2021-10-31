@@ -65,20 +65,20 @@ define gb_CObject__filter_out_clang_cflags
     $(filter-out $(gb_FilterOutClangCFLAGS),$(1))
 endef
 
-# $(call gb_CObject__command_pattern,object,flags,source,dep-file,compiler-plugins,symbols,compiler)
+# $(call gb_CObject__command_pattern,object,flags,source,dep-file,compiler-plugins,compiler)
 define gb_CObject__command_pattern
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && cd $(SRCDIR) && \
 	$(gb_COMPILER_SETUP) \
 	$(if $(5),$(gb_COMPILER_PLUGINS_SETUP)) \
-	$(call gb_CObject__compiler,$(3),$(7)) \
+	$(call gb_CObject__compiler,$(3),$(6)) \
 		$(DEFS) \
 		$(T_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
 		$(if $(5),$(gb_COMPILER_PLUGINS)) \
 		$(if $(COMPILER_TEST),-fsyntax-only -ferror-limit=0 -Xclang -verify) \
-		$(if $(7), $(call gb_CObject__filter_out_clang_cflags,$(2)),$(2)) \
+		$(if $(6), $(call gb_CObject__filter_out_clang_cflags,$(2)),$(2)) \
 		$(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS)) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
 		-c $(3) \
