@@ -285,10 +285,7 @@ void VclOutdevTest::testDrawBlackBitmap()
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     Bitmap aBitmap(Size(16, 16), vcl::PixelFormat::N24_BPP);
-    {
-        BitmapScopedWriteAccess pWriteAccess(aBitmap);
-        pWriteAccess->Erase(COL_RED);
-    }
+    aBitmap.Erase(COL_RED);
 
     GDIMetaFile aMtf;
     aMtf.Record(pVDev.get());
@@ -435,8 +432,7 @@ void VclOutdevTest::testDrawGrayBitmap()
 {
     // draw a red 1x1 bitmap
     Bitmap aBmp(Size(1, 1), vcl::PixelFormat::N24_BPP);
-    BitmapScopedWriteAccess pWriteAccess(aBmp);
-    pWriteAccess->Erase(COL_RED);
+    aBmp.Erase(COL_RED);
 
     // check to ensure that the bitmap is red
     {
