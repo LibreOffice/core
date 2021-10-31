@@ -63,6 +63,7 @@ typedef struct _cairo_user_data_key cairo_user_data_key_t;
 struct VCL_DLLPUBLIC CairoCommon
 {
     cairo_surface_t* m_pSurface;
+    basegfx::B2IVector m_aFrameSize;
 
     CairoCommon()
         : m_pSurface(nullptr)
