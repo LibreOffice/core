@@ -60,7 +60,6 @@ struct VCL_DLLPUBLIC DamageHandler
 class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphicsAutoDelegateToImpl
 {
     CairoCommon m_aCairoCommon;
-    basegfx::B2IVector             m_aFrameSize;
     double                         m_fScale;
     Color                          m_aLineColor;
     Color                          m_aFillColor;
@@ -130,8 +129,6 @@ public:
     virtual SalGraphicsImpl* GetImpl() const override { return m_pBackend.get(); }
 
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;
-    virtual sal_uInt16      GetBitCount() const override;
-    virtual tools::Long            GetGraphicsWidth() const override;
 
     virtual void            ResetClipRegion() override;
     virtual bool            setClipRegion( const vcl::Region& ) override;
@@ -240,8 +237,6 @@ public:
     virtual bool        drawEPS( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, void* pPtr, sal_uInt32 nSize ) override;
 
     virtual SystemGraphicsData GetGraphicsData() const override;
-
-    virtual OUString getRenderBackendName() const override { return "svp"; }
 
 #if ENABLE_CAIRO_CANVAS
     virtual bool            SupportsCairo() const override;
