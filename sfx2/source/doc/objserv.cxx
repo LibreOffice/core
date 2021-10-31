@@ -1512,14 +1512,14 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
 
 IMPL_LINK_NOARG(SfxObjectShell, SignDocumentHandler, weld::Button&, void)
 {
-    SfxViewFrame *pFrame = SfxViewFrame::GetFirst(this);
-    if (!pFrame)
+    SfxViewFrame* pViewFrm = SfxViewFrame::GetFirst(this);
+    if (!pViewFrm)
     {
         SAL_WARN("sfx.appl", "There should be some SfxViewFrame associated here");
         return;
     }
-    pFrame->MakeActive_Impl(false);
-    GetDispatcher()->Execute(SID_SIGNATURE);
+    SfxUnoFrameItem aDocFrame(SID_FILLFRAME, pViewFrm->GetFrame().GetFrameInterface());
+    pViewFrm->GetDispatcher()->ExecuteList(SID_SIGNATURE, SfxCallMode::SLOT, {}, { &aDocFrame });
 }
 
 void SfxObjectShell::ExecProps_Impl(SfxRequest &rReq)
