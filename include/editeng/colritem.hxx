@@ -27,7 +27,8 @@
 
 #include <sal/log.hxx>
 
-#define VERSION_USEAUTOCOLOR    1
+#define VERSION_USEAUTOCOLOR 1
+
 
 /** ThemeColorData holds theme color related
     data of a color item eg. SvxColorItem
@@ -35,6 +36,8 @@
 class ThemeColorData
 {
 public:
+    ThemeColorData() = default;
+    ThemeColorData(const ColorSets* pColorSets) : mpColorSets(pColorSets){}
     bool operator==(const ThemeColorData& rOther) const;
     /** Calculates and returns the theme color from current ThemeColorData
 
@@ -77,14 +80,7 @@ private:
     // mutable since marked as false after recalculation in getThemeColorIfNeedsUpdate
     mutable bool mbRecalculateColor = true;
 
-    // HACK: VirtualColorSet index
-    // should be able to remove this after removing SfxObjectShell::Current()
-    // from the themecolordata code
-    sal_Int32 mnVirtualThemeColorSetIndex = -1;
-
-
-    // HACK: mutable here until I fix the SfxObjectShell interactions..
-    mutable std::weak_ptr<VirtualThemeColorSet> mpVirtualThemeColorSet = std::weak_ptr<VirtualThemeColorSet>();
+    std::weak_ptr<VirtualThemeColorSet> mpVirtualThemeColorSet = std::weak_ptr<VirtualThemeColorSet>();
 };
 
 /** SvxColorItem item describes a color.
@@ -105,6 +101,7 @@ public:
 
     explicit SvxColorItem(const sal_uInt16 nId);
     SvxColorItem(const Color& aColor, const sal_uInt16 nId);
+    SvxColorItem(const Color& aColor, const ColorSets* pColorSets, const sal_uInt16 nId);
     virtual ~SvxColorItem() override;
 
     // "pure virtual Methods" from SfxPoolItem

@@ -394,7 +394,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     const Color& rDfltColor =
         m_pCSS1Parser->GetTextCollFromPool( RES_POOLCOLL_STANDARD )
             ->GetColor().GetValue();
-    aItemSet.Put( SvxColorItem( rDfltColor, EE_CHAR_COLOR ) );
+    aItemSet.Put(SvxColorItem(rDfltColor, ColorSets::getColorSetsFromItemSet(aItemSet), EE_CHAR_COLOR));
 
     // set the attributes of the current paragraph style
     sal_uInt16 nWhichIds[] =

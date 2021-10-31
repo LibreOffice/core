@@ -366,7 +366,7 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType, boo
 
 // Font color - pass AUTO_COL to item
     if( mbColorUsed )
-        PUTITEM( SvxColorItem( maData.maColor, ATTR_FONT_COLOR  ), ATTR_FONT_COLOR, EE_CHAR_COLOR );
+        PUTITEM( SvxColorItem( maData.maColor, ColorSets::getColorSetsFromItemSet(rItemSet), ATTR_FONT_COLOR  ), ATTR_FONT_COLOR, EE_CHAR_COLOR );
 
 // Font weight (for all script types)
     if( mbWeightUsed )

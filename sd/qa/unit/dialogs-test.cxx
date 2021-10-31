@@ -502,7 +502,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             aSet.Put(SfxUInt16Item(ATTR_ANIMATION_TEXTEFFECT, sal_uInt16(presentation::AnimationEffect_NONE)));
             aSet.InvalidateItem(ATTR_ANIMATION_SPEED);
             aSet.Put(SfxBoolItem(ATTR_ANIMATION_FADEOUT, false));
-            aSet.Put(SvxColorItem(COL_LIGHTGRAY, ATTR_ANIMATION_COLOR));
+            aSet.Put(SvxColorItem(COL_LIGHTGRAY, ColorSets::getColorSetsFromItemSet(aSet), ATTR_ANIMATION_COLOR));
             aSet.Put(SfxBoolItem(ATTR_ANIMATION_INVISIBLE, false));
             aSet.Put(SfxBoolItem(ATTR_ANIMATION_SOUNDON, false));
             aSet.InvalidateItem(ATTR_ANIMATION_SOUNDFILE);

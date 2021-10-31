@@ -1843,7 +1843,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if (!m_xLbLight1->IsNoSelection())
     {
         aColor = m_xLbLight1->GetSelectEntryColor();
-        rAttrs.Put(makeSvx3DLightcolor1Item(aColor));
+        rAttrs.Put(makeSvx3DLightcolor1Item(aColor, rAttrs));
     }
     else
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_1);
@@ -1868,7 +1868,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if (!m_xLbLight2->IsNoSelection())
     {
         aColor = m_xLbLight2->GetSelectEntryColor();
-        rAttrs.Put(makeSvx3DLightcolor2Item(aColor));
+        rAttrs.Put(makeSvx3DLightcolor2Item(aColor, rAttrs));
     }
     else
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_2);
@@ -1892,7 +1892,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if (!m_xLbLight3->IsNoSelection())
     {
         aColor = m_xLbLight3->GetSelectEntryColor();
-        rAttrs.Put(makeSvx3DLightcolor3Item(aColor));
+        rAttrs.Put(makeSvx3DLightcolor3Item(aColor, rAttrs));
     }
     else
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_3);
@@ -1916,7 +1916,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if (!m_xLbLight4->IsNoSelection())
     {
         aColor = m_xLbLight4->GetSelectEntryColor();
-        rAttrs.Put(makeSvx3DLightcolor4Item(aColor));
+        rAttrs.Put(makeSvx3DLightcolor4Item(aColor, rAttrs));
     }
     else
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_4);
@@ -1940,7 +1940,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if (!m_xLbLight5->IsNoSelection())
     {
         aColor = m_xLbLight5->GetSelectEntryColor();
-        rAttrs.Put(makeSvx3DLightcolor5Item(aColor));
+        rAttrs.Put(makeSvx3DLightcolor5Item(aColor, rAttrs));
     }
     else
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_5);
@@ -1964,7 +1964,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if (!m_xLbLight6->IsNoSelection())
     {
         aColor = m_xLbLight6->GetSelectEntryColor();
-        rAttrs.Put(makeSvx3DLightcolor6Item(aColor));
+        rAttrs.Put(makeSvx3DLightcolor6Item(aColor, rAttrs));
     }
     else
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_6);
@@ -1988,7 +1988,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if (!m_xLbLight7->IsNoSelection())
     {
         aColor = m_xLbLight7->GetSelectEntryColor();
-        rAttrs.Put(makeSvx3DLightcolor7Item(aColor));
+        rAttrs.Put(makeSvx3DLightcolor7Item(aColor, rAttrs));
     }
     else
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_7);
@@ -2012,7 +2012,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if (!m_xLbLight8->IsNoSelection())
     {
         aColor = m_xLbLight8->GetSelectEntryColor();
-        rAttrs.Put(makeSvx3DLightcolor8Item(aColor));
+        rAttrs.Put(makeSvx3DLightcolor8Item(aColor, rAttrs));
     }
     else
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_8);
@@ -2036,7 +2036,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if (!m_xLbAmbientlight->IsNoSelection())
     {
         aColor = m_xLbAmbientlight->GetSelectEntryColor();
-        rAttrs.Put(makeSvx3DAmbientcolorItem(aColor));
+        rAttrs.Put(makeSvx3DAmbientcolorItem(aColor, rAttrs));
     }
     else
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_AMBIENTCOLOR);
@@ -2123,7 +2123,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if (!m_xLbMatEmission->IsNoSelection())
     {
         aColor = m_xLbMatEmission->GetSelectEntryColor();
-        rAttrs.Put(makeSvx3DMaterialEmissionItem(aColor));
+        rAttrs.Put(makeSvx3DMaterialEmissionItem(aColor, rAttrs));
     }
     else
         rAttrs.InvalidateItem(SDRATTR_3DOBJ_MAT_EMISSION);
@@ -2132,7 +2132,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if (!m_xLbMatSpecular->IsNoSelection())
     {
         aColor = m_xLbMatSpecular->GetSelectEntryColor();
-        rAttrs.Put(makeSvx3DMaterialSpecularItem(aColor));
+        rAttrs.Put(makeSvx3DMaterialSpecularItem(aColor, rAttrs));
     }
     else
         rAttrs.InvalidateItem(SDRATTR_3DOBJ_MAT_SPECULAR);
@@ -2632,15 +2632,15 @@ void Svx3DWin::ClickLight(const LightButton& rBtn)
 
     switch(nLightSource)
     {
-        case 0: aLightItemSet.Put(makeSvx3DLightcolor1Item(aColor)); aLightItemSet.Put(makeSvx3DLightOnOff1Item(bOnOff)); break;
-        case 1: aLightItemSet.Put(makeSvx3DLightcolor2Item(aColor)); aLightItemSet.Put(makeSvx3DLightOnOff2Item(bOnOff)); break;
-        case 2: aLightItemSet.Put(makeSvx3DLightcolor3Item(aColor)); aLightItemSet.Put(makeSvx3DLightOnOff3Item(bOnOff)); break;
-        case 3: aLightItemSet.Put(makeSvx3DLightcolor4Item(aColor)); aLightItemSet.Put(makeSvx3DLightOnOff4Item(bOnOff)); break;
-        case 4: aLightItemSet.Put(makeSvx3DLightcolor5Item(aColor)); aLightItemSet.Put(makeSvx3DLightOnOff5Item(bOnOff)); break;
-        case 5: aLightItemSet.Put(makeSvx3DLightcolor6Item(aColor)); aLightItemSet.Put(makeSvx3DLightOnOff6Item(bOnOff)); break;
-        case 6: aLightItemSet.Put(makeSvx3DLightcolor7Item(aColor)); aLightItemSet.Put(makeSvx3DLightOnOff7Item(bOnOff)); break;
+        case 0: aLightItemSet.Put(makeSvx3DLightcolor1Item(aColor, aLightItemSet)); aLightItemSet.Put(makeSvx3DLightOnOff1Item(bOnOff)); break;
+        case 1: aLightItemSet.Put(makeSvx3DLightcolor2Item(aColor, aLightItemSet)); aLightItemSet.Put(makeSvx3DLightOnOff2Item(bOnOff)); break;
+        case 2: aLightItemSet.Put(makeSvx3DLightcolor3Item(aColor, aLightItemSet)); aLightItemSet.Put(makeSvx3DLightOnOff3Item(bOnOff)); break;
+        case 3: aLightItemSet.Put(makeSvx3DLightcolor4Item(aColor, aLightItemSet)); aLightItemSet.Put(makeSvx3DLightOnOff4Item(bOnOff)); break;
+        case 4: aLightItemSet.Put(makeSvx3DLightcolor5Item(aColor, aLightItemSet)); aLightItemSet.Put(makeSvx3DLightOnOff5Item(bOnOff)); break;
+        case 5: aLightItemSet.Put(makeSvx3DLightcolor6Item(aColor, aLightItemSet)); aLightItemSet.Put(makeSvx3DLightOnOff6Item(bOnOff)); break;
+        case 6: aLightItemSet.Put(makeSvx3DLightcolor7Item(aColor, aLightItemSet)); aLightItemSet.Put(makeSvx3DLightOnOff7Item(bOnOff)); break;
         default:
-        case 7: aLightItemSet.Put(makeSvx3DLightcolor8Item(aColor)); aLightItemSet.Put(makeSvx3DLightOnOff8Item(bOnOff)); break;
+        case 7: aLightItemSet.Put(makeSvx3DLightcolor8Item(aColor, aLightItemSet)); aLightItemSet.Put(makeSvx3DLightOnOff8Item(bOnOff)); break;
     }
 
     m_xCtlLightPreview->GetSvx3DLightControl().Set3DAttributes(aLightItemSet);

@@ -516,7 +516,7 @@ static void lcl_FillAuthorAttr( std::size_t nAuthor, SfxItemSet &rSet,
     }
 
     if( !bBackGr )
-        rSet.Put( SvxColorItem( aCol, RES_CHRATR_COLOR ) );
+        rSet.Put( SvxColorItem( aCol, ColorSets::getColorSetsFromItemSet(rSet), RES_CHRATR_COLOR ) );
 }
 
 void SwModule::GetInsertAuthorAttr(std::size_t nAuthor, SfxItemSet &rSet)

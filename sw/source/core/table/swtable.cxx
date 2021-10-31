@@ -145,7 +145,7 @@ void InsTableBox( SwDoc& rDoc, SwTableNode* pTableNd,
         {
             SwAttrSet aAttrSet( *pCNd->GetpSwAttrSet() );
             if( pBox->GetSaveUserColor() )
-                aAttrSet.Put( SvxColorItem( *pBox->GetSaveUserColor(), RES_CHRATR_COLOR ));
+                aAttrSet.Put( SvxColorItem( *pBox->GetSaveUserColor(), ColorSets::getColorSetsFromItemSet(aAttrSet), RES_CHRATR_COLOR ));
             else
                 aAttrSet.ClearItem( RES_CHRATR_COLOR );
             rDoc.GetNodes().InsBoxen( pTableNd, pLine, pBoxFrameFormat,

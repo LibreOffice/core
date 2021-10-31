@@ -1438,7 +1438,7 @@ void ScHTMLLayoutParser::FontOn( HtmlImportInfo* pInfo )
             {
                 Color aColor;
                 rOption.GetColor( aColor );
-                mxActEntry->aItemSet.Put( SvxColorItem( aColor, ATTR_FONT_COLOR ) );
+                mxActEntry->aItemSet.Put( SvxColorItem( aColor, ColorSets::getColorSetsFromItemSet(mxActEntry->aItemSet), ATTR_FONT_COLOR ) );
             }
             break;
             default: break;

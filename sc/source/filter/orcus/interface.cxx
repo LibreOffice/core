@@ -1365,7 +1365,7 @@ void ScOrcusStyles::font::applyToItemSet(SfxItemSet& rSet) const
         FontWeight eWeight = mbBold ? WEIGHT_BOLD : WEIGHT_NORMAL;
         rSet.Put(SvxWeightItem(eWeight, ATTR_FONT_WEIGHT));
 
-        rSet.Put( SvxColorItem(maColor, ATTR_FONT_COLOR));
+        rSet.Put( SvxColorItem(maColor, ColorSets::getColorSetsFromItemSet(rSet), ATTR_FONT_COLOR));
 
         if(!maName.isEmpty())
             rSet.Put( SvxFontItem( FAMILY_DONTKNOW, maName, maName, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ));

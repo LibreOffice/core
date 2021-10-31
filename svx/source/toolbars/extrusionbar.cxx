@@ -1188,7 +1188,7 @@ static void getExtrusionColorState( SdrView const * pSdrView, SfxItemSet& rSet )
         aFinalColor = COL_AUTO;
 
     if( bHasCustomShape )
-        rSet.Put( SvxColorItem( aFinalColor, SID_EXTRUSION_3D_COLOR ) );
+        rSet.Put( SvxColorItem( aFinalColor, ColorSets::getColorSetsFromItemSet(rSet), SID_EXTRUSION_3D_COLOR ) );
     else
         rSet.DisableItem( SID_EXTRUSION_3D_COLOR );
 }

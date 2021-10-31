@@ -5756,14 +5756,14 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, T
             break;
             default: break;
         }
-        rSet.Put( SvxColorItem( aDefColor, EE_CHAR_COLOR ) );
+        rSet.Put( SvxColorItem( aDefColor, ColorSets::getColorSetsFromItemSet(rSet), EE_CHAR_COLOR ) );
     }
     else
     {
         if ( GetAttrib( PPT_CharAttr_FontColor, nVal, nDestinationInstance ) )  // text color (4Byte-Arg)
         {
             Color aCol( rManager.MSO_TEXT_CLR_ToColor( nVal ) );
-            rSet.Put( SvxColorItem( aCol, EE_CHAR_COLOR ) );
+            rSet.Put(SvxColorItem(aCol, ColorSets::getColorSetsFromItemSet(rSet), EE_CHAR_COLOR));
             if ( nDestinationInstance == TSS_Type::Unknown )
                 mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ mnDepth ].mnFontColorInStyleSheet = aCol;
         }
@@ -5772,7 +5772,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, T
             Color   aCol( rManager.MSO_TEXT_CLR_ToColor( nVal ) );
             Color&  aColorInSheet = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ mnDepth ].mnFontColorInStyleSheet;
             if ( aColorInSheet != aCol )
-                rSet.Put( SvxColorItem( aCol, EE_CHAR_COLOR ) );
+                rSet.Put( SvxColorItem( aCol, ColorSets::getColorSetsFromItemSet(rSet), EE_CHAR_COLOR ) );
         }
     }
 

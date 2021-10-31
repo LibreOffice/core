@@ -992,7 +992,7 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
             case FID_TAB_SET_TAB_BG_COLOR:
                 {
                     Color aColor = rDoc.GetTabBgColor( nTab );
-                    rSet.Put( SvxColorItem( aColor, nWhich ) );
+                    rSet.Put( SvxColorItem( aColor, ColorSets::getColorSetsFromItemSet(rSet), nWhich ) );
                 }
                 break;
 

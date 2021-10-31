@@ -681,14 +681,14 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
             if ( nAmbientColor > 255 )
                 nAmbientColor = 255;
             Color aGlobalAmbientColor( static_cast<sal_uInt8>(nAmbientColor), static_cast<sal_uInt8>(nAmbientColor), static_cast<sal_uInt8>(nAmbientColor) );
-            pScene->GetProperties().SetObjectItem( makeSvx3DAmbientcolorItem( aGlobalAmbientColor ) );
+            pScene->GetProperties().SetObjectItem( makeSvx3DAmbientcolorItem( aGlobalAmbientColor, pScene->GetMergedItemSet() ) );
 
             sal_uInt8 nSpotLight1 = static_cast<sal_uInt8>( fLightIntensity * 255.0 );
             basegfx::B3DVector aSpotLight1( aFirstLightDirection.DirectionX, - ( aFirstLightDirection.DirectionY ), -( aFirstLightDirection.DirectionZ ) );
             aSpotLight1.normalize();
             pScene->GetProperties().SetObjectItem( makeSvx3DLightOnOff1Item( true ) );
             Color aAmbientSpot1Color( nSpotLight1, nSpotLight1, nSpotLight1 );
-            pScene->GetProperties().SetObjectItem( makeSvx3DLightcolor1Item( aAmbientSpot1Color ) );
+            pScene->GetProperties().SetObjectItem( makeSvx3DLightcolor1Item( aAmbientSpot1Color, pScene->GetMergedItemSet() ) );
             pScene->GetProperties().SetObjectItem( makeSvx3DLightDirection1Item( aSpotLight1 ) );
 
             sal_uInt8 nSpotLight2 = static_cast<sal_uInt8>( fLight2Intensity * 255.0 );
@@ -696,14 +696,14 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
             aSpotLight2.normalize();
             pScene->GetProperties().SetObjectItem( makeSvx3DLightOnOff2Item( true ) );
             Color aAmbientSpot2Color( nSpotLight2, nSpotLight2, nSpotLight2 );
-            pScene->GetProperties().SetObjectItem( makeSvx3DLightcolor2Item( aAmbientSpot2Color ) );
+            pScene->GetProperties().SetObjectItem( makeSvx3DLightcolor2Item( aAmbientSpot2Color, pScene->GetMergedItemSet() ) );
             pScene->GetProperties().SetObjectItem( makeSvx3DLightDirection2Item( aSpotLight2 ) );
 
             sal_uInt8 nSpotLight3 = 70;
             basegfx::B3DVector aSpotLight3( 0.0, 0.0, 1.0 );
             pScene->GetProperties().SetObjectItem( makeSvx3DLightOnOff3Item( true ) );
             Color aAmbientSpot3Color( nSpotLight3, nSpotLight3, nSpotLight3 );
-            pScene->GetProperties().SetObjectItem( makeSvx3DLightcolor3Item( aAmbientSpot3Color ) );
+            pScene->GetProperties().SetObjectItem( makeSvx3DLightcolor3Item( aAmbientSpot3Color, pScene->GetMergedItemSet() ) );
             pScene->GetProperties().SetObjectItem( makeSvx3DLightDirection3Item( aSpotLight3 ) );
 
             double fSpecular = GetDouble( rGeometryItem, "Specularity", 0 ) / 100;
@@ -721,7 +721,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
             else if ( nIntensity < 0 )
                 nIntensity = 0;
             nIntensity = 100 - nIntensity;
-            pScene->GetProperties().SetObjectItem( makeSvx3DMaterialSpecularItem( aSpecularCol ) );
+            pScene->GetProperties().SetObjectItem( makeSvx3DMaterialSpecularItem( aSpecularCol, pScene->GetMergedItemSet() ) );
             pScene->GetProperties().SetObjectItem( makeSvx3DMaterialSpecularIntensityItem( static_cast<sal_uInt16>(nIntensity) ) );
 
             pScene->SetLogicRect(

@@ -376,7 +376,8 @@ void ImpSdrPdfImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr)
 
         mpTextAttr->Put(SvxWordLineModeItem(aFnt.IsWordLineMode(), EE_CHAR_WLM));
         mpTextAttr->Put(SvxContourItem(aFnt.IsOutline(), EE_CHAR_OUTLINE));
-        mpTextAttr->Put(SvxColorItem(mpVD->GetTextColor(), EE_CHAR_COLOR));
+        mpTextAttr->Put(SvxColorItem(
+            mpVD->GetTextColor(), ColorSets::getColorSetsFromItemSet(*mpTextAttr), EE_CHAR_COLOR));
         //... svxfont textitem svditext
         mbFntDirty = false;
     }

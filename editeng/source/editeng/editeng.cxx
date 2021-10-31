@@ -2635,8 +2635,8 @@ void EditEngine::SetFontInfoInItemSet( SfxItemSet& rSet, const SvxFont& rFont )
     rSet.Put( SvxShadowedItem( rFont.IsShadow(), EE_CHAR_SHADOW )  );
     rSet.Put( SvxEscapementItem( rFont.GetEscapement(), rFont.GetPropr(), EE_CHAR_ESCAPEMENT )  );
     rSet.Put( SvxWeightItem( rFont.GetWeight(), EE_CHAR_WEIGHT )  );
-    rSet.Put( SvxColorItem( rFont.GetColor(), EE_CHAR_COLOR )  );
-    rSet.Put( SvxColorItem( rFont.GetFillColor(), EE_CHAR_BKGCOLOR )  );
+    rSet.Put( SvxColorItem( rFont.GetColor(), ColorSets::getColorSetsFromItemSet(rSet), EE_CHAR_COLOR )  );
+    rSet.Put( SvxColorItem( rFont.GetFillColor(), ColorSets::getColorSetsFromItemSet(rSet), EE_CHAR_BKGCOLOR )  );
     rSet.Put( SvxUnderlineItem( rFont.GetUnderline(), EE_CHAR_UNDERLINE )  );
     rSet.Put( SvxOverlineItem( rFont.GetOverline(), EE_CHAR_OVERLINE )  );
     rSet.Put( SvxCrossedOutItem( rFont.GetStrikeout(), EE_CHAR_STRIKEOUT )  );

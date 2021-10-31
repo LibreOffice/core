@@ -29,6 +29,7 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 
+#include <sfx2/ColorSets.hxx>
 #include <svl/typedwhich.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editstat.hxx>
@@ -416,6 +417,8 @@ public:
 
     void            SetEditTextObjectPool( SfxItemPool* pPool );
     SfxItemPool*    GetEditTextObjectPool() const;
+
+    ColorSets*      GetColorSetsPtr() const;
 
     void                SetStyleSheetPool( SfxStyleSheetPool* pSPool );
     SfxStyleSheetPool*  GetStyleSheetPool();

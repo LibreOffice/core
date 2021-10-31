@@ -1807,12 +1807,12 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 const SvxBrushItem& aBrushItem = aSet.Get(RES_CHRATR_HIGHLIGHT);
                 if( aBrushItem.GetColor() != COL_TRANSPARENT )
                 {
-                    rSet.Put( SvxColorItem(aBrushItem.GetColor(), nWhich) );
+                    rSet.Put( SvxColorItem(aBrushItem.GetColor(), ColorSets::getColorSetsFromItemSet(rSet), nWhich) );
                 }
                 else
                 {
                     const SvxBrushItem& aBrushItem2 = aSet.Get(RES_CHRATR_BACKGROUND);
-                    rSet.Put( SvxColorItem(aBrushItem2.GetColor(), nWhich) );
+                    rSet.Put( SvxColorItem(aBrushItem2.GetColor(), ColorSets::getColorSetsFromItemSet(rSet), nWhich) );
                 }
             }
             break;

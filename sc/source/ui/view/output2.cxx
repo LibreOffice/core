@@ -916,7 +916,7 @@ static void lcl_SetEditColor( EditEngine& rEngine, const Color& rColor )
 {
     ESelection aSel( 0, 0, rEngine.GetParagraphCount(), 0 );
     SfxItemSet aSet( rEngine.GetEmptyItemSet() );
-    aSet.Put( SvxColorItem( rColor, EE_CHAR_COLOR ) );
+    aSet.Put( SvxColorItem( rColor, ColorSets::getColorSetsFromItemSet(aSet), EE_CHAR_COLOR ) );
     rEngine.QuickSetAttribs( aSet, aSel );
     // function is called with update mode set to FALSE
 }

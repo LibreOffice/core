@@ -390,7 +390,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                             if ( pBrushItem )
                             {
-                                SvxColorItem aBackColorItem(pBrushItem->GetColor(), EE_CHAR_BKGCOLOR);
+                                SvxColorItem aBackColorItem(pBrushItem->GetColor(), ColorSets::getColorSetsFromItemSet(aTempSet), EE_CHAR_BKGCOLOR);
                                 aTempSet.ClearItem( EE_CHAR_BKGCOLOR );
                                 aTempSet.Put( aBackColorItem );
                             }

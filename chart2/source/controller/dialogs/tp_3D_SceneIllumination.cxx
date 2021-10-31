@@ -470,44 +470,44 @@ void ThreeD_SceneIllumination_TabPage::updatePreview()
     LightSourceInfo* pInfo = &m_pLightSourceInfoList[0];
 
     // AmbientColor
-    aItemSet.Put(makeSvx3DAmbientcolorItem(m_xLB_AmbientLight->GetSelectEntryColor()));
+    aItemSet.Put(makeSvx3DAmbientcolorItem(m_xLB_AmbientLight->GetSelectEntryColor(), aItemSet));
 
-    aItemSet.Put(makeSvx3DLightcolor1Item(pInfo->aLightSource.nDiffuseColor));
+    aItemSet.Put(makeSvx3DLightcolor1Item(pInfo->aLightSource.nDiffuseColor, aItemSet));
     aItemSet.Put(makeSvx3DLightOnOff1Item(pInfo->aLightSource.bIsEnabled));
     aItemSet.Put(makeSvx3DLightDirection1Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
 
     pInfo = &m_pLightSourceInfoList[1];
-    aItemSet.Put(makeSvx3DLightcolor2Item(pInfo->aLightSource.nDiffuseColor));
+    aItemSet.Put(makeSvx3DLightcolor2Item(pInfo->aLightSource.nDiffuseColor, aItemSet));
     aItemSet.Put(makeSvx3DLightOnOff2Item(pInfo->aLightSource.bIsEnabled));
     aItemSet.Put(makeSvx3DLightDirection2Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
 
     pInfo = &m_pLightSourceInfoList[2];
-    aItemSet.Put(makeSvx3DLightcolor3Item(pInfo->aLightSource.nDiffuseColor));
+    aItemSet.Put(makeSvx3DLightcolor3Item(pInfo->aLightSource.nDiffuseColor, aItemSet));
     aItemSet.Put(makeSvx3DLightOnOff3Item(pInfo->aLightSource.bIsEnabled));
     aItemSet.Put(makeSvx3DLightDirection3Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
 
     pInfo = &m_pLightSourceInfoList[3];
-    aItemSet.Put(makeSvx3DLightcolor4Item(pInfo->aLightSource.nDiffuseColor));
+    aItemSet.Put(makeSvx3DLightcolor4Item(pInfo->aLightSource.nDiffuseColor, aItemSet));
     aItemSet.Put(makeSvx3DLightOnOff4Item(pInfo->aLightSource.bIsEnabled));
     aItemSet.Put(makeSvx3DLightDirection4Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
 
     pInfo = &m_pLightSourceInfoList[4];
-    aItemSet.Put(makeSvx3DLightcolor5Item(pInfo->aLightSource.nDiffuseColor));
+    aItemSet.Put(makeSvx3DLightcolor5Item(pInfo->aLightSource.nDiffuseColor, aItemSet));
     aItemSet.Put(makeSvx3DLightOnOff5Item(pInfo->aLightSource.bIsEnabled));
     aItemSet.Put(makeSvx3DLightDirection5Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
 
     pInfo = &m_pLightSourceInfoList[5];
-    aItemSet.Put(makeSvx3DLightcolor6Item(pInfo->aLightSource.nDiffuseColor));
+    aItemSet.Put(makeSvx3DLightcolor6Item(pInfo->aLightSource.nDiffuseColor, aItemSet));
     aItemSet.Put(makeSvx3DLightOnOff6Item(pInfo->aLightSource.bIsEnabled));
     aItemSet.Put(makeSvx3DLightDirection6Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
 
     pInfo = &m_pLightSourceInfoList[6];
-    aItemSet.Put(makeSvx3DLightcolor7Item(pInfo->aLightSource.nDiffuseColor));
+    aItemSet.Put(makeSvx3DLightcolor7Item(pInfo->aLightSource.nDiffuseColor, aItemSet));
     aItemSet.Put(makeSvx3DLightOnOff7Item(pInfo->aLightSource.bIsEnabled));
     aItemSet.Put(makeSvx3DLightDirection7Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
 
     pInfo = &m_pLightSourceInfoList[7];
-    aItemSet.Put(makeSvx3DLightcolor8Item(pInfo->aLightSource.nDiffuseColor));
+    aItemSet.Put(makeSvx3DLightcolor8Item(pInfo->aLightSource.nDiffuseColor, aItemSet));
     aItemSet.Put(makeSvx3DLightOnOff8Item(pInfo->aLightSource.bIsEnabled));
     aItemSet.Put(makeSvx3DLightDirection8Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
 

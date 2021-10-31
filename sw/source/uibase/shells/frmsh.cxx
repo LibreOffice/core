@@ -1294,7 +1294,7 @@ void SwFrameShell::GetLineStyleState(SfxItemSet &rSet)
             rSh.GetFlyFrameAttr(aFrameSet);
 
             const SvxBorderLine* pLine = aFrameSet.Get(RES_BOX).GetTop();
-            rSet.Put(SvxColorItem(pLine ? pLine->GetColor() : Color(), SID_FRAME_LINECOLOR));
+            rSet.Put(SvxColorItem(pLine ? pLine->GetColor() : Color(), ColorSets::getColorSetsFromItemSet(rSet), SID_FRAME_LINECOLOR));
         }
     }
 }

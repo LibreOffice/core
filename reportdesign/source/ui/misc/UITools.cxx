@@ -348,7 +348,7 @@ namespace
         _rItemSet.Put(SvxKerningItem(_rxReportControlFormat->getCharKerning(),ITEMID_KERNING));
         _rItemSet.Put(SvxEmphasisMarkItem(static_cast<FontEmphasisMark>(_rxReportControlFormat->getCharEmphasis()),ITEMID_EMPHASISMARK));
         _rItemSet.Put(SvxCharReliefItem(static_cast<FontRelief>(_rxReportControlFormat->getCharRelief()),ITEMID_CHARRELIEF));
-        _rItemSet.Put(SvxColorItem(::Color(ColorTransparency, _rxReportControlFormat->getCharColor()),ITEMID_COLOR));
+        _rItemSet.Put(SvxColorItem(::Color(ColorTransparency, _rxReportControlFormat->getCharColor()), ColorSets::getColorSetsFromItemSet(_rItemSet), ITEMID_COLOR));
         _rItemSet.Put(SvxCharRotateItem(Degree10(_rxReportControlFormat->getCharRotation()),false,ITEMID_CHARROTATE));
         _rItemSet.Put(SvxCharScaleWidthItem(_rxReportControlFormat->getCharScaleWidth(),ITEMID_CHARSCALE_W));
 

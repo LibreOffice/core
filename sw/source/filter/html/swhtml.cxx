@@ -3857,7 +3857,7 @@ void SwHTMLParser::NewFontAttr( HtmlTokenId nToken )
             aItemSet.Put( aFontHeightCTL );
         }
         if( bColor )
-            aItemSet.Put( SvxColorItem(aColor, RES_CHRATR_COLOR) );
+            aItemSet.Put( SvxColorItem(aColor, ColorSets::getColorSetsFromItemSet(aItemSet), RES_CHRATR_COLOR) );
         if( !aFontName.isEmpty() )
         {
             SvxFontItem aFont( eFamily, aFontName, aStyleName, ePitch, eEnc, RES_CHRATR_FONT );

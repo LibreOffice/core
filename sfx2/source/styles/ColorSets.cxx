@@ -8,6 +8,7 @@
  *
  */
 
+#include "sal/log.hxx"
 #include <memory>
 #include <sfx2/ColorSets.hxx>
 
@@ -121,6 +122,18 @@ void ColorSets::setThemeColorSet(std::u16string_view rName)
             mnThemeColorSetIndex = nIndex;
             break;
         }
+    }
+}
+
+ColorSets* ColorSets::getColorSetsFromItemSet(const SfxItemSet& rSet)
+{
+    if (const SfxColorSetListItem* const pColorSetListItem = rSet.GetItem(SID_COLOR_SETS))
+    {
+        return &pColorSetListItem->GetSfxColorSetList();
+    }
+    else
+    {
+        return nullptr;
     }
 }
 

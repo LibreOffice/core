@@ -660,7 +660,7 @@ void SwDocShell::SubInitNew()
             aDfltSet.Put( SvxTabStopItem( 1, nNewPos,
                                           SvxTabAdjust::Default, RES_PARATR_TABSTOP ) );
     }
-    aDfltSet.Put( SvxColorItem( COL_AUTO, RES_CHRATR_COLOR ) );
+    aDfltSet.Put( SvxColorItem( COL_AUTO, ColorSets::getColorSetsFromItemSet(aDfltSet), RES_CHRATR_COLOR ) );
 
     m_xDoc->SetDefault( aDfltSet );
 

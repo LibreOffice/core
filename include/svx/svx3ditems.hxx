@@ -105,12 +105,12 @@ inline SfxBoolItem makeSvx3DShadow3DItem(bool bVal) {
     return SfxBoolItem(SDRATTR_3DOBJ_SHADOW_3D, bVal);
 }
 
-inline SvxColorItem makeSvx3DMaterialEmissionItem(const Color& rCol) {
-    return SvxColorItem(rCol, SDRATTR_3DOBJ_MAT_EMISSION);
+inline SvxColorItem makeSvx3DMaterialEmissionItem(const Color& rCol, const SfxItemSet& rSet) {
+    return SvxColorItem(rCol, ColorSets::getColorSetsFromItemSet(rSet), SDRATTR_3DOBJ_MAT_EMISSION);
 }
 
-inline SvxColorItem makeSvx3DMaterialSpecularItem(const Color& rCol) {
-    return SvxColorItem(rCol, SDRATTR_3DOBJ_MAT_SPECULAR);
+inline SvxColorItem makeSvx3DMaterialSpecularItem(const Color& rCol, const SfxItemSet& rSet) {
+    return SvxColorItem(rCol, ColorSets::getColorSetsFromItemSet(rSet), SDRATTR_3DOBJ_MAT_SPECULAR);
 }
 
 inline SfxUInt16Item makeSvx3DMaterialSpecularIntensityItem(sal_uInt16 nVal) {
@@ -164,40 +164,40 @@ inline SfxBoolItem makeSvx3DTwoSidedLightingItem(bool bVal) {
     return SfxBoolItem(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING, bVal);
 }
 
-inline SvxColorItem makeSvx3DLightcolor1Item(const Color& rCol) {
-    return SvxColorItem(rCol, SDRATTR_3DSCENE_LIGHTCOLOR_1);
+inline SvxColorItem makeSvx3DLightcolor1Item(const Color& rCol, const SfxItemSet& rSet) {
+    return SvxColorItem(rCol, ColorSets::getColorSetsFromItemSet(rSet), SDRATTR_3DSCENE_LIGHTCOLOR_1);
 }
 
-inline SvxColorItem makeSvx3DLightcolor2Item(const Color& rCol) {
-    return SvxColorItem(rCol, SDRATTR_3DSCENE_LIGHTCOLOR_2);
+inline SvxColorItem makeSvx3DLightcolor2Item(const Color& rCol, const SfxItemSet& rSet) {
+    return SvxColorItem(rCol, ColorSets::getColorSetsFromItemSet(rSet), SDRATTR_3DSCENE_LIGHTCOLOR_2);
 }
 
-inline SvxColorItem makeSvx3DLightcolor3Item(const Color& rCol) {
-    return SvxColorItem(rCol, SDRATTR_3DSCENE_LIGHTCOLOR_3);
+inline SvxColorItem makeSvx3DLightcolor3Item(const Color& rCol, const SfxItemSet& rSet) {
+    return SvxColorItem(rCol, ColorSets::getColorSetsFromItemSet(rSet), SDRATTR_3DSCENE_LIGHTCOLOR_3);
 }
 
-inline SvxColorItem makeSvx3DLightcolor4Item(const Color& rCol) {
-    return SvxColorItem(rCol, SDRATTR_3DSCENE_LIGHTCOLOR_4);
+inline SvxColorItem makeSvx3DLightcolor4Item(const Color& rCol, const SfxItemSet& rSet) {
+    return SvxColorItem(rCol, ColorSets::getColorSetsFromItemSet(rSet), SDRATTR_3DSCENE_LIGHTCOLOR_4);
 }
 
-inline SvxColorItem makeSvx3DLightcolor5Item(const Color& rCol) {
-    return SvxColorItem(rCol, SDRATTR_3DSCENE_LIGHTCOLOR_5);
+inline SvxColorItem makeSvx3DLightcolor5Item(const Color& rCol, const SfxItemSet& rSet) {
+    return SvxColorItem(rCol, ColorSets::getColorSetsFromItemSet(rSet), SDRATTR_3DSCENE_LIGHTCOLOR_5);
 }
 
-inline SvxColorItem makeSvx3DLightcolor6Item(const Color& rCol) {
-    return SvxColorItem(rCol, SDRATTR_3DSCENE_LIGHTCOLOR_6);
+inline SvxColorItem makeSvx3DLightcolor6Item(const Color& rCol, const SfxItemSet& rSet) {
+    return SvxColorItem(rCol, ColorSets::getColorSetsFromItemSet(rSet), SDRATTR_3DSCENE_LIGHTCOLOR_6);
 }
 
-inline SvxColorItem makeSvx3DLightcolor7Item(const Color& rCol) {
-    return SvxColorItem(rCol, SDRATTR_3DSCENE_LIGHTCOLOR_7);
+inline SvxColorItem makeSvx3DLightcolor7Item(const Color& rCol, const SfxItemSet& rSet) {
+    return SvxColorItem(rCol, ColorSets::getColorSetsFromItemSet(rSet), SDRATTR_3DSCENE_LIGHTCOLOR_7);
 }
 
-inline SvxColorItem makeSvx3DLightcolor8Item(const Color& rCol) {
-    return SvxColorItem(rCol, SDRATTR_3DSCENE_LIGHTCOLOR_8);
+inline SvxColorItem makeSvx3DLightcolor8Item(const Color& rCol, const SfxItemSet& rSet) {
+    return SvxColorItem(rCol, ColorSets::getColorSetsFromItemSet(rSet), SDRATTR_3DSCENE_LIGHTCOLOR_8);
 }
 
-inline SvxColorItem makeSvx3DAmbientcolorItem(const Color& rCol) {
-    return SvxColorItem(rCol, SDRATTR_3DSCENE_AMBIENTCOLOR);
+inline SvxColorItem makeSvx3DAmbientcolorItem(const Color& rCol, const SfxItemSet& rSet) {
+    return SvxColorItem(rCol, ColorSets::getColorSetsFromItemSet(rSet), SDRATTR_3DSCENE_AMBIENTCOLOR);
 }
 
 inline SfxBoolItem makeSvx3DLightOnOff1Item(bool bVal) {

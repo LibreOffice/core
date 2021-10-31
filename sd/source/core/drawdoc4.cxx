@@ -215,7 +215,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(SvxCaseMapItem(SvxCaseMap::NotMapped, EE_CHAR_CASEMAP ));
     rISet.Put(SvxEmphasisMarkItem(FontEmphasisMark::NONE, EE_CHAR_EMPHASISMARK));
     rISet.Put(SvxCharReliefItem(FontRelief::NONE, EE_CHAR_RELIEF));
-    rISet.Put(SvxColorItem(COL_AUTO, EE_CHAR_COLOR ));
+    rISet.Put(SvxColorItem(COL_AUTO, ColorSets::getColorSetsFromItemSet(rISet), EE_CHAR_COLOR ));
 
     // Paragraph attributes (Edit Engine)
     rISet.Put(SvxLRSpaceItem(EE_PARA_LRSPACE));
@@ -443,7 +443,7 @@ void SdDrawDocument::CreateLayoutTemplates()
         aFillGradient.SetName( aName );
         aFillGradient.SetGradientValue(aGradient);
         pISet->Put( aFillGradient );
-        pISet->Put( SvxColorItem(COL_WHITE, EE_CHAR_COLOR ));           // font white
+        pISet->Put( SvxColorItem(COL_WHITE,  ColorSets::getColorSetsFromItemSet(rISet), EE_CHAR_COLOR ));           // font white
     }
     // Graphic > Shapes > Filled > Green
     {
@@ -459,7 +459,7 @@ void SdDrawDocument::CreateLayoutTemplates()
         aFillGradient.SetGradientValue(aGradient);
         pISet->Put( aFillGradient );
         pISet->Put( aSvxFontItem );                                     // font name
-        pISet->Put( SvxColorItem(COL_WHITE, EE_CHAR_COLOR ));           // font white
+        pISet->Put( SvxColorItem(COL_WHITE, ColorSets::getColorSetsFromItemSet(rISet), EE_CHAR_COLOR ));           // font white
     }
     // Graphic > Shapes > Filled > Red
     {
@@ -474,7 +474,7 @@ void SdDrawDocument::CreateLayoutTemplates()
         aFillGradient.SetName( aName );
         aFillGradient.SetGradientValue(aGradient);
         pISet->Put( aFillGradient );
-        pISet->Put( SvxColorItem(COL_WHITE, EE_CHAR_COLOR ));           // font white
+        pISet->Put( SvxColorItem(COL_WHITE, ColorSets::getColorSetsFromItemSet(rISet), EE_CHAR_COLOR ));           // font white
     }
     // Graphic > Shapes > Filled > Yellow
     {
@@ -489,7 +489,7 @@ void SdDrawDocument::CreateLayoutTemplates()
         aFillGradient.SetName( aName );
         aFillGradient.SetGradientValue(aGradient);
         pISet->Put( aFillGradient );
-        pISet->Put( SvxColorItem(COL_WHITE, EE_CHAR_COLOR ));           // font white
+        pISet->Put( SvxColorItem(COL_WHITE, ColorSets::getColorSetsFromItemSet(rISet), EE_CHAR_COLOR ));           // font white
     }
     // Graphic > Shapes > Outlines
     OUString aOutlineName(SdResId(STR_POOLSHEET_OUTLINE));
@@ -512,7 +512,7 @@ void SdDrawDocument::CreateLayoutTemplates()
         pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OUTLINE_BLUE );
         pISet = &pSheet->GetItemSet();
         pISet->Put( XLineColorItem(OUString(), Color(0x00355269)) );       // dark blue 2
-        pISet->Put( SvxColorItem(Color(0x00355269), EE_CHAR_COLOR ));      // font color
+        pISet->Put( SvxColorItem(Color(0x00355269), ColorSets::getColorSetsFromItemSet(rISet), EE_CHAR_COLOR ));      // font color
     }
     // Graphic > Shapes > Outlines > Green
     {
@@ -522,7 +522,7 @@ void SdDrawDocument::CreateLayoutTemplates()
         pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OUTLINE_GREEN );
         pISet = &pSheet->GetItemSet();
         pISet->Put( XLineColorItem(OUString(), Color(0x00127622)) );       // dark green 2
-        pISet->Put( SvxColorItem(Color(0x00127622), EE_CHAR_COLOR ));      // font color
+        pISet->Put( SvxColorItem(Color(0x00127622), ColorSets::getColorSetsFromItemSet(rISet), EE_CHAR_COLOR ));      // font color
     }
     // Graphic > Shapes > Outlines > Red
     {
@@ -532,7 +532,7 @@ void SdDrawDocument::CreateLayoutTemplates()
         pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OUTLINE_RED );
         pISet = &pSheet->GetItemSet();
         pISet->Put( XLineColorItem(OUString(), Color(0x00c9211e)) );       // dark red 2
-        pISet->Put( SvxColorItem(Color(0x00c9211e), EE_CHAR_COLOR ));      // font color
+        pISet->Put( SvxColorItem(Color(0x00c9211e), ColorSets::getColorSetsFromItemSet(rISet), EE_CHAR_COLOR ));      // font color
     }
     // Graphic > Shapes > Outlines > Yellow
     {
@@ -543,7 +543,7 @@ void SdDrawDocument::CreateLayoutTemplates()
         pISet = &pSheet->GetItemSet();
         pISet->Put( XLineStyleItem(drawing::LineStyle_SOLID));
         pISet->Put( XLineColorItem(OUString(), Color(0x00b47804)) );       // dark gold 2
-        pISet->Put( SvxColorItem(Color(0x00b47804), EE_CHAR_COLOR ));      // font color
+        pISet->Put( SvxColorItem(Color(0x00b47804), ColorSets::getColorSetsFromItemSet(rISet), EE_CHAR_COLOR ));      // font color
     }
     // Graphic > Lines
     OUString aLinesName;
@@ -670,7 +670,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
     rISet.Put( SvxFontHeightItem( 635, 100, EE_CHAR_FONTHEIGHT_CJK ) ); // 18 pt
     rISet.Put( SvxFontHeightItem( convertFontHeightToCTL( 635 ), 100, EE_CHAR_FONTHEIGHT_CTL ) ); // 18 pt
 
-    rISet.Put(SvxColorItem(COL_AUTO, EE_CHAR_COLOR ));
+    rISet.Put(SvxColorItem(COL_AUTO, ColorSets::getColorSetsFromItemSet(rISet), EE_CHAR_COLOR ));
 
     // Paragraph attributes (Edit Engine)
     rISet.Put(SvxLRSpaceItem(EE_PARA_LRSPACE));

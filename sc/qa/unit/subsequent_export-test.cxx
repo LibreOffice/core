@@ -1532,7 +1532,7 @@ void setAttribute( ScFieldEditEngine& rEE, sal_Int32 nPara, sal_Int32 nStart, sa
         break;
         case EE_CHAR_COLOR:
         {
-            SvxColorItem aItem(nColor, nType);
+            SvxColorItem aItem(nColor, ColorSets::getColorSetsFromItemSet(aItemSet), nType);
             aItemSet.Put(aItem);
             rEE.QuickSetAttribs(aItemSet, aSel);
         }
@@ -2039,7 +2039,7 @@ void ScExportTest::testRichTextExportODS()
         CPPUNIT_ASSERT_MESSAGE("Incorrect B9 value.", aCheckFunc.checkB9(pEditText));
 
         ScPatternAttr aCellFontColor(rDoc3.GetPool());
-        aCellFontColor.GetItemSet().Put(SvxColorItem(COL_BLUE, ATTR_FONT_COLOR));
+        aCellFontColor.GetItemSet().Put(SvxColorItem(COL_BLUE, ColorSets::getColorSetsFromItemSet(aCellFontColor.GetItemSet()), ATTR_FONT_COLOR));
         // Set font color of B10 to blue.
         rDoc3.ApplyPattern(1, 9, 0, aCellFontColor);
         pEE->Clear();

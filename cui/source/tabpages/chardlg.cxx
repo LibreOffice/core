@@ -1595,7 +1595,7 @@ bool SvxCharEffectsPage::FillItemSetColor_Impl( SfxItemSet& rSet )
     }
 
     if (bChanged)
-        rSet.Put( SvxColorItem( aSelectedColor, nWhich ) );
+        rSet.Put( SvxColorItem( aSelectedColor, ColorSets::getColorSetsFromItemSet(rSet), nWhich ) );
     else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )
         rSet.InvalidateItem(nWhich);
 

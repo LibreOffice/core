@@ -1547,7 +1547,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
 
     case RES_POOLCHR_INET_NORMAL:
         {
-            aSet.Put( SvxColorItem( COL_BLUE, RES_CHRATR_COLOR ) );
+            aSet.Put( SvxColorItem( COL_BLUE, ColorSets::getColorSetsFromItemSet(aSet), RES_CHRATR_COLOR ) );
             aSet.Put( SvxUnderlineItem( LINESTYLE_SINGLE, RES_CHRATR_UNDERLINE ) );
             // i40133: patch submitted by rail: set language to 'none' to prevent spell checking:
             aSet.Put( SvxLanguageItem( LANGUAGE_NONE, RES_CHRATR_LANGUAGE ) );
@@ -1557,7 +1557,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
         break;
     case RES_POOLCHR_INET_VISIT:
         {
-            aSet.Put( SvxColorItem( COL_RED, RES_CHRATR_COLOR ) );
+            aSet.Put( SvxColorItem( COL_RED, ColorSets::getColorSetsFromItemSet(aSet), RES_CHRATR_COLOR ) );
             aSet.Put( SvxUnderlineItem( LINESTYLE_SINGLE, RES_CHRATR_UNDERLINE ) );
             aSet.Put( SvxLanguageItem( LANGUAGE_NONE, RES_CHRATR_LANGUAGE ) );
             aSet.Put( SvxLanguageItem( LANGUAGE_NONE, RES_CHRATR_CJK_LANGUAGE ) );
@@ -1566,7 +1566,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
         break;
     case RES_POOLCHR_JUMPEDIT:
         {
-            aSet.Put( SvxColorItem( COL_CYAN, RES_CHRATR_COLOR ) );
+            aSet.Put( SvxColorItem( COL_CYAN, ColorSets::getColorSetsFromItemSet(aSet), RES_CHRATR_COLOR ) );
             aSet.Put( SvxUnderlineItem( LINESTYLE_DOTTED, RES_CHRATR_UNDERLINE ) );
             aSet.Put( SvxCaseMapItem( SvxCaseMap::SmallCaps, RES_CHRATR_CASEMAP ) );
         }

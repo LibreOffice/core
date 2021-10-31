@@ -16,8 +16,12 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <sfx2/dllapi.h>
+#include <sfx2/sfxsids.hrc>
 #include <svl/poolitem.hxx>
+#include <svl/itemset.hxx>
 #include <tools/color.hxx>
+
+class SfxColorSetListItem;
 
 class ColorSet
 {
@@ -83,16 +87,18 @@ public:
         return maColorSets.size() - 1;
     }
 
-    std::shared_ptr<VirtualThemeColorSet>& getVirtualColorSet(int nVirtualColorSetIndex)
+    const std::shared_ptr<VirtualThemeColorSet>& getVirtualColorSet(int nVirtualColorSetIndex) const
     {
+        // HACK: dont forget to change this... :)
         return maVirtualThemeColorSets[nVirtualColorSetIndex];
     }
 
-    sal_Int32 getVirtualColorSetIndex(const std::weak_ptr<VirtualThemeColorSet>& pVirtualColorSet)
+    sal_Int32
+    getVirtualColorSetIndex(const std::weak_ptr<VirtualThemeColorSet>& pVirtualColorSet) const
     {
         if (auto aIt = std::find_if(
                 maVirtualThemeColorSets.begin(), maVirtualThemeColorSets.end(),
-                [pVirtualColorSet](std::shared_ptr<VirtualThemeColorSet>& pVirtualColorSet_) {
+                [pVirtualColorSet](const std::shared_ptr<VirtualThemeColorSet>& pVirtualColorSet_) {
                     return pVirtualColorSet_.get() == pVirtualColorSet.lock().get();
                 });
             aIt != maVirtualThemeColorSets.end())
@@ -108,6 +114,8 @@ public:
             std::make_shared<VirtualThemeColorSet>(getColorSetPtr(nIndexColorSetToReference)));
         return maVirtualThemeColorSets.size() - 1;
     }
+
+    static ColorSets* getColorSetsFromItemSet(const SfxItemSet& rSet);
 };
 
 class SFX2_DLLPUBLIC SfxColorSetListItem final : public SfxPoolItem

@@ -373,11 +373,11 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             aSet.Put(SfxBoolItem(ATTR_ANIMATION_FADEOUT, false));
 
         if (nFadeColorSet == ATTR_SET)
-            aSet.Put(SvxColorItem(aFadeColor, ATTR_ANIMATION_COLOR));
+            aSet.Put(SvxColorItem(aFadeColor, ColorSets::getColorSetsFromItemSet(aSet), ATTR_ANIMATION_COLOR));
         else if (nFadeColorSet == ATTR_MIXED)
             aSet.InvalidateItem(ATTR_ANIMATION_COLOR);
         else
-            aSet.Put(SvxColorItem(COL_LIGHTGRAY, ATTR_ANIMATION_COLOR));
+            aSet.Put(SvxColorItem(COL_LIGHTGRAY, ColorSets::getColorSetsFromItemSet(aSet), ATTR_ANIMATION_COLOR));
 
         if (nInvisibleSet == ATTR_SET)
             aSet.Put(SfxBoolItem(ATTR_ANIMATION_INVISIBLE, bInvisible));

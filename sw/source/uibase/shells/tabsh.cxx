@@ -1546,7 +1546,7 @@ void SwTableShell::GetLineStyleState(SfxItemSet &rSet)
     const SvxBoxItem& rBoxItem = aCoreSet.Get( RES_BOX );
     const SvxBorderLine* pLine = rBoxItem.GetTop();
 
-    rSet.Put( SvxColorItem( pLine ? pLine->GetColor() : Color(), SID_FRAME_LINECOLOR ) );
+    rSet.Put( SvxColorItem( pLine ? pLine->GetColor() : Color(), ColorSets::getColorSetsFromItemSet(rSet), SID_FRAME_LINECOLOR ) );
     SvxLineItem aLine( SID_FRAME_LINESTYLE );
     aLine.SetLine(pLine);
     rSet.Put( aLine );

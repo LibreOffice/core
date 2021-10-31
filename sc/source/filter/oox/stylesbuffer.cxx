@@ -929,7 +929,7 @@ void Font::fillToItemSet( SfxItemSet& rItemSet, bool bEditEngineText, bool bSkip
     // character color
     if( maUsedFlags.mbColorUsed )
     {
-        ScfTools::PutItem( rItemSet,SvxColorItem( maApiData.mnColor, bEditEngineText ? static_cast<sal_uInt16>(EE_CHAR_COLOR) : ATTR_FONT_COLOR), bSkipPoolDefs );
+        ScfTools::PutItem( rItemSet,SvxColorItem( maApiData.mnColor, ColorSets::getColorSetsFromItemSet(rItemSet), bEditEngineText ? static_cast<sal_uInt16>(EE_CHAR_COLOR) : ATTR_FONT_COLOR), bSkipPoolDefs );
     }
     // underline style
     if( maUsedFlags.mbUnderlineUsed )

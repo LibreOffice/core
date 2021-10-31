@@ -1286,7 +1286,7 @@ static void ParseCSS1_color( const CSS1Expression *pExpr,
         {
             Color aColor;
             if( pExpr->GetColor( aColor ) )
-                rItemSet.Put( SvxColorItem( aColor, aItemIds.nColor ) );
+                rItemSet.Put( SvxColorItem( aColor, ColorSets::getColorSetsFromItemSet(rItemSet), aItemIds.nColor ) );
         }
         break;
     default:

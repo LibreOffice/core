@@ -978,7 +978,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
                         else
                             aColor = Color( ColorTransparency, sColor.toInt32( 16 ) );
 
-                        aSet.Put( SvxColorItem( aColor, EE_CHAR_COLOR ) );
+                        aSet.Put( SvxColorItem( aColor, ColorSets::getColorSetsFromItemSet(aSet), EE_CHAR_COLOR ) );
                     }
                     else
                     {

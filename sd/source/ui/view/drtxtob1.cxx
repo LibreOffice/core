@@ -88,14 +88,14 @@ namespace
         {
             case SID_ATTR_CHAR_COLOR:
             {
-                SvxColorItem aColorItem(aColor, EE_CHAR_COLOR);
+                SvxColorItem aColorItem(aColor, ColorSets::getColorSetsFromItemSet(*pArgs), EE_CHAR_COLOR);
                 pArgs->Put(aColorItem);
                 break;
             }
 
             case SID_ATTR_CHAR_BACK_COLOR:
             {
-                SvxColorItem pBackgroundItem(aColor, EE_CHAR_BKGCOLOR);
+                SvxColorItem pBackgroundItem(aColor, ColorSets::getColorSetsFromItemSet(*pArgs), EE_CHAR_BKGCOLOR);
                 pArgs->Put(pBackgroundItem);
                 break;
             }

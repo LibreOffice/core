@@ -1060,7 +1060,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
             if( auto n = o3tl::tryAccess<sal_Int32>(aTmp) )
             {
                 Color aColor( ColorTransparency, *n );
-                aItemSet.Put( SvxColorItem( aColor, RES_CHRATR_COLOR ) );
+                aItemSet.Put( SvxColorItem( aColor, ColorSets::getColorSetsFromItemSet(aItemSet), RES_CHRATR_COLOR ) );
             }
         }
         if( xPropSetInfo->hasPropertyByName( "FontHeight" ) )

@@ -1321,30 +1321,14 @@ bool ThemeColorData::operator==(const ThemeColorData &rOther) const
         return true;
     else
         return mnThemeColorIndex == rOther.mnThemeColorIndex
-               && mnVirtualThemeColorSetIndex == rOther.mnVirtualThemeColorSetIndex
+               // TODO: && mpVirtualThemeColorSet == rOther.mpVirtualThemeColorSet
                && mnTintShade == rOther.mnTintShade;
 }
 
 std::optional<Color> ThemeColorData::getThemeColorIfNeedsUpdate() const
 {
-    // HACK: after getting rid of SfxObjectShell::Current() should be
-    // able to get rid of mnContainerIndex
-    if (mnThemeColorIndex != -1 && mnVirtualThemeColorSetIndex != -1)
+    if (mnThemeColorIndex != -1)
     {
-        // HACK: try to get the pointer to the container.. if it's not there
-        // We won't need this after figuring out a better way of interacting with SfxObjectShell
-        if(mpVirtualThemeColorSet.expired())
-        {
-            if (SfxObjectShell* pObjShell = SfxObjectShell::Current())
-            {
-                if (const SfxColorSetListItem* pColorSetItem = pObjShell->GetItem(SID_COLOR_SETS))
-                {
-                    ColorSets& rColorSets = pColorSetItem->GetSfxColorSetList();
-                    mpVirtualThemeColorSet = rColorSets.getVirtualColorSet(mnVirtualThemeColorSetIndex);
-                }
-            }
-        }
-
         if (auto pVirtualThemeColorSet = mpVirtualThemeColorSet.lock())
         {
             if ( auto pColorSet = pVirtualThemeColorSet->getColorSetPtr().lock() )
@@ -1407,36 +1391,18 @@ void ThemeColorData::RecalculateOnNextGet()
 
 void ThemeColorData::setVirtualThemeColorSet(sal_Int32 nVirtualThemeColorSetIndex)
 {
-    // HACK:
-    mnVirtualThemeColorSetIndex = nVirtualThemeColorSetIndex;
-    return;
-
-    // After swapping out SfxObjectShell::Current() with something reasonable
-    // this should work:
-    if (SfxObjectShell* pObjShell = SfxObjectShell::Current())
+    if (mpColorSets)
     {
-        if (const SfxColorSetListItem* pColorSetItem = pObjShell->GetItem(SID_COLOR_SETS))
-        {
-            ColorSets& rColorSets = pColorSetItem->GetSfxColorSetList();
-            mpVirtualThemeColorSet = rColorSets.getVirtualColorSet(nVirtualThemeColorSetIndex);
-        }
+        mpVirtualThemeColorSet = mpColorSets->getVirtualColorSet(nVirtualThemeColorSetIndex);
     }
 }
 
 sal_Int32 ThemeColorData::getVirtualThemeColorSetIndex() const
 {
-    // HACK:
-    return mnVirtualThemeColorSetIndex;
-
-    // After swapping out SfxObjectShell::Current() with something reasonable
-    // this should work:
-    if (SfxObjectShell* pObjShell = SfxObjectShell::Current())
-    {
-        if (const SfxColorSetListItem* pColorSetItem = pObjShell->GetItem(SID_COLOR_SETS))
-        {
-            return pColorSetItem->GetSfxColorSetList().getVirtualColorSetIndex(mpVirtualThemeColorSet);
-        }
-    }
+    if (mpColorSets)
+        return mpColorSets->getVirtualColorSetIndex(mpVirtualThemeColorSet);
+    else
+        return -1;
 }
 
 // class SvxColorItem ----------------------------------------------------
@@ -1447,10 +1413,17 @@ SvxColorItem::SvxColorItem( const sal_uInt16 nId ) :
 {
 }
 
-SvxColorItem::SvxColorItem( const Color& rCol, const sal_uInt16 nId ) :
+SvxColorItem::SvxColorItem(const Color& rCol, const sal_uInt16 nId)
+    : SfxPoolItem(nId)
+    , mColor(rCol)
+    , maThemeColorData()
+{
+}
+
+SvxColorItem::SvxColorItem( const Color& rCol, const ColorSets* pColorSets, const sal_uInt16 nId ) :
     SfxPoolItem( nId ),
     mColor( rCol ),
-    maThemeColorData()
+    maThemeColorData( pColorSets )
 {
 }
 

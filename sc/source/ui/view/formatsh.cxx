@@ -2066,7 +2066,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
         {
             case SID_BACKGROUND_COLOR:
             {
-                rSet.Put( SvxColorItem( rBrushItem.GetColor(), SID_BACKGROUND_COLOR ) );
+                rSet.Put( SvxColorItem( rBrushItem.GetColor(), ColorSets::getColorSetsFromItemSet(rSet), SID_BACKGROUND_COLOR ) );
                 if(SfxItemState::DONTCARE == rAttrSet.GetItemState(ATTR_BACKGROUND))
                 {
                     rSet.InvalidateItem(SID_BACKGROUND_COLOR);
@@ -2206,16 +2206,16 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
                     if(bColDisable) // if different lines have different colors
                     {
                         aCol = COL_TRANSPARENT;
-                        rSet.Put( SvxColorItem(aCol, SID_FRAME_LINECOLOR ) );
+                        rSet.Put( SvxColorItem(aCol, ColorSets::getColorSetsFromItemSet(rSet), SID_FRAME_LINECOLOR ) );
                         rSet.InvalidateItem(SID_FRAME_LINECOLOR);
                     }
                     else if (!bCol) // if no line available
                     {
                         aCol = COL_AUTO;
-                        rSet.Put( SvxColorItem(aCol, SID_FRAME_LINECOLOR ) );
+                        rSet.Put( SvxColorItem(aCol, ColorSets::getColorSetsFromItemSet(rSet), SID_FRAME_LINECOLOR ) );
                     }
                     else
-                        rSet.Put( SvxColorItem(aCol, SID_FRAME_LINECOLOR ) );
+                        rSet.Put( SvxColorItem(aCol, ColorSets::getColorSetsFromItemSet(rSet), SID_FRAME_LINECOLOR ) );
                 }
                 else // if( nWhich == SID_FRAME_LINESTYLE)
                 {

@@ -153,8 +153,8 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
             {
                 if ( SID_ATTR_CHAR_BACK_COLOR == nSlot )
                 {
-                    maSet.Put( SvxColorItem( COL_TRANSPARENT, nWhich ) );
-                    rCoreSet->Put( SvxColorItem( COL_TRANSPARENT, nWhich ) );
+                    maSet.Put( SvxColorItem( COL_TRANSPARENT, ColorSets::getColorSetsFromItemSet(maSet), nWhich ) );
+                    rCoreSet->Put( SvxColorItem( COL_TRANSPARENT, ColorSets::getColorSetsFromItemSet(maSet), nWhich ) );
                 }
                 else
                 {
@@ -169,8 +169,8 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
             XFillColorItem aColorItem( maSet.Get( XATTR_FILLCOLOR ) );
             if ( SID_ATTR_CHAR_BACK_COLOR == nSlot )
             {
-                maSet.Put( SvxColorItem( aColorItem.GetColorValue(), nWhich ) );
-                rCoreSet->Put( SvxColorItem( aColorItem.GetColorValue(), nWhich ) );
+                maSet.Put( SvxColorItem( aColorItem.GetColorValue(), ColorSets::getColorSetsFromItemSet(maSet), nWhich ) );
+                rCoreSet->Put( SvxColorItem( aColorItem.GetColorValue(), ColorSets::getColorSetsFromItemSet(maSet), nWhich ) );
             }
             else
             {

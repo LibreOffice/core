@@ -410,7 +410,7 @@ handle_r1c1:
 
                 ESelection aSel( 0, nStart, 0, nPos );
                 SfxItemSet aSet( mpEditEngine->GetEmptyItemSet() );
-                aSet.Put( SvxColorItem( nColor, EE_CHAR_COLOR ) );
+                aSet.Put( SvxColorItem( nColor, ColorSets::getColorSetsFromItemSet(aSet), EE_CHAR_COLOR ) );
                 mpEditEngine->QuickSetAttribs( aSet, aSel );
                 ++nCount;
             }
@@ -610,7 +610,7 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
 
         lcl_Replace( pTopView, aNewStr, aOldSel );
         lcl_Replace( pTableView, aNewStr, aOldSel );
-        aSet.Put( SvxColorItem( nNewColor, EE_CHAR_COLOR ) );
+        aSet.Put( SvxColorItem( nNewColor, ColorSets::getColorSetsFromItemSet(aSet), EE_CHAR_COLOR ) );
         mpEditEngine->QuickSetAttribs( aSet, aOldSel );
 
         bInRangeUpdate = true;

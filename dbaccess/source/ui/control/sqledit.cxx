@@ -210,7 +210,7 @@ void SQLEditView::UpdateData()
         for (auto const& portion : aPortions)
         {
             SfxItemSet aSet(rEditEngine.GetEmptyItemSet());
-            aSet.Put(SvxColorItem(GetColorValue(portion.tokenType), EE_CHAR_COLOR));
+            aSet.Put(SvxColorItem(GetColorValue(portion.tokenType), ColorSets::getColorSetsFromItemSet(aSet), EE_CHAR_COLOR));
             rEditEngine.QuickSetAttribs(aSet, ESelection(nLine, portion.nBegin, nLine, portion.nEnd));
         }
     }
@@ -280,7 +280,7 @@ void SQLEditView::DoBracketHilight(sal_uInt16 nKey)
                 if (!nCount)
                 {
                     SfxItemSet aSet(m_xEditEngine->GetEmptyItemSet());
-                    aSet.Put(SvxColorItem(Color(0,0,0), EE_CHAR_COLOR));
+                    aSet.Put(SvxColorItem(Color(0,0,0), ColorSets::getColorSetsFromItemSet(aSet), EE_CHAR_COLOR));
                     aSet.Put(SvxWeightItem(WEIGHT_ULTRABOLD, EE_CHAR_WEIGHT));
                     aSet.Put(SvxWeightItem(WEIGHT_ULTRABOLD, EE_CHAR_WEIGHT_CJK));
                     aSet.Put(SvxWeightItem(WEIGHT_ULTRABOLD, EE_CHAR_WEIGHT_CTL));

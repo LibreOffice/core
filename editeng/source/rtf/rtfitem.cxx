@@ -924,8 +924,9 @@ ATTR_SETOVERLINE:
             case RTF_CF:
                 if( aPlainMap.nColor )
                 {
-                    pSet->Put( SvxColorItem( GetColor( sal_uInt16(nTokenValue) ),
-                                aPlainMap.nColor ));
+                    pSet->Put(SvxColorItem(GetColor(sal_uInt16(nTokenValue)),
+                                           ColorSets::getColorSetsFromItemSet(*pSet),
+                                           aPlainMap.nColor));
                 }
                 break;
             //#i12501# While cb is clearly documented in the rtf spec, word

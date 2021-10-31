@@ -1665,7 +1665,7 @@ void SentenceEditWindow_Impl::MoveErrorMarkTo(sal_Int32 nStart, sal_Int32 nEnd, 
     m_xEditEngine->RemoveAttribs(aAll, false, EE_CHAR_WEIGHT_CTL);
 
     SfxItemSet aSet(m_xEditEngine->GetEmptyItemSet());
-    aSet.Put(SvxColorItem(bGrammarError ? COL_LIGHTBLUE : COL_LIGHTRED, EE_CHAR_COLOR));
+    aSet.Put(SvxColorItem(bGrammarError ? COL_LIGHTBLUE : COL_LIGHTRED, ColorSets::getColorSetsFromItemSet(aSet), EE_CHAR_COLOR));
     aSet.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT));
     aSet.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT_CJK));
     aSet.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT_CTL));
