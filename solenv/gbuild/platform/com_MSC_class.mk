@@ -83,7 +83,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(INCLUDE) \
 		-Fd$(PDBFILE) \
 		-c $(3) \
-		-Fo$(1)) $(if $(filter $(true),$(6)),/link /DEBUG:FASTLINK) \
+		-Fo$(1)) \
 		$(if $(COMPILER_TEST),,$(call gb_create_deps,$(4),$(1),$(3)))
 endef
 
@@ -301,7 +301,12 @@ gb_Windows_PE_TARGETTYPEFLAGS := \
 	-manifest
 
 # link.exe in -LIB mode doesn't understand -debug, use it only for EXEs and DLLs
+ifeq ($(gb_ENABLE_DBGUTIL),$(true))
+# fastlink is faster but pdb files reference .obj files
+gb_Windows_PE_TARGETTYPEFLAGS_DEBUGINFO := -debug:fastlink
+else
 gb_Windows_PE_TARGETTYPEFLAGS_DEBUGINFO := -debug
+endif
 
 ifeq ($(ENABLE_LTO),TRUE)
 gb_Windows_PE_TARGETTYPEFLAGS += -LTCG
