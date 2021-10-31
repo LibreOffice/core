@@ -1262,6 +1262,8 @@ SwFormatColl *SwContentNode::ChgFormatColl( SwFormatColl *pNewColl )
 
         if( !IsModifyLocked() )
         {
+            assert(dynamic_cast<SwTextFormatColl*>(pNewColl));
+            ChkCondColl(static_cast<SwTextFormatColl*>(pNewColl));
             SwFormatChg aTmp1( pOldColl );
             SwFormatChg aTmp2( pNewColl );
             SwClientNotify( *this, sw::LegacyModifyHint(&aTmp1, &aTmp2) );
