@@ -23,11 +23,11 @@ BitmapEx BitmapAlphaClampFilter::execute(BitmapEx const& rBitmapEx) const
         AlphaScopedWriteAccess pWriteAlpha(aBitmapAlpha);
         const Size aSize(rBitmapEx.GetSizePixel());
 
-        for (tools::Long nY = 0; nY < aSize.Height(); ++nY)
+        for (sal_Int32 nY = 0; nY < sal_Int32(aSize.Height()); ++nY)
         {
             Scanline pScanAlpha = pWriteAlpha->GetScanline(nY);
 
-            for (tools::Long nX = 0; nX < aSize.Width(); ++nX)
+            for (sal_Int32 nX = 0; nX < sal_Int32(aSize.Width()); ++nX)
             {
                 BitmapColor aBitmapAlphaValue(pWriteAlpha->GetPixelFromData(pScanAlpha, nX));
                 if (aBitmapAlphaValue.GetIndex() > mcThreshold)

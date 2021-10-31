@@ -22,11 +22,11 @@ BitmapEx BitmapShadowFilter::execute(BitmapEx const& rBitmapEx) const
     if (!pWriteAccess)
         return rBitmapEx;
 
-    for (tools::Long y(0); y < pWriteAccess->Height(); y++)
+    for (sal_Int32 y(0); y < sal_Int32(pWriteAccess->Height()); y++)
     {
         Scanline pScanline = pWriteAccess->GetScanline(y);
 
-        for (tools::Long x(0); x < pWriteAccess->Width(); x++)
+        for (sal_Int32 x(0); x < sal_Int32(pWriteAccess->Width()); x++)
         {
             const BitmapColor aColor = pWriteAccess->GetColor(y, x);
             sal_uInt16 nLuminance(static_cast<sal_uInt16>(aColor.GetLuminance()) + 1);

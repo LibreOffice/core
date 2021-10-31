@@ -30,11 +30,11 @@ BitmapEx BitmapMaskToAlphaFilter::execute(BitmapEx const& rBitmapEx) const
     {
         assert(pRead->HasPalette() && "only supposed to be called with 1-bit mask");
         assert(pRead->GetPaletteEntryCount() == 2);
-        for (tools::Long nY = 0; nY < aSize.Height(); ++nY)
+        for (sal_Int32 nY = 0; nY < sal_Int32(aSize.Height()); ++nY)
         {
             Scanline pScanline = pWrite->GetScanline(nY);
             Scanline pScanlineRead = pRead->GetScanline(nY);
-            for (tools::Long nX = 0; nX < aSize.Width(); ++nX)
+            for (sal_Int32 nX = 0; nX < sal_Int32(aSize.Width()); ++nX)
             {
                 BitmapColor aBmpColor = pRead->GetPixelFromData(pScanlineRead, nX);
                 if (aBmpColor == COL_BLACK)

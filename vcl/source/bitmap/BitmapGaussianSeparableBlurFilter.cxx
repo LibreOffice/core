@@ -20,8 +20,8 @@ BitmapEx BitmapGaussianSeparableBlurFilter::execute(BitmapEx const& rBitmapEx) c
 {
     Bitmap aBitmap(rBitmapEx.GetBitmap());
 
-    const tools::Long nWidth = aBitmap.GetSizePixel().Width();
-    const tools::Long nHeight = aBitmap.GetSizePixel().Height();
+    const sal_Int32 nWidth = aBitmap.GetSizePixel().Width();
+    const sal_Int32 nHeight = aBitmap.GetSizePixel().Height();
 
     // Prepare Blur Vector
     int aNumberOfContributions;

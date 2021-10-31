@@ -26,8 +26,8 @@ BitmapEx BitmapDuoToneFilter::execute(BitmapEx const& rBitmapEx) const
 {
     Bitmap aBitmap(rBitmapEx.GetBitmap());
 
-    const tools::Long nWidth = aBitmap.GetSizePixel().Width();
-    const tools::Long nHeight = aBitmap.GetSizePixel().Height();
+    const sal_Int32 nWidth = aBitmap.GetSizePixel().Width();
+    const sal_Int32 nHeight = aBitmap.GetSizePixel().Height();
 
     Bitmap aResultBitmap(aBitmap.GetSizePixel(), vcl::PixelFormat::N24_BPP);
     Bitmap::ScopedReadAccess pReadAcc(aBitmap);
@@ -35,9 +35,9 @@ BitmapEx BitmapDuoToneFilter::execute(BitmapEx const& rBitmapEx) const
     const BitmapColor aColorOne(mnColorOne);
     const BitmapColor aColorTwo(mnColorTwo);
 
-    for (tools::Long x = 0; x < nWidth; x++)
+    for (sal_Int32 x = 0; x < nWidth; x++)
     {
-        for (tools::Long y = 0; y < nHeight; y++)
+        for (sal_Int32 y = 0; y < nHeight; y++)
         {
             BitmapColor aColor = pReadAcc->GetColor(y, x);
             sal_uInt8 nLuminance = aColor.GetLuminance();

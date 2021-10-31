@@ -41,23 +41,23 @@ BitmapEx BitmapEmbossGreyFilter::execute(BitmapEx const& rBitmapEx) const
             if (pWriteAcc)
             {
                 BitmapColor aGrey(sal_uInt8(0));
-                const tools::Long nWidth = pWriteAcc->Width();
-                const tools::Long nHeight = pWriteAcc->Height();
-                tools::Long nGrey11, nGrey12, nGrey13;
-                tools::Long nGrey21, nGrey22, nGrey23;
-                tools::Long nGrey31, nGrey32, nGrey33;
+                const sal_Int32 nWidth = pWriteAcc->Width();
+                const sal_Int32 nHeight = pWriteAcc->Height();
+                sal_Int32 nGrey11, nGrey12, nGrey13;
+                sal_Int32 nGrey21, nGrey22, nGrey23;
+                sal_Int32 nGrey31, nGrey32, nGrey33;
                 double fAzim = basegfx::deg2rad(mnAzimuthAngle100 * 0.01);
                 double fElev = basegfx::deg2rad(mnElevationAngle100 * 0.01);
-                std::unique_ptr<tools::Long[]> pHMap(new tools::Long[nWidth + 2]);
-                std::unique_ptr<tools::Long[]> pVMap(new tools::Long[nHeight + 2]);
-                tools::Long nX, nY, nNx, nNy, nDotL;
-                const tools::Long nLx = FRound(cos(fAzim) * cos(fElev) * 255.0);
-                const tools::Long nLy = FRound(sin(fAzim) * cos(fElev) * 255.0);
-                const tools::Long nLz = FRound(sin(fElev) * 255.0);
+                std::unique_ptr<sal_Int32[]> pHMap(new sal_Int32[nWidth + 2]);
+                std::unique_ptr<sal_Int32[]> pVMap(new sal_Int32[nHeight + 2]);
+                sal_Int32 nX, nY, nNx, nNy, nDotL;
+                const sal_Int32 nLx = FRound(cos(fAzim) * cos(fElev) * 255.0);
+                const sal_Int32 nLy = FRound(sin(fAzim) * cos(fElev) * 255.0);
+                const sal_Int32 nLz = FRound(sin(fElev) * 255.0);
                 const auto nZ2 = ((6 * 255) / 4) * ((6 * 255) / 4);
-                const tools::Long nNzLz = ((6 * 255) / 4) * nLz;
+                const sal_Int32 nNzLz = ((6 * 255) / 4) * nLz;
                 const sal_uInt8 cLz
-                    = static_cast<sal_uInt8>(std::clamp(nLz, tools::Long(0), tools::Long(255)));
+                    = static_cast<sal_uInt8>(std::clamp(nLz, sal_Int32(0), sal_Int32(255)));
 
                 // fill mapping tables
                 pHMap[0] = 0;
@@ -115,7 +115,7 @@ BitmapEx BitmapEmbossGreyFilter::execute(BitmapEx const& rBitmapEx) const
 
                         if (nX < (nWidth - 1))
                         {
-                            const tools::Long nNextX = pHMap[nX + 3];
+                            const sal_Int32 nNextX = pHMap[nX + 3];
 
                             nGrey11 = nGrey12;
                             nGrey12 = nGrey13;
