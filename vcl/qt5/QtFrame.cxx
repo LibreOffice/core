@@ -417,24 +417,71 @@ void QtFrame::DrawMenuBar() { /* not needed */}
 
 void QtFrame::SetExtendedFrameStyle(SalExtStyle /*nExtStyle*/) { /* not needed */}
 
+void QtFrame::modalReparent(bool bVisible)
+{
+#ifndef NDEBUG
+    auto* pSalInst(static_cast<QtInstance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    assert(pSalInst->IsMainThread());
+    assert(!asChild()->isVisible());
+    assert(asChild()->isModal());
+#endif
+
+    if (!bVisible)
+    {
+        m_pQWidget->setParent(m_pParent ? m_pParent->asChild() : nullptr,
+                              m_pQWidget->windowFlags());
+        return;
+    }
+
+    if (!QGuiApplication::modalWindow())
+        return;
+
+    QtInstance* pInst = static_cast<QtInstance*>(GetSalData()->m_pInstance);
+    for (auto* pFrame : pInst->getFrames())
+    {
+        QWidget* pQWidget = static_cast<QtFrame*>(pFrame)->asChild();
+        if (pQWidget->windowHandle() == QGuiApplication::modalWindow())
+        {
+            m_pQWidget->setParent(pQWidget, m_pQWidget->windowFlags());
+            break;
+        }
+    }
+}
+
 void QtFrame::Show(bool bVisible, bool bNoActivate)
 {
     assert(m_pQWidget);
     if (bVisible == asChild()->isVisible())
         return;
 
+    auto* pSalInst(static_cast<QtInstance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+
+    if (!bVisible) // hide
+    {
+        pSalInst->RunInMainThread([this]() {
+            asChild()->hide();
+            if (m_pQWidget->isModal())
+                modalReparent(false);
+        });
+        return;
+    }
+
+    // show
     SetDefaultSize();
     SetDefaultPos();
 
-    auto* pSalInst(static_cast<QtInstance*>(GetSalData()->m_pInstance));
-    assert(pSalInst);
-    pSalInst->RunInMainThread([this, bVisible, bNoActivate]() {
-        asChild()->setVisible(bVisible);
-        asChild()->raise();
+    pSalInst->RunInMainThread([this, bNoActivate]() {
+        QWidget* const pChild = asChild();
+        if (m_pQWidget->isModal())
+            modalReparent(true);
+        pChild->show();
+        pChild->raise();
         if (!bNoActivate && !isPopup())
         {
-            asChild()->activateWindow();
-            asChild()->setFocus();
+            pChild->activateWindow();
+            pChild->setFocus();
         }
     });
 }
@@ -610,7 +657,7 @@ SalFrame* QtFrame::GetParent() const { return m_pParent; }
 
 void QtFrame::SetModal(bool bModal)
 {
-    if (!isWindow())
+    if (!isWindow() || asChild()->isModal() == bModal)
         return;
 
     auto* pSalInst(static_cast<QtInstance*>(GetSalData()->m_pInstance));
@@ -622,12 +669,20 @@ void QtFrame::SetModal(bool bModal)
 
         // modality change is only effective if the window is hidden
         if (bWasVisible)
+        {
             pChild->hide();
+            if (!bModal)
+                modalReparent(false);
+        }
 
         pChild->setWindowModality(bModal ? Qt::WindowModal : Qt::NonModal);
 
         if (bWasVisible)
+        {
+            if (bModal)
+                modalReparent(true);
             pChild->show();
+        }
     });
 }
 
@@ -1180,7 +1235,14 @@ void QtFrame::SimulateKeyPress(sal_uInt16 nKeyCode)
     SAL_WARN("vcl.qt", "missing simulate keypress " << nKeyCode);
 }
 
-void QtFrame::SetParent(SalFrame* pNewParent) { m_pParent = static_cast<QtFrame*>(pNewParent); }
+void QtFrame::SetParent(SalFrame* pNewParent)
+{
+    if (m_pParent == pNewParent)
+        return;
+    m_pParent = static_cast<QtFrame*>(pNewParent);
+    if (!m_pTopLevel)
+        m_pQWidget->setParent(m_pParent->asChild(), m_pQWidget->windowFlags());
+}
 
 void QtFrame::SetPluginParent(SystemParentData* /*pNewParent*/)
 {
