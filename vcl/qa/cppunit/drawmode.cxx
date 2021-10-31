@@ -333,8 +333,7 @@ void VclDrawModeTest::testDrawModeBitmapEx()
     const StyleSettings aStyleSettings;
 
     Bitmap aBmp(Size(1, 1), vcl::PixelFormat::N24_BPP);
-    BitmapWriteAccess aBmpAccess(aBmp);
-    aBmpAccess.SetPixel(0, 0, BitmapColor(COL_RED));
+    BitmapWriteAccess(aBmp).SetPixel(0, 0, BitmapColor(COL_RED));
 
     BitmapEx aBmpEx(aBmp);
 
