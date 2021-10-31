@@ -138,7 +138,7 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     m_pParent = pParent;
 
     Qt::WindowFlags aWinFlags(Qt::Widget);
-    if (!(nStyle & SalFrameStyleFlags::SYSTEMCHILD))
+    if (!(nStyle & SalFrameStyleFlags::SYSTEMCHILD) && (nStyle != SalFrameStyleFlags::NONE))
     {
         if (nStyle & SalFrameStyleFlags::INTRO)
             aWinFlags = Qt::SplashScreen;
@@ -153,7 +153,7 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
         // a focus-out event, reaching the combo box. This used to map to
         // Qt::ToolTip, which doesn't feel that correct...
         else if (isPopup())
-            aWinFlags = Qt::Widget | Qt::FramelessWindowHint | Qt::BypassWindowManagerHint;
+            aWinFlags = Qt::Window | Qt::FramelessWindowHint | Qt::BypassWindowManagerHint;
         else if (nStyle & SalFrameStyleFlags::TOOLWINDOW)
             aWinFlags = Qt::Tool;
         // top level windows can't be transient in Qt, so make them dialogs, if they have a parent. At least
