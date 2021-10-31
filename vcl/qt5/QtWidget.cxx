@@ -23,6 +23,7 @@
 #include <QtFrame.hxx>
 #include <QtGraphics.hxx>
 #include <QtInstance.hxx>
+#include <QtMainWindow.hxx>
 #include <QtSvpGraphics.hxx>
 #include <QtTransferable.hxx>
 #include <QtTools.hxx>
@@ -616,7 +617,10 @@ void QtWidget::focusOutEvent(QFocusEvent*)
 }
 
 QtWidget::QtWidget(QtFrame& rFrame, Qt::WindowFlags f)
-    : QWidget(Q_NULLPTR, f)
+    : QWidget(!rFrame.GetTopLevelWindow() && rFrame.GetParent()
+                  ? static_cast<QtFrame*>(rFrame.GetParent())->asChild()
+                  : Q_NULLPTR,
+              f)
     , m_rFrame(rFrame)
     , m_bNonEmptyIMPreeditSeen(false)
     , m_nDeltaX(0)
