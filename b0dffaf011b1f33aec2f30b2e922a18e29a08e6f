@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5dcba5d_ac77ee9d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-10-31T03:42:29Z",
+      "side": 1,
+      "message": "@caolan: Qt has knowledge of its modal window stack. Not sure you want to fix anything wrt gtk, where it\u0027s just a bit annoying.",
+      "revId": "b0dffaf011b1f33aec2f30b2e922a18e29a08e6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
