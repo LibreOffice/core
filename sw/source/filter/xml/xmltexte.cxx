@@ -211,7 +211,7 @@ void SwXMLTextParagraphExport::_collectTextEmbeddedAutoStyles(
     lcl_addAspect( rObjRef, aStates,
            GetAutoFramePropMapper()->getPropertySetMapper() );
 
-    Add( XmlStyleFamily::TEXT_FRAME, rPropSet, { aStates.data(), aStates.size() } );
+    Add( XmlStyleFamily::TEXT_FRAME, rPropSet, aStates );
 }
 
 void SwXMLTextParagraphExport::_exportTextEmbedded(
@@ -276,7 +276,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         GetAutoFramePropMapper()->getPropertySetMapper() );
 
     const OUString sAutoStyle = Find( XmlStyleFamily::TEXT_FRAME,
-                                      rPropSet, sStyle, { aStates.data(), aStates.size() } );
+                                      rPropSet, sStyle, aStates );
     aStates.clear();
 
     if( !sAutoStyle.isEmpty() )

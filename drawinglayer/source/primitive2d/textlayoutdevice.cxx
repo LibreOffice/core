@@ -239,7 +239,7 @@ void TextLayouterDevice::getTextOutlines(basegfx::B2DPolyPolygonVector& rB2DPoly
         }
 
         mrDevice.GetTextOutlines(rB2DPolyPolyVector, rText, nIndex, nIndex, nLength, 0,
-                                 { aIntegerDXArray.data(), aIntegerDXArray.size() });
+                                 aIntegerDXArray);
     }
     else
     {

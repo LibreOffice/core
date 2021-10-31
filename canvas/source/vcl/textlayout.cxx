@@ -129,7 +129,7 @@ namespace vclcanvas
             maText.StartPosition,
             maText.Length,
             0,
-            {aOffsets.data(), aOffsets.size()}))
+            aOffsets))
         {
             aOutlineSequence.reserve(aOutlines.size());
             sal_Int32 nIndex (0);
@@ -343,7 +343,7 @@ namespace vclcanvas
 
             rOutDev.DrawTextArray( rOutpos,
                                    maText.Text,
-                                   { aOffsets.data(), aOffsets.size() },
+                                   aOffsets,
                                    ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
                                    ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) );
         }

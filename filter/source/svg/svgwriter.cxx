@@ -3809,7 +3809,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         {
                             vcl::Font aFont = ImplSetCorrectFontHeight();
                             maAttributeWriter.SetFontAttr( aFont );
-                            ImplWriteText( pA->GetPoint(), aText, { pA->GetDXArray().data(), pA->GetDXArray().size() }, 0 );
+                            ImplWriteText( pA->GetPoint(), aText, pA->GetDXArray(), 0 );
                         }
                         else
                         {

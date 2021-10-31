@@ -386,14 +386,14 @@ public:
     void Add(
         XmlStyleFamily nFamily,
         const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
-        const o3tl::span<XMLPropertyState> aAddStates = {}, bool bDontSeek = false );
+        o3tl::span<const XMLPropertyState> aAddStates = {}, bool bDontSeek = false );
 
     /// find style name for specified family and parent
     OUString Find(
         XmlStyleFamily nFamily,
         const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
         const OUString& rParent,
-        const o3tl::span<XMLPropertyState> aAddStates = {} ) const;
+        const o3tl::span<const XMLPropertyState> aAddStates = {} ) const;
 
     static SvXMLExportPropertyMapper *CreateShapeExtPropMapper(
                                                 SvXMLExport& rExport );

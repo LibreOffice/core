@@ -1890,7 +1890,7 @@ namespace emfio
                     pVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
                     pVDev->SetFont( maLatestFont );
                     pVDev->GetTextArray( rText, &aMyDXArray, 0, rText.getLength());
-                    pDX = { aMyDXArray.data(), aMyDXArray.size() };
+                    pDX = aMyDXArray;
                 }
                 mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition, rText, pDX, 0, rText.getLength() ) );
             }

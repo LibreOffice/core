@@ -707,7 +707,7 @@ void Calendar::ImplDraw(vcl::RenderContext& rRenderContext)
             std::vector<sal_Int32> aTmp;
             for (int k=0; k<6; ++k)
                 aTmp.push_back(mnDayOfWeekAry[k+1]);
-            rRenderContext.DrawTextArray(Point(nDayX + mnDayOfWeekAry[0], nDayY), maDayOfWeekText, {aTmp.data(), aTmp.size()});
+            rRenderContext.DrawTextArray(Point(nDayX + mnDayOfWeekAry[0], nDayY), maDayOfWeekText, aTmp);
 
             // display days
             sal_uInt16 nDaysInMonth = aDate.GetDaysInMonth();
