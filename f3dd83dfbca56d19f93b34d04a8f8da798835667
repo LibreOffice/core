@@ -51,6 +51,24 @@
       "message": "Na, the smoke test fails as well on my windows build, but I don\u0027t know where it actually fails.",
       "revId": "f3dd83dfbca56d19f93b34d04a8f8da798835667",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "616b46bd_eba45085",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-31T17:33:35Z",
+      "side": 1,
+      "message": "Open $(BUILDDIR)/workdir/Zip/smoketestdoc.sxw, and run StartTestWithDefaultOptions from Standard/Global - that is what get called in the smoketest.",
+      "parentUuid": "d11cdbd7_0ee38bd7",
+      "revId": "f3dd83dfbca56d19f93b34d04a8f8da798835667",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
