@@ -24,7 +24,10 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <vcl/BitmapTools.hxx>
 
-SvpGraphicsBackend::SvpGraphicsBackend() {}
+SvpGraphicsBackend::SvpGraphicsBackend(CairoCommon& rCairoCommon)
+    : m_rCairoCommon(rCairoCommon)
+{
+}
 
 void SvpGraphicsBackend::Init() {}
 
@@ -34,9 +37,17 @@ bool SvpGraphicsBackend::setClipRegion(const vcl::Region& /*i_rClip*/) { return 
 
 void SvpGraphicsBackend::ResetClipRegion() {}
 
-sal_uInt16 SvpGraphicsBackend::GetBitCount() const { return 0; }
+sal_uInt16 SvpGraphicsBackend::GetBitCount() const
+{
+    if (cairo_surface_get_content(m_rCairoCommon.m_pSurface) != CAIRO_CONTENT_COLOR_ALPHA)
+        return 1;
+    return 32;
+}
 
-tools::Long SvpGraphicsBackend::GetGraphicsWidth() const { return 0; }
+tools::Long SvpGraphicsBackend::GetGraphicsWidth() const
+{
+    return m_rCairoCommon.m_pSurface ? m_rCairoCommon.m_aFrameSize.getX() : 0;
+}
 
 void SvpGraphicsBackend::SetLineColor() {}
 
