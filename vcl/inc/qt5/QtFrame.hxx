@@ -132,6 +132,7 @@ class VCLPLUG_QT_PUBLIC QtFrame : public QObject, public SalFrame
     void SetWindowStateImpl(Qt::WindowStates eState);
 
     void fixICCCMwindowGroup();
+    void modalReparent(bool bVisible);
 
 public:
     QtFrame(QtFrame* pParent, SalFrameStyleFlags nSalFrameStyle, bool bUseCairo);
