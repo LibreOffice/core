@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9c0a0ef_240e7164",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-10-31T15:13:51Z",
+      "side": 1,
+      "message": "Same thing seems to have bitten others like so:\n\nhttps://git.neulandlabor.de/j3d1/json/commit/d5c0d52f3798811f9673ee952af3181721bed3d0",
+      "revId": "11b03222013f2adc6193d744736d24b4b9f41622",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
