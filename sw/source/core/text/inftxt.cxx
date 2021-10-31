@@ -581,7 +581,7 @@ SwTransparentTextGuard::~SwTransparentTextGuard()
     aVCLGradient.SetStartIntensity(100);
     aVCLGradient.SetEndIntensity(100);
     aVCLGradient.SetSteps(2);
-    m_rPaintInf.GetOut()->DrawTransparent(m_aContentMetafile, m_aPorRect.TopLeft(),
+    m_rPaintInf.GetOut()->DrawTransparentMetaFile(m_aContentMetafile, m_aPorRect.TopLeft(),
                                           m_aPorRect.SSize(), aVCLGradient);
 }
 }
