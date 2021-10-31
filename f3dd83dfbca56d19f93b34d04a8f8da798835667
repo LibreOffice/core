@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a08cec0a_4171c16d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-10-31T11:02:58Z",
+      "side": 1,
+      "message": "Hi Mike! Is there a possibility to find out which code piece is causing the error in this smoke test? On my local machine it does not come up.",
+      "revId": "f3dd83dfbca56d19f93b34d04a8f8da798835667",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
