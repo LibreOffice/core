@@ -25,10 +25,14 @@
 #include <salgdiimpl.hxx>
 #include <salgdi.hxx>
 
+#include <headless/CairoCommon.hxx>
+
 class VCL_DLLPUBLIC SvpGraphicsBackend : public SalGraphicsImpl
 {
+    CairoCommon& m_rCairoCommon;
+
 public:
-    SvpGraphicsBackend();
+    SvpGraphicsBackend(CairoCommon& rCairoCommon);
 
     void Init() override;
 

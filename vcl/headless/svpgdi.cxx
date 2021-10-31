@@ -918,7 +918,7 @@ SvpSalGraphics::SvpSalGraphics()
     , m_aFillColor(Color(0xFF, 0xFF, 0XFF))
     , m_ePaintMode(PaintMode::Over)
     , m_aTextRenderImpl(*this)
-    , m_pBackend(new SvpGraphicsBackend())
+    , m_pBackend(new SvpGraphicsBackend(m_aCairoCommon))
 {
     bool bLOKActive = comphelper::LibreOfficeKit::isActive();
     initWidgetDrawBackends(bLOKActive);
@@ -932,7 +932,7 @@ SvpSalGraphics::~SvpSalGraphics()
 void SvpSalGraphics::setSurface(cairo_surface_t* pSurface, const basegfx::B2IVector& rSize)
 {
     m_aCairoCommon.m_pSurface = pSurface;
-    m_aFrameSize = rSize;
+    m_aCairoCommon.m_aFrameSize = rSize;
     dl_cairo_surface_get_device_scale(pSurface, &m_fScale, nullptr);
     ResetClipRegion();
 }
@@ -940,18 +940,6 @@ void SvpSalGraphics::setSurface(cairo_surface_t* pSurface, const basegfx::B2IVec
 void SvpSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
 {
     rDPIX = rDPIY = 96;
-}
-
-sal_uInt16 SvpSalGraphics::GetBitCount() const
-{
-    if (cairo_surface_get_content(m_aCairoCommon.m_pSurface) != CAIRO_CONTENT_COLOR_ALPHA)
-        return 1;
-    return 32;
-}
-
-tools::Long SvpSalGraphics::GetGraphicsWidth() const
-{
-    return m_aCairoCommon.m_pSurface ? m_aFrameSize.getX() : 0;
 }
 
 void SvpSalGraphics::ResetClipRegion()
@@ -2487,8 +2475,8 @@ cairo_t* SvpSalGraphics::createTmpCompatibleCairoContext() const
     cairo_surface_t *target = cairo_image_surface_create(
 #endif
             CAIRO_FORMAT_ARGB32,
-            m_aFrameSize.getX() * m_fScale,
-            m_aFrameSize.getY() * m_fScale);
+            m_aCairoCommon.m_aFrameSize.getX() * m_fScale,
+            m_aCairoCommon.m_aFrameSize.getY() * m_fScale);
 
     dl_cairo_surface_set_device_scale(target, m_fScale, m_fScale);
 
@@ -2539,8 +2527,8 @@ void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, cons
     basegfx::B2IRange aIntExtents(basegfx::unotools::b2ISurroundingRangeFromB2DRange(rExtents));
     sal_Int32 nExtentsLeft(aIntExtents.getMinX()), nExtentsTop(aIntExtents.getMinY());
     sal_Int32 nExtentsRight(aIntExtents.getMaxX()), nExtentsBottom(aIntExtents.getMaxY());
-    sal_Int32 nWidth = m_aFrameSize.getX();
-    sal_Int32 nHeight = m_aFrameSize.getY();
+    sal_Int32 nWidth = m_aCairoCommon.m_aFrameSize.getX();
+    sal_Int32 nHeight = m_aCairoCommon.m_aFrameSize.getY();
     nExtentsLeft = std::max<sal_Int32>(nExtentsLeft, 0);
     nExtentsTop = std::max<sal_Int32>(nExtentsTop, 0);
     nExtentsRight = std::min<sal_Int32>(nExtentsRight, nWidth);
