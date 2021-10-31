@@ -71,7 +71,6 @@ namespace svt
             { "AutoExtensionBox",       CHECKBOX_AUTOEXTENSION,         PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
             { "CancelButton",           PUSHBUTTON_CANCEL,              PROPERTY_FLAGS_COMMON | PropFlags::Text          },
             { "CurrentFolderText",      FIXEDTEXT_CURRENTFOLDER,        PROPERTY_FLAGS_COMMON | PropFlags::Text          },
-            { "DefaultLocationButton",  TOOLBOXBUTTON_DEFAULT_LOCATION, PROPERTY_FLAGS_COMMON                               },
             { "FileURLEdit",            EDIT_FILEURL,                   PROPERTY_FLAGS_COMMON | PropFlags::Text          },
             { "FileURLEditLabel",       EDIT_FILEURL_LABEL,             PROPERTY_FLAGS_COMMON | PropFlags::Text          },
             { "FileView",               CONTROL_FILEVIEW,               PROPERTY_FLAGS_COMMON                               },
