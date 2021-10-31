@@ -34,6 +34,24 @@
       "parentUuid": "efb10dde_33a6ef08",
       "revId": "5b0ae3b59cd2cccfb72d991657366eb2a69bff49",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02d5ad4d_38ed2e46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-31T10:39:07Z",
+      "side": 1,
+      "message": "FTR: I checked https://bz.apache.org/ooo/show_bug.cgi?id\u003d82676 - it has no SXCs; and I also tried https://bz.apache.org/ooo/attachment.cgi?id\u003d82676 - it is a DOC. So I\u0027m lost.",
+      "parentUuid": "dbc7c2e9_c2ed404c",
+      "revId": "5b0ae3b59cd2cccfb72d991657366eb2a69bff49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
