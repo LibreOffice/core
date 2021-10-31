@@ -116,6 +116,8 @@ QtFilePicker::QtFilePicker(css::uno::Reference<css::uno::XComponentContext> cons
     // update automatic file extension when filter is changed
     connect(m_pFileDialog.get(), SIGNAL(filterSelected(const QString&)), this,
             SLOT(updateAutomaticFileExtension()));
+
+    connect(m_pFileDialog.get(), SIGNAL(finished(int)), this, SLOT(finished(int)));
 }
 
 QtFilePicker::~QtFilePicker()
@@ -152,18 +154,8 @@ void SAL_CALL QtFilePicker::setTitle(const OUString& title)
         [this, &title]() { m_pFileDialog->setWindowTitle(toQString(title)); });
 }
 
-sal_Int16 SAL_CALL QtFilePicker::execute()
+void QtFilePicker::prepareExecute()
 {
-    SolarMutexGuard g;
-    auto* pSalInst(static_cast<QtInstance*>(GetSalData()->m_pInstance));
-    assert(pSalInst);
-    if (!pSalInst->IsMainThread())
-    {
-        sal_uInt16 ret;
-        pSalInst->RunInMainThread([&ret, this]() { ret = execute(); });
-        return ret;
-    }
-
     QWidget* pTransientParent = m_pParentWidget;
     if (!pTransientParent)
     {
@@ -191,13 +183,54 @@ sal_Int16 SAL_CALL QtFilePicker::execute()
     m_pFileDialog->setParent(pTransientParent, m_pFileDialog->windowFlags());
     m_pFileDialog->show();
     xDesktop->addTerminateListener(this);
-    int result = m_pFileDialog->exec();
+}
+
+void QtFilePicker::finished(int nResult)
+{
+    uno::Reference<css::frame::XDesktop> xDesktop(css::frame::Desktop::create(m_context),
+                                                  UNO_QUERY_THROW);
     xDesktop->removeTerminateListener(this);
     m_pFileDialog->setParent(nullptr, m_pFileDialog->windowFlags());
+
+    if (m_xClosedListener.is())
+    {
+        const sal_Int16 nRet = (QFileDialog::Rejected == nResult) ? ExecutableDialogResults::CANCEL
+                                                                  : ExecutableDialogResults::OK;
+        css::ui::dialogs::DialogClosedEvent aEvent(*this, nRet);
+        m_xClosedListener->dialogClosed(aEvent);
+        m_xClosedListener.clear();
+    }
+}
+
+sal_Int16 SAL_CALL QtFilePicker::execute()
+{
+    SolarMutexGuard g;
+    auto* pSalInst(static_cast<QtInstance*>(GetSalData()->m_pInstance));
+    assert(pSalInst);
+    if (!pSalInst->IsMainThread())
+    {
+        sal_uInt16 ret;
+        pSalInst->RunInMainThread([&ret, this]() { ret = execute(); });
+        return ret;
+    }
+
+    prepareExecute();
+    int result = m_pFileDialog->exec();
 
     if (QFileDialog::Rejected == result)
         return ExecutableDialogResults::CANCEL;
     return ExecutableDialogResults::OK;
+}
+
+// XAsynchronousExecutableDialog functions
+void SAL_CALL QtFilePicker::setDialogTitle(const OUString& _rTitle) { setTitle(_rTitle); }
+
+void SAL_CALL
+QtFilePicker::startExecuteModal(const Reference<css::ui::dialogs::XDialogClosedListener>& xListener)
+{
+    m_xClosedListener = xListener;
+    prepareExecute();
+    m_pFileDialog->show();
 }
 
 void SAL_CALL QtFilePicker::setMultiSelectionMode(sal_Bool multiSelect)
