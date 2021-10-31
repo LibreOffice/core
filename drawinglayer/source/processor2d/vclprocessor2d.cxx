@@ -307,6 +307,14 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                 aText = aFilled.makeStringAndClear();
                 nPos = 0;
                 nLen = nChars;
+
+                if (!aTransformedDXArray.empty())
+                {
+                    sal_Int32 nDX = aTransformedDXArray[0];
+                    aTransformedDXArray.resize(nLen);
+                    for (sal_Int32 i = 1; i < nLen; ++i)
+                        aTransformedDXArray[i] = aTransformedDXArray[i - 1] + nDX;
+                }
             }
 
             if (!aTransformedDXArray.empty())
