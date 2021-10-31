@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c11cfc19_23959399",
+        "filename": "comphelper/source/container/enumhelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2021-10-31T19:30:11Z",
+      "side": 1,
+      "message": "@Noel, is this necessary ?",
+      "range": {
+        "startLine": 51,
+        "startChar": 9,
+        "endLine": 51,
+        "endChar": 19
+      },
+      "revId": "ccc06855c1e149972cfd9f3417f6642093026412",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
