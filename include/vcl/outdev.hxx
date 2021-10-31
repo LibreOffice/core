@@ -1497,7 +1497,7 @@ public:
                                     const basegfx::B2DPolyPolygon& rB2DPolyPoly,
                                     double fTransparency);
 
-    void                        DrawTransparent(
+    void                        DrawTransparentMetaFile(
                                         const GDIMetaFile& rMtf, const Point& rPos, const Size& rSize,
                                         const Gradient& rTransparenceGradient );
 
