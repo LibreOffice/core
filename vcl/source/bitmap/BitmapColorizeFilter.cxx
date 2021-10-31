@@ -23,13 +23,13 @@ BitmapEx BitmapColorizeFilter::execute(BitmapEx const& rBitmapEx) const
         return rBitmapEx;
 
     BitmapColor aBitmapColor;
-    const tools::Long nW = pWriteAccess->Width();
-    const tools::Long nH = pWriteAccess->Height();
+    const sal_Int32 nW = pWriteAccess->Width();
+    const sal_Int32 nH = pWriteAccess->Height();
     std::vector<sal_uInt8> aMapR(256);
     std::vector<sal_uInt8> aMapG(256);
     std::vector<sal_uInt8> aMapB(256);
-    tools::Long nX;
-    tools::Long nY;
+    sal_Int32 nX;
+    sal_Int32 nY;
 
     const sal_uInt8 cR = maColor.GetRed();
     const sal_uInt8 cG = maColor.GetGreen();

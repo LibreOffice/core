@@ -39,20 +39,20 @@ BitmapEx BitmapSobelGreyFilter::execute(BitmapEx const& rBitmapEx) const
             if (pWriteAcc)
             {
                 BitmapColor aGrey(sal_uInt8(0));
-                const tools::Long nWidth = pWriteAcc->Width();
-                const tools::Long nHeight = pWriteAcc->Height();
-                const tools::Long nMask111 = -1, nMask121 = 0, nMask131 = 1;
-                const tools::Long nMask211 = -2, nMask221 = 0, nMask231 = 2;
-                const tools::Long nMask311 = -1, nMask321 = 0, nMask331 = 1;
-                const tools::Long nMask112 = 1, nMask122 = 2, nMask132 = 1;
-                const tools::Long nMask212 = 0, nMask222 = 0, nMask232 = 0;
-                const tools::Long nMask312 = -1, nMask322 = -2, nMask332 = -1;
-                tools::Long nGrey11, nGrey12, nGrey13;
-                tools::Long nGrey21, nGrey22, nGrey23;
-                tools::Long nGrey31, nGrey32, nGrey33;
+                const sal_Int32 nWidth = pWriteAcc->Width();
+                const sal_Int32 nHeight = pWriteAcc->Height();
+                const sal_Int32 nMask111 = -1, nMask121 = 0, nMask131 = 1;
+                const sal_Int32 nMask211 = -2, nMask221 = 0, nMask231 = 2;
+                const sal_Int32 nMask311 = -1, nMask321 = 0, nMask331 = 1;
+                const sal_Int32 nMask112 = 1, nMask122 = 2, nMask132 = 1;
+                const sal_Int32 nMask212 = 0, nMask222 = 0, nMask232 = 0;
+                const sal_Int32 nMask312 = -1, nMask322 = -2, nMask332 = -1;
+                sal_Int32 nGrey11, nGrey12, nGrey13;
+                sal_Int32 nGrey21, nGrey22, nGrey23;
+                sal_Int32 nGrey31, nGrey32, nGrey33;
                 std::unique_ptr<long[]> pHMap(new long[nWidth + 2]);
                 std::unique_ptr<long[]> pVMap(new long[nHeight + 2]);
-                tools::Long nX, nY, nSum1, nSum2;
+                sal_Int32 nX, nY, nSum1, nSum2;
 
                 // fill mapping tables
                 pHMap[0] = 0;
@@ -117,16 +117,16 @@ BitmapEx BitmapSobelGreyFilter::execute(BitmapEx const& rBitmapEx) const
                         nSum1 += nMask331 * nGrey33;
                         nSum2 += nMask332 * nGrey33;
 
-                        nSum1 = static_cast<tools::Long>(
+                        nSum1 = static_cast<sal_Int32>(
                             sqrt(static_cast<double>(nSum1 * nSum1 + nSum2 * nSum2)));
 
                         aGrey.SetIndex(~static_cast<sal_uInt8>(
-                            std::clamp(nSum1, tools::Long(0), tools::Long(255))));
+                            std::clamp(nSum1, sal_Int32(0), sal_Int32(255))));
                         pWriteAcc->SetPixelOnData(pScanline, nX, aGrey);
 
                         if (nX < (nWidth - 1))
                         {
-                            const tools::Long nNextX = pHMap[nX + 3];
+                            const sal_Int32 nNextX = pHMap[nX + 3];
 
                             nGrey11 = nGrey12;
                             nGrey12 = nGrey13;
