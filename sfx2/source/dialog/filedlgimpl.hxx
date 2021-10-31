@@ -87,6 +87,7 @@ namespace sfx2
         bool                    mbDeleteMatcher         : 1;
         bool                    mbInsert                : 1;
         bool                    mbSystemPicker          : 1;
+        bool                    mbAsyncPicker           : 1;
         bool                    mbPwdCheckBoxState      : 1;
         bool                    mbSelection             : 1;
         bool                    mbSelectionEnabled      : 1;
@@ -206,7 +207,7 @@ namespace sfx2
         void                    SetContext( FileDialogHelper::Context _eNewContext );
         OUString                getInitPath( const OUString& _rFallback, const sal_Int32 _nFallbackToken );
 
-        bool             isSystemFilePicker() const { return mbSystemPicker; }
+        bool             isAsyncFilePicker() const { return mbAsyncPicker; }
         bool             isPasswordEnabled() const { return mbIsPwdEnabled; }
 
         css::uno::Reference<css::awt::XWindow> GetFrameInterface();
