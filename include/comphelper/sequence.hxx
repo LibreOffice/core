@@ -188,8 +188,10 @@ namespace comphelper
     inline css::uno::Sequence< DstElementType > containerToSequence( const SrcType& i_Container )
     {
         using ::std::size, ::std::begin, ::std::end;
-        css::uno::Sequence< DstElementType > result( size(i_Container) );
-        ::std::copy( begin(i_Container), end(i_Container), result.getArray() );
+        const ::std::size_t nSize = size(i_Container);
+        css::uno::Sequence<DstElementType> result(nSize);
+        if (nSize > 0)
+            ::std::copy( begin(i_Container), end(i_Container), result.getArray() );
         return result;
     }
 
