@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1227e1aa_068f98e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-10-31T09:03:40Z",
+      "side": 1,
+      "message": "I noticed this when testing https://bugs.documentfoundation.org/show_bug.cgi?id\u003d145285 with gen rendering.\nI had a log containing \"SvtFileDialog::getControl: invalid id!\"\n\nIt\u0027s like this since:\ncommit f98218a9396780e2a9ef3d0e3a2e3ccd18dbc785\nAuthor: Oliver Bolte \u003cobo@openoffice.org\u003e\nDate:   Wed Apr 13 07:48:45 2005 +0000\n\n    INTEGRATION: CWS visibility03 (1.1.2); FILE ADDED\n    2005/03/24 16:43:58 mhu 1.1.2.1: #i45006# Factored out and moved from svtools/source/filepicker/\n",
+      "revId": "491c08d4ae745415f82b2c7f70dac98938356c5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
