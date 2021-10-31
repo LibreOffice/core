@@ -16,6 +16,23 @@
       "message": "Same thing seems to have bitten others like so:\n\nhttps://git.neulandlabor.de/j3d1/json/commit/d5c0d52f3798811f9673ee952af3181721bed3d0",
       "revId": "11b03222013f2adc6193d744736d24b4b9f41622",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afca2f95_a9cb60c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-10-31T16:33:42Z",
+      "side": 1,
+      "message": "Interesting! This looks like a bug in the respective CRT, because std::copy is required to only dereference iterators when there are elements.\n\nBut of course, it makes sense to workaround that. Or maybe just revert the change of the valarrayToSequence algorithm switch. I just thought it would be a good idea to unify things :-D",
+      "revId": "11b03222013f2adc6193d744736d24b4b9f41622",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
