@@ -807,6 +807,19 @@ static bool lcl_isSystemFilePicker( const uno::Reference< XExecutableDialog >& _
 
 namespace {
 
+bool lcl_isAsyncFilePicker( const uno::Reference< XExecutableDialog >& _rxFP )
+{
+    try
+    {
+        uno::Reference<XAsynchronousExecutableDialog> xSI(_rxFP, UNO_QUERY);
+        return xSI.is();
+    }
+    catch( const Exception& )
+    {
+    }
+    return false;
+}
+
 enum open_or_save_t {OPEN, SAVE, UNDEFINED};
 
 }
@@ -917,6 +930,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     // create the picker component
     mxFileDlg.set(xFactory->createInstance( aService ), css::uno::UNO_QUERY);
     mbSystemPicker = lcl_isSystemFilePicker( mxFileDlg );
+    mbAsyncPicker = lcl_isAsyncFilePicker(mxFileDlg);
 
     uno::Reference< XInitialization > xInit( mxFileDlg, UNO_QUERY );
 
@@ -1328,23 +1342,18 @@ void FileDialogHelper_Impl::implStartExecute()
 {
     DBG_ASSERT( mxFileDlg.is(), "invalid file dialog" );
 
+    assert(mbAsyncPicker);
     preExecute();
 
-    if ( mbSystemPicker )
+    try
     {
+        uno::Reference< XAsynchronousExecutableDialog > xAsyncDlg( mxFileDlg, UNO_QUERY );
+        if ( xAsyncDlg.is() )
+            xAsyncDlg->startExecuteModal( this );
     }
-    else
+    catch( const Exception& )
     {
-        try
-        {
-            uno::Reference< XAsynchronousExecutableDialog > xAsyncDlg( mxFileDlg, UNO_QUERY );
-            if ( xAsyncDlg.is() )
-                xAsyncDlg->startExecuteModal( this );
-        }
-        catch( const Exception& )
-        {
-            TOOLS_WARN_EXCEPTION( "sfx.dialog", "FileDialogHelper_Impl::implDoExecute" );
-        }
+        TOOLS_WARN_EXCEPTION( "sfx.dialog", "FileDialogHelper_Impl::implDoExecute" );
     }
 }
 
@@ -2592,7 +2601,7 @@ void FileDialogHelper::StartExecuteModal( const Link<FileDialogHelper*,void>& rE
 {
     m_aDialogClosedLink = rEndDialogHdl;
     m_nError = ERRCODE_NONE;
-    if ( mpImpl->isSystemFilePicker() )
+    if (!mpImpl->isAsyncFilePicker())
         Application::PostUserEvent( LINK( this, FileDialogHelper, ExecuteSystemFilePicker ) );
     else
         mpImpl->implStartExecute();
