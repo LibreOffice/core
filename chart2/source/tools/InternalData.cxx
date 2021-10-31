@@ -69,6 +69,9 @@ private:
 template< typename T >
     Sequence< T > lcl_ValarrayToSequence( const std::valarray< T > & rValarray )
 {
+    if (!size(rValarray))
+        return Sequence<T>();
+
     return comphelper::containerToSequence(rValarray);
 }
 
