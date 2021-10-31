@@ -740,7 +740,7 @@ namespace oglcanvas
                                           rTxt.StartPosition,
                                           rTxt.Length,
                                           0,
-                                          { aDXArray.data(), aDXArray.size() } );
+                                          aDXArray);
                 }
                 else
                 {

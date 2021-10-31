@@ -191,7 +191,7 @@ namespace cppcanvas::internal
 
                 rVDev.GetTextArray( rText, &aCharWidths, nStartPos, nLen );
 
-                return setupDXArray( { aCharWidths.data(), aCharWidths.size() }, nLen, rState );
+                return setupDXArray( aCharWidths, nLen, rState );
             }
 
             ::basegfx::B2DPoint adaptStartPoint( const ::basegfx::B2DPoint&     rStartPoint,

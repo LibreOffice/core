@@ -809,7 +809,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 case MetaActionType::TEXTARRAY:
                 {
                     const MetaTextArrayAction* pA = static_cast<const MetaTextArrayAction*>(pAction);
-                    m_rOuterFace.DrawTextArray( pA->GetPoint(), pA->GetText(), { pA->GetDXArray().data(), pA->GetDXArray().size() }, pA->GetIndex(), pA->GetLen() );
+                    m_rOuterFace.DrawTextArray( pA->GetPoint(), pA->GetText(), pA->GetDXArray(), pA->GetIndex(), pA->GetLen() );
                 }
                 break;
 

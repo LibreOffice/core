@@ -3392,7 +3392,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
 
                                     aTmpFont.SetPhysFont(*GetRefDevice());
                                     aTmpFont.QuickGetTextSize( GetRefDevice(), aText, nTextStart, nTextLen, &aTmpDXArray );
-                                    pDXArray = o3tl::span(aTmpDXArray.data(), aTmpDXArray.size());
+                                    pDXArray = aTmpDXArray;
 
                                     // add a meta file comment if we record to a metafile
                                     if( bMetafileValid )
@@ -3418,7 +3418,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     // crash when accessing 0 pointer in pDXArray
                                     aTmpFont.SetPhysFont(*GetRefDevice());
                                     aTmpFont.QuickGetTextSize( GetRefDevice(), aText, 0, aText.getLength(), &aTmpDXArray );
-                                    pDXArray = o3tl::span(aTmpDXArray.data(), aTmpDXArray.size());
+                                    pDXArray = aTmpDXArray;
                                 }
 
                                 tools::Long nTxtWidth = rTextPortion.GetSize().Width();

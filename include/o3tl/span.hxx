@@ -26,6 +26,7 @@ namespace o3tl { using std::span; }
 #include <cstddef>
 #include <iterator>
 #include <type_traits>
+#include <vector>
 
 namespace o3tl {
 
@@ -57,6 +58,10 @@ public:
         // not terribly sure about this, might need to strengthen it
         assert(a != nullptr || len == 0);
     }
+
+    template<typename T2>
+    constexpr span(const std::vector<T2>& vec)
+        : data_(vec.data()), size_(vec.size()) {}
 
     /** for assigning from span<T> to span<const T> */
     constexpr span (const span<typename std::remove_const<T>::type>& other) noexcept

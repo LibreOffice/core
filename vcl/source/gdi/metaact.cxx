@@ -638,7 +638,7 @@ MetaTextArrayAction::~MetaTextArrayAction()
 
 void MetaTextArrayAction::Execute( OutputDevice* pOut )
 {
-    pOut->DrawTextArray( maStartPt, maStr, { maDXAry.data(), maDXAry.size() }, mnIndex, mnLen );
+    pOut->DrawTextArray( maStartPt, maStr, maDXAry, mnIndex, mnLen );
 }
 
 rtl::Reference<MetaAction> MetaTextArrayAction::Clone() const

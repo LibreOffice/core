@@ -1114,7 +1114,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 rInf.GetFrame()->SwitchHorizontalToVertical( aTextOriginPos );
 
             rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                { aKernArray.data(), aKernArray.size() }, sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
+                aKernArray, sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
 
             return;
         }
@@ -1200,20 +1200,20 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             {
                                 aKernArray[0] = rInf.GetWidth() + nSpaceAdd;
                                 rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                                    { aKernArray.data(), aKernArray.size() }, sal_Int32(rInf.GetIdx()), 1);
+                                    aKernArray, sal_Int32(rInf.GetIdx()), 1);
                             }
                             else
                             {
                                 aKernArray[sal_Int32(rInf.GetLen()) - 2] += nSpaceAdd;
                                 rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                                    { aKernArray.data(), aKernArray.size() }, sal_Int32(rInf.GetIdx()),
+                                    aKernArray, sal_Int32(rInf.GetIdx()),
                                     sal_Int32(rInf.GetLen()));
                             }
                         }
                         else
                         {
                             rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                                { aKernArray.data(), aKernArray.size() }, sal_Int32(rInf.GetIdx()),
+                                aKernArray, sal_Int32(rInf.GetIdx()),
                                 sal_Int32(rInf.GetLen()));
                         }
                     }
@@ -1230,7 +1230,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         }
 
                         rInf.GetOut().DrawTextArray(aTextOriginPos,
-                                rInf.GetText(), { aKernArray.data(), aKernArray.size() },
+                                rInf.GetText(), aKernArray,
                                 sal_Int32(rInf.GetIdx()),
                                 sal_Int32(rInf.GetLen()));
                     }
@@ -1247,7 +1247,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     aKernArray[i] += nGridAddSum;
                 }
                 rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                    { aKernArray.data(), aKernArray.size() }, sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
+                    aKernArray, sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
             }
             return;
         }
@@ -1401,18 +1401,18 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         aKernArray[0] = rInf.GetWidth() + nSpaceAdd;
 
                         rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                             { aKernArray.data(), aKernArray.size() }, sal_Int32(rInf.GetIdx()), 1 );
+                             aKernArray, sal_Int32(rInf.GetIdx()), 1 );
                     }
                     else
                     {
                         aKernArray[ sal_Int32(rInf.GetLen()) - 2 ] += nSpaceAdd;
                         rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                            { aKernArray.data(), aKernArray.size() }, sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
+                            aKernArray, sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
                     }
                 }
                 else
                     rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                            { aKernArray.data(), aKernArray.size() }, sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
+                            aKernArray, sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
             }
             else
             {
@@ -1651,9 +1651,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 rInf.GetFrame()->SwitchHorizontalToVertical( aTextOriginPos );
 
             rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                         { aKernArray.data(), aKernArray.size() }, sal_Int32(rInf.GetIdx()), 1 );
+                         aKernArray, sal_Int32(rInf.GetIdx()), 1 );
             if( bBullet )
-                rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, { aKernArray.data(), aKernArray.size() },
+                rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, aKernArray,
                                              rInf.GetIdx() ? 1 : 0, 1 );
         }
         else
@@ -1842,7 +1842,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             : sal_Int32(rInf.GetIdx());
                 aGlyphsKey = SwTextGlyphsKey{ &rInf.GetOut(), *pStr, nTmpIdx, nLen };
                 pGlyphs = GetCachedSalLayoutGlyphs(aGlyphsKey);
-                rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, { aKernArray.data(), aKernArray.size() },
+                rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, aKernArray,
                                              nTmpIdx , nLen, SalLayoutFlags::NONE, pGlyphs );
                 if (bBullet)
                 {
@@ -1880,7 +1880,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                                 aKernArray [ i - 1 ] -= nAdd;
                         }
                     }
-                    rInf.GetOut().DrawTextArray( aTextOriginPos, aBulletOverlay, { aKernArray.data(), aKernArray.size() },
+                    rInf.GetOut().DrawTextArray( aTextOriginPos, aBulletOverlay, aKernArray,
                                                  nTmpIdx , nLen );
                     pTmpFont->SetColor( aPreviousColor );
 

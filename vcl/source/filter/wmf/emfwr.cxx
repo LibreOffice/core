@@ -881,7 +881,7 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, o
     else
     {
         nNormWidth = maVDev->GetTextArray( rText, &aOwnArray );
-        pDX = { aOwnArray.data(), aOwnArray.size() };
+        pDX = aOwnArray;
     }
 
     if( nLen > 1 )
@@ -893,7 +893,7 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, o
             if (!pDXArray.empty())
             {
                 aOwnArray.insert(aOwnArray.begin(), pDXArray.begin(), pDXArray.end());
-                pDX = { aOwnArray.data(), aOwnArray.size() };
+                pDX = aOwnArray;
             }
             const double fFactor = static_cast<double>(nWidth) / nNormWidth;
 
@@ -1371,7 +1371,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 const OUString              aText = pA->GetText().copy( pA->GetIndex(), std::min(pA->GetText().getLength() - pA->GetIndex(), pA->GetLen()) );
 
                 ImplCheckTextAttr();
-                ImplWriteTextRecord( pA->GetPoint(), aText, { pA->GetDXArray().data(), pA->GetDXArray().size() }, 0 );
+                ImplWriteTextRecord( pA->GetPoint(), aText, pA->GetDXArray(), 0 );
             }
             break;
 

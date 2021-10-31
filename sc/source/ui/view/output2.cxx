@@ -2146,7 +2146,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                                 }
 
                                 if (bPaint)
-                                    mpDev->DrawTextArray(aDrawTextPos, aShort, {aDX.data(), aDX.size()});
+                                    mpDev->DrawTextArray(aDrawTextPos, aShort, aDX);
                             }
                             else
                             {

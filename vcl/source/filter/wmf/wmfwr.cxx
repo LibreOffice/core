@@ -1185,8 +1185,8 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 OUString aTemp = pA->GetText().copy( pA->GetIndex(), std::min<sal_Int32>(pA->GetText().getLength() - pA->GetIndex(), pA->GetLen()) );
                 aSrcLineInfo = LineInfo();
                 SetAllAttr();
-                if ( !WMFRecord_Escape_Unicode( pA->GetPoint(), aTemp, { pA->GetDXArray().data(), pA->GetDXArray().size() } ) )
-                    WMFRecord_ExtTextOut( pA->GetPoint(), aTemp, { pA->GetDXArray().data(), pA->GetDXArray().size() } );
+                if ( !WMFRecord_Escape_Unicode( pA->GetPoint(), aTemp, pA->GetDXArray() ) )
+                    WMFRecord_ExtTextOut( pA->GetPoint(), aTemp, pA->GetDXArray() );
             }
             break;
 
@@ -1211,8 +1211,8 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                         aDXAry.clear();
                     aSrcLineInfo = LineInfo();
                     SetAllAttr();
-                    if ( !WMFRecord_Escape_Unicode( pA->GetPoint(), aTemp, { aDXAry.data(), aDXAry.size() } ) )
-                        WMFRecord_ExtTextOut( pA->GetPoint(), aTemp, { aDXAry.data(), aDXAry.size() } );
+                    if ( !WMFRecord_Escape_Unicode( pA->GetPoint(), aTemp, aDXAry ) )
+                        WMFRecord_ExtTextOut( pA->GetPoint(), aTemp, aDXAry );
                 }
             }
             break;

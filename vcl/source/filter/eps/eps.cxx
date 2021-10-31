@@ -768,7 +768,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 OUString  aUniStr = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
                 Point     aPoint( pA->GetPoint() );
 
-                ImplText( aUniStr, aPoint, { pA->GetDXArray().data(), pA->GetDXArray().size() }, 0, rVDev );
+                ImplText( aUniStr, aPoint, pA->GetDXArray(), 0, rVDev );
             }
             break;
 

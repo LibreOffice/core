@@ -977,7 +977,7 @@ void Outliner::PaintBullet(sal_Int32 nPara, const Point& rStartPos, const Point&
                     aTextPos.AdjustY( -(aMetric.GetDescent()) );
                 }
 
-                DrawingText(aTextPos, pPara->GetText(), 0, pPara->GetText().getLength(), o3tl::span(aBuf.data(), aBuf.size()),
+                DrawingText(aTextPos, pPara->GetText(), 0, pPara->GetText().getLength(), aBuf,
                     aSvxFont, nPara, bRightToLeftPara ? 1 : 0, nullptr, nullptr, false, false, true, nullptr, Color(), Color());
             }
             else

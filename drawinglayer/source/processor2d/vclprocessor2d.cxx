@@ -311,9 +311,7 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
 
             if (!aTransformedDXArray.empty())
             {
-                mpOutputDevice->DrawTextArray(
-                    aStartPoint, aText, { aTransformedDXArray.data(), aTransformedDXArray.size() },
-                    nPos, nLen);
+                mpOutputDevice->DrawTextArray(aStartPoint, aText, aTransformedDXArray, nPos, nLen);
             }
             else
             {

@@ -1008,7 +1008,7 @@ namespace cppcanvas::internal
                             aStrikeoutText.makeStringAndClear(),
                             0/*nStartPos*/,
                             nLen,
-                            { aStrikeoutCharWidths.data(), aStrikeoutCharWidths.size() },
+                            aStrikeoutCharWidths,
                             rParms.mrVDev,
                             rParms.mrCanvas,
                             rState,
@@ -2474,7 +2474,7 @@ namespace cppcanvas::internal
                             sText,
                             pAct->GetIndex(),
                             nLen,
-                            { pAct->GetDXArray().data(), pAct->GetDXArray().size() },
+                            pAct->GetDXArray(),
                             rFactoryParms,
                             bSubsettableActions );
                     }
@@ -2582,7 +2582,7 @@ namespace cppcanvas::internal
                             sText,
                             pAct->GetIndex(),
                             nLen,
-                            { aDXArray.data(), aDXArray.size() },
+                            aDXArray,
                             rFactoryParms,
                             bSubsettableActions );
                     }

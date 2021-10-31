@@ -470,7 +470,7 @@ void VCLXGraphics::drawTextArray( sal_Int32 x, sal_Int32 y, const OUString& rTex
         {
             aDXA[i] = rLongs[i];
         }
-        mpOutputDevice->DrawTextArray( Point( x, y ), rText, o3tl::span(aDXA.data(), aDXA.size()) );
+        mpOutputDevice->DrawTextArray( Point( x, y ), rText, aDXA );
     }
 }
 

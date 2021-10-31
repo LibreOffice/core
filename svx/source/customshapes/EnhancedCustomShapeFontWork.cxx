@@ -372,7 +372,7 @@ static void GetTextAreaOutline(
                     pVirDev->SetFont( aFont );
                 }
                 FWCharacterData aCharacterData;
-                if ( pVirDev->GetTextOutlines( aCharacterData.vOutlines, rText, 0, 0, -1, nWidth, { aDXArry.data(), aDXArry.size() } ) )
+                if ( pVirDev->GetTextOutlines( aCharacterData.vOutlines, rText, 0, 0, -1, nWidth, aDXArry ) )
                 {
                     rParagraph.vCharacters.push_back( aCharacterData );
                 }
