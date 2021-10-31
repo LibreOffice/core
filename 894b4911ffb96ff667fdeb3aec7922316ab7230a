@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3c8b53e7_5a187cda",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-10-31T00:44:01Z",
+      "side": 1,
+      "message": "I think the theory is that span should be preferred to vector anyway when taking in data as a parameter, since it\u0027s the generic data+size argument that can point to vector but also to whatever else, the same way string_view can for any string.\n\nAnd note that std::span can be constructed directly from std::vector, so you could save the typing if o3tl::span had that too (even only as ctor from std::vector).",
+      "revId": "894b4911ffb96ff667fdeb3aec7922316ab7230a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e9e92446_f77ca8bd",
         "filename": "canvas/source/directx/dx_textlayout_drawhelper.cxx",
         "patchSetId": 8
