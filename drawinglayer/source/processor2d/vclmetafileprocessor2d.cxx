@@ -2185,8 +2185,9 @@ void VclMetafileProcessor2D::processUnifiedTransparencePrimitive2D(
                 aVCLGradient.SetSteps(2);
 
                 // render it to VCL
-                mpOutputDevice->DrawTransparent(aContentMetafile, aPrimitiveRectangle.TopLeft(),
-                                                aPrimitiveRectangle.GetSize(), aVCLGradient);
+                mpOutputDevice->DrawTransparentMetaFile(
+                    aContentMetafile, aPrimitiveRectangle.TopLeft(), aPrimitiveRectangle.GetSize(),
+                    aVCLGradient);
             }
         }
     }
@@ -2234,8 +2235,8 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
                                                      true);
 
         // render it to VCL
-        mpOutputDevice->DrawTransparent(aContentMetafile, aPrimitiveRectangle.TopLeft(),
-                                        aPrimitiveRectangle.GetSize(), aVCLGradient);
+        mpOutputDevice->DrawTransparentMetaFile(aContentMetafile, aPrimitiveRectangle.TopLeft(),
+                                                aPrimitiveRectangle.GetSize(), aVCLGradient);
     }
     else
     {

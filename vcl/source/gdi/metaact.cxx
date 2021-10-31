@@ -1769,7 +1769,7 @@ MetaFloatTransparentAction::MetaFloatTransparentAction( const GDIMetaFile& rMtf,
 
 void MetaFloatTransparentAction::Execute( OutputDevice* pOut )
 {
-    pOut->DrawTransparent( maMtf, maPoint, maSize, maGradient );
+    pOut->DrawTransparentMetaFile( maMtf, maPoint, maSize, maGradient );
 }
 
 rtl::Reference<MetaAction> MetaFloatTransparentAction::Clone() const
