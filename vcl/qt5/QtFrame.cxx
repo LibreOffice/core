@@ -137,32 +137,32 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     m_nStyle = nStyle;
     m_pParent = pParent;
 
-    Qt::WindowFlags aWinFlags;
+    Qt::WindowFlags aWinFlags(Qt::Widget);
     if (!(nStyle & SalFrameStyleFlags::SYSTEMCHILD))
     {
         if (nStyle & SalFrameStyleFlags::INTRO)
-            aWinFlags |= Qt::SplashScreen;
+            aWinFlags = Qt::SplashScreen;
         // floating toolbars are frameless tool windows
         // + they must be able to receive keyboard focus
         else if ((nStyle & SalFrameStyleFlags::FLOAT)
                  && (nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION))
-            aWinFlags |= Qt::Tool | Qt::FramelessWindowHint;
+            aWinFlags = Qt::Tool | Qt::FramelessWindowHint;
         else if (nStyle & SalFrameStyleFlags::TOOLTIP)
-            aWinFlags |= Qt::ToolTip;
+            aWinFlags = Qt::ToolTip;
         // Can't use Qt::Popup, because it grabs the input focus and generates
         // a focus-out event, reaching the combo box. This used to map to
         // Qt::ToolTip, which doesn't feel that correct...
         else if (isPopup())
             aWinFlags = Qt::Widget | Qt::FramelessWindowHint | Qt::BypassWindowManagerHint;
         else if (nStyle & SalFrameStyleFlags::TOOLWINDOW)
-            aWinFlags |= Qt::Tool;
+            aWinFlags = Qt::Tool;
         // top level windows can't be transient in Qt, so make them dialogs, if they have a parent. At least
         // the plasma shell relies on this setting to skip dialogs in the window list. And Qt Xcb will just
         // set transient for the types Dialog, Sheet, Tool, SplashScreen, ToolTip, Drawer and Popup.
         else if (nStyle & SalFrameStyleFlags::DIALOG || m_pParent)
-            aWinFlags |= Qt::Dialog;
+            aWinFlags = Qt::Dialog;
         else
-            aWinFlags |= Qt::Window;
+            aWinFlags = Qt::Window;
     }
 
     if (aWinFlags == Qt::Window)
