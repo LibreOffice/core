@@ -47,16 +47,16 @@ BitmapEx BitmapSimpleColorQuantizationFilter::execute(BitmapEx const& aBitmapEx)
 
             if (pWAcc)
             {
-                const tools::Long nWidth = pRAcc->Width();
-                const tools::Long nHeight = pRAcc->Height();
+                const sal_Int32 nWidth = pRAcc->Width();
+                const sal_Int32 nHeight = pRAcc->Height();
 
                 if (pRAcc->HasPalette())
                 {
-                    for (tools::Long nY = 0; nY < nHeight; nY++)
+                    for (sal_Int32 nY = 0; nY < nHeight; nY++)
                     {
                         Scanline pScanline = pWAcc->GetScanline(nY);
                         Scanline pScanlineRead = pRAcc->GetScanline(nY);
-                        for (tools::Long nX = 0; nX < nWidth; nX++)
+                        for (sal_Int32 nX = 0; nX < nWidth; nX++)
                         {
                             auto c = pRAcc->GetPaletteColor(
                                 pRAcc->GetIndexFromData(pScanlineRead, nX));
@@ -68,11 +68,11 @@ BitmapEx BitmapSimpleColorQuantizationFilter::execute(BitmapEx const& aBitmapEx)
                 }
                 else
                 {
-                    for (tools::Long nY = 0; nY < nHeight; nY++)
+                    for (sal_Int32 nY = 0; nY < nHeight; nY++)
                     {
                         Scanline pScanline = pWAcc->GetScanline(nY);
                         Scanline pScanlineRead = pRAcc->GetScanline(nY);
-                        for (tools::Long nX = 0; nX < nWidth; nX++)
+                        for (sal_Int32 nX = 0; nX < nWidth; nX++)
                         {
                             auto c = pRAcc->GetPixelFromData(pScanlineRead, nX);
                             pWAcc->SetPixelOnData(

@@ -38,8 +38,8 @@ BitmapEx BitmapMosaicFilter::execute(BitmapEx const& rBitmapEx) const
         }
 
         bool bConditionsMet = false;
-        tools::Long nWidth(0);
-        tools::Long nHeight(0);
+        sal_Int32 nWidth(0);
+        sal_Int32 nHeight(0);
         if (pReadAcc && pWriteAcc)
         {
             nWidth = pReadAcc->Width();
@@ -50,7 +50,7 @@ BitmapEx BitmapMosaicFilter::execute(BitmapEx const& rBitmapEx) const
         if (bConditionsMet)
         {
             BitmapColor aCol;
-            tools::Long nX, nY, nX1, nX2, nY1, nY2, nSumR, nSumG, nSumB;
+            sal_Int32 nX, nY, nX1, nX2, nY1, nY2, nSumR, nSumG, nSumB;
             double fArea_1;
 
             nY1 = 0;

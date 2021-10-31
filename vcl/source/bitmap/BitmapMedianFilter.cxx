@@ -16,7 +16,7 @@
 
 #define S2(a, b)                                                                                   \
     {                                                                                              \
-        tools::Long t;                                                                             \
+        sal_Int32 t;                                                                               \
         if ((t = b - a) < 0)                                                                       \
         {                                                                                          \
             a += t;                                                                                \
@@ -63,10 +63,10 @@ BitmapEx BitmapMedianFilter::execute(BitmapEx const& rBitmapEx) const
 
         if (pWriteAcc)
         {
-            const tools::Long nWidth = pWriteAcc->Width(), nWidth2 = nWidth + 2;
-            const tools::Long nHeight = pWriteAcc->Height(), nHeight2 = nHeight + 2;
-            std::unique_ptr<tools::Long[]> pColm(new tools::Long[nWidth2]);
-            std::unique_ptr<tools::Long[]> pRows(new tools::Long[nHeight2]);
+            const sal_Int32 nWidth = pWriteAcc->Width(), nWidth2 = nWidth + 2;
+            const sal_Int32 nHeight = pWriteAcc->Height(), nHeight2 = nHeight + 2;
+            std::unique_ptr<sal_Int32[]> pColm(new sal_Int32[nWidth2]);
+            std::unique_ptr<sal_Int32[]> pRows(new sal_Int32[nHeight2]);
             std::unique_ptr<BitmapColor[]> pColRow1(new BitmapColor[nWidth2]);
             std::unique_ptr<BitmapColor[]> pColRow2(new BitmapColor[nWidth2]);
             std::unique_ptr<BitmapColor[]> pColRow3(new BitmapColor[nWidth2]);
@@ -74,10 +74,10 @@ BitmapEx BitmapMedianFilter::execute(BitmapEx const& rBitmapEx) const
             BitmapColor* pRowTmp2 = pColRow2.get();
             BitmapColor* pRowTmp3 = pColRow3.get();
             BitmapColor* pColor;
-            tools::Long nY, nX, i;
-            tools::Long nR1, nR2, nR3, nR4, nR5, nR6, nR7, nR8, nR9;
-            tools::Long nG1, nG2, nG3, nG4, nG5, nG6, nG7, nG8, nG9;
-            tools::Long nB1, nB2, nB3, nB4, nB5, nB6, nB7, nB8, nB9;
+            sal_Int32 nY, nX, i;
+            sal_Int32 nR1, nR2, nR3, nR4, nR5, nR6, nR7, nR8, nR9;
+            sal_Int32 nG1, nG2, nG3, nG4, nG5, nG6, nG7, nG8, nG9;
+            sal_Int32 nB1, nB2, nB3, nB4, nB5, nB6, nB7, nB8, nB9;
 
             // create column LUT
             for (i = 0; i < nWidth2; i++)

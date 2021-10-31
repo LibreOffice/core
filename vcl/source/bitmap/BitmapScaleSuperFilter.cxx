@@ -49,18 +49,18 @@ struct ScaleContext
 {
     BitmapReadAccess*  mpSrc;
     BitmapWriteAccess* mpDest;
-    tools::Long mnDestW;
+    sal_Int32 mnDestW;
     bool mbHMirr;
     bool mbVMirr;
-    std::vector<tools::Long> maMapIX;
-    std::vector<tools::Long> maMapIY;
+    std::vector<sal_Int32> maMapIX;
+    std::vector<sal_Int32> maMapIY;
     std::vector<BilinearWeightType> maMapFX;
     std::vector<BilinearWeightType> maMapFY;
 
     ScaleContext( BitmapReadAccess *pSrc,
                   BitmapWriteAccess *pDest,
-                  tools::Long nSrcW, tools::Long nDestW,
-                  tools::Long nSrcH, tools::Long nDestH,
+                  sal_Int32 nSrcW, sal_Int32 nDestW,
+                  sal_Int32 nSrcH, sal_Int32 nDestH,
                   bool bHMirr, bool bVMirr)
         : mpSrc(pSrc)
         , mpDest(pDest)
@@ -76,28 +76,28 @@ struct ScaleContext
         generateMap(nSrcH, nDestH, bVMirr, maMapIY, maMapFY);
     }
 
-    static void generateMap(tools::Long nSourceLength, tools::Long nDestinationLength, bool bMirrored,
-        std::vector<tools::Long> & rMapIX, std::vector<BilinearWeightType> & rMapFX)
+    static void generateMap(sal_Int32 nSourceLength, sal_Int32 nDestinationLength, bool bMirrored,
+        std::vector<sal_Int32> & rMapIX, std::vector<BilinearWeightType> & rMapFX)
     {
         const double fRevScale = (nDestinationLength > 1) ? double(nSourceLength - 1) / (nDestinationLength - 1) : 0.0;
 
-        tools::Long nTemp = nSourceLength - 2;
-        tools::Long nTempX = nSourceLength - 1;
+        sal_Int32 nTemp = nSourceLength - 2;
+        sal_Int32 nTempX = nSourceLength - 1;
 
-        for (tools::Long i = 0; i < nDestinationLength; i++)
+        for (sal_Int32 i = 0; i < nDestinationLength; i++)
         {
             double fTemp = i * fRevScale;
             if (bMirrored)
                 fTemp = nTempX - fTemp;
-            rMapIX[i] = MinMax(tools::Long(fTemp), 0, nTemp);
+            rMapIX[i] = MinMax(sal_Int32(fTemp), 0, nTemp);
             rMapFX[i] = BilinearWeightType((fTemp - rMapIX[i]) * (BilinearWeightType(1) << MAP_PRECISION));
         }
     }
 };
 
-constexpr tools::Long constScaleThreadStrip = 32;
+constexpr sal_Int32 constScaleThreadStrip = 32;
 
-typedef void (*ScaleRangeFn)(const ScaleContext & rContext, tools::Long nStartY, tools::Long nEndY);
+typedef void (*ScaleRangeFn)(const ScaleContext & rContext, sal_Int32 nStartY, sal_Int32 nEndY);
 
 template <size_t nSize> struct ScaleFunc
 {
@@ -164,22 +164,22 @@ template <size_t nSize> struct ScaleFunc
 };
 
 template <int nColorBits>
-void scaleDown (const ScaleContext &rCtx, tools::Long nStartY, tools::Long nEndY)
+void scaleDown (const ScaleContext &rCtx, sal_Int32 nStartY, sal_Int32 nEndY)
 {
     comphelper::ProfileZone pz("BitmapScaleSuperFilter::scaleDown");
     constexpr int nColorComponents = nColorBits / 8;
     static_assert(nColorComponents * 8 == nColorBits, "nColorBits must be divisible by 8");
     using ScaleFunction = ScaleFunc<nColorComponents>;
-    const tools::Long nStartX = 0;
-    const tools::Long nEndX = rCtx.mnDestW - 1;
+    const sal_Int32 nStartX = 0;
+    const sal_Int32 nEndX = rCtx.mnDestW - 1;
 
-    for (tools::Long nY = nStartY; nY <= nEndY; nY++)
+    for (sal_Int32 nY = nStartY; nY <= nEndY; nY++)
     {
-        tools::Long nTop = rCtx.mbVMirr ? (nY + 1) : nY;
-        tools::Long nBottom = rCtx.mbVMirr ? nY : (nY + 1);
+        sal_Int32 nTop = rCtx.mbVMirr ? (nY + 1) : nY;
+        sal_Int32 nBottom = rCtx.mbVMirr ? nY : (nY + 1);
 
-        tools::Long nLineStart;
-        tools::Long nLineRange;
+        sal_Int32 nLineStart;
+        sal_Int32 nLineRange;
         if (nY == nEndY)
         {
             nLineStart = rCtx.maMapIY[nY];
@@ -193,13 +193,13 @@ void scaleDown (const ScaleContext &rCtx, tools::Long nStartY, tools::Long nEndY
         }
 
         Scanline pScanDest = rCtx.mpDest->GetScanline(nY);
-        for (tools::Long nX = nStartX; nX <= nEndX; nX++)
+        for (sal_Int32 nX = nStartX; nX <= nEndX; nX++)
         {
-            tools::Long nLeft = rCtx.mbHMirr ? (nX + 1) : nX;
-            tools::Long nRight = rCtx.mbHMirr ? nX : (nX + 1);
+            sal_Int32 nLeft = rCtx.mbHMirr ? (nX + 1) : nX;
+            sal_Int32 nRight = rCtx.mbHMirr ? nX : (nX + 1);
 
-            tools::Long nRowStart;
-            tools::Long nRowRange;
+            sal_Int32 nRowStart;
+            sal_Int32 nRowRange;
             if (nX == nEndX)
             {
                 nRowStart = rCtx.maMapIX[nX];
@@ -215,7 +215,7 @@ void scaleDown (const ScaleContext &rCtx, tools::Long nStartY, tools::Long nEndY
             std::array<int, nColorComponents> sumNumbers{}; // zero-initialize
             BilinearWeightType nTotalWeightY = 0;
 
-            for (tools::Long i = 0; i<= nLineRange; i++)
+            for (sal_Int32 i = 0; i<= nLineRange; i++)
             {
                 Scanline pTmpY = rCtx.mpSrc->GetScanline(nLineStart + i);
                 Scanline pTmpX = pTmpY + nColorComponents * nRowStart;
@@ -223,7 +223,7 @@ void scaleDown (const ScaleContext &rCtx, tools::Long nStartY, tools::Long nEndY
                 std::array<int, nColorComponents> sumRows{}; // zero-initialize
                 BilinearWeightType nTotalWeightX = 0;
 
-                for (tools::Long j = 0; j <= nRowRange; j++)
+                for (sal_Int32 j = 0; j <= nRowRange; j++)
                 {
                     if (nX == nEndX)
                     {
@@ -280,18 +280,18 @@ void scaleDown (const ScaleContext &rCtx, tools::Long nStartY, tools::Long nEndY
 }
 
 template <int nColorBits>
-void scaleUp(const ScaleContext &rCtx, tools::Long nStartY, tools::Long nEndY)
+void scaleUp(const ScaleContext &rCtx, sal_Int32 nStartY, sal_Int32 nEndY)
 {
     comphelper::ProfileZone pz("BitmapScaleSuperFilter::scaleUp");
     constexpr int nColorComponents = nColorBits / 8;
     static_assert(nColorComponents * 8 == nColorBits, "nColorBits must be divisible by 8");
     using ScaleFunction = ScaleFunc<nColorComponents>;
-    const tools::Long nStartX = 0;
-    const tools::Long nEndX = rCtx.mnDestW - 1;
+    const sal_Int32 nStartX = 0;
+    const sal_Int32 nEndX = rCtx.mnDestW - 1;
 
-    for (tools::Long nY = nStartY; nY <= nEndY; nY++)
+    for (sal_Int32 nY = nStartY; nY <= nEndY; nY++)
     {
-        tools::Long nTempY = rCtx.maMapIY[nY];
+        sal_Int32 nTempY = rCtx.maMapIY[nY];
         BilinearWeightType nTempFY = rCtx.maMapFY[nY];
 
         Scanline pLine0 = rCtx.mpSrc->GetScanline(nTempY+0);
@@ -304,9 +304,9 @@ void scaleUp(const ScaleContext &rCtx, tools::Long nStartY, tools::Long nEndY)
         Scanline pColorPtr0;
         Scanline pColorPtr1;
 
-        for (tools::Long nX = nStartX; nX <= nEndX; nX++)
+        for (sal_Int32 nX = nStartX; nX <= nEndX; nX++)
         {
-            tools::Long nTempX = rCtx.maMapIX[nX];
+            sal_Int32 nTempX = rCtx.maMapIX[nX];
             BilinearWeightType nTempFX = rCtx.maMapFX[nX];
 
             pColorPtr0 = pLine0 + nTempX * nColorComponents;
@@ -327,14 +327,14 @@ class ScaleTask : public comphelper::ThreadTask
 {
     ScaleRangeFn mpScaleRangeFunction;
     const ScaleContext& mrContext;
-    tools::Long mnStartY;
-    tools::Long mnEndY;
+    sal_Int32 mnStartY;
+    sal_Int32 mnEndY;
 
 public:
     explicit ScaleTask(const std::shared_ptr<comphelper::ThreadTaskTag>& pTag,
                        ScaleRangeFn pScaleRangeFunction,
                        const ScaleContext& rContext,
-                       tools::Long nStartY, tools::Long nEndY)
+                       sal_Int32 nStartY, sal_Int32 nEndY)
         : comphelper::ThreadTask(pTag)
         , mpScaleRangeFunction(pScaleRangeFunction)
         , mrContext(rContext)
@@ -348,21 +348,21 @@ public:
     }
 };
 
-void scaleUpPalette8bit(const ScaleContext &rCtx, tools::Long nStartY, tools::Long nEndY)
+void scaleUpPalette8bit(const ScaleContext &rCtx, sal_Int32 nStartY, sal_Int32 nEndY)
 {
-    const tools::Long nStartX = 0, nEndX = rCtx.mnDestW - 1;
+    const sal_Int32 nStartX = 0, nEndX = rCtx.mnDestW - 1;
 
-    for( tools::Long nY = nStartY; nY <= nEndY; nY++ )
+    for( sal_Int32 nY = nStartY; nY <= nEndY; nY++ )
     {
-        tools::Long nTempY = rCtx.maMapIY[ nY ];
+        sal_Int32 nTempY = rCtx.maMapIY[ nY ];
         BilinearWeightType nTempFY = rCtx.maMapFY[ nY ];
         Scanline pLine0 = rCtx.mpSrc->GetScanline( nTempY );
         Scanline pLine1 = rCtx.mpSrc->GetScanline( ++nTempY );
         Scanline pScanDest = rCtx.mpDest->GetScanline( nY );
 
-        for(tools::Long nX = nStartX, nXDst = 0; nX <= nEndX; nX++ )
+        for(sal_Int32 nX = nStartX, nXDst = 0; nX <= nEndX; nX++ )
         {
-            tools::Long nTempX = rCtx.maMapIX[ nX ];
+            sal_Int32 nTempX = rCtx.maMapIX[ nX ];
             BilinearWeightType nTempFX = rCtx.maMapFX[ nX ];
 
             const BitmapColor& rCol0 = rCtx.mpSrc->GetPaletteColor( pLine0[ nTempX ] );
@@ -386,19 +386,19 @@ void scaleUpPalette8bit(const ScaleContext &rCtx, tools::Long nStartY, tools::Lo
     }
 }
 
-void scaleUpPaletteGeneral(const ScaleContext &rCtx, tools::Long nStartY, tools::Long nEndY)
+void scaleUpPaletteGeneral(const ScaleContext &rCtx, sal_Int32 nStartY, sal_Int32 nEndY)
 {
-    const tools::Long nStartX = 0, nEndX = rCtx.mnDestW - 1;
+    const sal_Int32 nStartX = 0, nEndX = rCtx.mnDestW - 1;
 
-    for( tools::Long nY = nStartY; nY <= nEndY; nY++ )
+    for( sal_Int32 nY = nStartY; nY <= nEndY; nY++ )
     {
-        tools::Long nTempY = rCtx.maMapIY[ nY ];
+        sal_Int32 nTempY = rCtx.maMapIY[ nY ];
         BilinearWeightType nTempFY = rCtx.maMapFY[ nY ];
         Scanline pScanline = rCtx.mpDest->GetScanline( nY );
 
-        for( tools::Long nX = nStartX, nXDst = 0; nX <= nEndX; nX++ )
+        for( sal_Int32 nX = nStartX, nXDst = 0; nX <= nEndX; nX++ )
         {
-            tools::Long nTempX = rCtx.maMapIX[ nX ];
+            sal_Int32 nTempX = rCtx.maMapIX[ nX ];
             BilinearWeightType nTempFX = rCtx.maMapFX[ nX ];
 
             BitmapColor aCol0 = rCtx.mpSrc->GetPaletteColor( rCtx.mpSrc->GetPixelIndex( nTempY, nTempX ) );
@@ -421,19 +421,19 @@ void scaleUpPaletteGeneral(const ScaleContext &rCtx, tools::Long nStartY, tools:
     }
 }
 
-void scaleUpNonPaletteGeneral(const ScaleContext &rCtx, tools::Long nStartY, tools::Long nEndY)
+void scaleUpNonPaletteGeneral(const ScaleContext &rCtx, sal_Int32 nStartY, sal_Int32 nEndY)
 {
-    const tools::Long nStartX = 0, nEndX = rCtx.mnDestW - 1;
+    const sal_Int32 nStartX = 0, nEndX = rCtx.mnDestW - 1;
 
-    for( tools::Long nY = nStartY; nY <= nEndY; nY++ )
+    for( sal_Int32 nY = nStartY; nY <= nEndY; nY++ )
     {
-        tools::Long nTempY = rCtx.maMapIY[ nY ];
+        sal_Int32 nTempY = rCtx.maMapIY[ nY ];
         BilinearWeightType nTempFY = rCtx.maMapFY[ nY ];
         Scanline pScanDest = rCtx.mpDest->GetScanline( nY );
 
-        for( tools::Long nX = nStartX, nXDst = 0; nX <= nEndX; nX++ )
+        for( sal_Int32 nX = nStartX, nXDst = 0; nX <= nEndX; nX++ )
         {
-            tools::Long nTempX = rCtx.maMapIX[ nX ];
+            sal_Int32 nTempX = rCtx.maMapIX[ nX ];
             BilinearWeightType nTempFX = rCtx.maMapFX[ nX ];
 
             BitmapColor aCol0 = rCtx.mpSrc->GetPixel( nTempY, nTempX );
@@ -456,16 +456,16 @@ void scaleUpNonPaletteGeneral(const ScaleContext &rCtx, tools::Long nStartY, too
     }
 }
 
-void scaleDownPalette8bit(const ScaleContext &rCtx, tools::Long nStartY, tools::Long nEndY)
+void scaleDownPalette8bit(const ScaleContext &rCtx, sal_Int32 nStartY, sal_Int32 nEndY)
 {
-    const tools::Long nStartX = 0, nEndX = rCtx.mnDestW - 1;
+    const sal_Int32 nStartX = 0, nEndX = rCtx.mnDestW - 1;
 
-    for( tools::Long nY = nStartY; nY <= nEndY; nY++ )
+    for( sal_Int32 nY = nStartY; nY <= nEndY; nY++ )
     {
-        tools::Long nTop = rCtx.mbVMirr ? ( nY + 1 ) : nY;
-        tools::Long nBottom = rCtx.mbVMirr ? nY : ( nY + 1 ) ;
+        sal_Int32 nTop = rCtx.mbVMirr ? ( nY + 1 ) : nY;
+        sal_Int32 nBottom = rCtx.mbVMirr ? nY : ( nY + 1 ) ;
 
-        tools::Long nLineStart, nLineRange;
+        sal_Int32 nLineStart, nLineRange;
         if( nY == nEndY )
         {
             nLineStart = rCtx.maMapIY[ nY ];
@@ -478,13 +478,13 @@ void scaleDownPalette8bit(const ScaleContext &rCtx, tools::Long nStartY, tools::
         }
 
         Scanline pScanDest = rCtx.mpDest->GetScanline( nY );
-        for( tools::Long nX = nStartX , nXDst = 0; nX <= nEndX; nX++ )
+        for( sal_Int32 nX = nStartX , nXDst = 0; nX <= nEndX; nX++ )
         {
-            tools::Long nLeft = rCtx.mbHMirr ? ( nX + 1 ) : nX;
-            tools::Long nRight = rCtx.mbHMirr ? nX : ( nX + 1 ) ;
+            sal_Int32 nLeft = rCtx.mbHMirr ? ( nX + 1 ) : nX;
+            sal_Int32 nRight = rCtx.mbHMirr ? nX : ( nX + 1 ) ;
 
-            tools::Long nRowStart;
-            tools::Long nRowRange;
+            sal_Int32 nRowStart;
+            sal_Int32 nRowRange;
             if( nX == nEndX )
             {
                 nRowStart = rCtx.maMapIX[ nX ];
@@ -501,7 +501,7 @@ void scaleDownPalette8bit(const ScaleContext &rCtx, tools::Long nStartY, tools::
             int nSumB = 0;
             BilinearWeightType nTotalWeightY = 0;
 
-            for(tools::Long i = 0; i<= nLineRange; i++)
+            for(sal_Int32 i = 0; i<= nLineRange; i++)
             {
                 Scanline pTmpY = rCtx.mpSrc->GetScanline( nLineStart + i );
                 int nSumRowR = 0;
@@ -509,7 +509,7 @@ void scaleDownPalette8bit(const ScaleContext &rCtx, tools::Long nStartY, tools::
                 int nSumRowB = 0;
                 BilinearWeightType nTotalWeightX = 0;
 
-                for(tools::Long j = 0; j <= nRowRange; j++)
+                for(sal_Int32 j = 0; j <= nRowRange; j++)
                 {
                     const BitmapColor& rCol = rCtx.mpSrc->GetPaletteColor( pTmpY[ nRowStart + j ] );
 
@@ -581,16 +581,16 @@ void scaleDownPalette8bit(const ScaleContext &rCtx, tools::Long nStartY, tools::
     }
 }
 
-void scaleDownPaletteGeneral(const ScaleContext &rCtx, tools::Long nStartY, tools::Long nEndY)
+void scaleDownPaletteGeneral(const ScaleContext &rCtx, sal_Int32 nStartY, sal_Int32 nEndY)
 {
-    const tools::Long nStartX = 0, nEndX = rCtx.mnDestW - 1;
+    const sal_Int32 nStartX = 0, nEndX = rCtx.mnDestW - 1;
 
-    for( tools::Long nY = nStartY; nY <= nEndY; nY++ )
+    for( sal_Int32 nY = nStartY; nY <= nEndY; nY++ )
     {
-        tools::Long nTop = rCtx.mbVMirr ? ( nY + 1 ) : nY;
-        tools::Long nBottom = rCtx.mbVMirr ? nY : ( nY + 1 ) ;
+        sal_Int32 nTop = rCtx.mbVMirr ? ( nY + 1 ) : nY;
+        sal_Int32 nBottom = rCtx.mbVMirr ? nY : ( nY + 1 ) ;
 
-        tools::Long nLineStart, nLineRange;
+        sal_Int32 nLineStart, nLineRange;
         if( nY ==nEndY )
         {
             nLineStart = rCtx.maMapIY[ nY ];
@@ -603,12 +603,12 @@ void scaleDownPaletteGeneral(const ScaleContext &rCtx, tools::Long nStartY, tool
         }
 
         Scanline pScanDest = rCtx.mpDest->GetScanline( nY );
-        for( tools::Long nX = nStartX , nXDst = 0; nX <= nEndX; nX++ )
+        for( sal_Int32 nX = nStartX , nXDst = 0; nX <= nEndX; nX++ )
         {
-            tools::Long nLeft = rCtx.mbHMirr ? ( nX + 1 ) : nX;
-            tools::Long nRight = rCtx.mbHMirr ? nX : ( nX + 1 ) ;
+            sal_Int32 nLeft = rCtx.mbHMirr ? ( nX + 1 ) : nX;
+            sal_Int32 nRight = rCtx.mbHMirr ? nX : ( nX + 1 ) ;
 
-            tools::Long nRowStart, nRowRange;
+            sal_Int32 nRowStart, nRowRange;
             if( nX == nEndX )
             {
                 nRowStart = rCtx.maMapIX[ nX ];
@@ -625,7 +625,7 @@ void scaleDownPaletteGeneral(const ScaleContext &rCtx, tools::Long nStartY, tool
             int nSumB = 0;
             BilinearWeightType nTotalWeightY = 0;
 
-            for(tools::Long i = 0; i<= nLineRange; i++)
+            for(sal_Int32 i = 0; i<= nLineRange; i++)
             {
                 int nSumRowR = 0;
                 int nSumRowG = 0;
@@ -633,7 +633,7 @@ void scaleDownPaletteGeneral(const ScaleContext &rCtx, tools::Long nStartY, tool
                 BilinearWeightType nTotalWeightX = 0;
 
                 Scanline pScanlineSrc = rCtx.mpSrc->GetScanline( nLineStart + i );
-                for(tools::Long j = 0; j <= nRowRange; j++)
+                for(sal_Int32 j = 0; j <= nRowRange; j++)
                 {
                     BitmapColor aCol0 = rCtx.mpSrc->GetPaletteColor ( rCtx.mpSrc->GetIndexFromData( pScanlineSrc, nRowStart + j ) );
 
@@ -673,7 +673,7 @@ void scaleDownPaletteGeneral(const ScaleContext &rCtx, tools::Long nStartY, tool
                     }
                 }
 
-                tools::Long nWeightY = lclMaxWeight();
+                sal_Int32 nWeightY = lclMaxWeight();
                 if( nY == nEndY )
                     nWeightY = lclMaxWeight();
                 else if( i == 0 )
@@ -709,16 +709,16 @@ void scaleDownPaletteGeneral(const ScaleContext &rCtx, tools::Long nStartY, tool
     }
 }
 
-void scaleDownNonPaletteGeneral(const ScaleContext &rCtx, tools::Long nStartY, tools::Long nEndY)
+void scaleDownNonPaletteGeneral(const ScaleContext &rCtx, sal_Int32 nStartY, sal_Int32 nEndY)
 {
-    const tools::Long nStartX = 0, nEndX = rCtx.mnDestW - 1;
+    const sal_Int32 nStartX = 0, nEndX = rCtx.mnDestW - 1;
 
-    for( tools::Long nY = nStartY; nY <= nEndY; nY++ )
+    for( sal_Int32 nY = nStartY; nY <= nEndY; nY++ )
     {
-        tools::Long nTop = rCtx.mbVMirr ? ( nY + 1 ) : nY;
-        tools::Long nBottom = rCtx.mbVMirr ? nY : ( nY + 1 ) ;
+        sal_Int32 nTop = rCtx.mbVMirr ? ( nY + 1 ) : nY;
+        sal_Int32 nBottom = rCtx.mbVMirr ? nY : ( nY + 1 ) ;
 
-        tools::Long nLineStart, nLineRange;
+        sal_Int32 nLineStart, nLineRange;
         if( nY ==nEndY )
         {
             nLineStart = rCtx.maMapIY[ nY ];
@@ -731,12 +731,12 @@ void scaleDownNonPaletteGeneral(const ScaleContext &rCtx, tools::Long nStartY, t
         }
 
         Scanline pScanDest = rCtx.mpDest->GetScanline( nY );
-        for( tools::Long nX = nStartX , nXDst = 0; nX <= nEndX; nX++ )
+        for( sal_Int32 nX = nStartX , nXDst = 0; nX <= nEndX; nX++ )
         {
-            tools::Long nLeft = rCtx.mbHMirr ? ( nX + 1 ) : nX;
-            tools::Long nRight = rCtx.mbHMirr ? nX : ( nX + 1 ) ;
+            sal_Int32 nLeft = rCtx.mbHMirr ? ( nX + 1 ) : nX;
+            sal_Int32 nRight = rCtx.mbHMirr ? nX : ( nX + 1 ) ;
 
-            tools::Long nRowStart, nRowRange;
+            sal_Int32 nRowStart, nRowRange;
             if( nX == nEndX )
             {
                 nRowStart = rCtx.maMapIX[ nX ];
@@ -753,7 +753,7 @@ void scaleDownNonPaletteGeneral(const ScaleContext &rCtx, tools::Long nStartY, t
             int nSumB = 0;
             BilinearWeightType nTotalWeightY = 0;
 
-            for(tools::Long i = 0; i<= nLineRange; i++)
+            for(sal_Int32 i = 0; i<= nLineRange; i++)
             {
                 int nSumRowR = 0;
                 int nSumRowG = 0;
@@ -761,7 +761,7 @@ void scaleDownNonPaletteGeneral(const ScaleContext &rCtx, tools::Long nStartY, t
                 BilinearWeightType nTotalWeightX = 0;
 
                 Scanline pScanlineSrc = rCtx.mpSrc->GetScanline( nLineStart + i );
-                for(tools::Long j = 0; j <= nRowRange; j++)
+                for(sal_Int32 j = 0; j <= nRowRange; j++)
                 {
                     BitmapColor aCol0 = rCtx.mpSrc->GetPixelFromData( pScanlineSrc, nRowStart + j );
 
@@ -859,8 +859,8 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
     double fScaleX = std::fabs(mrScaleX);
     double fScaleY = std::fabs(mrScaleY);
 
-    const tools::Long nDstW = FRound(aSizePix.Width()  * fScaleX);
-    const tools::Long nDstH = FRound(aSizePix.Height() * fScaleY);
+    const sal_Int32 nDstW = FRound(aSizePix.Width()  * fScaleX);
+    const sal_Int32 nDstH = FRound(aSizePix.Height() * fScaleY);
 
     constexpr double fScaleThresh = 0.6;
 
@@ -903,7 +903,7 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
 
         BitmapScopedWriteAccess pWriteAccess(aOutBmp);
 
-        const tools::Long nEndY   = nDstH - 1;
+        const sal_Int32 nEndY   = nDstH - 1;
 
         if (pReadAccess && pWriteAccess)
         {
@@ -971,7 +971,7 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
             // A large source image.
             bool bHorizontalWork = pReadAccess->Height() >= 512 && pReadAccess->Width() >= 512;
             bool bUseThreads = true;
-            const tools::Long nStartY = 0;
+            const sal_Int32 nStartY = 0;
 
             static bool bDisableThreadedScaling = getenv ("VCL_NO_THREAD_SCALE");
             if (bDisableThreadedScaling || !bHorizontalWork)
@@ -989,7 +989,7 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
                     std::shared_ptr<comphelper::ThreadTaskTag> pTag = comphelper::ThreadPool::createThreadTaskTag();
 
                     vcl::bitmap::generateStripRanges<constScaleThreadStrip>(nStartY, nEndY,
-                    [&] (tools::Long const nStart, tools::Long const nEnd, bool const bLast)
+                    [&] (sal_Int32 const nStart, sal_Int32 const nEnd, bool const bLast)
                     {
                         if (!bLast)
                         {

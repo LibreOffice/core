@@ -23,7 +23,7 @@ BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
 {
     Bitmap aBitmap(rBitmapEx.GetBitmap());
 
-    const tools::Long nDivisor = 8;
+    const sal_Int32 nDivisor = 8;
     Bitmap::ScopedReadAccess pReadAcc(aBitmap);
     bool bRet = false;
 
@@ -34,10 +34,10 @@ BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
 
         if (pWriteAcc)
         {
-            const tools::Long nWidth = pWriteAcc->Width(), nWidth2 = nWidth + 2;
-            const tools::Long nHeight = pWriteAcc->Height(), nHeight2 = nHeight + 2;
-            std::unique_ptr<tools::Long[]> pColm(new tools::Long[nWidth2]);
-            std::unique_ptr<tools::Long[]> pRows(new tools::Long[nHeight2]);
+            const sal_Int32 nWidth = pWriteAcc->Width(), nWidth2 = nWidth + 2;
+            const sal_Int32 nHeight = pWriteAcc->Height(), nHeight2 = nHeight + 2;
+            std::unique_ptr<sal_Int32[]> pColm(new sal_Int32[nWidth2]);
+            std::unique_ptr<sal_Int32[]> pRows(new sal_Int32[nHeight2]);
             std::unique_ptr<BitmapColor[]> pColRow1(new BitmapColor[nWidth2]);
             std::unique_ptr<BitmapColor[]> pColRow2(new BitmapColor[nWidth2]);
             std::unique_ptr<BitmapColor[]> pColRow3(new BitmapColor[nWidth2]);
@@ -45,7 +45,7 @@ BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
             BitmapColor* pRowTmp2 = pColRow2.get();
             BitmapColor* pRowTmp3 = pColRow3.get();
             BitmapColor* pColor;
-            tools::Long nY, nX, i, nSumR, nSumG, nSumB, nMatrixVal, nTmp;
+            sal_Int32 nY, nX, i, nSumR, nSumG, nSumB, nMatrixVal, nTmp;
             std::array<std::array<sal_Int32, 256>, 9> aKoeff;
             sal_Int32* pTmp;
 
