@@ -26,6 +26,7 @@
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
@@ -48,10 +49,10 @@ class QGridLayout;
 class QLabel;
 class QWidget;
 
-typedef ::cppu::WeakComponentImplHelper<css::frame::XTerminateListener, css::lang::XInitialization,
-                                        css::lang::XServiceInfo, css::ui::dialogs::XFilePicker3,
-                                        css::ui::dialogs::XFilePickerControlAccess,
-                                        css::ui::dialogs::XFolderPicker2>
+typedef ::cppu::WeakComponentImplHelper<
+    css::frame::XTerminateListener, css::lang::XInitialization, css::lang::XServiceInfo,
+    css::ui::dialogs::XFilePicker3, css::ui::dialogs::XFilePickerControlAccess,
+    css::ui::dialogs::XAsynchronousExecutableDialog, css::ui::dialogs::XFolderPicker2>
     QtFilePicker_Base;
 
 class VCLPLUG_QT_PUBLIC QtFilePicker : public QObject, public QtFilePicker_Base
@@ -62,6 +63,7 @@ private:
     css::uno::Reference<css::uno::XComponentContext> m_context;
 
     css::uno::Reference<css::ui::dialogs::XFilePickerListener> m_xListener;
+    css::uno::Reference<css::ui::dialogs::XDialogClosedListener> m_xClosedListener;
 
     osl::Mutex m_aHelperMutex; ///< mutex used by the WeakComponentImplHelper
 
@@ -111,6 +113,11 @@ public:
     // XExecutableDialog functions
     virtual void SAL_CALL setTitle(const OUString& rTitle) override;
     virtual sal_Int16 SAL_CALL execute() override;
+
+    // XAsynchronousExecutableDialog functions
+    virtual void SAL_CALL setDialogTitle(const OUString&) override;
+    virtual void SAL_CALL
+    startExecuteModal(const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>&) override;
 
     // XFilePicker functions
     virtual void SAL_CALL setMultiSelectionMode(sal_Bool bMode) override;
@@ -164,6 +171,8 @@ private:
     static void handleSetListValue(QComboBox* pQComboBox, sal_Int16 nAction,
                                    const css::uno::Any& rValue);
 
+    void prepareExecute();
+
 private Q_SLOTS:
     // emit XFilePickerListener controlStateChanged event
     void filterSelected(const QString&);
@@ -171,6 +180,7 @@ private Q_SLOTS:
     void currentChanged(const QString&);
     // (un)set automatic file extension
     virtual void updateAutomaticFileExtension();
+    void finished(int);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
