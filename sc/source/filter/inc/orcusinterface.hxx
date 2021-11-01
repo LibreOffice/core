@@ -75,8 +75,8 @@ class ScOrcusRefResolver : public orcus::spreadsheet::iface::import_reference_re
 public:
     ScOrcusRefResolver( const ScOrcusGlobalSettings& rGS );
 
-    orcus::spreadsheet::src_address_t resolve_address(const char* p, size_t n) override;
-    orcus::spreadsheet::src_range_t resolve_range(const char* p, size_t n) override;
+    orcus::spreadsheet::src_address_t resolve_address(std::string_view address) override;
+    orcus::spreadsheet::src_range_t resolve_range(std::string_view range) override;
 };
 
 class ScOrcusNamedExpression : public orcus::spreadsheet::iface::import_named_expression
@@ -94,8 +94,8 @@ public:
     void reset();
 
     virtual void set_base_position(const orcus::spreadsheet::src_address_t& pos) override;
-    virtual void set_named_expression(const char* p_name, size_t n_name, const char* p_exp, size_t n_exp) override;
-    virtual void set_named_range(const char* p_name, size_t n_name, const char* p_range, size_t n_range) override;
+    virtual void set_named_expression(std::string_view name, std::string_view expression) override;
+    virtual void set_named_range(std::string_view name, std::string_view range) override;
     virtual void commit() override;
 };
 
@@ -107,19 +107,19 @@ class ScOrcusSharedStrings : public orcus::spreadsheet::iface::import_shared_str
 public:
     ScOrcusSharedStrings(ScOrcusFactory& rFactory);
 
-    virtual size_t append(const char* s, size_t n) override;
-    virtual size_t add(const char* s, size_t n) override;
+    virtual size_t append(std::string_view s) override;
+    virtual size_t add(std::string_view s) override;
 
     virtual void set_segment_bold(bool b) override;
     virtual void set_segment_italic(bool b) override;
     virtual void set_segment_font(size_t font_index) override;
-    virtual void set_segment_font_name(const char* s, size_t n) override;
+    virtual void set_segment_font_name(std::string_view s) override;
     virtual void set_segment_font_size(double point) override;
     virtual void set_segment_font_color(orcus::spreadsheet::color_elem_t alpha,
             orcus::spreadsheet::color_elem_t red,
             orcus::spreadsheet::color_elem_t green,
             orcus::spreadsheet::color_elem_t blue) override;
-    virtual void append_segment(const char* s, size_t n) override;
+    virtual void append_segment(std::string_view s) override;
 
     virtual size_t commit_segments() override;
 };
@@ -133,7 +133,7 @@ public:
     virtual void set_color(orcus::spreadsheet::color_elem_t alpha, orcus::spreadsheet::color_elem_t red,
             orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue) override;
 
-    virtual void set_formula(const char* p, size_t n) override;
+    virtual void set_formula(std::string_view formula) override;
 
     virtual void set_condition_type(orcus::spreadsheet::condition_type_t type) override;
 
@@ -141,7 +141,7 @@ public:
 
     virtual void commit_condition() override;
 
-    virtual void set_icon_name(const char* p, size_t n) override;
+    virtual void set_icon_name(std::string_view name) override;
 
     virtual void set_databar_gradient(bool gradient) override;
 
@@ -169,7 +169,7 @@ public:
 
     virtual void commit_entry() override;
 
-    virtual void set_range(const char* p, size_t n) override;
+    virtual void set_range(std::string_view range) override;
 
     virtual void set_range(orcus::spreadsheet::row_t row_start, orcus::spreadsheet::col_t col_start,
             orcus::spreadsheet::row_t row_end, orcus::spreadsheet::col_t col_end) override;
@@ -197,7 +197,7 @@ public:
 
     virtual void set_column(orcus::spreadsheet::col_t col) override;
 
-    virtual void append_column_match_value(const char* p, size_t n) override;
+    virtual void append_column_match_value(std::string_view value) override;
 
     virtual void commit_column() override;
 
@@ -243,7 +243,7 @@ class ScOrcusFormula : public orcus::spreadsheet::iface::import_formula
     bool mbShared;
 
     ResultType meResType;
-    size_t mnResult; // result string index.
+    OUString maResult; // result string.
     double mfResult;
 
     void reset();
@@ -253,10 +253,10 @@ public:
     virtual ~ScOrcusFormula() override;
 
     virtual void set_position(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col) override;
-    virtual void set_formula(orcus::spreadsheet::formula_grammar_t grammar, const char* p, size_t n) override;
+    virtual void set_formula(orcus::spreadsheet::formula_grammar_t grammar, std::string_view formula) override;
     virtual void set_shared_formula_index(size_t index) override;
     virtual void set_result_value(double value) override;
-    virtual void set_result_string(size_t sindex) override;
+    virtual void set_result_string(std::string_view value) override;
     virtual void set_result_empty() override;
     virtual void set_result_bool(bool value) override;
     virtual void commit() override;
@@ -282,9 +282,9 @@ public:
     virtual ~ScOrcusArrayFormula() override;
 
     virtual void set_range(const orcus::spreadsheet::range_t& range) override;
-    virtual void set_formula(orcus::spreadsheet::formula_grammar_t grammar, const char* p, size_t n) override;
+    virtual void set_formula(orcus::spreadsheet::formula_grammar_t grammar, std::string_view formula) override;
     virtual void set_result_value(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, double value) override;
-    virtual void set_result_string(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, size_t sindex) override;
+    virtual void set_result_string(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, std::string_view value) override;
     virtual void set_result_empty(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col) override;
     virtual void set_result_bool(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, bool value) override;
     virtual void commit() override;
@@ -326,8 +326,8 @@ public:
     virtual orcus::spreadsheet::iface::import_array_formula* get_array_formula() override;
 
     // Orcus import interface
-    virtual void set_auto(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, const char* p, size_t n) override;
-    virtual void set_string(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, size_t sindex) override;
+    virtual void set_auto(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, std::string_view value) override;
+    virtual void set_string(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::string_id_t sindex) override;
     virtual void set_value(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, double value) override;
     virtual void set_bool(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, bool value) override;
     virtual void set_date_time(
@@ -491,7 +491,7 @@ public:
     virtual void set_font_count(size_t n) override;
     virtual void set_font_bold(bool b) override;
     virtual void set_font_italic(bool b) override;
-    virtual void set_font_name(const char* s, size_t n) override;
+    virtual void set_font_name(std::string_view name) override;
     virtual void set_font_size(double point) override;
     virtual void set_font_underline(orcus::spreadsheet::underline_t e) override;
     virtual void set_font_underline_width(orcus::spreadsheet::underline_width_t e) override;
@@ -542,7 +542,7 @@ public:
     // number format
     virtual void set_number_format_count(size_t n) override;
     virtual void set_number_format_identifier(size_t n) override;
-    virtual void set_number_format_code(const char* s, size_t n) override;
+    virtual void set_number_format_code(std::string_view s) override;
     virtual size_t commit_number_format() override;
 
     // cell style xf
@@ -574,10 +574,10 @@ public:
     // cell style entry
 
     virtual void set_cell_style_count(size_t n) override;
-    virtual void set_cell_style_name(const char* s, size_t n) override;
+    virtual void set_cell_style_name(std::string_view name) override;
     virtual void set_cell_style_xf(size_t index) override;
     virtual void set_cell_style_builtin(size_t index) override;
-    virtual void set_cell_style_parent_name(const char* s, size_t n) override;
+    virtual void set_cell_style_parent_name(std::string_view name) override;
     virtual size_t commit_cell_style() override;
 };
 
@@ -639,8 +639,8 @@ public:
     ScOrcusFactory(ScDocument& rDoc, bool bSkipDefaultStyles=false);
 
     virtual orcus::spreadsheet::iface::import_sheet* append_sheet(
-        orcus::spreadsheet::sheet_t sheet_index, const char *sheet_name, size_t sheet_name_length) override;
-    virtual orcus::spreadsheet::iface::import_sheet* get_sheet(const char *sheet_name, size_t sheet_name_length) override;
+        orcus::spreadsheet::sheet_t sheet_index, std::string_view sheet_name) override;
+    virtual orcus::spreadsheet::iface::import_sheet* get_sheet(std::string_view sheet_name) override;
     virtual orcus::spreadsheet::iface::import_sheet* get_sheet(orcus::spreadsheet::sheet_t sheet_index) override;
     virtual orcus::spreadsheet::iface::import_global_settings* get_global_settings() override;
     virtual orcus::spreadsheet::iface::import_shared_strings* get_shared_strings() override;
