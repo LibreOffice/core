@@ -2774,53 +2774,11 @@ dnl ===================================================================
 dnl MacOSX build and runtime environment options
 dnl ===================================================================
 
-AC_ARG_WITH(macosx-sdk,
-    AS_HELP_STRING([--with-macosx-sdk=<version>],
-        [Prefer a specific SDK for building.])
-    [
-                          If the requested SDK is not available, a search for the oldest one will be done.
-                          With current Xcode versions, only the latest SDK is included, so this option is
-                          not terribly useful. It works fine to build with a new SDK and run the result
-                          on an older OS.
-
-                          e. g.: --with-macosx-sdk=10.15
-
-                          there are 3 options to control the MacOSX build:
-                          --with-macosx-sdk (referred as 'sdk' below)
-                          --with-macosx-version-min-required (referred as 'min' below)
-                          --with-macosx-version-max-allowed (referred as 'max' below)
-
-                          the connection between these value and the default they take is as follow:
-                          ( ? means not specified on the command line, s means the SDK version found,
-                          constraint: 8 <= x <= y <= z)
-
-                          ==========================================
-                           command line      || config result
-                          ==========================================
-                          min  | max  | sdk  || min   | max  | sdk  |
-                          ?    | ?    | ?    || 10.12 | 10.s | 10.s |
-                          ?    | ?    | 10.x || 10.12 | 10.x | 10.x |
-                          ?    | 10.x | ?    || 10.12 | 10.s | 10.s |
-                          ?    | 10.x | 10.y || 10.12 | 10.x | 10.y |
-                          10.x | ?    | ?    || 10.x  | 10.s | 10.s |
-                          10.x | ?    | 10.y || 10.x  | 10.y | 10.y |
-                          10.x | 10.y | ?    || 10.x  | 10.y | 10.y |
-                          10.x | 10.y | 10.z || 10.x  | 10.y | 10.z |
-
-
-                          see: http://developer.apple.com/library/mac/#technotes/tn2064/_index.html
-                          for a detailed technical explanation of these variables
-
-                          Note: MACOSX_DEPLOYMENT_TARGET will be set to the value of 'min'.
-    ],
-,)
-
 AC_ARG_WITH(macosx-version-min-required,
     AS_HELP_STRING([--with-macosx-version-min-required=<version>],
         [set the minimum OS version needed to run the built LibreOffice])
     [
                           e. g.: --with-macosx-version-min-required=10.12
-                          see --with-macosx-sdk for more info
     ],
 ,)
 
@@ -2828,8 +2786,7 @@ AC_ARG_WITH(macosx-version-max-allowed,
     AS_HELP_STRING([--with-macosx-version-max-allowed=<version>],
         [set the maximum allowed OS version the LibreOffice compilation can use APIs from])
     [
-                          e. g.: --with-macosx-version-max-allowed=10.12
-                          see --with-macosx-sdk for more info
+                          e. g.: --with-macosx-version-max-allowed=11.0
     ],
 ,)
 
@@ -3242,24 +3199,16 @@ dnl ===================================================================
 
 if test $_os = Darwin; then
 
-    # If no --with-macosx-sdk option is given, look for one
-
-    # The intent is that for "most" Mac-based developers, a suitable
-    # SDK will be found automatically without any configure options.
-
-    # For developers with a current Xcode, the lowest-numbered SDK
-    # higher than or equal to the minimum required should be found.
+    # The SDK in the currently selected Xcode should be found.
 
     AC_MSG_CHECKING([what macOS SDK to use])
-    for _macosx_sdk in ${with_macosx_sdk-12.0 11.3 11.1 11.0 10.15 10.14 10.13}; do
-        MACOSX_SDK_PATH=`xcrun --sdk macosx${_macosx_sdk} --show-sdk-path 2> /dev/null`
+    for macosx_sdk in 12.0 11.3 11.1 11.0 10.15 10.14 10.13; do
+        MACOSX_SDK_PATH=`xcrun --sdk macosx${macosx_sdk} --show-sdk-path 2> /dev/null`
         if test -d "$MACOSX_SDK_PATH"; then
-            with_macosx_sdk="${_macosx_sdk}"
             break
         else
-            MACOSX_SDK_PATH="`xcode-select -print-path`/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${_macosx_sdk}.sdk"
+            MACOSX_SDK_PATH="`xcode-select -print-path`/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${macosx_sdk}.sdk"
             if test -d "$MACOSX_SDK_PATH"; then
-                with_macosx_sdk="${_macosx_sdk}"
                 break
             fi
         fi
@@ -3268,9 +3217,9 @@ if test $_os = Darwin; then
         AC_MSG_ERROR([Could not find an appropriate macOS SDK])
     fi
 
-    AC_MSG_RESULT([SDK $with_macosx_sdk at $MACOSX_SDK_PATH])
+    AC_MSG_RESULT([macOS SDK $macosx_sdk at $MACOSX_SDK_PATH])
 
-    case $with_macosx_sdk in
+    case $macosx_sdk in
     10.13)
         MACOSX_SDK_VERSION=101300
         ;;
@@ -3293,12 +3242,12 @@ if test $_os = Darwin; then
         MACOSX_SDK_VERSION=120000
         ;;
     *)
-        AC_MSG_ERROR([with-macosx-sdk $with_macosx_sdk is not a supported value, supported values are 10.13--12.0])
+        AC_MSG_ERROR([macOS SDK $macosx_sdk is not supported])
         ;;
     esac
 
     if test "$host_cpu" = arm64 -a $MACOSX_SDK_VERSION -lt 110000; then
-        AC_MSG_ERROR([with-macosx-sdk $with_macosx_sdk is not a supported value for Apple Silicon])
+        AC_MSG_ERROR([macOS SDK $macosx_sdk is not supported for Apple Silicon])
     fi
 
     if test "$with_macosx_version_min_required" = "" ; then
@@ -3310,7 +3259,7 @@ if test $_os = Darwin; then
     fi
 
     if test "$with_macosx_version_max_allowed" = "" ; then
-        with_macosx_version_max_allowed="$with_macosx_sdk"
+        with_macosx_version_max_allowed="$macosx_sdk"
     fi
 
     # export this so that "xcrun" invocations later return matching values
@@ -11742,7 +11691,7 @@ if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
     if test $OS = MACOSX && test "$MACOSX_SDK_VERSION" -ge 101500; then
         # The Bluetooth code doesn't compile with macOS SDK 10.15
         if test "$enable_sdremote_bluetooth" = yes; then
-            AC_MSG_ERROR([macOS SDK $with_macosx_sdk does not currently support --enable-sdremote-bluetooth])
+            AC_MSG_ERROR([macOS SDK $macosx_sdk does not currently support --enable-sdremote-bluetooth])
         fi
         enable_sdremote_bluetooth=no
     fi
