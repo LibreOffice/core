@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4707c35a_817680cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-01T17:23:04Z",
+      "side": 1,
+      "message": "the jenkins mac didn\u0027t find its SDK",
+      "revId": "0d84d14809abf679afb6c176a54f4c24c26ea9af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
