@@ -1,0 +1,418 @@
+From f917ed284c52ae12fb0d752c17141f355158470e Mon Sep 17 00:00:00 2001
+From: Kohei Yoshida <kohei.yoshida@gmail.com>
+Date: Tue, 2 Nov 2021 22:07:51 -0400
+Subject: [PATCH] std::get<T>(...) may be flaky with some version of clang.
+
+As workaround, use boost::variant and boost::get.
+
+c.f. https://stackoverflow.com/questions/52521388/stdvariantget-does-not-compile-with-apple-llvm-10-0
+---
+ include/orcus/config.hpp                    |  4 ++--
+ include/orcus/css_selector.hpp              |  5 +++--
+ include/orcus/json_parser_thread.hpp        |  4 ++--
+ include/orcus/sax_token_parser_thread.hpp   |  5 +++--
+ include/orcus/spreadsheet/pivot.hpp         |  7 ++++---
+ include/orcus/threaded_json_parser.hpp      |  8 ++++----
+ include/orcus/threaded_sax_token_parser.hpp |  8 ++++----
+ src/liborcus/css_document_tree.cpp          |  2 +-
+ src/liborcus/css_selector.cpp               | 12 ++++++------
+ src/liborcus/orcus_csv.cpp                  |  4 ++--
+ src/orcus_csv_main.cpp                      |  2 +-
+ src/orcus_test_csv.cpp                      |  8 ++++----
+ src/orcus_test_xlsx.cpp                     |  4 ++--
+ src/parser/json_parser_thread.cpp           |  8 ++++----
+ src/python/sheet_rows.cpp                   |  3 +++
+ 15 files changed, 45 insertions(+), 39 deletions(-)
+
+diff --git a/include/orcus/config.hpp b/include/orcus/config.hpp
+index 17743e6a..fe9a7d81 100644
+--- a/include/orcus/config.hpp
++++ b/include/orcus/config.hpp
+@@ -12,7 +12,7 @@
+ #include "orcus/types.hpp"
+ 
+ #include <string>
+-#include <variant>
++#include <boost/variant.hpp>
+ 
+ namespace orcus {
+ 
+@@ -37,7 +37,7 @@ struct ORCUS_DLLPUBLIC config
+     };
+ 
+     // TODO: add config for other formats as needed.
+-    using data_type = std::variant<csv_config>;
++    using data_type = boost::variant<csv_config>;
+ 
+     /**
+      * Enable or disable runtime debug output to stdout or stderr.
+diff --git a/include/orcus/css_selector.hpp b/include/orcus/css_selector.hpp
+index 1e41d544..dafeddf5 100644
+--- a/include/orcus/css_selector.hpp
++++ b/include/orcus/css_selector.hpp
+@@ -12,11 +12,12 @@
+ #include "css_types.hpp"
+ 
+ #include <ostream>
+-#include <variant>
+ #include <vector>
+ #include <unordered_set>
+ #include <unordered_map>
+ 
++#include <boost/variant.hpp>
++
+ namespace orcus {
+ 
+ struct ORCUS_DLLPUBLIC css_simple_selector_t
+@@ -73,7 +74,7 @@ struct ORCUS_DLLPUBLIC css_selector_t
+  */
+ struct ORCUS_DLLPUBLIC css_property_value_t
+ {
+-    using value_type = std::variant<std::string_view, css::rgba_color_t, css::hsla_color_t>;
++    using value_type = boost::variant<std::string_view, css::rgba_color_t, css::hsla_color_t>;
+ 
+     css::property_value_t type;
+     value_type value;
+diff --git a/include/orcus/json_parser_thread.hpp b/include/orcus/json_parser_thread.hpp
+index 8328ef11..565008da 100644
+--- a/include/orcus/json_parser_thread.hpp
++++ b/include/orcus/json_parser_thread.hpp
+@@ -14,7 +14,7 @@
+ #include <memory>
+ #include <vector>
+ #include <ostream>
+-#include <variant>
++#include <boost/variant.hpp>
+ 
+ namespace orcus {
+ 
+@@ -47,7 +47,7 @@ enum class parse_token_t
+ 
+ struct ORCUS_PSR_DLLPUBLIC parse_token
+ {
+-    using value_type = std::variant<std::string_view, parse_error_value_t, double>;
++    using value_type = boost::variant<std::string_view, parse_error_value_t, double>;
+ 
+     parse_token_t type;
+     value_type value;
+diff --git a/include/orcus/sax_token_parser_thread.hpp b/include/orcus/sax_token_parser_thread.hpp
+index b3645735..e0842013 100644
+--- a/include/orcus/sax_token_parser_thread.hpp
++++ b/include/orcus/sax_token_parser_thread.hpp
+@@ -12,10 +12,11 @@
+ #include "types.hpp"
+ 
+ #include <memory>
+-#include <variant>
+ #include <vector>
+ #include <ostream>
+ 
++#include <boost/variant.hpp>
++
+ namespace orcus {
+ 
+ class tokens;
+@@ -36,7 +37,7 @@ enum class parse_token_t
+ 
+ struct ORCUS_PSR_DLLPUBLIC parse_token
+ {
+-    using value_type = std::variant<std::string_view, parse_error_value_t, const xml_token_element_t*>;
++    using value_type = boost::variant<std::string_view, parse_error_value_t, const xml_token_element_t*>;
+ 
+     parse_token_t type;
+     value_type value;
+diff --git a/include/orcus/spreadsheet/pivot.hpp b/include/orcus/spreadsheet/pivot.hpp
+index dee25596..fa091160 100644
+--- a/include/orcus/spreadsheet/pivot.hpp
++++ b/include/orcus/spreadsheet/pivot.hpp
+@@ -15,9 +15,10 @@
+ #include <memory>
+ #include <vector>
+ #include <limits>
+-#include <variant>
+ #include <optional>
+ 
++#include <boost/variant.hpp>
++
+ namespace ixion {
+ 
+ struct abs_range_t;
+@@ -36,7 +37,7 @@ using pivot_cache_indices_t = std::vector<size_t>;
+ 
+ struct ORCUS_SPM_DLLPUBLIC pivot_cache_record_value_t
+ {
+-    using value_type = std::variant<bool, double, std::size_t, std::string_view, date_time_t>;
++    using value_type = boost::variant<bool, double, std::size_t, std::string_view, date_time_t>;
+ 
+     enum class record_type
+     {
+@@ -66,7 +67,7 @@ using pivot_cache_record_t = std::vector<pivot_cache_record_value_t>;
+ 
+ struct ORCUS_SPM_DLLPUBLIC pivot_cache_item_t
+ {
+-    using value_type = std::variant<bool, double, std::string_view, date_time_t, error_value_t>;
++    using value_type = boost::variant<bool, double, std::string_view, date_time_t, error_value_t>;
+ 
+     enum class item_type
+     {
+diff --git a/include/orcus/threaded_json_parser.hpp b/include/orcus/threaded_json_parser.hpp
+index 51cdaced..3bf6e591 100644
+--- a/include/orcus/threaded_json_parser.hpp
++++ b/include/orcus/threaded_json_parser.hpp
+@@ -151,23 +151,23 @@ void threaded_json_parser<_Handler>::process_tokens(json::parse_tokens_t& tokens
+                     m_handler.null();
+                     break;
+                 case json::parse_token_t::number:
+-                    m_handler.number(std::get<double>(t.value));
++                    m_handler.number(boost::get<double>(t.value));
+                     break;
+                 case json::parse_token_t::object_key:
+                 {
+-                    auto s = std::get<std::string_view>(t.value);
++                    auto s = boost::get<std::string_view>(t.value);
+                     m_handler.object_key(s.data(), s.size(), false);
+                     break;
+                 }
+                 case json::parse_token_t::string:
+                 {
+-                    auto s = std::get<std::string_view>(t.value);
++                    auto s = boost::get<std::string_view>(t.value);
+                     m_handler.string(s.data(), s.size(), false);
+                     break;
+                 }
+                 case json::parse_token_t::parse_error:
+                 {
+-                    auto v = std::get<parse_error_value_t>(t.value);
++                    auto v = boost::get<parse_error_value_t>(t.value);
+                     throw json::parse_error(std::string{v.str}, v.offset);
+                 }
+                 case json::parse_token_t::unknown:
+diff --git a/include/orcus/threaded_sax_token_parser.hpp b/include/orcus/threaded_sax_token_parser.hpp
+index 59ea967a..1b389be2 100644
+--- a/include/orcus/threaded_sax_token_parser.hpp
++++ b/include/orcus/threaded_sax_token_parser.hpp
+@@ -131,25 +131,25 @@ void threaded_sax_token_parser<_Handler>::process_tokens(const sax::parse_tokens
+         {
+             case sax::parse_token_t::start_element:
+             {
+-                const auto* elem = std::get<const xml_token_element_t*>(t.value);
++                const auto* elem = boost::get<const xml_token_element_t*>(t.value);
+                 m_handler.start_element(*elem);
+                 break;
+             }
+             case sax::parse_token_t::end_element:
+             {
+-                const auto* elem = std::get<const xml_token_element_t*>(t.value);
++                const auto* elem = boost::get<const xml_token_element_t*>(t.value);
+                 m_handler.end_element(*elem);
+                 break;
+             }
+             case sax::parse_token_t::characters:
+             {
+-                auto s = std::get<std::string_view>(t.value);
++                auto s = boost::get<std::string_view>(t.value);
+                 m_handler.characters(s, false);
+                 break;
+             }
+             case sax::parse_token_t::parse_error:
+             {
+-                auto v = std::get<parse_error_value_t>(t.value);
++                auto v = boost::get<parse_error_value_t>(t.value);
+                 throw sax::malformed_xml_error(std::string{v.str}, v.offset);
+             }
+             default:
+diff --git a/src/liborcus/css_document_tree.cpp b/src/liborcus/css_document_tree.cpp
+index 46bf7e91..4b44edff 100644
+--- a/src/liborcus/css_document_tree.cpp
++++ b/src/liborcus/css_document_tree.cpp
+@@ -317,7 +317,7 @@ public:
+             {
+                 // String value needs interning.
+                 css_property_value_t interned = v;
+-                auto s = std::get<std::string_view>(v.value);
++                auto s = boost::get<std::string_view>(v.value);
+                 interned.value = m_sp.intern(s).first;
+                 m_dest.push_back(interned);
+                 break;
+diff --git a/src/liborcus/css_selector.cpp b/src/liborcus/css_selector.cpp
+index b7b63f37..de522062 100644
+--- a/src/liborcus/css_selector.cpp
++++ b/src/liborcus/css_selector.cpp
+@@ -155,7 +155,7 @@ std::ostream& operator<< (std::ostream& os, const css_property_value_t& v)
+     {
+         case css::property_value_t::hsl:
+         {
+-            auto c = std::get<css::hsla_color_t>(v.value);
++            auto c = boost::get<css::hsla_color_t>(v.value);
+             os << "hsl("
+                 << (int)c.hue << sep
+                 << (int)c.saturation << sep
+@@ -165,7 +165,7 @@ std::ostream& operator<< (std::ostream& os, const css_property_value_t& v)
+         }
+         case css::property_value_t::hsla:
+         {
+-            auto c = std::get<css::hsla_color_t>(v.value);
++            auto c = boost::get<css::hsla_color_t>(v.value);
+             os << "hsla("
+                 << (int)c.hue << sep
+                 << (int)c.saturation << sep
+@@ -176,7 +176,7 @@ std::ostream& operator<< (std::ostream& os, const css_property_value_t& v)
+         }
+         case css::property_value_t::rgb:
+         {
+-            auto c = std::get<css::rgba_color_t>(v.value);
++            auto c = boost::get<css::rgba_color_t>(v.value);
+             os << "rgb("
+                 << (int)c.red << sep
+                 << (int)c.green << sep
+@@ -186,7 +186,7 @@ std::ostream& operator<< (std::ostream& os, const css_property_value_t& v)
+         }
+         case css::property_value_t::rgba:
+         {
+-            auto c = std::get<css::rgba_color_t>(v.value);
++            auto c = boost::get<css::rgba_color_t>(v.value);
+             os << "rgba("
+                 << (int)c.red << sep
+                 << (int)c.green << sep
+@@ -196,10 +196,10 @@ std::ostream& operator<< (std::ostream& os, const css_property_value_t& v)
+             break;
+         }
+         case css::property_value_t::string:
+-            os << std::get<std::string_view>(v.value);
++            os << boost::get<std::string_view>(v.value);
+             break;
+         case css::property_value_t::url:
+-            os << "url(" << std::get<std::string_view>(v.value) << ")";
++            os << "url(" << boost::get<std::string_view>(v.value) << ")";
+             break;
+         case css::property_value_t::none:
+         default:
+diff --git a/src/liborcus/orcus_csv.cpp b/src/liborcus/orcus_csv.cpp
+index 5c71bcf5..637308ab 100644
+--- a/src/liborcus/orcus_csv.cpp
++++ b/src/liborcus/orcus_csv.cpp
+@@ -63,7 +63,7 @@ public:
+         // 0.
+         if (m_row >= mp_sheet->get_sheet_size().rows)
+         {
+-            auto csv = std::get<config::csv_config>(m_app_config.data);
++            auto csv = boost::get<config::csv_config>(m_app_config.data);
+ 
+             if (!csv.split_to_multiple_sheets)
+                 throw max_row_size_reached();
+@@ -93,7 +93,7 @@ public:
+ 
+     void cell(const char* p, size_t n, bool transient)
+     {
+-        auto csv = std::get<config::csv_config>(m_app_config.data);
++        auto csv = boost::get<config::csv_config>(m_app_config.data);
+ 
+         if (m_sheet == 0 && size_t(m_row) < csv.header_row_size)
+         {
+diff --git a/src/orcus_csv_main.cpp b/src/orcus_csv_main.cpp
+index 4f6d7173..446f2684 100644
+--- a/src/orcus_csv_main.cpp
++++ b/src/orcus_csv_main.cpp
+@@ -45,7 +45,7 @@ public:
+ 
+     virtual void map_to_config(config& opt, const po::variables_map& vm) override
+     {
+-        auto csv = std::get<config::csv_config>(opt.data);
++        auto csv = boost::get<config::csv_config>(opt.data);
+ 
+         if (vm.count("row-header"))
+             csv.header_row_size = vm["row-header"].as<size_t>();
+diff --git a/src/orcus_test_csv.cpp b/src/orcus_test_csv.cpp
+index 310ace9d..0b9ba994 100644
+--- a/src/orcus_test_csv.cpp
++++ b/src/orcus_test_csv.cpp
+@@ -95,8 +95,8 @@ void test_csv_import_split_sheet()
+     std::cout << "checking " << path << "..." << std::endl;
+ 
+     config conf(format_t::csv);
+-    std::get<config::csv_config>(conf.data).header_row_size = 0;
+-    std::get<config::csv_config>(conf.data).split_to_multiple_sheets = true;
++    boost::get<config::csv_config>(conf.data).header_row_size = 0;
++    boost::get<config::csv_config>(conf.data).split_to_multiple_sheets = true;
+ 
+     // Set the row size to 11 to make sure the split occurs.
+     spreadsheet::range_size_t ss{11, 4};
+@@ -126,7 +126,7 @@ void test_csv_import_split_sheet()
+     path = dir;
+     path.append("input.csv");
+     doc.clear();
+-    std::get<config::csv_config>(conf.data).header_row_size = 1;
++    boost::get<config::csv_config>(conf.data).header_row_size = 1;
+     {
+         spreadsheet::import_factory factory(doc);
+         orcus_csv app(&factory);
+@@ -149,7 +149,7 @@ void test_csv_import_split_sheet()
+ 
+     // Re-import it again, but this time disable the splitting.  The data should
+     // get trucated on the first sheet.
+-    std::get<config::csv_config>(conf.data).split_to_multiple_sheets = false;
++    boost::get<config::csv_config>(conf.data).split_to_multiple_sheets = false;
+ 
+     path = dir;
+     path.append("input.csv");
+diff --git a/src/orcus_test_xlsx.cpp b/src/orcus_test_xlsx.cpp
+index 807c61e4..632fb1e7 100644
+--- a/src/orcus_test_xlsx.cpp
++++ b/src/orcus_test_xlsx.cpp
+@@ -1154,8 +1154,8 @@ void test_xlsx_pivot_group_by_numbers()
+     for (const pivot_cache_item_t& item : fld->items)
+     {
+         assert(item.type == pivot_cache_item_t::item_type::numeric);
+-        assert(*fld->min_value <= std::get<double>(item.value));
+-        assert(std::get<double>(item.value) <= *fld->max_value);
++        assert(*fld->min_value <= boost::get<double>(item.value));
++        assert(boost::get<double>(item.value) <= *fld->max_value);
+     }
+ 
+     // This field is also gruop field with 7 numeric intervals of width 2.
+diff --git a/src/parser/json_parser_thread.cpp b/src/parser/json_parser_thread.cpp
+index 36bbe6e6..65fb6255 100644
+--- a/src/parser/json_parser_thread.cpp
++++ b/src/parser/json_parser_thread.cpp
+@@ -237,19 +237,19 @@ std::ostream& operator<< (std::ostream& os, const parse_tokens_t& tokens)
+                     os << "- null" << endl;
+                     break;
+                 case parse_token_t::number:
+-                    os << "- number (v=" << std::get<double>(t.value) << ")" << endl;
++                    os << "- number (v=" << boost::get<double>(t.value) << ")" << endl;
+                     break;
+                 case parse_token_t::object_key:
+-                    os << "- object_key (v=" << std::get<std::string_view>(t.value) << ")" << endl;
++                    os << "- object_key (v=" << boost::get<std::string_view>(t.value) << ")" << endl;
+                     break;
+                 case parse_token_t::parse_error:
+                 {
+-                    auto v = std::get<parse_error_value_t>(t.value);
++                    auto v = boost::get<parse_error_value_t>(t.value);
+                     os << "- parse_error (v=" << v.str << ", offset=" << v.offset << ")" << endl;
+                     break;
+                 }
+                 case parse_token_t::string:
+-                    os << "- string (" << std::get<std::string_view>(t.value) << ")" << endl;
++                    os << "- string (" << boost::get<std::string_view>(t.value) << ")" << endl;
+                     break;
+                 case parse_token_t::unknown:
+                     os << "- unknown" << endl;
+diff --git a/src/python/sheet_rows.cpp b/src/python/sheet_rows.cpp
+index be495894..0d21ba71 100644
+--- a/src/python/sheet_rows.cpp
++++ b/src/python/sheet_rows.cpp
+@@ -135,7 +135,10 @@ PyObject* sheet_rows_iternext(PyObject* self)
+                 break;
+             }
+             case ixion::celltype_t::unknown:
++            {
++                PyErr_SetString(PyExc_RuntimeError, "Unknown cell type.");
+                 break;
++            }
+         }
+ 
+         if (!obj)
+-- 
+2.25.1
+

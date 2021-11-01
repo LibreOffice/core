@@ -20,12 +20,11 @@ $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/gcc9.patch.0 \
 	external/liborcus/libtool.patch.0 \
 	external/liborcus/fix-pch.patch.0 \
-	external/liborcus/include.patch.0 \
 	external/liborcus/liborcus_newline.patch.1 \
-))
-
-$(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
-	external/liborcus/allow-utf-8-in-xml-names.patch \
+	external/liborcus/remove-unused-parameters.patch.1 \
+	external/liborcus/unused-variables.patch.1 \
+	external/liborcus/boost-filesystem.patch.1 \
+	external/liborcus/std-get-busted.patch.1 \
 ))
 
 ifeq ($(OS),WNT)
