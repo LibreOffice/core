@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "94294bd3_27af9ea8",
+        "filename": "testtools/source/bridgetest/cppobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-01T08:42:59Z",
+      "side": 1,
+      "message": "Interestingly, the above line does not trigger loplugin:implicitboolconversion for me (with Clang 14 trunk).  Looks like some older versions of Clang have an issue here and ImplicitBoolConversion::TraverseCXXStdInitializerListExpr (compilerplugins/clang/implicitboolconversion.cxx) doesn\u0027t work as intended for them.  Will have a look.",
+      "parentUuid": "e427b4e7_7177e3ed",
+      "revId": "23bbff61ac6c93dfb1153d662f93e1f722c9c28a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "89a4771a_4cab87db",
         "filename": "testtools/source/bridgetest/cppobj.cxx",
         "patchSetId": 2
@@ -48,6 +66,24 @@
       "writtenOn": "2021-11-01T06:29:10Z",
       "side": 1,
       "message": "But why does it fail on this? It assigns \u0027true\u0027 to \u0027member\u0027, and that \u0027member\u0027 should be exactly the same type that succeeded previously at line 978 before the change?",
+      "revId": "23bbff61ac6c93dfb1153d662f93e1f722c9c28a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3ea1377_67ef5207",
+        "filename": "testtools/source/bridgetest/cppobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 976,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-01T08:42:59Z",
+      "side": 1,
+      "message": "The reason for the different behavior is that for the variable args32 itself, Clang preserves the sugared `Sequence\u003cTestPolyStruct\u003csal_Bool\u003e\u003e` type, while for the invocation of `args32.getArray()` (which involves template instantiation) it uses the desugared type `Sequence\u003cTestPolyStruct\u003cunsigned char\u003e\u003e`.\n\nWhat should help in this specific case (modulo the issue with older Clang, see line 972) is to rewrite this as\n\n  Sequence\u003c TestPolyStruct\u003c sal_Bool \u003e \u003e arg32{{true}};\n\nthough I have the nagging feeling that proliferation of those getArray() calls will cause more of those false positives that might not be that easy to work around and/or become quite a nuisance...",
+      "parentUuid": "89a4771a_4cab87db",
       "revId": "23bbff61ac6c93dfb1153d662f93e1f722c9c28a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
