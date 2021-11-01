@@ -36,6 +36,7 @@ namespace dbaui
         class ChangesListener;
         friend class ChangesListener;
 
+        std::unique_ptr<weld::ScrolledWindow> m_xScrolledWindow;
         Link<LinkParamNone*,void> m_aModifyLink;
         const svtools::ColorConfig m_aColorConfig;
         Timer m_aUpdateDataTimer;
@@ -52,6 +53,8 @@ namespace dbaui
 
         DECL_LINK(ModifyHdl, LinkParamNone*, void);
         DECL_LINK(ImplUpdateDataHdl, Timer*, void);
+        DECL_LINK(ScrollHdl, weld::ScrolledWindow&, void);
+        DECL_LINK(EditStatusHdl, EditStatus&, void);
 
         Color GetColorValue(TokenType aToken);
 
@@ -62,8 +65,14 @@ namespace dbaui
         static void SetItemPoolFont(SfxItemPool* pItemPool);
 
         void UpdateData();
+
+        void SetScrollBarRange();
+        void DoScroll();
+
+        virtual void EditViewScrollStateChange() override;
+
     public:
-        SQLEditView();
+        SQLEditView(std::unique_ptr<weld::ScrolledWindow> xScrolledWindow);
         virtual void makeEditEngine() override;
         virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
         virtual ~SQLEditView() override;
