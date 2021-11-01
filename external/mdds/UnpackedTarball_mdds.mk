@@ -13,11 +13,9 @@ $(eval $(call gb_UnpackedTarball_set_tarball,mdds,$(MDDS_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,mdds,0))
 
-# * external/mdds/Wunused-but-set-variable.patch upstream at
-#   <https://gitlab.com/mdds/mdds/-/merge_requests/29> "-Werror,-Wunused-but-set-variable (Clang 13
-#   trunk)":
 $(eval $(call gb_UnpackedTarball_add_patches,mdds,\
-    external/mdds/Wunused-but-set-variable.patch \
+	external/mdds/remove-unused-parameters.patch.1 \
+	external/mdds/remove-more-unused-parameters.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:

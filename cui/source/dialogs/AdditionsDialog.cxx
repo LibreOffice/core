@@ -54,7 +54,6 @@
 #include <orcus/json_document_tree.hpp>
 #include <orcus/json_parser.hpp>
 #include <orcus/config.hpp>
-#include <orcus/pstring.hpp>
 
 #define PAGE_SIZE 30
 
@@ -158,62 +157,37 @@ void parseResponse(const std::string& rResponse, std::vector<AdditionInfo>& aAdd
         try
         {
             AdditionInfo aNewAddition = {
-                OStringToOUString(std::string_view(arrayElement.child("id").string_value().get()),
+                OStringToOUString(arrayElement.child("id").string_value(), RTL_TEXTENCODING_UTF8),
+                OStringToOUString(arrayElement.child("name").string_value(), RTL_TEXTENCODING_UTF8),
+                OStringToOUString(arrayElement.child("author").string_value(),
                                   RTL_TEXTENCODING_UTF8),
-                OStringToOUString(std::string_view(arrayElement.child("name").string_value().get()),
+                OStringToOUString(arrayElement.child("url").string_value(), RTL_TEXTENCODING_UTF8),
+                OStringToOUString(arrayElement.child("screenshotURL").string_value(),
                                   RTL_TEXTENCODING_UTF8),
-                OStringToOUString(
-                    std::string_view(arrayElement.child("author").string_value().get()),
-                    RTL_TEXTENCODING_UTF8),
-                OStringToOUString(std::string_view(arrayElement.child("url").string_value().get()),
+                OStringToOUString(arrayElement.child("extensionIntroduction").string_value(),
                                   RTL_TEXTENCODING_UTF8),
-                OStringToOUString(
-                    std::string_view(arrayElement.child("screenshotURL").string_value().get()),
-                    RTL_TEXTENCODING_UTF8),
-                OStringToOUString(
-                    std::string_view(
-                        arrayElement.child("extensionIntroduction").string_value().get()),
-                    RTL_TEXTENCODING_UTF8),
-                OStringToOUString(
-                    std::string_view(
-                        arrayElement.child("extensionDescription").string_value().get()),
-                    RTL_TEXTENCODING_UTF8),
-                OStringToOUString(std::string_view(arrayElement.child("releases")
-                                                       .child(0)
-                                                       .child("compatibility")
-                                                       .string_value()
-                                                       .get()),
-                                  RTL_TEXTENCODING_UTF8),
-                OStringToOUString(std::string_view(arrayElement.child("releases")
-                                                       .child(0)
-                                                       .child("releaseName")
-                                                       .string_value()
-                                                       .get()),
-                                  RTL_TEXTENCODING_UTF8),
-                OStringToOUString(std::string_view(arrayElement.child("releases")
-                                                       .child(0)
-                                                       .child("license")
-                                                       .string_value()
-                                                       .get()),
+                OStringToOUString(arrayElement.child("extensionDescription").string_value(),
                                   RTL_TEXTENCODING_UTF8),
                 OStringToOUString(
-                    std::string_view(arrayElement.child("commentNumber").string_value().get()),
+                    arrayElement.child("releases").child(0).child("compatibility").string_value(),
                     RTL_TEXTENCODING_UTF8),
                 OStringToOUString(
-                    std::string_view(arrayElement.child("commentURL").string_value().get()),
+                    arrayElement.child("releases").child(0).child("releaseName").string_value(),
                     RTL_TEXTENCODING_UTF8),
                 OStringToOUString(
-                    std::string_view(arrayElement.child("rating").string_value().get()),
+                    arrayElement.child("releases").child(0).child("license").string_value(),
                     RTL_TEXTENCODING_UTF8),
+                OStringToOUString(arrayElement.child("commentNumber").string_value(),
+                                  RTL_TEXTENCODING_UTF8),
+                OStringToOUString(arrayElement.child("commentURL").string_value(),
+                                  RTL_TEXTENCODING_UTF8),
+                OStringToOUString(arrayElement.child("rating").string_value(),
+                                  RTL_TEXTENCODING_UTF8),
+                OStringToOUString(arrayElement.child("downloadNumber").string_value(),
+                                  RTL_TEXTENCODING_UTF8),
                 OStringToOUString(
-                    std::string_view(arrayElement.child("downloadNumber").string_value().get()),
-                    RTL_TEXTENCODING_UTF8),
-                OStringToOUString(std::string_view(arrayElement.child("releases")
-                                                       .child(0)
-                                                       .child("downloadURL")
-                                                       .string_value()
-                                                       .get()),
-                                  RTL_TEXTENCODING_UTF8)
+                    arrayElement.child("releases").child(0).child("downloadURL").string_value(),
+                    RTL_TEXTENCODING_UTF8)
             };
 
             aAdditions.push_back(aNewAddition);
