@@ -111,6 +111,7 @@ public:
     void DoScroll();
 
     DECL_LINK(ModifyHdl, LinkParamNone*, void);
+    DECL_LINK(EditStatusHdl, EditStatus&, void);
 
 protected:
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;

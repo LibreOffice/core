@@ -1599,6 +1599,7 @@ void ScTextWnd::InitEditEngine()
         lcl_ModifyRTLVisArea( m_xEditView.get() );
 
     m_xEditEngine->SetModifyHdl(LINK(this, ScTextWnd, ModifyHdl));
+    m_xEditEngine->SetStatusEventHdl(LINK(this, ScTextWnd, EditStatusHdl));
 
     if (!maAccTextDatas.empty())
         maAccTextDatas.back()->StartEdit();
@@ -1874,6 +1875,13 @@ IMPL_LINK_NOARG(ScTextWnd, ModifyHdl, LinkParamNone*, void)
     }
 }
 
+IMPL_LINK_NOARG(ScTextWnd, EditStatusHdl, EditStatus&, void)
+{
+    SetScrollBarRange();
+    DoScroll();
+    Invalidate();
+}
+
 void ScTextWnd::StopEditEngine( bool bAll )
 {
     if (!m_xEditEngine)
@@ -1891,6 +1899,7 @@ void ScTextWnd::StopEditEngine( bool bAll )
         aString = m_xEditEngine->GetText();
         bIsInsertMode = m_xEditView->IsInsertMode();
         bool bSelection = m_xEditView->HasSelection();
+        m_xEditEngine->SetStatusEventHdl(Link<EditStatus&, void>());
         m_xEditEngine->SetModifyHdl(Link<LinkParamNone*,void>());
         m_xEditView.reset();
         m_xEditEngine.reset();
