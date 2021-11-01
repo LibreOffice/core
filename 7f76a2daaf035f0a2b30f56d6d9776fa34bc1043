@@ -107,6 +107,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b62c2ee_7041205a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-01T11:27:44Z",
+      "side": 1,
+      "message": "I see now that my idea may be incorrect. Let me keep it for now, maybe it could allow quikee to get some idea what happens. Also I\u0027m not deleting the problematic certificate from my local store - in case you have some suggestion that I need to test. In case there won\u0027t be suggestions, I\u0027ll abandon it, remove the problematic certificate locally, and will try to watch what adds it - maybe I\u0027ll succeed this time (or maybe it\u0027s already fixed in the meanwhile...)",
+      "parentUuid": "11c46aa0_82e8e199",
+      "revId": "7f76a2daaf035f0a2b30f56d6d9776fa34bc1043",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "733b1bd1_f858b390",
