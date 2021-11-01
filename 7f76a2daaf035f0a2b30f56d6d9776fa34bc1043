@@ -51,6 +51,23 @@
       "parentUuid": "6abcd577_c98c1fd2",
       "revId": "7f76a2daaf035f0a2b30f56d6d9776fa34bc1043",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "733b1bd1_f858b390",
+        "filename": "xmlsecurity/qa/unit/signing/signing.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1141,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-01T10:27:18Z",
+      "side": 1,
+      "message": "I suppose that this test might need the same check, and that it only doesn\u0027t fail on my system because there\u0027s nothing (invalid) returned for ECDSA...",
+      "revId": "7f76a2daaf035f0a2b30f56d6d9776fa34bc1043",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
