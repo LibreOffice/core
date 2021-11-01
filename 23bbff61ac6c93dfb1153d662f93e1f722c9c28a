@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b289719_12a2f874",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-01T06:29:10Z",
+      "side": 1,
+      "message": "Stephan: thanks to your help, I could change declarations to use sal_Bool explicitly in most places; but I don\u0027t understand the failure at this place. I tried to grep for cppobj in the hope that I find an explicit exclusion, but I didn\u0027t find one. Could you please advise?",
+      "revId": "23bbff61ac6c93dfb1153d662f93e1f722c9c28a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e427b4e7_7177e3ed",
+        "filename": "testtools/source/bridgetest/cppobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-01T06:29:10Z",
+      "side": 1,
+      "message": "I likely could change this to\n\n    Sequence\u003c Sequence\u003c sal_Bool \u003e \u003e arg28{ Sequence\u003c sal_Bool \u003e{ true } };",
+      "revId": "23bbff61ac6c93dfb1153d662f93e1f722c9c28a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89a4771a_4cab87db",
+        "filename": "testtools/source/bridgetest/cppobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 976,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-01T06:29:10Z",
+      "side": 1,
+      "message": "But why does it fail on this? It assigns \u0027true\u0027 to \u0027member\u0027, and that \u0027member\u0027 should be exactly the same type that succeeded previously at line 978 before the change?",
+      "revId": "23bbff61ac6c93dfb1153d662f93e1f722c9c28a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
