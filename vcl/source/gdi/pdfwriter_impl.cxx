@@ -9517,8 +9517,15 @@ const PDFWriterImpl::BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx
         m_aBitmaps.push_front( BitmapEmit() );
         m_aBitmaps.front().m_aID        = aID;
         m_aBitmaps.front().m_aBitmap    = aBitmap;
-        if (!rGraphic.hasPdfData() || m_aContext.UseReferenceXObject)
-            m_aBitmaps.front().m_nObject = createObject();
+
+        static bool bAllowPdfToPdf(officecfg::Office::Common::VCL::AllowPdfToPdfEmbedding::get());
+        const bool bHasPdfDFata(bAllowPdfToPdf && rGraphic.hasPdfData());
+
+        if (!bHasPdfDFata || m_aContext.UseReferenceXObject)
+        {
+             m_aBitmaps.front().m_nObject = createObject();
+        }
+
         createEmbeddedFile(rGraphic, m_aBitmaps.front().m_aReferenceXObject, m_aBitmaps.front().m_nObject);
         it = m_aBitmaps.begin();
     }
