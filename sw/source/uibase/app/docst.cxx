@@ -319,7 +319,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
             if (sName.isEmpty() && m_xBasePool)
                 sName = SfxStyleDialogController::GenerateUnusedName(*m_xBasePool, nFamily);
 
-            Edit(sName, sParent, nFamily, nMask, true, OString(), nullptr, &rReq, nSlot);
+            Edit(rReq.GetFrameWeld(), sName, sParent, nFamily, nMask, true, OString(), nullptr, &rReq, nSlot);
         }
         break;
 
@@ -491,7 +491,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 switch(nSlot)
                 {
                     case SID_STYLE_EDIT:
-                        Edit(aParam, OUString(), nFamily, nMask, false, OString(), pActShell);
+                        Edit(rReq.GetFrameWeld(), aParam, OUString(), nFamily, nMask, false, OString(), pActShell);
                         break;
                     case SID_STYLE_DELETE:
                         Delete(aParam, nFamily);
@@ -754,6 +754,7 @@ void syncEndnoteOrientation(const uno::Reference< style::XStyleFamiliesSupplier 
 }
 
 void SwDocShell::Edit(
+    weld::Window* pDialogParent,
     const OUString &rName,
     const OUString &rParent,
     const SfxStyleFamily nFamily,
@@ -953,7 +954,12 @@ void SwDocShell::Edit(
         FieldUnit eMetric = ::GetDfltMetric(0 != (HTMLMODE_ON&nHtmlMode));
         SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        VclPtr<SfxAbstractApplyTabDialog> pDlg(pFact->CreateTemplateDialog(GetView()->GetFrameWeld(),
+        if (!pDialogParent)
+        {
+            SAL_WARN("sw.ui", "no parent for dialog supplied, assuming document frame is good enough");
+            pDialogParent = GetView()->GetFrameWeld();
+        }
+        VclPtr<SfxAbstractApplyTabDialog> pDlg(pFact->CreateTemplateDialog(pDialogParent,
                                                     *xTmp, nFamily, sPage, pCurrShell, bNew));
         auto pApplyStyleHelper = std::make_shared<ApplyStyle>(*this, bNew, xTmp, nFamily, pDlg.get(), m_xBasePool, bModified);
         pDlg->SetApplyHdl(LINK(pApplyStyleHelper.get(), ApplyStyle, ApplyHdl));
@@ -1627,7 +1633,7 @@ void SwDocShell::FormatPage(
     SwWrtShell& rActShell,
     SfxRequest* pRequest)
 {
-    Edit(rPage, OUString(), SfxStyleFamily::Page, SfxStyleSearchBits::Auto, false, rPageId, &rActShell, pRequest);
+    Edit(nullptr, rPage, OUString(), SfxStyleFamily::Page, SfxStyleSearchBits::Auto, false, rPageId, &rActShell, pRequest);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

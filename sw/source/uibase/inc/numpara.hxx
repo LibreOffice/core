@@ -58,8 +58,8 @@ class SwParagraphNumTabPage final : public SfxTabPage
 
     static const WhichRangesContainer aPageRg;
 
-    static bool ExecuteEditNumStyle_Impl( sal_uInt16 nId, const OUString& rStr,
-                          SfxStyleFamily nFamily );
+    bool ExecuteEditNumStyle_Impl(sal_uInt16 nId, const OUString& rStr,
+                                  SfxStyleFamily nFamily);
 
 public:
     SwParagraphNumTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet );

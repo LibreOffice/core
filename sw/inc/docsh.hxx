@@ -128,6 +128,7 @@ class SW_DLLPUBLIC SwDocShell
     /// Only used for nFamily == SfxStyleFamily::Page. Identifies optional Slot by which the edit is triggered.
     /// Used to activate certain dialog pane
     SAL_DLLPRIVATE void Edit(
+        weld::Window* pDialogParent,
         const OUString &rName,
         const OUString& rParent,
         const SfxStyleFamily nFamily,
