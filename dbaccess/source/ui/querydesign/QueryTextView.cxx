@@ -33,7 +33,7 @@ using namespace ::com::sun::star::lang;
 OQueryTextView::OQueryTextView(OQueryContainerWindow* pParent, OQueryController& rController)
     : InterimItemWindow(pParent, "dbaccess/ui/queryview.ui", "QueryView")
     , m_rController(rController)
-    , m_xSQL(new SQLEditView)
+    , m_xSQL(new SQLEditView(m_xBuilder->weld_scrolled_window("scrolledwindow", true)))
     , m_xSQLEd(new weld::CustomWeld(*m_xBuilder, "sql", *m_xSQL))
     , m_timerUndoActionCreation("dbaccess OQueryTextView m_timerUndoActionCreation")
     , m_timerInvalidate("dbaccess OQueryTextView m_timerInvalidate")

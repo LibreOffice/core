@@ -51,7 +51,7 @@ namespace dbaui
         , m_xShowOutput(m_xBuilder->weld_check_button("showoutput"))
         , m_xOutput(m_xBuilder->weld_text_view("output"))
         , m_xClose(m_xBuilder->weld_button("close"))
-        , m_xSQL(new SQLEditView)
+        , m_xSQL(new SQLEditView(m_xBuilder->weld_scrolled_window("scrolledwindow", true)))
         , m_xSQLEd(new weld::CustomWeld(*m_xBuilder, "sql", *m_xSQL))
         , m_nStatusCount(1)
         , m_xConnection(_rxConn)
