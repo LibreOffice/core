@@ -151,14 +151,14 @@ css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecCon
     }
     else // OOXML
     {
-        internalSignatureInfor.signatureInfor.ouSignatureId = "idPackageSignature";
+        OUString aID = createId();
+        internalSignatureInfor.signatureInfor.ouSignatureId = aID;
 
-        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, "idPackageObject", -1, OUString());
+        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, "idPackageObject_" + aID, -1, OUString());
         size++;
-        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, "idOfficeObject", -1, OUString());
+        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, "idOfficeObject_" + aID, -1, OUString());
         size++;
-        OUString aId = "idSignedProperties_" +  internalSignatureInfor.signatureInfor.ouSignatureId;
-        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, aId, -1, OUString());
+        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, "idSignedProperties_" + aID, -1, OUString());
         size++;
     }
 
