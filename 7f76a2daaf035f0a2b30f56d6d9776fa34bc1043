@@ -53,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2886fdac_13ef1128",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-01T10:49:15Z",
+      "side": 1,
+      "message": "but how is this \"certificate that exists in my Personal Certificates container\" involved in verifying the one in the test document? did you import a test certificate into the Personal Certificates container? does it have the same serial number by accident?",
+      "parentUuid": "e69662ec_25e11df1",
+      "revId": "7f76a2daaf035f0a2b30f56d6d9776fa34bc1043",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "733b1bd1_f858b390",
