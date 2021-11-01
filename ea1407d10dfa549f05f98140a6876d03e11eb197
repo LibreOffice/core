@@ -16,6 +16,24 @@
       "message": "Can you also look into [1] if you have time please \n\n[1] https://bugs.documentfoundation.org/show_bug.cgi?id\u003d145486",
       "revId": "ea1407d10dfa549f05f98140a6876d03e11eb197",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ad720f6_c042c6a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-11-01T16:57:26Z",
+      "side": 1,
+      "message": "Fixed it! https://gerrit.libreoffice.org/c/core/+/124555",
+      "parentUuid": "dfc24c38_e53c4b37",
+      "revId": "ea1407d10dfa549f05f98140a6876d03e11eb197",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
