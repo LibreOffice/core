@@ -327,6 +327,7 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     m_xPerformFileExtCheck->set_active(
         officecfg::Office::Common::Misc::PerformFileExtCheck::get());
     m_xPerformFileExtCheck->save_state();
+    m_xPerformFileExtCheck->set_sensitive(!officecfg::Office::Common::Misc::PerformFileExtCheck::isReadOnly());
 #endif
 }
 
