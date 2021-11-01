@@ -104,6 +104,24 @@
       "parentUuid": "733b1bd1_f858b390",
       "revId": "7f76a2daaf035f0a2b30f56d6d9776fa34bc1043",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acc8663d_e6517b94",
+        "filename": "xmlsecurity/qa/unit/signing/signing.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1141,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-01T10:53:04Z",
+      "side": 1,
+      "message": "that looks like a different problem though, more duplicate xml:id\u0027s that cause verification to pick the wrong element? no indication of invalid certificate.\n\nwarn:xmlsecurity.xmlsec:11689:11689:xmlsecurity/source/xmlsec/errorcallback.cxx:53: xmltree.c:722: xmlSecAddIDs() \u0027\u0027 \u0027\u0027 12 \u0027invalid data for \u0027id\u0027: actual\u003d\u0027idPackageSignature\u0027 and expected unique id (id already defined)\u0027\nwarn:xmlsecurity.xmlsec:11689:11689:xmlsecurity/source/xmlsec/errorcallback.cxx:53: xmltree.c:722: xmlSecAddIDs() \u0027\u0027 \u0027\u0027 12 \u0027invalid data for \u0027id\u0027: actual\u003d\u0027idPackageObject\u0027 and expected unique id (id already defined)\u0027\nwarn:xmlsecurity.xmlsec:11689:11689:xmlsecurity/source/xmlsec/errorcallback.cxx:53: xmltree.c:722: xmlSecAddIDs() \u0027\u0027 \u0027\u0027 12 \u0027invalid data for \u0027id\u0027: actual\u003d\u0027idSignatureTime\u0027 and expected unique id (id already defined)\u0027\nwarn:xmlsecurity.xmlsec:11689:11689:xmlsecurity/source/xmlsec/errorcallback.cxx:53: xmltree.c:722: xmlSecAddIDs() \u0027\u0027 \u0027\u0027 12 \u0027invalid data for \u0027id\u0027: actual\u003d\u0027idOfficeObject\u0027 and expected unique id (id already defined)\u0027\nwarn:xmlsecurity.xmlsec:11689:11689:xmlsecurity/source/xmlsec/errorcallback.cxx:53: xmltree.c:722: xmlSecAddIDs() \u0027\u0027 \u0027\u0027 12 \u0027invalid data for \u0027id\u0027: actual\u003d\u0027idOfficeV1Details\u0027 and expected unique id (id already defined)\u0027\nwarn:xmlsecurity.xmlsec:11689:11689:xmlsecurity/source/xmlsec/errorcallback.cxx:53: xmltree.c:722: xmlSecAddIDs() \u0027\u0027 \u0027\u0027 12 \u0027invalid data for \u0027id\u0027: actual\u003d\u0027idSignedProperties_idPackageSignature\u0027 and expected unique id (id already defined)\u0027\nwarn:xmlsecurity.xmlsec:11689:11689:xmlsecurity/source/xmlsec/errorcallback.cxx:53: digests.c:226: xmlSecNssDigestVerify() \u0027sha256\u0027 \u0027\u0027 12 \u0027data and digest do not match\u0027\n/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/xmlsecurity/qa/unit/signing/signing.cxx:1170:testSigningMultipleTimes_OOXML::TestBody\nequality assertion failed\n- Expected: 1\n- Actual  : 0",
+      "parentUuid": "63cbdecc_7aa600f5",
+      "revId": "7f76a2daaf035f0a2b30f56d6d9776fa34bc1043",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
