@@ -1915,8 +1915,9 @@ auto CurlSession::MKCOL(OUString const& rURIReference, DAVRequestEnvironment con
 
     CurlUri const uri(CurlProcessor::URIReferenceToURI(*this, rURIReference));
 
-    ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, "MKCOL",
-                                               "CURLOPT_CUSTOMREQUEST" } };
+    ::std::vector<CurlOption> const options{
+        { CURLOPT_NOBODY, 1L, nullptr }, { CURLOPT_CUSTOMREQUEST, "MKCOL", "CURLOPT_CUSTOMREQUEST" }
+    };
 
     CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, nullptr, nullptr, nullptr, nullptr);
 }
@@ -1943,8 +1944,9 @@ auto CurlProcessor::MoveOrCopy(CurlSession& rSession, OUString const& rSourceURI
         throw uno::RuntimeException("curl_slist_append failed");
     }
 
-    ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, pMethod,
-                                               "CURLOPT_CUSTOMREQUEST" } };
+    ::std::vector<CurlOption> const options{
+        { CURLOPT_NOBODY, 1L, nullptr }, { CURLOPT_CUSTOMREQUEST, pMethod, "CURLOPT_CUSTOMREQUEST" }
+    };
 
     CurlProcessor::ProcessRequest(rSession, uriSource, options, &rEnv, ::std::move(pList), nullptr,
                                   nullptr, nullptr);
@@ -1974,7 +1976,8 @@ auto CurlSession::DESTROY(OUString const& rURIReference, DAVRequestEnvironment c
 
     CurlUri const uri(CurlProcessor::URIReferenceToURI(*this, rURIReference));
 
-    ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, "DELETE",
+    ::std::vector<CurlOption> const options{ { CURLOPT_NOBODY, 1L, nullptr },
+                                             { CURLOPT_CUSTOMREQUEST, "DELETE",
                                                "CURLOPT_CUSTOMREQUEST" } };
 
     CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, nullptr, nullptr, nullptr, nullptr);
