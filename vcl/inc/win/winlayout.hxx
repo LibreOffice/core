@@ -44,6 +44,7 @@ public:
 
     HFONT GetHFONT() const { return m_hFont; }
     float GetScale() const { return m_fScale; }
+    bool  IsAtPrefixed() const { return m_bIsAtPrefixed; }
 
     const WinFontFace * GetFontFace() const { return static_cast<const WinFontFace *>(LogicalFontInstance::GetFontFace()); }
     WinFontFace * GetFontFace() { return static_cast<WinFontFace *>(LogicalFontInstance::GetFontFace()); }
@@ -59,6 +60,7 @@ private:
     WinSalGraphics *m_pGraphics;
     HFONT m_hFont;
     float m_fScale;
+    bool  m_bIsAtPrefixed;
 };
 
 class TextOutRenderer
