@@ -1362,9 +1362,13 @@ void ScOrcusStyles::font::applyToItemSet(SfxItemSet& rSet) const
     {
         FontItalic eItalic = mbItalic ? ITALIC_NORMAL : ITALIC_NONE;
         rSet.Put(SvxPostureItem(eItalic, ATTR_FONT_POSTURE));
+        rSet.Put(SvxPostureItem(eItalic, ATTR_CJK_FONT_POSTURE));
+        rSet.Put(SvxPostureItem(eItalic, ATTR_CTL_FONT_POSTURE));
 
         FontWeight eWeight = mbBold ? WEIGHT_BOLD : WEIGHT_NORMAL;
         rSet.Put(SvxWeightItem(eWeight, ATTR_FONT_WEIGHT));
+        rSet.Put(SvxWeightItem(eWeight, ATTR_CJK_FONT_WEIGHT));
+        rSet.Put(SvxWeightItem(eWeight, ATTR_CTL_FONT_WEIGHT));
 
         rSet.Put( SvxColorItem(maColor, ATTR_FONT_COLOR));
 
@@ -1372,6 +1376,8 @@ void ScOrcusStyles::font::applyToItemSet(SfxItemSet& rSet) const
             rSet.Put( SvxFontItem( FAMILY_DONTKNOW, maName, maName, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ));
 
         rSet.Put( SvxFontHeightItem (translateToInternal(mnSize, orcus::length_unit_t::point), 100, ATTR_FONT_HEIGHT));
+        rSet.Put( SvxFontHeightItem (translateToInternal(mnSize, orcus::length_unit_t::point), 100, ATTR_CJK_FONT_HEIGHT));
+        rSet.Put( SvxFontHeightItem (translateToInternal(mnSize, orcus::length_unit_t::point), 100, ATTR_CTL_FONT_HEIGHT));
     }
 
     if (mbHasUnderlineAttr)
