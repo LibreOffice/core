@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c8d9cd1e_15e67d01",
+        "filename": "comphelper/source/container/enumhelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2021-11-01T16:17:35Z",
+      "side": 1,
+      "message": "Ok I ill do it but if this lock is useful, it means that we will use a destroyed object !",
+      "parentUuid": "45aa4453_388604be",
+      "range": {
+        "startLine": 51,
+        "startChar": 9,
+        "endLine": 51,
+        "endChar": 19
+      },
+      "revId": "ccc06855c1e149972cfd9f3417f6642093026412",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "61a8b1aa_0d88999d",
         "filename": "comphelper/source/container/enumhelper.cxx",
         "patchSetId": 2
