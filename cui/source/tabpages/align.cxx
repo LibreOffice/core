@@ -56,7 +56,7 @@ namespace {
 
 template<typename JustContainerType, typename JustEnumType>
 void lcl_MaybeResetAlignToDistro(
-    weld::ComboBox& rLB, sal_uInt16 nListPos, const SfxItemSet& rCoreAttrs, sal_uInt16 nWhichAlign, sal_uInt16 nWhichJM, JustEnumType eBlock)
+    weld::ComboBox& rLB, sal_uInt16 nListId, const SfxItemSet& rCoreAttrs, sal_uInt16 nWhichAlign, sal_uInt16 nWhichJM, JustEnumType eBlock)
 {
     const SfxPoolItem* pItem;
     if (rCoreAttrs.GetItemState(nWhichAlign, true, &pItem) != SfxItemState::SET)
@@ -78,14 +78,19 @@ void lcl_MaybeResetAlignToDistro(
     if (eMethod == SvxCellJustifyMethod::Distribute)
     {
         // Select the 'distribute' entry in the specified list box.
-        rLB.set_active(nListPos);
+        rLB.set_active_id(OUString::number(nListId));
     }
 }
 
-void lcl_SetJustifyMethodToItemSet(SfxItemSet& rSet, const SfxItemSet& rOldSet, sal_uInt16 nWhichJM, const weld::ComboBox& rLB, sal_uInt16 nListPos)
+void lcl_SetJustifyMethodToItemSet(SfxItemSet& rSet, const SfxItemSet& rOldSet, sal_uInt16 nWhichJM, const weld::ComboBox& rLB, sal_uInt16 nListId)
 {
+    // tdf#138698 unsupported, e.g. dbaccess
+    if (rLB.find_id(OUString::number(nListId)) == -1)
+        return;
+
+    // feature supported , e.g. calc
     SvxCellJustifyMethod eJM = SvxCellJustifyMethod::Auto;
-    if (rLB.get_active() == nListPos)
+    if (rLB.get_active_id().toInt32() == nListId)
         eJM = SvxCellJustifyMethod::Distribute;
 
     // tdf#129300 If it would create no change, don't force it
@@ -615,19 +620,43 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
         }
     }
 
-
     // Special treatment for distributed alignment; we need to set the justify
     // method to 'distribute' to distinguish from the normal justification.
+    sal_uInt16 nHorJustifyMethodWhich = GetWhich(SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD);
+    SfxItemState eHorJustifyMethodState = pCoreAttrs->GetItemState(nHorJustifyMethodWhich);
+    if (eHorJustifyMethodState == SfxItemState::UNKNOWN)
+    {
+        // feature unknown, e.g. dbaccess, remove the option
+        int nDistribId = m_xLbHorAlign->find_id(OUString::number(ALIGNDLG_HORALIGN_DISTRIBUTED));
+        if (nDistribId != -1)
+            m_xLbHorAlign->remove(nDistribId);
+    }
+    else
+    {
+        // feature known, e.g. calc
+        lcl_MaybeResetAlignToDistro<SvxCellHorJustify, SvxCellHorJustify>(
+            *m_xLbHorAlign, ALIGNDLG_HORALIGN_DISTRIBUTED, *pCoreAttrs,
+            GetWhich(SID_ATTR_ALIGN_HOR_JUSTIFY), nHorJustifyMethodWhich,
+            SvxCellHorJustify::Block);
+    }
 
-    lcl_MaybeResetAlignToDistro<SvxCellHorJustify, SvxCellHorJustify>(
-        *m_xLbHorAlign, ALIGNDLG_HORALIGN_DISTRIBUTED, *pCoreAttrs,
-        GetWhich(SID_ATTR_ALIGN_HOR_JUSTIFY), GetWhich(SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD),
-        SvxCellHorJustify::Block);
-
-    lcl_MaybeResetAlignToDistro<SvxCellVerJustify, SvxCellVerJustify>(
-        *m_xLbVerAlign, ALIGNDLG_VERALIGN_DISTRIBUTED, *pCoreAttrs,
-        GetWhich(SID_ATTR_ALIGN_VER_JUSTIFY), GetWhich(SID_ATTR_ALIGN_VER_JUSTIFY_METHOD),
-        SvxCellVerJustify::Block);
+    sal_uInt16 nVerJustifyMethodWhich = GetWhich(SID_ATTR_ALIGN_VER_JUSTIFY_METHOD);
+    SfxItemState eVerJustifyMethodState = pCoreAttrs->GetItemState(nVerJustifyMethodWhich);
+    if (eVerJustifyMethodState == SfxItemState::UNKNOWN)
+    {
+        // feature unknown, e.g. dbaccess, remove the option
+        int nDistribId = m_xLbVerAlign->find_id(OUString::number(ALIGNDLG_VERALIGN_DISTRIBUTED));
+        if (nDistribId != -1)
+            m_xLbVerAlign->remove(nDistribId);
+    }
+    else
+    {
+        // feature known, e.g. calc
+        lcl_MaybeResetAlignToDistro<SvxCellVerJustify, SvxCellVerJustify>(
+            *m_xLbVerAlign, ALIGNDLG_VERALIGN_DISTRIBUTED, *pCoreAttrs,
+            GetWhich(SID_ATTR_ALIGN_VER_JUSTIFY), nVerJustifyMethodWhich,
+            SvxCellVerJustify::Block);
+    }
 
     m_xLbHorAlign->save_value();
     m_xLbFrameDir->save_value();
@@ -668,7 +697,7 @@ void AlignmentTabPage::InitVsRefEgde()
 
 void AlignmentTabPage::UpdateEnableControls()
 {
-    const sal_Int32 nHorAlign = m_xLbHorAlign->get_active();
+    const sal_Int32 nHorAlign = m_xLbHorAlign->get_active_id().toInt32();
     bool bHorLeft  = (nHorAlign == ALIGNDLG_HORALIGN_LEFT);
     bool bHorBlock = (nHorAlign == ALIGNDLG_HORALIGN_BLOCK);
     bool bHorFill  = (nHorAlign == ALIGNDLG_HORALIGN_FILL);
