@@ -22,6 +22,47 @@
       },
       "revId": "ccc06855c1e149972cfd9f3417f6642093026412",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45aa4453_388604be",
+        "filename": "comphelper/source/container/enumhelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-11-01T12:51:58Z",
+      "side": 1,
+      "message": "prob best to leave this lock here, and remove the one in prob best to just remove the lock in impl_stopDisposeListening",
+      "parentUuid": "c11cfc19_23959399",
+      "range": {
+        "startLine": 51,
+        "startChar": 9,
+        "endLine": 51,
+        "endChar": 19
+      },
+      "revId": "ccc06855c1e149972cfd9f3417f6642093026412",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61a8b1aa_0d88999d",
+        "filename": "comphelper/source/container/enumhelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-11-01T12:51:58Z",
+      "side": 1,
+      "message": "and it will deadlock here, prob best to just remove the lock in impl_stopDisposeListening",
+      "revId": "ccc06855c1e149972cfd9f3417f6642093026412",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
