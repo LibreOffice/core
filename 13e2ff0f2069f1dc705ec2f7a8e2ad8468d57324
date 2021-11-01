@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "501d94c6_b9cda0ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-01T20:54:16Z",
+      "side": 1,
+      "message": "Thank you for your feedback!\nI rebased to try to trigger Jenkins (same symptom for another patch)",
+      "revId": "13e2ff0f2069f1dc705ec2f7a8e2ad8468d57324",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
