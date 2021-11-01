@@ -622,28 +622,33 @@ void LibPage::InsertLib()
 
     Sequence< OUString > aLibNames = GetMergedLibraryNames( xModLibContImport, xDlgLibContImport );
     sal_Int32 nLibCount = aLibNames.getLength();
-    const OUString* pLibNames = aLibNames.getConstArray();
-    for ( sal_Int32 i = 0 ; i < nLibCount ; i++ )
+    if (nLibCount)
     {
         // library import dialog
-        if (!xLibDlg)
+        xLibDlg = std::make_shared<LibDialog>(m_pDialog->getDialog());
+        xLibDlg->SetStorageName(aURLObj.getName());
+        weld::TreeView& rView = xLibDlg->GetLibBox();
+        rView.make_unsorted();
+
+        const OUString* pLibNames = aLibNames.getConstArray();
+        for (sal_Int32 i = 0 ; i < nLibCount; ++i)
         {
-            xLibDlg = std::make_shared<LibDialog>(m_pDialog->getDialog());
-            xLibDlg->SetStorageName( aURLObj.getName() );
+            // libbox entries
+            OUString aLibName( pLibNames[ i ] );
+            if ( !( ( xModLibContImport.is() && xModLibContImport->hasByName( aLibName ) && xModLibContImport->isLibraryLink( aLibName ) ) ||
+                    ( xDlgLibContImport.is() && xDlgLibContImport->hasByName( aLibName ) && xDlgLibContImport->isLibraryLink( aLibName ) ) ) )
+            {
+                rView.append();
+                const int nRow = rView.n_children() - 1;
+                rView.set_toggle(nRow, TRISTATE_TRUE);
+                rView.set_text(nRow, aLibName, 0);
+            }
         }
 
-        // libbox entries
-        OUString aLibName( pLibNames[ i ] );
-        if ( !( ( xModLibContImport.is() && xModLibContImport->hasByName( aLibName ) && xModLibContImport->isLibraryLink( aLibName ) ) ||
-                ( xDlgLibContImport.is() && xDlgLibContImport->hasByName( aLibName ) && xDlgLibContImport->isLibraryLink( aLibName ) ) ) )
-        {
-            weld::TreeView& rView = xLibDlg->GetLibBox();
-            rView.append();
-            const int nRow = rView.n_children() - 1;
-            rView.set_toggle(nRow, TRISTATE_TRUE);
-            rView.set_text(nRow, aLibName, 0);
-            rView.set_cursor(rView.find_text(aLibName));
-        }
+        rView.make_sorted();
+
+        if (rView.n_children())
+            rView.set_cursor(0);
     }
 
     if (!xLibDlg)
