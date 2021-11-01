@@ -29,25 +29,6 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 
-//  conversion programmatic <-> display (visible) name
-//  currently, the core always has the visible names
-//  the api is required to use programmatic names for default styles
-//  these programmatic names must never change!
-
-constexpr OUStringLiteral SC_STYLE_PROG_STANDARD = u"Default";
-constexpr OUStringLiteral SC_STYLE_PROG_RESULT = u"Result";
-constexpr OUStringLiteral SC_STYLE_PROG_RESULT1 = u"Result2";
-constexpr OUStringLiteral SC_STYLE_PROG_HEADING = u"Heading";
-constexpr OUStringLiteral SC_STYLE_PROG_HEADING1 = u"Heading1";
-constexpr OUStringLiteral SC_STYLE_PROG_REPORT = u"Report";
-
-constexpr OUStringLiteral SC_PIVOT_STYLE_PROG_INNER = u"Pivot Table Value";
-constexpr OUStringLiteral SC_PIVOT_STYLE_PROG_RESULT = u"Pivot Table Result";
-constexpr OUStringLiteral SC_PIVOT_STYLE_PROG_CATEGORY = u"Pivot Table Category";
-constexpr OUStringLiteral SC_PIVOT_STYLE_PROG_TITLE = u"Pivot Table Title";
-constexpr OUStringLiteral SC_PIVOT_STYLE_PROG_FIELDNAME = u"Pivot Table Field";
-constexpr OUStringLiteral SC_PIVOT_STYLE_PROG_TOP = u"Pivot Table Corner";
-
 namespace {
 
 struct ScDisplayNameMap
