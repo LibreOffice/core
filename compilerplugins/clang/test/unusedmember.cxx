@@ -13,15 +13,35 @@ namespace
 {
 struct S
 {
-    enum E
+    enum E1
     {
-        E1,
-        E2
+        E11,
+        E12
     };
-    E e;
+    E1 e1;
+    enum E2
+    {
+        E21,
+        E22
+    };
+    E2 e2; // expected-error {{unused class member [loplugin:unusedmember]}}
+    enum E3
+    {
+        E31,
+        E32
+    } e3;
+    enum E4
+    {
+        E41,
+        E42
+    } e4; // expected-error {{unused class member [loplugin:unusedmember]}}
 };
 }
-void f(S s) { (void)s.e; }
+void f(S s)
+{
+    (void)s.e1;
+    (void)s.e3;
+}
 }
 
 namespace ElaboratedEnum
