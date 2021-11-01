@@ -2783,7 +2783,7 @@ AC_ARG_WITH(macosx-sdk,
                           not terribly useful. It works fine to build with a new SDK and run the result
                           on an older OS.
 
-                          e. g.: --with-macosx-sdk=10.10
+                          e. g.: --with-macosx-sdk=10.15
 
                           there are 3 options to control the MacOSX build:
                           --with-macosx-sdk (referred as 'sdk' below)
@@ -2798,10 +2798,10 @@ AC_ARG_WITH(macosx-sdk,
                            command line      || config result
                           ==========================================
                           min  | max  | sdk  || min   | max  | sdk  |
-                          ?    | ?    | ?    || 10.10 | 10.s | 10.s |
-                          ?    | ?    | 10.x || 10.10 | 10.x | 10.x |
-                          ?    | 10.x | ?    || 10.10 | 10.s | 10.s |
-                          ?    | 10.x | 10.y || 10.10 | 10.x | 10.y |
+                          ?    | ?    | ?    || 10.12 | 10.s | 10.s |
+                          ?    | ?    | 10.x || 10.12 | 10.x | 10.x |
+                          ?    | 10.x | ?    || 10.12 | 10.s | 10.s |
+                          ?    | 10.x | 10.y || 10.12 | 10.x | 10.y |
                           10.x | ?    | ?    || 10.x  | 10.s | 10.s |
                           10.x | ?    | 10.y || 10.x  | 10.y | 10.y |
                           10.x | 10.y | ?    || 10.x  | 10.y | 10.y |
@@ -2819,7 +2819,7 @@ AC_ARG_WITH(macosx-version-min-required,
     AS_HELP_STRING([--with-macosx-version-min-required=<version>],
         [set the minimum OS version needed to run the built LibreOffice])
     [
-                          e. g.: --with-macosx-version-min-required=10.10
+                          e. g.: --with-macosx-version-min-required=10.12
                           see --with-macosx-sdk for more info
     ],
 ,)
@@ -2828,7 +2828,7 @@ AC_ARG_WITH(macosx-version-max-allowed,
     AS_HELP_STRING([--with-macosx-version-max-allowed=<version>],
         [set the maximum allowed OS version the LibreOffice compilation can use APIs from])
     [
-                          e. g.: --with-macosx-version-max-allowed=10.10
+                          e. g.: --with-macosx-version-max-allowed=10.12
                           see --with-macosx-sdk for more info
     ],
 ,)
@@ -3303,7 +3303,7 @@ if test $_os = Darwin; then
 
     if test "$with_macosx_version_min_required" = "" ; then
         if test "$host_cpu" = x86_64; then
-            with_macosx_version_min_required="10.10";
+            with_macosx_version_min_required="10.12";
         else
             with_macosx_version_min_required="11.0";
         fi
@@ -3331,12 +3331,6 @@ if test $_os = Darwin; then
     fi
 
     case "$with_macosx_version_min_required" in
-    10.10)
-        MAC_OS_X_VERSION_MIN_REQUIRED="101000"
-        ;;
-    10.11)
-        MAC_OS_X_VERSION_MIN_REQUIRED="101100"
-        ;;
     10.12)
         MAC_OS_X_VERSION_MIN_REQUIRED="101200"
         ;;
@@ -3365,7 +3359,7 @@ if test $_os = Darwin; then
         MAC_OS_X_VERSION_MIN_REQUIRED="120000"
         ;;
     *)
-        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported values are 10.10--12.0])
+        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported values are 10.12--12.0])
         ;;
     esac
 
@@ -3405,12 +3399,6 @@ if test $_os = Darwin; then
     fi
 
     case "$with_macosx_version_max_allowed" in
-    10.10)
-        MAC_OS_X_VERSION_MAX_ALLOWED="101000"
-        ;;
-    10.11)
-        MAC_OS_X_VERSION_MAX_ALLOWED="101100"
-        ;;
     10.12)
         MAC_OS_X_VERSION_MAX_ALLOWED="101200"
         ;;
@@ -3436,7 +3424,7 @@ if test $_os = Darwin; then
         MAC_OS_X_VERSION_MAX_ALLOWED="120000"
         ;;
     *)
-        AC_MSG_ERROR([with-macosx-version-max-allowed $with_macosx_version_max_allowed is not a supported value, supported values are 10.10--12.0])
+        AC_MSG_ERROR([with-macosx-version-max-allowed $with_macosx_version_max_allowed is not a supported value, supported values are 10.12--12.0])
         ;;
     esac
 
