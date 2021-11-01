@@ -89,6 +89,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "11c46aa0_82e8e199",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-01T11:00:44Z",
+      "side": 1,
+      "message": "uh, if the tests change the system configuration by adding certificates, that\u0027s definitely not ideal...\n\ni already added a hack to let it look up trusted root certificates from a file, see CheckUnitTestStore() ... but this is a different problem no idea what causes that to happen",
+      "parentUuid": "e773f350_2443b6d1",
+      "revId": "7f76a2daaf035f0a2b30f56d6d9776fa34bc1043",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "733b1bd1_f858b390",
