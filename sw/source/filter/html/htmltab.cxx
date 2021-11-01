@@ -34,6 +34,7 @@
 #include <svtools/htmlkywd.hxx>
 #include <svl/numformat.hxx>
 #include <svl/urihelper.hxx>
+#include <svx/sdrobjectuser.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
@@ -380,7 +381,7 @@ public:
 // HTML table
 typedef std::vector<SdrObject *> SdrObjects;
 
-class HTMLTable
+class HTMLTable : public sdr::ObjectUser
 {
     OUString m_aId;
     OUString m_aStyle;
@@ -528,6 +529,8 @@ private:
     sal_uInt16 GetBorderWidth( const SvxBorderLine& rBLine,
                            bool bWithDistance=false ) const;
 
+    virtual void ObjectInDestruction(const SdrObject& rObject) override;
+
 public:
 
     bool m_bFirstCell;                // is there a cell created already?
@@ -537,7 +540,7 @@ public:
               bool bHasToFly,
               const HTMLTableOptions& rOptions);
 
-    ~HTMLTable();
+    virtual ~HTMLTable();
 
     // Identifying of a cell
     const HTMLTableCell& GetCell(sal_uInt16 nRow, sal_uInt16 nCell) const;
@@ -1071,11 +1074,33 @@ bool SwHTMLParser::IsReqIF() const
     return m_bReqIF;
 }
 
+// if any m_xResizeDrawObjects members are deleted during parse, remove them
+// from m_xResizeDrawObjects and m_xDrawObjectPercentWidths
+void HTMLTable::ObjectInDestruction(const SdrObject& rObject)
+{
+    auto it = std::find(m_xResizeDrawObjects->begin(), m_xResizeDrawObjects->end(), &rObject);
+    assert(it != m_xResizeDrawObjects->end());
+    auto nIndex = std::distance(m_xResizeDrawObjects->begin(), it);
+    m_xResizeDrawObjects->erase(it);
+    auto otherit = m_xDrawObjectPercentWidths->begin() + nIndex * 3;
+    m_xDrawObjectPercentWidths->erase(otherit, otherit + 3);
+}
+
 HTMLTable::~HTMLTable()
 {
     m_pParser->DeregisterHTMLTable(this);
 
-    m_xResizeDrawObjects.reset();
+    if (m_xResizeDrawObjects)
+    {
+        size_t nCount = m_xResizeDrawObjects->size();
+        for (size_t i = 0; i < nCount; ++i)
+        {
+            SdrObject *pObj = (*m_xResizeDrawObjects)[i];
+            pObj->RemoveObjectUser(*this);
+            m_xResizeDrawObjects.reset();
+        }
+    }
+
     m_xDrawObjectPercentWidths.reset();
 
     m_pContext.reset();
@@ -2477,6 +2502,7 @@ void HTMLTable::RegisterDrawObject( SdrObject *pObj, sal_uInt8 nPercentWidth )
     if( !m_xResizeDrawObjects )
         m_xResizeDrawObjects.emplace();
     m_xResizeDrawObjects->push_back( pObj );
+    pObj->AddObjectUser(*this);
 
     if( !m_xDrawObjectPercentWidths )
         m_xDrawObjectPercentWidths.emplace();
