@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51b5a963_6f74f705",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000863
+      },
+      "writtenOn": "2021-11-01T23:56:18Z",
+      "side": 1,
+      "message": "I encountered this, and with the fix it builds without a problem, thanks a bunch, Mike!",
+      "revId": "cae2f5ca7fb0eacff2c7cdf73b17657b17c8ceb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
