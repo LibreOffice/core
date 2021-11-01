@@ -1605,7 +1605,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         xEntry.reset();
 
     bool bRemoveGotoEntry = false;
-    if (State::HIDDEN == m_eState || !xEntry || !lcl_IsContent(*xEntry, *m_xTreeView))
+    if (State::HIDDEN == m_eState || !xEntry || !lcl_IsContent(*xEntry, *m_xTreeView) ||
+            reinterpret_cast<SwContent*>(m_xTreeView->get_id(*xEntry).toInt64())->IsInvisible())
         bRemoveGotoEntry = true;
 
     bool bRemovePostItEntries = true;
