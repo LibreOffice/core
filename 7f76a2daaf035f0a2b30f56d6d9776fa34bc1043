@@ -71,6 +71,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e773f350_2443b6d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-01T10:56:48Z",
+      "side": 1,
+      "message": "\u003e but how is this \"certificate that exists in my Personal Certificates container\" involved in verifying the one in the test document?\n\nI don\u0027t know :-D Actually I didn\u0027t check the logic there, and prior to your question, assumed that it takes a certificate from local store and signs the document then checks. Not I\u0027m puzzled, too.\n\n\u003e did you import a test certificate into the Personal Certificates container?\n\nNo I didn\u0027t myself. But that certificate gets re-added to my personal certificates after manual removal - presumably after running \u0027make check\u0027, but strangely, not always. I already asked you some time ago about this strange certificate - it was causing another failure back then. But I haven\u0027t managed to find the exact scenario to reproduce the appearance of that certificate - so couldn\u0027t debug it.",
+      "parentUuid": "2886fdac_13ef1128",
+      "revId": "7f76a2daaf035f0a2b30f56d6d9776fa34bc1043",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "733b1bd1_f858b390",
