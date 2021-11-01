@@ -16,6 +16,23 @@
       "message": "ODBC 3 is quite old (1995 as indicated in the bugtracker) so should be ok but perhaps I missed some side effect.\nBefore pushing this, I\u0027d like your opinion on this patch (and more generally about the bugtracker).\nObviously, it won\u0027t fix anything but the goal is to simplify this part so easier to maintain/modify... and all the things we can expect from some simplification.",
       "revId": "67f5474961859f277072efa8e33706f68ab91c9b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41322dd2_cac42821",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2021-11-01T19:26:50Z",
+      "side": 1,
+      "message": "If it compiles on all platforms, go for it.",
+      "revId": "67f5474961859f277072efa8e33706f68ab91c9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
