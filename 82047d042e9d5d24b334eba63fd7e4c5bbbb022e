@@ -16,6 +16,23 @@
       "message": "Thank you!",
       "revId": "82047d042e9d5d24b334eba63fd7e4c5bbbb022e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19ff9aeb_d3bfafd2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-01T10:43:20Z",
+      "side": 1,
+      "message": "this looks to me like a bug in libstdc++, \u003chttps://gcc.gnu.org/bugzilla/show_bug.cgi?id\u003d103022\u003e \"std::begin on empty std::valarray causes _GLIBCXX_DEBUG assertion\"",
+      "revId": "82047d042e9d5d24b334eba63fd7e4c5bbbb022e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
