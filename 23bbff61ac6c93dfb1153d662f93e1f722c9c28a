@@ -86,6 +86,24 @@
       "parentUuid": "89a4771a_4cab87db",
       "revId": "23bbff61ac6c93dfb1153d662f93e1f722c9c28a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "186edba8_1759aa0d",
+        "filename": "testtools/source/bridgetest/cppobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 976,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-01T09:00:15Z",
+      "side": 1,
+      "message": "Thank you!\n\n\u003e proliferation of those getArray() calls will cause more of those false positives that might not be that easy to work around and/or become quite a nuisance\n\nThis change is the last one, and I hope that we won\u0027t add much more uses of Sequence\u003csal_Bool\u003e in the future. I hope that there won\u0027t be much of the problem after merging this one.",
+      "parentUuid": "e3ea1377_67ef5207",
+      "revId": "23bbff61ac6c93dfb1153d662f93e1f722c9c28a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
