@@ -181,7 +181,9 @@ private:
     void DeInitGraphics();
 
 public:
-    HFONT ImplDoSetFont(HDC hDC, vcl::font::FontSelectPattern const & i_rFont, const vcl::font::PhysicalFontFace * i_pFontFace, HFONT& o_rOldFont);
+    // Return HFONT, and whether the font is for vertical writing ( prefixed with '@' )
+    // and tmDescent value for adjusting offset in vertical writing mode.
+    std::tuple<HFONT,bool,sal_Int32> ImplDoSetFont(HDC hDC, vcl::font::FontSelectPattern const & i_rFont, const vcl::font::PhysicalFontFace * i_pFontFace, HFONT& o_rOldFont);
 
     HDC getHDC() const { return mhLocalDC; }
     // NOTE: this doesn't transfer ownership! See class comment.
