@@ -1974,6 +1974,9 @@ class SFDocuments:
         def GetFormula(self, range):
             return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'GetFormula', range)
 
+        def GetRangeAddress(self, range, addressitem = ''):
+            return self.ExecMethod(self.vbMethod + self.flgArrayArg, 'GetRangeAddress', range, addressitem)
+
         def GetValue(self, range):
             return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'GetValue', range)
 

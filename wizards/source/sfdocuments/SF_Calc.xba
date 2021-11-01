@@ -1315,6 +1315,74 @@ Catch:
 End Function	&apos;	SFDocuments.SF_Calc.GetProperty
 
 REM -----------------------------------------------------------------------------
+Public Function GetRangeAddress(Optional ByVal Range As Variant _
+							, Optional ByVal AddressItem As Variant _
+							) As Variant
+&apos;&apos;&apos;	Extracts from a range expressed in A1-style one or more of its coordinates
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Range: the range as a string from which to extract the coordinates
+&apos;&apos;&apos;		AddressItem: either &quot;firstrow&quot;, &quot;firstcol&quot; (topleft cell), &quot;lastrow&quot;, &quot;lastcol&quot; (bottom right cell), &quot;sheet&quot; or omitted
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		Either:
+&apos;&apos;&apos;			- one of the cell coordinates as a Long (coordinates start with 1)
+&apos;&apos;&apos;				when Range is a single cell, row2 and row1 return the same value
+&apos;&apos;&apos;			- the sheet name as a string
+&apos;&apos;&apos;			- all of them as a zero-based array in the order firstrow, firstcol, lastrow, lastcol, sheet
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		row2 = oDoc.GetRangeAddress(&quot;&apos;$SheetX&apos;.E2:J4&quot;, &quot;row2&quot;)		&apos;	4
+&apos;&apos;&apos;		arr = oDoc.GetRangeAddress(&quot;&apos;$SheetX&apos;.E2:J4&quot;)				&apos;	(2, 5, 4, 10, &quot;SheetX&quot;)
+
+Dim vRangeAddress As Variant		&apos;	Return value
+Dim oAddress As Object				&apos;	Alias of input range as _Address
+Dim oCellRange As Object			&apos;	com.sun.star.table.XCellRange
+Const cstThisSub = &quot;SFDocuments.Calc.GetRangeAddress&quot;
+Const cstSubArgs = &quot;Range, [AddressItem=&quot;&quot;firstrow&quot;&quot;|&quot;&quot;firstcol&quot;&quot;|&quot;&quot;lastrow&quot;&quot;|&quot;&quot;lastcol&quot;&quot;|&quot;&quot;sheet&quot;&quot;]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	vRangeAddress = 0
+
+Check:
+	If IsMissing(AddressItem) Or IsEmpty(AddressItem) Then AddressItem = &quot;&quot;
+
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Range, &quot;Range&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(AddressItem, &quot;AddressItem&quot;, V_STRING _
+				, Array(&quot;firstrow&quot;, &quot;firstcol&quot;, &quot;firstcolumn&quot;, &quot;lastrow&quot;, &quot;lastcol&quot;, &quot;lastcolumn&quot;, &quot;sheet&quot;, &quot;sheetname&quot;, &quot;&quot;)) Then GoTo Finally
+	End If
+
+Try:
+	Set oAddress = _ParseAddress(Range)
+	Set oCellRange = oAddress.XCellRange
+	
+	With oCellRange
+		Select Case UCase(AddressItem)
+			Case &quot;FIRSTROW&quot;						:	vRangeAddress = CLng(.RangeAddress.StartRow + 1)
+			Case &quot;FIRSTCOL&quot;, &quot;FIRSTCOLUMN&quot;		:	vRangeAddress = CLng(.RangeAddress.StartColumn + 1)
+			Case &quot;LASTROW&quot;						:	vRangeAddress = CLng(.RangeAddress.EndRow + 1)
+			Case &quot;LASTCOL&quot;, &quot;LASTCOLUMN&quot;		:	vRangeAddress = CLng(.RangeAddress.EndColumn + 1)
+			Case &quot;SHEET&quot;, &quot;SHEETNAME&quot;			:	vRangeAddress = .Spreadsheet.Name
+			Case &quot;&quot;
+				vRangeAddress = Array( _
+								CLng(.RangeAddress.StartRow + 1) _
+								, CLng(.RangeAddress.StartColumn + 1) _
+								, CLng(.RangeAddress.EndRow + 1) _
+								, CLng(.RangeAddress.EndColumn + 1) _
+								, .Spreadsheet.Name _
+								)
+		End Select
+	End With
+
+Finally:
+	GetRangeAddress = vRangeAddress
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SF_Documents.SF_Calc.GetRangeAddress
+
+REM -----------------------------------------------------------------------------
 Public Function GetValue(Optional ByVal Range As Variant) As Variant
 &apos;&apos;&apos;	Get the value(s) stored in the given range of cells
 &apos;&apos;&apos;	Args:
@@ -1617,6 +1685,7 @@ Public Function Methods() As Variant
 					, &quot;ExportAsPDF&quot; _
 					, &quot;GetColumnName&quot; _
 					, &quot;GetFormula&quot; _
+					, &quot;GetRangeAddress&quot; _
 					, &quot;GetValue&quot; _
 					, &quot;ImportFromCSVFile&quot; _
 					, &quot;ImportFromDatabase&quot; _
