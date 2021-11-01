@@ -1076,6 +1076,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_ODT)
         = getCertificate(aManager, svl::crypto::SignatureMethodAlgorithm::RSA);
     if (!xCertificate.is())
         return;
+    uno::Reference<xml::crypto::XSecurityEnvironment> xSE = aManager.getSecurityEnvironment();
+    if (xSE->verifyCertificate(xCertificate, {}) != security::CertificateValidity::VALID)
+        return;
     sal_Int32 nSecurityId;
     aManager.add(xCertificate, mxSecurityContext, /*rDescription=*/OUString(), nSecurityId,
                  /*bAdESCompliant=*/true);
