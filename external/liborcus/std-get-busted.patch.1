@@ -1,0 +1,129 @@
+From 6d3bf65449c2eb70070fafd4235a1ff2d341a605 Mon Sep 17 00:00:00 2001
+From: Kohei Yoshida <kohei.yoshida@gmail.com>
+Date: Tue, 2 Nov 2021 22:07:51 -0400
+Subject: [PATCH] std::get<T>(...) may be flaky with some version of clang.
+
+Use std::get_if as a workaround.
+
+c.f. https://stackoverflow.com/questions/52521388/stdvariantget-does-not-compile-with-apple-llvm-10-0
+---
+ include/orcus/threaded_json_parser.hpp | 25 +++++++++++++++++-------
+ src/liborcus/css_document_tree.cpp     |  7 +++++--
+ src/parser/json_parser_thread.cpp      | 27 +++++++++++++++++++++-----
+ 3 files changed, 45 insertions(+), 14 deletions(-)
+
+diff --git a/include/orcus/threaded_json_parser.hpp b/include/orcus/threaded_json_parser.hpp
+index 51cdaced..5d04947a 100644
+--- a/include/orcus/threaded_json_parser.hpp
++++ b/include/orcus/threaded_json_parser.hpp
+@@ -151,24 +151,35 @@ void threaded_json_parser<_Handler>::process_tokens(json::parse_tokens_t& tokens
+                     m_handler.null();
+                     break;
+                 case json::parse_token_t::number:
+-                    m_handler.number(std::get<double>(t.value));
++                {
++                    if (const double* p = std::get_if<double>(&t.value); p)
++                        m_handler.number(*p);
++                    else
++                        throw general_error("double type expected of t.value");
+                     break;
++                }
+                 case json::parse_token_t::object_key:
+                 {
+-                    auto s = std::get<std::string_view>(t.value);
+-                    m_handler.object_key(s.data(), s.size(), false);
++                    if (const std::string_view* p = std::get_if<std::string_view>(&t.value); p)
++                        m_handler.object_key(p->data(), p->size(), false);
++                    else
++                        throw general_error("std::string_view type expected of t.value");
+                     break;
+                 }
+                 case json::parse_token_t::string:
+                 {
+-                    auto s = std::get<std::string_view>(t.value);
+-                    m_handler.string(s.data(), s.size(), false);
++                    if (const std::string_view* p = std::get_if<std::string_view>(&t.value); p)
++                        m_handler.string(p->data(), p->size(), false);
++                    else
++                        throw general_error("std::string_view type expected of t.value");
+                     break;
+                 }
+                 case json::parse_token_t::parse_error:
+                 {
+-                    auto v = std::get<parse_error_value_t>(t.value);
+-                    throw json::parse_error(std::string{v.str}, v.offset);
++                    if (const parse_error_value_t* p = std::get_if<parse_error_value_t>(&t.value); p)
++                        throw json::parse_error(std::string{p->str}, p->offset);
++                    else
++                        throw general_error("parse_error_value_t type expected of t.value");
+                 }
+                 case json::parse_token_t::unknown:
+                 default:
+diff --git a/src/liborcus/css_document_tree.cpp b/src/liborcus/css_document_tree.cpp
+index 46bf7e91..e45c5026 100644
+--- a/src/liborcus/css_document_tree.cpp
++++ b/src/liborcus/css_document_tree.cpp
+@@ -317,8 +317,11 @@ public:
+             {
+                 // String value needs interning.
+                 css_property_value_t interned = v;
+-                auto s = std::get<std::string_view>(v.value);
+-                interned.value = m_sp.intern(s).first;
++                const std::string_view* p = std::get_if<std::string_view>(&v.value);
++                if (!p)
++                    throw css_document_tree::insertion_error("std::string_view type expected.");
++
++                interned.value = m_sp.intern(*p).first;
+                 m_dest.push_back(interned);
+                 break;
+             }
+diff --git a/src/parser/json_parser_thread.cpp b/src/parser/json_parser_thread.cpp
+index 36bbe6e6..0b8b481d 100644
+--- a/src/parser/json_parser_thread.cpp
++++ b/src/parser/json_parser_thread.cpp
+@@ -237,20 +237,37 @@ std::ostream& operator<< (std::ostream& os, const parse_tokens_t& tokens)
+                     os << "- null" << endl;
+                     break;
+                 case parse_token_t::number:
+-                    os << "- number (v=" << std::get<double>(t.value) << ")" << endl;
++                {
++                    if (const double* p = std::get_if<double>(&t.value); p)
++                        os << "- number (v=" << *p << ")" << endl;
++                    else
++                        os << "- number (v=?)" << endl;
+                     break;
++                }
+                 case parse_token_t::object_key:
+-                    os << "- object_key (v=" << std::get<std::string_view>(t.value) << ")" << endl;
++                {
++                    if (const std::string_view* p = std::get_if<std::string_view>(&t.value); p)
++                        os << "- object_key (v=" << *p << ")" << endl;
++                    else
++                        os << "- object_key (v=?)" << endl;
+                     break;
++                }
+                 case parse_token_t::parse_error:
+                 {
+-                    auto v = std::get<parse_error_value_t>(t.value);
+-                    os << "- parse_error (v=" << v.str << ", offset=" << v.offset << ")" << endl;
++                    if (const parse_error_value_t* p = std::get_if<parse_error_value_t>(&t.value); p)
++                        os << "- parse_error (v=" << p->str << ", offset=" << p->offset << ")" << endl;
++                    else
++                        os << "- parse_error (v=?, offset=?)" << endl;
+                     break;
+                 }
+                 case parse_token_t::string:
+-                    os << "- string (" << std::get<std::string_view>(t.value) << ")" << endl;
++                {
++                    if (const std::string_view* p = std::get_if<std::string_view>(&t.value); p)
++                        os << "- string (" << *p << ")" << endl;
++                    else
++                        os << "- string (?)" << endl;
+                     break;
++                }
+                 case parse_token_t::unknown:
+                     os << "- unknown" << endl;
+                     break;
+-- 
+2.25.1
+

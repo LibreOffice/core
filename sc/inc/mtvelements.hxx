@@ -97,6 +97,12 @@ public:
     void element_block_released(const mdds::mtv::base_element_block* block);
 };
 
+struct CellStoreTrait
+{
+    using event_func = CellStoreEvent;
+    static constexpr mdds::mtv::lu_factor_t loop_unrolling = mdds::mtv::lu_factor_t::lu16;
+};
+
 /// Cell note container
 typedef mdds::mtv::custom_block_func1<sc::cellnote_block> CNoteFunc;
 typedef mdds::multi_type_vector<CNoteFunc> CellNoteStoreType;
@@ -111,7 +117,7 @@ typedef mdds::multi_type_vector<CTAttrFunc> CellTextAttrStoreType;
 
 /// Cell container
 typedef mdds::mtv::custom_block_func3<sc::string_block, sc::edittext_block, sc::formula_block> CellFunc;
-typedef mdds::multi_type_vector<CellFunc, CellStoreEvent> CellStoreType;
+typedef mdds::multi_type_vector<CellFunc, CellStoreTrait> CellStoreType;
 
 /**
  * Store position data for column array storage.
