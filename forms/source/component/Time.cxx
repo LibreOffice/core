@@ -150,7 +150,7 @@ void OTimeModel::describeFixedProperties( Sequence< Property >& _rProps ) const
         DECL_PROP3(DEFAULT_TIME,            util::Time,             BOUND, MAYBEDEFAULT, MAYBEVOID);
         DECL_PROP1(TABINDEX,                sal_Int16,              BOUND);
         DECL_PROP1(FORMATKEY,               sal_Int32,              TRANSIENT);
-        DECL_IFACE_PROP2(FORMATSSUPPLIER,   XNumberFormatsSupplier, READONLY, TRANSIENT);
+        DECL_IFACE_PROP_IMPL(FORMATSSUPPLIER, XNumberFormatsSupplier) css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
     END_DESCRIBE_PROPERTIES();
 }
 
