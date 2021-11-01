@@ -31,7 +31,7 @@ static bool isProductVersionUpgraded(bool aUpdateVersion)
         = sLastVersion.getToken(0, '.').toInt32() * 10 + sLastVersion.getToken(1, '.').toInt32();
     if (iCurrent > iLast)
     {
-        if (aUpdateVersion)
+        if (aUpdateVersion && !officecfg::Setup::Product::ooSetupLastVersion::isReadOnly())
         { //update lastversion
             std::shared_ptr<comphelper::ConfigurationChanges> batch(
                 comphelper::ConfigurationChanges::create());
