@@ -523,7 +523,10 @@ tools::Long OutputDevice::ImplGetTextLines( const tools::Rectangle& rRect, const
                 xBI = vcl::unohelper::CreateBreakIterator();
 
             if ( xBI.is() )
+            {
                 nBreakPos = ImplBreakLinesWithIterator(nWidth, rStr, _rLayout, xHyph, xBI, bHyphenate, nPos, nBreakPos);
+                nLineWidth = _rLayout.GetTextWidth(rStr, nPos, nBreakPos - nPos);
+            }
             else
                 // fallback to something really simple
                 nBreakPos = ImplBreakLinesSimple(nWidth, rStr, _rLayout, nPos, nBreakPos, nLineWidth);
