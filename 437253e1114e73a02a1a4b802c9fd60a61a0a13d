@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4fc08a0_ef9ad546",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 3202,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-11-01T14:13:37Z",
+      "side": 1,
+      "message": "what does \u0027selected\u0027 mean here? is there a mechanism to point to another one? unless you perhaps meant to write \u0027currently installed\u0027 ?",
+      "revId": "437253e1114e73a02a1a4b802c9fd60a61a0a13d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
