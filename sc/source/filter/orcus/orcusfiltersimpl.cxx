@@ -70,7 +70,7 @@ bool loadFileContent(SfxMedium& rMedium, orcus::iface::import_filter& filter)
 
     try
     {
-        filter.read_stream(aBuffer.getStr(), aBuffer.getLength());
+        filter.read_stream(aBuffer);
     }
     catch (const std::exception& e)
     {
@@ -148,14 +148,14 @@ bool ScOrcusFiltersImpl::importODS_Styles(ScDocument& rDoc, OUString& aPath) con
             if (GetShortPathNameW(o3tl::toW(aPath.getStr()), buf, std::size(buf)) == 0)
                 throw;
             aPath8 = OUStringToOString(o3tl::toU(buf), osl_getThreadTextEncoding());
-            content = std::make_unique<orcus::file_content>(aPath8.getStr());
+            content = std::make_unique<orcus::file_content>(aPath8);
         }
 #else
-        auto content = std::make_unique<orcus::file_content>(aPath8.getStr());
+        auto content = std::make_unique<orcus::file_content>(aPath8);
 #endif
         ScOrcusFactory aFactory(rDoc);
         ScOrcusStyles aStyles(aFactory);
-        orcus::import_ods::read_styles(content->data(), content->size(), &aStyles);
+        orcus::import_ods::read_styles(content->str(), &aStyles);
     }
     catch (const std::exception& e)
     {
