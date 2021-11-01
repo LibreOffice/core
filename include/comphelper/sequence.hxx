@@ -122,7 +122,9 @@ namespace comphelper
     inline css::uno::Sequence< DstType > arrayToSequence( const SrcType* i_pArray, sal_Int32 nNum )
     {
         if constexpr (std::is_same_v< DstType, SrcType >)
+        {
             return css::uno::Sequence< DstType >( i_pArray, nNum );
+        }
         else
         {
             css::uno::Sequence< DstType > result( nNum );
