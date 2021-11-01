@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a88f541a_fa082c6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-11-01T19:35:45Z",
+      "side": 1,
+      "message": "We have a mechanism that can be used to specify the parent a dialog spawned from a SfxRequest should use. We could use that to explicitly give the numbering-style dialog launched by the edit-style dialog a parent of that edit-style dialog instead of a parent of the document frame which presumably also solves the problem of that specific case for qt as it seems to solve it for my case.",
+      "revId": "1f60fd43b2aab3b01dc271fa9d0a0cc30d245119",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
