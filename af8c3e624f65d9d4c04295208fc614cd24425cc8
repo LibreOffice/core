@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f03ea63c_d875df3f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-01T11:16:59Z",
+      "side": 1,
+      "message": "On pc Debian x86-64 with master sources updated today + this patch, I confirm everything is ok (no crash + all elements visible and sorted) on gen, gtk3 and kf5 renderings.\nThank you!",
+      "revId": "af8c3e624f65d9d4c04295208fc614cd24425cc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
