@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d87a10d3_343bdf6b",
+        "filename": "include/unotools/VersionConfig.hxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-11-01T08:59:07Z",
+      "side": 1,
+      "message": "This needs a check if the property is finalized, see https://bugs.documentfoundation.org/show_bug.cgi?id\u003d145486",
+      "range": {
+        "startLine": 36,
+        "startChar": 12,
+        "endLine": 39,
+        "endChar": 28
+      },
+      "revId": "07e269f2596756bf841bbc380929bcffc3ca6bc6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
