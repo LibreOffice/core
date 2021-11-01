@@ -100,7 +100,6 @@ ValueSet::ValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
     mnSpacing           = 0;
     mnFrameStyle        = DrawFrameStyle::NONE;
     mbNoSelection       = true;
-    mbDrawSelection     = true;
     mbDoubleSel         = false;
     mbScroll            = false;
     mbFullMode          = true;
@@ -468,14 +467,14 @@ void ValueSet::ImplTracking(bool bLeaveWindow, const Point& rPos)
         if( GetStyle() & WB_MENUSTYLEVALUESET || GetStyle() & WB_FLATVALUESET )
             mbHighlight = true;
 
-        ImplHighlightItem( pItem->mnId );
+        ImplHighlightItem(pItem->mnId);
     }
     else
     {
         if( GetStyle() & WB_MENUSTYLEVALUESET || GetStyle() & WB_FLATVALUESET )
             mbHighlight = true;
 
-        ImplHighlightItem( 0, false );
+        ImplHighlightItem(0);
     }
 }
 
@@ -668,7 +667,7 @@ tools::Rectangle ValueSet::ImplGetItemRect( size_t nPos ) const
     return tools::Rectangle( Point(x, y), Size(mnItemWidth, mnItemHeight) );
 }
 
-void ValueSet::ImplHighlightItem( sal_uInt16 nItemId, bool bIsSelection )
+void ValueSet::ImplHighlightItem(sal_uInt16 nItemId)
 {
     if ( mnHighItemId == nItemId )
         return;
@@ -676,13 +675,8 @@ void ValueSet::ImplHighlightItem( sal_uInt16 nItemId, bool bIsSelection )
     // remember the old item to delete the previous selection
     mnHighItemId = nItemId;
 
-    // don't draw the selection if nothing is selected
-    if ( !bIsSelection && mbNoSelection )
-        mbDrawSelection = false;
-
     // remove the old selection and draw the new one
     Invalidate();
-    mbDrawSelection = true;
 }
 
 void ValueSet::ImplDraw(vcl::RenderContext& rRenderContext)
@@ -1184,7 +1178,7 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext)
         return;
 
     const bool bFocus = HasFocus();
-    const bool bDrawSel = !((mbNoSelection && !mbHighlight) || (!mbDrawSelection && mbHighlight));
+    const bool bDrawSel = !mbNoSelection || mbHighlight;
 
     if (!bFocus && !bDrawSel)
     {
