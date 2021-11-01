@@ -35,6 +35,8 @@
 #include <svtools/htmlkywd.hxx>
 #include <svl/urihelper.hxx>
 #include <o3tl/make_unique.hxx>
+#include <svx/sdrobjectuser.hxx>
+#include <sal/log.hxx>
 
 #include <dcontact.hxx>
 #include <fmtornt.hxx>
@@ -369,7 +371,7 @@ typedef std::vector<HTMLTableColumn> HTMLTableColumns;
 
 typedef std::vector<SdrObject *> SdrObjects;
 
-class HTMLTable
+class HTMLTable : public sdr::ObjectUser
 {
     OUString m_aId;
     OUString m_aStyle;
@@ -517,6 +519,8 @@ private:
     sal_uInt16 GetBorderWidth( const SvxBorderLine& rBLine,
                            bool bWithDistance=false ) const;
 
+    virtual void ObjectInDestruction(const SdrObject& rObject) override;
+
 public:
 
     bool m_bFirstCell;                // is there a cell created already?
@@ -526,7 +530,7 @@ public:
               bool bHasToFly,
               const HTMLTableOptions& rOptions);
 
-    ~HTMLTable();
+    virtual ~HTMLTable();
 
     // Identifying of a cell
     const HTMLTableCell& GetCell(sal_uInt16 nRow, sal_uInt16 nCell) const;
@@ -1055,11 +1059,33 @@ void SwHTMLParser::DeregisterHTMLTable(HTMLTable* pOld)
     m_aTables.erase(std::remove(m_aTables.begin(), m_aTables.end(), pOld));
 }
 
+// if any m_pResizeDrawObjects members are deleted during parse, remove them
+// from m_pResizeDrawObjects and m_pDrawObjectPrcWidths
+void HTMLTable::ObjectInDestruction(const SdrObject& rObject)
+{
+    auto it = std::find(m_pResizeDrawObjects->begin(), m_pResizeDrawObjects->end(), &rObject);
+    assert(it != m_pResizeDrawObjects->end());
+    auto nIndex = std::distance(m_pResizeDrawObjects->begin(), it);
+    m_pResizeDrawObjects->erase(it);
+    auto otherit = m_pDrawObjectPrcWidths->begin() + nIndex * 3;
+    m_pDrawObjectPrcWidths->erase(otherit, otherit + 3);
+}
+
 HTMLTable::~HTMLTable()
 {
     m_pParser->DeregisterHTMLTable(this);
 
-    delete m_pResizeDrawObjects;
+    if (m_pResizeDrawObjects)
+    {
+        size_t nCount = m_pResizeDrawObjects->size();
+        for (size_t i = 0; i < nCount; ++i)
+        {
+            SdrObject *pObj = (*m_pResizeDrawObjects)[i];
+            pObj->RemoveObjectUser(*this);
+        }
+        delete m_pResizeDrawObjects;
+    }
+
     delete m_pDrawObjectPrcWidths;
 
     delete m_pContext;
@@ -2454,6 +2480,7 @@ void HTMLTable::RegisterDrawObject( SdrObject *pObj, sal_uInt8 nPrcWidth )
     if( !m_pResizeDrawObjects )
         m_pResizeDrawObjects = new SdrObjects;
     m_pResizeDrawObjects->push_back( pObj );
+    pObj->AddObjectUser(*this);
 
     if( !m_pDrawObjectPrcWidths )
         m_pDrawObjectPrcWidths = new std::vector<sal_uInt16>;
