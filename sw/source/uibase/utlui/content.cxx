@@ -353,7 +353,7 @@ void SwContentType::Init(bool* pbInvalidateWindow)
         {
             m_sTypeToken = "outline";
             m_nMemberCount = m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
-            if (m_nMemberCount < MAXLEVEL)
+            if (m_nOutlineLevel < MAXLEVEL)
             {
                 const size_t nOutlineCount = m_nMemberCount;
                 for(size_t j = 0; j < nOutlineCount; ++j)
