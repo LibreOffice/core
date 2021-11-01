@@ -397,11 +397,11 @@
                     "dest-filename": "mariadb-connector-c-3.1.8-src.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/mdds-1.7.0.tar.bz2",
-                    "sha256": "a66a2a8293a3abc6cd9baff7c236156e2666935cbfb69a15d64d38141638fecf",
+                    "url": "https://dev-www.libreoffice.org/src/mdds-2.0.0.tar.bz2",
+                    "sha256": "5a0fb2dd88a6420e0a69ec4c7259bcd1fe8f4a80b232c150e11f3da4c68236d7",
                     "type": "file",
                     "dest": "external/tarballs",
-                    "dest-filename": "mdds-1.7.0.tar.bz2"
+                    "dest-filename": "mdds-2.0.0.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/neon-0.31.2.tar.gz",
@@ -425,11 +425,11 @@
                     "dest-filename": "openldap-2.4.45.tgz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/liborcus-0.16.1.tar.bz2",
-                    "sha256": "c700d1325f744104d9fca0d5a019434901e9d51a16eedfb05792f90a298587a4",
+                    "url": "https://dev-www.libreoffice.org/src/liborcus-0.17.0.tar.bz2",
+                    "sha256": "2ef9d2b5ee374c683cf631b78356b110510ab895788a68d778e225d8c4176d1b",
                     "type": "file",
                     "dest": "external/tarballs",
-                    "dest-filename": "liborcus-0.16.1.tar.bz2"
+                    "dest-filename": "liborcus-0.17.0.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/poppler-21.01.0.tar.xz",
