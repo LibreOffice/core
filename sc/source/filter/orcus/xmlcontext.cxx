@@ -63,7 +63,7 @@ OUString toString(const orcus::xml_structure_tree::entity_name& entity, const or
         aBuf.appendAscii(aShortName.c_str());
         aBuf.append(':');
     }
-    aBuf.append(OUString(entity.name.get(), entity.name.size(), RTL_TEXTENCODING_UTF8));
+    aBuf.append(OUString(entity.name.data(), entity.name.size(), RTL_TEXTENCODING_UTF8));
     return aBuf.makeStringAndClear();
 }
 
@@ -175,7 +175,7 @@ void ScOrcusXMLContextImpl::loadXMLStructure(weld::TreeView& rTreeCtrl, ScOrcusX
     orcus::xml_structure_tree aXmlTree(cxt);
     try
     {
-        aXmlTree.parse(&aStrm[0], aStrm.size());
+        aXmlTree.parse(aStrm);
 
         TreeUpdateSwitch aSwitch(rTreeCtrl);
         rTreeCtrl.clear();
@@ -265,14 +265,14 @@ void ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)
             std::for_each(rLink.maFieldPaths.begin(), rLink.maFieldPaths.end(),
                 [&filter](const OString& rFieldPath)
                 {
-                    filter.append_field_link(rFieldPath.getStr(), orcus::pstring());
+                    filter.append_field_link(rFieldPath, std::string_view());
                 }
             );
 
             std::for_each(rLink.maRowGroups.begin(), rLink.maRowGroups.end(),
                 [&filter] (const OString& rRowGroup)
                 {
-                    filter.set_range_row_group(rRowGroup.getStr());
+                    filter.set_range_row_group(rRowGroup);
                 }
             );
 
@@ -280,7 +280,7 @@ void ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)
         }
 
         orcus::file_content content(path);
-        filter.read_stream(content.data(), content.size());
+        filter.read_stream(content.str());
 
         aFactory.finalize();
     }
