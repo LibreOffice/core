@@ -1628,12 +1628,13 @@ void SwDocShell::LoadStyles_( SfxObjectShell& rSource, bool bPreserveCurrentDocu
 }
 
 void SwDocShell::FormatPage(
+    weld::Window* pDialogParent,
     const OUString& rPage,
     const OString& rPageId,
     SwWrtShell& rActShell,
     SfxRequest* pRequest)
 {
-    Edit(nullptr, rPage, OUString(), SfxStyleFamily::Page, SfxStyleSearchBits::Auto, false, rPageId, &rActShell, pRequest);
+    Edit(pDialogParent, rPage, OUString(), SfxStyleFamily::Page, SfxStyleSearchBits::Auto, false, rPageId, &rActShell, pRequest);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

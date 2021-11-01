@@ -263,6 +263,7 @@ public:
     /// @param nSlot
     /// Identifies slot by which the dialog is triggered. Used to activate certain dialog pane
     void FormatPage(
+        weld::Window* pDialogParent,
         const OUString& rPage,
         const OString& rPageId,
         SwWrtShell& rActShell,
