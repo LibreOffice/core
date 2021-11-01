@@ -30,6 +30,7 @@
 #include <numpara.hxx>
 
 #include <sfx2/dispatch.hxx>
+#include <sfx2/frame.hxx>
 #include <sfx2/viewsh.hxx>
 
 const WhichRangesContainer SwParagraphNumTabPage::aPageRg(svl::Items<FN_NUMBER_NEWSTART, FN_NUMBER_NEWSTART_AT>);
@@ -306,7 +307,6 @@ IMPL_LINK_NOARG(SwParagraphNumTabPage, EditNumStyleHdl_Impl, weld::Button&, void
 bool SwParagraphNumTabPage::ExecuteEditNumStyle_Impl(
     sal_uInt16 nId, const OUString &rStr, SfxStyleFamily nFamily)
 {
-
     SfxDispatcher &rDispatcher = *SfxViewShell::Current()->GetDispatcher();
     SfxStringItem aItem(nId, rStr);
     SfxUInt16Item aFamily(SID_STYLE_FAMILY, static_cast<sal_uInt16>(nFamily));
@@ -318,9 +318,16 @@ bool SwParagraphNumTabPage::ExecuteEditNumStyle_Impl(
 
     pItems[ nCount++ ] = nullptr;
 
+    // tdf#145363 we want the current dialog to be the parent of the new dialog
+    weld::Window* pDialogParent = GetFrameWeld();
+    css::uno::Any aAny(pDialogParent->GetXWindow());
+    SfxUnoAnyItem aDialogParent(SID_DIALOG_PARENT, aAny);
+    const SfxPoolItem* pInternalItems[ 1 ];
+    pInternalItems[ 0 ] = &aDialogParent;
+
     const SfxPoolItem* pItem = rDispatcher.Execute(
         nId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
-        pItems );
+        pItems, 0, pInternalItems);
 
     return pItem != nullptr;
 
