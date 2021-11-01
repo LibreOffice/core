@@ -16,6 +16,24 @@
       "message": "what about this?\n\nI see\n\n-API_VERSION\u003d1.5\n+API_VERSION\u003d2.0\n\nin mdds 2.0.0 itself, so this probably needs to be adapted? At least it needs to allow both mdds-1.5 and mdds-2.0 if both will work?",
       "revId": "f50611bce5dd0709668cef1ea29b1650ca9b8c23",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "974689b8_6923e972",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 10367,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2021-11-01T21:37:35Z",
+      "side": 1,
+      "message": "Yup. Just fixed it.",
+      "parentUuid": "7da9bfd9_425a0b6f",
+      "revId": "f50611bce5dd0709668cef1ea29b1650ca9b8c23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
