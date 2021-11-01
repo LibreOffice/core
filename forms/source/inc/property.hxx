@@ -381,20 +381,7 @@ public:
         DECL_PROP_IMPL(varname, type) css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2 | css::beans::PropertyAttribute::attrib3 | css::beans::PropertyAttribute::attrib4)
 
 // === some property types require special handling
-// === such as interfaces
-
-#define DECL_IFACE_PROP2(varname, type, attrib1, attrib2)   \
-        DECL_IFACE_PROP_IMPL(varname, type) css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2)
-
-
-#define DECL_IFACE_PROP3(varname, type, attrib1, attrib2, attrib3)  \
-    DECL_IFACE_PROP_IMPL(varname, type) css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2 | css::beans::PropertyAttribute::attrib3)
-
-
-#define DECL_IFACE_PROP4(varname, type, attrib1, attrib2, attrib3, attrib4) \
-    DECL_IFACE_PROP_IMPL(varname, type) css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2 | css::beans::PropertyAttribute::attrib3 | PropertyAttribute::attrib4)
-
-// === or Boolean properties
+// === such Boolean properties
 
 #define DECL_BOOL_PROP1(varname, attrib1)   \
         DECL_BOOL_PROP_IMPL(varname) css::beans::PropertyAttribute::attrib1)
@@ -402,11 +389,6 @@ public:
 
 #define DECL_BOOL_PROP2(varname, attrib1, attrib2)  \
         DECL_BOOL_PROP_IMPL(varname) css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2)
-
-
-#define DECL_BOOL_PROP3( varname, attrib1, attrib2, attrib3 )   \
-        DECL_BOOL_PROP_IMPL(varname) css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2 | css::beans::PropertyAttribute::attrib3 )
-
 
 #define END_DESCRIBE_PROPERTIES()   \
     DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?"); \

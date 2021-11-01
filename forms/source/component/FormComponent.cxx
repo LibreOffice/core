@@ -2780,8 +2780,8 @@ void OBoundControlModel::describeFixedProperties( Sequence< Property >& _rProps 
 {
     BEGIN_DESCRIBE_PROPERTIES( 5, OControlModel )
         DECL_PROP1      ( CONTROLSOURCE,           OUString,     BOUND );
-        DECL_IFACE_PROP3( BOUNDFIELD,               XPropertySet,       BOUND, READONLY, TRANSIENT );
-        DECL_IFACE_PROP2( CONTROLLABEL,             XPropertySet,       BOUND, MAYBEVOID );
+        DECL_IFACE_PROP_IMPL(BOUNDFIELD, XPropertySet) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
+        DECL_IFACE_PROP_IMPL(CONTROLLABEL, XPropertySet) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID);
         DECL_PROP2      ( CONTROLSOURCEPROPERTY,    OUString,    READONLY, TRANSIENT );
         DECL_BOOL_PROP1 ( INPUT_REQUIRED,                               BOUND );
     END_DESCRIBE_PROPERTIES()

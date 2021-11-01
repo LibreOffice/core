@@ -1290,7 +1290,8 @@ void ODatabaseForm::describeFixedAndAggregateProperties(
     RemoveProperty( _rAggregateProps, PROPERTY_HAVINGCLAUSE );
     RemoveProperty( _rAggregateProps, PROPERTY_APPLYFILTER );
 
-    DECL_IFACE_PROP4( ACTIVE_CONNECTION,XConnection,             BOUND, TRANSIENT, MAYBEVOID, CONSTRAINED);
+    DECL_IFACE_PROP_IMPL(ACTIVE_CONNECTION, XConnection) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::TRANSIENT |
+                                                         css::beans::PropertyAttribute::MAYBEVOID | PropertyAttribute::CONSTRAINED);
     DECL_BOOL_PROP2 ( APPLYFILTER,                               BOUND, MAYBEDEFAULT            );
     DECL_PROP1      ( NAME,             OUString,                BOUND                          );
     DECL_PROP1      ( MASTERFIELDS,     Sequence< OUString >,    BOUND                          );
@@ -1309,7 +1310,7 @@ void ODatabaseForm::describeFixedAndAggregateProperties(
     DECL_PROP1      ( TARGET_FRAME,     OUString,                BOUND                          );
     DECL_PROP1      ( SUBMIT_METHOD,    FormSubmitMethod,        BOUND                          );
     DECL_PROP1      ( SUBMIT_ENCODING,  FormSubmitEncoding,      BOUND                          );
-    DECL_BOOL_PROP3 ( DYNAMIC_CONTROL_BORDER,                    BOUND, MAYBEVOID, MAYBEDEFAULT );
+    DECL_BOOL_PROP_IMPL(DYNAMIC_CONTROL_BORDER) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT );
     DECL_PROP3      ( CONTROL_BORDER_COLOR_FOCUS,   sal_Int32,   BOUND, MAYBEVOID, MAYBEDEFAULT );
     DECL_PROP3      ( CONTROL_BORDER_COLOR_MOUSE,   sal_Int32,   BOUND, MAYBEVOID, MAYBEDEFAULT );
     DECL_PROP3      ( CONTROL_BORDER_COLOR_INVALID, sal_Int32,   BOUND, MAYBEVOID, MAYBEDEFAULT );
