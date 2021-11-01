@@ -1686,7 +1686,7 @@ namespace emfio
 
         if (pDXArry)
         {
-            sal_Int32 nSumX = 0, nSumY = 0;
+            sal_Int64 nSumX = 0, nSumY = 0;
             for (sal_Int32 i = 0; i < rText.getLength(); i++ )
             {
                 nSumX += (*pDXArry)[i];
