@@ -1178,13 +1178,9 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext)
         return;
 
     const bool bFocus = HasFocus();
-    const bool bDrawSel = !mbNoSelection || mbHighlight;
 
-    if (!bFocus && !bDrawSel)
-    {
-        ImplDrawItemText(rRenderContext, OUString());
+    if (!bFocus && mbNoSelection && !mbHighlight)
         return;
-    }
 
     tools::Rectangle aSelectedRect, aHoverRect;
     ValueSetItem* pSelectedItem = ImplGetDrawSelectItem(mnSelItemId, bFocus, aSelectedRect);
@@ -1192,12 +1188,26 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext)
 
     if (pSelectedItem)
     {
-        const bool bHover = mnHighItemId && pSelectedItem == pHighlightItem;
-        ImplDrawSelect(rRenderContext, aSelectedRect, pSelectedItem, bFocus, bDrawSel, true, bHover);
+        const bool bHover = pSelectedItem == pHighlightItem;
+        ImplDrawSelect(rRenderContext, aSelectedRect, pSelectedItem, bFocus, !mbNoSelection, true, bHover);
     }
-    if (mnHighItemId && pHighlightItem && pSelectedItem != pHighlightItem)
+    if (pHighlightItem && (pSelectedItem != pHighlightItem || mbNoSelection))
     {
-        ImplDrawSelect(rRenderContext, aHoverRect, pHighlightItem, false, bDrawSel, false, true);
+        // For the case that there isn't a selected item, but due to wanting to
+        // show focus is in the valueset, the above block will have drawn the
+        // first item with a focus rect. For that situation; if the valueset is
+        // the thin WB_MENUSTYLEVALUESET case then blend this highlight border
+        // on top of that focus rect and it will appear with a highlighted
+        // focus rect. If it's the other case of a thicker border then redraw
+        // the focus rect highlighted with the hover color.
+        bool bDrawFocus;
+        WinBits nStyle = GetStyle();
+        if (nStyle & WB_MENUSTYLEVALUESET)
+            bDrawFocus = false;
+        else
+            bDrawFocus = pSelectedItem == pHighlightItem && mbNoSelection;
+
+        ImplDrawSelect(rRenderContext, aHoverRect, pHighlightItem, bDrawFocus, mbHighlight, false, true);
     }
 }
 
