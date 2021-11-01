@@ -33,6 +33,24 @@
       "message": "adding the author of the test...\n\nthe test is not run on WNT in jenkins - if the developer who added it didn\u0027t use WNT it\u0027s possible that it was never run there before.\n\nbut i dont know why it would fail, maybe there\u0027s some additional output with  SAL_LOG\u003d\"+INFO.xmlsecurity+WARN\" from the logging in verifyCertificate()",
       "revId": "7f76a2daaf035f0a2b30f56d6d9776fa34bc1043",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e69662ec_25e11df1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-01T10:12:35Z",
+      "side": 1,
+      "message": "Thanks - tested with the SAL_LOG configured as you suggested. Verification gives this:\n\n  info:xmlsecurity.xmlsec:46732:50804:xmlsecurity/source/xmlsec/mscrypt/securityenvironment_mscryptimpl.cxx:812: Start verification of certificate: CN\u003d5008b16217855fa4\n  info:xmlsecurity.xmlsec:46732:50804:xmlsecurity/source/xmlsec/mscrypt/securityenvironment_mscryptimpl.cxx:874: Verifying cert using revocation information.\n  info:xmlsecurity.xmlsec:46732:50804:xmlsecurity/source/xmlsec/mscrypt/securityenvironment_mscryptimpl.cxx:887: Overall error status (all chains):\n  info:xmlsecurity.xmlsec:46732:50804:xmlsecurity/source/xmlsec/mscrypt/securityenvironment_mscryptimpl.cxx:109:   CERT_TRUST_IS_NOT_TIME_VALID\n  info:xmlsecurity.xmlsec:46732:50804:xmlsecurity/source/xmlsec/mscrypt/securityenvironment_mscryptimpl.cxx:109:   CERT_TRUST_REVOCATION_STATUS_UNKNOWN\n  info:xmlsecurity.xmlsec:46732:50804:xmlsecurity/source/xmlsec/mscrypt/securityenvironment_mscryptimpl.cxx:109:   CERT_TRUST_IS_OFFLINE_REVOCATION\n  info:xmlsecurity.xmlsec:46732:50804:xmlsecurity/source/xmlsec/mscrypt/securityenvironment_mscryptimpl.cxx:109:   CERT_TRUST_IS_PARTIAL_CHAIN\n  info:xmlsecurity.xmlsec:46732:50804:xmlsecurity/source/xmlsec/mscrypt/securityenvironment_mscryptimpl.cxx:891: Error status of first chain:\n  info:xmlsecurity.xmlsec:46732:50804:xmlsecurity/source/xmlsec/mscrypt/securityenvironment_mscryptimpl.cxx:109:   CERT_TRUST_IS_NOT_TIME_VALID\n  info:xmlsecurity.xmlsec:46732:50804:xmlsecurity/source/xmlsec/mscrypt/securityenvironment_mscryptimpl.cxx:109:   CERT_TRUST_REVOCATION_STATUS_UNKNOWN\n  info:xmlsecurity.xmlsec:46732:50804:xmlsecurity/source/xmlsec/mscrypt/securityenvironment_mscryptimpl.cxx:109:   CERT_TRUST_IS_OFFLINE_REVOCATION\n  info:xmlsecurity.xmlsec:46732:50804:xmlsecurity/source/xmlsec/mscrypt/securityenvironment_mscryptimpl.cxx:109:   CERT_TRUST_IS_PARTIAL_CHAIN\n  info:xmlsecurity.xmlsec:46732:50804:xmlsecurity/source/xmlsec/mscrypt/securityenvironment_mscryptimpl.cxx:949: Certificate is invalid.\n\nAnd indeed, that certificate that exists in my Personal Certificates container, is invalid when checked using Windows\u0027 \"Manage User Certificates\" applet.",
+      "parentUuid": "6abcd577_c98c1fd2",
+      "revId": "7f76a2daaf035f0a2b30f56d6d9776fa34bc1043",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
