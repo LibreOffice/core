@@ -69,7 +69,6 @@
 #include <orcus/json_parser_thread.hpp>
 #include <orcus/parser_base.hpp>
 #include <orcus/parser_global.hpp>
-#include <orcus/pstring.hpp>
 #include <orcus/sax_parser_base.hpp>
 #include <orcus/sax_token_parser.hpp>
 #include <orcus/sax_token_parser_thread.hpp>

@@ -38,7 +38,7 @@ curl --no-progress-meter -S \
     -C - -O https://dev-www.libreoffice.org/src/libmspub-0.1.4.tar.xz \
     -C - -O https://dev-www.libreoffice.org/src/libmwaw-0.3.20.tar.xz \
     -C - -O https://dev-www.libreoffice.org/src/libodfgen-0.1.8.tar.xz \
-    -C - -O https://dev-www.libreoffice.org/src/liborcus-0.16.1.tar.bz2 \
+    -C - -O https://dev-www.libreoffice.org/src/liborcus-0.17.0.tar.bz2 \
     -C - -O https://dev-www.libreoffice.org/src/libpagemaker-0.0.4.tar.xz \
     -C - -O https://dev-www.libreoffice.org/src/libpng-1.6.37.tar.xz \
     -C - -O https://dev-www.libreoffice.org/src/librevenge-0.0.4.tar.bz2 \
