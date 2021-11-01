@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78c9a2d8_3bd0ffca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-01T18:19:52Z",
+      "side": 1,
+      "message": "I removed one layer at the locations I changed but the goal is to have plain C++ at the end.",
+      "revId": "aeac37a29d1b418e75560fa91dce75a7b04679c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
