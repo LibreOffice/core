@@ -1605,7 +1605,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         xEntry.reset();
 
     bool bRemoveGotoEntry = false;
-    if (State::HIDDEN == m_eState || !xEntry || !lcl_IsContent(*xEntry, *m_xTreeView))
+    if (State::HIDDEN == m_eState || !xEntry || !lcl_IsContent(*xEntry, *m_xTreeView) ||
+            reinterpret_cast<SwContent*>(m_xTreeView->get_id(*xEntry).toInt64())->IsInvisible())
         bRemoveGotoEntry = true;
 
     bool bRemovePostItEntries = true;
@@ -2230,17 +2231,20 @@ IMPL_LINK_NOARG(SwContentTree, ContentDoubleClickHdl, weld::TreeView&, bool)
         }
         else if (!lcl_IsContentType(*xEntry, *m_xTreeView) && (State::HIDDEN != m_eState))
         {
-            if (State::CONSTANT == m_eState)
-            {
-                m_pActiveShell->GetView().GetViewFrame()->GetWindow().ToTop();
-            }
-            //Jump to content type:
             assert(dynamic_cast<SwContent*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xEntry).toInt64())));
             SwContent* pCnt = reinterpret_cast<SwContent*>(m_xTreeView->get_id(*xEntry).toInt64());
             assert(pCnt && "no UserData");
-            GotoContent(pCnt);
-            // fdo#36308 don't expand outlines on double-click
-            bConsumed = pCnt->GetParent()->GetType() == ContentTypeId::OUTLINE;
+            if (pCnt && !pCnt->IsInvisible())
+            {
+                if (State::CONSTANT == m_eState)
+                {
+                    m_pActiveShell->GetView().GetViewFrame()->GetWindow().ToTop();
+                }
+                //Jump to content type:
+                GotoContent(pCnt);
+                // fdo#36308 don't expand outlines on double-click
+                bConsumed = pCnt->GetParent()->GetType() == ContentTypeId::OUTLINE;
+            }
         }
     }
 
