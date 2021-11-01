@@ -629,6 +629,7 @@ void LibPage::InsertLib()
         xLibDlg->SetStorageName(aURLObj.getName());
         weld::TreeView& rView = xLibDlg->GetLibBox();
         rView.make_unsorted();
+        rView.freeze();
 
         const OUString* pLibNames = aLibNames.getConstArray();
         for (sal_Int32 i = 0 ; i < nLibCount; ++i)
@@ -645,6 +646,7 @@ void LibPage::InsertLib()
             }
         }
 
+        rView.thaw();
         rView.make_sorted();
 
         if (rView.n_children())
