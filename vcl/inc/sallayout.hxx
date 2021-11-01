@@ -95,7 +95,7 @@ private:
     bool            mbIncomplete;
 };
 
-class VCL_DLLPUBLIC GenericSalLayout : public SalLayout
+class VCL_DLLPUBLIC GenericSalLayout final : public SalLayout
 {
     friend void MultiSalLayout::AdjustLayout(vcl::text::ImplLayoutArgs&);
 
