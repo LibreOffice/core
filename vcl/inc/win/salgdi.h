@@ -166,7 +166,9 @@ private:
     int                     mnPenWidth;         // line width
 
 public:
-    HFONT ImplDoSetFont(FontSelectPattern const & i_rFont, const PhysicalFontFace * i_pFontFace, HFONT& o_rOldFont);
+    // Return HFONT, and whether the font is for vertical writing ( prefixed with '@' )
+    // and tmDescent value for adjusting offset in vertical writing mode.
+    std::tuple<HFONT,bool,sal_Int32> ImplDoSetFont(FontSelectPattern const & i_rFont, const PhysicalFontFace * i_pFontFace, HFONT& o_rOldFont);
 
     HDC getHDC() const { return mhLocalDC; }
     void setHDC(HDC aNew) { mhLocalDC = aNew; }

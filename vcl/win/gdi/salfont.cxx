@@ -760,6 +760,12 @@ void WinSalGraphics::SetTextColor( Color nColor )
     ::SetTextColor( getHDC(), aCol );
 }
 
+static int CALLBACK SalEnumQueryFontProcExW( const LOGFONTW*, const TEXTMETRICW*, DWORD, LPARAM lParam )
+{
+    *reinterpret_cast<bool*>(lParam) = true;
+    return 0;
+}
+
 void ImplGetLogFontFromFontSelect( const FontSelectPattern& rFont,
                                    const PhysicalFontFace* pFontFace,
                                    LOGFONTW& rLogFont )
@@ -809,7 +815,7 @@ void ImplGetLogFontFromFontSelect( const FontSelectPattern& rFont,
 
 }
 
-HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const & i_rFont,
+std::tuple<HFONT,bool,sal_Int32> WinSalGraphics::ImplDoSetFont(FontSelectPattern const & i_rFont,
                                     const PhysicalFontFace * i_pFontFace,
                                     HFONT& o_rOldFont)
 {
@@ -817,6 +823,27 @@ HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const & i_rFont,
 
     LOGFONTW aLogFont;
     ImplGetLogFontFromFontSelect( i_rFont, i_pFontFace, aLogFont );
+
+    bool    bIsCJKVerticalFont = false;
+    // select vertical mode for printing if requested and available
+    if ( i_rFont.mbVertical && mbPrinter )
+    {
+        constexpr size_t nLen = sizeof(aLogFont.lfFaceName) - sizeof(aLogFont.lfFaceName[0]);
+        // vertical fonts start with an '@'
+        memmove( &aLogFont.lfFaceName[1], &aLogFont.lfFaceName[0], nLen );
+        aLogFont.lfFaceName[0] = '@';
+        aLogFont.lfFaceName[LF_FACESIZE - 1] = 0;
+
+        // check availability of vertical mode for this font
+        EnumFontFamiliesExW( getHDC(), &aLogFont, SalEnumQueryFontProcExW,
+                reinterpret_cast<LPARAM>(&bIsCJKVerticalFont), 0 );
+        if( !bIsCJKVerticalFont )
+        {
+            // restore non-vertical name if not vertical mode isn't available
+            memcpy( &aLogFont.lfFaceName[0], &aLogFont.lfFaceName[1], nLen );
+            aLogFont.lfFaceName[LF_FACESIZE - 1] = 0;
+        }
+    }
 
     hNewFont = ::CreateFontIndirectW( &aLogFont );
 
@@ -845,12 +872,13 @@ HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const & i_rFont,
         SelectFont( getHDC(), hNewFont2 );
         DeleteFont( hNewFont );
         hNewFont = hNewFont2;
+        bIsCJKVerticalFont = false;
     }
 
     if( hdcScreen )
         ::ReleaseDC( nullptr, hdcScreen );
 
-    return hNewFont;
+    return std::make_tuple(hNewFont, bIsCJKVerticalFont, static_cast<sal_Int32>(aTextMetricW.tmDescent));
 }
 
 void WinSalGraphics::SetFont(LogicalFontInstance* pFont, int nFallbackLevel)
