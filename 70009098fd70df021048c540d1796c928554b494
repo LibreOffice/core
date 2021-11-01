@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4cd5e3ae_bdfeb0da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-01T07:43:16Z",
+      "side": 1,
+      "message": "\u003e Can we improve the \"It might be dangerous...\" text?\n\nSure, that\u0027s why I had added you to this change.  :)\n\n\u003e Something like \"Opening documents from relative addresses may have a security risk\" - still room for improvement but a bit more actionable.\n\nNote that this is not about \"relative addresses\".\n\n\u003e And I wonder in what cases the message comes up. In case you open a document that contains relative URLs it would be an infobar, for Insert From actions a message dialog?\n\nThe message comes up (always as a dialog) when the user initiates (by e.g. clicking on some hyperlink or designated area of an image) execution of another program.",
+      "parentUuid": "1f14221b_69d0c468",
+      "revId": "70009098fd70df021048c540d1796c928554b494",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2e703d6c_e7f9e640",
         "filename": "sfx2/source/appl/openuriexternally.cxx",
         "patchSetId": 2
