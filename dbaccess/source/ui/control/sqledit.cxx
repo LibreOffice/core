@@ -68,12 +68,14 @@ private:
     SQLEditView& editor_;
 };
 
-SQLEditView::SQLEditView()
-    : m_aUpdateDataTimer("dbaccess SQLEditView m_aUpdateDataTimer")
+SQLEditView::SQLEditView(std::unique_ptr<weld::ScrolledWindow> xScrolledWindow)
+    : m_xScrolledWindow(std::move(xScrolledWindow))
+    , m_aUpdateDataTimer("dbaccess SQLEditView m_aUpdateDataTimer")
     , m_aHighlighter(HighlighterLanguage::SQL)
     , m_bInUpdate(false)
     , m_bDisableInternalUndo(false)
 {
+    m_xScrolledWindow->connect_vadjustment_changed(LINK(this, SQLEditView, ScrollHdl));
 }
 
 void SQLEditView::DisableInternalUndo()
@@ -129,6 +131,7 @@ void SQLEditView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
     rEditEngine.SetDefaultHorizontalTextDirection(EEHorizontalTextDirection::L2R);
     rEditEngine.SetModifyHdl(LINK(this, SQLEditView, ModifyHdl));
+    rEditEngine.SetStatusEventHdl(LINK(this, SQLEditView, EditStatusHdl));
 
     m_aUpdateDataTimer.SetTimeout(150);
     m_aUpdateDataTimer.SetInvokeHandler(LINK(this, SQLEditView, ImplUpdateDataHdl));
@@ -430,6 +433,66 @@ bool SQLEditView::Command(const CommandEvent& rCEvt)
         return true;
     }
     return WeldEditView::Command(rCEvt);
+}
+
+void SQLEditView::EditViewScrollStateChange()
+{
+    // editengine height has changed or editview scroll pos has changed
+    SetScrollBarRange();
+}
+
+void SQLEditView::SetScrollBarRange()
+{
+    EditEngine *pEditEngine = GetEditEngine();
+    if (!pEditEngine)
+        return;
+    if (!m_xScrolledWindow)
+        return;
+    EditView* pEditView = GetEditView();
+    if (!pEditView)
+        return;
+
+    int nVUpper = pEditEngine->GetTextHeight();
+    int nVCurrentDocPos = pEditView->GetVisArea().Top();
+    const Size aOut(pEditView->GetOutputArea().GetSize());
+    int nVStepIncrement = aOut.Height() * 2 / 10;
+    int nVPageIncrement = aOut.Height() * 8 / 10;
+    int nVPageSize = aOut.Height();
+
+    /* limit the page size to below nUpper because gtk's gtk_scrolled_window_start_deceleration has
+       effectively...
+
+       lower = gtk_adjustment_get_lower
+       upper = gtk_adjustment_get_upper - gtk_adjustment_get_page_size
+
+       and requires that upper > lower or the deceleration animation never ends
+    */
+    nVPageSize = std::min(nVPageSize, nVUpper);
+
+    m_xScrolledWindow->vadjustment_configure(nVCurrentDocPos, 0, nVUpper,
+                                             nVStepIncrement, nVPageIncrement, nVPageSize);
+}
+
+IMPL_LINK_NOARG(SQLEditView, ScrollHdl, weld::ScrolledWindow&, void)
+{
+    DoScroll();
+}
+
+IMPL_LINK_NOARG(SQLEditView, EditStatusHdl, EditStatus&, void)
+{
+    Resize();
+}
+
+void SQLEditView::DoScroll()
+{
+    if (m_xEditView)
+    {
+        auto currentDocPos = m_xEditView->GetVisArea().Top();
+        auto nDiff = currentDocPos - m_xScrolledWindow->vadjustment_get_value();
+        // we expect SetScrollBarRange callback to be triggered by Scroll
+        // to set where we ended up
+        m_xEditView->Scroll(0, nDiff);
+    }
 }
 
 void SQLEditView::ConfigurationChanged(utl::ConfigurationBroadcaster*, ConfigurationHints)
