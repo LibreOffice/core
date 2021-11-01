@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "173d6a5b_825f872f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-01T17:34:59Z",
+      "side": 1,
+      "message": "I just changed the comment to fix the hyperlink to the bugtracker.\nLet\u0027s put back +1 for code review and +1 for verified.",
+      "revId": "0e1c0b576502df4fad3d5de97230eec66a459b41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
