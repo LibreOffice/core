@@ -257,7 +257,7 @@ SwTitlePageDlg::~SwTitlePageDlg()
 IMPL_LINK_NOARG(SwTitlePageDlg, EditHdl, weld::Button&, void)
 {
     SwView& rView = mrSh.GetView();
-    rView.GetDocShell()->FormatPage(m_xPagePropertiesLB->get_active_text(), "page", mrSh);
+    rView.GetDocShell()->FormatPage(getDialog(), m_xPagePropertiesLB->get_active_text(), "page", mrSh);
     rView.InvalidateRulerPos();
 }
 

@@ -427,7 +427,7 @@ void SwHeaderFooterWin::ExecuteCommand(std::string_view rIdent)
     if (rIdent == "edit")
     {
         OString sPageId = m_bIsHeader ? OString("header") : OString("footer");
-        rView.GetDocShell()->FormatPage(rStyleName, sPageId, rSh);
+        rView.GetDocShell()->FormatPage(rView.GetFrameWeld(), rStyleName, sPageId, rSh);
     }
     else if (rIdent == "borderback")
     {
