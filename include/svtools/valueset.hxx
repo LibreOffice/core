@@ -217,7 +217,6 @@ private:
     bool            mbFormat : 1;
     bool            mbHighlight : 1;
     bool            mbNoSelection : 1;
-    bool            mbDrawSelection : 1;
     bool            mbDoubleSel : 1;
     bool            mbScroll : 1;
     bool            mbFullMode : 1;
@@ -238,7 +237,7 @@ private:
                                                const bool bFocus, const bool bDrawSel,
                                                const bool bSelected, const bool bHover);
     SVT_DLLPRIVATE void         ImplDrawSelect(vcl::RenderContext& rRenderContext);
-    SVT_DLLPRIVATE void         ImplHighlightItem(sal_uInt16 nItemId, bool bIsSelection = true);
+    SVT_DLLPRIVATE void         ImplHighlightItem(sal_uInt16 nItemId);
     SVT_DLLPRIVATE void         ImplDraw(vcl::RenderContext& rRenderContext);
     SVT_DLLPRIVATE size_t       ImplGetItem( const Point& rPoint ) const;
     SVT_DLLPRIVATE ValueSetItem*    ImplGetItem( size_t nPos );
