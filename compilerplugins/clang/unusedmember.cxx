@@ -94,6 +94,21 @@ public:
 
 #endif
 
+    bool VisitDeclaratorDecl(DeclaratorDecl const* decl)
+    {
+        // For declarations like
+        //
+        //   enum E { ... } e;
+        //
+        // it may be that the declaration of E is not marked as referenced even though the
+        // declaration of e clearly references it:
+        if (auto const t = decl->getType()->getAs<EnumType>())
+        {
+            deferred_.erase(t->getDecl());
+        }
+        return true;
+    }
+
     bool VisitCXXRecordDecl(CXXRecordDecl const* decl) //TODO: non-CXX RecordDecl?
     {
         if (ignoreLocation(decl))
