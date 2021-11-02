@@ -16,6 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+// Silence spurious Werror=maybe-uninitialized in transliterateImpl emitted at least by GCC 11.2.0
+#if defined __GNUC__ && !defined __clang__
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
 
 #include <rtl/ref.hxx>
 #include <i18nutil/casefolding.hxx>
