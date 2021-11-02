@@ -1187,24 +1187,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95367_inheritFollowStyle, "tdf95367_inheritFollo
 DECLARE_OOXMLEXPORT_TEST(testInheritFirstHeader,"inheritFirstHeader.docx")
 {
 // First page headers always link to last used first header, never to a follow header
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
-
-    xCursor->jumpToLastPage();
-    OUString sPageStyleName = getProperty<OUString>( xCursor, "PageStyleName" );
-    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(sPageStyleName), "HeaderText");
-    CPPUNIT_ASSERT_EQUAL( OUString("Last Header"), xHeaderText->getString() );
-
-    xCursor->jumpToPreviousPage();
-    sPageStyleName = getProperty<OUString>( xCursor, "PageStyleName" );
-    xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(sPageStyleName), "HeaderText");
-    CPPUNIT_ASSERT_EQUAL( OUString("First Header"), xHeaderText->getString() );
-
-    xCursor->jumpToPreviousPage();
-    sPageStyleName = getProperty<OUString>( xCursor, "PageStyleName" );
-    xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(sPageStyleName), "HeaderText");
-    CPPUNIT_ASSERT_EQUAL( OUString("Follow Header"), xHeaderText->getString() );
+    CPPUNIT_ASSERT_EQUAL(OUString("First Header"), parseDump("/root/page[1]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Follow Header"), parseDump("/root/page[2]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Follow Header"), parseDump("/root/page[3]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("First Header"), parseDump("/root/page[4]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Last Header"), parseDump("/root/page[5]/header/txt/text()"));
 }
 
 #if HAVE_MORE_FONTS

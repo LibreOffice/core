@@ -586,9 +586,9 @@ DECLARE_SW_EXPORT_TEST(testHFLinkToPrev, "headerfooter-link-to-prev.docx", nullp
         xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
     // check page 1 header & footer text
     CPPUNIT_ASSERT_EQUAL(OUString("First page header for all sections"),
-        getHFText(xPageStyle, "HeaderText"));
+        getHFText(xPageStyle, "HeaderTextFirst"));
     CPPUNIT_ASSERT_EQUAL(OUString("First page footer for section 1 only"),
-        getHFText(xPageStyle, "FooterText"));
+        getHFText(xPageStyle, "FooterTextFirst"));
 
     // get LO page style for page 2, corresponding to docx section 1
     xCursor->jumpToPage(2);
@@ -610,9 +610,9 @@ DECLARE_SW_EXPORT_TEST(testHFLinkToPrev, "headerfooter-link-to-prev.docx", nullp
     xPageStyle.set( xPageStyles->getByName(pageStyleName), uno::UNO_QUERY );
     // check header & footer text
     CPPUNIT_ASSERT_EQUAL(OUString("First page header for all sections"),
-        getHFText(xPageStyle, "HeaderText"));
+        getHFText(xPageStyle, "HeaderTextFirst"));
     CPPUNIT_ASSERT_EQUAL(OUString("First page footer for sections 2 and 3 only"),
-        getHFText(xPageStyle, "FooterText"));
+        getHFText(xPageStyle, "FooterTextFirst"));
 
     // get LO page style for page 5, corresponding to docx section 2
     xCursor->jumpToPage(5);
@@ -634,9 +634,9 @@ DECLARE_SW_EXPORT_TEST(testHFLinkToPrev, "headerfooter-link-to-prev.docx", nullp
     xPageStyle.set( xPageStyles->getByName(pageStyleName), uno::UNO_QUERY );
     // check header & footer text
     CPPUNIT_ASSERT_EQUAL(OUString("First page header for all sections"),
-        getHFText(xPageStyle, "HeaderText"));
+        getHFText(xPageStyle, "HeaderTextFirst"));
     CPPUNIT_ASSERT_EQUAL(OUString("First page footer for sections 2 and 3 only"),
-        getHFText(xPageStyle, "FooterText"));
+        getHFText(xPageStyle, "FooterTextFirst"));
 
     // get LO page style for page 8, corresponding to docx section 3
     xCursor->jumpToPage(8);

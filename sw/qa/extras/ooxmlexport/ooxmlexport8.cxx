@@ -419,14 +419,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf59699, "tdf59699.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testN777337, "n777337.docx")
 {
-    /*
-     * The problem was that the top and bottom margin on the first page was only 0.1cm instead of 1.7cm.
-     *
-     * oFirst = ThisComponent.StyleFamilies.PageStyles.getByName("First Page")
-     * xray oFirst.TopMargin
-     * xray oFirst.BottomMargin
-     */
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("First Page"), uno::UNO_QUERY);
+     // The problem was that the top and bottom margin on the first page was only 0.1cm instead of 1.7cm.
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1702), getProperty<sal_Int32>(xPropertySet, "TopMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1702), getProperty<sal_Int32>(xPropertySet, "BottomMargin"));
 }
@@ -586,19 +580,7 @@ DECLARE_OOXMLEXPORT_TEST(testN780853, "n780853.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testN780843, "n780843.docx")
 {
-    uno::Reference< text::XTextRange > xPara = getParagraph(1);
-    OUString aStyleName = getProperty<OUString>(xPara, "PageStyleName");
-    // what happens on export here is that the "Default Style" isn't actually
-    // used on page 2, because of the hard page break with style "Converted2"
-    // and therefore SwPageDesc::IsFollowNextPageOfNode() returns false and
-    // "w:titlepg" element is not written
-    // (the export result is wrong with or without w:titlepg, because the footer
-    // on the 2nd page should be the text "shown footer")
-    if (mbExported)
-        CPPUNIT_ASSERT_EQUAL(OUString("Standard"), aStyleName);
-    else
-        CPPUNIT_ASSERT_EQUAL(OUString("First Page"), aStyleName);
-
+    CPPUNIT_ASSERT_EQUAL(OUString("shown footer"), parseDump("/root/page[2]/footer/txt/text()"));
 
     //tdf64372 this document should only have one page break (2 pages, not 3)
     CPPUNIT_ASSERT_EQUAL(2, getPages());
@@ -786,7 +768,10 @@ DECLARE_OOXMLEXPORT_TEST(testN779642, "n779642.docx")
     // tdf#106572 - perhaps not the best test to hijack since this file
     // produces an error in Word, but it nicely matches danger points,
     // and has a different first footer, so nice visual confirmation.
-    CPPUNIT_ASSERT_EQUAL(OUString("First Page"), getProperty<OUString>(getParagraphOrTable(1), "PageDescName"));
+    discardDumpedLayout();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // There is no footer text on the first page.
+    assertXPath(pXmlDoc, "/root/page[1]/footer/txt", 0);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTbLrHeight, "tblr-height.docx")

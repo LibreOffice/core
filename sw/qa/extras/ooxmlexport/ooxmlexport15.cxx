@@ -474,7 +474,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135216_evenOddFooter, "tdf135216_evenOddFooter.o
     xCursor->jumpToNextPage();
     pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
     xPageStyle.set(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
-    xFooter.set(getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterTextRight"));
+    xFooter.set(getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterTextFirst"));
     CPPUNIT_ASSERT_EQUAL(OUString("odd page - first footer"), xFooter->getString());
 
     xCursor->jumpToNextPage();
