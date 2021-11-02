@@ -1567,18 +1567,14 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     xSubPop2->set_active(OString::number(201 + static_cast<int>(GetParentWindow()->GetRegionDropMode())), true);
 
     // Insert the list of the open files
+    {
     sal_uInt16 nId = 301;
-    const SwView* pActiveView = ::GetActiveView();
     SwView *pView = SwModule::GetFirstView();
     while (pView)
     {
-        OUString sInsert = pView->GetDocShell()->GetTitle();
-        if (pView == pActiveView)
-        {
-            sInsert += "(" +
-                m_aContextStrings[IDX_STR_ACTIVE] +
-                ")";
-        }
+        OUString sInsert = pView->GetDocShell()->GetTitle() + " (" +
+                m_aContextStrings[pView == GetActiveView() ? IDX_STR_ACTIVE :
+                                                             IDX_STR_INACTIVE] + ")";
         xSubPop3->append_radio(OUString::number(nId), sInsert);
         if (State::CONSTANT == m_eState && m_pActiveShell == &pView->GetWrtShell())
             xSubPop3->set_active(OString::number(nId), true);
@@ -1586,19 +1582,19 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         nId++;
     }
     xSubPop3->append_radio(OUString::number(nId++), m_aContextStrings[IDX_STR_ACTIVE_VIEW]);
-    if (m_pHiddenShell)
+    if (m_pHiddenShell) // can have only one hidden shell
     {
         OUString sHiddenEntry = m_pHiddenShell->GetView().GetDocShell()->GetTitle() +
-            " ( " +
+            " (" +
             m_aContextStrings[IDX_STR_HIDDEN] +
-            " )";
+            ")";
         xSubPop3->append_radio(OUString::number(nId), sHiddenEntry);
     }
-
     if (State::ACTIVE == m_eState)
         xSubPop3->set_active(OString::number(--nId), true);
     else if (State::HIDDEN == m_eState)
         xSubPop3->set_active(OString::number(nId), true);
+    }
 
     std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
     if (!m_xTreeView->get_selected(xEntry.get()))
@@ -1701,7 +1697,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         }
         // Edit only if the shown content is coming from the current view.
         if (State::HIDDEN != m_eState &&
-                (State::ACTIVE == m_eState || m_pActiveShell == pActiveView->GetWrtShellPtr())
+                (State::ACTIVE == m_eState || m_pActiveShell == GetActiveView()->GetWrtShellPtr())
                 && lcl_IsContent(*xEntry, *m_xTreeView))
         {
             const bool bReadonly = m_pActiveShell->GetView().GetDocShell()->IsReadOnly();
