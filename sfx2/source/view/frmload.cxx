@@ -501,18 +501,16 @@ void SfxFrameLoader_Impl::impl_removeLoaderArguments( ::comphelper::NamedValueCo
 
 ::comphelper::NamedValueCollection SfxFrameLoader_Impl::impl_extractViewCreationArgs( ::comphelper::NamedValueCollection& io_rDescriptor )
 {
-    static const char* pKnownViewArgs[] = {
-        "JumpMark",
-        "PickListEntry"
-    };
+    static const std::u16string_view sKnownViewArgs[] = { u"JumpMark", u"PickListEntry" };
 
     ::comphelper::NamedValueCollection aViewArgs;
-    for (const char* pKnownViewArg : pKnownViewArgs)
+    for (const auto& rKnownViewArg : sKnownViewArgs)
     {
-        if ( io_rDescriptor.has( pKnownViewArg ) )
+        const OUString sKnownViewArg(rKnownViewArg);
+        if ( io_rDescriptor.has( sKnownViewArg ) )
         {
-            aViewArgs.put( pKnownViewArg, io_rDescriptor.get( pKnownViewArg ) );
-            io_rDescriptor.remove( pKnownViewArg );
+            aViewArgs.put( sKnownViewArg, io_rDescriptor.get( sKnownViewArg ) );
+            io_rDescriptor.remove( sKnownViewArg );
         }
     }
     return aViewArgs;
