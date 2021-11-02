@@ -1976,7 +1976,7 @@ namespace emfio
                                         {
                                             sal_Int32 nDxTmp = 0;
                                             mpInputStream->ReadInt32(nDxTmp);
-                                            aDXAry[i] += nDxTmp;
+                                            aDXAry[i] = o3tl::saturating_add(aDXAry[i], nDxTmp);
                                             if (nOptions & ETO_PDY)
                                             {
                                                 sal_Int32 nDyTmp = 0;
