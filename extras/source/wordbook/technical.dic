@@ -37,6 +37,7 @@ Base24=
 BeOS=
 Bing
 Bitcoin
+Blockchain
 Bluetooth
 Boolean
 BorderManager
@@ -88,6 +89,7 @@ eGuide
 Electronics
 elementary
 Etch
+Ethereum
 Ethernet
 Evolution
 Exadata=
@@ -264,8 +266,10 @@ Sid
 Skype
 SLED
 SLES
+Smart Contract
 SMTP
 Solaris=
+Solidity
 Sony
 Soyuz
 Spamassassin
