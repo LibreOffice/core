@@ -70,7 +70,7 @@ public:
                          const char* pFilterName, bool bUseHTMLMLEntities);
 };
 
-class SmXMLImport : public SvXMLImport
+class SmXMLImport final : public SvXMLImport
 {
     SmNodeStack aNodeStack;
     bool bSuccess;

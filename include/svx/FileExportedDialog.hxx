@@ -10,7 +10,7 @@
 #include <vcl/weld.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC FileExportedDialog : public weld::GenericDialogController
+class SVX_DLLPUBLIC FileExportedDialog final : public weld::GenericDialogController
 {
 private:
     std::unique_ptr<weld::Label> m_xFileLabel;

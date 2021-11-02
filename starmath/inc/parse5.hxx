@@ -25,7 +25,7 @@
 
 #include "parsebase.hxx"
 
-class SmParser5 : public AbstractSmParser
+class SmParser5 final : public AbstractSmParser
 {
     OUString m_aBufferString;
     SmToken m_aCurToken;

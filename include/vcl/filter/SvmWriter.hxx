@@ -30,7 +30,6 @@ class VCL_DLLPUBLIC SvmWriter
 private:
     SvStream& mrStream;
 
-protected:
     void WriteColor(::Color aColor);
 
 public:

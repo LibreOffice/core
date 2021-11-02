@@ -26,7 +26,7 @@
 
 namespace svgio::svgreader
     {
-        class SvgPatternNode : public SvgNode
+        class SvgPatternNode final : public SvgNode
         {
         private:
             /// buffered decomposition

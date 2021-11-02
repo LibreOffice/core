@@ -168,7 +168,7 @@ public:
                                 const SfxItemSet* rAttrSet);
 };
 
-class SwSectionFootnoteEndTabPage : public SfxTabPage
+class SwSectionFootnoteEndTabPage final : public SfxTabPage
 {
     std::unique_ptr<weld::CheckButton> m_xFootnoteNtAtTextEndCB;
     std::unique_ptr<weld::CheckButton> m_xFootnoteNtNumCB;

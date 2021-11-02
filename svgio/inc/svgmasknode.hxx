@@ -26,7 +26,7 @@
 
 namespace svgio::svgreader
     {
-        class SvgMaskNode : public SvgNode
+        class SvgMaskNode final : public SvgNode
         {
         private:
             /// use styles

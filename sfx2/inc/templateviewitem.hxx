@@ -11,7 +11,7 @@
 
 #include <sfx2/thumbnailviewitem.hxx>
 
-class TemplateViewItem : public ThumbnailViewItem
+class TemplateViewItem final : public ThumbnailViewItem
 {
 public:
 

@@ -113,7 +113,7 @@ public:
     void dump() const;
 #endif
 
-protected:
+private:
 
     TextCharacterProperties         maTextCharacterProperties;
     PropertyMap                     maTextParagraphPropertyMap;

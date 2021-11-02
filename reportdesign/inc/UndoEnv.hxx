@@ -37,7 +37,7 @@ namespace rptui
     class OXUndoEnvironmentImpl;
 
 
-    class REPORTDESIGN_DLLPUBLIC OXUndoEnvironment
+    class REPORTDESIGN_DLLPUBLIC OXUndoEnvironment final
         : public ::cppu::WeakImplHelper<   css::beans::XPropertyChangeListener
                                         ,   css::container::XContainerListener
                                         ,   css::util::XModifyListener
@@ -49,7 +49,6 @@ namespace rptui
         OXUndoEnvironment(const OXUndoEnvironment&) = delete;
         OXUndoEnvironment& operator=(const OXUndoEnvironment&) = delete;
 
-    protected:
         virtual ~OXUndoEnvironment() override;
 
         void SetUndoMode(bool _bUndo);
@@ -112,7 +111,7 @@ namespace rptui
         */
         void RemoveSection(OReportPage const * _pPage);
 
-    protected:
+    private:
         // XEventListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 

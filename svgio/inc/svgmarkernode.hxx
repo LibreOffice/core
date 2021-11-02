@@ -25,7 +25,7 @@
 
 namespace svgio::svgreader
     {
-        class SvgMarkerNode : public SvgNode
+        class SvgMarkerNode final : public SvgNode
         {
         public:
             enum class MarkerUnits

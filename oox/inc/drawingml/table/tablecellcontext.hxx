@@ -25,7 +25,7 @@
 
 namespace oox::drawingml::table
 {
-class TableCellContext : public ::oox::core::ContextHandler2
+class TableCellContext final : public ::oox::core::ContextHandler2
 {
 public:
     TableCellContext(::oox::core::ContextHandler2Helper const& rParent,

@@ -67,7 +67,7 @@ private:
 };
 
 /// Same as ColorContext, but handles multiple colors.
-class ColorsContext : public ::oox::core::ContextHandler2
+class ColorsContext final : public ::oox::core::ContextHandler2
 {
 public:
     explicit ColorsContext(::oox::core::ContextHandler2Helper const& rParent,

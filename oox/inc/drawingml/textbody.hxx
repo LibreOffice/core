@@ -88,7 +88,7 @@ public:
                             const css::uno::Reference < css::text::XText > & xText,
                             const TextCharacterProperties& rTextStyleProperties,
                             const TextListStylePtr& pMasterTextListStylePtr) const;
-protected:
+private:
     TextParagraphVector maParagraphs;
     TextBodyProperties  maTextProperties;
     /// Set if bodyPr tag in this textbody is non-empty during import

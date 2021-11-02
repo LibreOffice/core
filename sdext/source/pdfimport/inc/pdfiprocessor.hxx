@@ -52,7 +52,7 @@ namespace pdfi
 
         Creates the internal DOM tree from the render calls
      */
-    class PDFIProcessor : public ContentSink
+    class PDFIProcessor final : public ContentSink
     {
     public:
         css::uno::Reference<

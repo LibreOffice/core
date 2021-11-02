@@ -15,7 +15,7 @@
 
 #include <editeng/editdata.hxx>
 
-class SmMlElement : public SmRect
+class SmMlElement final : public SmRect
 {
     /* Technical stuff */
 
@@ -187,7 +187,7 @@ public: // attributes
     */
     bool isAttributeSet(SmMlAttributeValueType aAttributeType) const;
 
-protected: // attributes
+private: // attributes
     /**
       * Gets a given attribute.
       * If no available returns empty attribute.

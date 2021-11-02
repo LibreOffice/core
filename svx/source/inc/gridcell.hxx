@@ -75,11 +75,7 @@ class DbGridColumn
                                         // this is positioned by the DbBrowseBox on the respective
                                         // cells of a column
     rtl::Reference<FmXGridCell>                           m_pCell;
-
-protected:
     DbGridControl&      m_rParent;
-
-private:
     sal_Int32               m_nLastVisibleWidth;    // only valid if m_bHidden == sal_True
     sal_Int32               m_nFormatKey;
     sal_Int16               m_nFieldType;
