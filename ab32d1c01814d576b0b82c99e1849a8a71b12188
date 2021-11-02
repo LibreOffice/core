@@ -51,6 +51,24 @@
       "parentUuid": "3cba978e_7590b695",
       "revId": "ab32d1c01814d576b0b82c99e1849a8a71b12188",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "baadf6b3_77d4ca60",
+        "filename": "include/unotools/VersionConfig.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-11-02T08:50:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1aca5f1_ed57d177",
+      "revId": "ab32d1c01814d576b0b82c99e1849a8a71b12188",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
