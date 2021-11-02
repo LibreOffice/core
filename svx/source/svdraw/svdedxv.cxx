@@ -1473,6 +1473,9 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
                 delete pOriginal;
             }
 
+            // cid#1493241 - Wrapper object use after free
+            if (pUndoEditUndoManager == mpLocalTextEditUndoManager.get())
+                pUndoEditUndoManager = nullptr;
             mpLocalTextEditUndoManager.reset();
         }
     }
