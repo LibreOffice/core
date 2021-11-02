@@ -31,7 +31,7 @@ $(eval $(call gb_Module_add_targets,ucb,\
 ))
 endif
 
-ifeq ($(WITH_WEBDAV),neon)
+ifeq ($(WITH_WEBDAV),curl)
 
 $(eval $(call gb_Module_add_check_targets,ucb,\
     CppunitTest_ucb_webdav_local_neon \

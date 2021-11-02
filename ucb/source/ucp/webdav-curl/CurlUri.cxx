@@ -93,12 +93,12 @@ void CurlUri::Init()
     auto const oQuery(GetURLComponent(*m_pUrl, CURLUPART_QUERY, CURLUE_NO_QUERY));
     if (oQuery)
     {
-        m_QueryAndFragment += *oQuery;
+        m_QueryAndFragment += "?" + *oQuery;
     }
     auto const oFragment(GetURLComponent(*m_pUrl, CURLUPART_FRAGMENT, CURLUE_NO_FRAGMENT));
     if (oFragment)
     {
-        m_QueryAndFragment += *oFragment;
+        m_QueryAndFragment += "#" + *oFragment;
     }
 }
 
