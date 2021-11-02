@@ -96,6 +96,18 @@ void OutputDevice::DrawTransparent(
     if(!rB2DPolyPoly.count())
         return;
 
+    if (mpMetaFile)
+    {
+        // tdf#119843 need transformed Polygon here
+        basegfx::B2DPolyPolygon aB2DPolyPoly(rB2DPolyPoly);
+        aB2DPolyPoly.transform(rObjectTransform);
+
+        mpMetaFile->AddAction(
+            new MetaTransparentAction(
+                tools::PolyPolygon(aB2DPolyPoly),
+                static_cast< sal_uInt16 >(fTransparency * 100.0)));
+    }
+
     // we need a graphics
     if( !mpGraphics && !AcquireGraphics() )
         return;
@@ -164,17 +176,6 @@ void OutputDevice::DrawTransparent(
 
         if( bDrawnOk )
         {
-            if( mpMetaFile )
-            {
-                // tdf#119843 need transformed Polygon here
-                basegfx::B2DPolyPolygon aB2DPolyPoly(rB2DPolyPoly);
-                aB2DPolyPoly.transform(rObjectTransform);
-                mpMetaFile->AddAction(
-                    new MetaTransparentAction(
-                        tools::PolyPolygon(aB2DPolyPoly),
-                        static_cast< sal_uInt16 >(fTransparency * 100.0)));
-            }
-
             if (mpAlphaVDev)
                 mpAlphaVDev->DrawTransparent(rObjectTransform, rB2DPolyPoly, fTransparency);
 
@@ -182,13 +183,17 @@ void OutputDevice::DrawTransparent(
         }
     }
 
+    GDIMetaFile* pOldMetaFile = mpMetaFile;
+    mpMetaFile = nullptr;
+
     // fallback to old polygon drawing if needed
     // tdf#119843 need transformed Polygon here
     basegfx::B2DPolyPolygon aB2DPolyPoly(rB2DPolyPoly);
     aB2DPolyPoly.transform(rObjectTransform);
-    DrawTransparent(
-        toPolyPolygon(aB2DPolyPoly),
-        static_cast<sal_uInt16>(fTransparency * 100.0));
+
+    DrawTransparent(toPolyPolygon(aB2DPolyPoly), static_cast<sal_uInt16>(fTransparency * 100.0));
+
+    mpMetaFile = pOldMetaFile;
 }
 
 bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly,
