@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb5acd20_9a8755d9",
+        "filename": "include/unotools/VersionConfig.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-11-02T09:14:43Z",
+      "side": 1,
+      "message": "can you be specific which regression you want to catch here?",
+      "range": {
+        "startLine": 43,
+        "startChar": 18,
+        "endLine": 43,
+        "endChar": 23
+      },
+      "revId": "67c947e7aada0231800412f1e964768b256f116d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
