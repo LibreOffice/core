@@ -33,6 +33,7 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/drawing/XDrawView.hpp>
 
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
@@ -63,7 +64,6 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <tools/link.hxx>
 
-#include <asyncfunc.hxx>
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/request.hxx>
@@ -623,14 +623,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                             pReq->AppendItem( SfxDocumentInfoItem( GetTitle(),
                                 getDocProperties(), aNewCmisProperties, IsUseUserData(), IsUseThumbnailSave() ) );
                         }
-
-                        css::uno::Reference< css::uno::XInterface > xInterface;
-                        const SfxUnoAnyItem* pUnoAny = pReq->GetArg<SfxUnoAnyItem>(FN_PARAM_2);
-                        AsyncFunc* pAsyncFunc = pUnoAny && (pUnoAny->GetValue() >>= xInterface ) ?
-                            comphelper::getFromUnoTunnel<AsyncFunc>(xInterface) : nullptr;
-                        if (pAsyncFunc)
-                            pAsyncFunc->Execute();
-
                         pReq->Done();
                     }
                     else
