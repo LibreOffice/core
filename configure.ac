@@ -4318,7 +4318,6 @@ AC_SUBST(SHOWINCLUDES_PREFIX)
 #
 # prefix C with ccache if needed
 #
-UNCACHED_CC="$CC"
 if test "$CCACHE" != ""; then
     AC_MSG_CHECKING([whether $CC_BASE is already ccached])
 
@@ -6792,7 +6791,6 @@ AC_SUBST(BOOST_CXXFLAGS)
 #
 # prefx CXX with ccache if needed
 #
-UNCACHED_CXX="$CXX"
 if test "$CCACHE" != ""; then
     AC_MSG_CHECKING([whether $CXX_BASE is already ccached])
     AC_LANG_PUSH([C++])
@@ -12360,8 +12358,6 @@ fi
 #
 # prefix LO_CLANG_CC/LO_CLANG_CXX with ccache if needed
 #
-UNCACHED_CLANG_CC="$LO_CLANG_CC"
-UNCACHED_CLANG_CXX="$LO_CLANG_CXX"
 if test "$CCACHE" != "" -a -n "$LO_CLANG_CC" -a -n "$LO_CLANG_CXX"; then
     AC_MSG_CHECKING([whether $LO_CLANG_CC is already ccached])
     AC_LANG_PUSH([C])
@@ -12402,12 +12398,8 @@ if test "$CCACHE" != "" -a -n "$LO_CLANG_CC" -a -n "$LO_CLANG_CXX"; then
     AC_LANG_POP([C++])
 fi
 
-AC_SUBST(UNCACHED_CC)
-AC_SUBST(UNCACHED_CXX)
 AC_SUBST(LO_CLANG_CC)
 AC_SUBST(LO_CLANG_CXX)
-AC_SUBST(UNCACHED_CLANG_CC)
-AC_SUBST(UNCACHED_CLANG_CXX)
 AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_SSE2)
 AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_SSSE3)
 AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_SSE41)
