@@ -96,7 +96,7 @@ namespace
     }
 
     CPPUNIT_TEST_SUITE_REGISTRATION( webdav_resource_access_test );
-}                               // namespace rtl_random
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
