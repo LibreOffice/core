@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "edad72aa_0173ab48",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2021-11-02T01:42:49Z",
+      "side": 1,
+      "message": "sorry, cloph.\n\nI wrongly thought the libraries are not yet uploaded to dev-www.libreoffice.org.",
+      "revId": "c3a5d29a1dbf8a627f9e9820563f1b4b03628c37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
