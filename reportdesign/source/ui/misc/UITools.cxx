@@ -539,7 +539,7 @@ namespace
 
 
     template< class ATTRIBUTE_TYPE >
-    void lcl_applyFontAttribute( const ::comphelper::NamedValueCollection& _rAttrValues, const char* _pAttributeName,
+    void lcl_applyFontAttribute( const ::comphelper::NamedValueCollection& _rAttrValues, const OUString& _pAttributeName,
         const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat,
         void (SAL_CALL report::XReportControlFormat::*pSetter)( ATTRIBUTE_TYPE ) )
     {
@@ -549,7 +549,7 @@ namespace
     }
 
 
-    void lcl_applyFontAttribute( const ::comphelper::NamedValueCollection& _rAttrValues, const char* _pAttributeName,
+    void lcl_applyFontAttribute( const ::comphelper::NamedValueCollection& _rAttrValues, const OUString& _pAttributeName,
         const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat,
         void (SAL_CALL report::XReportControlFormat::*pSetter)( const OUString& ) )
     {
@@ -559,7 +559,7 @@ namespace
     }
 
 
-    void lcl_applyFontAttribute( const ::comphelper::NamedValueCollection& _rAttrValues, const char* _pAttributeName,
+    void lcl_applyFontAttribute( const ::comphelper::NamedValueCollection& _rAttrValues, const OUString& _pAttributeName,
         const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat,
         void (SAL_CALL report::XReportControlFormat::*pSetter)( const lang::Locale& ) )
     {
