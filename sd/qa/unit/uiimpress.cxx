@@ -242,8 +242,6 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf124708)
 {
     mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf124708.ppt"));
 
-    CPPUNIT_ASSERT(mxComponent.is());
-
     dispatchCommand(mxComponent, ".uno:NextPage", {});
     Scheduler::ProcessEventsToIdle();
 
@@ -273,8 +271,6 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf143412)
 {
     mxComponent = loadFromDesktop("private:factory/simpress",
                                   "com.sun.star.presentation.PresentationDocument");
-
-    CPPUNIT_ASSERT(mxComponent.is());
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -314,8 +310,6 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf139996)
 {
     mxComponent = loadFromDesktop("private:factory/simpress",
                                   "com.sun.star.presentation.PresentationDocument");
-
-    CPPUNIT_ASSERT(mxComponent.is());
 
     sd::slidesorter::SlideSorterViewShell* pSSVS = getSlideSorterViewShell();
     auto& rSSController = pSSVS->GetSlideSorter().GetController();
@@ -384,8 +378,6 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf100950)
     mxComponent = loadFromDesktop("private:factory/simpress",
                                   "com.sun.star.presentation.PresentationDocument");
 
-    CPPUNIT_ASSERT(mxComponent.is());
-
     dispatchCommand(mxComponent, ".uno:InsertPage", {});
     Scheduler::ProcessEventsToIdle();
 
@@ -410,8 +402,6 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf129346)
     mxComponent = loadFromDesktop("private:factory/simpress",
                                   "com.sun.star.presentation.PresentationDocument");
 
-    CPPUNIT_ASSERT(mxComponent.is());
-
     dispatchCommand(mxComponent, ".uno:DiaMode", {});
     Scheduler::ProcessEventsToIdle();
     checkCurrentPageNumber(1);
@@ -429,8 +419,6 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testmoveSlides)
 {
     mxComponent = loadFromDesktop("private:factory/simpress",
                                   "com.sun.star.presentation.PresentationDocument");
-
-    CPPUNIT_ASSERT(mxComponent.is());
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -494,7 +482,6 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf141703)
     mxComponent = loadFromDesktop("private:factory/simpress",
                                   "com.sun.star.presentation.PresentationDocument");
 
-    CPPUNIT_ASSERT(mxComponent.is());
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
@@ -556,8 +543,6 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127481)
 {
     mxComponent = loadFromDesktop("private:factory/simpress",
                                   "com.sun.star.presentation.PresentationDocument");
-
-    CPPUNIT_ASSERT(mxComponent.is());
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -763,7 +748,6 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf142589)
 {
     mxComponent = loadFromDesktop("private:factory/simpress",
                                   "com.sun.star.presentation.PresentationDocument");
-    CPPUNIT_ASSERT(mxComponent.is());
 
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
