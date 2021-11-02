@@ -19,9 +19,9 @@
 
 #pragma once
 
-#include <vcl/transfer.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/weldutils.hxx>
 #include <svtools/valueset.hxx>
 
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -352,13 +352,11 @@ public:
     void CreateDropDown();
 };
 
-class SvxConfigPageFunctionDropTarget : public DropTargetHelper
+class SvxConfigPageFunctionDropTarget : public weld::ReorderingDropTarget
 {
 private:
     SvxConfigPage& m_rPage;
-    weld::TreeView& m_rTreeView;
 
-    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
     virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 
 public:
