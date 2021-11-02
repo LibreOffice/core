@@ -161,8 +161,26 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                         nFirstCol = nLastCol = 0;
                         nFirstRow = nLastRow = 0;
                     }
+
+                    bool bIncludeObjects = false; // include drawing layer objects in CopyToClip ?
+
+                    if (nFormatId == SotClipboardFormatId::EMBED_SOURCE)
+                    {
+                        const ScDrawLayer* pDraw = rSrcDoc.GetDrawLayer();
+                        SCCOL nPrintEndCol = nFirstCol;
+                        SCROW nPrintEndRow = nFirstRow;
+                        bool bHasObjects = pDraw && pDraw->HasObjects();
+                        // Extend the range to include the drawing layer objects.
+                        if (bHasObjects && rSrcDoc.GetPrintArea(nSrcTab, nPrintEndCol, nPrintEndRow, true))
+                        {
+                            nLastCol = std::max<SCCOL>(nLastCol, nPrintEndCol);
+                            nLastRow = std::max<SCROW>(nLastRow, nPrintEndRow);
+                        }
+
+                        bIncludeObjects = bHasObjects;
+                    }
+
                     ScClipParam aClipParam(ScRange(nFirstCol, nFirstRow, nSrcTab, nLastCol, nLastRow, nSrcTab), false);
-                    bool bIncludeObjects = (nFormatId == SotClipboardFormatId::EMBED_SOURCE);
                     rSrcDoc.CopyToClip(aClipParam, pClipDoc.get(), &aSrcMark, false, bIncludeObjects);
                     ScGlobal::SetClipDocName( xDocShRef->GetTitle( SFX_TITLE_FULLNAME ) );
 
