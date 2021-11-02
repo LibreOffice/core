@@ -1506,7 +1506,7 @@ public:
                                     double fTransparency);
 
     void                        DrawTransparentMetaFile(
-                                        const GDIMetaFile& rMtf, const Point& rPos, const Size& rSize,
+                                        GDIMetaFile& rMtf, const Point& rPos, const Size& rSize,
                                         const Gradient& rTransparenceGradient );
 
 protected:
