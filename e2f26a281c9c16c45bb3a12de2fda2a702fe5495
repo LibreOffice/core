@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "928d42ec_1a3caa72",
+        "filename": "sw/source/core/layout/newfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-02T13:28:03Z",
+      "side": 1,
+      "message": "It seems what normally happens is that first we have an SwFlyDrawObj for a Writer shape, and then this is turned into a SwVirtFlyDrawObj once we have layout. This is done in SwFlyDrawContact::CreateNewRef(), using SdrObjList::ReplaceObject().\n\nBased on this, the call to RemoveMasterObjs() seems to be doing nothing good: the SwFlyDrawObjs are removed the first time a SwVirtFlyDrawObj is created for them. Since this code was here since the initial import, we have no chance to know what was the original motivation for this function back then.\n\nCould you please update the commit message to describe why this removal is normally done in CreateNewRef()? Then you can probably safely delete the RemoveMasterObjs() declaration + definition as well. Thanks!",
+      "revId": "e2f26a281c9c16c45bb3a12de2fda2a702fe5495",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
