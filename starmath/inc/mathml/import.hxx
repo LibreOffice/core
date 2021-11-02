@@ -83,7 +83,7 @@ public:
                            css::uno::Reference<css::beans::XPropertySet> const& rPropSet);
 };
 
-class SmMLImport : public SvXMLImport
+class SmMLImport final : public SvXMLImport
 {
 private:
     SmMlElement* m_pElementTree = new SmMlElement(SmMlElementType::NMlEmpty);

@@ -38,7 +38,7 @@ namespace reportdesign
      * \ingroup reportdesign_api
      *
      */
-    class OFormatCondition :    public cppu::BaseMutex,
+    class OFormatCondition final : public cppu::BaseMutex,
                             public FormatConditionBase,
                             public FormatConditionPropertySet
     {
@@ -95,7 +95,6 @@ namespace reportdesign
             }
             l.notify();
         }
-    protected:
         virtual ~OFormatCondition() override;
     public:
         explicit OFormatCondition(css::uno::Reference< css::uno::XComponentContext > const & _xContext

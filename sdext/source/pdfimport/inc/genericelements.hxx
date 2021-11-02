@@ -107,16 +107,15 @@ namespace pdfi
         std::list<std::unique_ptr<Element>> Children;
     };
 
-    struct ListElement : public Element
+    struct ListElement final : public Element
     {
         ListElement() : Element( nullptr ) {}
         virtual void visitedBy( ElementTreeVisitor&, const std::list< std::unique_ptr<Element> >::const_iterator& ) override;
     };
 
-    struct HyperlinkElement : public Element
+    struct HyperlinkElement final : public Element
     {
         friend class ElementFactory;
-    protected:
         HyperlinkElement( Element* pParent, const OUString& rURI )
         : Element( pParent ), URI( rURI ) {}
     public:
@@ -157,10 +156,9 @@ namespace pdfi
         sal_Int32 ZOrder;
     };
 
-    struct FrameElement : public DrawElement
+    struct FrameElement final : public DrawElement
     {
         friend class ElementFactory;
-    protected:
         FrameElement( Element* pParent, sal_Int32 nGCId )
         : DrawElement( pParent, nGCId ) {}
 
@@ -168,10 +166,9 @@ namespace pdfi
         virtual void visitedBy( ElementTreeVisitor&, const std::list< std::unique_ptr<Element> >::const_iterator& ) override;
     };
 
-    struct TextElement : public GraphicalElement
+    struct TextElement final : public GraphicalElement
     {
         friend class ElementFactory;
-    protected:
         TextElement( Element* pParent, sal_Int32 nGCId, sal_Int32 nFontId )
         : GraphicalElement( pParent, nGCId ), FontId( nFontId ) {}
 
@@ -182,10 +179,9 @@ namespace pdfi
         sal_Int32           FontId;
     };
 
-    struct ParagraphElement : public Element
+    struct ParagraphElement final : public Element
     {
         friend class ElementFactory;
-    protected:
         explicit ParagraphElement( Element* pParent ) : Element( pParent ), Type( Normal ), bRtl( false ) {}
 
     public:
@@ -204,10 +200,9 @@ namespace pdfi
     bool bRtl;
     };
 
-    struct PolyPolyElement : public DrawElement
+    struct PolyPolyElement final : public DrawElement
     {
         friend class ElementFactory;
-    protected:
         PolyPolyElement( Element* pParent, sal_Int32 nGCId,
                          const basegfx::B2DPolyPolygon& rPolyPoly,
                          sal_Int8 nAction );
@@ -224,10 +219,9 @@ namespace pdfi
         sal_Int8                Action;
     };
 
-    struct ImageElement : public DrawElement
+    struct ImageElement final : public DrawElement
     {
         friend class ElementFactory;
-    protected:
         ImageElement( Element* pParent, sal_Int32 nGCId, ImageId nImage )
         : DrawElement( pParent, nGCId ), Image( nImage ) {}
 
@@ -237,10 +231,9 @@ namespace pdfi
         ImageId Image;
     };
 
-    struct PageElement : public Element
+    struct PageElement final : public Element
     {
         friend class ElementFactory;
-    protected:
         PageElement( Element* pParent, sal_Int32 nPageNr )
         : Element( pParent ), PageNumber( nPageNr ), Hyperlinks(),
         TopMargin( 0.0 ), BottomMargin( 0.0 ), LeftMargin( 0.0 ), RightMargin( 0.0 )
@@ -267,7 +260,7 @@ namespace pdfi
         std::unique_ptr<Element> FooterElement;
     };
 
-    struct DocumentElement : public Element
+    struct DocumentElement final : public Element
     {
         friend class ElementFactory;
     public:

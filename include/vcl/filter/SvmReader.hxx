@@ -29,7 +29,6 @@ class VCL_DLLPUBLIC SvmReader
 private:
     SvStream& mrStream;
 
-protected:
     void ReadColor(::Color& rColor);
 
 public:

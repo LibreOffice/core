@@ -221,7 +221,7 @@ private:
 
 // OUnoObject
 
-class REPORTDESIGN_DLLPUBLIC OUnoObject: public SdrUnoObj , public OObjectBase
+class REPORTDESIGN_DLLPUBLIC OUnoObject final : public SdrUnoObj , public OObjectBase
 {
     friend class OReportPage;
     friend class OObjectBase;
@@ -231,7 +231,6 @@ class REPORTDESIGN_DLLPUBLIC OUnoObject: public SdrUnoObj , public OObjectBase
     // tdf#118730 remember if this object was created interactively (due to ::EndCreate being called)
     bool         m_bSetDefaultLabel;
 
-protected:
     OUnoObject(SdrModel& rSdrModel,
         const OUString& _sComponentName,
         const OUString& rModelName,

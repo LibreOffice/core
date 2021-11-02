@@ -40,7 +40,7 @@ namespace reportdesign
      * \ingroup reportdesign_api
      *
      */
-    class OFixedText :  public cppu::BaseMutex,
+    class OFixedText final : public cppu::BaseMutex,
                             public FixedTextBase,
                             public FixedTextPropertySet
     {
@@ -97,7 +97,6 @@ namespace reportdesign
             }
             l.notify();
         }
-    protected:
         virtual ~OFixedText() override;
     public:
         explicit OFixedText(css::uno::Reference< css::uno::XComponentContext > const & _xContext);

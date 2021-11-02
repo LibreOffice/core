@@ -39,7 +39,7 @@ namespace reportdesign
      * \ingroup reportdesign_api
      *
      */
-    class OFormattedField : public cppu::BaseMutex,
+    class OFormattedField final : public cppu::BaseMutex,
                             public FormattedFieldBase,
                             public FormattedFieldPropertySet
     {
@@ -100,7 +100,6 @@ namespace reportdesign
             }
             l.notify();
         }
-    protected:
         virtual ~OFormattedField() override;
     public:
         explicit OFormattedField(css::uno::Reference< css::uno::XComponentContext > const & _xContext);

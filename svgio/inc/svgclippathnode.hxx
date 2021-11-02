@@ -26,7 +26,7 @@
 
 namespace svgio::svgreader
     {
-        class SvgClipPathNode : public SvgNode
+        class SvgClipPathNode final : public SvgNode
         {
         private:
             /// use styles

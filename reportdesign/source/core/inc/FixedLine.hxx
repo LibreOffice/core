@@ -39,7 +39,7 @@ namespace reportdesign
      * \ingroup reportdesign_api
      *
      */
-    class OFixedLine :  public cppu::BaseMutex,
+    class OFixedLine final :  public cppu::BaseMutex,
                             public FixedLineBase,
                             public FixedLinePropertySet
     {
@@ -68,7 +68,6 @@ namespace reportdesign
             }
             l.notify();
         }
-    protected:
         virtual ~OFixedLine() override;
     public:
         explicit OFixedLine(css::uno::Reference< css::uno::XComponentContext > const & _xContext);

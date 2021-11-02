@@ -68,7 +68,7 @@ protected:
     static void setEmitData( EmitContext& rContext, EmitImplData* pNewEmitData );
 };
 
-struct PDFComment : public PDFEntry
+struct PDFComment final : public PDFEntry
 {
     OString  m_aComment;
 
@@ -86,7 +86,7 @@ struct PDFValue : public PDFEntry
     virtual ~PDFValue() override;
 };
 
-struct PDFName : public PDFValue
+struct PDFName final : public PDFValue
 {
     OString  m_aName;
 
@@ -99,7 +99,7 @@ struct PDFName : public PDFValue
     OUString getFilteredName() const;
 };
 
-struct PDFString : public PDFValue
+struct PDFString final : public PDFValue
 {
     OString  m_aString;
 
@@ -112,7 +112,7 @@ struct PDFString : public PDFValue
     OString getFilteredString() const;
 };
 
-struct PDFNumber : public PDFValue
+struct PDFNumber final : public PDFValue
 {
     double m_fValue;
 
@@ -123,7 +123,7 @@ struct PDFNumber : public PDFValue
     virtual PDFEntry* clone() const override;
 };
 
-struct PDFBool : public PDFValue
+struct PDFBool final : public PDFValue
 {
     bool m_bValue;
 
@@ -134,7 +134,7 @@ struct PDFBool : public PDFValue
     virtual PDFEntry* clone() const override;
 };
 
-struct PDFObjectRef : public PDFValue
+struct PDFObjectRef final : public PDFValue
 {
     unsigned int    m_nNumber;
     unsigned int    m_nGeneration;
@@ -146,7 +146,7 @@ struct PDFObjectRef : public PDFValue
     virtual PDFEntry* clone() const override;
 };
 
-struct PDFNull : public PDFValue
+struct PDFNull final : public PDFValue
 {
     PDFNull() {}
     virtual ~PDFNull() override;
@@ -172,7 +172,7 @@ struct PDFContainer : public PDFEntry
     { return findObject( pRef->m_nNumber, pRef->m_nGeneration ); }
 };
 
-struct PDFArray : public PDFContainer
+struct PDFArray final : public PDFContainer
 {
     PDFArray() {}
     virtual ~PDFArray() override;
@@ -180,7 +180,7 @@ struct PDFArray : public PDFContainer
     virtual PDFEntry* clone() const override;
 };
 
-struct PDFDict : public PDFContainer
+struct PDFDict final : public PDFContainer
 {
     typedef std::unordered_map<OString,PDFEntry*> Map;
     Map m_aMap;
@@ -200,7 +200,7 @@ struct PDFDict : public PDFContainer
     PDFEntry* buildMap();
 };
 
-struct PDFStream : public PDFEntry
+struct PDFStream final : public PDFEntry
 {
     unsigned int    m_nBeginOffset;
     unsigned int    m_nEndOffset; // offset of the byte after the stream
@@ -215,7 +215,7 @@ struct PDFStream : public PDFEntry
     unsigned int getDictLength( const PDFContainer* pObjectContainer ) const; // get contents of the "Length" entry of the dict
 };
 
-struct PDFTrailer : public PDFContainer
+struct PDFTrailer final : public PDFContainer
 {
     PDFDict*        m_pDict;
 
@@ -226,7 +226,7 @@ struct PDFTrailer : public PDFContainer
 };
 
 struct PDFFileImplData;
-struct PDFFile : public PDFContainer
+struct PDFFile final : public PDFContainer
 {
 private:
     mutable std::unique_ptr<PDFFileImplData> m_pData;
@@ -255,7 +255,7 @@ public:
                   unsigned int nObject, unsigned int nGeneration ) const;
 };
 
-struct PDFObject : public PDFContainer
+struct PDFObject final : public PDFContainer
 {
     PDFEntry*       m_pObject;
     PDFStream*      m_pStream;
@@ -279,7 +279,7 @@ private:
     bool getDeflatedStream( std::unique_ptr<char[]>& rpStream, unsigned int* pBytes, const PDFContainer* pObjectContainer, EmitContext& rContext ) const;
 };
 
-struct PDFPart : public PDFContainer
+struct PDFPart final : public PDFContainer
 {
     PDFPart() : PDFContainer() {}
     virtual ~PDFPart() override;
