@@ -251,9 +251,14 @@ int startprocess(std::string command, std::string args, bool verbose)
 
     // support ccache
     size_t pos=command.find("ccache ");
+    size_t len = strlen("ccache ");
+    if(pos == std::string::npos) {
+        pos=command.find("ccache.exe ");
+        len = strlen("ccache.exe ");
+    }
     if(pos != std::string::npos) {
-        args.insert(0,"cl.exe");
-        command=command.substr(0,pos+strlen("ccache"))+".exe";
+        args.insert(0,command.substr(pos+len));
+        command=command.substr(0,pos+len-1);
     }
 
     auto cmdline = "\"" + command + "\" " + args;
