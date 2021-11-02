@@ -1289,22 +1289,6 @@ uno::Reference< css::frame::XModuleManager2 > const & SfxStoringHelper::GetModul
     return m_xModuleManager;
 }
 
-namespace
-{
-    void LaunchPDFViewer(const INetURLObject& rURL)
-    {
-        // Launch PDF viewer
-        FilterConfigItem aItem( u"Office.Common/Filter/PDF/Export/" );
-        bool aViewPDF = aItem.ReadBool( "ViewPDFAfterExport", false );
-
-        if ( aViewPDF )
-        {
-            uno::Reference<XSystemShellExecute> xSystemShellExecute(SystemShellExecute::create(::comphelper::getProcessComponentContext()));
-            xSystemShellExecute->execute(rURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), "", SystemShellExecuteFlags::URIS_ONLY);
-        }
-    }
-}
-
 bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xModel,
                                             std::u16string_view aSlotName,
                                             uno::Sequence< beans::PropertyValue >& aArgsSequence,
@@ -1657,11 +1641,6 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
             {
                 SfxStoringHelper::SetDocInfoState(aModel.GetModel(), xOldDocProps);
             }
-
-            // Launch PDF viewer
-            if (nStoreMode & PDFEXPORT_REQUESTED)
-                LaunchPDFViewer(aURL);
-
         };
 
         // use dispatch API to show document info dialog
@@ -1683,10 +1662,19 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
             aModelData.GetStorable()->storeToURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aArgsSequence );
         else
             aModelData.GetStorable()->storeAsURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aArgsSequence );
+    }
 
-        // Launch PDF viewer
-        if (nStoreMode & PDFEXPORT_REQUESTED)
-            LaunchPDFViewer(aURL);
+    // Launch PDF viewer
+    if ( nStoreMode & PDFEXPORT_REQUESTED )
+    {
+        FilterConfigItem aItem(u"Office.Common/Filter/PDF/Export/");
+        bool aViewPDF = aItem.ReadBool( "ViewPDFAfterExport", false );
+
+        if ( aViewPDF )
+        {
+            uno::Reference<XSystemShellExecute> xSystemShellExecute(SystemShellExecute::create( ::comphelper::getProcessComponentContext() ) );
+            xSystemShellExecute->execute( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), "", SystemShellExecuteFlags::URIS_ONLY );
+        }
     }
 
     return bDialogUsed;
