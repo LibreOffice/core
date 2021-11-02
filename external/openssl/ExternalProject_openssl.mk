@@ -65,7 +65,7 @@ $(call gb_ExternalProject_get_state_target,openssl,build):
 	$(call gb_ExternalProject_run,build,\
 		CONFIGURE_INSIST=1 $(PERL) Configure $(OPENSSL_PLATFORM) no-tests no-multilib \
 		&& export PERL="$(shell cygpath -w $(PERL))" \
-		&& nmake -f makefile \
+		&& nmake -f makefile build_libs \
 	)
 	$(call gb_Trace_EndRange,openssl,EXTERNAL)
 
