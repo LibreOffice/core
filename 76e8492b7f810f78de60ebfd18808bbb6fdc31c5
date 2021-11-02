@@ -16,6 +16,52 @@
       "message": "I\u0027m not a developer and don\u0027t know much about the code.  So take these comments with a grain of salt:",
       "revId": "76e8492b7f810f78de60ebfd18808bbb6fdc31c5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b9a5af3_52968f08",
+        "filename": "sc/inc/stylehelper.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1002852
+      },
+      "writtenOn": "2021-11-02T11:57:15Z",
+      "side": 1,
+      "message": "I\u0027m not sure moving these macros here to the .hxx header is a good idea.  If you look closely they don\u0027t correspond to the names of current predefined built-in styles.  The first six (\"Default\" to \"Report\") matches the old (e.g. in 6.2.x series) predefined styles,  There are many more cell styles defined now in 7.2/master.  I doubt they are very relevant to the bug you are trying to solve here.",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 53
+      },
+      "revId": "76e8492b7f810f78de60ebfd18808bbb6fdc31c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3965f069_3fd4b568",
+        "filename": "sc/source/filter/orcus/interface.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1516,
+      "author": {
+        "id": 1002852
+      },
+      "writtenOn": "2021-11-02T11:57:15Z",
+      "side": 1,
+      "message": "It seems this is the only place the moved macros are used.  Maybe it\u0027s simpler to just use OUString(\"Default\") here, and leave those macros where they were?",
+      "range": {
+        "startLine": 1516,
+        "startChar": 75,
+        "endLine": 1516,
+        "endChar": 97
+      },
+      "revId": "76e8492b7f810f78de60ebfd18808bbb6fdc31c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
