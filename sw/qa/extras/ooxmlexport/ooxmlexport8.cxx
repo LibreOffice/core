@@ -144,17 +144,6 @@ DECLARE_OOXMLEXPORT_TEST(testN751117, "n751117.docx")
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.drawing.LineShape"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo49940, "fdo49940.docx")
-{
-    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
-    uno::Reference<beans::XPropertySet> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-    OUString aValue;
-    xPara->getPropertyValue("PageStyleName") >>= aValue;
-    CPPUNIT_ASSERT_EQUAL(OUString("First Page"), aValue);
-}
-
 DECLARE_OOXMLEXPORT_TEST(testFdo74745, "fdo74745.docx")
 {
     uno::Reference<text::XTextRange > paragraph = getParagraph(3);

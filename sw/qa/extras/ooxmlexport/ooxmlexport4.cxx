@@ -282,9 +282,6 @@ CPPUNIT_TEST_FIXTURE(Test, testSegFaultWhileSave)
     // fdo#74499
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6137), getXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblGrid/w:gridCol[2]", "w").toInt32());
-
-    // tdf#106572 - preventative test matching danger conditions, but imported OK anyway
-    CPPUNIT_ASSERT_EQUAL(OUString("First Page"), getProperty<OUString>(getParagraphOrTable(1), "PageDescName"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, fdo69656)
