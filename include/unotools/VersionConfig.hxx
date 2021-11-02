@@ -30,12 +30,19 @@ static bool isProductVersionUpgraded(bool aUpdateVersion)
         = sLastVersion.getToken(0, '.').toInt32() * 10 + sLastVersion.getToken(1, '.').toInt32();
     if (iCurrent > iLast)
     {
-        if (aUpdateVersion && !officecfg::Setup::Product::ooSetupLastVersion::isReadOnly())
+        if (aUpdateVersion)
         { //update lastversion
-            std::shared_ptr<comphelper::ConfigurationChanges> batch(
-                comphelper::ConfigurationChanges::create());
-            officecfg::Setup::Product::ooSetupLastVersion::set(sSetupVersion, batch);
-            batch->commit();
+            try
+            {
+                std::shared_ptr<comphelper::ConfigurationChanges> batch(
+                    comphelper::ConfigurationChanges::create());
+                officecfg::Setup::Product::ooSetupLastVersion::set(sSetupVersion, batch);
+                batch->commit();
+            }
+            catch (css::lang::IllegalArgumentException&)
+            { //If the value was readOnly.
+                SAL_INFO("desktop.updater", "Updation to a newer version failed!");
+            }
         }
         return true;
     }
