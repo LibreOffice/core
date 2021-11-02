@@ -160,7 +160,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                         nFirstRow = nLastRow = 0;
                     }
                     ScClipParam aClipParam(ScRange(nFirstCol, nFirstRow, nSrcTab, nLastCol, nLastRow, nSrcTab), false);
-                    rSrcDoc.CopyToClip(aClipParam, pClipDoc.get(), &aSrcMark, false, false);
+                    rSrcDoc.CopyToClip(aClipParam, pClipDoc.get(), &aSrcMark, false, true);
                     ScGlobal::SetClipDocName( xDocShRef->GetTitle( SFX_TITLE_FULLNAME ) );
 
                     SetCursor( nPosX, nPosY );
