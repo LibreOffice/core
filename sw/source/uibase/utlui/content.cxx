@@ -3677,6 +3677,25 @@ void SwContentTree::UpdateTracking()
 
     if (bTrack)
     {
+        {
+        // graphic, frame, and ole
+        OUString aContentTypeName;
+        if (m_bImageTracking && m_pActiveShell->GetSelectionType() == SelectionType::Graphic &&
+                !(m_bIsRoot && m_nRootType != ContentTypeId::GRAPHIC))
+            aContentTypeName = SwResId(STR_CONTENT_TYPE_GRAPHIC);
+        else if (m_bFrameTracking && m_pActiveShell->GetSelectionType() == SelectionType::Frame &&
+                 !(m_bIsRoot && m_nRootType != ContentTypeId::FRAME))
+            aContentTypeName = SwResId(STR_CONTENT_TYPE_FRAME);
+        else if (m_bOLEobjectTracking && m_pActiveShell->GetSelectionType() == SelectionType::Ole &&
+                 !(m_bIsRoot && m_nRootType != ContentTypeId::OLE))
+            aContentTypeName = SwResId(STR_CONTENT_TYPE_OLE);
+        if (!aContentTypeName.isEmpty())
+        {
+            OUString aName(m_pActiveShell->GetFlyName());
+            lcl_SelectByContentTypeAndName(this, *m_xTreeView, aContentTypeName, aName);
+            return;
+        }
+        }
         // footnotes and endnotes
         if (SwContentAtPos aContentAtPos(IsAttrAtPos::Ftn); m_bFootnoteTracking &&
                 m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
@@ -3790,23 +3809,6 @@ void SwContentTree::UpdateTracking()
                 m_xTreeView->unselect_all();
             }
             Select();
-            return;
-        }
-        // graphic, frame, and ole
-        OUString aContentTypeName;
-        if (m_bImageTracking && m_pActiveShell->GetSelectionType() == SelectionType::Graphic &&
-                !(m_bIsRoot && m_nRootType != ContentTypeId::GRAPHIC))
-            aContentTypeName = SwResId(STR_CONTENT_TYPE_GRAPHIC);
-        else if (m_bFrameTracking && m_pActiveShell->GetSelectionType() == SelectionType::Frame &&
-                 !(m_bIsRoot && m_nRootType != ContentTypeId::FRAME))
-            aContentTypeName = SwResId(STR_CONTENT_TYPE_FRAME);
-        else if (m_bOLEobjectTracking && m_pActiveShell->GetSelectionType() == SelectionType::Ole &&
-                 !(m_bIsRoot && m_nRootType != ContentTypeId::OLE))
-            aContentTypeName = SwResId(STR_CONTENT_TYPE_OLE);
-        if (!aContentTypeName.isEmpty())
-        {
-            OUString aName(m_pActiveShell->GetFlyName());
-            lcl_SelectByContentTypeAndName(this, *m_xTreeView, aContentTypeName, aName);
             return;
         }
         // table
