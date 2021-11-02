@@ -2852,6 +2852,7 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
 
     const PropertyIds ePropIsOn = bHeader? PROP_HEADER_IS_ON: PROP_FOOTER_IS_ON;
     const PropertyIds ePropShared = bHeader? PROP_HEADER_IS_SHARED: PROP_FOOTER_IS_SHARED;
+    const PropertyIds ePropTextFirst = bHeader? PROP_HEADER_TEXT_FIRST : PROP_FOOTER_TEXT_FIRST;
     const PropertyIds ePropTextLeft = bHeader? PROP_HEADER_TEXT_LEFT: PROP_FOOTER_TEXT_LEFT;
     const PropertyIds ePropText = bHeader? PROP_HEADER_TEXT: PROP_FOOTER_TEXT;
 
@@ -2875,22 +2876,32 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
         return; // TODO sw cannot Undo insert header/footer without crashing
     }
 
+    const bool bFirst = eType == SectionPropertyMap::PAGE_FIRST;
+
+    // See SectionPropertyMap::CloseSectionGroup for the reason why RTF is an exception.
     uno::Reference< beans::XPropertySet > xPageStyle =
         pSectionContext->GetPageStyle(
             *this,
-            eType == SectionPropertyMap::PAGE_FIRST );
+            IsRTFImport() && bFirst); // NOTE: needs to be compatible with bUseFirstPageStyle
     if (!xPageStyle.is())
         return;
     try
     {
         bool bLeft = eType == SectionPropertyMap::PAGE_LEFT;
-        bool bFirst = eType == SectionPropertyMap::PAGE_FIRST;
+        const PropertyIds eTextType = bFirst ? ePropTextFirst : bLeft ? ePropTextLeft: ePropText;
         if (!bLeft || GetSettingsTable()->GetEvenAndOddHeaders())
         {
             //switch on header/footer use
             xPageStyle->setPropertyValue(
                     getPropertyName(ePropIsOn),
                     uno::makeAny(true));
+
+            // At this point we don't know if there will be (or were) separate definitions for first header
+            // However, if it is marked as shared, non-first text will be duplicated to the first,
+            // which is not erased/removed when a bFirst concatinates its text.
+            // So assume that it needs to be defined separately and set the correct value later on.
+            if (!IsRTFImport())
+                xPageStyle->setPropertyValue(getPropertyName(PROP_FIRST_IS_SHARED), uno::makeAny(false));
 
             // If the 'Different Even & Odd Pages' flag is turned on - do not ignore it
             // Even if the 'Even' header/footer is blank - the flag should be imported (so it would look in LO like in Word)
@@ -2899,7 +2910,7 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
 
             //set the interface
             uno::Reference< text::XText > xText;
-            xPageStyle->getPropertyValue(getPropertyName(bLeft? ePropTextLeft: ePropText)) >>= xText;
+            xPageStyle->getPropertyValue(getPropertyName(eTextType)) >>= xText;
 
             m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >(xText, uno::UNO_QUERY_THROW),
                 m_bIsNewDoc
@@ -2923,8 +2934,7 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
             xPageStyle->setPropertyValue(getPropertyName(ePropShared), uno::makeAny(false));
             // Add the content of the headers footers to the doc
             uno::Reference<text::XText> xText;
-            xPageStyle->getPropertyValue(getPropertyName(bLeft ? ePropTextLeft : ePropText))
-                >>= xText;
+            xPageStyle->getPropertyValue(getPropertyName(eTextType)) >>= xText;
 
             m_aTextAppendStack.push(
                 TextAppendContext(uno::Reference<text::XTextAppend>(xText, uno::UNO_QUERY_THROW),
