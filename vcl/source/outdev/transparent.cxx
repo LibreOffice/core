@@ -559,7 +559,7 @@ void OutputDevice::DrawTransparent( const tools::PolyPolygon& rPolyPoly,
     }
 }
 
-void OutputDevice::DrawTransparentMetaFile( const GDIMetaFile& rMtf, const Point& rPos,
+void OutputDevice::DrawTransparentMetaFile(GDIMetaFile& rMtf, const Point& rPos,
                                     const Size& rSize, const Gradient& rTransparenceGradient )
 {
     assert(!is_double_buffered_window());
@@ -578,9 +578,9 @@ void OutputDevice::DrawTransparentMetaFile( const GDIMetaFile& rMtf, const Point
     if( ( rTransparenceGradient.GetStartColor() == aBlack && rTransparenceGradient.GetEndColor() == aBlack ) ||
         ( mnDrawMode & DrawModeFlags::NoTransparency ) )
     {
-        const_cast<GDIMetaFile&>(rMtf).WindStart();
-        const_cast<GDIMetaFile&>(rMtf).Play(*this, rPos, rSize);
-        const_cast<GDIMetaFile&>(rMtf).WindStart();
+        rMtf.WindStart();
+        rMtf.Play(*this, rPos, rSize);
+        rMtf.WindStart();
     }
     else
     {
@@ -634,9 +634,9 @@ void OutputDevice::DrawTransparentMetaFile( const GDIMetaFile& rMtf, const Point
 
                     // draw MetaFile to buffer
                     xVDev->EnableMapMode(bBufferMapModeEnabled);
-                    const_cast<GDIMetaFile&>(rMtf).WindStart();
-                    const_cast<GDIMetaFile&>(rMtf).Play(*xVDev, rPos, rSize);
-                    const_cast<GDIMetaFile&>(rMtf).WindStart();
+                    rMtf.WindStart();
+                    rMtf.Play(*xVDev, rPos, rSize);
+                    rMtf.WindStart();
 
                     // get content bitmap from buffer
                     xVDev->EnableMapMode(false);
@@ -669,9 +669,9 @@ void OutputDevice::DrawTransparentMetaFile( const GDIMetaFile& rMtf, const Point
                     const bool bVDevOldMap = xVDev->IsMapModeEnabled();
 
                     // create paint bitmap
-                    const_cast<GDIMetaFile&>(rMtf).WindStart();
-                    const_cast<GDIMetaFile&>(rMtf).Play(*xVDev, rPos, rSize);
-                    const_cast<GDIMetaFile&>(rMtf).WindStart();
+                    rMtf.WindStart();
+                    rMtf.Play(*xVDev, rPos, rSize);
+                    rMtf.WindStart();
                     xVDev->EnableMapMode( false );
                     BitmapEx aPaint = xVDev->GetBitmapEx(Point(), xVDev->GetOutputSizePixel());
                     xVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( sal_True ) here!
