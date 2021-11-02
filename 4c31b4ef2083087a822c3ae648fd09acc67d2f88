@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a540b86f_55092760",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-11-02T15:35:14Z",
+      "side": 1,
+      "message": "Sorry, the correct text:\n\nNote: This fix doesn\u0027t change multicolumn page styles or not evenly\ndistributed multicolumn sections or footnotes COLLECTED at the\nend of the sections.\n\n(and not \"NOT COLLECTED\").\n\n\nWe can fix the description in the upcoming commit with the compatibility option.",
+      "revId": "4c31b4ef2083087a822c3ae648fd09acc67d2f88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
