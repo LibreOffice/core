@@ -406,7 +406,8 @@ void OGridControlModel::describeFixedProperties( Sequence< Property >& _rProps )
         DECL_PROP1(FONT_STRIKEOUT,      sal_Int16,          MAYBEDEFAULT);
         DECL_PROP2(RECORDMARKER,        sal_Bool,           BOUND, MAYBEDEFAULT );
         DECL_PROP2(PRINTABLE,           sal_Bool,           BOUND, MAYBEDEFAULT );
-        DECL_PROP4(CURSORCOLOR,         sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID , TRANSIENT);
+        DECL_PROP_IMPL(CURSORCOLOR, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT |
+                         css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::TRANSIENT);
         DECL_PROP3(ALWAYSSHOWCURSOR,    sal_Bool,           BOUND, MAYBEDEFAULT, TRANSIENT);
         DECL_PROP3(DISPLAYSYNCHRON,     sal_Bool,           BOUND, MAYBEDEFAULT, TRANSIENT);
         DECL_PROP2(HELPURL,             OUString,    BOUND, MAYBEDEFAULT);

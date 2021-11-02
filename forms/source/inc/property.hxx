@@ -377,9 +377,6 @@ public:
         DECL_PROP_IMPL(varname, type) css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2 | css::beans::PropertyAttribute::attrib3)
 
 
-#define DECL_PROP4(varname, type, attrib1, attrib2, attrib3, attrib4)   \
-        DECL_PROP_IMPL(varname, type) css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2 | css::beans::PropertyAttribute::attrib3 | css::beans::PropertyAttribute::attrib4)
-
 // === some property types require special handling
 // === such Boolean properties
 
@@ -392,21 +389,6 @@ public:
 
 #define END_DESCRIBE_PROPERTIES()   \
     DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?"); \
-
-
-#define REGISTER_PROP_2( prop, member, attrib1, attrib2 ) \
-    registerProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::attrib1 | PropertyAttribute::attrib2, \
-        &member, cppu::UnoType<decltype(member)>::get() );
-
-#define REGISTER_PROP_3( prop, member, attrib1, attrib2, attrib3 ) \
-    registerProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::attrib1 | PropertyAttribute::attrib2 | PropertyAttribute::attrib3, \
-        &member, cppu::UnoType<decltype(member)>::get() );
-
-
-#define REGISTER_VOID_PROP_2( prop, memberAny, type, attrib1, attrib2 ) \
-    registerMayBeVoidProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::MAYBEVOID | PropertyAttribute::attrib1 | PropertyAttribute::attrib2, \
-        &memberAny, cppu::UnoType<type>::get() );
-
 
 }
 //... namespace frm .......................................................
