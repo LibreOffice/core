@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2425aa1b_5360a2e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2021-11-02T22:38:49Z",
+      "side": 1,
+      "message": "\u003e Patch Set 4: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/99787/ : FAILURE\n\u003e \n\u003e error \"call to \"__get\" is ambiguous\" triggered in included file /home/tdf/lode/opt_private/gcc-7.3.0/lib/gcc/x86_64-pc-linux-gnu/7.3.0/../../../../include/c++/7.3.0/variant:283:3 ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/100244/ )\n\u003e \n\u003e compiler couldn\"t find the file »filesystem« referenced from stream.cpp:20:10 ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/100244/ )\n\nThis is weird.  The \u003cfilesystem\u003e header should be available for C++17.",
+      "revId": "0952ee0e6b7d8dcbae44dabdac57fb39dde088eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
