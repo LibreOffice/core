@@ -23,6 +23,7 @@ import traceback
 import subprocess
 from sys import platform
 import collections
+import urllib.parse
 
 class GbuildLinkTarget:
     def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, cflags, linked_libs):
@@ -962,6 +963,10 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
 
         self.write_solution(os.path.join(self.solution_directory, 'LibreOffice.sln'), all_projects)
 
+    @staticmethod
+    def gen_guid(category, name):
+        return str(uuid.uuid5(uuid.NAMESPACE_URL, 'vnd.libreoffice.vs-ide-integration:' + category + '/' + urllib.parse.quote(name))).upper()
+
     nmake_project_guid = '8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942'
     nmake_folder_guid = '2150E333-8FDC-42A3-9474-1A3956D46DE8'
 
@@ -1071,7 +1076,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         folder = os.path.dirname(project_path)
         if not os.path.exists(folder):
             os.makedirs(folder)
-        project_guid = str(uuid.uuid4()).upper()
+        project_guid = self.gen_guid('project', target.short_name())
         cxxflags = ' '.join(target.cxxflags)
         ns = 'http://schemas.microsoft.com/developer/msbuild/2003'
         ET.register_namespace('', ns)
@@ -1232,8 +1237,6 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         filters_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
         for proj_filter in filters:
             filter_node = ET.SubElement(filters_node, '{%s}Filter' % ns, Include=proj_filter)
-            filter_id_node = ET.SubElement(filter_node, '{%s}UniqueIdentifier' % ns)
-            filter_id_node.text = '{%s}' % str(uuid.uuid4())
         self.write_pretty_xml(proj_node, filters_path)
 
 
