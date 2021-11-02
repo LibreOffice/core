@@ -22,6 +22,29 @@
       },
       "revId": "67c947e7aada0231800412f1e964768b256f116d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52732dc8_02804920",
+        "filename": "include/unotools/VersionConfig.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-11-02T09:17:13Z",
+      "side": 1,
+      "message": "Should this return be \u0027false\u0027 instead of \u0027true\u0027? P.S: I don\u0027t think, it should return false as the return statement is independent of the status of updating but is dependent on the condition \u0027curr \u003e last\u0027 which would turn out to be true if we were trying to update the value.",
+      "range": {
+        "startLine": 45,
+        "startChar": 16,
+        "endLine": 45,
+        "endChar": 28
+      },
+      "revId": "67c947e7aada0231800412f1e964768b256f116d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
