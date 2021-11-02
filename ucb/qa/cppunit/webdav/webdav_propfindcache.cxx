@@ -11,7 +11,7 @@
 #include <cppunit/plugin/TestPlugIn.h>
 #include <PropfindCache.hxx>
 
-using namespace webdav_ucp;
+using namespace http_dav_ucp;
 
 namespace
 {
@@ -113,7 +113,7 @@ namespace
 
         // add the cache an element
         aPropsNames.setPropertiesNames( std::vector(aProps) );
-        PropCache.addCachePropertyNames( aPropsNames );
+        PropCache.addCachePropertyNames( aPropsNames, 10 );
 
         PropertyNames aRetPropsNames;
         //test existence

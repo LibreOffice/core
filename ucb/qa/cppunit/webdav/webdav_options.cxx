@@ -11,7 +11,7 @@
 #include <cppunit/plugin/TestPlugIn.h>
 #include <DAVTypes.hxx>
 
-using namespace webdav_ucp;
+using namespace http_dav_ucp;
 
 namespace
 {
