@@ -426,7 +426,7 @@ public:
   Because the TreeView doesn't want or need subnodes, the drop target can be
   simply visually indicated as being between rows (the issue of a final drop
   location of a child of the drop target doesn't arise), and the meaning of
-  what a drop before or after the last row should do is unambigious.
+  what a drop before or after the last row should do is unambiguous.
 */
 class VCL_DLLPUBLIC ReorderingDropTarget : public DropTargetHelper
 {

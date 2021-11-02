@@ -1276,7 +1276,7 @@ void GetPropsUsingHeadRequest(DAVResource& resource,
         // clean cached value of PROPFIND property names
         // PROPPATCH can change them
         Content::removeCachedPropertyNames(aTargetURL);
-        // test if HEAD allowed, if not, throw, should be catched immediately
+        // test if HEAD allowed, if not, throw, should be caught immediately
         // SC_GONE used internally by us, see comment in Content::getPropertyValues
         // in the catch scope
         if (aDAVOptions.getHttpResponseStatusCode() != SC_GONE &&
@@ -4040,7 +4040,7 @@ void Content::getResourceOptions(
                 case DAVException::DAV_HTTP_CONNECT:
                 {
                     // something bad happened to the connection
-                    // not same as not found, this instead happens when the server doesn't exist or doesn't aswer at all
+                    // not same as not found, this instead happens when the server doesn't exist or doesn't answer at all
                     // probably a new bit stating 'timed out' should be added to opts var?
                     // in any case abort the command
                     SAL_WARN( "ucb.ucp.webdav", "OPTIONS - DAVException: DAV_HTTP_TIMEOUT or DAV_HTTP_CONNECT for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
