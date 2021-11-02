@@ -99,20 +99,35 @@ namespace frm
 
     void ONavigationBarModel::implInitPropertyContainer()
     {
-        REGISTER_PROP_2( DEFAULTCONTROL,      m_sDefaultControl,        BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( HELPTEXT,            m_sHelpText,              BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( HELPURL,             m_sHelpURL,               BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( ENABLED,             m_bEnabled,               BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( ENABLEVISIBLE,       m_bEnableVisible,         BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( ICONSIZE,            m_nIconSize,              BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( BORDER,              m_nBorder,                BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( DELAY,               m_nDelay,                 BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( SHOW_POSITION,       m_bShowPosition,          BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( SHOW_NAVIGATION,     m_bShowNavigation,        BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( SHOW_RECORDACTIONS,  m_bShowActions,           BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( SHOW_FILTERSORT,     m_bShowFilterSort,        BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( WRITING_MODE,        m_nWritingMode,           BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_3( CONTEXT_WRITING_MODE,m_nContextWritingMode,    BOUND, MAYBEDEFAULT, TRANSIENT );
+        registerProperty( PROPERTY_DEFAULTCONTROL, PROPERTY_ID_DEFAULTCONTROL, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_sDefaultControl, cppu::UnoType<decltype(m_sDefaultControl)>::get() );
+        registerProperty( PROPERTY_HELPTEXT, PROPERTY_ID_HELPTEXT, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_sHelpText, cppu::UnoType<decltype(m_sHelpText)>::get() );
+        registerProperty( PROPERTY_HELPURL, PROPERTY_ID_HELPURL, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_sHelpURL, cppu::UnoType<decltype(m_sHelpURL)>::get() );
+        registerProperty( PROPERTY_ENABLED, PROPERTY_ID_ENABLED, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_bEnabled, cppu::UnoType<decltype(m_bEnabled)>::get() );
+        registerProperty( PROPERTY_ENABLEVISIBLE, PROPERTY_ID_ENABLEVISIBLE, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_bEnableVisible, cppu::UnoType<decltype(m_bEnableVisible)>::get() );
+        registerProperty( PROPERTY_ICONSIZE, PROPERTY_ID_ICONSIZE, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_nIconSize, cppu::UnoType<decltype(m_nIconSize)>::get() );
+        registerProperty( PROPERTY_BORDER, PROPERTY_ID_BORDER, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_nBorder, cppu::UnoType<decltype(m_nBorder)>::get() );
+        registerProperty( PROPERTY_DELAY, PROPERTY_ID_DELAY, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_nDelay, cppu::UnoType<decltype(m_nDelay)>::get() );
+        registerProperty( PROPERTY_SHOW_POSITION, PROPERTY_ID_SHOW_POSITION, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_bShowPosition, cppu::UnoType<decltype(m_bShowPosition)>::get() );
+        registerProperty( PROPERTY_SHOW_NAVIGATION, PROPERTY_ID_SHOW_NAVIGATION, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_bShowNavigation, cppu::UnoType<decltype(m_bShowNavigation)>::get() );
+        registerProperty( PROPERTY_SHOW_RECORDACTIONS, PROPERTY_ID_SHOW_RECORDACTIONS, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_bShowActions, cppu::UnoType<decltype(m_bShowActions)>::get() );
+        registerProperty( PROPERTY_SHOW_FILTERSORT, PROPERTY_ID_SHOW_FILTERSORT, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_bShowFilterSort, cppu::UnoType<decltype(m_bShowFilterSort)>::get() );
+        registerProperty( PROPERTY_WRITING_MODE, PROPERTY_ID_WRITING_MODE, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_nWritingMode, cppu::UnoType<decltype(m_nWritingMode)>::get() );
+
+        registerProperty( PROPERTY_CONTEXT_WRITING_MODE, PROPERTY_ID_CONTEXT_WRITING_MODE, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT | PropertyAttribute::TRANSIENT,
+                          &m_nContextWritingMode, cppu::UnoType<decltype(m_nContextWritingMode)>::get() );
 
         REGISTER_VOID_PROP( TABSTOP,         m_aTabStop,         sal_Bool );
         REGISTER_VOID_PROP( BACKGROUNDCOLOR, m_aBackgroundColor, sal_Int32 );
