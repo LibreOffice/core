@@ -963,6 +963,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         self.write_solution(os.path.join(self.solution_directory, 'LibreOffice.sln'), all_projects)
 
     nmake_project_guid = '8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942'
+    nmake_folder_guid = '2150E333-8FDC-42A3-9474-1A3956D46DE8'
 
     def get_dependency_libs(self, linked_libs, library_projects):
         dependency_libs = {}
@@ -975,6 +976,8 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
     def write_solution(self, solution_path, projects):
         print('Solution %s:' % os.path.splitext(os.path.basename(solution_path))[0], end='')
         library_projects = [project for project in projects if project.target in self.gbuildparser.libs]
+        test_projects = [project for project in projects if project.target in self.gbuildparser.tests]
+        executable_projects = [project for project in projects if project.target in self.gbuildparser.exes]
         with open(solution_path, 'w') as f:
             f.write('Microsoft Visual Studio Solution File, Format Version 12.00\n')
             for project in projects:
@@ -992,19 +995,44 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
                         f.write('\t\t{%(guid)s} = {%(guid)s}\n' % {'guid': lib_guid})
                     f.write('\tEndProjectSection\n')
                 f.write('EndProject\n')
-            f.write('Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B9292527-A979-4D13-A598-C75A33222174}"\n')
+            f.write('Project("{%s}") = "Utility", "Utility", "{6778240E-8B6B-47A0-AC31-7E7A257B97E6}"\n' %
+                    (VisualStudioIntegrationGenerator.nmake_folder_guid))
             f.write('\tProjectSection(SolutionItems) = preProject\n')
             # The natvis file gives pretty-printed variable values when debugging
             natvis_path = os.path.join(gbuildparser.srcdir, 'solenv/vs/LibreOffice.natvis')
             f.write('\t\t%(natvis)s = %(natvis)s\n' % {'natvis': natvis_path})
             f.write('\tEndProjectSection\n')
             f.write('EndProject\n')
+            # Folders to group tests/libraries/executables
+            nmake_tests_guid = 'CF544F7B-9D02-4D83-8370-5887851209B7'
+            nmake_libraries_guid = 'C624F43D-616C-4627-B58F-F5C2047B7BDC'
+            nmake_executables_guid = '1CD80999-9FA9-4BA9-B4D9-6E33035CF648'
+            f.write('Project("{%s}") = "Tests", "Tests", "{%s}"\n' %
+                    (VisualStudioIntegrationGenerator.nmake_folder_guid, nmake_tests_guid))
+            f.write('EndProject\n')
+            f.write('Project("{%s}") = "Libraries", "Libraries", "{%s}"\n' %
+                    (VisualStudioIntegrationGenerator.nmake_folder_guid, nmake_libraries_guid))
+            f.write('EndProject\n')
+            f.write('Project("{%s}") = "Executables", "Executables", "{%s}"\n' %
+                    (VisualStudioIntegrationGenerator.nmake_folder_guid, nmake_executables_guid))
+            f.write('EndProject\n')
+            # end Folders to group tests/libraries/executables
             f.write('Global\n')
             platform = 'Win32'
             f.write('\tGlobalSection(SolutionConfigurationPlatforms) = preSolution\n')
             for cfg in self.configurations:
                 f.write('\t\t%(cfg)s|%(platform)s = %(cfg)s|%(platform)s\n' % {'cfg': cfg, 'platform': platform})
             f.write('\tEndGlobalSection\n')
+            # Group projects to folders
+            f.write('\tGlobalSection(NestedProjects) = preSolution\n')
+            for project in test_projects:
+                f.write('\t\t{%s} = {%s}\n' % (project.guid, nmake_tests_guid))
+            for project in library_projects:
+                f.write('\t\t{%s} = {%s}\n' % (project.guid, nmake_libraries_guid))
+            for project in executable_projects:
+                f.write('\t\t{%s} = {%s}\n' % (project.guid, nmake_executables_guid))
+            f.write('\tEndGlobalSection\n')
+            # end Group projects to folders
             f.write('\tGlobalSection(ProjectConfigurationPlatforms) = postSolution\n')
             # Specifies project configurations for solution configuration
             for project in projects:
