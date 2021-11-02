@@ -103,7 +103,7 @@ public:
 
     /// export a single event (writes <office:events> element)
     void ExportSingleEvent(
-        css::uno::Sequence<css::beans::PropertyValue>& rEventValues,
+        const css::uno::Sequence<css::beans::PropertyValue>& rEventValues,
         const OUString& rApiEventName,
         bool bUseWhitespace = true );
 

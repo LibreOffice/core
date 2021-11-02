@@ -175,7 +175,7 @@ namespace desktop {
         queue_type2::reverse_iterator toQueue2(queue_type1::reverse_iterator);
         void queue(const int type, CallbackData& data);
         void enqueueUpdatedTypes();
-        void enqueueUpdatedType( int type, SfxViewShell* sourceViewShell, int viewId );
+        void enqueueUpdatedType( int type, const SfxViewShell* sourceViewShell, int viewId );
 
         /** we frequently want to scan the queue, and mostly when we do so, we only care about the element type
             so we split the queue in 2 to make the scanning cache friendly. */

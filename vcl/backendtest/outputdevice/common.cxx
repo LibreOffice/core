@@ -720,7 +720,7 @@ tools::Polygon OutputDeviceTestCommon::createClosedBezierLoop(const tools::Recta
     return aPolygon;
 }
 
-basegfx::B2DPolygon OutputDeviceTestCommon::createOpenPolygon(tools::Rectangle& rRect, int nOffset)
+basegfx::B2DPolygon OutputDeviceTestCommon::createOpenPolygon(const tools::Rectangle& rRect, int nOffset)
 {
     int nMidOffset = rRect.GetWidth() / 2;
     basegfx::B2DPolygon aPolygon{

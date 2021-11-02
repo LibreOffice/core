@@ -74,7 +74,7 @@ SbiExpression::~SbiExpression() { }
 // Are there parameters without brackets following? This may be a number,
 // a string, a symbol or also a comma (if the 1st parameter is missing)
 
-static bool DoParametersFollow( SbiParser* p, SbiExprType eCurExpr, SbiToken eTok )
+static bool DoParametersFollow( const SbiParser* p, SbiExprType eCurExpr, SbiToken eTok )
 {
     if( eTok == LPAREN )
     {
@@ -92,7 +92,7 @@ static bool DoParametersFollow( SbiParser* p, SbiExprType eCurExpr, SbiToken eTo
     }
     else // check for default params with reserved names ( e.g. names of tokens )
     {
-        SbiTokenizer tokens( *static_cast<SbiTokenizer*>(p) );
+        SbiTokenizer tokens( *static_cast<const SbiTokenizer*>(p) );
         // Urk the Next() / Peek() semantics are... weird
         tokens.Next();
         if ( tokens.Peek() == ASSIGN )

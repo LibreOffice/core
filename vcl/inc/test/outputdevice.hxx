@@ -71,7 +71,7 @@ public:
     static tools::Polygon createDropShapePolygon();
     static basegfx::B2DPolygon createHalfEllipsePolygon();
     static tools::Polygon createClosedBezierLoop(const tools::Rectangle& rRect);
-    static basegfx::B2DPolygon createOpenPolygon(tools::Rectangle& rRect, int nOffset = 4);
+    static basegfx::B2DPolygon createOpenPolygon(const tools::Rectangle& rRect, int nOffset = 4);
 
     static void createHorizontalVerticalDiagonalLinePoints(tools::Rectangle rRect,
                                 Point& rHorizontalLinePoint1, Point& rHorizontalLinePoint2,

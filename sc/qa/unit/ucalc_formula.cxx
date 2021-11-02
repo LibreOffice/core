@@ -95,7 +95,7 @@ void setExpandRefs(bool bExpand)
     pMod->SetInputOptions(aOpt);
 }
 
-void testFormulaRefUpdateNameCopySheetCheckTab( ScDocument* pDoc, SCTAB nTab, bool bCheckNames )
+void testFormulaRefUpdateNameCopySheetCheckTab( const ScDocument* pDoc, SCTAB nTab, bool bCheckNames )
 {
     if (bCheckNames)
     {

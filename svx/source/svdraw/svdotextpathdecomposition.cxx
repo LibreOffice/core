@@ -69,7 +69,7 @@ namespace
         bool                                        mbRTL : 1;
 
     public:
-        explicit impPathTextPortion(DrawPortionInfo& rInfo)
+        explicit impPathTextPortion(const DrawPortionInfo& rInfo)
         :   maOffset(rInfo.mrStartPos.X(), rInfo.mrStartPos.Y()),
             maText(rInfo.maText),
             mnTextStart(rInfo.mnTextStart),

@@ -35,7 +35,7 @@ using namespace ::com::sun::star::accessibility;
 
 namespace {
 
-SystemWindow* GetTopMostParentSystemWindow(vcl::Window& rWindow)
+SystemWindow* GetTopMostParentSystemWindow(const vcl::Window& rWindow)
 {
     // ->manually search topmost system window
     // required because their might be another system window between this and the top window
