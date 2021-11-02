@@ -280,6 +280,11 @@ public:
 
     bool TraverseFunctionDecl(FunctionDecl * decl);
 
+    bool TraverseInitListExpr(InitListExpr * expr, DataRecursionQueue * queue = nullptr) {
+        return TraverseSynOrSemInitListExpr(
+            expr->isSemanticForm() ? expr : expr->getSemanticForm(), queue);
+    }
+
     bool VisitImplicitCastExpr(ImplicitCastExpr const * expr);
 
     bool VisitMaterializeTemporaryExpr(MaterializeTemporaryExpr const * expr);

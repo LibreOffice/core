@@ -11,6 +11,7 @@
 
 #include <atomic>
 
+#include <com/sun/star/uno/Sequence.hxx>
 #include <sal/types.h>
 
 bool g();
@@ -32,6 +33,16 @@ void f()
     bool b2 = true;
     b2 &= g();
     (void)b2;
+    css::uno::Sequence<sal_Bool> s1{ false };
+    (void)s1;
+    css::uno::Sequence<css::uno::Sequence<sal_Bool>> s2{ { false } };
+    (void)s2;
+    // expected-error@+1 {{implicit conversion (IntegralCast) from 'bool' to 'const int' [loplugin:implicitboolconversion]}}
+    css::uno::Sequence<sal_Int32> s3{ false };
+    (void)s3;
+    // expected-error@+1 {{implicit conversion (IntegralCast) from 'bool' to 'const int' [loplugin:implicitboolconversion]}}
+    css::uno::Sequence<css::uno::Sequence<sal_Int32>> s4{ { false } };
+    (void)s4;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
