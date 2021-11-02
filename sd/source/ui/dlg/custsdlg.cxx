@@ -250,6 +250,7 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg(weld::Window* pWindow, SdDrawDocume
     , m_xBtnAdd(m_xBuilder->weld_button("add"))
     , m_xBtnRemove(m_xBuilder->weld_button("remove"))
     , m_xLbCustomPages(m_xBuilder->weld_tree_view("custompages"))
+    , m_xDropTargetHelper(new CustomPagesDropTarget(*m_xLbCustomPages))
     , m_xBtnOK(m_xBuilder->weld_button("ok"))
     , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
     , m_xBtnHelp(m_xBuilder->weld_button("help"))
@@ -472,6 +473,39 @@ IMPL_LINK_NOARG(SdDefineCustomShowDlg, OKHdl, weld::Button&, void)
         xWarn->run();
         m_xEdtName->grab_focus();
     }
+}
+
+CustomPagesDropTarget::CustomPagesDropTarget(weld::TreeView& rTreeView)
+    : DropTargetHelper(rTreeView.get_drop_target())
+    , m_rTreeView(rTreeView)
+{
+}
+
+sal_Int8 CustomPagesDropTarget::AcceptDrop(const AcceptDropEvent& rEvt)
+{
+    // to enable the autoscroll when we're close to the edges
+    m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, nullptr, true);
+    return DND_ACTION_MOVE;
+}
+
+sal_Int8 CustomPagesDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
+{
+    weld::TreeView* pSource = m_rTreeView.get_drag_source();
+    // only dragging within the same widget allowed
+    if (!pSource || pSource != &m_rTreeView)
+        return DND_ACTION_NONE;
+
+    std::unique_ptr<weld::TreeIter> xSource(m_rTreeView.make_iterator());
+    if (!m_rTreeView.get_selected(xSource.get()))
+        return DND_ACTION_NONE;
+
+    std::unique_ptr<weld::TreeIter> xTarget(m_rTreeView.make_iterator());
+    int nTargetPos = -1;
+    if (m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, xTarget.get(), true))
+        nTargetPos = m_rTreeView.get_iter_index_in_parent(*xTarget);
+    m_rTreeView.move_subtree(*xSource, nullptr, nTargetPos);
+
+    return DND_ACTION_NONE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
