@@ -59,6 +59,7 @@
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/lok.hxx>
@@ -1108,7 +1109,14 @@ bool ModelData_Impl::ShowDocumentInfoDialog()
                                                                                 0 );
                     if ( xDispatch.is() )
                     {
-                        xDispatch->dispatch( aURL, uno::Sequence< beans::PropertyValue >() );
+                        // tdf#119206 use (abuse?) a SynchronMode of true,
+                        // which will become SfxRequest::IsSynchronCall of true
+                        // in SfxObjectShell::ExecFile_Impl to request that we
+                        // do not want the properties dialog to be run async
+                        uno::Sequence< beans::PropertyValue > aProperties{
+                            comphelper::makePropertyValue("SynchronMode", true)
+                        };
+                        xDispatch->dispatch(aURL, aProperties);
                         bDialogUsed = true;
                     }
                 }
