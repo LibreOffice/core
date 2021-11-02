@@ -29,10 +29,10 @@ class SwWrtShell;
 
 class SwDrawTextShell final : public SfxShell
 {
-    SwView      &rView;
+    SwView      &m_rView;
     RotateTransliteration m_aRotateCase;
 
-    SdrView     *pSdrView;
+    SdrView     *m_pSdrView;
 
     void        SetAttrToMarked(const SfxItemSet& rAttr);
     void        InsertSymbol(SfxRequest& rReq);
@@ -46,7 +46,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    SwView     &GetView() { return rView; }
+    SwView     &GetView() { return m_rView; }
     SwWrtShell &GetShell();
 
                 SwDrawTextShell(SwView &rView);

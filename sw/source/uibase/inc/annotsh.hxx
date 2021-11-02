@@ -27,7 +27,7 @@
 class SwView;
 class SwAnnotationShell final : public SfxShell
 {
-    SwView&     rView;
+    SwView&     m_rView;
     RotateTransliteration m_aRotateCase;
 
 public:

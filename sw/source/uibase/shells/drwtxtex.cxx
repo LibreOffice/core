@@ -123,7 +123,7 @@ namespace
 void SwDrawTextShell::Execute( SfxRequest &rReq )
 {
     SwWrtShell &rSh = GetShell();
-    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+    OutlinerView* pOLV = m_pSdrView->GetTextEditOutlinerView();
     SfxItemSet aEditAttr(pOLV->GetAttribs());
     SfxItemSet aNewAttr(*aEditAttr.GetPool(), aEditAttr.GetRanges());
 
@@ -469,7 +469,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         {
 //!! JP 16.03.2001: why??           pSdrView = rSh.GetDrawView();
 //!! JP 16.03.2001: why??           pOutliner = pSdrView->GetTextEditOutliner();
-            SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
+            SdrOutliner * pOutliner = m_pSdrView->GetTextEditOutliner();
             EEControlBits nCtrl = pOutliner->GetControlWord();
 
             bool bSet = static_cast<const SfxBoolItem&>(rReq.GetArgs()->Get(
@@ -480,7 +480,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 nCtrl &= ~EEControlBits::ONLINESPELLING;
             pOutliner->SetControlWord(nCtrl);
 
-            rView.ExecuteSlot(rReq);
+            m_rView.ExecuteSlot(rReq);
         }
         break;
         case SID_HYPERLINK_SETLINK:
@@ -554,11 +554,11 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
             // Shell switch!
             {
-                SdrObject* pTmpObj = pSdrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
-                SdrPageView* pTmpPV = pSdrView->GetSdrPageView();
-                SdrView* pTmpView = pSdrView;
+                SdrObject* pTmpObj = m_pSdrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+                SdrPageView* pTmpPV = m_pSdrView->GetSdrPageView();
+                SdrView* pTmpView = m_pSdrView;
 
-                pSdrView->SdrEndTextEdit(true);
+                m_pSdrView->SdrEndTextEdit(true);
 
                 SfxItemSetFixed<SDRATTR_TEXTDIRECTION,
                             SDRATTR_TEXTDIRECTION>  aAttr( *aNewAttr.GetPool() );
@@ -577,11 +577,11 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         case SID_ATTR_PARA_LEFT_TO_RIGHT:
         case SID_ATTR_PARA_RIGHT_TO_LEFT:
         {
-            SdrObject* pTmpObj = pSdrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
-            SdrPageView* pTmpPV = pSdrView->GetSdrPageView();
-            SdrView* pTmpView = pSdrView;
+            SdrObject* pTmpObj = m_pSdrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+            SdrPageView* pTmpPV = m_pSdrView->GetSdrPageView();
+            SdrView* pTmpView = m_pSdrView;
 
-            pSdrView->SdrEndTextEdit(true);
+            m_pSdrView->SdrEndTextEdit(true);
             bool bLeftToRight = nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT;
 
             const SfxPoolItem* pPoolItem;
@@ -656,7 +656,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
     if (!IsTextEdit()) // Otherwise sometimes crash!
         return;
 
-    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+    OutlinerView* pOLV = m_pSdrView->GetTextEditOutlinerView();
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
 
@@ -873,7 +873,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
                 }
                 else
                 {
-                    SdrOutliner* pOutliner = pSdrView->GetTextEditOutliner();
+                    SdrOutliner* pOutliner = m_pSdrView->GetTextEditOutliner();
                     if (pOutliner)
                         bFlag = pOutliner->IsVertical()
                                 == (SID_TEXTDIRECTION_TOP_TO_BOTTOM == nSlotId);
@@ -902,7 +902,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
                 }
                 else
                 {
-                    SdrOutliner* pOutliner = pSdrView->GetTextEditOutliner();
+                    SdrOutliner* pOutliner = m_pSdrView->GetTextEditOutliner();
                     if (pOutliner && pOutliner->IsVertical())
                     {
                         rSet.DisableItem(nWhich);
@@ -976,7 +976,7 @@ void SwDrawTextShell::GetDrawTextCtrlState(SfxItemSet& rSet)
     if (!IsTextEdit())  // Otherwise crash!
         return;
 
-    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+    OutlinerView* pOLV = m_pSdrView->GetTextEditOutlinerView();
     SfxItemSet aEditAttr(pOLV->GetAttribs());
 
     SfxWhichIter aIter(rSet);
@@ -1016,7 +1016,7 @@ void SwDrawTextShell::GetDrawTextCtrlState(SfxItemSet& rSet)
             case SID_ATTR_CHAR_STRIKEOUT: nEEWhich = EE_CHAR_STRIKEOUT;break;
             case SID_AUTOSPELL_CHECK:
             {
-                const SfxPoolItem* pState = rView.GetSlotState(nWhich);
+                const SfxPoolItem* pState = m_rView.GetSlotState(nWhich);
                 if (pState)
                     rSet.Put(SfxBoolItem(nWhich, static_cast<const SfxBoolItem*>(pState)->GetValue()));
                 else
@@ -1065,7 +1065,7 @@ void SwDrawTextShell::ExecClpbrd(SfxRequest const &rReq)
     if (!IsTextEdit())  // Otherwise crash!
         return;
 
-    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+    OutlinerView* pOLV = m_pSdrView->GetTextEditOutlinerView();
 
     ESelection aSel(pOLV->GetSelection());
     const bool bCopy = (aSel.nStartPara != aSel.nEndPara) || (aSel.nStartPos != aSel.nEndPos);
@@ -1145,7 +1145,7 @@ void SwDrawTextShell::StateClpbrd(SfxItemSet &rSet)
     if (!IsTextEdit())  // Otherwise crash!
         return;
 
-    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+    OutlinerView* pOLV = m_pSdrView->GetTextEditOutlinerView();
     ESelection aSel(pOLV->GetSelection());
     const bool bCopy = (aSel.nStartPara != aSel.nEndPara) ||
         (aSel.nStartPos != aSel.nEndPos);
@@ -1205,7 +1205,7 @@ void SwDrawTextShell::StateInsert(SfxItemSet &rSet)
     if (!IsTextEdit())  // Otherwise crash!
         return;
 
-    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+    OutlinerView* pOLV = m_pSdrView->GetTextEditOutlinerView();
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
 

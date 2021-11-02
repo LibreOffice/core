@@ -294,7 +294,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
     {
         case SID_CUT:
         case SID_COPY:
-            rView.GetEditWin().FlushInBuffer();
+            m_rView.GetEditWin().FlushInBuffer();
             if ( rSh.HasSelection() )
             {
                 rtl::Reference<SwTransferable> pTransfer = new SwTransferable( rSh );
@@ -339,7 +339,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                 {
                     // Temporary variables, because the shell could already be
                     // destroyed after the paste.
-                    SwView* pView = &rView;
+                    SwView* pView = &m_rView;
 
                     RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA;
                     const SfxUInt16Item* pAnchorType = rReq.GetArg<SfxUInt16Item>(FN_PARAM_1);
@@ -377,7 +377,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     {
                         // Temporary variables, because the shell could already be
                         // destroyed after the paste.
-                        SwView* pView = &rView;
+                        SwView* pView = &m_rView;
 
                         SwTransferable::PasteFormat( rSh, aDataHelper,
                                         static_cast<SotClipboardFormatId>(static_cast<const SfxUInt32Item*>(pFormat)->GetValue()) );
@@ -405,7 +405,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                 {
                     // Temporary variables, because the shell could already be
                     // destroyed after the paste.
-                    SwView* pView = &rView;
+                    SwView* pView = &m_rView;
                     rReq.Ignore();
                     bIgnore = true;
                     if(SwTransferable::PasteUnformatted( rSh, aDataHelper ))
@@ -457,7 +457,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     {
                         // Temporary variables, because the shell could already be
                         // destroyed after the paste.
-                        SwView* pView = &rView;
+                        SwView* pView = &m_rView;
                         bool bRet = false;
                         SotClipboardFormatId nFormatId = pDlg->GetFormatOnly();
 
@@ -779,7 +779,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             break;
         case FN_UPDATE_CHARTS:
             {
-                SwWait aWait( *rView.GetDocShell(), true );
+                SwWait aWait( *m_rView.GetDocShell(), true );
                 rSh.UpdateAllCharts();
             }
             break;
@@ -887,7 +887,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             if ( (!rSh.IsSelFrameMode() || nSelType & SelectionType::Graphic) &&
                 nGalleryItemType == css::gallery::GalleryItemType::GRAPHIC )
             {
-                SwWait aWait( *rView.GetDocShell(), true );
+                SwWait aWait( *m_rView.GetDocShell(), true );
 
                 OUString aGrfName, aFltName;
                 const Graphic aGrf( pGalleryItem->GetGraphic() );
@@ -1010,7 +1010,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             if( cDelim )
             {
                 //Shell change!
-                SwView& rSaveView = rView;
+                SwView& rSaveView = m_rView;
                 bool bInserted = false;
                 //recording:
                 SfxViewFrame* pViewFrame = GetView().GetViewFrame();
@@ -1425,12 +1425,12 @@ IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl, SwCursorShell&, void)
     if (CNT_GRF != rSh.SwEditShell::GetCntType())
         return;
     GraphicType const nGrfType(rSh.GetGraphicType());
-    if (GraphicType::NONE == nGrfType || aGrfUpdateSlots.empty())
+    if (GraphicType::NONE == nGrfType || m_aGrfUpdateSlots.empty())
         return;
 
     bool bProtect = FlyProtectFlags::NONE != rSh.IsSelObjProtected(FlyProtectFlags::Content|FlyProtectFlags::Parent);
     SfxViewFrame* pVFrame = GetView().GetViewFrame();
-    for( const auto nSlot : aGrfUpdateSlots )
+    for( const auto nSlot : m_aGrfUpdateSlots )
     {
         bool bSetState = false;
         bool bState = false;
@@ -1505,13 +1505,13 @@ IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl, SwCursorShell&, void)
         if( bSetState )
         {
             SfxBoolItem aBool( nSlot, bState );
-            if( pGetStateSet )
-                pGetStateSet->Put( aBool );
+            if( m_pGetStateSet )
+                m_pGetStateSet->Put( aBool );
             else
                 pVFrame->GetBindings().SetState( aBool );
         }
     }
-    aGrfUpdateSlots.clear();
+    m_aGrfUpdateSlots.clear();
 }
 
 void SwBaseShell::GetState( SfxItemSet &rSet )
@@ -1520,7 +1520,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
     SfxViewFrame* pVFrame = GetView().GetViewFrame();
     SfxWhichIter aIter( rSet );
     sal_uInt16 nWhich = aIter.FirstWhich();
-    pGetStateSet = &rSet;
+    m_pGetStateSet = &rSet;
     while ( nWhich )
     {
         switch ( nWhich )
@@ -1945,7 +1945,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
         }
         nWhich = aIter.NextWhich();
     }
-    pGetStateSet = nullptr;
+    m_pGetStateSet = nullptr;
 }
 
 // Disable the slots with this status method
@@ -2120,10 +2120,10 @@ void SwBaseShell::SetFrameMode(FlyMode eMode, SwWrtShell *pSh )
 
 SwBaseShell::SwBaseShell(SwView& rVw) :
     SfxShell( &rVw ),
-    rView(rVw),
-    pGetStateSet(nullptr)
+    m_rView(rVw),
+    m_pGetStateSet(nullptr)
 {
-    SwWrtShell& rWrtSh = rView.GetWrtShell();
+    SwWrtShell& rWrtSh = m_rView.GetWrtShell();
 
     SetPool(&rWrtSh.GetAttrPool());
     SetName("Base");
@@ -2132,12 +2132,12 @@ SwBaseShell::SwBaseShell(SwView& rVw) :
 
 SwBaseShell::~SwBaseShell()
 {
-    if( rView.GetCurShell() == this )
-        rView.ResetSubShell();
+    if( m_rView.GetCurShell() == this )
+        m_rView.ResetSubShell();
 
     Link<SwCursorShell&,void> aTmp( LINK( this, SwBaseShell, GraphicArrivedHdl));
-    if( aTmp == rView.GetWrtShell().GetGrfArrivedLnk() )
-        rView.GetWrtShell().SetGrfArrivedLnk( Link<SwCursorShell&,void>() );
+    if( aTmp == m_rView.GetWrtShell().GetGrfArrivedLnk() )
+        m_rView.GetWrtShell().SetGrfArrivedLnk( Link<SwCursorShell&,void>() );
 }
 
 void SwBaseShell::ExecTextCtrl( SfxRequest& rReq )
@@ -2772,12 +2772,12 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
 
 SwWrtShell& SwBaseShell::GetShell()
 {
-    return rView.GetWrtShell();
+    return m_rView.GetWrtShell();
 }
 
 SwWrtShell* SwBaseShell::GetShellPtr()
 {
-    return rView.GetWrtShellPtr();
+    return m_rView.GetWrtShellPtr();
 }
 
 static void EndUndo(SwWrtShell& rSh)

@@ -72,19 +72,19 @@ class SwTypeNumber
 
 class SwContent : public SwTypeNumber
 {
-    const SwContentType*    pParent;
-    OUString                sContentName;
-    tools::Long                    nYPosition;
+    const SwContentType*    m_pParent;
+    OUString                m_sContentName;
+    tools::Long                    m_nYPosition;
         // some subclasses appear to use this for a tools/gen.hxx-style
         // geometric Y position, while e.g. SwOutlineContent wants to store
         // the index in its subtree
-    bool                    bInvisible;
+    bool                    m_bInvisible;
 public:
         SwContent(const SwContentType* pCnt, const OUString& rName, tools::Long nYPos );
 
     virtual bool            IsProtect() const;
-    const SwContentType*    GetParent() const {return pParent;}
-    const OUString&         GetName()   const {return sContentName;}
+    const SwContentType*    GetParent() const {return m_pParent;}
+    const OUString&         GetName()   const {return m_sContentName;}
     bool operator==(const SwContent& /*rCont*/) const
     {
         // they're never equal, otherwise they'd fall out of the array
@@ -93,13 +93,13 @@ public:
     bool operator<(const SwContent& rCont) const
     {
         // at first sort by position and then by name
-        if (nYPosition != rCont.nYPosition)
-            return nYPosition < rCont.nYPosition;
-        return vcl::NaturalSortCompare(sContentName, rCont.sContentName) < 0;
+        if (m_nYPosition != rCont.m_nYPosition)
+            return m_nYPosition < rCont.m_nYPosition;
+        return vcl::NaturalSortCompare(m_sContentName, rCont.m_sContentName) < 0;
     }
 
-    bool        IsInvisible() const {return bInvisible;}
-    void        SetInvisible(){ bInvisible = true;}
+    bool        IsInvisible() const {return m_bInvisible;}
+    void        SetInvisible(){ m_bInvisible = true;}
 };
 
 #endif

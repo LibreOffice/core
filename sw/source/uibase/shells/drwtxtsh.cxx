@@ -90,12 +90,12 @@ void SwDrawTextShell::InitInterface_Impl()
 void SwDrawTextShell::Init()
 {
     SwWrtShell &rSh = GetShell();
-    pSdrView = rSh.GetDrawView();
-    SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
+    m_pSdrView = rSh.GetDrawView();
+    SdrOutliner * pOutliner = m_pSdrView->GetTextEditOutliner();
     //#97471# mouse click _and_ key input at the same time
     if( !pOutliner )
         return ;
-    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+    OutlinerView* pOLV = m_pSdrView->GetTextEditOutlinerView();
     EEControlBits nCtrl = pOutliner->GetControlWord();
     nCtrl |= EEControlBits::AUTOCORRECT;
 
@@ -117,7 +117,7 @@ void SwDrawTextShell::Init()
 
 SwDrawTextShell::SwDrawTextShell(SwView &rV) :
     SfxShell(&rV),
-    rView(rV)
+    m_rView(rV)
 {
     SwWrtShell &rSh = GetShell();
     SetPool(rSh.GetAttrPool().GetSecondaryPool());
@@ -132,12 +132,12 @@ SwDrawTextShell::SwDrawTextShell(SwView &rV) :
 SwDrawTextShell::~SwDrawTextShell()
 {
     if ( GetView().GetCurShell() == this )
-        rView.ResetSubShell();
+        m_rView.ResetSubShell();
 }
 
 SwWrtShell& SwDrawTextShell::GetShell()
 {
-    return rView.GetWrtShell();
+    return m_rView.GetWrtShell();
 }
 
 // Disable slots with this status method
@@ -156,7 +156,7 @@ void SwDrawTextShell::StateDisableItems( SfxItemSet &rSet )
 
 void SwDrawTextShell::SetAttrToMarked(const SfxItemSet& rAttr)
 {
-    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+    OutlinerView* pOLV = m_pSdrView->GetTextEditOutlinerView();
     tools::Rectangle aOutRect = pOLV->GetOutputArea();
 
     if (tools::Rectangle() != aOutRect)
@@ -167,7 +167,7 @@ void SwDrawTextShell::SetAttrToMarked(const SfxItemSet& rAttr)
 
 bool SwDrawTextShell::IsTextEdit() const
 {
-    return pSdrView->IsTextEdit();
+    return m_pSdrView->IsTextEdit();
 }
 
 void SwDrawTextShell::ExecFontWork(SfxRequest const & rReq)
@@ -264,7 +264,7 @@ void SwDrawTextShell::GetFormTextState(SfxItemSet& rSet)
 void SwDrawTextShell::ExecDrawLingu(SfxRequest const &rReq)
 {
     SwWrtShell &rSh = GetShell();
-    OutlinerView* pOutlinerView = pSdrView->GetTextEditOutlinerView();
+    OutlinerView* pOutlinerView = m_pSdrView->GetTextEditOutlinerView();
     if( !rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() )
         return;
 
@@ -354,8 +354,8 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest const &rReq)
 void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
-    pSdrView = rSh.GetDrawView();
-    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+    m_pSdrView = rSh.GetDrawView();
+    OutlinerView* pOLV = m_pSdrView->GetTextEditOutlinerView();
 
     switch (rReq.GetSlot())
     {
@@ -404,7 +404,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
 
         case SID_SELECTALL:
         {
-            SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
+            SdrOutliner * pOutliner = m_pSdrView->GetTextEditOutliner();
             if(pOutliner)
             {
                 sal_Int32 nParaCount = pOutliner->GetParagraphCount();
@@ -423,7 +423,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
         break;
 
         case FN_ESCAPE:
-            if (pSdrView->IsTextEdit())
+            if (m_pSdrView->IsTextEdit())
             {
                 // Shell switch!
                 rSh.EndTextEdit();
@@ -435,19 +435,19 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
             break;
         case FN_DRAWTEXT_ATTR_DLG:
             {
-                SfxItemSet aNewAttr( pSdrView->GetModel()->GetItemPool() );
-                pSdrView->GetAttributes( aNewAttr );
+                SfxItemSet aNewAttr( m_pSdrView->GetModel()->GetItemPool() );
+                m_pSdrView->GetAttributes( aNewAttr );
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog(
                             GetView().GetFrameWeld(),
-                            &aNewAttr, pSdrView ));
+                            &aNewAttr, m_pSdrView ));
                 sal_uInt16 nResult = pDlg->Execute();
 
                 if (nResult == RET_OK)
                 {
-                    if (pSdrView->AreObjectsMarked())
+                    if (m_pSdrView->AreObjectsMarked())
                     {
-                        pSdrView->SetAttributes(*pDlg->GetOutputItemSet());
+                        m_pSdrView->SetAttributes(*pDlg->GetOutputItemSet());
                         rReq.Done(*(pDlg->GetOutputItemSet()));
                     }
                 }
@@ -458,7 +458,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
         case SID_TABLE_VERT_BOTTOM:
             {
                 sal_uInt16 nSId = rReq.GetSlot();
-                if (pSdrView->AreObjectsMarked())
+                if (m_pSdrView->AreObjectsMarked())
                 {
                     SdrTextVertAdjust eTVA = SDRTEXTVERTADJUST_TOP;
                     if (nSId == SID_TABLE_VERT_CENTER)
@@ -466,10 +466,10 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
                     else if (nSId == SID_TABLE_VERT_BOTTOM)
                         eTVA = SDRTEXTVERTADJUST_BOTTOM;
 
-                    SfxItemSet aNewAttr( pSdrView->GetModel()->GetItemPool() );
-                    pSdrView->GetAttributes( aNewAttr );
+                    SfxItemSet aNewAttr( m_pSdrView->GetModel()->GetItemPool() );
+                    m_pSdrView->GetAttributes( aNewAttr );
                     aNewAttr.Put(SdrTextVertAdjustItem(eTVA));
-                    pSdrView->SetAttributes(aNewAttr);
+                    m_pSdrView->SetAttributes(aNewAttr);
                     rReq.Done();
                 }
 
@@ -597,7 +597,7 @@ void SwDrawTextShell::StateUndo(SfxItemSet &rSet)
 
 void SwDrawTextShell::ExecTransliteration( SfxRequest const & rReq )
 {
-    if (!pSdrView)
+    if (!m_pSdrView)
         return;
 
     using namespace i18n;
@@ -642,7 +642,7 @@ void SwDrawTextShell::ExecTransliteration( SfxRequest const & rReq )
 
     if( nMode != TransliterationFlags::NONE )
     {
-        OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+        OutlinerView* pOLV = m_pSdrView->GetTextEditOutlinerView();
 
         if (!pOLV)
             return;
@@ -655,10 +655,10 @@ void SwDrawTextShell::ExecRotateTransliteration( SfxRequest const & rReq )
 {
     if( rReq.GetSlot() == SID_TRANSLITERATE_ROTATE_CASE )
     {
-        if (!pSdrView)
+        if (!m_pSdrView)
             return;
 
-        OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+        OutlinerView* pOLV = m_pSdrView->GetTextEditOutlinerView();
 
         if (!pOLV)
             return;
@@ -671,7 +671,7 @@ void SwDrawTextShell::ExecRotateTransliteration( SfxRequest const & rReq )
 
 void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
 {
-    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+    OutlinerView* pOLV = m_pSdrView->GetTextEditOutlinerView();
     if(!pOLV)
         return;
     const SfxItemSet *pArgs = rReq.GetArgs();
@@ -714,7 +714,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         SfxAllItemSet aAllSet( GetPool() );
         aAllSet.Put( SfxBoolItem( FN_PARAM_1, false ) );
 
-        SwViewOption aOpt(*rView.GetWrtShell().GetViewOptions());
+        SwViewOption aOpt(*m_rView.GetWrtShell().GetViewOptions());
         const OUString& sSymbolFont = aOpt.GetSymbolFont();
         if( !sSymbolFont.isEmpty() )
             aAllSet.Put( SfxStringItem( SID_FONT_NAME, sSymbolFont ) );
@@ -723,15 +723,15 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
 
         // If character is selected, it can be shown
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        auto xFrame = rView.GetViewFrame()->GetFrame().GetFrameInterface();
-        ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(rView.GetFrameWeld(), aAllSet, xFrame));
+        auto xFrame = m_rView.GetViewFrame()->GetFrame().GetFrameInterface();
+        ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(m_rView.GetFrameWeld(), aAllSet, xFrame));
         pDlg->Execute();
         return;
     }
 
     // do not flicker
     pOLV->HideCursor();
-    SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
+    SdrOutliner * pOutliner = m_pSdrView->GetTextEditOutliner();
     pOutliner->SetUpdateLayout(false);
 
     SfxItemSet aOldSet( pOLV->GetAttribs() );
@@ -787,8 +787,8 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
 SfxUndoManager* SwDrawTextShell::GetUndoManager()
 {
     SwWrtShell &rSh = GetShell();
-    pSdrView = rSh.GetDrawView();
-    SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
+    m_pSdrView = rSh.GetDrawView();
+    SdrOutliner * pOutliner = m_pSdrView->GetTextEditOutliner();
     return &pOutliner->GetUndoManager();
 }
 
@@ -798,10 +798,10 @@ void SwDrawTextShell::GetStatePropPanelAttr(SfxItemSet &rSet)
     sal_uInt16 nWhich = aIter.FirstWhich();
 
     SwWrtShell &rSh = GetShell();
-    pSdrView = rSh.GetDrawView();
+    m_pSdrView = rSh.GetDrawView();
 
-    SfxItemSet aAttrs( pSdrView->GetModel()->GetItemPool() );
-    pSdrView->GetAttributes( aAttrs );
+    SfxItemSet aAttrs( m_pSdrView->GetModel()->GetItemPool() );
+    m_pSdrView->GetAttributes( aAttrs );
 
     while ( nWhich )
     {
