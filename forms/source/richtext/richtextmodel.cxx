@@ -165,37 +165,64 @@ namespace frm
 
     void ORichTextModel::implRegisterProperties()
     {
-        REGISTER_PROP_2( DEFAULTCONTROL,        m_sDefaultControl,          BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( HELPTEXT,              m_sHelpText,                BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( HELPURL,               m_sHelpURL,                 BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( ENABLED,               m_bEnabled,                 BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( ENABLEVISIBLE,               m_bEnableVisible,                 BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( BORDER,                m_nBorder,                  BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( HARDLINEBREAKS,        m_bHardLineBreaks,          BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( HSCROLL,               m_bHScroll,                 BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( VSCROLL,               m_bVScroll,                 BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( READONLY,              m_bReadonly,                BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( PRINTABLE,             m_bPrintable,               BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( REFERENCE_DEVICE,      m_xReferenceDevice,         BOUND, TRANSIENT    );
-        REGISTER_PROP_2( RICH_TEXT,             m_bReallyActAsRichText,     BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( HIDEINACTIVESELECTION, m_bHideInactiveSelection,   BOUND, MAYBEDEFAULT );
+        registerProperty( PROPERTY_DEFAULTCONTROL, PROPERTY_ID_DEFAULTCONTROL, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_sDefaultControl, cppu::UnoType<decltype(m_sDefaultControl)>::get() );
+        registerProperty( PROPERTY_HELPTEXT, PROPERTY_ID_HELPTEXT, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_sHelpText, cppu::UnoType<decltype(m_sHelpText)>::get() );
+        registerProperty( PROPERTY_HELPURL, PROPERTY_ID_HELPURL, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_sHelpURL, cppu::UnoType<decltype(m_sHelpURL)>::get() );
+        registerProperty( PROPERTY_ENABLED, PROPERTY_ID_ENABLED, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_bEnabled, cppu::UnoType<decltype(m_bEnabled)>::get() );
+        registerProperty( PROPERTY_ENABLEVISIBLE, PROPERTY_ID_ENABLEVISIBLE, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_bEnableVisible, cppu::UnoType<decltype(m_bEnableVisible)>::get() );
+        registerProperty( PROPERTY_BORDER, PROPERTY_ID_BORDER, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_nBorder, cppu::UnoType<decltype(m_nBorder)>::get() );
+        registerProperty( PROPERTY_HARDLINEBREAKS, PROPERTY_ID_HARDLINEBREAKS, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_bHardLineBreaks, cppu::UnoType<decltype(m_bHardLineBreaks)>::get() );
+        registerProperty( PROPERTY_HSCROLL, PROPERTY_ID_HSCROLL, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_bHScroll, cppu::UnoType<decltype(m_bHScroll)>::get() );
+        registerProperty( PROPERTY_VSCROLL, PROPERTY_ID_VSCROLL, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_bVScroll, cppu::UnoType<decltype(m_bVScroll)>::get() );
+        registerProperty( PROPERTY_READONLY, PROPERTY_ID_READONLY, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_bReadonly, cppu::UnoType<decltype(m_bReadonly)>::get() );
+        registerProperty( PROPERTY_PRINTABLE, PROPERTY_ID_PRINTABLE, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_bPrintable, cppu::UnoType<decltype(m_bPrintable)>::get() );
+        registerProperty( PROPERTY_REFERENCE_DEVICE, PROPERTY_ID_REFERENCE_DEVICE, PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT,
+                          &m_xReferenceDevice, cppu::UnoType<decltype(m_xReferenceDevice)>::get() );
+        registerProperty( PROPERTY_RICH_TEXT, PROPERTY_ID_RICH_TEXT, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_bReallyActAsRichText, cppu::UnoType<decltype(m_bReallyActAsRichText)>::get() );
+        registerProperty( PROPERTY_HIDEINACTIVESELECTION, PROPERTY_ID_HIDEINACTIVESELECTION, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_bHideInactiveSelection, cppu::UnoType<decltype(m_bHideInactiveSelection)>::get() );
 
-        REGISTER_VOID_PROP_2( TABSTOP,          m_aTabStop,             sal_Bool,           BOUND, MAYBEDEFAULT );
-        REGISTER_VOID_PROP_2( BACKGROUNDCOLOR,  m_aBackgroundColor,     sal_Int32,          BOUND, MAYBEDEFAULT );
-        REGISTER_VOID_PROP_2( BORDERCOLOR,      m_aBorderColor,         sal_Int32,          BOUND, MAYBEDEFAULT );
-        REGISTER_VOID_PROP_2( VERTICAL_ALIGN,   m_aVerticalAlignment,   VerticalAlignment,  BOUND, MAYBEDEFAULT );
+        registerMayBeVoidProperty( PROPERTY_TABSTOP, PROPERTY_ID_TABSTOP, PropertyAttribute::MAYBEVOID | PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                                   &m_aTabStop, cppu::UnoType<sal_Bool>::get() );
+        registerMayBeVoidProperty( PROPERTY_BACKGROUNDCOLOR, PROPERTY_ID_BACKGROUNDCOLOR, PropertyAttribute::MAYBEVOID | PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                                   &m_aBackgroundColor, cppu::UnoType<sal_Int32>::get() );
+        registerMayBeVoidProperty( PROPERTY_BORDERCOLOR, PROPERTY_ID_BORDERCOLOR, PropertyAttribute::MAYBEVOID | PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                                   &m_aBorderColor, cppu::UnoType<sal_Int32>::get() );
+        registerMayBeVoidProperty( PROPERTY_VERTICAL_ALIGN, PROPERTY_ID_VERTICAL_ALIGN, PropertyAttribute::MAYBEVOID | PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                                   &m_aVerticalAlignment, cppu::UnoType<VerticalAlignment>::get() );
 
         // properties which exist only for compatibility with the css.swt.UnoControlEditModel,
         // since we replace the default implementation for this service
-        REGISTER_PROP_2( ECHO_CHAR,             m_nEchoChar,            BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( MAXTEXTLEN,            m_nMaxTextLength,       BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( MULTILINE,             m_bMultiLine,           BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( TEXT,                  m_sLastKnownEngineText, BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( LINEEND_FORMAT,        m_nLineEndFormat,       BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( WRITING_MODE,          m_nTextWritingMode,     BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_3( CONTEXT_WRITING_MODE,  m_nContextWritingMode,  BOUND, MAYBEDEFAULT, TRANSIENT );
+        registerProperty( PROPERTY_ECHO_CHAR, PROPERTY_ID_ECHO_CHAR, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_nEchoChar, cppu::UnoType<decltype(m_nEchoChar)>::get() );
+        registerProperty( PROPERTY_MAXTEXTLEN, PROPERTY_ID_MAXTEXTLEN, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_nMaxTextLength, cppu::UnoType<decltype(m_nMaxTextLength)>::get() );
+        registerProperty( PROPERTY_MULTILINE, PROPERTY_ID_MULTILINE, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_bMultiLine, cppu::UnoType<decltype(m_bMultiLine)>::get() );
+        registerProperty( PROPERTY_TEXT, PROPERTY_ID_TEXT, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_sLastKnownEngineText, cppu::UnoType<decltype(m_sLastKnownEngineText)>::get() );
+        registerProperty( PROPERTY_LINEEND_FORMAT, PROPERTY_ID_LINEEND_FORMAT, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_nLineEndFormat, cppu::UnoType<decltype(m_nLineEndFormat)>::get() );
+        registerProperty( PROPERTY_WRITING_MODE, PROPERTY_ID_WRITING_MODE, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                          &m_nTextWritingMode, cppu::UnoType<decltype(m_nTextWritingMode)>::get() );
 
-        REGISTER_VOID_PROP_2( ALIGN,        m_aAlign,           sal_Int16, BOUND, MAYBEDEFAULT );
+        registerProperty( PROPERTY_CONTEXT_WRITING_MODE, PROPERTY_ID_CONTEXT_WRITING_MODE, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT |
+                          PropertyAttribute::TRANSIENT, &m_nContextWritingMode, cppu::UnoType<decltype(m_nContextWritingMode)>::get() );
+
+        registerMayBeVoidProperty( PROPERTY_ALIGN, PROPERTY_ID_ALIGN, PropertyAttribute::MAYBEVOID | PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                                   &m_aAlign, cppu::UnoType<sal_Int16>::get() );
     }
 
 
