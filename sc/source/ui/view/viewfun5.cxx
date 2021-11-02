@@ -149,7 +149,13 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                     SCCOL nFirstCol, nLastCol;
                     SCROW nFirstRow, nLastRow;
                     if ( rSrcDoc.GetDataStart( nSrcTab, nFirstCol, nFirstRow ) )
+                    {
                         rSrcDoc.GetCellArea( nSrcTab, nLastCol, nLastRow );
+                        if (nLastCol < nFirstCol)
+                            nLastCol = nFirstCol;
+                        if (nLastRow < nFirstRow)
+                            nLastRow = nFirstRow;
+                    }
                     else
                     {
                         nFirstCol = nLastCol = 0;
