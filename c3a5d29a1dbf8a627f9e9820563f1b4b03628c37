@@ -16,6 +16,23 @@
       "message": "sorry, cloph.\n\nI wrongly thought the libraries are not yet uploaded to dev-www.libreoffice.org.",
       "revId": "c3a5d29a1dbf8a627f9e9820563f1b4b03628c37",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb82b201_1de740fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-11-02T03:12:38Z",
+      "side": 1,
+      "message": "I get the following build error: (p.s. I set --enable-werror in autogen.input)\n\n/home/suokunlong/lo/source/core/workdir/UnpackedTarball/mdds/include/mdds/./multi_type_vector/soa/./block_util.hpp:49:27: error: unused parameter \u0027block_store\u0027 [-Werror,-Wunused-parameter]\n    void operator()(Blks\u0026 block_store, int64_t start_block_index, int64_t delta) const\n                          ^\n/home/suokunlong/lo/source/core/workdir/UnpackedTarball/mdds/include/mdds/./multi_type_vector/soa/./block_util.hpp:49:48: error: unused parameter \u0027start_block_index\u0027 [-Werror,-Wunused-parameter]\n    void operator()(Blks\u0026 block_store, int64_t start_block_index, int64_t delta) const\n                                               ^\n/home/suokunlong/lo/source/core/workdir/UnpackedTarball/mdds/include/mdds/./multi_type_vector/soa/./block_util.hpp:49:75: error: unused parameter \u0027delta\u0027 [-Werror,-Wunused-parameter]\n    void operator()(Blks\u0026 block_store, int64_t start_block_index, int64_t delta) const\n\nIs this an issue?",
+      "revId": "c3a5d29a1dbf8a627f9e9820563f1b4b03628c37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
