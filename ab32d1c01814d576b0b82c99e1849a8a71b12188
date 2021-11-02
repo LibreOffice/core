@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cba978e_7590b695",
+        "filename": "include/unotools/VersionConfig.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-02T06:53:39Z",
+      "side": 1,
+      "message": "So this returns true for case where the value was different, but kept unchanged. No idea if this is something to care about, though.\n\nIMO, the mechanics of finalized properties would be better handled by try-catch, with catch returning false, instead of checking read-only state before each write.",
+      "revId": "ab32d1c01814d576b0b82c99e1849a8a71b12188",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
