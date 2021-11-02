@@ -9,14 +9,11 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,ucb_webdav_propfindcache))
+$(eval $(call gb_CppunitTest_CppunitTest,ucb_webdav_core))
 
-$(eval $(call gb_CppunitTest_use_api,ucb_webdav_propfindcache, \
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_CppunitTest_use_sdk_api,ucb_webdav_core))
 
-$(eval $(call gb_CppunitTest_use_libraries,ucb_webdav_propfindcache, \
+$(eval $(call gb_CppunitTest_use_libraries,ucb_webdav_core, \
 	comphelper \
 	cppu \
 	cppuhelper \
@@ -27,29 +24,30 @@ $(eval $(call gb_CppunitTest_use_libraries,ucb_webdav_propfindcache, \
 	tl \
 ))
 
-$(eval $(call gb_CppunitTest_use_library_objects,ucb_webdav_propfindcache, \
+$(eval $(call gb_CppunitTest_use_library_objects,ucb_webdav_core, \
 	ucpdav1 \
 ))
 
-$(eval $(call gb_CppunitTest_use_externals,ucb_webdav_propfindcache,\
+$(eval $(call gb_CppunitTest_use_externals,ucb_webdav_core,\
 	boost_headers \
 	libxml2 \
 	curl \
 ))
 
-$(eval $(call gb_CppunitTest_use_custom_headers,ucb_webdav_propfindcache,\
+$(eval $(call gb_CppunitTest_use_custom_headers,ucb_webdav_core,\
 	officecfg/registry \
 ))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,ucb_webdav_propfindcache, \
+$(eval $(call gb_CppunitTest_add_exception_objects,ucb_webdav_core, \
+    ucb/qa/cppunit/webdav/webdav_resource_access \
     ucb/qa/cppunit/webdav/webdav_propfindcache \
+    ucb/qa/cppunit/webdav/webdav_options \
+    ucb/qa/cppunit/webdav/webdav_local_neon \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,ucb_webdav_propfindcache,\
+$(eval $(call gb_CppunitTest_set_include,ucb_webdav_core,\
     $$(INCLUDE) \
     -I$(SRCDIR)/ucb/source/ucp/webdav-curl \
 ))
-
-$(eval $(call gb_CppunitTest_use_static_libraries,ucb_webdav_propfindcache))
 
 # vim: set noet sw=4 ts=4:

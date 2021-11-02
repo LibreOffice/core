@@ -34,10 +34,7 @@ endif
 ifeq ($(WITH_WEBDAV),curl)
 
 $(eval $(call gb_Module_add_check_targets,ucb,\
-    CppunitTest_ucb_webdav_local_neon \
-    CppunitTest_ucb_webdav_neon_opts \
-    CppunitTest_ucb_webdav_propfindcache \
-    CppunitTest_ucb_webdav_res_access \
+    CppunitTest_ucb_webdav_core \
 ))
 
 endif

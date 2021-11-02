@@ -57,8 +57,6 @@ namespace
     }
 
     CPPUNIT_TEST_SUITE_REGISTRATION( webdav_local_test );
-}                               // namespace rtl_random
-
-CPPUNIT_PLUGIN_IMPLEMENT();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
