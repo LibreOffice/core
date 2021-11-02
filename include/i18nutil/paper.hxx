@@ -32,6 +32,10 @@ struct Locale;
 //!! The values of the following enumerators must correspond to the array position
 //!! of the respective paper size in the file i18nutil/source/utility/paper.cxx
 //!! Thus don't reorder the enum values here without changing the code there as well.
+
+//!! Also the RID_STR_PAPERNAMES array in vcl/inc/print.hrc and the
+//!! PaperIndex array in Printer::GetPaperName() in
+//!! vcl/source/gdi/print.cxx are parallel to this enum.
 enum Paper : unsigned
 {
     PAPER_A0,

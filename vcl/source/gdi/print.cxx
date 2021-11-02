@@ -1387,6 +1387,7 @@ OUString Printer::GetPaperName( Paper ePaper )
     ImplSVData* pSVData = ImplGetSVData();
     if( pSVData->maPaperNames.empty() )
     {
+        // This array must (probably) match exactly the enum Paper in <i18nutil/paper.hxx>
         static const int PaperIndex[] =
         {
             PAPER_A0, PAPER_A1, PAPER_A2, PAPER_A3, PAPER_A4, PAPER_A5, PAPER_B4_ISO, PAPER_B5_ISO,
