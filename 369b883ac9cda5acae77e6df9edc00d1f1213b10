@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52759f34_be4e627a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-11-02T12:33:50Z",
+      "side": 1,
+      "message": "There is a follow-up to this patch [1], but I first need to get it into master\n\n[1] https://gerrit.libreoffice.org/c/core/+/124571\n",
+      "revId": "369b883ac9cda5acae77e6df9edc00d1f1213b10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
