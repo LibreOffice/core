@@ -4630,9 +4630,9 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
                 m_eState = (nSelectedPopupEntry == 1) ? State::ACTIVE : State::HIDDEN;
                 Display(nSelectedPopupEntry == 1);
             }
+            GetParentWindow()->UpdateListBox();
         }
     }
-    GetParentWindow()->UpdateListBox();
 }
 
 void SwContentTree::DeleteOutlineSelections()
@@ -5094,7 +5094,6 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
     if(EditEntryMode::DELETE == nMode)
     {
         m_bViewHasChanged = true;
-        GetParentWindow()->UpdateListBox();
         TimerUpdate(&m_aUpdTimer);
         grab_focus();
     }
