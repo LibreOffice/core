@@ -12,7 +12,7 @@
 #include <DAVResourceAccess.hxx>
 #include <DAVException.hxx>
 
-using namespace webdav_ucp;
+using namespace http_dav_ucp;
 
 namespace
 {

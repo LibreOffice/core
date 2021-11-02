@@ -10,9 +10,9 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
-#include <NeonUri.hxx>
+#include <CurlUri.hxx>
 
-using namespace webdav_ucp;
+using namespace http_dav_ucp;
 
 namespace
 {
@@ -21,26 +21,39 @@ namespace
     {
 
     public:
-        void NeonUriTest();
+        void WebdavUriTest();
+        void WebdavUriTest2();
 
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE( webdav_local_test );
-        CPPUNIT_TEST( NeonUriTest );
+        CPPUNIT_TEST( WebdavUriTest );
+        CPPUNIT_TEST( WebdavUriTest2 );
         CPPUNIT_TEST_SUITE_END();
     };                          // class webdav_local_test
 
-    void webdav_local_test::NeonUriTest()
+    void webdav_local_test::WebdavUriTest()
     {
         //try URL decomposition
-        NeonUri aURI( "http://user%40anothername@server.biz:8040/aService/asegment/nextsegment/check.this?test=true&link=http://anotherserver.com/%3Fcheck=theapplication%26os=linuxintel%26lang=en-US%26version=5.2.0" );
+        CurlUri aURI(u"http://user%40anothername@server.biz:8040/aService/asegment/nextsegment/check.this?test=true&link=http://anotherserver.com/%3Fcheck=theapplication%26os=linuxintel%26lang=en-US%26version=5.2.0" );
         CPPUNIT_ASSERT_EQUAL( OUString( "http" ), aURI.GetScheme() );
         CPPUNIT_ASSERT_EQUAL( OUString( "server.biz" ), aURI.GetHost() );
-        CPPUNIT_ASSERT_EQUAL( OUString( "user%40anothername" ), aURI.GetUserInfo() );
-        CPPUNIT_ASSERT_EQUAL( sal_Int32( 8040 ), aURI.GetPort() );
-        CPPUNIT_ASSERT_EQUAL( OUString( "/aService/asegment/nextsegment/check.this?test=true&link=http://anotherserver.com/%3Fcheck=theapplication%26os=linuxintel%26lang=en-US%26version=5.2.0" ), aURI.GetPath( ) );
+        CPPUNIT_ASSERT_EQUAL( OUString( "user%40anothername" ), aURI.GetUser() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt16( 8040 ), aURI.GetPort() );
+        CPPUNIT_ASSERT_EQUAL( OUString( "/aService/asegment/nextsegment/check.this?test=true&link=http://anotherserver.com/%3Fcheck=theapplication%26os=linuxintel%26lang=en-US%26version=5.2.0" ), aURI.GetRelativeReference() );
+    }
+
+    void webdav_local_test::WebdavUriTest2()
+    {
+        CurlUri aURI(u"https://foo:bar@server.biz:8040/aService#aaa" );
+        CPPUNIT_ASSERT_EQUAL( OUString("https"), aURI.GetScheme() );
+        CPPUNIT_ASSERT_EQUAL( OUString("server.biz"), aURI.GetHost() );
+        CPPUNIT_ASSERT_EQUAL( OUString("foo"), aURI.GetUser() );
+        CPPUNIT_ASSERT_EQUAL( OUString("bar"), aURI.GetPassword() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt16( 8040 ), aURI.GetPort() );
+        CPPUNIT_ASSERT_EQUAL( OUString( "/aService#aaa" ), aURI.GetRelativeReference() );
     }
 
     CPPUNIT_TEST_SUITE_REGISTRATION( webdav_local_test );
