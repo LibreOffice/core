@@ -16,6 +16,23 @@
       "message": "Hello,\n\nCan you review the patch when you have time.\n\nThank you:)",
       "revId": "124243b047e07c689b3348438013302484c9bf67",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12f6f6a9_cfc1f9c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-11-02T12:47:00Z",
+      "side": 1,
+      "message": "For me it works, +2 if you want to restore the patch :)",
+      "revId": "124243b047e07c689b3348438013302484c9bf67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
