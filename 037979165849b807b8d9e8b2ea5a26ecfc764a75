@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db55cde8_9b9ca485",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-11-02T09:25:38Z",
+      "side": 1,
+      "message": "I do confirm this patch fixes the issue",
+      "revId": "037979165849b807b8d9e8b2ea5a26ecfc764a75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
