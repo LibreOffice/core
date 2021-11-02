@@ -622,6 +622,39 @@ void SetPointFont(OutputDevice& rDevice, const vcl::Font& rFont)
         if (vcl::Window* pDefaultWindow = pDefaultDevice->GetOwnerWindow())
             pDefaultWindow->SetPointFont(rDevice, rFont);
 }
+
+ReorderingDropTarget::ReorderingDropTarget(weld::TreeView& rTreeView)
+    : DropTargetHelper(rTreeView.get_drop_target())
+    , m_rTreeView(rTreeView)
+{
+}
+
+sal_Int8 ReorderingDropTarget::AcceptDrop(const AcceptDropEvent& rEvt)
+{
+    // to enable the autoscroll when we're close to the edges
+    m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, nullptr, true);
+    return DND_ACTION_MOVE;
+}
+
+sal_Int8 ReorderingDropTarget::ExecuteDrop(const ExecuteDropEvent& rEvt)
+{
+    weld::TreeView* pSource = m_rTreeView.get_drag_source();
+    // only dragging within the same widget allowed
+    if (!pSource || pSource != &m_rTreeView)
+        return DND_ACTION_NONE;
+
+    std::unique_ptr<weld::TreeIter> xSource(m_rTreeView.make_iterator());
+    if (!m_rTreeView.get_selected(xSource.get()))
+        return DND_ACTION_NONE;
+
+    std::unique_ptr<weld::TreeIter> xTarget(m_rTreeView.make_iterator());
+    int nTargetPos = -1;
+    if (m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, xTarget.get(), true))
+        nTargetPos = m_rTreeView.get_iter_index_in_parent(*xTarget);
+    m_rTreeView.move_subtree(*xSource, nullptr, nTargetPos);
+
+    return DND_ACTION_NONE;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,8 +19,8 @@
 
 #pragma once
 
-#include <vcl/transfer.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/weldutils.hxx>
 
 class SdDrawDocument;
 class SdCustomShow;
@@ -54,18 +54,6 @@ public:
     bool         IsCustomShow() const;
 };
 
-class CustomPagesDropTarget : public DropTargetHelper
-{
-private:
-    weld::TreeView& m_rTreeView;
-
-    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
-    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
-
-public:
-    CustomPagesDropTarget(weld::TreeView& rTreeView);
-};
-
 class SdDefineCustomShowDlg : public weld::GenericDialogController
 {
 private:
@@ -79,7 +67,7 @@ private:
     std::unique_ptr<weld::Button> m_xBtnAdd;
     std::unique_ptr<weld::Button> m_xBtnRemove;
     std::unique_ptr<weld::TreeView> m_xLbCustomPages;
-    std::unique_ptr<CustomPagesDropTarget> m_xDropTargetHelper;
+    std::unique_ptr<weld::ReorderingDropTarget> m_xDropTargetHelper;
     std::unique_ptr<weld::Button> m_xBtnOK;
     std::unique_ptr<weld::Button> m_xBtnCancel;
     std::unique_ptr<weld::Button> m_xBtnHelp;

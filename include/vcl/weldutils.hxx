@@ -21,6 +21,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/formatter.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/transfer.hxx>
 #include <vcl/weld.hxx>
 
 class CalendarWrapper;
@@ -416,6 +417,26 @@ public:
                         = Link<const CommandEvent&, void>());
     void Stop() { m_aRepeat.Stop(); }
     bool IsModKeyPressed() const { return m_bModKey; }
+};
+
+/*
+  If a TreeView is used as a list, rather than a tree, and DnD should just
+  reorder rows, then this can be used to implement that.
+
+  Because the TreeView doesn't want or need subnodes, the drop target can be
+  simply visually indicated as being between rows (the issue of a final drop
+  location of a child of the drop target doesn't arise), and the meaning of
+  what a drop before or after the last row should do is unambigious.
+*/
+class VCL_DLLPUBLIC ReorderingDropTarget : public DropTargetHelper
+{
+protected:
+    weld::TreeView& m_rTreeView;
+    virtual sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt) override;
+    virtual sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt) override;
+
+public:
+    ReorderingDropTarget(weld::TreeView& rTreeView);
 };
 
 // get the row the iterator is on

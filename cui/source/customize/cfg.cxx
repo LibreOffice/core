@@ -3201,39 +3201,16 @@ SvxIconChangeDialog::SvxIconChangeDialog(weld::Window *pWindow, const OUString& 
 }
 
 SvxConfigPageFunctionDropTarget::SvxConfigPageFunctionDropTarget(SvxConfigPage&rPage, weld::TreeView& rTreeView)
-    : DropTargetHelper(rTreeView.get_drop_target())
+    : weld::ReorderingDropTarget(rTreeView)
     , m_rPage(rPage)
-    , m_rTreeView(rTreeView)
 {
 }
 
-sal_Int8 SvxConfigPageFunctionDropTarget::AcceptDrop(const AcceptDropEvent& rEvt)
+sal_Int8 SvxConfigPageFunctionDropTarget::ExecuteDrop(const ExecuteDropEvent& rEvt)
 {
-    // to enable the autoscroll when we're close to the edges
-    m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, nullptr, true);
-    return DND_ACTION_MOVE;
-}
-
-sal_Int8 SvxConfigPageFunctionDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
-{
-    weld::TreeView* pSource = m_rTreeView.get_drag_source();
-    // only dragging within the same widget allowed
-    if (!pSource || pSource != &m_rTreeView)
-        return DND_ACTION_NONE;
-
-    std::unique_ptr<weld::TreeIter> xSource(m_rTreeView.make_iterator());
-    if (!m_rTreeView.get_selected(xSource.get()))
-        return DND_ACTION_NONE;
-
-    std::unique_ptr<weld::TreeIter> xTarget(m_rTreeView.make_iterator());
-    int nTargetPos = -1;
-    if (m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, xTarget.get(), true))
-        nTargetPos = m_rTreeView.get_iter_index_in_parent(*xTarget);
-    m_rTreeView.move_subtree(*xSource, nullptr, nTargetPos);
-
+    sal_Int8 nRet = weld::ReorderingDropTarget::ExecuteDrop(rEvt);
     m_rPage.ListModified();
-
-    return DND_ACTION_NONE;
+    return nRet;;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
