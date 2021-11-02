@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "730b3dc1_7665d886",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-11-02T15:29:40Z",
+      "side": 1,
+      "message": "@Szücsi: very nice fix! The freezing is solved by the latest patch set. The document comparison by TDF will reveal the possible regressions, which could be solved by the upcoming compatibility option.",
+      "revId": "7667a98335be0eb05b9e70a77a4e72a9aa978d80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
