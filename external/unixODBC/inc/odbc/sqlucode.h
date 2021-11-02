@@ -94,7 +94,6 @@ SQLRETURN SQL_API SQLGetCursorNameW(
     SQLSMALLINT        cbCursorMax,
     SQLSMALLINT    *pcbCursor);
 
-#if (ODBCVER >= 0x0300)
 SQLRETURN  SQL_API SQLSetDescFieldW(SQLHDESC DescriptorHandle,
                                       SQLSMALLINT RecNumber,
                                    SQLSMALLINT FieldIdentifier,
@@ -144,7 +143,6 @@ SQLRETURN SQL_API SQLGetDiagRecW(
     SQLSMALLINT    *pcbErrorMsg);
 
 
-#endif
 
 
 SQLRETURN SQL_API SQLPrepareW(
@@ -442,7 +440,6 @@ SQLRETURN SQL_API SQLGetCursorNameA(
     SQLSMALLINT        cbCursorMax,
     SQLSMALLINT    *pcbCursor);
 
-#if (ODBCVER >= 0x0300)
 SQLRETURN SQL_API SQLGetDescFieldA(
     SQLHDESC           hdesc,
     SQLSMALLINT        iRecord,
@@ -491,7 +488,6 @@ SQLRETURN SQL_API SQLGetStmtAttrA(
     SQLINTEGER         cbValueMax,
     SQLINTEGER     *pcbValue);
 
-#endif
 
 SQLRETURN SQL_API   SQLGetTypeInfoA(
     SQLHSTMT            StatementHandle,
