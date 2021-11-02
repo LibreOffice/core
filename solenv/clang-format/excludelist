@@ -14942,6 +14942,7 @@ vcl/source/outdev/bitmap.cxx
 vcl/source/outdev/bitmapex.cxx
 vcl/source/outdev/clipping.cxx
 vcl/source/outdev/curvedshapes.cxx
+vcl/source/outdev/eps.cxx
 vcl/source/outdev/fill.cxx
 vcl/source/outdev/font.cxx
 vcl/source/outdev/gradient.cxx

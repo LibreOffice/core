@@ -707,65 +707,6 @@ bool OutputDevice::ImplIsRecordLayout() const
     return mpOutDevData->mpRecordLayout;
 }
 
-// EPS public function
-
-bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
-                            const GfxLink& rGfxLink, GDIMetaFile* pSubst )
-{
-    bool bDrawn(true);
-
-    if ( mpMetaFile )
-    {
-        GDIMetaFile aSubst;
-
-        if( pSubst )
-            aSubst = *pSubst;
-
-        mpMetaFile->AddAction( new MetaEPSAction( rPoint, rSize, rGfxLink, aSubst ) );
-    }
-
-    if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
-        return bDrawn;
-
-    if( mbOutputClipped )
-        return bDrawn;
-
-    tools::Rectangle aRect( ImplLogicToDevicePixel( tools::Rectangle( rPoint, rSize ) ) );
-
-    if( !aRect.IsEmpty() )
-    {
-        // draw the real EPS graphics
-        if( rGfxLink.GetData() && rGfxLink.GetDataSize() )
-        {
-            if( !mpGraphics && !AcquireGraphics() )
-                return bDrawn;
-            assert(mpGraphics);
-
-            if( mbInitClipRegion )
-                InitClipRegion();
-
-            aRect.Justify();
-            bDrawn = mpGraphics->DrawEPS( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(),
-                         const_cast<sal_uInt8*>(rGfxLink.GetData()), rGfxLink.GetDataSize(), *this );
-        }
-
-        // else draw the substitution graphics
-        if( !bDrawn && pSubst )
-        {
-            GDIMetaFile* pOldMetaFile = mpMetaFile;
-
-            mpMetaFile = nullptr;
-            Graphic(*pSubst).Draw(*this, rPoint, rSize);
-            mpMetaFile = pOldMetaFile;
-        }
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawEPS( rPoint, rSize, rGfxLink, pSubst );
-
-    return bDrawn;
-}
-
 css::awt::DeviceInfo OutputDevice::GetCommonDeviceInfo(Size const& rDevSz) const
 {
     css::awt::DeviceInfo aInfo;
