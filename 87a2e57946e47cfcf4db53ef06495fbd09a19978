@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "585e1dc7_8dc98c47",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-02T08:47:03Z",
+      "side": 1,
+      "message": "doesn\u0027t fix the problem?\n\nwhy not move the entire block of gutter margin code above the loop that inserts into rProperties - and add a big comment above the first insert into rProperties that it invalidates all the pointers.",
+      "revId": "87a2e57946e47cfcf4db53ef06495fbd09a19978",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "462a8b56_fd2c3d9f",
+        "filename": "xmloff/source/style/PageMasterImportPropMapper.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-11-02T08:47:03Z",
+      "side": 1,
+      "message": "the pMargins array has exactly the same problem: it points to elements of rProperties.",
+      "range": {
+        "startLine": 479,
+        "startChar": 12,
+        "endLine": 479,
+        "endChar": 34
+      },
+      "revId": "87a2e57946e47cfcf4db53ef06495fbd09a19978",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
