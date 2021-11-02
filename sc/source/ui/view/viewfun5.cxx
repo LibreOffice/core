@@ -159,6 +159,19 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                         nFirstCol = nLastCol = 0;
                         nFirstRow = nLastRow = 0;
                     }
+
+                    // Extend the range to include the drawing layer objects.
+                    {
+                        const ScDrawLayer* pDraw = rSrcDoc.GetDrawLayer();
+                        SCCOL nPrintEndCol = nFirstCol;
+                        SCROW nPrintEndRow = nFirstRow;
+                        if (pDraw && pDraw->HasObjects() && rSrcDoc.GetPrintArea(nSrcTab, nPrintEndCol, nPrintEndRow, true))
+                        {
+                            nLastCol = std::max<SCCOL>(nLastCol, nPrintEndCol);
+                            nLastRow = std::max<SCROW>(nLastRow, nPrintEndRow);
+                        }
+                    }
+
                     ScClipParam aClipParam(ScRange(nFirstCol, nFirstRow, nSrcTab, nLastCol, nLastRow, nSrcTab), false);
                     rSrcDoc.CopyToClip(aClipParam, pClipDoc.get(), &aSrcMark, false, true);
                     ScGlobal::SetClipDocName( xDocShRef->GetTitle( SFX_TITLE_FULLNAME ) );
