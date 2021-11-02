@@ -34,6 +34,24 @@
       "parentUuid": "7da9bfd9_425a0b6f",
       "revId": "f50611bce5dd0709668cef1ea29b1650ca9b8c23",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c58ec8b4_a4e30f02",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 10367,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-11-02T20:31:21Z",
+      "side": 1,
+      "message": "Jup,  thanks.\n\nconfigures and builds for me then. (system-mdds, system-orcus of course :))",
+      "parentUuid": "974689b8_6923e972",
+      "revId": "f50611bce5dd0709668cef1ea29b1650ca9b8c23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
