@@ -104,6 +104,24 @@
       "parentUuid": "e3ea1377_67ef5207",
       "revId": "23bbff61ac6c93dfb1153d662f93e1f722c9c28a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a7900b5_0fda772f",
+        "filename": "testtools/source/bridgetest/cppobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 976,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-02T19:13:25Z",
+      "side": 1,
+      "message": "\u003e What should help in this specific case (modulo the issue with older Clang, see line 972) is to rewrite this as\n\u003e   Sequence\u003c TestPolyStruct\u003c sal_Bool \u003e \u003e arg32{{true}};\n\nthat should work now, atop \u003chttps://git.libreoffice.org/core/+/6f26a7246456d8989e83d658a211b5d2608568f5%5E%21\u003e \"Tweak loplugin:implicitboolconversion to allow some more bool -\u003e sal_Bool\"",
+      "parentUuid": "186edba8_1759aa0d",
+      "revId": "23bbff61ac6c93dfb1153d662f93e1f722c9c28a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
