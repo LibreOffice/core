@@ -132,7 +132,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/bastyp/sfxresid \
     sfx2/source/commandpopup/CommandPopup \
     sfx2/source/config/evntconf \
-    sfx2/source/control/asyncfunc \
     sfx2/source/control/bindings \
     sfx2/source/control/ctrlitem \
     sfx2/source/control/ctrlfactoryimpl \

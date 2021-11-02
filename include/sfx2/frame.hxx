@@ -171,7 +171,6 @@ class SFX2_DLLPUBLIC SfxUnoAnyItem final : public SfxPoolItem
     css::uno::Any  aValue;
 public:
                                 static SfxPoolItem* CreateDefault();
-                                SfxUnoAnyItem();
                                 SfxUnoAnyItem( sal_uInt16 nWhich, const css::uno::Any& rAny );
     const css::uno::Any&        GetValue() const
                                 { return aValue; }
