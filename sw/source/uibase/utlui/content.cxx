@@ -208,10 +208,10 @@ namespace
 
 SwContent::SwContent(const SwContentType* pCnt, const OUString& rName, tools::Long nYPos) :
     SwTypeNumber(CTYPE_CNT),
-    pParent(pCnt),
-    sContentName(rName),
-    nYPosition(nYPos),
-    bInvisible(false)
+    m_pParent(pCnt),
+    m_sContentName(rName),
+    m_nYPosition(nYPos),
+    m_bInvisible(false)
 {
 }
 

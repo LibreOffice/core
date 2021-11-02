@@ -38,17 +38,17 @@ class SwCursorShell;
 struct DBTextStruct_Impl;
 class SW_DLLPUBLIC SwBaseShell: public SfxShell
 {
-    SwView      &rView;
+    SwView      &m_rView;
 
     // DragMode
     static FlyMode eFrameMode;
 
     // Bug 75078 - if in GetState the async call of GetGraphic returns
     //              synch, the set the state directly into the itemset
-    SfxItemSet*         pGetStateSet;
+    SfxItemSet*         m_pGetStateSet;
 
     // Update-Timer for graphic
-    std::set<sal_uInt16> aGrfUpdateSlots;
+    std::set<sal_uInt16> m_aGrfUpdateSlots;
 
     DECL_LINK( GraphicArrivedHdl, SwCursorShell&, void );
 
@@ -56,9 +56,9 @@ protected:
     SwWrtShell&         GetShell();
     SwWrtShell*         GetShellPtr();
 
-    SwView&      GetView()                       { return rView; }
-    void         SetGetStateSet( SfxItemSet* p ) { pGetStateSet = p; }
-    bool         AddGrfUpdateSlot( sal_uInt16 nSlot ){ return aGrfUpdateSlots.insert( nSlot ).second; }
+    SwView&      GetView()                       { return m_rView; }
+    void         SetGetStateSet( SfxItemSet* p ) { m_pGetStateSet = p; }
+    bool         AddGrfUpdateSlot( sal_uInt16 nSlot ){ return m_aGrfUpdateSlots.insert( nSlot ).second; }
 
     DECL_LINK(    InsertDBTextHdl, void*, void );
 
