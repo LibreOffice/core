@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab7d6b41_0279272f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-02T17:11:19Z",
+      "side": 1,
+      "message": "https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/100300/consoleFull#-16338785152a810015-1db5-427c-9ce2-83b5f06a5284 is wrong - is it possible to avoid this [loplugin:stringstatic] warning?",
+      "revId": "cd80dcd857a645a436c40858e99b9fa67bd1776f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
