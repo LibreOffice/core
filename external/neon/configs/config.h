@@ -1,7 +1,5 @@
 /* Contents kept in sync with config.h.in from neon 0.31.2 */
 
-#include <osl/endian.h>
-
 /* Define if building universal (internal helper macro) */
 /* #undef AC_APPLE_UNIVERSAL_BUILD */
 
@@ -521,14 +519,20 @@
 #undef __EXTENSIONS__
 #endif
 
+/* Always defined to enable GNU extensions */
+#define _GNU_SOURCE 1
+
+/*
+   include osl/endian.h after _GNU_SOURCE because it includes other headers and we need
+   to ensure we get the strerror_r variant that returns char*
+*/
+#include <osl/endian.h>
+
 /* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
    significant byte first (like Motorola and SPARC, unlike Intel). */
 #if defined OSL_BIGENDIAN
 #define WORDS_BIGENDIAN 1
 #endif
-
-/* Always defined to enable GNU extensions */
-#define _GNU_SOURCE 1
 
 /* Define to 1 if on MINIX. */
 /* #undef _MINIX */
