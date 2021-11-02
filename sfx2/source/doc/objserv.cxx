@@ -602,9 +602,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                 // creating dialog is done via virtual method; application will
                 // add its own statistics page
-                std::shared_ptr<SfxRequest> pReq = std::make_shared<SfxRequest>(rReq);
                 std::shared_ptr<SfxDocumentInfoDialog> xDlg(CreateDocumentInfoDialog(rReq.GetFrameWeld(), aSet));
-                SfxTabDialogController::runAsync(xDlg, [this, xDlg, xCmisDoc, pReq](sal_Int32 nResult)
+                auto aFunc = [this, xDlg, xCmisDoc](sal_Int32 nResult, SfxRequest& rRequest)
                 {
                     if (RET_OK == nResult)
                     {
@@ -620,17 +619,31 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                             SetUseUserData( pDocInfoItem->IsUseUserData() );
                             SetUseThumbnailSave( pDocInfoItem-> IsUseThumbnailSave() );
                             // add data from dialog for possible recording purpose
-                            pReq->AppendItem( SfxDocumentInfoItem( GetTitle(),
+                            rRequest.AppendItem( SfxDocumentInfoItem( GetTitle(),
                                 getDocProperties(), aNewCmisProperties, IsUseUserData(), IsUseThumbnailSave() ) );
                         }
-                        pReq->Done();
+                        rRequest.Done();
                     }
                     else
+                    {
                         // nothing done; no recording
-                        pReq->Ignore();
-                });
+                        rRequest.Ignore();
+                    }
+                };
 
-                rReq.Ignore();
+                if (!rReq.IsSynchronCall())
+                {
+                    std::shared_ptr<SfxRequest> pReq = std::make_shared<SfxRequest>(rReq);
+                    SfxTabDialogController::runAsync(xDlg, [pReq, aFunc](sal_Int32 nResult)
+                    {
+                        aFunc(nResult, *pReq);
+                    });
+                    rReq.Ignore();
+                }
+                else
+                {
+                    aFunc(xDlg->run(), rReq);
+                }
             }
 
             return;
