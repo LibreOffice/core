@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "741f593e_a34bf2b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-02T07:01:05Z",
+      "side": 1,
+      "message": "Of course, I\u0027m wrong about return value; indeed, it\u0027s fine to return true here, since the running version is newer than the one recorded earlier, so the tests should run. So please ignore that part of my previous comment :-)",
+      "revId": "ab32d1c01814d576b0b82c99e1849a8a71b12188",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3cba978e_7590b695",
