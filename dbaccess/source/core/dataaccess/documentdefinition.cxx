@@ -1441,16 +1441,14 @@ void ODocumentDefinition::separateOpenCommandArguments( const Sequence< Property
 {
     ::comphelper::NamedValueCollection aOpenCommandArguments( i_rOpenCommandArguments );
 
-    const char* const pObjectDescriptorArgs[] =
+    static const std::u16string_view sObjectDescriptorArgs[] = { u"RecoveryStorage" };
+    for (const auto& rObjectDescriptorArg : sObjectDescriptorArgs)
     {
-        "RecoveryStorage"
-    };
-    for (const char* pObjectDescriptorArg : pObjectDescriptorArgs)
-    {
-        if ( aOpenCommandArguments.has( pObjectDescriptorArg ) )
+        const OUString sObjectDescriptorArg(rObjectDescriptorArg);
+        if ( aOpenCommandArguments.has( sObjectDescriptorArg ) )
         {
-            o_rEmbeddedObjectDescriptor.put( pObjectDescriptorArg, aOpenCommandArguments.get( pObjectDescriptorArg ) );
-            aOpenCommandArguments.remove( pObjectDescriptorArg );
+            o_rEmbeddedObjectDescriptor.put( sObjectDescriptorArg, aOpenCommandArguments.get( sObjectDescriptorArg ) );
+            aOpenCommandArguments.remove( sObjectDescriptorArg );
         }
     }
 

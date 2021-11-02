@@ -1170,7 +1170,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                             eType = E_QUERY;
                             break;
                         case ID_NEW_QUERY_DESIGN:
-                            aCreationArgs.put( OUString(PROPERTY_GRAPHICAL_DESIGN), true );
+                            aCreationArgs.put( PROPERTY_GRAPHICAL_DESIGN, true );
                             [[fallthrough]];
                         case ID_NEW_QUERY_SQL:
                             eType = E_QUERY;
@@ -1208,7 +1208,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         QueryDesigner aDesigner( getORB(), this, getFrame(), true );
 
                         ::comphelper::NamedValueCollection aCreationArgs;
-                        aCreationArgs.put( OUString(PROPERTY_GRAPHICAL_DESIGN), ID_NEW_VIEW_DESIGN == _nId );
+                        aCreationArgs.put( PROPERTY_GRAPHICAL_DESIGN, ID_NEW_VIEW_DESIGN == _nId );
 
                         const Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
                         const Reference< XComponent > xComponent = aDesigner.createNew( xDataSource, aCreationArgs );
@@ -1821,7 +1821,7 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
                 if ( bAddViewTypeArg )
                 {
                     const bool bQueryGraphicalMode =( _nInstigatorCommand != SID_DB_APP_EDIT_SQL_VIEW );
-                    aArguments.put( OUString(PROPERTY_GRAPHICAL_DESIGN), bQueryGraphicalMode );
+                    aArguments.put( PROPERTY_GRAPHICAL_DESIGN, bQueryGraphicalMode );
                 }
 
             }
@@ -1829,8 +1829,8 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
             {
                 pDesigner.reset( new ResultSetBrowser( getORB(), this, m_aCurrentFrame.getFrame(), _eType == E_TABLE ) );
 
-                if ( !aArguments.has( OUString(PROPERTY_SHOWMENU) ) )
-                    aArguments.put( OUString(PROPERTY_SHOWMENU), makeAny( true ) );
+                if ( !aArguments.has( PROPERTY_SHOWMENU ) )
+                    aArguments.put( PROPERTY_SHOWMENU, makeAny( true ) );
 
                 aDataSource <<= getDatabaseName();
             }
@@ -2622,7 +2622,7 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
         {
             // to get the 'modified' for the data source
             ::comphelper::NamedValueCollection aLayoutInfo( m_xDataSource->getPropertyValue( PROPERTY_LAYOUTINFORMATION ) );
-            if ( aLayoutInfo.has( OUString(INFO_PREVIEW) ) )
+            if ( aLayoutInfo.has( INFO_PREVIEW ) )
             {
                 const sal_Int32 nPreviewMode( aLayoutInfo.getOrDefault( INFO_PREVIEW, sal_Int32(0) ) );
                 m_ePreviewMode = static_cast< PreviewMode >( nPreviewMode );

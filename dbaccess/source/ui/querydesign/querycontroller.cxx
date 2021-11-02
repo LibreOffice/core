@@ -245,7 +245,7 @@ void SAL_CALL OQueryController::getFastPropertyValue( Any& o_rValue, sal_Int32 i
     {
         ::comphelper::NamedValueCollection aCurrentDesign;
         aCurrentDesign.put( "GraphicalDesign", isGraphicalDesign() );
-        aCurrentDesign.put( OUString(PROPERTY_ESCAPE_PROCESSING), m_bEscapeProcessing );
+        aCurrentDesign.put( PROPERTY_ESCAPE_PROCESSING, m_bEscapeProcessing );
 
         if ( isGraphicalDesign() )
         {
@@ -735,11 +735,11 @@ void OQueryController::impl_initialize()
     if ( aCurrentQueryDesignProps.hasElements() )
     {
         ::comphelper::NamedValueCollection aCurrentQueryDesign( aCurrentQueryDesignProps );
-        if ( aCurrentQueryDesign.has( OUString(PROPERTY_GRAPHICAL_DESIGN) ) )
+        if ( aCurrentQueryDesign.has( PROPERTY_GRAPHICAL_DESIGN ) )
         {
             aCurrentQueryDesign.get_ensureType( PROPERTY_GRAPHICAL_DESIGN, m_bGraphicalDesign );
         }
-        if ( aCurrentQueryDesign.has( OUString(PROPERTY_ESCAPE_PROCESSING) ) )
+        if ( aCurrentQueryDesign.has( PROPERTY_ESCAPE_PROCESSING ) )
         {
             aCurrentQueryDesign.get_ensureType( PROPERTY_ESCAPE_PROCESSING, m_bEscapeProcessing );
         }
