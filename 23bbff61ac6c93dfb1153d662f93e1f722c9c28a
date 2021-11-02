@@ -122,6 +122,24 @@
       "parentUuid": "186edba8_1759aa0d",
       "revId": "23bbff61ac6c93dfb1153d662f93e1f722c9c28a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05363330_ba980fee",
+        "filename": "testtools/source/bridgetest/cppobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 976,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-02T21:16:07Z",
+      "side": 1,
+      "message": "Thank you!",
+      "parentUuid": "0a7900b5_0fda772f",
+      "revId": "23bbff61ac6c93dfb1153d662f93e1f722c9c28a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
