@@ -53,39 +53,33 @@ namespace dbaui
     {
         /// one of the items from dsitems.hxx
         ItemID      nItemID;
-        const char* pAsciiFeatureName;
+        OUString pAsciiFeatureName;
     };
 
-    }
-
     // global tables
-    static const FeatureMapping* lcl_getFeatureMappings()
-    {
-        static const FeatureMapping s_aMappings[] = {
-            { DSID_AUTORETRIEVEENABLED,     "GeneratedValues" },
-            { DSID_AUTOINCREMENTVALUE,      "GeneratedValues" },
-            { DSID_AUTORETRIEVEVALUE,       "GeneratedValues" },
-            { DSID_SQL92CHECK,              "UseSQL92NamingConstraints" },
-            { DSID_APPEND_TABLE_ALIAS,      "AppendTableAliasInSelect" },
-            { DSID_AS_BEFORE_CORRNAME,      "UseKeywordAsBeforeAlias" },
-            { DSID_ENABLEOUTERJOIN,         "UseBracketedOuterJoinSyntax" },
-            { DSID_IGNOREDRIVER_PRIV,       "IgnoreDriverPrivileges" },
-            { DSID_PARAMETERNAMESUBST,      "ParameterNameSubstitution" },
-            { DSID_SUPPRESSVERSIONCL,       "DisplayVersionColumns" },
-            { DSID_CATALOG,                 "UseCatalogInSelect" },
-            { DSID_SCHEMA,                  "UseSchemaInSelect" },
-            { DSID_INDEXAPPENDIX,           "UseIndexDirectionKeyword" },
-            { DSID_DOSLINEENDS,             "UseDOSLineEnds" },
-            { DSID_BOOLEANCOMPARISON,       "BooleanComparisonMode" },
-            { DSID_CHECK_REQUIRED_FIELDS,   "FormsCheckRequiredFields" },
-            { DSID_IGNORECURRENCY,          "IgnoreCurrency" },
-            { DSID_ESCAPE_DATETIME,         "EscapeDateTime" },
-            { DSID_PRIMARY_KEY_SUPPORT,     "PrimaryKeySupport" },
-            { DSID_RESPECTRESULTSETTYPE,    "RespectDriverResultSetType" },
-            { DSID_MAX_ROW_SCAN,            "MaxRowScan" },
-            { 0, nullptr }
-        };
-        return s_aMappings;
+    const FeatureMapping s_aMappings[] = {
+        { DSID_AUTORETRIEVEENABLED,     "GeneratedValues" },
+        { DSID_AUTOINCREMENTVALUE,      "GeneratedValues" },
+        { DSID_AUTORETRIEVEVALUE,       "GeneratedValues" },
+        { DSID_SQL92CHECK,              "UseSQL92NamingConstraints" },
+        { DSID_APPEND_TABLE_ALIAS,      "AppendTableAliasInSelect" },
+        { DSID_AS_BEFORE_CORRNAME,      "UseKeywordAsBeforeAlias" },
+        { DSID_ENABLEOUTERJOIN,         "UseBracketedOuterJoinSyntax" },
+        { DSID_IGNOREDRIVER_PRIV,       "IgnoreDriverPrivileges" },
+        { DSID_PARAMETERNAMESUBST,      "ParameterNameSubstitution" },
+        { DSID_SUPPRESSVERSIONCL,       "DisplayVersionColumns" },
+        { DSID_CATALOG,                 "UseCatalogInSelect" },
+        { DSID_SCHEMA,                  "UseSchemaInSelect" },
+        { DSID_INDEXAPPENDIX,           "UseIndexDirectionKeyword" },
+        { DSID_DOSLINEENDS,             "UseDOSLineEnds" },
+        { DSID_BOOLEANCOMPARISON,       "BooleanComparisonMode" },
+        { DSID_CHECK_REQUIRED_FIELDS,   "FormsCheckRequiredFields" },
+        { DSID_IGNORECURRENCY,          "IgnoreCurrency" },
+        { DSID_ESCAPE_DATETIME,         "EscapeDateTime" },
+        { DSID_PRIMARY_KEY_SUPPORT,     "PrimaryKeySupport" },
+        { DSID_RESPECTRESULTSETTYPE,    "RespectDriverResultSetType" },
+        { DSID_MAX_ROW_SCAN,            "MaxRowScan" },
+    };
     }
 
     static const FeatureSet& lcl_getFeatureSet( const OUString& _rURL )
@@ -101,12 +95,10 @@ namespace dbaui
                 FeatureSet aCurrentSet;
                 const ::comphelper::NamedValueCollection aCurrentFeatures( aDriverConfig.getFeatures( pattern ).getNamedValues() );
 
-                const FeatureMapping* pFeatureMapping = lcl_getFeatureMappings();
-                while ( pFeatureMapping->pAsciiFeatureName )
+                for ( const FeatureMapping& rFeatureMapping : s_aMappings )
                 {
-                    if ( aCurrentFeatures.has( pFeatureMapping->pAsciiFeatureName ) )
-                        aCurrentSet.put( pFeatureMapping->nItemID );
-                    ++pFeatureMapping;
+                    if ( aCurrentFeatures.has( rFeatureMapping.pAsciiFeatureName ) )
+                        aCurrentSet.put( rFeatureMapping.nItemID );
                 }
 
                 tmp[ pattern ] = aCurrentSet;

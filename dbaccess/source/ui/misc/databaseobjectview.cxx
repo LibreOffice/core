@@ -146,14 +146,14 @@ namespace dbaui
         Reference<XDataSource> xDataSource;
         if ( _aDataSource >>= sDataSource )
         {
-            i_rDispatchArgs.put( OUString(PROPERTY_DATASOURCENAME), sDataSource );
+            i_rDispatchArgs.put( PROPERTY_DATASOURCENAME, sDataSource );
         }
         else if ( _aDataSource >>= xDataSource )
         {
-            i_rDispatchArgs.put( OUString(PROPERTY_DATASOURCE), xDataSource );
+            i_rDispatchArgs.put( PROPERTY_DATASOURCE, xDataSource );
         }
 
-        i_rDispatchArgs.put( OUString(PROPERTY_ACTIVE_CONNECTION), getConnection() );
+        i_rDispatchArgs.put( PROPERTY_ACTIVE_CONNECTION, getConnection() );
     }
 
     // QueryDesigner
@@ -173,16 +173,16 @@ namespace dbaui
         const bool bGraphicalDesign = i_rDispatchArgs.getOrDefault( PROPERTY_GRAPHICAL_DESIGN, true );
         const bool bEditViewAsSQLCommand = ( m_nCommandType == CommandType::TABLE ) && !bGraphicalDesign;
 
-        i_rDispatchArgs.put( OUString(PROPERTY_COMMAND_TYPE), m_nCommandType );
+        i_rDispatchArgs.put( PROPERTY_COMMAND_TYPE, m_nCommandType );
 
         if ( bIncludeQueryName )
         {
-            i_rDispatchArgs.put( OUString(PROPERTY_COMMAND), _rObjectName );
+            i_rDispatchArgs.put( PROPERTY_COMMAND, _rObjectName );
         }
 
         if ( bEditViewAsSQLCommand )
         {
-            i_rDispatchArgs.put( OUString(PROPERTY_ESCAPE_PROCESSING), false );
+            i_rDispatchArgs.put( PROPERTY_ESCAPE_PROCESSING, false );
         }
     }
 
@@ -199,7 +199,7 @@ namespace dbaui
 
         if ( !_rObjectName.isEmpty() )
         {
-            i_rDispatchArgs.put( OUString(PROPERTY_CURRENTTABLE), _rObjectName );
+            i_rDispatchArgs.put( PROPERTY_CURRENTTABLE, _rObjectName );
         }
     }
 
@@ -258,15 +258,15 @@ namespace dbaui
         if ( m_bTable )
             ::dbtools::qualifiedNameComponents( getConnection()->getMetaData(), _rQualifiedName, sCatalog, sSchema, sTable, ::dbtools::EComposeRule::InDataManipulation );
 
-        i_rDispatchArgs.put( OUString(PROPERTY_COMMAND_TYPE), (m_bTable ? CommandType::TABLE : CommandType::QUERY) );
-        i_rDispatchArgs.put( OUString(PROPERTY_COMMAND), _rQualifiedName );
-        i_rDispatchArgs.put( OUString(PROPERTY_ENABLE_BROWSER), false );
+        i_rDispatchArgs.put( PROPERTY_COMMAND_TYPE, (m_bTable ? CommandType::TABLE : CommandType::QUERY) );
+        i_rDispatchArgs.put( PROPERTY_COMMAND, _rQualifiedName );
+        i_rDispatchArgs.put( PROPERTY_ENABLE_BROWSER, false );
 
         if ( m_bTable )
         {
-            i_rDispatchArgs.put( OUString(PROPERTY_UPDATE_CATALOGNAME), sCatalog );
-            i_rDispatchArgs.put( OUString(PROPERTY_UPDATE_SCHEMANAME), sSchema );
-            i_rDispatchArgs.put( OUString(PROPERTY_UPDATE_TABLENAME), sTable );
+            i_rDispatchArgs.put( PROPERTY_UPDATE_CATALOGNAME, sCatalog );
+            i_rDispatchArgs.put( PROPERTY_UPDATE_SCHEMANAME, sSchema );
+            i_rDispatchArgs.put( PROPERTY_UPDATE_TABLENAME, sTable );
         }
     }
 

@@ -138,8 +138,8 @@ OUString SAL_CALL DBTypeDetection::detect( css::uno::Sequence< css::beans::Prope
                 {
                     // After fixing of the i88522 issue ( use the new file locking for database files ) the stream from the type detection can be used further
                     // for now the file should be reopened to have read/write access
-                    aMedia.remove( OUString(  "InputStream" ) );
-                    aMedia.remove( OUString(  "Stream" ) );
+                    aMedia.remove( "InputStream" );
+                    aMedia.remove( "Stream" );
                     aMedia >>= Descriptor;
                     try
                     {
@@ -374,7 +374,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
         else
         {
             ::comphelper::NamedValueCollection aCreationArgs;
-            aCreationArgs.put( OUString(INFO_POOLURL), sSalvagedURL );
+            aCreationArgs.put( INFO_POOLURL, sSalvagedURL );
             xDocumentDataSource.set( xDatabaseContext->createInstanceWithArguments( aCreationArgs.getWrappedNamedValues() ), UNO_QUERY_THROW );
         }
 
