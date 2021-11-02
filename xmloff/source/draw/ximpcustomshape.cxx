@@ -426,7 +426,7 @@ static bool GetNextParameter( css::drawing::EnhancedCustomShapeParameter& rParam
 
 static void GetPosition3D( std::vector< css::beans::PropertyValue >& rDest,                     // e.g. draw:extrusion-viewpoint
                         std::string_view rValue, const EnhancedCustomShapeTokenEnum eDestProp,
-                        SvXMLUnitConverter& rUnitConverter )
+                        const SvXMLUnitConverter& rUnitConverter )
 {
     drawing::Position3D aPosition3D;
     if ( rUnitConverter.convertPosition3D( aPosition3D, rValue ) )

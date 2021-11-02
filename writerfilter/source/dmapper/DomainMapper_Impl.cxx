@@ -4171,7 +4171,7 @@ static bool lcl_FindInCommand(
     return bRet;
 }
 
-static OUString lcl_trim(OUString& sValue)
+static OUString lcl_trim(const OUString& sValue)
 {
     // it seems, all kind of quotation marks are allowed around index type identifiers
     // TODO apply this on bookmarks, too, if needed

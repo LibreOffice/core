@@ -233,7 +233,7 @@ private:
     // selected is returned
     SVT_DLLPRIVATE ValueSetItem* ImplGetDrawSelectItem(sal_uInt16 nItemId, const bool bFocus, tools::Rectangle& rRect);
     SVT_DLLPRIVATE void         ImplDrawSelect(vcl::RenderContext& rRenderContext,
-                                               const tools::Rectangle& rRect, ValueSetItem* pItem,
+                                               const tools::Rectangle& rRect, const ValueSetItem* pItem,
                                                const bool bFocus, const bool bDrawSel,
                                                const bool bSelected, const bool bHover);
     SVT_DLLPRIVATE void         ImplDrawSelect(vcl::RenderContext& rRenderContext);

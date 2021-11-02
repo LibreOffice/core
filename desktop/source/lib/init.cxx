@@ -2189,7 +2189,7 @@ void CallbackFlushHandler::enqueueUpdatedTypes()
     }
 }
 
-void CallbackFlushHandler::enqueueUpdatedType( int type, SfxViewShell* viewShell, int viewId )
+void CallbackFlushHandler::enqueueUpdatedType( int type, const SfxViewShell* viewShell, int viewId )
 {
     OString payload = viewShell->getLOKPayload( type, viewId );
     if(payload.isEmpty())

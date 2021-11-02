@@ -106,7 +106,7 @@ FadeEffect SdPage::GetFadeEffect() const
 }
 
 /** callback from the sd::View when a new paragraph for one object on this page is created */
-void SdPage::onParagraphInserted( ::Outliner* pOutliner, Paragraph const * pPara, SdrObject* pObj )
+void SdPage::onParagraphInserted( const ::Outliner* pOutliner, Paragraph const * pPara, SdrObject* pObj )
 {
     if( mxAnimationNode.is() )
     {
@@ -121,7 +121,7 @@ void SdPage::onParagraphInserted( ::Outliner* pOutliner, Paragraph const * pPara
 }
 
 /** callback from the sd::View when a paragraph from one object on this page is removed */
-void SdPage::onParagraphRemoving( ::Outliner* pOutliner, Paragraph const * pPara, SdrObject* pObj )
+void SdPage::onParagraphRemoving( const ::Outliner* pOutliner, Paragraph const * pPara, SdrObject* pObj )
 {
     if( mxAnimationNode.is() )
     {

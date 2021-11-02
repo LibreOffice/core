@@ -291,9 +291,11 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
     {
         // check if we're inside a CXXCtorInitializer
         auto parentsRange = compiler.getASTContext().getParents(*stmt);
+        auto it = parentsRange.begin();
         if ( parentsRange.begin() != parentsRange.end())
         {
-            if (auto cxxConstructorDecl = dyn_cast_or_null<CXXConstructorDecl>(parentsRange.begin()->get<Decl>()))
+            const Decl *decl = it->get<Decl>();
+            if (auto cxxConstructorDecl = dyn_cast_or_null<CXXConstructorDecl>(decl))
             {
                 for ( auto cxxCtorInitializer : cxxConstructorDecl->inits())
                 {
@@ -317,18 +319,18 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
                     }
                 }
             }
-            if (auto varDecl = dyn_cast_or_null<VarDecl>(parentsRange.begin()->get<Decl>()))
+            if (auto varDecl = dyn_cast_or_null<VarDecl>(decl))
             {
                 return isOkForParameter(varDecl->getType());
             }
         }
-        parmVarDecl->dump();
-        stmt->dump();
-        report(
-             DiagnosticsEngine::Warning,
-             "no parent?",
-              compat::getBeginLoc(stmt))
-              << stmt->getSourceRange();
+//        parmVarDecl->dump();
+//        stmt->dump();
+//        report(
+//             DiagnosticsEngine::Warning,
+//             "no parent?",
+//              compat::getBeginLoc(stmt))
+//              << stmt->getSourceRange();
         return false;
     }
 

@@ -304,7 +304,7 @@ OUString HtmlState::SetLink( const OUString& aLink, const OUString& aTarget )
 namespace
 {
 
-OUString getParagraphStyle( SdrOutliner* pOutliner, sal_Int32 nPara )
+OUString getParagraphStyle( const SdrOutliner* pOutliner, sal_Int32 nPara )
 {
     SfxItemSet aParaSet( pOutliner->GetParaAttribs( nPara ) );
 

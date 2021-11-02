@@ -150,7 +150,7 @@ void XMLEventExport::ExportExt( Reference<XNameAccess> const & rAccess )
 
 /// export a singular event and write <office:events> container
 void XMLEventExport::ExportSingleEvent(
-    Sequence<PropertyValue>& rEventValues,
+    const Sequence<PropertyValue>& rEventValues,
     const OUString& rApiEventName,
     bool bUseWhitespace )
 {

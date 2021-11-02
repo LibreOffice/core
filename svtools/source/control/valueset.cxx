@@ -1233,7 +1233,7 @@ ValueSetItem* ValueSet::ImplGetDrawSelectItem(sal_uInt16 nItemId, const bool bFo
 }
 
 void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext,
-                              const tools::Rectangle& rRect, ValueSetItem* pItem,
+                              const tools::Rectangle& rRect, const ValueSetItem* pItem,
                               const bool bFocus, const bool bDrawSel,
                               const bool bSelected, const bool bHover)
 {
