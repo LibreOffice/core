@@ -207,7 +207,6 @@ bool PrintDialog::PrintPreviewWindow::Command( const CommandEvent& rEvt )
 
 void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPreview,
                                                   const Size& i_rOrigSize,
-                                                  std::u16string_view i_rPaperName,
                                                   const OUString& i_rReplacement,
                                                   sal_Int32 i_nDPIX,
                                                   sal_Int32 i_nDPIY,
@@ -235,12 +234,18 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     OUStringBuffer aBuf;
     aBuf.append( aNumText + " " );
     aBuf.appendAscii( eUnit == MapUnit::MapMM ? "mm" : "in" );
-    if( !i_rPaperName.empty() )
+
+    // Look up the paper name from the dimensions
+    PaperInfo aPaperInfoFromSize(i_rOrigSize.getWidth(), i_rOrigSize.getHeight());
+    aPaperInfoFromSize.doSloppyFit( true );
+
+    if (aPaperInfoFromSize.getPaper() != PAPER_USER)
     {
         aBuf.append( " (" );
-        aBuf.append( i_rPaperName );
+        aBuf.append( Printer::GetPaperName(aPaperInfoFromSize.getPaper()) );
         aBuf.append( ')' );
     }
+
     maHorzText = aBuf.makeStringAndClear();
 
     aNumText = rLocWrap.getNum( aLogicPaperSize.Height(), nDigits );
@@ -944,7 +949,6 @@ void PrintDialog::preparePreview( bool i_bMayUseCache )
     if ( !hasPreview() )
     {
         mxPreview->setPreview( aMtf, aCurPageSize,
-                            Printer::GetPaperName( mePaper ),
                             maNoPreviewStr,
                             aPrt->GetDPIX(), aPrt->GetDPIY(),
                             aPrt->GetPrinterOptions().IsConvertToGreyscales()
@@ -979,7 +983,6 @@ void PrintDialog::preparePreview( bool i_bMayUseCache )
     }
 
     mxPreview->setPreview( aMtf, aCurPageSize,
-                                Printer::GetPaperName( mePaper ),
                                 nPages > 0 ? OUString() : maNoPageStr,
                                 aPrt->GetDPIX(), aPrt->GetDPIY(),
                                 aPrt->GetPrinterOptions().IsConvertToGreyscales()
