@@ -274,7 +274,7 @@ public:
     { return TraverseCompoundAssignOperator(expr); }
 #endif
 
-    bool TraverseCXXStdInitializerListExpr(CXXStdInitializerListExpr * expr);
+    bool TraverseInitListExpr(InitListExpr * expr);
 
     bool TraverseReturnStmt(ReturnStmt * stmt);
 
@@ -626,36 +626,15 @@ bool ImplicitBoolConversion::TraverseCompoundAssignOperator(CompoundAssignOperat
     }
 }
 
-bool ImplicitBoolConversion::TraverseCXXStdInitializerListExpr(
-    CXXStdInitializerListExpr * expr)
-{
-    // Must be some std::initializer_list<T>; check whether T is sal_Bool (i.e.,
-    // unsigned char) [TODO: check for real sal_Bool instead]:
-    auto t = expr->getType();
-    if (auto et = dyn_cast<ElaboratedType>(t)) {
-        t = et->desugar();
-    }
-    auto ts = t->getAs<TemplateSpecializationType>();
-    if (ts == nullptr
-        || !ts->getArg(0).getAsType()->isSpecificBuiltinType(
-            clang::BuiltinType::UChar))
-    {
-        return RecursiveASTVisitor::TraverseCXXStdInitializerListExpr(expr);
-    }
-    // Avoid warnings for code like
-    //
-    //  Sequence<sal_Bool> arBool({true, false, true});
-    //
-    auto e = dyn_cast<InitListExpr>(
-        ignoreParenAndTemporaryMaterialization(expr->getSubExpr()));
-    if (e == nullptr) {
-        return RecursiveASTVisitor::TraverseCXXStdInitializerListExpr(expr);
-    }
+bool ImplicitBoolConversion::TraverseInitListExpr(InitListExpr * expr) {
     nested.push(std::vector<ImplicitCastExpr const *>());
-    bool ret = RecursiveASTVisitor::TraverseCXXStdInitializerListExpr(expr);
+    auto const e = expr->isSemanticForm() ? expr : expr->getSemanticForm();
+    auto const ret = TraverseSynOrSemInitListExpr(e, nullptr);
     assert(!nested.empty());
     for (auto i: nested.top()) {
-        if (std::find(e->begin(), e->end(), i) == e->end()) {
+        if (std::find(e->begin(), e->end(), i) == e->end()
+            || !i->getType()->isSpecificBuiltinType(clang::BuiltinType::UChar))
+        {
             reportWarning(i);
         }
     }
@@ -857,31 +836,38 @@ void ImplicitBoolConversion::checkCXXConstructExpr(
         if (j != expr->arg_end()) {
             TemplateSpecializationType const * t1 = expr->getType()->
                 getAs<TemplateSpecializationType>();
-            SubstTemplateTypeParmType const * t2 = nullptr;
-            CXXConstructorDecl const * d = expr->getConstructor();
-            if (d->getNumParams() == expr->getNumArgs()) { //TODO: better check
-                t2 = getAsSubstTemplateTypeParmType(
-                    d->getParamDecl(j - expr->arg_begin())->getType()
-                    .getNonReferenceType());
-            }
-            if (t1 != nullptr && t2 != nullptr) {
-                TemplateDecl const * td
-                    = t1->getTemplateName().getAsTemplateDecl();
-                if (td != nullptr) {
-                    TemplateParameterList const * ps
-                        = td->getTemplateParameters();
-                    auto i = std::find(
-                        ps->begin(), ps->end(),
-                        t2->getReplacedParameter()->getDecl());
-                    if (i != ps->end()) {
-                        if (ps->size() == t1->getNumArgs()) { //TODO
-                            TemplateArgument const & arg = t1->getArg(
-                                i - ps->begin());
-                            if (arg.getKind() == TemplateArgument::Type
-                                && (loplugin::TypeCheck(arg.getAsType())
-                                    .AnyBoolean()))
-                            {
-                                continue;
+            if (t1 == nullptr) {
+                //TODO:
+                if (i->getType()->isSpecificBuiltinType(clang::BuiltinType::UChar)) {
+                    continue;
+                }
+            } else {
+                SubstTemplateTypeParmType const * t2 = nullptr;
+                CXXConstructorDecl const * d = expr->getConstructor();
+                if (d->getNumParams() == expr->getNumArgs()) { //TODO: better check
+                    t2 = getAsSubstTemplateTypeParmType(
+                        d->getParamDecl(j - expr->arg_begin())->getType()
+                        .getNonReferenceType());
+                }
+                if (t2 != nullptr) {
+                    TemplateDecl const * td
+                        = t1->getTemplateName().getAsTemplateDecl();
+                    if (td != nullptr) {
+                        TemplateParameterList const * ps
+                            = td->getTemplateParameters();
+                        auto k = std::find(
+                            ps->begin(), ps->end(),
+                            t2->getReplacedParameter()->getDecl());
+                        if (k != ps->end()) {
+                            if (ps->size() == t1->getNumArgs()) { //TODO
+                                TemplateArgument const & arg = t1->getArg(
+                                    k - ps->begin());
+                                if (arg.getKind() == TemplateArgument::Type
+                                    && (loplugin::TypeCheck(arg.getAsType())
+                                        .AnyBoolean()))
+                                {
+                                    continue;
+                                }
                             }
                         }
                     }
