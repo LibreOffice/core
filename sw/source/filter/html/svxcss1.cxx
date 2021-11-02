@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
 #include <cmath>
 #include <memory>
 #include <stdlib.h>
@@ -2855,9 +2856,7 @@ static void ParseCSS1_length( const CSS1Expression *pExpr,
         break;
 
     case CSS1_PERCENTAGE:
-        rLength = static_cast<long>(pExpr->GetNumber());
-        if( rLength > 100 )
-            rLength = 100;
+        rLength = static_cast<long>(std::min(pExpr->GetNumber(), 100.0));
         rLengthType = SVX_CSS1_LTYPE_PERCENTAGE;
         break;
 
