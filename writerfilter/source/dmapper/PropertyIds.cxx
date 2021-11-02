@@ -109,6 +109,7 @@ OUString getPropertyName( PropertyIds eId )
         case PROP_TOP_MARGIN          :    sName = "TopMargin"; break;
         case PROP_BOTTOM_MARGIN       :    sName = "BottomMargin"; break;
         case PROP_FIRST_LINE_OFFSET:    sName = "FirstLineOffset"; break;
+        case PROP_FIRST_IS_SHARED: sName = "FirstIsShared"; break;
         case PROP_LEFT_BORDER           :    sName = "LeftBorder";break;
         case PROP_RIGHT_BORDER          :    sName = "RightBorder";break;
         case PROP_TOP_BORDER            :    sName = "TopBorder";break;
@@ -162,10 +163,12 @@ OUString getPropertyName( PropertyIds eId )
         case PROP_ALTERNATIVE_TEXT     :    sName = "AlternativeText"; break;
         case PROP_HEADER_TEXT_LEFT     :    sName = "HeaderTextLeft"; break;
         case PROP_HEADER_TEXT          :    sName = "HeaderText"; break;
+        case PROP_HEADER_TEXT_FIRST    :    sName = "HeaderTextFirst"; break;
         case PROP_HEADER_IS_SHARED     :    sName = "HeaderIsShared"; break;
         case PROP_HEADER_IS_ON         :    sName = "HeaderIsOn"; break;
         case PROP_FOOTER_TEXT_LEFT     :    sName = "FooterTextLeft"; break;
         case PROP_FOOTER_TEXT          :    sName = "FooterText"; break;
+        case PROP_FOOTER_TEXT_FIRST    :    sName = "FooterTextFirst"; break;
         case PROP_FOOTER_IS_SHARED     :    sName = "FooterIsShared"; break;
         case PROP_FOOTER_IS_ON         :    sName = "FooterIsOn"; break;
         case PROP_FOOTNOTE_COUNTING    :    sName = "FootnoteCounting"; break;

@@ -301,6 +301,7 @@ private:
 
     static void CopyHeaderFooter( const css::uno::Reference< css::beans::XPropertySet >& xPrevStyle,
                                   const css::uno::Reference< css::beans::XPropertySet >& xStyle,
+                                  bool bOmitFirstHeader = false, bool bOmitFirstFooter = false,
                                   bool bOmitRightHeader = false, bool bOmitLeftHeader = false,
                                   bool bOmitRightFooter = false, bool bOmitLeftFooter = false );
 
@@ -355,7 +356,7 @@ public:
     // @throws css::lang::IllegalArgumentException
     // @throws css::lang::WrappedTargetException
     // @throws css::uno::RuntimeException
-    void InheritOrFinalizePageStyles( DomainMapper_Impl& rDM_Impl );
+    void InheritOrFinalizePageStyles(bool bFirst, DomainMapper_Impl& rDM_Impl);
 
     void SetBorder( BorderPosition ePos, sal_Int32 nLineDistance, const css::table::BorderLine2& rBorderLine, bool bShadow );
     void SetBorderApply( BorderApply nSet ) { m_eBorderApply = nSet; }
