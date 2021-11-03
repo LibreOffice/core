@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2d83fd1_cc86e6f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-03T21:56:37Z",
+      "side": 1,
+      "message": "Rene: just reminded about unixodbc package.\nI downloaded latest version from official website ftp://ftp.unixodbc.org/pub/unixODBC/unixODBC-2.3.9.tar.gz and noticed the file:\n./unixODBC-2.3.9/include/sql.h\nDo you think I should revert this patch and the previous one about tdf#1432499 because of a possible side-effect or no pb at all?\nThe goal of the bugtracker is to decruftify some files.",
+      "revId": "0464b86787da269be7b16a6f1f124d774f78fa97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
