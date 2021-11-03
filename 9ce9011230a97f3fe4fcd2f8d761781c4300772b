@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11d307ae_bb819cb7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-11-03T11:06:40Z",
+      "side": 1,
+      "message": "Please don\u0027t do this \"those members/fields can be made private\", you\u0027re losing information for no good reason.\n",
+      "revId": "9ce9011230a97f3fe4fcd2f8d761781c4300772b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

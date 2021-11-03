@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43d3b05b_56560f0e",
+        "filename": "basctl/source/inc/dlgedobj.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-11-03T11:06:40Z",
+      "side": 0,
+      "message": "Please don\u0027t do this. While it\u0027s implicit, it\u0027s there for readability.",
+      "revId": "8a4bcae71053b2db33d80036a0707edbe1ddb270",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27137112_06422794",
+        "filename": "basctl/source/inc/dlgedobj.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-11-03T11:06:40Z",
+      "side": 0,
+      "message": "Neither this. Protected and private are conceptually different, and even though it technically doesn\u0027t matter now that you\u0027ve mechanically changed the class to final just because nobody inherits from the at the moment, you\u0027re losing the design information that may be useful in case somebody later decides to inherit from it after all. This is like if git didn\u0027t keep deleted files at all just because right now nobody cares about them. See the discussion on #libreoffice-dev.",
+      "revId": "8a4bcae71053b2db33d80036a0707edbe1ddb270",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
