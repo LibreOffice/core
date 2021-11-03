@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include <sal/macros.h>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -900,7 +904,7 @@ SvxUnoPropertyMapProvider::~SvxUnoPropertyMapProvider()
 
 const SfxItemPropertyMapEntry* SvxUnoPropertyMapProvider::GetMap(sal_uInt16 nPropertyId)
 {
-    DBG_ASSERT(nPropertyId < SVXMAP_END, "Id ?" );
+    assert(nPropertyId < SVXMAP_END);
     if(!aMapArr[nPropertyId]) {
         switch(nPropertyId) {
             case SVXMAP_SHAPE: aMapArr[SVXMAP_SHAPE]=ImplGetSvxShapePropertyMap(); break;
