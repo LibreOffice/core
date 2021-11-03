@@ -30,7 +30,7 @@ namespace sd {
 /** This class implements the SlideSorter specific part of the
     controller.
  */
-class SdUnoSlideView
+class SdUnoSlideView final
     : private cppu::BaseMutex,
       public DrawSubControllerInterfaceBase
 {

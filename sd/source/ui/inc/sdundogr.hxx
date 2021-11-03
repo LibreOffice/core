@@ -25,7 +25,7 @@
 #include <memory>
 #include <vector>
 
-class SD_DLLPUBLIC SdUndoGroup : public SdUndoAction
+class SD_DLLPUBLIC SdUndoGroup final : public SdUndoAction
 {
     std::vector<std::unique_ptr<SdUndoAction>> aCtn;
 public:

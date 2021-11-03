@@ -27,7 +27,7 @@ namespace sd {
 class View;
 class ViewShell;
 
-class TextObjectBar
+class TextObjectBar final
     : public SfxShell
 {
 public:

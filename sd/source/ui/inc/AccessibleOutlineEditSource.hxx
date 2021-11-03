@@ -42,7 +42,7 @@ namespace accessibility
         @see SvxEditSource
         @see SvxViewForwarder
     */
-    class AccessibleOutlineEditSource : public SvxEditSource, public SvxViewForwarder, public SfxBroadcaster, public SfxListener
+    class AccessibleOutlineEditSource final : public SvxEditSource, public SvxViewForwarder, public SfxBroadcaster, public SfxListener
     {
     public:
         /// Create an SvxEditSource interface for the given Outliner

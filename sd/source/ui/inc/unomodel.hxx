@@ -368,7 +368,7 @@ public:
 *                                                                      *
 ***********************************************************************/
 
-class SdDocLinkTargets : public ::cppu::WeakImplHelper< css::container::XNameAccess,
+class SdDocLinkTargets final : public ::cppu::WeakImplHelper< css::container::XNameAccess,
                                                          css::lang::XServiceInfo , css::lang::XComponent >
 {
 private:

@@ -367,7 +367,7 @@ private:
 typedef std::shared_ptr< InteractiveSequence > InteractiveSequencePtr;
 typedef std::vector< InteractiveSequencePtr > InteractiveSequenceVector;
 
-class SAL_DLLPUBLIC_RTTI MainSequence : public EffectSequenceHelper, public ISequenceListener
+class SD_DLLPUBLIC MainSequence final : public EffectSequenceHelper, public ISequenceListener
 {
     friend class UndoAnimation;
     friend class MainSequenceRebuildGuard;
@@ -407,7 +407,7 @@ public:
     virtual sal_Int32 getOffsetFromEffect( const CustomAnimationEffectPtr& xEffect ) const override;
     virtual CustomAnimationEffectPtr getEffectFromOffset( sal_Int32 nOffset ) const override;
 
-protected:
+private:
     /** permits rebuilds until unlockRebuilds() is called. All rebuild calls during a locked sequence are
         process after unlockRebuilds() call. lockRebuilds() and unlockRebuilds() calls can be nested. */
     void lockRebuilds();

@@ -27,7 +27,7 @@ class SdDrawDocument;
 
 /************************************************************************/
 
-class SD_DLLPUBLIC SdHeaderFooterUndoAction : public SdUndoAction
+class SD_DLLPUBLIC SdHeaderFooterUndoAction final : public SdUndoAction
 {
     SdPage*     mpPage;
 

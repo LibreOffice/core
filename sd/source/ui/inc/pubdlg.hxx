@@ -47,7 +47,7 @@ template <class E> class Sequence;
 // Html-Export Autopilot
 // *********************************************************************
 // should turn this into a wizard
-class SdPublishingDlg : public weld::GenericDialogController
+class SdPublishingDlg final : public weld::GenericDialogController
 {
 private:
     // page 1 controls

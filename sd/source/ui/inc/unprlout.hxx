@@ -26,7 +26,7 @@
 class SdDrawDocument;
 class SdPage;
 
-class SdPresentationLayoutUndoAction : public SdUndoAction
+class SdPresentationLayoutUndoAction final : public SdUndoAction
 {
     OUString        aOldLayoutName;
     OUString        aNewLayoutName;

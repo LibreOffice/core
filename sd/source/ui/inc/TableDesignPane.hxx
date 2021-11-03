@@ -48,7 +48,7 @@ enum TableCheckBox : sal_uInt16
     CB_COUNT            = CB_BANDED_COLUMNS + 1
 };
 
-class TableValueSet : public ValueSet
+class TableValueSet final : public ValueSet
 {
 private:
     bool m_bModal;
@@ -94,7 +94,7 @@ private:
     css::uno::Reference< css::container::XIndexAccess > mxTableFamily;
 };
 
-class TableDesignPane : public PanelLayout
+class TableDesignPane final : public PanelLayout
                       , public sfx2::sidebar::ILayoutableWindow
 {
 private:

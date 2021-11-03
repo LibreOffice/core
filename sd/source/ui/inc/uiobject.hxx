@@ -11,7 +11,7 @@
 #include <vcl/uitest/uiobject.hxx>
 #include "Window.hxx"
 
-class ImpressWindowUIObject : public WindowUIObject
+class ImpressWindowUIObject final : public WindowUIObject
 {
 public:
     ImpressWindowUIObject(const VclPtr<sd::Window>& xWindow);
@@ -26,10 +26,9 @@ public:
 
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
-protected:
+private:
     virtual OUString get_name() const override;
 
-private:
     VclPtr<sd::Window> mxWindow;
 };
 

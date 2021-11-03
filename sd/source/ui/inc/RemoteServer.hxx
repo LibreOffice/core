@@ -46,7 +46,7 @@ namespace sd
 
     struct ClientInfoInternal;
 
-    class RemoteServer : public salhelper::Thread
+    class RemoteServer final : public salhelper::Thread
     {
         public:
             // Internal setup

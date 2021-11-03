@@ -270,7 +270,7 @@ public:
 *                                                                      *
 ***********************************************************************/
 
-class SdPageLinkTargets : public ::cppu::WeakImplHelper< css::container::XNameAccess,
+class SdPageLinkTargets final : public ::cppu::WeakImplHelper< css::container::XNameAccess,
                                                   css::lang::XServiceInfo >
 {
 private:

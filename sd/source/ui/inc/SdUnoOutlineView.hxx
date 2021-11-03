@@ -28,7 +28,7 @@ class OutlineViewShell;
 
 /** This class implements the OutlineViewShell specific part of the controller.
 */
-class SdUnoOutlineView
+class SdUnoOutlineView final
     : private cppu::BaseMutex,
       public DrawSubControllerInterfaceBase
 {

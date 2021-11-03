@@ -32,7 +32,7 @@ namespace sd::slidesorter {
 
 class SlideSorter;
 
-class SAL_DLLPUBLIC_RTTI SlideSorterViewShell
+class SAL_DLLPUBLIC_RTTI SlideSorterViewShell final
     : public ViewShell
 {
     friend class controller::SlotManager;
@@ -190,14 +190,13 @@ public:
     */
     virtual bool RelocateToParentWindow (vcl::Window* pParentWindow) override;
 
-protected:
+private:
 
     /** Override this method to handle a missing tool bar correctly.
         This is the case when the slide sorter is not the main view shell.
     */
     virtual SfxUndoManager* ImpGetUndoManager() const override;
 
-private:
     std::shared_ptr<SlideSorter> mpSlideSorter;
     bool mbIsArrangeGUIElementsPending;
 

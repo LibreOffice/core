@@ -43,7 +43,7 @@ namespace sd {
 
 namespace sd {
 
-class TabBarControl : public InterimItemWindow
+class TabBarControl final : public InterimItemWindow
 {
 public:
     TabBarControl(vcl::Window* pParentWindow, const ::rtl::Reference<ViewTabBar>& rpViewTabBar);
@@ -69,7 +69,7 @@ typedef ::cppu::WeakComponentImplHelper <
 
 /** Tab control for switching between views in the center pane.
 */
-class ViewTabBar
+class ViewTabBar final
     : private sd::MutexOwner,
       public ViewTabBarInterfaceBase
 {

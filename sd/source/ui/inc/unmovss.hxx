@@ -25,7 +25,7 @@
 
 class SdDrawDocument;
 
-class SdMoveStyleSheetsUndoAction : public SdUndoAction
+class SdMoveStyleSheetsUndoAction final : public SdUndoAction
 {
     StyleSheetCopyResultVector          maStyles;
     std::vector< SdStyleSheetVector >   maListOfChildLists;

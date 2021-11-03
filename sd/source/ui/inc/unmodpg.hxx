@@ -26,7 +26,7 @@
 class SdDrawDocument;
 class SdPage;
 
-class ModifyPageUndoAction : public SdUndoAction
+class ModifyPageUndoAction final : public SdUndoAction
 {
     SdPage*         mpPage;
     OUString        maOldName;
@@ -52,7 +52,7 @@ public:
     virtual void Redo() override;
 };
 
-class RenameLayoutTemplateUndoAction : public SdUndoAction
+class RenameLayoutTemplateUndoAction final : public SdUndoAction
 {
 public:
     RenameLayoutTemplateUndoAction(

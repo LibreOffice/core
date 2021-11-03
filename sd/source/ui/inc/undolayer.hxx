@@ -26,7 +26,7 @@ class SdrLayer;
 
 /************************************************************************/
 
-class SdLayerModifyUndoAction : public SdUndoAction
+class SdLayerModifyUndoAction final : public SdUndoAction
 {
 
 public:
