@@ -30,8 +30,6 @@
 #include <sfx2/lokhelper.hxx>
 #include <comphelper/lok.hxx>
 
-#define TWIPS_PER_PIXEL 15
-
 using namespace ::com::sun::star;
 
 namespace
@@ -307,20 +305,25 @@ void ChartWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
         if (pEditWin)
         {
             MapMode aCWMapMode = GetMapMode();
-            double fXScale( aCWMapMode.GetScaleX() );
-            double fYScale( aCWMapMode.GetScaleY() );
+            constexpr auto p = o3tl::getConversionMulDiv(o3tl::Length::px, o3tl::Length::twip);
+            const auto& scaleX = aCWMapMode.GetScaleX();
+            const auto& scaleY = aCWMapMode.GetScaleY();
+            const auto nXNum = p.first * scaleX.GetDenominator();
+            const auto nXDen = p.second * scaleX.GetNumerator();
+            const auto nYNum = p.first * scaleY.GetDenominator();
+            const auto nYDen = p.second * scaleY.GetNumerator();
 
             if (!IsMapModeEnabled())
             {
-                aRectangle.SetLeft( aRectangle.Left() / fXScale );
-                aRectangle.SetRight( aRectangle.Right() / fXScale );
-                aRectangle.SetTop( aRectangle.Top() / fYScale );
-                aRectangle.SetBottom( aRectangle.Bottom() / fYScale );
+                aRectangle.SetLeft( o3tl::convert(aRectangle.Left(), scaleX.GetDenominator(), scaleX.GetNumerator()) );
+                aRectangle.SetRight( o3tl::convert(aRectangle.Right(), scaleX.GetDenominator(), scaleX.GetNumerator()) );
+                aRectangle.SetTop( o3tl::convert(aRectangle.Top(), scaleY.GetDenominator(), scaleY.GetNumerator()) );
+                aRectangle.SetBottom( o3tl::convert(aRectangle.Bottom(), scaleY.GetDenominator(), scaleY.GetNumerator()) );
             }
 
             Point aOffset = this->GetOffsetPixelFrom(*pEditWin);
-            aOffset.setX( aOffset.X() * (TWIPS_PER_PIXEL / fXScale) );
-            aOffset.setY( aOffset.Y() * (TWIPS_PER_PIXEL / fYScale) );
+            aOffset.setX( o3tl::convert(aOffset.X(), nXNum, nXDen) );
+            aOffset.setY( o3tl::convert(aOffset.Y(), nYNum, nYDen) );
 
             aRectangle = tools::Rectangle(aRectangle.TopLeft() + aOffset, aRectangle.GetSize());
         }
@@ -374,14 +377,20 @@ tools::Rectangle ChartWindow::GetBoundingBox()
         // In all cases, the following code fragment
         // returns the chart bounding box in twips.
         MapMode aCWMapMode = GetMapMode();
-        double fXScale( aCWMapMode.GetScaleX() );
-        double fYScale( aCWMapMode.GetScaleY() );
+        constexpr auto p = o3tl::getConversionMulDiv(o3tl::Length::px, o3tl::Length::twip);
+        const auto& scaleX = aCWMapMode.GetScaleX();
+        const auto& scaleY = aCWMapMode.GetScaleY();
+        const auto nXNum = p.first * scaleX.GetDenominator();
+        const auto nXDen = p.second * scaleX.GetNumerator();
+        const auto nYNum = p.first * scaleY.GetDenominator();
+        const auto nYDen = p.second * scaleY.GetNumerator();
+
         Point aOffset = GetOffsetPixelFrom(*pRootWin);
-        aOffset.setX( aOffset.X() * (TWIPS_PER_PIXEL / fXScale) );
-        aOffset.setY( aOffset.Y() * (TWIPS_PER_PIXEL / fYScale) );
+        aOffset.setX( o3tl::convert(aOffset.X(), nXNum, nXDen) );
+        aOffset.setY( o3tl::convert(aOffset.Y(), nYNum, nYDen) );
         Size aSize = GetSizePixel();
-        aSize.setWidth( aSize.Width() * (TWIPS_PER_PIXEL / fXScale) );
-        aSize.setHeight( aSize.Height() * (TWIPS_PER_PIXEL / fYScale) );
+        aSize.setWidth( o3tl::convert(aSize.Width(), nXNum, nXDen) );
+        aSize.setHeight( o3tl::convert(aSize.Height(), nYNum, nYDen) );
         aBBox = tools::Rectangle(aOffset, aSize);
     }
     return aBBox;

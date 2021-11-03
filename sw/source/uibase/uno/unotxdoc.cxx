@@ -166,8 +166,6 @@
 #include <IDocumentOutlineNodes.hxx>
 #include <SearchResultLocator.hxx>
 
-#define TWIPS_PER_PIXEL 15
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::i18n;
@@ -3178,11 +3176,12 @@ void SwXTextDocument::setClientZoom(int nTilePixelWidth_, int /*nTilePixelHeight
         return;
 
     SwViewShell* pWrtViewShell = m_pDocShell->GetWrtShell();
-    double fScale = nTilePixelWidth_ * TWIPS_PER_PIXEL / (nTileTwipWidth_ * 1.0);
+    double fScale = 100.0 * nTilePixelWidth_ / nTileTwipWidth_
+                    * o3tl::convert(1.0, o3tl::Length::px, o3tl::Length::twip);
     SwViewOption aOption(*(pWrtViewShell->GetViewOptions()));
-    if (aOption.GetZoom() != fScale * 100)
+    if (aOption.GetZoom() != fScale)
     {
-        aOption.SetZoom(fScale * 100);
+        aOption.SetZoom(fScale);
         pWrtViewShell->ApplyViewOptions(aOption);
 
         // Changing the zoom value doesn't always trigger the updating of
@@ -3489,7 +3488,7 @@ void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int 
     }
 
     SwViewOption aOption(*(pWrtViewShell->GetViewOptions()));
-    double fScale = aOption.GetZoom() / (TWIPS_PER_PIXEL * 100.0);
+    double fScale = aOption.GetZoom() / o3tl::convert(100.0, o3tl::Length::px, o3tl::Length::twip);
 
     // check if the user hit a chart which is being edited by this view
     SfxViewShell* pViewShell = m_pDocShell->GetView();
@@ -3580,7 +3579,7 @@ void SwXTextDocument::setGraphicSelection(int nType, int nX, int nY)
 
     SwViewShell* pWrtViewShell = m_pDocShell->GetWrtShell();
     SwViewOption aOption(*(pWrtViewShell->GetViewOptions()));
-    double fScale = aOption.GetZoom() / (TWIPS_PER_PIXEL * 100.0);
+    double fScale = aOption.GetZoom() / o3tl::convert(100.0, o3tl::Length::px, o3tl::Length::twip);
 
     SfxViewShell* pViewShell = m_pDocShell->GetView();
     LokChartHelper aChartHelper(pViewShell);

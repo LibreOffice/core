@@ -142,6 +142,9 @@ template <int N> constexpr auto prepareMDArray(const m_and_d (&mdBase)[N])
     return a;
 }
 
+// A generic template used for fundamental arithmetic types
+template <typename U> constexpr sal_Int64 md(U i, U /*j*/) { return i; }
+
 // Length units implementation
 
 // Array of conversion quotients for mm, used to build final conversion table. Entries
