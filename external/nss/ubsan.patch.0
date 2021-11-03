@@ -1,3 +1,12 @@
+--- nss/lib/base/item.c
++++ nss/lib/base/item.c
+@@ -182,5 +182,5 @@
+         return PR_FALSE;
+     }
+ 
+-    return nsslibc_memequal(one->data, two->data, one->size, statusOpt);
++    return one->size == 0 || nsslibc_memequal(one->data, two->data, one->size, statusOpt);
+ }
 --- nss/lib/softoken/legacydb/pk11db.c
 +++ nss/lib/softoken/legacydb/pk11db.c
 @@ -65,7 +65,7 @@
