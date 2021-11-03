@@ -89,12 +89,6 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
     SAL_INFO("vcl.pdfwriter", "PDFObjectCopier::copyExternalResource: " << rObject.GetObjectValue()
                                                                         << " -> " << nObject);
 
-    SvMemoryStream* pObjectStream = rObject.GetStreamBuffer();
-    if (!pObjectStream)
-    {
-        pObjectStream = &rDocBuffer;
-    }
-
     OStringBuffer aLine;
     aLine.append(nObject);
     aLine.append(" 0 obj\n");
