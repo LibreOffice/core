@@ -20,6 +20,7 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
+#include "scdllapi.h"
 
 //  conversion programmatic <-> display (visible) name
 //  currently, the core always has the visible names
@@ -46,7 +47,8 @@ class ScStyleNameConversion
 {
 public:
     static OUString DisplayToProgrammaticName(const OUString& rDispName, SfxStyleFamily nType);
-    static OUString ProgrammaticToDisplayName(const OUString& rProgName, SfxStyleFamily nType);
+    static SC_DLLPUBLIC OUString ProgrammaticToDisplayName(const OUString& rProgName,
+                                                           SfxStyleFamily nType);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

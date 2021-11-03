@@ -49,6 +49,7 @@
 
 #include <stylesbuffer.hxx>
 #include <orcus/exception.hpp>
+#include <stylehelper.hxx>
 
 using namespace com::sun::star;
 
@@ -2176,7 +2177,9 @@ size_t ScOrcusStyles::commit_cell_style()
 
     ScStyleSheetPool* pPool = mrFactory.getDoc().getDoc().GetStyleSheetPool();
     SfxStyleSheetBase& rBase = pPool->Make(maCurrentCellStyle.maName, SfxStyleFamily::Para);
-    rBase.SetParent(maCurrentCellStyle.maParentName);
+    // Need to convert the parent name to localized UI name, see tdf#139205.
+    rBase.SetParent(ScStyleNameConversion::ProgrammaticToDisplayName(maCurrentCellStyle.maParentName,
+                                                                     SfxStyleFamily::Para));
     SfxItemSet& rSet = rBase.GetItemSet();
 
     xf& rXf = maCellStyleXfs[maCurrentCellStyle.mnXFId];
