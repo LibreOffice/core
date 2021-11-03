@@ -52,6 +52,24 @@
       "parentUuid": "eea458ee_34955928",
       "revId": "5c40ebef723b10dab56c33277f3d56cf93c17814",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1e332f4_2efc958e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-03T10:10:05Z",
+      "side": 1,
+      "message": "\u003e \u003e * DevGuide is still hosted on openoffice.org - we have no chance of updating documentation as long as it\u0027s not on our infra. We should have the DevGuide on our infra before doing such a change. Then all our documentation needs updating to reflect this change.\n\u003e \n\u003e good point; will wait for progress there\n\n@Ilmari, if I understand correctly you are involved in providing a DevGuid for LO.  Is there some place where its progress/schedule are discussed?",
+      "parentUuid": "ad6feb88_bdfe37bc",
+      "revId": "5c40ebef723b10dab56c33277f3d56cf93c17814",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
