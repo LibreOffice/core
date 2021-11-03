@@ -2172,6 +2172,12 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
 
             --aIdx; // move before insertion
 
+            // adjust empty nodes later
+            SwTextNode const*const pIsEmptyNode(nOffset < SwNodeOffset(0)
+                           ? aInsPos.nNode.GetNode().GetTextNode()
+                           : aIdx.GetNode().GetTextNode());
+            bool bIsEmptyNode = pIsEmptyNode && pIsEmptyNode->Len() == 0;
+
             getIDocumentContentOperations().CopyRange(aPam, aInsPos, SwCopyFlags::CheckPosInFly);
 
             // now delete all the delete redlines that were copied
@@ -2281,6 +2287,51 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
             aPam.GetBound().nContent.Assign(aPam.GetBound().nNode.GetNode().GetContentNode(), 0);
             aPam.GetBound(false).nContent.Assign(aPam.GetBound(false).nNode.GetNode().GetContentNode(), 0);
             sw::UpdateFramesForAddDeleteRedline(*this, aPam);
+
+            // avoid setting empty nodes to tracked insertion
+            if ( bIsEmptyNode )
+            {
+                SwRedlineTable& rTable = getIDocumentRedlineAccess().GetRedlineTable();
+                SwRedlineTable::size_type nRedlPosWithEmpty =
+                    getIDocumentRedlineAccess().GetRedlinePos( pStt->nNode.GetNode(), RedlineType::Insert );
+                if ( SwRedlineTable::npos != nRedlPosWithEmpty )
+                {
+                    pOwnRedl = rTable[nRedlPosWithEmpty];
+                    SwPosition *pRPos = nOffset < SwNodeOffset(0) ? pOwnRedl->End() : pOwnRedl->Start();
+                    SwNodeIndex aIdx2 ( pRPos->nNode );
+                    SwTextNode const*const pEmptyNode0(aIdx2.GetNode().GetTextNode());
+                    if ( nOffset < SwNodeOffset(0) )
+                    {
+                        // move up
+                        --aIdx2;
+                        SwTextNode const*const pEmptyNode(aIdx2.GetNode().GetTextNode());
+                        if ( pEmptyNode && pEmptyNode->Len() == 0 )
+                        {
+                            --(pRPos->nNode);
+                            pRPos->nContent.Assign( aIdx2.GetNode().GetContentNode(), 0 );
+                        }
+                    }
+                    else if ( pEmptyNode0 && pEmptyNode0->Len() == 0 )
+                    {
+                        // move down
+                        ++aIdx2;
+                        SwTextNode const*const pEmptyNode(aIdx2.GetNode().GetTextNode());
+                        if (pEmptyNode)
+                        {
+                            ++(pRPos->nNode);
+                            pRPos->nContent.Assign( aIdx2.GetNode().GetContentNode(), 0 );
+                        }
+                    }
+
+                    // sort redlines, when the trimmed range results bad redline order
+                    if ( nRedlPosWithEmpty + 1 < rTable.size() &&
+                            *rTable[nRedlPosWithEmpty + 1] < *rTable[nRedlPosWithEmpty] )
+                    {
+                        rTable.Remove(nRedlPosWithEmpty);
+                        rTable.Insert(pOwnRedl);
+                    }
+                }
+            }
 
             getIDocumentRedlineAccess().SetRedlineFlags( eOld );
             GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
