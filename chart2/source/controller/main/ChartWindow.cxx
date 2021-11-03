@@ -315,15 +315,11 @@ void ChartWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
 
             if (!IsMapModeEnabled())
             {
-                aRectangle.SetLeft( o3tl::convert(aRectangle.Left(), scaleX.GetDenominator(), scaleX.GetNumerator()) );
-                aRectangle.SetRight( o3tl::convert(aRectangle.Right(), scaleX.GetDenominator(), scaleX.GetNumerator()) );
-                aRectangle.SetTop( o3tl::convert(aRectangle.Top(), scaleY.GetDenominator(), scaleY.GetNumerator()) );
-                aRectangle.SetBottom( o3tl::convert(aRectangle.Bottom(), scaleY.GetDenominator(), scaleY.GetNumerator()) );
+                aRectangle = aRectangle.scale(scaleX.GetDenominator(), scaleX.GetNumerator(),
+                                              scaleY.GetDenominator(), scaleY.GetNumerator());
             }
 
-            Point aOffset = this->GetOffsetPixelFrom(*pEditWin);
-            aOffset.setX( o3tl::convert(aOffset.X(), nXNum, nXDen) );
-            aOffset.setY( o3tl::convert(aOffset.Y(), nYNum, nYDen) );
+            Point aOffset = this->GetOffsetPixelFrom(*pEditWin).scale(nXNum, nXDen, nYNum, nYDen);
 
             aRectangle = tools::Rectangle(aRectangle.TopLeft() + aOffset, aRectangle.GetSize());
         }

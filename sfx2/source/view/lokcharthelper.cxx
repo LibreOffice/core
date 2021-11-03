@@ -141,12 +141,8 @@ tools::Rectangle LokChartHelper::GetChartBoundingBox()
                     const auto nYNum = p.first * scaleY.GetDenominator();
                     const auto nYDen = p.second * scaleY.GetNumerator();
 
-                    Point aOffset = pWindow->GetOffsetPixelFrom(*pRootWin);
-                    aOffset.setX( o3tl::convert(aOffset.X(), nXNum, nXDen) );
-                    aOffset.setY( o3tl::convert(aOffset.Y(), nYNum, nYDen) );
-                    Size aSize = pWindow->GetSizePixel();
-                    aSize.setWidth( o3tl::convert(aSize.Width(), nXNum, nXDen) );
-                    aSize.setHeight( o3tl::convert(aSize.Height(), nYNum, nYDen) );
+                    Point aOffset = pWindow->GetOffsetPixelFrom(*pRootWin).scale(nXNum, nXDen, nYNum, nYDen);
+                    Size aSize = pWindow->GetSizePixel().scale(nXNum, nXDen, nYNum, nYDen);
                     aBBox = tools::Rectangle(aOffset, aSize);
                 }
             }

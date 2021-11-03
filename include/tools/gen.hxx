@@ -106,6 +106,10 @@ public:
     Pair const &        toPair() const { return *this; }
     Pair &              toPair() { return *this; }
 
+    // Scales relative to 0,0
+    constexpr inline Point scale(sal_Int64 nMulX, sal_Int64 nDivX,
+                                 sal_Int64 nMulY, sal_Int64 nDivY) const;
+
     using Pair::toString;
 };
 
@@ -173,14 +177,19 @@ inline bool operator !=(Point const & p1, Point const & p2)
     return !(p1 == p2);
 }
 
+constexpr inline Point Point::scale(sal_Int64 nMulX, sal_Int64 nDivX, sal_Int64 nMulY, sal_Int64 nDivY) const
+{
+    return Point(o3tl::convert(getX(), nMulX, nDivX),
+                 o3tl::convert(getY(), nMulY, nDivY));
+}
+
 namespace o3tl
 {
 
 constexpr Point convert(const Point& rPoint, o3tl::Length eFrom, o3tl::Length eTo)
 {
-    return Point(
-            o3tl::convert(rPoint.getX(), eFrom, eTo),
-            o3tl::convert(rPoint.getY(), eFrom, eTo));
+    const auto [num, den] = o3tl::getConversionMulDiv(eFrom, eTo);
+    return rPoint.scale(num, den, num, den);
 }
 
 } // end o3tl
@@ -233,6 +242,9 @@ public:
     friend inline Size operator-( const Size &rVal1, const Size &rVal2 );
     friend inline Size operator*( const Size &rVal1, const tools::Long nVal2 );
     friend inline Size operator/( const Size &rVal1, const tools::Long nVal2 );
+
+    constexpr inline Size scale(sal_Int64 nMulX, sal_Int64 nDivX,
+                                sal_Int64 nMulY, sal_Int64 nDivY) const;
 
 };
 
@@ -294,14 +306,20 @@ inline Size operator/( const Size &rVal1, const tools::Long nVal2 )
     return Size( rVal1.nA/nVal2, rVal1.nB/nVal2 );
 }
 
+constexpr inline Size Size::scale(sal_Int64 nMulX, sal_Int64 nDivX,
+                                  sal_Int64 nMulY, sal_Int64 nDivY) const
+{
+    return Size(o3tl::convert(Width(), nMulX, nDivX),
+                o3tl::convert(Height(), nMulY, nDivY));
+}
+
 namespace o3tl
 {
 
 constexpr Size convert(const Size& rSize, o3tl::Length eFrom, o3tl::Length eTo)
 {
-        return Size(
-            o3tl::convert(rSize.Width(), eFrom, eTo),
-            o3tl::convert(rSize.Height(), eFrom, eTo));
+    const auto [num, den] = o3tl::getConversionMulDiv(eFrom, eTo);
+    return rSize.scale(num, den, num, den);
 }
 
 } // end o3tl
@@ -595,6 +613,10 @@ public:
     void                SaturatingSetPosX(tools::Long x);
     void                SaturatingSetPosY(tools::Long y);
 
+    // Scales relative to 0,0
+    constexpr inline tools::Rectangle scale(sal_Int64 nMulX, sal_Int64 nDivX,
+                                            sal_Int64 nMulY, sal_Int64 nDivY) const;
+
 private:
     tools::Long nLeft = 0;
     tools::Long nTop = 0;
@@ -718,20 +740,27 @@ inline Rectangle operator - ( const Rectangle& rRect, const Point& rPt )
 
 }
 
+constexpr inline tools::Rectangle tools::Rectangle::scale(sal_Int64 nMulX, sal_Int64 nDivX,
+                                                          sal_Int64 nMulY, sal_Int64 nDivY) const
+{
+    // 1. Create an empty rectangle with correct left and top
+    tools::Rectangle aRect(o3tl::convert(Left(), nMulX, nDivX),
+                           o3tl::convert(Top(), nMulY, nDivY));
+    // 2. If source has width/height, set respective right and bottom
+    if (!IsWidthEmpty())
+        aRect.SetRight(o3tl::convert(Right(), nMulX, nDivX));
+    if (!IsHeightEmpty())
+        aRect.SetBottom(o3tl::convert(Bottom(), nMulY, nDivY));
+    return aRect;
+}
+
 namespace o3tl
 {
 
 constexpr tools::Rectangle convert(const tools::Rectangle& rRectangle, o3tl::Length eFrom, o3tl::Length eTo)
 {
-    // 1. Create an empty rectangle with correct left and top
-    tools::Rectangle aRect(o3tl::convert(rRectangle.Left(), eFrom, eTo),
-                           o3tl::convert(rRectangle.Top(), eFrom, eTo));
-    // 2. If source has width/height, set respective right and bottom
-    if (!rRectangle.IsWidthEmpty())
-        aRect.SetRight(o3tl::convert(rRectangle.Right(), eFrom, eTo));
-    if (!rRectangle.IsHeightEmpty())
-        aRect.SetBottom(o3tl::convert(rRectangle.Bottom(), eFrom, eTo));
-    return aRect;
+    const auto [num, den] = o3tl::getConversionMulDiv(eFrom, eTo);
+    return rRectangle.scale(num, den, num, den);
 }
 
 } // end o3tl
