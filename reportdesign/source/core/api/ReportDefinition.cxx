@@ -2486,9 +2486,8 @@ uno::Reference< frame::XTitle > OReportDefinition::impl_getTitleHelper_throw()
     if ( ! m_pImpl->m_xTitleHelper.is ())
     {
         uno::Reference< frame::XDesktop2 >    xDesktop = frame::Desktop::create(m_aProps->m_xContext);
-        uno::Reference< frame::XModel >       xThis(static_cast< frame::XModel* >(this), uno::UNO_QUERY_THROW);
 
-        m_pImpl->m_xTitleHelper = new ::framework::TitleHelper( m_aProps->m_xContext, xThis,
+        m_pImpl->m_xTitleHelper = new ::framework::TitleHelper( m_aProps->m_xContext, uno::Reference< frame::XModel >(this),
                                     uno::Reference<frame::XUntitledNumbers>(xDesktop, uno::UNO_QUERY_THROW) );
     }
 
@@ -2504,11 +2503,10 @@ uno::Reference< frame::XUntitledNumbers > OReportDefinition::impl_getUntitledHel
 
     if ( ! m_pImpl->m_xNumberedControllers.is ())
     {
-        uno::Reference< frame::XModel >    xThis(static_cast< frame::XModel* >(this), uno::UNO_QUERY_THROW);
         rtl::Reference<::comphelper::NumberedCollection>  pHelper = new ::comphelper::NumberedCollection();
         m_pImpl->m_xNumberedControllers = pHelper;
 
-        pHelper->setOwner          (xThis);
+        pHelper->setOwner          (uno::Reference< frame::XModel >(this));
         pHelper->setUntitledPrefix (" : ");
     }
 

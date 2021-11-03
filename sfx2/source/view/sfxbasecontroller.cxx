@@ -1425,9 +1425,9 @@ Reference< frame::XTitle > SfxBaseController::impl_getTitleHelper ()
     {
         Reference< frame::XModel >           xModel           = getModel ();
         Reference< frame::XUntitledNumbers > xUntitledProvider(xModel                                       , uno::UNO_QUERY      );
-        Reference< frame::XController >      xThis            (static_cast< frame::XController* >(this), uno::UNO_QUERY_THROW);
 
-        m_pData->m_xTitleHelper = new ::framework::TitleHelper(::comphelper::getProcessComponentContext(), xThis, xUntitledProvider);
+        m_pData->m_xTitleHelper = new ::framework::TitleHelper(::comphelper::getProcessComponentContext(),
+                                        Reference< frame::XController >(this), xUntitledProvider);
     }
 
     return m_pData->m_xTitleHelper;

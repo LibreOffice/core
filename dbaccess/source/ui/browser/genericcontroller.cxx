@@ -1055,9 +1055,8 @@ Reference< XTitle > OGenericUnoController::impl_getTitleHelper_throw()
     if ( ! m_xTitleHelper.is ())
     {
         Reference< XUntitledNumbers > xUntitledProvider(getPrivateModel(), UNO_QUERY      );
-        Reference< XController >      xThis(static_cast< XController* >(this), UNO_QUERY_THROW);
 
-        m_xTitleHelper = new ::framework::TitleHelper( m_xContext, xThis, xUntitledProvider );
+        m_xTitleHelper = new ::framework::TitleHelper( m_xContext, Reference< XController >(this), xUntitledProvider );
     }
 
     return m_xTitleHelper;
