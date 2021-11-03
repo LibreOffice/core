@@ -212,7 +212,7 @@ class DeleteRowTransformation : public DataTransformation
         const OUString & getFindString() const;
 };
 
-class SC_DLLPUBLIC SwapRowsTransformation : public DataTransformation
+class SwapRowsTransformation : public DataTransformation
 {
     SCROW mxRow, nxRow;
 

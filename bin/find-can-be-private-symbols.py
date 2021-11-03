@@ -53,6 +53,7 @@ with subprocess_find.stdout as txt:
                 if line_regex.match(line2):
                     sym = line2.split(" ")[2]
                     exported_symbols.add(sym)
+        subprocess_nm.terminate()
         # look for imported symbols
         subprocess_objdump = subprocess.Popen(b"objdump -T " + sharedlib, stdout=subprocess.PIPE, shell=True)
         with subprocess_objdump.stdout as txt2:
@@ -65,10 +66,11 @@ with subprocess_find.stdout as txt:
             # 0000000000000000      DF *UND*  0000000000000000     _ZN16FilterConfigItem10WriteInt32ERKN3rtl8OUStringEi
             for line2_bytes in txt2:
                 line2 = line2_bytes.strip().decode("utf-8")
+                if not("*UND*"in line2): continue
                 tokens = line2.split(" ")
-                if len(tokens) < 7 or not(tokens[7].startswith("*UND*")): continue
                 sym = tokens[len(tokens)-1]
                 imported_symbols.add(sym)
+        subprocess_objdump.terminate()
 subprocess_find.terminate()
 
 # look for imported symbols in executables
@@ -92,7 +94,10 @@ print("exported = " + str(len(exported_symbols)))
 print("imported = " + str(len(imported_symbols)))
 print("diff     = " + str(len(diff)))
 
-for sym in exported_symbols:
+progress = 0;
+for sym in sorted(exported_symbols):
+    progress += 1
+    if (progress % 128 == 0): print( str(int(progress * 100 / len(exported_symbols))) + "%")
     filtered_sym = subprocess.check_output(["c++filt", sym]).strip().decode("utf-8")
     if filtered_sym.startswith("non-virtual thunk to "): filtered_sym = filtered_sym[21:]
     elif filtered_sym.startswith("virtual thunk to "): filtered_sym = filtered_sym[17:]
@@ -107,7 +112,10 @@ for sym in exported_symbols:
         # find standalone functions which are exported but not imported
         if not(sym in imported_symbols): unused_function_exports.add(func)
 
-for sym in imported_symbols:
+progress = 0;
+for sym in sorted(imported_symbols):
+    progress += 1
+    if (progress % 128 == 0): print( str(int(progress * 100 / len(imported_symbols))) + "%")
     filtered_sym = subprocess.check_output(["c++filt", sym]).strip().decode("utf-8")
     if filtered_sym.startswith("non-virtual thunk to "): filtered_sym = filtered_sym[21:]
     elif filtered_sym.startswith("virtual thunk to "): filtered_sym = filtered_sym[17:]
