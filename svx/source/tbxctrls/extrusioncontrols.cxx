@@ -402,7 +402,7 @@ void ExtrusionDepthWindow::implFillStrings( FieldUnit eUnit )
         RID_SVXSTR_DEPTH_4_INCH
     };
 
-    assert(SAL_N_ELEMENTS(aDepths) == SAL_N_ELEMENTS(aDepthsInch));
+    static_assert(SAL_N_ELEMENTS(aDepths) == SAL_N_ELEMENTS(aDepthsInch));
 
     const TranslateId* pResource = IsMetric(eUnit) ? aDepths : aDepthsInch;
 

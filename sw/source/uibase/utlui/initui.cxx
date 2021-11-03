@@ -185,7 +185,7 @@ void ShellResource::GetAutoFormatNameLst_() const
     mxAutoFormatNameLst.emplace();
     mxAutoFormatNameLst->reserve(STR_AUTOFMTREDL_END);
 
-    assert(SAL_N_ELEMENTS(RID_SHELLRES_AUTOFMTSTRS) == STR_AUTOFMTREDL_END);
+    static_assert(SAL_N_ELEMENTS(RID_SHELLRES_AUTOFMTSTRS) == STR_AUTOFMTREDL_END);
     for (sal_uInt16 n = 0; n < STR_AUTOFMTREDL_END; ++n)
     {
         OUString p(SwResId(RID_SHELLRES_AUTOFMTSTRS[n]));
