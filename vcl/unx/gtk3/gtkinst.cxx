@@ -9002,6 +9002,7 @@ void update_attr_list(PangoAttrList* pAttrList, const vcl::Font& rFont)
 {
     pango_attr_list_change(pAttrList, pango_attr_family_new(OUStringToOString(rFont.GetFamilyName(), RTL_TEXTENCODING_UTF8).getStr()));
     pango_attr_list_change(pAttrList, pango_attr_size_new(rFont.GetFontSize().Height() * PANGO_SCALE));
+
     switch (rFont.GetItalic())
     {
         case ITALIC_NONE:
@@ -9070,10 +9071,33 @@ void update_attr_list(PangoAttrList* pAttrList, const vcl::Font& rFont)
     }
 }
 
+gboolean filter_pango_attrs(PangoAttribute *attr, gpointer data)
+{
+    PangoAttrType* pFilterAttrs = static_cast<PangoAttrType*>(data);
+    while (*pFilterAttrs)
+    {
+        if (attr->klass->type == *pFilterAttrs)
+            return true;
+        ++pFilterAttrs;
+    }
+    return false;
+}
+
 void set_font(GtkLabel* pLabel, const vcl::Font& rFont)
 {
     PangoAttrList* pOrigList = gtk_label_get_attributes(pLabel);
     PangoAttrList* pAttrList = pOrigList ? pango_attr_list_copy(pOrigList) : pango_attr_list_new();
+
+    if (pOrigList)
+    {
+        // tdf#143443 remove both PANGO_ATTR_ABSOLUTE_SIZE and PANGO_ATTR_SIZE
+        // because pango_attr_list_change(..., pango_attr_size_new...) isn't
+        // sufficient on its own to ensure a new size sticks.
+        PangoAttrType aFilterAttrs[] = {PANGO_ATTR_ABSOLUTE_SIZE, PANGO_ATTR_SIZE, PANGO_ATTR_INVALID};
+        PangoAttrList* pRemovedAttrs = pOrigList ? pango_attr_list_filter(pAttrList, filter_pango_attrs, &aFilterAttrs) : nullptr;
+        pango_attr_list_unref(pRemovedAttrs);
+    }
+
     update_attr_list(pAttrList, rFont);
     gtk_label_set_attributes(pLabel, pAttrList);
     pango_attr_list_unref(pAttrList);
@@ -12269,21 +12293,6 @@ namespace
                 gtk_entry_set_icon_from_icon_name(pEntry, GTK_ENTRY_ICON_SECONDARY, "dialog-error");
                 break;
         }
-    }
-}
-
-namespace
-{
-    gboolean filter_pango_attrs(PangoAttribute *attr, gpointer data)
-    {
-        PangoAttrType* pFilterAttrs = static_cast<PangoAttrType*>(data);
-        while (*pFilterAttrs)
-        {
-            if (attr->klass->type == *pFilterAttrs)
-                return true;
-            ++pFilterAttrs;
-        }
-        return false;
     }
 }
 
