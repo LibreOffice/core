@@ -2118,11 +2118,9 @@ uno::Reference< frame::XUntitledNumbers > ODatabaseDocument::impl_getUntitledHel
     TNumberedController::const_iterator aFind = m_aNumberedControllers.find(sModuleId);
     if ( aFind == m_aNumberedControllers.end() )
     {
-        uno::Reference< frame::XModel > xThis(static_cast< frame::XModel* >(this), uno::UNO_QUERY_THROW);
         rtl::Reference<::comphelper::NumberedCollection> pHelper = new ::comphelper::NumberedCollection();
         xNumberedControllers = pHelper;
-
-        pHelper->setOwner          (xThis);
+        pHelper->setOwner(uno::Reference< frame::XModel >(this));
 
         m_aNumberedControllers.emplace( sModuleId,xNumberedControllers );
     }

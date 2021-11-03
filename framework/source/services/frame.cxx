@@ -1848,9 +1848,7 @@ void SAL_CALL XFrameImpl::setLayoutManager(const css::uno::Reference<css::uno::X
 css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL XFrameImpl::getPropertySetInfo()
 {
     checkDisposed();
-    css::uno::Reference< css::beans::XPropertySetInfo > xInfo(
-        static_cast< css::beans::XPropertySetInfo* >(this), css::uno::UNO_QUERY_THROW);
-    return xInfo;
+    return css::uno::Reference< css::beans::XPropertySetInfo >(this);
 }
 
 void SAL_CALL XFrameImpl::setPropertyValue(const OUString& sProperty,

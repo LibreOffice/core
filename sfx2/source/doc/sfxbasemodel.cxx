@@ -3926,9 +3926,8 @@ Reference< frame::XTitle > SfxBaseModel::impl_getTitleHelper ()
     {
         Reference< XComponentContext >     xContext = ::comphelper::getProcessComponentContext();
         Reference< frame::XUntitledNumbers >    xDesktop( frame::Desktop::create(xContext), UNO_QUERY_THROW);
-        Reference< frame::XModel >              xThis   (static_cast< frame::XModel* >(this), UNO_QUERY_THROW);
 
-        m_pData->m_xTitleHelper = new ::framework::TitleHelper(xContext, xThis, xDesktop);
+        m_pData->m_xTitleHelper = new ::framework::TitleHelper(xContext, Reference< frame::XModel >(this), xDesktop);
     }
 
     return m_pData->m_xTitleHelper;
@@ -3941,12 +3940,9 @@ Reference< frame::XUntitledNumbers > SfxBaseModel::impl_getUntitledHelper ()
 
     if ( ! m_pData->m_xNumberedControllers.is ())
     {
-        Reference< frame::XModel > xThis   (static_cast< frame::XModel* >(this), UNO_QUERY_THROW);
         rtl::Reference<::comphelper::NumberedCollection> pHelper = new ::comphelper::NumberedCollection();
-
         m_pData->m_xNumberedControllers = pHelper;
-
-        pHelper->setOwner          (xThis);
+        pHelper->setOwner          (Reference< frame::XModel >(this));
         pHelper->setUntitledPrefix (" : ");
     }
 

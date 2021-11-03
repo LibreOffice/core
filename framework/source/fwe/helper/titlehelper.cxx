@@ -650,7 +650,7 @@ void TitleHelper::impl_setSubTitle (const css::uno::Reference< css::frame::XTitl
 
     css::uno::Reference< css::frame::XTitleChangeBroadcaster > xOldBroadcaster(xOldSubTitle                                          , css::uno::UNO_QUERY      );
     css::uno::Reference< css::frame::XTitleChangeBroadcaster > xNewBroadcaster(xSubTitle                                             , css::uno::UNO_QUERY      );
-    css::uno::Reference< css::frame::XTitleChangeListener >    xThis          (static_cast< css::frame::XTitleChangeListener* >(this), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::frame::XTitleChangeListener >    xThis(this);
 
     if (xOldBroadcaster.is())
         xOldBroadcaster->removeTitleChangeListener (xThis);
