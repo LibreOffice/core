@@ -52,6 +52,7 @@
 #include <editeng/UnoForbiddenCharsTable.hxx>
 #include <svx/svdoutl.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <svx/UnoNamespaceMap.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/svdsob.hxx>
@@ -124,8 +125,6 @@
 #include <tools/diagnose_ex.h>
 #include <tools/json_writer.hxx>
 #include <tools/UnitConversion.hxx>
-
-#define TWIPS_PER_PIXEL 15
 
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -2506,7 +2505,7 @@ void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, i
     if (!pViewShell)
         return;
 
-    double fScale = 1.0/TWIPS_PER_PIXEL;
+    constexpr double fScale = o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::px);
 
     // check if user hit a chart which is being edited by him
     LokChartHelper aChartHelper(pViewShell->GetViewShell());
@@ -2578,7 +2577,7 @@ void SdXImpressDocument::setGraphicSelection(int nType, int nX, int nY)
     if (!pViewShell)
         return;
 
-    double fScale = 1.0/TWIPS_PER_PIXEL;
+    constexpr double fScale = o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::px);
 
     LokChartHelper aChartHelper(pViewShell->GetViewShell());
     if (aChartHelper.setGraphicSelection(nType, nX, nY, fScale, fScale))

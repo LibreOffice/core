@@ -24,8 +24,6 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
-#define TWIPS_PER_PIXEL 15
-
 using namespace com::sun::star;
 
 namespace {
@@ -135,14 +133,20 @@ tools::Rectangle LokChartHelper::GetChartBoundingBox()
                     // In all cases, the following code fragment
                     // returns the chart bounding box in twips.
                     const MapMode& aCWMapMode = pWindow->GetMapMode();
-                    double fXScale( aCWMapMode.GetScaleX() );
-                    double fYScale( aCWMapMode.GetScaleY() );
+                    constexpr auto p = o3tl::getConversionMulDiv(o3tl::Length::px, o3tl::Length::twip);
+                    const auto& scaleX = aCWMapMode.GetScaleX();
+                    const auto& scaleY = aCWMapMode.GetScaleY();
+                    const auto nXNum = p.first * scaleX.GetDenominator();
+                    const auto nXDen = p.second * scaleX.GetNumerator();
+                    const auto nYNum = p.first * scaleY.GetDenominator();
+                    const auto nYDen = p.second * scaleY.GetNumerator();
+
                     Point aOffset = pWindow->GetOffsetPixelFrom(*pRootWin);
-                    aOffset.setX( aOffset.X() * (TWIPS_PER_PIXEL / fXScale) );
-                    aOffset.setY( aOffset.Y() * (TWIPS_PER_PIXEL / fYScale) );
+                    aOffset.setX( o3tl::convert(aOffset.X(), nXNum, nXDen) );
+                    aOffset.setY( o3tl::convert(aOffset.Y(), nYNum, nYDen) );
                     Size aSize = pWindow->GetSizePixel();
-                    aSize.setWidth( aSize.Width() * (TWIPS_PER_PIXEL / fXScale) );
-                    aSize.setHeight( aSize.Height() * (TWIPS_PER_PIXEL / fYScale) );
+                    aSize.setWidth( o3tl::convert(aSize.Width(), nXNum, nXDen) );
+                    aSize.setHeight( o3tl::convert(aSize.Height(), nYNum, nYDen) );
                     aBBox = tools::Rectangle(aOffset, aSize);
                 }
             }
