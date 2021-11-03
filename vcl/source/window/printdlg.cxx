@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -886,7 +886,14 @@ void PrintDialog::setPaperSizes()
             OUString aWidth( rLocWrap.getNum( aLogicPaperSize.Width(), nDigits ) );
             OUString aHeight( rLocWrap.getNum( aLogicPaperSize.Height(), nDigits ) );
             OUString aUnit = eUnit == MapUnit::MapMM ? OUString("mm") : OUString("in");
-            OUString aPaperName = Printer::GetPaperName( ePaper ) + " " + aWidth + aUnit + " x " + aHeight + aUnit;
+            OUString aPaperName;
+
+            // Paper sizes that we don't know of but the system printer driver lists are not "User
+            // Defined". Displaying them as such is just confusing.
+            if (ePaper != PAPER_USER)
+                aPaperName = Printer::GetPaperName( ePaper ) + " ";
+
+            aPaperName += aWidth + aUnit + " x " + aHeight + aUnit;
 
             mxPaperSizeBox->append_text(aPaperName);
 
