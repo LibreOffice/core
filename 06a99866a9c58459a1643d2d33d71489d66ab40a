@@ -71,6 +71,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f69e88f9_50465c50",
+        "filename": "sc/inc/stylehelper.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-11-03T11:00:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "facada8f_afa25a0a",
+      "revId": "06a99866a9c58459a1643d2d33d71489d66ab40a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f85d818f_0e382e7f",
