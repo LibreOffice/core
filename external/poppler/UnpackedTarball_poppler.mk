@@ -13,6 +13,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,poppler,$(POPPLER_TARBALL),,poppler
 
 $(eval $(call gb_UnpackedTarball_add_patches,poppler,\
 	external/poppler/poppler-config.patch.1 \
+	external/poppler/pch.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:
