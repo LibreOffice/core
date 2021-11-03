@@ -519,7 +519,7 @@ namespace pcr
             if( ! (_rControlValue >>= sControlValue) )
                 SAL_WARN("extensions.propctrlr", "convertToControlValue: unable to get property for Show/Hide");
 
-            assert(SAL_N_ELEMENTS(RID_RSC_ENUM_SHOWHIDE) == 2 && "FormComponentPropertyHandler::convertToPropertyValue: broken resource for Show/Hide!");
+            static_assert(SAL_N_ELEMENTS(RID_RSC_ENUM_SHOWHIDE), "FormComponentPropertyHandler::convertToPropertyValue: broken resource for Show/Hide!");
             bool bShow = sControlValue == PcrRes(RID_RSC_ENUM_SHOWHIDE[1]);
 
             aPropertyValue <<= bShow;
@@ -627,7 +627,7 @@ namespace pcr
         case PROPERTY_ID_SHOW_RECORDACTIONS:
         case PROPERTY_ID_SHOW_FILTERSORT:
         {
-            assert(SAL_N_ELEMENTS(RID_RSC_ENUM_SHOWHIDE) == 2 && "FormComponentPropertyHandler::convertToPropertyValue: broken resource for Show/Hide!");
+            static_assert(SAL_N_ELEMENTS(RID_RSC_ENUM_SHOWHIDE) == 2, "FormComponentPropertyHandler::convertToPropertyValue: broken resource for Show/Hide!");
             OUString sControlValue =     ::comphelper::getBOOL(_rPropertyValue)
                                             ? PcrRes(RID_RSC_ENUM_SHOWHIDE[1])
                                             : PcrRes(RID_RSC_ENUM_SHOWHIDE[0]);

@@ -1021,7 +1021,7 @@ void FmXFormShell::GetConversionMenu_Lock(weld::Menu& rNewMenu)
 
 OString FmXFormShell::SlotToIdent(sal_uInt16 nSlot)
 {
-    assert(SAL_N_ELEMENTS(SelObjectSlotMap) >= SAL_N_ELEMENTS(aConvertSlots));
+    static_assert(SAL_N_ELEMENTS(SelObjectSlotMap) >= SAL_N_ELEMENTS(aConvertSlots));
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aConvertSlots); ++i)
     {
