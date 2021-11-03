@@ -49,6 +49,7 @@
 
 #include <stylesbuffer.hxx>
 #include <orcus/exception.hpp>
+#include <stylehelper.hxx>
 
 using namespace com::sun::star;
 
@@ -1512,7 +1513,7 @@ ScOrcusStyles::xf::xf():
 }
 
 ScOrcusStyles::cell_style::cell_style():
-    maParentName("Default"),
+    maParentName(ScResId(STR_STYLENAME_STANDARD)),
     mnXFId(0),
     mnBuiltInId(0)
 {
@@ -2160,8 +2161,10 @@ void ScOrcusStyles::set_cell_style_builtin(size_t index)
 
 void ScOrcusStyles::set_cell_style_parent_name(const char* s, size_t n)
 {
-    OUString aParentName(s, n, mrFactory.getGlobalSettings().getTextEncoding());
-    maCurrentCellStyle.maParentName = aParentName;
+    const OUString aParentName(s, n, mrFactory.getGlobalSettings().getTextEncoding());
+    maCurrentCellStyle.maParentName = ScStyleNameConversion::ProgrammaticToDisplayName(
+        aParentName,
+        SfxStyleFamily::Para);
 }
 
 size_t ScOrcusStyles::commit_cell_style()
