@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c18ebd9_da99f3a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-11-03T15:27:44Z",
+      "side": 1,
+      "message": "The first piece of the 3rd part in the groupshape project. After a test (and Jenkins) it can be merged. Second part of this, will be the filter part. I splitted it to 2 part, because of the unit tests. (The last take had many test issues, see: https://gerrit.libreoffice.org/c/core/+/122577/22)",
+      "revId": "6a861591b18f250f61bcf4982b103c4bf30573d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
