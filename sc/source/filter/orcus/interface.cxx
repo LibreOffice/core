@@ -2160,7 +2160,7 @@ void ScOrcusStyles::set_cell_style_builtin(size_t index)
 
 void ScOrcusStyles::set_cell_style_parent_name(const char* s, size_t n)
 {
-    OUString aParentName(s, n, mrFactory.getGlobalSettings().getTextEncoding());
+    const OUString aParentName(s, n, mrFactory.getGlobalSettings().getTextEncoding());
     maCurrentCellStyle.maParentName = aParentName;
 }
 
