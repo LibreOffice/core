@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59ae6ab2_ca033433",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000863
+      },
+      "writtenOn": "2021-11-03T07:10:22Z",
+      "side": 1,
+      "message": "Is the expected result that I don\u0027t see a name anymore above the preview? Eg. it shows \"143 mm\" above the page, and that\u0027s it. Even if I select a different paper size from the dropdown, if it\u0027s a named one (eg. Letter), the name is shown, if it\u0027s User Defined, the \"name\" isn\u0027t shown. Of course in the dropdown there\u0027s always a name.",
+      "revId": "fa9ad21215f95bce91301a6de1a8ac0bb9ad05db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
