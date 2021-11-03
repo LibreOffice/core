@@ -1095,8 +1095,8 @@ HTMLTable::~HTMLTable()
         {
             SdrObject *pObj = (*m_xResizeDrawObjects)[i];
             pObj->RemoveObjectUser(*this);
-            m_xResizeDrawObjects.reset();
         }
+        m_xResizeDrawObjects.reset();
     }
 
     m_xDrawObjectPercentWidths.reset();
