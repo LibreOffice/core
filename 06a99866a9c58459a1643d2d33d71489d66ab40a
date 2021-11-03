@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfb1bdc4_d3f24939",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-03T10:19:18Z",
+      "side": 1,
+      "message": "It definitely looks like what I had in mind!",
+      "revId": "06a99866a9c58459a1643d2d33d71489d66ab40a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2165db5a_57b67686",
+        "filename": "sc/inc/stylehelper.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-03T10:19:18Z",
+      "side": 1,
+      "message": "I assume that you moved this section from sc/source/core/tool/stylehelper.cxx here just to be able to use SC_STYLE_PROG_STANDARD in ScOrcusStyles::cell_style::cell_style, right?\n\nTwo issues caused by this change.\n\n1. It would be *very* desirable to limit the change to the minimum. In current state, sc/source/core/tool/stylehelper.cxx and two functions in sc/source/filter/orcus/interface.cxx (ScOrcusStyles::cell_style::cell_style and ScOrcusStyles::set_cell_style_parent_name) could be kept unchanged at all, and sc/inc/stylehelper.hxx changes could be limited to DLLPUBLIC bits.\n2. If you move the strings here, I\u0027d suggest you to change them from #defines to constexpr OUStringLiterals. The lines are new here anyway, so the refactor would be nice (but I\u0027d still suggest do the refactor in a separate commit, dedicated to improving code structure, where you would also replace the hardcoded string in ScOrcusStyles::cell_style::cell_style with the constant).",
+      "revId": "06a99866a9c58459a1643d2d33d71489d66ab40a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f85d818f_0e382e7f",
+        "filename": "sc/source/filter/orcus/interface.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 2164,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-03T10:19:18Z",
+      "side": 1,
+      "message": "This \u0027const\u0027 change is likely a leftover.",
+      "revId": "06a99866a9c58459a1643d2d33d71489d66ab40a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
