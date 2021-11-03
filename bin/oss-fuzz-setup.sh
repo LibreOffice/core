@@ -50,7 +50,7 @@ curl --no-progress-meter -S \
     -C - -O https://dev-www.libreoffice.org/src/libzmf-0.0.2.tar.xz \
     -C - -O https://dev-www.libreoffice.org/src/pixman-0.40.0.tar.gz \
     -C - -O https://dev-www.libreoffice.org/src/zlib-1.2.11.tar.xz \
-    -C - -O https://dev-www.libreoffice.org/src/mdds-1.7.0.tar.bz2 \
+    -C - -O https://dev-www.libreoffice.org/src/mdds-2.0.0.tar.bz2 \
     -C - -O https://dev-www.libreoffice.org/src/openssl-1.1.1l.tar.gz \
     -C - -O https://dev-www.libreoffice.org/src/language-subtag-registry-2021-08-06.tar.bz2 \
     -C - -O https://dev-www.libreoffice.org/src/graphite2-minimal-1.3.14.tgz \
