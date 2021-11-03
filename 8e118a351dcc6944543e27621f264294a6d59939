@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3325c6c4_f78642e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2021-11-03T12:13:32Z",
+      "side": 1,
+      "message": "\u003e Patch Set 1:\n\u003e \n\u003e \u003e I didn\u0027t put -1 here on purpose, this is mostly discussing how to best move forward. Covering as large a space as PDF with unit tests is a lot of work, vs. taking what is there \u0026 making it work again. On the details (where files sit) - we have the crash testing \u0026 export compatibility regression testing framework, where we keep known-good \u0026 reference files outside the core repo (and don\u0027t burden developer machines with running it). Perhaps that is the right place to put those large test files, too? Then I\u0027d also remove the pdf files here, though.\n\u003e \n\u003e Is that a suggestion you could work with?\n\nWondering how to best move this forward - maybe a quick chat on irc could clear things up? @thorsten there",
+      "revId": "8e118a351dcc6944543e27621f264294a6d59939",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
