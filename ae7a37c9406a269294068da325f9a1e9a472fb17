@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9c353c0_d6fae1ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-11-03T19:55:47Z",
+      "side": 1,
+      "message": "yeah, sberg caught that earlier: https://gerrit.libreoffice.org/c/core/+/124658",
+      "revId": "ae7a37c9406a269294068da325f9a1e9a472fb17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
