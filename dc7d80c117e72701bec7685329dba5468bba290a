@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bf422ff_316f1768",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000521
+      },
+      "writtenOn": "2021-11-03T13:20:53Z",
+      "side": 1,
+      "message": "Build error not related to this patch",
+      "revId": "dc7d80c117e72701bec7685329dba5468bba290a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
