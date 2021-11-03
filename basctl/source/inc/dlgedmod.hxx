@@ -25,7 +25,7 @@ namespace basctl
 {
 // DlgEdModel
 
-class DlgEdModel final : public SdrModel
+class DlgEdModel : public SdrModel
 {
     friend class DlgEdPage;
 

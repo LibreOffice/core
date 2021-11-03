@@ -31,7 +31,7 @@ class DlgEditor;
 // DlgEdView
 
 
-class DlgEdView final : public SdrView
+class DlgEdView : public SdrView
 {
 private:
     DlgEditor& rDlgEditor;
@@ -48,7 +48,7 @@ public:
     virtual void MarkListHasChanged() override;
     virtual void MakeVisible( const tools::Rectangle& rRect, vcl::Window& rWin ) override;
 
-private:
+protected:
     /// override to handle HitTest for some objects specially
     using SdrView::CheckSingleSdrObjectHit;
     virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, SdrSearchOptions nOptions, const SdrLayerIDSet* pMVisLay) const override;
