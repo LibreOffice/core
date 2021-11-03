@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f91d510e_1c785ceb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2021-11-03T12:14:41Z",
+      "side": 1,
+      "message": "Don\u0027t any reason why not to check there, but perhaps Japanese is not the only exception? Eike, any thoughts?",
+      "revId": "4ea931baed841763b444b0cc6ee3020a93e3d5b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
