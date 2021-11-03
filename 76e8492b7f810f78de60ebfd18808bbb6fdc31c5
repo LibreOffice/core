@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ff04e13_d9466a81",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-11-03T07:07:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f35ce080_df06f66f",
+      "revId": "76e8492b7f810f78de60ebfd18808bbb6fdc31c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3b9a5af3_52968f08",
@@ -41,6 +59,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "06641a15_f3e41ea9",
+        "filename": "sc/inc/stylehelper.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-11-03T07:07:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3b9a5af3_52968f08",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 53
+      },
+      "revId": "76e8492b7f810f78de60ebfd18808bbb6fdc31c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3965f069_3fd4b568",
@@ -54,6 +96,30 @@
       "writtenOn": "2021-11-02T11:57:15Z",
       "side": 1,
       "message": "It seems this is the only place the moved macros are used.  Maybe it\u0027s simpler to just use OUString(\"Default\") here, and leave those macros where they were?",
+      "range": {
+        "startLine": 1516,
+        "startChar": 75,
+        "endLine": 1516,
+        "endChar": 97
+      },
+      "revId": "76e8492b7f810f78de60ebfd18808bbb6fdc31c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fdc15ae5_8ec19f7d",
+        "filename": "sc/source/filter/orcus/interface.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1516,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-11-03T07:07:32Z",
+      "side": 1,
+      "message": "I now use ScResId(STR_STYLENAME_STANDARD) to convert the Default to localized \"Default\" style.",
+      "parentUuid": "3965f069_3fd4b568",
       "range": {
         "startLine": 1516,
         "startChar": 75,
