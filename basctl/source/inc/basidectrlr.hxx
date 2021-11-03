@@ -29,7 +29,7 @@ namespace basctl
 
 class Shell;
 
-class Controller :
+class Controller final :
     public comphelper::OMutexAndBroadcastHelper,
     public comphelper::OPropertyContainer,
     public comphelper::OPropertyArrayUsageHelper<Controller>,
@@ -58,7 +58,7 @@ public:
     // OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
-protected:
+private:
     // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 };

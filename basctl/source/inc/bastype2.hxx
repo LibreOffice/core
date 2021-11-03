@@ -100,7 +100,7 @@ public:
     LibraryLocation GetLocation() const { return m_eLocation; }
 };
 
-class LibEntry : public DocumentEntry
+class LibEntry final : public DocumentEntry
 {
 private:
     OUString m_aLibName;
@@ -171,7 +171,7 @@ public:
 
 */
 
-class SbTreeListBox : public DocumentEventListener
+class SbTreeListBox final : public DocumentEventListener
 {
 private:
     std::unique_ptr<weld::TreeView> m_xControl;
@@ -180,9 +180,8 @@ private:
     bool m_bFreezeOnFirstAddRemove;
     BrowseMode nMode;
     DocumentEventNotifier m_aNotifier;
-    void            SetEntryBitmaps(const weld::TreeIter& rIter, const OUString& rImage);
 
-protected:
+    void            SetEntryBitmaps(const weld::TreeIter& rIter, const OUString& rImage);
     DECL_LINK(RequestingChildrenHdl, const weld::TreeIter&, bool);
     DECL_LINK(OpenCurrentHdl, weld::TreeView&, bool);
     void                    ImpCreateLibEntries(const weld::TreeIter& rShellRootEntry, const ScriptDocument& rDocument, LibraryLocation eLocation);
