@@ -159,7 +159,8 @@ class UITest(object):
                     try:
                         yield xDialog
                     finally:
-                        self.close_dialog_through_button(xDialog.getChild(close_button))
+                        if close_button:
+                            self.close_dialog_through_button(xDialog.getChild(close_button))
                     return
                 time_ += DEFAULT_SLEEP
                 time.sleep(DEFAULT_SLEEP)
