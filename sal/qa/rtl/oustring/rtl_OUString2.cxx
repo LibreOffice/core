@@ -30,8 +30,6 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#include <o3tl/cppunittraitshelper.hxx>
-
 #include <stringhelper.hxx>
 #include <valueequal.hxx>
 

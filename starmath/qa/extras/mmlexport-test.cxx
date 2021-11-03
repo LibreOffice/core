@@ -8,8 +8,6 @@
  */
 
 #include <sal/config.h>
-
-#include <o3tl/cppunittraitshelper.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <test/xmltesttools.hxx>
 #include <unotools/tempfile.hxx>

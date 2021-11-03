@@ -19,7 +19,6 @@
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
-#include <o3tl/cppunittraitshelper.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <config_features.h>
 #include <string>

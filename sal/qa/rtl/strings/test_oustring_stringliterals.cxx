@@ -14,7 +14,6 @@
 
 #include <utility>
 
-#include <o3tl/cppunittraitshelper.hxx>
 #include <sal/types.h>
 #include <config_global.h>
 #include <cppunit/TestFixture.h>

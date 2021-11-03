@@ -53,7 +53,6 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <vcl/bitmapaccess.hxx>
-#include <o3tl/cppunittraitshelper.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <com/sun/star/text/GraphicCrop.hpp>
