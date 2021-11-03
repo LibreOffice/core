@@ -21,7 +21,7 @@
 
 #include <sfx2/tabdlg.hxx>
 
-class SdPrintOptions : public SfxTabPage
+class SdPrintOptions final : public SfxTabPage
 {
     friend class SdModule;
 

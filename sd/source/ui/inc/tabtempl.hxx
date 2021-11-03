@@ -29,7 +29,7 @@ class SdrView;
 /**
  * Template-Tab-Dialog
  */
-class SdTabTemplateDlg : public SfxStyleDialogController
+class SdTabTemplateDlg final : public SfxStyleDialogController
 {
 private:
     const SfxObjectShell&   rDocShell;

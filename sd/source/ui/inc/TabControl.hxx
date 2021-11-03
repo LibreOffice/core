@@ -78,7 +78,7 @@ private:
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 
     // nested class to implement the TransferableHelper
-    class TabControlTransferable : public TransferableHelper
+    class TabControlTransferable final : public TransferableHelper
     {
     public:
         explicit TabControlTransferable( TabControl& rParent ) :

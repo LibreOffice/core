@@ -31,7 +31,7 @@ namespace sd {
 class DrawDocShell;
 }
 
-class SdPresLayoutDlg
+class SdPresLayoutDlg final
     : public weld::GenericDialogController
 {
 public:

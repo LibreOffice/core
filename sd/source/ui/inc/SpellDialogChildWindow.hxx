@@ -30,7 +30,7 @@ namespace sd
     provides Draw and Impress specific implementations of
     GetNextWrongSentence() and ApplyChangedSentence().
 */
-class SpellDialogChildWindow : public svx::SpellDialogChildWindow, public SfxListener
+class SpellDialogChildWindow final : public svx::SpellDialogChildWindow, public SfxListener
 {
 public:
     SpellDialogChildWindow(vcl::Window* pParent, sal_uInt16 nId, SfxBindings* pBindings,
@@ -47,7 +47,7 @@ public:
 
     SFX_DECL_CHILDWINDOW_WITHID(SpellDialogChildWindow);
 
-protected:
+private:
     /** Iterate over the sentences in all text shapes and stop at the
         next sentence with spelling errors. While doing so the view
         mode may be changed and text shapes are set into edit mode.
@@ -61,7 +61,6 @@ protected:
     virtual void GetFocus() override;
     virtual void LoseFocus() override;
 
-private:
     /** This outliner is used to do the main work of iterating over a
         document and finding sentences with spelling errors.
     */

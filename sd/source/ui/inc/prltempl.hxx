@@ -31,7 +31,7 @@ class SfxStyleSheetBasePool;
 /**
  * Template-Tab-Dialog
  */
-class SdPresLayoutTemplateDlg : public SfxTabDialogController
+class SdPresLayoutTemplateDlg final : public SfxTabDialogController
 {
 private:
     const SfxObjectShell*   mpDocShell;

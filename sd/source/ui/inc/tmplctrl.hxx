@@ -20,7 +20,7 @@
 
 #include <sfx2/stbitem.hxx>
 
-class SdTemplateControl : public SfxStatusBarControl
+class SdTemplateControl final : public SfxStatusBarControl
 {
 public:
     SdTemplateControl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb );
@@ -31,10 +31,9 @@ public:
 
     SFX_DECL_STATUSBAR_CONTROL();
 
-protected:
+private:
     virtual void    Command( const CommandEvent& rCEvt ) override;
 
-private:
     OUString  msTemplate;
 };
 

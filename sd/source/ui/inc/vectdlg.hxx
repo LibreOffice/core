@@ -32,7 +32,7 @@ class DrawDocShell;
 |*
 \******************************************************************************/
 
-class SdVectorizeDlg : public weld::GenericDialogController
+class SdVectorizeDlg final : public weld::GenericDialogController
 {
     ::sd::DrawDocShell* m_pDocSh;
     Bitmap              aBmp;

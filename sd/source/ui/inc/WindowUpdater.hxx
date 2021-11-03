@@ -48,7 +48,7 @@ namespace sd
     <member>RegisterWindow()</member> method.  When a document is given then
     this document is reformatted when the monitored option changes.</p>
 */
-class WindowUpdater : public utl::ConfigurationListener
+class WindowUpdater final : public utl::ConfigurationListener
 {
 public:
     explicit WindowUpdater();

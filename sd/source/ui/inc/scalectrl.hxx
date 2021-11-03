@@ -21,7 +21,7 @@
 
 #include <sfx2/stbitem.hxx>
 
-class SdScaleControl : public SfxStatusBarControl
+class SdScaleControl final : public SfxStatusBarControl
 {
 public:
     SdScaleControl(sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb);
@@ -32,7 +32,7 @@ public:
 
     SFX_DECL_STATUSBAR_CONTROL();
 
-protected:
+private:
     virtual void Command(const CommandEvent& rCEvt) override;
 };
 

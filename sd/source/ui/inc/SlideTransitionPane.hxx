@@ -45,7 +45,7 @@ namespace impl
     struct TransitionEffect;
 }
 
-class SlideTransitionPane : public PanelLayout
+class SlideTransitionPane final : public PanelLayout
                           , public sfx2::sidebar::ILayoutableWindow
 {
 public:

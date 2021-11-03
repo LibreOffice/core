@@ -25,7 +25,7 @@
 /**
  * Option-Tab-Page: Snap
  */
-class SdTpOptionsSnap : public SvxGridTabPage
+class SdTpOptionsSnap final : public SvxGridTabPage
 {
 public:
     SdTpOptionsSnap(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
@@ -39,7 +39,7 @@ public:
 /**
  * Option-Tab-Page: Contents
  */
-class SdTpOptionsContents : public SfxTabPage
+class SdTpOptionsContents final : public SfxTabPage
 {
 private:
     std::unique_ptr<weld::CheckButton> m_xCbxRuler;
@@ -60,7 +60,7 @@ public:
  * Option-Tab-Page: View
  */
 
-class SdTpOptionsMisc : public SfxTabPage
+class SdTpOptionsMisc final : public SfxTabPage
 {
  friend class SdModule;
 
@@ -116,7 +116,6 @@ private:
     */
     void UpdateCompatibilityControls();
 
-protected:
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 

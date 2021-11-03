@@ -29,7 +29,7 @@ class SfxItemSet;
 class SfxStyleSheet;
 class SdDrawDocument;
 
-class StyleSheetUndoAction : public SdUndoAction
+class StyleSheetUndoAction final : public SdUndoAction
 {
     SfxStyleSheet* mpStyleSheet;
 

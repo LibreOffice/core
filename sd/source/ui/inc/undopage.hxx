@@ -29,7 +29,7 @@ class SdPage;
 
 /************************************************************************/
 
-class SdPageFormatUndoAction : public SdUndoAction
+class SdPageFormatUndoAction final : public SdUndoAction
 {
     SdPage*     mpPage;
 
@@ -104,7 +104,7 @@ public:
 
 /************************************************************************/
 
-class SdPageLRUndoAction : public SdUndoAction
+class SdPageLRUndoAction final : public SdUndoAction
 {
     SdPage* mpPage;
 
@@ -132,7 +132,7 @@ public:
 
 /************************************************************************/
 
-class SdPageULUndoAction : public SdUndoAction
+class SdPageULUndoAction final : public SdUndoAction
 {
     SdPage* mpPage;
 

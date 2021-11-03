@@ -28,7 +28,7 @@
 class SdDrawDocument;
 class SdrObject;
 
-class SdAnimationPrmsUndoAction : public SdUndoAction
+class SdAnimationPrmsUndoAction final : public SdUndoAction
 {
     SdrObject*      pObject;
     bool            bOldActive;

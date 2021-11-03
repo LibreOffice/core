@@ -30,7 +30,7 @@ class SdPage;
 class SfxItemSet;
 class SfxPoolItem;
 
-class SdBackgroundObjUndoAction : public SdUndoAction
+class SdBackgroundObjUndoAction final : public SdUndoAction
 {
 private:
 

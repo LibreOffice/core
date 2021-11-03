@@ -71,9 +71,8 @@ public:
 /** this class holds the parameters and status of a search or replace operation performed
     by class SdUnoSearchReplaceShape */
 
-class SdUnoSearchReplaceDescriptor : public ::cppu::WeakImplHelper< css::lang::XUnoTunnel, css::util::XReplaceDescriptor > // public css::util::XSearchDescriptor, css::beans::XPropertySet
+class SdUnoSearchReplaceDescriptor final : public ::cppu::WeakImplHelper< css::lang::XUnoTunnel, css::util::XReplaceDescriptor > // public css::util::XSearchDescriptor, css::beans::XPropertySet
 {
-protected:
     std::unique_ptr<SvxItemPropertySet> mpPropSet;
 
     bool mbBackwards;

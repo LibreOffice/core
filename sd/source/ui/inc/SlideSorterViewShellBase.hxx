@@ -26,7 +26,7 @@ namespace sd
 /** This class exists to be able to register a factory that creates a
     slide sorter view shell as default.
 */
-class SlideSorterViewShellBase : public ImpressViewShellBase
+class SlideSorterViewShellBase final : public ImpressViewShellBase
 {
 public:
     SFX_DECL_VIEWFACTORY(SlideSorterViewShellBase);

@@ -35,7 +35,7 @@ class SdDrawDocument;
 /**
  * Effect-SingleTab-Dialog
  */
-class SdActionDlg : public SfxSingleTabDialogController
+class SdActionDlg final : public SfxSingleTabDialogController
 {
 public:
     SdActionDlg(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View const * pView);
@@ -44,7 +44,7 @@ public:
 /**
  * Interaction-Tab-Page
  */
-class SdTPAction : public SfxTabPage
+class SdTPAction final : public SfxTabPage
 {
 private:
     const ::sd::View*       mpView;

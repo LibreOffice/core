@@ -76,7 +76,7 @@ enum AnimationMode
 
 typedef ::cppu::WeakComponentImplHelper< css::presentation::XPresentation2, css::lang::XServiceInfo > SlideshowBase;
 
-class SlideShow : private ::cppu::BaseMutex, public SlideshowBase
+class SlideShow final : private ::cppu::BaseMutex, public SlideshowBase
 {
 public:
     /// used by the model to create a slideshow for it

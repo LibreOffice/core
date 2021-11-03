@@ -50,7 +50,7 @@ namespace svt {
     class AcceleratorExecute;
 }
 
-class SdPageObjsTLVDropTarget : public DropTargetHelper
+class SdPageObjsTLVDropTarget final : public DropTargetHelper
 {
 private:
     weld::TreeView& m_rTreeView;
@@ -350,7 +350,7 @@ public:
     }
 
     // nested class to implement the TransferableHelper
-    class SAL_DLLPRIVATE SdPageObjsTransferable : public SdTransferable
+    class SAL_DLLPRIVATE SdPageObjsTransferable final : public SdTransferable
     {
     public:
         SdPageObjsTransferable(
