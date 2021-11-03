@@ -7,14 +7,14 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 
 #Bug 122449 - Crash in: mergedlo.dll when closing "Edit Index Entry" dialog (gen/gtk)
 
 class tdf122449(UITestCase):
 
     def test_tdf122449_crash_edit_index_entry(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf122449.odt")) as writer_doc:
+        with self.ui_test.load_file("tdf122449.odt") as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             #search word Autocorrect (second find)   .uno:SearchDialog

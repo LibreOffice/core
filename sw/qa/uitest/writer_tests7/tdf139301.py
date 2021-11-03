@@ -5,14 +5,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 
 class tdf139301(UITestCase):
 
     styles = ('Long Dash', 'Long Dash Dot', 'Long Dot', 'Double Dash', 'Double Dash Dot', 'Double Dash Dot Dot', 'Dash', 'Dash Dot', 'Dash Dot Dot', 'Dot')
 
     def test_tdf139301(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf127166_prstDash_Word97.docx")) as writer_doc:
+        with self.ui_test.load_file("tdf127166_prstDash_Word97.docx") as writer_doc:
 
             for i in range(len(self.styles)):
                 # select next line shape
@@ -33,7 +33,7 @@ class tdf139301(UITestCase):
                 self.assertEqual(style, self.styles[i])
 
     def test_round_cap(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf127166_prstDash_round_cap.docx")) as writer_doc:
+        with self.ui_test.load_file("tdf127166_prstDash_round_cap.docx") as writer_doc:
 
             style_name_extension = ' (Rounded)'
 

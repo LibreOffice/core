@@ -7,14 +7,14 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_by_text
 
 class tdf145077(UITestCase):
 
     def test_tdf145077(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf145077.ods")) as document:
+        with self.ui_test.load_file("tdf145077.ods") as document:
 
             calcDoc = self.xUITest.getTopFocusWindow()
             gridwin = calcDoc.getChild("grid_window")

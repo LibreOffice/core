@@ -8,7 +8,6 @@ from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import select_pos
 from uitest.uihelper.common import type_text
-from uitest.uihelper.common import get_url_for_data_file
 
 class tdf46561(UITestCase):
     def check_header_texts(self, master="", first="", left="", right=""):
@@ -26,7 +25,7 @@ class tdf46561(UITestCase):
         self.assertEqual(right, xHeaderTextRight)
 
     def test_tdf46561(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf46561.odt")):
+        with self.ui_test.load_file("tdf46561.odt"):
             self.document = self.ui_test.get_component()
             self.check_header_texts(master="right", first="1st", left="left", right="right")
 

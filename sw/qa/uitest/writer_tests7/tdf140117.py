@@ -8,12 +8,11 @@ from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import select_pos
 from uitest.uihelper.common import type_text
-from uitest.uihelper.common import get_url_for_data_file
 
 class tdf140117(UITestCase):
     def test_tdf140117(self):
         # load the sample file
-        with self.ui_test.load_file(get_url_for_data_file("tdf140117.fodt")) as document:
+        with self.ui_test.load_file("tdf140117.fodt") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 

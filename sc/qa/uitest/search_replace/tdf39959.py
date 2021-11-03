@@ -9,13 +9,13 @@ from uitest.uihelper.common import select_pos
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, type_text
+from uitest.uihelper.common import get_state_as_dict, type_text
 
 #Bug 39959 - Find-and-replace doesn't search all tables anymore
 
 class tdf39959(UITestCase):
    def test_tdf39959_find_replace_all_sheets(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf39959.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf39959.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 

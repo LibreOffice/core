@@ -7,12 +7,11 @@
 from uitest.framework import UITestCase
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_url_for_data_file
 
 class tdf62057(UITestCase):
 
   def test_tdf62057(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf62057.ods")) as calc_doc:
+    with self.ui_test.load_file("tdf62057.ods") as calc_doc:
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 

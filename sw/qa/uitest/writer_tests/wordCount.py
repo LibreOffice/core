@@ -7,7 +7,7 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, type_text
+from uitest.uihelper.common import get_state_as_dict, type_text
 
 class writerWordCount(UITestCase):
 
@@ -43,7 +43,7 @@ class writerWordCount(UITestCase):
 
     def test_tdf68347(self):
         #Bug 68347 - Incorrect word count in a document with recorded changes
-        with self.ui_test.load_file(get_url_for_data_file("tdf68347.odt")) as writer_doc:
+        with self.ui_test.load_file("tdf68347.odt") as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 
@@ -77,7 +77,7 @@ class writerWordCount(UITestCase):
                 pass
 
     def test_tdf58050(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf58050.html")) as writer_doc:
+        with self.ui_test.load_file("tdf58050.html") as writer_doc:
 
             with self.ui_test.execute_modeless_dialog_through_command(".uno:WordCountDialog", close_button="close") as xDialog:
 
@@ -206,7 +206,7 @@ class writerWordCount(UITestCase):
                 self.assertEqual(get_state_as_dict(xdoccjkchars)["Text"], "0")
 
     def test_tdf51816(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf51816.odt")) as writer_doc:
+        with self.ui_test.load_file("tdf51816.odt") as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             #1. Open attached document
@@ -250,7 +250,7 @@ class writerWordCount(UITestCase):
 
 
     def test_tdf117703(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf117703.odt")):
+        with self.ui_test.load_file("tdf117703.odt"):
             self.xUITest.getTopFocusWindow()
 
             self.xUITest.executeCommand(".uno:SelectAll")

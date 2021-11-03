@@ -10,7 +10,7 @@ import threading
 from contextlib import contextmanager
 from uitest.config import DEFAULT_SLEEP
 from uitest.config import MAX_WAIT
-from uitest.uihelper.common import get_state_as_dict
+from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 
 from com.sun.star.uno import RuntimeException
 
@@ -107,9 +107,9 @@ class UITest(object):
 
     # Calls UITest.close_doc at exit
     @contextmanager
-    def load_file(self, url):
+    def load_file(self, fileName):
         try:
-            yield self.load_component_from_url(url)
+            yield self.load_component_from_url(get_url_for_data_file(fileName))
         finally:
             self.close_doc()
 

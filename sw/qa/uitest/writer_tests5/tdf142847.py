@@ -6,13 +6,12 @@
 #
 from uitest.framework import UITestCase
 import org.libreoffice.unotest
-from uitest.uihelper.common import get_url_for_data_file
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf142847(UITestCase):
     def test_tdf142847(self):
         # load the sample file
-        with self.ui_test.load_file(get_url_for_data_file("tdf142847.fodt")):
+        with self.ui_test.load_file("tdf142847.fodt"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             document = self.ui_test.get_component()

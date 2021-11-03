@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import change_measurement_unit
 from uitest.uihelper.common import select_by_text
 from libreoffice.uno.propertyvalue import mkPropertyValues
@@ -14,7 +14,7 @@ class Forms(UITestCase):
 
     def test_tdf140486(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf140486.odt")):
+        with self.ui_test.load_file("tdf140486.odt"):
 
             self.xUITest.executeCommand(".uno:JumpToNextFrame")
 
@@ -27,7 +27,7 @@ class Forms(UITestCase):
 
     def test_tdf140198(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf140198.odt")):
+        with self.ui_test.load_file("tdf140198.odt"):
 
             self.xUITest.executeCommand(".uno:JumpToNextFrame")
 
@@ -41,7 +41,7 @@ class Forms(UITestCase):
     def test_tdf141084(self):
 
         # Reuse document from tdf#140239
-        with self.ui_test.load_file(get_url_for_data_file("tdf140239.odt")):
+        with self.ui_test.load_file("tdf140239.odt"):
 
             with self.ui_test.execute_modeless_dialog_through_command(".uno:FormProperties", close_button=""):
                 xURL = self.ui_test.wait_until_child_is_available('urlcontrol-URL')
@@ -58,7 +58,7 @@ class Forms(UITestCase):
 
     def test_tdf140239(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf140239.odt")):
+        with self.ui_test.load_file("tdf140239.odt"):
 
             self.xUITest.executeCommand(".uno:JumpToNextFrame")
 
@@ -102,7 +102,7 @@ class Forms(UITestCase):
     def test_tdf138701(self):
 
         # Reuse file from another test
-        with self.ui_test.load_file(get_url_for_data_file("tdf140198.odt")):
+        with self.ui_test.load_file("tdf140198.odt"):
 
             self.xUITest.executeCommand(".uno:JumpToNextFrame")
 
@@ -122,7 +122,7 @@ class Forms(UITestCase):
     def test_tdf139486(self):
 
         # Reuse file from another test
-        with self.ui_test.load_file(get_url_for_data_file("tdf140198.odt")) as document:
+        with self.ui_test.load_file("tdf140198.odt") as document:
 
             change_measurement_unit(self, "Centimeter")
 
@@ -164,7 +164,7 @@ class Forms(UITestCase):
 
     def test_tdf138271(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf138271.odt")):
+        with self.ui_test.load_file("tdf138271.odt"):
 
             self.xUITest.executeCommand(".uno:JumpToNextFrame")
 

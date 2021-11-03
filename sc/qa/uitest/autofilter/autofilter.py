@@ -6,7 +6,7 @@
 #
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, select_by_text
+from uitest.uihelper.common import get_state_as_dict, select_by_text
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import is_row_hidden
 from uitest.uihelper.calc import enter_text_to_cell
@@ -14,7 +14,7 @@ from uitest.uihelper.calc import enter_text_to_cell
 class AutofilterTest(UITestCase):
 
     def test_tdf106214(self):
-        with self.ui_test.load_file(get_url_for_data_file("autofilter.ods")) as doc:
+        with self.ui_test.load_file("autofilter.ods") as doc:
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
             xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
@@ -37,7 +37,7 @@ class AutofilterTest(UITestCase):
             self.assertFalse(is_row_hidden(doc, 4))
 
     def test_filter_multiple_rows(self):
-        with self.ui_test.load_file(get_url_for_data_file("autofilter.ods")) as doc:
+        with self.ui_test.load_file("autofilter.ods") as doc:
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
             xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "2", "ROW": "0"}))
@@ -59,7 +59,7 @@ class AutofilterTest(UITestCase):
             self.assertFalse(is_row_hidden(doc, 4))
 
     def test_tdf133160(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf133160.ods")) as doc:
+        with self.ui_test.load_file("tdf133160.ods") as doc:
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
             xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "3"}))
@@ -101,7 +101,7 @@ class AutofilterTest(UITestCase):
             self.assertTrue(size4 < 1500)  # size4 is the maximum window width with a really long text
 
     def test_tdf134351(self):
-        with self.ui_test.load_file(get_url_for_data_file("autofilter.ods")) as doc:
+        with self.ui_test.load_file("autofilter.ods") as doc:
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
             xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
@@ -219,7 +219,7 @@ class AutofilterTest(UITestCase):
 
 
     def test_tdf116818(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf116818.xlsx")) as doc:
+        with self.ui_test.load_file("tdf116818.xlsx") as doc:
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 
@@ -248,7 +248,7 @@ class AutofilterTest(UITestCase):
             xOkBtn.executeAction("CLICK", tuple())
 
     def test_tdf140469(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf140469.xlsx")) as doc:
+        with self.ui_test.load_file("tdf140469.xlsx") as doc:
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 
@@ -261,7 +261,7 @@ class AutofilterTest(UITestCase):
             xOkBtn.executeAction("CLICK", tuple())
 
     def test_tdf140462(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf140462.ods")) as doc:
+        with self.ui_test.load_file("tdf140462.ods") as doc:
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 
@@ -290,7 +290,7 @@ class AutofilterTest(UITestCase):
             xOkBtn.executeAction("CLICK", tuple())
 
     def test_tdf137626(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf137626.xlsx")) as doc:
+        with self.ui_test.load_file("tdf137626.xlsx") as doc:
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 
@@ -303,7 +303,7 @@ class AutofilterTest(UITestCase):
             xOkBtn.executeAction("CLICK", tuple())
 
     def test_time_value(self):
-        with self.ui_test.load_file(get_url_for_data_file("time_value.xlsx")) as doc:
+        with self.ui_test.load_file("time_value.xlsx") as doc:
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 
@@ -329,7 +329,7 @@ class AutofilterTest(UITestCase):
             xOkBtn.executeAction("CLICK", tuple())
 
     def test_tdf140968(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf140968.xlsx")) as doc:
+        with self.ui_test.load_file("tdf140968.xlsx") as doc:
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 
@@ -415,7 +415,7 @@ class AutofilterTest(UITestCase):
 
 
     def test_tdf138438(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf138438.ods")) as doc:
+        with self.ui_test.load_file("tdf138438.ods") as doc:
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 
@@ -438,7 +438,7 @@ class AutofilterTest(UITestCase):
             self.assertFalse(is_row_hidden(doc, 8))
 
     def test_tdf142402(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf140968.xlsx")) as doc:
+        with self.ui_test.load_file("tdf140968.xlsx") as doc:
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 
@@ -458,7 +458,7 @@ class AutofilterTest(UITestCase):
             self.assertTrue(is_row_hidden(doc, 6))
 
     def test_tdf142910(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf140968.xlsx")) as doc:
+        with self.ui_test.load_file("tdf140968.xlsx") as doc:
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 
@@ -506,7 +506,7 @@ class AutofilterTest(UITestCase):
             self.assertFalse(is_row_hidden(doc, 7))
 
     def test_tdf144253(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf144253.ods")) as doc:
+        with self.ui_test.load_file("tdf144253.ods") as doc:
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 

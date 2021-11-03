@@ -6,14 +6,14 @@
 #
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, select_pos
+from uitest.uihelper.common import get_state_as_dict, select_pos
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import is_row_hidden
 
 class ColorFilterTest(UITestCase):
 
     def test_tdf142580(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf142580.xlsx")) as doc:
+        with self.ui_test.load_file("tdf142580.xlsx") as doc:
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
             xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A9"}))
@@ -58,7 +58,7 @@ class ColorFilterTest(UITestCase):
             self.assertTrue(is_row_hidden(doc, 8))
 
     def test_tdf142579(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf142579.xlsx")) as doc:
+        with self.ui_test.load_file("tdf142579.xlsx") as doc:
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
             xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A8"}))
@@ -101,7 +101,7 @@ class ColorFilterTest(UITestCase):
             self.assertFalse(is_row_hidden(doc, 7))
 
     def test_tdf142579_conditional_format(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf142579_cond_format.ods")) as doc:
+        with self.ui_test.load_file("tdf142579_cond_format.ods") as doc:
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
             xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A9"}))

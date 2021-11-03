@@ -5,7 +5,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_url_for_data_file
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 #Bug 144943 - FILEOPEN PPTX Read-only passwords on PPTX files are not working
@@ -13,7 +12,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf144943(UITestCase):
 
     def test_tdf144943(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf144943.pptx")):
+        with self.ui_test.load_file("tdf144943.pptx"):
             document = self.ui_test.get_component()
 
             # Without the fix in place, this test would have failed with

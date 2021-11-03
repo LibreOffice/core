@@ -10,13 +10,12 @@ from uitest.framework import UITestCase
 from libreoffice.calc.document import get_cell_by_position
 from uitest.uihelper.common import select_pos
 from uitest.uihelper.common import select_by_text
-from uitest.uihelper.common import get_url_for_data_file
 #Bug 118638 - subtotal option loses doesn't contain existing format for column
 class Subtotals(UITestCase):
 
 
     def test_tdf118638_subtotal_format(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf118638.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf118638.ods") as calc_doc:
             XcalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = XcalcDoc.getChild("grid_window")
             # Open the test file

@@ -5,12 +5,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_url_for_data_file
 
 # This tests both an edge cases, and some more realistic situations.
 class tdf138907(UITestCase):
     def test_tdf138907(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf138907_titlePageDialog.odt")) as document:
+        with self.ui_test.load_file("tdf138907_titlePageDialog.odt") as document:
 
             # Test an undefined situation - try to modify pages beyond the end of the document.
 

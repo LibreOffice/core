@@ -7,13 +7,12 @@
 from uitest.framework import UITestCase
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_url_for_data_file
 
 #Bug 101165 - Crashing on a filter selection, every time
 
 class tdf101165(UITestCase):
     def test_tdf101165_autofilter(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf101165.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf101165.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 

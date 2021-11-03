@@ -5,14 +5,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_url_for_data_file
 
 #Bug 81292 - TABLE: Crashes on sorting table
 
 class tdf81292(UITestCase):
 
    def test_tdf81292_table_sort(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf81292.odt")) as writer_doc:
+        with self.ui_test.load_file("tdf81292.odt") as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             #select whole table
             self.xUITest.executeCommand(".uno:SelectTable")

@@ -16,7 +16,7 @@ class compareDocuments(UITestCase):
 
     def test_tdf130960(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf130960.odt")) as writer_doc:
+        with self.ui_test.load_file("tdf130960.odt") as writer_doc:
 
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
@@ -40,7 +40,7 @@ class compareDocuments(UITestCase):
 
     def test_tdf137855(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf137855.odt")) as writer_doc:
+        with self.ui_test.load_file("tdf137855.odt") as writer_doc:
 
             xWriterDoc = self.xUITest.getTopFocusWindow()
 

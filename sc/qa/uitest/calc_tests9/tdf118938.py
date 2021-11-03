@@ -5,7 +5,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_url_for_data_file
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 #Bug 118938 - FILESAVE to Microsoft Excel 2007-2013 XML (.xlsx) files as read-only
@@ -14,7 +13,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf118938(UITestCase):
 
     def test_tdf118938(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf118938.xlsx")):
+        with self.ui_test.load_file("tdf118938.xlsx"):
             #The document was created in Calc after this fix.
             calcDoc = self.xUITest.getTopFocusWindow()
             gridwin = calcDoc.getChild("grid_window")

@@ -6,12 +6,11 @@
 #
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_url_for_data_file
 
 class Tdf43175(UITestCase):
 
     def test_tdf43175(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf43175.ods")) as document:
+        with self.ui_test.load_file("tdf43175.ods") as document:
 
             self.xUITest.executeCommand(".uno:TableSelectAll")
 

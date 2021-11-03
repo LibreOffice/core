@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
@@ -17,7 +17,7 @@ class tdf91217(UITestCase):
     def test_tdf91217_crash_deleting_rows(self):
         # FIXME disable this will it's clear what existing problem did this test uncover.
         return
-        with self.ui_test.load_file(get_url_for_data_file("tdf91217.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf91217.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #Select rows 76-1125 in sheet 3 (Daily), right click, Delete Rows.  Instant crash.

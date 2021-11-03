@@ -5,7 +5,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_url_for_data_file
 
 # This tests the Format->Title Page wizard, specifically the reset page number portion,
 # replacing some pages with title pages,
@@ -13,7 +12,7 @@ from uitest.uihelper.common import get_url_for_data_file
 # and inserting at the very end of the document.
 class tdf138907(UITestCase):
     def test_tdf138907(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf138907_titlePageDialog.odt")) as document:
+        with self.ui_test.load_file("tdf138907_titlePageDialog.odt") as document:
 
             # Confirm the starting state. Just a page break, without a valid restart page number on page 2
             self.assertEqual(document.CurrentController.PageCount, 5)

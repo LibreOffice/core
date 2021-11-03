@@ -7,14 +7,13 @@
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import get_cell_by_position
-from uitest.uihelper.common import get_url_for_data_file
 
 class Tdf1254400(UITestCase):
 
    def test_tdf125440(self):
         # In order to simulate copy&paste from external source,
         # import the text in Writer, copy it and paste it in Calc
-        with self.ui_test.load_file(get_url_for_data_file("tdf125440.odt")) as writer_doc:
+        with self.ui_test.load_file("tdf125440.odt") as writer_doc:
 
             self.xUITest.executeCommand(".uno:SelectAll")
             self.xUITest.executeCommand(".uno:Copy")

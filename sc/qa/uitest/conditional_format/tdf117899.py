@@ -6,7 +6,7 @@
 #
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 from libreoffice.calc.document import get_cell_by_position
 from org.libreoffice.unotest import systemPathToFileUrl
 from tempfile import TemporaryDirectory
@@ -28,7 +28,7 @@ class Tdf117899(UITestCase):
     with TemporaryDirectory() as tempdir:
         xFilePath = os.path.join(tempdir, "tdf117899-temp.ods")
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf117899.ods")):
+        with self.ui_test.load_file("tdf117899.ods"):
 
             self.execute_conditional_format_manager_dialog()
 

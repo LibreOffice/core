@@ -7,13 +7,12 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import select_pos, get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_url_for_data_file
 
 class tdf127900(UITestCase):
 
     def test_tdf127900(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf127900.fodp")) as doc:
+        with self.ui_test.load_file("tdf127900.fodp") as doc:
 
             xMasterLang = doc.MasterPages.getByIndex(0).getByIndex(1).CharLocale.Language
             xSlideLang = doc.DrawPages.getByIndex(1).getByIndex(1).CharLocale.Language

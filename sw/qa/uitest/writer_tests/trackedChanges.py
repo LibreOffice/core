@@ -6,7 +6,7 @@
 # tests for tracked changes ; tdf912270
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, type_text
+from uitest.uihelper.common import get_state_as_dict, type_text
 
 class trackedchanges(UITestCase):
 
@@ -125,7 +125,7 @@ class trackedchanges(UITestCase):
 
 
     def test_list_of_changes(self):
-        with self.ui_test.load_file(get_url_for_data_file("trackedChanges.odt")) as document:
+        with self.ui_test.load_file("trackedChanges.odt") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 
@@ -189,7 +189,7 @@ class trackedchanges(UITestCase):
 
 
     def test_tdf135018(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf135018.odt")) as document:
+        with self.ui_test.load_file("tdf135018.odt") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 

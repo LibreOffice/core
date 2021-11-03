@@ -9,13 +9,13 @@ from uitest.framework import UITestCase
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.calc import enter_text_to_cell
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 import datetime
 
 class CalcTrackedChanges(UITestCase):
 
     def test_tdf131907(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf131907.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf131907.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptChanges", close_button="close") as xTrackDlg:
 
@@ -263,7 +263,7 @@ class CalcTrackedChanges(UITestCase):
 
     def test_tdf136062(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf136062.ods")):
+        with self.ui_test.load_file("tdf136062.ods"):
 
             self.xUITest.getTopFocusWindow()
 

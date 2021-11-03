@@ -5,13 +5,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_url_for_data_file
 
 # Bug 124896 - CRASH: deleting sheet
 
 class tdf124896(UITestCase):
    def test_tdf124896_crash_delete_sheet(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf124896.ods")) as calc_doc:
+    with self.ui_test.load_file("tdf124896.ods") as calc_doc:
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 

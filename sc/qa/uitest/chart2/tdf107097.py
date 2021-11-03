@@ -7,14 +7,13 @@
 from uitest.framework import UITestCase
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_url_for_data_file
 
 # Test pivot chart is pasted correctly to a new document
 
 class tdf107097(UITestCase):
 
   def test_tdf107097(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf107097.ods")) as calc_doc:
+    with self.ui_test.load_file("tdf107097.ods") as calc_doc:
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 

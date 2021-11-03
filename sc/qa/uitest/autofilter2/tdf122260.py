@@ -7,7 +7,6 @@
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import is_row_hidden
-from uitest.uihelper.common import get_url_for_data_file
 
 #Bug 122260 - EDITING Autofilters not properly cleared
 class tdf122260(UITestCase):
@@ -59,7 +58,7 @@ class tdf122260(UITestCase):
         return valuesCount
 
     def test_tdf122260_autofilter(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf122260.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf122260.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             self.assertIsNotNone(gridwin)

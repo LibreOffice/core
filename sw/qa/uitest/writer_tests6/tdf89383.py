@@ -5,14 +5,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_url_for_data_file
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 #Bug 89383 - Read-only passwords on OOXML files are not working
 
 class tdf89383(UITestCase):
    def test_tdf89383_DOCX(self):
-        with self.ui_test.load_file(get_url_for_data_file("writeprotection.docx")):
+        with self.ui_test.load_file("writeprotection.docx"):
             document = self.ui_test.get_component()
 
             # Without the fix in place, this test would have failed with

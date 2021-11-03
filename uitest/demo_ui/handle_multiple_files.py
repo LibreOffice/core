@@ -8,16 +8,15 @@
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.uno.eventlistener import EventListener
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_url_for_data_file
 import time
 
 class HandleFiles(UITestCase):
 
     def test_load_file(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("test.ods")) as calc_file:
+        with self.ui_test.load_file("test.ods") as calc_file:
 
-            with self.ui_test.load_file(get_url_for_data_file("test2.ods")):
+            with self.ui_test.load_file("test2.ods"):
 
                 frames = self.ui_test.get_frames()
                 self.assertEqual(len(frames), 2)
@@ -32,9 +31,9 @@ class HandleFiles(UITestCase):
             time.sleep(1)
 
     def test_select_frame(self):
-        with self.ui_test.load_file(get_url_for_data_file("test.ods")) as calc_file:
+        with self.ui_test.load_file("test.ods") as calc_file:
 
-            with self.ui_test.load_file(get_url_for_data_file("test2.ods")):
+            with self.ui_test.load_file("test2.ods"):
                 frames = self.ui_test.get_frames()
                 self.assertEqual(len(frames), 2)
                 frames[0].activate()

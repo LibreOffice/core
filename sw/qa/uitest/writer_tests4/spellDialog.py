@@ -6,7 +6,7 @@
 
 import re
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 
 from libreoffice.linguistic.linguservice import get_spellchecker
 from com.sun.star.lang import Locale
@@ -97,7 +97,7 @@ frog, dogg, catt"""
         supported_locale = self.is_supported_locale("en", "US")
         if not supported_locale:
             self.skipTest("no dictionary support for en_US available")
-        with self.ui_test.load_file(get_url_for_data_file("tdf66043.fodt")) as writer_doc:
+        with self.ui_test.load_file("tdf66043.fodt") as writer_doc:
             # Step 1: Initiate spellchecking, and make sure "Check grammar" is
             # unchecked
             with self.ui_test.execute_modeless_dialog_through_command(".uno:SpellingAndGrammarDialog", close_button="close") as xDialog:

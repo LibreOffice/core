@@ -6,7 +6,7 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 
 class pivotTable(UITestCase):
 
@@ -15,7 +15,7 @@ class pivotTable(UITestCase):
         # This is basically a test for cf93998eb5abc193d95ae5433bf4dfd11a9d62d8
         # Without the fix in place, this test would have crashed
 
-        with self.ui_test.load_file(get_url_for_data_file("basicPivotTable.ods")):
+        with self.ui_test.load_file("basicPivotTable.ods"):
 
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")

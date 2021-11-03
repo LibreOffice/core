@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 
 #Find and replace
 #tdf118208/118212 - enabling either CJK or CTL, or both (Tools -> Options -> Language Settings -> Languages: Default Languages for Documents checkboxes)
@@ -14,7 +14,7 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 class tdf118208(UITestCase):
 
     def test_tdf118208_search_dialog_format_crash(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf118208.odt")) as writer_doc:
+        with self.ui_test.load_file("tdf118208.odt") as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             # 1. Open the attached file.
             # 2. Press ctrl-H to show the search and replace dialog.

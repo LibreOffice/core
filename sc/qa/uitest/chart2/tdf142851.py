@@ -6,13 +6,13 @@
 #
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 
 # Bug 142851 - UI Chart Type dialog empty with unsupported combo chart
 
 class tdf142851(UITestCase):
     def test_tdf142851_combo_chart_type(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf142851.xlsx")):
+        with self.ui_test.load_file("tdf142851.xlsx"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 

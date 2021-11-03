@@ -6,13 +6,12 @@
 #
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_url_for_data_file
 from libreoffice.calc.document import get_cell_by_position
 
 class EmbeddedDocument(UITestCase):
 
   def test_open_embedded_document(self):
-    with self.ui_test.load_file(get_url_for_data_file("embedded.pptx")):
+    with self.ui_test.load_file("embedded.pptx"):
 
         xImpressDoc = self.xUITest.getTopFocusWindow()
         xEditWin = xImpressDoc.getChild("impress_win")

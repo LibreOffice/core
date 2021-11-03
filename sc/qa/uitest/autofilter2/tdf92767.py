@@ -7,12 +7,12 @@
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import is_row_hidden
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 
 class tdf92767(UITestCase):
 
     def test_tdf92767(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf92767.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf92767.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 

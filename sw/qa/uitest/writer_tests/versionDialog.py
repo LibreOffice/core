@@ -8,13 +8,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 
 class versionDialog(UITestCase):
 
     def test_tdf131931(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf131931.odt")) as writer_doc:
+        with self.ui_test.load_file("tdf131931.odt") as writer_doc:
 
             xWriterDoc = self.xUITest.getTopFocusWindow()
 

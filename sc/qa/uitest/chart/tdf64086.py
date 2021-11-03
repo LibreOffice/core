@@ -6,12 +6,11 @@
 #
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_url_for_data_file
 
 class NamedRangesChart(UITestCase):
 
   def test_chart_series_ranges_with_named_ranges_as_datasource(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf64086.xlsx")) as calc_doc:
+    with self.ui_test.load_file("tdf64086.xlsx") as calc_doc:
 
         xChart = calc_doc.Sheets[0].Charts[0]
         xDataSeries = xChart.getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries

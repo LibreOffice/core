@@ -9,12 +9,12 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 
 class tdf40427(UITestCase):
 
   def test_tdf40427(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf40427_SectionPositions.odt")) as document:
+    with self.ui_test.load_file("tdf40427_SectionPositions.odt") as document:
         xMainWindow = self.xUITest.getTopFocusWindow()
         xWriterEdit = xMainWindow.getChild("writer_edit")
 

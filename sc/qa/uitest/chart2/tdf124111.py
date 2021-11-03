@@ -9,13 +9,13 @@ from uitest.uihelper.common import select_pos
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, type_text
+from uitest.uihelper.common import get_state_as_dict, type_text
 
 #Bug 124111 - Cannot enter negative number for cross other axis at value
 
 class tdf124111(UITestCase):
    def test_tdf124111_chart_x_negative_cross(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf124111.ods")) as calc_doc:
+    with self.ui_test.load_file("tdf124111.ods") as calc_doc:
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 

@@ -9,13 +9,13 @@ from uitest.uihelper.common import select_pos
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, type_text
+from uitest.uihelper.common import get_state_as_dict, type_text
 
 #Bug 44861 - EDITING: result 'Find&Replace All' wrong for particular Regular Expression
 
 class tdf44861(UITestCase):
    def test_tdf44861_find_replaceAll_regexp(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf44861.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf44861.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             # 2. ctrl-h, in dialog

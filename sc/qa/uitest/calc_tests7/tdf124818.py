@@ -5,13 +5,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_url_for_data_file
 
 #Bug 124818 - CRASH: selecting all and switching spreadsheet
 
 class tdf124818(UITestCase):
    def test_tdf124818_crash_select_all_and_switch_spreadsheet(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf124818.xls")) as calc_doc:
+    with self.ui_test.load_file("tdf124818.xls") as calc_doc:
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 

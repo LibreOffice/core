@@ -7,7 +7,6 @@
 from uitest.framework import UITestCase
 #from uitest.uihelper.common import type_text
 from uitest.uihelper.common import get_state_as_dict
-from uitest.uihelper.common import get_url_for_data_file
 from uitest.uihelper.common import select_pos
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from org.libreoffice.unotest import systemPathToFileUrl
@@ -24,7 +23,7 @@ class tdf90401(UITestCase):
         with TemporaryDirectory() as tempdir:
             xFilePath = os.path.join(tempdir, 'tdf90401-tmp.fodt')
 
-            with self.ui_test.load_file(get_url_for_data_file('redline-autocorrect.fodt')) as writer_doc:
+            with self.ui_test.load_file('redline-autocorrect.fodt') as writer_doc:
                 xWriterDoc = self.xUITest.getTopFocusWindow()
                 xWriterEdit = xWriterDoc.getChild('writer_edit')
 
@@ -89,7 +88,7 @@ class tdf90401(UITestCase):
         with TemporaryDirectory() as tempdir:
             xFilePath = os.path.join(tempdir, 'redline-para-join-tmp.docx')
 
-            with self.ui_test.load_file(get_url_for_data_file('redline-para-join.docx')) as writer_doc:
+            with self.ui_test.load_file('redline-para-join.docx') as writer_doc:
 
                 xWriterDoc = self.xUITest.getTopFocusWindow()
                 xWriterEdit = xWriterDoc.getChild('writer_edit')

@@ -6,7 +6,7 @@
 #
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 from libreoffice.calc.document import get_sheet_from_doc
 from libreoffice.calc.conditional_format import get_conditional_format_from_sheet
 
@@ -14,7 +14,7 @@ class ConditionalFormatDlgTest(UITestCase):
 
     def test_tdf96453(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf96453.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf96453.ods") as calc_doc:
 
             sheet = get_sheet_from_doc(calc_doc, 0)
             conditional_format_list = get_conditional_format_from_sheet(sheet)

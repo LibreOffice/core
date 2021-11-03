@@ -5,13 +5,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_url_for_data_file
 
 
 class tdf137803(UITestCase):
     def test_tdf137803(self):
         # load the sample file
-        with self.ui_test.load_file(get_url_for_data_file("tdf137803.odt")) as document:
+        with self.ui_test.load_file("tdf137803.odt") as document:
 
             # select the shape
             self.xUITest.executeCommand(".uno:JumpToNextFrame")

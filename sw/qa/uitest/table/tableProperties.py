@@ -8,14 +8,14 @@ from uitest.framework import UITestCase
 from uitest.uihelper.common import select_pos
 from uitest.uihelper.common import select_by_text
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import change_measurement_unit
 
 #Writer Table Properties
 
 class tableProperties(UITestCase):
     def test_table_properties(self):
-        with self.ui_test.load_file(get_url_for_data_file("tableToText.odt")) as writer_doc:
+        with self.ui_test.load_file("tableToText.odt") as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             change_measurement_unit(self, "Centimeter")

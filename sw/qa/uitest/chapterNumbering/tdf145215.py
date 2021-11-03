@@ -6,12 +6,12 @@
 #
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_url_for_data_file, get_state_as_dict
+from uitest.uihelper.common import get_state_as_dict
 
 class Tdf145215(UITestCase):
 
     def test_tdf145215(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf145215.docx")) as writer_doc:
+        with self.ui_test.load_file("tdf145215.docx") as writer_doc:
             with self.ui_test.execute_dialog_through_command(".uno:ChapterNumberingDialog") as xDialog:
                 xTab = xDialog.getChild("tabcontrol")
 

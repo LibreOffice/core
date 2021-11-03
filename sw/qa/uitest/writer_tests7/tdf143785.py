@@ -5,7 +5,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_url_for_data_file
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from com.sun.star.text.TextContentAnchorType import AT_PAGE, AT_PARAGRAPH
 
@@ -13,7 +12,7 @@ class tdf143785(UITestCase):
 
     def test_tdf143785(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf137802.odt")) as document:
+        with self.ui_test.load_file("tdf137802.odt") as document:
 
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")

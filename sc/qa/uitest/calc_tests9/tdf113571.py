@@ -5,13 +5,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_url_for_data_file
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class Tdf113571(UITestCase):
 
    def test_tdf113571(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf113571.ods")):
+        with self.ui_test.load_file("tdf113571.ods"):
 
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")

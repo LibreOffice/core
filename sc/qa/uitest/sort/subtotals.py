@@ -12,7 +12,7 @@ from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from uitest.uihelper.common import select_pos
 from uitest.uihelper.common import select_by_text
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 
 class Subtotals(UITestCase):
 
@@ -43,7 +43,7 @@ class Subtotals(UITestCase):
 
 
     def test_tdf88792(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf88792.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf88792.ods") as calc_doc:
             XcalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = XcalcDoc.getChild("grid_window")
 
@@ -68,7 +68,7 @@ class Subtotals(UITestCase):
             self.assertEqual(get_cell_by_position(calc_doc, 0, 3, 5).getValue(), 28000)
 
     def test_tdf88735(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf88735.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf88735.ods") as calc_doc:
             XcalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = XcalcDoc.getChild("grid_window")
             # 1 select all cells
@@ -85,7 +85,7 @@ class Subtotals(UITestCase):
             self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 8).getValue(), 8)
 
     def test_tdf56958(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf56958.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf56958.ods") as calc_doc:
             XcalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = XcalcDoc.getChild("grid_window")
             # 1. Open the test file
@@ -123,7 +123,7 @@ class Subtotals(UITestCase):
             self.assertEqual(get_cell_by_position(calc_doc, 0, 2, 1).getValue(), -0.25)
 
     def test_tdf55734(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf55734.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf55734.ods") as calc_doc:
             XcalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = XcalcDoc.getChild("grid_window")
             # 1. Open attached document

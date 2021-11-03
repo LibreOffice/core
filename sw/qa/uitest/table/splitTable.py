@@ -5,13 +5,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_url_for_data_file
 
 #Writer Split Table
 
 class splitTable(UITestCase):
     def test_split_table(self):
-        with self.ui_test.load_file(get_url_for_data_file("splitTable.odt")) as writer_doc:
+        with self.ui_test.load_file("splitTable.odt") as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             #go to row 2
             self.xUITest.executeCommand(".uno:GoDown")
@@ -30,7 +29,7 @@ class splitTable(UITestCase):
             self.assertEqual(writer_doc.TextTables.getCount(), 1)
 
         #dialog Split table, check Custom heading, OK -> verify 2 tables, 1st has 2 rows, second has 4 rows
-        with self.ui_test.load_file(get_url_for_data_file("splitTable.odt")) as writer_doc:
+        with self.ui_test.load_file("splitTable.odt") as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             #go to row 2
             self.xUITest.executeCommand(".uno:GoDown")
@@ -48,7 +47,7 @@ class splitTable(UITestCase):
             self.assertEqual(writer_doc.TextTables.getCount(), 1)
 
         #dialog Split table, check No heading, OK -> verify 2 tables, 1st has 2 rows, second has 4 rows
-        with self.ui_test.load_file(get_url_for_data_file("splitTable.odt")) as writer_doc:
+        with self.ui_test.load_file("splitTable.odt") as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             #go to row 2
             self.xUITest.executeCommand(".uno:GoDown")

@@ -10,13 +10,13 @@ from uitest.uihelper.common import select_by_text
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, type_text
+from uitest.uihelper.common import get_state_as_dict, type_text
 
 #Bug 123508 - "Fit print range(s) to width/height" value falls back to default when window closes
 
 class tdf123508(UITestCase):
    def test_tdf123508_format_page_scale(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf123508.ods")) as calc_doc:
+    with self.ui_test.load_file("tdf123508.ods") as calc_doc:
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
         #open "Format > Page - Sheet > Scale

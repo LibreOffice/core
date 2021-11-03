@@ -6,7 +6,6 @@
 #
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_url_for_data_file
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import get_cell_by_position
 
@@ -14,7 +13,7 @@ class tdf99386(UITestCase):
 
     def test_td99386_undo_merged_cell_needs_hard_recalculate(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf99386.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf99386.ods") as calc_doc:
 
             xCalcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = xCalcDoc.getChild("grid_window")

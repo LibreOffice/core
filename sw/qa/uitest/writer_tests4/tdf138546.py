@@ -8,11 +8,10 @@ from uitest.framework import UITestCase
 from uitest.uihelper.common import change_measurement_unit
 from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
-from uitest.uihelper.common import get_url_for_data_file
 
 class tdf138546(UITestCase):
     def test_tdf138546(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf138546.odt")):
+        with self.ui_test.load_file("tdf138546.odt"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             change_measurement_unit(self, "Centimeter")

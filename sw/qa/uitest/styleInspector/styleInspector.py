@@ -5,14 +5,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from com.sun.star.rdf.URIs import RDF_TYPE, RDFS_COMMENT, RDFS_LABEL, ODF_PREFIX, ODF_SUFFIX, LO_EXT_SHADING
 
 class styleNavigator(UITestCase):
 
     def test_listbox_is_updated(self):
-        with self.ui_test.load_file(get_url_for_data_file("styles.odt")):
+        with self.ui_test.load_file("styles.odt"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 
@@ -130,7 +130,7 @@ class styleNavigator(UITestCase):
             self.xUITest.executeCommand(".uno:Sidebar")
 
     def test_metadata(self):
-        with self.ui_test.load_file(get_url_for_data_file("metadata.odt")):
+        with self.ui_test.load_file("metadata.odt"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 
@@ -189,7 +189,7 @@ class styleNavigator(UITestCase):
             self.xUITest.executeCommand(".uno:Sidebar")
 
     def test_bookmark_metadata(self):
-        with self.ui_test.load_file(get_url_for_data_file("bookmark-metadata.odt")):
+        with self.ui_test.load_file("bookmark-metadata.odt"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 
@@ -245,7 +245,7 @@ class styleNavigator(UITestCase):
             self.xUITest.executeCommand(".uno:Sidebar")
 
     def test_metadata_shading_color(self):
-        with self.ui_test.load_file(get_url_for_data_file("metacolor.odt")) as writer_doc:
+        with self.ui_test.load_file("metacolor.odt") as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 

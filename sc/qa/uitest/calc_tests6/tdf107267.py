@@ -10,14 +10,13 @@ from uitest.framework import UITestCase
 from libreoffice.calc.document import get_cell_by_position
 from uitest.uihelper.common import select_pos
 from uitest.uihelper.common import select_by_text
-from uitest.uihelper.common import get_url_for_data_file
 
 #Bug 107267 - During a sub-total calculation or sum, the data set is not computed well.
 class Subtotals(UITestCase):
 
 
     def test_tdf107267(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf107267.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf107267.ods") as calc_doc:
             XcalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = XcalcDoc.getChild("grid_window")
             # 1. Open the test file

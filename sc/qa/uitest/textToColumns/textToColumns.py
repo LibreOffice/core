@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
@@ -15,7 +15,7 @@ class CalcTextToColumns(UITestCase):
 
     def test_text_to_columns_dot(self):
         #_Dot_as_Separator
-        with self.ui_test.load_file(get_url_for_data_file("text_to_columns_dot.ods")) as calc_doc:
+        with self.ui_test.load_file("text_to_columns_dot.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
@@ -105,7 +105,7 @@ class CalcTextToColumns(UITestCase):
 
     def test_text_to_columns_comma(self):
         #Comma as Separator
-        with self.ui_test.load_file(get_url_for_data_file("text_to_columns_comma.ods")) as calc_doc:
+        with self.ui_test.load_file("text_to_columns_comma.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
@@ -175,7 +175,7 @@ class CalcTextToColumns(UITestCase):
 
         def test_text_to_columns_semicolon(self):
             #Semicolon  as Separator
-            with self.ui_test.load_file(get_url_for_data_file("text_to_columns_semicolon.ods")) as calc_doc:
+            with self.ui_test.load_file("text_to_columns_semicolon.ods") as calc_doc:
                 gridwin = xCalcDoc.getChild("grid_window")
                 #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
             with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
@@ -242,7 +242,7 @@ class CalcTextToColumns(UITestCase):
 
         def test_text_to_columns_space(self):
             #Space as Separator
-            with self.ui_test.load_file(get_url_for_data_file("text_to_columns_space.ods")) as calc_doc:
+            with self.ui_test.load_file("text_to_columns_space.ods") as calc_doc:
                 gridwin = xCalcDoc.getChild("grid_window")
                 #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
             with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
@@ -310,7 +310,7 @@ class CalcTextToColumns(UITestCase):
 
         def test_text_to_columns_pipe(self):
             #Space as Separator
-            with self.ui_test.load_file(get_url_for_data_file("text_to_columns_pipe.ods")) as calc_doc:
+            with self.ui_test.load_file("text_to_columns_pipe.ods") as calc_doc:
                 gridwin = xCalcDoc.getChild("grid_window")
                 #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
             with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
@@ -384,7 +384,7 @@ class CalcTextToColumns(UITestCase):
 
         def test_text_to_columns_pipespace(self):
             #Space as Separator
-            with self.ui_test.load_file(get_url_for_data_file("text_to_columns_pipe_space.ods")) as calc_doc:
+            with self.ui_test.load_file("text_to_columns_pipe_space.ods") as calc_doc:
                 gridwin = xCalcDoc.getChild("grid_window")
                 #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
             with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:

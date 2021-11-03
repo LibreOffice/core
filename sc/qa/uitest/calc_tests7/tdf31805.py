@@ -5,7 +5,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_url_for_data_file
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
@@ -13,7 +12,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf31805(UITestCase):
     def test_tdf31805_delete_column_merged(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf31805.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf31805.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #1. open "sample.ods"

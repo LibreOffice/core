@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_sheet_from_doc
@@ -20,7 +20,7 @@ class regression(UITestCase):
         self._regression_check(data_groupedby_column = True)
 
     def _regression_check(self, data_groupedby_column = True):
-        with self.ui_test.load_file(get_url_for_data_file("regression.ods")) as calc_doc:
+        with self.ui_test.load_file("regression.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 

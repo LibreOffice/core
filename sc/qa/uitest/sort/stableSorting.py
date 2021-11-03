@@ -6,7 +6,7 @@
 #
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_sheet_from_doc
@@ -19,7 +19,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class CalcStableSorting(UITestCase):
 
     def test_Must_keep_sort_order_previous_sorting_toolbar_button_Ascending(self):
-        with self.ui_test.load_file(get_url_for_data_file("stableSorting.ods")) as calc_doc:
+        with self.ui_test.load_file("stableSorting.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #Select cell E1 ("Sales") and press toolbar button for ascending sorting.
@@ -39,7 +39,7 @@ class CalcStableSorting(UITestCase):
                 self.assertEqual(get_cell_by_position(calc_doc, 0, 5, i).getValue(), i)
 
     def test_Must_keep_sort_order_previous_sorting_toolbar_button_Descending(self):
-        with self.ui_test.load_file(get_url_for_data_file("stableSorting.ods")) as calc_doc:
+        with self.ui_test.load_file("stableSorting.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #Select cell E1 ("Sales") and press toolbar button for descending sorting.

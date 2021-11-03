@@ -6,7 +6,7 @@
 #
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_url_for_data_file, type_text
+from uitest.uihelper.common import type_text
 
 #Writer Text to table
 
@@ -33,7 +33,7 @@ class textToTable(UITestCase):
 
 
     def test_text_to_table_header(self):
-        with self.ui_test.load_file(get_url_for_data_file("textToTable.odt")) as writer_doc:
+        with self.ui_test.load_file("textToTable.odt") as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             #open file; select all text ; dialog Text to table - other ":"; verify

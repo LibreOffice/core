@@ -5,7 +5,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_url_for_data_file
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 #Bug 115933 - XLSX <fileSharing> password protected with algorithmName, hashValue, saltValue and spinCount
@@ -13,7 +12,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf115933(UITestCase):
 
     def test_tdf115933(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf115933.xlsx")):
+        with self.ui_test.load_file("tdf115933.xlsx"):
             #The document was created in Excel.
             calcDoc = self.xUITest.getTopFocusWindow()
             gridwin = calcDoc.getChild("grid_window")

@@ -6,7 +6,7 @@
 #
 from uitest.framework import UITestCase
 from uitest.uihelper.common import select_pos
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import change_measurement_unit
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
@@ -14,7 +14,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf134881(UITestCase):
     def test_tdf134881(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf134881_colProportionalAdjust.odt")) as writer_doc:
+        with self.ui_test.load_file("tdf134881_colProportionalAdjust.odt") as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             change_measurement_unit(self, "Centimeter")

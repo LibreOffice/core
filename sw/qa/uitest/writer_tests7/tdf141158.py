@@ -4,13 +4,12 @@ from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
-from uitest.uihelper.common import get_url_for_data_file
 import time
 
 class TestTdf141158(UITestCase):
     def test_tdf141158(self):
         # load the desired bugdoc
-        with self.ui_test.load_file(get_url_for_data_file("TestHiddenHeadersFooters.docx")):
+        with self.ui_test.load_file("TestHiddenHeadersFooters.docx"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             document = self.ui_test.get_component()

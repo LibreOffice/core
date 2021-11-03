@@ -6,19 +6,18 @@
 #
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_url_for_data_file
 from uitest.uihelper.calc import enter_text_to_cell
 
 #Calc sheet to Writer table
 
 class sheetToTable(UITestCase):
     def test_sheet_to_table_without_hidden_rows(self):
-        with self.ui_test.load_file(get_url_for_data_file("hiddenRow.ods")) as calc_doc:
+        with self.ui_test.load_file("hiddenRow.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             self.xUITest.executeCommand(".uno:SelectAll")
             self.xUITest.executeCommand(".uno:Copy")
 
-        with self.ui_test.load_file(get_url_for_data_file("tableToText.odt")) as writer_doc:
+        with self.ui_test.load_file("tableToText.odt") as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             self.xUITest.executeCommand(".uno:Paste")
             #verify (don't copy hidden cells)
@@ -31,12 +30,12 @@ class sheetToTable(UITestCase):
             self.assertEqual(table.getCellByName("A2").getString(), "3")
 
     def test_tdf138688(self):
-        with self.ui_test.load_file(get_url_for_data_file("hiddenRow.ods")) as calc_doc:
+        with self.ui_test.load_file("hiddenRow.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             self.xUITest.executeCommand(".uno:SelectAll")
             self.xUITest.executeCommand(".uno:Copy")
 
-        with self.ui_test.load_file(get_url_for_data_file("tableToText.odt")) as writer_doc:
+        with self.ui_test.load_file("tableToText.odt") as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             # set numbering in the paragraph after the table
@@ -74,7 +73,7 @@ class sheetToTable(UITestCase):
             self.xUITest.executeCommand(".uno:Copy")
 
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf129083.odt")) as writer_doc:
+        with self.ui_test.load_file("tdf129083.odt") as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             self.xUITest.executeCommand(".uno:Paste")

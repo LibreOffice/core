@@ -6,13 +6,12 @@
 #
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_url_for_data_file
 
 #Bug 126017 - Crash swlo!SwNode::EndOfSectionIndex
 
 class tdf126017(UITestCase):
    def test_tdf126017_crash_after_undo(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf126017.odt")) as writer_doc:
+        with self.ui_test.load_file("tdf126017.odt") as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             #go to TOC

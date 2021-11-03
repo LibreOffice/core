@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import select_pos, get_url_for_data_file
+from uitest.uihelper.common import select_pos
 from uitest.uihelper.common import change_measurement_unit
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
@@ -13,7 +13,7 @@ class tdf133630(UITestCase):
 
    def test_tdf133630(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("chartArea.ods")) as calc_doc:
+        with self.ui_test.load_file("chartArea.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 

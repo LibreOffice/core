@@ -6,13 +6,13 @@
 #
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 
 #Bug 126627 - CRASH: undoing redlinehide deletion
 
 class tdf126627(UITestCase):
     def test_tdf126627_crash_undo_deletion(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf126627.odt")) as writer_doc:
+        with self.ui_test.load_file("tdf126627.odt") as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:

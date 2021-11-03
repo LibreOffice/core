@@ -8,12 +8,12 @@
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.framework import UITestCase
 from libreoffice.calc.document import get_cell_by_position
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 
 class mergedRowsColumns(UITestCase):
 
     def test_merged_row_delete_tdf105412(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf105412.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf105412.ods") as calc_doc:
             xTopWindow = self.xUITest.getTopFocusWindow()
             gridwin = xTopWindow.getChild("grid_window")
 
@@ -26,7 +26,7 @@ class mergedRowsColumns(UITestCase):
             self.assertEqual(get_cell_by_position(calc_doc, 0, 2, 18).getString(), "L6")
 
     def test_merged_columns_delete(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf105412.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf105412.ods") as calc_doc:
             xTopWindow = self.xUITest.getTopFocusWindow()
             gridwin = xTopWindow.getChild("grid_window")
 
@@ -39,7 +39,7 @@ class mergedRowsColumns(UITestCase):
             self.assertEqual(get_cell_by_position(calc_doc, 0, 2, 18).getString(), "L6")
 
     def test_undo_not_available_merged_cells_tdf37901(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf105412.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf105412.ods") as calc_doc:
             xTopWindow = self.xUITest.getTopFocusWindow()
             gridwin = xTopWindow.getChild("grid_window")
 
@@ -58,7 +58,7 @@ class mergedRowsColumns(UITestCase):
             self.xUITest.executeCommand(".uno:Undo")
 
     def test_calculations_in_merged_cells_tdf51368(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf51368.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf51368.ods") as calc_doc:
             xTopWindow = self.xUITest.getTopFocusWindow()
             gridwin = xTopWindow.getChild("grid_window")
 
@@ -150,7 +150,7 @@ class mergedRowsColumns(UITestCase):
             self.assertEqual(get_cell_by_position(calc_doc, 0, 11, 21).getString(), "2")
 
     def test_merge_merged_cells_tdf63766(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf105412.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf105412.ods") as calc_doc:
             xTopWindow = self.xUITest.getTopFocusWindow()
             gridwin = xTopWindow.getChild("grid_window")
 

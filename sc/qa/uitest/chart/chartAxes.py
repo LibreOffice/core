@@ -9,13 +9,13 @@ from uitest.uihelper.common import select_pos
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, type_text, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict, type_text
 
 #Chart Enable Axes dialog
 
 class chartAxes(UITestCase):
    def test_chart_enable_grids_dialog(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf98390.ods")) as calc_doc:
+    with self.ui_test.load_file("tdf98390.ods") as calc_doc:
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 

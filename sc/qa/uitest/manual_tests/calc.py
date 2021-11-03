@@ -8,7 +8,7 @@
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import get_cell_by_position
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, type_text
+from uitest.uihelper.common import get_state_as_dict, type_text
 from uitest.uihelper.calc import enter_text_to_cell
 
 class ManualCalcTests(UITestCase):
@@ -145,7 +145,7 @@ class ManualCalcTests(UITestCase):
 
     # http://manual-test.libreoffice.org/manage/case/151/
     def test_cell_recalc(self):
-        with self.ui_test.load_file(get_url_for_data_file("cell_recalc.ods")) as document:
+        with self.ui_test.load_file("cell_recalc.ods") as document:
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
             xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "D2:D9"}))

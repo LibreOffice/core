@@ -5,13 +5,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_url_for_data_file
 
 #Bug 120731 - Crash cuilo!makeAutoCorrEdit when open character dialog with large amount of text selected
 
 class tdf120731(UITestCase):
    def test_tdf120731_crash_open_char_dialog(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf120731.odt")) as writer_doc:
+        with self.ui_test.load_file("tdf120731.odt") as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             self.xUITest.executeCommand(".uno:SelectAll")

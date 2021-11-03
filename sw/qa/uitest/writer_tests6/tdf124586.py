@@ -6,13 +6,13 @@
 #
 from uitest.framework import UITestCase
 from uitest.uihelper.common import select_by_text
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 
 #Bug 124586 - Crash if switch from user outline numbering to chapter numbering with same paragraph style
 
 class tdf124586(UITestCase):
    def test_tdf124586_crash_switch_outline_numbering(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf124586.odt")) as writer_doc:
+        with self.ui_test.load_file("tdf124586.odt") as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             #Goto Tools > Chapter Numbering.

@@ -6,13 +6,13 @@
 #
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 
 #Find similarities
 
 class findSimilarities(UITestCase):
     def test_find_similarities(self):
-        with self.ui_test.load_file(get_url_for_data_file("findReplace.odt")) as writer_doc:
+        with self.ui_test.load_file("findReplace.odt") as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             #verify: we are on page 1

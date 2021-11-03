@@ -11,7 +11,7 @@ from uitest.uihelper.common import change_measurement_unit
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, type_text
+from uitest.uihelper.common import get_state_as_dict, type_text
 
 from com.sun.star.lang import Locale
 
@@ -19,7 +19,7 @@ from com.sun.star.lang import Locale
 
 class chartDataLabels(UITestCase):
    def test_chart_data_labels_dialog(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf98390.ods")) as calc_doc:
+    with self.ui_test.load_file("tdf98390.ods") as calc_doc:
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 
@@ -111,7 +111,7 @@ class chartDataLabels(UITestCase):
         self.assertEqual(xDataSeries[0].LabelSeparator, ", ")
 
    def test_chart_data_labels_percentage_dialog(self):
-    with self.ui_test.load_file(get_url_for_data_file("dataLabels.ods")) as calc_doc:
+    with self.ui_test.load_file("dataLabels.ods") as calc_doc:
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 
@@ -212,7 +212,7 @@ class chartDataLabels(UITestCase):
         self.assertEqual(xDataSeries[0].PercentageNumberFormat, xFormat)
 
    def test_tdf131291(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf131291.ods")) as calc_doc:
+    with self.ui_test.load_file("tdf131291.ods") as calc_doc:
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 
@@ -272,7 +272,7 @@ class chartDataLabels(UITestCase):
         self.assertEqual(xDataSeries[0].NumberFormat, xFormat)
 
    def test_tdf136573(self):
-    with self.ui_test.load_file(get_url_for_data_file("dataLabels.ods")) as calc_doc:
+    with self.ui_test.load_file("dataLabels.ods") as calc_doc:
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 

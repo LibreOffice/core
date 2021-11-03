@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 #Bug 62267 - Conditional formatting lost after paste special of text, numbers and dates.
@@ -15,7 +15,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf62267(UITestCase):
 
     def test_tdf62267(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf62267.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf62267.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 

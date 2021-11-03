@@ -5,7 +5,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_url_for_data_file
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
@@ -15,7 +14,7 @@ class calcAutosum(UITestCase):
 
     def test_autosum_test1(self):
         #Sum on range and Sum on Sum's
-        with self.ui_test.load_file(get_url_for_data_file("autosum.ods")) as calc_doc:
+        with self.ui_test.load_file("autosum.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #Place the cell cursor on the gray cells located under Point 1.
@@ -41,7 +40,7 @@ class calcAutosum(UITestCase):
 
     def test_autosum_test2(self):
         #Sum on Row and Column
-        with self.ui_test.load_file(get_url_for_data_file("autosum.ods")) as calc_doc:
+        with self.ui_test.load_file("autosum.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -73,7 +72,7 @@ class calcAutosum(UITestCase):
 
     def test_autosum_test3(self):
         #Subtotals on Autosum
-        with self.ui_test.load_file(get_url_for_data_file("autosum.ods")) as calc_doc:
+        with self.ui_test.load_file("autosum.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -85,7 +84,7 @@ class calcAutosum(UITestCase):
 
     def test_autosum_test4(self):
         #Autosum on column with selected empty cell for result
-        with self.ui_test.load_file(get_url_for_data_file("autosum.ods")) as calc_doc:
+        with self.ui_test.load_file("autosum.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -97,7 +96,7 @@ class calcAutosum(UITestCase):
 
     def test_autosum_test5(self):
         #5.Autosum on rows with selected empty cell for result
-        with self.ui_test.load_file(get_url_for_data_file("autosum.ods")) as calc_doc:
+        with self.ui_test.load_file("autosum.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -117,7 +116,7 @@ class calcAutosum(UITestCase):
 
     def test_autosum_test6(self):
         #6.Subtotal on column with selected empty cell for result
-        with self.ui_test.load_file(get_url_for_data_file("autosum.ods")) as calc_doc:
+        with self.ui_test.load_file("autosum.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -129,7 +128,7 @@ class calcAutosum(UITestCase):
 
     def test_autosum_test7(self):
         #7.Autosum on column without selected empty cell for result
-        with self.ui_test.load_file(get_url_for_data_file("autosum.ods")) as calc_doc:
+        with self.ui_test.load_file("autosum.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -141,7 +140,7 @@ class calcAutosum(UITestCase):
 
     def test_autosum_test8(self):
         #8.Autosum on rows without selected empty cell for result
-        with self.ui_test.load_file(get_url_for_data_file("autosum.ods")) as calc_doc:
+        with self.ui_test.load_file("autosum.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -159,7 +158,7 @@ class calcAutosum(UITestCase):
 
     def test_autosum_test9(self):
         #9.Subtotal on column without selected empty cell for result
-        with self.ui_test.load_file(get_url_for_data_file("autosum.ods")) as calc_doc:
+        with self.ui_test.load_file("autosum.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -171,7 +170,7 @@ class calcAutosum(UITestCase):
 
     def test_autosum_test10(self):
         #10.Autosum on multiselected columns without selected empty cell for result
-        with self.ui_test.load_file(get_url_for_data_file("autosum.ods")) as calc_doc:
+        with self.ui_test.load_file("autosum.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -187,7 +186,7 @@ class calcAutosum(UITestCase):
 
     def test_autosum_test11(self):
         #11.Autosum on columns with formula results without selected empty cell for result
-        with self.ui_test.load_file(get_url_for_data_file("autosum.ods")) as calc_doc:
+        with self.ui_test.load_file("autosum.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -203,7 +202,7 @@ class calcAutosum(UITestCase):
 
     def test_autosum_test12(self):
         #12.Autosum on column with filled cell under selected area
-        with self.ui_test.load_file(get_url_for_data_file("autosum.ods")) as calc_doc:
+        with self.ui_test.load_file("autosum.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -219,7 +218,7 @@ class calcAutosum(UITestCase):
 
     def test_autosum_test13(self):
         #13.Autosum on column and rows with empty cells selected for row and column
-        with self.ui_test.load_file(get_url_for_data_file("autosum.ods")) as calc_doc:
+        with self.ui_test.load_file("autosum.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 

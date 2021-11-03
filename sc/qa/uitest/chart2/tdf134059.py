@@ -7,7 +7,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import select_pos
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 from libreoffice.calc.document import get_row
 
 class Tdf134059(UITestCase):
@@ -36,7 +36,7 @@ class Tdf134059(UITestCase):
     gridwin.executeAction("DESELECT", mkPropertyValues({"OBJECT": "Object 1"}))
 
   def test_tdf134059(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf134059.ods")) as calc_doc:
+    with self.ui_test.load_file("tdf134059.ods") as calc_doc:
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 

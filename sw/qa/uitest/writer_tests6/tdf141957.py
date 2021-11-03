@@ -5,12 +5,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 
 class tdf141957(UITestCase):
 
     def test_tdf_141957(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf141957.odt")):
+        with self.ui_test.load_file("tdf141957.odt"):
             with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
                 tabcontrol = xDialog.getChild("tabcontrol")
 

@@ -5,13 +5,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 
 class tdf135636(UITestCase):
 
     def test_tdf135636(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf135636.odt")) as document:
+        with self.ui_test.load_file("tdf135636.odt") as document:
 
             self.assertEqual(document.CurrentController.PageCount, 2)
 

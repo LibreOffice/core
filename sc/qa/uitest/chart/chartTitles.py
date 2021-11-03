@@ -10,13 +10,13 @@ from uitest.uihelper.common import change_measurement_unit
 
 
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 
 #Chart Display Titles dialog
 
 class chartTitles(UITestCase):
    def test_chart_display_titles_dialog(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf98390.ods")) as calc_doc:
+    with self.ui_test.load_file("tdf98390.ods") as calc_doc:
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 
@@ -83,7 +83,7 @@ class chartTitles(UITestCase):
 
    def test_title_move_with_arrows_keys(self):
 
-    with self.ui_test.load_file(get_url_for_data_file("chartArea.ods")) as calc_doc:
+    with self.ui_test.load_file("chartArea.ods") as calc_doc:
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 

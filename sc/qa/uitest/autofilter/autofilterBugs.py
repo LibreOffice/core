@@ -6,13 +6,13 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.calc import enter_text_to_cell
 
 class autofilter(UITestCase):
 
    def test_tdf115046(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf115046.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf115046.ods") as calc_doc:
             #autofilter exist
             self.assertEqual(calc_doc.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)
 
@@ -49,7 +49,7 @@ class autofilter(UITestCase):
 
         #tdf77479.ods
    def test_tdf77479(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf77479.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf77479.ods") as calc_doc:
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
             #autofilter exist
@@ -65,7 +65,7 @@ class autofilter(UITestCase):
 
         #112656
    def test_tdf112656(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf112656.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf112656.ods") as calc_doc:
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
 
@@ -79,7 +79,7 @@ class autofilter(UITestCase):
 
         #tdf81124
    def test_tdf81124(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf81124.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf81124.ods") as calc_doc:
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
 
@@ -101,7 +101,7 @@ class autofilter(UITestCase):
 
 #tdf73565
    def test_tdf73565(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf73565.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf73565.ods") as calc_doc:
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
 
@@ -116,7 +116,7 @@ class autofilter(UITestCase):
 
         #tdf65505
    def test_tdf65505(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf81124.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf81124.ods") as calc_doc:
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
 
@@ -131,7 +131,7 @@ class autofilter(UITestCase):
 
 #tdf74857
    def test_tdf74857(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf74857.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf74857.ods") as calc_doc:
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
 
@@ -142,7 +142,7 @@ class autofilter(UITestCase):
 
         #tdf35294
    def test_tdf35294(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf35294.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf35294.ods") as calc_doc:
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
 
@@ -170,7 +170,7 @@ class autofilter(UITestCase):
 
         #tdf55712
    def test_tdf55712(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf55712.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf55712.ods") as calc_doc:
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
 

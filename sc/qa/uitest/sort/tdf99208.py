@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
 from uitest.uihelper.common import select_by_text
 from uitest.uihelper.calc import enter_text_to_cell
@@ -16,7 +16,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf99208(UITestCase):
     def test_td99627_natural_sort(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf99208.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf99208.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #select A3:C245

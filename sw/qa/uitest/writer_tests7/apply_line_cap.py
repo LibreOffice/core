@@ -5,13 +5,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
 
 class apply_line_cap(UITestCase):
 
     def test_apply_line_cap(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf127166_prstDash_Word97.docx")) as writer_doc:
+        with self.ui_test.load_file("tdf127166_prstDash_Word97.docx") as writer_doc:
 
             # check FLAT -> ROUND cap style change by selecting the new 'Rounded' preset line styles
 

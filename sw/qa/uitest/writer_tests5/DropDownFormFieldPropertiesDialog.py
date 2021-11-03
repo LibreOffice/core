@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class dropDownFormFieldDialog(UITestCase):
@@ -13,7 +13,7 @@ class dropDownFormFieldDialog(UITestCase):
     def test_add_new_items(self):
 
         # open a file with an empty form field
-        with self.ui_test.load_file(get_url_for_data_file("empty_drop_down_form_field.odt")) as writer_doc:
+        with self.ui_test.load_file("empty_drop_down_form_field.odt") as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             # open the dialog (cursor is at the field)
@@ -62,7 +62,7 @@ class dropDownFormFieldDialog(UITestCase):
     def test_remove_items(self):
 
         # open a file with an empty form field
-        with self.ui_test.load_file(get_url_for_data_file("empty_drop_down_form_field.odt")) as writer_doc:
+        with self.ui_test.load_file("empty_drop_down_form_field.odt") as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             # open the dialog (cursor is at the field)
@@ -132,7 +132,7 @@ class dropDownFormFieldDialog(UITestCase):
     def test_move_items(self):
 
         # open a file with an empty form field
-        with self.ui_test.load_file(get_url_for_data_file("empty_drop_down_form_field.odt")) as writer_doc:
+        with self.ui_test.load_file("empty_drop_down_form_field.odt") as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             # open the dialog (cursor is at the field)
@@ -215,7 +215,7 @@ class dropDownFormFieldDialog(UITestCase):
         files = ["drop_down_form_field.odt", "drop_down_form_field.doc", "drop_down_form_field.docx"]
         for file in files:
             # open a file with a drop-down for field with items and selection
-            with self.ui_test.load_file(get_url_for_data_file(file)) as writer_doc:
+            with self.ui_test.load_file(file) as writer_doc:
                 xWriterDoc = self.xUITest.getTopFocusWindow()
 
                 # open the dialog (cursor is at the field)

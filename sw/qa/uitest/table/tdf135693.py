@@ -6,12 +6,12 @@
 
 from uitest.framework import UITestCase
 from uitest.uihelper.common import select_pos
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 
 class tdf135693(UITestCase):
 
     def test_tdf135693(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf135693.odt")) as writer_doc:
+        with self.ui_test.load_file("tdf135693.odt") as writer_doc:
 
             self.xUITest.getTopFocusWindow()
 

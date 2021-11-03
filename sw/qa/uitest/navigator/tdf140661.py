@@ -6,7 +6,7 @@
 #
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 
 class tdf140661(UITestCase):
 
@@ -41,7 +41,7 @@ class tdf140661(UITestCase):
 
     def test_tdf140661(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf140661.odt")) as writer_doc:
+        with self.ui_test.load_file("tdf140661.odt") as writer_doc:
 
             self.launch_navigator(True)
 

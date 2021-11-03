@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import change_measurement_unit
 
@@ -13,7 +13,7 @@ class tdf137397(UITestCase):
 
     def test_tdf137397(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf137397.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf137397.ods") as calc_doc:
 
             change_measurement_unit(self, 'Centimeter')
 

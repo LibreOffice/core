@@ -5,14 +5,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import change_measurement_unit
 
 class tdf99711(UITestCase):
     def test_tdf99711(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("shape.odt")) as writer_doc:
+        with self.ui_test.load_file("shape.odt") as writer_doc:
 
             #set measurement to millimeters
             change_measurement_unit(self, "Millimeter")

@@ -7,13 +7,12 @@
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import is_row_hidden
-from uitest.uihelper.common import get_url_for_data_file
 
 #Bug 130770 - Autofilter not updated on data change (automatically or manually)
 
 class tdf130770(UITestCase):
     def test_tdf130770_autofilter(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf130770.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf130770.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 

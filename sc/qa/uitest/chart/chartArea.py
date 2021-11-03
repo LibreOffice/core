@@ -10,13 +10,13 @@ from uitest.uihelper.common import change_measurement_unit
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, type_text, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict, type_text
 
 #Chart Area dialog
 
 class chartArea(UITestCase):
    def test_chart_area_dialog(self):
-    with self.ui_test.load_file(get_url_for_data_file("chartArea.ods")) as calc_doc:
+    with self.ui_test.load_file("chartArea.ods") as calc_doc:
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 

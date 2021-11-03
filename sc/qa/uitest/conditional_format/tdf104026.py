@@ -6,7 +6,7 @@
 #
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 
 class Tdf104026(UITestCase):
 
@@ -26,7 +26,7 @@ class Tdf104026(UITestCase):
 
 
   def test_tdf104026(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf104026.ods")):
+    with self.ui_test.load_file("tdf104026.ods"):
 
         self.execute_conditional_format_manager_dialog(6)
 

@@ -7,13 +7,12 @@
 from uitest.framework import UITestCase
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_url_for_data_file
 
 class tdf133855(UITestCase):
 
     def test_tdf133855(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf133855.ods")) as calc_doc:
+        with self.ui_test.load_file("tdf133855.ods") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
 
             results = ['A', 'B', 'C', 'D', 'E', 'F']

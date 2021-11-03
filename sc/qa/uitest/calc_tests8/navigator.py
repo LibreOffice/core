@@ -5,12 +5,12 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 
 class navigator(UITestCase):
 
     def test_rename_sheet(self):
-        with self.ui_test.load_file(get_url_for_data_file("navigator.ods")):
+        with self.ui_test.load_file("navigator.ods"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             xGridWin = xCalcDoc.getChild("grid_window")
 
@@ -76,7 +76,7 @@ class navigator(UITestCase):
 
     def test_tdf98493(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf98493.ods")):
+        with self.ui_test.load_file("tdf98493.ods"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             xGridWin = xCalcDoc.getChild("grid_window")
 
@@ -146,7 +146,7 @@ class navigator(UITestCase):
 
 
     def test_tdf141973(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf141973.ods")):
+        with self.ui_test.load_file("tdf141973.ods"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             xGridWin = xCalcDoc.getChild("grid_window")
 

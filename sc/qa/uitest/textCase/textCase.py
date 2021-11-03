@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
@@ -125,7 +125,7 @@ class textCase(UITestCase):
 
     def test_tdf119155_Capitalize_Every_Word(self):
         #Bug 119155 - Freeze after command format->text->Capitalize Every Word
-        with self.ui_test.load_file(get_url_for_data_file("tdf119155.xlsx")) as calc_doc:
+        with self.ui_test.load_file("tdf119155.xlsx") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #1. Open attached file
@@ -139,7 +139,7 @@ class textCase(UITestCase):
 
     def test_tdf119162_Cycle_Case(self):
         #Bug 119162 - Format > Text > Cycle Case on attached example file hangs Calc reproducibly
-        with self.ui_test.load_file(get_url_for_data_file("tdf119162.xls")) as calc_doc:
+        with self.ui_test.load_file("tdf119162.xls") as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #1.Open the attached .xls file
