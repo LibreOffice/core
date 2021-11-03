@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b72017d7_6509095d",
+        "filename": "include/unotools/VersionConfig.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-11-03T07:46:12Z",
+      "side": 1,
+      "message": "is this needed? Just leaving this branch empty would also return true.\nMaybe issuing a SAL_INFO might make sense here?",
+      "range": {
+        "startLine": 45,
+        "startChar": 16,
+        "endLine": 45,
+        "endChar": 28
+      },
+      "revId": "ce150eaf5d029f1b7858fcb6faf6c03a1e86106e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
