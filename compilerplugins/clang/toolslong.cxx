@@ -156,6 +156,7 @@ void ToolsLong::run()
         || loplugin::isSamePathname(fn, SRCDIR
                                     "/shell/source/win32/shlxthandler/ooofilt/stream_helper.cxx")
         || loplugin::isSamePathname(fn, SRCDIR "/shell/source/win32/zipfile/zipfile.cxx")
+        || loplugin::isSamePathname(fn, SRCDIR "/ucb/source/ucp/webdav-curl/CurlSession.cxx")
         || loplugin::isSamePathname(fn, SRCDIR "/ucb/source/ucp/webdav-neon/NeonSession.cxx"))
         return;
     // these are places where the external API is actually "long"
