@@ -122,6 +122,24 @@
       "parentUuid": "f85d818f_0e382e7f",
       "revId": "06a99866a9c58459a1643d2d33d71489d66ab40a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1fd0229_02a9c86d",
+        "filename": "sc/source/filter/orcus/interface.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 2164,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-03T11:06:18Z",
+      "side": 1,
+      "message": "Completely agree; I myself always try to declare things const wherever they do not change after creation. Thanks!",
+      "parentUuid": "29e48dc7_afdddda3",
+      "revId": "06a99866a9c58459a1643d2d33d71489d66ab40a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
