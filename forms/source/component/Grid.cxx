@@ -399,7 +399,7 @@ void OGridControlModel::describeFixedProperties( Sequence< Property >& _rProps )
         DECL_PROP1(FONT_WEIGHT,         float,              MAYBEDEFAULT);
         DECL_PROP1(FONT_SLANT,          sal_Int16,          MAYBEDEFAULT);
         DECL_PROP1(FONT_UNDERLINE,      sal_Int16,          MAYBEDEFAULT);
-        DECL_BOOL_PROP1(FONT_WORDLINEMODE,                  MAYBEDEFAULT);
+        DECL_BOOL_PROP_IMPL(FONT_WORDLINEMODE) css::beans::PropertyAttribute::MAYBEDEFAULT);
         DECL_PROP3(TEXTLINECOLOR,       sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID);
         DECL_PROP2(FONTEMPHASISMARK,    sal_Int16,          BOUND, MAYBEDEFAULT);
         DECL_PROP2(FONTRELIEF,          sal_Int16,          BOUND, MAYBEDEFAULT);

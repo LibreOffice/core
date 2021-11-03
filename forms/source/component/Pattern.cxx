@@ -100,7 +100,7 @@ void OPatternModel::describeFixedProperties( Sequence< Property >& _rProps ) con
 {
     BEGIN_DESCRIBE_PROPERTIES( 4, OEditBaseModel )
         DECL_PROP2(DEFAULT_TEXT,    OUString,    BOUND, MAYBEDEFAULT);
-        DECL_BOOL_PROP1(EMPTY_IS_NULL,                  BOUND);
+        DECL_BOOL_PROP_IMPL(EMPTY_IS_NULL) css::beans::PropertyAttribute::BOUND);
         DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
         DECL_PROP2(FILTERPROPOSAL,  sal_Bool,           BOUND, MAYBEDEFAULT);
     END_DESCRIBE_PROPERTIES();

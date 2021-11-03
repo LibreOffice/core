@@ -1292,7 +1292,7 @@ void ODatabaseForm::describeFixedAndAggregateProperties(
 
     DECL_IFACE_PROP_IMPL(ACTIVE_CONNECTION, XConnection) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::TRANSIENT |
                                                          css::beans::PropertyAttribute::MAYBEVOID | PropertyAttribute::CONSTRAINED);
-    DECL_BOOL_PROP2 ( APPLYFILTER,                               BOUND, MAYBEDEFAULT            );
+    DECL_BOOL_PROP_IMPL(APPLYFILTER) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     DECL_PROP1      ( NAME,             OUString,                BOUND                          );
     DECL_PROP1      ( MASTERFIELDS,     Sequence< OUString >,    BOUND                          );
     DECL_PROP1      ( DETAILFIELDS,     Sequence< OUString >,    BOUND                          );
@@ -1300,11 +1300,11 @@ void ODatabaseForm::describeFixedAndAggregateProperties(
     DECL_PROP3      ( CYCLE,            TabulatorCycle,          BOUND, MAYBEVOID, MAYBEDEFAULT );
     DECL_PROP2      ( FILTER,           OUString,                BOUND, MAYBEDEFAULT            );
     DECL_PROP2      ( HAVINGCLAUSE,     OUString,                BOUND, MAYBEDEFAULT            );
-    DECL_BOOL_PROP2 ( INSERTONLY,                                BOUND, MAYBEDEFAULT            );
+    DECL_BOOL_PROP_IMPL(INSERTONLY) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     DECL_PROP1      ( NAVIGATION,       NavigationBarMode,       BOUND                          );
-    DECL_BOOL_PROP1 ( ALLOWADDITIONS,                            BOUND                          );
-    DECL_BOOL_PROP1 ( ALLOWEDITS,                                BOUND                          );
-    DECL_BOOL_PROP1 ( ALLOWDELETIONS,                            BOUND                          );
+    DECL_BOOL_PROP_IMPL(ALLOWADDITIONS) css::beans::PropertyAttribute::BOUND);
+    DECL_BOOL_PROP_IMPL(ALLOWEDITS) css::beans::PropertyAttribute::BOUND);
+    DECL_BOOL_PROP_IMPL(ALLOWDELETIONS) css::beans::PropertyAttribute::BOUND);
     DECL_PROP2      ( PRIVILEGES,       sal_Int32,               TRANSIENT, READONLY            );
     DECL_PROP1      ( TARGET_URL,       OUString,                BOUND                          );
     DECL_PROP1      ( TARGET_FRAME,     OUString,                BOUND                          );
