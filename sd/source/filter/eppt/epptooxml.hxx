@@ -168,6 +168,8 @@ private:
 
     /// If this is PPTM, output the VBA stream.
     void WriteVBA();
+
+    void WriteModifyVerifier();
 };
 
 }

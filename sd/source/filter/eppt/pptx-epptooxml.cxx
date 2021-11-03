@@ -495,6 +495,8 @@ bool PowerPointExport::exportDocument()
 
     WriteVBA();
 
+    WriteModifyVerifier();
+
     mPresentationFS->endElementNS(XML_p, XML_presentation);
     mPresentationFS.reset();
     // Free all FSHelperPtr, to flush data before committing storage
@@ -1256,6 +1258,75 @@ void PowerPointExport::WriteVBA()
 
     // Write the relationship.
     addRelation(mPresentationFS->getOutputStream(), oox::getRelationship(Relationship::VBAPROJECT), u"vbaProject.bin");
+}
+
+void PowerPointExport::WriteModifyVerifier()
+{
+    Sequence<PropertyValue> aInfo;
+
+    try
+    {
+        Reference<lang::XMultiServiceFactory> xFactory(mXModel, UNO_QUERY);
+        Reference<XPropertySet> xDocSettings(
+            xFactory->createInstance("com.sun.star.document.Settings"), UNO_QUERY);
+        xDocSettings->getPropertyValue("ModifyPasswordInfo") >>= aInfo;
+    }
+    catch (const Exception&)
+    {
+    }
+
+    if (aInfo.hasElements())
+    {
+        OUString sAlgorithm, sSalt, sHash;
+        sal_Int32 nCount = 0;
+        for (auto& prop : aInfo)
+        {
+            if (prop.Name == "algorithm-name")
+                prop.Value >>= sAlgorithm;
+            else if (prop.Name == "salt")
+                prop.Value >>= sSalt;
+            else if (prop.Name == "iteration-count")
+                prop.Value >>= nCount;
+            else if (prop.Name == "hash")
+                prop.Value >>= sHash;
+        }
+        if (!sAlgorithm.isEmpty() && !sSalt.isEmpty() && !sHash.isEmpty())
+        {
+            sal_Int32 nAlgorithmSid = 0;
+            if (sAlgorithm == "MD2")
+                nAlgorithmSid = 1;
+            else if (sAlgorithm == "MD4")
+                nAlgorithmSid = 2;
+            else if (sAlgorithm == "MD5")
+                nAlgorithmSid = 3;
+            else if (sAlgorithm == "SHA-1")
+                nAlgorithmSid = 4;
+            else if (sAlgorithm == "MAC")
+                nAlgorithmSid = 5;
+            else if (sAlgorithm == "RIPEMD")
+                nAlgorithmSid = 6;
+            else if (sAlgorithm == "RIPEMD-160")
+                nAlgorithmSid = 7;
+            else if (sAlgorithm == "HMAC")
+                nAlgorithmSid = 9;
+            else if (sAlgorithm == "SHA-256")
+                nAlgorithmSid = 12;
+            else if (sAlgorithm == "SHA-384")
+                nAlgorithmSid = 13;
+            else if (sAlgorithm == "SHA-512")
+                nAlgorithmSid = 14;
+
+            if (nAlgorithmSid != 0)
+                mPresentationFS->singleElementNS(XML_p, XML_modifyVerifier,
+                    XML_cryptProviderType, "rsaAES",
+                    XML_cryptAlgorithmClass, "hash",
+                    XML_cryptAlgorithmType, "typeAny",
+                    XML_cryptAlgorithmSid, OString::number(nAlgorithmSid).getStr(),
+                    XML_spinCount, OString::number(nCount).getStr(),
+                    XML_saltData, sSalt.toUtf8().getStr(),
+                    XML_hashData, sHash.toUtf8().getStr());
+        }
+    }
 }
 
 void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_uInt16 /* nMode */,
