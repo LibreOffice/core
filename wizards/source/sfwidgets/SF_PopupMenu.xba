@@ -534,7 +534,7 @@ Try:
 				Case cstNormal
 					.insertItem(LastItem, sName, 0, -1)
 				Case cstCheck
-					.insertItem(LastItem, sName, com.sun.star.awt.MenuItemStyle.AUTOCHECK, -1)
+					.insertItem(LastItem, sName, com.sun.star.awt.MenuItemStyle.CHECKABLE, -1)
 					.checkItem(LastItem, Status)
 				Case cstRadio
 					.insertItem(LastItem, sName, com.sun.star.awt.MenuItemStyle.RADIOCHECK, -1)
