@@ -959,6 +959,41 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf145066_bad_paragraph_deletion)
                          pTextDoc->getText()->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf145311_move_over_empty_paragraphs)
+{
+    // check move up/down with redlining: jumping over an empty paragraph
+    // resulted bad insertion of the empty paragraph in Show Changes mode
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf145311.fodt");
+
+    //turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // 8 paragraphs (list items)
+    CPPUNIT_ASSERT_EQUAL(8, getParagraphs());
+
+    // move down the first item over the empty paragraph
+    for (int i = 0; i < 4; ++i)
+        dispatchCommand(mxComponent, ".uno:MoveDown", {});
+
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    // This was 3 (bad conversion of the empty item to a tracked insertion)
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), pEditShell->GetRedlineCount());
+
+    // check move up
+
+    for (int i = 0; i < 3; ++i)
+        dispatchCommand(mxComponent, ".uno:MoveUp", {});
+
+    // This was 3 (bad conversion of the empty item to a tracked insertion)
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), pEditShell->GetRedlineCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf54819)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf54819.fodt");
