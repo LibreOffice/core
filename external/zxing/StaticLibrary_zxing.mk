@@ -11,6 +11,8 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,zxing))
 
 $(eval $(call gb_StaticLibrary_use_unpacked,zxing,zxing))
 
+$(eval $(call gb_StaticLibrary_set_precompiled_header,zxing,external/zxing/inc/pch/precompiled_zxing))
+
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,zxing,cpp))
 
 $(eval $(call gb_StaticLibrary_use_external,zxing,icu_headers))

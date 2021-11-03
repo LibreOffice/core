@@ -479,6 +479,10 @@ def filter_ignore(line, module):
             'src/gpu/vk/',
             'include/gpu/vk'
             ]
+    if module == 'external/zxing':
+        ignore_list += [
+            'rss/ODRSSExpandedBinaryDecoder.h'
+            ]
 
     for i in ignore_list:
         if line.startswith(i):
