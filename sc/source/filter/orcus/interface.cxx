@@ -1510,7 +1510,7 @@ ScOrcusStyles::xf::xf():
 }
 
 ScOrcusStyles::cell_style::cell_style():
-    maParentName("Default"),
+    maParentName(OUString(SC_STYLE_PROG_STANDARD)),
     mnXFId(0),
     mnBuiltInId(0)
 {
