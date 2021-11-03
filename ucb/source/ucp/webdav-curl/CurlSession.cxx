@@ -124,7 +124,7 @@ struct CurlOption
     Type const Tag;
     union {
         void const* const pValue;
-        decltype(0L) const lValue;
+        long const lValue;
         curl_off_t const cValue;
     };
 #if 0
@@ -145,8 +145,7 @@ struct CurlOption
         , pExceptionString(i_pExceptionString)
     {
     }
-    CurlOption(CURLoption const i_Option, decltype(0L) const i_Value,
-               char const* const i_pExceptionString)
+    CurlOption(CURLoption const i_Option, long const i_Value, char const* const i_pExceptionString)
         : Option(i_Option)
         , Tag(Type::Long)
         , lValue(i_Value)
@@ -206,7 +205,7 @@ public:
             {
                 rc = curl_easy_setopt(m_pCurl, it.Option, *pp);
             }
-            else if (decltype(0L) const * const pLong = ::std::get_if<long>(&it.Value))
+            else if (long const * const pLong = ::std::get_if<long>(&it.Value))
             {
                 rc = curl_easy_setopt(m_pCurl, it.Option, *pLong);
             }
@@ -264,7 +263,7 @@ public:
             {
                 rc = curl_easy_setopt(m_pCurl, it.Option, nullptr);
             }
-            else if (decltype(0L) const * const pLong = ::std::get_if<long>(&it.Value))
+            else if (long const * const pLong = ::std::get_if<long>(&it.Value))
             {
                 rc = curl_easy_setopt(m_pCurl, it.Option, 0L);
             }
@@ -699,8 +698,7 @@ CurlSession::CurlSession(uno::Reference<uno::XComponentContext> const& xContext,
     assert(rc == CURLE_OK); // ANY is always available
     if (!m_Proxy.aName.isEmpty())
     {
-        rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_PROXYPORT,
-                              static_cast<decltype(0L)>(m_Proxy.nPort));
+        rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_PROXYPORT, static_cast<long>(m_Proxy.nPort));
         assert(rc == CURLE_OK);
         OString const utf8Proxy(OUStringToOString(m_Proxy.aName, RTL_TEXTENCODING_UTF8));
         rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_PROXY, utf8Proxy.getStr());
