@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "facada8f_afa25a0a",
+        "filename": "sc/inc/stylehelper.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-03T10:41:44Z",
+      "side": 1,
+      "message": "Oh I missed that bit - they even were string literals originally?\n\nMy point was that you should *not* move *even a single definition* from this block in this change; if you suppose it\u0027s worth it (and I agree with that), please move the whole block *in a separate change*.",
+      "parentUuid": "88183449_993a789a",
+      "revId": "06a99866a9c58459a1643d2d33d71489d66ab40a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f85d818f_0e382e7f",
         "filename": "sc/source/filter/orcus/interface.cxx",
         "patchSetId": 9
