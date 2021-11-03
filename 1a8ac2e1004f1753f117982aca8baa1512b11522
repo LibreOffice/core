@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40e12737_b61f2b98",
+        "filename": "vcl/source/gdi/print.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1407,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-03T09:05:36Z",
+      "side": 1,
+      "message": "Just a note that static_assert also has (test, message) syntax :-)",
+      "revId": "1a8ac2e1004f1753f117982aca8baa1512b11522",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
