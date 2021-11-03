@@ -70,6 +70,18 @@ DECLARE_HTMLEXPORT_TEST(testTdf118637, "tdf118637.odt")
         != -1);
 }
 
+DECLARE_HTMLEXPORT_TEST(testTdf145361, "tdf145361.odt")
+{
+    // Without the fix in place, this test would have failed with
+    // - SfxBaseModel::impl_store <file:///tmp/lu66091ameq.tmp> failed: 0xc10(Error Area:Io Class:Write Code:16)
+    SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
+    CPPUNIT_ASSERT(pStream);
+    sal_uInt64 nLength = pStream->TellEnd();
+    OString aStream(read_uInt8s_ToOString(*pStream, nLength));
+    CPPUNIT_ASSERT(
+        aStream.indexOf("List entry has<br/><span style=\"margin-left:0cm\"/>a line break") != -1);
+}
+
 DECLARE_HTMLEXPORT_TEST(testTdf142483, "tdf142483.odt")
 {
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
