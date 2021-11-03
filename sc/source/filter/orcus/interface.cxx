@@ -49,6 +49,7 @@
 
 #include <stylesbuffer.hxx>
 #include <orcus/exception.hpp>
+#include <stylehelper.hxx>
 
 using namespace com::sun::star;
 
@@ -1512,7 +1513,7 @@ ScOrcusStyles::xf::xf():
 }
 
 ScOrcusStyles::cell_style::cell_style():
-    maParentName("Default"),
+    maParentName(OUString(SC_STYLE_PROG_STANDARD)),
     mnXFId(0),
     mnBuiltInId(0)
 {
@@ -2160,7 +2161,7 @@ void ScOrcusStyles::set_cell_style_builtin(size_t index)
 
 void ScOrcusStyles::set_cell_style_parent_name(const char* s, size_t n)
 {
-    OUString aParentName(s, n, mrFactory.getGlobalSettings().getTextEncoding());
+    const OUString aParentName(s, n, mrFactory.getGlobalSettings().getTextEncoding());
     maCurrentCellStyle.maParentName = aParentName;
 }
 
@@ -2179,7 +2180,9 @@ size_t ScOrcusStyles::commit_cell_style()
 
     ScStyleSheetPool* pPool = mrFactory.getDoc().getDoc().GetStyleSheetPool();
     SfxStyleSheetBase& rBase = pPool->Make(maCurrentCellStyle.maName, SfxStyleFamily::Para);
-    rBase.SetParent(maCurrentCellStyle.maParentName);
+    // Need to convert the parent name to localized UI name, see tdf#139205.
+    rBase.SetParent(ScStyleNameConversion::ProgrammaticToDisplayName(maCurrentCellStyle.maParentName,
+                                                                     SfxStyleFamily::Para));
     SfxItemSet& rSet = rBase.GetItemSet();
 
     xf& rXf = maCellStyleXfs[maCurrentCellStyle.mnXFId];
