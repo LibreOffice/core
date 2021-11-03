@@ -16,6 +16,23 @@
       "message": "I can\u0027t figure out about the build failures I\u0027m afraid.  It would be nice to get some help here.",
       "revId": "8cbbfc8bcddcaa2416a85aa8f523537d1c38d46d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32121e51_7e952d31",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2021-11-03T01:23:57Z",
+      "side": 1,
+      "message": "\u003e Patch Set 7: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/99869/ : FAILURE\n\u003e \n\u003e compiler couldn\"t find the file »filesystem« referenced from stream.cpp:20:10 ( https://ci.libreoffice.org/job/gerrit_linux_gcc_release/103522/ )\n\nThis makes no sense. The filesystem header should be available in C++17.",
+      "revId": "8cbbfc8bcddcaa2416a85aa8f523537d1c38d46d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
