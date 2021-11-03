@@ -16,6 +16,23 @@
       "message": "Here\u0027s the result of git grep -n ODBCVER:\nexternal/unixODBC/inc/odbc/sql.h:14:#ifndef ODBCVER\nexternal/unixODBC/inc/odbc/sql.h:15:#define ODBCVER 0x0351\nexternal/unixODBC/inc/odbc/sqlext.h:127:#if (ODBCVER \u003e\u003d 0x0351)\nexternal/unixODBC/inc/odbc/sqlext.h:181:#if (ODBCVER \u003e\u003d 0x0351)\nexternal/unixODBC/inc/odbc/sqlext.h:335:#if (ODBCVER \u003e\u003d 0x0350)\nexternal/unixODBC/inc/odbc/sqlext.h:337:#endif /* ODBCVER \u003e\u003d 0x0350 */\nexternal/unixODBC/inc/odbc/sqlext.h:363:#if (ODBCVER \u003e\u003d 0x0350)\nexternal/unixODBC/inc/odbc/sqlext.h:365:#endif  /* ODBCVER \u003e\u003d 0x0350 */\nexternal/unixODBC/inc/odbc/sqlext.h:453:#if (ODBCVER \u003e\u003d 0x0350)\nexternal/unixODBC/inc/odbc/sqlext.h:455:#endif  /* ODBCVER \u003e\u003d 0x0350 */\nexternal/unixODBC/inc/odbc/sqltypes.h:23: * default to the 3.51 definitions. should define ODBCVER before here if you want an older set of defines\nexternal/unixODBC/inc/odbc/sqltypes.h:25:#ifndef ODBCVER\nexternal/unixODBC/inc/odbc/sqltypes.h:26:#define ODBCVER 0x0351\nexternal/unixODBC/inc/odbc/sqltypes.h:391:#if (ODBCVER \u003e\u003d 0x0350)\n\nhttps://en.wikipedia.org/wiki/Open_Database_Connectivity indicates 3.5 is from 1997, 3.8 from 2009.\nSo 3.51 between both so more than 10 years.\n\u003d\u003e should we consider removing this var completely?",
       "revId": "6df4084a3d7528477f9243f6232feb147ad17189",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43b2ec50_e629b4ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-11-03T18:02:14Z",
+      "side": 1,
+      "message": "Lionel: I\u0027ll push this one since Jenkins is ok.\nWaiting for your response on my previous question about removing ODBCVER\n",
+      "revId": "6df4084a3d7528477f9243f6232feb147ad17189",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
