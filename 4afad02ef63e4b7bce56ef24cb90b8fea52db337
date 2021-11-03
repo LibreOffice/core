@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0aa440e6_b0700b74",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-11-03T08:13:45Z",
+      "side": 1,
+      "message": "It seems to me that using *display* names when parsing data might be not optimal. Are there *localized* names in the XML? If not, then I\u0027d suggest to keep using original names in parsing, and only convert them to localized names when exporting from orcus to the Calc document model. Do you think this would be doable?",
+      "revId": "4afad02ef63e4b7bce56ef24cb90b8fea52db337",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
