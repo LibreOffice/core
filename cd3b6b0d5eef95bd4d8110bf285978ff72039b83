@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ca155e6_7f0f795a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2021-11-03T16:40:37Z",
+      "side": 1,
+      "message": "It appears that gerrit_linux_clang_dbgutil build agent suffers from this issue:\n\nhttps://bugs.llvm.org/show_bug.cgi?id\u003d33222\n\nI tried everything I could think of to work around this, but I simply cannot. Is there any way we can have this build agent incorporate any fix for this issue?\n",
+      "revId": "cd3b6b0d5eef95bd4d8110bf285978ff72039b83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
