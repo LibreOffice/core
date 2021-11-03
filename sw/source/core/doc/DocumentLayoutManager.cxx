@@ -313,6 +313,35 @@ void DocumentLayoutManager::DelLayoutFormat( SwFrameFormat *pFormat )
     m_rDoc.getIDocumentState().SetModified();
 }
 
+static void lcl_CopyTextBoxes(SwDoc* pDoc, SwTextBoxNode* pSrcTextBoxes, const SdrObject* pSrcObj,
+                              SwTextBoxNode* pDestTextBoxes, SdrObject* pDestObj,
+                              bool bSetTextFlyAtt, bool bMakeFrames)
+{
+    auto pSrcChildren = pSrcObj->getChildrenOfSdrObject();
+    auto pDestChildren = pDestObj->getChildrenOfSdrObject();
+    if (pSrcChildren && pDestChildren)
+    {
+        if (pSrcChildren->GetObjCount() == pDestChildren->GetObjCount())
+            for (size_t i = 0; i < pSrcChildren->GetObjCount(); ++i)
+            {
+                lcl_CopyTextBoxes(pDoc, pSrcTextBoxes, pSrcChildren->GetObj(i), pDestTextBoxes,
+                                  pDestChildren->GetObj(i), bSetTextFlyAtt, bMakeFrames);
+            }
+    }
+    else
+    {
+        if (auto pSourceTextBoxFormat = pSrcTextBoxes->GetTextBox(pSrcObj))
+        {
+            assert(pSourceTextBoxFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR);
+            auto pNewTextBoxFormat = pDoc->GetDocumentLayoutManager().CopyLayoutFormat(
+                *pSourceTextBoxFormat, pSourceTextBoxFormat->GetAnchor(), bSetTextFlyAtt,
+                bMakeFrames);
+            pDestTextBoxes->AddTextBox(pDestObj, pNewTextBoxFormat);
+            pNewTextBoxFormat->SetOtherTextBoxFormat(pDestTextBoxes);
+        }
+    }
+}
+
 /** Copies the stated format (pSrc) to pDest and returns pDest.
 
     If there's no pDest, it is created.
@@ -469,6 +498,17 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
         auto pObj = rSource.FindRealSdrObject();
         auto pTextBoxNd = new SwTextBoxNode(pDest);
         pDest->SetOtherTextBoxFormat(pTextBoxNd);
+
+        // TODO:
+        //if (!bMakeFrames && rNewAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+        //{
+        //    // If the draw format is as-char, then it will be copied with bMakeFrames=false, but
+        //    // doing the same for the fly format would result in not making fly frames at all.
+        //    bMakeFrames = true;
+        //}
+        //
+        //lcl_CopyTextBoxes(&m_rDoc, rSource.GetOtherTextBoxFormat(), rSource.FindRealSdrObject(),
+        //                  pTextBoxNd, pDest->FindRealSdrObject(), bSetTextFlyAtt, bMakeFrames);
 
         if (pObj)
         {
