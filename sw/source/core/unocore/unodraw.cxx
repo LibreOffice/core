@@ -963,7 +963,13 @@ SwXShape::~SwXShape()
 
 uno::Any SwXShape::queryInterface( const uno::Type& aType )
 {
-    uno::Any aRet = SwTextBoxHelper::queryInterface(GetFrameFormat(), aType);
+    uno::Any aRet;
+    if (aType == cppu::UnoType<text::XText>::get()
+        || aType == cppu::UnoType<text::XTextAppend>::get()
+        || aType == cppu::UnoType<text::XTextRange>::get())
+        aRet = SwTextBoxHelper::queryInterface(GetFrameFormat(), aType,
+            SdrObject::getSdrObjectFromXShape(mxShape));
+
     if (aRet.hasValue())
         return aRet;
 
@@ -1162,7 +1168,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
             else if (pEntry->nWID == RES_CHAIN)
             {
                 if (pEntry->nMemberId == MID_CHAIN_NEXTNAME || pEntry->nMemberId == MID_CHAIN_PREVNAME)
-                    SwTextBoxHelper::syncProperty(pFormat, pEntry->nWID, pEntry->nMemberId, aValue);
+                    SwTextBoxHelper::syncProperty(pFormat, pEntry->nWID, pEntry->nMemberId, aValue, SdrObject::getSdrObjectFromXShape(mxShape));
             }
             // #i28749#
             else if ( FN_SHAPE_POSITION_LAYOUT_DIR == pEntry->nWID )
@@ -1333,7 +1339,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     pFormat->SetFormatAttr(aSet);
             }
             // We have a pFormat and a pEntry as well: try to sync TextBox property.
-            SwTextBoxHelper::syncProperty(pFormat, pEntry->nWID, pEntry->nMemberId, aValue);
+            SwTextBoxHelper::syncProperty(pFormat, pEntry->nWID, pEntry->nMemberId, aValue, SdrObject::getSdrObjectFromXShape(mxShape));
         }
         else
         {
@@ -1423,7 +1429,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
         if (pFormat)
         {
             // We have a pFormat (but no pEntry): try to sync TextBox property.
-            SwTextBoxHelper::syncProperty(pFormat, rPropertyName, aValue);
+            SwTextBoxHelper::syncProperty(pFormat, rPropertyName, aValue, SdrObject::getSdrObjectFromXShape(mxShape));
         }
 
         // #i31698# - restore object position, if caption point is set.
@@ -1790,7 +1796,7 @@ uno::Sequence< beans::PropertyState > SwXShape::getPropertyStates(
             else if (pEntry->nWID == FN_TEXT_BOX)
             {
                 // The TextBox property is set, if we can find a textbox for this shape.
-                if (pFormat && SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT))
+                if (pFormat && SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT, SdrObject::getSdrObjectFromXShape(mxShape)))
                     pRet[nProperty] = beans::PropertyState_DIRECT_VALUE;
                 else
                     pRet[nProperty] = beans::PropertyState_DEFAULT_VALUE;
