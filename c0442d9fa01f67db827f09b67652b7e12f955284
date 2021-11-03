@@ -16,6 +16,24 @@
       "message": "\u003e Need to change them from constexprs to #defines to avoid \"defined but not used\" compiling error.\n\nRather mark them inline when you move them to the header, that will avoid the compile error",
       "revId": "c0442d9fa01f67db827f09b67652b7e12f955284",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "933b36bf_fae661dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-11-03T14:51:15Z",
+      "side": 1,
+      "message": "Should it be like this as shown in the updated patch set?",
+      "parentUuid": "c4c1c0e8_e61bc9e3",
+      "revId": "c0442d9fa01f67db827f09b67652b7e12f955284",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
