@@ -70,6 +70,24 @@
       "parentUuid": "ad6feb88_bdfe37bc",
       "revId": "5c40ebef723b10dab56c33277f3d56cf93c17814",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4d8a717_7a51d7c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-11-03T11:12:13Z",
+      "side": 1,
+      "message": "Florian is looking into it (wants to check what legal said 3 years ago). He returns from vacation 15 Nov. I don\u0027t know, if you need to wait. There\u0027s a lot of updating to be done anyway after we get the book online.",
+      "parentUuid": "e1e332f4_2efc958e",
+      "revId": "5c40ebef723b10dab56c33277f3d56cf93c17814",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
