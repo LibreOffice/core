@@ -33,6 +33,24 @@
       "message": "\u003e Patch Set 7: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/99869/ : FAILURE\n\u003e \n\u003e compiler couldn\"t find the file »filesystem« referenced from stream.cpp:20:10 ( https://ci.libreoffice.org/job/gerrit_linux_gcc_release/103522/ )\n\nThis makes no sense. The filesystem header should be available in C++17.",
       "revId": "8cbbfc8bcddcaa2416a85aa8f523537d1c38d46d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "376d35a9_0201a018",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-11-03T08:13:22Z",
+      "side": 1,
+      "message": "Our GCC baseline is 7.0.0 while filesystem only works with GCC 8.0.0: https://en.cppreference.com/w/cpp/compiler_support#C.2B.2B17_library_features\n\nHowever, even if we bumped GCC, we can\u0027t use filesystem until August 2023, when we will have gradually bumped our macOS *runtime* baseline to 10.15. See here for details: https://ask.libreoffice.org/t/intention-to-raise-minimum-required-macos-version/69894",
+      "parentUuid": "32121e51_7e952d31",
+      "revId": "8cbbfc8bcddcaa2416a85aa8f523537d1c38d46d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
