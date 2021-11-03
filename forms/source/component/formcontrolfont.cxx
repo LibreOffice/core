@@ -200,7 +200,7 @@ namespace frm
         DECL_PROP3      ( TEXTLINECOLOR,      sal_Int32,        BOUND, MAYBEDEFAULT, MAYBEVOID );
 
         DECL_PROP1      ( FONT_CHARWIDTH,     float,            MAYBEDEFAULT );
-        DECL_BOOL_PROP1 ( FONT_KERNING,                         MAYBEDEFAULT );
+        DECL_BOOL_PROP_IMPL(FONT_KERNING) css::beans::PropertyAttribute::MAYBEDEFAULT);
         DECL_PROP1      ( FONT_ORIENTATION,   float,            MAYBEDEFAULT );
         DECL_PROP1      ( FONT_PITCH,         sal_Int16,        MAYBEDEFAULT );
         DECL_PROP1      ( FONT_TYPE,          sal_Int16,        MAYBEDEFAULT );
@@ -214,7 +214,7 @@ namespace frm
         DECL_PROP1      ( FONT_SLANT,         sal_Int16,        MAYBEDEFAULT );
         DECL_PROP1      ( FONT_UNDERLINE,     sal_Int16,        MAYBEDEFAULT );
         DECL_PROP1      ( FONT_STRIKEOUT,     sal_Int16,        MAYBEDEFAULT );
-        DECL_BOOL_PROP1 ( FONT_WORDLINEMODE,                    MAYBEDEFAULT );
+        DECL_BOOL_PROP_IMPL(FONT_WORDLINEMODE) css::beans::PropertyAttribute::MAYBEDEFAULT);
     }
 
 

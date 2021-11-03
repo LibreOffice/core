@@ -1012,7 +1012,7 @@ void OControlModel::describeFixedProperties( Sequence< Property >& _rProps ) con
     BEGIN_DESCRIBE_BASE_PROPERTIES( 7 )
         DECL_PROP2      (CLASSID,     sal_Int16,        READONLY, TRANSIENT);
         DECL_PROP1      (NAME,        OUString,  BOUND);
-        DECL_BOOL_PROP2 (NATIVE_LOOK,                   BOUND, TRANSIENT);
+        DECL_BOOL_PROP_IMPL(NATIVE_LOOK) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::TRANSIENT);
         DECL_PROP1      (TAG,         OUString,  BOUND);
         DECL_PROP1      (GENERATEVBAEVENTS,         sal_Bool,  TRANSIENT);
         DECL_PROP1      (CONTROL_TYPE_IN_MSO,sal_Int16,     BOUND);
@@ -2783,7 +2783,7 @@ void OBoundControlModel::describeFixedProperties( Sequence< Property >& _rProps 
         DECL_IFACE_PROP_IMPL(BOUNDFIELD, XPropertySet) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
         DECL_IFACE_PROP_IMPL(CONTROLLABEL, XPropertySet) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID);
         DECL_PROP2      ( CONTROLSOURCEPROPERTY,    OUString,    READONLY, TRANSIENT );
-        DECL_BOOL_PROP1 ( INPUT_REQUIRED,                               BOUND );
+        DECL_BOOL_PROP_IMPL(INPUT_REQUIRED) css::beans::PropertyAttribute::BOUND);
     END_DESCRIBE_PROPERTIES()
 }
 }
