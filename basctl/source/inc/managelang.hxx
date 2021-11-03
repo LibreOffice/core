@@ -42,7 +42,7 @@ struct LanguageEntry
 extern bool localesAreEqual( const css::lang::Locale& rLocaleLeft,
                              const css::lang::Locale& rLocaleRight );
 
-class ManageLanguageDialog final : public weld::GenericDialogController
+class ManageLanguageDialog : public weld::GenericDialogController
 {
 private:
     std::shared_ptr<LocalizationMgr> m_xLocalizationMgr;
@@ -69,7 +69,7 @@ public:
     virtual ~ManageLanguageDialog() override;
 };
 
-class SetDefaultLanguageDialog final : public weld::GenericDialogController
+class SetDefaultLanguageDialog : public weld::GenericDialogController
 {
 private:
     std::shared_ptr<LocalizationMgr> m_xLocalizationMgr;

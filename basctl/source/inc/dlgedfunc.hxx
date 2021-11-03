@@ -51,7 +51,7 @@ public:
 
 // DlgEdFuncInsert
 
-class DlgEdFuncInsert final : public DlgEdFunc
+class DlgEdFuncInsert : public DlgEdFunc
 {
 public:
     explicit DlgEdFuncInsert(DlgEditor& rParent);
@@ -64,7 +64,7 @@ public:
 
 // DlgEdFuncSelect
 
-class DlgEdFuncSelect final : public DlgEdFunc
+class DlgEdFuncSelect : public DlgEdFunc
 {
 public:
     explicit DlgEdFuncSelect(DlgEditor& rParent);

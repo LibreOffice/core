@@ -31,7 +31,7 @@ class DlgEdObj;
 
 typedef ::cppu::WeakImplHelper<css::beans::XPropertyChangeListener> PropertyChangeListenerHelper;
 
-class DlgEdPropListenerImpl final : public PropertyChangeListenerHelper
+class DlgEdPropListenerImpl : public PropertyChangeListenerHelper
 {
 private:
     DlgEdObj& rDlgEdObj;
@@ -51,7 +51,7 @@ public:
 
 typedef ::cppu::WeakImplHelper<css::container::XContainerListener> ContainerListenerHelper;
 
-class DlgEdEvtContListenerImpl final : public ContainerListenerHelper
+class DlgEdEvtContListenerImpl : public ContainerListenerHelper
 {
 private:
     DlgEdObj& rDlgEdObj;

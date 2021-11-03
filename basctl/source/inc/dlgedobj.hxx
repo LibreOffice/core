@@ -144,19 +144,23 @@ public:
 // DlgEdForm
 
 
-class DlgEdForm final : public DlgEdObj
+class DlgEdForm: public DlgEdObj
 {
     friend class DlgEditor;
     friend class DlgEdFactory;
 
+private:
     DlgEditor& rDlgEditor;
     std::vector<DlgEdObj*> pChildren;
+
     mutable ::std::optional< css::awt::DeviceInfo >   mpDeviceInfo;
 
+private:
     explicit DlgEdForm(
         SdrModel& rSdrModel,
         DlgEditor&);
 
+protected:
     virtual void NbcMove( const Size& rSize ) override;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) override;
