@@ -49,7 +49,7 @@ class TabBar;
 class BaseWindow;
 class LocalizationMgr;
 
-class Shell :
+class Shell final :
     public SfxViewShell,
     public DocumentEventListener
 {

@@ -34,7 +34,7 @@ enum ItemType
     TYPE_METHOD
 };
 
-class SbxItem : public SfxPoolItem
+class SbxItem final : public SfxPoolItem
 {
     const ScriptDocument    m_aDocument;
     const OUString          m_aLibName;

@@ -124,9 +124,8 @@ private:
 // basctl::TabBar
 // Not to be confused with ::TabBar from svtools.
 
-class TabBar : public ::TabBar
+class TabBar final : public ::TabBar
 {
-protected:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    Command( const CommandEvent& rCEvt ) override;
 

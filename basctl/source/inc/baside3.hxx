@@ -45,15 +45,13 @@ class ObjectCatalog;
 
 bool implImportDialog(weld::Window* pWin, const ScriptDocument& rDocument, const OUString& rLibName);
 
-class DialogWindow: public BaseWindow
+class DialogWindow final : public BaseWindow
 {
-private:
     DialogWindowLayout& m_rLayout;
     std::unique_ptr<DlgEditor> m_pEditor;
     std::unique_ptr<SfxUndoManager> m_pUndoMgr; // never nullptr
     sal_uInt16          m_nControlSlotId;
 
-protected:
     virtual void        Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void        Resize() override;
     virtual void        dispose() override;
@@ -114,37 +112,32 @@ public:
 
 // DialogWindowLayout
 
-class DialogWindowLayout : public Layout
+class DialogWindowLayout final : public Layout
 {
 public:
     DialogWindowLayout (vcl::Window* pParent, ObjectCatalog&);
     virtual ~DialogWindowLayout() override;
     virtual void dispose() override;
-public:
     void ShowPropertyBrowser ();
     void UpdatePropertyBrowser ();
     void DisablePropertyBrowser ();
-public:
     // Layout:
     virtual void Activating (BaseWindow&) override;
     virtual void Deactivating () override;
     virtual void ExecuteGlobal (SfxRequest&) override;
     virtual void GetState (SfxItemSet&, unsigned nWhich) override;
     virtual void UpdateDebug (bool) override {};
-protected:
-    // Layout:
-    virtual void OnFirstSize (tools::Long nWidth, tools::Long nHeight) override;
 
 private:
+    // Layout:
+    virtual void OnFirstSize (tools::Long nWidth, tools::Long nHeight) override;
     // dockable windows:
     // object catalog (owned by Shell)
     ObjectCatalog& rObjectCatalog;
     // property browser (created by this, deleted by toolkit)
     VclPtr<PropBrw> pPropertyBrowser;
-
-private:
     void AddPropertyBrowser ();
-private:
+
     friend class DialogWindow;
 };
 

@@ -33,7 +33,7 @@ namespace basctl
  *
  * @see LibBox Class
  */
-class LibBoxControl : public SfxToolBoxControl
+class LibBoxControl final : public SfxToolBoxControl
 {
 public:
     /*!
@@ -121,7 +121,7 @@ public:
  *
  * @see LibBoxControl Class
  */
-class LibBox : public DocListenerBox
+class LibBox final : public DocListenerBox
 {
 public:
     /// @param pParent
@@ -136,11 +136,10 @@ public:
      */
     void Update(const SfxStringItem* pItem);
 
-protected:
+private:
     /// Called for setting language when user selects a language in ComboBox
     virtual void Select() override;
 
-private:
     static void ReleaseFocus();
 
     /*!
@@ -178,7 +177,7 @@ private:
  *
  * @see LanguageBox Class
  */
-class LanguageBoxControl : public SfxToolBoxControl
+class LanguageBoxControl final : public SfxToolBoxControl
 {
 public:
     /*! Macro for registering two methods
@@ -221,7 +220,7 @@ public:
  *
  * @see LanguageBoxControl Class
  */
-class LanguageBox : public DocListenerBox
+class LanguageBox final : public DocListenerBox
 {
 public:
     /*!
@@ -238,7 +237,7 @@ public:
      */
     void Update(const SfxStringItem* pItem);
 
-protected:
+private:
     /// Called for setting language when user selects a language in ComboBox
     virtual void Select() override;
 
@@ -250,7 +249,6 @@ protected:
      */
     virtual bool HandleKeyInput(const KeyEvent& rKEvt) override;
 
-private:
     /// Delete all languages from ComboBox
     void ClearBox();
     /// Switch interface of dialog to selected language

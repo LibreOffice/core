@@ -57,7 +57,7 @@ class DialogWindowLayout;
 
 class DlgEdObj;
 
-class DlgEdHint: public SfxHint
+class DlgEdHint final : public SfxHint
 {
 public:
     enum Kind {
@@ -92,7 +92,7 @@ class DlgEdForm;
 class DlgEdFactory;
 class DlgEdFunc;
 
-class DlgEditor: public SfxBroadcaster
+class DlgEditor final : public SfxBroadcaster
 {
 public:
     enum Mode {

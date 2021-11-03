@@ -33,7 +33,7 @@ namespace basctl
  *  in a tree structure which allows user to quickly select the necessary
  *  macro in BasicIDE.
  */
-class ObjectCatalog : public DockingWindow
+class ObjectCatalog final : public DockingWindow
 {
 public:
     explicit ObjectCatalog(vcl::Window* pParent);
