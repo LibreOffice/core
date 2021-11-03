@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "88183449_993a789a",
+        "filename": "sc/inc/stylehelper.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2021-11-03T10:38:22Z",
+      "side": 1,
+      "message": "I moved these defines from stylehelper.cxx to stylehelper.hxx because I want to use SC_STYLE_PROG_STANDARD in ScOrcusStyles::cell_style::cell_style. I moved all of them because they are a code block with the same functionality, and I thought it makes no sense to separate them in two different files, and it is very likely that those defines would be used somewhere else.\n\nI changed them from constexpr OUStringLiterals to #defines because I get \"defined but not used\" compiling -Werror message if I use constexprs, as this header file is used in multiple cxx files in our code base.\n\nIf you think it would be better to limit the move to the SC_STYLE_PROG_STANDARD, then I\u0027ll do it.",
+      "parentUuid": "2165db5a_57b67686",
+      "revId": "06a99866a9c58459a1643d2d33d71489d66ab40a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f85d818f_0e382e7f",
         "filename": "sc/source/filter/orcus/interface.cxx",
         "patchSetId": 9
