@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "55a0ac61_e350b56a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-11-04T14:31:06Z",
+      "side": 1,
+      "message": "Checking the wmf data inside the test document, wmf-dump from mso-dumper.git gives this:\n\n\u003crecord index\u003d\"4\" type\u003d\"META_DIBSTRETCHBLT\"\u003e\n\u003cstretchblt type\u003d\"StretchBlt\"\u003e\n\u003cRecordSize value\u003d\"15783\"/\u003e\n\u003cRecordFunction value\u003d\"0xb41\"/\u003e\n\u003cSrcHeight value\u003d\"32\"/\u003e\n\u003cSrcWidth value\u003d\"204\"/\u003e\n\u003cYSrc value\u003d\"105\"/\u003e\n\u003cXSrc value\u003d\"99\"/\u003e\n\u003cDestHeight value\u003d\"0\"/\u003e\n\u003cDestWidth value\u003d\"0\"/\u003e\n\u003cYDest value\u003d\"105\"/\u003e\n\u003cXDest value\u003d\"99\"/\u003e\n\u003cTarget size\u003d\"31544\"/\u003e\n\u003c/stretchblt\u003e\n\u003c/record\u003e\n\nSo it sounds like that 99/105 comes from the x/y src or dest fields of the wmf file (the original bugdoc had no \\picw\\pich, the testcase is stripped down from our own RTF export output). Here are some more observations:\n\n- even if the bad RTF import happens, saving it to ODT and reloading it makes the problem go away, which suggest to fix the problem on the import side\n\n- Word seems to ignore these values, so probably it\u0027s good if we do the same\n\n- this approach helps all the existing RTF exported documents out there, while fixing this on the export side would only help new documents\n\nBased on this it seems fixing this on the import side has more advantages than the export side.\n\nBut you are right, it may make sense to fix the export side as well, RTF export should not write that problematic picw/pich in the first place. But what is correct there is not entirely clear, given that Word ignores the value. :-) (And the spec is quite terse here.) Does that make sense?",
+      "parentUuid": "756ac446_2f3b8c51",
+      "revId": "300a233439fecbe62d3a00e1d762c3af0e814979",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "9dd3988e_b4a24f03",
