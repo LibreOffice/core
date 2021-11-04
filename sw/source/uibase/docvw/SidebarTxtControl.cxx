@@ -112,9 +112,13 @@ void SidebarTextControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     pEditView->setEditViewCallbacks(this);
 
     EditEngine* pEditEngine = GetEditEngine();
-    // tdf#143443 note we don't call SetPaperSize on pEditEngine unlike
-    // similar cases so that the Control defaults to the smallest possible
-    // height it might take, it can grow later
+    // tdf#143443 the initial papersize height should be the default
+    // 'unlimited' height.
+    // tdf#144686 it is helpful to initialize the papersize width to the
+    // 'SidebarWidth' so that the size calculations for the contents are always
+    // valid for the final layout in the sidebar.
+    pEditEngine->SetPaperSize(Size(mrPostItMgr.GetSidebarWidth(),
+                                   pEditEngine->GetPaperSize().Height()));
     pEditEngine->SetRefDevice(&rDevice);
 
     pEditView->SetOutputArea(tools::Rectangle(Point(0, 0), aOutputSize));
