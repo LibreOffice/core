@@ -467,8 +467,10 @@ extern "C" {
 #endif /* ODBCVER >= 0x0300 */
 
 /* SQL_ALTER_TABLE bitmasks */
+#if (ODBCVER >= 0x0200)
 #define SQL_AT_ADD_COLUMN                       0x00000001L
 #define SQL_AT_DROP_COLUMN                      0x00000002L
+#endif /* ODBCVER >= 0x0200 */
 
 #if (ODBCVER >= 0x0300)
 #define SQL_AT_ADD_CONSTRAINT                   0x00000008L
@@ -527,6 +529,7 @@ extern "C" {
 /* NB: this means 'outer join', not what  you may be thinking */
 
 
+#if (ODBCVER >= 0x0201)
 #define SQL_OJ_LEFT                         0x00000001L
 #define SQL_OJ_RIGHT                        0x00000002L
 #define SQL_OJ_FULL                         0x00000004L
@@ -534,6 +537,7 @@ extern "C" {
 #define SQL_OJ_NOT_ORDERED                  0x00000010L
 #define SQL_OJ_INNER                        0x00000020L
 #define SQL_OJ_ALL_COMPARISON_OPS           0x00000040L
+#endif
 
 /* SQL_SCROLL_CONCURRENCY bitmasks */
 #define SQL_SCCO_READ_ONLY                  0x00000001L

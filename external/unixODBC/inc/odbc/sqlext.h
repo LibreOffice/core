@@ -58,7 +58,11 @@ extern "C" {                         /* Assume C declarations for C++ */
 #define SQL_MAX_OPTION_STRING_LENGTH    256
 
 /* return code SQL_NO_DATA_FOUND is the same as SQL_NO_DATA */
+#if (ODBCVER < 0x0300)
+#define SQL_NO_DATA_FOUND   100
+#else
 #define SQL_NO_DATA_FOUND   SQL_NO_DATA
+#endif
 
 /* an end handle type */
 #if (ODBCVER >= 0x0300)
@@ -147,6 +151,16 @@ extern "C" {                         /* Assume C declarations for C++ */
 */
 #define SQL_ATTR_ANSI_APP           115
 #endif
+
+/* SQL_CONNECT_OPT_DRVR_START is not meaningful for 3.0 driver */
+#if (ODBCVER < 0x0300)
+#define SQL_CONNECT_OPT_DRVR_START      1000
+#endif  /* ODBCVER < 0x0300 */
+
+#if (ODBCVER < 0x0300)
+#define SQL_CONN_OPT_MAX                SQL_PACKET_SIZE
+#define SQL_CONN_OPT_MIN                SQL_ACCESS_MODE
+#endif /* ODBCVER < 0x0300 */
 
 /* SQL_ACCESS_MODE options */
 #define SQL_MODE_READ_WRITE             0UL
@@ -240,6 +254,11 @@ extern "C" {                         /* Assume C declarations for C++ */
 #define SQL_ATTR_USE_BOOKMARKS              SQL_USE_BOOKMARKS
 
 #endif  /* ODBCVER >= 0x0300 */
+
+#if (ODBCVER < 0x0300)
+#define SQL_STMT_OPT_MAX                SQL_ROW_NUMBER
+#define SQL_STMT_OPT_MIN    SQL_QUERY_TIMEOUT
+#endif      /* ODBCVER < 0x0300 */
 
 /* New defines for SEARCHABLE column in SQLGetTypeInfo */
 
@@ -437,10 +456,24 @@ extern "C" {                         /* Assume C declarations for C++ */
 #endif  /* ODBCVER >= 0x0300 */
 
 
+#if (ODBCVER <= 0x0300)
+#define SQL_UNICODE                             (-95)
+#define SQL_UNICODE_VARCHAR                     (-96)
+#define SQL_UNICODE_LONGVARCHAR                 (-97)
+#define SQL_UNICODE_CHAR                        SQL_UNICODE
+#else
+/* The previous definitions for SQL_UNICODE_ are historical and obsolete */
+
 #define SQL_UNICODE             SQL_WCHAR
 #define SQL_UNICODE_VARCHAR     SQL_WVARCHAR
 #define SQL_UNICODE_LONGVARCHAR SQL_WLONGVARCHAR
 #define SQL_UNICODE_CHAR        SQL_WCHAR
+#endif
+
+#if (ODBCVER < 0x0300)
+#define SQL_TYPE_DRIVER_START                   SQL_INTERVAL_YEAR
+#define SQL_TYPE_DRIVER_END                     SQL_UNICODE_LONGVARCHAR
+#endif  /* ODBCVER < 0x0300 */
 
 /* C datatype to SQL datatype mapping      SQL types
                                            ------------------- */
@@ -504,6 +537,10 @@ extern "C" {                         /* Assume C declarations for C++ */
 #endif  /* ODBCVER >= 0x0350 */
 
 #define SQL_TYPE_NULL                   0
+#if (ODBCVER < 0x0300)
+#define SQL_TYPE_MIN                    SQL_BIT
+#define SQL_TYPE_MAX                    SQL_VARCHAR
+#endif
 
 #if (ODBCVER >= 0x0300)
 #define SQL_C_VARBOOKMARK       SQL_C_BINARY
@@ -556,6 +593,9 @@ extern "C" {                         /* Assume C declarations for C++ */
 #define SQL_COLUMN_QUALIFIER_NAME       17
 #define SQL_COLUMN_LABEL                18
 #define SQL_COLATT_OPT_MAX              SQL_COLUMN_LABEL
+#if (ODBCVER < 0x0300)
+#define SQL_COLUMN_DRIVER_START         1000
+#endif  /* ODBCVER < 0x0300 */
 
 #define SQL_COLATT_OPT_MIN              SQL_COLUMN_COUNT
 
@@ -605,6 +645,19 @@ extern "C" {                         /* Assume C declarations for C++ */
 #define SQL_API_SQLSETPOS           68
 #define SQL_API_SQLSETSCROLLOPTIONS 69
 #define SQL_API_SQLTABLEPRIVILEGES  70
+
+/*-------------------------------------------*/
+/* SQL_EXT_API_LAST is not useful with ODBC  */
+/* version 3.0 because some of the values    */
+/* from X/Open are in the 10000 range.       */
+/*-------------------------------------------*/
+
+#if (ODBCVER < 0x0300)
+#define SQL_EXT_API_LAST            SQL_API_SQLBINDPARAMETER
+#define SQL_NUM_FUNCTIONS           23
+#define SQL_EXT_API_START           40
+#define SQL_NUM_EXTENSIONS (SQL_EXT_API_LAST-SQL_EXT_API_START+1)
+#endif
 
 /*--------------------------------------------*/
 /* SQL_API_ALL_FUNCTIONS returns an array     */
@@ -740,6 +793,25 @@ extern "C" {                         /* Assume C declarations for C++ */
 #define SQL_MAX_BINARY_LITERAL_LEN          112
 #define SQL_LIKE_ESCAPE_CLAUSE              113
 #define SQL_QUALIFIER_LOCATION              114
+
+#if (ODBCVER >= 0x0201 && ODBCVER < 0x0300)
+#ifndef SQL_OJ_CAPABILITIES
+#define SQL_OJ_CAPABILITIES         65003  /* Temp value until ODBC 3.0 */
+#endif
+#endif  /* ODBCVER >= 0x0201 && ODBCVER < 0x0300 */
+
+/*----------------------------------------------*/
+/* SQL_INFO_LAST and SQL_INFO_DRIVER_START are  */
+/* not useful anymore, because  X/Open has      */
+/* values in the 10000 range.   You             */
+/* must contact X/Open directly to get a range  */
+/* of numbers for driver-specific values.       */
+/*----------------------------------------------*/
+
+#if (ODBCVER < 0x0300)
+#define SQL_INFO_LAST                       SQL_QUALIFIER_LOCATION
+#define SQL_INFO_DRIVER_START               1000
+#endif /* ODBCVER < 0x0300 */
 
 /*-----------------------------------------------*/
 /* ODBC 3.0 SQLGetInfo values that are not part  */
@@ -1678,8 +1750,10 @@ SQLRETURN SQL_API SQLDriverConnect(
 #define SQL_CASCADE                      0
 #define SQL_RESTRICT                     1
 #define SQL_SET_NULL                     2
+#if (ODBCVER >= 0x0250)
 #define SQL_NO_ACTION            3
 #define SQL_SET_DEFAULT          4
+#endif  /* ODBCVER >= 0x0250 */
 
 #if (ODBCVER >= 0x0300)
 /* Note that the following are in a different column of SQLForeignKeys than */
