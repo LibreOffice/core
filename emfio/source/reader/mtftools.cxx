@@ -38,6 +38,9 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/defaultencoding.hxx>
 #include <unotools/wincodepage.hxx>
+#include <cmath>
+
+constexpr double RADIAN_1 = 180.0 / M_PI;
 
 #if OSL_DEBUG_LEVEL > 1
 #define EMFP_DEBUG(x) x
@@ -1773,7 +1776,7 @@ namespace emfio
             double fY = aP2.Y();
             if ( fX )
             {
-                double fOrientation = acos( fX / sqrt( fX * fX + fY * fY ) ) * 57.29577951308;
+                double fOrientation = acos( fX / sqrt( fX * fX + fY * fY ) ) * RADIAN_1;
                 if ( fY > 0 )
                     fOrientation = 360 - fOrientation;
                 fOrientation += 90;

@@ -29,6 +29,8 @@
 
 #include <memory>
 
+constexpr double RADIAN_1 = 180.0 / M_PI;
+
 using namespace ::com::sun::star;
 
 double CGM::ImplGetOrientation( FloatPoint const & rCenter, FloatPoint const & rPoint )
@@ -37,7 +39,7 @@ double CGM::ImplGetOrientation( FloatPoint const & rCenter, FloatPoint const & r
     double nY = rPoint.Y - rCenter.Y;
 
     double fSqrt = sqrt(nX * nX + nY * nY);
-    double fOrientation = fSqrt != 0.0 ? (acos(nX / fSqrt) * 57.29577951308) : 0.0;
+    double fOrientation = fSqrt != 0.0 ? (acos(nX / fSqrt) * RADIAN_1) : 0.0;
     if (nY > 0)
         fOrientation = 360 - fOrientation;
 
@@ -549,9 +551,9 @@ void CGM::ImplDoClass4()
                 if (!bUseless)
                 {
                     const double fStartSqrt = sqrt(vector[0] * vector[ 0 ] + vector[1] * vector[1]);
-                    fStartAngle = fStartSqrt != 0.0 ? (acos(vector[0] / fStartSqrt) * 57.29577951308) : 0.0;
+                    fStartAngle = fStartSqrt != 0.0 ? (acos(vector[0] / fStartSqrt) * RADIAN_1) : 0.0;
                     const double fEndSqrt = sqrt(vector[2] * vector[ 2 ] + vector[3] * vector[3]);
-                    fEndAngle = fEndSqrt != 0.0 ? (acos(vector[ 2 ] / fEndSqrt) * 57.29577951308) : 0.0;
+                    fEndAngle = fEndSqrt != 0.0 ? (acos(vector[ 2 ] / fEndSqrt) * RADIAN_1) : 0.0;
 
                     if ( vector[ 1 ] > 0 )
                         fStartAngle = 360 - fStartAngle;
@@ -627,9 +629,9 @@ void CGM::ImplDoClass4()
                 if (!bUseless)
                 {
                     const double fStartSqrt = sqrt(vector[0] * vector[0] + vector[1] * vector[1]);
-                    double fStartAngle = fStartSqrt ? (acos(vector[0] / fStartSqrt) * 57.29577951308) : 0.0;
+                    double fStartAngle = fStartSqrt ? (acos(vector[0] / fStartSqrt) * RADIAN_1) : 0.0;
                     const double fEndSqrt = sqrt(vector[2] * vector[2] + vector[3] * vector[3]);
-                    double fEndAngle = fEndSqrt ? acos(vector[2] / fEndSqrt) * 57.29577951308 : 0.0;
+                    double fEndAngle = fEndSqrt ? acos(vector[2] / fEndSqrt) * RADIAN_1 : 0.0;
 
                     if ( vector[ 1 ] > 0 )
                         fStartAngle = 360 - fStartAngle;
@@ -684,9 +686,9 @@ void CGM::ImplDoClass4()
                 if (!bUseless)
                 {
                     double fStartSqrt = sqrt(vector[0] * vector[0] + vector[1] * vector[1]);
-                    fStartAngle = fStartSqrt ? (acos(vector[0] / fStartSqrt) * 57.29577951308) : 0.0;
+                    fStartAngle = fStartSqrt ? (acos(vector[0] / fStartSqrt) * RADIAN_1) : 0.0;
                     double fEndSqrt = sqrt(vector[2] * vector[2] + vector[3] * vector[3]);
-                    fEndAngle = fEndSqrt ? (acos(vector[2] / fEndSqrt) * 57.29577951308) : 0.0;
+                    fEndAngle = fEndSqrt ? (acos(vector[2] / fEndSqrt) * RADIAN_1) : 0.0;
 
                     if ( vector[ 1 ] > 0 )
                         fStartAngle = 360 - fStartAngle;
@@ -720,9 +722,9 @@ void CGM::ImplDoClass4()
                 if (!bUseless)
                 {
                     double fStartSqrt = sqrt(vector[0] * vector[0] + vector[1] * vector[1]);
-                    fStartAngle = fStartSqrt ? (acos(vector[0] / fStartSqrt) * 57.29577951308) : 0.0;
+                    fStartAngle = fStartSqrt ? (acos(vector[0] / fStartSqrt) * RADIAN_1) : 0.0;
                     double fEndSqrt = sqrt(vector[2] * vector[2] + vector[3] * vector[3]);
-                    fEndAngle = fEndSqrt ? (acos(vector[2] / fEndSqrt) * 57.29577951308) : 0.0;
+                    fEndAngle = fEndSqrt ? (acos(vector[2] / fEndSqrt) * RADIAN_1) : 0.0;
 
                     if ( vector[ 1 ] > 0 )
                         fStartAngle = 360 - fStartAngle;

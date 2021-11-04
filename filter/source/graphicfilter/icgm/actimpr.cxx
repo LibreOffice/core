@@ -54,6 +54,7 @@
 #include "outact.hxx"
 
 #define MAX_PAGES_FOR_FUZZING 2048
+constexpr double RADIAN_1 = 180.0 / M_PI;
 
 using namespace ::com::sun::star;
 
@@ -792,7 +793,7 @@ void CGMImpressOutAct::DrawText(awt::Point const & rTextPos, awt::Size const & r
     double nX = mpCGM->pElement->nCharacterOrientation[ 2 ];
     double nY = mpCGM->pElement->nCharacterOrientation[ 3 ];
     double fSqrt = sqrt(nX * nX + nY * nY);
-    double nOrientation = fSqrt != 0.0 ? (acos(nX / fSqrt) * 57.29577951308) : 0.0;
+    double nOrientation = fSqrt != 0.0 ? (acos(nX / fSqrt) * RADIAN_1) : 0.0;
     if ( nY < 0 )
         nOrientation = 360 - nOrientation;
 

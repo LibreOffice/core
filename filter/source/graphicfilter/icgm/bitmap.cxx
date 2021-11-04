@@ -26,6 +26,8 @@
 #include "bitmap.hxx"
 #include "elements.hxx"
 
+constexpr double RADIAN_1 = 180.0 / M_PI;
+
 namespace {
 
 Color BMCOL(sal_uInt32 _col) {
@@ -227,7 +229,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
         nY = rDesc.mnR.Y - rDesc.mnP.Y;
 
         double fSqrt = sqrt(nX * nX + nY * nY);
-        rDesc.mnOrientation = fSqrt != 0.0 ? (acos(nX / fSqrt) * 57.29577951308) : 0.0;
+        rDesc.mnOrientation = fSqrt != 0.0 ? (acos(nX / fSqrt) * RADIAN_1) : 0.0;
         if ( nY > 0 )
             rDesc.mnOrientation = 360 - rDesc.mnOrientation;
 
@@ -241,7 +243,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
         nY = -( fSin * nX - fCos * nY );
 
         fSqrt = sqrt(nX * nX + nY * nY);
-        fAngle = fSqrt != 0.0 ? (acos(nX / fSqrt) * 57.29577951308) : 0.0;
+        fAngle = fSqrt != 0.0 ? (acos(nX / fSqrt) * RADIAN_1) : 0.0;
         if ( nY > 0 )
             fAngle = 360 - fAngle;
 
