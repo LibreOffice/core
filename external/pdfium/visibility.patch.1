@@ -1,0 +1,30 @@
+diff --git a/public/fpdfview.h b/public/fpdfview.h
+index 1ff0aeb26..f48036f2b 100644
+--- a/public/fpdfview.h
++++ b/public/fpdfview.h
+@@ -129,14 +129,20 @@ typedef int FPDF_ANNOTATION_SUBTYPE;
+ // Dictionary value types.
+ typedef int FPDF_OBJECT_TYPE;
+ 
+-#if defined(_WIN32) && defined(FPDFSDK_EXPORTS)
+-// On Windows system, functions are exported in a DLL
++#if defined(PDFIUM_DLLIMPLEMENTATION)
++#ifdef _WIN32
+ #define FPDF_EXPORT __declspec(dllexport)
+-#define FPDF_CALLCONV __stdcall
+ #else
+-#define FPDF_EXPORT
+-#define FPDF_CALLCONV
++#define FPDF_EXPORT __attribute__ ((visibility("default")))
++#endif
++#else
++#ifdef _WIN32
++#define FPDF_EXPORT __declspec(dllimport)
++#else
++#define FPDF_EXPORT __attribute__ ((visibility("default")))
+ #endif
++#endif
++#define FPDF_CALLCONV
+ 
+ // Exported Functions
+ #ifdef __cplusplus
