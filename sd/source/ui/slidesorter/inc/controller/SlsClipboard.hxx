@@ -200,7 +200,7 @@ private:
     /** Asynchronous part of DragFinished.  The argument is the sal_Int8
         nDropAction, disguised as void*.
     */
-    DECL_LINK(ProcessDragFinished, void*, void);
+    DECL_DLLPRIVATE_LINK(ProcessDragFinished, void*, void);
 };
 
 } // end of namespace ::sd::slidesorter::controller

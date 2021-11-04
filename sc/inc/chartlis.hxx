@@ -140,7 +140,7 @@ private:
     Idle            aIdle;
     ScDocument&     rDoc;
 
-                    DECL_LINK(TimerHdl, Timer *, void);
+                    DECL_DLLPRIVATE_LINK(TimerHdl, Timer *, void);
 
     ScChartListenerCollection& operator=( const ScChartListenerCollection& ) = delete;
 

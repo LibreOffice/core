@@ -489,8 +489,8 @@ protected:
     void ImpSidUndo(SfxRequest& rReq);
     void ImpSidRedo(SfxRequest& rReq);
 
-    DECL_LINK( HScrollHdl, ScrollBar *, void );
-    DECL_LINK( VScrollHdl, ScrollBar *, void );
+    DECL_DLLPRIVATE_LINK( HScrollHdl, ScrollBar *, void );
+    DECL_DLLPRIVATE_LINK( VScrollHdl, ScrollBar *, void );
 
     // virtual scroll handler, here, derivative classes can add themselves here
     virtual void VirtHScrollHdl(ScrollBar* pHScroll);

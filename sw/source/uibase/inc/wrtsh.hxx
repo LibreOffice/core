@@ -259,7 +259,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     bool    GotoPage( sal_uInt16 nPage, bool bRecord );
 
     // setting the cursor; remember the old position for turning back
-    DECL_LINK( ExecFlyMac, const SwFlyFrameFormat*, void );
+    DECL_DLLPRIVATE_LINK( ExecFlyMac, const SwFlyFrameFormat*, void );
 
     bool    PageCursor(SwTwips lOffset, bool bSelect);
 

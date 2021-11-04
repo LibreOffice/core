@@ -31,7 +31,7 @@ private:
 
     OUString maSuccessMsg;
 
-    DECL_LINK(BtnHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(BtnHdl, weld::Button&, void);
 };
 
 #endif

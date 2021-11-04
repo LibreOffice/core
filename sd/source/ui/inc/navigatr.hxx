@@ -151,13 +151,13 @@ private:
     static OUString             GetDragTypeSdBmpId(NavigatorDragType eDT);
     NavDocInfo*                 GetDocInfo();
 
-                                DECL_LINK( SelectToolboxHdl, const OString&, void );
-                                DECL_LINK( DropdownClickToolBoxHdl, const OString&, void );
-                                DECL_LINK( ClickObjectHdl, weld::TreeView&, bool );
-                                DECL_LINK( SelectDocumentHdl, weld::ComboBox&, void );
-                                DECL_LINK( MenuSelectHdl, const OString&, void );
-                                DECL_LINK( ShapeFilterCallback, const OString&, void );
-                                DECL_LINK( KeyInputHdl, const KeyEvent&, bool );
+                                DECL_DLLPRIVATE_LINK( SelectToolboxHdl, const OString&, void );
+                                DECL_DLLPRIVATE_LINK( DropdownClickToolBoxHdl, const OString&, void );
+                                DECL_DLLPRIVATE_LINK( ClickObjectHdl, weld::TreeView&, bool );
+                                DECL_DLLPRIVATE_LINK( SelectDocumentHdl, weld::ComboBox&, void );
+                                DECL_DLLPRIVATE_LINK( MenuSelectHdl, const OString&, void );
+                                DECL_DLLPRIVATE_LINK( ShapeFilterCallback, const OString&, void );
+                                DECL_DLLPRIVATE_LINK( KeyInputHdl, const KeyEvent&, bool );
 
     void                        SetDragImage();
 

@@ -35,7 +35,7 @@ private:
     std::unique_ptr<weld::Button> m_xBtnCancel;
 
 private:
-    DECL_LINK(CancelHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(CancelHdl, weld::Button&, void);
 
     WPFTEncodingDialog(WPFTEncodingDialog const&) = delete;
     WPFTEncodingDialog& operator=(WPFTEncodingDialog const&) = delete;

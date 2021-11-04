@@ -857,7 +857,7 @@ private:
     bool mbDocTimerEnabled:1;
 
     AutoTimer maSrcDocTimer;
-    DECL_LINK(TimeOutHdl, Timer*, void);
+    DECL_DLLPRIVATE_LINK(TimeOutHdl, Timer*, void);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

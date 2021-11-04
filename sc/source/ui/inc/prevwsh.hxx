@@ -54,8 +54,8 @@ class SC_DLLPUBLIC ScPreviewShell final : public SfxViewShell
     bool            GetPageSize( Size& aPageSize );
 private:
     void            Construct( vcl::Window* pParent );
-    DECL_LINK( ScrollHandler, ScrollBar*, void );
-    DECL_LINK( CloseHdl, SystemWindow&, void);
+    DECL_DLLPRIVATE_LINK( ScrollHandler, ScrollBar*, void );
+    DECL_DLLPRIVATE_LINK( CloseHdl, SystemWindow&, void);
     void            DoScroll( sal_uInt16 nMode );
     void            ExitPreview();
 

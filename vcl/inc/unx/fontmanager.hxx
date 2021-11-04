@@ -203,7 +203,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     std::vector<OUString> m_aCurrentRequests;
     Timer m_aFontInstallerTimer;
 
-    DECL_LINK( autoInstallFontLangSupport, Timer*, void );
+    DECL_DLLPRIVATE_LINK( autoInstallFontLangSupport, Timer*, void );
     PrintFontManager();
 public:
     ~PrintFontManager();

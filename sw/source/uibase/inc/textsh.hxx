@@ -46,8 +46,8 @@ private:
     static void InitInterface_Impl();
 
 public:
-    DECL_LINK( RedlineNextHdl, AbstractSvxPostItDialog&, void );
-    DECL_LINK( RedlinePrevHdl, AbstractSvxPostItDialog&, void );
+    DECL_DLLPRIVATE_LINK( RedlineNextHdl, AbstractSvxPostItDialog&, void );
+    DECL_DLLPRIVATE_LINK( RedlinePrevHdl, AbstractSvxPostItDialog&, void );
     DECL_STATIC_LINK( SwTextShell, DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void );
 
     void    Execute(SfxRequest &);

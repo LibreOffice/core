@@ -70,7 +70,7 @@ class SW_DLLPUBLIC SwAddressPreview final : public weld::CustomWidgetController
     virtual bool KeyInput( const KeyEvent& rKEvt ) override;
     void UpdateScrollBar();
 
-    DECL_LINK(ScrollHdl, weld::ScrolledWindow&,void);
+    DECL_DLLPRIVATE_LINK(ScrollHdl, weld::ScrolledWindow&,void);
 
 public:
     SwAddressPreview(std::unique_ptr<weld::ScrolledWindow> xParent);

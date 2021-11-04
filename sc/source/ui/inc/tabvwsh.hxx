@@ -172,12 +172,12 @@ private:
     bool            IsSignatureLineSigned();
     bool            IsQRCodeSelected();
 
-    DECL_LINK( SimpleRefClose, const OUString*, void );
-    DECL_LINK( SimpleRefDone, const OUString&, void );
-    DECL_LINK( SimpleRefAborted, const OUString&, void );
-    DECL_LINK( SimpleRefChange, const OUString&, void );
-    DECL_LINK( FormControlActivated, LinkParamNone*, void );
-    DECL_LINK( DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void );
+    DECL_DLLPRIVATE_LINK( SimpleRefClose, const OUString*, void );
+    DECL_DLLPRIVATE_LINK( SimpleRefDone, const OUString&, void );
+    DECL_DLLPRIVATE_LINK( SimpleRefAborted, const OUString&, void );
+    DECL_DLLPRIVATE_LINK( SimpleRefChange, const OUString&, void );
+    DECL_DLLPRIVATE_LINK( FormControlActivated, LinkParamNone*, void );
+    DECL_DLLPRIVATE_LINK( DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void );
 
 protected:
     virtual void    Activate(bool bMDI) override;

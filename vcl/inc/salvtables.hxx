@@ -141,7 +141,7 @@ private:
     bool m_bTakeOwnership;
     sal_uInt16 m_nLastId;
 
-    DECL_LINK(SelectMenuHdl, ::Menu*, bool);
+    DECL_DLLPRIVATE_LINK(SelectMenuHdl, ::Menu*, bool);
 
 public:
     SalInstanceMenu(PopupMenu* pMenu, bool bTakeOwnership);
