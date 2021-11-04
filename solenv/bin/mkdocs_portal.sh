@@ -80,7 +80,7 @@ function proc_text
     # Headings: == bleh ==
     # Paragraphs: \n\n
     sed -re ' s/\[\[([-_a-zA-Z0-9]+)\]\]/<a href="\1.html">\1<\/a>/g' - \
-        | sed -re ' s/\[git:([^]]+)\]/<a href="https:\/\/git.freedesktop.org\/core\/+\/refs\/heads\/master\/\1">\1<\/a>/g' \
+        | sed -re ' s/\[git:([^]]+)\]/<a href="https:\/\/git.libreoffice.org\/core\/+\/refs\/heads\/master\/\1">\1<\/a>/g' \
         | sed -re ' s/\[([^]]+)\]/<a href="\1">\1<\/a>/g' \
         | sed -re ' s/====([^=]+)====/<h4>\1<\/h4>/g' \
         | sed -re ' s/===([^=]+)===/<h3>\1<\/h3>/g' \
@@ -90,7 +90,7 @@ function proc_text
 }
 
 function proc_text_markdown {
-  sed -re ' s/\[git:([^]]+)\]/<a href="https:\/\/git.freedesktop.org\/core\/+\/refs\/heads\/master\/\1">\1<\/a>/g'
+  sed -re ' s/\[git:([^]]+)\]/<a href="https:\/\/git.libreoffice.org\/core\/+\/refs\/heads\/master\/\1">\1<\/a>/g'
 }
 
 # generate entry page
