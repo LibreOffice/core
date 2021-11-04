@@ -30,11 +30,7 @@ else
 
 cppunit_CXXFLAGS=$(CXXFLAGS)
 
-ifneq (,$(filter ANDROID DRAGONFLY FREEBSD iOS LINUX NETBSD OPENBSD,$(OS)))
-ifneq (,$(gb_ENABLE_DBGUTIL))
-cppunit_CXXFLAGS+=-D_GLIBCXX_DEBUG
-endif
-endif
+cppunit_CXXFLAGS+=$(gb_COMPILERDEFS_STDLIB_DEBUG)
 
 ifneq (,$(call gb_LinkTarget__symbols_enabled,cppunit))
 cppunit_CXXFLAGS+=-g

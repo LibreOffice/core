@@ -58,13 +58,6 @@ gb_CXXFLAGS := \
 	$(gb_CXX_LINKFLAGS) \
 
 
-# enable debug STL
-ifeq ($(gb_ENABLE_DBGUTIL),$(true))
-gb_COMPILERDEFS += \
-	-D_GLIBCXX_DEBUG \
-
-endif
-
 ifneq ($(strip $(SYSBASE)),)
 gb_CXXFLAGS += --sysroot=$(SYSBASE)
 gb_CFLAGS += --sysroot=$(SYSBASE)

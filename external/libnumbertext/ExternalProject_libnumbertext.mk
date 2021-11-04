@@ -18,11 +18,7 @@ $(eval $(call gb_ExternalProject_register_targets,libnumbertext,\
 
 libnumbertext_CXXFLAGS=$(CXXFLAGS) $(CXXFLAGS_CXX11)
 
-ifneq (,$(filter ANDROID DRAGONFLY FREEBSD iOS LINUX NETBSD OPENBSD,$(OS)))
-ifneq (,$(gb_ENABLE_DBGUTIL))
-libnumbertext_CPPFLAGS+=-D_GLIBCXX_DEBUG
-endif
-endif
+libnumbertext_CPPFLAGS+=$(gb_COMPILERDEFS_STDLIB_DEBUG)
 
 $(call gb_ExternalProject_get_state_target,libnumbertext,build):
 	$(call gb_Trace_StartRange,libnumbertext,EXTERNAL)

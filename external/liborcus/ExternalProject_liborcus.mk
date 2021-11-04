@@ -58,11 +58,7 @@ endif
 # library (glibc), the NDK does offer the GNU C++ library as one of
 # the C++ libraries available, and we use it.
 #
-ifneq (,$(filter ANDROID DRAGONFLY FREEBSD iOS LINUX NETBSD OPENBSD,$(OS)))
-ifneq (,$(gb_ENABLE_DBGUTIL))
-liborcus_CPPFLAGS+=-D_GLIBCXX_DEBUG
-endif
-endif
+liborcus_CPPFLAGS+=$(gb_COMPILERDEFS_STDLIB_DEBUG)
 
 liborcus_CXXFLAGS=$(CXXFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_VISIBILITY_FLAGS_CXX) $(CXXFLAGS_CXX11) -DBOOST_SYSTEM_NO_DEPRECATED
 liborcus_LDFLAGS=$(LDFLAGS) $(gb_LTOFLAGS)

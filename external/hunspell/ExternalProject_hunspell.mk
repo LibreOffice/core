@@ -15,11 +15,7 @@ $(eval $(call gb_ExternalProject_register_targets,hunspell,\
 
 hunspell_CPPCLAGS=$(CPPFLAGS)
 
-ifneq (,$(filter ANDROID DRAGONFLY FREEBSD iOS LINUX NETBSD OPENBSD,$(OS)))
-ifneq (,$(gb_ENABLE_DBGUTIL))
-hunspell_CPPFLAGS+=-D_GLIBCXX_DEBUG
-endif
-endif
+hunspell_CPPFLAGS+=$(gb_COMPILERDEFS_STDLIB_DEBUG)
 
 hunspell_CXXFLAGS:=$(CXXFLAGS) $(gb_LTOFLAGS) \
        $(gb_EMSCRIPTEN_CPPFLAGS) \
