@@ -19,11 +19,7 @@ $(eval $(call gb_ExternalProject_use_externals,libwps,\
 	revenge \
 ))
 
-ifneq (,$(filter ANDROID DRAGONFLY FREEBSD iOS LINUX NETBSD OPENBSD,$(OS)))
-ifneq (,$(gb_ENABLE_DBGUTIL))
-libwps_CPPFLAGS+=-D_GLIBCXX_DEBUG
-endif
-endif
+libwps_CPPFLAGS+=$(gb_COMPILERDEFS_STDLIB_DEBUG)
 
 libwps_CXXFLAGS=$(gb_CXXFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))
 

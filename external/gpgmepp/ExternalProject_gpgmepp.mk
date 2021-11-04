@@ -65,7 +65,7 @@ $(call gb_ExternalProject_get_state_target,gpgmepp,build):
 		   CXXFLAGS='$(CXXFLAGS) \
 				$(if $(ENABLE_OPTIMIZED), \
 					$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
-				$(if $(ENABLE_DBGUTIL),-D_GLIBCXX_DEBUG) \
+				$(gb_COMPILERDEFS_STDLIB_DEBUG) \
 				$(if $(call gb_Module__symbols_enabled,gpgmepp),$(gb_DEBUGINFO_FLAGS))' \
 		   $(if $(filter LINUX,$(OS)), \
 				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \

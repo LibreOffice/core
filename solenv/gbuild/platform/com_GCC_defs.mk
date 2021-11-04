@@ -49,6 +49,14 @@ gb_COMPILERDEFS := \
 	-DCPPU_ENV=$(CPPU_ENV) \
 	$(if $(filter EMSCRIPTEN,$(OS)),-U_FORTIFY_SOURCE) \
 
+# enable debug STL
+ifeq ($(gb_ENABLE_DBGUTIL),$(true))
+ifneq ($(HAVE_LIBSTDCPP),)
+gb_COMPILERDEFS_STDLIB_DEBUG = -D_GLIBCXX_DEBUG
+endif
+gb_COMPILERDEFS += $(gb_COMPILERDEFS_STDLIB_DEBUG)
+endif
+
 gb_CFLAGS_COMMON := \
 	-Wall \
 	-Wendif-labels \
