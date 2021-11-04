@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c582520_98078f73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-11-04T00:31:36Z",
+      "side": 1,
+      "message": "common nouns shouldn\u0027t be capitalized",
+      "revId": "99396490d28cb76146c527b31802f2440615b025",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "835667e5_223c0d68",
+        "filename": "extras/source/wordbook/technical.dic",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-11-04T00:31:36Z",
+      "side": 1,
+      "message": "this one should be lowercased",
+      "revId": "99396490d28cb76146c527b31802f2440615b025",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
