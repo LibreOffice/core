@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0668d699_27a6fbd5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-11-04T11:27:16Z",
+      "side": 1,
+      "message": "Or change constructs\n   acos(foo/bar) * 57.29577951308\nto\n   basegfx::rad2deg(acos(foo/bar))",
+      "revId": "b6299fa3b094561c3ec19a36fe2e6a7864a5399c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
