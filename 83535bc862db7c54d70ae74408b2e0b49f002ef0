@@ -16,6 +16,91 @@
       "message": "Hossein, done - I have removed the commented out facts into a new patch: https://gerrit.libreoffice.org/c/core/+/123957/\n\nBug fix 1: https://gerrit.libreoffice.org/c/core/+/123309\nBug fix 2: https://gerrit.libreoffice.org/c/core/+/122836\nBug fix 3: https://gerrit.libreoffice.org/c/core/+/123310\nBug fix 4: https://gerrit.libreoffice.org/c/core/+/123311\nFinal bug fix: https://gerrit.libreoffice.org/c/core/+/123312",
       "revId": "83535bc862db7c54d70ae74408b2e0b49f002ef0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3bd2ae2_ee21919d",
+        "filename": "vcl/qa/cppunit/physicalfontcollection.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-04T03:03:15Z",
+      "side": 1,
+      "message": "I think constexpr is better here.",
+      "revId": "83535bc862db7c54d70ae74408b2e0b49f002ef0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b9d436d_e5640a6b",
+        "filename": "vcl/qa/cppunit/physicalfontcollection.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-04T03:03:15Z",
+      "side": 1,
+      "message": "\"testfamily\" is better suited here.\n\nWhat do you think about a more relaxed search?\n\naFontCollection.FindFontFamilyByAttributes(ImplFontAttrs::BrushScript, WEIGHT_DONTKNOW, WIDTH_DONTKNOW, ITALIC_DONTKNOW, \"\"))",
+      "revId": "83535bc862db7c54d70ae74408b2e0b49f002ef0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29ea51b5_f3f19c6c",
+        "filename": "vcl/qa/cppunit/physicalfontcollection.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-04T03:03:15Z",
+      "side": 1,
+      "message": "If you invoke GetFamilyName() on the output from FindFontFamilyByAttributes(), the result would be \"matchingfamilyname\". Can you check for this?",
+      "revId": "83535bc862db7c54d70ae74408b2e0b49f002ef0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "997ec01c_46fbb443",
+        "filename": "vcl/qa/cppunit/physicalfontcollection.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-04T03:03:15Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "83535bc862db7c54d70ae74408b2e0b49f002ef0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2264ea8_9698d9a5",
+        "filename": "vcl/qa/cppunit/physicalfontcollection.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-11-04T03:03:15Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "83535bc862db7c54d70ae74408b2e0b49f002ef0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
