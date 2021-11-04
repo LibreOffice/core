@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8256e7c3_30ea7ecf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-11-04T10:50:05Z",
+      "side": 1,
+      "message": "@Tibi: very nice fix! Note: it seems, only the first shape of the test document had the fixed problem, but now it works well during the slideshow.",
+      "revId": "e1a66320607b5a1fd06825a8dd44c7fd6bd0addb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
