@@ -394,10 +394,10 @@ protected:
     bool                mbReadOnly;
     static bool         mbPipette;
 
-                    DECL_LINK( ClipboardChanged, TransferableDataHelper*, void );
-                    DECL_LINK( TabSplitHdl, TabBar *, void );
-                    DECL_LINK( NameObjectHdl, AbstractSvxObjectNameDialog&, bool );
-                    DECL_LINK( RenameSlideHdl, AbstractSvxNameDialog&, bool );
+                    DECL_DLLPRIVATE_LINK( ClipboardChanged, TransferableDataHelper*, void );
+                    DECL_DLLPRIVATE_LINK( TabSplitHdl, TabBar *, void );
+                    DECL_DLLPRIVATE_LINK( NameObjectHdl, AbstractSvxObjectNameDialog&, bool );
+                    DECL_DLLPRIVATE_LINK( RenameSlideHdl, AbstractSvxNameDialog&, bool );
 
     void            DeleteActualPage();
     void            DeleteActualLayer();

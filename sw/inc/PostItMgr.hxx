@@ -165,7 +165,7 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
         sal_Int32       GetScrollSize() const;
         sal_Int32       GetSpaceBetween() const;
         void            SetReadOnlyState();
-        DECL_LINK( CalcHdl, void*, void);
+        DECL_DLLPRIVATE_LINK( CalcHdl, void*, void);
 
         sw::annotation::SwAnnotationWin* GetSidebarWin(const SfxBroadcaster* pBroadcaster) const;
 

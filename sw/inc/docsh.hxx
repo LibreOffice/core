@@ -182,7 +182,7 @@ public:
     virtual ~SwDocShell() override;
 
     /// OLE 2.0-notification.
-    DECL_LINK( Ole2ModifiedHdl, bool, void );
+    DECL_DLLPRIVATE_LINK( Ole2ModifiedHdl, bool, void );
 
     /// OLE-stuff.
     virtual void      SetVisArea( const tools::Rectangle &rRect ) override;

@@ -214,8 +214,8 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
     bool                    bListValButton:1;
     bool                    bInitialPageBreaks:1;
 
-    DECL_LINK( PopupModeEndHdl, weld::Popover&, void );
-    DECL_LINK( PopupSpellingHdl, SpellCallbackInfo&, void );
+    DECL_DLLPRIVATE_LINK( PopupModeEndHdl, weld::Popover&, void );
+    DECL_DLLPRIVATE_LINK( PopupSpellingHdl, SpellCallbackInfo&, void );
 
     bool            TestMouse( const MouseEvent& rMEvt, bool bAction );
 
@@ -313,7 +313,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
                                             const Fraction aScaleX, const Fraction aScaleY);
 
     void            SetupInitialPageBreaks(const ScDocument& rDoc, SCTAB nTab);
-    DECL_LINK(InitiatePageBreaksTimer, Timer*, void);
+    DECL_DLLPRIVATE_LINK(InitiatePageBreaksTimer, Timer*, void);
 
 protected:
     virtual void    PrePaint(vcl::RenderContext& rRenderContext) override;

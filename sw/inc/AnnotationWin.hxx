@@ -212,13 +212,13 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
         void        SetSizePixel( const Size& rNewSize ) override;
         SfxItemSet  DefaultItem();
 
-        DECL_LINK(ModifyHdl, LinkParamNone*, void);
-        DECL_LINK(ScrollHdl, weld::ScrolledWindow&, void);
-        DECL_LINK(DeleteHdl, void*, void);
-        DECL_LINK(ToggleHdl, weld::Toggleable&, void);
-        DECL_LINK(SelectHdl, const OString&, void);
-        DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
-        DECL_LINK(MouseMoveHdl, const MouseEvent&, bool);
+        DECL_DLLPRIVATE_LINK(ModifyHdl, LinkParamNone*, void);
+        DECL_DLLPRIVATE_LINK(ScrollHdl, weld::ScrolledWindow&, void);
+        DECL_DLLPRIVATE_LINK(DeleteHdl, void*, void);
+        DECL_DLLPRIVATE_LINK(ToggleHdl, weld::Toggleable&, void);
+        DECL_DLLPRIVATE_LINK(SelectHdl, const OString&, void);
+        DECL_DLLPRIVATE_LINK(KeyInputHdl, const KeyEvent&, bool);
+        DECL_DLLPRIVATE_LINK(MouseMoveHdl, const MouseEvent&, bool);
 
         sal_uInt32 CountFollowing();
 

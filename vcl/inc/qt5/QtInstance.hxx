@@ -67,7 +67,7 @@ class VCLPLUG_QT_PUBLIC QtInstance : public QObject,
     Timer m_aUpdateStyleTimer;
     bool m_bUpdateFonts;
 
-    DECL_LINK(updateStyleHdl, Timer*, void);
+    DECL_DLLPRIVATE_LINK(updateStyleHdl, Timer*, void);
     void AfterAppInit() override;
 
 private Q_SLOTS:

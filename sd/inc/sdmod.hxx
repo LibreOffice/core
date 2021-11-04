@@ -74,7 +74,7 @@ class SAL_DLLPUBLIC_RTTI SdModule final : public SfxModule, public SfxListener
 {
 public:
                             SFX_DECL_INTERFACE(SD_IF_SDAPP)
-                            DECL_LINK( CalcFieldValueHdl, EditFieldInfo*, void );
+                            DECL_DLLPRIVATE_LINK( CalcFieldValueHdl, EditFieldInfo*, void );
 
 private:
     /// SfxInterface initializer.

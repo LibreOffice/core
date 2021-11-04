@@ -128,8 +128,8 @@ public:
 
                         // moved by the application
 
-    DECL_LINK( IdleHandler, Timer*, void ); // Timer instead of idle
-    DECL_LINK( CalcFieldValueHdl, EditFieldInfo*, void );
+    DECL_DLLPRIVATE_LINK( IdleHandler, Timer*, void ); // Timer instead of idle
+    DECL_DLLPRIVATE_LINK( CalcFieldValueHdl, EditFieldInfo*, void );
 
     void                Execute( SfxRequest& rReq );
     void                GetState( SfxItemSet& rSet );

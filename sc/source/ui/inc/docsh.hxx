@@ -342,8 +342,8 @@ public:
     void            LockDocument();
     void            UnlockDocument();
 
-    DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper*, void );
-    DECL_LINK( ReloadAllLinksHdl, weld::Button&, void );
+    DECL_DLLPRIVATE_LINK( DialogClosedHdl, sfx2::FileDialogHelper*, void );
+    DECL_DLLPRIVATE_LINK( ReloadAllLinksHdl, weld::Button&, void );
 
     virtual SfxStyleSheetBasePool*  GetStyleSheetPool() override;
 
@@ -405,7 +405,7 @@ public:
     static bool       HasAutomaticTableName( std::u16string_view rFilter );
     static void       LOKCommentNotify(LOKCommentNotificationType nType, const ScDocument* pDocument, const ScAddress& rPos, const ScPostIt* pNote);
 
-    DECL_LINK( RefreshDBDataHdl, Timer*, void );
+    DECL_DLLPRIVATE_LINK( RefreshDBDataHdl, Timer*, void );
 
     void            BeforeXMLLoading();
     void            AfterXMLLoading(bool bRet);
