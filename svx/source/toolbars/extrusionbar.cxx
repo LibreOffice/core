@@ -40,6 +40,7 @@
 #include <svx/sdasitm.hxx>
 #include <svl/intitem.hxx>
 #include <rtl/math.hxx>
+#include <basegfx/numeric/ftools.hxx>
 
 #include <svx/extrusionbar.hxx>
 #include <extrusiondepthdialog.hxx>
@@ -321,25 +322,54 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
         {
             sal_Int32 nSurface = rReq.GetArgs()->GetItem<SfxInt32Item>(SID_EXTRUSION_SURFACE)->GetValue();
 
-            ShadeMode eShadeMode( ShadeMode_FLAT );
-            bool bMetal = false;
-            double fSpecularity = 0;
-            double fDiffusion = 0;
+            // Set ShadeMode only when changing from or to wireframe, otherwise keep existing value.
+            ShadeMode eOldShadeMode(ShadeMode_FLAT);
+            css::uno::Any* pAny = rGeometryItem.GetPropertyValueByName(sExtrusion, u"ShadeMode");
+            if (pAny)
+                *pAny >>= eOldShadeMode;
+            ShadeMode eShadeMode(eOldShadeMode);
+            switch (nSurface)
+            {
+                case 0: // wireframe
+                    eShadeMode = ShadeMode_DRAFT;
+                    break;
+                case 1: // matte
+                case 2: // plastic
+                case 3: // metal
+                    if (eOldShadeMode == ShadeMode_DRAFT)
+                        eShadeMode = ShadeMode_FLAT; // ODF default
+                    break;
+            }
 
+            bool bMetal = nSurface == 3;
+
+            // ODF has no dedicated property for 'surface'. MS Office binary format uses attribute
+            // c3DSpecularAmt to distinguish between 'matte' (=0) and 'plastic'.
+            // From point of ODF, using not harsh light has similar effect.
+            double fOldSpecularity = 0.0;
+            pAny = rGeometryItem.GetPropertyValueByName(sExtrusion, u"Specularity");
+            if (pAny)
+                *pAny >>= fOldSpecularity;
+            double fSpecularity = fOldSpecularity;
+            bool bOldIsFirstLightHarsh = true;
+            pAny = rGeometryItem.GetPropertyValueByName(sExtrusion, u"FirstLightHarsh");
+            if (pAny)
+                *pAny >>= bOldIsFirstLightHarsh;
+            bool bIsFirstLightHarsh = bOldIsFirstLightHarsh;
             switch( nSurface )
             {
             case 0: // wireframe
-                eShadeMode = ShadeMode_DRAFT;
                 break;
             case 1: // matte
+                fSpecularity = 0.0;
+                bIsFirstLightHarsh = false;
                 break;
             case 2: // plastic
-                fSpecularity = 122.0;
-                break;
             case 3: // metal
-                bMetal = true;
-                fSpecularity = 122.0;
-                fDiffusion = 122.0;
+                if (basegfx::fTools::equalZero(fOldSpecularity, 0.0001))
+                    fSpecularity = 80; // estimated value, can be changed if necessary
+                if (!bOldIsFirstLightHarsh)
+                    bIsFirstLightHarsh = true;
                 break;
             }
 
@@ -352,13 +382,19 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
             aPropValue.Value <<= bMetal;
             rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
 
-            aPropValue.Name = "Specularity";
-            aPropValue.Value <<= fSpecularity;
-            rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
+            if (!basegfx::fTools::equalZero(fOldSpecularity - fSpecularity, 0.0001))
+            {
+                aPropValue.Name = "Specularity";
+                aPropValue.Value <<= fSpecularity;
+                rGeometryItem.SetPropertyValue(sExtrusion, aPropValue);
+            }
 
-            aPropValue.Name = "Diffusion";
-            aPropValue.Value <<= fDiffusion;
-            rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
+            if (bOldIsFirstLightHarsh != bIsFirstLightHarsh)
+            {
+                aPropValue.Name = "FirstLightHarsh";
+                aPropValue.Value <<= bIsFirstLightHarsh;
+                rGeometryItem.SetPropertyValue(sExtrusion, aPropValue);
+            }
         }
     }
     break;
@@ -369,7 +405,6 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
             sal_Int32 nLevel = rReq.GetArgs()->GetItem<SfxInt32Item>(SID_EXTRUSION_LIGHTING_INTENSITY)->GetValue();
 
             double fBrightness;
-            bool bHarsh2 = false;
             double fLevel1;
             double fLevel2;
 
@@ -377,19 +412,16 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
             {
             case 0: // bright
                 fBrightness = 34.0;
-                bHarsh2 = false;
                 fLevel1 = 66.0;
                 fLevel2 = 66.0;
                 break;
             case 1: // normal
                 fBrightness = 15.0;
-                bHarsh2 = false;
                 fLevel1 = 67.0;
                 fLevel2 = 37.0;
                 break;
             case 2: // dim
                 fBrightness = 6.0;
-                bHarsh2 = true;
                 fLevel1 = 79.0;
                 fLevel2 = 21.0;
                 break;
@@ -400,16 +432,8 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
             aPropValue.Value <<= fBrightness;
             rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
 
-            aPropValue.Name = "LightFace";
-            aPropValue.Value <<= true;
-            rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
-
-            aPropValue.Name = "FirstLightHarsh";
-            aPropValue.Value <<= true;
-            rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
-
             aPropValue.Name = "SecondLightHarsh";
-            aPropValue.Value <<= bHarsh2;
+            aPropValue.Value <<= false;
             rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
 
             aPropValue.Name = "FirstLightLevel";
@@ -849,7 +873,7 @@ static void getExtrusionSurfaceState( SdrView const * pSdrView, SfxItemSet& rSet
             if( pAny )
                 *pAny >>= eShadeMode;
 
-            if( eShadeMode == ShadeMode_FLAT )
+            if (eShadeMode != ShadeMode_DRAFT)
             {
                 bool bMetal = false;
                 pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, "Metal" );
