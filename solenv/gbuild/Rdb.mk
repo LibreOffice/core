@@ -11,7 +11,7 @@ gb_Rdb__get_install_target = $(INSTROOT)/$(LIBO_ETC_FOLDER)/services/$(1).rdb
 
 define gb_Rdb__command
 $(call gb_Helper_abbreviate_dirs,\
-	RESPONSEFILE=$(call var2file,$(shell $(call gb_MKTEMP)),70,\
+	RESPONSEFILE=$(call gb_var2file,$(shell $(call gb_MKTEMP)),70,\
 		<list> \
 		$(foreach component,$(COMPONENTS),\
 			<filename>$(call gb_ComponentTarget_get_target,$(component))</filename>) \

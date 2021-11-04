@@ -62,7 +62,7 @@ gb_PropertiesTranslateTarget_DEPS := $(call gb_Executable_get_runtime_dependenci
 define gb_PropertiesTranslateTarget__command
 $(call gb_Helper_abbreviate_dirs, \
 	$(if $(filter-out qtz,$(LANGUAGE)), \
-		MERGEINPUT=$(call var2file,$(shell $(gb_MKTEMP)),100,$(POFILE)) && \
+		MERGEINPUT=$(call gb_var2file,$(shell $(gb_MKTEMP)),100,$(POFILE)) && \
 		$(gb_PropertiesTranslateTarget_COMMAND) \
 			-i $(PROPERTIES_FILE) \
 			-l $(LANGUAGE) \
@@ -127,7 +127,7 @@ gb_DescriptionTranslateTarget_DEPS := $(call gb_Executable_get_runtime_dependenc
 
 define gb_DescriptionTranslateTarget__command
 $(call gb_Helper_abbreviate_dirs,\
-	MERGEINPUT=$(call var2file,$(shell $(gb_MKTEMP)),100,$(POFILES)) && \
+	MERGEINPUT=$(call gb_var2file,$(shell $(gb_MKTEMP)),100,$(POFILES)) && \
 	$(gb_DescriptionTranslateTarget_COMMAND) \
 		-i $(DESCRIPTION_XML) \
 		-l all \

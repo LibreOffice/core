@@ -55,7 +55,7 @@ $(call gb_PrecompiledHeader_get_target,$(1),$(3)) :
 	echo $$(sort $$(PCH_DEFS) $$(PCH_CXXFLAGS) $$(gb_PrecompiledHeader_EXCEPTIONFLAGS)) > $$(call gb_PrecompiledHeader_get_target,$(1),$(3)).flags
 ifeq ($(gb_FULLDEPS),$(true))
 	$$(call gb_Helper_abbreviate_dirs,\
-		RESPONSEFILE=$$(call var2file,$$(shell $$(gb_MKTEMP)),200,$$(call gb_PrecompiledHeader_get_dep_target_tmp,$(1),$(3))) && \
+		RESPONSEFILE=$$(call gb_var2file,$$(shell $$(gb_MKTEMP)),200,$$(call gb_PrecompiledHeader_get_dep_target_tmp,$(1),$(3))) && \
 		$$(call gb_Executable_get_command,concat-deps) $$$${RESPONSEFILE} \
 			> $$(call gb_PrecompiledHeader_get_dep_target,$(1),$(3)) && \
 		rm -f $$$${RESPONSEFILE} $$(call gb_PrecompiledHeader_get_dep_target_tmp,$(1),$(3)))

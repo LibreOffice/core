@@ -19,21 +19,21 @@ $(call gb_AutoInstall_get_target,%) : $(GBUILDDIR)/AutoInstall.mk \
 		$(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_Output_announce,$*,$(true),AIN,3)
 	$(call gb_Trace_StartRange,$*,AIN)
-	SDKLIBFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,\
+	SDKLIBFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),100,\
 	   $(foreach lib,$(gb_SdkLinkLibrary_MODULE_$*),\
 			$(lib) \
 			$(notdir $(call gb_Library_get_sdk_link_lib,$(lib))) \
 			../../program/$(call gb_Library_get_runtime_filename,$(lib)))) \
-	&& LIBFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,\
+	&& LIBFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),100,\
 		$(foreach lib,$(gb_Library_MODULE_$*),\
 			$(lib) \
 			$(call gb_Library_get_runtime_filename,$(lib)))) \
-	&& EXEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,\
+	&& EXEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),100,\
 		$(foreach exe,$(gb_Executable_MODULE_$*),\
 			$(exe) \
 			$(call gb_Executable_get_filename,$(exe)))) \
-	&& JARFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,$(gb_Jar_MODULE_$*)) \
-	&& PKGFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,$(gb_Package_MODULE_$*)) \
+	&& JARFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),100,$(gb_Jar_MODULE_$*)) \
+	&& PKGFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),100,$(gb_Package_MODULE_$*)) \
 	&& $(call gb_ExternalExecutable_get_command,python) \
 			$(GBUILDDIR)/gen-autoinstall.py \
 			'$*' '$(SCP2COMPONENTCONDITION)' \

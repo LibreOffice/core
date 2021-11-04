@@ -46,7 +46,7 @@ $(call gb_Zip_get_target,%) :
 	$(call gb_Trace_StartRange,$*,ZIP)
 	$(call gb_Helper_abbreviate_dirs,\
 		$(if $(FILES),\
-			RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,\
+			RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),500,\
                         $(FILES)) && \
 			cd $(LOCATION) && \
 			cat $${RESPONSEFILE} | tr "[:space:]" "\n" | \
