@@ -196,8 +196,8 @@ namespace frm
         DECL_PROP2      ( FONT,               FontDescriptor,   BOUND, MAYBEDEFAULT );
         DECL_PROP2      ( FONTEMPHASISMARK,   sal_Int16,        BOUND, MAYBEDEFAULT );
         DECL_PROP2      ( FONTRELIEF,         sal_Int16,        BOUND, MAYBEDEFAULT );
-        DECL_PROP3      ( TEXTCOLOR,          sal_Int32,        BOUND, MAYBEDEFAULT, MAYBEVOID );
-        DECL_PROP3      ( TEXTLINECOLOR,      sal_Int32,        BOUND, MAYBEDEFAULT, MAYBEVOID );
+        DECL_PROP_IMPL(TEXTCOLOR, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
+        DECL_PROP_IMPL(TEXTLINECOLOR, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
 
         DECL_PROP1      ( FONT_CHARWIDTH,     float,            MAYBEDEFAULT );
         DECL_BOOL_PROP_IMPL(FONT_KERNING) css::beans::PropertyAttribute::MAYBEDEFAULT);

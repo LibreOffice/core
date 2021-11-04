@@ -160,7 +160,7 @@ void OCurrencyModel::describeFixedProperties( Sequence< Property >& _rProps ) co
     // Set Value to transient
     // ModifyPropertyAttributes(_rAggregateProps, PROPERTY_VALUE, PropertyAttribute::TRANSIENT, 0);
 
-        DECL_PROP3(DEFAULT_VALUE,       double,             BOUND, MAYBEDEFAULT, MAYBEVOID);
+        DECL_PROP_IMPL(DEFAULT_VALUE, double) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
         DECL_PROP1(TABINDEX,        sal_Int16,              BOUND);
     END_DESCRIBE_PROPERTIES();
 }

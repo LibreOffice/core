@@ -142,7 +142,7 @@ OUString SAL_CALL ODateModel::getServiceName()
 void ODateModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 4, OEditBaseModel )
-        DECL_PROP3(DEFAULT_DATE,            util::Date,             BOUND, MAYBEDEFAULT, MAYBEVOID);
+        DECL_PROP_IMPL(DEFAULT_DATE, util::Date) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
         DECL_PROP1(TABINDEX,                sal_Int16,              BOUND);
         DECL_PROP1(FORMATKEY,               sal_Int32,              TRANSIENT);
         DECL_IFACE_PROP_IMPL(FORMATSSUPPLIER, XNumberFormatsSupplier) css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
