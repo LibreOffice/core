@@ -342,7 +342,7 @@ private:
 
     void OnSearchTerminated();
     // is used by SearchThread, after the return from this handler the thread removes itself
-    DECL_LINK(OnNewRecordCount, sal_Int32, void);
+    DECL_DLLPRIVATE_LINK(OnNewRecordCount, sal_Int32, void);
 };
 
 #endif // INCLUDED_SVX_FMSRCIMP_HXX

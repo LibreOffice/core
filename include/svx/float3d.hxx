@@ -211,18 +211,18 @@ private:
     // ItemSet used to remember set 2d attributes
     std::unique_ptr<SfxItemSet> mpRemember2DAttributes;
 
-    DECL_LINK( ClickViewTypeHdl, weld::Button&, void );
-    DECL_LINK( ClickUpdateHdl, weld::Toggleable&, void );
-    DECL_LINK( ClickAssignHdl, weld::Button&, void );
-    DECL_LINK( ClickHdl, weld::Button&, void );
-    DECL_LINK( ClickColorHdl, weld::Button&, void );
-    DECL_LINK( SelectHdl, weld::ComboBox&, void );
-    DECL_LINK( SelectColorHdl, ColorListBox&, void );
-    DECL_LINK( ModifyMetricHdl, weld::MetricSpinButton&, void );
-    DECL_LINK( ModifySpinHdl, weld::SpinButton&, void );
+    DECL_DLLPRIVATE_LINK( ClickViewTypeHdl, weld::Button&, void );
+    DECL_DLLPRIVATE_LINK( ClickUpdateHdl, weld::Toggleable&, void );
+    DECL_DLLPRIVATE_LINK( ClickAssignHdl, weld::Button&, void );
+    DECL_DLLPRIVATE_LINK( ClickHdl, weld::Button&, void );
+    DECL_DLLPRIVATE_LINK( ClickColorHdl, weld::Button&, void );
+    DECL_DLLPRIVATE_LINK( SelectHdl, weld::ComboBox&, void );
+    DECL_DLLPRIVATE_LINK( SelectColorHdl, ColorListBox&, void );
+    DECL_DLLPRIVATE_LINK( ModifyMetricHdl, weld::MetricSpinButton&, void );
+    DECL_DLLPRIVATE_LINK( ModifySpinHdl, weld::SpinButton&, void );
     void ClickLight(const LightButton& rBtn);
 
-    DECL_LINK( ChangeSelectionCallbackHdl, SvxLightCtl3D*, void );
+    DECL_DLLPRIVATE_LINK( ChangeSelectionCallbackHdl, SvxLightCtl3D*, void );
 
     SVX_DLLPRIVATE void         Construct();
     SVX_DLLPRIVATE void         Reset();

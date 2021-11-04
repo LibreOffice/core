@@ -364,7 +364,7 @@ public:
                            const OUString& aComment);
     SignatureState              GetScriptingSignatureState();
     void                        SignScriptingContent(weld::Window* pDialogParent);
-    DECL_LINK(SignDocumentHandler, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(SignDocumentHandler, weld::Button&, void);
 
     virtual std::shared_ptr<SfxDocumentInfoDialog> CreateDocumentInfoDialog(weld::Window* pParent, const SfxItemSet& rItemSet);
 

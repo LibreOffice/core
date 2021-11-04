@@ -34,7 +34,7 @@ public:
 
     weld::Widget* get_widget() const { return m_xContainer.get(); }
 
-    DECL_LINK(GotoButtonClicked, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(GotoButtonClicked, weld::Button&, void);
 };
 
 class SVX_DLLPUBLIC AccessibilityCheckDialog final : public weld::GenericDialogController

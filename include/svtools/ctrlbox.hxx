@@ -251,10 +251,10 @@ private:
                                     SvxBorderLineStyle nStyle, BitmapEx& rBmp );
 
     void            UpdatePaintLineColor();       // returns sal_True if maPaintCol has changed
-    DECL_LINK(ValueSelectHdl, ValueSet*, void);
-    DECL_LINK(FocusHdl, weld::Widget&, void);
-    DECL_LINK(ToggleHdl, weld::Toggleable&, void);
-    DECL_LINK(NoneHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(ValueSelectHdl, ValueSet*, void);
+    DECL_DLLPRIVATE_LINK(FocusHdl, weld::Widget&, void);
+    DECL_DLLPRIVATE_LINK(ToggleHdl, weld::Toggleable&, void);
+    DECL_DLLPRIVATE_LINK(NoneHdl, weld::Button&, void);
 
     void            UpdateEntries();
     sal_Int32       GetStylePos(sal_Int32 nListPos) const;
@@ -314,8 +314,8 @@ public:
     void connect_focus_in(const Link<weld::Widget&, void>& rLink) { m_xControl->connect_focus_in(rLink); }
     void connect_focus_out(const Link<weld::Widget&, void>& rLink) { m_xControl->connect_focus_out(rLink); }
 private:
-    DECL_LINK(SelectHdl, weld::Calendar&, void);
-    DECL_LINK(ActivateHdl, weld::Calendar&, void);
+    DECL_DLLPRIVATE_LINK(SelectHdl, weld::Calendar&, void);
+    DECL_DLLPRIVATE_LINK(ActivateHdl, weld::Calendar&, void);
 
     bool m_bUseLabel;
 
@@ -342,10 +342,10 @@ private:
 
     SVT_DLLPRIVATE void         ImplDestroyFontList();
 
-    DECL_LINK(CustomRenderHdl, weld::ComboBox::render_args, void);
-    DECL_LINK(CustomGetSizeHdl, OutputDevice&, Size);
-    DECL_LINK(SettingsChangedHdl, VclSimpleEvent&, void);
-    DECL_LINK(UpdateHdl, Timer*, void);
+    DECL_DLLPRIVATE_LINK(CustomRenderHdl, weld::ComboBox::render_args, void);
+    DECL_DLLPRIVATE_LINK(CustomGetSizeHdl, OutputDevice&, Size);
+    DECL_DLLPRIVATE_LINK(SettingsChangedHdl, VclSimpleEvent&, void);
+    DECL_DLLPRIVATE_LINK(UpdateHdl, Timer*, void);
 
     void            LoadMRUEntries( const OUString& aFontMRUEntriesFile );
     void            SaveMRUEntries( const OUString& aFontMRUEntriesFile ) const;
@@ -453,8 +453,8 @@ class SVT_DLLPUBLIC FontSizeBox
 
     OUString format_number(int nValue) const;
 
-    DECL_LINK(ModifyHdl, weld::ComboBox&, void);
-    DECL_LINK(ReformatHdl, weld::Widget&, void);
+    DECL_DLLPRIVATE_LINK(ModifyHdl, weld::ComboBox&, void);
+    DECL_DLLPRIVATE_LINK(ReformatHdl, weld::Widget&, void);
 public:
     FontSizeBox(std::unique_ptr<weld::ComboBox> p);
 

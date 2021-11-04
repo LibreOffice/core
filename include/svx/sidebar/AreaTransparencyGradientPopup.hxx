@@ -46,9 +46,9 @@ private:
 
     void InitStatus(XFillFloatTransparenceItem const* pGradientItem);
     void ExecuteValueModify(sal_uInt8 nStartCol, sal_uInt8 nEndCol);
-    DECL_LINK(ModifiedTrgrHdl_Impl, weld::MetricSpinButton&, void);
-    DECL_LINK(Left_Click45_Impl, const OString&, void);
-    DECL_LINK(Right_Click45_Impl, const OString&, void);
+    DECL_DLLPRIVATE_LINK(ModifiedTrgrHdl_Impl, weld::MetricSpinButton&, void);
+    DECL_DLLPRIVATE_LINK(Left_Click45_Impl, const OString&, void);
+    DECL_DLLPRIVATE_LINK(Right_Click45_Impl, const OString&, void);
 
 public:
     AreaTransparencyGradientPopup(const css::uno::Reference<css::frame::XFrame>& rFrame,

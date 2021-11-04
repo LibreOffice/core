@@ -221,7 +221,7 @@ private:
     static sal_uInt16 m_nHeaderHeight;
     VclPtr<ToolBox> m_pShortcuts;
     VclPtr<PushButton> m_pOpenMenu;
-    DECL_LINK(OpenMenu, Button*, void);
+    DECL_DLLPRIVATE_LINK(OpenMenu, Button*, void);
 };
 
 #endif // INCLUDED_VCL_TABCTRL_HXX

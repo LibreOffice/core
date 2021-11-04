@@ -37,7 +37,7 @@ class SvxLineBox final : public WeldToolbarPopup
     void FillControl();
     void Fill(const XDashListRef& pList);
 
-    DECL_LINK(SelectHdl, ValueSet*, void);
+    DECL_DLLPRIVATE_LINK(SelectHdl, ValueSet*, void);
 
     virtual void GrabFocus() override;
 

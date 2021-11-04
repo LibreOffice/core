@@ -87,7 +87,7 @@ private:
     /// called when an item has been selected by any means
     void            Select();
 
-    DECL_LINK(ImplClickHdl, HyperLabel*, void);
+    DECL_DLLPRIVATE_LINK(ImplClickHdl, HyperLabel*, void);
 
     RoadmapItem*         GetByIndex( ItemIndex _nItemIndex );
     const RoadmapItem*   GetByIndex( ItemIndex _nItemIndex ) const;

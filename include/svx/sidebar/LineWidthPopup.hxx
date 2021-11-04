@@ -60,8 +60,8 @@ private:
     std::unique_ptr<LineWidthValueSet> m_xVSWidth;
     std::unique_ptr<weld::CustomWeld> m_xVSWidthWin;
 
-    DECL_LINK(VSSelectHdl, ValueSet*, void);
-    DECL_LINK(MFModifyHdl, weld::MetricSpinButton&, void);
+    DECL_DLLPRIVATE_LINK(VSSelectHdl, ValueSet*, void);
+    DECL_DLLPRIVATE_LINK(MFModifyHdl, weld::MetricSpinButton&, void);
 };
 
 } // end of namespace svx::sidebar

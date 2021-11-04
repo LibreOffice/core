@@ -147,15 +147,15 @@ protected:
     std::unique_ptr< XFillFloatTransparenceItem >   mpFloatTransparenceItem;
     std::unique_ptr< SfxUInt16Item >                mpTransparenceItem;
 
-    DECL_LINK(SelectFillTypeHdl, weld::ComboBox&, void );
-    DECL_LINK(SelectFillAttrHdl, weld::ComboBox&, void );
-    DECL_LINK(SelectFillColorHdl, ColorListBox&, void);
-    DECL_LINK(ChangeGradientAngle, weld::MetricSpinButton&, void);
-    DECL_LINK(ChangeTrgrTypeHdl_Impl, weld::ComboBox&, void);
-    DECL_LINK(ModifyTransparentHdl_Impl, weld::MetricSpinButton&, void);
-    DECL_LINK(ModifyTransSliderHdl, weld::Scale&, void);
-    DECL_LINK(ClickImportBitmapHdl, weld::Button&, void);
-    DECL_LINK(ToolbarHdl_Impl, const OString&, void);
+    DECL_DLLPRIVATE_LINK(SelectFillTypeHdl, weld::ComboBox&, void );
+    DECL_DLLPRIVATE_LINK(SelectFillAttrHdl, weld::ComboBox&, void );
+    DECL_DLLPRIVATE_LINK(SelectFillColorHdl, ColorListBox&, void);
+    DECL_DLLPRIVATE_LINK(ChangeGradientAngle, weld::MetricSpinButton&, void);
+    DECL_DLLPRIVATE_LINK(ChangeTrgrTypeHdl_Impl, weld::ComboBox&, void);
+    DECL_DLLPRIVATE_LINK(ModifyTransparentHdl_Impl, weld::MetricSpinButton&, void);
+    DECL_DLLPRIVATE_LINK(ModifyTransSliderHdl, weld::Scale&, void);
+    DECL_DLLPRIVATE_LINK(ClickImportBitmapHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(ToolbarHdl_Impl, const OString&, void);
 
     void Update();
     void ImpUpdateTransparencies();

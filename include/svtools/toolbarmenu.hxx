@@ -34,7 +34,7 @@ namespace svt { class FrameStatusListener; }
 class SVT_DLLPUBLIC WeldToolbarPopup
 {
 private:
-    DECL_LINK(FocusHdl, weld::Widget&, void);
+    DECL_DLLPRIVATE_LINK(FocusHdl, weld::Widget&, void);
 
 protected:
     std::unique_ptr<weld::Builder> m_xBuilder;
@@ -65,7 +65,7 @@ public:
 class SVT_DLLPUBLIC ToolbarPopupContainer final
 {
 private:
-    DECL_LINK(FocusHdl, weld::Widget&, void);
+    DECL_DLLPRIVATE_LINK(FocusHdl, weld::Widget&, void);
 
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Container> m_xTopLevel;
