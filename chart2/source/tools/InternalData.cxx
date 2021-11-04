@@ -69,9 +69,11 @@ private:
 template< typename T >
     Sequence< T > lcl_ValarrayToSequence( const std::valarray< T > & rValarray )
 {
+#if defined __GLIBCXX__ && (!defined _GLIBCXX_RELEASE || _GLIBCXX_RELEASE < 12)
     // workaround for https://gcc.gnu.org/bugzilla/show_bug.cgi?id=103022
     if (!size(rValarray))
         return Sequence<T>();
+#endif
 
     return comphelper::containerToSequence(rValarray);
 }
