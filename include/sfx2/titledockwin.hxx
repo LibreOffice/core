@@ -70,7 +70,7 @@ namespace sfx2
         void    impl_resetToolBox();
 
     private:
-        DECL_LINK( OnToolboxItemSelected, ToolBox*, void );
+        DECL_DLLPRIVATE_LINK( OnToolboxItemSelected, ToolBox*, void );
 
         void    impl_layout();
 

@@ -94,17 +94,17 @@ class SvxRubyDialog final : public SfxModelessDialogController
     std::unique_ptr<RubyPreview> m_xPreviewWin;
     std::unique_ptr<weld::CustomWeld> m_xPreview;
 
-    DECL_LINK(ApplyHdl_Impl, weld::Button&, void);
-    DECL_LINK(CloseHdl_Impl, weld::Button&, void);
-    DECL_LINK(StylistHdl_Impl, weld::Button&, void);
-    DECL_LINK(ScrollHdl_Impl, weld::ScrolledWindow&, void);
-    DECL_LINK(PositionHdl_Impl, weld::ComboBox&, void);
-    DECL_LINK(AdjustHdl_Impl, weld::ComboBox&, void);
-    DECL_LINK(CharStyleHdl_Impl, weld::ComboBox&, void);
-    DECL_LINK(EditModifyHdl_Impl, weld::Entry&, void);
-    DECL_LINK(EditFocusHdl_Impl, weld::Widget&, void);
-    DECL_LINK(KeyUpDownHdl_Impl, const KeyEvent&, bool);
-    DECL_LINK(KeyUpDownTabHdl_Impl, const KeyEvent&, bool);
+    DECL_DLLPRIVATE_LINK(ApplyHdl_Impl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(CloseHdl_Impl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(StylistHdl_Impl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(ScrollHdl_Impl, weld::ScrolledWindow&, void);
+    DECL_DLLPRIVATE_LINK(PositionHdl_Impl, weld::ComboBox&, void);
+    DECL_DLLPRIVATE_LINK(AdjustHdl_Impl, weld::ComboBox&, void);
+    DECL_DLLPRIVATE_LINK(CharStyleHdl_Impl, weld::ComboBox&, void);
+    DECL_DLLPRIVATE_LINK(EditModifyHdl_Impl, weld::Entry&, void);
+    DECL_DLLPRIVATE_LINK(EditFocusHdl_Impl, weld::Widget&, void);
+    DECL_DLLPRIVATE_LINK(KeyUpDownHdl_Impl, const KeyEvent&, bool);
+    DECL_DLLPRIVATE_LINK(KeyUpDownTabHdl_Impl, const KeyEvent&, bool);
 
     bool EditScrollHdl_Impl(sal_Int32 nParam);
     bool EditJumpHdl_Impl(sal_Int32 nParam);

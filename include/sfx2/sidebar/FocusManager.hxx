@@ -94,7 +94,7 @@ private:
 
     /** Listen for key events for panels and buttons.
     */
-    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+    DECL_DLLPRIVATE_LINK(KeyInputHdl, const KeyEvent&, bool);
 
     void ClearPanels();
     void ClearButtons();

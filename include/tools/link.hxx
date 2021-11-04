@@ -25,7 +25,7 @@
 #include <sal/macros.h>
 #include <sal/types.h>
 
-#define DECL_LINK(Member, ArgType, RetType) \
+#define DECL_DLLPRIVATE_LINK(Member, ArgType, RetType) \
     static RetType LinkStub##Member(void *, ArgType); \
     RetType Member(ArgType)
 

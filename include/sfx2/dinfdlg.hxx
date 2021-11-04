@@ -186,9 +186,9 @@ private:
     std::unique_ptr<weld::Label> m_xTemplFt;
     std::unique_ptr<weld::Label> m_xTemplValFt;
 
-    DECL_LINK(DeleteHdl, weld::Button&, void);
-    DECL_LINK(SignatureHdl, weld::Button&, void);
-    DECL_LINK(ChangePassHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(DeleteHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(SignatureHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(ChangePassHdl, weld::Button&, void);
     void                ImplUpdateSignatures();
     void                ImplCheckPasswordState();
 
@@ -277,7 +277,7 @@ class CustomPropertiesDurationField
     std::unique_ptr<weld::Entry>    m_xEntry;
     std::unique_ptr<weld::Button>   m_xEditButton;
 
-    DECL_LINK(ClickHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(ClickHdl, weld::Button&, void);
 public:
     CustomPropertiesDurationField(std::unique_ptr<weld::Entry> xEntry,
                                   std::unique_ptr<weld::Button> xEditButton);
@@ -330,10 +330,10 @@ struct CustomPropertyLine
     bool m_bTypeLostFocus;
 
     CustomPropertyLine(CustomPropertiesWindow* pParent, weld::Widget* pContainer);
-    DECL_LINK(TypeHdl, weld::ComboBox&, void);
-    DECL_LINK(RemoveHdl, weld::Button&, void);
-    DECL_LINK(EditLoseFocusHdl, weld::Widget&, void);
-    DECL_LINK(BoxLoseFocusHdl, weld::Widget&, void);
+    DECL_DLLPRIVATE_LINK(TypeHdl, weld::ComboBox&, void);
+    DECL_DLLPRIVATE_LINK(RemoveHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(EditLoseFocusHdl, weld::Widget&, void);
+    DECL_DLLPRIVATE_LINK(BoxLoseFocusHdl, weld::Widget&, void);
 
     void DoTypeHdl(const weld::ComboBox& rBox);
 
@@ -362,8 +362,8 @@ private:
     weld::Label& m_rHeaderAccType;
     weld::Label& m_rHeaderAccValue;
 
-    DECL_LINK(EditTimeoutHdl, Timer *, void);
-    DECL_LINK(BoxTimeoutHdl, Timer *, void);
+    DECL_DLLPRIVATE_LINK(EditTimeoutHdl, Timer *, void);
+    DECL_DLLPRIVATE_LINK(BoxTimeoutHdl, Timer *, void);
 
     bool        IsLineValid( CustomPropertyLine* pLine ) const;
     void        ValidateLine( CustomPropertyLine* pLine, bool bIsFromTypeBox );
@@ -414,9 +414,9 @@ private:
     std::unique_ptr<weld::Label> m_xType;
     std::unique_ptr<weld::Label> m_xValue;
 
-    DECL_LINK( ResizeHdl, const Size&, void );
-    DECL_LINK( ScrollHdl, weld::ScrolledWindow&, void );
-    DECL_LINK( RemovedHdl, void*, void );
+    DECL_DLLPRIVATE_LINK( ResizeHdl, const Size&, void );
+    DECL_DLLPRIVATE_LINK( ScrollHdl, weld::ScrolledWindow&, void );
+    DECL_DLLPRIVATE_LINK( RemovedHdl, void*, void );
 
 public:
     CustomPropertiesControl();
@@ -440,7 +440,7 @@ public:
 class SfxCustomPropertiesPage final : public SfxTabPage
 {
 private:
-    DECL_LINK(AddHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(AddHdl, weld::Button&, void);
 
     std::unique_ptr<CustomPropertiesControl> m_xPropertiesCtrl;
     std::unique_ptr<weld::Button> m_xAdd;

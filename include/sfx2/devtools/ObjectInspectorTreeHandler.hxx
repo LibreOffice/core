@@ -64,26 +64,26 @@ public:
     ObjectInspectorTreeHandler(std::unique_ptr<ObjectInspectorWidgets>& pObjectInspectorWidgets);
 
     // callbacks when a node in the tree view is expanded
-    DECL_LINK(ExpandingHandlerInterfaces, const weld::TreeIter&, bool);
-    DECL_LINK(ExpandingHandlerServices, const weld::TreeIter&, bool);
-    DECL_LINK(ExpandingHandlerProperties, const weld::TreeIter&, bool);
-    DECL_LINK(ExpandingHandlerMethods, const weld::TreeIter&, bool);
+    DECL_DLLPRIVATE_LINK(ExpandingHandlerInterfaces, const weld::TreeIter&, bool);
+    DECL_DLLPRIVATE_LINK(ExpandingHandlerServices, const weld::TreeIter&, bool);
+    DECL_DLLPRIVATE_LINK(ExpandingHandlerProperties, const weld::TreeIter&, bool);
+    DECL_DLLPRIVATE_LINK(ExpandingHandlerMethods, const weld::TreeIter&, bool);
 
     // callback when the tree view selection changed to a different node
-    DECL_LINK(SelectionChanged, weld::TreeView&, void);
+    DECL_DLLPRIVATE_LINK(SelectionChanged, weld::TreeView&, void);
 
     // callback when a pop-up is triggered on a tree view node
-    DECL_LINK(PopupMenuHandler, const CommandEvent&, bool);
+    DECL_DLLPRIVATE_LINK(PopupMenuHandler, const CommandEvent&, bool);
 
     // callback when a button is clicked on a toolbar
-    DECL_LINK(ToolbarButtonClicked, const OString&, void);
+    DECL_DLLPRIVATE_LINK(ToolbarButtonClicked, const OString&, void);
 
     // callback when a page is entered or left on the notebook bar for
     // different categories
-    DECL_LINK(NotebookEnterPage, const OString&, void);
-    DECL_LINK(NotebookLeavePage, const OString&, bool);
+    DECL_DLLPRIVATE_LINK(NotebookEnterPage, const OString&, void);
+    DECL_DLLPRIVATE_LINK(NotebookLeavePage, const OString&, bool);
 
-    DECL_LINK(HeaderBarClick, int, void);
+    DECL_DLLPRIVATE_LINK(HeaderBarClick, int, void);
 
     void introspect(css::uno::Reference<css::uno::XInterface> const& xInterface);
 

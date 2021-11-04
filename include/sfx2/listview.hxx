@@ -82,9 +82,9 @@ protected:
 
     int get_index(sal_uInt16 nId) const { return mxTreeView->find_id(OUString::number(nId)); }
 
-    DECL_LINK(ColumnClickedHdl, const int, void);
+    DECL_DLLPRIVATE_LINK(ColumnClickedHdl, const int, void);
 
-    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
+    DECL_DLLPRIVATE_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
 
 protected:
     std::unique_ptr<weld::TreeView> mxTreeView;

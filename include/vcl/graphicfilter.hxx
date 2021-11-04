@@ -383,7 +383,7 @@ private:
     ErrCode         ImplSetError( ErrCode nError, const SvStream* pStm = nullptr );
     ErrCode         ImpTestOrFindFormat( const OUString& rPath, SvStream& rStream, sal_uInt16& rFormat );
 
-                    DECL_LINK( FilterCallback, ConvertData&, bool );
+                    DECL_DLLPRIVATE_LINK( FilterCallback, ConvertData&, bool );
 
     /** Information about errors during the GraphicFilter operation. */
     std::optional<ErrCode> mxErrorEx;

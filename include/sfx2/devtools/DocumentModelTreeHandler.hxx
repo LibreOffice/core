@@ -37,7 +37,7 @@ public:
     DocumentModelTreeHandler(std::unique_ptr<weld::TreeView>& pDocumentModelTree,
                              css::uno::Reference<css::uno::XInterface> const& xDocument);
 
-    DECL_LINK(ExpandingHandler, const weld::TreeIter&, bool);
+    DECL_DLLPRIVATE_LINK(ExpandingHandler, const weld::TreeIter&, bool);
 
     void inspectDocument();
 

@@ -89,7 +89,7 @@ private:
     bool                    bWasLastEditOK : 1;
     bool                    m_bIsConnect : 1;
 
-    DECL_LINK( EndEditHdl, const OUString&, void );
+    DECL_DLLPRIVATE_LINK( EndEditHdl, const OUString&, void );
 
     bool                    ExecuteEdit( const OUString& _rNewName );
 

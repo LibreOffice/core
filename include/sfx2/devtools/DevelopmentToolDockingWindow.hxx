@@ -47,8 +47,8 @@ private:
     // Handler for the object inspector tree
     ObjectInspectorTreeHandler maObjectInspectorTreeHandler;
 
-    DECL_LINK(DocumentModelTreeViewSelectionHandler, weld::TreeView&, void);
-    DECL_LINK(DomToolbarButtonClicked, const OString&, void);
+    DECL_DLLPRIVATE_LINK(DocumentModelTreeViewSelectionHandler, weld::TreeView&, void);
+    DECL_DLLPRIVATE_LINK(DomToolbarButtonClicked, const OString&, void);
 
     void updateSelection();
 

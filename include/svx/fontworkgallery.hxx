@@ -61,8 +61,8 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC FontWorkGalleryDialog final : public wel
     void            insertSelectedFontwork();
     void            fillFavorites(sal_uInt16 nThemeId);
 
-    DECL_LINK(DoubleClickFavoriteHdl, weld::IconView&, bool);
-    DECL_LINK(ClickOKHdl, weld::Button&, void );
+    DECL_DLLPRIVATE_LINK(DoubleClickFavoriteHdl, weld::IconView&, bool);
+    DECL_DLLPRIVATE_LINK(ClickOKHdl, weld::Button&, void );
 
 public:
     FontWorkGalleryDialog(weld::Window* pParent, SdrView& rView);

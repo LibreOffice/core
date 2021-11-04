@@ -1914,9 +1914,9 @@ class VCL_DLLPUBLIC MetricSpinButton final
     std::unique_ptr<weld::SpinButton> m_xSpinButton;
     Link<MetricSpinButton&, void> m_aValueChangedHdl;
 
-    DECL_LINK(spin_button_value_changed, weld::SpinButton&, void);
-    DECL_LINK(spin_button_output, weld::SpinButton&, void);
-    DECL_LINK(spin_button_input, int* result, bool);
+    DECL_DLLPRIVATE_LINK(spin_button_value_changed, weld::SpinButton&, void);
+    DECL_DLLPRIVATE_LINK(spin_button_output, weld::SpinButton&, void);
+    DECL_DLLPRIVATE_LINK(spin_button_input, int* result, bool);
 
     void signal_value_changed() { m_aValueChangedHdl.Call(*this); }
 

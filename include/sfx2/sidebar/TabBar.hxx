@@ -107,7 +107,7 @@ private:
     public:
         Item(TabBar& rTabBar);
         ~Item();
-        DECL_LINK(HandleClick, const OString&, void);
+        DECL_DLLPRIVATE_LINK(HandleClick, const OString&, void);
         std::unique_ptr<weld::Toolbar> mxButton;
         OUString msDeckId;
         ::std::function<void (const OUString& rsDeckId)> maDeckActivationFunctor;
@@ -123,7 +123,7 @@ private:
     css::uno::Reference<css::graphic::XGraphic> GetItemImage(const DeckDescriptor& rDeskDescriptor) const;
     void UpdateButtonIcons();
 
-    DECL_LINK(OnToolboxClicked, weld::Toggleable&, void);
+    DECL_DLLPRIVATE_LINK(OnToolboxClicked, weld::Toggleable&, void);
 
     SidebarController* pParentSidebarController;
     std::unique_ptr<svt::AcceleratorExecute> mpAccel;
