@@ -90,6 +90,7 @@ public:
     void testSoftEdges();
     void testShadowBlur();
     void testRhbz1870501();
+    void testTdf91060();
     void testTdf128550();
     void testTdf140714();
     void testMasterPageBackgroundFullSize();
@@ -136,6 +137,7 @@ public:
     CPPUNIT_TEST(testSoftEdges);
     CPPUNIT_TEST(testShadowBlur);
     CPPUNIT_TEST(testRhbz1870501);
+    CPPUNIT_TEST(testTdf91060);
     CPPUNIT_TEST(testTdf128550);
     CPPUNIT_TEST(testTdf140714);
     CPPUNIT_TEST(testMasterPageBackgroundFullSize);
@@ -1466,6 +1468,13 @@ void SdExportTest::testRhbz1870501()
     //Without the fix in place, it would crash at export time
     ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc(u"/sd/qa/unit/data/odg/rhbz1870501.odg"), ODG);
     xDocShRef = saveAndReload( xDocShRef.get(), ODG );
+}
+
+void SdExportTest::testTdf91060()
+{
+    //Without the fix in place, it would crash at import time
+    ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf91060.pptx"), PPTX);
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
 }
 
 void SdExportTest::testTdf128550()
