@@ -269,7 +269,7 @@ void SwPostItMgr::CheckForRemovedPostIts()
         PrepareView();
     }
     else
-        // if postits are their make sure that page lists are not empty
+        // if postits are there make sure that page lists are not empty
         // otherwise sudden paints can cause pain (in BorderOverPageBorder)
         CalcRects();
 }
