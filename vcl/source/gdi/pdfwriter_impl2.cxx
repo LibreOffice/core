@@ -438,6 +438,12 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                         const Color aTransCol( rTransparenceGradient.GetStartColor() );
                         const sal_uInt16 nTransPercent = aTransCol.GetLuminance() * 100 / 255;
                         m_rOuterFace.BeginTransparencyGroup();
+
+                        // tdf#138826 adjust the aTmpMtf to start at rPos (see also #i112076#)
+                        Point aMtfOrigin(aTmpMtf.GetPrefMapMode().GetOrigin());
+                        if (rPos != aMtfOrigin)
+                            aTmpMtf.Move(rPos.X() - aMtfOrigin.X(), rPos.Y() - aMtfOrigin.Y());
+
                         playMetafile( aTmpMtf, nullptr, i_rContext, pDummyVDev );
                         m_rOuterFace.EndTransparencyGroup( tools::Rectangle( rPos, rSize ), nTransPercent );
                     }
