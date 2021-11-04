@@ -1533,6 +1533,9 @@ void SwViewShell::PaintDesktop(vcl::RenderContext& rRenderContext, const SwRect 
     if ( !GetWin() && !GetOut()->GetConnectMetaFile() )
         return;                     //for the printer we don't do anything here.
 
+    if(comphelper::LibreOfficeKit::isActive())
+        return;
+
     //Catch exceptions, so that it doesn't look so surprising.
     //Can e.g. happen during Idle.
     //Unfortunately we must at any rate Paint the rectangles next to the pages,
