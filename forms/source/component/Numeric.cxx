@@ -111,7 +111,7 @@ css::uno::Sequence<OUString> ONumericModel::getSupportedServiceNames()
 void ONumericModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 2, OEditBaseModel )
-        DECL_PROP3(DEFAULT_VALUE,   double,             BOUND, MAYBEDEFAULT, MAYBEVOID);
+        DECL_PROP_IMPL(DEFAULT_VALUE, double) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
         DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
     END_DESCRIBE_PROPERTIES();
 }

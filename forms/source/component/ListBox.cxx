@@ -492,7 +492,7 @@ namespace frm
             DECL_PROP2(BOUNDCOLUMN,         sal_Int16,                      BOUND, MAYBEVOID);
             DECL_PROP1(LISTSOURCETYPE,      ListSourceType,                 BOUND);
             DECL_PROP1(LISTSOURCE,          css::uno::Sequence<OUString>,                 BOUND);
-            DECL_PROP3(VALUE_SEQ,           css::uno::Sequence<OUString>,                 BOUND, READONLY, TRANSIENT);
+            DECL_PROP_IMPL(VALUE_SEQ, css::uno::Sequence<OUString>) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
             DECL_PROP2(SELECT_VALUE_SEQ,    Sequence< Any >,                BOUND, TRANSIENT);
             DECL_PROP2(SELECT_VALUE,        Any,                            BOUND, TRANSIENT);
             DECL_PROP1(DEFAULT_SELECT_SEQ,  Sequence<sal_Int16>,            BOUND);

@@ -1297,7 +1297,7 @@ void ODatabaseForm::describeFixedAndAggregateProperties(
     DECL_PROP1      ( MASTERFIELDS,     Sequence< OUString >,    BOUND                          );
     DECL_PROP1      ( DETAILFIELDS,     Sequence< OUString >,    BOUND                          );
     DECL_PROP2      ( DATASOURCE,       OUString,                BOUND, CONSTRAINED             );
-    DECL_PROP3      ( CYCLE,            TabulatorCycle,          BOUND, MAYBEVOID, MAYBEDEFAULT );
+    DECL_PROP_IMPL(CYCLE, TabulatorCycle) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT);
     DECL_PROP2      ( FILTER,           OUString,                BOUND, MAYBEDEFAULT            );
     DECL_PROP2      ( HAVINGCLAUSE,     OUString,                BOUND, MAYBEDEFAULT            );
     DECL_BOOL_PROP_IMPL(INSERTONLY) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
@@ -1311,9 +1311,9 @@ void ODatabaseForm::describeFixedAndAggregateProperties(
     DECL_PROP1      ( SUBMIT_METHOD,    FormSubmitMethod,        BOUND                          );
     DECL_PROP1      ( SUBMIT_ENCODING,  FormSubmitEncoding,      BOUND                          );
     DECL_BOOL_PROP_IMPL(DYNAMIC_CONTROL_BORDER) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT );
-    DECL_PROP3      ( CONTROL_BORDER_COLOR_FOCUS,   sal_Int32,   BOUND, MAYBEVOID, MAYBEDEFAULT );
-    DECL_PROP3      ( CONTROL_BORDER_COLOR_MOUSE,   sal_Int32,   BOUND, MAYBEVOID, MAYBEDEFAULT );
-    DECL_PROP3      ( CONTROL_BORDER_COLOR_INVALID, sal_Int32,   BOUND, MAYBEVOID, MAYBEDEFAULT );
+    DECL_PROP_IMPL(CONTROL_BORDER_COLOR_FOCUS, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT);
+    DECL_PROP_IMPL(CONTROL_BORDER_COLOR_MOUSE, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT);
+    DECL_PROP_IMPL(CONTROL_BORDER_COLOR_INVALID, sal_Int32) css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::MAYBEDEFAULT);
     END_DESCRIBE_PROPERTIES();
 }
 

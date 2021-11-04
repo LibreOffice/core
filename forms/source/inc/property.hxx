@@ -373,9 +373,6 @@ public:
         DECL_PROP_IMPL(varname, type) css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2)
 
 
-#define DECL_PROP3(varname, type, attrib1, attrib2, attrib3)    \
-        DECL_PROP_IMPL(varname, type) css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2 | css::beans::PropertyAttribute::attrib3)
-
 #define END_DESCRIBE_PROPERTIES()   \
     DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?"); \
 
