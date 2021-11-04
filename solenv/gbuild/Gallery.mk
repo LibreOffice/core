@@ -17,7 +17,7 @@ gb_Gallery_INSTDIR := $(LIBO_SHARE_FOLDER)/gallery
 define gb_Gallery__command
 $(call gb_Helper_abbreviate_dirs,\
 	rm -f $(call gb_Gallery_get_workdir,$(2))/* && \
-	RESPONSEFILE=$(call var2file,$(shell $(call gb_MKTEMP)),100,$(GALLERY_FILES)) && \
+	RESPONSEFILE=$(call gb_var2file,$(shell $(call gb_MKTEMP)),100,$(GALLERY_FILES)) && \
 	$(call gb_Helper_print_on_error,\
 		$(call gb_Executable_get_command,gengal,$(ICECREAM_RUN)) \
 			--build-tree \

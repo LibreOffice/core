@@ -42,7 +42,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(if $(filter-out $(JARDEPS),$(4)), \
 		rm -rf $(call gb_JavaClassSet_get_classdir,$(2))/* && \
-		RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,\
+		RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),500,\
 			$(filter-out $(JARDEPS) $(T_JAVA9FILES),$(4))) && \
 		$(if $(3),$(call gb_JavaClassSet_JAVACCOMMAND,$(JAVA_TARGET_VER)) \
 			$(gb_JavaClassSet_JAVACDEBUG) \
@@ -51,7 +51,7 @@ $(call gb_Helper_abbreviate_dirs,\
 			@$$RESPONSEFILE &&) \
 		rm -f $$RESPONSEFILE &&) \
 		$(if $(T_MODULENAME),\
-			RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,\
+			RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),500,\
 				$(T_JAVA9FILES)) && \
 			$(if $(3),$(call gb_JavaClassSet_JAVACCOMMAND,9) \
 				$(gb_JavaClassSet_JAVACDEBUG) \

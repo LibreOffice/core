@@ -219,7 +219,7 @@ gb_XcuMergeTarget_CFGEXDEPS := $(call gb_Executable_get_runtime_dependencies,cfg
 gb_XcuMergeTarget_CFGEXCOMMAND := $(call gb_Executable_get_command,cfgex)
 
 define gb_XcuMergeTarget__command
-MERGEINPUT=$(call var2file,$(shell $(gb_MKTEMP)),100,$(POFILES)) && \
+MERGEINPUT=$(call gb_var2file,$(shell $(gb_MKTEMP)),100,$(POFILES)) && \
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_XcuMergeTarget_CFGEXCOMMAND) \

@@ -222,7 +222,7 @@ $(call gb_Output_announce,$(2),$(true),LNK,4)
 	$(call gb_Trace_StartRange,$(2),LNK)
 $(call gb_Helper_abbreviate_dirs,\
 	rm -f $(1) && \
-	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100, \
+	RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),100, \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
@@ -671,7 +671,7 @@ endif
 # use responsefile because cui has too many files for command line
 define gb_UIConfig__command
 $(call gb_Helper_abbreviate_dirs,\
-	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,$(if $(UI_IMAGELISTS),$(strip $(UI_IMAGELISTS)),/dev/null)) \
+	RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),100,$(if $(UI_IMAGELISTS),$(strip $(UI_IMAGELISTS)),/dev/null)) \
 	&& tr " " "\000" < $$RESPONSEFILE | tr -d "\r\n" > $$RESPONSEFILE.0 \
 	&& $(SORT) -u --files0-from=$$RESPONSEFILE.0 > $@ \
 	&& rm $$RESPONSEFILE $$RESPONSEFILE.0 \
@@ -683,7 +683,7 @@ endef
 define gb_UIConfig__gla11y_command
 $(call gb_ExternalExecutale__check_registration,python)
 $(call gb_Helper_abbreviate_dirs,\
-	FILES=$(call var2file,$(shell $(gb_MKTEMP)),100,$(UIFILES)) && \
+	FILES=$(call gb_var2file,$(shell $(gb_MKTEMP)),100,$(UIFILES)) && \
 	$(gb_UIConfig_LXML_PATH) $(if $(SYSTEM_LIBXML)$(SYSTEM_LIBXSLT),,$(gb_Helper_set_ld_path)) \
 	$(call gb_ExternalExecutable_get_command,python) \
 	$(gb_UIConfig_gla11y_SCRIPT) $(gb_UIConfig_gla11y_PARAMETERS) -o $@ -L $$FILES

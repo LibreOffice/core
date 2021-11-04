@@ -51,7 +51,7 @@ $(packimages_DIR)/images_%.zip : \
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
 	$(call gb_Helper_abbreviate_dirs, \
-		ILSTFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,$(filter %.ilst,$^)) && \
+		ILSTFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),100,$(filter %.ilst,$^)) && \
 		$(call gb_ExternalExecutable_get_command,python) \
 			$(SRCDIR)/solenv/bin/pack_images.py \
 			$(if $(DEFAULT_THEME),\

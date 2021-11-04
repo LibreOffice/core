@@ -28,7 +28,7 @@ gb_UnoApiTarget_UNOIDLCHECKCOMMAND := $(call gb_Executable_get_command,unoidl-ch
 define gb_UnoApiTarget__command
 mkdir -p $(dir $(1)) \
 $(if $(UNOAPI_ENTITIES), \
-	&& RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,$(UNOAPI_ENTITIES))) \
+	&& RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),500,$(UNOAPI_ENTITIES))) \
 && $(gb_UnoApiTarget_UNOIDLWRITECOMMAND) \
 	$(foreach rdb,$(UNOAPI_DEPRDBS),$(call gb_UnoApiTarget_get_target,$(rdb))) \
 	$(SRCDIR)/$(gb_UnoApiTarget_REG_$(2)) $(if $(UNOAPI_ENTITIES),@$${RESPONSEFILE}) $(1) \

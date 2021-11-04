@@ -30,7 +30,7 @@ ifeq ($(HAVE_GNUMAKE_FILE_FUNC),)
 	$(foreach file,$(officecfg_XCSFILES),\
 		&& echo "#include <officecfg/$(file).hxx>" >> $@)
 else
-	mv $(call var2file,$(shell mkdir -p $(dir $@) && cat /dev/null >$@.tmp && echo $@.tmp),100,$(foreach file,$(officecfg_XCSFILES),$(call officecfg_geninclude,$(file)))) $@
+	mv $(call gb_var2file,$(shell mkdir -p $(dir $@) && cat /dev/null >$@.tmp && echo $@.tmp),100,$(foreach file,$(officecfg_XCSFILES),$(call officecfg_geninclude,$(file)))) $@
 endif
 	$(call gb_Trace_EndRange,officecfg_qa_allheaders.hxx,CAT)
 
