@@ -37,10 +37,10 @@ gb_HelpTranslatePartTarget_DEPS := $(call gb_Executable_get_runtime_dependencies
 gb_HelpTranslatePartTarget_COMMAND := $(call gb_Executable_get_command,helpex)
 
 define gb_HelpTranslatePartTarget__command
-HELPFILES=$(call var2file,$(shell $(gb_MKTEMP)),100,$(sort $(filter %.xhp,$(3)))) && \
+HELPFILES=$(call gb_var2file,$(shell $(gb_MKTEMP)),100,$(sort $(filter %.xhp,$(3)))) && \
 $(call gb_Helper_abbreviate_dirs, \
 	$(if $(filter-out qtz,$(HELP_LANG)), \
-		POFILES=$(call var2file,$(shell $(gb_MKTEMP)),100,$(sort $(POFILES))) && \
+		POFILES=$(call gb_var2file,$(shell $(gb_MKTEMP)),100,$(sort $(POFILES))) && \
 		$(gb_HelpTranslatePartTarget_COMMAND) \
 			-l $(HELP_LANG) \
 			-mi $${HELPFILES} \
@@ -191,7 +191,7 @@ gb_HelpTreeTarget_COMMAND := $(call gb_Executable_get_command,treex)
 define gb_HelpTreeTarget__command
 $(call gb_Helper_abbreviate_dirs,\
 	$(if $(filter-out qtz,$(HELP_LANG)), \
-		POFILES=$(call var2file,$(shell $(gb_MKTEMP)),100,$(POFILES)) && \
+		POFILES=$(call gb_var2file,$(shell $(gb_MKTEMP)),100,$(POFILES)) && \
 		$(gb_HelpTreeTarget_COMMAND) \
 			-i $(HELP_TREE) \
 			-l $(HELP_LANG) \
@@ -290,7 +290,7 @@ gb_HelpLinkTarget_DEPS := \
 # the ones outside the dir by HelpLinker
 define gb_HelpLinkTarget__command
 	$(if $(HELP_INDEXED),rm -rf $(addprefix $(HELP_WORKDIR)/,$(HELP_INDEXED)) && \)
-RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,\
+RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),100,\
 	-lang $(HELP_LANG) \
 	-mod $(HELP_MODULE) \
 	$(if $(HELP_INDEXED),,-noindex) \
@@ -567,7 +567,7 @@ $(dir $(call gb_HelpTarget_get_target,%))%/.dir :
 # Translation of the module's .xhp files and all used modules is done.
 # Also creates the list for gb_HelpTarget_get_filelist.
 $(call gb_HelpTarget_get_translation_target,%) :
-	rm -f $@ && mv $(call var2file,$@.tmp,100,$(strip $(HELP_FILES))) $@
+	rm -f $@ && mv $(call gb_var2file,$@.tmp,100,$(strip $(HELP_FILES))) $@
 
 # Translation of the module's .xhp files and all used and linked modules
 # is done.
