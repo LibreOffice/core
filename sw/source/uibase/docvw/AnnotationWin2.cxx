@@ -179,8 +179,6 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
         pDev->Pop();
     }
 
-//    m_xContainer->draw(*pDev, rPt, GetSizePixel());
-
     if (mxMetadataDate->get_visible())
     {
         int x, y, width, height;
