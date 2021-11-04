@@ -19,8 +19,9 @@
 #pragma once
 
 #include <svtools/valueset.hxx>
+#include <tools/long.hxx>
 
-#define CELL_LINE_STYLE_ENTRIES 9
+#define CELL_LINE_STYLE_ENTRIES 11
 
 namespace sc::sidebar
 {
@@ -28,6 +29,7 @@ class CellLineStyleValueSet : public ValueSet
 {
 private:
     sal_uInt16 nSelItem;
+    tools::Long mnMaxTextWidth;
     OUString maStrUnit[CELL_LINE_STYLE_ENTRIES];
 
 public:
@@ -36,6 +38,7 @@ public:
 
     void SetUnit(const OUString* str);
     void SetSelItem(sal_uInt16 nSel);
+    tools::Long GetMaxTextWidth(vcl::RenderContext* pDev);
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual void UserDraw(const UserDrawEvent& rUDEvt) override;
 };
