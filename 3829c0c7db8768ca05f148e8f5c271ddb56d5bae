@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba353a68_50aceecc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-11-04T11:59:29Z",
+      "side": 1,
+      "message": "note \u003chttps://gerrit.libreoffice.org/c/help/+/124682\u003e \"Adapt helpcontent2 to var2file rename\"",
+      "revId": "3829c0c7db8768ca05f148e8f5c271ddb56d5bae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
