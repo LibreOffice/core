@@ -899,12 +899,18 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     uno::Reference<io::XInputStream> xInputStream(new utl::OInputStreamWrapper(pStream));
     WmfExternal aExtHeader;
     aExtHeader.mapMode = m_aStates.top().getPicture().eWMetafile;
-    aExtHeader.xExt = sal_uInt16(
-        std::clamp<sal_Int32>(m_aStates.top().getPicture().nWidth, 0,
-                              SAL_MAX_UINT16)); //TODO: better way to handle out-of-bounds values?
-    aExtHeader.yExt = sal_uInt16(
-        std::clamp<sal_Int32>(m_aStates.top().getPicture().nHeight, 0,
-                              SAL_MAX_UINT16)); //TODO: better way to handle out-of-bounds values?
+    if (m_aStates.top().getPicture().nGoalWidth == 0
+        || m_aStates.top().getPicture().nGoalHeight == 0)
+    {
+        // Don't use the values provided by picw and pich if the desired size is provided.
+
+        aExtHeader.xExt = sal_uInt16(std::clamp<sal_Int32>(
+            m_aStates.top().getPicture().nWidth, 0,
+            SAL_MAX_UINT16)); //TODO: better way to handle out-of-bounds values?
+        aExtHeader.yExt = sal_uInt16(std::clamp<sal_Int32>(
+            m_aStates.top().getPicture().nHeight, 0,
+            SAL_MAX_UINT16)); //TODO: better way to handle out-of-bounds values?
+    }
     WmfExternal* pExtHeader = &aExtHeader;
     uno::Reference<lang::XServiceInfo> xServiceInfo(m_aStates.top().getDrawingObject().getShape(),
                                                     uno::UNO_QUERY);
