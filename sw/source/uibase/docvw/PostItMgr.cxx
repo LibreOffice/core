@@ -238,7 +238,7 @@ SwPostItMgr::~SwPostItMgr()
     mPages.clear();
 }
 
-void SwPostItMgr::CheckForRemovedPostIts()
+bool SwPostItMgr::CheckForRemovedPostIts()
 {
     IDocumentRedlineAccess const& rIDRA(mpWrtShell->getIDocumentRedlineAccess());
     bool bRemoved = false;
@@ -260,7 +260,7 @@ void SwPostItMgr::CheckForRemovedPostIts()
     }
 
     if ( !bRemoved )
-        return;
+        return false;
 
     // make sure that no deleted items remain in page lists
     // todo: only remove deleted ones?!
@@ -270,9 +270,13 @@ void SwPostItMgr::CheckForRemovedPostIts()
         PrepareView();
     }
     else
-        // if postits are their make sure that page lists are not empty
+    {
+        // if postits are there make sure that page lists are not empty
         // otherwise sudden paints can cause pain (in BorderOverPageBorder)
         CalcRects();
+    }
+
+    return true;
 }
 
 SwSidebarItem* SwPostItMgr::InsertItem(SfxBroadcaster* pItem, bool bCheckExistence, bool bFocus)
@@ -370,7 +374,10 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 {
                     if (!pField)
                     {
-                        CheckForRemovedPostIts();
+                        const bool bWasRemoved = CheckForRemovedPostIts();
+                        // tdf#143643 ensure relayout on undo of insert comment
+                        if (bWasRemoved)
+                            mbLayout = true;
                         break;
                     }
                     RemoveItem(pField);
