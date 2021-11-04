@@ -61,7 +61,7 @@ private:
 
     void StartIdleLayout();
 
-    DECL_LINK(DoLayout, Timer*, void);
+    DECL_DLLPRIVATE_LINK(DoLayout, Timer*, void);
 
     virtual void ImplPaintToDevice(::OutputDevice* pTargetOutDev, const Point& rPos) override;
 };

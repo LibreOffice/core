@@ -587,9 +587,9 @@ protected:
 
 protected:
     void ImplInitWindow( const InitWindowFacet _eInitWhat );
-    DECL_LINK(OnDelete, void*, void);
+    DECL_DLLPRIVATE_LINK(OnDelete, void*, void);
 
-    DECL_LINK(OnAsyncAdjust, void*, void);
+    DECL_DLLPRIVATE_LINK(OnAsyncAdjust, void*, void);
         // if the param is != NULL, AdjustRows will be called, else AdjustDataSource
 
 private:

@@ -35,7 +35,7 @@ private:
     bool                bRelative;
     bool                bNegativeEnabled;
 
-    DECL_LINK(ModifyHdl, weld::Entry&, void);
+    DECL_DLLPRIVATE_LINK(ModifyHdl, weld::Entry&, void);
 
 public:
     SvxRelativeField(std::unique_ptr<weld::MetricSpinButton> pControl);

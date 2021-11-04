@@ -72,7 +72,7 @@ private:
     std::unique_ptr<weld::Toolbar> m_xCloseBtn;
     std::vector<std::unique_ptr<ExtraButton>> m_aActionBtns;
 
-    DECL_LINK(SizeAllocHdl, const Size&, void);
+    DECL_DLLPRIVATE_LINK(SizeAllocHdl, const Size&, void);
 
     void SetForeAndBackgroundColors(InfobarType eType);
     void SetCloseButtonImage();
@@ -104,7 +104,7 @@ public:
     void SetCommandHandler(weld::Button& rBtn, const OUString& aCommand);
 
 private:
-    DECL_LINK(CloseHandler, const OString&, void);
+    DECL_DLLPRIVATE_LINK(CloseHandler, const OString&, void);
 };
 
 class SfxInfoBarContainerWindow final : public vcl::Window

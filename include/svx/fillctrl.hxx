@@ -60,8 +60,8 @@ private:
     sal_Int32           mnLastPosBitmap;
     sal_Int32           mnLastPosPattern;
 
-    DECL_LINK(SelectFillTypeHdl, weld::ComboBox&, void);
-    DECL_LINK(SelectFillAttrHdl, weld::ComboBox&, void);
+    DECL_DLLPRIVATE_LINK(SelectFillTypeHdl, weld::ComboBox&, void);
+    DECL_DLLPRIVATE_LINK(SelectFillAttrHdl, weld::ComboBox&, void);
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();

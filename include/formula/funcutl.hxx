@@ -50,14 +50,14 @@ private:
     Link<RefEdit&,void> maModifyHdl;
     Link<weld::Widget&,bool> maActivateHdl;
 
-    DECL_LINK( UpdateHdl, Timer*, void );
+    DECL_DLLPRIVATE_LINK( UpdateHdl, Timer*, void );
 
-    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
-    DECL_LINK(GetFocusHdl, weld::Widget&, void);
-    DECL_LINK(LoseFocusHdl, weld::Widget&, void);
-    DECL_LINK(AsyncFocusInHdl, void*, void);
-    DECL_LINK(AsyncFocusOutHdl, void*, void);
-    DECL_LINK(Modify, weld::Entry&, void);
+    DECL_DLLPRIVATE_LINK(KeyInputHdl, const KeyEvent&, bool);
+    DECL_DLLPRIVATE_LINK(GetFocusHdl, weld::Widget&, void);
+    DECL_DLLPRIVATE_LINK(LoseFocusHdl, weld::Widget&, void);
+    DECL_DLLPRIVATE_LINK(AsyncFocusInHdl, void*, void);
+    DECL_DLLPRIVATE_LINK(AsyncFocusOutHdl, void*, void);
+    DECL_DLLPRIVATE_LINK(Modify, weld::Entry&, void);
 
     void GetFocus();
     void LoseFocus();
@@ -154,9 +154,9 @@ private:
     Link<RefButton&,void> maClickHdl;
 
     DECL_LINK(Click, weld::Button&, void);
-    DECL_LINK(KeyInput, const KeyEvent&, bool);
-    DECL_LINK(GetFocus, weld::Widget&, void);
-    DECL_LINK(LoseFocus, weld::Widget&, void);
+    DECL_DLLPRIVATE_LINK(KeyInput, const KeyEvent&, bool);
+    DECL_DLLPRIVATE_LINK(GetFocus, weld::Widget&, void);
+    DECL_DLLPRIVATE_LINK(LoseFocus, weld::Widget&, void);
 
 public:
     RefButton(std::unique_ptr<weld::Button> xControl);

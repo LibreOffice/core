@@ -204,12 +204,12 @@ namespace svt
         }
 
     protected:
-        DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
-        DECL_LINK(FocusInHdl, weld::Widget&, void);
-        DECL_LINK(FocusOutHdl, weld::Widget&, void);
-        DECL_LINK(MousePressHdl, const MouseEvent&, bool);
-        DECL_LINK(MouseReleaseHdl, const MouseEvent&, bool);
-        DECL_LINK(MouseMoveHdl, const MouseEvent&, bool);
+        DECL_DLLPRIVATE_LINK(KeyInputHdl, const KeyEvent&, bool);
+        DECL_DLLPRIVATE_LINK(FocusInHdl, weld::Widget&, void);
+        DECL_DLLPRIVATE_LINK(FocusOutHdl, weld::Widget&, void);
+        DECL_DLLPRIVATE_LINK(MousePressHdl, const MouseEvent&, bool);
+        DECL_DLLPRIVATE_LINK(MouseReleaseHdl, const MouseEvent&, bool);
+        DECL_DLLPRIVATE_LINK(MouseMoveHdl, const MouseEvent&, bool);
     private:
         Link<LinkParamNone*,void> m_aFocusInHdl;
         Link<LinkParamNone*,void> m_aFocusOutHdl;
@@ -595,7 +595,7 @@ namespace svt
         void Clicked();
 
     private:
-        DECL_LINK(OnToggle, weld::Toggleable&, void);
+        DECL_DLLPRIVATE_LINK(OnToggle, weld::Toggleable&, void);
 
         void CallModifyHdls()
         {
@@ -617,7 +617,7 @@ namespace svt
 
     private:
         virtual void ActivatingMouseEvent(const BrowserMouseEvent& rEvt, bool bUp) override;
-        DECL_LINK(ModifyHdl, LinkParamNone*, void);
+        DECL_DLLPRIVATE_LINK(ModifyHdl, LinkParamNone*, void);
     };
 
     //= ComboBoxControl
@@ -663,7 +663,7 @@ namespace svt
         virtual void dispose() override;
 
     private:
-        DECL_LINK(SelectHdl, weld::ComboBox&, void);
+        DECL_DLLPRIVATE_LINK(SelectHdl, weld::ComboBox&, void);
 
         void CallModifyHdls()
         {
@@ -685,7 +685,7 @@ namespace svt
 
     private:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const override;
-        DECL_LINK(ModifyHdl, LinkParamNone*, void);
+        DECL_DLLPRIVATE_LINK(ModifyHdl, LinkParamNone*, void);
     };
 
     //= ListBoxControl
@@ -725,7 +725,7 @@ namespace svt
 
         virtual void dispose() override;
     private:
-        DECL_LINK(SelectHdl, weld::ComboBox&, void);
+        DECL_DLLPRIVATE_LINK(SelectHdl, weld::ComboBox&, void);
 
         void CallModifyHdls()
         {
@@ -748,7 +748,7 @@ namespace svt
     protected:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const override;
     private:
-        DECL_LINK(ListBoxSelectHdl, LinkParamNone*, void);
+        DECL_DLLPRIVATE_LINK(ListBoxSelectHdl, LinkParamNone*, void);
     };
 
     class SVT_DLLPUBLIC FormattedControlBase : public EditControlBase
@@ -813,9 +813,9 @@ namespace svt
         std::unique_ptr<weld::Button> m_xTodayBtn;
         std::unique_ptr<weld::Button> m_xNoneBtn;
 
-        DECL_LINK(ToggleHdl, weld::Toggleable&, void);
-        DECL_LINK(ActivateHdl, weld::Calendar&, void);
-        DECL_LINK(ImplClickHdl, weld::Button&, void);
+        DECL_DLLPRIVATE_LINK(ToggleHdl, weld::Toggleable&, void);
+        DECL_DLLPRIVATE_LINK(ActivateHdl, weld::Calendar&, void);
+        DECL_DLLPRIVATE_LINK(ImplClickHdl, weld::Button&, void);
     };
 
     class SVT_DLLPUBLIC PatternControl final : public EditControl

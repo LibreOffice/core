@@ -92,14 +92,14 @@ namespace svt
         // initialize the dialog from the configuration data
         void    loadConfiguration();
 
-        DECL_LINK(OnFieldScroll, weld::ScrolledWindow&, void);
-        DECL_LINK(OnFieldSelect, weld::ComboBox&, void);
-        DECL_LINK(OnAdministrateDatasources, weld::Button&, void);
+        DECL_DLLPRIVATE_LINK(OnFieldScroll, weld::ScrolledWindow&, void);
+        DECL_DLLPRIVATE_LINK(OnFieldSelect, weld::ComboBox&, void);
+        DECL_DLLPRIVATE_LINK(OnAdministrateDatasources, weld::Button&, void);
         DECL_STATIC_LINK(AddressBookSourceDialog, OnComboGetFocus, weld::Widget&, void);
-        DECL_LINK(OnComboLoseFocus, weld::Widget&, void);
-        DECL_LINK(OnComboSelect, weld::ComboBox&, void);
-        DECL_LINK(OnOkClicked, weld::Button&, void);
-        DECL_LINK(OnDelayedInitialize, void*, void);
+        DECL_DLLPRIVATE_LINK(OnComboLoseFocus, weld::Widget&, void);
+        DECL_DLLPRIVATE_LINK(OnComboSelect, weld::ComboBox&, void);
+        DECL_DLLPRIVATE_LINK(OnOkClicked, weld::Button&, void);
+        DECL_DLLPRIVATE_LINK(OnDelayedInitialize, void*, void);
 
         // string to display for "no selection"
         const OUString         m_sNoFieldSelection;

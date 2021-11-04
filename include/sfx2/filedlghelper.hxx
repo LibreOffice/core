@@ -277,7 +277,7 @@ public:
     */
     void                    SetContext( Context _eNewContext );
 
-   DECL_LINK( ExecuteSystemFilePicker, void*, void );
+   DECL_DLLPRIVATE_LINK( ExecuteSystemFilePicker, void*, void );
 
    ErrCode                  Execute( std::vector<OUString>& rpURLList,
                                      std::optional<SfxAllItemSet>& rpSet,

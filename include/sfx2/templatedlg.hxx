@@ -56,38 +56,38 @@ protected:
 
     void fillFolderComboBox();
 
-    DECL_LINK(SelectApplicationHdl, weld::ComboBox&, void);
-    DECL_LINK(SelectRegionHdl, weld::ComboBox&, void);
+    DECL_DLLPRIVATE_LINK(SelectApplicationHdl, weld::ComboBox&, void);
+    DECL_DLLPRIVATE_LINK(SelectRegionHdl, weld::ComboBox&, void);
 
-    DECL_LINK(OkClickHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(OkClickHdl, weld::Button&, void);
     void ImportActionHdl();
     static void ExtensionsActionHdl();
 
-    DECL_LINK(TVItemStateHdl, const ThumbnailViewItem*, void);
+    DECL_DLLPRIVATE_LINK(TVItemStateHdl, const ThumbnailViewItem*, void);
 
-    DECL_LINK(MenuSelectHdl, const OString&, void);
+    DECL_DLLPRIVATE_LINK(MenuSelectHdl, const OString&, void);
     void DefaultTemplateMenuSelectHdl(std::string_view rIdent);
 
-    DECL_LINK(OpenRegionHdl, void*, void);
-    DECL_LINK(CreateContextMenuHdl, ThumbnailViewItem*, void);
-    DECL_LINK(OpenTemplateHdl, ThumbnailViewItem*, void);
-    DECL_LINK(EditTemplateHdl, ThumbnailViewItem*, void);
-    DECL_LINK(DeleteTemplateHdl, void*, void);
-    DECL_LINK(DefaultTemplateHdl, ThumbnailViewItem*, void);
-    DECL_LINK(MoveTemplateHdl, void*, void);
-    DECL_LINK(ExportTemplateHdl, void*, void);
+    DECL_DLLPRIVATE_LINK(OpenRegionHdl, void*, void);
+    DECL_DLLPRIVATE_LINK(CreateContextMenuHdl, ThumbnailViewItem*, void);
+    DECL_DLLPRIVATE_LINK(OpenTemplateHdl, ThumbnailViewItem*, void);
+    DECL_DLLPRIVATE_LINK(EditTemplateHdl, ThumbnailViewItem*, void);
+    DECL_DLLPRIVATE_LINK(DeleteTemplateHdl, void*, void);
+    DECL_DLLPRIVATE_LINK(DefaultTemplateHdl, ThumbnailViewItem*, void);
+    DECL_DLLPRIVATE_LINK(MoveTemplateHdl, void*, void);
+    DECL_DLLPRIVATE_LINK(ExportTemplateHdl, void*, void);
 
     void SearchUpdate();
 
-    DECL_LINK(SearchUpdateHdl, weld::Entry&, void);
-    DECL_LINK(GetFocusHdl, weld::Widget&, void);
-    DECL_LINK(LoseFocusHdl, weld::Widget&, void);
-    DECL_LINK(ImplUpdateDataHdl, Timer*, void);
-    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+    DECL_DLLPRIVATE_LINK(SearchUpdateHdl, weld::Entry&, void);
+    DECL_DLLPRIVATE_LINK(GetFocusHdl, weld::Widget&, void);
+    DECL_DLLPRIVATE_LINK(LoseFocusHdl, weld::Widget&, void);
+    DECL_DLLPRIVATE_LINK(ImplUpdateDataHdl, Timer*, void);
+    DECL_DLLPRIVATE_LINK(KeyInputHdl, const KeyEvent&, bool);
 
-    DECL_LINK(ListViewHdl, weld::Toggleable&, void);
-    DECL_LINK(ThumbnailViewHdl, weld::Toggleable&, void);
-    DECL_LINK(FocusRectLocalHdl, weld::Widget&, tools::Rectangle);
+    DECL_DLLPRIVATE_LINK(ListViewHdl, weld::Toggleable&, void);
+    DECL_DLLPRIVATE_LINK(ThumbnailViewHdl, weld::Toggleable&, void);
+    DECL_DLLPRIVATE_LINK(FocusRectLocalHdl, weld::Widget&, tools::Rectangle);
 
     void OnTemplateImportCategory(std::u16string_view sCategory);
     //    static void OnTemplateLink ();
@@ -180,9 +180,9 @@ public:
     bool IsStartWithTemplate() const { return mxCBXHideDlg->get_active(); };
 
 private:
-    DECL_LINK(OpenTemplateHdl, ThumbnailViewItem*, void);
-    DECL_LINK(OkClickHdl, weld::Button&, void);
-    DECL_LINK(TimeOut, Timer*, void);
+    DECL_DLLPRIVATE_LINK(OpenTemplateHdl, ThumbnailViewItem*, void);
+    DECL_DLLPRIVATE_LINK(OkClickHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(TimeOut, Timer*, void);
 
     OUString msTemplatePath;
     Idle maIdle;

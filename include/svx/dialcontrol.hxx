@@ -160,7 +160,7 @@ private:
 
     void                InvalidateControl();
 
-    DECL_LINK(LinkedFieldModifyHdl, weld::MetricSpinButton&, void);
+    DECL_DLLPRIVATE_LINK(LinkedFieldModifyHdl, weld::MetricSpinButton&, void);
 };
 
 }

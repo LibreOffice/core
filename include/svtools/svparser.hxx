@@ -43,7 +43,7 @@ enum class SvParserState
 template<typename T>
 class SVT_DLLPUBLIC SvParser : public SvRefBase
 {
-    DECL_LINK( NewDataRead, LinkParamNone*, void );
+    DECL_DLLPRIVATE_LINK( NewDataRead, LinkParamNone*, void );
 
 protected:
     SvStream&           rInput;

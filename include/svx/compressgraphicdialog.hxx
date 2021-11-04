@@ -63,17 +63,17 @@ private:
 
     void Initialize();
 
-    DECL_LINK( SlideHdl, weld::Scale&, void );
-    DECL_LINK( NewInterpolationModifiedHdl, weld::ComboBox&, void );
-    DECL_LINK( NewQualityModifiedHdl, weld::Entry&, void );
-    DECL_LINK( NewCompressionModifiedHdl, weld::Entry&, void );
-    DECL_LINK( NewWidthModifiedHdl, weld::Entry&, void );
-    DECL_LINK( NewHeightModifiedHdl, weld::Entry&, void );
-    DECL_LINK( ResolutionModifiedHdl, weld::ComboBox&, void );
-    DECL_LINK( ToggleCompressionRB, weld::Toggleable&, void );
-    DECL_LINK( ToggleReduceResolutionRB, weld::Toggleable&, void );
+    DECL_DLLPRIVATE_LINK( SlideHdl, weld::Scale&, void );
+    DECL_DLLPRIVATE_LINK( NewInterpolationModifiedHdl, weld::ComboBox&, void );
+    DECL_DLLPRIVATE_LINK( NewQualityModifiedHdl, weld::Entry&, void );
+    DECL_DLLPRIVATE_LINK( NewCompressionModifiedHdl, weld::Entry&, void );
+    DECL_DLLPRIVATE_LINK( NewWidthModifiedHdl, weld::Entry&, void );
+    DECL_DLLPRIVATE_LINK( NewHeightModifiedHdl, weld::Entry&, void );
+    DECL_DLLPRIVATE_LINK( ResolutionModifiedHdl, weld::ComboBox&, void );
+    DECL_DLLPRIVATE_LINK( ToggleCompressionRB, weld::Toggleable&, void );
+    DECL_DLLPRIVATE_LINK( ToggleReduceResolutionRB, weld::Toggleable&, void );
 
-    DECL_LINK( CalculateClickHdl, weld::Button&, void );
+    DECL_DLLPRIVATE_LINK( CalculateClickHdl, weld::Button&, void );
 
     void Update();
     void UpdateNewWidthMF();

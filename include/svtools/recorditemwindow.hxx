@@ -30,11 +30,11 @@ protected:
 private:
     virtual void PositionFired(sal_Int64 nRecord);
 
-    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+    DECL_DLLPRIVATE_LINK(KeyInputHdl, const KeyEvent&, bool);
 
-    DECL_LINK(ActivatedHdl, weld::Entry&, bool);
+    DECL_DLLPRIVATE_LINK(ActivatedHdl, weld::Entry&, bool);
     // for invalidating our content when losing the focus
-    DECL_LINK(FocusOutHdl, weld::Widget&, void);
+    DECL_DLLPRIVATE_LINK(FocusOutHdl, weld::Widget&, void);
 
     void FirePosition(bool bForce);
 };

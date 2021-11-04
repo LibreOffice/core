@@ -52,13 +52,13 @@ private:
     bool mbShowBubble;
     bool mbBubbleChanged;
 
-    DECL_LINK(UserEventHdl, void*, void);
-    DECL_LINK(TimeOutHdl, Timer*, void);
-    DECL_LINK(WindowEventHdl, VclWindowEvent&, void);
-    DECL_LINK(ApplicationEventHdl, VclSimpleEvent&, void);
-    DECL_LINK(WaitTimeOutHdl, Timer*, void);
-    DECL_LINK(ClickHdl, MenuBar::MenuBarButtonCallbackArg&, bool);
-    DECL_LINK(HighlightHdl, MenuBar::MenuBarButtonCallbackArg&, bool);
+    DECL_DLLPRIVATE_LINK(UserEventHdl, void*, void);
+    DECL_DLLPRIVATE_LINK(TimeOutHdl, Timer*, void);
+    DECL_DLLPRIVATE_LINK(WindowEventHdl, VclWindowEvent&, void);
+    DECL_DLLPRIVATE_LINK(ApplicationEventHdl, VclSimpleEvent&, void);
+    DECL_DLLPRIVATE_LINK(WaitTimeOutHdl, Timer*, void);
+    DECL_DLLPRIVATE_LINK(ClickHdl, MenuBar::MenuBarButtonCallbackArg&, bool);
+    DECL_DLLPRIVATE_LINK(HighlightHdl, MenuBar::MenuBarButtonCallbackArg&, bool);
 
     VclPtr<BubbleWindow> GetBubbleWindow();
     void SetBubbleChanged();

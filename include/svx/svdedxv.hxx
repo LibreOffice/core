@@ -128,7 +128,7 @@ protected:
 
     // Chaining
     void ImpChainingEventHdl();
-    DECL_LINK(ImpAfterCutOrPasteChainingEventHdl, LinkParamNone*, void);
+    DECL_DLLPRIVATE_LINK(ImpAfterCutOrPasteChainingEventHdl, LinkParamNone*, void);
 
 
     // Check if the whole text is selected.
@@ -137,11 +137,11 @@ protected:
     void ImpMakeTextCursorAreaVisible();
 
     // handler for AutoGrowing text with active Outliner
-    DECL_LINK(ImpOutlinerStatusEventHdl, EditStatus&, void);
-    DECL_LINK(ImpOutlinerCalcFieldValueHdl, EditFieldInfo*, void);
+    DECL_DLLPRIVATE_LINK(ImpOutlinerStatusEventHdl, EditStatus&, void);
+    DECL_DLLPRIVATE_LINK(ImpOutlinerCalcFieldValueHdl, EditFieldInfo*, void);
 
     // link for EndTextEditHdl
-    DECL_LINK(EndTextEditHdl, SdrUndoManager*, void);
+    DECL_DLLPRIVATE_LINK(EndTextEditHdl, SdrUndoManager*, void);
 
     void ImpMacroUp(const Point& rUpPos);
     void ImpMacroDown(const Point& rDownPos);
