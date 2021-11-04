@@ -154,7 +154,8 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
         bool            LayoutByPage( std::vector<sw::annotation::SwAnnotationWin*> &aVisiblePostItList,
                                       const tools::Rectangle& rBorder,
                                       tools::Long lNeededHeight);
-        void            CheckForRemovedPostIts();
+        // return true if a postit was found to have been removed
+        bool            CheckForRemovedPostIts();
         bool            ArrowEnabled(sal_uInt16 aDirection,tools::ULong aPage) const;
         bool            BorderOverPageBorder(tools::ULong aPage) const;
         bool            HasScrollbars() const;
