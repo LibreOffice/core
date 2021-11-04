@@ -41,6 +41,7 @@
 #include <svx/scene3d.hxx>
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
+#include <com/sun/star/drawing/NormalsKind.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <svx/sdr/properties/properties.hxx>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
@@ -327,10 +328,14 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
         bool bUseExtrusionColor = GetBool( rGeometryItem, "Color", false );
 
         drawing::FillStyle eFillStyle( aSet.Get(XATTR_FILLSTYLE).GetValue() );
-        pScene->GetProperties().SetObjectItem( Svx3DShadeModeItem( 0 ) );
+        pScene->GetProperties().SetObjectItem( Svx3DShadeModeItem(static_cast<sal_uInt16>(eShadeMode)));
         aSet.Put( makeSvx3DPercentDiagonalItem( 0 ) );
         aSet.Put( Svx3DTextureModeItem( 1 ) );
-        aSet.Put( Svx3DNormalsKindItem( 1 ) );
+         // SPECIFIC needed for ShadeMode_SMOOTH and ShadeMode_PHONG, otherwise FLAT is faster
+        if (eShadeMode == drawing::ShadeMode_SMOOTH || eShadeMode == drawing::ShadeMode_PHONG)
+            aSet.Put( Svx3DNormalsKindItem(static_cast<sal_uInt16>(drawing::NormalsKind_SPECIFIC)));
+        else
+            aSet.Put( Svx3DNormalsKindItem(static_cast<sal_uInt16>(drawing::NormalsKind_FLAT)));
 
         if ( eShadeMode == drawing::ShadeMode_DRAFT )
         {
@@ -656,7 +661,6 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
 
             // light
 
-            double fAmbientIntensity = GetDouble( rGeometryItem, "Brightness", 22178.0 / 655.36 ) / 100.0;
 
             drawing::Direction3D aFirstLightDirectionDefault( 50000, 0, 10000 );
             drawing::Direction3D aFirstLightDirection( GetDirection3D( rGeometryItem, "FirstLightDirection", aFirstLightDirectionDefault ) );
@@ -665,7 +669,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
 
             double fLightIntensity = GetDouble( rGeometryItem, "FirstLightLevel", 43712.0 / 655.36 ) / 100.0;
 
-            /* sal_Bool bFirstLightHarsh = */ GetBool( rGeometryItem, "FirstLightHarsh", false );
+            bool bFirstLightHarsh = GetBool( rGeometryItem, "FirstLightHarsh", true );
 
             drawing::Direction3D aSecondLightDirectionDefault( -50000, 0, 10000 );
             drawing::Direction3D aSecondLightDirection( GetDirection3D( rGeometryItem, "SecondLightDirection", aSecondLightDirectionDefault ) );
@@ -676,6 +680,21 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
 
             /* sal_Bool bLight2Harsh = */ GetBool( rGeometryItem, "SecondLightHarsh", false );
             /* sal_Bool bLightFace = */ GetBool( rGeometryItem, "LightFace", false );
+
+            double fAmbientIntensity = GetDouble( rGeometryItem, "Brightness", 22178.0 / 655.36 ) / 100.0;
+            bool bMetal = GetBool( rGeometryItem, "Metal", false );
+
+            // Currently needed for import from binar MS Office.
+            // ToDo: Create a solution in the filters.
+            // MS Office adds black to diffuse and ambient color in case of metal. Use an
+            // approximating ersatz.
+            if (bMetal)
+            {
+                fAmbientIntensity -= 0.15; // Estimated value. Adapt it if necessary.
+                fAmbientIntensity = std::clamp(fAmbientIntensity, 0.0, 1.0);
+                fLight2Intensity -= 0.15;
+                fLight2Intensity = std::clamp(fLight2Intensity, 0.0, 1.0);
+            }
 
             sal_uInt16 nAmbientColor = static_cast<sal_uInt16>( fAmbientIntensity * 255.0 );
             if ( nAmbientColor > 255 )
@@ -699,6 +718,9 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
             pScene->GetProperties().SetObjectItem( makeSvx3DLightcolor2Item( aAmbientSpot2Color ) );
             pScene->GetProperties().SetObjectItem( makeSvx3DLightDirection2Item( aSpotLight2 ) );
 
+            // Currently needed for import from binary MS Office.
+            // ToDo: Create a solution in the filters.
+            // Binary MS Office creates brighter shapes than our 3D engine with same values.
             sal_uInt8 nSpotLight3 = 70;
             basegfx::B3DVector aSpotLight3( 0.0, 0.0, 1.0 );
             pScene->GetProperties().SetObjectItem( makeSvx3DLightOnOff3Item( true ) );
@@ -706,23 +728,37 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
             pScene->GetProperties().SetObjectItem( makeSvx3DLightcolor3Item( aAmbientSpot3Color ) );
             pScene->GetProperties().SetObjectItem( makeSvx3DLightDirection3Item( aSpotLight3 ) );
 
-            double fSpecular = GetDouble( rGeometryItem, "Specularity", 0 ) / 100;
-            bool bMetal = GetBool( rGeometryItem, "Metal", false );
-
-            Color aSpecularCol( 225,225,225 );
+            double fSpecular = GetDouble( rGeometryItem, "Specularity", 0 );
+            // ODF specifies 'white', OOXML uses shape fill color in some presets
+            Color aSpecularCol(255, 255, 255);
             if ( bMetal )
             {
+                // values as specified in ODF
                 aSpecularCol = Color( 200, 200, 200 );
-                fSpecular += 0.15;
+                fSpecular += 15.0;
             }
-            sal_Int32 nIntensity = static_cast<sal_Int32>(fSpecular) * 100;
-            if ( nIntensity > 100 )
-                nIntensity = 100;
-            else if ( nIntensity < 0 )
-                nIntensity = 0;
-            nIntensity = 100 - nIntensity;
-            pScene->GetProperties().SetObjectItem( makeSvx3DMaterialSpecularItem( aSpecularCol ) );
-            pScene->GetProperties().SetObjectItem( makeSvx3DMaterialSpecularIntensityItem( static_cast<sal_uInt16>(nIntensity) ) );
+            sal_Int32 nIntensity = 100 - static_cast<sal_Int32>(fSpecular);
+            nIntensity = std::clamp<sal_Int32>(nIntensity, 0, 100);
+
+            // specularity is an object property, not a scene property
+            SdrObjListIter aSceneIter( *pScene, SdrIterMode::DeepNoGroups );
+            while (aSceneIter.IsMore())
+            {
+                const SdrObject* pNext = aSceneIter.Next();
+                pNext->GetProperties().SetObjectItem(makeSvx3DMaterialSpecularItem(aSpecularCol));
+                pNext->GetProperties().SetObjectItem(makeSvx3DMaterialSpecularIntensityItem(static_cast<sal_uInt16>(nIntensity)));
+            }
+
+            // fSpecular = 0 is used to indicate surface preset "matte".
+            if (!bFirstLightHarsh || basegfx::fTools::equalZero(fSpecular, 0.0001))
+            {
+                // First light in LO 3D engine is always specular, all other lights are never specular.
+                // We copy light1 values to light4 and use it instead of light1 in the 3D scene.
+                pScene->GetProperties().SetObjectItem(makeSvx3DLightOnOff1Item(false));
+                pScene->GetProperties().SetObjectItem(makeSvx3DLightOnOff4Item(true));
+                pScene->GetProperties().SetObjectItem(makeSvx3DLightcolor4Item(aAmbientSpot1Color));
+                pScene->GetProperties().SetObjectItem(makeSvx3DLightDirection4Item(aSpotLight1));
+            }
 
             pScene->SetLogicRect(
                 CalculateNewSnapRect(
