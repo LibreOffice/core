@@ -50,8 +50,8 @@ private:
     void Init();
     const ScRangeData* findRangeData(const ScRangeNameLine& rLine);
 
-    DECL_LINK(SizeAllocHdl, const Size&, void);
-    DECL_LINK(VisRowsScrolledHdl, weld::TreeView&, void);
+    DECL_DLLPRIVATE_LINK(SizeAllocHdl, const Size&, void);
+    DECL_DLLPRIVATE_LINK(VisRowsScrolledHdl, weld::TreeView&, void);
 
 public:
     ScRangeManagerTable(std::unique_ptr<weld::TreeView>,

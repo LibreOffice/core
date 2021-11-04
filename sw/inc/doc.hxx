@@ -374,7 +374,7 @@ private:
 
     // CharTimer calls this method.
     void DoUpdateAllCharts();
-    DECL_LINK( DoUpdateModifiedOLE, Timer *, void );
+    DECL_DLLPRIVATE_LINK( DoUpdateModifiedOLE, Timer *, void );
 
 public:
     SwFormat *MakeCharFormat_(const OUString &, SwFormat *, bool, bool );
@@ -556,7 +556,7 @@ public:
     const OUString& getDocAccTitle() const { return msDocAccTitle; }
 
     // INextInterface here
-    DECL_LINK(CalcFieldValueHdl, EditFieldInfo*, void);
+    DECL_DLLPRIVATE_LINK(CalcFieldValueHdl, EditFieldInfo*, void);
 
     // OLE ???
     bool IsOLEPrtNotifyPending() const  { return mbOLEPrtNotifyPending; }

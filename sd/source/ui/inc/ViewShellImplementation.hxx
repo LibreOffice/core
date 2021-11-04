@@ -70,7 +70,7 @@ public:
                 when IsUICaptured() returns <TRUE/>.
         */
         void Release(bool bForce = false);
-        DECL_LINK(TimeoutCallback, Timer*, void);
+        DECL_DLLPRIVATE_LINK(TimeoutCallback, Timer*, void);
 
     private:
         ::std::unique_ptr<ToolBarManager::UpdateLock,

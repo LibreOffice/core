@@ -29,7 +29,7 @@ class SAL_DLLPUBLIC_RTTI SwChildWinWrapper : public SfxChildWindow
     Timer       m_aUpdateTimer;
     SwDocShell* m_pDocSh;
 
-    DECL_LINK( UpdateHdl, Timer*, void );
+    DECL_DLLPRIVATE_LINK( UpdateHdl, Timer*, void );
 
     // Implementation in fldtdlg.cxx
 protected:

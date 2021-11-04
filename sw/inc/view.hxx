@@ -437,7 +437,7 @@ public:
     bool            ExecSpellPopup( const Point& rPt );
     void            ExecSmartTagPopup( const Point& rPt );
 
-    DECL_LINK( OnlineSpellCallback, SpellCallbackInfo&, void );
+    DECL_DLLPRIVATE_LINK( OnlineSpellCallback, SpellCallbackInfo&, void );
     bool            ExecDrwTextSpellPopup(const Point& rPt);
 
     void            SetTabColFromDocPos( const Point &rPt ) { m_aTabColFromDocPos = rPt; }
@@ -460,7 +460,7 @@ public:
 
     static sal_uInt16   GetMoveType();
     static void     SetMoveType(sal_uInt16 nSet);
-    DECL_LINK( MoveNavigationHdl, void*, void );
+    DECL_DLLPRIVATE_LINK( MoveNavigationHdl, void*, void );
     static void     SetActMark(sal_Int32 nSet);
 
     bool            HandleWheelCommands( const CommandEvent& );
@@ -507,7 +507,7 @@ public:
     void            ExecDraw(const SfxRequest&);
     void            ExecTabWin(SfxRequest const &);
     void            ExecuteStatusLine(SfxRequest&);
-    DECL_LINK( ExecRulerClick, Ruler *, void );
+    DECL_DLLPRIVATE_LINK( ExecRulerClick, Ruler *, void );
     void            ExecSearch(SfxRequest&);
     void            ExecViewOptions(SfxRequest &);
 
@@ -553,7 +553,7 @@ public:
     DECL_LINK( AttrChangedNotify, LinkParamNone*, void );
 
     // form control has been activated
-    DECL_LINK( FormControlActivated, LinkParamNone*, void );
+    DECL_DLLPRIVATE_LINK( FormControlActivated, LinkParamNone*, void );
 
     // edit links
     void            EditLinkDlg();
@@ -596,7 +596,7 @@ public:
 
     void ExecuteInsertDoc( SfxRequest& rRequest, const SfxPoolItem* pItem );
     tools::Long InsertMedium( sal_uInt16 nSlotId, std::unique_ptr<SfxMedium> pMedium, sal_Int16 nVersion );
-    DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper *, void );
+    DECL_DLLPRIVATE_LINK( DialogClosedHdl, sfx2::FileDialogHelper *, void );
 
     // status methods for clipboard.
     // Status changes now notified from the clipboard.

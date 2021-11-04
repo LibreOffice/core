@@ -413,7 +413,7 @@ private:
     void lockRebuilds();
     void unlockRebuilds();
 
-    DECL_LINK(onTimerHdl, Timer *, void);
+    DECL_DLLPRIVATE_LINK(onTimerHdl, Timer *, void);
 
     virtual void implRebuild() override;
 

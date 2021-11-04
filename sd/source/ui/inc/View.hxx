@@ -250,8 +250,8 @@ public:
 
     SearchContext& getSearchContext() { return maSearchContext; }
 protected:
-    DECL_LINK( OnParagraphInsertedHdl, ::Outliner::ParagraphHdlParam, void );
-    DECL_LINK( OnParagraphRemovingHdl, ::Outliner::ParagraphHdlParam, void );
+    DECL_DLLPRIVATE_LINK( OnParagraphInsertedHdl, ::Outliner::ParagraphHdlParam, void );
+    DECL_DLLPRIVATE_LINK( OnParagraphRemovingHdl, ::Outliner::ParagraphHdlParam, void );
 
     virtual void OnBeginPasteOrDrop( PasteOrDropInfos* pInfo ) override;
     virtual void OnEndPasteOrDrop( PasteOrDropInfos* pInfo ) override;
@@ -271,9 +271,9 @@ protected:
     sal_uInt16              mnLockRedrawSmph;
     bool                    mbIsDropAllowed;
 
-                            DECL_LINK( DropErrorHdl, Timer*, void );
-                            DECL_LINK( DropInsertFileHdl, Timer*, void );
-                            DECL_LINK( ExecuteNavigatorDrop, void*, void );
+                            DECL_DLLPRIVATE_LINK( DropErrorHdl, Timer*, void );
+                            DECL_DLLPRIVATE_LINK( DropInsertFileHdl, Timer*, void );
+                            DECL_DLLPRIVATE_LINK( ExecuteNavigatorDrop, void*, void );
 
     void ImplClearDrawDropMarker();
 

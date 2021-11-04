@@ -71,7 +71,7 @@ public:
     const OUString& GetSource() const       { return aSourceArea;   }
     const ScRange&  GetDestArea() const     { return aDestArea;     }
 
-    DECL_LINK( RefreshHdl, Timer*, void );
+    DECL_DLLPRIVATE_LINK( RefreshHdl, Timer*, void );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -155,16 +155,16 @@ class SW_DLLPUBLIC SwEditWin final : public vcl::Window,
      * The selection is regularly increased towards the mouse
      * position.
      */
-    DECL_LINK( TimerHandler, Timer *, void );
+    DECL_DLLPRIVATE_LINK( TimerHandler, Timer *, void );
     void            StartDDTimer();
     void            StopDDTimer(SwWrtShell *, const Point &);
-    DECL_LINK( DDHandler, Timer *, void );
+    DECL_DLLPRIVATE_LINK( DDHandler, Timer *, void );
 
     // timer for ANY-KeyInut question without a following KeyInputEvent
-    DECL_LINK( KeyInputFlushHandler, Timer *, void );
+    DECL_DLLPRIVATE_LINK( KeyInputFlushHandler, Timer *, void );
 
     // timer for ApplyTemplates via mouse (in disguise Drag&Drop)
-    DECL_LINK( TemplateTimerHdl, Timer *, void );
+    DECL_DLLPRIVATE_LINK( TemplateTimerHdl, Timer *, void );
 
     void            MoveCursor( SwWrtShell &rSh, const Point& rDocPos,
                                 const bool bOnlyText, bool bLockView );

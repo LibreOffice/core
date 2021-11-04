@@ -50,7 +50,7 @@ class SW_DLLPUBLIC SwBaseShell: public SfxShell
     // Update-Timer for graphic
     std::set<sal_uInt16> m_aGrfUpdateSlots;
 
-    DECL_LINK( GraphicArrivedHdl, SwCursorShell&, void );
+    DECL_DLLPRIVATE_LINK( GraphicArrivedHdl, SwCursorShell&, void );
 
 protected:
     SwWrtShell&         GetShell();
@@ -60,7 +60,7 @@ protected:
     void         SetGetStateSet( SfxItemSet* p ) { m_pGetStateSet = p; }
     bool         AddGrfUpdateSlot( sal_uInt16 nSlot ){ return m_aGrfUpdateSlots.insert( nSlot ).second; }
 
-    DECL_LINK(    InsertDBTextHdl, void*, void );
+    DECL_DLLPRIVATE_LINK(    InsertDBTextHdl, void*, void );
 
     void                InsertURLButton( const OUString& rURL, const OUString& rTarget, const OUString& rText );
     void                InsertTable( SfxRequest& _rRequest );
