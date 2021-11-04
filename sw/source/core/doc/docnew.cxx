@@ -470,11 +470,6 @@ SwDoc::~SwDoc()
         delete pTmp;
     }
 
-    for(const auto& pType : *mpTOXTypes)
-        pType->CallSwClientNotify(sw::DocumentDyingHint());
-    mpTOXTypes->clear();
-    mpDefTOXBases.reset();
-
     // Any of the FrameFormats can still have indices registered.
     // These need to be destroyed now at the latest.
     for( SwFrameFormat* pFormat : *mpFrameFormatTable )
@@ -497,6 +492,14 @@ SwDoc::~SwDoc()
     // do not have any dependencies anymore.
     m_pNodes->DelNodes( SwNodeIndex(*m_pNodes), m_pNodes->Count() );
     rUndoNodes.DelNodes( SwNodeIndex( rUndoNodes ), rUndoNodes.Count() );
+
+    // clear TOX after nodes - TOXMarks are gone now so SwTOXType has no clients
+    for (const auto& pType : *mpTOXTypes)
+    {
+        pType->CallSwClientNotify(sw::DocumentDyingHint());
+    }
+    mpTOXTypes->clear();
+    mpDefTOXBases.reset();
 
     // Delete Formats, make it permanent some time in the future
 
