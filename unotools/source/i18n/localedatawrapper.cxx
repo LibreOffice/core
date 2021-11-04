@@ -169,15 +169,12 @@ void LocaleDataWrapper::loadData()
 
     try
     {
-        aReservedWordSeq = xLD->getReservedWord( rMyLocale );
+        aReservedWords = comphelper::sequenceToContainer<std::vector<OUString>>(xLD->getReservedWord( rMyLocale ));
     }
     catch ( const Exception& )
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "getReservedWord" );
-        aReservedWordSeq = {};
     }
-    for (int i=0; i < css::i18n::reservedWords::COUNT; ++i)
-        aReservedWord[i] = aReservedWordSeq[i];
 
     try
     {
@@ -378,12 +375,13 @@ const OUString& LocaleDataWrapper::getOneLocaleItem( sal_Int16 nItem ) const
 
 const OUString& LocaleDataWrapper::getOneReservedWord( sal_Int16 nWord ) const
 {
-    if ( nWord < 0 || nWord >= reservedWords::COUNT )
+    if ( nWord < 0 || nWord >= static_cast<sal_Int16>(aReservedWords.size()) )
     {
         SAL_WARN( "unotools.i18n", "getOneReservedWord: bounds" );
-        nWord = reservedWords::FALSE_WORD;
+        static const OUString EMPTY;
+        return EMPTY;
     }
-    return aReservedWord[nWord];
+    return aReservedWords[nWord];
 }
 
 MeasurementSystem LocaleDataWrapper::mapMeasurementStringToEnum( const OUString& rMS ) const
