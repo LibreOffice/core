@@ -16,6 +16,24 @@
       "message": "This means crash in line 188?",
       "revId": "86b345a963a64fd9b9a3cab522b3ac2e909977fd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f3d2bee_91572dc6",
+        "filename": "unotools/source/i18n/localedatawrapper.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-11-04T09:32:32Z",
+      "side": 1,
+      "message": "good spotting, fixed here\n   https://gerrit.libreoffice.org/c/core/+/124677",
+      "parentUuid": "df7d8a80_c016767f",
+      "revId": "86b345a963a64fd9b9a3cab522b3ac2e909977fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
