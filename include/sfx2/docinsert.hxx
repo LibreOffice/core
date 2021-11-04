@@ -53,7 +53,7 @@ private:
     std::shared_ptr<SfxItemSet> m_xItemSet;
     std::vector<OUString>   m_pURLList;
 
-    DECL_LINK(DialogClosedHdl, sfx2::FileDialogHelper*, void);
+    DECL_DLLPRIVATE_LINK(DialogClosedHdl, sfx2::FileDialogHelper*, void);
 
 public:
     enum class Mode {

@@ -144,20 +144,20 @@ private:
     weld::CustomWidgetController& m_rWidgetController;
     std::unique_ptr<weld::DrawingArea> m_xDrawingArea;
 
-    DECL_LINK(DoResize, const Size& rSize, void);
-    DECL_LINK(DoPaint, weld::DrawingArea::draw_args, void);
-    DECL_LINK(DoMouseButtonDown, const MouseEvent&, bool);
-    DECL_LINK(DoMouseMove, const MouseEvent&, bool);
-    DECL_LINK(DoMouseButtonUp, const MouseEvent&, bool);
-    DECL_LINK(DoGetFocus, weld::Widget&, void);
-    DECL_LINK(DoLoseFocus, weld::Widget&, void);
-    DECL_LINK(DoKeyPress, const KeyEvent&, bool);
-    DECL_LINK(DoFocusRect, weld::Widget&, tools::Rectangle);
-    DECL_LINK(DoCommand, const CommandEvent&, bool);
-    DECL_LINK(DoStyleUpdated, weld::Widget&, void);
-    DECL_LINK(DoRequestHelp, tools::Rectangle&, OUString);
-    DECL_LINK(DoGetSurrounding, OUString&, int);
-    DECL_LINK(DoDeleteSurrounding, const Selection&, bool);
+    DECL_DLLPRIVATE_LINK(DoResize, const Size& rSize, void);
+    DECL_DLLPRIVATE_LINK(DoPaint, weld::DrawingArea::draw_args, void);
+    DECL_DLLPRIVATE_LINK(DoMouseButtonDown, const MouseEvent&, bool);
+    DECL_DLLPRIVATE_LINK(DoMouseMove, const MouseEvent&, bool);
+    DECL_DLLPRIVATE_LINK(DoMouseButtonUp, const MouseEvent&, bool);
+    DECL_DLLPRIVATE_LINK(DoGetFocus, weld::Widget&, void);
+    DECL_DLLPRIVATE_LINK(DoLoseFocus, weld::Widget&, void);
+    DECL_DLLPRIVATE_LINK(DoKeyPress, const KeyEvent&, bool);
+    DECL_DLLPRIVATE_LINK(DoFocusRect, weld::Widget&, tools::Rectangle);
+    DECL_DLLPRIVATE_LINK(DoCommand, const CommandEvent&, bool);
+    DECL_DLLPRIVATE_LINK(DoStyleUpdated, weld::Widget&, void);
+    DECL_DLLPRIVATE_LINK(DoRequestHelp, tools::Rectangle&, OUString);
+    DECL_DLLPRIVATE_LINK(DoGetSurrounding, OUString&, int);
+    DECL_DLLPRIVATE_LINK(DoDeleteSurrounding, const Selection&, bool);
 
 public:
     CustomWeld(weld::Builder& rBuilder, const OString& rDrawingId,

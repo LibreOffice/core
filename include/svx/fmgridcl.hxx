@@ -82,7 +82,7 @@ protected:
     */
     void notifyColumnSelect(sal_uInt16 nColumnId);
 private:
-    DECL_LINK( OnAsyncExecuteDrop, void*, void );
+    DECL_DLLPRIVATE_LINK( OnAsyncExecuteDrop, void*, void );
 };
 
 

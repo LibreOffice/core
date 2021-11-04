@@ -79,7 +79,7 @@ private:
     sal_Int32   mnCurStep;
     AutoTimer   maWaitTimer;
 
-    DECL_LINK( TimeOutHdl, Timer*, void );
+    DECL_DLLPRIVATE_LINK( TimeOutHdl, Timer*, void );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

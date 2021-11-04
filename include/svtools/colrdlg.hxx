@@ -55,7 +55,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XAsynchronousExecutableDialog > mxDialog;
     std::function<void(sal_Int32)> m_aResultFunc;
 
-    DECL_LINK( DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void );
+    DECL_DLLPRIVATE_LINK( DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

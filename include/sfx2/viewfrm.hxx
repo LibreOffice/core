@@ -61,13 +61,13 @@ class SFX2_DLLPUBLIC SfxViewFrame final : public SfxShell, public SfxListener
 
     SAL_DLLPRIVATE void Construct_Impl( SfxObjectShell *pObjSh );
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-    DECL_LINK(GetInvolvedHandler, weld::Button&, void);
-    DECL_LINK(DonationHandler, weld::Button&, void);
-    DECL_LINK(WhatsNewHandler, weld::Button&, void);
-    DECL_LINK(SwitchReadOnlyHandler, weld::Button&, void);
-    DECL_LINK(SignDocumentHandler, weld::Button&, void);
-    DECL_LINK(HiddenTrackChangesHandler, weld::Button&, void);
-    DECL_LINK(HyphenationMissingHandler, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(GetInvolvedHandler, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(DonationHandler, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(WhatsNewHandler, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(SwitchReadOnlyHandler, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(SignDocumentHandler, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(HiddenTrackChangesHandler, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(HyphenationMissingHandler, weld::Button&, void);
     SAL_DLLPRIVATE void KillDispatcher_Impl();
 
     virtual                 ~SfxViewFrame() override;
