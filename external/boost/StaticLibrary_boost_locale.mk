@@ -18,13 +18,6 @@ $(eval $(call gb_StaticLibrary_add_defs,boost_locale,\
 	-DBOOST_ALL_NO_LIB -DBOOST_LOCALE_NO_WINAPI_BACKEND -DBOOST_LOCALE_NO_POSIX_BACKEND -DBOOST_USE_WINDOWS_H \
 ))
 
-# Needed when building against MSVC resp. libc++ in C++17 mode, as Boost 1.65.1
-# workdir/UnpackedTarball/boost/boost/locale/generator.hpp contains "std::auto_ptr<data> d;":
-$(eval $(call gb_StaticLibrary_add_defs,boost_locale, \
-    -D_HAS_AUTO_PTR_ETC=1 \
-    -D_LIBCPP_ENABLE_CXX17_REMOVED_AUTO_PTR \
-))
-
 $(eval $(call gb_StaticLibrary_use_external,boost_locale,boost_headers))
 
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,boost_locale,cpp))
