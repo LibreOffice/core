@@ -661,6 +661,15 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf134053)
     SdrObject* pShape = pActualPage->GetObj(0);
     CPPUNIT_ASSERT_MESSAGE("No Shape", pShape);
 
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    sd::UndoManager* pUndoManager = pDocument->GetUndoManager();
+
+    // tdf#114613: Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : 8
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pUndoManager->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pUndoManager->GetRedoActionCount());
+
     XDash dash = pShape->GetMergedItem(XATTR_LINEDASH).GetDashValue();
 
     // Because 0% is not possible as dash length (as of June 2020) 1% is used in the fix.
