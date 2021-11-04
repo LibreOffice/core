@@ -604,8 +604,6 @@ Public Function SetPrinter(Optional ByVal FormDocument As Variant _
 &apos;&apos;&apos;		PaperFormat: one of next values
 &apos;&apos;&apos;			&quot;A3&quot;, &quot;A4&quot;, &quot;A5&quot;, &quot;B4&quot;, &quot;B5&quot;, &quot;LETTER&quot;, &quot;LEGAL&quot;, &quot;TABLOID&quot;
 &apos;&apos;&apos;			Left unchanged when absent
-&apos;&apos;&apos;		_PrintComponent: undocumented argument to determine the component
-&apos;&apos;&apos;			Useful typically to apply printer settings on a Base form document
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		True when successful
 &apos;&apos;&apos;	Examples:

@@ -111,6 +111,8 @@ Type _Address
 	XCellRange					As Object		&apos;	com.sun.star.table.XCellRange
 End Type
 
+Private _LastParsedAddress		As Object		&apos;	_Address type - parsed ranges are cached
+
 REM ============================================================ MODULE CONSTANTS
 
 Private Const cstSHEET			= 1
@@ -135,6 +137,7 @@ Private Sub Class_Initialize()
 	ObjectType = &quot;CALC&quot;
 	ServiceName = &quot;SFDocuments.Calc&quot;
 	Set _Component = Nothing
+	Set _LastParsedAddress = Nothing
 End Sub		&apos;	SFDocuments.SF_Calc Constructor
 
 REM -----------------------------------------------------------------------------
@@ -3379,7 +3382,7 @@ Private Function _ParseAddress(ByVal psAddress As String) As Object
 &apos;&apos;&apos;	Exceptions:
 &apos;&apos;&apos;		CALCADDRESSERROR		&apos;	Address could not be parsed to a valid address
 
-Dim oAddress As _Address			&apos;	Return value
+Dim oAddress As Object				&apos;	Return value
 Dim lStart As Long					&apos;	Position of found regex
 Dim sSheet As String				&apos;	Sheet component
 Dim sRange As String				&apos;	Range component
@@ -3389,6 +3392,20 @@ Dim oRangeAddress As Object			&apos;	Alias for rangeaddress
 Dim vLastCell As Variant			&apos;	Result of _LastCell() method
 Dim oSelect As Object				&apos;	Current selection
 
+	&apos;	If psAddress has already been parsed, get the result back
+	If Not IsNull(_LastParsedAddress) Then
+		&apos;	Given argument must contain an explicit reference to a sheet
+		If (InStr(psAddress, &quot;~.&quot;) = 0 And InStr(psAddress, &quot;.&quot;) &gt; 0 And psAddress = _LastParsedAddress.RawAddress) _
+				Or psAddress = _LastParsedAddress.RangeName Then
+			Set _ParseAddress = _LastParsedAddress
+			Exit Function
+		Else
+			Set _LastParsedAddress = Nothing
+		End If
+	End If
+
+	&apos;	Reinitialize a new _Address object
+	Set oAddress = New _Address
 	With oAddress
 		sSheet = &quot;&quot;				:	sRange = &quot;&quot;
 		.SheetName = &quot;&quot;			:	.RangeName = &quot;&quot;
@@ -3476,6 +3493,9 @@ Dim oSelect As Object				&apos;	Current selection
 		Set .Component = _Component
 
 	End With
+
+	&apos;	Store last parsed address for reuse
+	Set _LastParsedAddress = oAddress
 
 Finally:
 	Set _ParseAddress = oAddress
